@@ -12,12 +12,6 @@ branches:
 
 cache: pip
 
-#addons:
-#  postgresql: '9.6'
-
-#services:
-#- postgresql
-
 before_install:
 #- openssl aes-256-cbc -K $encrypted_596a6d1c4f83_key -iv $encrypted_596a6d1c4f83_iv -in deploy-key.enc -out deploy-key -d
 #- rm deploy-key.enc
@@ -29,23 +23,19 @@ before_install:
 install:
 - pip install ansible
 - pip install -r requirements.txt
-#- sudo service postgresql restart
 
 before_script:
-#- psql -U postgres < resources/sql/init_test.sql
-- sudo mkdir /var/log/etsin-finder
-- sudo chown -R $USER:$USER /var/log/etsin-finder
+- sudo mkdir /var/log/etsin_finder
+- sudo chown -R $USER:$USER /var/log/etsin_finder
 
 script:
-- cd src
+- coverage run --source="etsin_finder"
+- coverage report -m
+- cd etsin_finder
 - flake8 .
-#- coverage run --source="." manage.py test metax_api
-#- COVERALLS_REPO_TOKEN=$coveralls_token coveralls
 
 #notifications:
 #  flowdock:
 
 after_success:
 - $TRAVIS_BUILD_DIR/.travis-deploy.sh
-
-

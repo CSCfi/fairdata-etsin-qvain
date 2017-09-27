@@ -1,5 +1,5 @@
 import yaml
-from utils import executing_travis
+from .utils import executing_travis
 
 def _get_app_config_from_file():
     with open('/home/etsin-user/app_config') as app_config_file:
