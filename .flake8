@@ -1,0 +1,27 @@
+[flake8]
+ignore = 
+    # line too long (97 > 79 characters)
+    E501,
+    # block comment should start with '# '
+    E265,
+    # at least two spaces before inline comment
+    E261,
+    # expected 2 blank lines, found 1
+    E302,
+    # expected 2 blank lines after class or function definition, found 1
+    E305,
+    # no newline at end of file
+    W292,
+    # multiple spaces after ':'
+    E241,
+    # whitespace before '}'
+    E202,
+    # whitespace before '{'
+    E201,
+    # module level import not at top of file
+    E402,
+    # continuation line under-indented for visual indent
+    E128
+
+# often contains "unused" imports
+exclude = __init__.py
