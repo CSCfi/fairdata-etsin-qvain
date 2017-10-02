@@ -1,5 +1,19 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import App from "./App";
+import Footer from "./footer/footer";
+import Header from "./header/header";
+import Content from "./content/content";
+
+class App extends React.Component {
+  render () {
+    return (
+    <div>
+      <Header />
+      <Content />
+      <Footer />
+    </div>
+    );
+  }
+}
 
 ReactDOM.render(<App />, document.getElementById("content"));
