@@ -4,7 +4,7 @@ from logging.handlers import RotatingFileHandler
 from .app_config import get_app_config
 
 def create_app(config=None):
-    app = Flask('etsin_finder')
+    app = Flask('etsin_finder', static_folder="./frontend/dist", template_folder="./frontend")
     _set_app_config(app, config)
     if not app.testing:
         _setup_app_logging(app)
