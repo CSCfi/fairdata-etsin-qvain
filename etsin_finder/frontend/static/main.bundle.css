@@ -1,4 +1,17 @@
-/* Base */
+@import url(https://fonts.googleapis.com/css?family=Lato:300,400,700);/* Base */
+.regular-row {
+  padding: 30px 0; }
+
+body {
+  font-family: Lato, Helvetica, Arial, sans-serif;
+  font-size: 0.9rem; }
+
+input, button.btn, button, select, textarea, optgroup, option {
+  font-family: inherit;
+  font-size: inherit;
+  font-style: inherit;
+  font-weight: inherit; }
+
 button.btn {
   cursor: pointer; }
   button.btn.btn-etsin {
@@ -8,8 +21,7 @@ button.btn {
       background-color: #3686b4; }
   button.btn.btn-transparent {
     background-color: transparent;
-    color: #969696;
-    font-weight: 600; }
+    color: #969696; }
     button.btn.btn-transparent:hover {
       text-decoration: underline; }
 
@@ -21,17 +33,17 @@ button.btn {
 
 .top-logo {
   margin-bottom: 20px; }
+  .top-logo img {
+    height: 70px; }
+  .top-logo .slogan {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    margin: 0;
+    color: #3e94c5; }
 
 .top-nav {
-  justify-content: space-between;
-  font-weight: 700; }
-
-.top-nav-right {
-  margin-bottom: 8px;
-  display: inline-flex;
-  align-items: center; }
-  .top-nav-right .btn-etsin {
-    margin-right: 6px; }
+  justify-content: space-between; }
 
 .content .hero {
   background-color: #3e94c5;
@@ -46,6 +58,10 @@ button.btn {
   box-shadow: inset 0 3px 2px rgba(0, 0, 0, 0.3);
   display: flex;
   align-items: center; }
+  .footer .footer-content {
+    align-items: center; }
+  .footer .footer-img img {
+    width: 100%; }
 
 /* Components */
 .navigation {
@@ -55,7 +71,7 @@ button.btn {
     text-transform: uppercase;
     color: #969696; }
     .navigation a.nav-link:hover {
-      color: #707070; }
+      color: #3e94c5; }
     .navigation a.nav-link.active {
       color: #3e94c5;
       position: relative; }
@@ -70,6 +86,19 @@ button.btn {
         background-color: #3e94c5;
         bottom: -7px;
         left: 0%; }
+
+.top-nav-right {
+  align-items: center;
+  display: inline-flex;
+  position: absolute;
+  top: 10px;
+  right: 10px; }
+  @media all and (min-width: 62em) {
+    .top-nav-right {
+      position: inherit;
+      margin-bottom: 8px; }
+      .top-nav-right .btn-etsin {
+        margin-right: 6px; } }
 
 .userInfo {
   display: inline-flex; }

@@ -5,18 +5,18 @@
 }
 .top-logo {
   margin-bottom: 20px;
+  img {
+    height: 70px;
+  }
+  .slogan {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    margin: 0;
+    color: $color-primary;
+  }
 }
 
 .top-nav {
   justify-content: space-between;
-  font-weight: 700;
-}
-
-.top-nav-right {
-  margin-bottom: 8px;
-  display: inline-flex;
-  align-items: center;
-  .btn-etsin {
-    margin-right: 6px;
-  }
 }

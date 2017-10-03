@@ -11,7 +11,6 @@ button.btn {
   &.btn-transparent {
     background-color: transparent;
     color: $color-gray;
-    font-weight: 600;
     &:hover {
       text-decoration: underline;
     }

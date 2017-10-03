@@ -1,3 +1,4 @@
+// nav left
 .navigation {
   align-items: center;
   display: inline-flex;
@@ -5,7 +6,7 @@
     text-transform: uppercase;
     color: $color-gray;
     &:hover {
-      color: darken($color-gray, 15);
+      color: $color-primary;
     }
     &.active {
       color: $color-primary;
@@ -23,6 +24,22 @@
         bottom: -7px;
         left: 0%;
       }
+    }
+  }
+}
+
+// nav right
+.top-nav-right {
+  align-items: center;
+  display: inline-flex;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  @include mappy-bp(lg) {
+    position: inherit;
+    margin-bottom: 8px;
+    .btn-etsin {
+      margin-right: 6px;
     }
   }
 }
