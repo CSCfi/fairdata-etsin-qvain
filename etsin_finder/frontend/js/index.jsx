@@ -1,8 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import Footer from "./footer/footer";
-import Header from "./header/header";
-import Content from "./content/content";
+import Footer from "./layout/footer";
+import Header from "./layout/header";
+import Content from "./layout/content";
 require('bootstrap');
 
 class App extends React.Component {

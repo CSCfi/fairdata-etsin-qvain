@@ -1,0 +1,22 @@
+.header {
+  padding: 1.5rem 0 0;
+  background-color: $bg-primary;
+  border-bottom: 4px solid $color-lightgray;
+}
+.top-logo {
+  margin-bottom: 20px;
+}
+
+.top-nav {
+  justify-content: space-between;
+  font-weight: 700;
+}
+
+.top-nav-right {
+  margin-bottom: 8px;
+  display: inline-flex;
+  align-items: center;
+  .btn-etsin {
+    margin-right: 6px;
+  }
+}

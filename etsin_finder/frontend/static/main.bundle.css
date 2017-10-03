@@ -13,7 +13,7 @@ button.btn {
     button.btn.btn-transparent:hover {
       text-decoration: underline; }
 
-/* Components */
+/* Layout */
 .header {
   padding: 1.5rem 0 0;
   background-color: white;
@@ -25,37 +25,13 @@ button.btn {
 .top-nav {
   justify-content: space-between;
   font-weight: 700; }
-  .top-nav ul {
-    list-style: none;
-    padding: 0;
-    margin: 0; }
-
-.top-nav-left {
-  align-items: center; }
-  .top-nav-left, .top-nav-left ul {
-    display: inline-flex; }
-    .top-nav-left li, .top-nav-left ul li {
-      padding: 5px 10px;
-      margin: 0 5px;
-      text-transform: uppercase;
-      color: #969696; }
-      .top-nav-left li.active, .top-nav-left ul li.active {
-        color: #3e94c5;
-        position: relative; }
-        .top-nav-left li.active:after, .top-nav-left ul li.active:after {
-          position: absolute;
-          content: "";
-          display: block;
-          width: 100%;
-          height: 4px;
-          background-color: #3e94c5;
-          bottom: -10px;
-          left: 0%; }
 
 .top-nav-right {
   margin-bottom: 8px;
   display: inline-flex;
   align-items: center; }
+  .top-nav-right .btn-etsin {
+    margin-right: 6px; }
 
 .content .hero {
   background-color: #3e94c5;
@@ -67,4 +43,30 @@ button.btn {
 .footer {
   min-height: 200px;
   background-color: #ebebeb;
-  box-shadow: inset 0 3px 2px rgba(0, 0, 0, 0.3); }
+  box-shadow: inset 0 3px 2px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center; }
+
+/* Components */
+.navigation {
+  align-items: center;
+  display: inline-flex; }
+  .navigation a.nav-link {
+    text-transform: uppercase;
+    color: #969696; }
+    .navigation a.nav-link:hover {
+      color: #707070; }
+    .navigation a.nav-link.active {
+      color: #3e94c5;
+      position: relative; }
+      .navigation a.nav-link.active:hover {
+        color: #3077a0; }
+      .navigation a.nav-link.active:after {
+        position: absolute;
+        content: "";
+        display: block;
+        width: 100%;
+        height: 4px;
+        background-color: #3e94c5;
+        bottom: -7px;
+        left: 0%; }

@@ -5,7 +5,10 @@
 @import 'base/colors';
 @import 'base/buttons';
 
+/* Layout */
+@import 'layout/header';
+@import 'layout/content';
+@import 'layout/footer';
+
 /* Components */
-@import 'components/header';
-@import 'components/content';
-@import 'components/footer';
+@import 'components/navi';
