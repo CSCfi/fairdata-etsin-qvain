@@ -1,0 +1,19 @@
+button.btn {
+  cursor: pointer;
+  &.btn-etsin {
+    background-color: $color-primary;
+    color: white;
+    &:hover {
+      //box-shadow: inset 1px 1px 2px $inset-dark;
+      background-color: darken($color-primary, 5);
+    }
+  }
+  &.btn-transparent {
+    background-color: transparent;
+    color: $color-gray;
+    font-weight: 600;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

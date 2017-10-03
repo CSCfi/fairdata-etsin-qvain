@@ -4,7 +4,7 @@ const webpack = require('webpack');
 const config = {
     entry:  [__dirname + '/js/index.jsx', __dirname + '/scss/main.scss'],
     output: {
-        path: __dirname + '/dist',
+        path: __dirname + '/static',
         filename: 'bundle.js',
     },
     resolve: {
@@ -29,7 +29,10 @@ const config = {
           exclude: /node_modules/,
           use: ExtractTextPlugin.extract(['css-loader', 'sass-loader'])
         },
-
+        {
+          test: /\.(woff|woff2|eot|ttf|otf|svg)$/,
+          use: "file-loader"
+        }
       ]
     },
     plugins: [
