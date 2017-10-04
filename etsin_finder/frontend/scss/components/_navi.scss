@@ -10,13 +10,13 @@
   display: block;
   max-height: 0;
   overflow: hidden;
-  transition: all 0.3s ease;
+  transition: all 0.5s ease;
   @include mappy-bp(md) {
     display: inline-flex;
     max-height: initial;
   }
   &.open {
-    max-height: 400px;
+    max-height: 200px;
   }
   a.nav-link {
     text-transform: uppercase;

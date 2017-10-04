@@ -75,13 +75,13 @@ button.btn {
   display: block;
   max-height: 0;
   overflow: hidden;
-  transition: all 0.3s ease; }
+  transition: all 0.5s ease; }
   @media all and (min-width: 48em) {
     .nav-list {
       display: inline-flex;
       max-height: initial; } }
   .nav-list.open {
-    max-height: 400px; }
+    max-height: 200px; }
   .nav-list a.nav-link {
     text-transform: uppercase;
     color: #969696;
