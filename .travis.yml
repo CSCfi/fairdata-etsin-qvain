@@ -26,7 +26,8 @@ before_install:
 
 install:
 - pip install -r requirements.txt
-- npm install ./etsin_finder/frontend --prefix ./etsin_finder/frontend
+- npm install ./etsin_finder/frontend --prefix ./etsin_finder/frontend --production
+- npm run build
 
 before_script:
 - sudo mkdir /var/log/etsin_finder
@@ -35,8 +36,7 @@ before_script:
 script:
 - flake8 .
 - pytest --cov=etsin_finder tests/
-#- cd etsin_finder/frontend; npm run test; npm run build
-#- COVERALLS_REPO_TOKEN=$coveralls_token coveralls
+# THIS SHOULD BE MADE WORKING: - cd etsin_finder/frontend; npm run test;
 #- $TRAVIS_BUILD_DIR/.travis-deploy.sh
 
 notifications:
