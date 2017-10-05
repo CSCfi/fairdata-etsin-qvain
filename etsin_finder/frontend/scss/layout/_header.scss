@@ -1,0 +1,22 @@
+.header {
+  padding: 1.5rem 0 0;
+  background-color: $bg-primary;
+  border-bottom: 4px solid $color-lightgray;
+}
+.top-logo {
+  margin-bottom: 20px;
+  img {
+    height: 70px;
+  }
+  .slogan {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    margin: 0;
+    color: $color-primary;
+  }
+}
+
+.top-nav {
+  justify-content: space-between;
+}

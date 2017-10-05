@@ -1,0 +1,9 @@
+.content {
+  .hero {
+    background-color: $color-primary;
+    color: $color-white;
+    min-height: 300px;
+    display: flex;
+    align-items: center;
+  }
+}
