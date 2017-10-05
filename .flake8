@@ -24,4 +24,4 @@ ignore =
     E128
 
 # often contains "unused" imports
-exclude = __init__.py
+exclude = __init__.py,etsin_finder/frontend
