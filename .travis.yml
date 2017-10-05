@@ -7,35 +7,38 @@ branches:
   only:
   - test
   - stable
-  - staging
-  - production
+  - master
 
-cache: pip
+cache:
+  directories:
+  - pip
+  - node_modules
 
 before_install:
-#- openssl aes-256-cbc -K $encrypted_596a6d1c4f83_key -iv $encrypted_596a6d1c4f83_iv -in deploy-key.enc -out deploy-key -d
-#- rm deploy-key.enc
-#- chmod 600 deploy-key
-#- mv deploy-key ~/.ssh/id_rsa
-#- eval "$(ssh-agent -s)"
-#- ssh-add ~/.ssh/id_rsa
+- openssl aes-256-cbc -K $encrypted_de686f18e070_key -iv $encrypted_de686f18e070_iv -in deploy-key.enc -out deploy-key -d
+- rm deploy-key.enc
+- chmod 600 deploy-key
+- mv deploy-key ~/.ssh/id_rsa
+- eval "$(ssh-agent -s)"
+- ssh-add ~/.ssh/id_rsa
+- sudo apt-get install npm
+- pip install ansible
 
 install:
-- pip install ansible
 - pip install -r requirements.txt
+- npm install ./etsin_finder/frontend --prefix ./etsin_finder/frontend
 
 before_script:
 - sudo mkdir /var/log/etsin_finder
 - sudo chown -R $USER:$USER /var/log/etsin_finder
 
 script:
-- coverage run --source="etsin_finder"
-- coverage report -m
-- cd etsin_finder
 - flake8 .
+- pytest --cov=etsin_finder tests/
+#- cd etsin_finder/frontend; npm run test; npm run build
+#- COVERALLS_REPO_TOKEN=$coveralls_token coveralls
+#- $TRAVIS_BUILD_DIR/.travis-deploy.sh
 
-#notifications:
-#  flowdock:
-
-after_success:
-- $TRAVIS_BUILD_DIR/.travis-deploy.sh
+notifications:
+  flowdock:
+    secure: "eNLKnn2PTohlmGggmTNZYNTx70/FYzzlKXtyvf8fqcWTOmqpp+ZkttWIe0iWfmdkFKx82LaKcGk86Bj0wR4IHkbxJZLV61BQtPi5SZVG8zwBMDjfqRJtxCgzKN4nxeKqzVAZ1LB2TU1ggccHT7XJ/NJyGsQjDX+ek/LXgZbteZBHtswP079m4FgOIuolgRJAmHTr8w2Krd25K+uZByHRvHtV6ajb2At2J1PvYBgx47oD603JRW3Jqnhs37eXU4DrO0P8apmTuvXpInDB413s8FhLOiicH8CQGZyzBo2D9ZhGEQbN3hN/8zDlOAYDxjvpTF+vP8DDl/hKzm7MH+h4mNMC0lZUJXzuSdK1NlOb69pXL5NhYuo0Iz7lHzyRxTOoJJE5IC6J8AR5e0D79FTLnPMPZPeH7xlHoPPphCaK9Qk1bejwiQXjTNr7rgmE9ct9/cipEU/F3OcMFpbIc5QwCWz18lrFIRBC6koBZNPE7fW73AouHFu+JgkRFRJgcxx/Cx+SsVZUDw5//YvviWsgAhCLOHBt36BXKSHtNNLRfmantVwBXZhi7+Xl31jrqh7IAjR/v4npkadiBMHgx7opERRvsC9or4WeC6P3TdarlF5nyliV4yCtGdYKeHLDrX6A8tZSdT2TdRL3svo5frDACoLVItvAyPcMW0Wh6QfpDsw="
