@@ -3,6 +3,7 @@ from flask import render_template
 
 log = app.logger
 
+
 @app.route("/")
 def hello():
     log.debug("Debug msg")
