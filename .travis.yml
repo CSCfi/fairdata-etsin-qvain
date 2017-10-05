@@ -37,7 +37,7 @@ script:
 - flake8 .
 - pytest --cov=etsin_finder tests/
 # THIS SHOULD BE MADE WORKING: - cd etsin_finder/frontend; npm run test;
-#- $TRAVIS_BUILD_DIR/.travis-deploy.sh
+- $TRAVIS_BUILD_DIR/.travis-deploy.sh
 
 notifications:
   flowdock:
