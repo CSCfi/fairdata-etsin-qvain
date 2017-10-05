@@ -9,3 +9,5 @@ __pycache__
 etsin_finder/frontend/node_modules
 etsin_finder/frontend/npm-debug.log
 *.DS_Store
+etsin_finder/frontend/static/bundle.js
+etsin_finder/frontend/static/main.bundle.css
