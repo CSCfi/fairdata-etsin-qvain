@@ -7,3 +7,4 @@ __pycache__
 .eggs
 .coverage
 etsin_finder/frontend/node_modules
+etsin_finder/frontend/npm-debug.log
