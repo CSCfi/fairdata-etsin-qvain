@@ -26,8 +26,10 @@ before_install:
 
 install:
 - pip install -r requirements.txt
-- npm install ./etsin_finder/frontend --prefix ./etsin_finder/frontend --production
-- npm run build
+#- cd ./etsin_finder/frontend; npm install --production; cd -
+# Use the above instead of the below when production npm run build is working
+- cd ./etsin_finder/frontend; npm install; cd -
+- cd ./etsin_finder/frontend; npm run build; cd -
 
 before_script:
 - sudo mkdir /var/log/etsin_finder
@@ -36,7 +38,7 @@ before_script:
 script:
 - flake8 .
 - pytest --cov=etsin_finder tests/
-# THIS SHOULD BE MADE WORKING: - cd etsin_finder/frontend; npm run test;
+# this should be enabled once the testing of the frontend is in place: - cd etsin_finder/frontend; npm run test;
 - $TRAVIS_BUILD_DIR/.travis-deploy.sh
 
 notifications:
