@@ -37,9 +37,12 @@ before_script:
 - sudo chown -R $USER:$USER /var/log/etsin_finder
 
 script:
-- $TRAVIS_BUILD_DIR/flake8 .
-- $TRAVIS_BUILD_DIR/pytest --cov=etsin_finder tests/
-# this should be enabled once the testing of the frontend is in place: - cd etsin_finder/frontend; npm run test;
+- cd $TRAVIS_BUILD_DIR
+- flake8 .
+- pytest --cov=etsin_finder tests/
+# the below should be enabled once the testing of the frontend is in place
+# - cd $TRAVIS_BUILD_DIR/etsin_finder/frontend
+# - npm run test
 - $TRAVIS_BUILD_DIR/.travis-deploy.sh
 
 notifications:
