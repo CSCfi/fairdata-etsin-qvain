@@ -40,7 +40,7 @@ script:
 - cd $TRAVIS_BUILD_DIR
 - flake8 .
 - pytest --cov=etsin_finder tests/
-# the below should be enabled once the testing of the frontend is in place
+# the below should be enabled once the frontend tests are in place
 # - cd $TRAVIS_BUILD_DIR/etsin_finder/frontend
 # - npm run test
 - $TRAVIS_BUILD_DIR/.travis-deploy.sh
