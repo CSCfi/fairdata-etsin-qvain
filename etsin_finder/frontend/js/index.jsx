@@ -29,6 +29,10 @@ const languageWithoutRegionCode = language.toLowerCase().split(/[_-]+/)[0];
 // Try full locale, try locale without region code, fallback to 'en'
 const messages = localeData[languageWithoutRegionCode] || localeData[language] || localeData.en;
 
+if (process.env.NODE_ENV !== 'production') {
+  console.log('Looks like we are in development mode!');
+}
+
 class App extends React.Component {
   render () {
     return (
