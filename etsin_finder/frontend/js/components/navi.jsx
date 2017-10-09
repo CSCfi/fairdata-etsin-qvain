@@ -25,7 +25,9 @@ export default class Navi extends React.Component {
           <Link to={"/main"} className="nav-link active">
             Koti
           </Link>
-          <a href="#" className="nav-link">Aineistot</a>
+          <Link to={"/datasets"} className="nav-link">
+            Aineistot
+          </Link>
           <a href="#" className="nav-link">Organisaatiot</a>
           <a href="#" className="nav-link">Ohjeet ja Info</a>
         </nav>
