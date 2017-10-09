@@ -30,7 +30,8 @@
     ],
     "plugins": [
       [
-        "react-intl", {
+        "react-intl",
+        {
           "messagesDir": "./locale/messages",
           "enforceDescriptions": false
         }
@@ -42,7 +43,7 @@
     "extract-text-webpack-plugin": "3.0.1",
     "mappy-breakpoints": "0.2.3",
     "node-sass": "4.5.3",
-    "react-intl": "2.4.0",
+    "react-intl": "^2.4.0",
     "react-router-dom": "4.2.2",
     "sass-loader": "6.0.6"
   },

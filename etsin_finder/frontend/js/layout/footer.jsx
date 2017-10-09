@@ -14,13 +14,10 @@ export default class Footer extends React.Component {
               description="Description in footer"
             />
           </div>
-          <div className="col-4 col-md-2 footer-img">
+          <div className="col-4 col-md-2 ml-md-auto footer-img">
           <img src="../../static/images/mec_en.png" />
           </div>
-          <div className="col-4 col-md-2 footer-img">
-            <img src="../../static/images/osar_en.png" />
-          </div>
-          <div className="col-4 col-md-2 footer-img">
+          <div className="col-4 col-md-2 ml-auto footer-img">
             <img src="../../static/images/csc_logo.png" />
           </div>
         </div>
