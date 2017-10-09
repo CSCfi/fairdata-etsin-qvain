@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import UserInfo from "./userInfo";
 import { FormattedMessage } from "react-intl";
+import UserInfo from "./userInfo";
+import LangToggle from "./langToggle";
 
 export default class SecondNav extends Component {
   alertButton(a) {
@@ -17,9 +18,7 @@ export default class SecondNav extends Component {
             description="Link to adding Dataset"
           />
         </button>
-        <button type="button" className="btn btn-transparent" onClick={this.alertButton}>
-          EN
-        </button>
+        <LangToggle />
         <UserInfo></UserInfo>
       </div>
     );
