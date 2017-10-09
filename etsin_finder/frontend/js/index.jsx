@@ -6,18 +6,18 @@ import Header from "./layout/header";
 import Content from "./layout/content";
 require('bootstrap');
 
+class App extends React.Component {
+  render () {
+    return (
+      <Router>
+        <div>
+          <Header />
+          <Content />
+          <Footer />
+        </div>
+      </Router>
+    );
+  }
+}
 
-  return (
-    <Router>
-      <div>
-        <Header />
-        <Content />
-        <Footer />
-      </div>
-    </Router>
-  )
-
-ReactDOM.render(
-    <FetchFromMetax />,
-    document.getElementById("content")
-);
+ReactDOM.render(<App />, document.getElementById("content"));

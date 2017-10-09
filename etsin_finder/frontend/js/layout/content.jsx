@@ -1,5 +1,6 @@
 import React from "react";
-import { Route } from 'react-router-dom'
+import { Route } from 'react-router-dom';
+import Dataset from '../dataset';
 
 export default class Content extends React.Component {
   render () {
@@ -14,6 +15,12 @@ export default class Content extends React.Component {
           </div>
         );
       }}/>
+      <Route path="/dataset" render={()=>{
+        return (
+          <Dataset />
+        );
+      }}/>
+
     </div>
     );
   }
