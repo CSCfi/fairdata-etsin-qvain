@@ -2,17 +2,14 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter as Router } from 'react-router-dom';
 import { IntlProvider, addLocaleData } from 'react-intl';
+import { observer } from 'mobx-react';
+import { UIStore } from './stores/view/language';
 import en from 'react-intl/locale-data/en';
 import fi from 'react-intl/locale-data/fi';
 
 import Footer from "./layout/footer";
 import Header from "./layout/header";
 import Content from "./layout/content";
-
-// Our translated strings
-import translations from '../locale/data.js';
-
-let localeData = translations();
 
 addLocaleData([...en, ...fi]);
 
@@ -23,28 +20,24 @@ const language = (navigator.languages && navigator.languages[0]) ||
                      navigator.language ||
                      navigator.userLanguage;
 
-// Split locales with a region code
-const languageWithoutRegionCode = language.toLowerCase().split(/[_-]+/)[0];
-
-// Try full locale, try locale without region code, fallback to 'en'
-const messages = localeData[languageWithoutRegionCode] || localeData[language] || localeData.en;
+Locale.language = language;
 
 if (process.env.NODE_ENV !== 'production') {
   console.log('Looks like we are in development mode!');
 }
 
-class App extends React.Component {
+@observer class App extends React.Component {
   render () {
     return (
-    <IntlProvider locale={language} messages={messages}>
-      <Router>
-        <div>
-          <Header />
-          <Content />
-          <Footer />
-        </div>
-      </Router>
-    </IntlProvider>
+      <IntlProvider locale={Locale.language} messages={Locale.messages}>
+        <Router>
+          <div>
+            <Header />
+            <Content />
+            <Footer />
+          </div>
+        </Router>
+      </IntlProvider>
     );
   }
 }

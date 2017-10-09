@@ -14,7 +14,7 @@ export default class Header extends React.Component {
                 <p className="slogan">
                   <FormattedMessage
                     id="app.slogan"
-                    defaultMessage="Tutkimusaineistojen hakupalvelu"
+                    defaultMessage="Research data finder"
                     description="Brand slogan/description"
                   />
                 </p>
