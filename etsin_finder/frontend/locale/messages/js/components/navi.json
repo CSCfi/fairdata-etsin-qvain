@@ -1,0 +1,22 @@
+[
+  {
+    "id": "link.home",
+    "description": "Link to homepage",
+    "defaultMessage": "Home"
+  },
+  {
+    "id": "link.datasets",
+    "description": "Link to datasets",
+    "defaultMessage": "Datasets"
+  },
+  {
+    "id": "link.organizations",
+    "description": "Link to organizations",
+    "defaultMessage": "Organizations"
+  },
+  {
+    "id": "link.help",
+    "description": "Link to Help",
+    "defaultMessage": "Help & About"
+  }
+]
