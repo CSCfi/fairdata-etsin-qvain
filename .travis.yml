@@ -27,7 +27,8 @@ before_install:
 install:
 - pip install -r requirements.txt
 - cd $TRAVIS_BUILD_DIR/etsin_finder/frontend
-- npm install --only=production
+# TODO: At some point try to come up with a way so that the below command does not need to install webpack
+- npm install
 - npm run build
 
 before_script:
