@@ -12,16 +12,16 @@ export default class LangToggle extends Component {
   }
   changeLang(e){
     console.log(e.target.innerHTML);
-    counterpart.setLocale((e.target.innerHTML == "fi" ) ? "fi" : "en");
+    counterpart.setLocale(e.target.innerHTML);
     this.setState({
-      language: (e.target.innerHTML == "fi" ? "en" : "fi")
+      language: e.target.innerHTML
     });
   }
 
   render() {
     return (
         <button type="button" className="btn btn-transparent" onClick={this.changeLang}>
-          {this.state.language == "en" ? "en" : "fi"}
+          {this.state.language == "fi" ? "en" : "fi"}
         </button>
     );
   }

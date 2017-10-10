@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import Translate from 'react-translate-component';
 
 export default class Navi extends React.Component {
   openNavi(event) {
@@ -23,16 +24,16 @@ export default class Navi extends React.Component {
         </div>
         <nav role="navigation" className="nav nav-list">
           <Link to={"/main"} className="nav-link active">
-            Home
+            <Translate content="nav.home" />
           </Link>
           <a href="#" className="nav-link">
-            Datasets
+            <Translate content="nav.datasets" />
           </a>
           <a href="#" className="nav-link">
-            Organizations
+            <Translate content="nav.organizations" />
           </a>
           <a href="#" className="nav-link">
-            Help & About
+            <Translate content="nav.help" />
           </a>
         </nav>
       </div>
