@@ -1,6 +1,7 @@
 import React from "react";
 import { Route } from 'react-router-dom';
 import Translate from 'react-translate-component';
+import Dataset from '../dataset';
 
 export default class Content extends React.Component {
   render () {
