@@ -1,5 +1,4 @@
 import React from "react";
-import { FormattedMessage } from "react-intl";
 
 export default class Footer extends React.Component {
   render () {

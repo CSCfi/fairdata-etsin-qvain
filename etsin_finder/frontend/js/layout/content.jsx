@@ -20,11 +20,7 @@ export default class Content extends React.Component {
       }}/>
       <Route path="/dataset" render={()=>{
         return (
-          <div className="dataset">
-            <div className="container">
-              <h2 className="text-center">Single Dataset</h2>
-            </div>
-          </div>
+          <Dataset />
         )
       }}/>
       <Route path="/datasets" render={()=>{
