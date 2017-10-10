@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import axios from "axios";
+import counterpart from 'counterpart';
 
 class Dataset extends React.Component {
   constructor(props) {
@@ -12,7 +13,7 @@ class Dataset extends React.Component {
     this.identifier = "pid:urn:cr1";
 
     // TODO: Use Metax-test in dev env, actual Metax in production
-    this.url = "https://metax-test.csc.fi"
+    this.url = "https://metax-test.csc.fi",
 
     this.state = { dataset: [] };
   }
@@ -22,6 +23,7 @@ class Dataset extends React.Component {
       .then(res => {
         const dataset = res.data;
         this.setState({ dataset });
+        console.log(dataset);
       })
       .catch(function (error) {
         console.log(error);
@@ -38,10 +40,34 @@ class Dataset extends React.Component {
     }
 
     return (
-      <div>
-        Here be important values:<br />
-        {this.state.dataset.created_by_api}<br />
-        {this.state.dataset.research_dataset.urn_identifier}<br />
+      <div className="container">
+        <div className="row">
+          <div className="col-md-8">
+            <div className="content">
+              {
+                // getting the description based on locale, should use mobX
+                this.state.dataset.research_dataset.description.filter((single) => {
+                  if (single[counterpart.getLocale()]) {
+                    return true;
+                  }
+                })[0][counterpart.getLocale()]
+              }
+            </div>
+            <div className="content-footer">
+              Footer box
+            </div>
+          </div>
+          <div className="col-md-4">
+            <div className="sidebar">
+              <div className="separator">Säilityspaikka</div>
+              <div className="separator">Julkaisupaikka</div>
+              <div>Tieteenala</div>
+              <button type="button" className="btn btn-primary">
+                Näytä lisää tietojava
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
