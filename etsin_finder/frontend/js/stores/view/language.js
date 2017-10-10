@@ -8,6 +8,7 @@ class LocaleStore {
 }
 
 const Locale = window.Locale = new LocaleStore();
+console.log(Locale);
 export default Locale;
 
 let localeData = translations();

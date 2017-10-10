@@ -8,11 +8,7 @@ export default class Footer extends React.Component {
       <div className="container">
         <div className="row regular-row footer-content">
           <div className="col-12 col-md-6">
-            <FormattedMessage
-              id="footer.description"
-              defaultMessage="ATT-hanke on opetus ja kulttuuriministeriön rahoittama hanke, jonka tavoitteena on, että vuoteen 2017 mennessä Suomi nousee yhdeksi johtavista maista tieteen ja tutkimuksen avoimuudessa"
-              description="Description in footer"
-            />
+            ATT-hanke on opetus ja kulttuuriministeriön rahoittama hanke, jonka tavoitteena on, että vuoteen 2017 mennessä Suomi nousee yhdeksi johtavista maista tieteen ja tutkimuksen avoimuudessa
           </div>
           <div className="col-4 col-md-2 ml-md-auto footer-img">
           <img src="../../static/images/mec_en.png" />

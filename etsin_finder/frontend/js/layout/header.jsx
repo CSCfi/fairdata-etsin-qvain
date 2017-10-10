@@ -1,7 +1,7 @@
 import React from "react";
+import Translate from 'react-translate-component';
 import Navi from "../components/navi";
 import SecondNav from "../components/secondnav";
-import { FormattedMessage } from "react-intl";
 
 export default class Header extends React.Component {
   render () {
@@ -12,11 +12,7 @@ export default class Header extends React.Component {
             <div className="align-left row">
                 <img src="../../static/images/etsin_logo.png" />
                 <p className="slogan">
-                  <FormattedMessage
-                    id="app.slogan"
-                    defaultMessage="Research data finder"
-                    description="Brand slogan/description"
-                  />
+                  <Translate content="slogan" />
                 </p>
             </div>
           </div>

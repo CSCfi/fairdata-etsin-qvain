@@ -1,17 +1,27 @@
 import React, { Component } from 'react';
-import { observer } from 'mobx-react';
+import counterpart from 'counterpart';
+import '../../locale/translations';
 
 export default class LangToggle extends Component {
-  changeLang(){
-    console.log("Change the language");
-    Locale.language = (Locale.language == "fi_FI" ) ? "en_EN" : "fi_FI";
-    console.log(Locale.messages);
+  constructor(props) {
+    super(props);
+    this.state = {
+      language: counterpart.getLocale()
+    }
+    this.changeLang = this.changeLang.bind(this);
+  }
+  changeLang(e){
+    console.log(e.target.innerHTML);
+    counterpart.setLocale((e.target.innerHTML == "fi" ) ? "fi" : "en");
+    this.setState({
+      language: (e.target.innerHTML == "fi" ? "en" : "fi")
+    });
   }
 
   render() {
     return (
         <button type="button" className="btn btn-transparent" onClick={this.changeLang}>
-          {Locale.langShort}
+          {this.state.language == "en" ? "en" : "fi"}
         </button>
     );
   }

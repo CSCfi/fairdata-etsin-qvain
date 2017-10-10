@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FormattedMessage } from "react-intl";
+import Translate from 'react-translate-component';
 import UserInfo from "./userInfo";
 import LangToggle from "./langToggle";
 
@@ -12,14 +12,10 @@ export default class SecondNav extends Component {
     return (
       <div className="top-nav-right">
         <button type="button" className="btn btn-etsin" onClick={this.alertButton}>
-          <FormattedMessage
-            id="link.addDataset"
-            defaultMessage="Add Dataset"
-            description="Link to adding Dataset"
-          />
+          <Translate content="addDataset" />
         </button>
         <LangToggle />
-        <UserInfo></UserInfo>
+
       </div>
     );
   }

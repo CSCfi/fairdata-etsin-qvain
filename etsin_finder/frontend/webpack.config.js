@@ -15,13 +15,7 @@ const config = {
         {
           test: /\.jsx?/,
           exclude: /node_modules/,
-          loader: 'babel-loader',
-          options: {
-            plugins: [
-              ["transform-decorators-legacy"],
-              ["transform-class-properties"]
-            ]
-          }
+          loader: 'babel-loader'
         },
         {
           test: /\.css$/,
