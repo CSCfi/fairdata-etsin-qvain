@@ -8,6 +8,9 @@ counterpart.registerTranslations('en', {
     home: "Home",
     organizations: "Organizations",
     help: "Help & About"
+  },
+  home: {
+    title: "Search datasets"
   }
 });
 
@@ -19,5 +22,8 @@ counterpart.registerTranslations('fi', {
     home: "Koti",
     organizations: "Organisaatiot",
     help: "Ohjeet & Info"
+  },
+  home: {
+    title: "Etsi aineistoa"
   }
 });

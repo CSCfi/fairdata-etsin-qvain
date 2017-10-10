@@ -9,7 +9,7 @@ export default class Header extends React.Component {
       <div className="header">
         <div className="container">
           <div className="row top-logo">
-            <div className="align-left row">
+            <div className="container align-left row">
                 <img src="../../static/images/etsin_logo.png" />
                 <p className="slogan">
                   <Translate content="slogan" />
