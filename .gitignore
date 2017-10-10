@@ -11,3 +11,5 @@ etsin_finder/frontend/npm-debug.log
 *.DS_Store
 etsin_finder/frontend/static/bundle.js
 etsin_finder/frontend/static/main.bundle.css
+etsin_finder/frontend/static/bundle.js.map
+etsin_finder/frontend/static/main.bundle.css.map
