@@ -1,4 +1,5 @@
 import React from "react";
+import Translate from 'react-translate-component';
 import Navi from "../components/navi";
 import SecondNav from "../components/secondnav";
 
@@ -8,9 +9,11 @@ export default class Header extends React.Component {
       <div className="header">
         <div className="container">
           <div className="row top-logo">
-            <div className="align-left row">
+            <div className="container align-left row">
                 <img src="../../static/images/etsin_logo.png" />
-                <p className="slogan">Tutkimusaineistojen hakupalvelu</p>
+                <p className="slogan">
+                  <Translate content="slogan" />
+                </p>
             </div>
           </div>
           <div className="row top-nav">

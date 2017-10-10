@@ -1,5 +1,6 @@
 import React from "react";
-import { Route } from 'react-router-dom'
+import { Route } from 'react-router-dom';
+import Translate from 'react-translate-component';
 
 export default class Content extends React.Component {
   render () {
@@ -9,7 +10,9 @@ export default class Content extends React.Component {
         return (
           <div className="hero">
             <div className="container">
-              <h2 className="text-center">Etsi aineistoa</h2>
+              <h2 className="text-center">
+                <Translate content="home.title" />
+              </h2>
             </div>
           </div>
         );

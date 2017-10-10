@@ -1,7 +1,9 @@
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const webpack = require('webpack');
 
 const config = {
+    devtool: 'source-map',
     entry:  [__dirname + '/js/index.jsx', __dirname + '/scss/main.scss'],
     output: {
         path: __dirname + '/static',
@@ -15,7 +17,7 @@ const config = {
         {
           test: /\.jsx?/,
           exclude: /node_modules/,
-          loader: 'babel-loader'
+          use: 'babel-loader'
         },
         {
           test: /\.css$/,
@@ -39,6 +41,14 @@ const config = {
       new ExtractTextPlugin({ // define where to save the file
         filename: '[name].bundle.css',
         allChunks: true,
+      }),
+      new UglifyJSPlugin({
+        sourceMap: true
+      }),
+      new webpack.DefinePlugin({
+        'process.env': {
+          'NODE_ENV': JSON.stringify('production')
+        }
       })
     ]
 };
