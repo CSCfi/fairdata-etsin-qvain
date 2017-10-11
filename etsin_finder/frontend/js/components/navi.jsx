@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { FormattedMessage } from "react-intl";
 
 export default class Navi extends React.Component {
   openNavi(event) {
@@ -23,13 +24,33 @@ export default class Navi extends React.Component {
         </div>
         <nav role="navigation" className="nav nav-list">
           <Link to={"/"} className="nav-link active">
-            Koti
+            <FormattedMessage
+              id="link.home"
+              defaultMessage="Home"
+              description="Link to homepage"
+            />
           </Link>
-          <Link to={"/datasets"} className="nav-link">
-            Aineistot
-          </Link>
-          <a href="#" className="nav-link">Organisaatiot</a>
-          <a href="#" className="nav-link">Ohjeet ja Info</a>
+          <a href="#" className="nav-link">
+            <FormattedMessage
+              id="link.datasets"
+              defaultMessage="Datasets"
+              description="Link to datasets"
+            />
+          </a>
+          <a href="#" className="nav-link">
+            <FormattedMessage
+              id="link.organizations"
+              defaultMessage="Organizations"
+              description="Link to organizations"
+            />
+          </a>
+          <a href="#" className="nav-link">
+            <FormattedMessage
+              id="link.help"
+              defaultMessage="Help & About"
+              description="Link to Help"
+            />
+          </a>
         </nav>
       </div>
     );
