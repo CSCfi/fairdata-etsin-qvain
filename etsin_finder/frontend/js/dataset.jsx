@@ -2,7 +2,13 @@ import React from "react";
 import ReactDOM from "react-dom";
 import axios from "axios";
 import counterpart from 'counterpart';
+import { observer } from 'mobx-react';
 
+import DsSidebar from './components/dsSidebar';
+import DsDownloads from './components/dsDownloads';
+import DsContent from './components/dsContent';
+
+@observer(['stores'])
 class Dataset extends React.Component {
   constructor(props) {
     super(props);
@@ -38,34 +44,28 @@ class Dataset extends React.Component {
     if (!this.state.dataset.research_dataset) {
       return <div></div>;
     }
+    // from language store
+    let current_lang = this.props.stores.locale.current_lang;
+
+    let title = this.state.dataset.research_dataset.title[current_lang];
+    let description = this.state.dataset.research_dataset.description.filter((single) => {
+      if (single["en"]) {
+        return true;
+      }
+    })[0]["en"];
+
 
     return (
       <div className="container">
         <div className="row">
           <div className="col-md-8">
-            <div className="content">
-              {
-                // getting the description based on locale, should use mobX
-                this.state.dataset.research_dataset.description.filter((single) => {
-                  if (single[counterpart.getLocale()]) {
-                    return true;
-                  }
-                })[0][counterpart.getLocale()]
-              }
-            </div>
-            <div className="content-footer">
-              Footer box
-            </div>
+            <DsContent title={title}>
+            { description }
+            </DsContent>
+            <DsDownloads />
           </div>
           <div className="col-md-4">
-            <div className="sidebar">
-              <div className="separator">Säilityspaikka</div>
-              <div className="separator">Julkaisupaikka</div>
-              <div>Tieteenala</div>
-              <button type="button" className="btn btn-primary">
-                Näytä lisää tietojava
-              </button>
-            </div>
+            <DsSidebar />
           </div>
         </div>
       </div>

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import counterpart from 'counterpart';
 import '../../locale/translations';
+import Store from '../stores/view/language';
 
 export default class LangToggle extends Component {
   constructor(props) {
@@ -11,8 +12,8 @@ export default class LangToggle extends Component {
     this.changeLang = this.changeLang.bind(this);
   }
   changeLang(e){
-    console.log(e.target.innerHTML);
     counterpart.setLocale(e.target.innerHTML);
+    Store.current_lang = e.target.innerHTML;
     this.setState({
       language: e.target.innerHTML
     });
