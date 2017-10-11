@@ -1,5 +1,25 @@
 .dsDownloads {
-  >div {
-    padding: -20px;
+  .row:last-of-type {
+    margin-bottom: -15px;
+  }
+  .table {
+    margin-bottom: 0;
+    p {
+      font-weight: 700;
+      margin: 0
+    }
+    .urn {
+      font-size: 0.9em;
+      color: $color-gray;
+    }
+    td, th {
+      padding: 15px;
+    }
+  }
+}
+.thead-etsin {
+  background-color: $bg-secondary;
+  th {
+    border: 0 !important;
   }
 }
