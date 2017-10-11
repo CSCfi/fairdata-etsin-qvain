@@ -53,13 +53,13 @@ class Dataset extends React.Component {
         return true;
       }
     })[0]["en"];
-
+    let curator = this.state.dataset.research_dataset.curator;
 
     return (
-      <div className="container">
+      <div className="container regular-row">
         <div className="row">
           <div className="col-md-8">
-            <DsContent title={title}>
+            <DsContent title={title} curator={curator}>
             { description }
             </DsContent>
             <DsDownloads />

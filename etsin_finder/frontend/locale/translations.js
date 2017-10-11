@@ -11,6 +11,9 @@ counterpart.registerTranslations('en', {
   },
   home: {
     title: "Search datasets"
+  },
+  dataset: {
+    files: "Tiedostot"
   }
 });
 
@@ -25,5 +28,8 @@ counterpart.registerTranslations('fi', {
   },
   home: {
     title: "Etsi aineistoa"
+  },
+  dataset: {
+    files: "Files"
   }
 });

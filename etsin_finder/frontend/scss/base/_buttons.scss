@@ -8,6 +8,11 @@ button.btn {
       background-color: darken($color-primary, 5);
     }
   }
+  &.btn-etsin-outline {
+    background-color: transparent;
+    color: $color-primary;
+    border: 2px solid $color-primary;
+  }
   &.btn-transparent {
     background-color: transparent;
     color: $color-gray;

@@ -11,9 +11,9 @@ export default class Content extends React.Component {
         return (
           <div className="hero">
             <div className="container">
-              <h2 className="text-center">
+              <h1 className="text-center">
                 <Translate content="home.title" />
-              </h2>
+              </h1>
             </div>
           </div>
         );
