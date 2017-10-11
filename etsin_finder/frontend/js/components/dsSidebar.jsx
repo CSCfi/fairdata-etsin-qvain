@@ -14,8 +14,15 @@ export default class DsSidebar extends Component {
         </div>
         <div>
           <Translate content="" component="h3" />Tieteenala
+          {this.props.dataset.data_catalog.catalog_json.field_of_science.map(field => {
+            return <p key={field.identifier}>{field.pref_label[this.props.lang]}</p>
+          })}
           <Translate content="" component="h3" />Infra
+          <p>Lorem ipsum dolor sit amet</p>
           <Translate content="" component="h3" />Lisenssi
+          {this.props.dataset.data_catalog.catalog_json.access_rights.type.map(rights => {
+            return <p key={rights.identifier}>{rights.pref_label[this.props.lang]}</p>
+          })}
           <Translate content="" component="h3" />Pysyvä linkki tälle sivulle
           <Translate content="" component="h3" />Lisenssi
           <Translate content="" component="h3" />Viittaus aineistoon

@@ -13,7 +13,12 @@ counterpart.registerTranslations('en', {
     title: "Search datasets"
   },
   dataset: {
-    files: "Tiedostot"
+    dl: {
+      files: "Tiedostot",
+      name: "Name",
+      size: "Size",
+      download: "Download"
+    }
   }
 });
 
@@ -30,6 +35,11 @@ counterpart.registerTranslations('fi', {
     title: "Etsi aineistoa"
   },
   dataset: {
-    files: "Files"
+    dl: {
+      files: "Files",
+      name: "Nimi",
+      size: "Koko",
+      download: "Lataa"
+    }
   }
 });

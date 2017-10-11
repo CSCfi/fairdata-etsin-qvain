@@ -65,7 +65,7 @@ class Dataset extends React.Component {
             <DsDownloads />
           </div>
           <div className="col-md-4">
-            <DsSidebar />
+            <DsSidebar dataset={this.state.dataset} lang={current_lang}/>
           </div>
         </div>
       </div>
