@@ -36,7 +36,6 @@ if (process.env.NODE_ENV !== 'production') {
 class App extends Component {
   render () {
     return (
-    <IntlProvider locale={language} messages={messages}>
       <Provider stores={stores}>
         <Router>
           <div>
@@ -46,7 +45,6 @@ class App extends Component {
           </div>
         </Router>
       </Provider>
-    </IntlProvider>
     );
   }
 }
