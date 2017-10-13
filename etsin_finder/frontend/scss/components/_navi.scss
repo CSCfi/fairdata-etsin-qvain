@@ -11,6 +11,7 @@
   max-height: 0;
   overflow: hidden;
   transition: all 0.5s ease;
+  margin-bottom: -4px;
   @include mappy-bp(md) {
     display: inline-flex;
     max-height: initial;
@@ -21,7 +22,7 @@
   a.nav-link {
     text-transform: uppercase;
     color: $color-gray;
-    margin-bottom: -4px;
+    border-bottom: 4px solid transparent;
     &:hover {
       color: $color-primary;
     }
