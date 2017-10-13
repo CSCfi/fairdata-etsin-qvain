@@ -23,7 +23,7 @@ export default class Navi extends React.Component {
           <span></span>
         </div>
         <nav role="navigation" className="nav nav-list">
-          <Link to={"/main"} className="nav-link active">
+          <Link to={"/"} className="nav-link active">
             <FormattedMessage
               id="link.home"
               defaultMessage="Home"
