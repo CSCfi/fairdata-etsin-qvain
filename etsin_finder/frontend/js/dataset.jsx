@@ -2,13 +2,13 @@ import React from "react";
 import ReactDOM from "react-dom";
 import axios from "axios";
 import counterpart from 'counterpart';
-import { observer } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 
 import DsSidebar from './components/dsSidebar';
 import DsDownloads from './components/dsDownloads';
 import DsContent from './components/dsContent';
 
-@observer(['stores'])
+@inject("stores") @observer
 class Dataset extends React.Component {
   constructor(props) {
     super(props);
@@ -17,7 +17,7 @@ class Dataset extends React.Component {
 
     // Use Metax-test in dev env, actual Metax in production
     this.url = (process.env.NODE_ENV !== 'production') ? "https://metax-test.csc.fi" : "https://metax-test.csc.fi";
-    this.state = { dataset: [] };
+    this.state = { dataset: [], error: "" };
   }
 
   componentDidMount() {
@@ -25,24 +25,35 @@ class Dataset extends React.Component {
       .then(res => {
         const dataset = res.data;
         this.setState({ dataset });
-        console.log(dataset);
       })
-      .catch(function (error) {
-        console.log(error);
+      .catch(res => {
+        this.setState({ error: res });
       });
   }
 
   // TODO: All of this, obvs
   render() {
+    // from language store
+    let current_lang = this.props.stores.locale.current_lang;
+
+    // CASE 1: Houston, we have a problem
+    if (this.state.dataset.error !== "") {
+      return (
+        <div>
+          <p>Couldn't find dataset with id "{this.identifier}".</p>
+        </div>
+      );
+    }
+
+    // CASE 2: Loading not complete
     // Don't show anything until data has been loaded from Metax
     // TODO: Use a loading indicator instead
     // Do we need to worry about Metax sending us incomplete datasets?
     if (!this.state.dataset.research_dataset) {
-      return <div></div>;
+      return <DsNotFound />;
     }
-    // from language store
-    let current_lang = this.props.stores.locale.current_lang;
 
+    // CASE 3: Everything ok, give me the data!
     let title = this.state.dataset.research_dataset.title[current_lang];
     let description = this.state.dataset.research_dataset.description.filter((single) => {
       if (single["en"]) {

@@ -9,10 +9,6 @@ import Content from "./layout/content";
 
 import stores from './stores';
 
-if (process.env.NODE_ENV !== 'production') {
-  console.log('Looks like we are in development mode!');
-}
-
 class App extends Component {
   render () {
     return (
