@@ -1,13 +1,13 @@
-import React from "react";
+import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter as Router } from 'react-router-dom';
-import { IntlProvider, addLocaleData } from 'react-intl';
-import en from 'react-intl/locale-data/en';
-import fi from 'react-intl/locale-data/fi';
+import { Provider } from 'mobx-react';
 
 import Footer from "./layout/footer";
 import Header from "./layout/header";
 import Content from "./layout/content";
+
+import stores from './stores';
 
 // Our translated strings
 import translations from '../locale/data.js';
@@ -33,17 +33,19 @@ if (process.env.NODE_ENV !== 'production') {
   console.log('Looks like we are in development mode!');
 }
 
-class App extends React.Component {
+class App extends Component {
   render () {
     return (
     <IntlProvider locale={language} messages={messages}>
-      <Router>
-        <div>
-          <Header />
-          <Content />
-          <Footer />
-        </div>
-      </Router>
+      <Provider stores={stores}>
+        <Router>
+          <div>
+            <Header />
+            <Content />
+            <Footer />
+          </div>
+        </Router>
+      </Provider>
     </IntlProvider>
     );
   }

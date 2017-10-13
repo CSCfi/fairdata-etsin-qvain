@@ -1,0 +1,13 @@
+.sidebar {
+  >div:not(:first-of-type) {
+    padding: 20px 0;
+    &.separator {
+      padding: 20px 20px;
+    }
+  }
+  .separator {
+    padding: 0px 20px 20px;
+    margin: 0 -15px;
+    border-bottom: 1px solid $color-medgray;
+  }
+}

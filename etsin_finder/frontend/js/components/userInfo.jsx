@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FormattedMessage } from 'react-intl';
+import Translate from 'react-translate-component';
 
 export default class UserInfo extends Component {
 
@@ -27,11 +27,7 @@ export default class UserInfo extends Component {
           </div>
         </div>
         <button type="button" className="btn btn-transparent" onClick={this.logout}>
-          <FormattedMessage
-            id="link.logout"
-            defaultMessage="Logout"
-            description="Logout button"
-          />
+          Logout
         </button>
       </div>
     );
