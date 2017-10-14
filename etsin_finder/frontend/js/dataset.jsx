@@ -1,8 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom";
+
 import axios from "axios";
 import counterpart from 'counterpart';
 import { inject, observer } from 'mobx-react';
+import Translate from 'react-translate-component';
 
 import DsSidebar from './components/dsSidebar';
 import DsDownloads from './components/dsDownloads';
@@ -40,7 +42,7 @@ class Dataset extends React.Component {
     if (this.state.dataset.error !== "") {
       return (
         <div>
-          <p>Couldn't find dataset with id "{this.identifier}".</p>
+          <Translate content="error.notFound" />
         </div>
       );
     }

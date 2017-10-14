@@ -19,6 +19,9 @@ counterpart.registerTranslations('en', {
       size: "Size",
       download: "Download"
     }
+  },
+  error: {
+    notFound: "Couldn't find metadata for given id"
   }
 });
 
@@ -41,5 +44,8 @@ counterpart.registerTranslations('fi', {
       size: "Koko",
       download: "Lataa"
     }
+  },
+  error: {
+    notFound: "Annetulle id:lle ei löytynyt metadataa"
   }
 });
