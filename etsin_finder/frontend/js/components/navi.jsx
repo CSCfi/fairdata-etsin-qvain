@@ -32,12 +32,12 @@ export default class Navi extends React.Component {
           <NavLink to="/datasets" className="nav-link">
             <Translate content="nav.datasets" />
           </NavLink>
-          <a href="#a" className="nav-link">
+          <NavLink to="/organizations" className="nav-link">
             <Translate content="nav.organizations" />
-          </a>
-          <a href="#b" className="nav-link">
+          </NavLink>
+          <NavLink href="/help" className="nav-link">
             <Translate content="nav.help" />
-          </a>
+          </NavLink>
         </nav>
       </div>
     );
