@@ -35,7 +35,7 @@ export default class Navi extends React.Component {
           <NavLink to="/organizations" className="nav-link">
             <Translate content="nav.organizations" />
           </NavLink>
-          <NavLink href="/help" className="nav-link">
+          <NavLink to="/help" className="nav-link">
             <Translate content="nav.help" />
           </NavLink>
         </nav>
