@@ -52,7 +52,7 @@ class Dataset extends React.Component {
     // TODO: Use a loading indicator instead
     // Do we need to worry about Metax sending us incomplete datasets?
     if (!this.state.dataset.research_dataset) {
-      return <DsNotFound />;
+      return <div></div>;
     }
 
     // CASE 3: Everything ok, give me the data!
