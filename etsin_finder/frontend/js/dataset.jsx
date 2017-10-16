@@ -13,13 +13,12 @@ class Dataset extends React.Component {
   constructor(props) {
     super(props);
 
-    // TODO: Once routing is implemented, get this value from props
-    // Note that this dataset may not be always available as test db may
-    // be truncated at any time
-    this.identifier = "pid:urn:cr1";
+    this.identifier = this.props.match.params.identifier;
 
-    // TODO: Use Metax-test in dev env, actual Metax in production
-    this.url = "https://metax-test.csc.fi",
+    // Use Metax-test in dev env, actual Metax in production
+    this.url = (process.env.NODE_ENV !== 'production') 
+    ? "https://metax-test.csc.fi" 
+    : "put_production_URL_here";
 
     this.state = { dataset: [] };
   }

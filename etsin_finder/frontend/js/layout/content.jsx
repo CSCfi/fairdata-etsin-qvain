@@ -7,7 +7,7 @@ export default class Content extends React.Component {
   render () {
     return (
     <div className="content">
-      <Route path="/main" render={()=>{
+      <Route exact path="/" render={()=>{
         return (
           <div className="hero">
             <div className="container">
@@ -18,11 +18,6 @@ export default class Content extends React.Component {
           </div>
         );
       }}/>
-      <Route path="/dataset" render={()=>{
-        return (
-          <Dataset />
-        )
-      }}/>
       <Route path="/datasets" render={()=>{
         return (
           <div className="datasets">
@@ -32,6 +27,7 @@ export default class Content extends React.Component {
           </div>
         )
       }}/>
+      <Route path='/dataset/:identifier' component={Dataset}/>
     </div>
     );
   }

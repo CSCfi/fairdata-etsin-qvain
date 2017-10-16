@@ -6,6 +6,7 @@ import { Provider } from 'mobx-react';
 import Footer from "./layout/footer";
 import Header from "./layout/header";
 import Content from "./layout/content";
+
 import stores from './stores';
 
 console.log(process.env.NODE_ENV);
