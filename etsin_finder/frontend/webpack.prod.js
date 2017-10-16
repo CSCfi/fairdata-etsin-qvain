@@ -17,7 +17,13 @@ const config = {
         {
           test: /\.jsx?/,
           exclude: /node_modules/,
-          use: 'babel-loader'
+          loader: 'babel-loader',
+          options: {
+            plugins: [
+              ["transform-decorators-legacy"],
+              ["transform-class-properties"]
+            ]
+          }
         },
         {
           test: /\.css$/,
@@ -44,11 +50,6 @@ const config = {
       }),
       new UglifyJSPlugin({
         sourceMap: true
-      }),
-      new webpack.DefinePlugin({
-        'process.env': {
-          'NODE_ENV': JSON.stringify('production')
-        }
       })
     ]
 };

@@ -8,7 +8,12 @@ import Header from "./layout/header";
 import Content from "./layout/content";
 import stores from './stores';
 
-if (process.env.NODE_ENV !== 'production') {
+console.log(process.env.NODE_ENV);
+if (process.env.NODE_ENV === 'test') {
+  console.log('We are in test')
+} else if (process.env.NODE_ENV === 'development') {
+  console.log('We are in development')
+} else if (process.env.NODE_ENV !== 'production') {
   console.log('Looks like we are in development mode!');
 }
 
