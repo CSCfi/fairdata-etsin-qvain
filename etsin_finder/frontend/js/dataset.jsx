@@ -26,10 +26,9 @@ class Dataset extends React.Component {
       .then((res) => {
         const dataset = res.data;
         this.setState({ dataset });
-        console.log(dataset);
       })
-      .catch((error) => {
-        console.log(error);
+      .catch((err) => {
+        console.log(err)
       });
   }
 
