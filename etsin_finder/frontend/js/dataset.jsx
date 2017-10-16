@@ -1,7 +1,5 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import axios from "axios";
-import counterpart from 'counterpart';
+import React from 'react';
+import axios from 'axios';
 import { observer } from 'mobx-react';
 
 import DsSidebar from './components/dsSidebar';
@@ -16,19 +14,18 @@ class Dataset extends React.Component {
     this.identifier = this.props.match.params.identifier;
 
     // Use Metax-test in dev env, actual Metax in production
-    this.url = (process.env.NODE_ENV !== 'production') ? "https://metax-test.csc.fi" : "https://metax-test.csc.fi";
+    this.url = (process.env.NODE_ENV !== 'production') ? 'https://metax-test.csc.fi' : 'https://metax-test.csc.fi';
     this.state = { dataset: [] };
   }
 
   componentDidMount() {
     axios.get(`${this.url}/rest/datasets/${this.identifier}.json`)
-      .then(res => {
+      .then((res) => {
         const dataset = res.data;
         this.setState({ dataset });
-        console.log(dataset);
       })
-      .catch(function (error) {
-        console.log(error);
+      .catch((err) => {
+        console.log(err)
       });
   }
 
@@ -38,30 +35,31 @@ class Dataset extends React.Component {
     // TODO: Use a loading indicator instead
     // Do we need to worry about Metax sending us incomplete datasets?
     if (!this.state.dataset.research_dataset) {
-      return <div></div>;
+      return <div />;
     }
     // from language store
-    let current_lang = this.props.stores.locale.current_lang;
+    const { currentLang } = this.props.stores.Locale;
 
-    let title = this.state.dataset.research_dataset.title[current_lang];
-    let description = this.state.dataset.research_dataset.description.filter((single) => {
-      if (single["en"]) {
-        return true;
+    const title = this.state.dataset.research_dataset.title[currentLang];
+    const description = this.state.dataset.research_dataset.description.filter((single) => {
+      if (!single.en) {
+        return false
       }
-    })[0]["en"];
-    let curator = this.state.dataset.research_dataset.curator;
+      return true
+    })[0].en;
+    const { curator } = this.state.dataset.research_dataset;
 
     return (
       <div className="container regular-row">
         <div className="row">
           <div className="col-md-8">
             <DsContent title={title} curator={curator}>
-            { description }
+              { description }
             </DsContent>
             <DsDownloads />
           </div>
           <div className="col-md-4">
-            <DsSidebar dataset={this.state.dataset} lang={current_lang}/>
+            <DsSidebar dataset={this.state.dataset} lang={currentLang} />
           </div>
         </div>
       </div>

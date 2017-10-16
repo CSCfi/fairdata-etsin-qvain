@@ -19,5 +19,8 @@ button.btn {
     &:hover {
       text-decoration: underline;
     }
+    &:active, &:focus, &:visited {
+      background-color: transparent;
+    }
   }
 }
