@@ -28,8 +28,8 @@ install:
 - pip install -r requirements.txt
 - cd $TRAVIS_BUILD_DIR/etsin_finder/frontend
 - npm prune
-- npm install
-- npm run build
+- npm install --only=prod
+- npm run build -- --define process.env.NODE_ENV=\"'travis'\"
 
 before_script:
 - sudo mkdir /var/log/etsin_finder
@@ -38,7 +38,7 @@ before_script:
 # Add the below to the script after python tests once the frontend tests are in place
 #cd $TRAVIS_BUILD_DIR/etsin_finder/frontend && npm run test
 script:
-- cd $TRAVIS_BUILD_DIR && flake8 . && pytest --cov=etsin_finder tests/ && $TRAVIS_BUILD_DIR/.travis-deploy.sh
+- cd $TRAVIS_BUILD_DIR && flake8 . && cd etsin_finder/frontend && npm run lint && cd $TRAVIS_BUILD_DIR && pytest --cov=etsin_finder tests/ && $TRAVIS_BUILD_DIR/.travis-deploy.sh
 
 notifications:
   flowdock:
