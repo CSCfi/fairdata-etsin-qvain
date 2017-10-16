@@ -14,10 +14,7 @@ class Dataset extends React.Component {
     this.identifier = this.props.match.params.identifier;
 
     // Use Metax-test in dev env, actual Metax in production
-    this.url = (process.env.NODE_ENV !== 'production')
-      ? 'https://metax-test.csc.fi'
-      : 'put_production_URL_here';
-
+    this.url = (process.env.NODE_ENV !== 'production') ? 'https://metax-test.csc.fi' : 'https://metax-test.csc.fi';
     this.state = { dataset: [] };
   }
 
