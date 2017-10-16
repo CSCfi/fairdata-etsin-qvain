@@ -4,11 +4,11 @@ import ReactDOM from "react-dom";
 import axios from "axios";
 import counterpart from 'counterpart';
 import { inject, observer } from 'mobx-react';
-import Translate from 'react-translate-component';
 
 import DsSidebar from './components/dsSidebar';
 import DsDownloads from './components/dsDownloads';
 import DsContent from './components/dsContent';
+import ErrorPage from './components/errorPage';
 
 @inject("stores") @observer
 class Dataset extends React.Component {
@@ -39,12 +39,8 @@ class Dataset extends React.Component {
     let current_lang = this.props.stores.locale.current_lang;
 
     // CASE 1: Houston, we have a problem
-    if (this.state.dataset.error !== "") {
-      return (
-        <div>
-          <Translate content="error.notFound" />
-        </div>
-      );
+    if (this.state.error !== "") {
+      return <ErrorPage />;
     }
 
     // CASE 2: Loading not complete
