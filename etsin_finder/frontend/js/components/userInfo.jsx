@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
-import Translate from 'react-translate-component';
 
 export default class UserInfo extends Component {
-
-  logout(event) {
-    alert(event.target.innerHTML);
+  logout() {
+    alert(this.target.innerHTML);
   }
 
   render() {
@@ -15,13 +13,13 @@ export default class UserInfo extends Component {
             Matti Meikäläinen
           </button>
           <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a className="dropdown-item" href="#">
+            <a className="dropdown-item" href="#a">
               Action
             </a>
-            <a className="dropdown-item" href="#">
+            <a className="dropdown-item" href="#b">
               Another action
             </a>
-            <a className="dropdown-item" href="#">
+            <a className="dropdown-item" href="#c">
               Something else here
             </a>
           </div>

@@ -3,12 +3,11 @@ import Translate from 'react-translate-component';
 
 export default class DsDownloads extends Component {
   render() {
-    console.log(this.props.files);
     return (
       <div className="dsDownloads content-box">
         <div className="row no-gutters justify-content-between mb-3">
           <div className="d-flex align-items-center">
-            <Translate content="dataset.dl.files" component="h3" className="m-0"/>
+            <Translate content="dataset.dl.files" component="h3" className="m-0" />
             <p className="total-size m-0 ml-2">
               (99.9 GB)
             </p>
@@ -23,7 +22,7 @@ export default class DsDownloads extends Component {
               <tr>
                 <th><Translate content="dataset.dl.name" /></th>
                 <th><Translate content="dataset.dl.size" /></th>
-                <th></th>
+                <th />
               </tr>
             </thead>
             <tbody>

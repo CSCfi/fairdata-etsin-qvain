@@ -1,7 +1,7 @@
-import locale from './view/language';
+import Locale from './view/language';
 
 const stores = {
-  locale,
+  Locale,
 };
 
 export default stores;

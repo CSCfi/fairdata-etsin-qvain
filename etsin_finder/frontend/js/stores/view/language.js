@@ -1,8 +1,8 @@
-import { autorun, observable } from 'mobx';
+import { observable } from 'mobx';
 import counterpart from 'counterpart';
 
-class locale {
-  @observable current_lang = counterpart.getLocale();
+class Locale {
+  @observable currentLang = counterpart.getLocale();
 }
 
-export default new locale();
+export default new Locale();

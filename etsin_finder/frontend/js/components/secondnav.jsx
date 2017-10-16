@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 import Translate from 'react-translate-component';
-import UserInfo from "./userInfo";
-import LangToggle from "./langToggle";
+import LangToggle from './langToggle';
 
 export default class SecondNav extends Component {
-  alertButton(a) {
-    console.log(a.target);
-    alert(a.target.innerHTML);
+  alertButton() {
+    console.log(this.target)
   }
   render() {
     return (
@@ -15,7 +13,6 @@ export default class SecondNav extends Component {
           <Translate content="addDataset" />
         </button>
         <LangToggle />
-
       </div>
     );
   }

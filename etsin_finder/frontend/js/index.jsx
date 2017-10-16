@@ -1,25 +1,25 @@
-import React, { Component } from "react";
-import ReactDOM from "react-dom";
+import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { Provider } from 'mobx-react';
 
-import Footer from "./layout/footer";
-import Header from "./layout/header";
-import Content from "./layout/content";
+import Footer from './layout/footer';
+import Header from './layout/header';
+import Content from './layout/content';
 
 import stores from './stores';
 
 console.log(process.env.NODE_ENV);
 if (process.env.NODE_ENV === 'test') {
-  console.log('We are in test')
+  console.log('We are in test');
 } else if (process.env.NODE_ENV === 'development') {
-  console.log('We are in development')
+  console.log('We are in development');
 } else if (process.env.NODE_ENV !== 'production') {
   console.log('Looks like we are in development mode!');
 }
 
 class App extends Component {
-  render () {
+  render() {
     return (
       <Provider stores={stores}>
         <Router>
@@ -34,4 +34,4 @@ class App extends Component {
   }
 }
 
-ReactDOM.render(<App />, document.getElementById("content"));
+ReactDOM.render(<App />, document.getElementById('content'));
