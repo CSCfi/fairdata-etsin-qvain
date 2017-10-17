@@ -1,13 +1,23 @@
 .sidebar {
-  >div:not(:first-of-type) {
-    padding: 20px 0;
-    &.separator {
-      padding: 20px 20px;
+  h4 {
+    margin-bottom: 0;
+  }
+  >div {
+    padding: 20px 0px;
+    &:first-of-type {
+      padding: 0 0 20px;
     }
   }
   .separator {
-    padding: 0px 20px 20px;
-    margin: 0 -15px;
-    border-bottom: 1px solid $color-medgray;
+    &:after {
+      content: "";
+      display: block;
+      height: 1px;
+      background-color: $color-medgray;
+      position: relative;
+      bottom: -20px;
+      width: 200%;
+      margin: 0 -100px;
+    }
   }
 }

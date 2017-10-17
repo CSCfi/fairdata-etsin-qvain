@@ -16,7 +16,7 @@ export default class DsSidebarItem extends Component {
     }
     return (
       <div>
-        <Translate content={this.props.trans} fallback={this.props.fallback} component="h3" />
+        <Translate content={this.props.trans} fallback={this.props.fallback} component="h4" />
         {React.createElement(this.state.component, null, this.props.children)}
       </div>
     )
