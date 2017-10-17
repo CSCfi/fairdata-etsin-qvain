@@ -1,8 +1,6 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 
 import axios from 'axios';
-import counterpart from 'counterpart';
 import { inject, observer } from 'mobx-react';
 
 import DsSidebar from './components/dsSidebar';
@@ -20,9 +18,8 @@ class Dataset extends React.Component {
 
     // Use Metax-test in dev env, actual Metax in production
     this.url = (process.env.NODE_ENV !== 'production') ? 'https://metax-test.csc.fi' : 'https://metax-test.csc.fi'
-    this.state = { dataset: [], error: "" }
+    this.state = { dataset: [], error: '' }
     this.goBack = this.goBack.bind(this)
-
   }
 
   componentDidMount() {
@@ -31,7 +28,7 @@ class Dataset extends React.Component {
         const dataset = res.data;
         this.setState({ dataset });
       })
-      .catch(res => {
+      .catch((res) => {
         this.setState({ error: res });
       });
   }
@@ -42,9 +39,8 @@ class Dataset extends React.Component {
 
   // TODO: All of this, obvs
   render() {
-
     // CASE 1: Houston, we have a problem
-    if (this.state.error !== "") {
+    if (this.state.error !== '') {
       return <ErrorPage />;
     }
 
@@ -53,7 +49,7 @@ class Dataset extends React.Component {
     // TODO: Use a loading indicator instead
     // Do we need to worry about Metax sending us incomplete datasets?
     if (!this.state.dataset.research_dataset) {
-      return <div></div>;
+      return <div />;
     }
 
     // CASE 3: Everything ok, give me the data!
@@ -61,9 +57,9 @@ class Dataset extends React.Component {
     // from language store
     const { currentLang } = this.props.Stores.Locale;
 
-    let title = this.state.dataset.research_dataset.title[currentLang];
-    let description = this.state.dataset.research_dataset.description.filter((single) => {
-      if (single["en"]) {
+    const title = this.state.dataset.research_dataset.title[currentLang];
+    const description = this.state.dataset.research_dataset.description.filter((single) => {
+      if (single.en) {
         return true;
       }
       return true
