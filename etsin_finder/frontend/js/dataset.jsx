@@ -1,7 +1,12 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import axios from "axios";
+import React from 'react';
+import axios from 'axios';
+import { observer } from 'mobx-react';
 
+import DsSidebar from './components/dsSidebar';
+import DsDownloads from './components/dsDownloads';
+import DsContent from './components/dsContent';
+
+@observer(['stores'])
 class Dataset extends React.Component {
   constructor(props) {
     super(props);
@@ -9,18 +14,18 @@ class Dataset extends React.Component {
     this.identifier = this.props.match.params.identifier;
 
     // Use Metax-test in dev env, actual Metax in production
-    this.url = (process.env.NODE_ENV !== 'production') ? "https://metax-test.csc.fi" : "https://metax-test.csc.fi";
+    this.url = (process.env.NODE_ENV !== 'production') ? 'https://metax-test.csc.fi' : 'https://metax-test.csc.fi';
     this.state = { dataset: [] };
   }
 
   componentDidMount() {
     axios.get(`${this.url}/rest/datasets/${this.identifier}.json`)
-      .then(res => {
+      .then((res) => {
         const dataset = res.data;
         this.setState({ dataset });
       })
-      .catch(function (error) {
-        console.log(error);
+      .catch((err) => {
+        console.log(err)
       });
   }
 
@@ -30,14 +35,33 @@ class Dataset extends React.Component {
     // TODO: Use a loading indicator instead
     // Do we need to worry about Metax sending us incomplete datasets?
     if (!this.state.dataset.research_dataset) {
-      return <div></div>;
+      return <div />;
     }
+    // from language store
+    const { currentLang } = this.props.stores.Locale;
+
+    const title = this.state.dataset.research_dataset.title[currentLang];
+    const description = this.state.dataset.research_dataset.description.filter((single) => {
+      if (!single.en) {
+        return false
+      }
+      return true
+    })[0].en;
+    const { curator } = this.state.dataset.research_dataset;
 
     return (
-      <div>
-        Here be important values:<br />
-        {this.state.dataset.created_by_api}<br />
-        {this.state.dataset.research_dataset.urn_identifier}<br />
+      <div className="container regular-row">
+        <div className="row">
+          <div className="col-md-8">
+            <DsContent title={title} curator={curator}>
+              { description }
+            </DsContent>
+            <DsDownloads />
+          </div>
+          <div className="col-md-4">
+            <DsSidebar dataset={this.state.dataset} lang={currentLang} />
+          </div>
+        </div>
       </div>
     );
   }

@@ -1,15 +1,18 @@
 /* Base */
 @import 'base/breakpoints';
 @import 'base/general';
-@import 'base/typography';
 @import 'base/colors';
+@import 'base/typography';
 @import 'base/buttons';
 
 /* Layout */
 @import 'layout/header';
 @import 'layout/content';
 @import 'layout/footer';
+@import 'layout/dataset';
 
 /* Components */
+@import 'components/dsDownloads';
+@import 'components/dsSidebar';
 @import 'components/navi';
 @import 'components/userInfo';

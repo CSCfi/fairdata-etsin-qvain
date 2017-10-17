@@ -1,10 +1,8 @@
-import { autorun, observable } from 'mobx';
+import { observable } from 'mobx';
+import counterpart from 'counterpart';
 
-class LocaleStore {
+class Locale {
+  @observable currentLang = counterpart.getLocale();
 }
 
-const Locale = window.Locale = new LocaleStore();
-export default Locale;
-
-autorun(() => {
-})
+export default new Locale();
