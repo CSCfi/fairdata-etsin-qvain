@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.html",
   "scripts": {
-    "build": "webpack --progress --config webpack.prod.js --define process.env.NODE_ENV=\"'production'\"",
+    "build": "webpack --config webpack.prod.js --define process.env.NODE_ENV=\"'production'\"",
     "dev-build": "webpack --progress -d --config webpack.config.js",
     "lint": "eslint js --ext .jsx,.js",
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -39,7 +39,7 @@
     "babel-loader": "7.1.2",
     "babel-plugin-transform-class-properties": "6.24.1",
     "babel-plugin-transform-decorators-legacy": "1.3.4",
-    "babel-preset-es2015": "6.24.1",
+    "babel-preset-env": "^1.6.0",
     "babel-preset-react": "6.24.1",
     "counterpart": "0.18.3",
     "css-loader": "0.28.7",

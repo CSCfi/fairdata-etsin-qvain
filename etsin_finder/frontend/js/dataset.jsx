@@ -1,12 +1,12 @@
 import React from 'react';
 import axios from 'axios';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 
 import DsSidebar from './components/dsSidebar';
 import DsDownloads from './components/dsDownloads';
 import DsContent from './components/dsContent';
 
-@observer(['stores'])
+@inject('Stores') @observer
 class Dataset extends React.Component {
   constructor(props) {
     super(props);
@@ -14,8 +14,9 @@ class Dataset extends React.Component {
     this.identifier = this.props.match.params.identifier;
 
     // Use Metax-test in dev env, actual Metax in production
-    this.url = (process.env.NODE_ENV !== 'production') ? 'https://metax-test.csc.fi' : 'https://metax-test.csc.fi';
-    this.state = { dataset: [] };
+    this.url = (process.env.NODE_ENV !== 'production') ? 'https://metax-test.csc.fi' : 'https://metax-test.csc.fi'
+    this.state = { dataset: [] }
+    this.goBack = this.goBack.bind(this)
   }
 
   componentDidMount() {
@@ -29,6 +30,10 @@ class Dataset extends React.Component {
       });
   }
 
+  goBack() {
+    this.props.Stores.History.history.goBack()
+  }
+
   // TODO: All of this, obvs
   render() {
     // Don't show anything until data has been loaded from Metax
@@ -38,7 +43,7 @@ class Dataset extends React.Component {
       return <div />;
     }
     // from language store
-    const { currentLang } = this.props.stores.Locale;
+    const { currentLang } = this.props.Stores.Locale;
 
     const title = this.state.dataset.research_dataset.title[currentLang];
     const description = this.state.dataset.research_dataset.description.filter((single) => {
@@ -53,6 +58,9 @@ class Dataset extends React.Component {
       <div className="container regular-row">
         <div className="row">
           <div className="col-md-8">
+            <button className="btn btn-transparent" onClick={this.goBack}>
+              Go back
+            </button>
             <DsContent title={title} curator={curator}>
               { description }
             </DsContent>

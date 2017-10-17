@@ -1,7 +1,9 @@
-import Locale from './view/language';
+import Locale from './view/language'
+import History from './view/history'
 
-const stores = {
+const Stores = {
   Locale,
+  History,
 };
 
-export default stores;
+export default Stores;
