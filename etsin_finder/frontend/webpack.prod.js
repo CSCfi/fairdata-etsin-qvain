@@ -17,25 +17,14 @@ const config = {
       {
         test: /\.jsx?/,
         exclude: /node_modules/,
-        use: [
-          {
-            loader: 'babel-loader',
-            options: {
-              plugins: [
-                ['transform-decorators-legacy'],
-                ['transform-class-properties'],
-              ],
-            },
-          },
-          {
-            loader: 'eslint-loader',
-          },
-        ],
-      },
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        use: 'eslint-loader',
+        loader: 'babel-loader',
+        options: {
+          plugins: [
+            ['transform-decorators-legacy'],
+            ['transform-class-properties'],
+          ],
+          presets: ['env'],
+        },
       },
       {
         test: /\.css$/,

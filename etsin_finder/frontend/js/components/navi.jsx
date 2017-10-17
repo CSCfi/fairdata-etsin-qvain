@@ -38,6 +38,9 @@ export default class Navi extends React.Component {
           <NavLink to="/help" className="nav-link">
             <Translate content="nav.help" />
           </NavLink>
+          <NavLink to="/dataset/1" className="nav-link">
+            Dataset 1
+          </NavLink>
         </nav>
       </div>
     );
