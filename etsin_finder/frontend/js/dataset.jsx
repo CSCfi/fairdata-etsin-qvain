@@ -9,7 +9,6 @@ import DsContent from './components/dsContent';
 import ErrorPage from './components/errorPage';
 
 @inject('Stores') @observer
-
 class Dataset extends React.Component {
   constructor(props) {
     super(props);
@@ -27,6 +26,7 @@ class Dataset extends React.Component {
       .then((res) => {
         const dataset = res.data;
         this.setState({ dataset });
+        console.log(dataset)
       })
       .catch((res) => {
         this.setState({ error: res });

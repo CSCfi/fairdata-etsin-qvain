@@ -9,18 +9,34 @@ export default class DsSidebar extends Component {
       ? `${start} - ${end}`
       : start + end
   }
+  checkNested(obj, ...argus) {
+    const args = Array.prototype.slice.call(argus, 0);
+    let newObj = obj
+    for (let i = 0; i < args.length; i += 1) {
+      if (!newObj || !Object.prototype.hasOwnProperty.call(newObj, args[i])) {
+        return false;
+      }
+      newObj = newObj[args[i]];
+    }
+    return true;
+  }
 
   render() {
     const researchDataset = this.props.dataset.research_dataset
     const dataCatalog = this.props.dataset.data_catalog
     const { currentLang } = Locale
     const isOutputOf = researchDataset.is_output_of
+    console.log(this.props.dataset.research_dataset)
 
     return (
       <div className="sidebar content-box">
         <div className="separator">
           <DsSidebarItem component="p" trans="dataset.publisher" fallback="Publisher">
-            {dataCatalog.catalog_json.publisher.map(pub => pub.name[currentLang])}
+            {
+              this.checkNested(researchDataset, 'publisher', 'name')
+              ? researchDataset.publisher.name
+              : null
+            }
           </DsSidebarItem>
         </div>
         <div className="separator">
@@ -30,7 +46,11 @@ export default class DsSidebar extends Component {
         </div>
         <div>
           <DsSidebarItem component="p" trans="dataset.project" fallback="Project" hideEmpty="true">
-            {researchDataset.is_output_of}
+            {
+              isOutputOf
+                ? researchDataset.is_output_of.map(item => item.name[currentLang])
+                : null
+            }
           </DsSidebarItem>
           <DsSidebarItem component="div" trans="dataset.field_of_science" fallback="Field of Science" hideEmpty="true">
             {dataCatalog.catalog_json.field_of_science.map(field => (
@@ -40,45 +60,61 @@ export default class DsSidebar extends Component {
             ))}
           </DsSidebarItem>
           <DsSidebarItem component="p" trans="dataset.keywords" fallback="Keywords" hideEmpty="true">
-            {researchDataset.keywords}
+            {
+              researchDataset.keyword
+                ? researchDataset.keyword.map(keyword => <span className="keyword" key={keyword}>{keyword} </span>)
+                : null
+            }
           </DsSidebarItem>
           <DsSidebarItem component="p" trans="dataset.spatial_coverage" fallback="Spatial Coverage" hideEmpty="true">
             {
-            researchDataset.spatial
-              ? researchDataset.spatial.geographic_name
-              : null
+              this.checkNested(researchDataset, 'spatial', 'geographic_name')
+                ? researchDataset.spatial.geographic_name
+                : null
             }
           </DsSidebarItem>
           <DsSidebarItem component="p" trans="dataset.temporal_coverage" fallback="Temporal Coverage" hideEmpty="true">
             {
-              researchDataset.temporal
-              ? this.dateSeparator(
-                researchDataset.temporal.start_date,
-                researchDataset.temporal.end_date,
-              )
-              : null
+              this.checkNested(researchDataset, 'temporal')
+                ? this.dateSeparator(
+                  researchDataset.temporal.start_date,
+                  researchDataset.temporal.end_date,
+                )
+                : null
             }
           </DsSidebarItem>
           <DsSidebarItem component="div" trans="dataset.license" fallback="License" hideEmpty="true">
-            {dataCatalog.catalog_json.access_rights.license.map(rights => (
-              <p key={rights.identifier}>
-                {rights.title[0][this.props.lang]}
-              </p>
-            ))}
+            {
+              this.checkNested(dataCatalog, 'catalog_json', 'access_rights', 'licence')
+                ? dataCatalog.catalog_json.access_rights.license.map(rights => (
+                  <p key={rights.identifier}>
+                    {rights.title[0][this.props.lang]}
+                  </p>
+                ))
+                : null
+            }
           </DsSidebarItem>
           <DsSidebarItem component="p" trans="dataset.access_rights" fallback="Access rights statement" hideEmpty="true">
-            {dataCatalog.catalog_json.access_rights.description[0][currentLang]}
+            {
+              this.checkNested(dataCatalog, 'catalog_json', 'access_rights', 'description')
+                ? dataCatalog.catalog_json.access_rights.description[0][currentLang]
+                : null
+            }
           </DsSidebarItem>
           <DsSidebarItem component="p" trans="dataset.funder" fallback="Funder" hideEmpty="true">
-            {isOutputOf ? researchDataset.is_output_of.has_funding_agency.name : null}
+            {
+              this.checkNested(researchDataset, 'is_output_of', 'has_funding_agency', 'name')
+                ? researchDataset.is_output_of.has_funding_agency.name
+                : null
+            }
           </DsSidebarItem>
           <DsSidebarItem component="p" trans="dataset.curator" fallback="Curator" hideEmpty="true">
             {researchDataset.curator ? researchDataset.curator.name : null}
           </DsSidebarItem>
           <DsSidebarItem component="p" trans="dataset.infrastructure" fallback="Infrastructure" hideEmpty="true">
             {
-              researchDataset.related_entity
-                ? researchDataset.related_entity.title[currentLang]
+              this.checkNested(researchDataset, 'related_entity')
+                ? researchDataset.related_entity.map(entity => entity.title[currentLang])
                 : null
             }
           </DsSidebarItem>
