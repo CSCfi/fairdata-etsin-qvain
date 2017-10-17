@@ -1,12 +1,15 @@
 import React from 'react';
+
 import axios from 'axios';
-import { observer, inject } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 
 import DsSidebar from './components/dsSidebar';
 import DsDownloads from './components/dsDownloads';
 import DsContent from './components/dsContent';
+import ErrorPage from './components/errorPage';
 
 @inject('Stores') @observer
+
 class Dataset extends React.Component {
   constructor(props) {
     super(props);
@@ -15,7 +18,7 @@ class Dataset extends React.Component {
 
     // Use Metax-test in dev env, actual Metax in production
     this.url = (process.env.NODE_ENV !== 'production') ? 'https://metax-test.csc.fi' : 'https://metax-test.csc.fi'
-    this.state = { dataset: [] }
+    this.state = { dataset: [], error: '' }
     this.goBack = this.goBack.bind(this)
   }
 
@@ -25,8 +28,8 @@ class Dataset extends React.Component {
         const dataset = res.data;
         this.setState({ dataset });
       })
-      .catch((err) => {
-        console.log(err)
+      .catch((res) => {
+        this.setState({ error: res });
       });
   }
 
@@ -36,12 +39,21 @@ class Dataset extends React.Component {
 
   // TODO: All of this, obvs
   render() {
+    // CASE 1: Houston, we have a problem
+    if (this.state.error !== '') {
+      return <ErrorPage />;
+    }
+
+    // CASE 2: Loading not complete
     // Don't show anything until data has been loaded from Metax
     // TODO: Use a loading indicator instead
     // Do we need to worry about Metax sending us incomplete datasets?
     if (!this.state.dataset.research_dataset) {
       return <div />;
     }
+
+    // CASE 3: Everything ok, give me the data!
+
     // from language store
     const { currentLang } = this.props.Stores.Locale
     const researchDataset = this.state.dataset.research_dataset

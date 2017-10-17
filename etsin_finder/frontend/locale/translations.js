@@ -17,9 +17,12 @@ counterpart.registerTranslations('en', {
       files: 'Tiedostot',
       name: 'Name',
       size: 'Size',
-      download: 'Download',
-    },
+      download: 'Download'
+    }
   },
+  error: {
+    notFound: "Couldn't find metadata for given id"
+  }
 });
 
 counterpart.registerTranslations('fi', {
@@ -39,7 +42,10 @@ counterpart.registerTranslations('fi', {
       files: 'Files',
       name: 'Nimi',
       size: 'Koko',
-      download: 'Lataa',
-    },
+      download: 'Lataa'
+    }
   },
+  error: {
+    notFound: "Annetulle id:lle ei löytynyt metadataa"
+  }
 });
