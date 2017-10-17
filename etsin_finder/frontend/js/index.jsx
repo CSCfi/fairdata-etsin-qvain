@@ -7,7 +7,7 @@ import Footer from './layout/footer';
 import Header from './layout/header';
 import Content from './layout/content';
 
-import stores from './stores';
+import Stores from './stores';
 
 console.log(process.env.NODE_ENV);
 if (process.env.NODE_ENV === 'test') {
@@ -21,7 +21,7 @@ if (process.env.NODE_ENV === 'test') {
 class App extends Component {
   render() {
     return (
-      <Provider stores={stores}>
+      <Provider Stores={Stores}>
         <Router>
           <div>
             <Header />

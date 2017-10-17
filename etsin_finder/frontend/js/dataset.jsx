@@ -1,12 +1,16 @@
-import React from 'react';
-import axios from 'axios';
-import { observer } from 'mobx-react';
+import React from "react";
+import ReactDOM from "react-dom";
+
+import axios from "axios";
+import counterpart from 'counterpart';
+import { inject, observer } from 'mobx-react';
 
 import DsSidebar from './components/dsSidebar';
 import DsDownloads from './components/dsDownloads';
 import DsContent from './components/dsContent';
+import ErrorPage from './components/errorPage';
 
-@observer(['stores'])
+@inject("Stores") @observer
 class Dataset extends React.Component {
   constructor(props) {
     super(props);
@@ -15,7 +19,7 @@ class Dataset extends React.Component {
 
     // Use Metax-test in dev env, actual Metax in production
     this.url = (process.env.NODE_ENV !== 'production') ? 'https://metax-test.csc.fi' : 'https://metax-test.csc.fi';
-    this.state = { dataset: [] };
+    this.state = { dataset: [], error: '' };
   }
 
   componentDidMount() {
@@ -24,26 +28,36 @@ class Dataset extends React.Component {
         const dataset = res.data;
         this.setState({ dataset });
       })
-      .catch((err) => {
-        console.log(err)
+      .catch(res => {
+        this.setState({ error: res });
       });
   }
 
   // TODO: All of this, obvs
   render() {
+
+    // CASE 1: Houston, we have a problem
+    if (this.state.error !== "") {
+      return <ErrorPage />;
+    }
+
+    // CASE 2: Loading not complete
     // Don't show anything until data has been loaded from Metax
     // TODO: Use a loading indicator instead
     // Do we need to worry about Metax sending us incomplete datasets?
     if (!this.state.dataset.research_dataset) {
-      return <div />;
+      return <div></div>;
     }
-    // from language store
-    const { currentLang } = this.props.stores.Locale;
 
-    const title = this.state.dataset.research_dataset.title[currentLang];
-    const description = this.state.dataset.research_dataset.description.filter((single) => {
-      if (!single.en) {
-        return false
+    // CASE 3: Everything ok, give me the data!
+
+    // from language store
+    const { currentLang } = this.props.Stores.Locale;
+
+    let title = this.state.dataset.research_dataset.title[currentLang];
+    let description = this.state.dataset.research_dataset.description.filter((single) => {
+      if (single["en"]) {
+        return true;
       }
       return true
     })[0].en;
