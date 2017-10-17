@@ -43,16 +43,20 @@ class Dataset extends React.Component {
       return <div />;
     }
     // from language store
-    const { currentLang } = this.props.Stores.Locale;
+    const { currentLang } = this.props.Stores.Locale
+    const researchDataset = this.state.dataset.research_dataset
+    const titles = researchDataset.title
 
-    const title = this.state.dataset.research_dataset.title[currentLang];
-    const description = this.state.dataset.research_dataset.description.filter((single) => {
+    const title = titles[currentLang]
+
+
+    const description = researchDataset.description.filter((single) => {
       if (!single.en) {
         return false
       }
       return true
     })[0].en;
-    const { curator } = this.state.dataset.research_dataset;
+    const { creator, contributor, issued } = researchDataset;
 
     return (
       <div className="container regular-row">
@@ -61,7 +65,7 @@ class Dataset extends React.Component {
             <button className="btn btn-transparent" onClick={this.goBack}>
               Go back
             </button>
-            <DsContent title={title} curator={curator}>
+            <DsContent title={title} creator={creator} contributor={contributor} issued={issued}>
               { description }
             </DsContent>
             <DsDownloads />
