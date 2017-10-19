@@ -1,12 +1,11 @@
 from flask import Flask
 import logging
 from logging.handlers import RotatingFileHandler
-from .app_config import get_app_config
+from etsin_finder.app_config import get_app_config
 from .reindex_task import ReindexTask
 
-
 def create_app(config=None):
-    app = Flask('etsin_finder', static_folder="./frontend/dist", template_folder="./frontend")
+    app = Flask(__name__, static_folder="./frontend/dist", template_folder="./frontend")
     _set_app_config(app, config)
     if not app.testing:
         _setup_app_logging(app)
@@ -37,3 +36,7 @@ def _setup_app_logging(app):
 
 
 app = create_app()
+import etsin_finder.views
+
+if __name__ == "__main__":
+    app.run()
