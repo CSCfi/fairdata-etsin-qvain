@@ -2,6 +2,7 @@ from flask import Flask
 import logging
 from logging.handlers import RotatingFileHandler
 from .app_config import get_app_config
+from .reindex_task import ReindexTask
 
 
 def create_app(config=None):
@@ -9,6 +10,8 @@ def create_app(config=None):
     _set_app_config(app, config)
     if not app.testing:
         _setup_app_logging(app)
+        reindex_task = ReindexTask(app)
+        reindex_task.init_reindex_scheduled_task()
     return app
 
 
