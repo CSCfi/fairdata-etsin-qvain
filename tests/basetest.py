@@ -1,10 +1,11 @@
 import pytest
 
+
 class BaseTest():
 
     @pytest.fixture
     def app(self):
-        from etsin_finder import app
+        from etsin_finder.finder import app
         app.config.update(self._get_test_app_config())
         return app
 
