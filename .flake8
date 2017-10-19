@@ -22,6 +22,8 @@ ignore =
     E402,
     # continuation line under-indented for visual indent
     E128
+    # module imported but unused
+    F401
 
 # often contains "unused" imports
-exclude = __init__.py,etsin_finder/frontend
+exclude = etsin_finder/frontend
