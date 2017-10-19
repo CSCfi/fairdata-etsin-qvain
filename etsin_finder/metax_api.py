@@ -1,18 +1,16 @@
 import requests
 from requests import HTTPError
 import json
-import logging
+from etsin_finder.finder import app
 
-log = logging.getLogger(__name__)
+log = app.logger
 
 TIMEOUT = 30
 
 
 class MetaxAPIService:
 
-    def __init__(self, app):
-        self.app = app
-
+    def __init__(self):
         self.METAX_DATASETS_BASE_URL = 'https://{0}/rest/datasets'.format(app.config['METAX_API']['HOST'])
         self.METAX_GET_URN_IDENTIFIERS_URL = self.METAX_DATASETS_BASE_URL + '/urn_identifiers'
         self.METAX_GET_DATASET_URL = self.METAX_DATASETS_BASE_URL + '/{0}'
@@ -30,6 +28,7 @@ class MetaxAPIService:
 
         :return: Metax response as json
         """
+
         r = requests.get(self.METAX_GET_DATASET_URL.format(urn_identifier),
                             headers={'Content-Type': 'application/json'},
                             timeout=TIMEOUT)
@@ -40,6 +39,7 @@ class MetaxAPIService:
                 urn_id=urn_identifier, error=repr(e), json=self.json_or_empty(r)))
             return None
             log.debug('Response text: %s', r.text)
+
         return json.loads(r.text)
 
     def get_all_dataset_urn_identifiers(self):
@@ -56,7 +56,7 @@ class MetaxAPIService:
             log.error('Failed to urn_identifiers from Metax: \nerror={error}, \njson={json}'.format(
                 error=repr(e), json=self.json_or_empty(r)))
             return None
-        log.debug('Response text: %s', r.text)
+
         return json.loads(r.text)
 
     def check_dataset_exists(self, urn_identifier):
