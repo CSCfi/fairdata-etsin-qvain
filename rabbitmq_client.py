@@ -56,6 +56,7 @@ def callback_3(ch, method, properties, body):
     print(" [ delete ] %r" % body)
     channel.basic_ack(delivery_tag=method.delivery_tag)
 
+
 channel.basic_consume(callback_1, queue=queue_1)
 channel.basic_consume(callback_2, queue=queue_2)
 channel.basic_consume(callback_3, queue=queue_3)
