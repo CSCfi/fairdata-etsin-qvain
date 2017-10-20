@@ -30,8 +30,8 @@ class MetaxAPIService:
         """
 
         r = requests.get(self.METAX_GET_DATASET_URL.format(urn_identifier),
-                            headers={'Content-Type': 'application/json'},
-                            timeout=TIMEOUT)
+                         headers={'Content-Type': 'application/json'},
+                         timeout=TIMEOUT)
         try:
             r.raise_for_status()
         except HTTPError as e:
@@ -48,8 +48,8 @@ class MetaxAPIService:
         :return: List of urn_identfiers
         """
         r = requests.get(self.METAX_GET_URN_IDENTIFIERS_URL,
-                            headers={'Content-Type': 'application/json'},
-                            timeout=TIMEOUT)
+                         headers={'Content-Type': 'application/json'},
+                         timeout=TIMEOUT)
         try:
             r.raise_for_status()
         except HTTPError as e:
@@ -73,5 +73,5 @@ class MetaxAPIService:
             log.error("Error when connecting to MetaX dataset exists API")
             raise e
             log.debug('Checked dataset existence in MetaX: ({code}) {json}'.format(
-            code=r.status_code, json=r.json()))
+                code=r.status_code, json=r.json()))
         return r.json()

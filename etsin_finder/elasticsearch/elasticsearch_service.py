@@ -80,7 +80,7 @@ class ElasticSearchService:
 
     def _create_bulk_delete_row(self, doc_id):
         return "{\"delete\":{\"_index\": \"" + self.INDEX_NAME + "\", \"_type\": \"" + self.INDEX_DOC_TYPE_NAME + \
-              "\", \"_id\":\"" + doc_id + "\"}}"
+               "\", \"_id\":\"" + doc_id + "\"}}"
 
     def get_all_doc_ids_from_index(self):
         if not self.index_exists():

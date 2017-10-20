@@ -183,7 +183,6 @@ class ReindexTask:
             es_output['identifier'] = m_input.get('identifier'),
             es_output['label'] = m_input.get(m_input_label_field, {})
 
-
     def _convert_metax_org_or_person_to_es_model(self, m_input, es_output, relation_name):
         """
 
