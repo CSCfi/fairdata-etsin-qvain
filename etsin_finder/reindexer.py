@@ -25,6 +25,12 @@ def reindex_metax_catalog_record(metax_catalog_record_json):
         es_client.reindex_dataset(es_data_model)
 
 
+def delete_es_document_using_urn_identifier(urn_id):
+    es_client = _create_es_client()
+    if es_client.index_exists():
+        es_client.delete_dataset(urn_id)
+
+
 def _create_es_client():
     es_conf = get_elasticsearch_config(app.config)
     if es_conf:
@@ -93,9 +99,9 @@ class ReindexScheduledTask:
         # 5. Run bulk requests to search index
         # A. Delete documents from index no longer in metax
         # B. Create or update documents that are either new or already exist in search index
-        self.es_client.do_bulk_request_for_data(urn_ids_to_delete,
-                                                self.converter.convert_metax_cr_urn_ids_to_es_data_model(
-                                                    urn_ids_to_index, self.metax_api))
+        self.es_client.do_bulk_request_for_datasets(urn_ids_to_delete,
+                                                    self.converter.convert_metax_cr_urn_ids_to_es_data_model(
+                                                        urn_ids_to_index, self.metax_api))
 
         # 6. Enable RabbitMQ Consumer
         # Code here

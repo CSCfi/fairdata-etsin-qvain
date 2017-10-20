@@ -42,7 +42,7 @@ class ElasticSearchService:
         log.info("Trying to delete index " + self.INDEX_NAME)
         return self._operation_ok(self.es.indices.delete(index=self.INDEX_NAME, ignore=[404]))
 
-    def do_bulk_request_for_data(self, delete_doc_id_list, update_dataset_data_models):
+    def do_bulk_request_for_datasets(self, delete_doc_id_list, update_dataset_data_models):
         bulk_request_str = ''
 
         if delete_doc_id_list:
@@ -92,6 +92,13 @@ class ElasticSearchService:
             index=self.INDEX_NAME, doc_type=self.INDEX_DOC_TYPE_NAME,
             id=dataset_data_model.get_es_document_id(),
             body=dataset_data_model.to_es_document_string()))
+
+    def delete_dataset(self, doc_id):
+        log.info("{0}{1} into index {2}".format(
+            "Trying to delete data with doc id {0} having type ".format(doc_id),
+            self.INDEX_DOC_TYPE_NAME, self.INDEX_NAME))
+
+        return self._operation_ok(self.es.delete(index=self.INDEX_NAME, doc_type=self.INDEX_DOC_TYPE_NAME, id=doc_id))
 
     def get_all_doc_ids_from_index(self):
         if not self.index_exists():
