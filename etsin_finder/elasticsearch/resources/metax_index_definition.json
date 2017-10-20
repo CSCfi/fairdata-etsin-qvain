@@ -1,0 +1,30 @@
+{
+  "settings" : {
+    "index" : {
+      "number_of_shards" : 2,
+      "number_of_replicas" : 1
+    },
+    "analysis": {
+      "tokenizer": {
+        "ngram_tokenizer": {
+          "type": "edge_ngram",
+          "min_gram": 2,
+          "max_gram": 15,
+          "token_chars": [
+            "letter",
+            "digit"
+          ]
+        }
+      },
+      "analyzer": {
+        "etsin": {
+          "type": "custom",
+          "tokenizer": "ngram_tokenizer",
+          "filter": [
+            "lowercase"
+          ]
+        }
+      }
+    }
+  }
+}
