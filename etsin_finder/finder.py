@@ -3,13 +3,13 @@ from flask_apscheduler import APScheduler
 import logging
 from logging.handlers import RotatingFileHandler
 from etsin_finder.app_config import get_app_config
-from etsin_finder.utils import executing_travis
+from etsin_finder.utils import executing_travis, load_test_data_into_es
 
 
 def create_app(config=None):
     app = Flask(__name__, static_folder="./frontend/dist", template_folder="./frontend")
     _set_app_config(app, config)
-    if not app.testing:
+    if not app.testing and not executing_travis():
         _setup_app_logging(app)
         _setup_scheduler_config(app)
 
@@ -26,12 +26,16 @@ def _set_app_config(app, config):
 
 
 def _setup_app_logging(app):
-    level = logging.getLevelName(app.config.get('APP_LOG_LEVEL', 'INFO'))
     log_file_path = app.config.get('APP_LOG_PATH', None)
     if log_file_path:
+        level = logging.getLevelName(app.config.get('APP_LOG_LEVEL', 'INFO'))
+        app.logger.setLevel(level)
+
         handler = RotatingFileHandler(log_file_path, maxBytes=10000000, mode='a', backupCount=30)
         handler.setLevel(level)
-        app.logger.setLevel(level)
+        formatter = logging.Formatter(
+            "[%(asctime)s] {%(pathname)s:%(lineno)d} %(levelname)s - %(message)s")
+        handler.setFormatter(formatter)
         app.logger.addHandler(handler)
     else:
         app.logger.error('Logging not correctly set up due to missing app log path configuration')
@@ -41,7 +45,7 @@ def _setup_scheduler_config(app):
     app.config.update({
         'JOBS': [{
             'id': 'es_reindex_task',
-            'func': 'etsin_finder.reindex_task:reindex',
+            'func': 'etsin_finder.reindexer:reindex_all_without_emptying_index',
             'trigger': 'cron',
             'hour': 5,
         }]
@@ -63,9 +67,13 @@ def _do_imports():
 
 app = create_app()
 _do_imports()
-# from etsin_finder.reindex_task import reindex
-# reindex()
-# _init_reindex_task(app)
+
+if not app.testing and not executing_travis() and app.debug:
+    load_test_data_into_es(app.config, True)
+
+# from etsin_finder.reindexer import reindex_all_by_emptying_index
+# reindex_all_by_emptying_index()
+_init_reindex_task(app)
 
 if __name__ == "__main__":
     app.run()
