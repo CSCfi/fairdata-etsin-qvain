@@ -93,7 +93,7 @@ class ElasticSearchService:
             "Trying to reindex data with doc id {0} having type ".format(dataset_data_model.get_es_document_id()),
             self.INDEX_DOC_TYPE_NAME, self.INDEX_NAME))
 
-        return self._operation_ok(self.es.reindex(
+        return self._operation_ok(self.es.index(
             index=self.INDEX_NAME, doc_type=self.INDEX_DOC_TYPE_NAME,
             id=dataset_data_model.get_es_document_id(),
             body=dataset_data_model.to_es_document_string()))
