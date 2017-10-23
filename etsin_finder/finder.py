@@ -43,17 +43,34 @@ def _setup_app_logging(app):
 
 def _setup_scheduler_config(app):
     app.config.update({
-        'JOBS': [{
-            'id': 'es_reindex_task',
-            'func': 'etsin_finder.reindexer:reindex_all_without_emptying_index',
-            'trigger': 'cron',
-            'hour': 5,
-        }]
+        'JOBS': [
+            {
+                'id': 'es_reindex_without_emptying_index_task',
+                'func': 'etsin_finder.reindexer:reindex_all_without_emptying_index',
+                'trigger': 'cron',
+                'hour': 5,
+                'day_of_week': 'mon-sat'
+            },
+            {
+                'id': 'es_reindex_by_emptying_index_task',
+                'func': 'etsin_finder.reindexer:reindex_all_by_emptying_index',
+                'trigger': 'cron',
+                'hour': 5,
+                'day_of_week': 'sun'
+            }
+        ]
     })
 
 
 def _init_reindex_task(app):
-    if app.testing or executing_travis():
+    """
+    Initialize reindexing cron-style task. Do not do it if Flask debug mode is on (e.g. local dev env)
+    or if tests are run or if Travis is running this
+
+    :param app:
+    :return:
+    """
+    if app.debug or app.testing or executing_travis():
         return
 
     scheduler = APScheduler()
@@ -68,11 +85,14 @@ def _do_imports():
 app = create_app()
 _do_imports()
 
+# Load test data only in local dev env
 if not app.testing and not executing_travis() and app.debug:
     load_test_data_into_es(app.config, True)
 
+# Uncomment these if testing full reindexing is needed
 # from etsin_finder.reindexer import reindex_all_by_emptying_index
 # reindex_all_by_emptying_index()
+
 _init_reindex_task(app)
 
 if __name__ == "__main__":

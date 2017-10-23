@@ -19,7 +19,7 @@ class ElasticSearchService:
     INDEX_CONFIG_FILENAME = 'metax_index_definition.json'
     INDEX_DOC_TYPE_NAME = 'dataset'
     INDEX_DOC_TYPE_MAPPING_FILENAME = 'dataset_type_mapping.json'
-    BULK_OPERATION_ROW_SIZE = 1000
+    BULK_OPERATION_ROW_SIZE = 2000
 
     def __init__(self, es_config):
         self.es = Elasticsearch(es_config.get('HOSTS'), **self._get_connection_parameters(es_config))
@@ -65,9 +65,14 @@ class ElasticSearchService:
     def do_bulk_request(self, bulk_request_str):
         log.info("Trying to perform bulk request for data with type " + self.INDEX_DOC_TYPE_NAME +
                  " into index " + self.INDEX_NAME)
+
         # write_string_to_file(bulk_request_str, 'bulk.txt')
+
         if not self._operation_ok(self.es.bulk(body=bulk_request_str, request_timeout=30)):
             log.error("Something went wrong with the following bulk request: \n{0}".format(bulk_request_str))
+            return False
+
+        return True
 
     def _empty_all_documents_from_index(self):
         log.info("Trying to delete all documents from index " + self.INDEX_NAME)
@@ -88,7 +93,7 @@ class ElasticSearchService:
             "Trying to reindex data with doc id {0} having type ".format(dataset_data_model.get_es_document_id()),
             self.INDEX_DOC_TYPE_NAME, self.INDEX_NAME))
 
-        return self._operation_ok(self.es.reindex(
+        return self._operation_ok(self.es.index(
             index=self.INDEX_NAME, doc_type=self.INDEX_DOC_TYPE_NAME,
             id=dataset_data_model.get_es_document_id(),
             body=dataset_data_model.to_es_document_string()))
@@ -115,12 +120,13 @@ class ElasticSearchService:
 
     @staticmethod
     def _operation_ok(op_response):
-        if op_response.get('acknowledged'):
-            log.info("Operation OK")
-            return True
+        if ('errors' in op_response and op_response.get('errors')) or \
+                ('acknowledged' in op_response and not op_response.get('acknowledged')):
+            log.error('The performed operation had errors: \n{0}'.format(op_response))
+            return False
 
-        log.error("Operation failed")
-        return False
+        log.info('Operation OK')
+        return True
 
     @staticmethod
     def _get_json_file_as_str(filename):

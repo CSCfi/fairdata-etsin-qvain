@@ -38,9 +38,11 @@ def write_string_to_file(string, filename):
 
 def load_test_data_into_es(config, delete_index_first=False):
     from etsin_finder.elasticsearch.elasticsearch_service import ElasticSearchService
+    from etsin_finder.finder import app
     es_config = get_elasticsearch_config(config)
     test_data_file_path = path.abspath(os.path.dirname(__file__)) + '/test_data/es_dataset_bulk_request_1.txt'
 
+    app.logger.info("Loading test data into Elasticsearch..")
     if es_config:
         es_client = ElasticSearchService(es_config)
         if es_client:
@@ -54,4 +56,8 @@ def load_test_data_into_es(config, delete_index_first=False):
             with open(test_data_file_path, 'r') as file:
                 data = file.read()
             if es_client and data:
-                es_client.do_bulk_request(data)
+                if es_client.do_bulk_request(data):
+                    app.logger.info("Test data loaded into Elasticsearch")
+                    return
+
+    app.logger.error("Loading test data into Elasticsearch failed")
