@@ -4,10 +4,9 @@ from os import path
 from elasticsearch import Elasticsearch
 from elasticsearch.helpers import scan
 
-from etsin_finder.finder import app
-# from etsin_finder.utils import write_string_to_file
-
-log = app.logger
+import logging as log
+log.basicConfig(filename='/var/log/etsin_finder/elasticsearch.log', level='INFO', 
+  format="[%(asctime)s] {%(pathname)s:%(lineno)d} %(levelname)s - %(message)s")
 
 
 class ElasticSearchService:
