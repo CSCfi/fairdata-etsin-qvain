@@ -68,20 +68,17 @@ logging.basicConfig(filename='/var/log/etsin_finder/rabbitmq.log', level='INFO',
   format="[%(asctime)s] {%(pathname)s:%(lineno)d} %(levelname)s - %(message)s")
 
 def callback_reindex(ch, method, properties, body):
-    logging.info("{0}{1} into index {2}".format(
-        "Trying to reindex data with doc id {0} having type ".format(dataset_data_model.get_es_document_id()),
-        self.INDEX_DOC_TYPE_NAME, self.INDEX_NAME))
     converter = CRConverter()
     es_data_model = converter.convert_metax_catalog_record_json_to_es_data_model(
         json.loads(body))
-    es_client.reindex_dataset(es_data_model)
-    channel.basic_ack(delivery_tag=method.delivery_tag)
+    if es_client.reindex_dataset(es_data_model):
+        channel.basic_ack(delivery_tag=method.delivery_tag)
 
 
 def callback_delete(ch, method, properties, body):
-    es_client.delete(index=self.INDEX_NAME,
-                     doc_type=self.INDEX_DOC_TYPE_NAME, id=body)
-    channel.basic_ack(delivery_tag=method.delivery_tag)
+    if es_client.delete(index=self.INDEX_NAME,
+                     doc_type=self.INDEX_DOC_TYPE_NAME, id=body):
+        channel.basic_ack(delivery_tag=method.delivery_tag)
 
 
 # Set up consumer
