@@ -21,7 +21,7 @@ class MetaxAPIService:
         :return: Metax catalog record as json
         """
 
-        r = requests.get(self.METAX_GET_CATALOG_RECORD_URL.format(urn_identifier),
+        r = requests.get(self.METAX_GET_DATASET_URL.format(urn_identifier),
                          headers={'Content-Type': 'application/json'},
                          timeout=TIMEOUT)
         try:
@@ -64,7 +64,7 @@ class MetaxAPIService:
             log.error(e)
             log.error("Error when connecting to MetaX dataset exists API")
             raise e
-            log.debug('Checked catalog record existence in MetaX: ({code}) {json}'.format(
+            log.debug('Checked dataset existence in MetaX: ({code}) {json}'.format(
                 code=r.status_code, json=r.json()))
         return r.json()
 

@@ -33,27 +33,27 @@ with open('/home/etsin-user/app_config') as app_config_file:
 # Set up RabbitMQ connection, channel, exchange and queues
 credentials = pika.PlainCredentials(
     rabbit_settings['USER'], rabbit_settings['PASSWORD'])
-# connection = pika.BlockingConnection(
-#     pika.ConnectionParameters(
-#         rabbit_settings['HOST'],
-#         rabbit_settings['PORT'],
-#         rabbit_settings['VHOST'],
-#         credentials))
+connection = pika.BlockingConnection(
+    pika.ConnectionParameters(
+        rabbit_settings['HOST'],
+        rabbit_settings['PORT'],
+        rabbit_settings['VHOST'],
+        credentials))
 
-# channel = connection.channel()
+channel = connection.channel()
 
 exchange = rabbit_settings['EXCHANGE']
 queue_1 = 'etsin-create'
 queue_2 = 'etsin-update'
 queue_3 = 'etsin-delete'
 
-# channel.queue_declare(queue_1, durable=True)
-# channel.queue_declare(queue_2, durable=True)
-# channel.queue_declare(queue_3, durable=True)
+channel.queue_declare(queue_1, durable=True)
+channel.queue_declare(queue_2, durable=True)
+channel.queue_declare(queue_3, durable=True)
 
-# channel.queue_bind(exchange=exchange, queue=queue_1, routing_key='create')
-# channel.queue_bind(exchange=exchange, queue=queue_2, routing_key='update')
-# channel.queue_bind(exchange=exchange, queue=queue_3, routing_key='delete')
+channel.queue_bind(exchange=exchange, queue=queue_1, routing_key='create')
+channel.queue_bind(exchange=exchange, queue=queue_2, routing_key='update')
+channel.queue_bind(exchange=exchange, queue=queue_3, routing_key='delete')
 
 # Set up ElasticSearch client
 es_client = ElasticSearchService(es_settings)
@@ -85,10 +85,10 @@ def callback_delete(ch, method, properties, body):
 
 
 # Set up consumer
-# channel.basic_consume(callback_reindex, queue=queue_1)
-# channel.basic_consume(callback_reindex, queue=queue_2)
-# channel.basic_consume(callback_delete, queue=queue_3)
+channel.basic_consume(callback_reindex, queue=queue_1)
+channel.basic_consume(callback_reindex, queue=queue_2)
+channel.basic_consume(callback_delete, queue=queue_3)
 
 logging.info('[*] Waiting for logs. To exit press CTRL+C')
 print('[*] Waiting for logs. To exit press CTRL+C')
-# channel.start_consuming()
+channel.start_consuming()
