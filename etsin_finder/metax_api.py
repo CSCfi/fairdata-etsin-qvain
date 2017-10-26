@@ -21,7 +21,7 @@ class MetaxAPIService:
         :return: Metax catalog record as json
         """
 
-        r = requests.get(self.METAX_GET_DATASET_URL.format(urn_identifier),
+        r = requests.get(self.METAX_GET_CATALOG_RECORD_URL.format(urn_identifier),
                          headers={'Content-Type': 'application/json'},
                          timeout=TIMEOUT)
         try:
