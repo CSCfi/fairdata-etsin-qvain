@@ -89,13 +89,13 @@ class ElasticSearchService:
 
     def reindex_dataset(self, dataset_data_model):
         log.info("{0}{1} into index {2}".format(
-            "Trying to reindex data with doc id {0} having type ".format(dataset_data_model.get_es_document_id()),
+            "Trying to reindex data with doc id {0} having type ".format(dataset_data_model['urn_identifier']),
             self.INDEX_DOC_TYPE_NAME, self.INDEX_NAME))
 
         return self._operation_ok(self.es.index(
             index=self.INDEX_NAME, doc_type=self.INDEX_DOC_TYPE_NAME,
-            id=dataset_data_model.get_es_document_id(),
-            body=dataset_data_model.to_es_document_string()))
+            id=dataset_data_model['urn_identifier'],
+            body=dataset_data_model))
 
     def delete_dataset(self, doc_id):
         log.info("{0}{1} into index {2}".format(
