@@ -64,7 +64,7 @@ class MetaxAPIService:
             log.error(e)
             log.error("Error when connecting to MetaX dataset exists API")
             raise e
-            log.debug('Checked dataset existence in MetaX: ({code}) {json}'.format(
+            log.debug('Checked catalog record existence in MetaX: ({code}) {json}'.format(
                 code=r.status_code, json=r.json()))
         return r.json()
 
