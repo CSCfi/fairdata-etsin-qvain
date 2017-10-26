@@ -37,7 +37,6 @@ class Dataset extends React.Component {
     this.props.Stores.History.history.goBack()
   }
 
-  // TODO: All of this, obvs
   render() {
     // CASE 1: Houston, we have a problem
     if (this.state.error !== '') {
