@@ -2,23 +2,13 @@ import React, { Component } from 'react'
 import Translate from 'react-translate-component'
 import DsSidebarItem from './dsSidebarItem'
 import Locale from '../stores/view/language'
+import checkNested from './checkNested'
 
 export default class DsSidebar extends Component {
   dateSeparator(start, end) {
     return start && end
       ? `${start} - ${end}`
       : start + end
-  }
-  checkNested(obj, ...argus) {
-    const args = Array.prototype.slice.call(argus, 0);
-    let newObj = obj
-    for (let i = 0; i < args.length; i += 1) {
-      if (!newObj || !Object.prototype.hasOwnProperty.call(newObj, args[i])) {
-        return false;
-      }
-      newObj = newObj[args[i]];
-    }
-    return true;
   }
 
   render() {
@@ -33,7 +23,7 @@ export default class DsSidebar extends Component {
         <div className="separator">
           <DsSidebarItem component="p" trans="dataset.publisher" fallback="Publisher">
             {
-              this.checkNested(researchDataset, 'publisher', 'name')
+              checkNested(researchDataset, 'publisher', 'name')
               ? researchDataset.publisher.name[currentLang]
               : null
             }
@@ -68,14 +58,14 @@ export default class DsSidebar extends Component {
           </DsSidebarItem>
           <DsSidebarItem component="p" trans="dataset.spatial_coverage" fallback="Spatial Coverage" hideEmpty="true">
             {
-              this.checkNested(researchDataset, 'spatial', 'geographic_name')
+              checkNested(researchDataset, 'spatial', 'geographic_name')
                 ? researchDataset.spatial.geographic_name
                 : null
             }
           </DsSidebarItem>
           <DsSidebarItem component="p" trans="dataset.temporal_coverage" fallback="Temporal Coverage" hideEmpty="true">
             {
-              this.checkNested(researchDataset, 'temporal')
+              checkNested(researchDataset, 'temporal')
                 ? this.dateSeparator(
                   researchDataset.temporal.start_date,
                   researchDataset.temporal.end_date,
@@ -85,7 +75,7 @@ export default class DsSidebar extends Component {
           </DsSidebarItem>
           <DsSidebarItem component="div" trans="dataset.license" fallback="License" hideEmpty="true">
             {
-              this.checkNested(dataCatalog, 'catalog_json', 'access_rights', 'licence')
+              checkNested(dataCatalog, 'catalog_json', 'access_rights', 'licence')
                 ? dataCatalog.catalog_json.access_rights.license.map(rights => (
                   <p key={rights.identifier}>
                     {rights.title[0][this.props.lang]}
@@ -96,14 +86,14 @@ export default class DsSidebar extends Component {
           </DsSidebarItem>
           <DsSidebarItem component="p" trans="dataset.access_rights" fallback="Access rights statement" hideEmpty="true">
             {
-              this.checkNested(dataCatalog, 'catalog_json', 'access_rights', 'description')
+              checkNested(dataCatalog, 'catalog_json', 'access_rights', 'description')
                 ? dataCatalog.catalog_json.access_rights.description[0][currentLang]
                 : null
             }
           </DsSidebarItem>
           <DsSidebarItem component="p" trans="dataset.funder" fallback="Funder" hideEmpty="true">
             {
-              this.checkNested(researchDataset, 'is_output_of', 'has_funding_agency', 'name')
+              checkNested(researchDataset, 'is_output_of', 'has_funding_agency', 'name')
                 ? researchDataset.is_output_of.has_funding_agency.name
                 : null
             }
@@ -113,7 +103,7 @@ export default class DsSidebar extends Component {
           </DsSidebarItem>
           <DsSidebarItem component="p" trans="dataset.infrastructure" fallback="Infrastructure" hideEmpty="true">
             {
-              this.checkNested(researchDataset, 'related_entity')
+              checkNested(researchDataset, 'related_entity')
                 ? researchDataset.related_entity.map(entity => entity.title[currentLang])
                 : null
             }

@@ -1,31 +1,15 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import DateFormat from './dateFormat'
+import AccessRights from './accessRights'
+import checkNested from './checkNested'
 
 export default class DsContent extends Component {
-  accessRights() {
-    // this is not the right place to check. type if array
-    if (this.props.dataset.access_rights.type.id === 'open_access') {
-      return (
-        <button className="btn btn-gray" disabled>
-          <i className="fa fa-unlock" aria-hidden="true" />
-          <span> Open</span>
-        </button>
-      )
-    }
-    return (
-      <button className="btn btn-gray" disabled>
-        <i className="fa fa-lock" aria-hidden="true" />
-        <span> Rajattu käyttöoikeus</span>
-      </button>
-    )
-  }
-
   render() {
     return (
       <div className="dsContent">
         <div className="d-flex align-items-center">
           <h1 className="dataset-title mr-auto">{this.props.title}</h1>
-          {this.accessRights()}
+          <AccessRights access_rights={checkNested(this.props.dataset, 'access_rights', 'type') ? this.props.dataset.access_rights : null} />
         </div>
         <p className="creator">
           {
@@ -41,7 +25,7 @@ export default class DsContent extends Component {
             : null
         }
         <p>
-          <DateFormat date={this.props.issued} />
+          { this.props.issued ? <DateFormat date={this.props.issued} /> : null }
         </p>
         <p>
           {this.props.children}
