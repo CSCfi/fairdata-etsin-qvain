@@ -8,9 +8,9 @@ export default class ErrorPage extends React.Component {
     // Also, make it prettier.
 
     return (
-      <div class="hero">
-        <div class="container">
-          <h1 class="text-center">
+      <div className="hero">
+        <div className="container">
+          <h1 className="text-center">
             <Translate content="error.notFound" />
           </h1>
         </div>

@@ -76,7 +76,13 @@ class Dataset extends React.Component {
             <button className="btn btn-transparent" onClick={this.goBack}>
               Go back
             </button>
-            <DsContent title={title} creator={creator} contributor={contributor} issued={issued}>
+            <DsContent
+              title={title}
+              creator={creator}
+              contributor={contributor}
+              issued={issued}
+              dataset={researchDataset}
+            >
               { description }
             </DsContent>
             <DsDownloads />

@@ -23,4 +23,14 @@ button.btn {
       background-color: transparent;
     }
   }
+  &.btn-gray {
+    line-height: 0;
+    padding: 0.5em 1.5em;
+    border-radius: 1em;
+    background-color: $color-lightgray;
+    color: $color-dark;
+  }
+  &:disabled {
+    cursor: initial;
+  }
 }

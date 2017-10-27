@@ -34,7 +34,7 @@ export default class DsSidebar extends Component {
           <DsSidebarItem component="p" trans="dataset.publisher" fallback="Publisher">
             {
               this.checkNested(researchDataset, 'publisher', 'name')
-              ? researchDataset.publisher.name
+              ? researchDataset.publisher.name[currentLang]
               : null
             }
           </DsSidebarItem>
