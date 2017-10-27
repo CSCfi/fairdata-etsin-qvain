@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import DateFormat from './dateFormat'
 
 export default class DsContent extends Component {
   accessRights() {
@@ -7,7 +8,7 @@ export default class DsContent extends Component {
       return (
         <button className="btn btn-gray" disabled>
           <i className="fa fa-unlock" aria-hidden="true" />
-          <span>Open</span>
+          <span> Open</span>
         </button>
       )
     }
@@ -34,13 +35,13 @@ export default class DsContent extends Component {
         {
           this.props.contributor
             ?
-              <p>{this.props.contributor.map(person =>
-                <span key={person.name}>{person.name}</span>)}
+              <p className="contributor">
+                {this.props.contributor.map((person, i, arr) => <span key={person.name}>{person.name}{(i + 1 !== arr.length) ? ', ' : ''}</span>)}
               </p>
             : null
         }
         <p>
-          {this.props.issued}
+          <DateFormat date={this.props.issued} />
         </p>
         <p>
           {this.props.children}

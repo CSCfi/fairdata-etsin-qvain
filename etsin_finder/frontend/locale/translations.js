@@ -14,7 +14,7 @@ counterpart.registerTranslations('en', {
   },
   dataset: {
     dl: {
-      files: 'Tiedostot',
+      files: 'Files',
       name: 'Name',
       size: 'Size',
       download: 'Download',
@@ -39,7 +39,7 @@ counterpart.registerTranslations('fi', {
   },
   dataset: {
     dl: {
-      files: 'Files',
+      files: 'Tiedostot',
       name: 'Nimi',
       size: 'Koko',
       download: 'Lataa',
