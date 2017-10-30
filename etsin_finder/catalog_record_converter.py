@@ -198,13 +198,10 @@ class CRConverter:
 
     @staticmethod
     def _get_es_person_or_org_common_data_from_metax_obj(m_obj):
-        # If organization has several names, concat them all in one string
-        if isinstance(m_obj.get('name'), dict):
-            name = ''
-            for lang, name_in_lang in m_obj.get('name').items():
-                name += name_in_lang + ' '
-        else:
-            name = m_obj.get('name', '')
+        # Name should be langstring
+        name = m_obj.get('name', '')
+        if not isinstance(m_obj.get('name'), dict):
+            name = {'und': m_obj.get('name', '')}
 
         return {
             'identifier': m_obj.get('identifier', ''),
