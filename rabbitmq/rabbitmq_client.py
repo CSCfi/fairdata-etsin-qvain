@@ -1,6 +1,6 @@
 '''
 Consumer connects to Metax RabbitMQ and listens for changes in Metax.
-When metadata is created, updated or deleted, consumer calls appropriate 
+When metadata is created, updated or deleted, consumer calls appropriate
 functions to propagate the change to Etsin search index.
 
 This script should be run as a standalone. It's not part of the Flask app.
@@ -13,7 +13,7 @@ Press CTRL+C to exit script.
 '''
 
 import json
-import logging
+import logging  # logging is configured in ElasticSearchService
 import pika
 import yaml
 
@@ -63,9 +63,6 @@ if not es_client.index_exists():
     if not es_client.create_index_and_mapping():
         quit()
 
-# Set up logging
-logging.basicConfig(filename='/var/log/etsin_finder/rabbitmq.log', level='INFO', 
-  format="[%(asctime)s] {%(pathname)s:%(lineno)d} %(levelname)s - %(message)s")
 
 def callback_reindex(ch, method, properties, body):
     converter = CRConverter()
@@ -73,12 +70,21 @@ def callback_reindex(ch, method, properties, body):
         json.loads(body))
     if es_client.reindex_dataset(es_data_model):
         channel.basic_ack(delivery_tag=method.delivery_tag)
+    else:
+        logging.info('Failed to reindex %s', json.loads(
+            body).get('urn_identifier', 'unknown identifier'))
+        channel.basic_nack(delivery_tag=method.delivery_tag, requeue=False)
 
 
 def callback_delete(ch, method, properties, body):
-    if es_client.delete(index=self.INDEX_NAME,
-                     doc_type=self.INDEX_DOC_TYPE_NAME, id=body):
-        channel.basic_ack(delivery_tag=method.delivery_tag)
+    print('about to delete %s', json.loads(body).get('urn_identifier'))
+    try:
+        if es_client.delete_dataset(json.loads(body).get('urn_identifier')):
+            channel.basic_ack(delivery_tag=method.delivery_tag)
+    except:
+        logging.info('Failed to delete %s', json.loads(
+            body).get('urn_identifier', 'unknown identifier'))
+        channel.basic_nack(delivery_tag=method.delivery_tag, requeue=False)
 
 
 # Set up consumer
@@ -86,6 +92,6 @@ channel.basic_consume(callback_reindex, queue=queue_1)
 channel.basic_consume(callback_reindex, queue=queue_2)
 channel.basic_consume(callback_delete, queue=queue_3)
 
-logging.info('[*] Waiting for logs. To exit press CTRL+C')
-print('[*] Waiting for logs. To exit press CTRL+C')
+logging.info('[*] RabbitMQ client started')
+print('[*] RabbitMQ is running. To exit press CTRL+C. See logs for indexing details.')
 channel.start_consuming()

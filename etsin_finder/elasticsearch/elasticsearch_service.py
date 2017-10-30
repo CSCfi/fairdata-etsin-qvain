@@ -5,7 +5,7 @@ from elasticsearch import Elasticsearch
 from elasticsearch.helpers import scan
 
 import logging as log
-log.basicConfig(filename='/var/log/etsin_finder/elasticsearch.log', level='INFO', 
+log.basicConfig(filename='/var/log/etsin_finder/elasticsearch.log', level='INFO',
   format="[%(asctime)s] {%(pathname)s:%(lineno)d} %(levelname)s - %(message)s")
 
 
@@ -95,7 +95,7 @@ class ElasticSearchService:
         return self._operation_ok(self.es.index(
             index=self.INDEX_NAME, doc_type=self.INDEX_DOC_TYPE_NAME,
             id=dataset_data_model['urn_identifier'],
-            body=dataset_data_model))
+            body=json.dumps(dataset_data_model)))
 
     def delete_dataset(self, doc_id):
         log.info("{0}{1} into index {2}".format(
