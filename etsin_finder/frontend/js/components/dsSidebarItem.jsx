@@ -11,7 +11,11 @@ export default class DsSidebarItem extends Component {
     if (!this.props.component) {
       this.setState({ component: 'span' })
     }
-    if (this.props.hideEmpty && !this.props.children) {
+    if (
+      this.props.hideEmpty &&
+      (!this.props.children ||
+      (Array.isArray(this.props.children) && !this.props.children[0]))
+    ) {
       return null
     }
     return (

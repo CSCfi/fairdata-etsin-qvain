@@ -3,11 +3,12 @@ import Translate from 'react-translate-component'
 import DsSidebarItem from './dsSidebarItem'
 import Locale from '../stores/view/language'
 import checkNested from './checkNested'
+import DateFormat from './dateFormat'
 
 export default class DsSidebar extends Component {
   dateSeparator(start, end) {
     return start && end
-      ? `${start} - ${end}`
+      ? <p key={start}><DateFormat date={start} /> - <DateFormat date={end} /></p>
       : start + end
   }
 
@@ -63,23 +64,24 @@ export default class DsSidebar extends Component {
                 : null
             }
           </DsSidebarItem>
-          <DsSidebarItem component="p" trans="dataset.temporal_coverage" fallback="Temporal Coverage" hideEmpty="true">
+          <DsSidebarItem component="div" trans="dataset.temporal_coverage" fallback="Temporal Coverage" hideEmpty="true">
             {
               checkNested(researchDataset, 'temporal')
-                ? this.dateSeparator(
-                  researchDataset.temporal.start_date,
-                  researchDataset.temporal.end_date,
-                )
+                ? researchDataset.temporal.map(dates => this.dateSeparator(
+                    dates.start_date,
+                    dates.end_date,
+                  ))
                 : null
             }
           </DsSidebarItem>
           <DsSidebarItem component="div" trans="dataset.license" fallback="License" hideEmpty="true">
             {
-              checkNested(dataCatalog, 'catalog_json', 'access_rights', 'licence')
-                ? dataCatalog.catalog_json.access_rights.license.map(rights => (
-                  <p key={rights.identifier}>
-                    {rights.title[0][this.props.lang]}
-                  </p>
+              checkNested(researchDataset, 'access_rights', 'license')
+                ? researchDataset.access_rights.license.map(rights => (
+                  rights.title[0][this.props.lang] ?
+                    <p key={rights.identifier}>
+                      {rights.title[0][this.props.lang]}
+                    </p> : null
                 ))
                 : null
             }
@@ -93,13 +95,21 @@ export default class DsSidebar extends Component {
           </DsSidebarItem>
           <DsSidebarItem component="p" trans="dataset.funder" fallback="Funder" hideEmpty="true">
             {
-              checkNested(researchDataset, 'is_output_of', 'has_funding_agency', 'name')
-                ? researchDataset.is_output_of.has_funding_agency.name
+              checkNested(researchDataset, 'is_output_of')
+                ? researchDataset.is_output_of.map(output => (
+                  checkNested(output, 'has_funding_agency')
+                  ? output.has_funding_agency.map(agency => (
+                    agency.name[currentLang]
+                  ))
+                  : null
+                ))
                 : null
             }
           </DsSidebarItem>
           <DsSidebarItem component="p" trans="dataset.curator" fallback="Curator" hideEmpty="true">
-            {researchDataset.curator ? researchDataset.curator.name : null}
+            {researchDataset.curator ? researchDataset.curator.map(curators => (
+              curators.name[currentLang]
+            )) : null}
           </DsSidebarItem>
           <DsSidebarItem component="p" trans="dataset.infrastructure" fallback="Infrastructure" hideEmpty="true">
             {

@@ -73,8 +73,8 @@ class Dataset extends React.Component {
       <div className="container regular-row">
         <div className="row">
           <div className="col-md-8">
-            <button className="btn btn-transparent" onClick={this.goBack}>
-              Go back
+            <button className="btn btn-transparent nopadding btn-back" onClick={this.goBack}>
+              {'< Go back'}
             </button>
             <DsContent
               title={title}

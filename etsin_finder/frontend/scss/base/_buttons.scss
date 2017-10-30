@@ -8,7 +8,7 @@ button.btn {
       background-color: darken($color-primary, 5);
     }
   }
-  &.btn-etsin-outline {
+  &.btn-etsin-outline { // outline button
     background-color: transparent;
     color: $color-primary;
     border: 2px solid $color-primary;
@@ -32,5 +32,8 @@ button.btn {
   }
   &:disabled {
     cursor: initial;
+  }
+  &.btn-back {
+    color: $color-primary;
   }
 }

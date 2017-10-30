@@ -1,8 +1,17 @@
 .dataset-title {
-  font-size: 1.7em;
-  color: $color-dark;
+  margin-bottom: 1em;
+  h1 {
+    font-size: 1.7em;
+    color: $color-dark;
+    margin-bottom: 0;
+  }
 }
+.basic-info {
+  margin-bottom: 1em;
+}
+
 .creator, .contributor {
+  margin-bottom: 0;
   font-size: 0.9em;
   color: $color-gray;
 }
