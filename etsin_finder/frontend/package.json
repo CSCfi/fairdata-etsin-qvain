@@ -68,6 +68,9 @@
   "description": "",
   "jest": {
     "testPathIgnorePatterns": ["./__tests__/test-setup.js"],
-    "setupTestFrameworkScriptFile": "./__tests__/test-setup.js"
+    "setupTestFrameworkScriptFile": "./__tests__/test-setup.js",
+    "transform": {
+      "^.+\\.jsx?$": "babel-jest"
+    }
   }
 }
