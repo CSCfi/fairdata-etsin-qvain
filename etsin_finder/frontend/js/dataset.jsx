@@ -1,12 +1,13 @@
-import React from 'react';
+import React from 'react'
+import axios from 'axios'
+import { inject, observer } from 'mobx-react'
+import Translate from 'react-translate-component'
 
-import axios from 'axios';
-import { inject, observer } from 'mobx-react';
-
-import DsSidebar from './components/dsSidebar';
-import DsDownloads from './components/dsDownloads';
-import DsContent from './components/dsContent';
-import ErrorPage from './components/errorPage';
+import DsSidebar from './components/dsSidebar'
+import DsDownloads from './components/dsDownloads'
+import DsContent from './components/dsContent'
+import ErrorPage from './components/errorPage'
+import Identifier from './components/identifier'
 
 @inject('Stores') @observer
 class Dataset extends React.Component {
@@ -85,7 +86,14 @@ class Dataset extends React.Component {
             >
               { description }
             </DsContent>
-            <DsDownloads />
+            {
+              this.state.dataset.data_catalog.catalog_json.harvested
+                ?
+                  <Identifier idn={researchDataset.preferred_identifier} classes="btn btn-primary" >
+                    <Translate content="dataset.data_location" />
+                  </Identifier>
+                : <DsDownloads />
+            }
           </div>
           <div className="col-md-4">
             <DsSidebar dataset={this.state.dataset} lang={currentLang} />

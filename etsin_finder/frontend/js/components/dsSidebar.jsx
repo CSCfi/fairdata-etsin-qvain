@@ -4,6 +4,7 @@ import DsSidebarItem from './dsSidebarItem'
 import Locale from '../stores/view/language'
 import checkNested from './checkNested'
 import DateFormat from './dateFormat'
+import Identifier from './identifier'
 
 export default class DsSidebar extends Component {
   dateSeparator(start, end) {
@@ -31,8 +32,10 @@ export default class DsSidebar extends Component {
           </DsSidebarItem>
         </div>
         <div className="separator">
-          <DsSidebarItem component="p" trans="dataset.doi" fallback="DOI">
-            {researchDataset.preferred_identifier}
+          <DsSidebarItem component="p" trans="dataset.identifier" fallback="Identifier">
+            <Identifier idn={researchDataset.preferred_identifier}>
+              {researchDataset.preferred_identifier}
+            </Identifier>
           </DsSidebarItem>
         </div>
         <div>
