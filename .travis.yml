@@ -38,7 +38,7 @@ before_script:
 # Add the below to the script after python tests once the frontend tests are in place
 #cd $TRAVIS_BUILD_DIR/etsin_finder/frontend && npm run test
 script:
-- cd $TRAVIS_BUILD_DIR && flake8 . && cd etsin_finder/frontend && npm run lint && cd $TRAVIS_BUILD_DIR && pytest --cov=etsin_finder tests/ && $TRAVIS_BUILD_DIR/.travis-deploy.sh
+- cd $TRAVIS_BUILD_DIR && flake8 . && cd etsin_finder/frontend && npm run lint && npm run test && cd $TRAVIS_BUILD_DIR && pytest --cov=etsin_finder tests/ && $TRAVIS_BUILD_DIR/.travis-deploy.sh
 
 notifications:
   flowdock:
