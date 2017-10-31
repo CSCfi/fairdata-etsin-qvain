@@ -73,7 +73,7 @@ def callback_reindex(ch, method, properties, body):
     else:
         logging.info('Failed to reindex %s', json.loads(
             body).get('urn_identifier', 'unknown identifier'))
-        channel.basic_nack(delivery_tag=method.delivery_tag, requeue=False)
+        channel.basic_nack(delivery_tag=method.delivery_tag, requeue=True)
 
 
 def callback_delete(ch, method, properties, body):
@@ -84,7 +84,9 @@ def callback_delete(ch, method, properties, body):
     except:
         logging.info('Failed to delete %s', json.loads(
             body).get('urn_identifier', 'unknown identifier'))
-        channel.basic_nack(delivery_tag=method.delivery_tag, requeue=False)
+        # TODO: If delete fails because there's no such id in index, 
+        # no need to requeue
+        channel.basic_nack(delivery_tag=method.delivery_tag, requeue=True)
 
 
 # Set up consumer
