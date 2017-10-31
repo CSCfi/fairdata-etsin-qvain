@@ -1,4 +1,5 @@
 const checkNested = (obj, ...argus) => {
+  if (!obj) return false
   const args = Array.prototype.slice.call(argus, 0);
   let newObj = obj
   for (let i = 0; i < args.length; i += 1) {
