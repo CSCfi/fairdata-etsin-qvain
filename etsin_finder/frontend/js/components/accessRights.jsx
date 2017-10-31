@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 export default class AccessRights extends Component {
   accessRights() {
     // this is not the right place to check. type if array
-    if (this.props.access_rights !== undefined) {
+    if (this.props.access_rights !== undefined && this.props.access_rights !== null) {
       if (this.props.access_rights.type.filter(item => item.identifier !== 'http://purl.org/att/es/reference_data/access_type/access_type_open_access')[0]) {
         return (
           <div>

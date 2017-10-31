@@ -4,3 +4,9 @@
 .nopadding {
   padding: 0;
 }
+.error {
+  color: white;
+  text-align: center;
+  background-color: $color-error;
+  padding: 20px 0;
+}

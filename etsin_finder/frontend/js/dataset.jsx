@@ -8,6 +8,7 @@ import DsDownloads from './components/dsDownloads'
 import DsContent from './components/dsContent'
 import ErrorPage from './components/errorPage'
 import Identifier from './components/identifier'
+import ErrorBoundary from './components/errorBoundary'
 
 @inject('Stores') @observer
 class Dataset extends React.Component {
@@ -77,26 +78,32 @@ class Dataset extends React.Component {
             <button className="btn btn-transparent nopadding btn-back" onClick={this.goBack}>
               {'< Go back'}
             </button>
-            <DsContent
-              title={title}
-              creator={creator}
-              contributor={contributor}
-              issued={issued}
-              dataset={researchDataset}
-            >
-              { description }
-            </DsContent>
-            {
-              this.state.dataset.data_catalog.catalog_json.harvested
-                ?
-                  <Identifier idn={researchDataset.preferred_identifier} classes="btn btn-primary" >
-                    <Translate content="dataset.data_location" />
-                  </Identifier>
-                : <DsDownloads />
-            }
+            <ErrorBoundary>
+              <DsContent
+                title={title}
+                creator={creator}
+                contributor={contributor}
+                issued={issued}
+                dataset={researchDataset}
+              >
+                { description }
+              </DsContent>
+            </ErrorBoundary>
+            <ErrorBoundary>
+              {
+                this.state.dataset.data_catalog.catalog_json.harvested
+                  ?
+                    <Identifier idn={researchDataset.preferred_identifier} classes="btn btn-primary" >
+                      <Translate content="dataset.data_location" fallback="this is fallback" />
+                    </Identifier>
+                  : <DsDownloads />
+              }
+            </ErrorBoundary>
           </div>
           <div className="col-md-4">
-            <DsSidebar dataset={this.state.dataset} lang={currentLang} />
+            <ErrorBoundary>
+              <DsSidebar dataset={this.state.dataset} lang={currentLang} />
+            </ErrorBoundary>
           </div>
         </div>
       </div>

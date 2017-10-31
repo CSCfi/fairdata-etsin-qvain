@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { Provider } from 'mobx-react';
 
+import ErrorBoundary from './components/errorBoundary'
 import Footer from './layout/footer';
 import Header from './layout/header';
 import Content from './layout/content';
@@ -22,11 +23,11 @@ export default class App extends Component {
     return (
       <Provider Stores={Stores}>
         <Router>
-          <div>
+          <ErrorBoundary>
             <Header />
             <Content />
             <Footer />
-          </div>
+          </ErrorBoundary>
         </Router>
       </Provider>
     );

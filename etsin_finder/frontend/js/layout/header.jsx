@@ -1,7 +1,9 @@
 import React from 'react';
 import Translate from 'react-translate-component';
+
 import Navi from '../components/navi';
 import SecondNav from '../components/secondnav';
+import ErrorBoundary from '../components/errorBoundary'
 
 export default class Header extends React.Component {
   constructor(props) {
@@ -11,20 +13,22 @@ export default class Header extends React.Component {
   render() {
     return (
       <div className="header">
-        <div className="container">
-          <div className="row top-logo">
-            <div className="container align-left row">
-              <img alt="Etsin -logo" src="../../static/images/etsin_logo.png" />
-              <p className="slogan">
-                <Translate content="slogan" />
-              </p>
+        <ErrorBoundary>
+          <div className="container">
+            <div className="row top-logo">
+              <div className="container align-left row">
+                <img alt="Etsin -logo" src="../../static/images/etsin_logo.png" />
+                <p className="slogan">
+                  <Translate content="slogan" />
+                </p>
+              </div>
+            </div>
+            <div className="row top-nav">
+              <Navi />
+              <SecondNav />
             </div>
           </div>
-          <div className="row top-nav">
-            <Navi />
-            <SecondNav />
-          </div>
-        </div>
+        </ErrorBoundary>
       </div>
     );
   }
