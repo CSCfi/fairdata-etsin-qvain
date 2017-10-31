@@ -1,7 +1,8 @@
 import React from 'react'
 import axios from 'axios'
-import { inject, observer } from 'mobx-react'
 import Translate from 'react-translate-component'
+import { inject, observer } from 'mobx-react'
+import { Route } from 'react-router-dom'
 
 import DsSidebar from './components/dsSidebar'
 import DsDownloads from './components/dsDownloads'
@@ -9,6 +10,7 @@ import DsContent from './components/dsContent'
 import ErrorPage from './components/errorPage'
 import Identifier from './components/identifier'
 import ErrorBoundary from './components/errorBoundary'
+import DsTabs from './components/dsTabs'
 
 @inject('Stores') @observer
 class Dataset extends React.Component {
@@ -75,19 +77,28 @@ class Dataset extends React.Component {
       <div className="container regular-row">
         <div className="row">
           <div className="col-md-8">
-            <button className="btn btn-transparent nopadding btn-back" onClick={this.goBack}>
-              {'< Go back'}
-            </button>
             <ErrorBoundary>
-              <DsContent
-                title={title}
-                creator={creator}
-                contributor={contributor}
-                issued={issued}
-                dataset={researchDataset}
-              >
-                { description }
-              </DsContent>
+              <DsTabs identifier={this.identifier} />
+            </ErrorBoundary>
+            {/* <button className="btn btn-transparent nopadding btn-back" onClick={this.goBack}>
+              {'< Go back'}
+            </button> */}
+            <ErrorBoundary>
+              <Route
+                exact
+                path="/dataset/:identifier"
+                render={() => (
+                  <DsContent
+                    title={title}
+                    creator={creator}
+                    contributor={contributor}
+                    issued={issued}
+                    dataset={researchDataset}
+                  >
+                    { description }
+                  </DsContent>
+                )}
+              />
             </ErrorBoundary>
             <ErrorBoundary>
               {
@@ -96,7 +107,14 @@ class Dataset extends React.Component {
                     <Identifier idn={researchDataset.preferred_identifier} classes="btn btn-primary" >
                       <Translate content="dataset.data_location" fallback="this is fallback" />
                     </Identifier>
-                  : <DsDownloads />
+                  :
+                    <Route
+                      exact
+                      path="/dataset/:identifier/data"
+                      render={() => (
+                        <DsDownloads />
+                      )}
+                    />
               }
             </ErrorBoundary>
           </div>
