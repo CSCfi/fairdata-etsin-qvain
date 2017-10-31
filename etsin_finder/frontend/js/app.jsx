@@ -21,15 +21,17 @@ if (process.env.NODE_ENV === 'test') {
 export default class App extends Component {
   render() {
     return (
-      <Provider Stores={Stores}>
-        <Router>
-          <ErrorBoundary>
-            <Header />
-            <Content />
-            <Footer />
-          </ErrorBoundary>
-        </Router>
-      </Provider>
+      <div className="app">
+        <Provider Stores={Stores}>
+          <Router>
+            <ErrorBoundary>
+              <Header />
+              <Content />
+              <Footer />
+            </ErrorBoundary>
+          </Router>
+        </Provider>
+      </div>
     );
   }
 }
