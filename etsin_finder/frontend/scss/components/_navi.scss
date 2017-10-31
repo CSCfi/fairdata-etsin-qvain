@@ -1,6 +1,7 @@
 // nav left
 .navigation {
   width: 100%;
+  display: flex;
   @include mappy-bp(md) {
     width: initial;
   }
@@ -13,6 +14,7 @@
   transition: all 0.5s ease;
   margin-bottom: -4px;
   @include mappy-bp(md) {
+    align-items: stretch;
     display: inline-flex;
     max-height: initial;
   }
@@ -44,6 +46,7 @@
   position: absolute;
   top: 10px;
   right: 10px;
+  padding-bottom: 5px;
   @include mappy-bp(lg) {
     position: inherit;
     .btn-etsin {

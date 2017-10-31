@@ -19,23 +19,49 @@
     "@storybook/addon-links": "3.2.12",
     "@storybook/react": "3.2.12",
     "babel-eslint": "8.0.1",
-    "babel-jest": "^21.2.0",
-    "enzyme": "^3.1.0",
-    "enzyme-adapter-react-16": "^1.0.2",
+    "babel-jest": "21.2.0",
+    "enzyme": "3.1.0",
+    "enzyme-adapter-react-16": "1.0.2",
     "eslint": "4.9.0",
     "eslint-config-airbnb": "16.1.0",
     "eslint-loader": "1.9.0",
     "eslint-plugin-import": "2.8.0",
     "eslint-plugin-jsx-a11y": "6.0.2",
     "eslint-plugin-react": "7.4.0",
-    "jest": "^21.2.1",
+    "jest": "21.2.1",
     "webpack-dev-server": "2.9.1"
   },
   "babel": {
     "presets": [
-      "es2015",
+      [
+        "env",
+        {
+          "targets": {
+            "browsers": [
+              "last 2 major versions"
+            ]
+          }
+        }
+      ],
       "react"
-    ]
+    ],
+    "env": {
+      "test": {
+        "presets": [
+          [
+            "env",
+            {
+              "targets": {
+                "browsers": [
+                  "last 2 major versions"
+                ]
+              }
+            }
+          ],
+          "react"
+        ]
+      }
+    }
   },
   "dependencies": {
     "axios": "0.16.2",
@@ -59,7 +85,7 @@
     "react-dom": "16.0.0",
     "react-interpolate-component": "0.11.0",
     "react-router-dom": "4.2.2",
-    "react-test-renderer": "^16.0.0",
+    "react-test-renderer": "16.0.0",
     "react-translate-component": "0.14.0",
     "sass-loader": "6.0.6",
     "uglifyjs-webpack-plugin": "0.4.6",
@@ -67,10 +93,9 @@
   },
   "description": "",
   "jest": {
-    "testPathIgnorePatterns": ["./__tests__/test-setup.js"],
-    "setupTestFrameworkScriptFile": "./__tests__/test-setup.js",
-    "transform": {
-      "^.+\\.jsx?$": "babel-jest"
-    }
+    "testPathIgnorePatterns": [
+      "./__tests__/test-setup.js"
+    ],
+    "setupTestFrameworkScriptFile": "./__tests__/test-setup.js"
   }
 }
