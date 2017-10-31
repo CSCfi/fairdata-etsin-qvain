@@ -4,7 +4,11 @@ import Translate from 'react-translate-component';
 export default class DsSidebarItem extends Component {
   constructor(props) {
     super(props)
-    this.state = { component: this.props.component }
+    let component = this.props.component
+    if (!component) {
+      component = 'p'
+    }
+    this.state = { component }
   }
 
   render() {
