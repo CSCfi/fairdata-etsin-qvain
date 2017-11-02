@@ -17,6 +17,8 @@ import logging  # logging is configured in ElasticSearchService
 import pika
 import yaml
 
+from elasticsearch.exceptions import RequestError
+
 import sys
 sys.path.append('/etsin/etsin_finder')
 from etsin_finder.catalog_record_converter import CRConverter
@@ -68,25 +70,36 @@ def callback_reindex(ch, method, properties, body):
     converter = CRConverter()
     es_data_model = converter.convert_metax_catalog_record_json_to_es_data_model(
         json.loads(body))
-    if es_client.reindex_dataset(es_data_model):
-        channel.basic_ack(delivery_tag=method.delivery_tag)
-    else:
-        logging.info('Failed to reindex %s', json.loads(
-            body).get('urn_identifier', 'unknown identifier'))
-        channel.basic_nack(delivery_tag=method.delivery_tag, requeue=True)
+    reindex_success = False
+    try:
+        reindex_success = es_client.reindex_dataset(es_data_model)
+    except RequestError:
+        reindex_success = False
+    finally:
+        if reindex_success:
+            channel.basic_ack(delivery_tag=method.delivery_tag)
+        else:
+            logging.info('Failed to reindex %s', json.loads(
+                body).get('urn_identifier', 'unknown identifier'))
+            channel.basic_nack(delivery_tag=method.delivery_tag, requeue=True)
 
 
 def callback_delete(ch, method, properties, body):
     print('about to delete %s', json.loads(body).get('urn_identifier'))
+    delete_success = False
     try:
-        if es_client.delete_dataset(json.loads(body).get('urn_identifier')):
+        delete_success = es_client.delete_dataset(json.loads(body).get('urn_identifier'))
+    except RequestError:
+        delete_success = False
+    finally:
+        if delete_success:
             channel.basic_ack(delivery_tag=method.delivery_tag)
-    except:
-        logging.info('Failed to delete %s', json.loads(
-            body).get('urn_identifier', 'unknown identifier'))
-        # TODO: If delete fails because there's no such id in index, 
-        # no need to requeue
-        channel.basic_nack(delivery_tag=method.delivery_tag, requeue=True)
+        else:
+            logging.info('Failed to delete %s', json.loads(
+                body).get('urn_identifier', 'unknown identifier'))
+            # TODO: If delete fails because there's no such id in index,
+            # no need to requeue
+            channel.basic_nack(delivery_tag=method.delivery_tag, requeue=True)
 
 
 # Set up consumer
