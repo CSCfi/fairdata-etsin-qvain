@@ -12,25 +12,37 @@ import Identifier from './components/identifier'
 import ErrorBoundary from './components/errorBoundary'
 import DsTabs from './components/dsTabs'
 
-@inject('Stores') @observer
 class Dataset extends React.Component {
   constructor(props) {
     super(props);
 
-    this.identifier = this.props.match.params.identifier;
-
     // Use Metax-test in dev env, actual Metax in production
     this.url = (process.env.NODE_ENV !== 'production') ? 'https://metax-test.csc.fi' : 'https://metax-test.csc.fi'
-    this.state = { dataset: [], error: '' }
+    this.state = {
+      dataset: [],
+      error: '',
+    }
     this.goBack = this.goBack.bind(this)
+    this.updateData = this.updateData.bind(this)
+  }
+  componentDidMount() {
+    this.getData(this.props.match.params.identifier)
   }
 
-  componentDidMount() {
-    axios.get(`${this.url}/rest/datasets/${this.identifier}.json`)
+  componentWillReceiveProps(newProps) {
+    this.getData(newProps.match.params.identifier)
+  }
+
+  getData(id) {
+    let dataid = id;
+    if (this.props.dataid) {
+      dataid = this.props.dataid
+    }
+    axios.get(`${this.url}/rest/datasets/${dataid}.json`)
       .then((res) => {
         const dataset = res.data;
         this.setState({ dataset });
-        console.log(dataset)
+        this.updateData()
       })
       .catch((res) => {
         this.setState({ error: res });
@@ -39,6 +51,27 @@ class Dataset extends React.Component {
 
   goBack() {
     this.props.Stores.History.history.goBack()
+  }
+
+  updateData() {
+    const { currentLang } = this.props.Stores.Locale
+    this.setState({ currentLang })
+    const researchDataset = this.state.dataset.research_dataset
+    const titles = researchDataset.title
+
+    this.setState({ title: titles[this.state.currentLang] })
+
+    const description = researchDataset.description.filter((single) => {
+      if (!single.en) {
+        return false
+      }
+      return true
+    })[0].en;
+    this.setState({ description })
+    const { creator, contributor, issued } = this.state.dataset.research_dataset;
+    this.setState({ creator, contributor, issued })
+    console.log(this.state)
+    this.setState({ loaded: 'true' })
   }
 
   render() {
@@ -51,30 +84,12 @@ class Dataset extends React.Component {
     // Don't show anything until data has been loaded from Metax
     // TODO: Use a loading indicator instead
     // Do we need to worry about Metax sending us incomplete datasets?
-    if (!this.state.dataset.research_dataset) {
+    if (!this.state.loaded) {
       return <div />;
     }
 
-    // CASE 3: Everything ok, give me the data!
-
-    // from language store
-    const { currentLang } = this.props.Stores.Locale
-    const researchDataset = this.state.dataset.research_dataset
-    const titles = researchDataset.title
-
-    const title = titles[currentLang]
-
-
-    const description = researchDataset.description.filter((single) => {
-      if (!single.en) {
-        return false
-      }
-      return true
-    })[0].en;
-    const { creator, contributor, issued } = researchDataset;
-
     return (
-      <div className="container regular-row">
+      <div className="container regular-row" pageid={this.props.match.params.identifier}>
         <div className="row">
           <div className="col-md-8">
             <ErrorBoundary>
@@ -89,13 +104,13 @@ class Dataset extends React.Component {
                 path="/dataset/:identifier"
                 render={() => (
                   <DsContent
-                    title={title}
-                    creator={creator}
-                    contributor={contributor}
-                    issued={issued}
-                    dataset={researchDataset}
+                    title={this.state.title}
+                    creator={this.state.creator}
+                    contributor={this.state.contributor}
+                    issued={this.state.issued}
+                    dataset={this.state.dataset.research_dataset}
                   >
-                    { description }
+                    { this.state.description }
                   </DsContent>
                 )}
               />
@@ -104,7 +119,7 @@ class Dataset extends React.Component {
               {
                 this.state.dataset.data_catalog.catalog_json.harvested
                   ?
-                    <Identifier idn={researchDataset.preferred_identifier} classes="btn btn-primary" >
+                    <Identifier idn={this.state.dataset.research_dataset.preferred_identifier} classes="btn btn-primary" >
                       <Translate content="dataset.data_location" fallback="this is fallback" />
                     </Identifier>
                   :
@@ -120,7 +135,7 @@ class Dataset extends React.Component {
           </div>
           <div className="col-md-4">
             <ErrorBoundary>
-              <DsSidebar dataset={this.state.dataset} lang={currentLang} />
+              <DsSidebar dataset={this.state.dataset} lang={this.state.currentLang} />
             </ErrorBoundary>
           </div>
         </div>
@@ -129,4 +144,5 @@ class Dataset extends React.Component {
   }
 }
 
-export default Dataset;
+export default inject('Stores')(observer(Dataset))
+export const undecorated = Dataset
