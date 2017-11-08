@@ -197,15 +197,25 @@ const data = {
   "modified_by_api": "2017-05-23T13:07:22.559656",
   "created_by_api": "2017-05-23T13:07:22.559656"
 }
-
 describe('mount Dataset', () => {
+  let mock = '';
+  beforeAll(() => {
+    mock = new MockAdapter(axios);
+  });
+  
+  afterEach(() => {
+    mock.reset()
+  })
+  
+  afterAll(() => {
+    mock.restore()
+  })
+
   it('renders without crashing', () => {
     shallow(<Dataset match={{params: {identifier: 1}}} dataid={1} />)
   })
   describe('With data', () => {
-    var mock = new MockAdapter(axios);
     mock.onGet('https://metax-test.csc.fi/rest/datasets/1.json').reply(200, data);
-
     const MyDataset = shallow(<Dataset match={{params: {identifier: 1}}} dataid={1} />)
     describe('Get data', () => {
       it('should get with page id', (done) => {

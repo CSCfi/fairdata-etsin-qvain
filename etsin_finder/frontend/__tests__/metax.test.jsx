@@ -9,7 +9,6 @@ describe('Axios metax request', () => {
   it('gets data', (done) => {
     axios.get('https://metax-test.csc.fi/rest/datasets/11.json')
     .then(response => {
-      console.log(response.data)
       res = response
       done();
     })
