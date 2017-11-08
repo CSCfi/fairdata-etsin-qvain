@@ -17,7 +17,7 @@ class Dataset extends React.Component {
     super(props);
 
     // Use Metax-test in dev env, actual Metax in production
-    this.url = (process.env.NODE_ENV !== 'production') ? 'https://metax-test.csc.fi' : 'https://metax-test.csc.fi'
+    this.url = this.props.Stores.Env.metaxUrl
     this.state = {
       dataset: [],
       error: '',
@@ -70,7 +70,6 @@ class Dataset extends React.Component {
     this.setState({ description })
     const { creator, contributor, issued } = this.state.dataset.research_dataset;
     this.setState({ creator, contributor, issued })
-    console.log(this.state)
     this.setState({ loaded: 'true' })
   }
 
@@ -93,7 +92,7 @@ class Dataset extends React.Component {
         <div className="row">
           <div className="col-md-8">
             <ErrorBoundary>
-              <DsTabs identifier={this.identifier} />
+              <DsTabs identifier={this.props.match.params.identifier} />
             </ErrorBoundary>
             {/* <button className="btn btn-transparent nopadding btn-back" onClick={this.goBack}>
               {'< Go back'}
