@@ -1,4 +1,4 @@
-flake8==3.4.1
+flake8==3.5.0
 Flask==0.12.2
 #flask-login==0.4.0
 #flask-security==3.0.0

@@ -73,6 +73,6 @@ class MetaxAPIService:
         response_json = ""
         try:
             response_json = response.json()
-        except:
+        except Exception:
             pass
         return response_json
