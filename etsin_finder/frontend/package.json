@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "index.html",
   "scripts": {
+    "start": "webpack-dev-server --inline --hot",
     "build": "webpack --config webpack.prod.js --define process.env.NODE_ENV=\"'production'\"",
     "dev-build": "webpack --progress -d --config webpack.config.js",
     "lint": "eslint js --ext .jsx,.js",
@@ -31,7 +32,8 @@
     "eslint-plugin-react": "7.4.0",
     "jest": "21.2.1",
     "sinon": "4.1.1",
-    "webpack-dev-server": "2.9.1"
+    "style-loader": "^0.19.0",
+    "webpack-dev-server": "^2.9.1"
   },
   "babel": {
     "presets": [
@@ -85,13 +87,15 @@
     "node-sass": "4.5.3",
     "react": "16.0.0",
     "react-dom": "16.0.0",
+    "react-hot-loader": "^3.1.1",
     "react-interpolate-component": "0.11.0",
     "react-router-dom": "4.2.2",
     "react-test-renderer": "16.0.0",
     "react-translate-component": "0.14.0",
     "sass-loader": "6.0.6",
     "uglifyjs-webpack-plugin": "0.4.6",
-    "webpack": "3.8.1"
+    "webpack": "3.8.1",
+    "webpack-node-externals": "^1.6.0"
   },
   "description": "",
   "jest": {

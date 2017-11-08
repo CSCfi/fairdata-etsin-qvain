@@ -6,6 +6,7 @@ import { linkTo } from '@storybook/addon-links';
 
 import { Button, Welcome } from '@storybook/react/demo'
 import Identifier from '../js/components/identifier'
+import SearchBar from '../js/components/searchBar'
 
 storiesOf('Welcome', module).add('to Storybook', () => <Welcome showApp={linkTo('Button')} />);
 
@@ -15,3 +16,6 @@ storiesOf('Button', module)
 storiesOf('Identifier', module)
   .add('URN', () => <Identifier idn='urn:my:urn' classes="btn btn-primary">Data location</Identifier>)
   .add('Http', () => <Identifier idn='http://dx.doi.org/urn:something'>Im the identifier</Identifier>)
+
+storiesOf('SearchBar', module)
+  .add('Normal', () => <SearchBar />)

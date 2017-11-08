@@ -1,6 +1,7 @@
 {
-  "plugins": ["transform-decorators-legacy", "transform-class-properties"],
+  "plugins": ["transform-decorators-legacy", "transform-class-properties", "react-hot-loader/babel"],
   "presets": [["env", {
+    "modules": false,
     "targets": {
       "browsers": ["last 2 major versions"]
     }
