@@ -1,8 +1,8 @@
 celery==4.1.0
 elasticsearch==5.4.0
-flake8==3.4.1
+flake8==3.5.0
 Flask==0.12.2
-Flask-APScheduler==1.7.0
+Flask-APScheduler==1.7.1
 #flask-login==0.4.0
 #flask-security==3.0.0
 #flask-static-compress==1.0.1

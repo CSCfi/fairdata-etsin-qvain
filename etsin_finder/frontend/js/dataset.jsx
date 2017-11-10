@@ -22,6 +22,7 @@ class Dataset extends React.Component {
       dataset: [],
       error: '',
     }
+
     this.goBack = this.goBack.bind(this)
     this.updateData = this.updateData.bind(this)
   }
