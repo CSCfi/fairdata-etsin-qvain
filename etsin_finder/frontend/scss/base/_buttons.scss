@@ -1,4 +1,4 @@
-button.btn {
+.btn {
   cursor: pointer;
   &.btn-etsin {
     background-color: $color-primary;
@@ -8,7 +8,7 @@ button.btn {
       background-color: darken($color-primary, 5);
     }
   }
-  &.btn-etsin-outline {
+  &.btn-etsin-outline { // outline button
     background-color: transparent;
     color: $color-primary;
     border: 2px solid $color-primary;
@@ -21,6 +21,38 @@ button.btn {
     }
     &:active, &:focus, &:visited {
       background-color: transparent;
+    }
+  }
+  &.btn-gray {
+    line-height: 0;
+    padding: 0.5em 1.5em;
+    border-radius: 1em;
+    background-color: $color-lightgray;
+    color: $color-dark;
+  }
+  &:disabled {
+    cursor: initial;
+  }
+  &.btn-back {
+    color: $color-primary;
+  }
+}
+
+.etsin-tabs {
+  border-bottom-color: $color-primary;
+  .nav-link {
+    border-top-right-radius: 0em;
+    border-top-left-radius: 0em;
+    transition: all ease-out 0.3s;
+    &:not(.active) {
+      background-color: $color-primary;
+      color: white;
+      &:hover {
+        background-color: mix($color-primary, black, 80)
+      }
+    }
+    &.active, &:hover {
+      border-color: $color-primary $color-primary transparent $color-primary;
     }
   }
 }

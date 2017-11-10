@@ -1,37 +1,18 @@
-import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
-import { BrowserRouter as Router } from 'react-router-dom';
-import { Provider } from 'mobx-react';
+import { AppContainer } from 'react-hot-loader'
+import React from 'react'
+import ReactDOM from 'react-dom'
 
-import Footer from './layout/footer';
-import Header from './layout/header';
-import Content from './layout/content';
+import App, { App as NextApp } from './app'
 
-import Stores from './stores';
+ReactDOM.render(
+  <AppContainer>
+    <App />
+  </AppContainer>,
+  document.getElementById('content'),
+);
 
-console.log(process.env.NODE_ENV);
-if (process.env.NODE_ENV === 'test') {
-  console.log('We are in test');
-} else if (process.env.NODE_ENV === 'development') {
-  console.log('We are in development');
-} else if (process.env.NODE_ENV !== 'production') {
-  console.log('Looks like we are in development mode!');
+if (module.hot) {
+  module.hot.accept('./app', () => {
+    ReactDOM.render(<AppContainer><NextApp /></AppContainer>, document.getElementById('content'));
+  });
 }
-
-class App extends Component {
-  render() {
-    return (
-      <Provider Stores={Stores}>
-        <Router>
-          <div>
-            <Header />
-            <Content />
-            <Footer />
-          </div>
-        </Router>
-      </Provider>
-    );
-  }
-}
-
-ReactDOM.render(<App />, document.getElementById('content'));

@@ -4,21 +4,18 @@ import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 import { linkTo } from '@storybook/addon-links';
 
-import SampleData from './sampledata';
-import DsDownloads from '../js/components/dsDownloads'; 
-import { Button, Welcome } from '@storybook/react/demo';
+import { Button, Welcome } from '@storybook/react/demo'
+import Identifier from '../js/components/identifier'
+import SearchBar from '../js/components/searchBar'
 
 storiesOf('Welcome', module).add('to Storybook', () => <Welcome showApp={linkTo('Button')} />);
 
 storiesOf('Button', module)
-  .add('with text', () => <Button onClick={action('clicked')}>Hello Button</Button>)
-  .add('with some emoji', () => <Button onClick={action('clicked')}>😀 😎 👍 💯</Button>);
+  .add('with text', () => <Button onClick={action('clicked')}>Hello Button</Button>);
 
-storiesOf('DsDownloads', module)
-  .add('basic', () => (
-    <SampleData url='https://metax-test.csc.fi/rest/datasets/pid:urn:cr1.json' >
-      {dataset => 
-        <DsDownloads files={dataset} />
-      }
-    </SampleData>
-  ));
+storiesOf('Identifier', module)
+  .add('URN', () => <Identifier idn='urn:my:urn' classes="btn btn-primary">Data location</Identifier>)
+  .add('Http', () => <Identifier idn='http://dx.doi.org/urn:something'>Im the identifier</Identifier>)
+
+storiesOf('SearchBar', module)
+  .add('Normal', () => <SearchBar />)

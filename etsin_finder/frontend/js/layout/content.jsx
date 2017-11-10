@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
-import Translate from 'react-translate-component';
 import Dataset from '../dataset';
+import SearchPage from '../search';
 
 export default class Content extends React.Component {
   render() {
@@ -10,15 +10,7 @@ export default class Content extends React.Component {
         <Route
           exact
           path="/"
-          render={() => (
-            <div className="hero">
-              <div className="container">
-                <h1 className="text-center">
-                  <Translate content="home.title" />
-                </h1>
-              </div>
-            </div>
-        )}
+          component={SearchPage}
         />
         <Route
           path="/datasets"
