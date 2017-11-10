@@ -1,4 +1,14 @@
 {
+  "env": {
+    "test": {
+      "plugins": ["transform-decorators-legacy", "transform-class-properties", "react-hot-loader/babel"],
+      "presets": [["env", {
+        "targets": {
+          "browsers": ["last 2 major versions"]
+        }
+      }], "react"]
+    }
+  },
   "plugins": ["transform-decorators-legacy", "transform-class-properties", "react-hot-loader/babel"],
   "presets": [["env", {
     "modules": false,
