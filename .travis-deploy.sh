@@ -10,9 +10,9 @@ git clone https://github.com/CSCfi/etsin-ops
 cd etsin-ops/ansible/
 
 if [[ "$TRAVIS_BRANCH" == "test" && "$TRAVIS_PULL_REQUEST" == "false" ]]; then
-    echo "Deploying to test.."
+    echo "Deploying to test webservers.."
     ansible-galaxy -r requirements.yml install --roles-path=roles
-    ansible-playbook -vv -i inventories/test/hosts site_deploy.yml --extra-vars "ssh_user=etsin-deploy-user"
+    ansible-playbook -vv -i inventories/test/hosts deploy_webservers.yml --extra-vars "ssh_user=etsin-deploy-user"
 elif [[ "$TRAVIS_BRANCH" == "stable" && "$TRAVIS_PULL_REQUEST" == "false" ]]; then
     echo "Deploying to stable.. (NOT ACTUALLY, ADD CODE TO DO IT)"
 fi

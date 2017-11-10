@@ -1,0 +1,2781 @@
+[
+  {
+    "urn_identifier": "pid:urn:cr1",
+    "preferred_identifier": "pid:urn:preferred:dataset1",
+    "modified_by_api": "2017-10-20T12:34:41.938355",
+    "title": {
+      "en": "Wonderful Title"
+    },
+    "description": [
+      {
+        "en": "A descriptive description describing the described describee."
+      }
+    ],
+    "curator": [
+      {
+        "identifier": "id:of:curator:default",
+        "name": "Default Owner",
+        "email": "",
+        "telephone": "",
+        "agent_type": "Organization",
+        "homepage": {}
+      }
+    ],
+    "creator": [
+      {
+        "identifier": "",
+        "name": "Teppo Testaaja",
+        "email": "",
+        "telephone": "",
+        "agent_type": "Person",
+        "homepage": {}
+      }
+    ]
+  },
+  {
+    "urn_identifier": "pid:urn:cr2",
+    "preferred_identifier": "pid:urn:preferred:dataset2",
+    "modified_by_api": "2017-05-23T13:07:22.559656",
+    "title": {
+      "en": "Wonderful Title"
+    },
+    "description": [
+      {
+        "en": "A descriptive description describing the contents of this dataset. Must be descriptive."
+      }
+    ],
+    "preservation_state": 1,
+    "curator": [
+      {
+        "identifier": "id:of:curator:rahikainen",
+        "name": "Rahikainen",
+        "email": "",
+        "telephone": "",
+        "agent_type": "Person",
+        "homepage": {}
+      }
+    ],
+    "creator": [
+      {
+        "identifier": "",
+        "name": "Teppo Testaaja",
+        "email": "",
+        "telephone": "",
+        "agent_type": "Person",
+        "homepage": {}
+      }
+    ]
+  },
+  {
+    "urn_identifier": "pid:urn:cr3",
+    "preferred_identifier": "pid:urn:preferred:dataset3",
+    "modified_by_api": "2017-05-23T13:07:22.559656",
+    "title": {
+      "en": "Wonderful Title"
+    },
+    "description": [
+      {
+        "en": "A descriptive description describing the contents of this dataset. Must be descriptive."
+      }
+    ],
+    "preservation_state": 2,
+    "curator": [
+      {
+        "identifier": "id:of:curator:rahikainen",
+        "name": "Rahikainen",
+        "email": "",
+        "telephone": "",
+        "agent_type": "Person",
+        "homepage": {}
+      }
+    ],
+    "creator": [
+      {
+        "identifier": "",
+        "name": "Teppo Testaaja",
+        "email": "",
+        "telephone": "",
+        "agent_type": "Person",
+        "homepage": {}
+      }
+    ]
+  },
+  {
+    "urn_identifier": "pid:urn:cr4",
+    "preferred_identifier": "pid:urn:preferred:dataset4",
+    "modified_by_api": "2017-05-23T13:07:22.559656",
+    "title": {
+      "en": "Wonderful Title"
+    },
+    "description": [
+      {
+        "en": "A descriptive description describing the contents of this dataset. Must be descriptive."
+      }
+    ],
+    "preservation_state": 3,
+    "curator": [
+      {
+        "identifier": "id:of:curator:rahikainen",
+        "name": "Rahikainen",
+        "email": "",
+        "telephone": "",
+        "agent_type": "Person",
+        "homepage": {}
+      }
+    ],
+    "creator": [
+      {
+        "identifier": "",
+        "name": "Teppo Testaaja",
+        "email": "",
+        "telephone": "",
+        "agent_type": "Person",
+        "homepage": {}
+      }
+    ]
+  },
+  {
+    "urn_identifier": "pid:urn:cr5",
+    "preferred_identifier": "pid:urn:preferred:dataset5",
+    "modified_by_api": "2017-05-23T13:07:22.559656",
+    "title": {
+      "en": "Wonderful Title"
+    },
+    "description": [
+      {
+        "en": "A descriptive description describing the contents of this dataset. Must be descriptive."
+      }
+    ],
+    "preservation_state": 4,
+    "curator": [
+      {
+        "identifier": "id:of:curator:rahikainen",
+        "name": "Rahikainen",
+        "email": "",
+        "telephone": "",
+        "agent_type": "Person",
+        "homepage": {}
+      }
+    ],
+    "creator": [
+      {
+        "identifier": "",
+        "name": "Teppo Testaaja",
+        "email": "",
+        "telephone": "",
+        "agent_type": "Person",
+        "homepage": {}
+      }
+    ]
+  },
+  {
+    "urn_identifier": "pid:urn:cr6",
+    "preferred_identifier": "pid:urn:preferred:dataset6",
+    "modified_by_api": "2017-05-23T13:07:22.559656",
+    "title": {
+      "en": "Wonderful Title"
+    },
+    "description": [
+      {
+        "en": "A descriptive description describing the contents of this dataset. Must be descriptive."
+      }
+    ],
+    "preservation_state": 5,
+    "curator": [
+      {
+        "identifier": "id:of:curator:rahikainen",
+        "name": "Rahikainen",
+        "email": "",
+        "telephone": "",
+        "agent_type": "Person",
+        "homepage": {}
+      }
+    ],
+    "creator": [
+      {
+        "identifier": "",
+        "name": "Teppo Testaaja",
+        "email": "",
+        "telephone": "",
+        "agent_type": "Person",
+        "homepage": {}
+      }
+    ]
+  },
+  {
+    "urn_identifier": "pid:urn:cr7",
+    "preferred_identifier": "pid:urn:preferred:dataset7",
+    "modified_by_api": "2017-05-23T13:07:22.559656",
+    "title": {
+      "en": "Wonderful Title"
+    },
+    "description": [
+      {
+        "en": "A descriptive description describing the contents of this dataset. Must be descriptive."
+      }
+    ],
+    "curator": [
+      {
+        "identifier": "id:of:curator:jarski",
+        "name": "Jarski",
+        "email": "",
+        "telephone": "",
+        "agent_type": "Person",
+        "homepage": {}
+      }
+    ],
+    "creator": [
+      {
+        "identifier": "",
+        "name": "Teppo Testaaja",
+        "email": "",
+        "telephone": "",
+        "agent_type": "Person",
+        "homepage": {}
+      }
+    ]
+  },
+  {
+    "urn_identifier": "pid:urn:cr8",
+    "preferred_identifier": "pid:urn:preferred:dataset8",
+    "modified_by_api": "2017-05-23T13:07:22.559656",
+    "title": {
+      "en": "Wonderful Title"
+    },
+    "description": [
+      {
+        "en": "A descriptive description describing the contents of this dataset. Must be descriptive."
+      }
+    ],
+    "curator": [
+      {
+        "identifier": "id:of:curator:jarski",
+        "name": "Jarski",
+        "email": "",
+        "telephone": "",
+        "agent_type": "Person",
+        "homepage": {}
+      }
+    ],
+    "creator": [
+      {
+        "identifier": "",
+        "name": "Teppo Testaaja",
+        "email": "",
+        "telephone": "",
+        "agent_type": "Person",
+        "homepage": {}
+      }
+    ]
+  },
+  {
+    "urn_identifier": "pid:urn:cr9",
+    "preferred_identifier": "pid:urn:preferred:dataset9",
+    "modified_by_api": "2017-05-23T13:07:22.559656",
+    "title": {
+      "en": "Wonderful Title"
+    },
+    "description": [
+      {
+        "en": "A descriptive description describing the contents of this dataset. Must be descriptive."
+      }
+    ],
+    "curator": [
+      {
+        "identifier": "id:of:curator:jarski",
+        "name": "Jarski",
+        "email": "",
+        "telephone": "",
+        "agent_type": "Person",
+        "homepage": {}
+      }
+    ],
+    "creator": [
+      {
+        "identifier": "",
+        "name": "Teppo Testaaja",
+        "email": "",
+        "telephone": "",
+        "agent_type": "Person",
+        "homepage": {}
+      }
+    ]
+  },
+  {
+    "urn_identifier": "pid:urn:cr10",
+    "preferred_identifier": "pid:urn:preferred:dataset10",
+    "modified_by_api": "2017-05-23T13:07:22.559656",
+    "title": {
+      "en": "Wonderful Title"
+    },
+    "description": [
+      {
+        "en": "A descriptive description describing the contents of this dataset. Must be descriptive."
+      }
+    ],
+    "curator": [
+      {
+        "identifier": "id:of:curator:jarski",
+        "name": "Jarski",
+        "email": "",
+        "telephone": "",
+        "agent_type": "Person",
+        "homepage": {}
+      }
+    ],
+    "creator": [
+      {
+        "identifier": "",
+        "name": "Teppo Testaaja",
+        "email": "",
+        "telephone": "",
+        "agent_type": "Person",
+        "homepage": {}
+      }
+    ]
+  },
+  {
+    "urn_identifier": "very:unique:urn-0",
+    "preferred_identifier": "very:unique:urn-0",
+    "modified_by_api": "2017-05-23T13:07:22.559656",
+    "title": {
+      "en": "Wonderful Title"
+    },
+    "description": [
+      {
+        "en": "A descriptive description describing the contents of this dataset. Must be descriptive."
+      }
+    ],
+    "keyword": [
+      "keyword",
+      "keyword2",
+      "keyword3"
+    ],
+    "other_identifier": [
+      {
+        "notation": "doi:10.12345",
+        "type": {
+          "identifier": [
+            "doi"
+          ],
+          "label": {
+            "en": "pref label"
+          }
+        }
+      },
+      {
+        "notation": "urn:nbn:fi-12345",
+        "type": {
+          "identifier": [
+            "http://purl.org/att/es/reference_data/identifier_type/identifier_type_urn"
+          ],
+          "label": {
+            "en": "pref label for y"
+          }
+        }
+      }
+    ],
+    "access_rights": {
+      "license": [
+        {
+          "identifier": "http://www.opensource.org/licenses/Apache-2.0",
+          "label": [
+            {
+              "en": "A name given to the resource"
+            }
+          ]
+        }
+      ],
+      "type": [
+        {
+          "identifier": "http://purl.org/att/es/reference_data/access_type/access_type_open_access",
+          "label": {
+            "en": "pref label for this type"
+          }
+        }
+      ]
+    },
+    "theme": [
+      {
+        "identifier": "http://www.yso.fi/onto/yso/p20518",
+        "label": {
+          "en": "pref label for theme"
+        }
+      }
+    ],
+    "field_of_science": [
+      {
+        "identifier": "http://www.yso.fi/onto/okm-tieteenala/ta414",
+        "label": {
+          "en": "pref label for this type"
+        }
+      }
+    ],
+    "project": [
+      {
+        "identifier": [
+          "projectidentifier"
+        ],
+        "label": {
+          "en": "Name of project"
+        },
+        "has_funding_agency": [
+          {
+            "identifier": "fundingagencyidentifier",
+            "name": "Rahoittava Organisaatio",
+            "email": "rahoitus@rahaorg.fi",
+            "telephone": [
+              "+358501232233"
+            ],
+            "agent_type": "Organization",
+            "homepage": {}
+          }
+        ],
+        "source_organization": [
+          {
+            "identifier": "http://purl.org/att/es/organization_data/organization/organization_1901",
+            "name": "Mysterious Organization",
+            "email": "info@csc.fi",
+            "telephone": [
+              "+358501231235"
+            ],
+            "agent_type": "Organization",
+            "homepage": {}
+          }
+        ]
+      }
+    ],
+    "contributor": [
+      {
+        "identifier": "contributorid",
+        "name": "Kalle Kontribuuttaja",
+        "email": "kalle.kontribuuttaaja@csc.fi",
+        "telephone": [
+          "+358501231122"
+        ],
+        "agent_type": "Person",
+        "homepage": {},
+        "belongs_to_org": {
+          "identifier": "http://purl.org/att/es/organization_data/organization/organization_1901",
+          "name": "Mysterious Organization",
+          "email": "info@csc.fi",
+          "telephone": [
+            "+358501231235"
+          ],
+          "agent_type": "Organization",
+          "homepage": {}
+        }
+      },
+      {
+        "identifier": "contributorid2",
+        "name": "Franzibald Kontribuuttaja",
+        "email": "franzibald.kontribuuttaaja@csc.fi",
+        "telephone": [
+          "+358501231133"
+        ],
+        "agent_type": "Person",
+        "homepage": {},
+        "belongs_to_org": {
+          "identifier": "http://purl.org/att/es/organization_data/organization/organization_1901",
+          "name": "Mysterious Organization",
+          "email": "info@csc.fi",
+          "telephone": [
+            "+358501231235"
+          ],
+          "agent_type": "Organization",
+          "homepage": {}
+        }
+      }
+    ],
+    "publisher": {
+      "identifier": "http://purl.org/att/es/organization_data/organization/organization_1901",
+      "name": "Mysterious Organization",
+      "email": "info@csc.fi",
+      "telephone": [
+        "+358501231235"
+      ],
+      "agent_type": "Organization",
+      "homepage": {
+        "title": {
+          "en": "Publisher website",
+          "fi": "Julkaisijan kotisivu"
+        },
+        "identifier": "http://www.publisher.fi/"
+      }
+    },
+    "curator": [
+      {
+        "identifier": "id:of:curator:default",
+        "name": "Default Owner",
+        "email": "",
+        "telephone": "",
+        "agent_type": "Organization",
+        "homepage": {}
+      }
+    ],
+    "creator": [
+      {
+        "identifier": "",
+        "name": "Teppo Testaaja",
+        "email": "",
+        "telephone": "",
+        "agent_type": "Person",
+        "homepage": {}
+      }
+    ]
+  },
+  {
+    "urn_identifier": "very:unique:urn-1",
+    "preferred_identifier": "very:unique:urn-1",
+    "modified_by_api": "2017-05-23T13:07:22.559656",
+    "title": {
+      "en": "Wonderful Title"
+    },
+    "description": [
+      {
+        "en": "A descriptive description describing the contents of this dataset. Must be descriptive."
+      }
+    ],
+    "keyword": [
+      "keyword",
+      "keyword2",
+      "keyword3"
+    ],
+    "other_identifier": [
+      {
+        "notation": "doi:10.12345",
+        "type": {
+          "identifier": [
+            "doi"
+          ],
+          "label": {
+            "en": "pref label"
+          }
+        }
+      },
+      {
+        "notation": "urn:nbn:fi-12345",
+        "type": {
+          "identifier": [
+            "http://purl.org/att/es/reference_data/identifier_type/identifier_type_urn"
+          ],
+          "label": {
+            "en": "pref label for y"
+          }
+        }
+      }
+    ],
+    "access_rights": {
+      "license": [
+        {
+          "identifier": "http://www.opensource.org/licenses/Apache-2.0",
+          "label": [
+            {
+              "en": "A name given to the resource"
+            }
+          ]
+        }
+      ],
+      "type": [
+        {
+          "identifier": "http://purl.org/att/es/reference_data/access_type/access_type_open_access",
+          "label": {
+            "en": "pref label for this type"
+          }
+        }
+      ]
+    },
+    "theme": [
+      {
+        "identifier": "http://www.yso.fi/onto/yso/p20518",
+        "label": {
+          "en": "pref label for theme"
+        }
+      }
+    ],
+    "field_of_science": [
+      {
+        "identifier": "http://www.yso.fi/onto/okm-tieteenala/ta414",
+        "label": {
+          "en": "pref label for this type"
+        }
+      }
+    ],
+    "project": [
+      {
+        "identifier": [
+          "projectidentifier"
+        ],
+        "label": {
+          "en": "Name of project"
+        },
+        "has_funding_agency": [
+          {
+            "identifier": "fundingagencyidentifier",
+            "name": "Rahoittava Organisaatio",
+            "email": "rahoitus@rahaorg.fi",
+            "telephone": [
+              "+358501232233"
+            ],
+            "agent_type": "Organization",
+            "homepage": {}
+          }
+        ],
+        "source_organization": [
+          {
+            "identifier": "http://purl.org/att/es/organization_data/organization/organization_1901",
+            "name": "Mysterious Organization",
+            "email": "info@csc.fi",
+            "telephone": [
+              "+358501231235"
+            ],
+            "agent_type": "Organization",
+            "homepage": {}
+          }
+        ]
+      }
+    ],
+    "contributor": [
+      {
+        "identifier": "contributorid",
+        "name": "Kalle Kontribuuttaja",
+        "email": "kalle.kontribuuttaaja@csc.fi",
+        "telephone": [
+          "+358501231122"
+        ],
+        "agent_type": "Person",
+        "homepage": {},
+        "belongs_to_org": {
+          "identifier": "http://purl.org/att/es/organization_data/organization/organization_1901",
+          "name": "Mysterious Organization",
+          "email": "info@csc.fi",
+          "telephone": [
+            "+358501231235"
+          ],
+          "agent_type": "Organization",
+          "homepage": {}
+        }
+      },
+      {
+        "identifier": "contributorid2",
+        "name": "Franzibald Kontribuuttaja",
+        "email": "franzibald.kontribuuttaaja@csc.fi",
+        "telephone": [
+          "+358501231133"
+        ],
+        "agent_type": "Person",
+        "homepage": {},
+        "belongs_to_org": {
+          "identifier": "http://purl.org/att/es/organization_data/organization/organization_1901",
+          "name": "Mysterious Organization",
+          "email": "info@csc.fi",
+          "telephone": [
+            "+358501231235"
+          ],
+          "agent_type": "Organization",
+          "homepage": {}
+        }
+      }
+    ],
+    "publisher": {
+      "identifier": "http://purl.org/att/es/organization_data/organization/organization_1901",
+      "name": "Mysterious Organization",
+      "email": "info@csc.fi",
+      "telephone": [
+        "+358501231235"
+      ],
+      "agent_type": "Organization",
+      "homepage": {
+        "title": {
+          "en": "Publisher website",
+          "fi": "Julkaisijan kotisivu"
+        },
+        "identifier": "http://www.publisher.fi/"
+      }
+    },
+    "curator": [
+      {
+        "identifier": "id:of:curator:default",
+        "name": "Default Owner",
+        "email": "",
+        "telephone": "",
+        "agent_type": "Organization",
+        "homepage": {}
+      }
+    ],
+    "creator": [
+      {
+        "identifier": "",
+        "name": "Teppo Testaaja",
+        "email": "",
+        "telephone": "",
+        "agent_type": "Person",
+        "homepage": {}
+      }
+    ]
+  },
+  {
+    "urn_identifier": "pid:urn:cr:13-1508411570951",
+    "preferred_identifier": "http://urn.fi/urn:nbn:fi:lb-2016081804",
+    "modified_by_api": "2017-10-20T04:01:06.322626",
+    "title": {
+      "en": "The Corpus of Russian Abstract Nouns as Subjects",
+      "fi": "Ven\u00c3\u00a4j\u00c3\u00a4n abstraktisubstantiivit subjekteina -korpus"
+    },
+    "description": [
+      {
+        "en": "The corpus contains sentences in which a Russian abstract word (such as science, art, religion, literature, etc.) Is the subject of the sentence. This is a modified sub-corpus which which has been compiled from the Integrum database of Russian texts (see http://www.helsinki.fi/venaja/e-materiaali/).",
+        "fi": "Korpus sis\u00c3\u00a4lt\u00c3\u00a4\u00c3\u00a4 lauseita, joissa jokin ven\u00c3\u00a4j\u00c3\u00a4n kielen abstraktisana (kuten tiede, taide, uskonto, kirjallisuus jne.) toimii lauseen subjektina. Kyseess\u00c3\u00a4 on muokattu osakorpusm joka on koottu ven\u00c3\u00a4j\u00c3\u00a4nkielisi\u00c3\u00a4 tekstej\u00c3\u00a4 sis\u00c3\u00a4lt\u00c3\u00a4v\u00c3\u00a4st\u00c3\u00a4 Integrum-tietokannasta."
+      }
+    ],
+    "other_identifier": [
+      {
+        "notation": "urn:nbn:fi:csc-kata20170221141754760476",
+        "type": {
+          "identifier": [
+            "http://purl.org/att/es/reference_data/identifier_type/identifier_type_urn"
+          ],
+          "label": {
+            "en": "Uniform Resource Name (URN)",
+            "default": "Uniform Resource Name (URN)"
+          }
+        }
+      }
+    ],
+    "access_rights": {
+      "license": [
+        {
+          "identifier": "http://purl.org/att/es/reference_data/license/license_under_negotiation",
+          "label": {
+            "en": "Under negotiation",
+            "fi": "Neuvottelut kesken",
+            "default": "Neuvottelut kesken"
+          }
+        }
+      ]
+    },
+    "field_of_science": [
+      {
+        "identifier": "http://www.yso.fi/onto/okm-tieteenala/ta6121",
+        "label": {
+          "en": "Languages",
+          "fi": "Kielitieteet",
+          "sv": "Spr\u00c3\u00a5kvetenskaper",
+          "default": "Kielitieteet"
+        }
+      }
+    ],
+    "curator": [
+      {
+        "identifier": "",
+        "name": "Arto Mustajoki",
+        "email": "arto.mustajoki@helsinki.fi",
+        "telephone": "",
+        "agent_type": "Person",
+        "homepage": {},
+        "belongs_to_org": {
+          "identifier": "",
+          "name": "University of Helsinki",
+          "email": "firstname.surname@helsinki.fi",
+          "telephone": "",
+          "agent_type": "Organization",
+          "homepage": {}
+        }
+      }
+    ],
+    "creator": [
+      {
+        "identifier": "",
+        "name": "Arto Mustajoki",
+        "email": "arto.mustajoki@helsinki.fi",
+        "telephone": "",
+        "agent_type": "Person",
+        "homepage": {},
+        "belongs_to_org": {
+          "identifier": "",
+          "name": "University of Helsinki",
+          "email": "firstname.surname@helsinki.fi",
+          "telephone": "",
+          "agent_type": "Organization",
+          "homepage": {}
+        }
+      }
+    ]
+  },
+  {
+    "urn_identifier": "pid:urn:cr:14-1508411572589",
+    "preferred_identifier": "http://urn.fi/urn:nbn:fi:lb-2017021005",
+    "modified_by_api": "2017-10-20T04:01:18.518284",
+    "title": {
+      "en": "The Ethnography Interview Exercises Corpus of the University of Helsinki",
+      "fi": "Helsingin yliopiston kansatieteen oppiaineen haastatteluharjoituksia"
+    },
+    "description": [
+      {
+        "en": "The corpus contains interview exercises of ethnography students of the University of Helsinki (non-electronic texts)."
+      }
+    ],
+    "access_rights": {
+      "license": [
+        {
+          "identifier": "http://purl.org/att/es/reference_data/license/license_under_negotiation",
+          "label": {
+            "en": "Under negotiation",
+            "fi": "Neuvottelut kesken",
+            "default": "Neuvottelut kesken"
+          }
+        }
+      ]
+    },
+    "field_of_science": [
+      {
+        "identifier": "http://www.yso.fi/onto/okm-tieteenala/ta6121",
+        "label": {
+          "en": "Languages",
+          "fi": "Kielitieteet",
+          "sv": "Spr\u00e5kvetenskaper",
+          "default": "Kielitieteet"
+        }
+      }
+    ],
+    "curator": [
+      {
+        "identifier": "",
+        "name": "Katarina Koskiranta",
+        "email": "katarina.koskiranta@helsinki.fi",
+        "telephone": "",
+        "agent_type": "Person",
+        "homepage": {},
+        "belongs_to_org": {
+          "identifier": "",
+          "name": "University of Helsinki",
+          "email": "firstname.surname@helsinki.fi",
+          "telephone": "",
+          "agent_type": "Organization",
+          "homepage": {}
+        }
+      },
+      {
+        "identifier": "",
+        "name": "University of Helsinki",
+        "email": "firstname.surname@helsinki.fi",
+        "telephone": "",
+        "agent_type": "Organization",
+        "homepage": {}
+      }
+    ],
+    "creator": [
+      {
+        "identifier": "",
+        "name": "University of Helsinki",
+        "email": "firstname.surname@helsinki.fi",
+        "telephone": "",
+        "agent_type": "Organization",
+        "homepage": {}
+      }
+    ]
+  },
+  {
+    "urn_identifier": "pid:urn:cr:15-1508411573953",
+    "preferred_identifier": "http://urn.fi/urn:nbn:fi:lb-2016102807",
+    "modified_by_api": "2017-10-20T04:01:08.419311",
+    "title": {
+      "en": "The University of Helsinki's German E-thesis, Korp Version",
+      "fi": "Helsingin yliopiston saksankielisen E-thesiksen Korp-versio"
+    },
+    "description": [
+      {
+        "en": "The corpus is available in Kielipankki - the Language Bank of Finland in Korp, http://urn.fi/urn:nbn:fi:lb-2016102802\n\nThe corpus contains the University of Helsinki's German master's theses as well as the doctoral theses and their summaries published at https://ethesis.helsinki.fi by September 2016."
+      }
+    ],
+    "other_identifier": [
+      {
+        "notation": "urn:nbn:fi:csc-kata20170221141809271880",
+        "type": {
+          "identifier": [
+            "http://purl.org/att/es/reference_data/identifier_type/identifier_type_urn"
+          ],
+          "label": {
+            "en": "Uniform Resource Name (URN)",
+            "default": "Uniform Resource Name (URN)"
+          }
+        }
+      }
+    ],
+    "access_rights": {
+      "type": [
+        {
+          "identifier": "http://purl.org/att/es/reference_data/access_type/access_type_open_access",
+          "label": {
+            "en": "Open",
+            "fi": "Avoin",
+            "default": "Avoin"
+          }
+        }
+      ]
+    },
+    "field_of_science": [
+      {
+        "identifier": "http://www.yso.fi/onto/okm-tieteenala/ta6121",
+        "label": {
+          "en": "Languages",
+          "fi": "Kielitieteet",
+          "sv": "Spr\u00c3\u00a5kvetenskaper",
+          "default": "Kielitieteet"
+        }
+      }
+    ],
+    "curator": [
+      {
+        "identifier": "",
+        "name": "User support FIN-CLARIN",
+        "email": "finclarin@helsinki.fi",
+        "telephone": "",
+        "agent_type": "Person",
+        "homepage": {}
+      },
+      {
+        "identifier": "",
+        "name": "University of Helsinki",
+        "email": "firstname.surname@helsinki.fi",
+        "telephone": "",
+        "agent_type": "Organization",
+        "homepage": {}
+      }
+    ],
+    "creator": [
+      {
+        "identifier": "",
+        "name": "University of Helsinki",
+        "email": "firstname.surname@helsinki.fi",
+        "telephone": "",
+        "agent_type": "Organization",
+        "homepage": {}
+      }
+    ]
+  },
+  {
+    "urn_identifier": "pid:urn:cr:16-1508411575527",
+    "preferred_identifier": "http://urn.fi/urn:nbn:fi:lb-2016012201",
+    "modified_by_api": "2017-10-20T04:01:11.376587",
+    "title": {
+      "en": "Kildin Saami Corpus (UHLCS)",
+      "fi": "Kiltin\u00e4nsaamen korpus (UHLCS)"
+    },
+    "description": [
+      {
+        "en": "The corpus will be made available in taito-shell.csc.fi (taito-shell user guide: https://research.csc.fi/taito-shell-user-guide).\n\nThe sub-directory /kildin-saami/ will include the following sub-directories:\n\n        /Books-of-Children/\n       \t/originals/\n\nThe sub-directory /Books-of-Children/ will include the following text:\n\n        \"Jesus Friend of Children\" in Kildin Saami Language.\n        Arapovich, B. & Mattelm\u00e4ki, V. (eds.).\n        ISBN 952-9790-31-7. 65 pp.\n        Institute for Bible Translation.\n        Stockholm & Helsinki 1995\n\nThe texts of the computer corpus of Kildin S\u00e1mi have been donated to\nthe University of Helsinki by the Institute for Bible Translation\n(Stockholm, Sweden) to be used as research material. Reference\nto the corpus has to be made in papers in which it is used\nas a source.\n\n\nThe revised Unicode version is now the only official fulltext version of\nthis corpus. A scrambled version will be made available in korp.csc.fi in the near future.\nSee http://urn.fi/urn:nbn:fi:lb-2015102001 for more information.\n\nThe previous fulltext version(s) of this corpus can still be found in\n/originals/ for reference.  Thanks to Michael Rie\u00dfler U Freiburg\n(saami.uni-freiburg.de) for the revision of the original.\n\nThe Kildin Saami Corpus is a part of the UHLCS corpus collection.\n\nUHLCS has many different IPR holders. Should you have any questions regarding the collection, please contact Pirkko Suihkonen (suihkonen.pirkko@gmail.com).\n\nDetailed information: http://www.ling.helsinki.fi/uhlcs/"
+      }
+    ],
+    "other_identifier": [
+      {
+        "notation": "urn:nbn:fi:csc-kata20170221141647076832",
+        "type": {
+          "identifier": [
+            "http://purl.org/att/es/reference_data/identifier_type/identifier_type_urn"
+          ],
+          "label": {
+            "en": "Uniform Resource Name (URN)",
+            "default": "Uniform Resource Name (URN)"
+          }
+        }
+      }
+    ],
+    "access_rights": {
+      "type": [
+        {
+          "identifier": "http://purl.org/att/es/reference_data/access_type/access_type_restricted_access_permit",
+          "label": {
+            "en": "Requires permission",
+            "fi": "Vaatii luvan",
+            "default": "Vaatii luvan"
+          }
+        }
+      ]
+    },
+    "field_of_science": [
+      {
+        "identifier": "http://www.yso.fi/onto/okm-tieteenala/ta6121",
+        "label": {
+          "en": "Languages",
+          "fi": "Kielitieteet",
+          "sv": "Spr\u00e5kvetenskaper",
+          "default": "Kielitieteet"
+        }
+      }
+    ],
+    "curator": [
+      {
+        "identifier": "",
+        "name": "User support at CSC - IT Center for Science Ltd. The Language Bank of Finland",
+        "email": "kielipankki@csc.fi",
+        "telephone": "",
+        "agent_type": "Person",
+        "homepage": {}
+      },
+      {
+        "identifier": "",
+        "name": "University of Helsinki",
+        "email": "firstname.surname@helsinki.fi",
+        "telephone": "",
+        "agent_type": "Organization",
+        "homepage": {}
+      },
+      {
+        "identifier": "",
+        "name": "CSC - IT Center for Science",
+        "email": "servicedesk@csc.fi",
+        "telephone": "",
+        "agent_type": "Organization",
+        "homepage": {}
+      }
+    ],
+    "creator": [
+      {
+        "identifier": "",
+        "name": "Pirkko Suihkonen",
+        "email": "suihkonen.pirkko@gmail.com",
+        "telephone": "",
+        "agent_type": "Person",
+        "homepage": {}
+      }
+    ]
+  },
+  {
+    "urn_identifier": "pid:urn:cr:17-1508411576825",
+    "preferred_identifier": "http://urn.fi/urn:nbn:fi:lb-20140730163",
+    "modified_by_api": "2017-10-20T04:01:12.397454",
+    "title": {
+      "en": "International Corpus of Learner Finnish (ICLFI)",
+      "fi": "Kansainv\u00e4linen oppijansuomen korpus (ICLFI)"
+    },
+    "description": [
+      {
+        "en": "The International Corpus of Learner Finnish (ICLFI) is a corpus of written learner language.\n\nThe corpus is available in Kielipankki - the Language Bank of Finland in Korp (https://korp.csc.fi) at http://urn.fi/urn:nbn:fi:lb-2015050505\n\nAccess rights instructions: https://www.kielipankki.fi/support/access (in Finnish: https://www.kielipankki.fi/tuki/kayttooikeudet/).\n\nInstructions on how to access Kielipankki corpora: https://www.kielipankki.fi/support/corpus-location/ (in Finnish: https://www.kielipankki.fi/tuki/aineiston-sijainti/).\n\n\nThe corpus is morphologically annotated. The texts have been written by students of Finnish as a foreign language from various language backgrounds. They have been compiled with the help of Finnish language teachers around the world.\n\nThe corpus contains texts written by basic, independent, and proficient learners of Finnish, and the texts are analyzed according to the Common European Framework of Reference for Languages (CEFR). The ICLFI comprises a variety of both non-fictional (e.g. essays, argumentative texts) and fictional texts (e.g. narratives, letters). In addition, the corpus provides information on a large number of variables concerning the linguistic background of the learner, the learning task, the learning context, etc.\n\nThe purpose of the resource use must be outlined in a research plan.\n\nDistribution of copies is not allowed. Copies cannot be brought outside the servers of Kielipankki.\n\nImportant: due to the nature of the material, the resource should be handled with care in order to respect the privacy of the personal data. If samples of the data are published, they must be anonymized according to best practices.\n\nFor detailed information on the license of the resource see http://urn.fi/urn:nbn:fi:lb-2015050501"
+      }
+    ],
+    "other_identifier": [
+      {
+        "notation": "urn:nbn:fi:csc-kata20170221141331328783",
+        "type": {
+          "identifier": [
+            "http://purl.org/att/es/reference_data/identifier_type/identifier_type_urn"
+          ],
+          "label": {
+            "en": "Uniform Resource Name (URN)",
+            "default": "Uniform Resource Name (URN)"
+          }
+        }
+      }
+    ],
+    "access_rights": {
+      "type": [
+        {
+          "identifier": "http://purl.org/att/es/reference_data/access_type/access_type_restricted_access_permit",
+          "label": {
+            "en": "Requires permission",
+            "fi": "Vaatii luvan",
+            "default": "Vaatii luvan"
+          }
+        }
+      ]
+    },
+    "field_of_science": [
+      {
+        "identifier": "http://www.yso.fi/onto/okm-tieteenala/ta6121",
+        "label": {
+          "en": "Languages",
+          "fi": "Kielitieteet",
+          "sv": "Spr\u00e5kvetenskaper",
+          "default": "Kielitieteet"
+        }
+      }
+    ],
+    "curator": [
+      {
+        "identifier": "",
+        "name": "Sisko Brunni",
+        "email": "sisko.brunni@oulu.fi",
+        "telephone": "",
+        "agent_type": "Person",
+        "homepage": {},
+        "belongs_to_org": {
+          "identifier": "",
+          "name": "University of Oulu",
+          "email": "firstname.surname@oulu.fi",
+          "telephone": "",
+          "agent_type": "Organization",
+          "homepage": {}
+        }
+      },
+      {
+        "identifier": "",
+        "name": "University of Helsinki",
+        "email": "firstname.surname@helsinki.fi",
+        "telephone": "",
+        "agent_type": "Organization",
+        "homepage": {}
+      },
+      {
+        "identifier": "",
+        "name": "University of Oulu",
+        "email": "firstname.surname@oulu.fi",
+        "telephone": "",
+        "agent_type": "Organization",
+        "homepage": {}
+      }
+    ],
+    "creator": [
+      {
+        "identifier": "",
+        "name": "Sisko Brunni",
+        "email": "sisko.brunni@oulu.fi",
+        "telephone": "",
+        "agent_type": "Person",
+        "homepage": {},
+        "belongs_to_org": {
+          "identifier": "",
+          "name": "University of Oulu",
+          "email": "firstname.surname@oulu.fi",
+          "telephone": "",
+          "agent_type": "Organization",
+          "homepage": {}
+        }
+      },
+      {
+        "identifier": "",
+        "name": "Jarmo Jantunen",
+        "email": "jarmo.h.jantunen@jyu.fi",
+        "telephone": "",
+        "agent_type": "Person",
+        "homepage": {},
+        "belongs_to_org": {
+          "identifier": "",
+          "name": "Jyv\u00e4skyl\u00e4n yliopisto, University of Jyv\u00e4skyl\u00e4",
+          "email": "registry@jyu.fi",
+          "telephone": "",
+          "agent_type": "Organization",
+          "homepage": {}
+        }
+      },
+      {
+        "identifier": "",
+        "name": "University of Oulu",
+        "email": "firstname.surname@oulu.fi",
+        "telephone": "",
+        "agent_type": "Organization",
+        "homepage": {}
+      }
+    ]
+  },
+  {
+    "urn_identifier": "pid:urn:cr:18-1508411578368",
+    "preferred_identifier": "http://urn.fi/urn:nbn:fi:lb-2016102809",
+    "modified_by_api": "2017-10-20T04:01:13.396615",
+    "title": {
+      "en": "The University of Helsinki's Spanish E-thesis, Korp Version",
+      "fi": "Helsingin yliopiston espanjankielisen E-thesiksen Korp-versio"
+    },
+    "description": [
+      {
+        "en": "The corpus is available in Kielipankki - the Language Bank of Finland in Korp, http://urn.fi/urn:nbn:fi:lb-2016102804\n\nThe corpus contains the University of Helsinki's Spanish master's theses as well as the doctoral theses and their summaries published at https://ethesis.helsinki.fi by September 2016."
+      }
+    ],
+    "other_identifier": [
+      {
+        "notation": "urn:nbn:fi:csc-kata20170221141807196896",
+        "type": {
+          "identifier": [
+            "http://purl.org/att/es/reference_data/identifier_type/identifier_type_urn"
+          ],
+          "label": {
+            "en": "Uniform Resource Name (URN)",
+            "default": "Uniform Resource Name (URN)"
+          }
+        }
+      }
+    ],
+    "access_rights": {
+      "type": [
+        {
+          "identifier": "http://purl.org/att/es/reference_data/access_type/access_type_open_access",
+          "label": {
+            "en": "Open",
+            "fi": "Avoin",
+            "default": "Avoin"
+          }
+        }
+      ]
+    },
+    "field_of_science": [
+      {
+        "identifier": "http://www.yso.fi/onto/okm-tieteenala/ta6121",
+        "label": {
+          "en": "Languages",
+          "fi": "Kielitieteet",
+          "sv": "Spr\u00c3\u00a5kvetenskaper",
+          "default": "Kielitieteet"
+        }
+      }
+    ],
+    "curator": [
+      {
+        "identifier": "",
+        "name": "User support FIN-CLARIN",
+        "email": "finclarin@helsinki.fi",
+        "telephone": "",
+        "agent_type": "Person",
+        "homepage": {}
+      },
+      {
+        "identifier": "",
+        "name": "University of Helsinki",
+        "email": "firstname.surname@helsinki.fi",
+        "telephone": "",
+        "agent_type": "Organization",
+        "homepage": {}
+      }
+    ],
+    "creator": [
+      {
+        "identifier": "",
+        "name": "University of Helsinki",
+        "email": "firstname.surname@helsinki.fi",
+        "telephone": "",
+        "agent_type": "Organization",
+        "homepage": {}
+      }
+    ]
+  },
+  {
+    "urn_identifier": "pid:urn:cr:19-1508411580151",
+    "preferred_identifier": "http://urn.fi/urn:nbn:fi:lb-2015081401",
+    "modified_by_api": "2017-10-20T04:02:50.157517",
+    "title": {
+      "en": "The Corpus of Beserman Udmurt, Kielipankki Version",
+      "fi": "Udmurtin besermanin murteen korpus, Kielipankki-versio"
+    },
+    "description": [
+      {
+        "en": "The corpus is available in Kielipankki - the Language Bank of Finland (korp.csc.fi) at http://urn.fi/urn:nbn:fi:lb-2016092601\n\nThe Corpus of Beserman Udmurt comprises 65 000 tokens. The Beserman dialect of Udmurt is used in daily communication approximately by 2 000 speakers (according to the 2010 census). The Beserman live in the basin of the Cheptsa river in the Republic of Udmurtia and in the Kirov Oblast of the Russian Federation. In the scientific literature Beserman is considered to be a dialect of the Udmurt language which is characterized by an unusual combination of specifically Beserman phenomena (concentrated in vocabulary and phonetics) with certain traits of Northern and Southern Udmurt dialects, mostly morphological and phonological. The dialect remains the main means of everyday communication in Beserman villages, at least for the older generation.\nThe texts contained in the corpus have been collected in the villages of Shamardan (109 texts of 117), Vortsa (4 of 117), Malaya Yunda (1 of 117) and Zhuvam (3 of 117) in the Republic of Udmurtia in the years 2003-2015. There are 33 informants in total. The texts have been recorded, transcribed and grammatically annotated in the SIL FieldWorks software. The corpus contains narratives, life stories, dialogues, recipes, and recordings of psycholinguistic experiments. Each sentence is provided with interlinear glossing (according to the Leipzig Glossing Rules) and translation. Both the full text version with audio files and the corpus version are available at http://beserman.ru/corpus/search/?interface_language=en"
+      }
+    ],
+    "other_identifier": [
+      {
+        "notation": "urn:nbn:fi:csc-kata20170221141632411717",
+        "type": {
+          "identifier": [
+            "http://purl.org/att/es/reference_data/identifier_type/identifier_type_urn"
+          ],
+          "label": {
+            "en": "Uniform Resource Name (URN)",
+            "default": "Uniform Resource Name (URN)"
+          }
+        }
+      }
+    ],
+    "access_rights": {
+      "type": [
+        {
+          "identifier": "http://purl.org/att/es/reference_data/access_type/access_type_open_access",
+          "label": {
+            "en": "Open",
+            "fi": "Avoin",
+            "default": "Avoin"
+          }
+        }
+      ]
+    },
+    "field_of_science": [
+      {
+        "identifier": "http://www.yso.fi/onto/okm-tieteenala/ta6121",
+        "label": {
+          "en": "Languages",
+          "fi": "Kielitieteet",
+          "sv": "Spr\u00e5kvetenskaper",
+          "default": "Kielitieteet"
+        }
+      }
+    ],
+    "publisher": {
+      "identifier": "",
+      "name": "Natalia Serdobolskaya",
+      "email": "serdobolskaya@gmail.com",
+      "telephone": "",
+      "agent_type": "Person",
+      "homepage": {},
+      "belongs_to_org": {
+        "identifier": "",
+        "name": "Russian State University for the Humanities",
+        "email": "firstname.surname@rggu.ru",
+        "telephone": "",
+        "agent_type": "Organization",
+        "homepage": {}
+      }
+    },
+    "curator": [
+      {
+        "identifier": "",
+        "name": "Natalia Serdobolskaya",
+        "email": "serdobolskaya@gmail.com",
+        "telephone": "",
+        "agent_type": "Person",
+        "homepage": {},
+        "belongs_to_org": {
+          "identifier": "",
+          "name": "Russian State University for the Humanities",
+          "email": "firstname.surname@rggu.ru",
+          "telephone": "",
+          "agent_type": "Organization",
+          "homepage": {}
+        }
+      },
+      {
+        "identifier": "",
+        "name": "University of Helsinki",
+        "email": "firstname.surname@helsinki.fi",
+        "telephone": "",
+        "agent_type": "Organization",
+        "homepage": {}
+      }
+    ],
+    "creator": [
+      {
+        "identifier": "",
+        "name": "Natalia Serdobolskaya",
+        "email": "serdobolskaya@gmail.com",
+        "telephone": "",
+        "agent_type": "Person",
+        "homepage": {},
+        "belongs_to_org": {
+          "identifier": "",
+          "name": "Russian State University for the Humanities",
+          "email": "firstname.surname@rggu.ru",
+          "telephone": "",
+          "agent_type": "Organization",
+          "homepage": {}
+        }
+      },
+      {
+        "identifier": "",
+        "name": "Olga Biryuk",
+        "email": "biryukolga@gmail.com",
+        "telephone": "",
+        "agent_type": "Person",
+        "homepage": {}
+      },
+      {
+        "identifier": "",
+        "name": "Maria Usacheva",
+        "email": "mashastroeva@gmail.com",
+        "telephone": "",
+        "agent_type": "Person",
+        "homepage": {},
+        "belongs_to_org": {
+          "identifier": "",
+          "name": "Lomonosov Moscow State University",
+          "email": "firstname.surname@msu.ru",
+          "telephone": "",
+          "agent_type": "Organization",
+          "homepage": {}
+        }
+      },
+      {
+        "identifier": "",
+        "name": "Timofey Arkhangelskiy",
+        "email": "tarkhangelskiy@hse.ru",
+        "telephone": "",
+        "agent_type": "Person",
+        "homepage": {},
+        "belongs_to_org": {
+          "identifier": "",
+          "name": "National Research University Higher School of Economics",
+          "email": "firstname.surname@hse.ru",
+          "telephone": "",
+          "agent_type": "Organization",
+          "homepage": {}
+        }
+      }
+    ]
+  },
+  {
+    "urn_identifier": "pid:urn:cr:20-1508411581563",
+    "preferred_identifier": "http://urn.fi/urn:nbn:fi:lb-2014073066",
+    "modified_by_api": "2017-10-20T04:06:14.950713",
+    "title": {
+      "en": "The Helsinki Annotated Corpus of Russian Texts (HANCO) Database"
+    },
+    "description": [
+      {
+        "en": "Morphologically and syntactically annotated corpus of the modern Russian language. \n\nAccess location: http://www.ling.helsinki.fi/projects/hanco/index_e.html."
+      }
+    ],
+    "other_identifier": [
+      {
+        "notation": "urn:nbn:fi:csc-kata20170221141323614872",
+        "type": {
+          "identifier": [
+            "http://purl.org/att/es/reference_data/identifier_type/identifier_type_urn"
+          ],
+          "label": {
+            "en": "Uniform Resource Name (URN)",
+            "default": "Uniform Resource Name (URN)"
+          }
+        }
+      }
+    ],
+    "access_rights": {
+      "type": [
+        {
+          "identifier": "http://purl.org/att/es/reference_data/access_type/access_type_restricted_access_permit",
+          "label": {
+            "en": "Requires permission",
+            "fi": "Vaatii luvan",
+            "default": "Vaatii luvan"
+          }
+        }
+      ]
+    },
+    "field_of_science": [
+      {
+        "identifier": "http://www.yso.fi/onto/okm-tieteenala/ta6121",
+        "label": {
+          "en": "Languages",
+          "fi": "Kielitieteet",
+          "sv": "Spr\u00c3\u00a5kvetenskaper",
+          "default": "Kielitieteet"
+        }
+      }
+    ],
+    "curator": [
+      {
+        "identifier": "",
+        "name": "Mihail Kopotev",
+        "email": "mihail.kopotev@helsinki.fi",
+        "telephone": "",
+        "agent_type": "Person",
+        "homepage": {},
+        "belongs_to_org": {
+          "identifier": "",
+          "name": "University of Helsinki",
+          "email": "firstname.surname@helsinki.fi",
+          "telephone": "",
+          "agent_type": "Organization",
+          "homepage": {}
+        }
+      },
+      {
+        "identifier": "",
+        "name": "University of Helsinki",
+        "email": "firstname.surname@helsinki.fi",
+        "telephone": "",
+        "agent_type": "Organization",
+        "homepage": {}
+      }
+    ],
+    "creator": [
+      {
+        "identifier": "",
+        "name": "University of Helsinki",
+        "email": "firstname.surname@helsinki.fi",
+        "telephone": "",
+        "agent_type": "Organization",
+        "homepage": {}
+      }
+    ]
+  },
+  {
+    "urn_identifier": "pid:urn:cr:21-1508411583202",
+    "preferred_identifier": "http://urn.fi/urn:nbn:fi:lb-2016012804",
+    "modified_by_api": "2017-10-20T04:01:07.398562",
+    "title": {
+      "en": "Opus Subtitles Corpus"
+    },
+    "description": [
+      {
+        "en": "The corpus, containing the OpenSubtitles sub-corpora of the Opus open parallel corpus (http://opus.lingfil.uu.se/), will be made available for download at https://korp.csc.fi/download/"
+      }
+    ],
+    "other_identifier": [
+      {
+        "notation": "urn:nbn:fi:csc-kata20170221141651206667",
+        "type": {
+          "identifier": [
+            "http://purl.org/att/es/reference_data/identifier_type/identifier_type_urn"
+          ],
+          "label": {
+            "en": "Uniform Resource Name (URN)",
+            "default": "Uniform Resource Name (URN)"
+          }
+        }
+      }
+    ],
+    "access_rights": {
+      "type": [
+        {
+          "identifier": "http://purl.org/att/es/reference_data/access_type/access_type_open_access",
+          "label": {
+            "en": "Open",
+            "fi": "Avoin",
+            "default": "Avoin"
+          }
+        }
+      ]
+    },
+    "field_of_science": [
+      {
+        "identifier": "http://www.yso.fi/onto/okm-tieteenala/ta6121",
+        "label": {
+          "en": "Languages",
+          "fi": "Kielitieteet",
+          "sv": "Spr\u00c3\u00a5kvetenskaper",
+          "default": "Kielitieteet"
+        }
+      }
+    ],
+    "publisher": {
+      "identifier": "",
+      "name": "J\u00c3\u00b6rg Tiedemann",
+      "email": "jorg.tiedemann@helsinki.fi",
+      "telephone": "",
+      "agent_type": "Person",
+      "homepage": {},
+      "belongs_to_org": {
+        "identifier": "",
+        "name": "University of Helsinki",
+        "email": "nykykielet-toimisto@helsinki.fi",
+        "telephone": "",
+        "agent_type": "Organization",
+        "homepage": {}
+      }
+    },
+    "curator": [
+      {
+        "identifier": "",
+        "name": "User support FIN-CLARIN",
+        "email": "finclarin@helsinki.fi",
+        "telephone": "",
+        "agent_type": "Person",
+        "homepage": {}
+      },
+      {
+        "identifier": "",
+        "name": "University of Helsinki",
+        "email": "firstname.surname@helsinki.fi",
+        "telephone": "",
+        "agent_type": "Organization",
+        "homepage": {}
+      }
+    ],
+    "creator": [
+      {
+        "identifier": "",
+        "name": "J\u00c3\u00b6rg Tiedemann",
+        "email": "jorg.tiedemann@helsinki.fi",
+        "telephone": "",
+        "agent_type": "Person",
+        "homepage": {},
+        "belongs_to_org": {
+          "identifier": "",
+          "name": "University of Helsinki",
+          "email": "nykykielet-toimisto@helsinki.fi",
+          "telephone": "",
+          "agent_type": "Organization",
+          "homepage": {}
+        }
+      }
+    ]
+  },
+  {
+    "urn_identifier": "pid:urn:cr:22-1508411584784",
+    "preferred_identifier": "http://urn.fi/urn:nbn:fi:lb-2017030103",
+    "modified_by_api": "2017-10-20T04:02:12.117343",
+    "title": {
+      "en": "The Longitudinal Corpus of Finnish Spoken in Helsinki (1970s, 1990s and 2010s), Helsinki Korp Version",
+      "fi": "Helsingin pitkitt\u00e4iskorpuksen (1970, 1990, 2010) Helsinki-Korp-versio"
+    },
+    "description": [
+      {
+        "en": "The resource, a variant of The Longitudinal Corpus of Finnish Spoken in Helsinki (1970s, 1990s and 2010s) Downloadable Version (http://urn.fi/urn:nbn:fi:lb-201609142), will be made available at korp.csc.fi."
+      }
+    ],
+    "access_rights": {
+      "type": [
+        {
+          "identifier": "http://purl.org/att/es/reference_data/access_type/access_type_restricted_access_permit",
+          "label": {
+            "en": "Requires permission",
+            "fi": "Vaatii luvan",
+            "default": "Vaatii luvan"
+          }
+        }
+      ]
+    },
+    "field_of_science": [
+      {
+        "identifier": "http://www.yso.fi/onto/okm-tieteenala/ta6121",
+        "label": {
+          "en": "Languages",
+          "fi": "Kielitieteet",
+          "sv": "Spr\u00e5kvetenskaper",
+          "default": "Kielitieteet"
+        }
+      }
+    ],
+    "curator": [
+      {
+        "identifier": "",
+        "name": "User support at CSC - IT Center for Science Ltd. The Language Bank of Finland",
+        "email": "kielipankki@csc.fi",
+        "telephone": "",
+        "agent_type": "Person",
+        "homepage": {}
+      },
+      {
+        "identifier": "",
+        "name": "University of Helsinki",
+        "email": "firstname.surname@helsinki.fi",
+        "telephone": "",
+        "agent_type": "Organization",
+        "homepage": {}
+      }
+    ],
+    "creator": [
+      {
+        "identifier": "",
+        "name": "Heikki Paunonen",
+        "email": "heikki.paunonen@kolumbus.fi",
+        "telephone": "",
+        "agent_type": "Person",
+        "homepage": {}
+      },
+      {
+        "identifier": "",
+        "name": "University of Helsinki",
+        "email": "hanna.lehti-eklund@helsinki.fi",
+        "telephone": "",
+        "agent_type": "Organization",
+        "homepage": {}
+      },
+      {
+        "identifier": "",
+        "name": "Kotimaisten kielten keskus, Institute for the Languages of Finland",
+        "email": "etunim.sukunimi@kotus.fi",
+        "telephone": "",
+        "agent_type": "Organization",
+        "homepage": {}
+      }
+    ]
+  },
+  {
+    "urn_identifier": "pid:urn:cr:23-1508411586375",
+    "preferred_identifier": "http://urn.fi/urn:nbn:fi:lb-2016051603",
+    "modified_by_api": "2017-10-20T04:05:38.963454",
+    "title": {
+      "en": "Aalto University DSP Course Conversation Corpus 2013-2015, Helsinki LAT Version",
+      "fi": "Aalto-yliopiston DSP-kurssin keskustelukorpus 2013-2015, Helsinki LAT -versio"
+    },
+    "description": [
+      {
+        "en": "The corpus, which is the LAT version of the years 2013-2015 of the Aalto University DSP Course Conversation Corpus (http://urn.fi/urn:nbn:fi:lb-2015101901), will be made available in Kielipankki - the Language Bank of Finland at https://lat.csc.fi\n\nFor more information see http://urn.fi/urn:nbn:fi:lb-2015101901"
+      }
+    ],
+    "other_identifier": [
+      {
+        "notation": "urn:nbn:fi:csc-kata20170221141743530391",
+        "type": {
+          "identifier": [
+            "http://purl.org/att/es/reference_data/identifier_type/identifier_type_urn"
+          ],
+          "label": {
+            "en": "Uniform Resource Name (URN)",
+            "default": "Uniform Resource Name (URN)"
+          }
+        }
+      }
+    ],
+    "access_rights": {
+      "type": [
+        {
+          "identifier": "http://purl.org/att/es/reference_data/access_type/access_type_restricted_access_permit",
+          "label": {
+            "en": "Requires permission",
+            "fi": "Vaatii luvan",
+            "default": "Vaatii luvan"
+          }
+        }
+      ]
+    },
+    "field_of_science": [
+      {
+        "identifier": "http://www.yso.fi/onto/okm-tieteenala/ta6121",
+        "label": {
+          "en": "Languages",
+          "fi": "Kielitieteet",
+          "sv": "Spr\u00e5kvetenskaper",
+          "default": "Kielitieteet"
+        }
+      }
+    ],
+    "curator": [
+      {
+        "identifier": "",
+        "name": "User support at CSC - IT Center for Science Ltd. The Language Bank of Finland",
+        "email": "kielipankki@csc.fi",
+        "telephone": "",
+        "agent_type": "Person",
+        "homepage": {}
+      },
+      {
+        "identifier": "",
+        "name": "University of Helsinki",
+        "email": "firstname.surname@helsinki.fi",
+        "telephone": "",
+        "agent_type": "Organization",
+        "homepage": {}
+      },
+      {
+        "identifier": "",
+        "name": "Aalto University",
+        "email": "firstname.surname@aalto.fi",
+        "telephone": "",
+        "agent_type": "Organization",
+        "homepage": {}
+      }
+    ],
+    "creator": [
+      {
+        "identifier": "",
+        "name": "Aalto University",
+        "email": "firstname.surname@aalto.fi",
+        "telephone": "",
+        "agent_type": "Organization",
+        "homepage": {}
+      }
+    ]
+  },
+  {
+    "urn_identifier": "pid:urn:cr:24-1508411587823",
+    "preferred_identifier": "http://urn.fi/urn:nbn:fi:lb-2016061302",
+    "modified_by_api": "2017-10-20T04:01:19.552271",
+    "title": {
+      "en": "The Helsinki Korp Version of the ELFA Corpus"
+    },
+    "description": [
+      {
+        "en": "The corpus, which is the Korp version of the ELFA Corpus (http://urn.fi/urn:nbn:fi:lb-201403262), is available in Kielipankki - the Language Bank of Finland at http://urn.fi/urn:nbn:fi:lb-2016061301\n\n\nFor more information see http://urn.fi/urn:nbn:fi:lb-201403262"
+      }
+    ],
+    "other_identifier": [
+      {
+        "notation": "urn:nbn:fi:csc-kata20170221141746836295",
+        "type": {
+          "identifier": [
+            "http://purl.org/att/es/reference_data/identifier_type/identifier_type_urn"
+          ],
+          "label": {
+            "en": "Uniform Resource Name (URN)",
+            "default": "Uniform Resource Name (URN)"
+          }
+        }
+      }
+    ],
+    "access_rights": {
+      "type": [
+        {
+          "identifier": "http://purl.org/att/es/reference_data/access_type/access_type_open_access",
+          "label": {
+            "en": "Open",
+            "fi": "Avoin",
+            "default": "Avoin"
+          }
+        }
+      ]
+    },
+    "field_of_science": [
+      {
+        "identifier": "http://www.yso.fi/onto/okm-tieteenala/ta6121",
+        "label": {
+          "en": "Languages",
+          "fi": "Kielitieteet",
+          "sv": "Spr\u00c3\u00a5kvetenskaper",
+          "default": "Kielitieteet"
+        }
+      }
+    ],
+    "curator": [
+      {
+        "identifier": "",
+        "name": "User support at CSC - IT Center for Science Ltd. The Language Bank of Finland",
+        "email": "kielipankki@csc.fi",
+        "telephone": "",
+        "agent_type": "Person",
+        "homepage": {}
+      },
+      {
+        "identifier": "",
+        "name": "University of Helsinki",
+        "email": "firstname.surname@helsinki.fi",
+        "telephone": "",
+        "agent_type": "Organization",
+        "homepage": {}
+      }
+    ],
+    "creator": [
+      {
+        "identifier": "",
+        "name": "Anna Mauranen",
+        "email": "anna.mauranen@helsinki.fi",
+        "telephone": "",
+        "agent_type": "Person",
+        "homepage": {},
+        "belongs_to_org": {
+          "identifier": "",
+          "name": "University of Helsinki",
+          "email": "firstname.surname@helsinki.fi",
+          "telephone": "",
+          "agent_type": "Organization",
+          "homepage": {}
+        }
+      }
+    ]
+  },
+  {
+    "urn_identifier": "pid:urn:cr:25-1508411589494",
+    "preferred_identifier": "http://urn.fi/urn:nbn:fi:lb-2017022802",
+    "modified_by_api": "2017-10-20T04:06:39.969227",
+    "title": {
+      "en": "amph-Corpus, Helsinki Korp Version",
+      "fi": "Ajatella, mietti\u00e4, pohtia, harkita -korpuksen Helsinki-Korp-versio"
+    },
+    "description": [
+      {
+        "en": "The resource, a variant of amph-Corpus (see http://urn.fi/urn:nbn:fi:lb-2015021301), will be made available at korp.csc.fi."
+      }
+    ],
+    "access_rights": {
+      "type": [
+        {
+          "identifier": "http://purl.org/att/es/reference_data/access_type/access_type_restricted_access_permit",
+          "label": {
+            "en": "Requires permission",
+            "fi": "Vaatii luvan",
+            "default": "Vaatii luvan"
+          }
+        }
+      ]
+    },
+    "field_of_science": [
+      {
+        "identifier": "http://www.yso.fi/onto/okm-tieteenala/ta6121",
+        "label": {
+          "en": "Languages",
+          "fi": "Kielitieteet",
+          "sv": "Spr\u00e5kvetenskaper",
+          "default": "Kielitieteet"
+        }
+      }
+    ],
+    "curator": [
+      {
+        "identifier": "",
+        "name": "User support at CSC - IT Center for Science Ltd. The Language Bank of Finland",
+        "email": "kielipankki@csc.fi",
+        "telephone": "",
+        "agent_type": "Person",
+        "homepage": {}
+      },
+      {
+        "identifier": "",
+        "name": "CSC - IT Center for Science",
+        "email": "servicedesk@csc.fi",
+        "telephone": "",
+        "agent_type": "Organization",
+        "homepage": {}
+      }
+    ],
+    "creator": [
+      {
+        "identifier": "",
+        "name": "Antti Arppe",
+        "email": "antti.arppe@ualberta.ca",
+        "telephone": "",
+        "agent_type": "Person",
+        "homepage": {},
+        "belongs_to_org": {
+          "identifier": "",
+          "name": "University of Alberta",
+          "email": "firstname.surname@ualberta.ca",
+          "telephone": "",
+          "agent_type": "Organization",
+          "homepage": {}
+        }
+      }
+    ]
+  },
+  {
+    "urn_identifier": "pid:urn:cr:26-1508411590868",
+    "preferred_identifier": "http://urn.fi/urn:nbn:fi:lb-20140730121",
+    "modified_by_api": "2017-10-20T04:01:20.598237",
+    "title": {
+      "en": "Joensuu Wernicke Aphasia Corpora"
+    },
+    "description": [
+      {
+        "en": "Computer corpora of semi-spontaneous speech of two Finnish Wernicke aphasics."
+      }
+    ],
+    "other_identifier": [
+      {
+        "notation": "urn:nbn:fi:csc-kata20170221141357851489",
+        "type": {
+          "identifier": [
+            "http://purl.org/att/es/reference_data/identifier_type/identifier_type_urn"
+          ],
+          "label": {
+            "en": "Uniform Resource Name (URN)",
+            "default": "Uniform Resource Name (URN)"
+          }
+        }
+      }
+    ],
+    "access_rights": {
+      "type": [
+        {
+          "identifier": "http://purl.org/att/es/reference_data/access_type/access_type_restricted_access_permit",
+          "label": {
+            "en": "Requires permission",
+            "fi": "Vaatii luvan",
+            "default": "Vaatii luvan"
+          }
+        }
+      ]
+    },
+    "field_of_science": [
+      {
+        "identifier": "http://www.yso.fi/onto/okm-tieteenala/ta6121",
+        "label": {
+          "en": "Languages",
+          "fi": "Kielitieteet",
+          "sv": "Spr\u00e5kvetenskaper",
+          "default": "Kielitieteet"
+        }
+      }
+    ],
+    "publisher": {
+      "identifier": "",
+      "name": "Jussi Niemi",
+      "email": "jussi.niemi@uef.fi",
+      "telephone": "",
+      "agent_type": "Person",
+      "homepage": {},
+      "belongs_to_org": {
+        "identifier": "",
+        "name": "University of Eastern Finland",
+        "email": "kirjaamo@uef.fi",
+        "telephone": "",
+        "agent_type": "Organization",
+        "homepage": {}
+      }
+    },
+    "curator": [
+      {
+        "identifier": "",
+        "name": "Jussi Niemi",
+        "email": "jussi.niemi@uef.fi",
+        "telephone": "",
+        "agent_type": "Person",
+        "homepage": {},
+        "belongs_to_org": {
+          "identifier": "",
+          "name": "University of Eastern Finland",
+          "email": "kirjaamo@uef.fi",
+          "telephone": "",
+          "agent_type": "Organization",
+          "homepage": {}
+        }
+      }
+    ],
+    "creator": [
+      {
+        "identifier": "",
+        "name": "Jussi Niemi",
+        "email": "jussi.niemi@uef.fi",
+        "telephone": "",
+        "agent_type": "Person",
+        "homepage": {},
+        "belongs_to_org": {
+          "identifier": "",
+          "name": "University of Eastern Finland",
+          "email": "kirjaamo@uef.fi",
+          "telephone": "",
+          "agent_type": "Organization",
+          "homepage": {}
+        }
+      }
+    ]
+  },
+  {
+    "urn_identifier": "pid:urn:cr:27-1508411592248",
+    "preferred_identifier": "http://urn.fi/urn:nbn:fi:lb-20140730112",
+    "modified_by_api": "2017-10-20T04:01:21.646873",
+    "title": {
+      "en": "VARIENG Survey Corpus"
+    },
+    "description": [
+      {
+        "en": "A national survey on Finns\u00e2\u20ac\u2122 uses of and attitudes to English by the Jyv\u00c3\u00a4skyl\u00c3\u00a4 unit of VARIENG (the Centre of Excellence for the Study of Variation, Contacts and Change in English). The survey was carried out in cooperation with Statistics Finland. 1495 respondents, 15-74-year-olds"
+      }
+    ],
+    "other_identifier": [
+      {
+        "notation": "urn:nbn:fi:csc-kata20170221141254360544",
+        "type": {
+          "identifier": [
+            "http://purl.org/att/es/reference_data/identifier_type/identifier_type_urn"
+          ],
+          "label": {
+            "en": "Uniform Resource Name (URN)",
+            "default": "Uniform Resource Name (URN)"
+          }
+        }
+      }
+    ],
+    "access_rights": {
+      "license": [
+        {
+          "identifier": "http://purl.org/att/es/reference_data/license/license_under_negotiation",
+          "label": {
+            "en": "Under negotiation",
+            "fi": "Neuvottelut kesken",
+            "default": "Neuvottelut kesken"
+          }
+        }
+      ]
+    },
+    "field_of_science": [
+      {
+        "identifier": "http://www.yso.fi/onto/okm-tieteenala/ta6121",
+        "label": {
+          "en": "Languages",
+          "fi": "Kielitieteet",
+          "sv": "Spr\u00c3\u00a5kvetenskaper",
+          "default": "Kielitieteet"
+        }
+      }
+    ],
+    "publisher": {
+      "identifier": "",
+      "name": "Sirpa Lepp\u00c3\u00a4nen",
+      "email": "sirpa.leppanen@jyu.fi",
+      "telephone": "",
+      "agent_type": "Person",
+      "homepage": {},
+      "belongs_to_org": {
+        "identifier": "",
+        "name": "Jyv\u00c3\u00a4skyl\u00c3\u00a4n yliopisto, University of Jyv\u00c3\u00a4skyl\u00c3\u00a4",
+        "email": "registry@jyu.fi",
+        "telephone": "",
+        "agent_type": "Organization",
+        "homepage": {}
+      }
+    },
+    "curator": [
+      {
+        "identifier": "",
+        "name": "Sirpa Lepp\u00c3\u00a4nen",
+        "email": "sirpa.leppanen@jyu.fi",
+        "telephone": "",
+        "agent_type": "Person",
+        "homepage": {},
+        "belongs_to_org": {
+          "identifier": "",
+          "name": "Jyv\u00c3\u00a4skyl\u00c3\u00a4n yliopisto, University of Jyv\u00c3\u00a4skyl\u00c3\u00a4",
+          "email": "registry@jyu.fi",
+          "telephone": "",
+          "agent_type": "Organization",
+          "homepage": {}
+        }
+      }
+    ],
+    "creator": [
+      {
+        "identifier": "",
+        "name": "Sirpa Lepp\u00c3\u00a4nen",
+        "email": "sirpa.leppanen@jyu.fi",
+        "telephone": "",
+        "agent_type": "Person",
+        "homepage": {},
+        "belongs_to_org": {
+          "identifier": "",
+          "name": "Jyv\u00c3\u00a4skyl\u00c3\u00a4n yliopisto, University of Jyv\u00c3\u00a4skyl\u00c3\u00a4",
+          "email": "registry@jyu.fi",
+          "telephone": "",
+          "agent_type": "Organization",
+          "homepage": {}
+        }
+      }
+    ]
+  },
+  {
+    "urn_identifier": "pid:urn:cr:28-1508411593940",
+    "preferred_identifier": "http://urn.fi/urn:nbn:fi:lb-2014073054",
+    "modified_by_api": "2017-10-20T04:01:22.685924",
+    "title": {
+      "en": "Helsinki Archive of Regional English Speech \u00e2\u20ac\u201c Cambridgeshire Sampler"
+    },
+    "description": [
+      {
+        "en": "HARES is a collection of audio-recorded interviews that were gathered in England in the 1970s and 1980s. The fieldworkers were Finnish graduate and post-graduate students from the University of Helsinki, who shared a common interest in the study of dialect syntax. The informants were elderly persons who had lived in the region all their lives and who had left school at an early age. HARES combines the digital audio files with orthographic transcriptions and XML-annotated metadata.\n\nThe Cambridgeshire sampler contains 20 interviews recorded in 15 villages. The interviewees are 'typical' HARES informants, in that they are elderly (the youngest is in his 60s and the oldest in his late 90s), non-mobile (the informants have been born and bred in the area, with little or no time spent away), minimally educated (having left school at an early age) and rural (with professions such as horsekeeper, farmer and housewife). The sampler represents a 'modern' trend in dialectological surveys, because some of the interviews have women as primary informants."
+      }
+    ],
+    "other_identifier": [
+      {
+        "notation": "urn:nbn:fi:csc-kata20170221141306455919",
+        "type": {
+          "identifier": [
+            "http://purl.org/att/es/reference_data/identifier_type/identifier_type_urn"
+          ],
+          "label": {
+            "en": "Uniform Resource Name (URN)",
+            "default": "Uniform Resource Name (URN)"
+          }
+        }
+      }
+    ],
+    "access_rights": {
+      "license": [
+        {
+          "identifier": "http://purl.org/att/es/reference_data/license/license_under_negotiation",
+          "label": {
+            "en": "Under negotiation",
+            "fi": "Neuvottelut kesken",
+            "default": "Neuvottelut kesken"
+          }
+        }
+      ]
+    },
+    "field_of_science": [
+      {
+        "identifier": "http://www.yso.fi/onto/okm-tieteenala/ta6121",
+        "label": {
+          "en": "Languages",
+          "fi": "Kielitieteet",
+          "sv": "Spr\u00c3\u00a5kvetenskaper",
+          "default": "Kielitieteet"
+        }
+      }
+    ],
+    "publisher": {
+      "identifier": "",
+      "name": "Terttu Nevalainen",
+      "email": "terttu.nevalainen@helsinki.fi",
+      "telephone": "",
+      "agent_type": "Person",
+      "homepage": {},
+      "belongs_to_org": {
+        "identifier": "",
+        "name": "University of Helsinki",
+        "email": "firstname.surname@helsinki.fi",
+        "telephone": "",
+        "agent_type": "Organization",
+        "homepage": {}
+      }
+    },
+    "curator": [
+      {
+        "identifier": "",
+        "name": "Terttu Nevalainen",
+        "email": "terttu.nevalainen@helsinki.fi",
+        "telephone": "",
+        "agent_type": "Person",
+        "homepage": {},
+        "belongs_to_org": {
+          "identifier": "",
+          "name": "University of Helsinki",
+          "email": "firstname.surname@helsinki.fi",
+          "telephone": "",
+          "agent_type": "Organization",
+          "homepage": {}
+        }
+      },
+      {
+        "identifier": "",
+        "name": "Simo Ahava",
+        "email": "simo.s.ahava@gmail.com",
+        "telephone": "",
+        "agent_type": "Person",
+        "homepage": {}
+      }
+    ],
+    "creator": [
+      {
+        "identifier": "",
+        "name": "Terttu Nevalainen",
+        "email": "terttu.nevalainen@helsinki.fi",
+        "telephone": "",
+        "agent_type": "Person",
+        "homepage": {},
+        "belongs_to_org": {
+          "identifier": "",
+          "name": "University of Helsinki",
+          "email": "firstname.surname@helsinki.fi",
+          "telephone": "",
+          "agent_type": "Organization",
+          "homepage": {}
+        }
+      },
+      {
+        "identifier": "",
+        "name": "Simo Ahava",
+        "email": "simo.s.ahava@gmail.com",
+        "telephone": "",
+        "agent_type": "Person",
+        "homepage": {}
+      }
+    ]
+  },
+  {
+    "urn_identifier": "pid:urn:cr:29-1508411595876",
+    "preferred_identifier": "http://urn.fi/urn:nbn:fi:lb-2016081505",
+    "modified_by_api": "2017-10-20T04:01:23.703636",
+    "title": {
+      "en": "19th-century British Newspaper Advertisements",
+      "fi": "Mainosaineisto 1800-luvun englantilaisista lehdist\u00c3\u00a4"
+    },
+    "description": [
+      {
+        "en": "The corpus contains texts from 3 different newspapers from London (The Times, The Morning Post and The Morning Chronicle). All advertisements are in text format.",
+        "fi": "Aineisto, johon on koottu lehtimainoksia kolmesta lontoolaisesta lehdest\u00c3\u00a4 (The Times, The Morning Post ja The Morning Chronicle), sis\u00c3\u00a4lt\u00c3\u00a4\u00c3\u00a4 txt-tiedostoja."
+      }
+    ],
+    "other_identifier": [
+      {
+        "notation": "urn:nbn:fi:csc-kata20170221141747926478",
+        "type": {
+          "identifier": [
+            "http://purl.org/att/es/reference_data/identifier_type/identifier_type_urn"
+          ],
+          "label": {
+            "en": "Uniform Resource Name (URN)",
+            "default": "Uniform Resource Name (URN)"
+          }
+        }
+      }
+    ],
+    "access_rights": {
+      "license": [
+        {
+          "identifier": "http://purl.org/att/es/reference_data/license/license_under_negotiation",
+          "label": {
+            "en": "Under negotiation",
+            "fi": "Neuvottelut kesken",
+            "default": "Neuvottelut kesken"
+          }
+        }
+      ]
+    },
+    "field_of_science": [
+      {
+        "identifier": "http://www.yso.fi/onto/okm-tieteenala/ta6121",
+        "label": {
+          "en": "Languages",
+          "fi": "Kielitieteet",
+          "sv": "Spr\u00c3\u00a5kvetenskaper",
+          "default": "Kielitieteet"
+        }
+      }
+    ],
+    "curator": [
+      {
+        "identifier": "",
+        "name": "Minna Palander-Collin",
+        "email": "minna.palander-collin@helsinki.fi",
+        "telephone": "",
+        "agent_type": "Person",
+        "homepage": {},
+        "belongs_to_org": {
+          "identifier": "",
+          "name": "University of Helsinki",
+          "email": "firstname.surname@helsinki.fi",
+          "telephone": "",
+          "agent_type": "Organization",
+          "homepage": {}
+        }
+      }
+    ],
+    "creator": [
+      {
+        "identifier": "",
+        "name": "Minna Palander-Collin",
+        "email": "minna.palander-collin@helsinki.fi",
+        "telephone": "",
+        "agent_type": "Person",
+        "homepage": {},
+        "belongs_to_org": {
+          "identifier": "",
+          "name": "University of Helsinki",
+          "email": "firstname.surname@helsinki.fi",
+          "telephone": "",
+          "agent_type": "Organization",
+          "homepage": {}
+        }
+      }
+    ]
+  },
+  {
+    "urn_identifier": "pid:urn:cr:30-1508411597540",
+    "preferred_identifier": "http://urn.fi/urn:nbn:fi:lb-2014073040",
+    "modified_by_api": "2017-10-20T04:01:24.691471",
+    "title": {
+      "en": "The Longitudinal Corpus of Finnish Spoken in Helsinki (2010s Text Corpus)",
+      "fi": "Helsingin puhekielen pitkitt\u00e4iskorpus (2010-luvun tekstimuotoinen aineisto)"
+    },
+    "description": [
+      {
+        "en": "This corpus is a subset of The Longitudinal Corpus of Finnish Spoken in Helsinki, which contains interviews with people of different ages born in Helsinki. The Longitudinal Corpus of Finnish Spoken in Helsinki (2010s text corpus) contains the anonymized transcripts of the 2010s interviews.\n\nThe 2010s material is based on about one hour long audio recordings of individual interviews. Most of the interview questions are about how the interviewees perceive Helsinki, living and traveling in the city, as well as the languages and language forms spoken in Helsinki. The interviews also touch upon such topics as school, work and hobbies related issues of the interviewees.\nA part of the corpus has been transcribed and thematically coded. The Longitudinal Corpus of Finnish Spoken in Helsinki (2010s text corpus) contains also parts in which the audio material and the transcript are aligned.\nWork on the transcription, alignment and thematic coding of the corpus is planned to continue in the future.\n\n\nThe corpus should be referred to in the following way:\n\nThe Longitudinal Corpus of Finnish Spoken in Helsinki (2010s text corpus), informant\u2019s code (if applicable).\n\nThe informant\u2019s code should be marked if concrete text examples of the corpus are given.\n\n\nThe corpus will be published in Korp (https://korp.csc.fi).\n\nThis corpus can be used for educational and research purposes. For detailed information on the license of the resource see https://kitwiki.csc.fi/twiki/bin/view/FinCLARIN/ClarinEulaEngACANcReD.\nHowever, in order to use the audio files, a personal permission is required, see The Longitudinal Corpus of Finnish Spoken in Helsinki (1970s, 1990s, 2010s).",
+        "fi": "T\u00e4m\u00e4 korpus sis\u00e4lt\u00e4\u00e4 Helsingin puhekielen pitkitt\u00e4iskorpuksen 2010-luvun anonymisoidun tekstimuotoisen osa-aineiston, jota voidaan k\u00e4ytt\u00e4\u00e4 koulutus-, tutkimus- ja opetustarkoituksiin. \n\nAlkuper\u00e4inen Helsingin puhekielen pitkitt\u00e4iskorpus sis\u00e4lt\u00e4\u00e4 eri-ik\u00e4isten syntyper\u00e4isten helsinkil\u00e4isten haastatteluja. 2010-luvun aineisto koostuu noin tunnin mittaisista \u00e4\u00e4nitallennetuista yksil\u00f6haastatteluista. Niiss\u00e4 on kyselty etenkin haastateltavien suhteesta Helsinkiin, siell\u00e4 asumisesta ja liikkumisesta sek\u00e4 Helsingiss\u00e4 puhuttavista kielist\u00e4 ja kielimuodoista. Muita teemoja ovat olleet mm. haasteltavien koulunk\u00e4ynti, ty\u00f6 ja harrastukset.\n\nOsa aineistosta on litteroitu ja teemakoodattu; osassa \u00e4\u00e4ni ja litteraatti on kohdennettu toisiinsa.\nAineiston litterointia, kohdennusta ja temaattista koodausta pyrit\u00e4\u00e4n jatkamaan.\n\n\nAineistoon viitataan seuraavasti:\nHelsingin puhekielen pitkitt\u00e4iskorpus, 2010-luvun tekstiaineisto, (tarvittaessa) informantin koodi\nInformantin koodi olisi syyt\u00e4 merkit\u00e4 silloin, jos esitt\u00e4\u00e4 aineistosta konkreettisia tekstiesimerkkej\u00e4.\n\nKorpus julkaistaan Korp-palvelussa, https://korp.csc.fi.\n\nT\u00e4t\u00e4 tekstimuotoista korpusta voidaan k\u00e4ytt\u00e4\u00e4 koulutus-, tutkimus- ja opetustarkoituksiin. \nLis\u00e4tietoa kielivaran lisenssist\u00e4: https://kitwiki.csc.fi/twiki/bin/view/FinCLARIN/ClarinEulaFinACANcReD.\nHuom. \u00c4\u00e4niaineiston k\u00e4ytt\u00e4minen edellytt\u00e4\u00e4 henkil\u00f6kohtaista k\u00e4ytt\u00f6lupaa, ks. Helsingin puhekielen pitkitt\u00e4iskorpus (1970, 1990, 2010)."
+      }
+    ],
+    "other_identifier": [
+      {
+        "notation": "urn:nbn:fi:csc-kata20170221141512400292",
+        "type": {
+          "identifier": [
+            "http://purl.org/att/es/reference_data/identifier_type/identifier_type_urn"
+          ],
+          "label": {
+            "en": "Uniform Resource Name (URN)",
+            "default": "Uniform Resource Name (URN)"
+          }
+        }
+      }
+    ],
+    "access_rights": {
+      "type": [
+        {
+          "identifier": "http://purl.org/att/es/reference_data/access_type/access_type_restricted_access_permit",
+          "label": {
+            "en": "Requires permission",
+            "fi": "Vaatii luvan",
+            "default": "Vaatii luvan"
+          }
+        }
+      ]
+    },
+    "field_of_science": [
+      {
+        "identifier": "http://www.yso.fi/onto/okm-tieteenala/ta6121",
+        "label": {
+          "en": "Languages",
+          "fi": "Kielitieteet",
+          "sv": "Spr\u00e5kvetenskaper",
+          "default": "Kielitieteet"
+        }
+      }
+    ],
+    "curator": [
+      {
+        "identifier": "",
+        "name": "Hanna Lappalainen",
+        "email": "hanna.lappalainen@helsinki.fi",
+        "telephone": "",
+        "agent_type": "Person",
+        "homepage": {},
+        "belongs_to_org": {
+          "identifier": "",
+          "name": "University of Helsinki",
+          "email": "maria.andersson@helsinki.fi",
+          "telephone": "",
+          "agent_type": "Organization",
+          "homepage": {}
+        }
+      },
+      {
+        "identifier": "",
+        "name": "University of Helsinki",
+        "email": "firstname.surname@helsinki.fi",
+        "telephone": "",
+        "agent_type": "Organization",
+        "homepage": {}
+      },
+      {
+        "identifier": "",
+        "name": "University of Helsinki",
+        "email": "hanna.lehti-eklund@helsinki.fi",
+        "telephone": "",
+        "agent_type": "Organization",
+        "homepage": {}
+      },
+      {
+        "identifier": "",
+        "name": "Kotimaisten kielten keskus, Institute for the Languages of Finland",
+        "email": "etunim.sukunimi@kotus.fi",
+        "telephone": "",
+        "agent_type": "Organization",
+        "homepage": {}
+      }
+    ],
+    "creator": [
+      {
+        "identifier": "",
+        "name": "University of Helsinki",
+        "email": "hanna.lehti-eklund@helsinki.fi",
+        "telephone": "",
+        "agent_type": "Organization",
+        "homepage": {}
+      },
+      {
+        "identifier": "",
+        "name": "Kotimaisten kielten keskus, Institute for the Languages of Finland",
+        "email": "etunim.sukunimi@kotus.fi",
+        "telephone": "",
+        "agent_type": "Organization",
+        "homepage": {}
+      }
+    ]
+  },
+  {
+    "urn_identifier": "pid:urn:cr:31-1508411599001",
+    "preferred_identifier": "http://urn.fi/urn:nbn:fi:lb-2016121610",
+    "modified_by_api": "2017-10-20T04:05:22.379536",
+    "title": {
+      "en": "ParFin 2016, Finnish-Russian Parallel Corpus of Literary Texts",
+      "fi": "ParFin 2016 - suomi-ven\u00c3\u00a4j\u00c3\u00a4 kaunokirjallisten tekstien rinnakkaiskorpus"
+    },
+    "description": [
+      {
+        "en": "The corpus is available in Kielipankki - the Language Bank of Finland in Korp (https://korp.csc.fi). \n\nApply for access rights: Click on Documentation > Apply for Access\n\nThe corpus contains Finnish literary texts from 1990-2010 and their translations into Russian aligned at sentence level. \n\nThe purpose of the resource use must be outlined in a research plan. \n\nFor detailed information on the license of the resource see http://urn.fi/urn:nbn:fi:lb-2017020612 (in Finnish http://urn.fi/urn:nbn:fi:lb-2017020611)."
+      }
+    ],
+    "access_rights": {
+      "type": [
+        {
+          "identifier": "http://purl.org/att/es/reference_data/access_type/access_type_restricted_access_permit",
+          "label": {
+            "en": "Requires permission",
+            "fi": "Vaatii luvan",
+            "default": "Vaatii luvan"
+          }
+        }
+      ]
+    },
+    "field_of_science": [
+      {
+        "identifier": "http://www.yso.fi/onto/okm-tieteenala/ta6121",
+        "label": {
+          "en": "Languages",
+          "fi": "Kielitieteet",
+          "sv": "Spr\u00c3\u00a5kvetenskaper",
+          "default": "Kielitieteet"
+        }
+      }
+    ],
+    "curator": [
+      {
+        "identifier": "",
+        "name": "Mikhail Mikhailov",
+        "email": "mikhail.mikhailov@uta.fi",
+        "telephone": "",
+        "agent_type": "Person",
+        "homepage": {},
+        "belongs_to_org": {
+          "identifier": "",
+          "name": "University of Tampere",
+          "email": "registry@uta.fi",
+          "telephone": "",
+          "agent_type": "Organization",
+          "homepage": {}
+        }
+      },
+      {
+        "identifier": "",
+        "name": "University of Helsinki",
+        "email": "firstname.surname@helsinki.fi",
+        "telephone": "",
+        "agent_type": "Organization",
+        "homepage": {}
+      },
+      {
+        "identifier": "",
+        "name": "University of Tampere",
+        "email": "firstname.surname@uta.fi",
+        "telephone": "",
+        "agent_type": "Organization",
+        "homepage": {}
+      }
+    ],
+    "creator": [
+      {
+        "identifier": "",
+        "name": "University of Tampere",
+        "email": "firstname.surname@uta.fi",
+        "telephone": "",
+        "agent_type": "Organization",
+        "homepage": {}
+      }
+    ]
+  },
+  {
+    "urn_identifier": "pid:urn:cr:32-1508411600702",
+    "preferred_identifier": "http://urn.fi/urn:nbn:fi:lb-2017061924",
+    "modified_by_api": "2017-10-20T04:01:27.772338",
+    "title": {
+      "en": "Corpus of Historical American English - Kielipankki",
+      "fi": "Corpus of Historical American English - Kielipankki"
+    },
+    "description": [
+      {
+        "en": "The Corpus of Historical American English (COHA) contains about 385 million words and 115 000  texts from the years 1810-2009. Each decade has roughly the same balance of fiction, popular magazine, newspaper, and non-fiction books.\n\nLicense: The corpus is available for searching by logged-in staff and students of the FIN-CLARIN member organizations via the Korp interface at Kielipankki. Additionally, researchers in the FIN-CLARIN member organizations can obtain access to the full data set by submitting an application and a research plan via Language Bank Rights (lbr.csc.fi).",
+        "fi": "Historiallisen amerikanenglannin korpus COHA sis\u00c3\u00a4lt\u00c3\u00a4\u00c3\u00a4 noin 385 miljoonaa sanetta ja 115 000 teksti\u00c3\u00a4 vuosilta 1810-2009. Kultakin vuosikymmenelt\u00c3\u00a4 on mukana suunnilleen yht\u00c3\u00a4 paljon fiktiota, aikakauslehtiteksti\u00c3\u00a4, sanomalehtiteksti\u00c3\u00a4 ja kirjoja (pl. fiktio).\n\nLisenssi: Korpus on saatavilla Korp-palvelun kautta FIN-CLARINin j\u00c3\u00a4senorganisaatioiden tunnuksilla kirjautuneille henkil\u00c3\u00b6kunnan edustajille ja opiskelijoille. Lis\u00c3\u00a4ksi FIN-CLARINin j\u00c3\u00a4senorganisaatioiden tutkijat voivat saada p\u00c3\u00a4\u00c3\u00a4syn kokotekstiaineistoon l\u00c3\u00a4hett\u00c3\u00a4m\u00c3\u00a4ll\u00c3\u00a4 hakemuksen ja tutkimussuunnitelman Kielipankin oikeudet -palvelun kautta (lbr.csc.fi)."
+      }
+    ],
+    "access_rights": {
+      "type": [
+        {
+          "identifier": "http://purl.org/att/es/reference_data/access_type/access_type_restricted_access_permit",
+          "label": {
+            "en": "Requires permission",
+            "fi": "Vaatii luvan",
+            "default": "Vaatii luvan"
+          }
+        }
+      ]
+    },
+    "field_of_science": [
+      {
+        "identifier": "http://www.yso.fi/onto/okm-tieteenala/ta6121",
+        "label": {
+          "en": "Languages",
+          "fi": "Kielitieteet",
+          "sv": "Spr\u00c3\u00a5kvetenskaper",
+          "default": "Kielitieteet"
+        }
+      }
+    ],
+    "curator": [
+      {
+        "identifier": "",
+        "name": "User support FIN-CLARIN",
+        "email": "finclarin@helsinki.fi",
+        "telephone": "",
+        "agent_type": "Person",
+        "homepage": {}
+      },
+      {
+        "identifier": "",
+        "name": "FIN-CLARIN",
+        "email": "finclarin@helsinki.fi",
+        "telephone": "",
+        "agent_type": "Organization",
+        "homepage": {}
+      }
+    ]
+  },
+  {
+    "urn_identifier": "pid:urn:cr:33-1508411602361",
+    "preferred_identifier": "http://urn.fi/urn:nbn:fi:lb-2014100302",
+    "modified_by_api": "2017-10-20T04:01:28.774779",
+    "title": {
+      "en": "Nganasan Speech Corpus",
+      "fi": "Nganasanin kielen puhekorpus"
+    },
+    "description": [
+      {
+        "en": "The corpus contains video and audio recordings from 1986-2013 of fairy tales, songs, biographies, recollections and stories, as well as discussions on everyday issues in Nganasan and their linguistic transcripts. The corpus contains also photographs.\n\nThe Nganasan Speech Corpus will be made available in LAT (https://lat.csc.fi).\n\nFor detailed information on the license of the resource see https://kitwiki.csc.fi/twiki/bin/view/FinCLARIN/ClarinEulaEngACANcReD.",
+        "fi": "Korpus sis\u00c3\u00a4lt\u00c3\u00a4\u00c3\u00a4 nganasaninkielisi\u00c3\u00a4 videoita ja \u00c3\u00a4\u00c3\u00a4nitteit\u00c3\u00a4, joissa satuja, lauluja, el\u00c3\u00a4m\u00c3\u00a4kertoja, muisteluksia ja tarinoita sek\u00c3\u00a4 keskusteluja arkiasioista, ajalta 1986-2013 ja niiden kielitieteellisi\u00c3\u00a4 litterointeja. Korpus sis\u00c3\u00a4lt\u00c3\u00a4\u00c3\u00a4 my\u00c3\u00b6s valokuvia.\n\nNganasanin kielen puhekorpus julkaistaan LATissa (https://lat.csc.fi).\n\nLis\u00c3\u00a4tietoa kielivaran lisenssist\u00c3\u00a4: https://kitwiki.csc.fi/twiki/bin/view/FinCLARIN/ClarinEulaFinACANcReD."
+      }
+    ],
+    "other_identifier": [
+      {
+        "notation": "urn:nbn:fi:csc-kata20170221141606575410",
+        "type": {
+          "identifier": [
+            "http://purl.org/att/es/reference_data/identifier_type/identifier_type_urn"
+          ],
+          "label": {
+            "en": "Uniform Resource Name (URN)",
+            "default": "Uniform Resource Name (URN)"
+          }
+        }
+      }
+    ],
+    "access_rights": {
+      "type": [
+        {
+          "identifier": "http://purl.org/att/es/reference_data/access_type/access_type_restricted_access_permit",
+          "label": {
+            "en": "Requires permission",
+            "fi": "Vaatii luvan",
+            "default": "Vaatii luvan"
+          }
+        }
+      ]
+    },
+    "field_of_science": [
+      {
+        "identifier": "http://www.yso.fi/onto/okm-tieteenala/ta6121",
+        "label": {
+          "en": "Languages",
+          "fi": "Kielitieteet",
+          "sv": "Spr\u00c3\u00a5kvetenskaper",
+          "default": "Kielitieteet"
+        }
+      }
+    ],
+    "publisher": {
+      "identifier": "",
+      "name": "Larisa Leisi\u00c3\u00b6",
+      "email": "larisa.leisio@uta.fi",
+      "telephone": "",
+      "agent_type": "Person",
+      "homepage": {},
+      "belongs_to_org": {
+        "identifier": "",
+        "name": "University of Tampere",
+        "email": "firstname.surname@uta.fi",
+        "telephone": "",
+        "agent_type": "Organization",
+        "homepage": {}
+      }
+    },
+    "curator": [
+      {
+        "identifier": "",
+        "name": "Larisa Leisi\u00c3\u00b6",
+        "email": "larisa.leisio@uta.fi",
+        "telephone": "",
+        "agent_type": "Person",
+        "homepage": {},
+        "belongs_to_org": {
+          "identifier": "",
+          "name": "University of Tampere",
+          "email": "firstname.surname@uta.fi",
+          "telephone": "",
+          "agent_type": "Organization",
+          "homepage": {}
+        }
+      }
+    ],
+    "creator": [
+      {
+        "identifier": "",
+        "name": "Larisa Leisi\u00c3\u00b6",
+        "email": "larisa.leisio@uta.fi",
+        "telephone": "",
+        "agent_type": "Person",
+        "homepage": {},
+        "belongs_to_org": {
+          "identifier": "",
+          "name": "University of Tampere",
+          "email": "firstname.surname@uta.fi",
+          "telephone": "",
+          "agent_type": "Organization",
+          "homepage": {}
+        }
+      }
+    ]
+  },
+  {
+    "urn_identifier": "pid:urn:cr:34-1508411604264",
+    "preferred_identifier": "http://urn.fi/urn:nbn:fi:lb-201411071",
+    "modified_by_api": "2017-10-20T04:01:29.901965",
+    "title": {
+      "en": "Helsinki Corpus of Scottish Correspondence (1540-1750)"
+    },
+    "description": [
+      {
+        "en": "The Helsinki Corpus of Scottish Correspondence comprises circa 0.4 million words (0.5 million tokens) of early Scottish correspondence by male and female writers dating from the period 1540-1750. Unlike the majority of digital resources available for historical linguistics at present, the corpus consists of transcripts of original letter manuscripts, which reproduce the text disallowing any modernisation, normalisation or emendation. Language-external variables such as date, region, gender, addressee, hand and script type have been coded into the database. The writers originate from fifteen different regions of Scotland; these can be grouped to represent the areas of North, North-East, Central, South-East, and South-West. In addition, there are two categories of informants that have not been defined by geographical origin: representatives of the court and professional people such as members of the clergy. The proportion of female informants in the corpus is 21 per cent.\n\nIt should be noted that the compiler\u00e2\u20ac\u2122s copyright only applies to the annotated transcripts of the letter manuscripts. The copyright of the source manuscripts lies with their repository or, in some cases, with private owners. The original manuscripts used to compile ScotsCorr are deposited in the National Records of Scotland and the National Library of Scotland, Edinburgh, UK, and, as regards the right to reproduce or to publish the manuscript sources of the historical documents themselves, the user should contact these institutions for more information. \n\n\nLicense: http://urn.fi/urn:nbn:fi:lb-2016051203 (in Finnish: http://urn.fi/urn:nbn:fi:lb-2016051204).\n\nTo access ScotsCorr, use the direct link to http://urn.fi/urn:nbn:fi:lb-2016121607 above. You will then need to log in to the Korp concordance service https://korp.csc.fi/ with your home organisation's credentials. If you cannot find your home organisation when trying to log in or experience other log-in problems, please contact us at kielipankki@csc.fi. We can help you get connected."
+      }
+    ],
+    "other_identifier": [
+      {
+        "notation": "urn:nbn:fi:csc-kata20170221141611439088",
+        "type": {
+          "identifier": [
+            "http://purl.org/att/es/reference_data/identifier_type/identifier_type_urn"
+          ],
+          "label": {
+            "en": "Uniform Resource Name (URN)",
+            "default": "Uniform Resource Name (URN)"
+          }
+        }
+      }
+    ],
+    "access_rights": {
+      "type": [
+        {
+          "identifier": "http://purl.org/att/es/reference_data/access_type/access_type_restricted_access_permit",
+          "label": {
+            "en": "Requires permission",
+            "fi": "Vaatii luvan",
+            "default": "Vaatii luvan"
+          }
+        }
+      ]
+    },
+    "field_of_science": [
+      {
+        "identifier": "http://www.yso.fi/onto/okm-tieteenala/ta6121",
+        "label": {
+          "en": "Languages",
+          "fi": "Kielitieteet",
+          "sv": "Spr\u00c3\u00a5kvetenskaper",
+          "default": "Kielitieteet"
+        }
+      }
+    ],
+    "publisher": {
+      "identifier": "",
+      "name": "Anneli Meurman-Solin",
+      "email": "Anneli.Meurman-Solin@helsinki.fi",
+      "telephone": "",
+      "agent_type": "Person",
+      "homepage": {},
+      "belongs_to_org": {
+        "identifier": "",
+        "name": "University of Helsinki",
+        "email": "firstname.surname@helsinki.fi",
+        "telephone": "",
+        "agent_type": "Organization",
+        "homepage": {}
+      }
+    },
+    "curator": [
+      {
+        "identifier": "",
+        "name": "Anneli Meurman-Solin",
+        "email": "Anneli.Meurman-Solin@helsinki.fi",
+        "telephone": "",
+        "agent_type": "Person",
+        "homepage": {},
+        "belongs_to_org": {
+          "identifier": "",
+          "name": "University of Helsinki",
+          "email": "firstname.surname@helsinki.fi",
+          "telephone": "",
+          "agent_type": "Organization",
+          "homepage": {}
+        }
+      }
+    ],
+    "creator": [
+      {
+        "identifier": "",
+        "name": "Anneli Meurman-Solin",
+        "email": "Anneli.Meurman-Solin@helsinki.fi",
+        "telephone": "",
+        "agent_type": "Person",
+        "homepage": {},
+        "belongs_to_org": {
+          "identifier": "",
+          "name": "University of Helsinki",
+          "email": "firstname.surname@helsinki.fi",
+          "telephone": "",
+          "agent_type": "Organization",
+          "homepage": {}
+        }
+      }
+    ]
+  }
+]

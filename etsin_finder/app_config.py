@@ -1,5 +1,5 @@
 import yaml
-from .utils import executing_travis
+from etsin_finder.utils import executing_travis
 
 
 def _get_app_config_from_file():

@@ -1,7 +1,5 @@
-from etsin_finder import app
+from etsin_finder.finder import app
 from flask import render_template
-
-log = app.logger
 
 
 @app.route('/', defaults={'path': ''})
