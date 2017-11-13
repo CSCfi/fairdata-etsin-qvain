@@ -46,6 +46,7 @@ class Dataset extends React.Component {
         this.updateData()
       })
       .catch((res) => {
+        console.log(res);
         this.setState({ error: res });
       });
   }

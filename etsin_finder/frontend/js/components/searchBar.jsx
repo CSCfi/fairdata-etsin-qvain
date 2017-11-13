@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
-import axios from 'axios'
+import React, { Component } from 'react'
+import { withRouter } from 'react-router-dom'
 
 import ErrorBoundary from './errorBoundary'
 
-export default class SearchBar extends Component {
+class SearchBar extends Component {
   constructor(props) {
     super(props)
     this.state = { value: '' }
@@ -16,14 +16,9 @@ export default class SearchBar extends Component {
   }
 
   handleSubmit(event) {
-    axios.get(`https://30.30.30.30/es/metax/dataset/_search?q=${this.state.value}:*&pretty`)
-      .then((res) => {
-        console.log(res)
-      })
-      .catch((err) => {
-        console.log(err)
-      });
     event.preventDefault();
+    const path = `/datasets/${this.state.value}`
+    this.props.history.push(path)
   }
 
   render() {
@@ -41,3 +36,5 @@ export default class SearchBar extends Component {
     );
   }
 }
+
+export default withRouter(SearchBar)

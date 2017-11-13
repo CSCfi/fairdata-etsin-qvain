@@ -23,7 +23,7 @@ export default class App extends Component {
     return (
       <div className="app">
         <Provider Stores={Stores}>
-          <Router>
+          <Router history={Stores.history}>
             <ErrorBoundary>
               <Header />
               <Content />
