@@ -15,3 +15,8 @@
   font-size: 0.9em;
   color: $color-gray;
 }
+.dsContent {
+  .description {
+    overflow-wrap: break-word;
+  }
+}

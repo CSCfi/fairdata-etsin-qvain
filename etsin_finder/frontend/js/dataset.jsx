@@ -37,21 +37,18 @@ class Dataset extends React.Component {
   }
 
   getData(id) {
-    console.log(id);
     let dataid = id;
     if (this.props.dataid) {
       dataid = this.props.dataid
     }
-    console.log('now')
     axios.get(`${this.url}/rest/datasets/${dataid}.json`)
       .then((res) => {
+        console.log(res.data)
         const dataset = res.data;
         this.setState({ dataset });
         this.updateData()
-        console.log('finished')
       })
       .catch((error) => {
-        console.log(error)
         this.setState({ error });
       });
   }
@@ -66,14 +63,24 @@ class Dataset extends React.Component {
     const researchDataset = this.state.dataset.research_dataset
     const titles = researchDataset.title
 
-    this.setState({ title: titles[this.state.currentLang] })
+    this.setState({ title: checkDataLang(titles) })
 
     const description = researchDataset.description.map(single => (
       checkDataLang(single)
     ));
     this.setState({ description })
-    const { creator, contributor, issued } = this.state.dataset.research_dataset;
-    this.setState({ creator, contributor, issued })
+    const {
+      creator,
+      contributor,
+      issued,
+      rights_holder,
+    } = this.state.dataset.research_dataset;
+    this.setState({
+      creator,
+      contributor,
+      issued,
+      rights_holder,
+    })
     this.setState({ loaded: 'true' })
   }
 
@@ -109,6 +116,7 @@ class Dataset extends React.Component {
                   <DsContent
                     title={this.state.title}
                     creator={this.state.creator}
+                    rights_holder={this.state.rights_holder}
                     contributor={this.state.contributor}
                     issued={this.state.issued}
                     dataset={this.state.dataset.research_dataset}

@@ -4,7 +4,7 @@ import DateFormat from './dateFormat'
 import AccessRights from './accessRights'
 import checkNested from '../utils/checkNested'
 import ErrorBoundary from './errorBoundary'
-import Stores from '../stores'
+import checkDataLang from '../utils/checkDataLang'
 
 export default class DsContent extends Component {
   render() {
@@ -17,21 +17,34 @@ export default class DsContent extends Component {
         <div className="d-flex justify-content-between basic-info">
           <div>
             <ErrorBoundary>
-              <p className="creator">
-                {
-                  this.props.creator.length > 1
-                    ? <Translate content="dataset.creator.plrl" />
-                    : <Translate content="dataset.creator.snglr" />
-                }
-                {
-                  ': '
-                }
-                {
-                  this.props.creator.map((creators, i, arr) => (
-                    typeof creators.name === 'object' ? creators.name[Stores.Locale.currentLang] : <span key={creators.name}>{creators.name}{(i + 1 !== arr.length) ? ', ' : ''}</span>
-                  ))
-                }
-              </p>
+              {
+                this.props.creator ?
+                  <p className="creator">
+                    {
+                      this.props.creator.length > 1
+                        ? <Translate content="dataset.creator.plrl" />
+                        : <Translate content="dataset.creator.snglr" />
+                    }
+                    {
+                      ': '
+                    }
+                    {
+                      this.props.creator.map((creators, i, arr) => (
+                        typeof creators.name === 'object'
+                          ? checkDataLang(creators.name)
+                          :
+                          <span key={creators.name}>
+                            {creators.name}{(i + 1 !== arr.length) ? ', ' : ''}
+                          </span>
+                      ))
+                    }
+                  </p> :
+                  <p className="creator">
+                    {
+                      console.log(this.props.rights_holder)
+                    }
+                  </p>
+              }
             </ErrorBoundary>
             <ErrorBoundary>
               {
@@ -56,7 +69,7 @@ export default class DsContent extends Component {
             { this.props.issued ? <DateFormat date={this.props.issued} /> : null }
           </p>
         </div>
-        <p>
+        <p className="description">
           {this.props.children}
         </p>
       </div>
