@@ -11,6 +11,21 @@ class SearchBar extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
+
+  componentDidMount() {
+    this.getQuery();
+  }
+
+  getQuery() {
+    const query = this.props.match.params.query
+    if (query) {
+      this.setState({ value: query })
+      const searchBarInput = document.getElementById('searchBarInput');
+      searchBarInput.focus();
+      searchBarInput.setSelectionRange(query.length, query.lenght);
+    }
+  }
+
   handleChange(event) {
     this.setState({ value: event.target.value });
   }
@@ -28,7 +43,7 @@ class SearchBar extends Component {
           <div className="search">
             <div className="searchBar inner-addon right-addon">
               <i className="fa fa-search fa-2x" aria-hidden="true" />
-              <input placeholder="Anna hakusana" value={this.state.value} onChange={this.handleChange} />
+              <input id="searchBarInput" placeholder="Anna hakusana" value={this.state.value} onChange={this.handleChange} />
             </div>
           </div>
         </form>

@@ -28,6 +28,7 @@ class Dataset extends React.Component {
     this.getData = this.getData.bind(this)
     this.updateData = this.updateData.bind(this)
   }
+
   componentDidMount() {
     this.getData(this.props.match.params.identifier)
   }
@@ -102,12 +103,12 @@ class Dataset extends React.Component {
       <div className="container regular-row" pageid={this.props.match.params.identifier}>
         <div className="row">
           <div className="col-md-8">
+            <button className="btn btn-transparent nopadding btn-back" onClick={this.goBack}>
+              {'< Go back'}
+            </button>
             <ErrorBoundary>
               <DsTabs identifier={this.props.match.params.identifier} />
             </ErrorBoundary>
-            {/* <button className="btn btn-transparent nopadding btn-back" onClick={this.goBack}>
-              {'< Go back'}
-            </button> */}
             <ErrorBoundary>
               <Route
                 exact

@@ -4,11 +4,15 @@ import Translate from 'react-translate-component'
 import HeroBanner from './components/hero'
 import SearchBar from './components/searchBar'
 import ListItem from './components/listItem'
+import Store from './stores'
 
 export default class Datasets extends Component {
   constructor(props) {
     super(props)
-    this.state = { results: [] }
+    this.state = {
+      results: [],
+      currentLang: Store.Locale.currentLang,
+    }
   }
 
   componentDidMount() {
@@ -57,8 +61,13 @@ export default class Datasets extends Component {
               {this.state.results.length === 0
                 ? <div>Empty</div>
                 : this.state.results.map(single => (
-                  <ListItem key={single._id} item={single._source} />
-                ))}
+                  <ListItem
+                    key={single._id}
+                    identifier={single._id}
+                    item={single._source}
+                    lang={this.state.currentLang}
+                  />
+                ), this)}
             </div>
           </div>
         </div>
