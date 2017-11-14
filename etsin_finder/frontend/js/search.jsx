@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import Translate from 'react-translate-component'
 import SearchBar from './components/searchBar'
+import HeroBanner from './components/hero'
 
 export default class SearchPage extends Component {
   render() {
     return (
-      <div className="hero">
+      <HeroBanner className="hero-primary">
         <div className="container">
           <div className="text-center">
             <h1>
@@ -14,7 +15,7 @@ export default class SearchPage extends Component {
             <SearchBar />
           </div>
         </div>
-      </div>
+      </HeroBanner>
     );
   }
 }

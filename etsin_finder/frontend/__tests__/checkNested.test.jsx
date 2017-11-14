@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { shallow, mount } from 'enzyme';
 
-import checkNested from '../js/components/checkNested'
+import checkNested from '../js/utils/checkNested'
 
 describe('CheckNested function', () => {
   const researchDataset = {publisher: {name: "Bob"}}

@@ -15,8 +15,8 @@
     &:after {
       content: "";
       display: block;
-      height: 1px;
-      background-color: $color-medgray;
+      height: 2px;
+      background-color: $color-lightgray;
       position: relative;
       bottom: -20px;
       width: 200%;

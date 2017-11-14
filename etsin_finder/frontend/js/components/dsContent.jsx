@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import Translate from 'react-translate-component'
 import DateFormat from './dateFormat'
 import AccessRights from './accessRights'
-import checkNested from './checkNested'
+import checkNested from '../utils/checkNested'
 import ErrorBoundary from './errorBoundary'
 import Stores from '../stores'
 

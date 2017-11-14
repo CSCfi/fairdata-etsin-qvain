@@ -16,7 +16,7 @@ class SearchBar extends Component {
   }
 
   handleSubmit(event) {
-    event.preventDefault();
+    event.preventDefault()
     const path = `/datasets/${this.state.value}`
     this.props.history.push(path)
   }

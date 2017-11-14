@@ -1,0 +1,12 @@
+.listItem {
+  margin-bottom: 1.5em;
+  a {
+    color: inherit;
+    &:hover .content-box {
+      background-color: mix($color-lightgray, white, 30);
+    }
+    .title {
+      color: $color-primary;
+    }
+  }
+}

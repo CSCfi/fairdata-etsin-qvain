@@ -1,0 +1,9 @@
+.hero {
+  min-height: 300px;
+  display: flex;
+  align-items: center;
+  &.hero-primary {
+    background-color: $color-primary;
+    color: $color-white;
+  }
+}
