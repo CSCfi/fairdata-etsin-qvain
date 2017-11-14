@@ -11,6 +11,7 @@ import ErrorPage from './components/errorPage'
 import Identifier from './components/identifier'
 import ErrorBoundary from './components/errorBoundary'
 import DsTabs from './components/dsTabs'
+import checkDataLang from './utils/checkDataLang'
 
 class Dataset extends React.Component {
   constructor(props) {
@@ -20,10 +21,11 @@ class Dataset extends React.Component {
     this.url = this.props.Stores.Env.metaxUrl
     this.state = {
       dataset: [],
-      error: '',
+      error: false,
     }
 
     this.goBack = this.goBack.bind(this)
+    this.getData = this.getData.bind(this)
     this.updateData = this.updateData.bind(this)
   }
   componentDidMount() {
@@ -35,19 +37,22 @@ class Dataset extends React.Component {
   }
 
   getData(id) {
+    console.log(id);
     let dataid = id;
     if (this.props.dataid) {
       dataid = this.props.dataid
     }
+    console.log('now')
     axios.get(`${this.url}/rest/datasets/${dataid}.json`)
       .then((res) => {
         const dataset = res.data;
         this.setState({ dataset });
         this.updateData()
+        console.log('finished')
       })
-      .catch((res) => {
-        console.log(res);
-        this.setState({ error: res });
+      .catch((error) => {
+        console.log(error)
+        this.setState({ error });
       });
   }
 
@@ -63,12 +68,9 @@ class Dataset extends React.Component {
 
     this.setState({ title: titles[this.state.currentLang] })
 
-    const description = researchDataset.description.filter((single) => {
-      if (!single.en) {
-        return false
-      }
-      return true
-    })[0].en;
+    const description = researchDataset.description.map(single => (
+      checkDataLang(single)
+    ));
     this.setState({ description })
     const { creator, contributor, issued } = this.state.dataset.research_dataset;
     this.setState({ creator, contributor, issued })
@@ -77,7 +79,7 @@ class Dataset extends React.Component {
 
   render() {
     // CASE 1: Houston, we have a problem
-    if (this.state.error !== '') {
+    if (this.state.error !== false) {
       return <ErrorPage />;
     }
 
