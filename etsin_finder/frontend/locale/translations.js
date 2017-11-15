@@ -45,6 +45,9 @@ counterpart.registerTranslations('en', {
     home: 'Home',
     organizations: 'Organizations',
   },
+  results: {
+    amount: '%(amount)s results',
+  },
   slogan: 'Research data finder',
 });
 
@@ -92,6 +95,9 @@ counterpart.registerTranslations('fi', {
     help: 'Ohjeet & Info',
     home: 'Koti',
     organizations: 'Organisaatiot',
+  },
+  results: {
+    amount: '%(amount)s hakutulosta',
   },
   slogan: 'Tutkimustenhaku palvelu',
 });

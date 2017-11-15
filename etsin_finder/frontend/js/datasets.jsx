@@ -13,6 +13,7 @@ class Datasets extends Component {
     this.state = {
       results: [],
     }
+    this.renderList = this.renderList.bind(this)
   }
 
   componentDidMount() {
@@ -32,11 +33,27 @@ class Datasets extends Component {
       .then((res) => {
         this.setState({
           results: res.data.hits.hits,
+          total: res.data.hits.total,
         })
+        console.log(res)
       })
       .catch((err) => {
         console.log(err)
       });
+  }
+
+  renderList(lang) {
+    // console.time()
+    const list = this.state.results.map(single => (
+      <ListItem
+        key={single._id}
+        identifier={single._id}
+        item={single._source}
+        lang={lang}
+      />
+    ), this)
+    // console.timeEnd()
+    return list
   }
 
   render() {
@@ -55,23 +72,16 @@ class Datasets extends Component {
         </HeroBanner>
         <div className="container">
           <div className="row regular-row">
-            <div className="col-3">
-              Sidebar
+            <div className="col-lg-3">
+              <Translate with={{ amount: this.state.total }} component="p" content="results.amount" fallback="%(amount)s results" />
               <div className="content-box">
                 Filtering
               </div>
             </div>
-            <div className="col-9">
+            <div className="col-lg-9">
               {this.state.results.length === 0
-                ? <div>Empty</div>
-                : this.state.results.map(single => (
-                  <ListItem
-                    key={single._id}
-                    identifier={single._id}
-                    item={single._source}
-                    lang={currentLang}
-                  />
-                ), this)}
+                ? <div>Loading</div>
+                : this.renderList(currentLang)}
             </div>
           </div>
         </div>

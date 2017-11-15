@@ -2,11 +2,21 @@
   margin-bottom: 1.5em;
   a {
     color: inherit;
-    &:hover .content-box {
-      background-color: mix($color-lightgray, white, 30);
+    text-decoration: none;
+    .content-box {
+      transition: all 0.1s ease;
+    }
+    &:hover {
+      .content-box {
+        border: 2px solid $color-primary;
+        box-shadow: 0 2px 3px 0px $color-lightgray;
+        transform: translateY(-3px);
+      }
     }
     .title {
       color: $color-primary;
+      margin-bottom: 0;
+      margin-right: 1em;
     }
   }
 }
