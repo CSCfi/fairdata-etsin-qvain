@@ -1,17 +1,17 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import Translate from 'react-translate-component'
+import { inject, observer } from 'mobx-react'
+
 import HeroBanner from './components/hero'
 import SearchBar from './components/searchBar'
 import ListItem from './components/listItem'
-import Store from './stores'
 
-export default class Datasets extends Component {
+class Datasets extends Component {
   constructor(props) {
     super(props)
     this.state = {
       results: [],
-      currentLang: Store.Locale.currentLang,
     }
   }
 
@@ -24,9 +24,12 @@ export default class Datasets extends Component {
   }
 
   getData(query) {
-    axios.get(`https://30.30.30.30/es/metax/dataset/_search?q=${query}&pretty`)
+    let q = query;
+    if (!query) {
+      q = '*.*'
+    }
+    axios.get(`https://30.30.30.30/es/metax/dataset/_search?q=${q}&pretty&size=100`)
       .then((res) => {
-        console.log(res)
         this.setState({
           results: res.data.hits.hits,
         })
@@ -37,6 +40,7 @@ export default class Datasets extends Component {
   }
 
   render() {
+    const { currentLang } = this.props.Stores.Locale
     return (
       <div>
         <HeroBanner className="hero-primary">
@@ -65,7 +69,7 @@ export default class Datasets extends Component {
                     key={single._id}
                     identifier={single._id}
                     item={single._source}
-                    lang={this.state.currentLang}
+                    lang={currentLang}
                   />
                 ), this)}
             </div>
@@ -75,3 +79,5 @@ export default class Datasets extends Component {
     );
   }
 }
+
+export default inject('Stores')(observer(Datasets))

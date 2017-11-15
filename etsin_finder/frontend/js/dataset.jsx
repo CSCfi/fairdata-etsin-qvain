@@ -113,7 +113,7 @@ class Dataset extends React.Component {
                 path="/dataset/:identifier"
                 render={() => (
                   <DsContent
-                    title={this.state.title[currentLang]}
+                    title={checkDataLang(this.state.title, currentLang)}
                     creator={this.state.creator}
                     rights_holder={this.state.rights_holder}
                     contributor={this.state.contributor}
