@@ -46,7 +46,10 @@ counterpart.registerTranslations('en', {
     organizations: 'Organizations',
   },
   results: {
-    amount: '%(amount)s results',
+    amount: {
+      plrl: '%(amount)s results',
+      snglr: '%(amount)s result',
+    },
   },
   slogan: 'Research data finder',
 });
@@ -97,7 +100,10 @@ counterpart.registerTranslations('fi', {
     organizations: 'Organisaatiot',
   },
   results: {
-    amount: '%(amount)s hakutulosta',
+    amount: {
+      plrl: '%(amount)s hakutulosta',
+      snglr: '%(amount)s hakutulos',
+    },
   },
   slogan: 'Tutkimustenhaku palvelu',
 });

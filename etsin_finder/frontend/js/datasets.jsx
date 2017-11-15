@@ -73,7 +73,7 @@ class Datasets extends Component {
         <div className="container">
           <div className="row regular-row">
             <div className="col-lg-3">
-              <Translate with={{ amount: this.state.total }} component="p" content="results.amount" fallback="%(amount)s results" />
+              <Translate className="results-amount" with={{ amount: this.state.total }} component="p" content={`results.amount.${this.state.total === 1 ? 'snglr' : 'plrl'}`} fallback="%(amount)s results" />
               <div className="content-box">
                 Filtering
               </div>
