@@ -29,11 +29,7 @@ export default class ListItem extends Component {
                       checkDataLang(this.props.item.title, this.props.lang)
                     }
                   </h2>
-                  {
-                    this.props.item.access_rights
-                      ? <AccessRights access_rights={this.props.item.access_rights} />
-                      : null
-                  }
+                  <AccessRights access_rights={this.props.item.access_rights} />
                 </div>
               </ErrorBoundary>
               <ErrorBoundary>
