@@ -23,7 +23,7 @@ export default class ListItem extends Component {
           <Link to={`/dataset/${this.props.item.urn_identifier}`} >
             <div className="content-box">
               <ErrorBoundary>
-                <div className="d-flex justify-content-between align-items-center">
+                <div className="d-flex justify-content-between align-items-start item-header">
                   <h2 className="title">
                     {
                       checkDataLang(this.props.item.title, this.props.lang)
