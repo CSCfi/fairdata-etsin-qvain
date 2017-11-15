@@ -7,6 +7,7 @@
     "browser": true
   },
   "rules": {
+//    "max-len": ["error", { "code": 130 }],
     "no-extra-semi": 1,
     "semi": 0,
     "react/prop-types": 0,

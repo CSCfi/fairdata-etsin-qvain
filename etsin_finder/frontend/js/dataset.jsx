@@ -59,12 +59,8 @@ class Dataset extends React.Component {
   }
 
   updateData() {
-    const { currentLang } = this.props.Stores.Locale
-    this.setState({ currentLang })
     const researchDataset = this.state.dataset.research_dataset
-    const titles = researchDataset.title
-
-    this.setState({ title: checkDataLang(titles) })
+    this.setState({ title: researchDataset.title })
 
     const description = researchDataset.description.map(single => (
       checkDataLang(single)
@@ -99,6 +95,8 @@ class Dataset extends React.Component {
       return <div />;
     }
 
+    const { currentLang } = this.props.Stores.Locale
+
     return (
       <div className="container regular-row" pageid={this.props.match.params.identifier}>
         <div className="row">
@@ -115,7 +113,7 @@ class Dataset extends React.Component {
                 path="/dataset/:identifier"
                 render={() => (
                   <DsContent
-                    title={this.state.title}
+                    title={this.state.title[currentLang]}
                     creator={this.state.creator}
                     rights_holder={this.state.rights_holder}
                     contributor={this.state.contributor}
@@ -147,7 +145,7 @@ class Dataset extends React.Component {
           </div>
           <div className="col-md-4">
             <ErrorBoundary>
-              <DsSidebar dataset={this.state.dataset} lang={this.state.currentLang} />
+              <DsSidebar dataset={this.state.dataset} lang={currentLang} />
             </ErrorBoundary>
           </div>
         </div>
