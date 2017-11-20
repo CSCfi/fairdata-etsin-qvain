@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
-import axios from 'axios'
+import React, { Component } from 'react'
+import { withRouter } from 'react-router-dom'
 
 import ErrorBoundary from './errorBoundary'
 
-export default class SearchBar extends Component {
+class SearchBar extends Component {
   constructor(props) {
     super(props)
     this.state = { value: '' }
@@ -11,19 +11,29 @@ export default class SearchBar extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
+
+  componentDidMount() {
+    this.getQuery();
+  }
+
+  getQuery() {
+    const query = this.props.match.params.query
+    if (query) {
+      this.setState({ value: query })
+      const searchBarInput = document.getElementById('searchBarInput');
+      searchBarInput.focus();
+      searchBarInput.setSelectionRange(query.length, query.lenght);
+    }
+  }
+
   handleChange(event) {
     this.setState({ value: event.target.value });
   }
 
   handleSubmit(event) {
-    axios.get(`https://30.30.30.30/es/metax/dataset/_search?q=${this.state.value}:*&pretty`)
-      .then((res) => {
-        console.log(res)
-      })
-      .catch((err) => {
-        console.log(err)
-      });
-    event.preventDefault();
+    event.preventDefault()
+    const path = `/datasets/${this.state.value}`
+    this.props.history.push(path)
   }
 
   render() {
@@ -33,7 +43,7 @@ export default class SearchBar extends Component {
           <div className="search">
             <div className="searchBar inner-addon right-addon">
               <i className="fa fa-search fa-2x" aria-hidden="true" />
-              <input placeholder="Anna hakusana" value={this.state.value} onChange={this.handleChange} />
+              <input id="searchBarInput" placeholder="Anna hakusana" value={this.state.value} onChange={this.handleChange} />
             </div>
           </div>
         </form>
@@ -41,3 +51,5 @@ export default class SearchBar extends Component {
     );
   }
 }
+
+export default withRouter(SearchBar)

@@ -2,10 +2,12 @@ import React, { Component } from 'react'
 import Translate from 'react-translate-component'
 import DsSidebarItem from './dsSidebarItem'
 import Locale from '../stores/view/language'
-import checkNested from './checkNested'
+import checkNested from '../utils/checkNested'
 import DateFormat from './dateFormat'
 import Identifier from './identifier'
 import ErrorBoundary from './errorBoundary'
+
+import checkDataLang from '../utils/checkDataLang'
 
 export default class DsSidebar extends Component {
   dateSeparator(start, end) {
@@ -96,10 +98,9 @@ export default class DsSidebar extends Component {
               {
                 checkNested(researchDataset, 'access_rights', 'license')
                   ? researchDataset.access_rights.license.map(rights => (
-                    rights.title[this.props.lang] ?
-                      <p key={rights.identifier}>
-                        {rights.title[this.props.lang]}
-                      </p> : null
+                    <p key={rights.identifier}>
+                      {checkDataLang(rights.title, currentLang)}
+                    </p>
                   ))
                   : null
               }
@@ -109,7 +110,10 @@ export default class DsSidebar extends Component {
             <DsSidebarItem component="p" trans="dataset.access_rights" fallback="Access rights statement" hideEmpty="true">
               {
                 checkNested(dataCatalog, 'catalog_json', 'access_rights', 'description')
-                  ? dataCatalog.catalog_json.access_rights.description[0][currentLang]
+                  ? checkDataLang(
+                    dataCatalog.catalog_json.access_rights.description[0],
+                    currentLang,
+                  )
                   : null
               }
             </DsSidebarItem>
@@ -121,7 +125,7 @@ export default class DsSidebar extends Component {
                   ? researchDataset.is_output_of.map(output => (
                     checkNested(output, 'has_funding_agency')
                     ? output.has_funding_agency.map(agency => (
-                      agency.name[currentLang]
+                      checkDataLang(agency.name, currentLang)
                     ))
                     : null
                   ))
@@ -132,7 +136,7 @@ export default class DsSidebar extends Component {
           <ErrorBoundary>
             <DsSidebarItem component="p" trans="dataset.curator" fallback="Curator" hideEmpty="true">
               {researchDataset.curator ? researchDataset.curator.map(curators => (
-                curators.name[currentLang]
+                checkDataLang(curators.name, currentLang)
               )) : null}
             </DsSidebarItem>
           </ErrorBoundary>
@@ -140,7 +144,8 @@ export default class DsSidebar extends Component {
             <DsSidebarItem component="p" trans="dataset.infrastructure" fallback="Infrastructure" hideEmpty="true">
               {
                 checkNested(researchDataset, 'related_entity')
-                  ? researchDataset.related_entity.map(entity => entity.title[currentLang])
+                  ? researchDataset.related_entity.map(entity => (
+                    checkDataLang(entity.title, currentLang)))
                   : null
               }
             </DsSidebarItem>

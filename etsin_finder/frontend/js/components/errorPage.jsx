@@ -1,5 +1,6 @@
 import React from 'react';
 import Translate from 'react-translate-component';
+import HeroBanner from './hero'
 
 export default class ErrorPage extends React.Component {
   render() {
@@ -8,13 +9,13 @@ export default class ErrorPage extends React.Component {
     // Also, make it prettier.
 
     return (
-      <div className="hero">
+      <HeroBanner className="hero-primary">
         <div className="container">
           <h1 className="text-center">
             <Translate content="error.notFound" />
           </h1>
         </div>
-      </div>
+      </HeroBanner>
     );
   }
 }

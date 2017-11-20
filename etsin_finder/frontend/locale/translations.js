@@ -1,81 +1,109 @@
 import counterpart from 'counterpart';
 
 counterpart.registerTranslations('en', {
-  slogan: 'Research data finder',
   addDataset: 'Add dataset',
-  nav: {
-    datasets: 'Datasets',
-    home: 'Home',
-    organizations: 'Organizations',
-    help: 'Help & About',
+  dataset: {
+    access_locked: 'Restricted Access',
+    access_open: 'Open Access',
+    access_rights: 'Access rights statement',
+    contributor: {
+      plrl: 'Contributors',
+      snglr: 'Contributor',
+    },
+    creator: {
+      plrl: 'Creators',
+      snglr: 'Creator',
+    },
+    curator: 'Curator',
+    dl: {
+      download: 'Download',
+      files: 'Files',
+      name: 'Name',
+      size: 'Size',
+    },
+    doi: 'DOI',
+    field_of_science: 'Field of science',
+    funder: 'Funder',
+    infrastructure: 'Infrastructure',
+    keywords: 'Keywords',
+    license: 'License',
+    permanent_link: 'Permanent link to this page',
+    project: 'Project',
+    publisher: 'Publisher',
+    spatial_coverage: 'Spatial Coverage',
+    temporal_coverage: 'Temporal Coverage',
+  },
+  error: {
+    notFound: 'Couldn\'t find metadata for given id',
   },
   home: {
     title: 'Search datasets',
   },
-  dataset: {
-    dl: {
-      files: 'Files',
-      name: 'Name',
-      size: 'Size',
-      download: 'Download',
+  nav: {
+    datasets: 'Datasets',
+    help: 'Help & About',
+    home: 'Home',
+    organizations: 'Organizations',
+  },
+  results: {
+    amount: {
+      plrl: '%(amount)s results',
+      snglr: '%(amount)s result',
     },
-    creator: { snglr: 'Creator', plrl: 'Creators' },
-    contributor: { snglr: 'Contributor', plrl: 'Contributors' },
-    publisher: 'Publisher',
-    doi: 'DOI',
-    project: 'Project',
-    field_of_science: 'Field of science',
-    keywords: 'Keywords',
-    spatial_coverage: 'Spatial Coverage',
-    temporal_coverage: 'Temporal Coverage',
-    license: 'License',
-    access_rights: 'Access rights statement',
-    funder: 'Funder',
-    curator: 'Curator',
-    infrastructure: 'Infrastructure',
-    permanent_link: 'Permanent link to this page',
   },
-  error: {
-    notFound: "Couldn't find metadata for given id",
-  },
+  slogan: 'Research data finder',
 });
 
 counterpart.registerTranslations('fi', {
-  slogan: 'Tutkimustenhaku palvelu',
   addDataset: 'Lisää aineisto',
-  nav: {
-    datasets: 'Aineistot',
-    home: 'Koti',
-    organizations: 'Organisaatiot',
-    help: 'Ohjeet & Info',
-  },
-  home: {
-    title: 'Etsi aineistoa',
-  },
   dataset: {
+    access_locked: 'Rajattu käyttöoikeus',
+    access_open: 'Avoin',
+    access_rights: 'Saatavuus',
+    contributor: {
+      plrl: 'Muut tekijät',
+      snglr: 'Muu tekijä',
+    },
+    creator: {
+      plrl: 'Tekijät',
+      snglr: 'Tekijä',
+    },
+    curator: 'Hoivaaja',
     dl: {
+      download: 'Lataa',
       files: 'Tiedostot',
       name: 'Nimi',
       size: 'Koko',
-      download: 'Lataa',
     },
-    creator: { snglr: 'Tekijä', plrl: 'Tekijät' },
-    contributor: { snglr: 'Muu tekijä', plrl: 'Muut tekijät' },
-    publisher: 'Julkaisija',
     doi: 'DOI',
-    project: 'Projekti',
     field_of_science: 'Tieteenala',
+    funder: 'Rahoittaja',
+    infrastructure: 'Infrastruktuuri',
     keywords: 'Keywords',
+    license: 'Lisenssi',
+    permanent_link: 'Pysyvä linkki tälle sivulle',
+    project: 'Projekti',
+    publisher: 'Julkaisija',
     spatial_coverage: 'Maantieteellinen kattavuus',
     temporal_coverage: 'Ajallinen kattavuus',
-    license: 'Lisenssi',
-    access_rights: 'Saatavuus',
-    funder: 'Rahoittaja',
-    curator: 'Hoivaaja',
-    infrastructure: 'Infrastruktuuri',
-    permanent_link: 'Pysyvä linkki tälle sivulle',
   },
   error: {
     notFound: 'Annetulle id:lle ei löytynyt metadataa',
   },
+  home: {
+    title: 'Etsi aineistoa',
+  },
+  nav: {
+    datasets: 'Aineistot',
+    help: 'Ohjeet & Info',
+    home: 'Koti',
+    organizations: 'Organisaatiot',
+  },
+  results: {
+    amount: {
+      plrl: '%(amount)s hakutulosta',
+      snglr: '%(amount)s hakutulos',
+    },
+  },
+  slogan: 'Tutkimustenhaku palvelu',
 });

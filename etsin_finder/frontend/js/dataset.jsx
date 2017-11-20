@@ -11,6 +11,7 @@ import ErrorPage from './components/errorPage'
 import Identifier from './components/identifier'
 import ErrorBoundary from './components/errorBoundary'
 import DsTabs from './components/dsTabs'
+import checkDataLang from './utils/checkDataLang'
 
 class Dataset extends React.Component {
   constructor(props) {
@@ -20,12 +21,14 @@ class Dataset extends React.Component {
     this.url = this.props.Stores.Env.metaxUrl
     this.state = {
       dataset: [],
-      error: '',
+      error: false,
     }
 
     this.goBack = this.goBack.bind(this)
+    this.getData = this.getData.bind(this)
     this.updateData = this.updateData.bind(this)
   }
+
   componentDidMount() {
     this.getData(this.props.match.params.identifier)
   }
@@ -41,12 +44,13 @@ class Dataset extends React.Component {
     }
     axios.get(`${this.url}/rest/datasets/${dataid}.json`)
       .then((res) => {
+        console.log(res.data)
         const dataset = res.data;
         this.setState({ dataset });
         this.updateData()
       })
-      .catch((res) => {
-        this.setState({ error: res });
+      .catch((error) => {
+        this.setState({ error });
       });
   }
 
@@ -55,28 +59,31 @@ class Dataset extends React.Component {
   }
 
   updateData() {
-    const { currentLang } = this.props.Stores.Locale
-    this.setState({ currentLang })
     const researchDataset = this.state.dataset.research_dataset
-    const titles = researchDataset.title
+    this.setState({ title: researchDataset.title })
 
-    this.setState({ title: titles[this.state.currentLang] })
-
-    const description = researchDataset.description.filter((single) => {
-      if (!single.en) {
-        return false
-      }
-      return true
-    })[0].en;
+    const description = researchDataset.description.map(single => (
+      checkDataLang(single)
+    ));
     this.setState({ description })
-    const { creator, contributor, issued } = this.state.dataset.research_dataset;
-    this.setState({ creator, contributor, issued })
+    const {
+      creator,
+      contributor,
+      issued,
+      rights_holder,
+    } = this.state.dataset.research_dataset;
+    this.setState({
+      creator,
+      contributor,
+      issued,
+      rights_holder,
+    })
     this.setState({ loaded: 'true' })
   }
 
   render() {
     // CASE 1: Houston, we have a problem
-    if (this.state.error !== '') {
+    if (this.state.error !== false) {
       return <ErrorPage />;
     }
 
@@ -88,24 +95,27 @@ class Dataset extends React.Component {
       return <div />;
     }
 
+    const { currentLang } = this.props.Stores.Locale
+
     return (
       <div className="container regular-row" pageid={this.props.match.params.identifier}>
         <div className="row">
           <div className="col-md-8">
+            <button className="btn btn-transparent nopadding btn-back" onClick={this.goBack}>
+              {'< Go back'}
+            </button>
             <ErrorBoundary>
               <DsTabs identifier={this.props.match.params.identifier} />
             </ErrorBoundary>
-            {/* <button className="btn btn-transparent nopadding btn-back" onClick={this.goBack}>
-              {'< Go back'}
-            </button> */}
             <ErrorBoundary>
               <Route
                 exact
                 path="/dataset/:identifier"
                 render={() => (
                   <DsContent
-                    title={this.state.title}
+                    title={checkDataLang(this.state.title, currentLang)}
                     creator={this.state.creator}
+                    rights_holder={this.state.rights_holder}
                     contributor={this.state.contributor}
                     issued={this.state.issued}
                     dataset={this.state.dataset.research_dataset}
@@ -135,7 +145,7 @@ class Dataset extends React.Component {
           </div>
           <div className="col-md-4">
             <ErrorBoundary>
-              <DsSidebar dataset={this.state.dataset} lang={this.state.currentLang} />
+              <DsSidebar dataset={this.state.dataset} lang={currentLang} />
             </ErrorBoundary>
           </div>
         </div>

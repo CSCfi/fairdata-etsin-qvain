@@ -8,10 +8,15 @@
 }
 .basic-info {
   margin-bottom: 1em;
+  p, span {
+    margin-bottom: 0;
+    font-size: 0.95em;
+    color: $color-gray;
+  }
 }
 
-.creator, .contributor {
-  margin-bottom: 0;
-  font-size: 0.9em;
-  color: $color-gray;
+.dsContent {
+  .description {
+    overflow-wrap: break-word;
+  }
 }

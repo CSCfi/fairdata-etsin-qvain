@@ -1,9 +1,7 @@
 .content {
-  .hero {
-    background-color: $color-primary;
-    color: $color-white;
-    min-height: 300px;
-    display: flex;
-    align-items: center;
-  }
+}
+.content-box {
+  overflow-x: hidden;
+  padding: 30px;
+  border: 2px solid $color-lightgray;
 }
