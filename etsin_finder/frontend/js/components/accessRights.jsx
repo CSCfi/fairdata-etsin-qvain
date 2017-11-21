@@ -62,3 +62,4 @@ class AccessRights extends Component {
 }
 
 export default inject('Stores')(observer(AccessRights))
+export const undecorated = AccessRights
