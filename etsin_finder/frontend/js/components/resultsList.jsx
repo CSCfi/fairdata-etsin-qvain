@@ -4,6 +4,7 @@ import { inject, observer } from 'mobx-react'
 
 import ListItem from './listItem'
 import Loader from './loader'
+import FilterResults from './filterResults'
 
 class ResultsList extends Component {
   constructor(props) {
@@ -38,9 +39,7 @@ class ResultsList extends Component {
               {this.props.results.length === 0
                 ? null
                 :
-                <div className="content-box search-filtering">
-                  Filtering
-                </div>
+                <FilterResults />
               }
             </div>
             <div className="col-lg-9">
