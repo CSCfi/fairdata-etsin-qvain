@@ -36,7 +36,7 @@ class SearchBar extends Component {
       q = '*.*'
     }
     this.props.loading() // loader on
-    axios.get(`https://30.30.30.30/es/metax/dataset/_search?q=${q}&pretty&size=100`)
+    axios.get(`/es/metax/dataset/_search?q=${q}&pretty&size=100`)
       .then((res) => {
         this.props.results(res)
         console.log(res)
