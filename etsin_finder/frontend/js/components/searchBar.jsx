@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
+import axios from 'axios'
 
 import ErrorBoundary from './errorBoundary'
 
@@ -17,13 +18,34 @@ class SearchBar extends Component {
   }
 
   getQuery() {
-    const query = this.props.match.params.query
+    const query = this.props.query
     if (query) {
       this.setState({ value: query })
       const searchBarInput = document.getElementById('searchBarInput');
       searchBarInput.focus();
       searchBarInput.setSelectionRange(query.length, query.lenght);
     }
+    if (this.props.results) {
+      this.getData(query)
+    }
+  }
+
+  getData(query) {
+    let q = query;
+    if (!query) {
+      q = '*.*'
+    }
+    this.props.loading() // loader on
+    axios.get(`https://30.30.30.30/es/metax/dataset/_search?q=${q}&pretty&size=100`)
+      .then((res) => {
+        this.props.results(res)
+        console.log(res)
+        this.props.loading() // loader off
+      })
+      .catch((err) => {
+        console.log(err)
+        this.props.loading() // loader off
+      });
   }
 
   handleChange(event) {
@@ -34,6 +56,9 @@ class SearchBar extends Component {
     event.preventDefault()
     const path = `/datasets/${this.state.value}`
     this.props.history.push(path)
+    if (this.props.results) {
+      this.getData(this.state.value)
+    }
   }
 
   render() {

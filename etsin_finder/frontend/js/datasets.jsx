@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import axios from 'axios'
 import Translate from 'react-translate-component'
 
 import HeroBanner from './components/hero'
@@ -11,36 +10,23 @@ export default class Datasets extends Component {
     super(props)
     this.state = {
       results: [],
+      loading: false,
     }
+    this.updateData = this.updateData.bind(this)
+    this.toggleLoading = this.toggleLoading.bind(this)
   }
 
-  componentDidMount() {
-    this.getData(this.props.match.params.query)
+  updateData(results) {
+    this.setState({
+      results: results.data.hits.hits,
+      total: results.data.hits.total,
+    })
   }
 
-  componentWillReceiveProps(newProps) {
-    this.getData(newProps.match.params.query)
-  }
-
-  getData(query) {
-    let q = query;
-    if (!query) {
-      q = '*.*'
-    }
-    this.setState({ loading: true })
-    axios.get(`https://30.30.30.30/es/metax/dataset/_search?q=${q}&pretty&size=100`)
-      .then((res) => {
-        this.setState({
-          results: res.data.hits.hits,
-          total: res.data.hits.total,
-        })
-        console.log(res)
-        this.setState({ loading: false })
-      })
-      .catch((err) => {
-        console.log(err)
-        this.setState({ loading: false })
-      });
+  toggleLoading() {
+    this.setState({
+      loading: !this.state.loading,
+    })
   }
 
   render() {
@@ -52,7 +38,11 @@ export default class Datasets extends Component {
               <h1>
                 <Translate content="home.title" />
               </h1>
-              <SearchBar />
+              <SearchBar
+                query={this.props.match.params.query}
+                loading={this.toggleLoading}
+                results={this.updateData}
+              />
             </div>
           </div>
         </HeroBanner>
