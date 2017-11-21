@@ -1,63 +1,35 @@
 import React, { Component } from 'react'
-import axios from 'axios'
 import Translate from 'react-translate-component'
-import { inject, observer } from 'mobx-react'
 
 import HeroBanner from './components/hero'
 import SearchBar from './components/searchBar'
-import ListItem from './components/listItem'
+import ResultsList from './components/resultsList'
 
-class Datasets extends Component {
+export default class Datasets extends Component {
   constructor(props) {
     super(props)
     this.state = {
       results: [],
+      loading: false,
     }
-    this.renderList = this.renderList.bind(this)
+    this.updateData = this.updateData.bind(this)
+    this.toggleLoading = this.toggleLoading.bind(this)
   }
 
-  componentDidMount() {
-    this.getData(this.props.match.params.query)
+  updateData(results) {
+    this.setState({
+      results: results.data.hits.hits,
+      total: results.data.hits.total,
+    })
   }
 
-  componentWillReceiveProps(newProps) {
-    this.getData(newProps.match.params.query)
-  }
-
-  getData(query) {
-    let q = query;
-    if (!query) {
-      q = '*.*'
-    }
-    axios.get(`https://30.30.30.30/es/metax/dataset/_search?q=${q}&pretty&size=100`)
-      .then((res) => {
-        this.setState({
-          results: res.data.hits.hits,
-          total: res.data.hits.total,
-        })
-        console.log(res)
-      })
-      .catch((err) => {
-        console.log(err)
-      });
-  }
-
-  renderList(lang) {
-    // console.time()
-    const list = this.state.results.map(single => (
-      <ListItem
-        key={single._id}
-        identifier={single._id}
-        item={single._source}
-        lang={lang}
-      />
-    ), this)
-    // console.timeEnd()
-    return list
+  toggleLoading() {
+    this.setState({
+      loading: !this.state.loading,
+    })
   }
 
   render() {
-    const { currentLang } = this.props.Stores.Locale
     return (
       <div>
         <HeroBanner className="hero-primary">
@@ -66,28 +38,21 @@ class Datasets extends Component {
               <h1>
                 <Translate content="home.title" />
               </h1>
-              <SearchBar />
+              <SearchBar
+                query={this.props.match.params.query}
+                loading={this.toggleLoading}
+                results={this.updateData}
+              />
             </div>
           </div>
         </HeroBanner>
-        <div className="container">
-          <div className="row regular-row">
-            <div className="col-lg-3">
-              <Translate className="results-amount" with={{ amount: this.state.total }} component="p" content={`results.amount.${this.state.total === 1 ? 'snglr' : 'plrl'}`} fallback="%(amount)s results" />
-              <div className="content-box">
-                Filtering
-              </div>
-            </div>
-            <div className="col-lg-9">
-              {this.state.results.length === 0
-                ? <div>Loading</div>
-                : this.renderList(currentLang)}
-            </div>
-          </div>
-        </div>
+        <ResultsList
+          results={this.state.results}
+          total={this.state.total}
+          loading={this.state.loading}
+          query={this.props.match.params.query}
+        />
       </div>
     );
   }
 }
-
-export default inject('Stores')(observer(Datasets))
