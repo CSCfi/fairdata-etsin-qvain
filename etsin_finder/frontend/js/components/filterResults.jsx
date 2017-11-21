@@ -20,6 +20,7 @@ export default class FilterResults extends Component {
         <div className="filter-section">
           <button className="filter-category" onClick={this.toggleFilter} >
             Aineistotyyppi
+            <i className="fa fa-angle-down fa-2x" aria-hidden="true" />
           </button>
           <div className="filter-items">
             <ul>
@@ -39,6 +40,7 @@ export default class FilterResults extends Component {
         <div className="filter-section">
           <button className="filter-category" onClick={this.toggleFilter}>
             Tieteenala
+            <i className="fa fa-angle-down fa-2x" aria-hidden="true" />
           </button>
           <div className="filter-items">
             <ul>
