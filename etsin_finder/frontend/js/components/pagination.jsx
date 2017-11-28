@@ -18,7 +18,9 @@ export default class Pagination extends Component {
   }
 
   componentWillReceiveProps(newProps) {
-    if (newProps.total) {
+    console.log('newProps')
+    if (Math.ceil(newProps.total / newProps.perPage) !== this.state.pageAmount || this.state.currentPage !== newProps.currentPage) {
+      console.log('')
       const pages = Math.ceil(newProps.total / newProps.perPage);
       this.setState({
         currentPage: newProps.currentPage,
@@ -30,11 +32,20 @@ export default class Pagination extends Component {
   }
 
   checkAround() {
-    this.checkBefore()
-    this.checkAfter()
+    console.log('checkPagination')
+    this.setState({
+      after: [],
+      before: [],
+      afterCounter: 0,
+      beforeCounter: 0,
+    }, () => {
+      this.checkBefore()
+      this.checkAfter()
+    })
   }
 
   checkBefore() {
+    console.log(`before: ${this.state.beforeCounter}`)
     this.setState({
       beforeCounter: this.state.beforeCounter += 1,
     }, () => {
@@ -51,10 +62,11 @@ export default class Pagination extends Component {
   }
 
   checkAfter() {
+    console.log(`after: ${this.state.afterCounter}`)
     this.setState({
       afterCounter: this.state.afterCounter += 1,
     }, () => {
-      if (this.state.currentPage + this.state.beforeCounter < this.state.pageAmount
+      if (this.state.currentPage + this.state.afterCounter < this.state.pageAmount
         && this.state.afterCounter < 6) {
         const newAfter = this.state.after.concat(this.state.currentPage + this.state.afterCounter)
         this.setState({
@@ -117,13 +129,27 @@ export default class Pagination extends Component {
       <div className="pagination-container">
         <p id="pagination-label" className="pagination-label sr-only" aria-hidden="true">Pagination</p>
         <ul className="pagination">
-          {this.state.before.slice(0).reverse().map(number => (
-            this.singlePage(number, true)
-          ))}
-          {this.singlePage(this.state.currentPage, false)}
-          {this.state.after.map(number => (
-            this.singlePage(number, true)
-          ))}
+          { // first page
+            this.state.currentPage !== 1
+              ? this.singlePage(1, true)
+              : null
+          }
+          { // pages before
+            this.state.before.slice(0).reverse().map(number => (
+              this.singlePage(number, true)
+            ))
+          }
+          {this.singlePage(this.state.currentPage, false)} {/* currentpage */}
+          { // pages after
+            this.state.after.map(number => (
+              this.singlePage(number, true)
+            ))
+          }
+          { // last page
+            this.state.currentPage !== this.state.pageAmount
+              ? this.singlePage(this.state.pageAmount, true)
+              : null
+          }
         </ul>
       </div>
     );

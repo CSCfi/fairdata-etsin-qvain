@@ -29,13 +29,16 @@ export default class Datasets extends Component {
 
   getData() {
     this.toggleLoading()
+    console.log('getData')
     searchQuery(this.state.query, this.state.resSize, this.state.pageNum)
       .then((res) => {
+        console.log('got data')
         this.setState({
           results: res.data.hits.hits,
           total: res.data.hits.total,
-        })
-        this.toggleLoading() // loader off
+        }, () => (
+          this.toggleLoading() // loader off
+        ))
       })
       .catch((err) => {
         console.log(err)
@@ -64,6 +67,7 @@ export default class Datasets extends Component {
   }
 
   render() {
+    console.log('---- datasets render ----')
     return (
       <div>
         <HeroBanner className="hero-primary">
@@ -80,12 +84,12 @@ export default class Datasets extends Component {
             </div>
           </div>
         </HeroBanner>
-        <ResultsList
+        {/* <ResultsList
           results={this.state.results}
           total={this.state.total}
           loading={this.state.loading}
           query={this.state.query}
-        />
+        /> */}
         <Pagination
           total={this.state.total}
           perPage={this.state.resSize}
