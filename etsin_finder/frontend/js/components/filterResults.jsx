@@ -45,10 +45,14 @@ export default class FilterResults extends Component {
           <div className="filter-items">
             <ul>
               <li>
-                Luonnontiede
+                <button onClick={this.updateFilter} disabled>
+                  Luonnontiede
+                </button>
               </li>
               <li>
-                Kielet
+                <button onClick={this.updateFilter} disabled>
+                  Kielet
+                </button>
               </li>
             </ul>
           </div>

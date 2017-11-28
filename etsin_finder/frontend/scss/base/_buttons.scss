@@ -1,5 +1,6 @@
 .btn {
   cursor: pointer;
+
   &.btn-etsin {
     background-color: $color-primary;
     color: white;
@@ -8,11 +9,44 @@
       background-color: darken($color-primary, 5);
     }
   }
+
   &.btn-etsin-outline { // outline button
     background-color: transparent;
     color: $color-primary;
     border: 2px solid $color-primary;
   }
+
+  &.btn-select {
+    background-color: transparent;
+    color: $color-primary;
+    border: 2px solid $color-primary;
+    transition: border-radius 0.2s ease 0.5s;
+    &:focus {
+      outline: none;
+      box-shadow: none;
+    }
+    &:hover {
+      background-color: $color-primary;
+      color: white;
+    }
+    &.open {
+      border-radius: 5px 5px 0px 0px;
+      transition: border-radius 0.2s ease;
+    }
+  }
+
+  &.btn-select-options {
+    color: $color-gray;
+    border-radius: 0px;
+    &.active {
+      background-color: $color-primary;
+      color: white;
+    }
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
   &.btn-transparent {
     background-color: transparent;
     color: $color-gray;
@@ -23,6 +57,7 @@
       background-color: transparent;
     }
   }
+
   &.btn-gray {
     line-height: 0;
     padding: 0.5em 1.5em;
@@ -30,9 +65,11 @@
     background-color: $color-lightgray;
     color: $color-dark;
   }
+
   &:disabled {
     cursor: initial;
   }
+
   &.btn-back {
     color: $color-primary;
   }

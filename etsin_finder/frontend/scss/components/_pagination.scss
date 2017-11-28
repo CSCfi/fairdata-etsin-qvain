@@ -1,0 +1,27 @@
+$pages-item-size: 40px;
+
+.pagination {
+  justify-content: center;
+  .pagination-item {
+    display: block;
+    text-align: center;
+    margin: 0 0.2em;
+    background-color: $color-lightgray;
+    width: $pages-item-size;
+    height: $pages-item-size;
+    border-radius: $pages-item-size;
+    line-height: $pages-item-size;
+    color: black;
+    &.current {
+      background-color: $color-primary;
+      color: white;
+    }
+    &.pagination-rest {
+      background-color: transparent;
+      width: $pages-item-size - 10px;
+      height: $pages-item-size - 10px;
+      border-radius: $pages-item-size - 10px;
+      line-height: $pages-item-size - 10px;
+    }
+  }
+}
