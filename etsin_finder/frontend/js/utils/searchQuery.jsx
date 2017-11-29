@@ -4,7 +4,7 @@ const searchQuery = (query, size, pageNum) => (
   new Promise((resolve, reject) => {
     let q = query;
     if (!query) {
-      q = '*.*'
+      q = '*:*'
     }
     let page = '';
     if (pageNum > 1) {
