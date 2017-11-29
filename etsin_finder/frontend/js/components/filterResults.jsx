@@ -11,7 +11,7 @@ export default class FilterResults extends Component {
   }
 
   updateFilter(event) {
-    alert(event.target.innerHTML)
+    console.log(event.target.innerHTML)
   }
 
   render() {

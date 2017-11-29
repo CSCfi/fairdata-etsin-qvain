@@ -12,7 +12,9 @@ export default class DsContent extends Component {
       <div className="dsContent">
         <div className="d-flex align-items-center dataset-title">
           <h1 className="mr-auto">{this.props.title}</h1>
-          <AccessRights access_rights={checkNested(this.props.dataset, 'access_rights', 'type') ? this.props.dataset.access_rights : null} />
+          <ErrorBoundary>
+            <AccessRights access_rights={checkNested(this.props.dataset, 'access_rights', 'type') ? this.props.dataset.access_rights : null} />
+          </ErrorBoundary>
         </div>
         <div className="d-flex justify-content-between basic-info">
           <div>

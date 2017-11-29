@@ -50,6 +50,22 @@ class ResultsList extends Component {
 
   render() {
     const { currentLang } = this.props.Stores.Locale
+    if (this.state.results.length === 0) {
+      return (
+        <div className="container">
+          <div className="row regular-row">
+            <div className="col-lg-12">
+              <div className="results-zero text-center">
+                <span>Your search -
+                  <strong> {this.props.query} </strong>
+                  - did not match any documents
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )
+    }
     return (
       <div className="container">
         {this.props.loading
@@ -65,7 +81,12 @@ class ResultsList extends Component {
               }
             </div>
             <div className="col-lg-9">
-              <SortResults sorting={this.updateSorting} />
+              <div className="d-flex align-items-end justify-content-between">
+                <p>
+                  <span className="text-muted">Results for query: </span><strong>{this.props.query}</strong>
+                </p>
+                <SortResults sorting={this.updateSorting} />
+              </div>
               {this.props.results.length === 0
                 ?
                   <div className="results-zero">

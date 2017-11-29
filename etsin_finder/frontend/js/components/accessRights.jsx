@@ -11,8 +11,8 @@ class AccessRights extends Component {
     let title = { en: 'Restricted Access' }
     if (this.props.access_rights !== undefined && this.props.access_rights !== null) {
       title = this.props.access_rights.type
-        ? this.props.access_rights.type.map(item => item.label)[0]
-        : this.props.access_rights.license.map(item => item.label)[0]
+        ? this.props.access_rights.type.map(item => item.pref_label)[0]
+        : this.props.access_rights.license.map(item => item.pref_label)[0]
     }
     this.lang = this.props.Stores.Locale.currentLang
     this.state = {
