@@ -4,29 +4,68 @@ import { inject, observer } from 'mobx-react'
 
 import ListItem from './listItem'
 import Loader from './loader'
+import FilterResults from './filterResults'
+import SortResults from './sortResults'
 
 class ResultsList extends Component {
   constructor(props) {
     super(props)
+
+    this.state = {
+      results: this.props.results,
+      sort: '',
+    }
     this.renderList = this.renderList.bind(this)
+    this.updateSorting = this.updateSorting.bind(this)
+  }
+
+  componentWillReceiveProps(newProps) {
+    this.setState({
+      results: newProps.results,
+    })
+  }
+
+  updateSorting(sort) {
+    this.setState({
+      sort,
+    })
+    this.renderList(this.props.Stores.Locale)
   }
 
   renderList(lang) {
     // console.time()
-    const list = this.props.results.map(single => (
+    const list = this.state.results.map(single => (
       <ListItem
         key={single._id}
         identifier={single._id}
         item={single._source}
         lang={lang}
+        sort={this.state.sort}
       />
     ), this)
     // console.timeEnd()
     return list
   }
 
+
   render() {
     const { currentLang } = this.props.Stores.Locale
+    if (this.state.results.length === 0) {
+      return (
+        <div className="container">
+          <div className="row regular-row">
+            <div className="col-lg-12">
+              <div className="results-zero text-center">
+                <span>Your search -
+                  <strong> {this.props.query} </strong>
+                  - did not match any documents
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )
+    }
     return (
       <div className="container">
         {this.props.loading
@@ -35,15 +74,24 @@ class ResultsList extends Component {
           <div className="row regular-row">
             <div className="col-lg-3">
               <Translate className="results-amount" with={{ amount: this.props.total }} component="p" content={`results.amount.${this.props.total === 1 ? 'snglr' : 'plrl'}`} fallback="%(amount)s results" />
-              {this.props.results.length === 0
+              {this.state.results.length === 0
                 ? null
                 :
-                <div className="content-box search-filtering">
-                  Filtering
-                </div>
+                <FilterResults />
               }
             </div>
             <div className="col-lg-9">
+              <div className={`${this.props.query ? 'd-flex ' : ''}align-items-end justify-content-between`}>
+                {
+                  this.props.query
+                  ?
+                    <p>
+                      <span className="text-muted">Results for query: </span><strong>{this.props.query}</strong>
+                    </p>
+                  : null
+                }
+                <SortResults sorting={this.updateSorting} />
+              </div>
               {this.props.results.length === 0
                 ?
                   <div className="results-zero">

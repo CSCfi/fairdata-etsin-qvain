@@ -1,0 +1,42 @@
+$select-width: 10em;
+
+.sortResults {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1em;
+  .select-button {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    min-width: $select-width;
+    .btn {
+      width: 100%;
+      text-align: right;
+    }
+  }
+  .options {
+    position: absolute;
+    z-index: 10;
+    border: 0px solid $color-primary;
+    min-width: $select-width;
+    border-radius: 0px 0px 5px 5px;
+    max-height: 0px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: max-height 0.5s ease, border 0.3s ease 0.4s;
+    &.open {
+      transition: max-height 0.5s ease, border 0.3s ease;
+      max-height: 150px;
+      border-left: 2px solid $color-primary;
+      border-right: 2px solid $color-primary;
+      border-bottom: 2px solid $color-primary;
+    }
+    .btn {
+      text-align: right;
+      &:focus {
+        text-decoration: underline;
+      }
+    }
+  }
+}

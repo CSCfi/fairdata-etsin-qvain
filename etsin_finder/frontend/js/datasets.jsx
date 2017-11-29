@@ -4,6 +4,8 @@ import Translate from 'react-translate-component'
 import HeroBanner from './components/hero'
 import SearchBar from './components/searchBar'
 import ResultsList from './components/resultsList'
+import Pagination from './components/pagination'
+import searchQuery from './utils/searchQuery'
 
 export default class Datasets extends Component {
   constructor(props) {
@@ -11,15 +13,48 @@ export default class Datasets extends Component {
     this.state = {
       results: [],
       loading: false,
+      pageNum: 1,
+      resSize: 20,
+      query: this.props.match.params.query,
     }
-    this.updateData = this.updateData.bind(this)
+    this.getData = this.getData.bind(this)
+    this.updateQuery = this.updateQuery.bind(this)
+    this.updatePage = this.updatePage.bind(this)
     this.toggleLoading = this.toggleLoading.bind(this)
   }
 
-  updateData(results) {
+  componentDidMount() {
+    this.getData()
+  }
+
+  getData() {
+    this.toggleLoading()
+    searchQuery(this.state.query, this.state.resSize, this.state.pageNum)
+      .then((res) => {
+        this.setState({
+          results: res.data.hits.hits,
+          total: res.data.hits.total,
+        }, () => (
+          this.toggleLoading() // loader off
+        ))
+      })
+      .catch((err) => {
+        console.log(err)
+        this.toggleLoading() // loader off
+      })
+  }
+
+  updateQuery(query) {
+    this.setState({ query }, () => {
+      this.getData()
+    })
+  }
+
+  updatePage(page) {
     this.setState({
-      results: results.data.hits.hits,
-      total: results.data.hits.total,
+      pageNum: page,
+    }, () => {
+      this.getData()
     })
   }
 
@@ -39,9 +74,9 @@ export default class Datasets extends Component {
                 <Translate content="home.title" />
               </h1>
               <SearchBar
-                query={this.props.match.params.query}
-                loading={this.toggleLoading}
-                results={this.updateData}
+                query={this.state.query}
+                page={this.state.pageNum}
+                updateQuery={this.updateQuery}
               />
             </div>
           </div>
@@ -50,7 +85,13 @@ export default class Datasets extends Component {
           results={this.state.results}
           total={this.state.total}
           loading={this.state.loading}
-          query={this.props.match.params.query}
+          query={this.state.query}
+        />
+        <Pagination
+          total={this.state.total}
+          perPage={this.state.resSize}
+          currentPage={this.state.pageNum}
+          updatePage={this.updatePage}
         />
       </div>
     );
