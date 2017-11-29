@@ -1,6 +1,7 @@
 $pages-item-size: 40px;
 
 .pagination {
+  margin-top: 1em;
   justify-content: center;
   .pagination-item {
     display: block;
@@ -18,10 +19,10 @@ $pages-item-size: 40px;
     }
     &.pagination-rest {
       background-color: transparent;
-      width: $pages-item-size - 10px;
-      height: $pages-item-size - 10px;
-      border-radius: $pages-item-size - 10px;
-      line-height: $pages-item-size - 10px;
+      width: $pages-item-size;
+      height: $pages-item-size;
+      border-radius: $pages-item-size;
+      line-height: $pages-item-size;
     }
   }
 }

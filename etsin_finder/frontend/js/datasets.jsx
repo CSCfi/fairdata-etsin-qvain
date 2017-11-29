@@ -14,7 +14,7 @@ export default class Datasets extends Component {
       results: [],
       loading: false,
       pageNum: 1,
-      resSize: 50,
+      resSize: 20,
       query: this.props.match.params.query,
     }
     this.getData = this.getData.bind(this)
@@ -29,10 +29,8 @@ export default class Datasets extends Component {
 
   getData() {
     this.toggleLoading()
-    console.log('getData')
     searchQuery(this.state.query, this.state.resSize, this.state.pageNum)
       .then((res) => {
-        console.log('got data')
         this.setState({
           results: res.data.hits.hits,
           total: res.data.hits.total,
@@ -67,7 +65,6 @@ export default class Datasets extends Component {
   }
 
   render() {
-    console.log('---- datasets render ----')
     return (
       <div>
         <HeroBanner className="hero-primary">
@@ -84,12 +81,12 @@ export default class Datasets extends Component {
             </div>
           </div>
         </HeroBanner>
-        {/* <ResultsList
+        <ResultsList
           results={this.state.results}
           total={this.state.total}
           loading={this.state.loading}
           query={this.state.query}
-        /> */}
+        />
         <Pagination
           total={this.state.total}
           perPage={this.state.resSize}
