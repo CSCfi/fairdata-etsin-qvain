@@ -81,10 +81,15 @@ class ResultsList extends Component {
               }
             </div>
             <div className="col-lg-9">
-              <div className="d-flex align-items-end justify-content-between">
-                <p>
-                  <span className="text-muted">Results for query: </span><strong>{this.props.query}</strong>
-                </p>
+              <div className={`${this.props.query ? 'd-flex ' : ''}align-items-end justify-content-between`}>
+                {
+                  this.props.query
+                  ?
+                    <p>
+                      <span className="text-muted">Results for query: </span><strong>{this.props.query}</strong>
+                    </p>
+                  : null
+                }
                 <SortResults sorting={this.updateSorting} />
               </div>
               {this.props.results.length === 0
