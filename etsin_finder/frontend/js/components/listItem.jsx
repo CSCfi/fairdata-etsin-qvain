@@ -36,9 +36,9 @@ export default class ListItem extends Component {
                 <div className="basic-info">
                   <p>
                     {
-                      this.props.item.field_of_science
+                      Array.isArray(this.props.item.field_of_science)
                         ? this.props.item.field_of_science.map(field => (
-                          checkDataLang(field.label, this.props.lang)
+                          checkDataLang(field.pref_label, this.props.lang)
                         )) : null
                     }
                   </p>
