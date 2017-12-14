@@ -39,7 +39,7 @@ class ResultsList extends Component {
               {this.props.results.length === 0
                 ? null
                 :
-                <FilterResults />
+                <FilterResults aggregations={this.props.aggregations} />
               }
             </div>
             <div className="col-lg-9">

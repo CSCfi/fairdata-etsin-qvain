@@ -20,6 +20,7 @@ export default class Datasets extends Component {
     this.setState({
       results: results.data.hits.hits,
       total: results.data.hits.total,
+      aggregations: results.data.aggregations,
     })
   }
 
@@ -48,6 +49,7 @@ export default class Datasets extends Component {
         </HeroBanner>
         <ResultsList
           results={this.state.results}
+          aggregations={this.state.aggregations}
           total={this.state.total}
           loading={this.state.loading}
           query={this.props.match.params.query}

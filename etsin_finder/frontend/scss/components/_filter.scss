@@ -43,15 +43,17 @@ $filter-padding: 1em 1.5em;
       padding: 0;
     }
     &.open {
-      max-height: 100px;
+      max-height: inherit;
       padding: $filter-padding;
     }
     button {
       background: transparent;
       border: none;
       padding: 0;
-      margin: 0;
+      margin: 0 0 5px 0;
+      line-height: 16px;
       color: $color-dark;
+      text-align: left;
       &:focus {
         outline: none;
         color: $color-primary;

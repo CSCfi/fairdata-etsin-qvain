@@ -4,4 +4,4 @@ const checkDataLang = (object, lang) => {
   return object[Object.keys(object)[0]];
 }
 
-export default checkDataLang
+export default checkDataLang;
