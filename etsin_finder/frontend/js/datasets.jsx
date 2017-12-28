@@ -17,6 +17,7 @@ class Datasets extends Component {
     };
 
     this.getData = this.getData.bind(this);
+    this.handleFilter = this.handleFilter.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.toggleLoading = this.toggleLoading.bind(this);
     this.updateData = this.updateData.bind(this);
@@ -117,6 +118,11 @@ class Datasets extends Component {
     });
   }
 
+  handleFilter(term, value) {
+    console.log(term);
+    console.log(value);
+  }
+
   toggleLoading() {
     this.setState({
       loading: !this.state.loading,
@@ -145,6 +151,7 @@ class Datasets extends Component {
           total={this.state.total}
           loading={this.state.loading}
           query={this.props.match.params.query}
+          handleFilter={this.handleFilter}
         />
       </div>
     );

@@ -8,8 +8,6 @@ class FilterSection extends Component {
   constructor(props) {
     super(props);
 
-    this.updateFilter = this.updateFilter.bind(this);
-
     // TODO: should this be in an app-level storage?
     this.aggregations = {
       organization: {
@@ -50,11 +48,6 @@ class FilterSection extends Component {
     event.target.nextSibling.classList.toggle('open')
   }
 
-  updateFilter(e, key) {
-    console.log(this.termName);
-    console.log(key);
-  }
-
   render() {
     // Don't render unknown or empty sections
     if (this.aggregations[this.props.aggregation] === undefined
@@ -77,7 +70,7 @@ class FilterSection extends Component {
                 item={item}
                 aggregationName={this.aggregationName}
                 term={this.termName}
-                onClick={this.updateFilter}
+                handleFilter={this.props.handleFilter}
               />
             )) }
           </ul>
