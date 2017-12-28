@@ -1,123 +1,33 @@
 import React, { Component } from 'react'
-import { withRouter } from 'react-router-dom'
-import axios from 'axios'
 
 import ErrorBoundary from './errorBoundary'
 
-class SearchBar extends Component {
+export default class SearchBar extends Component {
   constructor(props) {
     super(props);
-    this.state = { query: '' };
+
+    // Handle possible empty initial query
+    this.state = { query: this.props.query || '' };
 
     this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentDidMount() {
-    this.getQuery();
-  }
-
-  getQuery() {
-    const query = this.props.query
-    if (query) {
-      this.setState({ query });
+    if (this.props.query) {
       const searchBarInput = document.getElementById('searchBarInput');
       searchBarInput.focus();
-      searchBarInput.setSelectionRange(query.length, query.lenght);
+      searchBarInput.setSelectionRange(this.props.query.length, this.props.query.length);
     }
-    if (this.props.results) {
-      this.getData(query);
-    }
-  }
-
-  // TODO: refactor all of this, atm not readable
-  getData(query) {
-    // Handle user search query
-    let queryObject;
-    if (query) {
-      queryObject = {
-        multi_match: {
-          query,
-          fields: ['title.en', 'title.fi'], // todo
-        },
-      }
-    } else {
-      // No user search query, fetch all docs
-      queryObject = {
-        match_all: {},
-      }
-    }
-
-    this.props.loading() // loader on
-    axios.post('/es/metax/dataset/_search', {
-      size: 20,
-      query: queryObject,
-      aggregations: {
-        organization: {
-          terms: {
-            field: 'organization_name.keyword',
-          },
-        },
-        creator: {
-          terms: {
-            field: 'creator_name.keyword',
-          },
-        },
-        field_of_science_en: {
-          terms: {
-            field: 'field_of_science.pref_label.en.keyword',
-          },
-        },
-        field_of_science_fi: {
-          terms: {
-            field: 'field_of_science.pref_label.fi.keyword',
-          },
-        },
-        keyword_en: {
-          terms: {
-            field: 'theme.label.en.keyword',
-          },
-        },
-        keyword_fi: {
-          terms: {
-            field: 'theme.label.fi.keyword',
-          },
-        },
-      },
-    }, {
-      auth: { // TODO obvs this must be safer
-        username: 'etsin',
-        password: 'test-etsin',
-      },
-    })
-      .then((res) => {
-        this.props.results(res)
-        console.log(res)
-        this.props.loading() // loader off
-      })
-      .catch((err) => {
-        console.log(err)
-        this.props.loading() // loader off
-      });
   }
 
   handleChange(event) {
     this.setState({ query: event.target.value });
   }
 
-  handleSubmit(event) {
-    event.preventDefault();
-    const path = `/datasets/${this.state.query}`;
-    this.props.history.push(path);
-    if (this.props.results) {
-      this.getData(this.state.query)
-    }
-  }
-
   render() {
     return (
       <ErrorBoundary>
-        <form onSubmit={this.handleSubmit}>
+        <form onSubmit={e => this.props.handleSubmit(e, this.state.query)}>
           <div className="search">
             <div className="searchBar inner-addon right-addon">
               <i className="fa fa-search fa-2x" aria-hidden="true" />
@@ -129,5 +39,3 @@ class SearchBar extends Component {
     );
   }
 }
-
-export default withRouter(SearchBar)

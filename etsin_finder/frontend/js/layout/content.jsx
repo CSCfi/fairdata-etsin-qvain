@@ -14,13 +14,7 @@ export default class Content extends React.Component {
           component={SearchPage}
         />
         <Route
-          exact
-          path="/datasets/"
-          component={Datasets}
-        />
-        <Route
-          exact
-          path="/datasets/:query"
+          path="/datasets/:query?"
           component={Datasets}
         />
         <Route path="/dataset/:identifier" component={Dataset} />
