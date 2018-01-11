@@ -19,3 +19,22 @@
   background-color: $color-error;
   padding: 20px 0;
 }
+
+.skip-to-content {
+  position: absolute;
+	left: 0;
+  top: 0;
+  max-width: 1px;
+  max-height: 0px;
+  margin-left: 0;
+  text-align: center;
+  overflow: hidden;
+  padding: 0;
+  list-style: outside none;
+  background-color: transparent;
+  &:focus {
+    padding: 0.5em 1em;
+    max-width: 200px;
+    max-height: 50px;
+  }
+}

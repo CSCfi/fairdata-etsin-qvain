@@ -19,14 +19,29 @@ if (process.env.NODE_ENV === 'test') {
 }
 
 export default class App extends Component {
+  constructor(props) {
+    super(props)
+    this.focusContent = this.focusContent.bind(this);
+  }
+
+  focusContent() {
+    this.content.focus()
+  }
+
   render() {
     return (
       <div className="app">
+        <button
+          className="skip-to-content"
+          onClick={this.focusContent}
+        >
+          Skip to content
+        </button>
         <Provider Stores={Stores}>
           <Router history={Stores.history}>
             <ErrorBoundary>
               <Header />
-              <Content />
+              <Content contentRef={(content) => { this.content = content }} />
               <Footer />
             </ErrorBoundary>
           </Router>

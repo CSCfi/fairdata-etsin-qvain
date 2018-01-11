@@ -7,7 +7,7 @@ import SearchPage from '../search';
 export default class Content extends React.Component {
   render() {
     return (
-      <div className="content">
+      <div id="content" className="content" ref={this.props.contentRef} tabIndex="-1" >
         <Route
           exact
           path="/"
