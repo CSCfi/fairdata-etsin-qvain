@@ -46,6 +46,10 @@ class FilterSection extends Component {
 
   toggleFilter(event) {
     event.target.nextSibling.classList.toggle('open')
+    const buttons = event.target.nextSibling.children[0].querySelectorAll('button');
+    buttons.forEach((button) => {
+      button.tabIndex = (button.tabIndex === -1) ? 0 : -1
+    })
   }
 
   render() {

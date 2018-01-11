@@ -3,6 +3,7 @@ $filter-padding: 1em 1.5em;
 .search-filtering {
   margin-bottom: 1em;
   .filter-category {
+    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -22,12 +23,12 @@ $filter-padding: 1em 1.5em;
       display: flex;
       align-items: center;
     }
-    &:focus {
+    &:focus, &:hover {
       outline: none;
       background-color: mix($color-lightgray, black, 90);
       border-color: mix($color-lightgray, black, 90);
     }
-    &:focus + .filter-items {
+    &:focus + .filter-items, &:hover + .filter-items {
       border-color: mix($color-lightgray, black, 90);
     }
   }
@@ -41,10 +42,23 @@ $filter-padding: 1em 1.5em;
       list-style-type: none;
       margin: 0;
       padding: 0;
+      transition: all 0.3s ease;
+      li {
+        max-height: 0;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        button:hover {
+          text-decoration: underline;
+          cursor: pointer;
+        }
+      }
     }
     &.open {
-      max-height: inherit;
+      max-height: 1000px;
       padding: $filter-padding;
+      li {
+        max-height: 50px;
+      }
     }
     button {
       background: transparent;
