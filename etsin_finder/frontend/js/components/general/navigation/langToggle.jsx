@@ -11,11 +11,10 @@ export default class LangToggle extends Component {
     };
     this.changeLang = this.changeLang.bind(this);
   }
-  changeLang(e) {
-    counterpart.setLocale(e.target.innerHTML);
-    Locale.currentLang = e.target.innerHTML;
+  changeLang() {
+    Locale.toggleLang()
     this.setState({
-      language: e.target.innerHTML,
+      language: Locale.currentLang,
     });
   }
 
