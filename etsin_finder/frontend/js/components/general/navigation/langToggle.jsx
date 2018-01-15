@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import counterpart from 'counterpart';
-import '../../locale/translations';
-import Locale from '../stores/view/language';
+import '../../../../locale/translations';
+import Locale from '../../../stores/view/language';
 
 export default class LangToggle extends Component {
   constructor(props) {

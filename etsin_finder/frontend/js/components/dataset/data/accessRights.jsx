@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import Translate from 'react-translate-component'
 import { inject, observer } from 'mobx-react'
 
-import checkNested from '../utils/checkNested'
-import checkDataLang from '../utils/checkDataLang'
+import checkNested from '../../../utils/checkNested'
+import checkDataLang from '../../../utils/checkDataLang'
 
 class AccessRights extends Component {
   constructor(props) {
@@ -22,7 +22,10 @@ class AccessRights extends Component {
   accessRights() {
     // this is not the right place to check. type if array
     if (this.props.access_rights !== undefined && this.props.access_rights !== null) {
-      if (checkNested(this.props.access_rights, 'type') && !this.props.access_rights.type.filter(item => item.identifier !== 'http://purl.org/att/es/reference_data/access_type/access_type_open_access')[0]) {
+      if (checkNested(this.props.access_rights, 'type')
+      && !this.props.access_rights.type.filter(item =>
+        item.identifier !== 'http://purl.org/att/es/reference_data/access_type/access_type_open_access')[0]
+      ) {
         return (
           this.openAccess()
         )

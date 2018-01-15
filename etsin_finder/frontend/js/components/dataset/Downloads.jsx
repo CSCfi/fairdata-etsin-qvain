@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Translate from 'react-translate-component';
 
-export default class DsDownloads extends Component {
+export default class Downloads extends Component {
   render() {
     return (
       <div className="dsDownloads content-box">

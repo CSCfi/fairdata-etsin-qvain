@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { observer } from 'mobx-react'
-import Locale from '../stores/view/language'
+import Locale from '../../../stores/view/language'
 
 @observer
 export default class DateFormat extends Component {

@@ -9,17 +9,17 @@
 @import 'layout/header';
 @import 'layout/content';
 @import 'layout/footer';
-@import 'layout/dataset';
 
 /* Components */
-@import 'components/dsContent';
-@import 'components/dsDownloads';
-@import 'components/dsSidebar';
+@import 'components/dataset/dataset';
+@import 'components/dataset/dsContent';
+@import 'components/dataset/dsDownloads';
+@import 'components/dataset/dsSidebar';
+@import 'components/dataset/accessRights';
+@import 'components/search/searchBar';
+@import 'components/search/listItem';
+@import 'components/search/_filter.scss';
 @import 'components/navi';
 @import 'components/userInfo';
-@import 'components/searchBar';
 @import 'components/hero';
-@import 'components/listItem';
-@import 'components/accessRights';
-@import 'components/_filter.scss';
 @import 'components/_loader.scss';

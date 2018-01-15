@@ -3,8 +3,8 @@ import Translate from 'react-translate-component'
 import { inject, observer } from 'mobx-react'
 
 import ListItem from './listItem'
-import Loader from './loader'
-import FilterResults from './filterResults'
+import Loader from '../../general/loader'
+import FilterResults from '../filterResults'
 
 class ResultsList extends Component {
   constructor(props) {

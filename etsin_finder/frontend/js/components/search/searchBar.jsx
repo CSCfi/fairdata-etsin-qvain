@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import ErrorBoundary from './errorBoundary'
+import ErrorBoundary from '../general/errorBoundary'
 
 export default class SearchBar extends Component {
   constructor(props) {

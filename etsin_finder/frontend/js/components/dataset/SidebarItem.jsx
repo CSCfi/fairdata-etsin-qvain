@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Translate from 'react-translate-component';
 
-export default class DsSidebarItem extends Component {
+export default class SidebarItem extends Component {
   constructor(props) {
     super(props)
     let component = this.props.component

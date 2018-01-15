@@ -1,8 +1,8 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
-import Dataset from '../dataset';
-import Datasets from '../datasets';
-import SearchPage from '../search';
+import Dataset from '../components/dataset';
+import Search from '../components/search';
+import FrontPage from '../components/frontpage';
 
 export default class Content extends React.Component {
   render() {
@@ -11,11 +11,11 @@ export default class Content extends React.Component {
         <Route
           exact
           path="/"
-          component={SearchPage}
+          component={FrontPage}
         />
         <Route
           path="/datasets/:query?"
-          component={Datasets}
+          component={Search}
         />
         <Route path="/dataset/:identifier" component={Dataset} />
       </div>

@@ -1,6 +1,6 @@
 import React from 'react';
 import Translate from 'react-translate-component';
-import HeroBanner from './hero'
+import HeroBanner from '../general/hero'
 
 export default class ErrorPage extends React.Component {
   render() {

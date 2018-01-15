@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 
-import ErrorBoundary from './errorBoundary'
-import checkDataLang from '../utils/checkDataLang'
-import AccessRights from './accessRights'
+import ErrorBoundary from '../../general/errorBoundary'
+import checkDataLang from '../../../utils/checkDataLang'
+import AccessRights from '../../dataset/data/accessRights'
 
 export default class ListItem extends Component {
   shortDescription(string) {

@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import Translate from 'react-translate-component'
-import SearchBar from './components/searchBar'
-import HeroBanner from './components/hero'
+import SearchBar from '../search/searchBar'
+import HeroBanner from '../general/hero'
 
-export default class SearchPage extends Component {
+export default class FrontPage extends Component {
   render() {
     return (
       <div className="search-page">

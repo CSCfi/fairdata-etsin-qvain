@@ -4,14 +4,14 @@ import Translate from 'react-translate-component'
 import { inject, observer } from 'mobx-react'
 import { Route } from 'react-router-dom'
 
-import DsSidebar from './components/dsSidebar'
-import DsDownloads from './components/dsDownloads'
-import DsContent from './components/dsContent'
-import ErrorPage from './components/errorPage'
-import Identifier from './components/identifier'
-import ErrorBoundary from './components/errorBoundary'
-import DsTabs from './components/dsTabs'
-import checkDataLang from './utils/checkDataLang'
+import Sidebar from './Sidebar'
+import Downloads from './Downloads'
+import Content from './Content'
+import ErrorPage from '../errorpage'
+import Identifier from './data/identifier'
+import ErrorBoundary from '../general/errorBoundary'
+import Tabs from './Tabs'
+import checkDataLang from '../../utils/checkDataLang'
 
 class Dataset extends React.Component {
   constructor(props) {
@@ -105,14 +105,14 @@ class Dataset extends React.Component {
               {'< Go back'}
             </button>
             <ErrorBoundary>
-              <DsTabs identifier={this.props.match.params.identifier} />
+              <Tabs identifier={this.props.match.params.identifier} />
             </ErrorBoundary>
             <ErrorBoundary>
               <Route
                 exact
                 path="/dataset/:identifier"
                 render={() => (
-                  <DsContent
+                  <Content
                     title={checkDataLang(this.state.title, currentLang)}
                     creator={this.state.creator}
                     rights_holder={this.state.rights_holder}
@@ -121,7 +121,7 @@ class Dataset extends React.Component {
                     dataset={this.state.dataset.research_dataset}
                   >
                     { this.state.description }
-                  </DsContent>
+                  </Content>
                 )}
               />
             </ErrorBoundary>
@@ -137,7 +137,7 @@ class Dataset extends React.Component {
                       exact
                       path="/dataset/:identifier/data"
                       render={() => (
-                        <DsDownloads />
+                        <Downloads />
                       )}
                     />
               }
@@ -145,7 +145,7 @@ class Dataset extends React.Component {
           </div>
           <div className="col-md-4">
             <ErrorBoundary>
-              <DsSidebar dataset={this.state.dataset} lang={currentLang} />
+              <Sidebar dataset={this.state.dataset} lang={currentLang} />
             </ErrorBoundary>
           </div>
         </div>

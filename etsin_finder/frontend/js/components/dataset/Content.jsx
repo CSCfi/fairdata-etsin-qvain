@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 import Translate from 'react-translate-component'
-import DateFormat from './dateFormat'
-import AccessRights from './accessRights'
-import checkNested from '../utils/checkNested'
-import ErrorBoundary from './errorBoundary'
-import checkDataLang from '../utils/checkDataLang'
+import DateFormat from './data/dateFormat'
+import AccessRights from './data/accessRights'
+import checkNested from '../../utils/checkNested'
+import ErrorBoundary from '../general/errorBoundary'
+import checkDataLang from '../../utils/checkDataLang'
 
-export default class DsContent extends Component {
+export default class Content extends Component {
   render() {
     return (
       <div className="dsContent">

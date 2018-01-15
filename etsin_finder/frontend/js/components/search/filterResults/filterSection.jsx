@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 
 import FilterItem from './filterItem';
-import checkDataLang from '../utils/checkDataLang';
+import checkDataLang from '../../../utils/checkDataLang';
 
 class FilterSection extends Component {
   constructor(props) {
