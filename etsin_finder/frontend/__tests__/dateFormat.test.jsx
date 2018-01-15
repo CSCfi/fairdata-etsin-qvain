@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom'; // eslint-disable-line no-unused-vars
-import { shallow, mount } from 'enzyme';
+import { shallow } from 'enzyme';
 import DateFormat from '../js/components/dataset/data/dateFormat'
 
 it('renders without crashing', () => {
@@ -8,8 +8,7 @@ it('renders without crashing', () => {
 })
 describe('check date', () => {
   it('should contain date', () => {
-    const dateformat = mount(<DateFormat />)
-    console.log(dateformat)
-    expect(dateformat).toContain('hello')
+    const dateformat = shallow(<DateFormat date={1000000} />)
+    expect(dateformat.find('span').text()).toContain('1970')
   })
 })
