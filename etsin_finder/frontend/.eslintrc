@@ -5,7 +5,7 @@
   ],
   "env": {
     "browser": true,
-    "jest": true,
+    "jest": true
   },
   "rules": {
     "max-len": ["warn", { "code": 150 }],
