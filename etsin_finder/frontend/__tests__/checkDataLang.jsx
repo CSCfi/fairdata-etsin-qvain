@@ -1,11 +1,7 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { shallow, mount } from 'enzyme';
-
 import checkDataLang from '../js/utils/checkDataLang'
 
 describe('CheckDataLang function', () => {
-  const researchDataset = {publisher: {name: {en: 'English', fi: 'Finnish'}}}
+  const researchDataset = { publisher: { name: { en: 'English', fi: 'Finnish' } } }
   let lang;
   it('should return finnish for lang fi', () => {
     lang = 'fi';

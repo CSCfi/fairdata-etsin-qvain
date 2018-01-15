@@ -1,17 +1,15 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom'; // eslint-disable-line no-unused-vars
 import axios from 'axios'
-import MockAdapter from 'axios-mock-adapter'
 
 let res = '';
 
 describe('Axios metax request', () => {
   it('gets data', (done) => {
     axios.get('https://metax-test.csc.fi/rest/datasets/11.json')
-    .then(response => {
-      res = response
-      done();
-    })
+      .then((response) => {
+        res = response
+        done();
+      })
   })
   describe('Axios metax request', () => {
     it('returns data', () => {

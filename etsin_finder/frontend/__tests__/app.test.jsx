@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom'; // eslint-disable-line no-unused-vars
 import { shallow, mount } from 'enzyme';
 import App from '../js/app'
 
@@ -13,14 +13,17 @@ describe('mount app', () => {
       expect(MyApp.find('.app').exists()).toEqual(true)
     })
     describe('Check children', () => {
+      it('should have two children', () => {
+        expect(MyApp.children().length).toEqual(2)
+      })
       it('should have store', () => {
-        expect(typeof MyApp.children().props().Stores).toEqual('object')
+        expect(typeof MyApp.children().last().props().Stores).toEqual('object')
       })
       it('stores should have history', () => {
-        expect(typeof MyApp.children().props().Stores.History).toEqual('object')
+        expect(typeof MyApp.children().last().props().Stores.History).toEqual('object')
       })
       it('stores should have locale', () => {
-        expect(typeof MyApp.children().props().Stores.Locale).toEqual('object')
+        expect(typeof MyApp.children().last().props().Stores.Locale).toEqual('object')
       })
     })
   })
