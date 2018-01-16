@@ -5,6 +5,8 @@ import { inject, observer } from 'mobx-react'
 import ListItem from './listItem'
 import Loader from '../../general/loader'
 import FilterResults from '../filterResults'
+import ErrorBoundary from '../../general/errorBoundary'
+import ElasticQuery from '../../../stores/view/elasticquery'
 
 class ResultsList extends Component {
   constructor(props) {
@@ -13,8 +15,7 @@ class ResultsList extends Component {
   }
 
   renderList(lang) {
-    // console.time()
-    const list = this.props.results.map(single => (
+    const list = ElasticQuery.results.hits.map(single => (
       <ListItem
         key={single._id}
         identifier={single._id}
@@ -22,35 +23,34 @@ class ResultsList extends Component {
         lang={lang}
       />
     ), this)
-    // console.timeEnd()
     return list
   }
 
   render() {
+    console.log('Render: Results list')
     const { currentLang } = this.props.Stores.Locale
     return (
       <div className="container">
-        {this.props.loading
+        {ElasticQuery.loading
           ? <Loader />
           :
           <div className="row regular-row">
             <div className="col-lg-3">
-              <Translate className="results-amount" with={{ amount: this.props.total }} component="p" content={`results.amount.${this.props.total === 1 ? 'snglr' : 'plrl'}`} fallback="%(amount)s results" />
-              {this.props.results.length === 0
+              <Translate className="results-amount" with={{ amount: ElasticQuery.results.total }} component="p" content={`results.amount.${ElasticQuery.results.total === 1 ? 'snglr' : 'plrl'}`} fallback="%(amount)s results" />
+              {ElasticQuery.results.hits.length === 0
                 ? null
                 :
-                <FilterResults
-                  aggregations={this.props.aggregations}
-                  handleFilter={this.props.handleFilter}
-                />
+                <ErrorBoundary>
+                  <FilterResults />
+                </ErrorBoundary>
               }
             </div>
             <div className="col-lg-9">
-              {this.props.results.length === 0
+              {ElasticQuery.results.hits.length === 0
                 ?
                   <div className="results-zero">
                     <span>Your search -
-                      <strong> {this.props.query} </strong>
+                      <strong> {ElasticQuery.search} </strong>
                       - did not match any documents
                     </span>
                   </div>

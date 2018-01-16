@@ -3,6 +3,7 @@ import { inject, observer } from 'mobx-react';
 
 import FilterItem from './filterItem';
 import checkDataLang from '../../../utils/checkDataLang';
+import ElasticQuery from '../../../stores/view/elasticquery'
 
 class FilterSection extends Component {
   constructor(props) {
@@ -55,8 +56,8 @@ class FilterSection extends Component {
   render() {
     // Don't render unknown or empty sections
     if (this.aggregations[this.props.aggregation] === undefined
-      || this.props.aggregations[this.aggregationName] === 'undefined'
-      || this.props.aggregations[this.aggregationName].buckets.length <= 0) {
+      || ElasticQuery.results.aggregations[this.aggregationName] === 'undefined'
+      || ElasticQuery.results.aggregations[this.aggregationName].buckets.length <= 0) {
       return '';
     }
 
@@ -68,13 +69,12 @@ class FilterSection extends Component {
         </button>
         <div className="filter-items">
           <ul>
-            { this.props.aggregations[this.aggregationName].buckets.map(item => (
+            { ElasticQuery.results.aggregations[this.aggregationName].buckets.map(item => (
               <FilterItem
                 key={item.key}
                 item={item}
                 aggregationName={this.aggregationName}
                 term={this.termName}
-                handleFilter={this.props.handleFilter}
               />
             )) }
           </ul>

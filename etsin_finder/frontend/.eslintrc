@@ -8,7 +8,7 @@
     "jest": true
   },
   "rules": {
-    "max-len": ["warning", { "code": 150 }],
+    "max-len": ["warn", { "code": 150 }],
     "no-extra-semi": 1,
     "semi": 0,
     "react/prop-types": 0,
@@ -18,6 +18,8 @@
     "no-console": 0,
     "prefer-destructuring": 0,
     "no-underscore-dangle": [0],
+    "arrow-parens": 0,
+    "comma-dangle": 0,
     "jsx-a11y/anchor-is-valid": [ "error", {
       "components": [ "Link" ],
       "specialLink": [ "to", "hrefLeft", "hrefRight" ],
