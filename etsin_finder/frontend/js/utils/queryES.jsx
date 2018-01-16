@@ -72,11 +72,6 @@ const queryES = (query) => {
         },
       },
     },
-  }, {
-    auth: { // TODO obvs this must be safer
-      username: 'etsin',
-      password: 'test-etsin',
-    },
   })
 
   return request
