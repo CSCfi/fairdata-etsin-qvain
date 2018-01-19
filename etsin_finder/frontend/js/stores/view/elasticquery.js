@@ -27,51 +27,74 @@ class ElasticQuery {
 
   @action
   updateFilter = (term, key) => {
-    this.filter.push({ term, key })
+    const index = this.filter.findIndex(i => i.term === term && i.key === key)
+    if (index !== -1) {
+      this.filter.splice(index, 1)
+    } else {
+      this.filter.push({ term, key })
+    }
   }
 
   @action
   queryES = () => {
     let queryObject
     const query = this.search
+    const filters = []
+    for (let i = 0; i < this.filter.length; i += 1) {
+      filters.push({ term: { [this.filter[i].term]: this.filter[i].key } })
+    }
+
     if (query) {
       queryObject = {
-        multi_match: {
-          query,
-          // https://www.elastic.co/guide/en/elasticsearch/reference/5.6/query-dsl-multi-match-query.html#type-best-fields
-          type: 'cross_fields',
-          minimum_should_match: '75%',
-          operator: 'and',
-          analyzer: Locale.currentLang === 'fi' ? 'finnish' : 'english',
-          fields: [
-            'title.*',
-            'description.*',
-            'creator.name.*',
-            'contributor.name.*',
-            'publisher.name.*',
-            'rights_holder.name.*',
-            'curator.name.*',
-            'keyword',
-            'access_rights.license.title.*',
-            'access_rights.type.identifier.*',
-            'access_rights.type.pref_label.*',
-            'theme.pref_label.*',
-            'field_of_science.pref_label.*',
-            'project.pref_label.*',
-            'urn_identifier',
-            'preferred_identifier',
-            'other_identifier.notation',
-            'other_identifier.type.pref_label.*',
+        bool: {
+          must: [
+            {
+              multi_match: {
+                query,
+                type: 'cross_fields',
+                minimum_should_match: '75%',
+                operator: 'and',
+                analyzer: Locale.currentLang === 'fi' ? 'finnish' : 'english',
+                fields: [
+                  'title.*',
+                  'description.*',
+                  'creator.name.*',
+                  'contributor.name.*',
+                  'publisher.name.*',
+                  'rights_holder.name.*',
+                  'curator.name.*',
+                  'keyword',
+                  'access_rights.license.title.*',
+                  'access_rights.type.identifier.*',
+                  'access_rights.type.pref_label.*',
+                  'theme.pref_label.*',
+                  'field_of_science.pref_label.*',
+                  'project.pref_label.*',
+                  'urn_identifier',
+                  'preferred_identifier',
+                  'other_identifier.notation',
+                  'other_identifier.type.pref_label.*',
+                ],
+              },
+            },
           ],
         },
       }
     } else {
-      // No user search query, fetch all docs
+      // No user search query, fetch all docs, change this to use aggregations and sorting and pagenum
       queryObject = {
         match_all: {},
       }
     }
+
+    // adding filters if they are set
+    if (filters.length > 0) {
+      queryObject.bool.filter = filters
+    }
+
+    // toggle loader
     this.loading = 1
+
     axios
       .post(
         '/es/metax/dataset/_search',
