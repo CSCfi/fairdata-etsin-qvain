@@ -51,21 +51,25 @@ $filter-padding: 1em 1.5em;
           text-decoration: underline;
           cursor: pointer;
         }
+        button.active {
+          background: $color-primary;
+          color: $color-white;
+        }
       }
     }
     &.open {
       max-height: 1000px;
       padding: $filter-padding;
       li {
-        max-height: 50px;
+        max-height: 140px;
       }
     }
     button {
       background: transparent;
       border: none;
-      padding: 0;
+      padding: 0.3em 0.8em;
+      border-radius: 0.7em;
       margin: 0 0 5px 0;
-      line-height: 16px;
       color: $color-dark;
       text-align: left;
       &:focus {
