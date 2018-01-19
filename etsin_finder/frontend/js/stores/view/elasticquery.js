@@ -1,5 +1,6 @@
 import { observable, action } from 'mobx'
 import axios from 'axios'
+import Locale from './language'
 
 class ElasticQuery {
   @observable filter = []
@@ -50,6 +51,10 @@ class ElasticQuery {
             {
               multi_match: {
                 query,
+                type: 'cross_fields',
+                minimum_should_match: '75%',
+                operator: 'and',
+                analyzer: Locale.currentLang === 'fi' ? 'finnish' : 'english',
                 fields: [
                   'title.*',
                   'description.*',
@@ -59,7 +64,7 @@ class ElasticQuery {
                   'rights_holder.name.*',
                   'curator.name.*',
                   'keyword',
-                  'access_rights.license.pref_label.*',
+                  'access_rights.license.title.*',
                   'access_rights.type.identifier.*',
                   'access_rights.type.pref_label.*',
                   'theme.pref_label.*',
@@ -96,6 +101,18 @@ class ElasticQuery {
         {
           size: 20,
           query: queryObject,
+          sort: ['_score'], // Sort by hit score
+          // Return only the following fields in source attribute to minimize traffic
+          _source: ['urn_identifier', 'title.*', 'description.*', 'access_rights.type.identifier', 'access_rights.license.identifier'],
+          highlight: {
+            // pre_tags: ['<b>'], # default is <em>
+            // post_tags: ['</b>'],
+            fields: {
+              'description.*': {},
+              'title.*': {}
+              // Add here more fields if highlights from other fields are required
+            }
+          },
           aggregations: {
             organization: {
               terms: {
@@ -127,13 +144,6 @@ class ElasticQuery {
                 field: 'theme.label.fi.keyword',
               },
             },
-          },
-        },
-        {
-          auth: {
-            // TODO obvs this must be safer
-            username: 'etsin',
-            password: 'test-etsin',
           },
         }
       )
