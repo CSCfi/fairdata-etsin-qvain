@@ -14,6 +14,11 @@ export default class FilterItem extends Component {
     }
   }
 
+  updateFilter() {
+    ElasticQuery.updateFilter(this.state.term, this.state.key)
+    ElasticQuery.queryES()
+  }
+
   render() {
     return (
       <li>
@@ -21,8 +26,7 @@ export default class FilterItem extends Component {
           tabIndex="-1"
           className={this.state.active ? 'active' : undefined}
           onClick={() => {
-            ElasticQuery.updateFilter(this.state.term, this.state.key)
-            ElasticQuery.queryES()
+            this.updateFilter()
           }}
         >
           { this.state.key } ({ this.state.doc_count })

@@ -27,13 +27,11 @@ class ElasticQuery {
   @action
   updateFilter = (term, key) => {
     const index = this.filter.findIndex(i => i.term === term && i.key === key)
-    console.log(index)
     if (index !== -1) {
       this.filter.splice(index, 1)
     } else {
       this.filter.push({ term, key })
     }
-    console.log(this.filter)
   }
 
   @action
