@@ -13,6 +13,7 @@ class Search extends Component {
   }
 
   initialQuery = () => {
+    console.log('-------- performing initial query ---------')
     ElasticQuery.updateFromUrl(this.props.match.params.query)
     ElasticQuery.queryES()
   }
@@ -28,9 +29,7 @@ class Search extends Component {
               <h1>
                 <Translate content="home.title" />
               </h1>
-              <SearchBar
-                history={this.props.history}
-              />
+              <SearchBar />
             </div>
           </div>
         </HeroBanner>

@@ -1,4 +1,4 @@
-import { observable, computed, action } from 'mobx'
+import { observable, action } from 'mobx'
 import createHistory from 'history/createBrowserHistory'
 
 const history = createHistory()
@@ -6,10 +6,10 @@ const history = createHistory()
 class History {
   @observable history = history
 
-  @computed
-  get urlParams() {
+  @action
+  urlParams() {
     const params = {}
-    const search = this.history.location.search.slice(1)
+    const search = decodeURI(this.history.location.search).slice(1)
     const definitions = search.split('&')
     definitions.forEach(val => {
       const parts = val.split('=', 2)
@@ -23,14 +23,14 @@ class History {
     let url = '?'
     const keys = Object.keys(params)
     for (let i = 0; i < keys.length; i += 1) {
-      console.log(params[keys[i]])
       url = `${url}${keys[i]}=${params[keys[i]]}`
-      if (i + 1 < keys.length) url = `${url}&` // not on last
+      if (i + 1 < keys.length) url = `${url}&`
     }
     this.history.push({
       pathname: this.history.location.pathname,
-      search: url,
+      search: encodeURI(url),
     })
+    this.history.location.search = encodeURI(url) // not sure if this is best practice
   }
 }
 

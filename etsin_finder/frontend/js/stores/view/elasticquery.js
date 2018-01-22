@@ -37,9 +37,13 @@ class ElasticQuery {
     this.search = newSearch
     if (updateUrl) {
       let path = `/datasets/${newSearch}` // reset parameters on new search, expect sort
-      const urlParams = History.urlParams
+      const urlParams = History.urlParams()
       if (urlParams && urlParams.sort) {
         path = `${path}?sort=${urlParams.sort}`
+      } else {
+        History.history.location.search = ''
+        this.filter = []
+        this.pageNum = 1
       }
       History.history.push(path)
     }
@@ -49,7 +53,7 @@ class ElasticQuery {
   updateSorting = (newSorting, updateUrl = true) => {
     this.sorting = newSorting
     if (updateUrl) {
-      const urlParams = History.urlParams
+      const urlParams = History.urlParams()
       urlParams.sort = newSorting
       History.setUrlParams(urlParams)
     }
@@ -65,13 +69,13 @@ class ElasticQuery {
   updateFilter = (term, key, updateUrl = true) => {
     const index = this.filter.findIndex(i => i.term === term && i.key === key)
     if (index !== -1) {
+      // fix: this clears filter when coming back to page
       this.filter.splice(index, 1)
       if (updateUrl) {
-        console.log('removing from url')
-        const urlParams = History.urlParams
+        const urlParams = History.urlParams()
         const removeParam = (param, value) => {
           const single = urlParams[param].split(',')
-          const removed = single.filter(e => e !== value)
+          const removed = single.filter(e => decodeURIComponent(e) !== value)
           urlParams[param] = removed.join()
         }
         removeParam('keys', key)
@@ -81,15 +85,17 @@ class ElasticQuery {
     } else {
       this.filter.push({ term, key })
       if (updateUrl) {
-        console.log('adding to url')
-        let urlParams = History.urlParams
+        let urlParams = History.urlParams()
         const addParam = (param, value) => {
           if (urlParams) {
             let selected = urlParams[param]
-            selected = selected !== undefined ? `${selected},${value}` : value
+            selected =
+              selected !== undefined && selected.length > 0
+                ? `${selected},${encodeURIComponent(value)}`
+                : encodeURIComponent(value)
             urlParams[param] = selected
           } else {
-            urlParams = { param: value }
+            urlParams = { [param]: encodeURIComponent(value) }
           }
         }
         addParam('keys', key)
@@ -102,20 +108,28 @@ class ElasticQuery {
   @action
   updateFromUrl = query => {
     window.myHistory = History
-    const urlParams = History.urlParams
+    const urlParams = History.urlParams()
     if (query) {
       this.updateSearch(query, false)
     }
     if (urlParams) {
       if (urlParams.p) {
-        this.updatePageNum(urlParams.p)
+        this.updatePageNum(urlParams.p, false)
       }
       if (urlParams.sort) {
-        this.updateSorting(urlParams.sort)
+        this.updateSorting(urlParams.sort, false)
       }
-      // if (urlParams.key && urlParams.term) {
-      //   this.updateFilter()
-      // }
+      if (urlParams.keys && urlParams.terms) {
+        const keys = urlParams.keys.split(',')
+        const terms = urlParams.terms.split(',')
+        for (let i = 0; i < keys.length; i += 1) {
+          this.updateFilter(
+            decodeURIComponent(terms[i]),
+            decodeURIComponent(keys[i]),
+            false
+          )
+        }
+      }
     }
   }
 
@@ -232,4 +246,5 @@ class ElasticQuery {
   }
 }
 
+window.ElasticQuery = new ElasticQuery()
 export default new ElasticQuery()
