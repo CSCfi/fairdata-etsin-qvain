@@ -158,13 +158,13 @@ class ElasticQuery {
         },
       })
       .then(res => {
+        console.log('-- QUERY DONE ---')
         this.results = {
           hits: res.data.hits.hits,
           total: res.data.hits.total,
           aggregations: res.data.aggregations,
         }
         this.loading = 0
-        console.log('-- QUERY DONE ---')
       })
   }
 }

@@ -8,15 +8,20 @@ import ResultsList from './resultslist'
 import ElasticQuery from '../../stores/view/elasticquery'
 
 class Search extends Component {
+  componentWillMount() {
+    this.initialQuery()
+  }
+
   initialQuery = () => {
-    ElasticQuery.updateSearch(this.props.match.params.query)
+    if (this.props.match.params.query) {
+      ElasticQuery.updateSearch(this.props.match.params.query)
+    }
     ElasticQuery.queryES()
   }
+
+
   render() {
     console.log('Render: Search page')
-    if (this.props.match.params.query) {
-      this.initialQuery();
-    }
     return (
       <div>
         <HeroBanner className="hero-primary">
