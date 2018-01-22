@@ -72,7 +72,7 @@ class ElasticQuery {
     if (index !== -1) {
       this.filter.splice(index, 1)
       if (updateUrl) {
-        const urlParams = UrlParse.urlParams(history.location.search)
+        const urlParams = UrlParse.searchParams(history.location.search)
         const removeParam = (param, value) => {
           const single = urlParams[param].split(',')
           const removed = single.filter(e => decodeURIComponent(e) !== value)
