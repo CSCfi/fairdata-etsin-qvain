@@ -13,9 +13,7 @@ class Search extends Component {
   }
 
   initialQuery = () => {
-    if (this.props.match.params.query) {
-      ElasticQuery.updateSearch(this.props.match.params.query)
-    }
+    ElasticQuery.updateFromUrl(this.props.match.params.query)
     ElasticQuery.queryES()
   }
 

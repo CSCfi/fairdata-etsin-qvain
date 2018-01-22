@@ -1,6 +1,7 @@
 import { observable, action } from 'mobx'
 import axios from 'axios'
 import Locale from './language'
+import History from './history'
 
 const fields = [
   'title.*',
@@ -32,27 +33,89 @@ class ElasticQuery {
   @observable loading = 0
 
   @action
-  updateSearch = newSearch => {
+  updateSearch = (newSearch, updateUrl = true) => {
     this.search = newSearch
+    if (updateUrl) {
+      let path = `/datasets/${newSearch}` // reset parameters on new search, expect sort
+      const urlParams = History.urlParams
+      if (urlParams && urlParams.sort) {
+        path = `${path}?sort=${urlParams.sort}`
+      }
+      History.history.push(path)
+    }
   }
 
   @action
-  updateSorting = newSorting => {
+  updateSorting = (newSorting, updateUrl = true) => {
     this.sorting = newSorting
+    if (updateUrl) {
+      const urlParams = History.urlParams
+      urlParams.sort = newSorting
+      History.setUrlParams(urlParams)
+    }
   }
 
   @action
-  updatePageNum = newPage => {
+  updatePageNum = (newPage, updateUrl = true) => {
     this.pageNum = newPage
+    console.log(updateUrl)
   }
 
   @action
-  updateFilter = (term, key) => {
+  updateFilter = (term, key, updateUrl = true) => {
     const index = this.filter.findIndex(i => i.term === term && i.key === key)
     if (index !== -1) {
       this.filter.splice(index, 1)
+      if (updateUrl) {
+        console.log('removing from url')
+        const urlParams = History.urlParams
+        const removeParam = (param, value) => {
+          const single = urlParams[param].split(',')
+          const removed = single.filter(e => e !== value)
+          urlParams[param] = removed.join()
+        }
+        removeParam('keys', key)
+        removeParam('terms', term)
+        History.setUrlParams(urlParams)
+      }
     } else {
       this.filter.push({ term, key })
+      if (updateUrl) {
+        console.log('adding to url')
+        let urlParams = History.urlParams
+        const addParam = (param, value) => {
+          if (urlParams) {
+            let selected = urlParams[param]
+            selected = selected !== undefined ? `${selected},${value}` : value
+            urlParams[param] = selected
+          } else {
+            urlParams = { param: value }
+          }
+        }
+        addParam('keys', key)
+        addParam('terms', term)
+        History.setUrlParams(urlParams)
+      }
+    }
+  }
+
+  @action
+  updateFromUrl = query => {
+    window.myHistory = History
+    const urlParams = History.urlParams
+    if (query) {
+      this.updateSearch(query, false)
+    }
+    if (urlParams) {
+      if (urlParams.p) {
+        this.updatePageNum(urlParams.p)
+      }
+      if (urlParams.sort) {
+        this.updateSorting(urlParams.sort)
+      }
+      // if (urlParams.key && urlParams.term) {
+      //   this.updateFilter()
+      // }
     }
   }
 

@@ -28,8 +28,6 @@ export default class SearchBar extends Component {
   handleSubmit(e) {
     e.preventDefault()
     ElasticQuery.updateSearch(this.state.query)
-    const path = `/datasets/${this.state.query}`
-    this.props.history.push(path)
     ElasticQuery.queryES()
   }
 
