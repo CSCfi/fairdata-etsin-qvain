@@ -76,6 +76,7 @@ class FilterSection extends Component {
                 item={item}
                 aggregationName={this.aggregationName}
                 term={this.termName}
+                history={this.props.history}
               />
             )) }
           </ul>

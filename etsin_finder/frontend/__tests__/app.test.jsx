@@ -19,9 +19,6 @@ describe('mount app', () => {
       it('should have store', () => {
         expect(typeof MyApp.children().last().props().Stores).toEqual('object')
       })
-      it('stores should have history', () => {
-        expect(typeof MyApp.children().last().props().Stores.History).toEqual('object')
-      })
       it('stores should have locale', () => {
         expect(typeof MyApp.children().last().props().Stores.Locale).toEqual('object')
       })

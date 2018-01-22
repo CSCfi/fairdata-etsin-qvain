@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
+import { withRouter } from 'react-router-dom'
 
 import ErrorBoundary from '../general/errorBoundary'
 import ElasticQuery from '../../stores/view/elasticquery'
 
-export default class SearchBar extends Component {
+class SearchBar extends Component {
   constructor(props) {
     super(props);
 
@@ -27,7 +28,7 @@ export default class SearchBar extends Component {
 
   handleSubmit(e) {
     e.preventDefault()
-    ElasticQuery.updateSearch(this.state.query)
+    ElasticQuery.updateSearch(this.state.query, this.props.history)
     ElasticQuery.queryES()
   }
 
@@ -46,3 +47,5 @@ export default class SearchBar extends Component {
     );
   }
 }
+
+export default withRouter(SearchBar)

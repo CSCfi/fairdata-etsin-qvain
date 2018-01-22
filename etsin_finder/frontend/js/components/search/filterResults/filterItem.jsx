@@ -15,7 +15,7 @@ export default class FilterItem extends Component {
   }
 
   updateFilter() {
-    ElasticQuery.updateFilter(this.state.term, this.state.key)
+    ElasticQuery.updateFilter(this.state.term, this.state.key, this.props.history)
     ElasticQuery.queryES()
   }
 

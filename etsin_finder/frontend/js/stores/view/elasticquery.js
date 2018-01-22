@@ -1,7 +1,7 @@
 import { observable, action } from 'mobx'
 import axios from 'axios'
 import Locale from './language'
-import History from './history'
+import UrlParse from '../../utils/urlParse'
 
 const fields = [
   'title.*',
@@ -33,29 +33,29 @@ class ElasticQuery {
   @observable loading = 0
 
   @action
-  updateSearch = (newSearch, updateUrl = true) => {
+  updateSearch = (newSearch, history, updateUrl = true) => {
     this.search = newSearch
     if (updateUrl) {
-      let path = `/datasets/${newSearch}` // reset parameters on new search, expect sort
-      const urlParams = History.urlParams()
+      const path = `/datasets/${newSearch}` // reset parameters on new search, expect sort
+      let search = ''
+      const urlParams = UrlParse.searchParams(history.location.search)
       if (urlParams && urlParams.sort) {
-        path = `${path}?sort=${urlParams.sort}`
+        search = `?sort=${urlParams.sort}`
       } else {
-        History.history.location.search = ''
         this.filter = []
         this.pageNum = 1
       }
-      History.history.push(path)
+      history.replace({ pathname: path, search })
     }
   }
 
   @action
-  updateSorting = (newSorting, updateUrl = true) => {
+  updateSorting = (newSorting, history, updateUrl = true) => {
     this.sorting = newSorting
     if (updateUrl) {
-      const urlParams = History.urlParams()
+      const urlParams = UrlParse.searchParams(history.location.search)
       urlParams.sort = newSorting
-      History.setUrlParams(urlParams)
+      history.replace({ search: UrlParse.makeSearchParams(urlParams) })
     }
   }
 
@@ -66,13 +66,13 @@ class ElasticQuery {
   }
 
   @action
-  updateFilter = (term, key, updateUrl = true) => {
+  updateFilter = (term, key, history, updateUrl = true) => {
     const index = this.filter.findIndex(i => i.term === term && i.key === key)
+    // fix: this clears filter when coming back to page
     if (index !== -1) {
-      // fix: this clears filter when coming back to page
       this.filter.splice(index, 1)
       if (updateUrl) {
-        const urlParams = History.urlParams()
+        const urlParams = UrlParse.urlParams(history.location.search)
         const removeParam = (param, value) => {
           const single = urlParams[param].split(',')
           const removed = single.filter(e => decodeURIComponent(e) !== value)
@@ -80,12 +80,12 @@ class ElasticQuery {
         }
         removeParam('keys', key)
         removeParam('terms', term)
-        History.setUrlParams(urlParams)
+        history.replace({ search: UrlParse.makeSearchParams(urlParams) })
       }
     } else {
       this.filter.push({ term, key })
       if (updateUrl) {
-        let urlParams = History.urlParams()
+        let urlParams = UrlParse.searchParams(history.location.search)
         const addParam = (param, value) => {
           if (urlParams) {
             let selected = urlParams[param]
@@ -100,17 +100,16 @@ class ElasticQuery {
         }
         addParam('keys', key)
         addParam('terms', term)
-        History.setUrlParams(urlParams)
+        history.replace({ search: UrlParse.makeSearchParams(urlParams) })
       }
     }
   }
 
   @action
-  updateFromUrl = query => {
-    window.myHistory = History
-    const urlParams = History.urlParams()
+  updateFromUrl = (query, history) => {
+    const urlParams = UrlParse.searchParams(history.location.search)
     if (query) {
-      this.updateSearch(query, false)
+      this.updateSearch(query, history, false)
     }
     if (urlParams) {
       if (urlParams.p) {
@@ -126,6 +125,7 @@ class ElasticQuery {
           this.updateFilter(
             decodeURIComponent(terms[i]),
             decodeURIComponent(keys[i]),
+            history,
             false
           )
         }

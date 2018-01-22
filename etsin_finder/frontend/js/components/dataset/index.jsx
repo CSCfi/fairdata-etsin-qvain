@@ -55,7 +55,7 @@ class Dataset extends React.Component {
   }
 
   goBack() {
-    this.props.Stores.History.history.goBack()
+    this.props.history.goBack()
   }
 
   updateData() {
