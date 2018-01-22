@@ -32,17 +32,6 @@ class FilterSection extends Component {
         term: { en: 'theme.label.en.keyword', fi: 'theme.label.fi.keyword' },
       },
     };
-
-    if (this.aggregations[this.props.aggregation] !== undefined) {
-      // Figure out languages
-      const { currentLang } = this.props.Stores.Locale;
-      const title = this.aggregations[this.props.aggregation].title;
-      const aggregation = this.aggregations[this.props.aggregation].aggregation;
-      const term = this.aggregations[this.props.aggregation].term;
-      this.titleName = checkDataLang(title, currentLang);
-      this.aggregationName = checkDataLang(aggregation, currentLang);
-      this.termName = checkDataLang(term, currentLang);
-    }
   }
 
   toggleFilter(event) {
@@ -54,12 +43,24 @@ class FilterSection extends Component {
   }
 
   render() {
-    // Don't render unknown or empty sections
+    if (this.aggregations[this.props.aggregation] !== undefined) {
+      // Figure out languages
+      const { currentLang } = this.props.Stores.Locale;
+      const title = this.aggregations[this.props.aggregation].title;
+      const aggregation = this.aggregations[this.props.aggregation].aggregation;
+      const term = this.aggregations[this.props.aggregation].term;
+      this.titleName = checkDataLang(title, currentLang);
+      this.aggregationName = checkDataLang(aggregation, currentLang);
+      this.termName = checkDataLang(term, currentLang);
+    }
+
+    // Don't render unknown or empty
     if (this.aggregations[this.props.aggregation] === undefined
       || ElasticQuery.results.aggregations[this.aggregationName] === 'undefined'
       || ElasticQuery.results.aggregations[this.aggregationName].buckets.length <= 0) {
       return '';
     }
+
 
     return (
       <div className="filter-section">
