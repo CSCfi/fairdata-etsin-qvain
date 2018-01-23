@@ -1,11 +1,15 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
+import { inject, observer } from 'mobx-react'
+import ElasticQuery from '../../stores/view/elasticquery'
 
-export default class Loader extends Component {
+class Loader extends Component {
   render() {
     return (
-      <div className="holder">
+      <div className={`holder ${ElasticQuery.loading ? 'loader-active' : ''}`}>
         <div className="results-spinner" />
       </div>
-    );
+    )
   }
 }
+
+export default inject('Stores')(observer(Loader))

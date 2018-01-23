@@ -1,21 +1,45 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
+import { withRouter } from 'react-router-dom'
+
 import ElasticQuery from '../../../stores/view/elasticquery'
 
-export default class FilterItem extends Component {
+class FilterItem extends Component {
   constructor(props) {
     super(props)
-    const active = ElasticQuery.filter
-      .filter((item) => item.term === this.props.term && item.key === this.props.item.key).length > 0
+    const active =
+      ElasticQuery.filter.filter(
+        item =>
+          item.term === this.props.term && item.key === this.props.item.key
+      ).length > 0
     this.state = {
       term: this.props.term,
       key: this.props.item.key,
       doc_count: this.props.item.doc_count,
       active,
     }
+    this.updateFilter = this.updateFilter.bind(this)
+  }
+
+  componentWillReceiveProps(newProps) {
+    this.setState({
+      doc_count: newProps.item.doc_count,
+    })
   }
 
   updateFilter() {
-    ElasticQuery.updateFilter(this.state.term, this.state.key, this.props.history)
+    ElasticQuery.updateFilter(
+      this.state.term,
+      this.state.key,
+      this.props.history
+    )
+    const active =
+      ElasticQuery.filter.filter(
+        item =>
+          item.term === this.props.term && item.key === this.props.item.key
+      ).length > 0
+    this.setState({
+      active,
+    })
     ElasticQuery.queryES()
   }
 
@@ -29,9 +53,11 @@ export default class FilterItem extends Component {
             this.updateFilter()
           }}
         >
-          { this.state.key } ({ this.state.doc_count })
+          {this.state.key} ({this.state.doc_count})
         </button>
       </li>
-    );
+    )
   }
 }
+
+export default withRouter(FilterItem)
