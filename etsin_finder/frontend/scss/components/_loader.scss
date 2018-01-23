@@ -1,3 +1,16 @@
+#nprogress .bar {
+  background: $color-primary;
+}
+
+#nprogress .peg {
+  box-shadow: 0 0 10px $color-primary, 0 0 5px $color-primary;
+}
+
+#nprogress .spinner-icon {
+  border-top-color: $color-primary;
+  border-left-color: $color-primary;
+}
+
 .holder {
   display: flex;
   justify-content: center;
@@ -5,7 +18,7 @@
   width: 100%;
 }
 
-.spinner {
+.results-spinner {
   height: 4em;
   width: 4em;
   animation: spinner 0.8s infinite linear;

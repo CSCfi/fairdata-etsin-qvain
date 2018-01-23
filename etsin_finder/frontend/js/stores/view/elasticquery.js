@@ -119,15 +119,17 @@ class ElasticQuery {
         this.updateSorting(urlParams.sort, false)
       }
       if (urlParams.keys && urlParams.terms) {
-        const keys = urlParams.keys.split(',')
-        const terms = urlParams.terms.split(',')
-        for (let i = 0; i < keys.length; i += 1) {
-          this.updateFilter(
-            decodeURIComponent(terms[i]),
-            decodeURIComponent(keys[i]),
-            history,
-            false
-          )
+        if (this.filter.length === 0) {
+          const keys = urlParams.keys.split(',')
+          const terms = urlParams.terms.split(',')
+          for (let i = 0; i < keys.length; i += 1) {
+            this.updateFilter(
+              decodeURIComponent(terms[i]),
+              decodeURIComponent(keys[i]),
+              history,
+              false
+            )
+          }
         }
       }
     }
