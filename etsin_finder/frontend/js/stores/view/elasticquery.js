@@ -56,20 +56,29 @@ class ElasticQuery {
     if (updateUrl) {
       const urlParams = UrlParse.searchParams(history.location.search)
       urlParams.sort = newSorting
+      // reset page number
+      this.pageNum = 1
+      urlParams.p = this.pageNum
       history.replace({ search: UrlParse.makeSearchParams(urlParams) })
     }
   }
 
   @action
-  updatePageNum = (newPage, updateUrl = true) => {
+  updatePageNum = (newPage, history, updateUrl = true) => {
     this.pageNum = parseInt(newPage, 10)
-    console.log(updateUrl)
+    if (updateUrl) {
+      let urlParams = UrlParse.searchParams(history.location.search)
+      if (urlParams) urlParams.p = newPage
+      else {
+        urlParams = { p: newPage }
+      }
+      history.replace({ search: UrlParse.makeSearchParams(urlParams) })
+    }
   }
 
   @action
   updateFilter = (term, key, history, updateUrl = true) => {
     const index = this.filter.findIndex(i => i.term === term && i.key === key)
-    // fix: this clears filter when coming back to page
     if (index !== -1) {
       this.filter.splice(index, 1)
       if (updateUrl) {
@@ -81,6 +90,9 @@ class ElasticQuery {
         }
         removeParam('keys', key)
         removeParam('terms', term)
+        // reset page number
+        this.pageNum = 1
+        urlParams.p = 1
         history.replace({ search: UrlParse.makeSearchParams(urlParams) })
       }
     } else {
@@ -101,6 +113,9 @@ class ElasticQuery {
         }
         addParam('keys', key)
         addParam('terms', term)
+        // reset page number
+        this.pageNum = 1
+        urlParams.p = 1
         history.replace({ search: UrlParse.makeSearchParams(urlParams) })
       }
     }
@@ -113,9 +128,6 @@ class ElasticQuery {
       this.updateSearch(query, history, false)
     }
     if (urlParams) {
-      if (urlParams.p) {
-        this.updatePageNum(urlParams.p, false)
-      }
       if (urlParams.sort) {
         this.updateSorting(urlParams.sort, false)
       }
@@ -132,6 +144,9 @@ class ElasticQuery {
             )
           }
         }
+      }
+      if (urlParams.p) {
+        this.updatePageNum(urlParams.p, history, false)
       }
     }
   }

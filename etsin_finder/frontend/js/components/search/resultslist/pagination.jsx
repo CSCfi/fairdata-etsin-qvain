@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 import ElasticQuery from '../../../stores/view/elasticquery'
 
-export default class Pagination extends Component {
+class Pagination extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -22,6 +22,7 @@ export default class Pagination extends Component {
     if (!this.pageAmount) {
       const pages = Math.ceil(this.props.total / this.props.perPage)
       this.setState({
+        currentPage: parseInt(ElasticQuery.pageNum, 10),
         pageAmount: pages
       }, () => {
         this.checkAround()
@@ -48,7 +49,7 @@ export default class Pagination extends Component {
   // you dont want to call setState inside loop. It forces dom to rerender everytime
   checkBefore() {
     return new Promise((resolve) => {
-      while (ElasticQuery.pageNum - this.beforeCounter > 1
+      while (this.state.currentPage - this.beforeCounter > 1
       && this.beforeCounter < 7) {
         this.beforeCounter += 1;
       }
@@ -58,7 +59,7 @@ export default class Pagination extends Component {
 
   checkAfter() {
     return new Promise((resolve) => {
-      while (ElasticQuery.pageNum + this.afterCounter < this.state.pageAmount
+      while (this.state.currentPage + this.afterCounter < this.state.pageAmount
       && this.afterCounter < 7) {
         this.afterCounter += 1;
       }
@@ -67,7 +68,8 @@ export default class Pagination extends Component {
   }
 
   changePage(event, value) {
-    ElasticQuery.updatePageNum(value)
+    console.log(value)
+    ElasticQuery.updatePageNum(value, this.props.history)
     ElasticQuery.queryES()
   }
 
@@ -87,8 +89,7 @@ export default class Pagination extends Component {
         {
           link
             ? (
-              <Link
-                to={`?p=${value}`}
+              <button
                 onClick={(e) => {
                   this.changePage(e, value)
                 }}
@@ -96,7 +97,7 @@ export default class Pagination extends Component {
               >
                 <span className="sr-only">page </span>
                 {value}
-              </Link>
+              </button>
             )
             : (
               <span className="pagination-item current">
@@ -113,7 +114,7 @@ export default class Pagination extends Component {
     const pagesAll = []
     let pages = []
     for (let i = 1; i < this.beforeCounter; i += 1) {
-      pagesAll.push(this.singlePage(ElasticQuery.pageNum - i, true))
+      pagesAll.push(this.singlePage(this.state.currentPage - i, true))
     }
     if (this.afterCounter < 4) {
       pages = pagesAll.slice(0, (3 + (2 - (this.afterCounter - 1)))) // atleast 2, max 4
@@ -129,7 +130,7 @@ export default class Pagination extends Component {
     const pagesAll = []
     let pages = []
     for (let i = 1; i < this.afterCounter; i += 1) {
-      pagesAll.push(this.singlePage(ElasticQuery.pageNum + i, true))
+      pagesAll.push(this.singlePage(this.state.currentPage + i, true))
     }
     if (this.beforeCounter < 4) {
       pages = pagesAll.slice(0, (3 + (2 - (this.beforeCounter - 1)))) // atleast 2, max 4
@@ -143,15 +144,15 @@ export default class Pagination extends Component {
 
   restDots(where) {
     if (where === 'before') {
-      if (ElasticQuery.pageNum === 5) {
+      if ((this.state.currentPage === 5 && this.state.pageAmount > 8) || (this.state.pageAmount === 9 && this.state.currentPage > 5)) {
         return this.singlePage(2, true)
-      } else if (ElasticQuery.pageNum > 5) {
+      } else if (this.state.currentPage > 5 && this.state.pageAmount > 8) {
         return this.singlePage('...', false)
       }
     } else if (where === 'after') {
-      if (this.state.pageAmount - ElasticQuery.pageNum === 4) {
+      if ((this.state.pageAmount - this.state.currentPage === 4 && this.state.pageAmount > 8) || (this.state.pageAmount === 9 && this.state.currentPage < 5)) {
         return this.singlePage(this.state.pageAmount - 1, true)
-      } else if (this.state.pageAmount - ElasticQuery.pageNum > 4) {
+      } else if (this.state.pageAmount - this.state.currentPage > 4 && this.state.pageAmount > 8) {
         return this.singlePage('...', false)
       }
     }
@@ -167,15 +168,15 @@ export default class Pagination extends Component {
       <div className="pagination-container col-lg-12">
         <p id="pagination-label" className="pagination-label sr-only" aria-hidden="true">Pagination</p>
         <ul className="pagination">
-          {ElasticQuery.pageNum > 1
+          {this.state.currentPage > 1
           ?
-            <button className="btn btn-transparent" onClick={(e) => { this.changePage(e, ElasticQuery.pageNum - 1) }}>
+            <button className="btn btn-transparent" onClick={(e) => { this.changePage(e, this.state.currentPage - 1) }}>
               {'<'} Previous page
             </button>
           : null
           }
           { // first page
-            ElasticQuery.pageNum !== 1
+            this.state.currentPage !== 1
               ? this.singlePage(1, true)
               : null
           }
@@ -185,7 +186,7 @@ export default class Pagination extends Component {
           { // pages before
             this.state.before.map(single => single)
           }
-          {this.singlePage(ElasticQuery.pageNum, false)} {/* currentpage */}
+          {this.singlePage(this.state.currentPage, false)} {/* currentpage */}
           { // pages after
             this.state.after.map(single => single)
           }
@@ -193,13 +194,13 @@ export default class Pagination extends Component {
             this.restDots('after')
           }
           { // last page
-            ElasticQuery.pageNum !== this.state.pageAmount
+            this.state.currentPage !== this.state.pageAmount
               ? this.singlePage(this.state.pageAmount, true)
               : null
           }
-          {ElasticQuery.pageNum < this.state.pageAmount
+          {this.state.currentPage < this.state.pageAmount
           ?
-            <button className="btn btn-transparent" onClick={(e) => { this.changePage(e, ElasticQuery.pageNum + 1) }}>
+            <button className="btn btn-transparent" onClick={(e) => { this.changePage(e, this.state.currentPage + 1) }}>
               Next page {'>'}
             </button>
           : null
@@ -209,3 +210,5 @@ export default class Pagination extends Component {
     );
   }
 }
+
+export default withRouter(Pagination)

@@ -13,6 +13,8 @@ $pages-item-size: 40px;
     border-radius: $pages-item-size;
     line-height: $pages-item-size;
     color: black;
+    padding: 0;
+    border: 0;
     &.current {
       background-color: $color-primary;
       color: white;
