@@ -1,7 +1,7 @@
-// import axios from 'axios'
-// import MockAdapter from 'axios-mock-adapter'
-
+import createHistory from 'history/createBrowserHistory'
 import ElasticQuery from '../js/stores/view/elasticquery'
+
+const history = createHistory()
 
 describe('ElasticQuery', () => {
   // ------ UPDATE SEARCH ------
@@ -10,7 +10,7 @@ describe('ElasticQuery', () => {
       expect(ElasticQuery.search).toEqual('')
     })
     it('should update the search value', () => {
-      ElasticQuery.updateSearch('Helsinki')
+      ElasticQuery.updateSearch('Helsinki', history)
       expect(ElasticQuery.search).toEqual('Helsinki')
     })
   })
@@ -21,8 +21,8 @@ describe('ElasticQuery', () => {
       expect(ElasticQuery.sorting).toEqual('')
     })
     it('should update the sorting value', () => {
-      ElasticQuery.updateSorting('Best Match')
-      expect(ElasticQuery.sorting).toEqual('Best Match')
+      ElasticQuery.updateSorting('BestMatch', history, false)
+      expect(ElasticQuery.sorting).toEqual('BestMatch')
     })
   })
 
@@ -43,25 +43,25 @@ describe('ElasticQuery', () => {
       expect(ElasticQuery.filter.length).toEqual(0)
     })
     it('should add the filter values', () => {
-      ElasticQuery.updateFilter('myterm', 'mykey')
+      ElasticQuery.updateFilter('myterm', 'mykey', history)
       expect(ElasticQuery.filter[0].key).toEqual('mykey')
       expect(ElasticQuery.filter[0].term).toEqual('myterm')
     })
     it('should push new values to filter values', () => {
-      ElasticQuery.updateFilter('myterm2', 'mykey2')
+      ElasticQuery.updateFilter('myterm2', 'mykey2', history)
       expect(ElasticQuery.filter[1].key).toEqual('mykey2')
       expect(ElasticQuery.filter[1].term).toEqual('myterm2')
     })
     it('should remove value that is already present', () => {
-      ElasticQuery.updateFilter('myterm', 'mykey')
+      ElasticQuery.updateFilter('myterm', 'mykey', history)
       expect(ElasticQuery.filter.find(item => item.term === 'myterm')).toEqual(undefined)
       expect(ElasticQuery.filter.find(item => item.key === 'mykey')).toEqual(undefined)
       expect(ElasticQuery.filter.length).toEqual(1)
     })
     it('should not remove if only key or term match', () => {
-      ElasticQuery.updateFilter('myterm2', 'mykey3')
+      ElasticQuery.updateFilter('myterm2', 'mykey3', history)
       expect(ElasticQuery.filter.length).toEqual(2)
-      ElasticQuery.updateFilter('myterm4', 'mykey2')
+      ElasticQuery.updateFilter('myterm4', 'mykey2', history)
       expect(ElasticQuery.filter.length).toEqual(3)
     })
   })

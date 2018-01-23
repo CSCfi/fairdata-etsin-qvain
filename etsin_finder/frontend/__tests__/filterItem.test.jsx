@@ -1,11 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom'; // eslint-disable-line no-unused-vars
 import { shallow, mount } from 'enzyme';
+import createHistory from 'history/createBrowserHistory'
+
 import FilterItem from '../js/components/search/filterResults/filterItem'
 import ElasticQuery from '../js/stores/view/elasticquery'
 
+const history = createHistory()
+
 describe('FilterItem', () => {
-  ElasticQuery.updateSearch('Helsinki')
+  ElasticQuery.updateSearch('Helsinki', history)
   const facet = { item: { key: 'Pirkko Suihkonen', doc_count: 92 }, aggregationName: 'Creator', termName: 'creator_name.keyword' }
   describe('Filter not active', () => {
     const filterItem = mount(<FilterItem
@@ -13,6 +17,7 @@ describe('FilterItem', () => {
       item={facet.item}
       aggregationName={facet.aggregationName}
       term={facet.termName}
+      history={history}
     />);
     it('should contain button', () => {
       expect(filterItem.children().children().type()).toEqual('button')
@@ -25,12 +30,13 @@ describe('FilterItem', () => {
     })
   })
   describe('Filter currently active', () => {
-    ElasticQuery.updateFilter(facet.termName, facet.item.key)
+    ElasticQuery.updateFilter(facet.termName, facet.item.key, history)
     const filterItem = shallow(<FilterItem
       key={facet.item.key}
       item={facet.item}
       aggregationName={facet.aggregationName}
       term={facet.termName}
+      history={history}
     />);
     it('should be active', () => {
       expect(filterItem.state().active).toEqual(true)

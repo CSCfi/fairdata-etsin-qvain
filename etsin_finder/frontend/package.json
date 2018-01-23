@@ -106,7 +106,8 @@
     "testPathIgnorePatterns": [
       "./__tests__/test-setup.js"
     ],
-    "setupTestFrameworkScriptFile": "./__tests__/test-setup.js"
+    "setupTestFrameworkScriptFile": "./__tests__/test-setup.js",
+    "testURL": "http://localhost"
   },
   "prettier": {
     "semi": false,
