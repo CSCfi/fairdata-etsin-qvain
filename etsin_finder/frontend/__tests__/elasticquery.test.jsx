@@ -32,7 +32,7 @@ describe('ElasticQuery', () => {
       expect(ElasticQuery.pageNum).toEqual(1)
     })
     it('should update the pagenum value', () => {
-      ElasticQuery.updatePageNum(2)
+      ElasticQuery.updatePageNum(2, history)
       expect(ElasticQuery.pageNum).toEqual(2)
     })
   })
