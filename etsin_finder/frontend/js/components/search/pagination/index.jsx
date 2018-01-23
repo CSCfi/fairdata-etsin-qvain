@@ -5,7 +5,6 @@ import ElasticQuery from '../../../stores/view/elasticquery'
 
 class Pagination extends Component {
   render() {
-    console.log('render pagination buttons')
     return <PaginationButtons loading={ElasticQuery.loading} />
   }
 }

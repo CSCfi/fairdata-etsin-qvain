@@ -20,9 +20,9 @@ export default class Results extends Component {
             </ErrorBoundary>
           </div>
           <div className="col-lg-9">
-            <div className="d-flex align-items-end justify-content-between">
-              <CurrentQuery />
+            <div className="d-flex align-items-end flex-row-reverse justify-content-between">
               <SortResults />
+              <CurrentQuery />
             </div>
             <Loader />
             <ResultsList query={this.props.query} />
