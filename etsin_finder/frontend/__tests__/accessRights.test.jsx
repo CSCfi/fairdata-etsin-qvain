@@ -20,7 +20,7 @@ describe('AccessRights', () => {
   })
   describe('render with access rights true', () => {
     const accessRights = shallow(<AccessRights
-      access_rights={{ type: [{ identifier: 'http://purl.org/att/es/reference_data/access_type/access_type_open_access', label: { fi: 'title' } }] }}
+      access_rights={{ type: [{ identifier: 'http://purl.org/att/es/reference_data/access_type/access_type_open_access', pref_label: { fi: 'title' } }] }}
       Stores={{ Locale: { currenLang: 'en' } }}
     />);
     it('should render unclocked icon', () => {
@@ -29,7 +29,7 @@ describe('AccessRights', () => {
   })
   describe('render with access rights anything else', () => {
     const accessRights = shallow(<AccessRights
-      access_rights={{ license: [{ identifier: 'something', label: { fi: 'title' } }] }}
+      access_rights={{ license: [{ identifier: 'something', pref_label: { fi: 'title' } }] }}
       Stores={{ Locale: { currenLang: 'en' } }}
     />);
     it('should render locked icon', () => {

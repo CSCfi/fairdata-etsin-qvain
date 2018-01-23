@@ -31,6 +31,7 @@ class ElasticQuery {
   @observable pageNum = 1
   @observable results = { hits: [], total: 0, aggregations: [] }
   @observable loading = 0
+  @observable perPage = 20
 
   @action
   updateSearch = (newSearch, history, updateUrl = true) => {
@@ -61,7 +62,7 @@ class ElasticQuery {
 
   @action
   updatePageNum = (newPage, updateUrl = true) => {
-    this.pageNum = newPage
+    this.pageNum = parseInt(newPage, 10)
     console.log(updateUrl)
   }
 
@@ -180,10 +181,13 @@ class ElasticQuery {
 
     // toggle loader
     this.loading = 1
+    let from = this.pageNum * this.perPage
+    from -= this.perPage
 
     axios
       .post('/es/metax/dataset/_search', {
-        size: 20,
+        size: this.perPage,
+        from,
         query: queryObject,
         sort: ['_score'], // Sort by hit score
         // Return only the following fields in source attribute to minimize traffic

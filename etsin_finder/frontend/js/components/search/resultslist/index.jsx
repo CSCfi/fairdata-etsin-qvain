@@ -7,10 +7,13 @@ import Loader from '../../general/loader'
 import FilterResults from '../filterResults'
 import ErrorBoundary from '../../general/errorBoundary'
 import ElasticQuery from '../../../stores/view/elasticquery'
+import SortResults from '../sortResults'
+import Pagination from './pagination'
 
 class ResultsList extends Component {
   constructor(props) {
     super(props)
+
     this.renderList = this.renderList.bind(this)
   }
 
@@ -25,6 +28,7 @@ class ResultsList extends Component {
     ), this)
     return list
   }
+
 
   render() {
     console.log('Render: Results list')
@@ -46,6 +50,17 @@ class ResultsList extends Component {
               }
             </div>
             <div className="col-lg-9">
+              <div className={`${this.props.query ? 'd-flex ' : ''}align-items-end justify-content-between`}>
+                {
+                  this.props.query
+                  ?
+                    <p>
+                      <span className="text-muted">Results for query: </span><strong>{this.props.query}</strong>
+                    </p>
+                  : null
+                }
+                <SortResults />
+              </div>
               {ElasticQuery.results.hits.length === 0
                 ?
                   <div className="results-zero">
@@ -56,6 +71,11 @@ class ResultsList extends Component {
                   </div>
                 : this.renderList(currentLang)}
             </div>
+            <Pagination
+              total={ElasticQuery.results.total}
+              perPage={ElasticQuery.perPage}
+              currentPage={ElasticQuery.pageNum}
+            />
           </div>
         }
       </div>
