@@ -17,12 +17,12 @@ describe('ElasticQuery', () => {
 
   // ------ UPDATE SORTING ------
   describe('updateSorting function', () => {
-    it('should be empty to start with', () => {
-      expect(ElasticQuery.sorting).toEqual('')
+    it('should be best to start with', () => {
+      expect(ElasticQuery.sorting).toEqual('best')
     })
     it('should update the sorting value', () => {
-      ElasticQuery.updateSorting('BestMatch', history, false)
-      expect(ElasticQuery.sorting).toEqual('BestMatch')
+      ElasticQuery.updateSorting('dateD', history, false)
+      expect(ElasticQuery.sorting).toEqual('dateD')
     })
   })
 
@@ -36,7 +36,7 @@ describe('ElasticQuery', () => {
       expect(ElasticQuery.pageNum).toEqual(2)
     })
   })
-  
+
   // ------ UPDATE FILTER ------
   describe('updateFilter function', () => {
     it('should be empty to start with', () => {
@@ -54,8 +54,12 @@ describe('ElasticQuery', () => {
     })
     it('should remove value that is already present', () => {
       ElasticQuery.updateFilter('myterm', 'mykey', history)
-      expect(ElasticQuery.filter.find(item => item.term === 'myterm')).toEqual(undefined)
-      expect(ElasticQuery.filter.find(item => item.key === 'mykey')).toEqual(undefined)
+      expect(ElasticQuery.filter.find(item => item.term === 'myterm')).toEqual(
+        undefined
+      )
+      expect(ElasticQuery.filter.find(item => item.key === 'mykey')).toEqual(
+        undefined
+      )
       expect(ElasticQuery.filter.length).toEqual(1)
     })
     it('should not remove if only key or term match', () => {

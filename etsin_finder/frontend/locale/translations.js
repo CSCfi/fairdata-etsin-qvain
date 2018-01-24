@@ -1,4 +1,4 @@
-import counterpart from 'counterpart';
+import counterpart from 'counterpart'
 
 counterpart.registerTranslations('en', {
   addDataset: 'Add dataset',
@@ -34,7 +34,7 @@ counterpart.registerTranslations('en', {
     temporal_coverage: 'Temporal Coverage',
   },
   error: {
-    notFound: 'Couldn\'t find metadata for given id',
+    notFound: "Couldn't find metadata for given id",
   },
   home: {
     title: 'Search datasets',
@@ -45,6 +45,13 @@ counterpart.registerTranslations('en', {
     home: 'Home',
     organizations: 'Organizations',
   },
+  search: {
+    sorting: {
+      best: 'Best Match',
+      dateD: 'Date descending',
+      dateA: 'Date ascending',
+    },
+  },
   results: {
     amount: {
       plrl: '%(amount)s results',
@@ -52,7 +59,7 @@ counterpart.registerTranslations('en', {
     },
   },
   slogan: 'Research data finder',
-});
+})
 
 counterpart.registerTranslations('fi', {
   addDataset: 'Lisää aineisto',
@@ -99,6 +106,13 @@ counterpart.registerTranslations('fi', {
     home: 'Koti',
     organizations: 'Organisaatiot',
   },
+  search: {
+    sorting: {
+      best: 'Osuvimmat ensin',
+      dateD: 'Uusin ensin',
+      dateA: 'Vanhin ensin',
+    },
+  },
   results: {
     amount: {
       plrl: '%(amount)s hakutulosta',
@@ -106,4 +120,4 @@ counterpart.registerTranslations('fi', {
     },
   },
   slogan: 'Tutkimustenhaku palvelu',
-});
+})

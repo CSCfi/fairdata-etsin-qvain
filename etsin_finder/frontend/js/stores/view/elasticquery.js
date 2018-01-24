@@ -26,7 +26,7 @@ const fields = [
 
 class ElasticQuery {
   @observable filter = []
-  @observable sorting = ''
+  @observable sorting = 'best'
   @observable search = ''
   @observable pageNum = 1
   @observable results = { hits: [], total: 0, aggregations: [] }
@@ -42,6 +42,8 @@ class ElasticQuery {
       const urlParams = UrlParse.searchParams(history.location.search)
       if (urlParams && urlParams.sort) {
         search = `?sort=${urlParams.sort}`
+        this.filter = []
+        this.pageNum = 1
       } else {
         this.filter = []
         this.pageNum = 1
@@ -54,8 +56,12 @@ class ElasticQuery {
   updateSorting = (newSorting, history, updateUrl = true) => {
     this.sorting = newSorting
     if (updateUrl) {
-      const urlParams = UrlParse.searchParams(history.location.search)
-      urlParams.sort = newSorting
+      let urlParams = UrlParse.searchParams(history.location.search)
+      if (urlParams) {
+        urlParams.sort = newSorting
+      } else {
+        urlParams = { sort: newSorting }
+      }
       // reset page number
       this.pageNum = 1
       urlParams.p = this.pageNum
@@ -129,7 +135,7 @@ class ElasticQuery {
     }
     if (urlParams) {
       if (urlParams.sort) {
-        this.updateSorting(urlParams.sort, false)
+        this.updateSorting(urlParams.sort, history, false)
       }
       if (urlParams.keys && urlParams.terms) {
         if (this.filter.length === 0) {
@@ -158,6 +164,15 @@ class ElasticQuery {
     const filters = []
     for (let i = 0; i < this.filter.length; i += 1) {
       filters.push({ term: { [this.filter[i].term]: this.filter[i].key } })
+    }
+    const sorting = ['_score']
+    if (this.sorting) {
+      if (this.sorting === 'dateA') {
+        sorting.unshift({ date_modified: { order: 'asc' } })
+      }
+      if (this.sorting === 'dateD') {
+        sorting.unshift({ date_modified: { order: 'desc' } })
+      }
     }
 
     if (query) {
@@ -189,6 +204,7 @@ class ElasticQuery {
         },
       }
     }
+
     // adding filters if they are set
     if (filters.length > 0) {
       queryObject.bool.filter = filters
@@ -204,7 +220,7 @@ class ElasticQuery {
         size: this.perPage,
         from,
         query: queryObject,
-        sort: ['_score'], // Sort by hit score
+        sort: sorting,
         // Return only the following fields in source attribute to minimize traffic
         _source: [
           'urn_identifier',
@@ -267,5 +283,4 @@ class ElasticQuery {
   }
 }
 
-window.ElasticQuery = new ElasticQuery()
 export default new ElasticQuery()
