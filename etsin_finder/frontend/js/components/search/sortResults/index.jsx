@@ -1,20 +1,22 @@
 import React, { Component } from 'react'
+import { withRouter } from 'react-router-dom'
+import Translate from 'react-translate-component'
 
-export default class SortResults extends Component {
+import ElasticQuery from '../../../stores/view/elasticquery'
+
+const options = ['best', 'dateD', 'dateA']
+
+class SortResults extends Component {
   constructor(props) {
     super(props)
+
     this.state = {
-      value: 'best',
-      name: 'Best Match',
+      value: ElasticQuery.sorting,
       listToggle: '',
     }
-    this.sort = this.sort.bind(this)
+
     this.toggleList = this.toggleList.bind(this)
     this.updateValue = this.updateValue.bind(this)
-  }
-
-  sort(event) {
-    this.props.sorting(event.target.value)
   }
 
   toggleList() {
@@ -30,13 +32,18 @@ export default class SortResults extends Component {
     }
   }
 
-  updateValue(event) {
+  updateValue(event, value) {
     this[`option${this.state.value}`].classList.remove('active')
-    this.setState({
-      value: event.target.value,
-      name: event.target.textContent,
-    })
-    event.target.classList.add('active');
+    this.setState(
+      {
+        value,
+      },
+      () => {
+        ElasticQuery.updateSorting(this.state.value, this.props.history)
+        ElasticQuery.queryES()
+      }
+    )
+    event.target.classList.add('active')
     this.toggleList()
   }
 
@@ -49,51 +56,44 @@ export default class SortResults extends Component {
               className={`btn btn-select ${this.state.listToggle}`}
               onClick={this.toggleList}
               value={this.state.value}
-              ref={(select) => { this.selectButton = select }}
+              ref={select => {
+                this.selectButton = select
+              }}
             >
-              {this.state.name} <i className="fa fa-sort" aria-hidden="true" />
+              <Translate content={`search.sorting.${this.state.value}`} />{' '}
+              <i className="fa fa-sort" aria-hidden="true" />
             </button>
           </div>
           <div
             id="select-options"
             className={`options ${this.state.listToggle}`}
-            ref={(options) => { this.selectOptions = options }}
+            ref={dropdown => {
+              this.selectOptions = dropdown
+            }}
           >
-            <button
-              className="btn btn-select-options active"
-              onClick={this.updateValue}
-              value="best"
-              ref={(value) => { this.optionbest = value }}
-              disabled={!this.state.listToggle}
-            >
-              Best Match
-            </button>
-            <button
-              className="btn btn-select-options"
-              onClick={this.updateValue}
-              value="dateA"
-              ref={(value) => { this.optiondateA = value }}
-              disabled={!this.state.listToggle}
-            >
-              Date ascending
-            </button>
-            <button
-              className="btn btn-select-options"
-              onClick={this.updateValue}
-              value="dateD"
-              ref={(value) => { this.optiondateD = value }}
-              disabled={!this.state.listToggle}
-            >
-              Date descending
-            </button>
+            {options.map(item => (
+              <button
+                key={`sorting-${item}`}
+                className={`btn btn-select-options ${
+                  this.state.value === item ? 'active' : ''
+                }`}
+                onClick={e => {
+                  this.updateValue(e, item)
+                }}
+                value={item}
+                ref={value => {
+                  this[`option${item}`] = value
+                }}
+                disabled={!this.state.listToggle}
+              >
+                <Translate content={`search.sorting.${item}`} />
+              </button>
+            ))}
           </div>
         </div>
-        {/* <select onChange={this.sort}>
-          <option value="">Best match</option>
-          <option value="date-a">Date ascending</option>
-          <option value="date-d">Date descending</option>
-        </select> */}
       </div>
-    );
+    )
   }
 }
+
+export default withRouter(SortResults)

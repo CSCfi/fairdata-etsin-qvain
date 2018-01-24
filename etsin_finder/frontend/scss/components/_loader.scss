@@ -27,10 +27,10 @@
 }
 
 .results-spinner {
-  height: 4em;
-  width: 4em;
+  height: 3em;
+  width: 3em;
   animation: spinner 0.8s infinite linear;
-  border: 8px solid $color-primary;
+  border: 7px solid $color-primary;
   border-right-color: transparent;
   border-radius: 50%;
 }

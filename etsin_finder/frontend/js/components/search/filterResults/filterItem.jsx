@@ -21,8 +21,14 @@ class FilterItem extends Component {
   }
 
   componentWillReceiveProps(newProps) {
+    const active =
+      ElasticQuery.filter.filter(
+        item =>
+          item.term === this.props.term && item.key === this.props.item.key
+      ).length > 0
     this.setState({
       doc_count: newProps.item.doc_count,
+      active,
     })
   }
 
