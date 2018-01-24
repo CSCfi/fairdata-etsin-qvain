@@ -16,6 +16,6 @@ describe('check date', () => {
   it('should contain the translated (finnish) date', () => {
     Locale.setLang('fi')
     const dateformat = shallow(<DateFormat date={1516007145830} />)
-    expect(dateformat.find('span').text()).toContain('1/15/2018')
+    expect(dateformat.find('span').text()).toContain('15.1.2018')
   })
 })
