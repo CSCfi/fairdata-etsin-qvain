@@ -1,29 +1,24 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
-import Dataset from '../dataset';
-import Datasets from '../datasets';
-import SearchPage from '../search';
+import FancyRoute from '../components/general/fancyRoute'
+import Dataset from '../components/dataset';
+import FrontPage from '../components/frontpage'
+import Search from '../components/search';
 
 export default class Content extends React.Component {
   render() {
     return (
       <div className="content">
-        <Route
+        <FancyRoute
           exact
           path="/"
-          component={SearchPage}
+          component={FrontPage}
         />
-        <Route
+        <FancyRoute
           exact
-          path="/datasets/"
-          component={Datasets}
+          path="/datasets/:query?"
+          component={Search}
         />
-        <Route
-          exact
-          path="/datasets/:query"
-          component={Datasets}
-        />
-        <Route path="/dataset/:identifier" component={Dataset} />
+        <FancyRoute path="/dataset/:identifier" component={Dataset} />
       </div>
     );
   }

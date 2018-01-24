@@ -1,9 +1,8 @@
 import React from 'react';
 import Translate from 'react-translate-component';
 
-import Navi from '../components/navi';
-import SecondNav from '../components/secondnav';
-import ErrorBoundary from '../components/errorBoundary'
+import Navi from '../components/general/navigation';
+import ErrorBoundary from '../components/general/errorBoundary'
 
 export default class Header extends React.Component {
   constructor(props) {
@@ -23,10 +22,7 @@ export default class Header extends React.Component {
                 </p>
               </div>
             </div>
-            <div className="row top-nav">
-              <Navi />
-              <SecondNav />
-            </div>
+            <Navi />
           </div>
         </ErrorBoundary>
       </div>
