@@ -1,4 +1,5 @@
 .dsDownloads {
+  font-size: 0.9em;
   .row:last-of-type {
     margin-bottom: -15px;
   }
@@ -6,13 +7,14 @@
     margin-bottom: 0;
     p {
       font-weight: 700;
-      margin: 0
+      margin: 0;
     }
     .urn {
       font-size: 0.9em;
       color: $color-gray;
     }
-    td, th {
+    td,
+    th {
       padding: 15px;
     }
     tbody tr:first-of-type {
@@ -25,11 +27,12 @@
 .thead-etsin {
   border: 0;
   background-color: transparent;
-  th, tr {
+  th,
+  tr {
     border: 0 !important;
   }
   &:after {
-    content: "";
+    content: '';
     display: block;
     height: 49px;
     width: 500%;

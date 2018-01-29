@@ -1,49 +1,62 @@
-import React, { Component } from 'react';
-import Translate from 'react-translate-component';
+import React, { Component } from 'react'
+import DatasetQuery from '../../stores/view/datasetquery'
 
 export default class Downloads extends Component {
-  render() {
+  constructor(props) {
+    super(props)
+    this.state = {
+      results: DatasetQuery.results,
+    }
+  }
+
+  tableItem(item, index) {
     return (
-      <div className="dsDownloads content-box">
-        <div className="row no-gutters justify-content-between mb-3">
-          <div className="d-flex align-items-center">
-            <Translate content="dataset.dl.files" component="h3" className="m-0" />
-            <p className="total-size m-0 ml-2">
-              (99.9 GB)
-            </p>
+      <tr key={`filelist-${index}`}>
+        <td>icon</td>
+        <td>{item.title}</td>
+        <td>Lorem Ipsum Dolor Sit Amet</td>
+        <td>38.5 MB</td>
+        <td>Dokumentaatio</td>
+        <td>
+          <button>Button1</button>
+          <button>Button2</button>
+        </td>
+      </tr>
+    )
+  }
+
+  render() {
+    console.log(this.state.results.research_dataset.files[0])
+    return (
+      <div className="dsDownloads">
+        <div className="downloads-header d-flex justify-content-between">
+          <div className="heading-right">
+            <div className="title">Tiedostot</div>
+            <div className="files-size-all">145 aineistoa (6789,1 MB)</div>
           </div>
-          <button type="button" className="btn btn-etsin">
-            <Translate content="" />Hae käyttölupaa
-          </button>
+          <div className="heading-left d-flex align-items-center">
+            <div className="files-filter">Suodata</div>
+            <div className="files-search">Search</div>
+          </div>
         </div>
-        <div className="row">
-          <table className="table">
-            <thead className="thead-etsin">
-              <tr>
-                <th><Translate content="dataset.dl.name" /></th>
-                <th><Translate content="dataset.dl.size" /></th>
-                <th />
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <p>
-                    Datasource 1
-                  </p>
-                  <span className="urn">urn:something</span>
-                </td>
-                <td>
-                  <p>38.7 Mb</p>
-                </td>
-                <td className="text-right">
-                  <button className="btn btn-etsin"><Translate content="dataset.dl.download" /></button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <table className="table">
+          <thead className="thead-dark">
+            <tr>
+              <th scope="col" />
+              <th scope="col">Nimi</th>
+              <th scope="col">Otsikko</th>
+              <th scope="col">Koko</th>
+              <th scope="col">Kategoria</th>
+              <th scope="col" />
+            </tr>
+          </thead>
+          <tbody>
+            {this.state.results.research_dataset.files.map((single, i) =>
+              this.tableItem(single, i)
+            )}
+          </tbody>
+        </table>
       </div>
-    );
+    )
   }
 }
