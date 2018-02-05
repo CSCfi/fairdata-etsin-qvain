@@ -5,7 +5,6 @@ import { NavLink } from 'react-router-dom'
 export default class Tabs extends Component {
   constructor(props) {
     super(props)
-    console.log(this.props.identifier)
   }
   render() {
     return (

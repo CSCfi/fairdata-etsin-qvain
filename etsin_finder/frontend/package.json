@@ -6,11 +6,11 @@
     "start": "webpack-dev-server",
     "build":
       "webpack --config webpack.prod.js --define process.env.NODE_ENV=\"'production'\"",
-    "dev-build": "webpack -d --config webpack.config.js",
+    "dev-build": "webpack -d --config webpack.config.js --define process.env.NODE_ENV=\"'development'\"",
     "lint": "eslint js --ext .jsx,.js",
     "test": "jest",
     "watch":
-      "echo \"Updating packages\"; npm update; echo \"Packages updated\"; webpack --progress -d --config webpack.config.js --watch",
+      "echo \"Updating packages\"; npm update; echo \"Packages updated\"; webpack --progress -d --config webpack.config.js --watch  --define process.env.NODE_ENV=\"'development'\"",
     "start:dev": "webpack-dev-server",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
