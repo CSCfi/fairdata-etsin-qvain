@@ -13,7 +13,7 @@ class DatasetQuery {
     console.log('DatasetQuery')
     return new Promise((resolve, reject) => {
       axios
-        .get(`${this.metaxUrl}/rest/datasets/${id}?file_details.json`)
+        .get(`${this.metaxUrl}/rest/datasets/${id}?file_details`)
         .then(res => {
           this.results = res.data
           resolve(res.data)

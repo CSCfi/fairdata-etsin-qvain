@@ -16,9 +16,10 @@
 /* Components */
 @import 'components/dataset/dataset';
 @import 'components/dataset/dsContent';
-@import 'components/dataset/dsDownloads';
+@import 'components/dataset/downloads/downloads';
 @import 'components/dataset/dsSidebar';
 @import 'components/dataset/accessRights';
+@import 'components/dataset/tabs';
 @import 'components/search/searchBar';
 @import 'components/search/listItem';
 @import 'components/search/_filter.scss';

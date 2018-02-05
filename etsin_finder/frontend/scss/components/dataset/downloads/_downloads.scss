@@ -1,0 +1,72 @@
+.dataset-downloads {
+  margin-top: 1em;
+  .downloads-header {
+    background-color: $color-primary;
+    padding: 1em 1.5em;
+    color: white;
+  }
+  .downloads-table {
+    table-layout: fixed;
+    .rowIcon {
+      width: 7%;
+    }
+    .rowName {
+      width: 35%;
+    }
+    .rowSize {
+      width: 13%;
+    }
+    .rowCategory {
+      width: 20%;
+    }
+    .rowButtons {
+      width: 25%;
+    }
+    .thead-dark {
+      background-color: $color-dark;
+      color: white;
+      th {
+        border: 0;
+        font-weight: 400;
+      }
+    }
+    tbody {
+      box-sizing: border-box;
+      border: 2px solid $color-lightgray;
+      border-top: none;
+      color: $color-dark;
+      font-weight: 300;
+      tr {
+        &:nth-child(even) {
+          background-color: $color-superlightgray;
+        }
+        td {
+          vertical-align: middle;
+          border: none;
+          &:first-of-type {
+            padding-right: 0.5em;
+            padding-left: 1.5em;
+          }
+          p {
+            size: 0.8em;
+            margin: 0;
+          }
+          button {
+            background-color: transparent;
+            font-size: 0.9em;
+            border-radius: 0.3em;
+            padding: 0.5em 0.7em;
+            &:first-of-type {
+              color: $color-darkgray;
+              margin-right: 0.5em;
+            }
+            &:last-of-type {
+              color: $color-primary;
+              border-color: $color-primary;
+            }
+          }
+        }
+      }
+    }
+  }
+}

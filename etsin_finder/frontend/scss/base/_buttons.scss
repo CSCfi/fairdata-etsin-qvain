@@ -10,7 +10,8 @@
     }
   }
 
-  &.btn-etsin-outline { // outline button
+  &.btn-etsin-outline {
+    // outline button
     background-color: transparent;
     color: $color-primary;
     border: 2px solid $color-primary;
@@ -53,7 +54,9 @@
     &:hover {
       text-decoration: underline;
     }
-    &:active, &:focus, &:visited {
+    &:active,
+    &:focus,
+    &:visited {
       background-color: transparent;
     }
   }
@@ -72,24 +75,6 @@
 
   &.btn-back {
     color: $color-primary;
-  }
-}
-
-.etsin-tabs {
-  border-bottom-color: $color-primary;
-  .nav-link {
-    border-top-right-radius: 0em;
-    border-top-left-radius: 0em;
-    transition: all ease-out 0.3s;
-    &:not(.active) {
-      background-color: $color-primary;
-      color: white;
-      &:hover {
-        background-color: mix($color-primary, black, 80)
-      }
-    }
-    &.active, &:hover {
-      border-color: $color-primary $color-primary transparent $color-primary;
-    }
+    margin-bottom: 1em;
   }
 }
