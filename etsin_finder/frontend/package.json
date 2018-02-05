@@ -4,13 +4,11 @@
   "main": "index.html",
   "scripts": {
     "start": "webpack-dev-server",
-    "build":
-      "webpack --config webpack.prod.js --define process.env.NODE_ENV=\"'production'\"",
+    "build": "webpack --config webpack.prod.js --define process.env.NODE_ENV=\"'production'\"",
     "dev-build": "webpack -d --config webpack.config.js",
     "lint": "eslint js --ext .jsx,.js",
     "test": "jest",
-    "watch":
-      "echo \"Updating packages\"; npm update; echo \"Packages updated\"; webpack --progress -d --config webpack.config.js --watch",
+    "watch": "echo \"Updating packages\"; npm update; echo \"Packages updated\"; webpack --progress -d --config webpack.config.js --watch",
     "start:dev": "webpack-dev-server",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
@@ -45,7 +43,9 @@
         "env",
         {
           "targets": {
-            "browsers": ["last 2 major versions"]
+            "browsers": [
+              "last 2 major versions"
+            ]
           }
         }
       ],
@@ -58,7 +58,9 @@
             "env",
             {
               "targets": {
-                "browsers": ["last 2 major versions"]
+                "browsers": [
+                  "last 2 major versions"
+                ]
               }
             }
           ],
@@ -68,6 +70,10 @@
     }
   },
   "dependencies": {
+    "@fortawesome/fontawesome": "^1.1.3",
+    "@fortawesome/fontawesome-free-regular": "^5.0.6",
+    "@fortawesome/fontawesome-free-solid": "^5.0.6",
+    "@fortawesome/react-fontawesome": "0.0.17",
     "axios": "==0.16.2",
     "babel-core": "==6.26.0",
     "babel-loader": "==7.1.2",
@@ -102,7 +108,9 @@
   },
   "description": "",
   "jest": {
-    "testPathIgnorePatterns": ["./__tests__/test-setup.js"],
+    "testPathIgnorePatterns": [
+      "./__tests__/test-setup.js"
+    ],
     "setupTestFrameworkScriptFile": "./__tests__/test-setup.js",
     "testURL": "http://localhost"
   },

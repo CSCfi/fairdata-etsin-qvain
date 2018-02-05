@@ -1,4 +1,7 @@
 import React, { Component } from 'react'
+import FontAwesomeIcon from '@fortawesome/react-fontawesome'
+import faFolder from '@fortawesome/fontawesome-free-regular/faFolder'
+import faFileAlt from '@fortawesome/fontawesome-free-regular/faFileAlt'
 import DatasetQuery from '../../stores/view/datasetquery'
 import Breadcrumbs from './data/breadcrumbs'
 import checkDataLang from '../../utils/checkDataLang'
@@ -15,7 +18,11 @@ export default class Downloads extends Component {
     this.state = {
       results: DatasetQuery.results,
       fileDirTree,
+      currentFolder: fileDirTree,
+      currentPath: [],
     }
+
+    this.updatePath = this.updatePath.bind(this)
   }
 
   createDirTree(files, folders) {
@@ -33,7 +40,7 @@ export default class Downloads extends Component {
     if (folders) {
       folderPaths = folders.map(folder => ({
         path: folder.details.directory_path.substring(1),
-        type: 'directory',
+        type: 'dir',
         details: folder.details,
         use_category: folder.use_category,
         title: folder.title,
@@ -43,11 +50,72 @@ export default class Downloads extends Component {
     return createTree(combined)
   }
 
+  changeFolder(folderName) {
+    const path = this.state.currentPath.slice()
+    path.push(folderName)
+    let currFolder = this.state.currentFolder.slice()
+    currFolder = currFolder.find(single => single.name === folderName).children
+    this.setState({
+      currentPath: path,
+      currentFolder: currFolder,
+    })
+  }
+
+  updatePath(path) {
+    if (!path) {
+      this.setState({
+        currentPath: [],
+        currentFolder: this.state.fileDirTree,
+      })
+    } else {
+      const currentPath = this.state.currentPath.slice()
+      const newPath = currentPath.slice(0, currentPath.indexOf(path) + 1)
+
+      const fileDirTree = this.state.fileDirTree
+      let currentFolder = fileDirTree
+      newPath.map(folder => {
+        currentFolder = currentFolder.find(item => item.path === folder)
+          .children
+        return true
+      })
+      this.setState({
+        currentPath: newPath,
+        currentFolder,
+      })
+    }
+  }
+
   tableItem(item, index) {
+    if (item.type === 'dir') {
+      return (
+        <tr key={`filelist-${index}`}>
+          <td className="fileIcon">
+            <button
+              className="folderButton"
+              onClick={() => this.changeFolder(item.details.directory_name)}
+            >
+              <FontAwesomeIcon icon={faFolder} transform="grow-6" />
+            </button>
+          </td>
+          <td className="fileName">
+            <p>{item.details.directory_name}</p>
+            {`Kuvailtuja tiedostoja: ${item.childAmount}`}
+          </td>
+          <td className="fileSize">{sizeParse(item.details.byte_size, 1)}</td>
+          <td className="fileCategory">
+            {checkDataLang(item.use_category.pref_label)}
+          </td>
+          <td className="fileButtons">
+            <button>Tietoja</button>
+            <button>Lataa</button>
+          </td>
+        </tr>
+      )
+    }
     return (
       <tr key={`filelist-${index}`}>
         <td className="fileIcon">
-          <i className="far fa-file-alt" data-fa-transform="grow-6" />
+          <FontAwesomeIcon icon={faFileAlt} transform="grow-6" />
         </td>
         <td className="fileName">
           <p>
@@ -70,11 +138,9 @@ export default class Downloads extends Component {
   }
 
   render() {
-    console.log(this.state.results)
     if (!this.state.results) {
       return 'Loading'
     }
-    console.log(this.state.fileDirTree)
     return (
       <div className="dataset-downloads">
         <div className="downloads-header d-flex justify-content-between">
@@ -94,7 +160,7 @@ export default class Downloads extends Component {
             <div className="files-search">Search</div>
           </div>
         </div>
-        <Breadcrumbs />
+        <Breadcrumbs path={this.state.currentPath} callback={this.updatePath} />
         <table className="table downloads-table">
           <thead className="thead-dark">
             <tr>
@@ -112,7 +178,7 @@ export default class Downloads extends Component {
             </tr>
           </thead>
           <tbody>
-            {this.state.fileDirTree.map((single, i) =>
+            {this.state.currentFolder.map((single, i) =>
               this.tableItem(single, i)
             )}
           </tbody>
