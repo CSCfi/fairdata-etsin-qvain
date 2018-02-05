@@ -36,6 +36,14 @@ counterpart.registerTranslations('en', {
   error: {
     notFound: "Couldn't find metadata for given id",
   },
+  tombstone: {
+    info: 'The dataset has been either deprecated or removed',
+    pid: 'Dataset permanent identifier',
+    version: 'Dataset version identifier',
+    title: 'Title',
+    description: 'Description',
+    last_modified: 'Last modification date'
+  },
   home: {
     title: 'Search datasets',
   },
@@ -96,6 +104,15 @@ counterpart.registerTranslations('fi', {
   },
   error: {
     notFound: 'Annetulle id:lle ei löytynyt metadataa',
+  },
+  tombstone: {
+    info: 'Aineisto on joko vanhentunut tai poistettu',
+    pid: 'Aineiston pysyvä tunniste',
+    version: 'Aineiston versiotunniste',
+    title: 'Otsikko',
+    description: 'Kuvaus',
+    last_modified: 'Viimeisin muokkauspäivämäärä'
+
   },
   home: {
     title: 'Etsi aineistoa',

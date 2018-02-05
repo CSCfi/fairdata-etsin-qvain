@@ -8,6 +8,7 @@ import Sidebar from './Sidebar'
 import Downloads from './Downloads'
 import Content from './Content'
 import ErrorPage from '../errorpage'
+import TombstonePage from '../tombstonepage'
 import Identifier from './data/identifier'
 import ErrorBoundary from '../general/errorBoundary'
 import Tabs from './Tabs'
@@ -38,47 +39,84 @@ class Dataset extends React.Component {
   }
 
   getData(id) {
+    if (process.env.NODE_ENV === 'production' && /^\d+$/.test(id)) {
+      console.log('Using integer as identifier not permitted');
+      this.setState({ error: 'wrong identifier' });
+      this.setState({ loaded: true });
+      return;
+    }
+
     let dataid = id;
     if (this.props.dataid) {
-      dataid = this.props.dataid
+      dataid = this.props.dataid;
     }
     axios.get(`${this.url}/rest/datasets/${dataid}.json`)
       .then((res) => {
         console.log(res.data)
         const dataset = res.data;
         this.setState({ dataset });
-        this.updateData()
+        if (dataset.deprecated) {
+          console.log('It seems the dataset is deprecated..');
+          this.updateData(false);
+        } else {
+          this.updateData(true);
+        }
       })
       .catch((error) => {
+        console.log(error);
+        this.getRemovedData(dataid);
+      });
+  }
+
+  getRemovedData(id) {
+    console.log('Trying to find from removed datasets..');
+    axios.get(`${this.url}/rest/datasets/${id}.json?removed=true`)
+      .then((res) => {
+        const dataset = res.data;
+        this.setState({ dataset });
+        this.updateData(false);
+      })
+      .catch((error) => {
+        console.log(error);
         this.setState({ error });
       });
   }
 
   goBack() {
-    this.props.history.goBack()
+    this.props.history.goBack();
   }
 
-  updateData() {
+  updateData(isLive) {
     const researchDataset = this.state.dataset.research_dataset
-    this.setState({ title: researchDataset.title })
 
+    const title = researchDataset.title;
     const description = researchDataset.description.map(single => (
       checkDataLang(single)
     ));
-    this.setState({ description })
-    const {
-      creator,
-      contributor,
-      issued,
-      rights_holder,
-    } = this.state.dataset.research_dataset;
-    this.setState({
-      creator,
-      contributor,
-      issued,
-      rights_holder,
-    })
-    this.setState({ loaded: 'true' })
+    this.setState({ title, description });
+
+    if (isLive) {
+      const {
+        creator,
+        contributor,
+        issued,
+        rights_holder,
+      } = this.state.dataset.research_dataset;
+      this.setState({
+        creator,
+        contributor,
+        issued,
+        rights_holder,
+      })
+    } else {
+      const {
+        urn_identifier,
+        preferred_identifier
+      } = researchDataset;
+      this.setState({ urn_identifier, preferred_identifier, date_modified: this.state.dataset.date_modified })
+    }
+    this.setState({ live: isLive });
+    this.setState({ loaded: true })
   }
 
   render() {
@@ -87,7 +125,7 @@ class Dataset extends React.Component {
       return <ErrorPage />;
     }
 
-    // CASE 2: Loading not complete
+    // Loading not complete
     // Don't show anything until data has been loaded from Metax
     // TODO: Use a loading indicator instead
     // Do we need to worry about Metax sending us incomplete datasets?
@@ -96,6 +134,20 @@ class Dataset extends React.Component {
     }
 
     const { currentLang } = this.props.Stores.Locale
+    // CASE 2: Dataset is deprecated or removed
+    if (!this.state.live) {
+      return (
+        <TombstonePage
+          title={checkDataLang(this.state.title, currentLang)}
+          description={checkDataLang(this.state.description, currentLang)}
+          date_modified={this.state.date_modified}
+          version_identifier={this.state.urn_identifier}
+          preferred_identifier={this.state.preferred_identifier}
+        />
+      );
+    }
+
+    // CASE 3: Business as usual
 
     return (
       <div className="container regular-row" pageid={this.props.match.params.identifier}>
