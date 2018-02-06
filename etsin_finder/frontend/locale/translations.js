@@ -36,6 +36,9 @@ counterpart.registerTranslations('en', {
   error: {
     notFound: "Couldn't find metadata for given id",
   },
+  tombstone: {
+    info: 'The dataset has been either deprecated or removed'
+  },
   home: {
     title: 'Search datasets',
   },
@@ -96,6 +99,9 @@ counterpart.registerTranslations('fi', {
   },
   error: {
     notFound: 'Annetulle id:lle ei löytynyt metadataa',
+  },
+  tombstone: {
+    info: 'Aineisto on joko vanhentunut tai poistettu'
   },
   home: {
     title: 'Etsi aineistoa',

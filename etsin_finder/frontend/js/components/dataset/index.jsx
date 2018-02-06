@@ -12,6 +12,7 @@ import Identifier from './data/identifier'
 import ErrorBoundary from '../general/errorBoundary'
 import Tabs from './Tabs'
 import checkDataLang from '../../utils/checkDataLang'
+import HeroBanner from '../general/hero';
 
 class Dataset extends React.Component {
   constructor(props) {
@@ -38,47 +39,77 @@ class Dataset extends React.Component {
   }
 
   getData(id) {
+    if (process.env.NODE_ENV === 'production' && /^\d+$/.test(id)) {
+      console.log('Using integer as identifier not permitted');
+      this.setState({ error: 'wrong identifier' });
+      this.setState({ loaded: true });
+      return;
+    }
+
     let dataid = id;
     if (this.props.dataid) {
-      dataid = this.props.dataid
+      dataid = this.props.dataid;
     }
     axios.get(`${this.url}/rest/datasets/${dataid}.json`)
       .then((res) => {
         console.log(res.data)
         const dataset = res.data;
         this.setState({ dataset });
-        this.updateData()
+        if (dataset.deprecated) {
+          console.log('It seems the dataset is deprecated..');
+          this.updateData(false);
+        } else {
+          this.updateData(true);
+        }
+      })
+      .catch(() => {
+        this.getRemovedData(dataid);
+      });
+  }
+
+  getRemovedData(id) {
+    console.log('Trying to find from removed datasets..');
+    axios.get(`${this.url}/rest/datasets/${id}.json?removed=true`)
+      .then((res) => {
+        const dataset = res.data;
+        this.setState({ dataset });
+        this.updateData(false);
       })
       .catch((error) => {
+        console.log(error);
         this.setState({ error });
       });
   }
 
   goBack() {
-    this.props.history.goBack()
+    this.props.history.goBack();
   }
 
-  updateData() {
+  updateData(isLive) {
     const researchDataset = this.state.dataset.research_dataset
-    this.setState({ title: researchDataset.title })
 
     const description = researchDataset.description.map(single => (
       checkDataLang(single)
     ));
-    this.setState({ description })
+
     const {
+      title,
       creator,
       contributor,
       issued,
-      rights_holder,
+      rights_holder
     } = this.state.dataset.research_dataset;
     this.setState({
+      title,
+      description,
       creator,
       contributor,
       issued,
-      rights_holder,
+      rights_holder
     })
-    this.setState({ loaded: 'true' })
+
+    this.setState({ live: isLive });
+    this.setState({ loaded: true })
   }
 
   render() {
@@ -87,7 +118,7 @@ class Dataset extends React.Component {
       return <ErrorPage />;
     }
 
-    // CASE 2: Loading not complete
+    // Loading not complete
     // Don't show anything until data has been loaded from Metax
     // TODO: Use a loading indicator instead
     // Do we need to worry about Metax sending us incomplete datasets?
@@ -96,16 +127,34 @@ class Dataset extends React.Component {
     }
 
     const { currentLang } = this.props.Stores.Locale
+    // CASE 2: Business as usual
 
     return (
       <div className="container regular-row" pageid={this.props.match.params.identifier}>
+        {
+          this.state.live
+            ?
+              ''
+            :
+              <div className="row">
+                <div className="col-md-12">
+                  <HeroBanner className="hero-primary">
+                    <div className="container">
+                      <h1 className="text-center">
+                        <Translate content="tombstone.info" />
+                      </h1>
+                    </div>
+                  </HeroBanner>
+                </div>
+              </div>
+        }
         <div className="row">
           <div className="col-md-8">
             <button className="btn btn-transparent nopadding btn-back" onClick={this.goBack}>
               {'< Go back'}
             </button>
             <ErrorBoundary>
-              <Tabs identifier={this.props.match.params.identifier} />
+              <Tabs identifier={this.props.match.params.identifier} live={this.state.live} />
             </ErrorBoundary>
             <ErrorBoundary>
               <Route
@@ -125,23 +174,29 @@ class Dataset extends React.Component {
                 )}
               />
             </ErrorBoundary>
-            <ErrorBoundary>
-              {
-                this.state.dataset.data_catalog.catalog_json.harvested
-                  ?
-                    <Identifier idn={this.state.dataset.research_dataset.preferred_identifier} classes="btn btn-primary" >
-                      <Translate content="dataset.data_location" fallback="this is fallback" />
-                    </Identifier>
-                  :
-                    <Route
-                      exact
-                      path="/dataset/:identifier/data"
-                      render={() => (
-                        <Downloads />
-                      )}
-                    />
-              }
-            </ErrorBoundary>
+            {
+              this.state.live
+                ?
+                  <ErrorBoundary>
+                    {
+                      this.state.dataset.data_catalog.catalog_json.harvested
+                        ?
+                          <Identifier idn={this.state.dataset.research_dataset.preferred_identifier} classes="btn btn-primary">
+                            <Translate content="dataset.data_location" fallback="this is fallback" />
+                          </Identifier>
+                        :
+                          <Route
+                            exact
+                            path="/dataset/:identifier/data"
+                            render={() => (
+                              <Downloads />
+                            )}
+                          />
+                    }
+                  </ErrorBoundary>
+                :
+                  ''
+            }
           </div>
           <div className="col-md-4">
             <ErrorBoundary>
