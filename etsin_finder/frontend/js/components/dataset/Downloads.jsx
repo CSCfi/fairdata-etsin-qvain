@@ -1,20 +1,10 @@
 import React, { Component } from 'react'
-import styled from 'styled-components'
-import { CSSTransitionGroup } from 'react-transition-group'
-import FontAwesomeIcon from '@fortawesome/react-fontawesome'
-import faFolder from '@fortawesome/fontawesome-free-regular/faFolder'
-import faFileAlt from '@fortawesome/fontawesome-free-regular/faFileAlt'
+import DataItem from './data/dataItem'
 import DatasetQuery from '../../stores/view/datasetquery'
-import Breadcrumbs from './data/breadcrumbs'
 import checkDataLang from '../../utils/checkDataLang'
+import Breadcrumbs from './data/breadcrumbs'
 import sizeParse from '../../utils/sizeParse'
 import createTree from '../../utils/createTree'
-
-const TitleAlt = styled.p`
-  font-size: 0.8em;
-  font-weight: 400;
-  color: #777;
-`
 
 export default class Downloads extends Component {
   constructor(props) {
@@ -32,19 +22,31 @@ export default class Downloads extends Component {
 
     this.updatePath = this.updatePath.bind(this)
     this.tableItems = this.tableItems.bind(this)
+    this.changeFolder = this.changeFolder.bind(this)
   }
 
   createDirTree(files, folders) {
     let filePaths = []
     let folderPaths = []
+    console.log(files)
+    console.log(folders)
     if (filePaths) {
-      filePaths = files.map(file => ({
-        path: file.details.file_path.substring(1),
-        type: 'file',
-        details: file.details,
-        use_category: file.use_category,
-        title: file.title,
-      }))
+      filePaths = files.map(file => {
+        let fileType
+        if (file.type || file.file_type) {
+          fileType = file.type
+            ? checkDataLang(file.type.pref_label)
+            : checkDataLang(file.file_type.pref_label)
+        }
+        return {
+          path: file.details.file_path.substring(1),
+          type: fileType,
+          details: file.details,
+          use_category: file.use_category,
+          title: file.title,
+          identifier: file.identifier,
+        }
+      })
     }
     if (folders) {
       folderPaths = folders.map(folder => ({
@@ -53,6 +55,7 @@ export default class Downloads extends Component {
         details: folder.details,
         use_category: folder.use_category,
         title: folder.title,
+        identifier: folder.identifier,
       }))
     }
     const combined = filePaths.concat(folderPaths)
@@ -60,6 +63,7 @@ export default class Downloads extends Component {
   }
 
   changeFolder(folderName) {
+    console.log(folderName)
     const path = this.state.currentPath.slice()
     path.push(folderName)
     let currFolder = this.state.currentFolder.slice()
@@ -95,66 +99,14 @@ export default class Downloads extends Component {
   }
 
   tableItems() {
-    return this.state.currentFolder.map((single, i) =>
-      this.tableItem(single, i)
-    )
-  }
-
-  tableItem(item, index) {
-    if (item.type === 'dir') {
-      return (
-        <tr key={`filelist-${index}`}>
-          <td className="fileIcon">
-            <button
-              className="folderButton"
-              onClick={() => this.changeFolder(item.details.directory_name)}
-            >
-              <FontAwesomeIcon icon={faFolder} transform="grow-6" />
-            </button>
-          </td>
-          <td className="fileName">
-            <button
-              className="folderButton"
-              onClick={() => this.changeFolder(item.details.directory_name)}
-            >
-              <p>{item.details.directory_name}</p>
-            </button>
-            <TitleAlt>{`Kuvailtuja tiedostoja: ${item.childAmount}`}</TitleAlt>
-          </td>
-          <td className="fileSize">{sizeParse(item.details.byte_size, 1)}</td>
-          <td className="fileCategory">
-            {checkDataLang(item.use_category.pref_label)}
-          </td>
-          <td className="fileButtons">
-            <button>Tietoja</button>
-            <button>Lataa</button>
-          </td>
-        </tr>
-      )
-    }
-    return (
-      <tr key={`filelist-${index}`}>
-        <td className="fileIcon">
-          <FontAwesomeIcon icon={faFileAlt} transform="grow-6" />
-        </td>
-        <td className="fileName">
-          <p>
-            {item.details.file_name
-              ? item.details.file_name
-              : item.details.directory_name}
-          </p>
-          <TitleAlt>{item.title}</TitleAlt>
-        </td>
-        <td className="fileSize">{sizeParse(item.details.byte_size, 1)}</td>
-        <td className="fileCategory">
-          {checkDataLang(item.use_category.pref_label)}
-        </td>
-        <td className="fileButtons">
-          <button>Tietoja</button>
-          <button>Lataa</button>
-        </td>
-      </tr>
-    )
+    return this.state.currentFolder.map((single, i) => (
+      <DataItem
+        key={`dataitem-${single.details.id}`}
+        item={single}
+        index={i}
+        changeFolder={this.changeFolder}
+      />
+    ))
   }
 
   render() {
