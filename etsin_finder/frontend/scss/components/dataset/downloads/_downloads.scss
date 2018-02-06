@@ -37,6 +37,8 @@
       cursor: pointer;
     }
     tbody {
+      position: relative;
+      overflow-y: hidden;
       box-sizing: border-box;
       border: 2px solid $color-lightgray;
       border-top: none;
@@ -76,3 +78,12 @@
     }
   }
 }
+
+// .download-navigation-appear {
+//   opacity: 0.01;
+// }
+
+// .download-navigation-appear.download-navigation-appear-active {
+//   opacity: 1;
+//   transition: opacity 0.5s ease-in;
+// }

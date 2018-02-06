@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import styled from 'styled-components'
+import { CSSTransitionGroup } from 'react-transition-group'
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faFolder from '@fortawesome/fontawesome-free-regular/faFolder'
 import faFileAlt from '@fortawesome/fontawesome-free-regular/faFileAlt'
@@ -7,6 +9,12 @@ import Breadcrumbs from './data/breadcrumbs'
 import checkDataLang from '../../utils/checkDataLang'
 import sizeParse from '../../utils/sizeParse'
 import createTree from '../../utils/createTree'
+
+const TitleAlt = styled.p`
+  font-size: 0.8em;
+  font-weight: 400;
+  color: #777;
+`
 
 export default class Downloads extends Component {
   constructor(props) {
@@ -23,6 +31,7 @@ export default class Downloads extends Component {
     }
 
     this.updatePath = this.updatePath.bind(this)
+    this.tableItems = this.tableItems.bind(this)
   }
 
   createDirTree(files, folders) {
@@ -85,6 +94,12 @@ export default class Downloads extends Component {
     }
   }
 
+  tableItems() {
+    return this.state.currentFolder.map((single, i) =>
+      this.tableItem(single, i)
+    )
+  }
+
   tableItem(item, index) {
     if (item.type === 'dir') {
       return (
@@ -98,8 +113,13 @@ export default class Downloads extends Component {
             </button>
           </td>
           <td className="fileName">
-            <p>{item.details.directory_name}</p>
-            {`Kuvailtuja tiedostoja: ${item.childAmount}`}
+            <button
+              className="folderButton"
+              onClick={() => this.changeFolder(item.details.directory_name)}
+            >
+              <p>{item.details.directory_name}</p>
+            </button>
+            <TitleAlt>{`Kuvailtuja tiedostoja: ${item.childAmount}`}</TitleAlt>
           </td>
           <td className="fileSize">{sizeParse(item.details.byte_size, 1)}</td>
           <td className="fileCategory">
@@ -123,7 +143,7 @@ export default class Downloads extends Component {
               ? item.details.file_name
               : item.details.directory_name}
           </p>
-          {item.title}
+          <TitleAlt>{item.title}</TitleAlt>
         </td>
         <td className="fileSize">{sizeParse(item.details.byte_size, 1)}</td>
         <td className="fileCategory">
@@ -141,6 +161,7 @@ export default class Downloads extends Component {
     if (!this.state.results) {
       return 'Loading'
     }
+
     return (
       <div className="dataset-downloads">
         <div className="downloads-header d-flex justify-content-between">
@@ -177,11 +198,7 @@ export default class Downloads extends Component {
               <th className="rowButtons" scope="col" />
             </tr>
           </thead>
-          <tbody>
-            {this.state.currentFolder.map((single, i) =>
-              this.tableItem(single, i)
-            )}
-          </tbody>
+          <tbody>{this.tableItems()}</tbody>
         </table>
       </div>
     )

@@ -61,6 +61,19 @@
     }
   }
 
+  &.btn-transparent-alt {
+    background-color: transparent;
+    color: $color-darkgray;
+    &:hover {
+      text-decoration: underline;
+    }
+    &:active,
+    &:focus,
+    &:visited {
+      background-color: transparent;
+    }
+  }
+
   &.btn-gray {
     line-height: 0;
     padding: 0.5em 1.5em;
