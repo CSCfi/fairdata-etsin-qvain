@@ -3,9 +3,6 @@ import Translate from 'react-translate-component'
 import { NavLink } from 'react-router-dom'
 
 export default class Tabs extends Component {
-  constructor(props) {
-    super(props)
-  }
   render() {
     return (
       <ul className="nav nav-tabs etsin-tabs">
@@ -14,11 +11,17 @@ export default class Tabs extends Component {
             <Translate content="nav.dataset" fallback="Dataset" />
           </NavLink>
         </li>
-        <li className="nav-item">
-          <NavLink exact to={`/dataset/${this.props.identifier}/data`} className="nav-link">
-            <Translate content="nav.data" fallback="Data" />
-          </NavLink>
-        </li>
+        {
+          this.props.live
+            ?
+              <li className="nav-item">
+                <NavLink exact to={`/dataset/${this.props.identifier}/data`} className="nav-link">
+                  <Translate content="nav.data" fallback="Data" />
+                </NavLink>
+              </li>
+            :
+              ''
+        }
       </ul>
     );
   }

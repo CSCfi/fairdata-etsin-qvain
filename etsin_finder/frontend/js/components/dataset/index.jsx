@@ -8,11 +8,11 @@ import Sidebar from './Sidebar'
 import Downloads from './Downloads'
 import Content from './Content'
 import ErrorPage from '../errorpage'
-import TombstonePage from '../tombstonepage'
 import Identifier from './data/identifier'
 import ErrorBoundary from '../general/errorBoundary'
 import Tabs from './Tabs'
 import checkDataLang from '../../utils/checkDataLang'
+import HeroBanner from '../general/hero';
 
 class Dataset extends React.Component {
   constructor(props) {
@@ -62,8 +62,7 @@ class Dataset extends React.Component {
           this.updateData(true);
         }
       })
-      .catch((error) => {
-        console.log(error);
+      .catch(() => {
         this.getRemovedData(dataid);
       });
   }
@@ -89,32 +88,26 @@ class Dataset extends React.Component {
   updateData(isLive) {
     const researchDataset = this.state.dataset.research_dataset
 
-    const title = researchDataset.title;
     const description = researchDataset.description.map(single => (
       checkDataLang(single)
     ));
-    this.setState({ title, description });
 
-    if (isLive) {
-      const {
-        creator,
-        contributor,
-        issued,
-        rights_holder,
-      } = this.state.dataset.research_dataset;
-      this.setState({
-        creator,
-        contributor,
-        issued,
-        rights_holder,
-      })
-    } else {
-      const {
-        urn_identifier,
-        preferred_identifier
-      } = researchDataset;
-      this.setState({ urn_identifier, preferred_identifier, date_modified: this.state.dataset.date_modified })
-    }
+    const {
+      title,
+      creator,
+      contributor,
+      issued,
+      rights_holder
+    } = this.state.dataset.research_dataset;
+    this.setState({
+      title,
+      description,
+      creator,
+      contributor,
+      issued,
+      rights_holder
+    })
+
     this.setState({ live: isLive });
     this.setState({ loaded: true })
   }
@@ -134,30 +127,34 @@ class Dataset extends React.Component {
     }
 
     const { currentLang } = this.props.Stores.Locale
-    // CASE 2: Dataset is deprecated or removed
-    if (!this.state.live) {
-      return (
-        <TombstonePage
-          title={checkDataLang(this.state.title, currentLang)}
-          description={checkDataLang(this.state.description, currentLang)}
-          date_modified={this.state.date_modified}
-          version_identifier={this.state.urn_identifier}
-          preferred_identifier={this.state.preferred_identifier}
-        />
-      );
-    }
-
-    // CASE 3: Business as usual
+    // CASE 2: Business as usual
 
     return (
       <div className="container regular-row" pageid={this.props.match.params.identifier}>
+        {
+          this.state.live
+            ?
+              ''
+            :
+              <div className="row">
+                <div className="col-md-12">
+                  <HeroBanner className="hero-primary">
+                    <div className="container">
+                      <h1 className="text-center">
+                        <Translate content="tombstone.info" />
+                      </h1>
+                    </div>
+                  </HeroBanner>
+                </div>
+              </div>
+        }
         <div className="row">
           <div className="col-md-8">
             <button className="btn btn-transparent nopadding btn-back" onClick={this.goBack}>
               {'< Go back'}
             </button>
             <ErrorBoundary>
-              <Tabs identifier={this.props.match.params.identifier} />
+              <Tabs identifier={this.props.match.params.identifier} live={this.state.live} />
             </ErrorBoundary>
             <ErrorBoundary>
               <Route
@@ -177,23 +174,29 @@ class Dataset extends React.Component {
                 )}
               />
             </ErrorBoundary>
-            <ErrorBoundary>
-              {
-                this.state.dataset.data_catalog.catalog_json.harvested
-                  ?
-                    <Identifier idn={this.state.dataset.research_dataset.preferred_identifier} classes="btn btn-primary" >
-                      <Translate content="dataset.data_location" fallback="this is fallback" />
-                    </Identifier>
-                  :
-                    <Route
-                      exact
-                      path="/dataset/:identifier/data"
-                      render={() => (
-                        <Downloads />
-                      )}
-                    />
-              }
-            </ErrorBoundary>
+            {
+              this.state.live
+                ?
+                  <ErrorBoundary>
+                    {
+                      this.state.dataset.data_catalog.catalog_json.harvested
+                        ?
+                          <Identifier idn={this.state.dataset.research_dataset.preferred_identifier} classes="btn btn-primary">
+                            <Translate content="dataset.data_location" fallback="this is fallback" />
+                          </Identifier>
+                        :
+                          <Route
+                            exact
+                            path="/dataset/:identifier/data"
+                            render={() => (
+                              <Downloads />
+                            )}
+                          />
+                    }
+                  </ErrorBoundary>
+                :
+                  ''
+            }
           </div>
           <div className="col-md-4">
             <ErrorBoundary>
