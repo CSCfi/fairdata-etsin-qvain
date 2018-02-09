@@ -14,7 +14,9 @@ if [[ "$TRAVIS_BRANCH" == "test" && "$TRAVIS_PULL_REQUEST" == "false" ]]; then
     ansible-galaxy -r requirements.yml install --roles-path=roles
     ansible-playbook -vv -i inventories/test/hosts deploy_webservers.yml --extra-vars "ssh_user=etsin-deploy-user"
 elif [[ "$TRAVIS_BRANCH" == "stable" && "$TRAVIS_PULL_REQUEST" == "false" ]]; then
-    echo "Deploying to stable.. (NOT ACTUALLY, ADD CODE TO DO IT)"
+    echo "Deploying to stable webservers.."
+    ansible-galaxy -r requirements.yml install --roles-path=roles
+    ansible-playbook -vv -i inventories/stable/hosts deploy_webservers.yml --extra-vars "ssh_user=etsin-deploy-user"
 fi
 
 # Make sure the last command to run before this part is the ansible-playbook command
