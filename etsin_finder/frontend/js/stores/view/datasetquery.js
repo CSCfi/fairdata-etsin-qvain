@@ -25,6 +25,8 @@ class DatasetQuery {
         })
     })
   }
+
+  @action
   getFolderData(id) {
     console.log('Folder Query')
     return new Promise((resolve, reject) => {

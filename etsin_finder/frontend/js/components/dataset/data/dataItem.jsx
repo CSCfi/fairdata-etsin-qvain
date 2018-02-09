@@ -4,6 +4,7 @@ import FileIcon from './fileIcon'
 import InfoModal from './infoModal'
 import checkDataLang from '../../../utils/checkDataLang'
 import sizeParse from '../../../utils/sizeParse'
+import checkNested from '../../../utils/checkNested'
 
 const TitleAlt = styled.p`
   font-size: 0.8em;
@@ -48,7 +49,12 @@ export default class DataItem extends Component {
           {this.props.item.type === 'dir' ? (
             <button
               className="folderButton"
-              onClick={() => this.props.changeFolder(this.state.name)}
+              onClick={() =>
+                this.props.changeFolder(
+                  this.state.name,
+                  this.props.item.identifier
+                )
+              }
               title={this.props.item.type}
             >
               <FileIcon type={this.props.item.type} />
@@ -64,7 +70,12 @@ export default class DataItem extends Component {
           <td className="fileName">
             <button
               className="folderButton"
-              onClick={() => this.props.changeFolder(this.state.name)}
+              onClick={() =>
+                this.props.changeFolder(
+                  this.state.name,
+                  this.props.item.identifier
+                )
+              }
             >
               <p>{this.state.name}</p>
             </button>
@@ -82,7 +93,9 @@ export default class DataItem extends Component {
           {sizeParse(this.props.item.details.byte_size, 1)}
         </td>
         <td className="fileCategory">
-          {checkDataLang(this.props.item.use_category.pref_label)}
+          {checkNested(this.props.item.use_category, 'pref_label')
+            ? checkDataLang(this.props.item.use_category.pref_label)
+            : ''}
         </td>
         <td className="fileButtons">
           <button onClick={this.openModal}>Tietoja</button>
@@ -92,7 +105,11 @@ export default class DataItem extends Component {
             id={this.props.item.identifier}
             title={this.state.titleAlt}
             size={sizeParse(this.props.item.details.byte_size, 1)}
-            category={checkDataLang(this.props.item.use_category.pref_label)}
+            category={
+              checkNested(this.props.item.use_category, 'pref_label')
+                ? checkDataLang(this.props.item.use_category.pref_label)
+                : ''
+            }
             type={this.props.item.type}
             open={this.state.modalIsOpen}
             closeModal={this.closeModal}

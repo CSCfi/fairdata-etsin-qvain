@@ -12,34 +12,42 @@ export default class Downloads extends Component {
 
     const files = DatasetQuery.results.research_dataset.files
     const folders = DatasetQuery.results.research_dataset.directories
-    const fileDirTree = this.createDirTree(files, folders)
+    const combined = this.createDirTree(files, folders)
+    const fileDirTree = createTree(combined)
     this.state = {
       results: DatasetQuery.results,
+      filesAndFolders: combined,
       fileDirTree,
       currentFolder: fileDirTree,
       currentPath: [],
+      currentIDs: [],
     }
 
     this.updatePath = this.updatePath.bind(this)
     this.tableItems = this.tableItems.bind(this)
     this.changeFolder = this.changeFolder.bind(this)
+    this.query = this.query.bind(this)
   }
 
-  createDirTree(files, folders) {
+  createDirTree(files, folders, fileApi = false) {
     let filePaths = []
     let folderPaths = []
     if (files) {
       filePaths = files.map(file => {
         let fileType
+        let fileDetails = file.details
         if (file.type || file.file_type) {
           fileType = file.type
             ? checkDataLang(file.type.pref_label)
             : checkDataLang(file.file_type.pref_label)
         }
+        if (fileApi) {
+          fileDetails = file
+        }
         return {
-          path: file.details.file_path.substring(1),
+          path: fileDetails.file_path.substring(1),
           type: fileType,
-          details: file.details,
+          details: fileDetails,
           use_category: file.use_category,
           title: file.title,
           identifier: file.identifier,
@@ -47,74 +55,87 @@ export default class Downloads extends Component {
       })
     }
     if (folders) {
-      folderPaths = folders.map(folder => ({
-        path: folder.details.directory_path.substring(1),
-        type: 'dir',
-        details: folder.details,
-        use_category: folder.use_category,
-        title: folder.title,
-        identifier: folder.identifier,
-      }))
+      folderPaths = folders.map(folder => {
+        let folderDetails = folder.details
+        if (fileApi) {
+          folderDetails = folder
+        }
+        return {
+          path: folderDetails.directory_path.substring(1),
+          type: 'dir',
+          details: folderDetails,
+          use_category: folder.use_category,
+          title: folder.title,
+          identifier: folder.identifier,
+        }
+      })
     }
-    const combined = filePaths.concat(folderPaths)
-    const describedTree = createTree(combined)
-    return describedTree
+    return filePaths.concat(folderPaths)
   }
 
-  changeFolder(folderName) {
-    console.log(folderName)
-    const path = this.state.currentPath.slice()
-    path.push(folderName)
-    let currFolder = this.state.currentFolder.slice()
-    const clickedFolder = currFolder.find(single => single.name === folderName)
-    console.log(clickedFolder)
-    DatasetQuery.getFolderData(clickedFolder.identifier)
+  query(id, newPath, newIDs) {
+    DatasetQuery.getFolderData(id)
       .then(res => {
-        console.log(res)
-        currFolder = this.createDirTree(res.files, res.directories)
+        const currFolder = createTree(
+          this.createDirTree(res.files, res.directories, true)
+        )
+        this.setState({
+          currentPath: newPath,
+          currentIDs: newIDs,
+          currentFolder: currFolder,
+        })
       })
       .catch(err => {
         console.log(err)
       })
-    this.setState({
-      currentPath: path,
-      currentFolder: currFolder,
-    })
   }
 
-  updatePath(path) {
+  changeFolder(folderName, id) {
+    const path = this.state.currentPath.slice()
+    path.push(folderName)
+    const identifiers = this.state.currentIDs.slice()
+    identifiers.push(id)
+    const currFolder = this.state.currentFolder.slice()
+    const clickedFolder = currFolder.find(single => single.name === folderName)
+    this.query(clickedFolder.identifier, path, identifiers)
+  }
+
+  updatePath(path, id) {
     if (!path) {
       this.setState({
         currentPath: [],
+        currentIDs: [],
         currentFolder: this.state.fileDirTree,
       })
     } else {
-      const currentPath = this.state.currentPath.slice()
-      const newPath = currentPath.slice(0, currentPath.indexOf(path) + 1)
+      const currentIDs = this.state.currentIDs.slice()
+      const newIDs = currentIDs.slice(0, currentIDs.indexOf(id) + 1)
+      const currentPaths = this.state.currentPath.slice()
+      const newPaths = currentPaths.slice(0, currentPaths.indexOf(path) + 1)
 
-      const fileDirTree = this.state.fileDirTree
-      let currentFolder = fileDirTree
-      newPath.map(folder => {
-        currentFolder = currentFolder.find(item => item.path === folder)
-          .children
-        return true
-      })
-      this.setState({
-        currentPath: newPath,
-        currentFolder,
-      })
+      this.query(id, newPaths, newIDs)
     }
   }
 
   tableItems(folder) {
-    return folder.map((single, i) => (
-      <DataItem
-        key={`dataitem-${single.details.identifier}`}
-        item={single}
-        index={i}
-        changeFolder={this.changeFolder}
-      />
-    ))
+    return folder.map((single, i) => {
+      let current = single
+      const described = this.state.filesAndFolders.filter(
+        item => item.identifier === single.identifier
+      )[0]
+      console.log(described)
+      if (described) {
+        current = described
+      }
+      return (
+        <DataItem
+          key={`dataitem-${current.details.identifier}`}
+          item={current}
+          index={i}
+          changeFolder={this.changeFolder}
+        />
+      )
+    })
   }
 
   render() {
@@ -141,7 +162,11 @@ export default class Downloads extends Component {
             <div className="files-search">Search</div>
           </div>
         </div>
-        <Breadcrumbs path={this.state.currentPath} callback={this.updatePath} />
+        <Breadcrumbs
+          path={this.state.currentPath}
+          ids={this.state.currentIDs}
+          callback={this.updatePath}
+        />
         <table className="table downloads-table">
           <thead className="thead-dark">
             <tr>

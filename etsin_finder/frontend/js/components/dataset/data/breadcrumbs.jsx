@@ -16,7 +16,7 @@ const Path = styled.div`
 const PathButton = styled.button``
 
 export default class Breadcrumbs extends Component {
-  pathItems(path, i) {
+  pathItems(path, i, id) {
     if (!path) {
       return (
         <Path key={`path-home-${i}`}>
@@ -42,7 +42,7 @@ export default class Breadcrumbs extends Component {
         <span>{'>'}</span>
         <PathButton
           className="btn btn-transparent-alt"
-          onClick={() => this.props.callback(path)}
+          onClick={() => this.props.callback(path, id)}
         >
           {path}
         </PathButton>
@@ -54,7 +54,9 @@ export default class Breadcrumbs extends Component {
     return (
       <Container className="light-border">
         {this.pathItems()}
-        {this.props.path.map((single, index) => this.pathItems(single, index))}
+        {this.props.path.map((single, index) =>
+          this.pathItems(single, index, this.props.ids[index])
+        )}
       </Container>
     )
   }
