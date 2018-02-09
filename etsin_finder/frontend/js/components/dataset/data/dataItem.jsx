@@ -49,11 +49,15 @@ export default class DataItem extends Component {
             <button
               className="folderButton"
               onClick={() => this.props.changeFolder(this.state.name)}
+              title={this.props.item.type}
             >
               <FileIcon type={this.props.item.type} />
             </button>
           ) : (
-            <FileIcon type={this.props.item.type} />
+            <FileIcon
+              type={this.props.item.type}
+              title={this.props.item.type}
+            />
           )}
         </td>
         {this.props.item.type === 'dir' ? (

@@ -98,10 +98,10 @@ export default class Downloads extends Component {
     }
   }
 
-  tableItems() {
-    return this.state.currentFolder.map((single, i) => (
+  tableItems(folder) {
+    return folder.map((single, i) => (
       <DataItem
-        key={`dataitem-${single.details.id}`}
+        key={`dataitem-${single.details.identifier}`}
         item={single}
         index={i}
         changeFolder={this.changeFolder}
@@ -150,7 +150,7 @@ export default class Downloads extends Component {
               <th className="rowButtons" scope="col" />
             </tr>
           </thead>
-          <tbody>{this.tableItems()}</tbody>
+          <tbody>{this.tableItems(this.state.currentFolder)}</tbody>
         </table>
       </div>
     )

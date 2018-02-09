@@ -28,7 +28,7 @@ const ModalIcon = styled.div`
   margin-right: 3em;
   @media (max-width: 600px) {
     margin-left: 0em;
-    margin-right: 1em;
+    font-size: 0.7em;
   }
 `
 

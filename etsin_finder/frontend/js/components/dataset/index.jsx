@@ -81,7 +81,7 @@ class Dataset extends React.Component {
         pageid={this.props.match.params.identifier}
       >
         <div className="row">
-          <div className="col-md-8">
+          <div className="col-lg-8">
             <button
               className="btn btn-transparent nopadding btn-back"
               onClick={this.goBack}
@@ -129,7 +129,7 @@ class Dataset extends React.Component {
               )}
             </ErrorBoundary>
           </div>
-          <div className="col-md-4">
+          <div className="col-lg-4">
             <ErrorBoundary>
               <Sidebar dataset={this.state.dataset} lang={currentLang} />
             </ErrorBoundary>
