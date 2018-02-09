@@ -28,9 +28,7 @@ export default class Downloads extends Component {
   createDirTree(files, folders) {
     let filePaths = []
     let folderPaths = []
-    console.log(files)
-    console.log(folders)
-    if (filePaths) {
+    if (files) {
       filePaths = files.map(file => {
         let fileType
         if (file.type || file.file_type) {
@@ -59,7 +57,8 @@ export default class Downloads extends Component {
       }))
     }
     const combined = filePaths.concat(folderPaths)
-    return createTree(combined)
+    const describedTree = createTree(combined)
+    return describedTree
   }
 
   changeFolder(folderName) {
@@ -67,7 +66,16 @@ export default class Downloads extends Component {
     const path = this.state.currentPath.slice()
     path.push(folderName)
     let currFolder = this.state.currentFolder.slice()
-    currFolder = currFolder.find(single => single.name === folderName).children
+    const clickedFolder = currFolder.find(single => single.name === folderName)
+    console.log(clickedFolder)
+    DatasetQuery.getFolderData(clickedFolder.identifier)
+      .then(res => {
+        console.log(res)
+        currFolder = this.createDirTree(res.files, res.directories)
+      })
+      .catch(err => {
+        console.log(err)
+      })
     this.setState({
       currentPath: path,
       currentFolder: currFolder,
