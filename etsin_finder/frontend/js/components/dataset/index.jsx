@@ -4,7 +4,7 @@ import { inject, observer } from 'mobx-react'
 import { Route } from 'react-router-dom'
 
 import Sidebar from './Sidebar'
-import Downloads from './Downloads'
+import Downloads from './downloads'
 import Content from './Content'
 import ErrorPage from '../errorpage'
 import Identifier from './data/identifier'
@@ -42,9 +42,7 @@ class Dataset extends React.Component {
 
   updateData(results) {
     const researchDataset = results.research_dataset
-    const description = researchDataset.description.map(single =>
-      checkDataLang(single)
-    )
+    const description = researchDataset.description.map(single => checkDataLang(single))
     const { creator, contributor, issued, rights_holder } = researchDataset
     this.setState({
       dataset: results,
@@ -76,16 +74,10 @@ class Dataset extends React.Component {
     const { currentLang } = this.props.Stores.Locale
 
     return (
-      <div
-        className="container regular-row"
-        pageid={this.props.match.params.identifier}
-      >
+      <div className="container regular-row" pageid={this.props.match.params.identifier}>
         <div className="row">
           <div className="col-lg-8">
-            <button
-              className="btn btn-transparent nopadding btn-back"
-              onClick={this.goBack}
-            >
+            <button className="btn btn-transparent nopadding btn-back" onClick={this.goBack}>
               {'< Go back'}
             </button>
             <ErrorBoundary>
@@ -115,17 +107,10 @@ class Dataset extends React.Component {
                   idn={this.state.dataset.research_dataset.preferred_identifier}
                   classes="btn btn-primary"
                 >
-                  <Translate
-                    content="dataset.data_location"
-                    fallback="this is fallback"
-                  />
+                  <Translate content="dataset.data_location" fallback="this is fallback" />
                 </Identifier>
               ) : (
-                <Route
-                  exact
-                  path="/dataset/:identifier/data"
-                  render={() => <Downloads />}
-                />
+                <Route exact path="/dataset/:identifier/data" render={() => <Downloads />} />
               )}
             </ErrorBoundary>
           </div>

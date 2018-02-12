@@ -53,37 +53,17 @@
           border: none;
           &:first-of-type {
             padding-right: 0.5em;
-            padding-left: 1.5em;
+            padding-left: 1em;
+            div {
+              float: right;
+            }
           }
           p {
             size: 0.8em;
             margin: 0;
-          }
-          button {
-            background-color: transparent;
-            font-size: 0.9em;
-            border-radius: 0.3em;
-            padding: 0.5em 0.7em;
-            &:first-of-type {
-              color: $color-darkgray;
-              margin-right: 0.5em;
-            }
-            &:last-of-type {
-              color: $color-primary;
-              border-color: $color-primary;
-            }
           }
         }
       }
     }
   }
 }
-
-// .download-navigation-appear {
-//   opacity: 0.01;
-// }
-
-// .download-navigation-appear.download-navigation-appear-active {
-//   opacity: 1;
-//   transition: opacity 0.5s ease-in;
-// }

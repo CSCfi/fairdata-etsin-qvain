@@ -52,28 +52,36 @@ const ModalInfo = ({ name, id, title, size, category, type }) => (
     </ModalIcon>
     <InfoTable>
       <tbody>
-        <tr>
-          <th>Name</th>
-          <td>{name}</td>
-        </tr>
-        <tr>
-          <th>ID</th>
-          <td>{id}</td>
-        </tr>
-        {type === 'dir' ? null : (
+        {!name ? null : (
+          <tr>
+            <th>Name</th>
+            <td>{name}</td>
+          </tr>
+        )}
+        {!id ? null : (
+          <tr>
+            <th>ID</th>
+            <td>{id}</td>
+          </tr>
+        )}
+        {type === 'dir' || !type ? null : (
           <tr>
             <th>Title</th>
             <td>{title}</td>
           </tr>
         )}
-        <tr>
-          <th>Size</th>
-          <td>{size}</td>
-        </tr>
-        <tr>
-          <th>Category</th>
-          <td>{category}</td>
-        </tr>
+        {!size ? null : (
+          <tr>
+            <th>Size</th>
+            <td>{size}</td>
+          </tr>
+        )}
+        {!category ? null : (
+          <tr>
+            <th>Category</th>
+            <td>{category}</td>
+          </tr>
+        )}
       </tbody>
     </InfoTable>
   </ModalLayout>
@@ -105,16 +113,7 @@ const customStyles = {
   },
 }
 
-const InfoModal = ({
-  name,
-  id,
-  title,
-  size,
-  category,
-  type,
-  open,
-  closeModal,
-}) => {
+const InfoModal = ({ name, id, title, size, category, type, open, closeModal }) => {
   Modal.setAppElement('#root')
   return (
     <Modal
@@ -124,22 +123,13 @@ const InfoModal = ({
       contentLabel="Example Modal"
     >
       <CloseModal onClick={closeModal}>X</CloseModal>
-      <ModalInfo
-        name={name}
-        id={id}
-        title={title}
-        size={size}
-        category={category}
-        type={type}
-      />
+      <ModalInfo name={name} id={id} title={title} size={size} category={category} type={type} />
       <ModalDescription>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-        commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-        velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
-        occaecat cupidatat non proident, sunt in culpa qui officia deserunt
-        mollit anim id est laborum.
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt
+        ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+        laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
+        voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
+        cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
       </ModalDescription>
       <Download className="btn btn-etsin">Download</Download>
     </Modal>

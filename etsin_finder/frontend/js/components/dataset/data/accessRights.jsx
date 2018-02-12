@@ -13,14 +13,32 @@ const Access = styled.div`
   border-radius: 1em;
 `
 
+export const accessRightsBool = accessRights => {
+  if (accessRights !== undefined && accessRights !== null) {
+    if (
+      (checkNested(accessRights, 'access_type') &&
+        accessRights.access_type.identifier ===
+          'http://purl.org/att/es/reference_data/access_type/access_type_open_access') ||
+      (checkNested(accessRights, 'type') &&
+        accessRights.type.filter(item => item.identifier === 'open_access'))[0] ||
+      (checkNested(accessRights, 'license') &&
+        accessRights.license.filter(
+          item =>
+            item.identifier ===
+            'http://purl.org/att/es/reference_data/access_type/access_type_open_access'
+        )[0])
+    ) {
+      return true
+    }
+  }
+  return false
+}
+
 class AccessRights extends Component {
   constructor(props) {
     super(props)
     let title = { en: 'Restricted Access' }
-    if (
-      this.props.access_rights !== undefined &&
-      this.props.access_rights !== null
-    ) {
+    if (this.props.access_rights !== undefined && this.props.access_rights !== null) {
       title = this.props.access_rights.type
         ? this.props.access_rights.type.map(item => item.identifier)
         : this.props.access_rights.license.map(item => item.identifier)
@@ -30,42 +48,13 @@ class AccessRights extends Component {
       title,
     }
   }
-  accessRights() {
-    console.log(this.props)
-    if (
-      this.props.access_rights !== undefined &&
-      this.props.access_rights !== null
-    ) {
-      if (
-        (checkNested(this.props.access_rights, 'type') &&
-          this.props.access_rights.type.filter(
-            item => item.identifier === 'open_access'
-          ))[0] ||
-        (checkNested(this.props.access_rights, 'license') &&
-          this.props.access_rights.license.filter(
-            item =>
-              item.identifier ===
-              'http://purl.org/att/es/reference_data/access_type/access_type_open_access'
-          )[0])
-      ) {
-        return this.openAccess()
-      }
-    }
-    return this.restricted()
-  }
 
   restricted() {
     return (
       <Tooltip title={checkDataLang(this.state.title, this.lang)}>
-        <div
-          className="access-symbol"
-          title={checkDataLang(this.state.title, this.lang)}
-        >
+        <div className="access-symbol" title={checkDataLang(this.state.title, this.lang)}>
           <i className="fa fa-lock" aria-hidden="true" />
-          <Translate
-            content="dataset.access_locked"
-            fallback="Restricted Access"
-          />
+          <Translate content="dataset.access_locked" fallback="Restricted Access" />
         </div>
       </Tooltip>
     )
@@ -73,10 +62,7 @@ class AccessRights extends Component {
 
   openAccess() {
     return (
-      <div
-        className="access-symbol"
-        title={checkDataLang(this.state.title, this.lang)}
-      >
+      <div className="access-symbol" title={checkDataLang(this.state.title, this.lang)}>
         <i className="fa fa-unlock" aria-hidden="true" />
         <Translate content="dataset.access_open" fallback="Open Access" />
       </div>
@@ -85,7 +71,11 @@ class AccessRights extends Component {
 
   render() {
     this.lang = this.props.Stores.Locale
-    return <Access>{this.accessRights()}</Access>
+    return (
+      <Access>
+        {accessRightsBool(this.props.access_rights) ? this.openAccess() : this.restricted()}
+      </Access>
+    )
   }
 }
 

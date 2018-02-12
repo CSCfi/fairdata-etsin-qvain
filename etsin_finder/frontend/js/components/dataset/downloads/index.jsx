@@ -1,26 +1,31 @@
 import React, { Component } from 'react'
-import DataItem from './data/dataItem'
-import DatasetQuery from '../../stores/view/datasetquery'
-import checkDataLang from '../../utils/checkDataLang'
-import Breadcrumbs from './data/breadcrumbs'
-import sizeParse from '../../utils/sizeParse'
-import createTree from '../../utils/createTree'
+import DataItem from './dataItem'
+import { accessRightsBool } from '../data/accessRights'
+import DatasetQuery from '../../../stores/view/datasetquery'
+import checkDataLang from '../../../utils/checkDataLang'
+import Breadcrumbs from './breadcrumbs'
+import sizeParse from '../../../utils/sizeParse'
+import createTree from '../../../utils/createTree'
+import Loader from '../../general/loader'
+import Button from '../../general/button'
 
 export default class Downloads extends Component {
   constructor(props) {
     super(props)
-
-    const files = DatasetQuery.results.research_dataset.files
-    const folders = DatasetQuery.results.research_dataset.directories
+    const results = DatasetQuery.results
+    const files = results.research_dataset.files
+    const folders = results.research_dataset.directories
     const combined = this.createDirTree(files, folders)
     const fileDirTree = createTree(combined)
     this.state = {
-      results: DatasetQuery.results,
+      results,
       filesAndFolders: combined,
+      access: accessRightsBool(results.research_dataset.access_rights),
       fileDirTree,
       currentFolder: fileDirTree,
       currentPath: [],
       currentIDs: [],
+      loading: false,
     }
 
     this.updatePath = this.updatePath.bind(this)
@@ -74,15 +79,19 @@ export default class Downloads extends Component {
   }
 
   query(id, newPath, newIDs) {
+    this.setState({
+      loading: true,
+    })
     DatasetQuery.getFolderData(id)
       .then(res => {
         const currFolder = createTree(
           this.createDirTree(res.files, res.directories, true)
-        )
+        ).reverse()
         this.setState({
           currentPath: newPath,
           currentIDs: newIDs,
           currentFolder: currFolder,
+          loading: false,
         })
       })
       .catch(err => {
@@ -120,10 +129,10 @@ export default class Downloads extends Component {
   tableItems(folder) {
     return folder.map((single, i) => {
       let current = single
+      // check if file is among described files (if there is more information available)
       const described = this.state.filesAndFolders.filter(
         item => item.identifier === single.identifier
       )[0]
-      console.log(described)
       if (described) {
         current = described
       }
@@ -133,6 +142,7 @@ export default class Downloads extends Component {
           item={current}
           index={i}
           changeFolder={this.changeFolder}
+          access={this.state.access}
         />
       )
     })
@@ -142,6 +152,7 @@ export default class Downloads extends Component {
     if (!this.state.results) {
       return 'Loading'
     }
+    console.log(this.state.results)
 
     return (
       <div className="dataset-downloads">
@@ -149,17 +160,17 @@ export default class Downloads extends Component {
           <div className="heading-right">
             <div className="title">Tiedostot</div>
             <div className="files-size-all">
-              {`${
-                this.state.results.research_dataset.files.length
-              } aineistoa (${sizeParse(
+              {`${this.state.results.research_dataset.files.length} aineistoa (${sizeParse(
                 this.state.results.research_dataset.total_ida_byte_size,
                 1
               )})`}
             </div>
           </div>
+          <Loader left active={this.state.loading} color="white" />
           <div className="heading-left d-flex align-items-center">
-            <div className="files-filter">Suodata</div>
-            <div className="files-search">Search</div>
+            <Button color="white" disabled={!this.state.access}>
+              Lataa kaikki
+            </Button>
           </div>
         </div>
         <Breadcrumbs

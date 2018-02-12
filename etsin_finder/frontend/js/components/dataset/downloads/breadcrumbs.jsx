@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
+import { TransparentButton } from '../../general/button'
 
-const Container = styled.div`
+const Container = styled.nav`
   padding: 0.5em 0.5em;
   width: 100%;
   border-top: 0px;
@@ -13,19 +14,12 @@ const Path = styled.div`
   align-items: center;
 `
 
-const PathButton = styled.button``
-
 export default class Breadcrumbs extends Component {
   pathItems(path, i, id) {
     if (!path) {
       return (
         <Path key={`path-home-${i}`}>
-          <PathButton
-            className="btn btn-transparent-alt"
-            onClick={() => this.props.callback()}
-          >
-            Home
-          </PathButton>
+          <TransparentButton onClick={() => this.props.callback()}>Home</TransparentButton>
         </Path>
       )
     }
@@ -33,26 +27,21 @@ export default class Breadcrumbs extends Component {
       return (
         <Path key={`${path}-${i}`}>
           <span>{'>'}</span>
-          <PathButton className="btn btn-transparent-alt">{path}</PathButton>
+          <TransparentButton aria-current="true">{path}</TransparentButton>
         </Path>
       )
     }
     return (
       <Path key={`${path}-${i}`}>
         <span>{'>'}</span>
-        <PathButton
-          className="btn btn-transparent-alt"
-          onClick={() => this.props.callback(path, id)}
-        >
-          {path}
-        </PathButton>
+        <TransparentButton onClick={() => this.props.callback(path, id)}>{path}</TransparentButton>
       </Path>
     )
   }
 
   render() {
     return (
-      <Container className="light-border">
+      <Container aria-label="Breadcrumb" className="light-border">
         {this.pathItems()}
         {this.props.path.map((single, index) =>
           this.pathItems(single, index, this.props.ids[index])

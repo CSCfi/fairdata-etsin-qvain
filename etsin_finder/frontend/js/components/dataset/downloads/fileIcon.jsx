@@ -8,25 +8,25 @@ import Tooltip from '../../general/tooltip'
 
 const FileIcon = props => {
   if (props.type === 'dir') {
-    return <FontAwesomeIcon icon={faFolder} {...props} transform="grow-6" />
+    return <FontAwesomeIcon icon={faFolder} size="2x" transform="shrink-4" {...props} />
   }
   if (props.type === 'Video') {
     return (
       <Tooltip title={props.type}>
-        <FontAwesomeIcon icon={faFileVideo} {...props} transform="grow-6" />
+        <FontAwesomeIcon icon={faFileVideo} size="2x" transform="shrink-4" {...props} />
       </Tooltip>
     )
   }
   if (props.type === 'Text' || props.ype === 'Teksti') {
     return (
       <Tooltip title={props.type}>
-        <FontAwesomeIcon icon={faFileAlt} {...props} transform="grow-6" />
+        <FontAwesomeIcon icon={faFileAlt} size="2x" transform="shrink-4" {...props} />
       </Tooltip>
     )
   }
   return (
     <Tooltip title={props.type}>
-      <FontAwesomeIcon icon={faFile} {...props} transform="grow-6" />
+      <FontAwesomeIcon icon={faFile} size="2x" transform="shrink-4" {...props} />
     </Tooltip>
   )
 }

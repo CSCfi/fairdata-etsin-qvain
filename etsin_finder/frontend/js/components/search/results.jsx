@@ -1,14 +1,16 @@
 import React, { Component } from 'react'
-import ErrorBoundary from '../general/errorBoundary'
+import { inject, observer } from 'mobx-react'
 import SortResults from './sortResults'
-import Loader from '../general/loader'
 import Pagination from './pagination'
 import ResultsList from './resultslist'
 import ResultsAmount from './resultsAmount'
 import CurrentQuery from './currentQuery'
 import FilterResults from './filterResults'
+import ErrorBoundary from '../general/errorBoundary'
+import Loader from '../general/loader'
+import ElasticQuery from '../../stores/view/elasticquery'
 
-export default class Results extends Component {
+class Results extends Component {
   render() {
     return (
       <div className="container">
@@ -24,7 +26,7 @@ export default class Results extends Component {
               <SortResults />
               <CurrentQuery />
             </div>
-            <Loader />
+            <Loader active={ElasticQuery.loading} margin="0.2em 0 1em" />
             <ResultsList query={this.props.query} />
           </div>
           <Pagination />
@@ -33,3 +35,5 @@ export default class Results extends Component {
     )
   }
 }
+
+export default inject('Stores')(observer(Results))
