@@ -3,6 +3,7 @@ import { BrowserRouter as Router } from 'react-router-dom'
 import { Provider } from 'mobx-react'
 import { ThemeProvider } from 'styled-components'
 
+import SkipToContent from './components/general/skipToContent'
 import ErrorBoundary from './components/general/errorBoundary'
 import Footer from './layout/footer'
 import Header from './layout/header'
@@ -21,8 +22,8 @@ if (process.env.NODE_ENV === 'test') {
 }
 
 export default class App extends Component {
-  constructor(props) {
-    super(props)
+  constructor() {
+    super()
     this.focusContent = this.focusContent.bind(this)
   }
 
@@ -33,9 +34,7 @@ export default class App extends Component {
   render() {
     return (
       <div className="app">
-        <button className="skip-to-content" onClick={this.focusContent}>
-          Skip to content
-        </button>
+        <SkipToContent callback={this.focusContent} />
         <Provider Stores={Stores}>
           <Router history={Stores.history}>
             <ThemeProvider theme={etsinTheme}>
