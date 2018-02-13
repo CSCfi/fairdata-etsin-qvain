@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import styled, { withTheme } from 'styled-components'
+import Translate from 'react-translate-component'
 import FileIcon from './fileIcon'
 import InfoModal from './infoModal'
 import checkDataLang from '../../../utils/checkDataLang'
@@ -50,6 +51,7 @@ class DataItem extends Component {
             <TransparentButton
               noPadding
               noMargin
+              tabIndex="-1"
               color={this.props.theme.color.primary}
               onClick={() => this.props.changeFolder(this.state.name, this.props.item.identifier)}
               title={this.props.item.type}
@@ -68,9 +70,16 @@ class DataItem extends Component {
               color={this.props.theme.color.primary}
               onClick={() => this.props.changeFolder(this.state.name, this.props.item.identifier)}
             >
+              <Translate className="screen-reader-only" content="dataset.dl.file_types.directory" />
               <p>{this.state.name}</p>
             </TransparentButton>
-            <TitleAlt>{this.state.titleAlt ? `Tiedostoja: ${this.state.titleAlt}` : ''}</TitleAlt>
+            <TitleAlt>
+              {this.state.titleAlt ? (
+                <Translate content="dataset.dl.fileAmount" with={{ amount: this.state.titleAlt }} />
+              ) : (
+                ''
+              )}
+            </TitleAlt>
           </td>
         ) : (
           <td className="fileName">
@@ -91,10 +100,20 @@ class DataItem extends Component {
             disabled={!this.props.access}
             onClick={this.openModal}
           >
-            Tietoja
+            <Translate content="dataset.dl.info" />
+            <Translate
+              className="screen-reader-only"
+              content="dataset.dl.info_about"
+              with={{ file: this.state.name }}
+            />
           </InvertedButton>
           <InvertedButton thin onClick={this.openModal} disabled={!this.props.access}>
-            Lataa
+            <Translate content="dataset.dl.download" />
+            <Translate
+              className="screen-reader-only"
+              content="dataset.dl.item"
+              with={{ item: this.state.name }}
+            />
           </InvertedButton>
           <InfoModal
             name={this.state.name}

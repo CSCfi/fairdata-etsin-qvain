@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import Translate from 'react-translate-component'
 import DataItem from './dataItem'
 import { accessRightsBool } from '../data/accessRights'
 import DatasetQuery from '../../../stores/view/datasetquery'
@@ -7,7 +8,7 @@ import Breadcrumbs from './breadcrumbs'
 import sizeParse from '../../../utils/sizeParse'
 import createTree from '../../../utils/createTree'
 import Loader from '../../general/loader'
-import Button from '../../general/button'
+import { InvertedButton } from '../../general/button'
 
 export default class Downloads extends Component {
   constructor(props) {
@@ -158,7 +159,9 @@ export default class Downloads extends Component {
       <div className="dataset-downloads">
         <div className="downloads-header d-flex justify-content-between">
           <div className="heading-right">
-            <div className="title">Tiedostot</div>
+            <div className="title">
+              <Translate content="dataset.dl.files" />
+            </div>
             <div className="files-size-all">
               {`${this.state.results.research_dataset.files.length} aineistoa (${sizeParse(
                 this.state.results.research_dataset.total_ida_byte_size,
@@ -168,9 +171,9 @@ export default class Downloads extends Component {
           </div>
           <Loader left active={this.state.loading} color="white" />
           <div className="heading-left d-flex align-items-center">
-            <Button color="white" disabled={!this.state.access}>
-              Lataa kaikki
-            </Button>
+            <InvertedButton color="white" disabled={!this.state.access}>
+              <Translate content="dataset.dl.downloadAll" />
+            </InvertedButton>
           </div>
         </div>
         <Breadcrumbs
@@ -183,13 +186,13 @@ export default class Downloads extends Component {
             <tr>
               <th className="rowIcon" scope="col" />
               <th className="rowName" scope="col">
-                Nimi
+                <Translate content="dataset.dl.name" />
               </th>
               <th className="rowSize" scope="col">
-                Koko
+                <Translate content="dataset.dl.size" />
               </th>
               <th className="rowCategory" scope="col">
-                Kategoria
+                <Translate content="dataset.dl.category" />
               </th>
               <th className="rowButtons" scope="col" />
             </tr>

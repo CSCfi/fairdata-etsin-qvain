@@ -6,10 +6,10 @@ import { opacify } from 'polished'
 const StyledButton = styled.button`
   cursor: pointer;
   padding: 0.3em 0.6em 0.4em;
-  margin: 0.5em 0.5em;
+  margin: 0.25em 0.25em;
   border: ${props => (props.thin ? '1px' : '2px')} solid ${props => (props.color ? props.color : props.theme.color.primary)};
   background-color: ${props => (props.color ? props.color : props.theme.color.primary)};
-  color: white;
+  color: ${props => (props.color !== 'white' ? 'white' : props.theme.color.primary)};
   border-radius: 0.25em;
   line-height: 1.25;
   transition: 0.2s ease;

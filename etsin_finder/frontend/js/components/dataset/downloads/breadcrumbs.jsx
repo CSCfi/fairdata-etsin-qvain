@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
+import translate from 'counterpart'
 import { TransparentButton } from '../../general/button'
 
 const Container = styled.nav`
@@ -41,7 +42,7 @@ export default class Breadcrumbs extends Component {
 
   render() {
     return (
-      <Container aria-label="Breadcrumb" className="light-border">
+      <Container aria-label={translate('dataset.dl.breadcrumbs')} className="light-border">
         {this.pathItems()}
         {this.props.path.map((single, index) =>
           this.pathItems(single, index, this.props.ids[index])
