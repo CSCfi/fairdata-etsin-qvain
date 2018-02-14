@@ -7,20 +7,38 @@
   }
   .downloads-table {
     table-layout: fixed;
-    .rowIcon {
-      width: 7%;
+    .rowIcon,
+    .fileIcon {
+      width: 10%;
+      @include mappy-bp(md) {
+        width: 7%;
+      }
     }
     .rowName {
-      width: 35%;
+      width: 25%;
+      @include mappy-bp(md) {
+        width: 35%;
+      }
     }
     .rowSize {
-      width: 13%;
+      width: 10%;
+      @include mappy-bp(md) {
+        width: 13%;
+      }
     }
-    .rowCategory {
+    .rowCategory,
+    .fileCategory {
       width: 20%;
+      display: none;
+      @include mappy-bp(sm) {
+        display: table-cell;
+      }
     }
     .rowButtons {
-      width: 25%;
+      width: 15%;
+      @include mappy-bp(sm) {
+        width: 25%;
+      }
     }
     .thead-dark {
       background-color: $color-dark;
@@ -36,6 +54,14 @@
       margin: 0;
       cursor: pointer;
     }
+
+    .fileButtons {
+      padding: 0.7em;
+      text-align: center;
+      display: table-cell;
+      flex-wrap: wrap;
+    }
+
     tbody {
       position: relative;
       overflow-y: hidden;
@@ -52,11 +78,8 @@
           vertical-align: middle;
           border: none;
           &:first-of-type {
-            padding-right: 0.5em;
-            padding-left: 1em;
-            div {
-              float: right;
-            }
+            padding: 0;
+            text-align: center;
           }
           p {
             size: 0.8em;

@@ -5,6 +5,10 @@ body {
   font-family: 'Lato', Helvetica, Arial, sans-serif;
   font-size: 1em;
   color: $color-dark;
+  font-size: 0.9em;
+  @include mappy-bp(md) {
+    font-size: 1em;
+  }
 }
 
 input,

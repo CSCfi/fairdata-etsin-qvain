@@ -15,6 +15,12 @@ const etsinTheme = {
     error: '#eb6672',
     insetDark: 'rgba(0, 0, 0, 0.3)',
   },
+  breakpoints: {
+    sm: '576px',
+    md: '768px',
+    lg: '992px',
+    xl: '1200px',
+  },
 }
 
 export default etsinTheme

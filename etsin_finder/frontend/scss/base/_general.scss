@@ -3,6 +3,16 @@
   min-height: 100vh;
   flex-direction: column;
 }
+
+.row {
+  margin-left: 0px;
+  margin-right: 0px;
+  @include mappy-bp(sm) {
+    margin-left: -15px;
+    margin-right: -15px;
+  }
+}
+
 .content {
   flex: 1;
 }

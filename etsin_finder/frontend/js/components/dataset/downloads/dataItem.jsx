@@ -13,6 +13,14 @@ const TitleAlt = styled.p`
   font-weight: 400;
   color: #777;
 `
+
+const HideSmButton = styled(InvertedButton)`
+  display: none;
+  @media (min-width: ${props => props.theme.breakpoints.sm}) {
+    display: initial;
+  }
+`
+
 class DataItem extends Component {
   constructor(props) {
     super(props)
@@ -107,14 +115,14 @@ class DataItem extends Component {
               with={{ file: this.state.name }}
             />
           </InvertedButton>
-          <InvertedButton thin onClick={this.openModal} disabled={!this.props.access}>
+          <HideSmButton thin onClick={this.openModal} disabled={!this.props.access}>
             <Translate content="dataset.dl.download" />
             <Translate
               className="screen-reader-only"
               content="dataset.dl.item"
               with={{ item: this.state.name }}
             />
-          </InvertedButton>
+          </HideSmButton>
           <InfoModal
             name={this.state.name}
             id={this.props.item.identifier}
