@@ -8,7 +8,8 @@
     "dev-build": "webpack -d --config webpack.config.js",
     "lint": "eslint js --ext .jsx,.js",
     "test": "jest",
-    "watch": "echo \"Updating packages\"; npm update; echo \"Packages updated\"; webpack --progress -d --config webpack.config.js --watch",
+    "watch":
+      "echo \"Updating packages\"; npm update; echo \"Packages updated\"; webpack --progress -d --config webpack.config.js --watch",
     "start:dev": "webpack-dev-server",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
@@ -33,6 +34,7 @@
     "eslint-plugin-react": "7.5.1",
     "html-webpack-plugin": "^2.30.1",
     "jest": "21.2.1",
+    "jest-cli": "^22.3.0",
     "sinon": "4.1.2",
     "style-loader": "0.19.0",
     "webpack-dev-server": "2.9.5"
@@ -43,9 +45,7 @@
         "env",
         {
           "targets": {
-            "browsers": [
-              "last 2 major versions"
-            ]
+            "browsers": ["last 2 major versions"]
           }
         }
       ],
@@ -58,9 +58,7 @@
             "env",
             {
               "targets": {
-                "browsers": [
-                  "last 2 major versions"
-                ]
+                "browsers": ["last 2 major versions"]
               }
             }
           ],
@@ -114,9 +112,7 @@
   },
   "description": "",
   "jest": {
-    "testPathIgnorePatterns": [
-      "./__tests__/test-setup.js"
-    ],
+    "testPathIgnorePatterns": ["./__tests__/test-setup.js"],
     "setupTestFrameworkScriptFile": "./__tests__/test-setup.js",
     "testURL": "http://localhost"
   },

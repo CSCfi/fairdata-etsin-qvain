@@ -51,7 +51,6 @@ class DataItem extends Component {
   }
 
   render() {
-    console.log(this.props.access)
     return (
       <tr key={`filelist-${this.props.index}`}>
         <td className="fileIcon">

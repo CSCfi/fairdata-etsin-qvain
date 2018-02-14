@@ -45,7 +45,7 @@ const InfoTable = styled.table`
   }
 `
 
-const ModalInfo = ({ name, id, title, size, category, type }) => (
+export const ModalInfo = ({ name, id, title, size, category, type }) => (
   <ModalLayout>
     <ModalIcon>
       <FileIcon type={type} size="4x" transform="" />
@@ -64,12 +64,12 @@ const ModalInfo = ({ name, id, title, size, category, type }) => (
             <td>{id}</td>
           </tr>
         )}
-        {type === 'dir' || !type ? null : (
+        {title && type !== 'dir' ? (
           <tr>
             <th>Title</th>
             <td>{title}</td>
           </tr>
-        )}
+        ) : null}
         {!size ? null : (
           <tr>
             <th>Size</th>
