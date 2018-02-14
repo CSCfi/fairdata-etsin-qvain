@@ -1,7 +1,9 @@
-import React from 'react';
-import { NavLink } from 'react-router-dom';
-import Translate from 'react-translate-component';
-import SecondNav from './secondnav';
+import React from 'react'
+import { NavLink } from 'react-router-dom'
+import Translate from 'react-translate-component'
+import translate from 'counterpart'
+import SecondNav from './secondnav'
+import Accessibility from '../../../stores/view/accessibility'
 
 export default class Navi extends React.Component {
   openNavi(event) {
@@ -28,25 +30,60 @@ export default class Navi extends React.Component {
             <span />
           </button>
           <nav className="nav nav-list">
-            <NavLink exact to="/" className="nav-link">
+            <NavLink
+              exact
+              to="/"
+              className="nav-link"
+              onClick={() => {
+                Accessibility.setNavText(translate('changepage', { page: translate('nav.home') }))
+              }}
+            >
               <Translate content="nav.home" />
             </NavLink>
-            <NavLink to="/datasets" className="nav-link">
+            <NavLink
+              to="/datasets"
+              className="nav-link"
+              onClick={() => {
+                Accessibility.setNavText(
+                  translate('changepage', { page: translate('nav.datasets') })
+                )
+              }}
+            >
               <Translate content="nav.datasets" />
             </NavLink>
-            <NavLink to="/organizations" className="nav-link">
+            <NavLink
+              to="/organizations"
+              className="nav-link"
+              onClick={() => {
+                Accessibility.setNavText(
+                  translate('changepage', { page: translate('nav.organizations') })
+                )
+              }}
+            >
               <Translate content="nav.organizations" />
             </NavLink>
-            <NavLink to="/help" className="nav-link">
+            <NavLink
+              to="/help"
+              className="nav-link"
+              onClick={() => {
+                Accessibility.setNavText(translate('changepage', { page: translate('nav.help') }))
+              }}
+            >
               <Translate content="nav.help" />
             </NavLink>
-            <NavLink to="/dataset/1" className="nav-link">
+            <NavLink
+              to="/dataset/1"
+              className="nav-link"
+              onClick={() => {
+                Accessibility.setNavText(translate('changepage', { page: 'Dataset 1' }))
+              }}
+            >
               Dataset 1
             </NavLink>
           </nav>
         </div>
         <SecondNav />
       </div>
-    );
+    )
   }
 }

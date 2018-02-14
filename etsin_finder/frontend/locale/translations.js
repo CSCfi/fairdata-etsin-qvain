@@ -46,6 +46,7 @@ counterpart.registerTranslations('en', {
     spatial_coverage: 'Spatial Coverage',
     temporal_coverage: 'Temporal Coverage',
   },
+  changepage: 'Navigated to page: %(page)s',
   error: {
     notFound: "Couldn't find metadata for given id",
   },

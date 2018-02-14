@@ -12,9 +12,7 @@ class FancyRoute extends React.Component {
   }
 
   render() {
-    return (
-      <Route {...this.props} />
-    )
+    return <Route {...this.props} />
   }
 }
 
