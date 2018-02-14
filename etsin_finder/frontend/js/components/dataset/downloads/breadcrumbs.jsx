@@ -17,6 +17,7 @@ const Path = styled.div`
 `
 const Arrow = styled.span`
   align-self: center;
+  color: ${props => props.theme.color.gray};
 `
 
 export default class Breadcrumbs extends Component {
@@ -52,9 +53,6 @@ export default class Breadcrumbs extends Component {
   }
 
   pathItems(path, i, id) {
-    // console.log('path', path)
-    // console.log('i', i)
-    // console.log('id', id)
     if (!path) {
       return (
         <Path key={`path-home-${i}`}>
@@ -81,7 +79,6 @@ export default class Breadcrumbs extends Component {
   }
 
   render() {
-    console.log(this.state)
     return (
       <Container aria-label={translate('dataset.dl.breadcrumbs')} className="light-border">
         {this.pathItems()}

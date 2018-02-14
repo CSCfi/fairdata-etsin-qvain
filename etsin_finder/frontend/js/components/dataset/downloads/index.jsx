@@ -152,7 +152,6 @@ export default class Downloads extends Component {
     if (!this.state.results) {
       return 'Loading'
     }
-    console.log('results', this.state.results)
 
     return (
       <div className="dataset-downloads">
