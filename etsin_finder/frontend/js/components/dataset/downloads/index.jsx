@@ -105,8 +105,7 @@ export default class Downloads extends Component {
     path.push(folderName)
     const identifiers = this.state.currentIDs.slice()
     identifiers.push(id)
-    const currFolder = this.state.currentFolder.slice()
-    const clickedFolder = currFolder.find(single => single.name === folderName)
+    const clickedFolder = this.state.currentFolder.find(single => single.identifier === id)
     this.query(clickedFolder.identifier, path, identifiers)
   }
 

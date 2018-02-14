@@ -78,6 +78,7 @@ counterpart.registerTranslations('en', {
 counterpart.registerTranslations('fi', {
   addDataset: 'Lisää aineisto',
   stc: 'Siirry sivun pääsisältöön',
+  changepage: 'Siirryit sivulle: %(page)s',
   dataset: {
     access_locked: 'Rajattu käyttöoikeus',
     access_open: 'Avoin',

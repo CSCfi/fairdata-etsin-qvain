@@ -56,6 +56,10 @@ const TransparentStyledButton = StyledButton.extend`
     text-decoration: underline;
     color: ${props => props.theme.color.primary};
   }
+  &:disabled {
+    color: ${props => props.theme.color.gray};
+    background-color: transparent;
+  }
 `
 
 const Button = props => <StyledButton {...props}>{props.children}</StyledButton>
