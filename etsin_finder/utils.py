@@ -33,3 +33,15 @@ def write_json_to_file(json_data, filename):
 def write_string_to_file(string, filename):
     with open(filename, "w") as output_file:
         print(f"{string}", file=output_file)
+
+
+def strip_catalog_record(cr_json):
+    """
+    This method should strip catalog record of any confidential/private information not supposed to be sent for
+    the frontend.
+
+    :param cr_json:
+    :return:
+    """
+    # TODO
+    return cr_json
