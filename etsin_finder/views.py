@@ -64,7 +64,8 @@ def contact(dataset_id):
     with mail.record_messages() as outbox:
         try:
             mail.send(msg)
-        except Exception:
+        except Exception as e:
+            log.error(e)
             log.error("Unable to send email message for {sender}".format(sender=[sender]))
             return Response(status=500)
 
