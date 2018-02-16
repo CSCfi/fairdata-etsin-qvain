@@ -16,40 +16,39 @@ class MetaxAPIService:
         self.METAX_GET_CATALOG_RECORD_URL = self.METAX_CATALOG_RECORDS_BASE_URL + '/{0}'
         self.METAX_GET_REMOVED_CATALOG_RECORD_URL = self.METAX_GET_CATALOG_RECORD_URL + '?removed=true'
 
-    def get_catalog_record(self, urn_identifier):
-        """ Get a catalog record with a given urn_identifier from MetaX API.
+    def get_catalog_record(self, identifier):
+        """ Get a catalog record with a given identifier from MetaX API.
 
         :return: Metax catalog record as json
         """
-
-        r = requests.get(self.METAX_GET_CATALOG_RECORD_URL.format(urn_identifier),
+        r = requests.get(self.METAX_GET_CATALOG_RECORD_URL.format(identifier),
                          headers={'Content-Type': 'application/json'},
                          timeout=TIMEOUT)
         try:
             r.raise_for_status()
         except HTTPError as e:
-            log.error('Failed to get catalog record: \nurn_identifier={urn_id}, \nerror={error}, \njson={json}'.format(
-                urn_id=urn_identifier, error=repr(e), json=self.json_or_empty(r)))
+            log.error('Failed to get catalog record: \nidentifier={identifier}, \nerror={error}, \njson={json}'.format(
+                identifier=identifier, error=repr(e), json=self.json_or_empty(r)))
             log.debug('Response text: %s', r.text)
             return None
 
         return json.loads(r.text)
 
-    def get_removed_catalog_record(self, urn_identifier):
-        """ Get a catalog record with a given urn_identifier from a MetaX API which should return only datasets that
+    def get_removed_catalog_record(self, identifier):
+        """ Get a catalog record with a given identifier from a MetaX API which should return only datasets that
             are removed.
 
         :return: Metax catalog record as json
         """
 
-        r = requests.get(self.METAX_GET_REMOVED_CATALOG_RECORD_URL.format(urn_identifier),
+        r = requests.get(self.METAX_GET_REMOVED_CATALOG_RECORD_URL.format(identifier),
                          headers={'Content-Type': 'application/json'},
                          timeout=TIMEOUT)
         try:
             r.raise_for_status()
         except HTTPError as e:
-            log.error('Failed to get catalog record: \nurn_identifier={urn_id}, \nerror={error}, \njson={json}'.format(
-                urn_id=urn_identifier, error=repr(e), json=self.json_or_empty(r)))
+            log.error('Failed to get catalog record: \nidentifier={identifier}, \nerror={error}, \njson={json}'.format(
+                identifier=identifier, error=repr(e), json=self.json_or_empty(r)))
             log.debug('Response text: %s', r.text)
             return None
 
