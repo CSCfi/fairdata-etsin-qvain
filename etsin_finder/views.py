@@ -29,6 +29,14 @@ def get_dataset(dataset_id):
     return jsonify(strip_catalog_record(cr))
 
 
+# This route is used for getting a list of possible email recipients
+@app.route('/api/dataset/<string:dataset_id>/contact', methods=['GET'])
+def contact(dataset_id):
+    # OR THEN MODIFY THE DATASET WHICH THE FRONTEND GETS TO INCLUDE INFO ABOUT WHETHER THE ROLES HAVE AN ASSOCIATED
+    # EMAIL ADDRESS
+    pass
+
+
 # This route is used to send email message
 @app.route('/api/dataset/<string:dataset_id>/contact', methods=['POST'])
 def contact(dataset_id):
