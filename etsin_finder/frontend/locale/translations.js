@@ -3,6 +3,9 @@ import counterpart from 'counterpart'
 counterpart.registerTranslations('en', {
   addDataset: 'Add dataset',
   stc: 'Skip to content',
+  general: {
+    description: 'Description',
+  },
   dataset: {
     access_locked: 'Restricted Access',
     access_open: 'Open Access',
@@ -80,6 +83,9 @@ counterpart.registerTranslations('fi', {
   addDataset: 'Lisää aineisto',
   stc: 'Siirry sivun pääsisältöön',
   changepage: 'Siirryit sivulle: %(page)s',
+  general: {
+    description: 'Kuvaus',
+  },
   dataset: {
     access_locked: 'Rajattu käyttöoikeus',
     access_open: 'Avoin',

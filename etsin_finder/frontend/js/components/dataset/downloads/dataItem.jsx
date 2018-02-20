@@ -133,6 +133,7 @@ class DataItem extends Component {
                 ? checkDataLang(this.props.item.use_category.pref_label)
                 : ''
             }
+            description={this.props.item.description}
             type={this.props.item.type}
             open={this.state.modalIsOpen}
             closeModal={this.closeModal}

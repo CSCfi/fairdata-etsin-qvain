@@ -54,6 +54,7 @@ export default class Downloads extends Component {
           path: fileDetails.file_path.substring(1),
           type: fileType,
           details: fileDetails,
+          description: file.description,
           use_category: file.use_category,
           title: file.title,
           identifier: file.identifier,
@@ -70,6 +71,7 @@ export default class Downloads extends Component {
           path: folderDetails.directory_path.substring(1),
           type: 'dir',
           details: folderDetails,
+          description: folder.description,
           use_category: folder.use_category,
           title: folder.title,
           identifier: folder.identifier,
@@ -126,6 +128,7 @@ export default class Downloads extends Component {
     }
   }
 
+  // prints files to dom as list items
   tableItems(folder) {
     return folder.map((single, i) => {
       let current = single

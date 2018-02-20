@@ -1,10 +1,12 @@
 import React from 'react'
 import Modal from 'react-modal'
 import styled from 'styled-components'
+import Translate from 'react-translate-component'
 import FileIcon from './fileIcon'
 
 const ModalDescription = styled.p`
   color: #555;
+  margin-bottom: 2em;
 `
 
 const CloseModal = styled.button`
@@ -113,7 +115,7 @@ const customStyles = {
   },
 }
 
-const InfoModal = ({ name, id, title, size, category, type, open, closeModal }) => {
+const InfoModal = ({ name, id, title, size, category, type, open, closeModal, description }) => {
   Modal.setAppElement('#root')
   return (
     <Modal
@@ -124,13 +126,12 @@ const InfoModal = ({ name, id, title, size, category, type, open, closeModal }) 
     >
       <CloseModal onClick={closeModal}>X</CloseModal>
       <ModalInfo name={name} id={id} title={title} size={size} category={category} type={type} />
-      <ModalDescription>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt
-        ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-        laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
-        voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-        cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-      </ModalDescription>
+      {description ? (
+        <div>
+          <Translate content="general.description" component="h4" />
+          <ModalDescription>{description}</ModalDescription>
+        </div>
+      ) : null}
       <Download className="btn btn-etsin">Download</Download>
     </Modal>
   )
