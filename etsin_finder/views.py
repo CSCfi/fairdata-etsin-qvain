@@ -10,6 +10,7 @@ metax_service = MetaxAPIService(get_metax_api_config(app.config))
 
 # This route is used by React app
 @app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
 def frontend_app(path):
     return render_template('index.html', title='Front Page')
 
@@ -31,7 +32,7 @@ def get_dataset(dataset_id):
 
 # This route is used for getting a list of possible email recipients
 @app.route('/api/dataset/<string:dataset_id>/contact', methods=['GET'])
-def contact(dataset_id):
+def get_contacts(dataset_id):
     # OR THEN MODIFY THE DATASET WHICH THE FRONTEND GETS TO INCLUDE INFO ABOUT WHETHER THE ROLES HAVE AN ASSOCIATED
     # EMAIL ADDRESS
     pass
@@ -39,7 +40,7 @@ def contact(dataset_id):
 
 # This route is used to send email message
 @app.route('/api/dataset/<string:dataset_id>/contact', methods=['POST'])
-def contact(dataset_id):
+def send_message_to_contact(dataset_id):
     """
     This route expects a json with three key-values: sender, subject and body.
     Having these three this method will send an email message to recipients
