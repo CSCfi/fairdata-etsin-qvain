@@ -71,15 +71,6 @@ export default class Navi extends React.Component {
             >
               <Translate content="nav.help" />
             </NavLink>
-            <NavLink
-              to="/dataset/1"
-              className="nav-link"
-              onClick={() => {
-                Accessibility.setNavText(translate('changepage', { page: 'Dataset 1' }))
-              }}
-            >
-              Dataset 1
-            </NavLink>
           </nav>
         </div>
         <SecondNav />

@@ -72,7 +72,6 @@ class Dataset extends React.Component {
     }
 
     const { currentLang } = this.props.Stores.Locale
-
     return (
       <div className="container regular-row" pageid={this.props.match.params.identifier}>
         <div className="row">
@@ -81,7 +80,9 @@ class Dataset extends React.Component {
               {'< Go back'}
             </button>
             <ErrorBoundary>
-              <Tabs identifier={this.props.match.params.identifier} />
+              {this.state.dataset.data_catalog.catalog_json.harvested ? null : (
+                <Tabs identifier={this.props.match.params.identifier} />
+              )}
             </ErrorBoundary>
             <ErrorBoundary>
               <Route
@@ -103,10 +104,7 @@ class Dataset extends React.Component {
             </ErrorBoundary>
             <ErrorBoundary>
               {this.state.dataset.data_catalog.catalog_json.harvested ? (
-                <Identifier
-                  idn={this.state.dataset.research_dataset.preferred_identifier}
-                  classes="btn btn-primary"
-                >
+                <Identifier idn={this.state.dataset.research_dataset.preferred_identifier}>
                   <Translate content="dataset.data_location" fallback="this is fallback" />
                 </Identifier>
               ) : (

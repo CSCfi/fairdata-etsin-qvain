@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Translate from 'react-translate-component'
+import styled from 'styled-components'
 import DataItem from './dataItem'
 import { accessRightsBool } from '../data/accessRights'
 import DatasetQuery from '../../../stores/view/datasetquery'
@@ -9,6 +10,14 @@ import sizeParse from '../../../utils/sizeParse'
 import createTree from '../../../utils/createTree'
 import Loader from '../../general/loader'
 import { InvertedButton } from '../../general/button'
+
+const TableTitle = styled.h4`
+  margin-bottom: 0;
+`
+
+const FileSizeAll = styled.p`
+  margin-bottom: 0;
+`
 
 export default class Downloads extends Component {
   constructor(props) {
@@ -160,15 +169,15 @@ export default class Downloads extends Component {
       <div className="dataset-downloads">
         <div className="downloads-header d-flex justify-content-between">
           <div className="heading-right">
-            <div className="title">
+            <TableTitle>
               <Translate content="dataset.dl.files" />
-            </div>
-            <div className="files-size-all">
+            </TableTitle>
+            <FileSizeAll>
               {`${this.state.results.research_dataset.files.length} aineistoa (${sizeParse(
                 this.state.results.research_dataset.total_ida_byte_size,
                 1
               )})`}
-            </div>
+            </FileSizeAll>
           </div>
           <Loader left active={this.state.loading} color="white" />
           <div className="heading-left d-flex align-items-center">

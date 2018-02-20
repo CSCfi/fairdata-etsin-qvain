@@ -5,7 +5,7 @@ import translate from 'counterpart'
 import { TransparentButton } from '../../general/button'
 
 const Container = styled.nav`
-  padding: 0.5em 0.5em;
+  padding: 0.5em 1.1em;
   width: 100%;
   border-top: 0px;
   border-bottom: 0px;
