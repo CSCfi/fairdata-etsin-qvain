@@ -171,6 +171,7 @@ export default class Downloads extends Component {
           <div className="heading-left d-flex align-items-center">
             <InvertedButton color="white" disabled={!this.state.access}>
               <Translate content="dataset.dl.downloadAll" />
+              <Translate className="screen-reader-only" content="dataset.dl.file_types.both" />
             </InvertedButton>
           </div>
         </div>
@@ -179,7 +180,7 @@ export default class Downloads extends Component {
           ids={this.state.currentIDs}
           callback={this.updatePath}
         />
-        <table className="table downloads-table">
+        <table className="table downloads-table" aria-live="assertive">
           <thead className="thead-dark">
             <tr>
               <th className="rowIcon" scope="col" />

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import styled, { withTheme } from 'styled-components'
 import Translate from 'react-translate-component'
+import translate from 'counterpart'
 import FileIcon from './fileIcon'
 import InfoModal from './infoModal'
 import checkDataLang from '../../../utils/checkDataLang'
@@ -61,7 +62,7 @@ class DataItem extends Component {
               tabIndex="-1"
               color={this.props.theme.color.primary}
               onClick={() => this.props.changeFolder(this.state.name, this.props.item.identifier)}
-              title={this.props.item.type}
+              title={translate('dataset.dl.file_types.directory')}
             >
               <FileIcon type={this.props.item.type} />
             </TransparentButton>

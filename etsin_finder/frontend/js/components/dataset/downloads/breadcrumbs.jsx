@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
+import Translate from 'react-translate-component'
 import translate from 'counterpart'
 import { TransparentButton } from '../../general/button'
 
@@ -56,7 +57,9 @@ export default class Breadcrumbs extends Component {
     if (!path) {
       return (
         <Path key={`path-home-${i}`}>
-          <TransparentButton onClick={() => this.props.callback()}>Home</TransparentButton>
+          <TransparentButton onClick={() => this.props.callback()}>
+            <Translate className="screen-reader-only" content="dataset.dl.file_types.directory" />Home
+          </TransparentButton>
         </Path>
       )
     }
@@ -65,7 +68,10 @@ export default class Breadcrumbs extends Component {
       return (
         <Path key={`${path}-${i}`}>
           <Arrow>{'>'}</Arrow>
-          <TransparentButton aria-current="true">{path}</TransparentButton>
+          <TransparentButton aria-current="true">
+            <Translate className="screen-reader-only" content="dataset.dl.file_types.directory" />
+            {path}
+          </TransparentButton>
         </Path>
       )
     }
@@ -73,7 +79,10 @@ export default class Breadcrumbs extends Component {
     return (
       <Path key={`${path}-${i}`}>
         <Arrow>{'>'}</Arrow>
-        <TransparentButton onClick={() => this.props.callback(path, id)}>{path}</TransparentButton>
+        <TransparentButton onClick={() => this.props.callback(path, id)}>
+          <Translate className="screen-reader-only" content="dataset.dl.file_types.directory" />
+          {path}
+        </TransparentButton>
       </Path>
     )
   }

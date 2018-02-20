@@ -27,6 +27,7 @@ counterpart.registerTranslations('en', {
       file_types: {
         directory: 'Folder',
         file: 'file',
+        both: 'files and folders',
       },
       dirContent: 'Folder content',
       category: 'Category',
@@ -103,6 +104,7 @@ counterpart.registerTranslations('fi', {
       file_types: {
         directory: 'Kansio',
         file: 'tiedosto',
+        both: 'tiedostot ja kansiot',
       },
       dirContent: 'Kansion sisältö',
       category: 'Kategoria',
