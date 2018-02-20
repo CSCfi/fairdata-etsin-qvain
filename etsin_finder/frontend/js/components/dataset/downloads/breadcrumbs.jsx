@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import translate from 'counterpart'
@@ -9,16 +9,25 @@ const Container = styled.nav`
   width: 100%;
   border-top: 0px;
   border-bottom: 0px;
-  display: inline-flex;
-  overflow-x: hidden;
+  display: flex;
   align-content: center;
+  flex-wrap: wrap;
 `
 const Path = styled.div`
   display: flex;
+  button {
+    padding-left: 0;
+    padding-right: 0;
+  }
 `
 const Arrow = styled.span`
+  padding: 0 0.4em;
   align-self: center;
   color: ${props => props.theme.color.gray};
+`
+
+const Rest = styled.div`
+  display: flex;
 `
 
 export default class Breadcrumbs extends Component {
@@ -66,24 +75,32 @@ export default class Breadcrumbs extends Component {
 
     if (this.props.path.length - 1 === i) {
       return (
-        <Path key={`${path}-${i}`}>
-          <Arrow>{'>'}</Arrow>
-          <TransparentButton aria-current="true">
-            <Translate className="screen-reader-only" content="dataset.dl.file_types.directory" />
-            {path}
-          </TransparentButton>
-        </Path>
+        <Fragment key={`${path}-${i}`}>
+          <Path>
+            <Arrow>{'>'}</Arrow>
+          </Path>
+          <Path>
+            <TransparentButton aria-current="true">
+              <Translate className="screen-reader-only" content="dataset.dl.file_types.directory" />
+              {path}
+            </TransparentButton>
+          </Path>
+        </Fragment>
       )
     }
 
     return (
-      <Path key={`${path}-${i}`}>
-        <Arrow>{'>'}</Arrow>
-        <TransparentButton onClick={() => this.props.callback(path, id)}>
-          <Translate className="screen-reader-only" content="dataset.dl.file_types.directory" />
-          {path}
-        </TransparentButton>
-      </Path>
+      <Fragment key={`${path}-${i}`}>
+        <Path>
+          <Arrow>{'>'}</Arrow>
+        </Path>
+        <Path>
+          <TransparentButton onClick={() => this.props.callback(path, id)}>
+            <Translate className="screen-reader-only" content="dataset.dl.file_types.directory" />
+            {path}
+          </TransparentButton>
+        </Path>
+      </Fragment>
     )
   }
 
@@ -92,12 +109,16 @@ export default class Breadcrumbs extends Component {
       <Container aria-label={translate('dataset.dl.breadcrumbs')} className="light-border">
         {this.pathItems()}
         {this.state.sliced ? (
-          <Path>
-            <Arrow>{'>'}</Arrow>
-            <TransparentButton aria-label="rest" disabled>
-              ...
-            </TransparentButton>
-          </Path>
+          <Rest>
+            <Path>
+              <Arrow>{'>'}</Arrow>
+            </Path>
+            <Path>
+              <TransparentButton aria-label="rest" disabled>
+                ...
+              </TransparentButton>
+            </Path>
+          </Rest>
         ) : (
           ''
         )}
