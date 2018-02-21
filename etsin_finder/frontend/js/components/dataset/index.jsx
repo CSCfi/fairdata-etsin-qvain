@@ -42,6 +42,7 @@ class Dataset extends React.Component {
     DatasetQuery.getData(this.props.match.params.identifier)
       .then(result => {
         this.setState({ dataset: result })
+        console.log(result.research_dataset)
         if (result.harvested) {
           console.log('It seems the dataset is deprecated...')
           this.updateData(false)
