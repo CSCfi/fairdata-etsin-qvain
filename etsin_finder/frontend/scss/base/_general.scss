@@ -3,6 +3,16 @@
   min-height: 100vh;
   flex-direction: column;
 }
+
+.row {
+  margin-left: 0px;
+  margin-right: 0px;
+  @include mappy-bp(sm) {
+    margin-left: -15px;
+    margin-right: -15px;
+  }
+}
+
 .content {
   flex: 1;
 }
@@ -22,7 +32,7 @@
 
 .skip-to-content {
   position: absolute;
-	left: 0;
+  left: 0;
   top: 0;
   max-width: 1px;
   max-height: 0px;
@@ -37,4 +47,19 @@
     max-width: 200px;
     max-height: 50px;
   }
+}
+
+.light-border {
+  border: 2px solid $color-lightgray;
+}
+
+.screen-reader-only {
+  position: absolute;
+  height: 1px;
+  width: 1px;
+  clip: rect(1px 1px 1px 1px); // IE 6 and 7
+  clip: rect(1px, 1px, 1px, 1px);
+  clip-path: polygon(0px 0px, 0px 0px, 0px 0px);
+  -webkit-clip-path: polygon(0px 0px, 0px 0px, 0px 0px);
+  overflow: hidden !important;
 }

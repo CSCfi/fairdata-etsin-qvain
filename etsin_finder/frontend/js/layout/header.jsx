@@ -1,17 +1,28 @@
-import React from 'react';
-import Translate from 'react-translate-component';
+import React from 'react'
+import Translate from 'react-translate-component'
+import Announcer from 'react-a11y-announcer'
+import { inject, observer } from 'mobx-react'
 
-import Navi from '../components/general/navigation';
+import Navi from '../components/general/navigation'
 import ErrorBoundary from '../components/general/errorBoundary'
+import Accessibility from '../stores/view/accessibility'
 
-export default class Header extends React.Component {
+class Header extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {}
+    this.state = {
+      announcer: '',
+    }
+  }
+  componentWillReceiveProps() {
+    this.setState({
+      announcer: Accessibility.navText,
+    })
   }
   render() {
     return (
       <div className="header">
+        <Announcer text={this.state.announcer} />
         <ErrorBoundary>
           <div className="container">
             <div className="row top-logo">
@@ -26,6 +37,8 @@ export default class Header extends React.Component {
           </div>
         </ErrorBoundary>
       </div>
-    );
+    )
   }
 }
+
+export default inject('Stores')(observer(Header))

@@ -1,7 +1,17 @@
+// checks if there is a translation available for specific language.
+// if no language is specified, uses current language.
+
+import Locale from '../stores/view/language'
+
 const checkDataLang = (object, lang) => {
-  if (typeof object === 'undefined' || Object.keys(object).length === 0) return '';
-  else if (object[lang]) return object[lang];
-  return object[Object.keys(object)[0]];
+  let language = lang
+  if (!lang) {
+    language = Locale.currentLang
+  }
+  if (typeof object === 'undefined' || Object.keys(object).length === 0) {
+    return ''
+  } else if (object[language]) return object[language]
+  return object[Object.keys(object)[0]]
 }
 
-export default checkDataLang;
+export default checkDataLang

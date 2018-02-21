@@ -1,26 +1,29 @@
-import React, { Component } from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
-import { Provider } from 'mobx-react';
+import React, { Component } from 'react'
+import { BrowserRouter as Router } from 'react-router-dom'
+import { Provider } from 'mobx-react'
+import { ThemeProvider } from 'styled-components'
 
+import SkipToContent from './components/general/skipToContent'
 import ErrorBoundary from './components/general/errorBoundary'
-import Footer from './layout/footer';
-import Header from './layout/header';
-import Content from './layout/content';
+import Footer from './layout/footer'
+import Header from './layout/header'
+import Content from './layout/content'
+import etsinTheme from './theme'
 
-import Stores from './stores';
+import Stores from './stores'
 
 if (process.env.NODE_ENV === 'test') {
-  console.log('We are in test');
+  console.log('We are in test')
 } else if (process.env.NODE_ENV === 'development') {
-  console.log('We are in development');
+  console.log('We are in development')
 } else if (process.env.NODE_ENV !== 'production') {
-  console.log('Looks like we are in development mode!');
+  console.log('Looks like we are in development mode!')
 }
 
 export default class App extends Component {
-  constructor(props) {
-    super(props)
-    this.focusContent = this.focusContent.bind(this);
+  constructor() {
+    super()
+    this.focusContent = this.focusContent.bind(this)
   }
 
   focusContent() {
@@ -30,22 +33,23 @@ export default class App extends Component {
   render() {
     return (
       <div className="app">
-        <button
-          className="skip-to-content"
-          onClick={this.focusContent}
-        >
-          Skip to content
-        </button>
+        <SkipToContent callback={this.focusContent} />
         <Provider Stores={Stores}>
           <Router history={Stores.history}>
-            <ErrorBoundary>
-              <Header />
-              <Content contentRef={(content) => { this.content = content }} />
-              <Footer />
-            </ErrorBoundary>
+            <ThemeProvider theme={etsinTheme}>
+              <ErrorBoundary>
+                <Header />
+                <Content
+                  contentRef={content => {
+                    this.content = content
+                  }}
+                />
+                <Footer />
+              </ErrorBoundary>
+            </ThemeProvider>
           </Router>
         </Provider>
       </div>
-    );
+    )
   }
 }

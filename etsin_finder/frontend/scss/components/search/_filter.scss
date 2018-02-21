@@ -1,4 +1,4 @@
-$filter-padding: 1em 1.5em;
+$filter-padding: 1em 1em;
 
 .search-filtering {
   margin-bottom: 1em;
@@ -13,28 +13,30 @@ $filter-padding: 1em 1.5em;
     text-align: left;
     border: 2px solid $color-lightgray;
     border-bottom: none;
-    padding: $filter-padding;
+    padding: 1em 1.5em;
     background-color: $color-lightgray;
     font-weight: 700;
     transition: all 0.3s ease;
-    i {
+    svg {
       pointer-events: none;
-      height: 0.5em;
+      height: 0.7em;
       display: flex;
       align-items: center;
     }
-    &:focus, &:hover {
+    &:focus,
+    &:hover {
       outline: none;
       background-color: mix($color-lightgray, black, 90);
       border-color: mix($color-lightgray, black, 90);
     }
-    &:focus + .filter-items, &:hover + .filter-items {
+    &:focus + .filter-items,
+    &:hover + .filter-items {
       border-color: mix($color-lightgray, black, 90);
     }
   }
   .filter-items {
     border: 2px solid $color-lightgray;
-    padding: 0em 1.5em;
+    padding: 0em 1em;
     max-height: 0px;
     overflow: hidden;
     transition: all 0.3s ease;

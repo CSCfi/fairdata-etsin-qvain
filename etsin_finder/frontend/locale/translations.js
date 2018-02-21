@@ -2,6 +2,10 @@ import counterpart from 'counterpart'
 
 counterpart.registerTranslations('en', {
   addDataset: 'Add dataset',
+  stc: 'Skip to content',
+  general: {
+    description: 'Description',
+  },
   dataset: {
     access_locked: 'Restricted Access',
     access_open: 'Open Access',
@@ -17,9 +21,22 @@ counterpart.registerTranslations('en', {
     curator: 'Curator',
     dl: {
       download: 'Download',
+      downloadAll: 'Download all',
       files: 'Files',
+      fileAmount: '%(amount)s files',
       name: 'Name',
       size: 'Size',
+      breadcrumbs: 'Breadcrumbs',
+      file_types: {
+        directory: 'Folder',
+        file: 'file',
+        both: 'files and folders',
+      },
+      dirContent: 'Folder content',
+      category: 'Category',
+      info: 'Info',
+      info_about: 'about object: %(file)s',
+      item: 'item %(item)s',
     },
     doi: 'DOI',
     field_of_science: 'Field of science',
@@ -33,6 +50,7 @@ counterpart.registerTranslations('en', {
     spatial_coverage: 'Spatial Coverage',
     temporal_coverage: 'Temporal Coverage',
   },
+  changepage: 'Navigated to page: %(page)s',
   error: {
     notFound: "Couldn't find metadata for given id",
   },
@@ -66,6 +84,11 @@ counterpart.registerTranslations('en', {
 
 counterpart.registerTranslations('fi', {
   addDataset: 'Lisää aineisto',
+  stc: 'Siirry sivun pääsisältöön',
+  changepage: 'Siirryit sivulle: %(page)s',
+  general: {
+    description: 'Kuvaus',
+  },
   dataset: {
     access_locked: 'Rajattu käyttöoikeus',
     access_open: 'Avoin',
@@ -84,6 +107,19 @@ counterpart.registerTranslations('fi', {
       files: 'Tiedostot',
       name: 'Nimi',
       size: 'Koko',
+      downloadAll: 'Lataa kaikki',
+      fileAmount: '%(amount)s tiedostoa',
+      breadcrumbs: 'Leivänmurut',
+      file_types: {
+        directory: 'Kansio',
+        file: 'tiedosto',
+        both: 'tiedostot ja kansiot',
+      },
+      dirContent: 'Kansion sisältö',
+      category: 'Kategoria',
+      info: 'Tietoja',
+      info_about: 'aineistosta: %(file)s',
+      item: 'aineisto %(item)s',
     },
     doi: 'DOI',
     field_of_science: 'Tieteenala',

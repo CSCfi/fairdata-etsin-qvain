@@ -8,7 +8,8 @@
 }
 .basic-info {
   margin-bottom: 1em;
-  p, span {
+  p,
+  span {
     margin-bottom: 0;
     font-size: 0.95em;
     color: $color-gray;
@@ -16,6 +17,7 @@
 }
 
 .dsContent {
+  padding: 2em 0;
   .description {
     overflow-wrap: break-word;
   }

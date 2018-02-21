@@ -1,8 +1,8 @@
-import React from 'react';
-import ReactDOM from 'react-dom'; // eslint-disable-line no-unused-vars
-import { shallow } from 'enzyme';
+import React from 'react'
+import ReactDOM from 'react-dom' // eslint-disable-line no-unused-vars
+import { shallow } from 'enzyme'
 import { undecorated as AccessRights } from '../js/components/dataset/data/accessRights'
-
+import etsinTheme from '../js/theme.js'
 
 it('renders without crashing', () => {
   shallow(<AccessRights Stores={{ Locale: { currenLang: 'en' } }} />)
@@ -10,28 +10,38 @@ it('renders without crashing', () => {
 
 describe('AccessRights', () => {
   describe('render without props', () => {
-    const accessRights = shallow(<AccessRights Stores={{Locale: { currenLang: 'en' }}}/>);
-    it('should render the button', () => {
-      expect(accessRights.type()).toEqual('button')
-    })
-    it('should be disabled', () => {
-      expect(accessRights.prop('disabled')).toEqual(true)
+    const accessRights = shallow(
+      <AccessRights Stores={{ Locale: { currenLang: 'en' } }} theme={etsinTheme} />
+    )
+    it('should render the div', () => {
+      expect(accessRights.name()).toContain('div')
     })
   })
   describe('render with access rights true', () => {
-    const accessRights = shallow(<AccessRights
-      access_rights={{ type: [{ identifier: 'http://purl.org/att/es/reference_data/access_type/access_type_open_access', pref_label: { fi: 'title' } }] }}
-      Stores={{ Locale: { currenLang: 'en' } }}
-    />);
-    it('should render unclocked icon', () => {
-      expect(accessRights.contains(<i className="fa fa-unlock" aria-hidden="true" />)).toEqual(true)
-    })
+    const accessRights = shallow(
+      <AccessRights
+        theme={etsinTheme}
+        access_rights={{
+          type: [
+            {
+              identifier:
+                'http://purl.org/att/es/reference_data/access_type/access_type_open_access',
+              pref_label: { fi: 'title' },
+            },
+          ],
+        }}
+        Stores={{ Locale: { currenLang: 'en' } }}
+      />
+    )
   })
   describe('render with access rights anything else', () => {
-    const accessRights = shallow(<AccessRights
-      access_rights={{ license: [{ identifier: 'something', pref_label: { fi: 'title' } }] }}
-      Stores={{ Locale: { currenLang: 'en' } }}
-    />);
+    const accessRights = shallow(
+      <AccessRights
+        theme={etsinTheme}
+        access_rights={{ license: [{ identifier: 'something', pref_label: { fi: 'title' } }] }}
+        Stores={{ Locale: { currenLang: 'en' } }}
+      />
+    )
     it('should render locked icon', () => {
       expect(accessRights.contains(<i className="fa fa-lock" aria-hidden="true" />)).toEqual(true)
     })

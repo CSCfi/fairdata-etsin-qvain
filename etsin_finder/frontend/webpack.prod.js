@@ -1,10 +1,14 @@
 const path = require('path')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
+const webpack = require('webpack')
+const CompressionPlugin = require('compression-webpack-plugin')
 
 const config = {
-  devtool: 'source-map',
-  entry: [path.join(__dirname, '/js/index.jsx'), path.join(__dirname, '/scss/main.scss')],
+  entry: [
+    path.join(__dirname, '/js/index.jsx'),
+    path.join(__dirname, '/scss/main.scss'),
+  ],
   output: {
     path: path.join(__dirname, '/static'),
     filename: 'bundle.js',
@@ -45,13 +49,22 @@ const config = {
     ],
   },
   plugins: [
-    new ExtractTextPlugin({ // define where to save the file
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify('production'),
+      },
+    }),
+    new ExtractTextPlugin({
+      // define where to save the file
       filename: '[name].bundle.css',
       allChunks: true,
     }),
     new UglifyJSPlugin({
       sourceMap: true,
     }),
+    new CompressionPlugin({
+      algorithm: 'gzip',
+    }),
   ],
-};
-module.exports = config;
+}
+module.exports = config

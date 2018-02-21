@@ -1,15 +1,14 @@
-import ReactDOM from 'react-dom'; // eslint-disable-line no-unused-vars
+import ReactDOM from 'react-dom' // eslint-disable-line no-unused-vars
 import axios from 'axios'
 
-let res = '';
+let res = ''
 
 describe('Axios metax request', () => {
-  it('gets data', (done) => {
-    axios.get('https://metax-test.csc.fi/rest/datasets/12.json')
-      .then((response) => {
-        res = response
-        done();
-      })
+  it('gets data', done => {
+    axios.get('https://metax-test.csc.fi/rest/datasets/12.json').then(response => {
+      res = response
+      done()
+    })
   })
   describe('Axios metax request', () => {
     it('returns data', () => {
@@ -22,7 +21,7 @@ describe('Axios metax request', () => {
       expect(typeof res.data.research_dataset).toEqual('object')
     })
     it('should contain a title', () => {
-      expect(Object.keys(res.data.research_dataset.title).map(() => true)).toBeTruthy();
+      expect(Object.keys(res.data.research_dataset.title).map(() => true)).toBeTruthy()
     })
   })
 })

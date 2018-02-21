@@ -6,12 +6,12 @@ import ElasticQuery from '../../stores/view/elasticquery'
 
 class SearchBar extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     // Handle possible empty initial query
-    this.state = { query: ElasticQuery.search || '' };
+    this.state = { query: ElasticQuery.search || '' }
 
-    this.handleChange = this.handleChange.bind(this);
+    this.handleChange = this.handleChange.bind(this)
   }
 
   componentDidMount() {
@@ -23,7 +23,7 @@ class SearchBar extends Component {
   }
 
   handleChange(event) {
-    this.setState({ query: event.target.value });
+    this.setState({ query: event.target.value })
   }
 
   handleSubmit(e) {
@@ -38,13 +38,22 @@ class SearchBar extends Component {
         <form onSubmit={e => this.handleSubmit(e)}>
           <div className="search">
             <div className="searchBar inner-addon right-addon">
-              <i className="fa fa-search fa-2x" aria-hidden="true" />
-              <input id="searchBarInput" placeholder="Anna hakusana" value={this.state.query} onChange={this.handleChange} />
+              <i
+                className="fa fa-search fa-2x"
+                data-fa-transform="shrink-4"
+                aria-hidden="true"
+              />
+              <input
+                id="searchBarInput"
+                placeholder="Anna hakusana"
+                value={this.state.query}
+                onChange={this.handleChange}
+              />
             </div>
           </div>
         </form>
       </ErrorBoundary>
-    );
+    )
   }
 }
 

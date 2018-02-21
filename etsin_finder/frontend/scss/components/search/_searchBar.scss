@@ -10,7 +10,7 @@
       border: 0;
       border-radius: 0.3em;
       //box-shadow: inset 0 1px 3px $color-gray;
-      box-shadow: 0 2px 3px rgba(0,0,0, 0.2);
+      box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);
       color: $color-gray;
       font-size: 1em;
       letter-spacing: 1px;
@@ -26,7 +26,6 @@
   }
 }
 
-
 /* enable absolute positioning */
 
 .inner-addon {
@@ -34,27 +33,24 @@
   display: flex;
 }
 
-
 /* style icon */
 
-.inner-addon i {
+.inner-addon svg {
   position: absolute;
-  align-self: center;
-  padding: 0 20px;
-  pointer-events: none;
+  color: $color-primary;
+  height: 100%;
+  margin: 0 0.3em;
 }
-
 
 /* align icon */
 
-.left-addon i {
+.left-addon svg {
   left: 0px;
 }
 
-.right-addon i {
+.right-addon svg {
   right: 0px;
 }
-
 
 /* add padding  */
 
