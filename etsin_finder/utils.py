@@ -128,32 +128,19 @@ def get_email_info(catalog_record):
     ret_obj = {}
     rd = catalog_record.get('research_dataset', None)
 
-    creator = rd.get('creator', None)
-    if creator:
-        ret_obj.update({AgentType.CREATOR.name: _agent_has_email_address(creator)})
-
-    publisher = rd.get('publisher', None)
-    if publisher:
-        ret_obj.update({AgentType.PUBLISHER.name: _agent_has_email_address(publisher)})
-
-    contributor = rd.get('contributor', None)
-    if contributor:
-        ret_obj.update({AgentType.CONTRIBUTOR.name: _agent_has_email_address(contributor)})
-
-    rights_holder = rd.get('rights_holder', None)
-    if rights_holder:
-        ret_obj.update({AgentType.RIGHTS_HOLDER.name: _agent_has_email_address(rights_holder)})
-
-    curator = rd.get('curator', None)
-    if curator:
-        ret_obj.update({AgentType.CURATOR.name: _agent_has_email_address(curator)})
+    ret_obj.update({AgentType.CREATOR.name: _agent_has_email_address(rd.get('creator', None))})
+    ret_obj.update({AgentType.PUBLISHER.name: _agent_has_email_address(rd.get('publisher', None))})
+    ret_obj.update({AgentType.CONTRIBUTOR.name: _agent_has_email_address(rd.get('contributor', None))})
+    ret_obj.update({AgentType.RIGHTS_HOLDER.name: _agent_has_email_address(rd.get('rights_holder', None))})
+    ret_obj.update({AgentType.CURATOR.name: _agent_has_email_address(rd.get('curator', None))})
 
     return ret_obj
 
 
 def _agent_has_email_address(agent_obj):
-    if isinstance(agent_obj, list) and len(agent_obj) > 0:
-        return 'email' in agent_obj[0]
-    elif isinstance(agent_obj, dict):
-        return 'email' in agent_obj
+    if agent_obj:
+        if isinstance(agent_obj, list) and len(agent_obj) > 0:
+            return 'email' in agent_obj[0]
+        elif isinstance(agent_obj, dict):
+            return 'email' in agent_obj
     return False
