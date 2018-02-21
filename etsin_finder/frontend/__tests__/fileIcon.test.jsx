@@ -5,7 +5,7 @@ import FileIcon from '../js/components/dataset/downloads/fileIcon'
 describe('FileIcon', () => {
   const fileIcon = shallow(<FileIcon />)
   it('should return a icon', () => {
-    expect(fileIcon.childAt(0).get(0).props.icon.iconName).toEqual('file')
+    expect(fileIcon.get(0).props.icon.iconName).toEqual('file')
   })
   it('should return video icon', () => {
     fileIcon.setProps({ type: 'Video' })
