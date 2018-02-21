@@ -18,12 +18,12 @@ class MetaxAPIService:
         self.METAX_GET_CATALOG_RECORD_URL = self.METAX_CATALOG_RECORDS_BASE_URL + '/{0}'
         self.METAX_GET_REMOVED_CATALOG_RECORD_URL = self.METAX_GET_CATALOG_RECORD_URL + '?removed=true'
 
-    def get_catalog_record(self, identifier):
+    def get_catalog_record_with_file_details(self, identifier):
         """ Get a catalog record with a given identifier from MetaX API.
 
         :return: Metax catalog record as json
         """
-        r = requests.get(self.METAX_GET_CATALOG_RECORD_URL.format(identifier),
+        r = requests.get(self.METAX_GET_CATALOG_RECORD_URL.format(identifier) + '?file_details',
                          headers={'Content-Type': 'application/json'},
                          timeout=TIMEOUT)
         try:

@@ -31,7 +31,7 @@ def get_dataset(dataset_id):
     :param dataset_id: id to use to fetch the record from metax
     :return:
     """
-    cr = metax_service.get_catalog_record(dataset_id)
+    cr = metax_service.get_catalog_record_with_file_details(dataset_id) or metax_service.get_removed_catalog_record(dataset_id)
     if not cr:
         return Response(status=400)
 
@@ -65,7 +65,7 @@ def send_message_to_contact(dataset_id):
         return Response(status=400)
 
     # Get the full catalog record from Metax
-    cr = metax_service.get_catalog_record(dataset_id)
+    cr = metax_service.get_catalog_record_with_file_details(dataset_id)
     # Get the chose email recipient
     recipient = get_email_recipient_address(cr, recipient_agent_role)
     if not recipient:
