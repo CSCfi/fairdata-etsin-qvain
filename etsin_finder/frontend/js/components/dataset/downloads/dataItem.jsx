@@ -81,18 +81,18 @@ class DataItem extends Component {
               <Translate className="screen-reader-only" content="dataset.dl.file_types.directory" />
               <p>{this.state.name}</p>
             </TransparentButton>
-            <TitleAlt>
-              {this.state.titleAlt ? (
+            {this.state.titleAlt ? (
+              <TitleAlt>
                 <Translate content="dataset.dl.fileAmount" with={{ amount: this.state.titleAlt }} />
-              ) : (
-                ''
-              )}
-            </TitleAlt>
+              </TitleAlt>
+            ) : (
+              ''
+            )}
           </td>
         ) : (
           <td className="fileName">
             <p>{this.state.name}</p>
-            <TitleAlt>{this.state.titleAlt}</TitleAlt>
+            {this.state.titleAlt ? <TitleAlt>{this.state.titleAlt}</TitleAlt> : null}
           </td>
         )}
         <td className="fileSize">{sizeParse(this.props.item.details.byte_size, 1)}</td>
