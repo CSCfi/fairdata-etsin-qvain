@@ -25,17 +25,26 @@ export default class Downloads extends Component {
     const results = DatasetQuery.results
     const files = results.research_dataset.files
     const folders = results.research_dataset.directories
-    const combined = this.createDirTree(files, folders)
-    const fileDirTree = createTree(combined)
-    this.state = {
-      results,
-      filesAndFolders: combined,
-      access: accessRightsBool(results.research_dataset.access_rights),
-      fileDirTree,
-      currentFolder: fileDirTree,
-      currentPath: [],
-      currentIDs: [],
-      loading: false,
+    if (files || folders) {
+      const combined = this.createDirTree(files, folders)
+      const fileDirTree = createTree(combined)
+      this.state = {
+        results,
+        filesAndFolders: combined,
+        access: accessRightsBool(results.research_dataset.access_rights),
+        fileDirTree,
+        currentFolder: fileDirTree,
+        currentPath: [],
+        currentIDs: [],
+        loading: false,
+        hasFiles: true,
+      }
+    } else {
+      this.state = {
+        results,
+        loading: false,
+        hasFiles: false,
+      }
     }
 
     this.updatePath = this.updatePath.bind(this)
@@ -87,7 +96,13 @@ export default class Downloads extends Component {
         }
       })
     }
-    return filePaths.concat(folderPaths)
+    if (files && folders) {
+      return filePaths.concat(folderPaths)
+    }
+    if (files || folders) {
+      return files ? filePaths : folderPaths
+    }
+    return null
   }
 
   query(id, newPath, newIDs) {
@@ -164,6 +179,9 @@ export default class Downloads extends Component {
     if (!this.state.results) {
       return 'Loading'
     }
+    if (!this.state.hasFiles) {
+      return 'No files'
+    }
 
     return (
       <div className="dataset-downloads">
@@ -187,29 +205,31 @@ export default class Downloads extends Component {
             </InvertedButton>
           </div>
         </div>
-        <Breadcrumbs
-          path={this.state.currentPath}
-          ids={this.state.currentIDs}
-          callback={this.updatePath}
-        />
-        <table className="table downloads-table" aria-live="assertive">
-          <thead className="thead-dark">
-            <tr>
-              <th className="rowIcon" scope="col" />
-              <th className="rowName" scope="col">
-                <Translate content="dataset.dl.name" />
-              </th>
-              <th className="rowSize" scope="col">
-                <Translate content="dataset.dl.size" />
-              </th>
-              <th className="rowCategory" scope="col">
-                <Translate content="dataset.dl.category" />
-              </th>
-              <th className="rowButtons" scope="col" />
-            </tr>
-          </thead>
-          <tbody>{this.tableItems(this.state.currentFolder)}</tbody>
-        </table>
+        <div>
+          <Breadcrumbs
+            path={this.state.currentPath}
+            ids={this.state.currentIDs}
+            callback={this.updatePath}
+          />
+          <table className="table downloads-table" aria-live="assertive">
+            <thead className="thead-dark">
+              <tr>
+                <th className="rowIcon" scope="col" />
+                <th className="rowName" scope="col">
+                  <Translate content="dataset.dl.name" />
+                </th>
+                <th className="rowSize" scope="col">
+                  <Translate content="dataset.dl.size" />
+                </th>
+                <th className="rowCategory" scope="col">
+                  <Translate content="dataset.dl.category" />
+                </th>
+                <th className="rowButtons" scope="col" />
+              </tr>
+            </thead>
+            <tbody>{this.state.hasFiles ? this.tableItems(this.state.currentFolder) : null}</tbody>
+          </table>
+        </div>
       </div>
     )
   }

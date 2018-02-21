@@ -20,6 +20,9 @@ const makeSmall = tree => {
 }
 
 const createTree = files => {
+  if (!files) {
+    return false
+  }
   const hierarchy = files.reduce((hier, file) => {
     let x = hier
     const split = file.path.split('/')

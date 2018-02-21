@@ -11,7 +11,7 @@ class DatasetQuery {
 
   @action
   getData(id) {
-    console.log('DatasetQuery', id)
+    console.log('DatasetQuery Identifier ||', id)
     return new Promise((resolve, reject) => {
       axios
         .get(`${this.metaxUrl}/rest/datasets/${id}?file_details`)

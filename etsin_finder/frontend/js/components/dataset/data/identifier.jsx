@@ -25,7 +25,6 @@ export default class Identifier extends Component {
   }
 
   render() {
-    console.log(this.props.idn)
     if (!this.state.url) {
       return <IdnPlain {...this.props}>{this.props.children}</IdnPlain>
     }

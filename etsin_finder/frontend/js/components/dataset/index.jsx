@@ -71,6 +71,7 @@ class Dataset extends React.Component {
     const researchDataset = this.state.dataset.research_dataset
 
     const description = researchDataset.description.map(single => checkDataLang(single))
+    const hasFiles = researchDataset.directories || researchDataset.files
 
     const {
       title,
@@ -81,6 +82,7 @@ class Dataset extends React.Component {
     } = this.state.dataset.research_dataset
 
     this.setState({
+      hasFiles,
       title,
       description,
       creator,
@@ -93,7 +95,6 @@ class Dataset extends React.Component {
   }
 
   render() {
-    console.log('render dataset')
     // CASE 1: Houston, we have a problem
     if (this.state.error !== false) {
       return <ErrorPage />
@@ -124,7 +125,8 @@ class Dataset extends React.Component {
                 {'< Go back'}
               </button>
               <ErrorBoundary>
-                {this.state.dataset.data_catalog.catalog_json.harvested ? null : (
+                {this.state.dataset.data_catalog.catalog_json.harvested ||
+                !this.state.hasFiles ? null : (
                   <Tabs identifier={this.props.match.params.identifier} live={this.state.live} />
                 )}
               </ErrorBoundary>
@@ -153,7 +155,7 @@ class Dataset extends React.Component {
                       <Translate content="dataset.data_location" fallback="this is fallback" />
                     </Identifier>
                   ) : (
-                    <Route exact path="/dataset/:identifier/data" render={() => <Downloads />} />
+                    <Route exact path="/dataset/:identifier/data" component={Downloads} />
                   )}
                 </ErrorBoundary>
               ) : null}

@@ -7,7 +7,6 @@ import Person from './person'
 
 export default class Content extends Component {
   render() {
-    console.log(this.props.dataset.access_rights)
     return (
       <div className="dsContent">
         <div className="d-flex align-items-center dataset-title">
