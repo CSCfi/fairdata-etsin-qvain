@@ -1,8 +1,14 @@
-from etsin_finder.finder import app, mail
 from flask import render_template, jsonify, request, Response
-from etsin_finder.metax_api import MetaxAPIService
-from etsin_finder.utils import get_metax_api_config, strip_catalog_record
 from flask_mail import Message
+
+from etsin_finder.finder import app, mail
+from etsin_finder.metax_api import MetaxAPIService
+from etsin_finder.utils import \
+    get_email_info, \
+    get_email_recipient_address, \
+    get_metax_api_config, \
+    strip_catalog_record, \
+    validate_send_message_request
 
 log = app.logger
 metax_service = MetaxAPIService(get_metax_api_config(app.config))
@@ -26,16 +32,10 @@ def get_dataset(dataset_id):
     :return:
     """
     cr = metax_service.get_catalog_record(dataset_id)
-    log.info(cr)
-    return jsonify(strip_catalog_record(cr))
+    if not cr:
+        return Response(status=400)
 
-
-# This route is used for getting a list of possible email recipients
-@app.route('/api/dataset/<string:dataset_id>/contact', methods=['GET'])
-def get_contacts(dataset_id):
-    # OR THEN MODIFY THE DATASET WHICH THE FRONTEND GETS TO INCLUDE INFO ABOUT WHETHER THE ROLES HAVE AN ASSOCIATED
-    # EMAIL ADDRESS
-    pass
+    return jsonify({'catalog_record': strip_catalog_record(cr), 'email_info': get_email_info(cr)})
 
 
 # This route is used to send email message
@@ -58,24 +58,31 @@ def send_message_to_contact(dataset_id):
     subject = request.json.get('subject', None)
     # Extract message body
     body = request.json.get('body', None)
+    # Extract recipient role
+    recipient_agent_role = request.json.get('agent_type')
     # Validate incoming request values are all there and are valid
+    if not validate_send_message_request(sender, subject, body, recipient_agent_role):
+        return Response(status=400)
 
     # Get the full catalog record from Metax
     cr = metax_service.get_catalog_record(dataset_id)
-    # Get email addresses from cr to decide who to send the message to
-    # but for now use fixed value
-    recipients = ['test@test.fi']
+    # Get the chose email recipient
+    recipient = get_email_recipient_address(cr, recipient_agent_role)
+    if not recipient:
+        return Response(status=500)
 
     # Create the message
-    msg = Message(sender=sender, recipients=recipients, subject=subject, body=body)
+    msg = Message(sender=sender, recipients=[recipient], subject=subject, body=body)
 
     # Send the message
     with mail.record_messages() as outbox:
         try:
             mail.send(msg)
+            if len(outbox) != 1:
+                raise Exception
         except Exception as e:
+            log.error("Unable to send email message".format(sender=[sender]))
             log.error(e)
-            log.error("Unable to send email message for {sender}".format(sender=[sender]))
             return Response(status=500)
 
     return Response(status=200)

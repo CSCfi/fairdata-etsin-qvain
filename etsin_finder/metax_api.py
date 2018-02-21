@@ -1,6 +1,8 @@
+import json
+
 import requests
 from requests import HTTPError
-import json
+
 from etsin_finder.finder import app
 
 log = app.logger
