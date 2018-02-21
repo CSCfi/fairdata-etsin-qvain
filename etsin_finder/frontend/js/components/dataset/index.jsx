@@ -12,6 +12,7 @@ import ErrorBoundary from '../general/errorBoundary'
 import Tabs from './Tabs'
 import checkDataLang from '../../utils/checkDataLang'
 import DatasetQuery from '../../stores/view/datasetquery'
+import NoticeBar from '../general/noticeBar'
 
 class Dataset extends React.Component {
   constructor(props) {
@@ -23,16 +24,42 @@ class Dataset extends React.Component {
     }
 
     this.goBack = this.goBack.bind(this)
+    this.query = this.query.bind(this)
     this.updateData = this.updateData.bind(this)
   }
 
   componentDidMount() {
+    this.query()
+  }
+
+  query() {
+    if (process.env.NODE_ENV === 'production' && /^\d+$/.test(this.props.match.params.identifier)) {
+      console.log('Using integer as identifier not permitted')
+      this.setState({ error: 'wrong identifier' })
+      this.setState({ loaded: true })
+      return
+    }
     DatasetQuery.getData(this.props.match.params.identifier)
       .then(result => {
-        this.updateData(result)
+        this.setState({ dataset: result })
+        if (result.harvested) {
+          console.log('It seems the dataset is deprecated...')
+          this.updateData(false)
+        } else {
+          this.updateData(true)
+        }
       })
-      .catch(error => {
-        this.setState({ error })
+      .catch(err => {
+        console.log(err)
+        DatasetQuery.getRemovedData(this.props.match.params.identifier)
+          .then(res => {
+            this.setState({ dataset: res })
+            this.updateData(false)
+          })
+          .catch(error => {
+            console.log(error)
+            this.setState({ error })
+          })
       })
   }
 
@@ -40,18 +67,27 @@ class Dataset extends React.Component {
     this.props.history.goBack()
   }
 
-  updateData(results) {
-    const researchDataset = results.research_dataset
+  updateData(isLive) {
+    const researchDataset = this.state.dataset.research_dataset
+
     const description = researchDataset.description.map(single => checkDataLang(single))
-    const { creator, contributor, issued, rights_holder } = researchDataset
+
+    const {
+      title,
+      creator,
+      contributor,
+      issued,
+      rights_holder,
+    } = this.state.dataset.research_dataset
+
     this.setState({
-      dataset: results,
-      title: researchDataset.title,
+      title,
       description,
       creator,
       contributor,
       issued,
       rights_holder,
+      live: isLive,
       loaded: true,
     })
   }
@@ -63,7 +99,7 @@ class Dataset extends React.Component {
       return <ErrorPage />
     }
 
-    // CASE 2: Loading not complete
+    // Loading not complete
     // Don't show anything until data has been loaded from Metax
     // TODO: Use a loading indicator instead
     // Do we need to worry about Metax sending us incomplete datasets?
@@ -72,50 +108,61 @@ class Dataset extends React.Component {
     }
 
     const { currentLang } = this.props.Stores.Locale
+    // CASE 2: Business as usual
+
     return (
-      <div className="container regular-row" pageid={this.props.match.params.identifier}>
-        <div className="row">
-          <div className="col-lg-8">
-            <button className="btn btn-transparent nopadding btn-back" onClick={this.goBack}>
-              {'< Go back'}
-            </button>
-            <ErrorBoundary>
-              {this.state.dataset.data_catalog.catalog_json.harvested ? null : (
-                <Tabs identifier={this.props.match.params.identifier} />
-              )}
-            </ErrorBoundary>
-            <ErrorBoundary>
-              <Route
-                exact
-                path="/dataset/:identifier"
-                render={() => (
-                  <Content
-                    title={checkDataLang(this.state.title, currentLang)}
-                    creator={this.state.creator}
-                    rights_holder={this.state.rights_holder}
-                    contributor={this.state.contributor}
-                    issued={this.state.issued}
-                    dataset={this.state.dataset.research_dataset}
-                  >
-                    {this.state.description}
-                  </Content>
+      <div>
+        {this.state.live ? null : (
+          <NoticeBar>
+            <Translate content="tombstone.info" />
+          </NoticeBar>
+        )}
+        <div className="container regular-row" pageid={this.props.match.params.identifier}>
+          <div className="row">
+            <div className="col-lg-8">
+              <button className="btn btn-transparent nopadding btn-back" onClick={this.goBack}>
+                {'< Go back'}
+              </button>
+              <ErrorBoundary>
+                {this.state.dataset.data_catalog.catalog_json.harvested ? null : (
+                  <Tabs identifier={this.props.match.params.identifier} live={this.state.live} />
                 )}
-              />
-            </ErrorBoundary>
-            <ErrorBoundary>
-              {this.state.dataset.data_catalog.catalog_json.harvested ? (
-                <Identifier idn={this.state.dataset.research_dataset.preferred_identifier}>
-                  <Translate content="dataset.data_location" fallback="this is fallback" />
-                </Identifier>
-              ) : (
-                <Route exact path="/dataset/:identifier/data" render={() => <Downloads />} />
-              )}
-            </ErrorBoundary>
-          </div>
-          <div className="col-lg-4">
-            <ErrorBoundary>
-              <Sidebar dataset={this.state.dataset} lang={currentLang} />
-            </ErrorBoundary>
+              </ErrorBoundary>
+              <ErrorBoundary>
+                <Route
+                  exact
+                  path="/dataset/:identifier"
+                  render={() => (
+                    <Content
+                      title={checkDataLang(this.state.title, currentLang)}
+                      creator={this.state.creator}
+                      rights_holder={this.state.rights_holder}
+                      contributor={this.state.contributor}
+                      issued={this.state.issued}
+                      dataset={this.state.dataset.research_dataset}
+                    >
+                      {this.state.description}
+                    </Content>
+                  )}
+                />
+              </ErrorBoundary>
+              {this.state.live ? (
+                <ErrorBoundary>
+                  {this.state.dataset.data_catalog.catalog_json.harvested ? (
+                    <Identifier idn={this.state.dataset.research_dataset.preferred_identifier}>
+                      <Translate content="dataset.data_location" fallback="this is fallback" />
+                    </Identifier>
+                  ) : (
+                    <Route exact path="/dataset/:identifier/data" render={() => <Downloads />} />
+                  )}
+                </ErrorBoundary>
+              ) : null}
+            </div>
+            <div className="col-lg-4">
+              <ErrorBoundary>
+                <Sidebar dataset={this.state.dataset} lang={currentLang} />
+              </ErrorBoundary>
+            </div>
           </div>
         </div>
       </div>

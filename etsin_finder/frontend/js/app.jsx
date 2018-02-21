@@ -12,7 +12,6 @@ import etsinTheme from './theme'
 
 import Stores from './stores'
 
-console.log(process.env.NODE_ENV)
 if (process.env.NODE_ENV === 'test') {
   console.log('We are in test')
 } else if (process.env.NODE_ENV === 'development') {
