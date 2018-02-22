@@ -20,6 +20,9 @@ def executing_travis():
 
 
 def get_elasticsearch_config(config):
+    if executing_travis():
+        return None
+
     es_conf = config.get('ELASTICSEARCH', None)
     if not es_conf or not isinstance(es_conf, dict):
         return None
@@ -28,6 +31,9 @@ def get_elasticsearch_config(config):
 
 
 def get_metax_api_config(config):
+    if executing_travis():
+        return None
+
     metax_api_conf = config.get('METAX_API')
     if not metax_api_conf or not isinstance(metax_api_conf, dict):
         return None
