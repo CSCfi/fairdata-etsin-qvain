@@ -31,7 +31,7 @@ class SearchBar extends Component {
     e.preventDefault()
     const identifier = getIdentifierFromQuery(this.state.query)
     if (identifier) {
-      console.log('!')
+      this.props.history.push(`/dataset/${identifier}`)
     } else {
       ElasticQuery.updateSearch(this.state.query, this.props.history)
       ElasticQuery.queryES()

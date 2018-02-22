@@ -17,7 +17,7 @@ class Search extends Component {
     console.log('-------- performing initial query ---------')
     const identifier = getIdentifierFromQuery(this.props.match.params.query)
     if (identifier) {
-      console.log('#')
+      this.props.history.push(`/dataset/${identifier}`)
     } else {
       ElasticQuery.updateFromUrl(this.props.match.params.query, this.props.history)
       ElasticQuery.queryES()

@@ -10,14 +10,14 @@ const getIdentifierFromQuery = (query) => {
   }
 
   // Remove possible whitespaces before and after the query
-  query = query.trim()
+  const trimmedQuery = query.trim()
 
   let identifier = ''
-  if (query && !/\s/.test(query) &&
-        (query.startsWith(httpUrnFiAttUrnPrefix) ||
-        query.startsWith(urnFiAttUrnPrefix) ||
-        query.startsWith(attUrnPrefix))) {
-    identifier = query.substring(query.indexOf(attUrnPrefix))
+  if (trimmedQuery && !/\s/.test(trimmedQuery) &&
+        (trimmedQuery.startsWith(httpUrnFiAttUrnPrefix) ||
+        trimmedQuery.startsWith(urnFiAttUrnPrefix) ||
+        trimmedQuery.startsWith(attUrnPrefix))) {
+    identifier = trimmedQuery.substring(trimmedQuery.indexOf(attUrnPrefix))
   }
   return identifier
 }
