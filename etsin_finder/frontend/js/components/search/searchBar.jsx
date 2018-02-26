@@ -3,6 +3,7 @@ import { withRouter } from 'react-router-dom'
 
 import ErrorBoundary from '../general/errorBoundary'
 import ElasticQuery from '../../stores/view/elasticquery'
+import getIdentifierFromQuery from '../../utils/getIdentifierFromQuery'
 
 class SearchBar extends Component {
   constructor(props) {
@@ -28,8 +29,13 @@ class SearchBar extends Component {
 
   handleSubmit(e) {
     e.preventDefault()
-    ElasticQuery.updateSearch(this.state.query, this.props.history)
-    ElasticQuery.queryES()
+    const identifier = getIdentifierFromQuery(this.state.query)
+    if (identifier) {
+      this.props.history.push(`/dataset/${identifier}`)
+    } else {
+      ElasticQuery.updateSearch(this.state.query, this.props.history)
+      ElasticQuery.queryES()
+    }
   }
 
   render() {

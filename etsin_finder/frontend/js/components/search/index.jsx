@@ -6,6 +6,7 @@ import HeroBanner from '../general/hero'
 import SearchBar from './searchBar'
 import Results from './results'
 import ElasticQuery from '../../stores/view/elasticquery'
+import getIdentifierFromQuery from '../../utils/getIdentifierFromQuery'
 
 class Search extends Component {
   componentWillMount() {
@@ -14,8 +15,13 @@ class Search extends Component {
 
   initialQuery = () => {
     console.log('-------- performing initial query ---------')
-    ElasticQuery.updateFromUrl(this.props.match.params.query, this.props.history)
-    ElasticQuery.queryES()
+    const identifier = getIdentifierFromQuery(this.props.match.params.query)
+    if (identifier) {
+      this.props.history.push(`/dataset/${identifier}`)
+    } else {
+      ElasticQuery.updateFromUrl(this.props.match.params.query, this.props.history)
+      ElasticQuery.queryES()
+    }
   }
 
   render() {

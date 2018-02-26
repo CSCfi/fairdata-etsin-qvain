@@ -1,8 +1,9 @@
+blinker==1.4
 flake8==3.5.0
 Flask==0.12.2
+Flask-Mail==0.9.1
 #flask-login==0.4.0
 #flask-security==3.0.0
-#flask-static-compress==1.0.1
 gevent==1.2.2
 gunicorn==19.7.1
 ipdb==0.11

@@ -19,7 +19,8 @@ class Dataset extends React.Component {
     super(props)
 
     this.state = {
-      dataset: DatasetQuery.results,
+      dataset: DatasetQuery.results.catalog_record,
+      email_info: DatasetQuery.results.email_info,
       error: false,
     }
 
@@ -41,7 +42,10 @@ class Dataset extends React.Component {
     }
     DatasetQuery.getData(this.props.match.params.identifier)
       .then(result => {
-        this.setState({ dataset: result })
+        this.setState({ dataset: result.catalog_record, email_info: result.email_info })
+        // TODO: The code below needs to be revised
+        // TODO: Somewhere we need to think how 1) harvested, 2) accumulative, 3) deprecated, 4) removed, 5) ordinary
+        // TODO: datasets are rendered. Maybe not here?
         if (result.harvested) {
           console.log('It seems the dataset is deprecated...')
           this.updateData(false)
@@ -49,17 +53,9 @@ class Dataset extends React.Component {
           this.updateData(true)
         }
       })
-      .catch(err => {
-        console.log(err)
-        DatasetQuery.getRemovedData(this.props.match.params.identifier)
-          .then(res => {
-            this.setState({ dataset: res })
-            this.updateData(false)
-          })
-          .catch(error => {
-            console.log(error)
-            this.setState({ error })
-          })
+      .catch(error => {
+        console.log(error)
+        this.setState({ error })
       })
   }
 
@@ -69,6 +65,7 @@ class Dataset extends React.Component {
 
   updateData(isLive) {
     const researchDataset = this.state.dataset.research_dataset
+    const emailInfo = this.state.email_info
 
     const description = researchDataset.description.map(single => checkDataLang(single))
 
