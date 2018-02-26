@@ -14,6 +14,10 @@ const Access = styled.div`
   background-color: ${props => props.theme.color.lightgray};
   padding: 0.2em 0.9em;
   border-radius: 1em;
+  width: max-content;
+  div {
+    width: max-content;
+  }
 `
 
 export const accessRightsBool = accessRights => {

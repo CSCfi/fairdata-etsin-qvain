@@ -9,8 +9,8 @@ export default class Content extends Component {
   render() {
     return (
       <div className="dsContent">
-        <div className="d-flex align-items-center dataset-title">
-          <h1 className="mr-auto">{this.props.title}</h1>
+        <div className="d-md-flex align-items-center dataset-title justify-content-between">
+          <h1>{this.props.title}</h1>
           <AccessRights
             access_rights={
               checkNested(this.props.dataset, 'access_rights', 'access_type')
