@@ -13,3 +13,7 @@ etsin_finder/frontend/static/bundle.js
 etsin_finder/frontend/static/main.bundle.css
 etsin_finder/frontend/static/bundle.js.map
 etsin_finder/frontend/static/main.bundle.css.map
+etsin_finder/frontend/static/bundle.js.gz
+etsin_finder/frontend/static/main.bundle.css.gz
+etsin_finder/frontend/static/bundle.js.map.gz
+etsin_finder/frontend/static/main.bundle.css.map.gz
