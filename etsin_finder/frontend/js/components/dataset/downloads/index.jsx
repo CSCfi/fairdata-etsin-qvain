@@ -191,10 +191,12 @@ export default class Downloads extends Component {
               <Translate content="dataset.dl.files" />
             </TableTitle>
             <FileSizeAll>
-              {`${this.state.results.research_dataset.files.length} aineistoa (${sizeParse(
-                this.state.results.research_dataset.total_ida_byte_size,
-                1
-              )})`}
+              <Translate
+                component="span"
+                content="dataset.dl.fileAmount"
+                with={{ amount: this.state.results.research_dataset.files.length }}
+              />
+              {` (${sizeParse(this.state.results.research_dataset.total_ida_byte_size, 1)})`}
             </FileSizeAll>
           </div>
           <Loader left active={this.state.loading} color="white" />

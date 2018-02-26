@@ -7,6 +7,7 @@ counterpart.registerTranslations('en', {
     description: 'Description',
   },
   dataset: {
+    data_location: 'Go to harvested location',
     access_locked: 'Restricted Access',
     access_open: 'Open Access',
     access_rights: 'Access rights statement',
@@ -23,7 +24,7 @@ counterpart.registerTranslations('en', {
       download: 'Download',
       downloadAll: 'Download all',
       files: 'Files',
-      fileAmount: '%(amount)s files',
+      fileAmount: '%(amount)s objects',
       name: 'Name',
       size: 'Size',
       breadcrumbs: 'Breadcrumbs',
@@ -55,7 +56,7 @@ counterpart.registerTranslations('en', {
     notFound: "Couldn't find metadata for given id",
   },
   tombstone: {
-    info: 'The dataset has been either deprecated or removed'
+    info: 'The dataset has been either deprecated or removed',
   },
   home: {
     title: 'Search datasets',
@@ -108,7 +109,7 @@ counterpart.registerTranslations('fi', {
       name: 'Nimi',
       size: 'Koko',
       downloadAll: 'Lataa kaikki',
-      fileAmount: '%(amount)s tiedostoa',
+      fileAmount: '%(amount)s objektia',
       breadcrumbs: 'Leivänmurut',
       file_types: {
         directory: 'Kansio',
@@ -137,7 +138,7 @@ counterpart.registerTranslations('fi', {
     notFound: 'Annetulle id:lle ei löytynyt metadataa',
   },
   tombstone: {
-    info: 'Aineisto on joko vanhentunut tai poistettu'
+    info: 'Aineisto on joko vanhentunut tai poistettu',
   },
   home: {
     title: 'Etsi aineistoa',

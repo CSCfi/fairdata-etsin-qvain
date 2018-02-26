@@ -151,8 +151,14 @@ class Dataset extends React.Component {
               </ErrorBoundary>
               {this.state.live ? (
                 <ErrorBoundary>
+                  {
+                    // this.state.dataset.data_catalog.catalog_json.harvested ? (
+                  }
                   {this.state.dataset.data_catalog.catalog_json.harvested ? (
-                    <Identifier idn={this.state.dataset.research_dataset.preferred_identifier}>
+                    <Identifier
+                      idn={this.state.dataset.research_dataset.preferred_identifier}
+                      button
+                    >
                       <Translate content="dataset.data_location" fallback="this is fallback" />
                     </Identifier>
                   ) : (

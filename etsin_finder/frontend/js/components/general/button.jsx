@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { opacify } from 'polished'
+import { opacify, darken } from 'polished'
 
 // prettier-ignore
 const StyledButton = styled.button`
@@ -12,10 +12,10 @@ const StyledButton = styled.button`
   color: ${props => (props.color !== 'white' ? 'white' : props.theme.color.primary)};
   border-radius: 0.25em;
   line-height: 1.25;
-  transition: 0.2s ease;
+  transition: 0.3s ease;
   &:hover {
-    background-color: transparent;
-    color: ${props => (props.color ? props.color : props.theme.color.primary)};
+    background-color: ${props => darken(0.1, (props.color ? props.color : props.theme.color.primary))};
+    border-color: ${props => darken(0.1, (props.color ? props.color : props.theme.color.primary))};
   }
   &:disabled {
     pointer-events:none;
@@ -47,6 +47,7 @@ const TransparentStyledButton = StyledButton.extend`
   background-color: transparent;
   color: ${props => (props.color ? props.color : props.theme.color.darkgray)};
   &:hover {
+    background-color: transparent;
     color: ${props => props.theme.color.primary};
     text-decoration: underline;
   }
