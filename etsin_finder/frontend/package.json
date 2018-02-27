@@ -5,10 +5,12 @@
   "scripts": {
     "start": "webpack-dev-server",
     "build": "webpack --config webpack.prod.js --define process.env.NODE_ENV=\"'production'\"",
-    "dev-build": "webpack -d --config webpack.config.js --define process.env.NODE_ENV=\"'development'\"",
+    "dev-build":
+      "webpack -d --config webpack.config.js --define process.env.NODE_ENV=\"'development'\"",
     "lint": "eslint js --ext .jsx,.js",
     "test": "jest",
-    "watch": "npm update; webpack --progress -d --config webpack.config.js --watch  --define process.env.NODE_ENV=\"'development'\"",
+    "watch":
+      "npm update; webpack --progress -d --config webpack.config.js --watch  --define process.env.NODE_ENV=\"'development'\"",
     "start:dev": "webpack-dev-server",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
@@ -27,15 +29,17 @@
     "enzyme-adapter-react-16": "1.1.0",
     "eslint": "4.12.0",
     "eslint-config-airbnb": "16.1.0",
-    "eslint-loader": "1.9.0",
+    "eslint-loader": "^2.0.0",
     "eslint-plugin-import": "2.8.0",
     "eslint-plugin-jsx-a11y": "6.0.2",
     "eslint-plugin-react": "7.5.1",
-    "html-webpack-plugin": "^2.30.1",
+    "extract-text-webpack-plugin": "^4.0.0-alpha.0",
+    "html-webpack-plugin": ">=2.30.1",
     "jest": "21.2.1",
     "jest-cli": "^22.4.2",
     "sinon": "4.1.2",
     "style-loader": "0.19.0",
+    "webpack-cli": "^2.0.9",
     "webpack-dev-server": "2.9.5"
   },
   "babel": {
@@ -44,9 +48,7 @@
         "env",
         {
           "targets": {
-            "browsers": [
-              "last 2 major versions"
-            ]
+            "browsers": ["last 2 major versions"]
           }
         }
       ],
@@ -59,9 +61,7 @@
             "env",
             {
               "targets": {
-                "browsers": [
-                  "last 2 major versions"
-                ]
+                "browsers": ["last 2 major versions"]
               }
             }
           ],
@@ -71,9 +71,9 @@
     }
   },
   "dependencies": {
-    "@fortawesome/fontawesome": "^1.1.3",
-    "@fortawesome/fontawesome-free-regular": "^5.0.6",
-    "@fortawesome/fontawesome-free-solid": "^5.0.6",
+    "@fortawesome/fontawesome": "^1.1.4",
+    "@fortawesome/fontawesome-free-regular": "^5.0.7",
+    "@fortawesome/fontawesome-free-solid": "^5.0.7",
     "@fortawesome/react-fontawesome": "0.0.17",
     "axios": "^0.16.2",
     "babel-core": "^6.26.0",
@@ -83,11 +83,10 @@
     "babel-preset-env": "^1.6.1",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
-    "compression-webpack-plugin": "^1.1.8",
-    "counterpart": "^0.18.5",
+    "compression-webpack-plugin": "^1.1.9",
+    "counterpart": ">=0.18.5",
     "css-loader": "^0.28.10",
-    "extract-text-webpack-plugin": "^3.0.2",
-    "file-loader": "^1.1.9",
+    "file-loader": "^1.1.10",
     "history": "^4.7.2",
     "mappy-breakpoints": "^0.2.3",
     "mobx": "^3.5.1",
@@ -100,24 +99,22 @@
     "react-a11y-announcer": "^1.2.0",
     "react-dom": "^16.2.0",
     "react-hot-loader": "^3.1.3",
-    "react-interpolate-component": "0.11.0",
+    "react-interpolate-component": "^0.12.0",
     "react-modal": "^3.3.1",
     "react-router-dom": "4.2.2",
     "react-test-renderer": "16.2.0",
     "react-transition-group": "^1.2.1",
-    "react-translate-component": "0.14.0",
+    "react-translate-component": "^0.15.0",
     "sass-loader": "6.0.6",
     "styled-components": "^3.1.6",
     "styled-theming": "^2.2.0",
-    "uglifyjs-webpack-plugin": "1.1.1",
-    "webpack": "3.8.1",
+    "uglifyjs-webpack-plugin": "^1.2.2",
+    "webpack": "^4.0.1",
     "webpack-node-externals": "^1.6.0"
   },
   "description": "",
   "jest": {
-    "testPathIgnorePatterns": [
-      "./__tests__/test-setup.js"
-    ],
+    "testPathIgnorePatterns": ["./__tests__/test-setup.js"],
     "setupTestFrameworkScriptFile": "./__tests__/test-setup.js",
     "testURL": "http://localhost"
   },

@@ -27,6 +27,7 @@ const Prefix = styled.div`
   align-self: stretch;
   display: flex;
   align-items: center;
+  text-transform: uppercase;
 `
 
 const IDN = styled.div`
@@ -42,9 +43,9 @@ const IdnButton = styled(Button)`
 export default class Identifier extends Component {
   constructor(props) {
     super(props)
-    // const url = this.makeLink(this.props.idn)
-    const url = this.makeLink('doi')
-    this.state = { url }
+    const url = this.makeLink(this.props.idn)
+    const prefix = this.prefix(this.props.idn)
+    this.state = { url, prefix }
   }
 
   makeLink(idn) {
@@ -59,6 +60,14 @@ export default class Identifier extends Component {
     return false
   }
 
+  prefix(idn) {
+    const sub3 = idn.substring(0, 3)
+    if (sub3 === 'urn' || sub3 === 'doi') {
+      return sub3
+    }
+    return ''
+  }
+
   render() {
     if (!this.state.url) {
       return this.props.children
@@ -68,7 +77,7 @@ export default class Identifier extends Component {
     }
     return (
       <IdnLink href={this.state.url} {...this.props} title={this.state.url}>
-        <Prefix>DOI</Prefix>
+        {this.state.prefix ? <Prefix>{this.state.prefix}</Prefix> : null}
         <IDN>{this.props.children}</IDN>
       </IdnLink>
     )

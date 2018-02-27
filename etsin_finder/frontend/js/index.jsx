@@ -8,11 +8,16 @@ ReactDOM.render(
   <AppContainer>
     <App />
   </AppContainer>,
-  document.getElementById('root'),
-);
+  document.getElementById('root')
+)
 
 if (module.hot) {
   module.hot.accept('./app', () => {
-    ReactDOM.render(<AppContainer><NextApp /></AppContainer>, document.getElementById('root'));
-  });
+    ReactDOM.render(
+      <AppContainer>
+        <NextApp />
+      </AppContainer>,
+      document.getElementById('root')
+    )
+  })
 }

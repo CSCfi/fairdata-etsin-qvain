@@ -5,8 +5,8 @@ import { opacify, darken } from 'polished'
 // prettier-ignore
 const StyledButton = styled.button`
   cursor: pointer;
-  padding: 0.3em 0.6em 0.4em;
-  margin: 0.25em 0.25em;
+  padding: ${props => (props.noPadding ? 0 : '0.3em 0.6em 0.4em')};
+  margin: ${props => (props.noMargin ? 0 : '0.25em 0.25em')};
   border: ${props => (props.thin ? '1px' : '2px')} solid ${props => (props.color ? props.color : props.theme.color.primary)};
   background-color: ${props => (props.color ? props.color : props.theme.color.primary)};
   color: ${props => (props.color !== 'white' ? 'white' : props.theme.color.primary)};
@@ -41,7 +41,6 @@ const InvertedStyledButton = StyledButton.extend`
   }
 `
 const TransparentStyledButton = StyledButton.extend`
-  padding: ${props => (props.noPadding ? 0 : '0.3em 0.6em 0.4em')};
   margin: ${props => (props.noMargin ? 0 : '0.1em 0.1em')};
   border: none;
   background-color: transparent;
@@ -63,12 +62,18 @@ const TransparentStyledButton = StyledButton.extend`
   }
 `
 
-const Button = props => <StyledButton {...props}>{props.children}</StyledButton>
-export const InvertedButton = props => (
-  <InvertedStyledButton {...props}>{props.children}</InvertedStyledButton>
-)
-export const TransparentButton = props => (
-  <TransparentStyledButton {...props}>{props.children}</TransparentStyledButton>
-)
+const LinkStyledButton = TransparentStyledButton.extend`
+  margin: 0;
+  padding: 0;
+  color: ${props => props.theme.color.primary};
+  &:hover {
+    color: ${props => darken(0.1, props.theme.color.primary)};
+  }
+`
+
+const Button = props => <StyledButton {...props} />
+export const InvertedButton = props => <InvertedStyledButton {...props} />
+export const TransparentButton = props => <TransparentStyledButton {...props} />
+export const LinkButton = props => <LinkStyledButton {...props} />
 
 export default Button
