@@ -33,11 +33,13 @@ class ElasticQuery {
   @observable loading = 0
   @observable perPage = 20
 
+  // update query search term
   @action
   updateSearch = (newSearch, history, updateUrl = true) => {
     this.search = newSearch
     if (updateUrl) {
-      const path = `/datasets/${newSearch}` // reset parameters on new search, expect sort
+      const path = `/datasets/${encodeURIComponent(newSearch)}`
+      // reset parameters on new search, expect sort
       let search = ''
       const urlParams = UrlParse.searchParams(history.location.search)
       if (urlParams && urlParams.sort) {
@@ -52,6 +54,7 @@ class ElasticQuery {
     }
   }
 
+  // update search result sorting
   @action
   updateSorting = (newSorting, history, updateUrl = true) => {
     this.sorting = newSorting
@@ -82,6 +85,7 @@ class ElasticQuery {
     }
   }
 
+  // update search filter
   @action
   updateFilter = (term, key, history, updateUrl = true) => {
     const index = this.filter.findIndex(i => i.term === term && i.key === key)
@@ -127,11 +131,12 @@ class ElasticQuery {
     }
   }
 
+  // when url is populated with settings
   @action
   updateFromUrl = (query, history) => {
     const urlParams = UrlParse.searchParams(history.location.search)
     if (query) {
-      this.updateSearch(query, history, false)
+      this.updateSearch(decodeURIComponent(query), history, false)
     }
     if (urlParams) {
       if (urlParams.sort) {
@@ -157,6 +162,7 @@ class ElasticQuery {
     }
   }
 
+  // query elastic search with defined settings
   @action
   queryES = () => {
     let queryObject

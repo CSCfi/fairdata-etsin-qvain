@@ -4,11 +4,11 @@ import Button from '../../general/button'
 
 // prettier-ignore
 const IdnLink = styled(Button)`
-  background-color: ${props => props.theme.color.lightgray};
-  border: ${props => props.theme.color.lightgray};
+  background-color: ${props => props.theme.color.primary};
+  border: ${props => props.theme.color.primary};
   width: unset;
-  color: black;
-  border-radius: 1em;
+  color: white;
+  border-radius: 0.3em;
   display: flex;
   padding: 0;
   align-items: center;
@@ -21,13 +21,17 @@ const Prefix = styled.div`
   background-color: ${props => props.theme.color.dark};
   color: white;
   font-weight: 700;
-  border-bottom-left-radius: 1em;
-  border-top-left-radius: 1em;
-  padding: 0.4em 0.5em 0.4em 1em;
+  border-top-left-radius: 0.3em;
+  margin: 0;
+  border-bottom-left-radius: 0.3em;
+  padding: 0.4em 0.5em 0.4em 0.7em;
   align-self: stretch;
   display: flex;
   align-items: center;
   text-transform: uppercase;
+  &:hover {
+    background-color: ${props => props.theme.color.dark};
+  }
 `
 
 const IDN = styled.div`
@@ -60,8 +64,26 @@ export default class Identifier extends Component {
     return false
   }
 
-  prefix(idn) {
+  parseIdn(idn) {
+    console.log('idn', idn)
     const sub3 = idn.substring(0, 3)
+    const sub4 = idn.substring(0, 4)
+    if (sub3 === 'urn' || sub3 === 'doi') {
+      return sub3
+    }
+    if (sub4 === 'http') {
+      return new URL(idn).pathname.slice(1)
+    }
+    return idn
+  }
+
+  prefix(idn) {
+    let id = idn
+    const sub4 = id.substring(0, 4)
+    if (sub4 === 'http') {
+      id = new URL(idn).pathname.slice(1)
+    }
+    const sub3 = id.substring(0, 3)
     if (sub3 === 'urn' || sub3 === 'doi') {
       return sub3
     }
@@ -78,7 +100,7 @@ export default class Identifier extends Component {
     return (
       <IdnLink href={this.state.url} {...this.props} title={this.state.url}>
         {this.state.prefix ? <Prefix>{this.state.prefix}</Prefix> : null}
-        <IDN>{this.props.children}</IDN>
+        <IDN>{this.parseIdn(this.props.children)}</IDN>
       </IdnLink>
     )
   }

@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 import Translate from 'react-translate-component'
+import FontAwesomeIcon from '@fortawesome/react-fontawesome'
+import faSort from '@fortawesome/fontawesome-free-solid/faSort'
 
 import ElasticQuery from '../../../stores/view/elasticquery'
 
@@ -61,7 +63,7 @@ class SortResults extends Component {
               }}
             >
               <Translate content={`search.sorting.${this.state.value}`} />{' '}
-              <i className="fa fa-sort" aria-hidden="true" />
+              <FontAwesomeIcon icon={faSort} aria-hidden="true" />
             </button>
           </div>
           <div
@@ -74,9 +76,7 @@ class SortResults extends Component {
             {options.map(item => (
               <button
                 key={`sorting-${item}`}
-                className={`btn btn-select-options ${
-                  this.state.value === item ? 'active' : ''
-                }`}
+                className={`btn btn-select-options ${this.state.value === item ? 'active' : ''}`}
                 onClick={e => {
                   this.updateValue(e, item)
                 }}

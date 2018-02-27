@@ -9,6 +9,8 @@ export default class Citation extends Component {
     super(props)
     const Data = DatasetQuery.results
     this.state = {
+      // creators: Data.research_dataset.creator && Data.research_dataset.creator,
+      // contributors: Data.research_dataset.contributor && Data.research_dataset.contributor,
       publisher: Data.data_catalog.catalog_json.publisher.name,
       release_date: Data.research_dataset.modified,
       title: Data.research_dataset.title,
