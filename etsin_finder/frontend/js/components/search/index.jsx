@@ -11,6 +11,14 @@ class Search extends Component {
   componentWillMount() {
     this.initialQuery()
   }
+  componentDidMount() {
+    // when searching on frontpage keep focus in input after enter
+    if (this.props.match.params.query) {
+      this.search.focus()
+      this.search.selectionStart = this.search.value.length
+      this.search.selectionEnd = this.search.value.length
+    }
+  }
 
   initialQuery = () => {
     console.log('-------- performing initial query ---------')
@@ -28,7 +36,12 @@ class Search extends Component {
               <h1>
                 <Translate content="home.title" />
               </h1>
-              <SearchBar />
+              <SearchBar
+                inputRef={input => {
+                  this.search = input
+                  window.searchInput = this.search
+                }}
+              />
             </div>
           </div>
         </HeroBanner>

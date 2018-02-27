@@ -38,16 +38,13 @@ class SearchBar extends Component {
         <form onSubmit={e => this.handleSubmit(e)}>
           <div className="search">
             <div className="searchBar inner-addon right-addon">
-              <i
-                className="fa fa-search fa-2x"
-                data-fa-transform="shrink-4"
-                aria-hidden="true"
-              />
+              <i className="fa fa-search fa-2x" data-fa-transform="shrink-4" aria-hidden="true" />
               <input
                 id="searchBarInput"
                 placeholder="Anna hakusana"
                 value={this.state.query}
                 onChange={this.handleChange}
+                ref={this.props.inputRef}
               />
             </div>
           </div>
