@@ -19,8 +19,8 @@ class Dataset extends React.Component {
     super(props)
 
     this.state = {
-      dataset: DatasetQuery.results.catalog_record,
-      email_info: DatasetQuery.results.email_info,
+      dataset: DatasetQuery.results,
+      email_info: DatasetQuery.email_info,
       error: false,
     }
 

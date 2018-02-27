@@ -5,6 +5,7 @@ import Env from '../domain/env'
 
 class DatasetQuery {
   @observable results = []
+  @observable emailInfo = []
   @observable directories = []
   @observable error = false
   metaxUrl = Env.metaxUrl
@@ -16,7 +17,8 @@ class DatasetQuery {
       axios
         .get(`/api/dataset/${id}`)
         .then(res => {
-          this.results = res.data
+          this.results = res.data.catalog_record
+          this.emailInfo = res.data.email_info
           resolve(res.data)
         })
         .catch(error => {
