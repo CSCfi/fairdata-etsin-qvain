@@ -22,12 +22,14 @@ const FileSizeAll = styled.p`
 export default class Downloads extends Component {
   constructor(props) {
     super(props)
+
     const results = DatasetQuery.results
     const files = results.research_dataset.files
     const folders = results.research_dataset.directories
     if (files || folders) {
       const combined = this.createDirTree(files, folders)
       const fileDirTree = createTree(combined)
+      const totalCount = this.countFiles(fileDirTree)
       this.state = {
         results,
         filesAndFolders: combined,
@@ -38,6 +40,7 @@ export default class Downloads extends Component {
         currentIDs: [],
         loading: false,
         hasFiles: true,
+        totalCount,
       }
     } else {
       this.state = {
@@ -105,11 +108,22 @@ export default class Downloads extends Component {
     return null
   }
 
+  countFiles(dirTree) {
+    console.log(dirTree)
+    const fileCount = dirTree.map(single => {
+      if (single.details.file_count) {
+        return single.details.file_count
+      }
+      return 1
+    })
+    return fileCount.reduce((prev, curr) => prev + curr)
+  }
+
   query(id, newPath, newIDs) {
     this.setState({
       loading: true,
     })
-    DatasetQuery.getFolderData(id)
+    DatasetQuery.getFolderData(id, this.state.results.research_dataset.urn_identifier)
       .then(res => {
         const currFolder = createTree(
           this.createDirTree(res.files, res.directories, true)
@@ -194,7 +208,7 @@ export default class Downloads extends Component {
               <Translate
                 component="span"
                 content="dataset.dl.fileAmount"
-                with={{ amount: this.state.results.research_dataset.files.length }}
+                with={{ amount: this.state.totalCount }}
               />
               {` (${sizeParse(this.state.results.research_dataset.total_ida_byte_size, 1)})`}
             </FileSizeAll>

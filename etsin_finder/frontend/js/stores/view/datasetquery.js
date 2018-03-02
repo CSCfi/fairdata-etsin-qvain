@@ -27,11 +27,11 @@ class DatasetQuery {
   }
 
   @action
-  getFolderData(id) {
+  getFolderData(id, urn) {
     console.log('Folder Query')
     return new Promise((resolve, reject) => {
       axios
-        .get(`${this.metaxUrl}/rest/directories/${id}/files`)
+        .get(`${this.metaxUrl}/rest/directories/${id}/files?urn_identifier=${urn}`)
         .then(res => {
           this.directories.push({ id, results: res.data })
           resolve(res.data)
@@ -42,6 +42,7 @@ class DatasetQuery {
         })
     })
   }
+
   @action
   getRemovedData(id) {
     console.log('Trying to find from removed datasets..')

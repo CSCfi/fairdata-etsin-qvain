@@ -1,5 +1,6 @@
 import React from 'react'
 import Translate from 'react-translate-component'
+import translate from 'counterpart'
 import { inject, observer } from 'mobx-react'
 import { Route } from 'react-router-dom'
 
@@ -114,11 +115,8 @@ class Dataset extends React.Component {
 
     return (
       <div>
-        {this.state.live ? null : (
-          <NoticeBar>
-            <Translate content="tombstone.info" />
-          </NoticeBar>
-        )}
+        {!this.state.live && <NoticeBar deprecated={translate('tombstone.info')} />}
+        {!this.state.live && <NoticeBar cumulative="This is a cumulative dataset" />}
         <div className="container regular-row" pageid={this.props.match.params.identifier}>
           <div className="row">
             <div className="col-lg-8">
