@@ -6,17 +6,21 @@ import SecondNav from './secondnav'
 import Accessibility from '../../../stores/view/accessibility'
 
 export default class Navi extends React.Component {
-  openNavi(event) {
-    if (event.target.classList.contains('open')) {
-      event.target.classList.remove('open')
+  constructor() {
+    super()
+
+    this.openNavi = this.openNavi.bind(this)
+  }
+  openNavi() {
+    if (this.navIcon.classList.contains('open')) {
+      this.navIcon.classList.remove('open')
     } else {
-      event.target.classList.add('open')
+      this.navIcon.classList.add('open')
     }
-    const navList = document.querySelector('.nav-list')
-    if (navList.classList.contains('open')) {
-      navList.classList.remove('open')
+    if (this.navList.classList.contains('open')) {
+      this.navList.classList.remove('open')
     } else {
-      navList.classList.add('open')
+      this.navList.classList.add('open')
     }
   }
 
@@ -24,17 +28,30 @@ export default class Navi extends React.Component {
     return (
       <div className="row top-nav">
         <div className="navigation">
-          <button id="nav-icon" className="btn btn-transparent" onClick={this.openNavi}>
+          <button
+            id="nav-icon"
+            className="btn btn-transparent"
+            ref={button => {
+              this.navIcon = button
+            }}
+            onClick={this.openNavi}
+          >
             <span />
             <span />
             <span />
           </button>
-          <nav className="nav nav-list">
+          <nav
+            className="nav nav-list"
+            ref={list => {
+              this.navList = list
+            }}
+          >
             <NavLink
               exact
               to="/"
               className="nav-link"
               onClick={() => {
+                this.openNavi()
                 Accessibility.setNavText(translate('changepage', { page: translate('nav.home') }))
               }}
             >
@@ -44,6 +61,7 @@ export default class Navi extends React.Component {
               to="/datasets"
               className="nav-link"
               onClick={() => {
+                this.openNavi()
                 Accessibility.setNavText(
                   translate('changepage', { page: translate('nav.datasets') })
                 )
@@ -55,6 +73,7 @@ export default class Navi extends React.Component {
               to="/organizations"
               className="nav-link"
               onClick={() => {
+                this.openNavi()
                 Accessibility.setNavText(
                   translate('changepage', { page: translate('nav.organizations') })
                 )
@@ -66,6 +85,7 @@ export default class Navi extends React.Component {
               to="/help"
               className="nav-link"
               onClick={() => {
+                this.openNavi()
                 Accessibility.setNavText(translate('changepage', { page: translate('nav.help') }))
               }}
             >
