@@ -3,6 +3,7 @@ import Translate from 'react-translate-component'
 import translate from 'counterpart'
 import { inject, observer } from 'mobx-react'
 import { Route } from 'react-router-dom'
+import styled from 'styled-components'
 
 import Sidebar from './Sidebar'
 import Downloads from './downloads'
@@ -14,6 +15,10 @@ import Tabs from './Tabs'
 import checkDataLang from '../../utils/checkDataLang'
 import DatasetQuery from '../../stores/view/datasetquery'
 import NoticeBar from '../general/noticeBar'
+
+const MarginAfter = styled.div`
+  margin-bottom: 3em;
+`
 
 class Dataset extends React.Component {
   constructor(props) {
@@ -119,7 +124,7 @@ class Dataset extends React.Component {
         {!this.state.live && <NoticeBar cumulative="This is a cumulative dataset" />}
         <div className="container regular-row" pageid={this.props.match.params.identifier}>
           <div className="row">
-            <div className="col-lg-8">
+            <MarginAfter className="col-lg-8">
               <button className="btn btn-transparent nopadding btn-back" onClick={this.goBack}>
                 {'< Go back'}
               </button>
@@ -164,7 +169,7 @@ class Dataset extends React.Component {
                   )}
                 </ErrorBoundary>
               ) : null}
-            </div>
+            </MarginAfter>
             <div className="col-lg-4">
               <ErrorBoundary>
                 <Sidebar dataset={this.state.dataset} lang={currentLang} />
