@@ -15,6 +15,7 @@ const Access = styled.div`
   padding: 0.2em 0.9em;
   border-radius: 1em;
   width: max-content;
+  height: max-content;
   div {
     width: max-content;
   }

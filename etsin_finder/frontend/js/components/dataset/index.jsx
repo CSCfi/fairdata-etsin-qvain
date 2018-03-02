@@ -126,7 +126,8 @@ class Dataset extends React.Component {
           <div className="row">
             <MarginAfter className="col-lg-8">
               <button className="btn btn-transparent nopadding btn-back" onClick={this.goBack}>
-                {'< Go back'}
+                <span aria-hidden>{'< '}</span>
+                {'Go back'}
               </button>
               <ErrorBoundary>
                 {this.state.dataset.data_catalog.catalog_json.harvested ||

@@ -1,9 +1,8 @@
-import React from 'react'
 import styled from 'styled-components'
 import { opacify, darken } from 'polished'
 
 // prettier-ignore
-const StyledButton = styled.button`
+const Button = styled.button`
   cursor: pointer;
   padding: ${props => (props.noPadding ? 0 : '0.3em 0.6em 0.4em')};
   margin: ${props => (props.noMargin ? 0 : '0.25em 0.25em')};
@@ -18,14 +17,14 @@ const StyledButton = styled.button`
     border-color: ${props => darken(0.1, (props.color ? props.color : props.theme.color.primary))};
   }
   &:disabled {
-    pointer-events:none;
+    pointer-events: none;
     background-color: ${props => props.theme.color.superlightgray};
     color: ${props => props.theme.color.medgray};
     border-color: ${props => props.theme.color.superlightgray};
   }
 `
 // prettier-ignore
-const InvertedStyledButton = StyledButton.extend`
+export const InvertedButton = Button.extend`
   border-color: ${props => (props.color ? props.color : props.theme.color.primary)};
   background-color: transparent;
   color: ${props => (props.color ? props.color : props.theme.color.primary)};
@@ -40,7 +39,7 @@ const InvertedStyledButton = StyledButton.extend`
     color: ${props => opacify(-0.5, (props.color ? props.color : props.theme.color.primary))};
   }
 `
-const TransparentStyledButton = StyledButton.extend`
+export const TransparentButton = Button.extend`
   margin: ${props => (props.noMargin ? 0 : '0.1em 0.1em')};
   border: none;
   background-color: transparent;
@@ -62,7 +61,7 @@ const TransparentStyledButton = StyledButton.extend`
   }
 `
 
-const LinkStyledButton = TransparentStyledButton.extend`
+export const LinkButton = TransparentButton.extend`
   margin: 0;
   padding: 0;
   color: ${props => props.theme.color.primary};
@@ -70,10 +69,5 @@ const LinkStyledButton = TransparentStyledButton.extend`
     color: ${props => darken(0.1, props.theme.color.primary)};
   }
 `
-
-const Button = props => <StyledButton {...props} />
-export const InvertedButton = props => <InvertedStyledButton {...props} />
-export const TransparentButton = props => <TransparentStyledButton {...props} />
-export const LinkButton = props => <LinkStyledButton {...props} />
 
 export default Button
