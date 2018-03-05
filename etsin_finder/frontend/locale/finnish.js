@@ -70,6 +70,7 @@ const finnish = {
     },
   },
   search: {
+    placeholder: 'Anna hakusana',
     sorting: {
       best: 'Osuvimmat ensin',
       dateA: 'Vanhin ensin',

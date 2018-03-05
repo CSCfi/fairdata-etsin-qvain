@@ -96,7 +96,7 @@ class AccessRights extends Component {
   render() {
     this.lang = this.props.Stores.Locale
     return (
-      <Access theme={this.props.theme}>
+      <Access {...this.props}>
         {accessRightsBool(this.props.access_rights) ? this.openAccess() : this.restricted()}
       </Access>
     )

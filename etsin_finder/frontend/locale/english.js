@@ -71,6 +71,7 @@ const english = {
     },
   },
   search: {
+    placeholder: 'Search term',
     sorting: {
       best: 'Best Match',
       dateA: 'Date ascending',

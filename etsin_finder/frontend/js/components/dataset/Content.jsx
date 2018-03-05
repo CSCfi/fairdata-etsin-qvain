@@ -6,6 +6,7 @@ import AccessRights from './data/accessRights'
 import checkNested from '../../utils/checkNested'
 import ErrorBoundary from '../general/errorBoundary'
 import Person from './person'
+import Contact from './contact'
 
 const Labels = styled.div`
   display: flex;
@@ -62,6 +63,7 @@ class Content extends Component {
           <p>{this.props.issued ? <DateFormat date={this.props.issued} /> : null}</p>
         </div>
         <p className="description">{this.props.children}</p>
+        <Contact />
       </div>
     )
   }

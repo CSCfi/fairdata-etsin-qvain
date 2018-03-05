@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
+import counterpart from 'counterpart'
 
 import ErrorBoundary from '../general/errorBoundary'
 import ElasticQuery from '../../stores/view/elasticquery'
@@ -9,17 +10,26 @@ class SearchBar extends Component {
     super(props)
 
     // Handle possible empty initial query
-    this.state = { query: ElasticQuery.search || '' }
+    this.state = {
+      query: ElasticQuery.search || '',
+      placeholder: counterpart('search.placeholder'),
+    }
 
     this.handleChange = this.handleChange.bind(this)
+    this.localeChanged = this.localeChanged.bind(this)
   }
 
-  componentDidMount() {
-    // if (this.props.query) {
-    //   const searchBarInput = document.getElementById('searchBarInput');
-    //   searchBarInput.focus();
-    //   searchBarInput.setSelectionRange(this.props.query.length, this.props.query.length);
-    // }
+  componentWillMount() {
+    counterpart.onLocaleChange(this.localeChanged)
+  }
+  componentWillUnmount() {
+    counterpart.offLocaleChange(this.localeChanged)
+  }
+
+  localeChanged() {
+    this.setState({
+      placeholder: counterpart('search.placeholder'),
+    })
   }
 
   handleChange(event) {
@@ -41,7 +51,7 @@ class SearchBar extends Component {
               <i className="fa fa-search fa-2x" data-fa-transform="shrink-4" aria-hidden="true" />
               <input
                 id="searchBarInput"
-                placeholder="Anna hakusana"
+                placeholder={this.state.placeholder}
                 value={this.state.query}
                 onChange={this.handleChange}
                 ref={this.props.inputRef}

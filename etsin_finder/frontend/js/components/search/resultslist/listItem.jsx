@@ -25,19 +25,22 @@ export default class ListItem extends Component {
               <ErrorBoundary>
                 <div className="d-flex justify-content-between align-items-start item-header">
                   <h2 className="title">{checkDataLang(this.props.item.title, this.props.lang)}</h2>
-                  <AccessRights access_rights={this.props.item.access_rights} />
+                  <AccessRights
+                    access_rights={this.props.item.access_rights}
+                    style={{ marginBottom: '1em' }}
+                  />
                 </div>
               </ErrorBoundary>
               <ErrorBoundary>
-                <div className="basic-info">
-                  <p>
-                    {Array.isArray(this.props.item.field_of_science)
-                      ? this.props.item.field_of_science.map(field =>
-                          checkDataLang(field.pref_label, this.props.lang)
-                        )
-                      : null}
-                  </p>
-                </div>
+                {Array.isArray(this.props.item.field_of_science) && (
+                  <div className="basic-info">
+                    <p>
+                      {this.props.item.field_of_science.map(field =>
+                        checkDataLang(field.pref_label)
+                      )}
+                    </p>
+                  </div>
+                )}
               </ErrorBoundary>
               <ErrorBoundary>
                 <p>

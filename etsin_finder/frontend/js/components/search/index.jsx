@@ -27,19 +27,15 @@ class Search extends Component {
   }
 
   render() {
-    console.log('Render: Search page')
     return (
       <div>
         <HeroBanner className="hero-primary">
           <div className="container">
             <div className="text-center">
-              <h1>
-                <Translate content="home.title" />
-              </h1>
+              <Translate content="home.title" component="h1" />
               <SearchBar
                 inputRef={input => {
                   this.search = input
-                  window.searchInput = this.search
                 }}
               />
             </div>
