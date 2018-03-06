@@ -6,7 +6,6 @@ const Input = styled.input`
   border-radius: 0.3em;
   margin-bottom: 0.5em;
   box-sizing: border-box;
-  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);
   color: #969696;
   font-size: 1em;
   letter-spacing: 1px;
@@ -23,7 +22,6 @@ export const InputArea = styled.textarea`
   border-radius: 0.3em;
   margin-bottom: 1em;
   box-sizing: border-box;
-  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);
   color: #969696;
   font-size: 1em;
   letter-spacing: 1px;

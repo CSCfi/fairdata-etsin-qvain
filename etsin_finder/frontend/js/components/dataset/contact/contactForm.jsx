@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { withFormik } from 'formik'
 import Yup from 'yup'
+import Select from '../../general/select'
 
 import Input, { InputArea } from './formItems'
 import Button from '../../general/button'
@@ -30,9 +31,30 @@ const Form = styled.form`
 `
 
 const InnerForm = props => {
-  const { values, touched, errors, isSubmitting, handleChange, handleBlur, handleSubmit } = props
+  const {
+    values,
+    touched,
+    errors,
+    isSubmitting,
+    handleChange,
+    handleBlur,
+    handleSubmit,
+    setFieldValue,
+    setFieldTouched,
+  } = props
   return (
     <Form onSubmit={handleSubmit}>
+      <InputContainer>
+        <Select
+          name="recipient"
+          value={values.recipient}
+          onChange={setFieldValue}
+          onBlur={setFieldTouched}
+          options={props.recipientsList}
+          error={errors.recipient && touched.recipient}
+        />
+        {errors.recipient && touched.recipient && <ErrorText>{errors.recipient}</ErrorText>}
+      </InputContainer>
       <InputContainer width="calc(50% - 0.5em)">
         <Label htmlFor="email">Email *</Label>
         <Input
@@ -80,7 +102,7 @@ const InnerForm = props => {
 }
 
 const ContactForm = withFormik({
-  mapPropsToValues: () => ({ subject: '', email: '', message: '' }),
+  mapPropsToValues: () => ({ subject: '', email: '', message: '', recipient: '' }),
   validationSchema: Yup.object().shape({
     email: Yup.string()
       .email('Invalid email address')
@@ -89,6 +111,9 @@ const ContactForm = withFormik({
       .min(20, 'Minimum message length is 20 characters')
       .required('Message is required!'),
     subject: Yup.string().required('Subject is required!'),
+    recipient: Yup.mixed()
+      .nullable('true')
+      .required('Recipient is required!'),
   }),
   handleSubmit: (values, { setSubmitting }) => {
     alert(JSON.stringify(values, null, 2))

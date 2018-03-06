@@ -44,6 +44,7 @@ export default class Contact extends Component {
 
     this.state = {
       open: false,
+      recipients: [{ value: 'one', label: 'One' }, { value: 'two', label: 'Two' }],
     }
 
     this.openModal = this.openModal.bind(this)
@@ -80,7 +81,7 @@ export default class Contact extends Component {
         >
           <h2>Contact us</h2>
           <CloseModal onClick={this.closeModal}>X</CloseModal>
-          <ContactForm />
+          <ContactForm recipientsList={this.state.recipients} />
         </Modal>
       </div>
     )
