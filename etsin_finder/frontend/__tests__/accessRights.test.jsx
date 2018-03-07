@@ -42,8 +42,14 @@ describe('AccessRights', () => {
         Stores={{ Locale: { currenLang: 'en' } }}
       />
     )
-    it('should render locked icon', () => {
-      expect(accessRights.contains(<i className="fa fa-lock" aria-hidden="true" />)).toEqual(true)
+    it('should render icon', () => {
+      expect(
+        accessRights
+          .children()
+          .children()
+          .childAt(0)
+          .render()[0]['name'] === 'svg'
+      ).toEqual(true)
     })
   })
 })

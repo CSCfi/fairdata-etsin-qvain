@@ -15,10 +15,7 @@ describe('Identifier', () => {
       </Identifier>
     )
     it('should render the children', () => {
-      expect(identifier.childAt(0).text()).toEqual('children')
-    })
-    it('should not contain link', () => {
-      expect(identifier.name()).toEqual('styled.span')
+      expect(identifier.text()).toEqual('children')
     })
   })
 })
