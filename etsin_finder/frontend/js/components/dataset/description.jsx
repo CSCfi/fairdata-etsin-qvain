@@ -30,10 +30,7 @@ const Flex = styled.div`
 class Description extends Component {
   constructor(props) {
     super(props)
-
-    console.log(props.dataset)
     const { creator, contributor, title, issued, description } = props.dataset.research_dataset
-    console.log(description)
     this.state = {
       creator,
       contributor,

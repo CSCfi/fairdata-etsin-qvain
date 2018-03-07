@@ -36,7 +36,6 @@ export default class Citation extends Component {
   }
 
   render() {
-    console.log(DatasetQuery.results)
     return (
       <Fragment>
         <p>

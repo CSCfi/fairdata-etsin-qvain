@@ -7,7 +7,6 @@ import styled from 'styled-components'
 export default class Select extends Component {
   handleChange = value => {
     // this is going to call setFieldValue and manually update values.topics
-    console.log(value)
     this.props.onChange(this.props.name, value)
   }
 

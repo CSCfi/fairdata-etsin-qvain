@@ -22,7 +22,6 @@ class ResultsList extends Component {
   }
 
   render() {
-    console.log('Render: Results list')
     const { currentLang } = this.props.Stores.Locale
     if (ElasticQuery.results.hits.length === 0 && ElasticQuery.loading === 0) {
       return (

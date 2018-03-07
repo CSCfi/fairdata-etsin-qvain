@@ -109,7 +109,6 @@ export default class Downloads extends Component {
   }
 
   countFiles(dirTree) {
-    console.log(dirTree)
     const fileCount = dirTree.map(single => {
       if (single.details.file_count) {
         return single.details.file_count
