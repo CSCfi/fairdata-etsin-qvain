@@ -1,19 +1,41 @@
 {
   "env": {
     "test": {
-      "plugins": ["transform-decorators-legacy", "transform-class-properties", "react-hot-loader/babel"],
-      "presets": [["env", {
+      "plugins": [
+        "transform-decorators-legacy",
+        "transform-class-properties",
+        "loadable-components/babel",
+        "syntax-dynamic-import"
+      ],
+      "presets": [
+        [
+          "env",
+          {
+            "targets": {
+              "browsers": ["last 2 major versions"]
+            }
+          }
+        ],
+        "react"
+      ]
+    }
+  },
+  "plugins": [
+    "transform-decorators-legacy",
+    "transform-class-properties",
+    "loadable-components/babel",
+    "syntax-dynamic-import"
+  ],
+  "presets": [
+    [
+      "env",
+      {
+        "modules": false,
         "targets": {
           "browsers": ["last 2 major versions"]
         }
-      }], "react"]
-    }
-  },
-  "plugins": ["transform-decorators-legacy", "transform-class-properties", "react-hot-loader/babel"],
-  "presets": [["env", {
-    "modules": false,
-    "targets": {
-      "browsers": ["last 2 major versions"]
-    }
-  }], "react"]
+      }
+    ],
+    "react"
+  ]
 }

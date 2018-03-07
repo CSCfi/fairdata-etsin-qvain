@@ -2,14 +2,12 @@ const path = require('path')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 
 const config = {
-  entry: [path.join(__dirname, '/js/index.jsx'), path.join(__dirname, '/scss/main.scss')],
-  devServer: {
-    contentBase: './',
-    hot: true,
-  },
+  entry: [path.join(__dirname, '/js/index.jsx')],
   output: {
     path: path.join(__dirname, '/static'),
+    publicPath: '/static/',
     filename: 'bundle.js',
+    chunkFilename: '[name].bundle.js',
   },
   resolve: {
     extensions: ['.js', '.jsx', '.css'],
@@ -19,23 +17,7 @@ const config = {
       {
         test: /\.jsx?/,
         exclude: /node_modules/,
-        use: [
-          {
-            loader: 'babel-loader',
-            options: {
-              plugins: [['transform-decorators-legacy'], ['transform-class-properties']],
-              presets: ['env'],
-            },
-          },
-          {
-            loader: 'eslint-loader',
-          },
-        ],
-      },
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        use: 'eslint-loader',
+        loader: 'babel-loader',
       },
       {
         test: /\.css$/,
@@ -57,7 +39,7 @@ const config = {
   },
   plugins: [
     new ExtractTextPlugin({
-      // define where to save the file
+      // define where to save the extracted styles file
       filename: '[name].bundle.css',
       allChunks: true,
     }),

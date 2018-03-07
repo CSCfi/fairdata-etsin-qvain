@@ -1,23 +1,7 @@
-import { AppContainer } from 'react-hot-loader'
 import React from 'react'
 import ReactDOM from 'react-dom'
+import '../scss/main.scss'
 
-import App, { App as NextApp } from './app'
+import App from './app'
 
-ReactDOM.render(
-  <AppContainer>
-    <App />
-  </AppContainer>,
-  document.getElementById('root')
-)
-
-if (module.hot) {
-  module.hot.accept('./app', () => {
-    ReactDOM.render(
-      <AppContainer>
-        <NextApp />
-      </AppContainer>,
-      document.getElementById('root')
-    )
-  })
-}
+ReactDOM.render(<App />, document.getElementById('root'))

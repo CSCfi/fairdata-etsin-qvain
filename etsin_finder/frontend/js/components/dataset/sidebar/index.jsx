@@ -1,14 +1,14 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 import styled from 'styled-components'
-import SidebarItem from './SidebarItem'
-import DateFormat from './data/dateFormat'
-import Identifier from './data/identifier'
-import Citation from './data/citation'
-import Image from '../general/image'
-import ErrorBoundary from '../general/errorBoundary'
-import checkNested from '../../utils/checkNested'
-import checkDataLang from '../../utils/checkDataLang'
+import SidebarItem from './sidebarItem'
+import DateFormat from '../data/dateFormat'
+import Identifier from '../data/identifier'
+import Citation from '../data/citation'
+import Image from '../../general/image'
+import ErrorBoundary from '../../general/errorBoundary'
+import checkNested from '../../../utils/checkNested'
+import checkDataLang from '../../../utils/checkDataLang'
 
 const Logo = styled.div`
   text-align: center;

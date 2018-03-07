@@ -1,72 +1,59 @@
 import React, { Component } from 'react'
-import styled, { withTheme } from 'styled-components'
-import Button from '../general/button'
-import DateFormat from './data/dateFormat'
-import AccessRights from './data/accessRights'
-import checkNested from '../../utils/checkNested'
+import Translate from 'react-translate-component'
+import { Route } from 'react-router-dom'
+import styled from 'styled-components'
+
+import Description from './description'
+import Downloads from './downloads'
+import Identifier from './data/identifier'
 import ErrorBoundary from '../general/errorBoundary'
-import Person from './person'
-import Contact from './contact'
+import Tabs from './tabs'
 
-const Labels = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.5em;
+const MarginAfter = styled.div`
+  margin-bottom: 3em;
 `
+export default class Content extends Component {
+  constructor() {
+    super()
 
-const LabelButton = styled(Button)`
-  margin: 0;
-  margin-right: 0.5em;
-  font-size: 0.9em;
-`
+    this.goBack = this.goBack.bind(this)
+  }
 
-const Flex = styled.div`
-  display: flex;
-  align-items: center;
-`
+  goBack() {
+    this.props.history.goBack()
+  }
 
-class Content extends Component {
   render() {
     return (
-      <div className="dsContent">
-        <Labels>
-          <Flex>
-            <LabelButton
-              onClick={() => alert('Change version')}
-              color={this.props.theme.color.yellow}
-            >
-              Versio 2 (Vanha)
-            </LabelButton>
-            <AccessRights
-              access_rights={
-                checkNested(this.props.dataset, 'access_rights', 'access_type')
-                  ? this.props.dataset.access_rights
-                  : null
-              }
-            />
-          </Flex>
-          <Button onClick={() => alert('Hae käyttölupaa')}>Hae käyttölupaa</Button>
-        </Labels>
-        <div className="d-md-flex align-items-center dataset-title justify-content-between">
-          <h1>{this.props.title}</h1>
-        </div>
-        <div className="d-flex justify-content-between basic-info">
-          <div>
-            <ErrorBoundary>
-              <Person creator={this.props.creator} />
-            </ErrorBoundary>
-            <ErrorBoundary>
-              <Person contributor={this.props.contributor} />
-            </ErrorBoundary>
-          </div>
-          <p>{this.props.issued ? <DateFormat date={this.props.issued} /> : null}</p>
-        </div>
-        <p className="description">{this.props.children}</p>
-        <Contact />
-      </div>
+      <MarginAfter className="col-lg-8">
+        <button className="btn btn-transparent nopadding btn-back" onClick={this.goBack}>
+          <span aria-hidden>{'< '}</span>
+          {'Go back'}
+        </button>
+        <ErrorBoundary>
+          {this.props.dataset.data_catalog.catalog_json.harvested || !this.props.hasFiles ? null : (
+            <Tabs identifier={this.props.match.params.identifier} live={this.props.live} />
+          )}
+        </ErrorBoundary>
+        <ErrorBoundary>
+          <Route
+            exact
+            path="/dataset/:identifier"
+            render={() => <Description dataset={this.props.dataset} />}
+          />
+        </ErrorBoundary>
+        {this.props.live ? (
+          <ErrorBoundary>
+            {this.props.dataset.data_catalog.catalog_json.harvested ? (
+              <Identifier idn={this.props.dataset.research_dataset.preferred_identifier} button>
+                <Translate content="dataset.data_location" fallback="this is fallback" />
+              </Identifier>
+            ) : (
+              <Route exact path="/dataset/:identifier/data" component={Downloads} />
+            )}
+          </ErrorBoundary>
+        ) : null}
+      </MarginAfter>
     )
   }
 }
-
-export default withTheme(Content)
