@@ -2,25 +2,29 @@
 .navigation {
   width: 100%;
   display: flex;
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.5s ease;
+  flex-direction: column;
+  &.open {
+    max-height: 200px;
+  }
   @include mappy-bp(md) {
-    width: initial;
+    align-items: stretch;
+    display: inline-flex;
+    max-height: initial;
+    flex-direction: row;
   }
 }
 .nav-list {
   align-items: center;
   display: block;
-  max-height: 0;
-  overflow: hidden;
-  transition: all 0.5s ease;
   margin-bottom: -4px;
   width: 100%;
   @include mappy-bp(md) {
     align-items: stretch;
     display: inline-flex;
     max-height: initial;
-  }
-  &.open {
-    max-height: 200px;
   }
   a.nav-link {
     text-transform: uppercase;
@@ -54,11 +58,14 @@
 // nav right
 .top-nav-right {
   align-items: center;
+  justify-content: center;
   display: inline-flex;
-  position: absolute;
   top: 10px;
   right: 10px;
   padding-bottom: 5px;
+  @include mappy-bp(md) {
+    position: absolute;
+  }
   @include mappy-bp(lg) {
     position: inherit;
     .btn-etsin {
@@ -88,8 +95,8 @@
 #nav-icon {
   transform: scale(0.6);
   position: absolute;
-  top: 55px;
-  right: 10px;
+  top: 2em;
+  right: 1.5em;
   @include mappy-bp(md) {
     display: none;
   }

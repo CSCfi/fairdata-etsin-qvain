@@ -27,25 +27,25 @@ export default class Navi extends React.Component {
   render() {
     return (
       <div className="row top-nav">
-        <div className="navigation">
-          <button
-            id="nav-icon"
-            className="btn btn-transparent"
-            ref={button => {
-              this.navIcon = button
-            }}
-            onClick={this.openNavi}
-          >
-            <span />
-            <span />
-            <span />
-          </button>
-          <nav
-            className="nav nav-list"
-            ref={list => {
-              this.navList = list
-            }}
-          >
+        <button
+          id="nav-icon"
+          className="btn btn-transparent"
+          ref={button => {
+            this.navIcon = button
+          }}
+          onClick={this.openNavi}
+        >
+          <span />
+          <span />
+          <span />
+        </button>
+        <div
+          className="navigation"
+          ref={list => {
+            this.navList = list
+          }}
+        >
+          <nav className="nav nav-list">
             <NavLink
               exact
               to="/"
@@ -92,8 +92,8 @@ export default class Navi extends React.Component {
               <Translate content="nav.help" />
             </NavLink>
           </nav>
+          <SecondNav />
         </div>
-        <SecondNav />
       </div>
     )
   }
