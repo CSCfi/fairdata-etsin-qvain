@@ -82,7 +82,7 @@ export default class Navi extends React.Component {
               <Translate content="nav.organizations" />
             </NavLink>
             <NavLink
-              to="/help"
+              to="/about"
               className="nav-link"
               onClick={() => {
                 this.openNavi()
