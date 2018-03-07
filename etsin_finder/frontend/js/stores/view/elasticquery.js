@@ -164,129 +164,134 @@ class ElasticQuery {
 
   // query elastic search with defined settings
   @action
-  queryES = () => {
-    let queryObject
-    const query = this.search
-    const filters = []
-    for (let i = 0; i < this.filter.length; i += 1) {
-      filters.push({ term: { [this.filter[i].term]: this.filter[i].key } })
-    }
-    const sorting = ['_score']
-    if (this.sorting) {
-      if (this.sorting === 'dateA') {
-        sorting.unshift({ date_modified: { order: 'asc' } })
+  queryES = () =>
+    new Promise((resolve, reject) => {
+      let queryObject
+      const query = this.search
+      const filters = []
+      for (let i = 0; i < this.filter.length; i += 1) {
+        filters.push({ term: { [this.filter[i].term]: this.filter[i].key } })
       }
-      if (this.sorting === 'dateD') {
-        sorting.unshift({ date_modified: { order: 'desc' } })
+      const sorting = ['_score']
+      if (this.sorting) {
+        if (this.sorting === 'dateA') {
+          sorting.unshift({ date_modified: { order: 'asc' } })
+        }
+        if (this.sorting === 'dateD') {
+          sorting.unshift({ date_modified: { order: 'desc' } })
+        }
       }
-    }
 
-    if (query) {
-      queryObject = {
-        bool: {
-          must: [
-            {
-              multi_match: {
-                query,
-                type: 'cross_fields',
-                minimum_should_match: '75%',
-                operator: 'and',
-                analyzer: Locale.currentLang === 'fi' ? 'finnish' : 'english',
-                fields,
+      if (query) {
+        queryObject = {
+          bool: {
+            must: [
+              {
+                multi_match: {
+                  query,
+                  type: 'cross_fields',
+                  minimum_should_match: '75%',
+                  operator: 'and',
+                  analyzer: Locale.currentLang === 'fi' ? 'finnish' : 'english',
+                  fields,
+                },
+              },
+            ],
+          },
+        }
+      } else {
+        // No user search query, fetch all docs, change this to use aggregations and sorting and pagenum
+        queryObject = {
+          bool: {
+            must: [
+              {
+                match_all: {},
+              },
+            ],
+          },
+        }
+      }
+
+      // adding filters if they are set
+      if (filters.length > 0) {
+        queryObject.bool.filter = filters
+      }
+
+      // toggle loader
+      this.loading = 1
+      let from = this.pageNum * this.perPage
+      from -= this.perPage
+
+      axios
+        .post('/es/metax/dataset/_search', {
+          size: this.perPage,
+          from,
+          query: queryObject,
+          sort: sorting,
+          // Return only the following fields in source attribute to minimize traffic
+          _source: [
+            'urn_identifier',
+            'title.*',
+            'description.*',
+            'access_rights.type.identifier',
+            'access_rights.license.identifier',
+          ],
+          highlight: {
+            // pre_tags: ['<b>'], # default is <em>
+            // post_tags: ['</b>'],
+            fields: {
+              'description.*': {},
+              'title.*': {},
+              // Add here more fields if highlights from other fields are required
+            },
+          },
+          aggregations: {
+            organization: {
+              terms: {
+                field: 'organization_name.keyword',
               },
             },
-          ],
-        },
-      }
-    } else {
-      // No user search query, fetch all docs, change this to use aggregations and sorting and pagenum
-      queryObject = {
-        bool: {
-          must: [
-            {
-              match_all: {},
+            creator: {
+              terms: {
+                field: 'creator_name.keyword',
+              },
             },
-          ],
-        },
-      }
-    }
-
-    // adding filters if they are set
-    if (filters.length > 0) {
-      queryObject.bool.filter = filters
-    }
-
-    // toggle loader
-    this.loading = 1
-    let from = this.pageNum * this.perPage
-    from -= this.perPage
-
-    axios
-      .post('/es/metax/dataset/_search', {
-        size: this.perPage,
-        from,
-        query: queryObject,
-        sort: sorting,
-        // Return only the following fields in source attribute to minimize traffic
-        _source: [
-          'urn_identifier',
-          'title.*',
-          'description.*',
-          'access_rights.type.identifier',
-          'access_rights.license.identifier',
-        ],
-        highlight: {
-          // pre_tags: ['<b>'], # default is <em>
-          // post_tags: ['</b>'],
-          fields: {
-            'description.*': {},
-            'title.*': {},
-            // Add here more fields if highlights from other fields are required
-          },
-        },
-        aggregations: {
-          organization: {
-            terms: {
-              field: 'organization_name.keyword',
+            field_of_science_en: {
+              terms: {
+                field: 'field_of_science.pref_label.en.keyword',
+              },
+            },
+            field_of_science_fi: {
+              terms: {
+                field: 'field_of_science.pref_label.fi.keyword',
+              },
+            },
+            keyword_en: {
+              terms: {
+                field: 'theme.label.en.keyword',
+              },
+            },
+            keyword_fi: {
+              terms: {
+                field: 'theme.label.fi.keyword',
+              },
             },
           },
-          creator: {
-            terms: {
-              field: 'creator_name.keyword',
-            },
-          },
-          field_of_science_en: {
-            terms: {
-              field: 'field_of_science.pref_label.en.keyword',
-            },
-          },
-          field_of_science_fi: {
-            terms: {
-              field: 'field_of_science.pref_label.fi.keyword',
-            },
-          },
-          keyword_en: {
-            terms: {
-              field: 'theme.label.en.keyword',
-            },
-          },
-          keyword_fi: {
-            terms: {
-              field: 'theme.label.fi.keyword',
-            },
-          },
-        },
-      })
-      .then(res => {
-        console.log('-- QUERY DONE ---')
-        this.results = {
-          hits: res.data.hits.hits,
-          total: res.data.hits.total,
-          aggregations: res.data.aggregations,
-        }
-        this.loading = 0
-      })
-  }
+        })
+        .then(res => {
+          console.log('-- QUERY DONE ---')
+          this.results = {
+            hits: res.data.hits.hits,
+            total: res.data.hits.total,
+            aggregations: res.data.aggregations,
+          }
+          this.loading = 0
+          resolve()
+        })
+        .catch(err => {
+          reject(err)
+        })
+    })
 }
 
 export default new ElasticQuery()

@@ -71,7 +71,7 @@ class Dataset extends React.Component {
   render() {
     // CASE 1: Houston, we have a problem
     if (this.state.error !== false) {
-      return <ErrorPage />
+      return <ErrorPage error="notfound" />
     }
 
     // Loading not complete

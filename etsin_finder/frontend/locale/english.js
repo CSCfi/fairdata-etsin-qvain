@@ -51,6 +51,7 @@ const english = {
   },
   error: {
     notFound: "Couldn't find metadata for given id",
+    notLoaded: 'Sorry! There was a problem loading the page.',
   },
   general: {
     description: 'Description',

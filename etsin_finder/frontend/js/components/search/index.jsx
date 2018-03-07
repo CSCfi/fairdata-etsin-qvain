@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 import Translate from 'react-translate-component'
+import { Dataset } from '../../routes'
 
 import HeroBanner from '../general/hero'
 import SearchBar from './searchBar'
@@ -23,7 +24,10 @@ class Search extends Component {
   initialQuery = () => {
     console.log('-------- performing initial query ---------')
     ElasticQuery.updateFromUrl(this.props.match.params.query, this.props.history)
-    ElasticQuery.queryES()
+    ElasticQuery.queryES().then(() => {
+      // preload load dataset page
+      Dataset.load()
+    })
   }
 
   render() {

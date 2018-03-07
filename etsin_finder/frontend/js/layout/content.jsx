@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import FancyRoute from '../components/general/fancyRoute'
+import { Route } from 'react-router-dom'
 import { Home, Search, Dataset } from '../routes'
 
 export default class Content extends Component {
@@ -9,9 +9,9 @@ export default class Content extends Component {
         {/* eslint-disable */}
         <a ref={this.props.contentRef} tabIndex="-1" />
         {/* eslint-enable */}
-        <FancyRoute exact path="/" component={Home} />
-        <FancyRoute exact path="/datasets/:query?" component={Search} />
-        <FancyRoute path="/dataset/:identifier" component={Dataset} />
+        <Route exact path="/" component={Home} />
+        <Route exact path="/datasets/:query?" component={Search} />
+        <Route path="/dataset/:identifier" component={Dataset} />
       </main>
     )
   }

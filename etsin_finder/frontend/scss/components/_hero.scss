@@ -6,4 +6,9 @@
     background-color: $color-primary;
     color: $color-white;
   }
+  &.hero-full {
+    height: 100%;
+    position: absolute;
+    width: 100%;
+  }
 }

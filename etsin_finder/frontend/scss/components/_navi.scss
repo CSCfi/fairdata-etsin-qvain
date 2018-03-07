@@ -13,6 +13,7 @@
   overflow: hidden;
   transition: all 0.5s ease;
   margin-bottom: -4px;
+  width: 100%;
   @include mappy-bp(md) {
     align-items: stretch;
     display: inline-flex;
@@ -29,11 +30,22 @@
       color: $color-primary;
     }
     &.active {
-      color: $color-primary;
+      color: white;
+      background-color: $color-primary;
+      border-bottom: 4px solid transparent;
+      background-clip: padding-box;
+      @include mappy-bp(md) {
+        color: $color-primary;
+        background-color: unset;
+        border-bottom: 4px solid $color-primary;
+      }
       position: relative;
-      border-bottom: 4px solid $color-primary;
       &:hover {
-        color: darken($color-primary, 10);
+        @include mappy-bp(md) {
+          color: darken($color-primary, 10);
+          background-color: unset;
+        }
+        background-color: darken($color-primary, 10);
       }
     }
   }
@@ -65,10 +77,10 @@
   -moz-transform: rotate(0deg);
   -o-transform: rotate(0deg);
   transform: rotate(0deg);
-  -webkit-transition: .5s ease-in-out;
-  -moz-transition: .5s ease-in-out;
-  -o-transition: .5s ease-in-out;
-  transition: .5s ease-in-out;
+  -webkit-transition: 0.5s ease-in-out;
+  -moz-transition: 0.5s ease-in-out;
+  -o-transition: 0.5s ease-in-out;
+  transition: 0.5s ease-in-out;
   cursor: pointer;
 }
 
@@ -78,7 +90,7 @@
   position: absolute;
   top: 55px;
   right: 10px;
-  @include mappy-bp(md){
+  @include mappy-bp(md) {
     display: none;
   }
 }
@@ -96,10 +108,10 @@
   -moz-transform: rotate(0deg);
   -o-transform: rotate(0deg);
   transform: rotate(0deg);
-  -webkit-transition: .25s ease-in-out;
-  -moz-transition: .25s ease-in-out;
-  -o-transition: .25s ease-in-out;
-  transition: .25s ease-in-out;
+  -webkit-transition: 0.25s ease-in-out;
+  -moz-transition: 0.25s ease-in-out;
+  -o-transition: 0.25s ease-in-out;
+  transition: 0.25s ease-in-out;
   pointer-events: none;
 }
 #nav-icon span:nth-child(1) {

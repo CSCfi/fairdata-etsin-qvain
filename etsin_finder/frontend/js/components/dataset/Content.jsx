@@ -19,6 +19,7 @@ export default class Content extends Component {
     this.goBack = this.goBack.bind(this)
   }
 
+  // goes back to previous page, which might be outside
   goBack() {
     this.props.history.goBack()
   }

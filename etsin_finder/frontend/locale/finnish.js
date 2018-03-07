@@ -50,6 +50,7 @@ const finnish = {
   },
   error: {
     notFound: 'Annetulle id:lle ei löytynyt metadataa',
+    notLoaded: 'Hups! Ongelma latauksessa!',
   },
   general: {
     description: 'Kuvaus',

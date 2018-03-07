@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 import counterpart from 'counterpart'
+import { Search } from '../../routes'
 
 import ErrorBoundary from '../general/errorBoundary'
 import ElasticQuery from '../../stores/view/elasticquery'
@@ -33,6 +34,7 @@ class SearchBar extends Component {
   }
 
   handleChange(event) {
+    Search.load()
     this.setState({ query: event.target.value })
   }
 
