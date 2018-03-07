@@ -15,7 +15,10 @@
 
 .content {
   flex: 1;
-  position: relative;
+  display: flex;
+  & > div {
+    width: 100%;
+  }
 }
 
 .regular-row {
