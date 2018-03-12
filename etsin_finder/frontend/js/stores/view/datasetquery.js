@@ -16,6 +16,7 @@ class DatasetQuery {
       axios
         .get(`${this.metaxUrl}/rest/datasets/${id}?file_details`)
         .then(res => {
+          console.log('results', res)
           this.results = res.data
           resolve(res.data)
         })

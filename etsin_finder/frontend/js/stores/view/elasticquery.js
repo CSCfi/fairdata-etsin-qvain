@@ -171,13 +171,11 @@ class ElasticQuery {
   @action
   queryES = (initial = false) => {
     if (initial) {
-      console.log(this.results.total)
       if (this.results.total !== 0) {
         return new Promise(resolve => resolve())
       }
     }
     return new Promise((resolve, reject) => {
-      console.log('-- query --')
       let queryObject
       const query = this.search
       const filters = []

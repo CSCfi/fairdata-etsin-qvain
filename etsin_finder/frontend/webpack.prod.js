@@ -2,7 +2,6 @@ const path = require('path')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 const webpack = require('webpack')
-const CompressionPlugin = require('compression-webpack-plugin')
 
 const config = {
   entry: [path.join(__dirname, '/js/index.jsx')],
@@ -54,9 +53,6 @@ const config = {
     }),
     new UglifyJSPlugin({
       sourceMap: true,
-    }),
-    new CompressionPlugin({
-      algorithm: 'gzip',
     }),
   ],
 }

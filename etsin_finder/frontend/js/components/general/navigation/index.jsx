@@ -30,6 +30,8 @@ export default class Navi extends React.Component {
         <button
           id="nav-icon"
           className="btn btn-transparent"
+          name="Navigation"
+          aria-label="Navigation"
           ref={button => {
             this.navIcon = button
           }}

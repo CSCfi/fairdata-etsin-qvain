@@ -32,9 +32,7 @@ class Sidebar extends Component {
       pid: researchDataset.preferred_identifier,
       field: dataCatalog.catalog_json.field_of_science,
       keyword: researchDataset.keyword,
-      geographic_name: checkNested(researchDataset, 'spatial', 'geographic_name')
-        ? researchDataset.spatial.geographic_name
-        : false,
+      geographic_name: checkNested(researchDataset, 'spatial') ? researchDataset.spatial : false,
       temporal: checkNested(researchDataset, 'temporal') ? researchDataset.temporal : false,
       licence: checkNested(researchDataset, 'access_rights', 'license')
         ? researchDataset.access_rights.licence
@@ -123,7 +121,8 @@ class Sidebar extends Component {
               fallback="Spatial Coverage"
               hideEmpty="true"
             >
-              {this.state.geographic_name && this.state.geographic_name}
+              {this.state.geographic_name &&
+                this.state.geographic_name.map(single => <span>{single.geographic_name}</span>)}
             </SidebarItem>
           </ErrorBoundary>
           <ErrorBoundary>

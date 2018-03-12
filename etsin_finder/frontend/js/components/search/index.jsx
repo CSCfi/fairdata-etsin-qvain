@@ -22,7 +22,6 @@ class Search extends Component {
   }
 
   initialQuery = () => {
-    console.log('-------- performing initial query ---------')
     ElasticQuery.updateFromUrl(this.props.match.params.query, this.props.history, true)
     ElasticQuery.queryES(true).then(() => {
       // preload load dataset page

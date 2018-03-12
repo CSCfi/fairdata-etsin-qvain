@@ -6,9 +6,14 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Kuvailutietojen perusteella käyttäjät voivat etsiä aineistoja ja arvioida löytämiensä aineistojen käyttökelpoisuutta tarpeisiinsa.">
+  <meta name="theme-color" content="rgb(77, 179, 231)">
+  <link rel="manifest" href="/static/manifest.json">
   <!-- Path must be to static because other traffic is directed through Flask-->
   <link rel="icon" type="image/png" href="/static/favicon.png">
-  <link rel="stylesheet" href="/static/main.bundle.css">
+  <link rel="preload" as="style" onload="this.rel='stylesheet'" href="/static/main.bundle.css">
+  <noscript>
+    <link href="/static/main.bundle.css" rel="stylesheet">
+  </noscript>
   <title>Etsin | Tutkimusaineistojen hakupalvelu</title>
   <style>
     .loader:empty {
@@ -35,6 +40,7 @@
 </head>
 
 <body>
+  <noscript>Javascript needs to be enabled to see this page</noscript>
   <div id="root">
     <div class="loader"></div>
   </div>
