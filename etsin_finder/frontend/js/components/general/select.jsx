@@ -34,8 +34,8 @@ export default class Select extends Component {
 const SelectContainer = styled.div.attrs({
   bordercolor: props => props.theme.color.gray,
   background: 'white',
-  selectedColor: '#333',
-  textPadding: '1.2em',
+  selectedcolor: '#333',
+  textpadding: '1.2em',
 })`
   margin-bottom: 1em;
   height: min-content;
@@ -105,7 +105,7 @@ const SelectContainer = styled.div.attrs({
       }
       &.Select--single > .Select-control .Select-value .Select-value-label,
       &.is-pseudo-focused.Select--single > .Select-control .Select-value .Select-value-label {
-        color: ${props => props.selectedColor};
+        color: ${props => props.selectedcolor};
       }
       &.Select--single > .Select-control .Select-value a.Select-value-label,
       &.is-pseudo-focused.Select--single > .Select-control .Select-value a.Select-value-label {
@@ -149,7 +149,7 @@ const SelectContainer = styled.div.attrs({
     background-color: ${props => props.background};
     border-radius: 4px;
     border: 1px solid ${props => (props.error ? props.theme.color.error : props.bordercolor)};
-    color: ${props => props.selectedColor};
+    color: ${props => props.selectedcolor};
     cursor: default;
     display: table;
     border-spacing: 0;
@@ -174,8 +174,8 @@ const SelectContainer = styled.div.attrs({
     color: #aaa;
     left: 0;
     line-height: 34px;
-    padding-left: ${props => props.textPadding};
-    padding-right: ${props => props.textPadding};
+    padding-left: ${props => props.textpadding};
+    padding-right: ${props => props.textpadding};
     position: absolute;
     right: 0;
     top: 0;
@@ -187,8 +187,8 @@ const SelectContainer = styled.div.attrs({
 
   .Select-input {
     height: 34px;
-    padding-left: ${props => props.textPadding};
-    padding-right: ${props => props.textPadding};
+    padding-left: ${props => props.textpadding};
+    padding-right: ${props => props.textpadding};
     vertical-align: middle;
     > input {
       width: 100%;
@@ -239,7 +239,7 @@ const SelectContainer = styled.div.attrs({
     box-sizing: border-box;
     border-radius: 50%;
     border: 2px solid ${props => props.bordercolor};
-    border-right-color: ${props => props.selectedColor};
+    border-right-color: ${props => props.selectedcolor};
     display: inline-block;
     position: relative;
     vertical-align: middle;
@@ -364,7 +364,7 @@ const SelectContainer = styled.div.attrs({
     color: #666666;
     cursor: pointer;
     display: block;
-    padding: 8px ${props => props.textPadding};
+    padding: 8px ${props => props.textpadding};
     &:last-child {
       border-bottom-right-radius: 4px;
       border-bottom-left-radius: 4px;
@@ -373,13 +373,13 @@ const SelectContainer = styled.div.attrs({
       background-color: #f5faff;
       /* Fallback color for IE 8 */
       background-color: rgba(props => props.color.theme.primary, 0.04);
-      color: ${props => props.selectedColor};
+      color: ${props => props.selectedcolor};
     }
     &.is-focused {
       background-color: #ebf5ff;
       /* Fallback color for IE 8 */
       background-color: rgba(props => props.color.theme.primary, 0.08);
-      color: ${props => props.selectedColor};
+      color: ${props => props.selectedcolor};
     }
     &.is-disabled {
       color: ${props => props.bordercolor};
@@ -392,18 +392,18 @@ const SelectContainer = styled.div.attrs({
     color: #999999;
     cursor: default;
     display: block;
-    padding: 8px ${props => props.textPadding};
+    padding: 8px ${props => props.textpadding};
   }
 
   .Select--multi {
     .Select-input {
       vertical-align: middle;
-      margin-left: ${props => props.textPadding};
+      margin-left: ${props => props.textpadding};
       padding: 0;
     }
     &.Select--rtl .Select-input {
       margin-left: 0;
-      margin-right: ${props => props.textPadding};
+      margin-right: ${props => props.textpadding};
     }
     &.has-value .Select-input {
       margin-left: 5px;
@@ -481,7 +481,7 @@ const SelectContainer = styled.div.attrs({
       .Select-value {
         background-color: #fcfcfc;
         border: 1px solid #e3e3e3;
-        color: ${props => props.selectedColor};
+        color: ${props => props.selectedcolor};
       }
       .Select-value-icon {
         cursor: not-allowed;

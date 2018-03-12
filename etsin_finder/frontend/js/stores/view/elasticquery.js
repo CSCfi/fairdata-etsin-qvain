@@ -133,7 +133,12 @@ class ElasticQuery {
 
   // when url is populated with settings
   @action
-  updateFromUrl = (query, history) => {
+  updateFromUrl = (query, history, initial = false) => {
+    if (initial) {
+      if (this.results.total !== 0) {
+        return
+      }
+    }
     const urlParams = UrlParse.searchParams(history.location.search)
     if (query) {
       this.updateSearch(decodeURIComponent(query), history, false)
@@ -164,8 +169,15 @@ class ElasticQuery {
 
   // query elastic search with defined settings
   @action
-  queryES = () =>
-    new Promise((resolve, reject) => {
+  queryES = (initial = false) => {
+    if (initial) {
+      console.log(this.results.total)
+      if (this.results.total !== 0) {
+        return new Promise(resolve => resolve())
+      }
+    }
+    return new Promise((resolve, reject) => {
+      console.log('-- query --')
       let queryObject
       const query = this.search
       const filters = []
@@ -292,6 +304,7 @@ class ElasticQuery {
           reject(err)
         })
     })
+  }
 }
 
 export default new ElasticQuery()
