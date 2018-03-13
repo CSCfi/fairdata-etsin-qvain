@@ -42,6 +42,7 @@
     "node-sass": "^4.7.2",
     "nprogress": "^0.2.0",
     "polished": "^1.9.2",
+    "prop-types": "^15.6.1",
     "react": "^16.2.0",
     "react-a11y-announcer": "^1.2.0",
     "react-dom": "^16.2.0",

@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Modal from 'react-modal'
 import translate from 'counterpart'
@@ -44,7 +45,7 @@ export default class Contact extends Component {
   constructor(props) {
     super(props)
 
-    const recipients = this.buildRecipients(props)
+    const recipients = this.buildRecipients(props.emails)
     const translations = this.makeTranslations(props)
 
     this.state = {
@@ -74,7 +75,7 @@ export default class Contact extends Component {
     return translate('dataset.contact')
   }
 
-  buildRecipients(props) {
+  buildRecipients(emails) {
     const recipientLabels = {
       CONTRIBUTOR: 'dataset.contributor.snglr',
       CREATOR: 'dataset.creator.snglr',
@@ -83,8 +84,8 @@ export default class Contact extends Component {
       RIGHTS_HOLDER: 'dataset.rights_holder',
     }
     const recipients = []
-    for (const o in props.emails) {
-      if (props.emails[o]) recipients.push({ label: translate(recipientLabels[o]), value: o })
+    for (const o in emails) {
+      if (emails[o]) recipients.push({ label: translate(recipientLabels[o]), value: o })
     }
     return recipients
   }
@@ -126,4 +127,15 @@ export default class Contact extends Component {
       </div>
     )
   }
+}
+
+Contact.propTypes = {
+  emails: PropTypes.shape({
+    CONTRIBUTOR: PropTypes.bool,
+    CREATOR: PropTypes.bool,
+    CURATOR: PropTypes.bool,
+    PUBLISHER: PropTypes.bool,
+    RIGHTS_HOLDER: PropTypes.bool,
+  }).isRequired,
+  datasetID: PropTypes.string.isRequired,
 }

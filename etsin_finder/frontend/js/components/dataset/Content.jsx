@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import { Route } from 'react-router-dom'
 import styled from 'styled-components'
@@ -12,6 +13,7 @@ import Tabs from './tabs'
 const MarginAfter = styled.div`
   margin-bottom: 3em;
 `
+
 export default class Content extends Component {
   constructor() {
     super()
@@ -57,4 +59,23 @@ export default class Content extends Component {
       </MarginAfter>
     )
   }
+}
+
+Content.defaultProps = {
+  hasFiles: [],
+}
+
+Content.propTypes = {
+  dataset: PropTypes.object.isRequired,
+  emails: PropTypes.shape({
+    CONTRIBUTOR: PropTypes.bool,
+    CREATOR: PropTypes.bool,
+    CURATOR: PropTypes.bool,
+    PUBLISHER: PropTypes.bool,
+    RIGHTS_HOLDER: PropTypes.bool,
+  }).isRequired,
+  live: PropTypes.bool.isRequired,
+  hasFiles: PropTypes.array,
+  match: PropTypes.object.isRequired,
+  history: PropTypes.object.isRequired,
 }

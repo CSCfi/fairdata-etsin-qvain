@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import styled, { withTheme } from 'styled-components'
 import Translate from 'react-translate-component'
 import Button from '../general/button'
@@ -104,3 +105,15 @@ class Description extends Component {
 }
 
 export default withTheme(Description)
+
+Description.propTypes = {
+  dataset: PropTypes.object.isRequired,
+  theme: PropTypes.object.isRequired,
+  emails: PropTypes.shape({
+    CONTRIBUTOR: PropTypes.bool,
+    CREATOR: PropTypes.bool,
+    CURATOR: PropTypes.bool,
+    PUBLISHER: PropTypes.bool,
+    RIGHTS_HOLDER: PropTypes.bool,
+  }).isRequired,
+}

@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import translate from 'counterpart'
 import { inject, observer } from 'mobx-react'
 
@@ -80,7 +81,6 @@ class Dataset extends React.Component {
 
     const { currentLang } = this.props.Stores.Locale
     // CASE 2: Business as usual
-    console.log(this.state.email_info)
     return (
       <div>
         {!this.state.live && <NoticeBar deprecated={translate('tombstone.info')} />}
@@ -105,6 +105,12 @@ class Dataset extends React.Component {
       </div>
     )
   }
+}
+
+Dataset.propTypes = {
+  history: PropTypes.object.isRequired,
+  Stores: PropTypes.object.isRequired,
+  match: PropTypes.object.isRequired,
 }
 
 export default inject('Stores')(observer(Dataset))

@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { withFormik } from 'formik'
 import Yup from 'yup'
@@ -62,7 +63,6 @@ const InnerForm = props => {
     status,
     translations,
   } = props
-  console.log('rerun')
   return (
     <Form onSubmit={handleSubmit}>
       <InputContainer>
@@ -170,5 +170,12 @@ const ContactForm = withFormik({
   },
   displayName: 'ContactForm', // helps with React DevTools
 })(InnerForm)
+
+/* eslint react/forbid-prop-types: 0 */
+ContactForm.propTypes = {
+  recipientsList: PropTypes.array,
+  translations: PropTypes.object,
+  datasetID: PropTypes.string,
+}
 
 export default ContactForm
