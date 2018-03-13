@@ -23,6 +23,8 @@ before_install:
 - ssh-add ~/.ssh/id_rsa
 - sudo apt-get install npm
 - pip install ansible
+- sudo apt-get install nodejs
+- sudo apt-get install npm
 
 install:
 - pip install -r requirements.txt
