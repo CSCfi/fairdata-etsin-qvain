@@ -5,6 +5,7 @@ import Env from '../domain/env'
 
 class DatasetQuery {
   @observable results = []
+  @observable emailInfo = []
   @observable directories = []
   @observable error = false
   metaxUrl = Env.metaxUrl
@@ -14,10 +15,10 @@ class DatasetQuery {
     console.log('DatasetQuery Identifier ||', id)
     return new Promise((resolve, reject) => {
       axios
-        .get(`${this.metaxUrl}/rest/datasets/${id}?file_details`)
+        .get(`/api/dataset/${id}`)
         .then(res => {
-          console.log('results', res)
-          this.results = res.data
+          this.results = res.data.catalog_record
+          this.emailInfo = res.data.email_info
           resolve(res.data)
         })
         .catch(error => {
@@ -39,21 +40,6 @@ class DatasetQuery {
         })
         .catch(error => {
           this.directories.push({ id, error })
-          reject(error)
-        })
-    })
-  }
-
-  @action
-  getRemovedData(id) {
-    console.log('Trying to find from removed datasets..')
-    return new Promise((resolve, reject) => {
-      axios
-        .get(`${this.metaxUrl}/rest/datasets/${id}.json?removed=true`)
-        .then(res => {
-          resolve(res.data)
-        })
-        .catch(error => {
           reject(error)
         })
     })
