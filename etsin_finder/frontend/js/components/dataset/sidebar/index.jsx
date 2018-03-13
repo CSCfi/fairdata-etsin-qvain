@@ -121,10 +121,12 @@ class Sidebar extends Component {
               fallback="Spatial Coverage"
               hideEmpty="true"
             >
-              {this.state.geographic_name &&
+              {/* disabled spatial coverage for now */}
+              {/* console.log(this.state.geographic_name) */}
+              {/* {this.state.geographic_name &&
                 this.state.geographic_name.map(single => (
                   <span key={single.geographic_name}>{single.geographic_name}, </span>
-                ))}
+                ))} */}
             </SidebarItem>
           </ErrorBoundary>
           <ErrorBoundary>
@@ -171,7 +173,9 @@ class Sidebar extends Component {
           <ErrorBoundary>
             <SidebarItem component="p" trans="dataset.curator" hideEmpty="true">
               {this.state.curator &&
-                this.state.curator.map(curators => checkDataLang(curators.name))}
+                this.state.curator.map(curators => (
+                  <span key={`${curators.name}`}>{checkDataLang(curators.name)}, </span>
+                ))}
             </SidebarItem>
           </ErrorBoundary>
           <ErrorBoundary>
