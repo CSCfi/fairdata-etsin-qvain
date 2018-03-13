@@ -6,6 +6,7 @@ import styled from 'styled-components'
 
 import Description from './description'
 import Downloads from './downloads'
+import Button from '../general/button'
 import Identifier from './data/identifier'
 import ErrorBoundary from '../general/errorBoundary'
 import Tabs from './tabs'
@@ -45,17 +46,17 @@ export default class Content extends Component {
             render={() => <Description dataset={this.props.dataset} emails={this.props.emails} />}
           />
         </ErrorBoundary>
-        {this.props.live ? (
+        {this.props.live && (
           <ErrorBoundary>
             {this.props.dataset.data_catalog.catalog_json.harvested ? (
-              <Identifier idn={this.props.dataset.research_dataset.preferred_identifier} button>
-                <Translate content="dataset.data_location" fallback="this is fallback" />
-              </Identifier>
+              <Button noMargin color="#FFBD39">
+                Harvested
+              </Button>
             ) : (
               <Route exact path="/dataset/:identifier/data" component={Downloads} />
             )}
           </ErrorBoundary>
-        ) : null}
+        )}
       </MarginAfter>
     )
   }
