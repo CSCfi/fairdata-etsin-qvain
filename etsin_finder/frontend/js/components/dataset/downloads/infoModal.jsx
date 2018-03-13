@@ -122,7 +122,7 @@ const InfoModal = ({ name, id, title, size, category, type, open, closeModal, de
       isOpen={open}
       onRequestClose={closeModal}
       style={customStyles}
-      contentLabel="Example Modal"
+      contentLabel="Object info"
     >
       <CloseModal onClick={closeModal}>X</CloseModal>
       <ModalInfo name={name} id={id} title={title} size={size} category={category} type={type} />

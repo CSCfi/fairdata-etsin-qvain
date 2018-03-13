@@ -12,7 +12,7 @@ class DatasetQuery {
 
   @action
   getData(id) {
-    console.log('DatasetQuery', id)
+    console.log('DatasetQuery Identifier ||', id)
     return new Promise((resolve, reject) => {
       axios
         .get(`/api/dataset/${id}`)
@@ -29,11 +29,11 @@ class DatasetQuery {
   }
 
   @action
-  getFolderData(id) {
+  getFolderData(id, urn) {
     console.log('Folder Query')
     return new Promise((resolve, reject) => {
       axios
-        .get(`${this.metaxUrl}/rest/directories/${id}/files`)
+        .get(`${this.metaxUrl}/rest/directories/${id}/files?urn_identifier=${urn}`)
         .then(res => {
           this.directories.push({ id, results: res.data })
           resolve(res.data)

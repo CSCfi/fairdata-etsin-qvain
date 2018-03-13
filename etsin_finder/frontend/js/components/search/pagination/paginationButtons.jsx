@@ -17,6 +17,7 @@ class PaginationButtons extends Component {
     this.checkAround = this.checkAround.bind(this)
     this.checkAfter = this.checkAfter.bind(this)
     this.checkBefore = this.checkBefore.bind(this)
+    this.createPagination = this.createPagination.bind(this)
   }
   componentWillMount() {
     if (!this.pageAmount) {
@@ -67,13 +68,9 @@ class PaginationButtons extends Component {
     )
   }
 
-  // you dont want to call setState inside loop. It forces dom to rerender everytime
   checkBefore() {
     return new Promise(resolve => {
-      while (
-        this.state.currentPage - this.beforeCounter > 1 &&
-        this.beforeCounter < 7
-      ) {
+      while (this.state.currentPage - this.beforeCounter > 1 && this.beforeCounter < 7) {
         this.beforeCounter += 1
       }
       resolve()
@@ -95,6 +92,8 @@ class PaginationButtons extends Component {
   changePage(event, value) {
     ElasticQuery.updatePageNum(value, this.props.history)
     ElasticQuery.queryES()
+    // scrolls back to top of page
+    window.scrollTo(0, 0)
   }
 
   singlePage(value, link) {
@@ -174,19 +173,54 @@ class PaginationButtons extends Component {
       }
     } else if (where === 'after') {
       if (
-        (this.state.pageAmount - this.state.currentPage === 4 &&
-          this.state.pageAmount > 8) ||
+        (this.state.pageAmount - this.state.currentPage === 4 && this.state.pageAmount > 8) ||
         (this.state.pageAmount === 9 && this.state.currentPage < 5)
       ) {
         return this.singlePage(this.state.pageAmount - 1, true)
-      } else if (
-        this.state.pageAmount - this.state.currentPage > 4 &&
-        this.state.pageAmount > 8
-      ) {
+      } else if (this.state.pageAmount - this.state.currentPage > 4 && this.state.pageAmount > 8) {
         return this.singlePage('...', false)
       }
     }
     return null
+  }
+
+  createPagination() {
+    return (
+      <ul className="pagination">
+        {this.state.currentPage > 1 && (
+          <button
+            className="btn btn-transparent"
+            onClick={e => {
+              this.changePage(e, this.state.currentPage - 1)
+            }}
+          >
+            {'<'} Previous page
+          </button>
+        )}
+        {// first page
+        this.state.currentPage !== 1 && this.singlePage(1, true)}
+        {this.restDots('before')}
+        {// pages before
+        this.state.before.map(single => single)}
+        {this.singlePage(this.state.currentPage, false)} {/* currentpage */}
+        {// pages after
+        this.state.after.map(single => single)}
+        {this.restDots('after')}
+        {// last page
+        this.state.currentPage !== this.state.pageAmount &&
+          this.singlePage(this.state.pageAmount, true)}
+        {this.state.currentPage < this.state.pageAmount && (
+          <button
+            className="btn btn-transparent"
+            onClick={e => {
+              this.changePage(e, this.state.currentPage + 1)
+            }}
+          >
+            Next page {'>'}
+          </button>
+        )}
+      </ul>
+    )
   }
 
   render() {
@@ -195,48 +229,10 @@ class PaginationButtons extends Component {
     }
     return (
       <div className="pagination-container col-lg-12">
-        <p
-          id="pagination-label"
-          className="pagination-label sr-only"
-          aria-hidden="true"
-        >
+        <p id="pagination-label" className="pagination-label sr-only" aria-hidden="true">
           Pagination
         </p>
-        <ul className="pagination">
-          {this.state.currentPage > 1 ? (
-            <button
-              className="btn btn-transparent"
-              onClick={e => {
-                this.changePage(e, this.state.currentPage - 1)
-              }}
-            >
-              {'<'} Previous page
-            </button>
-          ) : null}
-          {// first page
-          this.state.currentPage !== 1 ? this.singlePage(1, true) : null}
-          {this.restDots('before')}
-          {// pages before
-          this.state.before.map(single => single)}
-          {this.singlePage(this.state.currentPage, false)} {/* currentpage */}
-          {// pages after
-          this.state.after.map(single => single)}
-          {this.restDots('after')}
-          {// last page
-          this.state.currentPage !== this.state.pageAmount
-            ? this.singlePage(this.state.pageAmount, true)
-            : null}
-          {this.state.currentPage < this.state.pageAmount ? (
-            <button
-              className="btn btn-transparent"
-              onClick={e => {
-                this.changePage(e, this.state.currentPage + 1)
-              }}
-            >
-              Next page {'>'}
-            </button>
-          ) : null}
-        </ul>
+        {this.createPagination()}
       </div>
     )
   }

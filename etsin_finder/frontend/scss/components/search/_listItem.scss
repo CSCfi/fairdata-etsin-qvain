@@ -10,18 +10,22 @@
       .content-box {
         border: 2px solid $color-primary;
         box-shadow: 0 2px 3px 0px $color-lightgray;
-        transform: translateY(-2px);
       }
     }
     .title {
       color: $color-primary;
-      margin-bottom: 0;
+      margin-bottom: 0.5em;
       margin-right: 1em;
       line-height: 1.5em;
-      max-width: 70%;
     }
   }
   .item-header {
-    margin-bottom: 0.5em;
+    margin-bottom: 0em;
+    flex-wrap: wrap;
+    font-size: 0.9em;
+    @include mappy-bp('md') {
+      font-size: 1em;
+      flex-wrap: nowrap;
+    }
   }
 }

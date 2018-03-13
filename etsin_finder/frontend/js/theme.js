@@ -13,6 +13,7 @@ const etsinTheme = {
     darkgray: 'rgb(110, 110, 110)',
     dark: 'rgb(70, 70, 70)',
     error: '#eb6672',
+    yellow: '#FFBD39',
     insetDark: 'rgba(0, 0, 0, 0.3)',
   },
   breakpoints: {

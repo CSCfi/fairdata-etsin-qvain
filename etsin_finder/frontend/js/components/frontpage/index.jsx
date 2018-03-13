@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import Translate from 'react-translate-component'
 import SearchBar from '../search/searchBar'
 import HeroBanner from '../general/hero'
@@ -19,12 +19,10 @@ export default class FrontPage extends Component {
         </HeroBanner>
         <div className="container">
           <div className="text-center regular-row">
-            <h2>
-              Frontpage / Searchpage
-            </h2>
+            <h2>Frontpage / Searchpage</h2>
           </div>
         </div>
       </div>
-    );
+    )
   }
 }

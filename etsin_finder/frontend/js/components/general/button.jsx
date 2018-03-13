@@ -1,36 +1,39 @@
-import React from 'react'
 import styled from 'styled-components'
-import { opacify } from 'polished'
+import { opacify, darken } from 'polished'
 
 // prettier-ignore
-const StyledButton = styled.button`
+const Button = styled.button.attrs({
+  padding: props => (props.padding ? props.padding : '0.3em 0.6em 0.4em'),
+})`
   cursor: pointer;
-  padding: 0.3em 0.6em 0.4em;
-  margin: 0.25em 0.25em;
+  width: ${props => (props.width ? props.width : '')};
+  padding: ${props => (props.noPadding ? 0 : props.padding)};
+  margin: ${props => (props.noMargin ? 0 : '0.25em 0.25em')};
   border: ${props => (props.thin ? '1px' : '2px')} solid ${props => (props.color ? props.color : props.theme.color.primary)};
   background-color: ${props => (props.color ? props.color : props.theme.color.primary)};
   color: ${props => (props.color !== 'white' ? 'white' : props.theme.color.primary)};
   border-radius: 0.25em;
   line-height: 1.25;
-  transition: 0.2s ease;
+  transition: 0.3s ease;
   &:hover {
-    background-color: transparent;
-    color: ${props => (props.color ? props.color : props.theme.color.primary)};
+    background-color: ${props => darken(0.1, (props.color ? props.color : props.theme.color.primary))};
+    border-color: ${props => darken(0.1, (props.color ? props.color : props.theme.color.primary))};
   }
   &:disabled {
-    pointer-events:none;
+    pointer-events: none;
     background-color: ${props => props.theme.color.superlightgray};
     color: ${props => props.theme.color.medgray};
     border-color: ${props => props.theme.color.superlightgray};
   }
 `
 // prettier-ignore
-const InvertedStyledButton = StyledButton.extend`
+export const InvertedButton = Button.extend`
   border-color: ${props => (props.color ? props.color : props.theme.color.primary)};
   background-color: transparent;
   color: ${props => (props.color ? props.color : props.theme.color.primary)};
   &:hover {
     background-color: ${props => (props.color ? props.color : props.theme.color.primary)};
+    border-color: ${props => (props.color ? props.color : props.theme.color.primary)};
     color: ${props => (props.color === 'white' ? props.theme.color.primary : 'white')};
   }
   &:disabled {
@@ -40,13 +43,13 @@ const InvertedStyledButton = StyledButton.extend`
     color: ${props => opacify(-0.5, (props.color ? props.color : props.theme.color.primary))};
   }
 `
-const TransparentStyledButton = StyledButton.extend`
-  padding: ${props => (props.noPadding ? 0 : '0.3em 0.6em 0.4em')};
+export const TransparentButton = Button.extend`
   margin: ${props => (props.noMargin ? 0 : '0.1em 0.1em')};
   border: none;
   background-color: transparent;
   color: ${props => (props.color ? props.color : props.theme.color.darkgray)};
   &:hover {
+    background-color: transparent;
     color: ${props => props.theme.color.primary};
     text-decoration: underline;
   }
@@ -62,12 +65,13 @@ const TransparentStyledButton = StyledButton.extend`
   }
 `
 
-const Button = props => <StyledButton {...props}>{props.children}</StyledButton>
-export const InvertedButton = props => (
-  <InvertedStyledButton {...props}>{props.children}</InvertedStyledButton>
-)
-export const TransparentButton = props => (
-  <TransparentStyledButton {...props}>{props.children}</TransparentStyledButton>
-)
+export const LinkButton = TransparentButton.extend`
+  margin: 0;
+  padding: 0;
+  color: ${props => props.theme.color.primary};
+  &:hover {
+    color: ${props => darken(0.1, props.theme.color.primary)};
+  }
+`
 
 export default Button

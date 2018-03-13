@@ -148,7 +148,7 @@ describe('Create file tree', () => {
     const result = createTree(files)
     expect(result[0].details).toEqual({ id: 1 })
   })
-  it('should have work with only folders selected', () => {
+  it('should work with only folders selected', () => {
     const files = [
       {
         path: 'project_x_FROZEN/Experiment_X/Experiment_Y',

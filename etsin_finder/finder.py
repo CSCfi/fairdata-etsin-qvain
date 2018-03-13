@@ -9,7 +9,7 @@ from etsin_finder.utils import executing_travis
 
 
 def create_app(config=None):
-    app = Flask(__name__, static_folder="./frontend/dist", template_folder="./frontend")
+    app = Flask(__name__, template_folder="./frontend/static")
     _set_app_config(app, config)
     if not app.testing and not executing_travis():
         _setup_app_logging(app)

@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import { inject, observer } from 'mobx-react'
+import FontAwesomeIcon from '@fortawesome/react-fontawesome'
+import faAngleDown from '@fortawesome/fontawesome-free-solid/faAngleDown'
 
 import FilterItem from './filterItem'
 import checkDataLang from '../../../utils/checkDataLang'
@@ -39,9 +41,7 @@ class FilterSection extends Component {
 
   toggleFilter(event) {
     event.target.nextSibling.classList.toggle('open')
-    const buttons = event.target.nextSibling.children[0].querySelectorAll(
-      'button'
-    )
+    const buttons = event.target.nextSibling.children[0].querySelectorAll('button')
     buttons.forEach(button => {
       button.tabIndex = button.tabIndex === -1 ? 0 : -1
     })
@@ -66,8 +66,7 @@ class FilterSection extends Component {
     if (
       this.aggregations[this.props.aggregation] === undefined ||
       ElasticQuery.results.aggregations[this.aggregationName] === 'undefined' ||
-      ElasticQuery.results.aggregations[this.aggregationName].buckets.length <=
-        0
+      ElasticQuery.results.aggregations[this.aggregationName].buckets.length <= 0
     ) {
       return ''
     }
@@ -76,13 +75,11 @@ class FilterSection extends Component {
       <div className="filter-section">
         <button className="filter-category" onClick={this.toggleFilter}>
           {this.titleName}
-          <i className="fa fa-angle-down fa-2x" aria-hidden="true" />
+          <FontAwesomeIcon icon={faAngleDown} size="2x" />
         </button>
         <div className="filter-items">
           <ul>
-            {ElasticQuery.results.aggregations[
-              this.aggregationName
-            ].buckets.map(item => (
+            {ElasticQuery.results.aggregations[this.aggregationName].buckets.map(item => (
               <FilterItem
                 key={item.key}
                 item={item}

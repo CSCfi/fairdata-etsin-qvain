@@ -1,5 +1,6 @@
 /* External */
 @import '~nprogress/nprogress.css';
+@import '~bootstrap/scss/bootstrap';
 
 /* Base */
 @import 'base/colors';
@@ -22,10 +23,10 @@
 @import 'components/dataset/tabs';
 @import 'components/search/searchBar';
 @import 'components/search/listItem';
-@import 'components/search/_filter.scss';
-@import 'components/search/_sortResults.scss';
-@import 'components/search/_pagination.scss';
+@import 'components/search/filter';
+@import 'components/search/sortResults';
+@import 'components/search/pagination';
 @import 'components/navi';
 @import 'components/userInfo';
 @import 'components/hero';
-@import 'components/_loader.scss';
+@import 'components/loader';

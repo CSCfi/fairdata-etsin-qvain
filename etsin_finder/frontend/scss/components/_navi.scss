@@ -2,24 +2,30 @@
 .navigation {
   width: 100%;
   display: flex;
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.5s ease;
+  flex-direction: column;
+  &.open {
+    max-height: 200px;
+  }
   @include mappy-bp(md) {
-    width: initial;
+    align-items: stretch;
+    display: inline-flex;
+    max-height: initial;
+    flex-direction: row;
+    overflow: visible;
   }
 }
 .nav-list {
   align-items: center;
   display: block;
-  max-height: 0;
-  overflow: hidden;
-  transition: all 0.5s ease;
   margin-bottom: -4px;
+  width: 100%;
   @include mappy-bp(md) {
     align-items: stretch;
     display: inline-flex;
     max-height: initial;
-  }
-  &.open {
-    max-height: 200px;
   }
   a.nav-link {
     text-transform: uppercase;
@@ -29,11 +35,22 @@
       color: $color-primary;
     }
     &.active {
-      color: $color-primary;
+      color: white;
+      background-color: $color-primary;
+      border-bottom: 4px solid transparent;
+      background-clip: padding-box;
+      @include mappy-bp(md) {
+        color: $color-primary;
+        background-color: unset;
+        border-bottom: 4px solid $color-primary;
+      }
       position: relative;
-      border-bottom: 4px solid $color-primary;
       &:hover {
-        color: darken($color-primary, 10);
+        @include mappy-bp(md) {
+          color: darken($color-primary, 10);
+          background-color: unset;
+        }
+        background-color: darken($color-primary, 10);
       }
     }
   }
@@ -42,11 +59,14 @@
 // nav right
 .top-nav-right {
   align-items: center;
+  justify-content: center;
   display: inline-flex;
-  position: absolute;
   top: 10px;
   right: 10px;
   padding-bottom: 5px;
+  @include mappy-bp(md) {
+    position: absolute;
+  }
   @include mappy-bp(lg) {
     position: inherit;
     .btn-etsin {
@@ -65,10 +85,10 @@
   -moz-transform: rotate(0deg);
   -o-transform: rotate(0deg);
   transform: rotate(0deg);
-  -webkit-transition: .5s ease-in-out;
-  -moz-transition: .5s ease-in-out;
-  -o-transition: .5s ease-in-out;
-  transition: .5s ease-in-out;
+  -webkit-transition: 0.5s ease-in-out;
+  -moz-transition: 0.5s ease-in-out;
+  -o-transition: 0.5s ease-in-out;
+  transition: 0.5s ease-in-out;
   cursor: pointer;
 }
 
@@ -76,9 +96,9 @@
 #nav-icon {
   transform: scale(0.6);
   position: absolute;
-  top: 55px;
-  right: 10px;
-  @include mappy-bp(md){
+  top: 2em;
+  right: 1.5em;
+  @include mappy-bp(md) {
     display: none;
   }
 }
@@ -96,10 +116,10 @@
   -moz-transform: rotate(0deg);
   -o-transform: rotate(0deg);
   transform: rotate(0deg);
-  -webkit-transition: .25s ease-in-out;
-  -moz-transition: .25s ease-in-out;
-  -o-transition: .25s ease-in-out;
-  transition: .25s ease-in-out;
+  -webkit-transition: 0.25s ease-in-out;
+  -moz-transition: 0.25s ease-in-out;
+  -o-transition: 0.25s ease-in-out;
+  transition: 0.25s ease-in-out;
   pointer-events: none;
 }
 #nav-icon span:nth-child(1) {

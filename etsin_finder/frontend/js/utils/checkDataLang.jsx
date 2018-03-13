@@ -10,6 +10,8 @@ const checkDataLang = (object, lang) => {
   }
   if (typeof object === 'undefined' || Object.keys(object).length === 0) {
     return ''
+  } else if (typeof object === 'string') {
+    return object
   } else if (object[language]) return object[language]
   return object[Object.keys(object)[0]]
 }

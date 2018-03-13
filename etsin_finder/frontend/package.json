@@ -1,20 +1,65 @@
 {
-  "name": "src",
+  "name": "etsin-finder",
   "version": "1.0.0",
-  "main": "index.html",
+  "description": "Research data finder",
+  "main": "./static/index.html",
+  "author": "Aaron Hakala",
+  "license": "ISC",
   "scripts": {
-    "start": "webpack-dev-server",
-    "build": "webpack --config webpack.prod.js --define process.env.NODE_ENV=\"'production'\"",
+    "build": "webpack --mode production --config webpack.prod.js --define process.env.NODE_ENV=\"'production'\"",
+    "build-storybook": "build-storybook",
     "dev-build": "webpack -d --config webpack.config.js --define process.env.NODE_ENV=\"'development'\"",
     "lint": "eslint js --ext .jsx,.js",
-    "test": "jest",
-    "watch": "npm update; webpack --progress -d --config webpack.config.js --watch  --define process.env.NODE_ENV=\"'development'\"",
-    "start:dev": "webpack-dev-server",
+    "start": "webpack --progress -d --config webpack.config.js --watch  --define process.env.NODE_ENV=\"'development'\"",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "test": "jest",
+    "watch": "npm update; webpack --progress -d --config webpack.config.js --watch  --define process.env.NODE_ENV=\"'development'\""
   },
-  "author": "",
-  "license": "ISC",
+  "dependencies": {
+    "@fortawesome/fontawesome": "^1.1.4",
+    "@fortawesome/fontawesome-free-regular": "^5.0.8",
+    "@fortawesome/fontawesome-free-solid": "^5.0.8",
+    "@fortawesome/react-fontawesome": "0.0.17",
+    "axios": "^0.16.2",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.4",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-decorators-legacy": "^1.3.4",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "bootstrap": "^4.0.0",
+    "counterpart": "^0.18.6",
+    "css-loader": "^0.28.10",
+    "extract-text-webpack-plugin": "^4.0.0-beta.0",
+    "file-loader": "^1.1.11",
+    "formik": "^0.11.11",
+    "history": "^4.7.2",
+    "loadable-components": "^1.1.1",
+    "mappy-breakpoints": "^0.2.3",
+    "mobx": "^3.6.1",
+    "mobx-react": "^4.4.2",
+    "node-sass": "^4.7.2",
+    "nprogress": "^0.2.0",
+    "polished": "^1.9.2",
+    "prop-types": "^15.6.1",
+    "react": "^16.2.0",
+    "react-a11y-announcer": "^1.2.0",
+    "react-dom": "^16.2.0",
+    "react-interpolate-component": "^0.12.0",
+    "react-modal": "^3.3.1",
+    "react-router-dom": "4.2.2",
+    "react-select": "^1.2.1",
+    "react-test-renderer": "16.2.0",
+    "react-transition-group": "^1.2.1",
+    "react-translate-component": "^0.15.1",
+    "sass-loader": "6.0.6",
+    "styled-components": "^3.2.0",
+    "uglifyjs-webpack-plugin": "^1.2.2",
+    "webpack": "^4.1.0",
+    "webpack-node-externals": "^1.6.0",
+    "yup": "^0.24.1"
+  },
   "devDependencies": {
     "@storybook/addon-actions": "3.2.16",
     "@storybook/addon-links": "3.2.16",
@@ -22,36 +67,39 @@
     "axios-mock-adapter": "1.10.0",
     "babel-eslint": "8.0.2",
     "babel-jest": "21.2.0",
+    "babel-plugin-syntax-dynamic-import": "^6.18.0",
     "clean-webpack-plugin": "0.1.17",
     "enzyme": "3.2.0",
     "enzyme-adapter-react-16": "1.1.0",
     "eslint": "4.12.0",
     "eslint-config-airbnb": "16.1.0",
-    "eslint-loader": "1.9.0",
+    "eslint-loader": "^2.0.0",
     "eslint-plugin-import": "2.8.0",
     "eslint-plugin-jsx-a11y": "6.0.2",
     "eslint-plugin-react": "7.5.1",
-    "html-webpack-plugin": "^2.30.1",
+    "html-webpack-plugin": "^3.0.4",
     "jest": "21.2.1",
-    "jest-cli": "^22.4.0",
+    "jest-cli": "^22.4.2",
     "sinon": "4.1.2",
     "style-loader": "0.19.0",
+    "webpack-cli": "^2.0.10",
     "webpack-dev-server": "2.9.5"
   },
-  "babel": {
-    "presets": [
-      [
-        "env",
-        {
-          "targets": {
-            "browsers": [
-              "last 2 major versions"
-            ]
-          }
-        }
-      ],
-      "react"
+  "jest": {
+    "setupTestFrameworkScriptFile": "./__tests__/test-setup.js",
+    "testPathIgnorePatterns": [
+      "./__tests__/test-setup.js"
     ],
+    "testURL": "http://localhost"
+  },
+  "prettier": {
+    "function-paren-newline": false,
+    "printWidth": 100,
+    "semi": false,
+    "singleQuote": true,
+    "trailingComma": "es5"
+  },
+  "babel": {
     "env": {
       "test": {
         "presets": [
@@ -68,64 +116,19 @@
           "react"
         ]
       }
-    }
-  },
-  "dependencies": {
-    "@fortawesome/fontawesome": "^1.1.3",
-    "@fortawesome/fontawesome-free-regular": "^5.0.6",
-    "@fortawesome/fontawesome-free-solid": "^5.0.6",
-    "@fortawesome/react-fontawesome": "0.0.17",
-    "axios": "^0.16.2",
-    "babel-core": "^6.26.0",
-    "babel-loader": "^7.1.2",
-    "babel-plugin-transform-class-properties": "^6.24.1",
-    "babel-plugin-transform-decorators-legacy": "^1.3.4",
-    "babel-preset-env": "^1.6.1",
-    "babel-preset-es2015": "^6.24.1",
-    "babel-preset-react": "^6.24.1",
-    "compression-webpack-plugin": "^1.1.7",
-    "counterpart": "^0.18.5",
-    "css-loader": "^0.28.9",
-    "extract-text-webpack-plugin": "^3.0.2",
-    "file-loader": "^1.1.8",
-    "history": "^4.7.2",
-    "mappy-breakpoints": "^0.2.3",
-    "mobx": "^3.5.1",
-    "mobx-react": "^4.4.2",
-    "mobx-state-tree": "^1.3.1",
-    "node-sass": "^4.7.2",
-    "nprogress": "^0.2.0",
-    "polished": "^1.9.2",
-    "react": "^16.2.0",
-    "react-a11y-announcer": "^1.2.0",
-    "react-dom": "^16.2.0",
-    "react-hot-loader": "^3.1.3",
-    "react-interpolate-component": "0.11.0",
-    "react-modal": "^3.2.1",
-    "react-router-dom": "4.2.2",
-    "react-test-renderer": "16.2.0",
-    "react-transition-group": "^1.2.1",
-    "react-translate-component": "0.14.0",
-    "sass-loader": "6.0.6",
-    "styled-components": "^3.1.6",
-    "styled-theming": "^2.2.0",
-    "uglifyjs-webpack-plugin": "1.1.1",
-    "webpack": "3.8.1",
-    "webpack-node-externals": "^1.6.0"
-  },
-  "description": "",
-  "jest": {
-    "testPathIgnorePatterns": [
-      "./__tests__/test-setup.js"
-    ],
-    "setupTestFrameworkScriptFile": "./__tests__/test-setup.js",
-    "testURL": "http://localhost"
-  },
-  "prettier": {
-    "semi": false,
-    "singleQuote": true,
-    "trailingComma": "es5",
-    "function-paren-newline": false,
-    "printWidth": 100
+    },
+    "presets": [
+      [
+        "env",
+        {
+          "targets": {
+            "browsers": [
+              "last 2 major versions"
+            ]
+          }
+        }
+      ],
+      "react"
+    ]
   }
 }

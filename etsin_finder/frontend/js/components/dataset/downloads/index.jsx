@@ -22,20 +22,32 @@ const FileSizeAll = styled.p`
 export default class Downloads extends Component {
   constructor(props) {
     super(props)
+
     const results = DatasetQuery.results
     const files = results.research_dataset.files
     const folders = results.research_dataset.directories
-    const combined = this.createDirTree(files, folders)
-    const fileDirTree = createTree(combined)
-    this.state = {
-      results,
-      filesAndFolders: combined,
-      access: accessRightsBool(results.research_dataset.access_rights),
-      fileDirTree,
-      currentFolder: fileDirTree,
-      currentPath: [],
-      currentIDs: [],
-      loading: false,
+    if (files || folders) {
+      const combined = this.createDirTree(files, folders)
+      const fileDirTree = createTree(combined)
+      const totalCount = this.countFiles(fileDirTree)
+      this.state = {
+        results,
+        filesAndFolders: combined,
+        access: accessRightsBool(results.research_dataset.access_rights),
+        fileDirTree,
+        currentFolder: fileDirTree,
+        currentPath: [],
+        currentIDs: [],
+        loading: false,
+        hasFiles: true,
+        totalCount,
+      }
+    } else {
+      this.state = {
+        results,
+        loading: false,
+        hasFiles: false,
+      }
     }
 
     this.updatePath = this.updatePath.bind(this)
@@ -87,14 +99,30 @@ export default class Downloads extends Component {
         }
       })
     }
-    return filePaths.concat(folderPaths)
+    if (files && folders) {
+      return filePaths.concat(folderPaths)
+    }
+    if (files || folders) {
+      return files ? filePaths : folderPaths
+    }
+    return null
+  }
+
+  countFiles(dirTree) {
+    const fileCount = dirTree.map(single => {
+      if (single.details.file_count) {
+        return single.details.file_count
+      }
+      return 1
+    })
+    return fileCount.reduce((prev, curr) => prev + curr)
   }
 
   query(id, newPath, newIDs) {
     this.setState({
       loading: true,
     })
-    DatasetQuery.getFolderData(id)
+    DatasetQuery.getFolderData(id, this.state.results.research_dataset.urn_identifier)
       .then(res => {
         const currFolder = createTree(
           this.createDirTree(res.files, res.directories, true)
@@ -164,6 +192,9 @@ export default class Downloads extends Component {
     if (!this.state.results) {
       return 'Loading'
     }
+    if (!this.state.hasFiles) {
+      return 'No files'
+    }
 
     return (
       <div className="dataset-downloads">
@@ -173,10 +204,12 @@ export default class Downloads extends Component {
               <Translate content="dataset.dl.files" />
             </TableTitle>
             <FileSizeAll>
-              {`${this.state.results.research_dataset.files.length} aineistoa (${sizeParse(
-                this.state.results.research_dataset.total_ida_byte_size,
-                1
-              )})`}
+              <Translate
+                component="span"
+                content="dataset.dl.fileAmount"
+                with={{ amount: this.state.totalCount }}
+              />
+              {` (${sizeParse(this.state.results.research_dataset.total_ida_byte_size, 1)})`}
             </FileSizeAll>
           </div>
           <Loader left active={this.state.loading} color="white" />
@@ -187,29 +220,31 @@ export default class Downloads extends Component {
             </InvertedButton>
           </div>
         </div>
-        <Breadcrumbs
-          path={this.state.currentPath}
-          ids={this.state.currentIDs}
-          callback={this.updatePath}
-        />
-        <table className="table downloads-table" aria-live="assertive">
-          <thead className="thead-dark">
-            <tr>
-              <th className="rowIcon" scope="col" />
-              <th className="rowName" scope="col">
-                <Translate content="dataset.dl.name" />
-              </th>
-              <th className="rowSize" scope="col">
-                <Translate content="dataset.dl.size" />
-              </th>
-              <th className="rowCategory" scope="col">
-                <Translate content="dataset.dl.category" />
-              </th>
-              <th className="rowButtons" scope="col" />
-            </tr>
-          </thead>
-          <tbody>{this.tableItems(this.state.currentFolder)}</tbody>
-        </table>
+        <div>
+          <Breadcrumbs
+            path={this.state.currentPath}
+            ids={this.state.currentIDs}
+            callback={this.updatePath}
+          />
+          <table className="table downloads-table" aria-live="assertive">
+            <thead className="thead-dark">
+              <tr>
+                <th className="rowIcon" scope="col" />
+                <th className="rowName" scope="col">
+                  <Translate content="dataset.dl.name" />
+                </th>
+                <th className="rowSize" scope="col">
+                  <Translate content="dataset.dl.size" />
+                </th>
+                <th className="rowCategory" scope="col">
+                  <Translate content="dataset.dl.category" />
+                </th>
+                <th className="rowButtons" scope="col" />
+              </tr>
+            </thead>
+            <tbody>{this.state.hasFiles ? this.tableItems(this.state.currentFolder) : null}</tbody>
+          </table>
+        </div>
       </div>
     )
   }

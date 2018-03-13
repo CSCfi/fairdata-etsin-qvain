@@ -39,8 +39,5 @@ describe('Visible fields', () => {
     it('should contain category', () => {
       expect(Modal.find('tbody').html()).toContain('Kat')
     })
-    it('should contain icon for type', () => {
-      expect(Modal.childAt(0).html()).toContain('data-icon="file"')
-    })
   })
 })

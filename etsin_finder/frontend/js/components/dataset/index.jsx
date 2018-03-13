@@ -1,16 +1,12 @@
 import React from 'react'
-import Translate from 'react-translate-component'
+import PropTypes from 'prop-types'
+import translate from 'counterpart'
 import { inject, observer } from 'mobx-react'
-import { Route } from 'react-router-dom'
 
-import Sidebar from './Sidebar'
-import Downloads from './downloads'
-import Content from './Content'
+import Sidebar from './sidebar'
+import Content from './content'
 import ErrorPage from '../errorpage'
-import Identifier from './data/identifier'
 import ErrorBoundary from '../general/errorBoundary'
-import Tabs from './Tabs'
-import checkDataLang from '../../utils/checkDataLang'
 import DatasetQuery from '../../stores/view/datasetquery'
 import NoticeBar from '../general/noticeBar'
 
@@ -24,7 +20,6 @@ class Dataset extends React.Component {
       error: false,
     }
 
-    this.goBack = this.goBack.bind(this)
     this.query = this.query.bind(this)
     this.updateData = this.updateData.bind(this)
   }
@@ -59,41 +54,22 @@ class Dataset extends React.Component {
       })
   }
 
-  goBack() {
-    this.props.history.goBack()
-  }
-
   updateData(isLive) {
     const researchDataset = this.state.dataset.research_dataset
-    const emailInfo = this.state.email_info
-
-    const description = researchDataset.description.map(single => checkDataLang(single))
-
-    const {
-      title,
-      creator,
-      contributor,
-      issued,
-      rights_holder,
-    } = this.state.dataset.research_dataset
+    const hasFiles = researchDataset.directories || researchDataset.files
 
     this.setState({
-      title,
-      description,
-      creator,
-      contributor,
-      issued,
-      rights_holder,
+      hasFiles,
       live: isLive,
       loaded: true,
     })
   }
 
   render() {
-    console.log('render dataset')
+    console.log(this.state.dataset)
     // CASE 1: Houston, we have a problem
     if (this.state.error !== false) {
-      return <ErrorPage />
+      return <ErrorPage error="notfound" />
     }
 
     // Loading not complete
@@ -106,55 +82,20 @@ class Dataset extends React.Component {
 
     const { currentLang } = this.props.Stores.Locale
     // CASE 2: Business as usual
-
     return (
       <div>
-        {this.state.live ? null : (
-          <NoticeBar>
-            <Translate content="tombstone.info" />
-          </NoticeBar>
-        )}
+        {!this.state.live && <NoticeBar deprecated={translate('tombstone.info')} />}
+        {!this.state.live && <NoticeBar cumulative="This is a cumulative dataset" />}
         <div className="container regular-row" pageid={this.props.match.params.identifier}>
           <div className="row">
-            <div className="col-lg-8">
-              <button className="btn btn-transparent nopadding btn-back" onClick={this.goBack}>
-                {'< Go back'}
-              </button>
-              <ErrorBoundary>
-                {this.state.dataset.data_catalog.catalog_json.harvested ? null : (
-                  <Tabs identifier={this.props.match.params.identifier} live={this.state.live} />
-                )}
-              </ErrorBoundary>
-              <ErrorBoundary>
-                <Route
-                  exact
-                  path="/dataset/:identifier"
-                  render={() => (
-                    <Content
-                      title={checkDataLang(this.state.title, currentLang)}
-                      creator={this.state.creator}
-                      rights_holder={this.state.rights_holder}
-                      contributor={this.state.contributor}
-                      issued={this.state.issued}
-                      dataset={this.state.dataset.research_dataset}
-                    >
-                      {this.state.description}
-                    </Content>
-                  )}
-                />
-              </ErrorBoundary>
-              {this.state.live ? (
-                <ErrorBoundary>
-                  {this.state.dataset.data_catalog.catalog_json.harvested ? (
-                    <Identifier idn={this.state.dataset.research_dataset.preferred_identifier}>
-                      <Translate content="dataset.data_location" fallback="this is fallback" />
-                    </Identifier>
-                  ) : (
-                    <Route exact path="/dataset/:identifier/data" render={() => <Downloads />} />
-                  )}
-                </ErrorBoundary>
-              ) : null}
-            </div>
+            <Content
+              history={this.props.history}
+              match={this.props.match}
+              dataset={this.state.dataset}
+              live={this.state.live}
+              hasFiles={this.state.hasFiles}
+              emails={this.state.email_info}
+            />
             <div className="col-lg-4">
               <ErrorBoundary>
                 <Sidebar dataset={this.state.dataset} lang={currentLang} />
@@ -165,6 +106,12 @@ class Dataset extends React.Component {
       </div>
     )
   }
+}
+
+Dataset.propTypes = {
+  history: PropTypes.object.isRequired,
+  Stores: PropTypes.object.isRequired,
+  match: PropTypes.object.isRequired,
 }
 
 export default inject('Stores')(observer(Dataset))
