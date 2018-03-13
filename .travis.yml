@@ -12,7 +12,6 @@ branches:
 cache:
   directories:
   - pip
-  - node_modules
 
 before_install:
 - openssl aes-256-cbc -K $encrypted_de686f18e070_key -iv $encrypted_de686f18e070_iv -in deploy-key.enc -out deploy-key -d
@@ -23,8 +22,6 @@ before_install:
 - ssh-add ~/.ssh/id_rsa
 - sudo apt-get install npm
 - pip install ansible
-- sudo apt-get install nodejs
-- sudo apt-get install npm
 
 install:
 - pip install -r requirements.txt
