@@ -93,6 +93,7 @@ class Dataset extends React.Component {
               dataset={this.state.dataset}
               live={this.state.live}
               hasFiles={this.state.hasFiles}
+              emails={this.state.email_info}
             />
             <div className="col-lg-4">
               <ErrorBoundary>

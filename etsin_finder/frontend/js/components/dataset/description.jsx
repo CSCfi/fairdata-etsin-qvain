@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import styled, { withTheme } from 'styled-components'
+import Translate from 'react-translate-component'
 import Button from '../general/button'
 import DateFormat from './data/dateFormat'
 import AccessRights from './data/accessRights'
@@ -12,6 +13,7 @@ import checkDataLang from '../../utils/checkDataLang'
 const Labels = styled.div`
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
   align-items: center;
   margin-bottom: 0.5em;
 `
@@ -25,6 +27,7 @@ const LabelButton = styled(Button)`
 const Flex = styled.div`
   display: flex;
   align-items: center;
+  margin-bottom: 0.5em;
 `
 
 class Description extends Component {
@@ -39,6 +42,12 @@ class Description extends Component {
       description,
     }
   }
+
+  checkEmails(obj) {
+    for (const o in obj) if (obj[o]) return true
+    return false
+  }
+
   render() {
     return (
       <div className="dsContent">
@@ -58,7 +67,17 @@ class Description extends Component {
               }
             />
           </Flex>
-          <Button onClick={() => alert('Hae käyttölupaa')}>Hae käyttölupaa</Button>
+          <Flex>
+            {this.checkEmails(this.props.emails) && (
+              <Contact
+                datasetID={this.props.dataset.research_dataset.preferred_identifier}
+                emails={this.props.emails}
+              />
+            )}
+            <Button onClick={() => alert('Hae käyttölupaa')} noMargin>
+              <Translate content="dataset.access_permission" />
+            </Button>
+          </Flex>
         </Labels>
         <div className="d-md-flex align-items-center dataset-title justify-content-between">
           <h1>{checkDataLang(this.state.title)}</h1>
@@ -79,7 +98,6 @@ class Description extends Component {
           {/* {this.state.description.map(desc => <p className="description">{checkDataLang(desc)}</p>)} */}
           <p className="description">{checkDataLang(this.state.description[0])}</p>
         </ErrorBoundary>
-        <Contact />
       </div>
     )
   }

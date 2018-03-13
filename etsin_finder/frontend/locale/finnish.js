@@ -2,11 +2,41 @@ const finnish = {
   addDataset: 'Lisää aineisto',
   changepage: 'Siirryit sivulle: %(page)s',
   dataset: {
+    access_permission: 'Hae käyttölupaa',
     access_locked: 'Rajattu käyttöoikeus',
     access_open: 'Avoin',
     access_rights: 'Saatavuus',
     citation: 'Sitaatti',
     citation_formats: 'Näytä lisää sitaattiehdotuksia',
+    contact: {
+      contact: 'Ota yhteyttä',
+      email: {
+        error: { required: 'Sähköposti vaaditaan!', invalid: 'Virhe sähköpostissa' },
+        name: 'Sähköposti',
+        placeholder: 'Anna sähköposti',
+      },
+      error: 'Virhe viestin lähetyksessä!',
+      message: {
+        error: {
+          required: 'Viesti vaaditaan!',
+          max: 'Viestin maksimi pituus on 1000 merkkiä',
+        },
+        name: 'Viesti',
+        placeholder: 'Syötä viesti',
+      },
+      recipient: {
+        error: { required: 'Vastaanottaja vaaditaan!' },
+        placeholder: 'Valitse vastaanottaja',
+        name: 'Vastaanottaja',
+      },
+      send: 'Lähetä viesti',
+      subject: {
+        error: { required: 'Aihe vaaditaan!' },
+        name: 'Aihe',
+        placeholder: 'Anna aihe',
+      },
+      success: 'Viestin lähettäminen onnistui!',
+    },
     contributor: {
       plrl: 'Muut tekijät',
       snglr: 'Muu tekijä',
@@ -45,6 +75,7 @@ const finnish = {
     permanent_link: 'Pysyvä linkki tälle sivulle',
     project: 'Projekti',
     publisher: 'Julkaisija',
+    rights_holder: 'Oikeuksienhaltija',
     spatial_coverage: 'Maantieteellinen kattavuus',
     temporal_coverage: 'Ajallinen kattavuus',
   },
@@ -59,6 +90,8 @@ const finnish = {
     title: 'Etsi aineistoa',
   },
   nav: {
+    data: 'Data',
+    dataset: 'Aineisto',
     datasets: 'Aineistot',
     help: 'Ohjeet & Info',
     home: 'Koti',

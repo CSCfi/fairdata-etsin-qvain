@@ -122,7 +122,9 @@ class Sidebar extends Component {
               hideEmpty="true"
             >
               {this.state.geographic_name &&
-                this.state.geographic_name.map(single => <span>{single.geographic_name}</span>)}
+                this.state.geographic_name.map(single => (
+                  <span key={single.geographic_name}>{single.geographic_name}, </span>
+                ))}
             </SidebarItem>
           </ErrorBoundary>
           <ErrorBoundary>

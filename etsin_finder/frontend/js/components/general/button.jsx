@@ -2,9 +2,12 @@ import styled from 'styled-components'
 import { opacify, darken } from 'polished'
 
 // prettier-ignore
-const Button = styled.button`
+const Button = styled.button.attrs({
+  padding: props => (props.padding ? props.padding : '0.3em 0.6em 0.4em'),
+})`
   cursor: pointer;
-  padding: ${props => (props.noPadding ? 0 : '0.3em 0.6em 0.4em')};
+  width: ${props => (props.width ? props.width : '')};
+  padding: ${props => (props.noPadding ? 0 : props.padding)};
   margin: ${props => (props.noMargin ? 0 : '0.25em 0.25em')};
   border: ${props => (props.thin ? '1px' : '2px')} solid ${props => (props.color ? props.color : props.theme.color.primary)};
   background-color: ${props => (props.color ? props.color : props.theme.color.primary)};
@@ -30,6 +33,7 @@ export const InvertedButton = Button.extend`
   color: ${props => (props.color ? props.color : props.theme.color.primary)};
   &:hover {
     background-color: ${props => (props.color ? props.color : props.theme.color.primary)};
+    border-color: ${props => (props.color ? props.color : props.theme.color.primary)};
     color: ${props => (props.color === 'white' ? props.theme.color.primary : 'white')};
   }
   &:disabled {

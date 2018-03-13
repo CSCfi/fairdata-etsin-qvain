@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import Modal from 'react-modal'
-import Button from '../../general/button'
+import translate from 'counterpart'
+import Translate from 'react-translate-component'
+import { InvertedButton } from '../../general/button'
 import ContactForm from './contactForm'
 
 const CloseModal = styled.button`
@@ -42,9 +44,13 @@ export default class Contact extends Component {
   constructor(props) {
     super(props)
 
+    const recipients = this.buildRecipients(props)
+    const translations = this.makeTranslations(props)
+
     this.state = {
       open: false,
-      recipients: [{ value: 'one', label: 'One' }, { value: 'two', label: 'Two' }],
+      recipients,
+      translations,
     }
 
     this.openModal = this.openModal.bind(this)
@@ -53,6 +59,34 @@ export default class Contact extends Component {
 
   componentWillMount() {
     Modal.setAppElement('#root')
+  }
+
+  componentWillReceiveProps(newProps) {
+    const recipients = this.buildRecipients(newProps)
+    const translations = this.makeTranslations(newProps)
+
+    this.setState({
+      translations,
+      recipients,
+    })
+  }
+  makeTranslations(props) {
+    return translate('dataset.contact')
+  }
+
+  buildRecipients(props) {
+    const recipientLabels = {
+      CONTRIBUTOR: 'dataset.contributor.snglr',
+      CREATOR: 'dataset.creator.snglr',
+      CURATOR: 'dataset.curator',
+      PUBLISHER: 'dataset.publisher',
+      RIGHTS_HOLDER: 'dataset.rights_holder',
+    }
+    const recipients = []
+    for (const o in props.emails) {
+      if (props.emails[o]) recipients.push({ label: translate(recipientLabels[o]), value: o })
+    }
+    return recipients
   }
 
   openModal() {
@@ -70,18 +104,24 @@ export default class Contact extends Component {
   render() {
     return (
       <div>
-        <Button onClick={this.openModal} noMargin>
-          Contact Us!
-        </Button>
+        <InvertedButton onClick={this.openModal}>
+          <Translate content="dataset.contact.send" />
+        </InvertedButton>
         <Modal
           isOpen={this.state.open}
           onRequestClose={this.closeModal}
           style={customStyles}
-          contentLabel="Object info"
+          contentLabel="Contact"
         >
-          <h2>Contact us</h2>
+          <h2>
+            <Translate content="dataset.contact.contact" />
+          </h2>
           <CloseModal onClick={this.closeModal}>X</CloseModal>
-          <ContactForm recipientsList={this.state.recipients} />
+          <ContactForm
+            datasetID={this.props.datasetID}
+            recipientsList={this.state.recipients}
+            translations={this.state.translations}
+          />
         </Modal>
       </div>
     )

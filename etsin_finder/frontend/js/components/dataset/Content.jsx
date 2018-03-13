@@ -40,7 +40,7 @@ export default class Content extends Component {
           <Route
             exact
             path="/dataset/:identifier"
-            render={() => <Description dataset={this.props.dataset} />}
+            render={() => <Description dataset={this.props.dataset} emails={this.props.emails} />}
           />
         </ErrorBoundary>
         {this.props.live ? (

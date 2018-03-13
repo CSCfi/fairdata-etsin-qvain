@@ -154,7 +154,7 @@ const SelectContainer = styled.div.attrs({
     display: table;
     border-spacing: 0;
     border-collapse: separate;
-    height: 36px;
+    height: 38px;
     outline: none;
     overflow: hidden;
     position: relative;
@@ -173,7 +173,7 @@ const SelectContainer = styled.div.attrs({
     bottom: 0;
     color: #aaa;
     left: 0;
-    line-height: 34px;
+    line-height: 36px;
     padding-left: ${props => props.textpadding};
     padding-right: ${props => props.textpadding};
     position: absolute;
@@ -186,7 +186,7 @@ const SelectContainer = styled.div.attrs({
   }
 
   .Select-input {
-    height: 34px;
+    height: 36px;
     padding-left: ${props => props.textpadding};
     padding-right: ${props => props.textpadding};
     vertical-align: middle;
