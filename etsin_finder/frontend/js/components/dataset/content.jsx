@@ -6,6 +6,7 @@ import styled from 'styled-components'
 
 import Description from './description'
 import Downloads from './downloads'
+import Events from './events'
 import Button from '../general/button'
 import Identifier from './data/identifier'
 import ErrorBoundary from '../general/errorBoundary'
@@ -57,6 +58,9 @@ export default class Content extends Component {
             )}
           </ErrorBoundary>
         )}
+        <ErrorBoundary>
+          <Route exact path="/dataset/:identifier/events" component={Events} />
+        </ErrorBoundary>
       </MarginAfter>
     )
   }
