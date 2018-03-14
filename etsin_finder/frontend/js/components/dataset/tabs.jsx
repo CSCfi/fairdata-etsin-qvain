@@ -11,7 +11,7 @@ export default class Tabs extends Component {
             <Translate content="nav.dataset" fallback="Dataset" />
           </NavLink>
         </li>
-        {this.props.live ? (
+        {this.props.live && (
           <li className="nav-item">
             <NavLink
               exact
@@ -22,9 +22,17 @@ export default class Tabs extends Component {
               <Translate content="nav.data" fallback="Data" />
             </NavLink>
           </li>
-        ) : (
-          ''
         )}
+        <li className="nav-item">
+          <NavLink
+            exact
+            to={`/dataset/${this.props.identifier}/events`}
+            className="nav-link"
+            replace
+          >
+            <Translate content="nav.events" fallback="Identifiers and events" />
+          </NavLink>
+        </li>
       </ul>
     )
   }

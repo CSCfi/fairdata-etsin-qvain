@@ -7,7 +7,6 @@
   },
   "rules": {
     "no-unused-vars": "off",
-    "react/no-unused-state": "off",
     "max-len": ["warn", { "code": 150 }],
     "no-extra-semi": 1,
     "semi": 0,
