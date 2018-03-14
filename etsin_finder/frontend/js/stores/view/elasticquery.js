@@ -18,7 +18,6 @@ const fields = [
   'theme.pref_label.*',
   'field_of_science.pref_label.*',
   'project.pref_label.*',
-  'urn_identifier',
   'preferred_identifier',
   'other_identifier.notation',
   'other_identifier.type.pref_label.*',
@@ -240,7 +239,7 @@ class ElasticQuery {
           sort: sorting,
           // Return only the following fields in source attribute to minimize traffic
           _source: [
-            'urn_identifier',
+            'preferred_identifier',
             'title.*',
             'description.*',
             'access_rights.type.identifier',

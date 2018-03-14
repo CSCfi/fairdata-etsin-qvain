@@ -47,7 +47,6 @@ class Sidebar extends Component {
       related_entity: checkNested(researchDataset, 'related_entity')
         ? researchDataset.related_entity
         : false,
-      urn: researchDataset.urn_identifier,
     }
   }
 
@@ -182,16 +181,6 @@ class Sidebar extends Component {
             <SidebarItem component="p" trans="dataset.infrastructure" hideEmpty="true">
               {this.state.related_entity &&
                 this.state.related_entity.map(entity => checkDataLang(entity.title))}
-            </SidebarItem>
-          </ErrorBoundary>
-          <ErrorBoundary>
-            <SidebarItem
-              component="p"
-              trans="dataset.permanent_link"
-              fallback="Permanent link to this page"
-              hideEmpty="true"
-            >
-              {`placeholder!/something/${this.state.urn}`}
             </SidebarItem>
           </ErrorBoundary>
           <ErrorBoundary>
