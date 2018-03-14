@@ -1,13 +1,15 @@
 const path = require('path')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
+const webpack = require('webpack')
 
 const config = {
-  devtool: 'source-map',
-  entry: [path.join(__dirname, '/js/index.jsx'), path.join(__dirname, '/scss/main.scss')],
+  entry: [path.join(__dirname, '/js/index.jsx')],
   output: {
     path: path.join(__dirname, '/static'),
+    publicPath: '/static/',
     filename: 'bundle.js',
+    chunkFilename: '[name].bundle.js',
   },
   resolve: {
     extensions: ['.js', '.jsx', '.css'],
@@ -18,13 +20,6 @@ const config = {
         test: /\.jsx?/,
         exclude: /node_modules/,
         loader: 'babel-loader',
-        options: {
-          plugins: [
-            ['transform-decorators-legacy'],
-            ['transform-class-properties'],
-          ],
-          presets: ['env'],
-        },
       },
       {
         test: /\.css$/,
@@ -45,7 +40,14 @@ const config = {
     ],
   },
   plugins: [
-    new ExtractTextPlugin({ // define where to save the file
+    new webpack.optimize.AggressiveMergingPlugin(),
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify('production'),
+      },
+    }),
+    new ExtractTextPlugin({
+      // define where to save the extracted styles files
       filename: '[name].bundle.css',
       allChunks: true,
     }),
@@ -53,5 +55,5 @@ const config = {
       sourceMap: true,
     }),
   ],
-};
-module.exports = config;
+}
+module.exports = config

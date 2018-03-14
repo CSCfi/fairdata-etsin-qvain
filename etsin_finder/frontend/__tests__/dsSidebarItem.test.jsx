@@ -1,7 +1,7 @@
-import React from 'react';
-import ReactDOM from 'react-dom'; // eslint-disable-line no-unused-vars
-import { shallow } from 'enzyme';
-import SidebarItem from '../js/components/dataset/SidebarItem'
+import React from 'react'
+import ReactDOM from 'react-dom' // eslint-disable-line no-unused-vars
+import { shallow } from 'enzyme'
+import SidebarItem from '../js/components/dataset/sidebar/sidebarItem'
 
 it('renders without crashing', () => {
   shallow(<SidebarItem />)
@@ -9,7 +9,11 @@ it('renders without crashing', () => {
 
 describe('DsSidebarItem', () => {
   describe('render with content', () => {
-    const sidebarItem = shallow(<SidebarItem component="p" trans="dataset.project" fallback="Project" hideEmpty="true">Hello</SidebarItem>);
+    const sidebarItem = shallow(
+      <SidebarItem component="p" trans="dataset.project" fallback="Project" hideEmpty="true">
+        Hello
+      </SidebarItem>
+    )
     it('should render the children', () => {
       expect(sidebarItem.contains('Hello')).toEqual(true)
     })
@@ -18,7 +22,11 @@ describe('DsSidebarItem', () => {
     })
   })
   describe('render without content', () => {
-    const sidebarItem = shallow(<SidebarItem component="p" trans="dataset.project" fallback="Project" hideEmpty="true">{null}</SidebarItem>);
+    const sidebarItem = shallow(
+      <SidebarItem component="p" trans="dataset.project" fallback="Project" hideEmpty="true">
+        {null}
+      </SidebarItem>
+    )
     it('should render nothing', () => {
       expect(sidebarItem.html()).toEqual(null)
     })

@@ -1,12 +1,15 @@
-from flask import Flask
 import logging
 from logging.handlers import RotatingFileHandler
+
+from flask import Flask
+from flask_mail import Mail
+
 from etsin_finder.app_config import get_app_config
 from etsin_finder.utils import executing_travis
 
 
 def create_app(config=None):
-    app = Flask(__name__, static_folder="./frontend/dist", template_folder="./frontend")
+    app = Flask(__name__, template_folder="./frontend/static")
     _set_app_config(app, config)
     if not app.testing and not executing_travis():
         _setup_app_logging(app)
@@ -44,6 +47,7 @@ def _do_imports():
 
 
 app = create_app()
+mail = Mail(app)
 _do_imports()
 
 if __name__ == "__main__":

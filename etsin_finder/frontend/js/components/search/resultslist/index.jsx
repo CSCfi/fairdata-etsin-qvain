@@ -14,12 +14,7 @@ class ResultsList extends Component {
   renderList(lang) {
     const list = ElasticQuery.results.hits.map(
       single => (
-        <ListItem
-          key={single._id}
-          identifier={single._id}
-          item={single._source}
-          lang={lang}
-        />
+        <ListItem key={single._id} identifier={single._id} item={single._source} lang={lang} />
       ),
       this
     )
@@ -27,7 +22,6 @@ class ResultsList extends Component {
   }
 
   render() {
-    console.log('Render: Results list')
     const { currentLang } = this.props.Stores.Locale
     if (ElasticQuery.results.hits.length === 0 && ElasticQuery.loading === 0) {
       return (

@@ -1,14 +1,18 @@
 .dataset-title {
-  margin-bottom: 1em;
+  margin-bottom: 0em;
   h1 {
     font-size: 1.7em;
     color: $color-dark;
-    margin-bottom: 0;
+    margin-bottom: 0.5em;
+    @include mappy-bp(md) {
+      margin-bottom: 0;
+    }
   }
 }
 .basic-info {
   margin-bottom: 1em;
-  p, span {
+  p,
+  span {
     margin-bottom: 0;
     font-size: 0.95em;
     color: $color-gray;
@@ -16,6 +20,7 @@
 }
 
 .dsContent {
+  padding: 1.2em 0;
   .description {
     overflow-wrap: break-word;
   }

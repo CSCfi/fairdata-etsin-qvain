@@ -1,35 +1,53 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
+import counterpart from 'counterpart'
+import { Search } from '../../routes'
 
 import ErrorBoundary from '../general/errorBoundary'
 import ElasticQuery from '../../stores/view/elasticquery'
+import getIdentifierFromQuery from '../../utils/getIdentifierFromQuery'
 
 class SearchBar extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     // Handle possible empty initial query
-    this.state = { query: ElasticQuery.search || '' };
+    this.state = {
+      query: ElasticQuery.search || '',
+      placeholder: counterpart('search.placeholder'),
+    }
 
-    this.handleChange = this.handleChange.bind(this);
+    this.handleChange = this.handleChange.bind(this)
+    this.localeChanged = this.localeChanged.bind(this)
   }
 
-  componentDidMount() {
-    // if (this.props.query) {
-    //   const searchBarInput = document.getElementById('searchBarInput');
-    //   searchBarInput.focus();
-    //   searchBarInput.setSelectionRange(this.props.query.length, this.props.query.length);
-    // }
+  componentWillMount() {
+    counterpart.onLocaleChange(this.localeChanged)
+  }
+  componentWillUnmount() {
+    counterpart.offLocaleChange(this.localeChanged)
+  }
+
+  localeChanged() {
+    this.setState({
+      placeholder: counterpart('search.placeholder'),
+    })
   }
 
   handleChange(event) {
-    this.setState({ query: event.target.value });
+    Search.load()
+    this.setState({ query: event.target.value })
   }
 
   handleSubmit(e) {
     e.preventDefault()
-    ElasticQuery.updateSearch(this.state.query, this.props.history)
-    ElasticQuery.queryES()
+    const identifier = getIdentifierFromQuery(this.state.query)
+    if (identifier) {
+      this.props.history.push(`/dataset/${identifier}`)
+    } else {
+      ElasticQuery.updateSearch(this.state.query, this.props.history)
+      ElasticQuery.queryES()
+    }
   }
 
   render() {
@@ -38,13 +56,19 @@ class SearchBar extends Component {
         <form onSubmit={e => this.handleSubmit(e)}>
           <div className="search">
             <div className="searchBar inner-addon right-addon">
-              <i className="fa fa-search fa-2x" aria-hidden="true" />
-              <input id="searchBarInput" placeholder="Anna hakusana" value={this.state.query} onChange={this.handleChange} />
+              <i className="fa fa-search fa-2x" data-fa-transform="shrink-4" aria-hidden="true" />
+              <input
+                id="searchBarInput"
+                placeholder={this.state.placeholder}
+                value={this.state.query}
+                onChange={this.handleChange}
+                ref={this.props.inputRef}
+              />
             </div>
           </div>
         </form>
       </ErrorBoundary>
-    );
+    )
   }
 }
 
