@@ -29,11 +29,11 @@ class DatasetQuery {
   }
 
   @action
-  getFolderData(id, mvid) {
+  getFolderData(id, pref_id) {
     console.log('Folder Query')
     return new Promise((resolve, reject) => {
       axios
-        .get(`${this.metaxUrl}/rest/directories/${id}/files?metadata_version_identifier=${mvid}`)
+        .get(`${this.metaxUrl}/rest/directories/${id}/files?preferred_identifier=${pref_id}`)
         .then(res => {
           this.directories.push({ id, results: res.data })
           resolve(res.data)
