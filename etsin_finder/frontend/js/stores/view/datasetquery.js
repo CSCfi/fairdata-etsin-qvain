@@ -29,11 +29,11 @@ class DatasetQuery {
   }
 
   @action
-  getFolderData(id, pref_id) {
+  getFolderData(id, prefId) {
     console.log('Folder Query')
     return new Promise((resolve, reject) => {
       axios
-        .get(`${this.metaxUrl}/rest/directories/${id}/files?preferred_identifier=${pref_id}`)
+        .get(`${this.metaxUrl}/rest/directories/${id}/files?preferred_identifier=${prefId}`)
         .then(res => {
           this.directories.push({ id, results: res.data })
           resolve(res.data)
