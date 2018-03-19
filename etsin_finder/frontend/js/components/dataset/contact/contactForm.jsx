@@ -4,7 +4,6 @@ import styled from 'styled-components'
 import { withFormik } from 'formik'
 import Yup from 'yup'
 import axios from 'axios'
-import translate from 'counterpart'
 import Select from '../../general/select'
 
 import Input, { InputArea } from './formItems'
@@ -159,7 +158,7 @@ const ContactForm = withFormik({
         body: values.message,
         agent_type: values.recipient.value,
       })
-      .then(res => {
+      .then(() => {
         setStatus('success')
       })
       .catch(err => {

@@ -6,7 +6,6 @@
     "jest": true
   },
   "rules": {
-    "no-unused-vars": "off",
     "max-len": ["warn", { "code": 150 }],
     "no-extra-semi": 1,
     "semi": 0,

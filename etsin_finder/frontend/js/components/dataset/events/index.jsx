@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
-import Translate from 'react-translate-component'
+// import Translate from 'react-translate-component'
 import styled from 'styled-components'
 import DatasetQuery from '../../../stores/view/datasetquery'
-import { InvertedButton } from '../../general/button'
+import checkDataLang from '../../../utils/checkDataLang'
 
 const Table = styled.table`
+  overflow-x: scroll;
   width: 100%;
   max-width: 100%;
   margin-bottom: 1rem;
@@ -20,7 +21,7 @@ const Table = styled.table`
   tbody {
     box-sizing: border-box;
     border: 2px solid ${props => props.theme.color.lightgray};
-    border-top: 0;
+    border-top: ${props => (props.noHead ? '' : 0)};
     tr:nth-child(odd) {
       background-color: ${props => props.theme.color.superlightgray};
     }
@@ -28,15 +29,24 @@ const Table = styled.table`
       background-color: ${props => props.theme.color.white};
     }
     td {
+      overflow-wrap: break-word;
       padding: 0.75rem;
     }
   }
 `
 
+const ID = styled.span`
+  margin-left: 0.2em;
+  color: ${props => props.theme.color.darkgray};
+  font-size: 0.9em;
+`
+
 export default class Events extends Component {
   constructor(props) {
     super(props)
-    this.state = {}
+    this.state = {
+      results: DatasetQuery.results,
+    }
   }
 
   render() {
@@ -75,6 +85,44 @@ export default class Events extends Component {
             </tr>
           </tbody>
         </Table>
+        {this.state.results.research_dataset.other_identifier && (
+          <div>
+            <h2>Other identifiers</h2>
+            <div>
+              {this.state.results.research_dataset.other_identifier.map(single => (
+                <p key={single.notation}>{single.notation}</p>
+              ))}
+              {console.log(this.state.results.research_dataset.other_identifier)}
+            </div>
+          </div>
+        )}
+        {this.state.results.research_dataset.relation && (
+          <div>
+            <h2>Relations</h2>
+            <Table>
+              <thead>
+                <tr>
+                  <th>Type</th>
+                  <th>Title</th>
+                  <th>Identifier</th>
+                </tr>
+              </thead>
+              <tbody>
+                {this.state.results.research_dataset.relation.map(single => (
+                  <tr key={single.entity.identifier}>
+                    <td>{checkDataLang(single.relation_type.pref_label)}</td>
+                    <td>{checkDataLang(single.entity.title)}.</td>
+                    <td>
+                      <span className="sr-only">Identifier:</span>
+                      <ID>{single.entity.identifier}</ID>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+            {console.log(this.state.results.research_dataset.relation)}
+          </div>
+        )}
       </div>
     )
   }
