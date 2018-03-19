@@ -1,17 +1,21 @@
+// import shared config files
 const sharedConfig = require('./webpack.config.shared')
 const path = require('path')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 
-console.log(sharedConfig)
 const config = {
   entry: [path.join(__dirname, '/js/index.jsx')],
   output: {
+    // path of output
     path: path.join(__dirname, '/static'),
+    // publicPath is used in dynamic chunk loading
     publicPath: '/static/',
     filename: 'bundle.js',
     chunkFilename: '[name].bundle.js',
   },
   resolve: {
+    // adds aliases for common locations in app
+    // (../../../utils/checkDataLang => Utils/checkDataLang)
     alias: sharedConfig.alias,
     extensions: ['.js', '.jsx', '.css'],
   },
@@ -41,6 +45,7 @@ const config = {
     ],
   },
   plugins: [
+    // minimal plugins = fast development builds
     new ExtractTextPlugin({
       // define where to save the extracted styles file
       filename: '[name].bundle.css',
