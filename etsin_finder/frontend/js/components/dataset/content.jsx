@@ -34,9 +34,11 @@ export default class Content extends Component {
           {'Go back'}
         </button>
         <ErrorBoundary>
-          {this.props.dataset.data_catalog.catalog_json.harvested || !this.props.hasFiles ? null : (
-            <Tabs identifier={this.props.match.params.identifier} live={this.props.live} />
-          )}
+          <Tabs
+            identifier={this.props.match.params.identifier}
+            live={this.props.live}
+            downloads={this.props.hasFiles[0]}
+          />
         </ErrorBoundary>
         <ErrorBoundary>
           <Route
@@ -45,17 +47,11 @@ export default class Content extends Component {
             render={() => <Description dataset={this.props.dataset} emails={this.props.emails} />}
           />
         </ErrorBoundary>
-        {this.props.live && (
-          <ErrorBoundary>
-            {this.props.dataset.data_catalog.catalog_json.harvested ? (
-              <Button noMargin color="#FFBD39">
-                Harvested
-              </Button>
-            ) : (
-              <Route exact path="/dataset/:identifier/data" component={Downloads} />
-            )}
-          </ErrorBoundary>
-        )}
+        {this.props.live &&
+          !this.props.dataset.data_catalog.catalog_json.harvested &&
+          this.props.hasFiles[0] && (
+            <Route exact path="/dataset/:identifier/data" component={Downloads} />
+          )}
         <ErrorBoundary>
           <Route exact path="/dataset/:identifier/events" component={Events} />
         </ErrorBoundary>
