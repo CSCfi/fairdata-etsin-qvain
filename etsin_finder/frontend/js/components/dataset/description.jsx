@@ -69,12 +69,14 @@ class Description extends Component {
             />
           </Flex>
           <Flex>
-            {this.checkEmails(this.props.emails) && (
-              <Contact
-                datasetID={this.props.dataset.research_dataset.preferred_identifier}
-                emails={this.props.emails}
-              />
-            )}
+            <ErrorBoundary>
+              {this.checkEmails(this.props.emails) && (
+                <Contact
+                  datasetID={this.props.dataset.research_dataset.preferred_identifier}
+                  emails={this.props.emails}
+                />
+              )}
+            </ErrorBoundary>
             <Button onClick={() => alert('Hae käyttölupaa')} noMargin>
               <Translate content="dataset.access_permission" />
             </Button>

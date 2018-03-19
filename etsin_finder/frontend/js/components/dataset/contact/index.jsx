@@ -63,7 +63,7 @@ export default class Contact extends Component {
   }
 
   componentWillReceiveProps(newProps) {
-    const recipients = this.buildRecipients(newProps)
+    const recipients = this.buildRecipients(newProps.emails)
     const translations = this.makeTranslations(newProps)
 
     this.setState({
@@ -72,10 +72,12 @@ export default class Contact extends Component {
     })
   }
   makeTranslations() {
+    console.log('makeTranslation')
     return translate('dataset.contact')
   }
 
   buildRecipients(emails) {
+    console.log('buildRecipients')
     const recipientLabels = {
       CONTRIBUTOR: 'dataset.contributor.snglr',
       CREATOR: 'dataset.creator.snglr',
