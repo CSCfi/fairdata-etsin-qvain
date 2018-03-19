@@ -1,6 +1,8 @@
+const sharedConfig = require('./webpack.config.shared')
 const path = require('path')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 
+console.log(sharedConfig)
 const config = {
   entry: [path.join(__dirname, '/js/index.jsx')],
   output: {
@@ -10,6 +12,7 @@ const config = {
     chunkFilename: '[name].bundle.js',
   },
   resolve: {
+    alias: sharedConfig.alias,
     extensions: ['.js', '.jsx', '.css'],
   },
   module: {

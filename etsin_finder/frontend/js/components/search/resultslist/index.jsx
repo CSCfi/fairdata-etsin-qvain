@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { inject, observer } from 'mobx-react'
 
+import ElasticQuery from 'Stores/view/elasticquery'
 import ListItem from './listItem'
-import ElasticQuery from '../../../stores/view/elasticquery'
 
 class ResultsList extends Component {
   constructor(props) {

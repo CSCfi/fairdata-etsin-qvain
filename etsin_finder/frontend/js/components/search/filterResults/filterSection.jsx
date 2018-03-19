@@ -2,10 +2,9 @@ import React, { Component } from 'react'
 import { inject, observer } from 'mobx-react'
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faAngleDown from '@fortawesome/fontawesome-free-solid/faAngleDown'
-
+import checkDataLang from 'Utils/checkDataLang'
+import ElasticQuery from 'Stores/view/elasticquery'
 import FilterItem from './filterItem'
-import checkDataLang from '../../../utils/checkDataLang'
-import ElasticQuery from '../../../stores/view/elasticquery'
 
 class FilterSection extends Component {
   constructor(props) {

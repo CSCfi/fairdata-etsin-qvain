@@ -2,14 +2,14 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import styled, { withTheme } from 'styled-components'
 import Translate from 'react-translate-component'
+import dateFormat from 'Utils/dateFormat'
+import checkNested from 'Utils/checkNested'
+import checkDataLang from 'Utils/checkDataLang'
 import Button from '../general/button'
-import DateFormat from './data/dateFormat'
 import AccessRights from './data/accessRights'
-import checkNested from '../../utils/checkNested'
 import ErrorBoundary from '../general/errorBoundary'
 import Person from './person'
 import Contact from './contact'
-import checkDataLang from '../../utils/checkDataLang'
 
 const Labels = styled.div`
   display: flex;
@@ -94,7 +94,7 @@ class Description extends Component {
               <Person contributor={this.state.contributor} />
             </ErrorBoundary>
           </div>
-          <p>{this.state.issued ? <DateFormat date={checkDataLang(this.state.issued)} /> : null}</p>
+          <p>{this.state.issued ? dateFormat(checkDataLang(this.state.issued)) : null}</p>
         </div>
         <ErrorBoundary>
           {/* currently displays only first description */}

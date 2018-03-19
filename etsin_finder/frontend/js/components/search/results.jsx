@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import { inject, observer } from 'mobx-react'
+
+import ElasticQuery from 'Stores/view/elasticquery'
 import SortResults from './sortResults'
 import Pagination from './pagination'
 import ResultsList from './resultslist'
@@ -8,7 +10,6 @@ import CurrentQuery from './currentQuery'
 import FilterResults from './filterResults'
 import ErrorBoundary from '../general/errorBoundary'
 import Loader from '../general/loader'
-import ElasticQuery from '../../stores/view/elasticquery'
 
 class Results extends Component {
   render() {

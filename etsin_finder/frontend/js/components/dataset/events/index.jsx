@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 // import Translate from 'react-translate-component'
 import styled from 'styled-components'
-import DatasetQuery from '../../../stores/view/datasetquery'
-import checkDataLang from '../../../utils/checkDataLang'
+import DatasetQuery from 'Stores/view/datasetquery'
+import checkDataLang from 'Utils/checkDataLang'
+import dateFormat from 'Utils/dateFormat'
 
 const Table = styled.table`
   overflow-x: scroll;
@@ -53,38 +54,55 @@ export default class Events extends Component {
     return (
       <div>
         <h2>Events</h2>
-        <Table>
-          <thead>
-            <tr>
-              <th className="rowIcon" scope="col">
-                Tapahtuma
-              </th>
-              <th className="rowIcon" scope="col">
-                Kuka
-              </th>
-              <th className="rowIcon" scope="col">
-                Milloin
-              </th>
-              <th className="rowIcon" scope="col">
-                Kuvaus
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>NewVersionRelease</td>
-              <td>Sigrid Dengel</td>
-              <td>2012-04-22T00:00:00Z/2015-01-01T00:00:00Z</td>
-              <td>Postprocessing of 2012-2014 tower flux data</td>
-            </tr>
-            <tr>
-              <td>NewVersionRelease</td>
-              <td>Sigrid Dengel</td>
-              <td>2012-04-22T00:00:00Z/2016-01-01T00:00:00Z</td>
-              <td>Improved postprocessing of 2012-2015 tower flux data</td>
-            </tr>
-          </tbody>
-        </Table>
+        {this.state.results.research_dataset.provenance && (
+          <Table>
+            <thead>
+              <tr>
+                <th className="rowIcon" scope="col">
+                  Tapahtuma
+                </th>
+                <th className="rowIcon" scope="col">
+                  Kuka
+                </th>
+                <th className="rowIcon" scope="col">
+                  Milloin
+                </th>
+                <th className="rowIcon" scope="col">
+                  Kuvaus
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {this.state.results.research_dataset.provenance.map(single => (
+                <tr key={`provenance-${checkDataLang(single.title)}`}>
+                  {console.log(single)}
+                  <td>
+                    {single.lifecycle_event !== undefined
+                      ? checkDataLang(single.lifecycle_event.pref_label)
+                      : checkDataLang(single.preservation_event.pref_label)}
+                  </td>
+                  <td>
+                    {/* eslint-disable react/jsx-indent */}
+                    {single.was_associated_with
+                      ? single.was_associated_with.map(associate => (
+                          <span key={checkDataLang(associate.name)}>
+                            {checkDataLang(associate.name)}
+                          </span>
+                        ))
+                      : 'None'}
+                    {/* eslint-enable react/jsx-indent */}
+                  </td>
+                  <td>
+                    {`${dateFormat(single.temporal.start_date)} - ${dateFormat(
+                      single.temporal.end_date
+                    )}`}
+                  </td>
+                  <td>{checkDataLang(single.description)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        )}
         {this.state.results.research_dataset.other_identifier && (
           <div>
             <h2>Other identifiers</h2>
@@ -92,7 +110,6 @@ export default class Events extends Component {
               {this.state.results.research_dataset.other_identifier.map(single => (
                 <p key={single.notation}>{single.notation}</p>
               ))}
-              {console.log(this.state.results.research_dataset.other_identifier)}
             </div>
           </div>
         )}
@@ -120,7 +137,6 @@ export default class Events extends Component {
                 ))}
               </tbody>
             </Table>
-            {console.log(this.state.results.research_dataset.relation)}
           </div>
         )}
       </div>
