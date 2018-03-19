@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import Translate from 'react-translate-component'
-import DatasetQuery from '../../../stores/view/datasetquery'
-import checkDataLang from '../../../utils/checkDataLang'
+import DatasetQuery from 'Stores/view/datasetquery'
+import checkDataLang from 'Utils/checkDataLang'
 import { LinkButton } from '../../general/button'
 
 export default class Citation extends Component {

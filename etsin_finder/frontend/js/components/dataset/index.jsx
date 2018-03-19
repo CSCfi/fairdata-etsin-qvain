@@ -3,11 +3,11 @@ import PropTypes from 'prop-types'
 import translate from 'counterpart'
 import { inject, observer } from 'mobx-react'
 
+import DatasetQuery from 'Stores/view/datasetquery'
 import Sidebar from './sidebar'
 import Content from './content'
 import ErrorPage from '../errorpage'
 import ErrorBoundary from '../general/errorBoundary'
-import DatasetQuery from '../../stores/view/datasetquery'
 import NoticeBar from '../general/noticeBar'
 
 class Dataset extends React.Component {
