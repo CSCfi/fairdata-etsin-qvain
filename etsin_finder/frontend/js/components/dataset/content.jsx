@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import Translate from 'react-translate-component'
 import { Route } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -8,7 +7,6 @@ import Description from './description'
 import Downloads from './downloads'
 import Events from './events'
 import Button from '../general/button'
-import Identifier from './data/identifier'
 import ErrorBoundary from '../general/errorBoundary'
 import Tabs from './tabs'
 

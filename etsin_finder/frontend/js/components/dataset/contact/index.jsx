@@ -71,7 +71,7 @@ export default class Contact extends Component {
       recipients,
     })
   }
-  makeTranslations(props) {
+  makeTranslations() {
     return translate('dataset.contact')
   }
 

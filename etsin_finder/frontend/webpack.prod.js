@@ -1,7 +1,6 @@
 const path = require('path')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
-const webpack = require('webpack')
 
 const config = {
   entry: [path.join(__dirname, '/js/index.jsx')],
@@ -40,20 +39,12 @@ const config = {
     ],
   },
   plugins: [
-    new webpack.optimize.AggressiveMergingPlugin(),
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify('production'),
-      },
-    }),
     new ExtractTextPlugin({
       // define where to save the extracted styles files
       filename: '[name].bundle.css',
       allChunks: true,
     }),
-    new UglifyJSPlugin({
-      sourceMap: true,
-    }),
+    new UglifyJSPlugin(),
   ],
 }
 module.exports = config
