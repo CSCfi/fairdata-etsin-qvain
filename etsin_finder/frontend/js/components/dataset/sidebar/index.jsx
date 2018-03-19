@@ -1,14 +1,14 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 import styled from 'styled-components'
+import checkDataLang from 'Utils/checkDataLang'
+import checkNested from 'Utils/checkNested'
+import dateFormat from 'Utils/dateFormat'
 import SidebarItem from './sidebarItem'
-import DateFormat from '../data/dateFormat'
 import Identifier from '../data/identifier'
 import Citation from '../data/citation'
 import Image from '../../general/image'
 import ErrorBoundary from '../../general/errorBoundary'
-import checkNested from '../../../utils/checkNested'
-import checkDataLang from '../../../utils/checkDataLang'
 
 const Logo = styled.div`
   text-align: center;
@@ -53,7 +53,9 @@ class Sidebar extends Component {
   dateSeparator(start, end) {
     return start && end ? (
       <p key={start}>
-        <DateFormat date={start} /> - <DateFormat date={end} />
+        <span>
+          {dateFormat(start)} - {dateFormat(end)}
+        </span>
       </p>
     ) : (
       start + end

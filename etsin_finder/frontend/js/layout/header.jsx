@@ -5,9 +5,9 @@ import { inject, observer } from 'mobx-react'
 import { Link } from 'react-router-dom'
 import translate from 'counterpart'
 
-import Navi from '../components/general/navigation'
-import ErrorBoundary from '../components/general/errorBoundary'
-import Accessibility from '../stores/view/accessibility'
+import Navi from 'Components/general/navigation'
+import ErrorBoundary from 'Components/general/errorBoundary'
+import Accessibility from 'Stores/view/accessibility'
 
 class Header extends React.Component {
   constructor(props) {

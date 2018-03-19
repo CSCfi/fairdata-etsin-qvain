@@ -1,3 +1,4 @@
+const sharedConfig = require('./webpack.config.shared')
 const path = require('path')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
@@ -11,6 +12,7 @@ const config = {
     chunkFilename: '[name].bundle.js',
   },
   resolve: {
+    alias: sharedConfig.alias,
     extensions: ['.js', '.jsx', '.css'],
   },
   module: {

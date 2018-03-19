@@ -4,7 +4,7 @@ import Translate from 'react-translate-component'
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faSort from '@fortawesome/fontawesome-free-solid/faSort'
 
-import ElasticQuery from '../../../stores/view/elasticquery'
+import ElasticQuery from 'Stores/view/elasticquery'
 
 const options = ['best', 'dateD', 'dateA']
 

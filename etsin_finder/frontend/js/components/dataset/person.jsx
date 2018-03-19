@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
-import checkDataLang from '../../utils/checkDataLang'
+import checkDataLang from 'Utils/checkDataLang'
 
 export default class Person extends Component {
   constructor(props) {

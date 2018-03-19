@@ -1,11 +1,15 @@
 {
   "parser": "babel-eslint",
-  "plugins": ["react"],
+  "plugins": ["react", "import"],
   "env": {
     "browser": true,
     "jest": true
   },
   "rules": {
+    "import/resolver": "webpack",
+    "import/no-extraneous-dependencies": 0,
+    "import/no-unresolved": 0,
+    "import/extensions": 0,
     "max-len": ["warn", { "code": 150 }],
     "no-extra-semi": 1,
     "semi": 0,

@@ -6,7 +6,6 @@ import styled from 'styled-components'
 import Description from './description'
 import Downloads from './downloads'
 import Events from './events'
-import Button from '../general/button'
 import ErrorBoundary from '../general/errorBoundary'
 import Tabs from './tabs'
 
