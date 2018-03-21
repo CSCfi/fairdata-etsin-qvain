@@ -35,7 +35,7 @@ const config = {
         use: ExtractTextPlugin.extract(['css-loader', 'sass-loader']),
       },
       {
-        test: /\.(woff|woff2|eot|ttf|otf|svg)$/,
+        test: /\.(woff|woff2|eot|ttf|otf|svg|jpg|png)$/,
         use: 'file-loader',
       },
     ],

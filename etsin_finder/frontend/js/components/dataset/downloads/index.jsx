@@ -30,7 +30,6 @@ export default class Downloads extends Component {
       const combined = this.createDirTree(files, folders)
       const fileDirTree = createTree(combined)
       const totalCount = this.countFiles(fileDirTree)
-      const totalSize = this.countSize(fileDirTree)
       this.state = {
         results,
         filesAndFolders: combined,
@@ -42,7 +41,6 @@ export default class Downloads extends Component {
         loading: false,
         hasFiles: true,
         totalCount,
-        totalSize,
       }
     } else {
       this.state = {
@@ -118,12 +116,6 @@ export default class Downloads extends Component {
       return 1
     })
     return fileCount.reduce((prev, curr) => prev + curr)
-  }
-
-  countSize(dirTree) {
-    console.log(dirTree)
-    const totalSize = dirTree.map(single => single.details.byte_size)
-    return totalSize.reduce((prev, curr) => prev + curr)
   }
 
   query(id, newPath, newIDs) {
@@ -218,7 +210,6 @@ export default class Downloads extends Component {
                 with={{ amount: this.state.totalCount }}
               />
               {` (${sizeParse(this.state.results.research_dataset.total_ida_byte_size, 1)})`}
-              {` ${sizeParse(this.state.totalSize, 1)}`}
             </FileSizeAll>
           </div>
           <Loader left active={this.state.loading} color="white" />

@@ -1,19 +1,24 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import Button from '../../general/button'
+import { Link } from '../../general/button'
 
 // prettier-ignore
-const IdnLink = styled(Button)`
+const IdnLink = styled(Link)`
   background-color: ${props => props.theme.color.primary};
   border: ${props => props.theme.color.primary};
-  width: unset;
+  width: max-content;
   color: white;
   border-radius: 0.3em;
   display: flex;
   padding: 0;
   align-items: center;
+  font-size: 0.875em;
   &:hover {
     color: white;
+  }
+  &:active {
+    transition: 0.1s ease;
+    box-shadow: 0px 2px 5px -2px rgba(0,0,0,0.7) inset;
   }
 `
 
@@ -39,11 +44,6 @@ const IDN = styled.div`
   padding: 0.4em 1em 0.4em 0.5em;
 `
 
-const IdnButton = styled(Button)`
-  width: 100%;
-  margin: 0;
-`
-
 export default class Identifier extends Component {
   constructor(props) {
     super(props)
@@ -64,18 +64,6 @@ export default class Identifier extends Component {
     return false
   }
 
-  parseIdn(idn) {
-    const sub3 = idn.substring(0, 3)
-    const sub4 = idn.substring(0, 4)
-    if (sub3 === 'urn' || sub3 === 'doi') {
-      return sub3
-    }
-    if (sub4 === 'http') {
-      return new URL(idn).pathname.slice(1)
-    }
-    return idn
-  }
-
   prefix(idn) {
     let id = idn
     const sub4 = id.substring(0, 4)
@@ -90,16 +78,22 @@ export default class Identifier extends Component {
   }
 
   render() {
+    // display as text if not of type doi or urn
     if (!this.state.url) {
-      return this.props.children
+      return this.props.idn
     }
-    if (this.props.button) {
-      return <IdnButton {...this.props}>{this.props.children}</IdnButton>
-    }
+
+    // return styled link
     return (
-      <IdnLink href={this.state.url} {...this.props} title={this.state.url}>
+      <IdnLink
+        noMargin
+        href={this.state.url}
+        target="_blank"
+        {...this.props}
+        title={this.state.url}
+      >
         {this.state.prefix ? <Prefix>{this.state.prefix}</Prefix> : null}
-        <IDN>{this.parseIdn(this.props.children)}</IDN>
+        <IDN>{this.props.idn}</IDN>
       </IdnLink>
     )
   }

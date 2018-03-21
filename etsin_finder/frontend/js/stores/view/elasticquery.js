@@ -289,8 +289,6 @@ class ElasticQuery {
           },
         })
         .then(res => {
-          console.log('-- QUERY DONE ---')
-          console.log('result', res)
           this.results = {
             hits: res.data.hits.hits,
             total: res.data.hits.total,

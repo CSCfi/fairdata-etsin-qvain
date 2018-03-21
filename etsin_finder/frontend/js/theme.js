@@ -1,3 +1,8 @@
+/*
+  Theme is used with styled components to get access to global variables.
+  Currently these values are also in scss files.
+*/
+
 const etsinTheme = {
   color: {
     bgPrimary: 'white',

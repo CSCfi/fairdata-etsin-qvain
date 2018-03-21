@@ -37,7 +37,6 @@ export const accessRightsBool = accessRights => {
   }
 
   if (accessRights !== undefined && accessRights !== null) {
-    console.log(accessRights)
     // check access_type
     if (checkNested(accessRights, 'access_type')) {
       if (checkOpen(accessRights.access_type.identifier)) {

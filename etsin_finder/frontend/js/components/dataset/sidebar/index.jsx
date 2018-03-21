@@ -30,15 +30,15 @@ class Sidebar extends Component {
       logoAlt: dataCatalog.catalog_json.title,
       logo: dataCatalog.catalog_json.logo,
       pid: researchDataset.preferred_identifier,
-      field: dataCatalog.catalog_json.field_of_science,
+      field: researchDataset.field_of_science,
       keyword: researchDataset.keyword,
       geographic_name: checkNested(researchDataset, 'spatial') ? researchDataset.spatial : false,
       temporal: checkNested(researchDataset, 'temporal') ? researchDataset.temporal : false,
-      licence: checkNested(researchDataset, 'access_rights', 'license')
-        ? researchDataset.access_rights.licence
+      license: checkNested(researchDataset, 'access_rights', 'license')
+        ? researchDataset.access_rights.license
         : false,
-      description: checkNested(dataCatalog, 'catalog_json', 'access_rights', 'description')
-        ? dataCatalog.catalog_json.access_rights.description
+      access_rights: checkNested(researchDataset, 'access_rights', 'access_type', 'pref_label')
+        ? researchDataset.access_rights.access_type.pref_label
         : false,
       isOutputOf: checkNested(researchDataset, 'is_output_of')
         ? researchDataset.is_output_of
@@ -82,8 +82,8 @@ class Sidebar extends Component {
         </div>
         <div className="separator">
           <ErrorBoundary>
-            <SidebarItem component="p" trans="dataset.identifier">
-              <Identifier idn={this.state.pid}>{this.state.pid}</Identifier>
+            <SidebarItem component="div" trans="dataset.identifier">
+              <Identifier idn={this.state.pid} />
             </SidebarItem>
           </ErrorBoundary>
         </div>
@@ -100,17 +100,19 @@ class Sidebar extends Component {
               fallback="Field of Science"
               hideEmpty="true"
             >
-              {this.state.field.map(field => (
-                <p key={field.identifier}>{checkDataLang(field.pref_label)}</p>
-              ))}
+              {this.state.field &&
+                this.state.field.map(field => (
+                  <p key={field.identifier}>{checkDataLang(field.pref_label)}</p>
+                ))}
             </SidebarItem>
           </ErrorBoundary>
           <ErrorBoundary>
             <SidebarItem component="p" trans="dataset.keywords" hideEmpty="true">
               {this.state.keyword &&
-                this.state.keyword.map(keyword => (
+                this.state.keyword.map((keyword, i) => (
                   <span className="keyword" key={keyword}>
-                    {keyword}{' '}
+                    {keyword}
+                    {this.state.keyword.length !== i + 1 && ', '}
                   </span>
                 ))}
             </SidebarItem>
@@ -145,7 +147,7 @@ class Sidebar extends Component {
           </ErrorBoundary>
           <ErrorBoundary>
             <SidebarItem component="div" trans="dataset.license" hideEmpty="true">
-              {this.state.licence &&
+              {this.state.license &&
                 this.state.license.map(rights => (
                   <p key={rights.identifier}>{checkDataLang(rights.title)}</p>
                 ))}
@@ -158,7 +160,7 @@ class Sidebar extends Component {
               fallback="Access rights statement"
               hideEmpty="true"
             >
-              {this.state.description && checkDataLang(this.state.description[0])}
+              {this.state.access_rights && checkDataLang(this.state.access_rights)}
             </SidebarItem>
           </ErrorBoundary>
           <ErrorBoundary>
@@ -174,9 +176,21 @@ class Sidebar extends Component {
           <ErrorBoundary>
             <SidebarItem component="p" trans="dataset.curator" hideEmpty="true">
               {this.state.curator &&
-                this.state.curator.map(curators => (
-                  <span key={`${curators.name}`}>{checkDataLang(curators.name)}, </span>
-                ))}
+                this.state.curator.map((curators, i) => {
+                  let curator = checkDataLang(curators.name)
+                  if (curator === '') {
+                    curator = curators.name
+                  }
+                  return (
+                    /* eslint-disable react/no-array-index-key */
+                    <span key={`${curator}-${i}`}>
+                      {curator}
+                      {/* add separator, but not on last */}
+                      {this.state.curator.length !== i + 1 && ', '}
+                    </span>
+                    /* eslint-enable react/no-array-index-key */
+                  )
+                })}
             </SidebarItem>
           </ErrorBoundary>
           <ErrorBoundary>

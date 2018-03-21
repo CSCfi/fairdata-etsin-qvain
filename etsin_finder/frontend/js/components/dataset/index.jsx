@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import translate from 'counterpart'
-import { inject, observer } from 'mobx-react'
+import Translate from 'react-translate-component'
 
 import DatasetQuery from 'Stores/view/datasetquery'
 import Sidebar from './sidebar'
@@ -18,24 +18,37 @@ class Dataset extends React.Component {
       dataset: DatasetQuery.results,
       email_info: DatasetQuery.email_info,
       error: false,
+      live: true,
+      identifier: props.match.params.identifier,
     }
 
     this.query = this.query.bind(this)
     this.updateData = this.updateData.bind(this)
+    this.goBack = this.goBack.bind(this)
   }
 
   componentDidMount() {
     this.query()
   }
 
-  query() {
-    if (process.env.NODE_ENV === 'production' && /^\d+$/.test(this.props.match.params.identifier)) {
+  componentWillReceiveProps(newProps) {
+    if (this.props.match.params.identifier !== newProps.match.params.identifier) {
+      this.query(newProps.match.params.identifier)
+    }
+  }
+
+  query(customId) {
+    let identifier = this.props.match.params.identifier
+    if (customId !== undefined) {
+      identifier = customId
+    }
+    if (process.env.NODE_ENV === 'production' && /^\d+$/.test(identifier)) {
       console.log('Using integer as identifier not permitted')
       this.setState({ error: 'wrong identifier' })
       this.setState({ loaded: true })
       return
     }
-    DatasetQuery.getData(this.props.match.params.identifier)
+    DatasetQuery.getData(identifier)
       .then(result => {
         this.setState({ dataset: result.catalog_record, email_info: result.email_info })
         // TODO: The code below needs to be revised
@@ -65,43 +78,82 @@ class Dataset extends React.Component {
     })
   }
 
+  prevDataset() {
+    let path = this.props.location.pathname.slice(1)
+    path = path.split('/')
+    const id = parseInt(this.props.match.params.identifier, 10) - 1
+    this.setState(
+      {
+        loaded: false,
+      },
+      () => {
+        if (path[2]) {
+          this.props.history.push(`/dataset/${id}/${path[2]}`)
+        } else {
+          this.props.history.push(`/dataset/${id}`)
+        }
+      }
+    )
+  }
+
+  nextDataset() {
+    let path = this.props.location.pathname.slice(1)
+    path = path.split('/')
+    const id = parseInt(this.props.match.params.identifier, 10) + 1
+    this.setState(
+      {
+        loaded: false,
+      },
+      () => {
+        if (path[2]) {
+          this.props.history.push(`/dataset/${id}/${path[2]}`)
+        } else {
+          this.props.history.push(`/dataset/${id}`)
+        }
+      }
+    )
+  }
+
+  // goes back to previous page, which might be outside
+  goBack() {
+    this.props.history.goBack()
+  }
+
   render() {
-    console.log(this.state.dataset)
     // CASE 1: Houston, we have a problem
     if (this.state.error !== false) {
       return <ErrorPage error="notfound" />
     }
 
-    // Loading not complete
-    // Don't show anything until data has been loaded from Metax
-    // TODO: Use a loading indicator instead
-    // Do we need to worry about Metax sending us incomplete datasets?
-    if (!this.state.loaded) {
-      return <div />
-    }
-
-    const { currentLang } = this.props.Stores.Locale
     // CASE 2: Business as usual
     return (
       <div>
         {!this.state.live && <NoticeBar deprecated={translate('tombstone.info')} />}
         {!this.state.live && <NoticeBar cumulative="This is a cumulative dataset" />}
-        <div className="container regular-row" pageid={this.props.match.params.identifier}>
-          <div className="row">
-            <Content
-              history={this.props.history}
-              match={this.props.match}
-              dataset={this.state.dataset}
-              live={this.state.live}
-              hasFiles={this.state.hasFiles}
-              emails={this.state.email_info}
-            />
-            <div className="col-lg-4">
-              <ErrorBoundary>
-                <Sidebar dataset={this.state.dataset} lang={currentLang} />
-              </ErrorBoundary>
+        <div className="container regular-row">
+          <button onClick={() => this.prevDataset()}>Prev</button>
+          <button onClick={() => this.nextDataset()}>Next</button>
+          {console.log('rerender')}
+          <button className="btn btn-transparent nopadding btn-back" onClick={this.goBack}>
+            <span aria-hidden>{'< '}</span>
+            <Translate content={'dataset.goBack'} />
+          </button>
+          {this.state.loaded && (
+            <div className="row">
+              <Content
+                identifier={this.state.identifier}
+                dataset={this.state.dataset}
+                live={this.state.live}
+                hasFiles={this.state.hasFiles}
+                emails={this.state.email_info}
+              />
+              <div className="col-lg-4">
+                <ErrorBoundary>
+                  <Sidebar dataset={this.state.dataset} />
+                </ErrorBoundary>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     )
@@ -110,9 +162,8 @@ class Dataset extends React.Component {
 
 Dataset.propTypes = {
   history: PropTypes.object.isRequired,
-  Stores: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
 }
 
-export default inject('Stores')(observer(Dataset))
+export default Dataset
 export const undecorated = Dataset

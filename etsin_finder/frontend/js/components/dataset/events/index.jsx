@@ -1,7 +1,7 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
+import PropTypes from 'prop-types'
 // import Translate from 'react-translate-component'
 import styled from 'styled-components'
-import DatasetQuery from 'Stores/view/datasetquery'
 import checkDataLang from 'Utils/checkDataLang'
 import dateFormat from 'Utils/dateFormat'
 
@@ -43,77 +43,78 @@ const ID = styled.span`
 `
 
 export default class Events extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      results: DatasetQuery.results,
-    }
-  }
-
   render() {
     return (
       <div>
-        <h2>Events</h2>
-        {this.state.results.research_dataset.provenance && (
-          <Table>
-            <thead>
-              <tr>
-                <th className="rowIcon" scope="col">
-                  Tapahtuma
-                </th>
-                <th className="rowIcon" scope="col">
-                  Kuka
-                </th>
-                <th className="rowIcon" scope="col">
-                  Milloin
-                </th>
-                <th className="rowIcon" scope="col">
-                  Kuvaus
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {this.state.results.research_dataset.provenance.map(single => (
-                <tr key={`provenance-${checkDataLang(single.title)}`}>
-                  {console.log(single)}
-                  <td>
-                    {single.lifecycle_event !== undefined
-                      ? checkDataLang(single.lifecycle_event.pref_label)
-                      : checkDataLang(single.preservation_event.pref_label)}
-                  </td>
-                  <td>
-                    {/* eslint-disable react/jsx-indent */}
-                    {single.was_associated_with
-                      ? single.was_associated_with.map(associate => (
-                          <span key={checkDataLang(associate.name)}>
-                            {checkDataLang(associate.name)}
-                          </span>
-                        ))
-                      : 'None'}
-                    {/* eslint-enable react/jsx-indent */}
-                  </td>
-                  <td>
-                    {`${dateFormat(single.temporal.start_date)} - ${dateFormat(
-                      single.temporal.end_date
-                    )}`}
-                  </td>
-                  <td>{checkDataLang(single.description)}</td>
+        {this.props.provenance && (
+          <Fragment>
+            <h2>Events</h2>
+            <Table>
+              <thead>
+                <tr>
+                  <th className="rowIcon" scope="col">
+                    Tapahtuma
+                  </th>
+                  <th className="rowIcon" scope="col">
+                    Kuka
+                  </th>
+                  <th className="rowIcon" scope="col">
+                    Milloin
+                  </th>
+                  <th className="rowIcon" scope="col">
+                    Kuvaus
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </Table>
+              </thead>
+              <tbody>
+                {this.props.provenance.map(single => (
+                  <tr key={`provenance-${checkDataLang(single.title)}`}>
+                    <td>
+                      {/* if contains both it will display to tags in one box */}
+                      {single.lifecycle_event !== undefined &&
+                        checkDataLang(single.lifecycle_event.pref_label)}
+                      {single.preservation_event &&
+                        checkDataLang(single.preservation_event.pref_label)}
+                      {!single.lifecycle_event && !single.preservation_event && 'N/A'}
+                    </td>
+                    <td>
+                      {/* eslint-disable react/jsx-indent */}
+                      {single.was_associated_with
+                        ? single.was_associated_with.map(associate => (
+                            <span key={checkDataLang(associate.name)}>
+                              {checkDataLang(associate.name)}
+                            </span>
+                          ))
+                        : 'N/A'}
+                      {/* eslint-enable react/jsx-indent */}
+                    </td>
+                    <td>
+                      {/* some datasets have start_date and some startDate */}
+                      {single.temporal
+                        ? `${dateFormat(single.temporal.start_date)} - ${dateFormat(
+                            single.temporal.end_date
+                          )}`
+                        : 'N/A'}
+                    </td>
+                    <td>{single.description ? checkDataLang(single.description) : 'N/A'}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          </Fragment>
         )}
-        {this.state.results.research_dataset.other_identifier && (
-          <div>
-            <h2>Other identifiers</h2>
+        {this.props.other_identifier &&
+          this.props.other_identifier.length > 0 && (
             <div>
-              {this.state.results.research_dataset.other_identifier.map(single => (
-                <p key={single.notation}>{single.notation}</p>
-              ))}
+              <h2>Other identifiers</h2>
+              <div>
+                {this.props.other_identifier.map(single => (
+                  <p key={single.notation}>{single.notation}</p>
+                ))}
+              </div>
             </div>
-          </div>
-        )}
-        {this.state.results.research_dataset.relation && (
+          )}
+        {this.props.relation && (
           <div>
             <h2>Relations</h2>
             <Table>
@@ -125,7 +126,7 @@ export default class Events extends Component {
                 </tr>
               </thead>
               <tbody>
-                {this.state.results.research_dataset.relation.map(single => (
+                {this.props.relation.map(single => (
                   <tr key={single.entity.identifier}>
                     <td>{checkDataLang(single.relation_type.pref_label)}</td>
                     <td>{checkDataLang(single.entity.title)}.</td>
@@ -142,4 +143,16 @@ export default class Events extends Component {
       </div>
     )
   }
+}
+
+Events.defaultProps = {
+  relation: false,
+  provenance: false,
+  other_identifier: false,
+}
+
+Events.propTypes = {
+  relation: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
+  provenance: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
+  other_identifier: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
 }
