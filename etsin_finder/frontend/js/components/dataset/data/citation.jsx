@@ -48,7 +48,6 @@ export default class Citation extends Component {
           <span title="Title">{checkDataLang(this.state.title)}, </span>
           <span title="Publisher">{checkDataLang(this.state.publisher)}, </span>
           <span title="Release date">{this.state.release_date}, </span>
-          {'Version, '}
           <span title="Preferred identifier">{this.state.pid}</span>
         </p>
         <LinkButton noMargin>

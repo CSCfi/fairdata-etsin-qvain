@@ -26,6 +26,33 @@ const Button = styled.button.attrs({
     border-color: ${props => props.theme.color.superlightgray};
   }
 `
+
+// prettier-ignore
+export const Link = styled.a.attrs({
+  padding: props => (props.padding ? props.padding : '0.3em 0.6em 0.4em'),
+})`
+  cursor: pointer;
+  width: ${props => (props.width ? props.width : '')};
+  padding: ${props => (props.noPadding ? 0 : props.padding)};
+  margin: ${props => (props.noMargin ? 0 : '0.25em 0.25em')};
+  border: ${props => (props.thin ? '1px' : '2px')} solid ${props => (props.color ? props.color : props.theme.color.primary)};
+  background-color: ${props => (props.color ? props.color : props.theme.color.primary)};
+  color: ${props => (props.color !== 'white' ? 'white' : props.theme.color.primary)};
+  border-radius: 0.25em;
+  line-height: 1.25;
+  transition: 0.3s ease;
+  &:hover {
+    background-color: ${props => darken(0.1, props.color ? props.color : props.theme.color.primary)};
+    border-color: ${props => darken(0.1, props.color ? props.color : props.theme.color.primary)};
+  }
+  &:disabled {
+    pointer-events: none;
+    background-color: ${props => props.theme.color.superlightgray};
+    color: ${props => props.theme.color.medgray};
+    border-color: ${props => props.theme.color.superlightgray};
+  }
+`
+
 // prettier-ignore
 export const InvertedButton = Button.extend`
   border-color: ${props => (props.color ? props.color : props.theme.color.primary)};
