@@ -67,6 +67,22 @@ const english = {
       name: 'Name',
       size: 'Size',
     },
+    events_idn: {
+      events: {
+        title: 'Events',
+        event: 'Event',
+        who: 'Who',
+        when: 'When',
+        description: 'Description',
+      },
+      other_idn: 'Other identifiers',
+      relations: {
+        title: 'Relations',
+        type: 'Type',
+        name: 'Title',
+        idn: 'Identifier',
+      },
+    },
     doi: 'DOI',
     field_of_science: 'Field of science',
     funder: 'Funder',

@@ -1,9 +1,11 @@
 import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
-// import Translate from 'react-translate-component'
+import Translate from 'react-translate-component'
+import { inject, observer } from 'mobx-react'
+
 import styled from 'styled-components'
 import checkDataLang from 'Utils/checkDataLang'
-import dateFormat from 'Utils/dateFormat'
+import DateFormat from '../../general/dateFormat'
 
 const Table = styled.table`
   overflow-x: scroll;
@@ -42,7 +44,7 @@ const ID = styled.span`
   font-size: 0.9em;
 `
 
-export default class Events extends Component {
+class Events extends Component {
   checkProvenance = prov => {
     if (prov) {
       if (prov.length > 1) {
@@ -72,9 +74,13 @@ export default class Events extends Component {
 
   printDate = temp => {
     if (temp.start_date === temp.end_date) {
-      return dateFormat(temp.start_date)
+      return <DateFormat date={temp.start_date} />
     }
-    return `${dateFormat(temp.start_date)} - ${dateFormat(temp.end_date)}`
+    return (
+      <span>
+        <DateFormat date={temp.start_date} /> - <DateFormat date={temp.end_date} />
+      </span>
+    )
   }
 
   render() {
@@ -83,21 +89,23 @@ export default class Events extends Component {
         {console.log('prov', this.props.provenance)}
         {this.checkProvenance(this.props.provenance) && (
           <Fragment>
-            <h2>Events</h2>
+            <h2>
+              <Translate content="dataset.events_idn.events.title" />
+            </h2>
             <Table>
               <thead>
                 <tr>
                   <th className="rowIcon" scope="col">
-                    Tapahtuma
+                    <Translate content="dataset.events_idn.events.event" />
                   </th>
                   <th className="rowIcon" scope="col">
-                    Kuka
+                    <Translate content="dataset.events_idn.events.who" />
                   </th>
                   <th className="rowIcon" scope="col">
-                    Milloin
+                    <Translate content="dataset.events_idn.events.when" />
                   </th>
                   <th className="rowIcon" scope="col">
-                    Kuvaus
+                    <Translate content="dataset.events_idn.events.description" />
                   </th>
                 </tr>
               </thead>
@@ -110,24 +118,22 @@ export default class Events extends Component {
                         checkDataLang(single.lifecycle_event.pref_label)}
                       {single.preservation_event &&
                         checkDataLang(single.preservation_event.pref_label)}
-                      {!single.lifecycle_event && !single.preservation_event && ''}
                     </td>
                     <td>
                       {/* eslint-disable react/jsx-indent */}
-                      {single.was_associated_with
-                        ? single.was_associated_with.map(associate => (
-                            <span key={checkDataLang(associate.name)}>
-                              {checkDataLang(associate.name)}
-                            </span>
-                          ))
-                        : ''}
+                      {single.was_associated_with &&
+                        single.was_associated_with.map(associate => (
+                          <span key={checkDataLang(associate.name)}>
+                            {checkDataLang(associate.name)}
+                          </span>
+                        ))}
                       {/* eslint-enable react/jsx-indent */}
                     </td>
                     <td>
                       {/* some datasets have start_date and some startDate */}
-                      {single.temporal ? this.printDate(single.temporal) : ''}
+                      {single.temporal && this.printDate(single.temporal)}
                     </td>
-                    <td>{single.description ? checkDataLang(single.description) : ''}</td>
+                    <td>{single.description && checkDataLang(single.description)}</td>
                   </tr>
                 ))}
               </tbody>
@@ -137,7 +143,9 @@ export default class Events extends Component {
         {this.props.other_identifier &&
           this.props.other_identifier.length > 0 && (
             <div>
-              <h2>Other identifiers</h2>
+              <h2>
+                <Translate content="dataset.events_idn.other_idn" />
+              </h2>
               <div>
                 {this.props.other_identifier.map(single => (
                   <p key={single.notation}>{single.notation}</p>
@@ -147,13 +155,21 @@ export default class Events extends Component {
           )}
         {this.props.relation && (
           <div>
-            <h2>Relations</h2>
+            <h2>
+              <Translate content="dataset.events_idn.relations.title" />
+            </h2>
             <Table>
               <thead>
                 <tr>
-                  <th>Type</th>
-                  <th>Title</th>
-                  <th>Identifier</th>
+                  <th>
+                    <Translate content="dataset.events_idn.relations.type" />
+                  </th>
+                  <th>
+                    <Translate content="dataset.events_idn.relations.name" />
+                  </th>
+                  <th>
+                    <Translate content="dataset.events_idn.relations.idn" />
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -187,3 +203,5 @@ Events.propTypes = {
   provenance: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
   other_identifier: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
 }
+
+export default inject('Stores')(observer(Events))

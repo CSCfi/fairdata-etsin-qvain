@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import { inject, observer } from 'mobx-react'
+
 import checkDataLang from 'Utils/checkDataLang'
 import checkNested from 'Utils/checkNested'
 import dateFormat from 'Utils/dateFormat'
@@ -18,7 +20,6 @@ const Logo = styled.div`
 class Sidebar extends Component {
   constructor(props) {
     super(props)
-    console.log(props.dataset)
     const dataCatalog = props.dataset.data_catalog
     const researchDataset = props.dataset.research_dataset
 
@@ -208,4 +209,4 @@ Sidebar.propTypes = {
   dataset: PropTypes.object.isRequired,
 }
 
-export default Sidebar
+export default inject('Stores')(observer(Sidebar))

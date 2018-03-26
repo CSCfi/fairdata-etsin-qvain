@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import translate from 'counterpart'
 import Translate from 'react-translate-component'
+import { inject, observer } from 'mobx-react'
 
 import DatasetQuery from 'Stores/view/datasetquery'
 import Sidebar from './sidebar'
@@ -125,7 +126,6 @@ class Dataset extends React.Component {
     if (this.state.error !== false) {
       return <ErrorPage error="notfound" />
     }
-
     // CASE 2: Business as usual
     return this.state.loaded ? (
       <div>
@@ -162,9 +162,9 @@ class Dataset extends React.Component {
 }
 
 Dataset.propTypes = {
+  location: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
 }
 
-export default Dataset
-export const undecorated = Dataset
+export default inject('Stores')(observer(Dataset))
