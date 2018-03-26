@@ -1,7 +1,7 @@
+const sharedConfig = require('./webpack.config.shared')
 const path = require('path')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
-const webpack = require('webpack')
 
 const config = {
   entry: [path.join(__dirname, '/js/index.jsx')],
@@ -12,6 +12,7 @@ const config = {
     chunkFilename: '[name].bundle.js',
   },
   resolve: {
+    alias: sharedConfig.alias,
     extensions: ['.js', '.jsx', '.css'],
   },
   module: {
@@ -34,26 +35,18 @@ const config = {
         use: ExtractTextPlugin.extract(['css-loader', 'sass-loader']),
       },
       {
-        test: /\.(woff|woff2|eot|ttf|otf|svg)$/,
+        test: /\.(woff|woff2|eot|ttf|otf|svg|jpg|png)$/,
         use: 'file-loader',
       },
     ],
   },
   plugins: [
-    new webpack.optimize.AggressiveMergingPlugin(),
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify('production'),
-      },
-    }),
     new ExtractTextPlugin({
       // define where to save the extracted styles files
       filename: '[name].bundle.css',
       allChunks: true,
     }),
-    new UglifyJSPlugin({
-      sourceMap: true,
-    }),
+    new UglifyJSPlugin(),
   ],
 }
 module.exports = config

@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import Translate from 'react-translate-component'
-import DatasetQuery from '../../../stores/view/datasetquery'
-import checkDataLang from '../../../utils/checkDataLang'
+import DatasetQuery from 'Stores/view/datasetquery'
+import checkDataLang from 'Utils/checkDataLang'
 import { LinkButton } from '../../general/button'
 
 export default class Citation extends Component {
@@ -48,7 +48,6 @@ export default class Citation extends Component {
           <span title="Title">{checkDataLang(this.state.title)}, </span>
           <span title="Publisher">{checkDataLang(this.state.publisher)}, </span>
           <span title="Release date">{this.state.release_date}, </span>
-          {'Version, '}
           <span title="Preferred identifier">{this.state.pid}</span>
         </p>
         <LinkButton noMargin>

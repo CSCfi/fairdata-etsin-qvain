@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 import counterpart from 'counterpart'
-import { Search } from '../../routes'
 
+import { Search } from 'Routes'
+import ElasticQuery from 'Stores/view/elasticquery'
+import getIdentifierFromQuery from 'Utils/getIdentifierFromQuery'
 import ErrorBoundary from '../general/errorBoundary'
-import ElasticQuery from '../../stores/view/elasticquery'
-import getIdentifierFromQuery from '../../utils/getIdentifierFromQuery'
 
 class SearchBar extends Component {
   constructor(props) {

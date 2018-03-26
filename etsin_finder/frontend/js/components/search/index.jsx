@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 import Translate from 'react-translate-component'
-import { Dataset } from '../../routes'
+import ElasticQuery from 'Stores/view/elasticquery'
+import getIdentifierFromQuery from 'Utils/getIdentifierFromQuery'
+import { Dataset } from 'Routes'
 
 import HeroBanner from '../general/hero'
 import SearchBar from './searchBar'
 import Results from './results'
-import ElasticQuery from '../../stores/view/elasticquery'
-import getIdentifierFromQuery from '../../utils/getIdentifierFromQuery'
 
 class Search extends Component {
   componentWillMount() {
@@ -15,11 +15,11 @@ class Search extends Component {
   }
   componentDidMount() {
     // when searching on frontpage keep focus in input after enter
-    if (this.props.match.params.query) {
-      this.search.focus()
-      this.search.selectionStart = this.search.value.length
-      this.search.selectionEnd = this.search.value.length
-    }
+    // if (this.props.match.params.query) {
+    //   this.search.focus()
+    //   this.search.selectionStart = this.search.value.length
+    //   this.search.selectionEnd = this.search.value.length
+    // }
   }
 
   initialQuery = () => {
@@ -37,7 +37,7 @@ class Search extends Component {
 
   render() {
     return (
-      <div>
+      <div className="search-page">
         <HeroBanner className="hero-primary">
           <div className="container">
             <div className="text-center">

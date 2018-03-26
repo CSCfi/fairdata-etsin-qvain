@@ -46,7 +46,7 @@ export default class Contact extends Component {
     super(props)
 
     const recipients = this.buildRecipients(props.emails)
-    const translations = this.makeTranslations(props)
+    const translations = translate('dataset.contact')
 
     this.state = {
       open: false,
@@ -63,16 +63,13 @@ export default class Contact extends Component {
   }
 
   componentWillReceiveProps(newProps) {
-    const recipients = this.buildRecipients(newProps)
-    const translations = this.makeTranslations(newProps)
+    const recipients = this.buildRecipients(newProps.emails)
+    const translations = translate('dataset.contact')
 
     this.setState({
       translations,
       recipients,
     })
-  }
-  makeTranslations(props) {
-    return translate('dataset.contact')
   }
 
   buildRecipients(emails) {

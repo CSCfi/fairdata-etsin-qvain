@@ -1,17 +1,19 @@
 {
   "parser": "babel-eslint",
-  "plugins": ["react"],
+  "plugins": ["react", "import"],
   "env": {
     "browser": true,
     "jest": true
   },
   "rules": {
-    "no-unused-vars": "off",
-    "react/no-unused-state": "off",
+    "import/resolver": "webpack",
+    "import/no-extraneous-dependencies": 0,
+    "import/no-unresolved": 0,
+    "import/extensions": 0,
     "max-len": ["warn", { "code": 150 }],
     "no-extra-semi": 1,
     "semi": 0,
-    "react/prop-types": 0,
+    "react/prop-types": 1,
     "react/prefer-stateless-function": 0,
     "react/jsx-curly-brace-presence": 0,
     "react/forbid-prop-types": [2, { "forbid": ["any"] }],
