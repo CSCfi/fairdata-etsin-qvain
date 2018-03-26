@@ -1,9 +1,9 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import { inject, observer } from 'mobx-react'
-
 import styled from 'styled-components'
+
 import checkDataLang from 'Utils/checkDataLang'
 import DateFormat from '../../general/dateFormat'
 
@@ -42,6 +42,14 @@ const ID = styled.span`
   margin-left: 0.2em;
   color: ${props => props.theme.color.darkgray};
   font-size: 0.9em;
+`
+
+const OtherID = styled.li`
+  margin: 0;
+`
+
+const Margin = styled.div`
+  margin: 1.5em 0em;
 `
 
 class Events extends Component {
@@ -85,10 +93,9 @@ class Events extends Component {
 
   render() {
     return (
-      <div>
-        {console.log('prov', this.props.provenance)}
+      <Margin>
         {this.checkProvenance(this.props.provenance) && (
-          <Fragment>
+          <Margin>
             <h2>
               <Translate content="dataset.events_idn.events.title" />
             </h2>
@@ -138,23 +145,23 @@ class Events extends Component {
                 ))}
               </tbody>
             </Table>
-          </Fragment>
+          </Margin>
         )}
         {this.props.other_identifier &&
           this.props.other_identifier.length > 0 && (
-            <div>
+            <Margin>
               <h2>
                 <Translate content="dataset.events_idn.other_idn" />
               </h2>
-              <div>
+              <ul>
                 {this.props.other_identifier.map(single => (
-                  <p key={single.notation}>{single.notation}</p>
+                  <OtherID key={single.notation}>{single.notation}</OtherID>
                 ))}
-              </div>
-            </div>
+              </ul>
+            </Margin>
           )}
         {this.props.relation && (
-          <div>
+          <Margin>
             <h2>
               <Translate content="dataset.events_idn.relations.title" />
             </h2>
@@ -185,9 +192,9 @@ class Events extends Component {
                 ))}
               </tbody>
             </Table>
-          </div>
+          </Margin>
         )}
-      </div>
+      </Margin>
     )
   }
 }
