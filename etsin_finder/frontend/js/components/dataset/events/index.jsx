@@ -43,10 +43,45 @@ const ID = styled.span`
 `
 
 export default class Events extends Component {
+  checkProvenance = prov => {
+    if (prov) {
+      if (prov.length > 1) {
+        return true
+      }
+      if (prov[0].preservation_event || prov[0].lifecycle_event) {
+        return true
+      }
+      if (prov[0].was_associated_with) {
+        return true
+      }
+      if (prov[0].temporal) {
+        if (
+          prov[0].temporal.end_date &&
+          prov[0].temporal.end_date !== '' &&
+          (prov[0].temporal.start_date && prov[0].temporal.start_date !== '')
+        ) {
+          return true
+        }
+      }
+      if (prov[0].description) {
+        return true
+      }
+    }
+    return false
+  }
+
+  printDate = temp => {
+    if (temp.start_date === temp.end_date) {
+      return dateFormat(temp.start_date)
+    }
+    return `${dateFormat(temp.start_date)} - ${dateFormat(temp.end_date)}`
+  }
+
   render() {
     return (
       <div>
-        {this.props.provenance && (
+        {console.log('prov', this.props.provenance)}
+        {this.checkProvenance(this.props.provenance) && (
           <Fragment>
             <h2>Events</h2>
             <Table>
@@ -75,7 +110,7 @@ export default class Events extends Component {
                         checkDataLang(single.lifecycle_event.pref_label)}
                       {single.preservation_event &&
                         checkDataLang(single.preservation_event.pref_label)}
-                      {!single.lifecycle_event && !single.preservation_event && 'N/A'}
+                      {!single.lifecycle_event && !single.preservation_event && ''}
                     </td>
                     <td>
                       {/* eslint-disable react/jsx-indent */}
@@ -85,18 +120,14 @@ export default class Events extends Component {
                               {checkDataLang(associate.name)}
                             </span>
                           ))
-                        : 'N/A'}
+                        : ''}
                       {/* eslint-enable react/jsx-indent */}
                     </td>
                     <td>
                       {/* some datasets have start_date and some startDate */}
-                      {single.temporal
-                        ? `${dateFormat(single.temporal.start_date)} - ${dateFormat(
-                            single.temporal.end_date
-                          )}`
-                        : 'N/A'}
+                      {single.temporal ? this.printDate(single.temporal) : ''}
                     </td>
-                    <td>{single.description ? checkDataLang(single.description) : 'N/A'}</td>
+                    <td>{single.description ? checkDataLang(single.description) : ''}</td>
                   </tr>
                 ))}
               </tbody>

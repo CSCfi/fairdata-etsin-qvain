@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { withRouter } from 'react-router-dom'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import checkDataLang from 'Utils/checkDataLang'
 import checkNested from 'Utils/checkNested'
@@ -18,14 +18,17 @@ const Logo = styled.div`
 class Sidebar extends Component {
   constructor(props) {
     super(props)
-
-    const dataCatalog = this.props.dataset.data_catalog
-    const researchDataset = this.props.dataset.research_dataset
+    console.log(props.dataset)
+    const dataCatalog = props.dataset.data_catalog
+    const researchDataset = props.dataset.research_dataset
 
     // sidebar data
     this.state = {
-      publisher: checkNested(dataCatalog, 'catalog_json', 'publisher', 'name')
+      catalog_publisher: checkNested(dataCatalog, 'catalog_json', 'publisher', 'name')
         ? dataCatalog.catalog_json.publisher.name
+        : false,
+      publisher: checkNested(researchDataset, 'publisher', 'name')
+        ? researchDataset.publisher.name
         : false,
       logoAlt: dataCatalog.catalog_json.title,
       logo: dataCatalog.catalog_json.logo,
@@ -51,22 +54,22 @@ class Sidebar extends Component {
   }
 
   dateSeparator(start, end) {
-    return start && end ? (
-      <p key={start}>
-        <span>
-          {dateFormat(start)} - {dateFormat(end)}
-        </span>
-      </p>
-    ) : (
-      start + end
+    return (
+      (start || end) && (
+        <p key={start}>
+          <span>
+            {start === end ? dateFormat(start) : `${dateFormat(start)} - ${dateFormat(end)}`}
+          </span>
+        </p>
+      )
     )
   }
 
   render() {
     return (
       <div className="sidebar content-box">
-        <div className="separator">
-          <ErrorBoundary>
+        <ErrorBoundary>
+          <div className="separator">
             {this.state.logo && (
               <Logo>
                 <Image
@@ -75,25 +78,21 @@ class Sidebar extends Component {
                 />
               </Logo>
             )}
-            <SidebarItem component="div" trans="dataset.publisher">
-              {this.state.publisher && checkDataLang(this.state.publisher)}
+            <SidebarItem component="div" trans="dataset.catalog_publisher">
+              {this.state.catalog_publisher && checkDataLang(this.state.catalog_publisher)}
             </SidebarItem>
-          </ErrorBoundary>
-        </div>
-        <div className="separator">
-          <ErrorBoundary>
+          </div>
+          <div className="separator">
             <SidebarItem component="div" trans="dataset.identifier">
               <Identifier idn={this.state.pid} />
             </SidebarItem>
-          </ErrorBoundary>
-        </div>
-        <div>
-          <ErrorBoundary>
+          </div>
+          <div>
+            {/* PROJECT */}
             <SidebarItem component="p" trans="dataset.project" hideEmpty="true">
               {this.state.isOutputOf && this.state.isOutputOf.map(item => checkDataLang(item.name))}
             </SidebarItem>
-          </ErrorBoundary>
-          <ErrorBoundary>
+            {/* FIELD OF SCIENCE */}
             <SidebarItem
               component="div"
               trans="dataset.field_of_science"
@@ -105,8 +104,7 @@ class Sidebar extends Component {
                   <p key={field.identifier}>{checkDataLang(field.pref_label)}</p>
                 ))}
             </SidebarItem>
-          </ErrorBoundary>
-          <ErrorBoundary>
+            {/* KEYWORDS */}
             <SidebarItem component="p" trans="dataset.keywords" hideEmpty="true">
               {this.state.keyword &&
                 this.state.keyword.map((keyword, i) => (
@@ -116,8 +114,7 @@ class Sidebar extends Component {
                   </span>
                 ))}
             </SidebarItem>
-          </ErrorBoundary>
-          <ErrorBoundary>
+            {/* SPATIAL COVERAGE */}
             <SidebarItem
               component="p"
               trans="dataset.spatial_coverage"
@@ -131,8 +128,7 @@ class Sidebar extends Component {
                   <span key={single.geographic_name}>{single.geographic_name}, </span>
                 ))} */}
             </SidebarItem>
-          </ErrorBoundary>
-          <ErrorBoundary>
+            {/* TEMPORAL COVERAGE */}
             <SidebarItem
               component="div"
               trans="dataset.temporal_coverage"
@@ -144,16 +140,14 @@ class Sidebar extends Component {
                   this.dateSeparator(dates.start_date, dates.end_date)
                 )}
             </SidebarItem>
-          </ErrorBoundary>
-          <ErrorBoundary>
+            {/* LICENCE */}
             <SidebarItem component="div" trans="dataset.license" hideEmpty="true">
               {this.state.license &&
                 this.state.license.map(rights => (
                   <p key={rights.identifier}>{checkDataLang(rights.title)}</p>
                 ))}
             </SidebarItem>
-          </ErrorBoundary>
-          <ErrorBoundary>
+
             <SidebarItem
               component="p"
               trans="dataset.access_rights"
@@ -162,8 +156,11 @@ class Sidebar extends Component {
             >
               {this.state.access_rights && checkDataLang(this.state.access_rights)}
             </SidebarItem>
-          </ErrorBoundary>
-          <ErrorBoundary>
+
+            <SidebarItem component="p" trans="dataset.publisher" hideEmpty="true">
+              {this.state.publisher && checkDataLang(this.state.publisher)}
+            </SidebarItem>
+
             <SidebarItem component="p" trans="dataset.funder" hideEmpty="true">
               {this.state.isOutputOf &&
                 this.state.isOutputOf.map(
@@ -172,8 +169,7 @@ class Sidebar extends Component {
                     output.has_funding_agency.map(agency => checkDataLang(agency.name))
                 )}
             </SidebarItem>
-          </ErrorBoundary>
-          <ErrorBoundary>
+
             <SidebarItem component="p" trans="dataset.curator" hideEmpty="true">
               {this.state.curator &&
                 this.state.curator.map((curators, i) => {
@@ -192,22 +188,24 @@ class Sidebar extends Component {
                   )
                 })}
             </SidebarItem>
-          </ErrorBoundary>
-          <ErrorBoundary>
+
             <SidebarItem component="p" trans="dataset.infrastructure" hideEmpty="true">
               {this.state.related_entity &&
                 this.state.related_entity.map(entity => checkDataLang(entity.title))}
             </SidebarItem>
-          </ErrorBoundary>
-          <ErrorBoundary>
+
             <SidebarItem component="div" trans="dataset.citation" hideEmpty="false">
               <Citation />
             </SidebarItem>
-          </ErrorBoundary>
-        </div>
+          </div>
+        </ErrorBoundary>
       </div>
     )
   }
 }
 
-export default withRouter(Sidebar)
+Sidebar.propTypes = {
+  dataset: PropTypes.object.isRequired,
+}
+
+export default Sidebar
