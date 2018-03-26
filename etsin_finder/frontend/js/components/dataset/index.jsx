@@ -156,7 +156,7 @@ class Dataset extends React.Component {
         </div>
       </div>
     ) : (
-      'loading'
+      ''
     )
   }
 }
