@@ -6,6 +6,7 @@ const english = {
     access_locked: 'Restricted Access',
     access_open: 'Open Access',
     access_rights: 'Access rights statement',
+    catalog_publisher: 'Catalog publisher',
     citation: 'Citation',
     citation_formats: 'Show more citation formats',
     contact: {

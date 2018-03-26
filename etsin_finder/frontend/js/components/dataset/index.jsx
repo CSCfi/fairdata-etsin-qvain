@@ -44,21 +44,19 @@ class Dataset extends React.Component {
     }
     if (process.env.NODE_ENV === 'production' && /^\d+$/.test(identifier)) {
       console.log('Using integer as identifier not permitted')
-      this.setState({ error: 'wrong identifier' })
-      this.setState({ loaded: true })
+      this.setState({ error: 'wrong identifier', loaded: true })
       return
     }
     DatasetQuery.getData(identifier)
       .then(result => {
-        this.setState({ dataset: result.catalog_record, email_info: result.email_info })
         // TODO: The code below needs to be revised
         // TODO: Somewhere we need to think how 1) harvested, 2) accumulative, 3) deprecated, 4) removed, 5) ordinary
         // TODO: datasets are rendered. Maybe not here?
         if (result.harvested) {
           console.log('It seems the dataset is deprecated...')
-          this.updateData(false)
+          this.updateData(false, result)
         } else {
-          this.updateData(true)
+          this.updateData(true, result)
         }
       })
       .catch(error => {
@@ -67,11 +65,14 @@ class Dataset extends React.Component {
       })
   }
 
-  updateData(isLive) {
-    const researchDataset = this.state.dataset.research_dataset
+  updateData(isLive, res) {
+    const researchDataset = res.catalog_record.research_dataset
     const hasFiles = researchDataset.directories || researchDataset.files
 
     this.setState({
+      identifier: this.props.match.params.identifier,
+      dataset: res.catalog_record,
+      email_info: res.email_info,
       hasFiles,
       live: isLive,
       loaded: true,
@@ -126,7 +127,7 @@ class Dataset extends React.Component {
     }
 
     // CASE 2: Business as usual
-    return (
+    return this.state.loaded ? (
       <div>
         {!this.state.live && <NoticeBar deprecated={translate('tombstone.info')} />}
         {!this.state.live && <NoticeBar cumulative="This is a cumulative dataset" />}
@@ -138,24 +139,24 @@ class Dataset extends React.Component {
             <span aria-hidden>{'< '}</span>
             <Translate content={'dataset.goBack'} />
           </button>
-          {this.state.loaded && (
-            <div className="row">
-              <Content
-                identifier={this.state.identifier}
-                dataset={this.state.dataset}
-                live={this.state.live}
-                hasFiles={this.state.hasFiles}
-                emails={this.state.email_info}
-              />
-              <div className="col-lg-4">
-                <ErrorBoundary>
-                  <Sidebar dataset={this.state.dataset} />
-                </ErrorBoundary>
-              </div>
+          <div className="row">
+            <Content
+              identifier={this.state.identifier}
+              dataset={this.state.dataset}
+              live={this.state.live}
+              hasFiles={this.state.hasFiles}
+              emails={this.state.email_info}
+            />
+            <div className="col-lg-4">
+              <ErrorBoundary>
+                <Sidebar dataset={this.state.dataset} />
+              </ErrorBoundary>
             </div>
-          )}
+          </div>
         </div>
       </div>
+    ) : (
+      'loading'
     )
   }
 }
