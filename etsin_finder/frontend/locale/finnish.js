@@ -65,6 +65,22 @@ const finnish = {
       name: 'Nimi',
       size: 'Koko',
     },
+    events_idn: {
+      events: {
+        title: 'Tapahtumat',
+        event: 'Tapahtuma',
+        who: 'Kuka',
+        when: 'Milloin',
+        description: 'Kuvaus',
+      },
+      other_idn: 'Muut tunnisteet',
+      relations: {
+        title: 'Relaatiot',
+        type: 'Tyyppi',
+        name: 'Otsikko',
+        idn: 'Tunniste',
+      },
+    },
     doi: 'DOI',
     field_of_science: 'Tieteenala',
     funder: 'Rahoittaja',
