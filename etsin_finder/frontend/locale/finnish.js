@@ -6,6 +6,7 @@ const finnish = {
     access_locked: 'Rajattu käyttöoikeus',
     access_open: 'Avoin',
     access_rights: 'Saatavuus',
+    catalog_publisher: 'Katalogin julkaisija',
     citation: 'Sitaatti',
     citation_formats: 'Näytä lisää sitaattiehdotuksia',
     contact: {
