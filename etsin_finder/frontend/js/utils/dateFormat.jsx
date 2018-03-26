@@ -12,6 +12,12 @@ const formats = {
 }
 
 const dateFormat = date => {
+  if (!date) {
+    return ''
+  }
+  if (date.length === 4) {
+    return new Date(date).getFullYear()
+  }
   if (Locale.currentLang === 'en') {
     return new Date(date).toLocaleDateString(
       formats[Locale.currentLang].lang,
