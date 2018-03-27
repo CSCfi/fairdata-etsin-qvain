@@ -32,11 +32,7 @@ class Content extends Component {
   }
 
   showDownloads() {
-    if (
-      this.props.live &&
-      this.props.hasFiles[0] &&
-      !this.props.dataset.data_catalog.catalog_json.harvested
-    ) {
+    if (this.props.hasFiles[0] && !this.props.harvested) {
       return true
     }
     return false
@@ -55,7 +51,14 @@ class Content extends Component {
         <Route
           exact={this.showDownloads() || this.showEvents()}
           path="/dataset/:identifier"
-          render={() => <Description dataset={this.props.dataset} emails={this.props.emails} />}
+          render={() => (
+            <Description
+              dataset={this.props.dataset}
+              emails={this.props.emails}
+              harvested={this.props.harvested}
+              cumulative={this.props.cumulative}
+            />
+          )}
         />
 
         {/* Route to downloads */}
@@ -86,6 +89,8 @@ export default withRouter(Content)
 
 Content.defaultProps = {
   hasFiles: [],
+  harvested: false,
+  cumulative: false,
 }
 
 Content.propTypes = {
@@ -97,7 +102,8 @@ Content.propTypes = {
     PUBLISHER: PropTypes.bool,
     RIGHTS_HOLDER: PropTypes.bool,
   }).isRequired,
-  live: PropTypes.bool.isRequired,
+  harvested: PropTypes.bool,
+  cumulative: PropTypes.bool,
   hasFiles: PropTypes.array,
   identifier: PropTypes.string.isRequired,
 }
