@@ -129,6 +129,23 @@ const InnerForm = props => {
     </Form>
   )
 }
+InnerForm.defaultProps = {
+  status: undefined,
+}
+
+InnerForm.propTypes = {
+  values: PropTypes.object.isRequired,
+  touched: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired,
+  isSubmitting: PropTypes.bool.isRequired,
+  handleChange: PropTypes.func.isRequired,
+  handleBlur: PropTypes.func.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
+  setFieldValue: PropTypes.func.isRequired,
+  setFieldTouched: PropTypes.func.isRequired,
+  status: PropTypes.string,
+  translations: PropTypes.object.isRequired,
+}
 
 const ContactForm = withFormik({
   mapPropsToValues: props => ({
@@ -160,6 +177,7 @@ const ContactForm = withFormik({
       })
       .then(() => {
         setStatus('success')
+        props.close(undefined, true)
       })
       .catch(err => {
         console.log(err)
