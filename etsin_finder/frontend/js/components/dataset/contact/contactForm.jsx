@@ -126,7 +126,9 @@ const InnerForm = props => {
       </InvertedButton>
       {status === 'success' && <Success>{translations.success}</Success>}
       {status === 'error' && <Error>{translations.error}</Error>}
-      {status === 'error 500' && <Error>{translations.error} - error 500</Error>}
+      {status === 'error 500' && (
+        <Error>Internal server error! Please contact our support: supportemail</Error>
+      )}
     </Form>
   )
 }
@@ -146,6 +148,7 @@ InnerForm.propTypes = {
   setFieldTouched: PropTypes.func.isRequired,
   status: PropTypes.string,
   translations: PropTypes.object.isRequired,
+  recipientsList: PropTypes.array.isRequired,
 }
 
 const ContactForm = withFormik({
