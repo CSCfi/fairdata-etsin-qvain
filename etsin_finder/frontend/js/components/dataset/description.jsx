@@ -6,6 +6,7 @@ import dateFormat from 'Utils/dateFormat'
 import checkNested from 'Utils/checkNested'
 import checkDataLang from 'Utils/checkDataLang'
 import Button from '../general/button'
+import Label from '../general/label'
 import AccessRights from './data/accessRights'
 import ErrorBoundary from '../general/errorBoundary'
 import Person from './person'
@@ -101,6 +102,8 @@ class Description extends Component {
           {/* {this.state.description.map(desc => <p className="description">{checkDataLang(desc)}</p>)} */}
           <p className="description">{checkDataLang(this.state.description[0])}</p>
         </ErrorBoundary>
+        {this.props.cumulative && <Label color="#f35">Cumulative</Label>}
+        {this.props.harvested && <Label>Harvested</Label>}
       </div>
     )
   }
@@ -118,4 +121,6 @@ Description.propTypes = {
     PUBLISHER: PropTypes.bool,
     RIGHTS_HOLDER: PropTypes.bool,
   }).isRequired,
+  harvested: PropTypes.bool.isRequired,
+  cumulative: PropTypes.bool.isRequired,
 }

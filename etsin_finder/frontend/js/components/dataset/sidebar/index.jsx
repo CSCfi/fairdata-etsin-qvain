@@ -25,6 +25,7 @@ class Sidebar extends Component {
 
     // sidebar data
     this.state = {
+      harvested: dataCatalog.catalog_json.harvested,
       catalog_publisher: checkNested(dataCatalog, 'catalog_json', 'publisher', 'name')
         ? dataCatalog.catalog_json.publisher.name
         : false,
@@ -123,7 +124,7 @@ class Sidebar extends Component {
               hideEmpty="true"
             >
               {/* disabled spatial coverage for now */}
-              {console.log(this.state.geographic_name)}
+              {console.log('geographic name', this.state.geographic_name)}
               {/* {this.state.geographic_name &&
                 this.state.geographic_name.map(single => (
                   <span key={single.geographic_name}>{single.geographic_name}, </span>
@@ -196,7 +197,7 @@ class Sidebar extends Component {
             </SidebarItem>
 
             <SidebarItem component="div" trans="dataset.citation" hideEmpty="false">
-              <Citation />
+              {!this.state.harvested && <Citation />}
             </SidebarItem>
           </div>
         </ErrorBoundary>
