@@ -13,10 +13,6 @@ const MarginAfter = styled.div`
 `
 
 class Content extends Component {
-  componentWillReceiveProps(newProps) {
-    console.log('content', newProps)
-  }
-
   showEvents() {
     if (
       (this.props.dataset.research_dataset.provenance &&

@@ -19,7 +19,6 @@ class Dataset extends React.Component {
       dataset: DatasetQuery.results,
       email_info: DatasetQuery.email_info,
       error: false,
-      live: true,
       identifier: props.match.params.identifier,
     }
 
@@ -52,8 +51,6 @@ class Dataset extends React.Component {
         // TODO: The code below needs to be revised
         // TODO: Somewhere we need to think how 1) harvested, 2) accumulative, 3) deprecated, 4) removed, 5) ordinary
         // TODO: datasets are rendered. Maybe not here?
-        console.log('dataset', result)
-        console.log('harvested', result.catalog_record.data_catalog.catalog_json.harvested)
         this.setState({
           identifier: this.props.match.params.identifier,
           dataset: result.catalog_record,
@@ -125,7 +122,6 @@ class Dataset extends React.Component {
         <div className="container regular-row">
           <button onClick={() => this.prevDataset()}>Prev</button>
           <button onClick={() => this.nextDataset()}>Next</button>
-          {console.log('rerender')}
           <button className="btn btn-transparent nopadding btn-back" onClick={this.goBack}>
             <span aria-hidden>{'< '}</span>
             <Translate content={'dataset.goBack'} />
