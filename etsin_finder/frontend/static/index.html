@@ -10,7 +10,7 @@
   <link rel="manifest" href="/static/manifest.json">
   <!-- Path must be to static because other traffic is directed through Flask-->
   <link rel="icon" type="image/png" href="/static/favicon.png">
-  <link rel="preload" as="style" onload="this.rel='stylesheet'" href="/static/main.bundle.css">
+  <link rel="stylesheet" href="/static/main.bundle.css" media="none" onload="if(media!='all')media='all'">
   <noscript>
     <link href="/static/main.bundle.css" rel="stylesheet">
   </noscript>
