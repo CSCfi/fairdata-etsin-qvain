@@ -95,7 +95,7 @@ export default class Contact extends Component {
     })
   }
 
-  closeModal(e, sent = true) {
+  closeModal(e, sent = false) {
     console.log('sent', sent)
     this.setState(
       {

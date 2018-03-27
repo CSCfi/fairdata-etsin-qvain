@@ -126,6 +126,7 @@ const InnerForm = props => {
       </InvertedButton>
       {status === 'success' && <Success>{translations.success}</Success>}
       {status === 'error' && <Error>{translations.error}</Error>}
+      {status === 'error 500' && <Error>{translations.error} - error 500</Error>}
     </Form>
   )
 }
@@ -181,6 +182,9 @@ const ContactForm = withFormik({
       })
       .catch(err => {
         console.log(err)
+        if (err.respones.status === 500) {
+          setStatus('error 500')
+        }
         setStatus('error')
       })
     setSubmitting(false)
