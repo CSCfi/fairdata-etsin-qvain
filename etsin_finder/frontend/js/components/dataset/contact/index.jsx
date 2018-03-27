@@ -96,7 +96,6 @@ export default class Contact extends Component {
   }
 
   closeModal(e, sent = false) {
-    console.log('sent', sent)
     this.setState(
       {
         splash: sent,

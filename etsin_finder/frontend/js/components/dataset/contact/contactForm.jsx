@@ -125,9 +125,12 @@ const InnerForm = props => {
         {translations.send}
       </InvertedButton>
       {status === 'success' && <Success>{translations.success}</Success>}
-      {status === 'error' && <Error>{translations.error}</Error>}
-      {status === 'error 500' && (
-        <Error>Internal server error! Please contact our support: supportemail</Error>
+      {errors.sending && (
+        <Error>
+          {errors.sending === 'error 500' &&
+            'Internal server error! Please contact our support: supportemail'}
+          {errors.sending === 'error' && translations.error}
+        </Error>
       )}
     </Form>
   )
@@ -164,14 +167,15 @@ const ContactForm = withFormik({
         .email(props.translations.email.error.invalid)
         .required(props.translations.email.error.required),
       message: Yup.string()
-        .max(1000, props.translations.message.error.max)
+        .max(1300, props.translations.message.error.max)
         .required(props.translations.message.error.required),
       subject: Yup.string().required(props.translations.subject.error.required),
       recipient: Yup.mixed()
         .nullable('true')
         .required(props.translations.recipient.error.required),
     }),
-  handleSubmit: (values, { props, setSubmitting, setStatus }) => {
+  handleSubmit: (values, { props, setSubmitting, setStatus, setFieldError }) => {
+    setStatus('')
     axios
       .post(`/api/dataset/${props.datasetID}/contact`, {
         subject: values.subject,
@@ -185,9 +189,11 @@ const ContactForm = withFormik({
       })
       .catch(err => {
         console.log(err)
-        if (err.respones.status === 500) {
+        if (err.response.status === 500) {
           setStatus('error 500')
+          setFieldError('sending', 'error 500')
         }
+        setFieldError('sending', 'error')
         setStatus('error')
       })
     setSubmitting(false)
