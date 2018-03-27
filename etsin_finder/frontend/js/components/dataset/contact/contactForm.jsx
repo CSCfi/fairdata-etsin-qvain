@@ -153,9 +153,9 @@ const ContactForm = withFormik({
   handleSubmit: (values, { props, setSubmitting, setStatus }) => {
     axios
       .post(`/api/dataset/${props.datasetID}/contact`, {
-        subject: values.subject,
-        sender: values.email,
-        body: values.message,
+        user_subject: values.subject,
+        user_email: values.email,
+        user_body: values.message,
         agent_type: values.recipient.value,
       })
       .then(() => {
