@@ -17,6 +17,7 @@ const finnish = {
         placeholder: 'Anna sähköposti',
       },
       error: 'Virhe viestin lähetyksessä!',
+      errorInternal: 'Internal server error! Please contact our support',
       message: {
         error: {
           required: 'Viesti vaaditaan!',

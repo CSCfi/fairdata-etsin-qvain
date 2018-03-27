@@ -48,6 +48,10 @@ const Form = styled.form`
   align-content: center;
 `
 
+const Flex = styled.div`
+  display: flex;
+`
+
 const InnerForm = props => {
   const {
     values,
@@ -116,22 +120,29 @@ const InnerForm = props => {
         />
         {errors.message && touched.message && <ErrorText>{errors.message}</ErrorText>}
       </InputContainer>
-      <InvertedButton
-        type="submit"
-        disabled={isSubmitting || status === 'success'}
-        noMargin
-        padding="0.5em 2em"
-      >
-        {translations.send}
-      </InvertedButton>
-      {status === 'success' && <Success>{translations.success}</Success>}
-      {errors.sending && (
-        <Error>
-          {errors.sending === 'error 500' &&
-            'Internal server error! Please contact our support: supportemail'}
-          {errors.sending === 'error' && translations.error}
-        </Error>
-      )}
+      <Flex>
+        <InvertedButton
+          type="submit"
+          disabled={isSubmitting || status === 'success'}
+          noMargin
+          padding="0.5em 2em"
+        >
+          {translations.send}
+        </InvertedButton>
+        {status === 'success' && <Success>{translations.success}</Success>}
+        {errors.sending === 'error 500' && (
+          <Error>
+            {translations.errorInternal} (
+            <a
+              href="mailto:csc@servicedesk.fi?Subject=Etsin%20Contact%20Form%20Internal%20Server%20Error"
+              target="_top"
+            >
+              csc@servicedesk.fi
+            </a>).
+          </Error>
+        )}
+        {errors.sending === 'error' && <Error>{translations.error}</Error>}
+      </Flex>
     </Form>
   )
 }

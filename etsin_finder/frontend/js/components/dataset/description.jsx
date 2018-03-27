@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import styled, { withTheme } from 'styled-components'
 import Translate from 'react-translate-component'
+import { inject, observer } from 'mobx-react'
+
 import dateFormat from 'Utils/dateFormat'
 import checkNested from 'Utils/checkNested'
 import checkDataLang from 'Utils/checkDataLang'
@@ -106,7 +108,7 @@ class Description extends Component {
   }
 }
 
-export default withTheme(Description)
+export default withTheme(inject('Stores')(observer(Description)))
 
 Description.propTypes = {
   dataset: PropTypes.object.isRequired,
