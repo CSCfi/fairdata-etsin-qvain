@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import styled, { withTheme } from 'styled-components'
+import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import { inject, observer } from 'mobx-react'
 
@@ -13,6 +13,7 @@ import AccessRights from './data/accessRights'
 import ErrorBoundary from '../general/errorBoundary'
 import Person from './person'
 import Contact from './contact'
+import VersionChanger from './versionChanger'
 
 const Labels = styled.div`
   display: flex;
@@ -20,12 +21,6 @@ const Labels = styled.div`
   flex-wrap: wrap;
   align-items: center;
   margin-bottom: 0.5em;
-`
-
-const LabelButton = styled(Button)`
-  margin: 0;
-  margin-right: 0.5em;
-  font-size: 0.9em;
 `
 
 const Flex = styled.div`
@@ -57,12 +52,7 @@ class Description extends Component {
       <div className="dsContent">
         <Labels>
           <Flex>
-            <LabelButton
-              onClick={() => alert('Change version')}
-              color={this.props.theme.color.yellow}
-            >
-              Versio 2 (Vanha)
-            </LabelButton>
+            <VersionChanger />
             <AccessRights
               access_rights={
                 checkNested(this.props.dataset, 'access_rights', 'access_type')
@@ -111,11 +101,10 @@ class Description extends Component {
   }
 }
 
-export default withTheme(inject('Stores')(observer(Description)))
+export default inject('Stores')(observer(Description))
 
 Description.propTypes = {
   dataset: PropTypes.object.isRequired,
-  theme: PropTypes.object.isRequired,
   emails: PropTypes.shape({
     CONTRIBUTOR: PropTypes.bool,
     CREATOR: PropTypes.bool,
