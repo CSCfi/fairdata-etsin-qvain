@@ -48,6 +48,10 @@ const Form = styled.form`
   align-content: center;
 `
 
+const Flex = styled.div`
+  display: flex;
+`
+
 const InnerForm = props => {
   const {
     values,
@@ -116,18 +120,49 @@ const InnerForm = props => {
         />
         {errors.message && touched.message && <ErrorText>{errors.message}</ErrorText>}
       </InputContainer>
-      <InvertedButton
-        type="submit"
-        disabled={isSubmitting || status === 'success'}
-        noMargin
-        padding="0.5em 2em"
-      >
-        {translations.send}
-      </InvertedButton>
-      {status === 'success' && <Success>{translations.success}</Success>}
-      {status === 'error' && <Error>{translations.error}</Error>}
+      <Flex>
+        <InvertedButton
+          type="submit"
+          disabled={isSubmitting || status === 'success'}
+          noMargin
+          padding="0.5em 2em"
+        >
+          {translations.send}
+        </InvertedButton>
+        {status === 'success' && <Success>{translations.success}</Success>}
+        {errors.sending === 'error 500' && (
+          <Error>
+            {translations.errorInternal} (
+            <a
+              href="mailto:csc@servicedesk.fi?Subject=Etsin%20Contact%20Form%20Internal%20Server%20Error"
+              target="_top"
+            >
+              csc@servicedesk.fi
+            </a>).
+          </Error>
+        )}
+        {errors.sending === 'error' && <Error>{translations.error}</Error>}
+      </Flex>
     </Form>
   )
+}
+InnerForm.defaultProps = {
+  status: undefined,
+}
+
+InnerForm.propTypes = {
+  values: PropTypes.object.isRequired,
+  touched: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired,
+  isSubmitting: PropTypes.bool.isRequired,
+  handleChange: PropTypes.func.isRequired,
+  handleBlur: PropTypes.func.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
+  setFieldValue: PropTypes.func.isRequired,
+  setFieldTouched: PropTypes.func.isRequired,
+  status: PropTypes.string,
+  translations: PropTypes.object.isRequired,
+  recipientsList: PropTypes.array.isRequired,
 }
 
 const ContactForm = withFormik({
@@ -143,14 +178,15 @@ const ContactForm = withFormik({
         .email(props.translations.email.error.invalid)
         .required(props.translations.email.error.required),
       message: Yup.string()
-        .max(1000, props.translations.message.error.max)
+        .max(1300, props.translations.message.error.max)
         .required(props.translations.message.error.required),
       subject: Yup.string().required(props.translations.subject.error.required),
       recipient: Yup.mixed()
         .nullable('true')
         .required(props.translations.recipient.error.required),
     }),
-  handleSubmit: (values, { props, setSubmitting, setStatus }) => {
+  handleSubmit: (values, { props, setSubmitting, setStatus, setFieldError }) => {
+    setStatus('')
     axios
       .post(`/api/dataset/${props.datasetID}/contact`, {
         user_subject: values.subject,
@@ -160,9 +196,15 @@ const ContactForm = withFormik({
       })
       .then(() => {
         setStatus('success')
+        props.close(undefined, true)
       })
       .catch(err => {
         console.log(err)
+        if (err.response.status === 500) {
+          setStatus('error 500')
+          setFieldError('sending', 'error 500')
+        }
+        setFieldError('sending', 'error')
         setStatus('error')
       })
     setSubmitting(false)

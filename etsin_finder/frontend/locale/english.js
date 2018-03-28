@@ -17,6 +17,7 @@ const english = {
         placeholder: 'Enter your email',
       },
       error: 'Error sending message!',
+      errorInternal: 'Internal server error! Please contact our support',
       message: {
         error: {
           required: 'Message is required!',
