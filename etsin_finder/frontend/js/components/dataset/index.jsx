@@ -19,12 +19,10 @@ class Dataset extends React.Component {
       dataset: DatasetQuery.results,
       email_info: DatasetQuery.email_info,
       error: false,
-      live: true,
       identifier: props.match.params.identifier,
     }
 
     this.query = this.query.bind(this)
-    this.updateData = this.updateData.bind(this)
     this.goBack = this.goBack.bind(this)
   }
 
@@ -53,49 +51,22 @@ class Dataset extends React.Component {
         // TODO: The code below needs to be revised
         // TODO: Somewhere we need to think how 1) harvested, 2) accumulative, 3) deprecated, 4) removed, 5) ordinary
         // TODO: datasets are rendered. Maybe not here?
-        if (result.harvested) {
-          console.log('It seems the dataset is deprecated...')
-          this.updateData(false, result)
-        } else {
-          this.updateData(true, result)
-        }
+        this.setState({
+          identifier: this.props.match.params.identifier,
+          dataset: result.catalog_record,
+          email_info: result.email_info,
+          hasFiles:
+            result.catalog_record.research_dataset.directories ||
+            result.catalog_record.research_dataset.files,
+          harvested: result.catalog_record.data_catalog.catalog_json.harvested,
+          deprecated: result.catalog_record.deprecated,
+          loaded: true,
+        })
       })
       .catch(error => {
         console.log(error)
         this.setState({ error })
       })
-  }
-
-  updateData(isLive, res) {
-    const researchDataset = res.catalog_record.research_dataset
-    const hasFiles = researchDataset.directories || researchDataset.files
-
-    this.setState({
-      identifier: this.props.match.params.identifier,
-      dataset: res.catalog_record,
-      email_info: res.email_info,
-      hasFiles,
-      live: isLive,
-      loaded: true,
-    })
-  }
-
-  prevDataset() {
-    let path = this.props.location.pathname.slice(1)
-    path = path.split('/')
-    const id = parseInt(this.props.match.params.identifier, 10) - 1
-    this.setState(
-      {
-        loaded: false,
-      },
-      () => {
-        if (path[2]) {
-          this.props.history.push(`/dataset/${id}/${path[2]}`)
-        } else {
-          this.props.history.push(`/dataset/${id}`)
-        }
-      }
-    )
   }
 
   nextDataset() {
@@ -121,6 +92,24 @@ class Dataset extends React.Component {
     this.props.history.goBack()
   }
 
+  prevDataset() {
+    let path = this.props.location.pathname.slice(1)
+    path = path.split('/')
+    const id = parseInt(this.props.match.params.identifier, 10) - 1
+    this.setState(
+      {
+        loaded: false,
+      },
+      () => {
+        if (path[2]) {
+          this.props.history.push(`/dataset/${id}/${path[2]}`)
+        } else {
+          this.props.history.push(`/dataset/${id}`)
+        }
+      }
+    )
+  }
+
   render() {
     // CASE 1: Houston, we have a problem
     if (this.state.error !== false) {
@@ -129,12 +118,10 @@ class Dataset extends React.Component {
     // CASE 2: Business as usual
     return this.state.loaded ? (
       <div>
-        {!this.state.live && <NoticeBar deprecated={translate('tombstone.info')} />}
-        {!this.state.live && <NoticeBar cumulative="This is a cumulative dataset" />}
+        {this.state.deprecated && <NoticeBar deprecated={translate('tombstone.info')} />}
         <div className="container regular-row">
           <button onClick={() => this.prevDataset()}>Prev</button>
           <button onClick={() => this.nextDataset()}>Next</button>
-          {console.log('rerender')}
           <button className="btn btn-transparent nopadding btn-back" onClick={this.goBack}>
             <span aria-hidden>{'< '}</span>
             <Translate content={'dataset.goBack'} />
@@ -143,7 +130,8 @@ class Dataset extends React.Component {
             <Content
               identifier={this.state.identifier}
               dataset={this.state.dataset}
-              live={this.state.live}
+              harvested={this.state.harvested}
+              cumulative={this.state.cumulative}
               hasFiles={this.state.hasFiles}
               emails={this.state.email_info}
             />
