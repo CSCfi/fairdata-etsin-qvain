@@ -3,6 +3,7 @@ from logging.handlers import RotatingFileHandler
 
 from flask import Flask
 from flask_mail import Mail
+from flask_restful import Api
 
 from etsin_finder.app_config import get_app_config
 from etsin_finder.utils import executing_travis
@@ -45,9 +46,16 @@ def _setup_app_logging(app):
 def _do_imports():
     import etsin_finder.views
 
+def _add_restful_resources(api):
+    from etsin_finder.resources import Contact, Dataset
+    api.add_resource(Dataset, '/api/dataset/<string:dataset_id>')
+    api.add_resource(Contact, '/api/email/<string:dataset_id>')
+
 
 app = create_app()
 mail = Mail(app)
+api = Api(app)
+_add_restful_resources(api)
 _do_imports()
 
 if __name__ == "__main__":
