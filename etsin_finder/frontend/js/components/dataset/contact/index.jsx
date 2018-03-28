@@ -4,7 +4,6 @@ import styled from 'styled-components'
 import Modal from 'react-modal'
 import translate from 'counterpart'
 import Translate from 'react-translate-component'
-import { inject, observer } from 'mobx-react'
 
 import { InvertedButton } from '../../general/button'
 import Splash from '../../general/splash'
@@ -69,7 +68,6 @@ export default class Contact extends Component {
   componentWillReceiveProps(newProps) {
     const recipients = this.buildRecipients(newProps.emails)
     const translations = translate('dataset.contact')
-    console.log('newprops!')
     this.setState({
       translations,
       recipients,
