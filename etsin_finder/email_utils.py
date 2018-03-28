@@ -46,7 +46,7 @@ def validate_send_message_request(user_email, user_body, agent_type):
         return False
 
     if len(user_body) > 1000:
-        log.error("Either body is not given or body is too long")
+        log.error("Body is too long")
         return False
 
     return True
