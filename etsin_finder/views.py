@@ -1,14 +1,18 @@
 from flask import render_template, jsonify, request, Response
 from flask_mail import Message
 
+from etsin_finder.app_config import get_app_config
 from etsin_finder.finder import app, mail
 from etsin_finder.metax_api import MetaxAPIService
-from etsin_finder.utils import \
+from etsin_finder.email_utils import \
+    create_email_message_body, \
     get_email_info, \
+    get_email_message_subject, \
     get_email_recipient_address, \
-    get_metax_api_config, \
-    strip_catalog_record, \
     validate_send_message_request
+from etsin_finder.utils import \
+    get_metax_api_config, \
+    strip_catalog_record
 
 log = app.logger
 metax_service = MetaxAPIService(get_metax_api_config(app.config))
@@ -42,7 +46,7 @@ def get_dataset(dataset_id):
 @app.route('/api/dataset/<string:dataset_id>/contact', methods=['POST'])
 def send_message_to_contact(dataset_id):
     """
-    This route expects a json with three key-values: sender, subject and body.
+    This route expects a json with three key-values: user_email, user_subject and user_body.
     Having these three this method will send an email message to recipients
     defined in the catalog record in question
 
@@ -52,16 +56,16 @@ def send_message_to_contact(dataset_id):
     if not request.is_json or not request.json:
         return Response(status=400)
 
-    # Extract user's email address (OR SHOULD THE SENDER BE THE PERSON OR THE APP?)
-    sender = request.json.get('sender', None)
-    # Extract message subject
-    subject = request.json.get('subject', None)
-    # Extract message body
-    body = request.json.get('body', None)
+    # Extract user's email address to be used as reply-to address
+    user_email = request.json.get('user_email', None)
+    # Extract user's message subject to be used as part of the email body to be sent
+    user_subject = request.json.get('user_subject', None)
+    # Extract user's message body to be used as part of the email body to be sent
+    user_body = request.json.get('user_body', None)
     # Extract recipient role
     recipient_agent_role = request.json.get('agent_type')
     # Validate incoming request values are all there and are valid
-    if not validate_send_message_request(sender, subject, body, recipient_agent_role):
+    if not validate_send_message_request(user_email, user_subject, user_body, recipient_agent_role):
         return Response(status=400)
 
     # Get the full catalog record from Metax
@@ -71,8 +75,13 @@ def send_message_to_contact(dataset_id):
     if not recipient:
         return Response(status=500)
 
+    app_config = get_app_config()
+    sender = app_config.get('MAIL_DEFAULT_SENDER', 'etsin-no-reply@fairdata.fi')
+    subject = get_email_message_subject()
+    body = create_email_message_body(dataset_id, user_email, user_subject, user_body)
+
     # Create the message
-    msg = Message(sender=sender, recipients=[recipient], subject=subject, body=body)
+    msg = Message(sender=sender, reply_to=user_email, recipients=[recipient], subject=subject, body=body)
 
     # Send the message
     with mail.record_messages() as outbox:
@@ -81,7 +90,7 @@ def send_message_to_contact(dataset_id):
             if len(outbox) != 1:
                 raise Exception
         except Exception as e:
-            log.error("Unable to send email message".format(sender=[sender]))
+            log.error("Unable to send email message".format(sender=[user_email]))
             log.error(e)
             return Response(status=500)
 

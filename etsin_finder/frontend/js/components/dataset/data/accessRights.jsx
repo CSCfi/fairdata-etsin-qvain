@@ -5,10 +5,10 @@ import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faLock from '@fortawesome/fontawesome-free-solid/faLock'
 import faUnlock from '@fortawesome/fontawesome-free-solid/faUnlock'
 import styled from 'styled-components'
-import Tooltip from '../../general/tooltip'
 
-import checkNested from '../../../utils/checkNested'
-import checkDataLang from '../../../utils/checkDataLang'
+import checkNested from 'Utils/checkNested'
+import checkDataLang from 'Utils/checkDataLang'
+import Tooltip from '../../general/tooltip'
 
 const Access = styled.div`
   background-color: ${props => props.theme.color.lightgray};
@@ -40,12 +40,6 @@ export const accessRightsBool = accessRights => {
     // check access_type
     if (checkNested(accessRights, 'access_type')) {
       if (checkOpen(accessRights.access_type.identifier)) {
-        return true
-      }
-    }
-    // check type
-    if (checkNested(accessRights, 'type')) {
-      if (accessRights.type.filter(item => checkOpen(item.identifier))[0]) {
         return true
       }
     }

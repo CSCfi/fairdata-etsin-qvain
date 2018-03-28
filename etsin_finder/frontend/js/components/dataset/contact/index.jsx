@@ -4,7 +4,9 @@ import styled from 'styled-components'
 import Modal from 'react-modal'
 import translate from 'counterpart'
 import Translate from 'react-translate-component'
+
 import { InvertedButton } from '../../general/button'
+import Splash from '../../general/splash'
 import ContactForm from './contactForm'
 
 const CloseModal = styled.button`
@@ -46,10 +48,11 @@ export default class Contact extends Component {
     super(props)
 
     const recipients = this.buildRecipients(props.emails)
-    const translations = this.makeTranslations(props)
+    const translations = translate('dataset.contact')
 
     this.state = {
       open: false,
+      splash: false,
       recipients,
       translations,
     }
@@ -63,16 +66,12 @@ export default class Contact extends Component {
   }
 
   componentWillReceiveProps(newProps) {
-    const recipients = this.buildRecipients(newProps)
-    const translations = this.makeTranslations(newProps)
-
+    const recipients = this.buildRecipients(newProps.emails)
+    const translations = translate('dataset.contact')
     this.setState({
       translations,
       recipients,
     })
-  }
-  makeTranslations(props) {
-    return translate('dataset.contact')
   }
 
   buildRecipients(emails) {
@@ -96,10 +95,22 @@ export default class Contact extends Component {
     })
   }
 
-  closeModal() {
-    this.setState({
-      open: false,
-    })
+  closeModal(e, sent = false) {
+    this.setState(
+      {
+        splash: sent,
+        open: false,
+      },
+      () => {
+        if (sent) {
+          setTimeout(() => {
+            this.setState({
+              splash: false,
+            })
+          }, 1200)
+        }
+      }
+    )
   }
 
   render() {
@@ -119,11 +130,15 @@ export default class Contact extends Component {
           </h2>
           <CloseModal onClick={this.closeModal}>X</CloseModal>
           <ContactForm
+            close={this.closeModal}
             datasetID={this.props.datasetID}
             recipientsList={this.state.recipients}
             translations={this.state.translations}
           />
         </Modal>
+        <Splash visible={this.state.splash}>
+          <Translate content="dataset.contact.success" component="h1" />
+        </Splash>
       </div>
     )
   }

@@ -6,6 +6,7 @@ const english = {
     access_locked: 'Restricted Access',
     access_open: 'Open Access',
     access_rights: 'Access rights statement',
+    catalog_publisher: 'Catalog publisher',
     citation: 'Citation',
     citation_formats: 'Show more citation formats',
     contact: {
@@ -16,6 +17,7 @@ const english = {
         placeholder: 'Enter your email',
       },
       error: 'Error sending message!',
+      errorInternal: 'Internal server error! Please contact our support',
       message: {
         error: {
           required: 'Message is required!',
@@ -66,9 +68,26 @@ const english = {
       name: 'Name',
       size: 'Size',
     },
+    events_idn: {
+      events: {
+        title: 'Events',
+        event: 'Event',
+        who: 'Who',
+        when: 'When',
+        description: 'Description',
+      },
+      other_idn: 'Other identifiers',
+      relations: {
+        title: 'Relations',
+        type: 'Type',
+        name: 'Title',
+        idn: 'Identifier',
+      },
+    },
     doi: 'DOI',
     field_of_science: 'Field of science',
     funder: 'Funder',
+    goBack: 'Go back',
     identifier: 'Identifier',
     infrastructure: 'Infrastructure',
     keywords: 'Keywords',
@@ -94,6 +113,7 @@ const english = {
     data: 'Data',
     dataset: 'Dataset',
     datasets: 'Datasets',
+    events: 'Identifiers and events',
     help: 'Help & About',
     home: 'Home',
     organizations: 'Organizations',

@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import { inject, observer } from 'mobx-react'
+
+import ElasticQuery from 'Stores/view/elasticquery'
 import PaginationButtons from './paginationButtons'
-import ElasticQuery from '../../../stores/view/elasticquery'
 
 class Pagination extends Component {
   render() {

@@ -2,14 +2,17 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import styled, { withTheme } from 'styled-components'
 import Translate from 'react-translate-component'
+import { inject, observer } from 'mobx-react'
+
+import dateFormat from 'Utils/dateFormat'
+import checkNested from 'Utils/checkNested'
+import checkDataLang from 'Utils/checkDataLang'
 import Button from '../general/button'
-import DateFormat from './data/dateFormat'
+import Label from '../general/label'
 import AccessRights from './data/accessRights'
-import checkNested from '../../utils/checkNested'
 import ErrorBoundary from '../general/errorBoundary'
 import Person from './person'
 import Contact from './contact'
-import checkDataLang from '../../utils/checkDataLang'
 
 const Labels = styled.div`
   display: flex;
@@ -69,12 +72,14 @@ class Description extends Component {
             />
           </Flex>
           <Flex>
-            {this.checkEmails(this.props.emails) && (
-              <Contact
-                datasetID={this.props.dataset.research_dataset.preferred_identifier}
-                emails={this.props.emails}
-              />
-            )}
+            <ErrorBoundary>
+              {this.checkEmails(this.props.emails) && (
+                <Contact
+                  datasetID={this.props.dataset.research_dataset.preferred_identifier}
+                  emails={this.props.emails}
+                />
+              )}
+            </ErrorBoundary>
             <Button onClick={() => alert('Hae käyttölupaa')} noMargin>
               <Translate content="dataset.access_permission" />
             </Button>
@@ -92,19 +97,21 @@ class Description extends Component {
               <Person contributor={this.state.contributor} />
             </ErrorBoundary>
           </div>
-          <p>{this.state.issued ? <DateFormat date={checkDataLang(this.state.issued)} /> : null}</p>
+          <p>{this.state.issued ? dateFormat(checkDataLang(this.state.issued)) : null}</p>
         </div>
         <ErrorBoundary>
           {/* currently displays only first description */}
           {/* {this.state.description.map(desc => <p className="description">{checkDataLang(desc)}</p>)} */}
           <p className="description">{checkDataLang(this.state.description[0])}</p>
         </ErrorBoundary>
+        {this.props.cumulative && <Label color="#f35">Cumulative</Label>}
+        {this.props.harvested && <Label>Harvested</Label>}
       </div>
     )
   }
 }
 
-export default withTheme(Description)
+export default withTheme(inject('Stores')(observer(Description)))
 
 Description.propTypes = {
   dataset: PropTypes.object.isRequired,
@@ -116,4 +123,6 @@ Description.propTypes = {
     PUBLISHER: PropTypes.bool,
     RIGHTS_HOLDER: PropTypes.bool,
   }).isRequired,
+  harvested: PropTypes.bool.isRequired,
+  cumulative: PropTypes.bool.isRequired,
 }

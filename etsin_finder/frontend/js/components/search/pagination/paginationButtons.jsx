@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 
-import ElasticQuery from '../../../stores/view/elasticquery'
+import ElasticQuery from 'Stores/view/elasticquery'
 
 class PaginationButtons extends Component {
   constructor(props) {

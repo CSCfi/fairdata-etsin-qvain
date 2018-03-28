@@ -12,7 +12,6 @@ class DatasetQuery {
 
   @action
   getData(id) {
-    console.log('DatasetQuery Identifier ||', id)
     return new Promise((resolve, reject) => {
       axios
         .get(`/api/dataset/${id}`)
@@ -29,11 +28,10 @@ class DatasetQuery {
   }
 
   @action
-  getFolderData(id, mvid) {
-    console.log('Folder Query')
+  getFolderData(id, prefId) {
     return new Promise((resolve, reject) => {
       axios
-        .get(`${this.metaxUrl}/rest/directories/${id}/files?metadata_version_identifier=${mvid}`)
+        .get(`${this.metaxUrl}/rest/directories/${id}/files?preferred_identifier=${prefId}`)
         .then(res => {
           this.directories.push({ id, results: res.data })
           resolve(res.data)

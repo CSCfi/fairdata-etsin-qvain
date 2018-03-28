@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Route } from 'react-router-dom'
-import { Home, Search, Dataset, About, Organizations } from '../routes'
+import { Home, Search, Dataset, About, Organizations } from 'Routes'
 
 export default class Content extends Component {
   render() {

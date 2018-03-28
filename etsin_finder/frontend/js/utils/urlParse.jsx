@@ -1,5 +1,5 @@
 const UrlParse = {
-  searchParams: (url) => {
+  searchParams: url => {
     const params = {}
     const search = url.slice(1)
     const definitions = search.split('&')
@@ -10,7 +10,7 @@ const UrlParse = {
     return search !== '' ? params : null
   },
 
-  makeSearchParams: (params) => {
+  makeSearchParams: params => {
     let url = '?'
     const keys = Object.keys(params)
     for (let i = 0; i < keys.length; i += 1) {
@@ -18,7 +18,7 @@ const UrlParse = {
       if (i + 1 < keys.length) url = `${url}&`
     }
     return url
-  }
+  },
 }
 
 export default UrlParse

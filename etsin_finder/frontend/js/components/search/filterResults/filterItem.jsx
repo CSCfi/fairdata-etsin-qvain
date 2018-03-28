@@ -1,15 +1,14 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 
-import ElasticQuery from '../../../stores/view/elasticquery'
+import ElasticQuery from 'Stores/view/elasticquery'
 
 class FilterItem extends Component {
   constructor(props) {
     super(props)
     const active =
       ElasticQuery.filter.filter(
-        item =>
-          item.term === this.props.term && item.key === this.props.item.key
+        item => item.term === this.props.term && item.key === this.props.item.key
       ).length > 0
     this.state = {
       term: this.props.term,
@@ -23,8 +22,7 @@ class FilterItem extends Component {
   componentWillReceiveProps(newProps) {
     const active =
       ElasticQuery.filter.filter(
-        item =>
-          item.term === this.props.term && item.key === this.props.item.key
+        item => item.term === this.props.term && item.key === this.props.item.key
       ).length > 0
     this.setState({
       doc_count: newProps.item.doc_count,
@@ -33,15 +31,10 @@ class FilterItem extends Component {
   }
 
   updateFilter() {
-    ElasticQuery.updateFilter(
-      this.state.term,
-      this.state.key,
-      this.props.history
-    )
+    ElasticQuery.updateFilter(this.state.term, this.state.key, this.props.history)
     const active =
       ElasticQuery.filter.filter(
-        item =>
-          item.term === this.props.term && item.key === this.props.item.key
+        item => item.term === this.props.term && item.key === this.props.item.key
       ).length > 0
     this.setState({
       active,

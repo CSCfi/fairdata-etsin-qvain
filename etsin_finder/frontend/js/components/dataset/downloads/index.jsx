@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
 import Translate from 'react-translate-component'
 import styled from 'styled-components'
+import DatasetQuery from 'Stores/view/datasetquery'
+import checkDataLang from 'Utils/checkDataLang'
+import sizeParse from 'Utils/sizeParse'
+import createTree from 'Utils/createTree'
 import DataItem from './dataItem'
 import { accessRightsBool } from '../data/accessRights'
-import DatasetQuery from '../../../stores/view/datasetquery'
-import checkDataLang from '../../../utils/checkDataLang'
 import Breadcrumbs from './breadcrumbs'
-import sizeParse from '../../../utils/sizeParse'
-import createTree from '../../../utils/createTree'
 import Loader from '../../general/loader'
 import { InvertedButton } from '../../general/button'
 
@@ -122,7 +122,7 @@ export default class Downloads extends Component {
     this.setState({
       loading: true,
     })
-    DatasetQuery.getFolderData(id, this.state.results.research_dataset.metadata_version_identifier)
+    DatasetQuery.getFolderData(id, this.state.results.research_dataset.preferred_identifier)
       .then(res => {
         const currFolder = createTree(
           this.createDirTree(res.files, res.directories, true)

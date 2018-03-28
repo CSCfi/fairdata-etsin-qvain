@@ -1,7 +1,8 @@
 import { observable, action } from 'mobx'
 import axios from 'axios'
+
+import UrlParse from 'Utils/urlParse'
 import Locale from './language'
-import UrlParse from '../../utils/urlParse'
 
 const fields = [
   'title.*',
@@ -242,8 +243,8 @@ class ElasticQuery {
             'preferred_identifier',
             'title.*',
             'description.*',
-            'access_rights.type.identifier',
-            'access_rights.license.identifier',
+            'access_rights.access_type.*',
+            'access_rights.license.*',
           ],
           highlight: {
             // pre_tags: ['<b>'], # default is <em>
@@ -288,7 +289,6 @@ class ElasticQuery {
           },
         })
         .then(res => {
-          console.log('-- QUERY DONE ---')
           this.results = {
             hits: res.data.hits.hits,
             total: res.data.hits.total,

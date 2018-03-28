@@ -2,8 +2,9 @@ import React from 'react'
 import { NavLink } from 'react-router-dom'
 import Translate from 'react-translate-component'
 import translate from 'counterpart'
+
+import Accessibility from 'Stores/view/accessibility'
 import SecondNav from './secondnav'
-import Accessibility from '../../../stores/view/accessibility'
 
 export default class Navi extends React.Component {
   constructor() {

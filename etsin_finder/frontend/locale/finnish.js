@@ -6,6 +6,7 @@ const finnish = {
     access_locked: 'Rajattu käyttöoikeus',
     access_open: 'Avoin',
     access_rights: 'Saatavuus',
+    catalog_publisher: 'Katalogin julkaisija',
     citation: 'Sitaatti',
     citation_formats: 'Näytä lisää sitaattiehdotuksia',
     contact: {
@@ -16,6 +17,7 @@ const finnish = {
         placeholder: 'Anna sähköposti',
       },
       error: 'Virhe viestin lähetyksessä!',
+      errorInternal: 'Internal server error! Please contact our support',
       message: {
         error: {
           required: 'Viesti vaaditaan!',
@@ -65,9 +67,26 @@ const finnish = {
       name: 'Nimi',
       size: 'Koko',
     },
+    events_idn: {
+      events: {
+        title: 'Tapahtumat',
+        event: 'Tapahtuma',
+        who: 'Kuka',
+        when: 'Milloin',
+        description: 'Kuvaus',
+      },
+      other_idn: 'Muut tunnisteet',
+      relations: {
+        title: 'Relaatiot',
+        type: 'Tyyppi',
+        name: 'Otsikko',
+        idn: 'Tunniste',
+      },
+    },
     doi: 'DOI',
     field_of_science: 'Tieteenala',
     funder: 'Rahoittaja',
+    goBack: 'Palaa takaisin',
     identifier: 'Tunniste',
     infrastructure: 'Infrastruktuuri',
     keywords: 'Keywords',
@@ -93,6 +112,7 @@ const finnish = {
     data: 'Data',
     dataset: 'Aineisto',
     datasets: 'Aineistot',
+    events: 'Tunnisteet ja tapahtumat',
     help: 'Ohjeet & Info',
     home: 'Koti',
     organizations: 'Organisaatiot',
