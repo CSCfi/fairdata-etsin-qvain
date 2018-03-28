@@ -3,13 +3,12 @@ flake8==3.5.0
 Flask==0.12.2
 Flask-Mail==0.9.1
 flask-restful==0.3.6
-#flask-login==0.4.0
-#flask-security==3.0.0
+flask-login==0.4.1
 gevent==1.2.2
 gunicorn==19.7.1
 ipdb==0.11
-#psycopg2==2.7.3.1
 pytest==3.5.0
 pytest-cov==2.5.1
+python3-saml==1.4.0
 pyyaml==3.12
 requests==2.18.4

@@ -59,5 +59,9 @@ api = Api(app)
 _add_restful_resources()
 _do_imports()
 
+import os
+app.logger.error(os.path.dirname(__file__))
+app.config['SAML_PATH'] = os.path.join(os.path.dirname(__file__), 'saml')
+
 if __name__ == "__main__":
     app.run()
