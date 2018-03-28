@@ -46,7 +46,8 @@ def _setup_app_logging(app):
 def _do_imports():
     import etsin_finder.views
 
-def _add_restful_resources(api):
+
+def _add_restful_resources():
     from etsin_finder.resources import Contact, Dataset
     api.add_resource(Dataset, '/api/dataset/<string:dataset_id>')
     api.add_resource(Contact, '/api/email/<string:dataset_id>')
@@ -55,7 +56,7 @@ def _add_restful_resources(api):
 app = create_app()
 mail = Mail(app)
 api = Api(app)
-_add_restful_resources(api)
+_add_restful_resources()
 _do_imports()
 
 if __name__ == "__main__":
