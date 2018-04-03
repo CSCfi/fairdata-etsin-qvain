@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import { withRouter } from 'react-router-dom'
 
 import Select from '../general/select'
 
@@ -9,11 +11,30 @@ const VersionSelect = styled(Select)`
   margin-bottom: 0;
 `
 
-export default class VersionChanger extends Component {
-  state = {}
+class VersionChanger extends Component {
+  constructor(props) {
+    super(props)
 
-  changeVersion = () => {
-    alert('change version')
+    const versions = this.versionLabels(props.versionSet)
+
+    this.state = {
+      versions,
+      selected: versions.filter(single => single.value === props.pid)[0],
+    }
+  }
+
+  versionLabels = set =>
+    set.map((single, i) => ({ label: `Version ${i + 1}`, value: single.preferred_identifier }))
+
+  changeVersion = (name, value) => {
+    this.setState(
+      {
+        selected: value,
+      },
+      () => {
+        this.props.history.push(`/dataset/${value.value}`)
+      }
+    )
   }
 
   closeModal = () => {
@@ -29,11 +50,19 @@ export default class VersionChanger extends Component {
         textcolor="white"
         name="versions"
         clearable={false}
-        value={{ label: 'Version 1', value: 1 }}
+        value={this.state.selected}
         onChange={this.changeVersion}
         onBlur={this.closeModal}
-        options={[{ label: 'Version 1', value: 1 }, { label: 'Version 2', value: 2 }]}
+        options={this.state.versions}
       />
     )
   }
 }
+
+VersionChanger.propTypes = {
+  versionSet: PropTypes.array.isRequired,
+  pid: PropTypes.string.isRequired,
+  history: PropTypes.object.isRequired,
+}
+
+export default withRouter(VersionChanger)

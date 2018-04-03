@@ -29,6 +29,8 @@ export default class Select extends Component {
           onChange={this.handleChange}
           onBlur={this.handleBlur}
           value={value}
+          noResultsText={false}
+          searchable={false}
         />
       </SelectContainer>
     )
@@ -40,6 +42,7 @@ const SelectContainer = styled.div.attrs({
   background: props => (props.background ? props.background : 'white'),
   textcolor: props => (props.textcolor ? props.textcolor : '#666'),
   selectedcolor: props => (props.selectedColor ? props.selectedColor : '#333'),
+  placeholder: props => (props.textcolor ? props.textcolor : '#aaa'),
   textpadding: props => (props.textpadding ? props.textpadding : '1.2em'),
 })`
   margin-bottom: 1em;
@@ -175,7 +178,7 @@ const SelectContainer = styled.div.attrs({
   .Select-placeholder,
   .Select--single > .Select-control .Select-value {
     bottom: 0;
-    color: #aaa;
+    color: ${props => props.placeholder};
     left: 0;
     line-height: 36px;
     padding-left: ${props => props.textpadding};
@@ -376,7 +379,7 @@ const SelectContainer = styled.div.attrs({
     &.is-selected {
       background-color: #f5faff;
       /* Fallback color for IE 8 */
-      background-color: rgba(0, 0, 0, 0.1);
+      background-color: rgba(255, 255, 255, 0.1);
       color: ${props => props.selectedcolor};
     }
     &.is-focused {
@@ -393,7 +396,7 @@ const SelectContainer = styled.div.attrs({
 
   .Select-noresults {
     box-sizing: border-box;
-    color: #999999;
+    color: ${props => props.textcolor};
     cursor: default;
     display: block;
     padding: 8px ${props => props.textpadding};

@@ -89,7 +89,7 @@ const finnish = {
     goBack: 'Palaa takaisin',
     identifier: 'Tunniste',
     infrastructure: 'Infrastruktuuri',
-    keywords: 'Keywords',
+    keywords: 'Avainsanat',
     license: 'Lisenssi',
     permanent_link: 'Pysyvä linkki tälle sivulle',
     project: 'Projekti',
