@@ -31,11 +31,11 @@ def get_email_message_subject():
     return "Message from Etsin / Viesti Etsimestä"
 
 
-def validate_send_message_request(user_email, user_subject, user_body, agent_type):
+def validate_send_message_request(user_email, user_body, agent_type):
     from etsin_finder.finder import app
     log = app.logger
 
-    if not user_email or not re.match(r"^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+\.[a-zA-Z]*$", user_email):
+    if not re.match(r"^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+\.[a-zA-Z]*$", user_email):
         log.error("Reply-to email address not formally valid: {0}".format(user_email))
         return False
 
@@ -45,12 +45,8 @@ def validate_send_message_request(user_email, user_subject, user_body, agent_typ
         log.error("Unrecognized agent type")
         return False
 
-    if not user_subject:
-        log.error("Subject must be given")
-        return False
-
-    if not user_body or len(user_body) > 1000:
-        log.error("Either body is not given or body is too long")
+    if len(user_body) > 1000:
+        log.error("Body is too long")
         return False
 
     return True
