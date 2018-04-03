@@ -7,7 +7,7 @@ import translate from 'counterpart'
 import Select from '../general/select'
 
 const VersionSelect = styled(Select)`
-  width: 8em;
+  width: 10.5em;
   margin-right: 1em;
   margin-bottom: 0;
 `
@@ -33,10 +33,13 @@ class VersionChanger extends Component {
   }
 
   versionLabels = set =>
-    set.map((single, i) => ({
-      label: `${translate('dataset.version', { number: set.length - i })}`,
-      value: single.preferred_identifier,
-    }))
+    set.map((single, i) => {
+      const old = set.length === i + 1 ? translate('dataset.version.old') : ''
+      return {
+        label: `${translate('dataset.version.number', { number: set.length - i })} ${old}`,
+        value: single.preferred_identifier,
+      }
+    })
 
   changeVersion = (name, value) => {
     this.setState(
