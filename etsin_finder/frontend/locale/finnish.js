@@ -97,7 +97,7 @@ const finnish = {
     rights_holder: 'Oikeuksienhaltija',
     spatial_coverage: 'Maantieteellinen kattavuus',
     temporal_coverage: 'Ajallinen kattavuus',
-    version: 'Versio %(number)s',
+    version: { number: 'Versio %(number)s', old: '(Vanha)' },
   },
   error: {
     notFound: 'Annetulle id:lle ei löytynyt metadataa',
