@@ -98,6 +98,7 @@ const english = {
     rights_holder: 'Rights Holder',
     spatial_coverage: 'Spatial Coverage',
     temporal_coverage: 'Temporal Coverage',
+    version: 'Version %(number)s',
   },
   error: {
     notFound: "Couldn't find metadata for given id",

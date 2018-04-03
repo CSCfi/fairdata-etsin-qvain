@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { withRouter } from 'react-router-dom'
+import translate from 'counterpart'
 
 import Select from '../general/select'
 
@@ -23,8 +24,19 @@ class VersionChanger extends Component {
     }
   }
 
+  componentWillReceiveProps = () => {
+    const versions = this.versionLabels(this.props.versionSet)
+    this.setState({
+      versions,
+      selected: versions.filter(single => single.value === this.props.pid)[0],
+    })
+  }
+
   versionLabels = set =>
-    set.map((single, i) => ({ label: `Version ${i + 1}`, value: single.preferred_identifier }))
+    set.map((single, i) => ({
+      label: `${translate('dataset.version', { number: set.length - i })}`,
+      value: single.preferred_identifier,
+    }))
 
   changeVersion = (name, value) => {
     this.setState(
