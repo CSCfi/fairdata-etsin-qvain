@@ -78,6 +78,7 @@ const InnerForm = props => {
           options={props.recipientsList}
           placeholder={translations.recipient.placeholder}
           error={errors.recipient && touched.recipient}
+          clearable={false}
         />
         {errors.recipient && touched.recipient && <ErrorText>{errors.recipient}</ErrorText>}
       </InputContainer>

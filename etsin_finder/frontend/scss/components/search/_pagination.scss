@@ -3,6 +3,7 @@ $pages-item-size: 40px;
 .pagination {
   margin-top: 1em;
   justify-content: center;
+  flex-wrap: wrap;
   .pagination-item {
     cursor: pointer;
     display: block;

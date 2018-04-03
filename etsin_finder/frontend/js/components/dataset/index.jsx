@@ -32,7 +32,14 @@ class Dataset extends React.Component {
 
   componentWillReceiveProps(newProps) {
     if (this.props.match.params.identifier !== newProps.match.params.identifier) {
-      this.query(newProps.match.params.identifier)
+      this.setState(
+        {
+          loaded: false,
+        },
+        () => {
+          this.query(newProps.match.params.identifier)
+        }
+      )
     }
   }
 
@@ -73,18 +80,12 @@ class Dataset extends React.Component {
     let path = this.props.location.pathname.slice(1)
     path = path.split('/')
     const id = parseInt(this.props.match.params.identifier, 10) + 1
-    this.setState(
-      {
-        loaded: false,
-      },
-      () => {
-        if (path[2]) {
-          this.props.history.push(`/dataset/${id}/${path[2]}`)
-        } else {
-          this.props.history.push(`/dataset/${id}`)
-        }
-      }
-    )
+
+    if (path[2]) {
+      this.props.history.push(`/dataset/${id}/${path[2]}`)
+    } else {
+      this.props.history.push(`/dataset/${id}`)
+    }
   }
 
   // goes back to previous page, which might be outside
@@ -96,18 +97,11 @@ class Dataset extends React.Component {
     let path = this.props.location.pathname.slice(1)
     path = path.split('/')
     const id = parseInt(this.props.match.params.identifier, 10) - 1
-    this.setState(
-      {
-        loaded: false,
-      },
-      () => {
-        if (path[2]) {
-          this.props.history.push(`/dataset/${id}/${path[2]}`)
-        } else {
-          this.props.history.push(`/dataset/${id}`)
-        }
-      }
-    )
+    if (path[2]) {
+      this.props.history.push(`/dataset/${id}/${path[2]}`)
+    } else {
+      this.props.history.push(`/dataset/${id}`)
+    }
   }
 
   render() {

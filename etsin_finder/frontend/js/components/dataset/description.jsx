@@ -52,11 +52,18 @@ class Description extends Component {
       <div className="dsContent">
         <Labels>
           <Flex>
-            <VersionChanger />
+            {this.props.dataset.data_catalog.catalog_json.dataset_versioning &&
+              this.props.dataset.dataset_version_set &&
+              this.props.dataset.dataset_version_set[0] && (
+                <VersionChanger
+                  versionSet={this.props.dataset.dataset_version_set}
+                  pid={this.props.dataset.research_dataset.preferred_identifier}
+                />
+              )}
             <AccessRights
               access_rights={
-                checkNested(this.props.dataset, 'access_rights', 'access_type')
-                  ? this.props.dataset.access_rights
+                checkNested(this.props.dataset, 'research_dataset', 'access_rights', 'access_type')
+                  ? this.props.dataset.research_dataset.access_rights
                   : null
               }
             />
