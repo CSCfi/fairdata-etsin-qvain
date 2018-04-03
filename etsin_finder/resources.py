@@ -9,6 +9,7 @@ from etsin_finder.email_utils import \
     get_email_info, \
     get_email_message_subject, \
     get_email_recipient_address, \
+    get_harvest_info, \
     validate_send_message_request
 from etsin_finder.utils import \
     get_metax_api_config, \
@@ -73,6 +74,12 @@ class Contact(Resource):
 
         # Get the full catalog record from Metax
         cr = metax_service.get_catalog_record_with_file_details(dataset_id)
+
+        # Ensure dataset is not harvested
+        harvested = get_harvest_info(cr)
+        if harvested:
+            abort(500, message="Contact form is not available for harvested datasets")
+
         # Get the chose email recipient
         recipient = get_email_recipient_address(cr, recipient_agent_role)
         if not recipient:
