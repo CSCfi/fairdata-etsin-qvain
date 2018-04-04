@@ -5,7 +5,7 @@ let res = ''
 
 describe('Axios metax request', () => {
   it('gets data', done => {
-    axios.get('https://metax-test.csc.fi/rest/datasets/12.json').then(response => {
+    axios.get('https://metax-test.csc.fi/rest/datasets/12').then(response => {
       res = response
       done()
     })
