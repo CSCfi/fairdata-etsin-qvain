@@ -70,7 +70,7 @@ class Description extends Component {
           </Flex>
           <Flex>
             <ErrorBoundary>
-              {this.checkEmails(this.props.emails) && (
+              {this.checkEmails(this.props.emails) && !this.props.harvested && (
                 <Contact
                   datasetID={this.props.dataset.research_dataset.preferred_identifier}
                   emails={this.props.emails}

@@ -96,6 +96,11 @@ def get_email_info(catalog_record):
     return ret_obj
 
 
+# Returns True if dataset was harvested from a third party source
+def get_harvest_info(catalog_record):
+    return catalog_record.get('data_catalog.catalog_json.harvested', False)
+
+
 def _agent_has_email_address(agent_obj):
     if agent_obj:
         if isinstance(agent_obj, list) and len(agent_obj) > 0:
