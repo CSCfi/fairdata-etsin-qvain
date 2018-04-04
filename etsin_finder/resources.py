@@ -78,7 +78,7 @@ class Contact(Resource):
         # Ensure dataset is not harvested
         harvested = get_harvest_info(cr)
         if harvested:
-            abort(500, message="Contact form is not available for harvested datasets")
+            abort(400, message="Contact form is not available for harvested datasets")
 
         # Get the chose email recipient
         recipient = get_email_recipient_address(cr, recipient_agent_role)
