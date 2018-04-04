@@ -67,6 +67,7 @@ class Dataset extends React.Component {
             result.catalog_record.research_dataset.files,
           harvested: result.catalog_record.data_catalog.catalog_json.harvested,
           deprecated: result.catalog_record.deprecated,
+          removed: result.catalog_record.removed,
           loaded: true,
         })
       })
@@ -112,7 +113,7 @@ class Dataset extends React.Component {
     // CASE 2: Business as usual
     return this.state.loaded ? (
       <div>
-        {this.state.deprecated && <NoticeBar deprecated={translate('tombstone.info')} />}
+        {(this.state.deprecated || this.state.removed) && <NoticeBar deprecated={translate('tombstone.info')} />}
         <div className="container regular-row">
           <button onClick={() => this.prevDataset()}>Prev</button>
           <button onClick={() => this.nextDataset()}>Next</button>
