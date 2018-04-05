@@ -17,5 +17,5 @@ etsin_finder/frontend/static/*
 !etsin_finder/frontend/static/manifest.json
 !etsin_finder/frontend/static/service-worker.js
 !etsin_finder/frontend/static/saml.html
-!etsin_finder/frontend/static/base.html
-!etsin_finder/frontend/static/attrs.html
+!etsin_finder/frontend/static/saml_base.html
+!etsin_finder/frontend/static/saml_attrs.html

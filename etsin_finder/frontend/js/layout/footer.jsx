@@ -18,6 +18,7 @@ export default class Footer extends React.Component {
             </div>
           </div>
         </div>
+        <a href="/?sso">Login</a>
       </div>
     )
   }
