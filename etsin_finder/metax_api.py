@@ -14,8 +14,8 @@ class MetaxAPIService:
 
     def __init__(self, metax_api_config):
         if metax_api_config:
-            METAX_CATALOG_RECORDS_BASE_URL = 'https://{0}/rest/datasets'.format(metax_api_config['HOST'])
-            METAX_GET_CATALOG_RECORD_URL = METAX_CATALOG_RECORDS_BASE_URL + '/{0}?preferred_identifier'
+            METAX_GET_CATALOG_RECORD_URL = 'https://{0}/rest/datasets'.format(metax_api_config['HOST']) + \
+                                           '?preferred_identifier={0}&expand_relation=data_catalog'
 
             self.METAX_GET_CATALOG_RECORD_WITH_FILE_DETAILS_URL = METAX_GET_CATALOG_RECORD_URL + '&file_details'
             self.METAX_GET_REMOVED_CATALOG_RECORD_URL = METAX_GET_CATALOG_RECORD_URL + '&removed=true'
@@ -25,6 +25,7 @@ class MetaxAPIService:
 
         :return: Metax catalog record as json
         """
+
         r = requests.get(self.METAX_GET_CATALOG_RECORD_WITH_FILE_DETAILS_URL.format(identifier),
                          headers={'Content-Type': 'application/json'},
                          timeout=TIMEOUT)

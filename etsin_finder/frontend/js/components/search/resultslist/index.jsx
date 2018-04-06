@@ -14,7 +14,7 @@ class ResultsList extends Component {
   renderList(lang) {
     const list = ElasticQuery.results.hits.map(
       single => (
-        <ListItem key={single._id} identifier={single._id} item={single._source} lang={lang} />
+        <ListItem key={single._id} item={single._source} lang={lang} />
       ),
       this
     )
