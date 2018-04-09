@@ -1,5 +1,6 @@
 *~
 *.pyc
+.pytest_cache/
 .idea/
 __pycache__
 .cache

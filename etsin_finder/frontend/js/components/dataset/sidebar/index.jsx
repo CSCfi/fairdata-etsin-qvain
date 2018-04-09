@@ -142,12 +142,24 @@ class Sidebar extends Component {
                   this.dateSeparator(dates.start_date, dates.end_date)
                 )}
             </SidebarItem>
-            {/* LICENCE */}
+            {/* LICENSE */}
             <SidebarItem component="div" trans="dataset.license" hideEmpty="true">
               {this.state.license &&
-                this.state.license.map(rights => (
-                  <p key={rights.identifier}>{checkDataLang(rights.title)}</p>
-                ))}
+                this.state.license.map(rights => {
+                  // If license URL is available, link license title
+                  if (rights.license &&
+                    (rights.license.startsWith('http://') || rights.license.startsWith('https://'))) {
+                    return (
+                      <p key={rights.identifier}>
+                        <a href={rights.license} target="_blank">{checkDataLang(rights.title)}</a>
+                      </p>
+                    )
+                  }
+                  return (
+                    <p key={rights.identifier}>{checkDataLang(rights.title)}</p>
+                  )
+                })
+              }
             </SidebarItem>
 
             <SidebarItem
