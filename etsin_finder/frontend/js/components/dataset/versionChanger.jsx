@@ -62,7 +62,7 @@ class VersionChanger extends Component {
     return (
       <VersionSelect
         background="#FFBD39"
-        newestColor="#00aa66"
+        newestColor="#53BA8A"
         color="white"
         name="versions"
         padding="0.5em 1em"

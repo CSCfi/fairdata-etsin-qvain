@@ -10,7 +10,6 @@ class Announcer extends Component {
   }
 
   componentWillReceiveProps(newProps) {
-    console.log(newProps)
     setTimeout(() => {
       this.setState({
         text: newProps.Stores.Accessibility.navText,
