@@ -57,7 +57,6 @@ export const accessRightsBool = accessRights => {
 class AccessRights extends Component {
   constructor(props) {
     super(props)
-    console.log('access rights', props.access_rights)
     let title = { en: 'Restricted Access' }
     if (props.access_rights !== undefined && props.access_rights !== null) {
       title = props.access_rights.type

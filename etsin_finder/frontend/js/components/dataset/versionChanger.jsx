@@ -1,16 +1,16 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
 import { withRouter } from 'react-router-dom'
 import translate from 'counterpart'
+import Accessibility from 'Stores/view/accessibility'
+import VersionSelect from '../general/versionselect'
+// import Select from '../general/select'
 
-import Select from '../general/select'
-
-const VersionSelect = styled(Select)`
-  width: 10.5em;
-  margin-right: 1em;
-  margin-bottom: 0;
-`
+// const VersionSelect = styled(Select)`
+//   width: 10.5em;
+//   margin-right: 1em;
+//   margin-bottom: 0;
+// `
 
 class VersionChanger extends Component {
   constructor(props) {
@@ -34,7 +34,7 @@ class VersionChanger extends Component {
 
   versionLabels = set =>
     set.map((single, i) => {
-      const old = set.length === i + 1 ? translate('dataset.version.old') : ''
+      const old = i > 0 ? translate('dataset.version.old') : ''
       return {
         label: `${translate('dataset.version.number', { number: set.length - i })} ${old}`,
         value: single.preferred_identifier,
@@ -48,6 +48,8 @@ class VersionChanger extends Component {
       },
       () => {
         this.props.history.push(`/dataset/${value.value}`)
+        Accessibility.setNavText(`Navigated to ${value.label}`)
+        console.log(Accessibility.navText)
       }
     )
   }
@@ -59,12 +61,12 @@ class VersionChanger extends Component {
   render() {
     return (
       <VersionSelect
-        bordercolor="#FFBD39"
         background="#FFBD39"
-        selectedColor="white"
-        textcolor="white"
+        newestColor="#00aa66"
+        color="white"
         name="versions"
-        clearable={false}
+        padding="0.5em 1em"
+        width="10em"
         value={this.state.selected}
         onChange={this.changeVersion}
         onBlur={this.closeModal}

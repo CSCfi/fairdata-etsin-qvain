@@ -17,6 +17,7 @@ export default class ListItem extends Component {
     return string
   }
   render() {
+    console.log('list item', this.props.item)
     return (
       <div className="listItem">
         <ErrorBoundary>

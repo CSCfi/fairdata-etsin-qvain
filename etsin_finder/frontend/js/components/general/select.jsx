@@ -20,7 +20,13 @@ export default class Select extends Component {
   render() {
     const { className, error, name, options, value, clearable, ...rest } = this.props
     return (
-      <SelectContainer className={className} error={error} {...rest}>
+      <SelectContainer
+        className={className}
+        error={error}
+        {...rest}
+        options={options}
+        value={value}
+      >
         <ReactSelect
           id={name}
           clearable={clearable}
@@ -38,6 +44,7 @@ export default class Select extends Component {
 }
 /* prettier-ignore */
 const SelectContainer = styled.div.attrs({
+  current: props => (props.options[0] === props.value && props.colorCurrent),
   bordercolor: props => (props.bordercolor ? props.bordercolor : props.theme.color.gray),
   background: props => (props.background ? props.background : 'white'),
   textcolor: props => (props.textcolor ? props.textcolor : '#666'),
@@ -83,7 +90,7 @@ const SelectContainer = styled.div.attrs({
     &.is-open > .Select-control {
       border-bottom-right-radius: 0;
       border-bottom-left-radius: 0;
-      background: ${props => props.background};
+      background: ${props => (props.current ? props.first : props.background)};
       border-color: #b3b3b3 ${props => props.bordercolor} #d9d9d9;
       .Select-arrow {
         top: -2px;
@@ -99,11 +106,11 @@ const SelectContainer = styled.div.attrs({
     }
     &.is-focused {
       > .Select-control {
-        background: ${props => props.background};
+        background: ${props => (props.current ? props.first : props.background)};
       }
       &:not(.is-open) > .Select-control {
         border-color: #007eff;
-        background: ${props => props.background};
+        background: ${props => (props.current ? props.first : props.background)};
       }
     }
     &.has-value {
@@ -153,7 +160,7 @@ const SelectContainer = styled.div.attrs({
   }
 
   .Select-control {
-    background-color: ${props => props.background};
+    background-color: ${props => (props.current ? props.first : props.background)};
     border-radius: 4px;
     border: 1px solid ${props => (props.error ? props.theme.color.error : props.bordercolor)};
     color: ${props => props.selectedcolor};
@@ -171,7 +178,7 @@ const SelectContainer = styled.div.attrs({
     }
     .Select-input:focus {
       outline: none;
-      background: ${props => props.background};
+      background: ${props => (props.current ? props.first : props.background)};
     }
   }
 
@@ -391,6 +398,9 @@ const SelectContainer = styled.div.attrs({
     &.is-disabled {
       color: ${props => props.bordercolor};
       cursor: default;
+    }
+    &:first-of-type {
+      background-color: ${props => props.first};
     }
   }
 

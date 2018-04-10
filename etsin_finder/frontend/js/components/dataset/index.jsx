@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import translate from 'counterpart'
+import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import { inject, observer } from 'mobx-react'
 
@@ -10,6 +11,11 @@ import Content from './content'
 import ErrorPage from '../errorpage'
 import ErrorBoundary from '../general/errorBoundary'
 import NoticeBar from '../general/noticeBar'
+import Button, { TransparentButton } from '../general/button'
+
+const BackButton = styled(TransparentButton)`
+  color: ${props => props.theme.color.primary};
+`
 
 class Dataset extends React.Component {
   constructor(props) {
@@ -113,14 +119,16 @@ class Dataset extends React.Component {
     // CASE 2: Business as usual
     return this.state.loaded ? (
       <div>
-        {(this.state.deprecated || this.state.removed) && <NoticeBar deprecated={translate('tombstone.info')} />}
+        {(this.state.deprecated || this.state.removed) && (
+          <NoticeBar deprecated={translate('tombstone.info')} />
+        )}
         <div className="container regular-row">
           <button onClick={() => this.prevDataset()}>Prev</button>
           <button onClick={() => this.nextDataset()}>Next</button>
-          <button className="btn btn-transparent nopadding btn-back" onClick={this.goBack}>
+          <BackButton color="" noPadding onClick={this.goBack}>
             <span aria-hidden>{'< '}</span>
             <Translate content={'dataset.goBack'} />
-          </button>
+          </BackButton>
           <div className="row">
             <Content
               identifier={this.state.identifier}

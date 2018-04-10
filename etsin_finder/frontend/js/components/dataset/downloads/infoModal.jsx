@@ -3,13 +3,14 @@ import Modal from 'react-modal'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import FileIcon from './fileIcon'
+import Button, { TransparentButton } from '../../general/button'
 
 const ModalDescription = styled.p`
   color: #555;
   margin-bottom: 2em;
 `
 
-const CloseModal = styled.button`
+const CloseModal = styled(TransparentButton)`
   background: transparent;
   border: none;
   position: absolute;
@@ -34,7 +35,7 @@ const ModalIcon = styled.div`
   }
 `
 
-const Download = styled.button`
+const Download = styled(Button)`
   width: 100%;
 `
 
@@ -132,7 +133,7 @@ const InfoModal = ({ name, id, title, size, category, type, open, closeModal, de
           <ModalDescription>{description}</ModalDescription>
         </div>
       ) : null}
-      <Download className="btn btn-etsin">Download</Download>
+      <Download noMargin>Download</Download>
     </Modal>
   )
 }

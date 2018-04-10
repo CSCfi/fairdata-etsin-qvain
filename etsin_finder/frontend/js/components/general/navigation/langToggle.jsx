@@ -3,6 +3,7 @@ import counterpart from 'counterpart'
 
 import Locale from 'Stores/view/language'
 import '../../../../locale/translations'
+import { TransparentButton } from '../button'
 
 export default class LangToggle extends Component {
   constructor(props) {
@@ -21,9 +22,9 @@ export default class LangToggle extends Component {
 
   render() {
     return (
-      <button type="button" className="btn btn-transparent" onClick={this.changeLang}>
+      <TransparentButton onClick={this.changeLang}>
         {this.state.language === 'fi' ? 'en' : 'fi'}
-      </button>
+      </TransparentButton>
     )
   }
 }
