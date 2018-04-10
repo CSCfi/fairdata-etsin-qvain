@@ -4,11 +4,12 @@ import { opacify, darken } from 'polished'
 // prettier-ignore
 const Button = styled.button.attrs({
   padding: props => (props.padding ? props.padding : '0.3em 0.6em 0.4em'),
+  margin: props => (props.margin ? props.margin : '0.25em 0.25em'),
 })`
   cursor: pointer;
   width: ${props => (props.width ? props.width : '')};
   padding: ${props => (props.noPadding ? 0 : props.padding)};
-  margin: ${props => (props.noMargin ? 0 : '0.25em 0.25em')};
+  margin: ${props => (props.noMargin ? 0 : props.margin)};
   border: ${props => (props.thin ? '1px' : '2px')} solid ${props => (props.color ? props.color : props.theme.color.primary)};
   background-color: ${props => (props.color ? props.color : props.theme.color.primary)};
   color: ${props => (props.color !== 'white' ? 'white' : props.theme.color.primary)};
@@ -70,8 +71,10 @@ export const InvertedButton = Button.extend`
     color: ${props => opacify(-0.5, (props.color ? props.color : props.theme.color.primary))};
   }
 `
-export const TransparentButton = Button.extend`
-  margin: ${props => (props.noMargin ? 0 : '0.1em 0.1em')};
+export const TransparentButton = styled(Button).attrs({
+  margin: props => (props.margin ? props.margin : '0.1em'),
+})`
+  margin: ${props => (props.noMargin ? 0 : props.margin)};
   border: none;
   background-color: transparent;
   color: ${props => (props.color ? props.color : props.theme.color.darkgray)};

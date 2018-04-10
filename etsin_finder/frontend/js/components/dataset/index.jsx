@@ -124,9 +124,15 @@ class Dataset extends React.Component {
           <NoticeBar deprecated={translate('tombstone.info')} />
         )}
         <div className="container regular-row">
-          <button onClick={() => this.prevDataset()}>Prev</button>
-          <button onClick={() => this.nextDataset()}>Next</button>
-          <BackButton color="" noPadding onClick={this.goBack}>
+          {process.env.NODE_ENV === 'development' ? (
+            <div>
+              <button onClick={() => this.prevDataset()}>Prev</button>
+              <button onClick={() => this.nextDataset()}>Next</button>
+            </div>
+          ) : (
+            ''
+          )}
+          <BackButton color="" noPadding margin="0 0 0.5em 0" onClick={this.goBack}>
             <span aria-hidden>{'< '}</span>
             <Translate content={'dataset.goBack'} />
           </BackButton>
