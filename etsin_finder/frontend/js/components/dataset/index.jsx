@@ -1,15 +1,22 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import translate from 'counterpart'
+import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import { inject, observer } from 'mobx-react'
 
 import DatasetQuery from 'Stores/view/datasetquery'
+import Accessibility from 'Stores/view/accessibility'
 import Sidebar from './sidebar'
 import Content from './content'
 import ErrorPage from '../errorpage'
 import ErrorBoundary from '../general/errorBoundary'
 import NoticeBar from '../general/noticeBar'
+import { TransparentButton } from '../general/button'
+
+const BackButton = styled(TransparentButton)`
+  color: ${props => props.theme.color.primary};
+`
 
 class Dataset extends React.Component {
   constructor(props) {
@@ -25,14 +32,21 @@ class Dataset extends React.Component {
     this.query = this.query.bind(this)
     this.goBack = this.goBack.bind(this)
   }
-
   componentDidMount() {
+    Accessibility.setNavText('Navigated to Dataset page')
     this.query()
   }
 
   componentWillReceiveProps(newProps) {
     if (this.props.match.params.identifier !== newProps.match.params.identifier) {
-      this.query(newProps.match.params.identifier)
+      this.setState(
+        {
+          loaded: false,
+        },
+        () => {
+          this.query(newProps.match.params.identifier)
+        }
+      )
     }
   }
 
@@ -74,18 +88,12 @@ class Dataset extends React.Component {
     let path = this.props.location.pathname.slice(1)
     path = path.split('/')
     const id = parseInt(this.props.match.params.identifier, 10) + 1
-    this.setState(
-      {
-        loaded: false,
-      },
-      () => {
-        if (path[2]) {
-          this.props.history.push(`/dataset/${id}/${path[2]}`)
-        } else {
-          this.props.history.push(`/dataset/${id}`)
-        }
-      }
-    )
+
+    if (path[2]) {
+      this.props.history.push(`/dataset/${id}/${path[2]}`)
+    } else {
+      this.props.history.push(`/dataset/${id}`)
+    }
   }
 
   // goes back to previous page, which might be outside
@@ -97,18 +105,11 @@ class Dataset extends React.Component {
     let path = this.props.location.pathname.slice(1)
     path = path.split('/')
     const id = parseInt(this.props.match.params.identifier, 10) - 1
-    this.setState(
-      {
-        loaded: false,
-      },
-      () => {
-        if (path[2]) {
-          this.props.history.push(`/dataset/${id}/${path[2]}`)
-        } else {
-          this.props.history.push(`/dataset/${id}`)
-        }
-      }
-    )
+    if (path[2]) {
+      this.props.history.push(`/dataset/${id}/${path[2]}`)
+    } else {
+      this.props.history.push(`/dataset/${id}`)
+    }
   }
 
   render() {
@@ -119,14 +120,16 @@ class Dataset extends React.Component {
     // CASE 2: Business as usual
     return this.state.loaded ? (
       <div>
-        {(this.state.deprecated || this.state.removed) && <NoticeBar deprecated={translate('tombstone.info')} />}
+        {(this.state.deprecated || this.state.removed) && (
+          <NoticeBar deprecated={translate('tombstone.info')} />
+        )}
         <div className="container regular-row">
           <button onClick={() => this.prevDataset()}>Prev</button>
           <button onClick={() => this.nextDataset()}>Next</button>
-          <button className="btn btn-transparent nopadding btn-back" onClick={this.goBack}>
+          <BackButton color="" noPadding onClick={this.goBack}>
             <span aria-hidden>{'< '}</span>
             <Translate content={'dataset.goBack'} />
-          </button>
+          </BackButton>
           <div className="row">
             <Content
               identifier={this.state.identifier}

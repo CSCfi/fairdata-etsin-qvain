@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import styled, { withTheme } from 'styled-components'
+import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import { inject, observer } from 'mobx-react'
 
+import Accessiblity from 'Stores/view/accessibility'
 import dateFormat from 'Utils/dateFormat'
 import checkNested from 'Utils/checkNested'
 import checkDataLang from 'Utils/checkDataLang'
@@ -13,6 +14,7 @@ import AccessRights from './data/accessRights'
 import ErrorBoundary from '../general/errorBoundary'
 import Person from './person'
 import Contact from './contact'
+import VersionChanger from './versionChanger'
 
 const Labels = styled.div`
   display: flex;
@@ -20,12 +22,6 @@ const Labels = styled.div`
   flex-wrap: wrap;
   align-items: center;
   margin-bottom: 0.5em;
-`
-
-const LabelButton = styled(Button)`
-  margin: 0;
-  margin-right: 0.5em;
-  font-size: 0.9em;
 `
 
 const Flex = styled.div`
@@ -47,6 +43,10 @@ class Description extends Component {
     }
   }
 
+  componentDidMount() {
+    Accessiblity.setNavText('Navigated to Dataset tab')
+  }
+
   checkEmails(obj) {
     for (const o in obj) if (obj[o]) return true
     return false
@@ -57,28 +57,31 @@ class Description extends Component {
       <div className="dsContent">
         <Labels>
           <Flex>
-            <LabelButton
-              onClick={() => alert('Change version')}
-              color={this.props.theme.color.yellow}
-            >
-              Versio 2 (Vanha)
-            </LabelButton>
+            {this.props.dataset.data_catalog.catalog_json.dataset_versioning &&
+              this.props.dataset.dataset_version_set &&
+              this.props.dataset.dataset_version_set[0] && (
+                <VersionChanger
+                  versionSet={this.props.dataset.dataset_version_set}
+                  pid={this.props.dataset.research_dataset.preferred_identifier}
+                />
+              )}
             <AccessRights
               access_rights={
-                checkNested(this.props.dataset, 'access_rights', 'access_type')
-                  ? this.props.dataset.access_rights
+                checkNested(this.props.dataset, 'research_dataset', 'access_rights', 'access_type')
+                  ? this.props.dataset.research_dataset.access_rights
                   : null
               }
             />
           </Flex>
           <Flex>
             <ErrorBoundary>
-              {this.checkEmails(this.props.emails) && !this.props.harvested && (
-                <Contact
-                  datasetID={this.props.dataset.research_dataset.preferred_identifier}
-                  emails={this.props.emails}
-                />
-              )}
+              {this.checkEmails(this.props.emails) &&
+                !this.props.harvested && (
+                  <Contact
+                    datasetID={this.props.dataset.research_dataset.preferred_identifier}
+                    emails={this.props.emails}
+                  />
+                )}
             </ErrorBoundary>
             <Button onClick={() => alert('Hae käyttölupaa')} noMargin>
               <Translate content="dataset.access_permission" />
@@ -111,11 +114,10 @@ class Description extends Component {
   }
 }
 
-export default withTheme(inject('Stores')(observer(Description)))
+export default inject('Stores')(observer(Description))
 
 Description.propTypes = {
   dataset: PropTypes.object.isRequired,
-  theme: PropTypes.object.isRequired,
   emails: PropTypes.shape({
     CONTRIBUTOR: PropTypes.bool,
     CREATOR: PropTypes.bool,

@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import ReactSelect from 'react-select'
 import styled from 'styled-components'
+import { lighten } from 'polished'
+import PropTypes from 'prop-types'
 
 // react-select library: https://github.com/JedWatson/react-select
 
@@ -16,26 +18,39 @@ export default class Select extends Component {
   }
 
   render() {
+    const { className, error, name, options, value, clearable, ...rest } = this.props
     return (
-      <SelectContainer error={this.props.error}>
+      <SelectContainer
+        className={className}
+        error={error}
+        {...rest}
+        options={options}
+        value={value}
+      >
         <ReactSelect
-          id={this.props.name}
-          name={this.props.name}
-          options={this.props.options}
+          id={name}
+          clearable={clearable}
+          name={name}
+          options={options}
           onChange={this.handleChange}
           onBlur={this.handleBlur}
-          value={this.props.value}
+          value={value}
+          noResultsText={false}
+          searchable={false}
         />
       </SelectContainer>
     )
   }
 }
-
+/* prettier-ignore */
 const SelectContainer = styled.div.attrs({
-  bordercolor: props => props.theme.color.gray,
-  background: 'white',
-  selectedcolor: '#333',
-  textpadding: '1.2em',
+  current: props => (props.options[0] === props.value && props.colorCurrent),
+  bordercolor: props => (props.bordercolor ? props.bordercolor : props.theme.color.gray),
+  background: props => (props.background ? props.background : 'white'),
+  textcolor: props => (props.textcolor ? props.textcolor : '#666'),
+  selectedcolor: props => (props.selectedColor ? props.selectedColor : '#333'),
+  placeholder: props => (props.textcolor ? props.textcolor : '#aaa'),
+  textpadding: props => (props.textpadding ? props.textpadding : '1.2em'),
 })`
   margin-bottom: 1em;
   height: min-content;
@@ -75,11 +90,11 @@ const SelectContainer = styled.div.attrs({
     &.is-open > .Select-control {
       border-bottom-right-radius: 0;
       border-bottom-left-radius: 0;
-      background: ${props => props.background};
+      background: ${props => (props.current ? props.first : props.background)};
       border-color: #b3b3b3 ${props => props.bordercolor} #d9d9d9;
       .Select-arrow {
         top: -2px;
-        border-color: transparent transparent #999;
+        border-color: transparent transparent ${props => lighten(0.2, props.textcolor)};
         border-width: 0 5px 5px;
       }
     }
@@ -91,12 +106,11 @@ const SelectContainer = styled.div.attrs({
     }
     &.is-focused {
       > .Select-control {
-        background: ${props => props.background};
+        background: ${props => (props.current ? props.first : props.background)};
       }
       &:not(.is-open) > .Select-control {
         border-color: #007eff;
-        box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 0 3px rgba(0, 126, 255, 0.1);
-        background: ${props => props.background};
+        background: ${props => (props.current ? props.first : props.background)};
       }
     }
     &.has-value {
@@ -137,7 +151,7 @@ const SelectContainer = styled.div.attrs({
     }
     &.is-open .Select-arrow,
     .Select-arrow-zone:hover > .Select-arrow {
-      border-top-color: #666;
+      border-top-color: ${props => props.textcolor};
     }
     &.Select--rtl {
       direction: rtl;
@@ -146,7 +160,7 @@ const SelectContainer = styled.div.attrs({
   }
 
   .Select-control {
-    background-color: ${props => props.background};
+    background-color: ${props => (props.current ? props.first : props.background)};
     border-radius: 4px;
     border: 1px solid ${props => (props.error ? props.theme.color.error : props.bordercolor)};
     color: ${props => props.selectedcolor};
@@ -164,14 +178,14 @@ const SelectContainer = styled.div.attrs({
     }
     .Select-input:focus {
       outline: none;
-      background: ${props => props.background};
+      background: ${props => (props.current ? props.first : props.background)};
     }
   }
 
   .Select-placeholder,
   .Select--single > .Select-control .Select-value {
     bottom: 0;
-    color: #aaa;
+    color: ${props => props.placeholder};
     left: 0;
     line-height: 36px;
     padding-left: ${props => props.textpadding};
@@ -249,7 +263,7 @@ const SelectContainer = styled.div.attrs({
     -webkit-animation: Select-animation-fadeIn 200ms;
     -o-animation: Select-animation-fadeIn 200ms;
     animation: Select-animation-fadeIn 200ms;
-    color: #999;
+    color: ${props => lighten(0.2, props.textcolor)};
     cursor: pointer;
     display: table-cell;
     position: relative;
@@ -287,7 +301,7 @@ const SelectContainer = styled.div.attrs({
   }
 
   .Select-arrow {
-    border-color: #999 transparent transparent;
+    border-color: ${props => lighten(0.2, props.textcolor)} transparent transparent;
     border-style: solid;
     border-width: 5px 5px 2.5px;
     display: inline-block;
@@ -340,7 +354,7 @@ const SelectContainer = styled.div.attrs({
     border-bottom-left-radius: 4px;
     background-color: ${props => props.background};
     border: 1px solid ${props => props.bordercolor};
-    border-top-color: #e6e6e6;
+    border-top-color: ${props => props.bordercolor};
     box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
     box-sizing: border-box;
     margin-top: -1px;
@@ -361,7 +375,7 @@ const SelectContainer = styled.div.attrs({
   .Select-option {
     box-sizing: border-box;
     background-color: ${props => props.background};
-    color: #666666;
+    color: ${props => props.textcolor};
     cursor: pointer;
     display: block;
     padding: 8px ${props => props.textpadding};
@@ -372,24 +386,27 @@ const SelectContainer = styled.div.attrs({
     &.is-selected {
       background-color: #f5faff;
       /* Fallback color for IE 8 */
-      background-color: rgba(props => props.color.theme.primary, 0.04);
+      background-color: rgba(255, 255, 255, 0.1);
       color: ${props => props.selectedcolor};
     }
     &.is-focused {
       background-color: #ebf5ff;
       /* Fallback color for IE 8 */
-      background-color: rgba(props => props.color.theme.primary, 0.08);
+      background-color: rgba(0, 0, 0, 0.06);
       color: ${props => props.selectedcolor};
     }
     &.is-disabled {
       color: ${props => props.bordercolor};
       cursor: default;
     }
+    &:first-of-type {
+      background-color: ${props => props.first};
+    }
   }
 
   .Select-noresults {
     box-sizing: border-box;
-    color: #999999;
+    color: ${props => props.textcolor};
     cursor: default;
     display: block;
     padding: 8px ${props => props.textpadding};
@@ -507,3 +524,20 @@ const SelectContainer = styled.div.attrs({
     }
   }
 `
+
+Select.defaultProps = {
+  className: '',
+  error: false,
+  clearable: true,
+}
+
+Select.propTypes = {
+  name: PropTypes.string.isRequired,
+  onBlur: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
+  className: PropTypes.string,
+  clearable: PropTypes.bool,
+  error: PropTypes.bool,
+  options: PropTypes.array.isRequired,
+  value: PropTypes.object.isRequired,
+}

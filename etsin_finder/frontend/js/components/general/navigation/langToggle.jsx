@@ -1,29 +1,40 @@
 import React, { Component } from 'react'
-import counterpart from 'counterpart'
 
 import Locale from 'Stores/view/language'
 import '../../../../locale/translations'
+import { TransparentButton } from '../button'
 
-export default class LangToggle extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      language: counterpart.getLocale(),
-    }
-    this.changeLang = this.changeLang.bind(this)
+class LangToggle extends Component {
+  state = {
+    announce: '',
+    lang: Locale.currentLang,
   }
-  changeLang() {
+
+  changeLang = () => {
     Locale.toggleLang()
-    this.setState({
-      language: Locale.currentLang,
-    })
+    setTimeout(() => {
+      this.setState({
+        lang: Locale.currentLang,
+        announce: `Changed language to ${Locale.currentLang}`,
+      })
+    }, 50)
+    setTimeout(() => {
+      this.setState({
+        announce: '',
+      })
+    }, 500)
   }
 
   render() {
     return (
-      <button type="button" className="btn btn-transparent" onClick={this.changeLang}>
-        {this.state.language === 'fi' ? 'en' : 'fi'}
-      </button>
+      <div>
+        <div className="sr-only" aria-live="assertive">
+          {this.state.announce}
+        </div>
+        <TransparentButton onClick={this.changeLang}>{this.state.lang}</TransparentButton>
+      </div>
     )
   }
 }
+
+export default LangToggle

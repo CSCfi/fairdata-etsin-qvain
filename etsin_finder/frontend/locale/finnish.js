@@ -89,7 +89,7 @@ const finnish = {
     goBack: 'Palaa takaisin',
     identifier: 'Tunniste',
     infrastructure: 'Infrastruktuuri',
-    keywords: 'Keywords',
+    keywords: 'Avainsanat',
     license: 'Lisenssi',
     permanent_link: 'Pysyvä linkki tälle sivulle',
     project: 'Projekti',
@@ -97,6 +97,7 @@ const finnish = {
     rights_holder: 'Oikeuksienhaltija',
     spatial_coverage: 'Maantieteellinen kattavuus',
     temporal_coverage: 'Ajallinen kattavuus',
+    version: { number: 'Versio %(number)s', old: '(Vanha)' },
   },
   error: {
     notFound: 'Annetulle id:lle ei löytynyt metadataa',

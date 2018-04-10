@@ -7,6 +7,7 @@ const IdnLink = styled(Link)`
   background-color: ${props => props.theme.color.primary};
   border: ${props => props.theme.color.primary};
   width: max-content;
+  max-width: 100%;
   color: white;
   border-radius: 0.3em;
   display: flex;

@@ -7,6 +7,11 @@ class Accessibility {
   setNavText(text) {
     this.navText = text
   }
+
+  @action
+  clearNavText() {
+    this.navText = ''
+  }
 }
 
 export default new Accessibility()

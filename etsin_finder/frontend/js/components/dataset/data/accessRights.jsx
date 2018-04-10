@@ -57,12 +57,12 @@ class AccessRights extends Component {
   constructor(props) {
     super(props)
     let title = { en: 'Restricted Access' }
-    if (this.props.access_rights !== undefined && this.props.access_rights !== null) {
-      title = this.props.access_rights.type
-        ? this.props.access_rights.type.map(item => item.identifier)
-        : this.props.access_rights.license.map(item => item.identifier)
+    if (props.access_rights !== undefined && props.access_rights !== null) {
+      title = props.access_rights.type
+        ? props.access_rights.type.map(item => item.identifier)
+        : props.access_rights.license.map(item => item.identifier)
     }
-    this.lang = this.props.Stores.Locale.currentLang
+    this.lang = props.Stores.Locale.currentLang
     this.state = {
       title,
     }

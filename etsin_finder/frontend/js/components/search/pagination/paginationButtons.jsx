@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 
 import ElasticQuery from 'Stores/view/elasticquery'
+import { TransparentButton } from '../../general/button'
 
 class PaginationButtons extends Component {
   constructor(props) {
@@ -188,14 +189,13 @@ class PaginationButtons extends Component {
     return (
       <ul className="pagination">
         {this.state.currentPage > 1 && (
-          <button
-            className="btn btn-transparent"
+          <TransparentButton
             onClick={e => {
               this.changePage(e, this.state.currentPage - 1)
             }}
           >
             {'<'} Previous page
-          </button>
+          </TransparentButton>
         )}
         {// first page
         this.state.currentPage !== 1 && this.singlePage(1, true)}
@@ -210,14 +210,13 @@ class PaginationButtons extends Component {
         this.state.currentPage !== this.state.pageAmount &&
           this.singlePage(this.state.pageAmount, true)}
         {this.state.currentPage < this.state.pageAmount && (
-          <button
-            className="btn btn-transparent"
+          <TransparentButton
             onClick={e => {
               this.changePage(e, this.state.currentPage + 1)
             }}
           >
             Next page {'>'}
-          </button>
+          </TransparentButton>
         )}
       </ul>
     )

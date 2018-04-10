@@ -72,7 +72,7 @@ export default class Navi extends React.Component {
             >
               <Translate content="nav.datasets" />
             </NavLink>
-            <NavLink
+            {/* <NavLink
               to="/organizations"
               className="nav-link"
               onClick={() => {
@@ -83,7 +83,7 @@ export default class Navi extends React.Component {
               }}
             >
               <Translate content="nav.organizations" />
-            </NavLink>
+            </NavLink> */}
             <NavLink
               to="/about"
               className="nav-link"

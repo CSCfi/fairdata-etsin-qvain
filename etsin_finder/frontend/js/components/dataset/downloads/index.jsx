@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import Translate from 'react-translate-component'
 import styled from 'styled-components'
 import DatasetQuery from 'Stores/view/datasetquery'
+import Accessiblity from 'Stores/view/accessibility'
 import checkDataLang from 'Utils/checkDataLang'
 import sizeParse from 'Utils/sizeParse'
 import createTree from 'Utils/createTree'
@@ -54,6 +55,10 @@ export default class Downloads extends Component {
     this.tableItems = this.tableItems.bind(this)
     this.changeFolder = this.changeFolder.bind(this)
     this.query = this.query.bind(this)
+  }
+
+  componentDidMount() {
+    Accessiblity.setNavText('Navigated to Data tab')
   }
 
   createDirTree(files, folders, fileApi = false) {
@@ -226,7 +231,7 @@ export default class Downloads extends Component {
             ids={this.state.currentIDs}
             callback={this.updatePath}
           />
-          <table className="table downloads-table" aria-live="assertive">
+          <table className="table downloads-table" aria-live="polite">
             <thead className="thead-dark">
               <tr>
                 <th className="rowIcon" scope="col" />

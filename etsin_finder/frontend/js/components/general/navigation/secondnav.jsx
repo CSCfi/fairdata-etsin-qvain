@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Translate from 'react-translate-component'
 import LangToggle from './langToggle'
+import Button from '../button'
 
 export default class SecondNav extends Component {
   alertButton() {
@@ -9,9 +10,9 @@ export default class SecondNav extends Component {
   render() {
     return (
       <div className="top-nav-right">
-        <button type="button" className="btn btn-etsin" onClick={this.alertButton}>
+        <Button width="max-content" onClick={this.alertButton}>
           <Translate content="addDataset" />
-        </button>
+        </Button>
         <LangToggle />
       </div>
     )
