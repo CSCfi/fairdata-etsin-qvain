@@ -6,12 +6,13 @@ import Translate from 'react-translate-component'
 import { inject, observer } from 'mobx-react'
 
 import DatasetQuery from 'Stores/view/datasetquery'
+import Accessibility from 'Stores/view/accessibility'
 import Sidebar from './sidebar'
 import Content from './content'
 import ErrorPage from '../errorpage'
 import ErrorBoundary from '../general/errorBoundary'
 import NoticeBar from '../general/noticeBar'
-import Button, { TransparentButton } from '../general/button'
+import { TransparentButton } from '../general/button'
 
 const BackButton = styled(TransparentButton)`
   color: ${props => props.theme.color.primary};
@@ -31,8 +32,8 @@ class Dataset extends React.Component {
     this.query = this.query.bind(this)
     this.goBack = this.goBack.bind(this)
   }
-
   componentDidMount() {
+    Accessibility.setNavText('Navigated to Dataset page')
     this.query()
   }
 

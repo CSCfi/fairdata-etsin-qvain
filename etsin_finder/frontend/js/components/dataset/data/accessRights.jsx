@@ -22,7 +22,6 @@ const Access = styled.div`
 `
 
 export const accessRightsBool = accessRights => {
-  console.log('accessRights', accessRights)
   const openValues = [
     'http://purl.org/att/es/reference_data/access_type/access_type_open_access',
     'open_access',

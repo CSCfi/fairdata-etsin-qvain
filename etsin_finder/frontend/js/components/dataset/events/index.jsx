@@ -4,6 +4,7 @@ import Translate from 'react-translate-component'
 import { inject, observer } from 'mobx-react'
 import styled from 'styled-components'
 
+import Accessibility from 'Stores/view/accessibility'
 import checkDataLang from 'Utils/checkDataLang'
 import DateFormat from '../../general/dateFormat'
 
@@ -53,6 +54,9 @@ const Margin = styled.div`
 `
 
 class Events extends Component {
+  componentDidMount() {
+    Accessibility.setNavText('Navigated to Identifiers and Events tab')
+  }
   checkProvenance = prov => {
     if (prov) {
       if (prov.length > 1) {

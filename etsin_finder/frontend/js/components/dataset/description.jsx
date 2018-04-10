@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import { inject, observer } from 'mobx-react'
 
+import Accessiblity from 'Stores/view/accessibility'
 import dateFormat from 'Utils/dateFormat'
 import checkNested from 'Utils/checkNested'
 import checkDataLang from 'Utils/checkDataLang'
@@ -42,6 +43,10 @@ class Description extends Component {
     }
   }
 
+  componentDidMount() {
+    Accessiblity.setNavText('Navigated to Dataset tab')
+  }
+
   checkEmails(obj) {
     for (const o in obj) if (obj[o]) return true
     return false
@@ -70,12 +75,13 @@ class Description extends Component {
           </Flex>
           <Flex>
             <ErrorBoundary>
-              {this.checkEmails(this.props.emails) && !this.props.harvested && (
-                <Contact
-                  datasetID={this.props.dataset.research_dataset.preferred_identifier}
-                  emails={this.props.emails}
-                />
-              )}
+              {this.checkEmails(this.props.emails) &&
+                !this.props.harvested && (
+                  <Contact
+                    datasetID={this.props.dataset.research_dataset.preferred_identifier}
+                    emails={this.props.emails}
+                  />
+                )}
             </ErrorBoundary>
             <Button onClick={() => alert('Hae käyttölupaa')} noMargin>
               <Translate content="dataset.access_permission" />
