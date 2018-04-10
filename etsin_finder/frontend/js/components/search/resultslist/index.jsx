@@ -12,9 +12,15 @@ class ResultsList extends Component {
   }
 
   renderList(lang) {
+    console.log('ES results', ElasticQuery.results)
     const list = ElasticQuery.results.hits.map(
       single => (
-        <ListItem key={single._id} item={single._source} lang={lang} />
+        <ListItem
+          key={single._id}
+          catId={single._source.identifier}
+          item={single._source}
+          lang={lang}
+        />
       ),
       this
     )

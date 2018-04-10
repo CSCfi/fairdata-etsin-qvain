@@ -29,6 +29,9 @@ class DatasetQuery {
 
   @action
   getFolderData(id, prefId) {
+    // TODO:
+    // This will change to use catalog record identifier and not pid
+    // Will be implemented later
     return new Promise((resolve, reject) => {
       axios
         .get(`${this.metaxUrl}/rest/directories/${id}/files?preferred_identifier=${prefId}`)

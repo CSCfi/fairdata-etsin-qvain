@@ -59,10 +59,11 @@ class Description extends Component {
           <Flex>
             {this.props.dataset.data_catalog.catalog_json.dataset_versioning &&
               this.props.dataset.dataset_version_set &&
-              this.props.dataset.dataset_version_set[0] && (
+              this.props.dataset.dataset_version_set[0] &&
+              this.props.dataset.dataset_version_set.length > 1 && (
                 <VersionChanger
                   versionSet={this.props.dataset.dataset_version_set}
-                  pid={this.props.dataset.research_dataset.preferred_identifier}
+                  idn={this.props.dataset.identifier}
                 />
               )}
             <AccessRights
@@ -77,10 +78,7 @@ class Description extends Component {
             <ErrorBoundary>
               {this.checkEmails(this.props.emails) &&
                 !this.props.harvested && (
-                  <Contact
-                    datasetID={this.props.dataset.research_dataset.preferred_identifier}
-                    emails={this.props.emails}
-                  />
+                  <Contact datasetID={this.props.dataset.identifier} emails={this.props.emails} />
                 )}
             </ErrorBoundary>
             <Button onClick={() => alert('Hae käyttölupaa')} noMargin>

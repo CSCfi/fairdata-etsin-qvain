@@ -62,6 +62,7 @@ class Dataset extends React.Component {
     }
     DatasetQuery.getData(identifier)
       .then(result => {
+        console.log('Dataset', result)
         // TODO: The code below needs to be revised
         // TODO: Somewhere we need to think how 1) harvested, 2) accumulative, 3) deprecated, 4) removed, 5) ordinary
         // TODO: datasets are rendered. Maybe not here?
