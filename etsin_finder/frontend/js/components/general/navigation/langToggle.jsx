@@ -1,19 +1,21 @@
 import React, { Component } from 'react'
-import { inject, observer } from 'mobx-react'
 
+import Locale from 'Stores/view/language'
 import '../../../../locale/translations'
 import { TransparentButton } from '../button'
 
 class LangToggle extends Component {
   state = {
     announce: '',
+    lang: Locale.currentLang,
   }
 
   changeLang = () => {
-    this.props.Stores.Locale.toggleLang()
+    Locale.toggleLang()
     setTimeout(() => {
       this.setState({
-        announce: `Changed language to ${this.props.Stores.Locale.currentLang}`,
+        lang: Locale.currentLang,
+        announce: `Changed language to ${Locale.currentLang}`,
       })
     }, 50)
     setTimeout(() => {
@@ -29,12 +31,10 @@ class LangToggle extends Component {
         <div className="sr-only" aria-live="assertive">
           {this.state.announce}
         </div>
-        <TransparentButton onClick={this.changeLang}>
-          {this.props.Stores.Locale.currentLang}
-        </TransparentButton>
+        <TransparentButton onClick={this.changeLang}>{this.state.lang}</TransparentButton>
       </div>
     )
   }
 }
 
-export default inject('Stores')(observer(LangToggle))
+export default LangToggle
