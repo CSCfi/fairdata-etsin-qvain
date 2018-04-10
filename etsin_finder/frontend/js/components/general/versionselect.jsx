@@ -121,7 +121,6 @@ export default class VersionSelect extends Component {
         isFocused: false,
       },
       () => {
-        console.log(selected)
         this.props.onChange('Version Select', selected)
       }
     )
@@ -176,6 +175,11 @@ export default class VersionSelect extends Component {
                       : this.props.background
                   }
                 >
+                  {this.props.options[0] === single ? (
+                    <span className="sr-only">Current version: </span>
+                  ) : (
+                    ''
+                  )}
                   {single.label}
                 </ListItem>
               ))}
