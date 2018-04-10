@@ -56,6 +56,9 @@ const Controller = styled(ListButton)`
 export default class VersionSelect extends Component {
   constructor(props) {
     super(props)
+
+    this.timeoutID = undefined
+
     this.state = {
       isOpen: false,
       options: props.options,
@@ -100,7 +103,15 @@ export default class VersionSelect extends Component {
     }
   }
 
-  timeoutID
+  setFirstOptionRef = element => {
+    this.firstOption = element
+  }
+
+  focusFirstOption = () => {
+    if (this.firstOption) {
+      this.firstOption.focus()
+    }
+  }
 
   changeSelected = selected => {
     this.setState(
@@ -117,9 +128,16 @@ export default class VersionSelect extends Component {
   }
 
   toggleOpen = () => {
-    this.setState({
-      isOpen: !this.state.isOpen,
-    })
+    this.setState(
+      {
+        isOpen: !this.state.isOpen,
+      },
+      () => {
+        if (this.state.isOpen) {
+          this.focusFirstOption()
+        }
+      }
+    )
   }
 
   render() {
@@ -151,6 +169,7 @@ export default class VersionSelect extends Component {
                   key={single.value}
                   onClick={() => this.changeSelected(single)}
                   value={single.value}
+                  innerRef={this.setFirstOptionRef}
                   background={
                     this.props.options[0] === single
                       ? this.state.newestColor
