@@ -35,6 +35,14 @@ class FilterSection extends Component {
         aggregation: { en: 'keyword_en', fi: 'keyword_fi' },
         term: { en: 'theme.label.en.keyword', fi: 'theme.label.fi.keyword' },
       },
+      infrastructure: {
+        title: { en: 'Research Infra', fi: 'Tutkimusinfra' },
+        aggregation: { en: 'infrastructure_en', fi: 'infrastructure_fi' },
+        term: {
+          en: 'infrastructure.pref_label.en.keyword',
+          fi: 'infrastructure.pref_label.fi.keyword',
+        },
+      },
     }
   }
 

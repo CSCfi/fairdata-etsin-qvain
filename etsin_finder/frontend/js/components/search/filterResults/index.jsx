@@ -11,6 +11,7 @@ class FilterResults extends Component {
         <FilterSection aggregation="creator" />
         <FilterSection aggregation="field_of_science" />
         <FilterSection aggregation="keyword" />
+        <FilterSection aggregation="infrastructure" />
       </div>
     )
   }
