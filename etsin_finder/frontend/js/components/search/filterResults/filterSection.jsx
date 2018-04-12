@@ -43,6 +43,11 @@ class FilterSection extends Component {
           fi: 'infrastructure.pref_label.fi.keyword',
         },
       },
+      project: {
+        title: { en: 'Project', fi: 'Projekti' },
+        aggregation: { und: 'project' },
+        term: { und: 'project_name.keyword' },
+      },
     }
   }
 

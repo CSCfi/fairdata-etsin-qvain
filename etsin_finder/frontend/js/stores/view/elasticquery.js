@@ -297,6 +297,11 @@ class ElasticQuery {
                 field: 'infrastructure.pref_label.fi.keyword',
               },
             },
+            project: {
+              terms: {
+                field: 'project_name.keyword',
+              },
+            },
           },
         })
         .then(res => {

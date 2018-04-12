@@ -12,6 +12,7 @@ class FilterResults extends Component {
         <FilterSection aggregation="field_of_science" />
         <FilterSection aggregation="keyword" />
         <FilterSection aggregation="infrastructure" />
+        <FilterSection aggregation="project" />
       </div>
     )
   }
