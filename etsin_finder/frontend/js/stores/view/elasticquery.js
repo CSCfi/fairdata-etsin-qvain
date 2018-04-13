@@ -302,6 +302,16 @@ class ElasticQuery {
                 field: 'project_name.keyword',
               },
             },
+            file_type_en: {
+              terms: {
+                field: 'file_type.pref_label.en.keyword',
+              },
+            },
+            file_type_fi: {
+              terms: {
+                field: 'file_type.pref_label.fi.keyword',
+              },
+            },
           },
         })
         .then(res => {

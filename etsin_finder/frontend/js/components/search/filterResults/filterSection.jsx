@@ -48,6 +48,14 @@ class FilterSection extends Component {
         aggregation: { und: 'project' },
         term: { und: 'project_name.keyword' },
       },
+      file_type: {
+        title: { en: 'File Type', fi: 'Tiedostotyyppi' },
+        aggregation: { en: 'file_type_en', fi: 'file_type_fi' },
+        term: {
+          en: 'file_type.pref_label.en.keyword',
+          fi: 'file_type.pref_label.fi.keyword',
+        },
+      },
     }
   }
 
