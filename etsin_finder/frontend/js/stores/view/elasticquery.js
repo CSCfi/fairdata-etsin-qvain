@@ -18,6 +18,7 @@ const fields = [
   'access_rights.type.pref_label.*',
   'theme.pref_label.*',
   'field_of_science.pref_label.*',
+  'infrastructure.pref_label.*',
   'project.pref_label.*',
   'identifier',
   'preferred_identifier',
@@ -305,6 +306,31 @@ class ElasticQuery {
               'description.*': {},
               'title.*': {},
               // Add more fields if highlights from other fields are required
+            },
+            infrastructure_en: {
+              terms: {
+                field: 'infrastructure.pref_label.en.keyword',
+              },
+            },
+            infrastructure_fi: {
+              terms: {
+                field: 'infrastructure.pref_label.fi.keyword',
+              },
+            },
+            project: {
+              terms: {
+                field: 'project_name.keyword',
+              },
+            },
+            file_type_en: {
+              terms: {
+                field: 'file_type.pref_label.en.keyword',
+              },
+            },
+            file_type_fi: {
+              terms: {
+                field: 'file_type.pref_label.fi.keyword',
+              },
             },
           },
           aggregations,
