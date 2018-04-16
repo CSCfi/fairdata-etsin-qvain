@@ -11,32 +11,32 @@ describe('getIdentifierFromQuery function', () => {
   const validAttUrn = 'urn:nbn:fi:att:12345'
   const queryWithHttp = 'http://urn.fi/' + validAttUrn
   const queryWithUrnFi = 'urn.fi/' + validAttUrn
-  const queryWithUrn =  validAttUrn
+  const queryWithUrn = validAttUrn
   const queryWithWhitespaces = ' ' + validAttUrn + ' '
 
   it('should return empty identifier for an empty query', () => {
     const identifier = getIdentifierFromQuery(emptyQuery)
-    expect(identifier).toEqual('')
+    expect(identifier).toEqual(false)
   })
   it('should return empty identifier for a query without att-urn identifier I', () => {
     const identifier = getIdentifierFromQuery(queryWithNoAttIdentifier)
-    expect(identifier).toEqual('')
+    expect(identifier).toEqual(false)
   })
   it('should return empty identifier for a query without att-urn identifier II', () => {
     const identifier = getIdentifierFromQuery(queryWithHttpAndNoIdentifier)
-    expect(identifier).toEqual('')
+    expect(identifier).toEqual(false)
   })
   it('should return empty identifier for a query without att-urn identifier III', () => {
     const identifier = getIdentifierFromQuery(queryWithUrnFiAndNoIdentifier)
-    expect(identifier).toEqual('')
+    expect(identifier).toEqual(false)
   })
   it('should return empty identifier for a query with att-urn and something else separated by whitespace', () => {
     const identifier = getIdentifierFromQuery(queryWithUrnAndSomethingElse)
-    expect(identifier).toEqual('')
+    expect(identifier).toEqual(false)
   })
   it('should return empty identifier for a query with a urn that is nott an att urn', () => {
     const identifier = getIdentifierFromQuery(queryWithOtherThanAttUrn)
-    expect(identifier).toEqual('')
+    expect(identifier).toEqual(false)
   })
   it('should return the identifier for a query containing att-urn identifier I', () => {
     const identifier = getIdentifierFromQuery(queryWithHttp)
