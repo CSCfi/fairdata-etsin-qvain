@@ -2,13 +2,15 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import translate from 'counterpart'
+import { withTheme } from 'styled-components'
+
 import Accessibility from 'Stores/view/accessibility'
-import VersionSelect from '../general/versionselect'
+import VersionSelect from './versionselect'
 
 class VersionChanger extends Component {
   constructor(props) {
     super(props)
-
+    console.log(props.versionSet)
     const versions = this.versionLabels(props.versionSet)
 
     this.state = {
@@ -31,6 +33,7 @@ class VersionChanger extends Component {
       return {
         label: `${translate('dataset.version.number', { number: set.length - i })} ${old}`,
         value: single.identifier,
+        removed: single.removed,
       }
     })
 
@@ -54,8 +57,8 @@ class VersionChanger extends Component {
   render() {
     return (
       <VersionSelect
-        background="#FFBD39"
-        newestColor="#53BA8A"
+        background={this.props.theme.color.yellow}
+        newestColor={this.props.theme.color.success}
         color="white"
         name="versions"
         padding="0.5em 1em"
@@ -73,6 +76,7 @@ VersionChanger.propTypes = {
   versionSet: PropTypes.array.isRequired,
   idn: PropTypes.string.isRequired,
   history: PropTypes.object.isRequired,
+  theme: PropTypes.object.isRequired,
 }
 
-export default withRouter(VersionChanger)
+export default withRouter(withTheme(VersionChanger))
