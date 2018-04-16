@@ -4,7 +4,6 @@ import counterpart from 'counterpart'
 
 import { Search } from 'Routes'
 import ElasticQuery from 'Stores/view/elasticquery'
-import getIdentifierFromQuery from 'Utils/getIdentifierFromQuery'
 import ErrorBoundary from '../general/errorBoundary'
 
 class SearchBar extends Component {
@@ -41,13 +40,8 @@ class SearchBar extends Component {
 
   handleSubmit(e) {
     e.preventDefault()
-    const identifier = getIdentifierFromQuery(this.state.query)
-    if (identifier) {
-      this.props.history.push(`/dataset/${identifier}`)
-    } else {
-      ElasticQuery.updateSearch(this.state.query, this.props.history)
-      ElasticQuery.queryES()
-    }
+    ElasticQuery.updateSearch(this.state.query, this.props.history)
+    ElasticQuery.queryES(false)
   }
 
   render() {
