@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { inject, observer } from 'mobx-react'
 import styled from 'styled-components'
+import FontAwesomeIcon from '@fortawesome/react-fontawesome'
+import faFilter from '@fortawesome/fontawesome-free-solid/faFilter'
 
 import ElasticQuery from 'Stores/view/elasticquery'
 import HeightTransition from './heightTransition'
@@ -10,8 +12,64 @@ import ResultsList from './resultslist'
 import ResultsAmount from './resultsAmount'
 import CurrentQuery from './currentQuery'
 import FilterResults from './filterResults'
+import FilterToggle from './filterResults/filterToggle'
 import Loader from '../general/loader'
-import { InvertedButton } from '../general/button'
+
+class Results extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      filterOpen: false,
+    }
+  }
+
+  toggleFilter = () => {
+    this.setState({
+      filterOpen: !this.state.filterOpen,
+    })
+  }
+
+  render() {
+    return (
+      <div className="container">
+        <div className="row regular-row">
+          <Grid>
+            <AmountRes>
+              <ResultsAmount />
+            </AmountRes>
+            <FilterRes>
+              <HeightTransition in={this.state.filterOpen} duration={300}>
+                <FilterResults open={this.state.filterOpen} />
+              </HeightTransition>
+            </FilterRes>
+            <SortRes>
+              <SortResults />
+              <FilterToggle
+                margin="0em 0.5em 0em 0em"
+                onClick={this.toggleFilter}
+                active={this.state.filterOpen}
+              >
+                <FontAwesomeIcon icon={faFilter} /> Filter
+              </FilterToggle>
+            </SortRes>
+            <QueryString>
+              <CurrentQuery />
+            </QueryString>
+            <LoadCont>
+              <Loader active={ElasticQuery.loading} margin="0.2em 0 1em" />
+            </LoadCont>
+            <ResList>
+              <ResultsList query={this.props.query} />
+            </ResList>
+            <PageSwitcher>
+              <Pagination />
+            </PageSwitcher>
+          </Grid>
+        </div>
+      </div>
+    )
+  }
+}
 
 const Grid = styled.div`
   display: grid;
@@ -67,69 +125,5 @@ const ResList = styled.div`
 const PageSwitcher = styled.div`
   grid-area: pagination;
 `
-
-const FilterToggle = styled(InvertedButton)`
-  @media (min-width: ${props => props.theme.breakpoints.lg}) {
-    display: none;
-  }
-  float: right;
-  align-self: center;
-`
-
-class Results extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      filterOpen: false,
-    }
-  }
-
-  toggleFilter = () => {
-    this.setState({
-      filterOpen: !this.state.filterOpen,
-    })
-  }
-
-  render() {
-    return (
-      <div className="container">
-        <div className="row regular-row">
-          <Grid>
-            <AmountRes>
-              <ResultsAmount />
-            </AmountRes>
-            <FilterRes collapsed={this.state.filterOpen}>
-              <HeightTransition in={this.state.filterOpen} duration={300}>
-                <FilterResults />
-              </HeightTransition>
-            </FilterRes>
-            <SortRes>
-              <FilterToggle
-                margin="0em 0em 0em 0.5em"
-                padding="0.375rem 0.75rem"
-                onClick={this.toggleFilter}
-              >
-                Toggle Filter
-              </FilterToggle>
-              <SortResults />
-            </SortRes>
-            <QueryString>
-              <CurrentQuery />
-            </QueryString>
-            <LoadCont>
-              <Loader active={ElasticQuery.loading} margin="0.2em 0 1em" />
-            </LoadCont>
-            <ResList>
-              <ResultsList query={this.props.query} />
-            </ResList>
-            <PageSwitcher>
-              <Pagination />
-            </PageSwitcher>
-          </Grid>
-        </div>
-      </div>
-    )
-  }
-}
 
 export default inject('Stores')(observer(Results))

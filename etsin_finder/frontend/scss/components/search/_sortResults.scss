@@ -1,9 +1,7 @@
 $select-width: 10em;
 
 .sortResults {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 1em;
+  float: right;
   .select-button {
     display: flex;
     justify-content: flex-end;

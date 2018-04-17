@@ -1,12 +1,22 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
+import styled from 'styled-components'
 
 import FilterSection from './filterSection'
+
+const FilterContainer = styled.div`
+  padding: 1em;
+  border: 2px solid ${props => props.theme.color.lightgray};
+  @media (min-width: ${props => props.theme.breakpoints.lg}) {
+    padding: 0em;
+    border: none;
+  }
+`
 
 class FilterResults extends Component {
   render() {
     return (
-      <div className="search-filtering">
+      <FilterContainer className="search-filtering">
         <FilterSection aggregation="organization" />
         <FilterSection aggregation="creator" />
         <FilterSection aggregation="field_of_science" />
@@ -14,7 +24,7 @@ class FilterResults extends Component {
         <FilterSection aggregation="infrastructure" />
         <FilterSection aggregation="project" />
         <FilterSection aggregation="file_type" />
-      </div>
+      </FilterContainer>
     )
   }
 }
