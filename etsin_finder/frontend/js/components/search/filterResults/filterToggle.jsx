@@ -5,14 +5,13 @@ import ElasticQuery from '../../../stores/view/elasticquery'
 import { InvertedButton } from '../../general/button'
 
 const Filter = styled.div`
-  float: right;
+  float: left;
 `
 
 const FilterOpen = styled(InvertedButton)`
   @media (min-width: ${props => props.theme.breakpoints.lg}) {
     display: none;
   }
-  float: right;
   align-self: center;
   position: relative;
   background: ${props => (props.active ? props.theme.color.primary : 'transparent')};

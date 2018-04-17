@@ -2,21 +2,28 @@ $select-width: 10em;
 
 .sortResults {
   float: right;
+  .select {
+    position: relative;
+  }
   .select-button {
     display: flex;
     justify-content: flex-end;
     align-items: center;
     min-width: $select-width;
-    .btn {
+    button {
       width: 100%;
       text-align: right;
+      &.open {
+        border-radius: 5px 5px 0px 0px;
+      }
     }
   }
   .options {
     position: absolute;
+    background-color: white;
     z-index: 10;
     border: 0px solid $color-primary;
-    min-width: $select-width;
+    width: 100%;
     border-radius: 0px 0px 5px 5px;
     max-height: 0px;
     display: flex;
@@ -30,8 +37,9 @@ $select-width: 10em;
       border-right: 2px solid $color-primary;
       border-bottom: 2px solid $color-primary;
     }
-    .btn {
+    button {
       text-align: right;
+      border: none;
       &:focus {
         text-decoration: underline;
       }

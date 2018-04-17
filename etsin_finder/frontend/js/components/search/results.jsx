@@ -5,7 +5,7 @@ import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faFilter from '@fortawesome/fontawesome-free-solid/faFilter'
 
 import ElasticQuery from 'Stores/view/elasticquery'
-import HeightTransition from './heightTransition'
+import HeightTransition from '../general/animations/heightTransition'
 import SortResults from './sortResults'
 import Pagination from './pagination'
 import ResultsList from './resultslist'
@@ -37,13 +37,7 @@ class Results extends Component {
             <AmountRes>
               <ResultsAmount />
             </AmountRes>
-            <FilterRes>
-              <HeightTransition in={this.state.filterOpen} duration={300}>
-                <FilterResults open={this.state.filterOpen} />
-              </HeightTransition>
-            </FilterRes>
             <SortRes>
-              <SortResults />
               <FilterToggle
                 margin="0em 0.5em 0em 0em"
                 onClick={this.toggleFilter}
@@ -51,7 +45,13 @@ class Results extends Component {
               >
                 <FontAwesomeIcon icon={faFilter} /> Filter
               </FilterToggle>
+              <SortResults />
             </SortRes>
+            <FilterRes>
+              <HeightTransition in={this.state.filterOpen} duration={300}>
+                <FilterResults open={this.state.filterOpen} />
+              </HeightTransition>
+            </FilterRes>
             <QueryString>
               <CurrentQuery />
             </QueryString>
@@ -110,11 +110,16 @@ const FilterRes = styled.div`
 const SortRes = styled.div`
   grid-area: header;
   align-self: center;
+  width: max-content;
+  justify-self: end;
 `
 const QueryString = styled.div`
   grid-area: header;
   display: none;
   align-self: center;
+  @media (min-width: ${props => props.theme.breakpoints.lg}) {
+    display: block;
+  }
 `
 const LoadCont = styled.div`
   grid-area: results;

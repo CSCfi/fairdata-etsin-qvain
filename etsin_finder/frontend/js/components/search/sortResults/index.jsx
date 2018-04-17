@@ -5,6 +5,7 @@ import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faSort from '@fortawesome/fontawesome-free-solid/faSort'
 
 import ElasticQuery from 'Stores/view/elasticquery'
+import { InvertedButton } from '../../general/button'
 
 const options = ['best', 'dateD', 'dateA']
 
@@ -54,17 +55,19 @@ class SortResults extends Component {
       <div className="sortResults">
         <div className="select">
           <div className="select-button">
-            <button
-              className={`btn btn-select ${this.state.listToggle}`}
+            <InvertedButton
+              className={`btn-select ${this.state.listToggle}`}
               onClick={this.toggleList}
               value={this.state.value}
+              padding="0.5em 1em"
+              noMargin
               ref={select => {
                 this.selectButton = select
               }}
             >
               <Translate content={`search.sorting.${this.state.value}`} />{' '}
               <FontAwesomeIcon icon={faSort} aria-hidden="true" />
-            </button>
+            </InvertedButton>
           </div>
           <div
             id="select-options"
@@ -74,20 +77,22 @@ class SortResults extends Component {
             }}
           >
             {options.map(item => (
-              <button
+              <InvertedButton
                 key={`sorting-${item}`}
+                noMargin
+                padding="0.5em 1em"
                 className={`btn btn-select-options ${this.state.value === item ? 'active' : ''}`}
                 onClick={e => {
                   this.updateValue(e, item)
                 }}
                 value={item}
-                ref={value => {
+                innerRef={value => {
                   this[`option${item}`] = value
                 }}
                 disabled={!this.state.listToggle}
               >
                 <Translate content={`search.sorting.${item}`} />
-              </button>
+              </InvertedButton>
             ))}
           </div>
         </div>
