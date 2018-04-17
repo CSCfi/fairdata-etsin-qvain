@@ -15,15 +15,20 @@ export default class HeightTransition extends Component {
           height: '0px',
         },
         entered: {
-          height: '474px',
+          height: 'auto',
+        },
+        exiting: {
+          height: 'auto',
+        },
+        exited: {
+          height: '0px',
         },
       },
     }
-    this.heightRef = React.createRef()
   }
 
-  getHeight = () => {
-    const height = this.heightRef.current.scrollHeight
+  getHeight = node => {
+    const height = node.scrollHeight
     this.setState({
       transitionStyles: {
         entering: {
@@ -31,6 +36,12 @@ export default class HeightTransition extends Component {
         },
         entered: {
           height: `${height}px`,
+        },
+        exiting: {
+          height: `${height}px`,
+        },
+        exited: {
+          height: '0px',
         },
       },
     })
@@ -45,6 +56,12 @@ export default class HeightTransition extends Component {
         entered: {
           height: 'auto',
         },
+        exiting: {
+          height: 'auto',
+        },
+        exited: {
+          height: '0px',
+        },
       },
     })
   }
@@ -54,15 +71,14 @@ export default class HeightTransition extends Component {
       <Transition
         in={this.props.in}
         timeout={0}
-        onExit={this.getHeight}
-        onEnter={this.getHeight}
+        onExit={node => this.getHeight(node)}
+        onEnter={node => this.getHeight(node)}
         addEndListener={node => {
           node.addEventListener('transitionend', this.resetHeight, false)
         }}
       >
         {state => (
           <div
-            ref={this.heightRef}
             style={{
               ...this.state.defaultStyle,
               ...this.state.transitionStyles[state],

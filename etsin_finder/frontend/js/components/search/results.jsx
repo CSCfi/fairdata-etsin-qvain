@@ -11,6 +11,7 @@ import ResultsAmount from './resultsAmount'
 import CurrentQuery from './currentQuery'
 import FilterResults from './filterResults'
 import Loader from '../general/loader'
+import { InvertedButton } from '../general/button'
 
 const Grid = styled.div`
   display: grid;
@@ -21,9 +22,11 @@ const Grid = styled.div`
     'filters'
     'results'
     'pagination';
-  grid-column-gap: 1em;
-  grid-row-gap: 1em;
+  grid-column-gap: 0.5em;
+  grid-row-gap: 0.5em;
   @media (min-width: ${props => props.theme.breakpoints.lg}) {
+    grid-column-gap: 1em;
+    grid-row-gap: 1em;
     grid-template-columns: 1fr 3fr;
     grid-template-areas:
       'sidebartop header'
@@ -65,7 +68,13 @@ const PageSwitcher = styled.div`
   grid-area: pagination;
 `
 
-const FilterToggle = styled.button``
+const FilterToggle = styled(InvertedButton)`
+  @media (min-width: ${props => props.theme.breakpoints.lg}) {
+    display: none;
+  }
+  float: right;
+  align-self: center;
+`
 
 class Results extends Component {
   constructor(props) {
@@ -90,12 +99,18 @@ class Results extends Component {
               <ResultsAmount />
             </AmountRes>
             <FilterRes collapsed={this.state.filterOpen}>
-              <HeightTransition in={this.state.filterOpen} duration={500}>
+              <HeightTransition in={this.state.filterOpen} duration={300}>
                 <FilterResults />
               </HeightTransition>
             </FilterRes>
             <SortRes>
-              <FilterToggle onClick={this.toggleFilter}>Toggle Filter</FilterToggle>
+              <FilterToggle
+                margin="0em 0em 0em 0.5em"
+                padding="0.375rem 0.75rem"
+                onClick={this.toggleFilter}
+              >
+                Toggle Filter
+              </FilterToggle>
               <SortResults />
             </SortRes>
             <QueryString>
