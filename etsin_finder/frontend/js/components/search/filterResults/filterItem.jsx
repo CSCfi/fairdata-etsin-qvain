@@ -46,7 +46,7 @@ class FilterItem extends Component {
     return (
       <li>
         <button
-          tabIndex="-1"
+          tabIndex={this.props.tabIndex}
           className={this.state.active ? 'active' : undefined}
           onClick={() => {
             this.updateFilter()

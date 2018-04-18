@@ -57,13 +57,14 @@ class FilterSection extends Component {
         },
       },
     }
+    this.state = {
+      open: false,
+    }
   }
 
-  toggleFilter(event) {
-    event.target.nextSibling.classList.toggle('open')
-    const buttons = event.target.nextSibling.children[0].querySelectorAll('button')
-    buttons.forEach(button => {
-      button.tabIndex = button.tabIndex === -1 ? 0 : -1
+  toggleFilter = () => {
+    this.setState({
+      open: !this.state.open,
     })
   }
 
@@ -97,7 +98,7 @@ class FilterSection extends Component {
           {this.titleName}
           <FontAwesomeIcon icon={faAngleDown} size="2x" />
         </button>
-        <div className="filter-items">
+        <div className={`filter-items ${this.state.open ? 'open' : ''}`}>
           <ul>
             {ElasticQuery.results.aggregations[this.aggregationName].buckets.map(item => (
               <FilterItem
@@ -105,6 +106,7 @@ class FilterSection extends Component {
                 item={item}
                 aggregationName={this.aggregationName}
                 term={this.termName}
+                tabIndex={this.state.open ? '0' : '-1'}
               />
             ))}
           </ul>
