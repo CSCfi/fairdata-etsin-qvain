@@ -9,19 +9,24 @@ export default class HeightTransition extends Component {
         width: '100%',
         transition: `height ${this.props.duration}ms ease-in-out`,
         height: '0px',
+        display: 'initial',
       },
       transitionStyles: {
         entering: {
           height: '0px',
+          display: 'initial',
         },
         entered: {
           height: 'auto',
+          display: 'initial',
         },
         exiting: {
           height: 'auto',
+          display: 'initial',
         },
         exited: {
           height: '0px',
+          display: 'hidden',
         },
       },
     }
@@ -33,15 +38,19 @@ export default class HeightTransition extends Component {
       transitionStyles: {
         entering: {
           height: '0px',
+          display: 'initial',
         },
         entered: {
           height: `${height}px`,
+          display: 'initial',
         },
         exiting: {
           height: `${height}px`,
+          display: 'initial',
         },
         exited: {
           height: '0px',
+          display: 'hidden',
         },
       },
     })
@@ -52,15 +61,19 @@ export default class HeightTransition extends Component {
       transitionStyles: {
         entering: {
           height: '0px',
+          display: 'initial',
         },
         entered: {
           height: 'auto',
+          display: 'initial',
         },
         exiting: {
           height: 'auto',
+          display: 'initial',
         },
         exited: {
           height: '0px',
+          display: 'hidden',
         },
       },
     })
