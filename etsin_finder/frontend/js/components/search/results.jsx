@@ -32,7 +32,7 @@ class Results extends Component {
   render() {
     return (
       <div className="container">
-        <div className="row regular-row">
+        <div className="regular-row">
           <Grid>
             <AmountRes>
               <ResultsAmount />

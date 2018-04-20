@@ -51,6 +51,7 @@ export default class App extends Component {
 const handleFirstTab = e => {
   if (e.keyCode === 9) {
     document.body.classList.add('user-is-tabbing')
+    Stores.Accessibility.toggleTabbing()
 
     window.removeEventListener('keydown', handleFirstTab)
     /* eslint-disable-next-line no-use-before-define */
@@ -60,7 +61,7 @@ const handleFirstTab = e => {
 
 const handleMouseDownOnce = () => {
   document.body.classList.remove('user-is-tabbing')
-
+  Stores.Accessibility.toggleTabbing()
   window.removeEventListener('mousedown', handleMouseDownOnce)
   window.addEventListener('keydown', handleFirstTab)
 }

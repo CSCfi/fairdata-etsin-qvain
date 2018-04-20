@@ -2,11 +2,14 @@ import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 import Translate from 'react-translate-component'
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
-import faSort from '@fortawesome/fontawesome-free-solid/faSort'
+import faSortAmountDown from '@fortawesome/fontawesome-free-solid/faSortAmountDown'
+import styled from 'styled-components'
 
 import ElasticQuery from 'Stores/view/elasticquery'
+import Accessibility from 'Stores/view/accessibility'
 import { InvertedButton } from '../../general/button'
 
+// available options, they are also checked in ElasticQuery store
 const options = ['best', 'dateD', 'dateA']
 
 class SortResults extends Component {
@@ -17,26 +20,34 @@ class SortResults extends Component {
       value: ElasticQuery.sorting,
       listToggle: '',
     }
-
     this.toggleList = this.toggleList.bind(this)
     this.updateValue = this.updateValue.bind(this)
+    // create option references so that we can move focus inside
+    for (let i = 0; i < options.length; i += 1) {
+      this[`option${i}`] = React.createRef()
+    }
   }
 
-  toggleList() {
+  toggleList = () => {
     if (this.state.listToggle) {
       this.setState({
         listToggle: '',
       })
     } else {
-      this.setState({
-        listToggle: 'open',
-      })
-      this.selectOptions.children[0].focus()
+      this.setState(
+        {
+          listToggle: 'open',
+        },
+        () => {
+          if (Accessibility.userIsTabbing) {
+            this.option0.current.focus()
+          }
+        }
+      )
     }
   }
 
   updateValue(event, value) {
-    this[`option${this.state.value}`].classList.remove('active')
     this.setState(
       {
         value,
@@ -46,59 +57,123 @@ class SortResults extends Component {
         ElasticQuery.queryES()
       }
     )
-    event.target.classList.add('active')
     this.toggleList()
   }
 
   render() {
     return (
-      <div className="sortResults">
-        <div className="select">
-          <div className="select-button">
-            <InvertedButton
-              className={`btn-select ${this.state.listToggle}`}
-              onClick={this.toggleList}
-              value={this.state.value}
-              padding="0.5em 1em"
-              noMargin
-              ref={select => {
-                this.selectButton = select
-              }}
-            >
-              <Translate content={`search.sorting.${this.state.value}`} />{' '}
-              <FontAwesomeIcon icon={faSort} aria-hidden="true" />
-            </InvertedButton>
-          </div>
-          <div
-            id="select-options"
-            className={`options ${this.state.listToggle}`}
-            ref={dropdown => {
-              this.selectOptions = dropdown
+      <SortResultsContainer>
+        <SelectButton>
+          <InvertedButton
+            className={`btn-select ${this.state.listToggle} ${
+              this.state.listToggle ? 'active' : ''
+            }`}
+            onClick={this.toggleList}
+            value={this.state.value}
+            padding="0.5em 1em"
+            noMargin
+            ref={select => {
+              this.selectButton = select
             }}
           >
-            {options.map(item => (
-              <InvertedButton
-                key={`sorting-${item}`}
-                noMargin
-                padding="0.5em 1em"
-                className={`btn btn-select-options ${this.state.value === item ? 'active' : ''}`}
-                onClick={e => {
-                  this.updateValue(e, item)
-                }}
-                value={item}
-                innerRef={value => {
-                  this[`option${item}`] = value
-                }}
-                disabled={!this.state.listToggle}
-              >
-                <Translate content={`search.sorting.${item}`} />
-              </InvertedButton>
-            ))}
-          </div>
-        </div>
-      </div>
+            <FontAwesomeIcon icon={faSortAmountDown} aria-hidden="true" /> Sort
+          </InvertedButton>
+        </SelectButton>
+        <SelectOptionsContainer>
+          <SelectOptions id="select-options" className={this.state.listToggle}>
+            <div>
+              {options.map((item, i) => (
+                <InvertedButton
+                  innerRef={this[`option${i}`]}
+                  key={`sorting-${item}`}
+                  noMargin
+                  padding="0.5em 1em"
+                  className={`btn-select-options ${this.state.value === item ? 'active' : ''}`}
+                  onClick={e => {
+                    this.updateValue(e, item)
+                  }}
+                  value={item}
+                  // innerRef={value => {
+                  //   this[`option${item}`] = value
+                  // }}
+                  disabled={!this.state.listToggle}
+                >
+                  <Translate content={`search.sorting.${item}`} />
+                </InvertedButton>
+              ))}
+            </div>
+          </SelectOptions>
+        </SelectOptionsContainer>
+      </SortResultsContainer>
     )
   }
 }
 
 export default withRouter(SortResults)
+
+const SelectOptionsContainer = styled.div`
+  position: relative;
+`
+
+const SelectOptions = styled.div`
+  background-color: white;
+  position: absolute;
+  right: 0;
+  z-index: 10;
+  border: 0px solid ${props => props.theme.color.primary};
+  border-radius: 5px;
+  max-height: 0px;
+  width: max-content;
+  overflow: hidden;
+  transition: max-height 0.5s ease, border 0.3s ease 0.4s;
+  margin-top: 0.5em;
+  & > div {
+    display: flex;
+    flex-direction: column;
+  }
+  &.open {
+    transition: max-height 0.5s ease, border 0.3s ease;
+    max-height: 150px;
+    border: 2px solid ${props => props.theme.color.primary};
+  }
+  button {
+    text-align: right;
+    border-radius: 0;
+    border: none;
+    &:focus {
+      text-decoration: underline;
+    }
+  }
+`
+
+const SelectButton = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: max-content;
+  button {
+    position: relative;
+    &.open {
+      border-radius: 5px;
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -0.5em;
+        right: calc(50% - 0.5em);
+        display: 'block';
+        width: 0.5em;
+        border-top: 0.5em solid ${props => props.theme.color.primary};
+        border-left: 0.5em solid transparent;
+        border-right: 0.5em solid transparent;
+      }
+      &:hover,
+      &:focus {
+        background-color: ${props => props.theme.color.primary};
+      }
+    }
+  }
+`
+
+const SortResultsContainer = styled.div`
+  float: right;
+`
