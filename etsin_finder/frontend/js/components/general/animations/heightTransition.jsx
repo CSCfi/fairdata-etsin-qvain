@@ -1,33 +1,28 @@
 import React, { Component } from 'react'
 import Transition from 'react-transition-group/Transition'
 import PropTypes from 'prop-types'
+import styled from 'styled-components'
 
 export default class HeightTransition extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      defaultStyle: {
-        width: '100%',
-        transition: `height ${this.props.duration}ms ease-in-out`,
-        height: '0px',
-        display: 'initial',
-      },
       transitionStyles: {
         entering: {
           height: '0px',
-          display: 'initial',
+          visibility: 'initial',
         },
         entered: {
           height: 'auto',
-          display: 'initial',
+          visibility: 'initial',
         },
         exiting: {
           height: 'auto',
-          display: 'initial',
+          visibility: 'initial',
         },
         exited: {
           height: '0px',
-          display: 'hidden',
+          visibility: 'hidden',
         },
       },
     }
@@ -39,19 +34,19 @@ export default class HeightTransition extends Component {
       transitionStyles: {
         entering: {
           height: '0px',
-          display: 'initial',
+          visibility: 'initial',
         },
         entered: {
           height: `${height}px`,
-          display: 'initial',
+          visibility: 'initial',
         },
         exiting: {
           height: `${height}px`,
-          display: 'initial',
+          visibility: 'initial',
         },
         exited: {
           height: '0px',
-          display: 'hidden',
+          visibility: 'hidden',
         },
       },
     })
@@ -62,19 +57,19 @@ export default class HeightTransition extends Component {
       transitionStyles: {
         entering: {
           height: '0px',
-          display: 'initial',
+          visibility: 'initial',
         },
         entered: {
           height: 'auto',
-          display: 'initial',
+          visibility: 'initial',
         },
         exiting: {
           height: 'auto',
-          display: 'initial',
+          visibility: 'initial',
         },
         exited: {
           height: '0px',
-          display: 'hidden',
+          visibility: 'hidden',
         },
       },
     })
@@ -92,22 +87,41 @@ export default class HeightTransition extends Component {
         }}
       >
         {state => (
-          <div
-            style={{
-              ...this.state.defaultStyle,
-              ...this.state.transitionStyles[state],
-            }}
+          <TransitionDiv
+            visibility={this.state.transitionStyles[state].visibility}
+            height={this.state.transitionStyles[state].height}
+            duration={this.props.duration}
+            onlyMobile={this.props.onlyMobile}
           >
             {this.props.children}
-          </div>
+          </TransitionDiv>
         )}
       </Transition>
     )
   }
 }
 
+const TransitionDiv = styled.div.attrs({
+  height: props => (props.height ? props.height : '0px'),
+  visibility: props => (props.visibility ? props.visibility : 'initial'),
+})`
+  visibility: ${props => props.visibility};
+  height: ${props => props.height};
+  width: 100%;
+  transition: height ${props => props.duration}ms ease-in-out;
+  @media (min-width: ${props => props.theme.breakpoints.sm}) {
+    visibility: ${props => (props.onlyMobile ? 'initial' : props.visibility)};
+    height: ${props => (props.onlyMobile ? 'auto' : props.height)};
+  }
+`
+
+HeightTransition.defaultProps = {
+  onlyMobile: false,
+}
+
 HeightTransition.propTypes = {
   duration: PropTypes.number.isRequired,
   in: PropTypes.bool.isRequired,
   children: PropTypes.node.isRequired,
+  onlyMobile: PropTypes.bool,
 }

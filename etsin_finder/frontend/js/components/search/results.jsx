@@ -49,7 +49,7 @@ class Results extends Component {
               <SortResults />
             </SortRes>
             <FilterRes>
-              <HeightTransition in={this.state.filterOpen} duration={300}>
+              <HeightTransition in={this.state.filterOpen} duration={300} onlyMobile>
                 <FilterResults open={this.state.filterOpen} />
               </HeightTransition>
             </FilterRes>
