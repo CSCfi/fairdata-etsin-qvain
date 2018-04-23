@@ -317,13 +317,7 @@ class ElasticQuery {
           query: queryObject,
           sort: sorting,
           // Return only the following fields in source attribute to minimize traffic
-          _source: [
-            'identifier',
-            'title.*',
-            'description.*',
-            'access_rights.access_type.*',
-            'access_rights.license.*',
-          ],
+          _source: ['identifier', 'title.*', 'description.*', 'access_rights.*'],
           highlight: {
             // pre_tags: ['<b>'], # default is <em>
             // post_tags: ['</b>'],

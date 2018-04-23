@@ -46,10 +46,10 @@ export const accessRightsBool = accessRights => {
 class AccessRights extends Component {
   constructor(props) {
     super(props)
-    let title = { en: 'Restricted Access' }
+    let title = { en: 'Restricted Access', fi: 'Rajoitettu käyttöoikeus' }
     if (props.access_rights !== undefined && props.access_rights !== null) {
-      title = props.access_rights.type
-        ? props.access_rights.type.map(item => item.identifier)
+      title = props.access_rights.access_type
+        ? props.access_rights.access_type.identifier
         : props.access_rights.license.map(item => item.identifier)
     }
     this.lang = props.Stores.Locale.currentLang
@@ -106,8 +106,10 @@ AccessRights.defaultProps = {
 
 AccessRights.propTypes = {
   access_rights: PropTypes.shape({
-    type: PropTypes.array,
-    license: PropTypes.object,
+    access_type: PropTypes.shape({
+      identifier: PropTypes.string.isRequired,
+    }),
+    license: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
   }),
   Stores: PropTypes.object.isRequired,
 }
