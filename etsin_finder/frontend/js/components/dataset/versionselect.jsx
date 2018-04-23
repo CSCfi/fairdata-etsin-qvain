@@ -70,6 +70,7 @@ export default class VersionSelect extends Component {
       background: props.background,
       padding: props.padding,
       width: props.width,
+      removed: props.value.removed,
     }
   }
 
@@ -153,6 +154,7 @@ export default class VersionSelect extends Component {
           }
           isOpen={this.state.isOpen}
           onClick={this.toggleOpen}
+          removed={this.state.removed}
         >
           <span className="sr-only">Version selector (with current version) </span>
           {this.state.selected.label}
