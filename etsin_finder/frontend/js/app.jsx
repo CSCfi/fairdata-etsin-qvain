@@ -47,23 +47,4 @@ export default class App extends Component {
   }
 }
 
-// don't show outline when user is not using tab to navigate
-const handleFirstTab = e => {
-  if (e.keyCode === 9) {
-    document.body.classList.add('user-is-tabbing')
-    Stores.Accessibility.toggleTabbing()
-
-    window.removeEventListener('keydown', handleFirstTab)
-    /* eslint-disable-next-line no-use-before-define */
-    window.addEventListener('mousedown', handleMouseDownOnce)
-  }
-}
-
-const handleMouseDownOnce = () => {
-  document.body.classList.remove('user-is-tabbing')
-  Stores.Accessibility.toggleTabbing()
-  window.removeEventListener('mousedown', handleMouseDownOnce)
-  window.addEventListener('keydown', handleFirstTab)
-}
-
-window.addEventListener('keydown', handleFirstTab)
+Stores.Accessibility.initialLoad()
