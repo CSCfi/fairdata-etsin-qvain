@@ -33,7 +33,7 @@ class ElasticQuery {
   @observable search = ''
   @observable pageNum = 1
   @observable results = { hits: [], total: 0, aggregations: [] }
-  @observable loading = 0
+  @observable loading = false
   @observable perPage = 20
 
   // update query search term and url
@@ -304,7 +304,7 @@ class ElasticQuery {
       }
 
       // toggle loader
-      this.loading = 1
+      this.loading = true
 
       // results for specific page
       let from = this.pageNum * this.perPage
@@ -342,7 +342,7 @@ class ElasticQuery {
             total: res.data.hits.total,
             aggregations: res.data.aggregations,
           }
-          this.loading = 0
+          this.loading = false
           resolve()
         })
         .catch(err => {

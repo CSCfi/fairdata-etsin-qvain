@@ -200,6 +200,7 @@ VersionSelect.defaultProps = {
 }
 
 VersionSelect.propTypes = {
+  onChange: PropTypes.func.isRequired,
   options: PropTypes.array.isRequired,
   value: PropTypes.object.isRequired,
   background: PropTypes.string,

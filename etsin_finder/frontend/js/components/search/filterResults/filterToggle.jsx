@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import ElasticQuery from '../../../stores/view/elasticquery'
+import PropTypes from 'prop-types'
 
+import ElasticQuery from 'Stores/view/elasticquery'
 import { InvertedButton } from '../../general/button'
 
 const Filter = styled.div`
@@ -64,4 +65,8 @@ export default class FilterToggle extends Component {
       </Filter>
     )
   }
+}
+
+FilterToggle.propTypes = {
+  children: PropTypes.node.isRequired,
 }

@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types'
 
 import checkDataLang from 'Utils/checkDataLang'
 import ErrorBoundary from '../../general/errorBoundary'
@@ -57,4 +58,15 @@ export default class ListItem extends Component {
       </div>
     )
   }
+}
+
+ListItem.propTypes = {
+  catId: PropTypes.string.isRequired,
+  item: PropTypes.shape({
+    title: PropTypes.object.isRequired,
+    access_rights: PropTypes.object,
+    field_of_science: PropTypes.array,
+    description: PropTypes.object.isRequired,
+  }).isRequired,
+  lang: PropTypes.string.isRequired,
 }

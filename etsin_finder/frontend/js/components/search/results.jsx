@@ -3,6 +3,7 @@ import { inject, observer } from 'mobx-react'
 import styled from 'styled-components'
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faFilter from '@fortawesome/fontawesome-free-solid/faFilter'
+import PropTypes from 'prop-types'
 
 import ElasticQuery from 'Stores/view/elasticquery'
 import HeightTransition from '../general/animations/heightTransition'
@@ -130,5 +131,13 @@ const ResList = styled.div`
 const PageSwitcher = styled.div`
   grid-area: pagination;
 `
+
+Results.defaultProps = {
+  query: '',
+}
+
+Results.propTypes = {
+  query: PropTypes.string,
+}
 
 export default inject('Stores')(observer(Results))

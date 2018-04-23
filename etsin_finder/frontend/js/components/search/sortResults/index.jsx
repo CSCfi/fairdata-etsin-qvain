@@ -4,6 +4,7 @@ import Translate from 'react-translate-component'
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faSortAmountDown from '@fortawesome/fontawesome-free-solid/faSortAmountDown'
 import styled from 'styled-components'
+import PropTypes from 'prop-types'
 
 import ElasticQuery from 'Stores/view/elasticquery'
 import Accessibility from 'Stores/view/accessibility'
@@ -173,6 +174,10 @@ const SelectButton = styled.div`
     }
   }
 `
+
+SortResults.propTypes = {
+  history: PropTypes.object.isRequired,
+}
 
 const SortResultsContainer = styled.div`
   float: right;

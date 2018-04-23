@@ -2,33 +2,9 @@ import React, { Component, Fragment } from 'react'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import translate from 'counterpart'
+import PropTypes from 'prop-types'
+
 import { TransparentButton } from '../../general/button'
-
-const Container = styled.nav`
-  padding: 0.5em 1.1em;
-  width: 100%;
-  border-top: 0px;
-  border-bottom: 0px;
-  display: flex;
-  align-content: center;
-  flex-wrap: wrap;
-`
-const Path = styled.div`
-  display: flex;
-  button {
-    padding-left: 0;
-    padding-right: 0;
-  }
-`
-const Arrow = styled.span`
-  padding: 0 0.4em;
-  align-self: center;
-  color: ${props => props.theme.color.gray};
-`
-
-const Rest = styled.div`
-  display: flex;
-`
 
 export default class Breadcrumbs extends Component {
   constructor(props) {
@@ -128,4 +104,35 @@ export default class Breadcrumbs extends Component {
       </Container>
     )
   }
+}
+
+const Container = styled.nav`
+  padding: 0.5em 1.1em;
+  width: 100%;
+  border-top: 0px;
+  border-bottom: 0px;
+  display: flex;
+  align-content: center;
+  flex-wrap: wrap;
+`
+const Path = styled.div`
+  display: flex;
+  button {
+    padding-left: 0;
+    padding-right: 0;
+  }
+`
+const Arrow = styled.span`
+  padding: 0 0.4em;
+  align-self: center;
+  color: ${props => props.theme.color.gray};
+`
+
+const Rest = styled.div`
+  display: flex;
+`
+
+Breadcrumbs.propTypes = {
+  callback: PropTypes.func.isRequired,
+  path: PropTypes.array.isRequired,
 }

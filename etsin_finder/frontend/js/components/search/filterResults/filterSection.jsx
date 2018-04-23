@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { inject, observer } from 'mobx-react'
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faAngleDown from '@fortawesome/fontawesome-free-solid/faAngleDown'
+import PropTypes from 'prop-types'
+
 import checkDataLang from 'Utils/checkDataLang'
 import ElasticQuery from 'Stores/view/elasticquery'
 import FilterItem from './filterItem'
@@ -117,3 +119,12 @@ class FilterSection extends Component {
 }
 
 export default inject('Stores')(observer(FilterSection))
+
+FilterSection.propTypes = {
+  aggregation: PropTypes.string.isRequired,
+  Stores: PropTypes.shape({
+    Locale: PropTypes.shape({
+      currentLang: PropTypes.string.isRequired,
+    }).isRequired,
+  }).isRequired,
+}

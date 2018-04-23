@@ -3,6 +3,7 @@ import { withRouter } from 'react-router-dom'
 import Translate from 'react-translate-component'
 import ElasticQuery from 'Stores/view/elasticquery'
 import { Dataset } from 'Routes'
+import PropTypes from 'prop-types'
 
 import HeroBanner from '../general/hero'
 import SearchBar from './searchBar'
@@ -48,6 +49,15 @@ class Search extends Component {
       </div>
     )
   }
+}
+
+Search.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      query: PropTypes.string,
+    }).isRequired,
+  }).isRequired,
+  history: PropTypes.object.isRequired,
 }
 
 export default withRouter(Search)

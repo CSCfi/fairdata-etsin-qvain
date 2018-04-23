@@ -2,25 +2,14 @@ import React, { Component } from 'react'
 import styled, { withTheme } from 'styled-components'
 import Translate from 'react-translate-component'
 import translate from 'counterpart'
+import PropTypes from 'prop-types'
+
 import checkDataLang from 'Utils/checkDataLang'
 import sizeParse from 'Utils/sizeParse'
 import checkNested from 'Utils/checkNested'
 import FileIcon from './fileIcon'
 import InfoModal from './infoModal'
 import { InvertedButton, TransparentButton } from '../../general/button'
-
-const TitleAlt = styled.p`
-  font-size: 0.8em;
-  font-weight: 400;
-  color: #777;
-`
-
-const HideSmButton = styled(InvertedButton)`
-  display: none;
-  @media (min-width: ${props => props.theme.breakpoints.sm}) {
-    display: initial;
-  }
-`
 
 class DataItem extends Component {
   constructor(props) {
@@ -131,7 +120,7 @@ class DataItem extends Component {
             category={
               checkNested(this.props.item.use_category, 'pref_label')
                 ? checkDataLang(this.props.item.use_category.pref_label)
-                : ''
+                : undefined
             }
             description={this.props.item.description}
             type={this.props.item.type}
@@ -145,3 +134,43 @@ class DataItem extends Component {
 }
 
 export default withTheme(DataItem)
+
+const TitleAlt = styled.p`
+  font-size: 0.8em;
+  font-weight: 400;
+  color: #777;
+`
+
+const HideSmButton = styled(InvertedButton)`
+  display: none;
+  @media (min-width: ${props => props.theme.breakpoints.sm}) {
+    display: initial;
+  }
+`
+
+DataItem.propTypes = {
+  item: PropTypes.shape({
+    type: PropTypes.string,
+    details: PropTypes.shape({
+      directory_name: PropTypes.string,
+      file_count: PropTypes.number,
+      file_name: PropTypes.string,
+      title: PropTypes.string,
+      byte_size: PropTypes.number.isRequired,
+    }),
+    identifier: PropTypes.string.isRequired,
+    use_category: PropTypes.shape({
+      pref_label: PropTypes.object,
+    }),
+    description: PropTypes.string,
+  }).isRequired,
+  index: PropTypes.number.isRequired,
+  theme: PropTypes.shape({
+    color: PropTypes.shape({
+      primary: PropTypes.string.isRequired,
+      gray: PropTypes.string.isRequired,
+    }),
+  }).isRequired,
+  changeFolder: PropTypes.func.isRequired,
+  access: PropTypes.bool.isRequired,
+}

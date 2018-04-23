@@ -1,49 +1,8 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
+import PropTypes from 'prop-types'
+
 import { Link } from '../../general/button'
-
-// prettier-ignore
-const IdnLink = styled(Link)`
-  background-color: ${props => props.theme.color.primary};
-  border: ${props => props.theme.color.primary};
-  width: max-content;
-  max-width: 100%;
-  color: white;
-  border-radius: 0.3em;
-  display: flex;
-  padding: 0;
-  align-items: center;
-  font-size: 0.875em;
-  &:hover {
-    color: white;
-  }
-  &:active {
-    transition: 0.1s ease;
-    box-shadow: 0px 2px 5px -2px rgba(0,0,0,0.7) inset;
-  }
-`
-
-const Prefix = styled.div`
-  background-color: ${props => props.theme.color.dark};
-  color: white;
-  font-weight: 700;
-  border-top-left-radius: 0.3em;
-  margin: 0;
-  border-bottom-left-radius: 0.3em;
-  padding: 0.4em 0.5em 0.4em 0.7em;
-  align-self: stretch;
-  display: flex;
-  align-items: center;
-  text-transform: uppercase;
-  &:hover {
-    background-color: ${props => props.theme.color.dark};
-  }
-`
-
-const IDN = styled.div`
-  font-size: 0.9em;
-  padding: 0.4em 1em 0.4em 0.5em;
-`
 
 export default class Identifier extends Component {
   constructor(props) {
@@ -98,4 +57,51 @@ export default class Identifier extends Component {
       </IdnLink>
     )
   }
+}
+
+// prettier-ignore
+const IdnLink = styled(Link)`
+  background-color: ${props => props.theme.color.primary};
+  border: ${props => props.theme.color.primary};
+  width: max-content;
+  max-width: 100%;
+  color: white;
+  border-radius: 0.3em;
+  display: flex;
+  padding: 0;
+  align-items: center;
+  font-size: 0.875em;
+  &:hover {
+    color: white;
+  }
+  &:active {
+    transition: 0.1s ease;
+    box-shadow: 0px 2px 5px -2px rgba(0,0,0,0.7) inset;
+  }
+`
+
+const Prefix = styled.div`
+  background-color: ${props => props.theme.color.dark};
+  color: white;
+  font-weight: 700;
+  border-top-left-radius: 0.3em;
+  margin: 0;
+  border-bottom-left-radius: 0.3em;
+  padding: 0.4em 0.5em 0.4em 0.7em;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  text-transform: uppercase;
+  &:hover {
+    background-color: ${props => props.theme.color.dark};
+  }
+`
+
+const IDN = styled.div`
+  font-size: 0.9em;
+  padding: 0.4em 1em 0.4em 0.5em;
+`
+
+Identifier.propTypes = {
+  idn: PropTypes.string.isRequired,
 }

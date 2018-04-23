@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import Translate from 'react-translate-component'
 import { NavLink } from 'react-router-dom'
+import PropTypes from 'prop-types'
 
 export default class Tabs extends Component {
   render() {
@@ -42,4 +43,10 @@ export default class Tabs extends Component {
       </Fragment>
     )
   }
+}
+
+Tabs.propTypes = {
+  showDownloads: PropTypes.bool.isRequired,
+  showEvents: PropTypes.bool.isRequired,
+  identifier: PropTypes.string.isRequired,
 }

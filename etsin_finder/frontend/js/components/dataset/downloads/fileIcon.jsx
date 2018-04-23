@@ -4,6 +4,8 @@ import faFolder from '@fortawesome/fontawesome-free-regular/faFolder'
 import faFileVideo from '@fortawesome/fontawesome-free-regular/faFileVideo'
 import faFile from '@fortawesome/fontawesome-free-regular/faFile'
 import faFileAlt from '@fortawesome/fontawesome-free-regular/faFileAlt'
+import PropTypes from 'prop-types'
+
 import Tooltip from '../../general/tooltip'
 
 const FileIcon = props => {
@@ -35,3 +37,11 @@ const FileIcon = props => {
 }
 
 export default FileIcon
+
+FileIcon.defaultProps = {
+  type: undefined,
+}
+
+FileIcon.propTypes = {
+  type: PropTypes.string,
+}

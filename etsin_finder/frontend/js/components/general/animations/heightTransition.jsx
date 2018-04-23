@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Transition from 'react-transition-group/Transition'
+import PropTypes from 'prop-types'
 
 export default class HeightTransition extends Component {
   constructor(props) {
@@ -103,4 +104,10 @@ export default class HeightTransition extends Component {
       </Transition>
     )
   }
+}
+
+HeightTransition.propTypes = {
+  duration: PropTypes.number.isRequired,
+  in: PropTypes.bool.isRequired,
+  children: PropTypes.node.isRequired,
 }
