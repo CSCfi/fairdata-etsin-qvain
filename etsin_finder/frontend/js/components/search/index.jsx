@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 import Translate from 'react-translate-component'
 import ElasticQuery from 'Stores/view/elasticquery'
-import getIdentifierFromQuery from 'Utils/getIdentifierFromQuery'
 import { Dataset } from 'Routes'
 
 import HeroBanner from '../general/hero'
@@ -23,16 +22,11 @@ class Search extends Component {
   }
 
   initialQuery = () => {
-    const identifier = getIdentifierFromQuery(this.props.match.params.query)
-    if (identifier) {
-      this.props.history.push(`/dataset/${identifier}`)
-    } else {
-      ElasticQuery.updateFromUrl(this.props.match.params.query, this.props.history, true)
-      ElasticQuery.queryES(true).then(() => {
-        // preload load dataset page
-        Dataset.load()
-      })
-    }
+    ElasticQuery.updateFromUrl(this.props.match.params.query, this.props.history, true)
+    ElasticQuery.queryES(true).then(() => {
+      // preload load dataset page
+      Dataset.load()
+    })
   }
 
   render() {

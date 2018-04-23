@@ -62,6 +62,7 @@ class Dataset extends React.Component {
     }
     DatasetQuery.getData(identifier)
       .then(result => {
+        console.log('Dataset', result)
         // TODO: The code below needs to be revised
         // TODO: Somewhere we need to think how 1) harvested, 2) accumulative, 3) deprecated, 4) removed, 5) ordinary
         // TODO: datasets are rendered. Maybe not here?
@@ -124,9 +125,15 @@ class Dataset extends React.Component {
           <NoticeBar deprecated={translate('tombstone.info')} />
         )}
         <div className="container regular-row">
-          <button onClick={() => this.prevDataset()}>Prev</button>
-          <button onClick={() => this.nextDataset()}>Next</button>
-          <BackButton color="" noPadding onClick={this.goBack}>
+          {process.env.NODE_ENV === 'development' ? (
+            <div>
+              <button onClick={() => this.prevDataset()}>Prev</button>
+              <button onClick={() => this.nextDataset()}>Next</button>
+            </div>
+          ) : (
+            ''
+          )}
+          <BackButton color="" noPadding margin="0 0 0.5em 0" onClick={this.goBack}>
             <span aria-hidden>{'< '}</span>
             <Translate content={'dataset.goBack'} />
           </BackButton>

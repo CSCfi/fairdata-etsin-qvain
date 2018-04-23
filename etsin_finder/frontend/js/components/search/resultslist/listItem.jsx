@@ -20,7 +20,7 @@ export default class ListItem extends Component {
     return (
       <div className="listItem">
         <ErrorBoundary>
-          <Link to={`/dataset/${this.props.item.preferred_identifier}`}>
+          <Link to={`/dataset/${this.props.catId}`}>
             <div className="content-box">
               <ErrorBoundary>
                 <div className="d-flex justify-content-between align-items-start item-header">

@@ -28,10 +28,13 @@ class DatasetQuery {
   }
 
   @action
-  getFolderData(id, prefId) {
+  getFolderData(id, crID) {
+    // TODO:
+    // This will change to use catalog record identifier and not pid
+    // Will be implemented later
     return new Promise((resolve, reject) => {
       axios
-        .get(`${this.metaxUrl}/rest/directories/${id}/files?preferred_identifier=${prefId}`)
+        .get(`${this.metaxUrl}/rest/directories/${id}/files?cr_identifier=${crID}`)
         .then(res => {
           this.directories.push({ id, results: res.data })
           resolve(res.data)

@@ -20,9 +20,11 @@ const fields = [
   'field_of_science.pref_label.*',
   'infrastructure.pref_label.*',
   'project.pref_label.*',
+  'identifier',
   'preferred_identifier',
   'other_identifier.notation',
   'other_identifier.type.pref_label.*',
+  'dataset_version_set',
 ]
 
 class ElasticQuery {
@@ -34,7 +36,7 @@ class ElasticQuery {
   @observable loading = 0
   @observable perPage = 20
 
-  // update query search term
+  // update query search term and url
   @action
   updateSearch = (newSearch, history, updateUrl = true) => {
     this.search = newSearch
@@ -55,7 +57,7 @@ class ElasticQuery {
     }
   }
 
-  // update search result sorting
+  // update search result sorting and url
   @action
   updateSorting = (newSorting, history, updateUrl = true) => {
     this.sorting = newSorting
@@ -73,6 +75,7 @@ class ElasticQuery {
     }
   }
 
+  // update page number and url
   @action
   updatePageNum = (newPage, history, updateUrl = true) => {
     this.pageNum = parseInt(newPage, 10)
@@ -86,7 +89,7 @@ class ElasticQuery {
     }
   }
 
-  // update search filter
+  // update search filter and url
   @action
   updateFilter = (term, key, history, updateUrl = true) => {
     const index = this.filter.findIndex(i => i.term === term && i.key === key)
@@ -171,18 +174,22 @@ class ElasticQuery {
   // query elastic search with defined settings
   @action
   queryES = (initial = false) => {
-    if (initial) {
-      if (this.results.total !== 0) {
-        return new Promise(resolve => resolve())
-      }
+    // don't perform query on every componentMount
+    if (initial && this.results.total !== 0) {
+      return new Promise(resolve => resolve())
     }
-    return new Promise((resolve, reject) => {
-      let queryObject
-      const query = this.search
+
+    // Filters
+    const createFilters = () => {
       const filters = []
       for (let i = 0; i < this.filter.length; i += 1) {
         filters.push({ term: { [this.filter[i].term]: this.filter[i].key } })
       }
+      return filters
+    }
+
+    // Sorting
+    const createSorting = () => {
       const sorting = ['_score']
       if (this.sorting) {
         if (this.sorting === 'dateA') {
@@ -192,7 +199,11 @@ class ElasticQuery {
           sorting.unshift({ date_modified: { order: 'desc' } })
         }
       }
+      return sorting
+    }
 
+    const createQuery = query => {
+      let queryObject
       if (query) {
         queryObject = {
           bool: {
@@ -204,6 +215,7 @@ class ElasticQuery {
                   minimum_should_match: '75%',
                   operator: 'and',
                   analyzer: Locale.currentLang === 'fi' ? 'finnish' : 'english',
+                  // match only to specified fields
                   fields,
                 },
               },
@@ -211,7 +223,6 @@ class ElasticQuery {
           },
         }
       } else {
-        // No user search query, fetch all docs, change this to use aggregations and sorting and pagenum
         queryObject = {
           bool: {
             must: [
@@ -222,6 +233,70 @@ class ElasticQuery {
           },
         }
       }
+      return queryObject
+    }
+
+    return new Promise((resolve, reject) => {
+      const queryObject = createQuery(this.search)
+      const filters = createFilters()
+      const sorting = createSorting()
+      const aggregations = {
+        organization: {
+          terms: {
+            field: 'organization_name.keyword',
+          },
+        },
+        creator: {
+          terms: {
+            field: 'creator_name.keyword',
+          },
+        },
+        field_of_science_en: {
+          terms: {
+            field: 'field_of_science.pref_label.en.keyword',
+          },
+        },
+        field_of_science_fi: {
+          terms: {
+            field: 'field_of_science.pref_label.fi.keyword',
+          },
+        },
+        keyword_en: {
+          terms: {
+            field: 'theme.label.en.keyword',
+          },
+        },
+        keyword_fi: {
+          terms: {
+            field: 'theme.label.fi.keyword',
+          },
+        },
+        infrastructure_en: {
+          terms: {
+            field: 'infrastructure.pref_label.en.keyword',
+          },
+        },
+        infrastructure_fi: {
+          terms: {
+            field: 'infrastructure.pref_label.fi.keyword',
+          },
+        },
+        project: {
+          terms: {
+            field: 'project_name.keyword',
+          },
+        },
+        file_type_en: {
+          terms: {
+            field: 'file_type.pref_label.en.keyword',
+          },
+        },
+        file_type_fi: {
+          terms: {
+            field: 'file_type.pref_label.fi.keyword',
+          },
+        },
+      }
 
       // adding filters if they are set
       if (filters.length > 0) {
@@ -230,6 +305,8 @@ class ElasticQuery {
 
       // toggle loader
       this.loading = 1
+
+      // results for specific page
       let from = this.pageNum * this.perPage
       from -= this.perPage
 
@@ -241,7 +318,7 @@ class ElasticQuery {
           sort: sorting,
           // Return only the following fields in source attribute to minimize traffic
           _source: [
-            'preferred_identifier',
+            'identifier',
             'title.*',
             'description.*',
             'access_rights.access_type.*',
@@ -253,68 +330,13 @@ class ElasticQuery {
             fields: {
               'description.*': {},
               'title.*': {},
-              // Add here more fields if highlights from other fields are required
+              // Add more fields if highlights from other fields are required
             },
           },
-          aggregations: {
-            organization: {
-              terms: {
-                field: 'organization_name.keyword',
-              },
-            },
-            creator: {
-              terms: {
-                field: 'creator_name.keyword',
-              },
-            },
-            field_of_science_en: {
-              terms: {
-                field: 'field_of_science.pref_label.en.keyword',
-              },
-            },
-            field_of_science_fi: {
-              terms: {
-                field: 'field_of_science.pref_label.fi.keyword',
-              },
-            },
-            keyword_en: {
-              terms: {
-                field: 'theme.label.en.keyword',
-              },
-            },
-            keyword_fi: {
-              terms: {
-                field: 'theme.label.fi.keyword',
-              },
-            },
-            infrastructure_en: {
-              terms: {
-                field: 'infrastructure.pref_label.en.keyword',
-              },
-            },
-            infrastructure_fi: {
-              terms: {
-                field: 'infrastructure.pref_label.fi.keyword',
-              },
-            },
-            project: {
-              terms: {
-                field: 'project_name.keyword',
-              },
-            },
-            file_type_en: {
-              terms: {
-                field: 'file_type.pref_label.en.keyword',
-              },
-            },
-            file_type_fi: {
-              terms: {
-                field: 'file_type.pref_label.fi.keyword',
-              },
-            },
-          },
+          aggregations,
         })
         .then(res => {
+          // update results and stop loading
           this.results = {
             hits: res.data.hits.hits,
             total: res.data.hits.total,

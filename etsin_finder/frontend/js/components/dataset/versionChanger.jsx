@@ -4,13 +4,6 @@ import { withRouter } from 'react-router-dom'
 import translate from 'counterpart'
 import Accessibility from 'Stores/view/accessibility'
 import VersionSelect from '../general/versionselect'
-// import Select from '../general/select'
-
-// const VersionSelect = styled(Select)`
-//   width: 10.5em;
-//   margin-right: 1em;
-//   margin-bottom: 0;
-// `
 
 class VersionChanger extends Component {
   constructor(props) {
@@ -20,7 +13,7 @@ class VersionChanger extends Component {
 
     this.state = {
       versions,
-      selected: versions.filter(single => single.value === props.pid)[0],
+      selected: versions.filter(single => single.value === props.idn)[0],
     }
   }
 
@@ -28,7 +21,7 @@ class VersionChanger extends Component {
     const versions = this.versionLabels(this.props.versionSet)
     this.setState({
       versions,
-      selected: versions.filter(single => single.value === this.props.pid)[0],
+      selected: versions.filter(single => single.value === this.props.idn)[0],
     })
   }
 
@@ -37,7 +30,7 @@ class VersionChanger extends Component {
       const old = i > 0 ? translate('dataset.version.old') : ''
       return {
         label: `${translate('dataset.version.number', { number: set.length - i })} ${old}`,
-        value: single.preferred_identifier,
+        value: single.identifier,
       }
     })
 
@@ -78,7 +71,7 @@ class VersionChanger extends Component {
 
 VersionChanger.propTypes = {
   versionSet: PropTypes.array.isRequired,
-  pid: PropTypes.string.isRequired,
+  idn: PropTypes.string.isRequired,
   history: PropTypes.object.isRequired,
 }
 

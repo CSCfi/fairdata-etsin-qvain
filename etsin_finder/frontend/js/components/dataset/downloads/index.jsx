@@ -127,7 +127,7 @@ export default class Downloads extends Component {
     this.setState({
       loading: true,
     })
-    DatasetQuery.getFolderData(id, this.state.results.research_dataset.preferred_identifier)
+    DatasetQuery.getFolderData(id, this.state.results.identifier)
       .then(res => {
         const currFolder = createTree(
           this.createDirTree(res.files, res.directories, true)
