@@ -5,21 +5,11 @@ import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faLock from '@fortawesome/fontawesome-free-solid/faLock'
 import faUnlock from '@fortawesome/fontawesome-free-solid/faUnlock'
 import styled from 'styled-components'
+import PropTypes from 'prop-types'
 
 import checkNested from 'Utils/checkNested'
 import checkDataLang from 'Utils/checkDataLang'
 import Tooltip from '../../general/tooltip'
-
-const Access = styled.div`
-  background-color: ${props => props.theme.color.lightgray};
-  padding: 0.2em 0.9em;
-  border-radius: 1em;
-  width: max-content;
-  height: max-content;
-  div {
-    width: max-content;
-  }
-`
 
 export const accessRightsBool = accessRights => {
   const openValues = [
@@ -56,10 +46,10 @@ export const accessRightsBool = accessRights => {
 class AccessRights extends Component {
   constructor(props) {
     super(props)
-    let title = { en: 'Restricted Access' }
+    let title = { en: 'Restricted Access', fi: 'Rajoitettu käyttöoikeus' }
     if (props.access_rights !== undefined && props.access_rights !== null) {
-      title = props.access_rights.type
-        ? props.access_rights.type.map(item => item.identifier)
+      title = props.access_rights.access_type
+        ? props.access_rights.access_type.identifier
         : props.access_rights.license.map(item => item.identifier)
     }
     this.lang = props.Stores.Locale.currentLang
@@ -99,3 +89,27 @@ class AccessRights extends Component {
 
 export default inject('Stores')(observer(AccessRights))
 export const undecorated = AccessRights
+
+const Access = styled.div`
+  background-color: ${props => props.theme.color.lightgray};
+  padding: 0.2em 0.9em;
+  border-radius: 1em;
+  width: max-content;
+  height: max-content;
+  div {
+    width: max-content;
+  }
+`
+AccessRights.defaultProps = {
+  access_rights: undefined,
+}
+
+AccessRights.propTypes = {
+  access_rights: PropTypes.shape({
+    access_type: PropTypes.shape({
+      identifier: PropTypes.string.isRequired,
+    }),
+    license: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
+  }),
+  Stores: PropTypes.object.isRequired,
+}

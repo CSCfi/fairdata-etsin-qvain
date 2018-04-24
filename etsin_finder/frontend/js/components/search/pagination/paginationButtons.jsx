@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
+import PropTypes from 'prop-types'
 
 import ElasticQuery from 'Stores/view/elasticquery'
 import { TransparentButton } from '../../general/button'
@@ -235,6 +236,10 @@ class PaginationButtons extends Component {
       </div>
     )
   }
+}
+
+PaginationButtons.propTypes = {
+  history: PropTypes.object.isRequired,
 }
 
 export default withRouter(PaginationButtons)

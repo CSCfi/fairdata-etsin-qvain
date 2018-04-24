@@ -1,5 +1,28 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
+import PropTypes from 'prop-types'
+
+class Loader extends Component {
+  render() {
+    if (this.props.left) {
+      return (
+        <HolderLeft
+          margin={this.props.margin}
+          className={`${this.props.active ? 'loader-active' : ''}`}
+        >
+          <Spinner color={this.props.color} />
+        </HolderLeft>
+      )
+    }
+    return (
+      <Holder margin={this.props.margin} className={`${this.props.active ? 'loader-active' : ''}`}>
+        <Spinner color={this.props.color} />
+      </Holder>
+    )
+  }
+}
+
+export default Loader
 
 const Holder = styled.div`
   display: flex;
@@ -9,7 +32,7 @@ const Holder = styled.div`
   max-height: 0em;
   transition: all 0.2s ease;
   overflow: hidden;
-  margin: ${props => (props.margin ? props.margin : 0)};
+  margin: ${props => props.margin};
   &.loader-active {
     max-height: 4em;
     div {
@@ -41,24 +64,15 @@ const HolderLeft = Holder.extend`
   padding: 0 0 0 1em;
 `
 
-class Loader extends Component {
-  render() {
-    if (this.props.left) {
-      return (
-        <HolderLeft
-          margin={this.props.margin}
-          className={`${this.props.active ? 'loader-active' : ''}`}
-        >
-          <Spinner color={this.props.color} />
-        </HolderLeft>
-      )
-    }
-    return (
-      <Holder margin={this.props.margin} className={`${this.props.active ? 'loader-active' : ''}`}>
-        <Spinner color={this.props.color} />
-      </Holder>
-    )
-  }
+Loader.defaultProps = {
+  left: false,
+  margin: '0',
+  color: '',
 }
 
-export default Loader
+Loader.propTypes = {
+  left: PropTypes.bool,
+  margin: PropTypes.string,
+  active: PropTypes.bool.isRequired,
+  color: PropTypes.string,
+}

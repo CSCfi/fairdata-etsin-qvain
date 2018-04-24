@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 import counterpart from 'counterpart'
+import PropTypes from 'prop-types'
 
 import { Search } from 'Routes'
 import ElasticQuery from 'Stores/view/elasticquery'
@@ -64,6 +65,15 @@ class SearchBar extends Component {
       </ErrorBoundary>
     )
   }
+}
+
+SearchBar.defaultProps = {
+  inputRef: undefined,
+}
+
+SearchBar.propTypes = {
+  history: PropTypes.object.isRequired,
+  inputRef: PropTypes.func,
 }
 
 export default withRouter(SearchBar)

@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
-import Translate from 'react-translate-component';
+import React, { Component } from 'react'
+import Translate from 'react-translate-component'
+import PropTypes from 'prop-types'
 
 export default class SidebarItem extends Component {
   constructor(props) {
@@ -17,8 +18,7 @@ export default class SidebarItem extends Component {
     }
     if (
       this.props.hideEmpty &&
-      (!this.props.children ||
-      (Array.isArray(this.props.children) && !this.props.children[0]))
+      (!this.props.children || (Array.isArray(this.props.children) && !this.props.children[0]))
     ) {
       return null
     }
@@ -29,4 +29,20 @@ export default class SidebarItem extends Component {
       </div>
     )
   }
+}
+
+SidebarItem.defaultProps = {
+  component: '',
+  hideEmpty: undefined,
+  fallback: undefined,
+  children: undefined,
+  trans: undefined,
+}
+
+SidebarItem.propTypes = {
+  component: PropTypes.string,
+  hideEmpty: PropTypes.string,
+  children: PropTypes.node,
+  trans: PropTypes.string,
+  fallback: PropTypes.string,
 }

@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
 export default class HeroBanner extends Component {
   constructor(props) {
@@ -11,10 +12,15 @@ export default class HeroBanner extends Component {
     }
   }
   render() {
-    return (
-      <div className={`hero ${this.state.classes}`}>
-        {this.props.children}
-      </div>
-    );
+    return <div className={`hero ${this.state.classes}`}>{this.props.children}</div>
   }
+}
+
+HeroBanner.defaultProps = {
+  className: '',
+}
+
+HeroBanner.propTypes = {
+  children: PropTypes.node.isRequired,
+  className: PropTypes.string,
 }

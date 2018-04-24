@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import { darken } from 'polished'
+import PropTypes from 'prop-types'
 
 import Button from '../general/button'
 
@@ -14,17 +15,18 @@ const List = styled.div`
   position: absolute;
 `
 
+/* prettier-ignore */
 const ListButton = styled(Button)`
   color: ${props => props.color};
   padding: ${props => props.padding};
-  background: ${props => props.background};
   border-radius: 0;
   width: 100%;
   text-align: left;
   display: block;
   border: 0;
+  background: ${props => (props.removed ? props.theme.color.error : props.background)};
   &:hover {
-    background: ${props => darken(0.1, props.background)};
+    background: ${props => (props.removed ? darken(0.1, props.theme.color.error) : darken(0.1, props.background))};
   }
 `
 
@@ -64,10 +66,11 @@ export default class VersionSelect extends Component {
       options: props.options,
       selected: props.value,
       newestColor: props.newestColor ? props.newestColor : props.background,
-      color: props.color ? props.color : 'black',
-      background: props.background ? props.background : 'blue',
-      padding: props.padding ? props.padding : '0.3em 0.6em',
-      width: props.width ? props.width : '7em',
+      color: props.color,
+      background: props.background,
+      padding: props.padding,
+      width: props.width,
+      removed: props.value.removed,
     }
   }
 
@@ -88,7 +91,6 @@ export default class VersionSelect extends Component {
           isFocused: false,
           isOpen: false,
         })
-        console.log('focused', false)
       }
     }, 0)
   }
@@ -99,7 +101,6 @@ export default class VersionSelect extends Component {
       this.setState({
         isFocused: true,
       })
-      console.log('focused', true)
     }
   }
 
@@ -153,6 +154,7 @@ export default class VersionSelect extends Component {
           }
           isOpen={this.state.isOpen}
           onClick={this.toggleOpen}
+          removed={this.state.removed}
         >
           <span className="sr-only">Version selector (with current version) </span>
           {this.state.selected.label}
@@ -174,6 +176,7 @@ export default class VersionSelect extends Component {
                       ? this.state.newestColor
                       : this.props.background
                   }
+                  removed={single.removed}
                 >
                   {this.props.options[0] === single ? (
                     <span className="sr-only">Current version: </span>
@@ -188,4 +191,23 @@ export default class VersionSelect extends Component {
       </SelectContainer>
     )
   }
+}
+
+VersionSelect.defaultProps = {
+  background: 'blue',
+  color: 'black',
+  padding: '0.3em 0.6em',
+  newestColor: undefined,
+  width: '7em',
+}
+
+VersionSelect.propTypes = {
+  onChange: PropTypes.func.isRequired,
+  options: PropTypes.array.isRequired,
+  value: PropTypes.object.isRequired,
+  background: PropTypes.string,
+  color: PropTypes.string,
+  padding: PropTypes.string,
+  newestColor: PropTypes.string,
+  width: PropTypes.string,
 }

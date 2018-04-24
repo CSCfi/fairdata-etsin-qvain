@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { inject, observer } from 'mobx-react'
+import PropTypes from 'prop-types'
 
 class Announcer extends Component {
   constructor(props) {
@@ -33,3 +34,11 @@ class Announcer extends Component {
 }
 
 export default inject('Stores')(observer(Announcer))
+
+Announcer.propTypes = {
+  Stores: PropTypes.shape({
+    Accessibility: PropTypes.shape({
+      navText: PropTypes.string.isRequired,
+    }).isRequired,
+  }).isRequired,
+}

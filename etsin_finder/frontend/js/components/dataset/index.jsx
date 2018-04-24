@@ -116,7 +116,7 @@ class Dataset extends React.Component {
   render() {
     // CASE 1: Houston, we have a problem
     if (this.state.error !== false) {
-      return <ErrorPage error="notfound" />
+      return <ErrorPage error={{ type: 'notfound' }} />
     }
     // CASE 2: Business as usual
     return this.state.loaded ? (

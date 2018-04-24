@@ -25,6 +25,7 @@ describe('FilterItem', () => {
           aggregationName={facet.aggregationName}
           term={facet.termName}
           history={history}
+          tabIndex="1"
         />
       </MemoryRouter>
     )
@@ -66,6 +67,7 @@ describe('FilterItem', () => {
           aggregationName={facet.aggregationName}
           term={facet.termName}
           history={history}
+          tabIndex="1"
         />
       </MemoryRouter>
     )

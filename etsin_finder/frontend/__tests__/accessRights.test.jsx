@@ -22,13 +22,10 @@ describe('AccessRights', () => {
       <AccessRights
         theme={etsinTheme}
         access_rights={{
-          type: [
-            {
-              identifier:
-                'http://purl.org/att/es/reference_data/access_type/access_type_open_access',
-              pref_label: { fi: 'title' },
-            },
-          ],
+          access_type: {
+            identifier: 'http://purl.org/att/es/reference_data/access_type/access_type_open_access',
+            pref_label: { fi: 'title' },
+          },
         }}
         Stores={{ Locale: { currenLang: 'en' } }}
       />

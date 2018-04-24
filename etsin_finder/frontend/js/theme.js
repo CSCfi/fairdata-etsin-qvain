@@ -19,6 +19,7 @@ const etsinTheme = {
     dark: 'rgb(70, 70, 70)',
     error: '#eb6672',
     yellow: '#FFBD39',
+    success: '#53BA8A',
     insetDark: 'rgba(0, 0, 0, 0.3)',
   },
   breakpoints: {

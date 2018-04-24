@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { inject, observer } from 'mobx-react'
+import PropTypes from 'prop-types'
 
 import ElasticQuery from 'Stores/view/elasticquery'
 import ListItem from './listItem'
@@ -42,6 +43,10 @@ class ResultsList extends Component {
     }
     return this.renderList(currentLang)
   }
+}
+
+ResultsList.propTypes = {
+  Stores: PropTypes.object.isRequired,
 }
 
 export default inject('Stores')(observer(ResultsList))

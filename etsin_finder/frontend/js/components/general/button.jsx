@@ -59,7 +59,7 @@ export const InvertedButton = Button.extend`
   border-color: ${props => (props.color ? props.color : props.theme.color.primary)};
   background-color: transparent;
   color: ${props => (props.color ? props.color : props.theme.color.primary)};
-  &:hover {
+  &:hover, &:focus {
     background-color: ${props => (props.color ? props.color : props.theme.color.primary)};
     border-color: ${props => (props.color ? props.color : props.theme.color.primary)};
     color: ${props => (props.color === 'white' ? props.theme.color.primary : 'white')};
@@ -69,6 +69,15 @@ export const InvertedButton = Button.extend`
     background-color: transparent;
     border-color: ${props => opacify(-0.5, (props.color ? props.color : props.theme.color.primary))};
     color: ${props => opacify(-0.5, (props.color ? props.color : props.theme.color.primary))};
+  }
+  &.active {
+    background-color: ${props => (props.color ? props.color : props.theme.color.primary)};
+    border-color: ${props => (props.color ? props.color : props.theme.color.primary)};
+    color: ${props => (props.color === 'white' ? props.theme.color.primary : 'white')};
+    &:hover, &:focus {
+      background-color: ${props => (props.color ? darken(0.1, props.color) : darken(0.1, props.theme.color.primary))};
+      border-color: ${props => (props.color ? darken(0.1, props.color) : darken(0.1, props.theme.color.primary))};
+    }
   }
 `
 export const TransparentButton = styled(Button).attrs({
