@@ -26,8 +26,10 @@ body:not(.user-is-tabbing) .btn:focus {
 .content {
   flex: 1;
   display: flex;
+  background-color: inherit;
   & > div {
     width: 100%;
+    display: initial;
   }
 }
 

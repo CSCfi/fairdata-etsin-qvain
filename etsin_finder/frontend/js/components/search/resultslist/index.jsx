@@ -30,7 +30,7 @@ class ResultsList extends Component {
 
   render() {
     const { currentLang } = this.props.Stores.Locale
-    if (ElasticQuery.results.hits.length === 0 && ElasticQuery.loading === 0) {
+    if (ElasticQuery.results.hits.length === 0 && ElasticQuery.loading === false) {
       return (
         <div className="results-zero">
           <span>

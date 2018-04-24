@@ -6,14 +6,18 @@
   "author": "Aaron Hakala",
   "license": "ISC",
   "scripts": {
-    "build": "webpack --mode production --config webpack.prod.js --define process.env.NODE_ENV=\"'production'\"",
+    "build":
+      "webpack --mode production --config webpack.prod.js --define process.env.NODE_ENV=\"'production'\"",
     "build-storybook": "build-storybook",
-    "dev-build": "webpack -d --config webpack.config.js --define process.env.NODE_ENV=\"'development'\"",
+    "dev-build":
+      "webpack -d --config webpack.config.js --define process.env.NODE_ENV=\"'development'\"",
     "lint": "eslint js --ext .jsx,.js",
-    "start": "webpack --progress -d --config webpack.config.js --watch  --define process.env.NODE_ENV=\"'development'\"",
+    "start":
+      "webpack --progress -d --config webpack.config.js --watch  --define process.env.NODE_ENV=\"'development'\"",
     "storybook": "start-storybook -p 6006",
     "test": "jest",
-    "watch": "npm update; webpack --progress -d --config webpack.config.js --watch  --define process.env.NODE_ENV=\"'development'\""
+    "watch":
+      "npm update; webpack --progress -d --config webpack.config.js --watch  --define process.env.NODE_ENV=\"'development'\""
   },
   "dependencies": {
     "@fortawesome/fontawesome": "^1.1.4",
@@ -94,9 +98,7 @@
       "Stores/(.*)$": "<rootDir>/js/stores/$1",
       "Utils/(.*)$": "<rootDir>/js/utils/$1"
     },
-    "testPathIgnorePatterns": [
-      "./__tests__/test-setup.js"
-    ],
+    "testPathIgnorePatterns": ["./__tests__/test-setup.js"],
     "testURL": "http://localhost"
   },
   "prettier": {
@@ -114,9 +116,7 @@
             "env",
             {
               "targets": {
-                "browsers": [
-                  "last 2 major versions"
-                ]
+                "browsers": ["last 2 major versions"]
               }
             }
           ],
@@ -129,9 +129,7 @@
         "env",
         {
           "targets": {
-            "browsers": [
-              "last 2 major versions"
-            ]
+            "browsers": ["last 2 major versions"]
           }
         }
       ],

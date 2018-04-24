@@ -118,6 +118,9 @@ const QueryString = styled.div`
   grid-area: header;
   display: none;
   align-self: center;
+  p {
+    margin: auto;
+  }
   @media (min-width: ${props => props.theme.breakpoints.lg}) {
     display: block;
   }
