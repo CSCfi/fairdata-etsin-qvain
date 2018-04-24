@@ -41,7 +41,7 @@ body {
   background-color: rgb(77, 179, 231);
 }
 .content > div {
-  display: none;
+  opacity: 0;
 }
 
 /* --- BOOTSTRAP --- */

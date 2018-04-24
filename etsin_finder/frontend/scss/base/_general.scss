@@ -29,7 +29,7 @@ body:not(.user-is-tabbing) .btn:focus {
   background-color: inherit;
   & > div {
     width: 100%;
-    display: initial;
+    opacity: unset;
   }
 }
 
