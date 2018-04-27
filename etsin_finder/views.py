@@ -9,6 +9,45 @@ from etsin_finder.finder import app
 log = app.logger
 
 
+# REACT APP RELATED
+
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def frontend_app(path):
+    if 'sso' in request.args:
+        auth = get_saml_auth(request)
+        return redirect(auth.login())
+
+    if 'slo' in request.args:
+        auth = get_saml_auth(request)
+        name_id = None
+        session_index = None
+        if 'samlNameId' in session:
+            name_id = session['samlNameId']
+        if 'samlSessionIndex' in session:
+            session_index = session['samlSessionIndex']
+
+        return redirect(auth.logout(name_id=name_id, session_index=session_index))
+
+    return _render_index_template()
+
+
+def _render_index_template(saml_errors=[], slo_success=False):
+    saml_attributes = False
+    is_authenticated = False
+    if 'samlUserdata' in session:
+        if len(session['samlUserdata']) > 0:
+            saml_attributes = session['samlUserdata'].items()
+            is_authenticated = True
+            log.debug("SAML attributes: {0}".format(saml_attributes))
+
+    return render_template('index.html', title='Front Page', saml_errors=saml_errors, saml_attributes=saml_attributes,
+                           is_authenticated=is_authenticated, slo_success=slo_success)
+
+
+# SAML AUTHENTICATION RELATED
+
+# TODO: Remove this route at latest in production
 @app.route('/saml_attributes/')
 def saml_attributes():
     paint_logout = False
@@ -23,6 +62,7 @@ def saml_attributes():
                            attributes=attributes)
 
 
+# TODO: Ask whether this needs to be present?
 @app.route('/saml_metadata/')
 def saml_metadata():
     auth = get_saml_auth(request)
@@ -38,34 +78,9 @@ def saml_metadata():
     return resp
 
 
-@app.route('/sso/', methods=['GET'])
-def single_sign_on():
-    # if 'sso' in request.args:
-    #     return redirect(auth.login())
-    # elif 'sso2' in request.args:
-    #     return_to = '%sattrs/' % request.host_url
-    #     return redirect(auth.login(return_to))
-
-    auth = get_saml_auth(request)
-    return redirect(auth.login())
-
-
-@app.route('/slo/', methods=['GET'])
-def single_logout():
-    auth = get_saml_auth(request)
-    name_id = None
-    session_index = None
-    if 'samlNameId' in session:
-        name_id = session['samlNameId']
-    if 'samlSessionIndex' in session:
-        session_index = session['samlSessionIndex']
-
-    return redirect(auth.logout(name_id=name_id, session_index=session_index))
-
-
 @app.route('/acs/', methods=['GET', 'POST'])
-def attribute_consumer_service():
-    req = prepare_flask_request(request)
+def saml_attribute_consumer_service():
+    req = prepare_flask_request_for_saml(request)
     auth = init_saml_auth(req)
     auth.process_response()
     errors = auth.get_errors()
@@ -79,11 +94,12 @@ def attribute_consumer_service():
         if 'RelayState' in request.form and self_url != request.form['RelayState']:
             return redirect(auth.redirect_to(request.form['RelayState']))
 
-    render_index_template(errors, is_authenticated=is_authenticated)
+    log.info("NOT Relaystate")
+    return _render_index_template(saml_errors=errors)
 
 
 @app.route('/sls/', methods=['GET', 'POST'])
-def single_logout_service():
+def saml_single_logout_service():
     auth = get_saml_auth(request)
     slo_success = False
     dscb = lambda: session.clear()
@@ -95,37 +111,18 @@ def single_logout_service():
         else:
             slo_success = True
 
-    render_index_template(errors=errors, slo_success=slo_success)
-
-
-# This route is used by React app
-@app.route('/', defaults={'path': ''})
-@app.route('/<path:path>')
-def frontend_app(path):
-    return render_index_template()
-
-
-def render_index_template(saml_errors=[], is_authenticated=False, slo_success=False):
-    saml_attributes = False
-    if 'samlUserdata' in session:
-        if len(session['samlUserdata']) > 0:
-            saml_attributes = session['samlUserdata'].items()
-
-    log.info("SAML attributes: {0}".format(saml_attributes))
-
-    return render_template('index.html', title='Front Page', saml_errors=saml_errors, saml_attributes=saml_attributes,
-                           is_authenticated=is_authenticated, slo_success=slo_success)
+    return _render_index_template(saml_errors=errors, slo_success=slo_success)
 
 
 def get_saml_auth(request):
-    return OneLogin_Saml2_Auth(prepare_flask_request(request), custom_base_path=app.config['SAML_PATH'])
+    return OneLogin_Saml2_Auth(prepare_flask_request_for_saml(request), custom_base_path=app.config['SAML_PATH'])
 
 
 def init_saml_auth(flask_req):
     return OneLogin_Saml2_Auth(flask_req, custom_base_path=app.config['SAML_PATH'])
 
 
-def prepare_flask_request(request):
+def prepare_flask_request_for_saml(request):
     # If server is behind proxys or balancers use the HTTP_X_FORWARDED fields
     url_data = urlparse(request.url)
     return {
@@ -140,5 +137,3 @@ def prepare_flask_request(request):
         # "query_string": ""
 
     }
-
-

@@ -28,6 +28,8 @@ class Header extends React.Component {
                 <p className="slogan">
                   <Translate content="slogan" />
                 </p>
+                <a href={document.getElementById('root').hasAttribute('is_auth') ? '#' : this.props.location.pathname + '?sso'}>{document.getElementById('root').hasAttribute('is_auth') ? 'Logout' : 'Login'}</a>
+                <p>The user is{document.getElementById('root').hasAttribute('is_auth') ? '' : ' not'} logged in. Use incognito mode to test login repeatedly.</p>
               </div>
             </div>
             <Navi />
