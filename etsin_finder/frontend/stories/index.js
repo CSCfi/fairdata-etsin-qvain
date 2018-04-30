@@ -23,6 +23,10 @@ import ListItem from '../js/components/search/resultslist/listItem'
 import ErrorPage from '../js/components/errorpage'
 import Identifier from '../js/components/dataset/data/identifier'
 import AccessRights from '../js/components/dataset/data/accessRights'
+import Footer from '../js/layout/footer'
+import Loader from '../js/components/general/loader'
+import Separator from '../js/components/general/separator'
+import SkipToContent from '../js/components/general/skipToContent'
 
 import EsRes from './esRes'
 import MetaxRes from './metaxRes'
@@ -45,9 +49,8 @@ addDecorator(AppDecorator)
 
 const Container = styled.div`
   width: 100%;
-  max-width: ${props => props.maxWidth};
+  max-width: ${props => (props.maxWidth ? props.maxWidth : '100%')};
   padding: 1em;
-  margin: 1em;
 `
 
 storiesOf('Hero', module).add('Normal', () => (
@@ -133,5 +136,27 @@ storiesOf('Access rights', module).add('Open Access', () => (
     <AccessRights access_rights={MetaxRes.research_dataset.access_rights} />
     <br />
     <AccessRights access_rights={{ access_type: { identifier: 'locked' } }} />
+  </div>
+))
+
+storiesOf('Footer', module).add('Normal', () => <Footer />)
+
+storiesOf('Loader', module).add('Normal', () => (
+  <Fragment>
+    <Container>
+      <Loader active={true} />
+    </Container>
+    <Hero className="hero-primary">
+      <Loader active={true} color="white" />
+    </Hero>
+  </Fragment>
+))
+
+storiesOf('Separator', module).add('Normal', () => <Separator />)
+
+storiesOf('Skip to Content', module).add('Normal', () => (
+  <div>
+    <SkipToContent />
+    <p>Press tab to see skipToContent</p>
   </div>
 ))
