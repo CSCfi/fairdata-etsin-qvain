@@ -29,6 +29,7 @@ import Separator from '../js/components/general/separator'
 import SkipToContent from '../js/components/general/skipToContent'
 import VersionChanger from '../js/components/dataset/versionChanger'
 import Tabs from '../js/components/dataset/tabs'
+import ComponentCode from '../js/components/general/componentCode'
 
 import EsRes from './esRes'
 import MetaxRes from './metaxRes'
@@ -64,37 +65,73 @@ storiesOf('General/Hero', module).add('Normal', () => (
 storiesOf('General/Button', module)
   .add('Primary buttons', () => (
     <Container>
-      <Button>Primary</Button>
-      <InvertedButton>Inverted</InvertedButton>
-      <Link href="https://google.com">Link</Link>
-      <TransparentButton>Transparent Button</TransparentButton>
-      <LinkButton>LinkButton</LinkButton>
+      <ComponentCode displayName={() => 'Button'}>
+        <Button>Primary</Button>
+      </ComponentCode>
+      <Separator />
+      <ComponentCode displayName={() => 'InvertedButton'}>
+        <InvertedButton>Inverted</InvertedButton>
+      </ComponentCode>
+      <Separator />
+      <ComponentCode displayName={() => 'Link'}>
+        <Link href="https://google.com">Link</Link>
+      </ComponentCode>
+      <Separator />
+      <ComponentCode displayName={() => 'TransparentButton'}>
+        <TransparentButton>Transparent Button</TransparentButton>
+      </ComponentCode>
+      <Separator />
+      <ComponentCode displayName={() => 'LinkButton'}>
+        <LinkButton>LinkButton</LinkButton>
+      </ComponentCode>
     </Container>
   ))
   .add('Color error', () => (
     <Container>
-      <Button color={theme.color.error}>Primary</Button>
-      <InvertedButton color={theme.color.error}>Inverted</InvertedButton>
-      <Link href="https://google.com" color={theme.color.error}>
-        Link
-      </Link>
-      <TransparentButton color={theme.color.error}>Transparent Button</TransparentButton>
-      <LinkButton color={theme.color.error}>LinkButton</LinkButton>
+      <ComponentCode displayName={() => 'Button'}>
+        <Button color={theme.color.error}>Primary</Button>
+      </ComponentCode>
+      <Separator />
+      <ComponentCode displayName={() => 'InvertedButton'}>
+        <InvertedButton color={theme.color.error}>Inverted</InvertedButton>
+      </ComponentCode>
+      <Separator />
+      <ComponentCode displayName={() => 'Link'}>
+        <Link href="https://google.com" color={theme.color.error}>
+          Link
+        </Link>
+      </ComponentCode>
+      <Separator />
+      <ComponentCode displayName={() => 'TransparentButton'}>
+        <TransparentButton color={theme.color.error}>Transparent Button</TransparentButton>
+      </ComponentCode>
+      <Separator />
+      <ComponentCode displayName={() => 'LinkButton'}>
+        <LinkButton color={theme.color.error}>LinkButton</LinkButton>
+      </ComponentCode>
     </Container>
   ))
   .add('Custom', () => (
     <Container>
       <p>No Margin</p>
-      <Button noMargin>Button</Button>
+      <ComponentCode displayName={() => 'Button'}>
+        <Button noMargin>Button</Button>
+      </ComponentCode>
       <Separator />
       <p>Custom margin</p>
-      <Button margin="1em 2em">Button</Button>
+      <ComponentCode displayName={() => 'Button'}>
+        <Button margin="1em 2em">Button</Button>
+      </ComponentCode>
       <Separator />
       <p>No Padding</p>
-      <TransparentButton noPadding>Click me!</TransparentButton>
+      <ComponentCode displayName={() => 'TransparentButton'}>
+        <TransparentButton noPadding>Click me!</TransparentButton>
+      </ComponentCode>
       <Separator />
       <p>Custom padding</p>
-      <Button padding="0.5em 2em">0.5em 2em</Button>
+      <ComponentCode displayName={() => 'Button'}>
+        <Button padding="0.5em 2em">0.5em 2em</Button>
+      </ComponentCode>
     </Container>
   ))
 
@@ -107,7 +144,9 @@ storiesOf('General/Splash', module).add('Active', () => (
 storiesOf('Search/SearchBar', module)
   .add('Normal', () => (
     <Container maxWidth="100%">
-      <SearchBar />
+      <ComponentCode displayName={() => 'SearchBar'}>
+        <SearchBar />
+      </ComponentCode>
     </Container>
   ))
   .add('With background', () => (
@@ -118,25 +157,41 @@ storiesOf('Search/SearchBar', module)
     </Hero>
   ))
 
-storiesOf('Search/Results amount', module).add('Normal', () => <ResultsAmount amount={50} />)
+storiesOf('Search/Results amount', module).add('Normal', () => (
+  <ComponentCode displayName={() => 'ResultsAmount'}>
+    <ResultsAmount amount={50} />
+  </ComponentCode>
+))
 
 storiesOf('Search/Search sorting', module).add('Normal', () => (
   <Container maxWidth="500px">
-    <SortResults />
+    <ComponentCode displayName={() => 'SortResults'}>
+      <SortResults />
+    </ComponentCode>
   </Container>
 ))
 
 storiesOf('Search/Result item', module).add('Normal', () => (
   <Container maxWidth="700px">
-    <ListItem catId={EsRes.hits.hits[0]._id} item={EsRes.hits.hits[0]._source} lang="fi" />
+    <ComponentCode displayName={() => 'ListItem'} filterProps={['catId', 'item']}>
+      <ListItem catId={EsRes.hits.hits[0]._id} item={EsRes.hits.hits[0]._source} lang="fi" />
+    </ComponentCode>
   </Container>
 ))
 
 storiesOf('Search/Pagination', module).add('Examples', () => (
   <div>
-    <Pagination totalResults={50} perPage={10} currentPage={3} />
-    <Pagination totalResults={60} perPage={3} currentPage={10} />
-    <Pagination totalResults={100} perPage={3} currentPage={3} />
+    <ComponentCode displayName={() => 'Pagination'}>
+      <Pagination totalResults={50} perPage={10} currentPage={3} />
+    </ComponentCode>
+    <Separator />
+    <ComponentCode displayName={() => 'Pagination'}>
+      <Pagination totalResults={60} perPage={3} currentPage={10} />
+    </ComponentCode>
+    <Separator />
+    <ComponentCode displayName={() => 'Pagination'}>
+      <Pagination totalResults={100} perPage={3} currentPage={3} />
+    </ComponentCode>
   </div>
 ))
 
@@ -145,14 +200,19 @@ storiesOf('Error page', module)
   .add('Error', () => <ErrorPage error={{ type: 'error' }} />)
 
 storiesOf('Dataset/Identifier Component', module).add('Normal', () => (
-  <Identifier idn={MetaxRes.research_dataset.preferred_identifier} />
+  <ComponentCode displayName={() => 'Identifier'}>
+    <Identifier idn={MetaxRes.research_dataset.preferred_identifier} />
+  </ComponentCode>
 ))
 
 storiesOf('General/Access rights', module).add('Open Access', () => (
   <div>
-    <AccessRights access_rights={MetaxRes.research_dataset.access_rights} />
-    <br />
-    <AccessRights access_rights={{ access_type: { identifier: 'locked' } }} />
+    <ComponentCode displayName={() => 'AccessRights'}>
+      <AccessRights access_rights={MetaxRes.research_dataset.access_rights} />
+    </ComponentCode>
+    <ComponentCode displayName={() => 'AccessRights'}>
+      <AccessRights access_rights={{ access_type: { identifier: 'locked' } }} />
+    </ComponentCode>
   </div>
 ))
 
@@ -161,19 +221,28 @@ storiesOf('Footer', module).add('Normal', () => <Footer />)
 storiesOf('General/Loader', module).add('Normal', () => (
   <Fragment>
     <Container>
-      <Loader active={true} />
+      <ComponentCode displayName={() => 'Loader'}>
+        <Loader active={true} />
+      </ComponentCode>
     </Container>
+    <Separator />
     <Hero className="hero-primary">
       <Loader active={true} color="white" />
     </Hero>
   </Fragment>
 ))
 
-storiesOf('General/Separator', module).add('Normal', () => <Separator />)
+storiesOf('General/Separator', module).add('Normal', () => (
+  <ComponentCode displayName={() => 'Separator'}>
+    <Separator />
+  </ComponentCode>
+))
 
 storiesOf('General/Skip to Content', module).add('Normal', () => (
   <div>
-    <SkipToContent />
+    <ComponentCode displayName={() => 'SkipToContent'}>
+      <SkipToContent />
+    </ComponentCode>
     <p>Press tab to see skipToContent</p>
   </div>
 ))
@@ -206,7 +275,11 @@ storiesOf('Dataset/Version changer', module)
         date_created: '2017-05-23T13:07:22+06:00',
       },
     ]
-    return <VersionChanger versionSet={customVersionSet} idn={MetaxRes.identifier} />
+    return (
+      <ComponentCode displayName={() => 'VersionChanger'} filterProps={['versionSet']}>
+        <VersionChanger versionSet={customVersionSet} idn={MetaxRes.identifier} />
+      </ComponentCode>
+    )
   })
   .add('Old Version', () => {
     const customVersionSet = [
@@ -235,7 +308,11 @@ storiesOf('Dataset/Version changer', module)
         date_created: '2017-05-23T13:07:22+06:00',
       },
     ]
-    return <VersionChanger versionSet={customVersionSet} idn={'customID'} />
+    return (
+      <ComponentCode displayName={() => 'VersionChanger'} filterProps={['versionSet']}>
+        <VersionChanger versionSet={customVersionSet} idn={'customID'} />
+      </ComponentCode>
+    )
   })
   .add('Deleted Version', () => {
     const customVersionSet = [
@@ -264,9 +341,15 @@ storiesOf('Dataset/Version changer', module)
         date_created: '2017-05-23T13:07:22+06:00',
       },
     ]
-    return <VersionChanger versionSet={customVersionSet} idn={'customID2'} />
+    return (
+      <ComponentCode displayName={() => 'VersionChanger'} filterProps={['versionSet']}>
+        <VersionChanger versionSet={customVersionSet} idn={'customID2'} />
+      </ComponentCode>
+    )
   })
 
 storiesOf('Dataset/Tabs', module).add('Normal', () => (
-  <Tabs showDownloads={true} showEvents={true} identifier={'id'} />
+  <ComponentCode>
+    <Tabs showDownloads={true} showEvents={true} identifier={'id'} />
+  </ComponentCode>
 ))
