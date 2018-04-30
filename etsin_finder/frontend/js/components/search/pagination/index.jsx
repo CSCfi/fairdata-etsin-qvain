@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { inject, observer } from 'mobx-react'
+import styled from 'styled-components'
 
 import ElasticQuery from '../../../stores/view/elasticquery'
 import { TransparentButton } from '../../general/button'
@@ -24,10 +25,10 @@ class Pagination extends Component {
   }
   componentWillMount() {
     if (!this.pageAmount) {
-      const pages = Math.ceil(ElasticQuery.results.total / ElasticQuery.perPage)
+      const pages = Math.ceil(this.props.totalResults / this.props.perPage)
       this.setState(
         {
-          currentPage: parseInt(ElasticQuery.pageNum, 10),
+          currentPage: parseInt(this.props.currentPage, 10),
           pageAmount: pages,
         },
         () => {
@@ -39,10 +40,10 @@ class Pagination extends Component {
 
   componentWillReceiveProps(newProps) {
     if (!newProps.loading) {
-      const pages = Math.ceil(ElasticQuery.results.total / ElasticQuery.perPage)
+      const pages = Math.ceil(this.props.totalResults / this.props.perPage)
       this.setState(
         {
-          currentPage: parseInt(ElasticQuery.pageNum, 10),
+          currentPage: parseInt(this.props.currentPage, 10),
           pageAmount: pages,
         },
         () => {
@@ -103,30 +104,29 @@ class Pagination extends Component {
     if (value === '...') {
       return (
         <li>
-          <span className="pagination-item pagination-rest">
+          <PaginationItem className="pagination-rest">
             <span className="sr-only">Skipped pages indicator</span>
             <span aria-hidden="true">...</span>
-          </span>
+          </PaginationItem>
         </li>
       )
     }
     return (
       <li key={`pagination-${value}`}>
         {link ? (
-          <button
+          <PaginationButton
             onClick={e => {
               this.changePage(e, value)
             }}
-            className="pagination-item"
           >
             <span className="sr-only">page </span>
             {value}
-          </button>
+          </PaginationButton>
         ) : (
-          <span className="pagination-item current">
+          <PaginationItem className="current">
             <span className="sr-only">current page</span>
             <span aria-hidden="true">{value}</span>
-          </span>
+          </PaginationItem>
         )}
       </li>
     )
@@ -229,18 +229,58 @@ class Pagination extends Component {
       return null
     }
     return (
-      <div className="pagination-container col-lg-12">
+      <PaginationContainer className="col-lg-12">
         <p id="pagination-label" className="pagination-label sr-only" aria-hidden="true">
           Pagination
         </p>
         {this.createPagination()}
-      </div>
+      </PaginationContainer>
     )
   }
 }
 
+const PaginationItem = styled.span.attrs({
+  size: '40px',
+})`
+  cursor: pointer;
+  display: block;
+  text-align: center;
+  margin: 0 0.2em;
+  background-color: ${props => props.theme.color.lightgray};
+  width: ${props => props.size};
+  height: ${props => props.size};
+  border-radius: ${props => props.size};
+  line-height: ${props => props.size};
+  color: black;
+  padding: 0;
+  border: 0;
+  &.current {
+    background-color: ${props => props.theme.color.primary};
+    color: white;
+  }
+  &.pagination-rest {
+    background-color: transparent;
+    width: ${props => props.size};
+    height: ${props => props.size};
+    border-radius: ${props => props.size};
+    line-height: ${props => props.size};
+  }
+`
+
+const PaginationButton = PaginationItem.withComponent('button')
+
+const PaginationContainer = styled.div`
+  margin-top: 1em;
+  justify-content: center;
+  flex-wrap: wrap;
+  display: flex;
+`
+
 Pagination.propTypes = {
   history: PropTypes.object.isRequired,
+  totalResults: PropTypes.number.isRequired,
+  perPage: PropTypes.number.isRequired,
+  currentPage: PropTypes.number.isRequired,
 }
 
 export default inject('Stores')(observer(withRouter(Pagination)))

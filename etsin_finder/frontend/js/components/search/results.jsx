@@ -36,7 +36,7 @@ class Results extends Component {
         <div className="regular-row">
           <Grid>
             <AmountRes>
-              <ResultsAmount />
+              <ResultsAmount amount={ElasticQuery.results.total} />
             </AmountRes>
             <SortRes>
               <FilterToggle
@@ -63,7 +63,12 @@ class Results extends Component {
               <ResultsList query={this.props.query} />
             </ResList>
             <PageSwitcher>
-              <Pagination loading={ElasticQuery.loading} />
+              <Pagination
+                loading={ElasticQuery.loading}
+                totalResults={ElasticQuery.results.total}
+                perPage={ElasticQuery.perPage}
+                currentPage={ElasticQuery.pageNum}
+              />
             </PageSwitcher>
           </Grid>
         </div>
