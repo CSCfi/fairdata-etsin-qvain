@@ -21,6 +21,8 @@ import SearchBar from '../js/components/search/searchBar'
 import Pagination from '../js/components/search/pagination'
 import ListItem from '../js/components/search/resultslist/listItem'
 import ErrorPage from '../js/components/errorpage'
+import Identifier from '../js/components/dataset/data/identifier'
+import AccessRights from '../js/components/dataset/data/accessRights'
 
 import EsRes from './esRes'
 import MetaxRes from './metaxRes'
@@ -121,3 +123,15 @@ storiesOf('Pagination', module).add('5 pages', () => (
 storiesOf('Error page', module)
   .add('Not found', () => <ErrorPage error={{ type: 'notfound' }} />)
   .add('Error', () => <ErrorPage error={{ type: 'error' }} />)
+
+storiesOf('Identifier Component', module).add('Normal', () => (
+  <Identifier idn={MetaxRes.research_dataset.preferred_identifier} />
+))
+
+storiesOf('Access rights', module).add('Open Access', () => (
+  <div>
+    <AccessRights access_rights={MetaxRes.research_dataset.access_rights} />
+    <br />
+    <AccessRights access_rights={{ access_type: { identifier: 'locked' } }} />
+  </div>
+))

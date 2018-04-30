@@ -99,6 +99,9 @@ const Access = styled.div`
   div {
     width: max-content;
   }
+  svg {
+    margin-right: 0.5em;
+  }
 `
 AccessRights.defaultProps = {
   access_rights: undefined,
