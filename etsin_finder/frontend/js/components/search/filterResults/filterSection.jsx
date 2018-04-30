@@ -4,8 +4,8 @@ import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faAngleDown from '@fortawesome/fontawesome-free-solid/faAngleDown'
 import PropTypes from 'prop-types'
 
-import checkDataLang from 'Utils/checkDataLang'
-import ElasticQuery from 'Stores/view/elasticquery'
+import checkDataLang from '../../../utils/checkDataLang'
+import ElasticQuery from '../../../stores/view/elasticquery'
 import FilterItem from './filterItem'
 
 class FilterSection extends Component {

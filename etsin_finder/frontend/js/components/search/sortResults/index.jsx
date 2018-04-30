@@ -6,8 +6,8 @@ import faSortAmountDown from '@fortawesome/fontawesome-free-solid/faSortAmountDo
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 
-import ElasticQuery from 'Stores/view/elasticquery'
-import Accessibility from 'Stores/view/accessibility'
+import ElasticQuery from '../../../stores/view/elasticquery'
+import Accessibility from '../../../stores/view/accessibility'
 import { InvertedButton } from '../../general/button'
 
 // available options, they are also checked in ElasticQuery store

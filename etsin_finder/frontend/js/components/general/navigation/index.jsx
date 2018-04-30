@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom'
 import Translate from 'react-translate-component'
 import translate from 'counterpart'
 
-import Accessibility from 'Stores/view/accessibility'
+import Accessibility from '../../../stores/view/accessibility'
 import SecondNav from './secondnav'
 
 export default class Navi extends React.Component {

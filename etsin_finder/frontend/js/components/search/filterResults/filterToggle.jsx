@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 
-import ElasticQuery from 'Stores/view/elasticquery'
+import ElasticQuery from '../../../stores/view/elasticquery'
 import { InvertedButton } from '../../general/button'
 
 const Filter = styled.div`

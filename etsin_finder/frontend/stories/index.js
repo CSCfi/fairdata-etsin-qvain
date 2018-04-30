@@ -1,21 +1,41 @@
-import React from 'react';
+import React, { Fragment } from 'react'
 
-import { storiesOf } from '@storybook/react';
-import { action } from '@storybook/addon-actions';
-import { linkTo } from '@storybook/addon-links';
+import { storiesOf } from '@storybook/react'
+import { action } from '@storybook/addon-actions'
+import { linkTo } from '@storybook/addon-links'
 
-import { Button, Welcome } from '@storybook/react/demo'
-import Identifier from '../js/components/identifier'
-import SearchBar from '../js/components/searchBar'
+import Button, {
+  InvertedButton,
+  Link,
+  TransparentButton,
+  LinkButton,
+} from '../js/components/general/button'
+import Splash from '../js/components/general/splash'
+import Pagination from '../js/components/search/pagination'
+import theme from '../js/theme'
 
-storiesOf('Welcome', module).add('to Storybook', () => <Welcome showApp={linkTo('Button')} />);
+storiesOf('Welcome', module).add('welcome', () => (
+  <div>
+    <p>Click through components</p>
+  </div>
+))
 
-storiesOf('Button', module)
-  .add('with text', () => <Button onClick={action('clicked')}>Hello Button</Button>);
+storiesOf('Button', module).add('Primary buttons', () => (
+  <Fragment>
+    <Button theme={theme}>Primary</Button>
+    <InvertedButton theme={theme}>Inverted</InvertedButton>
+    <Link href="https://google.com" theme={theme}>
+      Link
+    </Link>
+    <TransparentButton theme={theme}>Transparent Button</TransparentButton>
+    <LinkButton theme={theme}>LinkButton</LinkButton>
+  </Fragment>
+))
 
-storiesOf('Identifier', module)
-  .add('URN', () => <Identifier idn='urn:my:urn' classes="btn btn-primary">Data location</Identifier>)
-  .add('Http', () => <Identifier idn='http://dx.doi.org/urn:something'>Im the identifier</Identifier>)
+storiesOf('Splash', module).add('Active', () => (
+  <Splash theme={theme} visible="true">
+    <h1>Hello</h1>
+  </Splash>
+))
 
-storiesOf('SearchBar', module)
-  .add('Normal', () => <SearchBar />)
+storiesOf('Pagination', module).add('5 pages', () => <Pagination />)

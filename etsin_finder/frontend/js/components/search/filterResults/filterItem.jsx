@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 import PropTypes from 'prop-types'
 
-import ElasticQuery from 'Stores/view/elasticquery'
+import ElasticQuery from '../../../stores/view/elasticquery'
 
 class FilterItem extends Component {
   constructor(props) {

@@ -38,7 +38,6 @@ body {
 }
 .content {
   flex: 1;
-  background-color: rgb(77, 179, 231);
 }
 .content > div {
   opacity: 0;

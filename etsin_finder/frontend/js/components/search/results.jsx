@@ -5,7 +5,7 @@ import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faFilter from '@fortawesome/fontawesome-free-solid/faFilter'
 import PropTypes from 'prop-types'
 
-import ElasticQuery from 'Stores/view/elasticquery'
+import ElasticQuery from '../../stores/view/elasticquery'
 import HeightTransition from '../general/animations/heightTransition'
 import SortResults from './sortResults'
 import Pagination from './pagination'
@@ -63,7 +63,7 @@ class Results extends Component {
               <ResultsList query={this.props.query} />
             </ResList>
             <PageSwitcher>
-              <Pagination />
+              <Pagination loading={ElasticQuery.loading} />
             </PageSwitcher>
           </Grid>
         </div>

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 
-import checkDataLang from 'Utils/checkDataLang'
+import checkDataLang from '../../../utils/checkDataLang'
 import ErrorBoundary from '../../general/errorBoundary'
 import AccessRights from '../../dataset/data/accessRights'
 

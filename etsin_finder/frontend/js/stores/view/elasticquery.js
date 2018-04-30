@@ -1,7 +1,7 @@
 import { observable, action } from 'mobx'
 import axios from 'axios'
 
-import UrlParse from 'Utils/urlParse'
+import UrlParse from '../../utils/urlParse'
 import Locale from './language'
 
 const fields = [

@@ -3,7 +3,7 @@ import { BrowserRouter as Router } from 'react-router-dom'
 import { Provider } from 'mobx-react'
 import { ThemeProvider } from 'styled-components'
 
-import SkipToContent from 'Components/general/skipToContent'
+import SkipToContent from './components/general/skipToContent'
 import Layout from './layout'
 import etsinTheme from './theme'
 

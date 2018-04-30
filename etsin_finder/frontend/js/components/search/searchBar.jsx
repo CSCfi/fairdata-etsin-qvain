@@ -3,8 +3,8 @@ import { withRouter } from 'react-router-dom'
 import counterpart from 'counterpart'
 import PropTypes from 'prop-types'
 
-import { Search } from 'Routes'
-import ElasticQuery from 'Stores/view/elasticquery'
+import { Search } from '../../routes'
+import ElasticQuery from '../../stores/view/elasticquery'
 import ErrorBoundary from '../general/errorBoundary'
 
 class SearchBar extends Component {

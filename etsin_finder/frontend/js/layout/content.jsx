@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { Route, Switch } from 'react-router-dom'
-import { Home, Search, Dataset, About } from 'Routes'
+import { Home, Search, Dataset, About } from '../routes'
 
-import Announcer from 'Components/general/announcer'
+import Announcer from '../components/general/announcer'
 import ErrorPage from '../components/errorpage'
 
 export default class Content extends Component {

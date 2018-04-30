@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 import Translate from 'react-translate-component'
-import ElasticQuery from 'Stores/view/elasticquery'
-import { Dataset } from 'Routes'
 import PropTypes from 'prop-types'
 
+import ElasticQuery from '../../stores/view/elasticquery'
+import { Dataset } from '../../routes'
 import HeroBanner from '../general/hero'
 import SearchBar from './searchBar'
 import Results from './results'

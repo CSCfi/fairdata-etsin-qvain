@@ -1,7 +1,7 @@
 import React from 'react'
 import Translate from 'react-translate-component'
 import { inject, observer } from 'mobx-react'
-import ElasticQuery from 'Stores/view/elasticquery'
+import ElasticQuery from '../../stores/view/elasticquery'
 
 const ResultsAmount = () => (
   <Translate

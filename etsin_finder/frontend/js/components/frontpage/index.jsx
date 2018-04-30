@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import Translate from 'react-translate-component'
 
-import { Search } from 'Routes'
+import { Search } from '../../routes'
 import SearchBar from '../search/searchBar'
 import HeroBanner from '../general/hero'
 
