@@ -14,9 +14,10 @@ import Button, {
   LinkButton,
 } from '../js/components/general/button'
 import Splash from '../js/components/general/splash'
-import Pagination from '../js/components/search/pagination'
-import SortResults from '../js/components/search/sortResults'
 import ResultsAmount from '../js/components/search/resultsAmount'
+import SortResults from '../js/components/search/sortResults'
+import SearchBar from '../js/components/search/searchBar'
+import Pagination from '../js/components/search/pagination'
 
 /* eslint-disable */
 
@@ -30,6 +31,7 @@ const AppDecorator = storyFn => (
 addDecorator(AppDecorator)
 
 const Container = styled.div`
+  width: 100%;
   max-width: ${props => props.maxWidth};
   padding: 1em;
   margin: 1em;
@@ -64,9 +66,31 @@ storiesOf('Button', module)
   ))
 
 storiesOf('Splash', module).add('Active', () => (
-  <Splash visible="true">
+  <Splash visible={true}>
     <h1>Hello</h1>
   </Splash>
+))
+
+storiesOf('SearchBar', module)
+  .add('Normal', () => (
+    <Container maxWidth="100%">
+      <SearchBar />
+    </Container>
+  ))
+  .add('With background', () => (
+    <Hero className="hero-primary">
+      <Container maxWidth="800px">
+        <SearchBar />
+      </Container>
+    </Hero>
+  ))
+
+storiesOf('Results amount', module).add('Normal', () => <ResultsAmount amount={50} />)
+
+storiesOf('Search sorting', module).add('Normal', () => (
+  <Container maxWidth="500px">
+    <SortResults />
+  </Container>
 ))
 
 storiesOf('Pagination', module).add('5 pages', () => (
@@ -76,11 +100,3 @@ storiesOf('Pagination', module).add('5 pages', () => (
     <Pagination totalResults={100} perPage={3} currentPage={3} />
   </div>
 ))
-
-storiesOf('Search sorting', module).add('Normal', () => (
-  <Container maxWidth="500px">
-    <SortResults />
-  </Container>
-))
-
-storiesOf('Results amount', module).add('Normal', () => <ResultsAmount amount={50} />)
