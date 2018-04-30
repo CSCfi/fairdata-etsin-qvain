@@ -7,6 +7,7 @@ import { storiesOf, addDecorator } from '@storybook/react'
 import Stores from '../js/stores'
 import theme from '../js/theme'
 import Hero from '../js/components/general/hero'
+import LangToggle from '../js/components/general/navigation/langToggle'
 import Button, {
   InvertedButton,
   Link,
@@ -18,13 +19,23 @@ import ResultsAmount from '../js/components/search/resultsAmount'
 import SortResults from '../js/components/search/sortResults'
 import SearchBar from '../js/components/search/searchBar'
 import Pagination from '../js/components/search/pagination'
+import ListItem from '../js/components/search/resultslist/listItem'
+import ErrorPage from '../js/components/errorpage'
+
+import EsRes from './esRes'
+import MetaxRes from './metaxRes'
 
 /* eslint-disable */
 
 const AppDecorator = storyFn => (
   <Provider Stores={Stores}>
     <Router history={Stores.history}>
-      <ThemeProvider theme={theme}>{storyFn()}</ThemeProvider>
+      <ThemeProvider theme={theme}>
+        <Fragment>
+          <LangToggle />
+          {storyFn()}
+        </Fragment>
+      </ThemeProvider>
     </Router>
   </Provider>
 )
@@ -93,6 +104,12 @@ storiesOf('Search sorting', module).add('Normal', () => (
   </Container>
 ))
 
+storiesOf('Result item', module).add('Normal', () => (
+  <Container maxWidth="700px">
+    <ListItem catId={EsRes.hits.hits[0]._id} item={EsRes.hits.hits[0]._source} lang="fi" />
+  </Container>
+))
+
 storiesOf('Pagination', module).add('5 pages', () => (
   <div>
     <Pagination totalResults={50} perPage={10} currentPage={3} />
@@ -100,3 +117,7 @@ storiesOf('Pagination', module).add('5 pages', () => (
     <Pagination totalResults={100} perPage={3} currentPage={3} />
   </div>
 ))
+
+storiesOf('Error page', module)
+  .add('Not found', () => <ErrorPage error={{ type: 'notfound' }} />)
+  .add('Error', () => <ErrorPage error={{ type: 'error' }} />)
