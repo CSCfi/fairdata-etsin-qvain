@@ -104,8 +104,10 @@ export default class VersionSelect extends Component {
     }
   }
 
-  setFirstOptionRef = element => {
-    this.firstOption = element
+  setFirstOptionRef = (element, counter) => {
+    if (counter === 0) {
+      this.firstOption = element
+    }
   }
 
   focusFirstOption = () => {
@@ -162,7 +164,7 @@ export default class VersionSelect extends Component {
         {this.state.isOpen &&
           this.state.isFocused && (
             <List width={this.state.width} background={this.props.background}>
-              {this.state.options.map(single => (
+              {this.state.options.map((single, i) => (
                 <ListItem
                   noMargin
                   color={this.state.color}
@@ -170,7 +172,7 @@ export default class VersionSelect extends Component {
                   key={single.value}
                   onClick={() => this.changeSelected(single)}
                   value={single.value}
-                  innerRef={this.setFirstOptionRef}
+                  innerRef={e => this.setFirstOptionRef(e, i)}
                   background={
                     this.props.options[0] === single
                       ? this.state.newestColor
