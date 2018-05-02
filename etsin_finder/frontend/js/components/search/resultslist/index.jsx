@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { inject, observer } from 'mobx-react'
 import PropTypes from 'prop-types'
 
-import ElasticQuery from 'Stores/view/elasticquery'
+import ElasticQuery from '../../../stores/view/elasticquery'
 import ListItem from './listItem'
 
 class ResultsList extends Component {
@@ -30,7 +30,7 @@ class ResultsList extends Component {
 
   render() {
     const { currentLang } = this.props.Stores.Locale
-    if (ElasticQuery.results.hits.length === 0 && ElasticQuery.loading === 0) {
+    if (ElasticQuery.results.hits.length === 0 && ElasticQuery.loading === false) {
       return (
         <div className="results-zero">
           <span>

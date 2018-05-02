@@ -4,8 +4,8 @@ import Translate from 'react-translate-component'
 import { inject, observer } from 'mobx-react'
 import styled from 'styled-components'
 
-import Accessibility from 'Stores/view/accessibility'
-import checkDataLang from 'Utils/checkDataLang'
+import Accessibility from '../../../stores/view/accessibility'
+import checkDataLang from '../../../utils/checkDataLang'
 import DateFormat from '../../general/dateFormat'
 
 const Table = styled.table`

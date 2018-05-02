@@ -3,9 +3,9 @@ import Translate from 'react-translate-component'
 import { Link, withRouter } from 'react-router-dom'
 import translate from 'counterpart'
 
-import Navi from 'Components/general/navigation'
-import ErrorBoundary from 'Components/general/errorBoundary'
-import Accessibility from 'Stores/view/accessibility'
+import Navi from '../components/general/navigation'
+import ErrorBoundary from '../components/general/errorBoundary'
+import Accessibility from '../stores/view/accessibility'
 
 class Header extends React.Component {
   render() {

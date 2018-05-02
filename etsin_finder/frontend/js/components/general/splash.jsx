@@ -20,7 +20,7 @@ const SplashBg = styled.div`
   z-index: 20;
 `
 
-const Splash = props => <SplashBg visible={props.visible}>{props.children}</SplashBg>
+const Splash = props => <SplashBg {...props}>{props.children}</SplashBg>
 
 Splash.defaultProps = {
   children: <span />,

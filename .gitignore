@@ -16,3 +16,4 @@ etsin_finder/frontend/static/*
 !etsin_finder/frontend/static/favicon.png
 !etsin_finder/frontend/static/manifest.json
 !etsin_finder/frontend/static/service-worker.js
+!etsin_finder/frontend/static/critical.css

@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
+import styled from 'styled-components'
 
-import checkDataLang from 'Utils/checkDataLang'
+import checkDataLang from '../../../utils/checkDataLang'
 import ErrorBoundary from '../../general/errorBoundary'
 import AccessRights from '../../dataset/data/accessRights'
+import ContentBox from '../../general/contentBox'
 
 export default class ListItem extends Component {
   shortDescription(string) {
@@ -19,10 +21,10 @@ export default class ListItem extends Component {
   }
   render() {
     return (
-      <div className="listItem">
+      <Item>
         <ErrorBoundary>
           <Link to={`/dataset/${this.props.catId}`}>
-            <div className="content-box">
+            <ContentBox>
               <ErrorBoundary>
                 <div className="d-flex justify-content-between align-items-start item-header">
                   <h2 className="title">{checkDataLang(this.props.item.title, this.props.lang)}</h2>
@@ -52,10 +54,10 @@ export default class ListItem extends Component {
                   )}
                 </p>
               </ErrorBoundary>
-            </div>
+            </ContentBox>
           </Link>
         </ErrorBoundary>
-      </div>
+      </Item>
     )
   }
 }
@@ -70,3 +72,35 @@ ListItem.propTypes = {
   }).isRequired,
   lang: PropTypes.string.isRequired,
 }
+
+const Item = styled.div`
+  margin-bottom: 1.3em;
+  a {
+    color: inherit;
+    text-decoration: none;
+    & > div {
+      transition: all 0.1s ease;
+    }
+    &:hover {
+      & > div {
+        border: 2px solid ${props => props.theme.color.primary};
+        box-shadow: 0 2px 3px 0px ${props => props.theme.color.lightgray};
+      }
+    }
+    .title {
+      color: ${props => props.theme.color.primary};
+      margin-bottom: 0.5em;
+      margin-right: 1em;
+      line-height: 1.5em;
+    }
+  }
+  .item-header {
+    margin-bottom: 0em;
+    flex-wrap: wrap;
+    font-size: 0.9em;
+    @media (min-width: ${props => props.theme.breakpoints.md}) {
+      font-size: 1em;
+      flex-wrap: nowrap;
+    }
+  }
+`

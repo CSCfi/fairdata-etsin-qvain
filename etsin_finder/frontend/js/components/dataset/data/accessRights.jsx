@@ -7,8 +7,8 @@ import faUnlock from '@fortawesome/fontawesome-free-solid/faUnlock'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 
-import checkNested from 'Utils/checkNested'
-import checkDataLang from 'Utils/checkDataLang'
+import checkNested from '../../../utils/checkNested'
+import checkDataLang from '../../../utils/checkDataLang'
 import Tooltip from '../../general/tooltip'
 
 export const accessRightsBool = accessRights => {
@@ -98,6 +98,9 @@ const Access = styled.div`
   height: max-content;
   div {
     width: max-content;
+  }
+  svg {
+    margin-right: 0.5em;
   }
 `
 AccessRights.defaultProps = {
