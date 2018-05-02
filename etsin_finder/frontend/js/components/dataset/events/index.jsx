@@ -6,7 +6,7 @@ import styled from 'styled-components'
 
 import Accessibility from '../../../stores/view/accessibility'
 import checkDataLang from '../../../utils/checkDataLang'
-import DateFormat from '../../general/dateFormat'
+import dateFormat from '../../../utils/dateFormat'
 
 const Table = styled.table`
   overflow-x: scroll;
@@ -86,11 +86,11 @@ class Events extends Component {
 
   printDate = temp => {
     if (temp.start_date === temp.end_date) {
-      return <DateFormat date={temp.start_date} />
+      return dateFormat(temp.start_date)
     }
     return (
       <span>
-        <DateFormat date={temp.start_date} /> - <DateFormat date={temp.end_date} />
+        {dateFormat(temp.start_date)} - {dateFormat(temp.end_date)}
       </span>
     )
   }

@@ -30,6 +30,8 @@ import SkipToContent from '../js/components/general/skipToContent'
 import VersionChanger from '../js/components/dataset/versionChanger'
 import Tabs from '../js/components/dataset/tabs'
 import ComponentCode from '../js/components/general/componentCode'
+import ContactForm from '../js/components/dataset/contact/contactForm'
+import DataItem from '../js/components/dataset/downloads/dataItem'
 
 import EsRes from './esRes'
 import MetaxRes from './metaxRes'
@@ -50,10 +52,15 @@ const AppDecorator = storyFn => (
 )
 addDecorator(AppDecorator)
 
+const align = props => ({
+  margin: props.center ? '0 auto' : '',
+})
+
 const Container = styled.div`
   width: 100%;
   max-width: ${props => (props.maxWidth ? props.maxWidth : '100%')};
   padding: 1em;
+  ${align};
 `
 
 storiesOf('General/Hero', module).add('Normal', () => (
@@ -353,3 +360,91 @@ storiesOf('Dataset/Tabs', module).add('Normal', () => (
     <Tabs showDownloads={true} showEvents={true} identifier={'id'} />
   </ComponentCode>
 ))
+
+storiesOf('Dataset/Contact', module).add('Normal', () => {
+  const translations = {
+    contact: 'Contact',
+    email: {
+      error: { required: 'Email is required!', invalid: 'Invalid email address' },
+      name: 'Email',
+      placeholder: 'Enter your email',
+    },
+    error: 'Error sending message!',
+    errorInternal: 'Internal server error! Please contact our support',
+    message: {
+      error: { required: 'Message is required!', max: 'Maximum message length is 1000 characters' },
+      name: 'Message',
+      placeholder: 'Enter your message',
+    },
+    recipient: {
+      error: { required: 'Recipient is required!' },
+      placeholder: 'Select recipient',
+      name: 'Recipient',
+    },
+    send: 'Send message',
+    subject: {
+      error: { required: 'Subject is required!' },
+      name: 'Subject',
+      placeholder: 'Enter your subject',
+    },
+    success: 'Successfully sent message!',
+  }
+  const recipients = [
+    { label: 'Publisher', value: 'PUBLISHER' },
+    { label: 'Contributor', value: 'CONTRIBUTOR' },
+    { label: 'Rights Holder', value: 'RIGHTS_HOLDER' },
+  ]
+  return (
+    <Container maxWidth="1000px" center>
+      <ContactForm
+        close={() => console.log('close')}
+        datasetID={'id'}
+        recipientsList={recipients}
+        translations={translations}
+      />
+    </Container>
+  )
+})
+
+/*
+storiesOf('Dataset/Downloads/DataItem', module).add('Normal', () => {
+  const item = {
+    name: 'project_x_FROZEN',
+    children: [],
+    childAmount: 3,
+    path: 'project_x_FROZEN',
+    type: 'dir',
+    details: {
+      id: 2,
+      byte_size: 21000,
+      directory_modified: '2018-04-26T11:28:34.903904+03:00',
+      directory_name: 'project_x_FROZEN',
+      directory_path: '/project_x_FROZEN',
+      file_count: 20,
+      identifier: 'pid:urn:dir:2',
+      parent_directory: { id: 1, identifier: 'pid:urn:dir:1' },
+      project_identifier: 'project_x',
+      date_modified: '2017-06-27T13:07:22+03:00',
+      date_created: '2017-05-23T13:07:22+03:00',
+      service_created: 'metax',
+    },
+    description: 'What is in this directory',
+    use_category: {
+      identifier: 'http://purl.org/att/es/reference_data/use_category/use_category_method',
+      pref_label: { en: 'Method', fi: 'Metodi', und: 'Metodi' },
+    },
+    title: 'dir_name',
+    identifier: 'pid:urn:dir:2',
+  }
+  return (
+    <Container center maxWidth="800px">
+      <DataItem
+        item={item}
+        index={1}
+        changeFolder={() => console.log('change folder')}
+        access={true}
+      />
+    </Container>
+  )
+})
+*/
