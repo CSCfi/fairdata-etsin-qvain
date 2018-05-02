@@ -19,7 +19,8 @@ const makeSmall = tree => {
   return newTree
 }
 
-const createTree = files => {
+export default function createTree(files) {
+  debugger
   if (!files) {
     return false
   }
@@ -51,5 +52,3 @@ const createTree = files => {
   }, [])
   return makeSmall(hierarchy)
 }
-
-export default createTree

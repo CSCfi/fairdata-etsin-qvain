@@ -1,6 +1,6 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import { ModalInfo } from '../js/components/dataset/downloads/infoModal'
+import { ModalInfo } from '../js/components/dataset/downloads/info'
 
 it('renders without crashing', () => {
   shallow(<ModalInfo name="" id="" title="" size="" category="" type="" />)

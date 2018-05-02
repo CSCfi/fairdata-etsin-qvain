@@ -31,10 +31,11 @@ import VersionChanger from '../js/components/dataset/versionChanger'
 import Tabs from '../js/components/dataset/tabs'
 import ComponentCode from '../js/components/general/componentCode'
 import ContactForm from '../js/components/dataset/contact/contactForm'
-import DataItem from '../js/components/dataset/downloads/dataItem'
+import TableItem from '../js/components/dataset/externalResources/tableItem'
 
 import EsRes from './esRes'
 import MetaxRes from './metaxRes'
+import idaDataTree, { remoteObj } from './resourceData'
 
 /* eslint-disable */
 
@@ -406,45 +407,73 @@ storiesOf('Dataset/Contact', module).add('Normal', () => {
   )
 })
 
-/*
-storiesOf('Dataset/Downloads/DataItem', module).add('Normal', () => {
-  const item = {
-    name: 'project_x_FROZEN',
-    children: [],
-    childAmount: 3,
-    path: 'project_x_FROZEN',
-    type: 'dir',
-    details: {
-      id: 2,
-      byte_size: 21000,
-      directory_modified: '2018-04-26T11:28:34.903904+03:00',
-      directory_name: 'project_x_FROZEN',
-      directory_path: '/project_x_FROZEN',
-      file_count: 20,
-      identifier: 'pid:urn:dir:2',
-      parent_directory: { id: 1, identifier: 'pid:urn:dir:1' },
-      project_identifier: 'project_x',
-      date_modified: '2017-06-27T13:07:22+03:00',
-      date_created: '2017-05-23T13:07:22+03:00',
-      service_created: 'metax',
-    },
-    description: 'What is in this directory',
-    use_category: {
-      identifier: 'http://purl.org/att/es/reference_data/use_category/use_category_method',
-      pref_label: { en: 'Method', fi: 'Metodi', und: 'Metodi' },
-    },
-    title: 'dir_name',
-    identifier: 'pid:urn:dir:2',
+storiesOf('Dataset/Data/TableItem', module).add('Normal', () => {
+  const parseExternal = ext => {
+    // let parsed = {
+    //   type: ext.file_type.pref_label,
+    //   name: ext.title,
+    //   byte_size: ext.byte_size,
+    //   identifier: ext.identifier,
+    //   category: ext.use_category.pref_label,
+    //   description: ext.description,
+    // }
+    console.log(ext)
+    // return parsed
   }
+  const parseIda = ida => {
+    let parsed = {}
+    if (ida.type === 'dir') {
+      parsed.type = ida.type
+      parsed.name = ida.title
+      parsed.file_count
+      parsed.byte_size
+      parsed.identifier
+      parsed.category
+      parsed.description
+    } else {
+    }
+    console.log(ida)
+    return parsed
+  }
+
+  const item1 = parseIda(idaDataTree[0])
+  const item2 = parseIda(idaDataTree[2])
+  const remote1 = parseExternal(remoteObj)
+
+  // type: PropTypes.string,
+  //   name: PropTypes.string.isRequired,
+  //   file_count: PropTypes.number,
+  //   byte_size: PropTypes.number,
+  //   identifier: PropTypes.string.isRequired,
+  //   category: PropTypes.shape({
+  //     pref_label: PropTypes.object,
+  //   }),
+  //   description: PropTypes.string,
+
   return (
     <Container center maxWidth="800px">
-      <DataItem
-        item={item}
-        index={1}
-        changeFolder={() => console.log('change folder')}
-        access={true}
-      />
+      <table style={{ width: '100%' }}>
+        <tbody>
+          <TableItem
+            item={item1}
+            index={1}
+            changeFolder={() => console.log('change folder')}
+            access={true}
+          />
+          {/* <TableItem
+             item={item2}
+             index={2}
+             changeFolder={() => console.log('change folder')}
+             access={true}
+           /> */}
+          {/* <TableItem
+            item={remote1}
+            index={3}
+            changeFolder={() => console.log('change folder')}
+            access={true}
+          /> */}
+        </tbody>
+      </table>
     </Container>
   )
 })
-*/

@@ -7,11 +7,11 @@ import PropTypes from 'prop-types'
 import checkDataLang from '../../../utils/checkDataLang'
 import sizeParse from '../../../utils/sizeParse'
 import checkNested from '../../../utils/checkNested'
-import FileIcon from './fileIcon'
-import Info from './info'
+import FileIcon from '../downloads/fileIcon'
+import Info from '../downloads/info'
 import { InvertedButton, TransparentButton } from '../../general/button'
 
-class DataItem extends Component {
+class TableItem extends Component {
   constructor(props) {
     super(props)
     if (props.item.type === 'dir') {
@@ -42,8 +42,8 @@ class DataItem extends Component {
 
   render() {
     return (
-      <tr key={`filelist-${this.props.index}`}>
-        <td className="fileIcon">
+      <TableRow key={`filelist-${this.props.index}`}>
+        <FileType>
           {this.props.item.type === 'dir' ? (
             <TransparentButton
               noPadding
@@ -58,16 +58,16 @@ class DataItem extends Component {
           ) : (
             <FileIcon type={this.props.item.type} title={this.props.item.type} />
           )}
-        </td>
+        </FileType>
         {this.props.item.type === 'dir' ? (
-          <td className="fileName">
+          <FileName>
             <TransparentButton
               noPadding
               noMargin
               color={this.props.theme.color.primary}
               onClick={() => this.props.changeFolder(this.state.name, this.props.item.identifier)}
             >
-              <Translate className="screen-reader-only" content="dataset.dl.file_types.directory" />
+              <Translate className="sr-only" content="dataset.dl.file_types.directory" />
               <p>{this.state.name}</p>
             </TransparentButton>
             {this.state.titleAlt ? (
@@ -77,20 +77,20 @@ class DataItem extends Component {
             ) : (
               ''
             )}
-          </td>
+          </FileName>
         ) : (
-          <td className="fileName">
+          <FileName>
             <p>{this.state.name}</p>
             {this.state.titleAlt ? <TitleAlt>{this.state.titleAlt}</TitleAlt> : null}
-          </td>
+          </FileName>
         )}
-        <td className="fileSize">{sizeParse(this.props.item.details.byte_size, 1)}</td>
-        <td className="fileCategory">
+        <FileSize>{sizeParse(this.props.item.details.byte_size, 1)}</FileSize>
+        <FileCategory>
           {checkNested(this.props.item.use_category, 'pref_label')
             ? checkDataLang(this.props.item.use_category.pref_label)
             : ''}
-        </td>
-        <td className="fileButtons">
+        </FileCategory>
+        <FileButtons>
           <InvertedButton
             thin
             color={this.props.theme.color.gray}
@@ -99,7 +99,7 @@ class DataItem extends Component {
           >
             <Translate content="dataset.dl.info" />
             <Translate
-              className="screen-reader-only"
+              className="sr-only"
               content="dataset.dl.info_about"
               with={{ file: this.state.name }}
             />
@@ -107,7 +107,7 @@ class DataItem extends Component {
           <HideSmButton thin onClick={this.openModal} disabled={!this.props.access}>
             <Translate content="dataset.dl.download" />
             <Translate
-              className="screen-reader-only"
+              className="sr-only"
               content="dataset.dl.item"
               with={{ item: this.state.name }}
             />
@@ -127,13 +127,11 @@ class DataItem extends Component {
             open={this.state.modalIsOpen}
             closeModal={this.closeModal}
           />
-        </td>
-      </tr>
+        </FileButtons>
+      </TableRow>
     )
   }
 }
-
-export default withTheme(DataItem)
 
 const TitleAlt = styled.p`
   font-size: 0.8em;
@@ -148,20 +146,52 @@ const HideSmButton = styled(InvertedButton)`
   }
 `
 
-DataItem.propTypes = {
+const TableRow = styled.tr`
+  &:nth-child(even) {
+    background-color: ${p => p.theme.color.superlightgray};
+  }
+  td {
+    vertical-align: middle;
+    border: none;
+    &:first-of-type {
+      padding: 0;
+      text-align: center;
+    }
+    p {
+      size: 0.8em;
+      margin: 0;
+    }
+  }
+`
+
+const FileType = styled.td``
+
+const FileName = styled.td``
+
+const FileSize = styled.td``
+
+const FileCategory = styled.td`
+  display: none;
+  @media screen and (min-width: ${p => p.theme.breakpoints.sm}) {
+    display: table-cell;
+  }
+`
+
+const FileButtons = styled.td`
+  padding: 0.7em;
+  text-align: center;
+  display: table-cell;
+  flex-wrap: wrap;
+`
+
+TableItem.propTypes = {
   item: PropTypes.shape({
     type: PropTypes.string,
-    details: PropTypes.shape({
-      directory_name: PropTypes.string,
-      file_count: PropTypes.number,
-      file_name: PropTypes.string,
-      title: PropTypes.string,
-      byte_size: PropTypes.number.isRequired,
-    }),
+    name: PropTypes.string.isRequired,
+    file_count: PropTypes.number,
+    byte_size: PropTypes.number,
     identifier: PropTypes.string.isRequired,
-    use_category: PropTypes.shape({
-      pref_label: PropTypes.object,
-    }),
+    category: PropTypes.object,
     description: PropTypes.string,
   }).isRequired,
   index: PropTypes.number.isRequired,
@@ -174,3 +204,5 @@ DataItem.propTypes = {
   changeFolder: PropTypes.func.isRequired,
   access: PropTypes.bool.isRequired,
 }
+
+export default withTheme(TableItem)

@@ -29,6 +29,7 @@ export default class Downloads extends Component {
     const folders = results.research_dataset.directories
     if (files || folders) {
       const combined = this.createDirTree(files, folders)
+      // createTree converts combined to object with nested hierarchy
       const fileDirTree = createTree(combined)
       const totalCount = this.countFiles(fileDirTree)
       this.state = {
@@ -61,6 +62,16 @@ export default class Downloads extends Component {
     Accessiblity.setNavText('Navigated to Data tab')
   }
 
+  // combines folders and files into single array of objects
+  // {
+  //   path:
+  //   type:
+  //   details:
+  //   description:
+  //   use_category:
+  //   title:
+  //   identifier:
+  // }
   createDirTree(files, folders, fileApi = false) {
     let filePaths = []
     let folderPaths = []
@@ -113,6 +124,9 @@ export default class Downloads extends Component {
     return null
   }
 
+  // counts total number of files in dataset (files + folders)
+  // file = 1
+  // folder = file_count
   countFiles(dirTree) {
     const fileCount = dirTree.map(single => {
       if (single.details.file_count) {

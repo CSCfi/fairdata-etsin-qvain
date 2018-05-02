@@ -76,7 +76,7 @@ export const ModalInfo = ({ name, id, title, size, category, type }) => (
   </ModalLayout>
 )
 
-const InfoModal = ({ name, id, title, size, category, type, open, closeModal, description }) => {
+const Info = ({ name, id, title, size, category, type, open, closeModal, description }) => {
   Modal.setAppElement('#root')
   return (
     <Modal
@@ -98,7 +98,7 @@ const InfoModal = ({ name, id, title, size, category, type, open, closeModal, de
   )
 }
 
-export default InfoModal
+export default Info
 
 const ModalDescription = styled.p`
   color: #555;
@@ -158,14 +158,14 @@ ModalInfo.propTypes = {
   type: PropTypes.string,
 }
 
-InfoModal.defaultProps = {
+Info.defaultProps = {
   title: undefined,
   category: undefined,
   type: undefined,
   description: '',
 }
 
-InfoModal.propTypes = {
+Info.propTypes = {
   name: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
   title: PropTypes.string,
