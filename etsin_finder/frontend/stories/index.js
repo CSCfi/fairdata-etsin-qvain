@@ -32,6 +32,7 @@ import Tabs from '../js/components/dataset/tabs'
 import ComponentCode from '../js/components/general/componentCode'
 import ContactForm from '../js/components/dataset/contact/contactForm'
 import TableItem from '../js/components/dataset/externalResources/tableItem'
+import Table from '../js/components/dataset/externalResources/table'
 
 import EsRes from './esRes'
 import MetaxRes from './metaxRes'
@@ -424,15 +425,20 @@ storiesOf('Dataset/Data/TableItem', module).add('Normal', () => {
     let parsed = {}
     if (ida.type === 'dir') {
       parsed.type = ida.type
-      parsed.name = ida.title
-      parsed.file_count
-      parsed.byte_size
-      parsed.identifier
-      parsed.category
-      parsed.description
+      parsed.name = ida.name
+      parsed.file_count = ida.details.file_count
+      parsed.byte_size = ida.details.byte_size
+      parsed.identifier = ida.identifier
+      parsed.category = ida.use_category.pref_label
+      parsed.description = ida.description
     } else {
+      parsed.type = ida.type
+      parsed.name = ida.name
+      parsed.byte_size = ida.details.byte_size
+      parsed.identifier = ida.identifier
+      parsed.category = ida.use_category.pref_label
+      parsed.description = ida.description
     }
-    console.log(ida)
     return parsed
   }
 
@@ -460,12 +466,12 @@ storiesOf('Dataset/Data/TableItem', module).add('Normal', () => {
             changeFolder={() => console.log('change folder')}
             access={true}
           />
-          {/* <TableItem
-             item={item2}
-             index={2}
-             changeFolder={() => console.log('change folder')}
-             access={true}
-           /> */}
+          <TableItem
+            item={item2}
+            index={2}
+            changeFolder={() => console.log('change folder')}
+            access={true}
+          />
           {/* <TableItem
             item={remote1}
             index={3}
@@ -476,4 +482,8 @@ storiesOf('Dataset/Data/TableItem', module).add('Normal', () => {
       </table>
     </Container>
   )
+})
+
+storiesOf('Dataset/Data/Table', module).add('Normal', () => {
+  return <Table access breadcrumbs={false} currentFolder={idaDataTree} describedObjects={[]} />
 })

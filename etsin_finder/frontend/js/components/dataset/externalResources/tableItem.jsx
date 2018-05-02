@@ -14,18 +14,10 @@ import { InvertedButton, TransparentButton } from '../../general/button'
 class TableItem extends Component {
   constructor(props) {
     super(props)
-    if (props.item.type === 'dir') {
-      this.state = {
-        modalIsOpen: false,
-        name: props.item.details.directory_name,
-        titleAlt: props.item.details.file_count,
-      }
-    } else {
-      this.state = {
-        modalIsOpen: false,
-        name: props.item.details.file_name,
-        titleAlt: props.item.details.title,
-      }
+    this.state = {
+      modalIsOpen: false,
+      name: props.item.name,
+      file_count: props.item.file_count ? props.item.file_count : '',
     }
 
     this.openModal = this.openModal.bind(this)
@@ -70,9 +62,12 @@ class TableItem extends Component {
               <Translate className="sr-only" content="dataset.dl.file_types.directory" />
               <p>{this.state.name}</p>
             </TransparentButton>
-            {this.state.titleAlt ? (
+            {this.state.file_count ? (
               <TitleAlt>
-                <Translate content="dataset.dl.fileAmount" with={{ amount: this.state.titleAlt }} />
+                <Translate
+                  content="dataset.dl.fileAmount"
+                  with={{ amount: this.state.file_count }}
+                />
               </TitleAlt>
             ) : (
               ''
@@ -81,14 +76,11 @@ class TableItem extends Component {
         ) : (
           <FileName>
             <p>{this.state.name}</p>
-            {this.state.titleAlt ? <TitleAlt>{this.state.titleAlt}</TitleAlt> : null}
           </FileName>
         )}
-        <FileSize>{sizeParse(this.props.item.details.byte_size, 1)}</FileSize>
+        <FileSize>{sizeParse(this.props.item.byte_size, 1)}</FileSize>
         <FileCategory>
-          {checkNested(this.props.item.use_category, 'pref_label')
-            ? checkDataLang(this.props.item.use_category.pref_label)
-            : ''}
+          {checkNested(this.props.item.category) ? checkDataLang(this.props.item.category) : ''}
         </FileCategory>
         <FileButtons>
           <InvertedButton
@@ -115,11 +107,10 @@ class TableItem extends Component {
           <Info
             name={this.state.name}
             id={this.props.item.identifier}
-            title={this.props.item.details.title}
-            size={sizeParse(this.props.item.details.byte_size, 1)}
+            size={sizeParse(this.props.item.byte_size, 1)}
             category={
-              checkNested(this.props.item.use_category, 'pref_label')
-                ? checkDataLang(this.props.item.use_category.pref_label)
+              checkNested(this.props.item.category)
+                ? checkDataLang(this.props.item.category)
                 : undefined
             }
             description={this.props.item.description}

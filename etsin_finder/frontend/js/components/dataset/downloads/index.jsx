@@ -32,6 +32,7 @@ export default class Downloads extends Component {
       // createTree converts combined to object with nested hierarchy
       const fileDirTree = createTree(combined)
       const totalCount = this.countFiles(fileDirTree)
+      console.log(fileDirTree)
       this.state = {
         results,
         filesAndFolders: combined,

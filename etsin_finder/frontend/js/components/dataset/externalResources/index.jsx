@@ -4,6 +4,7 @@ import styled from 'styled-components'
 
 import Accessibility from '../../../stores/view/accessibility'
 import TableHeader from './tableHeader'
+import Table from './table'
 
 export default class ExternalResources extends Component {
   constructor(props) {
