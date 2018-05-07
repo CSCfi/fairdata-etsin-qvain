@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 
-import { Link } from '../../general/button'
+import { Link } from '../general/button'
 
 export default class Identifier extends Component {
   constructor(props) {

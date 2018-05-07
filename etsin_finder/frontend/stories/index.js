@@ -408,6 +408,27 @@ storiesOf('Dataset/Contact', module).add('Normal', () => {
   )
 })
 
+const parseIda = ida => {
+  let parsed = {}
+  if (ida.type === 'dir') {
+    parsed.type = ida.type
+    parsed.name = ida.name
+    parsed.file_count = ida.details.file_count
+    parsed.byte_size = ida.details.byte_size
+    parsed.identifier = ida.identifier
+    parsed.category = ida.use_category.pref_label
+    parsed.description = ida.description
+  } else {
+    parsed.type = ida.type
+    parsed.name = ida.name
+    parsed.byte_size = ida.details.byte_size
+    parsed.identifier = ida.identifier
+    parsed.category = ida.use_category.pref_label
+    parsed.description = ida.description
+  }
+  return parsed
+}
+
 storiesOf('Dataset/Data/TableItem', module).add('Normal', () => {
   const parseExternal = ext => {
     // let parsed = {
@@ -421,28 +442,8 @@ storiesOf('Dataset/Data/TableItem', module).add('Normal', () => {
     console.log(ext)
     // return parsed
   }
-  const parseIda = ida => {
-    let parsed = {}
-    if (ida.type === 'dir') {
-      parsed.type = ida.type
-      parsed.name = ida.name
-      parsed.file_count = ida.details.file_count
-      parsed.byte_size = ida.details.byte_size
-      parsed.identifier = ida.identifier
-      parsed.category = ida.use_category.pref_label
-      parsed.description = ida.description
-    } else {
-      parsed.type = ida.type
-      parsed.name = ida.name
-      parsed.byte_size = ida.details.byte_size
-      parsed.identifier = ida.identifier
-      parsed.category = ida.use_category.pref_label
-      parsed.description = ida.description
-    }
-    return parsed
-  }
 
-  const item1 = parseIda(idaDataTree[0])
+  const item1 = parseIda(idaDataTree[1])
   const item2 = parseIda(idaDataTree[2])
   const remote1 = parseExternal(remoteObj)
 
@@ -485,5 +486,6 @@ storiesOf('Dataset/Data/TableItem', module).add('Normal', () => {
 })
 
 storiesOf('Dataset/Data/Table', module).add('Normal', () => {
-  return <Table access breadcrumbs={false} currentFolder={idaDataTree} describedObjects={[]} />
+  const folder = idaDataTree.map(single => parseIda(single))
+  return <Table access data={folder} changeFolder={() => console.log('change folder')} />
 })

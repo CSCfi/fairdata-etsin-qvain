@@ -1,29 +1,18 @@
 import React, { Component } from 'react'
-import Translate from 'react-translate-component'
-import styled from 'styled-components'
+
+import Accessibility from '../../../stores/view/accessibility'
 import DatasetQuery from '../../../stores/view/datasetquery'
-import Accessiblity from '../../../stores/view/accessibility'
-import checkDataLang from '../../../utils/checkDataLang'
-import sizeParse from '../../../utils/sizeParse'
 import createTree from '../../../utils/createTree'
-import DataItem from './dataItem'
+import checkDataLang from '../../../utils/checkDataLang'
+import checkNested from '../../../utils/checkNested'
 import { accessRightsBool } from '../data/accessRights'
-import Breadcrumbs from './breadcrumbs'
-import Loader from '../../general/loader'
-import { InvertedButton } from '../../general/button'
+import TableHeader from './tableHeader'
+import Table from './table'
+import Breadcrumbs from '../downloads/breadcrumbs'
 
-const TableTitle = styled.h4`
-  margin-bottom: 0;
-`
-
-const FileSizeAll = styled.p`
-  margin-bottom: 0;
-`
-
-export default class Downloads extends Component {
+export default class ExternalResources extends Component {
   constructor(props) {
     super(props)
-
     const results = DatasetQuery.results
     const files = results.research_dataset.files
     const folders = results.research_dataset.directories
@@ -32,35 +21,24 @@ export default class Downloads extends Component {
       // createTree converts combined to object with nested hierarchy
       const fileDirTree = createTree(combined)
       const totalCount = this.countFiles(fileDirTree)
-      console.log(fileDirTree)
       this.state = {
         results,
-        filesAndFolders: combined,
         access: accessRightsBool(results.research_dataset.access_rights),
         fileDirTree,
         currentFolder: fileDirTree,
         currentPath: [],
         currentIDs: [],
-        loading: false,
-        hasFiles: true,
         totalCount,
-      }
-    } else {
-      this.state = {
-        results,
-        loading: false,
-        hasFiles: false,
       }
     }
 
     this.updatePath = this.updatePath.bind(this)
-    this.tableItems = this.tableItems.bind(this)
     this.changeFolder = this.changeFolder.bind(this)
     this.query = this.query.bind(this)
   }
 
   componentDidMount() {
-    Accessiblity.setNavText('Navigated to Data tab')
+    Accessibility.setNavText('Navigated to Data tab')
   }
 
   // combines folders and files into single array of objects
@@ -139,9 +117,6 @@ export default class Downloads extends Component {
   }
 
   query(id, newPath, newIDs) {
-    this.setState({
-      loading: true,
-    })
     DatasetQuery.getFolderData(id, this.state.results.identifier)
       .then(res => {
         const currFolder = createTree(
@@ -151,7 +126,6 @@ export default class Downloads extends Component {
           currentPath: newPath,
           currentIDs: newIDs,
           currentFolder: currFolder,
-          loading: false,
         })
       })
       .catch(err => {
@@ -185,86 +159,45 @@ export default class Downloads extends Component {
     }
   }
 
-  // prints files to dom as list items
-  tableItems(folder) {
-    return folder.map((single, i) => {
-      let current = single
-      // check if file is among described files (if there is more information available)
-      const described = this.state.filesAndFolders.filter(
-        item => item.identifier === single.identifier
-      )[0]
-      if (described) {
-        current = described
-      }
-      return (
-        <DataItem
-          key={`dataitem-${current.details.identifier}`}
-          item={current}
-          index={i}
-          changeFolder={this.changeFolder}
-          access={this.state.access}
-        />
-      )
-    })
+  parseIda = ida => {
+    const parsed = {}
+    if (ida.type === 'dir') {
+      parsed.file_count = ida.details.file_count
+    }
+    parsed.type = ida.type
+    parsed.name = ida.name
+    parsed.byte_size = ida.details.byte_size
+    parsed.identifier = ida.identifier
+    if (checkNested(ida, 'use_category', 'pref_label')) {
+      parsed.category = ida.use_category.pref_label
+    }
+    parsed.description = ida.description
+    return parsed
   }
 
   render() {
     if (!this.state.results) {
       return 'Loading'
     }
-    if (!this.state.hasFiles) {
-      return 'No files'
-    }
 
     return (
       <div className="dataset-downloads">
-        <div className="downloads-header d-flex justify-content-between">
-          <div className="heading-right">
-            <TableTitle>
-              <Translate content="dataset.dl.files" />
-            </TableTitle>
-            <FileSizeAll>
-              <Translate
-                component="span"
-                content="dataset.dl.fileAmount"
-                with={{ amount: this.state.totalCount }}
-              />
-              {` (${sizeParse(this.state.results.research_dataset.total_ida_byte_size, 1)})`}
-            </FileSizeAll>
-          </div>
-          <Loader left active={this.state.loading} color="white" />
-          <div className="heading-left d-flex align-items-center">
-            <InvertedButton color="white" disabled={!this.state.access}>
-              <Translate content="dataset.dl.downloadAll" />
-              <Translate className="screen-reader-only" content="dataset.dl.file_types.both" />
-            </InvertedButton>
-          </div>
-        </div>
-        <div>
-          <Breadcrumbs
-            path={this.state.currentPath}
-            ids={this.state.currentIDs}
-            callback={this.updatePath}
-          />
-          <table className="table downloads-table" aria-live="polite">
-            <thead className="thead-dark">
-              <tr>
-                <th className="rowIcon" scope="col" />
-                <th className="rowName" scope="col">
-                  <Translate content="dataset.dl.name" />
-                </th>
-                <th className="rowSize" scope="col">
-                  <Translate content="dataset.dl.size" />
-                </th>
-                <th className="rowCategory" scope="col">
-                  <Translate content="dataset.dl.category" />
-                </th>
-                <th className="rowButtons" scope="col" />
-              </tr>
-            </thead>
-            <tbody>{this.state.hasFiles ? this.tableItems(this.state.currentFolder) : null}</tbody>
-          </table>
-        </div>
+        <TableHeader
+          objectCount={this.state.totalCount}
+          totalSize={this.state.results.research_dataset.total_ida_byte_size}
+          title={'files'}
+          access={this.state.access}
+        />
+        <Breadcrumbs
+          path={this.state.currentPath}
+          folderIds={this.state.currentIDs}
+          changeFolder={this.updatePath}
+        />
+        <Table
+          data={this.state.currentFolder.map(single => this.parseIda(single))}
+          access={this.state.access}
+          changeFolder={this.changeFolder}
+        />
       </div>
     )
   }

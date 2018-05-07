@@ -7,8 +7,8 @@ import PropTypes from 'prop-types'
 import checkDataLang from '../../../utils/checkDataLang'
 import sizeParse from '../../../utils/sizeParse'
 import checkNested from '../../../utils/checkNested'
-import FileIcon from '../downloads/fileIcon'
-import Info from '../downloads/info'
+import FileIcon from './fileIcon'
+import Info from './info'
 import { InvertedButton, TransparentButton } from '../../general/button'
 
 class TableItem extends Component {

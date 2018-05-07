@@ -4,7 +4,7 @@ import { Route, withRouter } from 'react-router-dom'
 import styled from 'styled-components'
 
 import Description from './description'
-import Downloads from './downloads'
+import ExternalResources from './data/idaResources'
 import Events from './events'
 import Tabs from './tabs'
 
@@ -59,7 +59,7 @@ class Content extends Component {
 
         {/* Route to downloads */}
         {this.showDownloads() && (
-          <Route exact path="/dataset/:identifier/data" component={Downloads} />
+          <Route exact path="/dataset/:identifier/data" component={ExternalResources} />
         )}
 
         {/* Route to Events */}

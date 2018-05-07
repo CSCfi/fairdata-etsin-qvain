@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import PropTypes from 'prop-types'
 
+import sizeParse from '../../../utils/sizeParse'
 import { InvertedButton } from '../../general/button'
 
 export default function TableHeader(props) {
@@ -10,7 +11,7 @@ export default function TableHeader(props) {
     <div className="downloads-header d-flex justify-content-between">
       <div className="heading-right">
         <TableTitle>
-          <Translate content="dataset.dl.files" />
+          <Translate content={`dataset.dl.${props.title}`} />
         </TableTitle>
         <ObjectCount>
           <Translate
@@ -18,6 +19,7 @@ export default function TableHeader(props) {
             content="dataset.dl.fileAmount"
             with={{ amount: props.objectCount }}
           />
+          {` (${sizeParse(props.totalSize, 1)})`}
         </ObjectCount>
       </div>
       <div className="heading-left d-flex align-items-center">
@@ -39,6 +41,8 @@ const ObjectCount = styled.p`
 `
 
 TableHeader.propTypes = {
+  title: PropTypes.string.isRequired,
+  totalSize: PropTypes.number.isRequired,
   objectCount: PropTypes.number.isRequired,
   access: PropTypes.bool.isRequired,
 }
