@@ -71,8 +71,9 @@ class Dataset extends React.Component {
           dataset: result.catalog_record,
           email_info: result.email_info,
           hasFiles:
-            result.catalog_record.research_dataset.directories ||
-            result.catalog_record.research_dataset.files,
+            (result.catalog_record.research_dataset.directories ||
+              result.catalog_record.research_dataset.files) === true,
+          hasRemote: result.catalog_record.research_dataset.remote_resources !== undefined,
           harvested: result.catalog_record.data_catalog.catalog_json.harvested,
           deprecated: result.catalog_record.deprecated,
           removed: result.catalog_record.removed,
@@ -144,6 +145,7 @@ class Dataset extends React.Component {
               harvested={this.state.harvested}
               cumulative={this.state.cumulative}
               hasFiles={this.state.hasFiles}
+              hasRemote={this.state.hasRemote}
               emails={this.state.email_info}
             />
             <div className="col-lg-4">

@@ -49,7 +49,6 @@ export default class Contact extends Component {
 
     const recipients = this.buildRecipients(props.emails)
     const translations = translate('dataset.contact')
-    console.log(JSON.stringify(recipients))
 
     this.state = {
       open: false,
@@ -85,7 +84,11 @@ export default class Contact extends Component {
     }
     const recipients = []
     for (const o in emails) {
-      if (emails[o]) recipients.push({ label: translate(recipientLabels[o]), value: o })
+      if (emails[o]) {
+        if (o !== 'CONTRIBUTOR') {
+          recipients.push({ label: translate(recipientLabels[o]), value: o })
+        }
+      }
     }
     return recipients
   }

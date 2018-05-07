@@ -44,8 +44,12 @@ export default class Table extends Component {
   }
 }
 
+Table.defaultTypes = {
+  changeFolder: () => {},
+}
+
 Table.propTypes = {
   data: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
-  changeFolder: PropTypes.func.isRequired,
+  changeFolder: PropTypes.func,
   access: PropTypes.bool.isRequired,
 }

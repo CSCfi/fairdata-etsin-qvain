@@ -21,8 +21,8 @@ import SearchBar from '../js/components/search/searchBar'
 import Pagination from '../js/components/search/pagination'
 import ListItem from '../js/components/search/resultslist/listItem'
 import ErrorPage from '../js/components/errorpage'
-import Identifier from '../js/components/dataset/data/identifier'
-import AccessRights from '../js/components/dataset/data/accessRights'
+import Identifier from '../js/components/dataset/identifier'
+import AccessRights from '../js/components/dataset/accessRights'
 import Footer from '../js/layout/footer'
 import Loader from '../js/components/general/loader'
 import Separator from '../js/components/general/separator'
@@ -31,11 +31,12 @@ import VersionChanger from '../js/components/dataset/versionChanger'
 import Tabs from '../js/components/dataset/tabs'
 import ComponentCode from '../js/components/general/componentCode'
 import ContactForm from '../js/components/dataset/contact/contactForm'
-import TableItem from '../js/components/dataset/externalResources/tableItem'
-import Table from '../js/components/dataset/externalResources/table'
+import TableItem from '../js/components/dataset/data/tableItem'
+import Table from '../js/components/dataset/data/table'
+import ExternalResources from '../js/components/dataset/data/externalResources'
 
 import EsRes from './esRes'
-import MetaxRes from './metaxRes'
+import MetaxRes, { MetaxRemote } from './metaxRes'
 import idaDataTree, { remoteObj } from './resourceData'
 
 /* eslint-disable */
@@ -220,7 +221,17 @@ storiesOf('General/Access rights', module).add('Open Access', () => (
       <AccessRights access_rights={MetaxRes.research_dataset.access_rights} />
     </ComponentCode>
     <ComponentCode displayName={() => 'AccessRights'}>
-      <AccessRights access_rights={{ access_type: { identifier: 'locked' } }} />
+      <AccessRights
+        access_rights={{
+          access_type: {
+            identifier: 'locked',
+            pref_label: {
+              en: 'locked',
+              fi: 'suljettu',
+            },
+          },
+        }}
+      />
     </ComponentCode>
   </div>
 ))
@@ -489,3 +500,7 @@ storiesOf('Dataset/Data/Table', module).add('Normal', () => {
   const folder = idaDataTree.map(single => parseIda(single))
   return <Table access data={folder} changeFolder={() => console.log('change folder')} />
 })
+
+storiesOf('Dataset/Data/Remote', module).add('Normal', () => (
+  <ExternalResources results={MetaxRemote} />
+))

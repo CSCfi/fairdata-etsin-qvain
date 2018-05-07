@@ -630,3 +630,194 @@ export default {
   service_modified: 'metax',
   service_created: 'metax',
 }
+
+export const MetaxRemote = {
+  id: 26,
+  identifier: 'cr955e904-e3dd-4d7e-99f1-3fed446f9626',
+  data_catalog: {
+    id: 5,
+    identifier: 'urn:nbn:fi:att:2955e904-e3dd-4d7e-99f1-3fed446f96d5',
+  },
+  deprecated: false,
+  research_dataset: {
+    theme: [],
+    title: {},
+    value: [],
+    issued: '2014-01-17T08:19:58Z',
+    creator: [],
+    curator: [],
+    keyword: [],
+    spatial: [],
+    language: [],
+    modified: '2014-01-17T08:19:58Z',
+    relation: [],
+    temporal: [],
+    publisher: {},
+    provenance: [],
+    contributor: [],
+    description: [],
+    is_output_of: [],
+    version_info: '0.1.2',
+    access_rights: {},
+    rights_holder: {},
+    version_notes: [],
+    infrastructure: [],
+    field_of_science: [],
+    other_identifier: [],
+    remote_resources: [
+      {
+        title: 'A name given to the distribution',
+        license: [
+          {
+            title: {
+              en: 'Apache Software License 2.0',
+              und: 'Apache Software License 2.0',
+            },
+            license: 'https://url.of.license.which.applies.org',
+            identifier: 'http://www.opensource.org/licenses/Apache-2.0',
+            description: [
+              {
+                en: 'Free account of the rights',
+              },
+            ],
+          },
+        ],
+        checksum: {
+          algorithm:
+            'http://purl.org/att/es/reference_data/checksum_algorithm/checksum_algorithm_SHA-512',
+          checksum_value: 'u5y6f4y68765ngf6ry8n',
+        },
+        modified: '2013-01-17T08:19:58Z',
+        byte_size: 2048,
+        file_type: {
+          in_scheme: [
+            {
+              identifier: 'http://uri.of.resource.concept/scheme',
+              pref_label: {
+                en: 'The preferred lexical label for a resource',
+              },
+            },
+          ],
+          definition: [
+            {
+              en: 'A statement or formal explanation of the meaning of a concept.',
+            },
+          ],
+          identifier: 'http://purl.org/att/es/reference_data/file_type/file_type_image',
+          pref_label: {
+            en: 'Image',
+            fi: 'Kuva',
+            und: 'Kuva',
+          },
+        },
+        mediatype: 'image/jpeg',
+        identifier: 'identifierofresource',
+        description: 'Free-text account of the distribution.',
+        download_url: {
+          title: {
+            en: 'A name given to the document, which would be an actual downloadable file',
+          },
+          identifier: 'https://download.url.of.resource.com',
+          description: {
+            en: 'Description of the link. For example to be used as hover text.',
+          },
+        },
+        use_category: {
+          identifier: 'http://purl.org/att/es/reference_data/use_category/use_category_rights',
+          pref_label: {
+            en: 'Rights statement',
+            fi: 'Oikeuksien kuvaus',
+            und: 'Oikeuksien kuvaus',
+          },
+        },
+        has_object_characteristics: {
+          title: 'File type name',
+          encoding: 'utf-8',
+          description: 'Description of file type',
+          has_creating_application_name: 'Creating application name',
+        },
+      },
+      {
+        title: 'A name given to the second distribution',
+        license: [
+          {
+            title: {
+              en: 'Apache Software License 2.0',
+              und: 'Apache Software License 2.0',
+            },
+            license: 'https://url.of.license.which.applies.org',
+            identifier: 'http://www.opensource.org/licenses/Apache-2.0',
+            description: [
+              {
+                en: 'Free account of the rights',
+              },
+            ],
+          },
+        ],
+        checksum: {
+          algorithm:
+            'http://purl.org/att/es/reference_data/checksum_algorithm/checksum_algorithm_SHA-512',
+          checksum_value: 'u5y6f4y68765ngf6ry8n',
+        },
+        modified: '2013-01-17T08:19:58Z',
+        byte_size: 4096,
+        mediatype: 'image/gif',
+        access_url: {
+          title: {
+            en: 'A name given to the document, which may be e.g. a landing page',
+          },
+          identifier: 'https://url.of.resource.com/landing',
+          description: {
+            en: 'Description of the link. For example to be used as hover text.',
+          },
+        },
+        identifier: 'identifierofresource_2',
+        description: 'Free-text account of the second distribution.',
+        use_category: {
+          identifier:
+            'http://purl.org/att/es/reference_data/use_category/use_category_documentation',
+          pref_label: {
+            en: 'Documentation',
+            fi: 'Dokumentaatio',
+            und: 'Dokumentaatio',
+          },
+        },
+        resource_type: {
+          in_scheme: [
+            {
+              identifier: 'http://uri.of.resource.concept/scheme',
+              pref_label: {
+                en: 'The preferred lexical label for a resource',
+              },
+            },
+          ],
+          definition: [
+            {
+              en: 'A statement or formal explanation of the meaning of a concept.',
+            },
+          ],
+          identifier: 'http://purl.org/att/es/reference_data/resource_type/resource_type_api',
+          pref_label: {
+            en: 'Application interface',
+            fi: 'Rajapinta',
+            und: 'Rajapinta',
+          },
+        },
+      },
+    ],
+    preferred_identifier: 'urn:nbn:fi:att:1955e904-e3dd-4d7e-99f1-3fed446f9626',
+    bibliographic_citation: 'whot',
+    metadata_version_identifier: '1955e904-e3dd-4d7e-99f1-3fed446f9626',
+    total_remote_resources_byte_size: 6144,
+  },
+  preservation_state: 0,
+  editor: {
+    owner_id: '05593961536b76fa825281ccaedd4d4f',
+    creator_id: '053bffbcc41edad4853bea91fc42ea18',
+  },
+  removed: false,
+  date_modified: '2018-05-07T11:50:10+03:00',
+  date_created: '2017-05-23T13:07:22+03:00',
+  service_modified: 'metax',
+  service_created: 'metax',
+}

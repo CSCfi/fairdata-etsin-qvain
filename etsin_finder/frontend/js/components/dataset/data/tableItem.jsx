@@ -175,6 +175,10 @@ const FileButtons = styled.td`
   flex-wrap: wrap;
 `
 
+TableItem.defaultProps = {
+  changeFolder: () => {},
+}
+
 TableItem.propTypes = {
   item: PropTypes.shape({
     type: PropTypes.string,
@@ -192,7 +196,7 @@ TableItem.propTypes = {
       gray: PropTypes.string.isRequired,
     }),
   }).isRequired,
-  changeFolder: PropTypes.func.isRequired,
+  changeFolder: PropTypes.func,
   access: PropTypes.bool.isRequired,
 }
 

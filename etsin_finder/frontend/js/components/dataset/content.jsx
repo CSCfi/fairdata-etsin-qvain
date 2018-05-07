@@ -4,7 +4,7 @@ import { Route, withRouter } from 'react-router-dom'
 import styled from 'styled-components'
 
 import Description from './description'
-import ExternalResources from './data/idaResources'
+import Data from './data'
 import Events from './events'
 import Tabs from './tabs'
 
@@ -27,8 +27,8 @@ class Content extends Component {
     return false
   }
 
-  showDownloads() {
-    if (this.props.hasFiles[0] && !this.props.harvested) {
+  showData() {
+    if ((this.props.hasFiles || this.props.hasRemote) && !this.props.harvested) {
       return true
     }
     return false
@@ -39,13 +39,13 @@ class Content extends Component {
       <MarginAfter className="col-lg-8">
         <Tabs
           identifier={this.props.identifier}
-          showDownloads={this.showDownloads()}
+          showData={this.showData()}
           showEvents={this.showEvents()}
         />
 
         {/* Initial route */}
         <Route
-          exact={this.showDownloads() || this.showEvents()}
+          exact={this.showData() || this.showEvents()}
           path="/dataset/:identifier"
           render={() => (
             <Description
@@ -58,8 +58,12 @@ class Content extends Component {
         />
 
         {/* Route to downloads */}
-        {this.showDownloads() && (
-          <Route exact path="/dataset/:identifier/data" component={ExternalResources} />
+        {this.showData() && (
+          <Route
+            exact
+            path="/dataset/:identifier/data"
+            render={() => <Data hasRemote={this.props.hasRemote} hasFiles={this.props.hasFiles} />}
+          />
         )}
 
         {/* Route to Events */}
@@ -84,7 +88,6 @@ class Content extends Component {
 export default withRouter(Content)
 
 Content.defaultProps = {
-  hasFiles: [],
   harvested: false,
   cumulative: false,
 }
@@ -100,6 +103,7 @@ Content.propTypes = {
   }).isRequired,
   harvested: PropTypes.bool,
   cumulative: PropTypes.bool,
-  hasFiles: PropTypes.array,
+  hasFiles: PropTypes.bool.isRequired,
+  hasRemote: PropTypes.bool.isRequired,
   identifier: PropTypes.string.isRequired,
 }

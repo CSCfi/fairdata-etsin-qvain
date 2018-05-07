@@ -49,8 +49,8 @@ class AccessRights extends Component {
     let title = { en: 'Restricted Access', fi: 'Rajoitettu käyttöoikeus' }
     if (props.access_rights !== undefined && props.access_rights !== null) {
       title = props.access_rights.access_type
-        ? props.access_rights.access_type.identifier
-        : props.access_rights.license.map(item => item.identifier)
+        ? props.access_rights.access_type.pref_label
+        : props.access_rights.license.map(item => item.title)[0]
     }
     this.lang = props.Stores.Locale.currentLang
     this.state = {
@@ -60,8 +60,8 @@ class AccessRights extends Component {
 
   restricted() {
     return (
-      <Tooltip title={checkDataLang(this.state.title, this.lang)}>
-        <div className="access-symbol" title={checkDataLang(this.state.title, this.lang)}>
+      <Tooltip title={checkDataLang(this.state.title)}>
+        <div className="access-symbol" title={checkDataLang(this.state.title)}>
           <FontAwesomeIcon icon={faLock} />
           <Translate content="dataset.access_locked" fallback="Restricted Access" />
         </div>
@@ -71,7 +71,7 @@ class AccessRights extends Component {
 
   openAccess() {
     return (
-      <div className="access-symbol" title={checkDataLang(this.state.title, this.lang)}>
+      <div className="access-symbol" title={checkDataLang(this.state.title)}>
         <FontAwesomeIcon icon={faUnlock} />
         <Translate content="dataset.access_open" fallback="Open Access" />
       </div>
@@ -111,6 +111,7 @@ AccessRights.propTypes = {
   access_rights: PropTypes.shape({
     access_type: PropTypes.shape({
       identifier: PropTypes.string.isRequired,
+      pref_label: PropTypes.objectOf(PropTypes.string),
     }),
     license: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
   }),

@@ -19,7 +19,7 @@ export default function TableHeader(props) {
             content="dataset.dl.fileAmount"
             with={{ amount: props.objectCount }}
           />
-          {` (${sizeParse(props.totalSize, 1)})`}
+          {props.totalSize !== 0 && ` (${sizeParse(props.totalSize, 1)})`}
         </ObjectCount>
       </div>
       <div className="heading-left d-flex align-items-center">
@@ -40,9 +40,13 @@ const ObjectCount = styled.p`
   margin-bottom: 0;
 `
 
+TableHeader.defaultProps = {
+  totalSize: 0,
+}
+
 TableHeader.propTypes = {
   title: PropTypes.string.isRequired,
-  totalSize: PropTypes.number.isRequired,
+  totalSize: PropTypes.number,
   objectCount: PropTypes.number.isRequired,
   access: PropTypes.bool.isRequired,
 }

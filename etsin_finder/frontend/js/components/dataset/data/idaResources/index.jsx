@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 
-import Accessibility from '../../../../stores/view/accessibility'
 import DatasetQuery from '../../../../stores/view/datasetquery'
 import createTree from '../../../../utils/createTree'
 import checkDataLang from '../../../../utils/checkDataLang'
@@ -35,10 +34,6 @@ export default class IdaResources extends Component {
     this.updatePath = this.updatePath.bind(this)
     this.changeFolder = this.changeFolder.bind(this)
     this.query = this.query.bind(this)
-  }
-
-  componentDidMount() {
-    Accessibility.setNavText('Navigated to Data tab')
   }
 
   // combines folders and files into single array of objects
