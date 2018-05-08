@@ -34,6 +34,7 @@ import ContactForm from '../js/components/dataset/contact/contactForm'
 import TableItem from '../js/components/dataset/data/tableItem'
 import Table from '../js/components/dataset/data/table'
 import ExternalResources from '../js/components/dataset/data/externalResources'
+import Info from '../js/components/dataset/data/info'
 
 import EsRes from './esRes'
 import MetaxRes, { MetaxRemote } from './metaxRes'
@@ -497,6 +498,33 @@ storiesOf('Dataset/Data/TableItem', module).add('Normal', () => {
     </Container>
   )
 })
+
+storiesOf('Dataset/Data/InfoModal', module).add('Normal', () => {
+  return (
+    <Info
+      name="Example name"
+      id="id:example-id"
+      title="Some title"
+      size="10930"
+      category="Mystery category"
+      type="image"
+      open={true}
+      closeModal={() => {}}
+      description="A default description about the object. Can be long or short. Usually pretty short."
+      downloadUrl={'https://google.com'}
+      accessUrl={'https://google.com'}
+    />
+  )
+})
+// name: PropTypes.string.isRequired,
+//   id: PropTypes.string,
+//   title: PropTypes.string,
+//   size: PropTypes.string.isRequired,
+//   category: PropTypes.string,
+//   type: PropTypes.string,
+//   open: PropTypes.bool.isRequired,
+//   closeModal: PropTypes.func.isRequired,
+//   description: PropTypes.string,
 
 storiesOf('Dataset/Data/Table', module).add('Normal', () => {
   const folder = idaDataTree.map(single => parseIda(single))

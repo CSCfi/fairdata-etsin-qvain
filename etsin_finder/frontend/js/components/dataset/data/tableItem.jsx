@@ -35,7 +35,6 @@ class TableItem extends Component {
   }
 
   changeFolder(name, id) {
-    console.log('loader')
     this.setState(
       {
         loader: true,
@@ -127,6 +126,9 @@ class TableItem extends Component {
                     ? checkDataLang(this.props.item.category)
                     : undefined
                 }
+                checksum={this.props.item.checksum}
+                downloadUrl={this.props.item.download_url}
+                accessUrl={this.props.item.access_url}
                 description={this.props.item.description}
                 type={this.props.item.type}
                 open={this.state.modalIsOpen}
@@ -218,6 +220,10 @@ TableItem.propTypes = {
     identifier: PropTypes.string,
     category: PropTypes.object,
     description: PropTypes.string,
+    access_url: PropTypes.object,
+    download_url: PropTypes.object,
+    checksum: PropTypes.object,
+    resource_type: PropTypes.object,
   }).isRequired,
   index: PropTypes.number.isRequired,
   theme: PropTypes.shape({

@@ -156,6 +156,7 @@ export default class IdaResources extends Component {
   }
 
   parseIda = ida => {
+    // TODO: add download_url to parsed object
     const parsed = {}
     if (ida.type === 'dir') {
       parsed.file_count = ida.details.file_count

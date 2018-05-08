@@ -17,6 +17,7 @@ export default class ExternalResources extends Component {
       results = props.results
     }
     const remote = results.research_dataset.remote_resources
+    console.log('remote', remote)
     if (remote) {
       // createTree converts combined to object with nested hierarchy
       const parsed = remote.map(single => this.parseExt(single))
@@ -37,8 +38,14 @@ export default class ExternalResources extends Component {
     parsed.name = ext.title
     parsed.byte_size = ext.byte_size
     parsed.identifier = ext.identifier
+    parsed.checksum = ext.checksum
+    parsed.download_url = ext.download_url
+    parsed.access_url = ext.access_url
     if (checkNested(ext, 'use_category', 'pref_label')) {
       parsed.category = ext.use_category.pref_label
+    }
+    if (checkNested(ext, 'resource_type', 'pref_label')) {
+      parsed.resource_type = ext.resource_type.pref_label
     }
     parsed.description = ext.description
     return parsed
@@ -48,7 +55,7 @@ export default class ExternalResources extends Component {
     if (!this.state.results) {
       return 'Loading'
     }
-
+    console.log('data', this.state.currentFolder)
     return (
       <DataTable>
         <TableHeader
