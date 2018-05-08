@@ -60,10 +60,17 @@ class TableItem extends Component {
                   onClick={() => this.changeFolder(this.state.name, this.props.item.identifier)}
                   title={translate('dataset.dl.file_types.directory')}
                 >
-                  <FileIcon type={this.props.item.type} />
+                  <FileIcon
+                    type={this.props.item.type}
+                    default={this.props.item.remote ? 'cloud' : 'file'}
+                  />
                 </TransparentButton>
               ) : (
-                <FileIcon type={this.props.item.type} title={this.props.item.type} />
+                <FileIcon
+                  type={this.props.item.type}
+                  title={this.props.item.type}
+                  default={this.props.item.remote ? 'cloud' : 'file'}
+                />
               )}
             </React.Fragment>
           )}
@@ -224,6 +231,7 @@ TableItem.propTypes = {
     download_url: PropTypes.object,
     checksum: PropTypes.object,
     resource_type: PropTypes.object,
+    remote: PropTypes.bool,
   }).isRequired,
   index: PropTypes.number.isRequired,
   theme: PropTypes.shape({

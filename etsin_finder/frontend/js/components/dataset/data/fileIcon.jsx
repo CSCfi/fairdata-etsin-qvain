@@ -2,46 +2,67 @@ import React from 'react'
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faFolder from '@fortawesome/fontawesome-free-regular/faFolder'
 import faFileVideo from '@fortawesome/fontawesome-free-regular/faFileVideo'
+import faFileImage from '@fortawesome/fontawesome-free-regular/faFileImage'
 import faFile from '@fortawesome/fontawesome-free-regular/faFile'
 import faFileAlt from '@fortawesome/fontawesome-free-regular/faFileAlt'
+import faCloud from '@fortawesome/fontawesome-free-solid/faCloud'
 import PropTypes from 'prop-types'
 
 import Tooltip from '../../general/tooltip'
 
+const Icon = (type, def) => {
+  if (!type) {
+    if (def === 'cloud') {
+      return faCloud
+    }
+    return faFile
+  }
+  if (type === 'dir') {
+    return faFolder
+  }
+  if (type === 'Video') {
+    return faFileVideo
+  }
+  if (type === 'Kuva' || type === 'Image') {
+    return faFileImage
+  }
+  if (type === 'Text' || type === 'Teksti') {
+    return faFileAlt
+  }
+  return faFile
+}
+
 const FileIcon = props => {
-  if (props.type === 'dir') {
-    return <FontAwesomeIcon icon={faFolder} size="2x" transform="shrink-4" {...props} />
-  }
-  if (props.type === 'Video') {
+  if (props.type !== 'dir' && props.type) {
     return (
       <Tooltip title={props.type}>
-        <FontAwesomeIcon icon={faFileVideo} size="2x" transform="shrink-4" {...props} />
+        <FontAwesomeIcon
+          icon={Icon(props.type, props.default)}
+          size="2x"
+          transform="shrink-4"
+          {...props}
+        />
       </Tooltip>
     )
   }
-  if (props.type === 'Text' || props.type === 'Teksti') {
-    return (
-      <Tooltip title={props.type}>
-        <FontAwesomeIcon icon={faFileAlt} size="2x" transform="shrink-4" {...props} />
-      </Tooltip>
-    )
-  }
-  if (props.type) {
-    return (
-      <Tooltip title={props.type}>
-        <FontAwesomeIcon icon={faFile} size="2x" transform="shrink-4" {...props} />
-      </Tooltip>
-    )
-  }
-  return <FontAwesomeIcon icon={faFile} size="2x" transform="shrink-4" {...props} />
+  return (
+    <FontAwesomeIcon
+      icon={Icon(props.type, props.default)}
+      size="2x"
+      transform="shrink-4"
+      {...props}
+    />
+  )
 }
 
 export default FileIcon
 
 FileIcon.defaultProps = {
   type: undefined,
+  default: undefined,
 }
 
 FileIcon.propTypes = {
   type: PropTypes.string,
+  default: PropTypes.string,
 }

@@ -50,6 +50,8 @@ export default class ExternalResources extends Component {
       parsed.resource_type = ext.resource_type.pref_label
     }
     parsed.description = ext.description
+    // adds cloud icon as default for files
+    parsed.remote = true
     return parsed
   }
 
