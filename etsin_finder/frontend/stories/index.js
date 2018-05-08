@@ -75,7 +75,7 @@ storiesOf('General/Hero', module).add('Normal', () => (
 
 storiesOf('General/Button', module)
   .add('Primary buttons', () => (
-    <Container>
+    <Container center maxWidth="800px">
       <ComponentCode displayName={() => 'Button'}>
         <Button>Primary</Button>
       </ComponentCode>
@@ -98,7 +98,7 @@ storiesOf('General/Button', module)
     </Container>
   ))
   .add('Color error', () => (
-    <Container>
+    <Container center maxWidth="800px">
       <ComponentCode displayName={() => 'Button'}>
         <Button color={theme.color.error}>Primary</Button>
       </ComponentCode>
@@ -123,7 +123,7 @@ storiesOf('General/Button', module)
     </Container>
   ))
   .add('Custom', () => (
-    <Container>
+    <Container center maxWidth="800px">
       <p>No Margin</p>
       <ComponentCode displayName={() => 'Button'}>
         <Button noMargin>Button</Button>
@@ -191,7 +191,7 @@ storiesOf('Search/Result item', module).add('Normal', () => (
 ))
 
 storiesOf('Search/Pagination', module).add('Examples', () => (
-  <div>
+  <Container center maxWidth="800px">
     <ComponentCode displayName={() => 'Pagination'}>
       <Pagination totalResults={50} perPage={10} currentPage={3} />
     </ComponentCode>
@@ -203,7 +203,7 @@ storiesOf('Search/Pagination', module).add('Examples', () => (
     <ComponentCode displayName={() => 'Pagination'}>
       <Pagination totalResults={100} perPage={3} currentPage={3} />
     </ComponentCode>
-  </div>
+  </Container>
 ))
 
 storiesOf('Error page', module)
@@ -211,29 +211,33 @@ storiesOf('Error page', module)
   .add('Error', () => <ErrorPage error={{ type: 'error' }} />)
 
 storiesOf('Dataset/Identifier Component', module).add('Normal', () => (
-  <ComponentCode displayName={() => 'Identifier'}>
-    <Identifier idn={MetaxRes.research_dataset.preferred_identifier} />
-  </ComponentCode>
+  <Container center maxWidth="800px">
+    <ComponentCode displayName={() => 'Identifier'}>
+      <Identifier idn={MetaxRes.research_dataset.preferred_identifier} />
+    </ComponentCode>
+  </Container>
 ))
 
 storiesOf('General/Access rights', module).add('Open Access', () => (
   <div>
-    <ComponentCode displayName={() => 'AccessRights'}>
-      <AccessRights access_rights={MetaxRes.research_dataset.access_rights} />
-    </ComponentCode>
-    <ComponentCode displayName={() => 'AccessRights'}>
-      <AccessRights
-        access_rights={{
-          access_type: {
-            identifier: 'locked',
-            pref_label: {
-              en: 'locked',
-              fi: 'suljettu',
+    <Container center maxWidth="800px">
+      <ComponentCode displayName={() => 'AccessRights'}>
+        <AccessRights access_rights={MetaxRes.research_dataset.access_rights} />
+      </ComponentCode>
+      <ComponentCode displayName={() => 'AccessRights'}>
+        <AccessRights
+          access_rights={{
+            access_type: {
+              identifier: 'locked',
+              pref_label: {
+                en: 'locked',
+                fi: 'suljettu',
+              },
             },
-          },
-        }}
-      />
-    </ComponentCode>
+          }}
+        />
+      </ComponentCode>
+    </Container>
   </div>
 ))
 
@@ -254,9 +258,11 @@ storiesOf('General/Loader', module).add('Normal', () => (
 ))
 
 storiesOf('General/Separator', module).add('Normal', () => (
-  <ComponentCode displayName={() => 'Separator'}>
-    <Separator />
-  </ComponentCode>
+  <Container center maxWidth="800px">
+    <ComponentCode displayName={() => 'Separator'}>
+      <Separator />
+    </ComponentCode>
+  </Container>
 ))
 
 storiesOf('General/Skip to Content', module).add('Normal', () => (
@@ -297,9 +303,11 @@ storiesOf('Dataset/Version changer', module)
       },
     ]
     return (
-      <ComponentCode displayName={() => 'VersionChanger'} filterProps={['versionSet']}>
-        <VersionChanger versionSet={customVersionSet} idn={MetaxRes.identifier} />
-      </ComponentCode>
+      <Container center maxWidth="800px">
+        <ComponentCode displayName={() => 'VersionChanger'} filterProps={['versionSet']}>
+          <VersionChanger versionSet={customVersionSet} idn={MetaxRes.identifier} />
+        </ComponentCode>
+      </Container>
     )
   })
   .add('Old Version', () => {
@@ -330,9 +338,11 @@ storiesOf('Dataset/Version changer', module)
       },
     ]
     return (
-      <ComponentCode displayName={() => 'VersionChanger'} filterProps={['versionSet']}>
-        <VersionChanger versionSet={customVersionSet} idn={'customID'} />
-      </ComponentCode>
+      <Container center maxWidth="800px">
+        <ComponentCode displayName={() => 'VersionChanger'} filterProps={['versionSet']}>
+          <VersionChanger versionSet={customVersionSet} idn={'customID'} />
+        </ComponentCode>
+      </Container>
     )
   })
   .add('Deleted Version', () => {
@@ -363,16 +373,20 @@ storiesOf('Dataset/Version changer', module)
       },
     ]
     return (
-      <ComponentCode displayName={() => 'VersionChanger'} filterProps={['versionSet']}>
-        <VersionChanger versionSet={customVersionSet} idn={'customID2'} />
-      </ComponentCode>
+      <Container center maxWidth="800px">
+        <ComponentCode displayName={() => 'VersionChanger'} filterProps={['versionSet']}>
+          <VersionChanger versionSet={customVersionSet} idn={'customID2'} />
+        </ComponentCode>
+      </Container>
     )
   })
 
 storiesOf('Dataset/Tabs', module).add('Normal', () => (
-  <ComponentCode>
-    <Tabs showDownloads={true} showEvents={true} identifier={'id'} />
-  </ComponentCode>
+  <Container center maxWidth="800px">
+    <ComponentCode>
+      <Tabs showDownloads={true} showEvents={true} identifier={'id'} />
+    </ComponentCode>
+  </Container>
 ))
 
 storiesOf('Dataset/Contact', module).add('Normal', () => {
@@ -409,7 +423,7 @@ storiesOf('Dataset/Contact', module).add('Normal', () => {
     { label: 'Rights Holder', value: 'RIGHTS_HOLDER' },
   ]
   return (
-    <Container maxWidth="1000px" center>
+    <Container maxWidth="800px" center>
       <ContactForm
         close={() => console.log('close')}
         datasetID={'id'}
@@ -513,31 +527,27 @@ storiesOf('Dataset/Data/InfoModal', module).add('Normal', () => {
       description="A default description about the object. Can be long or short. Usually pretty short."
       downloadUrl={'https://google.com'}
       accessUrl={'https://google.com'}
+      checksum={{ algorithm: 'ALG256', checksum_value: 'asdlkfhasfiahf08u1932712kklnsadhlas' }}
     />
   )
 })
-// name: PropTypes.string.isRequired,
-//   id: PropTypes.string,
-//   title: PropTypes.string,
-//   size: PropTypes.string.isRequired,
-//   category: PropTypes.string,
-//   type: PropTypes.string,
-//   open: PropTypes.bool.isRequired,
-//   closeModal: PropTypes.func.isRequired,
-//   description: PropTypes.string,
 
 storiesOf('Dataset/Data/Table', module).add('Normal', () => {
   const folder = idaDataTree.map(single => parseIda(single))
   return (
-    <Table
-      access
-      data={folder}
-      changeFolder={() => console.log('change folder')}
-      fields={{ size: true, category: true, name: true, downloadBtn: true, infoBtn: true }}
-    />
+    <Container center maxWidth="800px">
+      <Table
+        access
+        data={folder}
+        changeFolder={() => console.log('change folder')}
+        fields={{ size: true, category: true, name: true, downloadBtn: true, infoBtn: true }}
+      />
+    </Container>
   )
 })
 
 storiesOf('Dataset/Data/Remote', module).add('Normal', () => (
-  <ExternalResources results={MetaxRemote} />
+  <Container center maxWidth="800px">
+    <ExternalResources testData={MetaxRemote} />
+  </Container>
 ))

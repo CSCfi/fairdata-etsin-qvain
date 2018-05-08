@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
+import PropTypes from 'prop-types'
 
 import DatasetQuery from '../../../../stores/view/datasetquery'
 import checkDataLang from '../../../../utils/checkDataLang'
@@ -11,10 +12,11 @@ export default class ExternalResources extends Component {
   constructor(props) {
     super(props)
     let results
-    if (!props.results) {
+    // this is only for testing and storybook
+    if (!props.testData) {
       results = DatasetQuery.results
     } else {
-      results = props.results
+      results = props.testData
     }
     const remote = results.research_dataset.remote_resources
     console.log('remote', remote)
@@ -77,3 +79,11 @@ export default class ExternalResources extends Component {
 const DataTable = styled.div`
   margin-top: 1em;
 `
+
+ExternalResources.defaultProps = {
+  testData: null,
+}
+
+ExternalResources.propTypes = {
+  testData: PropTypes.object,
+}

@@ -131,7 +131,6 @@ class Dataset extends React.Component {
 }
 
 Dataset.propTypes = {
-  location: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
 }

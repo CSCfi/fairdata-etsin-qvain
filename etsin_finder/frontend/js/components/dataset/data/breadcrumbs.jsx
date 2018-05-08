@@ -3,6 +3,8 @@ import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import translate from 'counterpart'
 import PropTypes from 'prop-types'
+import FontAwesomeIcon from '@fortawesome/react-fontawesome'
+import faHome from '@fortawesome/fontawesome-free-solid/faHome'
 
 import { TransparentButton } from '../../general/button'
 
@@ -24,7 +26,9 @@ export default class Breadcrumbs extends Component {
       return (
         <Path key="path-home">
           <TransparentButton onClick={() => this.props.changeFolder()}>
-            <Translate className="screen-reader-only" content="dataset.dl.file_types.directory" />Home
+            <Translate className="sr-only" content="dataset.dl.file_types.directory" />
+            <Translate className="sr-only" content="dataset.dl.root" />
+            <FontAwesomeIcon icon={faHome} />
           </TransparentButton>
         </Path>
       )
@@ -38,7 +42,7 @@ export default class Breadcrumbs extends Component {
           </Path>
           <Path>
             <TransparentButton aria-current="true">
-              <Translate className="screen-reader-only" content="dataset.dl.file_types.directory" />
+              <Translate className="sr-only" content="dataset.dl.file_types.directory" />
               {path}
             </TransparentButton>
           </Path>
@@ -53,7 +57,7 @@ export default class Breadcrumbs extends Component {
         </Path>
         <Path>
           <TransparentButton onClick={() => this.props.changeFolder(path, id)}>
-            <Translate className="screen-reader-only" content="dataset.dl.file_types.directory" />
+            <Translate className="sr-only" content="dataset.dl.file_types.directory" />
             {path}
           </TransparentButton>
         </Path>

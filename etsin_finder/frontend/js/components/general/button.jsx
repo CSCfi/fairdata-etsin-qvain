@@ -53,6 +53,7 @@ export const Link = styled.a.attrs({
   transition: 0.3s ease;
   text-align: center;
   display: block;
+  width: max-content;
   &:hover {
     text-decoration: none;
     color: ${props => (props.color !== 'white' ? 'white' : props.theme.color.primary)};
@@ -93,6 +94,7 @@ export const InvertedButton = Button.extend`
     }
   }
 `
+
 export const TransparentButton = styled(Button).attrs({
   margin: props => (props.margin ? props.margin : '0.1em'),
 })`
@@ -102,7 +104,7 @@ export const TransparentButton = styled(Button).attrs({
   color: ${props => (props.color ? checkColor(props.color) : props.theme.color.darkgray)};
   &:hover {
     background-color: transparent;
-    color: ${props => props.theme.color.primary};
+    color: ${p => (p.color ? darken(0.1, p.color) : darken(0.1, p.theme.color.primary))};
     text-decoration: underline;
   }
   &:focus {
@@ -120,9 +122,9 @@ export const TransparentButton = styled(Button).attrs({
 export const LinkButton = TransparentButton.extend`
   margin: 0;
   padding: 0;
-  color: ${props => props.theme.color.primary};
+  color: ${props => (props.color ? checkColor(props.color) : props.theme.color.primary)};
   &:hover {
-    color: ${props => darken(0.1, props.theme.color.primary)};
+    color: ${p => (p.color ? darken(0.1, p.color) : darken(0.1, p.theme.color.primary))};
   }
 `
 

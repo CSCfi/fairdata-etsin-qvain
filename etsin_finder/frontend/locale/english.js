@@ -50,12 +50,15 @@ const english = {
     curator: 'Curator',
     data_location: 'Go to harvested location',
     dl: {
+      root: 'root',
       breadcrumbs: 'Breadcrumbs',
       category: 'Category',
       dirContent: 'Folder content',
       download: 'Download',
       downloadAll: 'Download all',
       fileAmount: '%(amount)s objects',
+      close_modal: 'Close info modal',
+      info_header: 'Other info related to file',
       file_types: {
         both: 'files and folders',
         directory: 'Folder',
@@ -67,7 +70,12 @@ const english = {
       item: 'item %(item)s',
       name: 'Name',
       size: 'Size',
-      remote: 'Remote resources'
+      remote: 'Remote resources',
+      checksum: 'Checksum',
+      id: 'ID',
+      title: 'Title',
+      type: 'Type',
+      go_to_original: 'Go to original',
     },
     events_idn: {
       events: {

@@ -54,51 +54,69 @@ const Info = ({
       style={customStyles}
       contentLabel="Object info"
     >
-      <CloseModal onClick={closeModal}>X</CloseModal>
+      <CloseModal onClick={closeModal}>
+        <Translate className="sr-only" content="dataset.dl.close_modal" />
+        <span aria-hidden>X</span>
+      </CloseModal>
       <ModalLayout>
+        <Translate className="sr-only" content="dataset.dl.info_header" />
         <InfoTable>
           <tbody>
             {name && (
               <tr>
-                <th>Name</th>
+                <th>
+                  <Translate content="dataset.dl.name" />
+                </th>
                 <td>{name}</td>
               </tr>
             )}
             {id && (
               <tr>
-                <th>ID</th>
+                <th>
+                  <Translate content="dataset.dl.id" />
+                </th>
                 <td>{id}</td>
               </tr>
             )}
             {title && (
               <tr>
-                <th>Title</th>
+                <th>
+                  <Translate content="dataset.dl.title" />
+                </th>
                 <td>{title}</td>
               </tr>
             )}
             {type &&
               type !== 'dir' && (
                 <tr>
-                  <th>Type</th>
+                  <th>
+                    <Translate content="dataset.dl.type" />
+                  </th>
                   <td>{type}</td>
                 </tr>
               )}
             {size && (
               <tr>
-                <th>Size</th>
+                <th>
+                  <Translate content="dataset.dl.size" />
+                </th>
                 <td>{size}</td>
               </tr>
             )}
             {category && (
               <tr>
-                <th>Category</th>
+                <th>
+                  <Translate content="dataset.dl.category" />
+                </th>
                 <td>{category}</td>
               </tr>
             )}
             {checksum && (
               <tr>
-                <th>Checksum</th>
-                <td>{checksum}</td>
+                <th>
+                  <Translate content="dataset.dl.checksum" />
+                </th>
+                <td>{checksum.checksum_value}</td>
               </tr>
             )}
           </tbody>
@@ -114,12 +132,12 @@ const Info = ({
       ) : null}
       {accessUrl && (
         <FullButton href={accessUrl} noMargin>
-          Go to location
+          <Translate content="dataset.dl.go_to_original" />
         </FullButton>
       )}
       {downloadUrl && (
         <FullButton href={downloadUrl} color="success" noMargin>
-          Download
+          <Translate content="dataset.dl.download" />
         </FullButton>
       )}
     </Modal>

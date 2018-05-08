@@ -1,6 +1,6 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import FileIcon from '../js/components/dataset/downloads/fileIcon'
+import FileIcon from '../js/components/dataset/data/fileIcon'
 
 describe('FileIcon', () => {
   const fileIcon = shallow(<FileIcon />)
