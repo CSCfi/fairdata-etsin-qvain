@@ -25,6 +25,6 @@ export default class ErrorPage extends React.Component {
 
 ErrorPage.propTypes = {
   error: PropTypes.shape({
-    type: PropTypes.string.isRequired,
+    type: PropTypes.string,
   }).isRequired,
 }

@@ -3,37 +3,20 @@ import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import translate from 'counterpart'
 import PropTypes from 'prop-types'
+import FontAwesomeIcon from '@fortawesome/react-fontawesome'
+import faHome from '@fortawesome/fontawesome-free-solid/faHome'
 
 import { TransparentButton } from '../../general/button'
 
 export default class Breadcrumbs extends Component {
-  constructor(props) {
-    super(props)
-    const modified = this.slicePath(props)
-    this.state = {
-      ids: modified.ids,
-      path: modified.path,
-      sliced: modified.sliced,
-    }
-  }
-
-  componentWillReceiveProps(newProps) {
-    const modified = this.slicePath(newProps)
-    this.setState({
-      ids: modified.ids,
-      path: modified.path,
-      sliced: modified.sliced,
-    })
-  }
-
   slicePath(props) {
     let path = props.path
     let sliced = false
-    let ids = props.ids
+    let ids = props.folderIds
     if (props.path.length > 3) {
       sliced = true
       path = props.path.slice(props.path.length - 3)
-      ids = props.ids.slice(props.ids.length - 3)
+      ids = props.folderIds.slice(props.folderIds.length - 3)
     }
     return { path, sliced, ids }
   }
@@ -41,9 +24,11 @@ export default class Breadcrumbs extends Component {
   pathItems(path, i, id) {
     if (!path) {
       return (
-        <Path key={`path-home-${i}`}>
-          <TransparentButton onClick={() => this.props.callback()}>
-            <Translate className="screen-reader-only" content="dataset.dl.file_types.directory" />Home
+        <Path key="path-home">
+          <TransparentButton onClick={() => this.props.changeFolder()}>
+            <Translate className="sr-only" content="dataset.dl.file_types.directory" />
+            <Translate className="sr-only" content="dataset.dl.root" />
+            <FontAwesomeIcon icon={faHome} />
           </TransparentButton>
         </Path>
       )
@@ -57,7 +42,7 @@ export default class Breadcrumbs extends Component {
           </Path>
           <Path>
             <TransparentButton aria-current="true">
-              <Translate className="screen-reader-only" content="dataset.dl.file_types.directory" />
+              <Translate className="sr-only" content="dataset.dl.file_types.directory" />
               {path}
             </TransparentButton>
           </Path>
@@ -71,8 +56,8 @@ export default class Breadcrumbs extends Component {
           <Arrow>{'>'}</Arrow>
         </Path>
         <Path>
-          <TransparentButton onClick={() => this.props.callback(path, id)}>
-            <Translate className="screen-reader-only" content="dataset.dl.file_types.directory" />
+          <TransparentButton onClick={() => this.props.changeFolder(path, id)}>
+            <Translate className="sr-only" content="dataset.dl.file_types.directory" />
             {path}
           </TransparentButton>
         </Path>
@@ -80,11 +65,12 @@ export default class Breadcrumbs extends Component {
     )
   }
 
-  render() {
+  renderPath() {
+    const modified = this.slicePath(this.props)
     return (
-      <Container aria-label={translate('dataset.dl.breadcrumbs')} className="light-border">
+      <React.Fragment>
         {this.pathItems()}
-        {this.state.sliced ? (
+        {modified.sliced ? (
           <Rest>
             <Path>
               <Arrow>{'>'}</Arrow>
@@ -98,9 +84,15 @@ export default class Breadcrumbs extends Component {
         ) : (
           ''
         )}
-        {this.state.path.map((single, index) =>
-          this.pathItems(single, index, this.state.ids[index])
-        )}
+        {modified.path.map((single, index) => this.pathItems(single, index, modified.ids[index]))}
+      </React.Fragment>
+    )
+  }
+
+  render() {
+    return (
+      <Container aria-label={translate('dataset.dl.breadcrumbs')} className="light-border">
+        {this.renderPath()}
       </Container>
     )
   }
@@ -132,7 +124,9 @@ const Rest = styled.div`
   display: flex;
 `
 
+/* eslint-disable react/no-unused-prop-types */
 Breadcrumbs.propTypes = {
-  callback: PropTypes.func.isRequired,
+  changeFolder: PropTypes.func.isRequired,
   path: PropTypes.array.isRequired,
+  folderIds: PropTypes.array.isRequired,
 }

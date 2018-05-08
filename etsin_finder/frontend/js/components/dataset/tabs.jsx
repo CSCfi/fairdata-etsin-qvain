@@ -8,14 +8,14 @@ export default class Tabs extends Component {
   render() {
     return (
       <Fragment>
-        {(this.props.showDownloads || this.props.showEvents) && (
+        {(this.props.showData || this.props.showEvents) && (
           <EtsinTabs className="nav nav-tabs">
             <li className="nav-item">
               <NavLink exact to={`/dataset/${this.props.identifier}`} className="nav-link" replace>
                 <Translate content="nav.dataset" fallback="Dataset" />
               </NavLink>
             </li>
-            {this.props.showDownloads && (
+            {this.props.showData && (
               <li className="nav-item">
                 <NavLink
                   exact
@@ -47,7 +47,7 @@ export default class Tabs extends Component {
 }
 
 Tabs.propTypes = {
-  showDownloads: PropTypes.bool.isRequired,
+  showData: PropTypes.bool.isRequired,
   showEvents: PropTypes.bool.isRequired,
   identifier: PropTypes.string.isRequired,
 }

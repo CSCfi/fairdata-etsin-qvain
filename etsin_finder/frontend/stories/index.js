@@ -21,8 +21,8 @@ import SearchBar from '../js/components/search/searchBar'
 import Pagination from '../js/components/search/pagination'
 import ListItem from '../js/components/search/resultslist/listItem'
 import ErrorPage from '../js/components/errorpage'
-import Identifier from '../js/components/dataset/data/identifier'
-import AccessRights from '../js/components/dataset/data/accessRights'
+import Identifier from '../js/components/dataset/identifier'
+import AccessRights from '../js/components/dataset/accessRights'
 import Footer from '../js/layout/footer'
 import Loader from '../js/components/general/loader'
 import Separator from '../js/components/general/separator'
@@ -31,10 +31,14 @@ import VersionChanger from '../js/components/dataset/versionChanger'
 import Tabs from '../js/components/dataset/tabs'
 import ComponentCode from '../js/components/general/componentCode'
 import ContactForm from '../js/components/dataset/contact/contactForm'
-import DataItem from '../js/components/dataset/downloads/dataItem'
+import TableItem from '../js/components/dataset/data/tableItem'
+import Table from '../js/components/dataset/data/table'
+import ExternalResources from '../js/components/dataset/data/externalResources'
+import Info from '../js/components/dataset/data/info'
 
 import EsRes from './esRes'
-import MetaxRes from './metaxRes'
+import MetaxRes, { MetaxRemote } from './metaxRes'
+import idaDataTree, { remoteObj } from './resourceData'
 
 /* eslint-disable */
 
@@ -71,7 +75,7 @@ storiesOf('General/Hero', module).add('Normal', () => (
 
 storiesOf('General/Button', module)
   .add('Primary buttons', () => (
-    <Container>
+    <Container center maxWidth="800px">
       <ComponentCode displayName={() => 'Button'}>
         <Button>Primary</Button>
       </ComponentCode>
@@ -94,7 +98,7 @@ storiesOf('General/Button', module)
     </Container>
   ))
   .add('Color error', () => (
-    <Container>
+    <Container center maxWidth="800px">
       <ComponentCode displayName={() => 'Button'}>
         <Button color={theme.color.error}>Primary</Button>
       </ComponentCode>
@@ -119,7 +123,7 @@ storiesOf('General/Button', module)
     </Container>
   ))
   .add('Custom', () => (
-    <Container>
+    <Container center maxWidth="800px">
       <p>No Margin</p>
       <ComponentCode displayName={() => 'Button'}>
         <Button noMargin>Button</Button>
@@ -187,7 +191,7 @@ storiesOf('Search/Result item', module).add('Normal', () => (
 ))
 
 storiesOf('Search/Pagination', module).add('Examples', () => (
-  <div>
+  <Container center maxWidth="800px">
     <ComponentCode displayName={() => 'Pagination'}>
       <Pagination totalResults={50} perPage={10} currentPage={3} />
     </ComponentCode>
@@ -199,7 +203,7 @@ storiesOf('Search/Pagination', module).add('Examples', () => (
     <ComponentCode displayName={() => 'Pagination'}>
       <Pagination totalResults={100} perPage={3} currentPage={3} />
     </ComponentCode>
-  </div>
+  </Container>
 ))
 
 storiesOf('Error page', module)
@@ -207,19 +211,33 @@ storiesOf('Error page', module)
   .add('Error', () => <ErrorPage error={{ type: 'error' }} />)
 
 storiesOf('Dataset/Identifier Component', module).add('Normal', () => (
-  <ComponentCode displayName={() => 'Identifier'}>
-    <Identifier idn={MetaxRes.research_dataset.preferred_identifier} />
-  </ComponentCode>
+  <Container center maxWidth="800px">
+    <ComponentCode displayName={() => 'Identifier'}>
+      <Identifier idn={MetaxRes.research_dataset.preferred_identifier} />
+    </ComponentCode>
+  </Container>
 ))
 
 storiesOf('General/Access rights', module).add('Open Access', () => (
   <div>
-    <ComponentCode displayName={() => 'AccessRights'}>
-      <AccessRights access_rights={MetaxRes.research_dataset.access_rights} />
-    </ComponentCode>
-    <ComponentCode displayName={() => 'AccessRights'}>
-      <AccessRights access_rights={{ access_type: { identifier: 'locked' } }} />
-    </ComponentCode>
+    <Container center maxWidth="800px">
+      <ComponentCode displayName={() => 'AccessRights'}>
+        <AccessRights access_rights={MetaxRes.research_dataset.access_rights} />
+      </ComponentCode>
+      <ComponentCode displayName={() => 'AccessRights'}>
+        <AccessRights
+          access_rights={{
+            access_type: {
+              identifier: 'locked',
+              pref_label: {
+                en: 'locked',
+                fi: 'suljettu',
+              },
+            },
+          }}
+        />
+      </ComponentCode>
+    </Container>
   </div>
 ))
 
@@ -240,9 +258,11 @@ storiesOf('General/Loader', module).add('Normal', () => (
 ))
 
 storiesOf('General/Separator', module).add('Normal', () => (
-  <ComponentCode displayName={() => 'Separator'}>
-    <Separator />
-  </ComponentCode>
+  <Container center maxWidth="800px">
+    <ComponentCode displayName={() => 'Separator'}>
+      <Separator />
+    </ComponentCode>
+  </Container>
 ))
 
 storiesOf('General/Skip to Content', module).add('Normal', () => (
@@ -283,9 +303,11 @@ storiesOf('Dataset/Version changer', module)
       },
     ]
     return (
-      <ComponentCode displayName={() => 'VersionChanger'} filterProps={['versionSet']}>
-        <VersionChanger versionSet={customVersionSet} idn={MetaxRes.identifier} />
-      </ComponentCode>
+      <Container center maxWidth="800px">
+        <ComponentCode displayName={() => 'VersionChanger'} filterProps={['versionSet']}>
+          <VersionChanger versionSet={customVersionSet} idn={MetaxRes.identifier} />
+        </ComponentCode>
+      </Container>
     )
   })
   .add('Old Version', () => {
@@ -316,9 +338,11 @@ storiesOf('Dataset/Version changer', module)
       },
     ]
     return (
-      <ComponentCode displayName={() => 'VersionChanger'} filterProps={['versionSet']}>
-        <VersionChanger versionSet={customVersionSet} idn={'customID'} />
-      </ComponentCode>
+      <Container center maxWidth="800px">
+        <ComponentCode displayName={() => 'VersionChanger'} filterProps={['versionSet']}>
+          <VersionChanger versionSet={customVersionSet} idn={'customID'} />
+        </ComponentCode>
+      </Container>
     )
   })
   .add('Deleted Version', () => {
@@ -349,16 +373,20 @@ storiesOf('Dataset/Version changer', module)
       },
     ]
     return (
-      <ComponentCode displayName={() => 'VersionChanger'} filterProps={['versionSet']}>
-        <VersionChanger versionSet={customVersionSet} idn={'customID2'} />
-      </ComponentCode>
+      <Container center maxWidth="800px">
+        <ComponentCode displayName={() => 'VersionChanger'} filterProps={['versionSet']}>
+          <VersionChanger versionSet={customVersionSet} idn={'customID2'} />
+        </ComponentCode>
+      </Container>
     )
   })
 
 storiesOf('Dataset/Tabs', module).add('Normal', () => (
-  <ComponentCode>
-    <Tabs showDownloads={true} showEvents={true} identifier={'id'} />
-  </ComponentCode>
+  <Container center maxWidth="800px">
+    <ComponentCode>
+      <Tabs showDownloads={true} showEvents={true} identifier={'id'} />
+    </ComponentCode>
+  </Container>
 ))
 
 storiesOf('Dataset/Contact', module).add('Normal', () => {
@@ -395,7 +423,7 @@ storiesOf('Dataset/Contact', module).add('Normal', () => {
     { label: 'Rights Holder', value: 'RIGHTS_HOLDER' },
   ]
   return (
-    <Container maxWidth="1000px" center>
+    <Container maxWidth="800px" center>
       <ContactForm
         close={() => console.log('close')}
         datasetID={'id'}
@@ -406,45 +434,120 @@ storiesOf('Dataset/Contact', module).add('Normal', () => {
   )
 })
 
-/*
-storiesOf('Dataset/Downloads/DataItem', module).add('Normal', () => {
-  const item = {
-    name: 'project_x_FROZEN',
-    children: [],
-    childAmount: 3,
-    path: 'project_x_FROZEN',
-    type: 'dir',
-    details: {
-      id: 2,
-      byte_size: 21000,
-      directory_modified: '2018-04-26T11:28:34.903904+03:00',
-      directory_name: 'project_x_FROZEN',
-      directory_path: '/project_x_FROZEN',
-      file_count: 20,
-      identifier: 'pid:urn:dir:2',
-      parent_directory: { id: 1, identifier: 'pid:urn:dir:1' },
-      project_identifier: 'project_x',
-      date_modified: '2017-06-27T13:07:22+03:00',
-      date_created: '2017-05-23T13:07:22+03:00',
-      service_created: 'metax',
-    },
-    description: 'What is in this directory',
-    use_category: {
-      identifier: 'http://purl.org/att/es/reference_data/use_category/use_category_method',
-      pref_label: { en: 'Method', fi: 'Metodi', und: 'Metodi' },
-    },
-    title: 'dir_name',
-    identifier: 'pid:urn:dir:2',
+const parseIda = ida => {
+  let parsed = {}
+  if (ida.type === 'dir') {
+    parsed.type = ida.type
+    parsed.name = ida.name
+    parsed.file_count = ida.details.file_count
+    parsed.byte_size = ida.details.byte_size
+    parsed.identifier = ida.identifier
+    parsed.category = ida.use_category.pref_label
+    parsed.description = ida.description
+  } else {
+    parsed.type = ida.type
+    parsed.name = ida.name
+    parsed.byte_size = ida.details.byte_size
+    parsed.identifier = ida.identifier
+    parsed.category = ida.use_category.pref_label
+    parsed.description = ida.description
   }
+  return parsed
+}
+
+storiesOf('Dataset/Data/TableItem', module).add('Normal', () => {
+  const parseExternal = ext => {
+    // let parsed = {
+    //   type: ext.file_type.pref_label,
+    //   name: ext.title,
+    //   byte_size: ext.byte_size,
+    //   identifier: ext.identifier,
+    //   category: ext.use_category.pref_label,
+    //   description: ext.description,
+    // }
+    console.log(ext)
+    // return parsed
+  }
+
+  const item1 = parseIda(idaDataTree[1])
+  const item2 = parseIda(idaDataTree[2])
+  const remote1 = parseExternal(remoteObj)
+
+  // type: PropTypes.string,
+  //   name: PropTypes.string.isRequired,
+  //   file_count: PropTypes.number,
+  //   byte_size: PropTypes.number,
+  //   identifier: PropTypes.string.isRequired,
+  //   category: PropTypes.shape({
+  //     pref_label: PropTypes.object,
+  //   }),
+  //   description: PropTypes.string,
+
   return (
     <Container center maxWidth="800px">
-      <DataItem
-        item={item}
-        index={1}
+      <table style={{ width: '100%' }}>
+        <tbody>
+          <TableItem
+            item={item1}
+            index={1}
+            changeFolder={() => console.log('change folder')}
+            access={true}
+            fields={{ size: true, category: true, name: true, downloadBtn: true, infoBtn: true }}
+          />
+          <TableItem
+            item={item2}
+            index={2}
+            changeFolder={() => console.log('change folder')}
+            access={true}
+            fields={{ size: true, category: true, name: true, downloadBtn: true, infoBtn: true }}
+          />
+          {/* <TableItem
+            item={remote1}
+            index={3}
+            changeFolder={() => console.log('change folder')}
+            access={true}
+          /> */}
+        </tbody>
+      </table>
+    </Container>
+  )
+})
+
+storiesOf('Dataset/Data/InfoModal', module).add('Normal', () => {
+  return (
+    <Info
+      name="Example name"
+      id="id:example-id"
+      title="Some title"
+      size="10930"
+      category="Mystery category"
+      type="image"
+      open={true}
+      closeModal={() => {}}
+      description="A default description about the object. Can be long or short. Usually pretty short."
+      downloadUrl={'https://google.com'}
+      accessUrl={'https://google.com'}
+      checksum={{ algorithm: 'ALG256', checksum_value: 'asdlkfhasfiahf08u1932712kklnsadhlas' }}
+    />
+  )
+})
+
+storiesOf('Dataset/Data/Table', module).add('Normal', () => {
+  const folder = idaDataTree.map(single => parseIda(single))
+  return (
+    <Container center maxWidth="800px">
+      <Table
+        access
+        data={folder}
         changeFolder={() => console.log('change folder')}
-        access={true}
+        fields={{ size: true, category: true, name: true, downloadBtn: true, infoBtn: true }}
       />
     </Container>
   )
 })
-*/
+
+storiesOf('Dataset/Data/Remote', module).add('Normal', () => (
+  <Container center maxWidth="800px">
+    <ExternalResources testData={MetaxRemote} />
+  </Container>
+))

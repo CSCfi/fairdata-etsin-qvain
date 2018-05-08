@@ -85,6 +85,7 @@ class ElasticQuery {
       else {
         urlParams = { p: newPage }
       }
+      // TODO: change to history push. Currently going back doesn't refresh results page.
       history.replace({ search: UrlParse.makeSearchParams(urlParams) })
     }
   }

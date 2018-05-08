@@ -10,7 +10,6 @@ import VersionSelect from './versionselect'
 class VersionChanger extends Component {
   constructor(props) {
     super(props)
-    console.log(props.versionSet)
     const versions = this.versionLabels(props.versionSet)
 
     this.state = {

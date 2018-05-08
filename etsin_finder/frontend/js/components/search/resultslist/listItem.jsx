@@ -5,7 +5,7 @@ import styled from 'styled-components'
 
 import checkDataLang from '../../../utils/checkDataLang'
 import ErrorBoundary from '../../general/errorBoundary'
-import AccessRights from '../../dataset/data/accessRights'
+import AccessRights from '../../dataset/accessRights'
 import ContentBox from '../../general/contentBox'
 
 export default class ListItem extends Component {

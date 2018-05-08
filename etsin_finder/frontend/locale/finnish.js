@@ -49,12 +49,15 @@ const finnish = {
     },
     curator: 'Hoivaaja',
     dl: {
+      root: 'juuri',
       breadcrumbs: 'Leivänmurut',
       category: 'Kategoria',
       dirContent: 'Kansion sisältö',
       download: 'Lataa',
       downloadAll: 'Lataa kaikki',
       fileAmount: '%(amount)s objektia',
+      close_modal: 'Sulje info',
+      info_header: 'Tiedoston muut tiedot',
       file_types: {
         both: 'tiedostot ja kansiot',
         directory: 'Kansio',
@@ -66,6 +69,12 @@ const finnish = {
       item: 'aineisto %(item)s',
       name: 'Nimi',
       size: 'Koko',
+      remote: 'Remote aineistot',
+      checksum: 'Checksum',
+      id: 'ID',
+      title: 'Otsikko',
+      type: 'Tyyppi',
+      go_to_original: 'Siirry sivulle',
     },
     events_idn: {
       events: {

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 
-import { Link } from '../../general/button'
+import { Link } from '../general/button'
 
 export default class Identifier extends Component {
   constructor(props) {
@@ -92,6 +92,7 @@ const Prefix = styled.div`
   display: flex;
   align-items: center;
   text-transform: uppercase;
+  min-width: max-content;
   &:hover {
     background-color: ${props => props.theme.color.dark};
   }
