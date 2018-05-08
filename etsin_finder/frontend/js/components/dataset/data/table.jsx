@@ -10,9 +10,10 @@ export default class Table extends Component {
 
   // prints files to dom as list items
   tableItems(data) {
+    /* eslint-disable react/no-array-index-key */
     return data.map((single, i) => (
       <TableItem
-        key={`dataitem-${single.identifier}`}
+        key={`dataitem-${single.identifier}-${single.name}`}
         item={single}
         index={i}
         changeFolder={this.props.changeFolder}
@@ -21,6 +22,7 @@ export default class Table extends Component {
       />
     ))
   }
+  /* eslint-enable react/no-array-index-key */
 
   render() {
     return (
@@ -54,7 +56,7 @@ export default class Table extends Component {
   }
 }
 
-Table.defaultTypes = {
+Table.defaultProps = {
   changeFolder: () => {},
 }
 

@@ -163,11 +163,12 @@ Info.defaultProps = {
   category: undefined,
   type: undefined,
   description: '',
+  id: '',
 }
 
 Info.propTypes = {
   name: PropTypes.string.isRequired,
-  id: PropTypes.string.isRequired,
+  id: PropTypes.string,
   title: PropTypes.string,
   size: PropTypes.string.isRequired,
   category: PropTypes.string,

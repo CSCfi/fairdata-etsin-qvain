@@ -62,7 +62,6 @@ class Dataset extends React.Component {
     }
     DatasetQuery.getData(identifier)
       .then(result => {
-        console.log('Dataset', result)
         // TODO: The code below needs to be revised
         // TODO: Somewhere we need to think how 1) harvested, 2) accumulative, 3) deprecated, 4) removed, 5) ordinary
         // TODO: datasets are rendered. Maybe not here?
@@ -72,7 +71,7 @@ class Dataset extends React.Component {
           email_info: result.email_info,
           hasFiles:
             (result.catalog_record.research_dataset.directories ||
-              result.catalog_record.research_dataset.files) === true,
+              result.catalog_record.research_dataset.files) !== undefined,
           hasRemote: result.catalog_record.research_dataset.remote_resources !== undefined,
           harvested: result.catalog_record.data_catalog.catalog_json.harvested,
           deprecated: result.catalog_record.deprecated,
@@ -86,32 +85,9 @@ class Dataset extends React.Component {
       })
   }
 
-  nextDataset() {
-    let path = this.props.location.pathname.slice(1)
-    path = path.split('/')
-    const id = parseInt(this.props.match.params.identifier, 10) + 1
-
-    if (path[2]) {
-      this.props.history.push(`/dataset/${id}/${path[2]}`)
-    } else {
-      this.props.history.push(`/dataset/${id}`)
-    }
-  }
-
   // goes back to previous page, which might be outside
   goBack() {
     this.props.history.goBack()
-  }
-
-  prevDataset() {
-    let path = this.props.location.pathname.slice(1)
-    path = path.split('/')
-    const id = parseInt(this.props.match.params.identifier, 10) - 1
-    if (path[2]) {
-      this.props.history.push(`/dataset/${id}/${path[2]}`)
-    } else {
-      this.props.history.push(`/dataset/${id}`)
-    }
   }
 
   render() {
@@ -126,14 +102,6 @@ class Dataset extends React.Component {
           <NoticeBar deprecated={translate('tombstone.info')} />
         )}
         <div className="container regular-row">
-          {process.env.NODE_ENV === 'development' ? (
-            <div>
-              <button onClick={() => this.prevDataset()}>Prev</button>
-              <button onClick={() => this.nextDataset()}>Next</button>
-            </div>
-          ) : (
-            ''
-          )}
           <BackButton color="" noPadding margin="0 0 0.5em 0" onClick={this.goBack}>
             <span aria-hidden>{'< '}</span>
             <Translate content={'dataset.goBack'} />

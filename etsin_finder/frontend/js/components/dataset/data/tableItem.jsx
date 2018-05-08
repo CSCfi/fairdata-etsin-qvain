@@ -154,7 +154,9 @@ const TableRow = styled.tr`
     vertical-align: middle;
     border: none;
     &:first-of-type {
-      padding: 0;
+      padding: 12px;
+      white-space: nowrap;
+      width: 1%;
       text-align: center;
     }
     p {
@@ -195,7 +197,7 @@ TableItem.propTypes = {
     name: PropTypes.string.isRequired,
     file_count: PropTypes.number,
     byte_size: PropTypes.number,
-    identifier: PropTypes.string.isRequired,
+    identifier: PropTypes.string,
     category: PropTypes.object,
     description: PropTypes.string,
   }).isRequired,
