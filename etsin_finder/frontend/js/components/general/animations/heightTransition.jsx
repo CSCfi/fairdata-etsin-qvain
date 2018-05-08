@@ -109,7 +109,7 @@ const TransitionDiv = styled.div.attrs({
   height: ${props => props.height};
   width: 100%;
   transition: height ${props => props.duration}ms ease-in-out;
-  @media (min-width: ${props => props.theme.breakpoints.sm}) {
+  @media (min-width: ${props => props.theme.breakpoints.lg}) {
     visibility: ${props => (props.onlyMobile ? 'initial' : props.visibility)};
     height: ${props => (props.onlyMobile ? 'auto' : props.height)};
   }

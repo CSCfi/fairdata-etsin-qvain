@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import Locale from 'Stores/view/language'
+import Locale from '../../../stores/view/language'
 import '../../../../locale/translations'
 import { TransparentButton } from '../button'
 

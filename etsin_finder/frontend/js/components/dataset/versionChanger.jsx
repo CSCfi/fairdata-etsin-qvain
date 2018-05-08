@@ -4,13 +4,12 @@ import { withRouter } from 'react-router-dom'
 import translate from 'counterpart'
 import { withTheme } from 'styled-components'
 
-import Accessibility from 'Stores/view/accessibility'
+import Accessibility from '../../stores/view/accessibility'
 import VersionSelect from './versionselect'
 
 class VersionChanger extends Component {
   constructor(props) {
     super(props)
-    console.log(props.versionSet)
     const versions = this.versionLabels(props.versionSet)
 
     this.state = {

@@ -1,16 +1,14 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import Translate from 'react-translate-component'
 import { inject, observer } from 'mobx-react'
 
-import Accessiblity from 'Stores/view/accessibility'
-import dateFormat from 'Utils/dateFormat'
-import checkNested from 'Utils/checkNested'
-import checkDataLang from 'Utils/checkDataLang'
-import Button from '../general/button'
+import Accessiblity from '../../stores/view/accessibility'
+import dateFormat from '../../utils/dateFormat'
+import checkNested from '../../utils/checkNested'
+import checkDataLang from '../../utils/checkDataLang'
 import Label from '../general/label'
-import AccessRights from './data/accessRights'
+import AccessRights from './accessRights'
 import ErrorBoundary from '../general/errorBoundary'
 import Person from './person'
 import Contact from './contact'
@@ -81,9 +79,9 @@ class Description extends Component {
                   <Contact datasetID={this.props.dataset.identifier} emails={this.props.emails} />
                 )}
             </ErrorBoundary>
-            <Button onClick={() => alert('Hae käyttölupaa')} noMargin>
+            {/* <Button onClick={() => alert('Hae käyttölupaa')} noMargin>
               <Translate content="dataset.access_permission" />
-            </Button>
+            </Button> */}
           </Flex>
         </Labels>
         <div className="d-md-flex align-items-center dataset-title justify-content-between">

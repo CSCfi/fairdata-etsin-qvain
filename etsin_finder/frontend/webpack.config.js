@@ -1,7 +1,7 @@
-// import shared config files
-const sharedConfig = require('./webpack.config.shared')
 const path = require('path')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
+
+// const criticalCSS = new ExtractTextPlugin('critical.css')
 
 const config = {
   entry: [path.join(__dirname, '/js/index.jsx')],
@@ -14,9 +14,6 @@ const config = {
     chunkFilename: '[name].bundle.js',
   },
   resolve: {
-    // adds aliases for common locations in app
-    // (../../../utils/checkDataLang => Utils/checkDataLang)
-    alias: sharedConfig.alias,
     extensions: ['.js', '.jsx', '.css'],
   },
   module: {
@@ -26,13 +23,13 @@ const config = {
         exclude: /node_modules/,
         loader: 'babel-loader',
       },
-      {
-        test: /\.css$/,
-        exclude: /node_modules/,
-        use: ExtractTextPlugin.extract({
-          use: 'css-loader?importLoaders=1',
-        }),
-      },
+      // {
+      //   // this doesn't work correctly
+      //   include: [path.resolve(__dirname, 'critical.css')],
+      //   use: criticalCSS.extract({
+      //     use: ExtractTextPlugin.extract(['css-loader', 'sass-loader']),
+      //   }),
+      // },
       {
         test: /\.(sass|scss)$/,
         exclude: /node_modules/,
@@ -46,6 +43,7 @@ const config = {
   },
   plugins: [
     // minimal plugins = fast development builds
+    // criticalCSS,
     new ExtractTextPlugin({
       // define where to save the extracted styles file
       filename: '[name].bundle.css',
@@ -57,6 +55,6 @@ const config = {
     aggregateTimeout: 300,
     poll: 1000,
     ignored: /node_modules/,
-  }
+  },
 }
 module.exports = config

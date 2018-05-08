@@ -1,7 +1,7 @@
 import { observable, action } from 'mobx'
 import axios from 'axios'
 
-import UrlParse from 'Utils/urlParse'
+import UrlParse from '../../utils/urlParse'
 import Locale from './language'
 
 const fields = [
@@ -85,6 +85,7 @@ class ElasticQuery {
       else {
         urlParams = { p: newPage }
       }
+      // TODO: change to history push. Currently going back doesn't refresh results page.
       history.replace({ search: UrlParse.makeSearchParams(urlParams) })
     }
   }

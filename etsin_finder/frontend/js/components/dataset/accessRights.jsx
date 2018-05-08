@@ -1,15 +1,13 @@
 import React, { Component } from 'react'
-import Translate from 'react-translate-component'
 import { inject, observer } from 'mobx-react'
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faLock from '@fortawesome/fontawesome-free-solid/faLock'
-import faUnlock from '@fortawesome/fontawesome-free-solid/faUnlock'
+import faLockOpen from '@fortawesome/fontawesome-free-solid/faLockOpen'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 
-import checkNested from 'Utils/checkNested'
-import checkDataLang from 'Utils/checkDataLang'
-import Tooltip from '../../general/tooltip'
+import checkNested from '../../utils/checkNested'
+import checkDataLang from '../../utils/checkDataLang'
 
 export const accessRightsBool = accessRights => {
   const openValues = [
@@ -49,8 +47,8 @@ class AccessRights extends Component {
     let title = { en: 'Restricted Access', fi: 'Rajoitettu käyttöoikeus' }
     if (props.access_rights !== undefined && props.access_rights !== null) {
       title = props.access_rights.access_type
-        ? props.access_rights.access_type.identifier
-        : props.access_rights.license.map(item => item.identifier)
+        ? props.access_rights.access_type.pref_label
+        : props.access_rights.license.map(item => item.title)[0]
     }
     this.lang = props.Stores.Locale.currentLang
     this.state = {
@@ -60,20 +58,18 @@ class AccessRights extends Component {
 
   restricted() {
     return (
-      <Tooltip title={checkDataLang(this.state.title, this.lang)}>
-        <div className="access-symbol" title={checkDataLang(this.state.title, this.lang)}>
-          <FontAwesomeIcon icon={faLock} />
-          <Translate content="dataset.access_locked" fallback="Restricted Access" />
-        </div>
-      </Tooltip>
+      <div className="access-symbol" title={checkDataLang(this.state.title)}>
+        <FontAwesomeIcon icon={faLock} />
+        {checkDataLang(this.state.title)}
+      </div>
     )
   }
 
   openAccess() {
     return (
-      <div className="access-symbol" title={checkDataLang(this.state.title, this.lang)}>
-        <FontAwesomeIcon icon={faUnlock} />
-        <Translate content="dataset.access_open" fallback="Open Access" />
+      <div className="access-symbol" title={checkDataLang(this.state.title)}>
+        <FontAwesomeIcon icon={faLockOpen} />
+        {checkDataLang(this.state.title)}
       </div>
     )
   }
@@ -99,6 +95,9 @@ const Access = styled.div`
   div {
     width: max-content;
   }
+  svg {
+    margin-right: 0.5em;
+  }
 `
 AccessRights.defaultProps = {
   access_rights: undefined,
@@ -108,6 +107,7 @@ AccessRights.propTypes = {
   access_rights: PropTypes.shape({
     access_type: PropTypes.shape({
       identifier: PropTypes.string.isRequired,
+      pref_label: PropTypes.objectOf(PropTypes.string),
     }),
     license: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
   }),

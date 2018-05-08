@@ -5,7 +5,7 @@ import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faFilter from '@fortawesome/fontawesome-free-solid/faFilter'
 import PropTypes from 'prop-types'
 
-import ElasticQuery from 'Stores/view/elasticquery'
+import ElasticQuery from '../../stores/view/elasticquery'
 import HeightTransition from '../general/animations/heightTransition'
 import SortResults from './sortResults'
 import Pagination from './pagination'
@@ -36,7 +36,7 @@ class Results extends Component {
         <div className="regular-row">
           <Grid>
             <AmountRes>
-              <ResultsAmount />
+              <ResultsAmount amount={ElasticQuery.results.total} />
             </AmountRes>
             <SortRes>
               <FilterToggle
@@ -63,7 +63,12 @@ class Results extends Component {
               <ResultsList query={this.props.query} />
             </ResList>
             <PageSwitcher>
-              <Pagination />
+              <Pagination
+                loading={ElasticQuery.loading}
+                totalResults={ElasticQuery.results.total}
+                perPage={ElasticQuery.perPage}
+                currentPage={ElasticQuery.pageNum}
+              />
             </PageSwitcher>
           </Grid>
         </div>
@@ -118,6 +123,9 @@ const QueryString = styled.div`
   grid-area: header;
   display: none;
   align-self: center;
+  p {
+    margin: auto;
+  }
   @media (min-width: ${props => props.theme.breakpoints.lg}) {
     display: block;
   }

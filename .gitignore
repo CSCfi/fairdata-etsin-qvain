@@ -19,3 +19,4 @@ etsin_finder/frontend/static/*
 !etsin_finder/frontend/static/saml.html
 !etsin_finder/frontend/static/saml_base.html
 !etsin_finder/frontend/static/saml_attrs.html
+!etsin_finder/frontend/static/critical.css

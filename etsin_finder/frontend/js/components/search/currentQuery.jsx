@@ -1,6 +1,6 @@
 import React from 'react'
 
-import ElasticQuery from 'Stores/view/elasticquery'
+import ElasticQuery from '../../stores/view/elasticquery'
 
 const CurrentQuery = () => {
   if (ElasticQuery.search !== '') {
