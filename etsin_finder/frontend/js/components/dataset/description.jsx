@@ -81,9 +81,9 @@ class Description extends Component {
                   <Contact datasetID={this.props.dataset.identifier} emails={this.props.emails} />
                 )}
             </ErrorBoundary>
-            <Button onClick={() => alert('Hae käyttölupaa')} noMargin>
+            {/* <Button onClick={() => alert('Hae käyttölupaa')} noMargin>
               <Translate content="dataset.access_permission" />
-            </Button>
+            </Button> */}
           </Flex>
         </Labels>
         <div className="d-md-flex align-items-center dataset-title justify-content-between">

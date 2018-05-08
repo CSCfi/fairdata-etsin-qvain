@@ -1,15 +1,13 @@
 import React, { Component } from 'react'
-import Translate from 'react-translate-component'
 import { inject, observer } from 'mobx-react'
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faLock from '@fortawesome/fontawesome-free-solid/faLock'
-import faUnlock from '@fortawesome/fontawesome-free-solid/faUnlock'
+import faLockOpen from '@fortawesome/fontawesome-free-solid/faLockOpen'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 
 import checkNested from '../../utils/checkNested'
 import checkDataLang from '../../utils/checkDataLang'
-import Tooltip from '../general/tooltip'
 
 export const accessRightsBool = accessRights => {
   const openValues = [
@@ -60,20 +58,18 @@ class AccessRights extends Component {
 
   restricted() {
     return (
-      <Tooltip title={checkDataLang(this.state.title)}>
-        <div className="access-symbol" title={checkDataLang(this.state.title)}>
-          <FontAwesomeIcon icon={faLock} />
-          <Translate content="dataset.access_locked" fallback="Restricted Access" />
-        </div>
-      </Tooltip>
+      <div className="access-symbol" title={checkDataLang(this.state.title)}>
+        <FontAwesomeIcon icon={faLock} />
+        {checkDataLang(this.state.title)}
+      </div>
     )
   }
 
   openAccess() {
     return (
       <div className="access-symbol" title={checkDataLang(this.state.title)}>
-        <FontAwesomeIcon icon={faUnlock} />
-        <Translate content="dataset.access_open" fallback="Open Access" />
+        <FontAwesomeIcon icon={faLockOpen} />
+        {checkDataLang(this.state.title)}
       </div>
     )
   }

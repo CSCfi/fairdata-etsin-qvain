@@ -92,6 +92,7 @@ const Prefix = styled.div`
   display: flex;
   align-items: center;
   text-transform: uppercase;
+  min-width: max-content;
   &:hover {
     background-color: ${props => props.theme.color.dark};
   }
