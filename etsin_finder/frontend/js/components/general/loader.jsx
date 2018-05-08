@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 
 class Loader extends Component {
+  spinner = () => <Spinner color={this.props.color} size={this.props.size} />
   render() {
     if (this.props.left) {
       return (
@@ -10,13 +11,13 @@ class Loader extends Component {
           margin={this.props.margin}
           className={`${this.props.active ? 'loader-active' : ''}`}
         >
-          <Spinner color={this.props.color} />
+          {this.spinner()}
         </HolderLeft>
       )
     }
     return (
       <Holder margin={this.props.margin} className={`${this.props.active ? 'loader-active' : ''}`}>
-        <Spinner color={this.props.color} />
+        {this.spinner()}
       </Holder>
     )
   }
@@ -42,8 +43,8 @@ const Holder = styled.div`
 `
 
 const Spinner = styled.div`
-  height: 2.5em;
-  width: 2.5em;
+  height: ${p => p.size};
+  width: ${p => p.size};
   animation: spinner 0.8s infinite linear;
   border: 0px solid ${props => (props.color ? props.color : props.theme.color.primary)};
   border-right-color: transparent;
@@ -68,6 +69,7 @@ Loader.defaultProps = {
   left: false,
   margin: '0',
   color: '',
+  size: '2.5em',
 }
 
 Loader.propTypes = {
@@ -75,4 +77,5 @@ Loader.propTypes = {
   margin: PropTypes.string,
   active: PropTypes.bool.isRequired,
   color: PropTypes.string,
+  size: PropTypes.string,
 }

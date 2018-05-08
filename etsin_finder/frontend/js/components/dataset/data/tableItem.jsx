@@ -10,6 +10,7 @@ import checkNested from '../../../utils/checkNested'
 import FileIcon from './fileIcon'
 import Info from './info'
 import { InvertedButton, TransparentButton } from '../../general/button'
+import Loader from '../../general/loader'
 
 class TableItem extends Component {
   constructor(props) {
@@ -18,6 +19,7 @@ class TableItem extends Component {
       modalIsOpen: false,
       name: props.item.name,
       file_count: props.item.file_count ? props.item.file_count : '',
+      loader: false,
     }
 
     this.openModal = this.openModal.bind(this)
@@ -32,23 +34,39 @@ class TableItem extends Component {
     this.setState({ modalIsOpen: false })
   }
 
+  changeFolder(name, id) {
+    console.log('loader')
+    this.setState(
+      {
+        loader: true,
+      },
+      () => this.props.changeFolder(name, id)
+    )
+  }
+
   render() {
     return (
       <TableRow key={`filelist-${this.props.index}`}>
         <FileType>
-          {this.props.item.type === 'dir' ? (
-            <TransparentButton
-              noPadding
-              noMargin
-              tabIndex="-1"
-              color={this.props.theme.color.primary}
-              onClick={() => this.props.changeFolder(this.state.name, this.props.item.identifier)}
-              title={translate('dataset.dl.file_types.directory')}
-            >
-              <FileIcon type={this.props.item.type} />
-            </TransparentButton>
+          {this.state.loader ? (
+            <Loader active size="2em" />
           ) : (
-            <FileIcon type={this.props.item.type} title={this.props.item.type} />
+            <React.Fragment>
+              {this.props.item.type === 'dir' ? (
+                <TransparentButton
+                  noPadding
+                  noMargin
+                  tabIndex="-1"
+                  color={this.props.theme.color.primary}
+                  onClick={() => this.changeFolder(this.state.name, this.props.item.identifier)}
+                  title={translate('dataset.dl.file_types.directory')}
+                >
+                  <FileIcon type={this.props.item.type} />
+                </TransparentButton>
+              ) : (
+                <FileIcon type={this.props.item.type} title={this.props.item.type} />
+              )}
+            </React.Fragment>
           )}
         </FileType>
         {this.props.fields.name && this.props.item.type === 'dir' ? (
@@ -57,7 +75,7 @@ class TableItem extends Component {
               noPadding
               noMargin
               color={this.props.theme.color.primary}
-              onClick={() => this.props.changeFolder(this.state.name, this.props.item.identifier)}
+              onClick={() => this.changeFolder(this.state.name, this.props.item.identifier)}
             >
               <Translate className="sr-only" content="dataset.dl.file_types.directory" />
               <p>{this.state.name}</p>
