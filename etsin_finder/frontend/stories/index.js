@@ -477,12 +477,14 @@ storiesOf('Dataset/Data/TableItem', module).add('Normal', () => {
             index={1}
             changeFolder={() => console.log('change folder')}
             access={true}
+            fields={{ size: true, category: true, name: true, downloadBtn: true, infoBtn: true }}
           />
           <TableItem
             item={item2}
             index={2}
             changeFolder={() => console.log('change folder')}
             access={true}
+            fields={{ size: true, category: true, name: true, downloadBtn: true, infoBtn: true }}
           />
           {/* <TableItem
             item={remote1}
@@ -498,7 +500,14 @@ storiesOf('Dataset/Data/TableItem', module).add('Normal', () => {
 
 storiesOf('Dataset/Data/Table', module).add('Normal', () => {
   const folder = idaDataTree.map(single => parseIda(single))
-  return <Table access data={folder} changeFolder={() => console.log('change folder')} />
+  return (
+    <Table
+      access
+      data={folder}
+      changeFolder={() => console.log('change folder')}
+      fields={{ size: true, category: true, name: true, downloadBtn: true, infoBtn: true }}
+    />
+  )
 })
 
 storiesOf('Dataset/Data/Remote', module).add('Normal', () => (

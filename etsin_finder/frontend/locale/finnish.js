@@ -66,6 +66,7 @@ const finnish = {
       item: 'aineisto %(item)s',
       name: 'Nimi',
       size: 'Koko',
+      remote: 'Remote aineistot'
     },
     events_idn: {
       events: {

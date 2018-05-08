@@ -17,6 +17,7 @@ const etsinTheme = {
     gray: 'rgb(150, 150, 150)',
     darkgray: 'rgb(110, 110, 110)',
     dark: 'rgb(70, 70, 70)',
+    darker: '#212529',
     error: '#eb6672',
     yellow: '#FFBD39',
     success: '#53BA8A',

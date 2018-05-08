@@ -8,8 +8,8 @@ import { InvertedButton } from '../../general/button'
 
 export default function TableHeader(props) {
   return (
-    <div className="downloads-header d-flex justify-content-between">
-      <div className="heading-right">
+    <Header className="d-flex justify-content-between">
+      <div>
         <TableTitle>
           <Translate content={`dataset.dl.${props.title}`} />
         </TableTitle>
@@ -22,15 +22,23 @@ export default function TableHeader(props) {
           {props.totalSize !== 0 && ` (${sizeParse(props.totalSize, 1)})`}
         </ObjectCount>
       </div>
-      <div className="heading-left d-flex align-items-center">
-        <InvertedButton color="white" disabled={!props.access}>
-          <Translate content="dataset.dl.downloadAll" />
-          <Translate className="screen-reader-only" content="dataset.dl.file_types.both" />
-        </InvertedButton>
-      </div>
-    </div>
+      {props.downloadAll && (
+        <div className="d-flex align-items-center">
+          <InvertedButton color="white" disabled={!props.access}>
+            <Translate content="dataset.dl.downloadAll" />
+            <Translate className="sr-only" content="dataset.dl.file_types.both" />
+          </InvertedButton>
+        </div>
+      )}
+    </Header>
   )
 }
+
+const Header = styled.div`
+  background-color: ${p => p.theme.color.primary};
+  padding: 1em 1.5em;
+  color: white;
+`
 
 const TableTitle = styled.h4`
   margin-bottom: 0;

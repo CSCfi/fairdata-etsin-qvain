@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
+import styled from 'styled-components'
 
 import DatasetQuery from '../../../../stores/view/datasetquery'
-import createTree from '../../../../utils/createTree'
 import checkDataLang from '../../../../utils/checkDataLang'
 import checkNested from '../../../../utils/checkNested'
-import { accessRightsBool } from '../../accessRights'
 import TableHeader from '../tableHeader'
 import Table from '../table'
 
@@ -24,7 +23,6 @@ export default class ExternalResources extends Component {
       const totalCount = parsed.length
       this.state = {
         results,
-        access: accessRightsBool(results.research_dataset.access_rights),
         currentFolder: parsed,
         totalCount,
       }
@@ -52,14 +50,23 @@ export default class ExternalResources extends Component {
     }
 
     return (
-      <div className="dataset-downloads">
+      <DataTable>
         <TableHeader
           objectCount={this.state.totalCount}
-          title={'files'}
-          access={this.state.access}
+          title={'remote'}
+          access
+          downloadAll={false}
         />
-        <Table data={this.state.currentFolder} access={this.state.access} />
-      </div>
+        <Table
+          data={this.state.currentFolder}
+          access
+          fields={{ size: false, category: false, name: true, downloadBtn: false, infoBtn: true }}
+        />
+      </DataTable>
     )
   }
 }
+
+const DataTable = styled.div`
+  margin-top: 1em;
+`

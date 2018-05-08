@@ -51,7 +51,7 @@ class TableItem extends Component {
             <FileIcon type={this.props.item.type} title={this.props.item.type} />
           )}
         </FileType>
-        {this.props.item.type === 'dir' ? (
+        {this.props.fields.name && this.props.item.type === 'dir' ? (
           <FileName>
             <TransparentButton
               noPadding
@@ -78,46 +78,54 @@ class TableItem extends Component {
             <p>{this.state.name}</p>
           </FileName>
         )}
-        <FileSize>{sizeParse(this.props.item.byte_size, 1)}</FileSize>
-        <FileCategory>
-          {checkNested(this.props.item.category) ? checkDataLang(this.props.item.category) : ''}
-        </FileCategory>
+        {this.props.fields.size && <FileSize>{sizeParse(this.props.item.byte_size, 1)}</FileSize>}
+        {this.props.fields.category && (
+          <FileCategory>
+            {checkNested(this.props.item.category) ? checkDataLang(this.props.item.category) : ''}
+          </FileCategory>
+        )}
         <FileButtons>
-          <InvertedButton
-            thin
-            color={this.props.theme.color.gray}
-            disabled={!this.props.access}
-            onClick={this.openModal}
-          >
-            <Translate content="dataset.dl.info" />
-            <Translate
-              className="sr-only"
-              content="dataset.dl.info_about"
-              with={{ file: this.state.name }}
-            />
-          </InvertedButton>
-          <HideSmButton thin onClick={this.openModal} disabled={!this.props.access}>
-            <Translate content="dataset.dl.download" />
-            <Translate
-              className="sr-only"
-              content="dataset.dl.item"
-              with={{ item: this.state.name }}
-            />
-          </HideSmButton>
-          <Info
-            name={this.state.name}
-            id={this.props.item.identifier}
-            size={sizeParse(this.props.item.byte_size, 1)}
-            category={
-              checkNested(this.props.item.category)
-                ? checkDataLang(this.props.item.category)
-                : undefined
-            }
-            description={this.props.item.description}
-            type={this.props.item.type}
-            open={this.state.modalIsOpen}
-            closeModal={this.closeModal}
-          />
+          {this.props.fields.infoBtn && (
+            <React.Fragment>
+              <InvertedButton
+                thin
+                color={this.props.theme.color.gray}
+                disabled={!this.props.access}
+                onClick={this.openModal}
+              >
+                <Translate content="dataset.dl.info" />
+                <Translate
+                  className="sr-only"
+                  content="dataset.dl.info_about"
+                  with={{ file: this.state.name }}
+                />
+              </InvertedButton>
+              <Info
+                name={this.state.name}
+                id={this.props.item.identifier}
+                size={sizeParse(this.props.item.byte_size, 1)}
+                category={
+                  checkNested(this.props.item.category)
+                    ? checkDataLang(this.props.item.category)
+                    : undefined
+                }
+                description={this.props.item.description}
+                type={this.props.item.type}
+                open={this.state.modalIsOpen}
+                closeModal={this.closeModal}
+              />
+            </React.Fragment>
+          )}
+          {this.props.fields.downloadBtn && (
+            <HideSmButton thin onClick={this.openModal} disabled={!this.props.access}>
+              <Translate content="dataset.dl.download" />
+              <Translate
+                className="sr-only"
+                content="dataset.dl.item"
+                with={{ item: this.state.name }}
+              />
+            </HideSmButton>
+          )}
         </FileButtons>
       </TableRow>
     )
@@ -142,6 +150,7 @@ const TableRow = styled.tr`
     background-color: ${p => p.theme.color.superlightgray};
   }
   td {
+    padding: 12px;
     vertical-align: middle;
     border: none;
     &:first-of-type {
@@ -169,10 +178,11 @@ const FileCategory = styled.td`
 `
 
 const FileButtons = styled.td`
-  padding: 0.7em;
   text-align: center;
   display: table-cell;
   flex-wrap: wrap;
+  width: 1%;
+  white-space: nowrap;
 `
 
 TableItem.defaultProps = {
@@ -195,6 +205,13 @@ TableItem.propTypes = {
       primary: PropTypes.string.isRequired,
       gray: PropTypes.string.isRequired,
     }),
+  }).isRequired,
+  fields: PropTypes.shape({
+    size: PropTypes.bool.isRequired,
+    name: PropTypes.bool.isRequired,
+    category: PropTypes.bool.isRequired,
+    downloadBtn: PropTypes.bool.isRequired,
+    infoBtn: PropTypes.bool.isRequired,
   }).isRequired,
   changeFolder: PropTypes.func,
   access: PropTypes.bool.isRequired,

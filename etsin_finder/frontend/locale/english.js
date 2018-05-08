@@ -67,6 +67,7 @@ const english = {
       item: 'item %(item)s',
       name: 'Name',
       size: 'Size',
+      remote: 'Remote resources'
     },
     events_idn: {
       events: {

@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import styled from 'styled-components'
 
 import DatasetQuery from '../../../../stores/view/datasetquery'
 import createTree from '../../../../utils/createTree'
@@ -176,12 +177,13 @@ export default class IdaResources extends Component {
     }
 
     return (
-      <div className="dataset-downloads">
+      <DataTable>
         <TableHeader
           objectCount={this.state.totalCount}
           totalSize={this.state.results.research_dataset.total_ida_byte_size}
           title={'files'}
           access={this.state.access}
+          downloadAll
         />
         <Breadcrumbs
           path={this.state.currentPath}
@@ -192,8 +194,13 @@ export default class IdaResources extends Component {
           data={this.state.currentFolder.map(single => this.parseIda(single))}
           access={this.state.access}
           changeFolder={this.changeFolder}
+          fields={{ size: true, category: true, name: true, downloadBtn: true, infoBtn: true }}
         />
-      </div>
+      </DataTable>
     )
   }
 }
+
+const DataTable = styled.div`
+  margin-top: 1em;
+`
