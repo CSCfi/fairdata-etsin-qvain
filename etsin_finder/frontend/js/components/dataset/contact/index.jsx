@@ -49,6 +49,7 @@ export default class Contact extends Component {
 
     const recipients = this.buildRecipients(props.emails)
     const translations = translate('dataset.contact')
+    console.log(JSON.stringify(recipients))
 
     this.state = {
       open: false,

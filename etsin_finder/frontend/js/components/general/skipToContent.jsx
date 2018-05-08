@@ -17,6 +17,7 @@ const STC = styled.button`
   background: rgb(77, 179, 231);
   color: white;
   max-height: 0;
+  width: 100%;
   margin: 0;
   padding: 0;
   border: none;

@@ -9,49 +9,6 @@ import Select from '../../general/select'
 import Input, { InputArea } from './formItems'
 import { InvertedButton } from '../../general/button'
 
-const InputContainer = styled.div`
-  display: inline-flex;
-  flex-direction: column;
-  width: 100%;
-  @media (min-width: ${props => props.theme.breakpoints.sm}) {
-    width: ${props => (props.width ? props.width : '100%')};
-    padding-right: ${props => (props.paddingRight ? props.paddingRight : '')};
-    padding-left: ${props => (props.paddingLeft ? props.paddingLeft : '')};
-  }
-`
-
-const ErrorText = styled.p`
-  color: ${props => props.theme.color.error};
-`
-
-const Success = styled.p`
-  color: ${props => props.theme.color.primary};
-  margin: 0 1em;
-  align-self: center;
-  font-weight: 700;
-`
-
-const Error = styled.p`
-  color: ${props => props.theme.color.error};
-  margin: 0 1em;
-  align-self: center;
-  font-weight: 700;
-`
-
-const Label = styled.label`
-  display: block;
-`
-
-const Form = styled.form`
-  display: flex;
-  flex-wrap: wrap;
-  align-content: center;
-`
-
-const Flex = styled.div`
-  display: flex;
-`
-
 const InnerForm = props => {
   const {
     values,
@@ -219,5 +176,50 @@ ContactForm.propTypes = {
   translations: PropTypes.object,
   datasetID: PropTypes.string,
 }
+
+/* Styles */
+
+const InputContainer = styled.div`
+  display: inline-flex;
+  flex-direction: column;
+  width: 100%;
+  @media (min-width: ${props => props.theme.breakpoints.sm}) {
+    width: ${props => (props.width ? props.width : '100%')};
+    padding-right: ${props => (props.paddingRight ? props.paddingRight : '')};
+    padding-left: ${props => (props.paddingLeft ? props.paddingLeft : '')};
+  }
+`
+
+const ErrorText = styled.p`
+  color: ${props => props.theme.color.error};
+`
+
+const Success = styled.p`
+  color: ${props => props.theme.color.primary};
+  margin: 0 1em;
+  align-self: center;
+  font-weight: 700;
+`
+
+const Error = styled.p`
+  color: ${props => props.theme.color.error};
+  margin: 0 1em;
+  align-self: center;
+  font-weight: 700;
+`
+
+const Label = styled.label`
+  display: block;
+`
+
+const Form = styled.form`
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+`
+
+const Flex = styled.div`
+  display: flex;
+`
 
 export default ContactForm
