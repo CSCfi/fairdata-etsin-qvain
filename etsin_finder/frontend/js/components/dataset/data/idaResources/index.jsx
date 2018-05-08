@@ -184,6 +184,7 @@ export default class IdaResources extends Component {
           totalSize={this.state.results.research_dataset.total_ida_byte_size}
           title={'files'}
           access={this.state.access}
+          crId={this.state.results.identifier}
           downloadAll
         />
         <Breadcrumbs
