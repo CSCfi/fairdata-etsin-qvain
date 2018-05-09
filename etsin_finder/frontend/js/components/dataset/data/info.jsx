@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import PropTypes from 'prop-types'
 
+import checkDataLang from '../../../utils/checkDataLang'
 import { Link, TransparentButton } from '../../general/button'
 
 const customStyles = {
@@ -130,13 +131,23 @@ const Info = ({
           <p>{description}</p>
         </ModalDescription>
       ) : null}
+      {console.log(accessUrl)}
       {accessUrl && (
-        <FullButton href={accessUrl} noMargin>
+        <FullButton
+          href={accessUrl.identifier}
+          title={checkDataLang(accessUrl.description)}
+          noMargin
+        >
           <Translate content="dataset.dl.go_to_original" />
         </FullButton>
       )}
       {downloadUrl && (
-        <FullButton href={downloadUrl} color="success" noMargin>
+        <FullButton
+          href={downloadUrl.identifier}
+          title={checkDataLang(downloadUrl.description)}
+          color="success"
+          noMargin
+        >
           <Translate content="dataset.dl.download" />
         </FullButton>
       )}
