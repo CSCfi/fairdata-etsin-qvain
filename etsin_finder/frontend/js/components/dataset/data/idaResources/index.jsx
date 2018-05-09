@@ -65,6 +65,7 @@ export default class IdaResources extends Component {
         return {
           path: fileDetails.file_path.substring(1),
           type: fileType,
+          download_url: file.access_url,
           details: fileDetails,
           description: file.description,
           use_category: file.use_category,
@@ -82,6 +83,7 @@ export default class IdaResources extends Component {
         return {
           path: folderDetails.directory_path.substring(1),
           type: 'dir',
+          download_url: folder.access_url,
           details: folderDetails,
           description: folder.description,
           use_category: folder.use_category,
@@ -168,6 +170,7 @@ export default class IdaResources extends Component {
     if (checkNested(ida, 'use_category', 'pref_label')) {
       parsed.category = ida.use_category.pref_label
     }
+    parsed.download_url = ida.download_url
     parsed.description = ida.description
     return parsed
   }

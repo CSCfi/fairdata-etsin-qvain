@@ -9,7 +9,7 @@ import sizeParse from '../../../utils/sizeParse'
 import checkNested from '../../../utils/checkNested'
 import FileIcon from './fileIcon'
 import Info from './info'
-import { InvertedButton, TransparentButton } from '../../general/button'
+import { InvertedLink, InvertedButton, TransparentButton } from '../../general/button'
 import Loader from '../../general/loader'
 
 class TableItem extends Component {
@@ -144,6 +144,8 @@ class TableItem extends Component {
             </React.Fragment>
           )}
           {this.props.fields.downloadBtn && (
+            // TODO: add download functionality, probably an axios post request,
+            // but it will also be used in the info modal, so a utility for both.
             <HideSmButton thin onClick={this.openModal} disabled={!this.props.access}>
               <Translate content="dataset.dl.download" />
               <Translate
@@ -165,7 +167,7 @@ const TitleAlt = styled.p`
   color: #777;
 `
 
-const HideSmButton = styled(InvertedButton)`
+const HideSmButton = styled(InvertedLink)`
   display: none;
   @media (min-width: ${props => props.theme.breakpoints.sm}) {
     display: initial;
