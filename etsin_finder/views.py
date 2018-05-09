@@ -34,35 +34,19 @@ def frontend_app(path):
 
 def _render_index_template(saml_errors=[], slo_success=False):
     saml_attributes = False
-    is_authenticated = False
-    if 'samlUserdata' in session:
-        if len(session['samlUserdata']) > 0:
-            saml_attributes = session['samlUserdata'].items()
-            is_authenticated = True
-            log.debug("SAML attributes: {0}".format(saml_attributes))
+    is_auth = is_authenticated()
+    if is_auth:
+        saml_attributes = session['samlUserdata'].items()
+        is_auth = True
+        log.debug("SAML attributes: {0}".format(saml_attributes))
 
     return render_template('index.html', title='Front Page', saml_errors=saml_errors, saml_attributes=saml_attributes,
-                           is_authenticated=is_authenticated, slo_success=slo_success)
+                           is_authenticated=is_auth, slo_success=slo_success)
 
 
 # SAML AUTHENTICATION RELATED
 
 # TODO: Remove this route at latest in production
-@app.route('/saml_attributes/')
-def saml_attributes():
-    paint_logout = False
-    attributes = False
-
-    if 'samlUserdata' in session:
-        paint_logout = True
-        if len(session['samlUserdata']) > 0:
-            attributes = session['samlUserdata'].items()
-
-    return render_template('saml_attrs.html', paint_logout=paint_logout,
-                           attributes=attributes)
-
-
-# TODO: Ask whether this needs to be present?
 @app.route('/saml_metadata/')
 def saml_metadata():
     auth = get_saml_auth(request)
@@ -78,23 +62,36 @@ def saml_metadata():
     return resp
 
 
+# TODO: Remove this route at latest in production
+@app.route('/saml_attributes/')
+def saml_attributes():
+    paint_logout = False
+    attributes = False
+
+    if is_authenticated():
+        paint_logout = True
+        if len(session['samlUserdata']) > 0:
+            attributes = session['samlUserdata'].items()
+
+    return render_template('saml_attrs.html', paint_logout=paint_logout,
+                           attributes=attributes)
+
+
 @app.route('/acs/', methods=['GET', 'POST'])
 def saml_attribute_consumer_service():
     req = prepare_flask_request_for_saml(request)
     auth = init_saml_auth(req)
     auth.process_response()
     errors = auth.get_errors()
-    is_authenticated = auth.is_authenticated()
-    if len(errors) == 0:
+    if len(errors) == 0 and auth.is_authenticated():
         session['samlUserdata'] = auth.get_attributes()
         session['samlNameId'] = auth.get_nameid()
         session['samlSessionIndex'] = auth.get_session_index()
         self_url = OneLogin_Saml2_Utils.get_self_url(req)
-        log.warning("SESSION: {0}".format(session))
+        log.debug("SESSION: {0}".format(session))
         if 'RelayState' in request.form and self_url != request.form['RelayState']:
             return redirect(auth.redirect_to(request.form['RelayState']))
 
-    log.info("NOT Relaystate")
     return _render_index_template(saml_errors=errors)
 
 
@@ -102,8 +99,7 @@ def saml_attribute_consumer_service():
 def saml_single_logout_service():
     auth = get_saml_auth(request)
     slo_success = False
-    dscb = lambda: session.clear()
-    url = auth.process_slo(delete_session_cb=dscb)
+    url = auth.process_slo(delete_session_cb = lambda: session.clear())
     errors = auth.get_errors()
     if len(errors) == 0:
         if url is not None:
@@ -114,12 +110,17 @@ def saml_single_logout_service():
     return _render_index_template(saml_errors=errors, slo_success=slo_success)
 
 
-def get_saml_auth(request):
-    return OneLogin_Saml2_Auth(prepare_flask_request_for_saml(request), custom_base_path=app.config['SAML_PATH'])
+def get_saml_auth(flask_request):
+    return OneLogin_Saml2_Auth(prepare_flask_request_for_saml(flask_request), custom_base_path=app.config['SAML_PATH'])
 
 
-def init_saml_auth(flask_req):
-    return OneLogin_Saml2_Auth(flask_req, custom_base_path=app.config['SAML_PATH'])
+def init_saml_auth(saml_prepared_flask_request):
+    return OneLogin_Saml2_Auth(saml_prepared_flask_request, custom_base_path=app.config['SAML_PATH'])
+
+
+def is_authenticated():
+    auth = get_saml_auth(request)
+    return True if auth.is_authenticated and 'samlUserdata' in session and len(session['samlUserdata']) > 0 else False
 
 
 def prepare_flask_request_for_saml(request):

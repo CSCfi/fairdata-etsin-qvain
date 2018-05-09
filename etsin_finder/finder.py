@@ -43,9 +43,10 @@ def _do_imports():
 
 
 def _add_restful_resources():
-    from etsin_finder.resources import Contact, Dataset
+    from etsin_finder.resources import Contact, Dataset, User
     api.add_resource(Dataset, '/api/dataset/<string:dataset_id>')
     api.add_resource(Contact, '/api/email/<string:dataset_id>')
+    api.add_resource(User, '/api/user')
 
 
 app = create_app()
