@@ -1,3 +1,4 @@
+import datetime
 from urllib.parse import urlparse
 
 from flask import make_response, render_template, redirect, request, session
@@ -138,3 +139,12 @@ def prepare_flask_request_for_saml(request):
         # "query_string": ""
 
     }
+
+# SESSION RELATED
+
+
+@app.before_request
+def before_request():
+    session.permanent = True
+    app.permanent_session_lifetime = datetime.timedelta(seconds=10)
+    session.modified = True
