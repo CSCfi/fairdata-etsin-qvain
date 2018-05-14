@@ -1,14 +1,6 @@
 import styled from 'styled-components'
 import { opacify, darken } from 'polished'
-import theme from '../../theme'
-
-// check if there is a color matching the string in the theme
-const checkColor = color => {
-  if (theme.color[color]) {
-    return theme.color[color]
-  }
-  return color
-}
+import checkColor from '../../utils/styledUtils'
 
 // prettier-ignore
 const Button = styled.button.attrs({

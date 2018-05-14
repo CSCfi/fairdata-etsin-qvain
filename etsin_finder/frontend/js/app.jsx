@@ -3,7 +3,6 @@ import { BrowserRouter as Router } from 'react-router-dom'
 import { Provider } from 'mobx-react'
 import { ThemeProvider } from 'styled-components'
 
-import KeepAlive from './components/general/keepAlive'
 import SkipToContent from './components/general/skipToContent'
 import Layout from './layout'
 import etsinTheme from './theme'
@@ -31,7 +30,6 @@ export default class App extends Component {
   render() {
     return (
       <div className="app">
-        <KeepAlive />
         <SkipToContent callback={this.focusContent} />
         <Provider Stores={Stores}>
           <Router history={Stores.history}>
