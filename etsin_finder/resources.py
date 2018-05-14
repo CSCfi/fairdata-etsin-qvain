@@ -15,7 +15,7 @@ from etsin_finder.email_utils import \
 from etsin_finder.utils import \
     get_metax_api_config, \
     strip_catalog_record
-from etsin_finder.views import is_authenticated
+from etsin_finder.views import is_authenticated, reset_flask_session_on_logout
 
 log = app.logger
 metax_service = MetaxAPIService(get_metax_api_config(app.config))
@@ -133,3 +133,20 @@ class User(Resource):
                 })
 
         return user_info, 200
+
+
+class Session(Resource):
+
+    """
+    Session related
+    """
+
+    def get(self):
+        if is_authenticated():
+            session.modified = True
+        return '', 200
+
+    def delete(self):
+        reset_flask_session_on_logout()
+        return not is_authenticated(), 200
+
