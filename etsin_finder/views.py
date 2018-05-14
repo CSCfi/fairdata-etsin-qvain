@@ -1,4 +1,3 @@
-import datetime
 from urllib.parse import urlparse
 
 from flask import make_response, render_template, redirect, request, session
@@ -80,6 +79,7 @@ def saml_attributes():
 
 @app.route('/acs/', methods=['GET', 'POST'])
 def saml_attribute_consumer_service():
+    reset_flask_session_on_login()
     req = prepare_flask_request_for_saml(request)
     auth = init_saml_auth(req)
     auth.process_response()
@@ -140,11 +140,12 @@ def prepare_flask_request_for_saml(request):
 
     }
 
-# SESSION RELATED
 
-
-@app.before_request
-def before_request():
+def reset_flask_session_on_login():
+    session.clear()
     session.permanent = True
-    app.permanent_session_lifetime = datetime.timedelta(seconds=10)
-    session.modified = True
+
+
+def reset_flask_session_on_logout():
+   session.clear()
+   session.permanent = False
