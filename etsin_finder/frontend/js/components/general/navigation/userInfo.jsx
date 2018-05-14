@@ -1,53 +1,53 @@
 import React, { Component } from 'react'
+import styled from 'styled-components'
+import { withRouter } from 'react-router-dom'
 
-export default class UserInfo extends Component {
-  logout() {
-    alert(this.target.innerHTML)
+import Stores from '../../../stores'
+import Button, { Link } from '../button'
+import Dropdown from '../dropdown'
+
+class UserInfo extends Component {
+  state = {
+    loggedin: Stores.Auth.loggedin,
+  }
+
+  componentWillMount() {
+    this.checkLogin()
+  }
+
+  checkLogin = () => {
+    Stores.Auth.checkLogin()
+  }
+
+  logout = () => {
+    Stores.Auth.logout()
   }
 
   render() {
+    if (!this.state.loggedin) {
+      return (
+        <Link margin="0em 1em" href={`${window.location.href}?sso`}>
+          Login
+        </Link>
+      )
+    }
     return (
       <div className="userInfo">
-        <div className="dropdown">
-          <button
-            className="btn btn-transparent dropdown-toggle"
-            type="button"
-            id="dropdownMenuButton"
-            data-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false"
-          >
-            Matti Meikäläinen
-          </button>
-          <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a className="dropdown-item" href="#a">
-              Action
-            </a>
-            <a className="dropdown-item" href="#b">
-              Another action
-            </a>
-            <a className="dropdown-item" href="#c">
-              Something else here
-            </a>
-          </div>
-        </div>
-        <button type="button" className="btn btn-transparent" onClick={this.logout}>
-          Logout
-        </button>
+        <Dropdown>
+          <P>{Stores.Auth.user.name}</P>
+          <Button color="error" onClick={this.logout} br="0" noMargin padding="0.6em 1em">
+            Logout
+          </Button>
+        </Dropdown>
       </div>
     )
   }
-  /* <a
-    href={
-      document.getElementById('root').hasAttribute('is_auth')
-        ? '#'
-        : this.props.location.pathname + '?sso'
-    }
-  >
-    {document.getElementById('root').hasAttribute('is_auth') ? 'Logout' : 'Login'}
-  </a>
-  <p>
-    The user is{document.getElementById('root').hasAttribute('is_auth') ? '' : ' not'}{' '}
-    logged in. Use incognito mode to test login repeatedly.
-  </p> */
 }
+
+const P = styled.p`
+  margin-bottom: 0;
+  padding: 0.6em 1em;
+  text-align: center;
+`
+
+export default withRouter(UserInfo)

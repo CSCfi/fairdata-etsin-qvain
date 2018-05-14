@@ -35,6 +35,7 @@ import TableItem from '../js/components/dataset/data/tableItem'
 import Table from '../js/components/dataset/data/table'
 import ExternalResources from '../js/components/dataset/data/externalResources'
 import Info from '../js/components/dataset/data/info'
+import Dropdown from '../js/components/general/dropdown'
 
 import EsRes from './esRes'
 import MetaxRes, { MetaxRemote } from './metaxRes'
@@ -60,11 +61,17 @@ const align = props => ({
   margin: props.center ? '0 auto' : '',
 })
 
+const flex = props => ({
+  display: props.flex ? 'flex' : '',
+})
+
 const Container = styled.div`
   width: 100%;
   max-width: ${props => (props.maxWidth ? props.maxWidth : '100%')};
   padding: 1em;
   ${align};
+  ${flex};
+  justify-content: ${p => (p.end ? 'flex-end' : '')};
 `
 
 storiesOf('General/Hero', module).add('Normal', () => (
@@ -551,3 +558,20 @@ storiesOf('Dataset/Data/Remote', module).add('Normal', () => (
     <ExternalResources testData={MetaxRemote} />
   </Container>
 ))
+
+storiesOf('General/Dropdown', module).add('Normal', () => (
+  <Container flex end center maxWidth="800px">
+    <Dropdown>
+      <P>Teppo Testaaja</P>
+      <Button color="error" noMargin br="0" padding="0.6em 1em">
+        Logout
+      </Button>
+    </Dropdown>
+  </Container>
+))
+
+const P = styled.p`
+  margin-bottom: 0;
+  padding: 0.6em 1em;
+  text-align: center;
+`
