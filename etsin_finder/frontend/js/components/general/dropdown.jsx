@@ -6,19 +6,32 @@ import PropTypes from 'prop-types'
 import Button from './button'
 
 export default class Dropdown extends Component {
-  state = {
-    open: true,
+  constructor(props) {
+    super(props)
+    this.state = {
+      open: false,
+    }
+    this.content = React.createRef()
+  }
+
+  onBlur = () => {
+    this.close()
   }
 
   open = () => {
-    console.log('close')
-    this.setState({
-      open: true,
-    })
+    console.log('open')
+    this.setState(
+      {
+        open: true,
+      },
+      () => {
+        this.content.current.focus()
+      }
+    )
   }
 
   close = () => {
-    console.log('open')
+    console.log('close')
     this.setState({
       open: false,
     })
@@ -33,18 +46,20 @@ export default class Dropdown extends Component {
         }}
       >
         <CustomButton
+          role="button"
           open={this.state.open}
+          aria-pressed={this.state.open}
           onClick={() => (this.state.open ? this.close() : this.open())}
         >
-          Profile
+          <span className="sr-only">Open user </span>Profile
         </CustomButton>
         <div
           style={{
             position: 'relative',
           }}
         >
-          <Content open={this.state.open}>
-            <Container>{this.props.children}</Container>
+          <Content open={this.state.open} innerRef={this.content} tabIndex="-1">
+            <Container onBlur={this.onBlur}>{this.props.children}</Container>
           </Content>
         </div>
       </div>
@@ -80,10 +95,12 @@ const Content = styled.div`
   height: ${p => (p.open ? 'auto' : 0)};
   position: absolute;
   overflow: hidden;
+  display: ${p => (p.open ? '' : 'none')};
   top: 0;
   right: 0;
   margin-top: 0.4em;
   border-radius: 0.3em;
+  background-color: white;
   /* border: ${p => (p.open ? '1px' : 0)} solid ${p => p.theme.color.dark}; */
   &:after {
     content: '';

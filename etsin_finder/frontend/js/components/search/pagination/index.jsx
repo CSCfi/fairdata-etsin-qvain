@@ -283,4 +283,4 @@ Pagination.propTypes = {
   currentPage: PropTypes.number.isRequired,
 }
 
-export default inject('Stores')(observer(withRouter(Pagination)))
+export default withRouter(inject('Stores')(observer(Pagination)))

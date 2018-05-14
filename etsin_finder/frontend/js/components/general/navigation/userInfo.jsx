@@ -1,14 +1,16 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import { withRouter } from 'react-router-dom'
+import { inject, observer } from 'mobx-react'
+import PropTypes from 'prop-types'
 
 import Stores from '../../../stores'
-import Button, { Link } from '../button'
+import Button from '../button'
 import Dropdown from '../dropdown'
 
 class UserInfo extends Component {
-  state = {
-    loggedin: Stores.Auth.loggedin,
+  static propTypes = {
+    location: PropTypes.object.isRequired,
   }
 
   componentWillMount() {
@@ -23,12 +25,26 @@ class UserInfo extends Component {
     Stores.Auth.logout()
   }
 
+  redirect = location => {
+    console.log(location)
+    if (location.search) {
+      window.location = `${location.search}&sso`
+    } else {
+      window.location = '?sso'
+    }
+  }
+
   render() {
-    if (!this.state.loggedin) {
+    if (!Stores.Auth.userLogged) {
       return (
-        <Link margin="0em 1em" href={`${window.location.href}?sso`}>
+        <Button
+          noMargin
+          onClick={() => {
+            this.redirect(this.props.location)
+          }}
+        >
           Login
-        </Link>
+        </Button>
       )
     }
     return (
@@ -50,4 +66,4 @@ const P = styled.p`
   text-align: center;
 `
 
-export default withRouter(UserInfo)
+export default withRouter(inject('Stores')(observer(UserInfo)))
