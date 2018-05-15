@@ -19,14 +19,14 @@ export default class KeepAlive extends Component {
   handleIdle = idle => {
     // user was idle for custom time and is logged in
     if (idle && Auth.userLogged) {
-      console.log('you will be logged out in 5s if you dont move')
+      console.log('you will be logged out in 30s if you dont move')
       this.timeout = setTimeout(() => {
         Auth.logout()
         this.setState({
           showNotice: true,
         })
         console.log('you have been logged out')
-      }, 5000)
+      }, 30000)
     }
 
     // user moved after being idle for custom time and is logged in
@@ -58,7 +58,7 @@ export default class KeepAlive extends Component {
     return (
       <React.Fragment>
         <Idle
-          timeout={5000}
+          timeout={30000}
           onChange={({ idle }) => this.handleIdle(idle)}
           eventCallback={this.renewSession}
           eventInterval={10000}

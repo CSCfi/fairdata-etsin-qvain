@@ -14,8 +14,13 @@ export default class Dropdown extends Component {
     this.content = React.createRef()
   }
 
-  onBlur = () => {
-    this.close()
+  onBlur = e => {
+    const currentTarget = e.currentTarget
+    setTimeout(() => {
+      if (!currentTarget.contains(document.activeElement)) {
+        this.close()
+      }
+    }, 0)
   }
 
   open = () => {
@@ -58,8 +63,13 @@ export default class Dropdown extends Component {
             position: 'relative',
           }}
         >
-          <Content open={this.state.open} innerRef={this.content} tabIndex="-1">
-            <Container onBlur={this.onBlur}>{this.props.children}</Container>
+          <Content
+            open={this.state.open}
+            innerRef={this.content}
+            tabIndex="-1"
+            onBlur={this.onBlur}
+          >
+            <Container>{this.props.children}</Container>
           </Content>
         </div>
       </div>
