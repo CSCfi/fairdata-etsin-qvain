@@ -1,31 +1,16 @@
 // nav left
-.navigation {
-  width: 100%;
-  display: flex;
-  max-height: 0;
-  overflow: hidden;
-  transition: all 0.5s ease;
-  flex-direction: column;
-  &.open {
-    max-height: 200px;
-  }
-  @include mappy-bp(md) {
-    align-items: stretch;
-    display: inline-flex;
-    max-height: initial;
-    flex-direction: row;
-    overflow: visible;
-  }
-}
 .nav-list {
   align-items: center;
   display: block;
-  margin-bottom: -4px;
   width: 100%;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
   @include mappy-bp(md) {
     align-items: stretch;
     display: inline-flex;
     max-height: initial;
+    margin-top: 0;
+    margin-bottom: -4px;
   }
   a.nav-link {
     text-transform: uppercase;
@@ -78,8 +63,8 @@
 // navi icon
 // https://codepen.io/designcouch/pen/Atyop
 #nav-icon {
-  width: 60px;
-  height: 45px;
+  width: 30px;
+  height: 26px;
   position: relative;
   -webkit-transform: rotate(0deg);
   -moz-transform: rotate(0deg);
@@ -94,10 +79,7 @@
 
 // my styles
 #nav-icon {
-  transform: scale(0.6);
-  position: absolute;
-  top: 2em;
-  right: 1.5em;
+  float: right;
   @include mappy-bp(md) {
     display: none;
   }
@@ -106,7 +88,7 @@
 #nav-icon span {
   display: block;
   position: absolute;
-  height: 8px;
+  height: 4px;
   width: 100%;
   background: $color-primary;
   border-radius: 9px;
@@ -131,7 +113,7 @@
 }
 
 #nav-icon span:nth-child(2) {
-  top: 18px;
+  top: 10px;
   -webkit-transform-origin: left center;
   -moz-transform-origin: left center;
   -o-transform-origin: left center;
@@ -139,7 +121,7 @@
 }
 
 #nav-icon span:nth-child(3) {
-  top: 36px;
+  top: 20px;
   -webkit-transform-origin: left center;
   -moz-transform-origin: left center;
   -o-transform-origin: left center;
@@ -151,8 +133,8 @@
   -moz-transform: rotate(45deg);
   -o-transform: rotate(45deg);
   transform: rotate(45deg);
-  top: -3px;
-  left: 8px;
+  top: 0px;
+  left: 4px;
 }
 
 #nav-icon.open span:nth-child(2) {
@@ -165,6 +147,6 @@
   -moz-transform: rotate(-45deg);
   -o-transform: rotate(-45deg);
   transform: rotate(-45deg);
-  top: 39px;
-  left: 8px;
+  top: 20px;
+  left: 4px;
 }

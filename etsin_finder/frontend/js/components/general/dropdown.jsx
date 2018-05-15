@@ -111,6 +111,7 @@ const Content = styled.div`
   margin-top: 0.4em;
   border-radius: 0.3em;
   background-color: white;
+  z-index: 2;
   /* border: ${p => (p.open ? '1px' : 0)} solid ${p => p.theme.color.dark}; */
   &:after {
     content: '';

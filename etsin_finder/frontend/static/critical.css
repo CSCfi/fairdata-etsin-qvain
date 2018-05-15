@@ -33,9 +33,6 @@ body {
   flex-direction: column;
 }
 
-.footer {
-  display: none;
-}
 .content {
   flex: 1;
 }
@@ -94,21 +91,22 @@ body {
 /* --- ETSIN --- */
 
 .header {
-  padding: 1.5rem 0 0;
   background-color: white;
   border-bottom: 4px solid #e7e9ed;
 }
 
-.top-logo {
-  margin-bottom: 1.5em;
-}
-.top-logo img {
-  height: 4em;
-}
-.top-logo .slogan {
+.header-row {
+  padding: 1rem 0 1rem;
   display: flex;
-  justify-content: flex-end;
-  align-items: flex-end;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  height: 2em;
+}
+
+.slogan {
   margin: 0;
   color: #4db3e7;
 }
@@ -126,8 +124,12 @@ body {
   padding-bottom: 5px;
 }
 @media all and (min-width: 48em) {
-  .top-nav-right {
-    position: absolute;
+  .logo {
+    height: 4em;
+  }
+  .header-row {
+    justify-content: flex-start;
+    align-items: flex-end;
   }
 }
 @media all and (min-width: 62em) {
@@ -136,27 +138,6 @@ body {
   }
   .top-nav-right .btn-etsin {
     margin-right: 6px;
-  }
-}
-
-.navigation {
-  width: 100%;
-  display: flex;
-  max-height: 0;
-  overflow: hidden;
-  transition: all 0.5s ease;
-  flex-direction: column;
-}
-.navigation.open {
-  max-height: 200px;
-}
-@media all and (min-width: 48em) {
-  .navigation {
-    align-items: stretch;
-    display: inline-flex;
-    max-height: initial;
-    flex-direction: row;
-    overflow: visible;
   }
 }
 
@@ -210,18 +191,12 @@ body {
 }
 
 #nav-icon {
-  width: 60px;
-  height: 45px;
+  width: 30px;
+  height: 26px;
   position: relative;
   cursor: pointer;
 }
 
-#nav-icon {
-  transform: scale(0.6);
-  position: absolute;
-  top: 2em;
-  right: 1.5em;
-}
 @media all and (min-width: 48em) {
   #nav-icon {
     display: none;
@@ -231,7 +206,7 @@ body {
 #nav-icon span {
   display: block;
   position: absolute;
-  height: 8px;
+  height: 4px;
   width: 100%;
   background: #4db3e7;
   border-radius: 9px;
@@ -242,26 +217,14 @@ body {
 
 #nav-icon span:nth-child(1) {
   top: 0px;
-  -webkit-transform-origin: left center;
-  -moz-transform-origin: left center;
-  -o-transform-origin: left center;
-  transform-origin: left center;
 }
 
 #nav-icon span:nth-child(2) {
-  top: 18px;
-  -webkit-transform-origin: left center;
-  -moz-transform-origin: left center;
-  -o-transform-origin: left center;
-  transform-origin: left center;
+  top: 10px;
 }
 
 #nav-icon span:nth-child(3) {
-  top: 36px;
-  -webkit-transform-origin: left center;
-  -moz-transform-origin: left center;
-  -o-transform-origin: left center;
-  transform-origin: left center;
+  top: 20px;
 }
 
 a {
