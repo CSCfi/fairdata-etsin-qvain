@@ -45,7 +45,6 @@
     <div class="loader"></div>
   </div>
   <!-- Path must be to static because other traffic is directed through Flask-->
-  <script src="/static/bundle.js" type="text/javascript"></script>
   <script type="text/javascript" defer>
     let fileref = document.createElement("link");
     fileref.rel = "stylesheet";
@@ -53,6 +52,7 @@
     fileref.href = "/static/main.bundle.css";
     document.getElementsByTagName("head")[0].appendChild(fileref)
   </script>
+  <script src="/static/bundle.js" type="text/javascript"></script>
 </body>
 
 </html>

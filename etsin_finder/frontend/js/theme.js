@@ -24,6 +24,7 @@ const etsinTheme = {
     insetDark: 'rgba(0, 0, 0, 0.3)',
   },
   breakpoints: {
+    xs: '410px',
     sm: '576px',
     md: '768px',
     lg: '992px',

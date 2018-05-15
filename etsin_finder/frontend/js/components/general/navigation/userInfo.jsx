@@ -23,7 +23,6 @@ class UserInfo extends Component {
   }
 
   redirect = location => {
-    console.log(location)
     this.setState({
       loading: true,
     })

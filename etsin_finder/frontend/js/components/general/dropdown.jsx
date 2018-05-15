@@ -24,7 +24,6 @@ export default class Dropdown extends Component {
   }
 
   open = () => {
-    console.log('open')
     this.setState(
       {
         open: true,
@@ -36,7 +35,6 @@ export default class Dropdown extends Component {
   }
 
   close = () => {
-    console.log('close')
     this.setState({
       open: false,
     })

@@ -23,7 +23,6 @@ class Header extends React.Component {
     } else {
       this.NavButton.current.classList.add('open')
     }
-    console.log(this.NavContainer)
     if (this.NavContainer.classList.contains('open')) {
       this.NavContainer.classList.remove('open')
     } else {

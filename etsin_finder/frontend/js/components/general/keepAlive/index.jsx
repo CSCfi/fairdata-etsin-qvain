@@ -19,25 +19,22 @@ export default class KeepAlive extends Component {
   handleIdle = idle => {
     // user was idle for custom time and is logged in
     if (idle && Auth.userLogged) {
-      console.log('you will be logged out in 30s if you dont move')
       this.timeout = setTimeout(() => {
         Auth.logout()
         this.setState({
           showNotice: true,
         })
-        console.log('you have been logged out')
       }, 30000)
     }
 
     // user moved after being idle for custom time and is logged in
     if (!idle && Auth.userLogged) {
-      console.log('ok you moved so no')
       clearTimeout(this.timeout)
     }
 
     // user was idle for custom time but is not logged in
     if (idle && !Auth.userLogged) {
-      console.log('user not logged in so just idling')
+      console.log('user idle')
     }
   }
 
@@ -48,7 +45,6 @@ export default class KeepAlive extends Component {
       this.setState({
         showNotice: false,
       })
-      console.log('session renewed')
     }
   }
 
