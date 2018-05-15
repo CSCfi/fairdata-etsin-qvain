@@ -8,6 +8,7 @@ class Loader extends Component {
     if (this.props.left) {
       return (
         <HolderLeft
+          size={this.props.size}
           margin={this.props.margin}
           className={`${this.props.active ? 'loader-active' : ''}`}
         >
@@ -16,7 +17,11 @@ class Loader extends Component {
       )
     }
     return (
-      <Holder margin={this.props.margin} className={`${this.props.active ? 'loader-active' : ''}`}>
+      <Holder
+        spinnerSize={this.props.spinnerSize}
+        margin={this.props.margin}
+        className={`${this.props.active ? 'loader-active' : ''}`}
+      >
         {this.spinner()}
       </Holder>
     )
@@ -37,7 +42,7 @@ const Holder = styled.div`
   &.loader-active {
     max-height: 4em;
     div {
-      border-width: 6px;
+      border-width: ${p => p.spinnerSize};
     }
   }
 `
@@ -70,6 +75,7 @@ Loader.defaultProps = {
   margin: '0',
   color: '',
   size: '2.5em',
+  spinnerSize: '6px',
 }
 
 Loader.propTypes = {
@@ -78,4 +84,5 @@ Loader.propTypes = {
   active: PropTypes.bool.isRequired,
   color: PropTypes.string,
   size: PropTypes.string,
+  spinnerSize: PropTypes.string,
 }

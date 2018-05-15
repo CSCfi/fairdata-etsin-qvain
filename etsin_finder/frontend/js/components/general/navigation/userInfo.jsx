@@ -7,18 +7,15 @@ import PropTypes from 'prop-types'
 import Stores from '../../../stores'
 import Button from '../button'
 import Dropdown from '../dropdown'
+import Loader from '../loader'
 
 class UserInfo extends Component {
   static propTypes = {
     location: PropTypes.object.isRequired,
   }
 
-  componentWillMount() {
-    this.checkLogin()
-  }
-
-  checkLogin = () => {
-    Stores.Auth.checkLogin()
+  state = {
+    loading: false,
   }
 
   logout = () => {
@@ -27,6 +24,9 @@ class UserInfo extends Component {
 
   redirect = location => {
     console.log(location)
+    this.setState({
+      loading: true,
+    })
     if (location.search) {
       window.location = `${location.search}&sso`
     } else {
@@ -37,14 +37,19 @@ class UserInfo extends Component {
   render() {
     if (!Stores.Auth.userLogged) {
       return (
-        <Button
-          noMargin
-          onClick={() => {
-            this.redirect(this.props.location)
-          }}
-        >
-          Login
-        </Button>
+        <div style={{ position: 'relative' }}>
+          <LoaderCont active={this.state.loading}>
+            <Loader active color="white" size="1.1em" spinnerSize="3px" />
+          </LoaderCont>
+          <Button
+            noMargin
+            onClick={() => {
+              this.redirect(this.props.location)
+            }}
+          >
+            <LoginText visible={!this.state.loading}>Login</LoginText>
+          </Button>
+        </div>
       )
     }
     return (
@@ -64,6 +69,17 @@ const P = styled.p`
   margin-bottom: 0;
   padding: 0.6em 1em;
   text-align: center;
+`
+
+const LoaderCont = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  position: absolute;
+  visibility: ${p => (p.active ? 'initial' : 'hidden')};
+`
+const LoginText = styled.span`
+  visibility: ${p => (p.visible ? 'initial' : 'hidden')};
 `
 
 export default withRouter(inject('Stores')(observer(UserInfo)))
