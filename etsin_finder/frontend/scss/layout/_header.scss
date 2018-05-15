@@ -1,22 +1,30 @@
 .header {
-  padding: 1.5rem 0 0;
   background-color: $bg-primary;
   border-bottom: 4px solid $color-lightgray;
 }
-.top-logo {
-  margin-bottom: 1.5em;
-  img {
-    height: 4em;
-  }
-  .slogan {
-    display: flex;
-    justify-content: flex-end;
+
+.header-row {
+  padding: 1rem 0 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  @include mappy-bp(md) {
+    justify-content: flex-start;
     align-items: flex-end;
-    margin: 0;
-    color: $color-primary;
   }
 }
 
-.top-nav {
-  justify-content: space-between;
+.logo {
+  height: 2em;
+  @include mappy-bp(md) {
+    height: 4em;
+  }
+}
+
+.slogan {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  margin: 0;
+  color: $color-primary;
 }
