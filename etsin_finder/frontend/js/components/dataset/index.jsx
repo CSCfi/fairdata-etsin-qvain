@@ -102,10 +102,12 @@ class Dataset extends React.Component {
           <NoticeBar bg="error" text={translate('tombstone.info')} />
         )}
         <div className="container regular-row">
-          <BackButton color="" noPadding margin="0 0 0.5em 0" onClick={this.goBack}>
-            <span aria-hidden>{'< '}</span>
-            <Translate content={'dataset.goBack'} />
-          </BackButton>
+          <div className="row">
+            <BackButton color="" noPadding margin="0 0 0.5em 0" onClick={this.goBack}>
+              <span aria-hidden>{'< '}</span>
+              <Translate content={'dataset.goBack'} />
+            </BackButton>
+          </div>
           <div className="row">
             <Content
               identifier={this.state.identifier}
