@@ -54,10 +54,10 @@ export default class KeepAlive extends Component {
     return (
       <React.Fragment>
         <Idle
-          timeout={30000}
+          timeout={600000}
           onChange={({ idle }) => this.handleIdle(idle)}
           eventCallback={this.renewSession}
-          eventInterval={10000}
+          eventInterval={60000}
         />
         {this.state.showNotice && (
           <NoticeBar
