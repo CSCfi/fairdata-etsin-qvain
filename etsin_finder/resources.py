@@ -1,3 +1,4 @@
+from flask import session
 from flask_mail import Message
 from flask_restful import abort, reqparse, Resource
 
@@ -14,6 +15,7 @@ from etsin_finder.email_utils import \
 from etsin_finder.utils import \
     get_metax_api_config, \
     strip_catalog_record
+from etsin_finder.views import is_authenticated, reset_flask_session_on_logout
 
 log = app.logger
 metax_service = MetaxAPIService(get_metax_api_config(app.config))
@@ -105,3 +107,45 @@ class Contact(Resource):
                 abort(500, message="Sending email failed")
 
         return '', 204
+
+
+class User(Resource):
+
+    """
+    Cf. saml attributes: https://wiki.eduuni.fi/display/CSCHAKA/funetEduPersonSchema2dot2
+    OID 1.3.6.1.4.1.5923.1.1.1.6 = eduPersonPrincipalName
+    OID 2.5.4.3 = cn / commonName
+    """
+
+    def get(self):
+        is_auth = is_authenticated()
+        user_info = {'is_authenticated': is_auth}
+        if is_auth:
+            eppn = session['samlUserdata'].get('urn:oid:1.3.6.1.4.1.5923.1.1.1.6', False)[0]
+            cn = session['samlUserdata'].get('urn:oid:2.5.4.3', False)[0]
+            if not eppn or not cn:
+                log.warn("User seems to be authenticated but eppn or cn not in session object. "
+                         "Saml userdata:\n{0}".format(session['samlUserdata']))
+            else:
+                user_info.update({
+                    'user_id': eppn,
+                    'user_display_name': cn
+                })
+
+        return user_info, 200
+
+
+class Session(Resource):
+
+    """
+    Session related
+    """
+
+    def get(self):
+        if is_authenticated():
+            session.modified = True
+        return '', 200
+
+    def delete(self):
+        reset_flask_session_on_logout()
+        return not is_authenticated(), 200

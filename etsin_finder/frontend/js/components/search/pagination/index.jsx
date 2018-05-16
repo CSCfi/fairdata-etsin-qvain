@@ -104,7 +104,7 @@ class Pagination extends Component {
     if (value === '...') {
       return (
         <li>
-          <PaginationItem className="pagination-rest">
+          <PaginationItem className="pagination-rest d-none d-md-block">
             <span className="sr-only">Skipped pages indicator</span>
             <span aria-hidden="true">...</span>
           </PaginationItem>
@@ -189,9 +189,10 @@ class Pagination extends Component {
 
   createPagination() {
     return (
-      <ul className="pagination">
+      <ul>
         {this.state.currentPage > 1 && (
           <TransparentButton
+            className="d-none d-lg-block"
             onClick={e => {
               this.changePage(e, this.state.currentPage - 1)
             }}
@@ -213,6 +214,7 @@ class Pagination extends Component {
           this.singlePage(this.state.pageAmount, true)}
         {this.state.currentPage < this.state.pageAmount && (
           <TransparentButton
+            className="d-none d-lg-block"
             onClick={e => {
               this.changePage(e, this.state.currentPage + 1)
             }}
@@ -245,7 +247,7 @@ const PaginationItem = styled.span.attrs({
   cursor: pointer;
   display: block;
   text-align: center;
-  margin: 0 0.2em;
+  margin: 0.2em 0.2em;
   background-color: ${props => props.theme.color.lightgray};
   width: ${props => props.size};
   height: ${props => props.size};
@@ -274,6 +276,13 @@ const PaginationContainer = styled.div`
   justify-content: center;
   flex-wrap: wrap;
   display: flex;
+  ul {
+    display: flex;
+    padding-left: 0;
+    list-style: none;
+    border-radius: 0.25rem;
+    flex-wrap: wrap;
+  }
 `
 
 Pagination.propTypes = {
@@ -283,4 +292,4 @@ Pagination.propTypes = {
   currentPage: PropTypes.number.isRequired,
 }
 
-export default inject('Stores')(observer(withRouter(Pagination)))
+export default withRouter(inject('Stores')(observer(Pagination)))

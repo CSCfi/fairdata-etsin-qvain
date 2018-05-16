@@ -1,14 +1,6 @@
 import styled from 'styled-components'
 import { opacify, darken } from 'polished'
-import theme from '../../theme'
-
-// check if there is a color matching the string in the theme
-const checkColor = color => {
-  if (theme.color[color] !== undefined) {
-    return theme.color[color]
-  }
-  return color
-}
+import checkColor from '../../utils/styledUtils'
 
 // prettier-ignore
 const Button = styled.button.attrs({
@@ -22,7 +14,7 @@ const Button = styled.button.attrs({
   border: ${props => (props.thin ? '1px' : '2px')} solid ${props => (props.color ? checkColor(props.color) : props.theme.color.primary)};
   background-color: ${props => (props.color ? checkColor(props.color) : props.theme.color.primary)};
   color: ${props => (props.color !== 'white' ? 'white' : props.theme.color.primary)};
-  border-radius: 0.25em;
+  border-radius: ${p => (p.br ? p.br : '0.25em')};
   line-height: 1.25;
   transition: 0.3s ease;
   &:hover {

@@ -47,6 +47,7 @@
     "react-a11y-announcer": "^1.2.0",
     "react-dom": "^16.3.2",
     "react-element-to-jsx-string": "^13.2.0",
+    "react-idle": "^3.0.0",
     "react-interpolate-component": "^0.12.0",
     "react-modal": "^3.4.4",
     "react-router-dom": "^4.2.2",

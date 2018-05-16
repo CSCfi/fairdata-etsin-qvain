@@ -82,6 +82,8 @@ const Item = styled.div`
       transition: all 0.1s ease;
     }
     &:hover {
+      color: inherit;
+      text-decoration: none;
       & > div {
         border: 2px solid ${props => props.theme.color.primary};
         box-shadow: 0 2px 3px 0px ${props => props.theme.color.lightgray};

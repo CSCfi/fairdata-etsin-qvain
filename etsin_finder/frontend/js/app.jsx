@@ -21,6 +21,7 @@ export default class App extends Component {
   constructor() {
     super()
     this.focusContent = this.focusContent.bind(this)
+    Stores.Auth.checkLogin()
   }
 
   focusContent() {
