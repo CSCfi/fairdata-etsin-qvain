@@ -41,7 +41,7 @@ class UserInfo extends Component {
             <Loader active color="white" size="1.1em" spinnerSize="3px" />
           </LoaderCont>
           <Button
-            noMargin
+            margin="0 0 0 0.5em"
             onClick={() => {
               this.redirect(this.props.location)
             }}

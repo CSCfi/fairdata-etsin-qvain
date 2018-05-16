@@ -123,7 +123,7 @@ const finnish = {
     dataset: 'Aineisto',
     datasets: 'Aineistot',
     events: 'Tunnisteet ja tapahtumat',
-    help: 'Ohjeet & Info',
+    help: 'Ohjeet',
     home: 'Koti',
     organizations: 'Organisaatiot',
   },

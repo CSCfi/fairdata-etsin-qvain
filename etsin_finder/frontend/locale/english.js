@@ -130,7 +130,7 @@ const english = {
     dataset: 'Dataset',
     datasets: 'Datasets',
     events: 'Identifiers and events',
-    help: 'Help & About',
+    help: 'Help',
     home: 'Home',
     organizations: 'Organizations',
   },
