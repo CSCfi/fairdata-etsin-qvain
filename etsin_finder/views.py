@@ -5,6 +5,7 @@ from onelogin.saml2.auth import OneLogin_Saml2_Auth
 from onelogin.saml2.utils import OneLogin_Saml2_Utils
 
 from etsin_finder.finder import app
+from etsin_finder.utils import executing_travis
 
 log = app.logger
 
@@ -46,7 +47,6 @@ def _render_index_template(saml_errors=[], slo_success=False):
 
 # SAML AUTHENTICATION RELATED
 
-# TODO: Remove this route at latest in production
 @app.route('/saml_metadata/')
 def saml_metadata():
     auth = get_saml_auth(request)
@@ -120,6 +120,8 @@ def init_saml_auth(saml_prepared_flask_request):
 
 
 def is_authenticated():
+    if executing_travis():
+        return False
     auth = get_saml_auth(request)
     return True if auth.is_authenticated and 'samlUserdata' in session and len(session['samlUserdata']) > 0 else False
 
