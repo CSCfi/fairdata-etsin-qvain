@@ -15,6 +15,7 @@ const CodeContainer = styled.code`
   margin-top: 4em;
   position: relative;
   border: 0px;
+  z-index: -100;
   &::before {
     content: 'code:';
     color: #ccc;

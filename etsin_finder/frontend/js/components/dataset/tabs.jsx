@@ -54,16 +54,29 @@ Tabs.propTypes = {
 
 /* prettier-ignore */
 const EtsinTabs = styled.ul`
-  border-bottom-color: ${props => props.theme.color.primary};
+  display: flex;
+  flex-wrap: wrap;
+  padding-left: 0;
+  margin-bottom: 0;
+  list-style: none;
+  border-bottom: 1px solid ${props => props.theme.color.primary};
+  margin-top: 5px;
   .nav-item {
+    margin-bottom: -1px;
     &:first-of-type {
       margin-left: 1em;
     }
   }
   .nav-link {
+    display: block;
+    padding: 0.5rem 1rem;
+    border: 1px solid transparent;
     border-top-right-radius: 0.5em;
     border-top-left-radius: 0.5em;
     transition: all ease-out 0.3s;
+    &:hover, &:focus {
+      text-decoration: none;
+    }
     &:not(.active) {
       background-color: transparent;
       color: ${props => props.theme.color.medgray};
@@ -73,9 +86,13 @@ const EtsinTabs = styled.ul`
       }
     }
     &.active,
-    &:hover {
+    &:hover,
+    &:focus {
       color: ${props => props.theme.color.primary};
       border-color: ${props => props.theme.color.primary} ${props => props.theme.color.primary} transparent ${props => props.theme.color.primary};
+    }
+    &.active {
+      background-color: white;
     }
   }
 `

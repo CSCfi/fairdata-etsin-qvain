@@ -15,6 +15,8 @@ body:not(.user-is-tabbing) .btn:focus {
 }
 
 .row {
+  display: flex;
+  flex-wrap: wrap;
   margin-left: 0px;
   margin-right: 0px;
   @include mappy-bp(sm) {
@@ -78,4 +80,8 @@ body:not(.user-is-tabbing) .btn:focus {
   clip-path: polygon(0px 0px, 0px 0px, 0px 0px);
   -webkit-clip-path: polygon(0px 0px, 0px 0px, 0px 0px);
   overflow: hidden !important;
+}
+
+.text-center {
+  text-align: center !important;
 }

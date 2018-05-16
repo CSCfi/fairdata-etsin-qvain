@@ -11,11 +11,11 @@
 
 /* Layout */
 @import 'layout/header';
+@import 'layout/responsive';
 
 /* Components */
 @import 'components/dataset/dsContent';
 @import 'components/dataset/dsSidebar';
-@import 'components/dataset/tabs';
 @import 'components/search/filter';
 @import 'components/navi';
 @import 'components/userInfo';
