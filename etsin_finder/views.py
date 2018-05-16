@@ -100,7 +100,7 @@ def saml_attribute_consumer_service():
 def saml_single_logout_service():
     auth = get_saml_auth(request)
     slo_success = False
-    url = auth.process_slo(delete_session_cb = lambda: session.clear())
+    url = auth.process_slo(delete_session_cb=lambda: session.clear())
     errors = auth.get_errors()
     if len(errors) == 0:
         if url is not None:
@@ -147,5 +147,5 @@ def reset_flask_session_on_login():
 
 
 def reset_flask_session_on_logout():
-   session.clear()
-   session.permanent = False
+    session.clear()
+    session.permanent = False

@@ -21,7 +21,6 @@ before_install:
 - eval "$(ssh-agent -s)"
 - ssh-add ~/.ssh/id_rsa
 - sudo apt-get install npm libxml2-dev libxmlsec1-dev libxmlsec1-openssl
-- pip install ansible
 
 install:
 - pip install -r requirements.txt

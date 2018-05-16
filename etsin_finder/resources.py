@@ -149,4 +149,3 @@ class Session(Resource):
     def delete(self):
         reset_flask_session_on_logout()
         return not is_authenticated(), 200
-
