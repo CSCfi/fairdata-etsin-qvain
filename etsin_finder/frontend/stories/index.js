@@ -10,6 +10,7 @@ import Hero from '../js/components/general/hero'
 import LangToggle from '../js/components/general/navigation/langToggle'
 import Button, {
   InvertedButton,
+  InvertedLink,
   Link,
   TransparentButton,
   LinkButton,
@@ -95,6 +96,10 @@ storiesOf('General/Button', module)
         <Link href="https://google.com">Link</Link>
       </ComponentCode>
       <Separator />
+      <ComponentCode displayName={() => 'InvertedLink'}>
+        <InvertedLink href="https://google.com">InvertedLink</InvertedLink>
+      </ComponentCode>
+      <Separator />
       <ComponentCode displayName={() => 'TransparentButton'}>
         <TransparentButton>Transparent Button</TransparentButton>
       </ComponentCode>
@@ -107,25 +112,31 @@ storiesOf('General/Button', module)
   .add('Color error', () => (
     <Container center maxWidth="800px">
       <ComponentCode displayName={() => 'Button'}>
-        <Button color={theme.color.error}>Primary</Button>
+        <Button color={'error'}>Primary</Button>
       </ComponentCode>
       <Separator />
       <ComponentCode displayName={() => 'InvertedButton'}>
-        <InvertedButton color={theme.color.error}>Inverted</InvertedButton>
+        <InvertedButton color={'error'}>Inverted</InvertedButton>
       </ComponentCode>
       <Separator />
       <ComponentCode displayName={() => 'Link'}>
-        <Link href="https://google.com" color={theme.color.error}>
+        <Link href="https://google.com" color={'error'}>
           Link
         </Link>
       </ComponentCode>
       <Separator />
+      <ComponentCode displayName={() => 'InvertedLink'}>
+        <InvertedLink href="https://google.com" color="error">
+          InvertedLink
+        </InvertedLink>
+      </ComponentCode>
+      <Separator />
       <ComponentCode displayName={() => 'TransparentButton'}>
-        <TransparentButton color={theme.color.error}>Transparent Button</TransparentButton>
+        <TransparentButton color={'error'}>Transparent Button</TransparentButton>
       </ComponentCode>
       <Separator />
       <ComponentCode displayName={() => 'LinkButton'}>
-        <LinkButton color={theme.color.error}>LinkButton</LinkButton>
+        <LinkButton color={'error'}>LinkButton</LinkButton>
       </ComponentCode>
     </Container>
   ))

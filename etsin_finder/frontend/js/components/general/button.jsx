@@ -81,8 +81,35 @@ export const InvertedButton = Button.extend`
     border-color: ${props => (props.color ? checkColor(props.color) : props.theme.color.primary)};
     color: ${props => (props.color === 'white' ? props.theme.color.primary : 'white')};
     &:hover, &:focus {
-      background-color: ${props => (props.color ? darken(0.1, props.color) : darken(0.1, props.theme.color.primary))};
-      border-color: ${props => (props.color ? darken(0.1, props.color) : darken(0.1, props.theme.color.primary))};
+      background-color: ${props => (props.color ? darken(0.1, checkColor(props.color)) : darken(0.1, props.theme.color.primary))};
+      border-color: ${props => (props.color ? darken(0.1, checkColor(props.color)) : darken(0.1, props.theme.color.primary))};
+    }
+  }
+`
+
+// prettier-ignore
+export const InvertedLink = Link.extend`
+  border-color: ${props => (props.color ? checkColor(props.color) : props.theme.color.primary)};
+  background-color: transparent;
+  color: ${props => (props.color ? checkColor(props.color) : props.theme.color.primary)};
+  &:hover, &:focus {
+    background-color: ${props => (props.color ? checkColor(props.color) : props.theme.color.primary)};
+    border-color: ${props => (props.color ? checkColor(props.color) : props.theme.color.primary)};
+    color: ${props => (props.color === 'white' ? props.theme.color.primary : 'white')};
+  }
+  &:disabled {
+    pointer-events: none;
+    background-color: transparent;
+    border-color: ${props => opacify(-0.5, (props.color ? checkColor(props.color) : props.theme.color.primary))};
+    color: ${props => opacify(-0.5, (props.color ? checkColor(props.color) : props.theme.color.primary))};
+  }
+  &.active {
+    background-color: ${props => (props.color ? checkColor(props.color) : props.theme.color.primary)};
+    border-color: ${props => (props.color ? checkColor(props.color) : props.theme.color.primary)};
+    color: ${props => (props.color === 'white' ? props.theme.color.primary : 'white')};
+    &:hover, &:focus {
+      background-color: ${props => darken(0.1, (props.color ? checkColor(props.color) : props.theme.color.primary))};
+      border-color: ${props => darken(0.1, (props.color ? checkColor(props.color) : props.theme.color.primary))};
     }
   }
 `
@@ -96,7 +123,7 @@ export const TransparentButton = styled(Button).attrs({
   color: ${props => (props.color ? checkColor(props.color) : props.theme.color.darkgray)};
   &:hover {
     background-color: transparent;
-    color: ${p => (p.color ? darken(0.1, p.color) : darken(0.1, p.theme.color.primary))};
+    color: ${p => darken(0.1, p.color ? checkColor(p.color) : p.theme.color.primary)};
     text-decoration: underline;
   }
   &:focus {
@@ -116,7 +143,7 @@ export const LinkButton = TransparentButton.extend`
   padding: 0;
   color: ${props => (props.color ? checkColor(props.color) : props.theme.color.primary)};
   &:hover {
-    color: ${p => (p.color ? darken(0.1, p.color) : darken(0.1, p.theme.color.primary))};
+    color: ${p => darken(0.1, p.color ? checkColor(p.color) : p.theme.color.primary)};
   }
 `
 
