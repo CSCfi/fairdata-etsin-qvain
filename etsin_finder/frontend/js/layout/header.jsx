@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom'
 import Translate from 'react-translate-component'
 
 import EtsinLogo from '../../static/images/Etsin_300px.png'
-import SecondNav from '../components/general/navigation/secondnav'
+import Settings from '../components/general/navigation/settings'
 
 export default class Header extends Component {
   state = {}
@@ -50,7 +50,7 @@ export default class Header extends Component {
             </NavItem>
           </NaviCont>
           <Right>
-            <SecondNav />
+            <Settings />
           </Right>
         </Positioner>
       </HeaderBar>
