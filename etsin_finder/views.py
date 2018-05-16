@@ -1,4 +1,4 @@
-from urllib.parse import urlparse
+from urllib.parse import urlparse, quote
 
 from flask import make_response, render_template, redirect, request, session
 from onelogin.saml2.auth import OneLogin_Saml2_Auth
@@ -12,37 +12,39 @@ log = app.logger
 
 # REACT APP RELATED
 
+@app.route('/sso')
+def login():
+    auth = get_saml_auth(request)
+    redirect_url = quote(request.args.get('relay', '/'))
+    return redirect(auth.login(redirect_url))
+
+
+@app.route('/slo')
+def logout():
+    auth = get_saml_auth(request)
+    name_id = None
+    session_index = None
+    if 'samlNameId' in session:
+        name_id = session['samlNameId']
+    if 'samlSessionIndex' in session:
+        session_index = session['samlSessionIndex']
+
+    return redirect(auth.logout(name_id=name_id, session_index=session_index))
+
+
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def frontend_app(path):
-    if 'sso' in request.args:
-        auth = get_saml_auth(request)
-        return redirect(auth.login())
-
-    if 'slo' in request.args:
-        auth = get_saml_auth(request)
-        name_id = None
-        session_index = None
-        if 'samlNameId' in session:
-            name_id = session['samlNameId']
-        if 'samlSessionIndex' in session:
-            session_index = session['samlSessionIndex']
-
-        return redirect(auth.logout(name_id=name_id, session_index=session_index))
-
     return _render_index_template()
 
 
 def _render_index_template(saml_errors=[], slo_success=False):
-    saml_attributes = False
     is_auth = is_authenticated()
     if is_auth:
         saml_attributes = session['samlUserdata'].items()
-        is_auth = True
         log.debug("SAML attributes: {0}".format(saml_attributes))
 
-    return render_template('index.html', title='Front Page', saml_errors=saml_errors, saml_attributes=saml_attributes,
-                           is_authenticated=is_auth, slo_success=slo_success)
+    return render_template('index.html')
 
 
 # SAML AUTHENTICATION RELATED
@@ -150,4 +152,3 @@ def reset_flask_session_on_login():
 
 def reset_flask_session_on_logout():
     session.clear()
-    session.permanent = False
