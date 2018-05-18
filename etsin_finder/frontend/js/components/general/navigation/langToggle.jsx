@@ -9,9 +9,11 @@ import { TransparentButton, InvertedButton } from '../button'
 class LangToggle extends Component {
   static defaultProps = {
     inverted: false,
+    margin: '0.3em 0.3em',
   }
   static propTypes = {
     inverted: PropTypes.bool,
+    margin: PropTypes.string,
   }
 
   state = {
@@ -39,7 +41,14 @@ class LangToggle extends Component {
           {this.state.announce}
         </div>
         {this.props.inverted ? (
-          <InvertedButton onClick={this.changeLang}>{Locale.currentLang}</InvertedButton>
+          <InvertedButton
+            color="dark"
+            margin={this.props.margin}
+            padding="0.3em 1em 0.4em"
+            onClick={this.changeLang}
+          >
+            {Locale.currentLang}
+          </InvertedButton>
         ) : (
           <TransparentButton onClick={this.changeLang}>{Locale.currentLang}</TransparentButton>
         )}

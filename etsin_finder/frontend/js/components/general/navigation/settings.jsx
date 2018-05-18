@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import Translate from 'react-translate-component'
 import styled from 'styled-components'
 
-import UserInfo from './userInfo'
+import Login from './loginButton'
 import Button from '../button'
 import LangToggle from './langToggle'
 // import { VerticalSeparator } from '../separator'
@@ -19,7 +19,7 @@ export default class Settings extends Component {
             <Translate content="addDataset" />
           </Button>
           <LangToggle />
-          <UserInfo />
+          <Login />
         </Positioner>
       </React.Fragment>
     )

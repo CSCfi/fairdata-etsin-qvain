@@ -10,6 +10,8 @@ import faCog from '@fortawesome/fontawesome-free-solid/faCog'
 import Accessibility from '../../../stores/view/accessibility'
 import DropdownMenu from './dropdownMenu'
 import LangToggle from './langToggle'
+import Login from './loginButton'
+import Button from '../button'
 
 export default class MobileNavi extends React.Component {
   render() {
@@ -43,7 +45,17 @@ export default class MobileNavi extends React.Component {
           </NavItem>
         </DropdownMenu>
         <DropdownMenu buttonContent={<FontawesomeIcon icon={faCog} size="lg" />} transparentButton>
-          <LangToggle />
+          <CustomContainer>
+            <Row>
+              <LangToggle inverted margin="0.4em 0.4em 0.4em 0em" />
+              <Button width="100%" margin="0.4em 0em 0.4em 0.4em">
+                Add Dataset
+              </Button>
+            </Row>
+            <Row>
+              <Login width="100%" margin="0.4em 0" />
+            </Row>
+          </CustomContainer>
         </DropdownMenu>
       </MobileItems>
     )
@@ -56,6 +68,11 @@ const MobileItems = styled.div`
   @media screen and (min-width: ${p => p.theme.breakpoints.lg}) {
     display: none;
   }
+`
+
+const Row = styled.div`
+  display: inline-flex;
+  width: 100%;
 `
 
 const NavItem = styled(NavLink)`
@@ -86,4 +103,11 @@ const NavItem = styled(NavLink)`
   &:hover {
     color: ${p => p.theme.color.primary};
   }
+`
+
+const CustomContainer = styled.div`
+  margin: 0 auto;
+  padding: 1em 1.3em;
+  max-width: 400px;
+  width: 100%;
 `
