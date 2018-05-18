@@ -1,12 +1,10 @@
 import React, { Component } from 'react'
-// import Translate from 'react-translate-component'
+import Translate from 'react-translate-component'
 import styled from 'styled-components'
-import FontawesomeIcon from '@fortawesome/react-fontawesome'
-import faCog from '@fortawesome/fontawesome-free-solid/faCog'
 
 import UserInfo from './userInfo'
+import Button from '../button'
 import LangToggle from './langToggle'
-import { TransparentButton } from '../button'
 // import { VerticalSeparator } from '../separator'
 
 export default class Settings extends Component {
@@ -16,13 +14,10 @@ export default class Settings extends Component {
   render() {
     return (
       <React.Fragment>
-        <TransparentButton noMargin>
-          <FontawesomeIcon icon={faCog} />
-        </TransparentButton>
         <Positioner>
-          {/* <Button noMargin width="max-content" onClick={this.alertButton}>
+          <Button noMargin width="max-content" onClick={this.alertButton}>
             <Translate content="addDataset" />
-          </Button> */}
+          </Button>
           <LangToggle />
           <UserInfo />
         </Positioner>
@@ -32,5 +27,8 @@ export default class Settings extends Component {
 }
 
 const Positioner = styled.div`
-  display: inline-flex;
+  display: none;
+  @media screen and (min-width: ${p => p.theme.breakpoints.lg}) {
+    display: inline-flex;
+  }
 `

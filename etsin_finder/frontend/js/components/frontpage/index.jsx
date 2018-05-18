@@ -29,9 +29,9 @@ export default class FrontPage extends Component {
           <div className="regular-row">
             <TextHolder>
               <KeyValues />
-              <Translate content="home.title1" component="h2" unsafe />
+              <Translate content="home.title1" component="h2" />
               <Translate content="home.para1" component="p" unsafe />
-              <Translate content="home.title2" component="h2" unsafe />
+              <Translate content="home.title2" component="h2" />
               <Translate content="home.para2" component="p" unsafe />
             </TextHolder>
           </div>

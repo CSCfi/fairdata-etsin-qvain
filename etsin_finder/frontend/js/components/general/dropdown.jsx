@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { darken } from 'polished'
 import PropTypes from 'prop-types'
 
-import Button from './button'
+import Button, { TransparentButton } from './button'
 
 export default class Dropdown extends Component {
   constructor(props) {
@@ -48,14 +48,25 @@ export default class Dropdown extends Component {
           width: 'max-content',
         }}
       >
-        <CustomButton
-          role="button"
-          open={this.state.open}
-          aria-pressed={this.state.open}
-          onClick={() => (this.state.open ? this.close() : this.open())}
-        >
-          <span className="sr-only">Open user </span>Profile
-        </CustomButton>
+        {this.props.transparentButton ? (
+          <CustomTransparentButton
+            role="button"
+            open={this.state.open}
+            aria-pressed={this.state.open}
+            onClick={() => (this.state.open ? this.close() : this.open())}
+          >
+            {this.props.buttonContent}
+          </CustomTransparentButton>
+        ) : (
+          <CustomButton
+            role="button"
+            open={this.state.open}
+            aria-pressed={this.state.open}
+            onClick={() => (this.state.open ? this.close() : this.open())}
+          >
+            {this.props.buttonContent}
+          </CustomButton>
+        )}
         <div
           style={{
             position: 'relative',
@@ -76,6 +87,30 @@ export default class Dropdown extends Component {
 }
 
 const CustomButton = styled(Button)`
+  position: relative;
+  ${p =>
+    p.open &&
+    `
+    &:after {
+      bottom: -20px;
+      content: '';
+      position: absolute;
+      display: block;
+      width: 10px;
+      border: 10px solid transparent;
+      border-top: 10px solid ${p.theme.color.primary};
+      margin-left: auto;
+      margin-right: auto;
+      left: 0;
+      right: 0;
+      transition: 0.2s ease;
+    }
+    &:hover:after {
+      border-top: 10px solid ${darken(0.1, p.theme.color.primary)};
+    }`};
+`
+
+const CustomTransparentButton = styled(TransparentButton)`
   position: relative;
   ${p =>
     p.open &&
@@ -125,6 +160,12 @@ const Container = styled.div`
   flex-direction: column;
 `
 
+Dropdown.defaultProps = {
+  transparentButton: false,
+}
+
 Dropdown.propTypes = {
   children: PropTypes.node.isRequired,
+  buttonContent: PropTypes.node.isRequired,
+  transparentButton: PropTypes.bool,
 }

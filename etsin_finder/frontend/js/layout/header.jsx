@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import { NavLink } from 'react-router-dom'
-import Translate from 'react-translate-component'
 
 import EtsinLogo from '../../static/images/Etsin_300px.png'
 import Settings from '../components/general/navigation/settings'
+import Navi from '../components/general/navigation/index'
+import MobileNavi from '../components/general/navigation/mobileNavi'
 
 export default class Header extends Component {
   state = {}
@@ -16,40 +16,10 @@ export default class Header extends Component {
             <Img alt="Fairdata-Etsin logo" src={EtsinLogo} />
           </LogoCont>
           <NaviCont>
-            <NavItem
-              exact
-              to="/"
-              // onClick={() => {
-              //   // this.props.closeNavi()
-              //   // Accessibility.setNavText(
-              //   //   translate('changepage', { page: translate('nav.datasets') })
-              //   // )
-              // }}
-            >
-              <Translate content="nav.home" />
-            </NavItem>
-            <NavItem
-              to="/datasets"
-              // onClick={() => {
-              //   // this.props.closeNavi()
-              //   // Accessibility.setNavText(
-              //   //   translate('changepage', { page: translate('nav.datasets') })
-              //   // )
-              // }}
-            >
-              <Translate content="nav.datasets" />
-            </NavItem>
-            <NavItem
-              to="/about"
-              // onClick={() => {
-              //   // this.props.closeNavi()
-              //   // Accessibility.setNavText(translate('changepage', { page: translate('nav.help') }))
-              // }}
-            >
-              <Translate content="nav.help" />
-            </NavItem>
+            <Navi />
           </NaviCont>
           <Right>
+            <MobileNavi />
             <Settings />
           </Right>
         </Positioner>
@@ -84,39 +54,19 @@ const Img = styled.img`
 `
 
 const NaviCont = styled.div`
-  display: flex;
+  display: none;
   justify-content: center;
   align-items: center;
   height: 100%;
+  @media screen and (min-width: ${p => p.theme.breakpoints.lg}) {
+    display: flex;
+  }
 `
 
 const Right = styled.div`
   width: 12em;
   display: flex;
   justify-content: flex-end;
-`
-
-const NavItem = styled(NavLink)`
-  margin: 0 1.5em;
-  color: ${p => p.theme.color.dark};
-  text-transform: uppercase;
-  height: 100%;
-  display: flex;
   align-items: center;
-  position: relative;
-  justify-content: center;
-  &.active {
-    color: ${p => p.theme.color.primary};
-    &::after {
-      content: '';
-      position: absolute;
-      display: block;
-      border: 8px solid transparent;
-      border-bottom: 8px solid ${p => p.theme.color.primary};
-      bottom: 0;
-    }
-  }
-  &:hover {
-    color: ${p => p.theme.color.primary};
-  }
+  height: 100%;
 `
