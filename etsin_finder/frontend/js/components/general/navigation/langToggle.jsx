@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { inject, observer } from 'mobx-react'
 import PropTypes from 'prop-types'
+import styled from 'styled-components'
 
 import Locale from '../../../stores/view/language'
 import '../../../../locale/translations'
@@ -34,6 +35,14 @@ class LangToggle extends Component {
     }, 500)
   }
 
+  otherLang = () =>
+    Locale.languages.map(lang => {
+      if (lang !== Locale.currentLang) {
+        return <Lang>{lang}</Lang>
+      }
+      return null
+    })
+
   render() {
     return (
       <div>
@@ -47,14 +56,21 @@ class LangToggle extends Component {
             padding="0.3em 1em 0.4em"
             onClick={this.changeLang}
           >
-            {Locale.currentLang}
+            {this.otherLang()}
           </InvertedButton>
         ) : (
-          <TransparentButton onClick={this.changeLang}>{Locale.currentLang}</TransparentButton>
+          <TransparentButton onClick={this.changeLang}>{this.otherLang()}</TransparentButton>
         )}
       </div>
     )
   }
 }
+
+const Lang = styled.span`
+  border-left: 1px solid ${p => p.theme.color.dark};
+  &:first-of-type {
+    border-left: none;
+  }
+`
 
 export default inject('Stores')(observer(LangToggle))
