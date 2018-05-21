@@ -38,7 +38,7 @@ class LangToggle extends Component {
   otherLang = () =>
     Locale.languages.map(lang => {
       if (lang !== Locale.currentLang) {
-        return <Lang>{lang}</Lang>
+        return <Lang key={lang}>{lang}</Lang>
       }
       return null
     })

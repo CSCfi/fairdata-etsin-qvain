@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
+import Translate from 'react-translate-component'
 
 import ElasticQuery from '../../../stores/view/elasticquery'
 import { InvertedButton } from '../../general/button'
@@ -57,7 +58,10 @@ export default class FilterToggle extends Component {
           {ElasticQuery.filter.length > 0 && (
             <Amount>
               {ElasticQuery.filter.length}
-              <span className="sr-only"> active</span>
+              <span className="sr-only">
+                {' '}
+                <Translate content="search.filter.SRactive" />
+              </span>
             </Amount>
           )}
           <Children>{this.props.children}</Children>

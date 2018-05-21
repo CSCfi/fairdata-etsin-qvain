@@ -3,6 +3,7 @@ import { withRouter } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { inject, observer } from 'mobx-react'
 import styled from 'styled-components'
+import Translate from 'react-translate-component'
 
 import ElasticQuery from '../../../stores/view/elasticquery'
 import { TransparentButton } from '../../general/button'
@@ -105,7 +106,9 @@ class Pagination extends Component {
       return (
         <li>
           <PaginationItem className="pagination-rest d-none d-md-block">
-            <span className="sr-only">Skipped pages indicator</span>
+            <span className="sr-only">
+              <Translate content="search.pagination.SRskipped" />
+            </span>
             <span aria-hidden="true">...</span>
           </PaginationItem>
         </li>
@@ -119,12 +122,16 @@ class Pagination extends Component {
               this.changePage(e, value)
             }}
           >
-            <span className="sr-only">page </span>
+            <span className="sr-only">
+              <Translate content="search.pagination.SRpage" />{' '}
+            </span>
             {value}
           </PaginationButton>
         ) : (
           <PaginationItem className="current">
-            <span className="sr-only">current page</span>
+            <span className="sr-only">
+              <Translate content="search.pagination.SRcurrentpage" />{' '}
+            </span>
             <span aria-hidden="true">{value}</span>
           </PaginationItem>
         )}
@@ -197,7 +204,7 @@ class Pagination extends Component {
               this.changePage(e, this.state.currentPage - 1)
             }}
           >
-            {'<'} Previous page
+            {'<'} <Translate content="search.pagination.prev" />
           </TransparentButton>
         )}
         {// first page
@@ -219,7 +226,7 @@ class Pagination extends Component {
               this.changePage(e, this.state.currentPage + 1)
             }}
           >
-            Next page {'>'}
+            <Translate content="search.pagination.next" /> {'>'}
           </TransparentButton>
         )}
       </ul>
@@ -233,7 +240,7 @@ class Pagination extends Component {
     return (
       <PaginationContainer className="col-lg-12">
         <p id="pagination-label" className="pagination-label sr-only" aria-hidden="true">
-          Pagination
+          <Translate content="search.pagination.SRpagination" />
         </p>
         {this.createPagination()}
       </PaginationContainer>

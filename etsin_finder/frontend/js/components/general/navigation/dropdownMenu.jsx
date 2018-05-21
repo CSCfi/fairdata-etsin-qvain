@@ -12,12 +12,16 @@ export default class DropdownMenu extends Component {
       open: false,
     }
     this.content = React.createRef()
+    this.button = React.createRef()
   }
 
   onBlur = e => {
     const currentTarget = e.currentTarget
     setTimeout(() => {
-      if (!currentTarget.contains(document.activeElement)) {
+      if (
+        !currentTarget.contains(document.activeElement) &&
+        this.button.current !== document.activeElement
+      ) {
         this.close()
       }
     }, 0)
@@ -48,6 +52,7 @@ export default class DropdownMenu extends Component {
             role="button"
             color="primary"
             open={this.state.open}
+            innerRef={this.button}
             aria-pressed={this.state.open}
             onClick={() => (this.state.open ? this.close() : this.open())}
           >

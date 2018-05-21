@@ -101,6 +101,8 @@ const english = {
     infrastructure: 'Infrastructure',
     keywords: 'Keywords',
     license: 'License',
+    harvested: 'Harvested',
+    cumulative: 'Cumulative',
     permanent_link: 'Permanent link to this page',
     project: 'Project',
     publisher: 'Publisher',
@@ -143,9 +145,22 @@ const english = {
   search: {
     placeholder: 'Search term',
     sorting: {
+      sort: 'Sort',
       best: 'Best Match',
       dateA: 'Date ascending',
       dateD: 'Date descending',
+    },
+    filter: {
+      filter: 'Filter',
+      SRactive: 'active',
+    },
+    pagination: {
+      prev: 'Previous page',
+      next: 'Next page',
+      SRskipped: 'Skipped pages indicator',
+      SRpage: 'page',
+      SRcurrentpage: 'current page',
+      SRpagination: 'Pagination',
     },
   },
   slogan: 'Research data finder',

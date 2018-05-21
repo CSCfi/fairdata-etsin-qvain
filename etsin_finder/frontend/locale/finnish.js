@@ -98,6 +98,8 @@ const finnish = {
     goBack: 'Palaa takaisin',
     identifier: 'Tunniste',
     infrastructure: 'Infrastruktuuri',
+    harvested: 'Haravoitu',
+    cumulative: 'Kumulatiivinen',
     keywords: 'Avainsanat',
     license: 'Lisenssi',
     permanent_link: 'Pysyvä linkki tälle sivulle',
@@ -117,6 +119,12 @@ const finnish = {
   },
   home: {
     title: 'Etsi aineistoa',
+    title1: 'Mikä Etsin on?',
+    title2: 'How can I get access to the datasets?',
+    para1:
+      'Etsimen avulla voit etsiä tutkimusaineistoja ja niiden metatietoja Fairdata-palveluista. Kopioimme myös metatietoja muista lähteistä, tällä hetkellä Tietoarkistosta, Kielipankista ja SYKEstä.',
+    para2:
+      'Julkaistut aineistojen kuvailutiedot ovat kaikille avoimia. Aineiston omistaja päättää miten ja kuka itse tutkimusaineistoon pääsee käsiksi. Etsin on riippumaton itse aineiston tallennuspaikasta. Aineistoja voi kuvailla <a href="https://qvain.fairdata.fi">Qvain-palvelussa.</a><br><br>Lue lisää Fairdata-palveluista <a href="https://fairdata.fi">Fairdata.fi-sivuilta.</a>',
   },
   nav: {
     data: 'Data',
@@ -136,9 +144,22 @@ const finnish = {
   search: {
     placeholder: 'Anna hakusana',
     sorting: {
+      sort: 'Järjestä',
       best: 'Osuvimmat ensin',
       dateA: 'Vanhin ensin',
       dateD: 'Uusin ensin',
+    },
+    filter: {
+      filter: 'Rajaa',
+      SRactive: 'päällä',
+    },
+    pagination: {
+      prev: 'Edellinen sivu',
+      next: 'Seuraava sivu',
+      SRskipped: 'Ylihypätyt sivut',
+      SRpage: 'sivu',
+      SRcurrentpage: 'tämä sivu',
+      SRpagination: 'Paginaatio',
     },
   },
   slogan: 'Tutkimustenhaku palvelu',
