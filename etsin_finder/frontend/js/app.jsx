@@ -5,8 +5,8 @@ import { ThemeProvider } from 'styled-components'
 
 import SkipToContent from './components/general/skipToContent'
 import Layout from './layout'
-import etsinTheme from './theme'
-
+import etsinTheme from './styles/theme'
+import './styles/globalStyles'
 import Stores from './stores'
 
 if (process.env.NODE_ENV === 'test') {

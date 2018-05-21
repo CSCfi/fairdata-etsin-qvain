@@ -57,7 +57,7 @@ const EtsinTabs = styled.ul`
   display: flex;
   flex-wrap: wrap;
   padding-left: 0;
-  margin-bottom: 0;
+  margin-bottom: 1em;
   list-style: none;
   border-bottom: 1px solid ${props => props.theme.color.primary};
   margin-top: 5px;

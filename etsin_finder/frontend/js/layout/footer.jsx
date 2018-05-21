@@ -9,14 +9,14 @@ export default class Footer extends React.Component {
     return (
       <FooterArea>
         <div className="container">
-          <div className="row regular-row footer-content">
-            <div className="col-4 col-md-2 mr-md-auto footer-img">
+          <Positioner>
+            <div>
               <img alt="Ministry of Education and Culture -logo" src={mecLogo} />
             </div>
-            <div className="col-4 col-md-2 ml-auto footer-img">
+            <div>
               <img alt="CSC -logo" src={cscLogo} />
             </div>
-          </div>
+          </Positioner>
         </div>
       </FooterArea>
     )
@@ -37,4 +37,10 @@ const FooterArea = styled.div`
       width: 100%;
     }
   }
+`
+
+const Positioner = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 `

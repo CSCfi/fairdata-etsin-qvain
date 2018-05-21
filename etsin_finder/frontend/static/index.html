@@ -10,10 +10,6 @@
   <link rel="manifest" href="/static/manifest.json">
   <!-- Path must be to static because other traffic is directed through Flask-->
   <link rel="icon" type="image/png" href="/static/favicon.png">
-  <!-- <link rel="stylesheet" type="text/css" href="/static/critical.css" media="all"> -->
-  <noscript>
-    <link href="/static/main.bundle.css" rel="stylesheet">
-  </noscript>
   <title>Etsin | Tutkimusaineistojen hakupalvelu</title>
   <style>
     .loader:empty {
@@ -45,13 +41,6 @@
     <div class="loader"></div>
   </div>
   <!-- Path must be to static because other traffic is directed through Flask-->
-  <script type="text/javascript" defer>
-    let fileref = document.createElement("link");
-    fileref.rel = "stylesheet";
-    fileref.type = "text/css";
-    fileref.href = "/static/main.bundle.css";
-    document.getElementsByTagName("head")[0].appendChild(fileref)
-  </script>
   <script src="/static/bundle.js" type="text/javascript"></script>
 </body>
 

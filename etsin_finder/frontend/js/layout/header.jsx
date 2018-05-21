@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
+import { NavLink } from 'react-router-dom'
 
 import EtsinLogo from '../../static/images/Etsin_300px.png'
 import Settings from '../components/general/navigation/settings'
@@ -12,7 +13,7 @@ export default class Header extends Component {
     return (
       <HeaderBar>
         <Positioner className="container">
-          <LogoCont>
+          <LogoCont to="/">
             <Img alt="Fairdata-Etsin logo" src={EtsinLogo} />
           </LogoCont>
           <NaviCont>
@@ -35,6 +36,7 @@ const HeaderBar = styled.div`
   color: ${p => p.theme.color.dark};
   display: flex;
   justify-content: center;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
 `
 
 const Positioner = styled.div`
@@ -45,7 +47,7 @@ const Positioner = styled.div`
   justify-content: space-between;
 `
 
-const LogoCont = styled.div`
+const LogoCont = styled(NavLink)`
   width: 12em;
 `
 

@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 
-import checkColor from '../../utils/styledUtils'
+import checkColor from '../../styles/styledUtils'
 import { TransparentButton } from './button'
 
 export default class NoticeBar extends React.Component {

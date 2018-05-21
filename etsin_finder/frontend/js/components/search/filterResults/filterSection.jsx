@@ -3,6 +3,8 @@ import { inject, observer } from 'mobx-react'
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faAngleDown from '@fortawesome/fontawesome-free-solid/faAngleDown'
 import PropTypes from 'prop-types'
+import styled from 'styled-components'
+import { mix } from 'polished'
 
 import checkDataLang from '../../../utils/checkDataLang'
 import ElasticQuery from '../../../stores/view/elasticquery'
@@ -95,12 +97,12 @@ class FilterSection extends Component {
     }
 
     return (
-      <div className="filter-section">
-        <button className="filter-category" onClick={this.toggleFilter}>
+      <Section>
+        <FilterCategory onClick={this.toggleFilter}>
           {this.titleName}
           <FontAwesomeIcon icon={faAngleDown} size="2x" />
-        </button>
-        <div className={`filter-items ${this.state.open ? 'open' : ''}`}>
+        </FilterCategory>
+        <FilterItems className={this.state.open ? 'open' : ''}>
           <ul>
             {ElasticQuery.results.aggregations[this.aggregationName].buckets.map(item => (
               <FilterItem
@@ -112,8 +114,8 @@ class FilterSection extends Component {
               />
             ))}
           </ul>
-        </div>
-      </div>
+        </FilterItems>
+      </Section>
     )
   }
 }
@@ -128,3 +130,88 @@ FilterSection.propTypes = {
     }).isRequired,
   }).isRequired,
 }
+
+const Section = styled.div`
+  margin-bottom: 4px;
+`
+
+const FilterCategory = styled.button`
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: ${p => p.theme.color.dark};
+  border-radius: 0;
+  width: 100%;
+  text-align: left;
+  border: 2px solid ${p => p.theme.color.lightgray};
+  border-bottom: none;
+  padding: 1em 1.5em;
+  background-color: ${p => p.theme.color.lightgray};
+  font-weight: 700;
+  transition: all 0.3s ease;
+  svg {
+    pointer-events: none;
+    height: 0.7em;
+    display: flex;
+    align-items: center;
+  }
+  &:focus,
+  &:hover {
+    outline: none;
+    background-color: ${p => mix(0.9, p.theme.color.lightgray, 'black')};
+    border-color: ${p => mix(0.9, p.theme.color.lightgray, 'black')};
+  }
+  &:focus + .filter-items,
+  &:hover + .filter-items {
+    border-color: ${p => mix(0.9, p.theme.color.lightgray, 'black')};
+  }
+`
+
+const FilterItems = styled.div`
+  border: 2px solid ${p => p.theme.color.lightgray};
+  padding: 0em 1em;
+  max-height: 0px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    transition: all 0.3s ease;
+    li {
+      max-height: 0;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      button:hover {
+        text-decoration: underline;
+        cursor: pointer;
+      }
+      button.active {
+        background: ${p => p.theme.color.primary};
+        color: ${p => p.theme.color.white};
+      }
+    }
+  }
+  &.open {
+    max-height: 1000px;
+    padding: 1em 1em;
+    li {
+      max-height: 140px;
+    }
+  }
+  button {
+    background: transparent;
+    border: none;
+    padding: 0.3em 0.8em;
+    border-radius: 0.7em;
+    margin: 0 0 5px 0;
+    color: ${p => p.theme.color.dark};
+    text-align: left;
+    &:focus {
+      outline: none;
+      color: ${p => p.theme.color.primary};
+      text-decoration: underline;
+    }
+  }
+`
