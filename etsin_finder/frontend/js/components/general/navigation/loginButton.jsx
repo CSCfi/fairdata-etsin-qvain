@@ -61,10 +61,8 @@ class Login extends Component {
       <Button
         color="error"
         onClick={this.logout}
-        br="0"
         margin={this.props.margin}
         width={this.props.width}
-        padding="0.6em 1em"
       >
         Logout
       </Button>
