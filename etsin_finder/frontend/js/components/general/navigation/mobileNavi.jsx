@@ -49,7 +49,7 @@ export default class MobileNavi extends React.Component {
             <Row>
               <LangToggle inverted margin="0.4em 0.4em 0.4em 0em" />
               <Button width="100%" margin="0.4em 0em 0.4em 0.4em">
-                Add Dataset
+                <Translate content="nav.addDataset" />
               </Button>
             </Row>
             <Row>

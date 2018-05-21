@@ -16,7 +16,7 @@ export default class Settings extends Component {
       <React.Fragment>
         <Positioner>
           <Button noMargin width="max-content" onClick={this.alertButton}>
-            <Translate content="addDataset" />
+            <Translate content="nav.addDataset" />
           </Button>
           <LangToggle />
           <Login />

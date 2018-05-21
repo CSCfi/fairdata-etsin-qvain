@@ -1,5 +1,4 @@
 const english = {
-  addDataset: 'Add dataset',
   changepage: 'Navigated to page: %(page)s',
   dataset: {
     access_permission: 'Ask for access',
@@ -128,6 +127,8 @@ const english = {
       'The published metadata on the dataset is open to everyone. The data owner decides how the underlying research data can be accessed and by whom. Etsin works independently of actual data storage location and contains no research datasets. Datasets can be described and published through the <a href="https://qvain.fairdata.fi">Qvain service.</a><br><br>Read more about the Finnish Fairdata services on the <a href="https://fairdata.fi">Fairdata.fi</a> pages.',
   },
   nav: {
+    login: 'Login',
+    logout: 'Logout',
     data: 'Data',
     dataset: 'Dataset',
     datasets: 'Datasets',
@@ -135,6 +136,7 @@ const english = {
     help: 'Help',
     home: 'Home',
     organizations: 'Organizations',
+    addDataset: 'Add dataset',
   },
   results: {
     amount: {

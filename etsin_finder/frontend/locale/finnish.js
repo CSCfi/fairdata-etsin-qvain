@@ -1,5 +1,4 @@
 const finnish = {
-  addDataset: 'Lisää aineisto',
   changepage: 'Siirryit sivulle: %(page)s',
   dataset: {
     access_permission: 'Hae käyttölupaa',
@@ -127,6 +126,8 @@ const finnish = {
       'Julkaistut aineistojen kuvailutiedot ovat kaikille avoimia. Aineiston omistaja päättää miten ja kuka itse tutkimusaineistoon pääsee käsiksi. Etsin on riippumaton itse aineiston tallennuspaikasta. Aineistoja voi kuvailla <a href="https://qvain.fairdata.fi">Qvain-palvelussa.</a><br><br>Lue lisää Fairdata-palveluista <a href="https://fairdata.fi">Fairdata.fi-sivuilta.</a>',
   },
   nav: {
+    login: 'Kirjaudu',
+    logout: 'Kirjaudu ulos',
     data: 'Data',
     dataset: 'Aineisto',
     datasets: 'Aineistot',
@@ -134,6 +135,7 @@ const finnish = {
     help: 'Ohjeet',
     home: 'Koti',
     organizations: 'Organisaatiot',
+    addDataset: 'Lisää aineisto',
   },
   results: {
     amount: {

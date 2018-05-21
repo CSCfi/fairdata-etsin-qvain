@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { withRouter } from 'react-router-dom'
 import { inject, observer } from 'mobx-react'
 import PropTypes from 'prop-types'
+import Translate from 'react-translate-component'
 
 import Stores from '../../../stores'
 import Button from '../button'
@@ -45,33 +46,39 @@ class Login extends Component {
           <LoaderCont active={this.state.loading}>
             <Loader active color="white" size="1.1em" spinnerSize="3px" />
           </LoaderCont>
-          <Button
+          <LoginButton
             width={this.props.width}
             margin={this.props.margin}
             onClick={() => {
               this.redirect(this.props.location)
             }}
           >
-            <LoginText visible={!this.state.loading}>Login</LoginText>
-          </Button>
+            <LoginText visible={!this.state.loading}>
+              <Translate content="nav.login" />
+            </LoginText>
+          </LoginButton>
         </Cont>
       )
     }
     return (
-      <Button
+      <LoginButton
         color="error"
         onClick={this.logout}
         margin={this.props.margin}
         width={this.props.width}
       >
-        Logout
-      </Button>
+        <Translate content="nav.logout" />
+      </LoginButton>
     )
   }
 }
 const Cont = styled.div`
   width: ${p => (p.width ? p.width : '')};
   position: relative;
+`
+
+const LoginButton = styled(Button)`
+  white-space: nowrap;
 `
 
 const LoaderCont = styled.div`
