@@ -46,7 +46,7 @@ const finnish = {
       plrl: 'Tekijät',
       snglr: 'Tekijä',
     },
-    curator: 'Hoivaaja',
+    curator: 'Kuraattori',
     dl: {
       root: 'juuri',
       breadcrumbs: 'Leivänmurut',
@@ -128,6 +128,8 @@ const finnish = {
   nav: {
     login: 'Kirjaudu',
     logout: 'Kirjaudu ulos',
+    logoutNotice:
+      'Kirjautui ulos onnistuneesti. Sulje selain kirjautuksesi ulos myös HAKA-palvelusta',
     data: 'Data',
     dataset: 'Aineisto',
     datasets: 'Aineistot',

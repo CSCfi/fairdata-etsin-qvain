@@ -911,13 +911,17 @@ export default injectGlobal`
 
   body {
     margin: 0;
-    font-family: 'Lato', Helvetica, Arial, sans-serif;
-    font-size: 1em;
     font-weight: 400;
     line-height: 1.5;
-    color: #464646;
     text-align: left;
     background-color: #fff;
+    font-family: 'Lato', Helvetica, Arial, sans-serif;
+    font-size: 0.92em;
+    color: ${etsinTheme.color.dark};
+    font-size: 1em;
+    @media screen and (min-width: ${etsinTheme.breakpoints.md}) {
+      font-size: 1em;
+    }
   }
 
   .app {
@@ -1064,16 +1068,6 @@ export default injectGlobal`
 
   /* ---- FONTS ---- */
 
-  body {
-    font-family: 'Lato', Helvetica, Arial, sans-serif;
-    font-size: 1em;
-    color: ${etsinTheme.color.dark};
-    font-size: 0.9em;
-    @media screen and (min-width: ${etsinTheme.breakpoints.md}) {
-      font-size: 1em;
-    }
-  }
-
   input,
   button.btn,
   button,
@@ -1096,26 +1090,26 @@ export default injectGlobal`
 
   h2 {
     font-size: 1.4em;
-    line-height: 1.4 * 1.4em;
+    line-height: calc(1.4 * 1.4em);
     font-weight: 700;
   }
 
   h3 {
     font-size: 1.2em;
-    line-height: 1.5 * 1.2em;
+    line-height: calc(1.5 * 1.2em);
     font-weight: 700;
   }
 
   h4 {
     font-size: 1.1em;
-    line-height: 1.5 * 1.1em;
+    line-height: calc(1.5 * 1.1em);
     font-weight: 700;
   }
 
   p {
     font-family: 'Open Sans', sans-serif;
     font-size: 1em;
-    line-height: 1.5 * 1em;
+    line-height: calc(1.7 * 1em);
   }
 
   .small-text {
@@ -1139,5 +1133,9 @@ export default injectGlobal`
 
   a {
     text-decoration: none;
+    color: ${etsinTheme.color.primary};
+    &:hover {
+      color: ${etsinTheme.color.primaryDark};
+    }
   }
 `

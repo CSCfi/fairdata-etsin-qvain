@@ -8,12 +8,14 @@ import Translate from 'react-translate-component'
 import Stores from '../../../stores'
 import Button from '../button'
 import Loader from '../loader'
+import NoticeBar from '../noticeBar'
 
 class Login extends Component {
   static defaultProps = {
     margin: '0 0 0 0.4em',
     width: undefined,
   }
+
   static propTypes = {
     location: PropTypes.object.isRequired,
     margin: PropTypes.string,
@@ -22,10 +24,18 @@ class Login extends Component {
 
   state = {
     loading: false,
+    showNotice: false,
   }
 
   logout = () => {
-    Stores.Auth.logout()
+    this.setState(
+      {
+        showNotice: true,
+      },
+      () => {
+        Stores.Auth.logout()
+      }
+    )
   }
 
   redirect = location => {
@@ -42,22 +52,37 @@ class Login extends Component {
   render() {
     if (!Stores.Auth.userLogged) {
       return (
-        <Cont width={this.props.width}>
-          <LoaderCont active={this.state.loading}>
-            <Loader active color="white" size="1.1em" spinnerSize="3px" />
-          </LoaderCont>
-          <LoginButton
-            width={this.props.width}
-            margin={this.props.margin}
-            onClick={() => {
-              this.redirect(this.props.location)
-            }}
-          >
-            <LoginText visible={!this.state.loading}>
-              <Translate content="nav.login" />
-            </LoginText>
-          </LoginButton>
-        </Cont>
+        <React.Fragment>
+          <Cont width={this.props.width}>
+            <LoaderCont active={this.state.loading}>
+              <Loader active color="white" size="1.1em" spinnerSize="3px" />
+            </LoaderCont>
+            <LoginButton
+              width={this.props.width}
+              margin={this.props.margin}
+              onClick={() => {
+                this.redirect(this.props.location)
+              }}
+            >
+              <LoginText visible={!this.state.loading}>
+                <Translate content="nav.login" />
+              </LoginText>
+            </LoginButton>
+          </Cont>
+          {this.state.showNotice && (
+            <NoticeBar
+              border
+              z="100"
+              position="fixed"
+              border_color="primary"
+              color="white"
+              bg="primary"
+              duration={4000}
+            >
+              <Translate content="nav.logoutNotice" />
+            </NoticeBar>
+          )}
+        </React.Fragment>
       )
     }
     return (

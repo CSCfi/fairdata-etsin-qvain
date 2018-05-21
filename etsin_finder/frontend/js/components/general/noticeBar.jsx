@@ -6,8 +6,33 @@ import checkColor from '../../styles/styledUtils'
 import { TransparentButton } from './button'
 
 export default class NoticeBar extends React.Component {
+  static defaultProps = {
+    color: 'white',
+    bg: 'primary',
+    position: 'relative',
+    z: '0',
+    duration: 0,
+  }
+
+  static propTypes = {
+    children: PropTypes.node.isRequired,
+    bg: PropTypes.string,
+    color: PropTypes.string,
+    position: PropTypes.string,
+    z: PropTypes.string,
+    duration: PropTypes.number,
+  }
+
   state = {
     open: true,
+  }
+
+  componentDidMount() {
+    if (this.props.duration) {
+      setTimeout(() => {
+        this.close()
+      }, this.props.duration)
+    }
   }
 
   close = () => {
@@ -25,11 +50,13 @@ export default class NoticeBar extends React.Component {
         color={this.props.color}
         open={this.state.open}
       >
-        <NoticeText>{this.props.text}</NoticeText>
-        <CloseButton onClick={this.close} role="button" aria-pressed={!this.state.open}>
-          <span className="sr-only">Hide notice</span>
-          X
-        </CloseButton>
+        <NoticeText>{this.props.children}</NoticeText>
+        {!this.props.duration && (
+          <CloseButton onClick={this.close} role="button" aria-pressed={!this.state.open}>
+            <span className="sr-only">Hide notice</span>
+            X
+          </CloseButton>
+        )}
       </Bar>
     )
   }
@@ -46,9 +73,10 @@ const Bar = styled.div`
   color: ${props => checkColor(props.color)};
   justify-content: center;
   align-items: center;
-  position: relative;
   overflow: hidden;
   position: ${p => p.position};
+  top: 0;
+  left: 0;
 `
 
 const NoticeText = styled.h3`
@@ -62,18 +90,3 @@ const CloseButton = styled(TransparentButton)`
   right: 1em;
   color: white;
 `
-
-NoticeBar.defaultProps = {
-  color: 'white',
-  bg: 'primary',
-  position: 'inherit',
-  z: '0',
-}
-
-NoticeBar.propTypes = {
-  text: PropTypes.string.isRequired,
-  bg: PropTypes.string,
-  color: PropTypes.string,
-  position: PropTypes.string,
-  z: PropTypes.string,
-}

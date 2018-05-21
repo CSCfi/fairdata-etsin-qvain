@@ -129,6 +129,7 @@ const english = {
   nav: {
     login: 'Login',
     logout: 'Logout',
+    logoutNotice: 'Logged out. Close browser to also logout from HAKA',
     data: 'Data',
     dataset: 'Dataset',
     datasets: 'Datasets',
