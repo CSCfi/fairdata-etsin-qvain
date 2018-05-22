@@ -19,7 +19,7 @@
     "@fortawesome/fontawesome": "^1.1.4",
     "@fortawesome/fontawesome-free-regular": "^5.0.10",
     "@fortawesome/fontawesome-free-solid": "^5.0.10",
-    "@fortawesome/react-fontawesome": "^0.0.18",
+    "@fortawesome/react-fontawesome": "^0.0.20",
     "axios": "^0.18.0",
     "babel-core": "^6.26.2",
     "babel-loader": "^7.1.4",
@@ -35,7 +35,7 @@
     "file-loader": "^1.1.11",
     "formik": "^0.11.11",
     "history": "^4.7.2",
-    "loadable-components": "^1.4.0",
+    "loadable-components": "^2.1.0",
     "mappy-breakpoints": "^0.2.3",
     "mobx": "^4.2.0",
     "mobx-react": "^5.0.0",
@@ -61,7 +61,7 @@
     "webpack": "^4.6.0",
     "webpack-cli": "^2.0.15",
     "webpack-node-externals": "^1.6.0",
-    "yup": "^0.24.1"
+    "yup": "^0.25.1"
   },
   "devDependencies": {
     "@storybook/addon-actions": "^3.4.2",
@@ -85,8 +85,8 @@
     "jest": "^22.4.3",
     "jest-cli": "^22.4.2",
     "jest-webpack-alias": "^3.3.3",
-    "sinon": "^4.4.8",
-    "style-loader": "^0.20.3",
+    "sinon": "^5.0.7",
+    "style-loader": "^0.21.0",
     "webpack-dev-server": "^3.1.1"
   },
   "jest": {
