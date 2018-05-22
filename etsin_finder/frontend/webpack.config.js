@@ -1,5 +1,6 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const CleanWebpackPlugin = require('clean-webpack-plugin')
 
 const config = {
   entry: [path.join(__dirname, '/js/index.jsx')],
@@ -8,11 +9,11 @@ const config = {
     path: path.join(__dirname, '/build'),
     // publicPath is used in dynamic chunk loading
     publicPath: '/build/',
-    filename: 'bundle.js',
+    filename: 'bundle.[chunkhash].js',
     chunkFilename: '[name].[chunkhash].js',
   },
   resolve: {
-    extensions: ['.js', '.jsx', '.css'],
+    extensions: ['.js', '.jsx'],
   },
   module: {
     rules: [
@@ -28,11 +29,16 @@ const config = {
     ],
   },
   plugins: [
+    new CleanWebpackPlugin(['build']),
     new HtmlWebpackPlugin({
-      title: 'Etsin | Tutkimusaineistojen hakupalvelu',
+      // TODO: add manifest to new html
+      chunksSortMode: 'none',
+      filename: 'index.html',
+      template: 'static/index.template.ejs',
+      favicon: 'static/images/favicon.png',
     }),
   ],
-  watch: true,
+  watch: false,
   watchOptions: {
     aggregateTimeout: 300,
     poll: 1000,
