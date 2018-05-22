@@ -42,11 +42,7 @@ class Login extends Component {
     this.setState({
       loading: true,
     })
-    if (location.search) {
-      window.location = `${location.search}&sso`
-    } else {
-      window.location = '?sso'
-    }
+    window.location = `/sso?relay=${location.pathname}`
   }
 
   render() {

@@ -106,11 +106,11 @@ class Description extends Component {
           <p className="description">{checkDataLang(this.state.description[0])}</p>
         </ErrorBoundary>
         {this.props.cumulative && (
-          <Label color="#f35">
+          <Label color="error">
             <Translate content="dataset.cumulative" />
           </Label>
         )}
-        {true && (
+        {this.props.harvested && (
           <React.Fragment>
             <GoToOriginal idn={this.props.dataset.research_dataset.preferred_identifier} />
             <Label>
