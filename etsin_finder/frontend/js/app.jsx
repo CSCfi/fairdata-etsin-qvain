@@ -5,8 +5,8 @@ import { ThemeProvider } from 'styled-components'
 
 import SkipToContent from './components/general/skipToContent'
 import Layout from './layout'
-import etsinTheme from './theme'
-
+import etsinTheme from './styles/theme'
+import './styles/globalStyles'
 import Stores from './stores'
 
 if (process.env.NODE_ENV === 'test') {
@@ -31,15 +31,17 @@ export default class App extends Component {
   render() {
     return (
       <div className="app">
-        <SkipToContent callback={this.focusContent} />
         <Provider Stores={Stores}>
           <Router history={Stores.history}>
             <ThemeProvider theme={etsinTheme}>
-              <Layout
-                contentRef={content => {
-                  this.content = content
-                }}
-              />
+              <React.Fragment>
+                <SkipToContent callback={this.focusContent} />
+                <Layout
+                  contentRef={content => {
+                    this.content = content
+                  }}
+                />
+              </React.Fragment>
             </ThemeProvider>
           </Router>
         </Provider>
@@ -48,4 +50,5 @@ export default class App extends Component {
   }
 }
 
+// setup tabbing
 Stores.Accessibility.initialLoad()

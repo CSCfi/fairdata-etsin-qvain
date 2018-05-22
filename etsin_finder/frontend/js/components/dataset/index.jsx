@@ -13,6 +13,7 @@ import ErrorPage from '../errorpage'
 import ErrorBoundary from '../general/errorBoundary'
 import NoticeBar from '../general/noticeBar'
 import { TransparentButton } from '../general/button'
+import Loader from '../general/loader'
 
 const BackButton = styled(TransparentButton)`
   color: ${props => props.theme.color.primary};
@@ -127,10 +128,19 @@ class Dataset extends React.Component {
         </div>
       </div>
     ) : (
-      ''
+      <LoadingSplash>
+        <Loader active />
+      </LoadingSplash>
     )
   }
 }
+
+const LoadingSplash = styled.div`
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
 
 Dataset.propTypes = {
   history: PropTypes.object.isRequired,

@@ -77,7 +77,8 @@ class SortResults extends Component {
               this.selectButton = select
             }}
           >
-            <FontAwesomeIcon icon={faSortAmountDown} aria-hidden="true" /> Sort
+            <FontAwesomeIcon icon={faSortAmountDown} aria-hidden="true" />{' '}
+            <Translate content="search.sorting.sort" />
           </InvertedButton>
         </SelectButton>
         <SelectOptionsContainer>

@@ -14,7 +14,7 @@ export default class SkipToContent extends Component {
 }
 
 const STC = styled.button`
-  background: rgb(77, 179, 231);
+  background: ${p => p.theme.color.primary};
   color: white;
   max-height: 0;
   width: 100%;

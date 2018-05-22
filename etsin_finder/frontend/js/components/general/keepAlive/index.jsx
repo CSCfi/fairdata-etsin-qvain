@@ -54,7 +54,7 @@ export default class KeepAlive extends Component {
     return (
       <React.Fragment>
         <Idle
-          timeout={600000}
+          timeout={540000}
           onChange={({ idle }) => this.handleIdle(idle)}
           eventCallback={this.renewSession}
           eventInterval={60000}
@@ -67,8 +67,9 @@ export default class KeepAlive extends Component {
             border_color="primary"
             color="white"
             bg="yellow"
-            text="You have been logged out due to inactivity"
-          />
+          >
+            You have been logged out due to inactivity
+          </NoticeBar>
         )}
       </React.Fragment>
     )

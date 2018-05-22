@@ -1,5 +1,4 @@
 const english = {
-  addDataset: 'Add dataset',
   changepage: 'Navigated to page: %(page)s',
   dataset: {
     access_permission: 'Ask for access',
@@ -101,6 +100,8 @@ const english = {
     infrastructure: 'Infrastructure',
     keywords: 'Keywords',
     license: 'License',
+    harvested: 'Harvested',
+    cumulative: 'Cumulative',
     permanent_link: 'Permanent link to this page',
     project: 'Project',
     publisher: 'Publisher',
@@ -126,13 +127,17 @@ const english = {
       'The published metadata on the dataset is open to everyone. The data owner decides how the underlying research data can be accessed and by whom. Etsin works independently of actual data storage location and contains no research datasets. Datasets can be described and published through the <a href="https://qvain.fairdata.fi">Qvain service.</a><br><br>Read more about the Finnish Fairdata services on the <a href="https://fairdata.fi">Fairdata.fi</a> pages.',
   },
   nav: {
+    login: 'Login',
+    logout: 'Logout',
+    logoutNotice: 'Logged out. Close browser to also logout from HAKA',
     data: 'Data',
     dataset: 'Dataset',
     datasets: 'Datasets',
     events: 'Identifiers and events',
-    help: 'Help & About',
+    help: 'Help',
     home: 'Home',
     organizations: 'Organizations',
+    addDataset: 'Add dataset',
   },
   results: {
     amount: {
@@ -143,9 +148,22 @@ const english = {
   search: {
     placeholder: 'Search term',
     sorting: {
+      sort: 'Sort',
       best: 'Best Match',
       dateA: 'Date ascending',
       dateD: 'Date descending',
+    },
+    filter: {
+      filter: 'Filter',
+      SRactive: 'active',
+    },
+    pagination: {
+      prev: 'Previous page',
+      next: 'Next page',
+      SRskipped: 'Skipped pages indicator',
+      SRpage: 'page',
+      SRcurrentpage: 'current page',
+      SRpagination: 'Pagination',
     },
   },
   slogan: 'Research data finder',

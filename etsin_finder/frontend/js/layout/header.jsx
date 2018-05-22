@@ -1,71 +1,63 @@
-import React from 'react'
-import Translate from 'react-translate-component'
-import { Link, withRouter } from 'react-router-dom'
-import translate from 'counterpart'
+import React, { Component } from 'react'
+import styled from 'styled-components'
 
-import Navi from '../components/general/navigation'
-import ErrorBoundary from '../components/general/errorBoundary'
-import Accessibility from '../stores/view/accessibility'
+import EtsinLogo from '../components/general/header/etsinLogo'
+import Settings from '../components/general/navigation/settings'
+import Navi from '../components/general/navigation/index'
+import MobileNavi from '../components/general/navigation/mobileNavi'
 
-class Header extends React.Component {
-  constructor(props) {
-    super(props)
-    this.NavButton = React.createRef()
-    this.NavContainer = null
-    this.setContainerRef = element => {
-      this.NavContainer = element
-    }
-  }
-
-  toggleNavi = () => {
-    if (this.NavButton.current.classList.contains('open')) {
-      this.NavButton.current.classList.remove('open')
-    } else {
-      this.NavButton.current.classList.add('open')
-    }
-    if (this.NavContainer.classList.contains('open')) {
-      this.NavContainer.classList.remove('open')
-    } else {
-      this.NavContainer.classList.add('open')
-    }
-  }
-
+export default class Header extends Component {
+  state = {}
   render() {
     return (
-      <div className="header">
-        <ErrorBoundary>
-          <div className="container">
-            <div className="row header-row">
-              <Link
-                to="/"
-                onClick={() => {
-                  Accessibility.setNavText(translate('changepage', { page: translate('nav.home') }))
-                }}
-              >
-                <img alt="Etsin -logo" className="logo" src="../../static/images/etsin_logo.png" />
-              </Link>
-              <p className="slogan">
-                <Translate content="slogan" />
-              </p>
-              <button
-                id="nav-icon"
-                className="btn btn-transparent"
-                name="Navigation"
-                aria-label="Navigation"
-                ref={this.NavButton}
-                onClick={this.toggleNavi}
-              >
-                <span />
-                <span />
-                <span />
-              </button>
-            </div>
-            <Navi closeNavi={this.toggleNavi} navRef={this.setContainerRef} />
-          </div>
-        </ErrorBoundary>
-      </div>
+      <HeaderBar>
+        <Positioner className="container">
+          <EtsinLogo />
+          <NaviCont>
+            <Navi />
+          </NaviCont>
+          <Right>
+            <MobileNavi />
+            <Settings />
+          </Right>
+        </Positioner>
+      </HeaderBar>
     )
   }
 }
 
-export default withRouter(Header)
+const HeaderBar = styled.div`
+  width: 100%;
+  height: 4em;
+  background-color: white;
+  color: ${p => p.theme.color.dark};
+  display: flex;
+  justify-content: center;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
+`
+
+const Positioner = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`
+
+const NaviCont = styled.div`
+  display: none;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  @media screen and (min-width: ${p => p.theme.breakpoints.lg}) {
+    display: flex;
+  }
+`
+
+const Right = styled.div`
+  width: 12em;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  height: 100%;
+`

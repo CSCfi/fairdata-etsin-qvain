@@ -6,6 +6,7 @@ import FilterSection from './filterSection'
 
 const FilterContainer = styled.div`
   padding: 1em;
+  margin-bottom: 1em;
   border: 2px solid ${props => props.theme.color.lightgray};
   @media (min-width: ${props => props.theme.breakpoints.lg}) {
     padding: 0em;

@@ -146,6 +146,7 @@ class TableItem extends Component {
           {this.props.fields.downloadBtn && (
             // TODO: add download functionality, probably an axios post request,
             // but it will also be used in the info modal, so a utility for both.
+            // TODO: change to button because disabled won't work in link
             <HideSmButton thin onClick={this.openModal} disabled={!this.props.access}>
               <Translate content="dataset.dl.download" />
               <Translate
