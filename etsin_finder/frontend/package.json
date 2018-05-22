@@ -82,9 +82,9 @@
     "jest-cli": "^22.4.4",
     "jest-webpack-alias": "^3.3.3",
     "react-element-to-jsx-string": "^13.2.0",
-    "webpack-dev-server": "^3.1.4"
+    "webpack-dev-server": "^3.1.4",
     "sinon": "^5.0.7",
-    "style-loader": "^0.21.0",
+    "style-loader": "^0.21.0"
   },
   "jest": {
     "setupTestFrameworkScriptFile": "./__tests__/test-setup.js",
