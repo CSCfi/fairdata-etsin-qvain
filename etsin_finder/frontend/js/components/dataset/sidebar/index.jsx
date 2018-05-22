@@ -10,13 +10,8 @@ import ContentBox from '../../general/contentBox'
 import SidebarItem from './sidebarItem'
 import Identifier from '../identifier'
 import Citation from './citation'
-import Image from '../../general/image'
+import Logo from './logo'
 import ErrorBoundary from '../../general/errorBoundary'
-
-const Logo = styled.div`
-  text-align: center;
-  margin-bottom: 1em;
-`
 
 class Sidebar extends Component {
   constructor(props) {
@@ -74,12 +69,7 @@ class Sidebar extends Component {
         <ErrorBoundary>
           <div className="separator">
             {this.state.logo && (
-              <Logo>
-                <Image
-                  alt={checkDataLang(this.state.logoAlt)}
-                  file={`../../../${this.state.logo}`}
-                />
-              </Logo>
+              <Logo alt={checkDataLang(this.state.logoAlt)} file={this.state.logo} />
             )}
             <SidebarItem component="div" trans="dataset.catalog_publisher">
               {this.state.catalog_publisher && checkDataLang(this.state.catalog_publisher)}
