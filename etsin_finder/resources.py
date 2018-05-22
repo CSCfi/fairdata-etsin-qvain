@@ -144,7 +144,8 @@ class Session(Resource):
     def get(self):
         if is_authenticated():
             session.modified = True
-        return '', 200
+            return '', 200
+        return '', 401
 
     def delete(self):
         reset_flask_session_on_logout()
