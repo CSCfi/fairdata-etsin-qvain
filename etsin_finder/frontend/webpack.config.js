@@ -50,7 +50,7 @@ const config = {
       allChunks: true,
     }),
   ],
-  watch: true,
+  watch: false,
   watchOptions: {
     aggregateTimeout: 300,
     poll: 1000,
