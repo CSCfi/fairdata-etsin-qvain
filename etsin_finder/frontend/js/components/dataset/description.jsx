@@ -14,6 +14,7 @@ import ErrorBoundary from '../general/errorBoundary'
 import Person from './person'
 import Contact from './contact'
 import VersionChanger from './versionChanger'
+import GoToOriginal from './goToOriginal'
 
 const Labels = styled.div`
   display: flex;
@@ -109,10 +110,13 @@ class Description extends Component {
             <Translate content="dataset.cumulative" />
           </Label>
         )}
-        {this.props.harvested && (
-          <Label>
-            <Translate content="dataset.harvested" />
-          </Label>
+        {true && (
+          <React.Fragment>
+            <GoToOriginal idn={this.props.dataset.research_dataset.preferred_identifier} />
+            <Label>
+              <Translate content="dataset.harvested" />
+            </Label>
+          </React.Fragment>
         )}
       </div>
     )

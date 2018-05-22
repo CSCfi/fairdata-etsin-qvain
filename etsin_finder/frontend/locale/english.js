@@ -105,6 +105,7 @@ const english = {
     permanent_link: 'Permanent link to this page',
     project: 'Project',
     publisher: 'Publisher',
+    go_to_original: 'Go to original location',
     rights_holder: 'Rights Holder',
     spatial_coverage: 'Spatial Coverage',
     temporal_coverage: 'Temporal Coverage',
