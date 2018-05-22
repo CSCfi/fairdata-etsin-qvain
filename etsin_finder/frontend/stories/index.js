@@ -28,6 +28,7 @@ import Footer from '../js/layout/footer'
 import Loader from '../js/components/general/loader'
 import Separator from '../js/components/general/separator'
 import SkipToContent from '../js/components/general/skipToContent'
+import NewHeader from '../js/layout/newHeader'
 import VersionChanger from '../js/components/dataset/versionChanger'
 import Tabs from '../js/components/dataset/tabs'
 import ComponentCode from '../js/components/general/componentCode'
@@ -49,7 +50,9 @@ const AppDecorator = storyFn => (
     <Router history={Stores.history}>
       <ThemeProvider theme={theme}>
         <Fragment>
-          <LangToggle />
+          <LangBar>
+            <LangToggle />
+          </LangBar>
           {storyFn()}
         </Fragment>
       </ThemeProvider>
@@ -66,6 +69,14 @@ const flex = props => ({
   display: props.flex ? 'flex' : '',
 })
 
+const LangBar = styled.div`
+  background-color: ${p => p.theme.color.primary};
+  border-bottom: 2px solid #f7f7f7;
+  button {
+    color: white;
+  }
+`
+
 const Container = styled.div`
   width: 100%;
   max-width: ${props => (props.maxWidth ? props.maxWidth : '100%')};
@@ -74,6 +85,10 @@ const Container = styled.div`
   ${flex};
   justify-content: ${p => (p.end ? 'flex-end' : '')};
 `
+
+//
+// --- GENERAL ---
+//
 
 storiesOf('General/Hero', module).add('Normal', () => (
   <Hero className="hero-primary">
@@ -164,11 +179,78 @@ storiesOf('General/Button', module)
     </Container>
   ))
 
+storiesOf('General/Header', module).add('Active', () => (
+  <Fragment>
+    <NewHeader />
+    <Hero className="hero-primary">
+      <h1>Example</h1>
+    </Hero>
+  </Fragment>
+))
+
 storiesOf('General/Splash', module).add('Active', () => (
   <Splash visible={true}>
     <h1>Hello</h1>
   </Splash>
 ))
+
+storiesOf('General/Access rights', module).add('Open Access', () => (
+  <div>
+    <Container center maxWidth="800px">
+      <ComponentCode displayName={() => 'AccessRights'}>
+        <AccessRights access_rights={MetaxRes.research_dataset.access_rights} />
+      </ComponentCode>
+      <ComponentCode displayName={() => 'AccessRights'}>
+        <AccessRights
+          access_rights={{
+            access_type: {
+              identifier: 'locked',
+              pref_label: {
+                en: 'locked',
+                fi: 'suljettu',
+              },
+            },
+          }}
+        />
+      </ComponentCode>
+    </Container>
+  </div>
+))
+
+storiesOf('General/Loader', module).add('Normal', () => (
+  <Fragment>
+    <Container>
+      <ComponentCode displayName={() => 'Loader'}>
+        <Loader active={true} />
+      </ComponentCode>
+    </Container>
+    <Separator />
+    <Hero className="hero-primary">
+      <Loader active={true} color="white" />
+    </Hero>
+  </Fragment>
+))
+
+storiesOf('General/Separator', module).add('Normal', () => (
+  <Container center maxWidth="800px">
+    <ComponentCode displayName={() => 'Separator'}>
+      <Separator />
+    </ComponentCode>
+  </Container>
+))
+
+storiesOf('General/Skip to Content', module).add('Normal', () => (
+  <div>
+    <ComponentCode displayName={() => 'SkipToContent'}>
+      <SkipToContent />
+    </ComponentCode>
+    <p>Press tab to see skipToContent</p>
+  </div>
+))
+
+//
+// --- Search ---
+//
 
 storiesOf('Search/SearchBar', module)
   .add('Normal', () => (
@@ -224,9 +306,23 @@ storiesOf('Search/Pagination', module).add('Examples', () => (
   </Container>
 ))
 
+//
+// --- Error page ---
+//
+
 storiesOf('Error page', module)
   .add('Not found', () => <ErrorPage error={{ type: 'notfound' }} />)
   .add('Error', () => <ErrorPage error={{ type: 'error' }} />)
+
+//
+// --- Footer ---
+//
+
+storiesOf('Footer', module).add('Normal', () => <Footer />)
+
+//
+// --- Dataset ---
+//
 
 storiesOf('Dataset/Identifier Component', module).add('Normal', () => (
   <Container center maxWidth="800px">
@@ -234,62 +330,6 @@ storiesOf('Dataset/Identifier Component', module).add('Normal', () => (
       <Identifier idn={MetaxRes.research_dataset.preferred_identifier} />
     </ComponentCode>
   </Container>
-))
-
-storiesOf('General/Access rights', module).add('Open Access', () => (
-  <div>
-    <Container center maxWidth="800px">
-      <ComponentCode displayName={() => 'AccessRights'}>
-        <AccessRights access_rights={MetaxRes.research_dataset.access_rights} />
-      </ComponentCode>
-      <ComponentCode displayName={() => 'AccessRights'}>
-        <AccessRights
-          access_rights={{
-            access_type: {
-              identifier: 'locked',
-              pref_label: {
-                en: 'locked',
-                fi: 'suljettu',
-              },
-            },
-          }}
-        />
-      </ComponentCode>
-    </Container>
-  </div>
-))
-
-storiesOf('Footer', module).add('Normal', () => <Footer />)
-
-storiesOf('General/Loader', module).add('Normal', () => (
-  <Fragment>
-    <Container>
-      <ComponentCode displayName={() => 'Loader'}>
-        <Loader active={true} />
-      </ComponentCode>
-    </Container>
-    <Separator />
-    <Hero className="hero-primary">
-      <Loader active={true} color="white" />
-    </Hero>
-  </Fragment>
-))
-
-storiesOf('General/Separator', module).add('Normal', () => (
-  <Container center maxWidth="800px">
-    <ComponentCode displayName={() => 'Separator'}>
-      <Separator />
-    </ComponentCode>
-  </Container>
-))
-
-storiesOf('General/Skip to Content', module).add('Normal', () => (
-  <div>
-    <ComponentCode displayName={() => 'SkipToContent'}>
-      <SkipToContent />
-    </ComponentCode>
-    <p>Press tab to see skipToContent</p>
-  </div>
 ))
 
 storiesOf('Dataset/Version changer', module)

@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import { opacify, darken } from 'polished'
-import checkColor from '../../utils/styledUtils'
+import checkColor from '../../styles/styledUtils'
 
 // prettier-ignore
 const Button = styled.button.attrs({

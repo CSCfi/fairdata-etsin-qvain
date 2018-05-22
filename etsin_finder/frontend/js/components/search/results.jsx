@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faFilter from '@fortawesome/fontawesome-free-solid/faFilter'
 import PropTypes from 'prop-types'
+import Translate from 'react-translate-component'
 
 import ElasticQuery from '../../stores/view/elasticquery'
 import HeightTransition from '../general/animations/heightTransition'
@@ -44,7 +45,7 @@ class Results extends Component {
                 onClick={this.toggleFilter}
                 active={this.state.filterOpen}
               >
-                <FontAwesomeIcon icon={faFilter} /> Filter
+                <FontAwesomeIcon icon={faFilter} /> <Translate content="search.filter.filter" />
               </FilterToggle>
               <SortResults />
             </SortRes>

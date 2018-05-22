@@ -3,6 +3,7 @@ import counterpart from 'counterpart'
 
 class Locale {
   @observable currentLang = counterpart.getLocale()
+  @observable languages = ['en', 'fi']
   setLang = lang => {
     counterpart.setLocale(lang)
     this.currentLang = counterpart.getLocale()

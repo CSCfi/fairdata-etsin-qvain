@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { inject, observer } from 'mobx-react'
+import Translate from 'react-translate-component'
 
 import Accessiblity from '../../stores/view/accessibility'
 import dateFormat from '../../utils/dateFormat'
@@ -103,8 +104,16 @@ class Description extends Component {
           {/* {this.state.description.map(desc => <p className="description">{checkDataLang(desc)}</p>)} */}
           <p className="description">{checkDataLang(this.state.description[0])}</p>
         </ErrorBoundary>
-        {this.props.cumulative && <Label color="#f35">Cumulative</Label>}
-        {this.props.harvested && <Label>Harvested</Label>}
+        {this.props.cumulative && (
+          <Label color="#f35">
+            <Translate content="dataset.cumulative" />
+          </Label>
+        )}
+        {this.props.harvested && (
+          <Label>
+            <Translate content="dataset.harvested" />
+          </Label>
+        )}
       </div>
     )
   }

@@ -10,8 +10,9 @@ __pycache__
 etsin_finder/frontend/node_modules
 etsin_finder/frontend/npm-debug.log
 *.DS_Store
+
 etsin_finder/frontend/static/*
-!etsin_finder/frontend/static/images/*
+!etsin_finder/frontend/static/images/
 !etsin_finder/frontend/static/index.html
 !etsin_finder/frontend/static/favicon.png
 !etsin_finder/frontend/static/manifest.json
@@ -19,4 +20,3 @@ etsin_finder/frontend/static/*
 !etsin_finder/frontend/static/saml.html
 !etsin_finder/frontend/static/saml_base.html
 !etsin_finder/frontend/static/saml_attrs.html
-!etsin_finder/frontend/static/critical.css

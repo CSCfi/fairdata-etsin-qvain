@@ -6,9 +6,11 @@
 const etsinTheme = {
   color: {
     bgPrimary: 'white',
-    bgLight: '#f5f5f5',
+    bgLight: '#f7f7f7',
     bgSecondary: 'rgb(235, 235, 235)',
-    primary: 'rgb(77, 179, 231)',
+    primaryLight: '#e5f2f7',
+    primary: '#007FAD',
+    primaryDark: '#004d79',
     secondary: 'rgb(235, 235, 235)',
     white: 'white',
     superlightgray: 'rgb(246, 246, 246)',
@@ -16,11 +18,12 @@ const etsinTheme = {
     medgray: 'rgb(180, 180, 180)',
     gray: 'rgb(150, 150, 150)',
     darkgray: 'rgb(110, 110, 110)',
-    dark: 'rgb(70, 70, 70)',
+    dark: '#4F4F4F',
     darker: '#212529',
     error: '#eb6672',
     yellow: '#FFBD39',
-    success: '#53BA8A',
+    // success: '#53BA8A',
+    success: '#11A53C',
     insetDark: 'rgba(0, 0, 0, 0.3)',
   },
   breakpoints: {

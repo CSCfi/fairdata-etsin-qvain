@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom' // eslint-disable-line no-unused-vars
 import { shallow } from 'enzyme'
 import { undecorated as AccessRights } from '../js/components/dataset/accessRights'
-import etsinTheme from '../js/theme.js'
+import etsinTheme from '../js/styles/theme.js'
 
 it('renders without crashing', () => {
   shallow(<AccessRights Stores={{ Locale: { currenLang: 'en' } }} />)

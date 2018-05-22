@@ -26,13 +26,13 @@ export default class ListItem extends Component {
           <Link to={`/dataset/${this.props.catId}`}>
             <ContentBox>
               <ErrorBoundary>
-                <div className="d-flex justify-content-between align-items-start item-header">
+                <ItemHeader>
                   <h2 className="title">{checkDataLang(this.props.item.title, this.props.lang)}</h2>
                   <AccessRights
                     access_rights={this.props.item.access_rights}
                     style={{ marginBottom: '1em' }}
                   />
-                </div>
+                </ItemHeader>
               </ErrorBoundary>
               <ErrorBoundary>
                 {Array.isArray(this.props.item.field_of_science) && (
@@ -73,6 +73,25 @@ ListItem.propTypes = {
   lang: PropTypes.string.isRequired,
 }
 
+const ItemHeader = styled.div`
+  margin-bottom: 0em;
+  flex-wrap: wrap;
+  font-size: 0.9em;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  @media (min-width: ${props => props.theme.breakpoints.md}) {
+    font-size: 1em;
+    flex-wrap: nowrap;
+  }
+  .title {
+    color: ${props => props.theme.color.primary};
+    margin-bottom: 0.5em;
+    margin-right: 1em;
+    line-height: 1.5em;
+  }
+`
+
 const Item = styled.div`
   margin-bottom: 1.3em;
   a {
@@ -88,21 +107,6 @@ const Item = styled.div`
         border: 2px solid ${props => props.theme.color.primary};
         box-shadow: 0 2px 3px 0px ${props => props.theme.color.lightgray};
       }
-    }
-    .title {
-      color: ${props => props.theme.color.primary};
-      margin-bottom: 0.5em;
-      margin-right: 1em;
-      line-height: 1.5em;
-    }
-  }
-  .item-header {
-    margin-bottom: 0em;
-    flex-wrap: wrap;
-    font-size: 0.9em;
-    @media (min-width: ${props => props.theme.breakpoints.md}) {
-      font-size: 1em;
-      flex-wrap: nowrap;
     }
   }
 `

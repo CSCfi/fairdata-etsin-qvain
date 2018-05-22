@@ -1,4 +1,4 @@
-import theme from '../theme'
+import theme from './theme'
 
 // check if there is a color matching the string in the theme
 const checkColor = color => {

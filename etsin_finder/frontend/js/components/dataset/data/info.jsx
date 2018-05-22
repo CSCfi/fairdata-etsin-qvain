@@ -131,7 +131,6 @@ const Info = ({
           <p>{description}</p>
         </ModalDescription>
       ) : null}
-      {console.log(accessUrl)}
       {accessUrl && (
         <FullButton
           href={accessUrl.identifier}

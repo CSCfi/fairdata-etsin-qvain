@@ -22,7 +22,7 @@ export default class TableHeader extends Component {
   }
   render() {
     return (
-      <Header className="d-flex justify-content-between">
+      <Header>
         <div>
           <TableTitle>
             <Translate content={`dataset.dl.${this.props.title}`} />
@@ -37,7 +37,7 @@ export default class TableHeader extends Component {
           </ObjectCount>
         </div>
         {this.props.downloadAll && (
-          <div className="d-flex align-items-center">
+          <ButtonsCont>
             <InvertedButton
               color="white"
               disabled={!this.props.access}
@@ -46,7 +46,7 @@ export default class TableHeader extends Component {
               <Translate content="dataset.dl.downloadAll" />
               <Translate className="sr-only" content="dataset.dl.file_types.both" />
             </InvertedButton>
-          </div>
+          </ButtonsCont>
         )}
       </Header>
     )
@@ -57,6 +57,13 @@ const Header = styled.div`
   background-color: ${p => p.theme.color.primary};
   padding: 1em 1.5em;
   color: white;
+  display: flex;
+  justify-content: space-between;
+`
+
+const ButtonsCont = styled.div`
+  display: flex;
+  align-items: center;
 `
 
 const TableTitle = styled.h4`
