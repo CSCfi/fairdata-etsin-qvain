@@ -120,7 +120,7 @@ const finnish = {
   home: {
     title: 'Etsi aineistoa',
     title1: 'Mikä Etsin on?',
-    title2: 'How can I get access to the datasets?',
+    title2: 'Miten saan aineistot käyttööni?',
     para1:
       'Etsimen avulla voit etsiä tutkimusaineistoja ja niiden metatietoja Fairdata-palveluista. Kopioimme myös metatietoja muista lähteistä, tällä hetkellä Tietoarkistosta, Kielipankista ja SYKEstä.',
     para2:

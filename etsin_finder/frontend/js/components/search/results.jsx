@@ -80,6 +80,7 @@ class Results extends Component {
 
 const Grid = styled.div`
   display: grid;
+  transition: 0.3s ease;
   width: 100%;
   grid-template-columns: auto;
   grid-template-areas:
