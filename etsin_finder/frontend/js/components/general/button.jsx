@@ -1,4 +1,6 @@
 import styled from 'styled-components'
+import PropTypes from 'prop-types'
+
 import { opacify, darken } from 'polished'
 import checkColor from '../../styles/styledUtils'
 
@@ -32,11 +34,12 @@ const Button = styled.button.attrs({
 // prettier-ignore
 export const Link = styled.a.attrs({
   padding: props => (props.padding ? props.padding : '0.3em 0.6em 0.4em'),
+  margin: props => (props.margin ? props.margin : '0.25em 0.25em'),
 })`
   cursor: pointer;
-  width: ${props => (props.width ? props.width : '')};
+  width: ${props => (props.width ? props.width : 'max-content')};
   padding: ${props => (props.noPadding ? 0 : props.padding)};
-  margin: ${props => (props.noMargin ? 0 : '0.25em 0.25em')};
+  margin: ${props => (props.noMargin ? 0 : props.margin)};
   border: ${props => (props.thin ? '1px' : '2px')} solid ${props => (props.color ? checkColor(props.color) : props.theme.color.primary)};
   background-color: ${props => (props.color ? checkColor(props.color) : props.theme.color.primary)};
   color: ${props => (props.color !== 'white' ? 'white' : props.theme.color.primary)};
@@ -45,7 +48,6 @@ export const Link = styled.a.attrs({
   transition: 0.3s ease;
   text-align: center;
   display: block;
-  width: max-content;
   &:hover {
     text-decoration: none;
     color: ${props => (props.color !== 'white' ? 'white' : props.theme.color.primary)};
@@ -148,3 +150,16 @@ export const LinkButton = TransparentButton.extend`
 `
 
 export default Button
+
+// PROPS
+Button.propTypes = {
+  width: PropTypes.string,
+  padding: PropTypes.string,
+  margin: PropTypes.string,
+  noMargin: PropTypes.bool,
+  noPadding: PropTypes.bool,
+  thin: PropTypes.bool,
+  color: PropTypes.string,
+  // border radius
+  br: PropTypes.string,
+}

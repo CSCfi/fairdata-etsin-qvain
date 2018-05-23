@@ -3,25 +3,14 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 
 import { Link } from '../general/button'
+import idnToLink from '../../utils/idnToLink'
 
 export default class Identifier extends Component {
   constructor(props) {
     super(props)
-    const url = this.makeLink(this.props.idn)
+    const url = idnToLink(this.props.idn)
     const prefix = this.prefix(this.props.idn)
     this.state = { url, prefix }
-  }
-
-  makeLink(idn) {
-    const sub3 = idn.substring(0, 3)
-    const sub4 = idn.substring(0, 4)
-    if (sub3 === 'urn' || sub3 === 'doi') {
-      const page = sub3 === 'doi' ? 'https://doi.org' : 'http://urn.fi'
-      return `${page}/${idn}`
-    } else if (sub4 === 'http') {
-      return idn
-    }
-    return false
   }
 
   prefix(idn) {

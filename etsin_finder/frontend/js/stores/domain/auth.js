@@ -40,14 +40,21 @@ class Auth {
     })
   }
 
+  /* keepAlive component calls renewsession if user is active */
   @action
   renewSession() {
-    axios
-      .get('/api/session')
-      .then(res => {
-        console.log(res)
-      })
-      .catch(err => console.log(err))
+    return new Promise((resolve, reject) => {
+      axios
+        .get('/api/session')
+        .then(() => resolve())
+        .catch(err => {
+          if (err.response.status === 401) {
+            this.userLogged = false
+            this.user = { id: undefined, name: undefined }
+          }
+          return reject(err)
+        })
+    })
   }
 }
 
