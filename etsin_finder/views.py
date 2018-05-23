@@ -64,21 +64,6 @@ def saml_metadata():
     return resp
 
 
-# TODO: Remove this route at latest in production
-@app.route('/saml_attributes/')
-def saml_attributes():
-    paint_logout = False
-    attributes = False
-
-    if is_authenticated():
-        paint_logout = True
-        if len(session['samlUserdata']) > 0:
-            attributes = session['samlUserdata'].items()
-
-    return render_template('saml_attrs.html', paint_logout=paint_logout,
-                           attributes=attributes)
-
-
 @app.route('/acs/', methods=['GET', 'POST'])
 def saml_attribute_consumer_service():
     reset_flask_session_on_login()
