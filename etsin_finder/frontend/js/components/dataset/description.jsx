@@ -15,6 +15,7 @@ import Person from './person'
 import Contact from './contact'
 import VersionChanger from './versionChanger'
 import GoToOriginal from './goToOriginal'
+// import Button from '../general/button'
 
 const Labels = styled.div`
   display: flex;

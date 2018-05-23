@@ -2,12 +2,13 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { withFormik } from 'formik'
-import Yup from 'yup'
+import * as yup from 'yup'
 import axios from 'axios'
 import Select from '../../general/select'
 
 import Input, { InputArea } from './formItems'
 import { InvertedButton } from '../../general/button'
+import ErrorBoundary from '../../general/errorBoundary'
 
 const InnerForm = props => {
   const {
@@ -26,18 +27,19 @@ const InnerForm = props => {
   return (
     <Form onSubmit={handleSubmit}>
       <InputContainer>
-        <Label htmlFor="recipient">{translations.recipient.name} *</Label>
-        <Select
-          name="recipient"
-          value={values.recipient}
-          onChange={setFieldValue}
-          onBlur={setFieldTouched}
-          options={props.recipientsList}
-          placeholder={translations.recipient.placeholder}
-          error={errors.recipient && touched.recipient}
-          clearable={false}
-        />
-        {errors.recipient && touched.recipient && <ErrorText>{errors.recipient}</ErrorText>}
+        <ErrorBoundary>
+          <Label htmlFor="recipient">{translations.recipient.name} *</Label>
+          <Select
+            name="recipient"
+            value={values.recipient}
+            onChange={setFieldValue}
+            onBlur={setFieldTouched}
+            options={props.recipientsList}
+            placeholder={translations.recipient.placeholder}
+            error={errors.recipient && touched.recipient}
+          />
+          {errors.recipient && touched.recipient && <ErrorText>{errors.recipient}</ErrorText>}
+        </ErrorBoundary>
       </InputContainer>
       <InputContainer width="50%" paddingRight="0.5em">
         <Label htmlFor="email">{translations.email.name} *</Label>
@@ -131,15 +133,18 @@ const ContactForm = withFormik({
     recipient: props.recipientsList[0],
   }),
   validationSchema: props =>
-    Yup.object().shape({
-      email: Yup.string()
+    yup.object().shape({
+      email: yup
+        .string()
         .email(props.translations.email.error.invalid)
         .required(props.translations.email.error.required),
-      message: Yup.string()
+      message: yup
+        .string()
         .max(1300, props.translations.message.error.max)
         .required(props.translations.message.error.required),
-      subject: Yup.string().required(props.translations.subject.error.required),
-      recipient: Yup.mixed()
+      subject: yup.string().required(props.translations.subject.error.required),
+      recipient: yup
+        .mixed()
         .nullable('true')
         .required(props.translations.recipient.error.required),
     }),

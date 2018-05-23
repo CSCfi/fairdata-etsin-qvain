@@ -133,6 +133,7 @@ export default class Contact extends Component {
             <Translate content="dataset.contact.contact" />
           </h2>
           <CloseModal onClick={this.closeModal}>X</CloseModal>
+          <p>Contact curator for access permit</p>
           <ContactForm
             close={this.closeModal}
             datasetID={this.props.datasetID}
