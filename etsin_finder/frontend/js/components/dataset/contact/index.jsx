@@ -17,6 +17,12 @@ const CloseModal = styled.button`
   right: 0.5em;
 `
 
+const Notice = styled.p`
+  margin-bottom: 0;
+  color: ${p => p.theme.color.error};
+  font-style: italic;
+`
+
 const customStyles = {
   overlay: {
     position: 'fixed',
@@ -133,7 +139,12 @@ export default class Contact extends Component {
             <Translate content="dataset.contact.contact" />
           </h2>
           <CloseModal onClick={this.closeModal}>X</CloseModal>
-          <p>Contact curator for access permit</p>
+          {/* TEMPORARY: rems won't be needed in contact later. */}
+          {this.props.isRems && (
+            <Notice>
+              <Translate content="dataset.contact.access" />
+            </Notice>
+          )}
           <ContactForm
             close={this.closeModal}
             datasetID={this.props.datasetID}
@@ -157,5 +168,7 @@ Contact.propTypes = {
     PUBLISHER: PropTypes.bool,
     RIGHTS_HOLDER: PropTypes.bool,
   }).isRequired,
+  // TEMPORARY: rems check won't be needed in contact later.
+  isRems: PropTypes.bool.isRequired,
   datasetID: PropTypes.string.isRequired,
 }
