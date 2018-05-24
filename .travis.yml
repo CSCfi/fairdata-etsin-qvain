@@ -7,7 +7,6 @@ branches:
   only:
   - test
   - stable
-  - master
 
 cache:
   directories:
