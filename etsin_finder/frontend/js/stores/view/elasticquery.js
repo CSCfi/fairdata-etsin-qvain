@@ -27,6 +27,8 @@ const fields = [
   'dataset_version_set',
 ]
 
+let lastQueryTime = 0
+
 class ElasticQuery {
   @observable filter = []
   @observable sorting = 'best'
@@ -175,10 +177,15 @@ class ElasticQuery {
   // query elastic search with defined settings
   @action
   queryES = (initial = false) => {
-    // don't perform query on every componentMount
+    // don't perform initial query on every componentMount
     if (initial && this.results.total !== 0) {
       return new Promise(resolve => resolve())
     }
+
+    if (Date.now() - lastQueryTime < 1000) {
+      return new Promise(resolve => resolve())
+    }
+    lastQueryTime = Date.now()
 
     // Filters
     const createFilters = () => {

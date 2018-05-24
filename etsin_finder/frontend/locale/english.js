@@ -167,7 +167,10 @@ const english = {
       SRcurrentpage: 'current page',
       SRpagination: 'Pagination',
     },
-    noResults: 'Your search - <strong>%(search)s</strong> - did not match any documents.',
+    noResults: {
+      searchterm: 'Your search - <strong>%(search)s</strong> - did not match any documents.',
+      nosearchterm: 'Your seach did not match any documents.',
+    },
   },
   slogan: 'Research data finder',
   stc: 'Skip to content',

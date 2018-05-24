@@ -7,12 +7,16 @@ import ElasticQuery from '../../stores/view/elasticquery'
 export default function NoResults() {
   return (
     <Wrapper>
-      <Translate
-        content="search.noResults"
-        with={{ search: ElasticQuery.search }}
-        component="span"
-        unsafe
-      />
+      {ElasticQuery.search ? (
+        <Translate
+          content="search.noResults.searchterm"
+          with={{ search: ElasticQuery.search }}
+          component="span"
+          unsafe
+        />
+      ) : (
+        <Translate content="search.noResults.nosearchterm" component="span" unsafe />
+      )}
     </Wrapper>
   )
 }

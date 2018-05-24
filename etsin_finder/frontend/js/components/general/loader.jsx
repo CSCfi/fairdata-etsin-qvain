@@ -38,8 +38,9 @@ const Holder = styled.div`
   max-height: 0em;
   transition: all 0.2s ease;
   overflow: hidden;
-  margin: ${props => props.margin};
+  margin: 0;
   &.loader-active {
+    margin: ${props => props.margin};
     max-height: 6em;
     div {
       border-width: ${p => p.spinnerSize};

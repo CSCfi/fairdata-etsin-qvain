@@ -59,7 +59,9 @@ class LangToggle extends Component {
             {this.otherLang()}
           </InvertedButton>
         ) : (
-          <TransparentButton onClick={this.changeLang}>{this.otherLang()}</TransparentButton>
+          <TransparentButton onClick={this.changeLang} margin={this.props.margin}>
+            {this.otherLang()}
+          </TransparentButton>
         )}
       </div>
     )
@@ -68,6 +70,7 @@ class LangToggle extends Component {
 
 const Lang = styled.span`
   border-left: 1px solid ${p => p.theme.color.dark};
+  text-transform: uppercase;
   &:first-of-type {
     border-left: none;
   }

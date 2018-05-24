@@ -120,10 +120,11 @@ export const TransparentButton = styled(Button).attrs({
   margin: props => (props.margin ? props.margin : '0.1em'),
 })`
   margin: ${props => (props.noMargin ? 0 : props.margin)};
-  border: none;
+  border-color: transparent;
   background-color: transparent;
   color: ${props => (props.color ? checkColor(props.color) : props.theme.color.darkgray)};
   &:hover {
+    border-color: transparent;
     background-color: transparent;
     color: ${p => darken(0.1, p.color ? checkColor(p.color) : p.theme.color.primary)};
     text-decoration: underline;

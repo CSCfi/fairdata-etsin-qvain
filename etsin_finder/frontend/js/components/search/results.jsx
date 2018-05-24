@@ -35,7 +35,7 @@ class Results extends Component {
     return (
       <div className="container">
         <div className="regular-row">
-          {ElasticQuery.results.total === 0 && ElasticQuery.search && !ElasticQuery.loading ? (
+          {ElasticQuery.results.total === 0 && !ElasticQuery.loading ? (
             <NoResults />
           ) : (
             <Grid>
@@ -92,6 +92,13 @@ const Grid = styled.div`
     'pagination';
   grid-column-gap: 0.5em;
   grid-row-gap: 0.5em;
+  @media (min-width: ${props => props.theme.breakpoints.sm}) {
+    grid-template-areas:
+      'settings'
+      'filters'
+      'results'
+      'pagination';
+  }
   @media (min-width: ${props => props.theme.breakpoints.lg}) {
     grid-column-gap: 1em;
     grid-row-gap: 1em;
@@ -103,6 +110,9 @@ const Grid = styled.div`
   }
 `
 const AmountRes = styled.div`
+  @media (min-width: ${props => props.theme.breakpoints.sm}) {
+    grid-area: settings;
+  }
   @media (min-width: ${props => props.theme.breakpoints.lg}) {
     grid-area: header;
   }
