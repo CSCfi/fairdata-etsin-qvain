@@ -40,7 +40,7 @@ const Holder = styled.div`
   overflow: hidden;
   margin: ${props => props.margin};
   &.loader-active {
-    max-height: 4em;
+    max-height: 6em;
     div {
       border-width: ${p => p.spinnerSize};
     }

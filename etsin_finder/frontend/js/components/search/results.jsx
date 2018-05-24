@@ -35,7 +35,7 @@ class Results extends Component {
     return (
       <div className="container">
         <div className="regular-row">
-          {ElasticQuery.results.total === 0 && ElasticQuery.search ? (
+          {ElasticQuery.results.total === 0 && ElasticQuery.search && !ElasticQuery.loading ? (
             <NoResults />
           ) : (
             <Grid>
