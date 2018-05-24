@@ -2,8 +2,12 @@ import React, { Component } from 'react'
 import { inject, observer } from 'mobx-react'
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faAngleDown from '@fortawesome/fontawesome-free-solid/faAngleDown'
-import checkDataLang from 'Utils/checkDataLang'
-import ElasticQuery from 'Stores/view/elasticquery'
+import PropTypes from 'prop-types'
+import styled from 'styled-components'
+import { mix } from 'polished'
+
+import checkDataLang from '../../../utils/checkDataLang'
+import ElasticQuery from '../../../stores/view/elasticquery'
 import FilterItem from './filterItem'
 
 class FilterSection extends Component {
@@ -35,14 +39,36 @@ class FilterSection extends Component {
         aggregation: { en: 'keyword_en', fi: 'keyword_fi' },
         term: { en: 'theme.label.en.keyword', fi: 'theme.label.fi.keyword' },
       },
+      infrastructure: {
+        title: { en: 'Research Infra', fi: 'Tutkimusinfra' },
+        aggregation: { en: 'infrastructure_en', fi: 'infrastructure_fi' },
+        term: {
+          en: 'infrastructure.pref_label.en.keyword',
+          fi: 'infrastructure.pref_label.fi.keyword',
+        },
+      },
+      project: {
+        title: { en: 'Project', fi: 'Projekti' },
+        aggregation: { und: 'project' },
+        term: { und: 'project_name.keyword' },
+      },
+      file_type: {
+        title: { en: 'File Type', fi: 'Tiedostotyyppi' },
+        aggregation: { en: 'file_type_en', fi: 'file_type_fi' },
+        term: {
+          en: 'file_type.pref_label.en.keyword',
+          fi: 'file_type.pref_label.fi.keyword',
+        },
+      },
+    }
+    this.state = {
+      open: false,
     }
   }
 
-  toggleFilter(event) {
-    event.target.nextSibling.classList.toggle('open')
-    const buttons = event.target.nextSibling.children[0].querySelectorAll('button')
-    buttons.forEach(button => {
-      button.tabIndex = button.tabIndex === -1 ? 0 : -1
+  toggleFilter = () => {
+    this.setState({
+      open: !this.state.open,
     })
   }
 
@@ -71,12 +97,12 @@ class FilterSection extends Component {
     }
 
     return (
-      <div className="filter-section">
-        <button className="filter-category" onClick={this.toggleFilter}>
+      <Section>
+        <FilterCategory onClick={this.toggleFilter}>
           {this.titleName}
           <FontAwesomeIcon icon={faAngleDown} size="2x" />
-        </button>
-        <div className="filter-items">
+        </FilterCategory>
+        <FilterItems className={this.state.open ? 'open' : ''}>
           <ul>
             {ElasticQuery.results.aggregations[this.aggregationName].buckets.map(item => (
               <FilterItem
@@ -84,13 +110,108 @@ class FilterSection extends Component {
                 item={item}
                 aggregationName={this.aggregationName}
                 term={this.termName}
+                tabIndex={this.state.open ? '0' : '-1'}
               />
             ))}
           </ul>
-        </div>
-      </div>
+        </FilterItems>
+      </Section>
     )
   }
 }
 
 export default inject('Stores')(observer(FilterSection))
+
+FilterSection.propTypes = {
+  aggregation: PropTypes.string.isRequired,
+  Stores: PropTypes.shape({
+    Locale: PropTypes.shape({
+      currentLang: PropTypes.string.isRequired,
+    }).isRequired,
+  }).isRequired,
+}
+
+const Section = styled.div`
+  margin-bottom: 4px;
+`
+
+const FilterCategory = styled.button`
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: ${p => p.theme.color.dark};
+  border-radius: 0;
+  width: 100%;
+  text-align: left;
+  border: 2px solid ${p => p.theme.color.lightgray};
+  border-bottom: none;
+  padding: 1em 1.5em;
+  background-color: ${p => p.theme.color.lightgray};
+  font-weight: 700;
+  transition: all 0.3s ease;
+  svg {
+    pointer-events: none;
+    height: 0.7em;
+    display: flex;
+    align-items: center;
+  }
+  &:focus,
+  &:hover {
+    outline: none;
+    background-color: ${p => mix(0.9, p.theme.color.lightgray, 'black')};
+    border-color: ${p => mix(0.9, p.theme.color.lightgray, 'black')};
+  }
+  &:focus + .filter-items,
+  &:hover + .filter-items {
+    border-color: ${p => mix(0.9, p.theme.color.lightgray, 'black')};
+  }
+`
+
+const FilterItems = styled.div`
+  border: 2px solid ${p => p.theme.color.lightgray};
+  padding: 0em 1em;
+  max-height: 0px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    transition: all 0.3s ease;
+    li {
+      max-height: 0;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      button:hover {
+        text-decoration: underline;
+        cursor: pointer;
+      }
+      button.active {
+        background: ${p => p.theme.color.primary};
+        color: ${p => p.theme.color.white};
+      }
+    }
+  }
+  &.open {
+    max-height: 1000px;
+    padding: 1em 1em;
+    li {
+      max-height: 140px;
+    }
+  }
+  button {
+    background: transparent;
+    border: none;
+    padding: 0.3em 0.8em;
+    border-radius: 0.7em;
+    margin: 0 0 5px 0;
+    color: ${p => p.theme.color.dark};
+    text-align: left;
+    &:focus {
+      outline: none;
+      color: ${p => p.theme.color.primary};
+      text-decoration: underline;
+    }
+  }
+`

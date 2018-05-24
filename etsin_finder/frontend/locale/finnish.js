@@ -1,5 +1,4 @@
 const finnish = {
-  addDataset: 'Lisää aineisto',
   changepage: 'Siirryit sivulle: %(page)s',
   dataset: {
     access_permission: 'Hae käyttölupaa',
@@ -10,6 +9,7 @@ const finnish = {
     citation: 'Sitaatti',
     citation_formats: 'Näytä lisää sitaattiehdotuksia',
     contact: {
+      access: 'Aineiston käyttöoikeuteen liittyvissä kyselyissä ota yhteyttä kuraattoriin.',
       contact: 'Ota yhteyttä',
       email: {
         error: { required: 'Sähköposti vaaditaan!', invalid: 'Virhe sähköpostissa' },
@@ -47,14 +47,17 @@ const finnish = {
       plrl: 'Tekijät',
       snglr: 'Tekijä',
     },
-    curator: 'Hoivaaja',
+    curator: 'Kuraattori',
     dl: {
+      root: 'juuri',
       breadcrumbs: 'Leivänmurut',
       category: 'Kategoria',
       dirContent: 'Kansion sisältö',
       download: 'Lataa',
       downloadAll: 'Lataa kaikki',
       fileAmount: '%(amount)s objektia',
+      close_modal: 'Sulje info',
+      info_header: 'Tiedoston muut tiedot',
       file_types: {
         both: 'tiedostot ja kansiot',
         directory: 'Kansio',
@@ -66,6 +69,12 @@ const finnish = {
       item: 'aineisto %(item)s',
       name: 'Nimi',
       size: 'Koko',
+      remote: 'Remote aineistot',
+      checksum: 'Checksum',
+      id: 'ID',
+      title: 'Otsikko',
+      type: 'Tyyppi',
+      go_to_original: 'Siirry sivulle',
     },
     events_idn: {
       events: {
@@ -89,14 +98,18 @@ const finnish = {
     goBack: 'Palaa takaisin',
     identifier: 'Tunniste',
     infrastructure: 'Infrastruktuuri',
-    keywords: 'Keywords',
+    harvested: 'Haravoitu',
+    cumulative: 'Kumulatiivinen',
+    keywords: 'Avainsanat',
     license: 'Lisenssi',
+    go_to_original: 'Siirry alkuperäiseen',
     permanent_link: 'Pysyvä linkki tälle sivulle',
     project: 'Projekti',
     publisher: 'Julkaisija',
     rights_holder: 'Oikeuksienhaltija',
     spatial_coverage: 'Maantieteellinen kattavuus',
     temporal_coverage: 'Ajallinen kattavuus',
+    version: { number: 'Versio %(number)s', old: '(Vanha)' },
   },
   error: {
     notFound: 'Annetulle id:lle ei löytynyt metadataa',
@@ -107,15 +120,26 @@ const finnish = {
   },
   home: {
     title: 'Etsi aineistoa',
+    title1: 'Mikä Etsin on?',
+    title2: 'How can I get access to the datasets?',
+    para1:
+      'Etsimen avulla voit etsiä tutkimusaineistoja ja niiden metatietoja Fairdata-palveluista. Kopioimme myös metatietoja muista lähteistä, tällä hetkellä Tietoarkistosta, Kielipankista ja SYKEstä.',
+    para2:
+      'Julkaistut aineistojen kuvailutiedot ovat kaikille avoimia. Aineiston omistaja päättää miten ja kuka itse tutkimusaineistoon pääsee käsiksi. Etsin on riippumaton itse aineiston tallennuspaikasta. Aineistoja voi kuvailla <a href="https://qvain.fairdata.fi">Qvain-palvelussa.</a><br><br>Lue lisää Fairdata-palveluista <a href="https://fairdata.fi">Fairdata.fi-sivuilta.</a>',
   },
   nav: {
+    login: 'Kirjaudu',
+    logout: 'Kirjaudu ulos',
+    logoutNotice:
+      'Kirjautui ulos onnistuneesti. Sulje selain kirjautuksesi ulos myös HAKA-palvelusta',
     data: 'Data',
     dataset: 'Aineisto',
     datasets: 'Aineistot',
     events: 'Tunnisteet ja tapahtumat',
-    help: 'Ohjeet & Info',
+    help: 'Ohjeet',
     home: 'Koti',
     organizations: 'Organisaatiot',
+    addDataset: 'Lisää aineisto',
   },
   results: {
     amount: {
@@ -126,9 +150,22 @@ const finnish = {
   search: {
     placeholder: 'Anna hakusana',
     sorting: {
+      sort: 'Järjestä',
       best: 'Osuvimmat ensin',
       dateA: 'Vanhin ensin',
       dateD: 'Uusin ensin',
+    },
+    filter: {
+      filter: 'Rajaa',
+      SRactive: 'päällä',
+    },
+    pagination: {
+      prev: 'Edellinen sivu',
+      next: 'Seuraava sivu',
+      SRskipped: 'Ylihypätyt sivut',
+      SRpage: 'sivu',
+      SRcurrentpage: 'tämä sivu',
+      SRpagination: 'Paginaatio',
     },
   },
   slogan: 'Tutkimustenhaku palvelu',

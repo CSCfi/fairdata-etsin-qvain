@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
+import PropTypes from 'prop-types'
 
-import ElasticQuery from 'Stores/view/elasticquery'
+import ElasticQuery from '../../../stores/view/elasticquery'
 
 class FilterItem extends Component {
   constructor(props) {
@@ -46,7 +47,7 @@ class FilterItem extends Component {
     return (
       <li>
         <button
-          tabIndex="-1"
+          tabIndex={this.props.tabIndex}
           className={this.state.active ? 'active' : undefined}
           onClick={() => {
             this.updateFilter()
@@ -60,3 +61,13 @@ class FilterItem extends Component {
 }
 
 export default withRouter(FilterItem)
+
+FilterItem.propTypes = {
+  term: PropTypes.string.isRequired,
+  item: PropTypes.shape({
+    key: PropTypes.string.isRequired,
+    doc_count: PropTypes.number.isRequired,
+  }).isRequired,
+  history: PropTypes.object.isRequired,
+  tabIndex: PropTypes.string.isRequired,
+}

@@ -1,8 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom' // eslint-disable-line no-unused-vars
 import { shallow } from 'enzyme'
-import { undecorated as AccessRights } from '../js/components/dataset/data/accessRights'
-import etsinTheme from '../js/theme.js'
+import { undecorated as AccessRights } from '../js/components/dataset/accessRights'
+import etsinTheme from '../js/styles/theme.js'
 
 it('renders without crashing', () => {
   shallow(<AccessRights Stores={{ Locale: { currenLang: 'en' } }} />)
@@ -22,13 +22,10 @@ describe('AccessRights', () => {
       <AccessRights
         theme={etsinTheme}
         access_rights={{
-          type: [
-            {
-              identifier:
-                'http://purl.org/att/es/reference_data/access_type/access_type_open_access',
-              pref_label: { fi: 'title' },
-            },
-          ],
+          access_type: {
+            identifier: 'http://purl.org/att/es/reference_data/access_type/access_type_open_access',
+            pref_label: { fi: 'title' },
+          },
         }}
         Stores={{ Locale: { currenLang: 'en' } }}
       />
@@ -46,9 +43,8 @@ describe('AccessRights', () => {
       expect(
         accessRights
           .children()
-          .children()
           .childAt(0)
-          .render()[0]['name'] === 'svg'
+          .render()[0].name === 'svg'
       ).toEqual(true)
     })
   })

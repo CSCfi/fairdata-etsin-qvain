@@ -4,8 +4,9 @@ import Translate from 'react-translate-component'
 import { inject, observer } from 'mobx-react'
 import styled from 'styled-components'
 
-import checkDataLang from 'Utils/checkDataLang'
-import DateFormat from '../../general/dateFormat'
+import Accessibility from '../../../stores/view/accessibility'
+import checkDataLang from '../../../utils/checkDataLang'
+import dateFormat from '../../../utils/dateFormat'
 
 const Table = styled.table`
   overflow-x: scroll;
@@ -53,6 +54,9 @@ const Margin = styled.div`
 `
 
 class Events extends Component {
+  componentDidMount() {
+    Accessibility.setNavText('Navigated to Identifiers and Events tab')
+  }
   checkProvenance = prov => {
     if (prov) {
       if (prov.length > 1) {
@@ -82,11 +86,11 @@ class Events extends Component {
 
   printDate = temp => {
     if (temp.start_date === temp.end_date) {
-      return <DateFormat date={temp.start_date} />
+      return dateFormat(temp.start_date)
     }
     return (
       <span>
-        <DateFormat date={temp.start_date} /> - <DateFormat date={temp.end_date} />
+        {dateFormat(temp.start_date)} - {dateFormat(temp.end_date)}
       </span>
     )
   }

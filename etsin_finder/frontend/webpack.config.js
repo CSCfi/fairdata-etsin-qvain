@@ -1,23 +1,19 @@
-// import shared config files
-const sharedConfig = require('./webpack.config.shared')
 const path = require('path')
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const CleanWebpackPlugin = require('clean-webpack-plugin')
 
 const config = {
   entry: [path.join(__dirname, '/js/index.jsx')],
   output: {
     // path of output
-    path: path.join(__dirname, '/static'),
+    path: path.join(__dirname, '/build'),
     // publicPath is used in dynamic chunk loading
-    publicPath: '/static/',
-    filename: 'bundle.js',
-    chunkFilename: '[name].bundle.js',
+    publicPath: '/build/',
+    filename: 'bundle.[chunkhash].js',
+    chunkFilename: '[name].[chunkhash].js',
   },
   resolve: {
-    // adds aliases for common locations in app
-    // (../../../utils/checkDataLang => Utils/checkDataLang)
-    alias: sharedConfig.alias,
-    extensions: ['.js', '.jsx', '.css'],
+    extensions: ['.js', '.jsx'],
   },
   module: {
     rules: [
@@ -27,36 +23,26 @@ const config = {
         loader: 'babel-loader',
       },
       {
-        test: /\.css$/,
-        exclude: /node_modules/,
-        use: ExtractTextPlugin.extract({
-          use: 'css-loader?importLoaders=1',
-        }),
-      },
-      {
-        test: /\.(sass|scss)$/,
-        exclude: /node_modules/,
-        use: ExtractTextPlugin.extract(['css-loader', 'sass-loader']),
-      },
-      {
         test: /\.(woff|woff2|eot|ttf|otf|svg|jpg|png)$/,
         use: 'file-loader',
       },
     ],
   },
   plugins: [
-    // minimal plugins = fast development builds
-    new ExtractTextPlugin({
-      // define where to save the extracted styles file
-      filename: '[name].bundle.css',
-      allChunks: true,
+    new CleanWebpackPlugin(['build']),
+    new HtmlWebpackPlugin({
+      // TODO: add manifest to new html
+      chunksSortMode: 'none',
+      filename: 'index.html',
+      template: 'static/index.template.ejs',
+      favicon: 'static/images/favicon.png',
     }),
   ],
-  watch: true,
+  watch: false,
   watchOptions: {
     aggregateTimeout: 300,
     poll: 1000,
     ignored: /node_modules/,
-  }
+  },
 }
 module.exports = config

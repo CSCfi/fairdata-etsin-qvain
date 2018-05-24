@@ -1,4 +1,13 @@
-const makeSmall = tree => {
+// Removes common parents from tree
+// ---
+// folder/folder2/file
+// folder/folder2/file2
+// folder/folder2
+// folder3
+// =>
+// folder2
+// folder3
+const removeCommonParents = tree => {
   const newTree = []
 
   const findPath = (array, index) => {
@@ -15,11 +24,24 @@ const makeSmall = tree => {
   }
 
   tree.map((item, index) => findPath(tree, index))
-
   return newTree
 }
 
-const createTree = files => {
+// creates a hierarchial folder tree from files and folders
+// input: array of files and folders with paths
+// output: files and folders placed inside parent folders as children
+// [
+//   { // root lvl file
+//     name: string
+//   },
+//   { // root lvl folder
+//     childAmount: number
+//     children: array
+//     name: string
+//   }
+// ]
+
+export default function createTree(files) {
   if (!files) {
     return false
   }
@@ -49,7 +71,5 @@ const createTree = files => {
     })
     return hier
   }, [])
-  return makeSmall(hierarchy)
+  return removeCommonParents(hierarchy)
 }
-
-export default createTree

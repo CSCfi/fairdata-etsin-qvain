@@ -1,4 +1,6 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import styled from 'styled-components'
 
 export default class HeroBanner extends Component {
   constructor(props) {
@@ -11,10 +13,33 @@ export default class HeroBanner extends Component {
     }
   }
   render() {
-    return (
-      <div className={`hero ${this.state.classes}`}>
-        {this.props.children}
-      </div>
-    );
+    return <Hero className={this.state.classes}>{this.props.children}</Hero>
   }
+}
+
+const Hero = styled.div`
+  width: 100%;
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  @media (min-width: ${props => props.theme.breakpoints.lg}) {
+    min-height: 300px;
+  }
+  &.hero-primary {
+    background-color: ${props => props.theme.color.primary};
+    color: white;
+  }
+  &.hero-full {
+    width: 100%;
+  }
+`
+
+HeroBanner.defaultProps = {
+  className: '',
+}
+
+HeroBanner.propTypes = {
+  children: PropTypes.node.isRequired,
+  className: PropTypes.string,
 }

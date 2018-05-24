@@ -1,19 +1,20 @@
-const sharedConfig = require('./webpack.config.shared')
 const path = require('path')
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const CleanWebpackPlugin = require('clean-webpack-plugin')
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
+
+// TODO: add service worker to build process, currently unused
 
 const config = {
   entry: [path.join(__dirname, '/js/index.jsx')],
   output: {
-    path: path.join(__dirname, '/static'),
-    publicPath: '/static/',
-    filename: 'bundle.js',
-    chunkFilename: '[name].bundle.js',
+    path: path.join(__dirname, '/build'),
+    publicPath: '/build/',
+    filename: 'bundle.[chunkhash].js',
+    chunkFilename: '[name].[chunkhash].js',
   },
   resolve: {
-    alias: sharedConfig.alias,
-    extensions: ['.js', '.jsx', '.css'],
+    extensions: ['.js', '.jsx'],
   },
   module: {
     rules: [
@@ -23,28 +24,19 @@ const config = {
         loader: 'babel-loader',
       },
       {
-        test: /\.css$/,
-        exclude: /node_modules/,
-        use: ExtractTextPlugin.extract({
-          use: 'css-loader?importLoaders=1',
-        }),
-      },
-      {
-        test: /\.(sass|scss)$/,
-        exclude: /node_modules/,
-        use: ExtractTextPlugin.extract(['css-loader', 'sass-loader']),
-      },
-      {
         test: /\.(woff|woff2|eot|ttf|otf|svg|jpg|png)$/,
         use: 'file-loader',
       },
     ],
   },
   plugins: [
-    new ExtractTextPlugin({
-      // define where to save the extracted styles files
-      filename: '[name].bundle.css',
-      allChunks: true,
+    new CleanWebpackPlugin(['build']),
+    new HtmlWebpackPlugin({
+      // TODO: add manifest to new html
+      chunksSortMode: 'none',
+      filename: 'index.html',
+      template: 'static/index.template.ejs',
+      favicon: 'static/images/favicon.png',
     }),
     new UglifyJSPlugin(),
   ],

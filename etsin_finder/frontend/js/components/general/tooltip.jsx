@@ -1,5 +1,14 @@
 import React from 'react'
 import styled from 'styled-components'
+import PropTypes from 'prop-types'
+
+const Tooltip = props => (
+  <Tip {...props} aria-hidden="true">
+    {props.children}
+  </Tip>
+)
+
+export default Tooltip
 
 const Tip = styled.div.attrs({
   bg: props => props.theme.color.darkgray,
@@ -42,9 +51,7 @@ const Tip = styled.div.attrs({
     }
   }
 `
-const Tooltip = props => (
-  <Tip {...props} aria-hidden="true">
-    {props.children}
-  </Tip>
-)
-export default Tooltip
+
+Tooltip.propTypes = {
+  children: PropTypes.element.isRequired,
+}

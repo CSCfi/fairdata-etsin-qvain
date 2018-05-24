@@ -59,9 +59,6 @@ def get_email_recipient_address(catalog_record, agent_type_str):
     :param agent_type_str: agent_type enum name as string
     :return:
     """
-    from etsin_finder.finder import app
-    log = app.logger
-
     rd = catalog_record['research_dataset']
     agent_type = AgentType[agent_type_str]
 
@@ -71,12 +68,13 @@ def get_email_recipient_address(catalog_record, agent_type_str):
         return rd['publisher']['email']
     if agent_type == AgentType.CONTRIBUTOR and rd.get('contributor', False)[0].get('email'):
         return rd['contributor'][0]['email']
-    if agent_type == AgentType.RIGHTS_HOLDER and rd.get('rights_holder', False).get('email'):
+    if agent_type == AgentType.RIGHTS_HOLDER and rd.get('rights_holder', False)[0].get('email'):
         return rd['rights_holder']['email']
     if agent_type == AgentType.CURATOR and rd.get('curator', False)[0].get('email'):
         return rd['curator'][0]['email']
 
-    log.error("No email address found with given agent type {0}".format(agent_type_str))
+    from etsin_finder.finder import app
+    app.logger.error("No email address found with given agent type {0}".format(agent_type_str))
     return None
 
 

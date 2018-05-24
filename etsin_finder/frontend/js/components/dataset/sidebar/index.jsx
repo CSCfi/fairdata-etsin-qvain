@@ -3,19 +3,15 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { inject, observer } from 'mobx-react'
 
-import checkDataLang from 'Utils/checkDataLang'
-import checkNested from 'Utils/checkNested'
-import dateFormat from 'Utils/dateFormat'
+import checkDataLang from '../../../utils/checkDataLang'
+import checkNested from '../../../utils/checkNested'
+import dateFormat from '../../../utils/dateFormat'
+import ContentBox from '../../general/contentBox'
 import SidebarItem from './sidebarItem'
-import Identifier from '../data/identifier'
-import Citation from '../data/citation'
-import Image from '../../general/image'
+import Identifier from '../identifier'
+import Citation from './citation'
+import Logo from './logo'
 import ErrorBoundary from '../../general/errorBoundary'
-
-const Logo = styled.div`
-  text-align: center;
-  margin-bottom: 1em;
-`
 
 class Sidebar extends Component {
   constructor(props) {
@@ -69,16 +65,11 @@ class Sidebar extends Component {
 
   render() {
     return (
-      <div className="sidebar content-box">
+      <SidebarContainer>
         <ErrorBoundary>
           <div className="separator">
             {this.state.logo && (
-              <Logo>
-                <Image
-                  alt={checkDataLang(this.state.logoAlt)}
-                  file={`../../../${this.state.logo}`}
-                />
-              </Logo>
+              <Logo alt={checkDataLang(this.state.logoAlt)} file={this.state.logo} />
             )}
             <SidebarItem component="div" trans="dataset.catalog_publisher">
               {this.state.catalog_publisher && checkDataLang(this.state.catalog_publisher)}
@@ -147,19 +138,20 @@ class Sidebar extends Component {
               {this.state.license &&
                 this.state.license.map(rights => {
                   // If license URL is available, link license title
-                  if (rights.license &&
-                    (rights.license.startsWith('http://') || rights.license.startsWith('https://'))) {
+                  if (
+                    rights.license &&
+                    (rights.license.startsWith('http://') || rights.license.startsWith('https://'))
+                  ) {
                     return (
                       <p key={rights.identifier}>
-                        <a href={rights.license} target="_blank">{checkDataLang(rights.title)}</a>
+                        <a href={rights.license} target="_blank">
+                          {checkDataLang(rights.title)}
+                        </a>
                       </p>
                     )
                   }
-                  return (
-                    <p key={rights.identifier}>{checkDataLang(rights.title)}</p>
-                  )
-                })
-              }
+                  return <p key={rights.identifier}>{checkDataLang(rights.title)}</p>
+                })}
             </SidebarItem>
 
             <SidebarItem
@@ -213,7 +205,7 @@ class Sidebar extends Component {
             </SidebarItem>
           </div>
         </ErrorBoundary>
-      </div>
+      </SidebarContainer>
     )
   }
 }
@@ -221,5 +213,32 @@ class Sidebar extends Component {
 Sidebar.propTypes = {
   dataset: PropTypes.object.isRequired,
 }
+
+const SidebarContainer = styled(ContentBox)`
+  p {
+    font-size: 0.875em;
+  }
+  h4 {
+    margin-bottom: 0;
+  }
+  > div {
+    padding: 20px 0px;
+    &:first-of-type {
+      padding: 0 0 20px;
+    }
+  }
+  .separator {
+    &:after {
+      content: '';
+      display: block;
+      height: 2px;
+      background-color: ${props => props.theme.color.lightgray};
+      position: relative;
+      bottom: -20px;
+      width: 200%;
+      margin: 0 -100px;
+    }
+  }
+`
 
 export default inject('Stores')(observer(Sidebar))

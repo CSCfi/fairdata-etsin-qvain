@@ -9,22 +9,17 @@ from etsin_finder.app_config import get_app_config
 from etsin_finder.utils import executing_travis
 
 
-def create_app(config=None):
-    app = Flask(__name__, template_folder="./frontend/static")
-    _set_app_config(app, config)
+def create_app():
+    app = Flask(__name__, template_folder="./frontend/build")
+    app.config.update(get_app_config())
+
     if not app.testing and not executing_travis():
         _setup_app_logging(app)
-
-    return app
-
-
-def _set_app_config(app, config):
-    if config:
-        app.config.update(config)
-    else:
-        app.config.update(get_app_config())
+    if not executing_travis():
+        app.config.update({'SAML_PATH': '/home/etsin-user'})
 
     app.logger.info("Application configuration: {0}".format(app.config))
+    return app
 
 
 def _setup_app_logging(app):
@@ -48,9 +43,11 @@ def _do_imports():
 
 
 def _add_restful_resources():
-    from etsin_finder.resources import Contact, Dataset
+    from etsin_finder.resources import Contact, Dataset, User, Session
     api.add_resource(Dataset, '/api/dataset/<string:dataset_id>')
     api.add_resource(Contact, '/api/email/<string:dataset_id>')
+    api.add_resource(User, '/api/user')
+    api.add_resource(Session, '/api/session')
 
 
 app = create_app()

@@ -1,5 +1,7 @@
 import React from 'react'
 import Translate from 'react-translate-component'
+import PropTypes from 'prop-types'
+
 import HeroBanner from '../general/hero'
 
 export default class ErrorPage extends React.Component {
@@ -11,12 +13,18 @@ export default class ErrorPage extends React.Component {
     return (
       <HeroBanner className="hero-primary hero-full">
         <div className="container">
-          <h1 className="text-center">
-            {this.props.error === 'notfound' && <Translate content="error.notFound" />}
+          <h1 className="text-center" aria-live="polite">
+            {this.props.error.type === 'notfound' && <Translate content="error.notFound" />}
             {this.props.error.type === 'error' && <Translate content="error.notLoaded" />}
           </h1>
         </div>
       </HeroBanner>
     )
   }
+}
+
+ErrorPage.propTypes = {
+  error: PropTypes.shape({
+    type: PropTypes.string,
+  }).isRequired,
 }

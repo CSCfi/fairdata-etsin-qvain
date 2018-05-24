@@ -1,19 +1,82 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import styled from 'styled-components'
+import PropTypes from 'prop-types'
 
-const Bar = styled.div.attrs({
-  colors: {
-    deprecated: props => props.theme.color.error,
-    cumulative: props => props.theme.color.cumulative,
-  },
-})`
+import checkColor from '../../styles/styledUtils'
+import { TransparentButton } from './button'
+
+export default class NoticeBar extends React.Component {
+  static defaultProps = {
+    color: 'white',
+    bg: 'primary',
+    position: 'relative',
+    z: '0',
+    duration: 0,
+  }
+
+  static propTypes = {
+    children: PropTypes.node.isRequired,
+    bg: PropTypes.string,
+    color: PropTypes.string,
+    position: PropTypes.string,
+    z: PropTypes.string,
+    duration: PropTypes.number,
+  }
+
+  state = {
+    open: true,
+  }
+
+  componentDidMount() {
+    if (this.props.duration) {
+      setTimeout(() => {
+        this.close()
+      }, this.props.duration)
+    }
+  }
+
+  close = () => {
+    this.setState({
+      open: false,
+    })
+  }
+
+  render() {
+    return (
+      <Bar
+        z={this.props.z}
+        position={this.props.position}
+        bg={this.props.bg}
+        color={this.props.color}
+        open={this.state.open}
+      >
+        <NoticeText>{this.props.children}</NoticeText>
+        {!this.props.duration && (
+          <CloseButton onClick={this.close} role="button" aria-pressed={!this.state.open}>
+            <span className="sr-only">Hide notice</span>
+            X
+          </CloseButton>
+        )}
+      </Bar>
+    )
+  }
+}
+
+const Bar = styled.div`
   width: 100%;
-  min-height: 2em;
-  background-color: ${props => props.colors[props.color]};
-  display: flex;
-  color: white;
+  z-index: ${p => p.z};
+  max-height: ${p => (p.open ? '4em' : '0em')};
+  background-color: ${props => checkColor(props.bg)};
+  ${p =>
+    p.border &&
+    `border: 2px solid ${p.border_color ? checkColor(p.border_color) : 'black'};`} display: flex;
+  color: ${props => checkColor(props.color)};
   justify-content: center;
   align-items: center;
+  overflow: hidden;
+  position: ${p => p.position};
+  top: 0;
+  left: 0;
 `
 
 const NoticeText = styled.h3`
@@ -22,24 +85,8 @@ const NoticeText = styled.h3`
   text-align: center;
 `
 
-const NoticeBar = props => (
-  <Fragment>
-    {props.deprecated && (
-      <Bar color="deprecated">
-        <NoticeText>{props.deprecated}</NoticeText>
-      </Bar>
-    )}
-    {props.cumulative && (
-      <Bar color="cumulative">
-        <NoticeText>{props.cumulative}</NoticeText>
-      </Bar>
-    )}
-    {props.notice && (
-      <Bar color="notice">
-        <NoticeText>{props.notice}</NoticeText>
-      </Bar>
-    )}
-  </Fragment>
-)
-
-export default NoticeBar
+const CloseButton = styled(TransparentButton)`
+  position: absolute;
+  right: 1em;
+  color: white;
+`

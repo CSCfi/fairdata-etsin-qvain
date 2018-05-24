@@ -1,7 +1,5 @@
-import React from 'react'
 import ReactDOM from 'react-dom' // eslint-disable-line no-unused-vars
-import { shallow } from 'enzyme'
-import dateFormat from 'Utils/dateFormat'
+import dateFormat from '../js/utils/dateFormat'
 
 describe('check date', () => {
   it('should return only year', () => {

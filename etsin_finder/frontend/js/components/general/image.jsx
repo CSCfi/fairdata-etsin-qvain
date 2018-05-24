@@ -1,10 +1,6 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-
-const StyledImg = styled.img`
-  max-width: 100%;
-  max-height: 7em;
-`
+import PropTypes from 'prop-types'
 
 export default class Image extends Component {
   constructor(props) {
@@ -18,4 +14,14 @@ export default class Image extends Component {
   render() {
     return <StyledImg alt={this.state.alt} src={this.state.file} />
   }
+}
+
+const StyledImg = styled.img`
+  max-width: 100%;
+  max-height: 7em;
+`
+
+Image.propTypes = {
+  file: PropTypes.string.isRequired,
+  alt: PropTypes.string.isRequired,
 }

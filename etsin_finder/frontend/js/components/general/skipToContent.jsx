@@ -1,11 +1,23 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
+import PropTypes from 'prop-types'
+
+export default class SkipToContent extends Component {
+  render() {
+    return (
+      <STC onClick={this.props.callback}>
+        <Translate content="stc" />
+      </STC>
+    )
+  }
+}
 
 const STC = styled.button`
-  background: rgb(77, 179, 231);
+  background: ${p => p.theme.color.primary};
   color: white;
   max-height: 0;
+  width: 100%;
   margin: 0;
   padding: 0;
   border: none;
@@ -18,12 +30,6 @@ const STC = styled.button`
   }
 `
 
-export default class SkipToContent extends Component {
-  render() {
-    return (
-      <STC onClick={this.props.callback}>
-        <Translate content="stc" />
-      </STC>
-    )
-  }
+SkipToContent.propTypes = {
+  callback: PropTypes.func.isRequired,
 }

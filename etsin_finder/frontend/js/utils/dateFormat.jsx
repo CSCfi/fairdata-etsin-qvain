@@ -1,4 +1,4 @@
-import Locale from 'Stores/view/language'
+import Locale from '../stores/view/language'
 
 const formats = {
   fi: {

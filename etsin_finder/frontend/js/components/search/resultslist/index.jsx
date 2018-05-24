@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import { inject, observer } from 'mobx-react'
+import PropTypes from 'prop-types'
 
-import ElasticQuery from 'Stores/view/elasticquery'
+import ElasticQuery from '../../../stores/view/elasticquery'
 import ListItem from './listItem'
 
 class ResultsList extends Component {
@@ -12,9 +13,15 @@ class ResultsList extends Component {
   }
 
   renderList(lang) {
+    console.log('ES results', ElasticQuery.results)
     const list = ElasticQuery.results.hits.map(
       single => (
-        <ListItem key={single._id} item={single._source} lang={lang} />
+        <ListItem
+          key={single._id}
+          catId={single._source.identifier}
+          item={single._source}
+          lang={lang}
+        />
       ),
       this
     )
@@ -23,7 +30,7 @@ class ResultsList extends Component {
 
   render() {
     const { currentLang } = this.props.Stores.Locale
-    if (ElasticQuery.results.hits.length === 0 && ElasticQuery.loading === 0) {
+    if (ElasticQuery.results.hits.length === 0 && ElasticQuery.loading === false) {
       return (
         <div className="results-zero">
           <span>
@@ -36,6 +43,10 @@ class ResultsList extends Component {
     }
     return this.renderList(currentLang)
   }
+}
+
+ResultsList.propTypes = {
+  Stores: PropTypes.object.isRequired,
 }
 
 export default inject('Stores')(observer(ResultsList))

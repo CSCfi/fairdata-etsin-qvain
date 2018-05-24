@@ -1,57 +1,63 @@
-import React from 'react'
-import Translate from 'react-translate-component'
-import Announcer from 'react-a11y-announcer'
-import { inject, observer } from 'mobx-react'
-import { Link } from 'react-router-dom'
-import translate from 'counterpart'
+import React, { Component } from 'react'
+import styled from 'styled-components'
 
-import Navi from 'Components/general/navigation'
-import ErrorBoundary from 'Components/general/errorBoundary'
-import Accessibility from 'Stores/view/accessibility'
+import EtsinLogo from '../components/general/header/etsinLogo'
+import Settings from '../components/general/navigation/settings'
+import Navi from '../components/general/navigation/index'
+import MobileNavi from '../components/general/navigation/mobileNavi'
 
-class Header extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      announcer: '',
-    }
-  }
-
-  componentWillReceiveProps() {
-    this.setState({
-      announcer: Accessibility.navText,
-    })
-  }
-
+export default class Header extends Component {
+  state = {}
   render() {
     return (
-      <div className="header">
-        <Announcer text={this.state.announcer} />
-        <ErrorBoundary>
-          <div className="container">
-            <div className="row top-logo">
-              <div className="container align-left row">
-                <Link
-                  to="/"
-                  onClick={() => {
-                    Accessibility.setNavText(
-                      translate('changepage', { page: translate('nav.home') })
-                    )
-                  }}
-                >
-                  <img alt="Etsin -logo" src="../../static/images/etsin_logo.png" />
-                </Link>
-                <p className="slogan">
-                  <Translate content="slogan" />
-                </p>
-              </div>
-            </div>
+      <HeaderBar>
+        <Positioner className="container">
+          <EtsinLogo />
+          <NaviCont>
             <Navi />
-          </div>
-        </ErrorBoundary>
-      </div>
+          </NaviCont>
+          <Right>
+            <MobileNavi />
+            <Settings />
+          </Right>
+        </Positioner>
+      </HeaderBar>
     )
   }
 }
 
-export default inject('Stores')(observer(Header))
+const HeaderBar = styled.div`
+  width: 100%;
+  height: 4em;
+  background-color: white;
+  color: ${p => p.theme.color.dark};
+  display: flex;
+  justify-content: center;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
+`
+
+const Positioner = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`
+
+const NaviCont = styled.div`
+  display: none;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  @media screen and (min-width: ${p => p.theme.breakpoints.lg}) {
+    display: flex;
+  }
+`
+
+const Right = styled.div`
+  width: 12em;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  height: 100%;
+`
