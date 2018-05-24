@@ -3,9 +3,10 @@ import { Provider } from 'mobx-react'
 import { BrowserRouter as Router } from 'react-router-dom'
 import styled, { ThemeProvider } from 'styled-components'
 import { storiesOf, addDecorator } from '@storybook/react'
+import { action } from '@storybook/addon-actions'
 
 import Stores from '../js/stores'
-import theme from '../js/theme'
+import theme from '../js/styles/theme'
 import Hero from '../js/components/general/hero'
 import LangToggle from '../js/components/general/navigation/langToggle'
 import Button, {
@@ -28,7 +29,7 @@ import Footer from '../js/layout/footer'
 import Loader from '../js/components/general/loader'
 import Separator from '../js/components/general/separator'
 import SkipToContent from '../js/components/general/skipToContent'
-import NewHeader from '../js/layout/newHeader'
+import Header from '../js/layout/header'
 import VersionChanger from '../js/components/dataset/versionChanger'
 import Tabs from '../js/components/dataset/tabs'
 import ComponentCode from './componentCode'
@@ -38,6 +39,7 @@ import Table from '../js/components/dataset/data/table'
 import ExternalResources from '../js/components/dataset/data/externalResources'
 import Info from '../js/components/dataset/data/info'
 import Dropdown from '../js/components/general/dropdown'
+// import Select from '../js/components/general/select'
 
 import EsRes from './esRes'
 import MetaxRes, { MetaxRemote } from './metaxRes'
@@ -181,7 +183,7 @@ storiesOf('General/Button', module)
 
 storiesOf('General/Header', module).add('Active', () => (
   <Fragment>
-    <NewHeader />
+    <Header />
     <Hero className="hero-primary">
       <h1>Example</h1>
     </Hero>
@@ -247,6 +249,28 @@ storiesOf('General/Skip to Content', module).add('Normal', () => (
     <p>Press tab to see skipToContent</p>
   </div>
 ))
+
+// storiesOf('General/Select', module).add('Normal', () => {
+//   const options = [
+//     { label: 'HTML', value: 'html' },
+//     { label: 'CSS', value: 'css' },
+//     { label: 'Python', value: 'python' },
+//     { label: 'Javascript', value: 'js' },
+//     { label: 'PHP', value: 'php' },
+//   ]
+//   return (
+//     <Container maxWidth="500px" center>
+//       <Select
+//         name="test-select"
+//         onBlur={action('select-blur')}
+//         onChange={action('select-change')}
+//         error={false}
+//         options={options}
+//         value={options[2]}
+//       />
+//     </Container>
+//   )
+// })
 
 //
 // --- Search ---

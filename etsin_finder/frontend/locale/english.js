@@ -9,6 +9,7 @@ const english = {
     citation: 'Citation',
     citation_formats: 'Show more citation formats',
     contact: {
+      access: 'Contact the curator on issues related to dataset access',
       contact: 'Contact',
       email: {
         error: { required: 'Email is required!', invalid: 'Invalid email address' },
