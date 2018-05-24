@@ -3,6 +3,7 @@ import { inject, observer } from 'mobx-react'
 import PropTypes from 'prop-types'
 
 import ElasticQuery from '../../../stores/view/elasticquery'
+import Loader from '../../general/loader'
 import ListItem from './listItem'
 
 class ResultsList extends Component {
@@ -29,7 +30,12 @@ class ResultsList extends Component {
 
   render() {
     const { currentLang } = this.props.Stores.Locale
-    return this.renderList(currentLang)
+    return (
+      <div>
+        <Loader active={ElasticQuery.loading} margin="0.2em 0 1em" />
+        {this.renderList(currentLang)}
+      </div>
+    )
   }
 }
 

@@ -54,7 +54,7 @@ class Search extends Component {
             </div>
           </div>
         </HeroBanner>
-        {this.state.initialLoad && <Results query={this.props.match.params.query} />}
+        {this.state.initialLoad && <Results />}
       </div>
     )
   }

@@ -15,7 +15,6 @@ import ResultsAmount from './resultsAmount'
 import CurrentQuery from './currentQuery'
 import FilterResults from './filterResults'
 import FilterToggle from './filterResults/filterToggle'
-import Loader from '../general/loader'
 import NoResults from './noResults'
 
 class Results extends Component {
@@ -61,11 +60,8 @@ class Results extends Component {
               <QueryString>
                 <CurrentQuery />
               </QueryString>
-              <LoadCont>
-                <Loader active={ElasticQuery.loading} margin="0.2em 0 1em" />
-              </LoadCont>
               <ResList>
-                <ResultsList query={this.props.query} />
+                <ResultsList />
               </ResList>
               <PageSwitcher>
                 <Pagination
@@ -138,9 +134,7 @@ const QueryString = styled.div`
     display: block;
   }
 `
-const LoadCont = styled.div`
-  grid-area: results;
-`
+
 const ResList = styled.div`
   grid-area: results;
 `
@@ -150,10 +144,6 @@ const PageSwitcher = styled.div`
 
 Results.defaultProps = {
   query: '',
-}
-
-Results.propTypes = {
-  query: PropTypes.string,
 }
 
 export default inject('Stores')(observer(Results))

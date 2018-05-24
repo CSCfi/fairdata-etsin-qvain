@@ -47,11 +47,12 @@ const Holder = styled.div`
   }
 `
 
+/* prettier-ignore */
 const Spinner = styled.div`
   height: ${p => p.size};
   width: ${p => p.size};
   animation: spinner 0.8s infinite linear;
-  border: 0px solid ${props => (props.color ? props.color : props.theme.color.primary)};
+  border: ${p => p.spinnerSize} solid ${p => (p.color ? p.color : p.theme.color.primary)};
   border-right-color: transparent;
   border-radius: 50%;
   transition: all 0.3s ease;
