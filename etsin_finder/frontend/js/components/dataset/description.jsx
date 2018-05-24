@@ -15,6 +15,7 @@ import Person from './person'
 import Contact from './contact'
 import VersionChanger from './versionChanger'
 import GoToOriginal from './goToOriginal'
+// import Button from '../general/button'
 
 const Labels = styled.div`
   display: flex;
@@ -78,7 +79,15 @@ class Description extends Component {
             <ErrorBoundary>
               {this.checkEmails(this.props.emails) &&
                 !this.props.harvested && (
-                  <Contact datasetID={this.props.dataset.identifier} emails={this.props.emails} />
+                  <Contact
+                    datasetID={this.props.dataset.identifier}
+                    emails={this.props.emails}
+                    // TEMPORARY: rems check won't be needed in contact later.
+                    isRems={
+                      this.props.dataset.research_dataset.access_rights.access_type.identifier ===
+                      'http://purl.org/att/es/reference_data/access_type/access_type_restricted_access_permit'
+                    }
+                  />
                 )}
             </ErrorBoundary>
             {/* <Button onClick={() => alert('Hae käyttölupaa')} noMargin>

@@ -9,6 +9,7 @@ const finnish = {
     citation: 'Sitaatti',
     citation_formats: 'Näytä lisää sitaattiehdotuksia',
     contact: {
+      access: 'Aineiston käyttöoikeuteen liittyvissä kyselyissä ota yhteyttä kuraattoriin.',
       contact: 'Ota yhteyttä',
       email: {
         error: { required: 'Sähköposti vaaditaan!', invalid: 'Virhe sähköpostissa' },

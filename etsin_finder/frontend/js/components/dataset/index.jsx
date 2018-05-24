@@ -104,10 +104,12 @@ class Dataset extends React.Component {
         )}
         <div className="container regular-row">
           <div className="row">
-            <BackButton color="" noPadding margin="0 0 0.5em 0" onClick={this.goBack}>
-              <span aria-hidden>{'< '}</span>
-              <Translate content={'dataset.goBack'} />
-            </BackButton>
+            <div className="col-12">
+              <BackButton color="" noPadding margin="0 0 0.5em 0" onClick={this.goBack}>
+                <span aria-hidden>{'< '}</span>
+                <Translate content={'dataset.goBack'} />
+              </BackButton>
+            </div>
           </div>
           <div className="row">
             <Content

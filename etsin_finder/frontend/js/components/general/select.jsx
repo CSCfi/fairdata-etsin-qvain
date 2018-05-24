@@ -44,7 +44,7 @@ export default class Select extends Component {
 }
 /* prettier-ignore */
 const SelectContainer = styled.div.attrs({
-  current: props => (props.options[0] === props.value && props.colorCurrent),
+  current: props => (props.options[0] === props.value ? props.colorCurrent : undefined),
   bordercolor: props => (props.bordercolor ? props.bordercolor : props.theme.color.gray),
   background: props => (props.background ? props.background : 'white'),
   textcolor: props => (props.textcolor ? props.textcolor : '#666'),
@@ -541,3 +541,108 @@ Select.propTypes = {
   options: PropTypes.array.isRequired,
   value: PropTypes.object.isRequired,
 }
+
+// -----------
+
+// import React, { Component } from 'react'
+// import styled, { css } from 'styled-components'
+// // import { lighten } from 'polished'
+// import PropTypes from 'prop-types'
+// export default class Select extends Component {
+//   constructor(props) {
+//     super(props)
+//     this.state = {
+//       isOpen: false,
+//     }
+//   }
+//   handleChange = value => {
+//     // this is going to call setFieldValue and manually update values.topics
+//     this.toggleOpen()
+//     this.props.onChange(this.props.name, value)
+//   }
+//   handleBlur = () => {
+//     // this is going to call setFieldTouched and manually update touched.topcis
+//     this.props.onBlur(this.props.name, true)
+//   }
+//   handleKey = e => {
+//     console.log(e)
+//   }
+//   toggleOpen = () => {
+//     this.setState({
+//       isOpen: !this.state.isOpen,
+//     })
+//   }
+//   render() {
+//     const { error, name, options, value } = this.props
+//     return (
+//       <SelectContainer error={error} options={options}>
+//         <Controller isOpen={this.state.isOpen} onClick={this.toggleOpen}>
+//           {value.label}
+//         </Controller>
+//         <List isOpen={this.state.isOpen} id={name}>
+//           {options.map(item => (
+//             <ListItem
+//               key={item.value}
+//               role="button"
+//               value={item.value}
+//               onClick={() => this.handleChange(item)}
+//               onKeyPress={this.handleKey}
+//             >
+//               {item.label}
+//             </ListItem>
+//           ))}
+//         </List>
+//       </SelectContainer>
+//     )
+//   }
+// }
+// /* prettier-ignore */
+// const SelectContainer = styled.div.attrs({
+//   bordercolor: props => (props.bordercolor ? props.bordercolor : props.theme.color.gray),
+//   background: props => (props.background ? props.background : 'white'),
+//   textcolor: props => (props.textcolor ? props.textcolor : '#666'),
+//   selectedcolor: props => (props.selectedColor ? props.selectedColor : '#333'),
+//   placeholder: props => (props.textcolor ? props.textcolor : '#aaa'),
+//   textpadding: props => (props.textpadding ? props.textpadding : '1.2em'),
+// })`
+//   width: 100%;
+//   position: relative;
+// `
+// /* prettier-ignore */
+// const Controller = styled.button`
+//   background: transparent;
+//   border: 1px solid gray;
+//   border-radius: 5px;
+//   ${p => p.isOpen && css`border-radius: 5px 5px 0px 0px;`}
+//   width: 100%;
+//   text-align: left;
+//   padding: 0.3em 1em;
+// `
+// const List = styled.ul`
+//   display: ${p => (p.isOpen ? '' : 'none')};
+//   position: absolute;
+//   width: 100%;
+//   margin: 0;
+//   padding: 0;
+// `
+// const ListItem = styled.li`
+//   list-style: none;
+//   padding: 0.3em 1em;
+//   border: 1px solid gray;
+//   margin: -1px 0px -1px 0px;
+//   background: white;
+//   &:nth-of-type(even) {
+//     background: #f4f4f4;
+//   }
+// `
+// Select.defaultProps = {
+//   error: false,
+// }
+// Select.propTypes = {
+//   name: PropTypes.string.isRequired,
+//   onBlur: PropTypes.func.isRequired,
+//   onChange: PropTypes.func.isRequired,
+//   error: PropTypes.bool,
+//   options: PropTypes.array.isRequired,
+//   value: PropTypes.object.isRequired,
+// }
