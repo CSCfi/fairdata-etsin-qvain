@@ -166,6 +166,7 @@ const finnish = {
       SRcurrentpage: 'tämä sivu',
       SRpagination: 'Paginaatio',
     },
+    noResults: 'Haullesi - <strong>%(search)s</strong> - ei löytynyt yhtään osumaa.',
   },
   slogan: 'Tutkimustenhaku palvelu',
   stc: 'Siirry sivun pääsisältöön',

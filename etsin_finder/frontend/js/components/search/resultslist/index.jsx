@@ -13,7 +13,6 @@ class ResultsList extends Component {
   }
 
   renderList(lang) {
-    console.log('ES results', ElasticQuery.results)
     const list = ElasticQuery.results.hits.map(
       single => (
         <ListItem
@@ -30,17 +29,6 @@ class ResultsList extends Component {
 
   render() {
     const { currentLang } = this.props.Stores.Locale
-    if (ElasticQuery.results.hits.length === 0 && ElasticQuery.loading === false) {
-      return (
-        <div className="results-zero">
-          <span>
-            Your search -
-            <strong> {ElasticQuery.search} </strong>
-            - did not match any documents
-          </span>
-        </div>
-      )
-    }
     return this.renderList(currentLang)
   }
 }

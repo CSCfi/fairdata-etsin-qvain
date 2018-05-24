@@ -924,6 +924,10 @@ export default injectGlobal`
     }
   }
 
+  strong {
+    font-weight: 700;
+  }
+
   .app {
     display: flex;
     min-height: 100vh;
@@ -1011,7 +1015,10 @@ export default injectGlobal`
   }
 
   .regular-row {
-    padding: 40px 0;
+    padding: 20px 0;
+    @media screen and (min-width: ${etsinTheme.breakpoints.md}) {
+      padding: 40px 0;
+    }
   }
   .nopadding {
     padding: 0;

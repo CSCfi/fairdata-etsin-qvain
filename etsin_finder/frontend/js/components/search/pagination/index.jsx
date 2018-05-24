@@ -122,16 +122,11 @@ class Pagination extends Component {
               this.changePage(e, value)
             }}
           >
-            <span className="sr-only">
-              <Translate content="search.pagination.SRpage" />{' '}
-            </span>
-            {value}
+            <Translate content="search.pagination.SRpage" className="sr-only" /> {value}
           </PaginationButton>
         ) : (
           <PaginationItem className="current">
-            <span className="sr-only">
-              <Translate content="search.pagination.SRcurrentpage" />{' '}
-            </span>
+            <Translate content="search.pagination.SRcurrentpage" className="sr-only" />{' '}
             <span aria-hidden="true">{value}</span>
           </PaginationItem>
         )}
@@ -198,14 +193,13 @@ class Pagination extends Component {
     return (
       <ul>
         {this.state.currentPage > 1 && (
-          <TransparentButton
-            className="d-none d-lg-block"
+          <PaginationButton
             onClick={e => {
               this.changePage(e, this.state.currentPage - 1)
             }}
           >
-            {'<'} <Translate content="search.pagination.prev" />
-          </TransparentButton>
+            {'<'} <Translate content="search.pagination.prev" className="sr-only" />
+          </PaginationButton>
         )}
         {// first page
         this.state.currentPage !== 1 && this.singlePage(1, true)}
@@ -220,14 +214,13 @@ class Pagination extends Component {
         this.state.currentPage !== this.state.pageAmount &&
           this.singlePage(this.state.pageAmount, true)}
         {this.state.currentPage < this.state.pageAmount && (
-          <TransparentButton
-            className="d-none d-lg-block"
+          <PaginationButton
             onClick={e => {
               this.changePage(e, this.state.currentPage + 1)
             }}
           >
-            <Translate content="search.pagination.next" /> {'>'}
-          </TransparentButton>
+            <Translate content="search.pagination.next" className="sr-only" /> {'>'}
+          </PaginationButton>
         )}
       </ul>
     )

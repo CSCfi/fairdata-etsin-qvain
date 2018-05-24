@@ -58,19 +58,19 @@ class AccessRights extends Component {
 
   restricted() {
     return (
-      <div title={checkDataLang(this.state.title)}>
+      <Inner title={checkDataLang(this.state.title)}>
         <FontAwesomeIcon icon={faLock} />
         <AccessLabel>{checkDataLang(this.state.title)}</AccessLabel>
-      </div>
+      </Inner>
     )
   }
 
   openAccess() {
     return (
-      <div title={checkDataLang(this.state.title)}>
+      <Inner title={checkDataLang(this.state.title)}>
         <FontAwesomeIcon icon={faLockOpen} />
         <AccessLabel>{checkDataLang(this.state.title)}</AccessLabel>
-      </div>
+      </Inner>
     )
   }
   render() {
@@ -97,6 +97,14 @@ const Access = styled.div`
 
 const AccessLabel = styled.div`
   display: inline;
+`
+
+const Inner = styled.div`
+  max-width: 100%;
+  @media screen and (min-width: ${p => p.theme.breakpoints.md}) {
+    width: max-content;
+    max-width: 14em;
+  }
 `
 
 AccessRights.defaultProps = {
