@@ -1,20 +1,19 @@
 const path = require('path')
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
-
-// const criticalCSS = new ExtractTextPlugin('critical.css')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const CleanWebpackPlugin = require('clean-webpack-plugin')
 
 const config = {
   entry: [path.join(__dirname, '/js/index.jsx')],
   output: {
     // path of output
-    path: path.join(__dirname, '/static'),
+    path: path.join(__dirname, '/build'),
     // publicPath is used in dynamic chunk loading
-    publicPath: '/static/',
-    filename: 'bundle.js',
-    chunkFilename: '[name].bundle.js',
+    publicPath: '/build/',
+    filename: 'bundle.[chunkhash].js',
+    chunkFilename: '[name].[chunkhash].js',
   },
   resolve: {
-    extensions: ['.js', '.jsx', '.css'],
+    extensions: ['.js', '.jsx'],
   },
   module: {
     rules: [
@@ -23,18 +22,6 @@ const config = {
         exclude: /node_modules/,
         loader: 'babel-loader',
       },
-      // {
-      //   // this doesn't work correctly
-      //   include: [path.resolve(__dirname, 'critical.css')],
-      //   use: criticalCSS.extract({
-      //     use: ExtractTextPlugin.extract(['css-loader', 'sass-loader']),
-      //   }),
-      // },
-      {
-        test: /\.(sass|scss)$/,
-        exclude: /node_modules/,
-        use: ExtractTextPlugin.extract(['css-loader', 'sass-loader']),
-      },
       {
         test: /\.(woff|woff2|eot|ttf|otf|svg|jpg|png)$/,
         use: 'file-loader',
@@ -42,12 +29,13 @@ const config = {
     ],
   },
   plugins: [
-    // minimal plugins = fast development builds
-    // criticalCSS,
-    new ExtractTextPlugin({
-      // define where to save the extracted styles file
-      filename: '[name].bundle.css',
-      allChunks: true,
+    new CleanWebpackPlugin(['build']),
+    new HtmlWebpackPlugin({
+      // TODO: add manifest to new html
+      chunksSortMode: 'none',
+      filename: 'index.html',
+      template: 'static/index.template.ejs',
+      favicon: 'static/images/favicon.png',
     }),
   ],
   watch: false,
