@@ -2,6 +2,7 @@ import { observable, action } from 'mobx'
 import axios from 'axios'
 
 import UrlParse from '../../utils/urlParse'
+import Helpers from '../../utils/helpers'
 import Locale from './language'
 
 const fields = [
@@ -182,7 +183,7 @@ class ElasticQuery {
       return new Promise(resolve => resolve())
     }
 
-    if (Date.now() - lastQueryTime < 1000) {
+    if (Date.now() - lastQueryTime < 500) {
       return new Promise(resolve => resolve())
     }
     lastQueryTime = Date.now()
@@ -318,6 +319,9 @@ class ElasticQuery {
       let from = this.pageNum * this.perPage
       from -= this.perPage
 
+      const currentSearch = this.search
+      const currentFilters = this.filter.slice()
+      const currentSorting = this.sorting
       axios
         .post('/es/metax/dataset/_search', {
           size: this.perPage,
@@ -338,14 +342,23 @@ class ElasticQuery {
           aggregations,
         })
         .then(res => {
-          // update results and stop loading
-          this.results = {
-            hits: res.data.hits.hits,
-            total: res.data.hits.total,
-            aggregations: res.data.aggregations,
+          // Fixes race condition
+          if (
+            currentSearch !== this.search ||
+            !Helpers.isEqual(currentFilters, this.filter) ||
+            currentSorting !== this.sorting
+          ) {
+            resolve()
+          } else {
+            // update results and stop loading
+            this.results = {
+              hits: res.data.hits.hits,
+              total: res.data.hits.total,
+              aggregations: res.data.aggregations,
+            }
+            this.loading = false
+            resolve()
           }
-          this.loading = false
-          resolve()
         })
         .catch(err => {
           reject(err)
