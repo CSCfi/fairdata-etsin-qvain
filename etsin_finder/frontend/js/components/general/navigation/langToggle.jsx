@@ -21,6 +21,13 @@ class LangToggle extends Component {
     announce: '',
   }
 
+  componentDidMount() {
+    const storedLang = localStorage.getItem('lang')
+    if (storedLang) {
+      this.props.Stores.Locale.setLang(storedLang)
+    }
+  }
+
   changeLang = () => {
     this.props.Stores.Locale.toggleLang()
     setTimeout(() => {

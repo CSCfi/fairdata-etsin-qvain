@@ -3,7 +3,7 @@ import FancyLoader from '../components/general/fancyLoader'
 import ErrorPage from '../components/errorpage'
 
 export const Home = loadable(
-  () => import(/* webpackChunkName: "frontpage" */ '../components/frontpage'),
+  () => import('../components/frontpage' /* webpackChunkName: "frontpage" */),
   {
     LoadingComponent: FancyLoader,
     ErrorComponent: ErrorPage,
@@ -16,7 +16,7 @@ export const Home = loadable(
 )
 
 export const Dataset = loadable(
-  () => import(/* webpackChunkName: "dataset" */ '../components/dataset'),
+  () => import('../components/dataset' /* webpackChunkName: "dataset" */),
   {
     LoadingComponent: FancyLoader,
     ErrorComponent: ErrorPage,
@@ -29,7 +29,7 @@ export const Dataset = loadable(
 )
 
 export const Search = loadable(
-  () => import(/* webpackChunkName: "search" */ '../components/search'),
+  () => import('../components/search' /* webpackChunkName: "search" */),
   {
     LoadingComponent: FancyLoader,
     ErrorComponent: ErrorPage,
@@ -41,7 +41,7 @@ export const Search = loadable(
   }
 )
 
-export const About = loadable(() => import(/* webpackChunkName: "about" */ '../components/about'), {
+export const About = loadable(() => import('../components/about' /* webpackChunkName: "about" */), {
   LoadingComponent: FancyLoader,
   ErrorComponent: ErrorPage,
   // render: ({ Component, loading, error, ownProps }) => {

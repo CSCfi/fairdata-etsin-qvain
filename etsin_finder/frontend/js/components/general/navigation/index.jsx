@@ -10,7 +10,6 @@ export default class Navi extends React.Component {
   render() {
     return (
       <React.Fragment>
-        {console.log(this.props)}
         <NavItem
           exact
           to="/"

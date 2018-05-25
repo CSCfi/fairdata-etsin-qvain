@@ -183,7 +183,7 @@ class ElasticQuery {
       return new Promise(resolve => resolve())
     }
 
-    if (Date.now() - lastQueryTime < 500) {
+    if (Date.now() - lastQueryTime < 200) {
       return new Promise(resolve => resolve())
     }
     lastQueryTime = Date.now()
@@ -342,6 +342,7 @@ class ElasticQuery {
           aggregations,
         })
         .then(res => {
+          // TODO: cache/save results
           // Fixes race condition
           if (
             currentSearch !== this.search ||
