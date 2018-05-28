@@ -38,40 +38,45 @@ class Results extends Component {
           {ElasticQuery.results.total === 0 && !ElasticQuery.loading ? (
             <NoResults />
           ) : (
-            <Grid>
-              <AmountRes>
-                <ResultsAmount amount={ElasticQuery.results.total} />
-              </AmountRes>
-              <SortRes>
-                <FilterToggle
-                  margin="0em 0.5em 0em 0em"
-                  onClick={this.toggleFilter}
-                  active={this.state.filterOpen}
-                >
-                  <FontAwesomeIcon icon={faFilter} /> <Translate content="search.filter.filter" />
-                </FilterToggle>
-                <SortResults />
-              </SortRes>
-              <FilterRes>
-                <HeightTransition in={this.state.filterOpen} duration={300} onlyMobile>
-                  <FilterResults open={this.state.filterOpen} />
-                </HeightTransition>
-              </FilterRes>
-              <QueryString>
-                <CurrentQuery />
-              </QueryString>
-              <ResList>
-                <ResultsList />
-              </ResList>
-              <PageSwitcher>
-                <Pagination
-                  loading={ElasticQuery.loading}
-                  totalResults={ElasticQuery.results.total}
-                  perPage={ElasticQuery.perPage}
-                  currentPage={ElasticQuery.pageNum}
-                />
-              </PageSwitcher>
-            </Grid>
+            <div>
+              <Header>
+                <AmountCont>
+                  <ResultsAmount amount={ElasticQuery.results.total} />
+                </AmountCont>
+                <ResultsHeader>
+                  <QueryCont>
+                    <CurrentQuery />
+                  </QueryCont>
+                  <Settings>
+                    <FilterToggle
+                      margin="0em 0.5em 0em 0em"
+                      onClick={this.toggleFilter}
+                      active={this.state.filterOpen}
+                    >
+                      <FontAwesomeIcon icon={faFilter} />{' '}
+                      <Translate content="search.filter.filter" />
+                    </FilterToggle>
+                    <SortResults />
+                  </Settings>
+                </ResultsHeader>
+              </Header>
+              <Flex>
+                <Sidebar>
+                  <HeightTransition in={this.state.filterOpen} duration={300} onlyMobile>
+                    <FilterResults open={this.state.filterOpen} />
+                  </HeightTransition>
+                </Sidebar>
+                <ResultsCont>
+                  <ResultsList />
+                </ResultsCont>
+              </Flex>
+              <Pagination
+                loading={ElasticQuery.loading}
+                totalResults={ElasticQuery.results.total}
+                perPage={ElasticQuery.perPage}
+                currentPage={ElasticQuery.pageNum}
+              />
+            </div>
           )}
         </div>
       </div>
@@ -79,77 +84,65 @@ class Results extends Component {
   }
 }
 
-const Grid = styled.div`
-  display: grid;
-  transition: 0.3s ease;
-  width: 100%;
-  grid-template-columns: auto;
-  grid-template-areas:
-    'header'
-    'settings'
-    'filters'
-    'results'
-    'pagination';
-  grid-column-gap: 0.5em;
-  grid-row-gap: 0.5em;
-  @media (min-width: ${props => props.theme.breakpoints.sm}) {
-    grid-template-areas:
-      'settings'
-      'filters'
-      'results'
-      'pagination';
-  }
-  @media (min-width: ${props => props.theme.breakpoints.lg}) {
-    grid-column-gap: 1em;
-    grid-row-gap: 1em;
-    grid-template-columns: 1fr 3fr;
-    grid-template-areas:
-      'header settings'
-      'sidebar results'
-      'pagination pagination';
-  }
-`
-const AmountRes = styled.div`
-  @media (min-width: ${props => props.theme.breakpoints.sm}) {
-    grid-area: settings;
-  }
-  @media (min-width: ${props => props.theme.breakpoints.lg}) {
-    grid-area: header;
-  }
-  grid-area: header;
-  align-self: center;
-`
-const FilterRes = styled.div`
+const Header = styled.div`
   display: flex;
-  @media (min-width: ${props => props.theme.breakpoints.lg}) {
-    grid-area: sidebar;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.8em;
+`
+
+const ResultsHeader = styled.div`
+  width: 100%;
+  @media screen and (min-width: ${p => p.theme.breakpoints.lg}) {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: ${8 / 0.12}%;
+    padding: 0 0 0 1em;
   }
-  overflow: hidden;
-  grid-area: filters;
 `
-const SortRes = styled.div`
-  grid-area: settings;
-  align-self: center;
-  width: max-content;
-  justify-self: end;
+
+const AmountCont = styled.div`
+  width: 100%;
+  @media screen and (min-width: ${p => p.theme.breakpoints.lg}) {
+    width: ${4 / 0.12}%;
+  }
 `
-const QueryString = styled.div`
-  grid-area: settings;
+
+const QueryCont = styled.div`
   display: none;
-  align-self: center;
   p {
-    margin: auto;
+    margin-bottom: 0;
   }
-  @media (min-width: ${props => props.theme.breakpoints.lg}) {
+  @media screen and (min-width: ${p => p.theme.breakpoints.lg}) {
     display: block;
   }
 `
 
-const ResList = styled.div`
-  grid-area: results;
+const Sidebar = styled.div`
+  display: block;
+  overflow: hidden;
+  width: 100%;
+  @media screen and (min-width: ${p => p.theme.breakpoints.lg}) {
+    width: ${4 / 0.12}%;
+  }
 `
-const PageSwitcher = styled.div`
-  grid-area: pagination;
+
+const ResultsCont = styled.div`
+  @media screen and (min-width: ${p => p.theme.breakpoints.lg}) {
+    width: ${8 / 0.12}%;
+    padding: 0 0 0 1em;
+  }
+`
+
+const Flex = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+`
+
+const Settings = styled.div`
+  float: right;
 `
 
 Results.defaultProps = {

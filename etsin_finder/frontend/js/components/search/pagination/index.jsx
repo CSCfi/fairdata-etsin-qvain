@@ -6,7 +6,6 @@ import styled from 'styled-components'
 import Translate from 'react-translate-component'
 
 import ElasticQuery from '../../../stores/view/elasticquery'
-import { TransparentButton } from '../../general/button'
 
 class Pagination extends Component {
   constructor(props) {
