@@ -346,11 +346,30 @@ class ElasticQuery {
           // Fixes race condition
           if (
             currentSearch !== this.search ||
-            !Helpers.isEqual(currentFilters, this.filter) ||
+            !Helpers.isEqual(currentFilters, this.filter.slice()) ||
             currentSorting !== this.sorting
           ) {
+            console.log('fixed race')
+            console.table({
+              search: {
+                current: currentSearch,
+                new: this.search,
+                isEqual: currentSearch === this.search,
+              },
+              filters: {
+                current: currentFilters,
+                new: this.filter.slice(),
+                isEqual: Helpers.isEqual(currentFilters, this.filter.slice()),
+              },
+              sorting: {
+                current: currentSorting,
+                new: this.sorting,
+                isEqual: currentSorting === this.sorting,
+              },
+            })
             resolve()
           } else {
+            console.log('updated results')
             // update results and stop loading
             this.results = {
               hits: res.data.hits.hits,
