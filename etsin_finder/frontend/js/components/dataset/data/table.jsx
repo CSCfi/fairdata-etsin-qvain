@@ -26,32 +26,34 @@ export default class Table extends Component {
 
   render() {
     return (
-      <StyledTable aria-live="polite">
-        <THead>
-          <tr>
-            <Icon scope="col" />
-            {this.props.fields.name && (
-              <Name scope="col">
-                <Translate content="dataset.dl.name" />
-              </Name>
-            )}
-            {this.props.fields.size && (
-              <Size scope="col">
-                <Translate content="dataset.dl.size" />
-              </Size>
-            )}
-            {this.props.fields.category && (
-              <Category scope="col">
-                <Translate content="dataset.dl.category" />
-              </Category>
-            )}
-            {(this.props.fields.downloadBtn || this.props.fields.infoBtn) && (
-              <Buttons scope="col" />
-            )}
-          </tr>
-        </THead>
-        <TBody>{this.tableItems(this.props.data)}</TBody>
-      </StyledTable>
+      <TableContainer>
+        <StyledTable aria-live="polite">
+          <THead>
+            <tr>
+              <Icon scope="col" />
+              {this.props.fields.name && (
+                <Name scope="col">
+                  <Translate content="dataset.dl.name" />
+                </Name>
+              )}
+              {this.props.fields.size && (
+                <Size scope="col">
+                  <Translate content="dataset.dl.size" />
+                </Size>
+              )}
+              {this.props.fields.category && (
+                <Category scope="col">
+                  <Translate content="dataset.dl.category" />
+                </Category>
+              )}
+              {(this.props.fields.downloadBtn || this.props.fields.infoBtn) && (
+                <Buttons scope="col" />
+              )}
+            </tr>
+          </THead>
+          <TBody>{this.tableItems(this.props.data)}</TBody>
+        </StyledTable>
+      </TableContainer>
     )
   }
 }
@@ -108,4 +110,12 @@ const TBody = styled.tbody`
 
 const StyledTable = styled.table`
   width: 100%;
+`
+
+const TableContainer = styled.div`
+  width: 100%;
+  overflow-x: scroll;
+  @media screen and (min-width: ${p => p.theme.breakpoints.sm}) {
+    overflow-x: hidden;
+  }
 `
