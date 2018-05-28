@@ -3,7 +3,6 @@ import { inject, observer } from 'mobx-react'
 import styled from 'styled-components'
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faFilter from '@fortawesome/fontawesome-free-solid/faFilter'
-import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 
 import ElasticQuery from '../../stores/view/elasticquery'
@@ -39,43 +38,47 @@ class Results extends Component {
             <NoResults />
           ) : (
             <div>
-              <Header>
-                <AmountCont>
-                  <ResultsAmount amount={ElasticQuery.results.total} />
-                </AmountCont>
-                <ResultsHeader>
-                  <QueryCont>
-                    <CurrentQuery />
-                  </QueryCont>
-                  <Settings>
-                    <FilterToggle
-                      margin="0em 0.5em 0em 0em"
-                      onClick={this.toggleFilter}
-                      active={this.state.filterOpen}
-                    >
-                      <FontAwesomeIcon icon={faFilter} />{' '}
-                      <Translate content="search.filter.filter" />
-                    </FilterToggle>
-                    <SortResults />
-                  </Settings>
-                </ResultsHeader>
-              </Header>
-              <Flex>
-                <Sidebar>
-                  <HeightTransition in={this.state.filterOpen} duration={300} onlyMobile>
-                    <FilterResults open={this.state.filterOpen} />
-                  </HeightTransition>
-                </Sidebar>
-                <ResultsCont>
-                  <ResultsList />
-                </ResultsCont>
-              </Flex>
-              <Pagination
-                loading={ElasticQuery.loading}
-                totalResults={ElasticQuery.results.total}
-                perPage={ElasticQuery.perPage}
-                currentPage={ElasticQuery.pageNum}
-              />
+              {ElasticQuery.results.total !== 0 ? (
+                <div>
+                  <Header>
+                    <AmountCont>
+                      <ResultsAmount amount={ElasticQuery.results.total} />
+                    </AmountCont>
+                    <ResultsHeader>
+                      <QueryCont>
+                        <CurrentQuery />
+                      </QueryCont>
+                      <Settings>
+                        <FilterToggle
+                          margin="0em 0.5em 0em 0em"
+                          onClick={this.toggleFilter}
+                          active={this.state.filterOpen}
+                        >
+                          <FontAwesomeIcon icon={faFilter} />{' '}
+                          <Translate content="search.filter.filter" />
+                        </FilterToggle>
+                        <SortResults />
+                      </Settings>
+                    </ResultsHeader>
+                  </Header>
+                  <Flex>
+                    <Sidebar>
+                      <HeightTransition in={this.state.filterOpen} duration={300} onlyMobile>
+                        <FilterResults open={this.state.filterOpen} />
+                      </HeightTransition>
+                    </Sidebar>
+                    <ResultsCont>
+                      <ResultsList />
+                    </ResultsCont>
+                  </Flex>
+                  <Pagination
+                    loading={ElasticQuery.loading}
+                    totalResults={ElasticQuery.results.total}
+                    perPage={ElasticQuery.perPage}
+                    currentPage={ElasticQuery.pageNum}
+                  />
+                </div>
+              ) : null}
             </div>
           )}
         </div>
