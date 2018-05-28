@@ -21,20 +21,20 @@ export default class Person extends Component {
           <Translate content={`dataset.${this.state.mode}.snglr`} />
         )}
         {': '}
-        {this.props[this.state.mode].map(
-          (people, i, arr) =>
-            typeof people.name === 'object' ? (
-              <span key={checkDataLang(people.name)}>
-                {checkDataLang(people.name)}
-                {i + 1 !== arr.length ? ', ' : ''}
-              </span>
-            ) : (
-              <span key={people.name}>
-                {people.name}
-                {i + 1 !== arr.length ? ', ' : ''}
-              </span>
-            )
-        )}
+        {/* eslint-disable-next-line arrow-body-style */}
+        {this.props[this.state.mode].map((people, i, arr) => {
+          return typeof people.name === 'object' ? (
+            <span key={checkDataLang(people.name)}>
+              {checkDataLang(people.name)}
+              {i + 1 !== arr.length ? ', ' : ''}
+            </span>
+          ) : (
+            <span key={people.name}>
+              {people.name}
+              {i + 1 !== arr.length ? ', ' : ''}
+            </span>
+          )
+        })}
       </PersonCont>
     ) : null
   }
