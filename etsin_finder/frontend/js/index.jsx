@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom'
 
 import App from './app'
 
+global.Promise = require('bluebird')
+
 ReactDOM.render(<App />, document.getElementById('root'))
 
 if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {

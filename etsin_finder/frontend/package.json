@@ -28,6 +28,7 @@
     "babel-preset-env": "^1.7.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
+    "bluebird": "^3.5.1",
     "clean-webpack-plugin": "^0.1.19",
     "counterpart": "^0.18.6",
     "css-loader": "^0.28.11",
