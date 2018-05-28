@@ -1,9 +1,10 @@
+require('babel-polyfill')
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 
 const config = {
-  entry: [path.join(__dirname, '/js/index.jsx')],
+  entry: ['babel-polyfill', path.join(__dirname, '/js/index.jsx')],
   output: {
     // path of output
     path: path.join(__dirname, '/build'),

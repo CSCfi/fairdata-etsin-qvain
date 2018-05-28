@@ -12,7 +12,7 @@ export default class Content extends Component {
   }
   render() {
     return (
-      <main className="content">
+      <div className="content">
         <Announcer />
         <span ref={this.props.contentRef} tabIndex="-1" />
         <Switch>
@@ -22,7 +22,7 @@ export default class Content extends Component {
           <Route path="/dataset/:identifier" component={Dataset} />
           <Route render={() => <ErrorPage error={{ type: 'error' }} />} />
         </Switch>
-      </main>
+      </div>
     )
   }
 }
