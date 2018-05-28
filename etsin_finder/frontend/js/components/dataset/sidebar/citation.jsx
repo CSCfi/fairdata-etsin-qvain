@@ -50,9 +50,9 @@ export default class Citation extends Component {
           <span title="Release date">{this.state.release_date}, </span>
           <span title="Preferred identifier">{this.state.pid}</span>
         </p>
-        <LinkButton noMargin>
+        {/* <LinkButton noMargin>
           <Translate content="dataset.citation_formats" />
-        </LinkButton>
+        </LinkButton> */}
       </Fragment>
     )
   }
