@@ -17,6 +17,12 @@ if (process.env.NODE_ENV === 'test') {
   console.log('Looks like we are in development mode!')
 }
 
+/* get language from localstorage */
+const storedLang = localStorage.getItem('lang')
+if (storedLang) {
+  Stores.Locale.setLang(storedLang)
+}
+
 export default class App extends Component {
   constructor() {
     super()
