@@ -934,9 +934,6 @@ export default injectGlobal`
     flex-direction: column;
   }
 
-  .content {
-    flex: 1;
-  }
   .content > div {
     opacity: 0;
   }
@@ -1005,12 +1002,13 @@ export default injectGlobal`
   }
 
   .content {
-    flex: 1;
     display: flex;
+    min-height: 70vh;
+    min-height: calc(100vh - 4em - 200px);
     background-color: inherit;
     & > div {
       width: 100%;
-      opacity: unset;
+      opacity: inherit;
     }
   }
 
