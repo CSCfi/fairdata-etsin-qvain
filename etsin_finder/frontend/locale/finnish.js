@@ -121,7 +121,7 @@ const finnish = {
   home: {
     title: 'Etsi aineistoa',
     title1: 'Mikä Etsin on?',
-    title2: 'How can I get access to the datasets?',
+    title2: 'Miten saan aineistot käyttööni?',
     para1:
       'Etsimen avulla voit etsiä tutkimusaineistoja ja niiden metatietoja Fairdata-palveluista. Kopioimme myös metatietoja muista lähteistä, tällä hetkellä Tietoarkistosta, Kielipankista ja SYKEstä.',
     para2:
@@ -166,6 +166,10 @@ const finnish = {
       SRpage: 'sivu',
       SRcurrentpage: 'tämä sivu',
       SRpagination: 'Paginaatio',
+    },
+    noResults: {
+      searchterm: 'Haullesi - <strong>%(search)s</strong> - ei löytynyt yhtään osumaa.',
+      nosearchterm: 'Haullesi ei löytynyt yhtään osumaa.',
     },
   },
   slogan: 'Tutkimustenhaku palvelu',

@@ -3,6 +3,7 @@ import { inject, observer } from 'mobx-react'
 import PropTypes from 'prop-types'
 
 import ElasticQuery from '../../../stores/view/elasticquery'
+import Loader from '../../general/loader'
 import ListItem from './listItem'
 
 class ResultsList extends Component {
@@ -13,7 +14,6 @@ class ResultsList extends Component {
   }
 
   renderList(lang) {
-    console.log('ES results', ElasticQuery.results)
     const list = ElasticQuery.results.hits.map(
       single => (
         <ListItem
@@ -30,18 +30,12 @@ class ResultsList extends Component {
 
   render() {
     const { currentLang } = this.props.Stores.Locale
-    if (ElasticQuery.results.hits.length === 0 && ElasticQuery.loading === false) {
-      return (
-        <div className="results-zero">
-          <span>
-            Your search -
-            <strong> {ElasticQuery.search} </strong>
-            - did not match any documents
-          </span>
-        </div>
-      )
-    }
-    return this.renderList(currentLang)
+    return (
+      <div>
+        <Loader active={ElasticQuery.loading} margin="0.2em 0 1em" />
+        {this.renderList(currentLang)}
+      </div>
+    )
   }
 }
 

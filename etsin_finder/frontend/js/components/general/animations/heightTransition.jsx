@@ -10,15 +10,15 @@ export default class HeightTransition extends Component {
       transitionStyles: {
         entering: {
           height: '0px',
-          visibility: 'initial',
+          visibility: 'inherit',
         },
         entered: {
           height: 'auto',
-          visibility: 'initial',
+          visibility: 'inherit',
         },
         exiting: {
           height: 'auto',
-          visibility: 'initial',
+          visibility: 'inherit',
         },
         exited: {
           height: '0px',
@@ -34,15 +34,15 @@ export default class HeightTransition extends Component {
       transitionStyles: {
         entering: {
           height: '0px',
-          visibility: 'initial',
+          visibility: 'inherit',
         },
         entered: {
           height: `${height}px`,
-          visibility: 'initial',
+          visibility: 'inherit',
         },
         exiting: {
           height: `${height}px`,
-          visibility: 'initial',
+          visibility: 'inherit',
         },
         exited: {
           height: '0px',
@@ -57,15 +57,15 @@ export default class HeightTransition extends Component {
       transitionStyles: {
         entering: {
           height: '0px',
-          visibility: 'initial',
+          visibility: 'inherit',
         },
         entered: {
           height: 'auto',
-          visibility: 'initial',
+          visibility: 'inherit',
         },
         exiting: {
           height: 'auto',
-          visibility: 'initial',
+          visibility: 'inherit',
         },
         exited: {
           height: '0px',
@@ -103,14 +103,14 @@ export default class HeightTransition extends Component {
 
 const TransitionDiv = styled.div.attrs({
   height: props => (props.height ? props.height : '0px'),
-  visibility: props => (props.visibility ? props.visibility : 'initial'),
+  visibility: props => (props.visibility ? props.visibility : 'inherit'),
 })`
   visibility: ${props => props.visibility};
   height: ${props => props.height};
   width: 100%;
   transition: height ${props => props.duration}ms ease-in-out;
   @media (min-width: ${props => props.theme.breakpoints.lg}) {
-    visibility: ${props => (props.onlyMobile ? 'initial' : props.visibility)};
+    visibility: ${props => (props.onlyMobile ? 'inherit' : props.visibility)};
     height: ${props => (props.onlyMobile ? 'auto' : props.height)};
   }
 `

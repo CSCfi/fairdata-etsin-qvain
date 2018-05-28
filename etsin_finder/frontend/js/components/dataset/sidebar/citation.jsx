@@ -1,8 +1,6 @@
 import React, { Component, Fragment } from 'react'
-import Translate from 'react-translate-component'
 import DatasetQuery from '../../../stores/view/datasetquery'
 import checkDataLang from '../../../utils/checkDataLang'
-import { LinkButton } from '../../general/button'
 
 export default class Citation extends Component {
   constructor(props) {
@@ -50,9 +48,9 @@ export default class Citation extends Component {
           <span title="Release date">{this.state.release_date}, </span>
           <span title="Preferred identifier">{this.state.pid}</span>
         </p>
-        <LinkButton noMargin>
+        {/* <LinkButton noMargin>
           <Translate content="dataset.citation_formats" />
-        </LinkButton>
+        </LinkButton> */}
       </Fragment>
     )
   }

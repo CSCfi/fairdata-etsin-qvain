@@ -2,6 +2,7 @@ import { observable, action } from 'mobx'
 import axios from 'axios'
 
 import UrlParse from '../../utils/urlParse'
+import Helpers from '../../utils/helpers'
 import Locale from './language'
 
 const fields = [
@@ -26,6 +27,8 @@ const fields = [
   'other_identifier.type.pref_label.*',
   'dataset_version_set',
 ]
+
+let lastQueryTime = 0
 
 class ElasticQuery {
   @observable filter = []
@@ -175,10 +178,15 @@ class ElasticQuery {
   // query elastic search with defined settings
   @action
   queryES = (initial = false) => {
-    // don't perform query on every componentMount
+    // don't perform initial query on every componentMount
     if (initial && this.results.total !== 0) {
       return new Promise(resolve => resolve())
     }
+
+    if (Date.now() - lastQueryTime < 200) {
+      return new Promise(resolve => resolve())
+    }
+    lastQueryTime = Date.now()
 
     // Filters
     const createFilters = () => {
@@ -311,6 +319,9 @@ class ElasticQuery {
       let from = this.pageNum * this.perPage
       from -= this.perPage
 
+      const currentSearch = this.search
+      const currentFilters = this.filter.slice()
+      const currentSorting = this.sorting
       axios
         .post('/es/metax/dataset/_search', {
           size: this.perPage,
@@ -331,14 +342,43 @@ class ElasticQuery {
           aggregations,
         })
         .then(res => {
-          // update results and stop loading
-          this.results = {
-            hits: res.data.hits.hits,
-            total: res.data.hits.total,
-            aggregations: res.data.aggregations,
+          // TODO: cache/save results
+          // Fixes race condition
+          if (
+            currentSearch !== this.search ||
+            !Helpers.isEqual(currentFilters, this.filter.slice()) ||
+            currentSorting !== this.sorting
+          ) {
+            console.log('fixed race')
+            console.table({
+              search: {
+                current: currentSearch,
+                new: this.search,
+                isEqual: currentSearch === this.search,
+              },
+              filters: {
+                current: currentFilters,
+                new: this.filter.slice(),
+                isEqual: Helpers.isEqual(currentFilters, this.filter.slice()),
+              },
+              sorting: {
+                current: currentSorting,
+                new: this.sorting,
+                isEqual: currentSorting === this.sorting,
+              },
+            })
+            resolve()
+          } else {
+            console.log('updated results')
+            // update results and stop loading
+            this.results = {
+              hits: res.data.hits.hits,
+              total: res.data.hits.total,
+              aggregations: res.data.aggregations,
+            }
+            this.loading = false
+            resolve()
           }
-          this.loading = false
-          resolve()
         })
         .catch(err => {
           reject(err)

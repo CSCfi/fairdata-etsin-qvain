@@ -34,7 +34,7 @@ export default class KeepAlive extends Component {
 
     // user was idle for custom time but is not logged in
     if (idle && !Auth.userLogged) {
-      console.log('user idle')
+      // console.log('user idle')
     }
   }
 

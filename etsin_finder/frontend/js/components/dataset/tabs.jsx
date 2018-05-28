@@ -55,12 +55,14 @@ Tabs.propTypes = {
 /* prettier-ignore */
 const EtsinTabs = styled.ul`
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   padding-left: 0;
   margin-bottom: 1em;
   list-style: none;
   border-bottom: 1px solid ${props => props.theme.color.primary};
   margin-top: 5px;
+  overflow-x: overlay;
+  overflow-y: hidden;
   .nav-item {
     margin-bottom: -1px;
     &:first-of-type {
@@ -74,6 +76,7 @@ const EtsinTabs = styled.ul`
     border-top-right-radius: 0.5em;
     border-top-left-radius: 0.5em;
     transition: all ease-out 0.3s;
+    white-space: nowrap;
     &:hover, &:focus {
       text-decoration: none;
     }

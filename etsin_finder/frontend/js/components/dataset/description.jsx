@@ -99,15 +99,15 @@ class Description extends Component {
           <h1>{checkDataLang(this.state.title)}</h1>
         </div>
         <div className="d-flex justify-content-between basic-info">
-          <div>
+          <MainInfo>
             <ErrorBoundary>
               <Person creator={this.state.creator} />
             </ErrorBoundary>
             <ErrorBoundary>
               <Person contributor={this.state.contributor} />
             </ErrorBoundary>
-          </div>
-          <p>{this.state.issued ? dateFormat(checkDataLang(this.state.issued)) : null}</p>
+            <p>{this.state.issued ? dateFormat(checkDataLang(this.state.issued)) : null}</p>
+          </MainInfo>
         </div>
         <ErrorBoundary>
           {/* currently displays only first description */}
@@ -146,3 +146,8 @@ Description.propTypes = {
   harvested: PropTypes.bool.isRequired,
   cumulative: PropTypes.bool.isRequired,
 }
+
+const MainInfo = styled.div`
+  color: ${p => p.theme.color.gray};
+  font-size: 0.9em;
+`

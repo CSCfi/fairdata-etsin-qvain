@@ -10,7 +10,6 @@ export default class Navi extends React.Component {
   render() {
     return (
       <React.Fragment>
-        {console.log(this.props)}
         <NavItem
           exact
           to="/"
@@ -60,6 +59,11 @@ const NavItem = styled(NavLink)`
       border: 8px solid transparent;
       border-bottom: 8px solid ${p => p.theme.color.primary};
       bottom: 0;
+      right: 0;
+      left: 0;
+      margin-left: auto;
+      margin-right: auto;
+      width: 16px;
     }
   }
   &:hover {
