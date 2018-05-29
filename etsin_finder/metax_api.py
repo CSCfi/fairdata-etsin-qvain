@@ -46,7 +46,6 @@ class MetaxAPIService:
             log.debug('Response text: %s', r.text)
             return None
 
-
         return json.loads(r.text)
 
     def get_catalog_record_with_file_details(self, identifier):
