@@ -19,6 +19,35 @@ class MetaxAPIService:
 
             self.METAX_GET_CATALOG_RECORD_WITH_FILE_DETAILS_URL = METAX_GET_CATALOG_RECORD_URL + '&file_details'
             self.METAX_GET_REMOVED_CATALOG_RECORD_URL = METAX_GET_CATALOG_RECORD_URL + '&removed=true'
+            self.METAX_GET_DIRECTORY_FOR_CR_URL = 'https://{0}/rest/directories'.format(metax_api_config['HOST']) + \
+                                                  '/{0}/files?cr_identifier={1}'
+
+            self.user = metax_api_config['USER']
+            self.pw = metax_api_config['PASSWORD']
+
+    def get_directory_for_catalog_record(self, cr_identifier, dir_identifier):
+        """
+        Get directory contents for a specific catalog record
+
+        :param cr_identifier:
+        :param dir_identifier:
+        :return:
+        """
+
+        r = requests.get(self.METAX_GET_DIRECTORY_FOR_CR_URL.format(dir_identifier, cr_identifier),
+                         headers={'Content-Type': 'application/json'},
+                         auth=(self.user, self.pw),
+                         timeout=TIMEOUT)
+        try:
+            r.raise_for_status()
+        except HTTPError as e:
+            log.error('Failed to get directory data for catalog record: \nidentifier={identifier}, \nerror={error}, '
+                      '\njson={json}'.format(identifier=cr_identifier, error=repr(e), json=self.json_or_empty(r)))
+            log.debug('Response text: %s', r.text)
+            return None
+
+
+        return json.loads(r.text)
 
     def get_catalog_record_with_file_details(self, identifier):
         """ Get a catalog record with a given identifier from MetaX API.
@@ -28,6 +57,7 @@ class MetaxAPIService:
 
         r = requests.get(self.METAX_GET_CATALOG_RECORD_WITH_FILE_DETAILS_URL.format(identifier),
                          headers={'Content-Type': 'application/json'},
+                         auth=(self.user, self.pw),
                          timeout=TIMEOUT)
         try:
             r.raise_for_status()
@@ -48,6 +78,7 @@ class MetaxAPIService:
 
         r = requests.get(self.METAX_GET_REMOVED_CATALOG_RECORD_URL.format(identifier),
                          headers={'Content-Type': 'application/json'},
+                         auth=(self.user, self.pw),
                          timeout=TIMEOUT)
         try:
             r.raise_for_status()

@@ -38,6 +38,23 @@ class Dataset(Resource):
         return {'catalog_record': strip_catalog_record(cr), 'email_info': get_email_info(cr)}, 200
 
 
+class Files(Resource):
+
+    def __init__(self):
+        self.parser = reqparse.RequestParser()
+        self.parser.add_argument('dir_id', required=True, type=str)
+
+    def get(self, dataset_id):
+        args = self.parser.parse_args()
+        dir_id = args['dir_id']
+
+        resp = metax_service.get_directory_for_catalog_record(dataset_id, dir_id)
+        if not resp:
+            return '', 404
+
+        return resp, 200
+
+
 class Contact(Resource):
 
     def __init__(self):
