@@ -2,11 +2,44 @@ import React, { Component } from 'react'
 import Translate from 'react-translate-component'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import axios from 'axios'
+
+import download from '../../../utils/download'
 
 import TableItem from './tableItem'
 
 export default class Table extends Component {
   state = {}
+
+  downloadFile = (itemID, type, name) => {
+    console.log('id', itemID)
+    console.log('cr_id', this.props.cr_id)
+    const options = {
+      cr_id: this.props.cr_id,
+    }
+
+    if (type === 'dir') {
+      options.dir_ids = itemID
+    } else {
+      options.file_ids = itemID
+    }
+    // TODO: currently downloads first to memory, and doesn't display progress to user.
+    // Memory won't be enough for big files
+    axios({
+      method: 'post',
+      url: '/api/od',
+      data: options,
+      responseType: 'blob',
+    })
+      .then(res => {
+        download(new Blob([res.data]), `${name}.jpg`, 'image/jpeg')
+      })
+      .catch(err => console.log(err))
+  }
+
+  downloadProgress = pe => {
+    console.log(pe)
+  }
 
   // prints files to dom as list items
   tableItems(data) {
@@ -19,6 +52,7 @@ export default class Table extends Component {
         changeFolder={this.props.changeFolder}
         access={this.props.access}
         fields={this.props.fields}
+        download={this.downloadFile}
       />
     ))
   }
@@ -66,6 +100,7 @@ Table.propTypes = {
   data: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
   changeFolder: PropTypes.func,
   access: PropTypes.bool.isRequired,
+  cr_id: PropTypes.string.isRequired,
   fields: PropTypes.shape({
     size: PropTypes.bool.isRequired,
     name: PropTypes.bool.isRequired,
