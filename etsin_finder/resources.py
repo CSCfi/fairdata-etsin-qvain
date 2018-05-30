@@ -162,7 +162,8 @@ class Download(Resource):
 
     def __init__(self):
         self.parser = reqparse.RequestParser()
-        self.parser.add_argument('cr_id', type=str, required=True)
+        # TODO: change required back to true
+        self.parser.add_argument('cr_id', type=str, required=False)
         self.parser.add_argument('file_ids', type=str, action='append', required=False)
         self.parser.add_argument('dir_ids', type=str, action='append', required=False)
 
@@ -206,9 +207,15 @@ class OpenDownload(Download):
         pprint.pprint(req.status_code)
         pprint.pprint(req.headers)
         pprint.pprint(req.text)
-        req = get('https://upload.wikimedia.org/wikipedia/commons/a/aa/FAIR_data_principles.jpg', stream=True)
-        return Response(response=stream_with_context(req.iter_content(chunk_size=8192)), status=req.status_code,
-                        content_type='application/octet-stream')
+        req = get('https://kent.dl.sourceforge.net/project/ta-lib/ta-lib/0.4.0/ta-lib-0.4.0-msvc.zip', stream=False)
+        res = Response(response=stream_with_context(req.iter_content(chunk_size=8192)), status=req.status_code)
+        pprint.pprint('----------------------------------------')
+        res.headers['content-type'] = 'application/octet-stream'
+        res.headers['access-control-allow-headers'] = '*'
+        res.headers['access-control-expose-headers'] = 'content-disposition'
+        res.headers['content-disposition'] = 'attachment; filename="filename.zip"'
+        pprint.pprint(res.headers)
+        return res
 
 
 class RestrictedDownload(Download):

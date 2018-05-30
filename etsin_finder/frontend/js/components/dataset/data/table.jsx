@@ -9,7 +9,14 @@ import download from '../../../utils/download'
 import TableItem from './tableItem'
 
 export default class Table extends Component {
-  state = {}
+  constructor(props) {
+    super(props)
+    this.state = {
+      downloadUrl: false,
+    }
+
+    this.downloadRef = React.createRef()
+  }
 
   downloadFile = (itemID, type, name) => {
     console.log('id', itemID)
@@ -29,10 +36,22 @@ export default class Table extends Component {
       method: 'post',
       url: '/api/od',
       data: options,
-      responseType: 'blob',
+      responseType: 'arraybuffer',
+      headers: {
+        'content-type': 'application/octet-stream',
+      },
     })
       .then(res => {
-        download(new Blob([res.data]), `${name}.jpg`, 'image/jpeg')
+        console.log('results', res)
+        const blob = new Blob([res.data], { type: 'application/octet-stream' })
+        this.setState(
+          {
+            downloadUrl: window.URL.createObjectURL(blob),
+          },
+          () => {
+            this.downloadRef.current.click()
+          }
+        )
       })
       .catch(err => console.log(err))
   }
@@ -87,6 +106,9 @@ export default class Table extends Component {
           </THead>
           <TBody>{this.tableItems(this.props.data)}</TBody>
         </StyledTable>
+        {this.state.downloadUrl && (
+          <HiddenLink innerRef={this.downloadRef} href={this.state.downloadUrl} download />
+        )}
       </TableContainer>
     )
   }
@@ -153,4 +175,9 @@ const TableContainer = styled.div`
   @media screen and (min-width: ${p => p.theme.breakpoints.sm}) {
     overflow-x: hidden;
   }
+`
+
+const HiddenLink = styled.a`
+  visibility: hidden;
+  display: none;
 `
