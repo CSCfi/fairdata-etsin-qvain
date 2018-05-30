@@ -199,22 +199,15 @@ class OpenDownload(Download):
 
     DOWNLOAD_URL = 'https://download.fairdata.fi/api/v1/dataset/{0}'
 
-    def post(self):
-        url = self.create_url(self.DOWNLOAD_URL)
-        req = get(url, stream=True)
+    def get(self):
+        # url = self.create_url(self.DOWNLOAD_URL)
+        # req = get(url, stream=True)
         import pprint
-        pprint.pprint(url)
-        pprint.pprint(req.status_code)
-        pprint.pprint(req.headers)
-        pprint.pprint(req.text)
-        req = get('https://kent.dl.sourceforge.net/project/ta-lib/ta-lib/0.4.0/ta-lib-0.4.0-msvc.zip', stream=False)
-        res = Response(response=stream_with_context(req.iter_content(chunk_size=8192)), status=req.status_code)
-        pprint.pprint('----------------------------------------')
-        res.headers['content-type'] = 'application/octet-stream'
-        res.headers['access-control-allow-headers'] = '*'
-        res.headers['access-control-expose-headers'] = 'content-disposition'
-        res.headers['content-disposition'] = 'attachment; filename="filename.zip"'
-        pprint.pprint(res.headers)
+        req = get('https://kent.dl.sourceforge.net/project/ta-lib/ta-lib/0.4.0/ta-lib-0.4.0-msvc.zip', stream=True)
+        res = Response(response=stream_with_context(req.iter_content(chunk_size=1024)), status=req.status_code)
+        res.headers['Content-Type'] = 'application/octet-stream'
+        res.headers['Content-Disposition'] = 'attachment; filename="dataset.zip"'
+        res.headers['Content-Length'] = req.headers['Content-Length']
         return res
 
 

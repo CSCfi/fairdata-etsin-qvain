@@ -2,9 +2,6 @@ import React, { Component } from 'react'
 import Translate from 'react-translate-component'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import axios from 'axios'
-
-import download from '../../../utils/download'
 
 import TableItem from './tableItem'
 
@@ -12,7 +9,7 @@ export default class Table extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      downloadUrl: false,
+      downloadUrl: '/api/od',
     }
 
     this.downloadRef = React.createRef()
@@ -30,30 +27,15 @@ export default class Table extends Component {
     } else {
       options.file_ids = itemID
     }
-    // TODO: currently downloads first to memory, and doesn't display progress to user.
-    // Memory won't be enough for big files
-    axios({
-      method: 'post',
-      url: '/api/od',
-      data: options,
-      responseType: 'arraybuffer',
-      headers: {
-        'content-type': 'application/octet-stream',
+    // TODO: create url for api
+    this.setState(
+      {
+        downloadUrl: '/api/od',
       },
-    })
-      .then(res => {
-        console.log('results', res)
-        const blob = new Blob([res.data], { type: 'application/octet-stream' })
-        this.setState(
-          {
-            downloadUrl: window.URL.createObjectURL(blob),
-          },
-          () => {
-            this.downloadRef.current.click()
-          }
-        )
-      })
-      .catch(err => console.log(err))
+      () => {
+        this.downloadRef.current.click()
+      }
+    )
   }
 
   downloadProgress = pe => {
