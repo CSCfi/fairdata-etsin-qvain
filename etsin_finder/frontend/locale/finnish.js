@@ -114,7 +114,7 @@ const finnish = {
   error: {
     notFound:
       'Olemme pahoillamme, nyt sattui häiriötilanne. Ole hyvä ja yritä hetken päästä uudelleen.',
-    notLoaded: 'Hups! Ongelma latauksessa!',
+    notLoaded: 'Hups! Sivua ei löytynyt!',
   },
   general: {
     description: 'Kuvaus',
