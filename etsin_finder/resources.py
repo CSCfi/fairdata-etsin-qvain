@@ -203,7 +203,7 @@ class OpenDownload(Download):
         # url = self.create_url(self.DOWNLOAD_URL)
         # req = get(url, stream=True)
         import pprint
-        req = get('https://kent.dl.sourceforge.net/project/ta-lib/ta-lib/0.4.0/ta-lib-0.4.0-msvc.zip', stream=True)
+        req = get('https://aaronkala.github.io/file-storage/image.jpg.zip', stream=True)
         res = Response(response=stream_with_context(req.iter_content(chunk_size=1024)), status=req.status_code)
         res.headers['Content-Type'] = 'application/octet-stream'
         res.headers['Content-Disposition'] = 'attachment; filename="dataset.zip"'
