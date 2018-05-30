@@ -113,7 +113,8 @@ const english = {
     version: { number: 'Version %(number)s', old: '(Old)' },
   },
   error: {
-    notFound: "Couldn't find metadata for given id",
+    notFound:
+      'Sorry, we are having some technical difficulties at the moment. Please, try again later.',
     notLoaded: 'Sorry! There was a problem loading the page.',
   },
   general: {
