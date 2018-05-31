@@ -215,7 +215,7 @@ class OpenDownload(Download):
     DOWNLOAD_URL = 'https://download.fairdata.fi/api/v1/dataset/{0}'
 
     def get(self):
-        url = self.create_url(self.DOWNLOAD_URL)
+        # url = self.create_url(self.DOWNLOAD_URL)
         # req = get(url, stream=True)
         req = get('https://aaronkala.github.io/file-storage/image.jpg.zip', stream=True)
         res = Response(response=stream_with_context(req.iter_content(chunk_size=1024)), status=req.status_code)
