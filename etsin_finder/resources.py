@@ -162,22 +162,20 @@ class Download(Resource):
 
     def __init__(self):
         self.parser = reqparse.RequestParser()
-        # TODO: change required back to true
-        self.parser.add_argument('cr_id', type=str, required=False)
-        self.parser.add_argument('file_ids', type=str, action='append', required=False)
-        self.parser.add_argument('dir_ids', type=str, action='append', required=False)
+        self.parser.add_argument('cr_id', type=str, required=True)
+        self.parser.add_argument('file_id', type=str, action='append', required=False)
+        self.parser.add_argument('dir_id', type=str, action='append', required=False)
 
     def create_url(self, base_url):
         # Check request query parameters are present
         args = self.parser.parse_args()
         cr_id = args['cr_id']
-        file_ids = args['file_ids'] or []
-        dir_ids = args['dir_ids'] or []
+        file_ids = args['file_id'] or []
+        dir_ids = args['dir_id'] or []
 
-        import pprint
-        pprint.pprint(cr_id)
-        pprint.pprint(file_ids)
-        pprint.pprint(dir_ids)
+        log.debug("Received cr_id: " + str(cr_id))
+        log.debug("Received file ids: " + str(file_ids))
+        log.debug("Received dir ids: " + str(dir_ids))
 
         url = base_url.format(cr_id)
         if file_ids or dir_ids:
@@ -187,7 +185,7 @@ class Download(Resource):
             for dir_id in dir_ids:
                 params += '&dir={0}'.format(dir_id) if params else 'dir={0}'.format(dir_id)
             url += '?' + params
-        pprint.pprint(url)
+        log.debug("Download service URL to be requested: " + url)
         return url
 
 
@@ -200,9 +198,8 @@ class OpenDownload(Download):
     DOWNLOAD_URL = 'https://download.fairdata.fi/api/v1/dataset/{0}'
 
     def get(self):
-        # url = self.create_url(self.DOWNLOAD_URL)
+        url = self.create_url(self.DOWNLOAD_URL)
         # req = get(url, stream=True)
-        import pprint
         req = get('https://aaronkala.github.io/file-storage/image.jpg.zip', stream=True)
         res = Response(response=stream_with_context(req.iter_content(chunk_size=1024)), status=req.status_code)
         res.headers['Content-Type'] = 'application/octet-stream'
@@ -228,11 +225,9 @@ class RestrictedDownload(Download):
 
         # url = self.create_url(self.DOWNLOAD_URL)
         # req = get(url, stream=True)
-        # import pprint
-        # pprint.pprint(url)
-        # pprint.pprint(req.status_code)
-        # pprint.pprint(req.headers)
-        # pprint.pprint(req.text)
-        req = get('https://upload.wikimedia.org/wikipedia/commons/a/aa/FAIR_data_principles.jpg', stream=True)
-        return Response(response=stream_with_context(req.iter_content(chunk_size=8192)), status=req.status_code,
-                        content_type='application/octet-stream')
+        # res = Response(response=stream_with_context(req.iter_content(chunk_size=1024)), status=req.status_code)
+        # res.headers['Content-Type'] = 'application/octet-stream'
+        # res.headers['Content-Disposition'] = 'attachment; filename="dataset.zip"'
+        # res.headers['Content-Length'] = req.headers['Content-Length']
+        # return res
+        return '', 501
