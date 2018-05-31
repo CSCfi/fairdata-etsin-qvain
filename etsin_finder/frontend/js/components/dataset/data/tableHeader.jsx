@@ -8,17 +8,23 @@ import sizeParse from '../../../utils/sizeParse'
 import { InvertedButton } from '../../general/button'
 
 export default class TableHeader extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      downloadAllUrl: '',
+    }
+    this.downloadAllRef = React.createRef()
+  }
+
   downloadAll = () => {
-    // if (this.props.access) {
-    //   axios
-    //     .get(`http://od.fairdata.fi/api/v1/dataset/${this.props.crId}`)
-    //     .then(res => {
-    //       console.log(res)
-    //     })
-    //     .catch(err => {
-    //       console.log(err)
-    //     })
-    // }
+    this.setState(
+      {
+        downloadAllUrl: `/api/od?cr_id=${this.props.crId}`,
+      },
+      () => {
+        this.downloadAllRef.current.click()
+      }
+    )
   }
   render() {
     return (
@@ -48,6 +54,9 @@ export default class TableHeader extends Component {
             </InvertedButton>
           </ButtonsCont>
         )}
+        {this.state.downloadAllUrl && (
+          <HiddenLink href={this.state.downloadAllUrl} innerRef={this.downloadAllRef} download />
+        )}
       </Header>
     )
   }
@@ -74,16 +83,22 @@ const ObjectCount = styled.p`
   margin-bottom: 0;
 `
 
+const HiddenLink = styled.a`
+  display: none;
+  visibility: hidden;
+`
+
 TableHeader.defaultProps = {
   totalSize: 0,
   downloadAll: false,
+  crId: '',
 }
 
 TableHeader.propTypes = {
   title: PropTypes.string.isRequired,
   totalSize: PropTypes.number,
   objectCount: PropTypes.number.isRequired,
-  // crId: PropTypes.string.isRequired,
+  crId: PropTypes.string,
   access: PropTypes.bool.isRequired,
   downloadAll: PropTypes.bool,
 }

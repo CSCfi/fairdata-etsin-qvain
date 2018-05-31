@@ -15,22 +15,18 @@ export default class Table extends Component {
     this.downloadRef = React.createRef()
   }
 
-  downloadFile = (itemID, type, name) => {
+  downloadFile = (itemID, type) => {
     console.log('id', itemID)
     console.log('cr_id', this.props.cr_id)
-    const options = {
-      cr_id: this.props.cr_id,
-    }
-
+    let urlParams = `?cr_id=${this.props.cr_id}`
     if (type === 'dir') {
-      options.dir_ids = itemID
+      urlParams += `&dir_id=${itemID}`
     } else {
-      options.file_ids = itemID
+      urlParams += `&file_id=${itemID}`
     }
-    // TODO: create url for api
     this.setState(
       {
-        downloadUrl: '/api/od',
+        downloadUrl: `/api/od${urlParams}`,
       },
       () => {
         this.downloadRef.current.click()

@@ -149,13 +149,7 @@ class TableItem extends Component {
             // TODO: change to button because disabled won't work in link
             <HideSmButton
               thin
-              onClick={() =>
-                this.props.download(
-                  this.props.item.identifier,
-                  this.props.item.type,
-                  this.state.name
-                )
-              }
+              onClick={() => this.props.download(this.props.item.identifier, this.props.item.type)}
               disabled={!this.props.access}
             >
               <Translate content="dataset.dl.download" />
