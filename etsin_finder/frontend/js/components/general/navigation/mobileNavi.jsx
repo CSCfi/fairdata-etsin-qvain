@@ -11,7 +11,7 @@ import Accessibility from '../../../stores/view/accessibility'
 import DropdownMenu from './dropdownMenu'
 import LangToggle from './langToggle'
 import Login from './loginButton'
-import Button from '../button'
+import { Link } from '../button'
 
 export default class MobileNavi extends React.Component {
   render() {
@@ -48,9 +48,9 @@ export default class MobileNavi extends React.Component {
           <CustomContainer>
             <Row>
               <LangToggle inverted margin="0.4em 0.4em 0.4em 0em" />
-              <Button width="100%" margin="0.4em 0em 0.4em 0.4em">
+              <Link width="100%" margin="0.4em 0em 0.4em 0.4em" href="https://fairdata.fi">
                 <Translate content="nav.addDataset" />
-              </Button>
+              </Link>
             </Row>
             <Row>
               <Login width="100%" margin="0.4em 0" />
