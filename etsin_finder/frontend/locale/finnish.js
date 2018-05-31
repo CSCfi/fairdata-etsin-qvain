@@ -112,8 +112,9 @@ const finnish = {
     version: { number: 'Versio %(number)s', old: '(Vanha)' },
   },
   error: {
-    notFound: 'Annetulle id:lle ei löytynyt metadataa',
-    notLoaded: 'Hups! Ongelma latauksessa!',
+    notFound:
+      'Olemme pahoillamme, nyt sattui häiriötilanne. Ole hyvä ja yritä hetken päästä uudelleen.',
+    notLoaded: 'Hups! Sivua ei löytynyt!',
   },
   general: {
     description: 'Kuvaus',
