@@ -6,7 +6,37 @@ import styled from 'styled-components'
 import TableItem from './tableItem'
 
 export default class Table extends Component {
-  state = {}
+  constructor(props) {
+    super(props)
+    this.state = {
+      downloadUrl: '/api/od',
+    }
+
+    this.downloadRef = React.createRef()
+  }
+
+  downloadFile = (itemID, type) => {
+    console.log('id', itemID)
+    console.log('cr_id', this.props.cr_id)
+    let urlParams = `?cr_id=${this.props.cr_id}`
+    if (type === 'dir') {
+      urlParams += `&dir_id=${itemID}`
+    } else {
+      urlParams += `&file_id=${itemID}`
+    }
+    this.setState(
+      {
+        downloadUrl: `/api/od${urlParams}`,
+      },
+      () => {
+        this.downloadRef.current.click()
+      }
+    )
+  }
+
+  downloadProgress = pe => {
+    console.log(pe)
+  }
 
   // prints files to dom as list items
   tableItems(data) {
@@ -19,6 +49,7 @@ export default class Table extends Component {
         changeFolder={this.props.changeFolder}
         access={this.props.access}
         fields={this.props.fields}
+        download={this.downloadFile}
       />
     ))
   }
@@ -53,6 +84,9 @@ export default class Table extends Component {
           </THead>
           <TBody>{this.tableItems(this.props.data)}</TBody>
         </StyledTable>
+        {this.state.downloadUrl && (
+          <HiddenLink innerRef={this.downloadRef} href={this.state.downloadUrl} download />
+        )}
       </TableContainer>
     )
   }
@@ -66,6 +100,7 @@ Table.propTypes = {
   data: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
   changeFolder: PropTypes.func,
   access: PropTypes.bool.isRequired,
+  cr_id: PropTypes.string.isRequired,
   fields: PropTypes.shape({
     size: PropTypes.bool.isRequired,
     name: PropTypes.bool.isRequired,
@@ -118,4 +153,9 @@ const TableContainer = styled.div`
   @media screen and (min-width: ${p => p.theme.breakpoints.sm}) {
     overflow-x: hidden;
   }
+`
+
+const HiddenLink = styled.a`
+  visibility: hidden;
+  display: none;
 `

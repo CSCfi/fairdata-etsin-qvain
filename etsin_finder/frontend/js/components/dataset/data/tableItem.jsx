@@ -9,7 +9,7 @@ import sizeParse from '../../../utils/sizeParse'
 import checkNested from '../../../utils/checkNested'
 import FileIcon from './fileIcon'
 import Info from './info'
-import { InvertedLink, InvertedButton, TransparentButton } from '../../general/button'
+import { InvertedButton, TransparentButton } from '../../general/button'
 import Loader from '../../general/loader'
 
 class TableItem extends Component {
@@ -147,7 +147,11 @@ class TableItem extends Component {
             // TODO: add download functionality, probably an axios post request,
             // but it will also be used in the info modal, so a utility for both.
             // TODO: change to button because disabled won't work in link
-            <HideSmButton thin onClick={this.openModal} disabled={!this.props.access}>
+            <HideSmButton
+              thin
+              onClick={() => this.props.download(this.props.item.identifier, this.props.item.type)}
+              disabled={!this.props.access}
+            >
               <Translate content="dataset.dl.download" />
               <Translate
                 className="sr-only"
@@ -168,7 +172,7 @@ const TitleAlt = styled.p`
   color: #777;
 `
 
-const HideSmButton = styled(InvertedLink)`
+const HideSmButton = styled(InvertedButton)`
   display: none;
   @media (min-width: ${props => props.theme.breakpoints.sm}) {
     display: initial;
@@ -219,6 +223,7 @@ const FileButtons = styled.td`
 
 TableItem.defaultProps = {
   changeFolder: () => {},
+  download: () => {},
 }
 
 TableItem.propTypes = {
@@ -252,6 +257,7 @@ TableItem.propTypes = {
   }).isRequired,
   changeFolder: PropTypes.func,
   access: PropTypes.bool.isRequired,
+  download: PropTypes.func,
 }
 
 export default withTheme(TableItem)

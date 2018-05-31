@@ -6,7 +6,6 @@
     "jest": true
   },
   "rules": {
-    "import/resolver": "webpack",
     "import/no-extraneous-dependencies": 0,
     "import/no-unresolved": 0,
     "import/extensions": 0,
