@@ -15,7 +15,7 @@ export default class KeyValues extends Component {
       fieldOfScienceNum: 0,
       researchNum: 0,
       loaded: false,
-      error: true,
+      error: false,
     }
   }
 
