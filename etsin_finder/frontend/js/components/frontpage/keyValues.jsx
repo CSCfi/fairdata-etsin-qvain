@@ -15,6 +15,7 @@ export default class KeyValues extends Component {
       fieldOfScienceNum: 0,
       researchNum: 0,
       loaded: false,
+      error: true,
     }
   }
 
@@ -50,65 +51,72 @@ export default class KeyValues extends Component {
           loaded: true,
         })
       })
-      .catch(err => console.log(err))
+      .catch(err => {
+        console.error('Error loading keyvalues')
+        this.setState({
+          error: err,
+        })
+      })
   }
 
   render() {
-    return (
-      <CustomBox>
-        <Value>
-          {this.state.loaded ? (
-            <div>
-              <h1>{this.state.datasetsNum}</h1>
-              <Translate content="home.key.dataset" fallback="Aineistoa" component="p" />
-            </div>
-          ) : (
-            <div>
-              <H1Skeleton />
-              <PSkeleton />
-            </div>
-          )}
-        </Value>
-        <Value>
-          {this.state.loaded ? (
-            <div>
-              <h1>{this.state.keywordsNum}</h1>
-              <Translate content="home.key.keywords" fallback="Asiasanaa" component="p" />
-            </div>
-          ) : (
-            <div>
-              <H1Skeleton />
-              <PSkeleton />
-            </div>
-          )}
-        </Value>
-        <Value>
-          {this.state.loaded ? (
-            <div>
-              <h1>{this.state.fieldOfScienceNum}</h1>
-              <Translate content="home.key.fos" fallback="Tieteenalaa" component="p" />
-            </div>
-          ) : (
-            <div>
-              <H1Skeleton />
-              <PSkeleton />
-            </div>
-          )}
-        </Value>
-        <Value>
-          {this.state.loaded ? (
-            <div>
-              <h1>{this.state.researchNum}</h1>
-              <Translate content="home.key.research" fallback="Tutkimusprojektia" component="p" />
-            </div>
-          ) : (
-            <div>
-              <H1Skeleton />
-              <PSkeleton />
-            </div>
-          )}
-        </Value>
-      </CustomBox>
+    return this.state.error ? null : (
+      <div>
+        <CustomBox>
+          <Value>
+            {this.state.loaded ? (
+              <div>
+                <h1>{this.state.datasetsNum}</h1>
+                <Translate content="home.key.dataset" fallback="Aineistoa" component="p" />
+              </div>
+            ) : (
+              <div>
+                <H1Skeleton />
+                <PSkeleton />
+              </div>
+            )}
+          </Value>
+          <Value>
+            {this.state.loaded ? (
+              <div>
+                <h1>{this.state.keywordsNum}</h1>
+                <Translate content="home.key.keywords" fallback="Asiasanaa" component="p" />
+              </div>
+            ) : (
+              <div>
+                <H1Skeleton />
+                <PSkeleton />
+              </div>
+            )}
+          </Value>
+          <Value>
+            {this.state.loaded ? (
+              <div>
+                <h1>{this.state.fieldOfScienceNum}</h1>
+                <Translate content="home.key.fos" fallback="Tieteenalaa" component="p" />
+              </div>
+            ) : (
+              <div>
+                <H1Skeleton />
+                <PSkeleton />
+              </div>
+            )}
+          </Value>
+          <Value>
+            {this.state.loaded ? (
+              <div>
+                <h1>{this.state.researchNum}</h1>
+                <Translate content="home.key.research" fallback="Tutkimusprojektia" component="p" />
+              </div>
+            ) : (
+              <div>
+                <H1Skeleton />
+                <PSkeleton />
+              </div>
+            )}
+          </Value>
+        </CustomBox>
+      </div>
     )
   }
 }
