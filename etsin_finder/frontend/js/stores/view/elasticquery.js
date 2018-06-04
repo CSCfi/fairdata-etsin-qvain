@@ -322,6 +322,9 @@ class ElasticQuery {
       const currentSearch = this.search
       const currentFilters = this.filter.slice()
       const currentSorting = this.sorting
+
+      // TODO: check cache for saved results
+
       axios
         .post('/es/metax/dataset/_search', {
           size: this.perPage,

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { inject, observer } from 'mobx-react'
 import Translate from 'react-translate-component'
+import ShowMore from 'react-show-more'
 
 import Accessiblity from '../../stores/view/accessibility'
 import dateFormat from '../../utils/dateFormat'
@@ -110,9 +111,13 @@ class Description extends Component {
           </MainInfo>
         </div>
         <ErrorBoundary>
-          {/* currently displays only first description */}
-          {/* {this.state.description.map(desc => <p className="description">{checkDataLang(desc)}</p>)} */}
-          <p className="description">{checkDataLang(this.state.description[0])}</p>
+          <ShowMore
+            lines={3}
+            more={<Translate content="general.showMore" component="p" />}
+            less={<Translate content="general.showLess" component="p" />}
+          >
+            <p className="description">{checkDataLang(this.state.description[0])}</p>
+          </ShowMore>
         </ErrorBoundary>
         {this.props.cumulative && (
           <Label color="error">
