@@ -17,6 +17,8 @@ import VersionChanger from './versionChanger'
 import GoToOriginal from './goToOriginal'
 // import Button from '../general/button'
 
+const ReactMarkdown = require('react-markdown')
+
 const Labels = styled.div`
   display: flex;
   justify-content: space-between;
@@ -110,9 +112,9 @@ class Description extends Component {
           </MainInfo>
         </div>
         <ErrorBoundary>
-          {/* currently displays only first description */}
-          {/* {this.state.description.map(desc => <p className="description">{checkDataLang(desc)}</p>)} */}
-          <p className="description">{checkDataLang(this.state.description[0])}</p>
+          <DatasetDescription>
+            <ReactMarkdown source={checkDataLang(this.state.description[0])} />
+          </DatasetDescription>
         </ErrorBoundary>
         {this.props.cumulative && (
           <Label color="error">
@@ -150,4 +152,13 @@ Description.propTypes = {
 const MainInfo = styled.div`
   color: ${p => p.theme.color.gray};
   font-size: 0.9em;
+`
+
+const DatasetDescription = styled.div`
+  padding: 0.5em 1em;
+  /* background-color: ${p => p.theme.color.superlightgray}; */
+  border-left: 2px solid ${p => p.theme.color.primary};
+  @media screen and (min-width: ${p => p.theme.breakpoints.sm}) {
+    padding: 1em 2em;
+  }
 `
