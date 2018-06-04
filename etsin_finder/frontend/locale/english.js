@@ -118,6 +118,8 @@ const english = {
     notLoaded: "Sorry! Page couldn't be found.",
   },
   general: {
+    showMore: 'Show more',
+    showLess: 'Show less',
     description: 'Description',
   },
   home: {

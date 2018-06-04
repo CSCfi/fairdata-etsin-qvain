@@ -117,6 +117,8 @@ const finnish = {
     notLoaded: 'Hups! Sivua ei löytynyt!',
   },
   general: {
+    showMore: 'Näytä lisää',
+    showLess: 'Näytä vähemmän',
     description: 'Kuvaus',
   },
   home: {
