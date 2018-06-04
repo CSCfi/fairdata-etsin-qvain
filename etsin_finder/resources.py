@@ -190,10 +190,6 @@ class Download(Resource):
         file_ids = args['file_id'] or []
         dir_ids = args['dir_id'] or []
 
-        log.debug("Received cr_id: " + str(cr_id))
-        log.debug("Received file ids: " + str(file_ids))
-        log.debug("Received dir ids: " + str(dir_ids))
-
         url = base_url.format(cr_id)
         if file_ids or dir_ids:
             params = ''
@@ -202,7 +198,12 @@ class Download(Resource):
             for dir_id in dir_ids:
                 params += '&dir={0}'.format(dir_id) if params else 'dir={0}'.format(dir_id)
             url += '?' + params
+
+        log.debug("Received cr_id: " + str(cr_id))
+        log.debug("Received file ids: " + str(file_ids))
+        log.debug("Received dir ids: " + str(dir_ids))
         log.debug("Download service URL to be requested: " + url)
+
         return url
 
 
@@ -215,12 +216,11 @@ class OpenDownload(Download):
     DOWNLOAD_URL = 'https://download.fairdata.fi/api/v1/dataset/{0}'
 
     def get(self):
-        # url = self.create_url(self.DOWNLOAD_URL)
-        # req = get(url, stream=True)
-        req = get('https://aaronkala.github.io/file-storage/image.jpg.zip', stream=True)
+        url = self.create_url(self.DOWNLOAD_URL)
+        req = get(url, stream=True)
         res = Response(response=stream_with_context(req.iter_content(chunk_size=1024)), status=req.status_code)
-        res.headers['Content-Type'] = 'application/octet-stream'
-        res.headers['Content-Disposition'] = 'attachment; filename="dataset.zip"'
+        res.headers['Content-Type'] = req.headers['Content-Type']
+        res.headers['Content-Disposition'] = req.headers['Content-Disposition']
         res.headers['Content-Length'] = req.headers['Content-Length']
         return res
 
@@ -243,8 +243,8 @@ class RestrictedDownload(Download):
         # url = self.create_url(self.DOWNLOAD_URL)
         # req = get(url, stream=True)
         # res = Response(response=stream_with_context(req.iter_content(chunk_size=1024)), status=req.status_code)
-        # res.headers['Content-Type'] = 'application/octet-stream'
-        # res.headers['Content-Disposition'] = 'attachment; filename="dataset.zip"'
+        # res.headers['Content-Type'] = req.headers['Content-Type']
+        # res.headers['Content-Disposition'] = req.headers['Content-Disposition']
         # res.headers['Content-Length'] = req.headers['Content-Length']
         # return res
         return '', 501

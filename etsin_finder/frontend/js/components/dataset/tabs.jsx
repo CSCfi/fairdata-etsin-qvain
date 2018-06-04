@@ -63,6 +63,9 @@ const EtsinTabs = styled.ul`
   margin-top: 5px;
   overflow-x: overlay;
   overflow-y: hidden;
+  @media screen and (min-width: ${p => p.theme.breakpoints.md}) {
+    overflow: initial;
+  }
   .nav-item {
     margin-bottom: -1px;
     &:first-of-type {

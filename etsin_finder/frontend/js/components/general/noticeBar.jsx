@@ -6,14 +6,6 @@ import checkColor from '../../styles/styledUtils'
 import { TransparentButton } from './button'
 
 export default class NoticeBar extends React.Component {
-  static defaultProps = {
-    color: 'white',
-    bg: 'primary',
-    position: 'relative',
-    z: '0',
-    duration: 0,
-  }
-
   static propTypes = {
     children: PropTypes.node.isRequired,
     bg: PropTypes.string,
@@ -21,6 +13,14 @@ export default class NoticeBar extends React.Component {
     position: PropTypes.string,
     z: PropTypes.string,
     duration: PropTypes.number,
+  }
+
+  static defaultProps = {
+    color: 'white',
+    bg: 'primary',
+    position: 'relative',
+    z: '0',
+    duration: 0,
   }
 
   state = {

@@ -144,7 +144,7 @@ class Sidebar extends Component {
                   ) {
                     return (
                       <p key={rights.identifier}>
-                        <a href={rights.license} target="_blank">
+                        <a href={rights.license} target="_blank" rel="noopener noreferrer">
                           {checkDataLang(rights.title)}
                         </a>
                       </p>
