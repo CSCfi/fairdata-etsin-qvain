@@ -22,7 +22,7 @@ class FilterSection extends Component {
         term: { und: 'organization_name.keyword' },
       },
       creator: {
-        title: { en: 'Creator', fi: 'Luoja' },
+        title: { en: 'Creator', fi: 'Tekijä' },
         aggregation: { und: 'creator' },
         term: { und: 'creator_name.keyword' },
       },

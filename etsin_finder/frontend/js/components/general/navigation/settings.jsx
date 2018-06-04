@@ -3,21 +3,18 @@ import Translate from 'react-translate-component'
 import styled from 'styled-components'
 
 import Login from './loginButton'
-import Button from '../button'
+import { Link } from '../button'
 import LangToggle from './langToggle'
 // import { VerticalSeparator } from '../separator'
 
 export default class Settings extends Component {
-  alertButton() {
-    alert('Add dataset')
-  }
   render() {
     return (
       <React.Fragment>
         <Positioner>
-          <Button noMargin width="max-content" onClick={this.alertButton}>
+          <Link noMargin width="max-content" href="https://fairdata.fi">
             <Translate content="nav.addDataset" />
-          </Button>
+          </Link>
           <LangToggle margin="0em 0em 0em 0.4em" />
           <Login />
         </Positioner>
