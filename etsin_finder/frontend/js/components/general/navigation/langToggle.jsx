@@ -7,14 +7,15 @@ import '../../../../locale/translations'
 import { TransparentButton, InvertedButton } from '../button'
 
 class LangToggle extends Component {
-  static defaultProps = {
-    inverted: false,
-    margin: '0.3em 0.3em',
-  }
   static propTypes = {
     inverted: PropTypes.bool,
     margin: PropTypes.string,
     Stores: PropTypes.object.isRequired,
+  }
+
+  static defaultProps = {
+    inverted: false,
+    margin: '0.3em 0.3em',
   }
 
   state = {
