@@ -9,31 +9,36 @@ export default class HeightTransition extends Component {
     this.state = {
       transitionStyles: {
         entering: {
-          height: '0px',
+          height: this.props.initialHeight,
           visibility: 'inherit',
         },
         entered: {
-          height: 'auto',
+          height: 'inherit',
           visibility: 'inherit',
         },
         exiting: {
-          height: 'auto',
+          height: 'inherit',
           visibility: 'inherit',
         },
         exited: {
-          height: '0px',
-          visibility: 'hidden',
+          height: this.props.initialHeight,
+          visibility: this.props.endVisibility,
         },
       },
     }
+
+    this.container = React.createRef()
   }
+
+  componentDidMount() {}
 
   getHeight = node => {
     const height = node.scrollHeight
+    this.props.contentHeight(height)
     this.setState({
       transitionStyles: {
         entering: {
-          height: '0px',
+          height: this.props.initialHeight,
           visibility: 'inherit',
         },
         entered: {
@@ -45,8 +50,8 @@ export default class HeightTransition extends Component {
           visibility: 'inherit',
         },
         exited: {
-          height: '0px',
-          visibility: 'hidden',
+          height: this.props.initialHeight,
+          visibility: this.props.endVisibility,
         },
       },
     })
@@ -56,23 +61,28 @@ export default class HeightTransition extends Component {
     this.setState({
       transitionStyles: {
         entering: {
-          height: '0px',
+          height: this.props.initialHeight,
           visibility: 'inherit',
         },
         entered: {
-          height: 'auto',
+          height: 'inherit',
           visibility: 'inherit',
         },
         exiting: {
-          height: 'auto',
+          height: 'inherit',
           visibility: 'inherit',
         },
         exited: {
-          height: '0px',
-          visibility: 'hidden',
+          height: this.props.initialHeight,
+          visibility: this.props.endVisibility,
         },
       },
     })
+  }
+
+  sendHeightToParent = node => {
+    const height = node.scrollHeight
+    this.props.contentHeight(height)
   }
 
   render() {
@@ -88,6 +98,9 @@ export default class HeightTransition extends Component {
       >
         {state => (
           <TransitionDiv
+            ref={this.container}
+            onClick={node => this.sendHeightToParent(node)}
+            initialHeight={this.props.initialHeight}
             visibility={this.state.transitionStyles[state].visibility}
             height={this.state.transitionStyles[state].height}
             duration={this.props.duration}
@@ -102,26 +115,33 @@ export default class HeightTransition extends Component {
 }
 
 const TransitionDiv = styled.div.attrs({
-  height: props => (props.height ? props.height : '0px'),
+  height: props => (props.height ? props.height : props.initialHeight),
   visibility: props => (props.visibility ? props.visibility : 'inherit'),
 })`
   visibility: ${props => props.visibility};
-  height: ${props => props.height};
+  max-height: ${props => props.height};
   width: 100%;
-  transition: height ${props => props.duration}ms ease-in-out;
+  overflow: hidden;
+  transition: max-height ${props => props.duration}ms ease-in-out;
   @media (min-width: ${props => props.theme.breakpoints.lg}) {
     visibility: ${props => (props.onlyMobile ? 'inherit' : props.visibility)};
-    height: ${props => (props.onlyMobile ? 'auto' : props.height)};
+    max-height: ${props => (props.onlyMobile ? 'inherit' : props.height)};
   }
 `
 
 HeightTransition.defaultProps = {
   onlyMobile: false,
+  initialHeight: '0px',
+  endVisibility: 'hidden',
+  contentHeight: () => {},
 }
 
 HeightTransition.propTypes = {
   duration: PropTypes.number.isRequired,
   in: PropTypes.bool.isRequired,
   children: PropTypes.node.isRequired,
+  initialHeight: PropTypes.string,
   onlyMobile: PropTypes.bool,
+  endVisibility: PropTypes.string,
+  contentHeight: PropTypes.func,
 }

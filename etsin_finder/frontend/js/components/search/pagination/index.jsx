@@ -62,12 +62,8 @@ class Pagination extends Component {
       () => {
         this.beforeCounter = 0
         this.afterCounter = 0
-        this.checkBefore().then(() => {
-          this.pagesBefore()
-        })
-        this.checkAfter().then(() => {
-          this.pagesAfter()
-        })
+        this.checkBefore().then(() => this.pagesBefore())
+        this.checkAfter().then(() => this.pagesAfter())
       }
     )
   }

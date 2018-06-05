@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { inject, observer } from 'mobx-react'
 import Translate from 'react-translate-component'
-import ShowMore from 'react-show-more'
 
 import Accessiblity from '../../stores/view/accessibility'
 import dateFormat from '../../utils/dateFormat'
@@ -16,7 +15,10 @@ import Person from './person'
 import Contact from './contact'
 import VersionChanger from './versionChanger'
 import GoToOriginal from './goToOriginal'
+// import ShowMore from '../general/showMore'
 // import Button from '../general/button'
+
+const ReactMarkdown = require('react-markdown')
 
 const Labels = styled.div`
   display: flex;
@@ -111,13 +113,15 @@ class Description extends Component {
           </MainInfo>
         </div>
         <ErrorBoundary>
-          <ShowMore
-            lines={3}
-            more={<Translate content="general.showMore" component="p" />}
-            less={<Translate content="general.showLess" component="p" />}
-          >
-            <p className="description">{checkDataLang(this.state.description[0])}</p>
-          </ShowMore>
+          <DatasetDescription>
+            {/* <ShowMore
+              min={100}
+              more={<Translate content="general.showMore" />}
+              less={<Translate content="general.showLess" />}
+            > */}
+            <ReactMarkdown source={checkDataLang(this.state.description)} />
+            {/* </ShowMore> */}
+          </DatasetDescription>
         </ErrorBoundary>
         {this.props.cumulative && (
           <Label color="error">
@@ -155,4 +159,14 @@ Description.propTypes = {
 const MainInfo = styled.div`
   color: ${p => p.theme.color.gray};
   font-size: 0.9em;
+`
+
+const DatasetDescription = styled.div`
+  padding: 0.5em 1em;
+  margin-bottom: 1em;
+  /* background-color: ${p => p.theme.color.superlightgray}; */
+  border-left: 2px solid ${p => p.theme.color.primary};
+  @media screen and (min-width: ${p => p.theme.breakpoints.sm}) {
+    padding: 1em 2em;
+  }
 `
