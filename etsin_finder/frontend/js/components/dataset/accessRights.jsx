@@ -45,20 +45,23 @@ class AccessRights extends Component {
   constructor(props) {
     super(props)
     let title = { en: 'Restricted Access', fi: 'Rajoitettu käyttöoikeus' }
+    let description = ''
     if (props.access_rights !== undefined && props.access_rights !== null) {
       title = props.access_rights.access_type
         ? props.access_rights.access_type.pref_label
         : props.access_rights.license.map(item => item.title)[0]
+      description = props.access_rights.description
     }
     this.lang = props.Stores.Locale.currentLang
     this.state = {
       title,
+      description,
     }
   }
 
   restricted() {
     return (
-      <Inner title={checkDataLang(this.state.title)}>
+      <Inner title={checkDataLang(this.state.description)}>
         <FontAwesomeIcon icon={faLock} />
         <AccessLabel>{checkDataLang(this.state.title)}</AccessLabel>
       </Inner>
@@ -67,7 +70,7 @@ class AccessRights extends Component {
 
   openAccess() {
     return (
-      <Inner title={checkDataLang(this.state.title)}>
+      <Inner title={checkDataLang(this.state.description)}>
         <FontAwesomeIcon icon={faLockOpen} />
         <AccessLabel>{checkDataLang(this.state.title)}</AccessLabel>
       </Inner>
@@ -113,6 +116,7 @@ AccessRights.defaultProps = {
 
 AccessRights.propTypes = {
   access_rights: PropTypes.shape({
+    description: PropTypes.string,
     access_type: PropTypes.shape({
       identifier: PropTypes.string.isRequired,
       pref_label: PropTypes.objectOf(PropTypes.string),
