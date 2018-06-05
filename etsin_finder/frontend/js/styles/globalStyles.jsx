@@ -1143,4 +1143,9 @@ export default injectGlobal`
       color: ${etsinTheme.color.primaryDark};
     }
   }
+
+  /* modal blur */
+  .blur {
+    filter: blur(1px);
+  }
 `

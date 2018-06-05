@@ -8,4 +8,10 @@ OfflinePluginRuntime.install()
 
 global.Promise = require('bluebird')
 
+Promise.config({
+  warnings: {
+    wForgottenReturn: false,
+  },
+})
+
 ReactDOM.render(<App />, document.getElementById('root'))

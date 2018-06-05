@@ -71,6 +71,7 @@ class Description extends Component {
                 />
               )}
             <AccessRights
+              button
               access_rights={
                 checkNested(this.props.dataset, 'research_dataset', 'access_rights', 'access_type')
                   ? this.props.dataset.research_dataset.access_rights
