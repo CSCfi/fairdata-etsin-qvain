@@ -1,21 +1,13 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import Modal from 'react-modal'
 import translate from 'counterpart'
 import Translate from 'react-translate-component'
 
 import { InvertedButton } from '../../general/button'
 import Splash from '../../general/splash'
 import ContactForm from './contactForm'
-
-const CloseModal = styled.button`
-  background: transparent;
-  border: none;
-  position: absolute;
-  top: 0.5em;
-  right: 0.5em;
-`
+import Modal from '../../general/modal'
 
 const Notice = styled.p`
   margin-bottom: 0;
@@ -24,27 +16,9 @@ const Notice = styled.p`
 `
 
 const customStyles = {
-  overlay: {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.75)',
-  },
   content: {
-    top: '0',
-    bottom: '0',
-    left: '0',
-    right: '0',
-    position: 'relative',
-    maxHeight: '80vh',
     minWidth: '20vw',
     maxWidth: '800px',
-    margin: '0.5em',
     padding: '3em',
   },
 }
@@ -65,10 +39,6 @@ export default class Contact extends Component {
 
     this.openModal = this.openModal.bind(this)
     this.closeModal = this.closeModal.bind(this)
-  }
-
-  componentWillMount() {
-    Modal.setAppElement('#root')
   }
 
   componentWillReceiveProps(newProps) {
@@ -132,13 +102,12 @@ export default class Contact extends Component {
         <Modal
           isOpen={this.state.open}
           onRequestClose={this.closeModal}
-          style={customStyles}
+          customStyles={customStyles}
           contentLabel="Contact"
         >
           <h2>
             <Translate content="dataset.contact.contact" />
           </h2>
-          <CloseModal onClick={this.closeModal}>X</CloseModal>
           {/* TEMPORARY: rems won't be needed in contact later. */}
           {this.props.isRems && (
             <Notice>

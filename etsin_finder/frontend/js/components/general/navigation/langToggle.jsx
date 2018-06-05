@@ -7,14 +7,15 @@ import '../../../../locale/translations'
 import { TransparentButton, InvertedButton } from '../button'
 
 class LangToggle extends Component {
-  static defaultProps = {
-    inverted: false,
-    margin: '0.3em 0.3em',
-  }
   static propTypes = {
     inverted: PropTypes.bool,
     margin: PropTypes.string,
     Stores: PropTypes.object.isRequired,
+  }
+
+  static defaultProps = {
+    inverted: false,
+    margin: '0.3em 0.3em',
   }
 
   state = {
@@ -59,7 +60,9 @@ class LangToggle extends Component {
             {this.otherLang()}
           </InvertedButton>
         ) : (
-          <TransparentButton onClick={this.changeLang}>{this.otherLang()}</TransparentButton>
+          <TransparentButton onClick={this.changeLang} margin={this.props.margin}>
+            {this.otherLang()}
+          </TransparentButton>
         )}
       </div>
     )
@@ -68,6 +71,7 @@ class LangToggle extends Component {
 
 const Lang = styled.span`
   border-left: 1px solid ${p => p.theme.color.dark};
+  text-transform: uppercase;
   &:first-of-type {
     border-left: none;
   }

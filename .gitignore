@@ -11,4 +11,5 @@ etsin_finder/frontend/node_modules
 etsin_finder/frontend/npm-debug.log
 *.DS_Store
 
+etsin_finder/frontend/jsconfig.json
 etsin_finder/frontend/build/

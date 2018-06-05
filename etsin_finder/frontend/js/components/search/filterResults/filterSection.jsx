@@ -22,7 +22,7 @@ class FilterSection extends Component {
         term: { und: 'organization_name.keyword' },
       },
       creator: {
-        title: { en: 'Creator', fi: 'Luoja' },
+        title: { en: 'Creator', fi: 'Tekijä' },
         aggregation: { und: 'creator' },
         term: { und: 'creator_name.keyword' },
       },
@@ -150,6 +150,7 @@ const FilterCategory = styled.button`
   background-color: ${p => p.theme.color.lightgray};
   font-weight: 700;
   transition: all 0.3s ease;
+  margin: 0;
   svg {
     pointer-events: none;
     height: 0.7em;

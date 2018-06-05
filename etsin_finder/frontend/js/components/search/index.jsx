@@ -10,6 +10,12 @@ import SearchBar from './searchBar'
 import Results from './results'
 
 class Search extends Component {
+  constructor() {
+    super()
+    this.state = {
+      initialLoad: false,
+    }
+  }
   componentWillMount() {
     this.initialQuery()
   }
@@ -25,6 +31,9 @@ class Search extends Component {
   initialQuery = () => {
     ElasticQuery.updateFromUrl(this.props.match.params.query, this.props.history, true)
     ElasticQuery.queryES(true).then(() => {
+      this.setState({
+        initialLoad: true,
+      })
       // preload dataset page
       Dataset.load()
     })
@@ -45,7 +54,7 @@ class Search extends Component {
             </div>
           </div>
         </HeroBanner>
-        <Results query={this.props.match.params.query} />
+        {this.state.initialLoad && <Results />}
       </div>
     )
   }

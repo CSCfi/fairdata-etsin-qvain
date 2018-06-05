@@ -69,7 +69,7 @@ def get_email_recipient_address(catalog_record, agent_type_str):
     if agent_type == AgentType.CONTRIBUTOR and rd.get('contributor', False)[0].get('email'):
         return rd['contributor'][0]['email']
     if agent_type == AgentType.RIGHTS_HOLDER and rd.get('rights_holder', False)[0].get('email'):
-        return rd['rights_holder']['email']
+        return rd['rights_holder'][0]['email']
     if agent_type == AgentType.CURATOR and rd.get('curator', False)[0].get('email'):
         return rd['curator'][0]['email']
 

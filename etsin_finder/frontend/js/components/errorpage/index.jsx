@@ -12,11 +12,13 @@ export default class ErrorPage extends React.Component {
 
     return (
       <HeroBanner className="hero-primary hero-full">
-        <div className="container">
-          <h1 className="text-center" aria-live="polite">
-            {this.props.error.type === 'notfound' && <Translate content="error.notFound" />}
-            {this.props.error.type === 'error' && <Translate content="error.notLoaded" />}
-          </h1>
+        <div className="container text-center" aria-live="polite">
+          {this.props.error.type === 'notfound' && (
+            <Translate content="error.notFound" component="h1" />
+          )}
+          {this.props.error.type === 'error' && (
+            <Translate content="error.notLoaded" component="h1" />
+          )}
         </div>
       </HeroBanner>
     )

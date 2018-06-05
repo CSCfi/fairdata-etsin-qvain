@@ -196,6 +196,7 @@ export default class IdaResources extends Component {
           changeFolder={this.updatePath}
         />
         <Table
+          cr_id={this.state.results.identifier}
           data={this.state.currentFolder.map(single => this.parseIda(single))}
           access={this.state.access}
           changeFolder={this.changeFolder}

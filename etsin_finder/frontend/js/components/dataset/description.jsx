@@ -15,7 +15,10 @@ import Person from './person'
 import Contact from './contact'
 import VersionChanger from './versionChanger'
 import GoToOriginal from './goToOriginal'
+// import ShowMore from '../general/showMore'
 // import Button from '../general/button'
+
+const ReactMarkdown = require('react-markdown')
 
 const Labels = styled.div`
   display: flex;
@@ -68,6 +71,7 @@ class Description extends Component {
                 />
               )}
             <AccessRights
+              button
               access_rights={
                 checkNested(this.props.dataset, 'research_dataset', 'access_rights', 'access_type')
                   ? this.props.dataset.research_dataset.access_rights
@@ -99,20 +103,26 @@ class Description extends Component {
           <h1>{checkDataLang(this.state.title)}</h1>
         </div>
         <div className="d-flex justify-content-between basic-info">
-          <div>
+          <MainInfo>
             <ErrorBoundary>
               <Person creator={this.state.creator} />
             </ErrorBoundary>
             <ErrorBoundary>
               <Person contributor={this.state.contributor} />
             </ErrorBoundary>
-          </div>
-          <p>{this.state.issued ? dateFormat(checkDataLang(this.state.issued)) : null}</p>
+            <p>{this.state.issued ? dateFormat(checkDataLang(this.state.issued)) : null}</p>
+          </MainInfo>
         </div>
         <ErrorBoundary>
-          {/* currently displays only first description */}
-          {/* {this.state.description.map(desc => <p className="description">{checkDataLang(desc)}</p>)} */}
-          <p className="description">{checkDataLang(this.state.description[0])}</p>
+          <DatasetDescription>
+            {/* <ShowMore
+              min={100}
+              more={<Translate content="general.showMore" />}
+              less={<Translate content="general.showLess" />}
+            > */}
+            <ReactMarkdown source={checkDataLang(this.state.description)} />
+            {/* </ShowMore> */}
+          </DatasetDescription>
         </ErrorBoundary>
         {this.props.cumulative && (
           <Label color="error">
@@ -146,3 +156,18 @@ Description.propTypes = {
   harvested: PropTypes.bool.isRequired,
   cumulative: PropTypes.bool.isRequired,
 }
+
+const MainInfo = styled.div`
+  color: ${p => p.theme.color.gray};
+  font-size: 0.9em;
+`
+
+const DatasetDescription = styled.div`
+  padding: 0.5em 1em;
+  margin-bottom: 1em;
+  /* background-color: ${p => p.theme.color.superlightgray}; */
+  border-left: 2px solid ${p => p.theme.color.primary};
+  @media screen and (min-width: ${p => p.theme.breakpoints.sm}) {
+    padding: 1em 2em;
+  }
+`

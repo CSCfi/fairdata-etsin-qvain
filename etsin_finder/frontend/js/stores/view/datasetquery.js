@@ -1,5 +1,6 @@
 import { observable, action } from 'mobx'
 import axios from 'axios'
+
 // import Locale from './language'
 import Env from '../domain/env'
 
@@ -34,7 +35,7 @@ class DatasetQuery {
     // Will be implemented later
     return new Promise((resolve, reject) => {
       axios
-        .get(`${this.metaxUrl}/rest/directories/${id}/files?cr_identifier=${crID}`)
+        .get(`/api/files/${crID}?dir_id=${id}`)
         .then(res => {
           this.directories.push({ id, results: res.data })
           resolve(res.data)

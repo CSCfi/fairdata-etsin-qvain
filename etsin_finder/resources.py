@@ -1,9 +1,11 @@
-from flask import session
+from requests import get
+
+from flask import session, Response, stream_with_context
 from flask_mail import Message
 from flask_restful import abort, reqparse, Resource
 
 from etsin_finder.app_config import get_app_config
-from etsin_finder.finder import app, mail
+from etsin_finder.finder import app, mail, api
 from etsin_finder.metax_api import MetaxAPIService
 from etsin_finder.email_utils import \
     create_email_message_body, \
@@ -36,6 +38,23 @@ class Dataset(Resource):
             abort(400, message="Unable to get catalog record from Metax")
 
         return {'catalog_record': strip_catalog_record(cr), 'email_info': get_email_info(cr)}, 200
+
+
+class Files(Resource):
+
+    def __init__(self):
+        self.parser = reqparse.RequestParser()
+        self.parser.add_argument('dir_id', required=True, type=str)
+
+    def get(self, dataset_id):
+        args = self.parser.parse_args()
+        dir_id = args['dir_id']
+
+        resp = metax_service.get_directory_for_catalog_record(dataset_id, dir_id)
+        if not resp:
+            return '', 404
+
+        return resp, 200
 
 
 class Contact(Resource):
@@ -150,3 +169,82 @@ class Session(Resource):
     def delete(self):
         reset_flask_session_on_logout()
         return not is_authenticated(), 200
+
+
+class Download(Resource):
+
+    """
+    Generic class for download functionalities
+    """
+
+    def __init__(self):
+        self.parser = reqparse.RequestParser()
+        self.parser.add_argument('cr_id', type=str, required=True)
+        self.parser.add_argument('file_id', type=str, action='append', required=False)
+        self.parser.add_argument('dir_id', type=str, action='append', required=False)
+
+    def create_url(self, base_url):
+        # Check request query parameters are present
+        args = self.parser.parse_args()
+        cr_id = args['cr_id']
+        file_ids = args['file_id'] or []
+        dir_ids = args['dir_id'] or []
+
+        url = base_url.format(cr_id)
+        if file_ids or dir_ids:
+            params = ''
+            for file_id in file_ids:
+                params += '&file={0}'.format(file_id) if params else 'file={0}'.format(file_id)
+            for dir_id in dir_ids:
+                params += '&dir={0}'.format(dir_id) if params else 'dir={0}'.format(dir_id)
+            url += '?' + params
+
+        log.debug("Received cr_id: " + str(cr_id))
+        log.debug("Received file ids: " + str(file_ids))
+        log.debug("Received dir ids: " + str(dir_ids))
+        log.debug("Download service URL to be requested: " + url)
+
+        return url
+
+
+class OpenDownload(Download):
+
+    """
+    API for downloading open files
+    """
+
+    DOWNLOAD_URL = 'https://download.fairdata.fi/api/v1/dataset/{0}'
+
+    def get(self):
+        url = self.create_url(self.DOWNLOAD_URL)
+        req = get(url, stream=True)
+        res = Response(response=stream_with_context(req.iter_content(chunk_size=1024)), status=req.status_code)
+        res.headers['Content-Type'] = req.headers['Content-Type']
+        res.headers['Content-Disposition'] = req.headers['Content-Disposition']
+        res.headers['Content-Length'] = req.headers['Content-Length']
+        return res
+
+
+class RestrictedDownload(Download):
+
+    """
+    API for downloading restricted files
+    """
+
+    DOWNLOAD_URL = 'N/A'
+
+    def get(self):
+        # TODO: Do checks whether user is allowed to download
+        # Check if is authenticated and also rems access permission. Maybe implement an API for frontend to ask
+        # whether auth user is authorized to download as well (before requesting this api)
+        if not is_authenticated():
+            return '', 401
+
+        # url = self.create_url(self.DOWNLOAD_URL)
+        # req = get(url, stream=True)
+        # res = Response(response=stream_with_context(req.iter_content(chunk_size=1024)), status=req.status_code)
+        # res.headers['Content-Type'] = req.headers['Content-Type']
+        # res.headers['Content-Disposition'] = req.headers['Content-Disposition']
+        # res.headers['Content-Length'] = req.headers['Content-Length']
+        # return res
+        return '', 501
