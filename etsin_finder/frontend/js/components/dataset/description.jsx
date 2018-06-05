@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { inject, observer } from 'mobx-react'
 import Translate from 'react-translate-component'
-import ShowMore from 'react-show-more'
 
 import Accessiblity from '../../stores/view/accessibility'
 import dateFormat from '../../utils/dateFormat'
@@ -16,6 +15,7 @@ import Person from './person'
 import Contact from './contact'
 import VersionChanger from './versionChanger'
 import GoToOriginal from './goToOriginal'
+// import ShowMore from '../general/showMore'
 // import Button from '../general/button'
 
 const ReactMarkdown = require('react-markdown')
@@ -114,13 +114,13 @@ class Description extends Component {
         </div>
         <ErrorBoundary>
           <DatasetDescription>
-            <ShowMore
-              lines={3}
-              more={<Translate content="general.showMore" component="p" />}
-              less={<Translate content="general.showLess" component="p" />}
-            >
-              <ReactMarkdown source={checkDataLang(this.state.description[0])} />
-            </ShowMore>
+            {/* <ShowMore
+              min={100}
+              more={<Translate content="general.showMore" />}
+              less={<Translate content="general.showLess" />}
+            > */}
+            <ReactMarkdown source={checkDataLang(this.state.description[0])} />
+            {/* </ShowMore> */}
           </DatasetDescription>
         </ErrorBoundary>
         {this.props.cumulative && (
