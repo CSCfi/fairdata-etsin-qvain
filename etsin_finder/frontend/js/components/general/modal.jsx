@@ -59,7 +59,6 @@ export default class Modal extends Component {
     this.state = {
       styles: { overlay: overlayStyle, content: contentStyle },
     }
-    console.log(this.state.styles)
 
     this.afterOpen = this.afterOpen.bind(this)
     this.onClose = this.onClose.bind(this)
