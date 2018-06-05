@@ -119,7 +119,7 @@ class Description extends Component {
               more={<Translate content="general.showMore" />}
               less={<Translate content="general.showLess" />}
             > */}
-            <ReactMarkdown source={checkDataLang(this.state.description[0])} />
+            <ReactMarkdown source={checkDataLang(this.state.description)} />
             {/* </ShowMore> */}
           </DatasetDescription>
         </ErrorBoundary>
@@ -163,6 +163,7 @@ const MainInfo = styled.div`
 
 const DatasetDescription = styled.div`
   padding: 0.5em 1em;
+  margin-bottom: 1em;
   /* background-color: ${p => p.theme.color.superlightgray}; */
   border-left: 2px solid ${p => p.theme.color.primary};
   @media screen and (min-width: ${p => p.theme.breakpoints.sm}) {

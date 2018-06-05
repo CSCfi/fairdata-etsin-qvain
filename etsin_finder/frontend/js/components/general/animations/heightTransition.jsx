@@ -30,9 +30,7 @@ export default class HeightTransition extends Component {
     this.container = React.createRef()
   }
 
-  componentDidMount() {
-    this.container.current.click()
-  }
+  componentDidMount() {}
 
   getHeight = node => {
     const height = node.scrollHeight

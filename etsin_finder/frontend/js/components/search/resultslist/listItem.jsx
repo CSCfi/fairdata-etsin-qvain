@@ -46,13 +46,7 @@ export default class ListItem extends Component {
                 )}
               </ErrorBoundary>
               <ErrorBoundary>
-                <p>
-                  {this.shortDescription(
-                    this.props.item.description.map(description =>
-                      checkDataLang(description, this.props.lang)
-                    )[0]
-                  )}
-                </p>
+                <p>{this.shortDescription(checkDataLang(this.props.item.description))}</p>
               </ErrorBoundary>
             </ContentBox>
           </Link>
