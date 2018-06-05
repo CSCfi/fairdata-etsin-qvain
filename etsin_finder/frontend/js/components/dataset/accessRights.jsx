@@ -48,7 +48,6 @@ export const accessRightsBool = accessRights => {
 class AccessRights extends Component {
   constructor(props) {
     super(props)
-    console.log('access_rights', props)
     let title = { en: 'Restricted Access', fi: 'Rajoitettu käyttöoikeus' }
     let description = ''
     let url = ''
@@ -57,9 +56,6 @@ class AccessRights extends Component {
         ? props.access_rights.access_type.pref_label
         : props.access_rights.license.map(item => item.title)[0]
       description = props.access_rights.description
-      if (description) {
-        console.log('description', description)
-      }
       url = props.access_rights.access_url
     }
     this.lang = props.Stores.Locale.currentLang
