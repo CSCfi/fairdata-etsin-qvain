@@ -158,7 +158,7 @@ export default {
         entity: {
           title: { en: 'External dataset 1', fi: 'Ulkopuolinen aineisto 1' },
           identifier: 'external:dataset:identifier',
-          description: [{ fi: 'Kuvailutiedot' }],
+          description: { fi: 'Kuvailutiedot' },
         },
         relation_type: {
           identifier: 'http://www.w3.org/ns/prov#wasDerivedFrom',
@@ -173,7 +173,7 @@ export default {
         entity: {
           title: { en: 'External thing 2', fi: 'Ulkopuolinen asia 2' },
           identifier: 'external:thing:identifier',
-          description: [{ fi: 'Kuvailutiedot' }],
+          description: { fi: 'Kuvailutiedot' },
         },
         relation_type: {
           identifier: 'http://purl.org/spar/cito/cites',
@@ -184,7 +184,7 @@ export default {
         entity: {
           title: { en: 'External dataset 2', fi: 'Ulkopuolinen aineisto 2' },
           identifier: 'external:dataset_2:identifier',
-          description: [{ fi: 'Kuvailutiedot' }],
+          description: { fi: 'Kuvailutiedot' },
         },
         relation_type: {
           identifier: 'http://purl.org/dc/terms/isPartOf',
@@ -195,7 +195,7 @@ export default {
         entity: {
           title: { en: 'External thing 2', fi: 'Ulkopuolinen asia 2' },
           identifier: 'external:thing_2:identifier',
-          description: [{ fi: 'Kuvailutiedot' }],
+          description: { fi: 'Kuvailutiedot' },
         },
         relation_type: {
           identifier: 'http://www.w3.org/ns/adms#previous',
@@ -278,7 +278,7 @@ export default {
               pref_label: { en: 'pref label' },
             },
             pref_label: { en: 'Preferred label' },
-            description: [{ en: 'Description' }],
+            description: { en: 'Description' },
             representation: {
               identifier: 'identifierheretoo',
               pref_label: { en: 'Preferred label' },
@@ -303,7 +303,7 @@ export default {
             },
             title: { en: 'Title' },
             identifier: 'someidhereagain',
-            description: [{ en: 'Description' }],
+            description: { en: 'Description' },
           },
         ],
         lifecycle_event: {
@@ -483,7 +483,7 @@ export default {
           title: { en: 'Apache Software License 2.0', und: 'Apache Software License 2.0' },
           license: 'https://url.of.license.which.applies.here.org',
           identifier: 'http://www.opensource.org/licenses/Apache-2.0',
-          description: [{ en: 'Free account of the rights' }],
+          description: { en: 'Free account of the rights' },
         },
       ],
       available: '2014-01-15T08:19:58Z',
@@ -498,7 +498,7 @@ export default {
         identifier: 'http://purl.org/att/es/reference_data/access_type/access_type_open_access',
         pref_label: { en: 'Open', fi: 'Avoin', und: 'Avoin' },
       },
-      description: [{ en: 'Free account of the rights' }],
+      description: { en: 'Free account of the rights' },
       restriction_grounds: {
         identifier:
           'http://purl.org/att/es/reference_data/restriction_grounds/restriction_grounds_1',

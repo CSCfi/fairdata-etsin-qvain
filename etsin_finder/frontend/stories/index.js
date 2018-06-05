@@ -3,7 +3,6 @@ import { Provider } from 'mobx-react'
 import { BrowserRouter as Router } from 'react-router-dom'
 import styled, { ThemeProvider } from 'styled-components'
 import { storiesOf, addDecorator } from '@storybook/react'
-import { action } from '@storybook/addon-actions'
 
 import Stores from '../js/stores'
 import theme from '../js/styles/theme'
@@ -196,28 +195,52 @@ storiesOf('General/Splash', module).add('Active', () => (
   </Splash>
 ))
 
-storiesOf('General/Access rights', module).add('Open Access', () => (
-  <div>
-    <Container center maxWidth="800px">
-      <ComponentCode displayName={() => 'AccessRights'}>
-        <AccessRights access_rights={MetaxRes.research_dataset.access_rights} />
-      </ComponentCode>
-      <ComponentCode displayName={() => 'AccessRights'}>
-        <AccessRights
-          access_rights={{
-            access_type: {
-              identifier: 'locked',
-              pref_label: {
-                en: 'locked',
-                fi: 'suljettu',
+storiesOf('General/Access rights', module)
+  .add('Results list', () => (
+    <div>
+      <Container center maxWidth="800px">
+        <ComponentCode displayName={() => 'AccessRights'}>
+          <AccessRights access_rights={MetaxRes.research_dataset.access_rights} />
+        </ComponentCode>
+        <ComponentCode displayName={() => 'AccessRights'}>
+          <AccessRights
+            access_rights={{
+              access_type: {
+                identifier: 'locked',
+                pref_label: {
+                  en: 'locked',
+                  fi: 'suljettu',
+                },
               },
-            },
-          }}
-        />
-      </ComponentCode>
-    </Container>
-  </div>
-))
+            }}
+          />
+        </ComponentCode>
+      </Container>
+    </div>
+  ))
+  .add('Dataset with button', () => (
+    <div>
+      <Container center maxWidth="800px">
+        <ComponentCode displayName={() => 'AccessRights'}>
+          <AccessRights button access_rights={MetaxRes.research_dataset.access_rights} />
+        </ComponentCode>
+        <ComponentCode displayName={() => 'AccessRights'}>
+          <AccessRights
+            button
+            access_rights={{
+              access_type: {
+                identifier: 'locked',
+                pref_label: {
+                  en: 'locked',
+                  fi: 'suljettu',
+                },
+              },
+            }}
+          />
+        </ComponentCode>
+      </Container>
+    </div>
+  ))
 
 storiesOf('General/Loader', module).add('Normal', () => (
   <Fragment>
