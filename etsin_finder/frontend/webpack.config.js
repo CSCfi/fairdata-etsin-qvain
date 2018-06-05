@@ -1,9 +1,11 @@
+require('babel-polyfill')
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
+const OfflinePlugin = require('offline-plugin')
 
 const config = {
-  entry: [path.join(__dirname, '/js/index.jsx')],
+  entry: ['babel-polyfill', path.join(__dirname, '/js/index.jsx')],
   output: {
     // path of output
     path: path.join(__dirname, '/build'),
@@ -36,6 +38,11 @@ const config = {
       filename: 'index.html',
       template: 'static/index.template.ejs',
       favicon: 'static/images/favicon.png',
+    }),
+    new OfflinePlugin({
+      ServiceWorker: {
+        entry: './static/service-worker.js',
+      },
     }),
   ],
   watch: false,

@@ -67,6 +67,7 @@ export default class ExternalResources extends Component {
           downloadAll={false}
         />
         <Table
+          cr_id={this.state.results.identifier}
           data={this.state.currentFolder}
           access
           fields={{ size: false, category: false, name: true, downloadBtn: false, infoBtn: true }}

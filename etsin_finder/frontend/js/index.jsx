@@ -1,17 +1,17 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import * as OfflinePluginRuntime from 'offline-plugin/runtime'
 
 import App from './app'
 
-ReactDOM.render(<App />, document.getElementById('root'))
+OfflinePluginRuntime.install()
 
-if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
-  navigator.serviceWorker
-    .register('./static/service-worker.js')
-    .then(registration => {
-      console.log('Registration successful, scope is:', registration.scope)
-    })
-    .catch(error => {
-      console.log('Service worker registration failed, error:', error)
-    })
-}
+global.Promise = require('bluebird')
+
+Promise.config({
+  warnings: {
+    wForgottenReturn: false,
+  },
+})
+
+ReactDOM.render(<App />, document.getElementById('root'))

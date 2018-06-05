@@ -13,16 +13,21 @@ export default class HeroBanner extends Component {
     }
   }
   render() {
-    return <Hero className={this.state.classes}>{this.props.children}</Hero>
+    return (
+      <Hero className={this.state.classes}>
+        <Center>{this.props.children}</Center>
+      </Hero>
+    )
   }
 }
 
 const Hero = styled.div`
   width: 100%;
   min-height: 200px;
-  display: flex;
+  /* display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: center; */
+  position: relative;
   @media (min-width: ${props => props.theme.breakpoints.lg}) {
     min-height: 300px;
   }
@@ -33,6 +38,13 @@ const Hero = styled.div`
   &.hero-full {
     width: 100%;
   }
+`
+
+const Center = styled.div`
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  transform: translateY(-50%);
 `
 
 HeroBanner.defaultProps = {

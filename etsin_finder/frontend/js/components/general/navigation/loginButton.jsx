@@ -11,15 +11,14 @@ import Loader from '../loader'
 import NoticeBar from '../noticeBar'
 
 class Login extends Component {
-  static defaultProps = {
-    margin: '0 0 0 0.4em',
-    width: undefined,
-  }
-
   static propTypes = {
     location: PropTypes.object.isRequired,
     margin: PropTypes.string,
     width: PropTypes.string,
+  }
+  static defaultProps = {
+    margin: '0 0 0 0.4em',
+    width: undefined,
   }
 
   state = {

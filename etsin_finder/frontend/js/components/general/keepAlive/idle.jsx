@@ -5,16 +5,6 @@ const eventsChanged = (yeoldevents, yonnewevents) =>
   yeoldevents.sort().toString() !== yonnewevents.sort().toString()
 
 export default class Idle extends Component {
-  static defaultProps = {
-    defaultIdle: false,
-    render: () => null,
-    onChange: () => {},
-    eventInterval: 60000,
-    eventCallback: () => {},
-    timeout: 1000,
-    events: ['mousemove', 'mousedown', 'keydown', 'touchstart', 'scroll'],
-  }
-
   static propTypes = {
     defaultIdle: PropTypes.bool,
     render: PropTypes.func,
@@ -23,6 +13,16 @@ export default class Idle extends Component {
     eventCallback: PropTypes.func,
     timeout: PropTypes.number,
     events: PropTypes.arrayOf(PropTypes.string),
+  }
+
+  static defaultProps = {
+    defaultIdle: false,
+    render: () => null,
+    onChange: () => {},
+    eventInterval: 60000,
+    eventCallback: () => {},
+    timeout: 1000,
+    events: ['mousemove', 'mousedown', 'keydown', 'touchstart', 'scroll'],
   }
 
   state = {

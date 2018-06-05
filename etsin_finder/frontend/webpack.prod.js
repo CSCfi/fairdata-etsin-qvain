@@ -2,6 +2,7 @@ const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
+const OfflinePlugin = require('offline-plugin')
 
 // TODO: add service worker to build process, currently unused
 
@@ -39,6 +40,7 @@ const config = {
       favicon: 'static/images/favicon.png',
     }),
     new UglifyJSPlugin(),
+    new OfflinePlugin(),
   ],
 }
 module.exports = config
