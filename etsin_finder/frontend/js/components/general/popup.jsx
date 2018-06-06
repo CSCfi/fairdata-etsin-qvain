@@ -112,7 +112,7 @@ const Pop = styled.div`
   padding: 1em 1.7em;
   margin: 0 auto;
   transform: translateY(calc(-100% - 10px));
-  box-shadow: 0px 3px 4px rgba(0, 0, 0, 0.3);
+  box-shadow: 0px 2px 4px 1px rgba(0, 0, 0, 0.3);
   display: flex;
   justify-content: center;
   border-radius: 5px;

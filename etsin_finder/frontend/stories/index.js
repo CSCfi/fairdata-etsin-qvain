@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 import { Provider } from 'mobx-react'
 import { BrowserRouter as Router } from 'react-router-dom'
-import styled, { ThemeProvider } from 'styled-components'
+import styled, { ThemeProvider, css } from 'styled-components'
 import { storiesOf, addDecorator } from '@storybook/react'
 
 import '../js/styles/globalStyles'
@@ -39,8 +39,10 @@ import Table from '../js/components/dataset/data/table'
 import ExternalResources from '../js/components/dataset/data/externalResources'
 import Info from '../js/components/dataset/data/info'
 import Dropdown from '../js/components/general/dropdown'
+import PopUp from '../js/components/general/popup'
 // import Select from '../js/components/general/select'
 import People from '../js/components/dataset/people'
+import Person from '../js/components/dataset/people/person'
 
 import EsRes from './esRes'
 import MetaxRes, { MetaxRemote } from './metaxRes'
@@ -87,6 +89,15 @@ const Container = styled.div`
   ${align};
   ${flex};
   justify-content: ${p => (p.end ? 'flex-end' : '')};
+  ${p =>
+    p.verticalCenter &&
+    css`
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      height: 100vh;
+      align-items: center;
+    `};
 `
 
 //
@@ -265,6 +276,27 @@ storiesOf('General/Separator', module).add('Normal', () => (
     </ComponentCode>
   </Container>
 ))
+
+storiesOf('General/PopUp', module).add('normal', () => {
+  const person = MetaxRes.research_dataset.creator[0]
+  return (
+    <Container verticalCenter center maxWidth="800px">
+      <ComponentCode>
+        <PopUp
+          isOpen={true}
+          onRequestClose={() => {}}
+          popUp={
+            <div>
+              <span>content</span>
+            </div>
+          }
+        >
+          <Button>Pop up</Button>
+        </PopUp>
+      </ComponentCode>
+    </Container>
+  )
+})
 
 storiesOf('General/Skip to Content', module).add('Normal', () => (
   <div>
@@ -496,7 +528,7 @@ storiesOf('Dataset/People', module)
       style={{
         color: 'rgb(150,150,150)',
         fontSize: '0.9em',
-        marginTop: '7em',
+        marginTop: '10em',
       }}
     >
       <ComponentCode>
@@ -505,9 +537,16 @@ storiesOf('Dataset/People', module)
     </Container>
   ))
   .add('Contributor', () => (
-    <Container center maxWidth="800px" style={{ marginTop: '7em' }}>
+    <Container center maxWidth="800px" style={{ marginTop: '10em' }}>
       <ComponentCode>
         <People creator={MetaxRes.research_dataset.contributor} />
+      </ComponentCode>
+    </Container>
+  ))
+  .add('Person', () => (
+    <Container center maxWidth="800px" style={{ marginTop: '10em' }}>
+      <ComponentCode>
+        <Person first person={MetaxRes.research_dataset.contributor[0]} />
       </ComponentCode>
     </Container>
   ))
