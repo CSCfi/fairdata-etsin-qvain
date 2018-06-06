@@ -74,7 +74,7 @@ export default class PopUp extends Component {
               <defs>
                 <filter id="dropshadow" height="200%" width="200%">
                   <feOffset dx="0" dy="3" result="offsetblur" />
-                  <feGaussianBlur in="SourceAlpha" stdDeviation="3.5" />
+                  <feGaussianBlur in="SourceAlpha" stdDeviation="3" />
                   <feComponentTransfer>
                     <feFuncA type="linear" slope="0.6" />
                   </feComponentTransfer>

@@ -100,7 +100,7 @@ class Description extends Component {
           </Flex>
         </Labels>
         <div className="d-md-flex align-items-center dataset-title justify-content-between">
-          <h1>{checkDataLang(this.state.title)}</h1>
+          <Title>{checkDataLang(this.state.title)}</Title>
         </div>
         <div className="d-flex justify-content-between basic-info">
           <MainInfo>
@@ -157,6 +157,10 @@ Description.propTypes = {
   cumulative: PropTypes.bool.isRequired,
 }
 
+const Title = styled.h1`
+  margin-bottom: 0.1rem;
+`
+
 const MainInfo = styled.div`
   color: ${p => p.theme.color.gray};
   font-size: 0.9em;
@@ -169,5 +173,8 @@ const DatasetDescription = styled.div`
   border-left: 2px solid ${p => p.theme.color.primary};
   @media screen and (min-width: ${p => p.theme.breakpoints.sm}) {
     padding: 1em 2em;
+  }
+  p:last-of-type {
+    margin-bottom: 0;
   }
 `

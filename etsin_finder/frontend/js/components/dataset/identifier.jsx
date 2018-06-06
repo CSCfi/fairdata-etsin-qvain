@@ -90,6 +90,7 @@ const Prefix = styled.div`
 const IDN = styled.div`
   font-size: 0.9em;
   padding: 0.4em 1em 0.4em 0.5em;
+  text-align: left;
 `
 
 Identifier.propTypes = {
