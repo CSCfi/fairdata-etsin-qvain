@@ -77,7 +77,7 @@ export default class Person extends Component {
                   <a
                     href={this.state.person.homepage.identifier}
                     title={
-                      this.state.person.homepage.description ||
+                      checkDataLang(this.state.person.homepage.description) ||
                       this.state.person.homepage.identifier
                     }
                   >
