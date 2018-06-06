@@ -111,6 +111,11 @@ const english = {
     spatial_coverage: 'Spatial Coverage',
     temporal_coverage: 'Temporal Coverage',
     version: { number: 'Version %(number)s', old: '(Old)' },
+    person: {
+      contributor_role: 'Role',
+      member_of: 'Member of',
+      homepage: 'Homepage',
+    },
   },
   error: {
     notFound:

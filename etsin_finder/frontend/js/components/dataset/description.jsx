@@ -11,7 +11,7 @@ import checkDataLang from '../../utils/checkDataLang'
 import Label from '../general/label'
 import AccessRights from './accessRights'
 import ErrorBoundary from '../general/errorBoundary'
-import Person from './person'
+import People from './people'
 import Contact from './contact'
 import VersionChanger from './versionChanger'
 import GoToOriginal from './goToOriginal'
@@ -105,10 +105,10 @@ class Description extends Component {
         <div className="d-flex justify-content-between basic-info">
           <MainInfo>
             <ErrorBoundary>
-              <Person creator={this.state.creator} />
+              <People creator={this.state.creator} />
             </ErrorBoundary>
             <ErrorBoundary>
-              <Person contributor={this.state.contributor} />
+              <People contributor={this.state.contributor} />
             </ErrorBoundary>
             <p>{this.state.issued ? dateFormat(checkDataLang(this.state.issued)) : null}</p>
           </MainInfo>

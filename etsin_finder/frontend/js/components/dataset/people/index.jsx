@@ -3,52 +3,48 @@ import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import styled from 'styled-components'
 
-import checkDataLang from '../../utils/checkDataLang'
+import Person from './person'
 
-export default class Person extends Component {
+export default class People extends Component {
   constructor(props) {
     super(props)
     const mode = typeof props.creator === 'object' ? 'creator' : 'contributor'
     this.state = { mode }
   }
 
-  renderPerson(people, i, arr) {
-    return typeof people.name === 'object' ? (
-      <span key={checkDataLang(people.name)}>
-        {checkDataLang(people.name)}
-        {i + 1 !== arr.length ? ', ' : ''}
-      </span>
-    ) : (
-      <span key={people.name}>
-        {people.name}
-        {i + 1 !== arr.length ? ', ' : ''}
-      </span>
-    )
-  }
-
   render() {
     return this.props[this.state.mode] ? (
-      <PersonCont>
+      <PeopleCont>
         {this.props[this.state.mode].length > 1 ? (
           <Translate content={`dataset.${this.state.mode}.plrl`} />
         ) : (
           <Translate content={`dataset.${this.state.mode}.snglr`} />
         )}
         {': '}
-        {this.props[this.state.mode].map((people, i, arr) => this.renderPerson(people, i, arr))}
-      </PersonCont>
+        <InlineUl>
+          {this.props[this.state.mode].map((person, i) => (
+            <Person key={person.name} first={i === 0} person={person} />
+          ))}
+        </InlineUl>
+      </PeopleCont>
     ) : null
   }
 }
 
-Person.defaultProps = {
+People.defaultProps = {
   creator: undefined,
 }
 
-Person.propTypes = {
+People.propTypes = {
   creator: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
 }
 
-const PersonCont = styled.p`
+const PeopleCont = styled.div`
   margin-bottom: 0;
+`
+
+const InlineUl = styled.ul`
+  display: inline;
+  margin: 0;
+  padding: 0;
 `

@@ -84,6 +84,7 @@ export default {
       {
         name: 'Teppo Testaaja',
         '@type': 'Person',
+        identifier: 'orcid.org/0000-0003-4727-9435',
         member_of: {
           name: { und: 'Aalto yliopisto' },
           '@type': 'Organization',
@@ -93,6 +94,11 @@ export default {
           identifier:
             'http://purl.org/att/es/reference_data/contributor_role/contributor_role_data_curation',
           pref_label: { en: 'Data curation', und: 'Data curation' },
+        },
+        homepage: {
+          identifier: 'http://purl.org',
+          title: 'purl.org',
+          description: 'purl website',
         },
       },
     ],

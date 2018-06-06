@@ -4,6 +4,7 @@ import { BrowserRouter as Router } from 'react-router-dom'
 import styled, { ThemeProvider } from 'styled-components'
 import { storiesOf, addDecorator } from '@storybook/react'
 
+import '../js/styles/globalStyles'
 import Stores from '../js/stores'
 import theme from '../js/styles/theme'
 import Hero from '../js/components/general/hero'
@@ -39,6 +40,7 @@ import ExternalResources from '../js/components/dataset/data/externalResources'
 import Info from '../js/components/dataset/data/info'
 import Dropdown from '../js/components/general/dropdown'
 // import Select from '../js/components/general/select'
+import People from '../js/components/dataset/people'
 
 import EsRes from './esRes'
 import MetaxRes, { MetaxRemote } from './metaxRes'
@@ -485,6 +487,30 @@ storiesOf('Dataset/Version changer', module)
       </Container>
     )
   })
+
+storiesOf('Dataset/People', module)
+  .add('Creator', () => (
+    <Container
+      center
+      maxWidth="800px"
+      style={{
+        color: 'rgb(150,150,150)',
+        fontSize: '0.9em',
+        marginTop: '7em',
+      }}
+    >
+      <ComponentCode>
+        <People creator={MetaxRes.research_dataset.creator} />
+      </ComponentCode>
+    </Container>
+  ))
+  .add('Contributor', () => (
+    <Container center maxWidth="800px" style={{ marginTop: '7em' }}>
+      <ComponentCode>
+        <People creator={MetaxRes.research_dataset.contributor} />
+      </ComponentCode>
+    </Container>
+  ))
 
 storiesOf('Dataset/Tabs', module).add('Normal', () => (
   <Container center maxWidth="800px">

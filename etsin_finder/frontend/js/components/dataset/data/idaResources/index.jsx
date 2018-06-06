@@ -14,6 +14,7 @@ export default class IdaResources extends Component {
   constructor(props) {
     super(props)
     const results = DatasetQuery.results
+    console.log('DatasetRes', DatasetQuery.results.research_dataset)
     const files = results.research_dataset.files
     const folders = results.research_dataset.directories
     if (files || folders) {
@@ -51,46 +52,55 @@ export default class IdaResources extends Component {
     let filePaths = []
     let folderPaths = []
     if (files) {
-      filePaths = files.map(file => {
-        let fileType
-        let fileDetails = file.details
-        if (file.type || file.file_type) {
-          fileType = file.type
-            ? checkDataLang(file.type.pref_label)
-            : checkDataLang(file.file_type.pref_label)
-        }
-        if (fileApi) {
-          fileDetails = file
-        }
-        return {
-          path: fileDetails.file_path.substring(1),
-          type: fileType,
+      if (fileApi) {
+        filePaths = files.map(file => ({
+          path: file.file_path.substring(1),
+          type: file.file_format,
+          download_url: undefined,
+          details: file,
+          description: undefined,
+          use_category: undefined,
+          title: file.file_name,
+          identifier: file.identifier,
+          checksum: file.checksum,
+        }))
+      } else {
+        filePaths = files.map(file => ({
+          path: file.details.file_path.substring(1),
+          type: checkDataLang(file.file_type.pref_label),
           download_url: file.access_url,
-          details: fileDetails,
+          details: file.details,
           description: file.description,
           use_category: file.use_category,
           title: file.title,
           identifier: file.identifier,
-        }
-      })
+        }))
+      }
     }
     if (folders) {
-      folderPaths = folders.map(folder => {
-        let folderDetails = folder.details
-        if (fileApi) {
-          folderDetails = folder
-        }
-        return {
-          path: folderDetails.directory_path.substring(1),
+      if (fileApi) {
+        folderPaths = folders.map(folder => ({
+          path: folder.directory_path.substring(1),
+          type: 'dir',
+          download_url: undefined,
+          details: folder,
+          description: undefined,
+          use_category: undefined,
+          title: folder.directory_name,
+          identifier: folder.identifier,
+        }))
+      } else {
+        folderPaths = folders.map(folder => ({
+          path: folder.details.directory_path.substring(1),
           type: 'dir',
           download_url: folder.access_url,
-          details: folderDetails,
+          details: folder.details,
           description: folder.description,
           use_category: folder.use_category,
           title: folder.title,
           identifier: folder.identifier,
-        }
-      })
+        }))
+      }
     }
     if (files && folders) {
       return filePaths.concat(folderPaths)
@@ -117,6 +127,7 @@ export default class IdaResources extends Component {
   query(id, newPath, newIDs) {
     DatasetQuery.getFolderData(id, this.state.results.identifier)
       .then(res => {
+        console.log('directory res', res)
         const currFolder = createTree(
           this.createDirTree(res.files, res.directories, true)
         ).reverse()
