@@ -15,6 +15,7 @@ import Button, {
   Link,
   TransparentButton,
   LinkButton,
+  TransparentLink,
 } from '../js/components/general/button'
 import Splash from '../js/components/general/splash'
 import ResultsAmount from '../js/components/search/resultsAmount'
@@ -121,14 +122,6 @@ storiesOf('General/Button', module)
         <InvertedButton>Inverted</InvertedButton>
       </ComponentCode>
       <Separator />
-      <ComponentCode displayName={() => 'Link'}>
-        <Link href="https://google.com">Link</Link>
-      </ComponentCode>
-      <Separator />
-      <ComponentCode displayName={() => 'InvertedLink'}>
-        <InvertedLink href="https://google.com">InvertedLink</InvertedLink>
-      </ComponentCode>
-      <Separator />
       <ComponentCode displayName={() => 'TransparentButton'}>
         <TransparentButton>Transparent Button</TransparentButton>
       </ComponentCode>
@@ -148,24 +141,23 @@ storiesOf('General/Button', module)
         <InvertedButton color={'error'}>Inverted</InvertedButton>
       </ComponentCode>
       <Separator />
-      <ComponentCode displayName={() => 'Link'}>
-        <Link href="https://google.com" color={'error'}>
-          Link
-        </Link>
-      </ComponentCode>
-      <Separator />
-      <ComponentCode displayName={() => 'InvertedLink'}>
-        <InvertedLink href="https://google.com" color="error">
-          InvertedLink
-        </InvertedLink>
-      </ComponentCode>
-      <Separator />
       <ComponentCode displayName={() => 'TransparentButton'}>
         <TransparentButton color={'error'}>Transparent Button</TransparentButton>
       </ComponentCode>
+    </Container>
+  ))
+  .add('Links', () => (
+    <Container center maxWidth="800px">
+      <ComponentCode displayName={() => 'Link'}>
+        <Link href="https://google.com">Link</Link>
+      </ComponentCode>
       <Separator />
-      <ComponentCode displayName={() => 'LinkButton'}>
-        <LinkButton color={'error'}>LinkButton</LinkButton>
+      <ComponentCode displayName={() => 'InvertedLink'}>
+        <InvertedLink href="https://google.com">InvertedLink</InvertedLink>
+      </ComponentCode>
+      <Separator />
+      <ComponentCode displayName={() => 'TransparentLink'}>
+        <TransparentLink href="https://google.com">TransparentLink</TransparentLink>
       </ComponentCode>
     </Container>
   ))

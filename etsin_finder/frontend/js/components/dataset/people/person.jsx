@@ -9,7 +9,7 @@ import faUniversity from '@fortawesome/fontawesome-free-solid/faUniversity'
 import faGlobe from '@fortawesome/fontawesome-free-solid/faGlobe'
 
 // import checkDataLang from '../../utils/checkDataLang'
-import { TransparentButton } from '../../general/button'
+import { TransparentLink } from '../../general/button'
 import PopUp from '../../general/popup'
 import checkDataLang from '../../../utils/checkDataLang'
 
@@ -90,10 +90,12 @@ export default class Person extends Component {
             </PopUpContainer>
           }
         >
-          <TransparentButton
+          <TransparentLink
             noMargin
             noPadding
             color="primary"
+            /* eslint-disable-next-line no-script-url */
+            href="javascript:;"
             onMouseDown={e => {
               // this prevents the popup not closing and opening
               // when using this button to close
@@ -102,7 +104,7 @@ export default class Person extends Component {
             onClick={this.state.popUpOpen ? this.closePopUp : this.openPopUp}
           >
             {checkDataLang(this.state.person.name)}
-          </TransparentButton>
+          </TransparentLink>
         </PopUp>
       </InlineLi>
     )
