@@ -54,11 +54,11 @@ class Sidebar extends Component {
   dateSeparator(start, end) {
     return (
       (start || end) && (
-        <p key={start}>
+        <ItemValue key={start}>
           <span>
             {start === end ? dateFormat(start) : `${dateFormat(start)} - ${dateFormat(end)}`}
           </span>
-        </p>
+        </ItemValue>
       )
     )
   }
@@ -87,14 +87,14 @@ class Sidebar extends Component {
             </SidebarItem>
             {/* FIELD OF SCIENCE */}
             <SidebarItem
-              component="div"
+              component="p"
               trans="dataset.field_of_science"
               fallback="Field of Science"
               hideEmpty="true"
             >
               {this.state.field &&
                 this.state.field.map(field => (
-                  <p key={field.identifier}>{checkDataLang(field.pref_label)}</p>
+                  <span key={field.identifier}>{checkDataLang(field.pref_label)}</span>
                 ))}
             </SidebarItem>
             {/* KEYWORDS */}
@@ -134,7 +134,7 @@ class Sidebar extends Component {
                 )}
             </SidebarItem>
             {/* LICENSE */}
-            <SidebarItem component="div" trans="dataset.license" hideEmpty="true">
+            <SidebarItem component="p" trans="dataset.license" hideEmpty="true">
               {this.state.license &&
                 this.state.license.map(rights => {
                   // If license URL is available, link license title
@@ -143,14 +143,14 @@ class Sidebar extends Component {
                     (rights.license.startsWith('http://') || rights.license.startsWith('https://'))
                   ) {
                     return (
-                      <p key={rights.identifier}>
+                      <span key={rights.identifier}>
                         <a href={rights.license} target="_blank" rel="noopener noreferrer">
                           {checkDataLang(rights.title)}
                         </a>
-                      </p>
+                      </span>
                     )
                   }
-                  return <p key={rights.identifier}>{checkDataLang(rights.title)}</p>
+                  return <span key={rights.identifier}>{checkDataLang(rights.title)}</span>
                 })}
             </SidebarItem>
 
@@ -240,5 +240,7 @@ const SidebarContainer = styled(ContentBox)`
     }
   }
 `
+
+const ItemValue = styled.p``
 
 export default inject('Stores')(observer(Sidebar))

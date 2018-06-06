@@ -110,6 +110,11 @@ const finnish = {
     spatial_coverage: 'Maantieteellinen kattavuus',
     temporal_coverage: 'Ajallinen kattavuus',
     version: { number: 'Versio %(number)s', old: '(Vanha)' },
+    person: {
+      contributor_role: 'Rooli',
+      member_of: 'Jäsen',
+      homepage: 'Kotisivu',
+    },
   },
   error: {
     notFound:
