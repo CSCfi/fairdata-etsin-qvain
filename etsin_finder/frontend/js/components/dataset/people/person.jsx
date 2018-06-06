@@ -45,7 +45,7 @@ export default class Person extends Component {
           onRequestClose={this.closePopUp}
           popUp={
             <PopUpContainer>
-              <Name>{this.state.person.name}</Name>
+              <Name>{checkDataLang(this.state.person.name)}</Name>
               {this.state.person.identifier && (
                 <Orcid href={this.state.person.identifier}>{this.state.person.identifier}</Orcid>
               )}
@@ -101,7 +101,7 @@ export default class Person extends Component {
             }}
             onClick={this.state.popUpOpen ? this.closePopUp : this.openPopUp}
           >
-            {this.state.person.name}
+            {checkDataLang(this.state.person.name)}
           </TransparentButton>
         </PopUp>
       </InlineLi>
