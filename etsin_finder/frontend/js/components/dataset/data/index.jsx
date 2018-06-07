@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import translate from 'counterpart'
 
 import Accessibility from '../../../stores/view/accessibility'
 import ExternalResources from './externalResources'
@@ -9,7 +10,7 @@ export default class Data extends Component {
   state = {}
 
   componentDidMount() {
-    Accessibility.setNavText('Navigated to Data tab')
+    Accessibility.setNavText(translate('nav.announcer.dataTab'))
   }
 
   render() {

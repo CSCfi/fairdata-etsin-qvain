@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
+import translate from 'counterpart'
 
 import DatasetQuery from '../../../../stores/view/datasetquery'
 import checkDataLang from '../../../../utils/checkDataLang'
@@ -56,7 +57,7 @@ export default class ExternalResources extends Component {
 
   render() {
     if (!this.state.results) {
-      return 'Loading'
+      return ''
     }
     return (
       <DataTable>

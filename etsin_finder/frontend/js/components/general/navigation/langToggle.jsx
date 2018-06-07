@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { inject, observer } from 'mobx-react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import translate from 'counterpart'
 
 import '../../../../locale/translations'
 import { TransparentButton, InvertedButton } from '../button'
@@ -26,7 +27,9 @@ class LangToggle extends Component {
     this.props.Stores.Locale.toggleLang()
     setTimeout(() => {
       this.setState({
-        announce: `Changed language to ${this.props.Stores.Locale.currentLang}`,
+        announce: translate('general.state.changedLang', {
+          lang: this.props.Stores.Locale.currentLang,
+        }),
       })
     }, 50)
     setTimeout(() => {

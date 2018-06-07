@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { inject, observer } from 'mobx-react'
 import Translate from 'react-translate-component'
+import translate from 'counterpart'
 
 import Accessiblity from '../../stores/view/accessibility'
 import dateFormat from '../../utils/dateFormat'
@@ -48,7 +49,7 @@ class Description extends Component {
   }
 
   componentDidMount() {
-    Accessiblity.setNavText('Navigated to Dataset tab')
+    Accessiblity.setNavText(translate('nav.announcer.datasetPage'))
   }
 
   checkEmails(obj) {
