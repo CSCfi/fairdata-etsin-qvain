@@ -188,7 +188,7 @@ export default class IdaResources extends Component {
 
   render() {
     if (!this.state.results) {
-      return 'Loading'
+      return ''
     }
 
     return (
