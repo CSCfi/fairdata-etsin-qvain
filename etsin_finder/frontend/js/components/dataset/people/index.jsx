@@ -4,6 +4,7 @@ import Translate from 'react-translate-component'
 import styled from 'styled-components'
 
 import Person from './person'
+import checkDataLang from '../../../utils/checkDataLang'
 
 export default class People extends Component {
   constructor(props) {
@@ -22,8 +23,9 @@ export default class People extends Component {
         )}
         {': '}
         <InlineUl>
+          {console.log(this.props[this.state.mode])}
           {this.props[this.state.mode].map((person, i) => (
-            <Person key={person.name} first={i === 0} person={person} />
+            <Person key={checkDataLang(person.name)} first={i === 0} person={person} />
           ))}
         </InlineUl>
       </PeopleCont>

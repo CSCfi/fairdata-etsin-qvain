@@ -62,14 +62,16 @@ export default class PopUp extends Component {
     return (
       <Relative>
         {this.props.isOpen && (
-          <Pop
-            innerRef={this.popRef}
-            tabIndex="-1"
-            autofocus
-            onBlur={this.onBlur}
-            onFocus={this.onFocus}
-          >
-            {this.props.popUp}
+          <React.Fragment>
+            <Pop
+              innerRef={this.popRef}
+              tabIndex="-1"
+              autofocus
+              onBlur={this.onBlur}
+              onFocus={this.onFocus}
+            >
+              {this.props.popUp}
+            </Pop>
             <Svg width="40px" height="20px" viewBox="0 0 20 20">
               <defs>
                 <filter id="dropshadow" height="200%" width="200%">
@@ -90,7 +92,7 @@ export default class PopUp extends Component {
                 style={{ filter: 'url(#dropshadow)' }}
               />
             </Svg>
-          </Pop>
+          </React.Fragment>
         )}
         {this.props.children}
       </Relative>
@@ -98,27 +100,39 @@ export default class PopUp extends Component {
   }
 }
 
-const Relative = styled.div`
-  position: relative;
+const Relative = styled.span`
+  position: initial;
   display: inline-flex;
   justify-content: center;
+  @media screen and (min-width: ${p => p.theme.breakpoints.md}) {
+    position: relative;
+  }
 `
 
 const Pop = styled.div`
   position: absolute;
-  top: 0;
-  width: max-content;
+  left: 15px;
   background-color: white;
+  max-width: calc(100vw - 30px);
   padding: 1em 1.7em;
   margin: 0 auto;
   transform: translateY(calc(-100% - 10px));
   box-shadow: 0px 2px 4px 1px rgba(0, 0, 0, 0.3);
-  display: flex;
-  justify-content: center;
   border-radius: 5px;
+  @media screen and (min-width: ${p => p.theme.breakpoints.md}) {
+    top: 0;
+    left: 0;
+    position: absolute;
+    width: max-content;
+  }
 `
 
 const Svg = styled.svg`
   position: absolute;
-  bottom: -20px;
+  top: initial;
+  margin-top: -10px;
+  @media screen and (min-width: ${p => p.theme.breakpoints.md}) {
+    margin-top: 0;
+    top: -10px;
+  }
 `
