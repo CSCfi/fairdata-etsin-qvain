@@ -83,7 +83,9 @@ export default class Person extends Component {
                   >
                     <Translate content="dataset.person.homepage" className="sr-only" />
                     <span className="sr-only">{' :'}</span>
-                    {checkDataLang(this.state.person.homepage.title)}
+                    {this.state.person.homepage.title
+                      ? checkDataLang(this.state.person.homepage.title)
+                      : this.state.person.homepage.identifier}
                   </a>
                 </Info>
               )}

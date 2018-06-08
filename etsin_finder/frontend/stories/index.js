@@ -529,17 +529,27 @@ storiesOf('Dataset/People', module)
       </ComponentCode>
     </Container>
   ))
-  .add('Contributor', () => (
-    <Container center maxWidth="800px" style={{ marginTop: '10em' }}>
-      <ComponentCode>
-        <People creator={MetaxRes.research_dataset.contributor} />
-      </ComponentCode>
-    </Container>
-  ))
-  .add('Person', () => (
+  .add('3 Contributors', () => {
+    const twoContributors = MetaxRes.research_dataset.contributor.slice(0, 3)
+    return (
+      <Container center maxWidth="800px" style={{ marginTop: '10em' }}>
+        <ComponentCode>
+          <People contributor={twoContributors} />
+        </ComponentCode>
+      </Container>
+    )
+  })
+  .add('Single Person', () => (
     <Container center maxWidth="800px" style={{ marginTop: '10em' }}>
       <ComponentCode>
         <Person first person={MetaxRes.research_dataset.contributor[0]} />
+      </ComponentCode>
+    </Container>
+  ))
+  .add('More than 3 people', () => (
+    <Container center maxWidth="800px" style={{ marginTop: '10em' }}>
+      <ComponentCode>
+        <People contributor={MetaxRes.research_dataset.contributor} />
       </ComponentCode>
     </Container>
   ))
