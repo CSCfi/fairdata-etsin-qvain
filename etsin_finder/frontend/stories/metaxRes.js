@@ -399,6 +399,82 @@ export default {
           pref_label: { en: 'Project administration', und: 'Project administration' },
         },
       },
+      {
+        name: 'Franzibalds Cousin',
+        '@type': 'Person',
+        email: 'franzibald.cousin@csc.fi',
+        member_of: {
+          name: { en: 'Mysterious Organization 2', fi: 'Organisaatio' },
+          '@type': 'Organization',
+          email: 'joo@csc.fi',
+          telephone: ['+23423423'],
+          identifier: 'org_identifier',
+        },
+        telephone: ['+358501231133'],
+        identifier: 'contributorid2',
+        contributor_role: {
+          identifier:
+            'http://purl.org/att/es/reference_data/contributor_role/contributor_role_project_administration',
+          pref_label: { en: 'Project administration', und: 'Project administration' },
+        },
+      },
+      {
+        name: 'Topi Toimittaja',
+        '@type': 'Person',
+        email: 'topi.toimittaja@csc.fi',
+        member_of: {
+          name: { en: 'Mysterious Organization 2', fi: 'Organisaatio' },
+          '@type': 'Organization',
+          email: 'joo@csc.fi',
+          telephone: ['+23423423'],
+          identifier: 'org_identifier',
+        },
+        telephone: ['+358501231133'],
+        identifier: 'contributorid2',
+        contributor_role: {
+          identifier:
+            'http://purl.org/att/es/reference_data/contributor_role/contributor_role_project_administration',
+          pref_label: { en: 'Project administration', und: 'Project administration' },
+        },
+      },
+      {
+        name: 'Tosi-Pitkänimi Tommi Pitkäniemi Pisinnimi',
+        '@type': 'Person',
+        email: 'tepi.toimittaja@csc.fi',
+        member_of: {
+          name: { en: 'Mysterious Organization 2', fi: 'Organisaatio' },
+          '@type': 'Organization',
+          email: 'joo@csc.fi',
+          telephone: ['+23423423'],
+          identifier: 'org_identifier',
+        },
+        telephone: ['+358501231133'],
+        identifier: 'contributorid2',
+        contributor_role: {
+          identifier:
+            'http://purl.org/att/es/reference_data/contributor_role/contributor_role_project_administration',
+          pref_label: { en: 'Project administration', und: 'Project administration' },
+        },
+      },
+      {
+        name: 'Tapi Toimittaja',
+        '@type': 'Person',
+        email: 'tapi.toimittaja@csc.fi',
+        member_of: {
+          name: { en: 'Mysterious Organization 2', fi: 'Organisaatio' },
+          '@type': 'Organization',
+          email: 'joo@csc.fi',
+          telephone: ['+23423423'],
+          identifier: 'org_identifier',
+        },
+        telephone: ['+358501231133'],
+        identifier: 'contributorid2',
+        contributor_role: {
+          identifier:
+            'http://purl.org/att/es/reference_data/contributor_role/contributor_role_project_administration',
+          pref_label: { en: 'Project administration', und: 'Project administration' },
+        },
+      },
     ],
     description: [
       {
