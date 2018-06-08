@@ -1,14 +1,17 @@
 import React, { Component } from 'react'
 import Translate from 'react-translate-component'
+import translate from 'counterpart'
 import styled from 'styled-components'
 
 import { Search } from '../../routes'
 import SearchBar from '../search/searchBar'
 import HeroBanner from '../general/hero'
 import KeyValues from './keyValues'
+import Accessibility from '../../stores/view/accessibility'
 
 export default class FrontPage extends Component {
   componentDidMount() {
+    Accessibility.setNavText(translate('nav.announcer.homePage'))
     // preload search page
     Search.load()
   }

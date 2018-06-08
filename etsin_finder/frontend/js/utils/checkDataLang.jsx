@@ -13,6 +13,7 @@ const checkDataLang = (object, lang) => {
   } else if (typeof object === 'string') {
     return object
   } else if (object[language]) return object[language]
+  else if (object.und) return object.und
   return object[Object.keys(object)[0]]
 }
 

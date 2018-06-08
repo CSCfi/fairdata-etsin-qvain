@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import { inject, observer } from 'mobx-react'
 import styled from 'styled-components'
+import translate from 'counterpart'
 
 import Accessibility from '../../../stores/view/accessibility'
 import checkDataLang from '../../../utils/checkDataLang'
@@ -55,7 +56,7 @@ const Margin = styled.div`
 
 class Events extends Component {
   componentDidMount() {
-    Accessibility.setNavText('Navigated to Identifiers and Events tab')
+    Accessibility.setNavText(translate('nav.announcer.idnAndEventsTab'))
   }
   checkProvenance = prov => {
     if (prov) {

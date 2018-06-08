@@ -125,6 +125,13 @@ const finnish = {
     showMore: 'Näytä lisää',
     showLess: 'Näytä vähemmän',
     description: 'Kuvaus',
+    notice: {
+      SRhide: 'hide notice',
+    },
+    state: {
+      changedLang: 'Kieli vaihdettu kieleen: %(lang)s',
+      inactiveLogout: 'Istunto aikakatkaistu. Sinut kirjattiin ulos.',
+    },
   },
   home: {
     title: 'Etsi aineistoa',
@@ -145,7 +152,7 @@ const finnish = {
     login: 'Kirjaudu',
     logout: 'Kirjaudu ulos',
     logoutNotice:
-      'Kirjautui ulos onnistuneesti. Sulje selain kirjautuksesi ulos myös HAKA-palvelusta',
+      'Kirjauduit ulos onnistuneesti. Sulje selain kirjautuksesi ulos myös HAKA-palvelusta',
     data: 'Data',
     dataset: 'Aineisto',
     datasets: 'Aineistot',
@@ -154,8 +161,18 @@ const finnish = {
     home: 'Koti',
     organizations: 'Organisaatiot',
     addDataset: 'Lisää aineisto',
+    announcer: {
+      dataTab: 'Siirryit data välilehdelle',
+      datasetPage: 'Siirryit aineiston sivulle',
+      idnAndEventsTab: 'Siirryit "tunnisteet ja tapahtumat" -välilehdelle',
+      datasetsPage: 'Siirryit sivulle: Aineistot',
+      homePage: 'Siirryit etusivulle',
+      helpPage: 'Siirryit sivulle: Ohjeet',
+      custom: 'Siirryit sivulle: %(to)s',
+    },
   },
   results: {
+    resultsFor: 'Tulokset haulle: ',
     amount: {
       plrl: '%(amount)s hakutulosta',
       snglr: '%(amount)s hakutulos',

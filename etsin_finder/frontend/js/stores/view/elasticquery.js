@@ -263,21 +263,25 @@ class ElasticQuery {
         field_of_science_en: {
           terms: {
             field: 'field_of_science.pref_label.en.keyword',
+            size: '123',
           },
         },
         field_of_science_fi: {
           terms: {
             field: 'field_of_science.pref_label.fi.keyword',
+            size: '123',
           },
         },
         keyword_en: {
           terms: {
             field: 'theme.label.en.keyword',
+            size: '123',
           },
         },
         keyword_fi: {
           terms: {
             field: 'theme.label.fi.keyword',
+            size: '123',
           },
         },
         infrastructure_en: {
