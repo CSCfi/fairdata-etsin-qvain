@@ -54,7 +54,13 @@ export default class People extends Component {
           {/* Show Button to open rest */}{' '}
           {this.props[this.state.mode].length > 3 && (
             <LinkButton onClick={this.toggleOpen}>
-              [ {this.state.open ? 'show less' : 'show more'} ]
+              [{' '}
+              {this.state.open ? (
+                <Translate content="general.showLess" />
+              ) : (
+                <Translate content="general.showMore" />
+              )}{' '}
+              ]
             </LinkButton>
           )}
         </InlineUl>
