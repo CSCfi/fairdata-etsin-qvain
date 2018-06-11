@@ -14,6 +14,9 @@ const removeCommonParents = tree => {
     if (array[index].path) {
       return newTree.push(array[index])
     }
+    if (!array[index].children) {
+      return newTree.push(array[index])
+    }
     const children = array[index].children
     return children.map((child, i) => {
       if (child.path) {

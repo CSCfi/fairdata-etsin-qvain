@@ -44,7 +44,6 @@ export default class KeyValues extends Component {
 
     Promise.all([datasets, es])
       .then(res => {
-        console.log('keyvalues', res)
         this.setState({
           datasetsNum: res[0].data.count,
           keywordsNum: res[1].data.aggregations.distinct_keywords.value,

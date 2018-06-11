@@ -120,7 +120,6 @@ class AccessRights extends Component {
             contentLabel="Access Modal"
           >
             <ModalInner>
-              {console.log(this.props.access_rights)}
               {accessRightsBool(this.props.access_rights) ? this.openAccess() : this.restricted()}
               {this.state.description && (
                 <div>

@@ -10,15 +10,19 @@ import { LinkButton } from '../../general/button'
 export default class People extends Component {
   constructor(props) {
     super(props)
-    const mode = typeof props.creator === 'object' ? 'creator' : 'contributor'
-    // if (this.props[mode].length > 3) {
 
-    // }
-    this.state = {
-      mode,
-      firstThree: this.props[mode].slice(0, 3),
-      rest: this.props[mode].slice(3),
-      open: false,
+    const mode = typeof props.creator === 'object' ? 'creator' : 'contributor'
+    if (this.props[mode]) {
+      this.state = {
+        mode,
+        firstThree: this.props[mode].slice(0, 3),
+        rest: this.props[mode].slice(3),
+        open: false,
+      }
+    } else {
+      this.state = {
+        open: false,
+      }
     }
 
     this.toggleOpen = this.toggleOpen.bind(this)

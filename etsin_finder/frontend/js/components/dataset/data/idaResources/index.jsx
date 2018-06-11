@@ -14,7 +14,6 @@ export default class IdaResources extends Component {
   constructor(props) {
     super(props)
     const results = DatasetQuery.results
-    console.log('DatasetRes', DatasetQuery.results.research_dataset)
     const files = results.research_dataset.files
     const folders = results.research_dataset.directories
     if (files || folders) {
@@ -66,7 +65,7 @@ export default class IdaResources extends Component {
         }))
       } else {
         filePaths = files.map(file => ({
-          path: file.details.file_path.substring(1),
+          path: file.details ? file.details.file_path.substring(1) : '',
           type: checkDataLang(file.file_type.pref_label),
           download_url: file.access_url,
           details: file.details,
@@ -116,8 +115,11 @@ export default class IdaResources extends Component {
   // folder = file_count
   countFiles(dirTree) {
     const fileCount = dirTree.map(single => {
-      if (single.details.file_count) {
-        return single.details.file_count
+      // Deleted datasets might not have details
+      if (single.details) {
+        if (single.details.file_count) {
+          return single.details.file_count
+        }
       }
       return 1
     })
@@ -127,7 +129,6 @@ export default class IdaResources extends Component {
   query(id, newPath, newIDs) {
     DatasetQuery.getFolderData(id, this.state.results.identifier)
       .then(res => {
-        console.log('directory res', res)
         const currFolder = createTree(
           this.createDirTree(res.files, res.directories, true)
         ).reverse()
@@ -171,12 +172,20 @@ export default class IdaResources extends Component {
   parseIda = ida => {
     // TODO: add download_url to parsed object
     const parsed = {}
-    if (ida.type === 'dir') {
-      parsed.file_count = ida.details.file_count
+    if (ida.details) {
+      if (ida.type === 'dir') {
+        parsed.file_count = ida.details.file_count
+      }
+      parsed.byte_size = ida.details.byte_size
     }
+    // Some files don't have details and then won't have name
+    if (ida.name) {
+      parsed.name = ida.name
+    } else {
+      parsed.name = ida.title
+    }
+
     parsed.type = ida.type
-    parsed.name = ida.name
-    parsed.byte_size = ida.details.byte_size
     parsed.identifier = ida.identifier
     if (checkNested(ida, 'use_category', 'pref_label')) {
       parsed.category = ida.use_category.pref_label

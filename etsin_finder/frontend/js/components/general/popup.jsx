@@ -8,7 +8,7 @@ export default class PopUp extends Component {
     popUp: PropTypes.node.isRequired,
     isOpen: PropTypes.bool.isRequired,
     onRequestClose: PropTypes.func.isRequired,
-    align: PropTypes.oneOf(['left', 'right', 'center']),
+    align: PropTypes.oneOf(['left', 'right', 'center', 'sidebar']),
   }
 
   static defaultProps = {

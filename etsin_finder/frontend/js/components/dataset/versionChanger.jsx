@@ -44,7 +44,6 @@ class VersionChanger extends Component {
       () => {
         this.props.history.push(`/dataset/${value.value}`)
         Accessibility.setNavText(translate('nav.announcer.custom', { to: value.label }))
-        console.log(Accessibility.navText)
       }
     )
   }
