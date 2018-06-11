@@ -113,8 +113,12 @@ export default class Person extends Component {
   }
 }
 
+Person.defaultProps = {
+  first: false,
+}
+
 Person.propTypes = {
-  first: PropTypes.bool.isRequired,
+  first: PropTypes.bool,
   person: PropTypes.object.isRequired,
 }
 
