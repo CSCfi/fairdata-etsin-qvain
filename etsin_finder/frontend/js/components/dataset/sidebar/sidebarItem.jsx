@@ -8,15 +8,12 @@ export default class SidebarItem extends Component {
     super(props)
     let component = this.props.component
     if (!component) {
-      component = 'p'
+      component = 'span'
     }
     this.state = { component }
   }
 
   render() {
-    if (!this.props.component) {
-      this.setState({ component: 'span' })
-    }
     if (
       this.props.hideEmpty &&
       (!this.props.children || (Array.isArray(this.props.children) && !this.props.children[0]))
