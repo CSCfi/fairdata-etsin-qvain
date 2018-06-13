@@ -38,7 +38,7 @@ export default class KeyValues extends Component {
         distinct_fieldsofscience: {
           cardinality: { field: 'field_of_science.pref_label.en.keyword' },
         },
-        distinct_projects: { cardinality: { field: 'project_name.keyword' } },
+        distinct_projects: { cardinality: { field: 'project_name_en.keyword' } },
       },
     })
 
