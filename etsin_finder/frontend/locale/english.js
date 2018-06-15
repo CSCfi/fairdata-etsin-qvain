@@ -111,6 +111,11 @@ const english = {
     spatial_coverage: 'Spatial Coverage',
     temporal_coverage: 'Temporal Coverage',
     version: { number: 'Version %(number)s', old: '(Old)' },
+    person: {
+      contributor_role: 'Role',
+      member_of: 'Member of',
+      homepage: 'Homepage',
+    },
   },
   error: {
     notFound:
@@ -121,6 +126,13 @@ const english = {
     showMore: 'Show more',
     showLess: 'Show less',
     description: 'Description',
+    notice: {
+      SRhide: 'piilota ilmoitus',
+    },
+    state: {
+      changedLang: 'Changed language to: %(lang)s',
+      inactiveLogout: 'You have been logged out due to inactivity',
+    },
   },
   home: {
     title: 'Search datasets',
@@ -134,7 +146,7 @@ const english = {
       dataset: 'Datasets',
       keywords: 'Keywords',
       fos: 'Fields of science',
-      research: 'Researches',
+      research: 'Projects',
     },
   },
   nav: {
@@ -149,8 +161,18 @@ const english = {
     home: 'Home',
     organizations: 'Organizations',
     addDataset: 'Add dataset',
+    announcer: {
+      dataTab: 'Navigated to Data tab',
+      datasetPage: 'Navigated to Dataset page',
+      idnAndEventsTab: 'Navigated to "Identifiers and Events" tab',
+      datasetsPage: 'Navigated to Datasets page',
+      homePage: 'Navigated to Home page',
+      helpPage: 'Navigated to Help page',
+      custom: 'Navigated to: %(to)s',
+    },
   },
   results: {
+    resultsFor: 'Results for query: ',
     amount: {
       plrl: '%(amount)s results',
       snglr: '%(amount)s result',

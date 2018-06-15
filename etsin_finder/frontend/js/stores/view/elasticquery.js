@@ -20,7 +20,7 @@ const fields = [
   'theme.pref_label.*',
   'field_of_science.pref_label.*',
   'infrastructure.pref_label.*',
-  'project.pref_label.*',
+  'project.*',
   'identifier',
   'preferred_identifier',
   'other_identifier.notation',
@@ -250,9 +250,14 @@ class ElasticQuery {
       const filters = createFilters()
       const sorting = createSorting()
       const aggregations = {
-        organization: {
+        organization_name_fi: {
           terms: {
-            field: 'organization_name.keyword',
+            field: 'organization_name_fi.keyword',
+          },
+        },
+        organization_name_en: {
+          terms: {
+            field: 'organization_name_en.keyword',
           },
         },
         creator: {
@@ -290,9 +295,14 @@ class ElasticQuery {
             field: 'infrastructure.pref_label.fi.keyword',
           },
         },
-        project: {
+        project_name_fi: {
           terms: {
-            field: 'project_name.keyword',
+            field: 'project_name_fi.keyword',
+          },
+        },
+        project_name_en: {
+          terms: {
+            field: 'project_name_en.keyword',
           },
         },
         file_type_en: {

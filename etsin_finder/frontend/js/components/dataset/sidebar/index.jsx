@@ -6,12 +6,12 @@ import { inject, observer } from 'mobx-react'
 import checkDataLang from '../../../utils/checkDataLang'
 import checkNested from '../../../utils/checkNested'
 import dateFormat from '../../../utils/dateFormat'
-import ContentBox from '../../general/contentBox'
 import SidebarItem from './sidebarItem'
 import Identifier from '../identifier'
 import Citation from './citation'
 import Logo from './logo'
 import ErrorBoundary from '../../general/errorBoundary'
+import License from './license'
 
 class Sidebar extends Component {
   constructor(props) {
@@ -54,11 +54,11 @@ class Sidebar extends Component {
   dateSeparator(start, end) {
     return (
       (start || end) && (
-        <p key={start}>
+        <ItemValue key={start}>
           <span>
             {start === end ? dateFormat(start) : `${dateFormat(start)} - ${dateFormat(end)}`}
           </span>
-        </p>
+        </ItemValue>
       )
     )
   }
@@ -69,7 +69,9 @@ class Sidebar extends Component {
         <ErrorBoundary>
           <div className="separator">
             {this.state.logo && (
-              <Logo alt={checkDataLang(this.state.logoAlt)} file={this.state.logo} />
+              <SidebarItem>
+                <Logo alt={checkDataLang(this.state.logoAlt)} file={this.state.logo} />
+              </SidebarItem>
             )}
             <SidebarItem component="div" trans="dataset.catalog_publisher">
               {this.state.catalog_publisher && checkDataLang(this.state.catalog_publisher)}
@@ -82,7 +84,7 @@ class Sidebar extends Component {
           </div>
           <div>
             {/* PROJECT */}
-            <SidebarItem component="p" trans="dataset.project" hideEmpty="true">
+            <SidebarItem component="div" trans="dataset.project" hideEmpty="true">
               {this.state.isOutputOf && this.state.isOutputOf.map(item => checkDataLang(item.name))}
             </SidebarItem>
             {/* FIELD OF SCIENCE */}
@@ -94,11 +96,11 @@ class Sidebar extends Component {
             >
               {this.state.field &&
                 this.state.field.map(field => (
-                  <p key={field.identifier}>{checkDataLang(field.pref_label)}</p>
+                  <span key={field.identifier}>{checkDataLang(field.pref_label)}</span>
                 ))}
             </SidebarItem>
             {/* KEYWORDS */}
-            <SidebarItem component="p" trans="dataset.keywords" hideEmpty="true">
+            <SidebarItem component="div" trans="dataset.keywords" hideEmpty="true">
               {this.state.keyword &&
                 this.state.keyword.map((keyword, i) => (
                   <span className="keyword" key={keyword}>
@@ -109,7 +111,7 @@ class Sidebar extends Component {
             </SidebarItem>
             {/* SPATIAL COVERAGE */}
             <SidebarItem
-              component="p"
+              component="div"
               trans="dataset.spatial_coverage"
               fallback="Spatial Coverage"
               hideEmpty="true"
@@ -136,26 +138,11 @@ class Sidebar extends Component {
             {/* LICENSE */}
             <SidebarItem component="div" trans="dataset.license" hideEmpty="true">
               {this.state.license &&
-                this.state.license.map(rights => {
-                  // If license URL is available, link license title
-                  if (
-                    rights.license &&
-                    (rights.license.startsWith('http://') || rights.license.startsWith('https://'))
-                  ) {
-                    return (
-                      <p key={rights.identifier}>
-                        <a href={rights.license} target="_blank" rel="noopener noreferrer">
-                          {checkDataLang(rights.title)}
-                        </a>
-                      </p>
-                    )
-                  }
-                  return <p key={rights.identifier}>{checkDataLang(rights.title)}</p>
-                })}
+                this.state.license.map(rights => <License key={rights.identifier} data={rights} />)}
             </SidebarItem>
 
             <SidebarItem
-              component="p"
+              component="div"
               trans="dataset.access_rights"
               fallback="Access rights statement"
               hideEmpty="true"
@@ -163,11 +150,11 @@ class Sidebar extends Component {
               {this.state.access_rights && checkDataLang(this.state.access_rights)}
             </SidebarItem>
 
-            <SidebarItem component="p" trans="dataset.publisher" hideEmpty="true">
+            <SidebarItem component="div" trans="dataset.publisher" hideEmpty="true">
               {this.state.publisher && checkDataLang(this.state.publisher)}
             </SidebarItem>
 
-            <SidebarItem component="p" trans="dataset.funder" hideEmpty="true">
+            <SidebarItem component="div" trans="dataset.funder" hideEmpty="true">
               {this.state.isOutputOf &&
                 this.state.isOutputOf.map(
                   output =>
@@ -176,7 +163,7 @@ class Sidebar extends Component {
                 )}
             </SidebarItem>
 
-            <SidebarItem component="p" trans="dataset.curator" hideEmpty="true">
+            <SidebarItem component="div" trans="dataset.curator" hideEmpty="true">
               {this.state.curator &&
                 this.state.curator.map((curators, i) => {
                   let curator = checkDataLang(curators.name)
@@ -195,7 +182,7 @@ class Sidebar extends Component {
                 })}
             </SidebarItem>
 
-            <SidebarItem component="p" trans="dataset.infrastructure" hideEmpty="true">
+            <SidebarItem component="div" trans="dataset.infrastructure" hideEmpty="true">
               {this.state.related_entity &&
                 this.state.related_entity.map(entity => checkDataLang(entity.title))}
             </SidebarItem>
@@ -214,7 +201,14 @@ Sidebar.propTypes = {
   dataset: PropTypes.object.isRequired,
 }
 
-const SidebarContainer = styled(ContentBox)`
+const SidebarContainer = styled.div`
+  border: 2px solid rgb(231, 233, 237);
+  word-wrap: break-word;
+  word-break: break-word;
+  -webkit-hyphens: auto;
+  -moz-hyphens: auto;
+  -ms-hyphens: auto;
+  hyphens: auto;
   p {
     font-size: 0.875em;
   }
@@ -223,9 +217,6 @@ const SidebarContainer = styled(ContentBox)`
   }
   > div {
     padding: 20px 0px;
-    &:first-of-type {
-      padding: 0 0 20px;
-    }
   }
   .separator {
     &:after {
@@ -235,10 +226,11 @@ const SidebarContainer = styled(ContentBox)`
       background-color: ${props => props.theme.color.lightgray};
       position: relative;
       bottom: -20px;
-      width: 200%;
-      margin: 0 -100px;
+      width: 100%;
     }
   }
 `
+
+const ItemValue = styled.p``
 
 export default inject('Stores')(observer(Sidebar))

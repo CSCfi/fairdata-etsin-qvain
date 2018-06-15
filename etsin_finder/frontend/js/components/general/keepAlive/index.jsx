@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import Translation from 'react-translate-component'
 
 import Idle from './idle'
 import NoticeBar from '../noticeBar'
@@ -68,7 +69,7 @@ export default class KeepAlive extends Component {
             color="white"
             bg="yellow"
           >
-            You have been logged out due to inactivity
+            <Translation content="general.state.inactiveLogout" />
           </NoticeBar>
         )}
       </React.Fragment>

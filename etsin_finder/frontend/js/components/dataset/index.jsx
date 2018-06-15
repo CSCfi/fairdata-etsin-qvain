@@ -34,7 +34,7 @@ class Dataset extends React.Component {
     this.goBack = this.goBack.bind(this)
   }
   componentDidMount() {
-    Accessibility.setNavText('Navigated to Dataset page')
+    Accessibility.setNavText(translate('nav.announcer.datasetPage'))
     this.query()
   }
 
@@ -100,7 +100,9 @@ class Dataset extends React.Component {
     return this.state.loaded ? (
       <div>
         {(this.state.deprecated || this.state.removed) && (
-          <NoticeBar bg="error" text={translate('tombstone.info')} />
+          <NoticeBar bg="error">
+            <Translate content="tombstone.info" />
+          </NoticeBar>
         )}
         <div className="container regular-row">
           <div className="row">

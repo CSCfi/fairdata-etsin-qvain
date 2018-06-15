@@ -18,8 +18,8 @@ class FilterSection extends Component {
     this.aggregations = {
       organization: {
         title: { en: 'Organization', fi: 'Organisaatio' },
-        aggregation: { und: 'organization' },
-        term: { und: 'organization_name.keyword' },
+        aggregation: { en: 'organization_name_en', fi: 'organization_name_fi' },
+        term: { en: 'organization_name_en.keyword', fi: 'organization_name_fi.keyword' },
       },
       creator: {
         title: { en: 'Creator', fi: 'Tekijä' },
@@ -49,8 +49,8 @@ class FilterSection extends Component {
       },
       project: {
         title: { en: 'Project', fi: 'Projekti' },
-        aggregation: { und: 'project' },
-        term: { und: 'project_name.keyword' },
+        aggregation: { en: 'project_name_en', fi: 'project_name_fi' },
+        term: { en: 'project_name_en.keyword', fi: 'project_name_fi.keyword' },
       },
       file_type: {
         title: { en: 'File Type', fi: 'Tiedostotyyppi' },

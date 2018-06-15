@@ -22,9 +22,6 @@ class Announcer extends Component {
   }
 
   render() {
-    if (this.state.text) {
-      console.log('announce', this.state.text)
-    }
     return (
       <div className="sr-only" aria-live="assertive">
         {this.state.text}
