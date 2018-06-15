@@ -16,8 +16,6 @@ export default class Table extends Component {
   }
 
   downloadFile = (itemID, type) => {
-    console.log('id', itemID)
-    console.log('cr_id', this.props.cr_id)
     let urlParams = `?cr_id=${this.props.cr_id}`
     if (type === 'dir') {
       urlParams += `&dir_id=${itemID}`

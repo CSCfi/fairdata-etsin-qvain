@@ -48,7 +48,6 @@ export default class ShowMore extends Component {
           duration={200}
           in={this.state.open}
         >
-          {console.log(this.state.height)}
           {this.props.children}
         </HeightTransition>
         {this.state.height < this.props.min && (

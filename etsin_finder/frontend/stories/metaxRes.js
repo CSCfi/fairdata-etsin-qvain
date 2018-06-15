@@ -84,6 +84,7 @@ export default {
       {
         name: 'Teppo Testaaja',
         '@type': 'Person',
+        identifier: 'orcid.org/0000-0003-4727-9435',
         member_of: {
           name: { und: 'Aalto yliopisto' },
           '@type': 'Organization',
@@ -93,6 +94,11 @@ export default {
           identifier:
             'http://purl.org/att/es/reference_data/contributor_role/contributor_role_data_curation',
           pref_label: { en: 'Data curation', und: 'Data curation' },
+        },
+        homepage: {
+          identifier: 'http://purl.org',
+          title: 'purl.org',
+          description: 'purl website',
         },
       },
     ],
@@ -158,7 +164,7 @@ export default {
         entity: {
           title: { en: 'External dataset 1', fi: 'Ulkopuolinen aineisto 1' },
           identifier: 'external:dataset:identifier',
-          description: [{ fi: 'Kuvailutiedot' }],
+          description: { fi: 'Kuvailutiedot' },
         },
         relation_type: {
           identifier: 'http://www.w3.org/ns/prov#wasDerivedFrom',
@@ -173,7 +179,7 @@ export default {
         entity: {
           title: { en: 'External thing 2', fi: 'Ulkopuolinen asia 2' },
           identifier: 'external:thing:identifier',
-          description: [{ fi: 'Kuvailutiedot' }],
+          description: { fi: 'Kuvailutiedot' },
         },
         relation_type: {
           identifier: 'http://purl.org/spar/cito/cites',
@@ -184,7 +190,7 @@ export default {
         entity: {
           title: { en: 'External dataset 2', fi: 'Ulkopuolinen aineisto 2' },
           identifier: 'external:dataset_2:identifier',
-          description: [{ fi: 'Kuvailutiedot' }],
+          description: { fi: 'Kuvailutiedot' },
         },
         relation_type: {
           identifier: 'http://purl.org/dc/terms/isPartOf',
@@ -195,7 +201,7 @@ export default {
         entity: {
           title: { en: 'External thing 2', fi: 'Ulkopuolinen asia 2' },
           identifier: 'external:thing_2:identifier',
-          description: [{ fi: 'Kuvailutiedot' }],
+          description: { fi: 'Kuvailutiedot' },
         },
         relation_type: {
           identifier: 'http://www.w3.org/ns/adms#previous',
@@ -278,7 +284,7 @@ export default {
               pref_label: { en: 'pref label' },
             },
             pref_label: { en: 'Preferred label' },
-            description: [{ en: 'Description' }],
+            description: { en: 'Description' },
             representation: {
               identifier: 'identifierheretoo',
               pref_label: { en: 'Preferred label' },
@@ -303,7 +309,7 @@ export default {
             },
             title: { en: 'Title' },
             identifier: 'someidhereagain',
-            description: [{ en: 'Description' }],
+            description: { en: 'Description' },
           },
         ],
         lifecycle_event: {
@@ -378,6 +384,82 @@ export default {
         name: 'Franzibald Kontribuuttaja',
         '@type': 'Person',
         email: 'franzibald.kontribuuttaaja@csc.fi',
+        member_of: {
+          name: { en: 'Mysterious Organization 2', fi: 'Organisaatio' },
+          '@type': 'Organization',
+          email: 'joo@csc.fi',
+          telephone: ['+23423423'],
+          identifier: 'org_identifier',
+        },
+        telephone: ['+358501231133'],
+        identifier: 'contributorid2',
+        contributor_role: {
+          identifier:
+            'http://purl.org/att/es/reference_data/contributor_role/contributor_role_project_administration',
+          pref_label: { en: 'Project administration', und: 'Project administration' },
+        },
+      },
+      {
+        name: 'Franzibalds Cousin',
+        '@type': 'Person',
+        email: 'franzibald.cousin@csc.fi',
+        member_of: {
+          name: { en: 'Mysterious Organization 2', fi: 'Organisaatio' },
+          '@type': 'Organization',
+          email: 'joo@csc.fi',
+          telephone: ['+23423423'],
+          identifier: 'org_identifier',
+        },
+        telephone: ['+358501231133'],
+        identifier: 'contributorid2',
+        contributor_role: {
+          identifier:
+            'http://purl.org/att/es/reference_data/contributor_role/contributor_role_project_administration',
+          pref_label: { en: 'Project administration', und: 'Project administration' },
+        },
+      },
+      {
+        name: 'Topi Toimittaja',
+        '@type': 'Person',
+        email: 'topi.toimittaja@csc.fi',
+        member_of: {
+          name: { en: 'Mysterious Organization 2', fi: 'Organisaatio' },
+          '@type': 'Organization',
+          email: 'joo@csc.fi',
+          telephone: ['+23423423'],
+          identifier: 'org_identifier',
+        },
+        telephone: ['+358501231133'],
+        identifier: 'contributorid2',
+        contributor_role: {
+          identifier:
+            'http://purl.org/att/es/reference_data/contributor_role/contributor_role_project_administration',
+          pref_label: { en: 'Project administration', und: 'Project administration' },
+        },
+      },
+      {
+        name: 'Tosi-Pitkänimi Tommi Pitkäniemi Pisinnimi',
+        '@type': 'Person',
+        email: 'tepi.toimittaja@csc.fi',
+        member_of: {
+          name: { en: 'Mysterious Organization 2', fi: 'Organisaatio' },
+          '@type': 'Organization',
+          email: 'joo@csc.fi',
+          telephone: ['+23423423'],
+          identifier: 'org_identifier',
+        },
+        telephone: ['+358501231133'],
+        identifier: 'contributorid2',
+        contributor_role: {
+          identifier:
+            'http://purl.org/att/es/reference_data/contributor_role/contributor_role_project_administration',
+          pref_label: { en: 'Project administration', und: 'Project administration' },
+        },
+      },
+      {
+        name: 'Tapi Toimittaja',
+        '@type': 'Person',
+        email: 'tapi.toimittaja@csc.fi',
         member_of: {
           name: { en: 'Mysterious Organization 2', fi: 'Organisaatio' },
           '@type': 'Organization',
@@ -483,7 +565,7 @@ export default {
           title: { en: 'Apache Software License 2.0', und: 'Apache Software License 2.0' },
           license: 'https://url.of.license.which.applies.here.org',
           identifier: 'http://www.opensource.org/licenses/Apache-2.0',
-          description: [{ en: 'Free account of the rights' }],
+          description: { en: 'Free account of the rights' },
         },
       ],
       available: '2014-01-15T08:19:58Z',
@@ -498,7 +580,7 @@ export default {
         identifier: 'http://purl.org/att/es/reference_data/access_type/access_type_open_access',
         pref_label: { en: 'Open', fi: 'Avoin', und: 'Avoin' },
       },
-      description: [{ en: 'Free account of the rights' }],
+      description: { en: 'Free account of the rights' },
       restriction_grounds: {
         identifier:
           'http://purl.org/att/es/reference_data/restriction_grounds/restriction_grounds_1',

@@ -56,7 +56,7 @@ export default class ExternalResources extends Component {
 
   render() {
     if (!this.state.results) {
-      return 'Loading'
+      return ''
     }
     return (
       <DataTable>

@@ -1,4 +1,5 @@
 const sizeParse = (bytes, decimals) => {
+  if (!bytes) return null
   if (bytes === 0) return '0 Bytes'
   if (bytes === 1) return '1 Byte'
   const k = 1024

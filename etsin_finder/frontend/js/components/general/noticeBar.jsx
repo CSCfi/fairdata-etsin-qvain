@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
+import Translate from 'react-translate-component'
 
 import checkColor from '../../styles/styledUtils'
 import { TransparentButton } from './button'
@@ -53,7 +54,7 @@ export default class NoticeBar extends React.Component {
         <NoticeText>{this.props.children}</NoticeText>
         {!this.props.duration && (
           <CloseButton onClick={this.close} role="button" aria-pressed={!this.state.open}>
-            <span className="sr-only">Hide notice</span>
+            <Translate content="general.notice.SRhide" className="sr-only" />
             X
           </CloseButton>
         )}

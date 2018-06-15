@@ -1,10 +1,10 @@
 import React, { Fragment } from 'react'
 import { Provider } from 'mobx-react'
 import { BrowserRouter as Router } from 'react-router-dom'
-import styled, { ThemeProvider } from 'styled-components'
+import styled, { ThemeProvider, css } from 'styled-components'
 import { storiesOf, addDecorator } from '@storybook/react'
-import { action } from '@storybook/addon-actions'
 
+import '../js/styles/globalStyles'
 import Stores from '../js/stores'
 import theme from '../js/styles/theme'
 import Hero from '../js/components/general/hero'
@@ -15,6 +15,7 @@ import Button, {
   Link,
   TransparentButton,
   LinkButton,
+  TransparentLink,
 } from '../js/components/general/button'
 import Splash from '../js/components/general/splash'
 import ResultsAmount from '../js/components/search/resultsAmount'
@@ -39,7 +40,11 @@ import Table from '../js/components/dataset/data/table'
 import ExternalResources from '../js/components/dataset/data/externalResources'
 import Info from '../js/components/dataset/data/info'
 import Dropdown from '../js/components/general/dropdown'
+import PopUp from '../js/components/general/popup'
 // import Select from '../js/components/general/select'
+import People from '../js/components/dataset/people'
+import Person from '../js/components/dataset/people/person'
+import License from '../js/components/dataset/sidebar/license'
 
 import EsRes from './esRes'
 import MetaxRes, { MetaxRemote } from './metaxRes'
@@ -86,6 +91,15 @@ const Container = styled.div`
   ${align};
   ${flex};
   justify-content: ${p => (p.end ? 'flex-end' : '')};
+  ${p =>
+    p.verticalCenter &&
+    css`
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      height: 100vh;
+      align-items: center;
+    `};
 `
 
 //
@@ -109,14 +123,6 @@ storiesOf('General/Button', module)
         <InvertedButton>Inverted</InvertedButton>
       </ComponentCode>
       <Separator />
-      <ComponentCode displayName={() => 'Link'}>
-        <Link href="https://google.com">Link</Link>
-      </ComponentCode>
-      <Separator />
-      <ComponentCode displayName={() => 'InvertedLink'}>
-        <InvertedLink href="https://google.com">InvertedLink</InvertedLink>
-      </ComponentCode>
-      <Separator />
       <ComponentCode displayName={() => 'TransparentButton'}>
         <TransparentButton>Transparent Button</TransparentButton>
       </ComponentCode>
@@ -136,24 +142,23 @@ storiesOf('General/Button', module)
         <InvertedButton color={'error'}>Inverted</InvertedButton>
       </ComponentCode>
       <Separator />
-      <ComponentCode displayName={() => 'Link'}>
-        <Link href="https://google.com" color={'error'}>
-          Link
-        </Link>
-      </ComponentCode>
-      <Separator />
-      <ComponentCode displayName={() => 'InvertedLink'}>
-        <InvertedLink href="https://google.com" color="error">
-          InvertedLink
-        </InvertedLink>
-      </ComponentCode>
-      <Separator />
       <ComponentCode displayName={() => 'TransparentButton'}>
         <TransparentButton color={'error'}>Transparent Button</TransparentButton>
       </ComponentCode>
+    </Container>
+  ))
+  .add('Links', () => (
+    <Container center maxWidth="800px">
+      <ComponentCode displayName={() => 'Link'}>
+        <Link href="https://google.com">Link</Link>
+      </ComponentCode>
       <Separator />
-      <ComponentCode displayName={() => 'LinkButton'}>
-        <LinkButton color={'error'}>LinkButton</LinkButton>
+      <ComponentCode displayName={() => 'InvertedLink'}>
+        <InvertedLink href="https://google.com">InvertedLink</InvertedLink>
+      </ComponentCode>
+      <Separator />
+      <ComponentCode displayName={() => 'TransparentLink'}>
+        <TransparentLink href="https://google.com">TransparentLink</TransparentLink>
       </ComponentCode>
     </Container>
   ))
@@ -196,28 +201,52 @@ storiesOf('General/Splash', module).add('Active', () => (
   </Splash>
 ))
 
-storiesOf('General/Access rights', module).add('Open Access', () => (
-  <div>
-    <Container center maxWidth="800px">
-      <ComponentCode displayName={() => 'AccessRights'}>
-        <AccessRights access_rights={MetaxRes.research_dataset.access_rights} />
-      </ComponentCode>
-      <ComponentCode displayName={() => 'AccessRights'}>
-        <AccessRights
-          access_rights={{
-            access_type: {
-              identifier: 'locked',
-              pref_label: {
-                en: 'locked',
-                fi: 'suljettu',
+storiesOf('General/Access rights', module)
+  .add('Results list', () => (
+    <div>
+      <Container center maxWidth="800px">
+        <ComponentCode displayName={() => 'AccessRights'}>
+          <AccessRights access_rights={MetaxRes.research_dataset.access_rights} />
+        </ComponentCode>
+        <ComponentCode displayName={() => 'AccessRights'}>
+          <AccessRights
+            access_rights={{
+              access_type: {
+                identifier: 'locked',
+                pref_label: {
+                  en: 'locked',
+                  fi: 'suljettu',
+                },
               },
-            },
-          }}
-        />
-      </ComponentCode>
-    </Container>
-  </div>
-))
+            }}
+          />
+        </ComponentCode>
+      </Container>
+    </div>
+  ))
+  .add('Dataset with button', () => (
+    <div>
+      <Container center maxWidth="800px">
+        <ComponentCode displayName={() => 'AccessRights'}>
+          <AccessRights button access_rights={MetaxRes.research_dataset.access_rights} />
+        </ComponentCode>
+        <ComponentCode displayName={() => 'AccessRights'}>
+          <AccessRights
+            button
+            access_rights={{
+              access_type: {
+                identifier: 'locked',
+                pref_label: {
+                  en: 'locked',
+                  fi: 'suljettu',
+                },
+              },
+            }}
+          />
+        </ComponentCode>
+      </Container>
+    </div>
+  ))
 
 storiesOf('General/Loader', module).add('Normal', () => (
   <Fragment>
@@ -240,6 +269,27 @@ storiesOf('General/Separator', module).add('Normal', () => (
     </ComponentCode>
   </Container>
 ))
+
+storiesOf('General/PopUp', module).add('normal', () => {
+  const person = MetaxRes.research_dataset.creator[0]
+  return (
+    <Container verticalCenter center maxWidth="800px">
+      <ComponentCode>
+        <PopUp
+          isOpen={true}
+          onRequestClose={() => {}}
+          popUp={
+            <div>
+              <span>content</span>
+            </div>
+          }
+        >
+          <Button>Pop up</Button>
+        </PopUp>
+      </ComponentCode>
+    </Container>
+  )
+})
 
 storiesOf('General/Skip to Content', module).add('Normal', () => (
   <div>
@@ -463,10 +513,59 @@ storiesOf('Dataset/Version changer', module)
     )
   })
 
+storiesOf('Dataset/People', module)
+  .add('Creator', () => (
+    <Container
+      center
+      maxWidth="800px"
+      style={{
+        color: 'rgb(150,150,150)',
+        fontSize: '0.9em',
+        marginTop: '10em',
+      }}
+    >
+      <ComponentCode>
+        <People creator={MetaxRes.research_dataset.creator} />
+      </ComponentCode>
+    </Container>
+  ))
+  .add('3 Contributors', () => {
+    const twoContributors = MetaxRes.research_dataset.contributor.slice(0, 3)
+    return (
+      <Container center maxWidth="800px" style={{ marginTop: '10em' }}>
+        <ComponentCode>
+          <People contributor={twoContributors} />
+        </ComponentCode>
+      </Container>
+    )
+  })
+  .add('Single Person', () => (
+    <Container center maxWidth="800px" style={{ marginTop: '10em' }}>
+      <ComponentCode>
+        <Person first person={MetaxRes.research_dataset.contributor[0]} />
+      </ComponentCode>
+    </Container>
+  ))
+  .add('More than 3 people', () => (
+    <Container center maxWidth="800px" style={{ marginTop: '10em' }}>
+      <ComponentCode>
+        <People contributor={MetaxRes.research_dataset.contributor} />
+      </ComponentCode>
+    </Container>
+  ))
+
 storiesOf('Dataset/Tabs', module).add('Normal', () => (
   <Container center maxWidth="800px">
     <ComponentCode>
       <Tabs showDownloads={true} showEvents={true} identifier={'id'} />
+    </ComponentCode>
+  </Container>
+))
+
+storiesOf('Dataset/Sidebar/License', module).add('Normal', () => (
+  <Container center maxWidth="800px" style={{ marginTop: '10em' }}>
+    <ComponentCode>
+      <License data={MetaxRes.research_dataset.access_rights.license[0]} />
     </ComponentCode>
   </Container>
 ))

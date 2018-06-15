@@ -164,13 +164,14 @@ Info.defaultProps = {
   accessUrl: null,
   downloadUrl: null,
   checksum: null,
+  size: null,
 }
 
 Info.propTypes = {
   name: PropTypes.string.isRequired,
   id: PropTypes.string,
   title: PropTypes.string,
-  size: PropTypes.string.isRequired,
+  size: PropTypes.string,
   category: PropTypes.string,
   type: PropTypes.string,
   open: PropTypes.bool.isRequired,

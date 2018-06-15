@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import PropTypes from 'prop-types'
 
@@ -7,15 +8,12 @@ export default class SidebarItem extends Component {
     super(props)
     let component = this.props.component
     if (!component) {
-      component = 'p'
+      component = 'span'
     }
     this.state = { component }
   }
 
   render() {
-    if (!this.props.component) {
-      this.setState({ component: 'span' })
-    }
     if (
       this.props.hideEmpty &&
       (!this.props.children || (Array.isArray(this.props.children) && !this.props.children[0]))
@@ -23,10 +21,12 @@ export default class SidebarItem extends Component {
       return null
     }
     return (
-      <div>
-        <Translate content={this.props.trans} fallback={this.props.fallback} component="h4" />
+      <Spacer>
+        {this.props.trans && (
+          <Translate content={this.props.trans} fallback={this.props.fallback} component="h4" />
+        )}
         {React.createElement(this.state.component, null, this.props.children)}
-      </div>
+      </Spacer>
     )
   }
 }
@@ -46,3 +46,14 @@ SidebarItem.propTypes = {
   trans: PropTypes.string,
   fallback: PropTypes.string,
 }
+
+const Spacer = styled.div`
+  padding: 0 1.4em;
+  @media screen and (min-width: ${p => p.theme.breakpoints.md}) {
+    padding: 0 1.6em;
+  }
+  margin-bottom: 1rem;
+  &:last-of-type {
+    margin-bottom: 0;
+  }
+`

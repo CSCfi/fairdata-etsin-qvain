@@ -1,15 +1,15 @@
-import React, { Component } from 'react';
-import axios from 'axios';
+import { Component } from 'react'
+import axios from 'axios'
 
 export default class SampleData extends Component {
-  state = { 
-    dataset: null
+  state = {
+    dataset: null,
   }
 
   componentDidMount() {
     axios.get(this.props.url).then(res => {
-      const dataset = res;
-      this.setState({ dataset });
+      const dataset = res
+      this.setState({ dataset })
     })
   }
 
