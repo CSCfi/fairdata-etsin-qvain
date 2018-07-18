@@ -8,8 +8,7 @@
  * @license   MIT
  */
 
-
-import { observable, action } from 'mobx'
+import { observable, action, computed } from 'mobx'
 import axios from 'axios'
 
 import UrlParse from '../../utils/urlParse'
@@ -150,12 +149,26 @@ class ElasticQuery {
     }
   }
 
+  // reset search filters
+  @action
+  clearFilters = (history, updateUrl = true) => {
+    this.filter = []
+    this.pageNum = 1
+    if (updateUrl) {
+      const urlParams = UrlParse.searchParams(history.location.search)
+      urlParams.keys = ''
+      urlParams.terms = ''
+      urlParams.p = 1
+      history.replace({ search: UrlParse.makeSearchParams(urlParams) })
+    }
+  }
+
   // when url is populated with settings
   @action
   updateFromUrl = (query, history, initial = false) => {
     if (initial) {
       if (this.results.total !== 0) {
-        return
+        return this.updateUrl(history)
       }
     }
     const urlParams = UrlParse.searchParams(history.location.search)
@@ -184,6 +197,23 @@ class ElasticQuery {
         this.updatePageNum(urlParams.p, history, false)
       }
     }
+  }
+
+  @action
+  updateUrl = history => {
+    const urlParams = {}
+    const path = `/datasets/${encodeURIComponent(this.search)}`
+    urlParams.keys = []
+    urlParams.terms = []
+    this.filter.map(single => {
+      urlParams.keys.push(single.key)
+      urlParams.terms.push(single.term)
+      return true
+    })
+    urlParams.p = this.pageNum
+    urlParams.sort = this.sorting
+    history.replace({ pathname: path, search: UrlParse.makeSearchParams(urlParams) })
+    return { path, search: UrlParse.makeSearchParams(urlParams) }
   }
 
   // query elastic search with defined settings

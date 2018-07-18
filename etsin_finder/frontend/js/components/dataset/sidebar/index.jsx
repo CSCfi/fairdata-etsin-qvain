@@ -103,7 +103,7 @@ class Sidebar extends Component {
             <SidebarItem component="div" trans="dataset.keywords" hideEmpty="true">
               {this.state.keyword &&
                 this.state.keyword.map((keyword, i) => (
-                  <span className="keyword" key={keyword}>
+                  <span className="keyword" key={`${keyword}-${i}`}>
                     {keyword}
                     {this.state.keyword.length !== i + 1 && ', '}
                   </span>
