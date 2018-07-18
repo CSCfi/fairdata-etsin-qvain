@@ -6,11 +6,13 @@
     "jest": true
   },
   "rules": {
+    "indent": 0,
+    "template-curly-spacing": 0,
     "import/no-extraneous-dependencies": 0,
     "import/no-unresolved": 0,
     "import/extensions": 0,
     "import/first": 0,
-    "no-lone-blocks":0,
+    "no-lone-blocks": 0,
     "max-len": ["warn", { "code": 150 }],
     "no-extra-semi": 1,
     "semi": 0,

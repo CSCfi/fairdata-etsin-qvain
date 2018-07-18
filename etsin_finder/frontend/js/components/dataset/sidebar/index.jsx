@@ -45,8 +45,8 @@ class Sidebar extends Component {
         ? researchDataset.is_output_of
         : false,
       curator: researchDataset.curator,
-      related_entity: checkNested(researchDataset, 'related_entity')
-        ? researchDataset.related_entity
+      infrastructure: checkNested(researchDataset, 'infrastructure')
+        ? researchDataset.infrastructure
         : false,
     }
   }
@@ -54,11 +54,9 @@ class Sidebar extends Component {
   dateSeparator(start, end) {
     return (
       (start || end) && (
-        <ItemValue key={start}>
-          <span>
-            {start === end ? dateFormat(start) : `${dateFormat(start)} - ${dateFormat(end)}`}
-          </span>
-        </ItemValue>
+        <Date key={start}>
+          {start === end ? dateFormat(start) : `${dateFormat(start)} - ${dateFormat(end)}`}
+        </Date>
       )
     )
   }
@@ -85,7 +83,11 @@ class Sidebar extends Component {
           <div>
             {/* PROJECT */}
             <SidebarItem component="div" trans="dataset.project" hideEmpty="true">
-              {this.state.isOutputOf && this.state.isOutputOf.map(item => checkDataLang(item.name))}
+              {this.state.isOutputOf &&
+                this.state.isOutputOf.map(item => {
+                  const name = checkDataLang(item.name)
+                  return <Item key={name}>{name}</Item>
+                })}
             </SidebarItem>
             {/* FIELD OF SCIENCE */}
             <SidebarItem
@@ -96,17 +98,16 @@ class Sidebar extends Component {
             >
               {this.state.field &&
                 this.state.field.map(field => (
-                  <span key={field.identifier}>{checkDataLang(field.pref_label)}</span>
+                  <Item key={field.identifier}>{checkDataLang(field.pref_label)}</Item>
                 ))}
             </SidebarItem>
             {/* KEYWORDS */}
             <SidebarItem component="div" trans="dataset.keywords" hideEmpty="true">
               {this.state.keyword &&
-                this.state.keyword.map((keyword, i) => (
-                  <span className="keyword" key={keyword}>
+                this.state.keyword.map(keyword => (
+                  <Item className="keyword" key={keyword}>
                     {keyword}
-                    {this.state.keyword.length !== i + 1 && ', '}
-                  </span>
+                  </Item>
                 ))}
             </SidebarItem>
             {/* SPATIAL COVERAGE */}
@@ -159,7 +160,9 @@ class Sidebar extends Component {
                 this.state.isOutputOf.map(
                   output =>
                     checkNested(output, 'has_funding_agency') &&
-                    output.has_funding_agency.map(agency => checkDataLang(agency.name))
+                    output.has_funding_agency.map(agency => (
+                      <Item>{checkDataLang(agency.name)}</Item>
+                    ))
                 )}
             </SidebarItem>
 
@@ -172,19 +175,17 @@ class Sidebar extends Component {
                   }
                   return (
                     /* eslint-disable react/no-array-index-key */
-                    <span key={`${curator}-${i}`}>
-                      {curator}
-                      {/* add separator, but not on last */}
-                      {this.state.curator.length !== i + 1 && ', '}
-                    </span>
+                    <Item key={`${curator}-${i}`}>{curator}</Item>
                     /* eslint-enable react/no-array-index-key */
                   )
                 })}
             </SidebarItem>
 
             <SidebarItem component="div" trans="dataset.infrastructure" hideEmpty="true">
-              {this.state.related_entity &&
-                this.state.related_entity.map(entity => checkDataLang(entity.title))}
+              {this.state.infrastructure &&
+                this.state.infrastructure.map(entity => (
+                  <Item key={entity.identifier}>{checkDataLang(entity.pref_label)}</Item>
+                ))}
             </SidebarItem>
 
             <SidebarItem component="div" trans="dataset.citation" hideEmpty="false">
@@ -231,6 +232,15 @@ const SidebarContainer = styled.div`
   }
 `
 
-const ItemValue = styled.p``
+const Item = styled.span`
+  &:not(:last-child)::after {
+    content: ', ';
+  }
+`
+const Date = styled.span`
+  &:not(:last-child)::after {
+    content: '; ';
+  }
+`
 
 export default inject('Stores')(observer(Sidebar))

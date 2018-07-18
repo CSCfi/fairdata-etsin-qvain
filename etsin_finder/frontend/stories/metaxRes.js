@@ -11,7 +11,135 @@
 export default {
   id: 13,
   identifier: 'cr955e904-e3dd-4d7e-99f1-3fed446f9613',
-  data_catalog: { id: 1, identifier: 'urn:nbn:fi:att:2955e904-e3dd-4d7e-99f1-3fed446f96d1' },
+  data_catalog: {
+    id: 1,
+    identifier: 'urn:nbn:fi:att:2955e904-e3dd-4d7e-99f1-3fed446f96d1',
+    catalog_json: {
+      title: {
+        en: 'Test data catalog name',
+        fi: 'Testidatakatalogin nimi',
+      },
+      issued: '2014-02-27T08:19:58Z',
+      homepage: [
+        {
+          title: {
+            en: 'Test website',
+            fi: 'Testi-verkkopalvelu',
+          },
+          identifier: 'http://testing.com',
+        },
+        {
+          title: {
+            en: 'Another website',
+            fi: 'Toinen verkkopalvelu',
+          },
+          identifier: 'http://www.testing.fi',
+        },
+      ],
+      language: [
+        {
+          title: {
+            en: 'Finnish language',
+            fi: 'Suomen kieli',
+            sv: 'finska',
+            und: 'Suomen kieli',
+          },
+          in_scheme: 'http://lexvo.org/id/',
+          identifier: 'http://lexvo.org/id/iso639-3/fin',
+        },
+        {
+          title: {
+            en: 'English language',
+            fi: 'Englannin kieli',
+            sv: 'engelska',
+            und: 'Englannin kieli',
+          },
+          in_scheme: 'http://lexvo.org/id/',
+          identifier: 'http://lexvo.org/id/iso639-3/eng',
+        },
+      ],
+      modified: '2014-01-17T08:19:58Z',
+      harvested: true,
+      publisher: {
+        name: {
+          en: 'Data catalog publisher organization',
+          fi: 'Datakatalogin julkaisijaorganisaatio',
+        },
+        homepage: [
+          {
+            title: {
+              en: 'Publisher organization website',
+              fi: 'Julkaisijaorganisaation kotisivu',
+            },
+            identifier: 'http://www.publisher.fi/',
+          },
+        ],
+        identifier: 'http://isni.org/isni/0000000405129137',
+      },
+      identifier: 'urn:nbn:fi:att:2955e904-e3dd-4d7e-99f1-3fed446f96d1',
+      access_rights: {
+        license: [
+          {
+            title: {
+              en: 'Creative Commons Attribution 4.0 International (CC BY 4.0)',
+              fi: 'Creative Commons Nime\u00e4 4.0 Kansainv\u00e4linen (CC BY 4.0)',
+              und: 'Creative Commons Nime\u00e4 4.0 Kansainv\u00e4linen (CC BY 4.0)',
+            },
+            license: 'https://creativecommons.org/licenses/by/4.0/',
+            in_scheme: 'https://metax.fairdata.fi/es/reference_data/license/_search?pretty',
+            identifier: 'https://creativecommons.org/licenses/by/4.0/',
+          },
+        ],
+        access_type: [
+          {
+            in_scheme: 'https://metax.fairdata.fi/es/reference_data/access_type/_search?pretty',
+            identifier: 'http://purl.org/att/es/reference_data/access_type/access_type_open_access',
+            pref_label: {
+              en: 'Open',
+              fi: 'Avoin',
+              und: 'Avoin',
+            },
+          },
+        ],
+        description: {
+          fi: 'K\u00e4ytt\u00f6ehtojen kuvaus',
+        },
+        has_rights_related_agent: [
+          {
+            name: {
+              en: 'A rights related organization',
+              fi: 'Oikeuksiin liittyv\u00e4 organisaatio',
+            },
+            identifier: 'org_id',
+          },
+          {
+            name: {
+              en: 'Aalto University',
+              fi: 'Aalto yliopisto',
+              sv: 'Aalto universitetet',
+              und: 'Aalto yliopisto',
+            },
+            in_scheme: 'https://metax.fairdata.fi/es/organization_data/organization/_search?pretty',
+            identifier: 'http://purl.org/att/es/organization_data/organization/organization_10076',
+          },
+        ],
+      },
+      field_of_science: [
+        {
+          in_scheme: 'http://www.yso.fi/onto/okm-tieteenala/conceptscheme',
+          identifier: 'http://www.yso.fi/onto/okm-tieteenala/ta1172',
+          pref_label: {
+            en: 'Environmental sciences',
+            fi: 'Ymp\u00e4rist\u00f6tiede',
+            sv: 'Milj\u00f6vetenskap',
+            und: 'Ymp\u00e4rist\u00f6tiede',
+          },
+        },
+      ],
+      dataset_versioning: true,
+      research_dataset_schema: 'ida',
+    },
+  },
   dataset_version_set: [
     {
       identifier: 'cr955e904-e3dd-4d7e-99f1-3fed446f9613',
@@ -223,7 +351,10 @@ export default {
         },
       },
     ],
-    temporal: [{ end_date: '2014-12-31T08:19:58Z', start_date: '2014-01-01T08:19:58Z' }],
+    temporal: [
+      { end_date: '2014-12-31T08:19:58Z', start_date: '2014-01-01T08:19:58Z' },
+      { end_date: '2014-12-30T08:19:58Z', start_date: '2014-01-02T08:19:58Z' },
+    ],
     publisher: {
       name: { und: 'School services, ARTS' },
       '@type': 'Organization',
@@ -541,27 +672,78 @@ export default {
     ],
     is_output_of: [
       {
-        name: { en: 'Name of project' },
+        name: {
+          en: 'Name of project',
+        },
         identifier: 'projectidentifier',
         funder_type: {
+          in_scheme: 'https://metax.fairdata.fi/es/reference_data/funder_type/_search?pretty',
           identifier: 'http://purl.org/att/es/reference_data/funder_type/funder_type_tekes',
-          pref_label: { en: 'Tekes', fi: 'Tekes', und: 'Tekes' },
+          pref_label: {
+            en: 'Tekes',
+            fi: 'Tekes',
+            und: 'Tekes',
+          },
         },
         has_funding_agency: [
           {
-            name: { en: 'Funding Organization', fi: 'Organisaatio' },
+            name: {
+              en: 'Funding Organization',
+              fi: 'Organisaatio',
+            },
             '@type': 'Organization',
-            email: 'rahoitus@rahaorg.fi',
-            telephone: ['+358501232233'],
             identifier: 'fundingagencyidentifier',
           },
         ],
         source_organization: [
           {
-            name: { und: 'Helsingin yliopisto' },
+            name: {
+              en: 'University of Helsinki',
+              fi: 'Helsingin yliopisto',
+              sv: 'Helsingfors universitet',
+              und: 'Helsingin yliopisto',
+            },
             '@type': 'Organization',
-            email: 'info@csc.fi',
-            telephone: ['+358501231235'],
+            in_scheme: 'https://metax.fairdata.fi/es/organization_data/organization/_search?pretty',
+            identifier: 'http://purl.org/att/es/organization_data/organization/organization_01901',
+          },
+        ],
+        has_funder_identifier: 'funderprojectidentifier',
+      },
+      {
+        name: {
+          en: 'Other project',
+        },
+        identifier: 'otherIdentifier',
+        funder_type: {
+          in_scheme: 'https://metax.fairdata.fi/es/reference_data/funder_type/_search?pretty',
+          identifier: 'http://purl.org/att/es/reference_data/funder_type/funder_type_tekes',
+          pref_label: {
+            en: 'Tekes',
+            fi: 'Tekes',
+            und: 'Tekes',
+          },
+        },
+        has_funding_agency: [
+          {
+            name: {
+              en: 'Funding Organization',
+              fi: 'Organisaatio',
+            },
+            '@type': 'Organization',
+            identifier: 'fundingagencyidentifier',
+          },
+        ],
+        source_organization: [
+          {
+            name: {
+              en: 'University of Helsinki',
+              fi: 'Helsingin yliopisto',
+              sv: 'Helsingfors universitet',
+              und: 'Helsingin yliopisto',
+            },
+            '@type': 'Organization',
+            in_scheme: 'https://metax.fairdata.fi/es/organization_data/organization/_search?pretty',
             identifier: 'http://purl.org/att/es/organization_data/organization/organization_01901',
           },
         ],
@@ -636,6 +818,14 @@ export default {
           und: 'Jyväskylän yliopiston fysiikan laitoksen Kiihdytinlaboratorio',
         },
       },
+      {
+        identifier: 'http://urn.fi/urn:nbn:fi:research-infras-2016072531',
+        pref_label: {
+          en: 'Accelerator laboratory of the university of Jyväskylä',
+          fi: 'Jyväskylän yliopiston fysiikan laitoksen Kiihdytinlaboratorio',
+          und: 'Jyväskylän yliopiston fysiikan laitoksen Kiihdytinlaboratorio',
+        },
+      },
     ],
     field_of_science: [
       {
@@ -646,12 +836,28 @@ export default {
           },
         ],
         definition: [{ en: 'A statement or formal explanation of the meaning of a concept.' }],
-        identifier: 'http://www.yso.fi/onto/okm-tieteenala/ta414',
+        identifier: 'http://www.yso.fi/onto/okm-tieteenala/ta415',
         pref_label: {
           en: 'Agricultural biotechnology',
           fi: 'Maatalouden bioteknologia',
           sv: 'Jordbruksbioteknologi',
           und: 'Maatalouden bioteknologia',
+        },
+      },
+      {
+        in_scheme: [
+          {
+            identifier: 'http://uri.of.that.concept/scheme',
+            pref_label: { en: 'The preferred lexical label for a resource' },
+          },
+        ],
+        definition: [{ en: 'A statement or formal explanation of the meaning of a concept.' }],
+        identifier: 'http://www.yso.fi/onto/okm-tieteenala/ta414',
+        pref_label: {
+          en: 'Some other biotechnology',
+          fi: 'Jokin muu bioteknologia',
+          sv: 'Andra bioteknologi',
+          und: 'Jokin muu bioteknologia',
         },
       },
     ],
