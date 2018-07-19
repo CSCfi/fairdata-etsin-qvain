@@ -73,13 +73,6 @@ class FilterSection extends Component {
       },
     }
 
-    if (this.aggregations[this.props.aggregation] !== undefined) {
-      const { title, aggregation, term } = this.aggregations[this.props.aggregation]
-      this.titleName = checkDataLang(title)
-      this.aggregationName = checkDataLang(aggregation)
-      this.termName = checkDataLang(term)
-    }
-
     this.state = {
       open: false,
     }
@@ -96,6 +89,12 @@ class FilterSection extends Component {
   }
 
   checkIfValid = () => {
+    if (this.aggregations[this.props.aggregation] !== undefined) {
+      const { title, aggregation, term } = this.aggregations[this.props.aggregation]
+      this.titleName = checkDataLang(title)
+      this.aggregationName = checkDataLang(aggregation)
+      this.termName = checkDataLang(term)
+    }
     if (
       this.aggregations[this.props.aggregation] === undefined ||
       this.props.Stores.ElasticQuery.results.aggregations[this.aggregationName] === 'undefined' ||
