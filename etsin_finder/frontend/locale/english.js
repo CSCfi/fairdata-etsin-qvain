@@ -197,6 +197,7 @@ const english = {
       dateD: 'Date descending',
     },
     filter: {
+      clearFilter: 'Remove filters',
       filter: 'Filter',
       SRactive: 'active',
     },

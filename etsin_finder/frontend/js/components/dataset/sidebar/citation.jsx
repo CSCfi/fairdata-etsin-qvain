@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import DatasetQuery from '../../../stores/view/datasetquery'
 import checkDataLang from '../../../utils/checkDataLang'
+import checkNested from '../../../utils/checkNested'
 
 export default class Citation extends Component {
   constructor(props) {
@@ -24,10 +25,15 @@ export default class Citation extends Component {
       if (creators && creators[i]) {
         people.push({ name: creators[i].name })
       } else if (contributors && contributors[i - creators.length]) {
-        people.push({
-          name: contributors[i - creators.length].name,
-          role: contributors[i - creators.length].contributor_role.pref_label,
-        })
+        const person = {}
+        if (contributors[i - creators.length].name) {
+          person.name = contributors[i - creators.length].name
+        }
+        // TODO: needs revision
+        if (checkNested(contributors[i - creators.length], 'contributor_role', 'pref_label')) {
+          person.role = contributors[i - creators.length].contributor_role.pref_label
+        }
+        people.push(person)
       }
     }
     return people
@@ -48,9 +54,6 @@ export default class Citation extends Component {
           <span title="Release date">{this.state.release_date}, </span>
           <span title="Preferred identifier">{this.state.pid}</span>
         </p>
-        {/* <LinkButton noMargin>
-          <Translate content="dataset.citation_formats" />
-        </LinkButton> */}
       </Fragment>
     )
   }

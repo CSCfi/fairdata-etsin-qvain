@@ -104,8 +104,9 @@ class Sidebar extends Component {
             {/* KEYWORDS */}
             <SidebarItem component="div" trans="dataset.keywords" hideEmpty="true">
               {this.state.keyword &&
-                this.state.keyword.map(keyword => (
-                  <Item className="keyword" key={keyword}>
+                this.state.keyword.map((keyword, i) => (
+                  /* eslint-disable-next-line react/no-array-index-key */
+                  <Item className="keyword" key={`${keyword}-${i}`}>
                     {keyword}
                   </Item>
                 ))}

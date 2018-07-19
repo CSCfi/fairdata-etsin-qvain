@@ -1,13 +1,13 @@
 {
-/**
- * This file is part of the Etsin service
- *
- * Copyright 2017-2018 Ministry of Education and Culture, Finland
- *
- *
- * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
- * @license   MIT
- */
+  /**
+   * This file is part of the Etsin service
+   *
+   * Copyright 2017-2018 Ministry of Education and Culture, Finland
+   *
+   *
+   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
+   * @license   MIT
+   */
 }
 
 import React, { Component } from 'react'
@@ -27,6 +27,7 @@ import CurrentQuery from './currentQuery'
 import FilterResults from './filterResults'
 import FilterToggle from './filterResults/filterToggle'
 import NoResults from './noResults'
+import ClearFilters from './filterResults/clearFilters'
 
 class Results extends Component {
   constructor(props) {
@@ -76,6 +77,7 @@ class Results extends Component {
                   <Flex>
                     <Sidebar>
                       <HeightTransition in={this.state.filterOpen} duration={300} onlyMobile>
+                        <ClearFilters />
                         <FilterResults open={this.state.filterOpen} />
                       </HeightTransition>
                     </Sidebar>

@@ -1,7 +1,10 @@
-import createHistory from 'history/createBrowserHistory'
+import createBrowserHistory from 'history/createBrowserHistory'
+import { syncHistoryWithStore } from 'mobx-react-router'
 import ElasticQuery from '../js/stores/view/elasticquery'
+import env from '../js/stores/domain/env'
 
-const history = createHistory()
+const browserHistory = createBrowserHistory()
+const history = syncHistoryWithStore(browserHistory, env.history)
 
 describe('ElasticQuery', () => {
   // ------ UPDATE SEARCH ------
@@ -54,12 +57,8 @@ describe('ElasticQuery', () => {
     })
     it('should remove value that is already present', () => {
       ElasticQuery.updateFilter('myterm', 'mykey', history)
-      expect(ElasticQuery.filter.find(item => item.term === 'myterm')).toEqual(
-        undefined
-      )
-      expect(ElasticQuery.filter.find(item => item.key === 'mykey')).toEqual(
-        undefined
-      )
+      expect(ElasticQuery.filter.find(item => item.term === 'myterm')).toEqual(undefined)
+      expect(ElasticQuery.filter.find(item => item.key === 'mykey')).toEqual(undefined)
       expect(ElasticQuery.filter.length).toEqual(1)
     })
     it('should not remove if only key or term match', () => {

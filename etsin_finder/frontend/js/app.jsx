@@ -1,19 +1,21 @@
 {
-/**
- * This file is part of the Etsin service
- *
- * Copyright 2017-2018 Ministry of Education and Culture, Finland
- *
- *
- * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
- * @license   MIT
- */
+  /**
+   * This file is part of the Etsin service
+   *
+   * Copyright 2017-2018 Ministry of Education and Culture, Finland
+   *
+   *
+   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
+   * @license   MIT
+   */
 }
 
 import React, { Component } from 'react'
-import { BrowserRouter as Router } from 'react-router-dom'
-import { Provider } from 'mobx-react'
 import { ThemeProvider } from 'styled-components'
+import { Router } from 'react-router-dom'
+import { Provider } from 'mobx-react'
+import createBrowserHistory from 'history/createBrowserHistory'
+import { syncHistoryWithStore } from 'mobx-react-router'
 
 import SkipToContent from './components/general/skipToContent'
 import Layout from './layout'
@@ -35,6 +37,10 @@ if (storedLang) {
   Stores.Locale.setLang(storedLang)
 }
 
+// Syncing history with store
+const browserHistory = createBrowserHistory()
+const history = syncHistoryWithStore(browserHistory, Stores.Env.history)
+
 export default class App extends Component {
   constructor() {
     super()
@@ -50,7 +56,7 @@ export default class App extends Component {
     return (
       <div className="app">
         <Provider Stores={Stores}>
-          <Router history={Stores.history}>
+          <Router history={history}>
             <ThemeProvider theme={etsinTheme}>
               <React.Fragment>
                 <SkipToContent callback={this.focusContent} />

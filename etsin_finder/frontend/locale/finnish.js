@@ -197,6 +197,7 @@ const finnish = {
       dateD: 'Uusin ensin',
     },
     filter: {
+      clearFilter: 'Poista rajaukset',
       filter: 'Rajaa',
       SRactive: 'päällä',
     },

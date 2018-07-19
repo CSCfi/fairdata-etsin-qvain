@@ -8,15 +8,14 @@
  * @license   MIT
  */
 
-
 import { observable } from 'mobx'
+import { RouterStore } from 'mobx-react-router'
 
-// metax url
-const metax = (process.env.NODE_ENV !== 'production') ? 'https://metax-test.csc.fi' : 'https://metax-test.csc.fi'
+const routingStore = new RouterStore()
 
 class Env {
   @observable environment = process.env.NODE_ENV
-  @observable metaxUrl = metax
+  history = routingStore
 }
 
-export default new Env();
+export default new Env()

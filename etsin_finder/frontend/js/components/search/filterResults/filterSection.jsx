@@ -1,13 +1,13 @@
 {
-/**
- * This file is part of the Etsin service
- *
- * Copyright 2017-2018 Ministry of Education and Culture, Finland
- *
- *
- * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
- * @license   MIT
- */
+  /**
+   * This file is part of the Etsin service
+   *
+   * Copyright 2017-2018 Ministry of Education and Culture, Finland
+   *
+   *
+   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
+   * @license   MIT
+   */
 }
 
 import React, { Component } from 'react'
@@ -19,7 +19,6 @@ import styled from 'styled-components'
 import { mix } from 'polished'
 
 import checkDataLang from '../../../utils/checkDataLang'
-import ElasticQuery from '../../../stores/view/elasticquery'
 import FilterItem from './filterItem'
 
 class FilterSection extends Component {
@@ -73,9 +72,14 @@ class FilterSection extends Component {
         },
       },
     }
+
     this.state = {
       open: false,
     }
+  }
+
+  componentWillMount() {
+    this.checkActive()
   }
 
   toggleFilter = () => {
@@ -84,27 +88,51 @@ class FilterSection extends Component {
     })
   }
 
-  render() {
-    if (ElasticQuery.results.total === 0) {
-      return null
-    }
+  checkIfValid = () => {
     if (this.aggregations[this.props.aggregation] !== undefined) {
-      // Figure out languages
-      const { currentLang } = this.props.Stores.Locale
-      const title = this.aggregations[this.props.aggregation].title
-      const aggregation = this.aggregations[this.props.aggregation].aggregation
-      const term = this.aggregations[this.props.aggregation].term
-      this.titleName = checkDataLang(title, currentLang)
-      this.aggregationName = checkDataLang(aggregation, currentLang)
-      this.termName = checkDataLang(term, currentLang)
+      const { title, aggregation, term } = this.aggregations[this.props.aggregation]
+      this.titleName = checkDataLang(title)
+      this.aggregationName = checkDataLang(aggregation)
+      this.termName = checkDataLang(term)
+    }
+    if (
+      this.aggregations[this.props.aggregation] === undefined ||
+      this.props.Stores.ElasticQuery.results.aggregations[this.aggregationName] === 'undefined' ||
+      this.props.Stores.ElasticQuery.results.aggregations[this.aggregationName].buckets.length <= 0
+    ) {
+      return false
+    }
+    return true
+  }
+
+  // opens the section if it contains an active filter
+  checkActive = () => {
+    if (this.checkIfValid()) {
+      this.props.Stores.ElasticQuery.results.aggregations[this.aggregationName].buckets.map(a => {
+        if (!this.state.open) {
+          const active =
+            this.props.Stores.ElasticQuery.filter.filter(
+              item => item.term === this.termName && item.key === a.key
+            ).length > 0
+          if (active) {
+            this.setState({
+              open: true,
+            })
+            return true
+          }
+        }
+        return false
+      })
+    }
+  }
+
+  render() {
+    if (this.props.Stores.ElasticQuery.results.total === 0) {
+      return null
     }
 
     // Don't render unknown or empty
-    if (
-      this.aggregations[this.props.aggregation] === undefined ||
-      ElasticQuery.results.aggregations[this.aggregationName] === 'undefined' ||
-      ElasticQuery.results.aggregations[this.aggregationName].buckets.length <= 0
-    ) {
+    if (!this.checkIfValid()) {
       return ''
     }
 
@@ -116,15 +144,17 @@ class FilterSection extends Component {
         </FilterCategory>
         <FilterItems className={this.state.open ? 'open' : ''}>
           <ul>
-            {ElasticQuery.results.aggregations[this.aggregationName].buckets.map(item => (
-              <FilterItem
-                key={item.key}
-                item={item}
-                aggregationName={this.aggregationName}
-                term={this.termName}
-                tabIndex={this.state.open ? '0' : '-1'}
-              />
-            ))}
+            {this.props.Stores.ElasticQuery.results.aggregations[this.aggregationName].buckets.map(
+              item => (
+                <FilterItem
+                  key={item.key}
+                  item={item}
+                  aggregationName={this.aggregationName}
+                  term={this.termName}
+                  tabIndex={this.state.open ? '0' : '-1'}
+                />
+              )
+            )}
           </ul>
         </FilterItems>
       </Section>
@@ -137,9 +167,7 @@ export default inject('Stores')(observer(FilterSection))
 FilterSection.propTypes = {
   aggregation: PropTypes.string.isRequired,
   Stores: PropTypes.shape({
-    Locale: PropTypes.shape({
-      currentLang: PropTypes.string.isRequired,
-    }).isRequired,
+    ElasticQuery: PropTypes.object.isRequired,
   }).isRequired,
 }
 
@@ -147,6 +175,7 @@ const Section = styled.div`
   margin-bottom: 4px;
 `
 
+// TODO: Better filter styles and animation
 const FilterCategory = styled.button`
   cursor: pointer;
   display: flex;
