@@ -12,7 +12,6 @@ import Citation from './citation'
 import Logo from './logo'
 import ErrorBoundary from '../../general/errorBoundary'
 import License from './license'
-import { isObservableMap } from '../../../../node_modules/mobx'
 
 class Sidebar extends Component {
   constructor(props) {
