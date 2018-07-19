@@ -12,6 +12,7 @@ import Citation from './citation'
 import Logo from './logo'
 import ErrorBoundary from '../../general/errorBoundary'
 import License from './license'
+import { isObservableMap } from '../../../../node_modules/mobx'
 
 class Sidebar extends Component {
   constructor(props) {
@@ -54,11 +55,22 @@ class Sidebar extends Component {
   dateSeparator(start, end) {
     return (
       (start || end) && (
-        <Date key={start}>
+        <Item2 key={start}>
           {start === end ? dateFormat(start) : `${dateFormat(start)} - ${dateFormat(end)}`}
-        </Date>
+        </Item2>
       )
     )
+  }
+
+  spatial(item) {
+    if (item.geographic_name && checkNested(item, 'place_uri', 'pref_label')) {
+      return (
+        <Item2 key={item.geographic_name}>
+          {checkDataLang(item.place_uri.pref_label)}, <span>{item.geographic_name}</span>
+        </Item2>
+      )
+    }
+    return <Item key={item.geographic_name}>{item.geographic_name}</Item>
   }
 
   render() {
@@ -118,12 +130,8 @@ class Sidebar extends Component {
               fallback="Spatial Coverage"
               hideEmpty="true"
             >
-              {/* disabled spatial coverage for now */}
-              {console.log('geographic name', this.state.geographic_name)}
-              {/* {this.state.geographic_name &&
-                this.state.geographic_name.map(single => (
-                  <span key={single.geographic_name}>{single.geographic_name}, </span>
-                ))} */}
+              {this.state.geographic_name &&
+                this.state.geographic_name.map(single => this.spatial(single))}
             </SidebarItem>
             {/* TEMPORAL COVERAGE */}
             <SidebarItem
@@ -238,7 +246,7 @@ const Item = styled.span`
     content: ', ';
   }
 `
-const Date = styled.span`
+const Item2 = styled.span`
   &:not(:last-child)::after {
     content: '; ';
   }
