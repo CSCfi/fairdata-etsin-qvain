@@ -27,9 +27,13 @@ class Locale {
     counterpart.setLocale(current === 'fi' ? 'en' : 'fi')
     this.currentLang = counterpart.getLocale()
     localStorage.setItem('lang', this.currentLang)
+
     // other things to do when language changes
-    // removes all filters
-    elasticquery.clearFilters()
+    // removes all filters and queries new results after filters are removed
+    const filtersChanged = elasticquery.clearFilters()
+    if (filtersChanged) {
+      elasticquery.queryES()
+    }
   }
 }
 

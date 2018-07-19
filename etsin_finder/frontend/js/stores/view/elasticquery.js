@@ -101,11 +101,15 @@ class ElasticQuery {
   // reset search filters
   @action
   clearFilters = (updateUrl = true) => {
-    this.filter = []
-    this.pageNum = 1
-    if (updateUrl) {
-      this.updateUrl()
+    if (this.filter.length !== 0) {
+      this.filter = []
+      this.pageNum = 1
+      if (updateUrl) {
+        this.updateUrl()
+      }
+      return true
     }
+    return false
   }
 
   @action

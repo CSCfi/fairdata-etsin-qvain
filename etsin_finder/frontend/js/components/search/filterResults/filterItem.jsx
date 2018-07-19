@@ -30,6 +30,7 @@ export default class FilterItem extends Component {
   componentWillReceiveProps(newProps) {
     this.setState({
       doc_count: newProps.item.doc_count,
+      term: newProps.term,
     })
   }
 
