@@ -43,8 +43,9 @@ export default class Citation extends Component {
     return (
       <Fragment>
         <p>
-          {this.getPeople().map(person => (
-            <Fragment key={checkDataLang(person.name)}>
+          {this.getPeople().map((person, i) => (
+            /* eslint-disable-next-line react/no-array-index-key */
+            <Fragment key={`${checkDataLang(person.name)}-${i}`}>
               <span name="Name">{checkDataLang(person.name)}, </span>
               {person.role && <span name="Role">{checkDataLang(person.role)}, </span>}
             </Fragment>
