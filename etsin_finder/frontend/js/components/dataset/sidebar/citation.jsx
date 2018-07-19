@@ -42,18 +42,16 @@ export default class Citation extends Component {
   render() {
     return (
       <Fragment>
-        <p>
-          {this.getPeople().map(person => (
-            <Fragment key={checkDataLang(person.name)}>
-              <span name="Name">{checkDataLang(person.name)}, </span>
-              {person.role && <span name="Role">{checkDataLang(person.role)}, </span>}
-            </Fragment>
-          ))}
-          <span title="Title">{checkDataLang(this.state.title)}, </span>
-          <span title="Publisher">{checkDataLang(this.state.publisher)}, </span>
-          <span title="Release date">{this.state.release_date}, </span>
-          <span title="Preferred identifier">{this.state.pid}</span>
-        </p>
+        {this.getPeople().map(person => (
+          <Fragment key={checkDataLang(person.name)}>
+            <span name="Name">{checkDataLang(person.name)}, </span>
+            {person.role && <span name="Role">{checkDataLang(person.role)}, </span>}
+          </Fragment>
+        ))}
+        <span title="Title">{checkDataLang(this.state.title)}, </span>
+        <span title="Publisher">{checkDataLang(this.state.publisher)}, </span>
+        <span title="Release date">{this.state.release_date}, </span>
+        <span title="Preferred identifier">{this.state.pid}</span>
       </Fragment>
     )
   }

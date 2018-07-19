@@ -218,9 +218,6 @@ const SidebarContainer = styled.div`
   -moz-hyphens: auto;
   -ms-hyphens: auto;
   hyphens: auto;
-  p {
-    font-size: 0.875em;
-  }
   h4 {
     margin-bottom: 0;
   }

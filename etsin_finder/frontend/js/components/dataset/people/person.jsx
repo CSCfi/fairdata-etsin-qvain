@@ -1,13 +1,13 @@
 {
-/**
- * This file is part of the Etsin service
- *
- * Copyright 2017-2018 Ministry of Education and Culture, Finland
- *
- *
- * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
- * @license   MIT
- */
+  /**
+   * This file is part of the Etsin service
+   *
+   * Copyright 2017-2018 Ministry of Education and Culture, Finland
+   *
+   *
+   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
+   * @license   MIT
+   */
 }
 
 import React, { Component } from 'react'
@@ -59,7 +59,13 @@ export default class Person extends Component {
             <PopUpContainer>
               <Name>{checkDataLang(this.state.person.name)}</Name>
               {this.state.person.identifier && (
-                <Orcid href={this.state.person.identifier}>{this.state.person.identifier}</Orcid>
+                <Orcid
+                  href={this.state.person.identifier}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {this.state.person.identifier}
+                </Orcid>
               )}
               {this.state.person.contributor_role && (
                 <Info>
@@ -88,6 +94,8 @@ export default class Person extends Component {
                   <FontawesomeIcon icon={faGlobe} title={translate('dataset.person.homepage')} />
                   <a
                     href={this.state.person.homepage.identifier}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     title={
                       checkDataLang(this.state.person.homepage.description) ||
                       this.state.person.homepage.identifier
