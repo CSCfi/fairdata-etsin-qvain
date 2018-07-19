@@ -66,7 +66,9 @@ export default class IdaResources extends Component {
       } else {
         filePaths = files.map(file => ({
           path: file.details ? file.details.file_path.substring(1) : '',
-          type: checkDataLang(file.file_type.pref_label),
+          type: checkNested(file, 'file_type', 'pref_label')
+            ? checkDataLang(file.file_type.pref_label)
+            : undefined,
           download_url: file.access_url,
           details: file.details,
           description: file.description,
