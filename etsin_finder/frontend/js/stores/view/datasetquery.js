@@ -8,19 +8,14 @@
  * @license   MIT
  */
 
-
 import { observable, action } from 'mobx'
 import axios from 'axios'
-
-// import Locale from './language'
-import Env from '../domain/env'
 
 class DatasetQuery {
   @observable results = []
   @observable emailInfo = []
   @observable directories = []
   @observable error = false
-  metaxUrl = Env.metaxUrl
 
   @action
   getData(id) {

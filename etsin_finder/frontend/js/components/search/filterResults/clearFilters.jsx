@@ -13,6 +13,7 @@ import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import Translate from 'react-translate-component'
 
 import ElasticQuery from '../../../stores/view/elasticquery'
 import { InvertedButton } from '../../general/button'
@@ -26,7 +27,7 @@ class ClearFilters extends Component {
   render() {
     return (
       <CustomButton onClick={this.clear} color="primary" open={ElasticQuery.filter.length > 0}>
-        Clear filters
+        <Translate content="search.filter.clearFilter" />
       </CustomButton>
     )
   }
