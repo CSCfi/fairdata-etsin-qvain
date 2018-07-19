@@ -1,13 +1,13 @@
 {
-/**
- * This file is part of the Etsin service
- *
- * Copyright 2017-2018 Ministry of Education and Culture, Finland
- *
- *
- * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
- * @license   MIT
- */
+  /**
+   * This file is part of the Etsin service
+   *
+   * Copyright 2017-2018 Ministry of Education and Culture, Finland
+   *
+   *
+   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
+   * @license   MIT
+   */
 }
 
 import React from 'react'
@@ -119,13 +119,21 @@ const Info = ({
       </ModalDescription>
     ) : null}
     {accessUrl && (
-      <FullButton href={accessUrl.identifier} title={checkDataLang(accessUrl.description)} noMargin>
+      <FullButton
+        href={accessUrl.identifier}
+        title={checkDataLang(accessUrl.description)}
+        noMargin
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         <Translate content="dataset.dl.go_to_original" />
       </FullButton>
     )}
     {downloadUrl && (
       <FullButton
         href={downloadUrl.identifier}
+        target="_blank"
+        rel="noopener noreferrer"
         title={checkDataLang(downloadUrl.description)}
         color="success"
         noMargin
