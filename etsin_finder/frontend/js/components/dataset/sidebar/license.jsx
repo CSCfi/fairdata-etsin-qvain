@@ -64,7 +64,7 @@ export default class License extends Component {
 
   render() {
     return (
-      <React.Fragment>
+      <span>
         <MainLink href={this.props.data.identifier} target="_blank" rel="noopener noreferrer">
           {checkDataLang(this.props.data.title)}
         </MainLink>
@@ -87,7 +87,7 @@ export default class License extends Component {
             <FontawesomeIcon icon={faInfoCircle} />
           </LinkButton>
         </PopUp>
-      </React.Fragment>
+      </span>
     )
   }
 }

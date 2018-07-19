@@ -33,6 +33,7 @@ class Sidebar extends Component {
       pid: researchDataset.preferred_identifier,
       field: researchDataset.field_of_science,
       keyword: researchDataset.keyword,
+      theme: researchDataset.theme,
       geographic_name: checkNested(researchDataset, 'spatial') ? researchDataset.spatial : false,
       temporal: checkNested(researchDataset, 'temporal') ? researchDataset.temporal : false,
       license: checkNested(researchDataset, 'access_rights', 'license')
@@ -114,12 +115,14 @@ class Sidebar extends Component {
             </SidebarItem>
             {/* KEYWORDS */}
             <SidebarItem component="div" trans="dataset.keywords" hideEmpty="true">
+              {this.state.theme &&
+                this.state.theme.map(theme => (
+                  <Item key={`theme-${theme.identifier}`}>{checkDataLang(theme.pref_label)}</Item>
+                ))}
               {this.state.keyword &&
                 this.state.keyword.map((keyword, i) => (
                   /* eslint-disable-next-line react/no-array-index-key */
-                  <Item className="keyword" key={`${keyword}-${i}`}>
-                    {keyword}
-                  </Item>
+                  <Item key={`keyword-${keyword}-${i}`}>{keyword}</Item>
                 ))}
             </SidebarItem>
             {/* SPATIAL COVERAGE */}
@@ -169,7 +172,7 @@ class Sidebar extends Component {
                   output =>
                     checkNested(output, 'has_funding_agency') &&
                     output.has_funding_agency.map(agency => (
-                      <Item>{checkDataLang(agency.name)}</Item>
+                      <Item key={checkDataLang(agency.name)}>{checkDataLang(agency.name)}</Item>
                     ))
                 )}
             </SidebarItem>
