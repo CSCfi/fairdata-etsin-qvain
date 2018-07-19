@@ -53,6 +53,9 @@ const Spacer = styled.div`
     padding: 0 1.6em;
   }
   margin-bottom: 1rem;
+  & > div {
+    font-size: 0.92em;
+  }
   &:last-of-type {
     margin-bottom: 0;
   }
