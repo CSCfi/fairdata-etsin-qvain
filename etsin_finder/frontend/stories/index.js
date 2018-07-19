@@ -54,6 +54,7 @@ import PopUp from '../js/components/general/popup'
 // import Select from '../js/components/general/select'
 import People from '../js/components/dataset/people'
 import Person from '../js/components/dataset/people/person'
+import Sidebar from '../js/components/dataset/sidebar'
 import License from '../js/components/dataset/sidebar/license'
 
 import EsRes from './esRes'
@@ -568,6 +569,13 @@ storiesOf('Dataset/Tabs', module).add('Normal', () => (
   <Container center maxWidth="800px">
     <ComponentCode>
       <Tabs showDownloads={true} showEvents={true} identifier={'id'} />
+    </ComponentCode>
+  </Container>
+))
+storiesOf('Dataset/Sidebar', module).add('Normal', () => (
+  <Container center maxWidth="800px" style={{ marginTop: '10em' }}>
+    <ComponentCode>
+      <Sidebar dataset={MetaxRes} />
     </ComponentCode>
   </Container>
 ))
