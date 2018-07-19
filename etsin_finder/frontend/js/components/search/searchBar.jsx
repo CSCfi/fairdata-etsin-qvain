@@ -11,7 +11,6 @@
 }
 
 import React, { Component } from 'react'
-import { withRouter } from 'react-router-dom'
 import counterpart from 'counterpart'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
@@ -22,7 +21,7 @@ import { Search } from '../../routes'
 import ElasticQuery from '../../stores/view/elasticquery'
 import ErrorBoundary from '../general/errorBoundary'
 
-class SearchBar extends Component {
+export default class SearchBar extends Component {
   constructor(props) {
     super(props)
 
@@ -57,7 +56,7 @@ class SearchBar extends Component {
 
   handleSubmit(e) {
     e.preventDefault()
-    ElasticQuery.updateSearch(this.state.query, this.props.history)
+    ElasticQuery.updateSearch(this.state.query)
     ElasticQuery.queryES(false)
   }
 
@@ -93,7 +92,6 @@ SearchBar.defaultProps = {
 }
 
 SearchBar.propTypes = {
-  history: PropTypes.object.isRequired,
   inputRef: PropTypes.func,
 }
 
@@ -136,5 +134,3 @@ const SearchInner = styled.div`
     }
   }
 `
-
-export default withRouter(SearchBar)

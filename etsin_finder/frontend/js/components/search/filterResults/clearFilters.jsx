@@ -10,17 +10,15 @@
    */
 }
 import React, { Component } from 'react'
-import { withRouter } from 'react-router-dom'
-import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
 
 import ElasticQuery from '../../../stores/view/elasticquery'
 import { InvertedButton } from '../../general/button'
 
-class ClearFilters extends Component {
+export default class ClearFilters extends Component {
   clear = () => {
-    ElasticQuery.clearFilters(this.props.history)
+    ElasticQuery.clearFilters()
     ElasticQuery.queryES()
   }
 
@@ -33,10 +31,6 @@ class ClearFilters extends Component {
   }
 }
 
-ClearFilters.propTypes = {
-  history: PropTypes.object.isRequired,
-}
-
 const CustomButton = styled(InvertedButton)`
   display: ${p => (p.open ? 'initial' : 'none')};
   width: 100%;
@@ -44,5 +38,3 @@ const CustomButton = styled(InvertedButton)`
   margin: 0;
   margin-bottom: 0.5em;
 `
-
-export default withRouter(ClearFilters)

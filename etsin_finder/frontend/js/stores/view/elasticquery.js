@@ -14,6 +14,7 @@ import axios from 'axios'
 import UrlParse from '../../utils/urlParse'
 import Helpers from '../../utils/helpers'
 import Locale from './language'
+import Env from '../domain/env'
 
 const fields = [
   'title.*',
@@ -51,157 +52,105 @@ class ElasticQuery {
 
   // update query search term and url
   @action
-  updateSearch = (newSearch, history, updateUrl = true) => {
+  updateSearch = (newSearch, updateUrl = true) => {
     this.search = newSearch
+    this.filter = []
+    this.pageNum = 1
     if (updateUrl) {
-      const path = `/datasets/${encodeURIComponent(newSearch)}`
-      // reset parameters on new search, expect sort
-      let search = ''
-      const urlParams = UrlParse.searchParams(history.location.search)
-      if (urlParams && urlParams.sort) {
-        search = `?sort=${urlParams.sort}`
-        this.filter = []
-        this.pageNum = 1
-      } else {
-        this.filter = []
-        this.pageNum = 1
-      }
-      history.replace({ pathname: path, search })
+      this.updateUrl()
     }
   }
 
   // update search result sorting and url
   @action
-  updateSorting = (newSorting, history, updateUrl = true) => {
+  updateSorting = (newSorting, updateUrl = true) => {
     this.sorting = newSorting
+    this.pageNum = 1
     if (updateUrl) {
-      let urlParams = UrlParse.searchParams(history.location.search)
-      if (urlParams) {
-        urlParams.sort = newSorting
-      } else {
-        urlParams = { sort: newSorting }
-      }
-      // reset page number
-      this.pageNum = 1
-      urlParams.p = this.pageNum
-      history.replace({ search: UrlParse.makeSearchParams(urlParams) })
+      this.updateUrl()
     }
   }
 
   // update page number and url
   @action
-  updatePageNum = (newPage, history, updateUrl = true) => {
+  updatePageNum = (newPage, updateUrl = true) => {
     this.pageNum = parseInt(newPage, 10)
     if (updateUrl) {
-      let urlParams = UrlParse.searchParams(history.location.search)
-      if (urlParams) urlParams.p = newPage
-      else {
-        urlParams = { p: newPage }
-      }
-      // TODO: change to history push. Currently going back doesn't refresh results page.
-      history.replace({ search: UrlParse.makeSearchParams(urlParams) })
+      this.updateUrl()
     }
   }
 
   // update search filter and url
   @action
-  updateFilter = (term, key, history, updateUrl = true) => {
+  updateFilter = (term, key, updateUrl = true) => {
     const index = this.filter.findIndex(i => i.term === term && i.key === key)
+    this.pageNum = 1
     if (index !== -1) {
       this.filter.splice(index, 1)
       if (updateUrl) {
-        const urlParams = UrlParse.searchParams(history.location.search)
-        const removeParam = (param, value) => {
-          const single = urlParams[param].split(',')
-          const removed = single.filter(e => decodeURIComponent(e) !== value)
-          urlParams[param] = removed.join()
-        }
-        removeParam('keys', key)
-        removeParam('terms', term)
-        // reset page number
-        this.pageNum = 1
-        urlParams.p = 1
-        history.replace({ search: UrlParse.makeSearchParams(urlParams) })
+        this.updateUrl()
       }
     } else {
       this.filter.push({ term, key })
       if (updateUrl) {
-        let urlParams = UrlParse.searchParams(history.location.search)
-        const addParam = (param, value) => {
-          if (urlParams) {
-            let selected = urlParams[param]
-            selected =
-              selected !== undefined && selected.length > 0
-                ? `${selected},${encodeURIComponent(value)}`
-                : encodeURIComponent(value)
-            urlParams[param] = selected
-          } else {
-            urlParams = { [param]: encodeURIComponent(value) }
-          }
-        }
-        addParam('keys', key)
-        addParam('terms', term)
-        // reset page number
-        this.pageNum = 1
-        urlParams.p = 1
-        history.replace({ search: UrlParse.makeSearchParams(urlParams) })
+        this.updateUrl()
       }
     }
   }
 
   // reset search filters
   @action
-  clearFilters = (history, updateUrl = true) => {
+  clearFilters = (updateUrl = true) => {
     this.filter = []
     this.pageNum = 1
     if (updateUrl) {
-      const urlParams = UrlParse.searchParams(history.location.search)
-      urlParams.keys = ''
-      urlParams.terms = ''
-      urlParams.p = 1
-      history.replace({ search: UrlParse.makeSearchParams(urlParams) })
+      this.updateUrl()
     }
+  }
+
+  @action
+  clearAll = () => {
+    this.filter = []
+    this.pageNum = 1
+    this.search = ''
+    this.sorting = 'best'
+    this.updateUrl()
   }
 
   // when url is populated with settings
   @action
-  updateFromUrl = (query, history, initial = false) => {
+  updateFromUrl = (query, initial = false) => {
     if (initial) {
       if (this.results.total !== 0) {
-        return this.updateUrl(history)
+        return this.updateUrl()
       }
     }
-    const urlParams = UrlParse.searchParams(history.location.search)
+    const urlParams = UrlParse.searchParams(Env.history.location.search)
     if (query) {
-      this.updateSearch(decodeURIComponent(query), history, false)
+      this.updateSearch(decodeURIComponent(query), false)
     }
     if (urlParams) {
       if (urlParams.sort) {
-        this.updateSorting(urlParams.sort, history, false)
+        this.updateSorting(urlParams.sort, false)
       }
       if (urlParams.keys && urlParams.terms) {
         if (this.filter.length === 0) {
           const keys = urlParams.keys.split(',')
           const terms = urlParams.terms.split(',')
           for (let i = 0; i < keys.length; i += 1) {
-            this.updateFilter(
-              decodeURIComponent(terms[i]),
-              decodeURIComponent(keys[i]),
-              history,
-              false
-            )
+            this.updateFilter(decodeURIComponent(terms[i]), decodeURIComponent(keys[i]), false)
           }
         }
       }
       if (urlParams.p) {
-        this.updatePageNum(urlParams.p, history, false)
+        this.updatePageNum(urlParams.p, false)
       }
     }
     return true
   }
 
   @action
-  updateUrl = history => {
+  updateUrl = () => {
     const urlParams = {}
     const path = `/datasets/${encodeURIComponent(this.search)}`
     urlParams.keys = []
@@ -213,7 +162,7 @@ class ElasticQuery {
     })
     urlParams.p = this.pageNum
     urlParams.sort = this.sorting
-    history.replace({ pathname: path, search: UrlParse.makeSearchParams(urlParams) })
+    Env.history.replace({ pathname: path, search: UrlParse.makeSearchParams(urlParams) })
     return { path, search: UrlParse.makeSearchParams(urlParams) }
   }
 

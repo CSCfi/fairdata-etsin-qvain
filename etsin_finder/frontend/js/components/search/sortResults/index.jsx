@@ -1,22 +1,20 @@
 {
-/**
- * This file is part of the Etsin service
- *
- * Copyright 2017-2018 Ministry of Education and Culture, Finland
- *
- *
- * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
- * @license   MIT
- */
+  /**
+   * This file is part of the Etsin service
+   *
+   * Copyright 2017-2018 Ministry of Education and Culture, Finland
+   *
+   *
+   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
+   * @license   MIT
+   */
 }
 
 import React, { Component } from 'react'
-import { withRouter } from 'react-router-dom'
 import Translate from 'react-translate-component'
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faSortAmountDown from '@fortawesome/fontawesome-free-solid/faSortAmountDown'
 import styled from 'styled-components'
-import PropTypes from 'prop-types'
 
 import ElasticQuery from '../../../stores/view/elasticquery'
 import Accessibility from '../../../stores/view/accessibility'
@@ -25,7 +23,7 @@ import { InvertedButton } from '../../general/button'
 // available options, they are also checked in ElasticQuery store
 const options = ['best', 'dateD', 'dateA']
 
-class SortResults extends Component {
+export default class SortResults extends Component {
   constructor(props) {
     super(props)
 
@@ -66,7 +64,7 @@ class SortResults extends Component {
         value,
       },
       () => {
-        ElasticQuery.updateSorting(this.state.value, this.props.history)
+        ElasticQuery.updateSorting(this.state.value)
         ElasticQuery.queryES()
       }
     )
@@ -122,8 +120,6 @@ class SortResults extends Component {
     )
   }
 }
-
-export default withRouter(SortResults)
 
 const SelectOptionsContainer = styled.div`
   position: relative;
@@ -187,10 +183,6 @@ const SelectButton = styled.div`
     }
   }
 `
-
-SortResults.propTypes = {
-  history: PropTypes.object.isRequired,
-}
 
 const SortResultsContainer = styled.div`
   float: right;

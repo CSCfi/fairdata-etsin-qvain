@@ -11,12 +11,11 @@
 }
 
 import React, { Component } from 'react'
-import { withRouter } from 'react-router-dom'
 import PropTypes from 'prop-types'
 
 import ElasticQuery from '../../../stores/view/elasticquery'
 
-class FilterItem extends Component {
+export default class FilterItem extends Component {
   constructor(props) {
     super(props)
 
@@ -35,7 +34,7 @@ class FilterItem extends Component {
   }
 
   updateFilter() {
-    ElasticQuery.updateFilter(this.state.term, this.state.key, this.props.history)
+    ElasticQuery.updateFilter(this.state.term, this.state.key)
     ElasticQuery.queryES()
   }
 
@@ -67,14 +66,11 @@ class FilterItem extends Component {
   }
 }
 
-export default withRouter(FilterItem)
-
 FilterItem.propTypes = {
   term: PropTypes.string.isRequired,
   item: PropTypes.shape({
     key: PropTypes.string.isRequired,
     doc_count: PropTypes.number.isRequired,
   }).isRequired,
-  history: PropTypes.object.isRequired,
   tabIndex: PropTypes.string.isRequired,
 }
