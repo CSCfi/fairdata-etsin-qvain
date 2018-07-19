@@ -29,6 +29,7 @@ export default class Citation extends Component {
         if (contributors[i - creators.length].name) {
           person.name = contributors[i - creators.length].name
         }
+        // TODO: needs revision
         if (checkNested(contributors[i - creators.length], 'contributor_role', 'pref_label')) {
           person.role = contributors[i - creators.length].contributor_role.pref_label
         }
@@ -53,9 +54,6 @@ export default class Citation extends Component {
           <span title="Release date">{this.state.release_date}, </span>
           <span title="Preferred identifier">{this.state.pid}</span>
         </p>
-        {/* <LinkButton noMargin>
-          <Translate content="dataset.citation_formats" />
-        </LinkButton> */}
       </Fragment>
     )
   }

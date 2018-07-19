@@ -8,7 +8,7 @@
  * @license   MIT
  */
 
-import { observable, action, computed } from 'mobx'
+import { observable, action } from 'mobx'
 import axios from 'axios'
 
 import UrlParse from '../../utils/urlParse'
@@ -197,6 +197,7 @@ class ElasticQuery {
         this.updatePageNum(urlParams.p, history, false)
       }
     }
+    return true
   }
 
   @action

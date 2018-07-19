@@ -4,7 +4,7 @@ import axios from 'axios'
 import Auth from '../js/stores/domain/auth'
 
 // This sets the mock adapter on the default instance
-var mock = new MockAdapter(axios)
+const mock = new MockAdapter(axios)
 
 describe('Auth Store', () => {
   mock
@@ -39,14 +39,14 @@ describe('Auth Store', () => {
   it('Login renewal error should clear login', () => {
     mock.onGet('/api/session').reply(401)
     const test = Auth.renewSession()
-    test.catch(err => {
+    test.catch(() => {
       expect(Auth.userLogged).toEqual(false)
     })
   })
   it('Login renewal error should clear user', () => {
     mock.onGet('/api/session').reply(401)
     const test = Auth.renewSession()
-    test.catch(err => {
+    test.catch(() => {
       expect(Auth.user).toEqual({ id: undefined, name: undefined })
     })
   })

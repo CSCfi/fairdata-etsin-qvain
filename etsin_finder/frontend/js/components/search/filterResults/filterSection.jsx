@@ -176,6 +176,7 @@ const Section = styled.div`
   margin-bottom: 4px;
 `
 
+// TODO: Better filter styles and animation
 const FilterCategory = styled.button`
   cursor: pointer;
   display: flex;
