@@ -3,8 +3,6 @@ import styled from 'styled-components'
 
 import DatasetQuery from '../../../../stores/view/datasetquery'
 import createTree from '../../../../utils/createTree'
-import checkDataLang from '../../../../utils/checkDataLang'
-import checkNested from '../../../../utils/checkNested'
 import { accessRightsBool } from '../../accessRights'
 import TableHeader from '../tableHeader'
 import Table from '../table'
@@ -38,77 +36,117 @@ export default class IdaResources extends Component {
   }
 
   // combines folders and files into single array of objects
-  // {
-  //   path:
-  //   type:
-  //   details:
-  //   description:
-  //   use_category:
-  //   title:
-  //   identifier:
-  // }
+  /*
+    {
+      title: ,
+      description?: ,
+      use_category: ,
+      type: ,
+      access_url?: ,
+      identifier: ,
+      name: ,
+      path: ,
+      byte_size: ,
+      directory: {
+        file_count: ,
+      }
+      file: {
+        file_format?: ,
+        open_access?: ,
+        file_characteristics: ,
+        checksum: ,
+      }
+    }
+  */
+
   createDirTree(files, folders, fileApi = false) {
     let filePaths = []
     let folderPaths = []
     if (files) {
-      if (fileApi) {
+      if (!fileApi) {
         filePaths = files.map(file => ({
-          path: file.file_path.substring(1),
-          type: file.file_format,
-          download_url: undefined,
-          details: file,
-          description: undefined,
-          use_category: undefined,
-          title: file.file_name,
-          identifier: file.identifier,
-          checksum: file.checksum,
+          title: file.title,
+          description: file.description,
+          use_category: file.use_category,
+          type: file.file_type,
+          access_url: file.access_url,
+          identifier: file.details.identifier,
+          name: file.details.file_name,
+          path: file.details.file_path.substring(1),
+          byte_size: file.details.byte_size,
+          file: {
+            file_format: file.details.file_format,
+            open_access: file.details.open_access,
+            file_characteristics: file.details.file_characteristics,
+            checksum: file.details.checksum,
+          },
+          directory: undefined,
         }))
       } else {
         filePaths = files.map(file => ({
-          path: file.details ? file.details.file_path.substring(1) : '',
-          type: checkNested(file, 'file_type', 'pref_label')
-            ? checkDataLang(file.file_type.pref_label)
-            : undefined,
-          download_url: file.access_url,
-          details: file.details,
-          description: file.description,
-          use_category: file.use_category,
-          title: file.title,
+          title: undefined,
+          description: undefined,
+          use_category: undefined,
+          type: undefined,
+          access_url: undefined,
           identifier: file.identifier,
+          name: file.file_name,
+          path: file.file_path.substring(1),
+          byte_size: file.byte_size,
+          file: {
+            file_format: file.file_format,
+            open_access: file.open_access,
+            file_characteristics: file.file_characteristics,
+            checksum: file.checksum,
+          },
+          directory: undefined,
         }))
       }
     }
     if (folders) {
-      if (fileApi) {
+      if (!fileApi) {
         folderPaths = folders.map(folder => ({
-          path: folder.directory_path.substring(1),
+          title: folder.title,
+          description: folder.description,
+          use_category: folder.use_category,
           type: 'dir',
-          download_url: undefined,
-          details: folder,
-          description: undefined,
-          use_category: undefined,
-          title: folder.directory_name,
-          identifier: folder.identifier,
+          access_url: folder.access_url,
+          identifier: folder.details.identifier,
+          name: folder.details.directory_name,
+          path: folder.details.directory_path.substring(1),
+          byte_size: folder.details.byte_size,
+          directory: {
+            file_count: folder.details.file_count,
+          },
+          file: undefined,
         }))
       } else {
         folderPaths = folders.map(folder => ({
-          path: folder.details.directory_path.substring(1),
+          title: undefined,
+          description: undefined,
+          use_category: undefined,
+          access_url: undefined,
           type: 'dir',
-          download_url: folder.access_url,
-          details: folder.details,
-          description: folder.description,
-          use_category: folder.use_category,
-          title: folder.title,
           identifier: folder.identifier,
+          name: folder.directory_name,
+          path: folder.directory_path.substring(1),
+          byte_size: folder.byte_size,
+          directory: {
+            file_count: folder.file_count,
+          },
+          file: undefined,
         }))
       }
     }
+
     if (files && folders) {
       return filePaths.concat(folderPaths)
     }
+
     if (files || folders) {
       return files ? filePaths : folderPaths
     }
+
     return null
   }
 
@@ -117,11 +155,9 @@ export default class IdaResources extends Component {
   // folder = file_count
   countFiles(dirTree) {
     const fileCount = dirTree.map(single => {
-      // Deleted datasets might not have details
-      if (single.details) {
-        if (single.details.file_count) {
-          return single.details.file_count
-        }
+      // if folder, return folder file amounts
+      if (single.directory) {
+        return single.directory.file_count
       }
       return 1
     })
@@ -171,32 +207,6 @@ export default class IdaResources extends Component {
     }
   }
 
-  parseIda = ida => {
-    // TODO: add download_url to parsed object
-    const parsed = {}
-    if (ida.details) {
-      if (ida.type === 'dir') {
-        parsed.file_count = ida.details.file_count
-      }
-      parsed.byte_size = ida.details.byte_size
-    }
-    // Some files don't have details and then won't have name
-    if (ida.name) {
-      parsed.name = ida.name
-    } else {
-      parsed.name = ida.title
-    }
-
-    parsed.type = ida.type
-    parsed.identifier = ida.identifier
-    if (checkNested(ida, 'use_category', 'pref_label')) {
-      parsed.category = ida.use_category.pref_label
-    }
-    parsed.download_url = ida.download_url
-    parsed.description = ida.description
-    return parsed
-  }
-
   render() {
     if (!this.state.results) {
       return ''
@@ -219,7 +229,7 @@ export default class IdaResources extends Component {
         />
         <Table
           cr_id={this.state.results.identifier}
-          data={this.state.currentFolder.map(single => this.parseIda(single))}
+          data={this.state.currentFolder}
           access={this.state.access}
           changeFolder={this.changeFolder}
           fields={{ size: true, category: true, name: true, downloadBtn: true, infoBtn: true }}

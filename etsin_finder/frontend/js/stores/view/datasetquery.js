@@ -36,9 +36,6 @@ class DatasetQuery {
 
   @action
   getFolderData(id, crID) {
-    // TODO:
-    // This will change to use catalog record identifier and not pid
-    // Will be implemented later
     return new Promise((resolve, reject) => {
       axios
         .get(`/api/files/${crID}?dir_id=${id}`)

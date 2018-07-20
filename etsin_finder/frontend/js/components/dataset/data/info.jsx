@@ -18,6 +18,7 @@ import PropTypes from 'prop-types'
 import checkDataLang from '../../../utils/checkDataLang'
 import { Link } from '../../general/button'
 import Modal from '../../general/modal'
+import { TypeConcept } from '../../../utils/propTypes'
 
 const customStyles = {
   content: {
@@ -80,7 +81,7 @@ const Info = ({
                 <th>
                   <Translate content="dataset.dl.type" />
                 </th>
-                <td>{type}</td>
+                <td>{checkDataLang(type.pref_label)}</td>
               </tr>
             )}
           {size && (
@@ -193,7 +194,7 @@ Info.propTypes = {
   title: PropTypes.string,
   size: PropTypes.string,
   category: PropTypes.string,
-  type: PropTypes.string,
+  type: PropTypes.oneOfType([PropTypes.string, TypeConcept]),
   open: PropTypes.bool.isRequired,
   closeModal: PropTypes.func.isRequired,
   description: PropTypes.string,

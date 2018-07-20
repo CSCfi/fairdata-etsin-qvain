@@ -1,13 +1,13 @@
 {
-/**
- * This file is part of the Etsin service
- *
- * Copyright 2017-2018 Ministry of Education and Culture, Finland
- *
- *
- * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
- * @license   MIT
- */
+  /**
+   * This file is part of the Etsin service
+   *
+   * Copyright 2017-2018 Ministry of Education and Culture, Finland
+   *
+   *
+   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
+   * @license   MIT
+   */
 }
 
 import React from 'react'
@@ -21,6 +21,8 @@ import faCloud from '@fortawesome/fontawesome-free-solid/faCloud'
 import PropTypes from 'prop-types'
 
 import Tooltip from '../../general/tooltip'
+import { TypeConcept } from '../../../utils/propTypes'
+import checkDataLang from '../../../utils/checkDataLang'
 
 const Icon = (type, def) => {
   if (!type) {
@@ -45,11 +47,11 @@ const Icon = (type, def) => {
 }
 
 const FileIcon = props => {
-  if (props.type !== 'dir' && props.type) {
+  if (props.type !== 'dir' && props.type && props.type.pref_label) {
     return (
-      <Tooltip title={props.type}>
+      <Tooltip title={checkDataLang(props.type.pref_label)}>
         <FontAwesomeIcon
-          icon={Icon(props.type, props.default)}
+          icon={Icon(checkDataLang(props.type.pref_label), props.default)}
           size="2x"
           transform="shrink-4"
           {...props}
@@ -58,12 +60,7 @@ const FileIcon = props => {
     )
   }
   return (
-    <FontAwesomeIcon
-      icon={Icon(props.type, props.default)}
-      size="2x"
-      transform="shrink-4"
-      {...props}
-    />
+    <FontAwesomeIcon icon={Icon(false, props.default)} size="2x" transform="shrink-4" {...props} />
   )
 }
 
@@ -75,6 +72,6 @@ FileIcon.defaultProps = {
 }
 
 FileIcon.propTypes = {
-  type: PropTypes.string,
+  type: PropTypes.oneOfType([PropTypes.string, TypeConcept]),
   default: PropTypes.string,
 }
