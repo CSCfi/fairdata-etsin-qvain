@@ -59,6 +59,16 @@ const FileIcon = props => {
       </Tooltip>
     )
   }
+  if (props.type === 'dir') {
+    return (
+      <FontAwesomeIcon
+        icon={Icon('dir', props.default)}
+        size="2x"
+        transform="shrink-4"
+        {...props}
+      />
+    )
+  }
   return (
     <FontAwesomeIcon icon={Icon(false, props.default)} size="2x" transform="shrink-4" {...props} />
   )

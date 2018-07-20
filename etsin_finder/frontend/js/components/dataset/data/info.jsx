@@ -18,7 +18,7 @@ import PropTypes from 'prop-types'
 import checkDataLang from '../../../utils/checkDataLang'
 import { Link } from '../../general/button'
 import Modal from '../../general/modal'
-import { TypeConcept } from '../../../utils/propTypes'
+import { TypeConcept, TypeChecksum } from '../../../utils/propTypes'
 
 const customStyles = {
   content: {
@@ -105,7 +105,7 @@ const Info = ({
               <th>
                 <Translate content="dataset.dl.checksum" />
               </th>
-              <td>{checksum.checksum_value}</td>
+              <td>{checksum.checksum_value ? checksum.checksum_value : checksum.value}</td>
             </tr>
           )}
         </tbody>
@@ -200,5 +200,5 @@ Info.propTypes = {
   description: PropTypes.string,
   accessUrl: PropTypes.object,
   downloadUrl: PropTypes.object,
-  checksum: PropTypes.object,
+  checksum: TypeChecksum,
 }
