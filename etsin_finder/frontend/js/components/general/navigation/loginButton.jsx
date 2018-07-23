@@ -18,7 +18,7 @@ import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 
 import Stores from '../../../stores'
-import Button, { InvertedButton } from '../button'
+import Button from '../button'
 import Loader from '../loader'
 import NoticeBar from '../noticeBar'
 
