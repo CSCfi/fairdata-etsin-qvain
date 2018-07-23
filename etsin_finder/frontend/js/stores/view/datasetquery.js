@@ -11,6 +11,21 @@
 import { observable, action } from 'mobx'
 import axios from 'axios'
 
+const QueryFields = {
+  file: [
+    'file_path',
+    'file_name',
+    'file_format',
+    'identifier',
+    'byte_size',
+    'open_access',
+    'file_format',
+    'file_characteristics',
+    'checksum_value',
+  ],
+  directory: ['directory_path', 'directory_name', 'identifier', 'file_count', 'byte_size'],
+}
+
 class DatasetQuery {
   @observable results = []
   @observable emailInfo = []
@@ -36,12 +51,13 @@ class DatasetQuery {
 
   @action
   getFolderData(id, crID) {
-    // TODO:
-    // This will change to use catalog record identifier and not pid
-    // Will be implemented later
+    const fileFields = QueryFields.file.join(',')
+    const dirFields = QueryFields.directory.join(',')
     return new Promise((resolve, reject) => {
       axios
-        .get(`/api/files/${crID}?dir_id=${id}`)
+        .get(
+          `/api/files/${crID}?dir_id=${id}&file_fields=${fileFields}&directory_fields=${dirFields}`
+        )
         .then(res => {
           this.directories.push({ id, results: res.data })
           resolve(res.data)
