@@ -70,7 +70,10 @@ class Sidebar extends Component {
         </Item2>
       )
     }
-    return <Item key={item.geographic_name}>{item.geographic_name}</Item>
+    if (item.geographic_name) {
+      return <Item key={item.geographic_name}>{item.geographic_name}</Item>
+    }
+    return null
   }
 
   render() {
@@ -157,7 +160,8 @@ class Sidebar extends Component {
               <SidebarItem component="div" trans="dataset.access_rights" hideEmpty="true">
                 {checkNested(this.state.access_rights, 'restriction_grounds', 'pref_label')
                   ? checkDataLang(this.state.access_rights.restriction_grounds.pref_label)
-                  : checkDataLang(this.state.access_rights.access_type.pref_label)}
+                  : checkNested(this.state.access_rights, 'restriction_grounds', 'pref_label') &&
+                    checkDataLang(this.state.access_rights.access_type.pref_label)}
               </SidebarItem>
             )}
 

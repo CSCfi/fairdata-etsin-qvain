@@ -230,6 +230,9 @@ AccessRights.propTypes = {
       identifier: PropTypes.string.isRequired,
       pref_label: PropTypes.objectOf(PropTypes.string),
     }),
+    restriction_grounds: PropTypes.shape({
+      pref_label: PropTypes.objectOf(PropTypes.string),
+    }),
     license: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
   }),
   Stores: PropTypes.object.isRequired,
