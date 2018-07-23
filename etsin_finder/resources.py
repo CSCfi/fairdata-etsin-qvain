@@ -52,12 +52,16 @@ class Files(Resource):
     def __init__(self):
         self.parser = reqparse.RequestParser()
         self.parser.add_argument('dir_id', required=True, type=str)
+        self.parser.add_argument('file_fields', required=False, type=str)
+        self.parser.add_argument('directory_fields', required=False, type=str)
 
     def get(self, dataset_id):
         args = self.parser.parse_args()
         dir_id = args['dir_id']
+        file_fields = args.get('file_fields', None)
+        directory_fields = args.get('directory_fields', None)
 
-        resp = metax_service.get_directory_for_catalog_record(dataset_id, dir_id)
+        resp = metax_service.get_directory_for_catalog_record(dataset_id, dir_id, file_fields, directory_fields)
         if not resp:
             return '', 404
 
