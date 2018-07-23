@@ -14,9 +14,11 @@ export const TypeDocument = PropTypes.shape({
 })
 
 // TODO: check schema for consistent naming of checksum_value
+// Currently two different locations for value.
 export const TypeChecksum = PropTypes.shape({
   algorithm: PropTypes.string,
-  checksum_value: PropTypes.string.isRequired,
+  checksum_value: PropTypes.string,
+  value: PropTypes.string,
   checksum_checked: PropTypes.string,
 })
 

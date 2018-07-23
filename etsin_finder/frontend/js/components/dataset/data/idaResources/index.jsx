@@ -97,7 +97,7 @@ export default class IdaResources extends Component {
             file_format: file.file_format,
             open_access: file.open_access,
             file_characteristics: file.file_characteristics,
-            checksum: file.checksum,
+            checksum: { value: file.checksum_value },
           },
           directory: undefined,
         }))
