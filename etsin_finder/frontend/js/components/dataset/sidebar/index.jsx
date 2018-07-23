@@ -39,8 +39,8 @@ class Sidebar extends Component {
       license: checkNested(researchDataset, 'access_rights', 'license')
         ? researchDataset.access_rights.license
         : false,
-      access_rights: checkNested(researchDataset, 'access_rights', 'access_type', 'pref_label')
-        ? researchDataset.access_rights.access_type.pref_label
+      access_rights: checkNested(researchDataset, 'access_rights')
+        ? researchDataset.access_rights
         : false,
       isOutputOf: checkNested(researchDataset, 'is_output_of')
         ? researchDataset.is_output_of
@@ -153,14 +153,13 @@ class Sidebar extends Component {
                 this.state.license.map(rights => <License key={rights.identifier} data={rights} />)}
             </SidebarItem>
 
-            <SidebarItem
-              component="div"
-              trans="dataset.access_rights"
-              fallback="Access rights statement"
-              hideEmpty="true"
-            >
-              {this.state.access_rights && checkDataLang(this.state.access_rights)}
-            </SidebarItem>
+            {this.state.access_rights && (
+              <SidebarItem component="div" trans="dataset.access_rights" hideEmpty="true">
+                {checkNested(this.state.access_rights, 'restriction_grounds', 'pref_label')
+                  ? checkDataLang(this.state.access_rights.restriction_grounds.pref_label)
+                  : checkDataLang(this.state.access_rights.access_type.pref_label)}
+              </SidebarItem>
+            )}
 
             <SidebarItem component="div" trans="dataset.publisher" hideEmpty="true">
               {this.state.publisher && checkDataLang(this.state.publisher)}

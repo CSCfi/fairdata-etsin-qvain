@@ -1,13 +1,13 @@
 {
-/**
- * This file is part of the Etsin service
- *
- * Copyright 2017-2018 Ministry of Education and Culture, Finland
- *
- *
- * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
- * @license   MIT
- */
+  /**
+   * This file is part of the Etsin service
+   *
+   * Copyright 2017-2018 Ministry of Education and Culture, Finland
+   *
+   *
+   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
+   * @license   MIT
+   */
 }
 
 import React, { Component } from 'react'
@@ -16,6 +16,7 @@ import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faLock from '@fortawesome/fontawesome-free-solid/faLock'
 import faLockOpen from '@fortawesome/fontawesome-free-solid/faLockOpen'
 import faInfoCircle from '@fortawesome/fontawesome-free-solid/faInfoCircle'
+import faExclamationTriangle from '@fortawesome/fontawesome-free-solid/faExclamationTriangle'
 import faGlobe from '@fortawesome/fontawesome-free-solid/faGlobe'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
@@ -75,6 +76,9 @@ class AccessRights extends Component {
       title,
       description,
       url,
+      restriction_grounds:
+        checkNested(props.access_rights, 'restriction_grounds', 'pref_label') &&
+        props.access_rights.restriction_grounds.pref_label,
       modalIsOpen: false,
     }
 
@@ -147,6 +151,12 @@ class AccessRights extends Component {
                   </AccessUrl>
                 </div>
               )}
+              {this.state.restriction_grounds && (
+                <div>
+                  <FontAwesomeIcon icon={faExclamationTriangle} />
+                  <AccessLabel>{checkDataLang(this.state.restriction_grounds)}</AccessLabel>
+                </div>
+              )}
             </ModalInner>
           </Modal>
         </React.Fragment>
@@ -200,6 +210,9 @@ const ModalInner = styled.div`
   max-width: 100%;
   svg {
     margin-right: 1.5em;
+  }
+  & > div:not(:last-child) {
+    margin-bottom: 0.2em;
   }
 `
 
