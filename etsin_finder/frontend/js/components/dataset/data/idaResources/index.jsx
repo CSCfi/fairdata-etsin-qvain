@@ -15,12 +15,13 @@ export default class IdaResources extends Component {
     const files = results.research_dataset.files
     const folders = results.research_dataset.directories
     if (files || folders) {
-      const combined = this.createDirTree(files, folders)
+      const parsed = this.createDirTree(files, folders)
       // createTree converts combined to object with nested hierarchy
-      const fileDirTree = createTree(combined)
+      const fileDirTree = createTree(parsed)
       const totalCount = this.countFiles(fileDirTree)
       this.state = {
         results,
+        described: parsed,
         access: accessRightsBool(results.research_dataset.access_rights),
         fileDirTree,
         currentFolder: fileDirTree,
@@ -150,6 +151,22 @@ export default class IdaResources extends Component {
     return null
   }
 
+  // checks if there is more data available (described content) for directory contents
+  combineDescribed(formatted) {
+    return formatted.map(single => {
+      // search for the same ID
+      const describedVersion = this.state.described.find(
+        described => described.identifier === single.identifier
+      )
+      // combine the two objects
+      if (describedVersion) {
+        const combined = { ...single, ...describedVersion }
+        return combined
+      }
+      return single
+    })
+  }
+
   // counts total number of files in dataset (files + folders)
   // file = 1
   // folder = file_count
@@ -167,9 +184,8 @@ export default class IdaResources extends Component {
   query(id, newPath, newIDs) {
     DatasetQuery.getFolderData(id, this.state.results.identifier)
       .then(res => {
-        const currFolder = createTree(
-          this.createDirTree(res.files, res.directories, true)
-        ).reverse()
+        const formatted = this.createDirTree(res.files, res.directories, true)
+        const currFolder = createTree(this.combineDescribed(formatted)).reverse()
         this.setState({
           currentPath: newPath,
           currentIDs: newIDs,

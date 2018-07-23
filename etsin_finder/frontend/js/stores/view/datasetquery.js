@@ -23,7 +23,7 @@ const QueryFields = {
     'file_characteristics',
     'checksum_value',
   ],
-  directory: ['directory_path', 'directory_name', 'identifier', 'file_count'],
+  directory: ['directory_path', 'directory_name', 'identifier', 'file_count', 'byte_size'],
 }
 
 class DatasetQuery {
