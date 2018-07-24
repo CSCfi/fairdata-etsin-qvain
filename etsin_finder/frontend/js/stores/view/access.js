@@ -174,7 +174,6 @@ class Access {
 
   @action
   restrictedAccessResearchEducationStudying() {
-    // TODO: Check login
     if (auth.userLogged) {
       this.restrictions = {
         allowRemote: true,
@@ -198,7 +197,6 @@ class Access {
 
   @action
   restrictedAccessRegistration() {
-    // TODO: Check login
     if (auth.userLogged) {
       this.restrictions = {
         allowRemote: true,
