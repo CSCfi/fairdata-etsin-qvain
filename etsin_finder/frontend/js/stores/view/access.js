@@ -8,7 +8,8 @@
  * @license   MIT
  */
 
-import { observable, action } from 'mobx'
+import { observable, action, computed } from 'mobx'
+
 import auth from '../domain/auth'
 
 const accessTypes = {
@@ -32,12 +33,17 @@ const accessTypes = {
 class Access {
   @observable
   restrictions = {
-    allowDataIda: false,
     allowRemote: false,
     allowRemoteDownload: false,
+    allowDataIda: false,
     allowDataInfoButton: false,
     allowDataDownload: false,
     allowAskForAccess: false,
+  }
+
+  @computed
+  get accessDataTab() {
+    return this.restrictions.allowRemote || this.restrictions.allowDataIda
   }
 
   updateAccess(access) {

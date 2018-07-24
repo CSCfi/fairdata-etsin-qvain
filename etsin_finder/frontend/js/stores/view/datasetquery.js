@@ -11,6 +11,8 @@
 import { observable, action } from 'mobx'
 import axios from 'axios'
 
+import access from './access'
+
 const QueryFields = {
   file: [
     'file_path',
@@ -40,10 +42,14 @@ class DatasetQuery {
         .then(res => {
           this.results = res.data.catalog_record
           this.emailInfo = res.data.email_info
+          access.updateAccess(res.data.catalog_record.research_dataset.access_rights)
           resolve(res.data)
         })
         .catch(error => {
           this.error = error
+          this.results = []
+          this.emailInfo = []
+          this.directories = []
           reject(error)
         })
     })

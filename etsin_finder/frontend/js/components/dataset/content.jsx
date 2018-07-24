@@ -1,13 +1,13 @@
 {
-/**
- * This file is part of the Etsin service
- *
- * Copyright 2017-2018 Ministry of Education and Culture, Finland
- *
- *
- * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
- * @license   MIT
- */
+  /**
+   * This file is part of the Etsin service
+   *
+   * Copyright 2017-2018 Ministry of Education and Culture, Finland
+   *
+   *
+   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
+   * @license   MIT
+   */
 }
 
 import React, { Component } from 'react'
@@ -15,6 +15,7 @@ import PropTypes from 'prop-types'
 import { Route, withRouter } from 'react-router-dom'
 import styled from 'styled-components'
 
+import access from '../../stores/view/access'
 import Description from './description'
 import Data from './data'
 import Events from './events'
@@ -26,24 +27,24 @@ const MarginAfter = styled.div`
 
 class Content extends Component {
   showEvents() {
-    if (
+    return (
       (this.props.dataset.research_dataset.provenance &&
         this.props.dataset.research_dataset.provenance.length > 0) ||
       (this.props.dataset.research_dataset.other_identifier &&
         this.props.dataset.research_dataset.other_identifier.length > 0) ||
       (this.props.dataset.research_dataset.relation &&
         this.props.dataset.research_dataset.relation.length > 0)
-    ) {
-      return true
-    }
-    return false
+    )
   }
 
   showData() {
-    if ((this.props.hasFiles || this.props.hasRemote) && !this.props.harvested) {
-      return true
-    }
-    return false
+    // Hide data tab if
+    // - it doesn't contain files or remote files
+    // - the dataset is harvested
+    // - the access_rights allow it
+    return (
+      (this.props.hasFiles || this.props.hasRemote) && !this.props.harvested && access.accessDataTab
+    )
   }
 
   render() {
