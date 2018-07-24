@@ -32,16 +32,24 @@ class MetaxAPIService:
             self.user = metax_api_config['USER']
             self.pw = metax_api_config['PASSWORD']
 
-    def get_directory_for_catalog_record(self, cr_identifier, dir_identifier):
+    def get_directory_for_catalog_record(self, cr_identifier, dir_identifier, file_fields, directory_fields):
         """
         Get directory contents for a specific catalog record
 
         :param cr_identifier:
         :param dir_identifier:
+        :param file_fields:
+        :param directory_fields:
         :return:
         """
 
-        r = requests.get(self.METAX_GET_DIRECTORY_FOR_CR_URL.format(dir_identifier, cr_identifier),
+        req_url = self.METAX_GET_DIRECTORY_FOR_CR_URL.format(dir_identifier, cr_identifier)
+        if file_fields:
+            req_url = req_url + '&file_fields={0}'.format(file_fields)
+        if directory_fields:
+            req_url = req_url + '&directory_fields={0}'.format(directory_fields)
+
+        r = requests.get(req_url,
                          headers={'Content-Type': 'application/json'},
                          auth=(self.user, self.pw),
                          timeout=TIMEOUT)

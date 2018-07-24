@@ -8,11 +8,11 @@ describe('FileIcon', () => {
     expect(fileIcon.get(0).props.icon.iconName).toEqual('file')
   })
   it('should return video icon', () => {
-    fileIcon.setProps({ type: 'Video' })
+    fileIcon.setProps({ type: { pref_label: { fi: 'Video' }, identifier: 'id' } })
     expect(fileIcon.childAt(0).get(0).props.icon.iconName).toEqual('file-video')
   })
   it('should return text icon', () => {
-    fileIcon.setProps({ type: 'Text' })
+    fileIcon.setProps({ type: { pref_label: { en: 'Text' }, identifier: 'id' } })
     expect(fileIcon.childAt(0).get(0).props.icon.iconName).toEqual('file-alt')
   })
   it('should return dir icon', () => {
