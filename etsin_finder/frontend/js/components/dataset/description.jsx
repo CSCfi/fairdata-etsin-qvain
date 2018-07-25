@@ -1,13 +1,13 @@
 {
-/**
- * This file is part of the Etsin service
- *
- * Copyright 2017-2018 Ministry of Education and Culture, Finland
- *
- *
- * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
- * @license   MIT
- */
+  /**
+   * This file is part of the Etsin service
+   *
+   * Copyright 2017-2018 Ministry of Education and Culture, Finland
+   *
+   *
+   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
+   * @license   MIT
+   */
 }
 
 import React, { Component } from 'react'
@@ -28,8 +28,7 @@ import People from './people'
 import Contact from './contact'
 import VersionChanger from './versionChanger'
 import GoToOriginal from './goToOriginal'
-// import ShowMore from '../general/showMore'
-// import Button from '../general/button'
+import Map from './map'
 
 const ReactMarkdown = require('react-markdown')
 
@@ -150,6 +149,15 @@ class Description extends Component {
             </Label>
           </React.Fragment>
         )}
+        {this.props.dataset.research_dataset.spatial &&
+          this.props.dataset.research_dataset.spatial.map(spatial => {
+            if (spatial.as_wkt !== undefined) {
+              console.log(spatial.as_wkt)
+
+              return <Map geometry={spatial.as_wkt} />
+            }
+            return null
+          })}
       </div>
     )
   }
