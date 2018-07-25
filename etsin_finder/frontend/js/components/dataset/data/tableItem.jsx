@@ -136,7 +136,7 @@ class TableItem extends Component {
               <InvertedButton
                 thin
                 color={this.props.theme.color.gray}
-                disabled={!this.props.access}
+                disabled={!this.props.allowInfo}
                 onClick={this.openModal}
               >
                 <Translate content="dataset.dl.info" />
@@ -159,6 +159,7 @@ class TableItem extends Component {
                 downloadUrl={
                   this.props.item.remote ? this.props.item.remote.download_url : undefined
                 }
+                allowDownload={this.props.allowDownload}
                 accessUrl={this.props.item.access_url}
                 description={this.props.item.description}
                 type={this.props.item.type}
@@ -174,7 +175,7 @@ class TableItem extends Component {
             <HideSmButton
               thin
               onClick={() => this.props.download(this.props.item.identifier, this.props.item.type)}
-              disabled={!this.props.access}
+              disabled={!this.props.allowDownload}
             >
               <Translate content="dataset.dl.download" />
               <Translate
@@ -278,7 +279,8 @@ TableItem.propTypes = {
     infoBtn: PropTypes.bool.isRequired,
   }).isRequired,
   changeFolder: PropTypes.func,
-  access: PropTypes.bool.isRequired,
+  allowDownload: PropTypes.bool.isRequired,
+  allowInfo: PropTypes.bool.isRequired,
   download: PropTypes.func,
 }
 

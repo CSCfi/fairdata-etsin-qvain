@@ -28,11 +28,11 @@ const MarginAfter = styled.div`
 class Content extends Component {
   showEvents() {
     return (
-      (this.props.dataset.research_dataset.provenance &&
+      (this.props.dataset.research_dataset.provenance !== undefined &&
         this.props.dataset.research_dataset.provenance.length > 0) ||
-      (this.props.dataset.research_dataset.other_identifier &&
+      (this.props.dataset.research_dataset.other_identifier !== undefined &&
         this.props.dataset.research_dataset.other_identifier.length > 0) ||
-      (this.props.dataset.research_dataset.relation &&
+      (this.props.dataset.research_dataset.relation !== undefined &&
         this.props.dataset.research_dataset.relation.length > 0)
     )
   }

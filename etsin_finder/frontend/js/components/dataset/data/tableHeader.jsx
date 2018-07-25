@@ -1,13 +1,13 @@
 {
-/**
- * This file is part of the Etsin service
- *
- * Copyright 2017-2018 Ministry of Education and Culture, Finland
- *
- *
- * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
- * @license   MIT
- */
+  /**
+   * This file is part of the Etsin service
+   *
+   * Copyright 2017-2018 Ministry of Education and Culture, Finland
+   *
+   *
+   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
+   * @license   MIT
+   */
 }
 
 import React, { Component } from 'react'
@@ -58,7 +58,7 @@ export default class TableHeader extends Component {
           <ButtonsCont>
             <InvertedButton
               color="white"
-              disabled={!this.props.access}
+              disabled={!this.props.allowDownload}
               onClick={() => this.downloadAll()}
             >
               <Translate content="dataset.dl.downloadAll" />
@@ -111,6 +111,6 @@ TableHeader.propTypes = {
   totalSize: PropTypes.number,
   objectCount: PropTypes.number.isRequired,
   crId: PropTypes.string,
-  access: PropTypes.bool.isRequired,
+  allowDownload: PropTypes.bool.isRequired,
   downloadAll: PropTypes.bool,
 }

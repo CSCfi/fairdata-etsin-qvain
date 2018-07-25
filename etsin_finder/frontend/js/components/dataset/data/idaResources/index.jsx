@@ -3,10 +3,10 @@ import styled from 'styled-components'
 
 import DatasetQuery from '../../../../stores/view/datasetquery'
 import createTree from '../../../../utils/createTree'
-import { accessRightsBool } from '../../accessRights'
 import TableHeader from '../tableHeader'
 import Table from '../table'
 import Breadcrumbs from '../breadcrumbs'
+import access from '../../../../stores/view/access'
 
 export default class IdaResources extends Component {
   constructor(props) {
@@ -22,7 +22,8 @@ export default class IdaResources extends Component {
       this.state = {
         results,
         described: parsed,
-        access: accessRightsBool(results.research_dataset.access_rights),
+        allowInfo: access.restrictions.allowDataInfoButton,
+        allowDownload: access.restrictions.allowDataDownload,
         fileDirTree,
         currentFolder: fileDirTree,
         currentPath: [],
@@ -234,7 +235,7 @@ export default class IdaResources extends Component {
           objectCount={this.state.totalCount}
           totalSize={this.state.results.research_dataset.total_ida_byte_size}
           title={'files'}
-          access={this.state.access}
+          allowDownload={this.state.allowDownload}
           crId={this.state.results.identifier}
           downloadAll
         />
@@ -246,7 +247,8 @@ export default class IdaResources extends Component {
         <Table
           cr_id={this.state.results.identifier}
           data={this.state.currentFolder}
-          access={this.state.access}
+          allowDownload={this.state.allowDownload}
+          allowInfo={this.state.allowInfo}
           changeFolder={this.changeFolder}
           fields={{ size: true, category: true, name: true, downloadBtn: true, infoBtn: true }}
         />

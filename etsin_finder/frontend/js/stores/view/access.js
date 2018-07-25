@@ -33,9 +33,12 @@ const accessTypes = {
 class Access {
   @observable
   restrictions = {
+    // toggles access icon: locked => unlocked
+    open: false,
     allowRemote: false,
     allowRemoteDownload: false,
     allowDataIda: false,
+    // currently both buttons are disabled always at the same time
     allowDataInfoButton: false,
     allowDataDownload: false,
     allowAskForAccess: false,
@@ -83,6 +86,7 @@ class Access {
   @action
   open() {
     this.restrictions = {
+      open: true,
       allowRemote: true,
       allowRemoteDownload: true,
       allowDataIda: true,
@@ -95,6 +99,7 @@ class Access {
   @action
   closed() {
     this.restrictions = {
+      open: false,
       allowRemote: true,
       allowRemoteDownload: true,
       allowDataIda: true,
@@ -108,6 +113,7 @@ class Access {
   embargoed(av) {
     if (new Date(av).getTime() < new Date().getTime()) {
       this.restrictions = {
+        open: true,
         allowRemote: true,
         allowRemoteDownload: true,
         allowDataIda: true,
@@ -117,6 +123,7 @@ class Access {
       }
     } else {
       this.restrictions = {
+        open: false,
         allowRemote: false,
         allowRemoteDownload: false,
         allowDataIda: false,
@@ -130,6 +137,7 @@ class Access {
   @action
   restrictedAccess() {
     this.restrictions = {
+      open: false,
       allowRemote: true,
       allowRemoteDownload: true,
       allowDataIda: true,
@@ -145,6 +153,7 @@ class Access {
     // these are the default permissions
     // this can not be checked yet
     this.restrictions = {
+      open: false,
       allowRemote: true,
       allowRemoteDownload: true,
       allowDataIda: true,
@@ -157,6 +166,7 @@ class Access {
   @action
   restrictedAccessPermitExternal() {
     this.restrictions = {
+      open: false,
       allowRemote: true,
       allowRemoteDownload: true,
       allowDataIda: true,
@@ -169,6 +179,7 @@ class Access {
   @action
   restrictedAccessResearch() {
     this.restrictions = {
+      open: false,
       allowRemote: true,
       allowRemoteDownload: true,
       allowDataIda: true,
@@ -182,6 +193,7 @@ class Access {
   restrictedAccessResearchEducationStudying() {
     if (auth.userLogged) {
       this.restrictions = {
+        open: false,
         allowRemote: true,
         allowRemoteDownload: true,
         allowDataIda: true,
@@ -191,6 +203,7 @@ class Access {
       }
     } else {
       this.restrictions = {
+        open: false,
         allowRemote: true,
         allowRemoteDownload: true,
         allowDataIda: true,
@@ -205,6 +218,7 @@ class Access {
   restrictedAccessRegistration() {
     if (auth.userLogged) {
       this.restrictions = {
+        open: false,
         allowRemote: true,
         allowRemoteDownload: true,
         allowDataIda: true,
@@ -214,6 +228,7 @@ class Access {
       }
     } else {
       this.restrictions = {
+        open: false,
         allowRemote: true,
         allowRemoteDownload: true,
         allowDataIda: true,
