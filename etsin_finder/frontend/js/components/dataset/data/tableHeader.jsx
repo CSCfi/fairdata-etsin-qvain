@@ -31,7 +31,7 @@ export default class TableHeader extends Component {
   downloadAll = () => {
     this.setState(
       {
-        downloadAllUrl: `/api/od?cr_id=${this.props.crId}`,
+        downloadAllUrl: `/api/dl?cr_id=${this.props.crId}`,
       },
       () => {
         this.downloadAllRef.current.click()

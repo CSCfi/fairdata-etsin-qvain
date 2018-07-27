@@ -5,8 +5,11 @@
 # :author: CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
 # :license: MIT
 
+import datetime
 import json
 import os
+
+from dateutil import parser
 
 
 def executing_travis():
@@ -48,24 +51,28 @@ def write_string_to_file(string, filename):
         print(f"{string}", file=output_file)
 
 
-def strip_catalog_record(catalog_record):
-    """
-    This method should strip catalog record of any confidential/private information not supposed to be sent for
-    the frontend.
-
-    :param catalog_record:
-    :return:
-    """
-    return _remove_keys(catalog_record, ['email', 'telephone', 'phone'])
-
-
-def _remove_keys(obj, rubbish):
+def remove_keys(obj, rubbish):
     if isinstance(obj, dict):
         obj = {
-            key: _remove_keys(value, rubbish) for key, value in obj.items() if key not in rubbish
+            key: remove_keys(value, rubbish) for key, value in obj.items() if key not in rubbish
         }
     elif isinstance(obj, list):
         obj = [
-            _remove_keys(item, rubbish) for item in obj if item not in rubbish
+            remove_keys(item, rubbish) for item in obj if item not in rubbish
         ]
     return obj
+
+
+def _parse_datetime_str_to_datetime_obj(str):
+    try:
+        return parser.parse(str)
+    except Exception:
+        pass
+    return None
+
+
+def now_is_later_than_datetime_str(datetime_str):
+    datetime_obj = _parse_datetime_str_to_datetime_obj(datetime_str)
+    if type(datetime_obj) != datetime.datetime:
+        raise Exception
+    return datetime.datetime.now() >= datetime

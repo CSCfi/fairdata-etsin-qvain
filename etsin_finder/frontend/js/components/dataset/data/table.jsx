@@ -21,7 +21,7 @@ export default class Table extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      downloadUrl: '/api/od',
+      downloadUrl: '/api/dl',
     }
 
     this.downloadRef = React.createRef()
@@ -36,7 +36,7 @@ export default class Table extends Component {
     }
     this.setState(
       {
-        downloadUrl: `/api/od${urlParams}`,
+        downloadUrl: `/api/dl${urlParams}`,
       },
       () => {
         this.downloadRef.current.click()
