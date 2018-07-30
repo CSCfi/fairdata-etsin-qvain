@@ -115,6 +115,42 @@ def is_rems_catalog_record(catalog_record):
     return False
 
 
+def strip_dir_api_object(dir_api_obj, is_authd, catalog_record):
+    access_type_id = get_access_type_id_from_catalog_record(catalog_record)
+
+    if access_type_id == ACCESS_TYPES['open']:
+        return dir_api_obj
+    if access_type_id == ACCESS_TYPES['closed']:
+        return _strip_directory_api_obj_partially(dir_api_obj)
+    elif access_type_id == ACCESS_TYPES['embargoed']:
+        try:
+            access_rights_available = _get_embargo_available_from_catalog_record(catalog_record)
+            embargo_time_passed = now_is_later_than_datetime_str(access_rights_available)
+        except Exception as e:
+            log.warning(e)
+            return {}
+
+        if not embargo_time_passed:
+            return {}
+    elif access_type_id == ACCESS_TYPES['restricted_access']:
+        return _strip_directory_api_obj_partially(dir_api_obj)
+    elif access_type_id == ACCESS_TYPES['restricted_access_permit_fairdata']:
+        if not user_has_rems_permission_for_dataset(catalog_record, is_authd):
+            return _strip_directory_api_obj_partially(dir_api_obj)
+    elif access_type_id == ACCESS_TYPES['restricted_access_permit_external']:
+        return _strip_directory_api_obj_partially(dir_api_obj)
+    elif access_type_id == ACCESS_TYPES['restricted_access_research']:
+        return _strip_directory_api_obj_partially(dir_api_obj)
+    elif access_type_id == ACCESS_TYPES['restricted_access_research_education_studying']:
+        if not is_authd:
+            return _strip_directory_api_obj_partially(dir_api_obj)
+    elif access_type_id == ACCESS_TYPES['restricted_access_registration']:
+        if not is_authd:
+            return _strip_directory_api_obj_partially(dir_api_obj)
+
+    return dir_api_obj
+
+
 def _get_embargo_available_from_catalog_record(catalog_record):
     return catalog_record. \
         get('research_dataset', {}). \
@@ -152,7 +188,7 @@ def _strip_information_based_on_access_type_from_catalog_record(catalog_record, 
     if access_type_id == ACCESS_TYPES['open']:
         return catalog_record
     if access_type_id == ACCESS_TYPES['closed']:
-        return remove_keys(catalog_record, ['files', 'directories'])
+        return _strip_catalog_record_ida_data_partially(catalog_record)
     elif access_type_id == ACCESS_TYPES['embargoed']:
         try:
             access_rights_available = _get_embargo_available_from_catalog_record(catalog_record)
@@ -164,19 +200,57 @@ def _strip_information_based_on_access_type_from_catalog_record(catalog_record, 
         if not embargo_time_passed:
             return remove_keys(catalog_record, ['files', 'directories', 'remote_resources'])
     elif access_type_id == ACCESS_TYPES['restricted_access']:
-        return remove_keys(catalog_record, ['files', 'directories'])
+        return _strip_catalog_record_ida_data_partially(catalog_record)
     elif access_type_id == ACCESS_TYPES['restricted_access_permit_fairdata']:
         if has_rems_permission is None or not has_rems_permission:
-            return remove_keys(catalog_record, ['files', 'directories'])
+            return _strip_catalog_record_ida_data_partially(catalog_record)
     elif access_type_id == ACCESS_TYPES['restricted_access_permit_external']:
-        return remove_keys(catalog_record, ['files', 'directories'])
+        return _strip_catalog_record_ida_data_partially(catalog_record)
     elif access_type_id == ACCESS_TYPES['restricted_access_research']:
-        return remove_keys(catalog_record, ['files', 'directories'])
+        return _strip_catalog_record_ida_data_partially(catalog_record)
     elif access_type_id == ACCESS_TYPES['restricted_access_research_education_studying']:
         if not is_authd:
-            return remove_keys(catalog_record, ['files', 'directories'])
+            return _strip_catalog_record_ida_data_partially(catalog_record)
     elif access_type_id == ACCESS_TYPES['restricted_access_registration']:
         if not is_authd:
-            return remove_keys(catalog_record, ['files', 'directories'])
+            return _strip_catalog_record_ida_data_partially(catalog_record)
 
     return catalog_record
+
+
+def _strip_catalog_record_ida_data_partially(catalog_record):
+    _strip_catalog_record_files(catalog_record)
+    _strip_catalog_record_directories(catalog_record)
+    return catalog_record
+
+
+def _strip_directory_api_obj_partially(dir_api_obj):
+    _strip_dir_api_obj_files(dir_api_obj)
+    _strip_dir_api_obj_directories(dir_api_obj)
+    return dir_api_obj
+
+
+def _strip_catalog_record_files(catalog_record):
+    remove_keys(catalog_record.get('research_dataset', {}).get('files', {}),
+                ['title', 'description', 'id', 'checksum', 'parent_directory', 'file_frozen', 'file_format',
+                 'file_modified', 'file_storage', 'file_uploaded', 'file_characteristics', 'open_access',
+                 'project_identifier', 'replication_path', 'date_modified', 'date_created', 'service_created'])
+
+
+def _strip_catalog_record_directories(catalog_record):
+    remove_keys(catalog_record.get('research_dataset', {}).get('directories', {}),
+                ['title', 'description', 'id', 'directory_modified', 'parent_directory', 'project_identifier',
+                 'date_modified', 'date_created', 'service_created'])
+
+
+def _strip_dir_api_obj_directories(dir_api_obj):
+    remove_keys(dir_api_obj.get('directories', {}),
+                ['id', 'directory_modified', 'parent_directory', 'project_identifier', 'date_modified',
+                 'date_created', 'service_created'])
+
+
+def _strip_dir_api_obj_files(dir_api_obj):
+    remove_keys(dir_api_obj.get('files', {}),
+                ['id', 'checksum', 'parent_directory', 'file_frozen', 'file_format', 'file_modified', 'file_storage',
+                 'file_uploaded', 'file_characteristics', 'open_access', 'project_identifier', 'replication_path',
+                 'date_modified', 'date_created', 'service_created'])

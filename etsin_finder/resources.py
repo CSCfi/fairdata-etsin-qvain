@@ -27,6 +27,7 @@ from etsin_finder.authorization import \
     get_access_type_id_from_catalog_record, \
     is_rems_catalog_record, \
     strip_catalog_record, \
+    strip_dir_api_object, \
     user_has_rems_permission_for_dataset, \
     user_is_allowed_to_download_from_ida, \
     ACCESS_TYPES
@@ -74,11 +75,12 @@ class Files(Resource):
         file_fields = args.get('file_fields', None)
         directory_fields = args.get('directory_fields', None)
 
-        resp = metax_service.get_directory_for_catalog_record(dataset_id, dir_id, file_fields, directory_fields)
-        if not resp:
-            return '', 404
-
-        return resp, 200
+        cr = metax_service.get_catalog_record_with_file_details(dataset_id)
+        dir_api_obj = metax_service.get_directory_for_catalog_record(dataset_id, dir_id, file_fields, directory_fields)
+        if cr and dir_api_obj:
+            strip_dir_api_object(dir_api_obj, is_authenticated(), cr)
+            return dir_api_obj, 200
+        return '', 404
 
 
 class Contact(Resource):
