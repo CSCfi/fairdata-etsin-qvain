@@ -246,11 +246,12 @@ def _strip_catalog_record_directories(catalog_record):
 def _strip_dir_api_obj_directories(dir_api_obj):
     remove_keys(dir_api_obj.get('directories', {}),
                 ['id', 'directory_modified', 'parent_directory', 'project_identifier', 'date_modified',
-                 'date_created', 'service_created'])
+                 'date_created', 'service_created', 'file_storage'])
 
 
 def _strip_dir_api_obj_files(dir_api_obj):
     remove_keys(dir_api_obj.get('files', {}),
                 ['id', 'checksum', 'parent_directory', 'file_frozen', 'file_format', 'file_modified', 'file_storage',
                  'file_uploaded', 'file_characteristics', 'open_access', 'project_identifier', 'replication_path',
-                 'date_modified', 'date_created', 'service_created'])
+                 'date_modified', 'date_created', 'service_created', 'file_characteristics',
+                 'file_characteristics_extension'])
