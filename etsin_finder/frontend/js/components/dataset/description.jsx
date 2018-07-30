@@ -28,7 +28,6 @@ import People from './people'
 import Contact from './contact'
 import VersionChanger from './versionChanger'
 import GoToOriginal from './goToOriginal'
-import Map from './map'
 
 const ReactMarkdown = require('react-markdown')
 
@@ -149,15 +148,6 @@ class Description extends Component {
             </Label>
           </React.Fragment>
         )}
-        {this.props.dataset.research_dataset.spatial &&
-          this.props.dataset.research_dataset.spatial.map(spatial => {
-            if (spatial.as_wkt !== undefined) {
-              console.log(spatial.as_wkt)
-
-              return <Map geometry={spatial.as_wkt} />
-            }
-            return null
-          })}
       </div>
     )
   }

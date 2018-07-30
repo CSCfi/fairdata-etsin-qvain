@@ -1,13 +1,13 @@
 {
-/**
- * This file is part of the Etsin service
- *
- * Copyright 2017-2018 Ministry of Education and Culture, Finland
- *
- *
- * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
- * @license   MIT
- */
+  /**
+   * This file is part of the Etsin service
+   *
+   * Copyright 2017-2018 Ministry of Education and Culture, Finland
+   *
+   *
+   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
+   * @license   MIT
+   */
 }
 
 import React, { Component } from 'react'
@@ -19,6 +19,7 @@ import Description from './description'
 import Data from './data'
 import Events from './events'
 import Tabs from './tabs'
+import Maps from './maps'
 
 const MarginAfter = styled.div`
   margin-bottom: 3em;
@@ -46,6 +47,13 @@ class Content extends Component {
     return false
   }
 
+  showMaps() {
+    if (this.props.dataset.research_dataset.spatial) {
+      return true
+    }
+    return false
+  }
+
   render() {
     return (
       <MarginAfter className="col-lg-8">
@@ -53,6 +61,7 @@ class Content extends Component {
           identifier={this.props.identifier}
           showData={this.showData()}
           showEvents={this.showEvents()}
+          showMaps={this.showMaps()}
         />
 
         {/* Initial route */}
@@ -90,6 +99,15 @@ class Content extends Component {
                 relation={this.props.dataset.research_dataset.relation}
               />
             )}
+          />
+        )}
+
+        {/* Route to Maps */}
+        {this.showMaps() && (
+          <Route
+            exact
+            path="/dataset/:identifier/maps"
+            render={() => <Maps spatial={this.props.dataset.research_dataset.spatial} />}
           />
         )}
       </MarginAfter>
