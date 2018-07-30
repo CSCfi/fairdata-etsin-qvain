@@ -106,6 +106,10 @@ class ElasticQuery {
       this.pageNum = 1
       if (updateUrl) {
         this.updateUrl()
+      } else {
+        // clear results if changing language on a different page
+        // will then perform query on when user enter page again.
+        this.results = { hits: [], total: 0, aggregations: [] }
       }
       return true
     }
