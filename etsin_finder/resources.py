@@ -25,7 +25,9 @@ from etsin_finder.utils import get_metax_api_config
 from etsin_finder.authentication import is_authenticated, get_user_saml_info, reset_flask_session_on_logout
 from etsin_finder.authorization import \
     get_access_type_id_from_catalog_record, \
+    is_rems_catalog_record, \
     strip_catalog_record, \
+    user_has_rems_permission_for_dataset, \
     user_is_allowed_to_download_from_ida, \
     ACCESS_TYPES
 
@@ -47,14 +49,15 @@ class Dataset(Resource):
         if not cr:
             abort(400, message="Unable to get catalog record from Metax")
 
-        # TODO: Does frontend need this info when rendering dataset?
-        # TODO: Does frontend need info whether user is authenticated?
-        ida_download_allowed = user_is_allowed_to_download_from_ida(cr, is_authenticated())
-        log.debug(ida_download_allowed)
-        # is_authd = is_authenticated()
+        is_authd = is_authenticated()
+        has_rems_permission = None
+        if is_rems_catalog_record(cr):
+            has_rems_permission = user_has_rems_permission_for_dataset(cr, is_authd)
+        ida_download_allowed = user_is_allowed_to_download_from_ida(cr, is_authd, has_rems_permission)
 
-        return {'catalog_record': strip_catalog_record(cr, is_authenticated()),
-                'email_info': get_email_info(cr)}, 200
+        return {'catalog_record': strip_catalog_record(cr, is_authd, has_rems_permission),
+                'email_info': get_email_info(cr),
+                'download_allowed': ida_download_allowed}, 200
 
 
 class Files(Resource):
