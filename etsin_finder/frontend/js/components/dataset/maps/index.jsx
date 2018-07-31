@@ -18,28 +18,27 @@ class Maps extends Component {
           console.log('spatial', spatial)
           if (spatial.as_wkt !== undefined || spatial.place_uri !== undefined) {
             return (
-              <div>
-                <MyMap
-                  geometry={spatial.as_wkt}
-                  place_uri={spatial.place_uri && spatial.place_uri.pref_label}
-                >
-                  <CustomPopup>
-                    {spatial.place_uri && <h2>{checkDataLang(spatial.place_uri.pref_label)}</h2>}
-                    {spatial.geographic_name && <h3>{spatial.geographic_name}</h3>}
-                    {spatial.full_address && (
-                      <p>
-                        <FontAwesomeIcon icon={FaMapMarker} />
-                        <i>{spatial.full_address}</i>
-                      </p>
-                    )}
-                    {spatial.alt && (
-                      <p>
-                        <FontAwesomeIcon icon={FaArrowsAltV} />Alititude: {spatial.alt}m
-                      </p>
-                    )}
-                  </CustomPopup>
-                </MyMap>
-              </div>
+              <MyMap
+                key={`${spatial.as_wkt[0]}-${spatial.place_uri.identifier}`}
+                geometry={spatial.as_wkt}
+                place_uri={spatial.place_uri && spatial.place_uri.pref_label}
+              >
+                <CustomPopup>
+                  {spatial.place_uri && <h2>{checkDataLang(spatial.place_uri.pref_label)}</h2>}
+                  {spatial.geographic_name && <h3>{spatial.geographic_name}</h3>}
+                  {spatial.full_address && (
+                    <p>
+                      <FontAwesomeIcon icon={FaMapMarker} />
+                      <i>{spatial.full_address}</i>
+                    </p>
+                  )}
+                  {spatial.alt && (
+                    <p>
+                      <FontAwesomeIcon icon={FaArrowsAltV} />Alititude: {spatial.alt}m
+                    </p>
+                  )}
+                </CustomPopup>
+              </MyMap>
             )
           }
           return null

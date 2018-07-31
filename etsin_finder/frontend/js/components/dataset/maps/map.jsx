@@ -20,20 +20,21 @@ const MarkerIcon = leaflet.icon({
 class MyMap extends Component {
   static propTypes = {
     geometry: PropTypes.arrayOf(PropTypes.string),
+    place_uri: PropTypes.objectOf(PropTypes.string),
   }
   static defaultProps = {
     geometry: undefined,
+    place_uri: undefined,
   }
 
   constructor(props) {
     super(props)
     this.state = {}
-    // TODO: Lat and Lng seem to be switched.
     // Create geometry, get geometry type and calculate center
     if (props.geometry) {
+      // TODO: draw all objects in geometry
       const geometry = this.convertToGeometry(props.geometry[0])
       console.log('geometry', geometry)
-
       const center = this.calculateCenter(geometry)
 
       this.state = {
@@ -131,6 +132,7 @@ class MyMap extends Component {
 
   renderGeometry = () => {
     switch (this.state.geometry.type) {
+      case 'MultiPolygon':
       case 'Polygon':
         return (
           <GeoJSON data={this.state.geometry} color={this.props.theme.color.primary} weight="3">
