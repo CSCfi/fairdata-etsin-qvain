@@ -206,7 +206,7 @@ def _strip_catalog_record_files(catalog_record):
         files = catalog_record['research_dataset']['files']
         catalog_record['research_dataset']['files'] = \
             remove_keys(files,
-                        ['title', 'description', 'id', 'checksum', 'parent_directory', 'file_frozen', 'file_format',
+                        ['title', 'description', 'id', 'checksum', 'checksum_value', 'parent_directory', 'file_frozen', 'file_format',
                          'file_modified', 'file_storage', 'file_uploaded', 'file_characteristics', 'open_access',
                          'project_identifier', 'replication_path', 'date_modified', 'date_created', 'service_created'])
     return catalog_record
@@ -239,7 +239,7 @@ def _strip_dir_api_obj_files(dir_api_obj):
         files = dir_api_obj['files']
         dir_api_obj['files'] = \
             remove_keys(files,
-                        ['id', 'checksum', 'parent_directory', 'file_frozen', 'file_format', 'file_modified',
+                        ['id', 'checksum', 'checksum_value', 'parent_directory', 'file_frozen', 'file_format', 'file_modified',
                          'file_storage', 'file_uploaded', 'file_characteristics', 'open_access', 'project_identifier',
                          'replication_path', 'date_modified', 'date_created', 'service_created', 'file_characteristics',
                          'file_characteristics_extension'])
@@ -248,7 +248,6 @@ def _strip_dir_api_obj_files(dir_api_obj):
 
 def _strip_dir_api_obj_directories(dir_api_obj):
     """
-    Keys to leave: 'identifier', 'byte_size', 'directory_name', 'directory_path', 'file_count'
 
     :param dir_api_obj:
     :return:
