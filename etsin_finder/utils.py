@@ -5,6 +5,7 @@
 # :author: CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
 # :license: MIT
 
+import copy
 import datetime
 import json
 import os
@@ -71,6 +72,33 @@ def remove_keys(obj, rubbish):
         obj = [
             remove_keys(item, rubbish) for item in obj if item not in rubbish
         ]
+    return obj
+
+
+def leave_keys(obj, relevant):
+    if isinstance(obj, dict):
+        retVal = {}
+        for key in obj:
+            if key in relevant:
+                retVal[key] = copy.deepcopy(obj[key])
+            elif isinstance(obj[key], list) or isinstance(obj[key], dict):
+                child = leave_keys(obj[key], relevant)
+                if child:
+                    retVal[key] = child
+        if retVal:
+            return retVal
+        else:
+            return None
+    elif isinstance(obj, list):
+        retVal = []
+        for entry in obj:
+            child = leave_keys(entry, relevant)
+            if child:
+                retVal.append(child)
+        if retVal:
+            return retVal
+        else:
+            return None
     return obj
 
 

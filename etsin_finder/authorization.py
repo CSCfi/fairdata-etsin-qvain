@@ -196,6 +196,12 @@ def _strip_directory_api_obj_partially(dir_api_obj):
 
 
 def _strip_catalog_record_files(catalog_record):
+    """
+    Keys to leave: 'use_category', 'file_type', 'identifier', 'file_name', 'file_path', 'byte_size'
+
+    :param catalog_record:
+    :return:
+    """
     if 'research_dataset' in catalog_record and 'files' in catalog_record['research_dataset']:
         files = catalog_record['research_dataset']['files']
         catalog_record['research_dataset']['files'] = \
@@ -207,6 +213,12 @@ def _strip_catalog_record_files(catalog_record):
 
 
 def _strip_catalog_record_directories(catalog_record):
+    """
+    Keys to leave: 'identifier', 'use_category', 'byte_size', 'directory_name', 'directory_path', 'file_count'
+
+    :param catalog_record:
+    :return:
+    """
     if 'research_dataset' in catalog_record and 'directories' in catalog_record['research_dataset']:
         dirs = catalog_record['research_dataset']['directories']
         catalog_record['research_dataset']['directories'] = \
@@ -216,17 +228,13 @@ def _strip_catalog_record_directories(catalog_record):
     return catalog_record
 
 
-def _strip_dir_api_obj_directories(dir_api_obj):
-    if 'directories' in dir_api_obj:
-        dirs = dir_api_obj['directories']
-        dir_api_obj['directories'] = \
-            remove_keys(dirs,
-                        ['id', 'directory_modified', 'parent_directory', 'project_identifier', 'date_modified',
-                         'date_created', 'service_created', 'file_storage'])
-    return dir_api_obj
-
-
 def _strip_dir_api_obj_files(dir_api_obj):
+    """
+    Keys to leave: 'identifier', 'file_name', 'file_path', 'byte_size'
+
+    :param dir_api_obj:
+    :return:
+    """
     if 'files' in dir_api_obj:
         files = dir_api_obj['files']
         dir_api_obj['files'] = \
@@ -235,4 +243,20 @@ def _strip_dir_api_obj_files(dir_api_obj):
                          'file_storage', 'file_uploaded', 'file_characteristics', 'open_access', 'project_identifier',
                          'replication_path', 'date_modified', 'date_created', 'service_created', 'file_characteristics',
                          'file_characteristics_extension'])
+    return dir_api_obj
+
+
+def _strip_dir_api_obj_directories(dir_api_obj):
+    """
+    Keys to leave: 'identifier', 'byte_size', 'directory_name', 'directory_path', 'file_count'
+
+    :param dir_api_obj:
+    :return:
+    """
+    if 'directories' in dir_api_obj:
+        dirs = dir_api_obj['directories']
+        dir_api_obj['directories'] = \
+            remove_keys(dirs,
+                        ['id', 'directory_modified', 'parent_directory', 'project_identifier', 'date_modified',
+                         'date_created', 'service_created', 'file_storage'])
     return dir_api_obj
