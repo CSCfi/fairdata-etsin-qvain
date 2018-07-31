@@ -31,7 +31,9 @@ describe('Access Store', () => {
   })
   describe('Update for open access', () => {
     it('Should start update process', done => {
-      Access.updateAccess(accessRights)
+      const open = accessRights
+      open.access_type.identifier = accessTypes.open
+      Access.updateAccess(open)
       done()
     })
     it('Should show Remote files', () => {
@@ -83,6 +85,9 @@ describe('Access Store', () => {
     describe('Is available', () => {
       it('Should start update process', done => {
         const embargoed = accessRights
+        const d = new Date()
+        d.setFullYear(d.getFullYear() - 1)
+        embargoed.available = d.toISOString()
         embargoed.access_type.identifier = accessTypes.embargoed
         Access.updateAccess(embargoed)
         done()
