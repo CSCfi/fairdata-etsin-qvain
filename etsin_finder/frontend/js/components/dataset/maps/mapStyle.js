@@ -480,14 +480,11 @@ const mapStyle = css`
   .leaflet-popup-content-wrapper {
     padding: 1px;
     text-align: left;
-    border-radius: 12px;
+    border-radius: 5px;
   }
   .leaflet-popup-content {
     margin: 13px 19px;
     line-height: 1.4;
-  }
-  .leaflet-popup-content p {
-    margin: 18px 0;
   }
   .leaflet-popup-tip-container {
     width: 40px;
