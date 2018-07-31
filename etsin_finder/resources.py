@@ -12,8 +12,11 @@ from flask_mail import Message
 from flask_restful import abort, reqparse, Resource
 
 from etsin_finder.app_config import get_app_config
+from etsin_finder.cr_service import \
+    get_catalog_record, \
+    get_catalog_record_access_type, \
+    get_directory_data_for_catalog_record
 from etsin_finder.finder import app, mail
-from etsin_finder.metax_api import MetaxAPIService
 from etsin_finder.email_utils import \
     create_email_message_body, \
     get_email_info, \
@@ -21,42 +24,36 @@ from etsin_finder.email_utils import \
     get_email_recipient_address, \
     get_harvest_info, \
     validate_send_message_request
-from etsin_finder.utils import get_metax_api_config
-from etsin_finder.authentication import is_authenticated, get_user_saml_info, reset_flask_session_on_logout
+from etsin_finder.authentication import \
+    get_user_saml_info, \
+    is_authenticated, \
+    reset_flask_session_on_logout
 from etsin_finder.authorization import \
-    get_access_type_id_from_catalog_record, \
-    is_rems_catalog_record, \
-    strip_catalog_record, \
+    strip_information_from_catalog_record, \
     strip_dir_api_object, \
-    user_has_rems_permission_for_dataset, \
     user_is_allowed_to_download_from_ida, \
     ACCESS_TYPES
 
 log = app.logger
-metax_service = MetaxAPIService(get_metax_api_config(app.config))
 
 
 class Dataset(Resource):
 
-    def get(self, dataset_id):
+    def get(self, cr_id):
         """
         Get dataset from metax and strip it from having sensitive information
 
-        :param dataset_id: id to use to fetch the record from metax
+        :param cr_id: id to use to fetch the record from metax
         :return:
         """
-        cr = metax_service.get_catalog_record_with_file_details(dataset_id) or metax_service.get_removed_catalog_record(
-            dataset_id)
+        cr = get_catalog_record(cr_id, True, True)
         if not cr:
             abort(400, message="Unable to get catalog record from Metax")
 
         is_authd = is_authenticated()
-        has_rems_permission = None
-        if is_rems_catalog_record(cr):
-            has_rems_permission = user_has_rems_permission_for_dataset(cr, is_authd)
-        ida_download_allowed = user_is_allowed_to_download_from_ida(cr, is_authd, has_rems_permission)
+        ida_download_allowed = user_is_allowed_to_download_from_ida(cr, is_authd)
 
-        return {'catalog_record': strip_catalog_record(cr, is_authd, has_rems_permission),
+        return {'catalog_record': strip_information_from_catalog_record(cr, is_authd),
                 'email_info': get_email_info(cr),
                 'download_allowed': ida_download_allowed}, 200
 
@@ -69,14 +66,14 @@ class Files(Resource):
         self.parser.add_argument('file_fields', required=False, type=str)
         self.parser.add_argument('directory_fields', required=False, type=str)
 
-    def get(self, dataset_id):
+    def get(self, cr_id):
         args = self.parser.parse_args()
         dir_id = args['dir_id']
         file_fields = args.get('file_fields', None)
         directory_fields = args.get('directory_fields', None)
 
-        cr = metax_service.get_catalog_record_with_file_details(dataset_id)
-        dir_api_obj = metax_service.get_directory_for_catalog_record(dataset_id, dir_id, file_fields, directory_fields)
+        cr = get_catalog_record(cr_id, False, False)
+        dir_api_obj = get_directory_data_for_catalog_record(cr_id, dir_id, file_fields, directory_fields)
         if cr and dir_api_obj:
             strip_dir_api_object(dir_api_obj, is_authenticated(), cr)
             return dir_api_obj, 200
@@ -92,13 +89,13 @@ class Contact(Resource):
         self.parser.add_argument('user_body', required=True, help='user_body cannot be empty')
         self.parser.add_argument('agent_type', required=True, help='agent_type cannot be empty')
 
-    def post(self, dataset_id):
+    def post(self, cr_id):
         """
         This route expects a json with three key-values: user_email, user_subject and user_body.
         Having these three this method will send an email message to recipients
         defined in the catalog record in question
 
-        :param dataset_id: id to use to fetch the record from metax
+        :param cr_id: id to use to fetch the record from metax
         :return: 200 if success
         """
         # if not request.is_json or not request.json:
@@ -120,7 +117,7 @@ class Contact(Resource):
             abort(400, message="Request parameters are not valid")
 
         # Get the full catalog record from Metax
-        cr = metax_service.get_catalog_record_with_file_details(dataset_id)
+        cr = get_catalog_record(cr_id, False, False)
 
         # Ensure dataset is not harvested
         harvested = get_harvest_info(cr)
@@ -135,7 +132,7 @@ class Contact(Resource):
         app_config = get_app_config()
         sender = app_config.get('MAIL_DEFAULT_SENDER', 'etsin-no-reply@fairdata.fi')
         subject = get_email_message_subject()
-        body = create_email_message_body(dataset_id, user_email, user_subject, user_body)
+        body = create_email_message_body(cr_id, user_email, user_subject, user_body)
 
         # Create the message
         msg = Message(sender=sender, reply_to=user_email, recipients=[recipient], subject=subject, body=body)
@@ -226,9 +223,9 @@ class Download(Resource):
         args = self.parser.parse_args()
         cr_id = args['cr_id']
 
-        cr = metax_service.get_catalog_record_with_file_details(cr_id)
+        cr = get_catalog_record(cr_id, False, False)
         if not cr:
-            abort(400, message="Unable to get catalog record from Metax")
+            abort(400, message="Unable to get catalog record")
 
         if user_is_allowed_to_download_from_ida(cr, is_authenticated()):
             url = self._create_url(self._select_download_base_url(cr), args)
@@ -246,8 +243,8 @@ class Download(Resource):
             abort(403, message="Not authorized")
 
     def _select_download_base_url(self, catalog_record):
-        access_type_id = get_access_type_id_from_catalog_record(catalog_record)
-        if access_type_id is None or access_type_id == ACCESS_TYPES['open']:
+        access_type_id = get_catalog_record_access_type(catalog_record)
+        if not access_type_id or access_type_id == ACCESS_TYPES['open']:
             return self.OPEN_DOWNLOAD_URL
         else:
             return self.RESTRICTED_DOWNLOAD_URL

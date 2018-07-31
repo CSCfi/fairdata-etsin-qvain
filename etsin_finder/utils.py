@@ -41,6 +41,17 @@ def get_metax_api_config(config):
     return metax_api_conf
 
 
+def get_rems_config(config):
+    if executing_travis():
+        return None
+
+    rems_conf = config.get('REMS')
+    if not rems_conf or not isinstance(rems_conf, dict):
+        return None
+
+    return rems_conf
+
+
 def write_json_to_file(json_data, filename):
     with open(filename, "w") as output_file:
         json.dump(json_data, output_file)
