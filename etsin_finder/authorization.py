@@ -233,6 +233,6 @@ def _strip_dir_api_obj_files(dir_api_obj):
             remove_keys(files,
                         ['id', 'checksum', 'parent_directory', 'file_frozen', 'file_format', 'file_modified',
                          'file_storage', 'file_uploaded', 'file_characteristics', 'open_access', 'project_identifier',
-                         'replication_path','date_modified', 'date_created', 'service_created', 'file_characteristics',
+                         'replication_path', 'date_modified', 'date_created', 'service_created', 'file_characteristics',
                          'file_characteristics_extension'])
     return dir_api_obj
