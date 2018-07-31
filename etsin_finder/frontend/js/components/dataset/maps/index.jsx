@@ -19,7 +19,7 @@ class Maps extends Component {
           if (spatial.as_wkt !== undefined || spatial.place_uri !== undefined) {
             return (
               <MyMap
-                key={`${spatial.as_wkt[0]}-${spatial.place_uri.identifier}`}
+                key={`${spatial.as_wkt && spatial.as_wkt[0]}-${spatial.place_uri.identifier}`}
                 geometry={spatial.as_wkt}
                 place_uri={spatial.place_uri && spatial.place_uri.pref_label}
               >

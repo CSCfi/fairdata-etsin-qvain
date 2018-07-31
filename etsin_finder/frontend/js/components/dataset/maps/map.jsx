@@ -21,10 +21,13 @@ class MyMap extends Component {
   static propTypes = {
     geometry: PropTypes.arrayOf(PropTypes.string),
     place_uri: PropTypes.objectOf(PropTypes.string),
+    children: PropTypes.element,
+    theme: PropTypes.object.isRequired,
   }
   static defaultProps = {
     geometry: undefined,
     place_uri: undefined,
+    children: null,
   }
 
   constructor(props) {
@@ -32,40 +35,53 @@ class MyMap extends Component {
     this.state = {}
     // Create geometry, get geometry type and calculate center
     if (props.geometry) {
-      // TODO: draw all objects in geometry
-      const geometry = this.convertToGeometry(props.geometry[0])
-      console.log('geometry', geometry)
-      const center = this.calculateCenter(geometry)
+      // TODO: center is calculated based on first WKT string and not influenced by others
+      let center
+      const geometry = []
+
+      // loop through all wkt string and create layers (elements) to be placed on map
+      const layers = props.geometry.map((single, i) => {
+        const converted = this.convertToGeometry(single)
+        if (i === 0) {
+          center = this.calculateCenter(converted)
+        }
+        geometry.push(converted)
+        return this.makeGeometry(converted)
+      })
 
       this.state = {
         lat: center[1],
         lng: center[0],
         zoom: 10,
         geometry,
+        layers,
       }
     }
   }
 
   componentDidMount = () => {
-    if (!this.state.geometry) {
+    if (!this.props.geometry) {
       this.getGeometryFromPlaceURI(this.props.place_uri)
     }
   }
 
+  // converts place name to latitude and longitude
   getGeometryFromPlaceURI = placeUri => {
     const provider = new OpenStreetMapProvider()
     provider
       .search({ query: checkDataLang(placeUri) })
       .then(results => {
-        console.log('results', results[0].bounds[0][0])
         this.setState({
           lat: results[0].y,
           lng: results[0].x,
           zoom: 10,
-          geometry: {
-            type: 'Rectangle',
-            coordinates: results[0].bounds,
-          },
+          geometry: [
+            {
+              type: 'Rectangle',
+              coordinates: results[0].bounds,
+            },
+          ],
+          layers: [this.makeGeometry({ type: 'Rectangle', coordinates: results[0].bounds })],
         })
       })
       .catch(err => {
@@ -73,23 +89,20 @@ class MyMap extends Component {
       })
   }
 
-  getGeometryType = geometry => {
-    const type = geometry.split('(', 1)[0]
-    return type
-  }
-
   getMapOptions = () => {
-    if (this.state.geometry.type === 'Point') {
+    // TODO: Zoom and bounds are calculated by first WKT string and not influenced by others
+    if (this.state.geometry[0].type === 'Point') {
       return {
         zoom: this.state.zoom,
       }
     }
     return {
-      bounds: this.state.geometry.coordinates,
+      bounds: this.state.geometry[0].coordinates,
     }
   }
 
   convertToGeometry = s => {
+    // convert WKT to geoJSON
     const converted = WKT.parse(s)
     // TODO: All coordinates might have altitude in them also. Not only Points
     // What to do with altitude?
@@ -130,33 +143,30 @@ class MyMap extends Component {
     return [averageX, averageY]
   }
 
-  renderGeometry = () => {
-    switch (this.state.geometry.type) {
+  makeGeometry = geometry => {
+    switch (geometry.type) {
       case 'MultiPolygon':
       case 'Polygon':
         return (
-          <GeoJSON data={this.state.geometry} color={this.props.theme.color.primary} weight="3">
+          <GeoJSON data={geometry} color={this.props.theme.color.primary} weight="3">
             <Popup>{this.props.children}</Popup>
           </GeoJSON>
         )
       case 'Rectangle':
         return (
-          <Rectangle
-            bounds={this.state.geometry.coordinates}
-            color={this.props.theme.color.primary}
-          >
+          <Rectangle bounds={geometry.coordinates} color={this.props.theme.color.primary}>
             <Popup>{this.props.children}</Popup>
           </Rectangle>
         )
       case 'Point':
         // GeoJson coords are (long,lat) so they have to be reversed to (lat,long) for react-leaflet
         return (
-          <Marker position={this.state.geometry.coordinates.reverse()} icon={MarkerIcon}>
+          <Marker position={geometry.coordinates.reverse()} icon={MarkerIcon}>
             <Popup>{this.props.children}</Popup>
           </Marker>
         )
       default:
-        console.error("CAN'T DRAW GEOMETRY FOR TYPE: ", this.state.geometry)
+        console.error("CAN'T DRAW GEOMETRY FOR TYPE: ", geometry)
         return null
     }
   }
@@ -166,11 +176,13 @@ class MyMap extends Component {
       return null
     }
     const position = [this.state.lat, this.state.lng]
+    console.log('layers', this.state.layers)
     return (
       <MapStyleContainer>
         <CustomMap center={position} {...this.getMapOptions()}>
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-          {this.renderGeometry()}
+          {this.state.layers}
+          {/* {this.renderGeometry()} */}
         </CustomMap>
       </MapStyleContainer>
     )
