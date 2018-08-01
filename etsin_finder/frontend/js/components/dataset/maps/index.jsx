@@ -4,6 +4,7 @@ import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import FaArrowsAltV from '@fortawesome/fontawesome-free-solid/faArrowsAltV'
 import FaMapMarker from '@fortawesome/fontawesome-free-solid/faMapMarkerAlt'
 import { TypeLocation } from '../../../utils/propTypes'
+import { Popup } from 'react-leaflet'
 import MyMap from './map'
 import checkDataLang from '../../../utils/checkDataLang'
 
@@ -23,21 +24,27 @@ class Maps extends Component {
                 geometry={spatial.as_wkt}
                 place_uri={spatial.place_uri && spatial.place_uri.pref_label}
               >
-                <CustomPopup>
-                  {spatial.place_uri && <h2>{checkDataLang(spatial.place_uri.pref_label)}</h2>}
-                  {spatial.geographic_name && <h3>{spatial.geographic_name}</h3>}
-                  {spatial.full_address && (
-                    <p>
-                      <FontAwesomeIcon icon={FaMapMarker} />
-                      <i>{spatial.full_address}</i>
-                    </p>
-                  )}
-                  {spatial.alt && (
-                    <p>
-                      <FontAwesomeIcon icon={FaArrowsAltV} />Alititude: {spatial.alt}m
-                    </p>
-                  )}
-                </CustomPopup>
+                {/* hide popup if it doesn't contain any information */}
+                {spatial.place_uri ||
+                spatial.geographic_name ||
+                spatial.full_address ||
+                spatial.alt ? (
+                  <CustomPopup>
+                    {spatial.place_uri && <h2>{checkDataLang(spatial.place_uri.pref_label)}</h2>}
+                    {spatial.geographic_name && <h3>{spatial.geographic_name}</h3>}
+                    {spatial.full_address && (
+                      <p>
+                        <FontAwesomeIcon icon={FaMapMarker} />
+                        <i>{spatial.full_address}</i>
+                      </p>
+                    )}
+                    {spatial.alt && (
+                      <p>
+                        <FontAwesomeIcon icon={FaArrowsAltV} />Alititude: {spatial.alt}m
+                      </p>
+                    )}
+                  </CustomPopup>
+                ) : null}
               </MyMap>
             )
           }
@@ -48,7 +55,7 @@ class Maps extends Component {
   }
 }
 
-const CustomPopup = styled.div`
+const CustomPopup = styled(Popup)`
   h2,
   h3 {
     margin-bottom: 0;

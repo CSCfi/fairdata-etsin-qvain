@@ -183,7 +183,6 @@ class MyMap extends Component {
   makeGeometryFromWKT = wkt => {
     // Create geometry, get geometry type and calculate center
     // loop through all wkt string and create layers (elements) to be placed on map
-
     const flipCoords = coordinates => {
       const coords = coordinates.slice()
       if (typeof coords[0] === 'number') {
@@ -237,7 +236,7 @@ class MyMap extends Component {
               color={this.props.theme.color.primary}
               weight="3"
             >
-              <Popup>{this.props.children}</Popup>
+              {this.props.children}
             </GeoJSON>
           )
         case 'Rectangle':
@@ -247,7 +246,7 @@ class MyMap extends Component {
               bounds={geo.latlng}
               color={this.props.theme.color.primary}
             >
-              <Popup>{this.props.children}</Popup>
+              {this.props.children}
             </Rectangle>
           )
         case 'Point':
@@ -258,7 +257,7 @@ class MyMap extends Component {
               position={geo.latlng}
               icon={MarkerIcon}
             >
-              <Popup>{this.props.children}</Popup>
+              {this.props.children}
             </Marker>
           )
         case 'MultiPoint':
@@ -266,7 +265,7 @@ class MyMap extends Component {
             <React.Fragment key={`marker-${geo.type}-${geo.coordinates}`}>
               {geo.coordinates.map(single => (
                 <Marker key={`marker-${geo.type}-${single}`} position={single} icon={MarkerIcon}>
-                  <Popup>{this.props.children}</Popup>
+                  {this.props.children}
                 </Marker>
               ))}
             </React.Fragment>
