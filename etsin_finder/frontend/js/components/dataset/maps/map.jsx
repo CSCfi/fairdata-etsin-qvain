@@ -56,31 +56,60 @@ class MyMap extends Component {
   }
 
   getBounds = coordinates => {
+    // sometimes objects are four levels deep. so bounds are not calculated correctly.
+    // if (coordinates[0]) {
+    //   console.log('1')
+    //   if (coordinates[0][0]) {
+    //     console.log('2')
+    //     if (coordinates[0][0][0]) {
+    //       console.log('3')
+    //       if (coordinates[0][0][0][0]) {
+    //         // [[[[123, 323], [322, 233]], []], []]
+    //         console.log('4')
+    //         if (coordinates[0][0][0][0][0]) {
+    //           console.log('5')
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
+
     let biggestX = -1000
     let biggestY = -1000
     let smallestX = 1000
     let smallestY = 1000
     // TODO: use all geometries to calculate bounds
-    coordinates.map(polygon => {
-      polygon.map(single => {
-        const x = single[0]
-        if (x > biggestX) {
-          biggestX = x
-        }
-        if (x < smallestX) {
-          smallestX = x
-        }
-        const y = single[1]
-        if (y > biggestY) {
-          biggestY = y
-        }
-        if (y < smallestY) {
-          smallestY = y
-        }
-        return true
-      })
+
+    // Compare current coordinate point to other points
+    const compareCoordinate = single => {
+      const x = single[0]
+      if (x > biggestX) {
+        biggestX = x
+      }
+      if (x < smallestX) {
+        smallestX = x
+      }
+      const y = single[1]
+      if (y > biggestY) {
+        biggestY = y
+      }
+      if (y < smallestY) {
+        smallestY = y
+      }
       return true
-    })
+    }
+
+    // loop through all
+    if (typeof coordinates[0][0] === 'number') {
+      coordinates.map(single => compareCoordinate(single))
+    } else if (typeof coordinates[0][0][0] === 'number') {
+      coordinates.map(polygon => polygon.map(single => compareCoordinate(single)))
+    } else if (typeof coordinates[0][0][0][0] === 'number') {
+      coordinates.map(multipolygon =>
+        multipolygon.map(polygon => polygon.map(single => compareCoordinate(single)))
+      )
+    }
+
     return [[smallestX, smallestY], [biggestX, biggestY]]
   }
 
@@ -196,6 +225,8 @@ class MyMap extends Component {
   makeLayers = geometry =>
     geometry.map(geo => {
       switch (geo.type) {
+        case 'LineString':
+        case 'MultiLineString':
         case 'MultiPolygon':
         case 'Polygon':
           // GeoJSON reads coordinates the other way around.
@@ -229,6 +260,16 @@ class MyMap extends Component {
             >
               <Popup>{this.props.children}</Popup>
             </Marker>
+          )
+        case 'MultiPoint':
+          return (
+            <React.Fragment key={`marker-${geo.type}-${geo.coordinates}`}>
+              {geo.coordinates.map(single => (
+                <Marker key={`marker-${geo.type}-${single}`} position={single} icon={MarkerIcon}>
+                  <Popup>{this.props.children}</Popup>
+                </Marker>
+              ))}
+            </React.Fragment>
           )
         default:
           console.error("CAN'T DRAW GEOMETRY FOR TYPE: ", geo)
