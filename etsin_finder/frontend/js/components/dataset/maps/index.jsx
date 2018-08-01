@@ -15,7 +15,6 @@ class Maps extends Component {
     return (
       <div>
         {this.props.spatial.map(spatial => {
-          console.log('spatial', spatial)
           if (spatial.as_wkt !== undefined || spatial.place_uri !== undefined) {
             return (
               <MyMap

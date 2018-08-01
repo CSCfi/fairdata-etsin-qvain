@@ -200,20 +200,33 @@ class MyMap extends Component {
         case 'Polygon':
           // GeoJSON reads coordinates the other way around.
           return (
-            <GeoJSON data={geo} color={this.props.theme.color.primary} weight="3">
+            <GeoJSON
+              key={`geojson-${geo.type}-${geo.coordinates}`}
+              data={geo}
+              color={this.props.theme.color.primary}
+              weight="3"
+            >
               <Popup>{this.props.children}</Popup>
             </GeoJSON>
           )
         case 'Rectangle':
           return (
-            <Rectangle bounds={geo.latlng} color={this.props.theme.color.primary}>
+            <Rectangle
+              key={`rectangle-${geo.type}-${geo.coordinates}`}
+              bounds={geo.latlng}
+              color={this.props.theme.color.primary}
+            >
               <Popup>{this.props.children}</Popup>
             </Rectangle>
           )
         case 'Point':
           // GeoJson coords are (long,lat) so they have to be reversed to (lat,long) for react-leaflet
           return (
-            <Marker position={geo.latlng} icon={MarkerIcon}>
+            <Marker
+              key={`marker-${geo.type}-${geo.coordinates}`}
+              position={geo.latlng}
+              icon={MarkerIcon}
+            >
               <Popup>{this.props.children}</Popup>
             </Marker>
           )
@@ -232,7 +245,6 @@ class MyMap extends Component {
         <CustomMap center={this.state.center} {...this.getMapOptions()}>
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
           {this.state.layers}
-          {/* {this.renderGeometry()} */}
         </CustomMap>
       </MapStyleContainer>
     )
