@@ -70,7 +70,7 @@ def remove_keys(obj, rubbish):
         }
     elif isinstance(obj, list):
         obj = [
-            remove_keys(item, rubbish) for item in obj if item not in rubbish
+           new_obj for new_obj in (remove_keys(item, rubbish) for item in obj if item not in rubbish) if new_obj
         ]
     return obj
 
