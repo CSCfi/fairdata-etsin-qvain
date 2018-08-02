@@ -1,13 +1,20 @@
 {
-/**
- * This file is part of the Etsin service
- *
- * Copyright 2017-2018 Ministry of Education and Culture, Finland
- *
- *
- * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
- * @license   MIT
- */
+  /**
+   * This file is part of the Etsin service
+   *
+   * Copyright 2017-2018 Ministry of Education and Culture, Finland
+   *
+   *
+   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
+   * @license   MIT
+   */
+}
+
+export const hasChildren = children => {
+  if (!children || (Array.isArray(children) && !children.find(single => single !== undefined))) {
+    return false
+  }
+  return true
 }
 
 // custom helper function
@@ -67,6 +74,7 @@ const Helpers = {
     // If nothing failed, return true
     return true
   },
+  hasChildren,
 }
 
 export default Helpers
