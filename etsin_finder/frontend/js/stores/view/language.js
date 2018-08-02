@@ -11,6 +11,7 @@
 import { observable, action } from 'mobx'
 import counterpart from 'counterpart'
 import elasticquery from './elasticquery'
+import env from '../domain/env'
 
 class Locale {
   @observable currentLang = counterpart.getLocale()
@@ -30,9 +31,17 @@ class Locale {
 
     // other things to do when language changes
     // removes all filters and queries new results after filters are removed
-    const filtersChanged = elasticquery.clearFilters()
-    if (filtersChanged) {
-      elasticquery.queryES()
+    // changes url only on /datasets/ page
+    const isSearch = env.history.location.pathname === '/datasets/'
+    if (isSearch) {
+      // update url true
+      const filtersChanged = elasticquery.clearFilters(true)
+      if (filtersChanged) {
+        elasticquery.queryES()
+      }
+    } else {
+      // update url false
+      elasticquery.clearFilters(false)
     }
   }
 }

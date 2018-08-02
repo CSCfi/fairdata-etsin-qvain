@@ -147,6 +147,7 @@ class TableItem extends Component {
                 />
               </InvertedButton>
               <Info
+                title={this.props.item.title}
                 name={this.props.item.name}
                 id={this.props.item.identifier}
                 size={sizeParse(this.props.item.byte_size, 1)}
@@ -255,6 +256,7 @@ TableItem.propTypes = {
   item: PropTypes.shape({
     name: PropTypes.string.isRequired,
     identifier: PropTypes.string,
+    title: PropTypes.string,
     byte_size: PropTypes.number,
     use_category: TypeConcept,
     description: PropTypes.string,

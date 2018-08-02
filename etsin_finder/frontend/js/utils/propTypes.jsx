@@ -74,6 +74,16 @@ export const TypeTableFile = PropTypes.shape({
   checksum: TypeChecksum,
 })
 
+export const TypeLocation = PropTypes.arrayOf(
+  PropTypes.shape({
+    geographic_name: PropTypes.string,
+    alt: PropTypes.string,
+    full_address: PropTypes.string,
+    as_wkt: PropTypes.arrayOf(PropTypes.string),
+    place_uri: TypeConcept,
+  })
+)
+
 const AllTypes = {
   TypeConcept,
   TypeDocument,

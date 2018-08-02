@@ -26,8 +26,8 @@ const fields = [
   'curator.name.*',
   'keyword',
   'access_rights.license.title.*',
-  'access_rights.type.identifier.*',
-  'access_rights.type.pref_label.*',
+  'access_rights.access_type.identifier',
+  'access_rights.access_type.pref_label.*',
   'theme.pref_label.*',
   'field_of_science.pref_label.*',
   'infrastructure.pref_label.*',
@@ -106,6 +106,10 @@ class ElasticQuery {
       this.pageNum = 1
       if (updateUrl) {
         this.updateUrl()
+      } else {
+        // clear results if changing language on a different page
+        // will then perform query on when user enter page again.
+        this.results = { hits: [], total: 0, aggregations: [] }
       }
       return true
     }

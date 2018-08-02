@@ -14,6 +14,7 @@ import Auth from './domain/auth'
 import ElasticQuery from './view/elasticquery'
 import DatasetQuery from './view/datasetquery'
 import Accessibility from './view/accessibility'
+import Map from './view/map'
 
 const Stores = {
   Env,
@@ -22,6 +23,7 @@ const Stores = {
   ElasticQuery,
   DatasetQuery,
   Accessibility,
+  Map,
 }
 
 export default Stores
