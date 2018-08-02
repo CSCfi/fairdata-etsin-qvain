@@ -43,6 +43,7 @@ import SkipToContent from '../js/components/general/skipToContent'
 import Header from '../js/layout/header'
 import VersionChanger from '../js/components/dataset/versionChanger'
 import Tabs from '../js/components/dataset/tabs'
+import AvailableTimestamp from '../js/components/dataset/availableTimestamp'
 import ComponentCode from './componentCode'
 import ContactForm from '../js/components/dataset/contact/contactForm'
 import TableItem from '../js/components/dataset/data/tableItem'
@@ -523,6 +524,14 @@ storiesOf('Dataset/Version changer', module)
       </Container>
     )
   })
+
+storiesOf('Dataset/Timestamp', module).add('Available', () => (
+  <Container center maxWidth="800px" style={{ marginTop: '10em' }}>
+    <ComponentCode>
+      <AvailableTimestamp time={MetaxRes.research_dataset.access_rights.available} />
+    </ComponentCode>
+  </Container>
+))
 
 storiesOf('Dataset/People', module)
   .add('Creator', () => (

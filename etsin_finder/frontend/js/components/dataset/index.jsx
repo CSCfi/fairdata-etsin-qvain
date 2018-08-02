@@ -1,13 +1,13 @@
 {
-/**
- * This file is part of the Etsin service
- *
- * Copyright 2017-2018 Ministry of Education and Culture, Finland
- *
- *
- * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
- * @license   MIT
- */
+  /**
+   * This file is part of the Etsin service
+   *
+   * Copyright 2017-2018 Ministry of Education and Culture, Finland
+   *
+   *
+   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
+   * @license   MIT
+   */
 }
 
 import React from 'react'
@@ -76,8 +76,8 @@ class Dataset extends React.Component {
     DatasetQuery.getData(identifier)
       .then(result => {
         // TODO: The code below needs to be revised
-        // TODO: Somewhere we need to think how 1) harvested, 2) accumulative, 3) deprecated, 4) removed, 5) ordinary
-        // TODO: datasets are rendered. Maybe not here?
+        // Somewhere we need to think how 1) harvested, 2) accumulative, 3) deprecated, 4) removed, 5) ordinary
+        // datasets are rendered. Maybe not here?
         this.setState({
           identifier: this.props.match.params.identifier,
           dataset: result.catalog_record,

@@ -1,16 +1,35 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import styled from 'styled-components'
+
+import dateFormat from '../../utils/dateFormat'
 
 const AvailableTimestamp = props => {
-  let content
-  const AvailableTime = new Date(props.time)
-  if (AvailableTime.getTime() < Date.now()) {
-    content = `Available since ${AvailableTime}`
-  } else {
-    content = `Available on ${AvailableTime}`
-  }
-  return <div>{content}</div>
+  const availableTime = new Date(props.time)
+  const isAvailable = () => availableTime.getTime() < new Date().getTime()
+  return (
+    <div>
+      <div>
+        {isAvailable() ? (
+          <Available>Available since</Available>
+        ) : (
+          <Available>Available on</Available>
+        )}
+        <DisplayDate>{dateFormat(availableTime)}</DisplayDate>
+      </div>
+    </div>
+  )
 }
+
+const Available = styled.p`
+  margin-bottom: 0;
+`
+
+const DisplayDate = styled.p`
+  font-style: italic;
+  font-size: 0.9em;
+  margin-bottom: 0;
+`
 
 AvailableTimestamp.propTypes = {
   time: PropTypes.string.isRequired,

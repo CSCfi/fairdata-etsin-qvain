@@ -70,13 +70,14 @@ export default class ExternalResources extends Component {
         <TableHeader
           objectCount={this.state.totalCount}
           title={'remote'}
-          access
+          allowDownload
           downloadAll={false}
         />
         <Table
           cr_id={this.state.results.identifier}
           data={this.state.currentFolder}
-          access
+          allowDownload
+          allowInfo
           fields={{ size: false, category: false, name: true, downloadBtn: false, infoBtn: true }}
         />
       </DataTable>

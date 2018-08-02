@@ -40,6 +40,7 @@ const Info = ({
   checksum,
   accessUrl,
   downloadUrl,
+  allowDownload,
 }) => (
   <Modal
     isOpen={open}
@@ -119,29 +120,31 @@ const Info = ({
         <p>{description}</p>
       </ModalDescription>
     ) : null}
-    {accessUrl && (
-      <FullButton
-        href={accessUrl.identifier}
-        title={checkDataLang(accessUrl.description)}
-        noMargin
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <Translate content="dataset.dl.go_to_original" />
-      </FullButton>
-    )}
-    {downloadUrl && (
-      <FullButton
-        href={downloadUrl.identifier}
-        target="_blank"
-        rel="noopener noreferrer"
-        title={checkDataLang(downloadUrl.description)}
-        color="success"
-        noMargin
-      >
-        <Translate content="dataset.dl.download" />
-      </FullButton>
-    )}
+    {accessUrl &&
+      allowDownload && (
+        <FullButton
+          href={accessUrl.identifier}
+          title={checkDataLang(accessUrl.description)}
+          noMargin
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Translate content="dataset.dl.go_to_original" />
+        </FullButton>
+      )}
+    {downloadUrl &&
+      allowDownload && (
+        <FullButton
+          href={downloadUrl.identifier}
+          target="_blank"
+          rel="noopener noreferrer"
+          title={checkDataLang(downloadUrl.description)}
+          color="success"
+          noMargin
+        >
+          <Translate content="dataset.dl.download" />
+        </FullButton>
+      )}
   </Modal>
 )
 
@@ -198,6 +201,7 @@ Info.propTypes = {
   open: PropTypes.bool.isRequired,
   closeModal: PropTypes.func.isRequired,
   description: PropTypes.string,
+  allowDownload: PropTypes.bool.isRequired,
   accessUrl: PropTypes.object,
   downloadUrl: PropTypes.object,
   checksum: TypeChecksum,
