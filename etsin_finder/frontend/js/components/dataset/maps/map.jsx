@@ -21,7 +21,6 @@ const MarkerIcon = leaflet.icon({
 
 // state = {
 //   geometry: type and latlng        onMount
-//   center: lat lng                  onMount
 //   bounds: [[lat lng], [lat, lng]]  onMount
 //   layers: React Elements           onMount
 // }
@@ -43,7 +42,6 @@ class MyMap extends Component {
     super(props)
     this.state = {
       geometry: undefined,
-      center: undefined,
       bounds: undefined,
       layers: undefined,
     }
@@ -58,6 +56,7 @@ class MyMap extends Component {
     if (this.state.geometry[0].type === 'Point') {
       return {
         zoom: 10,
+        center: this.state.bounds[0],
       }
     }
     return {
@@ -67,16 +66,11 @@ class MyMap extends Component {
 
   initMap = () => {
     MapStore.makeGeometry(this.props.geometry, this.props.place_uri).then(geometry => {
-      let bounds
-      const center = MapStore.getCenter(geometry)
       // TODO: use all geometries to calculate bounds
-      if (geometry[0].type !== 'Point') {
-        bounds = MapStore.getBounds(geometry[0].latlng)
-      }
+      const bounds = geometry[0].bounds
       const layers = this.makeLayers(geometry)
       this.setState({
         geometry,
-        center,
         bounds,
         layers,
       })
@@ -105,7 +99,7 @@ class MyMap extends Component {
           return (
             <Rectangle
               key={`rectangle-${geo.type}-${geo.coordinates}`}
-              bounds={geo.latlng}
+              bounds={geo.coordinates}
               color={this.props.theme.color.primary}
             >
               {this.props.children}
@@ -116,7 +110,8 @@ class MyMap extends Component {
           return (
             <Marker
               key={`marker-${geo.type}-${geo.coordinates}`}
-              position={geo.latlng}
+              // TODO: fix this bounds[0] hack
+              position={geo.bounds[0]}
               icon={MarkerIcon}
             >
               {this.props.children}
@@ -144,7 +139,7 @@ class MyMap extends Component {
     }
     return (
       <MapStyleContainer>
-        <CustomMap center={this.state.center} {...this.getMapOptions()}>
+        <CustomMap {...this.getMapOptions()}>
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
           {this.state.layers}
         </CustomMap>
