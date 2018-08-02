@@ -22,7 +22,7 @@ class MetaxAPIService:
     def __init__(self, metax_api_config):
         if metax_api_config:
             METAX_GET_CATALOG_RECORD_URL = 'https://{0}/rest/datasets'.format(metax_api_config['HOST']) + \
-                                           '/{0}?expand_relation=data_catalog'
+                                           '/{0}.json?expand_relation=data_catalog'
 
             self.METAX_GET_CATALOG_RECORD_WITH_FILE_DETAILS_URL = METAX_GET_CATALOG_RECORD_URL + '&file_details'
             self.METAX_GET_REMOVED_CATALOG_RECORD_URL = METAX_GET_CATALOG_RECORD_URL + '&removed=true'

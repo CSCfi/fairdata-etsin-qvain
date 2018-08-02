@@ -1,13 +1,13 @@
 {
-/**
- * This file is part of the Etsin service
- *
- * Copyright 2017-2018 Ministry of Education and Culture, Finland
- *
- *
- * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
- * @license   MIT
- */
+  /**
+   * This file is part of the Etsin service
+   *
+   * Copyright 2017-2018 Ministry of Education and Culture, Finland
+   *
+   *
+   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
+   * @license   MIT
+   */
 }
 
 import React, { Component } from 'react'
@@ -21,7 +21,7 @@ export default class Table extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      downloadUrl: '/api/od',
+      downloadUrl: '/api/dl',
     }
 
     this.downloadRef = React.createRef()
@@ -36,7 +36,7 @@ export default class Table extends Component {
     }
     this.setState(
       {
-        downloadUrl: `/api/od${urlParams}`,
+        downloadUrl: `/api/dl${urlParams}`,
       },
       () => {
         this.downloadRef.current.click()
@@ -57,7 +57,8 @@ export default class Table extends Component {
         item={single}
         index={i}
         changeFolder={this.props.changeFolder}
-        access={this.props.access}
+        allowInfo={this.props.allowInfo}
+        allowDownload={this.props.allowDownload}
         fields={this.props.fields}
         download={this.downloadFile}
       />
@@ -109,7 +110,8 @@ Table.defaultProps = {
 Table.propTypes = {
   data: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
   changeFolder: PropTypes.func,
-  access: PropTypes.bool.isRequired,
+  allowDownload: PropTypes.bool.isRequired,
+  allowInfo: PropTypes.bool.isRequired,
   cr_id: PropTypes.string.isRequired,
   fields: PropTypes.shape({
     size: PropTypes.bool.isRequired,
