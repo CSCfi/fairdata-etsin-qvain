@@ -11,6 +11,7 @@
 import { observable, action } from 'mobx'
 import axios from 'axios'
 
+import transformQuery from '../../utils/transformQuery'
 import UrlParse from '../../utils/urlParse'
 import Helpers from '../../utils/helpers'
 import Locale from './language'
@@ -212,18 +213,17 @@ class ElasticQuery {
 
     const createQuery = query => {
       let queryObject
-      if (query) {
+      let tquery = transformQuery(query)
+      if (tquery) {
         queryObject = {
           bool: {
             must: [
               {
                 multi_match: {
-                  query,
+                  query: tquery,
                   type: 'cross_fields',
                   minimum_should_match: '75%',
                   operator: 'and',
-                  analyzer: Locale.currentLang === 'fi' ? 'finnish' : 'english',
-                  // match only to specified fields
                   fields,
                 },
               },
