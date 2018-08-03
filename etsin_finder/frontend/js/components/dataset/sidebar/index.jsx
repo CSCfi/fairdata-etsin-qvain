@@ -33,20 +33,21 @@ class Sidebar extends Component {
       pid: researchDataset.preferred_identifier,
       field: researchDataset.field_of_science,
       keyword: researchDataset.keyword,
+      theme: researchDataset.theme,
       geographic_name: checkNested(researchDataset, 'spatial') ? researchDataset.spatial : false,
       temporal: checkNested(researchDataset, 'temporal') ? researchDataset.temporal : false,
       license: checkNested(researchDataset, 'access_rights', 'license')
         ? researchDataset.access_rights.license
         : false,
-      access_rights: checkNested(researchDataset, 'access_rights', 'access_type', 'pref_label')
-        ? researchDataset.access_rights.access_type.pref_label
+      access_rights: checkNested(researchDataset, 'access_rights')
+        ? researchDataset.access_rights
         : false,
       isOutputOf: checkNested(researchDataset, 'is_output_of')
         ? researchDataset.is_output_of
         : false,
       curator: researchDataset.curator,
-      related_entity: checkNested(researchDataset, 'related_entity')
-        ? researchDataset.related_entity
+      infrastructure: checkNested(researchDataset, 'infrastructure')
+        ? researchDataset.infrastructure
         : false,
     }
   }
@@ -54,13 +55,25 @@ class Sidebar extends Component {
   dateSeparator(start, end) {
     return (
       (start || end) && (
-        <ItemValue key={start}>
-          <span>
-            {start === end ? dateFormat(start) : `${dateFormat(start)} - ${dateFormat(end)}`}
-          </span>
-        </ItemValue>
+        <Item2 key={start}>
+          {start === end ? dateFormat(start) : `${dateFormat(start)} - ${dateFormat(end)}`}
+        </Item2>
       )
     )
+  }
+
+  spatial(item) {
+    if (item.geographic_name && checkNested(item, 'place_uri', 'pref_label')) {
+      return (
+        <Item2 key={item.geographic_name}>
+          {checkDataLang(item.place_uri.pref_label)}, <span>{item.geographic_name}</span>
+        </Item2>
+      )
+    }
+    if (item.geographic_name) {
+      return <Item key={item.geographic_name}>{item.geographic_name}</Item>
+    }
+    return null
   }
 
   render() {
@@ -85,7 +98,11 @@ class Sidebar extends Component {
           <div>
             {/* PROJECT */}
             <SidebarItem component="div" trans="dataset.project" hideEmpty="true">
-              {this.state.isOutputOf && this.state.isOutputOf.map(item => checkDataLang(item.name))}
+              {this.state.isOutputOf &&
+                this.state.isOutputOf.map(item => {
+                  const name = checkDataLang(item.name)
+                  return <Item key={name}>{name}</Item>
+                })}
             </SidebarItem>
             {/* FIELD OF SCIENCE */}
             <SidebarItem
@@ -96,17 +113,19 @@ class Sidebar extends Component {
             >
               {this.state.field &&
                 this.state.field.map(field => (
-                  <span key={field.identifier}>{checkDataLang(field.pref_label)}</span>
+                  <Item key={field.identifier}>{checkDataLang(field.pref_label)}</Item>
                 ))}
             </SidebarItem>
             {/* KEYWORDS */}
             <SidebarItem component="div" trans="dataset.keywords" hideEmpty="true">
+              {this.state.theme &&
+                this.state.theme.map(theme => (
+                  <Item key={`theme-${theme.identifier}`}>{checkDataLang(theme.pref_label)}</Item>
+                ))}
               {this.state.keyword &&
                 this.state.keyword.map((keyword, i) => (
-                  <span className="keyword" key={keyword}>
-                    {keyword}
-                    {this.state.keyword.length !== i + 1 && ', '}
-                  </span>
+                  /* eslint-disable-next-line react/no-array-index-key */
+                  <Item key={`keyword-${keyword}-${i}`}>{keyword}</Item>
                 ))}
             </SidebarItem>
             {/* SPATIAL COVERAGE */}
@@ -116,12 +135,8 @@ class Sidebar extends Component {
               fallback="Spatial Coverage"
               hideEmpty="true"
             >
-              {/* disabled spatial coverage for now */}
-              {console.log('geographic name', this.state.geographic_name)}
-              {/* {this.state.geographic_name &&
-                this.state.geographic_name.map(single => (
-                  <span key={single.geographic_name}>{single.geographic_name}, </span>
-                ))} */}
+              {this.state.geographic_name &&
+                this.state.geographic_name.map(single => this.spatial(single))}
             </SidebarItem>
             {/* TEMPORAL COVERAGE */}
             <SidebarItem
@@ -141,14 +156,14 @@ class Sidebar extends Component {
                 this.state.license.map(rights => <License key={rights.identifier} data={rights} />)}
             </SidebarItem>
 
-            <SidebarItem
-              component="div"
-              trans="dataset.access_rights"
-              fallback="Access rights statement"
-              hideEmpty="true"
-            >
-              {this.state.access_rights && checkDataLang(this.state.access_rights)}
-            </SidebarItem>
+            {this.state.access_rights && (
+              <SidebarItem component="div" trans="dataset.access_rights" hideEmpty="true">
+                {checkNested(this.state.access_rights, 'restriction_grounds', 'pref_label')
+                  ? checkDataLang(this.state.access_rights.restriction_grounds.pref_label)
+                  : checkNested(this.state.access_rights, 'restriction_grounds', 'pref_label') &&
+                    checkDataLang(this.state.access_rights.access_type.pref_label)}
+              </SidebarItem>
+            )}
 
             <SidebarItem component="div" trans="dataset.publisher" hideEmpty="true">
               {this.state.publisher && checkDataLang(this.state.publisher)}
@@ -159,7 +174,9 @@ class Sidebar extends Component {
                 this.state.isOutputOf.map(
                   output =>
                     checkNested(output, 'has_funding_agency') &&
-                    output.has_funding_agency.map(agency => checkDataLang(agency.name))
+                    output.has_funding_agency.map(agency => (
+                      <Item key={checkDataLang(agency.name)}>{checkDataLang(agency.name)}</Item>
+                    ))
                 )}
             </SidebarItem>
 
@@ -172,19 +189,17 @@ class Sidebar extends Component {
                   }
                   return (
                     /* eslint-disable react/no-array-index-key */
-                    <span key={`${curator}-${i}`}>
-                      {curator}
-                      {/* add separator, but not on last */}
-                      {this.state.curator.length !== i + 1 && ', '}
-                    </span>
+                    <Item key={`${curator}-${i}`}>{curator}</Item>
                     /* eslint-enable react/no-array-index-key */
                   )
                 })}
             </SidebarItem>
 
             <SidebarItem component="div" trans="dataset.infrastructure" hideEmpty="true">
-              {this.state.related_entity &&
-                this.state.related_entity.map(entity => checkDataLang(entity.title))}
+              {this.state.infrastructure &&
+                this.state.infrastructure.map(entity => (
+                  <Item key={entity.identifier}>{checkDataLang(entity.pref_label)}</Item>
+                ))}
             </SidebarItem>
 
             <SidebarItem component="div" trans="dataset.citation" hideEmpty="false">
@@ -209,9 +224,6 @@ const SidebarContainer = styled.div`
   -moz-hyphens: auto;
   -ms-hyphens: auto;
   hyphens: auto;
-  p {
-    font-size: 0.875em;
-  }
   h4 {
     margin-bottom: 0;
   }
@@ -231,6 +243,15 @@ const SidebarContainer = styled.div`
   }
 `
 
-const ItemValue = styled.p``
+const Item = styled.span`
+  &:not(:last-child)::after {
+    content: ', ';
+  }
+`
+const Item2 = styled.span`
+  &:not(:last-child)::after {
+    content: '; ';
+  }
+`
 
 export default inject('Stores')(observer(Sidebar))

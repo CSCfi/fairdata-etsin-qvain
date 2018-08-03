@@ -1,8 +1,21 @@
+{
+  /**
+   * This file is part of the Etsin service
+   *
+   * Copyright 2017-2018 Ministry of Education and Culture, Finland
+   *
+   *
+   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
+   * @license   MIT
+   */
+}
+
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 import Translate from 'react-translate-component'
 import translate from 'counterpart'
 import styled from 'styled-components'
+import { Home, About, Search } from '../../../routes'
 
 import Accessibility from '../../../stores/view/accessibility'
 
@@ -13,6 +26,9 @@ export default class Navi extends React.Component {
         <NavItem
           exact
           to="/"
+          onPointerOver={() => {
+            Home.load()
+          }}
           onClick={() => {
             Accessibility.setNavText(translate('changepage', { page: translate('nav.datasets') }))
           }}
@@ -21,6 +37,9 @@ export default class Navi extends React.Component {
         </NavItem>
         <NavItem
           to="/datasets"
+          onPointerOver={() => {
+            Search.load()
+          }}
           onClick={() => {
             Accessibility.setNavText(translate('changepage', { page: translate('nav.datasets') }))
           }}
@@ -29,6 +48,9 @@ export default class Navi extends React.Component {
         </NavItem>
         <NavItem
           to="/about"
+          onPointerOver={() => {
+            About.load()
+          }}
           onClick={() => {
             Accessibility.setNavText(translate('changepage', { page: translate('nav.help') }))
           }}

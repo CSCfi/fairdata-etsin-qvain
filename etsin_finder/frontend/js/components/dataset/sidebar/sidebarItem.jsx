@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import PropTypes from 'prop-types'
+import { hasChildren } from '../../../utils/helpers'
 
 export default class SidebarItem extends Component {
   constructor(props) {
@@ -14,10 +15,7 @@ export default class SidebarItem extends Component {
   }
 
   render() {
-    if (
-      this.props.hideEmpty &&
-      (!this.props.children || (Array.isArray(this.props.children) && !this.props.children[0]))
-    ) {
+    if (this.props.hideEmpty && !hasChildren(this.props.children)) {
       return null
     }
     return (
@@ -53,6 +51,9 @@ const Spacer = styled.div`
     padding: 0 1.6em;
   }
   margin-bottom: 1rem;
+  & > div {
+    font-size: 0.92em;
+  }
   &:last-of-type {
     margin-bottom: 0;
   }

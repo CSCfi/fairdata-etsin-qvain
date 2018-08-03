@@ -1,3 +1,15 @@
+{
+  /**
+   * This file is part of the Etsin service
+   *
+   * Copyright 2017-2018 Ministry of Education and Culture, Finland
+   *
+   *
+   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
+   * @license   MIT
+   */
+}
+
 import React, { Component } from 'react'
 import styled, { withTheme } from 'styled-components'
 import Translate from 'react-translate-component'
@@ -11,14 +23,29 @@ import FileIcon from './fileIcon'
 import Info from './info'
 import { InvertedButton, TransparentButton } from '../../general/button'
 import Loader from '../../general/loader'
+import {
+  TypeConcept,
+  TypeDocument,
+  TypeTableDirectory,
+  TypeTableFile,
+  TypeTableRemote,
+} from '../../../utils/propTypes'
 
 class TableItem extends Component {
   constructor(props) {
     super(props)
+
+    let checksum
+    if (props.item.remote) {
+      checksum = props.item.remote.checksum
+    } else if (props.item.file) {
+      checksum = props.item.file.checksum
+    }
+
     this.state = {
       modalIsOpen: false,
       name: props.item.name,
-      file_count: props.item.file_count ? props.item.file_count : '',
+      checksum,
       loader: false,
     }
 
@@ -51,7 +78,7 @@ class TableItem extends Component {
             <Loader active size="2em" />
           ) : (
             <React.Fragment>
-              {this.props.item.type === 'dir' ? (
+              {this.props.item.directory ? (
                 <TransparentButton
                   noPadding
                   noMargin
@@ -60,10 +87,7 @@ class TableItem extends Component {
                   onClick={() => this.changeFolder(this.state.name, this.props.item.identifier)}
                   title={translate('dataset.dl.file_types.directory')}
                 >
-                  <FileIcon
-                    type={this.props.item.type}
-                    default={this.props.item.remote ? 'cloud' : 'file'}
-                  />
+                  <FileIcon type={this.props.item.type} />
                 </TransparentButton>
               ) : (
                 <FileIcon
@@ -75,37 +99,35 @@ class TableItem extends Component {
             </React.Fragment>
           )}
         </FileType>
-        {this.props.fields.name && this.props.item.type === 'dir' ? (
+        {this.props.fields.name && this.props.item.directory ? (
           <FileName>
             <TransparentButton
               noPadding
               noMargin
               color={this.props.theme.color.primary}
-              onClick={() => this.changeFolder(this.state.name, this.props.item.identifier)}
+              onClick={() => this.changeFolder(this.props.item.name, this.props.item.identifier)}
             >
               <Translate className="sr-only" content="dataset.dl.file_types.directory" />
-              <p>{this.state.name}</p>
+              <p>{this.props.item.name}</p>
             </TransparentButton>
-            {this.state.file_count ? (
-              <TitleAlt>
-                <Translate
-                  content="dataset.dl.fileAmount"
-                  with={{ amount: this.state.file_count }}
-                />
-              </TitleAlt>
-            ) : (
-              ''
-            )}
+            <TitleAlt>
+              <Translate
+                content="dataset.dl.fileAmount"
+                with={{ amount: this.props.item.directory.file_count }}
+              />
+            </TitleAlt>
           </FileName>
         ) : (
           <FileName>
-            <p>{this.state.name}</p>
+            <p>{this.props.item.name}</p>
           </FileName>
         )}
         {this.props.fields.size && <FileSize>{sizeParse(this.props.item.byte_size, 1)}</FileSize>}
         {this.props.fields.category && (
           <FileCategory>
-            {checkNested(this.props.item.category) ? checkDataLang(this.props.item.category) : ''}
+            {checkNested(this.props.item.use_category, 'pref_label')
+              ? checkDataLang(this.props.item.use_category.pref_label)
+              : ''}
           </FileCategory>
         )}
         <FileButtons>
@@ -114,27 +136,31 @@ class TableItem extends Component {
               <InvertedButton
                 thin
                 color={this.props.theme.color.gray}
-                disabled={!this.props.access}
+                disabled={!this.props.allowInfo}
                 onClick={this.openModal}
               >
                 <Translate content="dataset.dl.info" />
                 <Translate
                   className="sr-only"
                   content="dataset.dl.info_about"
-                  with={{ file: this.state.name }}
+                  with={{ file: this.props.item.name }}
                 />
               </InvertedButton>
               <Info
-                name={this.state.name}
+                title={this.props.item.title}
+                name={this.props.item.name}
                 id={this.props.item.identifier}
                 size={sizeParse(this.props.item.byte_size, 1)}
                 category={
-                  checkNested(this.props.item.category)
-                    ? checkDataLang(this.props.item.category)
+                  checkNested(this.props.item.use_category, 'pref_label')
+                    ? checkDataLang(this.props.item.use_category.pref_label)
                     : undefined
                 }
-                checksum={this.props.item.checksum}
-                downloadUrl={this.props.item.download_url}
+                checksum={this.state.checksum}
+                downloadUrl={
+                  this.props.item.remote ? this.props.item.remote.download_url : undefined
+                }
+                allowDownload={this.props.allowDownload}
                 accessUrl={this.props.item.access_url}
                 description={this.props.item.description}
                 type={this.props.item.type}
@@ -150,13 +176,13 @@ class TableItem extends Component {
             <HideSmButton
               thin
               onClick={() => this.props.download(this.props.item.identifier, this.props.item.type)}
-              disabled={!this.props.access}
+              disabled={!this.props.allowDownload}
             >
               <Translate content="dataset.dl.download" />
               <Translate
                 className="sr-only"
                 content="dataset.dl.item"
-                with={{ item: this.state.name }}
+                with={{ item: this.props.item.name }}
               />
             </HideSmButton>
           )}
@@ -228,18 +254,17 @@ TableItem.defaultProps = {
 
 TableItem.propTypes = {
   item: PropTypes.shape({
-    type: PropTypes.string,
     name: PropTypes.string.isRequired,
-    file_count: PropTypes.number,
-    byte_size: PropTypes.number,
     identifier: PropTypes.string,
-    category: PropTypes.object,
+    title: PropTypes.string,
+    byte_size: PropTypes.number,
+    use_category: TypeConcept,
     description: PropTypes.string,
-    access_url: PropTypes.object,
-    download_url: PropTypes.object,
-    checksum: PropTypes.object,
-    resource_type: PropTypes.object,
-    remote: PropTypes.bool,
+    access_url: TypeDocument,
+    type: PropTypes.oneOfType([PropTypes.string, TypeConcept]),
+    remote: TypeTableRemote,
+    file: TypeTableFile,
+    directory: TypeTableDirectory,
   }).isRequired,
   index: PropTypes.number.isRequired,
   theme: PropTypes.shape({
@@ -256,7 +281,8 @@ TableItem.propTypes = {
     infoBtn: PropTypes.bool.isRequired,
   }).isRequired,
   changeFolder: PropTypes.func,
-  access: PropTypes.bool.isRequired,
+  allowDownload: PropTypes.bool.isRequired,
+  allowInfo: PropTypes.bool.isRequired,
   download: PropTypes.func,
 }
 

@@ -1,3 +1,15 @@
+{
+  /**
+   * This file is part of the Etsin service
+   *
+   * Copyright 2017-2018 Ministry of Education and Culture, Finland
+   *
+   *
+   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
+   * @license   MIT
+   */
+}
+
 import React, { Component } from 'react'
 import Translate from 'react-translate-component'
 import styled from 'styled-components'
@@ -12,7 +24,13 @@ export default class Settings extends Component {
     return (
       <React.Fragment>
         <Positioner>
-          <Link noMargin width="max-content" href="https://fairdata.fi">
+          <Link
+            noMargin
+            width="max-content"
+            href="https://fairdata.fi"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
             <Translate content="nav.addDataset" />
           </Link>
           <LangToggle margin="0em 0em 0em 0.4em" />

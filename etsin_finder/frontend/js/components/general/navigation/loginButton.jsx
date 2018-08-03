@@ -1,3 +1,15 @@
+{
+  /**
+   * This file is part of the Etsin service
+   *
+   * Copyright 2017-2018 Ministry of Education and Culture, Finland
+   *
+   *
+   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
+   * @license   MIT
+   */
+}
+
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import { withRouter } from 'react-router-dom'
@@ -48,13 +60,13 @@ class Login extends Component {
     if (!Stores.Auth.userLogged) {
       return (
         <React.Fragment>
-          <Cont width={this.props.width}>
+          <Cont width={this.props.width} margin={this.props.margin}>
             <LoaderCont active={this.state.loading}>
               <Loader active color="white" size="1.1em" spinnerSize="3px" />
             </LoaderCont>
             <LoginButton
               width={this.props.width}
-              margin={this.props.margin}
+              margin="0"
               onClick={() => {
                 this.redirect(this.props.location)
               }}
@@ -82,7 +94,7 @@ class Login extends Component {
     }
     return (
       <LoginButton
-        color="error"
+        color="primary"
         onClick={this.logout}
         margin={this.props.margin}
         width={this.props.width}
@@ -94,6 +106,7 @@ class Login extends Component {
 }
 const Cont = styled.div`
   width: ${p => (p.width ? p.width : '')};
+  margin: ${p => (p.margin ? p.margin : '')};
   position: relative;
 `
 

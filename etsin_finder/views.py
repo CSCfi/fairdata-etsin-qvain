@@ -1,11 +1,22 @@
-from urllib.parse import urlparse, quote
+# This file is part of the Etsin service
+#
+# Copyright 2017-2018 Ministry of Education and Culture, Finland
+#
+# :author: CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
+# :license: MIT
+
+from urllib.parse import quote
 
 from flask import make_response, render_template, redirect, request, session
-from onelogin.saml2.auth import OneLogin_Saml2_Auth
 from onelogin.saml2.utils import OneLogin_Saml2_Utils
 
+from etsin_finder.authentication import \
+    get_saml_auth, \
+    is_authenticated, \
+    init_saml_auth, \
+    prepare_flask_request_for_saml, \
+    reset_flask_session_on_login
 from etsin_finder.finder import app
-from etsin_finder.utils import executing_travis
 
 log = app.logger
 
@@ -96,44 +107,3 @@ def saml_single_logout_service():
             slo_success = True
 
     return _render_index_template(saml_errors=errors, slo_success=slo_success)
-
-
-def get_saml_auth(flask_request):
-    return OneLogin_Saml2_Auth(prepare_flask_request_for_saml(flask_request), custom_base_path=app.config['SAML_PATH'])
-
-
-def init_saml_auth(saml_prepared_flask_request):
-    return OneLogin_Saml2_Auth(saml_prepared_flask_request, custom_base_path=app.config['SAML_PATH'])
-
-
-def is_authenticated():
-    if executing_travis():
-        return False
-    auth = get_saml_auth(request)
-    return True if auth.is_authenticated and 'samlUserdata' in session and len(session['samlUserdata']) > 0 else False
-
-
-def prepare_flask_request_for_saml(request):
-    # If server is behind proxys or balancers use the HTTP_X_FORWARDED fields
-    url_data = urlparse(request.url)
-    return {
-        'https': 'on' if request.scheme == 'https' else 'off',
-        'http_host': request.host,
-        'server_port': url_data.port,
-        'script_name': request.path,
-        'get_data': request.args.copy(),
-        'post_data': request.form.copy()
-        # "lowercase_urlencoding": "",
-        # "request_uri": "",
-        # "query_string": ""
-
-    }
-
-
-def reset_flask_session_on_login():
-    session.clear()
-    session.permanent = True
-
-
-def reset_flask_session_on_logout():
-    session.clear()

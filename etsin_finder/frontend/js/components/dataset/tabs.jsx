@@ -1,3 +1,15 @@
+{
+  /**
+   * This file is part of the Etsin service
+   *
+   * Copyright 2017-2018 Ministry of Education and Culture, Finland
+   *
+   *
+   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
+   * @license   MIT
+   */
+}
+
 import React, { Component, Fragment } from 'react'
 import Translate from 'react-translate-component'
 import { NavLink } from 'react-router-dom'
@@ -39,6 +51,18 @@ export default class Tabs extends Component {
                 </NavLink>
               </li>
             )}
+            {this.props.showMaps && (
+              <li className="nav-item">
+                <NavLink
+                  exact
+                  to={`/dataset/${this.props.identifier}/maps`}
+                  className="nav-link"
+                  replace
+                >
+                  <Translate content="nav.maps" fallback="Maps" />
+                </NavLink>
+              </li>
+            )}
           </EtsinTabs>
         )}
       </Fragment>
@@ -49,6 +73,7 @@ export default class Tabs extends Component {
 Tabs.propTypes = {
   showData: PropTypes.bool.isRequired,
   showEvents: PropTypes.bool.isRequired,
+  showMaps: PropTypes.bool.isRequired,
   identifier: PropTypes.string.isRequired,
 }
 

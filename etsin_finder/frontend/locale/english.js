@@ -1,10 +1,20 @@
+/**
+ * This file is part of the Etsin service
+ *
+ * Copyright 2017-2018 Ministry of Education and Culture, Finland
+ *
+ *
+ * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
+ * @license   MIT
+ */
+
 const english = {
   changepage: 'Navigated to page: %(page)s',
   dataset: {
     access_permission: 'Ask for access',
     access_locked: 'Restricted Access',
     access_open: 'Open Access',
-    access_rights: 'Access rights statement',
+    access_rights: 'Access',
     catalog_publisher: 'Catalog publisher',
     citation: 'Citation',
     citation_formats: 'Show more citation formats',
@@ -187,6 +197,7 @@ const english = {
       dateD: 'Date descending',
     },
     filter: {
+      clearFilter: 'Remove filters',
       filter: 'Filter',
       SRactive: 'active',
     },

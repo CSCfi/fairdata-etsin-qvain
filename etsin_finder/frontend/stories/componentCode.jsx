@@ -1,3 +1,15 @@
+{
+/**
+ * This file is part of the Etsin service
+ *
+ * Copyright 2017-2018 Ministry of Education and Culture, Finland
+ *
+ *
+ * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
+ * @license   MIT
+ */
+}
+
 import React, { Fragment } from 'react'
 import retojsx from 'react-element-to-jsx-string'
 import styled from 'styled-components'

@@ -1,5 +1,16 @@
+{
+  /**
+   * This file is part of the Etsin service
+   *
+   * Copyright 2017-2018 Ministry of Education and Culture, Finland
+   *
+   *
+   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
+   * @license   MIT
+   */
+}
+
 import React, { Component } from 'react'
-import { withRouter } from 'react-router-dom'
 import counterpart from 'counterpart'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
@@ -10,7 +21,7 @@ import { Search } from '../../routes'
 import ElasticQuery from '../../stores/view/elasticquery'
 import ErrorBoundary from '../general/errorBoundary'
 
-class SearchBar extends Component {
+export default class SearchBar extends Component {
   constructor(props) {
     super(props)
 
@@ -21,6 +32,7 @@ class SearchBar extends Component {
     }
 
     this.handleChange = this.handleChange.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
     this.localeChanged = this.localeChanged.bind(this)
   }
 
@@ -44,7 +56,7 @@ class SearchBar extends Component {
 
   handleSubmit(e) {
     e.preventDefault()
-    ElasticQuery.updateSearch(this.state.query, this.props.history)
+    ElasticQuery.updateSearch(this.state.query)
     ElasticQuery.queryES(false)
   }
 
@@ -54,7 +66,12 @@ class SearchBar extends Component {
         <form onSubmit={e => this.handleSubmit(e)}>
           <SearchContainer>
             <SearchInner>
-              <FontAwesomeIcon icon={faSearch} size="2x" transform="shrink-4" />
+              <CustomFontAwesomeIcon
+                onClick={this.handleSubmit}
+                icon={faSearch}
+                size="2x"
+                transform="shrink-4"
+              />
               <input
                 id="searchBarInput"
                 placeholder={this.state.placeholder}
@@ -75,7 +92,6 @@ SearchBar.defaultProps = {
 }
 
 SearchBar.propTypes = {
-  history: PropTypes.object.isRequired,
   inputRef: PropTypes.func,
 }
 
@@ -84,18 +100,24 @@ const SearchContainer = styled.div`
   justify-content: center;
 `
 
+const CustomFontAwesomeIcon = styled(FontAwesomeIcon)`
+  cursor: pointer;
+  position: absolute;
+  color: ${props => props.theme.color.primary};
+  height: 100%;
+  margin: 0 0.3em;
+  right: 0px;
+  transition: 0.1s ease;
+  &:active {
+    transform: scale(0.9);
+  }
+`
+
 const SearchInner = styled.div`
   max-width: 800px;
   width: 100%;
   position: relative;
   display: flex;
-  svg {
-    position: absolute;
-    color: ${props => props.theme.color.primary};
-    height: 100%;
-    margin: 0 0.3em;
-    right: 0px;
-  }
   input {
     width: 100%;
     padding: 0.8em 1.5em;
@@ -111,10 +133,4 @@ const SearchInner = styled.div`
       font-style: italic;
     }
   }
-  i {
-    color: ${props => props.theme.color.primary};
-    transform: scale(0.9);
-  }
 `
-
-export default withRouter(SearchBar)

@@ -1,11 +1,21 @@
-import { observable } from 'mobx'
+/**
+ * This file is part of the Etsin service
+ *
+ * Copyright 2017-2018 Ministry of Education and Culture, Finland
+ *
+ *
+ * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
+ * @license   MIT
+ */
 
-// metax url
-const metax = (process.env.NODE_ENV !== 'production') ? 'https://metax-test.csc.fi' : 'https://metax-test.csc.fi'
+import { observable } from 'mobx'
+import { RouterStore } from 'mobx-react-router'
+
+const routingStore = new RouterStore()
 
 class Env {
   @observable environment = process.env.NODE_ENV
-  @observable metaxUrl = metax
+  history = routingStore
 }
 
-export default new Env();
+export default new Env()

@@ -1,12 +1,26 @@
+{
+  /**
+   * This file is part of the Etsin service
+   *
+   * Copyright 2017-2018 Ministry of Education and Culture, Finland
+   *
+   *
+   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
+   * @license   MIT
+   */
+}
+
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Route, withRouter } from 'react-router-dom'
 import styled from 'styled-components'
 
+import access from '../../stores/view/access'
 import Description from './description'
 import Data from './data'
 import Events from './events'
 import Tabs from './tabs'
+import Maps from './maps'
 
 const MarginAfter = styled.div`
   margin-bottom: 3em;
@@ -14,21 +28,28 @@ const MarginAfter = styled.div`
 
 class Content extends Component {
   showEvents() {
-    if (
-      (this.props.dataset.research_dataset.provenance &&
+    return (
+      (this.props.dataset.research_dataset.provenance !== undefined &&
         this.props.dataset.research_dataset.provenance.length > 0) ||
-      (this.props.dataset.research_dataset.other_identifier &&
+      (this.props.dataset.research_dataset.other_identifier !== undefined &&
         this.props.dataset.research_dataset.other_identifier.length > 0) ||
-      (this.props.dataset.research_dataset.relation &&
+      (this.props.dataset.research_dataset.relation !== undefined &&
         this.props.dataset.research_dataset.relation.length > 0)
-    ) {
-      return true
-    }
-    return false
+    )
   }
 
   showData() {
-    if ((this.props.hasFiles || this.props.hasRemote) && !this.props.harvested) {
+    // Hide data tab if
+    // - it doesn't contain files or remote files
+    // - the dataset is harvested
+    // - the access_rights allow it
+    return (
+      (this.props.hasFiles || this.props.hasRemote) && !this.props.harvested && access.accessDataTab
+    )
+  }
+
+  showMaps() {
+    if (this.props.dataset.research_dataset.spatial) {
       return true
     }
     return false
@@ -41,6 +62,7 @@ class Content extends Component {
           identifier={this.props.identifier}
           showData={this.showData()}
           showEvents={this.showEvents()}
+          showMaps={this.showMaps()}
         />
 
         {/* Initial route */}
@@ -78,6 +100,15 @@ class Content extends Component {
                 relation={this.props.dataset.research_dataset.relation}
               />
             )}
+          />
+        )}
+
+        {/* Route to Maps */}
+        {this.showMaps() && (
+          <Route
+            exact
+            path="/dataset/:identifier/maps"
+            render={() => <Maps spatial={this.props.dataset.research_dataset.spatial} />}
           />
         )}
       </MarginAfter>

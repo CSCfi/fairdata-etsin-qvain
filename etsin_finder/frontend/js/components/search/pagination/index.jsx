@@ -1,5 +1,16 @@
+{
+  /**
+   * This file is part of the Etsin service
+   *
+   * Copyright 2017-2018 Ministry of Education and Culture, Finland
+   *
+   *
+   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
+   * @license   MIT
+   */
+}
+
 import React, { Component } from 'react'
-import { withRouter } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { inject, observer } from 'mobx-react'
 import styled from 'styled-components'
@@ -90,7 +101,7 @@ class Pagination extends Component {
   }
 
   changePage(event, value) {
-    ElasticQuery.updatePageNum(value, this.props.history)
+    ElasticQuery.updatePageNum(value)
     ElasticQuery.queryES()
     // scrolls back to top of page
     window.scrollTo(0, 0)
@@ -281,10 +292,9 @@ const PaginationContainer = styled.div`
 `
 
 Pagination.propTypes = {
-  history: PropTypes.object.isRequired,
   totalResults: PropTypes.number.isRequired,
   perPage: PropTypes.number.isRequired,
   currentPage: PropTypes.number.isRequired,
 }
 
-export default withRouter(inject('Stores')(observer(Pagination)))
+export default inject('Stores')(observer(Pagination))

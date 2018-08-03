@@ -1,3 +1,10 @@
+# This file is part of the Etsin service
+#
+# Copyright 2017-2018 Ministry of Education and Culture, Finland
+#
+# :author: CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
+# :license: MIT
+
 from requests import get
 
 from flask import session, Response, stream_with_context
@@ -5,8 +12,11 @@ from flask_mail import Message
 from flask_restful import abort, reqparse, Resource
 
 from etsin_finder.app_config import get_app_config
-from etsin_finder.finder import app, mail, api
-from etsin_finder.metax_api import MetaxAPIService
+from etsin_finder.cr_service import \
+    get_catalog_record, \
+    get_catalog_record_access_type, \
+    get_directory_data_for_catalog_record
+from etsin_finder.finder import app, mail
 from etsin_finder.email_utils import \
     create_email_message_body, \
     get_email_info, \
@@ -14,30 +24,38 @@ from etsin_finder.email_utils import \
     get_email_recipient_address, \
     get_harvest_info, \
     validate_send_message_request
-from etsin_finder.utils import \
-    get_metax_api_config, \
-    strip_catalog_record
-from etsin_finder.views import is_authenticated, reset_flask_session_on_logout
+from etsin_finder.authentication import \
+    get_user_saml_info, \
+    is_authenticated, \
+    reset_flask_session_on_logout
+from etsin_finder.authorization import \
+    strip_information_from_catalog_record, \
+    strip_dir_api_object, \
+    user_is_allowed_to_download_from_ida, \
+    ACCESS_TYPES
 
 log = app.logger
-metax_service = MetaxAPIService(get_metax_api_config(app.config))
 
 
 class Dataset(Resource):
 
-    def get(self, dataset_id):
+    def get(self, cr_id):
         """
         Get dataset from metax and strip it from having sensitive information
 
-        :param dataset_id: id to use to fetch the record from metax
+        :param cr_id: id to use to fetch the record from metax
         :return:
         """
-        cr = metax_service.get_catalog_record_with_file_details(dataset_id) or metax_service.get_removed_catalog_record(
-            dataset_id)
+        cr = get_catalog_record(cr_id, True, True)
         if not cr:
             abort(400, message="Unable to get catalog record from Metax")
 
-        return {'catalog_record': strip_catalog_record(cr), 'email_info': get_email_info(cr)}, 200
+        is_authd = is_authenticated()
+        ida_download_allowed = user_is_allowed_to_download_from_ida(cr, is_authd)
+
+        return {'catalog_record': strip_information_from_catalog_record(cr, is_authd),
+                'email_info': get_email_info(cr),
+                'download_allowed': ida_download_allowed}, 200
 
 
 class Files(Resource):
@@ -45,16 +63,21 @@ class Files(Resource):
     def __init__(self):
         self.parser = reqparse.RequestParser()
         self.parser.add_argument('dir_id', required=True, type=str)
+        self.parser.add_argument('file_fields', required=False, type=str)
+        self.parser.add_argument('directory_fields', required=False, type=str)
 
-    def get(self, dataset_id):
+    def get(self, cr_id):
         args = self.parser.parse_args()
         dir_id = args['dir_id']
+        file_fields = args.get('file_fields', None)
+        directory_fields = args.get('directory_fields', None)
 
-        resp = metax_service.get_directory_for_catalog_record(dataset_id, dir_id)
-        if not resp:
-            return '', 404
-
-        return resp, 200
+        cr = get_catalog_record(cr_id, False, False)
+        dir_api_obj = get_directory_data_for_catalog_record(cr_id, dir_id, file_fields, directory_fields)
+        if cr and dir_api_obj:
+            strip_dir_api_object(dir_api_obj, is_authenticated(), cr)
+            return dir_api_obj, 200
+        return '', 404
 
 
 class Contact(Resource):
@@ -66,13 +89,13 @@ class Contact(Resource):
         self.parser.add_argument('user_body', required=True, help='user_body cannot be empty')
         self.parser.add_argument('agent_type', required=True, help='agent_type cannot be empty')
 
-    def post(self, dataset_id):
+    def post(self, cr_id):
         """
         This route expects a json with three key-values: user_email, user_subject and user_body.
         Having these three this method will send an email message to recipients
         defined in the catalog record in question
 
-        :param dataset_id: id to use to fetch the record from metax
+        :param cr_id: id to use to fetch the record from metax
         :return: 200 if success
         """
         # if not request.is_json or not request.json:
@@ -94,7 +117,7 @@ class Contact(Resource):
             abort(400, message="Request parameters are not valid")
 
         # Get the full catalog record from Metax
-        cr = metax_service.get_catalog_record_with_file_details(dataset_id)
+        cr = get_catalog_record(cr_id, False, False)
 
         # Ensure dataset is not harvested
         harvested = get_harvest_info(cr)
@@ -109,7 +132,7 @@ class Contact(Resource):
         app_config = get_app_config()
         sender = app_config.get('MAIL_DEFAULT_SENDER', 'etsin-no-reply@fairdata.fi')
         subject = get_email_message_subject()
-        body = create_email_message_body(dataset_id, user_email, user_subject, user_body)
+        body = create_email_message_body(cr_id, user_email, user_subject, user_body)
 
         # Create the message
         msg = Message(sender=sender, reply_to=user_email, recipients=[recipient], subject=subject, body=body)
@@ -137,20 +160,8 @@ class User(Resource):
     """
 
     def get(self):
-        is_auth = is_authenticated()
-        user_info = {'is_authenticated': is_auth}
-        if is_auth:
-            eppn = session['samlUserdata'].get('urn:oid:1.3.6.1.4.1.5923.1.1.1.6', False)[0]
-            cn = session['samlUserdata'].get('urn:oid:2.5.4.3', False)[0]
-            if not eppn or not cn:
-                log.warn("User seems to be authenticated but eppn or cn not in session object. "
-                         "Saml userdata:\n{0}".format(session['samlUserdata']))
-            else:
-                user_info.update({
-                    'user_id': eppn,
-                    'user_display_name': cn
-                })
-
+        user_info = {'is_authenticated': is_authenticated()}
+        user_info.update(get_user_saml_info())
         return user_info, 200
 
 
@@ -177,15 +188,16 @@ class Download(Resource):
     Generic class for download functionalities
     """
 
+    OPEN_DOWNLOAD_URL = 'https://download.fairdata.fi/api/v1/dataset/{0}'
+    RESTRICTED_DOWNLOAD_URL = 'https://download.fairdata.fi/api/v1/dataset/{0}'
+
     def __init__(self):
         self.parser = reqparse.RequestParser()
         self.parser.add_argument('cr_id', type=str, required=True)
         self.parser.add_argument('file_id', type=str, action='append', required=False)
         self.parser.add_argument('dir_id', type=str, action='append', required=False)
 
-    def create_url(self, base_url):
-        # Check request query parameters are present
-        args = self.parser.parse_args()
+    def _create_url(self, base_url, args):
         cr_id = args['cr_id']
         file_ids = args['file_id'] or []
         dir_ids = args['dir_id'] or []
@@ -206,45 +218,33 @@ class Download(Resource):
 
         return url
 
-
-class OpenDownload(Download):
-
-    """
-    API for downloading open files
-    """
-
-    DOWNLOAD_URL = 'https://download.fairdata.fi/api/v1/dataset/{0}'
-
     def get(self):
-        url = self.create_url(self.DOWNLOAD_URL)
-        req = get(url, stream=True)
-        res = Response(response=stream_with_context(req.iter_content(chunk_size=1024)), status=req.status_code)
-        res.headers['Content-Type'] = req.headers['Content-Type']
-        res.headers['Content-Disposition'] = req.headers['Content-Disposition']
-        res.headers['Content-Length'] = req.headers['Content-Length']
-        return res
+        # Check request query parameters are present
+        args = self.parser.parse_args()
+        cr_id = args['cr_id']
 
+        cr = get_catalog_record(cr_id, False, False)
+        if not cr:
+            abort(400, message="Unable to get catalog record")
 
-class RestrictedDownload(Download):
+        if user_is_allowed_to_download_from_ida(cr, is_authenticated()):
+            url = self._create_url(self._select_download_base_url(cr), args)
+            req = get(url, stream=True)
+            res = Response(response=stream_with_context(req.iter_content(chunk_size=1024)), status=req.status_code)
 
-    """
-    API for downloading restricted files
-    """
+            if 'Content-Type' in req.headers:
+                res.headers['Content-Type'] = req.headers['Content-Type']
+            if 'Content-Disposition' in req.headers:
+                res.headers['Content-Disposition'] = req.headers['Content-Disposition']
+            if 'Content-Length' in req.headers:
+                res.headers['Content-Length'] = req.headers['Content-Length']
+            return res
+        else:
+            abort(403, message="Not authorized")
 
-    DOWNLOAD_URL = 'N/A'
-
-    def get(self):
-        # TODO: Do checks whether user is allowed to download
-        # Check if is authenticated and also rems access permission. Maybe implement an API for frontend to ask
-        # whether auth user is authorized to download as well (before requesting this api)
-        if not is_authenticated():
-            return '', 401
-
-        # url = self.create_url(self.DOWNLOAD_URL)
-        # req = get(url, stream=True)
-        # res = Response(response=stream_with_context(req.iter_content(chunk_size=1024)), status=req.status_code)
-        # res.headers['Content-Type'] = req.headers['Content-Type']
-        # res.headers['Content-Disposition'] = req.headers['Content-Disposition']
-        # res.headers['Content-Length'] = req.headers['Content-Length']
-        # return res
-        return '', 501
+    def _select_download_base_url(self, catalog_record):
+        access_type_id = get_catalog_record_access_type(catalog_record)
+        if not access_type_id or access_type_id == ACCESS_TYPES['open']:
+            return self.OPEN_DOWNLOAD_URL
+        else:
+            return self.RESTRICTED_DOWNLOAD_URL

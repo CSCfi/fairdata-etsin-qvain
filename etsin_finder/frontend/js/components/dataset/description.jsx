@@ -1,23 +1,34 @@
+{
+  /**
+   * This file is part of the Etsin service
+   *
+   * Copyright 2017-2018 Ministry of Education and Culture, Finland
+   *
+   *
+   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
+   * @license   MIT
+   */
+}
+
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
 import { inject, observer } from 'mobx-react'
-import Translate from 'react-translate-component'
+import styled from 'styled-components'
 import translate from 'counterpart'
 
-import Accessiblity from '../../stores/view/accessibility'
-import dateFormat from '../../utils/dateFormat'
-import checkNested from '../../utils/checkNested'
-import checkDataLang from '../../utils/checkDataLang'
-import Label from '../general/label'
 import AccessRights from './accessRights'
-import ErrorBoundary from '../general/errorBoundary'
-import People from './people'
+import Accessiblity from '../../stores/view/accessibility'
+import AskForAccess from './askForAccess'
 import Contact from './contact'
-import VersionChanger from './versionChanger'
+import ErrorBoundary from '../general/errorBoundary'
 import GoToOriginal from './goToOriginal'
-// import ShowMore from '../general/showMore'
-// import Button from '../general/button'
+import Label from '../general/label'
+import People from './people'
+import PropTypes from 'prop-types'
+import Translate from 'react-translate-component'
+import VersionChanger from './versionChanger'
+import checkDataLang from '../../utils/checkDataLang'
+import checkNested from '../../utils/checkNested'
+import dateFormat from '../../utils/dateFormat'
 
 const ReactMarkdown = require('react-markdown')
 
@@ -95,9 +106,7 @@ class Description extends Component {
                   />
                 )}
             </ErrorBoundary>
-            {/* <Button onClick={() => alert('Hae käyttölupaa')} noMargin>
-              <Translate content="dataset.access_permission" />
-            </Button> */}
+            <AskForAccess />
           </Flex>
         </Labels>
         <div className="d-md-flex align-items-center dataset-title justify-content-between">
