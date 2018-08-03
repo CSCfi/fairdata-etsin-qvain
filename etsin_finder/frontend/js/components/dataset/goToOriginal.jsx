@@ -21,7 +21,7 @@ export default function GoToOriginal({ idn }) {
   const link = idnToLink(idn)
   if (link) {
     return (
-      <Link margin="0em 0em 0.7em 0em" width="100%" color="primary" href={link} title={link}>
+      <Link margin="0em 0em 0.7em 0em" width="100%" color="primary" href={link} title={link} target="_blank">
         <Translate content="dataset.go_to_original" />
       </Link>
     )
