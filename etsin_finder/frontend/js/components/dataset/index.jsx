@@ -16,6 +16,7 @@ import translate from 'counterpart'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import { inject, observer } from 'mobx-react'
+import { NavLink } from 'react-router-dom'
 
 import DatasetQuery from '../../stores/view/datasetquery'
 import Accessibility from '../../stores/view/accessibility'
@@ -24,11 +25,12 @@ import Content from './content'
 import ErrorPage from '../errorpage'
 import ErrorBoundary from '../general/errorBoundary'
 import NoticeBar from '../general/noticeBar'
-import { TransparentButton } from '../general/button'
 import Loader from '../general/loader'
 
-const BackButton = styled(TransparentButton)`
+const BackButton = styled(NavLink)`
   color: ${props => props.theme.color.primary};
+  padding: 0;
+  margin: 0 0 0.5em 0;
 `
 
 class Dataset extends React.Component {
@@ -119,7 +121,15 @@ class Dataset extends React.Component {
         <div className="container regular-row">
           <div className="row">
             <div className="col-12">
-              <BackButton color="" noPadding margin="0 0 0.5em 0" onClick={this.goBack}>
+              <BackButton
+                exact
+                to="/datasets"
+                onClick={() => {
+                  Accessibility.setNavText(
+                    translate('changepage', { page: translate('nav.datasets') })
+                  )
+                }}
+              >
                 <span aria-hidden>{'< '}</span>
                 <Translate content={'dataset.goBack'} />
               </BackButton>
