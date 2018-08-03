@@ -14,7 +14,6 @@ import axios from 'axios'
 import transformQuery from '../../utils/transformQuery'
 import UrlParse from '../../utils/urlParse'
 import Helpers from '../../utils/helpers'
-import Locale from './language'
 import Env from '../domain/env'
 
 const fields = [
@@ -213,14 +212,14 @@ class ElasticQuery {
 
     const createQuery = query => {
       let queryObject
-      let tquery = transformQuery(query)
-      if (tquery) {
+      const tQuery = transformQuery(query)
+      if (tQuery) {
         queryObject = {
           bool: {
             must: [
               {
                 multi_match: {
-                  query: tquery,
+                  query: tQuery,
                   type: 'cross_fields',
                   minimum_should_match: '75%',
                   operator: 'and',
