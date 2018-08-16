@@ -1,3 +1,10 @@
+# This file is part of the Etsin service
+#
+# Copyright 2017-2018 Ministry of Education and Culture, Finland
+#
+# :author: CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
+# :license: MIT
+
 import json
 
 import requests
@@ -15,7 +22,7 @@ class MetaxAPIService:
     def __init__(self, metax_api_config):
         if metax_api_config:
             METAX_GET_CATALOG_RECORD_URL = 'https://{0}/rest/datasets'.format(metax_api_config['HOST']) + \
-                                           '/{0}?expand_relation=data_catalog'
+                                           '/{0}.json?expand_relation=data_catalog'
 
             self.METAX_GET_CATALOG_RECORD_WITH_FILE_DETAILS_URL = METAX_GET_CATALOG_RECORD_URL + '&file_details'
             self.METAX_GET_REMOVED_CATALOG_RECORD_URL = METAX_GET_CATALOG_RECORD_URL + '&removed=true'
@@ -25,16 +32,24 @@ class MetaxAPIService:
             self.user = metax_api_config['USER']
             self.pw = metax_api_config['PASSWORD']
 
-    def get_directory_for_catalog_record(self, cr_identifier, dir_identifier):
+    def get_directory_for_catalog_record(self, cr_identifier, dir_identifier, file_fields, directory_fields):
         """
         Get directory contents for a specific catalog record
 
         :param cr_identifier:
         :param dir_identifier:
+        :param file_fields:
+        :param directory_fields:
         :return:
         """
 
-        r = requests.get(self.METAX_GET_DIRECTORY_FOR_CR_URL.format(dir_identifier, cr_identifier),
+        req_url = self.METAX_GET_DIRECTORY_FOR_CR_URL.format(dir_identifier, cr_identifier)
+        if file_fields:
+            req_url = req_url + '&file_fields={0}'.format(file_fields)
+        if directory_fields:
+            req_url = req_url + '&directory_fields={0}'.format(directory_fields)
+
+        r = requests.get(req_url,
                          headers={'Content-Type': 'application/json'},
                          auth=(self.user, self.pw),
                          timeout=TIMEOUT)

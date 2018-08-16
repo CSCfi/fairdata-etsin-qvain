@@ -1,3 +1,15 @@
+{
+  /**
+   * This file is part of the Etsin service
+   *
+   * Copyright 2017-2018 Ministry of Education and Culture, Finland
+   *
+   *
+   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
+   * @license   MIT
+   */
+}
+
 import React from 'react'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
@@ -6,6 +18,7 @@ import PropTypes from 'prop-types'
 import checkDataLang from '../../../utils/checkDataLang'
 import { Link } from '../../general/button'
 import Modal from '../../general/modal'
+import { TypeConcept, TypeChecksum } from '../../../utils/propTypes'
 
 const customStyles = {
   content: {
@@ -27,6 +40,7 @@ const Info = ({
   checksum,
   accessUrl,
   downloadUrl,
+  allowDownload,
 }) => (
   <Modal
     isOpen={open}
@@ -68,7 +82,7 @@ const Info = ({
                 <th>
                   <Translate content="dataset.dl.type" />
                 </th>
-                <td>{type}</td>
+                <td>{checkDataLang(type.pref_label)}</td>
               </tr>
             )}
           {size && (
@@ -92,7 +106,7 @@ const Info = ({
               <th>
                 <Translate content="dataset.dl.checksum" />
               </th>
-              <td>{checksum.checksum_value}</td>
+              <td>{checksum.checksum_value ? checksum.checksum_value : checksum.value}</td>
             </tr>
           )}
         </tbody>
@@ -106,21 +120,31 @@ const Info = ({
         <p>{description}</p>
       </ModalDescription>
     ) : null}
-    {accessUrl && (
-      <FullButton href={accessUrl.identifier} title={checkDataLang(accessUrl.description)} noMargin>
-        <Translate content="dataset.dl.go_to_original" />
-      </FullButton>
-    )}
-    {downloadUrl && (
-      <FullButton
-        href={downloadUrl.identifier}
-        title={checkDataLang(downloadUrl.description)}
-        color="success"
-        noMargin
-      >
-        <Translate content="dataset.dl.download" />
-      </FullButton>
-    )}
+    {accessUrl &&
+      allowDownload && (
+        <FullButton
+          href={accessUrl.identifier}
+          title={checkDataLang(accessUrl.description)}
+          noMargin
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Translate content="dataset.dl.go_to_original" />
+        </FullButton>
+      )}
+    {downloadUrl &&
+      allowDownload && (
+        <FullButton
+          href={downloadUrl.identifier}
+          target="_blank"
+          rel="noopener noreferrer"
+          title={checkDataLang(downloadUrl.description)}
+          color="success"
+          noMargin
+        >
+          <Translate content="dataset.dl.download" />
+        </FullButton>
+      )}
   </Modal>
 )
 
@@ -173,11 +197,12 @@ Info.propTypes = {
   title: PropTypes.string,
   size: PropTypes.string,
   category: PropTypes.string,
-  type: PropTypes.string,
+  type: PropTypes.oneOfType([PropTypes.string, TypeConcept]),
   open: PropTypes.bool.isRequired,
   closeModal: PropTypes.func.isRequired,
   description: PropTypes.string,
+  allowDownload: PropTypes.bool.isRequired,
   accessUrl: PropTypes.object,
   downloadUrl: PropTypes.object,
-  checksum: PropTypes.object,
+  checksum: TypeChecksum,
 }

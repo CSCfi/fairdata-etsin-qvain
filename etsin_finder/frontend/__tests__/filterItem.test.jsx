@@ -1,16 +1,20 @@
 import React from 'react'
 import ReactDOM from 'react-dom' // eslint-disable-line no-unused-vars
 import { mount } from 'enzyme'
-import createHistory from 'history/createBrowserHistory'
 import { MemoryRouter } from 'react-router-dom'
+import createBrowserHistory from 'history/createBrowserHistory'
+import { syncHistoryWithStore } from 'mobx-react-router'
 
 import FilterItem from '../js/components/search/filterResults/filterItem'
 import ElasticQuery from '../js/stores/view/elasticquery'
+import env from '../js/stores/domain/env'
 
-const history = createHistory()
+// Syncing history with store
+const browserHistory = createBrowserHistory()
+const history = syncHistoryWithStore(browserHistory, env.history)
 
 describe('FilterItem', () => {
-  ElasticQuery.updateSearch('Helsinki', history)
+  ElasticQuery.updateSearch('Helsinki')
   const facet = {
     item: { key: 'Pirkko Suihkonen', doc_count: 92 },
     aggregationName: 'Creator',
@@ -24,7 +28,6 @@ describe('FilterItem', () => {
           item={facet.item}
           aggregationName={facet.aggregationName}
           term={facet.termName}
-          history={history}
           tabIndex="1"
         />
       </MemoryRouter>
@@ -32,8 +35,6 @@ describe('FilterItem', () => {
     it('should contain button', () => {
       expect(
         filterItem
-          .children()
-          .children()
           .children()
           .children()
           .children()
@@ -51,14 +52,12 @@ describe('FilterItem', () => {
           .children()
           .children()
           .children()
-          .children()
-          .children()
           .props().className
       ).toEqual(undefined)
     })
   })
   describe('Filter currently active', () => {
-    ElasticQuery.updateFilter(facet.termName, facet.item.key, history)
+    ElasticQuery.updateFilter(facet.termName, facet.item.key)
     const filterItem = mount(
       <MemoryRouter>
         <FilterItem
@@ -66,7 +65,6 @@ describe('FilterItem', () => {
           item={facet.item}
           aggregationName={facet.aggregationName}
           term={facet.termName}
-          history={history}
           tabIndex="1"
         />
       </MemoryRouter>
@@ -74,8 +72,6 @@ describe('FilterItem', () => {
     it('should be active', () => {
       expect(
         filterItem
-          .children()
-          .children()
           .children()
           .children()
           .children()

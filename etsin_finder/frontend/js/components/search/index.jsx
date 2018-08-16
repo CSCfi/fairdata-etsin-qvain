@@ -1,5 +1,16 @@
+{
+  /**
+   * This file is part of the Etsin service
+   *
+   * Copyright 2017-2018 Ministry of Education and Culture, Finland
+   *
+   *
+   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
+   * @license   MIT
+   */
+}
+
 import React, { Component } from 'react'
-import { withRouter } from 'react-router-dom'
 import Translate from 'react-translate-component'
 import PropTypes from 'prop-types'
 
@@ -9,7 +20,7 @@ import HeroBanner from '../general/hero'
 import SearchBar from './searchBar'
 import Results from './results'
 
-class Search extends Component {
+export default class Search extends Component {
   constructor() {
     super()
     this.state = {
@@ -29,7 +40,7 @@ class Search extends Component {
   }
 
   initialQuery = () => {
-    ElasticQuery.updateFromUrl(this.props.match.params.query, this.props.history, true)
+    ElasticQuery.updateFromUrl(this.props.match.params.query, true)
     ElasticQuery.queryES(true).then(() => {
       this.setState({
         initialLoad: true,
@@ -66,7 +77,4 @@ Search.propTypes = {
       query: PropTypes.string,
     }).isRequired,
   }).isRequired,
-  history: PropTypes.object.isRequired,
 }
-
-export default withRouter(Search)

@@ -1,15 +1,38 @@
+/**
+ * This file is part of the Etsin service
+ *
+ * Copyright 2017-2018 Ministry of Education and Culture, Finland
+ *
+ *
+ * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
+ * @license   MIT
+ */
+
 import { observable, action } from 'mobx'
 import axios from 'axios'
 
-// import Locale from './language'
-import Env from '../domain/env'
+import access from './access'
+
+const QueryFields = {
+  file: [
+    'file_path',
+    'file_name',
+    'file_format',
+    'identifier',
+    'byte_size',
+    'open_access',
+    'file_format',
+    'file_characteristics',
+    'checksum_value',
+  ],
+  directory: ['directory_path', 'directory_name', 'identifier', 'file_count', 'byte_size'],
+}
 
 class DatasetQuery {
   @observable results = []
   @observable emailInfo = []
   @observable directories = []
   @observable error = false
-  metaxUrl = Env.metaxUrl
 
   @action
   getData(id) {
@@ -19,10 +42,14 @@ class DatasetQuery {
         .then(res => {
           this.results = res.data.catalog_record
           this.emailInfo = res.data.email_info
+          access.updateAccess(res.data.catalog_record.research_dataset.access_rights)
           resolve(res.data)
         })
         .catch(error => {
           this.error = error
+          this.results = []
+          this.emailInfo = []
+          this.directories = []
           reject(error)
         })
     })
@@ -30,12 +57,13 @@ class DatasetQuery {
 
   @action
   getFolderData(id, crID) {
-    // TODO:
-    // This will change to use catalog record identifier and not pid
-    // Will be implemented later
+    const fileFields = QueryFields.file.join(',')
+    const dirFields = QueryFields.directory.join(',')
     return new Promise((resolve, reject) => {
       axios
-        .get(`/api/files/${crID}?dir_id=${id}`)
+        .get(
+          `/api/files/${crID}?dir_id=${id}&file_fields=${fileFields}&directory_fields=${dirFields}`
+        )
         .then(res => {
           this.directories.push({ id, results: res.data })
           resolve(res.data)

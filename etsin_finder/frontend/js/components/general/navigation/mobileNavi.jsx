@@ -1,3 +1,15 @@
+{
+  /**
+   * This file is part of the Etsin service
+   *
+   * Copyright 2017-2018 Ministry of Education and Culture, Finland
+   *
+   *
+   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
+   * @license   MIT
+   */
+}
+
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 import Translate from 'react-translate-component'
@@ -48,7 +60,13 @@ export default class MobileNavi extends React.Component {
           <CustomContainer>
             <Row>
               <LangToggle inverted margin="0.4em 0.4em 0.4em 0em" />
-              <Link width="100%" margin="0.4em 0em 0.4em 0.4em" href="https://fairdata.fi">
+              <Link
+                width="100%"
+                margin="0.4em 0em 0.4em 0.4em"
+                href="https://fairdata.fi"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
                 <Translate content="nav.addDataset" />
               </Link>
             </Row>

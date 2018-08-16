@@ -1,9 +1,22 @@
+{
+  /**
+   * This file is part of the Etsin service
+   *
+   * Copyright 2017-2018 Ministry of Education and Culture, Finland
+   *
+   *
+   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
+   * @license   MIT
+   */
+}
+
 import React, { Component } from 'react'
 import { inject, observer } from 'mobx-react'
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faLock from '@fortawesome/fontawesome-free-solid/faLock'
 import faLockOpen from '@fortawesome/fontawesome-free-solid/faLockOpen'
 import faInfoCircle from '@fortawesome/fontawesome-free-solid/faInfoCircle'
+import faExclamationTriangle from '@fortawesome/fontawesome-free-solid/faExclamationTriangle'
 import faGlobe from '@fortawesome/fontawesome-free-solid/faGlobe'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
@@ -14,30 +27,12 @@ import Button from '../general/button'
 import Modal from '../general/modal'
 
 export const accessRightsBool = accessRights => {
-  const openValues = [
-    'http://purl.org/att/es/reference_data/access_type/access_type_open_access',
-    'open_access',
-    'http://www.opensource.org/licenses/Apache-2.0',
-  ]
-
-  // function to compare string to possible open values
-  const checkOpen = string => {
-    if (openValues.filter(open => open === string)[0]) {
-      return true
-    }
-    return false
-  }
+  const openValue = 'http://purl.org/att/es/reference_data/access_type/access_type_open_access'
 
   if (accessRights !== undefined && accessRights !== null) {
     // check access_type
     if (checkNested(accessRights, 'access_type')) {
-      if (checkOpen(accessRights.access_type.identifier)) {
-        return true
-      }
-    }
-    // check license
-    if (checkNested(accessRights, 'license')) {
-      if (accessRights.license.filter(item => checkOpen(item.identifier))[0]) {
+      if (accessRights.access_type.identifier === openValue) {
         return true
       }
     }
@@ -52,17 +47,19 @@ class AccessRights extends Component {
     let description = ''
     let url = ''
     if (props.access_rights !== undefined && props.access_rights !== null) {
-      title = props.access_rights.access_type
-        ? props.access_rights.access_type.pref_label
-        : props.access_rights.license.map(item => item.title)[0]
+      if (checkNested(props.access_rights, 'access_type', 'pref_label')) {
+        title = props.access_rights.access_type.pref_label
+      }
       description = props.access_rights.description
       url = props.access_rights.access_url
     }
-    this.lang = props.Stores.Locale.currentLang
     this.state = {
       title,
       description,
       url,
+      restriction_grounds:
+        checkNested(props.access_rights, 'restriction_grounds', 'pref_label') &&
+        props.access_rights.restriction_grounds.pref_label,
       modalIsOpen: false,
     }
 
@@ -97,7 +94,6 @@ class AccessRights extends Component {
   }
 
   render() {
-    this.lang = this.props.Stores.Locale
     // display button on dataset page
     if (this.props.button) {
       return (
@@ -133,6 +129,12 @@ class AccessRights extends Component {
                   <AccessUrl href={this.state.url.identifier} title={this.state.url.identifier}>
                     {checkDataLang(this.state.url.title)}
                   </AccessUrl>
+                </div>
+              )}
+              {this.state.restriction_grounds && (
+                <div>
+                  <FontAwesomeIcon icon={faExclamationTriangle} />
+                  <AccessLabel>{checkDataLang(this.state.restriction_grounds)}</AccessLabel>
                 </div>
               )}
             </ModalInner>
@@ -189,6 +191,9 @@ const ModalInner = styled.div`
   svg {
     margin-right: 1.5em;
   }
+  & > div:not(:last-child) {
+    margin-bottom: 0.2em;
+  }
 `
 
 AccessRights.defaultProps = {
@@ -203,6 +208,9 @@ AccessRights.propTypes = {
     access_url: PropTypes.object,
     access_type: PropTypes.shape({
       identifier: PropTypes.string.isRequired,
+      pref_label: PropTypes.objectOf(PropTypes.string),
+    }),
+    restriction_grounds: PropTypes.shape({
       pref_label: PropTypes.objectOf(PropTypes.string),
     }),
     license: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),

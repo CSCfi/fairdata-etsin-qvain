@@ -1,9 +1,22 @@
+{
+  /**
+   * This file is part of the Etsin service
+   *
+   * Copyright 2017-2018 Ministry of Education and Culture, Finland
+   *
+   *
+   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
+   * @license   MIT
+   */
+}
+
 import React from 'react'
 import PropTypes from 'prop-types'
 import translate from 'counterpart'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import { inject, observer } from 'mobx-react'
+import { NavLink } from 'react-router-dom'
 
 import DatasetQuery from '../../stores/view/datasetquery'
 import Accessibility from '../../stores/view/accessibility'
@@ -12,11 +25,12 @@ import Content from './content'
 import ErrorPage from '../errorpage'
 import ErrorBoundary from '../general/errorBoundary'
 import NoticeBar from '../general/noticeBar'
-import { TransparentButton } from '../general/button'
 import Loader from '../general/loader'
 
-const BackButton = styled(TransparentButton)`
+const BackButton = styled(NavLink)`
   color: ${props => props.theme.color.primary};
+  padding: 0;
+  margin: 0 0 0.5em 0;
 `
 
 class Dataset extends React.Component {
@@ -64,8 +78,8 @@ class Dataset extends React.Component {
     DatasetQuery.getData(identifier)
       .then(result => {
         // TODO: The code below needs to be revised
-        // TODO: Somewhere we need to think how 1) harvested, 2) accumulative, 3) deprecated, 4) removed, 5) ordinary
-        // TODO: datasets are rendered. Maybe not here?
+        // Somewhere we need to think how 1) harvested, 2) accumulative, 3) deprecated, 4) removed, 5) ordinary
+        // datasets are rendered. Maybe not here?
         this.setState({
           identifier: this.props.match.params.identifier,
           dataset: result.catalog_record,
@@ -107,7 +121,15 @@ class Dataset extends React.Component {
         <div className="container regular-row">
           <div className="row">
             <div className="col-12">
-              <BackButton color="" noPadding margin="0 0 0.5em 0" onClick={this.goBack}>
+              <BackButton
+                exact
+                to="/datasets"
+                onClick={() => {
+                  Accessibility.setNavText(
+                    translate('changepage', { page: translate('nav.datasets') })
+                  )
+                }}
+              >
                 <span aria-hidden>{'< '}</span>
                 <Translate content={'dataset.goBack'} />
               </BackButton>

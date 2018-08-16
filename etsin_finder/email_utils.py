@@ -1,3 +1,10 @@
+# This file is part of the Etsin service
+#
+# Copyright 2017-2018 Ministry of Education and Culture, Finland
+#
+# :author: CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
+# :license: MIT
+
 import datetime
 import re
 from enum import Enum
@@ -11,16 +18,16 @@ class AgentType(Enum):
     CURATOR = 'curator'
 
 
-def create_email_message_body(dataset_id, user_email, user_subject, user_body):
+def create_email_message_body(cr_id, user_email, user_subject, user_body):
     now = datetime.datetime.now()
 
     meta_en = ('The message below was sent via Etsin research data finder on {0}.{1}.{2}. '
                'It concerns a dataset having identifier \"{3}\". Please, send your reply to {4}.'
-               .format(now.day, now.month, now.year, dataset_id, user_email))
+               .format(now.day, now.month, now.year, cr_id, user_email))
 
     meta_fi = ('Allaoleva viesti on lähetetty Etsin-palvelun kautta {0}.{1}.{2}. Viesti koskee '
                'tutkimusaineistoa, jonka tunniste on \"{3}\". Ole hyvä, lähetä vastauksesi osoitteeseen {4}.'
-               .format(now.day, now.month, now.year, dataset_id, user_email))
+               .format(now.day, now.month, now.year, cr_id, user_email))
 
     msg = 'Subject / Aihe: {0}\nMessage / Viesti: {1}'.format(user_subject, user_body)
 

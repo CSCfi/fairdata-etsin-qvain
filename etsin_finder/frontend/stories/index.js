@@ -1,3 +1,13 @@
+/**
+ * This file is part of the Etsin service
+ *
+ * Copyright 2017-2018 Ministry of Education and Culture, Finland
+ *
+ *
+ * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
+ * @license   MIT
+ */
+
 import React, { Fragment } from 'react'
 import { Provider } from 'mobx-react'
 import { BrowserRouter as Router } from 'react-router-dom'
@@ -33,6 +43,7 @@ import SkipToContent from '../js/components/general/skipToContent'
 import Header from '../js/layout/header'
 import VersionChanger from '../js/components/dataset/versionChanger'
 import Tabs from '../js/components/dataset/tabs'
+import AvailableTimestamp from '../js/components/dataset/availableTimestamp'
 import ComponentCode from './componentCode'
 import ContactForm from '../js/components/dataset/contact/contactForm'
 import TableItem from '../js/components/dataset/data/tableItem'
@@ -44,6 +55,7 @@ import PopUp from '../js/components/general/popup'
 // import Select from '../js/components/general/select'
 import People from '../js/components/dataset/people'
 import Person from '../js/components/dataset/people/person'
+import Sidebar from '../js/components/dataset/sidebar'
 import License from '../js/components/dataset/sidebar/license'
 
 import EsRes from './esRes'
@@ -513,6 +525,14 @@ storiesOf('Dataset/Version changer', module)
     )
   })
 
+storiesOf('Dataset/Timestamp', module).add('Available', () => (
+  <Container center maxWidth="800px" style={{ marginTop: '10em' }}>
+    <ComponentCode>
+      <AvailableTimestamp time={MetaxRes.research_dataset.access_rights.available} />
+    </ComponentCode>
+  </Container>
+))
+
 storiesOf('Dataset/People', module)
   .add('Creator', () => (
     <Container
@@ -558,6 +578,13 @@ storiesOf('Dataset/Tabs', module).add('Normal', () => (
   <Container center maxWidth="800px">
     <ComponentCode>
       <Tabs showDownloads={true} showEvents={true} identifier={'id'} />
+    </ComponentCode>
+  </Container>
+))
+storiesOf('Dataset/Sidebar', module).add('Normal', () => (
+  <Container center maxWidth="800px" style={{ marginTop: '10em' }}>
+    <ComponentCode>
+      <Sidebar dataset={MetaxRes} />
     </ComponentCode>
   </Container>
 ))

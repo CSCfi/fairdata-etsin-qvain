@@ -1,3 +1,15 @@
+{
+  /**
+   * This file is part of the Etsin service
+   *
+   * Copyright 2017-2018 Ministry of Education and Culture, Finland
+   *
+   *
+   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
+   * @license   MIT
+   */
+}
+
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 import styled from 'styled-components'
@@ -17,7 +29,7 @@ const FilterContainer = styled.div`
 class FilterResults extends Component {
   render() {
     return (
-      <FilterContainer className="search-filtering">
+      <FilterContainer>
         <FilterSection aggregation="organization" />
         <FilterSection aggregation="creator" />
         <FilterSection aggregation="field_of_science" />
