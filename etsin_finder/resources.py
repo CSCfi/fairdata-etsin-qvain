@@ -187,6 +187,9 @@ class Download(Resource):
     Class for file download functionalities
     """
 
+    OPEN_DOWNLOAD_URL = 'https://download.fairdata.fi/api/v1/dataset/{0}'
+    RESTRICTED_DOWNLOAD_URL = 'https://download.fairdata.fi/api/v1/dataset/{0}'
+
     def __init__(self):
         self.parser = reqparse.RequestParser()
         self.parser.add_argument('cr_id', type=str, required=True)
