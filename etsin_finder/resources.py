@@ -5,25 +5,11 @@
 # :author: CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
 # :license: MIT
 
-from requests import get
-
-from flask import session, Response, stream_with_context
+from flask import session
 from flask_mail import Message
 from flask_restful import abort, reqparse, Resource
 
 from etsin_finder.app_config import get_app_config
-from etsin_finder.cr_service import \
-    get_catalog_record, \
-    get_catalog_record_access_type, \
-    get_directory_data_for_catalog_record
-from etsin_finder.finder import app, mail
-from etsin_finder.email_utils import \
-    create_email_message_body, \
-    get_email_info, \
-    get_email_message_subject, \
-    get_email_recipient_address, \
-    get_harvest_info, \
-    validate_send_message_request
 from etsin_finder.authentication import \
     get_user_saml_info, \
     is_authenticated, \
@@ -31,8 +17,21 @@ from etsin_finder.authentication import \
 from etsin_finder.authorization import \
     strip_information_from_catalog_record, \
     strip_dir_api_object, \
-    user_is_allowed_to_download_from_ida, \
-    ACCESS_TYPES
+    user_is_allowed_to_download_from_ida
+from etsin_finder.cr_service import \
+    get_catalog_record, \
+    get_directory_data_for_catalog_record
+from etsin_finder.download_api import DownloadAPIService
+from etsin_finder.email_utils import \
+    create_email_message_body, \
+    get_email_info, \
+    get_email_message_subject, \
+    get_email_recipient_address, \
+    get_harvest_info, \
+    validate_send_message_request
+from etsin_finder.finder import app, mail
+from etsin_finder.utils import get_download_api_config
+
 
 log = app.logger
 
@@ -185,38 +184,15 @@ class Session(Resource):
 class Download(Resource):
 
     """
-    Generic class for download functionalities
+    Class for file download functionalities
     """
-
-    OPEN_DOWNLOAD_URL = 'https://download.fairdata.fi/api/v1/dataset/{0}'
-    RESTRICTED_DOWNLOAD_URL = 'https://download.fairdata.fi/api/v1/dataset/{0}'
 
     def __init__(self):
         self.parser = reqparse.RequestParser()
         self.parser.add_argument('cr_id', type=str, required=True)
         self.parser.add_argument('file_id', type=str, action='append', required=False)
         self.parser.add_argument('dir_id', type=str, action='append', required=False)
-
-    def _create_url(self, base_url, args):
-        cr_id = args['cr_id']
-        file_ids = args['file_id'] or []
-        dir_ids = args['dir_id'] or []
-
-        url = base_url.format(cr_id)
-        if file_ids or dir_ids:
-            params = ''
-            for file_id in file_ids:
-                params += '&file={0}'.format(file_id) if params else 'file={0}'.format(file_id)
-            for dir_id in dir_ids:
-                params += '&dir={0}'.format(dir_id) if params else 'dir={0}'.format(dir_id)
-            url += '?' + params
-
-        log.debug("Received cr_id: " + str(cr_id))
-        log.debug("Received file ids: " + str(file_ids))
-        log.debug("Received dir ids: " + str(dir_ids))
-        log.debug("Download service URL to be requested: " + url)
-
-        return url
+        self.dl_api = DownloadAPIService(get_download_api_config(app.config))
 
     def get(self):
         # Check request query parameters are present
@@ -228,23 +204,8 @@ class Download(Resource):
             abort(400, message="Unable to get catalog record")
 
         if user_is_allowed_to_download_from_ida(cr, is_authenticated()):
-            url = self._create_url(self._select_download_base_url(cr), args)
-            req = get(url, stream=True)
-            res = Response(response=stream_with_context(req.iter_content(chunk_size=1024)), status=req.status_code)
-
-            if 'Content-Type' in req.headers:
-                res.headers['Content-Type'] = req.headers['Content-Type']
-            if 'Content-Disposition' in req.headers:
-                res.headers['Content-Disposition'] = req.headers['Content-Disposition']
-            if 'Content-Length' in req.headers:
-                res.headers['Content-Length'] = req.headers['Content-Length']
-            return res
+            file_ids = args['file_id'] or []
+            dir_ids = args['dir_id'] or []
+            return self.dl_api.download(cr_id, file_ids, dir_ids)
         else:
             abort(403, message="Not authorized")
-
-    def _select_download_base_url(self, catalog_record):
-        access_type_id = get_catalog_record_access_type(catalog_record)
-        if not access_type_id or access_type_id == ACCESS_TYPES['open']:
-            return self.OPEN_DOWNLOAD_URL
-        else:
-            return self.RESTRICTED_DOWNLOAD_URL

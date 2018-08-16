@@ -53,6 +53,17 @@ def get_rems_config(config):
     return rems_conf
 
 
+def get_download_api_config(config):
+    if executing_travis():
+        return None
+
+    dl_api_conf = config.get('DOWNLOAD_API')
+    if not dl_api_conf or not isinstance(dl_api_conf, dict):
+        return None
+
+    return dl_api_conf
+
+
 def write_json_to_file(json_data, filename):
     with open(filename, "w") as output_file:
         json.dump(json_data, output_file)
