@@ -53,16 +53,6 @@ export const Search = loadable(
   }
 )
 
-export const About = loadable(() => import('../components/about' /* webpackChunkName: "about" */), {
-  LoadingComponent: FancyLoader,
-  ErrorComponent: ErrorPage,
-  // render: ({ Component, loading, error, ownProps }) => {
-  //   if (loading) return <FancyLoader />
-  //   if (error) return <ErrorPage error="loaderror" />
-  //   return <Component {...ownProps} />
-  // },
-})
-
 // export const Organizations = loadable(
 //   () => import(/* webpackChunkName: "organizations" */ '../components/organizations'),
 //   {
