@@ -10,6 +10,7 @@
    */
 }
 
+import PropTypes from 'prop-types'
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 import Translate from 'react-translate-component'
@@ -47,14 +48,6 @@ export default class MobileNavi extends React.Component {
           >
             <Translate content="nav.datasets" />
           </NavItem>
-          <NavItem
-            to="/about"
-            onClick={() => {
-              Accessibility.setNavText(translate('changepage', { page: translate('nav.help') }))
-            }}
-          >
-            <Translate content="nav.help" />
-          </NavItem>
         </DropdownMenu>
         <DropdownMenu buttonContent={<FontawesomeIcon icon={faCog} size="lg" />} transparentButton>
           <CustomContainer>
@@ -63,11 +56,22 @@ export default class MobileNavi extends React.Component {
               <Link
                 width="100%"
                 margin="0.4em 0em 0.4em 0.4em"
-                href="https://fairdata.fi"
+                href="https://qvain.fairdata.fi"
                 rel="noopener noreferrer"
                 target="_blank"
               >
                 <Translate content="nav.addDataset" />
+              </Link>
+            </Row>
+            <Row>
+              <Link
+                margin="0.4em 0"
+                width="100%"
+                href={this.props.helpUrl}
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                <Translate content="nav.help" />
               </Link>
             </Row>
             <Row>
@@ -78,6 +82,14 @@ export default class MobileNavi extends React.Component {
       </MobileItems>
     )
   }
+}
+
+MobileNavi.defaultProps = {
+  helpUrl: undefined,
+}
+
+MobileNavi.propTypes = {
+  helpUrl: PropTypes.string,
 }
 
 const MobileItems = styled.div`

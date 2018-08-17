@@ -177,7 +177,6 @@ const finnish = {
       idnAndEventsTab: 'Siirryit "tunnisteet ja tapahtumat" -välilehdelle',
       datasetsPage: 'Siirryit sivulle: Aineistot',
       homePage: 'Siirryit etusivulle',
-      helpPage: 'Siirryit sivulle: Ohjeet',
       custom: 'Siirryit sivulle: %(to)s',
     },
   },
