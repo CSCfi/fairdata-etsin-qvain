@@ -177,7 +177,6 @@ const english = {
       idnAndEventsTab: 'Navigated to "Identifiers and Events" tab',
       datasetsPage: 'Navigated to Datasets page',
       homePage: 'Navigated to Home page',
-      helpPage: 'Navigated to Help page',
       custom: 'Navigated to: %(to)s',
     },
   },
