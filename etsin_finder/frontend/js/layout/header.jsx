@@ -12,6 +12,7 @@
 
 import React, { Component } from 'react'
 import styled from 'styled-components'
+import counterpart from 'counterpart'
 
 import EtsinLogo from '../components/general/header/etsinLogo'
 import Settings from '../components/general/navigation/settings'
@@ -19,8 +20,26 @@ import Navi from '../components/general/navigation/index'
 import MobileNavi from '../components/general/navigation/mobileNavi'
 
 export default class Header extends Component {
-  state = {}
+  constructor() {
+    super();
+    this.state = {
+      lang: counterpart.getLocale()
+    }
+    this.localeChanged = this.localeChanged.bind(this)
+  }
+  componentWillMount() {
+    counterpart.onLocaleChange(this.localeChanged)
+  }
+  componentWillUnmount() {
+    counterpart.offLocaleChange(this.localeChanged)
+  }
+  localeChanged() {
+    this.setState({
+      lang: counterpart.getLocale()
+    })
+  }
   render() {
+    const helpUrl = this.state.lang === 'fi' ? 'https://www.fairdata.fi/etsin/' : 'https://www.fairdata.fi/en/etsin/'
     return (
       <HeaderBar>
         <Positioner className="container">
@@ -29,8 +48,8 @@ export default class Header extends Component {
             <Navi />
           </NaviCont>
           <Right>
-            <MobileNavi />
-            <Settings />
+            <MobileNavi helpUrl={helpUrl} />
+            <Settings helpUrl={helpUrl} />
           </Right>
         </Positioner>
       </HeaderBar>

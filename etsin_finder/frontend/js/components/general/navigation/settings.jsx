@@ -10,6 +10,7 @@
    */
 }
 
+import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 import Translate from 'react-translate-component'
 import styled from 'styled-components'
@@ -25,9 +26,18 @@ export default class Settings extends Component {
       <React.Fragment>
         <Positioner>
           <Link
+            margin="0em 1em 0em 0em"
+            width="max-content"
+            href={this.props.helpUrl}
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            <Translate content="nav.help" />
+          </Link>
+          <Link
             noMargin
             width="max-content"
-            href="https://fairdata.fi"
+            href="https://qvain.fairdata.fi"
             rel="noopener noreferrer"
             target="_blank"
           >
@@ -39,6 +49,14 @@ export default class Settings extends Component {
       </React.Fragment>
     )
   }
+}
+
+Settings.defaultProps = {
+  helpUrl: undefined,
+}
+
+Settings.propTypes = {
+  helpUrl: PropTypes.string,
 }
 
 const Positioner = styled.div`

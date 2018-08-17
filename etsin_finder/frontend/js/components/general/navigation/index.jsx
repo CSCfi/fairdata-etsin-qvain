@@ -15,7 +15,7 @@ import { NavLink } from 'react-router-dom'
 import Translate from 'react-translate-component'
 import translate from 'counterpart'
 import styled from 'styled-components'
-import { Home, About, Search } from '../../../routes'
+import { Home, Search } from '../../../routes'
 
 import Accessibility from '../../../stores/view/accessibility'
 
@@ -45,17 +45,6 @@ export default class Navi extends React.Component {
           }}
         >
           <Translate content="nav.datasets" />
-        </NavItem>
-        <NavItem
-          to="/about"
-          onPointerOver={() => {
-            About.load()
-          }}
-          onClick={() => {
-            Accessibility.setNavText(translate('changepage', { page: translate('nav.help') }))
-          }}
-        >
-          <Translate content="nav.help" />
         </NavItem>
       </React.Fragment>
     )
