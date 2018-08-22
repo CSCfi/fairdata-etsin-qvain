@@ -129,7 +129,7 @@ const finnish = {
   error: {
     notFound:
       'Olemme pahoillamme, nyt sattui häiriötilanne. Ole hyvä ja yritä hetken päästä uudelleen.',
-    notLoaded: 'Hups! Sivua ei löytynyt!',
+    notLoaded: 'Hups! Sivua ei löytynyt.',
   },
   general: {
     showMore: 'Näytä lisää',
