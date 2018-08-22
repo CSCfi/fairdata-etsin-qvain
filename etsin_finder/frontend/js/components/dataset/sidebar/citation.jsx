@@ -10,7 +10,7 @@ export default class Citation extends Component {
     this.state = {
       creators: Data.research_dataset.creator && Data.research_dataset.creator,
       contributors: Data.research_dataset.contributor && Data.research_dataset.contributor,
-      publisher: Data.data_catalog.catalog_json.publisher.name,
+      publisher: Data.research_dataset.publisher && Data.research_dataset.publisher.name,
       release_date: Data.research_dataset.modified,
       title: Data.research_dataset.title,
       pid: Data.research_dataset.preferred_identifier,
@@ -50,7 +50,9 @@ export default class Citation extends Component {
           </Fragment>
         ))}
         <span title="Title">{checkDataLang(this.state.title)}, </span>
-        <span title="Publisher">{checkDataLang(this.state.publisher)}, </span>
+        {this.state.publisher &&
+          <span title="Publisher">{checkDataLang(this.state.publisher)}, </span>
+        }
         <span title="Release date">{this.state.release_date}, </span>
         <span title="Preferred identifier">{this.state.pid}</span>
       </Fragment>
