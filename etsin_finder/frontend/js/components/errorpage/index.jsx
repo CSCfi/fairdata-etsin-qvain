@@ -26,7 +26,7 @@ export default class ErrorPage extends React.Component {
       <HeroBanner className="hero-primary hero-full">
         <div className="container text-center" aria-live="polite">
           {this.props.error.type === 'notfound' && (
-            <Translate content="error.notFound" component="h1" />
+            <Translate content="error.notLoaded" component="h1" />
           )}
           {this.props.error.type === 'error' && (
             <Translate content="error.notLoaded" component="h1" />
