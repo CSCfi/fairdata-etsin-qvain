@@ -68,13 +68,14 @@
     "webpack": "^4.16.1",
     "webpack-cli": "^2.1.5",
     "webpack-node-externals": "^1.6.0",
-    "yup": "^0.25.1"
+    "yup": "^0.26.2"
   },
   "devDependencies": {
     "@storybook/addon-actions": "^3.4.8",
     "@storybook/addon-links": "^3.4.8",
     "@storybook/addon-viewport": "^3.4.8",
     "@storybook/react": "^4.0.0-alpha.14",
+    "@storybook/addons": "^3.3.0",
     "axios-mock-adapter": "^1.14.1",
     "babel-eslint": "^8.2.6",
     "babel-jest": "^22.4.4",
