@@ -22,7 +22,7 @@ class MetaxAPIService:
     def __init__(self, metax_api_config):
         if metax_api_config:
             METAX_GET_CATALOG_RECORD_URL = 'https://{0}/rest/datasets'.format(metax_api_config['HOST']) + \
-                                           '/{0}.json?expand_relation=data_catalog'
+                                           '/{0}?expand_relation=data_catalog'
 
             self.METAX_GET_CATALOG_RECORD_WITH_FILE_DETAILS_URL = METAX_GET_CATALOG_RECORD_URL + '&file_details'
             self.METAX_GET_REMOVED_CATALOG_RECORD_URL = METAX_GET_CATALOG_RECORD_URL + '&removed=true'
@@ -31,6 +31,7 @@ class MetaxAPIService:
 
             self.user = metax_api_config['USER']
             self.pw = metax_api_config['PASSWORD']
+            self.verify_ssl = metax_api_config.get('VERIFY_SSL', True)
 
     def get_directory_for_catalog_record(self, cr_identifier, dir_identifier, file_fields, directory_fields):
         """
@@ -50,8 +51,9 @@ class MetaxAPIService:
             req_url = req_url + '&directory_fields={0}'.format(directory_fields)
 
         r = requests.get(req_url,
-                         headers={'Content-Type': 'application/json'},
+                         headers={'Accept': 'application/json'},
                          auth=(self.user, self.pw),
+                         verify=self.verify_ssl,
                          timeout=TIMEOUT)
         try:
             r.raise_for_status()
@@ -70,8 +72,9 @@ class MetaxAPIService:
         """
 
         r = requests.get(self.METAX_GET_CATALOG_RECORD_WITH_FILE_DETAILS_URL.format(identifier),
-                         headers={'Content-Type': 'application/json'},
+                         headers={'Accept': 'application/json'},
                          auth=(self.user, self.pw),
+                         verify=self.verify_ssl,
                          timeout=TIMEOUT)
         try:
             r.raise_for_status()
@@ -91,8 +94,9 @@ class MetaxAPIService:
         """
 
         r = requests.get(self.METAX_GET_REMOVED_CATALOG_RECORD_URL.format(identifier),
-                         headers={'Content-Type': 'application/json'},
+                         headers={'Accept': 'application/json'},
                          auth=(self.user, self.pw),
+                         verify=self.verify_ssl,
                          timeout=TIMEOUT)
         try:
             r.raise_for_status()
