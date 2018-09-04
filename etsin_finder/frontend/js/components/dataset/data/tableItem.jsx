@@ -25,7 +25,6 @@ import { InvertedButton, TransparentButton } from '../../general/button'
 import Loader from '../../general/loader'
 import {
   TypeConcept,
-  TypeDocument,
   TypeTableDirectory,
   TypeTableFile,
   TypeTableRemote,
@@ -161,7 +160,6 @@ class TableItem extends Component {
                   this.props.item.remote ? this.props.item.remote.download_url : undefined
                 }
                 allowDownload={this.props.allowDownload}
-                accessUrl={this.props.item.access_url}
                 description={this.props.item.description}
                 type={this.props.item.type}
                 open={this.state.modalIsOpen}
@@ -260,7 +258,6 @@ TableItem.propTypes = {
     byte_size: PropTypes.number,
     use_category: TypeConcept,
     description: PropTypes.string,
-    access_url: TypeDocument,
     type: PropTypes.oneOfType([PropTypes.string, TypeConcept]),
     remote: TypeTableRemote,
     file: TypeTableFile,

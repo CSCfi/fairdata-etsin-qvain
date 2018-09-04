@@ -9,8 +9,8 @@ export const TypeConcept = PropTypes.shape({
 
 export const TypeDocument = PropTypes.shape({
   identifier: PropTypes.string.isRequired,
-  title: PropTypes.string,
-  description: PropTypes.string,
+  title: PropTypes.objectOf(PropTypes.string),
+  description: PropTypes.objectOf(PropTypes.string),
 })
 
 // TODO: check schema for consistent naming of checksum_value
