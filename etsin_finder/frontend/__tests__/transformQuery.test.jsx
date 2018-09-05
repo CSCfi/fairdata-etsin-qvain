@@ -1,4 +1,4 @@
-import transformQuery from '../js/utils/transformQuery'
+import { transformQuery } from '../js/utils/transformQuery'
 
 describe('transformQuery function', () => {
   const emptyQuery = ''

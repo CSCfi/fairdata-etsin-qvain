@@ -14,6 +14,9 @@ const httpUrnFiRegex = /^http:\/\/urn.fi\/urn:nbn:fi:(att|csc|ida)/i;
 const urnFiRegex = /^urn.fi\/urn:nbn:fi:(att|csc|ida)/i;
 const urnRegex = /^urn:nbn:fi:(att|csc|ida)/i;
 
+const isUrnQuery = query => query && !/\s/.test(query) &&
+(httpUrnFiRegex.test(query) || urnFiRegex.test(query) || urnRegex.test(query))
+
 const transformQuery = query => {
   if (!query) {
     return query
@@ -23,12 +26,7 @@ const transformQuery = query => {
   const tQuery = query.trim()
 
   let identifier = false
-  if (
-    tQuery &&
-    !/\s/.test(tQuery) &&
-    (httpUrnFiRegex.test(tQuery) ||
-      urnFiRegex.test(tQuery) ||
-      urnRegex.test(tQuery))
+  if (isUrnQuery(tQuery)
   ) {
     identifier = tQuery.substring(tQuery.indexOf('urn:nbn:fi:'))
   }
@@ -38,4 +36,7 @@ const transformQuery = query => {
   return tQuery
 }
 
-export default transformQuery
+module.exports = {
+    transformQuery,
+    isUrnQuery
+}
