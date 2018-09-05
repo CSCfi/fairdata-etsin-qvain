@@ -10,9 +10,9 @@
  */
 }
 
-const httpUrnFiAttUrnPrefix = 'http://urn.fi/urn:nbn:fi:att:'
-const urnFiAttUrnPrefix = 'urn.fi/urn:nbn:fi:att:'
-const attUrnPrefix = 'urn:nbn:fi:att:'
+const httpUrnFiRegex = /^http:\/\/urn.fi\/urn:nbn:fi:(att|csc|ida)/i;
+const urnFiRegex = /^urn.fi\/urn:nbn:fi:(att|csc|ida)/i;
+const urnRegex = /^urn:nbn:fi:(att|csc|ida)/i;
 
 const transformQuery = query => {
   if (!query) {
@@ -26,11 +26,11 @@ const transformQuery = query => {
   if (
     tQuery &&
     !/\s/.test(tQuery) &&
-    (tQuery.startsWith(httpUrnFiAttUrnPrefix) ||
-      tQuery.startsWith(urnFiAttUrnPrefix) ||
-      tQuery.startsWith(attUrnPrefix))
+    (httpUrnFiRegex.test(tQuery) ||
+      urnFiRegex.test(tQuery) ||
+      urnRegex.test(tQuery))
   ) {
-    identifier = tQuery.substring(tQuery.indexOf(attUrnPrefix))
+    identifier = tQuery.substring(tQuery.indexOf('urn:nbn:fi:'))
   }
   if (identifier) {
     return identifier
