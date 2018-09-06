@@ -735,7 +735,7 @@ storiesOf('Dataset/Data/InfoModal', module).add('Normal', () => {
       description="A default description about the object. Can be long or short. Usually pretty short."
       downloadUrl={'https://google.com'}
       accessUrl={'https://google.com'}
-      checksum={{ algorithm: 'ALG256', checksum_value: 'asdlkfhasfiahf08u1932712kklnsadhlas' }}
+      checksum={{ algorithm: 'SHA-256', checksum_value: 'asdlkfhasfiahf08u1932712kklnsadhlas' }}
     />
   )
 })
