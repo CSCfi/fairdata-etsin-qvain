@@ -51,7 +51,6 @@ export default class ExternalResources extends Component {
       byte_size: ext.byte_size,
       remote: {
         resource_type: ext.resource_type,
-        license: ext.license,
         mediatype: ext.mediatype,
         download_url: ext.download_url,
         object_characteristics: ext.object_characteristics,

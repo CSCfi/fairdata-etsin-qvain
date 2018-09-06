@@ -982,7 +982,7 @@ export const MetaxRemote = {
         ],
         checksum: {
           algorithm:
-            'http://purl.org/att/es/reference_data/checksum_algorithm/checksum_algorithm_SHA-512',
+            'SHA-512',
           checksum_value: 'u5y6f4y68765ngf6ry8n',
         },
         modified: '2013-01-17T08:19:58Z',
@@ -1054,7 +1054,7 @@ export const MetaxRemote = {
         ],
         checksum: {
           algorithm:
-            'http://purl.org/att/es/reference_data/checksum_algorithm/checksum_algorithm_SHA-512',
+            'SHA-512',
           checksum_value: 'u5y6f4y68765ngf6ry8n',
         },
         modified: '2013-01-17T08:19:58Z',

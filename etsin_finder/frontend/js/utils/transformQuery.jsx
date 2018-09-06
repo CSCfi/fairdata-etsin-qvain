@@ -10,9 +10,12 @@
  */
 }
 
-const httpUrnFiAttUrnPrefix = 'http://urn.fi/urn:nbn:fi:att:'
-const urnFiAttUrnPrefix = 'urn.fi/urn:nbn:fi:att:'
-const attUrnPrefix = 'urn:nbn:fi:att:'
+const httpUrnFiRegex = /^http:\/\/urn.fi\/urn:nbn:fi:(att|csc|ida)/i;
+const urnFiRegex = /^urn.fi\/urn:nbn:fi:(att|csc|ida)/i;
+const urnRegex = /^urn:nbn:fi:(att|csc|ida)/i;
+
+const isUrnQuery = query => query && !/\s/.test(query) &&
+(httpUrnFiRegex.test(query) || urnFiRegex.test(query) || urnRegex.test(query))
 
 const transformQuery = query => {
   if (!query) {
@@ -23,14 +26,9 @@ const transformQuery = query => {
   const tQuery = query.trim()
 
   let identifier = false
-  if (
-    tQuery &&
-    !/\s/.test(tQuery) &&
-    (tQuery.startsWith(httpUrnFiAttUrnPrefix) ||
-      tQuery.startsWith(urnFiAttUrnPrefix) ||
-      tQuery.startsWith(attUrnPrefix))
+  if (isUrnQuery(tQuery)
   ) {
-    identifier = tQuery.substring(tQuery.indexOf(attUrnPrefix))
+    identifier = tQuery.substring(tQuery.indexOf('urn:nbn:fi:'))
   }
   if (identifier) {
     return identifier
@@ -38,4 +36,7 @@ const transformQuery = query => {
   return tQuery
 }
 
-export default transformQuery
+module.exports = {
+    transformQuery,
+    isUrnQuery
+}

@@ -11,7 +11,7 @@
 import { observable, action } from 'mobx'
 import axios from 'axios'
 
-import transformQuery from '../../utils/transformQuery'
+import { transformQuery, isUrnQuery } from '../../utils/transformQuery'
 import UrlParse from '../../utils/urlParse'
 import Helpers from '../../utils/helpers'
 import Env from '../domain/env'
@@ -38,6 +38,8 @@ const fields = [
   'other_identifier.type.pref_label.*',
   'dataset_version_set',
 ]
+
+const prefIdField = ['preferred_identifier']
 
 let lastQueryTime = 0
 
@@ -213,21 +215,16 @@ class ElasticQuery {
     const createQuery = query => {
       let queryObject
       const tQuery = transformQuery(query)
+      const isUrnQ = isUrnQuery(query)
       if (tQuery) {
         queryObject = {
-          bool: {
-            must: [
-              {
-                multi_match: {
-                  query: tQuery,
-                  type: 'cross_fields',
-                  minimum_should_match: '75%',
-                  operator: 'and',
-                  fields,
-                },
-              },
-            ],
-          },
+            multi_match: {
+              query: tQuery,
+              type: 'best_fields',
+              minimum_should_match: isUrnQ ? '100%' : '25%',
+              operator: isUrnQ ? 'and' : 'or',
+              fields: isUrnQ ? prefIdField : fields,
+            },
         }
       } else {
         queryObject = {

@@ -84,7 +84,7 @@ export default class PopUp extends Component {
               <Pop
                 innerRef={this.popRef}
                 tabIndex="-1"
-                autofocus
+                autoFocus
                 onBlur={this.onBlur}
                 onFocus={this.onFocus}
                 align={this.props.align}
