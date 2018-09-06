@@ -19,7 +19,7 @@ class DownloadAPIService:
     def __init__(self, download_api_config):
         if download_api_config:
             self.DOWNLOAD_API_BASE_URL = 'https://{0}/api/v1/dataset'.format(download_api_config['HOST']) + '/{0}'
-            self.TIMEOUT = 5 # If no bytes have been received on the underlying socket for timeout seconds
+            self.TIMEOUT = 120 # If no bytes have been received on the underlying socket for timeout seconds
 
     def download(self, cr_id, file_ids, dir_ids):
         url = self._create_url(cr_id, file_ids, dir_ids)
