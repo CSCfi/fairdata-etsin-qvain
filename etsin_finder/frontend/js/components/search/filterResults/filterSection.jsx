@@ -47,8 +47,8 @@ class FilterSection extends Component {
       },
       keyword: {
         title: { en: 'Keyword', fi: 'Avainsana' },
-        aggregation: { en: 'keyword_en', fi: 'keyword_fi' },
-        term: { en: 'theme.label.en.keyword', fi: 'theme.label.fi.keyword' },
+        aggregation: { en: 'all_keywords_en', fi: 'all_keywords_fi' },
+        term: { en: 'all_keywords_en', fi: 'all_keywords_fi' },
       },
       infrastructure: {
         title: { en: 'Research Infra', fi: 'Tutkimusinfra' },

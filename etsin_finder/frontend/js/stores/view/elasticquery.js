@@ -270,14 +270,14 @@ class ElasticQuery {
             field: 'field_of_science.pref_label.fi.keyword',
           },
         },
-        keyword_en: {
+        all_keywords_en: {
           terms: {
-            field: 'theme.label.en.keyword',
+            field: 'all_keywords_en',
           },
         },
-        keyword_fi: {
+        all_keywords_fi: {
           terms: {
-            field: 'theme.label.fi.keyword',
+            field: 'all_keywords_fi',
           },
         },
         infrastructure_en: {
