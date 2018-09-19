@@ -218,13 +218,19 @@ class ElasticQuery {
       const isUrnQ = isUrnQuery(query)
       if (tQuery) {
         queryObject = {
-            multi_match: {
-              query: tQuery,
-              type: 'best_fields',
-              minimum_should_match: isUrnQ ? '100%' : '25%',
-              operator: isUrnQ ? 'and' : 'or',
-              fields: isUrnQ ? prefIdField : fields,
-            },
+          bool: {
+            must: [
+              {
+                multi_match: {
+                  query: tQuery,
+                  type: 'best_fields',
+                  minimum_should_match: isUrnQ ? '100%' : '25%',
+                  operator: isUrnQ ? 'and' : 'or',
+                  fields: isUrnQ ? prefIdField : fields,
+                },
+              },
+            ]
+          }
         }
       } else {
         queryObject = {
