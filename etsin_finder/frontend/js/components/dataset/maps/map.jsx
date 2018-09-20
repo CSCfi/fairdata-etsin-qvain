@@ -140,7 +140,7 @@ class MyMap extends Component {
     return (
       <MapStyleContainer>
         <CustomMap {...this.getMapOptions()}>
-          <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+          <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"/>
           {this.state.layers}
         </CustomMap>
       </MapStyleContainer>
