@@ -31,7 +31,7 @@ const fields = [
   'theme.pref_label.*',
   'field_of_science.pref_label.*',
   'infrastructure.pref_label.*',
-  'project.*',
+  'is_output_of.name.*',
   'identifier',
   'preferred_identifier',
   'other_identifier.notation',
