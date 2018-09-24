@@ -17,14 +17,14 @@ import Helpers from '../../utils/helpers'
 import Env from '../domain/env'
 
 const fields = [
-  'title.*',
+  'title.*^3',
   'description.*',
   'creator.name.*',
   'contributor.name.*',
   'publisher.name.*',
   'rights_holder.name.*',
   'curator.name.*',
-  'keyword',
+  'keyword.*',
   'access_rights.license.title.*',
   'access_rights.access_type.identifier',
   'access_rights.access_type.pref_label.*',
