@@ -27,7 +27,7 @@ import Button from '../general/button'
 import Modal from '../general/modal'
 
 export const accessRightsBool = accessRights => {
-  const openValue = 'http://purl.org/att/es/reference_data/access_type/access_type_open_access'
+  const openValue = 'http://uri.suomi.fi/codelist/fairdata/access_type/code/open_access'
 
   if (accessRights !== undefined && accessRights !== null) {
     // check access_type

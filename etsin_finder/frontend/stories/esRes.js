@@ -40,7 +40,7 @@ export default {
           },
           file_type: [
             {
-              identifier: 'http://purl.org/att/es/reference_data/file_type/file_type_text',
+              identifier: 'http://uri.suomi.fi/codelist/fairdata/file_type/code/text',
               pref_label: {
                 en: 'Text',
                 fi: 'Teksti',
@@ -48,7 +48,7 @@ export default {
               },
             },
             {
-              identifier: 'http://purl.org/att/es/reference_data/file_type/file_type_text',
+              identifier: 'http://uri.suomi.fi/codelist/fairdata/file_type/code/text',
               pref_label: {
                 en: 'Text',
                 fi: 'Teksti',
@@ -59,7 +59,7 @@ export default {
           curator: [
             {
               identifier:
-                'http://purl.org/att/es/organization_data/organization/organization_10076-E700',
+                'http://uri.suomi.fi/codelist/fairdata/organization/code/10076-E700',
               name: {
                 und: 'School Services, BIZ',
               },
@@ -106,7 +106,7 @@ export default {
           preservation_state: 3,
           file_type: [
             {
-              identifier: 'http:/des/purl.org/att/es/reference_data/file_type/file_type_video',
+              identifier: 'http:/des/uri.suomi.fi/codelist/fairdata/file_type/code/video',
               pref_label: {
                 en: 'Video',
                 fi: 'Video',
@@ -114,7 +114,7 @@ export default {
               },
             },
             {
-              identifier: 'http://purl.org/att/es/reference_data/file_type/file_type_image',
+              identifier: 'http://uri.suomi.fi/codelist/fairdata/file_type/code/image',
               pref_label: {
                 en: 'Image',
                 fi: 'Kuva',
@@ -177,7 +177,7 @@ export default {
           preservation_state: 5,
           file_type: [
             {
-              identifier: 'http://purl.org/att/es/reference_data/file_type/file_type_image',
+              identifier: 'http://uri.suomi.fi/codelist/fairdata/file_type/code/image',
               pref_label: {
                 en: 'Image',
                 fi: 'Kuva',
@@ -185,7 +185,7 @@ export default {
               },
             },
             {
-              identifier: 'http://purl.org/att/es/reference_data/file_type/file_type_source_code',
+              identifier: 'http://uri.suomi.fi/codelist/fairdata/file_type/code/source_code',
               pref_label: {
                 en: 'Source code',
                 fi: 'Lähdekoodi',
@@ -267,7 +267,7 @@ export default {
               notation: 'doi:10.12345',
               type: {
                 identifier:
-                  'http://purl.org/att/es/reference_data/identifier_type/identifier_type_doi',
+                  'http://uri.suomi.fi/codelist/fairdata/identifier_type/code/doi',
                 pref_label: {
                   en: 'Digital Object Identifier (DOI)',
                   und: 'Digital Object Identifier (DOI)',
@@ -278,7 +278,7 @@ export default {
               notation: 'urn:nbn:fi-12345',
               type: {
                 identifier:
-                  'http://purl.org/att/es/reference_data/identifier_type/identifier_type_urn',
+                  'http://uri.suomi.fi/codelist/fairdata/identifier_type/code/urn',
                 pref_label: {
                   en: 'Uniform Resource Name (URN)',
                   und: 'Uniform Resource Name (URN)',
@@ -298,7 +298,7 @@ export default {
             ],
             access_type: {
               identifier:
-                'http://purl.org/att/es/reference_data/access_type/access_type_open_access',
+                'http://uri.suomi.fi/codelist/fairdata/access_type/code/open_access',
               pref_label: {
                 en: 'Open',
                 fi: 'Avoin',
@@ -341,7 +341,7 @@ export default {
           project_name: ['Name of project'],
           file_type: [
             {
-              identifier: 'http://purl.org/att/es/reference_data/file_type/file_type_video',
+              identifier: 'http://uri.suomi.fi/codelist/fairdata/file_type/code/video',
               pref_label: {
                 en: 'Video',
                 fi: 'Video',
@@ -349,7 +349,7 @@ export default {
               },
             },
             {
-              identifier: 'http://purl.org/att/es/reference_data/file_type/file_type_software',
+              identifier: 'http://uri.suomi.fi/codelist/fairdata/file_type/code/software',
               pref_label: {
                 en: 'Software',
                 fi: 'Sovellus',
@@ -366,7 +366,7 @@ export default {
               agent_type: 'Person',
               belongs_to_org: {
                 identifier:
-                  'http://purl.org/att/es/organization_data/organization/organization_01901',
+                  'http://uri.suomi.fi/codelist/fairdata/organization/code/01901',
                 name: {
                   und: 'Helsingin yliopisto',
                 },
@@ -391,14 +391,14 @@ export default {
           ],
           publisher: {
             identifier:
-              'http://purl.org/att/es/organization_data/organization/organization_10076-A800',
+              'http://uri.suomi.fi/codelist/fairdata/organization/code/10076-A800',
             name: {
               und: 'School services, ARTS',
             },
             agent_type: 'Organization',
             belongs_to_org: {
               identifier:
-                'http://purl.org/att/es/organization_data/organization/organization_10076',
+                'http://uri.suomi.fi/codelist/fairdata/organization/code/10076',
               name: {
                 und: 'Aalto yliopisto',
               },
@@ -415,7 +415,7 @@ export default {
               agent_type: 'Organization',
               belongs_to_org: {
                 identifier:
-                  'http://purl.org/att/es/organization_data/organization/organization_10076',
+                  'http://uri.suomi.fi/codelist/fairdata/organization/code/10076',
                 name: {
                   und: 'Aalto yliopisto',
                 },
@@ -432,7 +432,7 @@ export default {
               agent_type: 'Person',
               belongs_to_org: {
                 identifier:
-                  'http://purl.org/att/es/organization_data/organization/organization_10076',
+                  'http://uri.suomi.fi/codelist/fairdata/organization/code/10076',
                 name: {
                   und: 'Aalto yliopisto',
                 },
@@ -442,14 +442,14 @@ export default {
           ],
           creator_name: ['Teppo Testaaja'],
           rights_holder: {
-            identifier: 'http://purl.org/att/es/organization_data/organization/organization_01901',
+            identifier: 'http://uri.suomi.fi/codelist/fairdata/organization/code/01901',
             name: {
               und: 'Helsingin yliopisto',
             },
             agent_type: 'Organization',
             belongs_to_org: {
               identifier:
-                'http://purl.org/att/es/organization_data/organization/organization_10076',
+                'http://uri.suomi.fi/codelist/fairdata/organization/code/10076',
               name: {
                 und: 'Aalto yliopisto',
               },
@@ -497,7 +497,7 @@ export default {
               notation: 'doi:10.12345',
               type: {
                 identifier:
-                  'http://purl.org/att/es/reference_data/identifier_type/identifier_type_doi',
+                  'http://uri.suomi.fi/codelist/fairdata/identifier_type/code/doi',
                 pref_label: {
                   en: 'Digital Object Identifier (DOI)',
                   und: 'Digital Object Identifier (DOI)',
@@ -508,7 +508,7 @@ export default {
               notation: 'urn:nbn:fi-12345',
               type: {
                 identifier:
-                  'http://purl.org/att/es/reference_data/identifier_type/identifier_type_urn',
+                  'http://uri.suomi.fi/codelist/fairdata/identifier_type/code/urn',
                 pref_label: {
                   en: 'Uniform Resource Name (URN)',
                   und: 'Uniform Resource Name (URN)',
@@ -528,7 +528,7 @@ export default {
             ],
             access_type: {
               identifier:
-                'http://purl.org/att/es/reference_data/access_type/access_type_open_access',
+                'http://uri.suomi.fi/codelist/fairdata/access_type/code/open_access',
               pref_label: {
                 en: 'Open',
                 fi: 'Avoin',
@@ -571,7 +571,7 @@ export default {
           project_name: ['Name of project'],
           file_type: [
             {
-              identifier: 'http://purl.org/att/es/reference_data/file_type/file_type_video',
+              identifier: 'http://uri.suomi.fi/codelist/fairdata/file_type/code/video',
               pref_label: {
                 en: 'Video',
                 fi: 'Video',
@@ -579,7 +579,7 @@ export default {
               },
             },
             {
-              identifier: 'http://purl.org/att/es/reference_data/file_type/file_type_software',
+              identifier: 'http://uri.suomi.fi/codelist/fairdata/file_type/code/software',
               pref_label: {
                 en: 'Software',
                 fi: 'Sovellus',
@@ -596,7 +596,7 @@ export default {
               agent_type: 'Person',
               belongs_to_org: {
                 identifier:
-                  'http://purl.org/att/es/organization_data/organization/organization_01901',
+                  'http://uri.suomi.fi/codelist/fairdata/organization/code/01901',
                 name: {
                   und: 'Helsingin yliopisto',
                 },
@@ -621,14 +621,14 @@ export default {
           ],
           publisher: {
             identifier:
-              'http://purl.org/att/es/organization_data/organization/organization_10076-A800',
+              'http://uri.suomi.fi/codelist/fairdata/organization/code/10076-A800',
             name: {
               und: 'School services, ARTS',
             },
             agent_type: 'Organization',
             belongs_to_org: {
               identifier:
-                'http://purl.org/att/es/organization_data/organization/organization_10076',
+                'http://uri.suomi.fi/codelist/fairdata/organization/code/10076',
               name: {
                 und: 'Aalto yliopisto',
               },
@@ -645,7 +645,7 @@ export default {
               agent_type: 'Organization',
               belongs_to_org: {
                 identifier:
-                  'http://purl.org/att/es/organization_data/organization/organization_10076',
+                  'http://uri.suomi.fi/codelist/fairdata/organization/code/10076',
                 name: {
                   und: 'Aalto yliopisto',
                 },
@@ -662,7 +662,7 @@ export default {
               agent_type: 'Person',
               belongs_to_org: {
                 identifier:
-                  'http://purl.org/att/es/organization_data/organization/organization_10076',
+                  'http://uri.suomi.fi/codelist/fairdata/organization/code/10076',
                 name: {
                   und: 'Aalto yliopisto',
                 },
@@ -672,14 +672,14 @@ export default {
           ],
           creator_name: ['Teppo Testaaja'],
           rights_holder: {
-            identifier: 'http://purl.org/att/es/organization_data/organization/organization_01901',
+            identifier: 'http://uri.suomi.fi/codelist/fairdata/organization/code/01901',
             name: {
               und: 'Helsingin yliopisto',
             },
             agent_type: 'Organization',
             belongs_to_org: {
               identifier:
-                'http://purl.org/att/es/organization_data/organization/organization_10076',
+                'http://uri.suomi.fi/codelist/fairdata/organization/code/10076',
               name: {
                 und: 'Aalto yliopisto',
               },
@@ -727,7 +727,7 @@ export default {
               notation: 'doi:10.12345',
               type: {
                 identifier:
-                  'http://purl.org/att/es/reference_data/identifier_type/identifier_type_doi',
+                  'http://uri.suomi.fi/codelist/fairdata/identifier_type/code/doi',
                 pref_label: {
                   en: 'Digital Object Identifier (DOI)',
                   und: 'Digital Object Identifier (DOI)',
@@ -738,7 +738,7 @@ export default {
               notation: 'urn:nbn:fi-12345',
               type: {
                 identifier:
-                  'http://purl.org/att/es/reference_data/identifier_type/identifier_type_urn',
+                  'http://uri.suomi.fi/codelist/fairdata/identifier_type/code/urn',
                 pref_label: {
                   en: 'Uniform Resource Name (URN)',
                   und: 'Uniform Resource Name (URN)',
@@ -758,7 +758,7 @@ export default {
             ],
             access_type: {
               identifier:
-                'http://purl.org/att/es/reference_data/access_type/access_type_open_access',
+                'http://uri.suomi.fi/codelist/fairdata/access_type/code/open_access',
               pref_label: {
                 en: 'Open',
                 fi: 'Avoin',
@@ -801,7 +801,7 @@ export default {
           project_name: ['Name of project'],
           file_type: [
             {
-              identifier: 'http://purl.org/att/es/reference_data/file_type/file_type_video',
+              identifier: 'http://uri.suomi.fi/codelist/fairdata/file_type/code/video',
               pref_label: {
                 en: 'Video',
                 fi: 'Video',
@@ -809,7 +809,7 @@ export default {
               },
             },
             {
-              identifier: 'http://purl.org/att/es/reference_data/file_type/file_type_software',
+              identifier: 'http://uri.suomi.fi/codelist/fairdata/file_type/code/software',
               pref_label: {
                 en: 'Software',
                 fi: 'Sovellus',
@@ -826,7 +826,7 @@ export default {
               agent_type: 'Person',
               belongs_to_org: {
                 identifier:
-                  'http://purl.org/att/es/organization_data/organization/organization_01901',
+                  'http://uri.suomi.fi/codelist/fairdata/organization/code/01901',
                 name: {
                   und: 'Helsingin yliopisto',
                 },
@@ -851,14 +851,14 @@ export default {
           ],
           publisher: {
             identifier:
-              'http://purl.org/att/es/organization_data/organization/organization_10076-A800',
+              'http://uri.suomi.fi/codelist/fairdata/organization/code/10076-A800',
             name: {
               und: 'School services, ARTS',
             },
             agent_type: 'Organization',
             belongs_to_org: {
               identifier:
-                'http://purl.org/att/es/organization_data/organization/organization_10076',
+                'http://uri.suomi.fi/codelist/fairdata/organization/code/10076',
               name: {
                 und: 'Aalto yliopisto',
               },
@@ -875,7 +875,7 @@ export default {
               agent_type: 'Organization',
               belongs_to_org: {
                 identifier:
-                  'http://purl.org/att/es/organization_data/organization/organization_10076',
+                  'http://uri.suomi.fi/codelist/fairdata/organization/code/10076',
                 name: {
                   und: 'Aalto yliopisto',
                 },
@@ -892,7 +892,7 @@ export default {
               agent_type: 'Person',
               belongs_to_org: {
                 identifier:
-                  'http://purl.org/att/es/organization_data/organization/organization_10076',
+                  'http://uri.suomi.fi/codelist/fairdata/organization/code/10076',
                 name: {
                   und: 'Aalto yliopisto',
                 },
@@ -902,14 +902,14 @@ export default {
           ],
           creator_name: ['Teppo Testaaja'],
           rights_holder: {
-            identifier: 'http://purl.org/att/es/organization_data/organization/organization_01901',
+            identifier: 'http://uri.suomi.fi/codelist/fairdata/organization/code/01901',
             name: {
               und: 'Helsingin yliopisto',
             },
             agent_type: 'Organization',
             belongs_to_org: {
               identifier:
-                'http://purl.org/att/es/organization_data/organization/organization_10076',
+                'http://uri.suomi.fi/codelist/fairdata/organization/code/10076',
               name: {
                 und: 'Aalto yliopisto',
               },
