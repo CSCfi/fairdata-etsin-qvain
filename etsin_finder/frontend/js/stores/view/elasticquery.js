@@ -17,21 +17,21 @@ import Helpers from '../../utils/helpers'
 import Env from '../domain/env'
 
 const fields = [
-  'title.*',
+  'title.*^3',
   'description.*',
   'creator.name.*',
   'contributor.name.*',
   'publisher.name.*',
   'rights_holder.name.*',
   'curator.name.*',
-  'keyword',
+  'keyword.*',
   'access_rights.license.title.*',
   'access_rights.access_type.identifier',
   'access_rights.access_type.pref_label.*',
   'theme.pref_label.*',
   'field_of_science.pref_label.*',
   'infrastructure.pref_label.*',
-  'project.*',
+  'is_output_of.name.*',
   'identifier',
   'preferred_identifier',
   'other_identifier.notation',
@@ -218,13 +218,19 @@ class ElasticQuery {
       const isUrnQ = isUrnQuery(query)
       if (tQuery) {
         queryObject = {
-            multi_match: {
-              query: tQuery,
-              type: 'best_fields',
-              minimum_should_match: isUrnQ ? '100%' : '25%',
-              operator: isUrnQ ? 'and' : 'or',
-              fields: isUrnQ ? prefIdField : fields,
-            },
+          bool: {
+            must: [
+              {
+                multi_match: {
+                  query: tQuery,
+                  type: 'best_fields',
+                  minimum_should_match: isUrnQ ? '100%' : '25%',
+                  operator: isUrnQ ? 'and' : 'or',
+                  fields: isUrnQ ? prefIdField : fields,
+                },
+              },
+            ]
+          }
         }
       } else {
         queryObject = {

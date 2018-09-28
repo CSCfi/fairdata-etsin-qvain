@@ -45,7 +45,7 @@ const idaDataTree = [
     },
     description: 'file description 6',
     use_category: {
-      identifier: 'http://purl.org/att/es/reference_data/use_category/use_category_configuration',
+      identifier: 'http://uri.suomi.fi/codelist/fairdata/use_category/code/configuration',
       pref_label: {
         en: 'Configuration files',
         fi: 'Konfiguraatiotiedosto',
@@ -89,7 +89,7 @@ const idaDataTree = [
     },
     description: 'file description 10',
     use_category: {
-      identifier: 'http://purl.org/att/es/reference_data/use_category/use_category_publication',
+      identifier: 'http://uri.suomi.fi/codelist/fairdata/use_category/code/publication',
       pref_label: { en: 'Publication', fi: 'Julkaisu', und: 'Julkaisu' },
     },
     title: 'file title 10',
@@ -115,7 +115,7 @@ const idaDataTree = [
     },
     description: 'Description of the directory',
     use_category: {
-      identifier: 'http://purl.org/att/es/reference_data/use_category/use_category_outcome',
+      identifier: 'http://uri.suomi.fi/codelist/fairdata/use_category/code/outcome',
       pref_label: { en: 'Outcome material', fi: 'Tulosaineisto', und: 'Tulosaineisto' },
     },
     title: 'Phase 1 of science data C',
@@ -141,7 +141,7 @@ const idaDataTree = [
     },
     description: 'Description of the directory',
     use_category: {
-      identifier: 'http://purl.org/att/es/reference_data/use_category/use_category_outcome',
+      identifier: 'http://uri.suomi.fi/codelist/fairdata/use_category/code/outcome',
       pref_label: { en: 'Outcome material', fi: 'Tulosaineisto', und: 'Tulosaineisto' },
     },
     title: 'Phase 2 of science data C',
@@ -167,7 +167,7 @@ const idaDataTree = [
     },
     description: 'Description of the directory',
     use_category: {
-      identifier: 'http://purl.org/att/es/reference_data/use_category/use_category_outcome',
+      identifier: 'http://uri.suomi.fi/codelist/fairdata/use_category/code/outcome',
       pref_label: { en: 'Outcome material', fi: 'Tulosaineisto', und: 'Tulosaineisto' },
     },
     title: 'Phase 1 01/2018 of Science data A',
@@ -193,7 +193,7 @@ const idaDataTree = [
     },
     description: 'Description of the directory',
     use_category: {
-      identifier: 'http://purl.org/att/es/reference_data/use_category/use_category_source',
+      identifier: 'http://uri.suomi.fi/codelist/fairdata/use_category/code/source',
       pref_label: { en: 'Source material', fi: 'Lähdeaineisto', und: 'Lähdeaineisto' },
     },
     title: 'Science data B',
@@ -219,7 +219,7 @@ const idaDataTree = [
     },
     description: 'Description of the directory',
     use_category: {
-      identifier: 'http://purl.org/att/es/reference_data/use_category/use_category_method',
+      identifier: 'http://uri.suomi.fi/codelist/fairdata/use_category/code/method',
       pref_label: { en: 'Method', fi: 'Metodi', und: 'Metodi' },
     },
     title: 'Other stuff',
@@ -264,7 +264,7 @@ export const remoteObj = {
         en: 'A statement or formal explanation of the meaning of a concept.',
       },
     ],
-    identifier: 'http://purl.org/att/es/reference_data/file_type/file_type_image',
+    identifier: 'http://uri.suomi.fi/codelist/fairdata/file_type/code/image',
     pref_label: {
       en: 'Image',
       fi: 'Kuva',
@@ -284,7 +284,7 @@ export const remoteObj = {
     },
   },
   use_category: {
-    identifier: 'http://purl.org/att/es/reference_data/use_category/use_category_rights',
+    identifier: 'http://uri.suomi.fi/codelist/fairdata/use_category/code/rights',
     pref_label: {
       en: 'Rights statement',
       fi: 'Oikeuksien kuvaus',

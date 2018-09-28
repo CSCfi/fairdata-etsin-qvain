@@ -5,12 +5,12 @@
 # :author: CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
 # :license: MIT
 
-import copy
-import datetime
+from datetime import datetime
 import json
 import os
 
 from dateutil import parser
+import pytz
 
 
 def executing_travis():
@@ -74,53 +74,45 @@ def write_string_to_file(string, filename):
         print(f"{string}", file=output_file)
 
 
-def remove_keys(obj, rubbish):
+def remove_keys_recursively(obj, fields_to_remove):
     if isinstance(obj, dict):
         obj = {
-            key: remove_keys(value, rubbish) for key, value in obj.items() if key not in rubbish
+            key: remove_keys_recursively(value, fields_to_remove) for key, value in obj.items()
+            if key not in fields_to_remove
         }
     elif isinstance(obj, list):
-        obj = [new_obj for new_obj in (remove_keys(item, rubbish) for item in obj if item not in rubbish) if new_obj]
+        obj = [remove_keys_recursively(item, fields_to_remove) for item in obj if item not in fields_to_remove]
+
     return obj
 
 
-def leave_keys(obj, relevant):
-    if isinstance(obj, dict):
-        retVal = {}
-        for key in obj:
-            if key in relevant:
-                retVal[key] = copy.deepcopy(obj[key])
-            elif isinstance(obj[key], list) or isinstance(obj[key], dict):
-                child = leave_keys(obj[key], relevant)
-                if child:
-                    retVal[key] = child
-        if retVal:
-            return retVal
-        else:
-            return None
-    elif isinstance(obj, list):
-        retVal = []
-        for entry in obj:
-            child = leave_keys(entry, relevant)
-            if child:
-                retVal.append(child)
-        if retVal:
-            return retVal
-        else:
-            return None
-    return obj
+def leave_keys_in_dict(dict_obj, fields_to_leave):
+    """
+    Removes the key-values from dict_obj, for which key is NOT listed in fields_to_leave.
+    NOTE: Is not recursive
+
+    :param dict_obj:
+    :param fields_to_leave:
+    :return:
+    """
+    for key in list(dict_obj):
+        if key not in fields_to_leave:
+            del dict_obj[key]
 
 
-def _parse_datetime_str_to_datetime_obj(str):
+def _parse_timestamp_string_to_tz_aware_datetime(timestamp_str):
+    if not isinstance(timestamp_str, str):
+        raise ValueError("Timestamp must be a string")
+
     try:
-        return parser.parse(str)
-    except Exception:
-        pass
-    return None
+        dt = parser.parse(timestamp_str)
+        if dt.tzinfo is None or dt.tzinfo.utcoffset(dt) is None:
+            dt = pytz.timezone('Europe/Helsinki').localize(dt)
+        return dt
+    except Exception as e:
+        raise ValueError("Unable to parse timestamp: {0}".format(timestamp_str))
 
 
-def now_is_later_than_datetime_str(datetime_str):
-    datetime_obj = _parse_datetime_str_to_datetime_obj(datetime_str)
-    if type(datetime_obj) != datetime.datetime:
-        raise Exception
-    return datetime.datetime.now() >= datetime
+def tz_now_is_later_than_timestamp_str(timestamp_str):
+    datetime_obj = _parse_timestamp_string_to_tz_aware_datetime(timestamp_str)
+    return datetime.now(tz=pytz.timezone('Europe/Helsinki')) >= datetime_obj

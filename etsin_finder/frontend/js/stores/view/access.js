@@ -13,21 +13,21 @@ import { observable, action, computed } from 'mobx'
 import auth from '../domain/auth'
 
 const accessTypes = {
-  open: 'http://purl.org/att/es/reference_data/access_type/access_type_open_access',
-  closed: 'http://purl.org/att/es/reference_data/access_type/access_type_closed_access',
-  embargoed: 'http://purl.org/att/es/reference_data/access_type/access_type_embargoed_access',
+  open: 'http://uri.suomi.fi/codelist/fairdata/access_type/code/open_access',
+  closed: 'http://uri.suomi.fi/codelist/fairdata/access_type/code/closed_access',
+  embargoed: 'http://uri.suomi.fi/codelist/fairdata/access_type/code/embargoed_access',
   restricted_access:
-    'http://purl.org/att/es/reference_data/access_type/access_type_restricted_access',
+    'http://uri.suomi.fi/codelist/fairdata/access_type/code/restricted_access',
   restricted_access_permit_fairdata:
-    'http://purl.org/att/es/reference_data/access_type/access_type_restricted_access_permit_fairdata',
+    'http://uri.suomi.fi/codelist/fairdata/access_type/code/restricted_access_permit_fairdata',
   restricted_access_permit_external:
-    'http://purl.org/att/es/reference_data/access_type/access_type_restricted_access_permit_external',
+    'http://uri.suomi.fi/codelist/fairdata/access_type/code/restricted_access_permit_external',
   restricted_access_research:
-    'http://purl.org/att/es/reference_data/access_type/access_type_restricted_access_research',
+    'http://uri.suomi.fi/codelist/fairdata/access_type/code/restricted_access_research',
   restricted_access_research_education_studying:
-    'http://purl.org/att/es/reference_data/access_type/access_type_restricted_access_education_studying',
+    'http://uri.suomi.fi/codelist/fairdata/access_type/code/restricted_access_education_studying',
   restricted_access_registration:
-    'http://purl.org/att/es/reference_data/access_type/access_type_restricted_access_registration',
+    'http://uri.suomi.fi/codelist/fairdata/access_type/code/restricted_access_registration',
 }
 
 class Access {

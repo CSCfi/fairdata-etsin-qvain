@@ -11,5 +11,6 @@ pytest==3.7.1
 pytest-cov==2.5.1
 python-dateutil==2.7.3
 python3-saml==1.4.1
+pytz==2018.5
 pyyaml==3.13
 requests==2.19.1
