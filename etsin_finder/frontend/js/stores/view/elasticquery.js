@@ -39,8 +39,6 @@ const fields = [
   'dataset_version_set',
 ]
 
-const prefIdField = ['preferred_identifier']
-
 let lastQueryTime = 0
 
 class ElasticQuery {
@@ -226,7 +224,7 @@ class ElasticQuery {
                   type: 'best_fields',
                   minimum_should_match: isUrnQ ? '100%' : '25%',
                   operator: isUrnQ ? 'and' : 'or',
-                  fields: fields,
+                  fields
                 },
               },
             ]
