@@ -66,6 +66,7 @@ const english = {
       dirContent: 'Folder content',
       download: 'Download',
       downloadAll: 'Download all',
+      downloading: 'Downloading...',
       fileAmount: '%(amount)s objects',
       close_modal: 'Close info modal',
       info_header: 'Other info related to file',
