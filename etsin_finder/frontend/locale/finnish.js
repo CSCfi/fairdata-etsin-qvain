@@ -65,6 +65,7 @@ const finnish = {
       dirContent: 'Kansion sisältö',
       download: 'Lataa',
       downloadAll: 'Lataa kaikki',
+      downloading: 'Ladataan...',
       fileAmount: '%(amount)s objektia',
       close_modal: 'Sulje info',
       info_header: 'Tiedoston muut tiedot',
