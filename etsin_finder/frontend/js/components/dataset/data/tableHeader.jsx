@@ -72,7 +72,7 @@ export default class TableHeader extends Component {
           <ButtonsCont>
             <InvertedButton
               color="white"
-              disabled={ true }
+              disabled="true"
             >
               <Translate content="dataset.dl.downloading" />
               <Translate className="sr-only" content="dataset.dl.file_types.both" />

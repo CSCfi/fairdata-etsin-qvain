@@ -78,7 +78,7 @@ class TableItem extends Component {
       () => {
         this.props.download(this.props.item.identifier, this.props.item.type)
       }
-    )   
+    )
   }
 
   render() {
@@ -199,7 +199,7 @@ class TableItem extends Component {
           {this.state.downloadDisabled && (
             <HideSmButton
               thin
-              disabled={ true }
+              disabled="true"
             >
               <Translate content="dataset.dl.downloading" />
               <Translate
