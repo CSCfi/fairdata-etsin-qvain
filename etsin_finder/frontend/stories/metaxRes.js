@@ -86,14 +86,14 @@ export default {
               und: 'Creative Commons Nime\u00e4 4.0 Kansainv\u00e4linen (CC BY 4.0)',
             },
             license: 'https://creativecommons.org/licenses/by/4.0/',
-            in_scheme: 'https://metax.fairdata.fi/es/reference_data/license/_search?pretty',
+            in_scheme: 'http://uri.suomi.fi/codelist/fairdata/license',
             identifier: 'https://creativecommons.org/licenses/by/4.0/',
           },
         ],
         access_type: [
           {
-            in_scheme: 'https://metax.fairdata.fi/es/reference_data/access_type/_search?pretty',
-            identifier: 'http://uri.suomi.fi/codelist/fairdata/access_type/code/open_access',
+            in_scheme: 'http://uri.suomi.fi/codelist/fairdata/access_type',
+            identifier: 'http://uri.suomi.fi/codelist/fairdata/access_type/code/open',
             pref_label: {
               en: 'Open',
               fi: 'Avoin',
@@ -119,7 +119,7 @@ export default {
               sv: 'Aalto universitetet',
               und: 'Aalto yliopisto',
             },
-            in_scheme: 'https://metax.fairdata.fi/es/organization_data/organization/_search?pretty',
+            in_scheme: 'http://uri.suomi.fi/codelist/fairdata/organization',
             identifier: 'http://uri.suomi.fi/codelist/fairdata/organization/code/10076',
           },
         ],
@@ -677,7 +677,7 @@ export default {
         },
         identifier: 'projectidentifier',
         funder_type: {
-          in_scheme: 'https://metax.fairdata.fi/es/reference_data/funder_type/_search?pretty',
+          in_scheme: 'http://uri.suomi.fi/codelist/fairdata/funder_type',
           identifier: 'http://uri.suomi.fi/codelist/fairdata/funder_type/code/tekes',
           pref_label: {
             en: 'Tekes',
@@ -704,7 +704,7 @@ export default {
               und: 'Helsingin yliopisto',
             },
             '@type': 'Organization',
-            in_scheme: 'https://metax.fairdata.fi/es/organization_data/organization/_search?pretty',
+            in_scheme: 'http://uri.suomi.fi/codelist/fairdata/organization',
             identifier: 'http://uri.suomi.fi/codelist/fairdata/organization/code/01901',
           },
         ],
@@ -716,7 +716,7 @@ export default {
         },
         identifier: 'otherIdentifier',
         funder_type: {
-          in_scheme: 'https://metax.fairdata.fi/es/reference_data/funder_type/_search?pretty',
+          in_scheme: 'http://uri.suomi.fi/codelist/fairdata/funder_type',
           identifier: 'http://uri.suomi.fi/codelist/fairdata/funder_type/code/tekes',
           pref_label: {
             en: 'Tekes',
@@ -743,7 +743,7 @@ export default {
               und: 'Helsingin yliopisto',
             },
             '@type': 'Organization',
-            in_scheme: 'https://metax.fairdata.fi/es/organization_data/organization/_search?pretty',
+            in_scheme: 'http://uri.suomi.fi/codelist/fairdata/organization',
             identifier: 'http://uri.suomi.fi/codelist/fairdata/organization/code/01901',
           },
         ],
@@ -762,25 +762,21 @@ export default {
       ],
       available: '2014-01-15T08:19:58Z',
       access_type: {
-        in_scheme: [
-          {
-            identifier: 'http://uri.of.accessrights.concept/scheme',
-            pref_label: { en: 'The preferred lexical label for a resource' },
-          },
-        ],
         definition: [{ en: 'A statement or formal explanation of the meaning of a concept.' }],
-        identifier: 'http://uri.suomi.fi/codelist/fairdata/access_type/code/open_access',
+        identifier: 'http://uri.suomi.fi/codelist/fairdata/access_type/code/open',
         pref_label: { en: 'Open', fi: 'Avoin', und: 'Avoin' },
       },
       description: { en: 'Free account of the rights' },
-      restriction_grounds: {
+      restriction_grounds: [{
         identifier:
-          'http://uri.suomi.fi/codelist/fairdata/restriction_grounds/code/1',
+          'http://uri.suomi.fi/codelist/fairdata/restriction_grounds/code/other',
         pref_label: {
-          fi: 'Avoin, ei tiedossa olevia rajoituksia',
-          und: 'Avoin, ei tiedossa olevia rajoituksia',
+          fi: 'Saatavuutta rajoitettu muulla perusteella',
+          en: 'Restricted access due to other reasons',
+          sv: 'Begränsad åtkomst av övriga skäl'
+          und: 'Saatavuutta rajoitettu muulla perusteella',
         },
-      },
+      }],
       has_rights_related_agent: [
         {
           name: { und: 'Helsingin yliopisto' },

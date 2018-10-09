@@ -27,7 +27,7 @@ import Button from '../general/button'
 import Modal from '../general/modal'
 
 export const accessRightsBool = accessRights => {
-  const openValue = 'http://uri.suomi.fi/codelist/fairdata/access_type/code/open_access'
+  const openValue = 'http://uri.suomi.fi/codelist/fairdata/access_type/code/open'
 
   if (accessRights !== undefined && accessRights !== null) {
     // check access_type
@@ -58,8 +58,9 @@ class AccessRights extends Component {
       description,
       url,
       restriction_grounds:
-        checkNested(props.access_rights, 'restriction_grounds', 'pref_label') &&
-        props.access_rights.restriction_grounds.pref_label,
+        props.access_rights.restriction_grounds !== undefined &&
+        props.access_rights.restriction_grounds.length > 0 &&
+        props.access_rights.restriction_grounds,
       modalIsOpen: false,
     }
 
@@ -131,12 +132,12 @@ class AccessRights extends Component {
                   </AccessUrl>
                 </div>
               )}
-              {this.state.restriction_grounds && (
-                <div>
-                  <FontAwesomeIcon icon={faExclamationTriangle} />
-                  <AccessLabel>{checkDataLang(this.state.restriction_grounds)}</AccessLabel>
+              {this.state.restriction_grounds && (this.state.restriction_grounds.map(rg => (
+                <div key={`div-rg-${rg.identifier}`}>
+                  <FontAwesomeIcon key={`fai-rg-${rg.identifier}`} icon={faExclamationTriangle} />
+                  <AccessLabel key={`al-rg-${rg.identifier}`}>{checkDataLang(rg.pref_label)}</AccessLabel>
                 </div>
-              )}
+              )))}
             </ModalInner>
           </Modal>
         </React.Fragment>
@@ -210,9 +211,7 @@ AccessRights.propTypes = {
       identifier: PropTypes.string.isRequired,
       pref_label: PropTypes.objectOf(PropTypes.string),
     }),
-    restriction_grounds: PropTypes.shape({
-      pref_label: PropTypes.objectOf(PropTypes.string),
-    }),
+    restriction_grounds: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
     license: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
   }),
   Stores: PropTypes.object.isRequired,

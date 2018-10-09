@@ -13,21 +13,11 @@ import { observable, action, computed } from 'mobx'
 import auth from '../domain/auth'
 
 const accessTypes = {
-  open: 'http://uri.suomi.fi/codelist/fairdata/access_type/code/open_access',
-  closed: 'http://uri.suomi.fi/codelist/fairdata/access_type/code/closed_access',
-  embargoed: 'http://uri.suomi.fi/codelist/fairdata/access_type/code/embargoed_access',
-  restricted_access:
-    'http://uri.suomi.fi/codelist/fairdata/access_type/code/restricted_access',
-  restricted_access_permit_fairdata:
-    'http://uri.suomi.fi/codelist/fairdata/access_type/code/restricted_access_permit_fairdata',
-  restricted_access_permit_external:
-    'http://uri.suomi.fi/codelist/fairdata/access_type/code/restricted_access_permit_external',
-  restricted_access_research:
-    'http://uri.suomi.fi/codelist/fairdata/access_type/code/restricted_access_research',
-  restricted_access_research_education_studying:
-    'http://uri.suomi.fi/codelist/fairdata/access_type/code/restricted_access_education_studying',
-  restricted_access_registration:
-    'http://uri.suomi.fi/codelist/fairdata/access_type/code/restricted_access_registration',
+  open: 'http://uri.suomi.fi/codelist/fairdata/access_type/code/open',
+  login: 'http://uri.suomi.fi/codelist/fairdata/access_type/code/login',
+  embargo: 'http://uri.suomi.fi/codelist/fairdata/access_type/code/embargo',
+  permit: 'http://uri.suomi.fi/codelist/fairdata/access_type/code/permit',
+  restricted: 'http://uri.suomi.fi/codelist/fairdata/access_type/code/restricted'
 }
 
 class Access {
@@ -54,32 +44,20 @@ class Access {
       case accessTypes.open:
         this.open()
         break
-      case accessTypes.closed:
-        this.closed()
+      case accessTypes.embargo:
+        this.embargoAccess(access.available)
         break
-      case accessTypes.embargoed:
-        this.embargoed(access.available)
-        break
-      case accessTypes.restricted_access:
+      case accessTypes.restricted:
         this.restrictedAccess()
         break
-      case accessTypes.restricted_access_permit_external:
-        this.restrictedAccessPermitExternal()
+      case accessTypes.permit:
+        this.permitAccess()
         break
-      case accessTypes.restricted_access_permit_fairdata:
-        this.restrictedAccessPermitFairdata()
-        break
-      case accessTypes.restricted_access_registration:
-        this.restrictedAccessRegistration()
-        break
-      case accessTypes.restricted_access_research:
-        this.restrictedAccessResearch()
-        break
-      case accessTypes.restricted_access_research_education_studying:
-        this.restrictedAccessResearchEducationStudying()
+      case accessTypes.login:
+        this.loginAccess()
         break
       default:
-        this.closed()
+        this.restrictedAccess()
     }
   }
 
@@ -97,20 +75,7 @@ class Access {
   }
 
   @action
-  closed() {
-    this.restrictions = {
-      open: false,
-      allowRemote: true,
-      allowRemoteDownload: true,
-      allowDataIda: true,
-      allowDataInfoButton: false,
-      allowDataDownload: false,
-      allowAskForAccess: false,
-    }
-  }
-
-  @action
-  embargoed(av) {
+  embargoAccess(av) {
     if (new Date(av).getTime() < new Date().getTime()) {
       this.restrictions = {
         open: true,
@@ -124,9 +89,9 @@ class Access {
     } else {
       this.restrictions = {
         open: false,
-        allowRemote: false,
-        allowRemoteDownload: false,
-        allowDataIda: false,
+        allowRemote: true,
+        allowRemoteDownload: true,
+        allowDataIda: true,
         allowDataInfoButton: false,
         allowDataDownload: false,
         allowAskForAccess: false,
@@ -148,7 +113,7 @@ class Access {
   }
 
   @action
-  restrictedAccessPermitFairdata() {
+  permitAccess() {
     // TODO: check if user has permission
     // these are the default permissions
     // this can not be checked yet
@@ -164,58 +129,7 @@ class Access {
   }
 
   @action
-  restrictedAccessPermitExternal() {
-    this.restrictions = {
-      open: false,
-      allowRemote: true,
-      allowRemoteDownload: true,
-      allowDataIda: true,
-      allowDataInfoButton: false,
-      allowDataDownload: false,
-      allowAskForAccess: true,
-    }
-  }
-
-  @action
-  restrictedAccessResearch() {
-    this.restrictions = {
-      open: false,
-      allowRemote: true,
-      allowRemoteDownload: true,
-      allowDataIda: true,
-      allowDataInfoButton: false,
-      allowDataDownload: false,
-      allowAskForAccess: false,
-    }
-  }
-
-  @action
-  restrictedAccessResearchEducationStudying() {
-    if (auth.userLogged) {
-      this.restrictions = {
-        open: false,
-        allowRemote: true,
-        allowRemoteDownload: true,
-        allowDataIda: true,
-        allowDataInfoButton: true,
-        allowDataDownload: true,
-        allowAskForAccess: false,
-      }
-    } else {
-      this.restrictions = {
-        open: false,
-        allowRemote: true,
-        allowRemoteDownload: true,
-        allowDataIda: true,
-        allowDataInfoButton: false,
-        allowDataDownload: false,
-        allowAskForAccess: false,
-      }
-    }
-  }
-
-  @action
-  restrictedAccessRegistration() {
+  loginAccess() {
     if (auth.userLogged) {
       this.restrictions = {
         open: false,
