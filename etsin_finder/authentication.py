@@ -57,23 +57,29 @@ def reset_flask_session_on_logout():
     session.clear()
 
 
-def get_user_saml_info():
-    if not is_authenticated():
-        return {}
+def get_user_display_name():
+    if not is_authenticated() or 'samlUserdata' not in session:
+        return None
 
-    eppn = session['samlUserdata'].get('urn:oid:1.3.6.1.4.1.5923.1.1.1.6', False)[0]
-    cn = session['samlUserdata'].get('urn:oid:2.5.4.3', False)[0]
-    if not eppn or not cn:
-        log.warn("User seems to be authenticated but eppn or cn not in session object. "
+    cn = session['samlUserdata'].get('urn:oid:2.5.4.3', False)
+    if cn:
+        return cn[0]
+    else:
+        log.warn("User seems to be authenticated but cn not in session object. "
                  "Saml userdata:\n{0}".format(session['samlUserdata']))
-    return {
-        'user_id': eppn,
-        'user_display_name': cn
-    }
+
+    return None
 
 
-def get_user_eppn():
-    user_info = get_user_saml_info()
-    if user_info:
-        return user_info.get('user_id', None)
+def get_user_id():
+    if not is_authenticated() or 'samlUserdata' not in session:
+        return None
+
+    user_fd_id = session['samlUserdata'].get('urn:oid:1.3.6.1.4.1.8057.2.80.9', False)
+    if user_fd_id:
+        return user_fd_id[0]
+    else:
+        log.warn("User seems to be authenticated but fairdata id not in session object. "
+                 "Saml userdata:\n{0}".format(session['samlUserdata']))
+
     return None

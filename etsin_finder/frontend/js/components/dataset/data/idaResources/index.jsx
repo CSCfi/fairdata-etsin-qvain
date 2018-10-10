@@ -22,8 +22,8 @@ export default class IdaResources extends Component {
       this.state = {
         results,
         described: parsed,
-        allowInfo: access.restrictions.allowDataInfoButton,
-        allowDownload: access.restrictions.allowDataDownload,
+        allowInfo: access.restrictions.allowDataIdaInfoButton,
+        allowDownload: access.restrictions.allowDataIdaDownloadButton,
         fileDirTree,
         currentFolder: fileDirTree,
         currentPath: [],

@@ -43,9 +43,16 @@ class Content extends Component {
     // - it doesn't contain files or remote files
     // - the dataset is harvested
     // - the access_rights allow it
-    return (
-      (this.props.hasFiles || this.props.hasRemote) && !this.props.harvested && access.accessDataTab
-    )
+
+    if ((!this.props.hasFiles && !this.props.hasRemote) || this.props.harvested) {
+      return false
+    }
+    if (this.props.hasFiles) {
+      return access.restrictions.allowDataIda
+    } else if (this.props.hasRemote) {
+        return access.restrictions.allowDataRemote
+    }
+    return false
   }
 
   showMaps() {

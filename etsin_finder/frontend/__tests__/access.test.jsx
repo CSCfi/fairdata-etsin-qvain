@@ -27,19 +27,16 @@ describe('Access Store', () => {
       done()
     })
     it('Should show Remote files', () => {
-      expect(Access.restrictions.allowRemote).toEqual(true)
+      expect(Access.restrictions.allowDataRemote).toEqual(true)
     })
     it('Should show IDA files', () => {
       expect(Access.restrictions.allowDataIda).toEqual(true)
     })
-    it('Should allow Remote file download', () => {
-      expect(Access.restrictions.allowRemoteDownload).toEqual(true)
-    })
     it('Should allow Ida file download', () => {
-      expect(Access.restrictions.allowDataDownload).toEqual(true)
+      expect(Access.restrictions.allowDataIdaDownloadButton).toEqual(true)
     })
     it('Should show Ida file info', () => {
-      expect(Access.restrictions.allowDataInfoButton).toEqual(true)
+      expect(Access.restrictions.allowDataIdaInfoButton).toEqual(true)
     })
     it('Should not show ask for access', () => {
       expect(Access.restrictions.allowAskForAccess).toEqual(false)
@@ -57,19 +54,16 @@ describe('Access Store', () => {
         done()
       })
       it('Should show Remote files', () => {
-        expect(Access.restrictions.allowRemote).toEqual(true)
-      })
-      it('Should allow Remote file download', () => {
-        expect(Access.restrictions.allowRemoteDownload).toEqual(true)
+        expect(Access.restrictions.allowDataRemote).toEqual(true)
       })
       it('Should show IDA files', () => {
         expect(Access.restrictions.allowDataIda).toEqual(true)
       })
       it('Should allow Ida file download', () => {
-        expect(Access.restrictions.allowDataDownload).toEqual(true)
+        expect(Access.restrictions.allowDataIdaDownloadButton).toEqual(true)
       })
       it('Should show Ida file info', () => {
-        expect(Access.restrictions.allowDataInfoButton).toEqual(true)
+        expect(Access.restrictions.allowDataIdaInfoButton).toEqual(true)
       })
       it('Should not show ask for access', () => {
         expect(Access.restrictions.allowAskForAccess).toEqual(false)
@@ -86,19 +80,16 @@ describe('Access Store', () => {
         done()
       })
       it('Should show Remote files', () => {
-        expect(Access.restrictions.allowRemote).toEqual(true)
-      })
-      it('Should allow Remote file download', () => {
-        expect(Access.restrictions.allowRemoteDownload).toEqual(true)
+        expect(Access.restrictions.allowDataRemote).toEqual(true)
       })
       it('Should show IDA files', () => {
         expect(Access.restrictions.allowDataIda).toEqual(true)
       })
       it('Should not allow Ida file download', () => {
-        expect(Access.restrictions.allowDataDownload).toEqual(false)
+        expect(Access.restrictions.allowDataIdaDownloadButton).toEqual(false)
       })
       it('Should not show Ida file info', () => {
-        expect(Access.restrictions.allowDataInfoButton).toEqual(false)
+        expect(Access.restrictions.allowDataIdaInfoButton).toEqual(false)
       })
       it('Should not show ask for access', () => {
         expect(Access.restrictions.allowAskForAccess).toEqual(false)
@@ -113,19 +104,16 @@ describe('Access Store', () => {
       done()
     })
     it('Should show Remote files', () => {
-      expect(Access.restrictions.allowRemote).toEqual(true)
-    })
-    it('Should allow Remote file download', () => {
-      expect(Access.restrictions.allowRemoteDownload).toEqual(true)
+      expect(Access.restrictions.allowDataRemote).toEqual(true)
     })
     it('Should show IDA files', () => {
       expect(Access.restrictions.allowDataIda).toEqual(true)
     })
     it('Should not allow Ida file download', () => {
-      expect(Access.restrictions.allowDataDownload).toEqual(false)
+      expect(Access.restrictions.allowDataIdaDownloadButton).toEqual(false)
     })
     it('Should not show Ida file info', () => {
-      expect(Access.restrictions.allowDataInfoButton).toEqual(false)
+      expect(Access.restrictions.allowDataIdaInfoButton).toEqual(false)
     })
     it('Should not show ask for access', () => {
       expect(Access.restrictions.allowAskForAccess).toEqual(false)
@@ -139,19 +127,16 @@ describe('Access Store', () => {
       done()
     })
     it('Should show Remote files', () => {
-      expect(Access.restrictions.allowRemote).toEqual(true)
-    })
-    it('Should allow Remote file download', () => {
-      expect(Access.restrictions.allowRemoteDownload).toEqual(true)
+      expect(Access.restrictions.allowDataRemote).toEqual(true)
     })
     it('Should show IDA files', () => {
       expect(Access.restrictions.allowDataIda).toEqual(true)
     })
     it('Should not allow Ida file download', () => {
-      expect(Access.restrictions.allowDataDownload).toEqual(false)
+      expect(Access.restrictions.allowDataIdaDownloadButton).toEqual(false)
     })
     it('Should not show Ida file info', () => {
-      expect(Access.restrictions.allowDataInfoButton).toEqual(false)
+      expect(Access.restrictions.allowDataIdaInfoButton).toEqual(false)
     })
     it('Should show ask for access', () => {
       expect(Access.restrictions.allowAskForAccess).toEqual(true)
@@ -167,19 +152,16 @@ describe('Access Store', () => {
         done()
       })
       it('Should show Remote files', () => {
-        expect(Access.restrictions.allowRemote).toEqual(true)
-      })
-      it('Should allow Remote file download', () => {
-        expect(Access.restrictions.allowRemoteDownload).toEqual(true)
+        expect(Access.restrictions.allowDataRemote).toEqual(true)
       })
       it('Should show IDA files', () => {
         expect(Access.restrictions.allowDataIda).toEqual(true)
       })
       it('Should not allow Ida file download', () => {
-        expect(Access.restrictions.allowDataDownload).toEqual(false)
+        expect(Access.restrictions.allowDataIdaDownloadButton).toEqual(false)
       })
       it('Should not show Ida file info', () => {
-        expect(Access.restrictions.allowDataInfoButton).toEqual(false)
+        expect(Access.restrictions.allowDataIdaInfoButton).toEqual(false)
       })
       it('Should not show ask for access', () => {
         expect(Access.restrictions.allowAskForAccess).toEqual(false)
@@ -194,19 +176,16 @@ describe('Access Store', () => {
         done()
       })
       it('Should show Remote files', () => {
-        expect(Access.restrictions.allowRemote).toEqual(true)
-      })
-      it('Should allow Remote file download', () => {
-        expect(Access.restrictions.allowRemoteDownload).toEqual(true)
+        expect(Access.restrictions.allowDataRemote).toEqual(true)
       })
       it('Should show IDA files', () => {
         expect(Access.restrictions.allowDataIda).toEqual(true)
       })
       it('Should not allow Ida file download', () => {
-        expect(Access.restrictions.allowDataDownload).toEqual(true)
+        expect(Access.restrictions.allowDataIdaDownloadButton).toEqual(true)
       })
       it('Should not show Ida file info', () => {
-        expect(Access.restrictions.allowDataInfoButton).toEqual(true)
+        expect(Access.restrictions.allowDataIdaInfoButton).toEqual(true)
       })
       it('Should not show ask for access', () => {
         expect(Access.restrictions.allowAskForAccess).toEqual(false)

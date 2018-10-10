@@ -163,7 +163,7 @@ const finnish = {
     login: 'Kirjaudu',
     logout: 'Kirjaudu ulos',
     logoutNotice:
-      'Kirjauduit ulos onnistuneesti. Sulje selain kirjautuksesi ulos myös HAKA-palvelusta',
+      'Kirjauduit ulos onnistuneesti. Sulje selain kirjautuaksesi ulos myös HAKA-palvelusta',
     data: 'Data',
     dataset: 'Aineisto',
     datasets: 'Aineistot',

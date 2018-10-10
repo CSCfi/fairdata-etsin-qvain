@@ -11,7 +11,7 @@ from flask_restful import abort, reqparse, Resource
 
 from etsin_finder.app_config import get_app_config
 from etsin_finder.authentication import \
-    get_user_saml_info, \
+    get_user_display_name, \
     is_authenticated, \
     reset_flask_session_on_logout
 from etsin_finder.authorization import \
@@ -156,7 +156,9 @@ class User(Resource):
 
     def get(self):
         user_info = {'is_authenticated': is_authenticated()}
-        user_info.update(get_user_saml_info())
+        dn = get_user_display_name()
+        if dn is not None:
+            user_info['user_display_name'] = dn
         return user_info, 200
 
 

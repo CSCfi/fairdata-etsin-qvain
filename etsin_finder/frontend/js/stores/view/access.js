@@ -8,7 +8,7 @@
  * @license   MIT
  */
 
-import { observable, action, computed } from 'mobx'
+import { observable, action } from 'mobx'
 
 import auth from '../domain/auth'
 
@@ -23,20 +23,18 @@ const accessTypes = {
 class Access {
   @observable
   restrictions = {
-    // toggles access icon: locked => unlocked
+    // ?
     open: false,
-    allowRemote: false,
-    allowRemoteDownload: false,
+    // toggles the whole remote resource tab. If it is shown, all is shown
+    allowDataRemote: false,
+    // toggles the whole ida file tab.
     allowDataIda: false,
-    // currently both buttons are disabled always at the same time
-    allowDataInfoButton: false,
-    allowDataDownload: false,
+    // toggles whether info button is disabled or not for ida files/dirs
+    allowDataIdaInfoButton: false,
+    // toggles whether to download button is disabled or not for ida files/dirs
+    allowDataIdaDownloadButton: false,
+    // Special button, use case for rems datasets
     allowAskForAccess: false,
-  }
-
-  @computed
-  get accessDataTab() {
-    return this.restrictions.allowRemote || this.restrictions.allowDataIda
   }
 
   updateAccess(access) {
@@ -65,11 +63,10 @@ class Access {
   open() {
     this.restrictions = {
       open: true,
-      allowRemote: true,
-      allowRemoteDownload: true,
+      allowDataRemote: true,
       allowDataIda: true,
-      allowDataInfoButton: true,
-      allowDataDownload: true,
+      allowDataIdaInfoButton: true,
+      allowDataIdaDownloadButton: true,
       allowAskForAccess: false,
     }
   }
@@ -79,21 +76,19 @@ class Access {
     if (new Date(av).getTime() < new Date().getTime()) {
       this.restrictions = {
         open: true,
-        allowRemote: true,
-        allowRemoteDownload: true,
+        allowDataRemote: true,
         allowDataIda: true,
-        allowDataInfoButton: true,
-        allowDataDownload: true,
+        allowDataIdaInfoButton: true,
+        allowDataIdaDownloadButton: true,
         allowAskForAccess: false,
       }
     } else {
       this.restrictions = {
         open: false,
-        allowRemote: true,
-        allowRemoteDownload: true,
+        allowDataRemote: true,
         allowDataIda: true,
-        allowDataInfoButton: false,
-        allowDataDownload: false,
+        allowDataIdaInfoButton: false,
+        allowDataIdaDownloadButton: false,
         allowAskForAccess: false,
       }
     }
@@ -103,11 +98,10 @@ class Access {
   restrictedAccess() {
     this.restrictions = {
       open: false,
-      allowRemote: true,
-      allowRemoteDownload: true,
+      allowDataRemote: true,
       allowDataIda: true,
-      allowDataInfoButton: false,
-      allowDataDownload: false,
+      allowDataIdaInfoButton: false,
+      allowDataIdaDownloadButton: false,
       allowAskForAccess: false,
     }
   }
@@ -119,11 +113,10 @@ class Access {
     // this can not be checked yet
     this.restrictions = {
       open: false,
-      allowRemote: true,
-      allowRemoteDownload: true,
+      allowDataRemote: true,
       allowDataIda: true,
-      allowDataInfoButton: false,
-      allowDataDownload: false,
+      allowDataIdaInfoButton: false,
+      allowDataIdaDownloadButton: false,
       allowAskForAccess: true,
     }
   }
@@ -132,22 +125,20 @@ class Access {
   loginAccess() {
     if (auth.userLogged) {
       this.restrictions = {
-        open: false,
-        allowRemote: true,
-        allowRemoteDownload: true,
+        open: true,
+        allowDataRemote: true,
         allowDataIda: true,
-        allowDataInfoButton: true,
-        allowDataDownload: true,
+        allowDataIdaInfoButton: true,
+        allowDataIdaDownloadButton: true,
         allowAskForAccess: false,
       }
     } else {
       this.restrictions = {
         open: false,
-        allowRemote: true,
-        allowRemoteDownload: true,
+        allowDataRemote: true,
         allowDataIda: true,
-        allowDataInfoButton: false,
-        allowDataDownload: false,
+        allowDataIdaInfoButton: false,
+        allowDataIdaDownloadButton: false,
         allowAskForAccess: false,
       }
     }

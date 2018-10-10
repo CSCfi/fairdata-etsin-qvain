@@ -5,14 +5,14 @@
 # :author: CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
 # :license: MIT
 
-from etsin_finder.cache import Cache
+from etsin_finder.cache import CatalogRecordCache
 from etsin_finder.finder import app
 from etsin_finder.metax_api import MetaxAPIService
 from etsin_finder.utils import get_metax_api_config
 
 log = app.logger
 _metax_service = MetaxAPIService(get_metax_api_config(app.config))
-_cache = Cache(500, 1800)
+_cache = CatalogRecordCache(maxsize=500, ttl=1800)
 
 
 def get_catalog_record(cr_id, check_removed_if_not_exist, refresh_cache=False):
