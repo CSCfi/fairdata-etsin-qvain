@@ -17,14 +17,14 @@ import Helpers from '../../utils/helpers'
 import Env from '../domain/env'
 
 const fields = [
-  'title.*^3',
+  'title.*^5',
   'description.*',
   'creator.name.*',
   'contributor.name.*',
   'publisher.name.*',
   'rights_holder.name.*',
   'curator.name.*',
-  'keyword.*',
+  'keyword^3',
   'access_rights.license.title.*',
   'access_rights.access_type.identifier',
   'access_rights.access_type.pref_label.*',
@@ -38,8 +38,6 @@ const fields = [
   'other_identifier.type.pref_label.*',
   'dataset_version_set',
 ]
-
-const prefIdField = ['preferred_identifier']
 
 let lastQueryTime = 0
 
@@ -226,7 +224,7 @@ class ElasticQuery {
                   type: 'best_fields',
                   minimum_should_match: isUrnQ ? '100%' : '25%',
                   operator: isUrnQ ? 'and' : 'or',
-                  fields: isUrnQ ? prefIdField : fields,
+                  fields
                 },
               },
             ]

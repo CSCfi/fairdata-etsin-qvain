@@ -9,7 +9,7 @@ const mock = new MockAdapter(axios)
 describe('Auth Store', () => {
   mock
     .onGet('/api/user')
-    .reply(200, { is_authenticated: true, user_id: 10, user_display_name: 'Testi Käyttäjä' })
+    .reply(200, { is_authenticated: true, user_display_name: 'Testi Käyttäjä' })
 
   it('Should be logged in', () => {
     Auth.checkLogin().then(() => {
@@ -19,7 +19,6 @@ describe('Auth Store', () => {
   it('Should have name and id', () => {
     Auth.checkLogin().then(() => {
       expect(Auth.user.name).toEqual('Testi Käyttäjä')
-      expect(Auth.user.id).toEqual(10)
     })
   })
   it('Should logout with logout()', () => {

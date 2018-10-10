@@ -8,45 +8,33 @@
  * @license   MIT
  */
 
-import { observable, action, computed } from 'mobx'
+import { observable, action } from 'mobx'
 
 import auth from '../domain/auth'
 
 const accessTypes = {
-  open: 'http://uri.suomi.fi/codelist/fairdata/access_type/code/open_access',
-  closed: 'http://uri.suomi.fi/codelist/fairdata/access_type/code/closed_access',
-  embargoed: 'http://uri.suomi.fi/codelist/fairdata/access_type/code/embargoed_access',
-  restricted_access:
-    'http://uri.suomi.fi/codelist/fairdata/access_type/code/restricted_access',
-  restricted_access_permit_fairdata:
-    'http://uri.suomi.fi/codelist/fairdata/access_type/code/restricted_access_permit_fairdata',
-  restricted_access_permit_external:
-    'http://uri.suomi.fi/codelist/fairdata/access_type/code/restricted_access_permit_external',
-  restricted_access_research:
-    'http://uri.suomi.fi/codelist/fairdata/access_type/code/restricted_access_research',
-  restricted_access_research_education_studying:
-    'http://uri.suomi.fi/codelist/fairdata/access_type/code/restricted_access_education_studying',
-  restricted_access_registration:
-    'http://uri.suomi.fi/codelist/fairdata/access_type/code/restricted_access_registration',
+  open: 'http://uri.suomi.fi/codelist/fairdata/access_type/code/open',
+  login: 'http://uri.suomi.fi/codelist/fairdata/access_type/code/login',
+  embargo: 'http://uri.suomi.fi/codelist/fairdata/access_type/code/embargo',
+  permit: 'http://uri.suomi.fi/codelist/fairdata/access_type/code/permit',
+  restricted: 'http://uri.suomi.fi/codelist/fairdata/access_type/code/restricted'
 }
 
 class Access {
   @observable
   restrictions = {
-    // toggles access icon: locked => unlocked
+    // ?
     open: false,
-    allowRemote: false,
-    allowRemoteDownload: false,
+    // toggles the whole remote resource tab. If it is shown, all is shown
+    allowDataRemote: false,
+    // toggles the whole ida file tab.
     allowDataIda: false,
-    // currently both buttons are disabled always at the same time
-    allowDataInfoButton: false,
-    allowDataDownload: false,
+    // toggles whether info button is disabled or not for ida files/dirs
+    allowDataIdaInfoButton: false,
+    // toggles whether to download button is disabled or not for ida files/dirs
+    allowDataIdaDownloadButton: false,
+    // Special button, use case for rems datasets
     allowAskForAccess: false,
-  }
-
-  @computed
-  get accessDataTab() {
-    return this.restrictions.allowRemote || this.restrictions.allowDataIda
   }
 
   updateAccess(access) {
@@ -54,32 +42,20 @@ class Access {
       case accessTypes.open:
         this.open()
         break
-      case accessTypes.closed:
-        this.closed()
+      case accessTypes.embargo:
+        this.embargoAccess(access.available)
         break
-      case accessTypes.embargoed:
-        this.embargoed(access.available)
-        break
-      case accessTypes.restricted_access:
+      case accessTypes.restricted:
         this.restrictedAccess()
         break
-      case accessTypes.restricted_access_permit_external:
-        this.restrictedAccessPermitExternal()
+      case accessTypes.permit:
+        this.permitAccess()
         break
-      case accessTypes.restricted_access_permit_fairdata:
-        this.restrictedAccessPermitFairdata()
-        break
-      case accessTypes.restricted_access_registration:
-        this.restrictedAccessRegistration()
-        break
-      case accessTypes.restricted_access_research:
-        this.restrictedAccessResearch()
-        break
-      case accessTypes.restricted_access_research_education_studying:
-        this.restrictedAccessResearchEducationStudying()
+      case accessTypes.login:
+        this.loginAccess()
         break
       default:
-        this.closed()
+        this.restrictedAccess()
     }
   }
 
@@ -87,48 +63,32 @@ class Access {
   open() {
     this.restrictions = {
       open: true,
-      allowRemote: true,
-      allowRemoteDownload: true,
+      allowDataRemote: true,
       allowDataIda: true,
-      allowDataInfoButton: true,
-      allowDataDownload: true,
+      allowDataIdaInfoButton: true,
+      allowDataIdaDownloadButton: true,
       allowAskForAccess: false,
     }
   }
 
   @action
-  closed() {
-    this.restrictions = {
-      open: false,
-      allowRemote: true,
-      allowRemoteDownload: true,
-      allowDataIda: true,
-      allowDataInfoButton: false,
-      allowDataDownload: false,
-      allowAskForAccess: false,
-    }
-  }
-
-  @action
-  embargoed(av) {
+  embargoAccess(av) {
     if (new Date(av).getTime() < new Date().getTime()) {
       this.restrictions = {
         open: true,
-        allowRemote: true,
-        allowRemoteDownload: true,
+        allowDataRemote: true,
         allowDataIda: true,
-        allowDataInfoButton: true,
-        allowDataDownload: true,
+        allowDataIdaInfoButton: true,
+        allowDataIdaDownloadButton: true,
         allowAskForAccess: false,
       }
     } else {
       this.restrictions = {
         open: false,
-        allowRemote: false,
-        allowRemoteDownload: false,
-        allowDataIda: false,
-        allowDataInfoButton: false,
-        allowDataDownload: false,
+        allowDataRemote: true,
+        allowDataIda: true,
+        allowDataIdaInfoButton: false,
+        allowDataIdaDownloadButton: false,
         allowAskForAccess: false,
       }
     }
@@ -138,102 +98,47 @@ class Access {
   restrictedAccess() {
     this.restrictions = {
       open: false,
-      allowRemote: true,
-      allowRemoteDownload: true,
+      allowDataRemote: true,
       allowDataIda: true,
-      allowDataInfoButton: false,
-      allowDataDownload: false,
+      allowDataIdaInfoButton: false,
+      allowDataIdaDownloadButton: false,
       allowAskForAccess: false,
     }
   }
 
   @action
-  restrictedAccessPermitFairdata() {
+  permitAccess() {
     // TODO: check if user has permission
     // these are the default permissions
     // this can not be checked yet
     this.restrictions = {
       open: false,
-      allowRemote: true,
-      allowRemoteDownload: true,
+      allowDataRemote: true,
       allowDataIda: true,
-      allowDataInfoButton: false,
-      allowDataDownload: false,
+      allowDataIdaInfoButton: false,
+      allowDataIdaDownloadButton: false,
       allowAskForAccess: true,
     }
   }
 
   @action
-  restrictedAccessPermitExternal() {
-    this.restrictions = {
-      open: false,
-      allowRemote: true,
-      allowRemoteDownload: true,
-      allowDataIda: true,
-      allowDataInfoButton: false,
-      allowDataDownload: false,
-      allowAskForAccess: true,
-    }
-  }
-
-  @action
-  restrictedAccessResearch() {
-    this.restrictions = {
-      open: false,
-      allowRemote: true,
-      allowRemoteDownload: true,
-      allowDataIda: true,
-      allowDataInfoButton: false,
-      allowDataDownload: false,
-      allowAskForAccess: false,
-    }
-  }
-
-  @action
-  restrictedAccessResearchEducationStudying() {
+  loginAccess() {
     if (auth.userLogged) {
       this.restrictions = {
-        open: false,
-        allowRemote: true,
-        allowRemoteDownload: true,
+        open: true,
+        allowDataRemote: true,
         allowDataIda: true,
-        allowDataInfoButton: true,
-        allowDataDownload: true,
+        allowDataIdaInfoButton: true,
+        allowDataIdaDownloadButton: true,
         allowAskForAccess: false,
       }
     } else {
       this.restrictions = {
         open: false,
-        allowRemote: true,
-        allowRemoteDownload: true,
+        allowDataRemote: true,
         allowDataIda: true,
-        allowDataInfoButton: false,
-        allowDataDownload: false,
-        allowAskForAccess: false,
-      }
-    }
-  }
-
-  @action
-  restrictedAccessRegistration() {
-    if (auth.userLogged) {
-      this.restrictions = {
-        open: false,
-        allowRemote: true,
-        allowRemoteDownload: true,
-        allowDataIda: true,
-        allowDataInfoButton: true,
-        allowDataDownload: true,
-        allowAskForAccess: false,
-      }
-    } else {
-      this.restrictions = {
-        open: false,
-        allowRemote: true,
-        allowRemoteDownload: true,
-        allowDataIda: true,
-        allowDataInfoButton: false,
-        allowDataDownload: false,
+        allowDataIdaInfoButton: false,
+        allowDataIdaDownloadButton: false,
         allowAskForAccess: false,
       }
     }

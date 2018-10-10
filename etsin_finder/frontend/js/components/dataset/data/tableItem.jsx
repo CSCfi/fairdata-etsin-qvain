@@ -46,6 +46,7 @@ class TableItem extends Component {
       name: props.item.name,
       checksum,
       loader: false,
+      downloadDisabled: false,
     }
 
     this.openModal = this.openModal.bind(this)
@@ -66,6 +67,17 @@ class TableItem extends Component {
         loader: true,
       },
       () => this.props.changeFolder(name, id)
+    )
+  }
+
+  downloadItem() {
+    this.setState(
+      {
+        downloadDisabled: true,
+      },
+      () => {
+        this.props.download(this.props.item.identifier, this.props.item.type)
+      }
     )
   }
 
@@ -167,16 +179,29 @@ class TableItem extends Component {
               />
             </React.Fragment>
           )}
-          {this.props.fields.downloadBtn && (
+          {this.props.fields.downloadBtn && !this.state.downloadDisabled && (
             // TODO: add download functionality, probably an axios post request,
             // but it will also be used in the info modal, so a utility for both.
             // TODO: change to button because disabled won't work in link
             <HideSmButton
               thin
-              onClick={() => this.props.download(this.props.item.identifier, this.props.item.type)}
+              onClick={() => this.downloadItem()}
               disabled={!this.props.allowDownload}
             >
               <Translate content="dataset.dl.download" />
+              <Translate
+                className="sr-only"
+                content="dataset.dl.item"
+                with={{ item: this.props.item.name }}
+              />
+            </HideSmButton>
+          )}
+          {this.state.downloadDisabled && (
+            <HideSmButton
+              thin
+              disabled="true"
+            >
+              <Translate content="dataset.dl.downloading" />
               <Translate
                 className="sr-only"
                 content="dataset.dl.item"

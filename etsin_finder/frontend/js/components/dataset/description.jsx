@@ -101,7 +101,7 @@ class Description extends Component {
                     // TEMPORARY: rems check won't be needed in contact later.
                     isRems={
                       this.props.dataset.research_dataset.access_rights.access_type.identifier ===
-                      'http://uri.suomi.fi/codelist/fairdata/access_type/code/restricted_access_permit_fairdata'
+                      'http://uri.suomi.fi/codelist/fairdata/access_type/code/permit'
                     }
                   />
                 )}

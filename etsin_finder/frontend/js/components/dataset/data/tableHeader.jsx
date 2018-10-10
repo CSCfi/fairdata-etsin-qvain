@@ -24,6 +24,7 @@ export default class TableHeader extends Component {
     super(props)
     this.state = {
       downloadAllUrl: '',
+      downloadDisabled: false,
     }
     this.downloadAllRef = React.createRef()
   }
@@ -32,6 +33,7 @@ export default class TableHeader extends Component {
     this.setState(
       {
         downloadAllUrl: `/api/dl?cr_id=${this.props.crId}`,
+        downloadDisabled: true,
       },
       () => {
         this.downloadAllRef.current.click()
@@ -54,7 +56,7 @@ export default class TableHeader extends Component {
             {this.props.totalSize !== 0 && ` (${sizeParse(this.props.totalSize, 1)})`}
           </ObjectCount>
         </div>
-        {this.props.downloadAll && (
+        {this.props.downloadAll && !this.state.downloadDisabled && (
           <ButtonsCont>
             <InvertedButton
               color="white"
@@ -65,6 +67,18 @@ export default class TableHeader extends Component {
               <Translate className="sr-only" content="dataset.dl.file_types.both" />
             </InvertedButton>
           </ButtonsCont>
+        )}
+        {this.state.downloadDisabled && (
+          <ButtonsCont>
+            <InvertedButton
+              color="white"
+              disabled="true"
+            >
+              <Translate content="dataset.dl.downloading" />
+              <Translate className="sr-only" content="dataset.dl.file_types.both" />
+            </InvertedButton>
+          </ButtonsCont>
+
         )}
         {this.state.downloadAllUrl && (
           <HiddenLink href={this.state.downloadAllUrl} innerRef={this.downloadAllRef} download />

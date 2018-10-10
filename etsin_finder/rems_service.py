@@ -10,7 +10,7 @@ import json
 import requests
 from requests import HTTPError
 
-from etsin_finder.cr_service import get_catalog_record_preferred_identifier
+from etsin_finder.cr_service import get_catalog_record_preferred_identifier, get_catalog_record, is_rems_catalog_record
 from etsin_finder.finder import app
 from etsin_finder.utils import get_rems_config
 
@@ -28,13 +28,17 @@ class RemsAPIService:
         return False
 
 
-def get_user_rems_permission_for_catalog_record(catalog_record, user_eppn, is_authd):
-    if not is_authd or not user_eppn or not catalog_record:
+def get_user_rems_permission_for_catalog_record(cr_id, user_id, is_authd):
+    if not is_authd or not user_id or not cr_id:
         return False
 
-    pref_id = get_catalog_record_preferred_identifier(catalog_record)
-    if not pref_id:
-        return False
+    cr = get_catalog_record(cr_id, False, False)
+    if cr and is_rems_catalog_record(cr):
+        pref_id = get_catalog_record_preferred_identifier(cr)
+        if not pref_id:
+            return False
 
-    rems_service = RemsAPIService()
-    return rems_service.get_rems_permission(user_eppn, pref_id)
+        rems_service = RemsAPIService()
+        return rems_service.get_rems_permission(user_id, pref_id)
+
+    return False

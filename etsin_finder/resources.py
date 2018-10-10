@@ -11,7 +11,7 @@ from flask_restful import abort, reqparse, Resource
 
 from etsin_finder.app_config import get_app_config
 from etsin_finder.authentication import \
-    get_user_saml_info, \
+    get_user_display_name, \
     is_authenticated, \
     reset_flask_session_on_logout
 from etsin_finder.authorization import \
@@ -49,12 +49,8 @@ class Dataset(Resource):
         if not cr:
             abort(400, message="Unable to get catalog record from Metax")
 
-        is_authd = is_authenticated()
-        ida_download_allowed = user_is_allowed_to_download_from_ida(cr, is_authd)
-
-        return {'catalog_record': strip_information_from_catalog_record(cr, is_authd),
-                'email_info': get_email_info(cr),
-                'download_allowed': ida_download_allowed}, 200
+        return {'catalog_record': strip_information_from_catalog_record(cr, is_authenticated()),
+                'email_info': get_email_info(cr)}, 200
 
 
 class Files(Resource):
@@ -160,7 +156,9 @@ class User(Resource):
 
     def get(self):
         user_info = {'is_authenticated': is_authenticated()}
-        user_info.update(get_user_saml_info())
+        dn = get_user_display_name()
+        if dn is not None:
+            user_info['user_display_name'] = dn
         return user_info, 200
 
 
@@ -186,9 +184,6 @@ class Download(Resource):
     """
     Class for file download functionalities
     """
-
-    OPEN_DOWNLOAD_URL = 'https://download.fairdata.fi/api/v1/dataset/{0}'
-    RESTRICTED_DOWNLOAD_URL = 'https://download.fairdata.fi/api/v1/dataset/{0}'
 
     def __init__(self):
         self.parser = reqparse.RequestParser()

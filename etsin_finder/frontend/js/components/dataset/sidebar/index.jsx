@@ -158,9 +158,11 @@ class Sidebar extends Component {
 
             {this.state.access_rights && (
               <SidebarItem component="div" trans="dataset.access_rights" hideEmpty="true">
-                {checkNested(this.state.access_rights, 'restriction_grounds', 'pref_label')
-                  ? checkDataLang(this.state.access_rights.restriction_grounds.pref_label)
-                  : checkNested(this.state.access_rights, 'restriction_grounds', 'pref_label') &&
+                {this.state.access_rights.restriction_grounds && this.state.access_rights.restriction_grounds.length > 0
+                  ? this.state.access_rights.restriction_grounds.map(rg => (
+                    <Item key={`rg-${rg.identifier}`}>{checkDataLang(rg.pref_label)}</Item>
+                    ))
+                  : checkNested(this.state.access_rights, 'access_type', 'pref_label') &&
                     checkDataLang(this.state.access_rights.access_type.pref_label)}
               </SidebarItem>
             )}

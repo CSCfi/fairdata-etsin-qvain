@@ -14,7 +14,7 @@ import axios from 'axios'
 
 class Auth {
   @observable userLogged = false
-  @observable user = { id: undefined, name: undefined }
+  @observable user = { name: undefined }
   @action
   checkLogin() {
     return new Promise((resolve, reject) => {
@@ -24,7 +24,7 @@ class Auth {
         })
         .then(res => {
           this.userLogged = res.data.is_authenticated
-          this.user = { id: res.data.user_id, name: res.data.user_display_name }
+          this.user = { name: res.data.user_display_name }
           resolve(res)
         })
         .catch(err => {
@@ -41,7 +41,7 @@ class Auth {
         .delete('/api/session')
         .then(res => {
           this.userLogged = false
-          this.user = { id: undefined, name: undefined }
+          this.user = { name: undefined }
           resolve(res)
         })
         .catch(err => {
@@ -61,7 +61,7 @@ class Auth {
         .catch(err => {
           if (err.response.status === 401) {
             this.userLogged = false
-            this.user = { id: undefined, name: undefined }
+            this.user = { name: undefined }
           }
           return reject(err)
         })
