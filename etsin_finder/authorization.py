@@ -44,7 +44,7 @@ def user_has_rems_permission_for_catalog_record(cr_id, user_id, is_authd):
 
     permission = rems_cache.get_from_cache(cr_id, user_id)
     if permission is None:
-        permission = get_user_rems_permission_for_catalog_record(cr_id, user_id, is_authd)
+        permission = get_user_rems_permission_for_catalog_record(cr_id, user_id)
         return rems_cache.update_cache(cr_id, user_id, permission)
     else:
         return permission
