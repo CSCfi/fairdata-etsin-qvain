@@ -49,8 +49,8 @@ class RemsAPIService:
         return len(r.json()) > 0
 
 
-def get_user_rems_permission_for_catalog_record(cr_id, user_id, is_authd):
-    if not is_authd or not user_id or not cr_id:
+def get_user_rems_permission_for_catalog_record(cr_id, user_id):
+    if not user_id or not cr_id:
         return False
 
     cr = get_catalog_record(cr_id, False, False)
