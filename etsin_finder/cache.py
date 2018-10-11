@@ -38,7 +38,7 @@ class BaseCache:
 
 class CatalogRecordCache(BaseCache):
 
-    CACHE_ITEM_TTL = 30
+    CACHE_ITEM_TTL = 1200
 
     def update_cache(self, cr_id, cr_json):
         if cr_id and cr_json:
@@ -54,7 +54,8 @@ class CatalogRecordCache(BaseCache):
 
 
 class RemsCache(BaseCache):
-    CACHE_ITEM_TTL = 30
+
+    CACHE_ITEM_TTL = 300
 
     def update_cache(self, cr_id, user_id, permission=False):
         if cr_id and user_id:
@@ -62,7 +63,7 @@ class RemsCache(BaseCache):
         return permission
 
     def get_from_cache(self, cr_id, user_id):
-        self.do_get(self._get_cache_key(cr_id, user_id))
+        return self.do_get(self._get_cache_key(cr_id, user_id))
 
     @staticmethod
     def _get_cache_key(cr_id, user_id):

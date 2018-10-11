@@ -42,11 +42,11 @@ def get_metax_api_config(config):
     return metax_api_conf
 
 
-def get_rems_config(config):
+def get_fairdata_rems_config(config):
     if executing_travis():
         return None
 
-    rems_conf = config.get('REMS')
+    rems_conf = config.get('FD_REMS')
     if not rems_conf or not isinstance(rems_conf, dict):
         return None
 

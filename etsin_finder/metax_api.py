@@ -14,7 +14,7 @@ from etsin_finder.finder import app
 
 log = app.logger
 
-TIMEOUT = 30
+TIMEOUT = 30  # If no bytes have been received on the underlying socket for timeout seconds
 
 
 class MetaxAPIService:
