@@ -5,20 +5,24 @@
 # :author: CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
 # :license: MIT
 
-from etsin_finder.cache import CatalogRecordCache
-from etsin_finder.finder import app
+from etsin_finder.finder import app, cr_cache
 from etsin_finder.metax_api import MetaxAPIService
 from etsin_finder.utils import get_metax_api_config
 
 log = app.logger
 _metax_service = MetaxAPIService(get_metax_api_config(app.config))
-_cache = CatalogRecordCache(maxsize=500, ttl=1800)
 
 
 def get_catalog_record(cr_id, check_removed_if_not_exist, refresh_cache=False):
     if refresh_cache:
-        return _cache.update_cache(_get_cr_from_metax(cr_id, check_removed_if_not_exist))
-    return _cache.get_from_cache(cr_id) or _cache.update_cache(_get_cr_from_metax(cr_id, check_removed_if_not_exist))
+        return cr_cache.update_cache(cr_id, _get_cr_from_metax(cr_id, check_removed_if_not_exist))
+
+    cr = cr_cache.get_from_cache(cr_id)
+    if cr is None:
+        cr = _get_cr_from_metax(cr_id, check_removed_if_not_exist)
+        return cr_cache.update_cache(cr_id, cr)
+    else:
+        return cr
 
 
 def get_directory_data_for_catalog_record(cr_id, dir_id, file_fields, directory_fields):

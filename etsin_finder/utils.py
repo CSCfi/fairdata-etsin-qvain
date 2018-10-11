@@ -64,6 +64,17 @@ def get_download_api_config(config):
     return dl_api_conf
 
 
+def get_memcached_config(config):
+    if executing_travis():
+        return None
+
+    memcached_conf = config.get('MEMCACHED')
+    if not memcached_conf or not isinstance(memcached_conf, dict):
+        return None
+
+    return memcached_conf
+
+
 def write_json_to_file(json_data, filename):
     with open(filename, "w") as output_file:
         json.dump(json_data, output_file)

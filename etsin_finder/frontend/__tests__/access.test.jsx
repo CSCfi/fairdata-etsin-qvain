@@ -39,7 +39,7 @@ describe('Access Store', () => {
       expect(Access.restrictions.allowDataIdaInfoButton).toEqual(true)
     })
     it('Should not show ask for access', () => {
-      expect(Access.restrictions.allowAskForAccess).toEqual(false)
+      expect(Access.restrictions.allowAskForPermit).toEqual(false)
     })
   })
   describe('Update for embargo access', () => {
@@ -66,7 +66,7 @@ describe('Access Store', () => {
         expect(Access.restrictions.allowDataIdaInfoButton).toEqual(true)
       })
       it('Should not show ask for access', () => {
-        expect(Access.restrictions.allowAskForAccess).toEqual(false)
+        expect(Access.restrictions.allowAskForPermit).toEqual(false)
       })
     })
     describe('Unavailable', () => {
@@ -92,7 +92,7 @@ describe('Access Store', () => {
         expect(Access.restrictions.allowDataIdaInfoButton).toEqual(false)
       })
       it('Should not show ask for access', () => {
-        expect(Access.restrictions.allowAskForAccess).toEqual(false)
+        expect(Access.restrictions.allowAskForPermit).toEqual(false)
       })
     })
   })
@@ -116,7 +116,7 @@ describe('Access Store', () => {
       expect(Access.restrictions.allowDataIdaInfoButton).toEqual(false)
     })
     it('Should not show ask for access', () => {
-      expect(Access.restrictions.allowAskForAccess).toEqual(false)
+      expect(Access.restrictions.allowAskForPermit).toEqual(false)
     })
   })
   describe('Update for permit access', () => {
@@ -139,7 +139,7 @@ describe('Access Store', () => {
       expect(Access.restrictions.allowDataIdaInfoButton).toEqual(false)
     })
     it('Should show ask for access', () => {
-      expect(Access.restrictions.allowAskForAccess).toEqual(true)
+      expect(Access.restrictions.allowAskForPermit).toEqual(true)
     })
   })
   describe('Update for login access', () => {
@@ -164,7 +164,7 @@ describe('Access Store', () => {
         expect(Access.restrictions.allowDataIdaInfoButton).toEqual(false)
       })
       it('Should not show ask for access', () => {
-        expect(Access.restrictions.allowAskForAccess).toEqual(false)
+        expect(Access.restrictions.allowAskForPermit).toEqual(false)
       })
     })
     describe('User logged in', () => {
@@ -188,7 +188,7 @@ describe('Access Store', () => {
         expect(Access.restrictions.allowDataIdaInfoButton).toEqual(true)
       })
       it('Should not show ask for access', () => {
-        expect(Access.restrictions.allowAskForAccess).toEqual(false)
+        expect(Access.restrictions.allowAskForPermit).toEqual(false)
       })
     })
   })

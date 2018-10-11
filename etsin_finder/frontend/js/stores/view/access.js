@@ -34,7 +34,7 @@ class Access {
     // toggles whether to download button is disabled or not for ida files/dirs
     allowDataIdaDownloadButton: false,
     // Special button, use case for rems datasets
-    allowAskForAccess: false,
+    allowAskForPermit: false,
   }
 
   updateAccess(access) {
@@ -67,7 +67,7 @@ class Access {
       allowDataIda: true,
       allowDataIdaInfoButton: true,
       allowDataIdaDownloadButton: true,
-      allowAskForAccess: false,
+      allowAskForPermit: false,
     }
   }
 
@@ -80,7 +80,7 @@ class Access {
         allowDataIda: true,
         allowDataIdaInfoButton: true,
         allowDataIdaDownloadButton: true,
-        allowAskForAccess: false,
+        allowAskForPermit: false,
       }
     } else {
       this.restrictions = {
@@ -89,7 +89,7 @@ class Access {
         allowDataIda: true,
         allowDataIdaInfoButton: false,
         allowDataIdaDownloadButton: false,
-        allowAskForAccess: false,
+        allowAskForPermit: false,
       }
     }
   }
@@ -102,22 +102,22 @@ class Access {
       allowDataIda: true,
       allowDataIdaInfoButton: false,
       allowDataIdaDownloadButton: false,
-      allowAskForAccess: false,
+      allowAskForPermit: false,
     }
   }
 
   @action
   permitAccess() {
-    // TODO: check if user has permission
-    // these are the default permissions
-    // this can not be checked yet
+    // TODO: requires info from backend regarding whether user is permitted or not
+    // TODO: This affects allowDataInfoButton, allowDataIdaDownloadButton and allowAskForPermit
+    // The below is the settings for no permit
     this.restrictions = {
       open: false,
       allowDataRemote: true,
       allowDataIda: true,
       allowDataIdaInfoButton: false,
       allowDataIdaDownloadButton: false,
-      allowAskForAccess: true,
+      allowAskForPermit: true,
     }
   }
 
@@ -130,7 +130,7 @@ class Access {
         allowDataIda: true,
         allowDataIdaInfoButton: true,
         allowDataIdaDownloadButton: true,
-        allowAskForAccess: false,
+        allowAskForPermit: false,
       }
     } else {
       this.restrictions = {
@@ -139,7 +139,7 @@ class Access {
         allowDataIda: true,
         allowDataIdaInfoButton: false,
         allowDataIdaDownloadButton: false,
-        allowAskForAccess: false,
+        allowAskForPermit: false,
       }
     }
   }
