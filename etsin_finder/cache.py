@@ -12,9 +12,10 @@ from pymemcache import serde
 class BaseCache:
 
     def __init__(self, memcached_config):
-        self.cache = base.Client((memcached_config['HOST'], memcached_config['PORT']),
-                                 serializer=serde.python_memcache_serializer,
-                                 deserializer=serde.python_memcache_deserializer, connect_timeout=1, timeout=1)
+        if memcached_config:
+            self.cache = base.Client((memcached_config['HOST'], memcached_config['PORT']),
+                                     serializer=serde.python_memcache_serializer,
+                                     deserializer=serde.python_memcache_deserializer, connect_timeout=1, timeout=1)
 
     def do_update(self, key, value, ttl):
         try:
