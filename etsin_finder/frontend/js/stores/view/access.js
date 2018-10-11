@@ -37,7 +37,7 @@ class Access {
     allowAskForPermit: false,
   }
 
-  updateAccess(access) {
+  updateAccess(access, hasPermit) {
     switch (access.access_type.identifier) {
       case accessTypes.open:
         this.open()
@@ -49,7 +49,7 @@ class Access {
         this.restrictedAccess()
         break
       case accessTypes.permit:
-        this.permitAccess()
+        this.permitAccess(hasPermit)
         break
       case accessTypes.login:
         this.loginAccess()
@@ -107,17 +107,25 @@ class Access {
   }
 
   @action
-  permitAccess() {
-    // TODO: requires info from backend regarding whether user is permitted or not
-    // TODO: This affects allowDataInfoButton, allowDataIdaDownloadButton and allowAskForPermit
-    // The below is the settings for no permit
-    this.restrictions = {
-      open: false,
-      allowDataRemote: true,
-      allowDataIda: true,
-      allowDataIdaInfoButton: false,
-      allowDataIdaDownloadButton: false,
-      allowAskForPermit: true,
+  permitAccess(hasPermit) {
+    if (hasPermit) {
+      this.restrictions = {
+        open: false,
+        allowDataRemote: true,
+        allowDataIda: true,
+        allowDataIdaInfoButton: true,
+        allowDataIdaDownloadButton: true,
+        allowAskForPermit: false,
+      }
+    } else {
+      this.restrictions = {
+        open: false,
+        allowDataRemote: true,
+        allowDataIda: true,
+        allowDataIdaInfoButton: false,
+        allowDataIdaDownloadButton: false,
+        allowAskForPermit: true,
+      }
     }
   }
 
