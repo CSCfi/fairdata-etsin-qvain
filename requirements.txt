@@ -6,7 +6,7 @@ flask-restful==0.3.6
 gevent==1.3.6
 gunicorn==19.9.0
 ipdb==0.11
-pymemcache=2.0.0
+pymemcache==2.0.0
 pytest==3.8.2
 pytest-cov==2.6.0
 python-dateutil==2.7.3
