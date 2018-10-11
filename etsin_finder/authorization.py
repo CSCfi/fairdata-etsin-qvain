@@ -6,17 +6,15 @@
 # :license: MIT
 
 from etsin_finder.authentication import get_user_id
-from etsin_finder.cache import RemsCache
 from etsin_finder.cr_service import \
     get_catalog_record_access_type, \
     get_catalog_record_data_catalog_id, \
     get_catalog_record_embargo_available
-from etsin_finder.finder import app
+from etsin_finder.finder import app, rems_cache
 from etsin_finder.rems_service import get_user_rems_permission_for_catalog_record
 from etsin_finder.utils import tz_now_is_later_than_timestamp_str, remove_keys_recursively, leave_keys_in_dict
 
 log = app.logger
-_cache = RemsCache(maxsize=50, ttl=600)
 
 ACCESS_TYPES = {
     'open': 'http://uri.suomi.fi/codelist/fairdata/access_type/code/open',
@@ -32,7 +30,7 @@ DATA_CATALOG_IDENTIFIERS = {
 }
 
 
-def _user_has_rems_permission_for_catalog_record(cr_id, user_id, is_authd):
+def user_has_rems_permission_for_catalog_record(cr_id, user_id, is_authd):
     """
     Use Fairdata REMS API to check whether user has 'entitlement' for the specified catalog record
 
@@ -44,8 +42,12 @@ def _user_has_rems_permission_for_catalog_record(cr_id, user_id, is_authd):
     if not cr_id or not user_id or not is_authd:
         return False
 
-    return _cache.get_from_cache(cr_id, user_id) or _cache.update_cache(
-        cr_id, user_id, get_user_rems_permission_for_catalog_record(cr_id, user_id, is_authd))
+    permission = rems_cache.get_from_cache(cr_id, user_id)
+    if permission is None:
+        permission = get_user_rems_permission_for_catalog_record(cr_id, user_id, is_authd)
+        return rems_cache.update_cache(cr_id, user_id, permission)
+    else:
+        return permission
 
 
 def user_is_allowed_to_download_from_ida(catalog_record, is_authd):
@@ -75,7 +77,7 @@ def user_is_allowed_to_download_from_ida(catalog_record, is_authd):
     elif access_type_id == ACCESS_TYPES['restricted']:
         return False
     elif access_type_id == ACCESS_TYPES['permit']:
-        return _user_has_rems_permission_for_catalog_record(catalog_record['identifier'], get_user_id(), is_authd)
+        return user_has_rems_permission_for_catalog_record(catalog_record['identifier'], get_user_id(), is_authd)
     elif access_type_id == ACCESS_TYPES['login']:
         if is_authd:
             return True
@@ -104,7 +106,7 @@ def strip_dir_api_object(dir_api_obj, is_authd, catalog_record):
     elif access_type_id == ACCESS_TYPES['restricted']:
         _strip_directory_api_obj_partially(dir_api_obj)
     elif access_type_id == ACCESS_TYPES['permit']:
-        if not _user_has_rems_permission_for_catalog_record(catalog_record['identifier'], get_user_id(), is_authd):
+        if not user_has_rems_permission_for_catalog_record(catalog_record['identifier'], get_user_id(), is_authd):
             _strip_directory_api_obj_partially(dir_api_obj)
     elif access_type_id == ACCESS_TYPES['login']:
         if not is_authd:
@@ -137,7 +139,7 @@ def strip_information_from_catalog_record(catalog_record, is_authd):
     elif access_type_id == ACCESS_TYPES['restricted']:
         _strip_catalog_record_ida_data_partially(catalog_record)
     elif access_type_id == ACCESS_TYPES['permit']:
-        if not _user_has_rems_permission_for_catalog_record(catalog_record['identifier'], get_user_id(), is_authd):
+        if not user_has_rems_permission_for_catalog_record(catalog_record['identifier'], get_user_id(), is_authd):
             _strip_catalog_record_ida_data_partially(catalog_record)
     elif access_type_id == ACCESS_TYPES['login']:
         if not is_authd:

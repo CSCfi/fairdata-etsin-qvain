@@ -34,10 +34,10 @@ class Access {
     // toggles whether to download button is disabled or not for ida files/dirs
     allowDataIdaDownloadButton: false,
     // Special button, use case for rems datasets
-    allowAskForAccess: false,
+    allowAskForPermit: false,
   }
 
-  updateAccess(access) {
+  updateAccess(access, hasPermit) {
     switch (access.access_type.identifier) {
       case accessTypes.open:
         this.open()
@@ -49,7 +49,7 @@ class Access {
         this.restrictedAccess()
         break
       case accessTypes.permit:
-        this.permitAccess()
+        this.permitAccess(hasPermit)
         break
       case accessTypes.login:
         this.loginAccess()
@@ -67,7 +67,7 @@ class Access {
       allowDataIda: true,
       allowDataIdaInfoButton: true,
       allowDataIdaDownloadButton: true,
-      allowAskForAccess: false,
+      allowAskForPermit: false,
     }
   }
 
@@ -80,7 +80,7 @@ class Access {
         allowDataIda: true,
         allowDataIdaInfoButton: true,
         allowDataIdaDownloadButton: true,
-        allowAskForAccess: false,
+        allowAskForPermit: false,
       }
     } else {
       this.restrictions = {
@@ -89,7 +89,7 @@ class Access {
         allowDataIda: true,
         allowDataIdaInfoButton: false,
         allowDataIdaDownloadButton: false,
-        allowAskForAccess: false,
+        allowAskForPermit: false,
       }
     }
   }
@@ -102,22 +102,30 @@ class Access {
       allowDataIda: true,
       allowDataIdaInfoButton: false,
       allowDataIdaDownloadButton: false,
-      allowAskForAccess: false,
+      allowAskForPermit: false,
     }
   }
 
   @action
-  permitAccess() {
-    // TODO: check if user has permission
-    // these are the default permissions
-    // this can not be checked yet
-    this.restrictions = {
-      open: false,
-      allowDataRemote: true,
-      allowDataIda: true,
-      allowDataIdaInfoButton: false,
-      allowDataIdaDownloadButton: false,
-      allowAskForAccess: true,
+  permitAccess(hasPermit) {
+    if (hasPermit) {
+      this.restrictions = {
+        open: false,
+        allowDataRemote: true,
+        allowDataIda: true,
+        allowDataIdaInfoButton: true,
+        allowDataIdaDownloadButton: true,
+        allowAskForPermit: false,
+      }
+    } else {
+      this.restrictions = {
+        open: false,
+        allowDataRemote: true,
+        allowDataIda: true,
+        allowDataIdaInfoButton: false,
+        allowDataIdaDownloadButton: false,
+        allowAskForPermit: true,
+      }
     }
   }
 
@@ -130,7 +138,7 @@ class Access {
         allowDataIda: true,
         allowDataIdaInfoButton: true,
         allowDataIdaDownloadButton: true,
-        allowAskForAccess: false,
+        allowAskForPermit: false,
       }
     } else {
       this.restrictions = {
@@ -139,7 +147,7 @@ class Access {
         allowDataIda: true,
         allowDataIdaInfoButton: false,
         allowDataIdaDownloadButton: false,
-        allowAskForAccess: false,
+        allowAskForPermit: false,
       }
     }
   }

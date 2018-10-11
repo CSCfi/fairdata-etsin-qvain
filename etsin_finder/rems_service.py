@@ -12,7 +12,7 @@ from requests import HTTPError
 
 from etsin_finder.cr_service import get_catalog_record_preferred_identifier, get_catalog_record, is_rems_catalog_record
 from etsin_finder.finder import app
-from etsin_finder.utils import get_rems_config
+from etsin_finder.utils import get_fairdata_rems_config
 
 log = app.logger
 
@@ -20,12 +20,33 @@ log = app.logger
 class RemsAPIService:
 
     def __init__(self):
-        rems_config = get_rems_config(app.config)
+        rems_config = get_fairdata_rems_config(app.config)
         if rems_config:
-            self.REMS_URL = 'REMS_URL'
+            self.REMS_URL = 'https://{0}'.format(rems_config['HOST']) + '/api/entitlements?resource={0}'
+            self.API_KEY = rems_config['API_KEY']
 
-    def get_rems_permission(self, user_id, rems_catalog_id):
-        return False
+    def get_rems_permission(self, user_id, rems_resource):
+        if not user_id or not rems_resource:
+            return False
+
+        r = requests.get(self.REMS_URL.format(rems_resource),
+                         headers={
+                             'Accept': 'application/json',
+                             'x-rems-api-key': self.API_KEY,
+                             'x-rems-user-id': user_id},
+                         verify=False,
+                         timeout=5)
+
+        try:
+            r.raise_for_status()
+        except HTTPError as e:
+            log.error('Failed to get entitlement data from Fairdata REMS for user_id: {0}, resource: {1}'.
+                      format(user_id, rems_resource))
+            log.error(e)
+            log.debug('Response text: %s', r.text)
+            return False
+
+        return len(r.json()) > 0
 
 
 def get_user_rems_permission_for_catalog_record(cr_id, user_id, is_authd):

@@ -12,15 +12,18 @@ from flask_restful import abort, reqparse, Resource
 from etsin_finder.app_config import get_app_config
 from etsin_finder.authentication import \
     get_user_display_name, \
+    get_user_id, \
     is_authenticated, \
     reset_flask_session_on_logout
 from etsin_finder.authorization import \
     strip_information_from_catalog_record, \
     strip_dir_api_object, \
-    user_is_allowed_to_download_from_ida
+    user_is_allowed_to_download_from_ida, \
+    user_has_rems_permission_for_catalog_record
 from etsin_finder.cr_service import \
     get_catalog_record, \
-    get_directory_data_for_catalog_record
+    get_directory_data_for_catalog_record, \
+    is_rems_catalog_record
 from etsin_finder.download_api import DownloadAPIService
 from etsin_finder.email_utils import \
     create_email_message_body, \
@@ -45,12 +48,18 @@ class Dataset(Resource):
         :param cr_id: id to use to fetch the record from metax
         :return:
         """
+        is_authd = is_authenticated()
         cr = get_catalog_record(cr_id, True, True)
         if not cr:
             abort(400, message="Unable to get catalog record from Metax")
 
-        return {'catalog_record': strip_information_from_catalog_record(cr, is_authenticated()),
-                'email_info': get_email_info(cr)}, 200
+        ret_obj = {'catalog_record': strip_information_from_catalog_record(cr, is_authd),
+                   'email_info': get_email_info(cr)}
+
+        if is_rems_catalog_record(cr):
+            ret_obj['has_permit'] = user_has_rems_permission_for_catalog_record(cr_id, get_user_id(), is_authd)
+
+        return ret_obj, 200
 
 
 class Files(Resource):

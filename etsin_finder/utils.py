@@ -42,11 +42,11 @@ def get_metax_api_config(config):
     return metax_api_conf
 
 
-def get_rems_config(config):
+def get_fairdata_rems_config(config):
     if executing_travis():
         return None
 
-    rems_conf = config.get('REMS')
+    rems_conf = config.get('FD_REMS')
     if not rems_conf or not isinstance(rems_conf, dict):
         return None
 
@@ -62,6 +62,17 @@ def get_download_api_config(config):
         return None
 
     return dl_api_conf
+
+
+def get_memcached_config(config):
+    if executing_travis():
+        return None
+
+    memcached_conf = config.get('MEMCACHED')
+    if not memcached_conf or not isinstance(memcached_conf, dict):
+        return None
+
+    return memcached_conf
 
 
 def write_json_to_file(json_data, filename):
