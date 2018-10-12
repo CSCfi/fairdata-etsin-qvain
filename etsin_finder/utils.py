@@ -5,12 +5,12 @@
 # :author: CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
 # :license: MIT
 
-from datetime import datetime
 import json
 import os
+from datetime import datetime
 
-from dateutil import parser
 import pytz
+from dateutil import parser
 
 
 def executing_travis():
@@ -18,61 +18,6 @@ def executing_travis():
     Returns True whenever code is being executed by travis
     """
     return True if os.getenv('TRAVIS', False) else False
-
-
-def get_elasticsearch_config(config):
-    if executing_travis():
-        return None
-
-    es_conf = config.get('ELASTICSEARCH', None)
-    if not es_conf or not isinstance(es_conf, dict):
-        return None
-
-    return es_conf
-
-
-def get_metax_api_config(config):
-    if executing_travis():
-        return None
-
-    metax_api_conf = config.get('METAX_API')
-    if not metax_api_conf or not isinstance(metax_api_conf, dict):
-        return None
-
-    return metax_api_conf
-
-
-def get_fairdata_rems_config(config):
-    if executing_travis():
-        return None
-
-    rems_conf = config.get('FD_REMS')
-    if not rems_conf or not isinstance(rems_conf, dict):
-        return None
-
-    return rems_conf
-
-
-def get_download_api_config(config):
-    if executing_travis():
-        return None
-
-    dl_api_conf = config.get('DOWNLOAD_API')
-    if not dl_api_conf or not isinstance(dl_api_conf, dict):
-        return None
-
-    return dl_api_conf
-
-
-def get_memcached_config(config):
-    if executing_travis():
-        return None
-
-    memcached_conf = config.get('MEMCACHED')
-    if not memcached_conf or not isinstance(memcached_conf, dict):
-        return None
-
-    return memcached_conf
 
 
 def write_json_to_file(json_data, filename):
@@ -83,6 +28,15 @@ def write_json_to_file(json_data, filename):
 def write_string_to_file(string, filename):
     with open(filename, "w") as output_file:
         print(f"{string}", file=output_file)
+
+
+def json_or_empty(response):
+    response_json = {}
+    try:
+        response_json = response.json()
+    except Exception:
+        pass
+    return response_json
 
 
 def remove_keys_recursively(obj, fields_to_remove):

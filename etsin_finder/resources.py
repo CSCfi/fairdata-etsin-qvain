@@ -24,7 +24,7 @@ from etsin_finder.cr_service import \
     get_catalog_record, \
     get_directory_data_for_catalog_record, \
     is_rems_catalog_record
-from etsin_finder.download_api import DownloadAPIService
+from etsin_finder.download_service import download_data
 from etsin_finder.email_utils import \
     create_email_message_body, \
     get_email_info, \
@@ -33,8 +33,6 @@ from etsin_finder.email_utils import \
     get_harvest_info, \
     validate_send_message_request
 from etsin_finder.finder import app, mail
-from etsin_finder.utils import get_download_api_config
-
 
 log = app.logger
 
@@ -199,7 +197,6 @@ class Download(Resource):
         self.parser.add_argument('cr_id', type=str, required=True)
         self.parser.add_argument('file_id', type=str, action='append', required=False)
         self.parser.add_argument('dir_id', type=str, action='append', required=False)
-        self.dl_api = DownloadAPIService(get_download_api_config(app.config))
 
     def get(self):
         # Check request query parameters are present
@@ -213,6 +210,6 @@ class Download(Resource):
         if user_is_allowed_to_download_from_ida(cr, is_authenticated()):
             file_ids = args['file_id'] or []
             dir_ids = args['dir_id'] or []
-            return self.dl_api.download(cr_id, file_ids, dir_ids)
+            return download_data(cr_id, file_ids, dir_ids)
         else:
             abort(403, message="Not authorized")
