@@ -5,8 +5,8 @@
 # :author: CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
 # :license: MIT
 
-from pymemcache.client import base
 from pymemcache import serde
+from pymemcache.client import base
 
 
 class BaseCache:
@@ -16,6 +16,9 @@ class BaseCache:
             self.cache = base.Client((memcached_config['HOST'], memcached_config['PORT']),
                                      serializer=serde.python_memcache_serializer,
                                      deserializer=serde.python_memcache_deserializer, connect_timeout=1, timeout=1)
+        else:
+            from etsin_finder.finder import app
+            app.logger.error("Unable to initialize Cache due to missing config")
 
     def do_update(self, key, value, ttl):
         try:

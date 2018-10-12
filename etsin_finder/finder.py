@@ -12,9 +12,9 @@ from flask import Flask
 from flask_mail import Mail
 from flask_restful import Api
 
-from etsin_finder.app_config import get_app_config
+from etsin_finder.app_config import get_app_config, get_memcached_config
 from etsin_finder.cache import CatalogRecordCache, RemsCache
-from etsin_finder.utils import executing_travis, get_memcached_config
+from etsin_finder.utils import executing_travis
 
 
 def create_app():
@@ -63,8 +63,8 @@ def _add_restful_resources():
 app = create_app()
 mail = Mail(app)
 api = Api(app)
-cr_cache = CatalogRecordCache(get_memcached_config(app.config))
-rems_cache = RemsCache(get_memcached_config(app.config))
+cr_cache = CatalogRecordCache(get_memcached_config())
+rems_cache = RemsCache(get_memcached_config())
 _add_restful_resources()
 _do_imports()
 
