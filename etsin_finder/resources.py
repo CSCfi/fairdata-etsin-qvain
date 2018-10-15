@@ -5,7 +5,9 @@
 # :author: CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
 # :license: MIT
 
-from flask import session
+from functools import wraps
+
+from flask import request, session
 from flask_mail import Message
 from flask_restful import abort, reqparse, Resource
 
@@ -37,8 +39,22 @@ from etsin_finder.finder import app, mail
 log = app.logger
 
 
+def log_request(f):
+    @wraps(f)
+    def func(*args, **kwargs):
+        user_id = get_user_id()
+        log.info('{0} - {1} - {2} - {3} - {4}'.format(request.environ['HTTP_X_REAL_IP'],
+                                                      user_id if user_id else '',
+                                                      request.environ['REQUEST_METHOD'],
+                                                      request.path,
+                                                      request.user_agent))
+        return f(*args, **kwargs)
+    return func
+
+
 class Dataset(Resource):
 
+    @log_request
     def get(self, cr_id):
         """
         Get dataset from metax and strip it from having sensitive information
@@ -91,6 +107,7 @@ class Contact(Resource):
         self.parser.add_argument('user_body', required=True, help='user_body cannot be empty')
         self.parser.add_argument('agent_type', required=True, help='agent_type cannot be empty')
 
+    @log_request
     def post(self, cr_id):
         """
         This route expects a json with three key-values: user_email, user_subject and user_body.
@@ -198,6 +215,7 @@ class Download(Resource):
         self.parser.add_argument('file_id', type=str, action='append', required=False)
         self.parser.add_argument('dir_id', type=str, action='append', required=False)
 
+    @log_request
     def get(self):
         # Check request query parameters are present
         args = self.parser.parse_args()
