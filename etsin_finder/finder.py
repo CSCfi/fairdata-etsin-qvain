@@ -11,8 +11,10 @@ from logging.handlers import RotatingFileHandler
 from flask import Flask
 from flask_mail import Mail
 from flask_restful import Api
+from flask.logging import default_handler
 
-from etsin_finder.app_config import get_app_config
+from etsin_finder.app_config import get_app_config, get_memcached_config
+from etsin_finder.cache import CatalogRecordCache, RemsCache
 from etsin_finder.utils import executing_travis
 
 
@@ -41,6 +43,7 @@ def _setup_app_logging(app):
             "[%(asctime)s] {%(pathname)s:%(lineno)d} %(levelname)s - %(message)s")
         handler.setFormatter(formatter)
         app.logger.addHandler(handler)
+        default_handler.setFormatter(formatter)
     else:
         app.logger.error('Logging not correctly set up due to missing app log path configuration')
 
@@ -62,6 +65,8 @@ def _add_restful_resources():
 app = create_app()
 mail = Mail(app)
 api = Api(app)
+cr_cache = CatalogRecordCache(get_memcached_config())
+rems_cache = RemsCache(get_memcached_config())
 _add_restful_resources()
 _do_imports()
 

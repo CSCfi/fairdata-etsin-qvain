@@ -15,33 +15,41 @@ import Locale from '../stores/view/language'
 const formats = {
   fi: {
     lang: 'fi-FI',
-    options: { day: 'numeric', month: 'numeric', year: 'numeric' },
+    options: {
+      day: 'numeric',
+      month: 'numeric',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      seconds: '2-digit' }
   },
   en: {
     lang: 'en-US',
-    options: { year: 'numeric', month: 'long', day: 'numeric' },
-  },
+    options: {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      seconds: '2-digit' }
+  }
 }
 
 const dateFormat = date => {
   if (!date) {
     return ''
   }
-  if (date.length === 4) {
-    return new Date(date).getFullYear()
+  let out = date
+  if ((typeof out === 'string' || out instanceof String) && out.endsWith('-00:00')) {
+    out = out.substring(0, out.length - 6)
   }
-  if (Locale.currentLang === 'en') {
-    return new Date(date).toLocaleDateString(
-      formats[Locale.currentLang].lang,
-      formats[Locale.currentLang].options
-    )
+  if (out.length === 4) {
+    return new Date(out).getFullYear()
   }
-  const itemDate = new Date(date)
-  const day = itemDate.getDate()
-  const month = itemDate.getMonth()
-  const year = itemDate.getFullYear()
-  const finnishFormat = `${day}.${month + 1}.${year}`
-  return finnishFormat
+  return new Date(out).toLocaleString(
+    formats[Locale.currentLang].lang,
+    formats[Locale.currentLang].options
+  )
 }
 
 export default dateFormat

@@ -40,7 +40,7 @@ class Maps extends Component {
                     )}
                     {spatial.alt && (
                       <p>
-                        <FontAwesomeIcon icon={FaArrowsAltV} />Alititude: {spatial.alt}m
+                        <FontAwesomeIcon icon={FaArrowsAltV} />Altitude: {spatial.alt}
                       </p>
                     )}
                   </CustomPopup>

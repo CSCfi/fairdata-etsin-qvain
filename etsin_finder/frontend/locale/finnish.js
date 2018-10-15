@@ -65,6 +65,7 @@ const finnish = {
       dirContent: 'Kansion sisältö',
       download: 'Lataa',
       downloadAll: 'Lataa kaikki',
+      downloading: 'Ladataan...',
       fileAmount: '%(amount)s objektia',
       close_modal: 'Sulje info',
       info_header: 'Tiedoston muut tiedot',
@@ -162,7 +163,7 @@ const finnish = {
     login: 'Kirjaudu',
     logout: 'Kirjaudu ulos',
     logoutNotice:
-      'Kirjauduit ulos onnistuneesti. Sulje selain kirjautuksesi ulos myös HAKA-palvelusta',
+      'Kirjauduit ulos onnistuneesti. Sulje selain kirjautuaksesi ulos myös HAKA-palvelusta',
     data: 'Data',
     dataset: 'Aineisto',
     datasets: 'Aineistot',

@@ -45,8 +45,8 @@ export default class KeyValues extends Component {
     const es = axios.post('/es/metax/dataset/_search', {
       aggs: {
         // label.en and label.fi always have same cardinality
-        // theme.identifier doesn't include free keywords
-        distinct_keywords: { cardinality: { field: 'theme.label.en.keyword' } },
+        // for keywords, use the english field
+        distinct_keywords: { cardinality: { field: 'all_keywords_en' } },
         distinct_fieldsofscience: {
           cardinality: { field: 'field_of_science.pref_label.en.keyword' },
         },

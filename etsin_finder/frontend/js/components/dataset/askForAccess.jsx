@@ -7,12 +7,12 @@ import access from '../../stores/view/access'
 
 class AskForAccess extends Component {
   render() {
-    if (!access.restrictions.allowAskForAccess) {
+    if (!access.restrictions.allowAskForPermit) {
       return null
     }
     return (
       // TODO: fill with real world items
-      <Button onClick={() => alert('Hae käyttölupaa')} noMargin>
+      <Button onClick={() => alert('Ei vielä toteutettu')} noMargin>
         <Translate content="dataset.access_permission" />
       </Button>
     )

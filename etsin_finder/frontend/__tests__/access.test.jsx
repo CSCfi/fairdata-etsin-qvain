@@ -3,21 +3,11 @@ import Access from '../js/stores/view/access'
 import auth from '../js/stores/domain/auth'
 
 const accessTypes = {
-  open: 'http://purl.org/att/es/reference_data/access_type/access_type_open_access',
-  closed: 'http://purl.org/att/es/reference_data/access_type/access_type_closed_access',
-  embargoed: 'http://purl.org/att/es/reference_data/access_type/access_type_embargoed_access',
-  restricted_access:
-    'http://purl.org/att/es/reference_data/access_type/access_type_restricted_access',
-  restricted_access_permit_fairdata:
-    'http://purl.org/att/es/reference_data/access_type/access_type_restricted_access_permit_fairdata',
-  restricted_access_permit_external:
-    'http://purl.org/att/es/reference_data/access_type/access_type_restricted_access_permit_external',
-  restricted_access_research:
-    'http://purl.org/att/es/reference_data/access_type/access_type_restricted_access_research',
-  restricted_access_research_education_studying:
-    'http://purl.org/att/es/reference_data/access_type/access_type_restricted_access_education_studying',
-  restricted_access_registration:
-    'http://purl.org/att/es/reference_data/access_type/access_type_restricted_access_registration',
+  open: 'http://uri.suomi.fi/codelist/fairdata/access_type/code/open',
+  login: 'http://uri.suomi.fi/codelist/fairdata/access_type/code/login',
+  embargo: 'http://uri.suomi.fi/codelist/fairdata/access_type/code/embargo',
+  permit: 'http://uri.suomi.fi/codelist/fairdata/access_type/code/permit',
+  restricted: 'http://uri.suomi.fi/codelist/fairdata/access_type/code/restricted'
 }
 
 let accessRights
@@ -37,78 +27,46 @@ describe('Access Store', () => {
       done()
     })
     it('Should show Remote files', () => {
-      expect(Access.restrictions.allowRemote).toEqual(true)
+      expect(Access.restrictions.allowDataRemote).toEqual(true)
     })
     it('Should show IDA files', () => {
       expect(Access.restrictions.allowDataIda).toEqual(true)
-    })
-    it('Should allow Remote file download', () => {
-      expect(Access.restrictions.allowRemoteDownload).toEqual(true)
     })
     it('Should allow Ida file download', () => {
-      expect(Access.restrictions.allowDataDownload).toEqual(true)
+      expect(Access.restrictions.allowDataIdaDownloadButton).toEqual(true)
     })
     it('Should show Ida file info', () => {
-      expect(Access.restrictions.allowDataInfoButton).toEqual(true)
+      expect(Access.restrictions.allowDataIdaInfoButton).toEqual(true)
     })
     it('Should not show ask for access', () => {
-      expect(Access.restrictions.allowAskForAccess).toEqual(false)
+      expect(Access.restrictions.allowAskForPermit).toEqual(false)
     })
   })
-  describe('Update for closed access', () => {
-    it('Should start update process', done => {
-      const closed = accessRights
-      closed.access_type.identifier = accessTypes.closed
-      Access.updateAccess(closed)
-      done()
-    })
-    it('Should show Remote files', () => {
-      expect(Access.restrictions.allowRemote).toEqual(true)
-    })
-    it('Should allow Remote file download', () => {
-      expect(Access.restrictions.allowRemoteDownload).toEqual(true)
-    })
-    it('Should show IDA files', () => {
-      expect(Access.restrictions.allowDataIda).toEqual(true)
-    })
-    it('Should not allow Ida file download', () => {
-      expect(Access.restrictions.allowDataDownload).toEqual(false)
-    })
-    it('Should not show Ida file info', () => {
-      expect(Access.restrictions.allowDataInfoButton).toEqual(false)
-    })
-    it('Should not show ask for access', () => {
-      expect(Access.restrictions.allowAskForAccess).toEqual(false)
-    })
-  })
-  describe('Update for embargoed access', () => {
+  describe('Update for embargo access', () => {
     describe('Is available', () => {
       it('Should start update process', done => {
         const embargoed = accessRights
         const d = new Date()
         d.setFullYear(d.getFullYear() - 1)
         embargoed.available = d.toISOString()
-        embargoed.access_type.identifier = accessTypes.embargoed
+        embargoed.access_type.identifier = accessTypes.embargo
         Access.updateAccess(embargoed)
         done()
       })
       it('Should show Remote files', () => {
-        expect(Access.restrictions.allowRemote).toEqual(true)
-      })
-      it('Should allow Remote file download', () => {
-        expect(Access.restrictions.allowRemoteDownload).toEqual(true)
+        expect(Access.restrictions.allowDataRemote).toEqual(true)
       })
       it('Should show IDA files', () => {
         expect(Access.restrictions.allowDataIda).toEqual(true)
       })
       it('Should allow Ida file download', () => {
-        expect(Access.restrictions.allowDataDownload).toEqual(true)
+        expect(Access.restrictions.allowDataIdaDownloadButton).toEqual(true)
       })
       it('Should show Ida file info', () => {
-        expect(Access.restrictions.allowDataInfoButton).toEqual(true)
+        expect(Access.restrictions.allowDataIdaInfoButton).toEqual(true)
       })
       it('Should not show ask for access', () => {
-        expect(Access.restrictions.allowAskForAccess).toEqual(false)
+        expect(Access.restrictions.allowAskForPermit).toEqual(false)
       })
     })
     describe('Unavailable', () => {
@@ -117,245 +75,120 @@ describe('Access Store', () => {
         const d = new Date()
         d.setFullYear(d.getFullYear() + 1)
         embargoed.available = d.toISOString()
-        embargoed.access_type.identifier = accessTypes.embargoed
+        embargoed.access_type.identifier = accessTypes.embargo
         Access.updateAccess(embargoed)
         done()
       })
-      it('Should not show Remote files', () => {
-        expect(Access.restrictions.allowRemote).toEqual(false)
+      it('Should show Remote files', () => {
+        expect(Access.restrictions.allowDataRemote).toEqual(true)
       })
-      it('Should not allow Remote file download', () => {
-        expect(Access.restrictions.allowRemoteDownload).toEqual(false)
-      })
-      it('Should not show IDA files', () => {
-        expect(Access.restrictions.allowDataIda).toEqual(false)
+      it('Should show IDA files', () => {
+        expect(Access.restrictions.allowDataIda).toEqual(true)
       })
       it('Should not allow Ida file download', () => {
-        expect(Access.restrictions.allowDataDownload).toEqual(false)
+        expect(Access.restrictions.allowDataIdaDownloadButton).toEqual(false)
       })
       it('Should not show Ida file info', () => {
-        expect(Access.restrictions.allowDataInfoButton).toEqual(false)
+        expect(Access.restrictions.allowDataIdaInfoButton).toEqual(false)
       })
       it('Should not show ask for access', () => {
-        expect(Access.restrictions.allowAskForAccess).toEqual(false)
+        expect(Access.restrictions.allowAskForPermit).toEqual(false)
       })
     })
   })
   describe('Update for restricted access', () => {
     it('Should start update process', done => {
       const restricted = accessRights
-      restricted.access_type.identifier = accessTypes.restricted_access
+      restricted.access_type.identifier = accessTypes.restricted
       Access.updateAccess(restricted)
       done()
     })
     it('Should show Remote files', () => {
-      expect(Access.restrictions.allowRemote).toEqual(true)
-    })
-    it('Should allow Remote file download', () => {
-      expect(Access.restrictions.allowRemoteDownload).toEqual(true)
+      expect(Access.restrictions.allowDataRemote).toEqual(true)
     })
     it('Should show IDA files', () => {
       expect(Access.restrictions.allowDataIda).toEqual(true)
     })
     it('Should not allow Ida file download', () => {
-      expect(Access.restrictions.allowDataDownload).toEqual(false)
+      expect(Access.restrictions.allowDataIdaDownloadButton).toEqual(false)
     })
     it('Should not show Ida file info', () => {
-      expect(Access.restrictions.allowDataInfoButton).toEqual(false)
+      expect(Access.restrictions.allowDataIdaInfoButton).toEqual(false)
     })
     it('Should not show ask for access', () => {
-      expect(Access.restrictions.allowAskForAccess).toEqual(false)
+      expect(Access.restrictions.allowAskForPermit).toEqual(false)
     })
   })
-  describe('Update for restricted access permit fairdata', () => {
+  describe('Update for permit access', () => {
     it('Should start update process', done => {
-      const permit_fairdata = accessRights
-      permit_fairdata.access_type.identifier = accessTypes.restricted_access_permit_fairdata
-      Access.updateAccess(permit_fairdata)
+      const restricted_fairdata = accessRights
+      restricted_fairdata.access_type.identifier = accessTypes.permit
+      Access.updateAccess(restricted_fairdata)
       done()
     })
     it('Should show Remote files', () => {
-      expect(Access.restrictions.allowRemote).toEqual(true)
-    })
-    it('Should allow Remote file download', () => {
-      expect(Access.restrictions.allowRemoteDownload).toEqual(true)
+      expect(Access.restrictions.allowDataRemote).toEqual(true)
     })
     it('Should show IDA files', () => {
       expect(Access.restrictions.allowDataIda).toEqual(true)
     })
     it('Should not allow Ida file download', () => {
-      expect(Access.restrictions.allowDataDownload).toEqual(false)
+      expect(Access.restrictions.allowDataIdaDownloadButton).toEqual(false)
     })
     it('Should not show Ida file info', () => {
-      expect(Access.restrictions.allowDataInfoButton).toEqual(false)
+      expect(Access.restrictions.allowDataIdaInfoButton).toEqual(false)
     })
     it('Should show ask for access', () => {
-      expect(Access.restrictions.allowAskForAccess).toEqual(true)
+      expect(Access.restrictions.allowAskForPermit).toEqual(true)
     })
   })
-  describe('Update for restricted access permit external', () => {
-    it('Should start update process', done => {
-      const permit_external = accessRights
-      permit_external.access_type.identifier = accessTypes.restricted_access_permit_external
-      Access.updateAccess(permit_external)
-      done()
-    })
-    it('Should show Remote files', () => {
-      expect(Access.restrictions.allowRemote).toEqual(true)
-    })
-    it('Should allow Remote file download', () => {
-      expect(Access.restrictions.allowRemoteDownload).toEqual(true)
-    })
-    it('Should show IDA files', () => {
-      expect(Access.restrictions.allowDataIda).toEqual(true)
-    })
-    it('Should not allow Ida file download', () => {
-      expect(Access.restrictions.allowDataDownload).toEqual(false)
-    })
-    it('Should not show Ida file info', () => {
-      expect(Access.restrictions.allowDataInfoButton).toEqual(false)
-    })
-    it('Should show ask for access', () => {
-      expect(Access.restrictions.allowAskForAccess).toEqual(true)
-    })
-  })
-  describe('Update for restricted access research', () => {
-    it('Should start update process', done => {
-      const restricted_research = accessRights
-      restricted_research.access_type.identifier = accessTypes.restricted_access_research
-      Access.updateAccess(restricted_research)
-      done()
-    })
-    it('Should show Remote files', () => {
-      expect(Access.restrictions.allowRemote).toEqual(true)
-    })
-    it('Should allow Remote file download', () => {
-      expect(Access.restrictions.allowRemoteDownload).toEqual(true)
-    })
-    it('Should show IDA files', () => {
-      expect(Access.restrictions.allowDataIda).toEqual(true)
-    })
-    it('Should not allow Ida file download', () => {
-      expect(Access.restrictions.allowDataDownload).toEqual(false)
-    })
-    it('Should not show Ida file info', () => {
-      expect(Access.restrictions.allowDataInfoButton).toEqual(false)
-    })
-    it('Should not show ask for access', () => {
-      expect(Access.restrictions.allowAskForAccess).toEqual(false)
-    })
-  })
-  describe('Update for restricted access research education studying', () => {
-    describe('User not logged in', () => {
-      it('Should start update process', done => {
-        auth.userLogged = false
-        const restricted_research_studying = accessRights
-        restricted_research_studying.access_type.identifier =
-          accessTypes.restricted_access_research_education_studying
-        Access.updateAccess(restricted_research_studying)
-        done()
-      })
-      it('Should show Remote files', () => {
-        expect(Access.restrictions.allowRemote).toEqual(true)
-      })
-      it('Should allow Remote file download', () => {
-        expect(Access.restrictions.allowRemoteDownload).toEqual(true)
-      })
-      it('Should show IDA files', () => {
-        expect(Access.restrictions.allowDataIda).toEqual(true)
-      })
-      it('Should not allow Ida file download', () => {
-        expect(Access.restrictions.allowDataDownload).toEqual(false)
-      })
-      it('Should not show Ida file info', () => {
-        expect(Access.restrictions.allowDataInfoButton).toEqual(false)
-      })
-      it('Should not show ask for access', () => {
-        expect(Access.restrictions.allowAskForAccess).toEqual(false)
-      })
-    })
-    describe('User logged in', () => {
-      it('Should start update process', done => {
-        auth.userLogged = true
-        const restricted_research_studying = accessRights
-        restricted_research_studying.access_type.identifier =
-          accessTypes.restricted_access_research_education_studying
-        Access.updateAccess(restricted_research_studying)
-        done()
-      })
-      it('Should show Remote files', () => {
-        expect(Access.restrictions.allowRemote).toEqual(true)
-      })
-      it('Should allow Remote file download', () => {
-        expect(Access.restrictions.allowRemoteDownload).toEqual(true)
-      })
-      it('Should show IDA files', () => {
-        expect(Access.restrictions.allowDataIda).toEqual(true)
-      })
-      it('Should not allow Ida file download', () => {
-        expect(Access.restrictions.allowDataDownload).toEqual(true)
-      })
-      it('Should not show Ida file info', () => {
-        expect(Access.restrictions.allowDataInfoButton).toEqual(true)
-      })
-      it('Should not show ask for access', () => {
-        expect(Access.restrictions.allowAskForAccess).toEqual(false)
-      })
-    })
-  })
-  describe('Update for restricted access registration', () => {
+  describe('Update for login access', () => {
     describe('User not logged in', () => {
       it('Should start update process', done => {
         auth.userLogged = false
         const restricted_registration = accessRights
-        restricted_registration.access_type.identifier = accessTypes.restricted_access_registration
+        restricted_registration.access_type.identifier = accessTypes.login
         Access.updateAccess(restricted_registration)
         done()
       })
       it('Should show Remote files', () => {
-        expect(Access.restrictions.allowRemote).toEqual(true)
-      })
-      it('Should allow Remote file download', () => {
-        expect(Access.restrictions.allowRemoteDownload).toEqual(true)
+        expect(Access.restrictions.allowDataRemote).toEqual(true)
       })
       it('Should show IDA files', () => {
         expect(Access.restrictions.allowDataIda).toEqual(true)
       })
       it('Should not allow Ida file download', () => {
-        expect(Access.restrictions.allowDataDownload).toEqual(false)
+        expect(Access.restrictions.allowDataIdaDownloadButton).toEqual(false)
       })
       it('Should not show Ida file info', () => {
-        expect(Access.restrictions.allowDataInfoButton).toEqual(false)
+        expect(Access.restrictions.allowDataIdaInfoButton).toEqual(false)
       })
       it('Should not show ask for access', () => {
-        expect(Access.restrictions.allowAskForAccess).toEqual(false)
+        expect(Access.restrictions.allowAskForPermit).toEqual(false)
       })
     })
     describe('User logged in', () => {
       it('Should start update process', done => {
         auth.userLogged = true
         const restricted_registration = accessRights
-        restricted_registration.access_type.identifier = accessTypes.restricted_access_registration
+        restricted_registration.access_type.identifier = accessTypes.login
         Access.updateAccess(restricted_registration)
         done()
       })
       it('Should show Remote files', () => {
-        expect(Access.restrictions.allowRemote).toEqual(true)
-      })
-      it('Should allow Remote file download', () => {
-        expect(Access.restrictions.allowRemoteDownload).toEqual(true)
+        expect(Access.restrictions.allowDataRemote).toEqual(true)
       })
       it('Should show IDA files', () => {
         expect(Access.restrictions.allowDataIda).toEqual(true)
       })
       it('Should not allow Ida file download', () => {
-        expect(Access.restrictions.allowDataDownload).toEqual(true)
+        expect(Access.restrictions.allowDataIdaDownloadButton).toEqual(true)
       })
       it('Should not show Ida file info', () => {
-        expect(Access.restrictions.allowDataInfoButton).toEqual(true)
+        expect(Access.restrictions.allowDataIdaInfoButton).toEqual(true)
       })
       it('Should not show ask for access', () => {
-        expect(Access.restrictions.allowAskForAccess).toEqual(false)
+        expect(Access.restrictions.allowAskForPermit).toEqual(false)
       })
     })
   })

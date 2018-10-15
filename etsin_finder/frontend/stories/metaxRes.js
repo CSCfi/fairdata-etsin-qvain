@@ -86,14 +86,14 @@ export default {
               und: 'Creative Commons Nime\u00e4 4.0 Kansainv\u00e4linen (CC BY 4.0)',
             },
             license: 'https://creativecommons.org/licenses/by/4.0/',
-            in_scheme: 'https://metax.fairdata.fi/es/reference_data/license/_search?pretty',
+            in_scheme: 'http://uri.suomi.fi/codelist/fairdata/license',
             identifier: 'https://creativecommons.org/licenses/by/4.0/',
           },
         ],
         access_type: [
           {
-            in_scheme: 'https://metax.fairdata.fi/es/reference_data/access_type/_search?pretty',
-            identifier: 'http://purl.org/att/es/reference_data/access_type/access_type_open_access',
+            in_scheme: 'http://uri.suomi.fi/codelist/fairdata/access_type',
+            identifier: 'http://uri.suomi.fi/codelist/fairdata/access_type/code/open',
             pref_label: {
               en: 'Open',
               fi: 'Avoin',
@@ -119,8 +119,8 @@ export default {
               sv: 'Aalto universitetet',
               und: 'Aalto yliopisto',
             },
-            in_scheme: 'https://metax.fairdata.fi/es/organization_data/organization/_search?pretty',
-            identifier: 'http://purl.org/att/es/organization_data/organization/organization_10076',
+            in_scheme: 'http://uri.suomi.fi/codelist/fairdata/organization',
+            identifier: 'http://uri.suomi.fi/codelist/fairdata/organization/code/10076',
           },
         ],
       },
@@ -161,14 +161,14 @@ export default {
             },
           ],
           definition: [{ en: 'A statement or formal explanation of the meaning of a concept.' }],
-          identifier: 'http://purl.org/att/es/reference_data/file_type/file_type_video',
+          identifier: 'http://uri.suomi.fi/codelist/fairdata/file_type/code/video',
           pref_label: { en: 'Video', fi: 'Video', und: 'Video' },
         },
         identifier: 'pid:urn:6',
         description: 'file description 6',
         use_category: {
           identifier:
-            'http://purl.org/att/es/reference_data/use_category/use_category_configuration',
+            'http://uri.suomi.fi/codelist/fairdata/use_category/code/configuration',
           pref_label: {
             en: 'Configuration files',
             fi: 'Konfiguraatiotiedosto',
@@ -186,13 +186,13 @@ export default {
             },
           ],
           definition: [{ en: 'A statement or formal explanation of the meaning of a concept.' }],
-          identifier: 'http://purl.org/att/es/reference_data/file_type/file_type_software',
+          identifier: 'http://uri.suomi.fi/codelist/fairdata/file_type/code/software',
           pref_label: { en: 'Software', fi: 'Sovellus', und: 'Sovellus' },
         },
         identifier: 'pid:urn:10',
         description: 'file description 10',
         use_category: {
-          identifier: 'http://purl.org/att/es/reference_data/use_category/use_category_publication',
+          identifier: 'http://uri.suomi.fi/codelist/fairdata/use_category/code/publication',
           pref_label: { en: 'Publication', fi: 'Julkaisu', und: 'Julkaisu' },
         },
       },
@@ -226,11 +226,11 @@ export default {
         member_of: {
           name: { und: 'Aalto yliopisto' },
           '@type': 'Organization',
-          identifier: 'http://purl.org/att/es/organization_data/organization/organization_10076',
+          identifier: 'http://uri.suomi.fi/codelist/fairdata/organization/code/10076',
         },
         contributor_role: {
           identifier:
-            'http://purl.org/att/es/reference_data/contributor_role/contributor_role_data_curation',
+            'http://uri.suomi.fi/codelist/fairdata/contributor_role/code/data_curation',
           pref_label: { en: 'Data curation', und: 'Data curation' },
         },
         homepage: {
@@ -248,7 +248,7 @@ export default {
         is_part_of: {
           name: { und: 'Aalto yliopisto' },
           '@type': 'Organization',
-          identifier: 'http://purl.org/att/es/organization_data/organization/organization_10076',
+          identifier: 'http://uri.suomi.fi/codelist/fairdata/organization/code/10076',
         },
       },
     ],
@@ -364,7 +364,7 @@ export default {
         identifier: 'http://www.publisher.fi/',
       },
       telephone: ['+358501231235'],
-      identifier: 'http://purl.org/att/es/organization_data/organization/organization_10076-A800',
+      identifier: 'http://uri.suomi.fi/codelist/fairdata/organization/code/10076-A800',
       is_part_of: {
         name: { und: 'Aalto yliopisto' },
         '@type': 'Organization',
@@ -374,7 +374,7 @@ export default {
           identifier: 'http://www.publisher_parent.fi/',
         },
         telephone: ['+234234'],
-        identifier: 'http://purl.org/att/es/organization_data/organization/organization_10076',
+        identifier: 'http://uri.suomi.fi/codelist/fairdata/organization/code/10076',
       },
     },
     provenance: [
@@ -462,7 +462,7 @@ export default {
           ],
           definition: [{ en: 'A statement or formal explanation of the meaning of a concept.' }],
           identifier:
-            'http://purl.org/att/es/reference_data/lifecycle_event/lifecycle_event_collected',
+            'http://uri.suomi.fi/codelist/fairdata/lifecycle_event/code/collected',
           pref_label: { en: 'Collected', fi: 'Kerätty', und: 'Kerätty' },
         },
         was_associated_with: [
@@ -471,7 +471,7 @@ export default {
             '@type': 'Organization',
             email: 'info@csc.fi',
             telephone: ['+358501231235'],
-            identifier: 'http://purl.org/att/es/organization_data/organization/organization_01901',
+            identifier: 'http://uri.suomi.fi/codelist/fairdata/organization/code/01901',
           },
         ],
       },
@@ -496,7 +496,7 @@ export default {
         description: { en: 'Description of other provenance activity' },
         preservation_event: {
           identifier:
-            'http://purl.org/att/reference_data/preservation_event/preservation_event_upd',
+            'http://uri.suomi.fi/codelist/fairdata/preservation_event/code/upd',
           pref_label: { en: 'Object update', fi: 'Objektin päivitys', und: 'Objektin päivitys' },
         },
       },
@@ -511,13 +511,13 @@ export default {
           '@type': 'Organization',
           email: 'info@csc.fi',
           telephone: ['+358501231235'],
-          identifier: 'http://purl.org/att/es/organization_data/organization/organization_01901',
+          identifier: 'http://uri.suomi.fi/codelist/fairdata/organization/code/01901',
         },
         telephone: ['+358501231122'],
         identifier: 'contributorid',
         contributor_role: {
           identifier:
-            'http://purl.org/att/es/reference_data/contributor_role/contributor_role_funding_acquisition',
+            'http://uri.suomi.fi/codelist/fairdata/contributor_role/code/funding_acquisition',
           pref_label: { en: 'Funding acquisition', und: 'Funding acquisition' },
         },
       },
@@ -536,7 +536,7 @@ export default {
         identifier: 'contributorid2',
         contributor_role: {
           identifier:
-            'http://purl.org/att/es/reference_data/contributor_role/contributor_role_project_administration',
+            'http://uri.suomi.fi/codelist/fairdata/contributor_role/code/project_administration',
           pref_label: { en: 'Project administration', und: 'Project administration' },
         },
       },
@@ -555,7 +555,7 @@ export default {
         identifier: 'contributorid2',
         contributor_role: {
           identifier:
-            'http://purl.org/att/es/reference_data/contributor_role/contributor_role_project_administration',
+            'http://uri.suomi.fi/codelist/fairdata/contributor_role/code/project_administration',
           pref_label: { en: 'Project administration', und: 'Project administration' },
         },
       },
@@ -574,7 +574,7 @@ export default {
         identifier: 'contributorid2',
         contributor_role: {
           identifier:
-            'http://purl.org/att/es/reference_data/contributor_role/contributor_role_project_administration',
+            'http://uri.suomi.fi/codelist/fairdata/contributor_role/code/project_administration',
           pref_label: { en: 'Project administration', und: 'Project administration' },
         },
       },
@@ -593,7 +593,7 @@ export default {
         identifier: 'contributorid2',
         contributor_role: {
           identifier:
-            'http://purl.org/att/es/reference_data/contributor_role/contributor_role_project_administration',
+            'http://uri.suomi.fi/codelist/fairdata/contributor_role/code/project_administration',
           pref_label: { en: 'Project administration', und: 'Project administration' },
         },
       },
@@ -612,7 +612,7 @@ export default {
         identifier: 'contributorid2',
         contributor_role: {
           identifier:
-            'http://purl.org/att/es/reference_data/contributor_role/contributor_role_project_administration',
+            'http://uri.suomi.fi/codelist/fairdata/contributor_role/code/project_administration',
           pref_label: { en: 'Project administration', und: 'Project administration' },
         },
       },
@@ -629,7 +629,7 @@ export default {
         identifier: 'pid:urn:dir:18',
         description: 'Description of the directory',
         use_category: {
-          identifier: 'http://purl.org/att/es/reference_data/use_category/use_category_outcome',
+          identifier: 'http://uri.suomi.fi/codelist/fairdata/use_category/code/outcome',
           pref_label: { en: 'Outcome material', fi: 'Tulosaineisto', und: 'Tulosaineisto' },
         },
       },
@@ -638,7 +638,7 @@ export default {
         identifier: 'pid:urn:dir:22',
         description: 'Description of the directory',
         use_category: {
-          identifier: 'http://purl.org/att/es/reference_data/use_category/use_category_outcome',
+          identifier: 'http://uri.suomi.fi/codelist/fairdata/use_category/code/outcome',
           pref_label: { en: 'Outcome material', fi: 'Tulosaineisto', und: 'Tulosaineisto' },
         },
       },
@@ -647,7 +647,7 @@ export default {
         identifier: 'pid:urn:dir:12',
         description: 'Description of the directory',
         use_category: {
-          identifier: 'http://purl.org/att/es/reference_data/use_category/use_category_outcome',
+          identifier: 'http://uri.suomi.fi/codelist/fairdata/use_category/code/outcome',
           pref_label: { en: 'Outcome material', fi: 'Tulosaineisto', und: 'Tulosaineisto' },
         },
       },
@@ -656,7 +656,7 @@ export default {
         identifier: 'pid:urn:dir:13',
         description: 'Description of the directory',
         use_category: {
-          identifier: 'http://purl.org/att/es/reference_data/use_category/use_category_source',
+          identifier: 'http://uri.suomi.fi/codelist/fairdata/use_category/code/source',
           pref_label: { en: 'Source material', fi: 'Lähdeaineisto', und: 'Lähdeaineisto' },
         },
       },
@@ -665,7 +665,7 @@ export default {
         identifier: 'pid:urn:dir:14',
         description: 'Description of the directory',
         use_category: {
-          identifier: 'http://purl.org/att/es/reference_data/use_category/use_category_method',
+          identifier: 'http://uri.suomi.fi/codelist/fairdata/use_category/code/method',
           pref_label: { en: 'Method', fi: 'Metodi', und: 'Metodi' },
         },
       },
@@ -677,8 +677,8 @@ export default {
         },
         identifier: 'projectidentifier',
         funder_type: {
-          in_scheme: 'https://metax.fairdata.fi/es/reference_data/funder_type/_search?pretty',
-          identifier: 'http://purl.org/att/es/reference_data/funder_type/funder_type_tekes',
+          in_scheme: 'http://uri.suomi.fi/codelist/fairdata/funder_type',
+          identifier: 'http://uri.suomi.fi/codelist/fairdata/funder_type/code/tekes',
           pref_label: {
             en: 'Tekes',
             fi: 'Tekes',
@@ -704,8 +704,8 @@ export default {
               und: 'Helsingin yliopisto',
             },
             '@type': 'Organization',
-            in_scheme: 'https://metax.fairdata.fi/es/organization_data/organization/_search?pretty',
-            identifier: 'http://purl.org/att/es/organization_data/organization/organization_01901',
+            in_scheme: 'http://uri.suomi.fi/codelist/fairdata/organization',
+            identifier: 'http://uri.suomi.fi/codelist/fairdata/organization/code/01901',
           },
         ],
         has_funder_identifier: 'funderprojectidentifier',
@@ -716,8 +716,8 @@ export default {
         },
         identifier: 'otherIdentifier',
         funder_type: {
-          in_scheme: 'https://metax.fairdata.fi/es/reference_data/funder_type/_search?pretty',
-          identifier: 'http://purl.org/att/es/reference_data/funder_type/funder_type_tekes',
+          in_scheme: 'http://uri.suomi.fi/codelist/fairdata/funder_type',
+          identifier: 'http://uri.suomi.fi/codelist/fairdata/funder_type/code/tekes',
           pref_label: {
             en: 'Tekes',
             fi: 'Tekes',
@@ -743,8 +743,8 @@ export default {
               und: 'Helsingin yliopisto',
             },
             '@type': 'Organization',
-            in_scheme: 'https://metax.fairdata.fi/es/organization_data/organization/_search?pretty',
-            identifier: 'http://purl.org/att/es/organization_data/organization/organization_01901',
+            in_scheme: 'http://uri.suomi.fi/codelist/fairdata/organization',
+            identifier: 'http://uri.suomi.fi/codelist/fairdata/organization/code/01901',
           },
         ],
         has_funder_identifier: 'funderprojectidentifier',
@@ -762,25 +762,21 @@ export default {
       ],
       available: '2014-01-15T08:19:58Z',
       access_type: {
-        in_scheme: [
-          {
-            identifier: 'http://uri.of.accessrights.concept/scheme',
-            pref_label: { en: 'The preferred lexical label for a resource' },
-          },
-        ],
         definition: [{ en: 'A statement or formal explanation of the meaning of a concept.' }],
-        identifier: 'http://purl.org/att/es/reference_data/access_type/access_type_open_access',
+        identifier: 'http://uri.suomi.fi/codelist/fairdata/access_type/code/open',
         pref_label: { en: 'Open', fi: 'Avoin', und: 'Avoin' },
       },
       description: { en: 'Free account of the rights' },
-      restriction_grounds: {
+      restriction_grounds: [{
         identifier:
-          'http://purl.org/att/es/reference_data/restriction_grounds/restriction_grounds_1',
+          'http://uri.suomi.fi/codelist/fairdata/restriction_grounds/code/other',
         pref_label: {
-          fi: 'Avoin, ei tiedossa olevia rajoituksia',
-          und: 'Avoin, ei tiedossa olevia rajoituksia',
+          fi: 'Saatavuutta rajoitettu muulla perusteella',
+          en: 'Restricted access due to other reasons',
+          sv: 'Begränsad åtkomst av övriga skäl'
+          und: 'Saatavuutta rajoitettu muulla perusteella',
         },
-      },
+      }],
       has_rights_related_agent: [
         {
           name: { und: 'Helsingin yliopisto' },
@@ -792,7 +788,7 @@ export default {
             description: { en: 'homepage description' },
           },
           telephone: ['+358501231235'],
-          identifier: 'http://purl.org/att/es/organization_data/organization/organization_01901',
+          identifier: 'http://uri.suomi.fi/codelist/fairdata/organization/code/01901',
         },
       ],
     },
@@ -801,11 +797,11 @@ export default {
       '@type': 'Organization',
       email: 'info@csc.fi',
       telephone: ['+358501231235'],
-      identifier: 'http://purl.org/att/es/organization_data/organization/organization_01901',
+      identifier: 'http://uri.suomi.fi/codelist/fairdata/organization/code/01901',
       is_part_of: {
         name: { und: 'Aalto yliopisto' },
         '@type': 'Organization',
-        identifier: 'http://purl.org/att/es/organization_data/organization/organization_10076',
+        identifier: 'http://uri.suomi.fi/codelist/fairdata/organization/code/10076',
       },
     },
     version_notes: ['This version contains changes to x and y.'],
@@ -871,7 +867,7 @@ export default {
             },
           ],
           definition: [{ en: 'A statement or formal explanation of the meaning of a concept.' }],
-          identifier: 'http://purl.org/att/es/reference_data/identifier_type/identifier_type_doi',
+          identifier: 'http://uri.suomi.fi/codelist/fairdata/identifier_type/code/doi',
           pref_label: {
             en: 'Digital Object Identifier (DOI)',
             und: 'Digital Object Identifier (DOI)',
@@ -883,7 +879,7 @@ export default {
           '@type': 'Organization',
           email: 'info@csc.fi',
           telephone: ['+358501231235'],
-          identifier: 'http://purl.org/att/es/organization_data/organization/organization_01901',
+          identifier: 'http://uri.suomi.fi/codelist/fairdata/organization/code/01901',
         },
         local_identifier_type:
           'Local identifier type defines use of the identifier in given context',
@@ -897,7 +893,7 @@ export default {
             },
           ],
           definition: [{ en: 'A statement or formal explanation of the meaning of a concept.' }],
-          identifier: 'http://purl.org/att/es/reference_data/identifier_type/identifier_type_urn',
+          identifier: 'http://uri.suomi.fi/codelist/fairdata/identifier_type/code/urn',
           pref_label: { en: 'Uniform Resource Name (URN)', und: 'Uniform Resource Name (URN)' },
         },
         notation: 'urn:nbn:fi-12345',
@@ -906,7 +902,7 @@ export default {
           '@type': 'Organization',
           email: 'info@csc.fi',
           telephone: ['+358501231235'],
-          identifier: 'http://purl.org/att/es/organization_data/organization/organization_01901',
+          identifier: 'http://uri.suomi.fi/codelist/fairdata/organization/code/01901',
         },
         local_identifier_type:
           'Local identifier type defines use of the identifier in given context',
@@ -1001,7 +997,7 @@ export const MetaxRemote = {
               en: 'A statement or formal explanation of the meaning of a concept.',
             },
           ],
-          identifier: 'http://purl.org/att/es/reference_data/file_type/file_type_image',
+          identifier: 'http://uri.suomi.fi/codelist/fairdata/file_type/code/image',
           pref_label: {
             en: 'Image',
             fi: 'Kuva',
@@ -1021,7 +1017,7 @@ export const MetaxRemote = {
           },
         },
         use_category: {
-          identifier: 'http://purl.org/att/es/reference_data/use_category/use_category_rights',
+          identifier: 'http://uri.suomi.fi/codelist/fairdata/use_category/code/rights',
           pref_label: {
             en: 'Rights statement',
             fi: 'Oikeuksien kuvaus',
@@ -1073,7 +1069,7 @@ export const MetaxRemote = {
         description: 'Free-text account of the second distribution.',
         use_category: {
           identifier:
-            'http://purl.org/att/es/reference_data/use_category/use_category_documentation',
+            'http://uri.suomi.fi/codelist/fairdata/use_category/code/documentation',
           pref_label: {
             en: 'Documentation',
             fi: 'Dokumentaatio',
@@ -1094,7 +1090,7 @@ export const MetaxRemote = {
               en: 'A statement or formal explanation of the meaning of a concept.',
             },
           ],
-          identifier: 'http://purl.org/att/es/reference_data/resource_type/resource_type_api',
+          identifier: 'http://uri.suomi.fi/codelist/fairdata/resource_type/code/api',
           pref_label: {
             en: 'Application interface',
             fi: 'Rajapinta',

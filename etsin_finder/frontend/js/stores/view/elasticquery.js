@@ -17,29 +17,27 @@ import Helpers from '../../utils/helpers'
 import Env from '../domain/env'
 
 const fields = [
-  'title.*',
+  'title.*^5',
   'description.*',
   'creator.name.*',
   'contributor.name.*',
   'publisher.name.*',
   'rights_holder.name.*',
   'curator.name.*',
-  'keyword',
+  'keyword^3',
   'access_rights.license.title.*',
   'access_rights.access_type.identifier',
   'access_rights.access_type.pref_label.*',
   'theme.pref_label.*',
   'field_of_science.pref_label.*',
   'infrastructure.pref_label.*',
-  'project.*',
+  'is_output_of.name.*',
   'identifier',
   'preferred_identifier',
   'other_identifier.notation',
   'other_identifier.type.pref_label.*',
   'dataset_version_set',
 ]
-
-const prefIdField = ['preferred_identifier']
 
 let lastQueryTime = 0
 
@@ -218,13 +216,19 @@ class ElasticQuery {
       const isUrnQ = isUrnQuery(query)
       if (tQuery) {
         queryObject = {
-            multi_match: {
-              query: tQuery,
-              type: 'best_fields',
-              minimum_should_match: isUrnQ ? '100%' : '25%',
-              operator: isUrnQ ? 'and' : 'or',
-              fields: isUrnQ ? prefIdField : fields,
-            },
+          bool: {
+            must: [
+              {
+                multi_match: {
+                  query: tQuery,
+                  type: 'best_fields',
+                  minimum_should_match: isUrnQ ? '100%' : '25%',
+                  operator: isUrnQ ? 'and' : 'or',
+                  fields
+                },
+              },
+            ]
+          }
         }
       } else {
         queryObject = {
@@ -270,14 +274,14 @@ class ElasticQuery {
             field: 'field_of_science.pref_label.fi.keyword',
           },
         },
-        keyword_en: {
+        all_keywords_en: {
           terms: {
-            field: 'theme.label.en.keyword',
+            field: 'all_keywords_en',
           },
         },
-        keyword_fi: {
+        all_keywords_fi: {
           terms: {
-            field: 'theme.label.fi.keyword',
+            field: 'all_keywords_fi',
           },
         },
         infrastructure_en: {

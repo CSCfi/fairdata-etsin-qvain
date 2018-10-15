@@ -5,23 +5,28 @@
 # :author: CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
 # :license: MIT
 
-from flask import session
+from functools import wraps
+
+from flask import request, session
 from flask_mail import Message
 from flask_restful import abort, reqparse, Resource
 
 from etsin_finder.app_config import get_app_config
 from etsin_finder.authentication import \
-    get_user_saml_info, \
+    get_user_display_name, \
+    get_user_id, \
     is_authenticated, \
     reset_flask_session_on_logout
 from etsin_finder.authorization import \
     strip_information_from_catalog_record, \
     strip_dir_api_object, \
-    user_is_allowed_to_download_from_ida
+    user_is_allowed_to_download_from_ida, \
+    user_has_rems_permission_for_catalog_record
 from etsin_finder.cr_service import \
     get_catalog_record, \
-    get_directory_data_for_catalog_record
-from etsin_finder.download_api import DownloadAPIService
+    get_directory_data_for_catalog_record, \
+    is_rems_catalog_record
+from etsin_finder.download_service import download_data
 from etsin_finder.email_utils import \
     create_email_message_body, \
     get_email_info, \
@@ -30,14 +35,26 @@ from etsin_finder.email_utils import \
     get_harvest_info, \
     validate_send_message_request
 from etsin_finder.finder import app, mail
-from etsin_finder.utils import get_download_api_config
-
 
 log = app.logger
 
 
+def log_request(f):
+    @wraps(f)
+    def func(*args, **kwargs):
+        user_id = get_user_id()
+        log.info('{0} - {1} - {2} - {3} - {4}'.format(request.environ['HTTP_X_REAL_IP'],
+                                                      user_id if user_id else '',
+                                                      request.environ['REQUEST_METHOD'],
+                                                      request.path,
+                                                      request.user_agent))
+        return f(*args, **kwargs)
+    return func
+
+
 class Dataset(Resource):
 
+    @log_request
     def get(self, cr_id):
         """
         Get dataset from metax and strip it from having sensitive information
@@ -45,16 +62,18 @@ class Dataset(Resource):
         :param cr_id: id to use to fetch the record from metax
         :return:
         """
+        is_authd = is_authenticated()
         cr = get_catalog_record(cr_id, True, True)
         if not cr:
             abort(400, message="Unable to get catalog record from Metax")
 
-        is_authd = is_authenticated()
-        ida_download_allowed = user_is_allowed_to_download_from_ida(cr, is_authd)
+        ret_obj = {'catalog_record': strip_information_from_catalog_record(cr, is_authd),
+                   'email_info': get_email_info(cr)}
 
-        return {'catalog_record': strip_information_from_catalog_record(cr, is_authd),
-                'email_info': get_email_info(cr),
-                'download_allowed': ida_download_allowed}, 200
+        if is_rems_catalog_record(cr):
+            ret_obj['has_permit'] = user_has_rems_permission_for_catalog_record(cr_id, get_user_id(), is_authd)
+
+        return ret_obj, 200
 
 
 class Files(Resource):
@@ -88,6 +107,7 @@ class Contact(Resource):
         self.parser.add_argument('user_body', required=True, help='user_body cannot be empty')
         self.parser.add_argument('agent_type', required=True, help='agent_type cannot be empty')
 
+    @log_request
     def post(self, cr_id):
         """
         This route expects a json with three key-values: user_email, user_subject and user_body.
@@ -160,7 +180,9 @@ class User(Resource):
 
     def get(self):
         user_info = {'is_authenticated': is_authenticated()}
-        user_info.update(get_user_saml_info())
+        dn = get_user_display_name()
+        if dn is not None:
+            user_info['user_display_name'] = dn
         return user_info, 200
 
 
@@ -187,16 +209,13 @@ class Download(Resource):
     Class for file download functionalities
     """
 
-    OPEN_DOWNLOAD_URL = 'https://download.fairdata.fi/api/v1/dataset/{0}'
-    RESTRICTED_DOWNLOAD_URL = 'https://download.fairdata.fi/api/v1/dataset/{0}'
-
     def __init__(self):
         self.parser = reqparse.RequestParser()
         self.parser.add_argument('cr_id', type=str, required=True)
         self.parser.add_argument('file_id', type=str, action='append', required=False)
         self.parser.add_argument('dir_id', type=str, action='append', required=False)
-        self.dl_api = DownloadAPIService(get_download_api_config(app.config))
 
+    @log_request
     def get(self):
         # Check request query parameters are present
         args = self.parser.parse_args()
@@ -209,6 +228,6 @@ class Download(Resource):
         if user_is_allowed_to_download_from_ida(cr, is_authenticated()):
             file_ids = args['file_id'] or []
             dir_ids = args['dir_id'] or []
-            return self.dl_api.download(cr_id, file_ids, dir_ids)
+            return download_data(cr_id, file_ids, dir_ids)
         else:
             abort(403, message="Not authorized")

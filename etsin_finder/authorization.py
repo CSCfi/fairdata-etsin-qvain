@@ -5,38 +5,23 @@
 # :author: CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
 # :license: MIT
 
-from cachetools import cached
-
-from etsin_finder.authentication import get_user_eppn
-from etsin_finder.cache import Cache
+from etsin_finder.authentication import get_user_id
 from etsin_finder.cr_service import \
     get_catalog_record_access_type, \
     get_catalog_record_data_catalog_id, \
-    get_catalog_record_embargo_available, \
-    is_rems_catalog_record
-from etsin_finder.finder import app
+    get_catalog_record_embargo_available
+from etsin_finder.finder import app, rems_cache
 from etsin_finder.rems_service import get_user_rems_permission_for_catalog_record
-from etsin_finder.utils import now_is_later_than_datetime_str, remove_keys
+from etsin_finder.utils import tz_now_is_later_than_timestamp_str, remove_keys_recursively, leave_keys_in_dict
 
 log = app.logger
-_cache = Cache(50, 600)
 
 ACCESS_TYPES = {
-    'open': 'http://purl.org/att/es/reference_data/access_type/access_type_open_access',
-    'closed': 'http://purl.org/att/es/reference_data/access_type/access_type_closed_access',
-    'embargoed': 'http://purl.org/att/es/reference_data/access_type/access_type_embargoed_access',
-    'restricted_access':
-        'http://purl.org/att/es/reference_data/access_type/access_type_restricted_access',
-    'restricted_access_permit_fairdata':
-        'http://purl.org/att/es/reference_data/access_type/access_type_restricted_access_permit_fairdata',
-    'restricted_access_permit_external':
-        'http://purl.org/att/es/reference_data/access_type/access_type_restricted_access_permit_external',
-    'restricted_access_research':
-        'http://purl.org/att/es/reference_data/access_type/access_type_restricted_access_research',
-    'restricted_access_research_education_studying':
-        'http://purl.org/att/es/reference_data/access_type/access_type_restricted_access_education_studying',
-    'restricted_access_registration':
-        'http://purl.org/att/es/reference_data/access_type/access_type_restricted_access_registration',
+    'open': 'http://uri.suomi.fi/codelist/fairdata/access_type/code/open',
+    'login': 'http://uri.suomi.fi/codelist/fairdata/access_type/code/login',
+    'permit': 'http://uri.suomi.fi/codelist/fairdata/access_type/code/permit',
+    'embargo': 'http://uri.suomi.fi/codelist/fairdata/access_type/code/embargo',
+    'restricted': 'http://uri.suomi.fi/codelist/fairdata/access_type/code/restricted'
 }
 
 DATA_CATALOG_IDENTIFIERS = {
@@ -45,15 +30,36 @@ DATA_CATALOG_IDENTIFIERS = {
 }
 
 
-@cached(_cache)
-def _user_has_rems_permission_for_catalog_record(catalog_record, user_eppn, is_authd):
-    user_has_rems_permission = False
-    if is_rems_catalog_record(catalog_record):
-        user_has_rems_permission = get_user_rems_permission_for_catalog_record(catalog_record, user_eppn, is_authd)
-    return user_has_rems_permission
+def user_has_rems_permission_for_catalog_record(cr_id, user_id, is_authd):
+    """
+    Use Fairdata REMS API to check whether user has 'entitlement' for the specified catalog record
+
+    :param catalog_record:
+    :param user_id:
+    :param is_authd:
+    :return:
+    """
+    if not cr_id or not user_id or not is_authd:
+        return False
+
+    permission = rems_cache.get_from_cache(cr_id, user_id)
+    if permission is None:
+        permission = get_user_rems_permission_for_catalog_record(cr_id, user_id)
+        return rems_cache.update_cache(cr_id, user_id, permission)
+    else:
+        return permission
 
 
 def user_is_allowed_to_download_from_ida(catalog_record, is_authd):
+    """
+        Based on catalog record's research_dataset.access_rights.access_type, decide whether user is allowed to download
+        from Fairdata download service
+
+        :param catalog_record:
+        :param is_authd: Is the user authenticated
+        :return:
+        """
+
     # TODO: After testing with this is done and after test datas have proper ida data catalog identifiers, remove
     # TODO: 'not app.debug and' from below
     if not app.debug and get_catalog_record_data_catalog_id(catalog_record) != DATA_CATALOG_IDENTIFIERS['ida']:
@@ -62,118 +68,101 @@ def user_is_allowed_to_download_from_ida(catalog_record, is_authd):
     access_type_id = get_catalog_record_access_type(catalog_record)
     if not access_type_id:
         return False
-    elif access_type_id == ACCESS_TYPES['open']:
-        return True
-    elif access_type_id == ACCESS_TYPES['closed']:
-        return False
-    elif access_type_id == ACCESS_TYPES['embargoed']:
-        try:
-            access_rights_available = get_catalog_record_embargo_available(catalog_record)
-            embargo_time_passed = now_is_later_than_datetime_str(access_rights_available)
-        except Exception as e:
-            log.warning(e)
-            return False
 
-        if embargo_time_passed:
+    if access_type_id == ACCESS_TYPES['open']:
+        return True
+    elif access_type_id == ACCESS_TYPES['embargo']:
+        if _embargo_time_passed(catalog_record):
             return True
-        else:
-            return False
-    elif access_type_id == ACCESS_TYPES['restricted_access']:
+    elif access_type_id == ACCESS_TYPES['restricted']:
         return False
-    elif access_type_id == ACCESS_TYPES['restricted_access_permit_fairdata']:
-        return _user_has_rems_permission_for_catalog_record(catalog_record, get_user_eppn(), is_authd)
-    elif access_type_id == ACCESS_TYPES['restricted_access_permit_external']:
-        return False
-    elif access_type_id == ACCESS_TYPES['restricted_access_research']:
-        return False
-    elif access_type_id == ACCESS_TYPES['restricted_access_research_education_studying']:
-        if is_authd:
-            return True
-    elif access_type_id == ACCESS_TYPES['restricted_access_registration']:
+    elif access_type_id == ACCESS_TYPES['permit']:
+        return user_has_rems_permission_for_catalog_record(catalog_record['identifier'], get_user_id(), is_authd)
+    elif access_type_id == ACCESS_TYPES['login']:
         if is_authd:
             return True
     return False
 
 
 def strip_dir_api_object(dir_api_obj, is_authd, catalog_record):
+    """
+    Based on catalog record's research_dataset.access_rights.access_type, decide whether to strip dir_api_obj partially
+    or not.
+
+    :param dir_api_obj:
+    :param is_authd: Is the user authenticated
+    :param catalog_record: Catalog record, to which the dir_api_obj is bound
+    :return: dir_api_obj after possible modifications
+    """
     access_type_id = get_catalog_record_access_type(catalog_record)
+    if not access_type_id:
+        dir_api_obj = {}
 
     if access_type_id == ACCESS_TYPES['open']:
-        return dir_api_obj
-    elif access_type_id == ACCESS_TYPES['closed']:
-        return _strip_directory_api_obj_partially(dir_api_obj)
-    elif access_type_id == ACCESS_TYPES['embargoed']:
-        try:
-            access_rights_available = get_catalog_record_embargo_available(catalog_record)
-            embargo_time_passed = now_is_later_than_datetime_str(access_rights_available)
-        except Exception as e:
-            log.warning(e)
-            return {}
-
-        if not embargo_time_passed:
-            return {}
-    elif access_type_id == ACCESS_TYPES['restricted_access']:
-        return _strip_directory_api_obj_partially(dir_api_obj)
-    elif access_type_id == ACCESS_TYPES['restricted_access_permit_fairdata']:
-        if not _user_has_rems_permission_for_catalog_record(catalog_record, get_user_eppn(), is_authd):
-            return _strip_directory_api_obj_partially(dir_api_obj)
-    elif access_type_id == ACCESS_TYPES['restricted_access_permit_external']:
-        return _strip_directory_api_obj_partially(dir_api_obj)
-    elif access_type_id == ACCESS_TYPES['restricted_access_research']:
-        return _strip_directory_api_obj_partially(dir_api_obj)
-    elif access_type_id == ACCESS_TYPES['restricted_access_research_education_studying']:
+        pass
+    elif access_type_id == ACCESS_TYPES['embargo']:
+        if not _embargo_time_passed(catalog_record):
+            _strip_directory_api_obj_partially(dir_api_obj)
+    elif access_type_id == ACCESS_TYPES['restricted']:
+        _strip_directory_api_obj_partially(dir_api_obj)
+    elif access_type_id == ACCESS_TYPES['permit']:
+        if not user_has_rems_permission_for_catalog_record(catalog_record['identifier'], get_user_id(), is_authd):
+            _strip_directory_api_obj_partially(dir_api_obj)
+    elif access_type_id == ACCESS_TYPES['login']:
         if not is_authd:
-            return _strip_directory_api_obj_partially(dir_api_obj)
-    elif access_type_id == ACCESS_TYPES['restricted_access_registration']:
-        if not is_authd:
-            return _strip_directory_api_obj_partially(dir_api_obj)
+            _strip_directory_api_obj_partially(dir_api_obj)
 
     return dir_api_obj
 
 
 def strip_information_from_catalog_record(catalog_record, is_authd):
     """
-    This method should inspect catalog record's research_dataset.access_rights.access_type and based on that
-    remove specific information so that it can be sent for the frontend.
+    Based on catalog record's research_dataset.access_rights.access_type, decide whether to strip ida-related file and
+    directory data partially or not. In any case, strip sensitive information
 
     :param catalog_record:
-    :return:
+    :param is_authd: Is the user authenticated
+    :return: catalog_record after possible modifications
     """
 
     catalog_record = _strip_sensitive_information_from_catalog_record(catalog_record)
 
     access_type_id = get_catalog_record_access_type(catalog_record)
-    if access_type_id == ACCESS_TYPES['open']:
-        return catalog_record
-    elif access_type_id == ACCESS_TYPES['closed']:
-        return _strip_catalog_record_ida_data_partially(catalog_record)
-    elif access_type_id == ACCESS_TYPES['embargoed']:
-        try:
-            access_rights_available = get_catalog_record_embargo_available(catalog_record)
-            embargo_time_passed = now_is_later_than_datetime_str(access_rights_available)
-        except Exception as e:
-            log.warning(e)
-            return remove_keys(catalog_record, ['files', 'directories', 'remote_resources'])
+    if not access_type_id:
+        return remove_keys_recursively(catalog_record, ['files', 'directories', 'remote_resources'])
 
-        if not embargo_time_passed:
-            return remove_keys(catalog_record, ['files', 'directories', 'remote_resources'])
-    elif access_type_id == ACCESS_TYPES['restricted_access']:
-        return _strip_catalog_record_ida_data_partially(catalog_record)
-    elif access_type_id == ACCESS_TYPES['restricted_access_permit_fairdata']:
-        if not _user_has_rems_permission_for_catalog_record(catalog_record, get_user_eppn(), is_authd):
-            return _strip_catalog_record_ida_data_partially(catalog_record)
-    elif access_type_id == ACCESS_TYPES['restricted_access_permit_external']:
-        return _strip_catalog_record_ida_data_partially(catalog_record)
-    elif access_type_id == ACCESS_TYPES['restricted_access_research']:
-        return _strip_catalog_record_ida_data_partially(catalog_record)
-    elif access_type_id == ACCESS_TYPES['restricted_access_research_education_studying']:
+    if access_type_id == ACCESS_TYPES['open']:
+        pass
+    elif access_type_id == ACCESS_TYPES['embargo']:
+        if not _embargo_time_passed(catalog_record):
+            _strip_catalog_record_ida_data_partially(catalog_record)
+    elif access_type_id == ACCESS_TYPES['restricted']:
+        _strip_catalog_record_ida_data_partially(catalog_record)
+    elif access_type_id == ACCESS_TYPES['permit']:
+        if not user_has_rems_permission_for_catalog_record(catalog_record['identifier'], get_user_id(), is_authd):
+            _strip_catalog_record_ida_data_partially(catalog_record)
+    elif access_type_id == ACCESS_TYPES['login']:
         if not is_authd:
-            return _strip_catalog_record_ida_data_partially(catalog_record)
-    elif access_type_id == ACCESS_TYPES['restricted_access_registration']:
-        if not is_authd:
-            return _strip_catalog_record_ida_data_partially(catalog_record)
+            _strip_catalog_record_ida_data_partially(catalog_record)
 
     return catalog_record
+
+
+def _embargo_time_passed(catalog_record):
+    """
+    Check whether embargo time has been passed.
+
+    :param catalog_record:
+    :return:
+    """
+    try:
+        access_rights_available = get_catalog_record_embargo_available(catalog_record)
+        embargo_time_passed = tz_now_is_later_than_timestamp_str(access_rights_available)
+    except Exception as e:
+        log.error(e)
+        embargo_time_passed = False
+
+    return embargo_time_passed
 
 
 def _strip_sensitive_information_from_catalog_record(catalog_record):
@@ -184,48 +173,53 @@ def _strip_sensitive_information_from_catalog_record(catalog_record):
     :param catalog_record:
     :return:
     """
-    return remove_keys(catalog_record, ['email', 'telephone', 'phone'])
+    return remove_keys_recursively(catalog_record, ['email', 'telephone', 'phone'])
 
 
 def _strip_catalog_record_ida_data_partially(catalog_record):
-    return _strip_catalog_record_directories(_strip_catalog_record_files(catalog_record))
+    _strip_catalog_record_files(catalog_record)
+    _strip_catalog_record_directories(catalog_record)
 
 
 def _strip_directory_api_obj_partially(dir_api_obj):
-    return _strip_dir_api_obj_directories(_strip_dir_api_obj_files(dir_api_obj))
+    _strip_dir_api_obj_files(dir_api_obj)
+    _strip_dir_api_obj_directories(dir_api_obj)
 
 
 def _strip_catalog_record_files(catalog_record):
     """
-    Keys to leave: 'use_category', 'file_type', 'identifier', 'file_name', 'file_path', 'byte_size'
+    Keys to leave: 'use_category', 'file_type', 'identifier', 'details.file_name', 'details.file_path',
+    'details.byte_size, details.identifier'
 
     :param catalog_record:
     :return:
     """
-    if 'research_dataset' in catalog_record and 'files' in catalog_record['research_dataset']:
-        files = catalog_record['research_dataset']['files']
-        catalog_record['research_dataset']['files'] = \
-            remove_keys(files,
-                        ['title', 'description', 'id', 'checksum', 'checksum_value', 'parent_directory', 'file_frozen', 'file_format',
-                         'file_modified', 'file_storage', 'file_uploaded', 'file_characteristics', 'open_access',
-                         'project_identifier', 'replication_path', 'date_modified', 'date_created', 'service_created'])
-    return catalog_record
+    file_keys_to_leave = set(['use_category', 'file_type', 'identifier', 'details'])
+    details_keys_to_leave = set(['file_name', 'file_path', 'byte_size', 'identifier'])
+
+    if 'research_dataset' in catalog_record:
+        for file in catalog_record['research_dataset'].get('files', []):
+            leave_keys_in_dict(file, file_keys_to_leave)
+            if 'details' in file:
+                leave_keys_in_dict(file['details'], details_keys_to_leave)
 
 
 def _strip_catalog_record_directories(catalog_record):
     """
-    Keys to leave: 'identifier', 'use_category', 'byte_size', 'directory_name', 'directory_path', 'file_count'
+    Keys to leave: 'identifier', 'use_category', 'details.byte_size', 'details.directory_name',
+    'details.directory_path', 'details.byte_size', 'details.file_count'
 
     :param catalog_record:
     :return:
     """
-    if 'research_dataset' in catalog_record and 'directories' in catalog_record['research_dataset']:
-        dirs = catalog_record['research_dataset']['directories']
-        catalog_record['research_dataset']['directories'] = \
-            remove_keys(dirs,
-                       ['title', 'description', 'id', 'directory_modified', 'parent_directory', 'project_identifier',
-                        'date_modified', 'date_created', 'service_created'])
-    return catalog_record
+    dir_keys_to_leave = set(['identifier', 'use_category', 'details'])
+    details_keys_to_leave = set(['directory_name', 'directory_path', 'byte_size', 'file_count', 'identifier'])
+
+    if 'research_dataset' in catalog_record:
+        for dir in catalog_record['research_dataset'].get('directories', []):
+            leave_keys_in_dict(dir, dir_keys_to_leave)
+            if 'details' in dir:
+                leave_keys_in_dict(dir['details'], details_keys_to_leave)
 
 
 def _strip_dir_api_obj_files(dir_api_obj):
@@ -235,27 +229,18 @@ def _strip_dir_api_obj_files(dir_api_obj):
     :param dir_api_obj:
     :return:
     """
-    if 'files' in dir_api_obj:
-        files = dir_api_obj['files']
-        dir_api_obj['files'] = \
-            remove_keys(files,
-                        ['id', 'checksum', 'checksum_value', 'parent_directory', 'file_frozen', 'file_format', 'file_modified',
-                         'file_storage', 'file_uploaded', 'file_characteristics', 'open_access', 'project_identifier',
-                         'replication_path', 'date_modified', 'date_created', 'service_created', 'file_characteristics',
-                         'file_characteristics_extension'])
-    return dir_api_obj
+    file_keys_to_leave = set(['identifier', 'file_name', 'file_path', 'byte_size'])
+    for file in dir_api_obj.get('files', []):
+        leave_keys_in_dict(file, file_keys_to_leave)
 
 
 def _strip_dir_api_obj_directories(dir_api_obj):
     """
+    Keys to leave: 'identifier', 'directory_name', 'directory_path', 'byte_size', 'file_count'
 
     :param dir_api_obj:
     :return:
     """
-    if 'directories' in dir_api_obj:
-        dirs = dir_api_obj['directories']
-        dir_api_obj['directories'] = \
-            remove_keys(dirs,
-                        ['id', 'directory_modified', 'parent_directory', 'project_identifier', 'date_modified',
-                         'date_created', 'service_created', 'file_storage'])
-    return dir_api_obj
+    dir_keys_to_leave = set(['identifier', 'directory_name', 'directory_path', 'byte_size', 'file_count'])
+    for dir in dir_api_obj.get('directories', []):
+        leave_keys_in_dict(dir, dir_keys_to_leave)
