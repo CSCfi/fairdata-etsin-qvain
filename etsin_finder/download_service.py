@@ -18,7 +18,8 @@ log = app.logger
 class DownloadAPIService:
     def __init__(self, dl_api_config):
         if dl_api_config:
-            self.API_BASE_URL = 'https://{0}:4433/secure/api/v1/dataset'.format(dl_api_config['HOST']) + '/{0}'
+            self.API_BASE_URL = 'https://{0}:{1}/secure/api/v1/dataset'\
+                                    .format(dl_api_config['HOST'], dl_api_config['PORT']) + '/{0}'
             self.USER = dl_api_config['USER']
             self.PASSWORD = dl_api_config['PASSWORD']
         else:
@@ -27,7 +28,8 @@ class DownloadAPIService:
     def download(self, cr_id, file_ids, dir_ids):
         url = self._create_url(cr_id, file_ids, dir_ids)
         try:
-            dl_api_response = requests.get(url, stream=True, timeout=15, auth=(self.USER, self.PASSWORD))
+            dl_api_response = requests.get(url, stream=True, timeout=15, auth=(self.USER,
+                                                                               self.PASSWORD.encode('utf-8')))
             dl_api_response.raise_for_status()
         except requests.Timeout as t:
             log.error('Request to Download API timed out')
