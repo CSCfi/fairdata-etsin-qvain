@@ -18,8 +18,8 @@ log = app.logger
 class DownloadAPIService:
     def __init__(self, dl_api_config):
         if dl_api_config:
-            self.API_BASE_URL = 'https://{0}:{1}/secure/api/v1/dataset'\
-                                    .format(dl_api_config['HOST'], dl_api_config['PORT']) + '/{0}'
+            self.API_BASE_URL = 'https://{0}:{1}/secure/api/v1/dataset'.format(
+                dl_api_config['HOST'], dl_api_config['PORT']) + '/{0}'
             self.USER = dl_api_config['USER']
             self.PASSWORD = dl_api_config['PASSWORD']
         else:
