@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { inject, observer } from 'mobx-react'
@@ -153,7 +153,7 @@ class Sidebar extends Component {
             {/* LICENSE */}
             <SidebarItem component="div" trans="dataset.license" hideEmpty="true">
               {this.state.license &&
-                this.state.license.map(rights => <License key={rights.identifier} data={rights} />)}
+                this.state.license.map(rights => <Fragment><License key={rights.identifier} data={rights} /><br /></Fragment>)}
             </SidebarItem>
 
             {this.state.access_rights && (
