@@ -245,6 +245,7 @@ export default class IdaResources extends Component {
           allowDownload={this.state.allowDownload}
           allowInfo={this.state.allowInfo}
           changeFolder={this.changeFolder}
+          isRemote={false}
           fields={{ size: true, category: true, name: true, downloadBtn: true, infoBtn: true }}
         />
       </DataTable>

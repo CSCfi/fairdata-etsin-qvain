@@ -61,6 +61,7 @@ export default class Table extends Component {
         allowDownload={this.props.allowDownload}
         fields={this.props.fields}
         download={this.downloadFile}
+        isRemote={this.props.isRemote}
       />
     ))
   }
@@ -112,6 +113,7 @@ Table.propTypes = {
   changeFolder: PropTypes.func,
   allowDownload: PropTypes.bool.isRequired,
   allowInfo: PropTypes.bool.isRequired,
+  isRemote: PropTypes.bool.isRequired,
   cr_id: PropTypes.string.isRequired,
   fields: PropTypes.shape({
     size: PropTypes.bool.isRequired,
