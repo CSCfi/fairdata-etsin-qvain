@@ -18,13 +18,13 @@ import Env from '../domain/env'
 
 const fields = [
   'title.*^5',
-  'description.*^2',
+  'description.*^3',
   'creator.name.*',
   'contributor.name.*',
   'publisher.name.*',
   'rights_holder.name.*',
   'curator.name.*',
-  'keyword^3',
+  'keyword^2',
   'access_rights.license.title.*',
   'access_rights.access_type.identifier',
   'access_rights.access_type.pref_label.*',
