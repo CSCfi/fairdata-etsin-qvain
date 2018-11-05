@@ -127,6 +127,7 @@ const english = {
       member_of: 'Member of',
       homepage: 'Homepage',
     },
+    language: 'Language',
   },
   error: {
     notFound:

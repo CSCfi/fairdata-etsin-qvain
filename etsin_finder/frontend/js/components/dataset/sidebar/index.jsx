@@ -46,6 +46,8 @@ class Sidebar extends Component {
         ? researchDataset.is_output_of
         : false,
       curator: researchDataset.curator,
+      rightsHolder: researchDataset.rights_holder,
+      language: researchDataset.language,
       infrastructure: checkNested(researchDataset, 'infrastructure')
         ? researchDataset.infrastructure
         : false,
@@ -128,6 +130,21 @@ class Sidebar extends Component {
                   <Item key={`keyword-${keyword}-${i}`}>{keyword}</Item>
                 ))}
             </SidebarItem>
+            {/* LANGUAGE */}
+            <SidebarItem component="div" trans="dataset.language" hideEmpty="true">
+              {this.state.language &&
+                this.state.language.map((languages, i) => {
+                  let language = checkDataLang(languages.title)
+                  if (language === '') {
+                    language = languages.title
+                  }
+                  return (
+                    /* eslint-disable react/no-array-index-key */
+                    <Item key={`${language}-${i}`}>{language}</Item>
+                    /* eslint-enable react/no-array-index-key */
+                  )
+                })}
+            </SidebarItem>
             {/* SPATIAL COVERAGE */}
             <SidebarItem
               component="div"
@@ -192,6 +209,21 @@ class Sidebar extends Component {
                   return (
                     /* eslint-disable react/no-array-index-key */
                     <Item key={`${curator}-${i}`}>{curator}</Item>
+                    /* eslint-enable react/no-array-index-key */
+                  )
+                })}
+            </SidebarItem>
+
+            <SidebarItem component="div" trans="dataset.rights_holder" hideEmpty="true">
+              {this.state.rightsHolder &&
+                this.state.rightsHolder.map((rightsHolders, i) => {
+                  let rightsHolder = checkDataLang(rightsHolders.name)
+                  if (rightsHolder === '') {
+                    rightsHolder = rightsHolders.name
+                  }
+                  return (
+                    /* eslint-disable react/no-array-index-key */
+                    <Item key={`${rightsHolder}-${i}`}>{rightsHolder}</Item>
                     /* eslint-enable react/no-array-index-key */
                   )
                 })}

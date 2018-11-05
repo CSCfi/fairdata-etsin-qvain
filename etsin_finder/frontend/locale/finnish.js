@@ -126,6 +126,7 @@ const finnish = {
       member_of: 'Jäsen',
       homepage: 'Kotisivu',
     },
+    language: 'Kieli',
   },
   error: {
     notFound:
