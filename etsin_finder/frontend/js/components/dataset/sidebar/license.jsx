@@ -37,56 +37,62 @@ export default class License extends Component {
     })
   }
 
+  licenseIsUrl(license) {
+    return license.startsWith('http://') || license.startsWith('https://')
+  }
+
   renderPopUpContent(data) {
     let link
-    if (
-      data.license &&
-      (data.license.startsWith('http://') || data.license.startsWith('https://'))
-    ) {
+    if (data.license && this.licenseIsUrl(data.license)) {
       link = data.license
     }
     return (
       <div>
         <Name>{checkDataLang(data.title)}</Name>
-        <Link href={data.identifier} target="_blank" rel="noopener noreferrer">
-          {data.identifier}
-        </Link>
+        <br />
+        {data.description && <Description>{checkDataLang(data.description)}</Description>}
         <br />
         {link && (
           <Link href={link} target="_blank" rel="noopener noreferrer">
             {link}
           </Link>
         )}
-        {data.description && <Description>{checkDataLang(data.description)}</Description>}
+        {!link && data.license}
       </div>
     )
   }
 
   render() {
+    const licenseIsUrl = this.props.data.license && this.licenseIsUrl(this.props.data.license)
     return (
       <span>
-        <MainLink href={this.props.data.identifier} target="_blank" rel="noopener noreferrer">
-          {checkDataLang(this.props.data.title)}
-        </MainLink>
-        <PopUp
-          popUp={this.renderPopUpContent(this.props.data)}
-          isOpen={this.state.popUpOpen}
-          onRequestClose={this.closePopUp}
-          align="sidebar"
-        >
-          <LinkButton
-            onMouseDown={e => {
-              // this prevents the popup not closing and opening
-              // when using this button to close
-              e.preventDefault()
-            }}
-            onClick={this.openPopUp}
-            noMargin
-            noPadding
+        {licenseIsUrl &&
+          <MainLink href={this.props.data.license} target="_blank" rel="noopener noreferrer">
+            {checkDataLang(this.props.data.title)}
+          </MainLink>
+        }
+        {!licenseIsUrl && checkDataLang(this.props.data.title)}
+        {this.props.data.description && (
+          <PopUp
+            popUp={this.renderPopUpContent(this.props.data)}
+            isOpen={this.state.popUpOpen}
+            onRequestClose={this.closePopUp}
+            align="sidebar"
           >
-            <FontawesomeIcon icon={faInfoCircle} />
-          </LinkButton>
-        </PopUp>
+            <LinkButton
+              onMouseDown={e => {
+                // this prevents the popup not closing and opening
+                // when using this button to close
+                e.preventDefault()
+              }}
+              onClick={this.openPopUp}
+              noMargin
+              noPadding
+            >
+              <FontawesomeIcon icon={faInfoCircle} />
+            </LinkButton>
+          </PopUp>
+        )}
       </span>
     )
   }

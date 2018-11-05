@@ -127,6 +127,7 @@ const english = {
       member_of: 'Member of',
       homepage: 'Homepage',
     },
+    language: 'Language',
   },
   error: {
     notFound:
@@ -152,12 +153,12 @@ const english = {
     para1:
       'Etsin enables you to find research datasets from all fields of science. Etsin contains information about the datasets and metadata in the national Finnish Fairdata services. We also currently harvest information from the Language Bank of Finland, the Finnish Social Science Data archive and the Finnish Environmental Institute, and new sources will be included.',
     para2:
-      'The published metadata on the dataset is open to everyone. The data owner decides how the underlying research data can be accessed and by whom. Etsin works independently of actual data storage location and contains no research datasets. Datasets can be described and published through the <a href="https://qvain.fairdata.fi">Qvain service.</a><br><br>Read more about the Finnish Fairdata services on the <a href="https://fairdata.fi">Fairdata.fi</a> pages.',
+      'The published metadata on the dataset is open to everyone. The data owner decides how and by whom the underlying research data can be accessed. Etsin works independently of actual data storage location and contains no research datasets. Datasets can be described and published through the <a href="https://qvain.fairdata.fi">Qvain service.</a><br><br>Read more about the Finnish Fairdata services on the <a href="https://fairdata.fi">Fairdata.fi</a> pages.',
     key: {
-      dataset: 'Datasets',
-      keywords: 'Keywords',
-      fos: 'Fields of science',
-      research: 'Projects',
+      dataset: 'datasets',
+      keywords: 'keywords',
+      fos: 'fields of science',
+      research: 'projects',
     },
   },
   nav: {

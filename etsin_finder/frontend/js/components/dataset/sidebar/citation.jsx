@@ -14,6 +14,7 @@ export default class Citation extends Component {
       release_date: Data.research_dataset.modified,
       title: Data.research_dataset.title,
       pid: Data.research_dataset.preferred_identifier,
+      citation: Data.research_dataset.bibliographic_citation,
     }
   }
 
@@ -22,7 +23,7 @@ export default class Citation extends Component {
     const contributors = this.state.contributors && this.state.contributors.slice()
     const people = []
     for (let i = 0; i < 3; i += 1) {
-      if (creators && creators[i]) {
+      if (creators && creators[i] && creators[i].name !== this.state.publisher) {
         people.push({ name: creators[i].name })
       } else if (contributors && contributors[i - creators.length]) {
         const person = {}
@@ -40,6 +41,13 @@ export default class Citation extends Component {
   }
 
   render() {
+    if (this.state.citation) {
+      return (
+        <Fragment>
+          {this.state.citation}
+        </Fragment>
+      )
+    }
     return (
       <Fragment>
         {this.getPeople().map((person, i) => (

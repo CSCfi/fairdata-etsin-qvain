@@ -18,7 +18,7 @@ import Env from '../domain/env'
 
 const fields = [
   'title.*^5',
-  'description.*',
+  'description.*^2',
   'creator.name.*',
   'contributor.name.*',
   'publisher.name.*',
