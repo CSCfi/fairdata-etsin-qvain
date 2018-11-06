@@ -310,10 +310,5 @@ const Item = styled.span`
     content: ', ';
   }
 `
-const Item2 = styled.span`
-  &:not(:last-child)::after {
-    content: '; ';
-  }
-`
 
 export default inject('Stores')(observer(Sidebar))
