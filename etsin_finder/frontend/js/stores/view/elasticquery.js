@@ -323,6 +323,11 @@ class ElasticQuery {
             field: 'file_type.pref_label.fi.keyword',
           },
         },
+        data_catalog: {
+          terms: {
+            field: 'data_catalog',
+          },
+        },
       }
 
       // adding filters if they are set

@@ -76,6 +76,11 @@ class FilterSection extends Component {
           fi: 'file_type.pref_label.fi.keyword',
         },
       },
+      data_catalog: {
+        title: { en: 'Data Catalog', fi: 'Datakatalogi' },
+        aggregation: { und: 'data_catalog' },
+        term: { und: 'data_catalog' },
+      },
     }
 
     this.state = {

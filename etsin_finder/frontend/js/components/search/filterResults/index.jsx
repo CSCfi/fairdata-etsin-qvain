@@ -38,6 +38,7 @@ class FilterResults extends Component {
         <FilterSection aggregation="infrastructure" />
         <FilterSection aggregation="project" />
         <FilterSection aggregation="file_type" />
+        <FilterSection aggregation="data_catalog" />
       </FilterContainer>
     )
   }
