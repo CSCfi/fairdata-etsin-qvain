@@ -26,7 +26,6 @@ const fields = [
   'curator.name.*',
   'keyword^2',
   'access_rights.license.title.*',
-  'access_rights.access_type.identifier',
   'access_rights.access_type.pref_label.*',
   'theme.pref_label.*',
   'field_of_science.pref_label.*',
@@ -249,6 +248,16 @@ class ElasticQuery {
       const filters = createFilters()
       const sorting = createSorting()
       const aggregations = {
+        access_type_fi: {
+          terms: {
+            field: 'access_rights.access_type.pref_label.fi.keyword',
+          },
+        },
+        access_type_en: {
+          terms: {
+            field: 'access_rights.access_type.pref_label.en.keyword',
+          },
+        },
         organization_name_fi: {
           terms: {
             field: 'organization_name_fi.keyword',

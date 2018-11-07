@@ -30,6 +30,7 @@ class FilterResults extends Component {
   render() {
     return (
       <FilterContainer>
+        <FilterSection aggregation="access_type" />
         <FilterSection aggregation="organization" />
         <FilterSection aggregation="creator" />
         <FilterSection aggregation="field_of_science" />

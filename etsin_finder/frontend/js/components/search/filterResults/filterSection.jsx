@@ -27,6 +27,11 @@ class FilterSection extends Component {
 
     // TODO: should this be in an app-level storage?
     this.aggregations = {
+      access_type: {
+        title: { en: 'Access', fi: 'Saatavuus' },
+        aggregation: { en: 'access_type_en', fi: 'access_type_fi' },
+        term: { en: 'access_rights.access_type.pref_label.en.keyword', fi: 'access_rights.access_type.pref_label.fi.keyword' },
+      },
       organization: {
         title: { en: 'Organization', fi: 'Organisaatio' },
         aggregation: { en: 'organization_name_en', fi: 'organization_name_fi' },
