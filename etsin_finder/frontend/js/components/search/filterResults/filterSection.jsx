@@ -78,8 +78,8 @@ class FilterSection extends Component {
       },
       data_catalog: {
         title: { en: 'Data Catalog', fi: 'Datakatalogi' },
-        aggregation: { und: 'data_catalog' },
-        term: { und: 'data_catalog' },
+        aggregation: { en: 'data_catalog_en', fi: 'data_catalog_fi' },
+        term: { en: 'data_catalog.en', fi: 'data_catalog.fi' },
       },
     }
 

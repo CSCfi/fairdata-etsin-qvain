@@ -323,9 +323,14 @@ class ElasticQuery {
             field: 'file_type.pref_label.fi.keyword',
           },
         },
-        data_catalog: {
+        data_catalog_fi: {
           terms: {
-            field: 'data_catalog',
+            field: 'data_catalog.fi',
+          },
+        },
+        data_catalog_en: {
+          terms: {
+            field: 'data_catalog.en',
           },
         },
       }
