@@ -60,7 +60,7 @@ export default class Agent extends Component {
               {this.state.agent.name && (
                 <Name>{checkDataLang(this.state.agent.name)}</Name>
               )}
-              {this.state.agent.identifier && this.state.agent.identifier.startsWith("http") && (
+              {this.state.agent.identifier && this.state.agent.identifier.startsWith('http') && (
                 <IdentifierLink
                   href={this.state.agent.identifier}
                   target="_blank"
@@ -69,7 +69,7 @@ export default class Agent extends Component {
                   {this.state.agent.identifier}
                 </IdentifierLink>
               )}
-              {this.state.agent.identifier && !this.state.agent.identifier.startsWith("http") && (
+              {this.state.agent.identifier && !this.state.agent.identifier.startsWith('http') && (
                 <IdentifierText>
                   {this.state.agent.identifier}
                 </IdentifierText>
