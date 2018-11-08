@@ -122,9 +122,11 @@ const english = {
     spatial_coverage: 'Spatial Coverage',
     temporal_coverage: 'Temporal Coverage',
     version: { number: 'Version %(number)s', old: '(Old)' },
-    person: {
-      contributor_role: 'Role',
+    agent: {
+      contributor_role: 'Contributor role',
+      contributor_type: 'Contributor type',
       member_of: 'Member of',
+      is_part_of: 'Is part of',
       homepage: 'Homepage',
     },
     language: 'Language',

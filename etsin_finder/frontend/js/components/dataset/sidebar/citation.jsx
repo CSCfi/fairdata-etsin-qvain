@@ -18,26 +18,26 @@ export default class Citation extends Component {
     }
   }
 
-  getPeople() {
+  getAgents() {
     const creators = this.state.creators && this.state.creators.slice()
     const contributors = this.state.contributors && this.state.contributors.slice()
-    const people = []
+    const agents = []
     for (let i = 0; i < 3; i += 1) {
       if (creators && creators[i] && creators[i].name !== this.state.publisher) {
-        people.push({ name: creators[i].name })
+        agents.push({ name: creators[i].name })
       } else if (contributors && contributors[i - creators.length]) {
-        const person = {}
+        const agent = {}
         if (contributors[i - creators.length].name) {
-          person.name = contributors[i - creators.length].name
+          agent.name = contributors[i - creators.length].name
         }
         // TODO: needs revision
         if (checkNested(contributors[i - creators.length], 'contributor_role', 'pref_label')) {
-          person.role = contributors[i - creators.length].contributor_role.pref_label
+          agent.role = contributors[i - creators.length].contributor_role.pref_label
         }
-        people.push(person)
+        agents.push(agent)
       }
     }
-    return people
+    return agents
   }
 
   render() {
@@ -50,11 +50,11 @@ export default class Citation extends Component {
     }
     return (
       <Fragment>
-        {this.getPeople().map((person, i) => (
+        {this.getAgents().map((agent, i) => (
           /* eslint-disable-next-line react/no-array-index-key */
-          <Fragment key={`${checkDataLang(person.name)}-${i}`}>
-            <span name="Name">{checkDataLang(person.name)}, </span>
-            {person.role && <span name="Role">{checkDataLang(person.role)}, </span>}
+          <Fragment key={`${checkDataLang(agent.name)}-${i}`}>
+            <span name="Name">{checkDataLang(agent.name)}, </span>
+            {agent.role && <span name="Role">{checkDataLang(agent.role)}, </span>}
           </Fragment>
         ))}
         <span title="Title">{checkDataLang(this.state.title)}, </span>

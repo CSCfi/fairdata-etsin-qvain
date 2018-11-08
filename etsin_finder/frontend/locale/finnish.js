@@ -121,9 +121,11 @@ const finnish = {
     spatial_coverage: 'Maantieteellinen kattavuus',
     temporal_coverage: 'Ajallinen kattavuus',
     version: { number: 'Versio %(number)s', old: '(Vanha)' },
-    person: {
+    agent: {
       contributor_role: 'Rooli',
+      contributor_type: 'Tyyppi',
       member_of: 'Jäsen',
+      is_part_of: 'Jäsen',
       homepage: 'Kotisivu',
     },
     language: 'Kieli',
