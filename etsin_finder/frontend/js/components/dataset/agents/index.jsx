@@ -15,11 +15,11 @@ import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import styled from 'styled-components'
 
-import Person from './person'
+import Agent from './agent'
 import checkDataLang from '../../../utils/checkDataLang'
 import { LinkButton } from '../../general/button'
 
-export default class People extends Component {
+export default class Agents extends Component {
   constructor(props) {
     super(props)
 
@@ -48,7 +48,7 @@ export default class People extends Component {
 
   render() {
     return this.props[this.state.mode] ? (
-      <PeopleCont>
+      <AgentsCont>
         {this.props[this.state.mode].length > 1 ? (
           <Translate content={`dataset.${this.state.mode}.plrl`} />
         ) : (
@@ -58,14 +58,14 @@ export default class People extends Component {
         <InlineUl>
           {console.log(this.props[this.state.mode])}
           {/* Show first three */}
-          {this.state.firstThree.map((person, i) => (
-            <Person key={checkDataLang(person.name)} first={i === 0} person={person} />
+          {this.state.firstThree.map((agent, i) => (
+            <Agent key={checkDataLang(agent.name)} first={i === 0} agent={agent} />
           ))}
           {/* Show the rest */}
           {this.props[this.state.mode].length > 3 &&
             this.state.open &&
-            this.state.rest.map(person => (
-              <Person key={checkDataLang(person.name)} person={person} />
+            this.state.rest.map(agent => (
+              <Agent key={checkDataLang(agent.name)} agent={agent} />
             ))}
           {/* Show Button to open rest */}{' '}
           {this.props[this.state.mode].length > 3 && (
@@ -80,20 +80,20 @@ export default class People extends Component {
             </LinkButton>
           )}
         </InlineUl>
-      </PeopleCont>
+      </AgentsCont>
     ) : null
   }
 }
 
-People.defaultProps = {
+Agents.defaultProps = {
   creator: undefined,
 }
 
-People.propTypes = {
+Agents.propTypes = {
   creator: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
 }
 
-const PeopleCont = styled.div`
+const AgentsCont = styled.div`
   margin-bottom: 0;
 `
 

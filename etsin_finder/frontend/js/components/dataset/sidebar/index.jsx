@@ -28,7 +28,10 @@ class Sidebar extends Component {
       publisher: checkNested(researchDataset, 'publisher', 'name')
         ? researchDataset.publisher.name
         : false,
-      logoAlt: dataCatalog.catalog_json.title,
+      catalogTitle: dataCatalog.catalog_json.title,
+      catalogPublisherHomepage: checkNested(dataCatalog, 'catalog_json', 'publisher', 'homepage')
+        ? dataCatalog.catalog_json.publisher.homepage[0].identifier
+        : '',
       logo: dataCatalog.catalog_json.logo,
       pid: researchDataset.preferred_identifier,
       field: researchDataset.field_of_science,
@@ -83,15 +86,24 @@ class Sidebar extends Component {
       <SidebarContainer>
         <ErrorBoundary>
           <div className="separator">
+
+            {/* DATA CATALOG LOGO */}
+
             {this.state.logo && (
               <SidebarItem>
-                <Logo alt={checkDataLang(this.state.logoAlt)} file={this.state.logo} />
+                <Logo alt={checkDataLang(this.state.catalogTitle)} file={this.state.logo} url={this.state.catalogPublisherHomepage} />
               </SidebarItem>
             )}
+
+            {/* DATA CATALOG PUBLISHER */}
+
             <SidebarItem component="div" trans="dataset.catalog_publisher">
               {this.state.catalog_publisher && checkDataLang(this.state.catalog_publisher)}
             </SidebarItem>
           </div>
+
+          {/* PREFERRED IDENTIFIER */}
+
           <div className="separator">
             <SidebarItem component="div" trans="dataset.identifier">
               <Identifier idn={this.state.pid} />

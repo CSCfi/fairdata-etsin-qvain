@@ -17,6 +17,7 @@ export default class Logo extends Component {
   static propTypes = {
     alt: PropTypes.string.isRequired,
     file: PropTypes.string.isRequired,
+    url: PropTypes.string.isRequired
   }
   constructor(props) {
     super(props)
@@ -31,7 +32,12 @@ export default class Logo extends Component {
   render() {
     return (
       <Cont>
-        <Image alt={this.props.alt} file={this.state.images[this.props.file]} />
+        {this.props.url ? (
+          <a href={this.props.url} target="_blank" rel="noopener noreferrer">
+            <Image alt={this.props.alt} file={this.state.images[this.props.file]} />
+          </a>)
+        : <Image alt={this.props.alt} file={this.state.images[this.props.file]} />
+        }
       </Cont>
     )
   }

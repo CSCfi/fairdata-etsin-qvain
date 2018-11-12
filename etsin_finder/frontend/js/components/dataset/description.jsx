@@ -22,7 +22,7 @@ import Contact from './contact'
 import ErrorBoundary from '../general/errorBoundary'
 import GoToOriginal from './goToOriginal'
 import Label from '../general/label'
-import People from './people'
+import Agents from './agents'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import VersionChanger from './versionChanger'
@@ -115,10 +115,10 @@ class Description extends Component {
         <div className="d-flex justify-content-between basic-info">
           <MainInfo>
             <ErrorBoundary>
-              <People creator={this.state.creator} />
+              <Agents creator={this.state.creator} />
             </ErrorBoundary>
             <ErrorBoundary>
-              <People contributor={this.state.contributor} />
+              <Agents contributor={this.state.contributor} />
             </ErrorBoundary>
             <p>{this.state.issued ? dateFormat(checkDataLang(this.state.issued)) : null}</p>
           </MainInfo>

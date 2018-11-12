@@ -103,26 +103,7 @@ export default {
         ],
         description: {
           fi: 'K\u00e4ytt\u00f6ehtojen kuvaus',
-        },
-        has_rights_related_agent: [
-          {
-            name: {
-              en: 'A rights related organization',
-              fi: 'Oikeuksiin liittyv\u00e4 organisaatio',
-            },
-            identifier: 'org_id',
-          },
-          {
-            name: {
-              en: 'Aalto University',
-              fi: 'Aalto yliopisto',
-              sv: 'Aalto universitetet',
-              und: 'Aalto yliopisto',
-            },
-            in_scheme: 'http://uri.suomi.fi/codelist/fairdata/organization',
-            identifier: 'http://uri.suomi.fi/codelist/fairdata/organization/code/10076',
-          },
-        ],
+        }
       },
       field_of_science: [
         {
@@ -776,21 +757,7 @@ export default {
           sv: 'Begränsad åtkomst av övriga skäl'
           und: 'Saatavuutta rajoitettu muulla perusteella',
         },
-      }],
-      has_rights_related_agent: [
-        {
-          name: { und: 'Helsingin yliopisto' },
-          '@type': 'Organization',
-          email: 'info@csc.fi',
-          homepage: {
-            title: { en: 'homepage title' },
-            identifier: 'https://www.csc.fi',
-            description: { en: 'homepage description' },
-          },
-          telephone: ['+358501231235'],
-          identifier: 'http://uri.suomi.fi/codelist/fairdata/organization/code/01901',
-        },
-      ],
+      }]
     },
     rights_holder: {
       name: { und: 'Helsingin yliopisto' },
