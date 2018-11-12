@@ -25,11 +25,6 @@ def write_json_to_file(json_data, filename):
         json.dump(json_data, output_file)
 
 
-def write_string_to_file(string, filename):
-    with open(filename, "w") as output_file:
-        print(f"{string}", file=output_file)
-
-
 def json_or_empty(response):
     response_json = {}
     try:
@@ -74,7 +69,7 @@ def _parse_timestamp_string_to_tz_aware_datetime(timestamp_str):
         if dt.tzinfo is None or dt.tzinfo.utcoffset(dt) is None:
             dt = pytz.timezone('Europe/Helsinki').localize(dt)
         return dt
-    except Exception as e:
+    except Exception:
         raise ValueError("Unable to parse timestamp: {0}".format(timestamp_str))
 
 

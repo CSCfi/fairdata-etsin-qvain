@@ -80,7 +80,7 @@ export default class KeyValues extends Component {
             {this.state.loaded ? (
               <div>
                 <h1>{this.state.datasetsNum}</h1>
-                <Translate content="home.key.dataset" fallback="Aineistoa" component="p" />
+                <Translate content="home.key.dataset" fallback="aineistoa" component="p" />
               </div>
             ) : (
               <div>
@@ -93,7 +93,7 @@ export default class KeyValues extends Component {
             {this.state.loaded ? (
               <div>
                 <h1>{this.state.keywordsNum}</h1>
-                <Translate content="home.key.keywords" fallback="Asiasanaa" component="p" />
+                <Translate content="home.key.keywords" fallback="asiasanaa" component="p" />
               </div>
             ) : (
               <div>
@@ -106,7 +106,7 @@ export default class KeyValues extends Component {
             {this.state.loaded ? (
               <div>
                 <h1>{this.state.fieldOfScienceNum}</h1>
-                <Translate content="home.key.fos" fallback="Tieteenalaa" component="p" />
+                <Translate content="home.key.fos" fallback="tieteenalaa" component="p" />
               </div>
             ) : (
               <div>
@@ -119,7 +119,7 @@ export default class KeyValues extends Component {
             {this.state.loaded ? (
               <div>
                 <h1>{this.state.researchNum}</h1>
-                <Translate content="home.key.research" fallback="Tutkimusprojektia" component="p" />
+                <Translate content="home.key.research" fallback="tutkimusprojektia" component="p" />
               </div>
             ) : (
               <div>

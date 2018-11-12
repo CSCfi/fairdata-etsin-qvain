@@ -59,6 +59,7 @@ export const TypeTableRemote = PropTypes.shape({
   license: PropTypes.arrayOf(TypeLicense),
   mediatype: PropTypes.string,
   download_url: TypeDocument,
+  access_url: TypeDocument,
   has_object_characteristics: TypeObjectCharacteristics,
   checksum: TypeChecksum,
 })

@@ -143,6 +143,8 @@ class Dataset extends React.Component {
               cumulative={this.state.cumulative}
               hasFiles={this.state.hasFiles}
               hasRemote={this.state.hasRemote}
+              isDeprecated={this.state.deprecated}
+              isRemoved={this.state.removed}
               emails={this.state.email_info}
             />
             <div className="col-lg-4">

@@ -25,11 +25,11 @@ import { TransparentLink } from '../../general/button'
 import PopUp from '../../general/popup'
 import checkDataLang from '../../../utils/checkDataLang'
 
-export default class Person extends Component {
+export default class Agent extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      person: props.person,
+      agent: props.agent,
       popUpOpen: false,
     }
     this.openPopUp = this.openPopUp.bind(this)
@@ -57,55 +57,84 @@ export default class Person extends Component {
           onRequestClose={this.closePopUp}
           popUp={
             <PopUpContainer>
-              <Name>{checkDataLang(this.state.person.name)}</Name>
-              {this.state.person.identifier && (
-                <Orcid
-                  href={this.state.person.identifier}
+              {this.state.agent.name && (
+                <Name>{checkDataLang(this.state.agent.name)}</Name>
+              )}
+              {this.state.agent.identifier && this.state.agent.identifier.startsWith('http') && (
+                <IdentifierLink
+                  href={this.state.agent.identifier}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  {this.state.person.identifier}
-                </Orcid>
+                  {this.state.agent.identifier}
+                </IdentifierLink>
               )}
-              {this.state.person.contributor_role && (
-                <Info>
-                  <FontawesomeIcon
-                    icon={faUser}
-                    title={translate('dataset.person.contributor_role')}
-                  />
-                  <Translate content="dataset.person.contributor_role" className="sr-only" />
-                  <span className="sr-only">{' :'}</span>
-                  <span>{checkDataLang(this.state.person.contributor_role.pref_label)}</span>
-                </Info>
+              {this.state.agent.identifier && !this.state.agent.identifier.startsWith('http') && (
+                <IdentifierText>
+                  {this.state.agent.identifier}
+                </IdentifierText>
               )}
-              {this.state.person.member_of && (
-                <Info>
+              {this.state.agent.contributor_role && (
+                this.state.agent.contributor_role.map(cr => (
+                  <Info title={translate('dataset.agent.contributor_role')}>
+                    <FontawesomeIcon
+                      icon={faUser}
+                    />
+                    <Translate content="dataset.agent.contributor_role" className="sr-only" />
+                    <span className="sr-only">{' :'}</span>
+                    <span>{checkDataLang(cr.pref_label)}</span>
+                  </Info>
+                ))
+              )}
+              {this.state.agent.contributor_type && (
+                this.state.agent.contributor_type.map(ct => (
+                  <Info title={translate('dataset.agent.contributor_type')}>
+                    <FontawesomeIcon
+                      icon={faUser}
+                    />
+                    <Translate content="dataset.agent.contributor_type" className="sr-only" />
+                    <span className="sr-only">{' :'}</span>
+                    <span>{checkDataLang(ct.pref_label)}</span>
+                  </Info>
+                ))
+              )}
+              {this.state.agent.member_of && (
+                <Info title={translate('dataset.agent.member_of')}>
                   <FontawesomeIcon
                     icon={faUniversity}
-                    title={translate('dataset.person.member_of')}
                   />
-                  <Translate content="dataset.person.member_of" className="sr-only" />
+                  <Translate content="dataset.agent.member_of" className="sr-only" />
                   <span className="sr-only">{' :'}</span>
-                  <span>{checkDataLang(this.state.person.member_of.name)}</span>
+                  <span>{checkDataLang(this.state.agent.member_of.name)}</span>
                 </Info>
               )}
-              {this.state.person.homepage && (
+              {this.state.agent.is_part_of && (
+                <Info title={translate('dataset.agent.is_part_of')}>
+                  <FontawesomeIcon
+                    icon={faUniversity}
+                  />
+                  <Translate content="dataset.agent.is_part_of" className="sr-only" />
+                  <span className="sr-only">{' :'}</span>
+                  <span>{checkDataLang(this.state.agent.is_part_of.name)}</span>
+                </Info>
+              )}
+              {this.state.agent.homepage && (
                 <Info>
-                  <FontawesomeIcon icon={faGlobe} title={translate('dataset.person.homepage')} />
+                  <FontawesomeIcon icon={faGlobe} title={translate('dataset.agent.homepage')} />
                   <a
-                    href={this.state.person.homepage.identifier}
+                    href={this.state.agent.homepage.identifier}
                     target="_blank"
                     rel="noopener noreferrer"
                     title={
-                      checkDataLang(this.state.person.homepage.description) ||
-                      this.state.person.homepage.identifier
+                      checkDataLang(this.state.agent.homepage.description) ||
+                      this.state.agent.homepage.identifier
                     }
                   >
-                    <Translate content="dataset.person.homepage" className="sr-only" />
+                    <Translate content="dataset.agent.homepage" className="sr-only" />
                     <span className="sr-only">{' :'}</span>
-                    {this.state.person.homepage.title
-                      ? checkDataLang(this.state.person.homepage.title)
-                      : this.state.person.homepage.identifier}
+                    {this.state.agent.homepage.title
+                      ? checkDataLang(this.state.agent.homepage.title)
+                      : this.state.agent.homepage.identifier}
                   </a>
                 </Info>
               )}
@@ -125,7 +154,7 @@ export default class Person extends Component {
             }}
             onClick={this.state.popUpOpen ? this.closePopUp : this.openPopUp}
           >
-            {checkDataLang(this.state.person.name)}
+            {checkDataLang(this.state.agent.name)}
           </TransparentLink>
         </PopUp>
       </InlineLi>
@@ -133,13 +162,13 @@ export default class Person extends Component {
   }
 }
 
-Person.defaultProps = {
+Agent.defaultProps = {
   first: false,
 }
 
-Person.propTypes = {
+Agent.propTypes = {
   first: PropTypes.bool,
-  person: PropTypes.object.isRequired,
+  agent: PropTypes.object.isRequired,
 }
 
 const PopUpContainer = styled.div`
@@ -158,8 +187,13 @@ const Name = styled.h4`
   line-height: 1;
 `
 
-const Orcid = styled.a`
+const IdentifierLink = styled.a`
   font-size: 0.9em;
+`
+
+const IdentifierText = styled.div`
+  font-size: 0.9em;
+  margin-bottom 0.5em;
 `
 
 const Info = styled.div`

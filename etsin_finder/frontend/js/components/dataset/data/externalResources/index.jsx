@@ -53,6 +53,7 @@ export default class ExternalResources extends Component {
         resource_type: ext.resource_type,
         mediatype: ext.mediatype,
         download_url: ext.download_url,
+        access_url: ext.access_url,
         object_characteristics: ext.object_characteristics,
         checksum: ext.checksum,
       },
@@ -69,7 +70,7 @@ export default class ExternalResources extends Component {
         <TableHeader
           objectCount={this.state.totalCount}
           title={'remote'}
-          allowDownload
+          allowDownload={false}
           downloadAll={false}
         />
         <Table
@@ -77,7 +78,8 @@ export default class ExternalResources extends Component {
           data={this.state.currentFolder}
           allowDownload
           allowInfo
-          fields={{ size: false, category: false, name: true, downloadBtn: false, infoBtn: true }}
+          isRemote
+          fields={{ size: false, category: false, name: true, downloadBtn: true, infoBtn: true }}
         />
       </DataTable>
     )

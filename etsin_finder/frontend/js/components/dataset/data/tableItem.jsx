@@ -21,7 +21,7 @@ import sizeParse from '../../../utils/sizeParse'
 import checkNested from '../../../utils/checkNested'
 import FileIcon from './fileIcon'
 import Info from './info'
-import { InvertedButton, TransparentButton } from '../../general/button'
+import { InvertedButton, TransparentButton, Link } from '../../general/button'
 import Loader from '../../general/loader'
 import {
   TypeConcept,
@@ -171,6 +171,9 @@ class TableItem extends Component {
                 downloadUrl={
                   this.props.item.remote ? this.props.item.remote.download_url : undefined
                 }
+                accessUrl={
+                  this.props.item.remote ? this.props.item.remote.access_url : undefined
+                }
                 allowDownload={this.props.allowDownload}
                 description={this.props.item.description}
                 type={this.props.item.type}
@@ -179,7 +182,27 @@ class TableItem extends Component {
               />
             </React.Fragment>
           )}
-          {this.props.fields.downloadBtn && !this.state.downloadDisabled && (
+          {this.props.isRemote && (this.props.item.remote.download_url || this.props.item.remote.access_url) && (
+            // Remote resource download button
+            <RemoteDlButton
+              thin
+              href={this.props.item.remote.download_url ? this.props.item.remote.download_url.identifier :
+              this.props.item.remote.access_url.identifier}
+              target="_blank"
+              rel="noopener noreferrer"
+              title={checkDataLang(this.props.item.remote.download_url ?
+              this.props.item.remote.download_url.description : this.props.item.remote.access_url.description)}
+            >
+              <Translate content={this.props.item.remote.download_url ? 'dataset.dl.download' : 'dataset.dl.go_to_original'} />
+              <Translate
+                className="sr-only"
+                content="dataset.dl.item"
+                with={{ item: this.props.item.name }}
+              />
+            </RemoteDlButton>
+          )}
+          {!this.props.isRemote && this.props.fields.downloadBtn && !this.state.downloadDisabled && (
+            // Ida download button enabled
             // TODO: add download functionality, probably an axios post request,
             // but it will also be used in the info modal, so a utility for both.
             // TODO: change to button because disabled won't work in link
@@ -196,7 +219,8 @@ class TableItem extends Component {
               />
             </HideSmButton>
           )}
-          {this.state.downloadDisabled && (
+          {!this.props.isRemote && this.state.downloadDisabled && (
+            // Ida download button disabled
             <HideSmButton
               thin
               disabled="true"
@@ -208,7 +232,7 @@ class TableItem extends Component {
                 with={{ item: this.props.item.name }}
               />
             </HideSmButton>
-          )}
+        )}
         </FileButtons>
       </TableRow>
     )
@@ -222,6 +246,13 @@ const TitleAlt = styled.p`
 `
 
 const HideSmButton = styled(InvertedButton)`
+  display: none;
+  @media (min-width: ${props => props.theme.breakpoints.sm}) {
+    display: initial;
+  }
+`
+
+const RemoteDlButton = styled(Link)`
   display: none;
   @media (min-width: ${props => props.theme.breakpoints.sm}) {
     display: initial;
@@ -306,6 +337,7 @@ TableItem.propTypes = {
   allowDownload: PropTypes.bool.isRequired,
   allowInfo: PropTypes.bool.isRequired,
   download: PropTypes.func,
+  isRemote: PropTypes.bool.isRequired,
 }
 
 export default withTheme(TableItem)

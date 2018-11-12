@@ -43,8 +43,10 @@ class Content extends Component {
     // - it doesn't contain files or remote files
     // - the dataset is harvested
     // - the access_rights allow it
+    // - the dataset in removed or deprecated
 
-    if ((!this.props.hasFiles && !this.props.hasRemote) || this.props.harvested) {
+    if ((!this.props.hasFiles && !this.props.hasRemote) || this.props.harvested || this.props.isRemoved ||
+    this.props.isDeprecated) {
       return false
     }
     if (this.props.hasFiles) {
@@ -144,4 +146,6 @@ Content.propTypes = {
   hasFiles: PropTypes.bool.isRequired,
   hasRemote: PropTypes.bool.isRequired,
   identifier: PropTypes.string.isRequired,
+  isRemoved: PropTypes.bool.isRequired,
+  isDeprecated: PropTypes.bool.isRequired,
 }

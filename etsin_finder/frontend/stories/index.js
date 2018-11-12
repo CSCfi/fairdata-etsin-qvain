@@ -53,8 +53,8 @@ import Info from '../js/components/dataset/data/info'
 import Dropdown from '../js/components/general/dropdown'
 import PopUp from '../js/components/general/popup'
 // import Select from '../js/components/general/select'
-import People from '../js/components/dataset/people'
-import Person from '../js/components/dataset/people/person'
+import Agents from '../js/components/dataset/agents'
+import Agent from '../js/components/dataset/agents/agent'
 import Sidebar from '../js/components/dataset/sidebar'
 import License from '../js/components/dataset/sidebar/license'
 
@@ -283,7 +283,7 @@ storiesOf('General/Separator', module).add('Normal', () => (
 ))
 
 storiesOf('General/PopUp', module).add('normal', () => {
-  const person = MetaxRes.research_dataset.creator[0]
+  const agent = MetaxRes.research_dataset.creator[0]
   return (
     <Container verticalCenter center maxWidth="800px">
       <ComponentCode>
@@ -533,7 +533,7 @@ storiesOf('Dataset/Timestamp', module).add('Available', () => (
   </Container>
 ))
 
-storiesOf('Dataset/People', module)
+storiesOf('Dataset/Agents', module)
   .add('Creator', () => (
     <Container
       center
@@ -545,7 +545,7 @@ storiesOf('Dataset/People', module)
       }}
     >
       <ComponentCode>
-        <People creator={MetaxRes.research_dataset.creator} />
+        <Agents creator={MetaxRes.research_dataset.creator} />
       </ComponentCode>
     </Container>
   ))
@@ -554,22 +554,22 @@ storiesOf('Dataset/People', module)
     return (
       <Container center maxWidth="800px" style={{ marginTop: '10em' }}>
         <ComponentCode>
-          <People contributor={twoContributors} />
+          <Agents contributor={twoContributors} />
         </ComponentCode>
       </Container>
     )
   })
-  .add('Single Person', () => (
+  .add('Single Agent', () => (
     <Container center maxWidth="800px" style={{ marginTop: '10em' }}>
       <ComponentCode>
-        <Person first person={MetaxRes.research_dataset.contributor[0]} />
+        <Agent first agent={MetaxRes.research_dataset.contributor[0]} />
       </ComponentCode>
     </Container>
   ))
-  .add('More than 3 people', () => (
+  .add('More than 3 agents', () => (
     <Container center maxWidth="800px" style={{ marginTop: '10em' }}>
       <ComponentCode>
-        <People contributor={MetaxRes.research_dataset.contributor} />
+        <Agents contributor={MetaxRes.research_dataset.contributor} />
       </ComponentCode>
     </Container>
   ))
