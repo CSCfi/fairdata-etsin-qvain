@@ -223,7 +223,7 @@ class TableItem extends Component {
             // Ida download button disabled
             <HideSmButton
               thin
-              disabled="true"
+              disabled
             >
               <Translate content="dataset.dl.downloading" />
               <Translate
