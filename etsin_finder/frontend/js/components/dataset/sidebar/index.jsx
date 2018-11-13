@@ -186,7 +186,7 @@ class Sidebar extends Component {
 
             <SidebarItem component="div" trans="dataset.license" hideEmpty="true">
               {this.state.license &&
-                this.state.license.map(rights => <div><License key={rights.identifier} data={rights} /></div>)}
+                this.state.license.map(rights => <div key={rights.identifier}><License data={rights} /></div>)}
             </SidebarItem>
 
             {/* ACCESS_TYPE */}
