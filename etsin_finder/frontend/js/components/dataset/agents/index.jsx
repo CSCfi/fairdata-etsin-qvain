@@ -56,17 +56,25 @@ export default class Agents extends Component {
         )}
         {': '}
         <InlineUl>
-          {console.log(this.props[this.state.mode])}
           {/* Show first three */}
-          {this.state.firstThree.map((agent, i) => (
-            <Agent key={checkDataLang(agent.name)} first={i === 0} agent={agent} />
-          ))}
+          {this.state.firstThree.map((agent, i) => {
+            if (agent.name) {
+              return (
+                <Agent key={checkDataLang(agent.name)} first={i === 0} agent={agent} />
+              )
+            }
+            return ''
+          })}
           {/* Show the rest */}
           {this.props[this.state.mode].length > 3 &&
             this.state.open &&
-            this.state.rest.map(agent => (
-              <Agent key={checkDataLang(agent.name)} agent={agent} />
-            ))}
+            this.state.rest.map(agent => {
+              if (agent.name) {
+                return (<Agent key={checkDataLang(agent.name)} agent={agent} />)
+              }
+              return ''
+            }
+          )}
           {/* Show Button to open rest */}{' '}
           {this.props[this.state.mode].length > 3 && (
             <LinkButton onClick={this.toggleOpen}>

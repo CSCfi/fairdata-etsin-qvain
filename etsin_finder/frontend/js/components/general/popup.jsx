@@ -177,6 +177,7 @@ const alignment = align => {
 }
 
 const Pop = styled.div`
+  z-index: 1;
   position: absolute;
   top: initial;
   left: 15px;
@@ -196,6 +197,7 @@ const Pop = styled.div`
 `
 
 const Svg = styled.svg`
+  z-index: 2;
   top: initial;
   position: absolute;
   margin-top: -10px;
