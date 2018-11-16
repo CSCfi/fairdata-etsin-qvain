@@ -189,13 +189,13 @@ class Sidebar extends Component {
                 this.state.license.map(rights => <div key={rights.identifier}><License data={rights} /></div>)}
             </SidebarItem>
 
-            {/* ACCESS_TYPE */}
+            {/* ACCESS RIGHTS RESTRICTION_GROUNDS */}
 
             {this.state.access_rights && (
               <SidebarItem component="div" trans="dataset.access_rights" hideEmpty="true">
                 {this.state.access_rights.restriction_grounds && this.state.access_rights.restriction_grounds.length > 0
                   ? this.state.access_rights.restriction_grounds.map(rg => (
-                    <Item key={`rg-${rg.identifier}`}>{checkDataLang(rg.pref_label)}</Item>
+                    <div key={`rg-${rg.identifier}`}><Item>{checkDataLang(rg.pref_label)}</Item></div>
                     ))
                   : checkNested(this.state.access_rights, 'access_type', 'pref_label') &&
                     checkDataLang(this.state.access_rights.access_type.pref_label)}
