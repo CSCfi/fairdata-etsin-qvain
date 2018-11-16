@@ -58,6 +58,11 @@ const ID = styled.span`
   font-size: 0.9em;
 `
 
+const IDLink = styled.a`
+  margin-left: 0.2em;
+  font-size: 0.9em;
+`
+
 const OtherID = styled.li`
   margin: 0;
 `
@@ -108,6 +113,10 @@ class Events extends Component {
     )
   }
 
+  relationIdentifierIsUrl(identifier) {
+    return identifier.startsWith('http://') || identifier.startsWith('https://')
+  }
+
   render() {
     return (
       <Margin>
@@ -146,8 +155,9 @@ class Events extends Component {
                     <td>
                       {/* eslint-disable react/jsx-indent */}
                       {single.was_associated_with &&
-                        single.was_associated_with.map(associate => (
+                        single.was_associated_with.map((associate, i) => (
                           <span key={checkDataLang(associate.name)}>
+                            {i === 0 ? '' : ', '}
                             {checkDataLang(associate.name)}
                           </span>
                         ))}
@@ -203,7 +213,16 @@ class Events extends Component {
                     <td>{checkDataLang(single.entity.title)}.</td>
                     <td>
                       <span className="sr-only">Identifier:</span>
-                      <ID>{single.entity.identifier}</ID>
+                      {this.relationIdentifierIsUrl(single.entity.identifier) ?
+                      (
+                        <IDLink href={single.entity.identifier} rel="noopener noreferrer" target="_blank">
+                          {single.entity.identifier}
+                        </IDLink>
+                      ) :
+                      (
+                        <ID>{single.entity.identifier}</ID>
+                      )
+                      }
                     </td>
                   </tr>
                 ))}
