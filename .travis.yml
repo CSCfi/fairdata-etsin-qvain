@@ -22,22 +22,23 @@ stages:
 jobs:
   include:
   - stage: tests
+    before_install:
+    - sudo apt-get install npm
+    install:
+    - cd $TRAVIS_BUILD_DIR/etsin_finder/frontend
+    - npm install
+    - npm run build -- --define process.env.NODE_ENV=\"'travis'\"
+    script: cd $TRAVIS_BUILD_DIR/etsin_finder/frontend && npm run lint && npm run test
+  - stage: tests
     python: 3.6
     before_install:
       - sudo apt-get install libxml2-dev libxmlsec1-dev libxmlsec1-openssl
     before_script:
+      - cd $TRAVIS_BUILD_DIR
       - pip install tox-travis
       - sudo mkdir /var/log/etsin_finder
       - sudo chown -R $USER:$USER /var/log/etsin_finder
-    script: cd $TRAVIS_BUILD_DIR && tox
-  - stage: tests
-    before_install:
-      - sudo apt-get install npm
-    install:
-      - cd $TRAVIS_BUILD_DIR/etsin_finder/frontend
-      - npm install
-      - npm run build -- --define process.env.NODE_ENV=\"'travis'\"
-    script: cd $TRAVIS_BUILD_DIR/etsin_finder/frontend && npm run lint && npm run test
+    script: tox
   - stage: deploy
     before_script:
       - openssl aes-256-cbc -K $encrypted_de686f18e070_key -iv $encrypted_de686f18e070_iv -in deploy-key.enc -out deploy-key -d
