@@ -15,8 +15,12 @@ import Translate from 'react-translate-component'
 import PropTypes from 'prop-types'
 
 import HeroBanner from '../general/hero'
+import Tracking from '../../utils/tracking'
 
 export default class ErrorPage extends React.Component {
+  componentDidMount() {
+    Tracking.newPageView(`Error: ${this.props.error.type}`, this.props.location.pathname)
+  }
   render() {
     // TODO: Expects all error to be 404s on dataset page.
     // Extend class to handle all kinds of errors.

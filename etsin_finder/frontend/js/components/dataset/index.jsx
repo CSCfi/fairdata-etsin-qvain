@@ -26,6 +26,7 @@ import ErrorPage from '../errorpage'
 import ErrorBoundary from '../general/errorBoundary'
 import NoticeBar from '../general/noticeBar'
 import Loader from '../general/loader'
+import Tracking from '../../utils/tracking'
 
 const BackButton = styled(NavLink)`
   color: ${props => props.theme.color.primary};
@@ -49,6 +50,7 @@ class Dataset extends React.Component {
   }
   componentDidMount() {
     Accessibility.setNavText(translate('nav.announcer.datasetPage'))
+    Tracking.newPageView(`Dataset: ${this.props.match.params.identifier}`, this.props.location.pathname)
     this.query()
   }
 

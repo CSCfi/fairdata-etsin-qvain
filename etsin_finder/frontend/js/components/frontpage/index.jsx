@@ -20,10 +20,12 @@ import SearchBar from '../search/searchBar'
 import HeroBanner from '../general/hero'
 import KeyValues from './keyValues'
 import Accessibility from '../../stores/view/accessibility'
+import Tracking from '../../utils/tracking'
 
 export default class FrontPage extends Component {
   componentDidMount() {
     Accessibility.setNavText(translate('nav.announcer.homePage'))
+    Tracking.newPageView('Etsin | Tutkimusaineistojen hakupalvelu', this.props.location.pathname)
     // preload search page
     Search.load()
   }
