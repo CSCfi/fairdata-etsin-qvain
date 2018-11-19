@@ -37,7 +37,7 @@ jobs:
       - pip install tox-travis
       - sudo mkdir /var/log/etsin_finder
       - sudo chown -R $USER:$USER /var/log/etsin_finder
-    script: tox && cd $TRAVIS_BUILD_DIR/etsin_finder/frontend && npm run lint && npm run test
+    script: tox -e travis && cd $TRAVIS_BUILD_DIR/etsin_finder/frontend && npm run lint && npm run test
   - stage: deploy
     before_script:
       - openssl aes-256-cbc -K $encrypted_de686f18e070_key -iv $encrypted_de686f18e070_iv -in deploy-key.enc -out deploy-key -d
