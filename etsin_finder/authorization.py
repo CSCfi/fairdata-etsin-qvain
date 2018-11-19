@@ -5,6 +5,8 @@
 # :author: CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
 # :license: MIT
 
+"""Functionalities related to authorization and what users are allowed to see."""
+
 from etsin_finder.authentication import get_user_id
 from etsin_finder.cr_service import \
     get_catalog_record_access_type, \
@@ -52,14 +54,14 @@ def user_has_rems_permission_for_catalog_record(cr_id, user_id, is_authd):
 
 def user_is_allowed_to_download_from_ida(catalog_record, is_authd):
     """
-        Based on catalog record's research_dataset.access_rights.access_type, decide whether user is allowed to download
-        from Fairdata download service
+    Based on catalog record's research_dataset.access_rights.access_type,
 
-        :param catalog_record:
-        :param is_authd: Is the user authenticated
-        :return:
-        """
+    decide whether user is allowed to download from Fairdata download service
 
+    :param catalog_record:
+    :param is_authd: Is the user authenticated
+    :return:
+    """
     # TODO: After testing with this is done and after test datas have proper ida data catalog identifiers, remove
     # TODO: 'not app.debug and' from below
     if not app.debug and get_catalog_record_data_catalog_id(catalog_record) != DATA_CATALOG_IDENTIFIERS['ida']:
@@ -86,8 +88,9 @@ def user_is_allowed_to_download_from_ida(catalog_record, is_authd):
 
 def strip_dir_api_object(dir_api_obj, is_authd, catalog_record):
     """
-    Based on catalog record's research_dataset.access_rights.access_type, decide whether to strip dir_api_obj partially
-    or not.
+    Based on catalog record's research_dataset.access_rights.access_type,
+
+    decide whether to strip dir_api_obj partially or not.
 
     :param dir_api_obj:
     :param is_authd: Is the user authenticated
@@ -117,14 +120,15 @@ def strip_dir_api_object(dir_api_obj, is_authd, catalog_record):
 
 def strip_information_from_catalog_record(catalog_record, is_authd):
     """
-    Based on catalog record's research_dataset.access_rights.access_type, decide whether to strip ida-related file and
-    directory data partially or not. In any case, strip sensitive information
+    Based on catalog record's research_dataset.access_rights.access_type,
+
+    decide whether to strip ida-related file and directory data partially or not. In any case, strip sensitive
+    information.
 
     :param catalog_record:
     :param is_authd: Is the user authenticated
     :return: catalog_record after possible modifications
     """
-
     catalog_record = _strip_sensitive_information_from_catalog_record(catalog_record)
 
     access_type_id = get_catalog_record_access_type(catalog_record)
@@ -167,8 +171,7 @@ def _embargo_time_passed(catalog_record):
 
 def _strip_sensitive_information_from_catalog_record(catalog_record):
     """
-    This method should strip catalog record of any confidential/private information not supposed to be sent for
-    the frontend.
+    This method should strip catalog record of any confidential/private information not supposed to be sent to frontend
 
     :param catalog_record:
     :return:
@@ -188,8 +191,10 @@ def _strip_directory_api_obj_partially(dir_api_obj):
 
 def _strip_catalog_record_files(catalog_record):
     """
-    Keys to leave: 'use_category', 'file_type', 'identifier', 'details.file_name', 'details.file_path',
-    'details.byte_size, details.identifier'
+    Keys to leave:
+
+    'use_category', 'file_type', 'identifier', 'details.file_name', 'details.file_path', 'details.byte_size,
+    details.identifier'
 
     :param catalog_record:
     :return:
@@ -206,8 +211,10 @@ def _strip_catalog_record_files(catalog_record):
 
 def _strip_catalog_record_directories(catalog_record):
     """
-    Keys to leave: 'identifier', 'use_category', 'details.byte_size', 'details.directory_name',
-    'details.directory_path', 'details.byte_size', 'details.file_count'
+    Keys to leave:
+
+    'identifier', 'use_category', 'details.byte_size', 'details.directory_name', 'details.directory_path',
+    'details.byte_size', 'details.file_count'
 
     :param catalog_record:
     :return:

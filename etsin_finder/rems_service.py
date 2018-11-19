@@ -5,6 +5,8 @@
 # :author: CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
 # :license: MIT
 
+"""Used for performing operations related to Fairdata Rems"""
+
 import requests
 
 from etsin_finder.cr_service import get_catalog_record_preferred_identifier, get_catalog_record, is_rems_catalog_record
@@ -16,8 +18,10 @@ log = app.logger
 
 
 class RemsAPIService:
+    """Rems Service"""
 
     def __init__(self, rems_api_config):
+        """Setup Rems API Service"""
         if rems_api_config:
             self.REMS_URL = 'https://{0}'.format(rems_api_config['HOST']) + '/api/entitlements?resource={0}'
             self.API_KEY = rems_api_config['API_KEY']
@@ -25,6 +29,13 @@ class RemsAPIService:
             log.error("Unable to initialize RemsAPIService due to missing config")
 
     def get_rems_permission(self, user_id, rems_resource):
+        """
+        Get user entitlement for a rems resource.
+
+        :param user_id:
+        :param rems_resource:
+        :return:
+        """
         if not user_id or not rems_resource:
             return False
         try:
@@ -53,6 +64,13 @@ _rems_api = RemsAPIService(get_fairdata_rems_api_config())
 
 
 def get_user_rems_permission_for_catalog_record(cr_id, user_id):
+    """
+    Get info about whether user is entitled for a catalog record.
+
+    :param cr_id:
+    :param user_id:
+    :return:
+    """
     if not user_id or not cr_id:
         return False
 

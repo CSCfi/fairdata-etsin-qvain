@@ -5,6 +5,8 @@
 # :author: CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
 # :license: MIT
 
+"""Get configurations for the app and external services."""
+
 import yaml
 
 from etsin_finder.utils import executing_travis
@@ -16,6 +18,11 @@ def _get_app_config_from_file():
 
 
 def get_app_config():
+    """
+    Get app config.
+
+    :return:
+    """
     if executing_travis():
         return _get_app_config_for_travis()
     return _get_app_config_from_file()
@@ -31,6 +38,11 @@ def _get_app_config_for_travis():
 
 
 def get_memcached_config():
+    """
+    Get memcached config.
+
+    :return:
+    """
     if executing_travis():
         return None
 
@@ -45,6 +57,11 @@ def get_memcached_config():
 
 
 def get_download_api_config():
+    """
+    Get download API config.
+
+    :return:
+    """
     if executing_travis():
         return None
 
@@ -59,6 +76,11 @@ def get_download_api_config():
 
 
 def get_fairdata_rems_api_config():
+    """
+    Get Fairdata Rems API config.
+
+    :return:
+    """
     if executing_travis():
         return None
 
@@ -73,6 +95,11 @@ def get_fairdata_rems_api_config():
 
 
 def get_metax_api_config():
+    """
+    Get Metax API config.
+
+    :return:
+    """
     if executing_travis():
         return None
 

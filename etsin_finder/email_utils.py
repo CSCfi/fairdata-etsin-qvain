@@ -5,12 +5,16 @@
 # :author: CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
 # :license: MIT
 
+"""Email sending related utils"""
+
 import datetime
 import re
 from enum import Enum
 
 
 class AgentType(Enum):
+    """Types of agents"""
+
     CREATOR = 'creator'
     PUBLISHER = 'publisher'
     CONTRIBUTOR = 'contributor'
@@ -19,6 +23,15 @@ class AgentType(Enum):
 
 
 def create_email_message_body(cr_id, user_email, user_subject, user_body):
+    """
+    Create body for an email message to be sent.
+
+    :param cr_id:
+    :param user_email:
+    :param user_subject:
+    :param user_body:
+    :return:
+    """
     now = datetime.datetime.now()
 
     meta_en = ('The message below was sent via Etsin research data finder on {0}.{1}.{2}. '
@@ -35,10 +48,23 @@ def create_email_message_body(cr_id, user_email, user_subject, user_body):
 
 
 def get_email_message_subject():
+    """
+    Get email message subject.
+
+    :return:
+    """
     return "Message from Etsin / Viesti Etsimestä"
 
 
 def validate_send_message_request(user_email, user_body, agent_type):
+    """
+    Validate request that is done to backend for sending email message.
+
+    :param user_email:
+    :param user_body:
+    :param agent_type:
+    :return:
+    """
     from etsin_finder.finder import app
     log = app.logger
 
@@ -61,6 +87,7 @@ def validate_send_message_request(user_email, user_body, agent_type):
 
 def get_email_recipient_address(catalog_record, agent_type_str):
     """
+    Get email recipient address based on agent type.
 
     :param catalog_record:
     :param agent_type_str: agent_type enum name as string
@@ -86,6 +113,12 @@ def get_email_recipient_address(catalog_record, agent_type_str):
 
 
 def get_email_info(catalog_record):
+    """
+    Get info for frontend about which agent types have email addresses available.
+
+    :param catalog_record:
+    :return:
+    """
     if not catalog_record:
         return None
 
@@ -101,8 +134,15 @@ def get_email_info(catalog_record):
     return ret_obj
 
 
-# Returns True if dataset was harvested from a third party source
 def get_harvest_info(catalog_record):
+    """
+    Is catalog record harvested.
+
+    Returns True if dataset was harvested from a third party source
+
+    :param catalog_record:
+    :return:
+    """
     return catalog_record.get('data_catalog.catalog_json.harvested', False)
 
 

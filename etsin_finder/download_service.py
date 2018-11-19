@@ -5,6 +5,8 @@
 # :author: CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
 # :license: MIT
 
+"""Functionalities for download data from Download API"""
+
 from flask import Response, stream_with_context
 import requests
 
@@ -16,7 +18,14 @@ log = app.logger
 
 
 class DownloadAPIService:
+    """Download API Service"""
+
     def __init__(self, dl_api_config):
+        """
+        Setup Download API Service.
+
+        :param dl_api_config:
+        """
         if dl_api_config:
             self.API_BASE_URL = 'https://{0}:{1}/secure/api/v1/dataset'.format(
                 dl_api_config['HOST'], dl_api_config['PORT']) + '/{0}'
@@ -26,6 +35,14 @@ class DownloadAPIService:
             log.error('Unable to initialize DownloadAPIService due to missing config')
 
     def download(self, cr_id, file_ids, dir_ids):
+        """
+        Download files from Download API.
+
+        :param cr_id:
+        :param file_ids:
+        :param dir_ids:
+        :return:
+        """
         url = self._create_url(cr_id, file_ids, dir_ids)
         try:
             dl_api_response = requests.get(url, stream=True, timeout=15, auth=(self.USER,
@@ -84,4 +101,12 @@ _dl_api = DownloadAPIService(get_download_api_config())
 
 
 def download_data(cr_id, file_ids, dir_ids):
+    """
+    Public method for downloading data from Download API.
+
+    :param cr_id:
+    :param file_ids:
+    :param dir_ids:
+    :return:
+    """
     return _dl_api.download(cr_id, file_ids, dir_ids)

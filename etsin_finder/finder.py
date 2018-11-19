@@ -5,6 +5,8 @@
 # :author: CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
 # :license: MIT
 
+"""Main app initialization file"""
+
 import logging
 from logging.handlers import RotatingFileHandler
 
@@ -19,6 +21,11 @@ from etsin_finder.utils import executing_travis
 
 
 def create_app():
+    """
+    Create Flask app.
+
+    :return:
+    """
     app = Flask(__name__, template_folder="./frontend/build")
     app.config.update(get_app_config())
 

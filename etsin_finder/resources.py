@@ -5,6 +5,8 @@
 # :author: CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
 # :license: MIT
 
+"""RESTful API endpoints, meant to be used by the frontend"""
+
 from functools import wraps
 
 from flask import request, session
@@ -40,8 +42,21 @@ log = app.logger
 
 
 def log_request(f):
+    """
+    Log request when used as decorator.
+
+    :param f:
+    :return:
+    """
     @wraps(f)
     def func(*args, **kwargs):
+        """
+        Log requests.
+
+        :param args:
+        :param kwargs:
+        :return:
+        """
         user_id = get_user_id()
         log.info('{0} - {1} - {2} - {3} - {4}'.format(request.environ['HTTP_X_REAL_IP'],
                                                       user_id if user_id else '',
@@ -53,6 +68,7 @@ def log_request(f):
 
 
 class Dataset(Resource):
+    """Dataset related REST endpoints for frontend"""
 
     @log_request
     def get(self, cr_id):
@@ -77,14 +93,22 @@ class Dataset(Resource):
 
 
 class Files(Resource):
+    """File/directory related REST endpoints for frontend"""
 
     def __init__(self):
+        """Setup file endpoints"""
         self.parser = reqparse.RequestParser()
         self.parser.add_argument('dir_id', required=True, type=str)
         self.parser.add_argument('file_fields', required=False, type=str)
         self.parser.add_argument('directory_fields', required=False, type=str)
 
     def get(self, cr_id):
+        """
+        Get files and directory objects for frontend.
+
+        :param cr_id:
+        :return:
+        """
         args = self.parser.parse_args()
         dir_id = args['dir_id']
         file_fields = args.get('file_fields', None)
@@ -99,8 +123,10 @@ class Files(Resource):
 
 
 class Contact(Resource):
+    """Contact form related REST endpoints for frontend"""
 
     def __init__(self):
+        """Setup endpoints"""
         self.parser = reqparse.RequestParser()
         self.parser.add_argument('user_email', required=True, help='user_email cannot be empty')
         self.parser.add_argument('user_subject', required=True, help='user_subject cannot be empty')
@@ -110,6 +136,8 @@ class Contact(Resource):
     @log_request
     def post(self, cr_id):
         """
+        Send email.
+
         This route expects a json with three key-values: user_email, user_subject and user_body.
         Having these three this method will send an email message to recipients
         defined in the catalog record in question
@@ -171,14 +199,19 @@ class Contact(Resource):
 
 
 class User(Resource):
-
     """
     Cf. saml attributes: https://wiki.eduuni.fi/display/CSCHAKA/funetEduPersonSchema2dot2
+
     OID 1.3.6.1.4.1.5923.1.1.1.6 = eduPersonPrincipalName
     OID 2.5.4.3 = cn / commonName
     """
 
     def get(self):
+        """
+        Get (logged-in) user info.
+
+        :return:
+        """
         user_info = {'is_authenticated': is_authenticated()}
         dn = get_user_display_name()
         if dn is not None:
@@ -187,29 +220,34 @@ class User(Resource):
 
 
 class Session(Resource):
-
-    """
-    Session related
-    """
+    """Session related endpoints"""
 
     def get(self):
+        """
+        Renew Flask session, used by frontend.
+
+        :return:
+        """
         if is_authenticated():
             session.modified = True
             return '', 200
         return '', 401
 
     def delete(self):
+        """
+        Delete Flask session, used by frontend.
+
+        :return:
+        """
         reset_flask_session_on_logout()
         return not is_authenticated(), 200
 
 
 class Download(Resource):
-
-    """
-    Class for file download functionalities
-    """
+    """Class for file download functionalities"""
 
     def __init__(self):
+        """Setup Download endpoint"""
         self.parser = reqparse.RequestParser()
         self.parser.add_argument('cr_id', type=str, required=True)
         self.parser.add_argument('file_id', type=str, action='append', required=False)
@@ -217,6 +255,11 @@ class Download(Resource):
 
     @log_request
     def get(self):
+        """
+        Download data REST endpoint for frontend.
+
+        :return:
+        """
         # Check request query parameters are present
         args = self.parser.parse_args()
         cr_id = args['cr_id']

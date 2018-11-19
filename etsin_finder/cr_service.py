@@ -5,6 +5,8 @@
 # :author: CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
 # :license: MIT
 
+"""Used for performing operations related to Metax"""
+
 import requests
 
 from etsin_finder.finder import app, cr_cache
@@ -15,8 +17,14 @@ log = app.logger
 
 
 class MetaxAPIService:
+    """Metax API Service"""
 
     def __init__(self, metax_api_config):
+        """
+        Init Metax API Service.
+
+        :param metax_api_config:
+        """
         if metax_api_config:
             METAX_GET_CATALOG_RECORD_URL = 'https://{0}/rest/datasets'.format(metax_api_config['HOST']) + \
                                            '/{0}?expand_relation=data_catalog'
@@ -42,7 +50,6 @@ class MetaxAPIService:
         :param directory_fields:
         :return:
         """
-
         req_url = self.METAX_GET_DIRECTORY_FOR_CR_URL.format(dir_identifier, cr_identifier)
         if file_fields:
             req_url = req_url + '&file_fields={0}'.format(file_fields)
@@ -71,7 +78,8 @@ class MetaxAPIService:
         return metax_api_response.json()
 
     def get_catalog_record_with_file_details(self, identifier):
-        """ Get a catalog record with a given identifier from MetaX API.
+        """
+        Get a catalog record with a given identifier from MetaX API.
 
         :return: Metax catalog record as json
         """
@@ -94,8 +102,10 @@ class MetaxAPIService:
         return metax_api_response.json()
 
     def get_removed_catalog_record(self, identifier):
-        """ Get a catalog record with a given identifier from a MetaX API which should return only datasets that
-            are removed.
+        """
+        Get a catalog record with a given identifier from MetaX API
+
+        Should return only datasets that are removed.
 
         :return: Metax catalog record as json
         """
@@ -123,6 +133,16 @@ _metax_api = MetaxAPIService(get_metax_api_config())
 
 
 def get_catalog_record(cr_id, check_removed_if_not_exist, refresh_cache=False):
+    """
+    Get single catalog record.
+
+    If it does not exist, try checking/fetching from deleted catalog records.
+
+    :param cr_id:
+    :param check_removed_if_not_exist:
+    :param refresh_cache:
+    :return:
+    """
     if refresh_cache:
         return cr_cache.update_cache(cr_id, _get_cr_from_metax(cr_id, check_removed_if_not_exist))
 
@@ -135,26 +155,65 @@ def get_catalog_record(cr_id, check_removed_if_not_exist, refresh_cache=False):
 
 
 def get_directory_data_for_catalog_record(cr_id, dir_id, file_fields, directory_fields):
+    """
+    Get data related to file/directory browsing view in the frontend.
+
+    :param cr_id:
+    :param dir_id:
+    :param file_fields:
+    :param directory_fields:
+    :return:
+    """
     return _metax_api.get_directory_for_catalog_record(cr_id, dir_id, file_fields, directory_fields)
 
 
 def get_catalog_record_access_type(cr):
+    """
+    Get the type of access_type of a catalog record.
+
+    :param cr:
+    :return:
+    """
     return cr.get('research_dataset', {}).get('access_rights', {}).get('access_type', {}).get('identifier', '')
 
 
 def get_catalog_record_embargo_available(cr):
+    """
+    Get access rights embargo available date as string for a catalog record.
+
+    :param cr:
+    :return:
+    """
     return cr.get('research_dataset', {}).get('access_rights', {}).get('available', '')
 
 
 def get_catalog_record_data_catalog_id(cr):
+    """
+    Get identifier for a catalog record.
+
+    :param cr:
+    :return:
+    """
     return cr.get('data_catalog', {}).get('catalog_json', {}).get('identifier', '')
 
 
 def get_catalog_record_preferred_identifier(cr):
+    """
+    Get preferred identifier for a catalog record.
+
+    :param cr:
+    :return:
+    """
     return cr.get('research_dataset', {}).get('preferred_identifier', '')
 
 
 def is_rems_catalog_record(catalog_record):
+    """
+    Is the catalog record a rems dataset or not.
+
+    :param catalog_record:
+    :return:
+    """
     from etsin_finder.authorization import ACCESS_TYPES
     if get_catalog_record_access_type(catalog_record) == ACCESS_TYPES['permit']:
         return True
