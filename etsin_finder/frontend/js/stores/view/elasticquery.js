@@ -14,6 +14,7 @@ import axios from 'axios'
 import { transformQuery, isUrnQuery } from '../../utils/transformQuery'
 import UrlParse from '../../utils/urlParse'
 import Helpers from '../../utils/helpers'
+import Tracking from '../../utils/tracking'
 import Env from '../domain/env'
 
 const fields = [
@@ -184,6 +185,7 @@ class ElasticQuery {
     if (Date.now() - lastQueryTime < 200) {
       return new Promise(resolve => resolve())
     }
+
     lastQueryTime = Date.now()
 
     // Filters
@@ -382,6 +384,9 @@ class ElasticQuery {
           ) {
             resolve()
           } else {
+            // track queries, categories, and hits
+            // category tracking turned off because filter contains a lot of different fields
+            Tracking.newSearch(currentSearch, false, res.data.hits.hits.length)
             this.results = {
               hits: res.data.hits.hits,
               total: res.data.hits.total,
