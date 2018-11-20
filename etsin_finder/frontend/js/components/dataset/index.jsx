@@ -173,6 +173,9 @@ const LoadingSplash = styled.div`
 `
 
 Dataset.propTypes = {
+  location: PropTypes.shape({
+    pathname: PropTypes.string,
+  }).isRequired,
   history: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
 }

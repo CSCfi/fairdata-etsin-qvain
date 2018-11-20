@@ -42,6 +42,9 @@ export default class ErrorPage extends React.Component {
 }
 
 ErrorPage.propTypes = {
+  location: PropTypes.shape({
+    pathname: PropTypes.string,
+  }).isRequired,
   error: PropTypes.shape({
     type: PropTypes.string,
   }).isRequired,
