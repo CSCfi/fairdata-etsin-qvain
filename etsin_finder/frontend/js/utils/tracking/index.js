@@ -1,8 +1,7 @@
 /* eslint-disable no-undef */
 class Tracking {
   isActive() {
-    return true
-    // return process.env.MATOMO === true
+    return process.env.MATOMO === true
   }
 
   newPageView(title, location) {
