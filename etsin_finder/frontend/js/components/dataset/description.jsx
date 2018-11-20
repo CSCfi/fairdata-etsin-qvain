@@ -29,6 +29,7 @@ import VersionChanger from './versionChanger'
 import checkDataLang from '../../utils/checkDataLang'
 import checkNested from '../../utils/checkNested'
 import dateFormat from '../../utils/dateFormat'
+import Tracking from '../../utils/tracking'
 
 const ReactMarkdown = require('react-markdown')
 
@@ -60,6 +61,7 @@ class Description extends Component {
   }
 
   componentDidMount() {
+    Tracking.newPageView(`Dataset: ${this.props.match.params.identifier} | Description`, this.props.location.pathname)
     Accessiblity.setNavText(translate('nav.announcer.datasetPage'))
   }
 
@@ -156,6 +158,14 @@ export default inject('Stores')(observer(Description))
 
 Description.propTypes = {
   dataset: PropTypes.object.isRequired,
+  location: PropTypes.shape({
+    pathname: PropTypes.string,
+  }).isRequired,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      identifier: PropTypes.string,
+    })
+  }).isRequired,
   emails: PropTypes.shape({
     CONTRIBUTOR: PropTypes.bool,
     CREATOR: PropTypes.bool,
