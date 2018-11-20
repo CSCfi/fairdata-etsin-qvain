@@ -78,6 +78,9 @@ export default class Search extends Component {
 }
 
 Search.propTypes = {
+  location: PropTypes.shape({
+    pathname: PropTypes.string,
+  }).isRequired,
   match: PropTypes.shape({
     params: PropTypes.shape({
       query: PropTypes.string,

@@ -14,6 +14,7 @@ import React, { Component } from 'react'
 import Translate from 'react-translate-component'
 import translate from 'counterpart'
 import styled from 'styled-components'
+import PropTypes from 'prop-types'
 
 import { Search } from '../../routes'
 import SearchBar from '../search/searchBar'
@@ -56,6 +57,12 @@ export default class FrontPage extends Component {
       </div>
     )
   }
+}
+
+FrontPage.propTypes = {
+  location: PropTypes.shape({
+    pathname: PropTypes.string,
+  }).isRequired
 }
 
 const TextHolder = styled.div`
