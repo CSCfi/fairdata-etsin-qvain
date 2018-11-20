@@ -20,6 +20,7 @@ import translate from 'counterpart'
 import Accessibility from '../../../stores/view/accessibility'
 import checkDataLang from '../../../utils/checkDataLang'
 import dateFormat from '../../../utils/dateFormat'
+import Tracking from '../../../utils/tracking'
 
 const Table = styled.table`
   overflow-x: scroll;
@@ -73,6 +74,7 @@ const Margin = styled.div`
 
 class Events extends Component {
   componentDidMount() {
+    Tracking.newPageView(`Dataset: ${this.props.match.params.identifier} | Events`, this.props.location.pathname)
     Accessibility.setNavText(translate('nav.announcer.idnAndEventsTab'))
   }
   checkProvenance = prov => {
@@ -242,6 +244,14 @@ Events.defaultProps = {
 }
 
 Events.propTypes = {
+  location: PropTypes.shape({
+    pathname: PropTypes.string,
+  }).isRequired,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      identifier: PropTypes.string,
+    })
+  }).isRequired,
   relation: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
   provenance: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
   other_identifier: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),

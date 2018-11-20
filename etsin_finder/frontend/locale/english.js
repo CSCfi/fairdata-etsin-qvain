@@ -135,6 +135,7 @@ const english = {
     notFound:
       'Sorry, we are having some technical difficulties at the moment. Please, try again later.',
     notLoaded: "Sorry! The page couldn't be found.",
+    undefined: 'Sorry! An error occured.',
   },
   general: {
     showMore: 'Show more',

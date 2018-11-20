@@ -14,6 +14,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import translate from 'counterpart'
 
+import Tracking from '../../../utils/tracking'
 import Accessibility from '../../../stores/view/accessibility'
 import ExternalResources from './externalResources'
 import IdaResources from './idaResources'
@@ -22,6 +23,7 @@ export default class Data extends Component {
   state = {}
 
   componentDidMount() {
+    Tracking.newPageView(`Dataset: ${this.props.match.params.identifier} | Data`, this.props.location.pathname)
     Accessibility.setNavText(translate('nav.announcer.dataTab'))
   }
 
@@ -36,6 +38,14 @@ export default class Data extends Component {
 }
 
 Data.propTypes = {
+  location: PropTypes.shape({
+    pathname: PropTypes.string,
+  }).isRequired,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      identifier: PropTypes.string,
+    })
+  }).isRequired,
   hasFiles: PropTypes.bool.isRequired,
   hasRemote: PropTypes.bool.isRequired,
 }
