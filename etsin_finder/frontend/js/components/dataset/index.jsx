@@ -48,6 +48,7 @@ class Dataset extends React.Component {
     this.goBack = this.goBack.bind(this)
   }
   componentDidMount() {
+    Accessibility.resetFocus()
     this.query()
   }
 
