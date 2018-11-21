@@ -45,8 +45,20 @@ class Accessibility {
   }
 
   @action
-  handleNavigation(location) {
-    this.setNavText(translate(`general.pageTitles.${location}`))
+  handleNavigation(location, resetFocus = true) {
+    const pageName = translate(`general.pageTitles.${location}`)
+    this.setNavText(pageName)
+    this.setPageTitle(pageName)
+    if (resetFocus) {
+      this.resetFocus()
+    }
+  }
+
+  setPageTitle(name) {
+    document.title = `${name} - etsin.fairdata.fi`
+  }
+
+  resetFocus() {
     this.focusableElement.current.focus()
   }
 

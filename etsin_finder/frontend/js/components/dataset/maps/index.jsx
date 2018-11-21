@@ -27,7 +27,7 @@ class Maps extends Component {
 
   componentDidMount() {
     Tracking.newPageView(`Dataset: ${this.props.match.params.identifier} | Maps`, this.props.location.pathname)
-    Accessibility.handleNavigation('maps')
+    Accessibility.handleNavigation('maps', false)
   }
 
   render() {

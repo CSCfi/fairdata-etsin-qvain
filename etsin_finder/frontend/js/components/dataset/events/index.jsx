@@ -74,7 +74,7 @@ const Margin = styled.div`
 class Events extends Component {
   componentDidMount() {
     Tracking.newPageView(`Dataset: ${this.props.match.params.identifier} | Events`, this.props.location.pathname)
-    Accessibility.handleNavigation('idnAndEvents')
+    Accessibility.handleNavigation('idnAndEvents', false)
   }
   checkProvenance = prov => {
     if (prov) {

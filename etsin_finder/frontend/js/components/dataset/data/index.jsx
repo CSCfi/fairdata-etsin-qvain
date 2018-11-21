@@ -23,7 +23,7 @@ export default class Data extends Component {
 
   componentDidMount() {
     Tracking.newPageView(`Dataset: ${this.props.match.params.identifier} | Data`, this.props.location.pathname)
-    Accessibility.handleNavigation('data')
+    Accessibility.handleNavigation('data', false)
   }
 
   render() {

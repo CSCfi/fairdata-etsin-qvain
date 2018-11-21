@@ -60,7 +60,7 @@ class Description extends Component {
   }
 
   componentDidMount() {
-    Accessiblity.handleNavigation('dataset')
+    Accessiblity.handleNavigation('dataset', false)
     Tracking.newPageView(`Dataset: ${this.props.match.params.identifier} | Description`, this.props.location.pathname)
   }
 
