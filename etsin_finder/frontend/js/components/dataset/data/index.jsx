@@ -12,7 +12,6 @@
 
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import translate from 'counterpart'
 
 import Tracking from '../../../utils/tracking'
 import Accessibility from '../../../stores/view/accessibility'
@@ -24,7 +23,7 @@ export default class Data extends Component {
 
   componentDidMount() {
     Tracking.newPageView(`Dataset: ${this.props.match.params.identifier} | Data`, this.props.location.pathname)
-    Accessibility.setNavText(translate('nav.announcer.dataTab'))
+    Accessibility.handleNavigation('data')
   }
 
   render() {

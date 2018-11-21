@@ -8,12 +8,14 @@
  * @license   MIT
  */
 
-
+import React from 'react'
 import { observable, action } from 'mobx'
+import translate from 'counterpart'
 
 class Accessibility {
   @observable navText = ''
   @observable userIsTabbing = false
+  focusableElement = React.createRef()
 
   @action
   toggleTabbing(value) {
@@ -29,11 +31,6 @@ class Accessibility {
     this.navText = text
   }
 
-  @action
-  clearNavText() {
-    this.navText = ''
-  }
-
   // don't show outline when user is not using tab to navigate
   @action
   handleTab = e => {
@@ -45,6 +42,12 @@ class Accessibility {
       /* eslint-disable-next-line no-use-before-define */
       window.addEventListener('mousedown', this.handleMouseDownOnce)
     }
+  }
+
+  @action
+  handleNavigation(location) {
+    this.setNavText(translate(`general.pageTitles.${location}`))
+    this.focusableElement.current.focus()
   }
 
   @action

@@ -15,7 +15,6 @@ import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import { inject, observer } from 'mobx-react'
 import styled from 'styled-components'
-import translate from 'counterpart'
 
 import Accessibility from '../../../stores/view/accessibility'
 import checkDataLang from '../../../utils/checkDataLang'
@@ -75,7 +74,7 @@ const Margin = styled.div`
 class Events extends Component {
   componentDidMount() {
     Tracking.newPageView(`Dataset: ${this.props.match.params.identifier} | Events`, this.props.location.pathname)
-    Accessibility.setNavText(translate('nav.announcer.idnAndEventsTab'))
+    Accessibility.handleNavigation('idnAndEvents')
   }
   checkProvenance = prov => {
     if (prov) {
