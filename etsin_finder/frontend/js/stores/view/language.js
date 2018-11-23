@@ -16,18 +16,19 @@ import env from '../domain/env'
 class Locale {
   @observable currentLang = counterpart.getLocale()
   @observable languages = ['en', 'fi']
+
   @action
   setLang = lang => {
     counterpart.setLocale(lang)
     this.currentLang = counterpart.getLocale()
     localStorage.setItem('lang', this.currentLang)
+    document.documentElement.lang = this.currentLang
   }
+
   @action
   toggleLang = () => {
     const current = counterpart.getLocale()
-    counterpart.setLocale(current === 'fi' ? 'en' : 'fi')
-    this.currentLang = counterpart.getLocale()
-    localStorage.setItem('lang', this.currentLang)
+    this.setLang(current === 'fi' ? 'en' : 'fi')
 
     // other things to do when language changes
     // removes all filters and queries new results after filters are removed
@@ -42,6 +43,15 @@ class Locale {
     } else {
       // update url false
       elasticquery.clearFilters(false)
+    }
+  }
+
+  @action
+  getLang = () => {
+    /* get language from localstorage */
+    const storedLang = localStorage.getItem('lang')
+    if (storedLang) {
+      this.setLang(storedLang)
     }
   }
 }

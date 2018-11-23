@@ -32,10 +32,7 @@ if (process.env.NODE_ENV === 'test') {
 }
 
 /* get language from localstorage */
-const storedLang = localStorage.getItem('lang')
-if (storedLang) {
-  Stores.Locale.setLang(storedLang)
-}
+Stores.Locale.getLang()
 
 // Syncing history with store
 const browserHistory = createBrowserHistory()
