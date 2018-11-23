@@ -74,7 +74,7 @@ export default class KeyValues extends Component {
 
   render() {
     return this.state.error ? null : (
-      <div>
+      <aside>
         <CustomBox>
           <Value>
             {this.state.loaded ? (
@@ -129,7 +129,7 @@ export default class KeyValues extends Component {
             )}
           </Value>
         </CustomBox>
-      </div>
+      </aside>
     )
   }
 }
