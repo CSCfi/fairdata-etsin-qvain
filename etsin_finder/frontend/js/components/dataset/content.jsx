@@ -78,12 +78,13 @@ class Content extends Component {
         <Route
           exact={this.showData() || this.showEvents()}
           path="/dataset/:identifier"
-          render={() => (
+          render={props => (
             <Description
               dataset={this.props.dataset}
               emails={this.props.emails}
               harvested={this.props.harvested}
               cumulative={this.props.cumulative}
+              {...props}
             />
           )}
         />
@@ -93,7 +94,7 @@ class Content extends Component {
           <Route
             exact
             path="/dataset/:identifier/data"
-            render={() => <Data hasRemote={this.props.hasRemote} hasFiles={this.props.hasFiles} />}
+            render={props => <Data hasRemote={this.props.hasRemote} hasFiles={this.props.hasFiles} {...props} />}
           />
         )}
 
@@ -102,11 +103,12 @@ class Content extends Component {
           <Route
             exact
             path="/dataset/:identifier/events"
-            render={() => (
+            render={props => (
               <Events
                 provenance={this.props.dataset.research_dataset.provenance}
                 other_identifier={this.props.dataset.research_dataset.other_identifier}
                 relation={this.props.dataset.research_dataset.relation}
+                {...props}
               />
             )}
           />
@@ -117,7 +119,7 @@ class Content extends Component {
           <Route
             exact
             path="/dataset/:identifier/maps"
-            render={() => <Maps spatial={this.props.dataset.research_dataset.spatial} />}
+            render={props => <Maps spatial={this.props.dataset.research_dataset.spatial} {...props} />}
           />
         )}
       </MarginAfter>

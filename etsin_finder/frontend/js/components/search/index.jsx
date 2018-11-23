@@ -15,10 +15,12 @@ import Translate from 'react-translate-component'
 import PropTypes from 'prop-types'
 
 import ElasticQuery from '../../stores/view/elasticquery'
+import Accessibility from '../../stores/view/accessibility'
 import { Dataset } from '../../routes'
 import HeroBanner from '../general/hero'
 import SearchBar from './searchBar'
 import Results from './results'
+import Tracking from '../../utils/tracking'
 
 export default class Search extends Component {
   constructor() {
@@ -31,12 +33,12 @@ export default class Search extends Component {
     this.initialQuery()
   }
   componentDidMount() {
-    // when searching on frontpage keep focus in input after enter
-    // if (this.props.match.params.query) {
-    //   this.search.focus()
-    //   this.search.selectionStart = this.search.value.length
-    //   this.search.selectionEnd = this.search.value.length
-    // }
+    Accessibility.handleNavigation('datasets')
+    if (this.props.match.params.query) {
+      Tracking.newPageView(`Search: ${this.props.match.params.query}`, this.props.location.pathname)
+    } else {
+      Tracking.newPageView('Search', this.props.location.pathname)
+    }
   }
 
   initialQuery = () => {
@@ -72,6 +74,9 @@ export default class Search extends Component {
 }
 
 Search.propTypes = {
+  location: PropTypes.shape({
+    pathname: PropTypes.string,
+  }).isRequired,
   match: PropTypes.shape({
     params: PropTypes.shape({
       query: PropTypes.string,
