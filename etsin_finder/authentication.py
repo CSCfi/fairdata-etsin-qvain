@@ -5,9 +5,11 @@
 # :author: CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
 # :license: MIT
 
+"""Authentication related functionalities"""
+
 from urllib.parse import urlparse
 
-from flask import request, session
+from flask import session
 from onelogin.saml2.auth import OneLogin_Saml2_Auth
 
 from etsin_finder.finder import app
@@ -17,21 +19,43 @@ log = app.logger
 
 
 def get_saml_auth(flask_request):
+    """
+    Used by saml library.
+
+    :param flask_request:
+    :return:
+    """
     return OneLogin_Saml2_Auth(prepare_flask_request_for_saml(flask_request), custom_base_path=app.config['SAML_PATH'])
 
 
 def init_saml_auth(saml_prepared_flask_request):
+    """
+    Used by saml library.
+
+    :param saml_prepared_flask_request:
+    :return:
+    """
     return OneLogin_Saml2_Auth(saml_prepared_flask_request, custom_base_path=app.config['SAML_PATH'])
 
 
 def is_authenticated():
+    """
+    Is user authenticated or not.
+
+    :return:
+    """
     if executing_travis():
         return False
-    auth = get_saml_auth(request)
-    return True if auth.is_authenticated and 'samlUserdata' in session and len(session['samlUserdata']) > 0 else False
+    return True if 'samlUserdata' in session and len(session['samlUserdata']) > 0 else False
 
 
 def prepare_flask_request_for_saml(request):
+    """
+    Used by saml library.
+
+    :param request:
+    :return:
+    """
     # If server is behind proxys or balancers use the HTTP_X_FORWARDED fields
     url_data = urlparse(request.url)
     return {
@@ -49,15 +73,22 @@ def prepare_flask_request_for_saml(request):
 
 
 def reset_flask_session_on_login():
+    """Reset Flask session on login"""
     session.clear()
     session.permanent = True
 
 
 def reset_flask_session_on_logout():
+    """Reset Flask session on logout"""
     session.clear()
 
 
 def get_user_display_name():
+    """
+    Get user display name from saml userdata.
+
+    :return:
+    """
     if not is_authenticated() or 'samlUserdata' not in session:
         return None
 
@@ -72,6 +103,11 @@ def get_user_display_name():
 
 
 def get_user_id():
+    """
+    Get user id from saml userdata.
+
+    :return:
+    """
     if not is_authenticated() or 'samlUserdata' not in session:
         return None
 

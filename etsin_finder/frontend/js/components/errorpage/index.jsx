@@ -13,10 +13,17 @@
 import React from 'react'
 import Translate from 'react-translate-component'
 import PropTypes from 'prop-types'
+import { withRouter } from 'react-router'
 
 import HeroBanner from '../general/hero'
+import Tracking from '../../utils/tracking'
+import Accessibility from '../../stores/view/accessibility'
 
-export default class ErrorPage extends React.Component {
+class ErrorPage extends React.Component {
+  componentDidMount() {
+    Accessibility.handleNavigation('error')
+    Tracking.newPageView(`Error: ${this.props.error.type}`, this.props.location.pathname)
+  }
   render() {
     // TODO: Expects all error to be 404s on dataset page.
     // Extend class to handle all kinds of errors.
@@ -31,6 +38,9 @@ export default class ErrorPage extends React.Component {
           {this.props.error.type === 'error' && (
             <Translate content="error.notLoaded" component="h1" />
           )}
+          {this.props.error === undefined && (
+            <Translate content="error.undefined" component="h1" />
+          )}
         </div>
       </HeroBanner>
     )
@@ -38,7 +48,12 @@ export default class ErrorPage extends React.Component {
 }
 
 ErrorPage.propTypes = {
+  location: PropTypes.shape({
+    pathname: PropTypes.string,
+  }).isRequired,
   error: PropTypes.shape({
     type: PropTypes.string,
   }).isRequired,
 }
+
+export default withRouter(ErrorPage)

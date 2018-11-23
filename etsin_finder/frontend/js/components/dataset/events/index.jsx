@@ -15,11 +15,11 @@ import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import { inject, observer } from 'mobx-react'
 import styled from 'styled-components'
-import translate from 'counterpart'
 
 import Accessibility from '../../../stores/view/accessibility'
 import checkDataLang from '../../../utils/checkDataLang'
 import dateFormat from '../../../utils/dateFormat'
+import Tracking from '../../../utils/tracking'
 
 const Table = styled.table`
   overflow-x: scroll;
@@ -58,6 +58,11 @@ const ID = styled.span`
   font-size: 0.9em;
 `
 
+const IDLink = styled.a`
+  margin-left: 0.2em;
+  font-size: 0.9em;
+`
+
 const OtherID = styled.li`
   margin: 0;
 `
@@ -68,7 +73,8 @@ const Margin = styled.div`
 
 class Events extends Component {
   componentDidMount() {
-    Accessibility.setNavText(translate('nav.announcer.idnAndEventsTab'))
+    Tracking.newPageView(`Dataset: ${this.props.match.params.identifier} | Events`, this.props.location.pathname)
+    Accessibility.handleNavigation('idnAndEvents', false)
   }
   checkProvenance = prov => {
     if (prov) {
@@ -106,6 +112,10 @@ class Events extends Component {
         {dateFormat(temp.start_date)} - {dateFormat(temp.end_date)}
       </span>
     )
+  }
+
+  relationIdentifierIsUrl(identifier) {
+    return identifier.startsWith('http://') || identifier.startsWith('https://')
   }
 
   render() {
@@ -146,8 +156,9 @@ class Events extends Component {
                     <td>
                       {/* eslint-disable react/jsx-indent */}
                       {single.was_associated_with &&
-                        single.was_associated_with.map(associate => (
+                        single.was_associated_with.map((associate, i) => (
                           <span key={checkDataLang(associate.name)}>
+                            {i === 0 ? '' : ', '}
                             {checkDataLang(associate.name)}
                           </span>
                         ))}
@@ -203,7 +214,16 @@ class Events extends Component {
                     <td>{checkDataLang(single.entity.title)}.</td>
                     <td>
                       <span className="sr-only">Identifier:</span>
-                      <ID>{single.entity.identifier}</ID>
+                      {this.relationIdentifierIsUrl(single.entity.identifier) ?
+                      (
+                        <IDLink href={single.entity.identifier} rel="noopener noreferrer" target="_blank">
+                          {single.entity.identifier}
+                        </IDLink>
+                      ) :
+                      (
+                        <ID>{single.entity.identifier}</ID>
+                      )
+                      }
                     </td>
                   </tr>
                 ))}
@@ -223,6 +243,14 @@ Events.defaultProps = {
 }
 
 Events.propTypes = {
+  location: PropTypes.shape({
+    pathname: PropTypes.string,
+  }).isRequired,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      identifier: PropTypes.string,
+    })
+  }).isRequired,
   relation: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
   provenance: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
   other_identifier: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),

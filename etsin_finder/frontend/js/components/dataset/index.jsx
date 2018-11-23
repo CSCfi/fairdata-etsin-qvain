@@ -48,7 +48,7 @@ class Dataset extends React.Component {
     this.goBack = this.goBack.bind(this)
   }
   componentDidMount() {
-    Accessibility.setNavText(translate('nav.announcer.datasetPage'))
+    Accessibility.resetFocus()
     this.query()
   }
 

@@ -108,36 +108,6 @@ describe('Create file tree', () => {
     expect(result[1].name).toEqual('Experiment_X')
     expect(result[2].name).toEqual('file_name_1')
   })
-  it('should have correct child amount', () => {
-    const files = [
-      {
-        path: 'project_x_FROZEN/Experiment_X/file_name_1',
-        details: { id: 1 },
-      },
-      {
-        path: 'amazing/Experiment_X/newFolder/file_name_3',
-        details: { id: 6 },
-      },
-      {
-        path: 'amazing/Experiment_X/file_name_2',
-        details: { id: 2 },
-      },
-      {
-        path: 'myRootFile/Folder2/file_name_1',
-        details: { id: 3 },
-      },
-      {
-        path: 'amazing/Experiment_X/newFolder',
-        details: { id: 5 },
-      },
-      {
-        path: 'amazing/Experiment_X',
-        details: { id: 4 },
-      },
-    ]
-    const result = createTree(files)
-    expect(result[1].childAmount).toEqual(3)
-  })
   it('should have file details', () => {
     const files = [
       {

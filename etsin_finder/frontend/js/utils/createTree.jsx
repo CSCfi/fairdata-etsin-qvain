@@ -64,18 +64,17 @@ export default function createTree(files) {
     let x = hier
     const split = file.path.split('/')
     split.map((item, index) => {
+      // check if has already been added to hierarchy
       let current = x.find(single => single.name === item)
+      // if not added add either as folder or as file
       if (!current) {
-        if (index === split.length - 1) {
+        if (index === split.length - 1 && file.type !== 'dir') {
           current = { name: item }
           x.push(current)
         } else {
-          current = { name: item, children: [], childAmount: 0 }
+          current = { name: item, children: [] }
           x.push(current)
         }
-      } else {
-        const amountindex = x.indexOf(current)
-        x[amountindex].childAmount += 1
       }
       const i = x.map(single => single.name).indexOf(item)
       if (index === split.length - 1) {

@@ -12,18 +12,20 @@
 
 import React, { Component } from 'react'
 import Translate from 'react-translate-component'
-import translate from 'counterpart'
 import styled from 'styled-components'
+import PropTypes from 'prop-types'
 
 import { Search } from '../../routes'
 import SearchBar from '../search/searchBar'
 import HeroBanner from '../general/hero'
 import KeyValues from './keyValues'
 import Accessibility from '../../stores/view/accessibility'
+import Tracking from '../../utils/tracking'
 
 export default class FrontPage extends Component {
   componentDidMount() {
-    Accessibility.setNavText(translate('nav.announcer.homePage'))
+    Accessibility.handleNavigation('home')
+    Tracking.newPageView('Etsin | Tutkimusaineistojen hakupalvelu', this.props.location.pathname)
     // preload search page
     Search.load()
   }
@@ -54,6 +56,12 @@ export default class FrontPage extends Component {
       </div>
     )
   }
+}
+
+FrontPage.propTypes = {
+  location: PropTypes.shape({
+    pathname: PropTypes.string,
+  }).isRequired
 }
 
 const TextHolder = styled.div`

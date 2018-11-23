@@ -5,24 +5,19 @@
 # :author: CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
 # :license: MIT
 
+"""Functionalities related to authorization and what users are allowed to see."""
+
 from etsin_finder.authentication import get_user_id
 from etsin_finder.cr_service import \
     get_catalog_record_access_type, \
     get_catalog_record_data_catalog_id, \
     get_catalog_record_embargo_available
-from etsin_finder.finder import app, rems_cache
-from etsin_finder.rems_service import get_user_rems_permission_for_catalog_record
-from etsin_finder.utils import tz_now_is_later_than_timestamp_str, remove_keys_recursively, leave_keys_in_dict
+from etsin_finder.finder import app
+from etsin_finder import rems_service
+from etsin_finder.utils import tz_now_is_later_than_timestamp_str, remove_keys_recursively, leave_keys_in_dict, \
+    ACCESS_TYPES
 
 log = app.logger
-
-ACCESS_TYPES = {
-    'open': 'http://uri.suomi.fi/codelist/fairdata/access_type/code/open',
-    'login': 'http://uri.suomi.fi/codelist/fairdata/access_type/code/login',
-    'permit': 'http://uri.suomi.fi/codelist/fairdata/access_type/code/permit',
-    'embargo': 'http://uri.suomi.fi/codelist/fairdata/access_type/code/embargo',
-    'restricted': 'http://uri.suomi.fi/codelist/fairdata/access_type/code/restricted'
-}
 
 DATA_CATALOG_IDENTIFIERS = {
     'ida': 'urn:nbn:fi:att:data-catalog-ida',
@@ -42,24 +37,24 @@ def user_has_rems_permission_for_catalog_record(cr_id, user_id, is_authd):
     if not cr_id or not user_id or not is_authd:
         return False
 
-    permission = rems_cache.get_from_cache(cr_id, user_id)
+    permission = app.rems_cache.get_from_cache(cr_id, user_id)
     if permission is None:
-        permission = get_user_rems_permission_for_catalog_record(cr_id, user_id)
-        return rems_cache.update_cache(cr_id, user_id, permission)
+        permission = rems_service.get_user_rems_permission_for_catalog_record(cr_id, user_id)
+        return app.rems_cache.update_cache(cr_id, user_id, permission)
     else:
         return permission
 
 
 def user_is_allowed_to_download_from_ida(catalog_record, is_authd):
     """
-        Based on catalog record's research_dataset.access_rights.access_type, decide whether user is allowed to download
-        from Fairdata download service
+    Based on catalog record's research_dataset.access_rights.access_type,
 
-        :param catalog_record:
-        :param is_authd: Is the user authenticated
-        :return:
-        """
+    decide whether user is allowed to download from Fairdata download service
 
+    :param catalog_record:
+    :param is_authd: Is the user authenticated
+    :return:
+    """
     # TODO: After testing with this is done and after test datas have proper ida data catalog identifiers, remove
     # TODO: 'not app.debug and' from below
     if not app.debug and get_catalog_record_data_catalog_id(catalog_record) != DATA_CATALOG_IDENTIFIERS['ida']:
@@ -86,8 +81,9 @@ def user_is_allowed_to_download_from_ida(catalog_record, is_authd):
 
 def strip_dir_api_object(dir_api_obj, is_authd, catalog_record):
     """
-    Based on catalog record's research_dataset.access_rights.access_type, decide whether to strip dir_api_obj partially
-    or not.
+    Based on catalog record's research_dataset.access_rights.access_type,
+
+    decide whether to strip dir_api_obj partially or not.
 
     :param dir_api_obj:
     :param is_authd: Is the user authenticated
@@ -117,16 +113,16 @@ def strip_dir_api_object(dir_api_obj, is_authd, catalog_record):
 
 def strip_information_from_catalog_record(catalog_record, is_authd):
     """
-    Based on catalog record's research_dataset.access_rights.access_type, decide whether to strip ida-related file and
-    directory data partially or not. In any case, strip sensitive information
+    Based on catalog record's research_dataset.access_rights.access_type,
+
+    decide whether to strip ida-related file and directory data partially or not. In any case, strip sensitive
+    information.
 
     :param catalog_record:
     :param is_authd: Is the user authenticated
     :return: catalog_record after possible modifications
     """
-
     catalog_record = _strip_sensitive_information_from_catalog_record(catalog_record)
-
     access_type_id = get_catalog_record_access_type(catalog_record)
     if not access_type_id:
         return remove_keys_recursively(catalog_record, ['files', 'directories', 'remote_resources'])
@@ -167,8 +163,7 @@ def _embargo_time_passed(catalog_record):
 
 def _strip_sensitive_information_from_catalog_record(catalog_record):
     """
-    This method should strip catalog record of any confidential/private information not supposed to be sent for
-    the frontend.
+    This method should strip catalog record of any confidential/private information not supposed to be sent to frontend
 
     :param catalog_record:
     :return:
@@ -188,8 +183,10 @@ def _strip_directory_api_obj_partially(dir_api_obj):
 
 def _strip_catalog_record_files(catalog_record):
     """
-    Keys to leave: 'use_category', 'file_type', 'identifier', 'details.file_name', 'details.file_path',
-    'details.byte_size, details.identifier'
+    Keys to leave:
+
+    'use_category', 'file_type', 'identifier', 'details.file_name', 'details.file_path', 'details.byte_size,
+    details.identifier'
 
     :param catalog_record:
     :return:
@@ -206,8 +203,10 @@ def _strip_catalog_record_files(catalog_record):
 
 def _strip_catalog_record_directories(catalog_record):
     """
-    Keys to leave: 'identifier', 'use_category', 'details.byte_size', 'details.directory_name',
-    'details.directory_path', 'details.byte_size', 'details.file_count'
+    Keys to leave:
+
+    'identifier', 'use_category', 'details.byte_size', 'details.directory_name', 'details.directory_path',
+    'details.byte_size', 'details.file_count'
 
     :param catalog_record:
     :return:

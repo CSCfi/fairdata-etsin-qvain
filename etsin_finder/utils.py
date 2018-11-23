@@ -5,6 +5,8 @@
 # :author: CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
 # :license: MIT
 
+"""Various utils"""
+
 import json
 import os
 from datetime import datetime
@@ -12,20 +14,38 @@ from datetime import datetime
 import pytz
 from dateutil import parser
 
+ACCESS_TYPES = {
+    'open': 'http://uri.suomi.fi/codelist/fairdata/access_type/code/open',
+    'login': 'http://uri.suomi.fi/codelist/fairdata/access_type/code/login',
+    'permit': 'http://uri.suomi.fi/codelist/fairdata/access_type/code/permit',
+    'embargo': 'http://uri.suomi.fi/codelist/fairdata/access_type/code/embargo',
+    'restricted': 'http://uri.suomi.fi/codelist/fairdata/access_type/code/restricted'
+}
+
 
 def executing_travis():
-    """
-    Returns True whenever code is being executed by travis
-    """
+    """Returns True whenever code is being executed by travis"""
     return True if os.getenv('TRAVIS', False) else False
 
 
 def write_json_to_file(json_data, filename):
+    """
+    Write JSON data to file.
+
+    :param json_data:
+    :param filename:
+    """
     with open(filename, "w") as output_file:
         json.dump(json_data, output_file)
 
 
 def json_or_empty(response):
+    """
+    Return response JSON as python dict or empty dict.
+
+    :param response:
+    :return:
+    """
     response_json = {}
     try:
         response_json = response.json()
@@ -35,6 +55,13 @@ def json_or_empty(response):
 
 
 def remove_keys_recursively(obj, fields_to_remove):
+    """
+    Remove specified keys recursively from a python object (dict or list)
+
+    :param obj:
+    :param fields_to_remove:
+    :return:
+    """
     if isinstance(obj, dict):
         obj = {
             key: remove_keys_recursively(value, fields_to_remove) for key, value in obj.items()
@@ -49,6 +76,7 @@ def remove_keys_recursively(obj, fields_to_remove):
 def leave_keys_in_dict(dict_obj, fields_to_leave):
     """
     Removes the key-values from dict_obj, for which key is NOT listed in fields_to_leave.
+
     NOTE: Is not recursive
 
     :param dict_obj:
@@ -74,5 +102,22 @@ def _parse_timestamp_string_to_tz_aware_datetime(timestamp_str):
 
 
 def tz_now_is_later_than_timestamp_str(timestamp_str):
+    """
+    Is timestamp_str later in time than current time.
+
+    :param timestamp_str:
+    :return:
+    """
     datetime_obj = _parse_timestamp_string_to_tz_aware_datetime(timestamp_str)
     return datetime.now(tz=pytz.timezone('Europe/Helsinki')) >= datetime_obj
+
+
+class FlaskService():
+    """Use as base class for external dependency services"""
+
+    def __init__(self, app):
+        """Init FlaskService"""
+        if app.testing or executing_travis():
+            self.is_testing = True
+        else:
+            self.is_testing = False

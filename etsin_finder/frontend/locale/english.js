@@ -135,6 +135,7 @@ const english = {
     notFound:
       'Sorry, we are having some technical difficulties at the moment. Please, try again later.',
     notLoaded: "Sorry! The page couldn't be found.",
+    undefined: 'Sorry! An error occured.',
   },
   general: {
     showMore: 'Show more',
@@ -146,6 +147,15 @@ const english = {
     state: {
       changedLang: 'Changed language to: %(lang)s',
       inactiveLogout: 'You have been logged out due to inactivity',
+    },
+    pageTitles: {
+      data: 'Data',
+      idnAndEvents: 'Identifiers and Events',
+      maps: 'Maps',
+      dataset: 'Dataset',
+      datasets: 'Datasets',
+      home: 'Home',
+      error: 'Error'
     },
   },
   home: {
@@ -175,14 +185,6 @@ const english = {
     home: 'Home',
     organizations: 'Organizations',
     addDataset: 'Add dataset',
-    announcer: {
-      dataTab: 'Navigated to Data tab',
-      datasetPage: 'Navigated to Dataset page',
-      idnAndEventsTab: 'Navigated to "Identifiers and Events" tab',
-      datasetsPage: 'Navigated to Datasets page',
-      homePage: 'Navigated to Home page',
-      custom: 'Navigated to: %(to)s',
-    },
   },
   results: {
     resultsFor: 'Results for query: ',
