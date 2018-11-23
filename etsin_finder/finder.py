@@ -5,22 +5,31 @@
 # :author: CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
 # :license: MIT
 
+"""Main app initialization file"""
+
 import logging
 from logging.handlers import RotatingFileHandler
+import os
 
 from flask import Flask
 from flask_mail import Mail
 from flask_restful import Api
 from flask.logging import default_handler
 
-from etsin_finder.app_config import get_app_config, get_memcached_config
+from etsin_finder.app_config import get_app_config
 from etsin_finder.cache import CatalogRecordCache, RemsCache
 from etsin_finder.utils import executing_travis
 
 
 def create_app():
+    """
+    Create Flask app.
+
+    :return:
+    """
+    is_testing = bool(os.environ.get('TESTING', False))
     app = Flask(__name__, template_folder="./frontend/build")
-    app.config.update(get_app_config())
+    app.config.update(get_app_config(is_testing))
 
     if not app.testing and not executing_travis():
         _setup_app_logging(app)
@@ -28,6 +37,11 @@ def create_app():
         app.config.update({'SAML_PATH': '/home/etsin-user'})
 
     app.logger.info("Application configuration: {0}".format(app.config))
+
+    app.mail = Mail(app)
+    app.cr_cache = CatalogRecordCache(app)
+    app.rems_cache = RemsCache(app)
+
     return app
 
 
@@ -48,11 +62,14 @@ def _setup_app_logging(app):
         app.logger.error('Logging not correctly set up due to missing app log path configuration')
 
 
-def _do_imports():
-    import etsin_finder.views
+def add_restful_resources(app):
+    """
+    Set Flask Restful API endpoints
 
-
-def _add_restful_resources():
+    :param app:
+    :return:
+    """
+    api = Api(app)
     from etsin_finder.resources import Contact, Dataset, User, Session, Files, Download
     api.add_resource(Dataset, '/api/dataset/<string:cr_id>')
     api.add_resource(Files, '/api/files/<string:cr_id>')
@@ -63,12 +80,8 @@ def _add_restful_resources():
 
 
 app = create_app()
-mail = Mail(app)
-api = Api(app)
-cr_cache = CatalogRecordCache(get_memcached_config())
-rems_cache = RemsCache(get_memcached_config())
-_add_restful_resources()
-_do_imports()
+add_restful_resources(app)
+import etsin_finder.views
 
 if __name__ == "__main__":
     app.run()

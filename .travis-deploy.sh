@@ -20,7 +20,7 @@ elif [[ "$TRAVIS_BRANCH" == "stable" && "$TRAVIS_PULL_REQUEST" == "false" ]]; th
     ansible-playbook -vv -i inventories/stable/hosts deploy_webservers.yml --extra-vars "ssh_user=etsin-deploy-user"
 fi
 
-# Make sure the last command to run before this part is the ansible-playbook command
+# Make sure the last command to run before this part is the ansible-playbook command, whose return value is examined here
 if [ $? -eq 0 ]
 then
     exit 0
