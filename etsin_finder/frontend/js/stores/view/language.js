@@ -30,6 +30,7 @@ class Locale {
     const current = counterpart.getLocale()
     this.setLang(current === 'fi' ? 'en' : 'fi')
 
+    // TODO: this should probably not be here
     // other things to do when language changes
     // removes all filters and queries new results after filters are removed
     // changes url only on /datasets/ page
