@@ -148,6 +148,15 @@ const english = {
       changedLang: 'Changed language to: %(lang)s',
       inactiveLogout: 'You have been logged out due to inactivity',
     },
+    pageTitles: {
+      data: 'Data',
+      idnAndEvents: 'Identifiers and Events',
+      maps: 'Maps',
+      dataset: 'Dataset',
+      datasets: 'Datasets',
+      home: 'Home',
+      error: 'Error'
+    },
   },
   home: {
     title: 'Search datasets',
@@ -176,14 +185,6 @@ const english = {
     home: 'Home',
     organizations: 'Organizations',
     addDataset: 'Add dataset',
-    announcer: {
-      dataTab: 'Navigated to Data tab',
-      datasetPage: 'Navigated to Dataset page',
-      idnAndEventsTab: 'Navigated to "Identifiers and Events" tab',
-      datasetsPage: 'Navigated to Datasets page',
-      homePage: 'Navigated to Home page',
-      custom: 'Navigated to: %(to)s',
-    },
   },
   results: {
     resultsFor: 'Results for query: ',

@@ -17,7 +17,6 @@ import { Provider } from 'mobx-react'
 import createBrowserHistory from 'history/createBrowserHistory'
 import { syncHistoryWithStore } from 'mobx-react-router'
 
-import SkipToContent from './components/general/skipToContent'
 import Layout from './layout'
 import etsinTheme from './styles/theme'
 import './styles/globalStyles'
@@ -41,12 +40,7 @@ const history = syncHistoryWithStore(browserHistory, Stores.Env.history)
 export default class App extends Component {
   constructor() {
     super()
-    this.focusContent = this.focusContent.bind(this)
     Stores.Auth.checkLogin()
-  }
-
-  focusContent() {
-    this.content.focus()
   }
 
   render() {
@@ -56,12 +50,7 @@ export default class App extends Component {
           <Router history={history}>
             <ThemeProvider theme={etsinTheme}>
               <React.Fragment>
-                <SkipToContent callback={this.focusContent} />
-                <Layout
-                  contentRef={content => {
-                    this.content = content
-                  }}
-                />
+                <Layout />
               </React.Fragment>
             </ThemeProvider>
           </Router>
