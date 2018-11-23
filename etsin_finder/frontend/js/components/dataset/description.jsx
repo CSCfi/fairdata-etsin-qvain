@@ -13,7 +13,6 @@
 import React, { Component } from 'react'
 import { inject, observer } from 'mobx-react'
 import styled from 'styled-components'
-import translate from 'counterpart'
 
 import AccessRights from './accessRights'
 import Accessiblity from '../../stores/view/accessibility'
@@ -61,8 +60,8 @@ class Description extends Component {
   }
 
   componentDidMount() {
+    Accessiblity.handleNavigation('dataset', false)
     Tracking.newPageView(`Dataset: ${this.props.match.params.identifier} | Description`, this.props.location.pathname)
-    Accessiblity.setNavText(translate('nav.announcer.datasetPage'))
   }
 
   checkEmails(obj) {

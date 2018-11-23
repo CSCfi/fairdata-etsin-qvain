@@ -10,6 +10,7 @@ import { TypeLocation } from '../../../utils/propTypes'
 import MyMap from './map'
 import checkDataLang from '../../../utils/checkDataLang'
 import Tracking from '../../../utils/tracking'
+import Accessibility from '../../../stores/view/accessibility'
 
 class Maps extends Component {
   static propTypes = {
@@ -26,6 +27,7 @@ class Maps extends Component {
 
   componentDidMount() {
     Tracking.newPageView(`Dataset: ${this.props.match.params.identifier} | Maps`, this.props.location.pathname)
+    Accessibility.handleNavigation('maps', false)
   }
 
   render() {

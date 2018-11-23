@@ -13,10 +13,6 @@ describe('Accessibility Store', () => {
       Accessibility.setNavText('This is new nav text')
       expect(Accessibility.navText).toEqual('This is new nav text')
     })
-    it('should clear nav text', () => {
-      Accessibility.clearNavText()
-      expect(Accessibility.navText).toEqual('')
-    })
   })
   describe('Tabbing functions', () => {
     it('should add tabbing to store', () => {
