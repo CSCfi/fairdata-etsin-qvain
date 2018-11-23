@@ -9,22 +9,26 @@
 
 import requests
 
-from etsin_finder.finder import app, cr_cache
+from etsin_finder.finder import app
 from etsin_finder.app_config import get_metax_api_config
-from etsin_finder.utils import json_or_empty
+from etsin_finder.utils import json_or_empty, FlaskService
 
 log = app.logger
 
 
-class MetaxAPIService:
+class MetaxAPIService(FlaskService):
     """Metax API Service"""
 
-    def __init__(self, metax_api_config):
+    def __init__(self, app):
         """
         Init Metax API Service.
 
         :param metax_api_config:
         """
+        super().__init__(app)
+
+        metax_api_config = get_metax_api_config(app.testing)
+
         if metax_api_config:
             METAX_GET_CATALOG_RECORD_URL = 'https://{0}/rest/datasets'.format(metax_api_config['HOST']) + \
                                            '/{0}?expand_relation=data_catalog'
@@ -37,7 +41,7 @@ class MetaxAPIService:
             self.user = metax_api_config['USER']
             self.pw = metax_api_config['PASSWORD']
             self.verify_ssl = metax_api_config.get('VERIFY_SSL', True)
-        else:
+        elif not self.is_testing:
             log.error("Unable to initialize MetaxAPIService due to missing config")
 
     def get_directory_for_catalog_record(self, cr_identifier, dir_identifier, file_fields, directory_fields):
@@ -129,7 +133,7 @@ class MetaxAPIService:
         return metax_api_response.json()
 
 
-_metax_api = MetaxAPIService(get_metax_api_config())
+_metax_api = MetaxAPIService(app)
 
 
 def get_catalog_record(cr_id, check_removed_if_not_exist, refresh_cache=False):
@@ -144,12 +148,12 @@ def get_catalog_record(cr_id, check_removed_if_not_exist, refresh_cache=False):
     :return:
     """
     if refresh_cache:
-        return cr_cache.update_cache(cr_id, _get_cr_from_metax(cr_id, check_removed_if_not_exist))
+        return app.cr_cache.update_cache(cr_id, _get_cr_from_metax(cr_id, check_removed_if_not_exist))
 
-    cr = cr_cache.get_from_cache(cr_id)
+    cr = app.cr_cache.get_from_cache(cr_id)
     if cr is None:
         cr = _get_cr_from_metax(cr_id, check_removed_if_not_exist)
-        return cr_cache.update_cache(cr_id, cr)
+        return app.cr_cache.update_cache(cr_id, cr)
     else:
         return cr
 

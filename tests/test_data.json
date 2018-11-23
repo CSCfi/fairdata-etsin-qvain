@@ -1,0 +1,1171 @@
+{
+  "identifier": "123",
+  "data_catalog": {
+    "id": 1,
+    "identifier": "urn:nbn:fi:att:2955e904-e3dd-4d7e-99f1-3fed446f96d1"
+  },
+  "dataset_version_set": [
+    {
+      "identifier": "cr955e904-e3dd-4d7e-99f1-3fed446f9613",
+      "preferred_identifier": "urn:nbn:fi:att:1955e904-e3dd-4d7e-99f1-3fed446f9613",
+      "removed": false,
+      "date_created": "2017-05-23T13:07:22+03:00"
+    }
+  ],
+  "deprecated": false,
+  "metadata_owner_org": "abc-org-123",
+  "metadata_provider_org": "abc-org-123",
+  "metadata_provider_user": "abc-user-123",
+  "research_dataset": {
+    "files": [
+      {
+        "title": "file title 6",
+        "file_type": {
+          "in_scheme": "http://uri.suomi.fi/codelist/fairdata/file_type",
+          "definition": {
+            "en": "A statement or formal explanation of the meaning of a concept."
+          },
+          "identifier": "http://uri.suomi.fi/codelist/fairdata/file_type/code/video",
+          "pref_label": {
+            "en": "Video",
+            "fi": "Video",
+            "und": "Video"
+          }
+        },
+        "identifier": "pid:urn:6",
+        "description": "file description 6",
+        "use_category": {
+          "in_scheme": "http://uri.suomi.fi/codelist/fairdata/use_category",
+          "identifier": "http://uri.suomi.fi/codelist/fairdata/use_category/code/configuration",
+          "pref_label": {
+            "en": "Configuration files",
+            "fi": "Konfiguraatiotiedosto",
+            "und": "Konfiguraatiotiedosto"
+          }
+        },
+        "details": {
+          "date_created": "2017-05-23T13:07:22+03:00",
+          "replication_path": "/path/to/copy/of/file",
+          "checksum": {
+            "algorithm": "sha2",
+            "checked": "2017-06-23T14:41:59Z",
+            "value": "habeebit"
+          },
+          "service_created": "metax",
+          "file_modified": "2017-06-23T17:41:59+03:00",
+          "byte_size": 600,
+          "project_identifier": "project_x",
+          "id": 6,
+          "open_access": false,
+          "parent_directory": {
+            "identifier": "pid:urn:dir:4",
+            "id": 4
+          },
+          "file_path": "/project_x_FROZEN/Experiment_X/Phase_1/file_name_6",
+          "date_modified": "2017-06-27T13:07:22+03:00",
+          "identifier": "pid:urn:6",
+          "file_uploaded": "2017-05-21T17:41:59+03:00",
+          "file_frozen": "2017-05-21T17:41:59+03:00",
+          "file_format": "html/text",
+          "file_characteristics": {
+            "title": "A title 120",
+            "encoding": "UTF-8",
+            "description": "A nice description 120",
+            "file_created": "2014-01-17T08:19:31Z",
+            "application_name": "Application Name",
+            "metadata_modified": "2014-01-17T08:19:31Z"
+          },
+          "file_name": "file_name_6",
+          "file_storage": {
+            "identifier": "pid:urn:storageidentifier1",
+            "id": 1
+          }
+        }
+      },
+      {
+        "title": "file title 10",
+        "file_type": {
+          "in_scheme": "http://uri.suomi.fi/codelist/fairdata/file_type",
+          "definition": {
+            "en": "A statement or formal explanation of the meaning of a concept."
+          },
+          "identifier": "http://uri.suomi.fi/codelist/fairdata/file_type/code/software",
+          "pref_label": {
+            "en": "Software",
+            "fi": "Sovellus",
+            "und": "Sovellus"
+          }
+        },
+        "identifier": "pid:urn:10",
+        "description": "file description 10",
+        "use_category": {
+          "in_scheme": "http://uri.suomi.fi/codelist/fairdata/use_category",
+          "identifier": "http://uri.suomi.fi/codelist/fairdata/use_category/code/publication",
+          "pref_label": {
+            "en": "Publication",
+            "fi": "Julkaisu",
+            "und": "Julkaisu"
+          }
+        },
+        "details": {
+          "date_created": "2017-05-23T13:07:22+03:00",
+          "replication_path": "/path/to/copy/of/file",
+          "checksum": {
+            "algorithm": "sha2",
+            "checked": "2017-06-23T14:41:59Z",
+            "value": "habeebit"
+          },
+          "service_created": "metax",
+          "file_modified": "2017-06-23T17:41:59+03:00",
+          "byte_size": 1000,
+          "project_identifier": "project_x",
+          "id": 10,
+          "open_access": false,
+          "parent_directory": {
+            "identifier": "pid:urn:dir:4",
+            "id": 4
+          },
+          "file_path": "/project_x_FROZEN/Experiment_X/Phase_1/file_name_10",
+          "date_modified": "2017-06-27T13:07:22+03:00",
+          "identifier": "pid:urn:10",
+          "file_uploaded": "2017-05-21T17:41:59+03:00",
+          "file_frozen": "2017-05-21T17:41:59+03:00",
+          "file_format": "html/text",
+          "file_characteristics": {
+            "title": "A title 120",
+            "encoding": "UTF-8",
+            "description": "A nice description 120",
+            "file_created": "2014-01-17T08:19:31Z",
+            "application_name": "Application Name",
+            "metadata_modified": "2014-01-17T08:19:31Z"
+          },
+          "file_name": "file_name_10",
+          "file_storage": {
+            "identifier": "pid:urn:storageidentifier1",
+            "id": 1
+          }
+        }
+      }
+    ],
+    "theme": [
+      {
+        "in_scheme": "http://www.yso.fi/onto/koko/",
+        "definition": {
+          "en": "A statement or formal explanation of the meaning of a concept."
+        },
+        "identifier": "http://www.yso.fi/onto/koko/p32202",
+        "pref_label": {
+          "en": "organic production",
+          "fi": "luonnonmukainen tuotanto",
+          "sv": "ekologisk produktion",
+          "und": "luonnonmukainen tuotanto"
+        }
+      },
+      {
+        "in_scheme": "http://www.yso.fi/onto/koko/",
+        "definition": {
+          "en": "A statement or formal explanation of the meaning of a concept."
+        },
+        "identifier": "http://www.yso.fi/onto/koko/p76312",
+        "pref_label": {
+          "fi": "naulamestarit",
+          "und": "naulamestarit"
+        }
+      }
+    ],
+    "title": {
+      "en": "Wonderful Title"
+    },
+    "value": 0.111,
+    "issued": "2014-01-17",
+    "creator": [
+      {
+        "name": "Teppo Testaaja",
+        "@type": "Person",
+        "member_of": {
+          "name": {
+            "en": "Aalto University",
+            "fi": "Aalto yliopisto",
+            "sv": "Aalto universitetet",
+            "und": "Aalto yliopisto"
+          },
+          "@type": "Organization",
+          "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/10076"
+        },
+        "contributor_role": [
+          {
+            "in_scheme": "http://uri.suomi.fi/codelist/fairdata/contributor_role",
+            "identifier": "http://uri.suomi.fi/codelist/fairdata/contributor_role/code/conceptualization",
+            "pref_label": {
+              "en": "Conceptualization",
+              "fi": "Tutkimuksen muotoilu",
+              "sv": "Formulering av forskningen",
+              "und": "Tutkimuksen muotoilu"
+            }
+          }
+        ]
+      }
+    ],
+    "curator": [
+      {
+        "name": {
+          "en": "Mysterious Organization",
+          "fi": "Organisaatio"
+        },
+        "@type": "Organization",
+        "identifier": "id:of:curator:default",
+        "is_part_of": {
+          "name": {
+            "en": "Aalto University",
+            "fi": "Aalto yliopisto",
+            "sv": "Aalto universitetet",
+            "und": "Aalto yliopisto"
+          },
+          "@type": "Organization",
+          "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/10076"
+        },
+        "contributor_type": [
+          {
+            "in_scheme": "http://uri.suomi.fi/codelist/fairdata/contributor_type",
+            "identifier": "http://uri.suomi.fi/codelist/fairdata/contributor_type/code/Distributor",
+            "pref_label": {
+              "en": "Distributor",
+              "fi": "Jakelija",
+              "sv": "Distributör",
+              "und": "Jakelija"
+            }
+          },
+          {
+            "in_scheme": "http://uri.suomi.fi/codelist/fairdata/contributor_type",
+            "identifier": "http://uri.suomi.fi/codelist/fairdata/contributor_type/code/Sponsor",
+            "pref_label": {
+              "en": "Sponsor",
+              "fi": "Sponsori",
+              "sv": "Sponsor",
+              "und": "Sponsori"
+            }
+          }
+        ]
+      }
+    ],
+    "keyword": [
+      "keyword",
+      "keyword2",
+      "keyword3"
+    ],
+    "spatial": [
+      {
+        "alt": "11.111",
+        "as_wkt": [
+          "POLYGON((0 0, 0 20, 40 20, 40 0, 0 0))"
+        ],
+        "place_uri": {
+          "in_scheme": "http://www.yso.fi/onto/yso/places",
+          "identifier": "http://www.yso.fi/onto/yso/p107966",
+          "pref_label": {
+            "en": "Olostunturi",
+            "fi": "Olostunturi",
+            "sv": "Olostunturi",
+            "und": "Olostunturi"
+          }
+        },
+        "full_address": "The complete address written as a string, with or without formatting",
+        "geographic_name": "Geographic name"
+      },
+      {
+        "alt": "60",
+        "as_wkt": [
+          "POINT(23.80834 67.92415)"
+        ],
+        "place_uri": {
+          "in_scheme": "http://www.yso.fi/onto/yso/places",
+          "identifier": "http://www.yso.fi/onto/yso/p107966",
+          "pref_label": {
+            "en": "Olostunturi",
+            "fi": "Olostunturi",
+            "sv": "Olostunturi",
+            "und": "Olostunturi"
+          }
+        },
+        "full_address": "The complete address written as a string, with or without formatting",
+        "geographic_name": "Geographic name 2"
+      }
+    ],
+    "language": [
+      {
+        "title": {
+          "en": "English language",
+          "fi": "Englannin kieli",
+          "sv": "engelska",
+          "und": "Englannin kieli"
+        },
+        "identifier": "http://lexvo.org/id/iso639-3/eng"
+      }
+    ],
+    "modified": "2014-01-17T08:19:58Z",
+    "relation": [
+      {
+        "entity": {
+          "type": {
+            "in_scheme": "http://uri.suomi.fi/codelist/fairdata/resource_type",
+            "identifier": "http://uri.suomi.fi/codelist/fairdata/resource_type/code/physical_object",
+            "pref_label": {
+              "en": "Physical object",
+              "fi": "Fyysinen objekti",
+              "und": "Fyysinen objekti"
+            }
+          },
+          "title": {
+            "en": "External dataset 1",
+            "fi": "Ulkopuolinen aineisto 1"
+          },
+          "identifier": "external:dataset:identifier",
+          "description": {
+            "fi": "Kuvailutiedot"
+          }
+        },
+        "relation_type": {
+          "identifier": "http://www.w3.org/ns/prov#wasDerivedFrom",
+          "pref_label": {
+            "en": "Was derived from",
+            "fi": "Johdettu aineistosta",
+            "und": "Johdettu aineistosta"
+          }
+        }
+      },
+      {
+        "entity": {
+          "type": {
+            "in_scheme": "http://uri.suomi.fi/codelist/fairdata/resource_type",
+            "identifier": "http://uri.suomi.fi/codelist/fairdata/resource_type/code/collection",
+            "pref_label": {
+              "en": "Collection",
+              "fi": "Kokoelma",
+              "und": "Kokoelma"
+            }
+          },
+          "title": {
+            "en": "External thing 2",
+            "fi": "Ulkopuolinen asia 2"
+          },
+          "identifier": "external:thing:identifier",
+          "description": {
+            "fi": "Kuvailutiedot"
+          }
+        },
+        "relation_type": {
+          "identifier": "http://purl.org/spar/cito/cites",
+          "pref_label": {
+            "en": "Cites",
+            "fi": "Viittaa",
+            "und": "Viittaa"
+          }
+        }
+      },
+      {
+        "entity": {
+          "type": {
+            "in_scheme": "http://uri.suomi.fi/codelist/fairdata/resource_type",
+            "identifier": "http://uri.suomi.fi/codelist/fairdata/resource_type/code/service",
+            "pref_label": {
+              "en": "Service",
+              "fi": "Palvelu",
+              "und": "Palvelu"
+            }
+          },
+          "title": {
+            "en": "External dataset 2",
+            "fi": "Ulkopuolinen aineisto 2"
+          },
+          "identifier": "external:dataset_2:identifier",
+          "description": {
+            "fi": "Kuvailutiedot"
+          }
+        },
+        "relation_type": {
+          "identifier": "http://purl.org/dc/terms/isPartOf",
+          "pref_label": {
+            "en": "Is part of",
+            "fi": "Kuuluu aineistoon",
+            "und": "Kuuluu aineistoon"
+          }
+        }
+      },
+      {
+        "entity": {
+          "type": {
+            "in_scheme": "http://uri.suomi.fi/codelist/fairdata/resource_type",
+            "identifier": "http://uri.suomi.fi/codelist/fairdata/resource_type/code/ui",
+            "pref_label": {
+              "en": "User interface",
+              "fi": "Käyttöliittymä",
+              "und": "Käyttöliittymä"
+            }
+          },
+          "title": {
+            "en": "External thing 2",
+            "fi": "Ulkopuolinen asia 2"
+          },
+          "identifier": "external:thing_2:identifier",
+          "description": {
+            "fi": "Kuvailutiedot"
+          }
+        },
+        "relation_type": {
+          "identifier": "http://www.w3.org/ns/adms#previous",
+          "pref_label": {
+            "en": "Has previous version",
+            "fi": "Edellinen versio",
+            "und": "Edellinen versio"
+          }
+        }
+      }
+    ],
+    "temporal": [
+      {
+        "end_date": "2014-12-31T08:19:58Z",
+        "start_date": "2014-01-01T08:19:58Z"
+      },
+      {
+        "temporal_coverage": "2011"
+      }
+    ],
+    "publisher": {
+      "name": {
+        "fi": "School services, ARTS",
+        "und": "School services, ARTS"
+      },
+      "@type": "Organization",
+      "homepage": {
+        "title": {
+          "en": "Publisher website",
+          "fi": "Julkaisijan kotisivu"
+        },
+        "identifier": "http://www.publisher.fi/"
+      },
+      "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/10076-A800",
+      "is_part_of": {
+        "name": {
+          "en": "Aalto University",
+          "fi": "Aalto yliopisto",
+          "sv": "Aalto universitetet",
+          "und": "Aalto yliopisto"
+        },
+        "@type": "Organization",
+        "homepage": {
+          "title": {
+            "en": "Publisher parent website",
+            "fi": "Julkaisijan yläorganisaation kotisivu"
+          },
+          "identifier": "http://www.publisher_parent.fi/"
+        },
+        "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/10076"
+      },
+      "contributor_type": [
+        {
+          "in_scheme": "http://uri.suomi.fi/codelist/fairdata/contributor_type",
+          "identifier": "http://uri.suomi.fi/codelist/fairdata/contributor_type/code/Distributor",
+          "pref_label": {
+            "en": "Distributor",
+            "fi": "Jakelija",
+            "sv": "Distributör",
+            "und": "Jakelija"
+          }
+        }
+      ]
+    },
+    "provenance": [
+      {
+        "title": {
+          "en": "Some activity"
+        },
+        "spatial": {
+          "alt": "11.111",
+          "as_wkt": [
+            "POINT(23.80834 67.92415)"
+          ],
+          "place_uri": {
+            "in_scheme": "http://www.yso.fi/onto/yso/places",
+            "identifier": "http://www.yso.fi/onto/yso/p107966",
+            "pref_label": {
+              "en": "Olostunturi",
+              "fi": "Olostunturi",
+              "sv": "Olostunturi",
+              "und": "Olostunturi"
+            }
+          },
+          "full_address": "The complete address written as a string, with or without formatting",
+          "geographic_name": "Geographic name"
+        },
+        "temporal": {
+          "end_date": "2014-12-31T08:19:58Z",
+          "start_date": "2014-01-01T08:19:58Z"
+        },
+        "variable": [
+          {
+            "concept": {
+              "in_scheme": "http://uri.of.filetype.concept/scheme",
+              "definition": {
+                "en": "A statement or formal explanation of the meaning of a concept."
+              },
+              "identifier": "variableconceptidentifier",
+              "pref_label": {
+                "en": "pref label"
+              }
+            },
+            "universe": {
+              "in_scheme": "http://uri.of.filetype.concept/scheme",
+              "definition": {
+                "en": "A statement or formal explanation of the meaning of a concept."
+              },
+              "identifier": "universeconceptidentifier",
+              "pref_label": {
+                "en": "pref label"
+              }
+            },
+            "pref_label": {
+              "en": "Preferred label"
+            },
+            "description": {
+              "en": "Description"
+            },
+            "representation": "http://uri.of.filetype.concept/scheme"
+          }
+        ],
+        "description": {
+          "en": "Description of provenance activity"
+        },
+        "used_entity": [
+          {
+            "type": {
+              "in_scheme": "http://uri.of.filetype.concept/scheme",
+              "definition": {
+                "en": "A statement or formal explanation of the meaning of a concept."
+              },
+              "identifier": "thisisnotenoughconcepts",
+              "pref_label": {
+                "en": "pref label for this type"
+              }
+            },
+            "title": {
+              "en": "Title"
+            },
+            "identifier": "someidhereagain",
+            "description": {
+              "en": "Description"
+            }
+          }
+        ],
+        "event_outcome": {
+          "in_scheme": "http://uri.suomi.fi/codelist/fairdata/event_outcome",
+          "identifier": "http://uri.suomi.fi/codelist/fairdata/event_outcome/code/success",
+          "pref_label": {
+            "en": "Success",
+            "fi": "Onnistunut",
+            "sv": "Framgångsrik",
+            "und": "Onnistunut"
+          }
+        },
+        "lifecycle_event": {
+          "in_scheme": "http://uri.suomi.fi/codelist/fairdata/lifecycle_event",
+          "definition": {
+            "en": "A statement or formal explanation of the meaning of a concept."
+          },
+          "identifier": "http://uri.suomi.fi/codelist/fairdata/lifecycle_event/code/collected",
+          "pref_label": {
+            "en": "Collected",
+            "fi": "Kerätty",
+            "und": "Kerätty"
+          }
+        },
+        "outcome_description": {
+          "en": "A grand success",
+          "fi": "Onnistui hyvin"
+        },
+        "was_associated_with": [
+          {
+            "name": {
+              "en": "University of Helsinki",
+              "fi": "Helsingin yliopisto",
+              "sv": "Helsingfors universitet",
+              "und": "Helsingin yliopisto"
+            },
+            "@type": "Organization",
+            "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/01901",
+            "contributor_type": [
+              {
+                "in_scheme": "http://uri.suomi.fi/codelist/fairdata/contributor_type",
+                "identifier": "http://uri.suomi.fi/codelist/fairdata/contributor_type/code/DataCurator",
+                "pref_label": {
+                  "en": "Data Curator",
+                  "fi": "Aineiston käsittelijä",
+                  "sv": "Databehandling",
+                  "und": "Aineiston käsittelijä"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": {
+          "en": "Some other activity"
+        },
+        "spatial": {
+          "alt": "11.111",
+          "as_wkt": [
+            "POINT(26 60.5)"
+          ],
+          "place_uri": {
+            "in_scheme": "http://www.yso.fi/onto/yso/places",
+            "identifier": "http://www.yso.fi/onto/yso/p105917",
+            "pref_label": {
+              "en": "Southern Finland Province",
+              "fi": "Etelä-Suomi",
+              "sv": "Södra Finland",
+              "und": "Etelä-Suomi"
+            }
+          },
+          "full_address": "The complete address written as a string, with or without formatting",
+          "geographic_name": "Geographic name"
+        },
+        "temporal": {
+          "end_date": "2014-12-31T08:19:58Z",
+          "start_date": "2014-01-01T08:19:58Z"
+        },
+        "description": {
+          "en": "Description of other provenance activity"
+        },
+        "event_outcome": {
+          "in_scheme": "http://uri.suomi.fi/codelist/fairdata/event_outcome",
+          "identifier": "http://uri.suomi.fi/codelist/fairdata/event_outcome/code/failure",
+          "pref_label": {
+            "en": "Failure",
+            "fi": "Epäonnistunut",
+            "sv": "Misslyckad",
+            "und": "Epäonnistunut"
+          }
+        },
+        "preservation_event": {
+          "in_scheme": "http://uri.suomi.fi/codelist/fairdata/preservation_event",
+          "identifier": "http://uri.suomi.fi/codelist/fairdata/preservation_event/code/upd",
+          "pref_label": {
+            "en": "Object update",
+            "fi": "Objektin päivitys",
+            "und": "Objektin päivitys"
+          }
+        },
+        "outcome_description": {
+          "en": "A grand failure",
+          "fi": "Epäonnistui"
+        }
+      }
+    ],
+    "contributor": [
+      {
+        "name": "Kalle Kontribuuttaja",
+        "@type": "Person",
+        "member_of": {
+          "name": {
+            "en": "University of Helsinki",
+            "fi": "Helsingin yliopisto",
+            "sv": "Helsingfors universitet",
+            "und": "Helsingin yliopisto"
+          },
+          "@type": "Organization",
+          "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/01901"
+        },
+        "identifier": "contributorid",
+        "contributor_role": [
+          {
+            "in_scheme": "http://uri.suomi.fi/codelist/fairdata/contributor_role",
+            "identifier": "http://uri.suomi.fi/codelist/fairdata/contributor_role/code/funding_acquisition",
+            "pref_label": {
+              "en": "Funding acquisition",
+              "fi": "Rahoituksen hankinta",
+              "sv": "Anskaffande av finansiering",
+              "und": "Rahoituksen hankinta"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Franzibald Kontribuuttaja",
+        "@type": "Person",
+        "member_of": {
+          "name": {
+            "en": "Mysterious Organization 2",
+            "fi": "Organisaatio"
+          },
+          "@type": "Organization",
+          "identifier": "org_identifier"
+        },
+        "identifier": "contributorid2",
+        "contributor_type": [
+          {
+            "in_scheme": "http://uri.suomi.fi/codelist/fairdata/contributor_type",
+            "identifier": "http://uri.suomi.fi/codelist/fairdata/contributor_type/code/ProjectLeader",
+            "pref_label": {
+              "en": "Project Leader",
+              "fi": "Projektin johtaja",
+              "sv": "Projektledare",
+              "und": "Projektin johtaja"
+            }
+          }
+        ]
+      }
+    ],
+    "description": {
+      "en": "A descriptive description describing the contents of this dataset. Must be descriptive."
+    },
+    "directories": [
+      {
+        "title": "Phase 1 of science data C",
+        "identifier": "pid:urn:dir:18",
+        "description": "Description of the directory",
+        "use_category": {
+          "in_scheme": "http://uri.suomi.fi/codelist/fairdata/use_category",
+          "identifier": "http://uri.suomi.fi/codelist/fairdata/use_category/code/outcome",
+          "pref_label": {
+            "en": "Outcome material",
+            "fi": "Tulosaineisto",
+            "und": "Tulosaineisto"
+          }
+        },
+        "details": {
+          "date_modified": "2017-06-27T13:07:22+03:00",
+          "identifier": "pid:urn:dir:18",
+          "id": 18,
+          "date_created": "2017-05-23T13:07:22+03:00",
+          "file_count": 35,
+          "directory_name": "phase_1",
+          "service_created": "metax",
+          "byte_size": 182000,
+          "project_identifier": "research_project_112",
+          "directory_modified": "2017-06-23T15:41:59+03:00",
+          "parent_directory": {
+            "identifier": "pid:urn:dir:17",
+            "id": 17
+          },
+          "directory_path": "/prj_112_root/science_data_C/phase_1"
+        }
+      },
+      {
+        "title": "Phase 2 of science data C",
+        "identifier": "pid:urn:dir:22",
+        "description": "Description of the directory",
+        "use_category": {
+          "in_scheme": "http://uri.suomi.fi/codelist/fairdata/use_category",
+          "identifier": "http://uri.suomi.fi/codelist/fairdata/use_category/code/outcome",
+          "pref_label": {
+            "en": "Outcome material",
+            "fi": "Tulosaineisto",
+            "und": "Tulosaineisto"
+          }
+        },
+        "details": {
+          "date_modified": "2017-06-27T13:07:22+03:00",
+          "identifier": "pid:urn:dir:22",
+          "id": 22,
+          "date_created": "2017-05-23T13:07:22+03:00",
+          "file_count": 46,
+          "directory_name": "phase_2",
+          "service_created": "metax",
+          "byte_size": 425500,
+          "project_identifier": "research_project_112",
+          "directory_modified": "2017-06-23T15:41:59+03:00",
+          "parent_directory": {
+            "identifier": "pid:urn:dir:17",
+            "id": 17
+          },
+          "directory_path": "/prj_112_root/science_data_C/phase_2"
+        }
+      },
+      {
+        "title": "Phase 1 01/2018 of Science data A",
+        "identifier": "pid:urn:dir:12",
+        "description": "Description of the directory",
+        "use_category": {
+          "in_scheme": "http://uri.suomi.fi/codelist/fairdata/use_category",
+          "identifier": "http://uri.suomi.fi/codelist/fairdata/use_category/code/outcome",
+          "pref_label": {
+            "en": "Outcome material",
+            "fi": "Tulosaineisto",
+            "und": "Tulosaineisto"
+          }
+        },
+        "details": {
+          "date_modified": "2017-06-27T13:07:22+03:00",
+          "identifier": "pid:urn:dir:12",
+          "id": 12,
+          "date_created": "2017-05-23T13:07:22+03:00",
+          "file_count": 3,
+          "directory_name": "01",
+          "service_created": "metax",
+          "byte_size": 6900,
+          "project_identifier": "research_project_112",
+          "directory_modified": "2017-06-23T15:41:59+03:00",
+          "parent_directory": {
+            "identifier": "pid:urn:dir:11",
+            "id": 11
+          },
+          "directory_path": "/prj_112_root/science_data_A/phase_1/2018/01"
+        }
+      },
+      {
+        "title": "Science data B",
+        "identifier": "pid:urn:dir:13",
+        "description": "Description of the directory",
+        "use_category": {
+          "in_scheme": "http://uri.suomi.fi/codelist/fairdata/use_category",
+          "identifier": "http://uri.suomi.fi/codelist/fairdata/use_category/code/source",
+          "pref_label": {
+            "en": "Source material",
+            "fi": "Lähdeaineisto",
+            "und": "Lähdeaineisto"
+          }
+        },
+        "details": {
+          "date_modified": "2017-06-27T13:07:22+03:00",
+          "identifier": "pid:urn:dir:13",
+          "id": 13,
+          "date_created": "2017-05-23T13:07:22+03:00",
+          "file_count": 1,
+          "directory_name": "science_data_B",
+          "service_created": "metax",
+          "byte_size": 2500,
+          "project_identifier": "research_project_112",
+          "directory_modified": "2017-06-23T15:41:59+03:00",
+          "parent_directory": {
+            "identifier": "pid:urn:dir:8",
+            "id": 8
+          },
+          "directory_path": "/prj_112_root/science_data_B"
+        }
+      },
+      {
+        "title": "Other stuff",
+        "identifier": "pid:urn:dir:14",
+        "description": "Description of the directory",
+        "use_category": {
+          "in_scheme": "http://uri.suomi.fi/codelist/fairdata/use_category",
+          "identifier": "http://uri.suomi.fi/codelist/fairdata/use_category/code/method",
+          "pref_label": {
+            "en": "Method",
+            "fi": "Metodi",
+            "und": "Metodi"
+          }
+        },
+        "details": {
+          "date_modified": "2017-06-27T13:07:22+03:00",
+          "identifier": "pid:urn:dir:14",
+          "id": 14,
+          "date_created": "2017-05-23T13:07:22+03:00",
+          "file_count": 1,
+          "directory_name": "other",
+          "service_created": "metax",
+          "byte_size": 2600,
+          "project_identifier": "research_project_112",
+          "directory_modified": "2017-06-23T15:41:59+03:00",
+          "parent_directory": {
+            "identifier": "pid:urn:dir:8",
+            "id": 8
+          },
+          "directory_path": "/prj_112_root/other"
+        }
+      }
+    ],
+    "is_output_of": [
+      {
+        "name": {
+          "en": "Name of project"
+        },
+        "identifier": "projectidentifier",
+        "funder_type": {
+          "in_scheme": "http://uri.suomi.fi/codelist/fairdata/funder_type",
+          "identifier": "http://uri.suomi.fi/codelist/fairdata/funder_type/code/tekes",
+          "pref_label": {
+            "en": "Tekes",
+            "fi": "Tekes",
+            "und": "Tekes"
+          }
+        },
+        "has_funding_agency": [
+          {
+            "name": {
+              "en": "Funding Organization",
+              "fi": "Organisaatio"
+            },
+            "@type": "Organization",
+            "identifier": "fundingagencyidentifier",
+            "contributor_type": [
+              {
+                "in_scheme": "http://uri.suomi.fi/codelist/fairdata/contributor_type",
+                "identifier": "http://uri.suomi.fi/codelist/fairdata/contributor_type/code/Editor",
+                "pref_label": {
+                  "en": "Editor",
+                  "fi": "Julkaisutoimittaja",
+                  "sv": "Redaktör",
+                  "und": "Julkaisutoimittaja"
+                }
+              }
+            ]
+          }
+        ],
+        "source_organization": [
+          {
+            "name": {
+              "en": "University of Helsinki",
+              "fi": "Helsingin yliopisto",
+              "sv": "Helsingfors universitet",
+              "und": "Helsingin yliopisto"
+            },
+            "@type": "Organization",
+            "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/01901",
+            "contributor_type": [
+              {
+                "in_scheme": "http://uri.suomi.fi/codelist/fairdata/contributor_type",
+                "identifier": "http://uri.suomi.fi/codelist/fairdata/contributor_type/code/HostingInstitution",
+                "pref_label": {
+                  "en": "Hosting Institution",
+                  "fi": "Säilyttävä organisaatio",
+                  "sv": "Bevarande organisation",
+                  "und": "Säilyttävä organisaatio"
+                }
+              }
+            ]
+          }
+        ],
+        "has_funder_identifier": "funderprojectidentifier"
+      }
+    ],
+    "version_info": "0.1.2",
+    "access_rights": {
+      "license": [
+        {
+          "title": {
+            "en": "Apache Software License 2.0",
+            "und": "Apache Software License 2.0"
+          },
+          "license": "https://url.of.license.which.applies.here.org",
+          "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/Apache-2.0",
+          "description": {
+            "en": "Free account of the rights"
+          }
+        },
+        {
+          "title": {
+            "en": "Creative Commons Attribution-NonCommercial 2.0 Generic (CC BY-NC 2.0",
+            "fi": "Creative Commons Nimeä-EiKaupallinen 2.0 Yleinen (CC BY-NC 2.0)",
+            "und": "Creative Commons Nimeä-EiKaupallinen 2.0 Yleinen (CC BY-NC 2.0)"
+          },
+          "license": "https://creativecommons.org/licenses/by-nc/2.0/",
+          "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-NC-2.0",
+          "description": {
+            "en": "Free account of the rights"
+          }
+        },
+        {
+          "title": {
+            "en": "Other",
+            "fi": "Muu",
+            "und": "Muu"
+          },
+          "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/other"
+        }
+      ],
+      "available": "2014-01-15",
+      "access_url": {
+        "title": {
+          "en": "A name given to the document"
+        },
+        "identifier": "https://access.url.com/landing",
+        "description": {
+          "en": "Description of the link. For example to be used as hover text."
+        }
+      },
+      "access_type": {
+        "in_scheme": "http://uri.suomi.fi/codelist/fairdata/access_type",
+        "definition": {
+          "en": "A statement or formal explanation of the meaning of a concept."
+        },
+        "identifier": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
+        "pref_label": {
+          "en": "Open",
+          "fi": "Avoin",
+          "und": "Avoin"
+        }
+      },
+      "description": {
+        "en": "Free account of the rights"
+      },
+      "restriction_grounds": [
+        {
+          "in_scheme": "http://uri.suomi.fi/codelist/fairdata/restriction_grounds",
+          "identifier": "http://uri.suomi.fi/codelist/fairdata/restriction_grounds/code/other",
+          "pref_label": {
+            "en": "Restricted access due to other reasons",
+            "fi": "Saatavuutta rajoitettu muulla perusteella",
+            "sv": "Begränsad åtkomst av övriga skäl",
+            "und": "Saatavuutta rajoitettu muulla perusteella"
+          }
+        }
+      ]
+    },
+    "rights_holder": [
+      {
+        "name": {
+          "en": "University of Helsinki",
+          "fi": "Helsingin yliopisto",
+          "sv": "Helsingfors universitet",
+          "und": "Helsingin yliopisto"
+        },
+        "@type": "Organization",
+        "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/01901",
+        "is_part_of": {
+          "name": {
+            "en": "Aalto University",
+            "fi": "Aalto yliopisto",
+            "sv": "Aalto universitetet",
+            "und": "Aalto yliopisto"
+          },
+          "@type": "Organization",
+          "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/10076"
+        },
+        "contributor_type": [
+          {
+            "in_scheme": "http://uri.suomi.fi/codelist/fairdata/contributor_type",
+            "identifier": "http://uri.suomi.fi/codelist/fairdata/contributor_type/code/DataManager",
+            "pref_label": {
+              "en": "Data Manager",
+              "fi": "Aineiston hallinnoija",
+              "sv": "Dataadministration",
+              "und": "Aineiston hallinnoija"
+            }
+          }
+        ]
+      }
+    ],
+    "version_notes": [
+      "This version contains changes to x and y."
+    ],
+    "infrastructure": [
+      {
+        "in_scheme": "https://avaa.tdata.fi/api/jsonws/tupa-portlet.Infrastructures/get-all-infrastructures",
+        "identifier": "http://urn.fi/urn:nbn:fi:research-infras-2016072530",
+        "pref_label": {
+          "en": "Accelerator laboratory of the university of Jyväskylä",
+          "fi": "Jyväskylän yliopiston fysiikan laitoksen Kiihdytinlaboratorio",
+          "und": "Jyväskylän yliopiston fysiikan laitoksen Kiihdytinlaboratorio"
+        }
+      }
+    ],
+    "field_of_science": [
+      {
+        "in_scheme": "http://www.yso.fi/onto/okm-tieteenala/conceptscheme",
+        "definition": {
+          "en": "A statement or formal explanation of the meaning of a concept."
+        },
+        "identifier": "http://www.yso.fi/onto/okm-tieteenala/ta414",
+        "pref_label": {
+          "en": "Agricultural biotechnology",
+          "fi": "Maatalouden bioteknologia",
+          "sv": "Jordbruksbioteknologi",
+          "und": "Maatalouden bioteknologia"
+        }
+      }
+    ],
+    "other_identifier": [
+      {
+        "type": {
+          "in_scheme": "http://uri.suomi.fi/codelist/fairdata/identifier_type",
+          "definition": {
+            "en": "A statement or formal explanation of the meaning of a concept."
+          },
+          "identifier": "http://uri.suomi.fi/codelist/fairdata/identifier_type/code/doi",
+          "pref_label": {
+            "en": "Digital Object Identifier (DOI)",
+            "und": "Digital Object Identifier (DOI)"
+          }
+        },
+        "notation": "doi:10.12345",
+        "provider": {
+          "name": {
+            "en": "University of Helsinki",
+            "fi": "Helsingin yliopisto",
+            "sv": "Helsingfors universitet",
+            "und": "Helsingin yliopisto"
+          },
+          "@type": "Organization",
+          "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/01901",
+          "contributor_type": [
+            {
+              "in_scheme": "http://uri.suomi.fi/codelist/fairdata/contributor_type",
+              "identifier": "http://uri.suomi.fi/codelist/fairdata/contributor_type/code/ContactPerson",
+              "pref_label": {
+                "en": "Point of contact",
+                "fi": "Yhteystiedot",
+                "sv": "Kontaktuppgifter",
+                "und": "Yhteystiedot"
+              }
+            }
+          ]
+        },
+        "local_identifier_type": "Local identifier type defines use of the identifier in given context"
+      },
+      {
+        "type": {
+          "in_scheme": "http://uri.suomi.fi/codelist/fairdata/identifier_type",
+          "definition": {
+            "en": "A statement or formal explanation of the meaning of a concept."
+          },
+          "identifier": "http://uri.suomi.fi/codelist/fairdata/identifier_type/code/urn",
+          "pref_label": {
+            "en": "Uniform Resource Name (URN)",
+            "und": "Uniform Resource Name (URN)"
+          }
+        },
+        "notation": "urn:nbn:fi-12345",
+        "provider": {
+          "name": {
+            "en": "University of Helsinki",
+            "fi": "Helsingin yliopisto",
+            "sv": "Helsingfors universitet",
+            "und": "Helsingin yliopisto"
+          },
+          "@type": "Organization",
+          "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/01901",
+          "contributor_type": [
+            {
+              "in_scheme": "http://uri.suomi.fi/codelist/fairdata/contributor_type",
+              "identifier": "http://uri.suomi.fi/codelist/fairdata/contributor_type/code/DataCollector",
+              "pref_label": {
+                "en": "Data Collector",
+                "fi": "Aineiston kerääjä",
+                "sv": "Datainsamling",
+                "und": "Aineiston kerääjä"
+              }
+            }
+          ]
+        },
+        "local_identifier_type": "Local identifier type defines use of the identifier in given context"
+      }
+    ],
+    "total_ida_byte_size": 621100,
+    "preferred_identifier": "urn:nbn:fi:att:1955e904-e3dd-4d7e-99f1-3fed446f9613",
+    "bibliographic_citation": "whot",
+    "metadata_version_identifier": "1955e904-e3dd-4d7e-99f1-3fed446f9613"
+  },
+  "preservation_state": 0,
+  "editor": {
+    "owner_id": "05593961536b76fa825281ccaedd4d4f",
+    "record_id": "955e904-e3dd-4d7e-99f1-3fed446f9013",
+    "creator_id": "05593961536b76fa825281ccaedd4d4f",
+    "identifier": "qvain"
+  },
+  "removed": false,
+  "date_modified": "2018-11-22T07:54:57+02:00",
+  "date_created": "2017-05-23T13:07:22+03:00",
+  "service_modified": "metax",
+  "service_created": "metax"
+}

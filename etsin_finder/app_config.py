@@ -17,7 +17,7 @@ def _get_app_config_from_file():
         return yaml.load(app_config_file)
 
 
-def get_app_config():
+def get_app_config(is_testing):
     """
     Get app config.
 
@@ -25,11 +25,37 @@ def get_app_config():
     """
     if executing_travis():
         return _get_app_config_for_travis()
+    if is_testing:
+        return _get_test_app_config()
     return _get_app_config_from_file()
+
+
+def _get_test_app_config():
+    return {
+        'TESTING': True,
+        'APP_LOG_LEVEL': 'DEBUG',
+        'APP_LOG_PATH': '/var/log/etsin_finder/etsin_finder.log',
+        'SEARCH_APP_LOG_LEVEL': 'DEBUG',
+        'SEARCH_APP_LOG_PATH': '/var/log/etsin_finder_search/etsin_finder_search.log',
+        'DEBUG': True,
+        'SECRET_KEY': 'cb1c9f28f16ddd1e41fb47e12d4a73f9ed76d6df93c54f31',
+        'SESSION_COOKIE_SAMESITE': 'Lax',
+        'SESSION_COOKIE_SECURE': True,
+        'SESSION_COOKIE_HTTPONLY': True,
+        'PERMANENT_SESSION_LIFETIME': 1800,
+        'SESSION_REFRESH_EACH_REQUEST': True,
+        'MAIL_SUPPRESS_SEND': True,
+        'MAIL_SERVER': 'localhost',
+        'MAIL_PORT': 25,
+        'MAIL_USERNAME': '',
+        'MAIL_PASSWORD': '',
+        'MAIL_DEFAULT_SENDER': 'test@fairdata.fi'
+    }
 
 
 def _get_app_config_for_travis():
     return {
+        'TESTING': True,
         'APP_LOG_LEVEL': 'DEBUG',
         'APP_LOG_PATH': '/var/log/etsin_finder/etsin_finder.log',
         'DEBUG': True,
@@ -37,16 +63,16 @@ def _get_app_config_for_travis():
     }
 
 
-def get_memcached_config():
+def get_memcached_config(is_testing):
     """
     Get memcached config.
 
     :return:
     """
-    if executing_travis():
+    if executing_travis() or is_testing:
         return None
 
-    memcached_conf = get_app_config().get('MEMCACHED', False)
+    memcached_conf = get_app_config(is_testing).get('MEMCACHED', False)
     if not memcached_conf or not isinstance(memcached_conf, dict):
         return None
 
@@ -56,16 +82,16 @@ def get_memcached_config():
     return memcached_conf
 
 
-def get_download_api_config():
+def get_download_api_config(is_testing):
     """
     Get download API config.
 
     :return:
     """
-    if executing_travis():
+    if executing_travis() or is_testing:
         return None
 
-    dl_api_conf = get_app_config().get('DOWNLOAD_API', False)
+    dl_api_conf = get_app_config(is_testing).get('DOWNLOAD_API', False)
     if not dl_api_conf or not isinstance(dl_api_conf, dict):
         return None
 
@@ -75,16 +101,16 @@ def get_download_api_config():
     return dl_api_conf
 
 
-def get_fairdata_rems_api_config():
+def get_fairdata_rems_api_config(is_testing):
     """
     Get Fairdata Rems API config.
 
     :return:
     """
-    if executing_travis():
+    if executing_travis() or is_testing:
         return None
 
-    rems_conf = get_app_config().get('FD_REMS', False)
+    rems_conf = get_app_config(is_testing).get('FD_REMS', False)
     if not rems_conf or not isinstance(rems_conf, dict):
         return None
 
@@ -94,16 +120,16 @@ def get_fairdata_rems_api_config():
     return rems_conf
 
 
-def get_metax_api_config():
+def get_metax_api_config(is_testing):
     """
     Get Metax API config.
 
     :return:
     """
-    if executing_travis():
+    if executing_travis() or is_testing:
         return None
 
-    metax_api_conf = get_app_config().get('METAX_API', False)
+    metax_api_conf = get_app_config(is_testing).get('METAX_API', False)
     if not metax_api_conf or not isinstance(metax_api_conf, dict):
         return None
 

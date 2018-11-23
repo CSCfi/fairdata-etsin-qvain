@@ -14,20 +14,9 @@ from flask_mail import Message
 from flask_restful import abort, reqparse, Resource
 
 from etsin_finder.app_config import get_app_config
-from etsin_finder.authentication import \
-    get_user_display_name, \
-    get_user_id, \
-    is_authenticated, \
-    reset_flask_session_on_logout
-from etsin_finder.authorization import \
-    strip_information_from_catalog_record, \
-    strip_dir_api_object, \
-    user_is_allowed_to_download_from_ida, \
-    user_has_rems_permission_for_catalog_record
-from etsin_finder.cr_service import \
-    get_catalog_record, \
-    get_directory_data_for_catalog_record, \
-    is_rems_catalog_record
+from etsin_finder import authentication
+from etsin_finder import authorization
+from etsin_finder import cr_service
 from etsin_finder.download_service import download_data
 from etsin_finder.email_utils import \
     create_email_message_body, \
@@ -36,7 +25,7 @@ from etsin_finder.email_utils import \
     get_email_recipient_address, \
     get_harvest_info, \
     validate_send_message_request
-from etsin_finder.finder import app, mail
+from etsin_finder.finder import app
 
 log = app.logger
 
@@ -57,12 +46,13 @@ def log_request(f):
         :param kwargs:
         :return:
         """
-        user_id = get_user_id()
-        log.info('{0} - {1} - {2} - {3} - {4}'.format(request.environ['HTTP_X_REAL_IP'],
-                                                      user_id if user_id else '',
-                                                      request.environ['REQUEST_METHOD'],
-                                                      request.path,
-                                                      request.user_agent))
+        user_id = authentication.get_user_id() if not app.testing else ''
+        log.info('{0} - {1} - {2} - {3} - {4}'.format(
+            request.environ['HTTP_X_REAL_IP'] if 'HTTP_X_REAL_IP' in request.environ else 'N/A',
+            user_id if user_id else '',
+            request.environ['REQUEST_METHOD'],
+            request.path,
+            request.user_agent))
         return f(*args, **kwargs)
     return func
 
@@ -78,16 +68,16 @@ class Dataset(Resource):
         :param cr_id: id to use to fetch the record from metax
         :return:
         """
-        is_authd = is_authenticated()
-        cr = get_catalog_record(cr_id, True, True)
+        is_authd = authentication.is_authenticated()
+        cr = cr_service.get_catalog_record(cr_id, True, True)
         if not cr:
             abort(400, message="Unable to get catalog record from Metax")
 
-        ret_obj = {'catalog_record': strip_information_from_catalog_record(cr, is_authd),
+        ret_obj = {'catalog_record': authorization.strip_information_from_catalog_record(cr, is_authd),
                    'email_info': get_email_info(cr)}
-
-        if is_rems_catalog_record(cr):
-            ret_obj['has_permit'] = user_has_rems_permission_for_catalog_record(cr_id, get_user_id(), is_authd)
+        if cr_service.is_rems_catalog_record(cr):
+            ret_obj['has_permit'] = authorization.user_has_rems_permission_for_catalog_record(
+                cr_id, authentication.get_user_id(), is_authd)
 
         return ret_obj, 200
 
@@ -114,10 +104,10 @@ class Files(Resource):
         file_fields = args.get('file_fields', None)
         directory_fields = args.get('directory_fields', None)
 
-        cr = get_catalog_record(cr_id, False, False)
-        dir_api_obj = get_directory_data_for_catalog_record(cr_id, dir_id, file_fields, directory_fields)
+        cr = cr_service.get_catalog_record(cr_id, False, False)
+        dir_api_obj = cr_service.get_directory_data_for_catalog_record(cr_id, dir_id, file_fields, directory_fields)
         if cr and dir_api_obj:
-            strip_dir_api_object(dir_api_obj, is_authenticated(), cr)
+            authorization.strip_dir_api_object(dir_api_obj, authentication.is_authenticated(), cr)
             return dir_api_obj, 200
         return '', 404
 
@@ -164,7 +154,7 @@ class Contact(Resource):
             abort(400, message="Request parameters are not valid")
 
         # Get the full catalog record from Metax
-        cr = get_catalog_record(cr_id, False, False)
+        cr = cr_service.get_catalog_record(cr_id, False, False)
 
         # Ensure dataset is not harvested
         harvested = get_harvest_info(cr)
@@ -176,7 +166,7 @@ class Contact(Resource):
         if not recipient:
             abort(500, message="No recipient could be inferred from the dataset")
 
-        app_config = get_app_config()
+        app_config = get_app_config(app.testing)
         sender = app_config.get('MAIL_DEFAULT_SENDER', 'etsin-no-reply@fairdata.fi')
         subject = get_email_message_subject()
         body = create_email_message_body(cr_id, user_email, user_subject, user_body)
@@ -185,9 +175,9 @@ class Contact(Resource):
         msg = Message(sender=sender, reply_to=user_email, recipients=[recipient], subject=subject, body=body)
 
         # Send the message
-        with mail.record_messages() as outbox:
+        with app.mail.record_messages() as outbox:
             try:
-                mail.send(msg)
+                app.mail.send(msg)
                 if len(outbox) != 1:
                     raise Exception
             except Exception as e:
@@ -212,8 +202,8 @@ class User(Resource):
 
         :return:
         """
-        user_info = {'is_authenticated': is_authenticated()}
-        dn = get_user_display_name()
+        user_info = {'is_authenticated': authentication.is_authenticated()}
+        dn = authentication.get_user_display_name()
         if dn is not None:
             user_info['user_display_name'] = dn
         return user_info, 200
@@ -228,7 +218,7 @@ class Session(Resource):
 
         :return:
         """
-        if is_authenticated():
+        if authentication.is_authenticated():
             session.modified = True
             return '', 200
         return '', 401
@@ -239,8 +229,8 @@ class Session(Resource):
 
         :return:
         """
-        reset_flask_session_on_logout()
-        return not is_authenticated(), 200
+        authentication.reset_flask_session_on_logout()
+        return not authentication.is_authenticated(), 200
 
 
 class Download(Resource):
@@ -264,11 +254,11 @@ class Download(Resource):
         args = self.parser.parse_args()
         cr_id = args['cr_id']
 
-        cr = get_catalog_record(cr_id, False, False)
+        cr = cr_service.get_catalog_record(cr_id, False, False)
         if not cr:
             abort(400, message="Unable to get catalog record")
 
-        if user_is_allowed_to_download_from_ida(cr, is_authenticated()):
+        if authorization.user_is_allowed_to_download_from_ida(cr, authentication.is_authenticated()):
             file_ids = args['file_id'] or []
             dir_ids = args['dir_id'] or []
             return download_data(cr_id, file_ids, dir_ids)

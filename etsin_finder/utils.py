@@ -14,6 +14,14 @@ from datetime import datetime
 import pytz
 from dateutil import parser
 
+ACCESS_TYPES = {
+    'open': 'http://uri.suomi.fi/codelist/fairdata/access_type/code/open',
+    'login': 'http://uri.suomi.fi/codelist/fairdata/access_type/code/login',
+    'permit': 'http://uri.suomi.fi/codelist/fairdata/access_type/code/permit',
+    'embargo': 'http://uri.suomi.fi/codelist/fairdata/access_type/code/embargo',
+    'restricted': 'http://uri.suomi.fi/codelist/fairdata/access_type/code/restricted'
+}
+
 
 def executing_travis():
     """Returns True whenever code is being executed by travis"""
@@ -102,3 +110,14 @@ def tz_now_is_later_than_timestamp_str(timestamp_str):
     """
     datetime_obj = _parse_timestamp_string_to_tz_aware_datetime(timestamp_str)
     return datetime.now(tz=pytz.timezone('Europe/Helsinki')) >= datetime_obj
+
+
+class FlaskService():
+    """Use as base class for external dependency services"""
+
+    def __init__(self, app):
+        """Init FlaskService"""
+        if app.testing or executing_travis():
+            self.is_testing = True
+        else:
+            self.is_testing = False

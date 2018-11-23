@@ -9,7 +9,7 @@
 
 from urllib.parse import urlparse
 
-from flask import request, session
+from flask import session
 from onelogin.saml2.auth import OneLogin_Saml2_Auth
 
 from etsin_finder.finder import app
@@ -46,8 +46,7 @@ def is_authenticated():
     """
     if executing_travis():
         return False
-    auth = get_saml_auth(request)
-    return True if auth.is_authenticated and 'samlUserdata' in session and len(session['samlUserdata']) > 0 else False
+    return True if 'samlUserdata' in session and len(session['samlUserdata']) > 0 else False
 
 
 def prepare_flask_request_for_saml(request):

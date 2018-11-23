@@ -12,19 +12,12 @@ from etsin_finder.cr_service import \
     get_catalog_record_access_type, \
     get_catalog_record_data_catalog_id, \
     get_catalog_record_embargo_available
-from etsin_finder.finder import app, rems_cache
-from etsin_finder.rems_service import get_user_rems_permission_for_catalog_record
-from etsin_finder.utils import tz_now_is_later_than_timestamp_str, remove_keys_recursively, leave_keys_in_dict
+from etsin_finder.finder import app
+from etsin_finder import rems_service
+from etsin_finder.utils import tz_now_is_later_than_timestamp_str, remove_keys_recursively, leave_keys_in_dict, \
+    ACCESS_TYPES
 
 log = app.logger
-
-ACCESS_TYPES = {
-    'open': 'http://uri.suomi.fi/codelist/fairdata/access_type/code/open',
-    'login': 'http://uri.suomi.fi/codelist/fairdata/access_type/code/login',
-    'permit': 'http://uri.suomi.fi/codelist/fairdata/access_type/code/permit',
-    'embargo': 'http://uri.suomi.fi/codelist/fairdata/access_type/code/embargo',
-    'restricted': 'http://uri.suomi.fi/codelist/fairdata/access_type/code/restricted'
-}
 
 DATA_CATALOG_IDENTIFIERS = {
     'ida': 'urn:nbn:fi:att:data-catalog-ida',
@@ -44,10 +37,10 @@ def user_has_rems_permission_for_catalog_record(cr_id, user_id, is_authd):
     if not cr_id or not user_id or not is_authd:
         return False
 
-    permission = rems_cache.get_from_cache(cr_id, user_id)
+    permission = app.rems_cache.get_from_cache(cr_id, user_id)
     if permission is None:
-        permission = get_user_rems_permission_for_catalog_record(cr_id, user_id)
-        return rems_cache.update_cache(cr_id, user_id, permission)
+        permission = rems_service.get_user_rems_permission_for_catalog_record(cr_id, user_id)
+        return app.rems_cache.update_cache(cr_id, user_id, permission)
     else:
         return permission
 
@@ -130,7 +123,6 @@ def strip_information_from_catalog_record(catalog_record, is_authd):
     :return: catalog_record after possible modifications
     """
     catalog_record = _strip_sensitive_information_from_catalog_record(catalog_record)
-
     access_type_id = get_catalog_record_access_type(catalog_record)
     if not access_type_id:
         return remove_keys_recursively(catalog_record, ['files', 'directories', 'remote_resources'])

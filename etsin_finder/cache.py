@@ -10,18 +10,24 @@
 from pymemcache import serde
 from pymemcache.client import base
 
+from etsin_finder.app_config import get_memcached_config
+from etsin_finder.utils import FlaskService
 
-class BaseCache:
+
+class BaseCache(FlaskService):
     """Base class for various caches used in the app"""
 
-    def __init__(self, memcached_config):
+    def __init__(self, app):
         """Setup cache"""
+        super().__init__(app)
+
+        memcached_config = get_memcached_config(self.is_testing)
+
         if memcached_config:
             self.cache = base.Client((memcached_config['HOST'], memcached_config['PORT']),
                                      serializer=serde.python_memcache_serializer,
                                      deserializer=serde.python_memcache_deserializer, connect_timeout=1, timeout=1)
-        else:
-            from etsin_finder.finder import app
+        elif not self.is_testing:
             app.logger.error("Unable to initialize Cache due to missing config")
 
     def do_update(self, key, value, ttl):
@@ -48,6 +54,9 @@ class BaseCache:
         :param key:
         :return:
         """
+        if self.is_testing:
+            return None
+
         try:
             return self.cache.get(key, None)
         except Exception as e:
