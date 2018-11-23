@@ -13,7 +13,6 @@
 import React, { Component } from 'react'
 import { inject, observer } from 'mobx-react'
 import styled from 'styled-components'
-import translate from 'counterpart'
 
 import AccessRights from './accessRights'
 import Accessiblity from '../../stores/view/accessibility'
@@ -29,6 +28,7 @@ import VersionChanger from './versionChanger'
 import checkDataLang from '../../utils/checkDataLang'
 import checkNested from '../../utils/checkNested'
 import dateFormat from '../../utils/dateFormat'
+import Tracking from '../../utils/tracking'
 
 const ReactMarkdown = require('react-markdown')
 
@@ -60,7 +60,8 @@ class Description extends Component {
   }
 
   componentDidMount() {
-    Accessiblity.setNavText(translate('nav.announcer.datasetPage'))
+    Accessiblity.handleNavigation('dataset', false)
+    Tracking.newPageView(`Dataset: ${this.props.match.params.identifier} | Description`, this.props.location.pathname)
   }
 
   checkEmails(obj) {
@@ -156,6 +157,14 @@ export default inject('Stores')(observer(Description))
 
 Description.propTypes = {
   dataset: PropTypes.object.isRequired,
+  location: PropTypes.shape({
+    pathname: PropTypes.string,
+  }).isRequired,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      identifier: PropTypes.string,
+    })
+  }).isRequired,
   emails: PropTypes.shape({
     CONTRIBUTOR: PropTypes.bool,
     CREATOR: PropTypes.bool,

@@ -5,6 +5,8 @@
 # :author: CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
 # :license: MIT
 
+"""RESTful API endpoints, meant to be used by the frontend"""
+
 from functools import wraps
 
 from flask import request, session
@@ -12,20 +14,9 @@ from flask_mail import Message
 from flask_restful import abort, reqparse, Resource
 
 from etsin_finder.app_config import get_app_config
-from etsin_finder.authentication import \
-    get_user_display_name, \
-    get_user_id, \
-    is_authenticated, \
-    reset_flask_session_on_logout
-from etsin_finder.authorization import \
-    strip_information_from_catalog_record, \
-    strip_dir_api_object, \
-    user_is_allowed_to_download_from_ida, \
-    user_has_rems_permission_for_catalog_record
-from etsin_finder.cr_service import \
-    get_catalog_record, \
-    get_directory_data_for_catalog_record, \
-    is_rems_catalog_record
+from etsin_finder import authentication
+from etsin_finder import authorization
+from etsin_finder import cr_service
 from etsin_finder.download_service import download_data
 from etsin_finder.email_utils import \
     create_email_message_body, \
@@ -34,25 +25,40 @@ from etsin_finder.email_utils import \
     get_email_recipient_address, \
     get_harvest_info, \
     validate_send_message_request
-from etsin_finder.finder import app, mail
+from etsin_finder.finder import app
 
 log = app.logger
 
 
 def log_request(f):
+    """
+    Log request when used as decorator.
+
+    :param f:
+    :return:
+    """
     @wraps(f)
     def func(*args, **kwargs):
-        user_id = get_user_id()
-        log.info('{0} - {1} - {2} - {3} - {4}'.format(request.environ['HTTP_X_REAL_IP'],
-                                                      user_id if user_id else '',
-                                                      request.environ['REQUEST_METHOD'],
-                                                      request.path,
-                                                      request.user_agent))
+        """
+        Log requests.
+
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        user_id = authentication.get_user_id() if not app.testing else ''
+        log.info('{0} - {1} - {2} - {3} - {4}'.format(
+            request.environ['HTTP_X_REAL_IP'] if 'HTTP_X_REAL_IP' in request.environ else 'N/A',
+            user_id if user_id else '',
+            request.environ['REQUEST_METHOD'],
+            request.path,
+            request.user_agent))
         return f(*args, **kwargs)
     return func
 
 
 class Dataset(Resource):
+    """Dataset related REST endpoints for frontend"""
 
     @log_request
     def get(self, cr_id):
@@ -62,45 +68,55 @@ class Dataset(Resource):
         :param cr_id: id to use to fetch the record from metax
         :return:
         """
-        is_authd = is_authenticated()
-        cr = get_catalog_record(cr_id, True, True)
+        is_authd = authentication.is_authenticated()
+        cr = cr_service.get_catalog_record(cr_id, True, True)
         if not cr:
             abort(400, message="Unable to get catalog record from Metax")
 
-        ret_obj = {'catalog_record': strip_information_from_catalog_record(cr, is_authd),
+        ret_obj = {'catalog_record': authorization.strip_information_from_catalog_record(cr, is_authd),
                    'email_info': get_email_info(cr)}
-
-        if is_rems_catalog_record(cr):
-            ret_obj['has_permit'] = user_has_rems_permission_for_catalog_record(cr_id, get_user_id(), is_authd)
+        if cr_service.is_rems_catalog_record(cr):
+            ret_obj['has_permit'] = authorization.user_has_rems_permission_for_catalog_record(
+                cr_id, authentication.get_user_id(), is_authd)
 
         return ret_obj, 200
 
 
 class Files(Resource):
+    """File/directory related REST endpoints for frontend"""
 
     def __init__(self):
+        """Setup file endpoints"""
         self.parser = reqparse.RequestParser()
         self.parser.add_argument('dir_id', required=True, type=str)
         self.parser.add_argument('file_fields', required=False, type=str)
         self.parser.add_argument('directory_fields', required=False, type=str)
 
     def get(self, cr_id):
+        """
+        Get files and directory objects for frontend.
+
+        :param cr_id:
+        :return:
+        """
         args = self.parser.parse_args()
         dir_id = args['dir_id']
         file_fields = args.get('file_fields', None)
         directory_fields = args.get('directory_fields', None)
 
-        cr = get_catalog_record(cr_id, False, False)
-        dir_api_obj = get_directory_data_for_catalog_record(cr_id, dir_id, file_fields, directory_fields)
+        cr = cr_service.get_catalog_record(cr_id, False, False)
+        dir_api_obj = cr_service.get_directory_data_for_catalog_record(cr_id, dir_id, file_fields, directory_fields)
         if cr and dir_api_obj:
-            strip_dir_api_object(dir_api_obj, is_authenticated(), cr)
+            authorization.strip_dir_api_object(dir_api_obj, authentication.is_authenticated(), cr)
             return dir_api_obj, 200
         return '', 404
 
 
 class Contact(Resource):
+    """Contact form related REST endpoints for frontend"""
 
     def __init__(self):
+        """Setup endpoints"""
         self.parser = reqparse.RequestParser()
         self.parser.add_argument('user_email', required=True, help='user_email cannot be empty')
         self.parser.add_argument('user_subject', required=True, help='user_subject cannot be empty')
@@ -110,6 +126,8 @@ class Contact(Resource):
     @log_request
     def post(self, cr_id):
         """
+        Send email.
+
         This route expects a json with three key-values: user_email, user_subject and user_body.
         Having these three this method will send an email message to recipients
         defined in the catalog record in question
@@ -136,7 +154,7 @@ class Contact(Resource):
             abort(400, message="Request parameters are not valid")
 
         # Get the full catalog record from Metax
-        cr = get_catalog_record(cr_id, False, False)
+        cr = cr_service.get_catalog_record(cr_id, False, False)
 
         # Ensure dataset is not harvested
         harvested = get_harvest_info(cr)
@@ -148,7 +166,7 @@ class Contact(Resource):
         if not recipient:
             abort(500, message="No recipient could be inferred from the dataset")
 
-        app_config = get_app_config()
+        app_config = get_app_config(app.testing)
         sender = app_config.get('MAIL_DEFAULT_SENDER', 'etsin-no-reply@fairdata.fi')
         subject = get_email_message_subject()
         body = create_email_message_body(cr_id, user_email, user_subject, user_body)
@@ -157,9 +175,9 @@ class Contact(Resource):
         msg = Message(sender=sender, reply_to=user_email, recipients=[recipient], subject=subject, body=body)
 
         # Send the message
-        with mail.record_messages() as outbox:
+        with app.mail.record_messages() as outbox:
             try:
-                mail.send(msg)
+                app.mail.send(msg)
                 if len(outbox) != 1:
                     raise Exception
             except Exception as e:
@@ -171,45 +189,55 @@ class Contact(Resource):
 
 
 class User(Resource):
-
     """
     Cf. saml attributes: https://wiki.eduuni.fi/display/CSCHAKA/funetEduPersonSchema2dot2
+
     OID 1.3.6.1.4.1.5923.1.1.1.6 = eduPersonPrincipalName
     OID 2.5.4.3 = cn / commonName
     """
 
     def get(self):
-        user_info = {'is_authenticated': is_authenticated()}
-        dn = get_user_display_name()
+        """
+        Get (logged-in) user info.
+
+        :return:
+        """
+        user_info = {'is_authenticated': authentication.is_authenticated()}
+        dn = authentication.get_user_display_name()
         if dn is not None:
             user_info['user_display_name'] = dn
         return user_info, 200
 
 
 class Session(Resource):
-
-    """
-    Session related
-    """
+    """Session related endpoints"""
 
     def get(self):
-        if is_authenticated():
+        """
+        Renew Flask session, used by frontend.
+
+        :return:
+        """
+        if authentication.is_authenticated():
             session.modified = True
             return '', 200
         return '', 401
 
     def delete(self):
-        reset_flask_session_on_logout()
-        return not is_authenticated(), 200
+        """
+        Delete Flask session, used by frontend.
+
+        :return:
+        """
+        authentication.reset_flask_session_on_logout()
+        return not authentication.is_authenticated(), 200
 
 
 class Download(Resource):
-
-    """
-    Class for file download functionalities
-    """
+    """Class for file download functionalities"""
 
     def __init__(self):
+        """Setup Download endpoint"""
         self.parser = reqparse.RequestParser()
         self.parser.add_argument('cr_id', type=str, required=True)
         self.parser.add_argument('file_id', type=str, action='append', required=False)
@@ -217,15 +245,20 @@ class Download(Resource):
 
     @log_request
     def get(self):
+        """
+        Download data REST endpoint for frontend.
+
+        :return:
+        """
         # Check request query parameters are present
         args = self.parser.parse_args()
         cr_id = args['cr_id']
 
-        cr = get_catalog_record(cr_id, False, False)
+        cr = cr_service.get_catalog_record(cr_id, False, False)
         if not cr:
             abort(400, message="Unable to get catalog record")
 
-        if user_is_allowed_to_download_from_ida(cr, is_authenticated()):
+        if authorization.user_is_allowed_to_download_from_ida(cr, authentication.is_authenticated()):
             file_ids = args['file_id'] or []
             dir_ids = args['dir_id'] or []
             return download_data(cr_id, file_ids, dir_ids)

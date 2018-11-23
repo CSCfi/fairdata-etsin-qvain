@@ -3,39 +3,52 @@ dist: trusty
 language: python
 python: 3.6
 
+git:
+  depth: false
+  quiet: true
+
 branches:
   only:
-  - test
-  - stable
+    - test
+    - stable
 
 cache:
   directories:
-  - pip
+    - pip
 
-before_install:
-- openssl aes-256-cbc -K $encrypted_de686f18e070_key -iv $encrypted_de686f18e070_iv -in deploy-key.enc -out deploy-key -d
-- rm deploy-key.enc
-- chmod 600 deploy-key
-- mv deploy-key ~/.ssh/id_rsa
-- eval "$(ssh-agent -s)"
-- ssh-add ~/.ssh/id_rsa
-- sudo apt-get install npm libxml2-dev libxmlsec1-dev libxmlsec1-openssl
+stages:
+  - name: tests
+    if: type IN (push, pull_request)
+  - name: deploy
+    if: type IN (push)
 
-install:
-- pip install -r requirements.txt
-- cd $TRAVIS_BUILD_DIR/etsin_finder/frontend
-- npm install
-- npm run build -- --define process.env.NODE_ENV=\"'travis'\"
 
-before_script:
-- sudo mkdir /var/log/etsin_finder
-- sudo chown -R $USER:$USER /var/log/etsin_finder
-
-# Add the below to the script after python tests once the frontend tests are in place
-#cd $TRAVIS_BUILD_DIR/etsin_finder/frontend && npm run test
-script:
-- cd $TRAVIS_BUILD_DIR && flake8 . && cd etsin_finder/frontend && npm run lint && npm run test && cd $TRAVIS_BUILD_DIR && pytest --cov=etsin_finder tests/ && $TRAVIS_BUILD_DIR/.travis-deploy.sh
+jobs:
+  include:
+  - stage: tests
+    before_install:
+      - sudo apt-get install npm libxml2-dev libxmlsec1-dev libxmlsec1-openssl
+    install:
+      - cd $TRAVIS_BUILD_DIR/etsin_finder/frontend
+      - npm install
+      - npm run build -- --define process.env.NODE_ENV=\"'travis'\"
+    before_script:
+      - cd $TRAVIS_BUILD_DIR
+      - pip install tox-travis
+      - sudo mkdir /var/log/etsin_finder
+      - sudo chown -R $USER:$USER /var/log/etsin_finder
+    script: tox -e travis && cd $TRAVIS_BUILD_DIR/etsin_finder/frontend && npm run lint && npm run test
+  - stage: deploy
+    before_install:
+      - sudo apt-get install libxml2-dev libxmlsec1-dev libxmlsec1-openssl
+    before_script:
+      - openssl aes-256-cbc -K $encrypted_de686f18e070_key -iv $encrypted_de686f18e070_iv -in deploy-key.enc -out deploy-key -d
+      - rm deploy-key.enc
+      - chmod 600 deploy-key
+      - mv deploy-key ~/.ssh/id_rsa
+      - eval "$(ssh-agent -s)"
+      - ssh-add ~/.ssh/id_rsa
+    script: $TRAVIS_BUILD_DIR/.travis-deploy.sh
 
 notifications:
-  flowdock:
-    secure: "eNLKnn2PTohlmGggmTNZYNTx70/FYzzlKXtyvf8fqcWTOmqpp+ZkttWIe0iWfmdkFKx82LaKcGk86Bj0wR4IHkbxJZLV61BQtPi5SZVG8zwBMDjfqRJtxCgzKN4nxeKqzVAZ1LB2TU1ggccHT7XJ/NJyGsQjDX+ek/LXgZbteZBHtswP079m4FgOIuolgRJAmHTr8w2Krd25K+uZByHRvHtV6ajb2At2J1PvYBgx47oD603JRW3Jqnhs37eXU4DrO0P8apmTuvXpInDB413s8FhLOiicH8CQGZyzBo2D9ZhGEQbN3hN/8zDlOAYDxjvpTF+vP8DDl/hKzm7MH+h4mNMC0lZUJXzuSdK1NlOb69pXL5NhYuo0Iz7lHzyRxTOoJJE5IC6J8AR5e0D79FTLnPMPZPeH7xlHoPPphCaK9Qk1bejwiQXjTNr7rgmE9ct9/cipEU/F3OcMFpbIc5QwCWz18lrFIRBC6koBZNPE7fW73AouHFu+JgkRFRJgcxx/Cx+SsVZUDw5//YvviWsgAhCLOHBt36BXKSHtNNLRfmantVwBXZhi7+Xl31jrqh7IAjR/v4npkadiBMHgx7opERRvsC9or4WeC6P3TdarlF5nyliV4yCtGdYKeHLDrX6A8tZSdT2TdRL3svo5frDACoLVItvAyPcMW0Wh6QfpDsw="
+  flowdock: eNLKnn2PTohlmGggmTNZYNTx70/FYzzlKXtyvf8fqcWTOmqpp+ZkttWIe0iWfmdkFKx82LaKcGk86Bj0wR4IHkbxJZLV61BQtPi5SZVG8zwBMDjfqRJtxCgzKN4nxeKqzVAZ1LB2TU1ggccHT7XJ/NJyGsQjDX+ek/LXgZbteZBHtswP079m4FgOIuolgRJAmHTr8w2Krd25K+uZByHRvHtV6ajb2At2J1PvYBgx47oD603JRW3Jqnhs37eXU4DrO0P8apmTuvXpInDB413s8FhLOiicH8CQGZyzBo2D9ZhGEQbN3hN/8zDlOAYDxjvpTF+vP8DDl/hKzm7MH+h4mNMC0lZUJXzuSdK1NlOb69pXL5NhYuo0Iz7lHzyRxTOoJJE5IC6J8AR5e0D79FTLnPMPZPeH7xlHoPPphCaK9Qk1bejwiQXjTNr7rgmE9ct9/cipEU/F3OcMFpbIc5QwCWz18lrFIRBC6koBZNPE7fW73AouHFu+JgkRFRJgcxx/Cx+SsVZUDw5//YvviWsgAhCLOHBt36BXKSHtNNLRfmantVwBXZhi7+Xl31jrqh7IAjR/v4npkadiBMHgx7opERRvsC9or4WeC6P3TdarlF5nyliV4yCtGdYKeHLDrX6A8tZSdT2TdRL3svo5frDACoLVItvAyPcMW0Wh6QfpDsw=

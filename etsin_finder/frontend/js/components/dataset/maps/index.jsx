@@ -3,15 +3,33 @@ import styled from 'styled-components'
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import FaArrowsAltV from '@fortawesome/fontawesome-free-solid/faArrowsAltV'
 import FaMapMarker from '@fortawesome/fontawesome-free-solid/faMapMarkerAlt'
-import { TypeLocation } from '../../../utils/propTypes'
+import PropTypes from 'prop-types'
 import { Popup } from 'react-leaflet'
+
+import { TypeLocation } from '../../../utils/propTypes'
 import MyMap from './map'
 import checkDataLang from '../../../utils/checkDataLang'
+import Tracking from '../../../utils/tracking'
+import Accessibility from '../../../stores/view/accessibility'
 
 class Maps extends Component {
   static propTypes = {
+    location: PropTypes.shape({
+      pathname: PropTypes.string,
+    }).isRequired,
+    match: PropTypes.shape({
+      params: PropTypes.shape({
+        identifier: PropTypes.string,
+      })
+    }).isRequired,
     spatial: TypeLocation.isRequired,
   }
+
+  componentDidMount() {
+    Tracking.newPageView(`Dataset: ${this.props.match.params.identifier} | Maps`, this.props.location.pathname)
+    Accessibility.handleNavigation('maps', false)
+  }
+
   render() {
     return (
       <div>
