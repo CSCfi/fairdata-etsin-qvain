@@ -134,8 +134,7 @@ class Pagination extends Component {
           </PaginationButton>
         ) : (
           <PaginationButton className="current" disabled aria-disabled="true">
-            <Translate content="search.pagination.SRcurrentpage" className="sr-only" />{' '}
-            {value}
+            <Translate content="search.pagination.SRcurrentpage" className="sr-only" /> {value}
           </PaginationButton>
         )}
       </li>
@@ -207,7 +206,8 @@ class Pagination extends Component {
                 this.changePage(e, this.state.currentPage - 1)
               }}
             >
-              <span aria-hidden>{'<'}</span> <Translate content="search.pagination.prev" className="sr-only" />
+              <span aria-hidden>{'<'}</span>{' '}
+              <Translate content="search.pagination.prev" className="sr-only" />
             </PaginationButton>
           </li>
         )}
@@ -230,7 +230,8 @@ class Pagination extends Component {
                 this.changePage(e, this.state.currentPage + 1)
               }}
             >
-              <Translate content="search.pagination.next" className="sr-only" /> <span aria-hidden>{'>'}</span>
+              <Translate content="search.pagination.next" className="sr-only" />{' '}
+              <span aria-hidden>{'>'}</span>
             </PaginationButton>
           </li>
         )}
@@ -244,7 +245,12 @@ class Pagination extends Component {
     }
     return (
       <PaginationContainer className="col-lg-12" aria-labelledby="pagination-label">
-        <Translate content="search.pagination.SRpagination" className="pagination-label sr-only" aria-hidden id="pagination-label" />
+        <Translate
+          content="search.pagination.SRpagination"
+          className="pagination-label sr-only"
+          aria-hidden
+          id="pagination-label"
+        />
         {this.createPagination()}
       </PaginationContainer>
     )
