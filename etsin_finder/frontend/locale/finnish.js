@@ -211,8 +211,9 @@ const finnish = {
       next: 'Seuraava sivu',
       SRskipped: 'Ylihypätyt sivut',
       SRpage: 'sivu',
-      SRcurrentpage: 'tämä sivu',
+      SRcurrentpage: 'nykyinen sivu',
       SRpagination: 'Paginaatio',
+      changepage: 'Sivu %(value)s'
     },
     noResults: {
       searchterm: 'Haullesi - <strong>%(search)s</strong> - ei löytynyt yhtään osumaa.',
