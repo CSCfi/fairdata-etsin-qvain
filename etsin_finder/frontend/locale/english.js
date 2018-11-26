@@ -213,6 +213,7 @@ const english = {
       SRpage: 'page',
       SRcurrentpage: 'current page',
       SRpagination: 'Pagination',
+      changepage: 'Page %(value)s'
     },
     noResults: {
       searchterm: 'Your search - <strong>%(search)s</strong> - did not match any documents.',
