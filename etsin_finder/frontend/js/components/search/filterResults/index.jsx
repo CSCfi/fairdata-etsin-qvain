@@ -16,7 +16,7 @@ import styled from 'styled-components'
 
 import FilterSection from './filterSection'
 
-const FilterContainer = styled.div`
+const FilterContainer = styled.ul`
   padding: 1em;
   margin-bottom: 1em;
   border: 2px solid ${props => props.theme.color.lightgray};
