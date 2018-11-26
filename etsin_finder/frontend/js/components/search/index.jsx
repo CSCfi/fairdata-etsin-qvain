@@ -61,14 +61,14 @@ export default class Search extends Component {
       <div className="search-page">
         <HeroBanner className="hero-primary">
           <div className="container">
-            <div className="text-center">
+            <section className="text-center">
               <Translate content="home.title" component="h1" />
               <SearchBar
                 inputRef={input => {
                   this.search = input
                 }}
               />
-            </div>
+            </section>
           </div>
         </HeroBanner>
         {this.state.initialLoad && <Results />}

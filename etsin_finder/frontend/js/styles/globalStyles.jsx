@@ -1,20 +1,18 @@
 {
-/**
- * This file is part of the Etsin service
- *
- * Copyright 2017-2018 Ministry of Education and Culture, Finland
- *
- *
- * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
- * @license   MIT
- */
+  /**
+   * This file is part of the Etsin service
+   *
+   * Copyright 2017-2018 Ministry of Education and Culture, Finland
+   *
+   *
+   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
+   * @license   MIT
+   */
 }
 
 import { injectGlobal } from 'styled-components'
 import etsinTheme from './theme'
 import Grid from './grid'
-import Semantics from './semanticsHelpers'
-
 
 export default injectGlobal`
   /* reset */
@@ -323,6 +321,4 @@ export default injectGlobal`
   .blur {
     filter: blur(1px);
   }
-
-  ${Semantics}
 `

@@ -1,13 +1,13 @@
 {
-/**
- * This file is part of the Etsin service
- *
- * Copyright 2017-2018 Ministry of Education and Culture, Finland
- *
- *
- * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
- * @license   MIT
- */
+  /**
+   * This file is part of the Etsin service
+   *
+   * Copyright 2017-2018 Ministry of Education and Culture, Finland
+   *
+   *
+   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
+   * @license   MIT
+   */
 }
 
 import React, { Component } from 'react'
@@ -68,13 +68,16 @@ const OtherID = styled.li`
   margin: 0;
 `
 
-const Margin = styled.div`
+const Margin = styled.section`
   margin: 1.5em 0em;
 `
 
 class Events extends Component {
   componentDidMount() {
-    Tracking.newPageView(`Dataset: ${this.props.match.params.identifier} | Events`, this.props.location.pathname)
+    Tracking.newPageView(
+      `Dataset: ${this.props.match.params.identifier} | Events`,
+      this.props.location.pathname
+    )
     Accessibility.setNavText(translate('nav.announcer.idnAndEventsTab'))
   }
   checkProvenance = prov => {
@@ -176,19 +179,18 @@ class Events extends Component {
             </Table>
           </Margin>
         )}
-        {this.props.other_identifier &&
-          this.props.other_identifier.length > 0 && (
-            <Margin>
-              <h2>
-                <Translate content="dataset.events_idn.other_idn" />
-              </h2>
-              <ul>
-                {this.props.other_identifier.map(single => (
-                  <OtherID key={single.notation}>{single.notation}</OtherID>
-                ))}
-              </ul>
-            </Margin>
-          )}
+        {this.props.other_identifier && this.props.other_identifier.length > 0 && (
+          <Margin>
+            <h2>
+              <Translate content="dataset.events_idn.other_idn" />
+            </h2>
+            <ul>
+              {this.props.other_identifier.map(single => (
+                <OtherID key={single.notation}>{single.notation}</OtherID>
+              ))}
+            </ul>
+          </Margin>
+        )}
         {this.props.relation && (
           <Margin>
             <h2>
@@ -215,16 +217,17 @@ class Events extends Component {
                     <td>{checkDataLang(single.entity.title)}.</td>
                     <td>
                       <span className="sr-only">Identifier:</span>
-                      {this.relationIdentifierIsUrl(single.entity.identifier) ?
-                      (
-                        <IDLink href={single.entity.identifier} rel="noopener noreferrer" target="_blank">
+                      {this.relationIdentifierIsUrl(single.entity.identifier) ? (
+                        <IDLink
+                          href={single.entity.identifier}
+                          rel="noopener noreferrer"
+                          target="_blank"
+                        >
                           {single.entity.identifier}
                         </IDLink>
-                      ) :
-                      (
+                      ) : (
                         <ID>{single.entity.identifier}</ID>
-                      )
-                      }
+                      )}
                     </td>
                   </tr>
                 ))}
@@ -250,7 +253,7 @@ Events.propTypes = {
   match: PropTypes.shape({
     params: PropTypes.shape({
       identifier: PropTypes.string,
-    })
+    }),
   }).isRequired,
   relation: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
   provenance: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
