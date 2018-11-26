@@ -118,7 +118,7 @@ class Dataset extends React.Component {
             <Translate content="tombstone.info" />
           </NoticeBar>
         )}
-        <div className="container regular-row">
+        <article className="container regular-row">
           <div className="row">
             <div className="col-12">
               <BackButton
@@ -153,7 +153,7 @@ class Dataset extends React.Component {
               </ErrorBoundary>
             </div>
           </div>
-        </div>
+        </article>
       </div>
     ) : (
       <LoadingSplash>

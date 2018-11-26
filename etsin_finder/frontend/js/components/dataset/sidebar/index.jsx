@@ -68,7 +68,11 @@ class Sidebar extends Component {
   }
 
   spatial(item) {
-    if (item.geographic_name && checkNested(item, 'place_uri', 'pref_label') && item.geographic_name !== checkDataLang(item.place_uri.pref_label)) {
+    if (
+      item.geographic_name &&
+      checkNested(item, 'place_uri', 'pref_label') &&
+      item.geographic_name !== checkDataLang(item.place_uri.pref_label)
+    ) {
       return (
         <div key={item.geographic_name}>
           {checkDataLang(item.place_uri.pref_label)} <span>({item.geographic_name})</span>
@@ -86,12 +90,15 @@ class Sidebar extends Component {
       <SidebarContainer>
         <ErrorBoundary>
           <div className="separator">
-
             {/* DATA CATALOG LOGO */}
 
             {this.state.logo && (
               <SidebarItem>
-                <Logo alt={checkDataLang(this.state.catalogTitle)} file={this.state.logo} url={this.state.catalogPublisherHomepage} />
+                <Logo
+                  alt={checkDataLang(this.state.catalogTitle)}
+                  file={this.state.logo}
+                  url={this.state.catalogPublisherHomepage}
+                />
               </SidebarItem>
             )}
 
@@ -110,7 +117,6 @@ class Sidebar extends Component {
             </SidebarItem>
           </div>
           <div>
-
             {/* FIELD OF SCIENCE */}
 
             <SidebarItem
@@ -186,16 +192,23 @@ class Sidebar extends Component {
 
             <SidebarItem component="div" trans="dataset.license" hideEmpty="true">
               {this.state.license &&
-                this.state.license.map(rights => <div key={rights.identifier}><License data={rights} /></div>)}
+                this.state.license.map(rights => (
+                  <div key={rights.identifier}>
+                    <License data={rights} />
+                  </div>
+                ))}
             </SidebarItem>
 
             {/* ACCESS RIGHTS RESTRICTION_GROUNDS */}
 
             {this.state.access_rights && (
               <SidebarItem component="div" trans="dataset.access_rights" hideEmpty="true">
-                {this.state.access_rights.restriction_grounds && this.state.access_rights.restriction_grounds.length > 0
+                {this.state.access_rights.restriction_grounds &&
+                this.state.access_rights.restriction_grounds.length > 0
                   ? this.state.access_rights.restriction_grounds.map(rg => (
-                    <div key={`rg-${rg.identifier}`}><Item>{checkDataLang(rg.pref_label)}</Item></div>
+                    <div key={`rg-${rg.identifier}`}>
+                      <Item>{checkDataLang(rg.pref_label)}</Item>
+                    </div>
                     ))
                   : checkNested(this.state.access_rights, 'access_type', 'pref_label') &&
                     checkDataLang(this.state.access_rights.access_type.pref_label)}
@@ -290,7 +303,7 @@ Sidebar.propTypes = {
   dataset: PropTypes.object.isRequired,
 }
 
-const SidebarContainer = styled.div`
+const SidebarContainer = styled.aside`
   border: 2px solid rgb(231, 233, 237);
   word-wrap: break-word;
   word-break: break-word;

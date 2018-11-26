@@ -45,7 +45,7 @@ SidebarItem.propTypes = {
   fallback: PropTypes.string,
 }
 
-const Spacer = styled.div`
+const Spacer = styled.section`
   padding: 0 1.4em;
   @media screen and (min-width: ${p => p.theme.breakpoints.md}) {
     padding: 0 1.6em;
