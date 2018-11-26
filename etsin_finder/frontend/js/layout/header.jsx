@@ -1,13 +1,13 @@
 {
-/**
- * This file is part of the Etsin service
- *
- * Copyright 2017-2018 Ministry of Education and Culture, Finland
- *
- *
- * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
- * @license   MIT
- */
+  /**
+   * This file is part of the Etsin service
+   *
+   * Copyright 2017-2018 Ministry of Education and Culture, Finland
+   *
+   *
+   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
+   * @license   MIT
+   */
 }
 
 import React, { Component } from 'react'
@@ -21,9 +21,9 @@ import MobileNavi from '../components/general/navigation/mobileNavi'
 
 export default class Header extends Component {
   constructor() {
-    super();
+    super()
     this.state = {
-      lang: counterpart.getLocale()
+      lang: counterpart.getLocale(),
     }
     this.localeChanged = this.localeChanged.bind(this)
   }
@@ -35,11 +35,14 @@ export default class Header extends Component {
   }
   localeChanged() {
     this.setState({
-      lang: counterpart.getLocale()
+      lang: counterpart.getLocale(),
     })
   }
   render() {
-    const helpUrl = this.state.lang === 'fi' ? 'https://www.fairdata.fi/etsin/' : 'https://www.fairdata.fi/en/etsin/'
+    const helpUrl =
+      this.state.lang === 'fi'
+        ? 'https://www.fairdata.fi/etsin/'
+        : 'https://www.fairdata.fi/en/etsin/'
     return (
       <HeaderBar>
         <Positioner className="container">
@@ -57,7 +60,7 @@ export default class Header extends Component {
   }
 }
 
-const HeaderBar = styled.div`
+const HeaderBar = styled.header`
   width: 100%;
   height: 4em;
   background-color: white;
@@ -73,7 +76,7 @@ const Positioner = styled.div`
   justify-content: space-between;
 `
 
-const NaviCont = styled.div`
+const NaviCont = styled.nav`
   display: none;
   justify-content: center;
   align-items: center;
@@ -83,7 +86,7 @@ const NaviCont = styled.div`
   }
 `
 
-const Right = styled.div`
+const Right = styled.nav`
   width: 12em;
   display: flex;
   justify-content: flex-end;
