@@ -27,7 +27,7 @@ class Accessibility {
   }
 
   @action
-  setNavText(text) {
+  announce(text) {
     this.navText = text
   }
 
@@ -47,7 +47,7 @@ class Accessibility {
   @action
   handleNavigation(location, resetFocus = true) {
     const pageName = translate(`general.pageTitles.${location}`)
-    this.setNavText(pageName)
+    this.announce(pageName)
     this.setPageTitle(pageName)
     if (resetFocus) {
       this.resetFocus()

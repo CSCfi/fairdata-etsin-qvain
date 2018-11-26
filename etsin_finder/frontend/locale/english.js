@@ -155,7 +155,7 @@ const english = {
       dataset: 'Dataset',
       datasets: 'Datasets',
       home: 'Home',
-      error: 'Error'
+      error: 'Error',
     },
   },
   home: {
@@ -203,6 +203,8 @@ const english = {
     },
     filter: {
       clearFilter: 'Remove filters',
+      filtersCleared: 'Filters cleared',
+      filters: 'Filters',
       filter: 'Filter',
       SRactive: 'active',
     },

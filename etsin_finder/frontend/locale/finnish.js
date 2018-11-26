@@ -154,7 +154,7 @@ const finnish = {
       dataset: 'Aineisto',
       datasets: 'Aineistot',
       home: 'Koti',
-      error: 'Virhe'
+      error: 'Virhe',
     },
   },
   home: {
@@ -203,6 +203,8 @@ const finnish = {
     },
     filter: {
       clearFilter: 'Poista rajaukset',
+      filtersCleared: 'Rajaukset poistettu',
+      filters: 'Rajaukset',
       filter: 'Rajaa',
       SRactive: 'päällä',
     },

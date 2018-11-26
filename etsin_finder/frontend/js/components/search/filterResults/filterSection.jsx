@@ -30,7 +30,10 @@ class FilterSection extends Component {
       access_type: {
         title: { en: 'Access', fi: 'Saatavuus' },
         aggregation: { en: 'access_type_en', fi: 'access_type_fi' },
-        term: { en: 'access_rights.access_type.pref_label.en.keyword', fi: 'access_rights.access_type.pref_label.fi.keyword' },
+        term: {
+          en: 'access_rights.access_type.pref_label.en.keyword',
+          fi: 'access_rights.access_type.pref_label.fi.keyword',
+        },
       },
       organization: {
         title: { en: 'Organization', fi: 'Organisaatio' },
@@ -148,12 +151,12 @@ class FilterSection extends Component {
 
     return (
       <Section>
-        <FilterCategory onClick={this.toggleFilter}>
+        <FilterCategory onClick={this.toggleFilter} aria-expanded={this.state.open}>
           {this.titleName}
           <FontAwesomeIcon icon={faAngleDown} size="2x" />
         </FilterCategory>
-        <FilterItems className={this.state.open ? 'open' : ''}>
-          <ul>
+        <FilterItems className={this.state.open ? 'open' : ''} aria-hidden={!this.state.open}>
+          <ul aria-label={this.titleName}>
             {this.props.Stores.ElasticQuery.results.aggregations[this.aggregationName].buckets.map(
               item => (
                 <FilterItem
@@ -181,7 +184,7 @@ FilterSection.propTypes = {
   }).isRequired,
 }
 
-const Section = styled.div`
+const Section = styled.li`
   margin-bottom: 4px;
 `
 
