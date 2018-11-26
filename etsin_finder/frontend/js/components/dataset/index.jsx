@@ -125,7 +125,7 @@ class Dataset extends React.Component {
                 exact
                 to="/datasets"
                 onClick={() => {
-                  Accessibility.setNavText(
+                  Accessibility.announce(
                     translate('changepage', { page: translate('nav.datasets') })
                   )
                 }}

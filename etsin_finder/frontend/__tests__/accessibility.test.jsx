@@ -10,7 +10,7 @@ describe('Accessibility Store', () => {
   })
   describe('Navigation text', () => {
     it('should change nav text', () => {
-      Accessibility.setNavText('This is new nav text')
+      Accessibility.announce('This is new nav text')
       expect(Accessibility.navText).toEqual('This is new nav text')
     })
   })

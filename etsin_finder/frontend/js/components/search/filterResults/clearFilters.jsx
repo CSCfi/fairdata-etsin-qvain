@@ -12,14 +12,17 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
+import translate from 'counterpart'
 
 import ElasticQuery from '../../../stores/view/elasticquery'
 import { InvertedButton } from '../../general/button'
+import Accessibility from '../../../stores/view/accessibility'
 
 export default class ClearFilters extends Component {
   clear = () => {
     ElasticQuery.clearFilters()
     ElasticQuery.queryES()
+    Accessibility.announce(translate('search.filter.filtersCleared'))
   }
 
   render() {

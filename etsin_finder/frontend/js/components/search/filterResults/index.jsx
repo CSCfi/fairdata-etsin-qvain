@@ -13,10 +13,11 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 import styled from 'styled-components'
+import Translate from 'react-translate-component'
 
 import FilterSection from './filterSection'
 
-const FilterContainer = styled.div`
+const FilterContainer = styled.ul`
   padding: 1em;
   margin-bottom: 1em;
   border: 2px solid ${props => props.theme.color.lightgray};
@@ -29,7 +30,10 @@ const FilterContainer = styled.div`
 class FilterResults extends Component {
   render() {
     return (
-      <FilterContainer>
+      <FilterContainer aria-labelledby="filterlabel">
+        <span id="filterlabel" className="sr-only" aria-hidden>
+          <Translate content="search.filter.filters" />
+        </span>
         <FilterSection aggregation="access_type" />
         <FilterSection aggregation="organization" />
         <FilterSection aggregation="creator" />
