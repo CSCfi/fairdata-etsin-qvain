@@ -1,0 +1,1 @@
+"""Etsin Finder backend tests"""

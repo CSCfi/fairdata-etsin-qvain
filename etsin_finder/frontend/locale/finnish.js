@@ -147,6 +147,15 @@ const finnish = {
       changedLang: 'Kieli vaihdettu kieleen: %(lang)s',
       inactiveLogout: 'Istunto aikakatkaistu. Sinut kirjattiin ulos.',
     },
+    pageTitles: {
+      data: 'Data',
+      idnAndEvents: 'Tunnisteet ja tapahtumat',
+      maps: 'Kartat',
+      dataset: 'Aineisto',
+      datasets: 'Aineistot',
+      home: 'Koti',
+      error: 'Virhe'
+    },
   },
   home: {
     title: 'Etsi aineistoa',
@@ -176,14 +185,6 @@ const finnish = {
     home: 'Koti',
     organizations: 'Organisaatiot',
     addDataset: 'Lisää aineisto',
-    announcer: {
-      dataTab: 'Siirryit data välilehdelle',
-      datasetPage: 'Siirryit aineiston sivulle',
-      idnAndEventsTab: 'Siirryit "tunnisteet ja tapahtumat" -välilehdelle',
-      datasetsPage: 'Siirryit sivulle: Aineistot',
-      homePage: 'Siirryit etusivulle',
-      custom: 'Siirryit sivulle: %(to)s',
-    },
   },
   results: {
     resultsFor: 'Tulokset haulle: ',

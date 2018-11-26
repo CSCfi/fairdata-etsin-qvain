@@ -15,17 +15,15 @@ import { Route, Switch } from 'react-router-dom'
 import PropTypes from 'prop-types'
 
 import { Home, Search, Dataset } from '../routes'
-import Announcer from '../components/general/announcer'
 import ErrorPage from '../components/errorpage'
 
 export default class Content extends Component {
   static propTypes = {
-    contentRef: PropTypes.func.isRequired,
+    contentRef: PropTypes.object.isRequired,
   }
   render() {
     return (
       <main className="content">
-        <Announcer />
         <span ref={this.props.contentRef} tabIndex="-1" />
         <Switch>
           <Route exact path="/" component={Home} />

@@ -5,27 +5,51 @@
 # :author: CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
 # :license: MIT
 
+"""Functionalities for download data from Download API"""
+
 from flask import Response, stream_with_context
 import requests
 
 from etsin_finder.app_config import get_download_api_config
 from etsin_finder.finder import app
-from etsin_finder.utils import json_or_empty
+from etsin_finder.utils import json_or_empty, FlaskService
 
 log = app.logger
 
 
-class DownloadAPIService:
-    def __init__(self, dl_api_config):
+class DownloadAPIService(FlaskService):
+    """Download API Service"""
+
+    def __init__(self, app):
+        """
+        Setup Download API Service.
+
+        :param dl_api_config:
+        """
+        super().__init__(app)
+
+        dl_api_config = get_download_api_config(app.testing)
+
         if dl_api_config:
             self.API_BASE_URL = 'https://{0}:{1}/secure/api/v1/dataset'.format(
                 dl_api_config['HOST'], dl_api_config['PORT']) + '/{0}'
             self.USER = dl_api_config['USER']
             self.PASSWORD = dl_api_config['PASSWORD']
-        else:
+        elif not self.is_testing:
             log.error('Unable to initialize DownloadAPIService due to missing config')
 
     def download(self, cr_id, file_ids, dir_ids):
+        """
+        Download files from Download API.
+
+        :param cr_id:
+        :param file_ids:
+        :param dir_ids:
+        :return:
+        """
+        if self.is_testing:
+            return self._get_error_response(200)
+
         url = self._create_url(cr_id, file_ids, dir_ids)
         try:
             dl_api_response = requests.get(url, stream=True, timeout=15, auth=(self.USER,
@@ -80,8 +104,16 @@ class DownloadAPIService:
         return url
 
 
-_dl_api = DownloadAPIService(get_download_api_config())
+_dl_api = DownloadAPIService(app)
 
 
 def download_data(cr_id, file_ids, dir_ids):
+    """
+    Public method for downloading data from Download API.
+
+    :param cr_id:
+    :param file_ids:
+    :param dir_ids:
+    :return:
+    """
     return _dl_api.download(cr_id, file_ids, dir_ids)

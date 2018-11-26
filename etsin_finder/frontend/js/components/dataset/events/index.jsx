@@ -15,7 +15,6 @@ import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import { inject, observer } from 'mobx-react'
 import styled from 'styled-components'
-import translate from 'counterpart'
 
 import Accessibility from '../../../stores/view/accessibility'
 import checkDataLang from '../../../utils/checkDataLang'
@@ -78,7 +77,7 @@ class Events extends Component {
       `Dataset: ${this.props.match.params.identifier} | Events`,
       this.props.location.pathname
     )
-    Accessibility.setNavText(translate('nav.announcer.idnAndEventsTab'))
+    Accessibility.handleNavigation('idnAndEvents', false)
   }
   checkProvenance = prov => {
     if (prov) {

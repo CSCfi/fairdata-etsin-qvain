@@ -12,7 +12,6 @@
 
 import React, { Component } from 'react'
 import Translate from 'react-translate-component'
-import translate from 'counterpart'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 
@@ -25,7 +24,7 @@ import Tracking from '../../utils/tracking'
 
 export default class FrontPage extends Component {
   componentDidMount() {
-    Accessibility.setNavText(translate('nav.announcer.homePage'))
+    Accessibility.handleNavigation('home')
     Tracking.newPageView('Etsin | Tutkimusaineistojen hakupalvelu', this.props.location.pathname)
     // preload search page
     Search.load()

@@ -17,9 +17,11 @@ import { withRouter } from 'react-router'
 
 import HeroBanner from '../general/hero'
 import Tracking from '../../utils/tracking'
+import Accessibility from '../../stores/view/accessibility'
 
 class ErrorPage extends React.Component {
   componentDidMount() {
+    Accessibility.handleNavigation('error')
     Tracking.newPageView(`Error: ${this.props.error.type}`, this.props.location.pathname)
   }
   render() {

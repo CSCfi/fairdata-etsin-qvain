@@ -5,6 +5,7 @@
 # :author: CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
 # :license: MIT
 
+"""Used for routing traffic from Flask to frontend. Additionally handles authentication related routes."""
 from urllib.parse import quote
 
 from flask import make_response, render_template, redirect, request, session
@@ -25,6 +26,11 @@ log = app.logger
 
 @app.route('/sso')
 def login():
+    """
+    Endpoint which frontend should call when wanting to perform a login.
+
+    :return:
+    """
     auth = get_saml_auth(request)
     redirect_url = quote(request.args.get('relay', '/'))
     return redirect(auth.login(redirect_url))
@@ -32,6 +38,13 @@ def login():
 
 @app.route('/slo')
 def logout():
+    """
+    Endpoint which frontend should call when wanting to perform a logout.
+
+    Currently not working since Fairdata authentication service does not support SLO.
+
+    :return:
+    """
     auth = get_saml_auth(request)
     name_id = None
     session_index = None
@@ -46,6 +59,12 @@ def logout():
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def frontend_app(path):
+    """
+    All other requests to the app should be routed via here. Renders the base file for the frontend app.
+
+    :param path:
+    :return:
+    """
     return _render_index_template()
 
 
@@ -62,6 +81,11 @@ def _render_index_template(saml_errors=[], slo_success=False):
 
 @app.route('/saml_metadata/')
 def saml_metadata():
+    """
+    Optional. Prints out the public saml metadata for the service.
+
+    :return:
+    """
     auth = get_saml_auth(request)
     settings = auth.get_settings()
     metadata = settings.get_sp_metadata()
@@ -77,6 +101,11 @@ def saml_metadata():
 
 @app.route('/acs/', methods=['GET', 'POST'])
 def saml_attribute_consumer_service():
+    """
+    The endpoint which is used by the saml library on auth.login call
+
+    :return:
+    """
     reset_flask_session_on_login()
     req = prepare_flask_request_for_saml(request)
     auth = init_saml_auth(req)
@@ -96,6 +125,11 @@ def saml_attribute_consumer_service():
 
 @app.route('/sls/', methods=['GET', 'POST'])
 def saml_single_logout_service():
+    """
+    The endpoint which is used by the saml library on auth.logout call
+
+    :return:
+    """
     auth = get_saml_auth(request)
     slo_success = False
     url = auth.process_slo(delete_session_cb=lambda: session.clear())
