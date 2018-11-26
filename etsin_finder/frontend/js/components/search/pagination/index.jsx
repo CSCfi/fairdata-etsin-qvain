@@ -135,7 +135,7 @@ class Pagination extends Component {
         ) : (
           <PaginationButton className="current" disabled aria-disabled="true">
             <Translate content="search.pagination.SRcurrentpage" className="sr-only" />{' '}
-            <span aria-hidden="true">{value}</span>
+            {value}
           </PaginationButton>
         )}
       </li>
@@ -243,7 +243,8 @@ class Pagination extends Component {
       return null
     }
     return (
-      <PaginationContainer className="col-lg-12" aria-label={translate('search.pagination.SRpagination')}>
+      <PaginationContainer className="col-lg-12" aria-labelledby="pagination-label">
+        <Translate content="search.pagination.SRpagination" className="pagination-label sr-only" aria-hidden id="pagination-label" />
         {this.createPagination()}
       </PaginationContainer>
     )
