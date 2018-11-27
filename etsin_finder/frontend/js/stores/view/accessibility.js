@@ -40,7 +40,7 @@ class Accessibility {
     this.politeAnnouncement = text
     setTimeout(() => {
       this.clearAnnounce('polite')
-    }, 1000)
+    }, 3000)
   }
 
   @action

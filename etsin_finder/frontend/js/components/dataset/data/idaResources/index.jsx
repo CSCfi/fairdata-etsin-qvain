@@ -181,6 +181,7 @@ export default class IdaResources extends Component {
   }
 
   query(id, newPath, newIDs) {
+    Accessibility.announcePolite(translate('dataset.dl.loading'))
     DatasetQuery.getFolderData(id, this.state.results.identifier)
       .then(res => {
         const formatted = this.createDirTree(res.files, res.directories, true)

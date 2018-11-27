@@ -70,6 +70,7 @@ const english = {
       fileAmount: '%(amount)s objects',
       close_modal: 'Close info modal',
       info_header: 'Other info related to file',
+      loading: 'Loading folder',
       loaded: 'Folder loaded',
       file_types: {
         both: 'files and folders',

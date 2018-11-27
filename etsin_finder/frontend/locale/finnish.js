@@ -69,6 +69,7 @@ const finnish = {
       fileAmount: '%(amount)s objektia',
       close_modal: 'Sulje info',
       info_header: 'Tiedoston muut tiedot',
+      loading: 'Ladataan kansiota',
       loaded: 'Kansio latautunut',
       file_types: {
         both: 'tiedostot ja kansiot',
