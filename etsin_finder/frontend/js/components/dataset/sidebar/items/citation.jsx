@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react'
-import DatasetQuery from '../../../stores/view/datasetquery'
-import checkDataLang from '../../../utils/checkDataLang'
-import checkNested from '../../../utils/checkNested'
+import DatasetQuery from '../../../../stores/view/datasetquery'
+import checkDataLang from '../../../../utils/checkDataLang'
+import checkNested from '../../../../utils/checkNested'
 
 export default class Citation extends Component {
   constructor(props) {
@@ -42,11 +42,7 @@ export default class Citation extends Component {
 
   render() {
     if (this.state.citation) {
-      return (
-        <Fragment>
-          {this.state.citation}
-        </Fragment>
-      )
+      return <Fragment>{this.state.citation}</Fragment>
     }
     return (
       <Fragment>
@@ -58,9 +54,9 @@ export default class Citation extends Component {
           </Fragment>
         ))}
         <span title="Title">{checkDataLang(this.state.title)}, </span>
-        {this.state.publisher &&
+        {this.state.publisher && (
           <span title="Publisher">{checkDataLang(this.state.publisher)}, </span>
-        }
+        )}
         <span title="Release date">{this.state.release_date}, </span>
         <span title="Preferred identifier">{this.state.pid}</span>
       </Fragment>

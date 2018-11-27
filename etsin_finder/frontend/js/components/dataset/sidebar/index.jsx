@@ -8,10 +8,10 @@ import checkNested from '../../../utils/checkNested'
 import dateFormat from '../../../utils/dateFormat'
 import SidebarItem from './sidebarItem'
 import Identifier from '../identifier'
-import Citation from './citation'
-import Logo from './logo'
+import Citation from './items/citation'
+import Logo from './items/logo'
 import ErrorBoundary from '../../general/errorBoundary'
-import License from './license'
+import License from './items/license'
 
 class Sidebar extends Component {
   constructor(props) {
@@ -60,226 +60,234 @@ class Sidebar extends Component {
   dateSeparator(start, end) {
     return (
       (start || end) && (
-        <div key={start}>
+        <ListItem key={start}>
           {start === end ? dateFormat(start) : `${dateFormat(start)} - ${dateFormat(end)}`}
-        </div>
+        </ListItem>
       )
     )
   }
 
   spatial(item) {
-    if (item.geographic_name && checkNested(item, 'place_uri', 'pref_label') && item.geographic_name !== checkDataLang(item.place_uri.pref_label)) {
+    if (
+      item.geographic_name &&
+      checkNested(item, 'place_uri', 'pref_label') &&
+      item.geographic_name !== checkDataLang(item.place_uri.pref_label)
+    ) {
       return (
-        <div key={item.geographic_name}>
+        <ListItem key={item.geographic_name}>
           {checkDataLang(item.place_uri.pref_label)} <span>({item.geographic_name})</span>
-        </div>
+        </ListItem>
       )
     }
     if (item.geographic_name) {
-      return <div key={item.geographic_name}>{item.geographic_name}</div>
+      return <ListItem key={item.geographic_name}>{item.geographic_name}</ListItem>
     }
     return null
+  }
+
+  keywordsAndTheme() {
+    const labels = []
+    if (this.state.theme) {
+      labels.push(...this.state.theme.map(theme => checkDataLang(theme.pref_label)))
+    }
+    if (this.state.keyword) labels.push(...this.state.keyword)
+    return labels.join(', ')
   }
 
   render() {
     return (
       <SidebarContainer>
         <ErrorBoundary>
-          <div className="separator">
-
-            {/* DATA CATALOG LOGO */}
-
-            {this.state.logo && (
-              <SidebarItem>
-                <Logo alt={checkDataLang(this.state.catalogTitle)} file={this.state.logo} url={this.state.catalogPublisherHomepage} />
-              </SidebarItem>
-            )}
-
-            {/* DATA CATALOG PUBLISHER */}
-
-            <SidebarItem component="div" trans="dataset.catalog_publisher">
-              {this.state.catalog_publisher && checkDataLang(this.state.catalog_publisher)}
+          {/* DATA CATALOG LOGO */}
+          {this.state.logo && (
+            <SidebarItem>
+              <Logo
+                alt={checkDataLang(this.state.catalogTitle)}
+                file={this.state.logo}
+                url={this.state.catalogPublisherHomepage}
+              />
             </SidebarItem>
-          </div>
+          )}
+
+          {/* DATA CATALOG PUBLISHER */}
+
+          <SidebarItem component="dd" trans="dataset.catalog_publisher">
+            {this.state.catalog_publisher && checkDataLang(this.state.catalog_publisher)}
+          </SidebarItem>
+          <HorizontalLine aria-hidden />
 
           {/* PREFERRED IDENTIFIER */}
 
-          <div className="separator">
-            <SidebarItem component="div" trans="dataset.identifier">
-              <Identifier idn={this.state.pid} />
+          <SidebarItem component="dd" trans="dataset.identifier">
+            <Identifier idn={this.state.pid} />
+          </SidebarItem>
+          <HorizontalLine aria-hidden />
+          {/* FIELD OF SCIENCE */}
+
+          <SidebarItem
+            trans="dataset.field_of_science"
+            fallback="Field of Science"
+            hideEmpty="true"
+          >
+            {this.state.field &&
+              this.state.field.map(field => (
+                <ListItem key={field.identifier}>{checkDataLang(field.pref_label)}</ListItem>
+              ))}
+          </SidebarItem>
+
+          {/* KEYWORDS */}
+
+          <SidebarItem component="dd" trans="dataset.keywords" hideEmpty="true">
+            {this.keywordsAndTheme()}
+          </SidebarItem>
+
+          {/* LANGUAGE */}
+
+          <SidebarItem trans="dataset.language" hideEmpty="true">
+            {this.state.language &&
+              this.state.language.map((languages, i) => {
+                let language = checkDataLang(languages.title)
+                if (language === '') {
+                  language = languages.title
+                }
+                return (
+                  /* eslint-disable react/no-array-index-key */
+                  <ListItem key={`${language}-${i}`}>{language}</ListItem>
+                  /* eslint-enable react/no-array-index-key */
+                )
+              })}
+          </SidebarItem>
+
+          {/* SPATIAL COVERAGE */}
+
+          <SidebarItem
+            trans="dataset.spatial_coverage"
+            fallback="Spatial Coverage"
+            hideEmpty="true"
+          >
+            {this.state.geographic_name &&
+              this.state.geographic_name.map(single => this.spatial(single))}
+          </SidebarItem>
+
+          {/* TEMPORAL COVERAGE */}
+
+          <SidebarItem
+            trans="dataset.temporal_coverage"
+            fallback="Temporal Coverage"
+            hideEmpty="true"
+          >
+            {this.state.temporal &&
+              this.state.temporal.map(dates =>
+                this.dateSeparator(dates.start_date, dates.end_date)
+              )}
+          </SidebarItem>
+
+          {/* LICENSE */}
+          <SidebarItem trans="dataset.license" hideEmpty="true">
+            {this.state.license &&
+              this.state.license.map(rights => (
+                <ListItem key={rights.identifier}>
+                  <License data={rights} />
+                </ListItem>
+              ))}
+          </SidebarItem>
+
+          {/* ACCESS RIGHTS RESTRICTION_GROUNDS */}
+
+          {this.state.access_rights && (
+            <SidebarItem trans="dataset.access_rights" hideEmpty="true">
+              {this.state.access_rights.restriction_grounds &&
+              this.state.access_rights.restriction_grounds.length > 0
+                ? this.state.access_rights.restriction_grounds.map(rg => (
+                    <ListItem key={`rg-${rg.identifier}`}>{checkDataLang(rg.pref_label)}</ListItem>
+                  ))
+                : checkNested(this.state.access_rights, 'access_type', 'pref_label') && (
+                    <ListItem>
+                      {checkDataLang(this.state.access_rights.access_type.pref_label)}
+                    </ListItem>
+                  )}
             </SidebarItem>
-          </div>
-          <div>
+          )}
 
-            {/* FIELD OF SCIENCE */}
+          {/* PROJECT NAME */}
 
-            <SidebarItem
-              component="div"
-              trans="dataset.field_of_science"
-              fallback="Field of Science"
-              hideEmpty="true"
-            >
-              {this.state.field &&
-                this.state.field.map(field => (
-                  <Item key={field.identifier}>{checkDataLang(field.pref_label)}</Item>
-                ))}
-            </SidebarItem>
+          <SidebarItem trans="dataset.project" hideEmpty="true">
+            {this.state.isOutputOf &&
+              this.state.isOutputOf.map(item => {
+                const name = checkDataLang(item.name)
+                return <ListItem key={name}>{name}</ListItem>
+              })}
+          </SidebarItem>
 
-            {/* KEYWORDS */}
+          {/* PROJECT FUNDER NAME */}
 
-            <SidebarItem component="div" trans="dataset.keywords" hideEmpty="true">
-              {this.state.theme &&
-                this.state.theme.map(theme => (
-                  <Item key={`theme-${theme.identifier}`}>{checkDataLang(theme.pref_label)}</Item>
-                ))}
-              {this.state.keyword &&
-                this.state.keyword.map((keyword, i) => (
-                  /* eslint-disable-next-line react/no-array-index-key */
-                  <Item key={`keyword-${keyword}-${i}`}>{keyword}</Item>
-                ))}
-            </SidebarItem>
+          <SidebarItem trans="dataset.funder" hideEmpty="true">
+            {this.state.isOutputOf &&
+              this.state.isOutputOf.map(
+                output =>
+                  checkNested(output, 'has_funding_agency') &&
+                  output.has_funding_agency.map(agency => (
+                    <ListItem key={checkDataLang(agency.name)}>
+                      {checkDataLang(agency.name)}
+                    </ListItem>
+                  ))
+              )}
+          </SidebarItem>
 
-            {/* LANGUAGE */}
+          {/* PUBLISHER */}
 
-            <SidebarItem component="div" trans="dataset.language" hideEmpty="true">
-              {this.state.language &&
-                this.state.language.map((languages, i) => {
-                  let language = checkDataLang(languages.title)
-                  if (language === '') {
-                    language = languages.title
-                  }
-                  return (
-                    /* eslint-disable react/no-array-index-key */
-                    <Item key={`${language}-${i}`}>{language}</Item>
-                    /* eslint-enable react/no-array-index-key */
-                  )
-                })}
-            </SidebarItem>
+          <SidebarItem component="dd" trans="dataset.publisher" hideEmpty="true">
+            {this.state.publisher && checkDataLang(this.state.publisher)}
+          </SidebarItem>
 
-            {/* SPATIAL COVERAGE */}
+          {/* CURATOR */}
 
-            <SidebarItem
-              component="div"
-              trans="dataset.spatial_coverage"
-              fallback="Spatial Coverage"
-              hideEmpty="true"
-            >
-              {this.state.geographic_name &&
-                this.state.geographic_name.map(single => this.spatial(single))}
-            </SidebarItem>
+          <SidebarItem trans="dataset.curator" hideEmpty="true">
+            {this.state.curator &&
+              this.state.curator.map((curators, i) => {
+                let curator = checkDataLang(curators.name)
+                if (curator === '') {
+                  curator = curators.name
+                }
+                return (
+                  /* eslint-disable react/no-array-index-key */
+                  <ListItem key={`${curator}-${i}`}>{curator}</ListItem>
+                  /* eslint-enable react/no-array-index-key */
+                )
+              })}
+          </SidebarItem>
 
-            {/* TEMPORAL COVERAGE */}
+          {/* RIGHTS HOLDER */}
 
-            <SidebarItem
-              component="div"
-              trans="dataset.temporal_coverage"
-              fallback="Temporal Coverage"
-              hideEmpty="true"
-            >
-              {this.state.temporal &&
-                this.state.temporal.map(dates =>
-                  this.dateSeparator(dates.start_date, dates.end_date)
-                )}
-            </SidebarItem>
+          <SidebarItem trans="dataset.rights_holder" hideEmpty="true">
+            {this.state.rightsHolder &&
+              this.state.rightsHolder.map((rightsHolders, i) => {
+                let rightsHolder = checkDataLang(rightsHolders.name)
+                if (rightsHolder === '') {
+                  rightsHolder = rightsHolders.name
+                }
+                return (
+                  /* eslint-disable react/no-array-index-key */
+                  <ListItem key={`${rightsHolder}-${i}`}>{rightsHolder}</ListItem>
+                  /* eslint-enable react/no-array-index-key */
+                )
+              })}
+          </SidebarItem>
 
-            {/* LICENSE */}
+          {/* INFRASTRUCTURE */}
 
-            <SidebarItem component="div" trans="dataset.license" hideEmpty="true">
-              {this.state.license &&
-                this.state.license.map(rights => <div key={rights.identifier}><License data={rights} /></div>)}
-            </SidebarItem>
+          <SidebarItem trans="dataset.infrastructure" hideEmpty="true">
+            {this.state.infrastructure &&
+              this.state.infrastructure.map(entity => (
+                <ListItem key={entity.identifier}>{checkDataLang(entity.pref_label)}</ListItem>
+              ))}
+          </SidebarItem>
 
-            {/* ACCESS RIGHTS RESTRICTION_GROUNDS */}
+          {/* CITATION */}
 
-            {this.state.access_rights && (
-              <SidebarItem component="div" trans="dataset.access_rights" hideEmpty="true">
-                {this.state.access_rights.restriction_grounds && this.state.access_rights.restriction_grounds.length > 0
-                  ? this.state.access_rights.restriction_grounds.map(rg => (
-                    <div key={`rg-${rg.identifier}`}><Item>{checkDataLang(rg.pref_label)}</Item></div>
-                    ))
-                  : checkNested(this.state.access_rights, 'access_type', 'pref_label') &&
-                    checkDataLang(this.state.access_rights.access_type.pref_label)}
-              </SidebarItem>
-            )}
-
-            {/* PROJECT NAME */}
-
-            <SidebarItem component="div" trans="dataset.project" hideEmpty="true">
-              {this.state.isOutputOf &&
-                this.state.isOutputOf.map(item => {
-                  const name = checkDataLang(item.name)
-                  return <div key={name}>{name}</div>
-                })}
-            </SidebarItem>
-
-            {/* PROJECT FUNDER NAME */}
-
-            <SidebarItem component="div" trans="dataset.funder" hideEmpty="true">
-              {this.state.isOutputOf &&
-                this.state.isOutputOf.map(
-                  output =>
-                    checkNested(output, 'has_funding_agency') &&
-                    output.has_funding_agency.map(agency => (
-                      <div key={checkDataLang(agency.name)}>{checkDataLang(agency.name)}</div>
-                    ))
-                )}
-            </SidebarItem>
-
-            {/* PUBLISHER */}
-
-            <SidebarItem component="div" trans="dataset.publisher" hideEmpty="true">
-              {this.state.publisher && checkDataLang(this.state.publisher)}
-            </SidebarItem>
-
-            {/* CURATOR */}
-
-            <SidebarItem component="div" trans="dataset.curator" hideEmpty="true">
-              {this.state.curator &&
-                this.state.curator.map((curators, i) => {
-                  let curator = checkDataLang(curators.name)
-                  if (curator === '') {
-                    curator = curators.name
-                  }
-                  return (
-                    /* eslint-disable react/no-array-index-key */
-                    <div key={`${curator}-${i}`}>{curator}</div>
-                    /* eslint-enable react/no-array-index-key */
-                  )
-                })}
-            </SidebarItem>
-
-            {/* RIGHTS HOLDER */}
-
-            <SidebarItem component="div" trans="dataset.rights_holder" hideEmpty="true">
-              {this.state.rightsHolder &&
-                this.state.rightsHolder.map((rightsHolders, i) => {
-                  let rightsHolder = checkDataLang(rightsHolders.name)
-                  if (rightsHolder === '') {
-                    rightsHolder = rightsHolders.name
-                  }
-                  return (
-                    /* eslint-disable react/no-array-index-key */
-                    <div key={`${rightsHolder}-${i}`}>{rightsHolder}</div>
-                    /* eslint-enable react/no-array-index-key */
-                  )
-                })}
-            </SidebarItem>
-
-            {/* INFRASTRUCTURE */}
-
-            <SidebarItem component="div" trans="dataset.infrastructure" hideEmpty="true">
-              {this.state.infrastructure &&
-                this.state.infrastructure.map(entity => (
-                  <div key={entity.identifier}>{checkDataLang(entity.pref_label)}</div>
-                ))}
-            </SidebarItem>
-
-            {/* CITATION */}
-
-            <SidebarItem component="div" trans="dataset.citation" hideEmpty="false">
-              {!this.state.harvested && <Citation />}
-            </SidebarItem>
-          </div>
+          <SidebarItem component="dd" trans="dataset.citation" hideEmpty="false">
+            {!this.state.harvested && <Citation />}
+          </SidebarItem>
         </ErrorBoundary>
       </SidebarContainer>
     )
@@ -290,7 +298,7 @@ Sidebar.propTypes = {
   dataset: PropTypes.object.isRequired,
 }
 
-const SidebarContainer = styled.div`
+const SidebarContainer = styled.dl`
   border: 2px solid rgb(231, 233, 237);
   word-wrap: break-word;
   word-break: break-word;
@@ -298,29 +306,15 @@ const SidebarContainer = styled.div`
   -moz-hyphens: auto;
   -ms-hyphens: auto;
   hyphens: auto;
-  h4 {
-    margin-bottom: 0;
-  }
-  > div {
-    padding: 20px 0px;
-  }
-  .separator {
-    &:after {
-      content: '';
-      display: block;
-      height: 2px;
-      background-color: ${props => props.theme.color.lightgray};
-      position: relative;
-      bottom: -20px;
-      width: 100%;
-    }
-  }
+  padding: 20px 0;
 `
 
-const Item = styled.span`
-  &:not(:last-child)::after {
-    content: ', ';
-  }
+const HorizontalLine = styled.hr`
+  border-style: solid;
+  border-color: ${props => props.theme.color.lightgray};
+  margin: 20px 0;
 `
+
+const ListItem = styled.dd``
 
 export default inject('Stores')(observer(Sidebar))

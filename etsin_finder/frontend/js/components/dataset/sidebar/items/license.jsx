@@ -4,9 +4,9 @@ import FontawesomeIcon from '@fortawesome/react-fontawesome'
 import faInfoCircle from '@fortawesome/fontawesome-free-solid/faInfoCircle'
 import styled from 'styled-components'
 
-import checkDataLang from '../../../utils/checkDataLang'
-import PopUp from '../../general/popup'
-import { LinkButton } from '../../general/button'
+import checkDataLang from '../../../../utils/checkDataLang'
+import PopUp from '../../../general/popup'
+import { LinkButton } from '../../../general/button'
 
 export default class License extends Component {
   static propTypes = {
@@ -66,11 +66,11 @@ export default class License extends Component {
     const licenseIsUrl = this.props.data.license && this.licenseIsUrl(this.props.data.license)
     return (
       <span>
-        {licenseIsUrl &&
+        {licenseIsUrl && (
           <MainLink href={this.props.data.license} target="_blank" rel="noopener noreferrer">
             {checkDataLang(this.props.data.title)}
           </MainLink>
-        }
+        )}
         {!licenseIsUrl && checkDataLang(this.props.data.title)}
         {this.props.data.description && (
           <PopUp

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 
-import Image from '../../general/image'
+import Image from '../../../general/image'
 
 function importAll(r) {
   const images = {}
@@ -17,14 +17,14 @@ export default class Logo extends Component {
   static propTypes = {
     alt: PropTypes.string.isRequired,
     file: PropTypes.string.isRequired,
-    url: PropTypes.string.isRequired
+    url: PropTypes.string.isRequired,
   }
   constructor(props) {
     super(props)
 
     this.state = {
       images: importAll(
-        require.context('../../../../static/images/catalog_logos', false, /\.(png|jpe?g|svg)$/)
+        require.context('../../../../../static/images/catalog_logos', false, /\.(png|jpe?g|svg)$/)
       ),
     }
   }
@@ -35,9 +35,10 @@ export default class Logo extends Component {
         {this.props.url ? (
           <a href={this.props.url} target="_blank" rel="noopener noreferrer">
             <Image alt={this.props.alt} file={this.state.images[this.props.file]} />
-          </a>)
-        : <Image alt={this.props.alt} file={this.state.images[this.props.file]} />
-        }
+          </a>
+        ) : (
+          <Image alt={this.props.alt} file={this.state.images[this.props.file]} />
+        )}
       </Cont>
     )
   }
