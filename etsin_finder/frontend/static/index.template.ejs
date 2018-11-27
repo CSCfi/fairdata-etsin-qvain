@@ -1,60 +1,65 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Kuvailutietojen perusteella käyttäjät voivat etsiä aineistoja ja arvioida löytämiensä aineistojen käyttökelpoisuutta tarpeisiinsa.">
-  <meta name="theme-color" content="#007FAD">
-  <link rel="manifest" href="/static/manifest.json">
-  <title>Etsin | Tutkimusaineistojen hakupalvelu</title>
-  <style>
-    .loader:empty {
-      position: absolute;
-      top: calc(50% - 3em);
-      left: calc(50% - 3em);
-      width: 6em;
-      height: 6em;
-      border: 0.3em solid rgba(0, 0, 0, 0.1);
-      border-left: 0.3em solid #007FAD;
-      border-radius: 50%;
-      animation: load8 1.1s infinite linear;
-    }
-
-    @keyframes load8 {
-      0% {
-        transform: rotate(0deg);
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Kuvailutietojen perusteella käyttäjät voivat etsiä aineistoja ja arvioida löytämiensä aineistojen käyttökelpoisuutta tarpeisiinsa."
+    />
+    <meta name="theme-color" content="#007FAD" />
+    <link rel="manifest" href="/static/manifest.json" />
+    <title>Etsin | Tutkimusaineistojen hakupalvelu</title>
+    <style>
+      .loader:empty {
+        position: absolute;
+        top: calc(50% - 3em);
+        left: calc(50% - 3em);
+        width: 6em;
+        height: 6em;
+        border: 0.3em solid rgba(0, 0, 0, 0.1);
+        border-left: 0.3em solid #007fad;
+        border-radius: 50%;
+        animation: load8 1.1s infinite linear;
       }
-      100% {
-        transform: rotate(360deg);
+
+      @keyframes load8 {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
       }
-    }
-  </style>
-  <% if(process.env.MATOMO === 'true') { %>
+    </style>
+    <% if(process.env.MATOMO === 'true') { %>
     <!-- Matomo -->
-    <script type="text/javascript">
-      var _paq = _paq || [];
+    <script>
+      var _paq = _paq || []
       /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
       // _paq.push(['trackPageView']);
-      _paq.push(['enableLinkTracking']);
-      (function() {
-        var u="//matomo.rahtiapp.fi/";
-        _paq.push(['setTrackerUrl', u+'piwik.php']);
-        _paq.push(['setSiteId', '3']);
-        var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-        g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
-      })();
-      </script>
+      _paq.push(['enableLinkTracking'])
+      ;(function() {
+        var u = '//matomo.rahtiapp.fi/'
+        _paq.push(['setTrackerUrl', u + 'piwik.php'])
+        _paq.push(['setSiteId', '3'])
+        var d = document,
+          g = d.createElement('script'),
+          s = d.getElementsByTagName('script')[0]
+        g.type = 'text/javascript'
+        g.async = true
+        g.defer = true
+        g.src = u + 'piwik.js'
+        s.parentNode.insertBefore(g, s)
+      })()
+    </script>
     <!-- End Matomo Code -->
-  <% } %>
-</head>
+    <% } %>
+  </head>
 
-<body>
-  <noscript>Javascript needs to be enabled to see this page</noscript>
-  <div id="root">
-    <div class="loader"></div>
-  </div>
-</body>
-
+  <body>
+    <noscript>Javascript needs to be enabled to see this page</noscript>
+    <div id="root"><div class="loader"></div></div>
+  </body>
 </html>

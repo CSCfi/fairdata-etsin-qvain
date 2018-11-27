@@ -61,7 +61,10 @@ class Description extends Component {
 
   componentDidMount() {
     Accessiblity.handleNavigation('dataset', false)
-    Tracking.newPageView(`Dataset: ${this.props.match.params.identifier} | Description`, this.props.location.pathname)
+    Tracking.newPageView(
+      `Dataset: ${this.props.match.params.identifier} | Description`,
+      this.props.location.pathname
+    )
   }
 
   checkEmails(obj) {
@@ -94,60 +97,61 @@ class Description extends Component {
           </Flex>
           <Flex>
             <ErrorBoundary>
-              {this.checkEmails(this.props.emails) &&
-                !this.props.harvested && (
-                  <Contact
-                    datasetID={this.props.dataset.identifier}
-                    emails={this.props.emails}
-                    // TEMPORARY: rems check won't be needed in contact later.
-                    isRems={
-                      this.props.dataset.research_dataset.access_rights.access_type.identifier ===
-                      'http://uri.suomi.fi/codelist/fairdata/access_type/code/permit'
-                    }
-                  />
-                )}
+              {this.checkEmails(this.props.emails) && !this.props.harvested && (
+                <Contact
+                  datasetID={this.props.dataset.identifier}
+                  emails={this.props.emails}
+                  // TEMPORARY: rems check won't be needed in contact later.
+                  isRems={
+                    this.props.dataset.research_dataset.access_rights.access_type.identifier ===
+                    'http://uri.suomi.fi/codelist/fairdata/access_type/code/permit'
+                  }
+                />
+              )}
             </ErrorBoundary>
             <AskForAccess />
           </Flex>
         </Labels>
-        <div className="d-md-flex align-items-center dataset-title justify-content-between">
-          <Title>{checkDataLang(this.state.title)}</Title>
-        </div>
-        <div className="d-flex justify-content-between basic-info">
-          <MainInfo>
-            <ErrorBoundary>
-              <Agents creator={this.state.creator} />
-            </ErrorBoundary>
-            <ErrorBoundary>
-              <Agents contributor={this.state.contributor} />
-            </ErrorBoundary>
-            <p>{this.state.issued ? dateFormat(checkDataLang(this.state.issued)) : null}</p>
-          </MainInfo>
-        </div>
-        <ErrorBoundary>
-          <DatasetDescription>
-            {/* <ShowMore
-              min={100}
-              more={<Translate content="general.showMore" />}
-              less={<Translate content="general.showLess" />}
-            > */}
-            <CustomMarkdown source={checkDataLang(this.state.description)} />
-            {/* </ShowMore> */}
-          </DatasetDescription>
-        </ErrorBoundary>
-        {this.props.cumulative && (
-          <Label color="error">
-            <Translate content="dataset.cumulative" />
-          </Label>
-        )}
-        {this.props.harvested && (
-          <React.Fragment>
-            <GoToOriginal idn={this.props.dataset.research_dataset.preferred_identifier} />
-            <Label>
-              <Translate content="dataset.harvested" />
+        <section>
+          <div className="d-md-flex align-items-center dataset-title justify-content-between">
+            <Title>{checkDataLang(this.state.title)}</Title>
+          </div>
+          <div className="d-flex justify-content-between basic-info">
+            <MainInfo>
+              <ErrorBoundary>
+                <Agents creator={this.state.creator} />
+              </ErrorBoundary>
+              <ErrorBoundary>
+                <Agents contributor={this.state.contributor} />
+              </ErrorBoundary>
+              <p>{this.state.issued ? dateFormat(checkDataLang(this.state.issued)) : null}</p>
+            </MainInfo>
+          </div>
+          <ErrorBoundary>
+            <DatasetDescription>
+              {/* <ShowMore
+                min={100}
+                more={<Translate content="general.showMore" />}
+                less={<Translate content="general.showLess" />}
+              > */}
+              <CustomMarkdown source={checkDataLang(this.state.description)} />
+              {/* </ShowMore> */}
+            </DatasetDescription>
+          </ErrorBoundary>
+          {this.props.cumulative && (
+            <Label color="error">
+              <Translate content="dataset.cumulative" />
             </Label>
-          </React.Fragment>
-        )}
+          )}
+          {this.props.harvested && (
+            <React.Fragment>
+              <GoToOriginal idn={this.props.dataset.research_dataset.preferred_identifier} />
+              <Label>
+                <Translate content="dataset.harvested" />
+              </Label>
+            </React.Fragment>
+          )}
+        </section>
       </div>
     )
   }
@@ -163,7 +167,7 @@ Description.propTypes = {
   match: PropTypes.shape({
     params: PropTypes.shape({
       identifier: PropTypes.string,
-    })
+    }),
   }).isRequired,
   emails: PropTypes.shape({
     CONTRIBUTOR: PropTypes.bool,

@@ -35,7 +35,7 @@ export default class MobileNavi extends React.Component {
             exact
             to="/"
             onClick={() => {
-              Accessibility.setNavText(translate('changepage', { page: translate('nav.datasets') }))
+              Accessibility.announce(translate('changepage', { page: translate('nav.datasets') }))
             }}
           >
             <Translate content="nav.home" />
@@ -43,7 +43,7 @@ export default class MobileNavi extends React.Component {
           <NavItem
             to="/datasets"
             onClick={() => {
-              Accessibility.setNavText(translate('changepage', { page: translate('nav.datasets') }))
+              Accessibility.announce(translate('changepage', { page: translate('nav.datasets') }))
             }}
           >
             <Translate content="nav.datasets" />

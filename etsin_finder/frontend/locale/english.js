@@ -155,7 +155,7 @@ const english = {
       dataset: 'Dataset',
       datasets: 'Datasets',
       home: 'Home',
-      error: 'Error'
+      error: 'Error',
     },
   },
   home: {
@@ -203,6 +203,8 @@ const english = {
     },
     filter: {
       clearFilter: 'Remove filters',
+      filtersCleared: 'Filters cleared',
+      filters: 'Filters',
       filter: 'Filter',
       SRactive: 'active',
     },
@@ -213,6 +215,7 @@ const english = {
       SRpage: 'page',
       SRcurrentpage: 'current page',
       SRpagination: 'Pagination',
+      changepage: 'Page %(value)s'
     },
     noResults: {
       searchterm: 'Your search - <strong>%(search)s</strong> - did not match any documents.',

@@ -154,7 +154,7 @@ const finnish = {
       dataset: 'Aineisto',
       datasets: 'Aineistot',
       home: 'Koti',
-      error: 'Virhe'
+      error: 'Virhe',
     },
   },
   home: {
@@ -203,6 +203,8 @@ const finnish = {
     },
     filter: {
       clearFilter: 'Poista rajaukset',
+      filtersCleared: 'Rajaukset poistettu',
+      filters: 'Rajaukset',
       filter: 'Rajaa',
       SRactive: 'päällä',
     },
@@ -211,8 +213,9 @@ const finnish = {
       next: 'Seuraava sivu',
       SRskipped: 'Ylihypätyt sivut',
       SRpage: 'sivu',
-      SRcurrentpage: 'tämä sivu',
+      SRcurrentpage: 'nykyinen sivu',
       SRpagination: 'Paginaatio',
+      changepage: 'Sivu %(value)s'
     },
     noResults: {
       searchterm: 'Haullesi - <strong>%(search)s</strong> - ei löytynyt yhtään osumaa.',

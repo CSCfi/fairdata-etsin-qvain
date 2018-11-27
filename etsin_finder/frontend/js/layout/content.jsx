@@ -1,13 +1,13 @@
 {
-/**
- * This file is part of the Etsin service
- *
- * Copyright 2017-2018 Ministry of Education and Culture, Finland
- *
- *
- * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
- * @license   MIT
- */
+  /**
+   * This file is part of the Etsin service
+   *
+   * Copyright 2017-2018 Ministry of Education and Culture, Finland
+   *
+   *
+   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
+   * @license   MIT
+   */
 }
 
 import React, { Component } from 'react'
@@ -23,7 +23,7 @@ export default class Content extends Component {
   }
   render() {
     return (
-      <div className="content">
+      <main className="content">
         <span ref={this.props.contentRef} tabIndex="-1" />
         <Switch>
           <Route exact path="/" component={Home} />
@@ -31,7 +31,7 @@ export default class Content extends Component {
           <Route path="/dataset/:identifier" component={Dataset} />
           <Route render={() => <ErrorPage error={{ type: 'error' }} />} />
         </Switch>
-      </div>
+      </main>
     )
   }
 }
