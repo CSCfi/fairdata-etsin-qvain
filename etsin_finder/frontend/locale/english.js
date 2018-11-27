@@ -70,6 +70,7 @@ const english = {
       fileAmount: '%(amount)s objects',
       close_modal: 'Close info modal',
       info_header: 'Other info related to file',
+      loaded: 'Folder loaded',
       file_types: {
         both: 'files and folders',
         directory: 'Folder',
@@ -215,7 +216,7 @@ const english = {
       SRpage: 'page',
       SRcurrentpage: 'current page',
       SRpagination: 'Pagination',
-      changepage: 'Page %(value)s'
+      changepage: 'Page %(value)s',
     },
     noResults: {
       searchterm: 'Your search - <strong>%(search)s</strong> - did not match any documents.',

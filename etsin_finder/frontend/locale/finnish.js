@@ -69,6 +69,7 @@ const finnish = {
       fileAmount: '%(amount)s objektia',
       close_modal: 'Sulje info',
       info_header: 'Tiedoston muut tiedot',
+      loaded: 'Kansio latautunut',
       file_types: {
         both: 'tiedostot ja kansiot',
         directory: 'Kansio',
@@ -215,7 +216,7 @@ const finnish = {
       SRpage: 'sivu',
       SRcurrentpage: 'nykyinen sivu',
       SRpagination: 'Paginaatio',
-      changepage: 'Sivu %(value)s'
+      changepage: 'Sivu %(value)s',
     },
     noResults: {
       searchterm: 'Haullesi - <strong>%(search)s</strong> - ei löytynyt yhtään osumaa.',

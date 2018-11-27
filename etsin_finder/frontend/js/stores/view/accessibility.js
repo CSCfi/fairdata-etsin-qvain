@@ -29,6 +29,14 @@ class Accessibility {
   @action
   announce(text) {
     this.navText = text
+    setTimeout(() => {
+      this.clearAnnounce()
+    }, 1000)
+  }
+
+  @action
+  clearAnnounce() {
+    this.navText = ''
   }
 
   // don't show outline when user is not using tab to navigate

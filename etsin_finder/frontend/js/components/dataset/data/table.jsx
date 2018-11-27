@@ -70,7 +70,7 @@ export default class Table extends Component {
   render() {
     return (
       <TableContainer>
-        <StyledTable aria-live="polite">
+        <StyledTable>
           <THead>
             <tr>
               <Icon scope="col">
