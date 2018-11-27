@@ -47,7 +47,7 @@ export default class Header extends Component {
       <HeaderBar>
         <Positioner className="container">
           <EtsinLogo />
-          <NaviCont>
+          <NaviCont aria-label="primary">
             <Navi />
           </NaviCont>
           <Right>

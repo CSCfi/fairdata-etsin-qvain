@@ -63,7 +63,7 @@ export default class SearchBar extends Component {
   render() {
     return (
       <ErrorBoundary>
-        <form onSubmit={e => this.handleSubmit(e)}>
+        <form onSubmit={e => this.handleSubmit(e)} role="search">
           <SearchContainer>
             <SearchInner>
               <CustomFontAwesomeIcon
