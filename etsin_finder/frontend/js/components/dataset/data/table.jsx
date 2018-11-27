@@ -73,7 +73,9 @@ export default class Table extends Component {
         <StyledTable aria-live="polite">
           <THead>
             <tr>
-              <Icon scope="col" />
+              <Icon scope="col">
+                <Translate content="dataset.dl.type" className="sr-only" />
+              </Icon>
               {this.props.fields.name && (
                 <Name scope="col">
                   <Translate content="dataset.dl.name" />
@@ -90,7 +92,9 @@ export default class Table extends Component {
                 </Category>
               )}
               {(this.props.fields.downloadBtn || this.props.fields.infoBtn) && (
-                <Buttons scope="col" />
+                <Buttons scope="col">
+                  <Translate content="dataset.dl.info" className="sr-only" />
+                </Buttons>
               )}
             </tr>
           </THead>

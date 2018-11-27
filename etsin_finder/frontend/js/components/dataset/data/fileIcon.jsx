@@ -19,6 +19,7 @@ import faFile from '@fortawesome/fontawesome-free-regular/faFile'
 import faFileAlt from '@fortawesome/fontawesome-free-regular/faFileAlt'
 import faCloud from '@fortawesome/fontawesome-free-solid/faCloud'
 import PropTypes from 'prop-types'
+import translate from 'counterpart'
 
 import Tooltip from '../../general/tooltip'
 import { TypeConcept } from '../../../utils/propTypes'
@@ -49,28 +50,43 @@ const Icon = (type, def) => {
 const FileIcon = props => {
   if (props.type !== 'dir' && props.type && props.type.pref_label) {
     return (
-      <Tooltip title={checkDataLang(props.type.pref_label)}>
-        <FontAwesomeIcon
-          icon={Icon(checkDataLang(props.type.pref_label), props.default)}
-          size="2x"
-          transform="shrink-4"
-          {...props}
-        />
-      </Tooltip>
+      <React.Fragment>
+        <div className="sr-only">{checkDataLang(props.type.pref_label)}</div>
+        <Tooltip title={checkDataLang(props.type.pref_label)}>
+          <FontAwesomeIcon
+            icon={Icon(checkDataLang(props.type.pref_label), props.default)}
+            size="2x"
+            transform="shrink-4"
+            {...props}
+            title={checkDataLang(props.type.pref_label)}
+          />
+        </Tooltip>
+      </React.Fragment>
     )
   }
   if (props.type === 'dir') {
     return (
+      <React.Fragment>
+        <div className="sr-only">{translate('dataset.dl.file_types.directory')}</div>
+        <FontAwesomeIcon
+          icon={Icon('dir', props.default)}
+          size="2x"
+          transform="shrink-4"
+          {...props}
+        />
+      </React.Fragment>
+    )
+  }
+  return (
+    <React.Fragment>
+      <div className="sr-only">{translate('dataset.dl.file_types.file')}</div>
       <FontAwesomeIcon
-        icon={Icon('dir', props.default)}
+        icon={Icon(false, props.default)}
         size="2x"
         transform="shrink-4"
         {...props}
       />
-    )
-  }
-  return (
-    <FontAwesomeIcon icon={Icon(false, props.default)} size="2x" transform="shrink-4" {...props} />
+    </React.Fragment>
   )
 }
 
