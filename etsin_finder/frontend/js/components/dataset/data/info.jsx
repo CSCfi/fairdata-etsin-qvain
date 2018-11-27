@@ -15,6 +15,7 @@ import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import PropTypes from 'prop-types'
 
+import InfoItem from './infoItem'
 import checkDataLang from '../../../utils/checkDataLang'
 import { Link } from '../../general/button'
 import Modal from '../../general/modal'
@@ -51,65 +52,20 @@ const Info = ({
     <ModalLayout>
       <Translate className="sr-only" content="dataset.dl.info_header" />
       <InfoTable>
-        <tbody>
-          {name && (
-            <tr>
-              <th>
-                <Translate content="dataset.dl.name" />
-              </th>
-              <td>{name}</td>
-            </tr>
-          )}
-          {id && (
-            <tr>
-              <th>
-                <Translate content="dataset.dl.id" />
-              </th>
-              <td>{id}</td>
-            </tr>
-          )}
-          {title && (
-            <tr>
-              <th>
-                <Translate content="dataset.dl.title" />
-              </th>
-              <td>{title}</td>
-            </tr>
-          )}
-          {type &&
-            type !== 'dir' && (
-              <tr>
-                <th>
-                  <Translate content="dataset.dl.type" />
-                </th>
-                <td>{checkDataLang(type.pref_label)}</td>
-              </tr>
-            )}
-          {size && (
-            <tr>
-              <th>
-                <Translate content="dataset.dl.size" />
-              </th>
-              <td>{size}</td>
-            </tr>
-          )}
-          {category && (
-            <tr>
-              <th>
-                <Translate content="dataset.dl.category" />
-              </th>
-              <td>{category}</td>
-            </tr>
-          )}
-          {checksum && (
-            <tr>
-              <th>
-                <Translate content="dataset.dl.checksum" />
-              </th>
-              <td>{checksum.checksum_value ? checksum.checksum_value : checksum.value}</td>
-            </tr>
-          )}
-        </tbody>
+        {name && <InfoItem translation="dataset.dl.name" content={name} />}
+        {id && <InfoItem translation="dataset.dl.id" content={id} />}
+        {title && <InfoItem translation="dataset.dl.title" content={title} />}
+        {type && type !== 'dir' && (
+          <InfoItem translation="dataset.dl.type" content={checkDataLang(type.pref_label)} />
+        )}
+        {size && <InfoItem translation="dataset.dl.size" content={size} />}
+        {category && <InfoItem translation="dataset.dl.category" content={category} />}
+        {checksum && (
+          <InfoItem
+            translation="dataset.dl.checksum"
+            content={checksum.checksum_value ? checksum.checksum_value : checksum.value}
+          />
+        )}
       </InfoTable>
     </ModalLayout>
     {description ? (
@@ -120,31 +76,29 @@ const Info = ({
         <p>{description}</p>
       </ModalDescription>
     ) : null}
-    {accessUrl &&
-      allowDownload && (
-        <FullButton
-          href={accessUrl.identifier}
-          title={checkDataLang(accessUrl.description)}
-          noMargin
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Translate content="dataset.dl.go_to_original" />
-        </FullButton>
-      )}
-    {downloadUrl &&
-      allowDownload && (
-        <FullButton
-          href={downloadUrl.identifier}
-          target="_blank"
-          rel="noopener noreferrer"
-          title={checkDataLang(downloadUrl.description)}
-          color="success"
-          noMargin
-        >
-          <Translate content="dataset.dl.download" />
-        </FullButton>
-      )}
+    {accessUrl && allowDownload && (
+      <FullButton
+        href={accessUrl.identifier}
+        title={checkDataLang(accessUrl.description)}
+        noMargin
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <Translate content="dataset.dl.go_to_original" />
+      </FullButton>
+    )}
+    {downloadUrl && allowDownload && (
+      <FullButton
+        href={downloadUrl.identifier}
+        target="_blank"
+        rel="noopener noreferrer"
+        title={checkDataLang(downloadUrl.description)}
+        color="success"
+        noMargin
+      >
+        <Translate content="dataset.dl.download" />
+      </FullButton>
+    )}
   </Modal>
 )
 
