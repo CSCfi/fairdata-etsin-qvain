@@ -160,6 +160,9 @@ const english = {
       home: 'Home',
       error: 'Error',
     },
+    language: {
+      toggleLabel: 'Toggle language',
+    },
   },
   home: {
     title: 'Search datasets',

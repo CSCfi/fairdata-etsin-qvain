@@ -159,6 +159,9 @@ const finnish = {
       home: 'Koti',
       error: 'Virhe',
     },
+    language: {
+      toggleLabel: 'Vaihda kieltä',
+    },
   },
   home: {
     title: 'Etsi aineistoa',
