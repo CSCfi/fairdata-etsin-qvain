@@ -1,13 +1,13 @@
 {
-/**
- * This file is part of the Etsin service
- *
- * Copyright 2017-2018 Ministry of Education and Culture, Finland
- *
- *
- * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
- * @license   MIT
- */
+  /**
+   * This file is part of the Etsin service
+   *
+   * Copyright 2017-2018 Ministry of Education and Culture, Finland
+   *
+   *
+   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
+   * @license   MIT
+   */
 }
 
 import React, { Component } from 'react'
@@ -134,7 +134,7 @@ export default class Contact extends Component {
           />
         </Modal>
         <Splash visible={this.state.splash}>
-          <Translate content="dataset.contact.success" component="h1" />
+          <Translate content="dataset.contact.success" component="h1" aria-live="assertive" />
         </Splash>
       </div>
     )
