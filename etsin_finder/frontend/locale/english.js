@@ -114,6 +114,7 @@ const english = {
     infrastructure: 'Infrastructure',
     keywords: 'Keywords',
     license: 'License',
+    loading: 'Loading dataset',
     harvested: 'Harvested',
     cumulative: 'Cumulative',
     permanent_link: 'Permanent link to this page',

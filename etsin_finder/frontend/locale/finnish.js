@@ -115,6 +115,7 @@ const finnish = {
     cumulative: 'Kumulatiivinen',
     keywords: 'Avainsanat',
     license: 'Lisenssi',
+    loading: 'Ladataan aineistoa',
     go_to_original: 'Siirry alkuperäiseen',
     permanent_link: 'Pysyvä linkki tälle sivulle',
     project: 'Projekti',
