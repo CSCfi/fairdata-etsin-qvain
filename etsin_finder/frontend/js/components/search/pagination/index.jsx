@@ -105,7 +105,7 @@ class Pagination extends Component {
   changePage(event, value) {
     ElasticQuery.updatePageNum(value)
     ElasticQuery.queryES()
-    Accessibility.setNavText(translate('search.pagination.changepage', { value }))
+    Accessibility.announce(translate('search.pagination.changepage', { value }))
     Accessibility.resetFocus()
   }
 
