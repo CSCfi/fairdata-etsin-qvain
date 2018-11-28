@@ -8,10 +8,10 @@ import checkNested from '../../../utils/checkNested'
 import dateFormat from '../../../utils/dateFormat'
 import SidebarItem from './sidebarItem'
 import Identifier from '../identifier'
-import Citation from './items/citation'
-import Logo from './items/logo'
+import Citation from './special/citation'
+import Logo from './special/logo'
+import License from './special/license'
 import ErrorBoundary from '../../general/errorBoundary'
-import License from './items/license'
 
 class Sidebar extends Component {
   constructor(props) {

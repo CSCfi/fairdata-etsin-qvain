@@ -40,25 +40,32 @@ export default class Citation extends Component {
     return agents
   }
 
+  createCitation() {
+    const cit = []
+    cit.push(
+      this.getAgents().map(agent => {
+        const currentAgent = agent.role
+          ? `${checkDataLang(agent.name)}, ${checkDataLang(agent.role)}`
+          : checkDataLang(agent.name)
+        return currentAgent
+      })
+    )
+    cit.push(checkDataLang(this.state.title))
+    if (this.state.publisher) {
+      cit.push(checkDataLang(this.state.publisher))
+    }
+    cit.push(checkDataLang(this.state.release_date))
+    cit.push(checkDataLang(this.state.pid))
+    return cit.join(', ')
+  }
+
   render() {
     if (this.state.citation) {
       return <Fragment>{this.state.citation}</Fragment>
     }
     return (
       <Fragment>
-        {this.getAgents().map((agent, i) => (
-          /* eslint-disable-next-line react/no-array-index-key */
-          <Fragment key={`${checkDataLang(agent.name)}-${i}`}>
-            <span name="Name">{checkDataLang(agent.name)}, </span>
-            {agent.role && <span name="Role">{checkDataLang(agent.role)}, </span>}
-          </Fragment>
-        ))}
-        <span title="Title">{checkDataLang(this.state.title)}, </span>
-        {this.state.publisher && (
-          <span title="Publisher">{checkDataLang(this.state.publisher)}, </span>
-        )}
-        <span title="Release date">{this.state.release_date}, </span>
-        <span title="Preferred identifier">{this.state.pid}</span>
+        <span>{this.createCitation()}</span>
       </Fragment>
     )
   }
