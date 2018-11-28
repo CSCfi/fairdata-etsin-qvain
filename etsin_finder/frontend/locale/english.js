@@ -197,6 +197,7 @@ const english = {
     },
   },
   search: {
+    name: 'Search',
     placeholder: 'Search term',
     sorting: {
       sort: 'Sort',

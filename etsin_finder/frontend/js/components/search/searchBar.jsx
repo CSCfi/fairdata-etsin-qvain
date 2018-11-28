@@ -66,6 +66,9 @@ export default class SearchBar extends Component {
         <form onSubmit={e => this.handleSubmit(e)} role="search">
           <SearchContainer>
             <SearchInner>
+              <label htmlFor="searchBarInput" className="sr-only">
+                {counterpart('search.name')}
+              </label>
               <CustomFontAwesomeIcon
                 onClick={this.handleSubmit}
                 icon={faSearch}

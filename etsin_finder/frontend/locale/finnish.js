@@ -197,6 +197,7 @@ const finnish = {
     },
   },
   search: {
+    name: 'Haku',
     placeholder: 'Anna hakusana',
     sorting: {
       sort: 'Järjestä',
