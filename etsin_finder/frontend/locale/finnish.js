@@ -123,6 +123,7 @@ const finnish = {
     rights_holder: 'Oikeuksienhaltija',
     spatial_coverage: 'Maantieteellinen kattavuus',
     temporal_coverage: 'Ajallinen kattavuus',
+    tags: 'Aineiston tägit',
     version: { number: 'Versio %(number)s', old: '(Vanha)' },
     agent: {
       contributor_role: 'Rooli',

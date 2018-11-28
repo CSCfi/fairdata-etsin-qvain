@@ -124,6 +124,7 @@ const english = {
     rights_holder: 'Rights Holder',
     spatial_coverage: 'Spatial Coverage',
     temporal_coverage: 'Temporal Coverage',
+    tags: 'Dataset tags',
     version: { number: 'Version %(number)s', old: '(Old)' },
     agent: {
       contributor_role: 'Contributor role',
