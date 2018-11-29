@@ -15,7 +15,7 @@ import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
-import checkDataLang from '../../../utils/checkDataLang'
+import checkDataLang, { getDataLang } from '../../../utils/checkDataLang'
 import ErrorBoundary from '../../general/errorBoundary'
 import AccessRights from '../../dataset/accessRights'
 import ContentBox from '../../general/contentBox'
@@ -39,7 +39,9 @@ export default class ListItem extends Component {
             <ContentBox>
               <ErrorBoundary>
                 <ItemHeader>
-                  <h2 className="title">{checkDataLang(this.props.item.title, this.props.lang)}</h2>
+                  <h2 className="title" lang={getDataLang(this.props.item.title)}>
+                    {checkDataLang(this.props.item.title)}
+                  </h2>
                   <AccessRights
                     access_rights={this.props.item.access_rights}
                     style={{ marginBottom: '1em' }}
@@ -50,15 +52,19 @@ export default class ListItem extends Component {
                 {Array.isArray(this.props.item.field_of_science) && (
                   <div className="basic-info">
                     <p>
-                      {this.props.item.field_of_science.map(field =>
-                        checkDataLang(field.pref_label)
-                      )}
+                      {this.props.item.field_of_science.map(field => (
+                        <span lang={getDataLang(field.pref_label)}>
+                          checkDataLang(field.pref_label)
+                        </span>
+                      ))}
                     </p>
                   </div>
                 )}
               </ErrorBoundary>
               <ErrorBoundary>
-                <p>{this.shortDescription(checkDataLang(this.props.item.description))}</p>
+                <p lang={getDataLang(this.props.item.description)}>
+                  {this.shortDescription(checkDataLang(this.props.item.description))}
+                </p>
               </ErrorBoundary>
             </ContentBox>
           </Link>

@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react'
 import DatasetQuery from '../../../stores/view/datasetquery'
-import checkDataLang from '../../../utils/checkDataLang'
+import checkDataLang, { getDataLang } from '../../../utils/checkDataLang'
 import checkNested from '../../../utils/checkNested'
 
 export default class Citation extends Component {
@@ -42,25 +42,31 @@ export default class Citation extends Component {
 
   render() {
     if (this.state.citation) {
-      return (
-        <Fragment>
-          {this.state.citation}
-        </Fragment>
-      )
+      return <Fragment>{this.state.citation}</Fragment>
     }
     return (
       <Fragment>
         {this.getAgents().map((agent, i) => (
           /* eslint-disable-next-line react/no-array-index-key */
           <Fragment key={`${checkDataLang(agent.name)}-${i}`}>
-            <span name="Name">{checkDataLang(agent.name)}, </span>
-            {agent.role && <span name="Role">{checkDataLang(agent.role)}, </span>}
+            <span name="Name" lang={getDataLang(agent.name)}>
+              {checkDataLang(agent.name)},{' '}
+            </span>
+            {agent.role && (
+              <span name="Role" lang={getDataLang(agent.role)}>
+                {checkDataLang(agent.role)},{' '}
+              </span>
+            )}
           </Fragment>
         ))}
-        <span title="Title">{checkDataLang(this.state.title)}, </span>
-        {this.state.publisher &&
-          <span title="Publisher">{checkDataLang(this.state.publisher)}, </span>
-        }
+        <span title="Title" lang={getDataLang(this.state.title)}>
+          {checkDataLang(this.state.title)},{' '}
+        </span>
+        {this.state.publisher && (
+          <span title="Publisher" lang={getDataLang(this.state.publisher)}>
+            {checkDataLang(this.state.publisher)},{' '}
+          </span>
+        )}
         <span title="Release date">{this.state.release_date}, </span>
         <span title="Preferred identifier">{this.state.pid}</span>
       </Fragment>

@@ -17,7 +17,7 @@ import { inject, observer } from 'mobx-react'
 import styled from 'styled-components'
 
 import Accessibility from '../../../stores/view/accessibility'
-import checkDataLang from '../../../utils/checkDataLang'
+import checkDataLang, { getDataLang } from '../../../utils/checkDataLang'
 import dateFormat from '../../../utils/dateFormat'
 import Tracking from '../../../utils/tracking'
 
@@ -151,16 +151,25 @@ class Events extends Component {
                   <tr key={`provenance-${checkDataLang(single.title)}`}>
                     <td>
                       {/* if contains both it will display to tags in one box */}
-                      {single.lifecycle_event !== undefined &&
-                        checkDataLang(single.lifecycle_event.pref_label)}
-                      {single.preservation_event &&
-                        checkDataLang(single.preservation_event.pref_label)}
+                      {single.lifecycle_event !== undefined && (
+                        <span lang={getDataLang(single.lifecycle_event.pref_label)}>
+                          {checkDataLang(single.lifecycle_event.pref_label)}
+                        </span>
+                      )}
+                      {single.preservation_event && (
+                        <span lang={getDataLang(single.preservation_event.pref_label)}>
+                          {checkDataLang(single.preservation_event.pref_label)}
+                        </span>
+                      )}
                     </td>
                     <td>
                       {/* eslint-disable react/jsx-indent */}
                       {single.was_associated_with &&
                         single.was_associated_with.map((associate, i) => (
-                          <span key={checkDataLang(associate.name)}>
+                          <span
+                            key={checkDataLang(associate.name)}
+                            lang={getDataLang(associate.name)}
+                          >
                             {i === 0 ? '' : ', '}
                             {checkDataLang(associate.name)}
                           </span>
@@ -171,7 +180,9 @@ class Events extends Component {
                       {/* some datasets have start_date and some startDate */}
                       {single.temporal && this.printDate(single.temporal)}
                     </td>
-                    <td>{single.description && checkDataLang(single.description)}</td>
+                    <td lang={getDataLang(single.description)}>
+                      {single.description && checkDataLang(single.description)}
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -212,8 +223,12 @@ class Events extends Component {
               <tbody>
                 {this.props.relation.map(single => (
                   <tr key={single.entity.identifier}>
-                    <td>{checkDataLang(single.relation_type.pref_label)}</td>
-                    <td>{checkDataLang(single.entity.title)}.</td>
+                    <td lang={getDataLang(single.relation_type.pref_label)}>
+                      {checkDataLang(single.relation_type.pref_label)}
+                    </td>
+                    <td lang={getDataLang(single.entity.title)}>
+                      {checkDataLang(single.entity.title)}.
+                    </td>
                     <td>
                       <span className="sr-only">Identifier:</span>
                       {this.relationIdentifierIsUrl(single.entity.identifier) ? (
