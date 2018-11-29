@@ -25,7 +25,7 @@ import Agents from './agents'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import VersionChanger from './versionChanger'
-import GetLang from '../general/getLang'
+import checkDataLang from '../../utils/checkDataLang'
 import checkNested from '../../utils/checkNested'
 import dateFormat from '../../utils/dateFormat'
 import Tracking from '../../utils/tracking'
@@ -114,10 +114,7 @@ class Description extends Component {
         </Labels>
         <section>
           <div className="d-md-flex align-items-center dataset-title justify-content-between">
-            <GetLang
-              content={this.state.title}
-              render={data => <Title lang={data.lang}>{data.translation}</Title>}
-            />
+            <Title>{checkDataLang(this.state.title)}</Title>
           </div>
           <div className="d-flex justify-content-between basic-info">
             <MainInfo>
@@ -127,12 +124,7 @@ class Description extends Component {
               <ErrorBoundary>
                 <Agents contributor={this.state.contributor} />
               </ErrorBoundary>
-              <GetLang
-                content={this.state.issued ? this.state.issued : null}
-                render={data => (
-                  <p lang={data.lang}>{this.state.issued ? dateFormat(data.translation) : null}</p>
-                )}
-              />
+              <p>{this.state.issued ? dateFormat(checkDataLang(this.state.issued)) : null}</p>
             </MainInfo>
           </div>
           <ErrorBoundary>
@@ -142,10 +134,7 @@ class Description extends Component {
                 more={<Translate content="general.showMore" />}
                 less={<Translate content="general.showLess" />}
               > */}
-              <GetLang
-                content={this.state.description}
-                render={data => <CustomMarkdown lang={data.lang} source={data.translation} />}
-              />
+              <CustomMarkdown source={checkDataLang(this.state.description)} />
               {/* </ShowMore> */}
             </DatasetDescription>
           </ErrorBoundary>

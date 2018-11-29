@@ -20,9 +20,10 @@ import faUser from '@fortawesome/fontawesome-free-solid/faUser'
 import faUniversity from '@fortawesome/fontawesome-free-solid/faUniversity'
 import faGlobe from '@fortawesome/fontawesome-free-solid/faGlobe'
 
+// import checkDataLang from '../../utils/checkDataLang'
 import { TransparentLink } from '../../general/button'
 import PopUp from '../../general/popup'
-import GetLang from '../../general/getLang'
+import checkDataLang from '../../../utils/checkDataLang'
 
 export default class Agent extends Component {
   constructor(props) {
@@ -47,13 +48,8 @@ export default class Agent extends Component {
     })
   }
 
-  shouldHavePopup = () =>
-    this.state.agent.identifier ||
-    this.state.agent.contributor_role ||
-    this.state.agent.contributor_type ||
-    this.state.agent.member_of ||
-    this.state.agent.is_part_of ||
-    this.state.agent.homepage
+  shouldHavePopup = () => this.state.agent.identifier || this.state.agent.contributor_role || this.state.agent.contributor_type ||
+  this.state.agent.member_of || this.state.agent.is_part_of || this.state.agent.homepage
 
   render() {
     if (!this.state.agent.name) {
@@ -62,24 +58,14 @@ export default class Agent extends Component {
     return (
       <InlineLi>
         {this.props.first ? '' : ' & '}
-        {!this.shouldHavePopup() ? (
-          <GetLang
-            content={this.state.agent.name}
-            render={data => (
-              <TextWithoutPopup lang={data.lang}>{data.translation}</TextWithoutPopup>
-            )}
-          />
-        ) : (
+        {!this.shouldHavePopup() ? <TextWithoutPopup>{checkDataLang(this.state.agent.name)}</TextWithoutPopup> : (
           <PopUp
             isOpen={this.state.popUpOpen}
             onRequestClose={this.closePopUp}
             popUp={
               <PopUpContainer>
                 {this.state.agent.name && (
-                  <GetLang
-                    content={this.state.agent.name}
-                    render={data => <Name lang={data.lang}>{data.translation}</Name>}
-                  />
+                  <Name>{checkDataLang(this.state.agent.name)}</Name>
                 )}
                 {this.state.agent.identifier && this.state.agent.identifier.startsWith('http') && (
                   <IdentifierLink
@@ -91,80 +77,72 @@ export default class Agent extends Component {
                   </IdentifierLink>
                 )}
                 {this.state.agent.identifier && !this.state.agent.identifier.startsWith('http') && (
-                  <IdentifierText>{this.state.agent.identifier}</IdentifierText>
+                  <IdentifierText>
+                    {this.state.agent.identifier}
+                  </IdentifierText>
                 )}
-                {this.state.agent.contributor_role &&
+                {this.state.agent.contributor_role && (
                   this.state.agent.contributor_role.map(cr => (
                     <Info key={cr.identifier} title={translate('dataset.agent.contributor_role')}>
-                      <FontawesomeIcon icon={faUser} />
+                      <FontawesomeIcon
+                        icon={faUser}
+                      />
                       <Translate content="dataset.agent.contributor_role" className="sr-only" />
                       <span className="sr-only">{' :'}</span>
-                      <GetLang
-                        content={cr.pref_label}
-                        render={data => <span lang={data.lang}>{data.translation}</span>}
-                      />
+                      <span>{checkDataLang(cr.pref_label)}</span>
                     </Info>
-                  ))}
-                {this.state.agent.contributor_type &&
+                  ))
+                )}
+                {this.state.agent.contributor_type && (
                   this.state.agent.contributor_type.map(ct => (
                     <Info key={ct.identifier} title={translate('dataset.agent.contributor_type')}>
-                      <FontawesomeIcon icon={faUser} />
+                      <FontawesomeIcon
+                        icon={faUser}
+                      />
                       <Translate content="dataset.agent.contributor_type" className="sr-only" />
                       <span className="sr-only">{' :'}</span>
-                      <GetLang
-                        content={ct.pref_label}
-                        render={data => <span lang={data.lang}>{data.translation}</span>}
-                      />
+                      <span>{checkDataLang(ct.pref_label)}</span>
                     </Info>
-                  ))}
+                  ))
+                )}
                 {this.state.agent.member_of && (
                   <Info title={translate('dataset.agent.member_of')}>
-                    <FontawesomeIcon icon={faUniversity} />
+                    <FontawesomeIcon
+                      icon={faUniversity}
+                    />
                     <Translate content="dataset.agent.member_of" className="sr-only" />
                     <span className="sr-only">{' :'}</span>
-                    <GetLang
-                      content={this.state.agent.member_of.name}
-                      render={data => <span lang={data.lang}>{data.translation}</span>}
-                    />
+                    <span>{checkDataLang(this.state.agent.member_of.name)}</span>
                   </Info>
                 )}
                 {this.state.agent.is_part_of && (
                   <Info title={translate('dataset.agent.is_part_of')}>
-                    <FontawesomeIcon icon={faUniversity} />
+                    <FontawesomeIcon
+                      icon={faUniversity}
+                    />
                     <Translate content="dataset.agent.is_part_of" className="sr-only" />
                     <span className="sr-only">{' :'}</span>
-                    <GetLang
-                      content={this.state.agent.is_part_of.name}
-                      render={data => <span lang={data.lang}>{data.translation}</span>}
-                    />
+                    <span>{checkDataLang(this.state.agent.is_part_of.name)}</span>
                   </Info>
                 )}
                 {this.state.agent.homepage && (
                   <Info>
                     <FontawesomeIcon icon={faGlobe} title={translate('dataset.agent.homepage')} />
-                    <GetLang
-                      content={this.state.agent.homepage.description}
-                      render={data => (
-                        <a
-                          href={this.state.agent.homepage.identifier}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          title={data.translation || this.state.agent.homepage.identifier}
-                          lang={data.translation ? data.lang : undefined}
-                        >
-                          <Translate content="dataset.agent.homepage" className="sr-only" />
-                          <span className="sr-only">{' :'}</span>
-                          {this.state.agent.homepage.title ? (
-                            <GetLang
-                              content={this.state.agent.homepage.title}
-                              render={r => <span lang={r.lang}>{r.translation}</span>}
-                            />
-                          ) : (
-                            <span>{this.state.agent.homepage.identifier}</span>
-                          )}
-                        </a>
-                      )}
-                    />
+                    <a
+                      href={this.state.agent.homepage.identifier}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title={
+                        checkDataLang(this.state.agent.homepage.description) ||
+                        this.state.agent.homepage.identifier
+                      }
+                    >
+                      <Translate content="dataset.agent.homepage" className="sr-only" />
+                      <span className="sr-only">{' :'}</span>
+                      {this.state.agent.homepage.title
+                        ? checkDataLang(this.state.agent.homepage.title)
+                        : this.state.agent.homepage.identifier}
+                    </a>
                   </Info>
                 )}
               </PopUpContainer>
@@ -183,10 +161,7 @@ export default class Agent extends Component {
               }}
               onClick={this.state.popUpOpen ? this.closePopUp : this.openPopUp}
             >
-              <GetLang
-                content={this.state.agent.name}
-                render={data => <span lang={data.lang}>{data.translation}</span>}
-              />
+              {checkDataLang(this.state.agent.name)}
             </TransparentLink>
           </PopUp>
         )}
@@ -230,7 +205,7 @@ const IdentifierLink = styled.a`
 
 const IdentifierText = styled.div`
   font-size: 0.9em;
-  margin-bottom: 0.5em;
+  margin-bottom 0.5em;
 `
 
 const Info = styled.div`
