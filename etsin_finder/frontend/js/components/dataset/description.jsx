@@ -132,16 +132,13 @@ class Description extends Component {
             </MainInfo>
           </div>
           <ErrorBoundary>
-            <DatasetDescription>
+            <DatasetDescription lang={getDataLang(this.state.description)}>
               {/* <ShowMore
                 min={100}
                 more={<Translate content="general.showMore" />}
                 less={<Translate content="general.showLess" />}
               > */}
-              <CustomMarkdown
-                lang={getDataLang(this.state.description)}
-                source={checkDataLang(this.state.description)}
-              />
+              <CustomMarkdown source={checkDataLang(this.state.description)} />
               {/* </ShowMore> */}
             </DatasetDescription>
           </ErrorBoundary>
