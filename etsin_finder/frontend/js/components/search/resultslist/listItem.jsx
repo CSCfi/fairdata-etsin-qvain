@@ -15,7 +15,7 @@ import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
-import GetLang from '../../general/getLang'
+import checkDataLang from '../../../utils/checkDataLang'
 import ErrorBoundary from '../../general/errorBoundary'
 import AccessRights from '../../dataset/accessRights'
 import ContentBox from '../../general/contentBox'
@@ -39,14 +39,7 @@ export default class ListItem extends Component {
             <ContentBox>
               <ErrorBoundary>
                 <ItemHeader>
-                  <GetLang
-                    content={this.props.item.title}
-                    render={data => (
-                      <h2 className="title" lang={data.lang}>
-                        {data.translation}
-                      </h2>
-                    )}
-                  />
+                  <h2 className="title">{checkDataLang(this.props.item.title, this.props.lang)}</h2>
                   <AccessRights
                     access_rights={this.props.item.access_rights}
                     style={{ marginBottom: '1em' }}
@@ -56,20 +49,16 @@ export default class ListItem extends Component {
               <ErrorBoundary>
                 {Array.isArray(this.props.item.field_of_science) && (
                   <div className="basic-info">
-                    {this.props.item.field_of_science.map(field => (
-                      <GetLang
-                        content={field.pref_label}
-                        render={data => <p lang={data.lang}>{data.translation}</p>}
-                      />
-                    ))}
+                    <p>
+                      {this.props.item.field_of_science.map(field =>
+                        checkDataLang(field.pref_label)
+                      )}
+                    </p>
                   </div>
                 )}
               </ErrorBoundary>
               <ErrorBoundary>
-                <GetLang
-                  content={this.props.item.description}
-                  render={data => <p lang={data.lang}>{this.shortDescription(data.translation)}</p>}
-                />
+                <p>{this.shortDescription(checkDataLang(this.props.item.description))}</p>
               </ErrorBoundary>
             </ContentBox>
           </Link>
@@ -87,6 +76,7 @@ ListItem.propTypes = {
     field_of_science: PropTypes.array,
     description: PropTypes.object.isRequired,
   }).isRequired,
+  lang: PropTypes.string.isRequired,
 }
 
 const ItemHeader = styled.div`
