@@ -16,7 +16,7 @@ import Translate from 'react-translate-component'
 import translate from 'counterpart'
 import PropTypes from 'prop-types'
 
-import checkDataLang from '../../../utils/checkDataLang'
+import GetLang from '../../general/getLang'
 import sizeParse from '../../../utils/sizeParse'
 import checkNested from '../../../utils/checkNested'
 import FileIcon from './fileIcon'
@@ -134,13 +134,13 @@ class TableItem extends Component {
           </FileName>
         )}
         {this.props.fields.size && <FileSize>{sizeParse(this.props.item.byte_size, 1)}</FileSize>}
-        {this.props.fields.category && (
-          <FileCategory>
-            {checkNested(this.props.item.use_category, 'pref_label')
-              ? checkDataLang(this.props.item.use_category.pref_label)
-              : ''}
-          </FileCategory>
-        )}
+        {this.props.fields.category &&
+          (checkNested(this.props.item.use_category, 'pref_label') ? (
+            <GetLang
+              content={this.props.item.use_category.pref_label}
+              render={data => <FileCategory lang={data.lang}>{data.translation}</FileCategory>}
+            />
+          ) : null)}
         <FileButtons>
           {this.props.fields.infoBtn && (
             <React.Fragment>
@@ -157,50 +157,75 @@ class TableItem extends Component {
                   with={{ file: this.props.item.name }}
                 />
               </InvertedButton>
-              <Info
-                title={this.props.item.title}
-                name={this.props.item.name}
-                id={this.props.item.identifier}
-                size={sizeParse(this.props.item.byte_size, 1)}
-                category={
+              <GetLang
+                content={
                   checkNested(this.props.item.use_category, 'pref_label')
-                    ? checkDataLang(this.props.item.use_category.pref_label)
+                    ? this.props.item.use_category.pref_label
                     : undefined
                 }
-                checksum={this.state.checksum}
-                downloadUrl={
-                  this.props.item.remote ? this.props.item.remote.download_url : undefined
-                }
-                accessUrl={
-                  this.props.item.remote ? this.props.item.remote.access_url : undefined
-                }
-                allowDownload={this.props.allowDownload}
-                description={this.props.item.description}
-                type={this.props.item.type}
-                open={this.state.modalIsOpen}
-                closeModal={this.closeModal}
+                render={data => (
+                  <Info
+                    title={this.props.item.title}
+                    name={this.props.item.name}
+                    id={this.props.item.identifier}
+                    size={sizeParse(this.props.item.byte_size, 1)}
+                    category={data.translation}
+                    checksum={this.state.checksum}
+                    downloadUrl={
+                      this.props.item.remote ? this.props.item.remote.download_url : undefined
+                    }
+                    accessUrl={
+                      this.props.item.remote ? this.props.item.remote.access_url : undefined
+                    }
+                    allowDownload={this.props.allowDownload}
+                    description={this.props.item.description}
+                    type={this.props.item.type}
+                    open={this.state.modalIsOpen}
+                    closeModal={this.closeModal}
+                    lang={data.lang}
+                  />
+                )}
               />
             </React.Fragment>
           )}
-          {this.props.isRemote && (this.props.item.remote.download_url || this.props.item.remote.access_url) && (
-            // Remote resource download button
-            <RemoteDlButton
-              thin
-              href={this.props.item.remote.download_url ? this.props.item.remote.download_url.identifier :
-              this.props.item.remote.access_url.identifier}
-              target="_blank"
-              rel="noopener noreferrer"
-              title={checkDataLang(this.props.item.remote.download_url ?
-              this.props.item.remote.download_url.description : this.props.item.remote.access_url.description)}
-            >
-              <Translate content={this.props.item.remote.download_url ? 'dataset.dl.download' : 'dataset.dl.go_to_original'} />
-              <Translate
-                className="sr-only"
-                content="dataset.dl.item"
-                with={{ item: this.props.item.name }}
+          {this.props.isRemote &&
+            (this.props.item.remote.download_url || this.props.item.remote.access_url) && (
+              // Remote resource download button
+              <GetLang
+                content={
+                  this.props.item.remote.download_url
+                    ? this.props.item.remote.download_url.description
+                    : this.props.item.remote.access_url.description
+                }
+                render={data => (
+                  <RemoteDlButton
+                    thin
+                    href={
+                      this.props.item.remote.download_url
+                        ? this.props.item.remote.download_url.identifier
+                        : this.props.item.remote.access_url.identifier
+                    }
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title={data.translate}
+                    lang={data.lang}
+                  >
+                    <Translate
+                      content={
+                        this.props.item.remote.download_url
+                          ? 'dataset.dl.download'
+                          : 'dataset.dl.go_to_original'
+                      }
+                    />
+                    <Translate
+                      className="sr-only"
+                      content="dataset.dl.item"
+                      with={{ item: this.props.item.name }}
+                    />
+                  </RemoteDlButton>
+                )}
               />
-            </RemoteDlButton>
-          )}
+            )}
           {!this.props.isRemote && this.props.fields.downloadBtn && !this.state.downloadDisabled && (
             // Ida download button enabled
             // TODO: add download functionality, probably an axios post request,
@@ -221,10 +246,7 @@ class TableItem extends Component {
           )}
           {!this.props.isRemote && this.state.downloadDisabled && (
             // Ida download button disabled
-            <HideSmButton
-              thin
-              disabled
-            >
+            <HideSmButton thin disabled>
               <Translate content="dataset.dl.downloading" />
               <Translate
                 className="sr-only"
@@ -232,7 +254,7 @@ class TableItem extends Component {
                 with={{ item: this.props.item.name }}
               />
             </HideSmButton>
-        )}
+          )}
         </FileButtons>
       </TableRow>
     )
