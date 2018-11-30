@@ -105,10 +105,8 @@ export default class SortResults extends Component {
                     this.updateValue(e, item)
                   }}
                   value={item}
-                  // innerRef={value => {
-                  //   this[`option${item}`] = value
-                  // }}
                   disabled={!this.state.listToggle}
+                  aria-hidden={!this.state.listToggle}
                 >
                   <Translate content={`search.sorting.${item}`} />
                 </InvertedButton>
