@@ -81,7 +81,6 @@ ListItem.propTypes = {
     field_of_science: PropTypes.array,
     description: PropTypes.object.isRequired,
   }).isRequired,
-  lang: PropTypes.string.isRequired,
 }
 
 const ItemHeader = styled.div`

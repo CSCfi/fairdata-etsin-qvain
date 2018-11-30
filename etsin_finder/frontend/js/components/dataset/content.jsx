@@ -163,6 +163,7 @@ Content.defaultProps = {
 }
 
 Content.propTypes = {
+  location: PropTypes.object.isRequired,
   dataset: PropTypes.object.isRequired,
   emails: PropTypes.shape({
     CONTRIBUTOR: PropTypes.bool,

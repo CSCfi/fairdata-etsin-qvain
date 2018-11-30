@@ -146,8 +146,13 @@ class Description extends Component {
           {this.props.harvested && (
             <React.Fragment>
               <GoToOriginal idn={this.props.dataset.research_dataset.preferred_identifier} />
-              <label>
-                <Translate content="dataset.tags" className="sr-only" element="span" />
+              <label htmlFor="dataset-tags">
+                <Translate
+                  id="dataset-tags"
+                  content="dataset.tags"
+                  className="sr-only"
+                  element="span"
+                />
                 {/* this should be named as tag rather than label */}
                 <Label>
                   <Translate content="dataset.harvested" />
