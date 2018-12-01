@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { inject, observer } from 'mobx-react'
 
-import checkDataLang from '../../../utils/checkDataLang'
+import checkDataLang, { getDataLang } from '../../../utils/checkDataLang'
 import checkNested from '../../../utils/checkNested'
 import dateFormat from '../../../utils/dateFormat'
 import SidebarItem from './sidebarItem'
@@ -74,7 +74,7 @@ class Sidebar extends Component {
       item.geographic_name !== checkDataLang(item.place_uri.pref_label)
     ) {
       return (
-        <div key={item.geographic_name}>
+        <div key={item.geographic_name} lang={getDataLang(item.place_uri.pref_label)}>
           {checkDataLang(item.place_uri.pref_label)} <span>({item.geographic_name})</span>
         </div>
       )
@@ -95,6 +95,7 @@ class Sidebar extends Component {
             {this.state.logo && (
               <SidebarItem>
                 <Logo
+                  lang={getDataLang(this.state.catalogTitle)}
                   alt={checkDataLang(this.state.catalogTitle)}
                   file={this.state.logo}
                   url={this.state.catalogPublisherHomepage}
@@ -104,7 +105,11 @@ class Sidebar extends Component {
 
             {/* DATA CATALOG PUBLISHER */}
 
-            <SidebarItem component="div" trans="dataset.catalog_publisher">
+            <SidebarItem
+              component="div"
+              trans="dataset.catalog_publisher"
+              lang={getDataLang(this.state.catalog_publisher)}
+            >
               {this.state.catalog_publisher && checkDataLang(this.state.catalog_publisher)}
             </SidebarItem>
           </div>
@@ -127,7 +132,9 @@ class Sidebar extends Component {
             >
               {this.state.field &&
                 this.state.field.map(field => (
-                  <Item key={field.identifier}>{checkDataLang(field.pref_label)}</Item>
+                  <Item key={field.identifier} lang={getDataLang(field.pref_label)}>
+                    {checkDataLang(field.pref_label)}
+                  </Item>
                 ))}
             </SidebarItem>
 
@@ -136,7 +143,9 @@ class Sidebar extends Component {
             <SidebarItem component="div" trans="dataset.keywords" hideEmpty="true">
               {this.state.theme &&
                 this.state.theme.map(theme => (
-                  <Item key={`theme-${theme.identifier}`}>{checkDataLang(theme.pref_label)}</Item>
+                  <Item key={`theme-${theme.identifier}`} lang={getDataLang(theme.pref_label)}>
+                    {checkDataLang(theme.pref_label)}
+                  </Item>
                 ))}
               {this.state.keyword &&
                 this.state.keyword.map((keyword, i) => (
@@ -156,7 +165,9 @@ class Sidebar extends Component {
                   }
                   return (
                     /* eslint-disable react/no-array-index-key */
-                    <Item key={`${language}-${i}`}>{language}</Item>
+                    <Item key={`${language}-${i}`} lang={getDataLang(languages.title)}>
+                      {language}
+                    </Item>
                     /* eslint-enable react/no-array-index-key */
                   )
                 })}
@@ -207,11 +218,16 @@ class Sidebar extends Component {
                 this.state.access_rights.restriction_grounds.length > 0
                   ? this.state.access_rights.restriction_grounds.map(rg => (
                     <div key={`rg-${rg.identifier}`}>
-                      <Item>{checkDataLang(rg.pref_label)}</Item>
+                      <Item lang={getDataLang(rg.pref_label)}>
+                        {checkDataLang(rg.pref_label)}
+                      </Item>
                     </div>
-                    ))
-                  : checkNested(this.state.access_rights, 'access_type', 'pref_label') &&
-                    checkDataLang(this.state.access_rights.access_type.pref_label)}
+                  ))
+                  : checkNested(this.state.access_rights, 'access_type', 'pref_label') && (
+                    <span lang={getDataLang(this.state.access_rights.access_type.pref_label)}>
+                      {checkDataLang(this.state.access_rights.access_type.pref_label)}
+                    </span>
+                  )}
               </SidebarItem>
             )}
 
@@ -221,7 +237,11 @@ class Sidebar extends Component {
               {this.state.isOutputOf &&
                 this.state.isOutputOf.map(item => {
                   const name = checkDataLang(item.name)
-                  return <div key={name}>{name}</div>
+                  return (
+                    <div key={name} lang={getDataLang(item.name)}>
+                      {name}
+                    </div>
+                  )
                 })}
             </SidebarItem>
 
@@ -233,14 +253,21 @@ class Sidebar extends Component {
                   output =>
                     checkNested(output, 'has_funding_agency') &&
                     output.has_funding_agency.map(agency => (
-                      <div key={checkDataLang(agency.name)}>{checkDataLang(agency.name)}</div>
+                      <div key={checkDataLang(agency.name)} lang={getDataLang(agency.name)}>
+                        {checkDataLang(agency.name)}
+                      </div>
                     ))
                 )}
             </SidebarItem>
 
             {/* PUBLISHER */}
 
-            <SidebarItem component="div" trans="dataset.publisher" hideEmpty="true">
+            <SidebarItem
+              component="div"
+              trans="dataset.publisher"
+              hideEmpty="true"
+              lang={getDataLang(this.state.publisher)}
+            >
               {this.state.publisher && checkDataLang(this.state.publisher)}
             </SidebarItem>
 
@@ -255,7 +282,9 @@ class Sidebar extends Component {
                   }
                   return (
                     /* eslint-disable react/no-array-index-key */
-                    <div key={`${curator}-${i}`}>{curator}</div>
+                    <div key={`${curator}-${i}`} lang={getDataLang(curators.name)}>
+                      {curator}
+                    </div>
                     /* eslint-enable react/no-array-index-key */
                   )
                 })}
@@ -272,7 +301,9 @@ class Sidebar extends Component {
                   }
                   return (
                     /* eslint-disable react/no-array-index-key */
-                    <div key={`${rightsHolder}-${i}`}>{rightsHolder}</div>
+                    <div key={`${rightsHolder}-${i}`} lang={getDataLang(rightsHolder.name)}>
+                      {rightsHolder}
+                    </div>
                     /* eslint-enable react/no-array-index-key */
                   )
                 })}
@@ -283,7 +314,9 @@ class Sidebar extends Component {
             <SidebarItem component="div" trans="dataset.infrastructure" hideEmpty="true">
               {this.state.infrastructure &&
                 this.state.infrastructure.map(entity => (
-                  <div key={entity.identifier}>{checkDataLang(entity.pref_label)}</div>
+                  <div key={entity.identifier} lang={getDataLang(entity.pref_label)}>
+                    {checkDataLang(entity.pref_label)}
+                  </div>
                 ))}
             </SidebarItem>
 

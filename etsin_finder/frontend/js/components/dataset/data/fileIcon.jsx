@@ -22,7 +22,7 @@ import PropTypes from 'prop-types'
 
 import Tooltip from '../../general/tooltip'
 import { TypeConcept } from '../../../utils/propTypes'
-import checkDataLang from '../../../utils/checkDataLang'
+import checkDataLang, { getDataLang } from '../../../utils/checkDataLang'
 
 const Icon = (type, def) => {
   if (!type) {
@@ -49,8 +49,12 @@ const Icon = (type, def) => {
 const FileIcon = props => {
   if (props.type !== 'dir' && props.type && props.type.pref_label) {
     return (
-      <Tooltip title={checkDataLang(props.type.pref_label)}>
+      <Tooltip
+        lang={getDataLang(props.type.pref_label)}
+        title={checkDataLang(props.type.pref_label)}
+      >
         <FontAwesomeIcon
+          lang={getDataLang(props.type.pref_label)}
           icon={Icon(checkDataLang(props.type.pref_label), props.default)}
           size="2x"
           transform="shrink-4"

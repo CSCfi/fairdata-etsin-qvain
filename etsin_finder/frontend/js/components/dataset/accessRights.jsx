@@ -22,7 +22,7 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 
 import checkNested from '../../utils/checkNested'
-import checkDataLang from '../../utils/checkDataLang'
+import checkDataLang, { getDataLang } from '../../utils/checkDataLang'
 import Button from '../general/button'
 import Modal from '../general/modal'
 
@@ -72,7 +72,9 @@ class AccessRights extends Component {
     return (
       <div>
         <FontAwesomeIcon icon={faLock} />
-        <AccessLabel>{checkDataLang(this.state.title)}</AccessLabel>
+        <AccessLabel lang={getDataLang(this.state.title)}>
+          {checkDataLang(this.state.title)}
+        </AccessLabel>
       </div>
     )
   }
@@ -81,7 +83,9 @@ class AccessRights extends Component {
     return (
       <div>
         <FontAwesomeIcon icon={faLockOpen} />
-        <AccessLabel>{checkDataLang(this.state.title)}</AccessLabel>
+        <AccessLabel lang={getDataLang(this.state.title)}>
+          {checkDataLang(this.state.title)}
+        </AccessLabel>
       </div>
     )
   }
@@ -106,7 +110,10 @@ class AccessRights extends Component {
             noMargin
             {...this.props}
           >
-            <Inner title={checkDataLang(this.state.description)}>
+            <Inner
+              lang={getDataLang(this.state.description)}
+              title={checkDataLang(this.state.description)}
+            >
               {accessRightsBool(this.props.access_rights) ? this.openAccess() : this.restricted()}
             </Inner>
           </CustomButton>
@@ -121,23 +128,32 @@ class AccessRights extends Component {
               {this.state.description && (
                 <div>
                   <FontAwesomeIcon icon={faInfoCircle} />
-                  <AccessLabel>{checkDataLang(this.state.description)}</AccessLabel>
+                  <AccessLabel lang={getDataLang(this.state.description)}>
+                    {checkDataLang(this.state.description)}
+                  </AccessLabel>
                 </div>
               )}
               {this.state.url && (
                 <div>
                   <FontAwesomeIcon icon={faGlobe} />
-                  <AccessUrl href={this.state.url.identifier} title={this.state.url.identifier}>
+                  <AccessUrl
+                    href={this.state.url.identifier}
+                    title={this.state.url.identifier}
+                    lang={getDataLang(this.state.url.title)}
+                  >
                     {checkDataLang(this.state.url.title)}
                   </AccessUrl>
                 </div>
               )}
-              {this.state.restriction_grounds && (this.state.restriction_grounds.map(rg => (
-                <div key={`div-rg-${rg.identifier}`}>
-                  <FontAwesomeIcon key={`fai-rg-${rg.identifier}`} icon={faExclamationTriangle} />
-                  <AccessLabel key={`al-rg-${rg.identifier}`}>{checkDataLang(rg.pref_label)}</AccessLabel>
-                </div>
-              )))}
+              {this.state.restriction_grounds &&
+                this.state.restriction_grounds.map(rg => (
+                  <div key={`div-rg-${rg.identifier}`}>
+                    <FontAwesomeIcon key={`fai-rg-${rg.identifier}`} icon={faExclamationTriangle} />
+                    <AccessLabel key={`al-rg-${rg.identifier}`} lang={getDataLang(rg.pref_label)}>
+                      {checkDataLang(rg.pref_label)}
+                    </AccessLabel>
+                  </div>
+                ))}
             </ModalInner>
           </Modal>
         </React.Fragment>
@@ -146,7 +162,10 @@ class AccessRights extends Component {
     // display only main info on results list
     return (
       <Access {...this.props}>
-        <Inner title={checkDataLang(this.state.description)}>
+        <Inner
+          title={checkDataLang(this.state.description)}
+          lang={getDataLang(this.state.description)}
+        >
           {accessRightsBool(this.props.access_rights) ? this.openAccess() : this.restricted()}
         </Inner>
       </Access>

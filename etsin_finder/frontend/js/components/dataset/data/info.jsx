@@ -15,7 +15,7 @@ import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import PropTypes from 'prop-types'
 
-import checkDataLang from '../../../utils/checkDataLang'
+import checkDataLang, { getDataLang } from '../../../utils/checkDataLang'
 import { Link } from '../../general/button'
 import Modal from '../../general/modal'
 import { TypeConcept, TypeChecksum } from '../../../utils/propTypes'
@@ -76,15 +76,14 @@ const Info = ({
               <td>{title}</td>
             </tr>
           )}
-          {type &&
-            type !== 'dir' && (
-              <tr>
-                <th>
-                  <Translate content="dataset.dl.type" />
-                </th>
-                <td>{checkDataLang(type.pref_label)}</td>
-              </tr>
-            )}
+          {type && type !== 'dir' && (
+            <tr>
+              <th>
+                <Translate content="dataset.dl.type" />
+              </th>
+              <td lang={getDataLang(type.pref_label)}>{checkDataLang(type.pref_label)}</td>
+            </tr>
+          )}
           {size && (
             <tr>
               <th>
@@ -120,31 +119,31 @@ const Info = ({
         <p>{description}</p>
       </ModalDescription>
     ) : null}
-    {accessUrl &&
-      allowDownload && (
-        <FullButton
-          href={accessUrl.identifier}
-          title={checkDataLang(accessUrl.description)}
-          noMargin
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Translate content="dataset.dl.go_to_original" />
-        </FullButton>
-      )}
-    {downloadUrl &&
-      allowDownload && (
-        <FullButton
-          href={downloadUrl.identifier}
-          target="_blank"
-          rel="noopener noreferrer"
-          title={checkDataLang(downloadUrl.description)}
-          color="success"
-          noMargin
-        >
-          <Translate content="dataset.dl.download" />
-        </FullButton>
-      )}
+    {accessUrl && allowDownload && (
+      <FullButton
+        lang={getDataLang(accessUrl.description)}
+        href={accessUrl.identifier}
+        title={checkDataLang(accessUrl.description)}
+        noMargin
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <Translate content="dataset.dl.go_to_original" />
+      </FullButton>
+    )}
+    {downloadUrl && allowDownload && (
+      <FullButton
+        href={downloadUrl.identifier}
+        target="_blank"
+        rel="noopener noreferrer"
+        lang={getDataLang(downloadUrl.description)}
+        title={checkDataLang(downloadUrl.description)}
+        color="success"
+        noMargin
+      >
+        <Translate content="dataset.dl.download" />
+      </FullButton>
+    )}
   </Modal>
 )
 
