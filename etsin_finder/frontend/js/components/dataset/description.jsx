@@ -25,7 +25,7 @@ import GoToOriginal from './goToOriginal'
 import Label from '../general/label'
 import Agents from './agents'
 import VersionChanger from './versionChanger'
-import checkDataLang from '../../utils/checkDataLang'
+import checkDataLang, { getDataLang } from '../../utils/checkDataLang'
 import checkNested from '../../utils/checkNested'
 import dateFormat from '../../utils/dateFormat'
 import Tracking from '../../utils/tracking'
@@ -114,7 +114,7 @@ class Description extends Component {
         </Labels>
         <section>
           <div className="d-md-flex align-items-center dataset-title justify-content-between">
-            <Title>{checkDataLang(this.state.title)}</Title>
+            <Title lang={getDataLang(this.state.title)}>{checkDataLang(this.state.title)}</Title>
           </div>
           <div className="d-flex justify-content-between basic-info">
             <MainInfo>
@@ -124,11 +124,15 @@ class Description extends Component {
               <ErrorBoundary>
                 <Agents contributor={this.state.contributor} />
               </ErrorBoundary>
-              <p>{this.state.issued ? dateFormat(checkDataLang(this.state.issued)) : null}</p>
+              {this.state.issued && (
+                <p lang={getDataLang(this.state.issued)}>
+                  {dateFormat(checkDataLang(this.state.issued))}
+                </p>
+              )}
             </MainInfo>
           </div>
           <ErrorBoundary>
-            <DatasetDescription>
+            <DatasetDescription lang={getDataLang(this.state.description)}>
               {/* <ShowMore
                 min={100}
                 more={<Translate content="general.showMore" />}

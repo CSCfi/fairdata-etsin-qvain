@@ -4,7 +4,7 @@ import FontawesomeIcon from '@fortawesome/react-fontawesome'
 import faInfoCircle from '@fortawesome/fontawesome-free-solid/faInfoCircle'
 import styled from 'styled-components'
 
-import checkDataLang from '../../../../utils/checkDataLang'
+import checkDataLang, { getDataLang } from '../../../../utils/checkDataLang'
 import PopUp from '../../../general/popup'
 import { LinkButton } from '../../../general/button'
 
@@ -48,9 +48,13 @@ export default class License extends Component {
     }
     return (
       <div>
-        <Name>{checkDataLang(data.title)}</Name>
+        <Name lang={getDataLang(data.title)}>{checkDataLang(data.title)}</Name>
         <br />
-        {data.description && <Description>{checkDataLang(data.description)}</Description>}
+        {data.description && (
+          <Description lang={getDataLang(data.description)}>
+            {checkDataLang(data.description)}
+          </Description>
+        )}
         <br />
         {link && (
           <Link href={link} target="_blank" rel="noopener noreferrer">
@@ -67,11 +71,20 @@ export default class License extends Component {
     return (
       <span>
         {licenseIsUrl && (
-          <MainLink href={this.props.data.license} target="_blank" rel="noopener noreferrer">
+          <MainLink
+            href={this.props.data.license}
+            target="_blank"
+            rel="noopener noreferrer"
+            lang={getDataLang(this.props.data.title)}
+          >
             {checkDataLang(this.props.data.title)}
           </MainLink>
         )}
-        {!licenseIsUrl && checkDataLang(this.props.data.title)}
+        {!licenseIsUrl && (
+          <span lang={getDataLang(this.props.data.title)}>
+            {checkDataLang(this.props.data.title)}
+          </span>
+        )}
         {this.props.data.description && (
           <PopUp
             popUp={this.renderPopUpContent(this.props.data)}

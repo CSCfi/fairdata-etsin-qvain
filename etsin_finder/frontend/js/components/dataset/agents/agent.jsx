@@ -19,10 +19,9 @@ import faUser from '@fortawesome/fontawesome-free-solid/faUser'
 import faUniversity from '@fortawesome/fontawesome-free-solid/faUniversity'
 import faGlobe from '@fortawesome/fontawesome-free-solid/faGlobe'
 
-// import checkDataLang from '../../utils/checkDataLang'
 import { TransparentLink } from '../../general/button'
 import PopUp from '../../general/popup'
-import checkDataLang from '../../../utils/checkDataLang'
+import checkDataLang, { getDataLang } from '../../../utils/checkDataLang'
 
 export default class Agent extends Component {
   constructor(props) {
@@ -48,7 +47,7 @@ export default class Agent extends Component {
     })
   }
 
-  infoItem(content, title, icon, key) {
+  infoItem(content, title, icon, lang, key) {
     return (
       <Info key={key}>
         <FontawesomeIcon icon={icon} aria-hidden />
@@ -56,7 +55,7 @@ export default class Agent extends Component {
           {title}
           {': '}
         </span>
-        <span>{content}</span>
+        <span lang={lang}>{content}</span>
       </Info>
     )
   }
@@ -78,14 +77,20 @@ export default class Agent extends Component {
       <InlineLi>
         {this.props.first ? '' : ' & '}
         {!this.shouldHavePopup() ? (
-          <TextWithoutPopup>{checkDataLang(this.state.agent.name)}</TextWithoutPopup>
+          <TextWithoutPopup lang={getDataLang(this.state.agent.name)}>
+            {checkDataLang(this.state.agent.name)}
+          </TextWithoutPopup>
         ) : (
           <PopUp
             isOpen={this.state.popUpOpen}
             onRequestClose={this.closePopUp}
             popUp={
               <PopUpContainer>
-                {this.state.agent.name && <Name>{checkDataLang(this.state.agent.name)}</Name>}
+                {this.state.agent.name && (
+                  <Name lang={getDataLang(this.state.agent.name)}>
+                    {checkDataLang(this.state.agent.name)}
+                  </Name>
+                )}
                 {this.state.agent.identifier && this.state.agent.identifier.startsWith('http') && (
                   // TODO: fix screenreader reading the link url when the popup is focused. It does not read the content.
                   <IdentifierLink
@@ -108,6 +113,7 @@ export default class Agent extends Component {
                           checkDataLang(cr.pref_label),
                           translate('dataset.agent.contributor_role'),
                           faUser,
+                          getDataLang(cr.pref_label),
                           cr.identifier
                         )
                       )}
@@ -117,6 +123,7 @@ export default class Agent extends Component {
                           checkDataLang(ct.pref_label),
                           translate('dataset.agent.contributor_type'),
                           faUser,
+                          getDataLang(ct.pref_label),
                           ct.identifier
                         )
                       )}
@@ -124,13 +131,15 @@ export default class Agent extends Component {
                       this.infoItem(
                         checkDataLang(this.state.agent.member_of.name),
                         translate('dataset.agent.member_of'),
-                        faUniversity
+                        faUniversity,
+                        getDataLang(this.state.agent.member_of.name)
                       )}
                     {this.state.agent.is_part_of &&
                       this.infoItem(
                         checkDataLang(this.state.agent.is_part_of.name),
                         translate('dataset.agent.is_part_of'),
-                        faUniversity
+                        faUniversity,
+                        getDataLang(this.state.agent.is_part_of.name)
                       )}
                     {this.state.agent.homepage && (
                       <Info>
@@ -139,6 +148,7 @@ export default class Agent extends Component {
                           href={this.state.agent.homepage.identifier}
                           target="_blank"
                           rel="noopener noreferrer"
+                          lang={getDataLang(this.state.agent.homepage.description)}
                           title={
                             checkDataLang(this.state.agent.homepage.description) ||
                             this.state.agent.homepage.identifier
@@ -148,9 +158,13 @@ export default class Agent extends Component {
                             {translate('dataset.agent.homepage')}
                             {' :'}
                           </span>
-                          {this.state.agent.homepage.title
-                            ? checkDataLang(this.state.agent.homepage.title)
-                            : this.state.agent.homepage.identifier}
+                          {this.state.agent.homepage.title ? (
+                            <span lang={this.state.agent.homepage.title}>
+                              {checkDataLang(this.state.agent.homepage.title)}
+                            </span>
+                          ) : (
+                            this.state.agent.homepage.identifier
+                          )}
                         </a>
                       </Info>
                     )}
@@ -171,6 +185,7 @@ export default class Agent extends Component {
                 e.preventDefault()
               }}
               onClick={this.state.popUpOpen ? this.closePopUp : this.openPopUp}
+              lang={getDataLang(this.state.agent.name)}
             >
               {checkDataLang(this.state.agent.name)}
             </TransparentLink>

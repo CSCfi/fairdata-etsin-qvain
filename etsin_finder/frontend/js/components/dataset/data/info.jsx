@@ -16,7 +16,7 @@ import Translate from 'react-translate-component'
 import PropTypes from 'prop-types'
 
 import InfoItem from './infoItem'
-import checkDataLang from '../../../utils/checkDataLang'
+import checkDataLang, { getDataLang } from '../../../utils/checkDataLang'
 import { Link } from '../../general/button'
 import Modal from '../../general/modal'
 import { TypeConcept, TypeChecksum } from '../../../utils/propTypes'
@@ -56,7 +56,11 @@ const Info = ({
         {id && <InfoItem translation="dataset.dl.id" content={id} />}
         {title && <InfoItem translation="dataset.dl.title" content={title} />}
         {type && type !== 'dir' && (
-          <InfoItem translation="dataset.dl.type" content={checkDataLang(type.pref_label)} />
+          <InfoItem
+            translation="dataset.dl.type"
+            content={checkDataLang(type.pref_label)}
+            lang={getDataLang(type.pref_label)}
+          />
         )}
         {size && <InfoItem translation="dataset.dl.size" content={size} />}
         {category && <InfoItem translation="dataset.dl.category" content={category} />}
@@ -78,6 +82,7 @@ const Info = ({
     ) : null}
     {accessUrl && allowDownload && (
       <FullButton
+        lang={getDataLang(accessUrl.description)}
         href={accessUrl.identifier}
         title={checkDataLang(accessUrl.description)}
         noMargin
@@ -92,6 +97,7 @@ const Info = ({
         href={downloadUrl.identifier}
         target="_blank"
         rel="noopener noreferrer"
+        lang={getDataLang(downloadUrl.description)}
         title={checkDataLang(downloadUrl.description)}
         color="success"
         noMargin

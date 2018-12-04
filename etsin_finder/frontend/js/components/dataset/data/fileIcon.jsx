@@ -23,7 +23,7 @@ import translate from 'counterpart'
 
 import Tooltip from '../../general/tooltip'
 import { TypeConcept } from '../../../utils/propTypes'
-import checkDataLang from '../../../utils/checkDataLang'
+import checkDataLang, { getDataLang } from '../../../utils/checkDataLang'
 
 const Icon = (type, def) => {
   if (!type) {
@@ -51,13 +51,19 @@ const FileIcon = props => {
   if (props.type !== 'dir' && props.type && props.type.pref_label) {
     return (
       <React.Fragment>
-        <div className="sr-only">{checkDataLang(props.type.pref_label)}</div>
-        <Tooltip title={checkDataLang(props.type.pref_label)}>
+        <div className="sr-only" lang={getDataLang(props.type.pref_label)}>
+          {checkDataLang(props.type.pref_label)}
+        </div>
+        <Tooltip
+          title={checkDataLang(props.type.pref_label)}
+          lang={getDataLang(props.type.pref_label)}
+        >
           <FontAwesomeIcon
             icon={Icon(checkDataLang(props.type.pref_label), props.default)}
             size="2x"
             transform="shrink-4"
             {...props}
+            lang={getDataLang(props.type.pref_label)}
             title={checkDataLang(props.type.pref_label)}
           />
         </Tooltip>

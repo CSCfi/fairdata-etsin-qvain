@@ -7,13 +7,14 @@ const InfoItem = props => (
     <th scope="row">
       <Translate content={props.translation} />
     </th>
-    <td>{props.content}</td>
+    <td lang={props.lang}>{props.content}</td>
   </tr>
 )
 
 InfoItem.propTypes = {
   translation: PropTypes.string.isRequired,
   content: PropTypes.string.isRequired,
+  lang: PropTypes.string.isRequired,
 }
 
 export default InfoItem
