@@ -19,7 +19,7 @@ import mecLogo from '../../static/images/mec_en.png'
 export default class Footer extends React.Component {
   render() {
     return (
-      <FooterArea>
+      <FooterArea role="contentinfo">
         <Positioner className="container">
           <div>
             <img alt="Ministry of Education and Culture -logo" src={mecLogo} />

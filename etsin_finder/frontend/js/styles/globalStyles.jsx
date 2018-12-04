@@ -259,32 +259,32 @@ export default injectGlobal`
     font-weight: inherit;
   }
 
-  h1 {
+  h1, .heading1 {
     font-size: 2em;
     line-height: 1.4em;
     font-weight: 700;
     letter-spacing: 1px;
   }
 
-  h2 {
+  h2, .heading2 {
     font-size: 1.4em;
     line-height: calc(1.4 * 1.4em);
     font-weight: 700;
   }
 
-  h3 {
+  h3, .heading3 {
     font-size: 1.2em;
     line-height: calc(1.5 * 1.2em);
     font-weight: 700;
   }
 
-  h4 {
+  h4, .heading4 {
     font-size: 1.1em;
     line-height: calc(1.5 * 1.1em);
     font-weight: 700;
   }
 
-  p {
+  p, .paragraph {
     font-family: 'Open Sans', sans-serif;
     font-size: 1em;
     line-height: calc(1.7 * 1em);
@@ -299,7 +299,11 @@ export default injectGlobal`
   h3,
   h4,
   h5,
-  h6 {
+  h6,
+  .heading1,
+  .heading2,
+  .heading3,
+  .heading4 {
     margin-top: 0;
     margin-bottom: 0.5rem;
   }

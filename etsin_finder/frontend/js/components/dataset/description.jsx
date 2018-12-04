@@ -13,6 +13,8 @@
 import React, { Component } from 'react'
 import { inject, observer } from 'mobx-react'
 import styled from 'styled-components'
+import PropTypes from 'prop-types'
+import Translate from 'react-translate-component'
 
 import AccessRights from './accessRights'
 import Accessiblity from '../../stores/view/accessibility'
@@ -22,8 +24,6 @@ import ErrorBoundary from '../general/errorBoundary'
 import GoToOriginal from './goToOriginal'
 import Label from '../general/label'
 import Agents from './agents'
-import PropTypes from 'prop-types'
-import Translate from 'react-translate-component'
 import VersionChanger from './versionChanger'
 import checkDataLang, { getDataLang } from '../../utils/checkDataLang'
 import checkNested from '../../utils/checkNested'
@@ -150,9 +150,18 @@ class Description extends Component {
           {this.props.harvested && (
             <React.Fragment>
               <GoToOriginal idn={this.props.dataset.research_dataset.preferred_identifier} />
-              <Label>
-                <Translate content="dataset.harvested" />
-              </Label>
+              <label htmlFor="dataset-tags">
+                <Translate
+                  id="dataset-tags"
+                  content="dataset.tags"
+                  className="sr-only"
+                  element="span"
+                />
+                {/* this should be named as tag rather than label */}
+                <Label>
+                  <Translate content="dataset.harvested" />
+                </Label>
+              </label>
             </React.Fragment>
           )}
         </section>

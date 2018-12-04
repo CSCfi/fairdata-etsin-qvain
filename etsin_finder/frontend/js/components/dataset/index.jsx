@@ -75,6 +75,7 @@ class Dataset extends React.Component {
       this.setState({ error: 'wrong identifier', loaded: true })
       return
     }
+    Accessibility.announcePolite(translate('dataset.loading'))
     DatasetQuery.getData(identifier)
       .then(result => {
         // TODO: The code below needs to be revised

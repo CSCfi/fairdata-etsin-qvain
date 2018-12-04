@@ -1,33 +1,30 @@
-import React, { Component } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import PropTypes from 'prop-types'
 import { hasChildren } from '../../../utils/helpers'
 
-export default class SidebarItem extends Component {
-  constructor(props) {
-    super(props)
-    let component = this.props.component
-    if (!component) {
-      component = 'span'
-    }
-    this.state = { component }
+const SidebarItem = props => {
+  if (props.hideEmpty && !hasChildren(props.children)) {
+    return null
   }
-
-  render() {
-    if (this.props.hideEmpty && !hasChildren(this.props.children)) {
-      return null
-    }
-    return (
-      <Spacer>
-        {this.props.trans && (
-          <Translate content={this.props.trans} fallback={this.props.fallback} component="h4" />
-        )}
-        {React.createElement(this.state.component, null, this.props.children)}
-      </Spacer>
-    )
-  }
+  return (
+    <Spacer>
+      {props.trans && (
+        <DT className="heading4">
+          <Translate content={props.trans} fallback={props.fallback} />
+        </DT>
+      )}
+      {props.component ? (
+        React.createElement(props.component, null, props.children)
+      ) : (
+        <React.Fragment>{props.children}</React.Fragment>
+      )}
+    </Spacer>
+  )
 }
+
+export default SidebarItem
 
 SidebarItem.defaultProps = {
   component: '',
@@ -44,6 +41,10 @@ SidebarItem.propTypes = {
   trans: PropTypes.string,
   fallback: PropTypes.string,
 }
+
+const DT = styled.dt`
+  margin-bottom: 0;
+`
 
 const Spacer = styled.section`
   padding: 0 1.4em;

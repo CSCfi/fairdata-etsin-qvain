@@ -1,13 +1,13 @@
 {
-/**
- * This file is part of the Etsin service
- *
- * Copyright 2017-2018 Ministry of Education and Culture, Finland
- *
- *
- * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
- * @license   MIT
- */
+  /**
+   * This file is part of the Etsin service
+   *
+   * Copyright 2017-2018 Ministry of Education and Culture, Finland
+   *
+   *
+   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
+   * @license   MIT
+   */
 }
 
 import React, { Component } from 'react'
@@ -19,10 +19,11 @@ import ExternalResources from './externalResources'
 import IdaResources from './idaResources'
 
 export default class Data extends Component {
-  state = {}
-
   componentDidMount() {
-    Tracking.newPageView(`Dataset: ${this.props.match.params.identifier} | Data`, this.props.location.pathname)
+    Tracking.newPageView(
+      `Dataset: ${this.props.match.params.identifier} | Data`,
+      this.props.location.pathname
+    )
     Accessibility.handleNavigation('data', false)
   }
 
@@ -43,7 +44,7 @@ Data.propTypes = {
   match: PropTypes.shape({
     params: PropTypes.shape({
       identifier: PropTypes.string,
-    })
+    }),
   }).isRequired,
   hasFiles: PropTypes.bool.isRequired,
   hasRemote: PropTypes.bool.isRequired,

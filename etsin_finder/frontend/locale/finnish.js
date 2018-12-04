@@ -69,6 +69,8 @@ const finnish = {
       fileAmount: '%(amount)s objektia',
       close_modal: 'Sulje info',
       info_header: 'Tiedoston muut tiedot',
+      loading: 'Ladataan kansiota',
+      loaded: 'Kansio latautunut',
       file_types: {
         both: 'tiedostot ja kansiot',
         directory: 'Kansio',
@@ -113,6 +115,7 @@ const finnish = {
     cumulative: 'Kumulatiivinen',
     keywords: 'Avainsanat',
     license: 'Lisenssi',
+    loading: 'Ladataan aineistoa',
     go_to_original: 'Siirry alkuperäiseen',
     permanent_link: 'Pysyvä linkki tälle sivulle',
     project: 'Projekti',
@@ -120,6 +123,7 @@ const finnish = {
     rights_holder: 'Oikeuksienhaltija',
     spatial_coverage: 'Maantieteellinen kattavuus',
     temporal_coverage: 'Ajallinen kattavuus',
+    tags: 'Aineiston tägit',
     version: { number: 'Versio %(number)s', old: '(Vanha)' },
     agent: {
       contributor_role: 'Rooli',
@@ -155,6 +159,9 @@ const finnish = {
       datasets: 'Aineistot',
       home: 'Koti',
       error: 'Virhe',
+    },
+    language: {
+      toggleLabel: 'Vaihda kieltä',
     },
   },
   home: {
@@ -194,6 +201,7 @@ const finnish = {
     },
   },
   search: {
+    name: 'Haku',
     placeholder: 'Anna hakusana',
     sorting: {
       sort: 'Järjestä',
@@ -215,7 +223,7 @@ const finnish = {
       SRpage: 'sivu',
       SRcurrentpage: 'nykyinen sivu',
       SRpagination: 'Paginaatio',
-      changepage: 'Sivu %(value)s'
+      changepage: 'Sivu %(value)s',
     },
     noResults: {
       searchterm: 'Haullesi - <strong>%(search)s</strong> - ei löytynyt yhtään osumaa.',

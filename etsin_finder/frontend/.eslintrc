@@ -39,6 +39,16 @@
         "specialLink": ["to", "hrefLeft", "hrefRight"],
         "aspects": ["noHref", "invalidHref", "preferButton"]
       }
+    ],
+    "jsx-a11y/label-has-for": [
+      2,
+      {
+        "components": ["Label"],
+        "required": {
+          "every": ["nesting", "id"]
+        },
+        "allowChildren": true
+      }
     ]
   },
   "extends": ["airbnb"]

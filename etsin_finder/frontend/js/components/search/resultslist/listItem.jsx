@@ -35,7 +35,13 @@ export default class ListItem extends Component {
     return (
       <Item>
         <ErrorBoundary>
-          <Link to={`/dataset/${this.props.catId}`} lang={getDataLang(this.props.item.title)}>
+          <Link
+            to={`/dataset/${this.props.catId}`}
+            aria-label={`${checkDataLang(this.props.item.title)}: ${this.shortDescription(
+              checkDataLang(this.props.item.description)
+            )}`}
+            lang={getDataLang(this.props.item.title)}
+          >
             <ContentBox>
               <ErrorBoundary>
                 <ItemHeader>

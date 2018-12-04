@@ -18,7 +18,7 @@ describe('DsSidebarItem', () => {
       expect(sidebarItem.contains('Hello')).toEqual(true)
     })
     it('should have the title', () => {
-      expect(sidebarItem.childAt(0).html()).toEqual('<h4>Project</h4>')
+      expect(sidebarItem.find('.heading4').childAt(0).html()).toEqual('<span>Project</span>')
     })
   })
   describe('render without content', () => {
