@@ -63,9 +63,12 @@ export default class SearchBar extends Component {
   render() {
     return (
       <ErrorBoundary>
-        <form onSubmit={e => this.handleSubmit(e)}>
+        <form onSubmit={e => this.handleSubmit(e)} role="search">
           <SearchContainer>
             <SearchInner>
+              <label htmlFor="searchBarInput" className="sr-only">
+                {counterpart('search.name')}
+              </label>
               <CustomFontAwesomeIcon
                 onClick={this.handleSubmit}
                 icon={faSearch}

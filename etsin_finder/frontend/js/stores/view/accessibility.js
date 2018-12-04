@@ -13,7 +13,8 @@ import { observable, action } from 'mobx'
 import translate from 'counterpart'
 
 class Accessibility {
-  @observable navText = ''
+  @observable assertiveAnnouncement = ''
+  @observable politeAnnouncement = ''
   @observable userIsTabbing = false
   focusableElement = React.createRef()
 
@@ -27,8 +28,33 @@ class Accessibility {
   }
 
   @action
-  setNavText(text) {
-    this.navText = text
+  announce(text) {
+    this.assertiveAnnouncement = text
+    setTimeout(() => {
+      this.clearAnnounce('assertive')
+    }, 1000)
+  }
+
+  @action
+  announcePolite(text) {
+    this.politeAnnouncement = text
+    setTimeout(() => {
+      this.clearAnnounce('polite')
+    }, 3000)
+  }
+
+  @action
+  clearAnnounce(type) {
+    switch (type) {
+      case 'assertive':
+        this.assertiveAnnouncement = ''
+        break
+      case 'polite':
+        this.politeAnnouncement = ''
+        break
+      default:
+        break
+    }
   }
 
   // don't show outline when user is not using tab to navigate
@@ -47,7 +73,7 @@ class Accessibility {
   @action
   handleNavigation(location, resetFocus = true) {
     const pageName = translate(`general.pageTitles.${location}`)
-    this.setNavText(pageName)
+    this.announce(pageName)
     this.setPageTitle(pageName)
     if (resetFocus) {
       this.resetFocus()

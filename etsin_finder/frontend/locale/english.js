@@ -70,6 +70,8 @@ const english = {
       fileAmount: '%(amount)s objects',
       close_modal: 'Close info modal',
       info_header: 'Other info related to file',
+      loading: 'Loading folder',
+      loaded: 'Folder loaded',
       file_types: {
         both: 'files and folders',
         directory: 'Folder',
@@ -112,6 +114,7 @@ const english = {
     infrastructure: 'Infrastructure',
     keywords: 'Keywords',
     license: 'License',
+    loading: 'Loading dataset',
     harvested: 'Harvested',
     cumulative: 'Cumulative',
     permanent_link: 'Permanent link to this page',
@@ -121,6 +124,7 @@ const english = {
     rights_holder: 'Rights Holder',
     spatial_coverage: 'Spatial Coverage',
     temporal_coverage: 'Temporal Coverage',
+    tags: 'Dataset tags',
     version: { number: 'Version %(number)s', old: '(Old)' },
     agent: {
       contributor_role: 'Contributor role',
@@ -155,7 +159,10 @@ const english = {
       dataset: 'Dataset',
       datasets: 'Datasets',
       home: 'Home',
-      error: 'Error'
+      error: 'Error',
+    },
+    language: {
+      toggleLabel: 'Toggle language',
     },
   },
   home: {
@@ -194,6 +201,7 @@ const english = {
     },
   },
   search: {
+    name: 'Search',
     placeholder: 'Search term',
     sorting: {
       sort: 'Sort',
@@ -203,6 +211,8 @@ const english = {
     },
     filter: {
       clearFilter: 'Remove filters',
+      filtersCleared: 'Filters cleared',
+      filters: 'Filters',
       filter: 'Filter',
       SRactive: 'active',
     },
@@ -213,6 +223,7 @@ const english = {
       SRpage: 'page',
       SRcurrentpage: 'current page',
       SRpagination: 'Pagination',
+      changepage: 'Page %(value)s',
     },
     noResults: {
       searchterm: 'Your search - <strong>%(search)s</strong> - did not match any documents.',

@@ -1,13 +1,13 @@
 {
-/**
- * This file is part of the Etsin service
- *
- * Copyright 2017-2018 Ministry of Education and Culture, Finland
- *
- *
- * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
- * @license   MIT
- */
+  /**
+   * This file is part of the Etsin service
+   *
+   * Copyright 2017-2018 Ministry of Education and Culture, Finland
+   *
+   *
+   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
+   * @license   MIT
+   */
 }
 
 import React from 'react'
@@ -50,7 +50,9 @@ const InnerForm = props => {
             placeholder={translations.recipient.placeholder}
             error={errors.recipient && touched.recipient}
           />
-          {errors.recipient && touched.recipient && <ErrorText>{errors.recipient}</ErrorText>}
+          {errors.recipient && touched.recipient && (
+            <ErrorText aria-live="assertive">{errors.recipient}</ErrorText>
+          )}
         </ErrorBoundary>
       </InputContainer>
       <InputContainer width="50%" paddingRight="0.5em">
@@ -64,7 +66,9 @@ const InnerForm = props => {
           onBlur={handleBlur}
           error={errors.email && touched.email}
         />
-        {errors.email && touched.email && <ErrorText>{errors.email}</ErrorText>}
+        {errors.email && touched.email && (
+          <ErrorText aria-live="assertive">{errors.email}</ErrorText>
+        )}
       </InputContainer>
       <InputContainer width="50%" paddingLeft="0.5em">
         <Label htmlFor="subject">{translations.subject.name} *</Label>
@@ -77,7 +81,9 @@ const InnerForm = props => {
           onBlur={handleBlur}
           error={errors.subject && touched.subject}
         />
-        {errors.subject && touched.subject && <ErrorText>{errors.subject}</ErrorText>}
+        {errors.subject && touched.subject && (
+          <ErrorText aria-live="assertive">{errors.subject}</ErrorText>
+        )}
       </InputContainer>
       <InputContainer>
         <Label htmlFor="message">{translations.message.name} *</Label>
@@ -90,7 +96,9 @@ const InnerForm = props => {
           onBlur={handleBlur}
           error={errors.message && touched.message}
         />
-        {errors.message && touched.message && <ErrorText>{errors.message}</ErrorText>}
+        {errors.message && touched.message && (
+          <ErrorText aria-live="assertive">{errors.message}</ErrorText>
+        )}
       </InputContainer>
       <Flex>
         <InvertedButton
@@ -101,19 +109,20 @@ const InnerForm = props => {
         >
           {translations.send}
         </InvertedButton>
-        {status === 'success' && <Success>{translations.success}</Success>}
+        {status === 'success' && <Success aria-live="assertive">{translations.success}</Success>}
         {errors.sending === 'error 500' && (
-          <Error>
+          <Error aria-live="assertive">
             {translations.errorInternal} (
             <a
               href="mailto:csc@servicedesk.fi?Subject=Etsin%20Contact%20Form%20Internal%20Server%20Error"
               target="_top"
             >
               csc@servicedesk.fi
-            </a>).
+            </a>
+            ).
           </Error>
         )}
-        {errors.sending === 'error' && <Error>{translations.error}</Error>}
+        {errors.sending === 'error' && <Error aria-live="assertive">{translations.error}</Error>}
       </Flex>
     </Form>
   )
@@ -138,14 +147,15 @@ InnerForm.propTypes = {
 }
 
 const ContactForm = withFormik({
+  validateOnChange: false,
   mapPropsToValues: props => ({
     subject: '',
     email: '',
     message: '',
     recipient: props.recipientsList[0],
   }),
-  validationSchema: props =>
-    yup.object().shape({
+  validationSchema: props => {
+    const validation = yup.object().shape({
       email: yup
         .string()
         .email(props.translations.email.error.invalid)
@@ -159,7 +169,9 @@ const ContactForm = withFormik({
         .mixed()
         .nullable('true')
         .required(props.translations.recipient.error.required),
-    }),
+    })
+    return validation
+  },
   handleSubmit: (values, { props, setSubmitting, setStatus, setFieldError }) => {
     setStatus('')
     axios
@@ -178,9 +190,10 @@ const ContactForm = withFormik({
         if (err.response.status === 500) {
           setStatus('error 500')
           setFieldError('sending', 'error 500')
+        } else {
+          setFieldError('sending', 'error')
+          setStatus('error')
         }
-        setFieldError('sending', 'error')
-        setStatus('error')
       })
     setSubmitting(false)
   },

@@ -137,7 +137,7 @@ const QueryCont = styled.div`
   }
 `
 
-const Sidebar = styled.div`
+const Sidebar = styled.aside`
   display: block;
   overflow: hidden;
   width: 100%;

@@ -75,6 +75,7 @@ class Dataset extends React.Component {
       this.setState({ error: 'wrong identifier', loaded: true })
       return
     }
+    Accessibility.announcePolite(translate('dataset.loading'))
     DatasetQuery.getData(identifier)
       .then(result => {
         // TODO: The code below needs to be revised
@@ -118,14 +119,14 @@ class Dataset extends React.Component {
             <Translate content="tombstone.info" />
           </NoticeBar>
         )}
-        <div className="container regular-row">
+        <article className="container regular-row">
           <div className="row">
             <div className="col-12">
               <BackButton
                 exact
                 to="/datasets"
                 onClick={() => {
-                  Accessibility.setNavText(
+                  Accessibility.announce(
                     translate('changepage', { page: translate('nav.datasets') })
                   )
                 }}
@@ -153,7 +154,7 @@ class Dataset extends React.Component {
               </ErrorBoundary>
             </div>
           </div>
-        </div>
+        </article>
       </div>
     ) : (
       <LoadingSplash>

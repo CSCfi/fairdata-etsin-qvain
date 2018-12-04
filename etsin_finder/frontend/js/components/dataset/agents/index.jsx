@@ -1,13 +1,13 @@
 {
-/**
- * This file is part of the Etsin service
- *
- * Copyright 2017-2018 Ministry of Education and Culture, Finland
- *
- *
- * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
- * @license   MIT
- */
+  /**
+   * This file is part of the Etsin service
+   *
+   * Copyright 2017-2018 Ministry of Education and Culture, Finland
+   *
+   *
+   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
+   * @license   MIT
+   */
 }
 
 import React, { Component } from 'react'
@@ -16,7 +16,7 @@ import Translate from 'react-translate-component'
 import styled from 'styled-components'
 
 import Agent from './agent'
-import checkDataLang from '../../../utils/checkDataLang'
+import checkDataLang, { getDataLang } from '../../../utils/checkDataLang'
 import { LinkButton } from '../../general/button'
 
 export default class Agents extends Component {
@@ -60,7 +60,12 @@ export default class Agents extends Component {
           {this.state.firstThree.map((agent, i) => {
             if (agent.name) {
               return (
-                <Agent key={checkDataLang(agent.name)} first={i === 0} agent={agent} />
+                <Agent
+                  lang={getDataLang(agent.name)}
+                  key={checkDataLang(agent.name)}
+                  first={i === 0}
+                  agent={agent}
+                />
               )
             }
             return ''
@@ -70,11 +75,16 @@ export default class Agents extends Component {
             this.state.open &&
             this.state.rest.map(agent => {
               if (agent.name) {
-                return (<Agent key={checkDataLang(agent.name)} agent={agent} />)
+                return (
+                  <Agent
+                    lang={getDataLang(agent.name)}
+                    key={checkDataLang(agent.name)}
+                    agent={agent}
+                  />
+                )
               }
               return ''
-            }
-          )}
+            })}
           {/* Show Button to open rest */}{' '}
           {this.props[this.state.mode].length > 3 && (
             <LinkButton onClick={this.toggleOpen}>

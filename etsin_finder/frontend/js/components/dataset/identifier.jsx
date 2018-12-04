@@ -54,7 +54,12 @@ export default class Identifier extends Component {
         {...this.props}
         title={this.state.url}
       >
-        {this.state.prefix ? <Prefix>{this.state.prefix}</Prefix> : null}
+        {this.state.prefix ? (
+          <Prefix>
+            <span aria-hidden>{this.state.prefix}</span>
+            <span className="sr-only">{`${this.state.prefix}: `}</span>
+          </Prefix>
+        ) : null}
         <IDN>{this.props.idn}</IDN>
       </IdnLink>
     )

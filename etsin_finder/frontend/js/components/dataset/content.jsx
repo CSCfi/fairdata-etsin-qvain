@@ -45,14 +45,18 @@ class Content extends Component {
     // - the access_rights allow it
     // - the dataset in removed or deprecated
 
-    if ((!this.props.hasFiles && !this.props.hasRemote) || this.props.harvested || this.props.isRemoved ||
-    this.props.isDeprecated) {
+    if (
+      (!this.props.hasFiles && !this.props.hasRemote) ||
+      this.props.harvested ||
+      this.props.isRemoved ||
+      this.props.isDeprecated
+    ) {
       return false
     }
     if (this.props.hasFiles) {
       return access.restrictions.allowDataIda
     } else if (this.props.hasRemote) {
-        return access.restrictions.allowDataRemote
+      return access.restrictions.allowDataRemote
     }
     return false
   }
@@ -69,6 +73,7 @@ class Content extends Component {
       <MarginAfter className="col-lg-8">
         <Tabs
           identifier={this.props.identifier}
+          location={this.props.location}
           showData={this.showData()}
           showEvents={this.showEvents()}
           showMaps={this.showMaps()}
@@ -80,6 +85,9 @@ class Content extends Component {
           path="/dataset/:identifier"
           render={props => (
             <Description
+              id="tab-description"
+              aria-labelledby="tab-for-description"
+              role="tabpanel"
               dataset={this.props.dataset}
               emails={this.props.emails}
               harvested={this.props.harvested}
@@ -94,7 +102,16 @@ class Content extends Component {
           <Route
             exact
             path="/dataset/:identifier/data"
-            render={props => <Data hasRemote={this.props.hasRemote} hasFiles={this.props.hasFiles} {...props} />}
+            render={props => (
+              <Data
+                id="tab-data"
+                aria-labelledby="tab-for-data"
+                role="tabpanel"
+                hasRemote={this.props.hasRemote}
+                hasFiles={this.props.hasFiles}
+                {...props}
+              />
+            )}
           />
         )}
 
@@ -105,6 +122,9 @@ class Content extends Component {
             path="/dataset/:identifier/events"
             render={props => (
               <Events
+                id="tab-events"
+                aria-labelledby="tab-for-events"
+                role="tabpanel"
                 provenance={this.props.dataset.research_dataset.provenance}
                 other_identifier={this.props.dataset.research_dataset.other_identifier}
                 relation={this.props.dataset.research_dataset.relation}
@@ -119,7 +139,15 @@ class Content extends Component {
           <Route
             exact
             path="/dataset/:identifier/maps"
-            render={props => <Maps spatial={this.props.dataset.research_dataset.spatial} {...props} />}
+            render={props => (
+              <Maps
+                id="tab-maps"
+                aria-labelledby="tab-for-maps"
+                role="tabpanel"
+                spatial={this.props.dataset.research_dataset.spatial}
+                {...props}
+              />
+            )}
           />
         )}
       </MarginAfter>
@@ -135,6 +163,7 @@ Content.defaultProps = {
 }
 
 Content.propTypes = {
+  location: PropTypes.object.isRequired,
   dataset: PropTypes.object.isRequired,
   emails: PropTypes.shape({
     CONTRIBUTOR: PropTypes.bool,

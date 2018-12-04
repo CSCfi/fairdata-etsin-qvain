@@ -15,8 +15,10 @@ import PropTypes from 'prop-types'
 import { inject, observer } from 'mobx-react'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
+import translate from 'counterpart'
 
 import ElasticQuery from '../../../stores/view/elasticquery'
+import Accessibility from '../../../stores/view/accessibility'
 
 class Pagination extends Component {
   constructor(props) {
@@ -103,8 +105,8 @@ class Pagination extends Component {
   changePage(event, value) {
     ElasticQuery.updatePageNum(value)
     ElasticQuery.queryES()
-    // scrolls back to top of page
-    window.scrollTo(0, 0)
+    Accessibility.announce(translate('search.pagination.changepage', { value }))
+    Accessibility.resetFocus()
   }
 
   singlePage(value, link) {
@@ -131,10 +133,9 @@ class Pagination extends Component {
             <Translate content="search.pagination.SRpage" className="sr-only" /> {value}
           </PaginationButton>
         ) : (
-          <PaginationItem className="current">
-            <Translate content="search.pagination.SRcurrentpage" className="sr-only" />{' '}
-            <span aria-hidden="true">{value}</span>
-          </PaginationItem>
+          <PaginationButton className="current" disabled aria-disabled="true">
+            <Translate content="search.pagination.SRcurrentpage" className="sr-only" /> {value}
+          </PaginationButton>
         )}
       </li>
     )
@@ -199,13 +200,16 @@ class Pagination extends Component {
     return (
       <ul>
         {this.state.currentPage > 1 && (
-          <PaginationButton
-            onClick={e => {
-              this.changePage(e, this.state.currentPage - 1)
-            }}
-          >
-            {'<'} <Translate content="search.pagination.prev" className="sr-only" />
-          </PaginationButton>
+          <li>
+            <PaginationButton
+              onClick={e => {
+                this.changePage(e, this.state.currentPage - 1)
+              }}
+            >
+              <span aria-hidden>{'<'}</span>{' '}
+              <Translate content="search.pagination.prev" className="sr-only" />
+            </PaginationButton>
+          </li>
         )}
         {// first page
         this.state.currentPage !== 1 && this.singlePage(1, true)}
@@ -220,13 +224,16 @@ class Pagination extends Component {
         this.state.currentPage !== this.state.pageAmount &&
           this.singlePage(this.state.pageAmount, true)}
         {this.state.currentPage < this.state.pageAmount && (
-          <PaginationButton
-            onClick={e => {
-              this.changePage(e, this.state.currentPage + 1)
-            }}
-          >
-            <Translate content="search.pagination.next" className="sr-only" /> {'>'}
-          </PaginationButton>
+          <li>
+            <PaginationButton
+              onClick={e => {
+                this.changePage(e, this.state.currentPage + 1)
+              }}
+            >
+              <Translate content="search.pagination.next" className="sr-only" />{' '}
+              <span aria-hidden>{'>'}</span>
+            </PaginationButton>
+          </li>
         )}
       </ul>
     )
@@ -237,10 +244,13 @@ class Pagination extends Component {
       return null
     }
     return (
-      <PaginationContainer className="col-lg-12">
-        <p id="pagination-label" className="pagination-label sr-only" aria-hidden="true">
-          <Translate content="search.pagination.SRpagination" />
-        </p>
+      <PaginationContainer className="col-lg-12" aria-labelledby="pagination-label">
+        <Translate
+          content="search.pagination.SRpagination"
+          className="pagination-label sr-only"
+          aria-hidden
+          id="pagination-label"
+        />
         {this.createPagination()}
       </PaginationContainer>
     )
@@ -263,10 +273,12 @@ const PaginationItem = styled.span.attrs({
   padding: 0;
   border: 0;
   &.current {
+    cursor: initial;
     background-color: ${props => props.theme.color.primary};
     color: white;
   }
   &.pagination-rest {
+    cursor: initial;
     background-color: transparent;
     width: ${props => props.size};
     height: ${props => props.size};
@@ -277,7 +289,7 @@ const PaginationItem = styled.span.attrs({
 
 const PaginationButton = PaginationItem.withComponent('button')
 
-const PaginationContainer = styled.div`
+const PaginationContainer = styled.nav`
   margin-top: 1em;
   justify-content: center;
   flex-wrap: wrap;

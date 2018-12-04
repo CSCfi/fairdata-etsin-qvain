@@ -1,28 +1,24 @@
 {
-/**
- * This file is part of the Etsin service
- *
- * Copyright 2017-2018 Ministry of Education and Culture, Finland
- *
- *
- * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
- * @license   MIT
- */
+  /**
+   * This file is part of the Etsin service
+   *
+   * Copyright 2017-2018 Ministry of Education and Culture, Finland
+   *
+   *
+   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
+   * @license   MIT
+   */
 }
 
 import React from 'react'
-import Translate from 'react-translate-component'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import translate from 'counterpart'
 
 const ResultsAmount = ({ amount }) => (
-  <Amount>
-    <Translate
-      with={{ amount }}
-      component="p"
-      content={`results.amount.${amount === 1 ? 'snglr' : 'plrl'}`}
-      fallback="%(amount)s results"
-    />
+  // TODO: this doesn't read the content if the amount stays the same, only if it changes
+  <Amount aria-live="polite">
+    {translate(`results.amount.${amount === 1 ? 'snglr' : 'plrl'}`, { amount })}
   </Amount>
 )
 

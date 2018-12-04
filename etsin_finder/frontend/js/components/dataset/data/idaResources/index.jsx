@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
+import translate from 'counterpart'
 
 import DatasetQuery from '../../../../stores/view/datasetquery'
 import createTree from '../../../../utils/createTree'
@@ -7,6 +8,7 @@ import TableHeader from '../tableHeader'
 import Table from '../table'
 import Breadcrumbs from '../breadcrumbs'
 import access from '../../../../stores/view/access'
+import Accessibility from '../../../../stores/view/accessibility'
 
 export default class IdaResources extends Component {
   constructor(props) {
@@ -35,6 +37,7 @@ export default class IdaResources extends Component {
     this.updatePath = this.updatePath.bind(this)
     this.changeFolder = this.changeFolder.bind(this)
     this.query = this.query.bind(this)
+    this.tableFocusReset = React.createRef()
   }
 
   // combines folders and files into single array of objects
@@ -178,6 +181,7 @@ export default class IdaResources extends Component {
   }
 
   query(id, newPath, newIDs) {
+    Accessibility.announcePolite(translate('dataset.dl.loading'))
     DatasetQuery.getFolderData(id, this.state.results.identifier)
       .then(res => {
         const formatted = this.createDirTree(res.files, res.directories, true)
@@ -187,6 +191,8 @@ export default class IdaResources extends Component {
           currentIDs: newIDs,
           currentFolder: currFolder,
         })
+        this.tableFocusReset.current.focus()
+        Accessibility.announce(translate('dataset.dl.loaded'))
       })
       .catch(err => {
         console.log(err)
@@ -239,6 +245,7 @@ export default class IdaResources extends Component {
           folderIds={this.state.currentIDs}
           changeFolder={this.updatePath}
         />
+        <div className="sr-only" aria-hidden tabIndex="-1" ref={this.tableFocusReset} />
         <Table
           cr_id={this.state.results.identifier}
           data={this.state.currentFolder}

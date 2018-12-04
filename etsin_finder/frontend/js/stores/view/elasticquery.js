@@ -225,11 +225,11 @@ class ElasticQuery {
                   type: 'best_fields',
                   minimum_should_match: isUrnQ ? '100%' : '25%',
                   operator: isUrnQ ? 'and' : 'or',
-                  fields
+                  fields,
                 },
               },
-            ]
-          }
+            ],
+          },
         }
       } else {
         queryObject = {
