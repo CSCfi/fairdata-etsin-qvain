@@ -26,7 +26,6 @@ import checkDataLang, { getDataLang } from '../../../utils/checkDataLang'
 export default class Agent extends Component {
   constructor(props) {
     super(props)
-    props.agent.identifier = 'https://google.com'
     this.state = {
       agent: props.agent,
       popUpOpen: false,
