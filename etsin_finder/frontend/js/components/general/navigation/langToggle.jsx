@@ -1,13 +1,13 @@
 {
-/**
- * This file is part of the Etsin service
- *
- * Copyright 2017-2018 Ministry of Education and Culture, Finland
- *
- *
- * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
- * @license   MIT
- */
+  /**
+   * This file is part of the Etsin service
+   *
+   * Copyright 2017-2018 Ministry of Education and Culture, Finland
+   *
+   *
+   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
+   * @license   MIT
+   */
 }
 
 import React, { Component } from 'react'
@@ -65,20 +65,25 @@ class LangToggle extends Component {
         <div className="sr-only" aria-live="assertive">
           {this.state.announce}
         </div>
-        {this.props.inverted ? (
-          <InvertedButton
-            color="dark"
-            margin={this.props.margin}
-            padding="0.3em 1em 0.4em"
-            onClick={this.changeLang}
-          >
-            {this.otherLang()}
-          </InvertedButton>
-        ) : (
-          <TransparentButton onClick={this.changeLang} margin={this.props.margin}>
-            {this.otherLang()}
-          </TransparentButton>
-        )}
+        <label>
+          <span className="sr-only">
+            {translate('general.language.toggleLabel')}: {this.otherLang()}
+          </span>
+          {this.props.inverted ? (
+            <InvertedButton
+              color="dark"
+              margin={this.props.margin}
+              padding="0.3em 1em 0.4em"
+              onClick={this.changeLang}
+            >
+              {this.otherLang()}
+            </InvertedButton>
+          ) : (
+            <TransparentButton onClick={this.changeLang} margin={this.props.margin}>
+              {this.otherLang()}
+            </TransparentButton>
+          )}
+        </label>
       </div>
     )
   }

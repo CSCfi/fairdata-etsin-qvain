@@ -1,13 +1,13 @@
 {
-/**
- * This file is part of the Etsin service
- *
- * Copyright 2017-2018 Ministry of Education and Culture, Finland
- *
- *
- * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
- * @license   MIT
- */
+  /**
+   * This file is part of the Etsin service
+   *
+   * Copyright 2017-2018 Ministry of Education and Culture, Finland
+   *
+   *
+   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
+   * @license   MIT
+   */
 }
 
 import React, { Component } from 'react'
@@ -34,22 +34,28 @@ export default class FrontPage extends Component {
       <div className="search-page">
         <HeroBanner className="hero-primary">
           <div className="container">
-            <div className="text-center">
+            <section className="text-center">
               <h1>
                 <Translate content="home.title" />
               </h1>
               <SearchBar />
-            </div>
+            </section>
           </div>
         </HeroBanner>
         <div className="container">
           <div className="regular-row">
             <TextHolder>
               <KeyValues />
-              <Translate content="home.title1" component="h2" />
-              <Translate content="home.para1" component="p" unsafe />
-              <Translate content="home.title2" component="h2" />
-              <Translate content="home.para2" component="p" unsafe />
+              <article>
+                <section>
+                  <Translate content="home.title1" component="h2" />
+                  <Translate content="home.para1" component="p" unsafe />
+                </section>
+                <section>
+                  <Translate content="home.title2" component="h2" />
+                  <Translate content="home.para2" component="p" unsafe />
+                </section>
+              </article>
             </TextHolder>
           </div>
         </div>
@@ -61,7 +67,7 @@ export default class FrontPage extends Component {
 FrontPage.propTypes = {
   location: PropTypes.shape({
     pathname: PropTypes.string,
-  }).isRequired
+  }).isRequired,
 }
 
 const TextHolder = styled.div`

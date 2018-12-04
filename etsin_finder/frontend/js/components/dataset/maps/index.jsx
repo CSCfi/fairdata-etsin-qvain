@@ -8,7 +8,7 @@ import { Popup } from 'react-leaflet'
 
 import { TypeLocation } from '../../../utils/propTypes'
 import MyMap from './map'
-import checkDataLang from '../../../utils/checkDataLang'
+import checkDataLang, { getDataLang } from '../../../utils/checkDataLang'
 import Tracking from '../../../utils/tracking'
 import Accessibility from '../../../stores/view/accessibility'
 
@@ -20,13 +20,16 @@ class Maps extends Component {
     match: PropTypes.shape({
       params: PropTypes.shape({
         identifier: PropTypes.string,
-      })
+      }),
     }).isRequired,
     spatial: TypeLocation.isRequired,
   }
 
   componentDidMount() {
-    Tracking.newPageView(`Dataset: ${this.props.match.params.identifier} | Maps`, this.props.location.pathname)
+    Tracking.newPageView(
+      `Dataset: ${this.props.match.params.identifier} | Maps`,
+      this.props.location.pathname
+    )
     Accessibility.handleNavigation('maps', false)
   }
 
@@ -48,7 +51,11 @@ class Maps extends Component {
                 spatial.full_address ||
                 spatial.alt ? (
                   <CustomPopup>
-                    {spatial.place_uri && <h2>{checkDataLang(spatial.place_uri.pref_label)}</h2>}
+                    {spatial.place_uri && (
+                      <h2 lang={getDataLang(spatial.place_uri.pref_label)}>
+                        {checkDataLang(spatial.place_uri.pref_label)}
+                      </h2>
+                    )}
                     {spatial.geographic_name && <h3>{spatial.geographic_name}</h3>}
                     {spatial.full_address && (
                       <p>
@@ -58,7 +65,8 @@ class Maps extends Component {
                     )}
                     {spatial.alt && (
                       <p>
-                        <FontAwesomeIcon icon={FaArrowsAltV} />Altitude: {spatial.alt}
+                        <FontAwesomeIcon icon={FaArrowsAltV} />
+                        Altitude: {spatial.alt}
                       </p>
                     )}
                   </CustomPopup>

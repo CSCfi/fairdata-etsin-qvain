@@ -54,8 +54,10 @@ export default class FilterItem extends Component {
     return (
       <li>
         <button
+          role="switch"
           tabIndex={this.props.tabIndex}
           className={this.isActive() ? 'active' : undefined}
+          aria-checked={this.isActive()}
           onClick={() => {
             this.updateFilter()
           }}

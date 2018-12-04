@@ -1,14 +1,15 @@
 /* eslint-disable no-undef */
 class Tracking {
   isActive() {
-    return process.env.MATOMO === true
+    // check if Matomo is active, will return false in development
+    return typeof _paq === 'object'
   }
 
   newPageView(title, location) {
     if (this.isActive()) {
-      _paq.push(['setCustomUrl', location]);
-      _paq.push(['setDocumentTitle', title]);
-      _paq.push(['trackPageView']);
+      _paq.push(['setCustomUrl', location])
+      _paq.push(['setDocumentTitle', title])
+      _paq.push(['trackPageView'])
     }
   }
 

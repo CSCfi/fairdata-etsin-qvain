@@ -10,8 +10,12 @@ describe('Accessibility Store', () => {
   })
   describe('Navigation text', () => {
     it('should change nav text', () => {
-      Accessibility.setNavText('This is new nav text')
-      expect(Accessibility.navText).toEqual('This is new nav text')
+      Accessibility.announce('This is new nav text')
+      expect(Accessibility.assertiveAnnouncement).toEqual('This is new nav text')
+    })
+    it('should change polite nav text', () => {
+      Accessibility.announcePolite('This is new nav text')
+      expect(Accessibility.politeAnnouncement).toEqual('This is new nav text')
     })
   })
   describe('Tabbing functions', () => {
