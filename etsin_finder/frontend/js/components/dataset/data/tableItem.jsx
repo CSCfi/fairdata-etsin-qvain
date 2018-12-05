@@ -135,11 +135,17 @@ class TableItem extends Component {
         )}
         {this.props.fields.size && <FileSize>{sizeParse(this.props.item.byte_size, 1)}</FileSize>}
         {this.props.fields.category &&
-          (checkNested(this.props.item.use_category, 'pref_label') && (
-            <FileCategory lang={getDataLang(this.props.item.use_category.pref_label)}>
-              {checkDataLang(this.props.item.use_category.pref_label)}
-            </FileCategory>
-          ))}
+          (checkNested(this.props.item.use_category, 'pref_label') ?
+            (
+              <FileCategory lang={getDataLang(this.props.item.use_category.pref_label)}>
+                {checkDataLang(this.props.item.use_category.pref_label)}
+              </FileCategory>
+            ) :
+            (
+              <FileCategory />
+            )
+          )
+        }
         <FileButtons>
           {this.props.fields.infoBtn && (
             <React.Fragment>

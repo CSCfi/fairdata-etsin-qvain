@@ -65,7 +65,7 @@ class LangToggle extends Component {
         <div className="sr-only" aria-live="assertive">
           {this.state.announce}
         </div>
-        <label>
+        <div>
           <span className="sr-only">
             {translate('general.language.toggleLabel')}: {this.otherLang()}
           </span>
@@ -83,7 +83,7 @@ class LangToggle extends Component {
               {this.otherLang()}
             </TransparentButton>
           )}
-        </label>
+        </div>
       </div>
     )
   }
