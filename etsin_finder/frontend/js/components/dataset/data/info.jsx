@@ -52,24 +52,26 @@ const Info = ({
     <ModalLayout>
       <Translate className="sr-only" content="dataset.dl.info_header" />
       <InfoTable>
-        {name && <InfoItem translation="dataset.dl.name" content={name} />}
-        {id && <InfoItem translation="dataset.dl.id" content={id} />}
-        {title && <InfoItem translation="dataset.dl.title" content={title} />}
-        {type && type !== 'dir' && (
-          <InfoItem
-            translation="dataset.dl.type"
-            content={checkDataLang(type.pref_label)}
-            lang={getDataLang(type.pref_label)}
-          />
-        )}
-        {size && <InfoItem translation="dataset.dl.size" content={size} />}
-        {category && <InfoItem translation="dataset.dl.category" content={category} />}
-        {checksum && (
-          <InfoItem
-            translation="dataset.dl.checksum"
-            content={checksum.checksum_value ? checksum.checksum_value : checksum.value}
-          />
-        )}
+        <tbody>
+          {name && <InfoItem translation="dataset.dl.name" content={name} />}
+          {id && <InfoItem translation="dataset.dl.id" content={id} />}
+          {title && <InfoItem translation="dataset.dl.title" content={title} />}
+          {type && type !== 'dir' && (
+            <InfoItem
+              translation="dataset.dl.type"
+              content={checkDataLang(type.pref_label)}
+              lang={getDataLang(type.pref_label)}
+            />
+          )}
+          {size && <InfoItem translation="dataset.dl.size" content={size} />}
+          {category && <InfoItem translation="dataset.dl.category" content={category} />}
+          {checksum && (checksum.checksum_value || checksum.value) && (
+            <InfoItem
+              translation="dataset.dl.checksum"
+              content={checksum.checksum_value ? checksum.checksum_value : checksum.value}
+            />
+          )}
+        </tbody>
       </InfoTable>
     </ModalLayout>
     {description ? (
@@ -156,7 +158,7 @@ Info.propTypes = {
   id: PropTypes.string,
   title: PropTypes.string,
   size: PropTypes.string,
-  category: PropTypes.string,
+  category: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   type: PropTypes.oneOfType([PropTypes.string, TypeConcept]),
   open: PropTypes.bool.isRequired,
   closeModal: PropTypes.func.isRequired,
