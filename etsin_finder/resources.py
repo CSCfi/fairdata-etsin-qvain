@@ -169,7 +169,8 @@ class Contact(Resource):
         app_config = get_app_config(app.testing)
         sender = app_config.get('MAIL_DEFAULT_SENDER', 'etsin-no-reply@fairdata.fi')
         subject = get_email_message_subject()
-        body = create_email_message_body(cr_id, user_email, user_subject, user_body)
+        body = create_email_message_body(cr_service.get_catalog_record_preferred_identifier(cr),
+                                         user_email, user_subject, user_body)
 
         # Create the message
         msg = Message(sender=sender, reply_to=user_email, recipients=[recipient], subject=subject, body=body)
