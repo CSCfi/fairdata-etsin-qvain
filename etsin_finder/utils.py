@@ -112,7 +112,7 @@ def tz_now_is_later_than_timestamp_str(timestamp_str):
     return datetime.now(tz=pytz.timezone('Europe/Helsinki')) >= datetime_obj
 
 
-class FlaskService():
+class FlaskService:
     """Use as base class for external dependency services"""
 
     def __init__(self, app):
