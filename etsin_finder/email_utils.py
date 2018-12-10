@@ -42,10 +42,6 @@ def create_email_message_body(pref_id, user_email, user_subject, user_body):
                'tutkimusaineistoa, jonka tunniste on \"{3}\". Ole hyvä, lähetä vastauksesi osoitteeseen {4}.'
                .format(now.day, now.month, now.year, pref_id, user_email))
 
-    import pprint
-    pprint.pprint(meta_en)
-    pprint.pprint(meta_fi)
-
     msg = 'Subject / Aihe: {0}\nMessage / Viesti: {1}'.format(user_subject, user_body)
 
     return '{0}\n\n{1}\n\n---\n\n{2}'.format(meta_en, meta_fi, msg)
