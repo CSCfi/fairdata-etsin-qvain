@@ -22,7 +22,8 @@ export default class Identifier extends Component {
     super(props)
     const url = idnToLink(this.props.idn)
     const prefix = this.prefix(this.props.idn)
-    this.state = { url, prefix }
+    const text = prefix === 'doi' ? this.props.idn.substring(4) : this.props.idn
+    this.state = { url, prefix, text }
   }
 
   prefix(idn) {
@@ -60,7 +61,7 @@ export default class Identifier extends Component {
             <span className="sr-only">{`${this.state.prefix}: `}</span>
           </Prefix>
         ) : null}
-        <IDN>{this.props.idn}</IDN>
+        <IDN>{this.state.text}</IDN>
       </IdnLink>
     )
   }
