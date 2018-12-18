@@ -205,9 +205,12 @@ const english = {
     placeholder: 'Search term',
     sorting: {
       sort: 'Sort',
-      best: 'Best Match',
-      dateA: 'Date ascending',
-      dateD: 'Date descending',
+      best: 'Most relevant',
+      bestTitle: 'Relevance',
+      dateA: 'Oldest first',
+      dateATitle: 'Oldest',
+      dateD: 'Last modified',
+      dateDTitle: 'Newest',
     },
     filter: {
       clearFilter: 'Remove filters',

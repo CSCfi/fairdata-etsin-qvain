@@ -205,9 +205,12 @@ const finnish = {
     placeholder: 'Anna hakusana',
     sorting: {
       sort: 'Järjestä',
-      best: 'Osuvimmat ensin',
+      best: 'Osuvin ensin',
+      bestTitle: 'Osuvin',
       dateA: 'Vanhin ensin',
-      dateD: 'Uusin ensin',
+      dateATitle: 'Vanhin',
+      dateD: 'Viimeksi muokattu',
+      dateDTitle: 'Uusin'
     },
     filter: {
       clearFilter: 'Poista rajaukset',
