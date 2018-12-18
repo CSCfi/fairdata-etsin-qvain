@@ -193,6 +193,7 @@ const Pop = styled.div`
     ${p => alignment(p.align)};
     position: absolute;
     width: max-content;
+    max-width: 40vw;
   }
 `
 
