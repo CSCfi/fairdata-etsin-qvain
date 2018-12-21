@@ -12,6 +12,7 @@ import Citation from './special/citation'
 import Logo from './special/logo'
 import License from './special/license'
 import ErrorBoundary from '../../general/errorBoundary'
+import Agent from '../agent'
 
 class Sidebar extends Component {
   constructor(props) {
@@ -25,9 +26,7 @@ class Sidebar extends Component {
       catalog_publisher: checkNested(dataCatalog, 'catalog_json', 'publisher', 'name')
         ? dataCatalog.catalog_json.publisher.name
         : false,
-      publisher: checkNested(researchDataset, 'publisher', 'name')
-        ? researchDataset.publisher.name
-        : false,
+      publisher: researchDataset.publisher,
       catalogTitle: dataCatalog.catalog_json.title,
       catalogPublisherHomepage: checkNested(dataCatalog, 'catalog_json', 'publisher', 'homepage')
         ? dataCatalog.catalog_json.publisher.homepage[0].identifier
@@ -244,7 +243,12 @@ class Sidebar extends Component {
                     checkNested(output, 'has_funding_agency') &&
                     output.has_funding_agency.map(agency => (
                       <ListItem key={checkDataLang(agency.name)} lang={getDataLang(agency.name)}>
-                        {checkDataLang(agency.name)}
+                        <Agent
+                          lang={getDataLang(agency)}
+                          key={checkDataLang(agency) || agency.name}
+                          first
+                          agent={agency}
+                        />
                       </ListItem>
                     ))
                 )}
@@ -253,48 +257,62 @@ class Sidebar extends Component {
             {/* PUBLISHER */}
 
             <SidebarItem
-              component="dd"
+              componen="dd"
               trans="dataset.publisher"
               hideEmpty="true"
               lang={this.state.publisher && getDataLang(this.state.publisher)}
             >
-              {this.state.publisher && checkDataLang(this.state.publisher)}
+              {this.state.publisher && (
+                <Agent
+                  lang={getDataLang(this.state.publisher)}
+                  key={checkDataLang(this.state.publisher) || this.state.publisher.name}
+                  first
+                  agent={this.state.publisher}
+                />
+              )}
             </SidebarItem>
 
             {/* CURATOR */}
 
             <SidebarItem trans="dataset.curator" hideEmpty="true">
               {this.state.curator &&
-                this.state.curator.map((curators, i) => {
-                  let curator = checkDataLang(curators.name)
-                  if (curator === '') {
-                    curator = curators.name
+                this.state.curator.map((curator) => {
+                  let curatorName = checkDataLang(curator.name)
+                  if (curatorName === '') {
+                    curatorName = curator.name
                   }
                   return (
-                    /* eslint-disable react/no-array-index-key */
-                    <ListItem key={`${curator}-${i}`} lang={getDataLang(curators.name)}>
-                      {curator}
+                    <ListItem key={`li-${curatorName}`} lang={getDataLang(curator)}>
+                      <Agent
+                        lang={getDataLang(curator)}
+                        key={curatorName}
+                        first
+                        agent={curator}
+                      />
                     </ListItem>
-                    /* eslint-enable react/no-array-index-key */
                   )
-                })}
+                })
+              }
             </SidebarItem>
 
             {/* RIGHTS HOLDER */}
 
             <SidebarItem trans="dataset.rights_holder" hideEmpty="true">
               {this.state.rightsHolder &&
-                this.state.rightsHolder.map((rightsHolders, i) => {
-                  let rightsHolder = checkDataLang(rightsHolders.name)
-                  if (rightsHolder === '') {
-                    rightsHolder = rightsHolders.name
+                this.state.rightsHolder.map((rightsHolder) => {
+                  let rightsHolderName = checkDataLang(rightsHolder.name)
+                  if (rightsHolderName === '') {
+                    rightsHolderName = rightsHolder.name
                   }
                   return (
-                    /* eslint-disable react/no-array-index-key */
-                    <ListItem key={`${rightsHolder}-${i}`} lang={getDataLang(rightsHolder.name)}>
-                      {rightsHolder}
+                    <ListItem key={`li-${rightsHolderName}`} lang={getDataLang(rightsHolder)}>
+                      <Agent
+                        lang={getDataLang(rightsHolder)}
+                        key={rightsHolderName}
+                        first
+                        agent={rightsHolder}
+                      />
                     </ListItem>
-                    /* eslint-enable react/no-array-index-key */
                   )
                 })}
             </SidebarItem>

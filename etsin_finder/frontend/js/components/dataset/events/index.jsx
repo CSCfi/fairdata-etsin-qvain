@@ -20,6 +20,7 @@ import Accessibility from '../../../stores/view/accessibility'
 import checkDataLang, { getDataLang } from '../../../utils/checkDataLang'
 import dateFormat from '../../../utils/dateFormat'
 import Tracking from '../../../utils/tracking'
+import Agent from '../agent'
 
 const Table = styled.table`
   overflow-x: scroll;
@@ -165,15 +166,21 @@ class Events extends Component {
                     <td>
                       {/* eslint-disable react/jsx-indent */}
                       {single.was_associated_with &&
-                        single.was_associated_with.map((associate, i) => (
-                          <span
-                            key={checkDataLang(associate.name)}
-                            lang={getDataLang(associate.name)}
-                          >
-                            {i === 0 ? '' : ', '}
-                            {checkDataLang(associate.name)}
-                          </span>
-                        ))}
+                        single.was_associated_with.map((associate, i) => {
+                          if (associate.name) {
+                            return (
+                              <InlineUl key={`ul-${checkDataLang(associate.name)}`}>
+                                <Agent
+                                  lang={getDataLang(associate)}
+                                  key={checkDataLang(associate) || associate.name}
+                                  first={i === 0}
+                                  agent={associate}
+                                />
+                              </InlineUl>
+                            )
+                          }
+                          return ''
+                        })}
                       {/* eslint-enable react/jsx-indent */}
                     </td>
                     <td>
@@ -273,5 +280,11 @@ Events.propTypes = {
   provenance: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
   other_identifier: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
 }
+
+const InlineUl = styled.ul`
+  display: inline;
+  margin: 0;
+  padding: 0;
+`
 
 export default inject('Stores')(observer(Events))

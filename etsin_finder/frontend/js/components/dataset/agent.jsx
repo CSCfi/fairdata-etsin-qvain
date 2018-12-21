@@ -19,9 +19,9 @@ import faUser from '@fortawesome/fontawesome-free-solid/faUser'
 import faUniversity from '@fortawesome/fontawesome-free-solid/faUniversity'
 import faGlobe from '@fortawesome/fontawesome-free-solid/faGlobe'
 
-import { TransparentLink } from '../../general/button'
-import PopUp from '../../general/popup'
-import checkDataLang, { getDataLang } from '../../../utils/checkDataLang'
+import { TransparentLink } from '../general/button'
+import PopUp from '../general/popup'
+import checkDataLang, { getDataLang } from '../../utils/checkDataLang'
 
 export default class Agent extends Component {
   constructor(props) {
