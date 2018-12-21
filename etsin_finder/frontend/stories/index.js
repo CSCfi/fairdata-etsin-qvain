@@ -53,8 +53,8 @@ import Info from '../js/components/dataset/data/info'
 import Dropdown from '../js/components/general/dropdown'
 import PopUp from '../js/components/general/popup'
 // import Select from '../js/components/general/select'
-import Agents from '../js/components/dataset/agents'
-import Agent from '../js/components/dataset/agents/agent'
+import TogglableAgentList from '../js/components/dataset/togglableAgentList'
+import Agent from '../js/components/dataset/agent'
 import Sidebar from '../js/components/dataset/sidebar'
 import License from '../js/components/dataset/sidebar/license'
 
@@ -533,7 +533,7 @@ storiesOf('Dataset/Timestamp', module).add('Available', () => (
   </Container>
 ))
 
-storiesOf('Dataset/Agents', module)
+storiesOf('Dataset/TogglableAgentList', module)
   .add('Creator', () => (
     <Container
       center
@@ -545,7 +545,7 @@ storiesOf('Dataset/Agents', module)
       }}
     >
       <ComponentCode>
-        <Agents creator={MetaxRes.research_dataset.creator} />
+        <TogglableAgentList agents={MetaxRes.research_dataset.creator} agentType="creator" />
       </ComponentCode>
     </Container>
   ))
@@ -554,7 +554,7 @@ storiesOf('Dataset/Agents', module)
     return (
       <Container center maxWidth="800px" style={{ marginTop: '10em' }}>
         <ComponentCode>
-          <Agents contributor={twoContributors} />
+          <TogglableAgentList agents={twoContributors} agentType="contributor" />
         </ComponentCode>
       </Container>
     )
@@ -569,7 +569,7 @@ storiesOf('Dataset/Agents', module)
   .add('More than 3 agents', () => (
     <Container center maxWidth="800px" style={{ marginTop: '10em' }}>
       <ComponentCode>
-        <Agents contributor={MetaxRes.research_dataset.contributor} />
+        <TogglableAgentList agents={MetaxRes.research_dataset.contributor} agemntType="contributor" />
       </ComponentCode>
     </Container>
   ))
