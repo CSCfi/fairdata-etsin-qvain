@@ -29,6 +29,7 @@ export default class Agent extends Component {
     this.state = {
       agent: props.agent,
       popUpOpen: false,
+      popupAlign: props.popupAlign
     }
     this.openPopUp = this.openPopUp.bind(this)
     this.closePopUp = this.closePopUp.bind(this)
@@ -83,6 +84,7 @@ export default class Agent extends Component {
           <PopUp
             isOpen={this.state.popUpOpen}
             onRequestClose={this.closePopUp}
+            align={this.state.popupAlign}
             popUp={
               <PopUpContainer>
                 {this.state.agent.name && (
@@ -98,7 +100,7 @@ export default class Agent extends Component {
                     rel="noopener noreferrer"
                     aria-label={translate('dataset.identifier')}
                   >
-                    <span aria-hidden>{this.state.agent.identifier}</span>
+                    <IdentifierText>{this.state.agent.identifier}</IdentifierText>
                   </IdentifierLink>
                 )}
                 {this.state.agent.identifier && !this.state.agent.identifier.startsWith('http') && (
@@ -197,11 +199,13 @@ export default class Agent extends Component {
 
 Agent.defaultProps = {
   first: false,
+  popupAlign: 'left'
 }
 
 Agent.propTypes = {
   first: PropTypes.bool,
   agent: PropTypes.object.isRequired,
+  popupAlign: PropTypes.oneOf(['left', 'right', 'center', 'sidebar']),
 }
 
 const TextWithoutPopup = styled.span`
@@ -226,6 +230,7 @@ const Name = styled.h4`
 
 const IdentifierLink = styled.a`
   font-size: 0.9em;
+  word-break: break-word;
 `
 
 const IdentifierText = styled.div`

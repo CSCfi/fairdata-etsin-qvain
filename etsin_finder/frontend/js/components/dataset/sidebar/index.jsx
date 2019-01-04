@@ -248,6 +248,7 @@ class Sidebar extends Component {
                           key={checkDataLang(agency) || agency.name}
                           first
                           agent={agency}
+                          popupAlign="sidebar"
                         />
                       </ListItem>
                     ))
@@ -268,6 +269,7 @@ class Sidebar extends Component {
                   key={checkDataLang(this.state.publisher) || this.state.publisher.name}
                   first
                   agent={this.state.publisher}
+                  popupAlign="sidebar"
                 />
               )}
             </SidebarItem>
@@ -288,6 +290,7 @@ class Sidebar extends Component {
                         key={curatorName}
                         first
                         agent={curator}
+                        popupAlign="sidebar"
                       />
                     </ListItem>
                   )
@@ -311,6 +314,7 @@ class Sidebar extends Component {
                         key={rightsHolderName}
                         first
                         agent={rightsHolder}
+                        popupAlign="sidebar"
                       />
                     </ListItem>
                   )
