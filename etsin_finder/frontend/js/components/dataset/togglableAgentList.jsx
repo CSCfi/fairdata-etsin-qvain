@@ -16,19 +16,20 @@ import Translate from 'react-translate-component'
 import styled from 'styled-components'
 
 import Agent from './agent'
-import checkDataLang, { getDataLang } from '../../../utils/checkDataLang'
-import { LinkButton } from '../../general/button'
+import checkDataLang, { getDataLang } from '../../utils/checkDataLang'
+import { LinkButton } from '../general/button'
 
-export default class Agents extends Component {
+export default class TogglableAgentList extends Component {
   constructor(props) {
     super(props)
 
-    const mode = typeof props.creator === 'object' ? 'creator' : 'contributor'
-    if (this.props[mode]) {
+    const agents = props.agents
+    const agentType = props.agentType
+    if (agents) {
       this.state = {
-        mode,
-        firstThree: this.props[mode].slice(0, 3),
-        rest: this.props[mode].slice(3),
+        agentType,
+        firstThree: agents.slice(0, 3),
+        rest: agents.slice(3),
         open: false,
       }
     } else {
@@ -47,12 +48,12 @@ export default class Agents extends Component {
   }
 
   render() {
-    return this.props[this.state.mode] ? (
+    return this.props.agents ? (
       <AgentsCont>
-        {this.props[this.state.mode].length > 1 ? (
-          <Translate content={`dataset.${this.state.mode}.plrl`} />
+        {this.props.agents.length > 1 ? (
+          <Translate content={`dataset.${this.state.agentType}.plrl`} />
         ) : (
-          <Translate content={`dataset.${this.state.mode}.snglr`} />
+          <Translate content={`dataset.${this.state.agentType}.snglr`} />
         )}
         {': '}
         <InlineUl>
@@ -71,7 +72,7 @@ export default class Agents extends Component {
             return ''
           })}
           {/* Show the rest */}
-          {this.props[this.state.mode].length > 3 &&
+          {this.props.agents.length > 3 &&
             this.state.open &&
             this.state.rest.map(agent => {
               if (agent.name) {
@@ -86,7 +87,7 @@ export default class Agents extends Component {
               return ''
             })}
           {/* Show Button to open rest */}{' '}
-          {this.props[this.state.mode].length > 3 && (
+          {this.props.agents.length > 3 && (
             <LinkButton onClick={this.toggleOpen}>
               [{' '}
               {this.state.open ? (
@@ -103,12 +104,14 @@ export default class Agents extends Component {
   }
 }
 
-Agents.defaultProps = {
-  creator: undefined,
+TogglableAgentList.defaultProps = {
+  agents: undefined,
+  agentType: undefined,
 }
 
-Agents.propTypes = {
-  creator: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+TogglableAgentList.propTypes = {
+  agents: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+  agentType: PropTypes.string
 }
 
 const AgentsCont = styled.div`

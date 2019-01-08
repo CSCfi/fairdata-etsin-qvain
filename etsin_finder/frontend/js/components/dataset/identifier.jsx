@@ -13,6 +13,9 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+import ClipboardIcon from 'react-clipboard-icon'
+import translate from 'counterpart'
 
 import { Link } from '../general/button'
 import idnToLink from '../../utils/idnToLink'
@@ -39,6 +42,13 @@ export default class Identifier extends Component {
     return ''
   }
 
+  cliboardStyle = {
+    verticalAlign: 'bottom',
+    marginLeft: '3px',
+    display: 'inline-block',
+    cursor: 'pointer'
+  }
+
   render() {
     // display as text if not of type doi or urn
     if (!this.state.url) {
@@ -47,25 +57,41 @@ export default class Identifier extends Component {
 
     // return styled link
     return (
-      <IdnLink
-        noMargin
-        href={this.state.url}
-        target="_blank"
-        rel="noopener noreferrer"
-        {...this.props}
-        title={this.state.url}
-      >
-        {this.state.prefix ? (
-          <Prefix>
-            <span aria-hidden>{this.state.prefix}</span>
-            <span className="sr-only">{`${this.state.prefix}: `}</span>
-          </Prefix>
-        ) : null}
-        <IDN>{this.state.text}</IDN>
-      </IdnLink>
+      <IdnSpan>
+        <IdnLink
+          noMargin
+          href={this.state.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          {...this.props}
+          title={this.state.url}
+        >
+          {this.state.prefix ? (
+            <Prefix>
+              <span aria-hidden>{this.state.prefix}</span>
+              <span className="sr-only">{`${this.state.prefix}: `}</span>
+            </Prefix>
+          ) : null}
+          <IDN>{this.state.text}</IDN>
+        </IdnLink>
+        <CopyToClipboard
+          text={this.state.url}
+          style={this.cliboardStyle}
+        >
+          <ClipboardIcon
+            title={translate('dataset.copyToClipboard')}
+            size={18}
+          />
+        </CopyToClipboard>
+      </IdnSpan>
     )
   }
 }
+
+const IdnSpan = styled.div`
+  display: -webkit-box;
+  width: 100%;
+`
 
 // prettier-ignore
 const IdnLink = styled(Link)`

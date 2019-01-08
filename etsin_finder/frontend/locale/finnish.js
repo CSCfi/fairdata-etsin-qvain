@@ -53,6 +53,7 @@ const finnish = {
       plrl: 'Muut tekijät',
       snglr: 'Muu tekijä',
     },
+    copyToClipboard: 'Kopioi leikepöydälle',
     creator: {
       plrl: 'Tekijät',
       snglr: 'Tekijä',

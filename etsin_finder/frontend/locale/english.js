@@ -53,6 +53,7 @@ const english = {
       plrl: 'Contributors',
       snglr: 'Contributor',
     },
+    copyToClipboard: 'Copy to clipboard',
     creator: {
       plrl: 'Creators',
       snglr: 'Creator',
