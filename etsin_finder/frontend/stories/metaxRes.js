@@ -754,7 +754,7 @@ export default {
         pref_label: {
           fi: 'Saatavuutta rajoitettu muulla perusteella',
           en: 'Restricted access due to other reasons',
-          sv: 'Begränsad åtkomst av övriga skäl'
+          sv: 'Begränsad åtkomst av övriga skäl',
           und: 'Saatavuutta rajoitettu muulla perusteella',
         },
       }]

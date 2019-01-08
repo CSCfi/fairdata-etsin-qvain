@@ -162,6 +162,12 @@ const alignment = align => {
           right: 0;
           margin-right: -30px;
         }
+        @media screen and (min-width: ${p => p.theme.breakpoints.md}) and (max-width: ${p => p.theme.breakpoints.lg}) {
+          margin-right: -150px;
+        }
+        @media screen and (min-width: ${p => p.theme.breakpoints.xs}) and (max-width: ${p => p.theme.breakpoints.md}) {
+          margin-right: -80px;
+        }
       `
       break
     case 'center':

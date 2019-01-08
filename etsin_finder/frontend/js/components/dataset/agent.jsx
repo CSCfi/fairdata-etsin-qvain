@@ -19,9 +19,9 @@ import faUser from '@fortawesome/fontawesome-free-solid/faUser'
 import faUniversity from '@fortawesome/fontawesome-free-solid/faUniversity'
 import faGlobe from '@fortawesome/fontawesome-free-solid/faGlobe'
 
-import { TransparentLink } from '../../general/button'
-import PopUp from '../../general/popup'
-import checkDataLang, { getDataLang } from '../../../utils/checkDataLang'
+import { TransparentLink } from '../general/button'
+import PopUp from '../general/popup'
+import checkDataLang, { getDataLang } from '../../utils/checkDataLang'
 
 export default class Agent extends Component {
   constructor(props) {
@@ -29,6 +29,7 @@ export default class Agent extends Component {
     this.state = {
       agent: props.agent,
       popUpOpen: false,
+      popupAlign: props.popupAlign
     }
     this.openPopUp = this.openPopUp.bind(this)
     this.closePopUp = this.closePopUp.bind(this)
@@ -83,6 +84,7 @@ export default class Agent extends Component {
           <PopUp
             isOpen={this.state.popUpOpen}
             onRequestClose={this.closePopUp}
+            align={this.state.popupAlign}
             popUp={
               <PopUpContainer>
                 {this.state.agent.name && (
@@ -98,7 +100,7 @@ export default class Agent extends Component {
                     rel="noopener noreferrer"
                     aria-label={translate('dataset.identifier')}
                   >
-                    <span aria-hidden>{this.state.agent.identifier}</span>
+                    <IdentifierText>{this.state.agent.identifier}</IdentifierText>
                   </IdentifierLink>
                 )}
                 {this.state.agent.identifier && !this.state.agent.identifier.startsWith('http') && (
@@ -106,6 +108,22 @@ export default class Agent extends Component {
                 )}
                 {this.hasExtraInfo() && (
                   <ul>
+                    {this.state.agent.member_of &&
+                      this.infoItem(
+                        checkDataLang(this.state.agent.member_of.name),
+                        translate('dataset.agent.member_of'),
+                        faUniversity,
+                        getDataLang(this.state.agent.member_of.name)
+                      )
+                    }
+                    {this.state.agent.is_part_of &&
+                      this.infoItem(
+                        checkDataLang(this.state.agent.is_part_of.name),
+                        translate('dataset.agent.is_part_of'),
+                        faUniversity,
+                        getDataLang(this.state.agent.is_part_of.name)
+                      )
+                    }
                     {this.state.agent.contributor_role &&
                       this.state.agent.contributor_role.map(cr =>
                         this.infoItem(
@@ -115,7 +133,8 @@ export default class Agent extends Component {
                           getDataLang(cr.pref_label),
                           cr.identifier
                         )
-                      )}
+                      )
+                    }
                     {this.state.agent.contributor_type &&
                       this.state.agent.contributor_type.map(ct =>
                         this.infoItem(
@@ -125,21 +144,8 @@ export default class Agent extends Component {
                           getDataLang(ct.pref_label),
                           ct.identifier
                         )
-                      )}
-                    {this.state.agent.member_of &&
-                      this.infoItem(
-                        checkDataLang(this.state.agent.member_of.name),
-                        translate('dataset.agent.member_of'),
-                        faUniversity,
-                        getDataLang(this.state.agent.member_of.name)
-                      )}
-                    {this.state.agent.is_part_of &&
-                      this.infoItem(
-                        checkDataLang(this.state.agent.is_part_of.name),
-                        translate('dataset.agent.is_part_of'),
-                        faUniversity,
-                        getDataLang(this.state.agent.is_part_of.name)
-                      )}
+                      )
+                    }
                     {this.state.agent.homepage && (
                       <Info>
                         <FontawesomeIcon icon={faGlobe} aria-hidden />
@@ -166,7 +172,8 @@ export default class Agent extends Component {
                           )}
                         </a>
                       </Info>
-                    )}
+                    )
+                  }
                   </ul>
                 )}
               </PopUpContainer>
@@ -197,11 +204,13 @@ export default class Agent extends Component {
 
 Agent.defaultProps = {
   first: false,
+  popupAlign: 'left'
 }
 
 Agent.propTypes = {
   first: PropTypes.bool,
   agent: PropTypes.object.isRequired,
+  popupAlign: PropTypes.oneOf(['left', 'right', 'center', 'sidebar']),
 }
 
 const TextWithoutPopup = styled.span`
@@ -226,6 +235,7 @@ const Name = styled.h4`
 
 const IdentifierLink = styled.a`
   font-size: 0.9em;
+  word-break: break-word;
 `
 
 const IdentifierText = styled.div`

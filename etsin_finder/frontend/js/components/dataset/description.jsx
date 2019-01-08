@@ -23,7 +23,7 @@ import Contact from './contact'
 import ErrorBoundary from '../general/errorBoundary'
 import GoToOriginal from './goToOriginal'
 import Label from '../general/label'
-import Agents from './agents'
+import TogglableAgentList from './togglableAgentList'
 import VersionChanger from './versionChanger'
 import checkDataLang, { getDataLang } from '../../utils/checkDataLang'
 import checkNested from '../../utils/checkNested'
@@ -119,10 +119,10 @@ class Description extends Component {
           <div className="d-flex justify-content-between basic-info">
             <MainInfo>
               <ErrorBoundary>
-                <Agents creator={this.state.creator} />
+                <TogglableAgentList agents={this.state.creator} agentType="creator" />
               </ErrorBoundary>
               <ErrorBoundary>
-                <Agents contributor={this.state.contributor} />
+                <TogglableAgentList agents={this.state.contributor} agentType="contributor" />
               </ErrorBoundary>
               {this.state.issued && (
                 <p lang={getDataLang(this.state.issued)}>
