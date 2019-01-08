@@ -51,6 +51,8 @@
     "prop-types": "^15.6.2",
     "react": "^16.6.3",
     "react-a11y-announcer": "^1.2.0",
+    "react-clipboard-icon": "^1.1.0",
+    "react-copy-to-clipboard": "^5.0.1",
     "react-dom": "^16.6.3",
     "react-idle": "^3.0.0",
     "react-interpolate-component": "^0.12.0",

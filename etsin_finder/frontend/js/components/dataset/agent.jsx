@@ -108,6 +108,22 @@ export default class Agent extends Component {
                 )}
                 {this.hasExtraInfo() && (
                   <ul>
+                    {this.state.agent.member_of &&
+                      this.infoItem(
+                        checkDataLang(this.state.agent.member_of.name),
+                        translate('dataset.agent.member_of'),
+                        faUniversity,
+                        getDataLang(this.state.agent.member_of.name)
+                      )
+                    }
+                    {this.state.agent.is_part_of &&
+                      this.infoItem(
+                        checkDataLang(this.state.agent.is_part_of.name),
+                        translate('dataset.agent.is_part_of'),
+                        faUniversity,
+                        getDataLang(this.state.agent.is_part_of.name)
+                      )
+                    }
                     {this.state.agent.contributor_role &&
                       this.state.agent.contributor_role.map(cr =>
                         this.infoItem(
@@ -117,7 +133,8 @@ export default class Agent extends Component {
                           getDataLang(cr.pref_label),
                           cr.identifier
                         )
-                      )}
+                      )
+                    }
                     {this.state.agent.contributor_type &&
                       this.state.agent.contributor_type.map(ct =>
                         this.infoItem(
@@ -127,21 +144,8 @@ export default class Agent extends Component {
                           getDataLang(ct.pref_label),
                           ct.identifier
                         )
-                      )}
-                    {this.state.agent.member_of &&
-                      this.infoItem(
-                        checkDataLang(this.state.agent.member_of.name),
-                        translate('dataset.agent.member_of'),
-                        faUniversity,
-                        getDataLang(this.state.agent.member_of.name)
-                      )}
-                    {this.state.agent.is_part_of &&
-                      this.infoItem(
-                        checkDataLang(this.state.agent.is_part_of.name),
-                        translate('dataset.agent.is_part_of'),
-                        faUniversity,
-                        getDataLang(this.state.agent.is_part_of.name)
-                      )}
+                      )
+                    }
                     {this.state.agent.homepage && (
                       <Info>
                         <FontawesomeIcon icon={faGlobe} aria-hidden />
@@ -168,7 +172,8 @@ export default class Agent extends Component {
                           )}
                         </a>
                       </Info>
-                    )}
+                    )
+                  }
                   </ul>
                 )}
               </PopUpContainer>
