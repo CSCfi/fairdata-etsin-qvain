@@ -96,6 +96,7 @@ const finnish = {
         event: 'Tapahtuma',
         who: 'Kuka',
         when: 'Milloin',
+        event_title: 'Otsikko',
         description: 'Kuvaus',
       },
       other_idn: 'Muut tunnisteet',

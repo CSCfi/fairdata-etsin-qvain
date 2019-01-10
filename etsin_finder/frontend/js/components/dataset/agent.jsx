@@ -110,7 +110,9 @@ export default class Agent extends Component {
                   <ul>
                     {this.state.agent.member_of &&
                       this.infoItem(
-                        checkDataLang(this.state.agent.member_of.name),
+                        (this.state.agent.member_of.is_part_of ?
+                          `${checkDataLang(this.state.agent.member_of.is_part_of.name)}, ` : '') +
+                          checkDataLang(this.state.agent.member_of.name),
                         translate('dataset.agent.member_of'),
                         faUniversity,
                         getDataLang(this.state.agent.member_of.name)
@@ -179,7 +181,7 @@ export default class Agent extends Component {
               </PopUpContainer>
             }
           >
-            <TransparentLink
+            <InlineTransparentLink
               noMargin
               noPadding
               color="primary"
@@ -193,14 +195,20 @@ export default class Agent extends Component {
               onClick={this.state.popUpOpen ? this.closePopUp : this.openPopUp}
               lang={getDataLang(this.state.agent.name)}
             >
-              {checkDataLang(this.state.agent.name)}
-            </TransparentLink>
+              {(this.state.agent.is_part_of ?
+                `${checkDataLang(this.state.agent.is_part_of.name)}, ` : '') +
+                checkDataLang(this.state.agent.name)}
+            </InlineTransparentLink>
           </PopUp>
         )}
       </InlineLi>
     )
   }
 }
+
+const InlineTransparentLink = styled(TransparentLink)`
+  display: inline;
+`
 
 Agent.defaultProps = {
   first: false,
@@ -215,6 +223,7 @@ Agent.propTypes = {
 
 const TextWithoutPopup = styled.span`
   color: ${p => p.theme.color.dark};
+  display: inline;
 `
 
 const PopUpContainer = styled.div`

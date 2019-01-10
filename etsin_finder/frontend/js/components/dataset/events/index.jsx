@@ -143,6 +143,9 @@ class Events extends Component {
                     <Translate content="dataset.events_idn.events.when" />
                   </th>
                   <th className="rowIcon" scope="col">
+                    <Translate content="dataset.events_idn.events.event_title" />
+                  </th>
+                  <th className="rowIcon" scope="col">
                     <Translate content="dataset.events_idn.events.description" />
                   </th>
                 </tr>
@@ -186,6 +189,10 @@ class Events extends Component {
                     <td>
                       {/* some datasets have start_date and some startDate */}
                       {single.temporal && this.printDate(single.temporal)}
+                    </td>
+                    <td>
+                      {/* some datasets have start_date and some startDate */}
+                      {single.title && checkDataLang(single.title)}
                     </td>
                     <td lang={getDataLang(single.description)}>
                       {single.description && checkDataLang(single.description)}
