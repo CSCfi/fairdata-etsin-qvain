@@ -97,6 +97,7 @@ const english = {
         event: 'Event',
         who: 'Who',
         when: 'When',
+        event_title: 'Title',
         description: 'Description',
       },
       other_idn: 'Other identifiers',
