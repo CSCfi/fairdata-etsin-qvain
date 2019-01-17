@@ -220,6 +220,8 @@ const finnish = {
       filters: 'Rajaukset',
       filter: 'Rajaa',
       SRactive: 'päällä',
+      show: 'Lisää',
+      hide: 'Vähemmän'
     },
     pagination: {
       prev: 'Edellinen sivu',

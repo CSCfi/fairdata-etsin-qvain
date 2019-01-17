@@ -220,6 +220,8 @@ const english = {
       filters: 'Filters',
       filter: 'Filter',
       SRactive: 'active',
+      show: 'More',
+      hide: 'Less'
     },
     pagination: {
       prev: 'Previous page',
