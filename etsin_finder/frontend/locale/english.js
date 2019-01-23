@@ -90,7 +90,7 @@ const english = {
       title: 'Title',
       type: 'Type',
       go_to_original: 'Go to original',
-      sliced: 'Some files are not displayed in this view due to big amount of files'
+      sliced: 'Some files are not displayed in this view due to large amount of files'
     },
     events_idn: {
       events: {
