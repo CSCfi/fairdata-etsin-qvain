@@ -112,6 +112,33 @@ def tz_now_is_later_than_timestamp_str(timestamp_str):
     return datetime.now(tz=pytz.timezone('Europe/Helsinki')) >= datetime_obj
 
 
+def sort_array_of_obj_by_key(obj_array, obj_key, obj_nested_key=False):
+    """
+    Sort the objects in an array by using the value of an object key, or if needed, the value of a nested object key contained inside an object pointed to by an object key
+
+    :param obj_array: Object array to be sorted
+    :obj_key: Object key based on which to sort the object array, or a pointer key to a nested object where the sorting key is located
+    :obj_nested_key: Object key based on which to sort the object array, if it is contained below the main level of the sortable object
+    """
+    try:
+        if obj_array and obj_key:
+            obj_array.sort(key=lambda x: x.get(obj_key, {}).get(obj_nested_key) if obj_nested_key else x.get(obj_key))
+    except Exception:
+        pass
+
+
+def slice_array_on_limit(array, limit):
+    """
+    If array contains more items than the limit, return an array containing items up until the limit
+
+    :param array:
+    :limit: integer
+    """
+    if array and len(array) > limit:
+        return array[0:limit]
+    return array
+
+
 class FlaskService:
     """Use as base class for external dependency services"""
 

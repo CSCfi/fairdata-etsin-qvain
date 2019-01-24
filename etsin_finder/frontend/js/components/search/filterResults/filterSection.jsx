@@ -12,14 +12,18 @@
 
 import React, { Component } from 'react'
 import { inject, observer } from 'mobx-react'
+import Translate from 'react-translate-component'
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faAngleDown from '@fortawesome/fontawesome-free-solid/faAngleDown'
+import faAngleDoubleDown from '@fortawesome/fontawesome-free-solid/faAngleDoubleDown'
+import faAngleDoubleUp from '@fortawesome/fontawesome-free-solid/faAngleDoubleUp'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { mix } from 'polished'
 
 import checkDataLang from '../../../utils/checkDataLang'
 import FilterItem from './filterItem'
+import { TransparentLink } from '../../general/button'
 
 class FilterSection extends Component {
   constructor(props) {
@@ -88,7 +92,10 @@ class FilterSection extends Component {
 
     this.state = {
       open: false,
+      show: false,
     }
+
+    this.cutoff = 10
   }
 
   componentWillMount() {
@@ -98,6 +105,12 @@ class FilterSection extends Component {
   toggleFilter = () => {
     this.setState({
       open: !this.state.open,
+    })
+  }
+
+  toggleShowHideItems = () => {
+    this.setState({
+      show: !this.state.show
     })
   }
 
@@ -149,6 +162,12 @@ class FilterSection extends Component {
       return ''
     }
 
+    let aggItems = this.props.Stores.ElasticQuery.results.aggregations[this.aggregationName].buckets
+    const displayShowButton = aggItems.length > this.cutoff
+    if (!this.state.show) {
+      aggItems = aggItems.slice(0, this.cutoff)
+    }
+
     return (
       <Section>
         <FilterCategory onClick={this.toggleFilter} aria-expanded={this.state.open}>
@@ -157,7 +176,7 @@ class FilterSection extends Component {
         </FilterCategory>
         <FilterItems className={this.state.open ? 'open' : ''} aria-hidden={!this.state.open}>
           <ul aria-label={this.titleName}>
-            {this.props.Stores.ElasticQuery.results.aggregations[this.aggregationName].buckets.map(
+            {aggItems.map(
               item => (
                 <FilterItem
                   key={item.key}
@@ -169,6 +188,15 @@ class FilterSection extends Component {
               )
             )}
           </ul>
+          { displayShowButton ? (
+            <div>
+              <hr />
+              <ShowHide onClick={this.toggleShowHideItems}>
+                <FontAwesomeIcon icon={this.state.show ? faAngleDoubleUp : faAngleDoubleDown} />
+                <ShowHideBtn><Translate content={this.state.show ? 'search.filter.hide' : 'search.filter.show'} /></ShowHideBtn>
+              </ShowHide>
+            </div>
+          ) : ''}
         </FilterItems>
       </Section>
     )
@@ -183,6 +211,15 @@ FilterSection.propTypes = {
     ElasticQuery: PropTypes.object.isRequired,
   }).isRequired,
 }
+
+const ShowHide = styled.span`
+  cursor: pointer;
+`
+
+const ShowHideBtn = styled(TransparentLink)`
+  display: inline;
+  margin-left: 8px;
+`
 
 const Section = styled.li`
   margin-bottom: 4px;
@@ -249,7 +286,7 @@ const FilterItems = styled.div`
     }
   }
   &.open {
-    max-height: 1000px;
+    max-height: 100%;
     padding: 1em 1em;
     li {
       max-height: 140px;

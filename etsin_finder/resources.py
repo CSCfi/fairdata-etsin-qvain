@@ -26,8 +26,13 @@ from etsin_finder.email_utils import \
     get_harvest_info, \
     validate_send_message_request
 from etsin_finder.finder import app
+from etsin_finder.utils import \
+    sort_array_of_obj_by_key, \
+    slice_array_on_limit
 
 log = app.logger
+
+TOTAL_ITEM_LIMIT = 1000
 
 
 def log_request(f):
@@ -73,6 +78,11 @@ class Dataset(Resource):
         if not cr:
             abort(400, message="Unable to get catalog record from Metax")
 
+        # Sort data items
+        sort_array_of_obj_by_key(cr.get('research_dataset', {}).get('remote_resources', []), 'title')
+        sort_array_of_obj_by_key(cr.get('research_dataset', {}).get('directories', []), 'details', 'directory_name')
+        sort_array_of_obj_by_key(cr.get('research_dataset', {}).get('files', []), 'details', 'file_name')
+
         ret_obj = {'catalog_record': authorization.strip_information_from_catalog_record(cr, is_authd),
                    'email_info': get_email_info(cr)}
         if cr_service.is_rems_catalog_record(cr):
@@ -106,7 +116,19 @@ class Files(Resource):
 
         cr = cr_service.get_catalog_record(cr_id, False, False)
         dir_api_obj = cr_service.get_directory_data_for_catalog_record(cr_id, dir_id, file_fields, directory_fields)
+
         if cr and dir_api_obj:
+            # Sort the items
+            sort_array_of_obj_by_key(dir_api_obj.get('directories', []), 'directory_name')
+            sort_array_of_obj_by_key(dir_api_obj.get('files', []), 'file_name')
+
+            # Limit the amount of items to be sent to the frontend
+            if 'directories' in dir_api_obj:
+                dir_api_obj['directories'] = slice_array_on_limit(dir_api_obj['directories'], TOTAL_ITEM_LIMIT)
+            if 'files' in dir_api_obj:
+                dir_api_obj['files'] = slice_array_on_limit(dir_api_obj['files'], TOTAL_ITEM_LIMIT)
+
+            # Strip the items of sensitive data
             authorization.strip_dir_api_object(dir_api_obj, authentication.is_authenticated(), cr)
             return dir_api_obj, 200
         return '', 404

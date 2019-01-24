@@ -263,36 +263,43 @@ class ElasticQuery {
         organization_name_fi: {
           terms: {
             field: 'organization_name_fi.keyword',
+            size: 40
           },
         },
         organization_name_en: {
           terms: {
             field: 'organization_name_en.keyword',
+            size: 40
           },
         },
         creator: {
           terms: {
             field: 'creator_name.keyword',
+            size: 40
           },
         },
         field_of_science_en: {
           terms: {
             field: 'field_of_science.pref_label.en.keyword',
+            size: 40
           },
         },
         field_of_science_fi: {
           terms: {
             field: 'field_of_science.pref_label.fi.keyword',
+            size: 40
           },
         },
         all_keywords_en: {
           terms: {
             field: 'all_keywords_en',
+            size: 40
           },
         },
         all_keywords_fi: {
           terms: {
             field: 'all_keywords_fi',
+            size: 40
           },
         },
         infrastructure_en: {
@@ -308,11 +315,13 @@ class ElasticQuery {
         project_name_fi: {
           terms: {
             field: 'project_name_fi.keyword',
+            size: 40
           },
         },
         project_name_en: {
           terms: {
             field: 'project_name_en.keyword',
+            size: 40
           },
         },
         file_type_en: {
