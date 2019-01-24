@@ -140,7 +140,7 @@ export default class IdaResources extends Component {
     }
 
     if (files && folders) {
-      return filePaths.concat(folderPaths)
+      return folderPaths.concat(filePaths)
     }
 
     if (files || folders) {
@@ -185,7 +185,7 @@ export default class IdaResources extends Component {
     DatasetQuery.getFolderData(id, this.state.results.identifier)
       .then(res => {
         const formatted = this.createDirTree(res.files, res.directories, true)
-        const currFolder = createTree(this.combineDescribed(formatted)).reverse()
+        const currFolder = createTree(this.combineDescribed(formatted))
         this.setState({
           currentPath: newPath,
           currentIDs: newIDs,

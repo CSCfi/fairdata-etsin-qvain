@@ -89,6 +89,7 @@ const finnish = {
       title: 'Otsikko',
       type: 'Tyyppi',
       go_to_original: 'Siirry sivulle',
+      sliced: 'Joitain tiedostoja ei näytetä tässä näkymässä tiedostojen suuren lukumäärän vuoksi'
     },
     events_idn: {
       events: {
@@ -220,6 +221,8 @@ const finnish = {
       filters: 'Rajaukset',
       filter: 'Rajaa',
       SRactive: 'päällä',
+      show: 'Lisää',
+      hide: 'Vähemmän'
     },
     pagination: {
       prev: 'Edellinen sivu',

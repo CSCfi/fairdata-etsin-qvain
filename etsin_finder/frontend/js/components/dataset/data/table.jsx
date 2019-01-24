@@ -14,8 +14,12 @@ import React, { Component } from 'react'
 import Translate from 'react-translate-component'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import faExclamation from '@fortawesome/fontawesome-free-solid/faExclamationCircle'
+import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 
 import TableItem from './tableItem'
+
+const itemMaxAmt = 500
 
 export default class Table extends Component {
   constructor(props) {
@@ -68,6 +72,9 @@ export default class Table extends Component {
   /* eslint-enable react/no-array-index-key */
 
   render() {
+    const sliced = this.props.data.length > itemMaxAmt
+    const data = sliced ? this.props.data.slice(0, itemMaxAmt) : this.props.data
+
     return (
       <TableContainer>
         <StyledTable>
@@ -98,7 +105,16 @@ export default class Table extends Component {
               )}
             </tr>
           </THead>
-          <TBody>{this.tableItems(this.props.data)}</TBody>
+          <TBody>
+            {sliced && (
+              <tr>
+                <SlicedInfo colSpan="5">
+                  <FontAwesomeIcon icon={faExclamation} /> <Translate content="dataset.dl.sliced" />
+                </SlicedInfo>
+              </tr>
+            )}
+            {this.tableItems(data)}
+          </TBody>
         </StyledTable>
         {this.state.downloadUrl && (
           <HiddenLink innerRef={this.downloadRef} href={this.state.downloadUrl} download />
@@ -142,6 +158,12 @@ const Size = styled.th``
 const Name = styled.th``
 
 const Buttons = styled.th``
+
+const SlicedInfo = styled.td`
+  text-align: center;
+  padding: 12px;
+  color: red;
+`
 
 const THead = styled.thead`
   background-color: ${p => p.theme.color.darker};
