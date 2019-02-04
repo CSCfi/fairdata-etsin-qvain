@@ -1151,7 +1151,7 @@
         "local_identifier_type": "Local identifier type defines use of the identifier in given context"
       }
     ],
-    "total_ida_byte_size": 621100,
+    "total_files_byte_size": 621100,
     "preferred_identifier": "urn:nbn:fi:att:1955e904-e3dd-4d7e-99f1-3fed446f9613",
     "bibliographic_citation": "whot",
     "metadata_version_identifier": "1955e904-e3dd-4d7e-99f1-3fed446f9613"
