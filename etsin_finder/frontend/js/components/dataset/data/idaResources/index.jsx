@@ -234,7 +234,7 @@ export default class IdaResources extends Component {
       <DataTable>
         <TableHeader
           objectCount={this.state.totalCount}
-          totalSize={this.state.results.research_dataset.total_ida_byte_size}
+          totalSize={this.state.results.research_dataset.total_files_byte_size}
           title={'files'}
           allowDownload={this.state.allowDownload}
           crId={this.state.results.identifier}
