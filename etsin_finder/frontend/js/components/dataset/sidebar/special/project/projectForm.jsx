@@ -171,6 +171,7 @@ const Form = styled.form`
   display: flex;
   flex-wrap: wrap;
   align-content: center;
+  min-width: 260px;
 `
 
 const List = styled.dl`
