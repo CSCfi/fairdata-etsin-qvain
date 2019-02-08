@@ -13,25 +13,43 @@
 import Locale from '../stores/view/language'
 
 const formats = {
-  fi: {
-    lang: 'fi-FI',
-    options: {
-      day: 'numeric',
-      month: 'numeric',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      seconds: '2-digit' }
+  datetime: {
+    fi: {
+      lang: 'fi-FI',
+      options: {
+        day: 'numeric',
+        month: 'numeric',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        seconds: '2-digit' }
+    },
+    en: {
+      lang: 'en-US',
+      options: {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        seconds: '2-digit' }
+    }
   },
-  en: {
-    lang: 'en-US',
-    options: {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      seconds: '2-digit' }
+  date: {
+    fi: {
+      lang: 'fi-FI',
+      options: {
+        day: 'numeric',
+        month: 'numeric',
+        year: 'numeric' }
+    },
+    en: {
+      lang: 'en-US',
+      options: {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric' }
+    }
   }
 }
 
@@ -46,9 +64,15 @@ const dateFormat = date => {
   if (out.length === 4) {
     return new Date(out).getFullYear()
   }
+  if (out.length <= 10) {
+    return new Date(out).toLocaleDateString(
+      formats.date[Locale.currentLang].lang,
+      formats.date[Locale.currentLang].options
+    )
+  }
   return new Date(out).toLocaleString(
-    formats[Locale.currentLang].lang,
-    formats[Locale.currentLang].options
+    formats.datetime[Locale.currentLang].lang,
+    formats.datetime[Locale.currentLang].options
   )
 }
 

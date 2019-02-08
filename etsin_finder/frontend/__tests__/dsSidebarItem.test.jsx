@@ -10,7 +10,7 @@ it('renders without crashing', () => {
 describe('DsSidebarItem', () => {
   describe('render with content', () => {
     const sidebarItem = shallow(
-      <SidebarItem component="p" trans="dataset.project" fallback="Project" hideEmpty="true">
+      <SidebarItem component="p" trans="dataset.project.project" fallback="Project" hideEmpty="true">
         Hello
       </SidebarItem>
     )
@@ -23,7 +23,7 @@ describe('DsSidebarItem', () => {
   })
   describe('render without content', () => {
     const sidebarItem = shallow(
-      <SidebarItem component="p" trans="dataset.project" fallback="Project" hideEmpty="true">
+      <SidebarItem component="p" trans="dataset.project.project" fallback="Project" hideEmpty="true">
         {null}
       </SidebarItem>
     )
