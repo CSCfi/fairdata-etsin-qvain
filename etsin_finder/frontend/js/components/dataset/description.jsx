@@ -49,12 +49,13 @@ const Flex = styled.div`
 class Description extends Component {
   constructor(props) {
     super(props)
-    const { creator, contributor, title, issued, description } = props.dataset.research_dataset
+    const { creator, contributor, title, issued, modified, description } = props.dataset.research_dataset
     this.state = {
       creator,
       contributor,
       title,
       issued,
+      modified,
       description,
     }
   }
@@ -126,7 +127,9 @@ class Description extends Component {
               </ErrorBoundary>
               {this.state.issued && (
                 <p lang={getDataLang(this.state.issued)}>
-                  {dateFormat(checkDataLang(this.state.issued))}
+                  <Translate content="dataset.issued" />{': '}{dateFormat(checkDataLang(this.state.issued))}
+                  <br />
+                  <Translate content="dataset.modified" />{': '}{dateFormat(checkDataLang(this.state.modified))}
                 </p>
               )}
             </MainInfo>
