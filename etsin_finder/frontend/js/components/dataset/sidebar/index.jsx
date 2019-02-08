@@ -13,6 +13,7 @@ import Logo from './special/logo'
 import License from './special/license'
 import ErrorBoundary from '../../general/errorBoundary'
 import Agent from '../agent'
+import Project from './special/project'
 
 class Sidebar extends Component {
   constructor(props) {
@@ -220,39 +221,19 @@ class Sidebar extends Component {
               </SidebarItem>
             )}
 
-            {/* PROJECT NAME */}
+            {/* PROJECTS */}
 
-            <SidebarItem trans="dataset.project" hideEmpty="true">
+            <SidebarItem trans="dataset.project.project" hideEmpty="true">
               {this.state.isOutputOf &&
-                this.state.isOutputOf.map(item => {
-                  const name = checkDataLang(item.name)
+                this.state.isOutputOf.map((item) => {
+                  const projectName = checkDataLang(item.name)
                   return (
-                    <ListItem key={name} lang={getDataLang(item.name)}>
-                      {name}
+                    <ListItem key={`li-${projectName}`} lang={getDataLang(item.name)}>
+                      <Project project={item} />
                     </ListItem>
                   )
-                })}
-            </SidebarItem>
-
-            {/* PROJECT FUNDER NAME */}
-
-            <SidebarItem trans="dataset.funder" hideEmpty="true">
-              {this.state.isOutputOf &&
-                this.state.isOutputOf.map(
-                  output =>
-                    checkNested(output, 'has_funding_agency') &&
-                    output.has_funding_agency.map(agency => (
-                      <ListItem key={checkDataLang(agency.name)} lang={getDataLang(agency.name)}>
-                        <Agent
-                          lang={getDataLang(agency)}
-                          key={checkDataLang(agency) || agency.name}
-                          first
-                          agent={agency}
-                          popupAlign="sidebar"
-                        />
-                      </ListItem>
-                    ))
-                )}
+                })
+              }
             </SidebarItem>
 
             {/* PUBLISHER */}
