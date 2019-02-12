@@ -97,7 +97,7 @@ export default class ProjectForm extends Component {
                       lang={this.state.lang}
                       first
                       agent={org}
-                      popupAlign="left"
+                      popupAlign="left-fit-content"
                     />
                   </dd>
               ))}
@@ -129,7 +129,7 @@ export default class ProjectForm extends Component {
                           lang={this.state.lang}
                           first
                           agent={agency}
-                          popupAlign="center"
+                          popupAlign="left-fit-content"
                         />
                       </Value>
                     </div>
