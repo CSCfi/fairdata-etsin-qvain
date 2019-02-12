@@ -218,7 +218,7 @@ Agent.defaultProps = {
 Agent.propTypes = {
   first: PropTypes.bool,
   agent: PropTypes.object.isRequired,
-  popupAlign: PropTypes.oneOf(['left', 'right', 'center', 'sidebar']),
+  popupAlign: PropTypes.oneOf(['left', 'left-fit-content', 'right', 'center', 'sidebar']),
 }
 
 const TextWithoutPopup = styled.span`

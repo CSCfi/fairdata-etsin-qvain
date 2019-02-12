@@ -20,7 +20,7 @@ export default class PopUp extends Component {
     popUp: PropTypes.node.isRequired,
     isOpen: PropTypes.bool.isRequired,
     onRequestClose: PropTypes.func.isRequired,
-    align: PropTypes.oneOf(['left', 'right', 'center', 'sidebar']),
+    align: PropTypes.oneOf(['left', 'left-fit-content', 'right', 'center', 'sidebar']),
   }
 
   static defaultProps = {
@@ -147,17 +147,27 @@ const alignment = align => {
       value = css`
         left: 0;
         margin-left: -10px;
+        width: max-content;
+      `
+      break
+    case 'left-fit-content':
+      value = css`
+        left: 0;
+        margin-left: -10px;
+        width: fit-content;
       `
       break
     case 'right':
       value = css`
         right: 0;
+        width: max-content;
       `
       break
     case 'sidebar':
       value = css`
         right: auto;
         left: auto;
+        width: max-content;
         @media screen and (min-width: ${p => p.theme.breakpoints.lg}) {
           right: 0;
           margin-right: -30px;
@@ -198,7 +208,7 @@ const Pop = styled.div`
     left: initial;
     ${p => alignment(p.align)};
     position: absolute;
-    width: max-content;
+    width: initial;
     max-width: 40vw;
   }
 `
