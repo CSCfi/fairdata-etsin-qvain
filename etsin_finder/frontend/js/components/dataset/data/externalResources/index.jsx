@@ -79,7 +79,7 @@ export default class ExternalResources extends Component {
           allowDownload
           allowInfo
           isRemote
-          fields={{ size: false, category: false, name: true, downloadBtn: true, infoBtn: true }}
+          fields={{ size: false, category: true, name: true, downloadBtn: true, infoBtn: true }}
         />
       </DataTable>
     )

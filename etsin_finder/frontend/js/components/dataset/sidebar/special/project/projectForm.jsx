@@ -97,7 +97,7 @@ export default class ProjectForm extends Component {
                       lang={this.state.lang}
                       first
                       agent={org}
-                      popupAlign="left"
+                      popupAlign="left-fit-content"
                     />
                   </dd>
               ))}
@@ -129,7 +129,7 @@ export default class ProjectForm extends Component {
                           lang={this.state.lang}
                           first
                           agent={agency}
-                          popupAlign="center"
+                          popupAlign="left-fit-content"
                         />
                       </Value>
                     </div>
@@ -171,6 +171,7 @@ const Form = styled.form`
   display: flex;
   flex-wrap: wrap;
   align-content: center;
+  min-width: 260px;
 `
 
 const List = styled.dl`
