@@ -82,7 +82,7 @@ export default class PopUp extends Component {
           <React.Fragment>
             <PopContainer>
               <Pop
-                innerRef={this.popRef}
+                ref={this.popRef}
                 tabIndex="-1"
                 autoFocus
                 onBlur={this.onBlur}

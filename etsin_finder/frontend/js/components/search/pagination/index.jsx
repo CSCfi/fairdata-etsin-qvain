@@ -257,9 +257,9 @@ class Pagination extends Component {
   }
 }
 
-const PaginationItem = styled.span.attrs({
+const PaginationItem = styled.span.attrs(() => ({
   size: '40px',
-})`
+}))`
   cursor: pointer;
   display: block;
   text-align: center;

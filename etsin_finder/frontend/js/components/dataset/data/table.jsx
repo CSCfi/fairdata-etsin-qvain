@@ -117,7 +117,7 @@ export default class Table extends Component {
           </TBody>
         </StyledTable>
         {this.state.downloadUrl && (
-          <HiddenLink innerRef={this.downloadRef} href={this.state.downloadUrl} download />
+          <HiddenLink ref={this.downloadRef} href={this.state.downloadUrl} download />
         )}
       </TableContainer>
     )

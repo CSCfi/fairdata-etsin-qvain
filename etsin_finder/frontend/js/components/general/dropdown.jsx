@@ -86,7 +86,7 @@ export default class Dropdown extends Component {
         >
           <Content
             open={this.state.open}
-            innerRef={this.content}
+            ref={this.content}
             tabIndex="-1"
             onBlur={this.onBlur}
           >

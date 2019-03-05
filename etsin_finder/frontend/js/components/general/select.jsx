@@ -55,15 +55,15 @@ export default class Select extends Component {
   }
 }
 /* prettier-ignore */
-const SelectContainer = styled.div.attrs({
-  current: props => (props.options[0] === props.value ? props.colorCurrent : undefined),
-  bordercolor: props => (props.bordercolor ? props.bordercolor : props.theme.color.gray),
-  background: props => (props.background ? props.background : 'white'),
-  textcolor: props => (props.textcolor ? props.textcolor : '#666'),
-  selectedcolor: props => (props.selectedColor ? props.selectedColor : '#333'),
-  placeholder: props => (props.textcolor ? props.textcolor : '#aaa'),
-  textpadding: props => (props.textpadding ? props.textpadding : '1.2em'),
-})`
+const SelectContainer = styled.div.attrs(props => ({
+  current: props.options[0] === props.value ? props.colorCurrent : undefined,
+  bordercolor: props.bordercolor ? props.bordercolor : props.theme.color.gray,
+  background: props.background ? props.background : 'white',
+  textcolor: props.textcolor ? props.textcolor : '#666',
+  selectedcolor: props.selectedColor ? props.selectedColor : '#333',
+  placeholder: props.textcolor ? props.textcolor : '#aaa',
+  textpadding: props.textpadding ? props.textpadding : '1.2em',
+}))`
   margin-bottom: 1em;
   height: min-content;
   .Select {

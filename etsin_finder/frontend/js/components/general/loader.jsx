@@ -79,7 +79,7 @@ const Spinner = styled.div`
   }
 `
 
-const HolderLeft = Holder.extend`
+const HolderLeft = styled(Holder)`
   justify-content: left;
   padding: 0 0 0 1em;
 `

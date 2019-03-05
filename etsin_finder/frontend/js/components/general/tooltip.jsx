@@ -22,10 +22,10 @@ const Tooltip = props => (
 
 export default Tooltip
 
-const Tip = styled.div.attrs({
-  bg: props => props.theme.color.darkgray,
-  fg: props => props.theme.color.white,
-})`
+const Tip = styled.div.attrs(props => ({
+  bg: props.theme.color.darkgray,
+  fg: props.theme.color.white,
+}))`
   display: inline-block;
   position: relative;
   color: inherit;

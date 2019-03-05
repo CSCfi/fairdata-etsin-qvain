@@ -147,7 +147,7 @@ export default class SortResults extends Component {
               <div>
                 {options.map((item, i) => (
                   <InvertedButton
-                    innerRef={this[`option${i}`]}
+                    ref={this[`option${i}`]}
                     key={`sorting-${item}`}
                     noMargin
                     padding="0.5em 1em"

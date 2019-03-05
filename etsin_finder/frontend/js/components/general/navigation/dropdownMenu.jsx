@@ -64,7 +64,7 @@ export default class DropdownMenu extends Component {
             role="button"
             color="primary"
             open={this.state.open}
-            innerRef={this.button}
+            ref={this.button}
             aria-pressed={this.state.open}
             onClick={() => (this.state.open ? this.close() : this.open())}
           >
@@ -74,7 +74,7 @@ export default class DropdownMenu extends Component {
         <Content
           open={this.state.open}
           onClick={this.close}
-          innerRef={this.content}
+          ref={this.content}
           tabIndex="-1"
           onBlur={this.onBlur}
         >

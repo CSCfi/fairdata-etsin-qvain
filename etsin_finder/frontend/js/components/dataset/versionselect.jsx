@@ -184,7 +184,7 @@ export default class VersionSelect extends Component {
                   key={single.value}
                   onClick={() => this.changeSelected(single)}
                   value={single.value}
-                  innerRef={e => this.setFirstOptionRef(e, i)}
+                  ref={e => this.setFirstOptionRef(e, i)}
                   background={
                     this.props.options[0] === single
                       ? this.state.newestColor
