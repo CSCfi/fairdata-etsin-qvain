@@ -16,36 +16,37 @@
     "watch": "npm update; webpack --progress -d --config webpack.config.js --watch  --define process.env.NODE_ENV=\"'development'\""
   },
   "dependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.3.4",
+    "@babel/plugin-proposal-class-properties": "^7.3.4",
+    "@babel/plugin-proposal-decorators": "^7.3.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.3.4",
+    "@babel/plugin-syntax-dynamic-import": "^7.2.0",
+    "@babel/polyfill": "^7.2.5",
+    "@babel/preset-env": "^7.3.4",
+    "@babel/preset-react": "^7.0.0",
     "@fortawesome/fontawesome": "1.1.8",
     "@fortawesome/fontawesome-free-regular": "5.0.13",
     "@fortawesome/fontawesome-free-solid": "5.0.13",
     "@fortawesome/react-fontawesome": "0.0.20",
+    "@loadable/babel-plugin": "^5.6.0",
+    "@loadable/component": "^5.6.1",
+    "@loadable/webpack-plugin": "^5.5.0",
     "axios": "0.18.0",
-    "babel-core": "6.26.3",
-    "babel-loader": "7.1.5",
-    "babel-plugin-transform-class-properties": "6.24.1",
-    "babel-plugin-transform-decorators-legacy": "1.3.5",
-    "babel-polyfill": "6.26.0",
-    "babel-preset-env": "1.7.0",
-    "babel-preset-es2015": "6.24.1",
-    "babel-preset-react": "6.24.1",
+    "babel-loader": "^8.0.5",
     "bluebird": "3.5.3",
-    "clean-webpack-plugin": "0.1.19",
+    "clean-webpack-plugin": "^2.0.0",
     "counterpart": "0.18.6",
-    "css-loader": "0.28.11",
-    "extract-text-webpack-plugin": "4.0.0-beta.0",
     "file-loader": "1.1.11",
     "formik": "0.11.11",
-    "html-webpack-plugin": "3.2.0",
+    "html-webpack-plugin": "^3.2.0",
     "leaflet": "1.3.4",
     "leaflet-geosearch": "2.7.0",
-    "loadable-components": "2.2.3",
     "mobx": "4.6.0",
     "mobx-react": "5.4.2",
     "mobx-react-router": "4.0.5",
     "node-sass": "4.10.0",
     "nprogress": "0.2.0",
-    "offline-plugin": "5.0.6",
     "p-min-delay": "2.0.0",
     "polished": "1.9.3",
     "prop-types": "15.6.2",
@@ -67,8 +68,8 @@
     "styled-components": "^4.1.3",
     "terraformer-wkt-parser": "1.2.0",
     "uglifyjs-webpack-plugin": "1.3.0",
-    "webpack": "4.20.2",
-    "webpack-cli": "3.1.1",
+    "webpack": "^4.28.4",
+    "webpack-cli": "^3.2.3",
     "webpack-node-externals": "1.6.0",
     "yup": "0.26.2"
   },
@@ -81,7 +82,6 @@
     "axios-mock-adapter": "1.14.1",
     "babel-eslint": "8.2.6",
     "babel-jest": "22.4.4",
-    "babel-plugin-transform-object-rest-spread": "6.26.0",
     "enzyme": "3.7.0",
     "enzyme-adapter-react-16": "1.7.0",
     "eslint": "4.19.1",
@@ -117,37 +117,5 @@
     "semi": false,
     "singleQuote": true,
     "trailingComma": "es5"
-  },
-  "babel": {
-    "env": {
-      "test": {
-        "presets": [
-          [
-            "env",
-            {
-              "targets": {
-                "browsers": [
-                  "last 2 major versions"
-                ]
-              }
-            }
-          ],
-          "react"
-        ]
-      }
-    },
-    "presets": [
-      [
-        "env",
-        {
-          "targets": {
-            "browsers": [
-              "last 2 major versions"
-            ]
-          }
-        }
-      ],
-      "react"
-    ]
   }
 }

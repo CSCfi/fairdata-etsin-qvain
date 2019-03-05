@@ -48,7 +48,7 @@ export default class Search extends Component {
         initialLoad: true,
       })
       // preload dataset page
-      Dataset.load()
+      Dataset.preload()
     })
   }
 

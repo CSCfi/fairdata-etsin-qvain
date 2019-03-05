@@ -26,9 +26,9 @@ export default class Content extends Component {
       <main className="content">
         <span ref={this.props.contentRef} tabIndex="-1" />
         <Switch>
-          <Route exact path="/" component={Home} />
-          <Route exact path="/datasets/:query?" component={Search} />
-          <Route path="/dataset/:identifier" component={Dataset} />
+          <Route exact path="/" render={props => <Home {...props} />} />
+          <Route exact path="/datasets/:query?" render={props => <Search {...props} />} />
+          <Route path="/dataset/:identifier" render={props => <Dataset {...props} />} />
           <Route render={() => <ErrorPage error={{ type: 'error' }} />} />
         </Switch>
       </main>

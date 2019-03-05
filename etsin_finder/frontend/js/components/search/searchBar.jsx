@@ -50,7 +50,7 @@ export default class SearchBar extends Component {
   }
 
   handleChange(event) {
-    Search.load()
+    Search.preload()
     this.setState({ query: event.target.value })
   }
 
