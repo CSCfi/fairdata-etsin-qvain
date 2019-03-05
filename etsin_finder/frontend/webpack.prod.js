@@ -21,10 +21,6 @@ const config = {
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
-          options: {
-            cacheDirectory: true,
-            presets: ['@babel/preset-react', '@babel/preset-env'],
-          },
         },
       },
       {
@@ -34,7 +30,7 @@ const config = {
     ],
   },
   plugins: [
-    new CleanWebpackPlugin(['build']),
+    new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       // TODO: add manifest to new html
       chunksSortMode: 'none',
