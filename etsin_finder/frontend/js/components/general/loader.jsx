@@ -16,6 +16,7 @@ import PropTypes from 'prop-types'
 
 class Loader extends Component {
   spinner = () => <Spinner color={this.props.color} size={this.props.size} />
+
   render() {
     if (this.props.left) {
       return (

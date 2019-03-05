@@ -210,11 +210,11 @@ export default class IdaResources extends Component {
 
   updatePath(path, id) {
     if (!path) {
-      this.setState({
+      this.setState(state => ({
         currentPath: [],
         currentIDs: [],
-        currentFolder: this.state.fileDirTree,
-      })
+        currentFolder: state.fileDirTree,
+      }))
     } else {
       const currentIDs = this.state.currentIDs.slice()
       const newIDs = currentIDs.slice(0, currentIDs.indexOf(id) + 1)

@@ -1,13 +1,13 @@
 {
-/**
- * This file is part of the Etsin service
- *
- * Copyright 2017-2018 Ministry of Education and Culture, Finland
- *
- *
- * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
- * @license   MIT
- */
+  /**
+   * This file is part of the Etsin service
+   *
+   * Copyright 2017-2018 Ministry of Education and Culture, Finland
+   *
+   *
+   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
+   * @license   MIT
+   */
 }
 
 import React, { Component } from 'react'
@@ -143,9 +143,9 @@ export default class VersionSelect extends Component {
 
   toggleOpen = () => {
     this.setState(
-      {
-        isOpen: !this.state.isOpen,
-      },
+      state => ({
+        isOpen: !state.isOpen,
+      }),
       () => {
         if (this.state.isOpen) {
           this.focusFirstOption()
@@ -173,35 +173,32 @@ export default class VersionSelect extends Component {
           <span className="sr-only">Version selector (with current version) </span>
           {this.state.selected.label}
         </Controller>
-        {this.state.isOpen &&
-          this.state.isFocused && (
-            <List width={this.state.width} background={this.props.background}>
-              {this.state.options.map((single, i) => (
-                <ListItem
-                  noMargin
-                  color={this.state.color}
-                  padding={this.state.padding}
-                  key={single.value}
-                  onClick={() => this.changeSelected(single)}
-                  value={single.value}
-                  ref={e => this.setFirstOptionRef(e, i)}
-                  background={
-                    this.props.options[0] === single
-                      ? this.state.newestColor
-                      : this.props.background
-                  }
-                  removed={single.removed}
-                >
-                  {this.props.options[0] === single ? (
-                    <span className="sr-only">Current version: </span>
-                  ) : (
-                    ''
-                  )}
-                  {single.label}
-                </ListItem>
-              ))}
-            </List>
-          )}
+        {this.state.isOpen && this.state.isFocused && (
+          <List width={this.state.width} background={this.props.background}>
+            {this.state.options.map((single, i) => (
+              <ListItem
+                noMargin
+                color={this.state.color}
+                padding={this.state.padding}
+                key={single.value}
+                onClick={() => this.changeSelected(single)}
+                value={single.value}
+                ref={e => this.setFirstOptionRef(e, i)}
+                background={
+                  this.props.options[0] === single ? this.state.newestColor : this.props.background
+                }
+                removed={single.removed}
+              >
+                {this.props.options[0] === single ? (
+                  <span className="sr-only">Current version: </span>
+                ) : (
+                  ''
+                )}
+                {single.label}
+              </ListItem>
+            ))}
+          </List>
+        )}
       </SelectContainer>
     )
   }

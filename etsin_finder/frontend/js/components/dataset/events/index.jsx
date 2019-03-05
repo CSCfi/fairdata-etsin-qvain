@@ -80,6 +80,7 @@ class Events extends Component {
     )
     Accessibility.handleNavigation('idnAndEvents', false)
   }
+
   checkProvenance = prov => {
     if (prov) {
       if (prov.length > 1) {
@@ -93,9 +94,9 @@ class Events extends Component {
       }
       if (prov[0].temporal) {
         if (
-          prov[0].temporal.end_date &&
-          prov[0].temporal.end_date !== '' &&
-          (prov[0].temporal.start_date && prov[0].temporal.start_date !== '')
+          prov[0].temporal.end_date
+          && prov[0].temporal.end_date !== ''
+          && (prov[0].temporal.start_date && prov[0].temporal.start_date !== '')
         ) {
           return true
         }
@@ -113,7 +114,10 @@ class Events extends Component {
     }
     return (
       <span>
-        {dateFormat(temp.start_date)} - {dateFormat(temp.end_date)}
+        {dateFormat(temp.start_date)}
+        {' '}
+-
+        {dateFormat(temp.end_date)}
       </span>
     )
   }
@@ -168,8 +172,8 @@ class Events extends Component {
                     </td>
                     <td>
                       {/* eslint-disable react/jsx-indent */}
-                      {single.was_associated_with &&
-                        single.was_associated_with.map((associate, i) => {
+                      {single.was_associated_with
+                        && single.was_associated_with.map((associate, i) => {
                           if (associate.name) {
                             return (
                               <InlineUl key={`ul-${checkDataLang(associate.name)}`}>
@@ -241,7 +245,8 @@ class Events extends Component {
                       {checkDataLang(single.relation_type.pref_label)}
                     </td>
                     <td lang={getDataLang(single.entity.title)}>
-                      {checkDataLang(single.entity.title)}.
+                      {checkDataLang(single.entity.title)}
+.
                     </td>
                     <td>
                       <span className="sr-only">Identifier:</span>

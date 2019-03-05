@@ -32,6 +32,7 @@ class MyMap extends Component {
     children: PropTypes.element,
     theme: PropTypes.object.isRequired,
   }
+
   static defaultProps = {
     geometry: undefined,
     place_uri: undefined,
@@ -77,8 +78,7 @@ class MyMap extends Component {
     })
   }
 
-  makeLayers = geometry =>
-    geometry.map(geo => {
+  makeLayers = geometry => geometry.map(geo => {
       switch (geo.type) {
         case 'LineString':
         case 'MultiLineString':

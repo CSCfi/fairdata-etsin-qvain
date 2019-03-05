@@ -138,7 +138,8 @@ export default class SortResults extends Component {
                 this.selectButton = select
               }}
             >
-              <FontAwesomeIcon icon={this.state.sortIcon} aria-hidden="true" />{' '}
+              <FontAwesomeIcon icon={this.state.sortIcon} aria-hidden="true" />
+              {' '}
               <Translate content={this.getSortTitleTranslationPath(this.state.value)} />
             </InvertedButton>
           </SelectButton>

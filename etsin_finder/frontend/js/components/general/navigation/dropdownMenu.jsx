@@ -31,8 +31,8 @@ export default class DropdownMenu extends Component {
     const currentTarget = e.currentTarget
     setTimeout(() => {
       if (
-        !currentTarget.contains(document.activeElement) &&
-        this.button.current !== document.activeElement
+        !currentTarget.contains(document.activeElement)
+        && this.button.current !== document.activeElement
       ) {
         this.close()
       }
@@ -99,9 +99,8 @@ const ButtonContainer = styled.div`
 `
 
 const CustomTransparentButton = styled(TransparentButton)`
-  ${p =>
-    p.open &&
-    `
+  ${p => p.open
+    && `
     &:after {
       content: '';
       position: absolute;

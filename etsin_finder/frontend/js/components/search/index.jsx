@@ -29,9 +29,11 @@ export default class Search extends Component {
       initialLoad: false,
     }
   }
+
   componentWillMount() {
     this.initialQuery()
   }
+
   componentDidMount() {
     Accessibility.handleNavigation('datasets')
     if (this.props.match.params.query) {

@@ -21,6 +21,7 @@ export default class Content extends Component {
   static propTypes = {
     contentRef: PropTypes.object.isRequired,
   }
+
   render() {
     return (
       <main className="content">

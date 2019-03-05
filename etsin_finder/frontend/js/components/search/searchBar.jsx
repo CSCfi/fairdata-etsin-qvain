@@ -39,6 +39,7 @@ export default class SearchBar extends Component {
   componentWillMount() {
     counterpart.onLocaleChange(this.localeChanged)
   }
+
   componentWillUnmount() {
     counterpart.offLocaleChange(this.localeChanged)
   }

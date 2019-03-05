@@ -43,11 +43,17 @@ let lastQueryTime = 0
 
 class ElasticQuery {
   @observable filter = []
+
   @observable sorting = 'best'
+
   @observable search = ''
+
   @observable pageNum = 1
+
   @observable results = { hits: [], total: 0, aggregations: [] }
+
   @observable loading = false
+
   @observable perPage = 20
 
   // update query search term and url
@@ -387,9 +393,9 @@ class ElasticQuery {
           // TODO: cache/save results
           // Fixes race condition
           if (
-            currentSearch !== this.search ||
-            !Helpers.isEqual(currentFilters, this.filter.slice()) ||
-            currentSorting !== this.sorting
+            currentSearch !== this.search
+            || !Helpers.isEqual(currentFilters, this.filter.slice())
+            || currentSorting !== this.sorting
           ) {
             resolve()
           } else {

@@ -78,10 +78,10 @@ class Description extends Component {
       <div className="dsContent">
         <Labels>
           <Flex>
-            {this.props.dataset.data_catalog.catalog_json.dataset_versioning &&
-              this.props.dataset.dataset_version_set &&
-              this.props.dataset.dataset_version_set[0] &&
-              this.props.dataset.dataset_version_set.length > 1 && (
+            {this.props.dataset.data_catalog.catalog_json.dataset_versioning
+              && this.props.dataset.dataset_version_set
+              && this.props.dataset.dataset_version_set[0]
+              && this.props.dataset.dataset_version_set.length > 1 && (
                 <VersionChanger
                   versionSet={this.props.dataset.dataset_version_set}
                   idn={this.props.dataset.identifier}
@@ -104,8 +104,8 @@ class Description extends Component {
                   emails={this.props.emails}
                   // TEMPORARY: rems check won't be needed in contact later.
                   isRems={
-                    this.props.dataset.research_dataset.access_rights.access_type.identifier ===
-                    'http://uri.suomi.fi/codelist/fairdata/access_type/code/permit'
+                    this.props.dataset.research_dataset.access_rights.access_type.identifier
+                    === 'http://uri.suomi.fi/codelist/fairdata/access_type/code/permit'
                   }
                 />
               )}
@@ -127,9 +127,13 @@ class Description extends Component {
               </ErrorBoundary>
               {this.state.issued && (
                 <p lang={getDataLang(this.state.issued)}>
-                  <Translate content="dataset.issued" />{': '}{dateFormat(checkDataLang(this.state.issued))}
+                  <Translate content="dataset.issued" />
+                  {': '}
+                  {dateFormat(checkDataLang(this.state.issued))}
                   <br />
-                  <Translate content="dataset.modified" />{': '}{dateFormat(checkDataLang(this.state.modified))}
+                  <Translate content="dataset.modified" />
+                  {': '}
+                  {dateFormat(checkDataLang(this.state.modified))}
                 </p>
               )}
             </MainInfo>

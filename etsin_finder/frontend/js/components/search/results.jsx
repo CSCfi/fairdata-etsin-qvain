@@ -38,9 +38,9 @@ class Results extends Component {
   }
 
   toggleFilter = () => {
-    this.setState({
-      filterOpen: !this.state.filterOpen,
-    })
+    this.setState(state => ({
+      filterOpen: !state.filterOpen,
+    }))
   }
 
   render() {

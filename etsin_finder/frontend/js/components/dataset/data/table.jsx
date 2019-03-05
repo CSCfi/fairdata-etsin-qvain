@@ -109,7 +109,9 @@ export default class Table extends Component {
             {sliced && (
               <tr>
                 <SlicedInfo colSpan="5">
-                  <FontAwesomeIcon icon={faExclamation} /> <Translate content="dataset.dl.sliced" />
+                  <FontAwesomeIcon icon={faExclamation} />
+                  {' '}
+                  <Translate content="dataset.dl.sliced" />
                 </SlicedInfo>
               </tr>
             )}

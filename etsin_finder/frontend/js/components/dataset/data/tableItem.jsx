@@ -134,14 +134,14 @@ class TableItem extends Component {
           </FileName>
         )}
         {this.props.fields.size && <FileSize>{sizeParse(this.props.item.byte_size, 1)}</FileSize>}
-        {this.props.fields.category &&
-          (checkNested(this.props.item.use_category, 'pref_label') ?
-            (
+        {this.props.fields.category
+          && (checkNested(this.props.item.use_category, 'pref_label')
+            ? (
               <FileCategory lang={getDataLang(this.props.item.use_category.pref_label)}>
                 {checkDataLang(this.props.item.use_category.pref_label)}
               </FileCategory>
-            ) :
-            (
+            )
+            : (
               <FileCategory />
             )
           )
@@ -168,12 +168,12 @@ class TableItem extends Component {
                 id={this.props.item.identifier}
                 size={sizeParse(this.props.item.byte_size, 1)}
                 lang={
-                  checkNested(this.props.item.use_category, 'pref_label') &&
-                  getDataLang(this.props.item.use_category.pref_label)
+                  checkNested(this.props.item.use_category, 'pref_label')
+                  && getDataLang(this.props.item.use_category.pref_label)
                 }
                 category={
-                  checkNested(this.props.item.use_category, 'pref_label') &&
-                  checkDataLang(this.props.item.use_category.pref_label)
+                  checkNested(this.props.item.use_category, 'pref_label')
+                  && checkDataLang(this.props.item.use_category.pref_label)
                 }
                 checksum={this.state.checksum}
                 downloadUrl={
@@ -188,8 +188,8 @@ class TableItem extends Component {
               />
             </React.Fragment>
           )}
-          {this.props.isRemote &&
-            (this.props.item.remote.download_url || this.props.item.remote.access_url) && (
+          {this.props.isRemote
+            && (this.props.item.remote.download_url || this.props.item.remote.access_url) && (
               // Remote resource download button
               <RemoteDlButton
                 thin

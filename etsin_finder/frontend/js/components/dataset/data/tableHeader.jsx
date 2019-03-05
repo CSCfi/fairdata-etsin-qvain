@@ -40,6 +40,7 @@ export default class TableHeader extends Component {
       }
     )
   }
+
   render() {
     return (
       <Header>

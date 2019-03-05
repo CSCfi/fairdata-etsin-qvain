@@ -29,6 +29,7 @@ export default class FrontPage extends Component {
     // preload search page
     Search.preload()
   }
+
   render() {
     return (
       <div className="search-page">

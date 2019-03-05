@@ -30,8 +30,11 @@ const QueryFields = {
 
 class DatasetQuery {
   @observable results = []
+
   @observable emailInfo = []
+
   @observable directories = []
+
   @observable error = false
 
   @action
