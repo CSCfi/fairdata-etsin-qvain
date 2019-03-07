@@ -12,12 +12,14 @@
 
 import React, { Component } from 'react'
 import { inject, observer } from 'mobx-react'
-import FontAwesomeIcon from '@fortawesome/react-fontawesome'
-import faLock from '@fortawesome/fontawesome-free-solid/faLock'
-import faLockOpen from '@fortawesome/fontawesome-free-solid/faLockOpen'
-import faInfoCircle from '@fortawesome/fontawesome-free-solid/faInfoCircle'
-import faExclamationTriangle from '@fortawesome/fontawesome-free-solid/faExclamationTriangle'
-import faGlobe from '@fortawesome/fontawesome-free-solid/faGlobe'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {
+  faLock,
+  faLockOpen,
+  faInfoCircle,
+  faExclamationTriangle,
+  faGlobe,
+} from '@fortawesome/free-solid-svg-icons'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 
@@ -58,9 +60,9 @@ class AccessRights extends Component {
       description,
       url,
       restriction_grounds:
-        props.access_rights.restriction_grounds !== undefined
-        && props.access_rights.restriction_grounds.length > 0
-        && props.access_rights.restriction_grounds,
+        props.access_rights.restriction_grounds !== undefined &&
+        props.access_rights.restriction_grounds.length > 0 &&
+        props.access_rights.restriction_grounds,
       modalIsOpen: false,
     }
 
@@ -145,8 +147,8 @@ class AccessRights extends Component {
                   </AccessUrl>
                 </div>
               )}
-              {this.state.restriction_grounds
-                && this.state.restriction_grounds.map(rg => (
+              {this.state.restriction_grounds &&
+                this.state.restriction_grounds.map(rg => (
                   <div key={`div-rg-${rg.identifier}`}>
                     <FontAwesomeIcon key={`fai-rg-${rg.identifier}`} icon={faExclamationTriangle} />
                     <AccessLabel key={`al-rg-${rg.identifier}`} lang={getDataLang(rg.pref_label)}>

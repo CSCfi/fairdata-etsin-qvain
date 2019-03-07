@@ -13,8 +13,8 @@
 import React, { Component } from 'react'
 import { inject, observer } from 'mobx-react'
 import styled from 'styled-components'
-import FontAwesomeIcon from '@fortawesome/react-fontawesome'
-import faFilter from '@fortawesome/fontawesome-free-solid/faFilter'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faFilter } from '@fortawesome/free-solid-svg-icons'
 import Translate from 'react-translate-component'
 
 import ElasticQuery from '../../stores/view/elasticquery'
@@ -67,7 +67,8 @@ class Results extends Component {
                           onClick={this.toggleFilter}
                           active={this.state.filterOpen}
                         >
-                          <FontAwesomeIcon icon={faFilter} />{' '}
+                          <FontAwesomeIcon icon={faFilter} />
+                          {' '}
                           <Translate content="search.filter.filter" />
                         </FilterToggle>
                         <SortResults />

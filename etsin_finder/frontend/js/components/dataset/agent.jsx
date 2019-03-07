@@ -14,10 +14,8 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import translate from 'counterpart'
 import styled from 'styled-components'
-import FontawesomeIcon from '@fortawesome/react-fontawesome'
-import faUser from '@fortawesome/fontawesome-free-solid/faUser'
-import faUniversity from '@fortawesome/fontawesome-free-solid/faUniversity'
-import faGlobe from '@fortawesome/fontawesome-free-solid/faGlobe'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faGlobe, faUniversity, faUser } from '@fortawesome/free-solid-svg-icons'
 
 import { TransparentLink } from '../general/button'
 import PopUp from '../general/popup'
@@ -59,7 +57,7 @@ export default class Agent extends Component {
   infoItem(content, title, icon, lang, key) {
     return (
       <Info key={key}>
-        <FontawesomeIcon icon={icon} aria-hidden />
+        <FontAwesomeIcon icon={icon} aria-hidden />
         <span className="sr-only">
           {title}
           {': '}
@@ -131,7 +129,7 @@ export default class Agent extends Component {
               )}
             {this.state.agent.homepage && (
               <Info>
-                <FontawesomeIcon icon={faGlobe} aria-hidden />
+                <FontAwesomeIcon icon={faGlobe} aria-hidden />
                 <a
                   href={this.state.agent.homepage.identifier}
                   target="_blank"

@@ -86,7 +86,8 @@ export default class TogglableAgentList extends Component {
               }
               return ''
             })}
-          {/* Show Button to open rest */}{' '}
+          {/* Show Button to open rest */}
+          {' '}
           {this.props.agents.length > 3 && (
             <LinkButton onClick={this.toggleOpen}>
               {this.state.open ? (

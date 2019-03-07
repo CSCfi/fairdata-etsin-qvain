@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import FontAwesomeIcon from '@fortawesome/react-fontawesome'
-import FaArrowsAltV from '@fortawesome/fontawesome-free-solid/faArrowsAltV'
-import FaMapMarker from '@fortawesome/fontawesome-free-solid/faMapMarkerAlt'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { FaMapMarker, FaArrowsAltV } from '@fortawesome/free-solid-svg-icons'
 import PropTypes from 'prop-types'
 import { Popup } from 'react-leaflet'
 
@@ -40,16 +39,16 @@ class Maps extends Component {
           if (spatial.as_wkt !== undefined || spatial.place_uri !== undefined) {
             return (
               <MyMap
-                key={`${spatial.as_wkt && spatial.as_wkt[0]}-${spatial.place_uri
-                  && spatial.place_uri.identifier}`}
+                key={`${spatial.as_wkt && spatial.as_wkt[0]}-${spatial.place_uri &&
+                  spatial.place_uri.identifier}`}
                 geometry={spatial.as_wkt}
                 place_uri={spatial.place_uri && spatial.place_uri.pref_label}
               >
                 {/* hide popup if it doesn't contain any information */}
-                {spatial.place_uri
-                || spatial.geographic_name
-                || spatial.full_address
-                || spatial.alt ? (
+                {spatial.place_uri ||
+                spatial.geographic_name ||
+                spatial.full_address ||
+                spatial.alt ? (
                   <CustomPopup>
                     {spatial.place_uri && (
                       <h2 lang={getDataLang(spatial.place_uri.pref_label)}>
@@ -66,9 +65,7 @@ class Maps extends Component {
                     {spatial.alt && (
                       <p>
                         <FontAwesomeIcon icon={FaArrowsAltV} />
-                        Altitude:
-                        {' '}
-                        {spatial.alt}
+                        Altitude: {spatial.alt}
                       </p>
                     )}
                   </CustomPopup>
