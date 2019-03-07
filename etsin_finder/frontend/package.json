@@ -79,6 +79,7 @@
     "axios-mock-adapter": "^1.16.0",
     "babel-eslint": "^10.0.1",
     "babel-jest": "^24.1.0",
+    "core-js": "^2.6.5",
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.10.0",
     "eslint": "^5.15.1",

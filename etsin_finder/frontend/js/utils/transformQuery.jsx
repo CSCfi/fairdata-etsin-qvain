@@ -14,11 +14,12 @@ const httpUrnFiRegex = /^http:\/\/urn.fi\/urn:nbn:fi:(att|csc|ida)/i
 const urnFiRegex = /^urn.fi\/urn:nbn:fi:(att|csc|ida)/i
 const urnRegex = /^urn:nbn:fi:(att|csc|ida)/i
 
-const isUrnQuery = query => query
-  && !/\s/.test(query)
-  && (httpUrnFiRegex.test(query) || urnFiRegex.test(query) || urnRegex.test(query))
+const isUrnQuery = query =>
+  query &&
+  !/\s/.test(query) &&
+  (httpUrnFiRegex.test(query) || urnFiRegex.test(query) || urnRegex.test(query))
 
-const transformQuery = query => {
+export const transformQuery = query => {
   if (!query) {
     return query
   }
@@ -36,7 +37,4 @@ const transformQuery = query => {
   return tQuery
 }
 
-module.exports = {
-  transformQuery,
-  isUrnQuery,
-}
+export default isUrnQuery
