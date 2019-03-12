@@ -17,7 +17,7 @@ const accessTypes = {
   login: 'http://uri.suomi.fi/codelist/fairdata/access_type/code/login',
   embargo: 'http://uri.suomi.fi/codelist/fairdata/access_type/code/embargo',
   permit: 'http://uri.suomi.fi/codelist/fairdata/access_type/code/permit',
-  restricted: 'http://uri.suomi.fi/codelist/fairdata/access_type/code/restricted'
+  restricted: 'http://uri.suomi.fi/codelist/fairdata/access_type/code/restricted',
 }
 
 class Access {

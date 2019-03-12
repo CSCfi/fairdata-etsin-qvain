@@ -13,7 +13,7 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
-import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { CopyToClipboard } from 'react-copy-to-clipboard'
 import ClipboardIcon from 'react-clipboard-icon'
 import translate from 'counterpart'
 
@@ -21,6 +21,13 @@ import { Link } from '../general/button'
 import idnToLink from '../../utils/idnToLink'
 
 export default class Identifier extends Component {
+  cliboardStyle = {
+    verticalAlign: 'bottom',
+    marginLeft: '3px',
+    display: 'inline-block',
+    cursor: 'pointer',
+  }
+
   constructor(props) {
     super(props)
     const url = idnToLink(this.props.idn)
@@ -40,13 +47,6 @@ export default class Identifier extends Component {
       return sub3
     }
     return ''
-  }
-
-  cliboardStyle = {
-    verticalAlign: 'bottom',
-    marginLeft: '3px',
-    display: 'inline-block',
-    cursor: 'pointer'
   }
 
   render() {
@@ -74,14 +74,8 @@ export default class Identifier extends Component {
           ) : null}
           <IDN>{this.state.text}</IDN>
         </IdnLink>
-        <CopyToClipboard
-          text={this.state.url}
-          style={this.cliboardStyle}
-        >
-          <ClipboardIcon
-            title={translate('dataset.copyToClipboard')}
-            size={18}
-          />
+        <CopyToClipboard text={this.state.url} style={this.cliboardStyle}>
+          <ClipboardIcon title={translate('dataset.copyToClipboard')} size={18} />
         </CopyToClipboard>
       </IdnSpan>
     )

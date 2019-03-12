@@ -10,11 +10,11 @@
    */
 }
 
-import { injectGlobal } from 'styled-components'
+import { createGlobalStyle } from 'styled-components'
 import etsinTheme from './theme'
 import Grid from './grid'
 
-export default injectGlobal`
+const GlobalStyle = createGlobalStyle`
   /* reset */
   html, body, div, span, applet, object, iframe,
   h1, h2, h3, h4, h5, h6, p, blockquote, pre,
@@ -76,10 +76,6 @@ export default injectGlobal`
     -webkit-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;
     -ms-overflow-style: scrollbar;
-  }
-
-  @-ms-viewport {
-    width: device-width;
   }
 
   body {
@@ -326,3 +322,5 @@ export default injectGlobal`
     filter: blur(1px);
   }
 `
+
+export default GlobalStyle

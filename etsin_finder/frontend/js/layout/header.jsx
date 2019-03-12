@@ -27,20 +27,23 @@ export default class Header extends Component {
     }
     this.localeChanged = this.localeChanged.bind(this)
   }
+
   componentWillMount() {
     counterpart.onLocaleChange(this.localeChanged)
   }
+
   componentWillUnmount() {
     counterpart.offLocaleChange(this.localeChanged)
   }
+
   localeChanged() {
     this.setState({
       lang: counterpart.getLocale(),
     })
   }
+
   render() {
-    const helpUrl =
-      this.state.lang === 'fi'
+    const helpUrl = this.state.lang === 'fi'
         ? 'https://www.fairdata.fi/etsin/'
         : 'https://www.fairdata.fi/en/etsin/'
     return (

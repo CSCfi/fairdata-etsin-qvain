@@ -12,10 +12,8 @@
 
 import React, { Component } from 'react'
 import Translate from 'react-translate-component'
-import FontAwesomeIcon from '@fortawesome/react-fontawesome'
-import faSortAmountDown from '@fortawesome/fontawesome-free-solid/faSortAmountDown'
-import faSortAmountUp from '@fortawesome/fontawesome-free-solid/faSortAmountUp'
-import faSort from '@fortawesome/fontawesome-free-solid/faSort'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSort, faSortAmountUp, faSortAmountDown } from '@fortawesome/free-solid-svg-icons'
 import styled from 'styled-components'
 
 import ElasticQuery from '../../../stores/view/elasticquery'
@@ -32,14 +30,14 @@ export default class SortResults extends Component {
     this.state = {
       listToggle: '',
       sortIcon: this.getSortIcon(ElasticQuery.sorting),
-      value: ElasticQuery.sorting
+      value: ElasticQuery.sorting,
     }
 
     this.toggleList = this.toggleList.bind(this)
     this.updateValue = this.updateValue.bind(this)
 
-    this.setWrapperRef = this.setWrapperRef.bind(this);
-    this.handleClickOutside = this.handleClickOutside.bind(this);
+    this.setWrapperRef = this.setWrapperRef.bind(this)
+    this.handleClickOutside = this.handleClickOutside.bind(this)
 
     // create option references so that we can move focus inside
     for (let i = 0; i < options.length; i += 1) {
@@ -48,15 +46,15 @@ export default class SortResults extends Component {
   }
 
   componentDidMount() {
-    document.addEventListener('mousedown', this.handleClickOutside);
+    document.addEventListener('mousedown', this.handleClickOutside)
   }
 
   componentWillUnmount() {
-    document.removeEventListener('mousedown', this.handleClickOutside);
+    document.removeEventListener('mousedown', this.handleClickOutside)
   }
 
   setWrapperRef(node) {
-    this.wrapperRef = node;
+    this.wrapperRef = node
   }
 
   getSortIcon(value) {
@@ -100,7 +98,11 @@ export default class SortResults extends Component {
 
   // Close sort dropdown if clicked on outside of wrapper node
   handleClickOutside(event) {
-    if (this.state.listToggle === 'open' && this.wrapperRef && !this.wrapperRef.contains(event.target)) {
+    if (
+      this.state.listToggle === 'open' &&
+      this.wrapperRef &&
+      !this.wrapperRef.contains(event.target)
+    ) {
       this.setState({
         listToggle: '',
       })
@@ -111,7 +113,7 @@ export default class SortResults extends Component {
     this.setState(
       {
         value,
-        sortIcon: this.getSortIcon(value)
+        sortIcon: this.getSortIcon(value),
       },
       () => {
         ElasticQuery.updateSorting(this.state.value)
@@ -147,7 +149,7 @@ export default class SortResults extends Component {
               <div>
                 {options.map((item, i) => (
                   <InvertedButton
-                    innerRef={this[`option${i}`]}
+                    ref={this[`option${i}`]}
                     key={`sorting-${item}`}
                     noMargin
                     padding="0.5em 1em"

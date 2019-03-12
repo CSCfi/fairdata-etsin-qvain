@@ -63,6 +63,7 @@ export default class FilterToggle extends Component {
     super(props)
     this.state = {}
   }
+
   render() {
     return (
       <Filter>

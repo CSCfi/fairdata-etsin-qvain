@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import FontawesomeIcon from '@fortawesome/react-fontawesome'
-import faInfoCircle from '@fortawesome/fontawesome-free-solid/faInfoCircle'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faInfoCircle } from '@fortawesome/free-solid-svg-icons'
 import styled from 'styled-components'
 
 import checkDataLang, { getDataLang } from '../../../../utils/checkDataLang'
@@ -102,7 +102,7 @@ export default class License extends Component {
               noMargin
               noPadding
             >
-              <FontawesomeIcon icon={faInfoCircle} />
+              <FontAwesomeIcon icon={faInfoCircle} />
             </LinkButton>
           </PopUp>
         )}

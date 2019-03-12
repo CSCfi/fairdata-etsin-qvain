@@ -11,13 +11,15 @@
 }
 
 import React from 'react'
-import FontAwesomeIcon from '@fortawesome/react-fontawesome'
-import faFolder from '@fortawesome/fontawesome-free-regular/faFolder'
-import faFileVideo from '@fortawesome/fontawesome-free-regular/faFileVideo'
-import faFileImage from '@fortawesome/fontawesome-free-regular/faFileImage'
-import faFile from '@fortawesome/fontawesome-free-regular/faFile'
-import faFileAlt from '@fortawesome/fontawesome-free-regular/faFileAlt'
-import faCloud from '@fortawesome/fontawesome-free-solid/faCloud'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {
+  faFolder,
+  faFileVideo,
+  faFileImage,
+  faFile,
+  faFileAlt,
+  faCloud,
+} from '@fortawesome/free-regular-svg-icons'
 import PropTypes from 'prop-types'
 import translate from 'counterpart'
 

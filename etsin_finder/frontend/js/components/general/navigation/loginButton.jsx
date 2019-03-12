@@ -28,6 +28,7 @@ class Login extends Component {
     margin: PropTypes.string,
     width: PropTypes.string,
   }
+
   static defaultProps = {
     margin: '0 0 0 0.4em',
     width: undefined,

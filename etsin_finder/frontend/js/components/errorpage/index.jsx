@@ -24,6 +24,7 @@ class ErrorPage extends React.Component {
     Accessibility.handleNavigation('error')
     Tracking.newPageView(`Error: ${this.props.error.type}`, this.props.location.pathname)
   }
+
   render() {
     // TODO: Expects all error to be 404s on dataset page.
     // Extend class to handle all kinds of errors.

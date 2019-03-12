@@ -16,6 +16,7 @@ import PropTypes from 'prop-types'
 
 class Loader extends Component {
   spinner = () => <Spinner color={this.props.color} size={this.props.size} />
+
   render() {
     if (this.props.left) {
       return (
@@ -79,7 +80,7 @@ const Spinner = styled.div`
   }
 `
 
-const HolderLeft = Holder.extend`
+const HolderLeft = styled(Holder)`
   justify-content: left;
   padding: 0 0 0 1em;
 `

@@ -29,12 +29,12 @@ const MarginAfter = styled.div`
 class Content extends Component {
   showEvents() {
     return (
-      (this.props.dataset.research_dataset.provenance !== undefined &&
-        this.props.dataset.research_dataset.provenance.length > 0) ||
-      (this.props.dataset.research_dataset.other_identifier !== undefined &&
-        this.props.dataset.research_dataset.other_identifier.length > 0) ||
-      (this.props.dataset.research_dataset.relation !== undefined &&
-        this.props.dataset.research_dataset.relation.length > 0)
+      (this.props.dataset.research_dataset.provenance !== undefined
+        && this.props.dataset.research_dataset.provenance.length > 0)
+      || (this.props.dataset.research_dataset.other_identifier !== undefined
+        && this.props.dataset.research_dataset.other_identifier.length > 0)
+      || (this.props.dataset.research_dataset.relation !== undefined
+        && this.props.dataset.research_dataset.relation.length > 0)
     )
   }
 
@@ -46,16 +46,16 @@ class Content extends Component {
     // - the dataset in removed or deprecated
 
     if (
-      (!this.props.hasFiles && !this.props.hasRemote) ||
-      this.props.harvested ||
-      this.props.isRemoved ||
-      this.props.isDeprecated
+      (!this.props.hasFiles && !this.props.hasRemote)
+      || this.props.harvested
+      || this.props.isRemoved
+      || this.props.isDeprecated
     ) {
       return false
     }
     if (this.props.hasFiles) {
       return access.restrictions.allowDataIda
-    } else if (this.props.hasRemote) {
+    } if (this.props.hasRemote) {
       return access.restrictions.allowDataRemote
     }
     return false
