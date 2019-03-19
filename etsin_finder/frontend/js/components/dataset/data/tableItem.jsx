@@ -78,7 +78,11 @@ class TableItem extends Component {
       () => {
         this.props.download(this.props.item.identifier, this.props.item.type)
       }
-    )
+    );
+    // Wait 5 seconds and return the button to its initial state (enabled)
+    setTimeout(() => (
+      this.setState({ downloadDisabled: false })
+    ), 5000)
   }
 
   render() {
