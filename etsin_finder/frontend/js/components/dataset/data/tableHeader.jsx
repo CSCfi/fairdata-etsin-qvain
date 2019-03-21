@@ -40,6 +40,7 @@ export default class TableHeader extends Component {
       }
     )
   }
+
   render() {
     return (
       <Header>
@@ -81,7 +82,7 @@ export default class TableHeader extends Component {
 
         )}
         {this.state.downloadAllUrl && (
-          <HiddenLink href={this.state.downloadAllUrl} innerRef={this.downloadAllRef} download />
+          <HiddenLink href={this.state.downloadAllUrl} ref={this.downloadAllRef} download />
         )}
       </Header>
     )

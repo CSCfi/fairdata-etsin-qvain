@@ -51,8 +51,7 @@ class LangToggle extends Component {
     }, 500)
   }
 
-  otherLang = () =>
-    this.props.Stores.Locale.languages.map(lang => {
+  otherLang = () => this.props.Stores.Locale.languages.map(lang => {
       if (lang !== this.props.Stores.Locale.currentLang) {
         return <Lang key={lang}>{lang}</Lang>
       }
@@ -67,7 +66,9 @@ class LangToggle extends Component {
         </div>
         <div>
           <span className="sr-only">
-            {translate('general.language.toggleLabel')}: {this.otherLang()}
+            {translate('general.language.toggleLabel')}
+:
+            {this.otherLang()}
           </span>
           {this.props.inverted ? (
             <InvertedButton

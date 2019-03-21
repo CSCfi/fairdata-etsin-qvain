@@ -19,6 +19,7 @@ export default class Logo extends Component {
     file: PropTypes.string.isRequired,
     url: PropTypes.string.isRequired,
   }
+
   constructor(props) {
     super(props)
 

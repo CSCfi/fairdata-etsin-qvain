@@ -15,6 +15,7 @@ import env from '../domain/env'
 
 class Locale {
   @observable currentLang = counterpart.getLocale()
+
   @observable languages = ['en', 'fi']
 
   @action

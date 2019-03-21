@@ -8,13 +8,14 @@
  * @license   MIT
  */
 
-
 import { observable, action } from 'mobx'
 import axios from 'axios'
 
 class Auth {
   @observable userLogged = false
+
   @observable user = { name: undefined }
+
   @action
   checkLogin() {
     return new Promise((resolve, reject) => {

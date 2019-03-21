@@ -14,8 +14,11 @@ import translate from 'counterpart'
 
 class Accessibility {
   @observable assertiveAnnouncement = ''
+
   @observable politeAnnouncement = ''
+
   @observable userIsTabbing = false
+
   focusableElement = React.createRef()
 
   @action

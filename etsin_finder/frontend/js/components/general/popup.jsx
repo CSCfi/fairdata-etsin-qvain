@@ -82,7 +82,7 @@ export default class PopUp extends Component {
           <React.Fragment>
             <PopContainer>
               <Pop
-                innerRef={this.popRef}
+                ref={this.popRef}
                 tabIndex="-1"
                 autoFocus
                 onBlur={this.onBlur}
@@ -169,14 +169,13 @@ const alignment = align => {
         left: auto;
         width: max-content;
         @media screen and (min-width: ${p => p.theme.breakpoints.lg}) {
-          right: 0;
-          margin-right: -30px;
+          margin-right: -150px;
         }
         @media screen and (min-width: ${p => p.theme.breakpoints.md}) and (max-width: ${p => p.theme.breakpoints.lg}) {
           margin-right: -150px;
         }
         @media screen and (min-width: ${p => p.theme.breakpoints.xs}) and (max-width: ${p => p.theme.breakpoints.md}) {
-          margin-right: -80px;
+          margin-right: -150px;
         }
       `
       break

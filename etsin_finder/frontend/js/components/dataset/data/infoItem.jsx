@@ -1,4 +1,5 @@
 import React from 'react'
+import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import PropTypes from 'prop-types'
 import Locale from '../../../stores/view/language'
@@ -8,9 +9,13 @@ const InfoItem = props => (
     <th scope="row">
       <Translate content={props.translation} />
     </th>
-    <td lang={props.lang}>{props.content}</td>
+    <InfoCell lang={props.lang}>{props.content}</InfoCell>
   </tr>
 )
+
+const InfoCell = styled.td`
+  word-break: break-all;
+`
 
 InfoItem.defaultProps = {
   lang: Locale.currentLang

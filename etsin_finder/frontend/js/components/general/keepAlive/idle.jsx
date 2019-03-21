@@ -1,20 +1,23 @@
 {
-/**
- * This file is part of the Etsin service
- *
- * Copyright 2017-2018 Ministry of Education and Culture, Finland
- *
- *
- * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
- * @license   MIT
- */
+  /**
+   * This file is part of the Etsin service
+   *
+   * Copyright 2017-2018 Ministry of Education and Culture, Finland
+   *
+   *
+   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
+   * @license   MIT
+   */
 }
 
 import { Component } from 'react'
 import PropTypes from 'prop-types'
 
-const eventsChanged = (yeoldevents, yonnewevents) =>
-  yeoldevents.sort().toString() !== yonnewevents.sort().toString()
+const eventsChanged = (oldEvents, newEvents) => {
+  const olde = oldEvents.sort().toString()
+  const newe = newEvents.sort().toString()
+  return olde !== newe
+}
 
 export default class Idle extends Component {
   static propTypes = {
@@ -41,6 +44,10 @@ export default class Idle extends Component {
     idle: this.props.defaultIdle,
   }
 
+  timeout = null
+
+  keepAlive = new Date().getTime()
+
   componentDidMount() {
     this.attachEvents()
     this.setTimeout()
@@ -63,17 +70,6 @@ export default class Idle extends Component {
     }, this.props.timeout)
   }
 
-  removeEvents() {
-    this.props.events.forEach(event => {
-      window.removeEventListener(event, this.handleEvent, true)
-    })
-  }
-
-  handleChange(idle) {
-    this.props.onChange({ idle })
-    this.setState({ idle })
-  }
-
   handleEvent = () => {
     if (this.state.idle) {
       this.handleChange(false)
@@ -87,14 +83,22 @@ export default class Idle extends Component {
     this.setTimeout()
   }
 
+  handleChange(idle) {
+    this.props.onChange({ idle })
+    this.setState({ idle })
+  }
+
+  removeEvents() {
+    this.props.events.forEach(event => {
+      window.removeEventListener(event, this.handleEvent, true)
+    })
+  }
+
   attachEvents() {
     this.props.events.forEach(event => {
       window.addEventListener(event, this.handleEvent, true)
     })
   }
-
-  timeout = null
-  keepAlive = new Date().getTime()
 
   render() {
     return this.props.render(this.state)

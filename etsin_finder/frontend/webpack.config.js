@@ -1,11 +1,10 @@
-require('babel-polyfill')
+require('@babel/polyfill')
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
-const OfflinePlugin = require('offline-plugin')
 
 const config = {
-  entry: ['babel-polyfill', path.join(__dirname, '/js/index.jsx')],
+  entry: [path.join(__dirname, '/js/index.jsx')],
   output: {
     // path of output
     path: path.join(__dirname, '/build'),
@@ -22,27 +21,26 @@ const config = {
       {
         test: /\.jsx?/,
         exclude: /node_modules/,
-        loader: 'babel-loader',
+        use: {
+          loader: 'babel-loader',
+        },
       },
       {
         test: /\.(woff|woff2|eot|ttf|otf|svg|jpg|png)$/,
-        use: 'file-loader',
+        use: {
+          loader: 'file-loader',
+        },
       },
     ],
   },
   plugins: [
-    new CleanWebpackPlugin(['build']),
+    new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       // TODO: add manifest to new html
       chunksSortMode: 'none',
       filename: 'index.html',
       template: 'static/index.template.ejs',
       favicon: 'static/images/favicon.png',
-    }),
-    new OfflinePlugin({
-      ServiceWorker: {
-        entry: './static/service-worker.js',
-      },
     }),
   ],
   watch: false,

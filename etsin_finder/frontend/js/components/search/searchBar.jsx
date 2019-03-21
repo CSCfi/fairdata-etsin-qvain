@@ -14,8 +14,8 @@ import React, { Component } from 'react'
 import counterpart from 'counterpart'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import FontAwesomeIcon from '@fortawesome/react-fontawesome'
-import faSearch from '@fortawesome/fontawesome-free-solid/faSearch'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSearch } from '@fortawesome/free-solid-svg-icons'
 
 import { Search } from '../../routes'
 import ElasticQuery from '../../stores/view/elasticquery'
@@ -39,6 +39,7 @@ export default class SearchBar extends Component {
   componentWillMount() {
     counterpart.onLocaleChange(this.localeChanged)
   }
+
   componentWillUnmount() {
     counterpart.offLocaleChange(this.localeChanged)
   }
@@ -50,7 +51,7 @@ export default class SearchBar extends Component {
   }
 
   handleChange(event) {
-    Search.load()
+    Search.preload()
     this.setState({ query: event.target.value })
   }
 

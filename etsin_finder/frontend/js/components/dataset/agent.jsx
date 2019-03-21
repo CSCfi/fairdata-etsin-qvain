@@ -14,10 +14,8 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import translate from 'counterpart'
 import styled from 'styled-components'
-import FontawesomeIcon from '@fortawesome/react-fontawesome'
-import faUser from '@fortawesome/fontawesome-free-solid/faUser'
-import faUniversity from '@fortawesome/fontawesome-free-solid/faUniversity'
-import faGlobe from '@fortawesome/fontawesome-free-solid/faGlobe'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faGlobe, faUniversity, faUser } from '@fortawesome/free-solid-svg-icons'
 
 import { TransparentLink } from '../general/button'
 import PopUp from '../general/popup'
@@ -29,11 +27,20 @@ export default class Agent extends Component {
     this.state = {
       agent: props.agent,
       popUpOpen: false,
-      popupAlign: props.popupAlign
+      popupAlign: props.popupAlign,
     }
     this.openPopUp = this.openPopUp.bind(this)
     this.closePopUp = this.closePopUp.bind(this)
   }
+
+  shouldHavePopup = () => this.state.agent.identifier || this.hasExtraInfo()
+
+  hasExtraInfo = () =>
+    this.state.agent.contributor_role ||
+    this.state.agent.contributor_type ||
+    this.state.agent.member_of ||
+    this.state.agent.is_part_of ||
+    this.state.agent.homepage
 
   openPopUp() {
     this.setState({
@@ -50,7 +57,7 @@ export default class Agent extends Component {
   infoItem(content, title, icon, lang, key) {
     return (
       <Info key={key}>
-        <FontawesomeIcon icon={icon} aria-hidden />
+        <FontAwesomeIcon icon={icon} aria-hidden />
         <span className="sr-only">
           {title}
           {': '}
@@ -60,14 +67,98 @@ export default class Agent extends Component {
     )
   }
 
-  shouldHavePopup = () => this.state.agent.identifier || this.hasExtraInfo()
-
-  hasExtraInfo = () =>
-    this.state.agent.contributor_role ||
-    this.state.agent.contributor_type ||
-    this.state.agent.member_of ||
-    this.state.agent.is_part_of ||
-    this.state.agent.homepage
+  popUpContent() {
+    return (
+      <PopUpContainer>
+        {this.state.agent.name && (
+          <Name lang={getDataLang(this.state.agent.name)}>
+            {checkDataLang(this.state.agent.name)}
+          </Name>
+        )}
+        {this.state.agent.identifier && this.state.agent.identifier.startsWith('http') && (
+          // TODO: fix screenreader reading the link url when the popup is focused. It does not read the content.
+          <IdentifierLink
+            href={this.state.agent.identifier}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={translate('dataset.identifier')}
+          >
+            <IdentifierText>{this.state.agent.identifier}</IdentifierText>
+          </IdentifierLink>
+        )}
+        {this.state.agent.identifier && !this.state.agent.identifier.startsWith('http') && (
+          <IdentifierText>{this.state.agent.identifier}</IdentifierText>
+        )}
+        {this.hasExtraInfo() && (
+          <ul>
+            {this.state.agent.member_of &&
+              this.infoItem(
+                (this.state.agent.member_of.is_part_of
+                  ? `${checkDataLang(this.state.agent.member_of.is_part_of.name)}, `
+                  : '') + checkDataLang(this.state.agent.member_of.name),
+                translate('dataset.agent.member_of'),
+                faUniversity,
+                getDataLang(this.state.agent.member_of.name)
+              )}
+            {this.state.agent.is_part_of &&
+              this.infoItem(
+                checkDataLang(this.state.agent.is_part_of.name),
+                translate('dataset.agent.is_part_of'),
+                faUniversity,
+                getDataLang(this.state.agent.is_part_of.name)
+              )}
+            {this.state.agent.contributor_role &&
+              this.state.agent.contributor_role.map(cr =>
+                this.infoItem(
+                  checkDataLang(cr.pref_label),
+                  translate('dataset.agent.contributor_role'),
+                  faUser,
+                  getDataLang(cr.pref_label),
+                  cr.identifier
+                )
+              )}
+            {this.state.agent.contributor_type &&
+              this.state.agent.contributor_type.map(ct =>
+                this.infoItem(
+                  checkDataLang(ct.pref_label),
+                  translate('dataset.agent.contributor_type'),
+                  faUser,
+                  getDataLang(ct.pref_label),
+                  ct.identifier
+                )
+              )}
+            {this.state.agent.homepage && (
+              <Info>
+                <FontAwesomeIcon icon={faGlobe} aria-hidden />
+                <a
+                  href={this.state.agent.homepage.identifier}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  lang={getDataLang(this.state.agent.homepage.description)}
+                  title={
+                    checkDataLang(this.state.agent.homepage.description) ||
+                    this.state.agent.homepage.identifier
+                  }
+                >
+                  <span className="sr-only">
+                    {translate('dataset.agent.homepage')}
+                    {' :'}
+                  </span>
+                  {this.state.agent.homepage.title ? (
+                    <span lang={this.state.agent.homepage.title}>
+                      {checkDataLang(this.state.agent.homepage.title)}
+                    </span>
+                  ) : (
+                    this.state.agent.homepage.identifier
+                  )}
+                </a>
+              </Info>
+            )}
+          </ul>
+        )}
+      </PopUpContainer>
+    )
+  }
 
   render() {
     if (!this.state.agent.name) {
@@ -85,101 +176,7 @@ export default class Agent extends Component {
             isOpen={this.state.popUpOpen}
             onRequestClose={this.closePopUp}
             align={this.state.popupAlign}
-            popUp={
-              <PopUpContainer>
-                {this.state.agent.name && (
-                  <Name lang={getDataLang(this.state.agent.name)}>
-                    {checkDataLang(this.state.agent.name)}
-                  </Name>
-                )}
-                {this.state.agent.identifier && this.state.agent.identifier.startsWith('http') && (
-                  // TODO: fix screenreader reading the link url when the popup is focused. It does not read the content.
-                  <IdentifierLink
-                    href={this.state.agent.identifier}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={translate('dataset.identifier')}
-                  >
-                    <IdentifierText>{this.state.agent.identifier}</IdentifierText>
-                  </IdentifierLink>
-                )}
-                {this.state.agent.identifier && !this.state.agent.identifier.startsWith('http') && (
-                  <IdentifierText>{this.state.agent.identifier}</IdentifierText>
-                )}
-                {this.hasExtraInfo() && (
-                  <ul>
-                    {this.state.agent.member_of &&
-                      this.infoItem(
-                        (this.state.agent.member_of.is_part_of ?
-                          `${checkDataLang(this.state.agent.member_of.is_part_of.name)}, ` : '') +
-                          checkDataLang(this.state.agent.member_of.name),
-                        translate('dataset.agent.member_of'),
-                        faUniversity,
-                        getDataLang(this.state.agent.member_of.name)
-                      )
-                    }
-                    {this.state.agent.is_part_of &&
-                      this.infoItem(
-                        checkDataLang(this.state.agent.is_part_of.name),
-                        translate('dataset.agent.is_part_of'),
-                        faUniversity,
-                        getDataLang(this.state.agent.is_part_of.name)
-                      )
-                    }
-                    {this.state.agent.contributor_role &&
-                      this.state.agent.contributor_role.map(cr =>
-                        this.infoItem(
-                          checkDataLang(cr.pref_label),
-                          translate('dataset.agent.contributor_role'),
-                          faUser,
-                          getDataLang(cr.pref_label),
-                          cr.identifier
-                        )
-                      )
-                    }
-                    {this.state.agent.contributor_type &&
-                      this.state.agent.contributor_type.map(ct =>
-                        this.infoItem(
-                          checkDataLang(ct.pref_label),
-                          translate('dataset.agent.contributor_type'),
-                          faUser,
-                          getDataLang(ct.pref_label),
-                          ct.identifier
-                        )
-                      )
-                    }
-                    {this.state.agent.homepage && (
-                      <Info>
-                        <FontawesomeIcon icon={faGlobe} aria-hidden />
-                        <a
-                          href={this.state.agent.homepage.identifier}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          lang={getDataLang(this.state.agent.homepage.description)}
-                          title={
-                            checkDataLang(this.state.agent.homepage.description) ||
-                            this.state.agent.homepage.identifier
-                          }
-                        >
-                          <span className="sr-only">
-                            {translate('dataset.agent.homepage')}
-                            {' :'}
-                          </span>
-                          {this.state.agent.homepage.title ? (
-                            <span lang={this.state.agent.homepage.title}>
-                              {checkDataLang(this.state.agent.homepage.title)}
-                            </span>
-                          ) : (
-                            this.state.agent.homepage.identifier
-                          )}
-                        </a>
-                      </Info>
-                    )
-                  }
-                  </ul>
-                )}
-              </PopUpContainer>
-            }
+            popUp={this.popUpContent()}
           >
             <InlineTransparentLink
               noMargin
@@ -195,9 +192,9 @@ export default class Agent extends Component {
               onClick={this.state.popUpOpen ? this.closePopUp : this.openPopUp}
               lang={getDataLang(this.state.agent.name)}
             >
-              {(this.state.agent.is_part_of ?
-                `${checkDataLang(this.state.agent.is_part_of.name)}, ` : '') +
-                checkDataLang(this.state.agent.name)}
+              {(this.state.agent.is_part_of
+                ? `${checkDataLang(this.state.agent.is_part_of.name)}, `
+                : '') + checkDataLang(this.state.agent.name)}
             </InlineTransparentLink>
           </PopUp>
         )}
@@ -212,7 +209,7 @@ const InlineTransparentLink = styled(TransparentLink)`
 
 Agent.defaultProps = {
   first: false,
-  popupAlign: 'left'
+  popupAlign: 'left',
 }
 
 Agent.propTypes = {

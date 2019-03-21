@@ -16,9 +16,8 @@ import { NavLink } from 'react-router-dom'
 import Translate from 'react-translate-component'
 import translate from 'counterpart'
 import styled from 'styled-components'
-import FontawesomeIcon from '@fortawesome/react-fontawesome'
-import faBars from '@fortawesome/fontawesome-free-solid/faBars'
-import faCog from '@fortawesome/fontawesome-free-solid/faCog'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faBars, faCog } from '@fortawesome/free-solid-svg-icons'
 
 import Accessibility from '../../../stores/view/accessibility'
 import DropdownMenu from './dropdownMenu'
@@ -30,7 +29,7 @@ export default class MobileNavi extends React.Component {
   render() {
     return (
       <MobileItems>
-        <DropdownMenu buttonContent={<FontawesomeIcon icon={faBars} size="lg" />} transparentButton>
+        <DropdownMenu buttonContent={<FontAwesomeIcon icon={faBars} size="lg" />} transparentButton>
           <NavItem
             exact
             to="/"
@@ -49,7 +48,7 @@ export default class MobileNavi extends React.Component {
             <Translate content="nav.datasets" />
           </NavItem>
         </DropdownMenu>
-        <DropdownMenu buttonContent={<FontawesomeIcon icon={faCog} size="lg" />} transparentButton>
+        <DropdownMenu buttonContent={<FontAwesomeIcon icon={faCog} size="lg" />} transparentButton>
           <CustomContainer>
             <Row>
               <LangToggle inverted margin="0.4em 0.4em 0.4em 0em" />

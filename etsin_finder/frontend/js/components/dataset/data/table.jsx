@@ -14,8 +14,8 @@ import React, { Component } from 'react'
 import Translate from 'react-translate-component'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import faExclamation from '@fortawesome/fontawesome-free-solid/faExclamationCircle'
-import FontAwesomeIcon from '@fortawesome/react-fontawesome'
+import { faExclamation } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import TableItem from './tableItem'
 
@@ -109,7 +109,9 @@ export default class Table extends Component {
             {sliced && (
               <tr>
                 <SlicedInfo colSpan="5">
-                  <FontAwesomeIcon icon={faExclamation} /> <Translate content="dataset.dl.sliced" />
+                  <FontAwesomeIcon icon={faExclamation} />
+                  {' '}
+                  <Translate content="dataset.dl.sliced" />
                 </SlicedInfo>
               </tr>
             )}
@@ -117,7 +119,7 @@ export default class Table extends Component {
           </TBody>
         </StyledTable>
         {this.state.downloadUrl && (
-          <HiddenLink innerRef={this.downloadRef} href={this.state.downloadUrl} download />
+          <HiddenLink ref={this.downloadRef} href={this.state.downloadUrl} download />
         )}
       </TableContainer>
     )

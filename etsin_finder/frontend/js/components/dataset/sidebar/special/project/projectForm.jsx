@@ -13,11 +13,10 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import Translate from 'react-translate-component'
 import checkDataLang from '../../../../../utils/checkDataLang'
 import checkNested from '../../../../../utils/checkNested'
 import Agent from '../../../agent'
-
-import Translate from 'react-translate-component'
 
 
 export default class ProjectForm extends Component {
@@ -34,9 +33,9 @@ export default class ProjectForm extends Component {
   }
 
   hasFunderInfo() {
-    return this.state.project.has_funder_identifier ||
-    checkNested(this.state.project, 'funder_type') ||
-    checkNested(this.state.project, 'has_funding_agency')
+    return this.state.project.has_funder_identifier
+    || checkNested(this.state.project, 'funder_type')
+    || checkNested(this.state.project, 'has_funding_agency')
   }
 
   render() {
@@ -65,8 +64,8 @@ export default class ProjectForm extends Component {
                     rel="noopener noreferrer"
                     lang={this.state.lang}
                     title={
-                      checkDataLang(this.state.project.homepage.title) ||
-                      this.state.project.homepage.identifier
+                      checkDataLang(this.state.project.homepage.title)
+                      || this.state.project.homepage.identifier
                     }
                   >
                     {this.state.project.homepage.title ? (
@@ -120,8 +119,8 @@ export default class ProjectForm extends Component {
                     <Value>{checkDataLang(this.state.project.funder_type.pref_label)}</Value>
                   </div>
                 )}
-                {checkNested(this.state.project, 'has_funding_agency') &&
-                  this.state.project.has_funding_agency.map(agency => (
+                {checkNested(this.state.project, 'has_funding_agency')
+                  && this.state.project.has_funding_agency.map(agency => (
                     <div key={checkDataLang(agency.name)}>
                       <Key><Translate content="dataset.project.funder" /></Key>
                       <Value>

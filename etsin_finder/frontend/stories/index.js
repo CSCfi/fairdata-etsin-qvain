@@ -56,7 +56,7 @@ import PopUp from '../js/components/general/popup'
 import TogglableAgentList from '../js/components/dataset/togglableAgentList'
 import Agent from '../js/components/dataset/agent'
 import Sidebar from '../js/components/dataset/sidebar'
-import License from '../js/components/dataset/sidebar/license'
+import License from '../js/components/dataset/sidebar/special/license'
 
 import EsRes from './esRes'
 import MetaxRes, { MetaxRemote } from './metaxRes'
@@ -569,7 +569,10 @@ storiesOf('Dataset/TogglableAgentList', module)
   .add('More than 3 agents', () => (
     <Container center maxWidth="800px" style={{ marginTop: '10em' }}>
       <ComponentCode>
-        <TogglableAgentList agents={MetaxRes.research_dataset.contributor} agemntType="contributor" />
+        <TogglableAgentList
+          agents={MetaxRes.research_dataset.contributor}
+          agemntType="contributor"
+        />
       </ComponentCode>
     </Container>
   ))

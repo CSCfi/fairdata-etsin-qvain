@@ -55,6 +55,7 @@ export default class FilterItem extends Component {
       <li>
         <button
           role="switch"
+          type="button"
           tabIndex={this.props.tabIndex}
           className={this.isActive() ? 'active' : undefined}
           aria-checked={this.isActive()}
@@ -62,7 +63,7 @@ export default class FilterItem extends Component {
             this.updateFilter()
           }}
         >
-          {this.state.key} ({this.state.doc_count})
+          {`${this.state.key} (${this.state.doc_count})`}
         </button>
       </li>
     )

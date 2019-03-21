@@ -126,10 +126,10 @@ export default class HeightTransition extends Component {
   }
 }
 
-const TransitionDiv = styled.div.attrs({
-  height: props => (props.height ? props.height : props.initialHeight),
-  visibility: props => (props.visibility ? props.visibility : 'inherit'),
-})`
+const TransitionDiv = styled.div.attrs(props => ({
+  height: props.height ? props.height : props.initialHeight,
+  visibility: props.visibility ? props.visibility : 'inherit',
+}))`
   visibility: ${props => props.visibility};
   max-height: ${props => props.height};
   width: 100%;

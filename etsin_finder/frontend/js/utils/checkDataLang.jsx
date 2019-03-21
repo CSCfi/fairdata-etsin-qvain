@@ -22,10 +22,10 @@ const checkDataLang = (object, lang) => {
   }
   if (typeof object === 'undefined' || Object.keys(object).length === 0) {
     return ''
-  } else if (typeof object === 'string') {
+  } if (typeof object === 'string') {
     return object
-  } else if (object[language]) return object[language]
-  else if (object.und) {
+  } if (object[language]) return object[language]
+  if (object.und) {
     return object.und
   }
   return object[Object.keys(object)[0]]
@@ -35,9 +35,9 @@ export const getDataLang = object => {
   const language = Locale.currentLang
   if (typeof object === 'undefined' || Object.keys(object).length === 0) {
     return undefined
-  } else if (typeof object === 'string') {
+  } if (typeof object === 'string') {
     return undefined
-  } else if (object[language]) return language
+  } if (object[language]) return language
   return Object.keys(object)[0]
 }
 

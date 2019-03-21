@@ -36,6 +36,7 @@ class Pagination extends Component {
     this.checkBefore = this.checkBefore.bind(this)
     this.createPagination = this.createPagination.bind(this)
   }
+
   componentWillMount() {
     if (!this.pageAmount) {
       const pages = Math.ceil(this.props.totalResults / this.props.perPage)
@@ -93,8 +94,8 @@ class Pagination extends Component {
   checkAfter() {
     return new Promise(resolve => {
       while (
-        this.state.currentPage + this.afterCounter < this.state.pageAmount &&
-        this.afterCounter < 7
+        this.state.currentPage + this.afterCounter < this.state.pageAmount
+        && this.afterCounter < 7
       ) {
         this.afterCounter += 1
       }
@@ -130,11 +131,15 @@ class Pagination extends Component {
               this.changePage(e, value)
             }}
           >
-            <Translate content="search.pagination.SRpage" className="sr-only" /> {value}
+            <Translate content="search.pagination.SRpage" className="sr-only" />
+            {' '}
+            {value}
           </PaginationButton>
         ) : (
           <PaginationButton className="current" disabled aria-disabled="true">
-            <Translate content="search.pagination.SRcurrentpage" className="sr-only" /> {value}
+            <Translate content="search.pagination.SRcurrentpage" className="sr-only" />
+            {' '}
+            {value}
           </PaginationButton>
         )}
       </li>
@@ -176,20 +181,20 @@ class Pagination extends Component {
   restDots(where) {
     if (where === 'before') {
       if (
-        (this.state.currentPage === 5 && this.state.pageAmount > 8) ||
-        (this.state.pageAmount === 9 && this.state.currentPage > 5)
+        (this.state.currentPage === 5 && this.state.pageAmount > 8)
+        || (this.state.pageAmount === 9 && this.state.currentPage > 5)
       ) {
         return this.singlePage(2, true)
-      } else if (this.state.currentPage > 5 && this.state.pageAmount > 8) {
+      } if (this.state.currentPage > 5 && this.state.pageAmount > 8) {
         return this.singlePage('...', false)
       }
     } else if (where === 'after') {
       if (
-        (this.state.pageAmount - this.state.currentPage === 4 && this.state.pageAmount > 8) ||
-        (this.state.pageAmount === 9 && this.state.currentPage < 5)
+        (this.state.pageAmount - this.state.currentPage === 4 && this.state.pageAmount > 8)
+        || (this.state.pageAmount === 9 && this.state.currentPage < 5)
       ) {
         return this.singlePage(this.state.pageAmount - 1, true)
-      } else if (this.state.pageAmount - this.state.currentPage > 4 && this.state.pageAmount > 8) {
+      } if (this.state.pageAmount - this.state.currentPage > 4 && this.state.pageAmount > 8) {
         return this.singlePage('...', false)
       }
     }
@@ -206,7 +211,8 @@ class Pagination extends Component {
                 this.changePage(e, this.state.currentPage - 1)
               }}
             >
-              <span aria-hidden>{'<'}</span>{' '}
+              <span aria-hidden>{'<'}</span>
+              {' '}
               <Translate content="search.pagination.prev" className="sr-only" />
             </PaginationButton>
           </li>
@@ -216,13 +222,15 @@ class Pagination extends Component {
         {this.restDots('before')}
         {// pages before
         this.state.before.map(single => single)}
-        {this.singlePage(this.state.currentPage, false)} {/* currentpage */}
+        {this.singlePage(this.state.currentPage, false)}
+        {' '}
+        {/* currentpage */}
         {// pages after
         this.state.after.map(single => single)}
         {this.restDots('after')}
         {// last page
-        this.state.currentPage !== this.state.pageAmount &&
-          this.singlePage(this.state.pageAmount, true)}
+        this.state.currentPage !== this.state.pageAmount
+          && this.singlePage(this.state.pageAmount, true)}
         {this.state.currentPage < this.state.pageAmount && (
           <li>
             <PaginationButton
@@ -230,7 +238,8 @@ class Pagination extends Component {
                 this.changePage(e, this.state.currentPage + 1)
               }}
             >
-              <Translate content="search.pagination.next" className="sr-only" />{' '}
+              <Translate content="search.pagination.next" className="sr-only" />
+              {' '}
               <span aria-hidden>{'>'}</span>
             </PaginationButton>
           </li>
@@ -257,9 +266,9 @@ class Pagination extends Component {
   }
 }
 
-const PaginationItem = styled.span.attrs({
+const PaginationItem = styled.span.attrs(() => ({
   size: '40px',
-})`
+}))`
   cursor: pointer;
   display: block;
   text-align: center;

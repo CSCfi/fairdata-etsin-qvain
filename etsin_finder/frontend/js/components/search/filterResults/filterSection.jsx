@@ -13,10 +13,8 @@
 import React, { Component } from 'react'
 import { inject, observer } from 'mobx-react'
 import Translate from 'react-translate-component'
-import FontAwesomeIcon from '@fortawesome/react-fontawesome'
-import faAngleDown from '@fortawesome/fontawesome-free-solid/faAngleDown'
-import faAngleDoubleDown from '@fortawesome/fontawesome-free-solid/faAngleDoubleDown'
-import faAngleDoubleUp from '@fortawesome/fontawesome-free-solid/faAngleDoubleUp'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faAngleDoubleUp, faAngleDoubleDown, faAngleDown } from '@fortawesome/free-solid-svg-icons'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { mix } from 'polished'
@@ -103,15 +101,15 @@ class FilterSection extends Component {
   }
 
   toggleFilter = () => {
-    this.setState({
-      open: !this.state.open,
-    })
+    this.setState(state => ({
+      open: !state.open,
+    }))
   }
 
   toggleShowHideItems = () => {
-    this.setState({
-      show: !this.state.show
-    })
+    this.setState(state => ({
+      show: !state.show,
+    }))
   }
 
   checkIfValid = () => {
@@ -176,27 +174,31 @@ class FilterSection extends Component {
         </FilterCategory>
         <FilterItems className={this.state.open ? 'open' : ''} aria-hidden={!this.state.open}>
           <ul aria-label={this.titleName}>
-            {aggItems.map(
-              item => (
-                <FilterItem
-                  key={item.key}
-                  item={item}
-                  aggregationName={this.aggregationName}
-                  term={this.termName}
-                  tabIndex={this.state.open ? '0' : '-1'}
-                />
-              )
-            )}
+            {aggItems.map(item => (
+              <FilterItem
+                key={item.key}
+                item={item}
+                aggregationName={this.aggregationName}
+                term={this.termName}
+                tabIndex={this.state.open ? '0' : '-1'}
+              />
+            ))}
           </ul>
-          { displayShowButton ? (
+          {displayShowButton ? (
             <div>
               <hr />
               <ShowHide onClick={this.toggleShowHideItems}>
                 <FontAwesomeIcon icon={this.state.show ? faAngleDoubleUp : faAngleDoubleDown} />
-                <ShowHideBtn><Translate content={this.state.show ? 'search.filter.hide' : 'search.filter.show'} /></ShowHideBtn>
+                <ShowHideBtn>
+                  <Translate
+                    content={this.state.show ? 'search.filter.hide' : 'search.filter.show'}
+                  />
+                </ShowHideBtn>
               </ShowHide>
             </div>
-          ) : ''}
+          ) : (
+            ''
+          )}
         </FilterItems>
       </Section>
     )
