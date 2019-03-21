@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import FontAwesomeIcon from '@fortawesome/react-fontawesome'
-import FaArrowsAltV from '@fortawesome/fontawesome-free-solid/faArrowsAltV'
-import FaMapMarker from '@fortawesome/fontawesome-free-solid/faMapMarkerAlt'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { FaMapMarker, FaArrowsAltV } from '@fortawesome/free-solid-svg-icons'
 import PropTypes from 'prop-types'
 import { Popup } from 'react-leaflet'
 

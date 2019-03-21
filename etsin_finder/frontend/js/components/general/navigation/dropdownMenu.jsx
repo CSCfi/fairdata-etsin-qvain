@@ -31,8 +31,8 @@ export default class DropdownMenu extends Component {
     const currentTarget = e.currentTarget
     setTimeout(() => {
       if (
-        !currentTarget.contains(document.activeElement) &&
-        this.button.current !== document.activeElement
+        !currentTarget.contains(document.activeElement)
+        && this.button.current !== document.activeElement
       ) {
         this.close()
       }
@@ -64,7 +64,7 @@ export default class DropdownMenu extends Component {
             role="button"
             color="primary"
             open={this.state.open}
-            innerRef={this.button}
+            ref={this.button}
             aria-pressed={this.state.open}
             onClick={() => (this.state.open ? this.close() : this.open())}
           >
@@ -74,7 +74,7 @@ export default class DropdownMenu extends Component {
         <Content
           open={this.state.open}
           onClick={this.close}
-          innerRef={this.content}
+          ref={this.content}
           tabIndex="-1"
           onBlur={this.onBlur}
         >
@@ -99,9 +99,8 @@ const ButtonContainer = styled.div`
 `
 
 const CustomTransparentButton = styled(TransparentButton)`
-  ${p =>
-    p.open &&
-    `
+  ${p => p.open
+    && `
     &:after {
       content: '';
       position: absolute;

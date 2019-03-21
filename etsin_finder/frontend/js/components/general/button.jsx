@@ -17,10 +17,10 @@ import { opacify, darken } from 'polished'
 import checkColor from '../../styles/styledUtils'
 
 // prettier-ignore
-const Button = styled.button.attrs({
-  padding: props => (props.padding ? props.padding : '0.3em 0.6em 0.4em'),
-  margin: props => (props.margin ? props.margin : '0.25em 0.25em'),
-})`
+const Button = styled.button.attrs(props => ({
+  padding: props.padding ? props.padding : '0.3em 0.6em 0.4em',
+  margin: props.margin ? props.margin : '0.25em 0.25em',
+}))`
   cursor: pointer;
   width: ${props => (props.width ? props.width : '')};
   padding: ${props => (props.noPadding ? 0 : props.padding)};
@@ -70,9 +70,9 @@ export const InvertedButton = styled(Button)`
   }
 `
 
-export const TransparentButton = styled(Button).attrs({
-  margin: props => (props.margin ? props.margin : '0.1em'),
-})`
+export const TransparentButton = styled(Button).attrs(props => ({
+  margin: props.margin ? props.margin : '0.1em',
+}))`
   margin: ${props => (props.noMargin ? 0 : props.margin)};
   border-color: transparent;
   background-color: transparent;
@@ -105,10 +105,10 @@ export const LinkButton = styled(TransparentButton)`
 `
 
 // prettier-ignore
-export const Link = styled.a.attrs({
-  padding: props => (props.padding ? props.padding : '0.3em 0.6em 0.4em'),
-  margin: props => (props.margin ? props.margin : '0.25em 0.25em'),
-})`
+export const Link = styled.a.attrs(props => ({
+  padding: props.padding ? props.padding : '0.3em 0.6em 0.4em',
+  margin: props.margin ? props.margin : '0.25em 0.25em',
+}))`
   cursor: pointer;
   width: ${props => (props.width ? props.width : 'max-content')};
   padding: ${props => (props.noPadding ? 0 : props.padding)};
@@ -136,7 +136,7 @@ export const Link = styled.a.attrs({
 `
 
 // prettier-ignore
-export const InvertedLink = Link.extend`
+export const InvertedLink = styled(Link)`
   border-color: ${props => (props.color ? checkColor(props.color) : props.theme.color.primary)};
   background-color: transparent;
   color: ${props => (props.color ? checkColor(props.color) : props.theme.color.primary)};

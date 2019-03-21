@@ -86,7 +86,7 @@ export default class Dropdown extends Component {
         >
           <Content
             open={this.state.open}
-            innerRef={this.content}
+            ref={this.content}
             tabIndex="-1"
             onBlur={this.onBlur}
           >
@@ -100,9 +100,8 @@ export default class Dropdown extends Component {
 
 const CustomButton = styled(Button)`
   position: relative;
-  ${p =>
-    p.open &&
-    `
+  ${p => p.open
+    && `
     &:after {
       bottom: -20px;
       content: '';
@@ -124,9 +123,8 @@ const CustomButton = styled(Button)`
 
 const CustomTransparentButton = styled(TransparentButton)`
   position: relative;
-  ${p =>
-    p.open &&
-    `
+  ${p => p.open
+    && `
     &:after {
       bottom: -20px;
       content: '';

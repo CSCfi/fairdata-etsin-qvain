@@ -47,6 +47,7 @@ class Dataset extends React.Component {
     this.query = this.query.bind(this)
     this.goBack = this.goBack.bind(this)
   }
+
   componentDidMount() {
     Accessibility.resetFocus()
     this.query()
@@ -86,8 +87,8 @@ class Dataset extends React.Component {
           dataset: result.catalog_record,
           email_info: result.email_info,
           hasFiles:
-            (result.catalog_record.research_dataset.directories ||
-              result.catalog_record.research_dataset.files) !== undefined,
+            (result.catalog_record.research_dataset.directories
+              || result.catalog_record.research_dataset.files) !== undefined,
           hasRemote: result.catalog_record.research_dataset.remote_resources !== undefined,
           harvested: result.catalog_record.data_catalog.catalog_json.harvested,
           deprecated: result.catalog_record.deprecated,

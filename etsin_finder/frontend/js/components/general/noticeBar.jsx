@@ -80,9 +80,8 @@ const Bar = styled.div`
   z-index: ${p => p.z};
   max-height: ${p => (p.open ? '4em' : '0em')};
   background-color: ${props => checkColor(props.bg)};
-  ${p =>
-    p.border &&
-    `border: 2px solid ${p.border_color ? checkColor(p.border_color) : 'black'};`} display: flex;
+  ${p => p.border
+    && `border: 2px solid ${p.border_color ? checkColor(p.border_color) : 'black'};`} display: flex;
   color: ${props => checkColor(props.color)};
   justify-content: center;
   align-items: center;

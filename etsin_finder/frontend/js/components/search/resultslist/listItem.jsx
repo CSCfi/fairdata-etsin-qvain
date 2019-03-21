@@ -31,6 +31,7 @@ export default class ListItem extends Component {
     }
     return string
   }
+
   render() {
     return (
       <Item>

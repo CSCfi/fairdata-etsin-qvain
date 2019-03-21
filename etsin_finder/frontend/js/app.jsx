@@ -19,7 +19,7 @@ import { syncHistoryWithStore } from 'mobx-react-router'
 
 import Layout from './layout'
 import etsinTheme from './styles/theme'
-import './styles/globalStyles'
+import GlobalStyle from './styles/globalStyles'
 import Stores from './stores'
 
 if (process.env.NODE_ENV === 'test') {
@@ -50,6 +50,7 @@ export default class App extends Component {
           <Router history={history}>
             <ThemeProvider theme={etsinTheme}>
               <React.Fragment>
+                <GlobalStyle />
                 <Layout />
               </React.Fragment>
             </ThemeProvider>

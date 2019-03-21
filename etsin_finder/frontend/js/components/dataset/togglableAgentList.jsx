@@ -42,9 +42,9 @@ export default class TogglableAgentList extends Component {
   }
 
   toggleOpen() {
-    this.setState({
-      open: !this.state.open,
-    })
+    this.setState(state => ({
+      open: !state.open,
+    }))
   }
 
   render() {
@@ -86,16 +86,15 @@ export default class TogglableAgentList extends Component {
               }
               return ''
             })}
-          {/* Show Button to open rest */}{' '}
+          {/* Show Button to open rest */}
+          {' '}
           {this.props.agents.length > 3 && (
             <LinkButton onClick={this.toggleOpen}>
-              [{' '}
               {this.state.open ? (
                 <Translate content="general.showLess" />
               ) : (
                 <Translate content="general.showMore" />
-              )}{' '}
-              ]
+              )}
             </LinkButton>
           )}
         </InlineUl>
@@ -111,7 +110,7 @@ TogglableAgentList.defaultProps = {
 
 TogglableAgentList.propTypes = {
   agents: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
-  agentType: PropTypes.string
+  agentType: PropTypes.string,
 }
 
 const AgentsCont = styled.div`

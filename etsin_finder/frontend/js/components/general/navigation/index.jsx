@@ -27,7 +27,7 @@ export default class Navi extends React.Component {
           exact
           to="/"
           onPointerOver={() => {
-            Home.load()
+            Home.preload()
           }}
           onClick={() => {
             Accessibility.announce(translate('changepage', { page: translate('nav.datasets') }))
@@ -38,7 +38,7 @@ export default class Navi extends React.Component {
         <NavItem
           to="/datasets"
           onPointerOver={() => {
-            Search.load()
+            Search.preload()
           }}
           onClick={() => {
             Accessibility.announce(translate('changepage', { page: translate('nav.datasets') }))

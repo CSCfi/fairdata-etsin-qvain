@@ -19,11 +19,13 @@ export default class HeroBanner extends Component {
     super(props)
     this.state = { classes: '' }
   }
+
   componentWillMount() {
     if (this.props.className) {
       this.setState({ classes: this.props.className })
     }
   }
+
   render() {
     return (
       <Hero className={this.state.classes}>

@@ -27,8 +27,9 @@ export default class FrontPage extends Component {
     Accessibility.handleNavigation('home')
     Tracking.newPageView('Etsin | Tutkimusaineistojen hakupalvelu', this.props.location.pathname)
     // preload search page
-    Search.load()
+    Search.preload()
   }
+
   render() {
     return (
       <div className="search-page">

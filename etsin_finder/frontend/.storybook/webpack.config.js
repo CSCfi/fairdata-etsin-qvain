@@ -1,5 +1,4 @@
-require('babel-polyfill')
-const path = require('path')
+require('@babel/polyfill')
 
 const config = {
   resolve: {

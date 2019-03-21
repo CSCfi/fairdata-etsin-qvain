@@ -15,6 +15,7 @@ const routingStore = new RouterStore()
 
 class Env {
   @observable environment = process.env.NODE_ENV
+
   history = routingStore
 }
 

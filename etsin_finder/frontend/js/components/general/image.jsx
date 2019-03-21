@@ -23,6 +23,7 @@ export default class Image extends Component {
       alt: props.alt,
     }
   }
+
   render() {
     return <StyledImg alt={this.state.alt} src={this.state.file} />
   }
