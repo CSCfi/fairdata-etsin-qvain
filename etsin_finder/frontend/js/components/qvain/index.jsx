@@ -10,7 +10,6 @@ class Qvain extends Component {
           <SubHeaderText>Publish Dataset</SubHeaderText>
         </SubHeader>
         <form>
-          <div>asd</div>
           <RightsAndLicenses />
         </form>
       </div>

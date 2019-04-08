@@ -16,7 +16,7 @@ class RightsAndLicenses extends Component {
 
   render() {
     return (
-      <React.Fragment>
+      <div className="container">
         <h1>Rights And Licenses</h1>
         <div>
           <h3>Access Type</h3>
@@ -44,7 +44,7 @@ class RightsAndLicenses extends Component {
             onBlur={() => {}}>
           </Select>
         </div>
-      </React.Fragment>
+      </div>
     )
   }
 }
