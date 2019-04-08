@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
+import RightsAndLicenses from './licenses'
 
 class Qvain extends Component {
   render() {
@@ -10,6 +11,7 @@ class Qvain extends Component {
         </SubHeader>
         <form>
           <div>asd</div>
+          <RightsAndLicenses />
         </form>
       </div>
     )
