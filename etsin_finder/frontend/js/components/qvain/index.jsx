@@ -2,20 +2,28 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import RightsAndLicenses from './licenses'
 
+import Description from './description';
+
 class Qvain extends Component {
   render() {
     return (
-      <div>
+      <QvainContainer>
         <SubHeader>
           <SubHeaderText>Publish Dataset</SubHeaderText>
         </SubHeader>
-        <form>
+        <form className="container">
+          <Description />
           <RightsAndLicenses />
         </form>
-      </div>
+      </QvainContainer>
     )
   }
 }
+
+const QvainContainer = styled.div`
+  background-color: #fafafa;
+  height: -webkit-fill-available;
+`
 
 const SubHeader = styled.div`
   height: 100px;
