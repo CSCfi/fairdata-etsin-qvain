@@ -1,15 +1,13 @@
 import React, { Component } from 'react'
-import Translation from 'react-translate-component'
 import Select from 'react-select'
 import Card from '../general/card'
 
 const accessOptions = [
-  { value: "OPEN", label: "Open" },
-  { value: "CLOSED", label: "Closed" }
+  { value: 'OPEN', label: 'Open' },
+  { value: 'CLOSED', label: 'Closed' }
 ]
 
 class AccessType extends Component {
-
   render() {
     return (
       <Card>
@@ -18,12 +16,12 @@ class AccessType extends Component {
           name="accessType"
           options={accessOptions}
           placeholder="Select option"
-          clearable={true}
+          clearable
           onChange={() => {
-            console.log("changed access type")
+            console.log('changed access type')
           }}
-          onBlur={() => {}}>
-        </Select>
+          onBlur={() => {}}
+        />
       </Card>
     )
   }

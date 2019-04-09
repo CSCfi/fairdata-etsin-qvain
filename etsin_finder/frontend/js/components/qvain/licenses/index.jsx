@@ -1,12 +1,9 @@
 import React, { Component } from 'react'
-import Translation from 'react-translate-component'
-import Select from '../../general/select'
+import styled from 'styled-components'
 import AccessType from './accessType'
 import Licenses from './licenses'
-import styled from 'styled-components'
 
 class RightsAndLicenses extends Component {
-
   render() {
     return (
       <div className="container">
