@@ -4,10 +4,11 @@ import DescriptionFeild from './descriptionField';
 import OtherIdentifierField from './otherIdentifierField';
 import FieldOfScienceField from './fieldOfScienceField';
 import KeywordsField from './keywordsField';
+import { SectionTitle } from '../general/section'
 
 const Description = () => (
   <div className="container">
-    <h2>DESCRIPTION</h2>
+    <SectionTitle>Description</SectionTitle>
     <div>
       <DescriptionFeild />
       <OtherIdentifierField />

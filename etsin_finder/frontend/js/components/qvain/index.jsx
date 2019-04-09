@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import RightsAndLicenses from './licenses'
-
 import Description from './description';
+import Participants from './participants'
 
 class Qvain extends Component {
   render() {
@@ -14,6 +14,7 @@ class Qvain extends Component {
         <form className="container">
           <Description />
           <RightsAndLicenses />
+          <Participants />
         </form>
       </QvainContainer>
     )
