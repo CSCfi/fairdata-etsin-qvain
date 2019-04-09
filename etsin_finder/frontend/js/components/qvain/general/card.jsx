@@ -10,7 +10,7 @@ const Container = styled.div`
   border: 1px solid #eceeef;
   min-height: 150px;
   background-color: #fff;
-  overflow: auto;
+  overflow: visible;
 `
 
 Card.prototype = {
