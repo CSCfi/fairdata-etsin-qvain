@@ -24,7 +24,6 @@ class License extends Component {
           placeholder="Select option"
           clearable
           onChange={(license) => {
-            console.log('changed license')
             this.props.Stores.Qvain.setLicence(license)
           }}
           onBlur={() => {}}
