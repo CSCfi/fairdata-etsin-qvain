@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
+import RightsAndLicenses from './licenses'
 
 import Description from './description';
 
@@ -12,6 +13,7 @@ class Qvain extends Component {
         </SubHeader>
         <form className="container">
           <Description />
+          <RightsAndLicenses />
         </form>
       </QvainContainer>
     )
@@ -20,7 +22,6 @@ class Qvain extends Component {
 
 const QvainContainer = styled.div`
   background-color: #fafafa;
-  height: -webkit-fill-available;
 `
 
 const SubHeader = styled.div`
