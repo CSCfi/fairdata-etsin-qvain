@@ -22,7 +22,6 @@ class Qvain extends Component {
 
 const QvainContainer = styled.div`
   background-color: #fafafa;
-  height: -webkit-fill-available;
 `
 
 const SubHeader = styled.div`
