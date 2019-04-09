@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
+import { inject, observer } from 'mobx-react'
 import Select from 'react-select'
+import PropTypes from 'prop-types'
 import Card from '../general/card'
 
 const licenseOptions = [
@@ -7,7 +9,11 @@ const licenseOptions = [
   { value: 'PROPRIETARY', label: 'Proprietary' }
 ]
 
-class RightsAndLicenses extends Component {
+class License extends Component {
+  static propTypes = {
+    Stores: PropTypes.object.isRequired
+  }
+
   render() {
     return (
       <Card>
@@ -17,8 +23,9 @@ class RightsAndLicenses extends Component {
           options={licenseOptions}
           placeholder="Select option"
           clearable
-          onChange={() => {
+          onChange={(license) => {
             console.log('changed license')
+            this.props.Stores.Qvain.setLicence(license)
           }}
           onBlur={() => {}}
         />
@@ -27,4 +34,4 @@ class RightsAndLicenses extends Component {
   }
 }
 
-export default RightsAndLicenses
+export default inject('Stores')(observer(License))

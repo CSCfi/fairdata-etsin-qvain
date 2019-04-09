@@ -7,9 +7,7 @@ class RightsAndLicenses extends Component {
   render() {
     return (
       <div className="container">
-        <RightsAndLicensesTitle>
-          <h1>Rights And Licenses</h1>
-        </RightsAndLicensesTitle>
+        <RightsAndLicensesTitle>Rights And Licenses</RightsAndLicensesTitle>
         <AccessType />
         <Licenses />
       </div>
@@ -17,7 +15,7 @@ class RightsAndLicenses extends Component {
   }
 }
 
-const RightsAndLicensesTitle = styled.div`
+const RightsAndLicensesTitle = styled.h2`
   text-transform: uppercase
 `
 
