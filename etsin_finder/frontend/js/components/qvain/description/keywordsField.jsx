@@ -1,11 +1,17 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types';
+import { inject, observer } from 'mobx-react'
+import { toJS } from 'mobx'
 import styled from 'styled-components'
 
 import Card from '../general/card';
 
 class KeywordsField extends Component {
+  static propTypes = {
+    Stores: PropTypes.object.isRequired
+  }
+
   state = {
-    keywords: [],
     value: ''
   }
 
@@ -17,15 +23,18 @@ class KeywordsField extends Component {
     if (e.keyCode === 13) {
       e.preventDefault();
       const newKeyword = this.state.value;
-      this.setState(prevState => ({
-        keywords: [...prevState.keywords, newKeyword]
-      }))
+      this.props.Stores.Qvain.setKeywords([
+        ...toJS(this.props.Stores.Qvain.keywords),
+        newKeyword
+      ])
       this.setState({ value: '' })
     }
   }
 
   render() {
-    const keywords = this.state.keywords.map(word => (<div>{word}</div>))
+    const keywords = toJS(this.props.Stores.Qvain.keywords).map(word => (
+      <div key={word}>{ word }</div>)
+    )
     return (
       <Card>
         <h3>Keywords</h3>
@@ -51,4 +60,4 @@ const Input = styled.input`
   margin-bottom: 20px;
 `
 
-export default KeywordsField;
+export default inject('Stores')(observer(KeywordsField));
