@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
+import Translate from 'react-translate-component'
 import RightsAndLicenses from './licenses'
 
 import Description from './description';
@@ -9,7 +10,7 @@ class Qvain extends Component {
     return (
       <QvainContainer>
         <SubHeader>
-          <SubHeaderText>Publish Dataset</SubHeaderText>
+          <SubHeaderText><Translate content="qvain.title" /></SubHeaderText>
         </SubHeader>
         <form className="container">
           <Description />

@@ -1,5 +1,8 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
+import Translate from 'react-translate-component'
+import translate from 'counterpart'
+import '../../../../locale/translations'
 
 class DescriptionField extends Component {
   state = {
@@ -29,12 +32,12 @@ class DescriptionField extends Component {
           <EmptyBlock width="48%" />
         </LangButtonContainer>
         <DescriptionCard>
-          <h3>Title</h3>
+          <h3><Translate content="qvain.description.description.title.label" /></h3>
           <Input
             type="text"
-            placeholder="Title (English)"
+            placeholder={translate('qvain.description.description.title.label')}
           />
-          <h3>Description</h3>
+          <h3><Translate content="qvain.description.description.description.label" /></h3>
           <Textarea rows="8" />
           <div>Only one launguage selection is mandatory</div>
         </DescriptionCard>
@@ -42,6 +45,7 @@ class DescriptionField extends Component {
     )
   }
 }
+
 const DescriptionCard = styled.div`
   margin-bottom: 15px;
   padding: 25px 44px;

@@ -252,6 +252,31 @@ const english = {
       nosearchterm: 'Your seach did not match any documents.',
     },
   },
+  qvain: {
+    title: 'Publish Dataset',
+    description: {
+      title: 'Description',
+      description: {
+        title: {
+          label: 'Title',
+          placeholder: 'Title '
+        },
+        description: {
+          label: 'Description',
+          placeholder: 'Description '
+        }
+      },
+      otherIdentifiers: {
+        title: 'Other Identifiers',
+        instructions: 'Identifier for the metadata will be created automatically but if there alredy is an EXISTING identifier please insert it here.',
+        addButton: '+ Add new'
+      },
+      fieldOfScience: {
+        title: 'Field of Science',
+        placeholder: 'Select option'
+      }
+    }
+  },
   slogan: 'Research data finder',
   stc: 'Skip to content',
   tombstone: {

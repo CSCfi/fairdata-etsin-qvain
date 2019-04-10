@@ -252,6 +252,33 @@ const finnish = {
       nosearchterm: 'Haullesi ei löytynyt yhtään osumaa.',
     },
   },
+  qvain: {
+    title: 'Julkaise tiedosto',
+    description: {
+      title: 'Kuvaus',
+      description: {
+        title: {
+          label: 'Otsikko',
+          placeholderEn: 'Otsikko (Englanti)',
+          placeholderFi: 'Otsikko (Suomi)'
+        },
+        description: {
+          label: 'Kuvaus',
+          placeholderEn: 'Kuvaus (Englanti)',
+          placeholderFi: 'Kuvaus (Suomi)'
+        }
+      },
+      otherIdentifiers: {
+        title: 'Muut tunnisteet',
+        instructions: 'Metadatan tunniste luodaan automaattisesti mutta jos on jo OLEMASSA OLEVA tunniste, syötä se tähän.',
+        addButton: '+ Lisää uusi'
+      },
+      fieldOfScience: {
+        title: 'Tutkimusala',
+        placeholder: 'Valitse vaihtoehto'
+      }
+    }
+  },
   slogan: 'Tutkimustenhaku palvelu',
   stc: 'Siirry sivun pääsisältöön',
   tombstone: {

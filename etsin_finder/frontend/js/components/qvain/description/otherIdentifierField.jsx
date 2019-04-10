@@ -1,20 +1,19 @@
 import React from 'react'
 import styled from 'styled-components'
+import Translate from 'react-translate-component'
 
 import Button from '../../general/button';
 import Card from '../general/card';
 
 const OtherIdentifierField = () => (
   <Card>
-    <h3>Other identifier</h3>
-    <p>
-      Identifier for the metadata will be created automatically but if there alredy is an EXISTING identifier please insert it here.
-    </p>
+    <Translate component="h3" content="qvain.description.otherIdentifiers.title" />
+    <Translate component="p" content="qvain.description.otherIdentifiers.instructions" />
     <Input
       type="text"
       placeholder="http://orcid.org/"
     />
-    <AddNewButton>+ Add new</AddNewButton>
+    <AddNewButton><Translate content="qvain.description.otherIdentifiers.addButton" /></AddNewButton>
   </Card>
 )
 
@@ -28,7 +27,7 @@ const Input = styled.input`
 const AddNewButton = styled(Button)`
   float: right;
   margin: 0;
-  margin-top: 11px; 
+  margin-top: 11px;
 `
 
 export default OtherIdentifierField;
