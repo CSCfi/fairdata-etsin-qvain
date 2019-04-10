@@ -275,6 +275,10 @@ const finnish = {
       fieldOfScience: {
         title: 'Tutkimusala',
         placeholder: 'Valitse vaihtoehto'
+      },
+      keywords: {
+        title: 'Avainsanat',
+        placeholder: 'Esim. taloustiede'
       }
     }
   },

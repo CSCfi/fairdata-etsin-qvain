@@ -275,6 +275,10 @@ const english = {
       fieldOfScience: {
         title: 'Field of Science',
         placeholder: 'Select option'
+      },
+      keywords: {
+        title: 'Keywords',
+        placeholder: 'E.g. economy'
       }
     }
   },
