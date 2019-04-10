@@ -40,10 +40,8 @@ class OtherIdentifierField extends React.Component {
     const otherIdentifiers = toJS(this.props.Stores.Qvain.otherIdentifiers)
     return (
       <Card>
-        <h3>Other identifier</h3>
-        <p>
-          Identifier for the metadata will be created automatically but if there alredy is an EXISTING identifier please insert it here.
-        </p>
+        <Translate component="h3" content="qvain.description.otherIdentifiers.title" />
+        <Translate component="p" content="qvain.description.otherIdentifiers.instructions" />
         { otherIdentifiers.length > 0 && (
           <ul>
             {otherIdentifiers.map(identifier => <li key={identifier}>{identifier}</li>)}
@@ -55,7 +53,9 @@ class OtherIdentifierField extends React.Component {
           onChange={this.handleInputChange}
           placeholder="http://orcid.org/"
         />
-        <AddNewButton onClick={this.handleAdd}>+ Add new</AddNewButton>
+        <AddNewButton onClick={this.handleAdd}>
+          <Translate content="qvain.description.otherIdentifiers.addButton" />
+        </AddNewButton>
       </Card>
     )
   }
