@@ -259,14 +259,13 @@ const finnish = {
       description: {
         title: {
           label: 'Otsikko',
-          placeholderEn: 'Otsikko (Englanti)',
-          placeholderFi: 'Otsikko (Suomi)'
+          placeholder: 'Otsikko'
         },
         description: {
           label: 'Kuvaus',
-          placeholderEn: 'Kuvaus (Englanti)',
-          placeholderFi: 'Kuvaus (Suomi)'
-        }
+          placeholder: 'Kuvaus'
+        },
+        instructions: 'Vain yksi kielivalinta on pakollinen'
       },
       otherIdentifiers: {
         title: 'Muut tunnisteet',

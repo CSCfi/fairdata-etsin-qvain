@@ -264,7 +264,8 @@ const english = {
         description: {
           label: 'Description',
           placeholder: 'Description '
-        }
+        },
+        instructions: 'Only one launguage selection is mandatory'
       },
       otherIdentifiers: {
         title: 'Other Identifiers',

@@ -33,13 +33,18 @@ class DescriptionField extends Component {
         </LangButtonContainer>
         <DescriptionCard>
           <h3><Translate content="qvain.description.description.title.label" /></h3>
-          <Input
+          <Translate
+            component={Input}
             type="text"
-            placeholder={translate('qvain.description.description.title.label')}
+            attributes={{ placeholder: 'qvain.description.description.title.label' }}
           />
           <h3><Translate content="qvain.description.description.description.label" /></h3>
-          <Textarea rows="8" />
-          <div>Only one launguage selection is mandatory</div>
+          <Translate
+            component={Textarea}
+            rows="8"
+            attributes={{ placeholder: 'qvain.description.description.description.placeholder' }}
+          />
+          <Translate component="div" content="qvain.description.description.instructions" />
         </DescriptionCard>
       </div>
     )
