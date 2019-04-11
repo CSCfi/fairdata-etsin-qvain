@@ -252,6 +252,55 @@ const finnish = {
       nosearchterm: 'Haullesi ei löytynyt yhtään osumaa.',
     },
   },
+  qvain: {
+    title: 'Julkaise tiedosto',
+    general: {
+      langEnglish: 'Englanti',
+      langFinnish: 'Suomi'
+    },
+    description: {
+      title: 'Kuvaus',
+      description: {
+        langEn: 'ENGLANTI',
+        langFi: 'SUOMI',
+        title: {
+          label: 'Otsikko',
+          placeholderFi: 'Otsikko (Suomi)',
+          placeholderEn: 'Otsikko (Englanti)'
+        },
+        description: {
+          label: 'Kuvaus',
+          placeholderFi: 'Kuvaus (Suomi)',
+          placeholderEn: 'Kuvaus (Englanti)'
+        },
+        instructions: 'Vain yksi kielivalinta on pakollinen'
+      },
+      otherIdentifiers: {
+        title: 'Muut tunnisteet',
+        instructions: 'Metadatan tunniste luodaan automaattisesti mutta jos on jo OLEMASSA OLEVA tunniste, syötä se tähän.',
+        addButton: '+ Lisää uusi'
+      },
+      fieldOfScience: {
+        title: 'Tutkimusala',
+        placeholder: 'Valitse vaihtoehto'
+      },
+      keywords: {
+        title: 'Avainsanat',
+        placeholder: 'Esim. taloustiede'
+      }
+    },
+    rightsAndLicenses: {
+      title: 'Oikeudet ja lisenssit',
+      accessType: {
+        title: 'Pääsyoikeus',
+        placeholder: 'Valitse vaihtoehto'
+      },
+      license: {
+        title: 'Lisenssi',
+        placeholder: 'Valitse vaihtoehto'
+      }
+    }
+  },
   slogan: 'Tutkimustenhaku palvelu',
   stc: 'Siirry sivun pääsisältöön',
   tombstone: {

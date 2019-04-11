@@ -252,6 +252,51 @@ const english = {
       nosearchterm: 'Your seach did not match any documents.',
     },
   },
+  qvain: {
+    title: 'Publish Dataset',
+    description: {
+      title: 'Description',
+      description: {
+        langEn: 'ENGLISH',
+        langFi: 'FINNISH',
+        title: {
+          label: 'Title',
+          placeholderEn: 'Title (English)',
+          placeholderFi: 'Title (Finnish)'
+        },
+        description: {
+          label: 'Description',
+          placeholderEn: 'Description (English)',
+          placeholderFi: 'Description (Finnish)'
+        },
+        instructions: 'Only one launguage selection is mandatory'
+      },
+      otherIdentifiers: {
+        title: 'Other Identifiers',
+        instructions: 'Identifier for the metadata will be created automatically but if there alredy is an EXISTING identifier please insert it here.',
+        addButton: '+ Add new'
+      },
+      fieldOfScience: {
+        title: 'Field of Science',
+        placeholder: 'Select option'
+      },
+      keywords: {
+        title: 'Keywords',
+        placeholder: 'E.g. economy'
+      }
+    },
+    rightsAndLicenses: {
+      title: 'Rights And Licenses',
+      accessType: {
+        title: 'Access Type',
+        placeholder: 'Select option'
+      },
+      license: {
+        title: 'License',
+        placeholder: 'Select option'
+      }
+    }
+  },
   slogan: 'Research data finder',
   stc: 'Skip to content',
   tombstone: {

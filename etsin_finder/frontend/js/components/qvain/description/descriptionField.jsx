@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
+import Translate from 'react-translate-component'
+import '../../../../locale/translations'
 
 class DescriptionField extends Component {
   state = {
@@ -13,35 +15,46 @@ class DescriptionField extends Component {
       : this.setState({ active: 'ENGLISH' })
   }
 
+  getLangButton = (activeLang, buttonLang) => (
+    <LangButton active={activeLang === buttonLang} onClick={this.handleLanguageButtonClisck}>
+      <Translate content={buttonLang === 'ENGLISH' ? 'qvain.description.description.langEn' : 'qvain.description.description.langFi'} />
+    </LangButton>
+  )
+
+  getPlaceholder = (field, activeLang) => {
+    const stub = `qvain.description.description.${field}.`
+    return activeLang === 'ENGLISH' ? `${stub}placeholderEn` : `${stub}placeholderFi`
+  }
+
   render() {
     return (
       <div>
         <LangButtonContainer>
-          {this.state.active === 'ENGLISH'
-            ? <LangButton active onClick={this.handleLanguageButtonClisck}>ENGLISH</LangButton>
-            : <LangButton onClick={this.handleLanguageButtonClisck}>ENGLISH</LangButton>
-          }
+          {this.getLangButton(this.state.active, 'ENGLISH')}
           <EmptyBlock width="2%" />
-          {this.state.active === 'FINNISH'
-            ? <LangButton active onClick={this.handleLanguageButtonClisck}>FINNISH</LangButton>
-            : <LangButton onClick={this.handleLanguageButtonClisck}>FINNISH</LangButton>
-          }
+          {this.getLangButton(this.state.active, 'FINNISH')}
           <EmptyBlock width="48%" />
         </LangButtonContainer>
         <DescriptionCard>
-          <h3>Title</h3>
-          <Input
+          <h3><Translate content="qvain.description.description.title.label" /></h3>
+          <Translate
+            component={Input}
             type="text"
-            placeholder="Title (English)"
+            attributes={{ placeholder: this.getPlaceholder('title', this.state.active) }}
           />
-          <h3>Description</h3>
-          <Textarea rows="8" />
-          <div>Only one launguage selection is mandatory</div>
+          <h3><Translate content="qvain.description.description.description.label" /></h3>
+          <Translate
+            component={Textarea}
+            rows="8"
+            attributes={{ placeholder: this.getPlaceholder('title', this.state.active) }}
+          />
+          <Translate component="div" content="qvain.description.description.instructions" />
         </DescriptionCard>
       </div>
     )
   }
 }
+
 const DescriptionCard = styled.div`
   margin-bottom: 15px;
   padding: 25px 44px;
