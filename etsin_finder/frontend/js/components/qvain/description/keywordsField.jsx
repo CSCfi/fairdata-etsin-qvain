@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types';
+import Translate from 'react-translate-component'
 import { inject, observer } from 'mobx-react'
 import { toJS } from 'mobx'
 import styled from 'styled-components'
@@ -37,14 +38,15 @@ class KeywordsField extends Component {
     )
     return (
       <Card>
-        <h3>Keywords</h3>
+        <Translate component="h3" content="qvain.description.keywords.title" />
         {keywords}
-        <Input
+        <Translate
+          component={Input}
           value={this.state.value}
           onChange={this.handleChange}
           onKeyDown={this.handleKeywordAdd}
           type="text"
-          placeholder="Title (English)"
+          attributes={{ placeholder: 'qvain.description.keywords.placeholder' }}
         />
       </Card>
     )
