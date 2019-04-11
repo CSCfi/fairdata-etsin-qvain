@@ -254,16 +254,24 @@ const finnish = {
   },
   qvain: {
     title: 'Julkaise tiedosto',
+    general: {
+      langEnglish: 'Englanti',
+      langFinnish: 'Suomi'
+    },
     description: {
       title: 'Kuvaus',
       description: {
+        langEn: 'ENGLANTI',
+        langFi: 'SUOMI',
         title: {
           label: 'Otsikko',
-          placeholder: 'Otsikko'
+          placeholderFi: 'Otsikko (Suomi)',
+          placeholderEn: 'Otsikko (Englanti)'
         },
         description: {
           label: 'Kuvaus',
-          placeholder: 'Kuvaus'
+          placeholderFi: 'Kuvaus (Suomi)',
+          placeholderEn: 'Kuvaus (Englanti)'
         },
         instructions: 'Vain yksi kielivalinta on pakollinen'
       },
@@ -279,6 +287,17 @@ const finnish = {
       keywords: {
         title: 'Avainsanat',
         placeholder: 'Esim. taloustiede'
+      }
+    },
+    rightsAndLicenses: {
+      title: 'Oikeudet ja lisenssit',
+      accessType: {
+        title: 'Pääsyoikeus',
+        placeholder: 'Valitse vaihtoehto'
+      },
+      license: {
+        title: 'Lisenssi',
+        placeholder: 'Valitse vaihtoehto'
       }
     }
   },

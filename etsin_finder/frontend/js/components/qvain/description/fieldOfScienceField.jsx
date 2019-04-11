@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { inject, observer } from 'mobx-react'
 import Select from 'react-select';
 import Translate from 'react-translate-component'
-import counterpart from 'counterpart'
 
 import Card from '../general/card';
 
@@ -12,9 +11,7 @@ const scienceOptions = [
   { value: 'MEDICINE', label: 'Medicine', labelFi: 'Lääketiede' }
 ]
 
-const scienceOptionsFi = scienceOptions.map(option => {
-  return { ...option, label: option.labelFi }
-})
+const scienceOptionsFi = scienceOptions.map(option => ({ ...option, label: option.labelFi }))
 
 class FieldOfScienceField extends React.Component {
   static propTypes = {
@@ -31,7 +28,7 @@ class FieldOfScienceField extends React.Component {
           attributes={{ placeholder: 'qvain.description.fieldOfScience.placeholder' }}
           className="basic-single"
           classNamePrefix="select"
-          options={counterpart.getLocale() === 'en' ? scienceOptions : scienceOptionsFi}
+          options={this.props.Stores.Locale.lang === 'en' ? scienceOptions : scienceOptionsFi}
           onChange={(fieldOfScience) => {
             this.props.Stores.Qvain.setFieldOfScience(fieldOfScience)
           }}

@@ -257,13 +257,17 @@ const english = {
     description: {
       title: 'Description',
       description: {
+        langEn: 'ENGLISH',
+        langFi: 'FINNISH',
         title: {
           label: 'Title',
-          placeholder: 'Title '
+          placeholderEn: 'Title (English)',
+          placeholderFi: 'Title (Finnish)'
         },
         description: {
           label: 'Description',
-          placeholder: 'Description '
+          placeholderEn: 'Description (English)',
+          placeholderFi: 'Description (Finnish)'
         },
         instructions: 'Only one launguage selection is mandatory'
       },
@@ -279,6 +283,17 @@ const english = {
       keywords: {
         title: 'Keywords',
         placeholder: 'E.g. economy'
+      }
+    },
+    rightsAndLicenses: {
+      title: 'Rights And Licenses',
+      accessType: {
+        title: 'Access Type',
+        placeholder: 'Select option'
+      },
+      license: {
+        title: 'License',
+        placeholder: 'Select option'
       }
     }
   },
