@@ -4,10 +4,11 @@ import DescriptionFeild from './descriptionField';
 import OtherIdentifierField from './otherIdentifierField';
 import FieldOfScienceField from './fieldOfScienceField';
 import KeywordsField from './keywordsField';
+import { SectionTitle } from '../general/section'
 
 const Description = () => (
   <div className="container">
-    <h2><Translate content="qvain.description.title" /></h2>
+    <Translate component={SectionTitle} content="qvain.description.title" />
     <div>
       <DescriptionFeild />
       <OtherIdentifierField />
