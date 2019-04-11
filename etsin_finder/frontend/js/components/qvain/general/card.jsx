@@ -7,7 +7,7 @@ const Card = ({ children }) => <Container>{children}</Container>
 
 const Container = styled.div`
   margin-bottom: 15px;
-  padding: 25px 44px;
+  padding: 25px 45px 56px 45px;
   border: 1px solid #eceeef;
   min-height: 150px;
   background-color: #fff;
