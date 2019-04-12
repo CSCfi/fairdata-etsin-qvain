@@ -10,8 +10,71 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { SectionTitle } from '../general/section'
 import { ContainerLight, ContainerSubsection } from '../general/card';
 
+const EntityType = {
+  PERSON: 'Person',
+  ORGANIZATION: 'Organization'
+}
+
+const Role = {
+  CREATOR: 'Creator',
+  PUBLISHER: 'Publisher',
+  CURATOR: 'Curator'
+}
+
 class Participants extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      entity: {
+        entityType: undefined,
+        roles: []
+      }
+    }
+  }
+
+  getSelection = () => (
+    <ParticipantSelection>
+      <ParticipantEntityType>{this.state.entity.entityType}</ParticipantEntityType>
+      {this.state.entity.roles.map(role => ` / ${role}`)}
+    </ParticipantSelection>
+  )
+
+  addRole = (role) => this.setState((state) => ({
+    entity: {
+      ...state.entity,
+      roles: [...state.entity.roles, role]
+    }
+  }))
+
+  removeRole = (role) => this.setState((state) => ({
+    entity: {
+      ...state.entity,
+      roles: state.entity.roles.filter((possessedRole) => possessedRole !== role)
+    }
+  }))
+
+  handleChangeRole = (event) => {
+    console.log('event: ', event.target.value)
+    const role = event.target.value
+    if (event.target.checked === true) {
+      this.addRole(role)
+    } else {
+      this.removeRole(role)
+    }
+  }
+
+  handleChangeEntity = (event) => {
+    this.setState({
+      entity: {
+        entityType: event.target.value,
+        roles: []
+      }
+    })
+  }
+
   render() {
+    console.log('render ', this.state)
+    const { entity } = this.state
     return (
       <div className="container">
         <SectionTitle>Participants</SectionTitle>
@@ -23,27 +86,63 @@ class Participants extends Component {
               <Column>
                 <FormField>
                   <RadioContainer>
-                    <RadioInput id="entityPerson" name="entityType" type="radio" />
+                    <RadioInput
+                      id="entityPerson"
+                      name="entityType"
+                      onClick={this.handleChangeEntity}
+                      value={EntityType.PERSON}
+                      type="radio"
+                    />
                   </RadioContainer>
-                  <Label for="entityPerson">Person</Label>
+                  <Label htmlFor="entityPerson">Person</Label>
                 </FormField>
                 <List>
-                  <ListItem>
+                  <ListItem disabled={entity.entityType !== EntityType.PERSON}>
                     <FormField>
-                      <Checkbox id="personCreator" type="checkbox" />
-                      <Label for="creator">Creator *</Label>
+                      <Checkbox
+                        disabled={entity.entityType !== EntityType.PERSON}
+                        onChange={this.handleChangeRole}
+                        id="personCreator"
+                        type="checkbox"
+                        value={Role.CREATOR}
+                        checked={
+                          entity.entityType === EntityType.PERSON &&
+                          entity.roles.includes(Role.CREATOR)
+                        }
+                      />
+                      <Label htmlFor="personCreator">Creator *</Label>
                     </FormField>
                   </ListItem>
-                  <ListItem>
+                  <ListItem disabled={entity.entityType !== EntityType.PERSON}>
                     <FormField>
-                      <Checkbox id="personPublisher" type="checkbox" />
-                      <Label for="personPublisher">Publisher * <HelpField>max 1</HelpField></Label>
+                      <Checkbox
+                        onChange={this.handleChangeRole}
+                        disabled={entity.entityType !== EntityType.PERSON}
+                        id="personPublisher"
+                        value={Role.PUBLISHER}
+                        type="checkbox"
+                        checked={
+                          entity.entityType === EntityType.PERSON &&
+                          entity.roles.includes(Role.PUBLISHER)
+                        }
+                      />
+                      <Label htmlFor="personPublisher">Publisher * <HelpField>max 1</HelpField></Label>
                     </FormField>
                   </ListItem>
-                  <ListItem>
+                  <ListItem disabled={entity.entityType !== EntityType.PERSON}>
                     <FormField>
-                      <Checkbox id="personPublisher" type="checkbox" />
-                      <Label for="personPublisher">Curator <HelpField>max 1</HelpField></Label>
+                      <Checkbox
+                        disabled={entity.entityType !== EntityType.PERSON}
+                        onChange={this.handleChangeRole}
+                        id="personCurator"
+                        value={Role.CURATOR}
+                        checked={
+                          entity.entityType === EntityType.PERSON &&
+                          entity.roles.includes(Role.CURATOR)
+                        }
+                        type="checkbox"
+                      />
+                      <Label htmlFor="personCurator">Curator <HelpField>max 1</HelpField></Label>
                     </FormField>
                   </ListItem>
                 </List>
@@ -51,33 +150,69 @@ class Participants extends Component {
               <Column>
                 <FormField>
                   <RadioContainer>
-                    <RadioInput id="entityOrg" name="entityType" type="radio" />
+                    <RadioInput
+                      id="entityOrg"
+                      name="entityType"
+                      value={EntityType.ORGANIZATION}
+                      type="radio"
+                      onClick={this.handleChangeEntity}
+                    />
                   </RadioContainer>
                   <Label for="entityOrg">Organization</Label>
                 </FormField>
                 <List>
-                  <ListItem>
+                  <ListItem disabled={entity.entityType !== EntityType.ORGANIZATION}>
                     <FormField>
-                      <Checkbox id="personCreator" type="checkbox" />
-                      <Label for="creator">Creator</Label>
+                      <Checkbox
+                        id="orgCreator"
+                        type="checkbox"
+                        disabled={entity.entityType !== EntityType.ORGANIZATION}
+                        onChange={this.handleChangeRole}
+                        value={Role.CREATOR}
+                        checked={
+                          entity.entityType === EntityType.ORGANIZATION &&
+                          entity.roles.includes(Role.CREATOR)
+                        }
+                      />
+                      <Label htmlFor="orgCreator">Creator</Label>
                     </FormField>
                   </ListItem>
-                  <ListItem>
+                  <ListItem disabled={entity.entityType !== EntityType.ORGANIZATION}>
                     <FormField>
-                      <Checkbox id="personPublisher" type="checkbox" />
-                      <Label for="personPublisher">Publisher <HelpField>max 1</HelpField></Label>
+                      <Checkbox
+                        id="orgPublisher"
+                        type="checkbox"
+                        disabled={entity.entityType !== EntityType.ORGANIZATION}
+                        onChange={this.handleChangeRole}
+                        value={Role.PUBLISHER}
+                        checked={
+                          entity.entityType === EntityType.ORGANIZATION &&
+                          entity.roles.includes(Role.PUBLISHER)
+                        }
+                      />
+                      <Label htmlFor="orgPublisher">Publisher <HelpField>max 1</HelpField></Label>
                     </FormField>
                   </ListItem>
-                  <ListItem>
+                  <ListItem disabled={entity.entityType !== EntityType.ORGANIZATION}>
                     <FormField>
-                      <Checkbox id="personPublisher" type="checkbox" />
-                      <Label for="personPublisher">Curator <HelpField>max 1</HelpField></Label>
+                      <Checkbox
+                        id="orgCurator"
+                        type="checkbox"
+                        disabled={entity.entityType !== EntityType.ORGANIZATION}
+                        onChange={this.handleChangeRole}
+                        value={Role.CURATOR}
+                        checked={
+                          entity.entityType === EntityType.ORGANIZATION &&
+                          entity.roles.includes(Role.CURATOR)
+                        }
+                      />
+                      <Label htmlFor="orgCurator">Curator <HelpField>max 1</HelpField></Label>
                     </FormField>
                   </ListItem>
                 </List>
               </Column>
             </Fieldset>
-            <ParticipantSelection><ParticipantEntityType>Person</ParticipantEntityType> / Creator / Curator</ParticipantSelection>
+            {entity.entityType !== undefined && this.getSelection()}
             <Label>Name *</Label>
             <Input type="text" placeholder="First And Last Name" />
             <Label>Email</Label>
@@ -169,6 +304,8 @@ const ListItem = styled.li`
   align-items: center;
   justify-content: flex-start;
   overflow: hidden;
+  cursor: pointer;
+  color: ${props => (props.disabled ? 'grey' : 'inherit')};
 `
 
 const Checkbox = styled.input`
