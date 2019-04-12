@@ -1,74 +1,122 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import {
+  faBuilding,
+  faUser,
+  faPen,
+  faTimes
+} from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { SectionTitle } from '../general/section'
-import Card from '../general/card';
+import { ContainerLight, ContainerSubsection } from '../general/card';
 
 class Participants extends Component {
   render() {
     return (
       <div className="container">
         <SectionTitle>Participants</SectionTitle>
-        <Card>
-          <h3>Participants</h3>
-          <p>Creator (1+) and publisher (max 1) roles are mandatory. Notice that one participant can have multiple roles.</p>
-          <Column>
-            <FormField>
-              <RadioContainer>
-                <RadioInput id="entityPerson" name="entityType" type="radio" />
-              </RadioContainer>
-              <Label for="entityPerson">Person</Label>
-            </FormField>
-            <List>
-              <ListItem>
+        <ContainerLight>
+          <ContainerSubsection>
+            <h3>Participants *</h3>
+            <p>Creator (1+) and publisher (max 1) roles are mandatory. Notice that one participant can have multiple roles.</p>
+            <Fieldset>
+              <Column>
                 <FormField>
-                  <Checkbox id="personCreator" type="checkbox" />
-                  <Label for="creator">Creator *</Label>
+                  <RadioContainer>
+                    <RadioInput id="entityPerson" name="entityType" type="radio" />
+                  </RadioContainer>
+                  <Label for="entityPerson">Person</Label>
                 </FormField>
-              </ListItem>
-              <ListItem>
+                <List>
+                  <ListItem>
+                    <FormField>
+                      <Checkbox id="personCreator" type="checkbox" />
+                      <Label for="creator">Creator *</Label>
+                    </FormField>
+                  </ListItem>
+                  <ListItem>
+                    <FormField>
+                      <Checkbox id="personPublisher" type="checkbox" />
+                      <Label for="personPublisher">Publisher * <HelpField>max 1</HelpField></Label>
+                    </FormField>
+                  </ListItem>
+                  <ListItem>
+                    <FormField>
+                      <Checkbox id="personPublisher" type="checkbox" />
+                      <Label for="personPublisher">Curator <HelpField>max 1</HelpField></Label>
+                    </FormField>
+                  </ListItem>
+                </List>
+              </Column>
+              <Column>
                 <FormField>
-                  <Checkbox id="personPublisher" type="checkbox" />
-                  <Label for="personPublisher">Publisher * <HelpField>max 1</HelpField></Label>
+                  <RadioContainer>
+                    <RadioInput id="entityOrg" name="entityType" type="radio" />
+                  </RadioContainer>
+                  <Label for="entityOrg">Organization</Label>
                 </FormField>
-              </ListItem>
-              <ListItem>
-                <FormField>
-                  <Checkbox id="personPublisher" type="checkbox" />
-                  <Label for="personPublisher">Curator <HelpField>max 1</HelpField></Label>
-                </FormField>
-              </ListItem>
-            </List>
-          </Column>
-          <Column>
-            <FormField>
-              <RadioContainer>
-                <RadioInput id="entityOrg" name="entityType" type="radio" />
-              </RadioContainer>
-              <Label for="entityOrg">Organization</Label>
-            </FormField>
-            <List>
-              <ListItem>
-                <FormField>
-                  <Checkbox id="personCreator" type="checkbox" />
-                  <Label for="creator">Creator</Label>
-                </FormField>
-              </ListItem>
-              <ListItem>
-                <FormField>
-                  <Checkbox id="personPublisher" type="checkbox" />
-                  <Label for="personPublisher">Publisher <HelpField>max 1</HelpField></Label>
-                </FormField>
-              </ListItem>
-              <ListItem>
-                <FormField>
-                  <Checkbox id="personPublisher" type="checkbox" />
-                  <Label for="personPublisher">Curator <HelpField>max 1</HelpField></Label>
-                </FormField>
-              </ListItem>
-            </List>
-          </Column>
-          <Input disabled type="text" />
-        </Card>
+                <List>
+                  <ListItem>
+                    <FormField>
+                      <Checkbox id="personCreator" type="checkbox" />
+                      <Label for="creator">Creator</Label>
+                    </FormField>
+                  </ListItem>
+                  <ListItem>
+                    <FormField>
+                      <Checkbox id="personPublisher" type="checkbox" />
+                      <Label for="personPublisher">Publisher <HelpField>max 1</HelpField></Label>
+                    </FormField>
+                  </ListItem>
+                  <ListItem>
+                    <FormField>
+                      <Checkbox id="personPublisher" type="checkbox" />
+                      <Label for="personPublisher">Curator <HelpField>max 1</HelpField></Label>
+                    </FormField>
+                  </ListItem>
+                </List>
+              </Column>
+            </Fieldset>
+            <ParticipantSelection><ParticipantEntityType>Person</ParticipantEntityType> / Creator / Curator</ParticipantSelection>
+            <Label>Name *</Label>
+            <Input type="text" placeholder="First And Last Name" />
+            <Label>Email</Label>
+            <Input type="email" placeholder="Email" />
+            <Label>Identifier</Label>
+            <Input type="text" placeholder="Identifier" />
+            <Label>Organization *</Label>
+            <Input type="text" placeholder="E.g. University of Helsinki" />
+            <CancelButton>Cancel</CancelButton>
+            <SaveButton>Save</SaveButton>
+          </ContainerSubsection>
+          <ContainerSubsection>
+            <h3>Added Participants</h3>
+            <AddedParticipant>
+              <AddedParticipantLabel>
+                <FontAwesomeIcon icon={faBuilding} style={{ marginRight: '8px' }} />
+                 University of Helsinki / Creator
+              </AddedParticipantLabel>
+              <AddedParticipantEditButton>
+                <FontAwesomeIcon size="lg" style={{ color: '#007fad' }} icon={faPen} />
+              </AddedParticipantEditButton>
+              <AddedParticipantDeleteButton>
+                <FontAwesomeIcon size="lg" style={{ color: '#ad2300' }} icon={faTimes} />
+              </AddedParticipantDeleteButton>
+            </AddedParticipant>
+            <AddedParticipant>
+              <AddedParticipantLabel>
+                <FontAwesomeIcon icon={faUser} style={{ marginRight: '8px' }} />
+                 Tiia Tutkija / Creator
+              </AddedParticipantLabel>
+              <AddedParticipantEditButton>
+                <FontAwesomeIcon size="lg" style={{ color: '#007fad' }} icon={faPen} />
+              </AddedParticipantEditButton>
+              <AddedParticipantDeleteButton>
+                <FontAwesomeIcon size="lg" style={{ color: '#ad2300' }} icon={faTimes} />
+              </AddedParticipantDeleteButton>
+            </AddedParticipant>
+          </ContainerSubsection>
+        </ContainerLight>
       </div>
     )
   }
@@ -150,5 +198,86 @@ const Input = styled.input`
   color: #808080;
   margin-bottom: 20px;
 `
+
+const ParticipantSelection = styled.div`
+  width: 100%;
+  border-radius: 4px;
+  padding: 5px 17px;
+  background-color: #f9f9f9;
+  margin-bottom: 20px;
+`
+
+const ParticipantEntityType = styled.span`
+  font-weight: 600;
+`;
+
+const Fieldset = styled.fieldset`
+  border: none;
+`
+
+const CancelButton = styled.button`
+  width: 84px;
+  height: 38px;
+  border-radius: 4px;
+  border: solid 1px #4f4f4f;
+  font-size: 16px;
+  font-weight: 600px;
+  line-height: 1.31;
+  color: #4f4f4f;
+`;
+
+const SaveButton = styled.button`
+  border-radius: 4px;
+  border: solid 1px #49a24a;
+  background-color: #49a24a;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.31;
+  color: #fff;
+  margin-left: 20px;
+  padding: 10px 25px;
+`
+
+const AddedParticipant = styled.div`
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.13);
+  border: solid 1px #eceeef;
+  background-color: #fff;
+  margin-bottom: 12px;
+`
+
+const AddedParticipantLabel = styled.span`
+  background-color: transparent;
+  display: inline-flex;
+  padding: 0 8px 0 8px;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-width: 64px;
+  height: 36px;
+  border: none;
+  outline: none;
+  overflow: hidden;
+  vertical-align: middle;
+  float: left;
+  margin: 14px;
+  white-space: nowrap;
+`;
+
+const AddedParticipantEditButton = styled.button`
+  background-color: rgba(0,187,255, 0.1);
+  width: 60px;
+  height: 56px;
+  border: none;
+  text-align: center;
+`;
+
+const AddedParticipantDeleteButton = styled.button`
+  background-color: rgba(255, 52, 0, 0.1);
+  width: 60px;
+  height: 56px;
+  border: none;
+  text-align: center;
+`;
 
 export default Participants

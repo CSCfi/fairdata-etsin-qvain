@@ -14,6 +14,18 @@ const Container = styled.div`
   overflow: visible;
 `
 
+export const ContainerLight = styled.div`
+  margin-bottom: 15px;
+`
+
+export const ContainerSubsection = styled.div`
+  padding: 25px 45px 56px 45px;
+  border: 1px solid #eceeef;
+  min-height: 150px;
+  background-color: #fff;
+  overflow: visible;
+`
+
 Card.prototype = {
   children: PropTypes.element.isRequired
 }
