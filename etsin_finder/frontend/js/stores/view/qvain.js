@@ -29,6 +29,11 @@ class Qvain {
   }
 
   @action
+  removeKeyword = (keyword) => {
+    this.keywords = this.keywords.filter(word => word !== keyword);
+  }
+
+  @action
   setLicence = (license) => {
     this.license = license
   }

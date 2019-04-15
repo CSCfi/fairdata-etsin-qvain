@@ -1,11 +1,14 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Translate from 'react-translate-component'
-import { inject, observer } from 'mobx-react'
-import { toJS } from 'mobx'
-import styled from 'styled-components'
+import Translate from 'react-translate-component';
+import { inject, observer } from 'mobx-react';
+import { toJS } from 'mobx';
+import styled from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons'
 
 import Card from '../general/card';
+import Label from '../general/label';
 
 class KeywordsField extends Component {
   static propTypes = {
@@ -32,10 +35,17 @@ class KeywordsField extends Component {
     }
   }
 
+  handleKeywordRemove = (word) => {
+    this.props.Stores.Qvain.removeKeyword(word)
+  }
+
   render() {
     const keywords = toJS(this.props.Stores.Qvain.keywords).map(word => (
-      <div key={word}>{ word }</div>)
-    )
+      <Label color="#007fad" margin="0 0.5em 0.5em 0" key={word}>
+        <PaddedWord>{ word }</PaddedWord>
+        <FontAwesomeIcon onClick={() => this.handleKeywordRemove(word)} icon={faTimes} size="xs" />
+      </Label>
+    ))
     return (
       <Card>
         <Translate component="h3" content="qvain.description.keywords.title" />
@@ -60,6 +70,9 @@ const Input = styled.input`
   padding: 8px;
   color: #808080;
   margin-bottom: 20px;
+`
+const PaddedWord = styled.span`
+padding-right: 10px;
 `
 
 export default inject('Stores')(observer(KeywordsField));
