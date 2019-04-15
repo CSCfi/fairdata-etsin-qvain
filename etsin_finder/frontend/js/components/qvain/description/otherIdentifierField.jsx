@@ -4,9 +4,12 @@ import { inject, observer } from 'mobx-react'
 import { toJS } from 'mobx'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons'
 
 import Button from '../../general/button';
 import Card from '../general/card';
+import Label from '../general/label';
 
 class OtherIdentifierField extends React.Component {
   static propTypes = {
@@ -36,26 +39,33 @@ class OtherIdentifierField extends React.Component {
     this.clearInput()
   }
 
+  handleRemove = (identifier) => {
+    this.props.Stores.Qvain.removeOtherIdentifier(identifier)
+  }
+
   render() {
-    const otherIdentifiers = toJS(this.props.Stores.Qvain.otherIdentifiers)
+    const otherIdentifiers = toJS(this.props.Stores.Qvain.otherIdentifiers.map((identifier) => (
+      <Label color="#007fad" margin="0 0.5em 0.5em 0" key={identifier}>
+        <PaddedWord>{ identifier }</PaddedWord>
+        <FontAwesomeIcon onClick={() => this.handleRemove(identifier)} icon={faTimes} size="xs" />
+      </Label>
+    )))
     return (
-      <Card>
+      <Card bottomContent>
         <Translate component="h3" content="qvain.description.otherIdentifiers.title" />
         <Translate component="p" content="qvain.description.otherIdentifiers.instructions" />
-        { otherIdentifiers.length > 0 && (
-          <ul>
-            {otherIdentifiers.map(identifier => <li key={identifier}>{identifier}</li>)}
-          </ul>
-        )}
+        {otherIdentifiers}
         <Input
           type="text"
           value={this.state.identifier}
           onChange={this.handleInputChange}
           placeholder="http://orcid.org/"
         />
-        <AddNewButton onClick={this.handleAdd}>
-          <Translate content="qvain.description.otherIdentifiers.addButton" />
-        </AddNewButton>
+        <ButtonContainer>
+          <AddNewButton onClick={this.handleAdd}>
+            <Translate content="qvain.description.otherIdentifiers.addButton" />
+          </AddNewButton>
+        </ButtonContainer>
       </Card>
     )
   }
@@ -68,10 +78,15 @@ const Input = styled.input`
   padding: 8px;
   color: #808080;
 `
+const ButtonContainer = styled.div`
+  text-align: right;
+`
 const AddNewButton = styled(Button)`
-  float: right;
   margin: 0;
   margin-top: 11px;
+`
+const PaddedWord = styled.span`
+padding-right: 10px;
 `
 
 export default inject('Stores')(observer(OtherIdentifierField));
