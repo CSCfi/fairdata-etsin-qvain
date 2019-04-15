@@ -3,11 +3,14 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
 // eslint-disable-next-line
-const Card = ({ children }) => <Container>{children}</Container>
+const Card = ({ children, bottomContent }) => <Container bottomContent={bottomContent}>{children}</Container>
 
 const Container = styled.div`
-  margin-bottom: 15px;
-  padding: 25px 44px;
+  padding-left: 45px;
+  padding-right: 45px;
+  padding-top: 25px;
+  padding-bottom: ${props => (props.bottomContent ? '31px' : '56px')};
+  margin-top: 20px;
   border: 1px solid #eceeef;
   min-height: 150px;
   background-color: #fff;

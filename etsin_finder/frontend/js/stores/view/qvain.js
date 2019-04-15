@@ -17,6 +17,11 @@ class Qvain {
   }
 
   @action
+  removeOtherIdentifier = (identifier) => {
+  this.otherIdentifiers = this.otherIdentifiers.filter(otherIdentifier => otherIdentifier !== identifier);
+  }
+
+  @action
   setFieldOfScience = (fieldOfScience) => {
     this.fieldOfScience = fieldOfScience
   }
