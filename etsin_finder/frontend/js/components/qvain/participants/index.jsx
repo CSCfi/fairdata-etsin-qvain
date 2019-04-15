@@ -43,12 +43,22 @@ class Participants extends Component {
     }
   }
 
-  getSelection = () => (
-    <ParticipantSelection>
-      <ParticipantEntityType>{this.state.participant.entityType}</ParticipantEntityType>
-      {this.state.participant.roles.map(role => ` / ${role}`)}
-    </ParticipantSelection>
-  )
+  getSelection = () => {
+    const { participant } = this.state
+    return (
+      <ParticipantSelection>
+        <ParticipantEntityType>
+          <Translate content={`qvain.participants.add.radio.${participant.entityType.toLowerCase()}`} />
+        </ParticipantEntityType>
+        {participant.roles.map(role => (
+          <React.Fragment key={role}>
+            <span> / </span>
+            <Translate content={`qvain.participants.add.checkbox.${role.toLowerCase()}`} />
+          </React.Fragment>
+        ))}
+      </ParticipantSelection>
+    )
+  }
 
   addRole = (role) => this.setState((state) => ({
     participant: {
@@ -65,7 +75,6 @@ class Participants extends Component {
   }))
 
   handleChangeRole = (event) => {
-    console.log('event: ', event.target.value)
     const role = event.target.value
     if (event.target.checked === true) {
       this.addRole(role)
