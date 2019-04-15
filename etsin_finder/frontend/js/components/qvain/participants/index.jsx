@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types'
 import { inject, observer } from 'mobx-react'
+import Translate from 'react-translate-component'
 import styled from 'styled-components';
 import {
   faBuilding,
@@ -32,9 +33,13 @@ class Participants extends Component {
     super(props)
     this.state = {
       participant: {
-        entityType: undefined,
-        roles: [],
-      }
+        entityType: EntityType.PERSON,
+        roles: []
+      },
+      name: '',
+      email: '',
+      identifier: '',
+      organization: ''
     }
   }
 
@@ -81,7 +86,7 @@ class Participants extends Component {
   handleReset = () => {
     this.setState({
       participant: {
-        entityType: undefined,
+        entityType: EntityType.PERSON,
         roles: [],
       },
       name: '',
@@ -130,11 +135,11 @@ class Participants extends Component {
     const { participant, name, email, identifier, organization } = this.state
     return (
       <div className="container">
-        <SectionTitle>Participants</SectionTitle>
+        <Translate component={SectionTitle} content="qvain.participants.title" />
         <ContainerLight>
           <ContainerSubsection>
-            <h3>Participants *</h3>
-            <p>Creator (1+) and publisher (max 1) roles are mandatory. Notice that one participant can have multiple roles.</p>
+            <h3><Translate content="qvain.participants.add.title" /> *</h3>
+            <Translate component="p" content="qvain.participants.add.help" />
             <Fieldset>
               <Column>
                 <FormField>
@@ -148,7 +153,9 @@ class Participants extends Component {
                       checked={participant.entityType === EntityType.PERSON}
                     />
                   </RadioContainer>
-                  <Label htmlFor="entityPerson">Person</Label>
+                  <Label htmlFor="entityPerson">
+                    <Translate content="qvain.participants.add.radio.person" />
+                  </Label>
                 </FormField>
                 <List>
                   <ListItem disabled={participant.entityType !== EntityType.PERSON}>
@@ -164,7 +171,9 @@ class Participants extends Component {
                           participant.roles.includes(Role.CREATOR)
                         }
                       />
-                      <Label htmlFor="personCreator">Creator *</Label>
+                      <Label htmlFor="personCreator">
+                        <Translate content="qvain.participants.add.checkbox.creator" /> *
+                      </Label>
                     </FormField>
                   </ListItem>
                   <ListItem disabled={participant.entityType !== EntityType.PERSON}>
@@ -180,7 +189,9 @@ class Participants extends Component {
                           participant.roles.includes(Role.PUBLISHER)
                         }
                       />
-                      <Label htmlFor="personPublisher">Publisher * <HelpField>max 1</HelpField></Label>
+                      <Label htmlFor="personPublisher">
+                        <Translate content="qvain.participants.add.checkbox.publisher" /> * <HelpField>max 1</HelpField>
+                      </Label>
                     </FormField>
                   </ListItem>
                   <ListItem disabled={participant.entityType !== EntityType.PERSON}>
@@ -196,7 +207,9 @@ class Participants extends Component {
                         }
                         type="checkbox"
                       />
-                      <Label htmlFor="personCurator">Curator <HelpField>max 1</HelpField></Label>
+                      <Label htmlFor="personCurator">
+                        <Translate content="qvain.participants.add.checkbox.curator" /> <HelpField>max 1</HelpField>
+                      </Label>
                     </FormField>
                   </ListItem>
                 </List>
@@ -213,7 +226,9 @@ class Participants extends Component {
                       checked={participant.entityType === EntityType.ORGANIZATION}
                     />
                   </RadioContainer>
-                  <Label for="entityOrg">Organization</Label>
+                  <Label for="entityOrg">
+                    <Translate content="qvain.participants.add.radio.organization" />
+                  </Label>
                 </FormField>
                 <List>
                   <ListItem disabled={participant.entityType !== EntityType.ORGANIZATION}>
@@ -229,7 +244,9 @@ class Participants extends Component {
                           participant.roles.includes(Role.CREATOR)
                         }
                       />
-                      <Label htmlFor="orgCreator">Creator</Label>
+                      <Label htmlFor="orgCreator">
+                        <Translate content="qvain.participants.add.checkbox.creator" />
+                      </Label>
                     </FormField>
                   </ListItem>
                   <ListItem disabled={participant.entityType !== EntityType.ORGANIZATION}>
@@ -245,7 +262,9 @@ class Participants extends Component {
                           participant.roles.includes(Role.PUBLISHER)
                         }
                       />
-                      <Label htmlFor="orgPublisher">Publisher <HelpField>max 1</HelpField></Label>
+                      <Label htmlFor="orgPublisher">
+                        <Translate content="qvain.participants.add.checkbox.publisher" /> <HelpField>max 1</HelpField>
+                      </Label>
                     </FormField>
                   </ListItem>
                   <ListItem disabled={participant.entityType !== EntityType.ORGANIZATION}>
@@ -261,7 +280,9 @@ class Participants extends Component {
                           participant.roles.includes(Role.CURATOR)
                         }
                       />
-                      <Label htmlFor="orgCurator">Curator <HelpField>max 1</HelpField></Label>
+                      <Label htmlFor="orgCurator">
+                        <Translate content="qvain.participants.add.checkbox.curator" /> <HelpField>max 1</HelpField>
+                      </Label>
                     </FormField>
                   </ListItem>
                 </List>
@@ -270,65 +291,73 @@ class Participants extends Component {
             {participant.entityType !== undefined && this.getSelection()}
             {participant.entityType !== undefined && (
               <React.Fragment>
-                <Label>Name *</Label>
-                <Input
+                <Label htmlFor="nameField">
+                  <Translate content="qvain.participants.add.name.label" /> *
+                </Label>
+                <Translate
+                  component={Input}
                   type="text"
+                  id="nameField"
+                  attributes={{ placeholder: `qvain.participants.add.name.placeholder.${participant.entityType.toLowerCase()}` }}
                   placeholder={participant.entityType === EntityType.PERSON ? 'First And Last Name' : 'Name'}
+                  value={name}
                   onChange={(event) => this.setState({ name: event.target.value })}
-                  defaultValue={name}
                 />
-                <Label>Email</Label>
-                <Input
+                <Label htmlFor="emailField">
+                  <Translate content="qvain.participants.add.email.label" />
+                </Label>
+                <Translate
+                  component={Input}
+                  id="emailField"
                   type="email"
-                  placeholder="Email"
+                  attributes={{ placeholder: 'qvain.participants.add.email.placeholder' }}
                   onChange={(event) => this.setState({ email: event.target.value })}
-                  defaultValue={email}
+                  value={email}
                 />
-                <Label>Identifier</Label>
-                <Input
+                <Label htmlFor="identifierField">
+                  <Translate content="qvain.participants.add.identifier.label" />
+                </Label>
+                <Translate
+                  id="identifierField"
+                  component={Input}
                   type="text"
-                  placeholder="Identifier"
+                  attributes={{ placeholder: 'qvain.participants.add.identifier.placeholder' }}
                   onChange={(event) => this.setState({ identifier: event.target.value })}
-                  defaultValue={identifier}
+                  value={identifier}
                 />
-                <Label>{participant.entityType === EntityType.PERSON ? 'Organization *' : 'Parent Organization'}</Label>
-                <Input
+                <Label htmlFor="orgField">
+                  <Translate content={`qvain.participants.add.organization.label.${participant.entityType.toLowerCase()}`} />
+                  {participant.entityType === EntityType.PERSON && ' *'}
+                </Label>
+                <Translate
+                  component={Input}
+                  id="orgField"
                   type="text"
-                  placeholder="E.g. University of Helsinki"
+                  attributes={{ placeholder: 'qvain.participants.add.organization.placeholder' }}
                   onChange={(event) => this.setState({ organization: event.target.value })}
-                  defaultValue={organization}
+                  value={organization}
                 />
-                <CancelButton onClick={this.handleCancel}>Cancel</CancelButton>
-                <SaveButton onClick={this.handleSave}>Save</SaveButton>
+                <Translate
+                  component={CancelButton}
+                  onClick={this.handleCancel}
+                  content="qvain.participants.add.cancel.label"
+                />
+                <Translate
+                  component={SaveButton}
+                  onClick={this.handleSave}
+                  content="qvain.participants.add.save.label"
+                />
               </React.Fragment>
           )}
           </ContainerSubsection>
           <ContainerSubsection>
-            <h3>Added Participants</h3>
-            <AddedParticipant>
-              <AddedParticipantLabel>
-                <FontAwesomeIcon icon={faBuilding} style={{ marginRight: '8px' }} />
-                 University of Helsinki / Creator
-              </AddedParticipantLabel>
-              <AddedParticipantEditButton>
-                <FontAwesomeIcon size="lg" style={{ color: '#007fad' }} icon={faPen} />
-              </AddedParticipantEditButton>
-              <AddedParticipantDeleteButton>
-                <FontAwesomeIcon size="lg" style={{ color: '#ad2300' }} icon={faTimes} />
-              </AddedParticipantDeleteButton>
-            </AddedParticipant>
-            <AddedParticipant>
-              <AddedParticipantLabel>
-                <FontAwesomeIcon icon={faUser} style={{ marginRight: '8px' }} />
-                 Tiia Tutkija / Creator
-              </AddedParticipantLabel>
-              <AddedParticipantEditButton>
-                <FontAwesomeIcon size="lg" style={{ color: '#007fad' }} icon={faPen} />
-              </AddedParticipantEditButton>
-              <AddedParticipantDeleteButton>
-                <FontAwesomeIcon size="lg" style={{ color: '#ad2300' }} icon={faTimes} />
-              </AddedParticipantDeleteButton>
-            </AddedParticipant>
+            <Translate
+              component="h3"
+              content="qvain.participants.added.title"
+            />
+            {this.props.Stores.Qvain.addedParticipants.length === 0 &&
+              (<Translate component="p" content="qvain.participants.added.noneAddedNotice" />)
+            }
             {this.props.Stores.Qvain.addedParticipants.map((addedParticipant) => (
               <AddedParticipant key={addedParticipant.identifier}>
                 <AddedParticipantLabel>

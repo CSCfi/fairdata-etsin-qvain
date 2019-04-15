@@ -295,6 +295,54 @@ const english = {
         title: 'License',
         placeholder: 'Select option'
       }
+    },
+    participants: {
+      title: 'Participants',
+      add: {
+        title: 'Participants',
+        help: 'Creator (1+) and publisher (max 1) roles are mandatory. Notice that one participant can have multiple roles.',
+        radio: {
+          person: 'Person',
+          organization: 'Organization'
+        },
+        checkbox: {
+          creator: 'Creator',
+          publisher: 'Publisher',
+          curator: 'Curator'
+        },
+        name: {
+          placeholder: {
+            organization: 'Name',
+            person: 'First And Last Name'
+          },
+          label: 'Name'
+        },
+        email: {
+          placeholder: 'Email',
+          label: 'Email'
+        },
+        identifier: {
+          label: 'Identifier',
+          placeholder: 'Identifier'
+        },
+        organization: {
+          label: {
+            person: 'Organization',
+            organization: 'Parent Organization'
+          },
+          placeholder: 'E.g. University of Helsinki'
+        },
+        save: {
+          label: 'Save'
+        },
+        cancel: {
+          label: 'Cancel'
+        }
+      },
+      added: {
+        title: 'Added Participants',
+        noneAddedNotice: 'No participants added'
+      }
     }
   },
   slogan: 'Research data finder',
