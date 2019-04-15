@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types'
+import { inject, observer } from 'mobx-react'
 import styled from 'styled-components';
 import {
   faBuilding,
@@ -22,34 +24,38 @@ const Role = {
 }
 
 class Participants extends Component {
+  static propTypes = {
+    Stores: PropTypes.object.isRequired
+  }
+
   constructor(props) {
     super(props)
     this.state = {
-      entity: {
+      participant: {
         entityType: undefined,
-        roles: []
+        roles: [],
       }
     }
   }
 
   getSelection = () => (
     <ParticipantSelection>
-      <ParticipantEntityType>{this.state.entity.entityType}</ParticipantEntityType>
-      {this.state.entity.roles.map(role => ` / ${role}`)}
+      <ParticipantEntityType>{this.state.participant.entityType}</ParticipantEntityType>
+      {this.state.participant.roles.map(role => ` / ${role}`)}
     </ParticipantSelection>
   )
 
   addRole = (role) => this.setState((state) => ({
-    entity: {
-      ...state.entity,
-      roles: [...state.entity.roles, role]
+    participant: {
+      ...state.participant,
+      roles: [...state.participant.roles, role]
     }
   }))
 
   removeRole = (role) => this.setState((state) => ({
-    entity: {
-      ...state.entity,
-      roles: state.entity.roles.filter((possessedRole) => possessedRole !== role)
+    participant: {
+      ...state.participant,
+      roles: state.participant.roles.filter((possessedRole) => possessedRole !== role)
     }
   }))
 
@@ -65,16 +71,63 @@ class Participants extends Component {
 
   handleChangeEntity = (event) => {
     this.setState({
-      entity: {
+      participant: {
         entityType: event.target.value,
         roles: []
       }
     })
   }
 
+  handleReset = () => {
+    this.setState({
+      participant: {
+        entityType: undefined,
+        roles: [],
+      },
+      name: '',
+      email: '',
+      identifier: '',
+      organization: ''
+    })
+  }
+
+  handleSave = (event) => {
+    event.preventDefault()
+    const { name, email, identifier, organization } = this.state
+    const participant = {
+      ...this.state.participant,
+      name,
+      email,
+      identifier,
+      organization
+    }
+    this.props.Stores.Qvain.addParticipant(participant)
+    this.handleReset()
+  }
+
+  handleCancel = (event) => {
+    event.preventDefault()
+    this.handleReset()
+  }
+
+  createHandleEdit = (participant) => (event) => {
+    event.preventDefault()
+    this.setState({
+      participant: {
+        entityType: participant.entityType,
+        roles: participant.roles
+      },
+      ...participant
+    })
+  }
+
+  createHandleRemove = (participant) => (event) => {
+    event.preventDefault()
+    this.props.Stores.Qvain.removeParticipant(participant)
+  }
+
   render() {
-    console.log('render ', this.state)
-    const { entity } = this.state
+    const { participant, name, email, identifier, organization } = this.state
     return (
       <div className="container">
         <SectionTitle>Participants</SectionTitle>
@@ -89,56 +142,57 @@ class Participants extends Component {
                     <RadioInput
                       id="entityPerson"
                       name="entityType"
-                      onClick={this.handleChangeEntity}
+                      onChange={this.handleChangeEntity}
                       value={EntityType.PERSON}
                       type="radio"
+                      checked={participant.entityType === EntityType.PERSON}
                     />
                   </RadioContainer>
                   <Label htmlFor="entityPerson">Person</Label>
                 </FormField>
                 <List>
-                  <ListItem disabled={entity.entityType !== EntityType.PERSON}>
+                  <ListItem disabled={participant.entityType !== EntityType.PERSON}>
                     <FormField>
                       <Checkbox
-                        disabled={entity.entityType !== EntityType.PERSON}
+                        disabled={participant.entityType !== EntityType.PERSON}
                         onChange={this.handleChangeRole}
                         id="personCreator"
                         type="checkbox"
                         value={Role.CREATOR}
                         checked={
-                          entity.entityType === EntityType.PERSON &&
-                          entity.roles.includes(Role.CREATOR)
+                          participant.entityType === EntityType.PERSON &&
+                          participant.roles.includes(Role.CREATOR)
                         }
                       />
                       <Label htmlFor="personCreator">Creator *</Label>
                     </FormField>
                   </ListItem>
-                  <ListItem disabled={entity.entityType !== EntityType.PERSON}>
+                  <ListItem disabled={participant.entityType !== EntityType.PERSON}>
                     <FormField>
                       <Checkbox
                         onChange={this.handleChangeRole}
-                        disabled={entity.entityType !== EntityType.PERSON}
+                        disabled={participant.entityType !== EntityType.PERSON}
                         id="personPublisher"
                         value={Role.PUBLISHER}
                         type="checkbox"
                         checked={
-                          entity.entityType === EntityType.PERSON &&
-                          entity.roles.includes(Role.PUBLISHER)
+                          participant.entityType === EntityType.PERSON &&
+                          participant.roles.includes(Role.PUBLISHER)
                         }
                       />
                       <Label htmlFor="personPublisher">Publisher * <HelpField>max 1</HelpField></Label>
                     </FormField>
                   </ListItem>
-                  <ListItem disabled={entity.entityType !== EntityType.PERSON}>
+                  <ListItem disabled={participant.entityType !== EntityType.PERSON}>
                     <FormField>
                       <Checkbox
-                        disabled={entity.entityType !== EntityType.PERSON}
+                        disabled={participant.entityType !== EntityType.PERSON}
                         onChange={this.handleChangeRole}
                         id="personCurator"
                         value={Role.CURATOR}
                         checked={
-                          entity.entityType === EntityType.PERSON &&
-                          entity.roles.includes(Role.CURATOR)
+                          participant.entityType === EntityType.PERSON &&
+                          participant.roles.includes(Role.CURATOR)
                         }
                         type="checkbox"
                       />
@@ -155,55 +209,56 @@ class Participants extends Component {
                       name="entityType"
                       value={EntityType.ORGANIZATION}
                       type="radio"
-                      onClick={this.handleChangeEntity}
+                      onChange={this.handleChangeEntity}
+                      checked={participant.entityType === EntityType.ORGANIZATION}
                     />
                   </RadioContainer>
                   <Label for="entityOrg">Organization</Label>
                 </FormField>
                 <List>
-                  <ListItem disabled={entity.entityType !== EntityType.ORGANIZATION}>
+                  <ListItem disabled={participant.entityType !== EntityType.ORGANIZATION}>
                     <FormField>
                       <Checkbox
                         id="orgCreator"
                         type="checkbox"
-                        disabled={entity.entityType !== EntityType.ORGANIZATION}
+                        disabled={participant.entityType !== EntityType.ORGANIZATION}
                         onChange={this.handleChangeRole}
                         value={Role.CREATOR}
                         checked={
-                          entity.entityType === EntityType.ORGANIZATION &&
-                          entity.roles.includes(Role.CREATOR)
+                          participant.entityType === EntityType.ORGANIZATION &&
+                          participant.roles.includes(Role.CREATOR)
                         }
                       />
                       <Label htmlFor="orgCreator">Creator</Label>
                     </FormField>
                   </ListItem>
-                  <ListItem disabled={entity.entityType !== EntityType.ORGANIZATION}>
+                  <ListItem disabled={participant.entityType !== EntityType.ORGANIZATION}>
                     <FormField>
                       <Checkbox
                         id="orgPublisher"
                         type="checkbox"
-                        disabled={entity.entityType !== EntityType.ORGANIZATION}
+                        disabled={participant.entityType !== EntityType.ORGANIZATION}
                         onChange={this.handleChangeRole}
                         value={Role.PUBLISHER}
                         checked={
-                          entity.entityType === EntityType.ORGANIZATION &&
-                          entity.roles.includes(Role.PUBLISHER)
+                          participant.entityType === EntityType.ORGANIZATION &&
+                          participant.roles.includes(Role.PUBLISHER)
                         }
                       />
                       <Label htmlFor="orgPublisher">Publisher <HelpField>max 1</HelpField></Label>
                     </FormField>
                   </ListItem>
-                  <ListItem disabled={entity.entityType !== EntityType.ORGANIZATION}>
+                  <ListItem disabled={participant.entityType !== EntityType.ORGANIZATION}>
                     <FormField>
                       <Checkbox
                         id="orgCurator"
                         type="checkbox"
-                        disabled={entity.entityType !== EntityType.ORGANIZATION}
+                        disabled={participant.entityType !== EntityType.ORGANIZATION}
                         onChange={this.handleChangeRole}
                         value={Role.CURATOR}
                         checked={
-                          entity.entityType === EntityType.ORGANIZATION &&
-                          entity.roles.includes(Role.CURATOR)
+                          participant.entityType === EntityType.ORGANIZATION &&
+                          participant.roles.includes(Role.CURATOR)
                         }
                       />
                       <Label htmlFor="orgCurator">Curator <HelpField>max 1</HelpField></Label>
@@ -212,17 +267,41 @@ class Participants extends Component {
                 </List>
               </Column>
             </Fieldset>
-            {entity.entityType !== undefined && this.getSelection()}
-            <Label>Name *</Label>
-            <Input type="text" placeholder="First And Last Name" />
-            <Label>Email</Label>
-            <Input type="email" placeholder="Email" />
-            <Label>Identifier</Label>
-            <Input type="text" placeholder="Identifier" />
-            <Label>Organization *</Label>
-            <Input type="text" placeholder="E.g. University of Helsinki" />
-            <CancelButton>Cancel</CancelButton>
-            <SaveButton>Save</SaveButton>
+            {participant.entityType !== undefined && this.getSelection()}
+            {participant.entityType !== undefined && (
+              <React.Fragment>
+                <Label>Name *</Label>
+                <Input
+                  type="text"
+                  placeholder={participant.entityType === EntityType.PERSON ? 'First And Last Name' : 'Name'}
+                  onChange={(event) => this.setState({ name: event.target.value })}
+                  defaultValue={name}
+                />
+                <Label>Email</Label>
+                <Input
+                  type="email"
+                  placeholder="Email"
+                  onChange={(event) => this.setState({ email: event.target.value })}
+                  defaultValue={email}
+                />
+                <Label>Identifier</Label>
+                <Input
+                  type="text"
+                  placeholder="Identifier"
+                  onChange={(event) => this.setState({ identifier: event.target.value })}
+                  defaultValue={identifier}
+                />
+                <Label>{participant.entityType === EntityType.PERSON ? 'Organization *' : 'Parent Organization'}</Label>
+                <Input
+                  type="text"
+                  placeholder="E.g. University of Helsinki"
+                  onChange={(event) => this.setState({ organization: event.target.value })}
+                  defaultValue={organization}
+                />
+                <CancelButton onClick={this.handleCancel}>Cancel</CancelButton>
+                <SaveButton onClick={this.handleSave}>Save</SaveButton>
+              </React.Fragment>
+          )}
           </ContainerSubsection>
           <ContainerSubsection>
             <h3>Added Participants</h3>
@@ -250,6 +329,20 @@ class Participants extends Component {
                 <FontAwesomeIcon size="lg" style={{ color: '#ad2300' }} icon={faTimes} />
               </AddedParticipantDeleteButton>
             </AddedParticipant>
+            {this.props.Stores.Qvain.addedParticipants.map((addedParticipant) => (
+              <AddedParticipant key={addedParticipant.identifier}>
+                <AddedParticipantLabel>
+                  <FontAwesomeIcon icon={addedParticipant.entityType === EntityType.PERSON ? faUser : faBuilding} style={{ marginRight: '8px' }} />
+                  {addedParticipant.name}{addedParticipant.roles.map(role => (` / ${ role }`))}
+                </AddedParticipantLabel>
+                <AddedParticipantEditButton onClick={this.createHandleEdit(addedParticipant)}>
+                  <FontAwesomeIcon size="lg" style={{ color: '#007fad' }} icon={faPen} />
+                </AddedParticipantEditButton>
+                <AddedParticipantDeleteButton onClick={this.createHandleRemove(addedParticipant)}>
+                  <FontAwesomeIcon size="lg" style={{ color: '#ad2300' }} icon={faTimes} />
+                </AddedParticipantDeleteButton>
+              </AddedParticipant>
+            ))}
           </ContainerSubsection>
         </ContainerLight>
       </div>
@@ -345,7 +438,7 @@ const ParticipantSelection = styled.div`
 `
 
 const ParticipantEntityType = styled.span`
-  font-weight: 600;
+  font-weight: 800;
 `;
 
 const Fieldset = styled.fieldset`
@@ -417,4 +510,4 @@ const AddedParticipantDeleteButton = styled.button`
   text-align: center;
 `;
 
-export default Participants
+export default inject('Stores')(observer(Participants))
