@@ -51,7 +51,7 @@ class OtherIdentifierField extends React.Component {
       </Label>
     )))
     return (
-      <Card>
+      <Card bottomContent>
         <Translate component="h3" content="qvain.description.otherIdentifiers.title" />
         <Translate component="p" content="qvain.description.otherIdentifiers.instructions" />
         {otherIdentifiers}
@@ -61,9 +61,11 @@ class OtherIdentifierField extends React.Component {
           onChange={this.handleInputChange}
           placeholder="http://orcid.org/"
         />
-        <AddNewButton onClick={this.handleAdd}>
-          <Translate content="qvain.description.otherIdentifiers.addButton" />
-        </AddNewButton>
+        <ButtonContainer>
+          <AddNewButton onClick={this.handleAdd}>
+            <Translate content="qvain.description.otherIdentifiers.addButton" />
+          </AddNewButton>
+        </ButtonContainer>
       </Card>
     )
   }
@@ -76,8 +78,10 @@ const Input = styled.input`
   padding: 8px;
   color: #808080;
 `
+const ButtonContainer = styled.div`
+  text-align: right;
+`
 const AddNewButton = styled(Button)`
-  float: right;
   margin: 0;
   margin-top: 11px;
 `
