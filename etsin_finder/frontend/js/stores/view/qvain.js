@@ -1,6 +1,6 @@
 import { observable, action, computed } from 'mobx'
 
-class Qvain {
+export class Qvain {
   @observable otherIdentifiers = []
 
   @observable fieldOfScience = {}

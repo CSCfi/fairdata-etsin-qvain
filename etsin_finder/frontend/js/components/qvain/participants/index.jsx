@@ -13,12 +13,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { SectionTitle } from '../general/section'
 import { ContainerLight, ContainerSubsection } from '../general/card';
 
-const EntityType = {
+export const EntityType = {
   PERSON: 'Person',
   ORGANIZATION: 'Organization'
 }
 
-const Role = {
+export const Role = {
   CREATOR: 'Creator',
   PUBLISHER: 'Publisher',
   CURATOR: 'Curator'
@@ -29,18 +29,15 @@ class Participants extends Component {
     Stores: PropTypes.object.isRequired
   }
 
-  constructor(props) {
-    super(props)
-    this.state = {
-      participant: {
-        entityType: EntityType.PERSON,
-        roles: []
-      },
-      name: '',
-      email: '',
-      identifier: '',
-      organization: ''
-    }
+  state = {
+    participant: {
+      entityType: EntityType.PERSON,
+      roles: []
+    },
+    name: '',
+    email: '',
+    identifier: '',
+    organization: ''
   }
 
   getSelection = () => {
@@ -467,7 +464,7 @@ const Input = styled.input`
   margin-bottom: 20px;
 `
 
-const ParticipantSelection = styled.div`
+export const ParticipantSelection = styled.div`
   width: 100%;
   border-radius: 4px;
   padding: 5px 17px;
@@ -506,7 +503,7 @@ const SaveButton = styled.button`
   padding: 10px 25px;
 `
 
-const AddedParticipant = styled.div`
+export const AddedParticipant = styled.div`
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.13);
   border: solid 1px #eceeef;
   background-color: #fff;
