@@ -5,7 +5,7 @@ import styled from 'styled-components'
 // eslint-disable-next-line
 const Card = ({ children, bottomContent }) => <Container bottomContent={bottomContent}>{children}</Container>
 
-const Container = styled.div`
+export const Container = styled.div`
   padding-left: 45px;
   padding-right: 45px;
   padding-top: 25px;
