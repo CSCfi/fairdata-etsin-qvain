@@ -1,22 +1,27 @@
 import React, { Component } from 'react';
 import { SectionTitle } from '../general/section'
-import Card from '../general/card'
+import { ContainerLight, ContainerSubsection } from '../general/card'
 import IDAFilePicker from './idaFilePicker'
 import ProjectSelector from './projectSelector'
 import FileForm from './fileForm'
+import SelectedFiles from './selectedFiles'
+import ExternalFiles from './externalFiles'
 
 class Files extends Component {
   render() {
     return (
-      <div className="container">
+      <ContainerLight className="container">
         <SectionTitle>Files</SectionTitle>
-        <Card>
+        <ContainerSubsection>
           <IDAFilePicker />
           <ProjectSelector />
           <FileForm />
-          asd
-        </Card>
-      </div>
+          <SelectedFiles />
+        </ContainerSubsection>
+        <ContainerSubsection>
+          <ExternalFiles />
+        </ContainerSubsection>
+      </ContainerLight>
     )
   }
 }
