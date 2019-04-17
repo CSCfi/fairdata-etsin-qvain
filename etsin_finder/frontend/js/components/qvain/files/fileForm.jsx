@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { inject, observer } from 'mobx-react'
 import styled from 'styled-components';
 import Translate from 'react-translate-component'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -13,9 +15,37 @@ import {
 } from '../general/buttons'
 import { Label, Input, Textarea, CustomSelect } from '../general/form'
 import { Container } from '../general/card'
+import getReferenceData, { getLocalizedOptions } from '../utils/getReferenceData';
 
 class FileForm extends Component {
+  static propTypes = {
+    Stores: PropTypes.object.isRequired
+  }
+
+  state = {
+    fileTypesEn: [],
+    fileTypesFi: [],
+    useCategoriesEn: [],
+    useCategoriesFi: []
+  }
+
+  componentDidMount = () => {
+    getLocalizedOptions('file_type').then(translations => {
+      this.setState({
+        fileTypesEn: translations.en,
+        fileTypesFi: translations.fi
+      })
+    })
+    getLocalizedOptions('use_category').then(translations => {
+      this.setState({
+        useCategoriesEn: translations.en,
+        useCategoriesFi: translations.fi
+      })
+    })
+  }
+
   render() {
+    console.log('render, ', this.state)
     return (
       <div>
         <Translate component={SelectedFilesTitle} content="qvain.files.selected.title" />
@@ -29,28 +59,24 @@ class FileForm extends Component {
         </FileItem>
         <FileContainer>
           <div className="file-form">
-            <Translate
-              component={Label}
-              content="qvain.files.selected.form.title.label"
-            />
+            <Label><Translate content="qvain.files.selected.form.title.label" /> *</Label>
             <Translate
               component={Input}
               attributes={{ placeholder: 'qvain.files.selected.form.title.placeholder' }}
             />
-            <Translate
-              component={Label}
-              content="qvain.files.selected.form.description.label"
-            />
+            <Label><Translate content="qvain.files.selected.form.description.label" /> *</Label>
             <Translate
               component={Textarea}
               attributes={{ placeholder: 'qvain.files.selected.form.description.placeholder' }}
             />
-            <Translate
-              component={Label}
-              content="qvain.files.selected.form.use.label"
-            />
+            <Label><Translate content="qvain.files.selected.form.use.label" /> *</Label>
             <Translate
               component={CustomSelect}
+              options={
+                this.props.Stores.Locale.lang === 'en'
+                ? this.state.useCategoriesEn
+                : this.state.useCategoriesFi
+              }
               attributes={{ placeholder: 'qvain.files.selected.form.use.placeholder' }}
             />
             <Translate
@@ -59,6 +85,11 @@ class FileForm extends Component {
             />
             <Translate
               component={CustomSelect}
+              options={
+                this.props.Stores.Locale.lang === 'en'
+                ? this.state.fileTypesEn
+                : this.state.fileTypesFi
+              }
               attributes={{ placeholder: 'qvain.files.selected.form.fileType.placeholder' }}
             />
             <Translate
@@ -97,4 +128,4 @@ const FileContainer = styled(Container)`
   margin-top: 0px;
 `;
 
-export default FileForm
+export default inject('Stores')(observer(FileForm))
