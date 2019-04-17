@@ -18,6 +18,19 @@ import {
   EditButton,
   DeleteButton
 } from '../general/buttons'
+import {
+  Input,
+  FormField,
+  RadioInput,
+  RadioContainer,
+  Checkbox,
+  Label,
+  HelpField
+} from '../general/form'
+import {
+  List,
+  ListItem
+} from '../general/list'
 
 export const EntityType = {
   PERSON: 'Person',
@@ -390,80 +403,6 @@ class Participants extends Component {
 const Column = styled.div`
   float: left;
   width: 50%;
-`
-
-const FormField = styled.div`
-  display: inline-flex;
-  align-items: center;
-  vertical-align: middle;
-`
-
-const RadioContainer = styled.div`
-  display: inline-block;
-  position: relative;
-  flex: 0 0 auto;
-  box-sizing: border-box;
-  width: 40px;
-  height: 40px;
-  padding: 10px;
-  cursor: pointer;
-`
-
-const RadioInput = styled.input`
-  position: absolute;
-  z-index: 1;
-`
-
-const Label = styled.label`
-  margin-right: auto;
-  padding-left: 4px;
-  display: block;
-`
-
-const List = styled.ul`
-  padding: 0px;
-  margin: 0;
-  list-style-type: none;
-`
-
-const ListItem = styled.li`
-  padding-left: 48px;
-  height: 40px;
-  display: flex;
-  position: relative;
-  align-items: center;
-  justify-content: flex-start;
-  overflow: hidden;
-  cursor: pointer;
-  color: ${props => (props.disabled ? 'grey' : 'inherit')};
-`
-
-const Checkbox = styled.input`
-  display: inline-block;
-  position: relative;
-  flex: 0 0 18px;
-  box-sizing: content-box;
-  width: 18px;
-  height: 18px;
-  padding: 11px;
-  line-height: 0;
-  white-space: nowrap;
-  cursor: pointer;
-  vertical-align: bottom;
-`
-
-const HelpField = styled.span`
-  font-weight: 200;
-  font-family: "Lato"
-`
-
-const Input = styled.input`
-  width: 100%;
-  border-radius: 3px;
-  border: 1px solid #eceeef;
-  padding: 8px;
-  color: #808080;
-  margin-bottom: 20px;
 `
 
 export const ParticipantSelection = styled.div`

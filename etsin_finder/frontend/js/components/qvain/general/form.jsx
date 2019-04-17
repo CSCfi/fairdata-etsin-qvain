@@ -64,3 +64,8 @@ export const Checkbox = styled.input`
   cursor: pointer;
   vertical-align: bottom;
 `
+
+export const HelpField = styled.span`
+  font-weight: 200;
+  font-family: "Lato"
+`
