@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
+import Translate from 'react-translate-component'
 import Select from 'react-select';
 import styled from 'styled-components';
 
 class ProjectSelector extends Component {
   render() {
     return (
-      <ProjectSelect placeholder="Select project" />
+      <Translate
+        component={ProjectSelect}
+        attributes={{ placeholder: 'qvain.files.projectSelect.placeholder' }}
+      />
     )
   }
 }

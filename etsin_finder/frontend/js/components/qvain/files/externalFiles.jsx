@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Translate from 'react-translate-component'
 import {
   FilePickerButtonInverse,
   FilePickerButtonText,
@@ -10,10 +11,10 @@ class ExternalFiles extends Component {
   render() {
     return (
       <div>
-        <p>Add link to external files from here:</p>
+        <Translate component="p" content="qvain.files.external.help" />
         <FilePickerButtonInverse>
           <LinkIcon />
-          <FilePickerButtonText>Add link to external files</FilePickerButtonText>
+          <Translate component={FilePickerButtonText} content="qvain.files.external.button.label" />
           <ChevronIcon />
         </FilePickerButtonInverse>
       </div>

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import Translate from 'react-translate-component'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCopy } from '@fortawesome/free-solid-svg-icons'
 import {
@@ -17,7 +18,7 @@ class FileForm extends Component {
   render() {
     return (
       <div>
-        <SelectedFilesTitle>Selected Files</SelectedFilesTitle>
+        <Translate component={SelectedFilesTitle} content="qvain.files.selected.title" />
         <FileItem>
           <ButtonLabel>
             <FontAwesomeIcon icon={faCopy} style={{ marginRight: '8px' }} />
@@ -28,18 +29,46 @@ class FileForm extends Component {
         </FileItem>
         <FileContainer>
           <div className="file-form">
-            <Label>Title</Label>
-            <Input type="text" />
-            <Label>Description</Label>
-            <Textarea placeholder="Description" />
-            <Label>Use category</Label>
-            <CustomSelect placeholder="Select option" />
-            <Label>File type</Label>
-            <CustomSelect placeholder="Select option" />
-            <Label style={{ textTransform: 'uppercase' }}>Identifier</Label>
+            <Translate
+              component={Label}
+              content="qvain.files.selected.form.title.label"
+            />
+            <Translate
+              component={Input}
+              attributes={{ placeholder: 'qvain.files.selected.form.title.placeholder' }}
+            />
+            <Translate
+              component={Label}
+              content="qvain.files.selected.form.description.label"
+            />
+            <Translate
+              component={Textarea}
+              attributes={{ placeholder: 'qvain.files.selected.form.description.placeholder' }}
+            />
+            <Translate
+              component={Label}
+              content="qvain.files.selected.form.use.label"
+            />
+            <Translate
+              component={CustomSelect}
+              attributes={{ placeholder: 'qvain.files.selected.form.use.placeholder' }}
+            />
+            <Translate
+              component={Label}
+              content="qvain.files.selected.form.fileType.label"
+            />
+            <Translate
+              component={CustomSelect}
+              attributes={{ placeholder: 'qvain.files.selected.form.fileType.placeholder' }}
+            />
+            <Translate
+              component={Label}
+              style={{ textTransform: 'uppercase' }}
+              content="qvain.files.selected.form.identifier.label"
+            />
             <p>123476543234567876</p>
-            <CancelButton>Cancel</CancelButton>
-            <SaveButton>Save</SaveButton>
+            <Translate component={CancelButton} content="qvain.common.cancel" />
+            <Translate component={SaveButton} content="qvain.common.save" />
           </div>
         </FileContainer>
       </div>

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Translate from 'react-translate-component'
 import { SectionTitle } from '../general/section'
 import { ContainerLight, ContainerSubsection } from '../general/card'
 import IDAFilePicker from './idaFilePicker'
@@ -11,7 +12,7 @@ class Files extends Component {
   render() {
     return (
       <ContainerLight className="container">
-        <SectionTitle>Files</SectionTitle>
+        <Translate component={SectionTitle} content="qvain.files.title" />
         <ContainerSubsection>
           <IDAFilePicker />
           <ProjectSelector />

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Translate from 'react-translate-component'
 import {
   FilePickerButton,
   FileIcon,
@@ -10,10 +11,10 @@ class IDAFilePicker extends Component {
   render() {
     return (
       <React.Fragment>
-        <p>If you have files in Fairdata IDA you can link them from here:</p>
+        <Translate component="p" content="qvain.files.ida.help" />
         <FilePickerButton>
           <FileIcon />
-          <FilePickerButtonText>Link files from Fairdata IDA</FilePickerButtonText>
+          <Translate component={FilePickerButtonText} content="qvain.files.ida.button.label" />
           <ChevronIcon />
         </FilePickerButton>
       </React.Fragment>

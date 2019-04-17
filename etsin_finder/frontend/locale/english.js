@@ -254,6 +254,10 @@ const english = {
   },
   qvain: {
     title: 'Publish Dataset',
+    common: {
+      cancel: 'Cancel',
+      save: 'Save'
+    },
     description: {
       title: 'Description',
       description: {
@@ -342,6 +346,48 @@ const english = {
       added: {
         title: 'Added Participants',
         noneAddedNotice: 'No participants added'
+      }
+    },
+    files: {
+      title: 'Files',
+      ida: {
+        help: 'If you have files in Fairdata IDA you can link them from here:',
+        button: {
+          label: 'Link files from Fairdata IDA'
+        }
+      },
+      projectSelect: {
+        placeholder: 'Select project'
+      },
+      selected: {
+        title: 'Selected files',
+        form: {
+          title: {
+            label: 'Title',
+            placeholder: 'Title'
+          },
+          description: {
+            label: 'Description',
+            placeholder: 'Description'
+          },
+          use: {
+            label: 'Use category',
+            placeholder: 'Select option'
+          },
+          fileType: {
+            label: 'File type',
+            placeholder: 'Select option'
+          },
+          identifier: {
+            label: 'Identifier'
+          }
+        }
+      },
+      external: {
+        help: 'Add link to external files from here:',
+        button: {
+          label: 'Add link to external files'
+        }
       }
     }
   },
