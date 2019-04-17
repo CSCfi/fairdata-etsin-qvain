@@ -1,6 +1,6 @@
-import { observable, action } from 'mobx'
+import { observable, action, computed } from 'mobx'
 
-class Qvain {
+export class Qvain {
   @observable otherIdentifiers = []
 
   @observable fieldOfScience = {}
@@ -11,6 +11,8 @@ class Qvain {
 
   @observable accessType = {}
 
+  @observable participants = []
+
   @action
   addOtherIdentifier = (identifier) => {
     this.otherIdentifiers = [...this.otherIdentifiers, identifier]
@@ -18,7 +20,7 @@ class Qvain {
 
   @action
   removeOtherIdentifier = (identifier) => {
-  this.otherIdentifiers = this.otherIdentifiers.filter(otherIdentifier => otherIdentifier !== identifier);
+    this.otherIdentifiers = this.otherIdentifiers.filter(otherIdentifier => otherIdentifier !== identifier);
   }
 
   @action
@@ -44,6 +46,33 @@ class Qvain {
   @action
   setAccessType = (accessType) => {
     this.accessType = accessType
+  }
+
+  @action
+  setParticipants = (participants) => {
+    this.participants = participants
+  }
+
+  @action
+  addParticipant = (participant) => {
+    const existing = this.participants.find((addedParticipant) => (addedParticipant.identifier === participant.identifier))
+    if (existing !== undefined) {
+      this.removeParticipant(participant)
+    }
+    this.setParticipants(
+      [...this.participants, participant]
+    )
+  }
+
+  @action
+  removeParticipant = (participant) => {
+    const participants = this.participants.filter((p) => p.identifier !== participant.identifier)
+    this.setParticipants(participants)
+  }
+
+  @computed
+  get addedParticipants() {
+    return this.participants
   }
 }
 
