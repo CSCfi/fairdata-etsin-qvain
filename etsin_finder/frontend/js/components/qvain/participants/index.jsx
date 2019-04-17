@@ -143,6 +143,16 @@ class Participants extends Component {
     this.props.Stores.Qvain.removeParticipant(participant)
   }
 
+  checkIfParticipantRoleExists = (role) => {
+    const participantMatchList = this.props.Stores.Qvain.addedParticipants.map((addedParticipant) => (
+      addedParticipant.roles.includes(role)
+    ))
+    if (participantMatchList.includes(true)) {
+      return true
+    }
+    return false;
+  }
+
   render() {
     const { participant, name, email, identifier, organization } = this.state
     return (
@@ -188,11 +198,11 @@ class Participants extends Component {
                       </Label>
                     </FormField>
                   </ListItem>
-                  <ListItem disabled={participant.entityType !== EntityType.PERSON}>
+                  <ListItem disabled={participant.entityType !== EntityType.PERSON || this.checkIfParticipantRoleExists('Publisher')}>
                     <FormField>
                       <Checkbox
                         onChange={this.handleChangeRole}
-                        disabled={participant.entityType !== EntityType.PERSON}
+                        disabled={participant.entityType !== EntityType.PERSON || this.checkIfParticipantRoleExists('Publisher')}
                         id="personPublisher"
                         value={Role.PUBLISHER}
                         type="checkbox"
@@ -206,10 +216,10 @@ class Participants extends Component {
                       </Label>
                     </FormField>
                   </ListItem>
-                  <ListItem disabled={participant.entityType !== EntityType.PERSON}>
+                  <ListItem disabled={participant.entityType !== EntityType.PERSON || this.checkIfParticipantRoleExists('Curator')}>
                     <FormField>
                       <Checkbox
-                        disabled={participant.entityType !== EntityType.PERSON}
+                        disabled={participant.entityType !== EntityType.PERSON || this.checkIfParticipantRoleExists('Curator')}
                         onChange={this.handleChangeRole}
                         id="personCurator"
                         value={Role.CURATOR}
@@ -261,12 +271,12 @@ class Participants extends Component {
                       </Label>
                     </FormField>
                   </ListItem>
-                  <ListItem disabled={participant.entityType !== EntityType.ORGANIZATION}>
+                  <ListItem disabled={participant.entityType !== EntityType.ORGANIZATION || this.checkIfParticipantRoleExists('Publisher')}>
                     <FormField>
                       <Checkbox
                         id="orgPublisher"
                         type="checkbox"
-                        disabled={participant.entityType !== EntityType.ORGANIZATION}
+                        disabled={participant.entityType !== EntityType.ORGANIZATION || this.checkIfParticipantRoleExists('Publisher')}
                         onChange={this.handleChangeRole}
                         value={Role.PUBLISHER}
                         checked={
@@ -279,12 +289,12 @@ class Participants extends Component {
                       </Label>
                     </FormField>
                   </ListItem>
-                  <ListItem disabled={participant.entityType !== EntityType.ORGANIZATION}>
+                  <ListItem disabled={participant.entityType !== EntityType.ORGANIZATION || this.checkIfParticipantRoleExists('Curator')}>
                     <FormField>
                       <Checkbox
                         id="orgCurator"
                         type="checkbox"
-                        disabled={participant.entityType !== EntityType.ORGANIZATION}
+                        disabled={participant.entityType !== EntityType.ORGANIZATION || this.checkIfParticipantRoleExists('Curator')}
                         onChange={this.handleChangeRole}
                         value={Role.CURATOR}
                         checked={
