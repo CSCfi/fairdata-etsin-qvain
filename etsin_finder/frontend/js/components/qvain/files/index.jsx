@@ -3,6 +3,7 @@ import { SectionTitle } from '../general/section'
 import Card from '../general/card'
 import IDAFilePicker from './idaFilePicker'
 import ProjectSelector from './projectSelector'
+import FileForm from './fileForm'
 
 class Files extends Component {
   render() {
@@ -12,6 +13,8 @@ class Files extends Component {
         <Card>
           <IDAFilePicker />
           <ProjectSelector />
+          <FileForm />
+          asd
         </Card>
       </div>
     )

@@ -482,12 +482,4 @@ const Fieldset = styled.fieldset`
   border: none;
 `
 
-const AddedParticipantDeleteButton = styled.button`
-  background-color: rgba(255, 52, 0, 0.1);
-  width: 60px;
-  height: 56px;
-  border: none;
-  text-align: center;
-`;
-
 export default inject('Stores')(observer(Participants))
