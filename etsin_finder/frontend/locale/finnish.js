@@ -299,6 +299,54 @@ const finnish = {
         title: 'Lisenssi',
         placeholder: 'Valitse vaihtoehto'
       }
+    },
+    participants: {
+      title: 'Toimijat',
+      add: {
+        title: 'Toimijat',
+        help: 'Tekijä (1+) ja julkaisija (max 1) roolit ovat pakollisia. Huomioi että yksittäisellä toimijalla voi olla useampi rooli.',
+        radio: {
+          person: 'Luonnollinen henkilö',
+          organization: 'Organisaatio'
+        },
+        checkbox: {
+          creator: 'Tekijä',
+          publisher: 'Julkaisija',
+          curator: 'Kuraattori'
+        },
+        name: {
+          placeholder: {
+            organization: 'Nimi',
+            person: 'Etu- ja sukunimi'
+          },
+          label: 'Nimi'
+        },
+        email: {
+          placeholder: 'Sähköposti',
+          label: 'Sähköposti'
+        },
+        identifier: {
+          label: 'Tunniste',
+          placeholder: 'Tunniste'
+        },
+        organization: {
+          label: {
+            person: 'Organisaatio',
+            organization: 'Emo-organisaatio'
+          },
+          placeholder: 'Esim. Helsingin yliopisto'
+        },
+        save: {
+          label: 'Tallenna'
+        },
+        cancel: {
+          label: 'Peruuta'
+        }
+      },
+      added: {
+        title: 'Lisätyt toimijat',
+        noneAddedNotice: 'Toimijoita ei olla lisätty'
+      }
     }
   },
   slogan: 'Tutkimustenhaku palvelu',
