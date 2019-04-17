@@ -5,13 +5,19 @@ import Translate from 'react-translate-component'
 import styled from 'styled-components';
 import {
   faBuilding,
-  faUser,
-  faPen,
-  faTimes
+  faUser
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { SectionTitle } from '../general/section'
 import { ContainerLight, ContainerSubsection } from '../general/card';
+import {
+  SaveButton,
+  CancelButton,
+  ButtonGroup,
+  ButtonLabel,
+  EditButton,
+  DeleteButton
+} from '../general/buttons'
 
 export const EntityType = {
   PERSON: 'Person',
@@ -232,7 +238,7 @@ class Participants extends Component {
                       checked={participant.entityType === EntityType.ORGANIZATION}
                     />
                   </RadioContainer>
-                  <Label for="entityOrg">
+                  <Label htmlFor="entityOrg">
                     <Translate content="qvain.participants.add.radio.organization" />
                   </Label>
                 </FormField>
@@ -365,18 +371,14 @@ class Participants extends Component {
               (<Translate component="p" content="qvain.participants.added.noneAddedNotice" />)
             }
             {this.props.Stores.Qvain.addedParticipants.map((addedParticipant) => (
-              <AddedParticipant key={addedParticipant.identifier}>
-                <AddedParticipantLabel>
+              <ButtonGroup key={addedParticipant.identifier}>
+                <ButtonLabel>
                   <FontAwesomeIcon icon={addedParticipant.entityType === EntityType.PERSON ? faUser : faBuilding} style={{ marginRight: '8px' }} />
                   {addedParticipant.name}{addedParticipant.roles.map(role => (` / ${ role }`))}
-                </AddedParticipantLabel>
-                <AddedParticipantEditButton onClick={this.createHandleEdit(addedParticipant)}>
-                  <FontAwesomeIcon size="lg" style={{ color: '#007fad' }} icon={faPen} />
-                </AddedParticipantEditButton>
-                <AddedParticipantDeleteButton onClick={this.createHandleRemove(addedParticipant)}>
-                  <FontAwesomeIcon size="lg" style={{ color: '#ad2300' }} icon={faTimes} />
-                </AddedParticipantDeleteButton>
-              </AddedParticipant>
+                </ButtonLabel>
+                <EditButton onClick={this.createHandleEdit(addedParticipant)} />
+                <DeleteButton onClick={this.createHandleRemove(addedParticipant)} />
+              </ButtonGroup>
             ))}
           </ContainerSubsection>
         </ContainerLight>
@@ -479,63 +481,6 @@ const ParticipantEntityType = styled.span`
 const Fieldset = styled.fieldset`
   border: none;
 `
-
-const CancelButton = styled.button`
-  width: 84px;
-  height: 38px;
-  border-radius: 4px;
-  border: solid 1px #4f4f4f;
-  font-size: 16px;
-  font-weight: 600px;
-  line-height: 1.31;
-  color: #4f4f4f;
-`;
-
-const SaveButton = styled.button`
-  border-radius: 4px;
-  border: solid 1px #49a24a;
-  background-color: #49a24a;
-  font-size: 16px;
-  font-weight: 600;
-  line-height: 1.31;
-  color: #fff;
-  margin-left: 20px;
-  padding: 10px 25px;
-`
-
-export const AddedParticipant = styled.div`
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.13);
-  border: solid 1px #eceeef;
-  background-color: #fff;
-  margin-bottom: 12px;
-`
-
-const AddedParticipantLabel = styled.span`
-  background-color: transparent;
-  display: inline-flex;
-  padding: 0 8px 0 8px;
-  position: relative;
-  align-items: center;
-  justify-content: center;
-  box-sizing: border-box;
-  min-width: 64px;
-  height: 36px;
-  border: none;
-  outline: none;
-  overflow: hidden;
-  vertical-align: middle;
-  float: left;
-  margin: 14px;
-  white-space: nowrap;
-`;
-
-const AddedParticipantEditButton = styled.button`
-  background-color: rgba(0,187,255, 0.1);
-  width: 60px;
-  height: 56px;
-  border: none;
-  text-align: center;
-`;
 
 const AddedParticipantDeleteButton = styled.button`
   background-color: rgba(255, 52, 0, 0.1);
