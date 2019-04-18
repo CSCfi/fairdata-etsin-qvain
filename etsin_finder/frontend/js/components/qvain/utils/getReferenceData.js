@@ -7,11 +7,11 @@ export default getReferenceData;
 export const getLocalizedOptions = (field) => getReferenceData(field).then(res => {
   const hits = res.data.hits.hits
   const refsFi = hits.map(hit => ({
-    value: hit._source._id,
+    value: hit._source.id,
     label: hit._source.label.fi
   }))
   const refsEn = hits.map(hit => ({
-    value: hit._source._id,
+    value: hit._source.id,
     label: hit._source.label.en
   }))
   return {
