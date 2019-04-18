@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import PropTypes from 'prop-types'
 import { inject, observer } from 'mobx-react'
 import Translate from 'react-translate-component'
+import CreatableSelect from 'react-select/lib/Creatable'
 import styled from 'styled-components';
 import {
   faBuilding,
@@ -43,7 +45,44 @@ class Participants extends Component {
     name: '',
     email: '',
     identifier: '',
-    organization: ''
+    organization: '',
+    organizationsEn: [{ value: '', label: '' }],
+    organizationsFi: [{ value: '', label: '' }]
+  }
+
+  componentDidMount = () => {
+    axios.get('https://metax.fairdata.fi/es/organization_data/organization/_search?size=1000')
+    .then(res => {
+      const list = res.data.hits.hits;
+      const refsEn = list.map(ref => (
+        {
+          value: ref._source.label.und,
+          label: ref._source.label.und,
+        }
+        ))
+      const refsFi = list.map(ref => (
+        {
+          value: ref._source.label.und,
+          label: ref._source.label.fi,
+        }
+        ))
+      this.setState({ organizationsEn: refsEn })
+      this.setState({ organizationsFi: refsFi })
+    })
+    .catch(error => {
+      if (error.response) {
+        // Error response from Metax
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+      } else if (error.request) {
+        // No response from Metax
+        console.log(error.request);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.log('Error', error.message);
+      }
+    });
   }
 
   getSelection = () => {
@@ -143,6 +182,16 @@ class Participants extends Component {
     this.props.Stores.Qvain.removeParticipant(participant)
   }
 
+  checkIfParticipantRoleExists = (role) => {
+    const participantMatchList = this.props.Stores.Qvain.addedParticipants.map((addedParticipant) => (
+      addedParticipant.roles.includes(role)
+    ))
+    if (participantMatchList.includes(true)) {
+      return true
+    }
+    return false;
+  }
+
   render() {
     const { participant, name, email, identifier, organization } = this.state
     return (
@@ -188,11 +237,11 @@ class Participants extends Component {
                       </Label>
                     </FormField>
                   </ListItem>
-                  <ListItem disabled={participant.entityType !== EntityType.PERSON}>
+                  <ListItem disabled={participant.entityType !== EntityType.PERSON || this.checkIfParticipantRoleExists('Publisher')}>
                     <FormField>
                       <Checkbox
                         onChange={this.handleChangeRole}
-                        disabled={participant.entityType !== EntityType.PERSON}
+                        disabled={participant.entityType !== EntityType.PERSON || this.checkIfParticipantRoleExists('Publisher')}
                         id="personPublisher"
                         value={Role.PUBLISHER}
                         type="checkbox"
@@ -206,10 +255,10 @@ class Participants extends Component {
                       </Label>
                     </FormField>
                   </ListItem>
-                  <ListItem disabled={participant.entityType !== EntityType.PERSON}>
+                  <ListItem disabled={participant.entityType !== EntityType.PERSON || this.checkIfParticipantRoleExists('Curator')}>
                     <FormField>
                       <Checkbox
-                        disabled={participant.entityType !== EntityType.PERSON}
+                        disabled={participant.entityType !== EntityType.PERSON || this.checkIfParticipantRoleExists('Curator')}
                         onChange={this.handleChangeRole}
                         id="personCurator"
                         value={Role.CURATOR}
@@ -261,12 +310,12 @@ class Participants extends Component {
                       </Label>
                     </FormField>
                   </ListItem>
-                  <ListItem disabled={participant.entityType !== EntityType.ORGANIZATION}>
+                  <ListItem disabled={participant.entityType !== EntityType.ORGANIZATION || this.checkIfParticipantRoleExists('Publisher')}>
                     <FormField>
                       <Checkbox
                         id="orgPublisher"
                         type="checkbox"
-                        disabled={participant.entityType !== EntityType.ORGANIZATION}
+                        disabled={participant.entityType !== EntityType.ORGANIZATION || this.checkIfParticipantRoleExists('Publisher')}
                         onChange={this.handleChangeRole}
                         value={Role.PUBLISHER}
                         checked={
@@ -279,12 +328,12 @@ class Participants extends Component {
                       </Label>
                     </FormField>
                   </ListItem>
-                  <ListItem disabled={participant.entityType !== EntityType.ORGANIZATION}>
+                  <ListItem disabled={participant.entityType !== EntityType.ORGANIZATION || this.checkIfParticipantRoleExists('Curator')}>
                     <FormField>
                       <Checkbox
                         id="orgCurator"
                         type="checkbox"
-                        disabled={participant.entityType !== EntityType.ORGANIZATION}
+                        disabled={participant.entityType !== EntityType.ORGANIZATION || this.checkIfParticipantRoleExists('Curator')}
                         onChange={this.handleChangeRole}
                         value={Role.CURATOR}
                         checked={
@@ -306,15 +355,40 @@ class Participants extends Component {
                 <Label htmlFor="nameField">
                   <Translate content="qvain.participants.add.name.label" /> *
                 </Label>
-                <Translate
-                  component={Input}
-                  type="text"
-                  id="nameField"
-                  attributes={{ placeholder: `qvain.participants.add.name.placeholder.${participant.entityType.toLowerCase()}` }}
-                  placeholder={participant.entityType === EntityType.PERSON ? 'First And Last Name' : 'Name'}
-                  value={name}
-                  onChange={(event) => this.setState({ name: event.target.value })}
-                />
+                {participant.entityType === EntityType.PERSON
+                  ? (
+                    <Translate
+                      component={Input}
+                      type="text"
+                      id="nameField"
+                      attributes={{ placeholder: `qvain.participants.add.name.placeholder.${participant.entityType.toLowerCase()}` }}
+                      // placeholder={participant.entityType === EntityType.PERSON ? 'First And Last Name' : 'Name'}
+                      value={name}
+                      onChange={(event) => this.setState({ name: event.target.value })}
+                    />
+                  )
+                  : (
+                    <Translate
+                      component={SelectOrg}
+                      name="nameField"
+                      id="nameField"
+                      options={
+                        this.props.Stores.Locale.lang === 'en'
+                        ? this.state.organizationsEn
+                        : this.state.organizationsFi
+                      }
+                      formatCreateLabel={inputValue => (
+                        <React.Fragment>
+                          <Translate content="qvain.participants.add.newOrganization.label" />
+                          <span>: &rsquo;{inputValue}&rsquo;</span>
+                        </React.Fragment>
+                      )}
+                      attributes={{ placeholder: 'qvain.participants.add.organization.placeholder' }}
+                      onChange={(org) => this.setState({ name: org.label })}
+                      value={{ label: name, value: name }}
+                    />
+                    )}
+
                 <Label htmlFor="emailField">
                   <Translate content="qvain.participants.add.email.label" />
                 </Label>
@@ -342,12 +416,23 @@ class Participants extends Component {
                   {participant.entityType === EntityType.PERSON && ' *'}
                 </Label>
                 <Translate
-                  component={Input}
+                  component={SelectOrg}
+                  name="orgField"
                   id="orgField"
-                  type="text"
+                  options={
+                    this.props.Stores.Locale.lang === 'en'
+                    ? this.state.organizationsEn
+                    : this.state.organizationsFi
+                  }
+                  formatCreateLabel={inputValue => (
+                    <React.Fragment>
+                      <Translate content="qvain.participants.add.newOrganization.label" />
+                      <span>: &rsquo;{inputValue}&rsquo;</span>
+                    </React.Fragment>
+                  )}
                   attributes={{ placeholder: 'qvain.participants.add.organization.placeholder' }}
-                  onChange={(event) => this.setState({ organization: event.target.value })}
-                  value={organization}
+                  onChange={(org) => this.setState({ organization: org.label })}
+                  value={{ label: organization, value: organization }}
                 />
                 <Translate
                   component={CancelButton}
@@ -481,13 +566,8 @@ const ParticipantEntityType = styled.span`
 const Fieldset = styled.fieldset`
   border: none;
 `
-
-const AddedParticipantDeleteButton = styled.button`
-  background-color: rgba(255, 52, 0, 0.1);
-  width: 60px;
-  height: 56px;
-  border: none;
-  text-align: center;
-`;
+const SelectOrg = styled(CreatableSelect)`
+  margin-bottom: 20px;
+`
 
 export default inject('Stores')(observer(Participants))

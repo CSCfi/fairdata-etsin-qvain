@@ -323,7 +323,7 @@ const english = {
         },
         identifier: {
           label: 'Identifier',
-          placeholder: 'Identifier'
+          placeholder: 'e.g http://orcid.org'
         },
         organization: {
           label: {
@@ -337,6 +337,9 @@ const english = {
         },
         cancel: {
           label: 'Cancel'
+        },
+        newOrganization: {
+          label: 'Add'
         }
       },
       added: {
