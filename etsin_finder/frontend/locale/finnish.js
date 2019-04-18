@@ -331,7 +331,7 @@ const finnish = {
         },
         identifier: {
           label: 'Tunniste',
-          placeholder: 'Tunniste'
+          placeholder: 'esim. http://orcid.org'
         },
         organization: {
           label: {
@@ -345,6 +345,9 @@ const finnish = {
         },
         cancel: {
           label: 'Peruuta'
+        },
+        newOrganization: {
+          label: 'Lisää'
         }
       },
       added: {
