@@ -15,7 +15,7 @@ import {
 } from '../general/buttons'
 import { Label, Input, Textarea, CustomSelect } from '../general/form'
 import { Container } from '../general/card'
-import getReferenceData, { getLocalizedOptions } from '../utils/getReferenceData';
+import { getLocalizedOptions } from '../utils/getReferenceData';
 
 class FileForm extends Component {
   static propTypes = {
@@ -45,7 +45,6 @@ class FileForm extends Component {
   }
 
   render() {
-    console.log('render, ', this.state)
     return (
       <div>
         <Translate component={SelectedFilesTitle} content="qvain.files.selected.title" />
