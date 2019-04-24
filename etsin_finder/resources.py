@@ -133,6 +133,70 @@ class Files(Resource):
             return dir_api_obj, 200
         return '', 404
 
+class ProjectFiles(Resource):
+    """File/directory related REST endpoints for getting project directory"""
+
+    def __init__(self):
+        """Setup file endpoints"""
+        self.parser = reqparse.RequestParser()
+        self.parser.add_argument('pid', required=True, type=str)
+
+    def get(self, pid):
+        """
+        Get files and directory objects for frontend.
+
+        :param pid:
+        :return:
+        """
+
+        project_dir_obj = cr_service.get_directory_for_project(pid)
+
+        # Return data only if authenticated
+        if project_dir_obj:
+            # Sort the items
+            sort_array_of_obj_by_key(project_dir_obj.get('directories', []), 'directory_name')
+            sort_array_of_obj_by_key(project_dir_obj.get('files', []), 'file_name')
+
+            # Limit the amount of items to be sent to the frontend
+            if 'directories' in project_dir_obj:
+                project_dir_obj['directories'] = slice_array_on_limit(project_dir_obj['directories'], TOTAL_ITEM_LIMIT)
+            if 'files' in project_dir_obj:
+                project_dir_obj['files'] = slice_array_on_limit(project_dir_obj['files'], TOTAL_ITEM_LIMIT)
+
+            return project_dir_obj, 200
+        return '', 404
+
+class FileDirectory(Resource):
+    """File/directory related REST endpoints for getting a directory"""
+
+    def __init__(self):
+        """Setup file endpoints"""
+        self.parser = reqparse.RequestParser()
+
+    def get(self, dir_id):
+        """
+        Get files and directory objects for frontend.
+
+        :param dir_id:
+        :return:
+        """
+
+        dir_obj = cr_service.get_directory(dir_id)
+
+        # Return data only if authenticated
+        if dir_obj:
+            # Sort the items
+            sort_array_of_obj_by_key(dir_obj.get('directories', []), 'directory_name')
+            sort_array_of_obj_by_key(dir_obj.get('files', []), 'file_name')
+
+            # Limit the amount of items to be sent to the frontend
+            if 'directories' in dir_obj:
+                dir_obj['directories'] = slice_array_on_limit(dir_obj['directories'], TOTAL_ITEM_LIMIT)
+            if 'files' in dir_obj:
+                dir_obj['files'] = slice_array_on_limit(dir_obj['files'], TOTAL_ITEM_LIMIT)
+
+            return dir_obj, 200
+        return '', 404
 
 class Contact(Resource):
     """Contact form related REST endpoints for frontend"""

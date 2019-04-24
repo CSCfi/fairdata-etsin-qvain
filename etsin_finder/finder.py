@@ -70,9 +70,11 @@ def add_restful_resources(app):
     :return:
     """
     api = Api(app)
-    from etsin_finder.resources import Contact, Dataset, User, Session, Files, Download
+    from etsin_finder.resources import Contact, Dataset, User, Session, Files, Download, ProjectFiles, FileDirectory
     api.add_resource(Dataset, '/api/dataset/<string:cr_id>')
     api.add_resource(Files, '/api/files/<string:cr_id>')
+    api.add_resource(ProjectFiles, '/api/files/project/<string:pid>')
+    api.add_resource(FileDirectory, '/api/files/directory/<string:dir_id>')
     api.add_resource(Contact, '/api/email/<string:cr_id>')
     api.add_resource(User, '/api/user')
     api.add_resource(Session, '/api/session')
