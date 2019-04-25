@@ -4,7 +4,6 @@ import { SectionTitle } from '../general/section'
 import { ContainerLight, ContainerSubsection } from '../general/card'
 import IDAFilePicker from './idaFilePicker'
 import ProjectSelector from './projectSelector'
-import FileForm from './fileForm'
 import SelectedFiles from './selectedFiles'
 import ExternalFiles from './externalFiles'
 
@@ -16,8 +15,7 @@ class Files extends Component {
         <ContainerSubsection>
           <IDAFilePicker />
           <ProjectSelector />
-          <FileForm />
-          <SelectedFiles />
+          {}<SelectedFiles />
         </ContainerSubsection>
         <ContainerSubsection>
           <ExternalFiles />

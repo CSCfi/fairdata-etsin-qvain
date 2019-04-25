@@ -3,13 +3,7 @@ import PropTypes from 'prop-types';
 import { inject, observer } from 'mobx-react'
 import styled from 'styled-components';
 import Translate from 'react-translate-component'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCopy } from '@fortawesome/free-solid-svg-icons'
 import {
-  ButtonGroup,
-  ButtonLabel,
-  EditButton,
-  DeleteButton,
   SaveButton,
   CancelButton
 } from '../general/buttons'
@@ -26,7 +20,9 @@ class FileForm extends Component {
     fileTypesEn: [],
     fileTypesFi: [],
     useCategoriesEn: [],
-    useCategoriesFi: []
+    useCategoriesFi: [],
+    title: this.props.Stores.Qvain.fileInEdit.file_characteristics.title,
+    description: this.props.Stores.Qvain.fileInEdit.file_characteristics.description
   }
 
   componentDidMount = () => {
@@ -44,28 +40,35 @@ class FileForm extends Component {
     })
   }
 
+  handleCancel = (event) => {
+    event.preventDefault()
+    this.props.Stores.Qvain.setInEdit(undefined)
+  }
+
+  handleSave = (event) => {
+    event.preventDefault()
+    const fileCharacteristics = this.props.Stores.Qvain.fileInEdit.file_characteristics
+    fileCharacteristics.title = this.state.title
+    fileCharacteristics.description = this.state.description
+  }
+
   render() {
     return (
       <div>
-        <Translate component={SelectedFilesTitle} content="qvain.files.selected.title" />
-        <FileItem>
-          <ButtonLabel>
-            <FontAwesomeIcon icon={faCopy} style={{ marginRight: '8px' }} />
-            Project 1 / Title 1
-          </ButtonLabel>
-          <EditButton />
-          <DeleteButton />
-        </FileItem>
         <FileContainer>
           <div className="file-form">
             <Label><Translate content="qvain.files.selected.form.title.label" /> *</Label>
             <Translate
               component={Input}
+              value={this.state.title}
+              onChange={(event) => this.setState({ title: event.target.value })}
               attributes={{ placeholder: 'qvain.files.selected.form.title.placeholder' }}
             />
             <Label><Translate content="qvain.files.selected.form.description.label" /> *</Label>
             <Translate
               component={Textarea}
+              value={this.state.description}
+              onChange={(event) => this.setState({ description: event.target.value })}
               attributes={{ placeholder: 'qvain.files.selected.form.description.placeholder' }}
             />
             <Label><Translate content="qvain.files.selected.form.use.label" /> *</Label>
@@ -97,28 +100,14 @@ class FileForm extends Component {
               content="qvain.files.selected.form.identifier.label"
             />
             <p>123476543234567876</p>
-            <Translate component={CancelButton} content="qvain.common.cancel" />
-            <Translate component={SaveButton} content="qvain.common.save" />
+            <Translate component={CancelButton} onClick={this.handleCancel} content="qvain.common.cancel" />
+            <Translate component={SaveButton} onClick={this.handleSave} content="qvain.common.save" />
           </div>
         </FileContainer>
       </div>
     )
   }
 }
-
-const SelectedFilesTitle = styled.label`
-  display: block;
-  font-weight: 600;
-  color: #4f4f4f;
-  margin-bottom: 8px;
-  text-transform: uppercase;
-`;
-
-const FileItem = styled(ButtonGroup)`
-  border-bottom: none;
-  box-shadow: none;
-  margin-bottom: 0px;
-`;
 
 const FileContainer = styled(Container)`
   padding: 35px 24px;

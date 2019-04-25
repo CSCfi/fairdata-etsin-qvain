@@ -1,5 +1,4 @@
 import { observable, action, computed } from 'mobx'
-import axios from 'axios'
 
 class Qvain {
   @observable otherIdentifiers = []
@@ -74,6 +73,35 @@ class Qvain {
   @computed
   get addedParticipants() {
     return this.participants
+  }
+
+  // FILE PICKER STATE MANAGEMENT
+
+  @observable _selectedFiles = []
+
+  @observable _fileInEdit = undefined
+
+  @action addSelectedFile = (file) => {
+    this._selectedFiles = [...this._selectedFiles, file]
+  }
+
+  @action removeSelectedFile = (fileId) => {
+    this._selectedFiles = this._selectedFiles.filter(sf => sf.id !== fileId)
+  }
+
+  @action setInEdit = (file) => {
+    console.log('setInEdit')
+    this._fileInEdit = file
+  }
+
+  @computed
+  get selectedFiles() {
+    return this._selectedFiles
+  }
+
+  @computed
+  get fileInEdit() {
+    return this._fileInEdit
   }
 }
 
