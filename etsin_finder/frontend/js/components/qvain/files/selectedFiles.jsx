@@ -16,7 +16,7 @@ class SelectedFiles extends Component {
   handleEdit = (file) => (event) => {
     const { fileInEdit } = this.props.Stores.Qvain
     event.preventDefault()
-    if (fileInEdit !== undefined && file.id === fileInEdit.id) {
+    if (isFileInEdit(fileInEdit, file.id)) {
       this.props.Stores.Qvain.setInEdit(undefined)
     } else {
       this.props.Stores.Qvain.setInEdit(file)
@@ -24,7 +24,6 @@ class SelectedFiles extends Component {
   }
 
   render() {
-    console.log('render')
     const { selectedFiles, removeSelectedFile, fileInEdit } = this.props.Stores.Qvain
     return (
       <div>
@@ -32,7 +31,7 @@ class SelectedFiles extends Component {
         {selectedFiles.length === 0 && <p>No files selected</p>}
         {selectedFiles.map(file => (
           <Fragment key={file.id}>
-            <FileItem active={fileInEdit !== undefined && fileInEdit.id === file.id}>
+            <FileItem active={isFileInEdit(fileInEdit, file.id)}>
               <ButtonLabel>
                 <FontAwesomeIcon icon={faCopy} style={{ marginRight: '8px' }} />
                 {file.project_identifier} / {file.file_characteristics.title}
@@ -45,7 +44,7 @@ class SelectedFiles extends Component {
                 }}
               />
             </FileItem>
-            {fileInEdit !== undefined &&
+            {isFileInEdit(fileInEdit, file.id) &&
               <FileForm />
             }
           </Fragment>
@@ -54,6 +53,8 @@ class SelectedFiles extends Component {
     )
   }
 }
+
+const isFileInEdit = (fileInEdit, fileId) => (fileInEdit !== undefined) && fileInEdit.id === fileId
 
 const SelectedFilesTitle = styled.label`
   display: block;
