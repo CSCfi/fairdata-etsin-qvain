@@ -71,7 +71,8 @@ class FileForm extends Component {
     fileCharacteristics.title = this.state.title
     fileCharacteristics.description = this.state.description
     fileCharacteristics.use_category = this.state.useCategory.value
-    fileCharacteristics.file_type = this.state.fileType.value
+    fileCharacteristics.file_type = this.state.fileType ? this.state.fileType.value : ''
+    this.props.Stores.Qvain.setInEdit(undefined) // close form after saving
   }
 
   render() {

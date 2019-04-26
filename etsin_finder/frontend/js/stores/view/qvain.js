@@ -102,8 +102,12 @@ class Qvain {
   // directories visited, used to go up the directory hierarchy
   @observable _previousDirectories = new Map()
 
-  @action addSelectedFile = (file) => {
-    this._selectedFiles = [...this._selectedFiles, file]
+  @action toggleSelectedFile = (file) => {
+    if (this._selectedFiles.find(sf => sf.id === file.id) === undefined) {
+      this._selectedFiles = [...this._selectedFiles, file]
+    } else {
+      this._selectedFiles = this._selectedFiles.filter(sf => sf.id !== file.id)
+    }
   }
 
   @action removeSelectedFile = (fileId) => {
@@ -116,11 +120,9 @@ class Qvain {
 
   @action getInitialDirectories = () => {
     this._userProjects.forEach(projectId => {
-      console.log('projectId: ', projectId)
       axios
         .get(PROJECT_DIR_URL + projectId)
         .then(res => {
-          console.log('res: ', res.data)
           this._currentDirectory = res.data
           this._directories = this._directories.concat(res.data.directories)
           this._files = this._files.concat(res.data.files)

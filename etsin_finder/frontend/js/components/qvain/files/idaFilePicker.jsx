@@ -43,7 +43,7 @@ class IDAFilePicker extends Component {
   render() {
     const {
       selectedFiles,
-      addSelectedFile,
+      toggleSelectedFile,
       currentDirectory,
       directories,
       files,
@@ -90,7 +90,7 @@ class IDAFilePicker extends Component {
                   checked={selectedFiles.map(sf => sf.id).includes(file.id)}
                   id={`${file.id}Checkbox`}
                   type="checkbox"
-                  onChange={() => addSelectedFile(file)}
+                  onChange={() => toggleSelectedFile(file)}
                 />
                 <label htmlFor={`${file.id}Checkbox`}>
                   <FileIcon style={{ paddingLeft: '8px' }} />
