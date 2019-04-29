@@ -7,46 +7,50 @@ import { faCopy } from '@fortawesome/free-solid-svg-icons'
 import Translate from 'react-translate-component'
 import { ButtonGroup, ButtonLabel, EditButton, DeleteButton } from '../general/buttons'
 import FileForm from './fileForm'
+import DirectoryForm from './directoryForm'
 
 class SelectedFiles extends Component {
   static propTypes = {
     Stores: PropTypes.object.isRequired
   }
 
-  handleEdit = (file) => (event) => {
-    const { fileInEdit } = this.props.Stores.Qvain
+  handleEdit = (selected) => (event) => {
+    const { inEdit } = this.props.Stores.Qvain
     event.preventDefault()
-    if (isFileInEdit(fileInEdit, file.id)) {
+    if (isInEdit(inEdit, selected.identifier)) {
       this.props.Stores.Qvain.setInEdit(undefined)
     } else {
-      this.props.Stores.Qvain.setInEdit(file)
+      this.props.Stores.Qvain.setInEdit(selected)
     }
   }
 
   render() {
-    const { selectedFiles, removeSelectedFile, fileInEdit } = this.props.Stores.Qvain
+    const { selected, toggleSelected, inEdit } = this.props.Stores.Qvain
     return (
       <div>
         <Translate component={SelectedFilesTitle} content="qvain.files.selected.title" />
-        {selectedFiles.length === 0 && <p>No files selected</p>}
-        {selectedFiles.map(file => (
-          <Fragment key={file.id}>
-            <FileItem active={isFileInEdit(fileInEdit, file.id)}>
+        {selected.length === 0 && <p>No files or directories selected</p>}
+        {selected.map(s => (
+          <Fragment key={`${s.id}-${s.identifier}`}>
+            <FileItem active={isInEdit(inEdit, s.identifier)}>
               <ButtonLabel>
                 <FontAwesomeIcon icon={faCopy} style={{ marginRight: '8px' }} />
-                {file.project_identifier} / {file.file_characteristics.title}
+                {s.project_identifier} / {s.directory_name || s.file_characteristics.title}
               </ButtonLabel>
-              <EditButton onClick={this.handleEdit(file)} />
+              <EditButton onClick={this.handleEdit(s)} />
               <DeleteButton
                 onClick={(event) => {
                   event.preventDefault()
-                  removeSelectedFile(file.id)
+                  toggleSelected(s.identifier)
                 }}
               />
             </FileItem>
-            {isFileInEdit(fileInEdit, file.id) &&
-              <FileForm />
-            }
+            {isInEdit(inEdit, s.identifier) && (
+              <Fragment>
+                {isDirectory(inEdit) && (<DirectoryForm />)}
+                {!isDirectory(inEdit) && (<FileForm />)}
+              </Fragment>
+            )}
           </Fragment>
         ))}
       </div>
@@ -54,7 +58,9 @@ class SelectedFiles extends Component {
   }
 }
 
-const isFileInEdit = (fileInEdit, fileId) => (fileInEdit !== undefined) && fileInEdit.id === fileId
+const isInEdit = (inEdit, identifier) => (inEdit !== undefined) && inEdit.identifier === identifier
+
+const isDirectory = (inEdit) => inEdit.directory_name !== undefined
 
 const SelectedFilesTitle = styled.label`
   display: block;

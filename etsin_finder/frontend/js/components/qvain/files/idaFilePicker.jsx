@@ -42,8 +42,8 @@ class IDAFilePicker extends Component {
 
   render() {
     const {
-      selectedFiles,
-      toggleSelectedFile,
+      selected,
+      toggleSelected,
       currentDirectory,
       directories,
       files,
@@ -71,9 +71,14 @@ class IDAFilePicker extends Component {
               </li>
             )}
             {directories.map(dir => (
-              <li
-                key={dir.id}
-              >
+              <li key={dir.id}>
+                <Checkbox
+                  checked={selected.map(s => s.directory_name).includes(dir.directory_name)}
+                  id={`${dir.id}Checkbox`}
+                  type="checkbox"
+                  title={`${dir.id}Checkbox`}
+                  onChange={() => toggleSelected(dir)}
+                />
                 <LinkButton
                   type="button"
                   onKeyPress={this.handleChangeDirectory(dir.id)}
@@ -87,10 +92,10 @@ class IDAFilePicker extends Component {
             {files.map(file => (
               <li key={file.id}>
                 <Checkbox
-                  checked={selectedFiles.map(sf => sf.id).includes(file.id)}
+                  checked={selected.map(s => s.file_name).includes(file.file_name)}
                   id={`${file.id}Checkbox`}
                   type="checkbox"
-                  onChange={() => toggleSelectedFile(file)}
+                  onChange={() => toggleSelected(file)}
                 />
                 <label htmlFor={`${file.id}Checkbox`}>
                   <FileIcon style={{ paddingLeft: '8px' }} />

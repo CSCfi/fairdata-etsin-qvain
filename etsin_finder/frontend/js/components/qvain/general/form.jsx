@@ -1,3 +1,4 @@
+import React from 'react';
 import styled from 'styled-components';
 import Select from 'react-select';
 
@@ -51,7 +52,7 @@ export const RadioInput = styled.input`
   z-index: 1;
 `
 
-export const Checkbox = styled.input`
+export const CheckboxStyles = styled.input`
   display: inline-block;
   position: relative;
   flex: 0 0 18px;
@@ -64,6 +65,8 @@ export const Checkbox = styled.input`
   cursor: pointer;
   vertical-align: bottom;
 `
+
+export const Checkbox = (props) => <CheckboxStyles {...props} type="checkbox" />
 
 export const HelpField = styled.span`
   font-weight: 200;

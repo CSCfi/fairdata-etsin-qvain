@@ -85,7 +85,10 @@ class Qvain {
 
   @observable _selectedFiles = []
 
-  @observable _fileInEdit = undefined
+  // Selected files AND directories
+  @observable _selected = []
+
+  @observable _inEdit = undefined
 
   // directory currently in the view (modal)
   @observable _currentDirectory = []
@@ -103,10 +106,26 @@ class Qvain {
   @observable _previousDirectories = new Map()
 
   @action toggleSelectedFile = (file) => {
-    if (this._selectedFiles.find(sf => sf.id === file.id) === undefined) {
-      this._selectedFiles = [...this._selectedFiles, file]
+    if (this._selected.find(s => s.file_name === file.file_name) === undefined) {
+      this._selected = [...this._selected, file]
     } else {
-      this._selectedFiles = this._selectedFiles.filter(sf => sf.id !== file.id)
+      this._selected = this._selected.filter(s => s.file_name !== file.file_name)
+    }
+  }
+
+  @action toggleSelectedDirectory = (directory) => {
+    if (this._selected.find(s => s.directory_name === directory.directory_name) === undefined) {
+      this._selected = [...this._selected, directory]
+    } else {
+      this._selected = this._selected.filter(s => s.directory_name !== directory.directory_name)
+    }
+  }
+
+  @action toggleSelected = (selected) => {
+    if (this._selected.find(s => s.identifier === selected.identifier) === undefined) {
+      this._selected = [...this._selected, selected]
+    } else {
+      this._selected = this._selected.filter(s => s.identifier !== selected.identifier)
     }
   }
 
@@ -145,8 +164,8 @@ class Qvain {
       })
   }
 
-  @action setInEdit = (file) => {
-    this._fileInEdit = file
+  @action setInEdit = (storageItem) => {
+    this._inEdit = storageItem
   }
 
   @computed
@@ -155,8 +174,13 @@ class Qvain {
   }
 
   @computed
-  get fileInEdit() {
-    return this._fileInEdit
+  get selected() {
+    return this._selected
+  }
+
+  @computed
+  get inEdit() {
+    return this._inEdit
   }
 
   @computed

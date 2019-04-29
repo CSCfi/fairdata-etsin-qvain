@@ -381,6 +381,36 @@ const english = {
             label: 'File type',
             placeholder: 'Select option'
           },
+          fileFormat: {
+            label: 'File format',
+            placeholder: 'Select option'
+          },
+          formatVersion: {
+            label: 'File format version',
+            placeholder: 'Select option'
+          },
+          isSequential: {
+            label: 'File is sequential'
+          },
+          csvDelimiter: {
+            label: 'Delimiter',
+            placeholder: 'Select option'
+          },
+          csvHasHeader: {
+            label: 'Has header'
+          },
+          csvRecordSeparator: {
+            label: 'Record separator',
+            placeholder: 'Select option'
+          },
+          csvQuoteChar: {
+            label: 'Quoting character',
+            placeholder: 'Quoting character, e.g. \\'
+          },
+          csvEncoding: {
+            label: 'Encoding',
+            placeholder: 'Select option'
+          },
           identifier: {
             label: 'Identifier'
           }
