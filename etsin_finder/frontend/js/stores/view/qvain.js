@@ -83,6 +83,8 @@ class Qvain {
 
   @observable _userProjects = ['project_x']
 
+  @observable _selectedProject = undefined
+
   @observable _selectedFiles = []
 
   // Selected files AND directories
@@ -138,16 +140,22 @@ class Qvain {
   }
 
   @action getInitialDirectories = () => {
-    this._userProjects.forEach(projectId => {
-      axios
-        .get(PROJECT_DIR_URL + projectId)
-        .then(res => {
-          this._currentDirectory = res.data
-          this._directories = this._directories.concat(res.data.directories)
-          this._files = this._files.concat(res.data.files)
-          this._directories.forEach(dir => this._parentDirs.set(dir.id, dir.parent_directory.id))
-        })
-    })
+    axios
+      .get(PROJECT_DIR_URL + this._selectedProject)
+      .then(res => {
+        this._currentDirectory = res.data
+        this._directories = res.data.directories
+        this._files = res.data.files
+        this._directories.forEach(dir => this._parentDirs.set(dir.id, dir.parent_directory.id))
+      })
+      .catch(e => {
+        console.log('Failed to acquire project root directory, error: ', e.message)
+      })
+  }
+
+  @action changeProject = (projectId) => {
+    this._selectedProject = projectId
+    this.getInitialDirectories()
   }
 
   @action changeDirectory = (dirId) => {
@@ -166,6 +174,16 @@ class Qvain {
 
   @action setInEdit = (storageItem) => {
     this._inEdit = storageItem
+  }
+
+  @computed
+  get userProjects() {
+    return this._userProjects
+  }
+
+  @computed
+  get selectedProject() {
+    return this._selectedProject
   }
 
   @computed

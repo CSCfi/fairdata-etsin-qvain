@@ -14,8 +14,6 @@ class Files extends Component {
         <Translate component={SectionTitle} content="qvain.files.title" />
         <ContainerSubsection>
           <IDAFilePicker />
-          <ProjectSelector />
-          {}<SelectedFiles />
         </ContainerSubsection>
         <ContainerSubsection>
           <ExternalFiles />

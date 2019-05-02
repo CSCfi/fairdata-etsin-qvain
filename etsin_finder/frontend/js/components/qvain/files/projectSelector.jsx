@@ -10,20 +10,21 @@ class ProjectSelector extends Component {
     Stores: PropTypes.object.isRequired
   }
 
-  getOptions = () => {
-    const theOptions = this.props.Stores.Qvain.selectedFiles.map(sf =>
-      ({ value: sf.project_identifier, label: sf.project_identifier })
-    )
-    return theOptions.filter((option, index) =>
-      theOptions.map(opt => opt.value).indexOf(option.value) === index
-    )
+  getOptions = () => this.props.Stores.Qvain.userProjects.map(up => ({ value: up, label: up }))
+
+  handleOnChange = (selectedOption) => {
+    this.props.Stores.Qvain.changeProject(selectedOption.value)
   }
 
   render() {
+    const options = this.getOptions()
+    const selected = options.find(opt => opt.value === this.props.Stores.Qvain.selectedProject)
     return (
       <Translate
-        options={this.getOptions()}
+        options={options}
         component={ProjectSelect}
+        value={selected}
+        onChange={this.handleOnChange}
         attributes={{ placeholder: 'qvain.files.projectSelect.placeholder' }}
       />
     )
@@ -35,7 +36,7 @@ const ProjectSelect = styled(Select)`
   width: 164px;
   height: 38px;
   margin-top: 30px;
-  margin-bottom: 45px;
+  margin-bottom: 10px;
 `;
 
 export default inject('Stores')(observer(ProjectSelector))

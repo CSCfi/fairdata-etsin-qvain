@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import Translate from 'react-translate-component'
 import {
   FilePickerButtonInverse,
@@ -8,16 +8,30 @@ import {
 } from '../general/buttons'
 
 class ExternalFiles extends Component {
+  state = {
+    formOpen: false
+  }
+
+  handleToggleForm = (event) => {
+    event.preventDefault()
+    this.setState((state) => ({
+      formOpen: !state.formOpen
+    }))
+  }
+
   render() {
     return (
-      <div>
+      <Fragment>
         <Translate component="p" content="qvain.files.external.help" />
-        <FilePickerButtonInverse>
+        <FilePickerButtonInverse onClick={this.handleToggleForm}>
           <LinkIcon />
           <Translate component={FilePickerButtonText} content="qvain.files.external.button.label" />
           <ChevronIcon />
         </FilePickerButtonInverse>
-      </div>
+        {this.state.formOpen &&
+          (<p>asd</p>)
+        }
+      </Fragment>
     )
   }
 }

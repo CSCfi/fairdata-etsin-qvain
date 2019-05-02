@@ -27,7 +27,7 @@ class SelectedFiles extends Component {
   render() {
     const { selected, toggleSelected, inEdit } = this.props.Stores.Qvain
     return (
-      <div>
+      <Fragment>
         <Translate component={SelectedFilesTitle} content="qvain.files.selected.title" />
         {selected.length === 0 && <p>No files or directories selected</p>}
         {selected.map(s => (
@@ -35,13 +35,13 @@ class SelectedFiles extends Component {
             <FileItem active={isInEdit(inEdit, s.identifier)}>
               <ButtonLabel>
                 <FontAwesomeIcon icon={faCopy} style={{ marginRight: '8px' }} />
-                {s.project_identifier} / {s.directory_name || s.file_characteristics.title}
+                {s.project_identifier} / {s.directory_name || getTitle(s.file_characteristics)}
               </ButtonLabel>
               <EditButton onClick={this.handleEdit(s)} />
               <DeleteButton
                 onClick={(event) => {
                   event.preventDefault()
-                  toggleSelected(s.identifier)
+                  toggleSelected(s)
                 }}
               />
             </FileItem>
@@ -53,7 +53,7 @@ class SelectedFiles extends Component {
             )}
           </Fragment>
         ))}
-      </div>
+      </Fragment>
     )
   }
 }
@@ -61,6 +61,8 @@ class SelectedFiles extends Component {
 const isInEdit = (inEdit, identifier) => (inEdit !== undefined) && inEdit.identifier === identifier
 
 const isDirectory = (inEdit) => inEdit.directory_name !== undefined
+
+const getTitle = (fileCharacteristics) => (fileCharacteristics !== undefined ? fileCharacteristics.title : '')
 
 const SelectedFilesTitle = styled.label`
   display: block;
