@@ -1,6 +1,16 @@
 import { observable, action, computed } from 'mobx'
 
 export class Qvain {
+  @observable title = {
+    fi: '',
+    en: ''
+  }
+
+  @observable description = {
+    fi: '',
+    en: ''
+  }
+
   @observable otherIdentifiers = []
 
   @observable fieldOfScience = {}
@@ -12,6 +22,24 @@ export class Qvain {
   @observable accessType = {}
 
   @observable participants = []
+
+  @action
+  setTitle = (title, lang) => {
+    if (lang === 'ENGLISH') {
+      this.title.en = title
+    } else if (lang === 'FINNISH') {
+      this.title.fi = title
+    }
+  }
+
+  @action
+  setDescription = (description, lang) => {
+    if (lang === 'ENGLISH') {
+      this.description.en = description
+    } else if (lang === 'FINNISH') {
+      this.description.fi = description
+    }
+  }
 
   @action
   addOtherIdentifier = (identifier) => {
