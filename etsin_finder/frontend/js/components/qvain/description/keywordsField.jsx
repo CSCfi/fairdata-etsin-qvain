@@ -24,7 +24,7 @@ class KeywordsField extends Component {
   }
 
   handleKeywordAdd = (e) => {
-    if (e.keyCode === 13) {
+    if (e.keyCode === 13 && this.state.value.length > 0) {
       e.preventDefault();
       const newKeyword = this.state.value;
       this.props.Stores.Qvain.setKeywords([
