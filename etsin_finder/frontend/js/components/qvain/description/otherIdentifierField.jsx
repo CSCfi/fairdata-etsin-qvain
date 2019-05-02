@@ -33,10 +33,20 @@ class OtherIdentifierField extends React.Component {
     })
   }
 
-  handleAdd = (event) => {
-    event.preventDefault()
-    this.props.Stores.Qvain.addOtherIdentifier(this.state.identifier)
-    this.clearInput()
+  handleAddEnter = (event) => {
+    if (event.keyCode === 13 && this.state.identifier.length > 0) {
+      event.preventDefault()
+      this.props.Stores.Qvain.addOtherIdentifier(this.state.identifier)
+      this.clearInput()
+    }
+  }
+
+  handleAddClick = (event) => {
+    if (this.state.identifier.length > 0) {
+      event.preventDefault()
+      this.props.Stores.Qvain.addOtherIdentifier(this.state.identifier)
+      this.clearInput()
+    }
   }
 
   handleRemove = (identifier) => {
@@ -59,10 +69,11 @@ class OtherIdentifierField extends React.Component {
           type="text"
           value={this.state.identifier}
           onChange={this.handleInputChange}
+          onKeyDown={this.handleAddEnter}
           placeholder="http://orcid.org/"
         />
         <ButtonContainer>
-          <AddNewButton onClick={this.handleAdd}>
+          <AddNewButton type="button" onClick={this.handleAddClick}>
             <Translate content="qvain.description.otherIdentifiers.addButton" />
           </AddNewButton>
         </ButtonContainer>
