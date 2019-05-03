@@ -373,6 +373,9 @@ const english = {
             label: 'Description',
             placeholder: 'Description'
           },
+          directoryFiles: {
+            label: 'Files within directory'
+          },
           use: {
             label: 'Use category',
             placeholder: 'Select option'

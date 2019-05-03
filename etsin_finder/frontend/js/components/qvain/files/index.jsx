@@ -3,8 +3,6 @@ import Translate from 'react-translate-component'
 import { SectionTitle } from '../general/section'
 import { ContainerLight, ContainerSubsection } from '../general/card'
 import IDAFilePicker from './idaFilePicker'
-import ProjectSelector from './projectSelector'
-import SelectedFiles from './selectedFiles'
 import ExternalFiles from './externalFiles'
 
 class Files extends Component {

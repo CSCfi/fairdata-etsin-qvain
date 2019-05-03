@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { inject, observer } from 'mobx-react'
 import styled from 'styled-components';
@@ -7,9 +7,10 @@ import {
   SaveButton,
   CancelButton
 } from '../general/buttons'
-import { Label, Input, Textarea, CustomSelect } from '../general/form'
+import { Label, CustomSelect } from '../general/form'
 import { Container } from '../general/card'
 import { getLocalizedOptions } from '../utils/getReferenceData';
+import { List, ListItem } from '../general/list'
 
 class DirectoryForm extends Component {
   static propTypes = {
@@ -21,9 +22,6 @@ class DirectoryForm extends Component {
     fileTypesFi: [],
     useCategoriesEn: [],
     useCategoriesFi: [],
-    isDirectory: this.props.Stores.Qvain.inEdit.directory_name !== undefined,
-    title: this.props.Stores.Qvain.inEdit.file_characteristics.title || 'Couldn\'t get title',
-    description: this.props.Stores.Qvain.inEdit.file_characteristics.description || 'Couldn\'t get description',
     useCategory: undefined,
     fileType: undefined
   }
@@ -32,20 +30,17 @@ class DirectoryForm extends Component {
     getLocalizedOptions('file_type').then(translations => {
       this.setState({
         fileTypesEn: translations.en,
-        fileTypesFi: translations.fi,
-        fileType: translations.en.find(opt =>
-          opt.value === this.props.Stores.Qvain.inEdit.file_characteristics.file_type
-        )
+        fileTypesFi: translations.fi
       })
     })
     getLocalizedOptions('use_category').then(translations => {
-      this.setState({
+      this.setState((state, props) => ({
         useCategoriesEn: translations.en,
         useCategoriesFi: translations.fi,
-        useCategory: translations.en.find(opt =>
-          opt.value === this.props.Stores.Qvain.inEdit.file_characteristics.use_category
-        )
-      })
+        useCategory: props.Stores.Locale.lang === 'en' ?
+          translations.en.find(opt => opt.value === 'use_category_outcome') :
+          translations.fi.find(opt => opt.value === 'use_category_outcome')
+      }))
     })
   }
 
@@ -68,71 +63,55 @@ class DirectoryForm extends Component {
 
   handleSave = (event) => {
     event.preventDefault()
-    const fileCharacteristics = this.props.Stores.Qvain.inEdit.file_characteristics
-    fileCharacteristics.title = this.state.title
-    fileCharacteristics.description = this.state.description
-    fileCharacteristics.use_category = this.state.useCategory.value
-    fileCharacteristics.file_type = this.state.fileType ? this.state.fileType.value : ''
+    const { selectedFiles, inEdit } = this.props.Stores.Qvain
+    const files = selectedFiles.filter(sf => sf.parent_directory.id === inEdit.id)
+    files.forEach(file => {
+      file.file_characteristics.use_category = this.useCategory.value
+      file.file_characteristics.file_type = this.fileType.value
+    })
     this.props.Stores.Qvain.setInEdit(undefined) // close form after saving
   }
 
   render() {
+    const { selectedFiles } = this.props.Stores.Qvain
     return (
-      <div>
+      <Fragment>
         <FileContainer>
-          <div className="file-form">
-            <Label><Translate content="qvain.files.selected.form.title.label" /> *</Label>
-            <Translate
-              component={Input}
-              value={this.state.title}
-              onChange={(event) => this.setState({ title: event.target.value })}
-              attributes={{ placeholder: 'qvain.files.selected.form.title.placeholder' }}
-            />
-            <Label><Translate content="qvain.files.selected.form.description.label" /> *</Label>
-            <Translate
-              component={Textarea}
-              value={this.state.description}
-              onChange={(event) => this.setState({ description: event.target.value })}
-              attributes={{ placeholder: 'qvain.files.selected.form.description.placeholder' }}
-            />
-            <Label><Translate content="qvain.files.selected.form.use.label" /> *</Label>
-            <Translate
-              component={CustomSelect}
-              value={this.state.useCategory}
-              options={
-                this.props.Stores.Locale.lang === 'en'
-                ? this.state.useCategoriesEn
-                : this.state.useCategoriesFi
-              }
-              onChange={this.handleChangeUse}
-              attributes={{ placeholder: 'qvain.files.selected.form.use.placeholder' }}
-            />
-            <Translate
-              component={Label}
-              content="qvain.files.selected.form.fileType.label"
-            />
-            <Translate
-              component={CustomSelect}
-              value={this.state.fileType}
-              onChange={this.handleChangeFileType}
-              options={
-                this.props.Stores.Locale.lang === 'en'
-                ? this.state.fileTypesEn
-                : this.state.fileTypesFi
-              }
-              attributes={{ placeholder: 'qvain.files.selected.form.fileType.placeholder' }}
-            />
-            <Translate
-              component={Label}
-              style={{ textTransform: 'uppercase' }}
-              content="qvain.files.selected.form.identifier.label"
-            />
-            <p style={{ marginLeft: '10px' }}>{this.props.Stores.Qvain.inEdit.identifier}</p>
-            <Translate component={CancelButton} onClick={this.handleCancel} content="qvain.common.cancel" />
-            <Translate component={SaveButton} onClick={this.handleSave} content="qvain.common.save" />
-          </div>
+          <Label><Translate content="qvain.files.selected.form.directoryFiles.label" /></Label>
+          <List>
+            {selectedFiles.map(sf => (<ListItem key={sf.identifier}>{sf.file_name}</ListItem>))}
+          </List>
+          <Label><Translate content="qvain.files.selected.form.use.label" /> *</Label>
+          <Translate
+            component={CustomSelect}
+            value={this.state.useCategory}
+            options={
+              this.props.Stores.Locale.lang === 'en'
+              ? this.state.useCategoriesEn
+              : this.state.useCategoriesFi
+            }
+            onChange={this.handleChangeUse}
+            attributes={{ placeholder: 'qvain.files.selected.form.use.placeholder' }}
+          />
+          <Translate
+            component={Label}
+            content="qvain.files.selected.form.fileType.label"
+          />
+          <Translate
+            component={CustomSelect}
+            value={this.state.fileType}
+            onChange={this.handleChangeFileType}
+            options={
+              this.props.Stores.Locale.lang === 'en'
+              ? this.state.fileTypesEn
+              : this.state.fileTypesFi
+            }
+            attributes={{ placeholder: 'qvain.files.selected.form.fileType.placeholder' }}
+          />
+          <Translate component={CancelButton} onClick={this.handleCancel} content="qvain.common.cancel" />
+          <Translate component={SaveButton} onClick={this.handleSave} content="qvain.common.save" />
         </FileContainer>
-      </div>
+      </Fragment>
     )
   }
 }

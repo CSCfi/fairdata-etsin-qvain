@@ -90,6 +90,10 @@ class Qvain {
   // Selected files AND directories
   @observable _selected = []
 
+  @observable _selectedDirectories = []
+
+  @observable _hierarchy = {}
+
   @observable _inEdit = undefined
 
   // directory currently in the view (modal)
@@ -108,26 +112,52 @@ class Qvain {
   @observable _previousDirectories = new Map()
 
   @action toggleSelectedFile = (file) => {
-    if (this._selected.find(s => s.file_name === file.file_name) === undefined) {
-      this._selected = [...this._selected, file]
+    if (this._selectedFiles.find(s => s.file_name === file.file_name) === undefined) {
+      this._selectedFiles = [...this._selectedFiles, file]
     } else {
-      this._selected = this._selected.filter(s => s.file_name !== file.file_name)
+      this._selectedFiles = this._selectedFiles.filter(s => s.file_name !== file.file_name)
     }
   }
 
-  @action toggleSelectedDirectory = (directory) => {
-    if (this._selected.find(s => s.directory_name === directory.directory_name) === undefined) {
-      this._selected = [...this._selected, directory]
+  @action toggleSelectedDirectory = (directory, select) => {
+    if (select) {
+      if (this._selectedDirectories.find(s => s.directory_name === directory.directory_name) === undefined) {
+        this._selectedDirectories = [...this._selectedDirectories, directory]
+        axios
+          .get(DIR_URL + directory.id)
+          .then(res => {
+            const { files, directories } = res.data
+            this._selectedFiles = this._selectedFiles.concat(files)
+            directories.forEach(dir => this.toggleSelectedDirectory(dir, true))
+          })
+      }
     } else {
-      this._selected = this._selected.filter(s => s.directory_name !== directory.directory_name)
+      this._selectedDirectories = this._selectedDirectories.filter(s => s.directory_name !== directory.directory_name)
+      this._selectedFiles = this._selectedFiles.filter(sf => sf.parent_directory.id !== directory.id)
+      this._selectedDirectories.map(sd => this.toggleSelectedDirectory(sd, false))
     }
   }
 
   @action toggleSelected = (selected) => {
     if (this._selected.find(s => s.identifier === selected.identifier) === undefined) {
       this._selected = [...this._selected, selected]
+      if (selected.directory_name !== undefined) {
+        axios
+          .get(DIR_URL + selected.id)
+          .then(res => {
+            const { files } = res.data
+            this._selectedFiles = this._selectedFiles.concat(files)
+          })
+      } else {
+        this._selectedFiles = [...this._selectedFiles, selected]
+      }
     } else {
       this._selected = this._selected.filter(s => s.identifier !== selected.identifier)
+      if (selected.directory_name !== undefined) {
+        this._selectedFiles = this._selectedFiles.filter(sf => sf.parent_directory.id !== selected.id)
+      } else {
+        this._selectedFiles = this._selectedFiles.filter(sf => sf.identifier !== selected.identifier)
+      }
     }
   }
 
@@ -143,10 +173,13 @@ class Qvain {
     axios
       .get(PROJECT_DIR_URL + this._selectedProject)
       .then(res => {
-        this._currentDirectory = res.data
+        // this._currentDirectory = res.data
         this._directories = res.data.directories
         this._files = res.data.files
         this._directories.forEach(dir => this._parentDirs.set(dir.id, dir.parent_directory.id))
+        this._hierarchy = res.data
+        console.log(res.data)
+        this._currentDirectory = this._hierarchy
       })
       .catch(e => {
         console.log('Failed to acquire project root directory, error: ', e.message)
@@ -172,6 +205,17 @@ class Qvain {
       })
   }
 
+  @action openDirectory = (dirId, rootDir) => {
+    axios
+      .get(DIR_URL + dirId)
+      .then(res => {
+        const dir = rootDir.directories.find(d => d.id === dirId)
+        const { files, directories } = res.data
+        dir.files = files
+        dir.directories = directories
+      })
+  }
+
   @action setInEdit = (storageItem) => {
     this._inEdit = storageItem
   }
@@ -192,6 +236,11 @@ class Qvain {
   }
 
   @computed
+  get selectedDirectories() {
+    return this._selectedDirectories
+  }
+
+  @computed
   get selected() {
     return this._selected
   }
@@ -204,6 +253,11 @@ class Qvain {
   @computed
   get currentDirectory() {
     return this._currentDirectory
+  }
+
+  @computed
+  get hierarchy() {
+    return this._hierarchy
   }
 
   @computed

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { inject, observer } from 'mobx-react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCopy } from '@fortawesome/free-solid-svg-icons'
+import { faCopy, faFolder } from '@fortawesome/free-solid-svg-icons'
 import Translate from 'react-translate-component'
 import { ButtonGroup, ButtonLabel, EditButton, DeleteButton } from '../general/buttons'
 import FileForm from './fileForm'
@@ -25,7 +25,9 @@ class SelectedFiles extends Component {
   }
 
   render() {
-    const { selected, toggleSelected, inEdit } = this.props.Stores.Qvain
+    const { selectedFiles, selectedDirectories, toggleSelected, inEdit } = this.props.Stores.Qvain
+    const selected = selectedFiles.concat(selectedDirectories)
+    const grouped = groupBy('parent_directory.id')(selectedFiles)
     return (
       <Fragment>
         <Translate component={SelectedFilesTitle} content="qvain.files.selected.title" />
@@ -34,7 +36,7 @@ class SelectedFiles extends Component {
           <Fragment key={`${s.id}-${s.identifier}`}>
             <FileItem active={isInEdit(inEdit, s.identifier)}>
               <ButtonLabel>
-                <FontAwesomeIcon icon={faCopy} style={{ marginRight: '8px' }} />
+                <FontAwesomeIcon icon={(s.directory_name ? faFolder : faCopy)} style={{ marginRight: '8px' }} />
                 {s.project_identifier} / {s.directory_name || getTitle(s.file_characteristics)}
               </ButtonLabel>
               <EditButton onClick={this.handleEdit(s)} />
@@ -63,6 +65,20 @@ const isInEdit = (inEdit, identifier) => (inEdit !== undefined) && inEdit.identi
 const isDirectory = (inEdit) => inEdit.directory_name !== undefined
 
 const getTitle = (fileCharacteristics) => (fileCharacteristics !== undefined ? fileCharacteristics.title : '')
+
+const groupBy = key => array =>
+  array.reduce((objectsByKeyValue, obj) => {
+    const keys = key.split('.')
+    let value = obj
+    keys.forEach(_key => {
+      value = value[_key]
+    })
+    // const value = obj[key];
+    objectsByKeyValue[value] = (objectsByKeyValue[value] || []).concat(obj);
+    return objectsByKeyValue;
+  }, {});
+
+// Components
 
 const SelectedFilesTitle = styled.label`
   display: block;
