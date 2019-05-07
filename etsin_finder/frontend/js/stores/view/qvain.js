@@ -119,46 +119,24 @@ class Qvain {
     }
   }
 
-  @action toggleSelectedDirectory = (directory, select) => {
+  @action toggleSelectedDirectory = (dir, select) => {
     if (select) {
-      if (this._selectedDirectories.find(s => s.directory_name === directory.directory_name) === undefined) {
-        this._selectedDirectories = [...this._selectedDirectories, directory]
-        axios
-          .get(DIR_URL + directory.id)
-          .then(res => {
-            const { files, directories } = res.data
-            this._selectedFiles = this._selectedFiles.concat(files)
-            directories.forEach(dir => this.toggleSelectedDirectory(dir, true))
-          })
-      }
+      this._selectedDirectories = [...this._selectedDirectories, dir]
+      this.addDirs(dir, select)
     } else {
-      this._selectedDirectories = this._selectedDirectories.filter(s => s.directory_name !== directory.directory_name)
-      this._selectedFiles = this._selectedFiles.filter(sf => sf.parent_directory.id !== directory.id)
-      this._selectedDirectories.map(sd => this.toggleSelectedDirectory(sd, false))
+      this._selectedDirectories = this._selectedDirectories.filter(sd => sd.directory_name !== dir.directory_name)
     }
   }
 
-  @action toggleSelected = (selected) => {
-    if (this._selected.find(s => s.identifier === selected.identifier) === undefined) {
-      this._selected = [...this._selected, selected]
-      if (selected.directory_name !== undefined) {
-        axios
-          .get(DIR_URL + selected.id)
-          .then(res => {
-            const { files } = res.data
-            this._selectedFiles = this._selectedFiles.concat(files)
-          })
-      } else {
-        this._selectedFiles = [...this._selectedFiles, selected]
-      }
-    } else {
-      this._selected = this._selected.filter(s => s.identifier !== selected.identifier)
-      if (selected.directory_name !== undefined) {
-        this._selectedFiles = this._selectedFiles.filter(sf => sf.parent_directory.id !== selected.id)
-      } else {
-        this._selectedFiles = this._selectedFiles.filter(sf => sf.identifier !== selected.identifier)
-      }
-    }
+  @action addDirs = (dir, select) => {
+    axios
+      .get(DIR_URL + dir.id)
+      .then(res => {
+        const { files, directories } = res.data
+        dir.files = files
+        dir.directories = directories
+        dir.directories.forEach(d => this.addDirs(d, select))
+      })
   }
 
   @action removeSelectedFile = (fileId) => {
@@ -173,7 +151,6 @@ class Qvain {
     axios
       .get(PROJECT_DIR_URL + this._selectedProject)
       .then(res => {
-        // this._currentDirectory = res.data
         this._directories = res.data.directories
         this._files = res.data.files
         this._directories.forEach(dir => this._parentDirs.set(dir.id, dir.parent_directory.id))
@@ -238,11 +215,6 @@ class Qvain {
   @computed
   get selectedDirectories() {
     return this._selectedDirectories
-  }
-
-  @computed
-  get selected() {
-    return this._selected
   }
 
   @computed

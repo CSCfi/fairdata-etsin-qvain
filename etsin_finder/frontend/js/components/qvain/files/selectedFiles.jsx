@@ -25,9 +25,14 @@ class SelectedFiles extends Component {
   }
 
   render() {
-    const { selectedFiles, selectedDirectories, toggleSelected, inEdit } = this.props.Stores.Qvain
+    const {
+      selectedFiles,
+      selectedDirectories,
+      toggleSelectedFile,
+      toggleSelectedDirectory,
+      inEdit
+    } = this.props.Stores.Qvain
     const selected = selectedFiles.concat(selectedDirectories)
-    const grouped = groupBy('parent_directory.id')(selectedFiles)
     return (
       <Fragment>
         <Translate component={SelectedFilesTitle} content="qvain.files.selected.title" />
@@ -43,7 +48,11 @@ class SelectedFiles extends Component {
               <DeleteButton
                 onClick={(event) => {
                   event.preventDefault()
-                  toggleSelected(s)
+                  if (s.directory_name !== undefined) {
+                    toggleSelectedDirectory(s)
+                  } else {
+                    toggleSelectedFile(s)
+                  }
                 }}
               />
             </FileItem>

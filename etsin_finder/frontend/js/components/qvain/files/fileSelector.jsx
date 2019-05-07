@@ -9,6 +9,7 @@ import {
   FileIcon,
 } from '../general/buttons'
 import { List, ListItem } from '../general/list'
+import { getDirectories, getFiles, getAllFiles } from '../utils/fileHierarchy'
 
 class FileSelector extends Component {
   static propTypes = {
@@ -32,7 +33,8 @@ class FileSelector extends Component {
 
   isDirectorySelected = (dir, selectedFiles, selectedDirectories) => (
     selectedFiles.map(sf => sf.parent_directory.id).includes(dir.id) ||
-    selectedDirectories.map(sd => sd.id).includes(dir.id)
+    selectedDirectories.map(sd => sd.id).includes(dir.id) ||
+    selectedDirectories.map(sd => getDirectories(sd)).flat().map(d => d.identifier).includes(dir.identifier)
   )
 
   // recursive function to draw the entire file hierarchy, if so desired
@@ -73,7 +75,10 @@ class FileSelector extends Component {
                 {h.files.map(f => (
                   <li key={f.identifier} style={{ paddingLeft: '20px' }}>
                     <Checkbox
-                      checked={selectedFiles.map(s => s.file_name).includes(f.file_name)}
+                      checked={
+                        selectedFiles.map(s => s.file_name).includes(f.file_name) ||
+                        getAllFiles(selectedDirectories).map(sf => sf.file_name).includes(f.file_name)
+                      }
                       id={`${f.id}Checkbox`}
                       type="checkbox"
                       onChange={() => toggleSelectedFile(f)}
@@ -94,6 +99,7 @@ class FileSelector extends Component {
     const {
       selectedFiles,
       toggleSelectedFile,
+      selectedDirectories,
       hierarchy,
     } = this.props.Stores.Qvain
     return (
@@ -109,7 +115,10 @@ class FileSelector extends Component {
               {hierarchy.files.map(file => (
                 <ListItem key={file.id}>
                   <Checkbox
-                    checked={selectedFiles.map(s => s.file_name).includes(file.file_name)}
+                    checked={
+                      selectedFiles.map(s => s.file_name).includes(file.file_name) ||
+                      selectedDirectories.map(d => getFiles(d)).flat().map(f => f.file_name).includes(file.file_name)
+                    }
                     id={`${file.id}Checkbox`}
                     type="checkbox"
                     onChange={() => toggleSelectedFile(file)}
