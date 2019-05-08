@@ -21,6 +21,8 @@ export class Qvain {
 
   @observable accessType = {}
 
+  @observable restrictionGrounds = {}
+
   @observable participants = []
 
   @action
@@ -74,6 +76,11 @@ export class Qvain {
   @action
   setAccessType = (accessType) => {
     this.accessType = accessType
+  }
+
+  @action
+  setRestrictionGrounds = (restrictionGrounds) => {
+    this.restrictionGrounds = restrictionGrounds
   }
 
   @action
