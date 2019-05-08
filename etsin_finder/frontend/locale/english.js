@@ -291,6 +291,11 @@ const english = {
         title: 'Access Type',
         placeholder: 'Select option'
       },
+      restrictionGrounds: {
+        title: 'Restriction Grounds',
+        placeholder: 'Select option',
+        text: 'When access type is "Restricted", please choose the restriction grounds.'
+      },
       license: {
         title: 'License',
         placeholder: 'Select option'

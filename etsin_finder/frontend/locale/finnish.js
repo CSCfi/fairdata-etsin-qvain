@@ -295,6 +295,11 @@ const finnish = {
         title: 'Pääsyoikeus',
         placeholder: 'Valitse vaihtoehto'
       },
+      restrictionGrounds: {
+        title: 'Saatavuutta rajoitettu',
+        placeholder: 'Valitse vaihtoehto',
+        text: 'Jos pääsyoikeus tyyppi on rajattu, valitse rajoituksen syy.'
+      },
       license: {
         title: 'Lisenssi',
         placeholder: 'Valitse vaihtoehto'
