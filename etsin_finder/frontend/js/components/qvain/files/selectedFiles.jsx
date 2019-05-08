@@ -49,9 +49,9 @@ class SelectedFiles extends Component {
                 onClick={(event) => {
                   event.preventDefault()
                   if (s.directory_name !== undefined) {
-                    toggleSelectedDirectory(s)
+                    toggleSelectedDirectory(s, false)
                   } else {
-                    toggleSelectedFile(s)
+                    toggleSelectedFile(s, false)
                   }
                 }}
               />

@@ -1,5 +1,6 @@
 import { observable, action, computed } from 'mobx'
 import axios from 'axios'
+import { getDirectories, deepCopy } from '../../components/qvain/utils/fileHierarchy'
 
 const DIR_URL = '/api/files/directory/'
 const PROJECT_DIR_URL = '/api/files/project/'
@@ -96,9 +97,6 @@ class Qvain {
 
   @observable _inEdit = undefined
 
-  // directory currently in the view (modal)
-  @observable _currentDirectory = []
-
   // acquired directories parent directories' ids
   @observable _parentDirs = new Map()
 
@@ -111,31 +109,75 @@ class Qvain {
   // directories visited, used to go up the directory hierarchy
   @observable _previousDirectories = new Map()
 
-  @action toggleSelectedFile = (file) => {
-    if (this._selectedFiles.find(s => s.file_name === file.file_name) === undefined) {
+  @action toggleSelectedFile = (file, select) => {
+    if (select && this._selectedFiles.find(s => s.file_name === file.file_name) === undefined) {
+      // if we are selecting
       this._selectedFiles = [...this._selectedFiles, file]
+    } else if (!select && this._selectedFiles.find(s => s.file_name === file.file_name) === undefined) {
+      // if we are deselecting but there is no file in selected files
+      // go through selected directories, find the file and filter it out
+      this._selectedDirectories.forEach(sd =>
+        getDirectories(sd)
+          .filter(d => d.identifier === file.parent_directory.identifier)
+          .map(d => d.files.filter(f => f.file_name !== file.file_name))
+      )
     } else {
-      this._selectedFiles = this._selectedFiles.filter(s => s.file_name !== file.file_name)
+      // otherwise remove
+      this._selectedFiles = [...this._selectedFiles.filter(s => s.file_name !== file.file_name)]
     }
   }
 
   @action toggleSelectedDirectory = (dir, select) => {
+    console.log('toggleSelectedDirectory, dir, select', { dir, select })
     if (select) {
-      this._selectedDirectories = [...this._selectedDirectories, dir]
-      this.addDirs(dir, select)
+      // FIXME: somehow deep copy the entire dir tree
+      // even if we copy the dir, the directories and files within will still be referring to their original instances
+      // the moment we deselect them from the UI, thus removing them from the dir, the elements will be gone from
+      // the hierarchy object, which is used to render the file selector itself
+      // const copy = JSON.parse(JSON.stringify(dir))
+      const copy = deepCopy(dir)
+      this._selectedDirectories = [...this._selectedDirectories, copy]
+      this.addDirs(copy)
     } else {
-      this._selectedDirectories = this._selectedDirectories.filter(sd => sd.directory_name !== dir.directory_name)
+      const root = this._selectedDirectories.find(sd => sd.directory_name === dir.directory_name)
+      // we are removing the root selected directory, not one of the subdirectories belonging
+      // to one of the selected directories
+      if (root !== undefined) {
+        this._selectedDirectories = this._selectedDirectories.filter(sd => sd.directory_name !== dir.directory_name)
+      } else {
+        // we are removing one of the subdirectories
+        // this is the selected directory, the highest level directory of the one we are
+        // removing
+        const theSelectedDirs = this._selectedDirectories.filter(sd =>
+          getDirectories(sd).map(d => d.directory_name).includes(dir.directory_name)
+        )
+        console.log(theSelectedDirs)
+        theSelectedDirs.forEach(sd => {
+          const dirs = getDirectories(sd)
+          const theDir = dirs.find(d => d.directory_name === dir.directory_name)
+          theDir.files = undefined
+          theDir.directories = undefined
+
+          const parent = dirs.find(d => d.identifier === theDir.parent_directory.identifier)
+          console.log('parent, ', parent)
+          parent.directories = [...parent.directories.filter(d => d.directory_name !== theDir.directory_name)]
+        })
+        // deselect the individually selected files within the directory
+        if (theSelectedDirs.length === 0) {
+          this._selectedFiles = [...this._selectedFiles.filter(sf => sf.parent_directory.identifier !== dir.identifier)]
+        }
+      }
     }
   }
 
-  @action addDirs = (dir, select) => {
+  @action addDirs = (dir) => {
     axios
       .get(DIR_URL + dir.id)
       .then(res => {
         const { files, directories } = res.data
         dir.files = files
         dir.directories = directories
-        dir.directories.forEach(d => this.addDirs(d, select))
+        dir.directories.forEach(d => this.addDirs(d))
       })
   }
 
@@ -143,20 +185,15 @@ class Qvain {
     this._selectedFiles = this._selectedFiles.filter(sf => sf.id !== fileId)
   }
 
-  @action setCurrentDirectory = (dir) => {
-    this._currentDirectory = dir
-  }
-
   @action getInitialDirectories = () => {
     axios
       .get(PROJECT_DIR_URL + this._selectedProject)
       .then(res => {
-        this._directories = res.data.directories
-        this._files = res.data.files
-        this._directories.forEach(dir => this._parentDirs.set(dir.id, dir.parent_directory.id))
+        // this._directories = res.data.directories
+        // this._files = res.data.files
+        // this._directories.forEach(dir => this._parentDirs.set(dir.id, dir.parent_directory.id))
         this._hierarchy = res.data
         console.log(res.data)
-        this._currentDirectory = this._hierarchy
       })
       .catch(e => {
         console.log('Failed to acquire project root directory, error: ', e.message)
@@ -168,21 +205,7 @@ class Qvain {
     this.getInitialDirectories()
   }
 
-  @action changeDirectory = (dirId) => {
-    axios
-      .get(DIR_URL + dirId)
-      .then(res => {
-        this._previousDirectories.set(this._currentDirectory.id, this._currentDirectory)
-        this._currentDirectory = this._directories.find(dir => dir.id === dirId) ||
-          this._previousDirectories.get(dirId)
-        const { files, directories } = res.data
-        this._directories = directories
-        this._directories.forEach(dir => this._parentDirs.set(dir.id, dir.parent_directory.id))
-        this._files = files
-      })
-  }
-
-  @action openDirectory = (dirId, rootDir) => {
+  @action loadDirectory = (dirId, rootDir) => {
     axios
       .get(DIR_URL + dirId)
       .then(res => {
@@ -190,11 +213,12 @@ class Qvain {
         const { files, directories } = res.data
         dir.files = files
         dir.directories = directories
+        dir.open = true
       })
   }
 
-  @action setInEdit = (storageItem) => {
-    this._inEdit = storageItem
+  @action setInEdit = (selectedItem) => {
+    this._inEdit = selectedItem
   }
 
   @computed
@@ -220,11 +244,6 @@ class Qvain {
   @computed
   get inEdit() {
     return this._inEdit
-  }
-
-  @computed
-  get currentDirectory() {
-    return this._currentDirectory
   }
 
   @computed

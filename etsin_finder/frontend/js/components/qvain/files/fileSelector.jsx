@@ -16,18 +16,19 @@ class FileSelector extends Component {
     Stores: PropTypes.object.isRequired
   }
 
-  handleChangeDirectory = (dirId) => () => {
-    this.props.Stores.Qvain.changeDirectory(dirId)
-  }
-
-  handleOpenDirectory = (dirId, root) => () => {
-    if (root.directories.find(dir => dir.id === dirId).directories === undefined) {
-      const { openDirectory } = this.props.Stores.Qvain
-      openDirectory(dirId, root)
+  handleOpenDirectory = (dirId, root, open) => () => {
+    if (open) {
+      let theDir = root.directories.find(dir => dir.id === dirId)
+      if (theDir.directories === undefined) {
+        const { loadDirectory } = this.props.Stores.Qvain
+        loadDirectory(dirId, root)
+        theDir = root.directories.find(dir => dir.id === dirId)
+      }
+      theDir.open = true
     } else {
-      const theDir = root.directories.find(dir => dir.id === dirId)
-      theDir.directories = undefined
-      theDir.files = undefined
+      root.directories.find(dir => dir.id === dirId).open = false
+      // theDir.directories = undefined
+      // theDir.files = undefined
     }
   }
 
@@ -35,6 +36,11 @@ class FileSelector extends Component {
     selectedFiles.map(sf => sf.parent_directory.id).includes(dir.id) ||
     selectedDirectories.map(sd => sd.id).includes(dir.id) ||
     selectedDirectories.map(sd => getDirectories(sd)).flat().map(d => d.identifier).includes(dir.identifier)
+  )
+
+  isFileSelected = (f, selectedFiles, selectedDirectories) => (
+    selectedFiles.map(s => s.file_name).includes(f.file_name) ||
+    getAllFiles(selectedDirectories).map(sf => sf.file_name).includes(f.file_name)
   )
 
   // recursive function to draw the entire file hierarchy, if so desired
@@ -50,38 +56,38 @@ class FileSelector extends Component {
         <li style={{ paddingLeft: '20px' }}>
           <LinkButton
             type="button"
-            onKeyPress={this.handleOpenDirectory(h.id, root)}
-            onClick={this.handleOpenDirectory(h.id, root)}
+            onKeyPress={this.handleOpenDirectory(h.id, root, !h.open)}
+            onClick={this.handleOpenDirectory(h.id, root, !h.open)}
           >
-            <FontAwesomeIcon icon={h.directories ? faChevronDown : faChevronRight} />
+            <FontAwesomeIcon icon={h.open ? faChevronDown : faChevronRight} />
           </LinkButton>
           <Checkbox
             checked={this.isDirectorySelected(h, selectedFiles, selectedDirectories)}
             id={`${h.id}Checkbox`}
             type="checkbox"
             onChange={() => toggleSelectedDirectory(
-              h,
+              { ...h },
               !this.isDirectorySelected(h, selectedFiles, selectedDirectories)
             )}
           />
           <DirectoryIcon />
           {h.directory_name}
           <ul>
-            {h.directories && (
+            {(h.directories && h.open) && (
               <Fragment>{h.directories.map(dir => (this.drawHierarchy(dir, h)))}</Fragment>
             )}
-            {h.files && (
+            {(h.files && h.open) && (
               <Fragment>
                 {h.files.map(f => (
                   <li key={f.identifier} style={{ paddingLeft: '20px' }}>
                     <Checkbox
-                      checked={
-                        selectedFiles.map(s => s.file_name).includes(f.file_name) ||
-                        getAllFiles(selectedDirectories).map(sf => sf.file_name).includes(f.file_name)
-                      }
+                      checked={this.isFileSelected(f, selectedFiles, selectedDirectories)}
                       id={`${f.id}Checkbox`}
                       type="checkbox"
-                      onChange={() => toggleSelectedFile(f)}
+                      onChange={() => toggleSelectedFile(
+                        f,
+                        !this.isFileSelected(f, selectedFiles, selectedDirectories)
+                      )}
                     />
                     <FileIcon style={{ paddingLeft: '8px' }} />
                     {f.file_name}
@@ -121,7 +127,7 @@ class FileSelector extends Component {
                     }
                     id={`${file.id}Checkbox`}
                     type="checkbox"
-                    onChange={() => toggleSelectedFile(file)}
+                    onChange={() => toggleSelectedFile(file, !this.isFileSelected(file, selectedFiles, selectedDirectories))}
                   />
                   <label htmlFor={`${file.id}Checkbox`}>
                     <FileIcon style={{ paddingLeft: '8px' }} />

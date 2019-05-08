@@ -11,3 +11,17 @@ export const getAllFiles = (dirs) => dirs.map(d => getFiles(d)).flat()
 export const getDirectories = (dir) => [].concat(dir.directories || []).concat(
   ...(dir.directories ? dir.directories.map(d => getDirectories(d)) : [])
 )
+
+// used to deep copy selected directories to the selectedDirectories array in qvain
+// state store. We need all of the internal data structures to be copied as well,
+// which is why shallow copying is not enough.
+export const deepCopy = (oldObj) => {
+  let newObj = oldObj
+  if (oldObj && typeof oldObj === 'object') {
+    newObj = Object.prototype.toString.call(oldObj) === '[object Array]' ? [] : {}
+    Object.keys(oldObj).forEach(key => {
+      newObj[key] = deepCopy(oldObj[key])
+    })
+  }
+  return newObj
+}
