@@ -5,7 +5,8 @@ import Select from 'react-select'
 import Translate from 'react-translate-component'
 
 import getReferenceData from '../utils/getReferenceData';
-import Card from '../general/card'
+import Card from '../general/card';
+import RestrictionGrounds from './resctrictionGrounds';
 
 class AccessType extends Component {
   static propTypes = {
@@ -13,8 +14,9 @@ class AccessType extends Component {
   }
 
   state = {
+    accessTypeNotOpen: false,
     accessTypesEn: [{ value: '', label: '' }],
-    accessTypesFi: [{ value: '', label: '' }]
+    accessTypesFi: [{ value: '', label: '' }],
   }
 
   componentDidMount = () => {
@@ -33,8 +35,10 @@ class AccessType extends Component {
           label: ref._source.label.fi,
         }
         ))
-      this.setState({ accessTypesEn: refsEn })
-      this.setState({ accessTypesFi: refsFi })
+      this.setState({
+        accessTypesEn: refsEn,
+        accessTypesFi: refsFi
+      })
     })
     .catch(error => {
       if (error.response) {
@@ -66,13 +70,20 @@ class AccessType extends Component {
           }
           clearable
           onChange={(accessType) => {
-            this.props.Stores.Qvain.accessType = accessType
+            this.props.Stores.Qvain.setAccessType(accessType)
+            if (accessType.value !== 'Open') {
+              this.setState({ accessTypeNotOpen: true })
+            } else if (accessType.value === 'Open') {
+              this.setState({ accessTypeNotOpen: false })
+            }
           }}
           onBlur={() => {}}
           attributes={{
             placeholder: 'qvain.rightsAndLicenses.accessType.placeholder'
           }}
         />
+        { this.state.accessTypeNotOpen
+          ? <RestrictionGrounds /> : null}
       </Card>
     )
   }
