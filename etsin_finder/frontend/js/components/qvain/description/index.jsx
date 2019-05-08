@@ -9,12 +9,12 @@ import { SectionTitle } from '../general/section'
 const Description = () => (
   <div className="container">
     <Translate component={SectionTitle} content="qvain.description.title" />
-    <div>
+    <React.Fragment>
       <DescriptionFeild />
       <OtherIdentifierField />
       <FieldOfScienceField />
       <KeywordsField />
-    </div>
+    </React.Fragment>
   </div>
 )
 
