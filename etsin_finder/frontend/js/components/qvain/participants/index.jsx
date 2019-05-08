@@ -22,14 +22,14 @@ import {
 } from '../general/buttons'
 
 export const EntityType = {
-  PERSON: 'Person',
-  ORGANIZATION: 'Organization'
+  PERSON: 'person',
+  ORGANIZATION: 'organization'
 }
 
 export const Role = {
-  CREATOR: 'Creator',
-  PUBLISHER: 'Publisher',
-  CURATOR: 'Curator'
+  CREATOR: 'creator',
+  PUBLISHER: 'publisher',
+  CURATOR: 'curator'
 }
 
 class Participants extends Component {
@@ -39,7 +39,7 @@ class Participants extends Component {
 
   state = {
     participant: {
-      entityType: EntityType.PERSON,
+      type: EntityType.PERSON,
       roles: []
     },
     name: '',
@@ -90,7 +90,7 @@ class Participants extends Component {
     return (
       <ParticipantSelection>
         <ParticipantEntityType>
-          <Translate content={`qvain.participants.add.radio.${participant.entityType.toLowerCase()}`} />
+          <Translate content={`qvain.participants.add.radio.${participant.type.toLowerCase()}`} />
         </ParticipantEntityType>
         {participant.roles.map(role => (
           <React.Fragment key={role}>
@@ -128,7 +128,7 @@ class Participants extends Component {
   handleChangeEntity = (event) => {
     this.setState({
       participant: {
-        entityType: event.target.value,
+        type: event.target.value,
         roles: []
       }
     })
@@ -137,7 +137,7 @@ class Participants extends Component {
   handleReset = () => {
     this.setState({
       participant: {
-        entityType: EntityType.PERSON,
+        type: EntityType.PERSON,
         roles: [],
       },
       name: '',
@@ -170,7 +170,7 @@ class Participants extends Component {
     event.preventDefault()
     this.setState({
       participant: {
-        entityType: participant.entityType,
+        type: participant.type,
         roles: participant.roles
       },
       ...participant
@@ -211,7 +211,7 @@ class Participants extends Component {
                       onChange={this.handleChangeEntity}
                       value={EntityType.PERSON}
                       type="radio"
-                      checked={participant.entityType === EntityType.PERSON}
+                      checked={participant.type === EntityType.PERSON}
                     />
                   </RadioContainer>
                   <Label htmlFor="entityPerson">
@@ -219,16 +219,16 @@ class Participants extends Component {
                   </Label>
                 </FormField>
                 <List>
-                  <ListItem disabled={participant.entityType !== EntityType.PERSON}>
+                  <ListItem disabled={participant.type !== EntityType.PERSON}>
                     <FormField>
                       <Checkbox
-                        disabled={participant.entityType !== EntityType.PERSON}
+                        disabled={participant.type !== EntityType.PERSON}
                         onChange={this.handleChangeRole}
                         id="personCreator"
                         type="checkbox"
                         value={Role.CREATOR}
                         checked={
-                          participant.entityType === EntityType.PERSON &&
+                          participant.type === EntityType.PERSON &&
                           participant.roles.includes(Role.CREATOR)
                         }
                       />
@@ -237,16 +237,16 @@ class Participants extends Component {
                       </Label>
                     </FormField>
                   </ListItem>
-                  <ListItem disabled={participant.entityType !== EntityType.PERSON || this.checkIfParticipantRoleExists('Publisher')}>
+                  <ListItem disabled={participant.type !== EntityType.PERSON || this.checkIfParticipantRoleExists('publisher')}>
                     <FormField>
                       <Checkbox
                         onChange={this.handleChangeRole}
-                        disabled={participant.entityType !== EntityType.PERSON || this.checkIfParticipantRoleExists('Publisher')}
+                        disabled={participant.type !== EntityType.PERSON || this.checkIfParticipantRoleExists('publisher')}
                         id="personPublisher"
                         value={Role.PUBLISHER}
                         type="checkbox"
                         checked={
-                          participant.entityType === EntityType.PERSON &&
+                          participant.type === EntityType.PERSON &&
                           participant.roles.includes(Role.PUBLISHER)
                         }
                       />
@@ -255,15 +255,15 @@ class Participants extends Component {
                       </Label>
                     </FormField>
                   </ListItem>
-                  <ListItem disabled={participant.entityType !== EntityType.PERSON || this.checkIfParticipantRoleExists('Curator')}>
+                  <ListItem disabled={participant.type !== EntityType.PERSON || this.checkIfParticipantRoleExists('curator')}>
                     <FormField>
                       <Checkbox
-                        disabled={participant.entityType !== EntityType.PERSON || this.checkIfParticipantRoleExists('Curator')}
+                        disabled={participant.type !== EntityType.PERSON || this.checkIfParticipantRoleExists('curator')}
                         onChange={this.handleChangeRole}
                         id="personCurator"
                         value={Role.CURATOR}
                         checked={
-                          participant.entityType === EntityType.PERSON &&
+                          participant.type === EntityType.PERSON &&
                           participant.roles.includes(Role.CURATOR)
                         }
                         type="checkbox"
@@ -284,7 +284,7 @@ class Participants extends Component {
                       value={EntityType.ORGANIZATION}
                       type="radio"
                       onChange={this.handleChangeEntity}
-                      checked={participant.entityType === EntityType.ORGANIZATION}
+                      checked={participant.type === EntityType.ORGANIZATION}
                     />
                   </RadioContainer>
                   <Label htmlFor="entityOrg">
@@ -292,16 +292,16 @@ class Participants extends Component {
                   </Label>
                 </FormField>
                 <List>
-                  <ListItem disabled={participant.entityType !== EntityType.ORGANIZATION}>
+                  <ListItem disabled={participant.type !== EntityType.ORGANIZATION}>
                     <FormField>
                       <Checkbox
                         id="orgCreator"
                         type="checkbox"
-                        disabled={participant.entityType !== EntityType.ORGANIZATION}
+                        disabled={participant.type !== EntityType.ORGANIZATION}
                         onChange={this.handleChangeRole}
                         value={Role.CREATOR}
                         checked={
-                          participant.entityType === EntityType.ORGANIZATION &&
+                          participant.type === EntityType.ORGANIZATION &&
                           participant.roles.includes(Role.CREATOR)
                         }
                       />
@@ -310,16 +310,16 @@ class Participants extends Component {
                       </Label>
                     </FormField>
                   </ListItem>
-                  <ListItem disabled={participant.entityType !== EntityType.ORGANIZATION || this.checkIfParticipantRoleExists('Publisher')}>
+                  <ListItem disabled={participant.type !== EntityType.ORGANIZATION || this.checkIfParticipantRoleExists('publisher')}>
                     <FormField>
                       <Checkbox
                         id="orgPublisher"
                         type="checkbox"
-                        disabled={participant.entityType !== EntityType.ORGANIZATION || this.checkIfParticipantRoleExists('Publisher')}
+                        disabled={participant.type !== EntityType.ORGANIZATION || this.checkIfParticipantRoleExists('publisher')}
                         onChange={this.handleChangeRole}
                         value={Role.PUBLISHER}
                         checked={
-                          participant.entityType === EntityType.ORGANIZATION &&
+                          participant.type === EntityType.ORGANIZATION &&
                           participant.roles.includes(Role.PUBLISHER)
                         }
                       />
@@ -328,16 +328,16 @@ class Participants extends Component {
                       </Label>
                     </FormField>
                   </ListItem>
-                  <ListItem disabled={participant.entityType !== EntityType.ORGANIZATION || this.checkIfParticipantRoleExists('Curator')}>
+                  <ListItem disabled={participant.type !== EntityType.ORGANIZATION || this.checkIfParticipantRoleExists('curator')}>
                     <FormField>
                       <Checkbox
                         id="orgCurator"
                         type="checkbox"
-                        disabled={participant.entityType !== EntityType.ORGANIZATION || this.checkIfParticipantRoleExists('Curator')}
+                        disabled={participant.type !== EntityType.ORGANIZATION || this.checkIfParticipantRoleExists('curator')}
                         onChange={this.handleChangeRole}
                         value={Role.CURATOR}
                         checked={
-                          participant.entityType === EntityType.ORGANIZATION &&
+                          participant.type === EntityType.ORGANIZATION &&
                           participant.roles.includes(Role.CURATOR)
                         }
                       />
@@ -349,20 +349,20 @@ class Participants extends Component {
                 </List>
               </Column>
             </Fieldset>
-            {participant.entityType !== undefined && this.getSelection()}
-            {participant.entityType !== undefined && (
+            {participant.type !== undefined && this.getSelection()}
+            {participant.type !== undefined && (
               <React.Fragment>
                 <Label htmlFor="nameField">
                   <Translate content="qvain.participants.add.name.label" /> *
                 </Label>
-                {participant.entityType === EntityType.PERSON
+                {participant.type === EntityType.PERSON
                   ? (
                     <Translate
                       component={Input}
                       type="text"
                       id="nameField"
-                      attributes={{ placeholder: `qvain.participants.add.name.placeholder.${participant.entityType.toLowerCase()}` }}
-                      // placeholder={participant.entityType === EntityType.PERSON ? 'First And Last Name' : 'Name'}
+                      attributes={{ placeholder: `qvain.participants.add.name.placeholder.${participant.type.toLowerCase()}` }}
+                      // placeholder={participant.type === EntityType.PERSON ? 'First And Last Name' : 'Name'}
                       value={name}
                       onChange={(event) => this.setState({ name: event.target.value })}
                     />
@@ -412,8 +412,8 @@ class Participants extends Component {
                   value={identifier}
                 />
                 <Label htmlFor="orgField">
-                  <Translate content={`qvain.participants.add.organization.label.${participant.entityType.toLowerCase()}`} />
-                  {participant.entityType === EntityType.PERSON && ' *'}
+                  <Translate content={`qvain.participants.add.organization.label.${participant.type.toLowerCase()}`} />
+                  {participant.type === EntityType.PERSON && ' *'}
                 </Label>
                 <Translate
                   component={SelectOrg}
@@ -458,7 +458,7 @@ class Participants extends Component {
             {this.props.Stores.Qvain.addedParticipants.map((addedParticipant) => (
               <ButtonGroup key={addedParticipant.identifier}>
                 <ButtonLabel>
-                  <FontAwesomeIcon icon={addedParticipant.entityType === EntityType.PERSON ? faUser : faBuilding} style={{ marginRight: '8px' }} />
+                  <FontAwesomeIcon icon={addedParticipant.type === EntityType.PERSON ? faUser : faBuilding} style={{ marginRight: '8px' }} />
                   {addedParticipant.name}{addedParticipant.roles.map(role => (` / ${ role }`))}
                 </ButtonLabel>
                 <EditButton onClick={this.createHandleEdit(addedParticipant)} />
