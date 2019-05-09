@@ -1,4 +1,4 @@
-import { observable, action, computed } from 'mobx'
+import { observable, action, computed, toJS } from 'mobx'
 import axios from 'axios'
 import { getDirectories, deepCopy } from '../../components/qvain/utils/fileHierarchy'
 
@@ -116,11 +116,17 @@ class Qvain {
     } else if (!select && this._selectedFiles.find(s => s.file_name === file.file_name) === undefined) {
       // if we are deselecting but there is no file in selected files
       // go through selected directories, find the file and filter it out
-      this._selectedDirectories.forEach(sd =>
-        getDirectories(sd)
-          .filter(d => d.identifier === file.parent_directory.identifier)
-          .map(d => d.files.filter(f => f.file_name !== file.file_name))
-      )
+      this._selectedDirectories.forEach(sd => {
+        const dirs = getDirectories(sd).filter(d => d.identifier === file.parent_directory.identifier)
+        dirs.forEach(dir => {
+          dir.files = [...dir.files.filter(f => f.file_name !== file.file_name)]
+        })
+        if (dirs.length === 0) {
+          // debug. might be hard to find bugs in this logic since nothing here will break even
+          // if it isn't working
+          console.warn(`Couldn't find directory for file with file path ${file.file_path}`)
+        }
+      })
     } else {
       // otherwise remove
       this._selectedFiles = [...this._selectedFiles.filter(s => s.file_name !== file.file_name)]
@@ -130,7 +136,6 @@ class Qvain {
   @action toggleSelectedDirectory = (dir, select) => {
     console.log('toggleSelectedDirectory, dir, select', { dir, select })
     if (select) {
-      // FIXME: somehow deep copy the entire dir tree
       // even if we copy the dir, the directories and files within will still be referring to their original instances
       // the moment we deselect them from the UI, thus removing them from the dir, the elements will be gone from
       // the hierarchy object, which is used to render the file selector itself
@@ -139,31 +144,39 @@ class Qvain {
       this._selectedDirectories = [...this._selectedDirectories, copy]
       this.addDirs(copy)
     } else {
-      const root = this._selectedDirectories.find(sd => sd.directory_name === dir.directory_name)
+      const isRoot = this._selectedDirectories.find(sd => sd.directory_name === dir.directory_name) !== undefined
       // we are removing the root selected directory, not one of the subdirectories belonging
       // to one of the selected directories
-      if (root !== undefined) {
+      if (isRoot) {
         this._selectedDirectories = this._selectedDirectories.filter(sd => sd.directory_name !== dir.directory_name)
       } else {
         // we are removing one of the subdirectories
         // this is the selected directory, the highest level directory of the one we are
         // removing
-        const theSelectedDirs = this._selectedDirectories.filter(sd =>
-          getDirectories(sd).map(d => d.directory_name).includes(dir.directory_name)
-        )
-        console.log(theSelectedDirs)
-        theSelectedDirs.forEach(sd => {
-          const dirs = getDirectories(sd)
-          const theDir = dirs.find(d => d.directory_name === dir.directory_name)
-          theDir.files = undefined
-          theDir.directories = undefined
-
-          const parent = dirs.find(d => d.identifier === theDir.parent_directory.identifier)
-          console.log('parent, ', parent)
-          parent.directories = [...parent.directories.filter(d => d.directory_name !== theDir.directory_name)]
-        })
+        let parent = this._selectedDirectories.find(sd => sd.identifier === dir.parent_directory.identifier)
+        const allSelectedDirs = this._selectedDirectories
+        const allDirs = allSelectedDirs.map(x => getDirectories(x)).flat()
+        if (parent !== undefined) {
+          // is the directory being deselected the direct child of one of the selected directories?
+          this._selectedDirectories = this._selectedDirectories.map(sd => {
+            const copy = deepCopy(sd)
+            const newDirs = copy.directories.filter(d => d.directory_name !== dir.directory_name)
+            copy.directories = newDirs
+            return copy
+          })
+        } else {
+          // the directory being deselected is not a direct child
+          const newSelectedDirs = allSelectedDirs.map(sd => {
+            const copy = deepCopy(sd)
+            const copyDirs = getDirectories(copy)
+            parent = copyDirs.find(d => d.identifier === dir.parent_directory.identifier)
+            parent.directories = parent.directories.filter(d => d.identifier !== dir.identifier)
+            return copy
+          })
+          this._selectedDirectories = newSelectedDirs
+        }
         // deselect the individually selected files within the directory
-        if (theSelectedDirs.length === 0) {
+        if (allDirs.length === 0) {
           this._selectedFiles = [...this._selectedFiles.filter(sf => sf.parent_directory.identifier !== dir.identifier)]
         }
       }
@@ -189,9 +202,6 @@ class Qvain {
     axios
       .get(PROJECT_DIR_URL + this._selectedProject)
       .then(res => {
-        // this._directories = res.data.directories
-        // this._files = res.data.files
-        // this._directories.forEach(dir => this._parentDirs.set(dir.id, dir.parent_directory.id))
         this._hierarchy = res.data
         console.log(res.data)
       })
