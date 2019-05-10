@@ -8,6 +8,7 @@ import Translate from 'react-translate-component'
 import { ButtonGroup, ButtonLabel, EditButton, DeleteButton } from '../general/buttons'
 import FileForm from './fileForm'
 import DirectoryForm from './directoryForm'
+import { getDirectories, getFiles } from '../utils/fileHierarchy'
 
 class SelectedFiles extends Component {
   static propTypes = {
@@ -26,13 +27,12 @@ class SelectedFiles extends Component {
 
   render() {
     const {
-      selectedFiles,
-      selectedDirectories,
       toggleSelectedFile,
       toggleSelectedDirectory,
+      hierarchy,
       inEdit
     } = this.props.Stores.Qvain
-    const selected = selectedFiles.concat(selectedDirectories)
+    const selected = getDirectories(hierarchy).filter(d => d.selected).concat(getFiles(hierarchy).filter(f => f.selected))
     return (
       <Fragment>
         <Translate component={SelectedFilesTitle} content="qvain.files.selected.title" />
@@ -41,14 +41,14 @@ class SelectedFiles extends Component {
           <Fragment key={`${s.id}-${s.identifier}`}>
             <FileItem active={isInEdit(inEdit, s.identifier)}>
               <ButtonLabel>
-                <FontAwesomeIcon icon={(s.directory_name ? faFolder : faCopy)} style={{ marginRight: '8px' }} />
-                {s.project_identifier} / {s.directory_name || getTitle(s.file_characteristics)}
+                <FontAwesomeIcon icon={(s.directoryName ? faFolder : faCopy)} style={{ marginRight: '8px' }} />
+                {s.projectIdentifier} / {s.directoryName || getTitle(s.characteristics)}
               </ButtonLabel>
               <EditButton onClick={this.handleEdit(s)} />
               <DeleteButton
                 onClick={(event) => {
                   event.preventDefault()
-                  if (s.directory_name !== undefined) {
+                  if (s.directoryName !== undefined) {
                     toggleSelectedDirectory(s, false)
                   } else {
                     toggleSelectedFile(s, false)
@@ -71,21 +71,9 @@ class SelectedFiles extends Component {
 
 const isInEdit = (inEdit, identifier) => (inEdit !== undefined) && inEdit.identifier === identifier
 
-const isDirectory = (inEdit) => inEdit.directory_name !== undefined
+const isDirectory = (inEdit) => inEdit.directoryName !== undefined
 
 const getTitle = (fileCharacteristics) => (fileCharacteristics !== undefined ? fileCharacteristics.title : '')
-
-const groupBy = key => array =>
-  array.reduce((objectsByKeyValue, obj) => {
-    const keys = key.split('.')
-    let value = obj
-    keys.forEach(_key => {
-      value = value[_key]
-    })
-    // const value = obj[key];
-    objectsByKeyValue[value] = (objectsByKeyValue[value] || []).concat(obj);
-    return objectsByKeyValue;
-  }, {});
 
 // Components
 

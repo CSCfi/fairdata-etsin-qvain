@@ -11,6 +11,8 @@ import {
 import { List, ListItem } from '../general/list'
 import { getDirectories, getFiles, getAllFiles } from '../utils/fileHierarchy'
 
+import { toJS } from 'mobx'
+
 class FileSelector extends Component {
   static propTypes = {
     Stores: PropTypes.object.isRequired
@@ -18,11 +20,12 @@ class FileSelector extends Component {
 
   handleOpenDirectory = (dirId, root, open) => () => {
     if (open) {
-      let theDir = root.directories.find(dir => dir.id === dirId)
-      if (theDir.directories === undefined) {
+      const theDir = root.directories.find(dir => dir.id === dirId)
+      console.log('handleOpenDirectory, theDir, ', theDir)
+      if (theDir.directories.length === 0) {
+        console.log('asdasd')
         const { loadDirectory } = this.props.Stores.Qvain
         loadDirectory(dirId, root)
-        theDir = root.directories.find(dir => dir.id === dirId)
       }
       theDir.open = true
     } else {
@@ -31,12 +34,6 @@ class FileSelector extends Component {
       // theDir.files = undefined
     }
   }
-
-  isDirectorySelected = (dir, selectedFiles, selectedDirectories) => (
-    selectedFiles.map(sf => sf.parent_directory.id).includes(dir.id) ||
-    selectedDirectories.map(sd => sd.id).includes(dir.id) ||
-    selectedDirectories.map(sd => getDirectories(sd)).flat().map(d => d.identifier).includes(dir.identifier)
-  )
 
   isFileSelected = (f, selectedFiles, selectedDirectories) => (
     selectedFiles.map(s => s.file_name).includes(f.file_name) ||
@@ -47,9 +44,7 @@ class FileSelector extends Component {
   drawHierarchy = (h, root) => {
     const {
       toggleSelectedDirectory,
-      toggleSelectedFile,
-      selectedFiles,
-      selectedDirectories
+      toggleSelectedFile
     } = this.props.Stores.Qvain
     return (
       <Fragment key={h.identifier}>
@@ -62,16 +57,16 @@ class FileSelector extends Component {
             <FontAwesomeIcon icon={h.open ? faChevronDown : faChevronRight} />
           </LinkButton>
           <Checkbox
-            checked={this.isDirectorySelected(h, selectedFiles, selectedDirectories)}
+            checked={h.selected}
             id={`${h.id}Checkbox`}
             type="checkbox"
             onChange={() => toggleSelectedDirectory(
               { ...h },
-              !this.isDirectorySelected(h, selectedFiles, selectedDirectories)
+              !h.selected
             )}
           />
           <DirectoryIcon />
-          {h.directory_name}
+          {h.directoryName}
           <ul>
             {(h.directories && h.open) && (
               <Fragment>{h.directories.map(dir => (this.drawHierarchy(dir, h)))}</Fragment>
@@ -81,16 +76,16 @@ class FileSelector extends Component {
                 {h.files.map(f => (
                   <li key={f.identifier} style={{ paddingLeft: '20px' }}>
                     <Checkbox
-                      checked={this.isFileSelected(f, selectedFiles, selectedDirectories)}
+                      checked={f.selected}
                       id={`${f.id}Checkbox`}
                       type="checkbox"
                       onChange={() => toggleSelectedFile(
                         f,
-                        !this.isFileSelected(f, selectedFiles, selectedDirectories)
+                        !f.selected
                       )}
                     />
                     <FileIcon style={{ paddingLeft: '8px' }} />
-                    {f.file_name}
+                    {f.fileName}
                   </li>
                 ))}
               </Fragment>

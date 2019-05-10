@@ -134,64 +134,39 @@ class Qvain {
   }
 
   @action toggleSelectedDirectory = (dir, select) => {
-    console.log('toggleSelectedDirectory, dir, select', { dir, select })
-    if (select) {
-      // even if we copy the dir, the directories and files within will still be referring to their original instances
-      // the moment we deselect them from the UI, thus removing them from the dir, the elements will be gone from
-      // the hierarchy object, which is used to render the file selector itself
-      // const copy = JSON.parse(JSON.stringify(dir))
-      const copy = deepCopy(dir)
-      this._selectedDirectories = [...this._selectedDirectories, copy]
-      this.addDirs(copy)
+    const newHier = { ...this._hierarchy }
+    const flat = getDirectories(newHier)
+    this.selectDirectory(flat.find(d => d.identifier === dir.identifier), select)
+    this._hierarchy = newHier
+  }
+
+  selectDirectory = (dir, select, prev) => {
+    dir.selected = select
+    console.log('selectDirectory, dir ', toJS(dir))
+    console.log()
+    if (prev !== undefined && dir.directories.length === 0) {
+      console.log('selectDirectory load more')
+      this.loadDirectory(dir.id, prev, () => {
+        console.log('this is the callback')
+        dir.files.forEach(f => {
+          f.selected = select
+        })
+        dir.directories.forEach(d => this.selectDirectory(d, select, dir))
+      })
     } else {
-      const isRoot = this._selectedDirectories.find(sd => sd.directory_name === dir.directory_name) !== undefined
-      // we are removing the root selected directory, not one of the subdirectories belonging
-      // to one of the selected directories
-      if (isRoot) {
-        this._selectedDirectories = this._selectedDirectories.filter(sd => sd.directory_name !== dir.directory_name)
-      } else {
-        // we are removing one of the subdirectories
-        // this is the selected directory, the highest level directory of the one we are
-        // removing
-        let parent = this._selectedDirectories.find(sd => sd.identifier === dir.parent_directory.identifier)
-        const allSelectedDirs = this._selectedDirectories
-        const allDirs = allSelectedDirs.map(x => getDirectories(x)).flat()
-        if (parent !== undefined) {
-          // is the directory being deselected the direct child of one of the selected directories?
-          this._selectedDirectories = this._selectedDirectories.map(sd => {
-            const copy = deepCopy(sd)
-            const newDirs = copy.directories.filter(d => d.directory_name !== dir.directory_name)
-            copy.directories = newDirs
-            return copy
-          })
-        } else {
-          // the directory being deselected is not a direct child
-          const newSelectedDirs = allSelectedDirs.map(sd => {
-            const copy = deepCopy(sd)
-            const copyDirs = getDirectories(copy)
-            parent = copyDirs.find(d => d.identifier === dir.parent_directory.identifier)
-            parent.directories = parent.directories.filter(d => d.identifier !== dir.identifier)
-            return copy
-          })
-          this._selectedDirectories = newSelectedDirs
-        }
-        // deselect the individually selected files within the directory
-        if (allDirs.length === 0) {
-          this._selectedFiles = [...this._selectedFiles.filter(sf => sf.parent_directory.identifier !== dir.identifier)]
-        }
-      }
+      dir.files.forEach(f => {
+        f.selected = select
+      })
+      dir.directories.forEach(d => this.selectDirectory(d, select, dir))
     }
   }
 
-  @action addDirs = (dir) => {
-    axios
-      .get(DIR_URL + dir.id)
-      .then(res => {
-        const { files, directories } = res.data
-        dir.files = files
-        dir.directories = directories
-        dir.directories.forEach(d => this.addDirs(d))
-      })
+  findDir = (dir, dirs) => this.findDir(dirs.find(d => d.identifier === dir.identifier))
+
+  checkDir = (dir, dirs) => {
+    const toBeChecked = this.findDir(dir, dirs)
+    toBeChecked.selected = true
+    return toBeChecked
   }
 
   @action removeSelectedFile = (fileId) => {
@@ -202,11 +177,11 @@ class Qvain {
     axios
       .get(PROJECT_DIR_URL + this._selectedProject)
       .then(res => {
-        this._hierarchy = res.data
         console.log(res.data)
+        this._hierarchy = Directory(res.data, false, false)
       })
       .catch(e => {
-        console.log('Failed to acquire project root directory, error: ', e.message)
+        console.log('Failed to acquire project root directory, error: ', e)
       })
   }
 
@@ -215,16 +190,22 @@ class Qvain {
     this.getInitialDirectories()
   }
 
-  @action loadDirectory = (dirId, rootDir) => {
-    axios
+  @action loadDirectory = (dirId, rootDir, callback) => {
+    const req = axios
       .get(DIR_URL + dirId)
       .then(res => {
-        const dir = rootDir.directories.find(d => d.id === dirId)
-        const { files, directories } = res.data
-        dir.files = files
-        dir.directories = directories
-        dir.open = true
+        const newDirs = [...rootDir.directories.map(d => (
+          d.id === dirId ? {
+            ...d,
+            directories: res.data.directories.map(newDir => Directory(newDir, false, false)),
+            files: res.data.files.map(newFile => File(newFile, false)),
+          } : d
+        ))]
+        rootDir.directories = newDirs
       })
+    if (callback) {
+      req.then(callback)
+    }
   }
 
   @action setInEdit = (selectedItem) => {
@@ -276,5 +257,29 @@ class Qvain {
     return this._parentDirs
   }
 }
+
+const Hierarchy = (h, parent, selected) => ({
+  original: h,
+  identifier: h.identifier,
+  projectIdentifier: h.project_identifier,
+  id: h.id,
+  parentDirectory: h.parent_directory,
+  selected
+})
+
+const Directory = (dir, selected, open) => ({
+  ...Hierarchy(dir, selected),
+  open,
+  directoryName: dir.directory_name,
+  directories: dir.directories ? dir.directories.map(d => Directory(d, false, false)) : [],
+  files: dir.files ? dir.files.map(f => File(f, false)) : []
+})
+
+const File = (file, selected) => ({
+  ...Hierarchy(file, selected),
+  fileName: file.file_name,
+  filePath: file.file_path,
+  fileCharacteristics: file.file_characteristics
+})
 
 export default new Qvain()
