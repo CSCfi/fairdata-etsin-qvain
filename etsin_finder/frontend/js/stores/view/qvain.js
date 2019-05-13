@@ -84,6 +84,11 @@ export class Qvain {
   }
 
   @action
+  removeRestrictionGrounds = () => {
+    this.restrictionGrounds = {}
+  }
+
+  @action
   setParticipants = (participants) => {
     this.participants = participants
   }
@@ -101,6 +106,7 @@ export class Qvain {
 
   @action
   removeParticipant = (participant) => {
+    // TODO identifier is not a mandatory field, so it should me replaced with something new or removed.
     const participants = this.participants.filter((p) => p.identifier !== participant.identifier)
     this.setParticipants(participants)
   }
