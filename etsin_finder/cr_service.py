@@ -85,66 +85,6 @@ class MetaxAPIService(FlaskService):
 
         return metax_api_response.json()
 
-    def get_directory_for_project(self, project_identifier):
-        """
-        Get directory contents for a specific project
-
-        :param project_identifier:
-        :return:
-        """
-        req_url = self.METAX_GET_DIRECTORY_FOR_PROJECT_URL.format(project_identifier)
-
-        try:
-            metax_api_response = requests.get(req_url,
-                                              headers={'Accept': 'application/json'},
-                                              auth=(self.user, self.pw),
-                                              verify=self.verify_ssl,
-                                              timeout=10)
-            metax_api_response.raise_for_status()
-        except Exception as e:
-            if isinstance(e, requests.HTTPError):
-                log.debug("Failed to get data for project {0} from Metax API".
-                          format(project_identifier))
-                log.debug('Response status code: {0}'.format(metax_api_response.status_code))
-                log.debug('Response text: {0}'.format(json_or_empty(metax_api_response) or metax_api_response.text))
-            else:
-                log.error("Failed to get data for project {0} from Metax API".
-                          format(project_identifier))
-                log.error(e)
-            return None
-
-        return metax_api_response.json()
-
-    def get_directory(self, dir_identifier):
-        """
-        Get a specific directory with directory's id
-
-        :param dir_identifier:
-        :return:
-        """
-        req_url = self.METAX_GET_DIRECTORY.format(dir_identifier)
-
-        try:
-            metax_api_response = requests.get(req_url,
-                                              headers={'Accept': 'application/json'},
-                                              auth=(self.user, self.pw),
-                                              verify=self.verify_ssl,
-                                              timeout=10)
-            metax_api_response.raise_for_status()
-        except Exception as e:
-            if isinstance(e, requests.HTTPError):
-                log.debug("Failed to get data for directory {0} from Metax API".
-                          format(dir_identifier))
-                log.debug('Response status code: {0}'.format(metax_api_response.status_code))
-                log.debug('Response text: {0}'.format(json_or_empty(metax_api_response) or metax_api_response.text))
-            else:
-                log.error("Failed to get data for directory {0} from Metax API".
-                          format(dir_identifier))
-                log.error(e)
-            return None
-
-        return metax_api_response.json()
-
     def get_catalog_record_with_file_details(self, identifier):
         """
         Get a catalog record with a given identifier from MetaX API.
@@ -233,12 +173,6 @@ def get_directory_data_for_catalog_record(cr_id, dir_id, file_fields, directory_
     :return:
     """
     return _metax_api.get_directory_for_catalog_record(cr_id, dir_id, file_fields, directory_fields)
-
-def get_directory(dir_id):
-    return _metax_api.get_directory(dir_id)
-
-def get_directory_for_project(project_id):
-    return _metax_api.get_directory_for_project(project_id)
 
 
 def get_catalog_record_access_type(cr):
