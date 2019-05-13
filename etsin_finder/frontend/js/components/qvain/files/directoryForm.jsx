@@ -26,19 +26,23 @@ class DirectoryForm extends Component {
   }
 
   componentDidMount = () => {
+    const { fileCharacteristics } = this.props.Stores.Qvain.inEdit
     getLocalizedOptions('file_type').then(translations => {
-      this.setState({
+      this.setState((state, props) => ({
         fileTypesEn: translations.en,
-        fileTypesFi: translations.fi
-      })
+        fileTypesFi: translations.fi,
+        fileType: props.Stores.Locale.lang === 'en' ?
+          getFileType(fileCharacteristics, translations.en) :
+          getFileType(fileCharacteristics, translations.fi)
+      }))
     })
     getLocalizedOptions('use_category').then(translations => {
       this.setState((state, props) => ({
         useCategoriesEn: translations.en,
         useCategoriesFi: translations.fi,
         useCategory: props.Stores.Locale.lang === 'en' ?
-          translations.en.find(opt => opt.value === 'use_category_outcome') :
-          translations.fi.find(opt => opt.value === 'use_category_outcome')
+          getUseCategory(fileCharacteristics, translations.en) :
+          getUseCategory(fileCharacteristics, translations.fi)
       }))
     })
   }
@@ -63,7 +67,7 @@ class DirectoryForm extends Component {
   handleSave = (event) => {
     event.preventDefault()
     const { inEdit, setDirFileSettings } = this.props.Stores.Qvain
-    setDirFileSettings(inEdit, this.state.useCategory.value, this.state.fileType.value)
+    setDirFileSettings(inEdit, this.state.useCategory.value, this.state.fileType ? this.state.fileType.value : undefined)
     this.props.Stores.Qvain.setInEdit(undefined) // close form after saving
   }
 
@@ -104,6 +108,20 @@ class DirectoryForm extends Component {
       </Fragment>
     )
   }
+}
+
+const getUseCategory = (fileCharacteristics, translations) => {
+  if (fileCharacteristics !== undefined && fileCharacteristics.useCategory !== undefined) {
+    return translations.find(t => t.value === fileCharacteristics.useCategory)
+  }
+  return translations.find(t => t.value === 'use_category_outcome')
+}
+
+const getFileType = (fileCharacteristics, translations) => {
+  if (fileCharacteristics !== undefined && fileCharacteristics.fileType !== undefined) {
+    return translations.find(t => t.value === fileCharacteristics.fileType)
+  }
+  return undefined
 }
 
 const FileContainer = styled(Container)`
