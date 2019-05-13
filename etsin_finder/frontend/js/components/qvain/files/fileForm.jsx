@@ -21,8 +21,8 @@ class FileForm extends Component {
     fileTypesFi: [],
     useCategoriesEn: [],
     useCategoriesFi: [],
-    title: this.props.Stores.Qvain.inEdit.file_characteristics.title || 'Couldn\'t get title',
-    description: this.props.Stores.Qvain.inEdit.file_characteristics.description || 'Couldn\'t get description',
+    title: this.props.Stores.Qvain.inEdit.fileCharacteristics.title || 'Couldn\'t get title',
+    description: this.props.Stores.Qvain.inEdit.fileCharacteristics.description || 'Couldn\'t get description',
     useCategory: undefined,
     fileType: undefined
   }
@@ -33,7 +33,7 @@ class FileForm extends Component {
         fileTypesEn: translations.en,
         fileTypesFi: translations.fi,
         fileType: translations.en.find(opt =>
-          opt.value === this.props.Stores.Qvain.inEdit.file_characteristics.file_type
+          opt.value === this.props.Stores.Qvain.inEdit.fileCharacteristics.fileType
         )
       })
     })
@@ -65,17 +65,17 @@ class FileForm extends Component {
 
   handleSave = (event) => {
     event.preventDefault()
-    const fileCharacteristics = this.props.Stores.Qvain.inEdit.file_characteristics
+    const fileCharacteristics = this.props.Stores.Qvain.inEdit.fileCharacteristics
     const {
       title,
       description,
       useCategory,
-      fileType
+      // fileType
     } = this.state
     fileCharacteristics.title = title
     fileCharacteristics.description = description
-    fileCharacteristics.use_category = useCategory
-    fileCharacteristics.file_type = fileType ? fileType.value : ''
+    fileCharacteristics.useCategory = useCategory.value
+    // fileCharacteristics.fileType = fileType ? fileType.value : ''
     this.props.Stores.Qvain.setInEdit(undefined) // close form after saving
   }
 
@@ -148,10 +148,10 @@ class FileForm extends Component {
 const getUseCategory = (fi, en, stores) => {
   let uc
   if (stores.Locale.lang === 'en') {
-    uc = en.find(opt => opt.value === stores.Qvain.inEdit.file_characteristics.use_category) ||
+    uc = en.find(opt => opt.value === stores.Qvain.inEdit.fileCharacteristics.useCategory) ||
       en.find(opt => opt.value === 'use_category_outcome')
   } else {
-    uc = fi.find(opt => opt.value === stores.Qvain.inEdit.file_characteristics.use_category) ||
+    uc = fi.find(opt => opt.value === stores.Qvain.inEdit.fileCharacteristics.useCategory) ||
       fi.find(opt => opt.value === 'use_category_outcome')
   }
   return uc

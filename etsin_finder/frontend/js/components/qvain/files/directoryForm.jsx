@@ -10,8 +10,6 @@ import {
 import { Label, CustomSelect } from '../general/form'
 import { Container } from '../general/card'
 import { getLocalizedOptions } from '../utils/getReferenceData';
-import { List, ListItem } from '../general/list'
-import { getFiles } from '../utils/fileHierarchy'
 
 class DirectoryForm extends Component {
   static propTypes = {
@@ -64,24 +62,15 @@ class DirectoryForm extends Component {
 
   handleSave = (event) => {
     event.preventDefault()
-    const { selectedFiles, inEdit } = this.props.Stores.Qvain
-    const files = selectedFiles.filter(sf => sf.parent_directory.id === inEdit.id)
-    files.forEach(file => {
-      file.file_characteristics.use_category = this.useCategory.value
-      file.file_characteristics.file_type = this.fileType.value
-    })
+    const { inEdit, setDirFileSettings } = this.props.Stores.Qvain
+    setDirFileSettings(inEdit, this.state.useCategory.value, this.state.fileType.value)
     this.props.Stores.Qvain.setInEdit(undefined) // close form after saving
   }
 
   render() {
-    const { inEdit } = this.props.Stores.Qvain
     return (
       <Fragment>
         <FileContainer>
-          <Label><Translate content="qvain.files.selected.form.directoryFiles.label" /></Label>
-          <List>
-            {getFiles(inEdit).map(sf => (<ListItem key={sf.identifier}>{sf.file_path}</ListItem>))}
-          </List>
           <Label><Translate content="qvain.files.selected.form.use.label" /> *</Label>
           <Translate
             component={CustomSelect}

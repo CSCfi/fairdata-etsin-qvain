@@ -32,7 +32,9 @@ class SelectedFiles extends Component {
       hierarchy,
       inEdit
     } = this.props.Stores.Qvain
-    const selected = getDirectories(hierarchy).filter(d => d.selected).concat(getFiles(hierarchy).filter(f => f.selected))
+    const dirs = getDirectories(hierarchy)
+    const files = getFiles(hierarchy)
+    const selected = dirs.filter(d => d.selected).concat(files.filter(f => f.selected))
     return (
       <Fragment>
         <Translate component={SelectedFilesTitle} content="qvain.files.selected.title" />
@@ -42,7 +44,7 @@ class SelectedFiles extends Component {
             <FileItem active={isInEdit(inEdit, s.identifier)}>
               <ButtonLabel>
                 <FontAwesomeIcon icon={(s.directoryName ? faFolder : faCopy)} style={{ marginRight: '8px' }} />
-                {s.projectIdentifier} / {s.directoryName || getTitle(s.characteristics)}
+                {s.projectIdentifier} / {s.directoryName || getTitle(s.fileCharacteristics)}
               </ButtonLabel>
               <EditButton onClick={this.handleEdit(s)} />
               <DeleteButton
