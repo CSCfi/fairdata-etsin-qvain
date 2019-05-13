@@ -7,6 +7,8 @@ import Translate from 'react-translate-component'
 import getReferenceData from '../utils/getReferenceData';
 import Card from '../general/card';
 import RestrictionGrounds from './resctrictionGrounds';
+import { accessTypeSchema } from '../utils/formValidation';
+import ValidationError from '../general/validationError';
 
 class AccessType extends Component {
   static propTypes = {
@@ -14,9 +16,10 @@ class AccessType extends Component {
   }
 
   state = {
-    accessTypeNotOpen: false,
+    accessTypeRestricted: false,
     accessTypesEn: [{ value: '', label: '' }],
     accessTypesFi: [{ value: '', label: '' }],
+    accessTypeValidationError: null
   }
 
   componentDidMount = () => {
@@ -25,13 +28,13 @@ class AccessType extends Component {
       const list = res.data.hits.hits;
       const refsEn = list.map(ref => (
         {
-          value: ref._source.label.en,
+          value: ref._source.uri,
           label: ref._source.label.en,
         }
         ))
       const refsFi = list.map(ref => (
         {
-          value: ref._source.label.en,
+          value: ref._source.uri,
           label: ref._source.label.fi,
         }
         ))
@@ -56,6 +59,27 @@ class AccessType extends Component {
     });
   }
 
+  handleChange = (accessType) => {
+    this.props.Stores.Qvain.setAccessType(accessType)
+    console.log(accessType)
+    if (accessType.value !== 'http://uri.suomi.fi/codelist/fairdata/access_type/code/open') {
+      this.setState({ accessTypeRestricted: true })
+    } else if (accessType.value === 'http://uri.suomi.fi/codelist/fairdata/access_type/code/open') {
+      this.setState({ accessTypeRestricted: false })
+    }
+    this.setState({ accessTypeValidationError: null })
+  }
+
+  handleBlur = () => {
+    accessTypeSchema.validate(this.props.Stores.Qvain.accessType.value)
+      .then(() => {
+        this.setState({ accessTypeValidationError: null })
+      })
+      .catch((err) => {
+        this.setState({ accessTypeValidationError: err.errors })
+      })
+  }
+
   render() {
     return (
       <Card>
@@ -68,21 +92,14 @@ class AccessType extends Component {
             ? this.state.accessTypesEn
             : this.state.accessTypesFi
           }
-          clearable
-          onChange={(accessType) => {
-            this.props.Stores.Qvain.setAccessType(accessType)
-            if (accessType.value !== 'Open') {
-              this.setState({ accessTypeNotOpen: true })
-            } else if (accessType.value === 'Open') {
-              this.setState({ accessTypeNotOpen: false })
-            }
-          }}
-          onBlur={() => {}}
+          onChange={this.handleChange}
+          onBlur={this.handleBlur}
           attributes={{
             placeholder: 'qvain.rightsAndLicenses.accessType.placeholder'
           }}
         />
-        { this.state.accessTypeNotOpen
+        <ValidationError>{this.state.accessTypeValidationError}</ValidationError>
+        { this.state.accessTypeRestricted
           ? <RestrictionGrounds /> : null}
       </Card>
     )

@@ -6,6 +6,8 @@ import Select from 'react-select'
 import Translate from 'react-translate-component'
 
 import getReferenceData from '../utils/getReferenceData';
+import { restrictionGroundsSchema } from '../utils/formValidation';
+import ValidationError from '../general/validationError';
 
 class RestrictionGrounds extends Component {
   static propTypes = {
@@ -14,7 +16,8 @@ class RestrictionGrounds extends Component {
 
   state = {
     restrictionGroundsEn: [{ value: '', label: '' }],
-    restrictionGroundsFi: [{ value: '', label: '' }]
+    restrictionGroundsFi: [{ value: '', label: '' }],
+    restrictionGroundsValidationError: null
   }
 
   componentDidMount = () => {
@@ -23,13 +26,13 @@ class RestrictionGrounds extends Component {
       const list = res.data.hits.hits;
       const refsEn = list.map(ref => (
         {
-          value: ref._source.label.en,
+          value: ref._source.uri,
           label: ref._source.label.en,
         }
         ))
       const refsFi = list.map(ref => (
         {
-          value: ref._source.label.en,
+          value: ref._source.uri,
           label: ref._source.label.fi,
         }
         ))
@@ -54,6 +57,25 @@ class RestrictionGrounds extends Component {
     });
   }
 
+  componentWillUnmount = () => {
+    this.props.Stores.Qvain.removeRestrictionGrounds();
+  }
+
+  handleChange = (restrictionGrounds) => {
+    this.props.Stores.Qvain.setRestrictionGrounds(restrictionGrounds)
+    this.setState({ restrictionGroundsValidationError: null })
+  }
+
+  handleBlur = () => {
+    restrictionGroundsSchema.validate(this.props.Stores.Qvain.restrictionGrounds.value)
+      .then(() => {
+        this.setState({ restrictionGroundsValidationError: null })
+      })
+      .catch((err) => {
+        this.setState({ restrictionGroundsValidationError: err.errors })
+      })
+  }
+
   render() {
     return (
       <RestrictionGroundsContainer>
@@ -67,14 +89,13 @@ class RestrictionGrounds extends Component {
             : this.state.restrictionGroundsFi
           }
           clearable
-          onChange={(restrictionGrounds) => {
-            this.props.Stores.Qvain.setRestrictionGrounds(restrictionGrounds)
-          }}
-          onBlur={() => {}}
+          onChange={this.handleChange}
+          onBlur={this.handleBlur}
           attributes={{
             placeholder: 'qvain.rightsAndLicenses.restrictionGrounds.placeholder'
           }}
         />
+        <ValidationError>{this.state.restrictionGroundsValidationError}</ValidationError>
         <Text><Translate content="qvain.rightsAndLicenses.restrictionGrounds.text" /></Text>
       </RestrictionGroundsContainer>
     )
