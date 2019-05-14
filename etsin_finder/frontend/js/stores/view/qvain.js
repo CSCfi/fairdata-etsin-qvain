@@ -117,7 +117,21 @@ class Qvain {
   @action toggleSelectedDirectory = (dir, select) => {
     const newHier = { ...this._hierarchy }
     const flat = getDirectories(newHier)
-    flat.find(d => d.directoryName === dir.directoryName).selected = select
+    const theDir = flat.find(d => d.directoryName === dir.directoryName)
+    theDir.selected = select
+    if (select) {
+      theDir.files.forEach(f => {
+        f.selected = false
+      })
+      const deselectOthers = (aDir) => {
+        aDir.selected = false
+        aDir.files.forEach(f => {
+          f.selected = false
+        })
+        aDir.directories.forEach(d => deselectOthers(d))
+      }
+      theDir.directories.forEach(d => deselectOthers(d))
+    }
     this._hierarchy = newHier
   }
 
@@ -125,7 +139,6 @@ class Qvain {
     axios
       .get(PROJECT_DIR_URL + this._selectedProject)
       .then(res => {
-        console.log(res.data)
         this._hierarchy = Directory(res.data, undefined, false, false)
       })
       .catch(e => {
