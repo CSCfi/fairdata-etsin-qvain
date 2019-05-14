@@ -29,7 +29,7 @@ class FileSelector extends Component {
   }
 
   // recursive function to draw the entire file hierarchy, if so desired
-  drawHierarchy = (h, root, disabled) => {
+  drawHierarchy = (h, root) => {
     const {
       toggleSelectedDirectory,
       toggleSelectedFile
@@ -46,7 +46,6 @@ class FileSelector extends Component {
           </LinkButton>
           <Checkbox
             checked={h.selected || false}
-            disabled={disabled || root.selected}
             id={`${h.id}Checkbox`}
             type="checkbox"
             onChange={() => toggleSelectedDirectory(
@@ -58,14 +57,13 @@ class FileSelector extends Component {
           {h.directoryName}
           <ul>
             {(h.directories && h.open) && (
-              <Fragment>{h.directories.map(dir => (this.drawHierarchy(dir, h, disabled || root.selected)))}</Fragment>
+              <Fragment>{h.directories.map(dir => (this.drawHierarchy(dir, h)))}</Fragment>
             )}
             {(h.files && h.open) && (
               <Fragment>
                 {h.files.map(f => (
                   <li key={f.identifier} style={{ paddingLeft: '20px' }}>
                     <Checkbox
-                      disabled={disabled || h.selected || root.selected}
                       checked={f.selected}
                       id={`${f.id}Checkbox`}
                       type="checkbox"
