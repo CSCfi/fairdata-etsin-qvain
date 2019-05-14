@@ -110,8 +110,23 @@ class Qvain {
   @observable _previousDirectories = new Map()
 
   @action toggleSelectedFile = (file, select) => {
+    const newHier = { ...this._hierarchy }
+    const flat = getDirectories(newHier)
     file.selected = select
-    this._hierarchy = { ...this._hierarchy }
+    if (select) {
+      const deselectDir = (dir) => {
+        dir.selected = false
+        if (dir.parentDirectory !== undefined) {
+          const aDir = flat.find(d => d.directoryName === dir.parentDirectory.directoryName)
+          if (aDir !== undefined) {
+            deselectDir(aDir)
+          }
+        }
+      }
+      const theDir = flat.find(d => d.directoryName === file.parentDirectory.directoryName)
+      deselectDir(theDir)
+    }
+    this._hierarchy = newHier
   }
 
   @action toggleSelectedDirectory = (dir, select) => {
