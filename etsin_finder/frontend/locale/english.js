@@ -252,6 +252,102 @@ const english = {
       nosearchterm: 'Your seach did not match any documents.',
     },
   },
+  qvain: {
+    title: 'Publish Dataset',
+    description: {
+      title: 'Description',
+      description: {
+        langEn: 'ENGLISH',
+        langFi: 'FINNISH',
+        title: {
+          label: 'Title',
+          placeholderEn: 'Title (English)',
+          placeholderFi: 'Title (Finnish)'
+        },
+        description: {
+          label: 'Description',
+          placeholderEn: 'Description (English)',
+          placeholderFi: 'Description (Finnish)'
+        },
+        instructions: 'Only one launguage selection is mandatory'
+      },
+      otherIdentifiers: {
+        title: 'Other Identifiers',
+        instructions: 'Identifier for the metadata will be created automatically but if there alredy is an EXISTING identifier please insert it here.',
+        addButton: '+ Add new'
+      },
+      fieldOfScience: {
+        title: 'Field of Science',
+        placeholder: 'Select option'
+      },
+      keywords: {
+        title: 'Keywords',
+        placeholder: 'E.g. economy'
+      }
+    },
+    rightsAndLicenses: {
+      title: 'Rights And Licenses',
+      accessType: {
+        title: 'Access Type',
+        placeholder: 'Select option'
+      },
+      license: {
+        title: 'License',
+        placeholder: 'Select option'
+      }
+    },
+    participants: {
+      title: 'Participants',
+      add: {
+        title: 'Participants',
+        help: 'Creator (1+) and publisher (max 1) roles are mandatory. Notice that one participant can have multiple roles.',
+        radio: {
+          person: 'Person',
+          organization: 'Organization'
+        },
+        checkbox: {
+          creator: 'Creator',
+          publisher: 'Publisher',
+          curator: 'Curator'
+        },
+        name: {
+          placeholder: {
+            organization: 'Name',
+            person: 'First And Last Name'
+          },
+          label: 'Name'
+        },
+        email: {
+          placeholder: 'Email',
+          label: 'Email'
+        },
+        identifier: {
+          label: 'Identifier',
+          placeholder: 'e.g http://orcid.org'
+        },
+        organization: {
+          label: {
+            person: 'Organization',
+            organization: 'Parent Organization'
+          },
+          placeholder: 'E.g. University of Helsinki'
+        },
+        save: {
+          label: 'Save'
+        },
+        cancel: {
+          label: 'Cancel'
+        },
+        newOrganization: {
+          label: 'Add'
+        }
+      },
+      added: {
+        title: 'Added Participants',
+        noneAddedNotice: 'No participants added'
+      }
+    }
+  },
   slogan: 'Research data finder',
   stc: 'Skip to content',
   tombstone: {
