@@ -29,7 +29,7 @@ class ExternalFiles extends Component {
           <ChevronIcon />
         </FilePickerButtonInverse>
         {this.state.formOpen &&
-          (<p>asd</p>)
+          (<p>No content</p>)
         }
       </Fragment>
     )
