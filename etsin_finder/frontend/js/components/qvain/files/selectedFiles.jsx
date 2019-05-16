@@ -10,7 +10,7 @@ import FileForm from './fileForm'
 import DirectoryForm from './directoryForm'
 import { getDirectories, getFiles } from '../utils/fileHierarchy'
 
-class SelectedFiles extends Component {
+export class SelectedFilesBase extends Component {
   static propTypes = {
     Stores: PropTypes.object.isRequired
   }
@@ -87,7 +87,7 @@ const SelectedFilesTitle = styled.label`
   text-transform: uppercase;
 `;
 
-const FileItem = styled(ButtonGroup)`
+export const FileItem = styled(ButtonGroup)`
   ${props => (props.active ? `
     border-bottom: none;
     box-shadow: none;
@@ -95,4 +95,4 @@ const FileItem = styled(ButtonGroup)`
   ` : '')}
 `;
 
-export default inject('Stores')(observer(SelectedFiles))
+export default inject('Stores')(observer(SelectedFilesBase))

@@ -10,7 +10,7 @@ import {
 } from '../general/buttons'
 import { List, ListItem } from '../general/list'
 
-class FileSelector extends Component {
+export class FileSelectorBase extends Component {
   static propTypes = {
     Stores: PropTypes.object.isRequired
   }
@@ -136,4 +136,4 @@ const LinkButton = styled.button`
    cursor: pointer;
 `;
 
-export default inject('Stores')(observer(FileSelector))
+export default inject('Stores')(observer(FileSelectorBase))

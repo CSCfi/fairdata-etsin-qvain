@@ -11,7 +11,7 @@ import { Label, CustomSelect } from '../general/form'
 import { Container } from '../general/card'
 import { getLocalizedOptions } from '../utils/getReferenceData';
 
-class DirectoryForm extends Component {
+export class DirectoryFormBase extends Component {
   static propTypes = {
     Stores: PropTypes.object.isRequired
   }
@@ -131,4 +131,4 @@ const FileContainer = styled(Container)`
   margin-top: 0px;
 `;
 
-export default inject('Stores')(observer(DirectoryForm))
+export default inject('Stores')(observer(DirectoryFormBase))

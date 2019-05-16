@@ -150,20 +150,21 @@ class Qvain {
     this._hierarchy = newHier
   }
 
-  @action getInitialDirectories = () => {
+  @action getInitialDirectories = () => (
     axios
       .get(PROJECT_DIR_URL + this._selectedProject)
       .then(res => {
         this._hierarchy = Directory(res.data, undefined, false, false)
+        return this._hierarchy
       })
       .catch(e => {
         console.log('Failed to acquire project root directory, error: ', e)
       })
-  }
+  )
 
   @action changeProject = (projectId) => {
     this._selectedProject = projectId
-    this.getInitialDirectories()
+    return this.getInitialDirectories()
   }
 
   @action loadDirectory = (dirId, rootDir, callback) => {
@@ -262,7 +263,7 @@ const Hierarchy = (h, parent, selected) => ({
   selected
 })
 
-const Directory = (dir, parent, selected, open) => ({
+export const Directory = (dir, parent, selected, open) => ({
   ...Hierarchy(dir, parent, selected),
   open,
   directoryName: dir.directory_name,

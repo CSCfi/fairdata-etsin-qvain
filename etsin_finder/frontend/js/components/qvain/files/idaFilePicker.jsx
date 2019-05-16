@@ -11,7 +11,7 @@ import {
   ChevronIcon
 } from '../general/buttons'
 
-class IDAFilePicker extends Component {
+export class IDAFilePickerBase extends Component {
   state = {
     idaPickerOpen: false
   }
@@ -44,4 +44,4 @@ class IDAFilePicker extends Component {
   }
 }
 
-export default inject('Stores')(observer(IDAFilePicker))
+export default inject('Stores')(observer(IDAFilePickerBase))

@@ -5,7 +5,7 @@ import Translate from 'react-translate-component'
 import Select from 'react-select';
 import styled from 'styled-components';
 
-class ProjectSelector extends Component {
+export class ProjectSelectorBase extends Component {
   static propTypes = {
     Stores: PropTypes.object.isRequired
   }
@@ -13,6 +13,7 @@ class ProjectSelector extends Component {
   getOptions = () => this.props.Stores.Qvain.userProjects.map(up => ({ value: up, label: up }))
 
   handleOnChange = (selectedOption) => {
+    console.log('ProjectSelect handleOnChange')
     this.props.Stores.Qvain.changeProject(selectedOption.value)
   }
 
@@ -31,7 +32,7 @@ class ProjectSelector extends Component {
   }
 }
 
-const ProjectSelect = styled(Select)`
+export const ProjectSelect = styled(Select)`
   background-color: #f5f5f5;
   width: 164px;
   height: 38px;
@@ -39,4 +40,4 @@ const ProjectSelect = styled(Select)`
   margin-bottom: 10px;
 `;
 
-export default inject('Stores')(observer(ProjectSelector))
+export default inject('Stores')(observer(ProjectSelectorBase))
