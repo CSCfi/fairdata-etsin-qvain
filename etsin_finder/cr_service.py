@@ -37,10 +37,6 @@ class MetaxAPIService(FlaskService):
             self.METAX_GET_REMOVED_CATALOG_RECORD_URL = METAX_GET_CATALOG_RECORD_URL + '&removed=true'
             self.METAX_GET_DIRECTORY_FOR_CR_URL = 'https://{0}/rest/directories'.format(metax_api_config['HOST']) + \
                                                   '/{0}/files?cr_identifier={1}'
-            self.METAX_GET_DIRECTORY_FOR_PROJECT_URL = 'https://{0}/rest/directories'.format(metax_api_config['HOST']) + \
-                                                       '/root?project={0}'
-            self.METAX_GET_DIRECTORY = 'https://{0}/rest/directories'.format(metax_api_config['HOST']) + \
-                                       '/{0}/files'
 
             self.user = metax_api_config['USER']
             self.pw = metax_api_config['PASSWORD']
