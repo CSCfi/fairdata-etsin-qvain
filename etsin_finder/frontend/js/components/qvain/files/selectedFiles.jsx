@@ -5,7 +5,7 @@ import { inject, observer } from 'mobx-react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCopy, faFolder } from '@fortawesome/free-solid-svg-icons'
 import Translate from 'react-translate-component'
-import { ButtonGroup, ButtonLabel, EditButton, DeleteButton } from '../general/buttons'
+import { ButtonGroup, ButtonLabel, EditButton, DeleteButton, FileItem } from '../general/buttons'
 import FileForm from './fileForm'
 import DirectoryForm from './directoryForm'
 import { getDirectories, getFiles } from '../utils/fileHierarchy'
@@ -85,14 +85,6 @@ const SelectedFilesTitle = styled.label`
   color: #4f4f4f;
   margin-bottom: 8px;
   text-transform: uppercase;
-`;
-
-export const FileItem = styled(ButtonGroup)`
-  ${props => (props.active ? `
-    border-bottom: none;
-    box-shadow: none;
-    margin-bottom: 0px;
-  ` : '')}
 `;
 
 export default inject('Stores')(observer(SelectedFilesBase))

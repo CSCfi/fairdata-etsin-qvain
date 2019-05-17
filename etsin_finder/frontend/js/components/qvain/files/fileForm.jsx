@@ -1,14 +1,13 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { inject, observer } from 'mobx-react'
-import styled from 'styled-components';
 import Translate from 'react-translate-component'
 import {
   SaveButton,
   CancelButton
 } from '../general/buttons'
 import { Label, Input, Textarea, CustomSelect } from '../general/form'
-import { Container } from '../general/card'
+import { FileContainer } from '../general/card'
 import { getLocalizedOptions } from '../utils/getReferenceData';
 
 class FileForm extends Component {
@@ -156,12 +155,5 @@ const getUseCategory = (fi, en, stores) => {
   }
   return uc
 }
-
-const FileContainer = styled(Container)`
-  padding: 35px 24px;
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.13);
-  margin-bottom: 69px;
-  margin-top: 0px;
-`;
 
 export default inject('Stores')(observer(FileForm))

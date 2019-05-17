@@ -29,6 +29,13 @@ export const ContainerSubsection = styled.div`
   overflow: visible;
 `
 
+export const FileContainer = styled(Container)`
+  padding: 35px 24px;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.13);
+  margin-bottom: 69px;
+  margin-top: 0px;
+`;
+
 Card.prototype = {
   children: PropTypes.element.isRequired
 }

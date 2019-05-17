@@ -252,6 +252,32 @@ class Qvain {
   get parentDirs() {
     return this._parentDirs
   }
+
+  // EXTERNAL FILES
+
+  @observable _externalResources = [
+    ExternalResource(1, 'google', 'http://google.com')
+  ]
+
+  @computed get externalResources() {
+    return this._externalResources
+  }
+
+  @action saveExternalResource = (resource) => {
+    const existing = this._externalResources.find(r => r.id === resource.id)
+    if (existing !== undefined) {
+      existing.title = resource.title
+      existing.url = resource.url
+    } else {
+      const newId = Math.max(...this._externalResources.map(r => r.id)) + 1
+      const newResource = ExternalResource(newId, resource.title, resource.url)
+      this._externalResources = [...this._externalResources, newResource]
+    }
+  }
+
+  @action removeExternalResource = (id) => {
+    this._externalResources = this._externalResources.filter(r => r.id !== id)
+  }
 }
 
 const Hierarchy = (h, parent, selected) => ({
@@ -280,6 +306,12 @@ const File = (file, parent, selected) => ({
     useCategory: file.file_characteristics.use_category,
     fileType: file.file_characteristics.file_type
   }
+})
+
+const ExternalResource = (id, title, url) => ({
+  id,
+  title,
+  url
 })
 
 export default new Qvain()
