@@ -18,8 +18,6 @@ import {
 import { Input, SelectedFilesTitle, Label } from '../general/form'
 import { FileContainer } from '../general/card'
 
-import { toJS } from 'mobx'
-
 class ExternalFiles extends Component {
   static propTypes = {
     Stores: PropTypes.object.isRequired
@@ -70,10 +68,13 @@ class ExternalFiles extends Component {
 
   editForm = (resource) => (
     <Fragment>
-      <Label>Title</Label>
-      <ResourceInput
+      <Translate
+        component={Label}
+        content="qvain.files.external.form.title.label"
+      />
+      <Translate
+        component={ResourceInput}
         type="text"
-        placeholder="A Resource"
         value={resource ? resource.title : this.state.title}
         onChange={(event) => {
           if (resource !== undefined) {
@@ -84,11 +85,15 @@ class ExternalFiles extends Component {
             })
           }
         }}
+        attributes={{ placeholder: 'qvain.files.external.form.title.placeholder' }}
       />
-      <Label>URL</Label>
-      <ResourceInput
+      <Translate
+        component={Label}
+        content="qvain.files.external.form.url.label"
+      />
+      <Translate
+        component={ResourceInput}
         type="text"
-        placeholder="https://"
         value={resource ? resource.url : this.state.url}
         onChange={(event) => {
           if (resource !== undefined) {
@@ -99,12 +104,15 @@ class ExternalFiles extends Component {
             })
           }
         }}
+        attributes={{ placeholder: 'qvain.files.external.form.url.placeholder' }}
       />
-      <ResourceSave
+      <Translate
+        component={ResourceSave}
         onClick={resource ? this.handleCloseEdit : this.handleAddResource}
-      >
-        {resource ? 'Save' : 'Add'}
-      </ResourceSave>
+        content={resource ?
+          'qvain.files.external.form.save.label' : 'qvain.files.external.form.add.label'
+        }
+      />
     </Fragment>
   )
 
@@ -120,8 +128,10 @@ class ExternalFiles extends Component {
           {formOpen ? <ChevronDown /> : <ChevronRight />}
         </FilePickerButtonInverse>
         <SlidingContent open={formOpen}>
-          <SelectedFilesTitle>Added resources</SelectedFilesTitle>
-          {externalResources.length === 0 && <p>None added</p>}
+          <Translate component={SelectedFilesTitle} content="qvain.files.external.addedResources.title" />
+          {externalResources.length === 0 &&
+            <Translate component="p" content="qvain.files.external.addedResources.none" />
+          }
           {externalResources.map(r => (
             <Fragment key={r.id}>
               <ResourceItem active={isInEdit(inEdit, r)}>

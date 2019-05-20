@@ -423,6 +423,26 @@ const english = {
         help: 'Add link to external files from here:',
         button: {
           label: 'Add link to external files'
+        },
+        addedResources: {
+          title: 'Added external resources',
+          none: 'None added'
+        },
+        form: {
+          title: {
+            label: 'Title',
+            placeholder: 'A Resource'
+          },
+          url: {
+            label: 'URL',
+            placeholder: 'https://'
+          },
+          save: {
+            label: 'Save'
+          },
+          add: {
+            label: 'Add'
+          }
         }
       }
     }
