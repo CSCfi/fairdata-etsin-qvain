@@ -15,7 +15,7 @@ import {
   DeleteButton,
   ButtonLabel
 } from '../general/buttons'
-import { Input } from '../general/form'
+import { Input, SelectedFilesTitle, Label } from '../general/form'
 import { FileContainer } from '../general/card'
 
 class ExternalFiles extends Component {
@@ -73,12 +73,18 @@ class ExternalFiles extends Component {
     this.setState({ inEdit })
   }
 
+  handleCloseEdit = (event) => {
+    event.preventDefault()
+    this.setState({ inEdit: undefined })
+  }
+
   editForm = (resource) => {
     return (
       <Fragment>
+        <Label>Title</Label>
         <ResourceInput
           type="text"
-          placeholder="Title"
+          placeholder="A Resource"
           value={resource ? resource.title : this.state.title}
           onChange={(event) => {
             if (resource !== undefined) {
@@ -90,9 +96,10 @@ class ExternalFiles extends Component {
             }
           }}
         />
+        <Label>URL</Label>
         <ResourceInput
           type="text"
-          placeholder="URL"
+          placeholder="https://"
           value={resource ? resource.url : this.state.url}
           onChange={(event) => {
             if (resource !== undefined) {
@@ -105,13 +112,18 @@ class ExternalFiles extends Component {
           }}
         />
         {resource === undefined && (<ValidationMessage validatable={undefined} />)}
-        {resource === undefined && (<ResourceSave onClick={this.handleAddResource}>{resource ? 'Save' : 'Add'}</ResourceSave>)}
+        <ResourceSave
+          onClick={resource ? this.handleCloseEdit : this.handleAddResource}
+        >
+          {resource ? 'Save' : 'Add'}
+        </ResourceSave>
       </Fragment>
     )
   }
 
   render() {
     const { formOpen, inEdit } = this.state
+    const { externalResources } = this.props.Stores.Qvain
     return (
       <Fragment>
         <Translate component="p" content="qvain.files.external.help" />
@@ -121,18 +133,21 @@ class ExternalFiles extends Component {
           {formOpen ? <ChevronDown /> : <ChevronRight />}
         </FilePickerButtonInverse>
         <SlidingContent open={formOpen}>
-          <p>Added resources</p>
-          {this.props.Stores.Qvain.externalResources.map(r => (
+          <SelectedFilesTitle>Added resources</SelectedFilesTitle>
+          {externalResources.length === 0 && <p>None added</p>}
+          {externalResources.map(r => (
             <Fragment key={r.id}>
               <ResourceItem active={isInEdit(inEdit, r)}>
                 <ButtonLabel><a target="_blank" rel="noopener noreferrer" href={r.url}>{r.title} / {r.url}</a></ButtonLabel>
-                <EditButton onClick={this.handleEditResource(r.id)} />
+                <EditButton
+                  onClick={isInEdit(inEdit, r) ? this.handleCloseEdit : this.handleEditResource(r.id)}
+                />
                 <DeleteButton onClick={this.handleRemoveResource(r.id)} />
               </ResourceItem>
               {isInEdit(inEdit, r) && <ResourceContainer>{this.editForm(r)}</ResourceContainer>}
             </Fragment>
           ))}
-          {this.editForm(undefined)}
+          <ResourceForm>{this.editForm(undefined)}</ResourceForm>
         </SlidingContent>
       </Fragment>
     )
@@ -177,20 +192,23 @@ const ValidationMessage = styled.p`
 `;
 
 const ResourceInput = styled(Input)`
-  width: 40%;
-  margin-right: 20px;
+  width: 100%;
 `;
 
 const ResourceSave = styled(SaveButton)`
-  width: 10%;
+  margin-left: 0;
 `;
 
 const ResourceItem = styled(FileItem)`
-  margin-bottom: ${props => (props.active ? '0' : '30px')}
+  margin-bottom: ${props => (props.active ? '0' : '10px')}
 `
 
 const ResourceContainer = styled(FileContainer)`
   margin-bottom: 20px;
+`;
+
+const ResourceForm = styled.div`
+  padding-top: 20px;
 `;
 
 export default inject('Stores')(observer(ExternalFiles))

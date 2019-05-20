@@ -255,9 +255,7 @@ class Qvain {
 
   // EXTERNAL FILES
 
-  @observable _externalResources = [
-    ExternalResource(1, 'google', 'http://google.com')
-  ]
+  @observable _externalResources = []
 
   @computed get externalResources() {
     return this._externalResources
