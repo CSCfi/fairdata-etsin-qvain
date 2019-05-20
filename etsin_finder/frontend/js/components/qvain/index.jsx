@@ -4,6 +4,7 @@ import Translate from 'react-translate-component'
 import RightsAndLicenses from './licenses'
 import Description from './description';
 import Participants from './participants'
+import Files from './files'
 
 class Qvain extends Component {
   render() {
@@ -16,6 +17,7 @@ class Qvain extends Component {
           <Description />
           <RightsAndLicenses />
           <Participants />
+          <Files />
         </form>
       </QvainContainer>
     )
