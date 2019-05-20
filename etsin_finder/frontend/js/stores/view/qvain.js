@@ -271,7 +271,6 @@ class Qvain {
       const newId = this._externalResources.length === 0 ?
         1 :
         Math.max(...this._externalResources.map(r => r.id)) + 1
-      console.log('newId: ', newId)
       const newResource = ExternalResource(newId, resource.title, resource.url)
       this._externalResources = [...this._externalResources, newResource]
     }

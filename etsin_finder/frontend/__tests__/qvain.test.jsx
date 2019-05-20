@@ -13,8 +13,15 @@ import FileSelector, { FileSelectorBase } from '../js/components/qvain/files/fil
 import { SelectedFilesBase, FileItem } from '../js/components/qvain/files/selectedFiles'
 import DirectoryForm from '../js/components/qvain/files/directoryForm'
 import {
+  ExternalFilesBase,
+  ResourceInput,
+  ResourceSave,
+  ResourceItem
+} from '../js/components/qvain/files/externalFiles'
+import {
   ButtonGroup,
   FilePickerButton,
+  FilePickerButtonInverse,
   ButtonLabel,
   DeleteButton
 } from '../js/components/qvain/general/buttons'
@@ -22,6 +29,7 @@ import {
   List,
   ListItem
 } from '../js/components/qvain/general/list'
+import { SlidingContent } from '../js/components/qvain/general/card'
 import QvainStore, { Directory } from '../js/stores/view/qvain'
 import LocaleStore from '../js/stores/view/language'
 
@@ -173,5 +181,27 @@ describe('Qvain.Files', () => {
     expect(selectedFiles.find(ButtonLabel).text()).toBe('project_y / directory2')
     selectedFiles.find(DeleteButton).simulate('click', { preventDefault: () => {} })
     expect(selectedFiles.find(ButtonLabel).length).toBe(0)
+  })
+})
+
+describe('Qvain.ExternalFiles', () => {
+  it('should render correctly', () => {
+    const extFiles = mount(<ExternalFilesBase Stores={getStores()} />)
+    expect(extFiles.find(SlidingContent).length).toBe(1)
+  })
+
+  it('should add resources', () => {
+    const extFiles = mount(<ExternalFilesBase Stores={getStores()} />)
+    const inputs = extFiles.find(ResourceInput)
+    inputs.forEach((input, index) => {
+      input.simulate('change', {
+        target: {
+          value: `test-${index + 1}`
+        }
+      })
+    })
+    extFiles.find(ResourceSave).simulate('click')
+    expect(extFiles.find(ResourceItem).length).toBe(1)
+    expect(extFiles.find(ButtonLabel).text()).toBe('test-1 / test-2')
   })
 })

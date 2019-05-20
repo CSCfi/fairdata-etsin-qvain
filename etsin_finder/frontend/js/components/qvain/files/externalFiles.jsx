@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { inject, observer } from 'mobx-react'
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import Translate from 'react-translate-component'
 import {
   FilePickerButtonInverse,
@@ -16,9 +16,9 @@ import {
   ButtonLabel
 } from '../general/buttons'
 import { Input, SelectedFilesTitle, Label } from '../general/form'
-import { FileContainer } from '../general/card'
+import { FileContainer, SlidingContent } from '../general/card'
 
-class ExternalFiles extends Component {
+export class ExternalFilesBase extends Component {
   static propTypes = {
     Stores: PropTypes.object.isRequired
   }
@@ -153,45 +153,15 @@ class ExternalFiles extends Component {
 
 const isInEdit = (inEdit, resource) => (inEdit !== undefined) && inEdit.url === resource.url
 
-const slide = keyframes`
-  from {
-    transform: translate(0, -100px);
-    opacity: 0;
-    z-index: -1;
-  }
-  to {
-    transform: translate(0, 0);
-    opacity: 1;
-  }
-`;
-
-const SlidingContent = styled.div`
-  padding-top: 20px;
-  position: relative;
-  flex: auto;
-  width: 100%;
-  animation: ${slide} .2s ease-in;
-  ${props => (
-    props.open ?
-      `
-      display: inline-block;
-      `
-      :
-      `
-      display: none;
-      `
-  )}
-`;
-
-const ResourceInput = styled(Input)`
+export const ResourceInput = styled(Input)`
   width: 100%;
 `;
 
-const ResourceSave = styled(SaveButton)`
+export const ResourceSave = styled(SaveButton)`
   margin-left: 0;
 `;
 
-const ResourceItem = styled(FileItem)`
+export const ResourceItem = styled(FileItem)`
   margin-bottom: ${props => (props.active ? '0' : '10px')}
 `
 
@@ -203,4 +173,4 @@ const ResourceForm = styled.div`
   padding-top: 20px;
 `;
 
-export default inject('Stores')(observer(ExternalFiles))
+export default inject('Stores')(observer(ExternalFilesBase))
