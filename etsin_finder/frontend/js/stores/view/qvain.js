@@ -267,7 +267,11 @@ class Qvain {
       existing.title = resource.title
       existing.url = resource.url
     } else {
-      const newId = Math.max(...this._externalResources.map(r => r.id)) + 1
+      // Create an internal identifier for the resource to help with UI interaction
+      const newId = this._externalResources.length === 0 ?
+        1 :
+        Math.max(...this._externalResources.map(r => r.id)) + 1
+      console.log('newId: ', newId)
       const newResource = ExternalResource(newId, resource.title, resource.url)
       this._externalResources = [...this._externalResources, newResource]
     }

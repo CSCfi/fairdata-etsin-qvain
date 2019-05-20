@@ -38,6 +38,7 @@ export const ButtonGroup = styled.div`
   border: solid 1px #eceeef;
   background-color: #fff;
   margin-bottom: 12px;
+  overflow: overlay;
 `;
 
 export const FileItem = styled(ButtonGroup)`

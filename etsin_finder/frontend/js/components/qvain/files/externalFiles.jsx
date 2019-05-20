@@ -18,6 +18,8 @@ import {
 import { Input, SelectedFilesTitle, Label } from '../general/form'
 import { FileContainer } from '../general/card'
 
+import { toJS } from 'mobx'
+
 class ExternalFiles extends Component {
   static propTypes = {
     Stores: PropTypes.object.isRequired
@@ -27,8 +29,6 @@ class ExternalFiles extends Component {
     formOpen: false,
     title: '',
     url: '',
-    showValidationError: false,
-    validationMessage: '',
     inEdit: undefined
   }
 
@@ -41,25 +41,15 @@ class ExternalFiles extends Component {
 
   handleAddResource = (event) => {
     event.preventDefault()
-    if (!this.state.url.includes('https://') &&
-        !this.state.url.includes('http://')) {
-      this.setState({
-        showValidationError: true,
-        validationMessage: 'URL is in wrong format. Remember to add the full URL (include http or https).'
-      })
-    } else {
-      this.props.Stores.Qvain.saveExternalResource({
-        id: undefined,
-        title: this.state.title,
-        url: this.state.url
-      })
-      this.setState({
-        title: '',
-        url: '',
-        showValidationError: false,
-        validationMessage: ''
-      })
-    }
+    this.props.Stores.Qvain.saveExternalResource({
+      id: undefined,
+      title: this.state.title,
+      url: this.state.url
+    })
+    this.setState({
+      title: '',
+      url: ''
+    })
   }
 
   handleRemoveResource = (resourceId) => (event) => {
@@ -78,48 +68,45 @@ class ExternalFiles extends Component {
     this.setState({ inEdit: undefined })
   }
 
-  editForm = (resource) => {
-    return (
-      <Fragment>
-        <Label>Title</Label>
-        <ResourceInput
-          type="text"
-          placeholder="A Resource"
-          value={resource ? resource.title : this.state.title}
-          onChange={(event) => {
-            if (resource !== undefined) {
-              resource.title = event.target.value
-            } else {
-              this.setState({
-                title: event.target.value
-              })
-            }
-          }}
-        />
-        <Label>URL</Label>
-        <ResourceInput
-          type="text"
-          placeholder="https://"
-          value={resource ? resource.url : this.state.url}
-          onChange={(event) => {
-            if (resource !== undefined) {
-              resource.url = event.target.value
-            } else {
-              this.setState({
-                url: event.target.value
-              })
-            }
-          }}
-        />
-        {resource === undefined && (<ValidationMessage validatable={undefined} />)}
-        <ResourceSave
-          onClick={resource ? this.handleCloseEdit : this.handleAddResource}
-        >
-          {resource ? 'Save' : 'Add'}
-        </ResourceSave>
-      </Fragment>
-    )
-  }
+  editForm = (resource) => (
+    <Fragment>
+      <Label>Title</Label>
+      <ResourceInput
+        type="text"
+        placeholder="A Resource"
+        value={resource ? resource.title : this.state.title}
+        onChange={(event) => {
+          if (resource !== undefined) {
+            resource.title = event.target.value
+          } else {
+            this.setState({
+              title: event.target.value
+            })
+          }
+        }}
+      />
+      <Label>URL</Label>
+      <ResourceInput
+        type="text"
+        placeholder="https://"
+        value={resource ? resource.url : this.state.url}
+        onChange={(event) => {
+          if (resource !== undefined) {
+            resource.url = event.target.value
+          } else {
+            this.setState({
+              url: event.target.value
+            })
+          }
+        }}
+      />
+      <ResourceSave
+        onClick={resource ? this.handleCloseEdit : this.handleAddResource}
+      >
+        {resource ? 'Save' : 'Add'}
+      </ResourceSave>
+    </Fragment>
+  )
 
   render() {
     const { formOpen, inEdit } = this.state
@@ -184,11 +171,6 @@ const SlidingContent = styled.div`
       display: none;
       `
   )}
-`;
-
-const ValidationMessage = styled.p`
-  color: red;
-  ${props => (props.show ? 'diplay: inherit;' : 'display: none;')}
 `;
 
 const ResourceInput = styled(Input)`
