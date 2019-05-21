@@ -14,7 +14,7 @@ import React, { Component } from 'react'
 import { Route, Switch } from 'react-router-dom'
 import PropTypes from 'prop-types'
 
-import { Home, Search, Dataset, Qvain } from '../routes'
+import { Home, Search, Dataset, Qvain, QvainDatasets } from '../routes'
 import ErrorPage from '../components/errorpage'
 
 export default class Content extends Component {
@@ -30,7 +30,8 @@ export default class Content extends Component {
           <Route exact path="/" render={props => <Home {...props} />} />
           <Route exact path="/datasets/:query?" render={props => <Search {...props} />} />
           <Route path="/dataset/:identifier" render={props => <Dataset {...props} />} />
-          <Route path="/qvain" render={props => <Qvain {...props} />} />
+          <Route path="/qvain/dataset" render={props => <Qvain {...props} />} />
+          <Route path="/qvain" render={props => <QvainDatasets {...props} />} />
           <Route render={() => <ErrorPage error={{ type: 'error' }} />} />
         </Switch>
       </main>

@@ -18,3 +18,5 @@ export const Dataset = loadable(() => import('../components/dataset' /* webpackP
 export const Search = loadable(() => import('../components/search' /* webpackPrefetch: true */))
 
 export const Qvain = loadable(() => import('../components/qvain' /* webpackPrefetch: true */))
+
+export const QvainDatasets = loadable(() => import('../components/qvain/datasets' /* webpackPrefetch: true */))

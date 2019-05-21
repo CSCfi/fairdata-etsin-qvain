@@ -29,6 +29,30 @@ export const ContainerSubsection = styled.div`
   overflow: visible;
 `
 
+export const QvainContainer = styled.div`
+  background-color: #fafafa;
+`
+
+export const SubHeader = styled.div`
+  height: 100px;
+  background-color: #007fad;
+  color: white;
+  display: flex;
+  align-items: center;
+`
+
+export const SubHeaderText = styled.div`
+  font-family: Lato;
+  font-size: 32px;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 0.81;
+  letter-spacing: normal;
+  color: #ffffff;
+  margin-left: 47px;
+`
+
 Card.prototype = {
   children: PropTypes.element.isRequired
 }
