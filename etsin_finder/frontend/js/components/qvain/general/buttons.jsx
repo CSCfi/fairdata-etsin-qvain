@@ -18,6 +18,9 @@ export const CancelButton = styled.button`
   font-weight: 600px;
   line-height: 1.31;
   color: #4f4f4f;
+  &:hover {
+    background-color: #ccc;
+  }
 `;
 
 export const SaveButton = styled.button`
