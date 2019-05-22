@@ -59,8 +59,6 @@ class ProjectFiles(Resource):
 
     def __init__(self):
         """Setup file endpoints"""
-        self.parser = reqparse.RequestParser()
-        self.parser.add_argument('pid', required=True, type=str)
 
     def get(self, pid):
         """
@@ -92,7 +90,6 @@ class FileDirectory(Resource):
 
     def __init__(self):
         """Setup file endpoints"""
-        self.parser = reqparse.RequestParser()
 
     def get(self, dir_id):
         """
@@ -125,6 +122,8 @@ class UserDatasets(Resource):
     def __init__(self):
         """Setup file endpoints"""
         self.parser = reqparse.RequestParser()
+        self.parser.add_argument('limit', type=str, action='append', required=False)
+        self.parser.add_argument('offset', type=str, action='append', required=False)
 
     def get(self, user_id):
         """
@@ -134,7 +133,11 @@ class UserDatasets(Resource):
         :return:
         """
 
-        result = qvain_light_service.get_datasets_for_user(user_id)
+        args = self.parser.parse_args()
+        limit = args.get('limit', None)
+        offset = args.get('offset', None)
+
+        result = qvain_light_service.get_datasets_for_user(user_id, limit, offset)
 
         # Return data only if authenticated
         if result:

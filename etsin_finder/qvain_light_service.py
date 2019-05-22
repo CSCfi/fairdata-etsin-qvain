@@ -104,14 +104,20 @@ class MetaxQvainLightAPIService(FlaskService):
         return metax_api_response.json()
 
 
-    def get_datasets_for_user(self, user_id):
+    def get_datasets_for_user(self, user_id, limit, offset):
         """
-        Get datasets created by the specified user
+        Get datasets created by the specified user. Uses pagination, so offset
+        and limit are used as well
 
         :param user_id:
         :return datasets:
         """
         req_url = self.METAX_GET_DATASETS_FOR_USER.format(user_id)
+
+        if (limit) :
+            req_url = req_url + "&limit={0}".format(limit[0])
+        if (offset) :
+            req_url = req_url + "&offset={}".format(offset[0])
 
         try:
             metax_api_response = requests.get(req_url,
@@ -143,5 +149,5 @@ def get_directory(dir_id):
 def get_directory_for_project(project_id):
     return _metax_api.get_directory_for_project(project_id)
 
-def get_datasets_for_user(user_id):
-    return _metax_api.get_datasets_for_user(user_id)
+def get_datasets_for_user(user_id, limit, offset):
+    return _metax_api.get_datasets_for_user(user_id, limit, offset)
