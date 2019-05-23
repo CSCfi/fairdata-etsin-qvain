@@ -29,3 +29,9 @@ export const HeaderCell = styled.th`
 export const BodyCell = styled.td`
   padding: inherit;
 `;
+
+export const TableNote = styled.p`
+  &:hover {
+    background-color: inherit;
+  }
+`

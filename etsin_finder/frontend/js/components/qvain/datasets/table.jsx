@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import { inject, observer } from 'mobx-react'
+import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom'
 import axios from 'axios'
 import {
   Table,
@@ -6,7 +9,8 @@ import {
   Row,
   HeaderCell,
   TableBody,
-  BodyCell
+  BodyCell,
+  TableNote
 } from '../general/table'
 import { CancelButton } from '../general/buttons'
 
@@ -14,6 +18,11 @@ const USER_DATASETS_URL = '/api/datasets/'
 const tempuser = 'abc-user-123'
 
 class DatasetTable extends Component {
+  static propTypes = {
+    history: PropTypes.object.isRequired,
+    Stores: PropTypes.object.isRequired
+  }
+
   state = {
     datasets: [],
     count: 0,
@@ -23,20 +32,19 @@ class DatasetTable extends Component {
   }
 
   componentDidMount() {
-    this.setState({ loading: true })
     this.getDatasets()
   }
 
   getDatasets = () => {
+    this.setState({ loading: true })
     const { limit, offset } = this.state
     const url = `${USER_DATASETS_URL}${tempuser}?limit=${limit}&offset=${offset}`
     axios
       .get(url)
       .then(result => {
-        console.log('result: ', result)
         const { count, results } = result.data
         const datasets = [...results]
-        console.log('datasets: ', datasets)
+        console.log('datasets : ', datasets)
         this.setState({ count, datasets, loading: false })
       })
   }
@@ -46,6 +54,17 @@ class DatasetTable extends Component {
     this.setState((state) => ({
       datasets: [...state.datasets.filter(d => d.identifier !== identifier)]
     }))
+  }
+
+  noDatasets = () => {
+    const { loading, datasets } = this.state
+    return !loading && datasets.length === 0
+  }
+
+  handleEnterEdit = (dataset) => (event) => {
+    // event.preventDefault()
+    this.props.Stores.Qvain.editDataset(dataset)
+    this.props.history.push('/qvain/dataset')
   }
 
   render() {
@@ -61,13 +80,14 @@ class DatasetTable extends Component {
           </Row>
         </TableHeader>
         <TableBody striped>
-          {loading && <p>Loading...</p>}
+          {loading && <TableNote>Loading...</TableNote>}
+          {this.noDatasets() && <TableNote>You have no datasets</TableNote>}
           {datasets.map(dataset => (
             <Row key={dataset.identifier}>
               <BodyCell>{dataset.identifier}</BodyCell>
               <BodyCell>{dataset.research_dataset.title.en}</BodyCell>
               <BodyCell>
-                <CancelButton>Edit</CancelButton>
+                <CancelButton onClick={this.handleEnterEdit(dataset)}>Edit</CancelButton>
               </BodyCell>
               <BodyCell>
                 <CancelButton onClick={this.handleRemove(dataset.identifier)}>Delete</CancelButton>
@@ -80,4 +100,4 @@ class DatasetTable extends Component {
   }
 }
 
-export default DatasetTable;
+export default withRouter(inject('Stores')(observer(DatasetTable)))

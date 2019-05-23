@@ -33,6 +33,9 @@ export const SaveButton = styled.button`
   color: #fff;
   margin-left: 20px;
   padding: 10px 25px;
+  &:hover {
+    background-color: #3a813b;
+  }
 `
 
 export const ButtonGroup = styled.div`

@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Translate from 'react-translate-component'
+import { withRouter } from 'react-router-dom'
 import DatasetTable from './table'
 import {
   ContainerLight,
@@ -8,8 +10,15 @@ import {
   SubHeader,
   SubHeaderText
 } from '../general/card'
+import {
+  SaveButton
+} from '../general/buttons'
 
 class Datasets extends Component {
+  static propTypes = {
+    history: PropTypes.object.isRequired,
+  }
+
   render() {
     return (
       <QvainContainer>
@@ -18,9 +27,11 @@ class Datasets extends Component {
         </SubHeader>
         <ContainerLight className="container" style={{ paddingTop: '20px' }}>
           <ContainerSubsection>
-            <p>Pick one to edit or delete</p>
+            <p>
+              Choose a dataset to edit or create a new dataset
+              <SaveButton onClick={() => this.props.history.push('/qvain/dataset')}>Create dataset</SaveButton>
+            </p>
             <DatasetTable />
-            <p>Or create a new dataset</p>
           </ContainerSubsection>
         </ContainerLight>
       </QvainContainer>
@@ -28,4 +39,4 @@ class Datasets extends Component {
   }
 }
 
-export default Datasets
+export default withRouter(Datasets)

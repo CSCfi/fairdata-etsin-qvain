@@ -18,6 +18,8 @@ class Qvain {
 
   @observable participants = []
 
+  @observable participantInEdit = EmptyParticipant
+
   @action
   addOtherIdentifier = (identifier) => {
     this.otherIdentifiers = [...this.otherIdentifiers, identifier]
@@ -75,9 +77,19 @@ class Qvain {
     this.setParticipants(participants)
   }
 
+  @action
+  editParticipant = (participant) => {
+    this.participantInEdit = participant
+  }
+
   @computed
   get addedParticipants() {
     return this.participants
+  }
+
+  @computed
+  get getParticipantInEdit() {
+    return this.participantInEdit
   }
 
   // FILE PICKER STATE MANAGEMENT
@@ -252,6 +264,27 @@ class Qvain {
   get parentDirs() {
     return this._parentDirs
   }
+
+  // Dataset related
+
+  // dataset - METAX dataset JSON
+  // perform schema transformation METAX JSON -> etsin backend / internal schema
+  @action editDataset = (dataset) => {
+    const researchDataset = dataset.research_dataset
+    let participants = []
+    const creators = researchDataset.creator
+    if (creators.length > 0) {
+      participants = [...participants, ...creators.map(creator => Participant(
+        creator['@type'] === EntityType.PERSON ? EntityType.PERSON : EntityType.ORGANIZATION,
+        [Role.CREATOR],
+        creator.name,
+        creator.email,
+        creator.identifier,
+        creator.member_of.name.en ? creator.member_of.name.en : Object.values(creator.member_of.name)[0]
+      ))]
+    }
+    this.participants = participants
+  }
 }
 
 const Hierarchy = (h, parent, selected) => ({
@@ -281,5 +314,34 @@ const File = (file, parent, selected) => ({
     fileType: file.file_characteristics.file_type
   }
 })
+
+export const EntityType = {
+  PERSON: 'person',
+  ORGANIZATION: 'organization'
+}
+
+export const Role = {
+  CREATOR: 'creator',
+  PUBLISHER: 'publisher',
+  CURATOR: 'curator'
+}
+
+export const Participant = (entityType, roles, name, email, identifier, organization) => ({
+  type: entityType,
+  role: roles,
+  name,
+  email,
+  identifier,
+  organization
+})
+
+export const EmptyParticipant = Participant(
+  undefined,
+  [],
+  '',
+  '',
+  '',
+  ''
+)
 
 export default new Qvain()
