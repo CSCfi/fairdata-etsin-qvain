@@ -356,19 +356,23 @@ const english = {
       title: {
         string: 'The Title must be a string value.',
         max: 'The Title is too long.',
-        required: 'The Title is required in atleast one language.'
+        required: 'The Title is required in at least one language.'
       },
       description: {
         string: 'The Description must be a string value.',
         max: 'The description is too long.',
-        required: 'The Description is required in atleast one language.'
+        required: 'The Description is required in at least one language.'
       },
-      otherIdentifiers: {},
+      otherIdentifiers: {
+        string: 'Other Identifiers must be string value.',
+        url: 'Ther Identifiers should be valid URLs.',
+        max: 'Identifier too long.'
+      },
       fieldOfScience: {},
       keywords: {
         string: 'Keywords must be string value.',
         max: 'Keyword too long.',
-        required: 'Atleast one keyword is required.'
+        required: 'At least one keyword is required.'
       },
       participants: {
         type: {

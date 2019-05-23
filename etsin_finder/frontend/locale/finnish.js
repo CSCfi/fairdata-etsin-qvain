@@ -367,7 +367,11 @@ const finnish = {
         max: 'Kuvaus on liian pitkä.',
         required: 'Kuvaus on pakollinen vähintään yhdellä kielellä.'
       },
-      otherIdentifiers: {},
+      otherIdentifiers: {
+        string: 'Tunnisteet tulisivat olla arvoltaan merkkijonoja.',
+        url: 'Tunnisteet täytyy olla valiideja URL;eja',
+        max: 'Tunniste liian pitkä.'
+      },
       fieldOfScience: {},
       keywords: {
         string: 'Avainsanat tulisi olla arvoltaan merkkijonoja.',
