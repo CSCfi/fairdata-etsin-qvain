@@ -35,7 +35,7 @@ export default class Settings extends Component {
           >
             <Translate content="nav.help" />
           </Link>
-          <DropdownMenu >
+          <DropdownMenu transparent={false} buttonContent={<Translate content="nav.addDataset" />} >
           <CustomContainer>
               <Row>
                 <Link
@@ -54,7 +54,7 @@ export default class Settings extends Component {
                   href="https://etsin.fairdata.fi/qvain"
                   rel="noopener noreferrer"
                   target="_blank"
-                >Qvain Lite
+                >Qvain Light
                 </Link>
               </Row>
             </CustomContainer>
@@ -78,16 +78,20 @@ Settings.propTypes = {
 
 const Positioner = styled.div`
   display: none;
+  align-items: center;
+  max-height: 30px;
   @media screen and (min-width: ${p => p.theme.breakpoints.lg}) {
-    display: inline-flex;
+    display: flex;
   }
 `
+
 const CustomContainer = styled.div`
   margin: 0 auto;
   padding: 1em 1.3em;
   max-width: 300px;
   width: 100%;
 `
+
 const Row = styled.div`
   display: inline-flex;
   width: 100%;

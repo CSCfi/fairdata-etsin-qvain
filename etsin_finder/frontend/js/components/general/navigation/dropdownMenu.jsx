@@ -15,7 +15,8 @@ import styled from 'styled-components'
 import { darken } from 'polished'
 import PropTypes from 'prop-types'
 
-import { TransparentButton } from '../button'
+import TransparentButton from '../button'
+import Button from '../button'
 
 export default class DropdownMenu extends Component {
   constructor(props) {
@@ -60,16 +61,31 @@ export default class DropdownMenu extends Component {
     return (
       <MenuContainer>
         <ButtonContainer>
-          <CustomTransparentButton
-            role="button"
-            color="primary"
-            open={this.state.open}
-            ref={this.button}
-            aria-pressed={this.state.open}
-            onClick={() => (this.state.open ? this.close() : this.open())}
-          >
-            {this.props.buttonContent}
-          </CustomTransparentButton>
+          {this.props.transparent ? 
+          (
+            <CustomTransparentButton
+              role="button"
+              color="primary"
+              open={this.state.open}
+              ref={this.button}
+              aria-pressed={this.state.open}
+              onClick={() => (this.state.open ? this.close() : this.open())}
+            >
+              {this.props.buttonContent}
+            </CustomTransparentButton>
+          ) :
+          (
+            <CustomButton
+              role="button"
+              color="primary"
+              open={this.state.open}
+              ref={this.button}
+              aria-pressed={this.state.open}
+              onClick={() => (this.state.open ? this.close() : this.open())}
+            >
+              {this.props.buttonContent}
+            </CustomButton>
+          )}
         </ButtonContainer>
         <Content
           open={this.state.open}
@@ -119,6 +135,9 @@ const CustomTransparentButton = styled(TransparentButton)`
       border-bottom: 10px solid ${darken(0.1, p.theme.color.primary)};
     }`};
 `
+const CustomButton = styled(Button)`
+  white-space: nowrap;
+`
 
 const Content = styled.div`
   height: ${p => (p.open ? 'auto' : 0)};
@@ -148,4 +167,5 @@ const Container = styled.div`
 DropdownMenu.propTypes = {
   children: PropTypes.node.isRequired,
   buttonContent: PropTypes.node.isRequired,
+  transparent: PropTypes.bool,
 }
