@@ -10,6 +10,8 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import Button from '../../general/button';
 import Card from '../general/card';
 import Label from '../general/label';
+import { otherIdentifiersSchema } from '../utils/formValidation';
+import ValidationError from '../general/validationError';
 
 class OtherIdentifierField extends React.Component {
   static propTypes = {
@@ -18,7 +20,10 @@ class OtherIdentifierField extends React.Component {
 
   constructor(props) {
     super(props)
-    this.state = { identifier: '' }
+    this.state = {
+      identifier: '',
+      validationError: null
+    }
   }
 
   handleInputChange = (event) => {
@@ -38,6 +43,7 @@ class OtherIdentifierField extends React.Component {
       event.preventDefault()
       this.props.Stores.Qvain.addOtherIdentifier(this.state.identifier)
       this.clearInput()
+      this.validateIdentifiers()
     }
   }
 
@@ -46,12 +52,25 @@ class OtherIdentifierField extends React.Component {
       event.preventDefault()
       this.props.Stores.Qvain.addOtherIdentifier(this.state.identifier)
       this.clearInput()
+      this.validateIdentifiers()
     }
   }
 
   handleRemove = (identifier) => {
     this.props.Stores.Qvain.removeOtherIdentifier(identifier)
+    this.validateIdentifiers()
   }
+
+  validateIdentifiers = () => {
+    otherIdentifiersSchema.validate(this.props.Stores.Qvain.otherIdentifiers)
+      .then(() => {
+        this.setState({ validationError: null })
+      })
+      .catch((err) => {
+        this.setState({ validationError: err.errors })
+      })
+    }
+
 
   render() {
     const otherIdentifiers = toJS(this.props.Stores.Qvain.otherIdentifiers.map((identifier) => (
@@ -72,6 +91,7 @@ class OtherIdentifierField extends React.Component {
           onKeyDown={this.handleAddEnter}
           placeholder="http://orcid.org/"
         />
+        <ValidationError>{this.state.validationError}</ValidationError>
         <ButtonContainer>
           <AddNewButton type="button" onClick={this.handleAddClick}>
             <Translate content="qvain.description.otherIdentifiers.addButton" />
