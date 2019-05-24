@@ -50,21 +50,32 @@ export default class MobileNavi extends React.Component {
         </DropdownMenu>
         <DropdownMenu transparent={true} buttonContent={<FontAwesomeIcon icon={faCog} size="lg" />} transparentButton>
           <CustomContainer>
+            <DatasetCont>
+              <TextContainer> <Translate content="nav.addDataset" /> </TextContainer>
+              <Row>
+                <Link
+                    width="50%"
+                    margin="0em 0.4em 1.0em 0em"
+                    href="https://qvain.fairdata.fi"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    Qvain
+                  </Link>
+                <Link
+                    width="50%"
+                    margin="0em 0em 1.0em 0em"
+                    href="https://etsin.fairdata.fi/qvain"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    Qvain Light
+                </Link>
+              </Row>
+            </DatasetCont>
             <Row>
-              <LangToggle inverted margin="0.4em 0.4em 0.4em 0em" />
               <Link
-                width="100%"
-                margin="0.4em 0em 0.4em 0.4em"
-                href="https://qvain.fairdata.fi"
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                <Translate content="nav.addDataset" />
-              </Link>
-            </Row>
-            <Row>
-              <Link
-                margin="0.4em 0"
+                margin="1.1em 0em 0em"
                 width="100%"
                 href={this.props.helpUrl}
                 rel="noopener noreferrer"
@@ -74,7 +85,8 @@ export default class MobileNavi extends React.Component {
               </Link>
             </Row>
             <Row>
-              <Login width="100%" margin="0.4em 0" />
+              <LangToggle margin="0.4em 0.4em 0.4em 0em" />
+              <Login width="100%" margin="0.4em 0em 0.4em 0em" />
             </Row>
           </CustomContainer>
         </DropdownMenu>
@@ -96,12 +108,24 @@ const MobileItems = styled.div`
   height: 100%;
   @media screen and (min-width: ${p => p.theme.breakpoints.lg}) {
     display: none;
-  }
+    title
+    title  }
+`
+const TextContainer = styled.h1`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1em;
 `
 
 const Row = styled.div`
   display: inline-flex;
   width: 100%;
+`
+
+
+const DatasetCont = styled.div`
+  border-bottom: 3px solid ${p => p.theme.color.primary};
 `
 
 const NavItem = styled(NavLink)`
@@ -140,3 +164,53 @@ const CustomContainer = styled.div`
   max-width: 400px;
   width: 100%;
 `
+
+
+// {this.state.datasetview ? 
+//   (
+//     <CustomContainer>
+//     <Row>
+//         <Button
+//         role="button"
+//         color="primary"
+//         width="100%"
+//         ref={this.button}
+//         aria-pressed={this.state.datasetview}
+//         onClick={() => (this.setState({datasetview: false}))}
+//       >
+//         <Translate content="nav.addDataset" />
+//       </Button>
+//     </Row>
+//   </CustomContainer>
+//   ) :
+//   (
+//     <CustomContainer>
+//       <Row>
+//         <LangToggle margin="0.4em 0.4em 0em 0em" />
+//         <Button
+//           role="button"
+//           color="primary"
+//           width="100%"
+//           ref={this.button}
+//           aria-pressed={this.state.datasetview}
+//           onClick={() => (this.state.datasetview = true)}
+//         >
+//           <Translate content="nav.addDataset" />
+//         </Button>
+//       </Row>
+//       <Row>
+//         <Link
+//           margin="0.4em 0"
+//           width="100%"
+//           href={this.props.helpUrl}
+//           rel="noopener noreferrer"
+//           target="_blank"
+//         >
+//           <Translate content="nav.help" />
+//         </Link>
+//       </Row>
+//       <Row>
+//         <Login width="100%" margin="0.4em 0em 0.4em 0em" />
+//       </Row>
+//     </CustomContainer>
+//   )}

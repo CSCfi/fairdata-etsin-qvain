@@ -59,7 +59,7 @@ export default class Settings extends Component {
               </Row>
             </CustomContainer>
           </DropdownMenu>
-          <LangToggle margin="0em 0em 0em 0.4em" />
+          <LangToggle margin="0em 0em 0em 0em" />
           <Login />
         </Positioner>
       </React.Fragment>
@@ -79,7 +79,6 @@ Settings.propTypes = {
 const Positioner = styled.div`
   display: none;
   align-items: center;
-  max-height: 30px;
   @media screen and (min-width: ${p => p.theme.breakpoints.lg}) {
     display: flex;
   }
@@ -88,7 +87,7 @@ const Positioner = styled.div`
 const CustomContainer = styled.div`
   margin: 0 auto;
   padding: 1em 1.3em;
-  max-width: 300px;
+  max-width: 400px;
   width: 100%;
 `
 
