@@ -6,9 +6,19 @@ const DIR_URL = '/api/files/directory/'
 const PROJECT_DIR_URL = '/api/files/project/'
 
 class Qvain {
+  @observable title = {
+    en: '',
+    fi: ''
+  }
+
+  @observable description = {
+    en: '',
+    fi: ''
+  }
+
   @observable otherIdentifiers = []
 
-  @observable fieldOfScience = {}
+  @observable fieldOfScience = undefined
 
   @observable keywords = []
 
@@ -277,24 +287,55 @@ class Qvain {
   // perform schema transformation METAX JSON -> etsin backend / internal schema
   @action editDataset = (dataset) => {
     const researchDataset = dataset.research_dataset
+
+    // Load description
+    this.title = researchDataset.title
+    this.description = researchDataset.description
+
+    // Other identifiers
+    this.otherIdentifiers = researchDataset.other_identifier ?
+      researchDataset.other_identifier.map(oid => oid.notation) : []
+
+    // field of science
+    const fieldOfScience = researchDataset.field_of_science[0]
+    this.fieldOfScience = fieldOfScience ? FieldOfScience(fieldOfScience.pref_label, fieldOfScience.identifier) : undefined
+
+    // Load participants
     let participants = []
-    const creators = researchDataset.creator
-    if (creators.length > 0) {
-      participants = [...participants, ...creators.map(creator => Participant(
-        creator['@type'] === EntityType.PERSON ? EntityType.PERSON : EntityType.ORGANIZATION,
-        [Role.CREATOR],
-        creator.name,
-        creator.email,
-        creator.identifier,
-        creator.member_of.name.en ? creator.member_of.name.en : Object.values(creator.member_of.name)[0],
-        this.createParticipantUIId(participants)
-      ))]
-    }
+    participants = [...participants, ...this.createParticipants(participants, researchDataset.creator || [], Role.CREATOR)]
+    participants = [...participants, ...this.createParticipants(participants, researchDataset.publisher || [], Role.PUBLISHER)]
+    participants = [...participants, ...this.createParticipants(participants, researchDataset.curator || [], Role.CURATOR)]
     this.participants = participants
+
+    // Load files
   }
+
+  createParticipants = (existing, toAdd, role) => {
+    let added = []
+    if (toAdd.length > 0) {
+      added = [...toAdd.map(participant =>
+        this.createParticipant(participant, role, existing)
+      )]
+    }
+    return added
+  }
+
+  createParticipant = (participantJson, role, participants) => Participant(
+    participantJson['@type'].toLowerCase() === EntityType.PERSON ?
+      EntityType.PERSON : EntityType.ORGANIZATION,
+    [role],
+    participantJson['@type'].toLowerCase() === EntityType.ORGANIZATION ?
+      participantJson.name.en : participantJson.name,
+    participantJson.email,
+    participantJson.identifier,
+    participantJson['@type'].toLowerCase() === EntityType.ORGANIZATION ?
+      participantJson.is_part_of.name.en : participantJson.member_of.name.en,
+    this.createParticipantUIId(participants)
+  )
 
   // create a new UI Identifier based on existing UI IDs
   // basically a simple number increment
+  // use the store participants by default
   createParticipantUIId = (participants = this.participants) => {
     const latestId = participants.length > 0 ? Math.max(...participants.map(p => p.uiId)) : 0
     return latestId + 1
@@ -359,5 +400,10 @@ export const EmptyParticipant = Participant(
   '',
   undefined
 )
+
+export const FieldOfScience = (name, url) => ({
+  name,
+  url
+})
 
 export default new Qvain()

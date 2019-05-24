@@ -1,9 +1,15 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types';
+import { inject, observer } from 'mobx-react'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import '../../../../locale/translations'
 
 class DescriptionField extends Component {
+  static propTypes = {
+    Stores: PropTypes.object.isRequired
+  }
+
   state = {
     active: 'ENGLISH'
   }
@@ -27,6 +33,8 @@ class DescriptionField extends Component {
   }
 
   render() {
+    const { title, description } = this.props.Stores.Qvain
+    const activeLang = this.state.active
     return (
       <div>
         <LangButtonContainer>
@@ -37,17 +45,43 @@ class DescriptionField extends Component {
         </LangButtonContainer>
         <DescriptionCard>
           <h3><Translate content="qvain.description.description.title.label" /></h3>
-          <Translate
-            component={Input}
-            type="text"
-            attributes={{ placeholder: this.getPlaceholder('title', this.state.active) }}
-          />
+          {activeLang === 'ENGLISH' && (
+            <Translate
+              component={Input}
+              type="text"
+              value={title.en}
+              onChange={(event) => { title.en = event.target.value }}
+              attributes={{ placeholder: this.getPlaceholder('title', 'ENGLISH') }}
+            />
+          )}
+          {activeLang === 'FINNISH' && (
+            <Translate
+              component={Input}
+              type="text"
+              value={title.fi}
+              onChange={(event) => { title.fi = event.target.value }}
+              attributes={{ placeholder: this.getPlaceholder('title', 'FINNISH') }}
+            />
+          )}
           <h3><Translate content="qvain.description.description.description.label" /></h3>
-          <Translate
-            component={Textarea}
-            rows="8"
-            attributes={{ placeholder: this.getPlaceholder('title', this.state.active) }}
-          />
+          {activeLang === 'ENGLISH' && (
+            <Translate
+              component={Textarea}
+              rows="8"
+              value={description.en}
+              onChange={(event) => { description.en = event.target.value }}
+              attributes={{ placeholder: this.getPlaceholder('title', this.state.active) }}
+            />
+          )}
+          {activeLang === 'FINNISH' && (
+            <Translate
+              component={Textarea}
+              rows="8"
+              value={description.fi}
+              onChange={(event) => { description.fi = event.target.value }}
+              attributes={{ placeholder: this.getPlaceholder('title', this.state.active) }}
+            />
+          )}
           <Translate component="div" content="qvain.description.description.instructions" />
         </DescriptionCard>
       </div>
@@ -100,5 +134,4 @@ const Textarea = styled.textarea`
   border: solid 1px #cccccc;
 `
 
-
-export default DescriptionField;
+export default inject('Stores')(observer(DescriptionField));

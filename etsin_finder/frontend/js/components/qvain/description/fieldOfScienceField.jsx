@@ -6,6 +6,8 @@ import Translate from 'react-translate-component';
 
 import getReferenceData from '../utils/getReferenceData';
 import Card from '../general/card';
+import { FieldOfScience } from '../../../stores/view/qvain'
+import { toJS } from 'mobx'
 
 class FieldOfScienceField extends React.Component {
   static propTypes = {
@@ -13,8 +15,7 @@ class FieldOfScienceField extends React.Component {
   }
 
   state = {
-    fieldOfScienceEn: [{ value: '', label: '' }],
-    fieldOfScienceFi: [{ value: '', label: '' }]
+    options: {}
   }
 
   componentDidMount = () => {
@@ -23,18 +24,22 @@ class FieldOfScienceField extends React.Component {
       const list = res.data.hits.hits;
       const refsEn = list.map(ref => (
         {
-          value: ref._source.label.en,
+          value: ref._source.uri,
           label: ref._source.label.en,
         }
         ))
       const refsFi = list.map(ref => (
         {
-          value: ref._source.label.en,
+          value: ref._source.uri,
           label: ref._source.label.fi,
         }
         ))
-      this.setState({ fieldOfScienceEn: refsEn })
-      this.setState({ fieldOfScienceFi: refsFi })
+      this.setState({
+        options: {
+          en: refsEn,
+          fi: refsFi
+        }
+      })
     })
     .catch(error => {
       if (error.response) {
@@ -52,7 +57,25 @@ class FieldOfScienceField extends React.Component {
     });
   }
 
+  getCurrentValue = (fieldOfScience, options, lang) => {
+    let current
+    if (fieldOfScience !== undefined && options[lang] !== undefined) {
+      current = options[lang].find(opt => opt.value === fieldOfScience.url)
+    }
+    console.log('fieldOfScience ', toJS(fieldOfScience))
+    if (current === undefined && fieldOfScience !== undefined) {
+      current = {
+        value: fieldOfScience.url,
+        label: fieldOfScience.name[lang] || Object.values(fieldOfScience.name)[0]
+      }
+    }
+    return current
+  }
+
   render() {
+    const { fieldOfScience } = this.props.Stores.Qvain
+    const { lang } = this.props.Stores.Locale
+    const { options } = this.state
     return (
       <Card>
         <Translate component="h3" content="qvain.description.fieldOfScience.title" />
@@ -60,15 +83,18 @@ class FieldOfScienceField extends React.Component {
           name="field-of-science"
           component={Select}
           attributes={{ placeholder: 'qvain.description.fieldOfScience.placeholder' }}
+          value={this.getCurrentValue(fieldOfScience, options, lang)}
           className="basic-single"
           classNamePrefix="select"
-          options={
-            this.props.Stores.Locale.lang === 'en'
-            ? this.state.fieldOfScienceEn
-            : this.state.fieldOfScienceFi
-          }
-          onChange={(fieldOfScience) => {
-            this.props.Stores.Qvain.setFieldOfScience(fieldOfScience)
+          options={options[lang]}
+          onChange={(selection) => {
+            const name = {}
+            name[lang] = selection.label
+            const otherLocales = Object.keys(options).filter(o => o !== lang)
+            if (otherLocales.length > 0) {
+              name[otherLocales[0]] = options[otherLocales[0]].find(o => o.value === selection.value).label
+            }
+            this.props.Stores.Qvain.setFieldOfScience(FieldOfScience(name, selection.value))
           }}
         />
       </Card>

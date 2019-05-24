@@ -44,6 +44,7 @@ class DatasetTable extends Component {
       .then(result => {
         const { count, results } = result.data
         const datasets = [...results]
+        console.log('datasets ', datasets)
         this.setState({ count, datasets, loading: false })
       })
   }
