@@ -293,8 +293,10 @@ class Qvain {
     this.participants = participants
   }
 
+  // create a new UI Identifier based on existing UI IDs
+  // basically a simple number increment
   createParticipantUIId = (participants = this.participants) => {
-    const latestId = participants.length > 0 ? Math.max(participants.map(p => p.uiId)) : 0
+    const latestId = participants.length > 0 ? Math.max(...participants.map(p => p.uiId)) : 0
     return latestId + 1
   }
 }
