@@ -55,7 +55,7 @@ export default class MobileNavi extends React.Component {
               <Row>
                 <Link
                     width="50%"
-                    margin="0em 0.4em 1.0em 0em"
+                    margin="0em 0.4em 0.6em 0em"
                     href="https://qvain.fairdata.fi"
                     rel="noopener noreferrer"
                     target="_blank"
@@ -64,7 +64,7 @@ export default class MobileNavi extends React.Component {
                   </Link>
                 <Link
                     width="50%"
-                    margin="0em 0em 1.0em 0em"
+                    margin="0em 0em 0.6em 0em"
                     href="https://etsin.fairdata.fi/qvain"
                     rel="noopener noreferrer"
                     target="_blank"
@@ -123,7 +123,6 @@ const Row = styled.div`
   width: 100%;
 `
 
-
 const DatasetCont = styled.div`
   border-bottom: 3px solid ${p => p.theme.color.primary};
 `
@@ -164,53 +163,3 @@ const CustomContainer = styled.div`
   max-width: 400px;
   width: 100%;
 `
-
-
-// {this.state.datasetview ? 
-//   (
-//     <CustomContainer>
-//     <Row>
-//         <Button
-//         role="button"
-//         color="primary"
-//         width="100%"
-//         ref={this.button}
-//         aria-pressed={this.state.datasetview}
-//         onClick={() => (this.setState({datasetview: false}))}
-//       >
-//         <Translate content="nav.addDataset" />
-//       </Button>
-//     </Row>
-//   </CustomContainer>
-//   ) :
-//   (
-//     <CustomContainer>
-//       <Row>
-//         <LangToggle margin="0.4em 0.4em 0em 0em" />
-//         <Button
-//           role="button"
-//           color="primary"
-//           width="100%"
-//           ref={this.button}
-//           aria-pressed={this.state.datasetview}
-//           onClick={() => (this.state.datasetview = true)}
-//         >
-//           <Translate content="nav.addDataset" />
-//         </Button>
-//       </Row>
-//       <Row>
-//         <Link
-//           margin="0.4em 0"
-//           width="100%"
-//           href={this.props.helpUrl}
-//           rel="noopener noreferrer"
-//           target="_blank"
-//         >
-//           <Translate content="nav.help" />
-//         </Link>
-//       </Row>
-//       <Row>
-//         <Login width="100%" margin="0.4em 0em 0.4em 0em" />
-//       </Row>
-//     </CustomContainer>
-//   )}
