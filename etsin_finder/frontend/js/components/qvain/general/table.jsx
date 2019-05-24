@@ -1,3 +1,5 @@
+import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 export const Table = styled.table`
@@ -30,8 +32,28 @@ export const BodyCell = styled.td`
   padding: inherit;
 `;
 
-export const TableNote = styled.p`
+export const TableNoteStyles = styled.tr`
   &:hover {
     background-color: inherit;
   }
 `
+
+export const TableNote = (props) => (
+  <TableNoteStyles {...props}>
+    <BodyCell>{props.children}</BodyCell>
+  </TableNoteStyles>
+)
+
+TableNote.propTypes = {
+  children: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.object
+  ])
+}
+
+TableNote.defaultProps = {
+  children: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.object
+  ])
+}

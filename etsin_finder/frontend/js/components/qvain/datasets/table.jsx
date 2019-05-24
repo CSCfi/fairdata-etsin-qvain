@@ -44,7 +44,6 @@ class DatasetTable extends Component {
       .then(result => {
         const { count, results } = result.data
         const datasets = [...results]
-        console.log('datasets : ', datasets)
         this.setState({ count, datasets, loading: false })
       })
   }
@@ -61,8 +60,7 @@ class DatasetTable extends Component {
     return !loading && datasets.length === 0
   }
 
-  handleEnterEdit = (dataset) => (event) => {
-    // event.preventDefault()
+  handleEnterEdit = (dataset) => () => {
     this.props.Stores.Qvain.editDataset(dataset)
     this.props.history.push('/qvain/dataset')
   }

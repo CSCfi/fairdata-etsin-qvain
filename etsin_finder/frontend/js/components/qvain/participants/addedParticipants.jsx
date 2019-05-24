@@ -43,7 +43,7 @@ class AddedParticipants extends Component {
           (<Translate component="p" content="qvain.participants.added.noneAddedNotice" />)
         }
         {this.props.Stores.Qvain.addedParticipants.map((addedParticipant) => (
-          <ButtonGroup key={addedParticipant.identifier}>
+          <ButtonGroup key={addedParticipant.uiId}>
             <ButtonLabel>
               <FontAwesomeIcon icon={addedParticipant.type === EntityType.PERSON ? faUser : faBuilding} style={{ marginRight: '8px' }} />
               {addedParticipant.name}{addedParticipant.role.map(role => (` / ${ role }`))}

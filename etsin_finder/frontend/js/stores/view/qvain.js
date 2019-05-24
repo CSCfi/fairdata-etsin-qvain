@@ -62,9 +62,15 @@ class Qvain {
 
   @action
   addParticipant = (participant) => {
-    const existing = this.participants.find((addedParticipant) => (addedParticipant.identifier === participant.identifier))
-    if (existing !== undefined) {
-      this.removeParticipant(participant)
+    if (participant.uiId !== undefined) {
+      // we are saving a participant that was previously added
+      const existing = this.participants.find((addedParticipant) => (addedParticipant.uiId === participant.uiId))
+      if (existing !== undefined) {
+        this.removeParticipant(participant)
+      }
+    } else {
+      // we are adding a new participant, generate a new UI ID for them
+      participant.uiId = this.createParticipantUIId()
     }
     this.setParticipants(
       [...this.participants, participant]
@@ -73,7 +79,7 @@ class Qvain {
 
   @action
   removeParticipant = (participant) => {
-    const participants = this.participants.filter((p) => p.identifier !== participant.identifier)
+    const participants = this.participants.filter((p) => p.uiId !== participant.uiId)
     this.setParticipants(participants)
   }
 
@@ -280,10 +286,16 @@ class Qvain {
         creator.name,
         creator.email,
         creator.identifier,
-        creator.member_of.name.en ? creator.member_of.name.en : Object.values(creator.member_of.name)[0]
+        creator.member_of.name.en ? creator.member_of.name.en : Object.values(creator.member_of.name)[0],
+        this.createParticipantUIId(participants)
       ))]
     }
     this.participants = participants
+  }
+
+  createParticipantUIId = (participants = this.participants) => {
+    const latestId = participants.length > 0 ? Math.max(participants.map(p => p.uiId)) : 0
+    return latestId + 1
   }
 }
 
@@ -326,13 +338,14 @@ export const Role = {
   CURATOR: 'curator'
 }
 
-export const Participant = (entityType, roles, name, email, identifier, organization) => ({
+export const Participant = (entityType, roles, name, email, identifier, organization, uiId) => ({
   type: entityType,
   role: roles,
   name,
   email,
   identifier,
-  organization
+  organization,
+  uiId
 })
 
 export const EmptyParticipant = Participant(
@@ -341,7 +354,8 @@ export const EmptyParticipant = Participant(
   '',
   '',
   '',
-  ''
+  '',
+  undefined
 )
 
 export default new Qvain()
