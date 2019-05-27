@@ -15,8 +15,7 @@ import styled from 'styled-components'
 import { darken } from 'polished'
 import PropTypes from 'prop-types'
 
-import TransparentButton from '../button'
-import Button from '../button'
+import Button, { TransparentButton } from '../button'
 
 export default class DropdownMenu extends Component {
   constructor(props) {
@@ -61,7 +60,7 @@ export default class DropdownMenu extends Component {
     return (
       <MenuContainer>
         <ButtonContainer>
-          {this.props.transparent ? 
+          {this.props.transparent ?
           (
             <CustomTransparentButton
               role="button"
@@ -163,6 +162,10 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
 `
+
+DropdownMenu.defaultProps = {
+  transparent: false,
+}
 
 DropdownMenu.propTypes = {
   children: PropTypes.node.isRequired,

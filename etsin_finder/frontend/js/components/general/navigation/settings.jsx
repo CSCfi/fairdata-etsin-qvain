@@ -35,8 +35,8 @@ export default class Settings extends Component {
           >
             <Translate content="nav.help" />
           </Link>
-          <DropdownMenu transparent={false} buttonContent={<Translate content="nav.addDataset" />} >
-          <CustomContainer>
+          <DropdownMenu transparent={false} buttonContent={<Translate content="nav.addDataset" />}>
+            <CustomContainer>
               <Row>
                 <Link
                   width="100%"

@@ -29,7 +29,7 @@ export default class MobileNavi extends React.Component {
   render() {
     return (
       <MobileItems>
-        <DropdownMenu transparent={true} buttonContent={<FontAwesomeIcon icon={faBars} size="lg" />} transparentButton>
+        <DropdownMenu transparent buttonContent={<FontAwesomeIcon icon={faBars} size="lg" />} transparentButton>
           <NavItem
             exact
             to="/"
@@ -48,28 +48,28 @@ export default class MobileNavi extends React.Component {
             <Translate content="nav.datasets" />
           </NavItem>
         </DropdownMenu>
-        <DropdownMenu transparent={true} buttonContent={<FontAwesomeIcon icon={faCog} size="lg" />} transparentButton>
+        <DropdownMenu transparent buttonContent={<FontAwesomeIcon icon={faCog} size="lg" />} transparentButton>
           <CustomContainer>
             <DatasetCont>
               <TextContainer> <Translate content="nav.addDataset" /> </TextContainer>
               <Row>
                 <Link
-                    width="50%"
-                    margin="0em 0.4em 0.6em 0em"
-                    href="https://qvain.fairdata.fi"
-                    rel="noopener noreferrer"
-                    target="_blank"
-                  >
-                    Qvain
-                  </Link>
+                  width="50%"
+                  margin="0em 0.4em 0.6em 0em"
+                  href="https://qvain.fairdata.fi"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  Qvain
+                </Link>
                 <Link
-                    width="50%"
-                    margin="0em 0em 0.6em 0em"
-                    href="https://etsin.fairdata.fi/qvain"
-                    rel="noopener noreferrer"
-                    target="_blank"
-                  >
-                    Qvain Light
+                  width="50%"
+                  margin="0em 0em 0.6em 0em"
+                  href="https://etsin.fairdata.fi/qvain"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  Qvain Light
                 </Link>
               </Row>
             </DatasetCont>
