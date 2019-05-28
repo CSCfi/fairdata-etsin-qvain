@@ -72,3 +72,11 @@ export const HelpField = styled.span`
   font-weight: 200;
   font-family: "Lato"
 `
+
+export const SelectedFilesTitle = styled.label`
+  display: block;
+  font-weight: 600;
+  color: #4f4f4f;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+`;
