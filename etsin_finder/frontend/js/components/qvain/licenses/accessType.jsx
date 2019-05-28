@@ -6,6 +6,8 @@ import Translate from 'react-translate-component'
 
 import getReferenceData from '../utils/getReferenceData';
 import Card from '../general/card'
+import { onChange, getCurrentValue } from '../utils/select'
+import { AccessType as AccessTypeConstructor } from '../../../stores/view/qvain'
 
 class AccessType extends Component {
   static propTypes = {
@@ -13,8 +15,10 @@ class AccessType extends Component {
   }
 
   state = {
-    accessTypesEn: [{ value: '', label: '' }],
-    accessTypesFi: [{ value: '', label: '' }]
+    options: {
+      en: [],
+      fi: []
+    }
   }
 
   componentDidMount = () => {
@@ -23,18 +27,22 @@ class AccessType extends Component {
       const list = res.data.hits.hits;
       const refsEn = list.map(ref => (
         {
-          value: ref._source.label.en,
+          value: ref._source.uri,
           label: ref._source.label.en,
         }
         ))
       const refsFi = list.map(ref => (
         {
-          value: ref._source.label.en,
+          value: ref._source.uri,
           label: ref._source.label.fi,
         }
         ))
-      this.setState({ accessTypesEn: refsEn })
-      this.setState({ accessTypesFi: refsFi })
+      this.setState({
+        options: {
+          en: refsEn,
+          fi: refsFi
+        }
+      })
     })
     .catch(error => {
       if (error.response) {
@@ -53,21 +61,19 @@ class AccessType extends Component {
   }
 
   render() {
+    const { lang } = this.props.Stores.Locale
+    const { options } = this.state
+    const { accessType, setAccessType } = this.props.Stores.Qvain
     return (
       <Card>
         <Translate component="h3" content="qvain.rightsAndLicenses.accessType.title" />
         <Translate
           component={Select}
           name="accessType"
-          options={
-            this.props.Stores.Locale.lang === 'en'
-            ? this.state.accessTypesEn
-            : this.state.accessTypesFi
-          }
+          options={this.state.options[lang]}
           clearable
-          onChange={(accessType) => {
-            this.props.Stores.Qvain.accessType = accessType
-          }}
+          value={getCurrentValue(accessType, options, lang)}
+          onChange={onChange(options, lang, setAccessType, AccessTypeConstructor)}
           onBlur={() => {}}
           attributes={{
             placeholder: 'qvain.rightsAndLicenses.accessType.placeholder'

@@ -6,6 +6,8 @@ const DIR_URL = '/api/files/directory/'
 const PROJECT_DIR_URL = '/api/files/project/'
 
 class Qvain {
+  @observable original = undefined // used if editing, otherwise undefined
+
   @observable title = {
     en: '',
     fi: ''
@@ -22,9 +24,9 @@ class Qvain {
 
   @observable keywords = []
 
-  @observable license = {}
+  @observable license = undefined
 
-  @observable accessType = {}
+  @observable accessType = undefined
 
   @observable participants = []
 
@@ -56,7 +58,7 @@ class Qvain {
   }
 
   @action
-  setLicence = (license) => {
+  setLicense = (license) => {
     this.license = license
   }
 
@@ -286,6 +288,7 @@ class Qvain {
   // dataset - METAX dataset JSON
   // perform schema transformation METAX JSON -> etsin backend / internal schema
   @action editDataset = (dataset) => {
+    this.original = dataset
     const researchDataset = dataset.research_dataset
 
     // Load description
@@ -297,8 +300,23 @@ class Qvain {
       researchDataset.other_identifier.map(oid => oid.notation) : []
 
     // field of science
-    const fieldOfScience = researchDataset.field_of_science[0]
-    this.fieldOfScience = fieldOfScience ? FieldOfScience(fieldOfScience.pref_label, fieldOfScience.identifier) : undefined
+    if (researchDataset.field_of_science !== undefined) {
+      const primary = researchDataset.field_of_science[0]
+      if (primary !== undefined) {
+        this.fieldOfScience = FieldOfScience(primary.pref_label, primary.identifier)
+      }
+    }
+
+    // keywords
+    this.keywords = researchDataset.keyword || []
+
+    // access type
+    const at = researchDataset.access_rights.access_type
+    this.accessType = AccessType(at.pref_label, at.identifier)
+
+    // license
+    const l = researchDataset.access_rights.license[0]
+    this.license = License(l.title, l.identifier)
 
     // Load participants
     let participants = []
@@ -402,6 +420,16 @@ export const EmptyParticipant = Participant(
 )
 
 export const FieldOfScience = (name, url) => ({
+  name,
+  url
+})
+
+export const AccessType = (name, url) => ({
+  name,
+  url
+})
+
+export const License = (name, url) => ({
   name,
   url
 })

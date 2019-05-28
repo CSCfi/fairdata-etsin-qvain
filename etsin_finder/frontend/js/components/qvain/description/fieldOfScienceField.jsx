@@ -7,7 +7,7 @@ import Translate from 'react-translate-component';
 import getReferenceData from '../utils/getReferenceData';
 import Card from '../general/card';
 import { FieldOfScience } from '../../../stores/view/qvain'
-import { toJS } from 'mobx'
+import { onChange, getCurrentValue } from '../utils/select'
 
 class FieldOfScienceField extends React.Component {
   static propTypes = {
@@ -57,21 +57,6 @@ class FieldOfScienceField extends React.Component {
     });
   }
 
-  getCurrentValue = (fieldOfScience, options, lang) => {
-    let current
-    if (fieldOfScience !== undefined && options[lang] !== undefined) {
-      current = options[lang].find(opt => opt.value === fieldOfScience.url)
-    }
-    console.log('fieldOfScience ', toJS(fieldOfScience))
-    if (current === undefined && fieldOfScience !== undefined) {
-      current = {
-        value: fieldOfScience.url,
-        label: fieldOfScience.name[lang] || Object.values(fieldOfScience.name)[0]
-      }
-    }
-    return current
-  }
-
   render() {
     const { fieldOfScience } = this.props.Stores.Qvain
     const { lang } = this.props.Stores.Locale
@@ -83,19 +68,11 @@ class FieldOfScienceField extends React.Component {
           name="field-of-science"
           component={Select}
           attributes={{ placeholder: 'qvain.description.fieldOfScience.placeholder' }}
-          value={this.getCurrentValue(fieldOfScience, options, lang)}
+          value={getCurrentValue(fieldOfScience, options, lang)}
           className="basic-single"
           classNamePrefix="select"
           options={options[lang]}
-          onChange={(selection) => {
-            const name = {}
-            name[lang] = selection.label
-            const otherLocales = Object.keys(options).filter(o => o !== lang)
-            if (otherLocales.length > 0) {
-              name[otherLocales[0]] = options[otherLocales[0]].find(o => o.value === selection.value).label
-            }
-            this.props.Stores.Qvain.setFieldOfScience(FieldOfScience(name, selection.value))
-          }}
+          onChange={onChange(options, lang, this.props.Stores.Qvain.setFieldOfScience, FieldOfScience)}
         />
       </Card>
     )
