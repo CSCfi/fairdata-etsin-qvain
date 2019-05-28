@@ -9,6 +9,8 @@ import Card from '../general/card'
 import { onChange, getCurrentValue } from '../utils/select'
 import { AccessType as AccessTypeConstructor } from '../../../stores/view/qvain'
 
+const OPEN = 'http://uri.suomi.fi/codelist/fairdata/access_type/code/open'
+
 class AccessType extends Component {
   static propTypes = {
     Stores: PropTypes.object.isRequired
@@ -72,7 +74,10 @@ class AccessType extends Component {
           name="accessType"
           options={this.state.options[lang]}
           clearable
-          value={getCurrentValue(accessType, options, lang)}
+          value={
+            getCurrentValue(accessType, options, lang) ||
+            options[lang].find(opt => opt.value === OPEN) // access is OPEN by default - 28.5.2019
+          }
           onChange={onChange(options, lang, setAccessType, AccessTypeConstructor)}
           onBlur={() => {}}
           attributes={{
