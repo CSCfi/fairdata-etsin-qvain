@@ -8,7 +8,8 @@ import {
   FilePickerButton,
   FileIcon,
   FilePickerButtonText,
-  ChevronIcon
+  ChevronRight,
+  ChevronDown
 } from '../general/buttons'
 
 export class IDAFilePickerBase extends Component {
@@ -24,15 +25,16 @@ export class IDAFilePickerBase extends Component {
   }
 
   render() {
+    const { idaPickerOpen } = this.state
     return (
       <Fragment>
         <Translate component="p" content="qvain.files.ida.help" />
         <FilePickerButton onClick={this.handleToggleForm}>
           <FileIcon />
           <Translate component={FilePickerButtonText} content="qvain.files.ida.button.label" />
-          <ChevronIcon />
+          {idaPickerOpen ? <ChevronDown /> : <ChevronRight />}
         </FilePickerButton>
-        {this.state.idaPickerOpen && (
+        {idaPickerOpen && (
           <Fragment>
             <ProjectSelector />
             <FileSelector />

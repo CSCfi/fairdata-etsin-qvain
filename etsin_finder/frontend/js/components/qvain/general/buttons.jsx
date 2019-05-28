@@ -6,7 +6,8 @@ import {
   faTimes,
   faCopy,
   faLink,
-  faChevronRight
+  faChevronRight,
+  faChevronDown
 } from '@fortawesome/free-solid-svg-icons'
 
 export const CancelButton = styled.button`
@@ -43,6 +44,15 @@ export const ButtonGroup = styled.div`
   border: solid 1px #eceeef;
   background-color: #fff;
   margin-bottom: 12px;
+  overflow: overlay;
+`;
+
+export const FileItem = styled(ButtonGroup)`
+  ${props => (props.active ? `
+    border-bottom: none;
+    box-shadow: none;
+    margin-bottom: 0px;
+  ` : '')}
 `;
 
 export const ButtonLabel = styled.span`
@@ -154,4 +164,6 @@ const ChevronIconStyled = styled(FontAwesomeIcon)`
   vertical-align: top;
 `
 
-export const ChevronIcon = () => <ChevronIconStyled icon={faChevronRight} />
+export const ChevronRight = () => <ChevronIconStyled icon={faChevronRight} />
+
+export const ChevronDown = () => <ChevronIconStyled icon={faChevronDown} />

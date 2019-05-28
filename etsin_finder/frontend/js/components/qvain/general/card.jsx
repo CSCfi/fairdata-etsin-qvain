@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 
 // eslint-disable-next-line
 const Card = ({ children, bottomContent }) => <Container bottomContent={bottomContent}>{children}</Container>
@@ -52,6 +52,43 @@ export const SubHeaderText = styled.div`
   color: #ffffff;
   margin-left: 47px;
 `
+
+export const FileContainer = styled(Container)`
+  padding: 35px 24px;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.13);
+  margin-bottom: 69px;
+  margin-top: 0px;
+`;
+
+const slide = keyframes`
+  from {
+    transform: translate(0, -100px);
+    opacity: 0;
+    z-index: -1;
+  }
+  to {
+    transform: translate(0, 0);
+    opacity: 1;
+  }
+`;
+
+export const SlidingContent = styled.div`
+  padding-top: 20px;
+  position: relative;
+  flex: auto;
+  width: 100%;
+  animation: ${slide} .2s ease-in;
+  ${props => (
+    props.open ?
+      `
+      display: inline-block;
+      `
+      :
+      `
+      display: none;
+      `
+  )}
+`;
 
 Card.prototype = {
   children: PropTypes.element.isRequired

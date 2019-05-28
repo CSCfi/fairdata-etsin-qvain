@@ -358,6 +358,33 @@ class Qvain {
     const latestId = participants.length > 0 ? Math.max(...participants.map(p => p.uiId)) : 0
     return latestId + 1
   }
+  // EXTERNAL FILES
+
+  @observable _externalResources = []
+
+  @computed get externalResources() {
+    return this._externalResources
+  }
+
+  @action saveExternalResource = (resource) => {
+    const existing = this._externalResources.find(r => r.id === resource.id)
+    if (existing !== undefined) {
+      existing.title = resource.title
+      existing.url = resource.url
+    } else {
+      // Create an internal identifier for the resource to help with UI interaction
+      const newId = this._externalResources.length === 0 ?
+        1 :
+        Math.max(...this._externalResources.map(r => r.id)) + 1
+      const newResource = ExternalResource(newId, resource.title, resource.url)
+      this._externalResources = [...this._externalResources, newResource]
+    }
+  }
+
+  @action removeExternalResource = (id) => {
+    this._externalResources = this._externalResources.filter(r => r.id !== id)
+  }
+
 }
 
 const Hierarchy = (h, parent, selected) => ({
@@ -431,6 +458,12 @@ export const AccessType = (name, url) => ({
 
 export const License = (name, url) => ({
   name,
+  url
+})
+
+const ExternalResource = (id, title, url) => ({
+  id,
+  title,
   url
 })
 

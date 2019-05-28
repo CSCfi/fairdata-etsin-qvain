@@ -1,11 +1,11 @@
 import React, { Component, Fragment } from 'react';
-import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { inject, observer } from 'mobx-react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCopy, faFolder } from '@fortawesome/free-solid-svg-icons'
 import Translate from 'react-translate-component'
-import { ButtonGroup, ButtonLabel, EditButton, DeleteButton } from '../general/buttons'
+import { ButtonLabel, EditButton, DeleteButton, FileItem } from '../general/buttons'
+import { SelectedFilesTitle } from '../general/form'
 import FileForm from './fileForm'
 import DirectoryForm from './directoryForm'
 import { getDirectories, getFiles } from '../utils/fileHierarchy'
@@ -76,23 +76,5 @@ const isInEdit = (inEdit, identifier) => (inEdit !== undefined) && inEdit.identi
 const isDirectory = (inEdit) => inEdit.directoryName !== undefined
 
 const getTitle = (fileCharacteristics) => (fileCharacteristics !== undefined ? fileCharacteristics.title : '')
-
-// Components
-
-const SelectedFilesTitle = styled.label`
-  display: block;
-  font-weight: 600;
-  color: #4f4f4f;
-  margin-bottom: 8px;
-  text-transform: uppercase;
-`;
-
-export const FileItem = styled(ButtonGroup)`
-  ${props => (props.active ? `
-    border-bottom: none;
-    box-shadow: none;
-    margin-bottom: 0px;
-  ` : '')}
-`;
 
 export default inject('Stores')(observer(SelectedFilesBase))
