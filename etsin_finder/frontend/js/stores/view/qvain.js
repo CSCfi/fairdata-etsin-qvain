@@ -341,6 +341,22 @@ class Qvain {
       this._selectedDirectories = dsDirectories ? dsDirectories.map(d => Directory(d, undefined, true, false)) : []
       this._selectedFiles = dsFiles ? dsFiles.map(f => DatasetFile(f, undefined, true)) : []
     }
+
+    // external resources
+    const remoteResources = researchDataset.remote_resources
+    this._externalResources = remoteResources ? remoteResources.map(r => ExternalResource(
+      this.createExternalResourceUIId(),
+      r.title,
+      r.identifier
+    )) : []
+    if (remoteResources !== undefined) {
+      this._externalResources = remoteResources.map(r => ExternalResource(
+        this.createExternalResourceUIId(),
+        r.title,
+        r.identifier
+      ))
+      this.extResFormOpen = true
+    }
   }
 
   createParticipants = (existing, toAdd, role) => {
@@ -353,18 +369,32 @@ class Qvain {
     return added
   }
 
-  createParticipant = (participantJson, role, participants) => Participant(
-    participantJson['@type'].toLowerCase() === EntityType.PERSON ?
-      EntityType.PERSON : EntityType.ORGANIZATION,
-    [role],
-    participantJson['@type'].toLowerCase() === EntityType.ORGANIZATION ?
-      participantJson.name.en : participantJson.name,
-    participantJson.email,
-    participantJson.identifier,
-    participantJson['@type'].toLowerCase() === EntityType.ORGANIZATION ?
-      participantJson.is_part_of.name.en : participantJson.member_of.name.en,
-    this.createParticipantUIId(participants)
-  )
+  createParticipant = (participantJson, role, participants) => {
+    let name
+    if (participantJson['@type'].toLowerCase() === EntityType.ORGANIZATION) {
+      name = participantJson.name ? participantJson.name.en : undefined
+    } else {
+      name = participantJson.name
+    }
+
+    let parentOrg
+    if (participantJson['@type'].toLowerCase() === EntityType.ORGANIZATION) {
+      parentOrg = participantJson.is_part_of.name ? participantJson.is_part_of.name.en : undefined
+    } else {
+      parentOrg = participantJson.member_of.name ? participantJson.member_of.name.en : undefined
+    }
+
+    return Participant(
+      participantJson['@type'].toLowerCase() === EntityType.PERSON ?
+        EntityType.PERSON : EntityType.ORGANIZATION,
+      [role],
+      name,
+      participantJson.email,
+      participantJson.identifier,
+      parentOrg,
+      this.createParticipantUIId(participants)
+    )
+  }
 
   // create a new UI Identifier based on existing UI IDs
   // basically a simple number increment
@@ -377,8 +407,15 @@ class Qvain {
 
   @observable _externalResources = []
 
+  @observable extResFormOpen = false
+
   @computed get externalResources() {
     return this._externalResources
+  }
+
+  createExternalResourceUIId = (resources = this._externalResources) => {
+    const latestId = resources.length > 0 ? Math.max(...resources.map(r => r.id)) : 0
+    return latestId + 1
   }
 
   @action saveExternalResource = (resource) => {
@@ -388,9 +425,7 @@ class Qvain {
       existing.url = resource.url
     } else {
       // Create an internal identifier for the resource to help with UI interaction
-      const newId = this._externalResources.length === 0 ?
-        1 :
-        Math.max(...this._externalResources.map(r => r.id)) + 1
+      const newId = this.createExternalResourceUIId()
       const newResource = ExternalResource(newId, resource.title, resource.url)
       this._externalResources = [...this._externalResources, newResource]
     }

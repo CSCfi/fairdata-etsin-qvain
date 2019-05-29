@@ -24,7 +24,6 @@ export class ExternalFilesBase extends Component {
   }
 
   state = {
-    formOpen: false,
     title: '',
     url: '',
     inEdit: undefined
@@ -32,9 +31,7 @@ export class ExternalFilesBase extends Component {
 
   handleToggleForm = (event) => {
     event.preventDefault()
-    this.setState((state) => ({
-      formOpen: !state.formOpen
-    }))
+    this.props.Stores.Qvain.extResFormOpen = !this.props.Stores.Qvain.extResFormOpen
   }
 
   handleAddResource = (event) => {
@@ -117,17 +114,17 @@ export class ExternalFilesBase extends Component {
   )
 
   render() {
-    const { formOpen, inEdit } = this.state
-    const { externalResources } = this.props.Stores.Qvain
+    const { inEdit } = this.state
+    const { externalResources, extResFormOpen } = this.props.Stores.Qvain
     return (
       <Fragment>
         <Translate component="p" content="qvain.files.external.help" />
         <FilePickerButtonInverse onClick={this.handleToggleForm}>
           <LinkIcon />
           <Translate component={FilePickerButtonText} content="qvain.files.external.button.label" />
-          {formOpen ? <ChevronDown /> : <ChevronRight />}
+          {extResFormOpen ? <ChevronDown /> : <ChevronRight />}
         </FilePickerButtonInverse>
-        <SlidingContent open={formOpen}>
+        <SlidingContent open={extResFormOpen}>
           <Translate component={SelectedFilesTitle} content="qvain.files.external.addedResources.title" />
           {externalResources.length === 0 &&
             <Translate component="p" content="qvain.files.external.addedResources.none" />
