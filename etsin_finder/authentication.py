@@ -58,6 +58,9 @@ def prepare_flask_request_for_saml(request):
     """
     # If server is behind proxys or balancers use the HTTP_X_FORWARDED fields
     url_data = urlparse(request.url)
+    # If in local development environment this will redirect the saml login right.
+    if request.host == 'localhost':
+        request.host = '30.30.30.30'
     return {
         'https': 'on' if request.scheme == 'https' else 'off',
         'http_host': request.host,
