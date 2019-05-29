@@ -4,9 +4,15 @@ export const getCurrentValue = (field, options, lang) => {
     current = options[lang].find(opt => opt.value === field.url)
   }
   if (current === undefined && field !== undefined) {
+    let label
+    if (field.name !== undefined) {
+      label = field.name[lang] || Object.values(field.name)[0]
+    } else {
+      label = undefined
+    }
     current = {
       value: field.url,
-      label: field.name[lang] || Object.values(field.name)[0]
+      label
     }
   }
   return current

@@ -35,7 +35,7 @@ class MetaxQvainLightAPIService(FlaskService):
             self.METAX_GET_DIRECTORY = 'https://{0}/rest/directories'.format(metax_api_config['HOST']) + \
                                        '/{0}/files'
             self.METAX_GET_DATASETS_FOR_USER = 'https://{0}/rest/datasets'.format(metax_api_config['HOST']) + \
-                                               '?metadata_provider_user={0}'
+                                               '?metadata_provider_user={0}&file_details'
 
             self.user = metax_api_config['USER']
             self.pw = metax_api_config['PASSWORD']

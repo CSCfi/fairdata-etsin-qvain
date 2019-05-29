@@ -9,6 +9,8 @@ import Card from '../general/card'
 import { onChange, getCurrentValue } from '../utils/select'
 import { AccessType as AccessTypeConstructor } from '../../../stores/view/qvain'
 
+import { toJS } from 'mobx'
+
 const OPEN = 'http://uri.suomi.fi/codelist/fairdata/access_type/code/open'
 
 class AccessType extends Component {

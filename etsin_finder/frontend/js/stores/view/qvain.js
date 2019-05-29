@@ -1,6 +1,6 @@
 import { observable, action, computed } from 'mobx'
 import axios from 'axios'
-import { getDirectories } from '../../components/qvain/utils/fileHierarchy'
+import { getDirectories, getFiles } from '../../components/qvain/utils/fileHierarchy'
 
 const DIR_URL = '/api/files/directory/'
 const PROJECT_DIR_URL = '/api/files/project/'
@@ -114,12 +114,11 @@ class Qvain {
 
   @observable _userProjects = ['project_x']
 
+  @observable idaPickerOpen = false
+
   @observable _selectedProject = undefined
 
   @observable _selectedFiles = []
-
-  // Selected files AND directories
-  @observable _selected = []
 
   @observable _selectedDirectories = []
 
@@ -142,7 +141,8 @@ class Qvain {
   @action toggleSelectedFile = (file, select) => {
     const newHier = { ...this._hierarchy }
     const flat = getDirectories(newHier)
-    file.selected = select
+    // file.selected = select
+    getFiles(newHier).find(f => f.identifier === file.identifier).selected = false
     if (select) {
       const deselectDir = (dir) => {
         dir.selected = false
@@ -155,6 +155,9 @@ class Qvain {
       }
       const theDir = flat.find(d => d.directoryName === file.parentDirectory.directoryName)
       deselectDir(theDir)
+      this._selectedFiles = [...this._selectedFiles, file]
+    } else {
+      this._selectedFiles = this._selectedFiles.filter(f => f.identifier !== file.identifier)
     }
     this._hierarchy = newHier
   }
@@ -176,6 +179,9 @@ class Qvain {
         aDir.directories.forEach(d => deselectOthers(d))
       }
       theDir.directories.forEach(d => deselectOthers(d))
+      this._selectedDirectories = [...this._selectedDirectories, dir]
+    } else {
+      this._selectedDirectories = this._selectedDirectories.filter(d => d.identifier !== dir.identifier)
     }
     this._hierarchy = newHier
   }
@@ -207,30 +213,30 @@ class Qvain {
             directories: res.data.directories.map(newDir => Directory(
               newDir,
               d,
-              false,
+              this._selectedDirectories.map(sd => sd.identifier).includes(newDir.identifier),
               false
             )),
             files: res.data.files.map(newFile => File(
               newFile,
               d,
-              false
+              this._selectedFiles.map(sf => sf.identifier).includes(newFile.identifier)
             )),
           } : d
         ))]
         rootDir.directories = newDirs
+        return rootDir
       })
     if (callback) {
       req.then(callback)
     }
+    return req
   }
 
   @action setDirFileSettings = (directory, useCategory, fileType) => {
     const newHier = { ...this._hierarchy }
     const theDir = getDirectories(newHier).find(d => d.directoryName === directory.directoryName)
-    theDir.fileCharacteristics = {
-      useCategory,
-      fileType
-    }
+    theDir.useCategory = useCategory
+    theDir.fileType = fileType
     this._hierarchy = newHier
   }
 
@@ -315,8 +321,8 @@ class Qvain {
     this.accessType = AccessType(at.pref_label, at.identifier)
 
     // license
-    const l = researchDataset.access_rights.license[0]
-    this.license = License(l.title, l.identifier)
+    const l = researchDataset.access_rights.license ? researchDataset.access_rights.license[0] : undefined
+    this.license = l ? License(l.title, l.identifier) : undefined
 
     // Load participants
     let participants = []
@@ -326,6 +332,15 @@ class Qvain {
     this.participants = participants
 
     // Load files
+    const dsFiles = researchDataset.files
+    const dsDirectories = researchDataset.directories
+    if (dsFiles !== undefined || dsDirectories !== undefined) {
+      this.idaPickerOpen = true
+      this._selectedProject = dsFiles[0].details.project_identifier
+      this.getInitialDirectories()
+      this._selectedDirectories = dsDirectories ? dsDirectories.map(d => Directory(d, undefined, true, false)) : []
+      this._selectedFiles = dsFiles ? dsFiles.map(f => DatasetFile(f, undefined, true)) : []
+    }
   }
 
   createParticipants = (existing, toAdd, role) => {
@@ -384,7 +399,6 @@ class Qvain {
   @action removeExternalResource = (id) => {
     this._externalResources = this._externalResources.filter(r => r.id !== id)
   }
-
 }
 
 const Hierarchy = (h, parent, selected) => ({
@@ -401,6 +415,8 @@ export const Directory = (dir, parent, selected, open) => ({
   open,
   directoryName: dir.directory_name,
   directories: dir.directories ? dir.directories.map(d => Directory(d, dir, false, false)) : [],
+  useCategory: dir.use_category,
+  fileType: dir.file_type,
   files: dir.files ? dir.files.map(f => File(f, dir, false)) : []
 })
 
@@ -408,10 +424,24 @@ const File = (file, parent, selected) => ({
   ...Hierarchy(file, parent, selected),
   fileName: file.file_name,
   filePath: file.file_path,
+  useCategory: file.file_characteristics.use_category,
+  fileType: file.file_characteristics.file_type,
+  description: file.file_characteristics.description,
+  title: file.file_characteristics.title
+})
+
+const DatasetFile = (file) => ({
+  identifier: file.identifier,
+  useCategory: file.use_category.identifier,
+  fileType: file.file_type.identifier,
+  projectIdentifier: file.details.project_identifier,
+  title: file.title,
+  description: file.description || file.details.file_characteristics.description,
   fileCharacteristics: {
-    ...file.file_characteristics,
-    useCategory: file.file_characteristics.use_category,
-    fileType: file.file_characteristics.file_type
+    ...file.details.file_characteristics,
+    useCategory: file.use_category,
+    fileType: file.file_type,
+    title: file.title
   }
 })
 
