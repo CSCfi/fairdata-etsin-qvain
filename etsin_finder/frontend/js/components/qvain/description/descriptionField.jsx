@@ -1,14 +1,56 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
+import { inject, observer } from 'mobx-react'
 import '../../../../locale/translations'
+import { titleSchema, descriptionSchema } from '../utils/formValidation';
+import ValidationError from '../general/validationError';
 
 class DescriptionField extends Component {
-  state = {
-    active: 'ENGLISH'
+  static propTypes = {
+    Stores: PropTypes.object.isRequired
   }
 
-  handleLanguageButtonClisck = () => {
+  state = {
+    active: 'ENGLISH',
+    titleError: null,
+    descriptionError: null
+  }
+
+  handleTitleChange = (e) => {
+    const title = e.target.value;
+    this.props.Stores.Qvain.setTitle(title, this.state.active);
+    this.setState({ titleError: null });
+  }
+
+  handleDescriptionChange = (e) => {
+    const description = e.target.value;
+    this.props.Stores.Qvain.setDescription(description, this.state.active);
+    this.setState({ descriptionError: null })
+  }
+
+  handleTitleBlur = () => {
+    titleSchema.validate(this.props.Stores.Qvain.title)
+      .then(() => {
+        this.setState({ titleError: null })
+      })
+      .catch((err) => {
+        this.setState({ titleError: err.errors })
+      })
+  }
+
+  handleDescriptionBlur = () => {
+    descriptionSchema.validate(this.props.Stores.Qvain.description)
+      .then(() => {
+        this.setState({ descriptionError: null })
+      })
+      .catch((err) => {
+        this.setState({ descriptionError: err.errors })
+      })
+    }
+
+  handleLanguageButtonClicks = () => {
     /* eslint-disable no-unused-expressions */
     this.state.active === 'ENGLISH'
       ? this.setState({ active: 'FINNISH' })
@@ -16,7 +58,7 @@ class DescriptionField extends Component {
   }
 
   getLangButton = (activeLang, buttonLang) => (
-    <LangButton active={activeLang === buttonLang} onClick={this.handleLanguageButtonClisck}>
+    <LangButton active={activeLang === buttonLang} onClick={this.handleLanguageButtonClicks}>
       <Translate content={buttonLang === 'ENGLISH' ? 'qvain.description.description.langEn' : 'qvain.description.description.langFi'} />
     </LangButton>
   )
@@ -28,7 +70,7 @@ class DescriptionField extends Component {
 
   render() {
     return (
-      <div>
+      <React.Fragment>
         <LangButtonContainer>
           {this.getLangButton(this.state.active, 'ENGLISH')}
           <EmptyBlock width="2%" />
@@ -41,16 +83,30 @@ class DescriptionField extends Component {
             component={Input}
             type="text"
             attributes={{ placeholder: this.getPlaceholder('title', this.state.active) }}
+            onChange={this.handleTitleChange}
+            onBlur={this.handleTitleBlur}
+            value={this.state.active === 'ENGLISH'
+              ? this.props.Stores.Qvain.title.en
+              : this.props.Stores.Qvain.title.fi
+            }
           />
+          <ValidationError>{this.state.titleError}</ValidationError>
           <h3><Translate content="qvain.description.description.description.label" /></h3>
           <Translate
             component={Textarea}
             rows="8"
-            attributes={{ placeholder: this.getPlaceholder('title', this.state.active) }}
+            attributes={{ placeholder: this.getPlaceholder('description', this.state.active) }}
+            onChange={this.handleDescriptionChange}
+            onBlur={this.handleDescriptionBlur}
+            value={this.state.active === 'ENGLISH'
+              ? this.props.Stores.Qvain.description.en
+              : this.props.Stores.Qvain.description.fi
+            }
           />
+          <ValidationError>{this.state.descriptionError}</ValidationError>
           <Translate component="div" content="qvain.description.description.instructions" />
         </DescriptionCard>
-      </div>
+      </React.Fragment>
     )
   }
 }
@@ -101,4 +157,4 @@ const Textarea = styled.textarea`
 `
 
 
-export default DescriptionField;
+export default inject('Stores')(observer(DescriptionField));

@@ -1,29 +1,27 @@
 import React, { Component } from 'react'
+import styled from 'styled-components';
 import PropTypes from 'prop-types'
 import { inject, observer } from 'mobx-react'
 import Select from 'react-select'
 import Translate from 'react-translate-component'
 
 import getReferenceData from '../utils/getReferenceData';
-import Card from '../general/card';
-import RestrictionGrounds from './resctrictionGrounds';
-import { accessTypeSchema } from '../utils/formValidation';
+import { restrictionGroundsSchema } from '../utils/formValidation';
 import ValidationError from '../general/validationError';
 
-class AccessType extends Component {
+class RestrictionGrounds extends Component {
   static propTypes = {
     Stores: PropTypes.object.isRequired
   }
 
   state = {
-    accessTypeRestricted: false,
-    accessTypesEn: [{ value: '', label: '' }],
-    accessTypesFi: [{ value: '', label: '' }],
-    accessTypeValidationError: null
+    restrictionGroundsEn: [{ value: '', label: '' }],
+    restrictionGroundsFi: [{ value: '', label: '' }],
+    restrictionGroundsValidationError: null
   }
 
   componentDidMount = () => {
-    getReferenceData('access_type')
+    getReferenceData('restriction_grounds')
     .then(res => {
       const list = res.data.hits.hits;
       const refsEn = list.map(ref => (
@@ -39,8 +37,8 @@ class AccessType extends Component {
         }
         ))
       this.setState({
-        accessTypesEn: refsEn,
-        accessTypesFi: refsFi
+        restrictionGroundsEn: refsEn,
+        restrictionGroundsFi: refsFi
       })
     })
     .catch(error => {
@@ -59,51 +57,56 @@ class AccessType extends Component {
     });
   }
 
-  handleChange = (accessType) => {
-    this.props.Stores.Qvain.setAccessType(accessType)
-    console.log(accessType)
-    if (accessType.value !== 'http://uri.suomi.fi/codelist/fairdata/access_type/code/open') {
-      this.setState({ accessTypeRestricted: true })
-    } else if (accessType.value === 'http://uri.suomi.fi/codelist/fairdata/access_type/code/open') {
-      this.setState({ accessTypeRestricted: false })
-    }
-    this.setState({ accessTypeValidationError: null })
+  componentWillUnmount = () => {
+    this.props.Stores.Qvain.removeRestrictionGrounds();
+  }
+
+  handleChange = (restrictionGrounds) => {
+    this.props.Stores.Qvain.setRestrictionGrounds(restrictionGrounds)
+    this.setState({ restrictionGroundsValidationError: null })
   }
 
   handleBlur = () => {
-    accessTypeSchema.validate(this.props.Stores.Qvain.accessType.value)
+    restrictionGroundsSchema.validate(this.props.Stores.Qvain.restrictionGrounds.value)
       .then(() => {
-        this.setState({ accessTypeValidationError: null })
+        this.setState({ restrictionGroundsValidationError: null })
       })
       .catch((err) => {
-        this.setState({ accessTypeValidationError: err.errors })
+        this.setState({ restrictionGroundsValidationError: err.errors })
       })
   }
 
   render() {
     return (
-      <Card>
-        <Translate component="h3" content="qvain.rightsAndLicenses.accessType.title" />
+      <RestrictionGroundsContainer>
+        <Translate component="h3" content="qvain.rightsAndLicenses.restrictionGrounds.title" />
         <Translate
           component={Select}
-          name="accessType"
+          name="restrictionGrounds"
           options={
             this.props.Stores.Locale.lang === 'en'
-            ? this.state.accessTypesEn
-            : this.state.accessTypesFi
+            ? this.state.restrictionGroundsEn
+            : this.state.restrictionGroundsFi
           }
+          clearable
           onChange={this.handleChange}
           onBlur={this.handleBlur}
           attributes={{
-            placeholder: 'qvain.rightsAndLicenses.accessType.placeholder'
+            placeholder: 'qvain.rightsAndLicenses.restrictionGrounds.placeholder'
           }}
         />
-        <ValidationError>{this.state.accessTypeValidationError}</ValidationError>
-        { this.state.accessTypeRestricted
-          ? <RestrictionGrounds /> : null}
-      </Card>
+        <ValidationError>{this.state.restrictionGroundsValidationError}</ValidationError>
+        <Text><Translate content="qvain.rightsAndLicenses.restrictionGrounds.text" /></Text>
+      </RestrictionGroundsContainer>
     )
   }
 }
 
-export default inject('Stores')(observer(AccessType))
+const RestrictionGroundsContainer = styled.div`
+  margin-top: 20px;
+`
+const Text = styled.p`
+  margin-top: 10px;
+`
+
+export default inject('Stores')(observer(RestrictionGrounds))

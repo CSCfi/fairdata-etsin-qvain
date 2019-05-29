@@ -23,13 +23,13 @@ class License extends Component {
       const list = res.data.hits.hits;
       const refsEn = list.map(ref => (
         {
-          value: ref._source.label.en,
+          value: ref._source.uri,
           label: ref._source.label.en,
         }
         ))
       const refsFi = list.map(ref => (
         {
-          value: ref._source.label.en,
+          value: ref._source.uri,
           label: ref._source.label.fi,
         }
         ))

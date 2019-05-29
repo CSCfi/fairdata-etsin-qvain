@@ -6,6 +6,16 @@ const DIR_URL = '/api/files/directory/'
 const PROJECT_DIR_URL = '/api/files/project/'
 
 class Qvain {
+  @observable title = {
+    fi: '',
+    en: ''
+  }
+
+  @observable description = {
+    fi: '',
+    en: ''
+  }
+
   @observable otherIdentifiers = []
 
   @observable fieldOfScience = {}
@@ -16,7 +26,27 @@ class Qvain {
 
   @observable accessType = {}
 
+  @observable restrictionGrounds = {}
+
   @observable participants = []
+
+  @action
+  setTitle = (title, lang) => {
+    if (lang === 'ENGLISH') {
+      this.title.en = title
+    } else if (lang === 'FINNISH') {
+      this.title.fi = title
+    }
+  }
+
+  @action
+  setDescription = (description, lang) => {
+    if (lang === 'ENGLISH') {
+      this.description.en = description
+    } else if (lang === 'FINNISH') {
+      this.description.fi = description
+    }
+  }
 
   @action
   addOtherIdentifier = (identifier) => {
@@ -54,6 +84,16 @@ class Qvain {
   }
 
   @action
+  setRestrictionGrounds = (restrictionGrounds) => {
+    this.restrictionGrounds = restrictionGrounds
+  }
+
+  @action
+  removeRestrictionGrounds = () => {
+    this.restrictionGrounds = {}
+  }
+
+  @action
   setParticipants = (participants) => {
     this.participants = participants
   }
@@ -71,6 +111,7 @@ class Qvain {
 
   @action
   removeParticipant = (participant) => {
+    // TODO identifier is not a mandatory field, so it should me replaced with something new or removed.
     const participants = this.participants.filter((p) => p.identifier !== participant.identifier)
     this.setParticipants(participants)
   }
