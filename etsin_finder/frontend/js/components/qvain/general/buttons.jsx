@@ -1,7 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPen, faTimes } from '@fortawesome/free-solid-svg-icons'
+import {
+  faPen,
+  faTimes,
+  faCopy,
+  faLink,
+  faChevronRight,
+  faChevronDown
+} from '@fortawesome/free-solid-svg-icons'
 
 export const CancelButton = styled.button`
   width: 84px;
@@ -31,6 +38,15 @@ export const ButtonGroup = styled.div`
   border: solid 1px #eceeef;
   background-color: #fff;
   margin-bottom: 12px;
+  overflow: overlay;
+`;
+
+export const FileItem = styled(ButtonGroup)`
+  ${props => (props.active ? `
+    border-bottom: none;
+    box-shadow: none;
+    margin-bottom: 0px;
+  ` : '')}
 `;
 
 export const ButtonLabel = styled.span`
@@ -81,3 +97,67 @@ export const DeleteButton = (props) => (
     <FontAwesomeIcon size="lg" icon={faTimes} />
   </DeleteButtonStyles>
 )
+
+export const FilePickerButton = styled.button`
+  background-color: #007fad;
+  color: #fff;
+  width: 100%;
+  height: 47px;
+  border-radius: 31.5px;
+  border: solid 1px #007fad;
+  text-transform: none;
+  font-weight: 600;
+  padding-left: 27px;
+  padding-right: 27px;
+  display: inline-flex;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-width: 64px;
+  outline: none;
+  -webkit-appearance: none;
+  overflow: hidden;
+  vertical-align: middle;
+  cursor: pointer;
+`;
+
+export const FilePickerButtonInverse = styled(FilePickerButton)`
+  color: #007fad;
+  background-color: #fff;
+`;
+
+export const FilePickerButtonText = styled.span`
+  width: 90%;
+  text-align: left;
+  color: inherit;
+  font-weight: 400;
+  text-transform: none;
+`
+
+const FileIconStyles = styled(FontAwesomeIcon)`
+  width: 5%;
+  color: inherit;
+  margin-left: -4px;
+  margin-right: 8px;
+  display: inline-block;
+  height: 18px;
+  font-size: 18px;
+  vertical-align: top;
+`;
+
+export const FileIcon = () => <FileIconStyles icon={faCopy} />
+
+export const LinkIcon = () => <FileIconStyles icon={faLink} />
+
+const ChevronIconStyled = styled(FontAwesomeIcon)`
+  margin-left: 8px;
+  margin-right: -4px;
+  width: 5%;
+  display: inline-block;
+  vertical-align: top;
+`
+
+export const ChevronRight = () => <ChevronIconStyled icon={faChevronRight} />
+
+export const ChevronDown = () => <ChevronIconStyled icon={faChevronDown} />

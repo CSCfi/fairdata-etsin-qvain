@@ -254,6 +254,10 @@ const english = {
   },
   qvain: {
     title: 'Publish Dataset',
+    common: {
+      cancel: 'Cancel',
+      save: 'Save'
+    },
     description: {
       title: 'Description',
       description: {
@@ -419,6 +423,101 @@ const english = {
         required: 'Restriction Grounds are required if Access Type is not "Open".'
       },
       license: {}
+    },
+    files: {
+      title: 'Files',
+      ida: {
+        help: 'If you have files in Fairdata IDA you can link them from here:',
+        button: {
+          label: 'Link files from Fairdata IDA'
+        }
+      },
+      projectSelect: {
+        placeholder: 'Select project'
+      },
+      selected: {
+        title: 'Selected files',
+        form: {
+          title: {
+            label: 'Title',
+            placeholder: 'Title'
+          },
+          description: {
+            label: 'Description',
+            placeholder: 'Description'
+          },
+          directoryFiles: {
+            label: 'Files within directory'
+          },
+          use: {
+            label: 'Use category',
+            placeholder: 'Select option'
+          },
+          fileType: {
+            label: 'File type',
+            placeholder: 'Select option'
+          },
+          fileFormat: {
+            label: 'File format',
+            placeholder: 'Select option'
+          },
+          formatVersion: {
+            label: 'File format version',
+            placeholder: 'Select option'
+          },
+          isSequential: {
+            label: 'File is sequential'
+          },
+          csvDelimiter: {
+            label: 'Delimiter',
+            placeholder: 'Select option'
+          },
+          csvHasHeader: {
+            label: 'Has header'
+          },
+          csvRecordSeparator: {
+            label: 'Record separator',
+            placeholder: 'Select option'
+          },
+          csvQuoteChar: {
+            label: 'Quoting character',
+            placeholder: 'Quoting character, e.g. \\'
+          },
+          csvEncoding: {
+            label: 'Encoding',
+            placeholder: 'Select option'
+          },
+          identifier: {
+            label: 'Identifier'
+          }
+        }
+      },
+      external: {
+        help: 'Add link to external files from here:',
+        button: {
+          label: 'Add link to external files'
+        },
+        addedResources: {
+          title: 'Added external resources',
+          none: 'None added'
+        },
+        form: {
+          title: {
+            label: 'Title',
+            placeholder: 'A Resource'
+          },
+          url: {
+            label: 'URL',
+            placeholder: 'https://'
+          },
+          save: {
+            label: 'Save'
+          },
+          add: {
+            label: 'Add'
+          }
+        }
+      }
     }
   },
   slogan: 'Research data finder',

@@ -8,6 +8,7 @@ import RightsAndLicenses from './licenses'
 import Description from './description';
 import Participants from './participants'
 import { qvainFormSchema } from './utils/formValidation';
+import Files from './files'
 
 class Qvain extends Component {
   static propTypes = {
@@ -55,6 +56,7 @@ class Qvain extends Component {
           <Description />
           <Participants />
           <RightsAndLicenses />
+          <Files />
           <button type="submit">submit</button>
         </form>
       </QvainContainer>

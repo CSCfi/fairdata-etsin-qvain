@@ -254,6 +254,10 @@ const finnish = {
   },
   qvain: {
     title: 'Julkaise tiedosto',
+    common: {
+      save: 'Tallenna',
+      cancel: 'Peruuta'
+    },
     general: {
       langEnglish: 'Englanti',
       langFinnish: 'Suomi'
@@ -423,6 +427,48 @@ const finnish = {
         required: 'Saatavuutta rajoitettu on pakollinen kenttä jos Pääsyoikeus ei ole "Avoin".'
       },
       license: {}
+    },
+    files: {
+      title: 'Tiedostot',
+      ida: {
+        help: 'Jos sinulla on tiedostoja Fairdata IDA:ssa, voit liittää ne tässä:',
+        button: {
+          label: 'Liitä tiedostoja Fairdata IDA:sta'
+        }
+      },
+      projectSelect: {
+        placeholder: 'Valitse projekti'
+      },
+      selected: {
+        title: 'Valitut tiedostot',
+        form: {
+          title: {
+            label: 'Otsikko',
+            placeholder: 'Otsikko'
+          },
+          description: {
+            label: 'Kuvaus',
+            placeholder: 'Kuvaus'
+          },
+          use: {
+            label: 'Käyttökategoria',
+            placeholder: 'Valitse vaihtoehto'
+          },
+          fileType: {
+            label: 'Tiedostotyyppi',
+            placeholder: 'Valitse vaihtoehto'
+          },
+          identifier: {
+            label: 'Tunniste'
+          }
+        }
+      },
+      external: {
+        help: 'Lisää linkki ulkoisiin tiedostoihin tässä:',
+        button: {
+          label: 'Lisää linkki ulkoisiin tiedostoihin'
+        }
+      }
     }
   },
   slogan: 'Tutkimustenhaku palvelu',

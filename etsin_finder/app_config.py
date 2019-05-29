@@ -14,7 +14,7 @@ from etsin_finder.utils import executing_travis
 
 def _get_app_config_from_file():
     with open('/home/etsin-user/app_config') as app_config_file:
-        return yaml.load(app_config_file)
+        return yaml.load(app_config_file, Loader=yaml.FullLoader)
 
 
 def get_app_config(is_testing):
