@@ -26,6 +26,8 @@ class Qvain {
 
   @observable accessType = {}
 
+  @observable embargoExpDate = undefined
+
   @observable restrictionGrounds = {}
 
   @observable participants = []

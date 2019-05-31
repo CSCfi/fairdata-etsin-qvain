@@ -295,6 +295,11 @@ const english = {
         title: 'Access Type',
         placeholder: 'Select option'
       },
+      embargoDate: {
+        label: 'Embargo expiration date',
+        placeholder: 'Date',
+        help: 'By default, expiration date will be indefinite if not set.'
+      },
       restrictionGrounds: {
         title: 'Restriction Grounds',
         placeholder: 'Select option',
