@@ -104,7 +104,8 @@
     "moduleNameMapper": {
       "Components/(.*)$": "<rootDir>/js/components/$1",
       "Stores/(.*)$": "<rootDir>/js/stores/$1",
-      "Utils/(.*)$": "<rootDir>/js/utils/$1"
+      "Utils/(.*)$": "<rootDir>/js/utils/$1",
+      "\\.(css|less)$": "<rootDir>/__mocks__/styleMock.js"
     },
     "testPathIgnorePatterns": [
       "./__tests__/test-setup.js"
