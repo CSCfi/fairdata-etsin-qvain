@@ -33,7 +33,7 @@ class Qvain extends Component {
       participants: values.participants,
       accessType: values.accessType.value,
       restrictionGrounds: values.restrictionGrounds.value,
-      license: values.license.value
+      license: values.license
     };
     console.log(JSON.stringify(obj, null, 4));
     qvainFormSchema.validate(obj, { abortEarly: false })

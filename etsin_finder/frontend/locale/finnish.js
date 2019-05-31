@@ -306,7 +306,11 @@ const finnish = {
       },
       license: {
         title: 'Lisenssi',
-        placeholder: 'Valitse vaihtoehto'
+        placeholder: 'Valitse vaihtoehto',
+        other: {
+          label: 'Muu',
+          help: 'Anna osoite lisenssille.'
+        }
       }
     },
     participants: {

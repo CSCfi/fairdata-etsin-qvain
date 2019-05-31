@@ -22,7 +22,9 @@ class Qvain {
 
   @observable keywords = []
 
-  @observable license = {}
+  @observable license = undefined
+
+  @observable otherLicenseUrl = undefined
 
   @observable accessType = {}
 

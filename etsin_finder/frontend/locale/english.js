@@ -302,7 +302,11 @@ const english = {
       },
       license: {
         title: 'License',
-        placeholder: 'Select option'
+        placeholder: 'Select option',
+        other: {
+          label: 'Other',
+          help: 'Specify URL for license'
+        }
       }
     },
     participants: {
