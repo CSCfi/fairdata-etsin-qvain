@@ -51,9 +51,7 @@ export default class Settings extends Component {
                 <Link
                   width="100%"
                   margin="0.4em 0em 0.4em 0.4em"
-                  href="https://etsin.fairdata.fi/qvain"
-                  rel="noopener noreferrer"
-                  target="_blank"
+                  href="/qvain"
                 >Qvain Light
                 </Link>
               </Row>

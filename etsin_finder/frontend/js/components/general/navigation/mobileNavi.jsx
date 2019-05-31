@@ -65,9 +65,7 @@ export default class MobileNavi extends React.Component {
                 <Link
                   width="50%"
                   margin="0em 0em 0.6em 0em"
-                  href="https://etsin.fairdata.fi/qvain"
-                  rel="noopener noreferrer"
-                  target="_blank"
+                  href="/qvain"
                 >
                   Qvain Light
                 </Link>
