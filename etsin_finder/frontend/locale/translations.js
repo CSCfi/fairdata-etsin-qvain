@@ -15,3 +15,4 @@ import english from './english'
 
 counterpart.registerTranslations('en', english)
 counterpart.registerTranslations('fi', finnish)
+counterpart.setFallbackLocale('en')

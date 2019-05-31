@@ -133,7 +133,6 @@ class Files(Resource):
             return dir_api_obj, 200
         return '', 404
 
-
 class Contact(Resource):
     """Contact form related REST endpoints for frontend"""
 
