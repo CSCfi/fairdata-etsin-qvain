@@ -105,7 +105,19 @@ class MetaxQvainLightAPIService(FlaskService):
 _metax_api = MetaxQvainLightAPIService(app)
 
 def get_directory(dir_id):
+    """
+    Get directory from metax.
+
+    :param dir_id:
+    :return:
+    """
     return _metax_api.get_directory(dir_id)
 
 def get_directory_for_project(project_id):
+    """
+    Get project root file directory from metax.
+
+    :param project_id:
+    :return:
+    """
     return _metax_api.get_directory_for_project(project_id)
