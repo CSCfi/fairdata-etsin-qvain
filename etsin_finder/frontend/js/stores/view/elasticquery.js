@@ -36,7 +36,7 @@ const fields = [
   'preferred_identifier',
   'other_identifier.notation',
   'other_identifier.type.pref_label.*',
-  'dataset_version_set',
+  'dataset_version_set'
 ]
 
 let lastQueryTime = 0

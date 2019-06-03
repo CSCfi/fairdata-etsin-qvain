@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import styled from 'styled-components'
 import PropTypes from 'prop-types';
 import Translate from 'react-translate-component'
 import { inject, observer } from 'mobx-react';
@@ -9,6 +8,7 @@ import Description from './description';
 import Participants from './participants'
 import { qvainFormSchema } from './utils/formValidation';
 import Files from './files'
+import { QvainContainer, SubHeader, SubHeaderText } from './general/card'
 
 class Qvain extends Component {
   static propTypes = {
@@ -63,29 +63,5 @@ class Qvain extends Component {
     )
   }
 }
-
-const QvainContainer = styled.div`
-  background-color: #fafafa;
-`
-
-const SubHeader = styled.div`
-  height: 100px;
-  background-color: #007fad;
-  color: white;
-  display: flex;
-  align-items: center;
-`
-
-const SubHeaderText = styled.div`
-  font-family: Lato;
-  font-size: 32px;
-  font-weight: bold;
-  font-style: normal;
-  font-stretch: normal;
-  line-height: 0.81;
-  letter-spacing: normal;
-  color: #ffffff;
-  margin-left: 47px;
-`
 
 export default inject('Stores')(observer(Qvain));
