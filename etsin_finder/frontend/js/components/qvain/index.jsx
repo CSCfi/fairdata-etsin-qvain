@@ -3,12 +3,16 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types';
 import Translate from 'react-translate-component'
 import { inject, observer } from 'mobx-react';
+import { Link } from 'react-router-dom';
 
 import RightsAndLicenses from './licenses'
 import Description from './description';
 import Participants from './participants'
 import { qvainFormSchema } from './utils/formValidation';
 import Files from './files'
+import Stores from '../../stores'
+import LoginButton from '../general/navigation/loginButton';
+import Card from './general/card';
 
 class Qvain extends Component {
   static propTypes = {
@@ -47,11 +51,9 @@ class Qvain extends Component {
   }
 
   render() {
-    return (
-      <QvainContainer>
-        <SubHeader>
-          <SubHeaderText><Translate content="qvain.title" /></SubHeaderText>
-        </SubHeader>
+    let view;
+    if (Stores.Auth.userLogged && Stores.Auth.CSCUserLogged) {
+      view = (
         <form onSubmit={this.handleSubmit} className="container">
           <Description />
           <Participants />
@@ -59,6 +61,38 @@ class Qvain extends Component {
           <Files />
           <button type="submit">submit</button>
         </form>
+      )
+    } else if (Stores.Auth.userLogged && !Stores.Auth.CSCUserLogged) {
+      view = (
+        <div className="container">
+          <Card>
+            <h2><Translate content="qvain.unsuccessfullLogin"/></h2>
+            <div>
+              <Translate content="qvain.notCSCUser1" />
+              <a href="https://sui.csc.fi"><Translate content="qvain.notCSCUserLink" /></a>.
+              <Translate content="qvain.notCSCUser2" />
+            </div>
+          </Card>
+        </div>
+      )
+    } else if (!Stores.Auth.userLogged && !Stores.Auth.CSCUserLogged){
+      view = (
+        <div className="container">
+          <Card>
+            <h2><Translate content="qvain.notLoggedIn" /></h2>
+            <LoginButton />
+          </Card>
+        </div>
+      )
+    } else {
+      view = null
+    }
+    return (
+      <QvainContainer>
+        <SubHeader>
+          <SubHeaderText><Translate content="qvain.title" /></SubHeaderText>
+        </SubHeader>
+        {view}
       </QvainContainer>
     )
   }

@@ -14,7 +14,9 @@ import axios from 'axios'
 class Auth {
   @observable userLogged = false
 
-  @observable user = { name: undefined }
+  @observable CSCUserLogged = false
+
+  @observable user = { name: undefined, idaGroups: [] }
 
   @action
   checkLogin() {
@@ -24,8 +26,14 @@ class Auth {
           headers: { 'content-type': 'application/json', charset: 'utf-8' },
         })
         .then(res => {
+          console.log(res.data)
           this.userLogged = res.data.is_authenticated
-          this.user = { name: res.data.user_display_name }
+          this.CSCUserLogged = res.data.is_authenticated_CSC_user
+          this.user = { 
+            name: res.data.user_display_name,
+            idaGroups: res.data.user_ida_groups
+          }
+          console.log(this.user)
           resolve(res)
         })
         .catch(err => {
@@ -42,6 +50,7 @@ class Auth {
         .delete('/api/session')
         .then(res => {
           this.userLogged = false
+          this.CSCUserLogged = false
           this.user = { name: undefined }
           resolve(res)
         })
@@ -62,6 +71,7 @@ class Auth {
         .catch(err => {
           if (err.response.status === 401) {
             this.userLogged = false
+            this.CSCUserLogged = false
             this.user = { name: undefined }
           }
           return reject(err)
