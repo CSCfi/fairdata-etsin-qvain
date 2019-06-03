@@ -31,7 +31,7 @@ class Qvain extends Component {
       fieldOfScience: values.fieldOfScience.value,
       keywords: values.keywords,
       participants: values.participants,
-      accessType: values.accessType.value,
+      accessType: values.accessType,
       restrictionGrounds: values.restrictionGrounds.value,
       license: values.license
     };

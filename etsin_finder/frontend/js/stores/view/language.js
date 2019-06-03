@@ -10,6 +10,7 @@
 
 import { observable, action, computed } from 'mobx'
 import counterpart from 'counterpart'
+import moment from 'moment'
 import elasticquery from './elasticquery'
 import env from '../domain/env'
 
@@ -28,6 +29,7 @@ class Locale {
     counterpart.setLocale(lang)
     this.currentLang = counterpart.getLocale()
     localStorage.setItem('lang', this.currentLang)
+    moment.locale(lang)
     document.documentElement.lang = this.currentLang
   }
 

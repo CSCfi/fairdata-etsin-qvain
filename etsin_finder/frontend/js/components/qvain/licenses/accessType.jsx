@@ -9,6 +9,9 @@ import Card from '../general/card';
 import RestrictionGrounds from './resctrictionGrounds';
 import { accessTypeSchema } from '../utils/formValidation';
 import ValidationError from '../general/validationError';
+import EmbargoExpires from './embargoExpires'
+
+const EMBARGO = 'http://uri.suomi.fi/codelist/fairdata/access_type/code/embargo'
 
 class AccessType extends Component {
   static propTypes = {
@@ -60,8 +63,7 @@ class AccessType extends Component {
   }
 
   handleChange = (accessType) => {
-    this.props.Stores.Qvain.setAccessType(accessType)
-    console.log(accessType)
+    this.props.Stores.Qvain.setAccessType(accessType.value)
     if (accessType.value !== 'http://uri.suomi.fi/codelist/fairdata/access_type/code/open') {
       this.setState({ accessTypeRestricted: true })
     } else if (accessType.value === 'http://uri.suomi.fi/codelist/fairdata/access_type/code/open') {
@@ -71,7 +73,7 @@ class AccessType extends Component {
   }
 
   handleBlur = () => {
-    accessTypeSchema.validate(this.props.Stores.Qvain.accessType.value)
+    accessTypeSchema.validate(this.props.Stores.Qvain.accessType)
       .then(() => {
         this.setState({ accessTypeValidationError: null })
       })
@@ -81,6 +83,7 @@ class AccessType extends Component {
   }
 
   render() {
+    const { accessType } = this.props.Stores.Qvain
     return (
       <Card>
         <Translate component="h3" content="qvain.rightsAndLicenses.accessType.title" />
@@ -99,6 +102,7 @@ class AccessType extends Component {
           }}
         />
         <ValidationError>{this.state.accessTypeValidationError}</ValidationError>
+        {accessType === EMBARGO && (<EmbargoExpires />)}
         { this.state.accessTypeRestricted
           ? <RestrictionGrounds /> : null}
       </Card>

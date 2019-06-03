@@ -63,13 +63,7 @@ class ProjectFiles(Resource):
         self.parser.add_argument('pid', required=True, type=str)
 
     def get(self, pid):
-        """
-        Get files and directory objects for frontend.
-
-        :param pid:
-        :return:
-        """
-
+        """Get files and directory objects for frontend."""
         project_dir_obj = qvain_light_file_service.get_directory_for_project(pid)
 
         # Return data only if authenticated
@@ -95,13 +89,7 @@ class FileDirectory(Resource):
         self.parser = reqparse.RequestParser()
 
     def get(self, dir_id):
-        """
-        Get files and directory objects for frontend.
-
-        :param dir_id:
-        :return:
-        """
-
+        """Get files and directory objects for frontend."""
         dir_obj = qvain_light_file_service.get_directory(dir_id)
 
         # Return data only if authenticated

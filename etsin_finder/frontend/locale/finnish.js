@@ -299,6 +299,11 @@ const finnish = {
         title: 'Pääsyoikeus',
         placeholder: 'Valitse vaihtoehto'
       },
+      embargoDate: {
+        label: 'Embargo loppumispäivämäärä',
+        placeholder: 'Päivämäärä',
+        help: 'Oletuksena embargo ei lopu jollei päivämäärää aseteta.'
+      },
       restrictionGrounds: {
         title: 'Saatavuutta rajoitettu',
         placeholder: 'Valitse vaihtoehto',
