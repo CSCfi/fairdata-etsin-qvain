@@ -253,6 +253,11 @@ const finnish = {
     },
   },
   qvain: {
+    unsuccessfullLogin: 'Kirjautuminen epäonnistui.',
+    notCSCUser1: 'Varmistakaa että teillä on voimassaoleva CSC tunnus. Jos yritit kirjautua sisään ulkoisella tunnuksella (kuten Haka) Niin saatat saada tämän virhe ilmoituksen jos titlit eivät ole linkitetty. Linkityksen voi tehdä',
+    notCSCUserLink: ' CSC asiakas porttaalissa',
+    notCSCUser2: ' Voit rekisteröityä Hakatunuksella tai ilman.',
+    notLoggedIn: 'Kirjaudu sisään käyttääksesi Qvain-light palvelua.',
     title: 'Julkaise tiedosto',
     common: {
       save: 'Tallenna',
