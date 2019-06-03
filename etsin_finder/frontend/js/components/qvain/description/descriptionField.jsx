@@ -4,6 +4,8 @@ import { inject, observer } from 'mobx-react'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import '../../../../locale/translations'
+import { titleSchema, descriptionSchema } from '../utils/formValidation';
+import ValidationError from '../general/validationError';
 
 class DescriptionField extends Component {
   static propTypes = {
@@ -11,10 +13,44 @@ class DescriptionField extends Component {
   }
 
   state = {
-    active: 'ENGLISH'
+    active: 'ENGLISH',
+    titleError: null,
+    descriptionError: null
   }
 
-  handleLanguageButtonClisck = () => {
+  handleTitleChange = (e) => {
+    const title = e.target.value;
+    this.props.Stores.Qvain.setTitle(title, this.state.active);
+    this.setState({ titleError: null });
+  }
+
+  handleDescriptionChange = (e) => {
+    const description = e.target.value;
+    this.props.Stores.Qvain.setDescription(description, this.state.active);
+    this.setState({ descriptionError: null })
+  }
+
+  handleTitleBlur = () => {
+    titleSchema.validate(this.props.Stores.Qvain.title)
+      .then(() => {
+        this.setState({ titleError: null })
+      })
+      .catch((err) => {
+        this.setState({ titleError: err.errors })
+      })
+  }
+
+  handleDescriptionBlur = () => {
+    descriptionSchema.validate(this.props.Stores.Qvain.description)
+      .then(() => {
+        this.setState({ descriptionError: null })
+      })
+      .catch((err) => {
+        this.setState({ descriptionError: err.errors })
+      })
+    }
+
+  handleLanguageButtonClicks = () => {
     /* eslint-disable no-unused-expressions */
     this.state.active === 'ENGLISH'
       ? this.setState({ active: 'FINNISH' })
@@ -22,7 +58,7 @@ class DescriptionField extends Component {
   }
 
   getLangButton = (activeLang, buttonLang) => (
-    <LangButton active={activeLang === buttonLang} onClick={this.handleLanguageButtonClisck}>
+    <LangButton active={activeLang === buttonLang} onClick={this.handleLanguageButtonClicks}>
       <Translate content={buttonLang === 'ENGLISH' ? 'qvain.description.description.langEn' : 'qvain.description.description.langFi'} />
     </LangButton>
   )
@@ -36,7 +72,7 @@ class DescriptionField extends Component {
     const { title, description } = this.props.Stores.Qvain
     const activeLang = this.state.active
     return (
-      <div>
+      <React.Fragment>
         <LangButtonContainer>
           {this.getLangButton(this.state.active, 'ENGLISH')}
           <EmptyBlock width="2%" />
@@ -51,6 +87,7 @@ class DescriptionField extends Component {
               type="text"
               value={title.en}
               onChange={(event) => { title.en = event.target.value }}
+              onBlur={this.handleTitleBlur}
               attributes={{ placeholder: this.getPlaceholder('title', 'ENGLISH') }}
             />
           )}
@@ -60,9 +97,11 @@ class DescriptionField extends Component {
               type="text"
               value={title.fi}
               onChange={(event) => { title.fi = event.target.value }}
+              onBlur={this.handleTitleBlur}
               attributes={{ placeholder: this.getPlaceholder('title', 'FINNISH') }}
             />
           )}
+          <ValidationError>{this.state.titleError}</ValidationError>
           <h3><Translate content="qvain.description.description.description.label" /></h3>
           {activeLang === 'ENGLISH' && (
             <Translate
@@ -70,6 +109,7 @@ class DescriptionField extends Component {
               rows="8"
               value={description.en}
               onChange={(event) => { description.en = event.target.value }}
+              onBlur={this.handleDescriptionBlur}
               attributes={{ placeholder: this.getPlaceholder('title', this.state.active) }}
             />
           )}
@@ -79,12 +119,14 @@ class DescriptionField extends Component {
               rows="8"
               value={description.fi}
               onChange={(event) => { description.fi = event.target.value }}
+              onBlur={this.handleDescriptionBlur}
               attributes={{ placeholder: this.getPlaceholder('title', this.state.active) }}
             />
           )}
+          <ValidationError>{this.state.descriptionError}</ValidationError>
           <Translate component="div" content="qvain.description.description.instructions" />
         </DescriptionCard>
-      </div>
+      </React.Fragment>
     )
   }
 }

@@ -28,9 +28,31 @@ class Qvain {
 
   @observable accessType = undefined
 
+  @observable embargoExpDate = undefined
+
+  @observable restrictionGrounds = {}
+
   @observable participants = []
 
   @observable participantInEdit = EmptyParticipant
+
+  @action
+  setTitle = (title, lang) => {
+    if (lang === 'ENGLISH') {
+      this.title.en = title
+    } else if (lang === 'FINNISH') {
+      this.title.fi = title
+    }
+  }
+
+  @action
+  setDescription = (description, lang) => {
+    if (lang === 'ENGLISH') {
+      this.description.en = description
+    } else if (lang === 'FINNISH') {
+      this.description.fi = description
+    }
+  }
 
   @action
   addOtherIdentifier = (identifier) => {
@@ -65,6 +87,16 @@ class Qvain {
   @action
   setAccessType = (accessType) => {
     this.accessType = accessType
+  }
+
+  @action
+  setRestrictionGrounds = (restrictionGrounds) => {
+    this.restrictionGrounds = restrictionGrounds
+  }
+
+  @action
+  removeRestrictionGrounds = () => {
+    this.restrictionGrounds = {}
   }
 
   @action

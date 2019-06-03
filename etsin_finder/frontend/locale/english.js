@@ -312,6 +312,16 @@ const english = {
         title: 'Access Type',
         placeholder: 'Select option'
       },
+      embargoDate: {
+        label: 'Embargo expiration date',
+        placeholder: 'Date',
+        help: 'By default, expiration date will be indefinite if not set.'
+      },
+      restrictionGrounds: {
+        title: 'Restriction Grounds',
+        placeholder: 'Select option',
+        text: 'When access type is "Restricted", please choose the restriction grounds.'
+      },
       license: {
         title: 'License',
         placeholder: 'Select option'
@@ -367,6 +377,74 @@ const english = {
         title: 'Added Participants',
         noneAddedNotice: 'No participants added'
       }
+    },
+    validationMessages: {
+      title: {
+        string: 'The Title must be a string value.',
+        max: 'The Title is too long.',
+        required: 'The Title is required in at least one language.'
+      },
+      description: {
+        string: 'The Description must be a string value.',
+        max: 'The description is too long.',
+        required: 'The Description is required in at least one language.'
+      },
+      otherIdentifiers: {
+        string: 'Other Identifiers must be string value.',
+        url: 'Ther Identifiers should be valid URLs.',
+        max: 'Identifier too long.'
+      },
+      fieldOfScience: {},
+      keywords: {
+        string: 'Keywords must be string value.',
+        max: 'Keyword too long.',
+        required: 'At least one keyword is required.'
+      },
+      participants: {
+        type: {
+          mixed: '',
+          oneOf: 'Participant type can only be "person" or "organization"',
+          required: 'The Type of the Participant is required.'
+        },
+        roles: {
+          mixed: '',
+          oneOf: 'Roles must be one of "creator", "publisher" or "curator".',
+          required: 'You must specify the role of the participant. Creator field is mandatory and there must be exactly one Publisher.'
+        },
+        name: {
+          string: 'The Name must be a string value.',
+          max: 'Name too long.',
+          required: 'Name is a required field.'
+        },
+        email: {
+          string: '',
+          max: 'Email too long.',
+          email: 'Please insert a valid Email address.',
+          nullable: ''
+        },
+        identifier: {
+          string: '',
+          max: 'Identifier too long.',
+          nullable: ''
+        },
+        organization: {
+          mixed: '',
+          object: 'The Selected Organization should be an Object.',
+          string: 'The Organization value must be string.',
+          required: 'Organization is required if the partisipant is a person.'
+        }
+      },
+      accessType: {
+        string: 'Access Type must be string value.',
+        url: 'Reference value ERROR.',
+        required: 'Access Type is a required field.'
+      },
+      restrictionGrounds: {
+        string: 'Restriction Grounds must be string value.',
+        url: 'Reference value ERROR.',
+        required: 'Restriction Grounds are required if Access Type is not "Open".'
+      },
+      license: {}
     },
     files: {
       title: 'Files',

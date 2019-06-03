@@ -7,7 +7,7 @@
         "@babel/plugin-syntax-dynamic-import"
       ],
       "presets": [
-        ["@babel/env", { "useBuiltIns": "entry", "targets": "> 0.25%, not dead" }],
+        ["@babel/env", { "useBuiltIns": "entry", "corejs": 2, "targets": "> 0.25%, not dead" }],
         "@babel/preset-react"
       ]
     }

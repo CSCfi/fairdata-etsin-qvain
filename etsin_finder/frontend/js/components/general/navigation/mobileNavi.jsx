@@ -29,7 +29,7 @@ export default class MobileNavi extends React.Component {
   render() {
     return (
       <MobileItems>
-        <DropdownMenu buttonContent={<FontAwesomeIcon icon={faBars} size="lg" />} transparentButton>
+        <DropdownMenu transparent buttonContent={<FontAwesomeIcon icon={faBars} size="lg" />} transparentButton>
           <NavItem
             exact
             to="/"
@@ -48,23 +48,32 @@ export default class MobileNavi extends React.Component {
             <Translate content="nav.datasets" />
           </NavItem>
         </DropdownMenu>
-        <DropdownMenu buttonContent={<FontAwesomeIcon icon={faCog} size="lg" />} transparentButton>
+        <DropdownMenu transparent buttonContent={<FontAwesomeIcon icon={faCog} size="lg" />} transparentButton>
           <CustomContainer>
+            <DatasetCont>
+              <TextContainer> <Translate content="nav.addDataset" /> </TextContainer>
+              <Row>
+                <Link
+                  width="50%"
+                  margin="0em 0.4em 0.6em 0em"
+                  href="https://qvain.fairdata.fi"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  Qvain
+                </Link>
+                <Link
+                  width="50%"
+                  margin="0em 0em 0.6em 0em"
+                  href="/qvain"
+                >
+                  Qvain Light
+                </Link>
+              </Row>
+            </DatasetCont>
             <Row>
-              <LangToggle inverted margin="0.4em 0.4em 0.4em 0em" />
               <Link
-                width="100%"
-                margin="0.4em 0em 0.4em 0.4em"
-                href="https://qvain.fairdata.fi"
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                <Translate content="nav.addDataset" />
-              </Link>
-            </Row>
-            <Row>
-              <Link
-                margin="0.4em 0"
+                margin="1.1em 0em 0em"
                 width="100%"
                 href={this.props.helpUrl}
                 rel="noopener noreferrer"
@@ -74,7 +83,8 @@ export default class MobileNavi extends React.Component {
               </Link>
             </Row>
             <Row>
-              <Login width="100%" margin="0.4em 0" />
+              <LangToggle margin="0.4em 0.4em 0.4em 0em" />
+              <Login width="100%" margin="0.4em 0em 0.4em 0em" />
             </Row>
           </CustomContainer>
         </DropdownMenu>
@@ -96,12 +106,23 @@ const MobileItems = styled.div`
   height: 100%;
   @media screen and (min-width: ${p => p.theme.breakpoints.lg}) {
     display: none;
-  }
+    title
+    title  }
+`
+const TextContainer = styled.h1`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1em;
 `
 
 const Row = styled.div`
   display: inline-flex;
   width: 100%;
+`
+
+const DatasetCont = styled.div`
+  border-bottom: 3px solid ${p => p.theme.color.primary};
 `
 
 const NavItem = styled(NavLink)`

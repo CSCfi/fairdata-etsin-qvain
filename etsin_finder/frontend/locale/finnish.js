@@ -316,6 +316,16 @@ const finnish = {
         title: 'Pääsyoikeus',
         placeholder: 'Valitse vaihtoehto'
       },
+      embargoDate: {
+        label: 'Embargo loppumispäivämäärä',
+        placeholder: 'Päivämäärä',
+        help: 'Oletuksena embargo ei lopu jollei päivämäärää aseteta.'
+      },
+      restrictionGrounds: {
+        title: 'Saatavuutta rajoitettu',
+        placeholder: 'Valitse vaihtoehto',
+        text: 'Jos pääsyoikeus tyyppi on rajattu, valitse rajoituksen syy.'
+      },
       license: {
         title: 'Lisenssi',
         placeholder: 'Valitse vaihtoehto'
@@ -371,6 +381,74 @@ const finnish = {
         title: 'Lisätyt toimijat',
         noneAddedNotice: 'Toimijoita ei olla lisätty'
       }
+    },
+    validationMessages: {
+      title: {
+        string: 'Otsikon tulisi olla arvoltaan merkkijono.',
+        max: 'Otsikko on liian pitkä.',
+        required: 'Otsikko on pakollinen vähintään yhdellä kielellä.'
+      },
+      description: {
+        string: 'Kuvaus tulisi olla arvoltaan merkkijono.',
+        max: 'Kuvaus on liian pitkä.',
+        required: 'Kuvaus on pakollinen vähintään yhdellä kielellä.'
+      },
+      otherIdentifiers: {
+        string: 'Tunnisteet tulisivat olla arvoltaan merkkijonoja.',
+        url: 'Tunnisteet täytyy olla valiideja URL;eja',
+        max: 'Tunniste liian pitkä.'
+      },
+      fieldOfScience: {},
+      keywords: {
+        string: 'Avainsanat tulisi olla arvoltaan merkkijonoja.',
+        max: 'Avainsana on liian pitkä.',
+        required: 'Vähintään yksi avainsana on pakollinen.'
+      },
+      participants: {
+        type: {
+          mixed: '',
+          oneOf: 'Toimijan tyyppi pitää olla joko "person" tai "organization"',
+          required: 'Toimijan tyyppi on pakollinen.'
+        },
+        roles: {
+          mixed: '',
+          oneOf: 'Roolin kuuluisi olla "creator", "publisher" tai "curator".',
+          required: 'Tekijän rooli on pakollinen. On myös pakollista määrittää tasan yhden Julkaisijan.'
+        },
+        name: {
+          string: 'Nimi pitää olla arvoltaan merkkijono.',
+          max: 'Nimi on liian pitkä.',
+          required: 'Nimi kenttä on pakollinen.'
+        },
+        email: {
+          string: 'Sähköposti pitää olla arvoltaan merkkijono.',
+          max: 'Sähköposti on liian pikä.',
+          email: 'Lisää valiidi sähköposti.',
+          nullable: ''
+        },
+        identifier: {
+          string: '',
+          max: 'Tunniste on liian pitkä.',
+          nullable: ''
+        },
+        organization: {
+          mixed: '',
+          object: 'Valittu Organisaatio tulisi olla olio.',
+          string: 'Organisaation arvo tulisi olla merkkijono.',
+          required: 'Organisaatio on pakollinen kenttä jos Toimija on Luonnollinen henkilö.'
+        }
+      },
+      accessType: {
+        string: 'Pääsyoikeus tulisi olla arvoltaan merkkijono.',
+        url: 'Referenssi arvo ERROR.',
+        required: 'Pääsyoikeus on pakollimen kenttä.'
+      },
+      restrictionGrounds: {
+        string: 'kentän arvo tulisi olla merkkijono.',
+        url: 'Referenssi arvo ERROR.',
+        required: 'Saatavuutta rajoitettu on pakollinen kenttä jos Pääsyoikeus ei ole "Avoin".'
+      },
+      license: {}
     },
     files: {
       title: 'Tiedostot',
