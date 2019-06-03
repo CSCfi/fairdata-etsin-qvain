@@ -3,6 +3,8 @@ import { inject, observer } from 'mobx-react'
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom'
 import axios from 'axios'
+import styled from 'styled-components';
+import Translate from 'react-translate-component'
 import {
   Table,
   TableHeader,
@@ -12,7 +14,8 @@ import {
   BodyCell,
   TableNote
 } from '../general/table'
-import { CancelButton, ButtonGroup } from '../general/buttons'
+import DatasetPagination from './pagination'
+import { CancelButton } from '../general/buttons'
 
 const USER_DATASETS_URL = '/api/datasets/'
 const tempuser = 'abc-user-123'
@@ -72,70 +75,81 @@ class DatasetTable extends Component {
     this.props.history.push('/qvain/dataset')
   }
 
-  handleNextPage = () => {
-    this.getDatasets(this.state.offset + this.state.limit).then(() => {
-      this.setState((state) => ({
-        page: state.page + 1,
-        offset: state.offset + state.limit
-      }))
-    })
-  }
-
   handleChangePage = (pageNum) => () => {
     this.setState({ page: pageNum, datasets: [] })
-    this.getDatasets((this.state.page - 1) * this.state.limit)
-  }
-
-  renderPageButtons = () => {
-    let buttons = []
-    const { count, limit, page } = this.state
-    for (let i = 1; i <= (count / limit); i += 1) {
-      buttons = [...buttons, (
-        <button key={i} onClick={this.handleChangePage(i)} disabled={i === page} type="button">{i}</button>
-      )]
-    }
-    return buttons
+    this.getDatasets((pageNum - 1) * this.state.limit)
   }
 
   render() {
-    const { datasets, loading, count, page, limit, error, errorMessage } = this.state
+    const { datasets, loading, error, errorMessage, page, count, limit } = this.state
     return (
       <Fragment>
-        <ButtonGroup>
-          <button disabled={(page * limit) - limit === 0} onClick={this.handleChangePage(page - 1)} type="button">Back</button>
-          {this.renderPageButtons()}
-          <button disabled={(page * limit) + limit > count} onClick={this.handleChangePage(page + 1)} type="button">Next</button>
-        </ButtonGroup>
-        <Table className="table">
+        <DatasetPagination page={page} count={count} limit={limit} onChangePage={this.handleChangePage} />
+        <TablePadded className="table">
           <TableHeader>
             <Row>
-              <HeaderCell>ID</HeaderCell>
-              <HeaderCell>Name</HeaderCell>
-              <HeaderCell>Edit</HeaderCell>
-              <HeaderCell>Remove</HeaderCell>
+              <Translate component={HeaderCell} content="qvain.datasets.tableRows.id" />
+              <Translate component={HeaderCell} content="qvain.datasets.tableRows.name" />
+              <Translate component={HeaderCell} content="qvain.datasets.tableRows.edit" />
+              <Translate component={HeaderCell} content="qvain.datasets.tableRows.remove" />
             </Row>
           </TableHeader>
           <TableBody striped>
-            {loading && <TableNote>Loading...</TableNote>}
-            {error && <TableNote style={{ color: 'red' }}>{errorMessage}</TableNote>}
-            {this.noDatasets() && <TableNote>You have no datasets</TableNote>}
-            {datasets.map(dataset => (
+            {loading && <Translate component={TableNote} content="qvain.datasets.loading" />}
+            {error && (
+              <Fragment>
+                <TableNote style={{ color: 'red' }}>
+                  <Translate content="qvain.datasets.errorOccurred" />:
+                  <ErrorMessage>{errorMessage}</ErrorMessage>
+                </TableNote>
+                <TableNote>
+                  <Translate
+                    style={{ height: '100%' }}
+                    component={CancelButton}
+                    onClick={this.handleChangePage(page)}
+                    content="qvain.datasets.reload"
+                  />
+                </TableNote>
+              </Fragment>
+            )}
+            {this.noDatasets() && <Translate component={TableNote} content="qvain.datasets.noDatasets" />}
+            {!error && datasets.map(dataset => (
               <Row key={dataset.identifier}>
                 <BodyCell>{dataset.identifier}</BodyCell>
                 <BodyCell>{dataset.research_dataset.title.en}</BodyCell>
                 <BodyCell>
-                  <CancelButton onClick={this.handleEnterEdit(dataset)}>Edit</CancelButton>
+                  <Translate
+                    component={CancelButton}
+                    onClick={this.handleEnterEdit(dataset)}
+                    content="qvain.datasets.editButton"
+                  />
                 </BodyCell>
                 <BodyCell>
-                  <CancelButton onClick={this.handleRemove(dataset.identifier)}>Delete</CancelButton>
+                  <Translate
+                    component={CancelButton}
+                    onClick={this.handleRemove(dataset.identifier)}
+                    content="qvain.datasets.deleteButton"
+                  />
                 </BodyCell>
               </Row>
             ))}
           </TableBody>
-        </Table>
+        </TablePadded>
+        <DatasetPagination page={page} count={count} limit={limit} onChangePage={this.handleChangePage} />
       </Fragment>
     );
   }
 }
+
+const ErrorMessage = styled.span`
+  margin-left: 10px;
+`;
+
+const TablePadded = styled(Table)`
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin-top: 30px;
+  margin-bottom: 30px;
+`;
 
 export default withRouter(inject('Stores')(observer(DatasetTable)))

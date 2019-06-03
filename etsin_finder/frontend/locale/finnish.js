@@ -258,6 +258,23 @@ const finnish = {
       save: 'Tallenna',
       cancel: 'Peruuta'
     },
+    datasets: {
+      title: 'Aineistot',
+      help: 'Muokkaa olemassa olevaa aineistoa tai luo uusi',
+      createButton: 'Luo aineisto',
+      tableRows: {
+        id: 'ID',
+        name: 'Nimi',
+        edit: 'Muokkaa',
+        remove: 'Poista'
+      },
+      editButton: 'Muokkaa',
+      deleteButton: 'Poista',
+      noDatasets: 'Sinulla ei ole olemassa olevia aineistoja',
+      reload: 'Lataa uudelleen',
+      loading: 'Lataa...',
+      errorOccurred: 'Virhe tapahtui'
+    },
     general: {
       langEnglish: 'Englanti',
       langFinnish: 'Suomi'
