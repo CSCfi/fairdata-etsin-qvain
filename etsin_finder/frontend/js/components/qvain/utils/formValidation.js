@@ -70,7 +70,7 @@ const licenseSchema = yup.object().shape({
       then: yup.string().required(),
       otherwise: yup.string()
     })
-  }),
+  }).nullable(),
   otherLicenseUrl: yup.mixed().when('license.url', {
     is: 'other',
     then: yup
@@ -78,7 +78,7 @@ const licenseSchema = yup.object().shape({
       .url(translate('qvain.validationMessages.license.otherUrl.url'))
       .required(translate('qvain.validationMessages.license.otherUrl.required')),
     otherwise: yup.string().url().nullable()
-  })
+  }).nullable()
 })
 
 const accessTypeSchema = yup.object().shape({
