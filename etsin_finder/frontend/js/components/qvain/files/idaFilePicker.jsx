@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { inject, observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 import ProjectSelector from './projectSelector'
@@ -13,19 +14,17 @@ import {
 } from '../general/buttons'
 
 export class IDAFilePickerBase extends Component {
-  state = {
-    idaPickerOpen: false
+  static propTypes = {
+    Stores: PropTypes.object.isRequired
   }
 
   handleToggleForm = (event) => {
     event.preventDefault()
-    this.setState((state) => ({
-      idaPickerOpen: !state.idaPickerOpen
-    }))
+    this.props.Stores.Qvain.idaPickerOpen = !this.props.Stores.Qvain.idaPickerOpen
   }
 
   render() {
-    const { idaPickerOpen } = this.state
+    const { idaPickerOpen } = this.props.Stores.Qvain
     return (
       <Fragment>
         <Translate component="p" content="qvain.files.ida.help" />

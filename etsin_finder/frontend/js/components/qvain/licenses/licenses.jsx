@@ -6,6 +6,8 @@ import Translate from 'react-translate-component'
 
 import getReferenceData from '../utils/getReferenceData';
 import Card from '../general/card'
+import { License as LicenseConstructor } from '../../../stores/view/qvain'
+import { onChange, getCurrentValue } from '../utils/select'
 
 class License extends Component {
   static propTypes = {
@@ -13,8 +15,10 @@ class License extends Component {
   }
 
   state = {
-    licensesEn: [{ value: '', label: '' }],
-    licensesFi: [{ value: '', label: '' }]
+    options: {
+      en: [],
+      fi: []
+    }
   }
 
   componentDidMount = () => {
@@ -23,18 +27,22 @@ class License extends Component {
       const list = res.data.hits.hits;
       const refsEn = list.map(ref => (
         {
-          value: ref._source.label.en,
+          value: ref._source.uri,
           label: ref._source.label.en,
         }
         ))
       const refsFi = list.map(ref => (
         {
-          value: ref._source.label.en,
+          value: ref._source.uri,
           label: ref._source.label.fi,
         }
         ))
-      this.setState({ licensesEn: refsEn })
-      this.setState({ licensesFi: refsFi })
+      this.setState({
+        options: {
+          en: refsEn,
+          fi: refsFi
+        }
+      })
     })
     .catch(error => {
       if (error.response) {
@@ -53,21 +61,19 @@ class License extends Component {
   }
 
   render() {
+    const { options } = this.state
+    const { lang } = this.props.Stores.Locale
+    const { license, setLicense } = this.props.Stores.Qvain
     return (
       <Card>
         <Translate component="h3" content="qvain.rightsAndLicenses.license.title" />
         <Translate
           component={Select}
           name="license"
-          options={
-            this.props.Stores.Locale.lang === 'en'
-            ? this.state.licensesEn
-            : this.state.licensesFi
-          }
+          value={getCurrentValue(license, options, lang)}
+          options={options[lang]}
           clearable
-          onChange={(license) => {
-            this.props.Stores.Qvain.setLicence(license)
-          }}
+          onChange={onChange(options, lang, setLicense, LicenseConstructor)}
           onBlur={() => {}}
           attributes={{ placeholder: 'qvain.rightsAndLicenses.license.placeholder' }}
         />

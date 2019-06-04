@@ -9,6 +9,8 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons'
 
 import Card from '../general/card';
 import Label from '../general/label';
+import { keywordsSchema } from '../utils/formValidation';
+import ValidationError from '../general/validationError';
 
 class KeywordsField extends Component {
   static propTypes = {
@@ -16,15 +18,27 @@ class KeywordsField extends Component {
   }
 
   state = {
-    value: ''
+    value: '',
+    keywordsValidationError: null
   }
 
   handleChange = (e) => {
     this.setState({ value: e.target.value });
+    this.setState({ keywordsValidationError: null })
+  }
+
+  handleBlur = () => {
+    keywordsSchema.validate(this.props.Stores.Qvain.keywords)
+      .then(() => {
+        this.setState({ keywordsValidationError: null })
+      })
+      .catch((err) => {
+        this.setState({ keywordsValidationError: err.errors })
+      })
   }
 
   handleKeywordAdd = (e) => {
-    if (e.keyCode === 13) {
+    if (e.keyCode === 13 && this.state.value.length > 0) {
       e.preventDefault();
       const newKeyword = this.state.value;
       this.props.Stores.Qvain.setKeywords([
@@ -54,10 +68,12 @@ class KeywordsField extends Component {
           component={Input}
           value={this.state.value}
           onChange={this.handleChange}
+          onBlur={this.handleBlur}
           onKeyDown={this.handleKeywordAdd}
           type="text"
           attributes={{ placeholder: 'qvain.description.keywords.placeholder' }}
         />
+        <ValidationError>{this.state.keywordsValidationError}</ValidationError>
       </Card>
     )
   }

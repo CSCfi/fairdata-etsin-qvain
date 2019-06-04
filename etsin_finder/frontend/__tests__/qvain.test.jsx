@@ -35,7 +35,7 @@ import LocaleStore from '../js/stores/view/language'
 
 describe('Qvain', () => {
   it('should render correctly', () => {
-    const component = shallow(<Qvain />)
+    const component = shallow(<Qvain Stores={getStores()} />)
 
     expect(component).toMatchSnapshot()
   })
@@ -58,7 +58,7 @@ describe('Qvain.Participants', () => {
   it('should render person participant form by default', () => {
     const component = mount(<Participants Stores={getStores()} />)
     // test if active selection field displays 'Person'
-    expect(component.find(ParticipantSelection).html().includes(EntityType.PERSON)).toBe(true)
+    expect(component.find(ParticipantSelection).html().includes('Person')).toBe(true)
     // test if name field is rendered
     expect(component.find('#nameField').length).not.toBe(0)
   })
@@ -68,13 +68,13 @@ describe('Qvain.Participants', () => {
   // 'Organization'
   it('should change selected participant entity', () => {
     const component = mount(<Participants Stores={getStores()} />)
-    expect(component.find(ParticipantSelection).html().includes(EntityType.PERSON)).toBe(true)
+    expect(component.find(ParticipantSelection).html().includes('Person')).toBe(true)
     component.find('#personCreator').first().simulate('change', { target: { checked: true, value: Role.CREATOR } })
-    const isPersonCreator = component.find(ParticipantSelection).html().includes(Role.CREATOR)
+    const isPersonCreator = component.find(ParticipantSelection).html().includes('Creator')
     expect(isPersonCreator).toBe(true)
     component.find('#entityOrg').first().simulate('change')
-    expect(component.find(ParticipantSelection).html().includes(EntityType.ORGANIZATION)).toBe(true)
-    expect(component.find(ParticipantSelection).html().includes(Role.CREATOR)).toBe(false)
+    expect(component.find(ParticipantSelection).html().includes('Organization')).toBe(true)
+    expect(component.find(ParticipantSelection).html().includes('Creator')).toBe(false)
   })
 
   // Added participants should be listed if there are any

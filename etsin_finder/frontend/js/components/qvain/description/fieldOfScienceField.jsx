@@ -6,6 +6,8 @@ import Translate from 'react-translate-component';
 
 import getReferenceData from '../utils/getReferenceData';
 import Card from '../general/card';
+import { FieldOfScience } from '../../../stores/view/qvain'
+import { onChange, getCurrentValue } from '../utils/select'
 
 class FieldOfScienceField extends React.Component {
   static propTypes = {
@@ -13,8 +15,7 @@ class FieldOfScienceField extends React.Component {
   }
 
   state = {
-    fieldOfScienceEn: [{ value: '', label: '' }],
-    fieldOfScienceFi: [{ value: '', label: '' }]
+    options: {}
   }
 
   componentDidMount = () => {
@@ -23,18 +24,22 @@ class FieldOfScienceField extends React.Component {
       const list = res.data.hits.hits;
       const refsEn = list.map(ref => (
         {
-          value: ref._source.label.en,
+          value: ref._source.uri,
           label: ref._source.label.en,
         }
         ))
       const refsFi = list.map(ref => (
         {
-          value: ref._source.label.en,
+          value: ref._source.uri,
           label: ref._source.label.fi,
         }
         ))
-      this.setState({ fieldOfScienceEn: refsEn })
-      this.setState({ fieldOfScienceFi: refsFi })
+      this.setState({
+        options: {
+          en: refsEn,
+          fi: refsFi
+        }
+      })
     })
     .catch(error => {
       if (error.response) {
@@ -53,6 +58,9 @@ class FieldOfScienceField extends React.Component {
   }
 
   render() {
+    const { fieldOfScience } = this.props.Stores.Qvain
+    const { lang } = this.props.Stores.Locale
+    const { options } = this.state
     return (
       <Card>
         <Translate component="h3" content="qvain.description.fieldOfScience.title" />
@@ -60,16 +68,11 @@ class FieldOfScienceField extends React.Component {
           name="field-of-science"
           component={Select}
           attributes={{ placeholder: 'qvain.description.fieldOfScience.placeholder' }}
+          value={getCurrentValue(fieldOfScience, options, lang)}
           className="basic-single"
           classNamePrefix="select"
-          options={
-            this.props.Stores.Locale.lang === 'en'
-            ? this.state.fieldOfScienceEn
-            : this.state.fieldOfScienceFi
-          }
-          onChange={(fieldOfScience) => {
-            this.props.Stores.Qvain.setFieldOfScience(fieldOfScience)
-          }}
+          options={options[lang]}
+          onChange={onChange(options, lang, this.props.Stores.Qvain.setFieldOfScience, FieldOfScience)}
         />
       </Card>
     )

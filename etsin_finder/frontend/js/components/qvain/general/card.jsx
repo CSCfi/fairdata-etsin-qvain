@@ -29,6 +29,30 @@ export const ContainerSubsection = styled.div`
   overflow: visible;
 `
 
+export const QvainContainer = styled.div`
+  background-color: #fafafa;
+`
+
+export const SubHeader = styled.div`
+  height: 100px;
+  background-color: #007fad;
+  color: white;
+  display: flex;
+  align-items: center;
+`
+
+export const SubHeaderText = styled.div`
+  font-family: Lato;
+  font-size: 32px;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 0.81;
+  letter-spacing: normal;
+  color: #ffffff;
+  margin-left: 47px;
+`
+
 export const FileContainer = styled(Container)`
   padding: 35px 24px;
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.13);
