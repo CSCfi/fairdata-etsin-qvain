@@ -34,6 +34,7 @@ class Qvain extends Component {
       accessType: values.accessType,
       restrictionGrounds: values.restrictionGrounds.value,
       license: {
+        idaPickerOpen: values.idaPickerOpen,
         license: values.license,
         otherLicenseUrl: values.otherLicenseUrl
       }

@@ -85,8 +85,8 @@ class License extends Component {
   }
 
   handleOnBlur = () => {
-    const { license, otherLicenseUrl } = this.props.Stores.Qvain
-    const validationObject = { license, otherLicenseUrl }
+    const { license, otherLicenseUrl, idaPickerOpen } = this.props.Stores.Qvain
+    const validationObject = { idaPickerOpen, license, otherLicenseUrl }
     licenseSchema.validate(validationObject).then(() => {
       this.setState({
         errorMessage: undefined
@@ -110,12 +110,12 @@ class License extends Component {
           name="license"
           value={getCurrentValue(license, options, lang)}
           options={options[lang]}
-          clearable
+          isClearable
           onChange={onChange(options, lang, setLicense, LicenseConstructor)}
           onBlur={() => {}}
           attributes={{ placeholder: 'qvain.rightsAndLicenses.license.placeholder' }}
         />
-        {(license.url === otherOptValue) && (
+        {(license !== undefined && license.url === otherOptValue) && (
           <Fragment>
             <Translate
               component={Label}
