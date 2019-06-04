@@ -1,9 +1,7 @@
 import React, { Component } from 'react'
-import styled from 'styled-components'
 import PropTypes from 'prop-types';
 import Translate from 'react-translate-component'
 import { inject, observer } from 'mobx-react';
-import { Link } from 'react-router-dom';
 
 import RightsAndLicenses from './licenses'
 import Description from './description';
@@ -12,7 +10,7 @@ import { qvainFormSchema } from './utils/formValidation';
 import Files from './files'
 import Stores from '../../stores'
 import LoginButton from '../general/navigation/loginButton';
-import Card from './general/card';
+import Card, { QvainContainer, SubHeader, SubHeaderText } from './general/card'
 
 class Qvain extends Component {
   static propTypes = {
@@ -66,7 +64,7 @@ class Qvain extends Component {
       view = (
         <div className="container">
           <Card>
-            <h2><Translate content="qvain.unsuccessfullLogin"/></h2>
+            <h2><Translate content="qvain.unsuccessfullLogin" /></h2>
             <div>
               <Translate content="qvain.notCSCUser1" />
               <a href="https://sui.csc.fi"><Translate content="qvain.notCSCUserLink" /></a>.
@@ -75,7 +73,7 @@ class Qvain extends Component {
           </Card>
         </div>
       )
-    } else if (!Stores.Auth.userLogged && !Stores.Auth.CSCUserLogged){
+    } else if (!Stores.Auth.userLogged && !Stores.Auth.CSCUserLogged) {
       view = (
         <div className="container">
           <Card>
@@ -97,29 +95,5 @@ class Qvain extends Component {
     )
   }
 }
-
-const QvainContainer = styled.div`
-  background-color: #fafafa;
-`
-
-const SubHeader = styled.div`
-  height: 100px;
-  background-color: #007fad;
-  color: white;
-  display: flex;
-  align-items: center;
-`
-
-const SubHeaderText = styled.div`
-  font-family: Lato;
-  font-size: 32px;
-  font-weight: bold;
-  font-style: normal;
-  font-stretch: normal;
-  line-height: 0.81;
-  letter-spacing: normal;
-  color: #ffffff;
-  margin-left: 47px;
-`
 
 export default inject('Stores')(observer(Qvain));

@@ -60,10 +60,15 @@ const otherIdentifiersSchema = yup
   )
   .nullable()
 
-const accessTypeSchema = yup
-  .string(translate('qvain.validationMessages.accessType.string'))
-  .url(translate('qvain.validationMessages.accessType.url'))
-  .required(translate('qvain.validationMessages.accessType.required'))
+const accessTypeSchema = yup.object().shape({
+  name: yup.string(),
+  url: yup
+    .string(translate('qvain.validationMessages.accessType.string'))
+    .url(translate('qvain.validationMessages.accessType.url'))
+    .required(translate('qvain.validationMessages.accessType.required'))
+})
+
+const embargoExpDateSchema = yup.date().nullable()
 
 const restrictionGroundsSchema = yup
   .string(translate('qvain.validationMessages.restrictionGrounds.string'))
@@ -175,6 +180,7 @@ export {
   otherIdentifiersSchema,
   keywordsSchema,
   accessTypeSchema,
+  embargoExpDateSchema,
   restrictionGroundsSchema,
   participantsSchema,
   participantType,

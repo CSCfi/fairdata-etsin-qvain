@@ -34,6 +34,8 @@ class MetaxQvainLightAPIService(FlaskService):
                                                        '/root?project={0}'
             self.METAX_GET_DIRECTORY = 'https://{0}/rest/directories'.format(metax_api_config['HOST']) + \
                                        '/{0}/files'
+            self.METAX_GET_DATASETS_FOR_USER = 'https://{0}/rest/datasets'.format(metax_api_config['HOST']) + \
+                                               '?metadata_provider_user={0}&file_details'
 
             self.user = metax_api_config['USER']
             self.pw = metax_api_config['PASSWORD']
@@ -102,6 +104,43 @@ class MetaxQvainLightAPIService(FlaskService):
         return metax_api_response.json()
 
 
+    def get_datasets_for_user(self, user_id, limit, offset):
+        """
+        Get datasets created by the specified user. Uses pagination, so offset
+        and limit are used as well
+
+        :param user_id:
+        :return datasets:
+        """
+        req_url = self.METAX_GET_DATASETS_FOR_USER.format(user_id)
+
+        if (limit) :
+            req_url = req_url + "&limit={0}".format(limit[0])
+        if (offset) :
+            req_url = req_url + "&offset={}".format(offset[0])
+
+        try:
+            metax_api_response = requests.get(req_url,
+                                              headers={'Accept': 'application/json'},
+                                              auth=(self.user, self.pw),
+                                              verify=self.verify_ssl,
+                                              timeout=10)
+            metax_api_response.raise_for_status()
+        except Exception as e:
+            if isinstance(e, requests.HTTPError):
+                log.debug("Failed to get data for directory {0} from Metax API".
+                          format(dir_identifier))
+                log.debug('Response status code: {0}'.format(metax_api_response.status_code))
+                log.debug('Response text: {0}'.format(json_or_empty(metax_api_response) or metax_api_response.text))
+            else:
+                log.error("Failed to get data for directory {0} from Metax API".
+                          format(dir_identifier))
+                log.error(e)
+            return None
+
+        return metax_api_response.json()
+
+
 _metax_api = MetaxQvainLightAPIService(app)
 
 def get_directory(dir_id):
@@ -121,3 +160,6 @@ def get_directory_for_project(project_id):
     :return:
     """
     return _metax_api.get_directory_for_project(project_id)
+
+def get_datasets_for_user(user_id, limit, offset):
+    return _metax_api.get_datasets_for_user(user_id, limit, offset)
