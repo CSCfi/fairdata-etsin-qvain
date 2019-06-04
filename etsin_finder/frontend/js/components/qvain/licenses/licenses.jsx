@@ -9,6 +9,8 @@ import Card from '../general/card'
 import { Label, Input } from '../general/form'
 import { License as LicenseConstructor } from '../../../stores/view/qvain'
 import { onChange, getCurrentValue } from '../utils/select'
+import { licenseSchema } from '../utils/formValidation';
+import ValidationError from '../general/validationError';
 
 const otherOptValue = 'other'
 
@@ -34,10 +36,12 @@ class License extends Component {
     options: {
       en: [],
       fi: []
-    }
+    },
+    errorMessage: undefined
   }
 
   componentDidMount = () => {
+    const { license } = this.props.Stores.Qvain
     getReferenceData('license')
     .then(res => {
       const list = res.data.hits.hits;
@@ -59,6 +63,10 @@ class License extends Component {
           fi: [...refsFi, otherOpt('fi')]
         }
       })
+      license.name = {
+        en: refsEn.find(opt => opt.value === license.url).label,
+        fi: refsFi.find(opt => opt.value === license.url).label
+      }
     })
     .catch(error => {
       if (error.response) {
@@ -76,8 +84,22 @@ class License extends Component {
     });
   }
 
+  handleOnBlur = () => {
+    const { license, otherLicenseUrl } = this.props.Stores.Qvain
+    const validationObject = { license, otherLicenseUrl }
+    licenseSchema.validate(validationObject).then(() => {
+      this.setState({
+        errorMessage: undefined
+      })
+    }).catch(err => {
+      this.setState({
+        errorMessage: err.errors
+      })
+    })
+  }
+
   render() {
-    const { options } = this.state
+    const { options, errorMessage } = this.state
     const { lang } = this.props.Stores.Locale
     const { license, setLicense, otherLicenseUrl } = this.props.Stores.Qvain
     return (
@@ -106,7 +128,9 @@ class License extends Component {
                 this.props.Stores.Qvain.otherLicenseUrl = event.target.value
               }}
               placeholder="https://"
+              onBlur={this.handleOnBlur}
             />
+            {errorMessage && <ValidationError>{errorMessage}</ValidationError>}
             <Translate component="p" content="qvain.rightsAndLicenses.license.other.help" />
           </Fragment>
         )}

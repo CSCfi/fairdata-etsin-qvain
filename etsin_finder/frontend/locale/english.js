@@ -326,8 +326,8 @@ const english = {
         title: 'License',
         placeholder: 'Select option',
         other: {
-          label: 'Other',
-          help: 'Specify URL for license'
+          label: 'URL address',
+          help: 'Specify URL address for license'
         }
       }
     },
@@ -448,7 +448,13 @@ const english = {
         url: 'Reference value ERROR.',
         required: 'Restriction Grounds are required if Access Type is not "Open".'
       },
-      license: {}
+      license: {
+        otherUrl: {
+          string: 'The license URL must be a valid string of text',
+          url: 'The license URL must be a valid URL',
+          required: 'License URL is a required value'
+        }
+      }
     },
     files: {
       title: 'Files',

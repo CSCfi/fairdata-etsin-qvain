@@ -330,7 +330,7 @@ const finnish = {
         title: 'Lisenssi',
         placeholder: 'Valitse vaihtoehto',
         other: {
-          label: 'Muu',
+          label: 'URL',
           help: 'Anna osoite lisenssille.'
         }
       }
@@ -452,7 +452,13 @@ const finnish = {
         url: 'Referenssi arvo ERROR.',
         required: 'Saatavuutta rajoitettu on pakollinen kenttä jos Pääsyoikeus ei ole "Avoin".'
       },
-      license: {}
+      license: {
+        otherUrl: {
+          string: 'Lisenssi URL pitää olla merkkijono',
+          url: 'Lisenssi URL pitää olla oikeanlainen URL',
+          required: 'Lisenssi URL on pakollinen'
+        }
+      }
     },
     files: {
       title: 'Tiedostot',

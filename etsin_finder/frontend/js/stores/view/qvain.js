@@ -5,6 +5,8 @@ import { getDirectories, getFiles } from '../../components/qvain/utils/fileHiera
 const DIR_URL = '/api/files/directory/'
 const PROJECT_DIR_URL = '/api/files/project/'
 
+const CCBY4 = 'http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0'
+
 class Qvain {
   @observable original = undefined // used if editing, otherwise undefined
 
@@ -24,7 +26,7 @@ class Qvain {
 
   @observable keywords = []
 
-  @observable license = undefined
+  @observable license = License(undefined, CCBY4)
 
   @observable otherLicenseUrl = undefined
 
