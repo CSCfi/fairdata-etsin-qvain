@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
+import { inject, observer } from 'mobx-react'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
-import { inject, observer } from 'mobx-react'
 import '../../../../locale/translations'
 import { titleSchema, descriptionSchema } from '../utils/formValidation';
 import ValidationError from '../general/validationError';
@@ -69,6 +69,8 @@ class DescriptionField extends Component {
   }
 
   render() {
+    const { title, description } = this.props.Stores.Qvain
+    const activeLang = this.state.active
     return (
       <React.Fragment>
         <LangButtonContainer>
@@ -79,30 +81,48 @@ class DescriptionField extends Component {
         </LangButtonContainer>
         <DescriptionCard>
           <h3><Translate content="qvain.description.description.title.label" /></h3>
-          <Translate
-            component={Input}
-            type="text"
-            attributes={{ placeholder: this.getPlaceholder('title', this.state.active) }}
-            onChange={this.handleTitleChange}
-            onBlur={this.handleTitleBlur}
-            value={this.state.active === 'ENGLISH'
-              ? this.props.Stores.Qvain.title.en
-              : this.props.Stores.Qvain.title.fi
-            }
-          />
+          {activeLang === 'ENGLISH' && (
+            <Translate
+              component={Input}
+              type="text"
+              value={title.en}
+              onChange={(event) => { title.en = event.target.value }}
+              onBlur={this.handleTitleBlur}
+              attributes={{ placeholder: this.getPlaceholder('title', 'ENGLISH') }}
+            />
+          )}
+          {activeLang === 'FINNISH' && (
+            <Translate
+              component={Input}
+              type="text"
+              value={title.fi}
+              onChange={(event) => { title.fi = event.target.value }}
+              onBlur={this.handleTitleBlur}
+              attributes={{ placeholder: this.getPlaceholder('title', 'FINNISH') }}
+            />
+          )}
           <ValidationError>{this.state.titleError}</ValidationError>
           <h3><Translate content="qvain.description.description.description.label" /></h3>
-          <Translate
-            component={Textarea}
-            rows="8"
-            attributes={{ placeholder: this.getPlaceholder('description', this.state.active) }}
-            onChange={this.handleDescriptionChange}
-            onBlur={this.handleDescriptionBlur}
-            value={this.state.active === 'ENGLISH'
-              ? this.props.Stores.Qvain.description.en
-              : this.props.Stores.Qvain.description.fi
-            }
-          />
+          {activeLang === 'ENGLISH' && (
+            <Translate
+              component={Textarea}
+              rows="8"
+              value={description.en}
+              onChange={(event) => { description.en = event.target.value }}
+              onBlur={this.handleDescriptionBlur}
+              attributes={{ placeholder: this.getPlaceholder('title', this.state.active) }}
+            />
+          )}
+          {activeLang === 'FINNISH' && (
+            <Translate
+              component={Textarea}
+              rows="8"
+              value={description.fi}
+              onChange={(event) => { description.fi = event.target.value }}
+              onBlur={this.handleDescriptionBlur}
+              attributes={{ placeholder: this.getPlaceholder('title', this.state.active) }}
+            />
+          )}
           <ValidationError>{this.state.descriptionError}</ValidationError>
           <Translate component="div" content="qvain.description.description.instructions" />
         </DescriptionCard>
@@ -155,6 +175,5 @@ const Textarea = styled.textarea`
   border-radius: 4px;
   border: solid 1px #cccccc;
 `
-
 
 export default inject('Stores')(observer(DescriptionField));

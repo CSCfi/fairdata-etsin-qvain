@@ -258,6 +258,23 @@ const english = {
       cancel: 'Cancel',
       save: 'Save'
     },
+    datasets: {
+      title: 'Your Datasets',
+      help: 'Choose a dataset to edit or create a new dataset',
+      createButton: 'Create dataset',
+      tableRows: {
+        id: 'ID',
+        name: 'Name',
+        edit: 'Edit',
+        remove: 'Remove'
+      },
+      editButton: 'Edit',
+      deleteButton: 'Remove',
+      noDatasets: 'You have no datasets',
+      reload: 'Reload',
+      loading: 'Loading...',
+      errorOccurred: 'An error occurred'
+    },
     description: {
       title: 'Description',
       description: {
