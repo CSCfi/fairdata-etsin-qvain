@@ -67,7 +67,6 @@ class ProjectFiles(Resource):
         :param pid:
         :return:
         """
-
         project_dir_obj = qvain_light_service.get_directory_for_project(pid)
 
         # Return data only if authenticated
@@ -98,7 +97,6 @@ class FileDirectory(Resource):
         :param dir_id:
         :return:
         """
-
         dir_obj = qvain_light_service.get_directory(dir_id)
 
         # Return data only if authenticated
@@ -132,7 +130,6 @@ class UserDatasets(Resource):
         :param dir_id:
         :return:
         """
-
         args = self.parser.parse_args()
         limit = args.get('limit', None)
         offset = args.get('offset', None)

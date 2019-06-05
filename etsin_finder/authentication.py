@@ -57,7 +57,7 @@ def is_authenticated_CSC_user():
     key = 'urn:oid:1.3.6.1.4.1.8057.2.80.26'
     if executing_travis():
         return False
-    return True if 'samlUserdata' in session and len(session['samlUserdata']) > 0  and key in session['samlUserdata'] else False
+    return True if 'samlUserdata' in session and len(session['samlUserdata']) > 0 and key in session['samlUserdata'] else False
 
 
 def prepare_flask_request_for_saml(request):

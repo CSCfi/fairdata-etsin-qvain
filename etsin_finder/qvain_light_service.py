@@ -103,20 +103,18 @@ class MetaxQvainLightAPIService(FlaskService):
 
         return metax_api_response.json()
 
-
     def get_datasets_for_user(self, user_id, limit, offset):
         """
-        Get datasets created by the specified user. Uses pagination, so offset
-        and limit are used as well
+        Get datasets created by the specified user. Uses pagination, so offset and limit are used as well.
 
         :param user_id:
         :return datasets:
         """
         req_url = self.METAX_GET_DATASETS_FOR_USER.format(user_id)
 
-        if (limit) :
+        if (limit):
             req_url = req_url + "&limit={0}".format(limit[0])
-        if (offset) :
+        if (offset):
             req_url = req_url + "&offset={}".format(offset[0])
 
         try:
@@ -128,18 +126,17 @@ class MetaxQvainLightAPIService(FlaskService):
             metax_api_response.raise_for_status()
         except Exception as e:
             if isinstance(e, requests.HTTPError):
-                log.debug("Failed to get data for directory {0} from Metax API".
-                          format(dir_identifier))
+                log.debug("Failed to get datasets for user {0} from Metax API".
+                          format(user_id))
                 log.debug('Response status code: {0}'.format(metax_api_response.status_code))
                 log.debug('Response text: {0}'.format(json_or_empty(metax_api_response) or metax_api_response.text))
             else:
-                log.error("Failed to get data for directory {0} from Metax API".
-                          format(dir_identifier))
+                log.debug("Failed to get datasets for user {0} from Metax API".
+                          format(user_id))
                 log.error(e)
             return None
 
         return metax_api_response.json()
-
 
 _metax_api = MetaxQvainLightAPIService(app)
 
@@ -162,4 +159,10 @@ def get_directory_for_project(project_id):
     return _metax_api.get_directory_for_project(project_id)
 
 def get_datasets_for_user(user_id, limit, offset):
+    """
+    Get datasets for user
+
+    :param user_id, limit:
+    :return:
+    """
     return _metax_api.get_datasets_for_user(user_id, limit, offset)
