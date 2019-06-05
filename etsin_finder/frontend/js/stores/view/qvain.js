@@ -148,8 +148,6 @@ class Qvain {
 
   // FILE PICKER STATE MANAGEMENT
 
-  @observable _userProjects = ['project_x']
-
   @observable idaPickerOpen = false
 
   @observable _selectedProject = undefined
@@ -278,11 +276,6 @@ class Qvain {
 
   @action setInEdit = (selectedItem) => {
     this._inEdit = selectedItem
-  }
-
-  @computed
-  get userProjects() {
-    return this._userProjects
   }
 
   @computed

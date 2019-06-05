@@ -40,10 +40,16 @@ class DatasetTable extends Component {
     this.getDatasets((this.state.page - 1) * this.state.limit)
   }
 
+  getUser = () => (
+    this.props.Stores.Env.environment === 'development' ?
+      tempuser :
+      this.props.Stores.Auth.user.name
+  )
+
   getDatasets = (offset) => {
     this.setState({ loading: true, error: false, errorMessage: '' })
     const { limit } = this.state
-    const url = `${USER_DATASETS_URL}${tempuser}?limit=${limit}&offset=${offset}`
+    const url = `${USER_DATASETS_URL}${this.getUser()}?limit=${limit}&offset=${offset}`
     return axios
       .get(url)
       .then(result => {
@@ -116,7 +122,7 @@ class DatasetTable extends Component {
             {!error && datasets.map(dataset => (
               <Row key={dataset.identifier}>
                 <BodyCell>{dataset.identifier}</BodyCell>
-                <BodyCell>{dataset.research_dataset.title.en}</BodyCell>
+                <BodyCell>{dataset.research_dataset.title.en || dataset.research_dataset.title.fi}</BodyCell>
                 <BodyCell>
                   <Translate
                     component={CancelButton}
