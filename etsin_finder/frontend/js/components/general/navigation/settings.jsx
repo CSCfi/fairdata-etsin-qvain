@@ -14,6 +14,7 @@ import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 import Translate from 'react-translate-component'
 import styled from 'styled-components'
+import { NavLink } from 'react-router-dom'
 
 import Login from './loginButton'
 import { Link } from '../button'
@@ -48,12 +49,12 @@ export default class Settings extends Component {
                 </Link>
               </Row>
               <Row>
-                <Link
+                <QvainNavLink
                   width="100%"
                   margin="0.4em 0em 0.4em 0.4em"
-                  href="/qvain"
+                  to="/qvain"
                 >Qvain Light
-                </Link>
+                </QvainNavLink>
               </Row>
             </CustomContainer>
           </DropdownMenu>
@@ -88,6 +89,8 @@ const CustomContainer = styled.div`
   max-width: 400px;
   width: 100%;
 `
+
+const QvainNavLink = Link.withComponent(NavLink)
 
 const Row = styled.div`
   display: inline-flex;

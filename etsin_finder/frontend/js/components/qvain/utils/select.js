@@ -19,11 +19,15 @@ export const getCurrentValue = (field, options, lang) => {
 }
 
 export const onChange = (options, lang, callback, constructFunc) => (selection) => {
-  const name = {}
-  name[lang] = selection.label
-  const otherLocales = Object.keys(options).filter(o => o !== lang)
-  if (otherLocales.length > 0) {
-    name[otherLocales[0]] = options[otherLocales[0]].find(o => o.value === selection.value).label
+  if (selection !== null) {
+    const name = {}
+    name[lang] = selection.label
+    const otherLocales = Object.keys(options).filter(o => o !== lang)
+    if (otherLocales.length > 0) {
+      name[otherLocales[0]] = options[otherLocales[0]].find(o => o.value === selection.value).label
+    }
+    callback(constructFunc(name, selection.value))
+  } else {
+    callback(undefined)
   }
-  callback(constructFunc(name, selection.value))
 }
