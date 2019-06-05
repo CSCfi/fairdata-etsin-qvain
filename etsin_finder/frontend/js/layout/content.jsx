@@ -49,7 +49,7 @@ const renderQvainDatasets = (props) => <QvainDatasets {...props} />
 
 const renderIfLoggedIn = (renderFunc) => (props) => {
   // Rendered components (login button view and the actual component we want to render)
-  const login = <QvainLogin redirectPath={props.location.pathname} loading />
+  const login = <QvainLogin redirectPath={props.location.pathname} />
   const actual = renderFunc(props)
 
   // render the actual if logged in
@@ -57,10 +57,8 @@ const renderIfLoggedIn = (renderFunc) => (props) => {
   // if backend tells that it has no logged in users, force user to travel to login site
   if (!Auth.cscUserLogged) {
     Auth.checkLogin().then(() => {
-      console.log('login comp ', login)
       if (!Auth.cscUserLogged) {
         window.location = `/sso?relay=${props.location.pathname}`
-        login.props.loading = false
         return login
       }
       return actual

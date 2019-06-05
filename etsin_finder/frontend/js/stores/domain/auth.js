@@ -16,11 +16,14 @@ class Auth {
 
   @observable cscUserLogged = false
 
+  @observable loading = false
+
   @observable user = { name: undefined, idaGroups: [] }
 
   @action
   checkLogin() {
     return new Promise((resolve, reject) => {
+      this.loading = true
       axios
         .get('/api/user', {
           headers: { 'content-type': 'application/json', charset: 'utf-8' },
@@ -34,9 +37,11 @@ class Auth {
             idaGroups: res.data.user_ida_groups
           }
           console.log(toJS(this.user))
+          this.loading = false
           resolve(res)
         })
         .catch(err => {
+          this.loading = false
           console.log(err)
           reject(err)
         })

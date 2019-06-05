@@ -8,19 +8,17 @@ import LoginButton from '../general/navigation/loginButton'
 
 class QvainLogin extends Component {
   static propTypes = {
-    loading: PropTypes.bool,
     Stores: PropTypes.object.isRequired,
     redirectPath: PropTypes.string
   }
 
   static defaultProps = {
-    loading: false,
     redirectPath: '/'
   }
 
   render() {
-    const { loading, redirectPath } = this.props
-    const { cscUserLogged } = this.props.Stores.Auth
+    const { redirectPath } = this.props
+    const { cscUserLogged, loading } = this.props.Stores.Auth
     return (
       <Card className="container">
         {(loading && !cscUserLogged) && <p>Loading...</p>}
