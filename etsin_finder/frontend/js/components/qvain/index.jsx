@@ -28,12 +28,16 @@ class Qvain extends Component {
         en: values.description.en
       },
       identifiers: values.otherIdentifiers,
-      fieldOfScience: values.fieldOfScience.value,
+      fieldOfScience: values.fieldOfScience ? values.fieldOfScience.value : undefined,
       keywords: values.keywords,
       participants: values.participants,
       accessType: values.accessType,
       restrictionGrounds: values.restrictionGrounds.value,
-      license: values.license.value
+      license: {
+        idaPickerOpen: values.idaPickerOpen,
+        license: values.license,
+        otherLicenseUrl: values.otherLicenseUrl
+      }
     };
     console.log(JSON.stringify(obj, null, 4));
     qvainFormSchema.validate(obj, { abortEarly: false })
