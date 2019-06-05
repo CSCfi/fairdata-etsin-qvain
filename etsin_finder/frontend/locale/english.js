@@ -257,7 +257,7 @@ const english = {
     notCSCUser1: 'Please make sure that you have a valid CSC account. If you tried to log in with an external account (for example Haka) you might get this error if your account is not associated with CSC account. Please do the registration in',
     notCSCUserLink: ' CSC Customer Portal',
     notCSCUser2: ' You can register with or without Haka account.',
-    notLoggedIn: 'Please login to use Qvain-light service.',
+    notLoggedIn: 'Please login with your CSC account to use Qvain-light service.',
     title: 'Publish Dataset',
     common: {
       cancel: 'Cancel',

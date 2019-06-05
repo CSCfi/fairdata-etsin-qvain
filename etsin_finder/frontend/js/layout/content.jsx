@@ -16,6 +16,8 @@ import PropTypes from 'prop-types'
 
 import { Home, Search, Dataset, Qvain, QvainDatasets } from '../routes'
 import ErrorPage from '../components/errorpage'
+import Auth from '../stores/domain/auth'
+import QvainLogin from '../components/qvain/qvainLogin'
 
 export default class Content extends Component {
   static propTypes = {
@@ -30,11 +32,40 @@ export default class Content extends Component {
           <Route exact path="/" render={props => <Home {...props} />} />
           <Route exact path="/datasets/:query?" render={props => <Search {...props} />} />
           <Route path="/dataset/:identifier" render={props => <Dataset {...props} />} />
-          <Route path="/qvain/dataset" render={props => <Qvain {...props} />} />
-          <Route path="/qvain" render={props => <QvainDatasets {...props} />} />
+          <Route path="/qvain/dataset" render={renderIfLoggedIn(renderQvain)} />
+          <Route path="/qvain" render={renderIfLoggedIn(renderQvainDatasets)} />
           <Route render={() => <ErrorPage error={{ type: 'error' }} />} />
         </Switch>
       </main>
     )
   }
+}
+
+// Restrict access to Qvain Light
+// Since I couldn't get Private Routes to work, here's a workaround
+
+const renderQvain = (props) => <Qvain {...props} />
+const renderQvainDatasets = (props) => <QvainDatasets {...props} />
+
+const renderIfLoggedIn = (renderFunc) => (props) => {
+  // Rendered components (login button view and the actual component we want to render)
+  const login = <QvainLogin redirectPath={props.location.pathname} loading />
+  const actual = renderFunc(props)
+
+  // render the actual if logged in
+  // if not, check from backend
+  // if backend tells that it has no logged in users, force user to travel to login site
+  if (!Auth.cscUserLogged) {
+    Auth.checkLogin().then(() => {
+      console.log('login comp ', login)
+      if (!Auth.cscUserLogged) {
+        window.location = `/sso?relay=${props.location.pathname}`
+        login.props.loading = false
+        return login
+      }
+      return actual
+    })
+    return login
+  }
+  return actual
 }

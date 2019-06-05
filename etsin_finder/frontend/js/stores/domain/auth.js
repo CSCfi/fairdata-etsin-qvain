@@ -8,13 +8,13 @@
  * @license   MIT
  */
 
-import { observable, action } from 'mobx'
+import { observable, action, toJS } from 'mobx'
 import axios from 'axios'
 
 class Auth {
   @observable userLogged = false
 
-  @observable CSCUserLogged = false
+  @observable cscUserLogged = false
 
   @observable user = { name: undefined, idaGroups: [] }
 
@@ -28,12 +28,12 @@ class Auth {
         .then(res => {
           console.log(res.data)
           this.userLogged = res.data.is_authenticated
-          this.CSCUserLogged = res.data.is_authenticated_CSC_user
-          this.user = { 
+          this.cscUserLogged = res.data.is_authenticated_CSC_user
+          this.user = {
             name: res.data.user_display_name,
             idaGroups: res.data.user_ida_groups
           }
-          console.log(this.user)
+          console.log(toJS(this.user))
           resolve(res)
         })
         .catch(err => {
@@ -50,7 +50,7 @@ class Auth {
         .delete('/api/session')
         .then(res => {
           this.userLogged = false
-          this.CSCUserLogged = false
+          this.cscUserLogged = false
           this.user = { name: undefined }
           resolve(res)
         })
@@ -71,7 +71,7 @@ class Auth {
         .catch(err => {
           if (err.response.status === 401) {
             this.userLogged = false
-            this.CSCUserLogged = false
+            this.cscUserLogged = false
             this.user = { name: undefined }
           }
           return reject(err)
