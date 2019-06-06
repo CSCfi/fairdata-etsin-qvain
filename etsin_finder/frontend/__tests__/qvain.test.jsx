@@ -3,12 +3,12 @@ import { shallow, mount } from 'enzyme'
 
 import Qvain from '../js/components/qvain'
 import {
-  ParticipantSelection,
-  ParticipantsBase,
-  EntityType,
-  Role
+  ParticipantsBase
 } from '../js/components/qvain/participants'
 import { ParticipantTypeSelectBase } from '../js/components/qvain/participants/participantTypeSelect'
+import { SelectedParticipantBase, ParticipantSelection } from '../js/components/qvain/participants/participantSelection'
+import { ParticipantInfoBase } from '../js/components/qvain/participants/participantInfo'
+import { AddedParticipantsBase } from '../js/components/qvain/participants/addedParticipants'
 import Files from '../js/components/qvain/files'
 import IDAFilePicker, { IDAFilePickerBase } from '../js/components/qvain/files/idaFilePicker'
 import FileSelector, { FileSelectorBase } from '../js/components/qvain/files/fileSelector'
@@ -33,7 +33,12 @@ import {
 } from '../js/components/qvain/general/list'
 import { SlidingContent } from '../js/components/qvain/general/card'
 import { SectionTitle } from '../js/components/qvain/general/section'
-import QvainStore, { Directory } from '../js/stores/view/qvain'
+import QvainStore, {
+  Directory,
+  EntityType,
+  Role,
+  Participant
+} from '../js/stores/view/qvain'
 import LocaleStore from '../js/stores/view/language'
 
 describe('Qvain', () => {
@@ -56,43 +61,55 @@ describe('Qvain.Participants', () => {
   })
 
   it('should render person selection by default', () => {
-    const component = mount(<ParticipantsBase Stores={getStores()} />)
-    // test if active selection field displays 'Person'
-    expect(component).toMatchSnapshot()
-    console.log('participant render ', component.html())
-    // test if name field is rendered
-    // expect(component.find('#nameField').length).not.toBe(0)
+    const component = mount(<SelectedParticipantBase Stores={getStores()} />)
+    expect(component.find(ParticipantSelection).html().includes('Person')).toBe(true)
+    component.unmount()
+    const form = mount(<ParticipantTypeSelectBase Stores={getStores()} />)
+    expect(form.find('#entityPerson input').props().checked).toBe(true)
   })
 
   // By default person should be selected. Upon clicking the Organization radio button
   // the checkboxes should be reset and active selection field should display
   // 'Organization'
   it('should change selected participant entity', () => {
-    const component = mount(<ParticipantTypeSelectBase Stores={getStores()} />)
-    // test if active selection field displays 'Person'
-    expect(component.html().includes('Person')).toBe(true)
-    // component.find('#personCreator').first().simulate('change', { target: { checked: true, value: Role.CREATOR } })
-    // const isPersonCreator = component.find(ParticipantSelection).html().includes('Creator')
-    // expect(isPersonCreator).toBe(true)
-    // component.find('#entityOrg').first().simulate('change')
-    // expect(component.find(ParticipantSelection).html().includes('Organization')).toBe(true)
-    // expect(component.find(ParticipantSelection).html().includes('Creator')).toBe(false)
+    const stores = getStores()
+    const entityRoleForm = mount(<ParticipantTypeSelectBase Stores={stores} />)
+    entityRoleForm.find('#personCreator').first().simulate('change', {
+      target: {
+        checked: true
+      }
+    })
+    entityRoleForm.unmount()
+    const selectedParticipant = mount(<SelectedParticipantBase Stores={stores} />)
+    expect(selectedParticipant.text()).toBe('Person / Creator')
+    selectedParticipant.unmount()
+    entityRoleForm.mount()
+    entityRoleForm.find('#entityOrg input').simulate('change')
+    entityRoleForm.find('#orgPublisher input').simulate('change', {
+      target: {
+        checked: true
+      }
+    })
+    // expect(entityRoleForm.find('#entityOrg input').checked).toBe(true)
+    entityRoleForm.unmount()
+    selectedParticipant.mount()
+    expect(selectedParticipant.text()).toBe('Organization / Publisher')
   })
 
   // Added participants should be listed if there are any
   it('should list all added participants', () => {
-  //   const store = getStores()
-  //   const component = mount(<Participants Stores={store} />)
-  //   expect(component.find(ButtonGroup).length).toBe(0)
-  //   store.Qvain.addParticipant({
-  //     entityType: EntityType.ORGANIZATION,
-  //     roles: [Role.PUBLISHER],
-  //     name: 'University of Helsinki',
-  //     email: 'test@test.fi',
-  //     identifier: 'uoh'
-  //   })
-  //   component.update()
-  //   expect(component.find(ButtonGroup).length).toBe(1)
+    const stores = getStores()
+    const addedParticipants = mount(<AddedParticipantsBase Stores={stores} />)
+    expect(addedParticipants.find(ButtonGroup).length).toBe(0)
+    stores.Qvain.addParticipant(Participant(
+      EntityType.ORGANIZATION,
+      [Role.PUBLISHER],
+      'University of Helsinki',
+      'test@test.fi',
+      'uohIdentifier'
+    ))
+    addedParticipants.update()
+    expect(addedParticipants.find(ButtonGroup).length).toBe(1)
   })
 })
 

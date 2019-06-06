@@ -531,7 +531,7 @@ export const Participant = (entityType, roles, name, email, identifier, organiza
 })
 
 export const EmptyParticipant = Participant(
-  undefined,
+  EntityType.PERSON,
   [],
   '',
   '',

@@ -17,7 +17,7 @@ import {
 } from '../general/list'
 import { EntityType, Role } from '../../../stores/view/qvain'
 
-class ParticipantTypeSelect extends Component {
+export class ParticipantTypeSelectBase extends Component {
   static propTypes = {
     Stores: PropTypes.object.isRequired
   }
@@ -220,4 +220,4 @@ const Fieldset = styled.fieldset`
   border: none;
 `
 
-export default inject('Stores')(observer(ParticipantTypeSelect));
+export default inject('Stores')(observer(ParticipantTypeSelectBase));

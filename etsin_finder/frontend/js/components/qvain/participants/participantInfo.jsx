@@ -17,7 +17,7 @@ import {
 import { EntityType, EmptyParticipant } from '../../../stores/view/qvain'
 import { deepCopy } from '../utils/fileHierarchy'
 
-class ParticipantInfo extends Component {
+export class ParticipantInfoBase extends Component {
   static propTypes = {
     Stores: PropTypes.object.isRequired
   }
@@ -179,4 +179,4 @@ const SelectOrg = styled(CreatableSelect)`
   margin-bottom: 20px;
 `
 
-export default inject('Stores')(observer(ParticipantInfo));
+export default inject('Stores')(observer(ParticipantInfoBase));
