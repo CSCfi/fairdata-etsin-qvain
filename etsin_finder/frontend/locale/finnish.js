@@ -253,6 +253,11 @@ const finnish = {
     },
   },
   qvain: {
+    unsuccessfullLogin: 'Kirjautuminen epäonnistui.',
+    notCSCUser1: 'Varmistakaa että teillä on voimassaoleva CSC tunnus. Jos yritit kirjautua sisään ulkoisella tunnuksella (kuten Haka) Niin saatat saada tämän virhe ilmoituksen jos titlit eivät ole linkitetty. Linkityksen voi tehdä',
+    notCSCUserLink: ' CSC asiakas porttaalissa',
+    notCSCUser2: ' Voit rekisteröityä Hakatunuksella tai ilman.',
+    notLoggedIn: 'Kirjaudu sisään CSC -tililläsi käyttääksesi Qvain-light palvelua.',
     title: 'Julkaise tiedosto',
     common: {
       save: 'Tallenna',
@@ -328,7 +333,11 @@ const finnish = {
       },
       license: {
         title: 'Lisenssi',
-        placeholder: 'Valitse vaihtoehto'
+        placeholder: 'Valitse vaihtoehto',
+        other: {
+          label: 'URL',
+          help: 'Anna osoite lisenssille.'
+        }
       }
     },
     participants: {
@@ -448,7 +457,13 @@ const finnish = {
         url: 'Referenssi arvo ERROR.',
         required: 'Saatavuutta rajoitettu on pakollinen kenttä jos Pääsyoikeus ei ole "Avoin".'
       },
-      license: {}
+      license: {
+        otherUrl: {
+          string: 'Lisenssi URL pitää olla merkkijono',
+          url: 'Lisenssi URL pitää olla oikeanlainen URL',
+          required: 'Lisenssi URL on pakollinen'
+        }
+      }
     },
     files: {
       title: 'Tiedostot',

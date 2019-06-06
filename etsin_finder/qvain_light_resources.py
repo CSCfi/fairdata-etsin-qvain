@@ -73,11 +73,10 @@ class ProjectFiles(Resource):
         :param pid:
         :return:
         """
-
         project_dir_obj = qvain_light_service.get_directory_for_project(pid)
 
         # Return data only if authenticated
-        if project_dir_obj:
+        if project_dir_obj and authentication.is_authenticated():
             # Sort the items
             sort_array_of_obj_by_key(project_dir_obj.get('directories', []), 'directory_name')
             sort_array_of_obj_by_key(project_dir_obj.get('files', []), 'file_name')
@@ -104,11 +103,10 @@ class FileDirectory(Resource):
         :param dir_id:
         :return:
         """
-
         dir_obj = qvain_light_service.get_directory(dir_id)
 
         # Return data only if authenticated
-        if dir_obj:
+        if dir_obj and authentication.is_authenticated():
             # Sort the items
             sort_array_of_obj_by_key(dir_obj.get('directories', []), 'directory_name')
             sort_array_of_obj_by_key(dir_obj.get('files', []), 'file_name')
@@ -138,7 +136,6 @@ class UserDatasets(Resource):
         :param dir_id:
         :return:
         """
-
         args = self.parser.parse_args()
         limit = args.get('limit', None)
         offset = args.get('offset', None)
@@ -146,7 +143,7 @@ class UserDatasets(Resource):
         result = qvain_light_service.get_datasets_for_user(user_id, limit, offset)
 
         # Return data only if authenticated
-        if result:
+        if result and authentication.is_authenticated():
 
             # Limit the amount of items to be sent to the frontend
             if 'results' in result:

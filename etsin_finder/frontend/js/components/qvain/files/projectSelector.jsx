@@ -10,7 +10,18 @@ export class ProjectSelectorBase extends Component {
     Stores: PropTypes.object.isRequired
   }
 
-  getOptions = () => this.props.Stores.Qvain.userProjects.map(up => ({ value: up, label: up }))
+  getOptions = () => {
+    if (this.props.Stores.Env.environment === 'development') {
+      return [{ value: 'project_x', label: 'project_x' }]
+    }
+    return this.props.Stores.Auth.user.idaGroups
+      .filter(group => group.includes('IDA'))
+      .map(group => group.substring(
+        group.indexOf(':') + 1,
+        group.length
+      ))
+      .map(projectId => ({ value: projectId, label: projectId }))
+  }
 
   handleOnChange = (selectedOption) => {
     console.log('ProjectSelect handleOnChange')
