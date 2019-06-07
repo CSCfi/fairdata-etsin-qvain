@@ -253,10 +253,32 @@ const english = {
     },
   },
   qvain: {
+    unsuccessfullLogin: 'Login unsuccessful.',
+    notCSCUser1: 'Please make sure that you have a valid CSC account. If you tried to log in with an external account (for example Haka) you might get this error if your account is not associated with CSC account. Please do the registration in',
+    notCSCUserLink: ' CSC Customer Portal',
+    notCSCUser2: ' You can register with or without Haka account.',
+    notLoggedIn: 'Please login with your CSC account to use Qvain-light service.',
     title: 'Publish Dataset',
     common: {
       cancel: 'Cancel',
       save: 'Save'
+    },
+    datasets: {
+      title: 'Your Datasets',
+      help: 'Choose a dataset to edit or create a new dataset',
+      createButton: 'Create dataset',
+      tableRows: {
+        id: 'ID',
+        name: 'Name',
+        edit: 'Edit',
+        remove: 'Remove'
+      },
+      editButton: 'Edit',
+      deleteButton: 'Remove',
+      noDatasets: 'You have no datasets',
+      reload: 'Reload',
+      loading: 'Loading...',
+      errorOccurred: 'An error occurred'
     },
     description: {
       title: 'Description',
@@ -307,7 +329,11 @@ const english = {
       },
       license: {
         title: 'License',
-        placeholder: 'Select option'
+        placeholder: 'Select option',
+        other: {
+          label: 'URL address',
+          help: 'Specify URL address for license'
+        }
       }
     },
     participants: {
@@ -427,7 +453,13 @@ const english = {
         url: 'Reference value ERROR.',
         required: 'Restriction Grounds are required if Access Type is not "Open".'
       },
-      license: {}
+      license: {
+        otherUrl: {
+          string: 'The license URL must be a valid string of text',
+          url: 'The license URL must be a valid URL',
+          required: 'License URL is a required value'
+        }
+      }
     },
     files: {
       title: 'Files',

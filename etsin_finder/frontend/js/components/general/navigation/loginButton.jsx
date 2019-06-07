@@ -27,11 +27,13 @@ class Login extends Component {
     location: PropTypes.object.isRequired,
     margin: PropTypes.string,
     width: PropTypes.string,
+    isLoggedInKey: PropTypes.string
   }
 
   static defaultProps = {
     margin: '0 0 0 0.4em',
     width: undefined,
+    isLoggedInKey: 'userLogged'
   }
 
   state = {
@@ -58,7 +60,7 @@ class Login extends Component {
   }
 
   render() {
-    if (!Stores.Auth.userLogged) {
+    if (!Stores.Auth[this.props.isLoggedInKey]) {
       return (
         <React.Fragment>
           <Cont width={this.props.width} margin={this.props.margin}>

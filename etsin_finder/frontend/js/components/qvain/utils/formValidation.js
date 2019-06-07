@@ -60,10 +60,36 @@ const otherIdentifiersSchema = yup
   )
   .nullable()
 
-const accessTypeSchema = yup
-  .string(translate('qvain.validationMessages.accessType.string'))
-  .url(translate('qvain.validationMessages.accessType.url'))
-  .required(translate('qvain.validationMessages.accessType.required'))
+// you have to provide both the license object and the otherLicenseUrl as an object
+const licenseSchema = yup.object().shape({
+  idaPickerOpen: yup.boolean(),
+  license: yup.object().shape({
+    name: yup.object().nullable(),
+    url: yup.mixed().when('idaPickerOpen', {
+      is: true,
+      then: yup.string().required(),
+      otherwise: yup.string()
+    })
+  }).nullable(),
+  otherLicenseUrl: yup.mixed().when('license.url', {
+    is: 'other',
+    then: yup
+      .string(translate('qvain.validationMessages.license.otherUrl.string'))
+      .url(translate('qvain.validationMessages.license.otherUrl.url'))
+      .required(translate('qvain.validationMessages.license.otherUrl.required')),
+    otherwise: yup.string().url().nullable()
+  }).nullable()
+})
+
+const accessTypeSchema = yup.object().shape({
+  name: yup.string(),
+  url: yup
+    .string(translate('qvain.validationMessages.accessType.string'))
+    .url(translate('qvain.validationMessages.accessType.url'))
+    .required(translate('qvain.validationMessages.accessType.required'))
+})
+
+const embargoExpDateSchema = yup.date().nullable()
 
 const restrictionGroundsSchema = yup
   .string(translate('qvain.validationMessages.restrictionGrounds.string'))
@@ -159,6 +185,7 @@ const qvainFormSchema = yup.object().shape({
   keywords: keywordsSchema,
   otherIdentifiers: otherIdentifiersSchema,
   accessType: accessTypeSchema,
+  license: licenseSchema,
   restrictionGrounds: yup
     .mixed()
     .when('accessType.value', {
@@ -175,6 +202,8 @@ export {
   otherIdentifiersSchema,
   keywordsSchema,
   accessTypeSchema,
+  licenseSchema,
+  embargoExpDateSchema,
   restrictionGroundsSchema,
   participantsSchema,
   participantType,

@@ -10,8 +10,11 @@ import RestrictionGrounds from './resctrictionGrounds';
 import { accessTypeSchema } from '../utils/formValidation';
 import ValidationError from '../general/validationError';
 import EmbargoExpires from './embargoExpires'
+import { onChange, getCurrentValue } from '../utils/select'
+import { AccessType as AccessTypeConstructor } from '../../../stores/view/qvain'
 
 const EMBARGO = 'http://uri.suomi.fi/codelist/fairdata/access_type/code/embargo'
+const OPEN = 'http://uri.suomi.fi/codelist/fairdata/access_type/code/open'
 
 class AccessType extends Component {
   static propTypes = {
@@ -19,9 +22,11 @@ class AccessType extends Component {
   }
 
   state = {
+    options: {
+      en: [],
+      fi: []
+    },
     accessTypeRestricted: false,
-    accessTypesEn: [{ value: '', label: '' }],
-    accessTypesFi: [{ value: '', label: '' }],
     accessTypeValidationError: null
   }
 
@@ -42,8 +47,10 @@ class AccessType extends Component {
         }
         ))
       this.setState({
-        accessTypesEn: refsEn,
-        accessTypesFi: refsFi
+        options: {
+          en: refsEn,
+          fi: refsFi
+        }
       })
     })
     .catch(error => {
@@ -83,26 +90,29 @@ class AccessType extends Component {
   }
 
   render() {
-    const { accessType } = this.props.Stores.Qvain
+    const { lang } = this.props.Stores.Locale
+    const { options } = this.state
+    const { accessType, setAccessType } = this.props.Stores.Qvain
     return (
       <Card>
         <Translate component="h3" content="qvain.rightsAndLicenses.accessType.title" />
         <Translate
           component={Select}
           name="accessType"
-          options={
-            this.props.Stores.Locale.lang === 'en'
-            ? this.state.accessTypesEn
-            : this.state.accessTypesFi
+          options={this.state.options[lang]}
+          clearable
+          value={
+            getCurrentValue(accessType, options, lang) ||
+            options[lang].find(opt => opt.value === OPEN) // access is OPEN by default - 28.5.2019
           }
-          onChange={this.handleChange}
+          onChange={onChange(options, lang, setAccessType, AccessTypeConstructor)}
           onBlur={this.handleBlur}
           attributes={{
             placeholder: 'qvain.rightsAndLicenses.accessType.placeholder'
           }}
         />
         <ValidationError>{this.state.accessTypeValidationError}</ValidationError>
-        {accessType === EMBARGO && (<EmbargoExpires />)}
+        {(accessType !== undefined && accessType.url === EMBARGO) && (<EmbargoExpires />)}
         { this.state.accessTypeRestricted
           ? <RestrictionGrounds /> : null}
       </Card>

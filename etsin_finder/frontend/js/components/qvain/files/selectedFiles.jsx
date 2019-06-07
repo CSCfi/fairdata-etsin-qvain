@@ -8,7 +8,6 @@ import { ButtonLabel, EditButton, DeleteButton, FileItem } from '../general/butt
 import { SelectedFilesTitle } from '../general/form'
 import FileForm from './fileForm'
 import DirectoryForm from './directoryForm'
-import { getDirectories, getFiles } from '../utils/fileHierarchy'
 
 export class SelectedFilesBase extends Component {
   static propTypes = {
@@ -29,12 +28,11 @@ export class SelectedFilesBase extends Component {
     const {
       toggleSelectedFile,
       toggleSelectedDirectory,
-      hierarchy,
+      selectedFiles,
+      selectedDirectories,
       inEdit
     } = this.props.Stores.Qvain
-    const dirs = getDirectories(hierarchy)
-    const files = getFiles(hierarchy)
-    const selected = dirs.filter(d => d.selected).concat(files.filter(f => f.selected))
+    const selected = [...selectedDirectories, ...selectedFiles]
     return (
       <Fragment>
         <Translate component={SelectedFilesTitle} content="qvain.files.selected.title" />

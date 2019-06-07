@@ -7,6 +7,8 @@ import { SingleDatePicker } from 'react-dates';
 import 'react-dates/lib/css/_datepicker.css';
 import moment from 'moment'
 import { Label } from '../general/form'
+import { embargoExpDateSchema } from '../utils/formValidation';
+import ValidationError from '../general/validationError';
 
 class EmbargoExpires extends Component {
   static propTypes = {
@@ -14,11 +16,29 @@ class EmbargoExpires extends Component {
   }
 
   state = {
-    focused: false
+    focused: false,
+    error: false,
+    errorMessage: ''
+  }
+
+  validate = () => {
+    const { embargoExpDate } = this.props.Stores.Qvain
+    embargoExpDateSchema.validate(embargoExpDate).then(() => {
+      this.setState({ error: false, errorMessage: '' })
+    }).catch(err => {
+      this.setState({ error: true, errorMessage: err.errors })
+    })
+  }
+
+  componentDidUpdate = (prevProps, prevState) => {
+    if (!this.state.focused && prevState.focused) {
+      this.validate()
+    }
   }
 
   render() {
     const { embargoExpDate } = this.props.Stores.Qvain
+    const { error, errorMessage } = this.state
     return (
       <Fragment>
         <Translate component={Label} content="qvain.rightsAndLicenses.embargoDate.label" />
@@ -38,8 +58,10 @@ class EmbargoExpires extends Component {
             id="embargo_expiration_date_field_id"
             showClearDate
             attributes={{ placeholder: 'qvain.rightsAndLicenses.embargoDate.placeholder' }}
+            onClose={this.validate}
           />
         </DatePickerWrapper>
+        {error && <ValidationError>{errorMessage}</ValidationError>}
         <Translate component="p" content="qvain.rightsAndLicenses.embargoDate.help" />
       </Fragment>
     );
