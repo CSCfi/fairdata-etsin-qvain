@@ -76,6 +76,7 @@ export class ParticipantInfoBase extends Component {
 
   render() {
     const participant = this.props.Stores.Qvain.participantInEdit
+    console.log('participant: ', toJS(participant))
     return (
       <Fragment>
         <Label htmlFor="nameField">
@@ -110,7 +111,7 @@ export class ParticipantInfoBase extends Component {
                 </Fragment>
               )}
               attributes={{ placeholder: 'qvain.participants.add.organization.placeholder' }}
-              onChange={(selection) => { participant.organization = selection.label }}
+              onChange={(selection) => { participant.name = selection.label }}
               value={{ label: participant.name, value: participant.name }}
             />
             )}
