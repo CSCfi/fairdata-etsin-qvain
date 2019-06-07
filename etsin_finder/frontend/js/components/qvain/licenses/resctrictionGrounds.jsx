@@ -17,6 +17,10 @@ class RestrictionGrounds extends Component {
   state = {
     restrictionGroundsEn: [{ value: '', label: '' }],
     restrictionGroundsFi: [{ value: '', label: '' }],
+    options: {
+      en: [],
+      fi: []
+    },
     restrictionGroundsValidationError: null
   }
 
@@ -38,7 +42,11 @@ class RestrictionGrounds extends Component {
         ))
       this.setState({
         restrictionGroundsEn: refsEn,
-        restrictionGroundsFi: refsFi
+        restrictionGroundsFi: refsFi,
+        options: {
+          en: refsEn,
+          fi: refsFi
+        }
       })
     })
     .catch(error => {
@@ -77,17 +85,15 @@ class RestrictionGrounds extends Component {
   }
 
   render() {
+    const { options } = this.state
+    const { lang } = this.props.Stores.Locale
     return (
       <RestrictionGroundsContainer>
         <Translate component="h3" content="qvain.rightsAndLicenses.restrictionGrounds.title" />
         <Translate
           component={Select}
           name="restrictionGrounds"
-          options={
-            this.props.Stores.Locale.lang === 'en'
-            ? this.state.restrictionGroundsEn
-            : this.state.restrictionGroundsFi
-          }
+          options={options[lang]}
           clearable
           onChange={this.handleChange}
           onBlur={this.handleBlur}
