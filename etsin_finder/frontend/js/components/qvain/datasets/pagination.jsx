@@ -146,7 +146,7 @@ class DatasetPagination extends Component {
           {this.renderPageButtons(higherRange)}
           <li>
             <PaginationButton
-              disabled={page === this.getPageCount(count, limit)}
+              disabled={page === pageCount || pageCount === 0}
               onClick={this.handleChangePage(page + 1)}
               type="button"
             >

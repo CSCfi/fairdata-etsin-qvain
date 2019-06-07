@@ -15,8 +15,6 @@ class RestrictionGrounds extends Component {
   }
 
   state = {
-    restrictionGroundsEn: [{ value: '', label: '' }],
-    restrictionGroundsFi: [{ value: '', label: '' }],
     options: {
       en: [],
       fi: []
@@ -41,8 +39,6 @@ class RestrictionGrounds extends Component {
         }
         ))
       this.setState({
-        restrictionGroundsEn: refsEn,
-        restrictionGroundsFi: refsFi,
         options: {
           en: refsEn,
           fi: refsFi
