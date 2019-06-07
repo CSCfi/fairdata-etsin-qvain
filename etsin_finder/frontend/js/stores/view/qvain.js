@@ -133,7 +133,7 @@ class Qvain {
 
   @action
   editParticipant = (participant) => {
-    this.participantInEdit = participant
+    this.participantInEdit = { ...participant }
   }
 
   @computed
