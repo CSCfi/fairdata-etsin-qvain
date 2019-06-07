@@ -14,8 +14,16 @@ import {
   Input,
   Label,
 } from '../general/form'
+import ValidationError from '../general/validationError'
 import { EntityType, EmptyParticipant } from '../../../stores/view/qvain'
 import { deepCopy } from '../utils/fileHierarchy'
+import {
+  participantSchema,
+  participantNameSchema,
+  participantEmailSchema,
+  participantIdentifierSchema,
+  participantOrganizationSchema
+} from '../utils/formValidation'
 
 export class ParticipantInfoBase extends Component {
   static propTypes = {
@@ -23,8 +31,15 @@ export class ParticipantInfoBase extends Component {
   }
 
   state = {
-    organizationsEn: [{ value: '', label: '' }],
-    organizationsFi: [{ value: '', label: '' }]
+    orgs: {
+      en: [],
+      fi: []
+    },
+    nameError: undefined,
+    emailError: undefined,
+    participantError: undefined,
+    identifierError: undefined,
+    organizationError: undefined
   }
 
   componentDidMount = () => {
@@ -33,18 +48,22 @@ export class ParticipantInfoBase extends Component {
         const list = res.data.hits.hits;
         const refsEn = list.map(ref => (
           {
-            value: ref._source.label.und,
+            value: ref._source.code,
             label: ref._source.label.und,
           }
           ))
         const refsFi = list.map(ref => (
           {
-            value: ref._source.label.und,
+            value: ref._source.code,
             label: ref._source.label.fi,
           }
           ))
-        this.setState({ organizationsEn: refsEn })
-        this.setState({ organizationsFi: refsFi })
+        this.setState({
+          orgs: {
+            en: refsEn,
+            fi: refsFi
+          }
+        })
       })
       .catch(error => {
         if (error.response) {
@@ -62,11 +81,27 @@ export class ParticipantInfoBase extends Component {
       });
   }
 
+  resetErrorMessages = () => {
+    this.setState({
+      nameError: undefined,
+      emailError: undefined,
+      participantError: undefined,
+      identifierError: undefined,
+      organizationError: undefined
+    })
+  }
+
   handleSave = (event) => {
     event.preventDefault()
     const { Qvain } = this.props.Stores
-    Qvain.addParticipant(deepCopy(toJS(Qvain.participantInEdit)))
-    Qvain.editParticipant(EmptyParticipant)
+    const participant = toJS(Qvain.participantInEdit)
+    participantSchema.validate(participant).then(() => {
+      Qvain.addParticipant(deepCopy(toJS(Qvain.participantInEdit)))
+      Qvain.editParticipant(EmptyParticipant)
+      this.resetErrorMessages()
+    }).catch(err => {
+      this.setState({ participantError: err.errors })
+    })
   }
 
   handleCancel = (event) => {
@@ -74,9 +109,45 @@ export class ParticipantInfoBase extends Component {
     this.props.Stores.Qvain.editParticipant(EmptyParticipant)
   }
 
+  handleOnBlur = (validator, value, errorSet) => {
+    validator.validate(value).then(() => errorSet(undefined)).catch(err => errorSet(err.errors))
+  }
+
+  handleOnNameBlur = () => {
+    const participant = this.props.Stores.Qvain.participantInEdit
+    this.handleOnBlur(participantNameSchema, participant.name, value => this.setState({ nameError: value }))
+  }
+
+  handleOnEmailBlur = () => {
+    const participant = this.props.Stores.Qvain.participantInEdit
+    this.handleOnBlur(participantEmailSchema, participant.email, value => this.setState({ emailError: value }))
+  }
+
+  handleOnIdentifierBlur = () => {
+    const participant = this.props.Stores.Qvain.participantInEdit
+    this.handleOnBlur(participantIdentifierSchema, participant.identifier, value => this.setState({ identifierError: value }))
+  }
+
+  handleOnOrganizationBlur = () => {
+    const { type, organization } = this.props.Stores.Qvain.participantInEdit
+    this.handleOnBlur(
+      participantOrganizationSchema,
+      { type, organization },
+      value => this.setState({ organizationError: value })
+    )
+  }
+
   render() {
     const participant = this.props.Stores.Qvain.participantInEdit
-    console.log('participant: ', toJS(participant))
+    const { lang } = this.props.Stores.Locale
+    const {
+      orgs,
+      nameError,
+      emailError,
+      participantError,
+      identifierError,
+      organizationError
+    } = this.state
     return (
       <Fragment>
         <Label htmlFor="nameField">
@@ -89,9 +160,9 @@ export class ParticipantInfoBase extends Component {
               type="text"
               id="nameField"
               attributes={{ placeholder: `qvain.participants.add.name.placeholder.${participant.type}` }}
-              // placeholder={participant.type === EntityType.PERSON ? 'First And Last Name' : 'Name'}
               value={participant.name}
               onChange={(event) => { participant.name = event.target.value }}
+              onBlur={this.handleOnNameBlur}
             />
           )
           : (
@@ -99,11 +170,7 @@ export class ParticipantInfoBase extends Component {
               component={SelectOrg}
               name="nameField"
               id="nameField"
-              options={
-                this.props.Stores.Locale.lang === 'en'
-                ? this.state.organizationsEn
-                : this.state.organizationsFi
-              }
+              options={orgs[lang]}
               formatCreateLabel={inputValue => (
                 <Fragment>
                   <Translate content="qvain.participants.add.newOrganization.label" />
@@ -111,11 +178,20 @@ export class ParticipantInfoBase extends Component {
                 </Fragment>
               )}
               attributes={{ placeholder: 'qvain.participants.add.organization.placeholder' }}
-              onChange={(selection) => { participant.name = selection.label }}
-              value={{ label: participant.name, value: participant.name }}
+              onChange={(selection) => {
+                participant.name = selection.label
+                // if selection value ie the org identifier is not in the reference data, then we are adding a new org, so do not define
+                // identifier
+                if (orgs[lang].filter(opt => opt.value === selection.value).length > 0) {
+                  participant.identifier = selection.value
+                  participant.name = selection.label
+                }
+              }}
+              value={{ label: participant.name, value: participant.identifier }}
+              onBlur={this.handleOnNameBlur}
             />
             )}
-
+        {nameError && <ValidationError>{nameError}</ValidationError>}
         <Label htmlFor="emailField">
           <Translate content="qvain.participants.add.email.label" />
         </Label>
@@ -126,7 +202,9 @@ export class ParticipantInfoBase extends Component {
           attributes={{ placeholder: 'qvain.participants.add.email.placeholder' }}
           onChange={(event) => { participant.email = event.target.value }}
           value={participant.email}
+          onBlur={this.handleOnEmailBlur}
         />
+        {emailError && <ValidationError>{emailError}</ValidationError>}
         <Label htmlFor="identifierField">
           <Translate content="qvain.participants.add.identifier.label" />
         </Label>
@@ -134,10 +212,12 @@ export class ParticipantInfoBase extends Component {
           id="identifierField"
           component={Input}
           type="text"
+          disabled={orgs[lang].find(opt => opt.value === participant.identifier)}
           attributes={{ placeholder: 'qvain.participants.add.identifier.placeholder' }}
           onChange={(event) => { participant.identifier = event.target.value }}
           value={participant.identifier}
         />
+        {identifierError && <ValidationError>{identifierError}</ValidationError>}
         <Label htmlFor="orgField">
           <Translate content={`qvain.participants.add.organization.label.${participant.type.toLowerCase()}`} />
           {participant.type === EntityType.PERSON && ' *'}
@@ -146,11 +226,7 @@ export class ParticipantInfoBase extends Component {
           component={SelectOrg}
           name="orgField"
           id="orgField"
-          options={
-            this.props.Stores.Locale.lang === 'en'
-            ? this.state.organizationsEn
-            : this.state.organizationsFi
-          }
+          options={orgs[lang]}
           formatCreateLabel={inputValue => (
             <Fragment>
               <Translate content="qvain.participants.add.newOrganization.label" />
@@ -161,6 +237,8 @@ export class ParticipantInfoBase extends Component {
           onChange={(selection) => { participant.organization = selection.label }}
           value={{ label: participant.organization, value: participant.organization }}
         />
+        {organizationError && <ValidationError>{organizationError}</ValidationError>}
+        {participantError && <ParticipantValidationError>{participantError}</ParticipantValidationError>}
         <Translate
           component={CancelButton}
           onClick={this.handleCancel}
@@ -175,6 +253,11 @@ export class ParticipantInfoBase extends Component {
     );
   }
 }
+
+const ParticipantValidationError = styled(ValidationError)`
+  margin-top: 40px;
+  margin-bottom: 40px;
+`;
 
 const SelectOrg = styled(CreatableSelect)`
   margin-bottom: 20px;

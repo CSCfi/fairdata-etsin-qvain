@@ -408,9 +408,21 @@ class Qvain {
 
     let parentOrg
     if (participantJson['@type'].toLowerCase() === EntityType.ORGANIZATION) {
-      parentOrg = participantJson.is_part_of.name ? participantJson.is_part_of.name.en : undefined
+      const isPartOf = participantJson.is_part_of
+      if (isPartOf !== undefined) {
+        parentOrg = isPartOf.name.en
+      } else {
+        parentOrg = undefined
+      }
     } else {
-      parentOrg = participantJson.member_of.name ? participantJson.member_of.name.en : undefined
+      const parentOrgName = participantJson.member_of.name
+      if (parentOrgName !== undefined && parentOrgName.en !== undefined) {
+        parentOrg = parentOrgName.en
+      } else if (parentOrgName !== undefined) {
+        parentOrg = parentOrgName.fi
+      } else {
+        parentOrg = undefined
+      }
     }
 
     return Participant(
@@ -497,7 +509,7 @@ const File = (file, parent, selected) => ({
 const DatasetFile = (file) => ({
   identifier: file.identifier,
   useCategory: file.use_category.identifier,
-  fileType: file.file_type.identifier,
+  fileType: file.file_type ? file.file_type.identifier : undefined,
   projectIdentifier: file.details.project_identifier,
   title: file.title,
   description: file.description || file.details.file_characteristics.description,
