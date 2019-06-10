@@ -9,6 +9,7 @@ import moment from 'moment'
 import { Label } from '../general/form'
 import { embargoExpDateSchema } from '../utils/formValidation';
 import ValidationError from '../general/validationError';
+import DateFormats from '../utils/date'
 
 class EmbargoExpires extends Component {
   static propTypes = {
@@ -45,12 +46,12 @@ class EmbargoExpires extends Component {
         <DatePickerWrapper>
           <Translate
             component={SingleDatePicker}
-            date={embargoExpDate ? moment(embargoExpDate) : null}
+            date={embargoExpDate ? moment.utc(embargoExpDate) : null}
             onDateChange={date => {
               if (date === null) {
                 this.props.Stores.Qvain.embargoExpDate = undefined
               } else {
-                this.props.Stores.Qvain.embargoExpDate = date.utc().format()
+                this.props.Stores.Qvain.embargoExpDate = date.utc().format(DateFormats.ISO8601_DATE_FORMAT)
               }
             }}
             focused={this.state.focused}
