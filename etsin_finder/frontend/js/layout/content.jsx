@@ -56,9 +56,9 @@ const renderIfLoggedIn = (renderFunc) => (props) => {
   // render the actual if logged in
   // if not, check from backend
   // if backend tells that it has no logged in users, force user to travel to login site
-  if (!allowAccess) {
+  if (!allowAccess()) {
     Auth.checkLogin().then(() => {
-      if (!allowAccess) {
+      if (!allowAccess()) {
         window.location = `/sso?relay=${props.location.pathname}`
         return login
       }
@@ -69,4 +69,4 @@ const renderIfLoggedIn = (renderFunc) => (props) => {
   return actual
 }
 
-const allowAccess = () => Auth.cscUserLogged || Env.environment !== 'development'
+const allowAccess = () => Auth.cscUserLogged || Env.environment === 'development'
