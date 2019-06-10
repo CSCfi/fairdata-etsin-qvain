@@ -23,12 +23,8 @@ from etsin_finder.utils import \
     sort_array_of_obj_by_key, \
     slice_array_on_limit
 from etsin_finder.qvain_light_dataset_schema import DatasetValidationSchema
-from etsin_finder.qvain_light_utils import \
-    clean_empty_keyvalues_from_dict, \
-    alter_role_data, \
-    other_identifiers_to_metax, \
-    access_rights_to_metax
-from etsin_finder.qvain_light_service import create_dataset
+from etsin_finder.qvain_light_utils import data_to_metax
+from etsin_finder.qvain_light_service import create_dataset, update_dataset
 
 log = app.logger
 
@@ -158,6 +154,30 @@ class QvainDataset(Resource):
 
     @log_request
     def post(self):
+        """
+        Create new dataset.
+
+        :param form_data:
+        :return metax_response:
+        """
+        # is_authd = authentication.is_authenticated()
+        # if not is_authd:
+        #     return 'Not logged in', 400
+        try:
+            data, error = self.validationSchema.loads(request.data)
+        except ValidationError as err:
+            log.warning("INVALID FORM DATA: {0}".format(err.messages))
+            return err.messages, 400
+
+        metax_redy_data = data_to_metax(data)
+        metax_response = create_dataset(metax_redy_data)
+        return metax_response, 200
+
+    @log_request
+    def patch(self, cr_id):
+        """
+        Update existing dataset metadata.
+        """
         is_authd = authentication.is_authenticated()
         if not is_authd:
             return 'Not logged in', 400
@@ -166,27 +186,6 @@ class QvainDataset(Resource):
         except ValidationError as err:
             log.warning("INVALID FORM DATA: {0}".format(err.messages))
             return err.messages, 400
-
-        dataset_data = {
-            "data_catalog": "urn:nbn:fi:att:data-catalog-att",
-            "research_dataset": {
-                "title": data["title"],
-                "description": data["description"],
-                "creator": alter_role_data(data["participants"], "creator"),
-                "publisher": alter_role_data(data["participants"], "publisher"),
-                "curator": alter_role_data(data["participants"], "curator"),
-                "other_identifier": other_identifiers_to_metax(data["identifiers"]),
-                "field_of_science": {
-                    "identifier": data["fieldOfScience"]
-                },
-                "keyword": data["keywords"],
-                "language": [{
-                    "title": { "en": "en" },
-                    "identifier": "http://lexvo.org/id/iso639-3/aar"
-                }],
-                "access_rights": access_rights_to_metax(data)
-            }
-        }
-        metax_redy_data = clean_empty_keyvalues_from_dict(dataset_data)
-        metax_response = create_dataset(metax_redy_data)
+        metax_redy_data = data_to_metax(data)
+        metax_response = update_dataset(metax_redy_data)
         return metax_response, 200

@@ -1,5 +1,3 @@
-import copy
-
 def clean_empty_keyvalues_from_dict(d):
     if not isinstance(d, (dict, list)):
         return d
@@ -7,32 +5,30 @@ def clean_empty_keyvalues_from_dict(d):
         return [v for v in (clean_empty_keyvalues_from_dict(v) for v in d) if v]
     return {k: v for k, v in ((k, clean_empty_keyvalues_from_dict(v)) for k, v in d.items()) if v}
 
-def alter_role_data(d, role):
-    participant_list = copy.deepcopy(d)
+def alter_role_data(participant_list, role):
     participants = []
     participant_list_with_role = [x for x in participant_list if role in x["role"] ]
-    for dict in participant_list_with_role:
+    for participant_object in participant_list_with_role:
         participant = {}
         participant["member_of"] = {}
         participant["member_of"]["name"] = {}
-        if dict["type"] == "person":
-            participant["name"] = dict["name"]
+        if participant_object["type"] == "Person":
+            participant["name"] = participant_object["name"]
             participant["member_of"] = {}
             participant["member_of"]["name"] = {}
-            participant["member_of"]["name"]["und"] = dict["organization"]
+            participant["member_of"]["name"]["und"] = participant_object["organization"]
             participant["member_of"]["@type"] = "Organization"
         else:
             participant["name"] = {}
-            participant["name"]["und"] = dict["name"]
+            participant["name"]["und"] = participant_object["name"]
             participant["is_part_of"] = {}
             participant["is_part_of"]["name"] = {}
-            participant["is_part_of"]["name"]["und"] = dict["organization"]
+            participant["is_part_of"]["name"]["und"] = participant_object["organization"]
             participant["is_part_of"]["@type"] = "Organization"
 
-        participant["@type"] = dict["type"]
-        participant["email"] = dict["email"]
-        participant["identifier"] = dict["identifier"]
-
+        participant["@type"] = participant_object["type"]
+        participant["email"] = participant_object["email"]
+        participant["identifier"] = participant_object["identifier"]
         participants.append(participant)
     return participants
 
@@ -48,10 +44,35 @@ def access_rights_to_metax(data):
     access_rights = {}
     access_rights["access_type"] = {}
     access_rights["access_type"]["identifier"] = data["accessType"]
-    access_rights["license"] = {}
-    access_rights["license"]["identifier"] = data["license"]
+    access_rights["license"] = []
+    access_rights["license"].append({"identifier": data["license"]})
     if data["accessType"] != "http://uri.suomi.fi/codelist/fairdata/access_type/code/open":
         access_rights["restriction_grounds"] = {}
         access_rights["restriction_grounds"]["identifier"] = data["restrictionGrounds"]
 
     return access_rights
+
+def data_to_metax(data):
+    dataset_data = {
+        "metadata_provider_org": "Aalto",
+        "metadata_provider_user": "keinane1",
+        "data_catalog": "urn:nbn:fi:att:data-catalog-att",
+        "research_dataset": {
+            "title": data["title"],
+            "description": data["description"],
+            "creator": alter_role_data(data["participants"], "creator"),
+            "publisher": alter_role_data(data["participants"], "publisher")[0],
+            "curator": alter_role_data(data["participants"], "curator"),
+            "other_identifier": other_identifiers_to_metax(data["identifiers"]),
+            "field_of_science": [{
+                "identifier": data["fieldOfScience"]
+            }],
+            "keyword": data["keywords"],
+            "language": [{
+                "title": { "en": "en" },
+                "identifier": "http://lexvo.org/id/iso639-3/aar"
+            }],
+            "access_rights": access_rights_to_metax(data)
+        }
+    }
+    return clean_empty_keyvalues_from_dict(dataset_data)

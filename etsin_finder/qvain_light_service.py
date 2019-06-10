@@ -166,6 +166,34 @@ class MetaxQvainLightAPIService(FlaskService):
 
         return metax_api_response.json()
 
+    def update_dataset(self, data, cr_id):
+        """
+        Update a dataset with the datat that the user has entered in Qvain-light.
+
+        :param data, cr_id:
+        :return response:
+        """
+        req_url = self.METAX_CREATE_DATASET + "/" + cr_id
+        headers = {'Accept': 'application/json'}
+        try:
+            metax_api_response = requests.patch(req_url,
+                                                json=data,
+                                                headers=headers,
+                                                auth=(self.user, self.pw),
+                                                verify=self.verify_ssl,
+                                                timeout=10)
+        except Exception as e:
+            if isinstance(e, requests.HTTPError):
+                log.debug("Failed to create dataset.")
+                log.debug('Response status code: {0}'.format(metax_api_response.status_code))
+                log.debug('Response text: {0}'.format(json_or_empty(metax_api_response) or metax_api_response.text))
+            else:
+                log.error("Failed to get data for directory {0} from Metax API")
+                log.error(e)
+            return metax_api_response.json()
+
+        return metax_api_response.json()
+
 
 _metax_api = MetaxQvainLightAPIService(app)
 
@@ -198,3 +226,6 @@ def get_datasets_for_user(user_id, limit, offset):
 
 def create_dataset(form_data):
     return _metax_api.create_dataset(form_data)
+
+def update_dataset(form_data, cr_id):
+    return _metax_api.update_dataset(form_data, cr_id)
