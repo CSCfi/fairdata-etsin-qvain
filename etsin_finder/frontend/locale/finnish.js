@@ -507,9 +507,29 @@ const finnish = {
         }
       },
       external: {
-        help: 'Lisää linkki ulkoisiin tiedostoihin tässä:',
+        help: 'Lisää linkkejä ulkoisiin tiedostoihin:',
         button: {
-          label: 'Lisää linkki ulkoisiin tiedostoihin'
+          label: 'Lisää linkki ulkoiseen tiedostoon'
+        },
+        addedResources: {
+          title: 'Lisätyt ulkoiset aineistot',
+          none: 'Aineistoja ei ole lisätty'
+        },
+        form: {
+          title: {
+            label: 'Otsikko',
+            placeholder: 'Aineisto'
+          },
+          url: {
+            label: 'URL',
+            placeholder: 'https://'
+          },
+          save: {
+            label: 'Tallenna'
+          },
+          add: {
+            label: 'Lisää'
+          }
         }
       }
     }
