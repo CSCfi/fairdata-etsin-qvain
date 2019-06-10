@@ -174,7 +174,14 @@ class QvainDataset(Resource):
         except KeyError as err:
             log.warning("The Metadata provider is not specified: \n{0}".format(err))
             return "The Metadata provider is not specified", 400
-        metax_redy_data = data_to_metax(data, metadata_provider_org, metadata_provider_user)
+
+        if all(["remote_resources" in data, "files" not in data, "directorys" not in data]):
+            data_catalog = "urn:nbn:fi:att:data-catalog-att"
+        elif all(["remote_resources" not in data, "files" in data, "directorys" in data]):
+            data_catalog = "urn:nbn:fi:att:data-catalog-ida"
+        else:
+            return "Missing fields to specify the data catalog.", 400
+        metax_redy_data = data_to_metax(data, metadata_provider_org, metadata_provider_user, data_catalog)
         metax_response = create_dataset(metax_redy_data)
         return metax_response, 200
 

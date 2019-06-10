@@ -58,11 +58,11 @@ def access_rights_to_metax(data):
         access_rights["available"] = data["embargoDate"]
     return access_rights
 
-def data_to_metax(data, metadata_provider_org, metadata_provider_user):
+def data_to_metax(data, metadata_provider_org, metadata_provider_user, data_catalog):
     dataset_data = {
         "metadata_provider_org": metadata_provider_org,
         "metadata_provider_user": metadata_provider_user,
-        "data_catalog": "urn:nbn:fi:att:data-catalog-att",
+        "data_catalog": data_catalog,
         "research_dataset": {
             "title": data["title"],
             "description": data["description"],
