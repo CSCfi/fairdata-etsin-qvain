@@ -149,6 +149,17 @@ const participantOrganizationSchema = yup.object().shape({
       })
 })
 
+const externalResourceUrlSchema = yup
+  .string()
+  .url(translate('qvain.validationMessages.externalResources.url.url'))
+  .required(translate('qvain.validationMessages.externalResources.url.required'))
+
+const externalResourceSchema = yup.object().shape({
+  id: yup.number().nullable(),
+  title: yup.string().nullable(),
+  url: externalResourceUrlSchema
+})
+
 const participantSchema = yup
   .object().shape({
     type: participantType,
@@ -232,5 +243,7 @@ export {
   participantRolesSchema,
   participantEmailSchema,
   participantIdentifierSchema,
-  participantOrganizationSchema
+  participantOrganizationSchema,
+  externalResourceSchema,
+  externalResourceUrlSchema
 };

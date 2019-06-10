@@ -463,6 +463,12 @@ const finnish = {
           url: 'Lisenssi URL pitää olla oikeanlainen URL',
           required: 'Lisenssi URL on pakollinen'
         }
+      },
+      externalResources: {
+        url: {
+          required: 'Ulkoisen aineiston URL osoite on pakollinen',
+          url: 'Ulkoisen aineiston URL osoitteen pitää olla oikeassa URL formaatissa'
+        }
       }
     },
     files: {
