@@ -176,13 +176,13 @@ const participantsSchema = yup
     yup
       .object().shape({
         type: participantType,
-        roles: participantRolesSchema,
+        role: participantRolesSchema,
         name: participantNameSchema,
         email: participantEmailSchema,
         identifier: participantIdentifierSchema,
         organization: yup
           .mixed()
-          .when('participant.type', {
+          .when('type', {
             is: 'person',
             then:
               yup
