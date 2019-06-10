@@ -1,3 +1,7 @@
+access_type = {}
+access_type["EMBARGO"] = "http://uri.suomi.fi/codelist/fairdata/access_type/code/embargo"
+access_type["OPEN"] = "http://uri.suomi.fi/codelist/fairdata/access_type/code/open"
+
 def clean_empty_keyvalues_from_dict(d):
     if not isinstance(d, (dict, list)):
         return d
@@ -12,13 +16,15 @@ def alter_role_data(participant_list, role):
         participant = {}
         participant["member_of"] = {}
         participant["member_of"]["name"] = {}
-        if participant_object["type"] == "Person":
+        if participant_object["type"] == "person":
+            participant["@type"] = "Person"
             participant["name"] = participant_object["name"]
             participant["member_of"] = {}
             participant["member_of"]["name"] = {}
             participant["member_of"]["name"]["und"] = participant_object["organization"]
             participant["member_of"]["@type"] = "Organization"
         else:
+            participant["@type"] = "Organization"
             participant["name"] = {}
             participant["name"]["und"] = participant_object["name"]
             participant["is_part_of"] = {}
@@ -26,7 +32,6 @@ def alter_role_data(participant_list, role):
             participant["is_part_of"]["name"]["und"] = participant_object["organization"]
             participant["is_part_of"]["@type"] = "Organization"
 
-        participant["@type"] = participant_object["type"]
         participant["email"] = participant_object["email"]
         participant["identifier"] = participant_object["identifier"]
         participants.append(participant)
@@ -46,16 +51,17 @@ def access_rights_to_metax(data):
     access_rights["access_type"]["identifier"] = data["accessType"]
     access_rights["license"] = []
     access_rights["license"].append({"identifier": data["license"]})
-    if data["accessType"] != "http://uri.suomi.fi/codelist/fairdata/access_type/code/open":
+    if data["accessType"] != access_type["OPEN"]:
         access_rights["restriction_grounds"] = {}
         access_rights["restriction_grounds"]["identifier"] = data["restrictionGrounds"]
-
+    if data["accessType"] == access_type["EMBARGO"]:
+        access_rights["available"] = data["embargoDate"]
     return access_rights
 
-def data_to_metax(data):
+def data_to_metax(data, metadata_provider_org, metadata_provider_user):
     dataset_data = {
-        "metadata_provider_org": "Aalto",
-        "metadata_provider_user": "keinane1",
+        "metadata_provider_org": metadata_provider_org,
+        "metadata_provider_user": metadata_provider_user,
         "data_catalog": "urn:nbn:fi:att:data-catalog-att",
         "research_dataset": {
             "title": data["title"],
@@ -68,10 +74,6 @@ def data_to_metax(data):
                 "identifier": data["fieldOfScience"]
             }],
             "keyword": data["keywords"],
-            "language": [{
-                "title": { "en": "en" },
-                "identifier": "http://lexvo.org/id/iso639-3/aar"
-            }],
             "access_rights": access_rights_to_metax(data)
         }
     }

@@ -51,6 +51,7 @@ class DatasetValidationSchema(Schema):
         required=True,
         validate=Length(min=1)
     )
+    embargoDate = fields.Str()
     restrictionGrounds = fields.Str()
     license = fields.Str(
         required=True,
