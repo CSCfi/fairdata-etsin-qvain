@@ -31,6 +31,10 @@ const config = {
           loader: 'file-loader',
         },
       },
+      {
+        test: /\.css$/i,
+        use: ['style-loader', 'css-loader'],
+      },
     ],
   },
   plugins: [
@@ -43,7 +47,7 @@ const config = {
       favicon: 'static/images/favicon.png',
     }),
   ],
-  watch: false,
+  watch: true,
   watchOptions: {
     aggregateTimeout: 300,
     poll: 1000,

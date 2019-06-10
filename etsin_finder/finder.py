@@ -71,12 +71,17 @@ def add_restful_resources(app):
     """
     api = Api(app)
     from etsin_finder.resources import Contact, Dataset, User, Session, Files, Download
+    from etsin_finder.qvain_light_resources import ProjectFiles, FileDirectory, UserDatasets
     api.add_resource(Dataset, '/api/dataset/<string:cr_id>')
     api.add_resource(Files, '/api/files/<string:cr_id>')
     api.add_resource(Contact, '/api/email/<string:cr_id>')
     api.add_resource(User, '/api/user')
     api.add_resource(Session, '/api/session')
     api.add_resource(Download, '/api/dl')
+    # Qvain light API endpoints
+    api.add_resource(ProjectFiles, '/api/files/project/<string:pid>')
+    api.add_resource(FileDirectory, '/api/files/directory/<string:dir_id>')
+    api.add_resource(UserDatasets, '/api/datasets/<string:user_id>')
 
 
 app = create_app()

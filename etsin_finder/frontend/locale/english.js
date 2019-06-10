@@ -252,6 +252,311 @@ const english = {
       nosearchterm: 'Your seach did not match any documents.',
     },
   },
+  qvain: {
+    unsuccessfullLogin: 'Login unsuccessful.',
+    notCSCUser1: 'Please make sure that you have a valid CSC account. If you tried to log in with an external account (for example Haka) you might get this error if your account is not associated with CSC account. Please do the registration in',
+    notCSCUserLink: ' CSC Customer Portal',
+    notCSCUser2: ' You can register with or without Haka account.',
+    notLoggedIn: 'Please login with your CSC account to use Qvain-light service.',
+    title: 'Publish Dataset',
+    common: {
+      cancel: 'Cancel',
+      save: 'Save'
+    },
+    datasets: {
+      title: 'Your Datasets',
+      help: 'Choose a dataset to edit or create a new dataset',
+      createButton: 'Create dataset',
+      tableRows: {
+        id: 'ID',
+        name: 'Name',
+        edit: 'Edit',
+        remove: 'Remove'
+      },
+      editButton: 'Edit',
+      deleteButton: 'Remove',
+      noDatasets: 'You have no datasets',
+      reload: 'Reload',
+      loading: 'Loading...',
+      errorOccurred: 'An error occurred'
+    },
+    description: {
+      title: 'Description',
+      description: {
+        langEn: 'ENGLISH',
+        langFi: 'FINNISH',
+        title: {
+          label: 'Title',
+          placeholderEn: 'Title (English)',
+          placeholderFi: 'Title (Finnish)'
+        },
+        description: {
+          label: 'Description',
+          placeholderEn: 'Description (English)',
+          placeholderFi: 'Description (Finnish)'
+        },
+        instructions: 'Only one launguage selection is mandatory'
+      },
+      otherIdentifiers: {
+        title: 'Other Identifiers',
+        instructions: 'Identifier for the metadata will be created automatically but if there alredy is an EXISTING identifier please insert it here.',
+        addButton: '+ Add new'
+      },
+      fieldOfScience: {
+        title: 'Field of Science',
+        placeholder: 'Select option'
+      },
+      keywords: {
+        title: 'Keywords',
+        placeholder: 'E.g. economy'
+      }
+    },
+    rightsAndLicenses: {
+      title: 'Rights And Licenses',
+      accessType: {
+        title: 'Access Type',
+        placeholder: 'Select option'
+      },
+      embargoDate: {
+        label: 'Embargo expiration date',
+        placeholder: 'Date',
+        help: 'By default, expiration date will be indefinite if not set.'
+      },
+      restrictionGrounds: {
+        title: 'Restriction Grounds',
+        placeholder: 'Select option',
+        text: 'When access type is "Restricted", please choose the restriction grounds.'
+      },
+      license: {
+        title: 'License',
+        placeholder: 'Select option',
+        other: {
+          label: 'URL address',
+          help: 'Specify URL address for license'
+        }
+      }
+    },
+    participants: {
+      title: 'Participants',
+      add: {
+        title: 'Participants',
+        help: 'Creator (1+) and publisher (max 1) roles are mandatory. Notice that one participant can have multiple roles.',
+        radio: {
+          person: 'Person',
+          organization: 'Organization'
+        },
+        checkbox: {
+          creator: 'Creator',
+          publisher: 'Publisher',
+          curator: 'Curator'
+        },
+        name: {
+          placeholder: {
+            organization: 'Name',
+            person: 'First And Last Name'
+          },
+          label: 'Name'
+        },
+        email: {
+          placeholder: 'Email',
+          label: 'Email'
+        },
+        identifier: {
+          label: 'Identifier',
+          placeholder: 'e.g http://orcid.org'
+        },
+        organization: {
+          label: {
+            person: 'Organization',
+            organization: 'Parent Organization'
+          },
+          placeholder: 'E.g. University of Helsinki'
+        },
+        save: {
+          label: 'Save'
+        },
+        cancel: {
+          label: 'Cancel'
+        },
+        newOrganization: {
+          label: 'Add'
+        }
+      },
+      added: {
+        title: 'Added Participants',
+        noneAddedNotice: 'No participants added'
+      }
+    },
+    validationMessages: {
+      title: {
+        string: 'The Title must be a string value.',
+        max: 'The Title is too long.',
+        required: 'The Title is required in at least one language.'
+      },
+      description: {
+        string: 'The Description must be a string value.',
+        max: 'The description is too long.',
+        required: 'The Description is required in at least one language.'
+      },
+      otherIdentifiers: {
+        string: 'Other Identifiers must be string value.',
+        url: 'Ther Identifiers should be valid URLs.',
+        max: 'Identifier too long.'
+      },
+      fieldOfScience: {},
+      keywords: {
+        string: 'Keywords must be string value.',
+        max: 'Keyword too long.',
+        required: 'At least one keyword is required.'
+      },
+      participants: {
+        type: {
+          mixed: '',
+          oneOf: 'Participant type can only be "person" or "organization"',
+          required: 'The Type of the Participant is required.'
+        },
+        roles: {
+          mixed: '',
+          oneOf: 'Roles must be one of "creator", "publisher" or "curator".',
+          required: 'You must specify the role of the participant. Creator field is mandatory and there must be exactly one Publisher.'
+        },
+        name: {
+          string: 'The Name must be a string value.',
+          max: 'Name too long.',
+          required: 'Name is a required field.'
+        },
+        email: {
+          string: '',
+          max: 'Email too long.',
+          email: 'Please insert a valid Email address.',
+          nullable: ''
+        },
+        identifier: {
+          string: '',
+          max: 'Identifier too long.',
+          nullable: ''
+        },
+        organization: {
+          mixed: '',
+          object: 'The Selected Organization should be an Object.',
+          string: 'The Organization value must be string.',
+          required: 'Organization is required if the partisipant is a person.'
+        }
+      },
+      accessType: {
+        string: 'Access Type must be string value.',
+        url: 'Reference value ERROR.',
+        required: 'Access Type is a required field.'
+      },
+      restrictionGrounds: {
+        string: 'Restriction Grounds must be string value.',
+        url: 'Reference value ERROR.',
+        required: 'Restriction Grounds are required if Access Type is not "Open".'
+      },
+      license: {
+        otherUrl: {
+          string: 'The license URL must be a valid string of text',
+          url: 'The license URL must be a valid URL',
+          required: 'License URL is a required value'
+        }
+      }
+    },
+    files: {
+      title: 'Files',
+      ida: {
+        help: 'If you have files in Fairdata IDA you can link them from here:',
+        button: {
+          label: 'Link files from Fairdata IDA'
+        }
+      },
+      projectSelect: {
+        placeholder: 'Select project'
+      },
+      selected: {
+        title: 'Selected files',
+        form: {
+          title: {
+            label: 'Title',
+            placeholder: 'Title'
+          },
+          description: {
+            label: 'Description',
+            placeholder: 'Description'
+          },
+          directoryFiles: {
+            label: 'Files within directory'
+          },
+          use: {
+            label: 'Use category',
+            placeholder: 'Select option'
+          },
+          fileType: {
+            label: 'File type',
+            placeholder: 'Select option'
+          },
+          fileFormat: {
+            label: 'File format',
+            placeholder: 'Select option'
+          },
+          formatVersion: {
+            label: 'File format version',
+            placeholder: 'Select option'
+          },
+          isSequential: {
+            label: 'File is sequential'
+          },
+          csvDelimiter: {
+            label: 'Delimiter',
+            placeholder: 'Select option'
+          },
+          csvHasHeader: {
+            label: 'Has header'
+          },
+          csvRecordSeparator: {
+            label: 'Record separator',
+            placeholder: 'Select option'
+          },
+          csvQuoteChar: {
+            label: 'Quoting character',
+            placeholder: 'Quoting character, e.g. \\'
+          },
+          csvEncoding: {
+            label: 'Encoding',
+            placeholder: 'Select option'
+          },
+          identifier: {
+            label: 'Identifier'
+          }
+        }
+      },
+      external: {
+        help: 'Add link to external files from here:',
+        button: {
+          label: 'Add link to external files'
+        },
+        addedResources: {
+          title: 'Added external resources',
+          none: 'None added'
+        },
+        form: {
+          title: {
+            label: 'Title',
+            placeholder: 'A Resource'
+          },
+          url: {
+            label: 'URL',
+            placeholder: 'https://'
+          },
+          save: {
+            label: 'Save'
+          },
+          add: {
+            label: 'Add'
+          }
+        }
+      }
+    }
+  },
   slogan: 'Research data finder',
   stc: 'Skip to content',
   tombstone: {

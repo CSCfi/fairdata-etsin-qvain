@@ -40,7 +40,7 @@ export default class KeepAlive extends Component {
         this.setState({
           showNotice: true,
         })
-      }, 30000)
+      }, 28800000)
     }
 
     // user moved after being idle for custom time and is logged in
