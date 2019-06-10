@@ -459,6 +459,12 @@ const english = {
           url: 'The license URL must be a valid URL',
           required: 'License URL is a required value'
         }
+      },
+      externalResources: {
+        url: {
+          required: 'External resource URL is required',
+          url: 'External Resource URL needs to be of valid URL format'
+        }
       }
     },
     files: {
