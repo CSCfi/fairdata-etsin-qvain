@@ -172,7 +172,7 @@ class Qvain {
     const newHier = { ...this._hierarchy }
     const flat = getDirectories(newHier)
     // file.selected = select
-    getFiles(newHier).find(f => f.identifier === file.identifier).selected = false
+    getFiles(newHier).find(f => f.identifier === file.identifier).selected = select
     if (select) {
       const deselectDir = (dir) => {
         dir.selected = false
