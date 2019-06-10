@@ -9,6 +9,7 @@ import Participants from './participants'
 import { qvainFormSchema } from './utils/formValidation';
 import Files from './files'
 import { QvainContainer, SubHeader, SubHeaderText } from './general/card'
+import { AccessTypeURLs } from './utils/constants'
 
 class Qvain extends Component {
   static propTypes = {
@@ -39,6 +40,12 @@ class Qvain extends Component {
         otherLicenseUrl: values.otherLicenseUrl
       }
     };
+    if (values.accessType !== undefined && values.accessType.url === AccessTypeURLs.EMBARGO) {
+      obj.accessType = {
+        ...obj.accessType,
+        embargoExpDate: values.embargoExpDate
+      }
+    }
     console.log(JSON.stringify(obj, null, 4));
     qvainFormSchema.validate(obj, { abortEarly: false })
       .then((val) => {

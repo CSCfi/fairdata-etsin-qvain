@@ -42,7 +42,7 @@ export class SelectedFilesBase extends Component {
             <FileItem active={isInEdit(inEdit, s.identifier)}>
               <ButtonLabel>
                 <FontAwesomeIcon icon={(s.directoryName ? faFolder : faCopy)} style={{ marginRight: '8px' }} />
-                {s.projectIdentifier} / {s.directoryName || getTitle(s.fileCharacteristics)}
+                {s.projectIdentifier} / {s.directoryName || s.title}
               </ButtonLabel>
               <EditButton onClick={this.handleEdit(s)} />
               <DeleteButton

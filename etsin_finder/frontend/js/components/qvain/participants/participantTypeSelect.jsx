@@ -37,7 +37,7 @@ export class ParticipantTypeSelectBase extends Component {
 
   checkIfParticipantRoleExists = (role) => {
     const participant = this.props.Stores.Qvain.participantInEdit
-    if (this.props.Stores.Qvain.addedParticipants.map(p => p.identifier).includes(participant.uiId)) {
+    if (this.props.Stores.Qvain.addedParticipants.map(p => p.uiId).includes(participant.uiId)) {
       // we are editing a previously added participant, allow chaning roles
       return false
     }
