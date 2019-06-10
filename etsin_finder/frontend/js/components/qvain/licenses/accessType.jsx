@@ -95,7 +95,7 @@ class AccessType extends Component {
   render() {
     const { lang } = this.props.Stores.Locale
     const { options } = this.state
-    const { accessType } = this.props.Stores.Qvain
+    const { accessType, setAccessType } = this.props.Stores.Qvain
     return (
       <Card>
         <Translate component="h3" content="qvain.rightsAndLicenses.accessType.title" />
@@ -108,7 +108,7 @@ class AccessType extends Component {
             getCurrentValue(accessType, options, lang) ||
             options[lang].find(opt => opt.value === OPEN) // access is OPEN by default - 28.5.2019
           }
-          onChange={this.handleChange}
+          onChange={onChange(options, lang, setAccessType, AccessTypeConstructor)}
           onBlur={this.handleBlur}
           attributes={{
             placeholder: 'qvain.rightsAndLicenses.accessType.placeholder'
