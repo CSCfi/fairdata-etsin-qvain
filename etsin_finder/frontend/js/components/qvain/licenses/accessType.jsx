@@ -72,9 +72,9 @@ class AccessType extends Component {
     const { options } = this.state
     const { setAccessType } = this.props.Stores.Qvain
     onChange(options, lang, setAccessType, AccessTypeConstructor)(selection)
-    if (selection.value !== 'http://uri.suomi.fi/codelist/fairdata/access_type/code/open') {
+    if (selection.value !== AccessTypeURLs.OPEN) {
       this.setState({ accessTypeRestricted: true })
-    } else if (selection.value === 'http://uri.suomi.fi/codelist/fairdata/access_type/code/open') {
+    } else if (selection.value === AccessTypeURLs.OPEN) {
       this.setState({ accessTypeRestricted: false })
     }
     this.setState({ accessTypeValidationError: null })
@@ -93,7 +93,7 @@ class AccessType extends Component {
   render() {
     const { lang } = this.props.Stores.Locale
     const { options } = this.state
-    const { accessType, setAccessType } = this.props.Stores.Qvain
+    const { accessType } = this.props.Stores.Qvain
     return (
       <Card>
         <Translate component="h3" content="qvain.rightsAndLicenses.accessType.title" />
@@ -105,7 +105,7 @@ class AccessType extends Component {
           value={
             getCurrentValue(accessType, options, lang) // access is OPEN by default - 28.5.2019
           }
-          onChange={onChange(options, lang, setAccessType, AccessTypeConstructor)}
+          onChange={this.handleChange}
           onBlur={this.handleBlur}
           attributes={{
             placeholder: 'qvain.rightsAndLicenses.accessType.placeholder'
