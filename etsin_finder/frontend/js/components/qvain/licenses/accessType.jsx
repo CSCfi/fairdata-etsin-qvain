@@ -12,9 +12,7 @@ import ValidationError from '../general/validationError';
 import EmbargoExpires from './embargoExpires'
 import { onChange, getCurrentValue } from '../utils/select'
 import { AccessType as AccessTypeConstructor } from '../../../stores/view/qvain'
-
-const EMBARGO = 'http://uri.suomi.fi/codelist/fairdata/access_type/code/embargo'
-const OPEN = 'http://uri.suomi.fi/codelist/fairdata/access_type/code/open'
+import { AccessTypeURLs } from '../utils/constants'
 
 class AccessType extends Component {
   static propTypes = {
@@ -105,8 +103,7 @@ class AccessType extends Component {
           options={this.state.options[lang]}
           clearable
           value={
-            getCurrentValue(accessType, options, lang) ||
-            options[lang].find(opt => opt.value === OPEN) // access is OPEN by default - 28.5.2019
+            getCurrentValue(accessType, options, lang) // access is OPEN by default - 28.5.2019
           }
           onChange={onChange(options, lang, setAccessType, AccessTypeConstructor)}
           onBlur={this.handleBlur}
@@ -115,7 +112,7 @@ class AccessType extends Component {
           }}
         />
         <ValidationError>{this.state.accessTypeValidationError}</ValidationError>
-        {(accessType !== undefined && accessType.url === EMBARGO) && (<EmbargoExpires />)}
+        {(accessType !== undefined && accessType.url === AccessTypeURLs.EMBARGO) && (<EmbargoExpires />)}
         { this.state.accessTypeRestricted
           ? <RestrictionGrounds /> : null}
       </Card>

@@ -1,11 +1,7 @@
 import { observable, action, computed } from 'mobx'
 import axios from 'axios'
 import { getDirectories, getFiles } from '../../components/qvain/utils/fileHierarchy'
-
-const DIR_URL = '/api/files/directory/'
-const PROJECT_DIR_URL = '/api/files/project/'
-
-const CCBY4 = 'http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0'
+import { AccessTypeURLs, LicenseUrls, FileAPIURLs } from '../../components/qvain/utils/constants'
 
 class Qvain {
   @observable original = undefined // used if editing, otherwise undefined
@@ -26,11 +22,11 @@ class Qvain {
 
   @observable keywords = []
 
-  @observable license = License(undefined, CCBY4)
+  @observable license = License(undefined, LicenseUrls.CCBY4)
 
   @observable otherLicenseUrl = undefined
 
-  @observable accessType = undefined
+  @observable accessType = AccessType(undefined, AccessTypeURLs.OPEN)
 
   @observable embargoExpDate = undefined
 
@@ -222,7 +218,7 @@ class Qvain {
 
   @action getInitialDirectories = () => (
     axios
-      .get(PROJECT_DIR_URL + this._selectedProject)
+      .get(FileAPIURLs.PROJECT_DIR_URL + this._selectedProject)
       .then(res => {
         this._hierarchy = Directory(res.data, undefined, false, false)
         return this._hierarchy
@@ -239,7 +235,7 @@ class Qvain {
 
   @action loadDirectory = (dirId, rootDir, callback) => {
     const req = axios
-      .get(DIR_URL + dirId)
+      .get(FileAPIURLs.DIR_URL + dirId)
       .then(res => {
         const newDirs = [...rootDir.directories.map(d => (
           d.id === dirId ? {
