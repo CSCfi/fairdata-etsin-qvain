@@ -51,6 +51,11 @@ export class ExternalFilesBase extends Component {
       title: '',
       url: ''
     })
+    // close IDA picker if it is open since after adding resources user
+    // shouldn't be able to add IDA files or directories
+    if (this.props.Stores.Qvain.idaPickerOpen) {
+      this.props.Stores.Qvain.idaPickerOpen = false
+    }
   }
 
   handleRemoveResource = (resourceId) => (event) => {
@@ -121,11 +126,12 @@ export class ExternalFilesBase extends Component {
 
   render() {
     const { inEdit } = this.state
-    const { externalResources, extResFormOpen } = this.props.Stores.Qvain
+    const { externalResources, extResFormOpen, selectedFiles, selectedDirectories } = this.props.Stores.Qvain
+    const hasIDAItems = [...selectedFiles, ...selectedDirectories].length > 0
     return (
       <Fragment>
         <Translate component="p" content="qvain.files.external.help" />
-        <FilePickerButtonInverse onClick={this.handleToggleForm}>
+        <FilePickerButtonInverse disabled={hasIDAItems} onClick={this.handleToggleForm}>
           <LinkIcon />
           <Translate component={FilePickerButtonText} content="qvain.files.external.button.label" />
           {extResFormOpen ? <ChevronDown /> : <ChevronRight />}

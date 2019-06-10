@@ -73,6 +73,4 @@ const isInEdit = (inEdit, identifier) => (inEdit !== undefined) && inEdit.identi
 
 const isDirectory = (inEdit) => inEdit.directoryName !== undefined
 
-const getTitle = (fileCharacteristics) => (fileCharacteristics !== undefined ? fileCharacteristics.title : '')
-
 export default inject('Stores')(observer(SelectedFilesBase))
