@@ -160,16 +160,21 @@ class QvainDataset(Resource):
         :param form_data:
         :return metax_response:
         """
-        # is_authd = authentication.is_authenticated()
-        # if not is_authd:
-        #     return 'Not logged in', 400
+        is_authd = authentication.is_authenticated()
+        if not is_authd:
+            return 'Not logged in', 400
         try:
             data, error = self.validationSchema.loads(request.data)
         except ValidationError as err:
             log.warning("INVALID FORM DATA: {0}".format(err.messages))
             return err.messages, 400
-
-        metax_redy_data = data_to_metax(data)
+        try:
+            metadata_provider_org = session["samlUserdata"]["urn:oid:1.3.6.1.4.1.25178.1.2.9"][0]
+            metadata_provider_user = session["samlUserdata"]["urn:oid:1.3.6.1.4.1.16161.4.0.53"][0]
+        except KeyError as err:
+            log.warning("The Metadata provider is not specified: \n{0}".format(err))
+            return "The Metadata provider is not specified", 400
+        metax_redy_data = data_to_metax(data, metadata_provider_org, metadata_provider_user)
         metax_response = create_dataset(metax_redy_data)
         return metax_response, 200
 
@@ -186,6 +191,12 @@ class QvainDataset(Resource):
         except ValidationError as err:
             log.warning("INVALID FORM DATA: {0}".format(err.messages))
             return err.messages, 400
-        metax_redy_data = data_to_metax(data)
+        try:
+            metadata_provider_org = session["samlUserdata"]["urn:oid:1.3.6.1.4.1.25178.1.2.9"]
+            metadata_provider_user = session["samlUserdata"]["urn:oid:1.3.6.1.4.1.8057.2.80.26"]
+        except KeyError as err:
+            log.warning("The Metadata provider is not specified: \n{0}".format(err))
+            return "The Metadata provider is not specified", 400
+        metax_redy_data = data_to_metax(data, metadata_provider_org, metadata_provider_user)
         metax_response = update_dataset(metax_redy_data)
         return metax_response, 200
