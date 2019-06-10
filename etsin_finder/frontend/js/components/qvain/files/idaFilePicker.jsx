@@ -20,7 +20,13 @@ export class IDAFilePickerBase extends Component {
 
   handleToggleForm = (event) => {
     event.preventDefault()
-    this.props.Stores.Qvain.idaPickerOpen = !this.props.Stores.Qvain.idaPickerOpen
+    const { idaPickerOpen } = this.props.Stores.Qvain
+    if (idaPickerOpen) {
+      this.props.Stores.Qvain.idaPickerOpen = false
+    } else {
+      this.props.Stores.Qvain.idaPickerOpen = true
+      this.props.Stores.Qvain.extResFormOpen = false
+    }
   }
 
   render() {
