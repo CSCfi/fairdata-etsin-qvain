@@ -31,7 +31,13 @@ export class ExternalFilesBase extends Component {
 
   handleToggleForm = (event) => {
     event.preventDefault()
-    this.props.Stores.Qvain.extResFormOpen = !this.props.Stores.Qvain.extResFormOpen
+    const { extResFormOpen } = this.props.Stores.Qvain
+    if (extResFormOpen) {
+      this.props.Stores.Qvain.extResFormOpen = false
+    } else {
+      this.props.Stores.Qvain.extResFormOpen = true
+      this.props.Stores.Qvain.idaPickerOpen = false
+    }
   }
 
   handleAddResource = (event) => {

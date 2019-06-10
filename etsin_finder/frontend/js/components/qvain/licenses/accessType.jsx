@@ -69,11 +69,14 @@ class AccessType extends Component {
     });
   }
 
-  handleChange = (accessType) => {
-    this.props.Stores.Qvain.setAccessType(accessType.value)
-    if (accessType.value !== 'http://uri.suomi.fi/codelist/fairdata/access_type/code/open') {
+  handleChange = (selection) => {
+    const { lang } = this.props.Stores.Locale
+    const { options } = this.state
+    const { setAccessType } = this.props.Stores.Qvain
+    onChange(options, lang, setAccessType, AccessTypeConstructor)(selection)
+    if (selection.value !== 'http://uri.suomi.fi/codelist/fairdata/access_type/code/open') {
       this.setState({ accessTypeRestricted: true })
-    } else if (accessType.value === 'http://uri.suomi.fi/codelist/fairdata/access_type/code/open') {
+    } else if (selection.value === 'http://uri.suomi.fi/codelist/fairdata/access_type/code/open') {
       this.setState({ accessTypeRestricted: false })
     }
     this.setState({ accessTypeValidationError: null })
