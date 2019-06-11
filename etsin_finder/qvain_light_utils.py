@@ -3,6 +3,15 @@ access_type["EMBARGO"] = "http://uri.suomi.fi/codelist/fairdata/access_type/code
 access_type["OPEN"] = "http://uri.suomi.fi/codelist/fairdata/access_type/code/open"
 
 def clean_empty_keyvalues_from_dict(d):
+    """
+    Cleans all key value pairs from the object that have empty values, like [], {} and ''.
+
+    Arguments:
+        d {object} -- The object to be sent to metax. (might have empty values)
+
+    Returns:
+        object  -- Object without the empty values.
+    """
     if not isinstance(d, (dict, list)):
         return d
     if isinstance(d, list):
@@ -10,6 +19,16 @@ def clean_empty_keyvalues_from_dict(d):
     return {k: v for k, v in ((k, clean_empty_keyvalues_from_dict(v)) for k, v in d.items()) if v}
 
 def alter_role_data(participant_list, role):
+    """
+    Converts the role data fom the frontend to comply with the Metax schema.
+
+    Arguments:
+        participant_list {list} -- A list of all the participants from the frontend.
+        role {string} -- The role, can be 'creator', 'publisher' or 'curator'.
+
+    Returns:
+        list -- List of the participants with the role in question complyant to Metax schema.
+    """
     participants = []
     participant_list_with_role = [x for x in participant_list if role in x["role"] ]
     for participant_object in participant_list_with_role:
@@ -38,6 +57,15 @@ def alter_role_data(participant_list, role):
     return participants
 
 def other_identifiers_to_metax(identifiers_list):
+    """
+    Convert other identifiers to comply with Metax schema.
+
+    Arguments:
+        identifiers_list {list} -- List of other identifiers from frontend.
+
+    Returns:
+        list -- List of other identifiers that comply to Metax schema.
+    """
     other_identifiers = []
     for identifier in identifiers_list:
         id_dict = {}
@@ -46,6 +74,15 @@ def other_identifiers_to_metax(identifiers_list):
     return other_identifiers
 
 def access_rights_to_metax(data):
+    """
+    Cherry pick access right data from the frontend form data and make it comply with Metax schema.
+
+    Arguments:
+        data {object} -- The whole object sent from the frontend.
+
+    Returns:
+        object -- Object containing access right object that comply to Metax schema.
+    """
     access_rights = {}
     access_rights["access_type"] = {}
     access_rights["access_type"]["identifier"] = data["accessType"]
@@ -57,6 +94,29 @@ def access_rights_to_metax(data):
     if data["accessType"] == access_type["EMBARGO"]:
         access_rights["available"] = data["embargoDate"]
     return access_rights
+
+def files_data_to_metax(files):
+    metax_files = []
+    metax_file_object = {}
+    for file in files:
+        metax_file_object["identifier"] = file["identifier"]
+        metax_file_object["title"] = file["title"]
+        metax_file_object["description"] = file["description"]
+        metax_file_object["file_type"] = file["fileType"] if "fileType" in file else ""
+        metax_file_object["use_category"] = file["useCategory"]
+        metax_files.append(metax_file_object)
+    return metax_files
+
+def directorys_data_to_metax(files):
+    metax_directorys = []
+    metax_directory_object = {}
+    for file in files:
+        metax_directory_object["identifier"] = file["identifier"]
+        metax_directory_object["title"] = file["title"]
+        metax_directory_object["description"] = file["description"] if "description" in file else ""
+        metax_directory_object["use_category"] = file["useCategory"]
+        metax_directorys.append(metax_directory_object)
+    return metax_directorys
 
 def data_to_metax(data, metadata_provider_org, metadata_provider_user, data_catalog):
     dataset_data = {
@@ -74,7 +134,10 @@ def data_to_metax(data, metadata_provider_org, metadata_provider_user, data_cata
                 "identifier": data["fieldOfScience"]
             }],
             "keyword": data["keywords"],
-            "access_rights": access_rights_to_metax(data)
+            "access_rights": access_rights_to_metax(data),
+            "remote_resources": data["remote_resources"] if data_catalog == "urn:nbn:fi:att:data-catalog-att" else "",
+            "files": files_data_to_metax(data["files"]) if data_catalog == "urn:nbn:fi:att:data-catalog-ida" else "",
+            "directorys": directorys_data_to_metax(data["directorys"]) if data_catalog == "urn:nbn:fi:att:data-catalog-ida" else ""
         }
     }
     return clean_empty_keyvalues_from_dict(dataset_data)

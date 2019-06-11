@@ -40,6 +40,10 @@ class Qvain extends Component {
       restrictionGrounds: values.restrictionGrounds ? values.restrictionGrounds.value : undefined,
       embargoDate: values.embargoExpDate,
       license: values.license ? values.license.url : undefined,
+      remote_resources:
+        values._externalResources.length > 0 ? values._externalResources : undefined,
+      files: values._selectedFiles,
+      directorys: values._selectedDirectories,
     }
     console.log(JSON.stringify(obj, null, 4))
     qvainFormSchema
