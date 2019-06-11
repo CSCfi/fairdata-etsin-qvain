@@ -39,13 +39,13 @@ class FileForm extends Component {
 
   componentDidMount = () => {
     getLocalizedOptions('file_type').then(translations => {
-      this.setState({
+      this.setState((state, props) => ({
         fileTypesEn: translations.en,
         fileTypesFi: translations.fi,
-        fileType: translations.en.find(opt =>
+        fileType: translations[props.Stores.Locale.lang].find(opt =>
           opt.value === this.props.Stores.Qvain.inEdit.fileType
         )
-      })
+      }))
     })
     getLocalizedOptions('use_category').then(translations => {
       this.setState({
@@ -89,16 +89,16 @@ class FileForm extends Component {
       fileType
     }
     fileSchema.validate(validationObj).then(() => {
+      this.setState({
+        fileError: undefined,
+        useCategoryError: undefined
+      })
       const file = this.props.Stores.Qvain.inEdit
       file.title = title
       file.description = description
       file.useCategory = useCategory.value
       file.fileType = fileType ? fileType.value : undefined
       this.props.Stores.Qvain.setInEdit(undefined) // close form after saving
-      this.setState({
-        fileError: undefined,
-        useCategoryError: undefined
-      })
     }).catch(err => {
       this.setState({
         fileError: err.errors
