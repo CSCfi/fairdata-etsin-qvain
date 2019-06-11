@@ -205,11 +205,9 @@ class FileForm extends Component {
 const getUseCategory = (fi, en, stores) => {
   let uc
   if (stores.Locale.lang === 'en') {
-    uc = en.find(opt => opt.value === stores.Qvain.inEdit.useCategory) ||
-      en.find(opt => opt.value === 'use_category_outcome')
+    uc = en.find(opt => opt.value === stores.Qvain.inEdit.useCategory)
   } else {
-    uc = fi.find(opt => opt.value === stores.Qvain.inEdit.useCategory) ||
-      fi.find(opt => opt.value === 'use_category_outcome')
+    uc = fi.find(opt => opt.value === stores.Qvain.inEdit.useCategory)
   }
   return uc
 }

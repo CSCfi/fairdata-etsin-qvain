@@ -1,7 +1,7 @@
 import { observable, action, computed } from 'mobx'
 import axios from 'axios'
 import { getDirectories, getFiles } from '../../components/qvain/utils/fileHierarchy'
-import { AccessTypeURLs, LicenseUrls, FileAPIURLs } from '../../components/qvain/utils/constants'
+import { AccessTypeURLs, LicenseUrls, FileAPIURLs, UseCategoryURLs } from '../../components/qvain/utils/constants'
 
 class Qvain {
   @observable original = undefined // used if editing, otherwise undefined
@@ -499,7 +499,7 @@ export const Directory = (dir, parent, selected, open) => ({
   open,
   directoryName: dir.directory_name,
   directories: dir.directories ? dir.directories.map(d => Directory(d, dir, false, false)) : [],
-  useCategory: dir.use_category,
+  useCategory: dir.use_category || UseCategoryURLs.OUTCOME_MATERIAL,
   fileType: dir.file_type,
   files: dir.files ? dir.files.map(f => File(f, dir, false)) : []
 })
@@ -508,7 +508,7 @@ const File = (file, parent, selected) => ({
   ...Hierarchy(file, parent, selected),
   fileName: file.file_name,
   filePath: file.file_path,
-  useCategory: file.file_characteristics.use_category,
+  useCategory: file.file_characteristics.use_category || UseCategoryURLs.OUTCOME_MATERIAL,
   fileType: file.file_characteristics.file_type,
   description: file.file_characteristics.description,
   title: file.file_characteristics.title

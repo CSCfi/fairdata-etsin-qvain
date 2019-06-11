@@ -30,14 +30,14 @@ export class DirectoryFormBase extends Component {
   }
 
   componentDidMount = () => {
-    const { fileCharacteristics } = this.props.Stores.Qvain.inEdit
+    const { inEdit } = this.props.Stores.Qvain
     getLocalizedOptions('file_type').then(translations => {
       this.setState((state, props) => ({
         fileTypesEn: translations.en,
         fileTypesFi: translations.fi,
         fileType: props.Stores.Locale.lang === 'en' ?
-          getFileType(fileCharacteristics, translations.en) :
-          getFileType(fileCharacteristics, translations.fi)
+          getFileType(inEdit, translations.en) :
+          getFileType(inEdit, translations.fi)
       }))
     })
     getLocalizedOptions('use_category').then(translations => {
@@ -45,8 +45,8 @@ export class DirectoryFormBase extends Component {
         useCategoriesEn: translations.en,
         useCategoriesFi: translations.fi,
         useCategory: props.Stores.Locale.lang === 'en' ?
-          getUseCategory(fileCharacteristics, translations.en) :
-          getUseCategory(fileCharacteristics, translations.fi)
+          getUseCategory(inEdit, translations.en) :
+          getUseCategory(inEdit, translations.fi)
       }))
     })
   }
@@ -147,19 +147,9 @@ export class DirectoryFormBase extends Component {
   }
 }
 
-const getUseCategory = (fileCharacteristics, translations) => {
-  if (fileCharacteristics !== undefined && fileCharacteristics.useCategory !== undefined) {
-    return translations.find(t => t.value === fileCharacteristics.useCategory)
-  }
-  return translations.find(t => t.value === 'use_category_outcome')
-}
+const getUseCategory = (directory, translations) => translations.find(opt => opt.value === directory.useCategory)
 
-const getFileType = (fileCharacteristics, translations) => {
-  if (fileCharacteristics !== undefined && fileCharacteristics.fileType !== undefined) {
-    return translations.find(t => t.value === fileCharacteristics.fileType)
-  }
-  return undefined
-}
+const getFileType = (directory, translations) => translations.find(opt => opt.value === directory.fileType)
 
 const FileContainer = styled(Container)`
   padding: 35px 24px;
