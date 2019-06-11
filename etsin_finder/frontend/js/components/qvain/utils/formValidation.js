@@ -126,15 +126,13 @@ const participantIdentifierSchema = yup
   .nullable()
 
 const participantOrganizationSchema = yup.object().shape({
-  participant: yup.object().shape({
-    type: yup
-      .mixed()
-      .oneOf(['person', 'organization'], translate('qvain.validationMessages.participants.type.oneOf'))
-      .required(translate('qvain.validationMessages.participants.type.required'))
-  }),
+  type: yup
+    .mixed()
+    .oneOf(['person', 'organization'], translate('qvain.validationMessages.participants.type.oneOf'))
+    .required(translate('qvain.validationMessages.participants.type.required')),
   organization: yup
     .mixed()
-    .when('participant.type', {
+    .when('type', {
       is: 'person',
       then:
         yup.object(translate('qvain.validationMessages.participants.organization.object')).shape({
@@ -151,18 +149,51 @@ const participantOrganizationSchema = yup.object().shape({
       })
 })
 
+const externalResourceUrlSchema = yup
+  .string()
+  .url(translate('qvain.validationMessages.externalResources.url.url'))
+  .required(translate('qvain.validationMessages.externalResources.url.required'))
+
+const externalResourceSchema = yup.object().shape({
+  id: yup.number().nullable(),
+  title: yup.string().nullable(),
+  url: externalResourceUrlSchema
+})
+
+const participantSchema = yup
+  .object().shape({
+    type: participantType,
+    role: participantRolesSchema,
+    name: participantNameSchema,
+    email: participantEmailSchema,
+    identifier: participantIdentifierSchema,
+    organization: yup
+      .mixed()
+      .when('type', {
+        is: 'person',
+        then:
+          yup
+            .string(translate('qvain.validationMessages.participants.organization.string'))
+            .required(translate('qvain.validationMessages.participants.organization.required')),
+        otherwise:
+          yup
+            .string(translate('qvain.validationMessages.participants.organization.string'))
+            .nullable()
+        })
+  })
+
 const participantsSchema = yup
   .array().of(
     yup
       .object().shape({
         type: participantType,
-        roles: participantRolesSchema,
+        role: participantRolesSchema,
         name: participantNameSchema,
         email: participantEmailSchema,
         identifier: participantIdentifierSchema,
         organization: yup
           .mixed()
-          .when('participant.type', {
+          .when('type', {
             is: 'person',
             then:
               yup
@@ -206,10 +237,13 @@ export {
   embargoExpDateSchema,
   restrictionGroundsSchema,
   participantsSchema,
+  participantSchema,
   participantType,
   participantNameSchema,
   participantRolesSchema,
   participantEmailSchema,
   participantIdentifierSchema,
-  participantOrganizationSchema
+  participantOrganizationSchema,
+  externalResourceSchema,
+  externalResourceUrlSchema
 };

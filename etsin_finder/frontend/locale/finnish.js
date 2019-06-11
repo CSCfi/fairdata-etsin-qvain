@@ -463,6 +463,12 @@ const finnish = {
           url: 'Lisenssi URL pitää olla oikeanlainen URL',
           required: 'Lisenssi URL on pakollinen'
         }
+      },
+      externalResources: {
+        url: {
+          required: 'Ulkoisen aineiston URL osoite on pakollinen',
+          url: 'Ulkoisen aineiston URL osoitteen pitää olla oikeassa URL formaatissa'
+        }
       }
     },
     files: {
@@ -501,9 +507,29 @@ const finnish = {
         }
       },
       external: {
-        help: 'Lisää linkki ulkoisiin tiedostoihin tässä:',
+        help: 'Lisää linkkejä ulkoisiin tiedostoihin:',
         button: {
-          label: 'Lisää linkki ulkoisiin tiedostoihin'
+          label: 'Lisää linkki ulkoiseen tiedostoon'
+        },
+        addedResources: {
+          title: 'Lisätyt ulkoiset aineistot',
+          none: 'Aineistoja ei ole lisätty'
+        },
+        form: {
+          title: {
+            label: 'Otsikko',
+            placeholder: 'Aineisto'
+          },
+          url: {
+            label: 'URL',
+            placeholder: 'https://'
+          },
+          save: {
+            label: 'Tallenna'
+          },
+          add: {
+            label: 'Lisää'
+          }
         }
       }
     }

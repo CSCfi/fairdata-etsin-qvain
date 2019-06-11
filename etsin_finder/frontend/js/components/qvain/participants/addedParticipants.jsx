@@ -16,7 +16,7 @@ import {
 } from '../general/buttons'
 import { EntityType, EmptyParticipant } from '../../../stores/view/qvain'
 
-class AddedParticipants extends Component {
+export class AddedParticipantsBase extends Component {
   static propTypes = {
     Stores: PropTypes.object.isRequired
   }
@@ -57,4 +57,4 @@ class AddedParticipants extends Component {
   }
 }
 
-export default inject('Stores')(observer(AddedParticipants));
+export default inject('Stores')(observer(AddedParticipantsBase));

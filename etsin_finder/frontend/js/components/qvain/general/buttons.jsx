@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faPen,
@@ -105,12 +105,16 @@ export const DeleteButton = (props) => (
 )
 
 export const FilePickerButton = styled.button`
-  background-color: #007fad;
+  background-color: ${props => (
+    props.disabled ? '#7fbfd6' : '#007fad'
+  )};
   color: #fff;
   width: 100%;
   height: 47px;
   border-radius: 31.5px;
-  border: solid 1px #007fad;
+  border: solid 1px ${props => (
+    props.disabled ? '#7fbfd6' : '#007fad'
+  )};
   text-transform: none;
   font-weight: 600;
   padding-left: 27px;
@@ -125,11 +129,15 @@ export const FilePickerButton = styled.button`
   -webkit-appearance: none;
   overflow: hidden;
   vertical-align: middle;
-  cursor: pointer;
+  ${props => !props.disabled && css`
+    cursor: pointer;
+  `}
 `;
 
 export const FilePickerButtonInverse = styled(FilePickerButton)`
-  color: #007fad;
+  color: ${props => (
+    props.disabled ? '#7fbfd6' : '#007fad'
+  )};
   background-color: #fff;
 `;
 

@@ -20,15 +20,22 @@ export class IDAFilePickerBase extends Component {
 
   handleToggleForm = (event) => {
     event.preventDefault()
-    this.props.Stores.Qvain.idaPickerOpen = !this.props.Stores.Qvain.idaPickerOpen
+    const { idaPickerOpen } = this.props.Stores.Qvain
+    if (idaPickerOpen) {
+      this.props.Stores.Qvain.idaPickerOpen = false
+    } else {
+      this.props.Stores.Qvain.idaPickerOpen = true
+      this.props.Stores.Qvain.extResFormOpen = false
+    }
   }
 
   render() {
-    const { idaPickerOpen } = this.props.Stores.Qvain
+    const { idaPickerOpen, externalResources } = this.props.Stores.Qvain
+    const hasExternalResources = externalResources.length > 0
     return (
       <Fragment>
         <Translate component="p" content="qvain.files.ida.help" />
-        <FilePickerButton onClick={this.handleToggleForm}>
+        <FilePickerButton disabled={hasExternalResources} onClick={this.handleToggleForm}>
           <FileIcon />
           <Translate component={FilePickerButtonText} content="qvain.files.ida.button.label" />
           {idaPickerOpen ? <ChevronDown /> : <ChevronRight />}

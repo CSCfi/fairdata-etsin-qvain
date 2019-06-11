@@ -30,10 +30,14 @@ export class ProjectSelectorBase extends Component {
 
   render() {
     const options = this.getOptions()
+    // if editing an existing dataset, user cannot link files from another project. - 10.6.2019
+    const { original, selectedFiles, selectedDirectories } = this.props.Stores.Qvain
+    const editing = original !== undefined && [...selectedFiles, ...selectedDirectories].length > 0
     const selected = options.find(opt => opt.value === this.props.Stores.Qvain.selectedProject)
     return (
       <Translate
         options={options}
+        isDisabled={editing}
         component={ProjectSelect}
         value={selected}
         onChange={this.handleOnChange}

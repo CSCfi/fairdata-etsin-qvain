@@ -17,7 +17,7 @@ import {
 } from '../general/list'
 import { EntityType, Role } from '../../../stores/view/qvain'
 
-class ParticipantTypeSelect extends Component {
+export class ParticipantTypeSelectBase extends Component {
   static propTypes = {
     Stores: PropTypes.object.isRequired
   }
@@ -37,7 +37,7 @@ class ParticipantTypeSelect extends Component {
 
   checkIfParticipantRoleExists = (role) => {
     const participant = this.props.Stores.Qvain.participantInEdit
-    if (this.props.Stores.Qvain.addedParticipants.map(p => p.identifier).includes(participant.uiId)) {
+    if (this.props.Stores.Qvain.addedParticipants.map(p => p.uiId).includes(participant.uiId)) {
       // we are editing a previously added participant, allow chaning roles
       return false
     }
@@ -220,4 +220,4 @@ const Fieldset = styled.fieldset`
   border: none;
 `
 
-export default inject('Stores')(observer(ParticipantTypeSelect));
+export default inject('Stores')(observer(ParticipantTypeSelectBase));

@@ -2,11 +2,13 @@ import React from 'react';
 import { shallow, mount } from 'enzyme'
 
 import Qvain from '../js/components/qvain'
-import Participants, {
-  ParticipantSelection,
-  EntityType,
-  Role
+import {
+  ParticipantsBase
 } from '../js/components/qvain/participants'
+import { ParticipantTypeSelectBase } from '../js/components/qvain/participants/participantTypeSelect'
+import { SelectedParticipantBase, ParticipantSelection } from '../js/components/qvain/participants/participantSelection'
+import { ParticipantInfoBase } from '../js/components/qvain/participants/participantInfo'
+import { AddedParticipantsBase } from '../js/components/qvain/participants/addedParticipants'
 import Files from '../js/components/qvain/files'
 import IDAFilePicker, { IDAFilePickerBase } from '../js/components/qvain/files/idaFilePicker'
 import FileSelector, { FileSelectorBase } from '../js/components/qvain/files/fileSelector'
@@ -30,7 +32,13 @@ import {
   ListItem
 } from '../js/components/qvain/general/list'
 import { SlidingContent } from '../js/components/qvain/general/card'
-import QvainStore, { Directory } from '../js/stores/view/qvain'
+import { SectionTitle } from '../js/components/qvain/general/section'
+import QvainStore, {
+  Directory,
+  EntityType,
+  Role,
+  Participant
+} from '../js/stores/view/qvain'
 import LocaleStore from '../js/stores/view/language'
 
 describe('Qvain', () => {
@@ -41,8 +49,6 @@ describe('Qvain', () => {
   })
 })
 
-const setup = (renderFunc) => renderFunc(<Participants Stores={{Qvain: QvainStore}} />)
-
 const getStores = () => ({
   Qvain: QvainStore,
   Locale: LocaleStore
@@ -50,47 +56,60 @@ const getStores = () => ({
 
 describe('Qvain.Participants', () => {
   it('should render correctly', () => {
-    const component = setup(shallow)
-
+    const component = shallow(<ParticipantsBase Stores={getStores()} />)
     expect(component).toMatchSnapshot()
   })
 
-  it('should render person participant form by default', () => {
-    const component = mount(<Participants Stores={getStores()} />)
-    // test if active selection field displays 'Person'
+  it('should render person selection by default', () => {
+    const component = mount(<SelectedParticipantBase Stores={getStores()} />)
     expect(component.find(ParticipantSelection).html().includes('Person')).toBe(true)
-    // test if name field is rendered
-    expect(component.find('#nameField').length).not.toBe(0)
+    component.unmount()
+    const form = mount(<ParticipantTypeSelectBase Stores={getStores()} />)
+    expect(form.find('#entityPerson input').props().checked).toBe(true)
   })
 
   // By default person should be selected. Upon clicking the Organization radio button
   // the checkboxes should be reset and active selection field should display
   // 'Organization'
   it('should change selected participant entity', () => {
-    const component = mount(<Participants Stores={getStores()} />)
-    expect(component.find(ParticipantSelection).html().includes('Person')).toBe(true)
-    component.find('#personCreator').first().simulate('change', { target: { checked: true, value: Role.CREATOR } })
-    const isPersonCreator = component.find(ParticipantSelection).html().includes('Creator')
-    expect(isPersonCreator).toBe(true)
-    component.find('#entityOrg').first().simulate('change')
-    expect(component.find(ParticipantSelection).html().includes('Organization')).toBe(true)
-    expect(component.find(ParticipantSelection).html().includes('Creator')).toBe(false)
+    const stores = getStores()
+    const entityRoleForm = mount(<ParticipantTypeSelectBase Stores={stores} />)
+    entityRoleForm.find('#personCreator').first().simulate('change', {
+      target: {
+        checked: true
+      }
+    })
+    entityRoleForm.unmount()
+    const selectedParticipant = mount(<SelectedParticipantBase Stores={stores} />)
+    expect(selectedParticipant.text()).toBe('Person / Creator')
+    selectedParticipant.unmount()
+    entityRoleForm.mount()
+    entityRoleForm.find('#entityOrg input').simulate('change')
+    entityRoleForm.find('#orgPublisher input').simulate('change', {
+      target: {
+        checked: true
+      }
+    })
+    // expect(entityRoleForm.find('#entityOrg input').checked).toBe(true)
+    entityRoleForm.unmount()
+    selectedParticipant.mount()
+    expect(selectedParticipant.text()).toBe('Organization / Publisher')
   })
 
   // Added participants should be listed if there are any
   it('should list all added participants', () => {
-    const store = getStores()
-    const component = mount(<Participants Stores={store} />)
-    expect(component.find(ButtonGroup).length).toBe(0)
-    store.Qvain.addParticipant({
-      entityType: EntityType.ORGANIZATION,
-      roles: [Role.PUBLISHER],
-      name: 'University of Helsinki',
-      email: 'test@test.fi',
-      identifier: 'uoh'
-    })
-    component.update()
-    expect(component.find(ButtonGroup).length).toBe(1)
+    const stores = getStores()
+    const addedParticipants = mount(<AddedParticipantsBase Stores={stores} />)
+    expect(addedParticipants.find(ButtonGroup).length).toBe(0)
+    stores.Qvain.addParticipant(Participant(
+      EntityType.ORGANIZATION,
+      [Role.PUBLISHER],
+      'University of Helsinki',
+      'test@test.fi',
+      'uohIdentifier'
+    ))
+    addedParticipants.update()
+    expect(addedParticipants.find(ButtonGroup).length).toBe(1)
   })
 })
 
@@ -148,8 +167,9 @@ describe('Qvain.Files', () => {
   it('allows modifying the metadata of selected directories', () => {
     // repeat previous one
     const stores = getStores()
+    // reset selected directories
+    stores.Qvain._selectedDirectories = []
     const fileSelector = mount(<FileSelectorBase Stores={stores} />)
-    // mount the selected files component
 
     stores.Qvain._selectedProject = 'project_y'
     stores.Qvain._hierarchy = Directory(
@@ -175,11 +195,12 @@ describe('Qvain.Files', () => {
       true
     )
     fileSelector.update()
-    fileSelector.find('li').find('input').simulate('change')
+    fileSelector.find('#test2Checkbox input').simulate('change')
     fileSelector.unmount()
+    // mount the SelectedFiles component
     const selectedFiles = mount(<SelectedFilesBase Stores={stores} />)
-    expect(selectedFiles.find(ButtonLabel).text()).toBe('project_y / directory2')
-    selectedFiles.find(DeleteButton).simulate('click', { preventDefault: () => {} })
+    expect(selectedFiles.find(ButtonLabel).last().text()).toBe('project_y / directory2')
+    selectedFiles.find(DeleteButton).last().simulate('click', { preventDefault: () => {} })
     expect(selectedFiles.find(ButtonLabel).length).toBe(0)
   })
 })
@@ -190,18 +211,27 @@ describe('Qvain.ExternalFiles', () => {
     expect(extFiles.find(SlidingContent).length).toBe(1)
   })
 
-  it('should add resources', () => {
-    const extFiles = mount(<ExternalFilesBase Stores={getStores()} />)
-    const inputs = extFiles.find(ResourceInput)
-    inputs.forEach((input, index) => {
-      input.simulate('change', {
-        target: {
-          value: `test-${index + 1}`
-        }
-      })
+  it('should add resources', async () => {
+    const stores = getStores()
+    const extFiles = mount(<ExternalFilesBase Stores={stores} />)
+    const title = 'Test title'
+    extFiles.find('#titleInput').first().simulate('change', {
+      target: {
+        value: title
+      }
     })
-    extFiles.find(ResourceSave).simulate('click')
+    const url = 'https://en.wikipedia.org'
+    extFiles.find('#urlInput').first().simulate('change', {
+      target: {
+        value: url
+      }
+    })
+    // extFiles.find(ResourceSave).simulate('click')
+    await extFiles.instance().handleAddResource({
+      preventDefault: () => console.log('handleAddResource preventDefault')
+    })
+    extFiles.update()
     expect(extFiles.find(ResourceItem).length).toBe(1)
-    expect(extFiles.find(ButtonLabel).text()).toBe('test-1 / test-2')
+    expect(extFiles.find(ButtonLabel).text()).toBe(`${title} / ${url}`)
   })
 })
