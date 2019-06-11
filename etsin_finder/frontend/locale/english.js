@@ -460,6 +460,22 @@ const english = {
           required: 'License URL is a required value'
         }
       },
+      files: {
+        file: {
+          title: {
+            required: 'File title is required'
+          },
+          description: {
+            required: 'File description is required'
+          },
+          useCategory: {
+            required: 'File use category is required'
+          }
+        },
+        directory: {
+          required: 'Directory use category is required'
+        }
+      },
       externalResources: {
         url: {
           required: 'External resource URL is required',
@@ -480,6 +496,7 @@ const english = {
       },
       selected: {
         title: 'Selected files',
+        none: 'No files or directories selected',
         form: {
           title: {
             label: 'Title',

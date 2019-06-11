@@ -9,7 +9,9 @@ import {
 } from '../general/buttons'
 import { Label, CustomSelect } from '../general/form'
 import { Container } from '../general/card'
+import ValidationError from '../general/validationError'
 import { getLocalizedOptions } from '../utils/getReferenceData';
+import { directorySchema, directoryUseCategorySchema } from '../utils/formValidation'
 
 export class DirectoryFormBase extends Component {
   static propTypes = {
@@ -22,7 +24,9 @@ export class DirectoryFormBase extends Component {
     useCategoriesEn: [],
     useCategoriesFi: [],
     useCategory: undefined,
-    fileType: undefined
+    fileType: undefined,
+    directoryError: undefined,
+    useCategoryError: undefined
   }
 
   componentDidMount = () => {
@@ -54,7 +58,8 @@ export class DirectoryFormBase extends Component {
 
   handleChangeUse = (selectedOption) => {
     this.setState({
-      useCategory: selectedOption
+      useCategory: selectedOption,
+      useCategoryError: undefined
     })
   }
 
@@ -66,12 +71,41 @@ export class DirectoryFormBase extends Component {
 
   handleSave = (event) => {
     event.preventDefault()
-    const { inEdit, setDirFileSettings } = this.props.Stores.Qvain
-    setDirFileSettings(inEdit, this.state.useCategory.value, this.state.fileType ? this.state.fileType.value : undefined)
-    this.props.Stores.Qvain.setInEdit(undefined) // close form after saving
+    const validationObj = {
+      useCategory: this.state.useCategory ? this.state.useCategory.value : undefined,
+      fileType: this.state.fileType ? this.state.fileType.value : undefined
+    }
+    directorySchema.validate(validationObj).then(() => {
+      this.setState({
+        directoryError: undefined,
+        useCategoryError: undefined
+      })
+      const { inEdit, setDirFileSettings } = this.props.Stores.Qvain
+      setDirFileSettings(inEdit, this.state.useCategory.value, this.state.fileType ? this.state.fileType.value : undefined)
+      this.props.Stores.Qvain.setInEdit(undefined) // close form after saving
+    }).catch(err => {
+      this.setState({
+        directoryError: err.errors
+      })
+    })
+  }
+
+  handleOnUseCategoryBlur = () => {
+    const { useCategory } = this.state
+    directoryUseCategorySchema.validate(useCategory).then(() => {
+      this.setState({
+        useCategoryError: undefined,
+        directoryError: undefined
+      })
+    }).catch(err => {
+      this.setState({
+        useCategoryError: err.errors
+      })
+    })
   }
 
   render() {
+    const { directoryError, useCategoryError } = this.state
     return (
       <Fragment>
         <FileContainer>
@@ -85,8 +119,10 @@ export class DirectoryFormBase extends Component {
               : this.state.useCategoriesFi
             }
             onChange={this.handleChangeUse}
+            onBlur={this.handleOnUseCategoryBlur}
             attributes={{ placeholder: 'qvain.files.selected.form.use.placeholder' }}
           />
+          {useCategoryError !== undefined && <ValidationError>{useCategoryError}</ValidationError>}
           <Translate
             component={Label}
             content="qvain.files.selected.form.fileType.label"
@@ -102,6 +138,7 @@ export class DirectoryFormBase extends Component {
             }
             attributes={{ placeholder: 'qvain.files.selected.form.fileType.placeholder' }}
           />
+          {directoryError !== undefined && <ValidationError>{directoryError}</ValidationError>}
           <Translate component={CancelButton} onClick={this.handleCancel} content="qvain.common.cancel" />
           <Translate component={SaveButton} onClick={this.handleSave} content="qvain.common.save" />
         </FileContainer>
