@@ -30,11 +30,12 @@ export class IDAFilePickerBase extends Component {
   }
 
   render() {
-    const { idaPickerOpen } = this.props.Stores.Qvain
+    const { idaPickerOpen, externalResources } = this.props.Stores.Qvain
+    const hasExternalResources = externalResources.length > 0
     return (
       <Fragment>
         <Translate component="p" content="qvain.files.ida.help" />
-        <FilePickerButton onClick={this.handleToggleForm}>
+        <FilePickerButton disabled={hasExternalResources} onClick={this.handleToggleForm}>
           <FileIcon />
           <Translate component={FilePickerButtonText} content="qvain.files.ida.button.label" />
           {idaPickerOpen ? <ChevronDown /> : <ChevronRight />}

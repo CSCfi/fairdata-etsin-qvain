@@ -17,6 +17,8 @@ import {
 } from '../general/buttons'
 import { Input, SelectedFilesTitle, Label } from '../general/form'
 import { FileContainer, SlidingContent } from '../general/card'
+import { externalResourceSchema, externalResourceUrlSchema } from '../utils/formValidation'
+import ValidationError from '../general/validationError'
 
 export class ExternalFilesBase extends Component {
   static propTypes = {
@@ -26,7 +28,9 @@ export class ExternalFilesBase extends Component {
   state = {
     title: '',
     url: '',
-    inEdit: undefined
+    inEdit: undefined,
+    resourceError: undefined,
+    urlError: undefined
   }
 
   handleToggleForm = (event) => {
@@ -42,14 +46,28 @@ export class ExternalFilesBase extends Component {
 
   handleAddResource = (event) => {
     event.preventDefault()
-    this.props.Stores.Qvain.saveExternalResource({
+    const externalResource = {
       id: undefined,
       title: this.state.title,
       url: this.state.url
-    })
-    this.setState({
-      title: '',
-      url: ''
+    }
+    return externalResourceSchema.validate(externalResource).then(() => {
+      console.log('success')
+      this.props.Stores.Qvain.saveExternalResource(externalResource)
+      this.setState({
+        title: '',
+        url: '',
+        urlError: undefined,
+        resourceError: undefined
+      })
+      // close IDA picker if it is open since after adding resources user
+      // shouldn't be able to add IDA files or directories
+      if (this.props.Stores.Qvain.idaPickerOpen) {
+        this.props.Stores.Qvain.idaPickerOpen = false
+      }
+    }).catch(err => {
+      console.log('there were errors')
+      this.setState({ resourceError: err.errors })
     })
   }
 
@@ -69,6 +87,14 @@ export class ExternalFilesBase extends Component {
     this.setState({ inEdit: undefined })
   }
 
+  handleOnUrlBlur = () => {
+    externalResourceUrlSchema.validate(this.state.url).then(() => {
+      this.setState({ urlError: undefined, resourceError: undefined })
+    }).catch(err => {
+      this.setState({ urlError: err.errors })
+    })
+  }
+
   editForm = (resource) => (
     <Fragment>
       <Translate
@@ -78,6 +104,7 @@ export class ExternalFilesBase extends Component {
       <Translate
         component={ResourceInput}
         type="text"
+        id="titleInput"
         value={resource ? resource.title : this.state.title}
         onChange={(event) => {
           if (resource !== undefined) {
@@ -97,6 +124,7 @@ export class ExternalFilesBase extends Component {
       <Translate
         component={ResourceInput}
         type="text"
+        id="urlInput"
         value={resource ? resource.url : this.state.url}
         onChange={(event) => {
           if (resource !== undefined) {
@@ -107,8 +135,11 @@ export class ExternalFilesBase extends Component {
             })
           }
         }}
+        onBlur={this.handleOnUrlBlur}
         attributes={{ placeholder: 'qvain.files.external.form.url.placeholder' }}
       />
+      {this.state.urlError !== undefined && <ValidationError>{this.state.urlError}</ValidationError>}
+      {this.state.resourceError !== undefined && <ValidationError>{this.state.resourceError}</ValidationError>}
       <Translate
         component={ResourceSave}
         onClick={resource ? this.handleCloseEdit : this.handleAddResource}
@@ -121,11 +152,12 @@ export class ExternalFilesBase extends Component {
 
   render() {
     const { inEdit } = this.state
-    const { externalResources, extResFormOpen } = this.props.Stores.Qvain
+    const { externalResources, extResFormOpen, selectedFiles, selectedDirectories } = this.props.Stores.Qvain
+    const hasIDAItems = [...selectedFiles, ...selectedDirectories].length > 0
     return (
       <Fragment>
         <Translate component="p" content="qvain.files.external.help" />
-        <FilePickerButtonInverse onClick={this.handleToggleForm}>
+        <FilePickerButtonInverse disabled={hasIDAItems} onClick={this.handleToggleForm}>
           <LinkIcon />
           <Translate component={FilePickerButtonText} content="qvain.files.external.button.label" />
           {extResFormOpen ? <ChevronDown /> : <ChevronRight />}
@@ -154,7 +186,7 @@ export class ExternalFilesBase extends Component {
   }
 }
 
-const isInEdit = (inEdit, resource) => (inEdit !== undefined) && inEdit.url === resource.url
+const isInEdit = (inEdit, resource) => (inEdit !== undefined) && inEdit.id === resource.id
 
 export const ResourceInput = styled(Input)`
   width: 100%;
