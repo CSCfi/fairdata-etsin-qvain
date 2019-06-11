@@ -36,7 +36,7 @@ export class SelectedFilesBase extends Component {
     return (
       <Fragment>
         <Translate component={SelectedFilesTitle} content="qvain.files.selected.title" />
-        {selected.length === 0 && <p>No files or directories selected</p>}
+        {selected.length === 0 && <Translate component="p" content="qvain.files.selected.none" />}
         {selected.map(s => (
           <Fragment key={`${s.id}-${s.identifier}`}>
             <FileItem active={isInEdit(inEdit, s.identifier)}>
