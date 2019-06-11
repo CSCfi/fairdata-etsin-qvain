@@ -498,7 +498,8 @@ const finnish = {
         }
       },
       projectSelect: {
-        placeholder: 'Valitse projekti'
+        placeholder: 'Valitse projekti',
+        loadError: 'Projektin hakemistojen lataus epäonnistui, virhe: '
       },
       selected: {
         title: 'Valitut tiedostot',

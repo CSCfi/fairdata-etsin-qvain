@@ -492,7 +492,8 @@ const english = {
         }
       },
       projectSelect: {
-        placeholder: 'Select project'
+        placeholder: 'Select project',
+        loadError: 'Failed to load project directories, error: '
       },
       selected: {
         title: 'Selected files',

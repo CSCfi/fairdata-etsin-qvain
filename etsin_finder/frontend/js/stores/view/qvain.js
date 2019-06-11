@@ -235,13 +235,11 @@ class Qvain {
         this._hierarchy = Directory(res.data, undefined, false, false)
         return this._hierarchy
       })
-      .catch(e => {
-        console.log('Failed to acquire project root directory, error: ', e)
-      })
   )
 
   @action changeProject = (projectId) => {
     this._selectedProject = projectId
+    this._hierarchy = {}
     return this.getInitialDirectories()
   }
 
