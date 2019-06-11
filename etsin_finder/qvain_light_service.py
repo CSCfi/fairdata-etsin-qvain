@@ -140,10 +140,13 @@ class MetaxQvainLightAPIService(FlaskService):
 
     def create_dataset(self, data):
         """
-        Create a dataset with the datat that the user has entered in Qvain-light.
+        Send the data from the frontend to Metax.
 
-        :param data:
-        :return response:
+        Arguments:
+            data {object} -- Object with the dataset data that has been validated and converted to comply with the Metax schema.
+
+        Returns:
+            [type] -- The response from Metax.
         """
         req_url = self.METAX_CREATE_DATASET
         headers = {'Accept': 'application/json'}
@@ -170,8 +173,12 @@ class MetaxQvainLightAPIService(FlaskService):
         """
         Update a dataset with the datat that the user has entered in Qvain-light.
 
-        :param data, cr_id:
-        :return response:
+        Arguments:
+            data {object} -- Object with the dataset data that has been validated and converted to comply with the Metax schema.
+            cr_id {string} -- The identifier of the dataset.
+
+        Returns:
+            [type] -- The response from Metax.
         """
         req_url = self.METAX_CREATE_DATASET + "/" + cr_id
         headers = {'Accept': 'application/json'}
@@ -225,7 +232,26 @@ def get_datasets_for_user(user_id, limit, offset):
     return _metax_api.get_datasets_for_user(user_id, limit, offset)
 
 def create_dataset(form_data):
+    """
+    Create dataset in Metax.
+
+    Arguments:
+        form_data {object} -- Object with the dataset data that has been validated and converted to comply with the Metax schema.
+
+    Returns:
+        [type] -- Metax response.
+    """
     return _metax_api.create_dataset(form_data)
 
 def update_dataset(form_data, cr_id):
+    """
+    Update dataset in Metax.
+
+    Arguments:
+        form_data {object} -- Object with the dataset data that has been validated and converted to comply with the Metax schema.
+        cr_id {string} -- The identifier of the dataset.
+
+    Returns:
+        [type] -- Metax response.
+    """
     return _metax_api.update_dataset(form_data, cr_id)

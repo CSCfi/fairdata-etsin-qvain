@@ -3,10 +3,22 @@ from marshmallow.validate import Length
 import json
 
 class LangValidationSchema(Schema):
+    """
+    Validation schema for language.
+
+    Arguments:
+        Schema {library} -- Marshmallows Schema library.
+    """
     en = fields.Str()
     fi = fields.Str()
 
 class ParticipantsValidationSchema(Schema):
+    """
+    Validation schema for participants.
+
+    Arguments:
+        Schema {library} -- Marshmallows Schema library.
+    """
     type = fields.Str(
         required=True,
         validate=Length(min=1)
@@ -24,6 +36,12 @@ class ParticipantsValidationSchema(Schema):
     organization = fields.Str()
 
 class DatasetValidationSchema(Schema):
+    """
+    Validation schema for the whole dataset.
+
+    Arguments:
+        Schema {library} -- Marshmallows Schema library.
+    """
     original = fields.Str()
     title = fields.Nested(
         LangValidationSchema,

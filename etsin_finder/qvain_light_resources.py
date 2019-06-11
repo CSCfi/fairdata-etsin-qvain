@@ -155,10 +155,10 @@ class QvainDataset(Resource):
     @log_request
     def post(self):
         """
-        Create new dataset.
+        Create a dataset to Metax with the form data from the frontend.
 
-        :param form_data:
-        :return metax_response:
+        Returns:
+            object -- The response from metax or if error an error message.
         """
         is_authd = authentication.is_authenticated()
         if not is_authd:
@@ -177,7 +177,7 @@ class QvainDataset(Resource):
 
         if all(["remote_resources" in data, "files" not in data, "directorys" not in data]):
             data_catalog = "urn:nbn:fi:att:data-catalog-att"
-        elif all(["remote_resources" not in data, "files" in data, "directorys" in data]):
+        elif all(["remote_resources" not in data, "files" in data or "directorys" in data]):
             data_catalog = "urn:nbn:fi:att:data-catalog-ida"
         else:
             return "Missing fields to specify the data catalog.", 400
@@ -188,7 +188,13 @@ class QvainDataset(Resource):
     @log_request
     def patch(self, cr_id):
         """
-        Update existing dataset metadata.
+        Updete existing detaset.
+
+        Arguments:
+            cr_id {string} -- The identifier of the dataset.
+
+        Returns:
+            object -- The response from metax or if error an error message.
         """
         is_authd = authentication.is_authenticated()
         if not is_authd:
