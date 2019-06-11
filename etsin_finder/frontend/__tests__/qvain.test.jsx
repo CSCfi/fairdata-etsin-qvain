@@ -211,18 +211,27 @@ describe('Qvain.ExternalFiles', () => {
     expect(extFiles.find(SlidingContent).length).toBe(1)
   })
 
-  it('should add resources', () => {
-    const extFiles = mount(<ExternalFilesBase Stores={getStores()} />)
-    const inputs = extFiles.find(ResourceInput)
-    inputs.forEach((input, index) => {
-      input.simulate('change', {
-        target: {
-          value: `test-${index + 1}`
-        }
-      })
+  it('should add resources', async () => {
+    const stores = getStores()
+    const extFiles = mount(<ExternalFilesBase Stores={stores} />)
+    const title = 'Test title'
+    extFiles.find('#titleInput').first().simulate('change', {
+      target: {
+        value: title
+      }
     })
-    extFiles.find(ResourceSave).simulate('click')
+    const url = 'https://en.wikipedia.org'
+    extFiles.find('#urlInput').first().simulate('change', {
+      target: {
+        value: url
+      }
+    })
+    // extFiles.find(ResourceSave).simulate('click')
+    await extFiles.instance().handleAddResource({
+      preventDefault: () => console.log('handleAddResource preventDefault')
+    })
+    extFiles.update()
     expect(extFiles.find(ResourceItem).length).toBe(1)
-    expect(extFiles.find(ButtonLabel).text()).toBe('test-1 / test-2')
+    expect(extFiles.find(ButtonLabel).text()).toBe(`${title} / ${url}`)
   })
 })

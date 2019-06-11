@@ -51,7 +51,7 @@ export class ExternalFilesBase extends Component {
       title: this.state.title,
       url: this.state.url
     }
-    externalResourceSchema.validate(externalResource).then(() => {
+    return externalResourceSchema.validate(externalResource).then(() => {
       console.log('success')
       this.props.Stores.Qvain.saveExternalResource(externalResource)
       this.setState({
@@ -104,6 +104,7 @@ export class ExternalFilesBase extends Component {
       <Translate
         component={ResourceInput}
         type="text"
+        id="titleInput"
         value={resource ? resource.title : this.state.title}
         onChange={(event) => {
           if (resource !== undefined) {
@@ -123,6 +124,7 @@ export class ExternalFilesBase extends Component {
       <Translate
         component={ResourceInput}
         type="text"
+        id="urlInput"
         value={resource ? resource.url : this.state.url}
         onChange={(event) => {
           if (resource !== undefined) {
