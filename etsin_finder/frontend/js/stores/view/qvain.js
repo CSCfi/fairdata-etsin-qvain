@@ -240,6 +240,8 @@ class Qvain {
   @action changeProject = (projectId) => {
     this._selectedProject = projectId
     this._hierarchy = {}
+    this._selectedFiles = []
+    this._selectedDirectories = []
     return this.getInitialDirectories()
   }
 
