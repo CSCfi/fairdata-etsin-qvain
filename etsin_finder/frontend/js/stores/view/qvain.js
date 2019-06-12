@@ -1,4 +1,4 @@
-import { observable, action, computed } from 'mobx'
+import { observable, action, computed, toJS } from 'mobx'
 import axios from 'axios'
 import { getDirectories, getFiles } from '../../components/qvain/utils/fileHierarchy'
 import { AccessTypeURLs, LicenseUrls, FileAPIURLs, UseCategoryURLs } from '../../components/qvain/utils/constants'
@@ -277,11 +277,9 @@ class Qvain {
   }
 
   @action setDirFileSettings = (directory, useCategory, fileType) => {
-    const newHier = { ...this._hierarchy }
-    const theDir = getDirectories(newHier).find(d => d.directoryName === directory.directoryName)
+    const theDir = this._selectedDirectories.find(d => d.directoryName === directory.directoryName)
     theDir.useCategory = useCategory
     theDir.fileType = fileType
-    this._hierarchy = newHier
   }
 
   @action setInEdit = (selectedItem) => {
