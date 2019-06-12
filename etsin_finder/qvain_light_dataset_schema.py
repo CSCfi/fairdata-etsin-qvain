@@ -75,3 +75,6 @@ class DatasetValidationSchema(Schema):
         required=True,
         validate=Length(min=1)
     )
+    files = fields.List(fields.Dict())
+    directorys = fields.List(fields.Dict())
+    remote_resources = fields.List(fields.Dict())
