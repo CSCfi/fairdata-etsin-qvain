@@ -96,6 +96,15 @@ def access_rights_to_metax(data):
     return access_rights
 
 def files_data_to_metax(files):
+    """
+    Create list of objects that comply to Metax schema
+
+    Arguments:
+        files {list} -- List containing the files from frontend (does contain ALL the data).
+
+    Returns:
+        list -- List containing objects that conform to Metax schema.
+    """
     metax_files = []
     metax_file_object = {}
     for file in files:
@@ -108,6 +117,15 @@ def files_data_to_metax(files):
     return metax_files
 
 def directorys_data_to_metax(files):
+    """
+    Create list of objects that comply to Metax schema
+
+    Arguments:
+        files {list} -- List containing the directorys from frontend (does contain ALL the data).
+
+    Returns:
+        list -- List containing objects that conform to Metax schema.
+    """
     metax_directorys = []
     metax_directory_object = {}
     for file in files:
@@ -119,6 +137,18 @@ def directorys_data_to_metax(files):
     return metax_directorys
 
 def data_to_metax(data, metadata_provider_org, metadata_provider_user, data_catalog):
+    """
+    Converts all the data from the frontend to conform to Metax schema.
+
+    Arguments:
+        data {object} -- All form data sent from the frontend.
+        metadata_provider_org {string} -- The name of the metadata providers organisation taken from authentication information.
+        metadata_provider_user {string} -- The name of the metadata provider taken from authentication information.
+        data_catalog {string} -- The correct data catalog value for the dataset taken from the data.
+
+    Returns:
+        object -- Returns an object that has been validated and should conform to Metax schema and is ready to be sent to Metax.
+    """
     dataset_data = {
         "metadata_provider_org": metadata_provider_org,
         "metadata_provider_user": metadata_provider_user,
