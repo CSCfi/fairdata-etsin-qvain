@@ -160,12 +160,12 @@ export class ParticipantTypeSelectBase extends Component {
                 </Label>
               </FormField>
             </ListItem>
-            <ListItem disabled={participant.type !== EntityType.ORGANIZATION || this.checkIfParticipantRoleExists('Publisher')}>
+            <ListItem disabled={participant.type !== EntityType.ORGANIZATION || this.checkIfParticipantRoleExists(Role.PUBLISHER)}>
               <FormField>
                 <Checkbox
                   id="orgPublisher"
                   type="checkbox"
-                  disabled={participant.type !== EntityType.ORGANIZATION || this.checkIfParticipantRoleExists('Publisher')}
+                  disabled={participant.type !== EntityType.ORGANIZATION || this.checkIfParticipantRoleExists(Role.PUBLISHER)}
                   onChange={this.handleChangeRole(participant, Role.PUBLISHER)}
                   value={Role.PUBLISHER}
                   checked={
@@ -178,12 +178,12 @@ export class ParticipantTypeSelectBase extends Component {
                 </Label>
               </FormField>
             </ListItem>
-            <ListItem disabled={participant.type !== EntityType.ORGANIZATION || this.checkIfParticipantRoleExists('Curator')}>
+            <ListItem disabled={participant.type !== EntityType.ORGANIZATION || this.checkIfParticipantRoleExists(Role.CURATOR)}>
               <FormField>
                 <Checkbox
                   id="orgCurator"
                   type="checkbox"
-                  disabled={participant.type !== EntityType.ORGANIZATION || this.checkIfParticipantRoleExists('Curator')}
+                  disabled={participant.type !== EntityType.ORGANIZATION || this.checkIfParticipantRoleExists(Role.CURATOR)}
                   onChange={this.handleChangeRole(participant, Role.CURATOR)}
                   value={Role.CURATOR}
                   checked={

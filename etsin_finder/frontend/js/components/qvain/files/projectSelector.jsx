@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { inject, observer } from 'mobx-react'
 import Translate from 'react-translate-component'
@@ -10,9 +10,16 @@ export class ProjectSelectorBase extends Component {
     Stores: PropTypes.object.isRequired
   }
 
+  state = {
+    error: undefined
+  }
+
   getOptions = () => {
     if (this.props.Stores.Env.environment === 'development') {
-      return [{ value: 'project_x', label: 'project_x' }]
+      return [
+        { value: 'project_x', label: 'project_x' },
+        { value: 'empty', label: 'test nonexistant IDA project' }
+      ]
     }
     return this.props.Stores.Auth.user.idaGroups
       .filter(group => group.includes('IDA'))
@@ -25,7 +32,12 @@ export class ProjectSelectorBase extends Component {
 
   handleOnChange = (selectedOption) => {
     console.log('ProjectSelect handleOnChange')
-    this.props.Stores.Qvain.changeProject(selectedOption.value)
+    this.props.Stores.Qvain.changeProject(selectedOption.value).then(() => {
+      this.setState({ error: undefined })
+    }).catch(e => {
+      console.log(e)
+      this.setState({ error: e.message })
+    })
   }
 
   render() {
@@ -34,18 +46,31 @@ export class ProjectSelectorBase extends Component {
     const { original, selectedFiles, selectedDirectories } = this.props.Stores.Qvain
     const editing = original !== undefined && [...selectedFiles, ...selectedDirectories].length > 0
     const selected = options.find(opt => opt.value === this.props.Stores.Qvain.selectedProject)
+    const { error } = this.state
     return (
-      <Translate
-        options={options}
-        isDisabled={editing}
-        component={ProjectSelect}
-        value={selected}
-        onChange={this.handleOnChange}
-        attributes={{ placeholder: 'qvain.files.projectSelect.placeholder' }}
-      />
+      <Fragment>
+        <Translate
+          options={options}
+          isDisabled={editing}
+          component={ProjectSelect}
+          value={selected}
+          onChange={this.handleOnChange}
+          attributes={{ placeholder: 'qvain.files.projectSelect.placeholder' }}
+        />
+        {error !== undefined && (
+          <ErrorMessage>
+            <Translate content="qvain.files.projectSelect.loadError" />
+            {error}
+          </ErrorMessage>
+        )}
+      </Fragment>
     )
   }
 }
+
+const ErrorMessage = styled.p`
+  color: red;
+`;
 
 export const ProjectSelect = styled(Select)`
   background-color: #f5f5f5;

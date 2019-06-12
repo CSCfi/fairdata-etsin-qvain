@@ -141,7 +141,7 @@ describe('Qvain.Files', () => {
           Directory(
             {
               id: 'test2',
-              identifier: 'test-ident-1',
+              identifier: 'test-ident-2',
               project_identifier: 'project_y',
               directory_name: 'directory2',
               directories: [],

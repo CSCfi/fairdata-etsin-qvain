@@ -2,6 +2,7 @@
 import * as yup from 'yup';
 import translate from 'counterpart';
 
+// DATASET DESCRIPTION VALIDATION
 
 const titleSchema = yup.object().shape({
   fi: yup
@@ -60,6 +61,8 @@ const otherIdentifiersSchema = yup
   )
   .nullable()
 
+// LICENSE AND ACCESS VALIDATION
+
 // you have to provide both the license object and the otherLicenseUrl as an object
 const licenseSchema = yup.object().shape({
   idaPickerOpen: yup.boolean(),
@@ -95,6 +98,8 @@ const restrictionGroundsSchema = yup
   .string(translate('qvain.validationMessages.restrictionGrounds.string'))
   .url(translate('qvain.validationMessages.restrictionGrounds.url'))
   .required(translate('qvain.validationMessages.restrictionGrounds.required'))
+
+// PARTICIPANT VALIDATION SCHEMAS
 
 const participantType = yup
   .mixed()
@@ -149,6 +154,40 @@ const participantOrganizationSchema = yup.object().shape({
       })
 })
 
+// FILE AND DIRECTORY (IDA RESOURCES) VALIDATION
+
+const fileUseCategorySchema = yup
+  .string()
+  .required(translate('qvain.validationMessages.files.file.useCategory.required'))
+
+const fileTitleSchema = yup
+  .string()
+  .required(translate('qvain.validationMessages.files.file.title.required'))
+
+const fileDescriptionSchema = yup
+  .string()
+  .required(translate('qvain.validationMessages.files.file.description.required'))
+
+const fileSchema = yup.object().shape({
+  title: fileTitleSchema,
+  description: fileDescriptionSchema,
+  useCategory: fileUseCategorySchema,
+  fileType: yup.string().nullable()
+})
+
+const filesSchema = yup.array().of(fileSchema)
+
+const directoryUseCategorySchema = yup.string().required(translate('qvain.validationMessages.files.directory.useCategory.required'))
+
+const directorySchema = yup.object().shape({
+  useCategory: directoryUseCategorySchema,
+  fileType: yup.string().nullable()
+})
+
+const directoriesSchema = yup.array().of(directorySchema)
+
+// EXTERNAL RESOURCES VALIDATION
+
 const externalResourceUrlSchema = yup
   .string()
   .url(translate('qvain.validationMessages.externalResources.url.url'))
@@ -159,6 +198,8 @@ const externalResourceSchema = yup.object().shape({
   title: yup.string().nullable(),
   url: externalResourceUrlSchema
 })
+
+// ENTIRE PARTICIPANT SCHEMAS
 
 const participantSchema = yup
   .object().shape({
@@ -208,6 +249,8 @@ const participantsSchema = yup
   )
   .required()
 
+// ENTIRE FORM VALIDATION
+
 const qvainFormSchema = yup.object().shape({
   title: titleSchema,
   description: descriptionSchema,
@@ -244,6 +287,14 @@ export {
   participantEmailSchema,
   participantIdentifierSchema,
   participantOrganizationSchema,
+  fileTitleSchema,
+  fileDescriptionSchema,
+  fileUseCategorySchema,
+  fileSchema,
+  filesSchema,
+  directoryUseCategorySchema,
+  directorySchema,
+  directoriesSchema,
   externalResourceSchema,
   externalResourceUrlSchema
 };
