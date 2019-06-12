@@ -87,7 +87,14 @@ def access_rights_to_metax(data):
     access_rights["access_type"] = {}
     access_rights["access_type"]["identifier"] = data["accessType"]
     access_rights["license"] = []
-    access_rights["license"].append({"identifier": data["license"]})
+    if "identifier" in data["license"]:
+        license_object = {}
+        license_object["identifier"] = data["license"]["identifier"]
+        access_rights["license"].append(license_object)
+    elif "url" in data["license"]:
+        license_object = {}
+        license_object["license"] = data["license"]["url"]
+        access_rights["license"].append(license_object)
     if data["accessType"] != access_type["OPEN"]:
         access_rights["restriction_grounds"] = {}
         access_rights["restriction_grounds"]["identifier"] = data["restrictionGrounds"]
