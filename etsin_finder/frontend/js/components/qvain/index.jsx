@@ -40,10 +40,11 @@ class Qvain extends Component {
       restrictionGrounds: values.restrictionGrounds ? values.restrictionGrounds.value : undefined,
       embargoDate: values.embargoExpDate,
       license: values.license ? values.license.url : undefined,
+      // Send no values if empty instead of empty values.
       remote_resources:
         values._externalResources.length > 0 ? values._externalResources : undefined,
-      files: values._selectedFiles,
-      directorys: values._selectedDirectories,
+      files: values._selectedFiles.idaGroups ? values._selectedFiles : undefined,
+      directorys: values._selectedDirectories.idaGroups ? values._selectedDirectories : undefined,
     }
     console.log(JSON.stringify(obj, null, 4))
     qvainFormSchema
