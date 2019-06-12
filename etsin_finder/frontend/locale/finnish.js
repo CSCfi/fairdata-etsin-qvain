@@ -464,6 +464,24 @@ const finnish = {
           required: 'Lisenssi URL on pakollinen'
         }
       },
+      files: {
+        file: {
+          title: {
+            required: 'Tiedoston otsikko on pakollinen'
+          },
+          description: {
+            required: 'Tiedoston kuvaus on pakollinen'
+          },
+          useCategory: {
+            required: 'Tiedoston käyttökategoria on pakollinen'
+          }
+        },
+        directory: {
+          useCategory: {
+            required: 'Hakemiston käyttökategoria on pakollinen'
+          }
+        }
+      },
       externalResources: {
         url: {
           required: 'Ulkoisen aineiston URL osoite on pakollinen',
@@ -480,10 +498,12 @@ const finnish = {
         }
       },
       projectSelect: {
-        placeholder: 'Valitse projekti'
+        placeholder: 'Valitse projekti',
+        loadError: 'Projektin hakemistojen lataus epäonnistui, virhe: '
       },
       selected: {
         title: 'Valitut tiedostot',
+        none: 'Tiedostoja tai hakemistoja ei ole valittu',
         form: {
           title: {
             label: 'Otsikko',

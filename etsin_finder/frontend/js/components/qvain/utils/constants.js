@@ -11,3 +11,7 @@ export const FileAPIURLs = {
   DIR_URL: '/api/files/directory/',
   PROJECT_DIR_URL: '/api/files/project/'
 }
+
+export const UseCategoryURLs = {
+  OUTCOME_MATERIAL: 'http://uri.suomi.fi/codelist/fairdata/use_category/code/outcome'
+}
