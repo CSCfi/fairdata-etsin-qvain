@@ -71,9 +71,8 @@ class DatasetValidationSchema(Schema):
     )
     embargoDate = fields.Str()
     restrictionGrounds = fields.Str()
-    license = fields.Str(
-        required=True,
-        validate=Length(min=1)
+    license = fields.Dict(
+        required=True
     )
     files = fields.List(fields.Dict())
     directorys = fields.List(fields.Dict())
