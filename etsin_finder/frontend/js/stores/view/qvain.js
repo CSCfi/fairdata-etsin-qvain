@@ -218,12 +218,14 @@ class Qvain {
 
   deselectParents = (dir, flattenedHierarchy) => {
     // deselect directories upwards in the hierarchy, remove them from selected directories
-    dir.selected = false
-    this._selectedDirectories = [...this._selectedDirectories.filter(d => d.identifier !== dir.identifier)]
-    if (dir.parentDirectory !== undefined) {
-      const aDir = flattenedHierarchy.find(d => d.directoryName === dir.parentDirectory.directoryName)
-      if (aDir !== undefined) {
-        this.deselectParents(aDir, flattenedHierarchy)
+    if (dir !== undefined) {
+      dir.selected = false
+      this._selectedDirectories = [...this._selectedDirectories.filter(d => d.identifier !== dir.identifier)]
+      if (dir.parentDirectory !== undefined) {
+        const aDir = flattenedHierarchy.find(d => d.identifier === dir.parentDirectory.identifier)
+        if (aDir !== undefined) {
+          this.deselectParents(aDir, flattenedHierarchy)
+        }
       }
     }
   }
