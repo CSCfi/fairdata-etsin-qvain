@@ -494,6 +494,7 @@ const finnish = {
     },
     files: {
       title: 'Tiedostot',
+      help: 'Aineistoon kuuluvat tiedostot. Aineistoon voi kuulua vain joko IDAssa olevia tiedostoja tai ulkopuolisia tiedostoja. Tiedostojen metadata ei ole osa aineistojen metadataa, joten muista tallentaa muutokset jotka teet tiedostojen metadataan.',
       ida: {
         help: 'Jos sinulla on tiedostoja Fairdata IDA:ssa, voit liittää ne tässä:',
         button: {

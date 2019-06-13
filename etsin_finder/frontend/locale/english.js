@@ -488,6 +488,7 @@ const english = {
     },
     files: {
       title: 'Files',
+      help: 'Files associated with this dataset. A dataset can only have either IDA files or external files. File metadata will not be associated with datasets, so remember to save edits to file metadata.',
       ida: {
         help: 'If you have files in Fairdata IDA you can link them from here:',
         button: {
