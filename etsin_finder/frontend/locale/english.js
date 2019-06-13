@@ -401,7 +401,8 @@ const english = {
       otherIdentifiers: {
         string: 'Other Identifiers must be string value.',
         url: 'Ther Identifiers should be valid URLs.',
-        max: 'Identifier too long.'
+        max: 'Identifier too long.',
+        min: 'Identifier needs to be at least 10 characters long'
       },
       fieldOfScience: {},
       keywords: {

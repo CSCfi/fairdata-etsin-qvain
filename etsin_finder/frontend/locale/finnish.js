@@ -405,7 +405,8 @@ const finnish = {
       otherIdentifiers: {
         string: 'Tunnisteet tulisivat olla arvoltaan merkkijonoja.',
         url: 'Tunnisteet täytyy olla valiideja URL;eja',
-        max: 'Tunniste liian pitkä.'
+        max: 'Tunniste liian pitkä.',
+        min: 'Tunnisteen pitää olla vähintään 10 merkkiä pitkä.'
       },
       fieldOfScience: {},
       keywords: {
