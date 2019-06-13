@@ -8,7 +8,7 @@
 """RESTful API endpoints, meant to be used by Qvain Light form"""
 
 from functools import wraps
-
+from marshmallow import ValidationError
 from flask import request, session
 from flask_mail import Message
 from flask_restful import abort, reqparse, Resource
@@ -22,11 +22,13 @@ from etsin_finder.finder import app
 from etsin_finder.utils import \
     sort_array_of_obj_by_key, \
     slice_array_on_limit
+from etsin_finder.qvain_light_dataset_schema import DatasetValidationSchema
+from etsin_finder.qvain_light_utils import data_to_metax
+from etsin_finder.qvain_light_service import create_dataset, update_dataset
 
 log = app.logger
 
 TOTAL_ITEM_LIMIT = 1000
-
 
 def log_request(f):
     """
@@ -145,3 +147,75 @@ class UserDatasets(Resource):
 
             return result, 200
         return '', 404
+
+class QvainDataset(Resource):
+    def __init__(self):
+        self.validationSchema = DatasetValidationSchema(strict=True)
+
+    @log_request
+    def post(self):
+        """
+        Create a dataset to Metax with the form data from the frontend.
+
+        Returns:
+            object -- The response from metax or if error an error message.
+        """
+        is_authd = authentication.is_authenticated()
+        if not is_authd:
+            return 'Not logged in', 400
+        try:
+            data, error = self.validationSchema.loads(request.data)
+        except ValidationError as err:
+            log.warning("INVALID FORM DATA: {0}".format(err.messages))
+            return err.messages, 400
+        try:
+            metadata_provider_org = session["samlUserdata"]["urn:oid:1.3.6.1.4.1.25178.1.2.9"][0]
+            metadata_provider_user = session["samlUserdata"]["urn:oid:1.3.6.1.4.1.16161.4.0.53"][0]
+        except KeyError as err:
+            log.warning("The Metadata provider is not specified: \n{0}".format(err))
+            return "The Metadata provider is not specified", 400
+
+        if all(["remote_resources" in data, "files" not in data, "directorys" not in data]):
+            data_catalog = "urn:nbn:fi:att:data-catalog-att"
+        elif all(["remote_resources" not in data, "files" in data or "directorys" in data]):
+            data_catalog = "urn:nbn:fi:att:data-catalog-ida"
+        else:
+            return "Error specifying the datacatalog. Make shure you have added EITHER Ida files OR external files.", 400
+        metax_redy_data = data_to_metax(data, metadata_provider_org, metadata_provider_user, data_catalog)
+        metax_response = create_dataset(metax_redy_data)
+        return metax_response, 200
+
+    @log_request
+    def patch(self, cr_id):
+        """
+        Updete existing detaset.
+
+        Arguments:
+            cr_id {string} -- The identifier of the dataset.
+
+        Returns:
+            object -- The response from metax or if error an error message.
+        """
+        is_authd = authentication.is_authenticated()
+        if not is_authd:
+            return 'Not logged in', 400
+        try:
+            data, error = self.validationSchema.loads(request.data)
+        except ValidationError as err:
+            log.warning("INVALID FORM DATA: {0}".format(err.messages))
+            return err.messages, 400
+        try:
+            metadata_provider_org = session["samlUserdata"]["urn:oid:1.3.6.1.4.1.25178.1.2.9"]
+            metadata_provider_user = session["samlUserdata"]["urn:oid:1.3.6.1.4.1.8057.2.80.26"]
+        except KeyError as err:
+            log.warning("The Metadata provider is not specified: \n{0}".format(err))
+            return "The Metadata provider is not specified", 400
+        if all(["remote_resources" in data, "files" not in data, "directorys" not in data]):
+            data_catalog = "urn:nbn:fi:att:data-catalog-att"
+        elif all(["remote_resources" not in data, "files" in data or "directorys" in data]):
+            data_catalog = "urn:nbn:fi:att:data-catalog-ida"
+        else:
+            return "Error specifying the datacatalog. Make shure you have added EITHER Ida files OR external files.", 400
+        metax_redy_data = data_to_metax(data, metadata_provider_org, metadata_provider_user, data_catalog)
+        metax_response = update_dataset(metax_redy_data)
+        return metax_response, 200
