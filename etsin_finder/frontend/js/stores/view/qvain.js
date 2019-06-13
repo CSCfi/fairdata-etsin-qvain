@@ -1,4 +1,4 @@
-import { observable, action, computed, toJS } from 'mobx'
+import { observable, action, computed } from 'mobx'
 import axios from 'axios'
 import { getDirectories, getFiles } from '../../components/qvain/utils/fileHierarchy'
 import { AccessTypeURLs, LicenseUrls, FileAPIURLs, UseCategoryURLs } from '../../components/qvain/utils/constants'
@@ -458,6 +458,12 @@ class Qvain {
 
   @observable extResFormOpen = false
 
+  @observable resourceInEdit = undefined
+
+  @action resetInEditResource = () => {
+    this.resourceInEdit = undefined
+  }
+
   @computed get externalResources() {
     return this._externalResources
   }
@@ -482,6 +488,10 @@ class Qvain {
 
   @action removeExternalResource = (id) => {
     this._externalResources = this._externalResources.filter(r => r.id !== id)
+  }
+
+  @action setResourceInEdit = (id) => {
+    this.resourceInEdit = this._externalResources.find(r => r.id === id)
   }
 }
 
