@@ -15,9 +15,12 @@ import FileSelector, { FileSelectorBase } from '../js/components/qvain/files/fil
 import { SelectedFilesBase, FileItem } from '../js/components/qvain/files/selectedFiles'
 import DirectoryForm from '../js/components/qvain/files/directoryForm'
 import {
-  ExternalFilesBase,
+  ExternalEditFormBase,
   ResourceInput,
-  ResourceSave,
+  ResourceSave
+} from '../js/components/qvain/files/externalFileForm'
+import {
+  ExternalFilesBase,
   ResourceItem
 } from '../js/components/qvain/files/externalFiles'
 import {
@@ -207,30 +210,31 @@ describe('Qvain.Files', () => {
 
 describe('Qvain.ExternalFiles', () => {
   it('should render correctly', () => {
-    const extFiles = mount(<ExternalFilesBase Stores={getStores()} />)
+    const extFiles = shallow(<ExternalFilesBase Stores={getStores()} />)
     expect(extFiles.find(SlidingContent).length).toBe(1)
   })
 
   it('should add resources', async () => {
     const stores = getStores()
-    const extFiles = mount(<ExternalFilesBase Stores={stores} />)
+    const extFileForm = mount(<ExternalEditFormBase Stores={stores} />)
     const title = 'Test title'
-    extFiles.find('#titleInput').first().simulate('change', {
+    extFileForm.find('#titleInput').first().simulate('change', {
       target: {
         value: title
       }
     })
     const url = 'https://en.wikipedia.org'
-    extFiles.find('#urlInput').first().simulate('change', {
+    extFileForm.find('#urlInput').first().simulate('change', {
       target: {
         value: url
       }
     })
     // extFiles.find(ResourceSave).simulate('click')
-    await extFiles.instance().handleAddResource({
+    await extFileForm.instance().handleAddResource({
       preventDefault: () => console.log('handleAddResource preventDefault')
     })
-    extFiles.update()
+    extFileForm.unmount()
+    const extFiles = shallow(<ExternalFilesBase Stores={stores} />)
     expect(extFiles.find(ResourceItem).length).toBe(1)
     expect(extFiles.find(ButtonLabel).text()).toBe(`${title} / ${url}`)
   })

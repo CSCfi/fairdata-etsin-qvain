@@ -11,7 +11,7 @@ import {
 import ValidationError from '../general/validationError'
 import { externalResourceSchema, externalResourceUrlSchema } from '../utils/formValidation'
 
-class ExternalEditForm extends Component {
+export class ExternalEditFormBase extends Component {
   static propTypes = {
     Stores: PropTypes.object.isRequired,
     isEditForm: PropTypes.bool
@@ -135,4 +135,4 @@ export const ResourceItem = styled(FileItem)`
   margin-bottom: ${props => (props.active ? '0' : '10px')}
 `
 
-export default inject('Stores')(observer(ExternalEditForm))
+export default inject('Stores')(observer(ExternalEditFormBase))
