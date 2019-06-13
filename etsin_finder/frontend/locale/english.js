@@ -308,7 +308,9 @@ const english = {
       },
       keywords: {
         title: 'Keywords',
-        placeholder: 'E.g. economy'
+        placeholder: 'E.g. economy',
+        addButton: 'Add keywords',
+        help: 'You can add multiple keywords by separating them with a comma (,). Dataset has to have at least one keyword.'
       }
     },
     rightsAndLicenses: {

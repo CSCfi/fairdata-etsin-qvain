@@ -312,7 +312,9 @@ const finnish = {
       },
       keywords: {
         title: 'Avainsanat',
-        placeholder: 'Esim. taloustiede'
+        placeholder: 'Esim. taloustiede',
+        addButton: 'Lisää avainsanoja',
+        help: 'Voit lisätä useamman avainsanan erottamalla ne pilkulla (,). Aineistolla on oltava vähintään yksi avainsana.'
       }
     },
     rightsAndLicenses: {

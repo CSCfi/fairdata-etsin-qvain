@@ -40,10 +40,10 @@ class KeywordsField extends Component {
   handleKeywordAdd = (e) => {
     e.preventDefault();
     if (this.state.value.length > 0) {
-      const newKeyword = this.state.value;
+      const keywords = this.state.value.split(',').map(keyword => keyword.trim())
       this.props.Stores.Qvain.setKeywords([
         ...this.props.Stores.Qvain.keywords,
-        newKeyword
+        ...keywords
       ])
       this.setState({ value: '' })
     }
@@ -65,6 +65,7 @@ class KeywordsField extends Component {
         <h3>
           <Translate content="qvain.description.keywords.title" /> *
         </h3>
+        <Translate component="p" content="qvain.description.keywords.help" />
         {keywords}
         <Translate
           component={Input}
@@ -76,7 +77,7 @@ class KeywordsField extends Component {
         <ValidationError>{this.state.keywordsValidationError}</ValidationError>
         <ButtonContainer>
           <AddNewButton type="button" onClick={this.handleKeywordAdd}>
-            <Translate content="qvain.description.otherIdentifiers.addButton" />
+            <Translate content="qvain.description.keywords.addButton" />
           </AddNewButton>
         </ButtonContainer>
       </Card>
