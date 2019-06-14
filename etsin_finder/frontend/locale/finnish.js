@@ -331,7 +331,7 @@ const finnish = {
       restrictionGrounds: {
         title: 'Saatavuutta rajoitettu',
         placeholder: 'Valitse vaihtoehto',
-        text: 'Jos pääsyoikeus tyyppi on rajattu, valitse rajoituksen syy.'
+        text: 'Jos pääsyoikeus tyyppi ei ole Avoin, valitse rajoituksen syy.'
       },
       license: {
         title: 'Lisenssi',

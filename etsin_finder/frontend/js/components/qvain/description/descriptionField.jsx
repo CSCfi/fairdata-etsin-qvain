@@ -110,7 +110,7 @@ class DescriptionField extends Component {
               value={description.en}
               onChange={(event) => { description.en = event.target.value }}
               onBlur={this.handleDescriptionBlur}
-              attributes={{ placeholder: this.getPlaceholder('title', this.state.active) }}
+              attributes={{ placeholder: this.getPlaceholder('description', this.state.active) }}
             />
           )}
           {activeLang === 'FINNISH' && (
@@ -120,7 +120,7 @@ class DescriptionField extends Component {
               value={description.fi}
               onChange={(event) => { description.fi = event.target.value }}
               onBlur={this.handleDescriptionBlur}
-              attributes={{ placeholder: this.getPlaceholder('title', this.state.active) }}
+              attributes={{ placeholder: this.getPlaceholder('description', this.state.active) }}
             />
           )}
           <ValidationError>{this.state.descriptionError}</ValidationError>
