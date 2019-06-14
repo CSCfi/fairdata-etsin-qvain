@@ -308,7 +308,9 @@ const english = {
       },
       keywords: {
         title: 'Keywords',
-        placeholder: 'E.g. economy'
+        placeholder: 'E.g. economy',
+        addButton: 'Add keywords',
+        help: 'You can add multiple keywords by separating them with a comma (,). Dataset has to have at least one keyword.'
       }
     },
     rightsAndLicenses: {
@@ -325,7 +327,7 @@ const english = {
       restrictionGrounds: {
         title: 'Restriction Grounds',
         placeholder: 'Select option',
-        text: 'When access type is "Restricted", please choose the restriction grounds.'
+        text: 'When access type is not "Open", you need to define the restriction grounds.'
       },
       license: {
         title: 'License',
@@ -401,7 +403,8 @@ const english = {
       otherIdentifiers: {
         string: 'Other Identifiers must be string value.',
         url: 'Ther Identifiers should be valid URLs.',
-        max: 'Identifier too long.'
+        max: 'Identifier too long.',
+        min: 'Identifier needs to be at least 10 characters long'
       },
       fieldOfScience: {},
       keywords: {
@@ -485,6 +488,7 @@ const english = {
     },
     files: {
       title: 'Files',
+      help: 'Files associated with this dataset. A dataset can only have either IDA files or external files. File metadata will not be associated with datasets, so remember to save edits to file metadata.',
       ida: {
         help: 'If you have files in Fairdata IDA you can link them from here:',
         button: {

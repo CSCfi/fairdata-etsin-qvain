@@ -312,7 +312,9 @@ const finnish = {
       },
       keywords: {
         title: 'Avainsanat',
-        placeholder: 'Esim. taloustiede'
+        placeholder: 'Esim. taloustiede',
+        addButton: 'Lisää avainsanoja',
+        help: 'Voit lisätä useamman avainsanan erottamalla ne pilkulla (,). Aineistolla on oltava vähintään yksi avainsana.'
       }
     },
     rightsAndLicenses: {
@@ -329,7 +331,7 @@ const finnish = {
       restrictionGrounds: {
         title: 'Saatavuutta rajoitettu',
         placeholder: 'Valitse vaihtoehto',
-        text: 'Jos pääsyoikeus tyyppi on rajattu, valitse rajoituksen syy.'
+        text: 'Jos pääsyoikeus tyyppi ei ole Avoin, valitse rajoituksen syy.'
       },
       license: {
         title: 'Lisenssi',
@@ -405,7 +407,8 @@ const finnish = {
       otherIdentifiers: {
         string: 'Tunnisteet tulisivat olla arvoltaan merkkijonoja.',
         url: 'Tunnisteet täytyy olla valiideja URL;eja',
-        max: 'Tunniste liian pitkä.'
+        max: 'Tunniste liian pitkä.',
+        min: 'Tunnisteen pitää olla vähintään 10 merkkiä pitkä.'
       },
       fieldOfScience: {},
       keywords: {
@@ -491,6 +494,7 @@ const finnish = {
     },
     files: {
       title: 'Tiedostot',
+      help: 'Aineistoon kuuluvat tiedostot. Aineistoon voi kuulua vain joko IDAssa olevia tiedostoja tai ulkopuolisia tiedostoja. Tiedostojen metadata ei ole osa aineistojen metadataa, joten muista tallentaa muutokset jotka teet tiedostojen metadataan.',
       ida: {
         help: 'Jos sinulla on tiedostoja Fairdata IDA:ssa, voit liittää ne tässä:',
         button: {

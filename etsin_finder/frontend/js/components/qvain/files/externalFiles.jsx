@@ -15,22 +15,13 @@ import {
   DeleteButton,
   ButtonLabel
 } from '../general/buttons'
-import { Input, SelectedFilesTitle, Label } from '../general/form'
+import { Input, SelectedFilesTitle } from '../general/form'
 import { FileContainer, SlidingContent } from '../general/card'
-import { externalResourceSchema, externalResourceUrlSchema } from '../utils/formValidation'
-import ValidationError from '../general/validationError'
+import ExternalEditForm from './externalFileForm'
 
 export class ExternalFilesBase extends Component {
   static propTypes = {
     Stores: PropTypes.object.isRequired
-  }
-
-  state = {
-    title: '',
-    url: '',
-    inEdit: undefined,
-    resourceError: undefined,
-    urlError: undefined
   }
 
   handleToggleForm = (event) => {
@@ -44,33 +35,6 @@ export class ExternalFilesBase extends Component {
     }
   }
 
-  handleAddResource = (event) => {
-    event.preventDefault()
-    const externalResource = {
-      id: undefined,
-      title: this.state.title,
-      url: this.state.url
-    }
-    return externalResourceSchema.validate(externalResource).then(() => {
-      console.log('success')
-      this.props.Stores.Qvain.saveExternalResource(externalResource)
-      this.setState({
-        title: '',
-        url: '',
-        urlError: undefined,
-        resourceError: undefined
-      })
-      // close IDA picker if it is open since after adding resources user
-      // shouldn't be able to add IDA files or directories
-      if (this.props.Stores.Qvain.idaPickerOpen) {
-        this.props.Stores.Qvain.idaPickerOpen = false
-      }
-    }).catch(err => {
-      console.log('there were errors')
-      this.setState({ resourceError: err.errors })
-    })
-  }
-
   handleRemoveResource = (resourceId) => (event) => {
     event.preventDefault()
     this.props.Stores.Qvain.removeExternalResource(resourceId)
@@ -78,80 +42,16 @@ export class ExternalFilesBase extends Component {
 
   handleEditResource = (resourceId) => (event) => {
     event.preventDefault()
-    const inEdit = this.props.Stores.Qvain.externalResources.find(r => r.id === resourceId)
-    this.setState({ inEdit })
+    this.props.Stores.Qvain.setResourceInEdit(resourceId)
   }
 
   handleCloseEdit = (event) => {
     event.preventDefault()
-    this.setState({ inEdit: undefined })
+    this.props.Stores.Qvain.resetInEditResource()
   }
-
-  handleOnUrlBlur = () => {
-    externalResourceUrlSchema.validate(this.state.url).then(() => {
-      this.setState({ urlError: undefined, resourceError: undefined })
-    }).catch(err => {
-      this.setState({ urlError: err.errors })
-    })
-  }
-
-  editForm = (resource) => (
-    <Fragment>
-      <Translate
-        component={Label}
-        content="qvain.files.external.form.title.label"
-      />
-      <Translate
-        component={ResourceInput}
-        type="text"
-        id="titleInput"
-        value={resource ? resource.title : this.state.title}
-        onChange={(event) => {
-          if (resource !== undefined) {
-            resource.title = event.target.value
-          } else {
-            this.setState({
-              title: event.target.value
-            })
-          }
-        }}
-        attributes={{ placeholder: 'qvain.files.external.form.title.placeholder' }}
-      />
-      <Translate
-        component={Label}
-        content="qvain.files.external.form.url.label"
-      />
-      <Translate
-        component={ResourceInput}
-        type="text"
-        id="urlInput"
-        value={resource ? resource.url : this.state.url}
-        onChange={(event) => {
-          if (resource !== undefined) {
-            resource.url = event.target.value
-          } else {
-            this.setState({
-              url: event.target.value
-            })
-          }
-        }}
-        onBlur={this.handleOnUrlBlur}
-        attributes={{ placeholder: 'qvain.files.external.form.url.placeholder' }}
-      />
-      {this.state.urlError !== undefined && <ValidationError>{this.state.urlError}</ValidationError>}
-      {this.state.resourceError !== undefined && <ValidationError>{this.state.resourceError}</ValidationError>}
-      <Translate
-        component={ResourceSave}
-        onClick={resource ? this.handleCloseEdit : this.handleAddResource}
-        content={resource ?
-          'qvain.files.external.form.save.label' : 'qvain.files.external.form.add.label'
-        }
-      />
-    </Fragment>
-  )
 
   render() {
-    const { inEdit } = this.state
+    const { resourceInEdit } = this.props.Stores.Qvain
     const { externalResources, extResFormOpen, selectedFiles, selectedDirectories } = this.props.Stores.Qvain
     const hasIDAItems = [...selectedFiles, ...selectedDirectories].length > 0
     return (
@@ -169,17 +69,23 @@ export class ExternalFilesBase extends Component {
           }
           {externalResources.map(r => (
             <Fragment key={r.id}>
-              <ResourceItem active={isInEdit(inEdit, r)}>
+              <ResourceItem active={isInEdit(resourceInEdit, r)}>
                 <ButtonLabel><a target="_blank" rel="noopener noreferrer" href={r.url}>{r.title} / {r.url}</a></ButtonLabel>
                 <EditButton
-                  onClick={isInEdit(inEdit, r) ? this.handleCloseEdit : this.handleEditResource(r.id)}
+                  onClick={isInEdit(resourceInEdit, r) ? this.handleCloseEdit : this.handleEditResource(r.id)}
                 />
                 <DeleteButton onClick={this.handleRemoveResource(r.id)} />
               </ResourceItem>
-              {isInEdit(inEdit, r) && <ResourceContainer>{this.editForm(r)}</ResourceContainer>}
+              {isInEdit(resourceInEdit, r) && (
+                <ResourceContainer>
+                  <ExternalEditForm isEditForm />
+                </ResourceContainer>
+              )}
             </Fragment>
           ))}
-          <ResourceForm>{this.editForm(undefined)}</ResourceForm>
+          <ResourceForm>
+            <ExternalEditForm />
+          </ResourceForm>
         </SlidingContent>
       </Fragment>
     )

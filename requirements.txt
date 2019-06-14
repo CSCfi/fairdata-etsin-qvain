@@ -4,6 +4,7 @@ Flask-Mail==0.9.1
 flask-restful==0.3.7
 gevent==1.4.0
 gunicorn==19.9.0
+marshmallow==v3.0.0rc6
 pymemcache==2.1.1
 python-dateutil==2.8.0
 python3-saml==1.5.0

@@ -52,13 +52,14 @@ const keywordsSchema = yup
   )
   .required(translate('qvain.validationMessages.keywords.required'))
 
+const otherIdentifierSchema = yup
+  .string(translate('qvain.validationMessages.otherIdentifiers.string'))
+  .min(10, translate('qvain.validationMessages.otherIdentifiers.min'))
+  .url(translate('qvain.validationMessages.otherIdentifiers.url'))
+  .max(100, translate('qvain.validationMessages.otherIdentifiers.max'))
+
 const otherIdentifiersSchema = yup
-  .array().of(
-    yup
-      .string(translate('qvain.validationMessages.otherIdentifiers.string'))
-      .url(translate('qvain.validationMessages.otherIdentifiers.url'))
-      .max(100, translate('qvain.validationMessages.otherIdentifiers.max'))
-  )
+  .array().of(otherIdentifierSchema)
   .nullable()
 
 // LICENSE AND ACCESS VALIDATION
@@ -273,6 +274,7 @@ export {
   qvainFormSchema,
   titleSchema,
   descriptionSchema,
+  otherIdentifierSchema,
   otherIdentifiersSchema,
   keywordsSchema,
   accessTypeSchema,
