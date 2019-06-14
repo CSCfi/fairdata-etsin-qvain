@@ -269,6 +269,8 @@ class Qvain {
         ))]
         rootDir.directories = newDirs
         return rootDir
+      }).catch(e => {
+        console.log(e)
       })
     if (callback) {
       req.then(callback)
