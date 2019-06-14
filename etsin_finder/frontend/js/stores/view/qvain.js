@@ -2,6 +2,7 @@ import { observable, action, computed } from 'mobx'
 import axios from 'axios'
 import { getDirectories, getFiles } from '../../components/qvain/utils/fileHierarchy'
 import { AccessTypeURLs, LicenseUrls, FileAPIURLs, UseCategoryURLs } from '../../components/qvain/utils/constants'
+import { getPath } from '../../components/qvain/utils/object'
 
 class Qvain {
   @observable original = undefined // used if editing, otherwise undefined
@@ -520,19 +521,19 @@ const File = (file, parent, selected) => ({
   ...Hierarchy(file, parent, selected),
   fileName: file.file_name,
   filePath: file.file_path,
-  useCategory: file.file_characteristics.use_category || UseCategoryURLs.OUTCOME_MATERIAL,
-  fileType: file.file_characteristics.file_type,
-  description: file.file_characteristics.description,
-  title: file.file_characteristics.title
+  useCategory: getPath('file_characteristics.use_category', file) || UseCategoryURLs.OUTCOME_MATERIAL,
+  fileType: getPath('file_characteristics.file_type', file),
+  description: getPath('file_characteristics.description', file),
+  title: getPath('file_characteristics.title', file)
 })
 
 const DatasetFile = (file) => ({
   identifier: file.identifier,
-  useCategory: file.use_category.identifier,
-  fileType: file.file_type ? file.file_type.identifier : undefined,
-  projectIdentifier: file.details.project_identifier,
+  useCategory: getPath('use_category.identifier'),
+  fileType: getPath('file_type.identifier', file),
+  projectIdentifier: getPath('details.project_identifier', file),
   title: file.title,
-  description: file.description || file.details.file_characteristics.description,
+  description: file.description || getPath('details.file_characteristics.description', file),
   fileCharacteristics: {
     ...file.details.file_characteristics,
     useCategory: file.use_category,
