@@ -277,11 +277,9 @@ class Qvain {
   }
 
   @action setDirFileSettings = (directory, useCategory, fileType) => {
-    const newHier = { ...this._hierarchy }
-    const theDir = getDirectories(newHier).find(d => d.directoryName === directory.directoryName)
+    const theDir = this._selectedDirectories.find(d => d.directoryName === directory.directoryName)
     theDir.useCategory = useCategory
     theDir.fileType = fileType
-    this._hierarchy = newHier
   }
 
   @action setInEdit = (selectedItem) => {
@@ -460,6 +458,12 @@ class Qvain {
 
   @observable extResFormOpen = false
 
+  @observable resourceInEdit = undefined
+
+  @action resetInEditResource = () => {
+    this.resourceInEdit = undefined
+  }
+
   @computed get externalResources() {
     return this._externalResources
   }
@@ -484,6 +488,10 @@ class Qvain {
 
   @action removeExternalResource = (id) => {
     this._externalResources = this._externalResources.filter(r => r.id !== id)
+  }
+
+  @action setResourceInEdit = (id) => {
+    this.resourceInEdit = this._externalResources.find(r => r.id === id)
   }
 }
 

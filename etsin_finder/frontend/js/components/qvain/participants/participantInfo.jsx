@@ -216,6 +216,7 @@ export class ParticipantInfoBase extends Component {
           attributes={{ placeholder: 'qvain.participants.add.identifier.placeholder' }}
           onChange={(event) => { participant.identifier = event.target.value }}
           value={participant.identifier}
+          onBlur={this.handleOnIdentifierBlur}
         />
         {identifierError && <ValidationError>{identifierError}</ValidationError>}
         <Label htmlFor="orgField">
@@ -235,6 +236,7 @@ export class ParticipantInfoBase extends Component {
           )}
           attributes={{ placeholder: 'qvain.participants.add.organization.placeholder' }}
           onChange={(selection) => { participant.organization = selection.label }}
+          onBlur={this.handleOnOrganizationBlur}
           value={{ label: participant.organization, value: participant.organization }}
         />
         {organizationError && <ValidationError>{organizationError}</ValidationError>}

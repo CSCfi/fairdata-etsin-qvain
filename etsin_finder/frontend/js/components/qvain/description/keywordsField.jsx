@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Translate from 'react-translate-component';
 import { inject, observer } from 'mobx-react';
-import { toJS } from 'mobx';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 
 import Card from '../general/card';
 import Label from '../general/label';
+import Button from '../../general/button';
 import { keywordsSchema } from '../utils/formValidation';
 import ValidationError from '../general/validationError';
 
@@ -38,12 +38,12 @@ class KeywordsField extends Component {
   }
 
   handleKeywordAdd = (e) => {
-    if (e.keyCode === 13 && this.state.value.length > 0) {
-      e.preventDefault();
-      const newKeyword = this.state.value;
+    e.preventDefault();
+    if (this.state.value.length > 0) {
+      const keywords = this.state.value.split(',').map(keyword => keyword.trim())
       this.props.Stores.Qvain.setKeywords([
-        ...toJS(this.props.Stores.Qvain.keywords),
-        newKeyword
+        ...this.props.Stores.Qvain.keywords,
+        ...keywords
       ])
       this.setState({ value: '' })
     }
@@ -54,7 +54,7 @@ class KeywordsField extends Component {
   }
 
   render() {
-    const keywords = toJS(this.props.Stores.Qvain.keywords).map(word => (
+    const keywords = this.props.Stores.Qvain.keywords.map(word => (
       <Label color="#007fad" margin="0 0.5em 0.5em 0" key={word}>
         <PaddedWord>{ word }</PaddedWord>
         <FontAwesomeIcon onClick={() => this.handleKeywordRemove(word)} icon={faTimes} size="xs" />
@@ -62,18 +62,24 @@ class KeywordsField extends Component {
     ))
     return (
       <Card>
-        <Translate component="h3" content="qvain.description.keywords.title" />
+        <h3>
+          <Translate content="qvain.description.keywords.title" /> *
+        </h3>
+        <Translate component="p" content="qvain.description.keywords.help" />
         {keywords}
         <Translate
           component={Input}
           value={this.state.value}
           onChange={this.handleChange}
-          onBlur={this.handleBlur}
-          onKeyDown={this.handleKeywordAdd}
           type="text"
           attributes={{ placeholder: 'qvain.description.keywords.placeholder' }}
         />
         <ValidationError>{this.state.keywordsValidationError}</ValidationError>
+        <ButtonContainer>
+          <AddNewButton type="button" onClick={this.handleKeywordAdd}>
+            <Translate content="qvain.description.keywords.addButton" />
+          </AddNewButton>
+        </ButtonContainer>
       </Card>
     )
   }
@@ -89,6 +95,14 @@ const Input = styled.input`
 `
 const PaddedWord = styled.span`
 padding-right: 10px;
+`
+
+const ButtonContainer = styled.div`
+  text-align: right;
+`
+const AddNewButton = styled(Button)`
+  margin: 0;
+  margin-top: 11px;
 `
 
 export default inject('Stores')(observer(KeywordsField));

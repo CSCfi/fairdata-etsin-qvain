@@ -10,7 +10,7 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import Button from '../../general/button';
 import Card from '../general/card';
 import Label from '../general/label';
-import { otherIdentifiersSchema } from '../utils/formValidation';
+import { otherIdentifiersSchema, otherIdentifierSchema } from '../utils/formValidation';
 import ValidationError from '../general/validationError';
 
 class OtherIdentifierField extends React.Component {
@@ -27,8 +27,12 @@ class OtherIdentifierField extends React.Component {
   }
 
   handleInputChange = (event) => {
+    const { value } = event.target
+    otherIdentifierSchema.validate(value).catch(err => {
+      this.setState({ validationError: err.errors })
+    })
     this.setState({
-      identifier: event.target.value
+      identifier: value
     })
   }
 
@@ -48,16 +52,22 @@ class OtherIdentifierField extends React.Component {
   }
 
   handleAddClick = (event) => {
-    if (this.state.identifier.length > 0) {
-      event.preventDefault()
+    event.preventDefault()
+    otherIdentifierSchema.validate(this.state.identifier).then(() => {
       this.props.Stores.Qvain.addOtherIdentifier(this.state.identifier)
       this.clearInput()
-      this.validateIdentifiers()
-    }
+    }).catch(err => {
+      this.setState({ validationError: err.errors })
+    })
   }
 
   handleRemove = (identifier) => {
     this.props.Stores.Qvain.removeOtherIdentifier(identifier)
+    this.validateIdentifiers()
+  }
+
+  handleBlur = () => {
+    this.setState({ validationError: undefined })
     this.validateIdentifiers()
   }
 
@@ -90,6 +100,7 @@ class OtherIdentifierField extends React.Component {
           onChange={this.handleInputChange}
           onKeyDown={this.handleAddEnter}
           placeholder="http://orcid.org/"
+          onBlur={this.handleBlur}
         />
         <ValidationError>{this.state.validationError}</ValidationError>
         <ButtonContainer>
