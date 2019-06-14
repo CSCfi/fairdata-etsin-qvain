@@ -1,3 +1,4 @@
+"""Utilities for transforming the data from Qvain Light form to METAX compatible format"""
 access_type = {}
 access_type["EMBARGO"] = "http://uri.suomi.fi/codelist/fairdata/access_type/code/embargo"
 access_type["OPEN"] = "http://uri.suomi.fi/codelist/fairdata/access_type/code/open"
@@ -11,6 +12,7 @@ def clean_empty_keyvalues_from_dict(d):
 
     Returns:
         object  -- Object without the empty values.
+
     """
     if not isinstance(d, (dict, list)):
         return d
@@ -28,6 +30,7 @@ def alter_role_data(participant_list, role):
 
     Returns:
         list -- List of the participants with the role in question complyant to Metax schema.
+
     """
     participants = []
     participant_list_with_role = [x for x in participant_list if role in x["role"] ]
@@ -65,6 +68,7 @@ def other_identifiers_to_metax(identifiers_list):
 
     Returns:
         list -- List of other identifiers that comply to Metax schema.
+
     """
     other_identifiers = []
     for identifier in identifiers_list:
@@ -82,6 +86,7 @@ def access_rights_to_metax(data):
 
     Returns:
         object -- Object containing access right object that comply to Metax schema.
+
     """
     access_rights = {}
     access_rights["access_type"] = {}
@@ -111,6 +116,7 @@ def files_data_to_metax(files):
 
     Returns:
         list -- List containing objects that conform to Metax schema.
+
     """
     metax_files = []
     metax_file_object = {}
@@ -132,6 +138,7 @@ def directorys_data_to_metax(files):
 
     Returns:
         list -- List containing objects that conform to Metax schema.
+
     """
     metax_directorys = []
     metax_directory_object = {}
@@ -155,6 +162,7 @@ def data_to_metax(data, metadata_provider_org, metadata_provider_user, data_cata
 
     Returns:
         object -- Returns an object that has been validated and should conform to Metax schema and is ready to be sent to Metax.
+
     """
     dataset_data = {
         "metadata_provider_org": metadata_provider_org,

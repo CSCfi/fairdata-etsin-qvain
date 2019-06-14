@@ -149,7 +149,10 @@ class UserDatasets(Resource):
         return '', 404
 
 class QvainDataset(Resource):
+    """POST and PATCH request handling coming in from Qvain Light. Used for adding datasets to METAX."""
+
     def __init__(self):
+        """Setup required utils for dataset metadata handling"""
         self.validationSchema = DatasetValidationSchema(strict=True)
 
     @log_request
@@ -159,6 +162,7 @@ class QvainDataset(Resource):
 
         Returns:
             object -- The response from metax or if error an error message.
+
         """
         is_authd = authentication.is_authenticated()
         if not is_authd:
@@ -195,6 +199,7 @@ class QvainDataset(Resource):
 
         Returns:
             object -- The response from metax or if error an error message.
+
         """
         is_authd = authentication.is_authenticated()
         if not is_authd:

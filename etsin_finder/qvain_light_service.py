@@ -147,6 +147,7 @@ class MetaxQvainLightAPIService(FlaskService):
 
         Returns:
             [type] -- The response from Metax.
+
         """
         req_url = self.METAX_CREATE_DATASET
         headers = {'Accept': 'application/json'}
@@ -179,6 +180,7 @@ class MetaxQvainLightAPIService(FlaskService):
 
         Returns:
             [type] -- The response from Metax.
+
         """
         req_url = self.METAX_CREATE_DATASET + "/" + cr_id
         headers = {'Accept': 'application/json'}
@@ -240,6 +242,7 @@ def create_dataset(form_data):
 
     Returns:
         [type] -- Metax response.
+
     """
     return _metax_api.create_dataset(form_data)
 
@@ -253,5 +256,6 @@ def update_dataset(form_data, cr_id):
 
     Returns:
         [type] -- Metax response.
+
     """
     return _metax_api.update_dataset(form_data, cr_id)

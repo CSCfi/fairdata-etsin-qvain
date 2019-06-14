@@ -1,3 +1,4 @@
+"""Validation schemas for form data coming in from Qvain Light"""
 from marshmallow import Schema, fields
 from marshmallow.validate import Length
 import json
@@ -9,6 +10,7 @@ class LangValidationSchema(Schema):
     Arguments:
         Schema {library} -- Marshmallows Schema library.
     """
+
     en = fields.Str()
     fi = fields.Str()
 
@@ -19,6 +21,7 @@ class ParticipantsValidationSchema(Schema):
     Arguments:
         Schema {library} -- Marshmallows Schema library.
     """
+
     type = fields.Str(
         required=True,
         validate=Length(min=1)
@@ -42,6 +45,7 @@ class DatasetValidationSchema(Schema):
     Arguments:
         Schema {library} -- Marshmallows Schema library.
     """
+
     original = fields.Str()
     title = fields.Nested(
         LangValidationSchema,
