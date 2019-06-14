@@ -15,19 +15,23 @@ export class ProjectSelectorBase extends Component {
   }
 
   getOptions = () => {
-    if (this.props.Stores.Env.environment === 'development') {
+    const { environment } = this.props.Stores.Env
+    if (environment === 'development' || environment === 'test') {
       return [
         { value: 'project_x', label: 'project_x' },
         { value: 'empty', label: 'test nonexistant IDA project' }
       ]
     }
-    return this.props.Stores.Auth.user.idaGroups
+    const projects = this.props.Stores.Auth.user.idaGroups
       .filter(group => group.includes('IDA'))
       .map(group => group.substring(
         group.indexOf(':') + 1,
         group.length
       ))
       .map(projectId => ({ value: projectId, label: projectId }))
+    return environment === 'test' ?
+      [...projects, { value: 'project_x', label: 'project_x' }] :
+      projects
   }
 
   handleOnChange = (selectedOption) => {
