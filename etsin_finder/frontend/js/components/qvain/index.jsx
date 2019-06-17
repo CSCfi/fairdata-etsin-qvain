@@ -36,10 +36,11 @@ class Qvain extends Component {
       fieldOfScience: values.fieldOfScience ? values.fieldOfScience.url : undefined,
       keywords: values.keywords,
       participants: values.participants,
-      accessType: values.accessType ? values.accessType.url : undefined,
+      accessType: values.accessType ? values.accessType : undefined,
       restrictionGrounds: values.restrictionGrounds ? values.restrictionGrounds.value : undefined,
       embargoDate: values.embargoExpDate,
-      license: values.license ? values.license.url : undefined,
+      license: values.license ? values.license : undefined,
+      otherLicenseUrl: values.otherLicenseUrl,
       // Send no values if empty instead of empty values.
       remote_resources:
         values._externalResources.length > 0 ? values._externalResources : undefined,
@@ -53,7 +54,7 @@ class Qvain extends Component {
         console.log(val)
         axios
           .post('/api/dataset', obj)
-          .then(res => this.setState({ response: res }))
+          .then(res => this.setState({ response: res.data }))
           .catch(err => this.setState({ response: err }))
       })
       .catch(err => {

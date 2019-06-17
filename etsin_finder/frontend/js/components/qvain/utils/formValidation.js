@@ -60,21 +60,11 @@ const otherIdentifiersSchema = yup
 
 // you have to provide both the license object and the otherLicenseUrl as an object
 const licenseSchema = yup.object().shape({
-  idaPickerOpen: yup.boolean(),
-  license: yup
-    .object()
-    .shape({
-      name: yup.object().nullable(),
-      url: yup.mixed().when('idaPickerOpen', {
-        is: true,
-        then: yup.string().required(),
-        otherwise: yup.string(),
-      }),
-    })
-    .nullable(),
+  name: yup.object().nullable(),
+  identifier: yup.string().required(),
   otherLicenseUrl: yup
     .mixed()
-    .when('license.url', {
+    .when('identifier', {
       is: 'other',
       then: yup
         .string(translate('qvain.validationMessages.license.otherUrl.string'))
