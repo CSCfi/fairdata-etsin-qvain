@@ -3,6 +3,7 @@ access_type = {}
 access_type["EMBARGO"] = "http://uri.suomi.fi/codelist/fairdata/access_type/code/embargo"
 access_type["OPEN"] = "http://uri.suomi.fi/codelist/fairdata/access_type/code/open"
 
+
 def clean_empty_keyvalues_from_dict(d):
     """
     Cleans all key value pairs from the object that have empty values, like [], {} and ''.
@@ -19,6 +20,7 @@ def clean_empty_keyvalues_from_dict(d):
     if isinstance(d, list):
         return [v for v in (clean_empty_keyvalues_from_dict(v) for v in d) if v]
     return {k: v for k, v in ((k, clean_empty_keyvalues_from_dict(v)) for k, v in d.items()) if v}
+
 
 def alter_role_data(participant_list, role):
     """
@@ -54,10 +56,13 @@ def alter_role_data(participant_list, role):
             participant["is_part_of"]["name"]["und"] = participant_object["organization"]
             participant["is_part_of"]["@type"] = "Organization"
 
-        participant["email"] = participant_object["email"]
-        participant["identifier"] = participant_object["identifier"]
+        if "email" in participant_object:
+            participant["email"] = participant_object["email"]
+        if "identifier" in participant_object:
+            participant["identifier"] = participant_object["identifier"]
         participants.append(participant)
     return participants
+
 
 def other_identifiers_to_metax(identifiers_list):
     """
@@ -77,6 +82,7 @@ def other_identifiers_to_metax(identifiers_list):
         other_identifiers.append(id_dict)
     return other_identifiers
 
+
 def access_rights_to_metax(data):
     """
     Cherry pick access right data from the frontend form data and make it comply with Metax schema.
@@ -90,22 +96,46 @@ def access_rights_to_metax(data):
     """
     access_rights = {}
     access_rights["access_type"] = {}
-    access_rights["access_type"]["identifier"] = data["accessType"]
+    access_rights["access_type"]["identifier"] = data["accessType"]["url"]
     access_rights["license"] = []
-    if "identifier" in data["license"]:
+    if "identifier" in data["license"] and data["license"]["identifier"] != 'other':
         license_object = {}
         license_object["identifier"] = data["license"]["identifier"]
         access_rights["license"].append(license_object)
-    elif "url" in data["license"]:
+    elif "otherLicenseUrl" in data:
         license_object = {}
-        license_object["license"] = data["license"]["url"]
+        license_object["license"] = data["otherLicenseUrl"]
         access_rights["license"].append(license_object)
-    if data["accessType"] != access_type["OPEN"]:
+    if data["accessType"]["url"] != access_type["OPEN"]:
         access_rights["restriction_grounds"] = {}
         access_rights["restriction_grounds"]["identifier"] = data["restrictionGrounds"]
-    if data["accessType"] == access_type["EMBARGO"]:
+    if data["accessType"]["url"] == access_type["EMBARGO"]:
         access_rights["available"] = data["embargoDate"]
     return access_rights
+
+
+def remote_resources_data_to_metax(resources):
+    """
+    Converts external resources from qvain light schema to metax schema.
+
+    Arguments:
+        data {object} -- External resources.
+
+    Returns:
+        object -- Object containing external resources array that complies with Metax schema.
+
+    """
+    metax_remote_resources = []
+    metax_remote_resources_object = {}
+    metax_remote_resources_object["use_category"] = {}
+    metax_remote_resources_object["access_url"] = {}
+    for resource in resources:
+        metax_remote_resources_object["title"] = resource["title"]
+        metax_remote_resources_object["access_url"]["identifier"] = resource["url"]
+        metax_remote_resources_object["use_category"]["identifier"] = resource["useCategory"]["value"]
+        metax_remote_resources.append(metax_remote_resources_object)
+    return metax_remote_resources
+
 
 def files_data_to_metax(files):
     """
@@ -129,6 +159,7 @@ def files_data_to_metax(files):
         metax_files.append(metax_file_object)
     return metax_files
 
+
 def directorys_data_to_metax(files):
     """
     Create list of objects that comply to Metax schema
@@ -149,6 +180,7 @@ def directorys_data_to_metax(files):
         metax_directory_object["use_category"] = file["useCategory"]
         metax_directorys.append(metax_directory_object)
     return metax_directorys
+
 
 def data_to_metax(data, metadata_provider_org, metadata_provider_user, data_catalog):
     """
@@ -180,7 +212,7 @@ def data_to_metax(data, metadata_provider_org, metadata_provider_user, data_cata
             }],
             "keyword": data["keywords"],
             "access_rights": access_rights_to_metax(data),
-            "remote_resources": data["remote_resources"] if data_catalog == "urn:nbn:fi:att:data-catalog-att" else "",
+            "remote_resources": remote_resources_data_to_metax(data["remote_resources"]) if data_catalog == "urn:nbn:fi:att:data-catalog-att" else "",
             "files": files_data_to_metax(data["files"]) if data_catalog == "urn:nbn:fi:att:data-catalog-ida" else "",
             "directorys": directorys_data_to_metax(data["directorys"]) if data_catalog == "urn:nbn:fi:att:data-catalog-ida" else ""
         }

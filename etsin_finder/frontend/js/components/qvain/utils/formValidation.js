@@ -1,51 +1,44 @@
 /* eslint-disable no-unused-expressions */
-import * as yup from 'yup';
-import translate from 'counterpart';
+import * as yup from 'yup'
+import translate from 'counterpart'
 
 // DATASET DESCRIPTION VALIDATION
 
 const titleSchema = yup.object().shape({
-  fi: yup
-    .mixed()
-    .when('en', {
-      is: (val) => val.length > 0,
-      then:
-        yup
-          .string(translate('qvain.validationMessages.title.string'))
-          .max(100, translate('qvain.validationMessages.title.max')),
-      otherwise:
-        yup
-          .string(translate('qvain.validationMessages.title.string'))
-          .max(100, translate('qvain.validationMessages.title.max'))
-          .required(translate('qvain.validationMessages.title.required'))
-    }),
+  fi: yup.mixed().when('en', {
+    is: val => val.length > 0,
+    then: yup
+      .string(translate('qvain.validationMessages.title.string'))
+      .max(100, translate('qvain.validationMessages.title.max')),
+    otherwise: yup
+      .string(translate('qvain.validationMessages.title.string'))
+      .max(100, translate('qvain.validationMessages.title.max'))
+      .required(translate('qvain.validationMessages.title.required')),
+  }),
   en: yup
     .string(translate('qvain.validationMessages.title.string'))
-    .max(100, translate('qvain.validationMessages.title.max'))
+    .max(100, translate('qvain.validationMessages.title.max')),
 })
 
 const descriptionSchema = yup.object().shape({
-  fi: yup
-    .mixed()
-    .when('en', {
-      is: (val) => val.length > 0,
-      then:
-        yup
-          .string(translate('qvain.validationMessages.description.string'))
-          .max(100, translate('qvain.validationMessages.description.max')),
-      otherwise:
-        yup
-        .string(translate('qvain.validationMessages.description.string'))
-        .max(100, translate('qvain.validationMessages.description.max'))
-        .required(translate('qvain.validationMessages.description.required'))
-    }),
+  fi: yup.mixed().when('en', {
+    is: val => val.length > 0,
+    then: yup
+      .string(translate('qvain.validationMessages.description.string'))
+      .max(100, translate('qvain.validationMessages.description.max')),
+    otherwise: yup
+      .string(translate('qvain.validationMessages.description.string'))
+      .max(100, translate('qvain.validationMessages.description.max'))
+      .required(translate('qvain.validationMessages.description.required')),
+  }),
   en: yup
     .string(translate('qvain.validationMessages.description.string'))
-    .max(100, translate('qvain.validationMessages.description.max'))
+    .max(100, translate('qvain.validationMessages.description.max')),
 })
 
 const keywordsSchema = yup
-  .array().of(
+  .array()
+  .of(
     yup
       .string(translate('qvain.validationMessages.keywords.string'))
       .max(100, translate('qvain.validationMessages.keywords.max'))
@@ -59,30 +52,30 @@ const otherIdentifierSchema = yup
   .max(100, translate('qvain.validationMessages.otherIdentifiers.max'))
 
 const otherIdentifiersSchema = yup
-  .array().of(otherIdentifierSchema)
+  .array()
+  .of(otherIdentifierSchema)
   .nullable()
 
 // LICENSE AND ACCESS VALIDATION
 
 // you have to provide both the license object and the otherLicenseUrl as an object
 const licenseSchema = yup.object().shape({
-  idaPickerOpen: yup.boolean(),
-  license: yup.object().shape({
-    name: yup.object().nullable(),
-    url: yup.mixed().when('idaPickerOpen', {
-      is: true,
-      then: yup.string().required(),
-      otherwise: yup.string()
+  name: yup.object().nullable(),
+  identifier: yup.string().required(),
+  otherLicenseUrl: yup
+    .mixed()
+    .when('identifier', {
+      is: 'other',
+      then: yup
+        .string(translate('qvain.validationMessages.license.otherUrl.string'))
+        .url(translate('qvain.validationMessages.license.otherUrl.url'))
+        .required(translate('qvain.validationMessages.license.otherUrl.required')),
+      otherwise: yup
+        .string()
+        .url()
+        .nullable(),
     })
-  }).nullable(),
-  otherLicenseUrl: yup.mixed().when('license.url', {
-    is: 'other',
-    then: yup
-      .string(translate('qvain.validationMessages.license.otherUrl.string'))
-      .url(translate('qvain.validationMessages.license.otherUrl.url'))
-      .required(translate('qvain.validationMessages.license.otherUrl.required')),
-    otherwise: yup.string().url().nullable()
-  }).nullable()
+    .nullable(),
 })
 
 const accessTypeSchema = yup.object().shape({
@@ -90,7 +83,7 @@ const accessTypeSchema = yup.object().shape({
   url: yup
     .string(translate('qvain.validationMessages.accessType.string'))
     .url(translate('qvain.validationMessages.accessType.url'))
-    .required(translate('qvain.validationMessages.accessType.required'))
+    .required(translate('qvain.validationMessages.accessType.required')),
 })
 
 const embargoExpDateSchema = yup.date().nullable()
@@ -108,10 +101,14 @@ const participantType = yup
   .required(translate('qvain.validationMessages.participants.type.required'))
 
 const participantRolesSchema = yup
-  .array().of(
+  .array()
+  .of(
     yup
       .mixed()
-      .oneOf(['creator', 'curator', 'publisher'], translate('qvain.validationMessages.participants.roles.oneOf')),
+      .oneOf(
+        ['creator', 'curator', 'publisher'],
+        translate('qvain.validationMessages.participants.roles.oneOf')
+      )
   )
   .required(translate('qvain.validationMessages.participants.roles.required'))
 
@@ -134,25 +131,24 @@ const participantIdentifierSchema = yup
 const participantOrganizationSchema = yup.object().shape({
   type: yup
     .mixed()
-    .oneOf(['person', 'organization'], translate('qvain.validationMessages.participants.type.oneOf'))
+    .oneOf(
+      ['person', 'organization'],
+      translate('qvain.validationMessages.participants.type.oneOf')
+    )
     .required(translate('qvain.validationMessages.participants.type.required')),
-  organization: yup
-    .mixed()
-    .when('type', {
-      is: 'person',
-      then:
-        yup.object(translate('qvain.validationMessages.participants.organization.object')).shape({
-          value: yup
-            .string(translate('qvain.validationMessages.participants.organization.string'))
-        })
-        .required(translate('qvain.validationMessages.participants.organization.required')),
-      otherwise:
-        yup.object(translate('qvain.validationMessages.participants.organization.object')).shape({
-          value: yup
-            .string(translate('qvain.validationMessages.participants.organization.string'))
-            .nullable()
-        })
-      })
+  organization: yup.mixed().when('type', {
+    is: 'person',
+    then: yup
+      .string(translate('qvain.validationMessages.participants.organization.string'))
+      .required(translate('qvain.validationMessages.participants.organization.required')),
+    otherwise: yup
+      .object(translate('qvain.validationMessages.participants.organization.object'))
+      .shape({
+        value: yup
+          .string(translate('qvain.validationMessages.participants.organization.string'))
+          .nullable(),
+      }),
+  }),
 })
 
 // FILE AND DIRECTORY (IDA RESOURCES) VALIDATION
@@ -173,16 +169,18 @@ const fileSchema = yup.object().shape({
   title: fileTitleSchema,
   description: fileDescriptionSchema,
   useCategory: fileUseCategorySchema,
-  fileType: yup.string().nullable()
+  fileType: yup.string().nullable(),
 })
 
 const filesSchema = yup.array().of(fileSchema)
 
-const directoryUseCategorySchema = yup.string().required(translate('qvain.validationMessages.files.directory.useCategory.required'))
+const directoryUseCategorySchema = yup
+  .string()
+  .required(translate('qvain.validationMessages.files.directory.useCategory.required'))
 
 const directorySchema = yup.object().shape({
   useCategory: directoryUseCategorySchema,
-  fileType: yup.string().nullable()
+  fileType: yup.string().nullable(),
 })
 
 const directoriesSchema = yup.array().of(directorySchema)
@@ -197,56 +195,47 @@ const externalResourceUrlSchema = yup
 const externalResourceSchema = yup.object().shape({
   id: yup.number().nullable(),
   title: yup.string().nullable(),
-  url: externalResourceUrlSchema
+  url: externalResourceUrlSchema,
 })
 
 // ENTIRE PARTICIPANT SCHEMAS
 
-const participantSchema = yup
-  .object().shape({
-    type: participantType,
-    role: participantRolesSchema,
-    name: participantNameSchema,
-    email: participantEmailSchema,
-    identifier: participantIdentifierSchema,
-    organization: yup
-      .mixed()
-      .when('type', {
-        is: 'person',
-        then:
-          yup
-            .string(translate('qvain.validationMessages.participants.organization.string'))
-            .required(translate('qvain.validationMessages.participants.organization.required')),
-        otherwise:
-          yup
-            .string(translate('qvain.validationMessages.participants.organization.string'))
-            .nullable()
-        })
-  })
+const participantSchema = yup.object().shape({
+  type: participantType,
+  role: participantRolesSchema,
+  name: participantNameSchema,
+  email: participantEmailSchema,
+  identifier: participantIdentifierSchema,
+  organization: yup.mixed().when('type', {
+    is: 'person',
+    then: yup
+      .string(translate('qvain.validationMessages.participants.organization.string'))
+      .required(translate('qvain.validationMessages.participants.organization.required')),
+    otherwise: yup
+      .string(translate('qvain.validationMessages.participants.organization.string'))
+      .nullable(),
+  }),
+})
 
 const participantsSchema = yup
-  .array().of(
-    yup
-      .object().shape({
-        type: participantType,
-        role: participantRolesSchema,
-        name: participantNameSchema,
-        email: participantEmailSchema,
-        identifier: participantIdentifierSchema,
-        organization: yup
-          .mixed()
-          .when('type', {
-            is: 'person',
-            then:
-              yup
-                .string(translate('qvain.validationMessages.participants.organization.string'))
-                .required(translate('qvain.validationMessages.participants.organization.required')),
-            otherwise:
-              yup
-                .string(translate('qvain.validationMessages.participants.organization.string'))
-                .nullable()
-            })
-          })
+  .array()
+  .of(
+    yup.object().shape({
+      type: participantType,
+      role: participantRolesSchema,
+      name: participantNameSchema,
+      email: participantEmailSchema,
+      identifier: participantIdentifierSchema,
+      organization: yup.mixed().when('type', {
+        is: 'person',
+        then: yup
+          .string(translate('qvain.validationMessages.participants.organization.string'))
+          .required(translate('qvain.validationMessages.participants.organization.required')),
+        otherwise: yup
+          .string(translate('qvain.validationMessages.participants.organization.string'))
+          .nullable(),
+      }),
+    })
   )
   .required()
 
@@ -255,20 +244,17 @@ const participantsSchema = yup
 const qvainFormSchema = yup.object().shape({
   title: titleSchema,
   description: descriptionSchema,
-  fieldOfScience: yup
-    .string(),
+  fieldOfScience: yup.string(),
   keywords: keywordsSchema,
   otherIdentifiers: otherIdentifiersSchema,
   accessType: accessTypeSchema,
   license: licenseSchema,
-  restrictionGrounds: yup
-    .mixed()
-    .when('accessType.value', {
-      is: 'Open',
-      then: restrictionGroundsSchema
-    }),
-  participants: participantsSchema
-});
+  restrictionGrounds: yup.mixed().when('accessType.value', {
+    is: 'Open',
+    then: restrictionGroundsSchema,
+  }),
+  participants: participantsSchema,
+})
 
 export {
   qvainFormSchema,
@@ -298,5 +284,5 @@ export {
   directorySchema,
   directoriesSchema,
   externalResourceSchema,
-  externalResourceUrlSchema
-};
+  externalResourceUrlSchema,
+}
