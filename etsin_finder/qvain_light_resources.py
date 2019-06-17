@@ -168,7 +168,7 @@ class QvainDataset(Resource):
         if not is_authd:
             return 'Not logged in'
         try:
-            data, error = self.validationSchema.loads(request.data)
+            data = self.validationSchema.loads(request.data)
         except ValidationError as err:
             log.warning("INVALID FORM DATA: {0}".format(err.messages))
             return err.messages

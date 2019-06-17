@@ -10,6 +10,7 @@ import Participants from './participants'
 import { qvainFormSchema } from './utils/formValidation'
 import Files from './files'
 import { QvainContainer, SubHeader, SubHeaderText, Container } from './general/card'
+import handleSubmitToBackend from './utils/handleSubmit'
 
 class Qvain extends Component {
   static propTypes = {
@@ -22,31 +23,7 @@ class Qvain extends Component {
 
   handleSubmit = e => {
     e.preventDefault()
-    const values = this.props.Stores.Qvain
-    const obj = {
-      title: {
-        fi: values.title.fi,
-        en: values.title.en,
-      },
-      description: {
-        fi: values.description.fi,
-        en: values.description.en,
-      },
-      identifiers: values.otherIdentifiers,
-      fieldOfScience: values.fieldOfScience ? values.fieldOfScience.url : undefined,
-      keywords: values.keywords,
-      participants: values.participants,
-      accessType: values.accessType ? values.accessType : undefined,
-      restrictionGrounds: values.restrictionGrounds ? values.restrictionGrounds.value : undefined,
-      embargoDate: values.embargoExpDate,
-      license: values.license ? values.license : undefined,
-      otherLicenseUrl: values.otherLicenseUrl,
-      // Send no values if empty instead of empty values.
-      remote_resources:
-        values._externalResources.length > 0 ? values._externalResources : undefined,
-      files: values._selectedFiles.idaGroups ? values._selectedFiles : undefined,
-      directorys: values._selectedDirectories.idaGroups ? values._selectedDirectories : undefined,
-    }
+    const obj = handleSubmitToBackend(this.props.Stores.Qvain)
     console.log(JSON.stringify(obj, null, 4))
     qvainFormSchema
       .validate(obj, { abortEarly: false })
