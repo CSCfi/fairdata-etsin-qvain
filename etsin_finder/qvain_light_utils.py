@@ -115,6 +115,16 @@ def access_rights_to_metax(data):
 
 
 def remote_resources_data_to_metax(resources):
+    """
+    Converts external resources from qvain light schema to metax schema.
+
+    Arguments:
+        data {object} -- External resources.
+
+    Returns:
+        object -- Object containing external resources array that complies with Metax schema.
+
+    """
     metax_remote_resources = []
     metax_remote_resources_object = {}
     metax_remote_resources_object["use_category"] = {}
