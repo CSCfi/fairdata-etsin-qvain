@@ -11,6 +11,31 @@ const participantsToMetax = participants => {
   return parsedParticipant
 }
 
+const filesToMetax = files => {
+  const parsedFileData = files.map(file => ({
+    identifier: file.identifier,
+    title: file.title,
+    description: file.description ? file.description : undefined,
+    fileType: file.fileType ? file.fileType : undefined,
+    useCategory: {
+      identifier: file.useCategory
+    }
+  }))
+  return parsedFileData
+}
+
+const directoriesToMetax = directories => {
+  const parsedDirectoryData = directories.map(dir => ({
+    identifier: dir.identifier,
+    title: dir.title,
+    description: dir.description ? dir.description : undefined,
+    useCategory: {
+      identifier: dir.useCategory
+    }
+  }))
+  return parsedDirectoryData
+}
+
 const handleSubmitToBackend = (values) => {
   const obj = {
     title: {
@@ -33,8 +58,8 @@ const handleSubmitToBackend = (values) => {
     // Send no values if empty instead of empty values.
     remote_resources:
       values._externalResources.length > 0 ? values._externalResources : undefined,
-    files: values._selectedFiles.idaGroups ? values._selectedFiles : undefined,
-    directorys: values._selectedDirectories.idaGroups ? values._selectedDirectories : undefined,
+    files: values._selectedFiles ? filesToMetax(values._selectedFiles) : undefined,
+    directories: values._selectedDirectories ? directoriesToMetax(values._selectedDirectories) : undefined,
   }
   return obj
 }
