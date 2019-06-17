@@ -163,7 +163,6 @@ const fileTitleSchema = yup
 
 const fileDescriptionSchema = yup
   .string()
-  .required(translate('qvain.validationMessages.files.file.description.required'))
 
 const fileSchema = yup.object().shape({
   title: fileTitleSchema,
@@ -174,11 +173,20 @@ const fileSchema = yup.object().shape({
 
 const filesSchema = yup.array().of(fileSchema)
 
+const directoryTitleSchema = yup
+  .string()
+  .required(translate('qvain.validationMessages.files.directory.title.required'))
+
+const directoryDescriptionSchema = yup
+  .string()
+
 const directoryUseCategorySchema = yup
   .string()
   .required(translate('qvain.validationMessages.files.directory.useCategory.required'))
 
 const directorySchema = yup.object().shape({
+  title: directoryTitleSchema,
+  description: directoryDescriptionSchema,
   useCategory: directoryUseCategorySchema,
   fileType: yup.string().nullable(),
 })
@@ -280,6 +288,8 @@ export {
   fileUseCategorySchema,
   fileSchema,
   filesSchema,
+  directoryTitleSchema,
+  directoryDescriptionSchema,
   directoryUseCategorySchema,
   directorySchema,
   directoriesSchema,

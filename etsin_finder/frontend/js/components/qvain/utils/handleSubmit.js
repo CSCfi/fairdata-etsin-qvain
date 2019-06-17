@@ -17,17 +17,21 @@ const filesToMetax = files => {
     title: file.title,
     description: file.description ? file.description : undefined,
     fileType: file.fileType ? file.fileType : undefined,
-    useCategory: file.useCategory
+    useCategory: {
+      identifier: file.useCategory
+    }
   }))
   return parsedFileData
 }
 
-const directorysToMetax = directorys => {
-  const parsedDirectoryData = directorys.map(dir => ({
+const directoriesToMetax = directories => {
+  const parsedDirectoryData = directories.map(dir => ({
     identifier: dir.identifier,
     title: dir.title,
     description: dir.description ? dir.description : undefined,
-    useCategory: dir.useCategory
+    useCategory: {
+      identifier: dir.useCategory
+    }
   }))
   return parsedDirectoryData
 }
@@ -55,7 +59,7 @@ const handleSubmitToBackend = (values) => {
     remote_resources:
       values._externalResources.length > 0 ? values._externalResources : undefined,
     files: values._selectedFiles ? filesToMetax(values._selectedFiles) : undefined,
-    directorys: values._selectedDirectories ? directorysToMetax(values._selectedDirectories) : undefined,
+    directories: values._selectedDirectories ? directoriesToMetax(values._selectedDirectories) : undefined,
   }
   return obj
 }
