@@ -153,7 +153,7 @@ class QvainDataset(Resource):
 
     def __init__(self):
         """Setup required utils for dataset metadata handling"""
-        self.validationSchema = DatasetValidationSchema(strict=True)
+        self.validationSchema = DatasetValidationSchema()
 
     @log_request
     def post(self):
