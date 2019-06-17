@@ -34,7 +34,7 @@ class ParticipantsValidationSchema(Schema):
         required=True,
         validate=Length(min=1)
     )
-    email = fields.Email(required=True)
+    email = fields.Email()
     identifier = fields.Str()
     organization = fields.Str()
 
@@ -69,9 +69,8 @@ class DatasetValidationSchema(Schema):
         required=True,
         validate=lambda list: len(list) > 0
     )
-    accessType = fields.Str(
-        required=True,
-        validate=Length(min=1)
+    accessType = fields.Dict(
+        required=True
     )
     embargoDate = fields.Str()
     restrictionGrounds = fields.Str()

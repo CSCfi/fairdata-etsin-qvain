@@ -4,98 +4,98 @@ import Select from 'react-select'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 
-import getReferenceData from '../utils/getReferenceData';
+import getReferenceData from '../utils/getReferenceData'
 import Card from '../general/card'
 import { Label, Input } from '../general/form'
 import { License as LicenseConstructor } from '../../../stores/view/qvain'
 import { onChange, getCurrentValue } from '../utils/select'
-import { licenseSchema } from '../utils/formValidation';
-import ValidationError from '../general/validationError';
+import { licenseSchema } from '../utils/formValidation'
+import ValidationError from '../general/validationError'
 
 const otherOptValue = 'other'
 
 const otherOptLabel = locale => {
   const labels = {
     en: 'Other (URL)',
-    fi: 'Muu (URL)'
+    fi: 'Muu (URL)',
   }
   return labels[locale]
 }
 
 const otherOpt = locale => ({
   value: otherOptValue,
-  label: otherOptLabel(locale)
+  label: otherOptLabel(locale),
 })
 
 class License extends Component {
   static propTypes = {
-    Stores: PropTypes.object.isRequired
+    Stores: PropTypes.object.isRequired,
   }
 
   state = {
     options: {
       en: [],
-      fi: []
+      fi: [],
     },
-    errorMessage: undefined
+    errorMessage: undefined,
   }
 
   componentDidMount = () => {
     const { license } = this.props.Stores.Qvain
     getReferenceData('license')
-    .then(res => {
-      const list = res.data.hits.hits;
-      const refsEn = list.map(ref => (
-        {
+      .then(res => {
+        const list = res.data.hits.hits
+        const refsEn = list.map(ref => ({
           value: ref._source.uri,
           label: ref._source.label.en,
-        }
-        ))
-      const refsFi = list.map(ref => (
-        {
+        }))
+        const refsFi = list.map(ref => ({
           value: ref._source.uri,
-          label: ref._source.label.fi || ref._source.label.en // use english label when finnish is not available
-        }
-        ))
-      this.setState({
-        options: {
-          en: [...refsEn, otherOpt('en')],
-          fi: [...refsFi, otherOpt('fi')]
+          label: ref._source.label.fi || ref._source.label.en, // use english label when finnish is not available
+        }))
+        this.setState({
+          options: {
+            en: [...refsEn, otherOpt('en')],
+            fi: [...refsFi, otherOpt('fi')],
+          },
+        })
+        license.name = {
+          en: refsEn.find(opt => opt.value === license.identifier).label,
+          fi: refsFi.find(opt => opt.value === license.identifier).label,
         }
       })
-      license.name = {
-        en: refsEn.find(opt => opt.value === license.url).label,
-        fi: refsFi.find(opt => opt.value === license.url).label
-      }
-    })
-    .catch(error => {
-      if (error.response) {
-        // Error response from Metax
-        console.log(error.response.data);
-        console.log(error.response.status);
-        console.log(error.response.headers);
-      } else if (error.request) {
-        // No response from Metax
-        console.log(error.request);
-      } else {
-        // Something happened in setting up the request that triggered an Error
-        console.log('Error', error.message);
-      }
-    });
+      .catch(error => {
+        if (error.response) {
+          // Error response from Metax
+          console.log(error.response.data)
+          console.log(error.response.status)
+          console.log(error.response.headers)
+        } else if (error.request) {
+          // No response from Metax
+          console.log(error.request)
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.log('Error', error.message)
+        }
+      })
   }
 
   handleOnBlur = () => {
-    const { license, otherLicenseUrl, idaPickerOpen } = this.props.Stores.Qvain
-    const validationObject = { idaPickerOpen, license, otherLicenseUrl }
-    licenseSchema.validate(validationObject).then(() => {
-      this.setState({
-        errorMessage: undefined
+    const { otherLicenseUrl, idaPickerOpen } = this.props.Stores.Qvain
+    const { identifier, name } = this.props.Stores.Qvain.license
+    const validationObject = { idaPickerOpen, identifier, name, otherLicenseUrl }
+    licenseSchema
+      .validate(validationObject)
+      .then(() => {
+        this.setState({
+          errorMessage: undefined,
+        })
       })
-    }).catch(err => {
-      this.setState({
-        errorMessage: err.errors
+      .catch(err => {
+        this.setState({
+          errorMessage: err.errors,
+        })
       })
-    })
   }
 
   render() {
@@ -115,7 +115,7 @@ class License extends Component {
           onBlur={() => {}}
           attributes={{ placeholder: 'qvain.rightsAndLicenses.license.placeholder' }}
         />
-        {(license !== undefined && license.url === otherOptValue) && (
+        {license !== undefined && license.identifier === otherOptValue && (
           <Fragment>
             <Translate
               component={Label}
@@ -124,7 +124,7 @@ class License extends Component {
             />
             <Input
               value={otherLicenseUrl}
-              onChange={(event) => {
+              onChange={event => {
                 this.props.Stores.Qvain.otherLicenseUrl = event.target.value
               }}
               placeholder="https://"
