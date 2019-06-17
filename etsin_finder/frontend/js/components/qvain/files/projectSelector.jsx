@@ -16,7 +16,7 @@ export class ProjectSelectorBase extends Component {
 
   getOptions = () => {
     const { environment } = this.props.Stores.Env
-    if (environment === 'development' || environment === 'test') {
+    if (environment === 'development') {
       return [
         { value: 'project_x', label: 'project_x' },
         { value: 'empty', label: 'test nonexistant IDA project' }
