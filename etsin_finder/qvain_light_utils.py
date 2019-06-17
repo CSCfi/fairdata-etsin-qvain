@@ -160,26 +160,26 @@ def files_data_to_metax(files):
     return metax_files
 
 
-def directorys_data_to_metax(files):
+def directories_data_to_metax(files):
     """
     Create list of objects that comply to Metax schema
 
     Arguments:
-        files {list} -- List containing the directorys from frontend (does contain ALL the data).
+        files {list} -- List containing the directories from frontend (does contain ALL the data).
 
     Returns:
         list -- List containing objects that conform to Metax schema.
 
     """
-    metax_directorys = []
+    metax_directories = []
     metax_directory_object = {}
     for file in files:
         metax_directory_object["identifier"] = file["identifier"]
         metax_directory_object["title"] = file["title"]
         metax_directory_object["description"] = file["description"] if "description" in file else ""
         metax_directory_object["use_category"] = file["useCategory"]
-        metax_directorys.append(metax_directory_object)
-    return metax_directorys
+        metax_directories.append(metax_directory_object)
+    return metax_directories
 
 
 def data_to_metax(data, metadata_provider_org, metadata_provider_user, data_catalog):
@@ -214,7 +214,7 @@ def data_to_metax(data, metadata_provider_org, metadata_provider_user, data_cata
             "access_rights": access_rights_to_metax(data),
             "remote_resources": remote_resources_data_to_metax(data["remote_resources"]) if data_catalog == "urn:nbn:fi:att:data-catalog-att" else "",
             "files": files_data_to_metax(data["files"]) if data_catalog == "urn:nbn:fi:att:data-catalog-ida" else "",
-            "directorys": directorys_data_to_metax(data["directorys"]) if data_catalog == "urn:nbn:fi:att:data-catalog-ida" else ""
+            "directories": directories_data_to_metax(data["directories"]) if data_catalog == "urn:nbn:fi:att:data-catalog-ida" else ""
         }
     }
     return clean_empty_keyvalues_from_dict(dataset_data)

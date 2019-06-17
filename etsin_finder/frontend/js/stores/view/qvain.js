@@ -304,10 +304,11 @@ class Qvain {
     return req
   }
 
-  @action setDirFileSettings = (directory, useCategory, fileType) => {
+  @action setDirFileSettings = (directory, title, description, useCategory) => {
     const theDir = this._selectedDirectories.find(d => d.directoryName === directory.directoryName)
+    theDir.title = title
+    theDir.description = description
     theDir.useCategory = useCategory
-    theDir.fileType = fileType
   }
 
   @action setInEdit = selectedItem => {

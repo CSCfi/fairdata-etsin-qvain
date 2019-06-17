@@ -485,9 +485,12 @@ const finnish = {
           },
         },
         directory: {
-          useCategory: {
-            required: 'Hakemiston käyttökategoria on pakollinen',
+          title: {
+            required: 'Hakemiston otsikko on pakollinen'
           },
+          useCategory: {
+            required: 'Hakemiston käyttökategoria on pakollinen'
+          }
         },
       },
       externalResources: {
