@@ -1,28 +1,18 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { inject, observer } from 'mobx-react'
-import styled from 'styled-components';
+import styled from 'styled-components'
 import Translate from 'react-translate-component'
-import {
-  FormField,
-  RadioInput,
-  RadioContainer,
-  Checkbox,
-  Label,
-  HelpField
-} from '../general/form'
-import {
-  List,
-  ListItem
-} from '../general/list'
+import { FormField, RadioInput, RadioContainer, Checkbox, Label, HelpField } from '../general/form'
+import { List, ListItem } from '../general/list'
 import { EntityType, Role } from '../../../stores/view/qvain'
 
 export class ParticipantTypeSelectBase extends Component {
   static propTypes = {
-    Stores: PropTypes.object.isRequired
+    Stores: PropTypes.object.isRequired,
   }
 
-  handleChangeRole = (participant, role) => (event) => {
+  handleChangeRole = (participant, role) => event => {
     if (event.target.checked === true) {
       participant.role = [...participant.role, role]
     } else {
@@ -35,19 +25,19 @@ export class ParticipantTypeSelectBase extends Component {
     participant.role = []
   }
 
-  checkIfParticipantRoleExists = (role) => {
+  checkIfParticipantRoleExists = role => {
     const participant = this.props.Stores.Qvain.participantInEdit
     if (this.props.Stores.Qvain.addedParticipants.map(p => p.uiId).includes(participant.uiId)) {
       // we are editing a previously added participant, allow chaning roles
       return false
     }
-    const participantMatchList = this.props.Stores.Qvain.addedParticipants.map((addedParticipant) => (
+    const participantMatchList = this.props.Stores.Qvain.addedParticipants.map(addedParticipant =>
       addedParticipant.role.includes(role)
-    ))
+    )
     if (participantMatchList.includes(true)) {
       return true
     }
-    return false;
+    return false
   }
 
   render() {
@@ -88,11 +78,19 @@ export class ParticipantTypeSelectBase extends Component {
                 </Label>
               </FormField>
             </ListItem>
-            <ListItem disabled={participant.type !== EntityType.PERSON || this.checkIfParticipantRoleExists(Role.PUBLISHER)}>
+            <ListItem
+              disabled={
+                participant.type !== EntityType.PERSON ||
+                this.checkIfParticipantRoleExists(Role.PUBLISHER)
+              }
+            >
               <FormField>
                 <Checkbox
                   onChange={this.handleChangeRole(participant, Role.PUBLISHER)}
-                  disabled={participant.type !== EntityType.PERSON || this.checkIfParticipantRoleExists(Role.PUBLISHER)}
+                  disabled={
+                    participant.type !== EntityType.PERSON ||
+                    this.checkIfParticipantRoleExists(Role.PUBLISHER)
+                  }
                   id="personPublisher"
                   value={Role.PUBLISHER}
                   type="checkbox"
@@ -102,14 +100,23 @@ export class ParticipantTypeSelectBase extends Component {
                   }
                 />
                 <Label htmlFor="personPublisher">
-                  <Translate content="qvain.participants.add.checkbox.publisher" /> * <HelpField>max 1</HelpField>
+                  <Translate content="qvain.participants.add.checkbox.publisher" /> *{' '}
+                  <HelpField>max 1</HelpField>
                 </Label>
               </FormField>
             </ListItem>
-            <ListItem disabled={participant.type !== EntityType.PERSON || this.checkIfParticipantRoleExists(Role.CURATOR)}>
+            <ListItem
+              disabled={
+                participant.type !== EntityType.PERSON ||
+                this.checkIfParticipantRoleExists(Role.CURATOR)
+              }
+            >
               <FormField>
                 <Checkbox
-                  disabled={participant.type !== EntityType.PERSON || this.checkIfParticipantRoleExists(Role.CURATOR)}
+                  disabled={
+                    participant.type !== EntityType.PERSON ||
+                    this.checkIfParticipantRoleExists(Role.CURATOR)
+                  }
                   onChange={this.handleChangeRole(participant, Role.CURATOR)}
                   id="personCurator"
                   value={Role.CURATOR}
@@ -120,7 +127,8 @@ export class ParticipantTypeSelectBase extends Component {
                   type="checkbox"
                 />
                 <Label htmlFor="personCurator">
-                  <Translate content="qvain.participants.add.checkbox.curator" /> <HelpField>max 1</HelpField>
+                  <Translate content="qvain.participants.add.checkbox.curator" />{' '}
+                  <HelpField>max 1</HelpField>
                 </Label>
               </FormField>
             </ListItem>
@@ -160,12 +168,20 @@ export class ParticipantTypeSelectBase extends Component {
                 </Label>
               </FormField>
             </ListItem>
-            <ListItem disabled={participant.type !== EntityType.ORGANIZATION || this.checkIfParticipantRoleExists(Role.PUBLISHER)}>
+            <ListItem
+              disabled={
+                participant.type !== EntityType.ORGANIZATION ||
+                this.checkIfParticipantRoleExists(Role.PUBLISHER)
+              }
+            >
               <FormField>
                 <Checkbox
                   id="orgPublisher"
                   type="checkbox"
-                  disabled={participant.type !== EntityType.ORGANIZATION || this.checkIfParticipantRoleExists(Role.PUBLISHER)}
+                  disabled={
+                    participant.type !== EntityType.ORGANIZATION ||
+                    this.checkIfParticipantRoleExists(Role.PUBLISHER)
+                  }
                   onChange={this.handleChangeRole(participant, Role.PUBLISHER)}
                   value={Role.PUBLISHER}
                   checked={
@@ -174,16 +190,25 @@ export class ParticipantTypeSelectBase extends Component {
                   }
                 />
                 <Label htmlFor="orgPublisher">
-                  <Translate content="qvain.participants.add.checkbox.publisher" /> <HelpField>max 1</HelpField>
+                  <Translate content="qvain.participants.add.checkbox.publisher" />{' '}
+                  <HelpField>max 1</HelpField>
                 </Label>
               </FormField>
             </ListItem>
-            <ListItem disabled={participant.type !== EntityType.ORGANIZATION || this.checkIfParticipantRoleExists(Role.CURATOR)}>
+            <ListItem
+              disabled={
+                participant.type !== EntityType.ORGANIZATION ||
+                this.checkIfParticipantRoleExists(Role.CURATOR)
+              }
+            >
               <FormField>
                 <Checkbox
                   id="orgCurator"
                   type="checkbox"
-                  disabled={participant.type !== EntityType.ORGANIZATION || this.checkIfParticipantRoleExists(Role.CURATOR)}
+                  disabled={
+                    participant.type !== EntityType.ORGANIZATION ||
+                    this.checkIfParticipantRoleExists(Role.CURATOR)
+                  }
                   onChange={this.handleChangeRole(participant, Role.CURATOR)}
                   value={Role.CURATOR}
                   checked={
@@ -192,14 +217,15 @@ export class ParticipantTypeSelectBase extends Component {
                   }
                 />
                 <Label htmlFor="orgCurator">
-                  <Translate content="qvain.participants.add.checkbox.curator" /> <HelpField>max 1</HelpField>
+                  <Translate content="qvain.participants.add.checkbox.curator" />{' '}
+                  <HelpField>max 1</HelpField>
                 </Label>
               </FormField>
             </ListItem>
           </List>
         </Column>
       </Fieldset>
-    );
+    )
   }
 }
 
@@ -220,4 +246,4 @@ const Fieldset = styled.fieldset`
   border: none;
 `
 
-export default inject('Stores')(observer(ParticipantTypeSelectBase));
+export default inject('Stores')(observer(ParticipantTypeSelectBase))

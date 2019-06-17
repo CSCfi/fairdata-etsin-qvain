@@ -166,28 +166,28 @@ class QvainDataset(Resource):
         """
         is_authd = authentication.is_authenticated()
         if not is_authd:
-            return 'Not logged in', 400
+            return 'Not logged in'
         try:
             data, error = self.validationSchema.loads(request.data)
         except ValidationError as err:
             log.warning("INVALID FORM DATA: {0}".format(err.messages))
-            return err.messages, 400
+            return err.messages
         try:
             metadata_provider_org = session["samlUserdata"]["urn:oid:1.3.6.1.4.1.25178.1.2.9"][0]
             metadata_provider_user = session["samlUserdata"]["urn:oid:1.3.6.1.4.1.16161.4.0.53"][0]
         except KeyError as err:
             log.warning("The Metadata provider is not specified: \n{0}".format(err))
-            return "The Metadata provider is not specified", 400
+            return "The Metadata provider is not specified"
 
         if all(["remote_resources" in data, "files" not in data, "directorys" not in data]):
             data_catalog = "urn:nbn:fi:att:data-catalog-att"
         elif all(["remote_resources" not in data, "files" in data or "directorys" in data]):
             data_catalog = "urn:nbn:fi:att:data-catalog-ida"
         else:
-            return "Error specifying the datacatalog. Make shure you have added EITHER Ida files OR external files.", 400
+            return "Error specifying the datacatalog. Make shure you have added EITHER Ida files OR external files."
         metax_redy_data = data_to_metax(data, metadata_provider_org, metadata_provider_user, data_catalog)
         metax_response = create_dataset(metax_redy_data)
-        return metax_response, 200
+        return metax_response
 
     @log_request
     def patch(self, cr_id):
