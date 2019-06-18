@@ -1,23 +1,25 @@
 import { observable, action, computed } from 'mobx'
 import axios from 'axios'
 import { getDirectories, getFiles } from '../../components/qvain/utils/fileHierarchy'
-
-const DIR_URL = '/api/files/directory/'
-const PROJECT_DIR_URL = '/api/files/project/'
-
-const CCBY4 = 'http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0'
+import {
+  AccessTypeURLs,
+  LicenseUrls,
+  FileAPIURLs,
+  UseCategoryURLs,
+} from '../../components/qvain/utils/constants'
+import { getPath } from '../../components/qvain/utils/object'
 
 class Qvain {
   @observable original = undefined // used if editing, otherwise undefined
 
   @observable title = {
     en: '',
-    fi: ''
+    fi: '',
   }
 
   @observable description = {
     en: '',
-    fi: ''
+    fi: '',
   }
 
   @observable otherIdentifiers = []
@@ -26,11 +28,11 @@ class Qvain {
 
   @observable keywords = []
 
-  @observable license = License(undefined, CCBY4)
+  @observable license = License(undefined, LicenseUrls.CCBY4)
 
   @observable otherLicenseUrl = undefined
 
-  @observable accessType = undefined
+  @observable accessType = AccessType(undefined, AccessTypeURLs.OPEN)
 
   @observable embargoExpDate = undefined
 
@@ -59,42 +61,44 @@ class Qvain {
   }
 
   @action
-  addOtherIdentifier = (identifier) => {
+  addOtherIdentifier = identifier => {
     this.otherIdentifiers = [...this.otherIdentifiers, identifier]
   }
 
   @action
-  removeOtherIdentifier = (identifier) => {
-    this.otherIdentifiers = this.otherIdentifiers.filter(otherIdentifier => otherIdentifier !== identifier);
+  removeOtherIdentifier = identifier => {
+    this.otherIdentifiers = this.otherIdentifiers.filter(
+      otherIdentifier => otherIdentifier !== identifier
+    )
   }
 
   @action
-  setFieldOfScience = (fieldOfScience) => {
+  setFieldOfScience = fieldOfScience => {
     this.fieldOfScience = fieldOfScience
   }
 
   @action
-  setKeywords = (keywords) => {
+  setKeywords = keywords => {
     this.keywords = keywords
   }
 
   @action
-  removeKeyword = (keyword) => {
-    this.keywords = this.keywords.filter(word => word !== keyword);
+  removeKeyword = keyword => {
+    this.keywords = this.keywords.filter(word => word !== keyword)
   }
 
   @action
-  setLicense = (license) => {
+  setLicense = license => {
     this.license = license
   }
 
   @action
-  setAccessType = (accessType) => {
+  setAccessType = accessType => {
     this.accessType = accessType
   }
 
   @action
-  setRestrictionGrounds = (restrictionGrounds) => {
+  setRestrictionGrounds = restrictionGrounds => {
     this.restrictionGrounds = restrictionGrounds
   }
 
@@ -104,15 +108,17 @@ class Qvain {
   }
 
   @action
-  setParticipants = (participants) => {
+  setParticipants = participants => {
     this.participants = participants
   }
 
   @action
-  addParticipant = (participant) => {
+  addParticipant = participant => {
     if (participant.uiId !== undefined) {
       // we are saving a participant that was previously added
-      const existing = this.participants.find((addedParticipant) => (addedParticipant.uiId === participant.uiId))
+      const existing = this.participants.find(
+        addedParticipant => addedParticipant.uiId === participant.uiId
+      )
       if (existing !== undefined) {
         this.removeParticipant(participant)
       }
@@ -120,19 +126,17 @@ class Qvain {
       // we are adding a new participant, generate a new UI ID for them
       participant.uiId = this.createParticipantUIId()
     }
-    this.setParticipants(
-      [...this.participants, participant]
-    )
+    this.setParticipants([...this.participants, participant])
   }
 
   @action
-  removeParticipant = (participant) => {
-    const participants = this.participants.filter((p) => p.uiId !== participant.uiId)
+  removeParticipant = participant => {
+    const participants = this.participants.filter(p => p.uiId !== participant.uiId)
     this.setParticipants(participants)
   }
 
   @action
-  editParticipant = (participant) => {
+  editParticipant = participant => {
     this.participantInEdit = { ...participant }
   }
 
@@ -176,19 +180,10 @@ class Qvain {
     const newHier = { ...this._hierarchy }
     const flat = getDirectories(newHier)
     // file.selected = select
-    getFiles(newHier).find(f => f.identifier === file.identifier).selected = false
+    getFiles(newHier).find(f => f.identifier === file.identifier).selected = select
     if (select) {
-      const deselectDir = (dir) => {
-        dir.selected = false
-        if (dir.parentDirectory !== undefined) {
-          const aDir = flat.find(d => d.directoryName === dir.parentDirectory.directoryName)
-          if (aDir !== undefined) {
-            deselectDir(aDir)
-          }
-        }
-      }
       const theDir = flat.find(d => d.directoryName === file.parentDirectory.directoryName)
-      deselectDir(theDir)
+      this.deselectParents(theDir, flat)
       this._selectedFiles = [...this._selectedFiles, file]
     } else {
       this._selectedFiles = this._selectedFiles.filter(f => f.identifier !== file.identifier)
@@ -202,63 +197,106 @@ class Qvain {
     const theDir = flat.find(d => d.directoryName === dir.directoryName)
     theDir.selected = select
     if (select) {
+      // deselect and remove the files within the selected directory
       theDir.files.forEach(f => {
         f.selected = false
+        this._selectedFiles = [
+          ...this._selectedFiles.filter(file => file.identifier !== f.identifier),
+        ]
       })
-      const deselectOthers = (aDir) => {
-        aDir.selected = false
-        aDir.files.forEach(f => {
-          f.selected = false
-        })
-        aDir.directories.forEach(d => deselectOthers(d))
-      }
-      theDir.directories.forEach(d => deselectOthers(d))
+      // deselect directories and files downwards in the hierarchy, remove them from selections
+      theDir.directories.forEach(d => this.deselectChildren(d))
+      // deselect parents
+      const parent = flat.find(d => d.directoryName === theDir.parentDirectory.directoryName)
+      this.deselectParents(parent, flat)
       this._selectedDirectories = [...this._selectedDirectories, dir]
     } else {
-      this._selectedDirectories = this._selectedDirectories.filter(d => d.identifier !== dir.identifier)
+      this._selectedDirectories = this._selectedDirectories.filter(
+        d => d.identifier !== dir.identifier
+      )
     }
     this._hierarchy = newHier
   }
 
-  @action getInitialDirectories = () => (
-    axios
-      .get(PROJECT_DIR_URL + this._selectedProject)
-      .then(res => {
-        this._hierarchy = Directory(res.data, undefined, false, false)
-        return this._hierarchy
-      })
-      .catch(e => {
-        console.log('Failed to acquire project root directory, error: ', e)
-      })
-  )
+  deselectChildren = dir => {
+    dir.selected = false
+    this._selectedDirectories = [
+      ...this._selectedDirectories.filter(d => d.identifier !== dir.identifier),
+    ]
+    dir.files.forEach(f => {
+      f.selected = false
+      this._selectedFiles = [
+        ...this._selectedFiles.filter(file => file.identifier !== f.identifier),
+      ]
+    })
+    dir.directories.forEach(d => this.deselectChildren(d))
+  }
 
-  @action changeProject = (projectId) => {
+  deselectParents = (dir, flattenedHierarchy) => {
+    // deselect directories upwards in the hierarchy, remove them from selected directories
+    if (dir !== undefined) {
+      dir.selected = false
+      this._selectedDirectories = [
+        ...this._selectedDirectories.filter(d => d.identifier !== dir.identifier),
+      ]
+      if (dir.parentDirectory !== undefined) {
+        const aDir = flattenedHierarchy.find(d => d.identifier === dir.parentDirectory.identifier)
+        if (aDir !== undefined) {
+          this.deselectParents(aDir, flattenedHierarchy)
+        }
+      }
+    }
+  }
+
+  @action getInitialDirectories = () =>
+    axios.get(FileAPIURLs.PROJECT_DIR_URL + this._selectedProject).then(res => {
+      this._hierarchy = Directory(res.data, undefined, false, false)
+      return this._hierarchy
+    })
+
+  @action changeProject = projectId => {
     this._selectedProject = projectId
+    this._hierarchy = {}
+    this._selectedFiles = []
+    this._selectedDirectories = []
     return this.getInitialDirectories()
   }
 
   @action loadDirectory = (dirId, rootDir, callback) => {
     const req = axios
-      .get(DIR_URL + dirId)
+      .get(FileAPIURLs.DIR_URL + dirId)
       .then(res => {
-        const newDirs = [...rootDir.directories.map(d => (
-          d.id === dirId ? {
-            ...d,
-            directories: res.data.directories.map(newDir => Directory(
-              newDir,
-              d,
-              this._selectedDirectories.map(sd => sd.identifier).includes(newDir.identifier),
-              false
-            )),
-            files: res.data.files.map(newFile => File(
-              newFile,
-              d,
-              this._selectedFiles.map(sf => sf.identifier).includes(newFile.identifier)
-            )),
-          } : d
-        ))]
+        const newDirs = [
+          ...rootDir.directories.map(d => (
+            d.id === dirId
+              ? {
+                  ...d,
+                  directories: res.data.directories.map(newDir =>
+                    Directory(
+                      newDir,
+                      d,
+                      this._selectedDirectories
+                        .map(sd => sd.identifier)
+                        .includes(newDir.identifier),
+                      false
+                    )
+                  ),
+                  files: res.data.files.map(newFile =>
+                    File(
+                      newFile,
+                      d,
+                      this._selectedFiles.map(sf => sf.identifier).includes(newFile.identifier)
+                    )
+                  ),
+                }
+              : d
+          )),
+        ]
         rootDir.directories = newDirs
         return rootDir
+      })
+      .catch(e => {
+        console.log(e)
       })
     if (callback) {
       req.then(callback)
@@ -266,15 +304,14 @@ class Qvain {
     return req
   }
 
-  @action setDirFileSettings = (directory, useCategory, fileType) => {
-    const newHier = { ...this._hierarchy }
-    const theDir = getDirectories(newHier).find(d => d.directoryName === directory.directoryName)
+  @action setDirFileSettings = (directory, title, description, useCategory) => {
+    const theDir = this._selectedDirectories.find(d => d.directoryName === directory.directoryName)
+    theDir.title = title
+    theDir.description = description
     theDir.useCategory = useCategory
-    theDir.fileType = fileType
-    this._hierarchy = newHier
   }
 
-  @action setInEdit = (selectedItem) => {
+  @action setInEdit = selectedItem => {
     this._inEdit = selectedItem
   }
 
@@ -322,7 +359,7 @@ class Qvain {
 
   // dataset - METAX dataset JSON
   // perform schema transformation METAX JSON -> etsin backend / internal schema
-  @action editDataset = (dataset) => {
+  @action editDataset = dataset => {
     this.original = dataset
     const researchDataset = dataset.research_dataset
 
@@ -331,8 +368,9 @@ class Qvain {
     this.description = researchDataset.description
 
     // Other identifiers
-    this.otherIdentifiers = researchDataset.other_identifier ?
-      researchDataset.other_identifier.map(oid => oid.notation) : []
+    this.otherIdentifiers = researchDataset.other_identifier
+      ? researchDataset.other_identifier.map(oid => oid.notation)
+      : []
 
     // field of science
     if (researchDataset.field_of_science !== undefined) {
@@ -350,14 +388,25 @@ class Qvain {
     this.accessType = AccessType(at.pref_label, at.identifier)
 
     // license
-    const l = researchDataset.access_rights.license ? researchDataset.access_rights.license[0] : undefined
+    const l = researchDataset.access_rights.license
+      ? researchDataset.access_rights.license[0]
+      : undefined
     this.license = l ? License(l.title, l.identifier) : undefined
 
     // Load participants
     let participants = []
-    participants = [...participants, ...this.createParticipants(participants, researchDataset.creator || [], Role.CREATOR)]
-    participants = [...participants, ...this.createParticipants(participants, researchDataset.publisher || [], Role.PUBLISHER)]
-    participants = [...participants, ...this.createParticipants(participants, researchDataset.curator || [], Role.CURATOR)]
+    participants = [
+      ...participants,
+      ...this.createParticipants(participants, researchDataset.creator || [], Role.CREATOR),
+    ]
+    participants = [
+      ...participants,
+      ...this.createParticipants(participants, researchDataset.publisher || [], Role.PUBLISHER),
+    ]
+    participants = [
+      ...participants,
+      ...this.createParticipants(participants, researchDataset.curator || [], Role.CURATOR),
+    ]
     this.participants = participants
 
     // Load files
@@ -367,23 +416,23 @@ class Qvain {
       this.idaPickerOpen = true
       this._selectedProject = dsFiles[0].details.project_identifier
       this.getInitialDirectories()
-      this._selectedDirectories = dsDirectories ? dsDirectories.map(d => Directory(d, undefined, true, false)) : []
+      this._selectedDirectories = dsDirectories
+        ? dsDirectories.map(d => Directory(d, undefined, true, false))
+        : []
       this._selectedFiles = dsFiles ? dsFiles.map(f => DatasetFile(f, undefined, true)) : []
     }
 
     // external resources
     const remoteResources = researchDataset.remote_resources
-    this._externalResources = remoteResources ? remoteResources.map(r => ExternalResource(
-      this.createExternalResourceUIId(),
-      r.title,
-      r.identifier
-    )) : []
+    this._externalResources = remoteResources
+      ? remoteResources.map(r =>
+          ExternalResource(this.createExternalResourceUIId(), r.title, r.identifier)
+        )
+      : []
     if (remoteResources !== undefined) {
-      this._externalResources = remoteResources.map(r => ExternalResource(
-        this.createExternalResourceUIId(),
-        r.title,
-        r.identifier
-      ))
+      this._externalResources = remoteResources.map(r =>
+        ExternalResource(this.createExternalResourceUIId(), r.title, r.identifier)
+      )
       this.extResFormOpen = true
     }
   }
@@ -391,9 +440,7 @@ class Qvain {
   createParticipants = (existing, toAdd, role) => {
     let added = []
     if (toAdd.length > 0) {
-      added = [...toAdd.map(participant =>
-        this.createParticipant(participant, role, existing)
-      )]
+      added = [...toAdd.map(participant => this.createParticipant(participant, role, existing))]
     }
     return added
   }
@@ -426,8 +473,9 @@ class Qvain {
     }
 
     return Participant(
-      participantJson['@type'].toLowerCase() === EntityType.PERSON ?
-        EntityType.PERSON : EntityType.ORGANIZATION,
+      participantJson['@type'].toLowerCase() === EntityType.PERSON
+        ? EntityType.PERSON
+        : EntityType.ORGANIZATION,
       [role],
       name,
       participantJson.email,
@@ -450,6 +498,12 @@ class Qvain {
 
   @observable extResFormOpen = false
 
+  @observable resourceInEdit = undefined
+
+  @action resetInEditResource = () => {
+    this.resourceInEdit = undefined
+  }
+
   @computed get externalResources() {
     return this._externalResources
   }
@@ -459,21 +513,31 @@ class Qvain {
     return latestId + 1
   }
 
-  @action saveExternalResource = (resource) => {
+  @action saveExternalResource = resource => {
     const existing = this._externalResources.find(r => r.id === resource.id)
     if (existing !== undefined) {
       existing.title = resource.title
       existing.url = resource.url
+      existing.useCategory = resource.useCategory
     } else {
       // Create an internal identifier for the resource to help with UI interaction
       const newId = this.createExternalResourceUIId()
-      const newResource = ExternalResource(newId, resource.title, resource.url)
+      const newResource = ExternalResource(
+        newId,
+        resource.title,
+        resource.url,
+        resource.useCategory
+      )
       this._externalResources = [...this._externalResources, newResource]
     }
   }
 
-  @action removeExternalResource = (id) => {
+  @action removeExternalResource = id => {
     this._externalResources = this._externalResources.filter(r => r.id !== id)
+  }
+
+  @action setResourceInEdit = id => {
+    this.resourceInEdit = this._externalResources.find(r => r.id === id)
   }
 }
 
@@ -483,7 +547,7 @@ const Hierarchy = (h, parent, selected) => ({
   projectIdentifier: h.project_identifier,
   id: h.id,
   parentDirectory: parent,
-  selected
+  selected,
 })
 
 export const Directory = (dir, parent, selected, open) => ({
@@ -491,45 +555,46 @@ export const Directory = (dir, parent, selected, open) => ({
   open,
   directoryName: dir.directory_name,
   directories: dir.directories ? dir.directories.map(d => Directory(d, dir, false, false)) : [],
-  useCategory: dir.use_category,
+  useCategory: dir.use_category || UseCategoryURLs.OUTCOME_MATERIAL,
   fileType: dir.file_type,
-  files: dir.files ? dir.files.map(f => File(f, dir, false)) : []
+  files: dir.files ? dir.files.map(f => File(f, dir, false)) : [],
 })
 
 const File = (file, parent, selected) => ({
   ...Hierarchy(file, parent, selected),
   fileName: file.file_name,
   filePath: file.file_path,
-  useCategory: file.file_characteristics.use_category,
-  fileType: file.file_characteristics.file_type,
-  description: file.file_characteristics.description,
-  title: file.file_characteristics.title
+  useCategory:
+    getPath('file_characteristics.use_category', file) || UseCategoryURLs.OUTCOME_MATERIAL,
+  fileType: getPath('file_characteristics.file_type', file),
+  description: getPath('file_characteristics.description', file),
+  title: getPath('file_characteristics.title', file),
 })
 
-const DatasetFile = (file) => ({
+const DatasetFile = file => ({
   identifier: file.identifier,
-  useCategory: file.use_category.identifier,
-  fileType: file.file_type ? file.file_type.identifier : undefined,
-  projectIdentifier: file.details.project_identifier,
+  useCategory: getPath('use_category.identifier'),
+  fileType: getPath('file_type.identifier', file),
+  projectIdentifier: getPath('details.project_identifier', file),
   title: file.title,
-  description: file.description || file.details.file_characteristics.description,
+  description: file.description || getPath('details.file_characteristics.description', file),
   fileCharacteristics: {
     ...file.details.file_characteristics,
     useCategory: file.use_category,
     fileType: file.file_type,
-    title: file.title
-  }
+    title: file.title,
+  },
 })
 
 export const EntityType = {
   PERSON: 'person',
-  ORGANIZATION: 'organization'
+  ORGANIZATION: 'organization',
 }
 
 export const Role = {
   CREATOR: 'creator',
   PUBLISHER: 'publisher',
-  CURATOR: 'curator'
+  CURATOR: 'curator',
 }
 
 export const Participant = (entityType, roles, name, email, identifier, organization, uiId) => ({
@@ -539,38 +604,39 @@ export const Participant = (entityType, roles, name, email, identifier, organiza
   email,
   identifier,
   organization,
-  uiId
+  uiId,
 })
 
 export const EmptyParticipant = Participant(
   EntityType.PERSON,
   [],
   '',
-  '',
-  '',
+  undefined,
+  undefined,
   '',
   undefined
 )
 
 export const FieldOfScience = (name, url) => ({
   name,
-  url
+  url,
 })
 
 export const AccessType = (name, url) => ({
   name,
-  url
+  url,
 })
 
-export const License = (name, url) => ({
+export const License = (name, identifier) => ({
   name,
-  url
+  identifier,
 })
 
-const ExternalResource = (id, title, url) => ({
+const ExternalResource = (id, title, url, useCategory) => ({
   id,
   title,
-  url
+  url,
+  useCategory,
 })
 
 export default new Qvain()

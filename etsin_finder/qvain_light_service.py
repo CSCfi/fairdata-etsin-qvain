@@ -10,7 +10,7 @@
 import requests
 
 from etsin_finder.finder import app
-from etsin_finder.app_config import get_metax_api_config
+from etsin_finder.app_config import get_metax_qvain_api_config
 from etsin_finder.utils import json_or_empty, FlaskService
 
 log = app.logger
@@ -26,20 +26,20 @@ class MetaxQvainLightAPIService(FlaskService):
         """
         super().__init__(app)
 
-        metax_api_config = get_metax_api_config(app.testing)
+        metax_qvain_api_config = get_metax_qvain_api_config(app.testing)
 
-        if metax_api_config:
+        if metax_qvain_api_config:
 
-            self.METAX_GET_DIRECTORY_FOR_PROJECT_URL = 'https://{0}/rest/directories'.format(metax_api_config['HOST']) + \
+            self.METAX_GET_DIRECTORY_FOR_PROJECT_URL = 'https://{0}/rest/directories'.format(metax_qvain_api_config['HOST']) + \
                                                        '/root?project={0}'
-            self.METAX_GET_DIRECTORY = 'https://{0}/rest/directories'.format(metax_api_config['HOST']) + \
+            self.METAX_GET_DIRECTORY = 'https://{0}/rest/directories'.format(metax_qvain_api_config['HOST']) + \
                                        '/{0}/files'
-            self.METAX_GET_DATASETS_FOR_USER = 'https://{0}/rest/datasets'.format(metax_api_config['HOST']) + \
+            self.METAX_GET_DATASETS_FOR_USER = 'https://{0}/rest/datasets'.format(metax_qvain_api_config['HOST']) + \
                                                '?metadata_provider_user={0}&file_details'
-
-            self.user = metax_api_config['USER']
-            self.pw = metax_api_config['PASSWORD']
-            self.verify_ssl = metax_api_config.get('VERIFY_SSL', True)
+            self.METAX_CREATE_DATASET = 'https://{0}/rest/datasets'.format(metax_qvain_api_config['HOST'])
+            self.user = metax_qvain_api_config['USER']
+            self.pw = metax_qvain_api_config['PASSWORD']
+            self.verify_ssl = metax_qvain_api_config.get('VERIFY_SSL', True)
         elif not self.is_testing:
             log.error("Unable to initialize MetaxAPIService due to missing config")
 
@@ -53,25 +53,25 @@ class MetaxQvainLightAPIService(FlaskService):
         req_url = self.METAX_GET_DIRECTORY_FOR_PROJECT_URL.format(project_identifier)
 
         try:
-            metax_api_response = requests.get(req_url,
-                                              headers={'Accept': 'application/json'},
-                                              auth=(self.user, self.pw),
-                                              verify=self.verify_ssl,
-                                              timeout=10)
-            metax_api_response.raise_for_status()
+            metax_qvain_api_response = requests.get(req_url,
+                                                    headers={'Accept': 'application/json'},
+                                                    auth=(self.user, self.pw),
+                                                    verify=self.verify_ssl,
+                                                    timeout=10)
+            metax_qvain_api_response.raise_for_status()
         except Exception as e:
             if isinstance(e, requests.HTTPError):
                 log.debug("Failed to get data for project {0} from Metax API".
                           format(project_identifier))
-                log.debug('Response status code: {0}'.format(metax_api_response.status_code))
-                log.debug('Response text: {0}'.format(json_or_empty(metax_api_response) or metax_api_response.text))
+                log.debug('Response status code: {0}'.format(metax_qvain_api_response.status_code))
+                log.debug('Response text: {0}'.format(json_or_empty(metax_qvain_api_response) or metax_qvain_api_response.text))
             else:
                 log.error("Failed to get data for project {0} from Metax API".
                           format(project_identifier))
                 log.error(e)
             return None
 
-        return metax_api_response.json()
+        return metax_qvain_api_response.json()
 
     def get_directory(self, dir_identifier):
         """
@@ -83,25 +83,25 @@ class MetaxQvainLightAPIService(FlaskService):
         req_url = self.METAX_GET_DIRECTORY.format(dir_identifier)
 
         try:
-            metax_api_response = requests.get(req_url,
-                                              headers={'Accept': 'application/json'},
-                                              auth=(self.user, self.pw),
-                                              verify=self.verify_ssl,
-                                              timeout=10)
-            metax_api_response.raise_for_status()
+            metax_qvain_api_response = requests.get(req_url,
+                                                    headers={'Accept': 'application/json'},
+                                                    auth=(self.user, self.pw),
+                                                    verify=self.verify_ssl,
+                                                    timeout=10)
+            metax_qvain_api_response.raise_for_status()
         except Exception as e:
             if isinstance(e, requests.HTTPError):
                 log.debug("Failed to get data for directory {0} from Metax API".
                           format(dir_identifier))
-                log.debug('Response status code: {0}'.format(metax_api_response.status_code))
-                log.debug('Response text: {0}'.format(json_or_empty(metax_api_response) or metax_api_response.text))
+                log.debug('Response status code: {0}'.format(metax_qvain_api_response.status_code))
+                log.debug('Response text: {0}'.format(json_or_empty(metax_qvain_api_response) or metax_qvain_api_response.text))
             else:
                 log.error("Failed to get data for directory {0} from Metax API".
                           format(dir_identifier))
                 log.error(e)
             return None
 
-        return metax_api_response.json()
+        return metax_qvain_api_response.json()
 
     def get_datasets_for_user(self, user_id, limit, offset):
         """
@@ -138,6 +138,72 @@ class MetaxQvainLightAPIService(FlaskService):
 
         return metax_api_response.json()
 
+    def create_dataset(self, data):
+        """
+        Send the data from the frontend to Metax.
+
+        Arguments:
+            data {object} -- Object with the dataset data that has been validated and converted to comply with the Metax schema.
+
+        Returns:
+            [type] -- The response from Metax.
+
+        """
+        req_url = self.METAX_CREATE_DATASET
+        headers = {'Accept': 'application/json'}
+        try:
+            metax_api_response = requests.post(req_url,
+                                               json=data,
+                                               headers=headers,
+                                               auth=(self.user, self.pw),
+                                               verify=self.verify_ssl,
+                                               timeout=10)
+        except Exception as e:
+            if isinstance(e, requests.HTTPError):
+                log.debug("Failed to create dataset.")
+                log.debug('Response status code: {0}'.format(metax_api_response.status_code))
+                log.debug('Response text: {0}'.format(json_or_empty(metax_api_response) or metax_api_response.text))
+            else:
+                log.error("Failed to get data for directory {0} from Metax API")
+                log.error(e)
+            return metax_api_response.json()
+
+        return metax_api_response.json()
+
+    def update_dataset(self, data, cr_id):
+        """
+        Update a dataset with the datat that the user has entered in Qvain-light.
+
+        Arguments:
+            data {object} -- Object with the dataset data that has been validated and converted to comply with the Metax schema.
+            cr_id {string} -- The identifier of the dataset.
+
+        Returns:
+            [type] -- The response from Metax.
+
+        """
+        req_url = self.METAX_CREATE_DATASET + "/" + cr_id
+        headers = {'Accept': 'application/json'}
+        try:
+            metax_api_response = requests.patch(req_url,
+                                                json=data,
+                                                headers=headers,
+                                                auth=(self.user, self.pw),
+                                                verify=self.verify_ssl,
+                                                timeout=10)
+        except Exception as e:
+            if isinstance(e, requests.HTTPError):
+                log.debug("Failed to create dataset.")
+                log.debug('Response status code: {0}'.format(metax_api_response.status_code))
+                log.debug('Response text: {0}'.format(json_or_empty(metax_api_response) or metax_api_response.text))
+            else:
+                log.error("Failed to get data for directory {0} from Metax API")
+                log.error(e)
+            return metax_api_response.json()
+
+        return metax_api_response.json()
+
+
 _metax_api = MetaxQvainLightAPIService(app)
 
 def get_directory(dir_id):
@@ -166,3 +232,30 @@ def get_datasets_for_user(user_id, limit, offset):
     :return:
     """
     return _metax_api.get_datasets_for_user(user_id, limit, offset)
+
+def create_dataset(form_data):
+    """
+    Create dataset in Metax.
+
+    Arguments:
+        form_data {object} -- Object with the dataset data that has been validated and converted to comply with the Metax schema.
+
+    Returns:
+        [type] -- Metax response.
+
+    """
+    return _metax_api.create_dataset(form_data)
+
+def update_dataset(form_data, cr_id):
+    """
+    Update dataset in Metax.
+
+    Arguments:
+        form_data {object} -- Object with the dataset data that has been validated and converted to comply with the Metax schema.
+        cr_id {string} -- The identifier of the dataset.
+
+    Returns:
+        [type] -- Metax response.
+
+    """
+    return _metax_api.update_dataset(form_data, cr_id)

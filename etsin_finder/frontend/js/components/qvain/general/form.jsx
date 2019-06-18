@@ -1,6 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 import Select from 'react-select';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {
+  faInfoCircle
+} from '@fortawesome/free-solid-svg-icons'
 
 export const FormField = styled.div`
   display: inline-flex;
@@ -72,6 +76,12 @@ export const HelpField = styled.span`
   font-weight: 200;
   font-family: "Lato"
 `
+
+export const HelpIconStyles = styled(FontAwesomeIcon)`
+  margin-left: 10px;
+`
+
+export const HelpIcon = (props) => <HelpIconStyles {...props} icon={faInfoCircle} />
 
 export const SelectedFilesTitle = styled.label`
   display: block;
