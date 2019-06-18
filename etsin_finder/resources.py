@@ -133,7 +133,6 @@ class Files(Resource):
             return dir_api_obj, 200
         return '', 404
 
-
 class Contact(Resource):
     """Contact form related REST endpoints for frontend"""
 
@@ -225,8 +224,12 @@ class User(Resource):
 
         :return:
         """
-        user_info = {'is_authenticated': authentication.is_authenticated()}
+        user_info = {
+            'is_authenticated': authentication.is_authenticated(),
+            'is_authenticated_CSC_user': authentication.is_authenticated_CSC_user()}
         dn = authentication.get_user_display_name()
+        groups = authentication.get_user_ida_groups()
+        user_info['user_ida_groups'] = groups
         if dn is not None:
             user_info['user_display_name'] = dn
         return user_info, 200

@@ -22,6 +22,9 @@ import etsinTheme from './styles/theme'
 import GlobalStyle from './styles/globalStyles'
 import Stores from './stores'
 
+// init react-dates
+import 'react-dates/initialize';
+
 if (process.env.NODE_ENV === 'test') {
   console.log('We are in test')
 } else if (process.env.NODE_ENV === 'development') {

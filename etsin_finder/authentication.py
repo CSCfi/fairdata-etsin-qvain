@@ -48,6 +48,17 @@ def is_authenticated():
         return False
     return True if 'samlUserdata' in session and len(session['samlUserdata']) > 0 else False
 
+def is_authenticated_CSC_user():
+    """
+    Is the user authenticated with CSC username or not.
+
+    :return:
+    """
+    key = 'urn:oid:1.3.6.1.4.1.8057.2.80.26'
+    if executing_travis():
+        return False
+    return True if 'samlUserdata' in session and len(session['samlUserdata']) > 0 and key in session['samlUserdata'] else False
+
 
 def prepare_flask_request_for_saml(request):
     """
@@ -58,6 +69,9 @@ def prepare_flask_request_for_saml(request):
     """
     # If server is behind proxys or balancers use the HTTP_X_FORWARDED fields
     url_data = urlparse(request.url)
+    # If in local development environment this will redirect the saml login right.
+    if request.host == 'localhost':
+        request.host = '30.30.30.30'
     return {
         'https': 'on' if request.scheme == 'https' else 'off',
         'http_host': request.host,
@@ -116,6 +130,25 @@ def get_user_id():
         return user_fd_id[0]
     else:
         log.warn("User seems to be authenticated but fairdata id not in session object. "
+                 "Saml userdata:\n{0}".format(session['samlUserdata']))
+
+    return None
+
+def get_user_ida_groups():
+    """
+    Get the Groups from CSC IdM for the user.
+
+    :return:
+    """
+    if not is_authenticated() or 'samlUserdata' not in session:
+        return None
+
+    groups = session['samlUserdata'].get('urn:oid:1.3.6.1.4.1.8057.2.80.26', False)
+    if groups:
+        ida_groups = [group for group in groups if group.startswith('IDA')]
+        return ida_groups
+    else:
+        log.warn("User seems to be authenticated but groups not in session object. "
                  "Saml userdata:\n{0}".format(session['samlUserdata']))
 
     return None

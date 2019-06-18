@@ -8,14 +8,20 @@
  * @license   MIT
  */
 
-import { observable, action } from 'mobx'
+import { observable, action, computed } from 'mobx'
 import counterpart from 'counterpart'
+import moment from 'moment'
 import elasticquery from './elasticquery'
 import env from '../domain/env'
 
 class Locale {
   @observable currentLang = counterpart.getLocale()
 
+  @computed get lang() {
+    return this.currentLang
+  }
+
+  // get current computed (state changes are tracked) language. Convenience function.
   @observable languages = ['en', 'fi']
 
   @action
@@ -23,6 +29,7 @@ class Locale {
     counterpart.setLocale(lang)
     this.currentLang = counterpart.getLocale()
     localStorage.setItem('lang', this.currentLang)
+    moment.locale(lang)
     document.documentElement.lang = this.currentLang
   }
 
