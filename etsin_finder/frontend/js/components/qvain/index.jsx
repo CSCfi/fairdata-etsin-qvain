@@ -3,6 +3,10 @@ import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import { inject, observer } from 'mobx-react'
 import axios from 'axios'
+import { Link } from 'react-router-dom'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faChevronLeft } from '@fortawesome/free-solid-svg-icons'
+import styled from 'styled-components';
 
 import RightsAndLicenses from './licenses'
 import Description from './description'
@@ -11,6 +15,7 @@ import { qvainFormSchema } from './utils/formValidation'
 import Files from './files'
 import { QvainContainer, SubHeader, SubHeaderText, Container } from './general/card'
 import handleSubmitToBackend from './utils/handleSubmit'
+import Title from './general/title'
 
 class Qvain extends Component {
   static propTypes = {
@@ -45,10 +50,11 @@ class Qvain extends Component {
       <QvainContainer>
         <SubHeader>
           <SubHeaderText>
-            <Translate content="qvain.title" />
+            <Translate component={Title} content="qvain.title" />
           </SubHeaderText>
         </SubHeader>
         <form onSubmit={this.handleSubmit} className="container">
+          <LinkBack to="/qvain"><FontAwesomeIcon size="lg" icon={faChevronLeft} /><Translate component="span" content="qvain.backLink" /></LinkBack>
           <Description />
           <Participants />
           <RightsAndLicenses />
@@ -64,5 +70,10 @@ class Qvain extends Component {
     )
   }
 }
+
+const LinkBack = styled(Link)`
+  display: inline-block;
+  margin: 10px 15px 0;
+`
 
 export default inject('Stores')(observer(Qvain))

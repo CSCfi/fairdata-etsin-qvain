@@ -260,6 +260,7 @@ const finnish = {
     notCSCUser2: ' Voit rekisteröityä Hakatunuksella tai ilman.',
     notLoggedIn: 'Kirjaudu sisään CSC -tililläsi käyttääksesi Qvain-light palvelua.',
     title: 'Julkaise tiedosto',
+    backLink: ' Takaisin hakemistoihin',
     common: {
       save: 'Tallenna',
       cancel: 'Peruuta',

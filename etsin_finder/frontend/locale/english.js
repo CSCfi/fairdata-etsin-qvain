@@ -260,6 +260,7 @@ const english = {
     notCSCUser2: ' You can register with or without Haka account.',
     notLoggedIn: 'Please login with your CSC account to use Qvain-light service.',
     title: 'Publish Dataset',
+    backLink: ' Back to datasets',
     common: {
       cancel: 'Cancel',
       save: 'Save',
