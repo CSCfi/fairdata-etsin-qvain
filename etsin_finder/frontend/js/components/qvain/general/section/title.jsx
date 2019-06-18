@@ -5,8 +5,8 @@ const SectionTitle = styled.h2`
   color: #007fad;
   font-weight: bold;
   font-size: 20px;
-  margin-bottom: 31px;
-  margin-top: 50px;
+  margin-bottom: 30px;
+  margin-top: 30px;
 `
 
 export default SectionTitle
