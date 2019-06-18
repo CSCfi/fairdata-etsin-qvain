@@ -1,9 +1,9 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component, Fragment } from 'react'
 import { inject, observer } from 'mobx-react'
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import axios from 'axios'
-import styled from 'styled-components';
+import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import {
   Table,
@@ -12,18 +12,18 @@ import {
   HeaderCell,
   TableBody,
   BodyCell,
-  TableNote
+  TableNote,
 } from '../general/table'
 import DatasetPagination from './pagination'
 import { CancelButton } from '../general/buttons'
 
 const USER_DATASETS_URL = '/api/datasets/'
-const tempuser = 'abc-user-123'
+// const tempuser = 'abc-user-123'
 
 class DatasetTable extends Component {
   static propTypes = {
     history: PropTypes.object.isRequired,
-    Stores: PropTypes.object.isRequired
+    Stores: PropTypes.object.isRequired,
   }
 
   state = {
@@ -33,41 +33,48 @@ class DatasetTable extends Component {
     page: 1,
     loading: false,
     error: false,
-    errorMessage: ''
+    errorMessage: '',
   }
 
   componentDidMount() {
     this.getDatasets((this.state.page - 1) * this.state.limit)
   }
 
-  getUser = () => (
-    this.props.Stores.Env.environment === 'development' ?
-      tempuser :
-      this.props.Stores.Auth.user.name
-  )
-
-  getDatasets = (offset) => {
+  getDatasets = offset => {
     this.setState({ loading: true, error: false, errorMessage: '' })
     const { limit } = this.state
-    const url = `${USER_DATASETS_URL}${this.getUser()}?limit=${limit}&offset=${offset}`
-    return axios
-      .get(url)
-      .then(result => {
-        const { count, results } = result.data
-        const datasets = [...results]
-        console.log('datasets ', datasets)
-        this.setState({ count, datasets, loading: false })
+    this.props.Stores.Auth.checkLogin()
+      .then(() => {
+        const url = `${USER_DATASETS_URL}${
+          this.props.Stores.Auth.user.name
+        }?limit=${limit}&offset=${offset}`
+        console.log(url)
+        return axios
+          .get(url)
+          .then(result => {
+            const { count, results } = result.data
+            const datasets = [...results]
+            console.log('datasets ', datasets)
+            this.setState({ count, datasets, loading: false })
+          })
+          .catch(e => {
+            console.log(e.message)
+            this.setState({ loading: false, error: true, errorMessage: 'Failed to load datasets' })
+          })
       })
-      .catch(e => {
-        console.log(e.message)
-        this.setState({ loading: false, error: true, errorMessage: 'Failed to load datasets' })
-      })
+      .catch(() =>
+        this.setState({
+          loading: false,
+          error: true,
+          errorMessage: 'There was an error loading the datasets',
+        })
+      )
   }
 
-  handleRemove = (identifier) => (event) => {
+  handleRemove = identifier => event => {
     event.preventDefault()
-    this.setState((state) => ({
-      datasets: [...state.datasets.filter(d => d.identifier !== identifier)]
+    this.setState(state => ({
+      datasets: [...state.datasets.filter(d => d.identifier !== identifier)],
     }))
   }
 
@@ -76,12 +83,12 @@ class DatasetTable extends Component {
     return !loading && !error && datasets.length === 0
   }
 
-  handleEnterEdit = (dataset) => () => {
+  handleEnterEdit = dataset => () => {
     this.props.Stores.Qvain.editDataset(dataset)
     this.props.history.push('/qvain/dataset')
   }
 
-  handleChangePage = (pageNum) => () => {
+  handleChangePage = pageNum => () => {
     this.setState({ page: pageNum, datasets: [] })
     this.getDatasets((pageNum - 1) * this.state.limit)
   }
@@ -90,7 +97,12 @@ class DatasetTable extends Component {
     const { datasets, loading, error, errorMessage, page, count, limit } = this.state
     return (
       <Fragment>
-        <DatasetPagination page={page} count={count} limit={limit} onChangePage={this.handleChangePage} />
+        <DatasetPagination
+          page={page}
+          count={count}
+          limit={limit}
+          onChangePage={this.handleChangePage}
+        />
         <TablePadded className="table">
           <TableHeader>
             <Row>
@@ -118,44 +130,54 @@ class DatasetTable extends Component {
                 </TableNote>
               </Fragment>
             )}
-            {this.noDatasets() && <Translate component={TableNote} content="qvain.datasets.noDatasets" />}
-            {!error && datasets.map(dataset => (
-              <Row key={dataset.identifier}>
-                <BodyCell>{dataset.identifier}</BodyCell>
-                <BodyCell>{dataset.research_dataset.title.en || dataset.research_dataset.title.fi}</BodyCell>
-                <BodyCell>
-                  <Translate
-                    component={CancelButton}
-                    onClick={this.handleEnterEdit(dataset)}
-                    content="qvain.datasets.editButton"
-                  />
-                </BodyCell>
-                <BodyCell>
-                  <Translate
-                    component={CancelButton}
-                    onClick={this.handleRemove(dataset.identifier)}
-                    content="qvain.datasets.deleteButton"
-                  />
-                </BodyCell>
-              </Row>
-            ))}
+            {this.noDatasets() && (
+              <Translate component={TableNote} content="qvain.datasets.noDatasets" />
+            )}
+            {!error &&
+              datasets.map(dataset => (
+                <Row key={dataset.identifier}>
+                  <BodyCell>{dataset.identifier}</BodyCell>
+                  <BodyCell>
+                    {dataset.research_dataset.title.en || dataset.research_dataset.title.fi}
+                  </BodyCell>
+                  <BodyCell>
+                    <Translate
+                      component={CancelButton}
+                      onClick={this.handleEnterEdit(dataset)}
+                      content="qvain.datasets.editButton"
+                    />
+                  </BodyCell>
+                  <BodyCell>
+                    <Translate
+                      component={CancelButton}
+                      onClick={this.handleRemove(dataset.identifier)}
+                      content="qvain.datasets.deleteButton"
+                    />
+                  </BodyCell>
+                </Row>
+              ))}
           </TableBody>
         </TablePadded>
-        <DatasetPagination page={page} count={count} limit={limit} onChangePage={this.handleChangePage} />
+        <DatasetPagination
+          page={page}
+          count={count}
+          limit={limit}
+          onChangePage={this.handleChangePage}
+        />
       </Fragment>
-    );
+    )
   }
 }
 
 const ErrorMessage = styled.span`
   margin-left: 10px;
-`;
+`
 
 const TablePadded = styled(Table)`
   padding-top: 10px;
   padding-bottom: 10px;
   margin-top: 30px;
   margin-bottom: 30px;
-`;
+`
 
 export default withRouter(inject('Stores')(observer(DatasetTable)))
