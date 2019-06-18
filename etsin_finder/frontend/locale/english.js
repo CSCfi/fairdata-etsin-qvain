@@ -482,11 +482,11 @@ const english = {
         },
         directory: {
           title: {
-            required: 'Directory Title is required'
+            required: 'Directory Title is required',
           },
           useCategory: {
-            required: 'Directory use category is required'
-          }
+            required: 'Directory use category is required',
+          },
         },
       },
       externalResources: {
