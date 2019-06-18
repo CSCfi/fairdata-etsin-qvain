@@ -106,7 +106,7 @@ def get_user_display_name():
     if not is_authenticated() or 'samlUserdata' not in session:
         return None
 
-    cn = session['samlUserdata'].get('urn:oid:2.5.4.3', False)
+    cn = session['samlUserdata'].get('urn:oid:1.3.6.1.4.1.16161.4.0.53', False)
     if cn:
         return cn[0]
     else:
