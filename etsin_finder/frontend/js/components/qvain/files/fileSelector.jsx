@@ -10,7 +10,6 @@ import {
 } from '../general/buttons'
 import { List, ListItem } from '../general/list'
 
-
 export class FileSelectorBase extends Component {
   static propTypes = {
     Stores: PropTypes.object.isRequired
