@@ -121,7 +121,7 @@ def get_user_csc_name():
 
     :return:
     """
-    if not is_authenticated() or is_authenticated_CSC_user() or 'samlUserdata' not in session:
+    if not is_authenticated() or not is_authenticated_CSC_user() or 'samlUserdata' not in session:
         return None
 
     csc_name = session['samlUserdata'].get('urn:oid:1.3.6.1.4.1.16161.4.0.53', False)
