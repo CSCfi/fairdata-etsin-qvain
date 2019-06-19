@@ -4,64 +4,65 @@ import { inject, observer } from 'mobx-react'
 import { toJS } from 'mobx'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
+import translate from 'counterpart'
 
-import Button from '../../general/button';
-import Card from '../general/card';
-import Label from '../general/label';
-import { otherIdentifiersSchema, otherIdentifierSchema } from '../utils/formValidation';
-import ValidationError from '../general/validationError';
+import Button from '../../general/button'
+import Card from '../general/card'
+import Label from '../general/label'
+import { otherIdentifiersSchema, otherIdentifierSchema } from '../utils/formValidation'
+import ValidationError from '../general/validationError'
 
 class OtherIdentifierField extends React.Component {
   static propTypes = {
-    Stores: PropTypes.object.isRequired
+    Stores: PropTypes.object.isRequired,
   }
 
   constructor(props) {
     super(props)
     this.state = {
       identifier: '',
-      validationError: null
+      validationError: null,
     }
   }
 
-  handleInputChange = (event) => {
+  handleInputChange = event => {
     const { value } = event.target
     otherIdentifierSchema.validate(value).catch(err => {
       this.setState({ validationError: err.errors })
     })
     this.setState({
-      identifier: value
+      identifier: value,
     })
   }
 
   clearInput = () => {
     this.setState({
-      identifier: ''
+      identifier: '',
     })
   }
 
-  handleAddEnter = (event) => {
-    if (event.keyCode === 13 && this.state.identifier.length > 0) {
-      event.preventDefault()
-      this.props.Stores.Qvain.addOtherIdentifier(this.state.identifier)
-      this.clearInput()
-      this.validateIdentifiers()
-    }
-  }
-
-  handleAddClick = (event) => {
+  handleAddClick = event => {
     event.preventDefault()
-    otherIdentifierSchema.validate(this.state.identifier).then(() => {
-      this.props.Stores.Qvain.addOtherIdentifier(this.state.identifier)
-      this.clearInput()
-    }).catch(err => {
-      this.setState({ validationError: err.errors })
-    })
+    otherIdentifierSchema
+      .validate(this.state.identifier)
+      .then(() => {
+        if (!this.props.Stores.Qvain.otherIdentifiers.includes(this.state.identifier)) {
+          this.props.Stores.Qvain.addOtherIdentifier(this.state.identifier)
+        } else {
+          this.setState({
+            validationError: translate('qvain.description.otherIdentifiers.alredyAdded'),
+          })
+        }
+        this.clearInput()
+      })
+      .catch(err => {
+        this.setState({ validationError: err.errors })
+      })
   }
 
-  handleRemove = (identifier) => {
+  handleRemove = identifier => {
     this.props.Stores.Qvain.removeOtherIdentifier(identifier)
     this.validateIdentifiers()
   }
@@ -72,23 +73,25 @@ class OtherIdentifierField extends React.Component {
   }
 
   validateIdentifiers = () => {
-    otherIdentifiersSchema.validate(this.props.Stores.Qvain.otherIdentifiers)
+    otherIdentifiersSchema
+      .validate(this.props.Stores.Qvain.otherIdentifiers)
       .then(() => {
         this.setState({ validationError: null })
       })
-      .catch((err) => {
+      .catch(err => {
         this.setState({ validationError: err.errors })
       })
-    }
-
+  }
 
   render() {
-    const otherIdentifiers = toJS(this.props.Stores.Qvain.otherIdentifiers.map((identifier) => (
-      <Label color="#007fad" margin="0 0.5em 0.5em 0" key={identifier}>
-        <PaddedWord>{ identifier }</PaddedWord>
-        <FontAwesomeIcon onClick={() => this.handleRemove(identifier)} icon={faTimes} size="xs" />
-      </Label>
-    )))
+    const otherIdentifiers = toJS(
+      this.props.Stores.Qvain.otherIdentifiers.map(identifier => (
+        <Label color="#007fad" margin="0 0.5em 0.5em 0" key={identifier}>
+          <PaddedWord>{identifier}</PaddedWord>
+          <FontAwesomeIcon onClick={() => this.handleRemove(identifier)} icon={faTimes} size="xs" />
+        </Label>
+      ))
+    )
     return (
       <Card bottomContent>
         <Translate component="h3" content="qvain.description.otherIdentifiers.title" />
@@ -98,7 +101,6 @@ class OtherIdentifierField extends React.Component {
           type="text"
           value={this.state.identifier}
           onChange={this.handleInputChange}
-          onKeyDown={this.handleAddEnter}
           placeholder="http://orcid.org/"
           onBlur={this.handleBlur}
         />
@@ -128,7 +130,7 @@ const AddNewButton = styled(Button)`
   margin-top: 11px;
 `
 const PaddedWord = styled.span`
-padding-right: 10px;
+  padding-right: 10px;
 `
 
-export default inject('Stores')(observer(OtherIdentifierField));
+export default inject('Stores')(observer(OtherIdentifierField))

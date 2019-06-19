@@ -184,7 +184,8 @@ class QvainDataset(Resource):
         elif all(["remote_resources" not in data, "files" in data or "directorys" in data]):
             data_catalog = "urn:nbn:fi:att:data-catalog-ida"
         else:
-            return "Error specifying the datacatalog. Make shure you have added EITHER Ida files OR external files."
+            # If the user whants to add a dataset without data, the data_catalog is set to att.
+            data_catalog = "urn:nbn:fi:att:data-catalog-att"
         metax_redy_data = data_to_metax(data, metadata_provider_org, metadata_provider_user, data_catalog)
         metax_response = create_dataset(metax_redy_data)
         return metax_response
@@ -220,7 +221,8 @@ class QvainDataset(Resource):
         elif all(["remote_resources" not in data, "files" in data or "directorys" in data]):
             data_catalog = "urn:nbn:fi:att:data-catalog-ida"
         else:
-            return "Error specifying the datacatalog. Make shure you have added EITHER Ida files OR external files.", 400
+            # If the user whants to add a dataset without data, the data_catalog is set to att.
+            data_catalog = "urn:nbn:fi:att:data-catalog-att"
         metax_redy_data = data_to_metax(data, metadata_provider_org, metadata_provider_user, data_catalog)
         metax_response = update_dataset(metax_redy_data)
         return metax_response, 200
