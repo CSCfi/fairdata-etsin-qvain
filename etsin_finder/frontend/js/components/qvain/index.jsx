@@ -6,7 +6,7 @@ import axios from 'axios'
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons'
-import styled from 'styled-components';
+import styled from 'styled-components'
 
 import RightsAndLicenses from './licenses'
 import Description from './description'
@@ -16,6 +16,7 @@ import Files from './files'
 import { QvainContainer, SubHeader, SubHeaderText, Container } from './general/card'
 import handleSubmitToBackend from './utils/handleSubmit'
 import Title from './general/title'
+import SubmitResponse from './general/submitResponse'
 
 class Qvain extends Component {
   static propTypes = {
@@ -54,17 +55,16 @@ class Qvain extends Component {
           </SubHeaderText>
         </SubHeader>
         <form onSubmit={this.handleSubmit} className="container">
-          <LinkBack to="/qvain"><FontAwesomeIcon size="lg" icon={faChevronLeft} /><Translate component="span" content="qvain.backLink" /></LinkBack>
+          <LinkBack to="/qvain">
+            <FontAwesomeIcon size="lg" icon={faChevronLeft} />
+            <Translate component="span" content="qvain.backLink" />
+          </LinkBack>
           <Description />
           <Participants />
           <RightsAndLicenses />
           <Files />
           <button type="submit">submit</button>
-          {this.state.response ? (
-            <Container>
-              <pre>{JSON.stringify(this.state.response, null, 4)}</pre>
-            </Container>
-          ) : null}
+          {this.state.response ? <SubmitResponse response={this.state.response} /> : null}
         </form>
       </QvainContainer>
     )
