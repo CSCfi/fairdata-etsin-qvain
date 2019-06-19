@@ -304,6 +304,7 @@ const english = {
         instructions:
           'Identifier for the metadata will be created automatically but if there alredy is an EXISTING identifier please insert it here.',
         addButton: '+ Add new',
+        alredyAdded: 'Identifier already added',
       },
       fieldOfScience: {
         title: 'Field of Science',
@@ -483,11 +484,11 @@ const english = {
         },
         directory: {
           title: {
-            required: 'Directory Title is required'
+            required: 'Directory Title is required',
           },
           useCategory: {
-            required: 'Directory use category is required'
-          }
+            required: 'Directory use category is required',
+          },
         },
       },
       externalResources: {

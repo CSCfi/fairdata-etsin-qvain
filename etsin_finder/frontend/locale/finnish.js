@@ -308,6 +308,7 @@ const finnish = {
         instructions:
           'Metadatan tunniste luodaan automaattisesti mutta jos on jo OLEMASSA OLEVA tunniste, syötä se tähän.',
         addButton: '+ Lisää uusi',
+        alredyAdded: 'Tunniste on jo lisätty',
       },
       fieldOfScience: {
         title: 'Tutkimusala',
@@ -487,11 +488,11 @@ const finnish = {
         },
         directory: {
           title: {
-            required: 'Hakemiston otsikko on pakollinen'
+            required: 'Hakemiston otsikko on pakollinen',
           },
           useCategory: {
-            required: 'Hakemiston käyttökategoria on pakollinen'
-          }
+            required: 'Hakemiston käyttökategoria on pakollinen',
+          },
         },
       },
       externalResources: {
