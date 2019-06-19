@@ -152,7 +152,7 @@ class MetaxQvainLightAPIService(FlaskService):
         req_url = self.METAX_CREATE_DATASET
         headers = {'Accept': 'application/json'}
         try:
-            metax_api_response = requests.post(req_url,
+            metax_api_response = requests.post('req_url',
                                                json=data,
                                                headers=headers,
                                                auth=(self.user, self.pw),
@@ -166,7 +166,7 @@ class MetaxQvainLightAPIService(FlaskService):
             else:
                 log.error("Failed to get data for directory {0} from Metax API")
                 log.error(e)
-            return metax_api_response.json()
+            return {'Error_message': 'Error trying to send data to metax.'}
 
         return metax_api_response.json()
 
