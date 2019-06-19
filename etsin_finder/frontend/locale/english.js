@@ -260,6 +260,7 @@ const english = {
     notCSCUser2: ' You can register with or without Haka account.',
     notLoggedIn: 'Please login with your CSC account to use Qvain-light service.',
     title: 'Publish Dataset',
+    backLink: ' Back to datasets',
     common: {
       cancel: 'Cancel',
       save: 'Save',
@@ -482,11 +483,11 @@ const english = {
         },
         directory: {
           title: {
-            required: 'Directory Title is required',
+            required: 'Directory Title is required'
           },
           useCategory: {
-            required: 'Directory use category is required',
-          },
+            required: 'Directory use category is required'
+          }
         },
       },
       externalResources: {

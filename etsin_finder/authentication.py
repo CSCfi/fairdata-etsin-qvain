@@ -115,6 +115,24 @@ def get_user_display_name():
 
     return None
 
+def get_user_csc_name():
+    """
+    Get user csc name from saml userdata.
+
+    :return:
+    """
+    if not is_authenticated() or is_authenticated_CSC_user() or 'samlUserdata' not in session:
+        return None
+
+    csc_name = session['samlUserdata'].get('urn:oid:1.3.6.1.4.1.16161.4.0.53', False)
+    if csc_name:
+        return csc_name[0]
+    else:
+        log.warn("User seems to be authenticated but CSC user name not in session object. "
+                 "Saml userdata:\n{0}".format(session['samlUserdata']))
+
+    return None
+
 
 def get_user_id():
     """

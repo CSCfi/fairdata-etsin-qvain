@@ -33,8 +33,8 @@ class Auth {
           this.userLogged = res.data.is_authenticated
           this.cscUserLogged = res.data.is_authenticated_CSC_user
           this.user = {
-            name: res.data.user_display_name,
-            idaGroups: res.data.user_ida_groups
+            name: res.data.user_csc_name,
+            idaGroups: res.data.user_ida_groups,
           }
           console.log(toJS(this.user))
           this.loading = false
