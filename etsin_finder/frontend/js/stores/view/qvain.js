@@ -267,8 +267,8 @@ class Qvain {
       .get(FileAPIURLs.DIR_URL + dirId)
       .then(res => {
         const newDirs = [
-          ...rootDir.directories.map(d => (
-            d.id === dirId
+          ...rootDir.directories.map(d =>
+            (d.id === dirId
               ? {
                   ...d,
                   directories: res.data.directories.map(newDir =>
@@ -289,8 +289,8 @@ class Qvain {
                     )
                   ),
                 }
-              : d
-          )),
+              : d)
+          ),
         ]
         rootDir.directories = newDirs
         return rootDir
@@ -607,15 +607,7 @@ export const Participant = (entityType, roles, name, email, identifier, organiza
   uiId,
 })
 
-export const EmptyParticipant = Participant(
-  EntityType.PERSON,
-  [],
-  '',
-  undefined,
-  undefined,
-  '',
-  undefined
-)
+export const EmptyParticipant = Participant(EntityType.PERSON, [], '', '', '', '', undefined)
 
 export const FieldOfScience = (name, url) => ({
   name,

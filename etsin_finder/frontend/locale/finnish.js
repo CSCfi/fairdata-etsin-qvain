@@ -253,6 +253,13 @@ const finnish = {
     },
   },
   qvain: {
+    submit: 'Julkaise Aineisto',
+    submitStatus: {
+      success: 'Aineisto julkaistu!',
+      fail: 'Jotain meni pieleen...',
+    },
+    openErrorMessages: 'Avaa virhe viestit',
+    closeErrorMessages: 'Sulje virhe viestit',
     unsuccessfullLogin: 'Kirjautuminen epäonnistui.',
     notCSCUser1:
       'Varmistakaa että teillä on voimassaoleva CSC tunnus. Jos yritit kirjautua sisään ulkoisella tunnuksella (kuten Haka) Niin saatat saada tämän virhe ilmoituksen jos titlit eivät ole linkitetty. Linkityksen voi tehdä',
@@ -308,6 +315,7 @@ const finnish = {
         instructions:
           'Metadatan tunniste luodaan automaattisesti mutta jos on jo OLEMASSA OLEVA tunniste, syötä se tähän.',
         addButton: '+ Lisää uusi',
+        alredyAdded: 'Tunniste on jo lisätty',
       },
       fieldOfScience: {
         title: 'Tutkimusala',
@@ -487,11 +495,11 @@ const finnish = {
         },
         directory: {
           title: {
-            required: 'Hakemiston otsikko on pakollinen'
+            required: 'Hakemiston otsikko on pakollinen',
           },
           useCategory: {
-            required: 'Hakemiston käyttökategoria on pakollinen'
-          }
+            required: 'Hakemiston käyttökategoria on pakollinen',
+          },
         },
       },
       externalResources: {

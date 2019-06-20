@@ -253,6 +253,13 @@ const english = {
     },
   },
   qvain: {
+    submit: 'Submit Dataset',
+    submitStatus: {
+      success: 'Dataset published!',
+      fail: 'Something went wrong...',
+    },
+    openErrorMessages: 'Open error messages',
+    closeErrorMessages: 'Close error messages',
     unsuccessfullLogin: 'Login unsuccessful.',
     notCSCUser1:
       'Please make sure that you have a valid CSC account. If you tried to log in with an external account (for example Haka) you might get this error if your account is not associated with CSC account. Please do the registration in',
@@ -304,6 +311,7 @@ const english = {
         instructions:
           'Identifier for the metadata will be created automatically but if there alredy is an EXISTING identifier please insert it here.',
         addButton: '+ Add new',
+        alredyAdded: 'Identifier already added',
       },
       fieldOfScience: {
         title: 'Field of Science',
@@ -483,11 +491,11 @@ const english = {
         },
         directory: {
           title: {
-            required: 'Directory Title is required'
+            required: 'Directory Title is required',
           },
           useCategory: {
-            required: 'Directory use category is required'
-          }
+            required: 'Directory use category is required',
+          },
         },
       },
       externalResources: {

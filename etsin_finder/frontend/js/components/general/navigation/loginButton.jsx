@@ -27,13 +27,13 @@ class Login extends Component {
     location: PropTypes.object.isRequired,
     margin: PropTypes.string,
     width: PropTypes.string,
-    isLoggedInKey: PropTypes.string
+    isLoggedInKey: PropTypes.string,
   }
 
   static defaultProps = {
     margin: '0 0 0 0.4em',
     width: undefined,
-    isLoggedInKey: 'userLogged'
+    isLoggedInKey: 'userLogged',
   }
 
   state = {
@@ -47,6 +47,7 @@ class Login extends Component {
         showNotice: true,
       },
       () => {
+        window.location = '/slo'
         Stores.Auth.logout()
       }
     )
