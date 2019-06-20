@@ -253,10 +253,13 @@ const finnish = {
     },
   },
   qvain: {
+    submit: 'Julkaise Aineisto',
     submitStatus: {
       success: 'Aineisto julkaistu!',
       fail: 'Jotain meni pieleen...',
     },
+    openErrorMessages: 'Avaa virhe viestit',
+    closeErrorMessages: 'Sulje virhe viestit',
     unsuccessfullLogin: 'Kirjautuminen epäonnistui.',
     notCSCUser1:
       'Varmistakaa että teillä on voimassaoleva CSC tunnus. Jos yritit kirjautua sisään ulkoisella tunnuksella (kuten Haka) Niin saatat saada tämän virhe ilmoituksen jos titlit eivät ole linkitetty. Linkityksen voi tehdä',

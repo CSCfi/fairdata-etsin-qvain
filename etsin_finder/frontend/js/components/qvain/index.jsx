@@ -13,10 +13,11 @@ import Description from './description'
 import Participants from './participants'
 import { qvainFormSchema } from './utils/formValidation'
 import Files from './files'
-import { QvainContainer, SubHeader, SubHeaderText, Container } from './general/card'
+import { QvainContainer, SubHeader, SubHeaderText } from './general/card'
 import handleSubmitToBackend from './utils/handleSubmit'
 import Title from './general/title'
 import SubmitResponse from './general/submitResponse'
+import { InvertedButton } from '../general/button'
 
 class Qvain extends Component {
   static propTypes = {
@@ -25,10 +26,12 @@ class Qvain extends Component {
 
   state = {
     response: null,
+    submitted: false,
   }
 
   handleSubmit = e => {
     e.preventDefault()
+    this.setState({ submitted: true })
     const obj = handleSubmitToBackend(this.props.Stores.Qvain)
     console.log(JSON.stringify(obj, null, 4))
     qvainFormSchema
@@ -54,7 +57,7 @@ class Qvain extends Component {
             <Translate component={Title} content="qvain.title" />
           </SubHeaderText>
         </SubHeader>
-        <form onSubmit={this.handleSubmit} className="container">
+        <Form onSubmit={this.handleSubmit} className="container">
           <LinkBack to="/qvain">
             <FontAwesomeIcon size="lg" icon={faChevronLeft} />
             <Translate component="span" content="qvain.backLink" />
@@ -63,9 +66,13 @@ class Qvain extends Component {
           <Participants />
           <RightsAndLicenses />
           <Files />
-          <button type="submit">submit</button>
-          {this.state.response ? <SubmitResponse response={this.state.response} /> : null}
-        </form>
+          <ButtonContainer>
+            <SubmitButton type="submit">
+              <Translate content="qvain.submit" />
+            </SubmitButton>
+          </ButtonContainer>
+          {this.state.submitted ? <SubmitResponse response={this.state.response} /> : null}
+        </Form>
       </QvainContainer>
     )
   }
@@ -74,6 +81,17 @@ class Qvain extends Component {
 const LinkBack = styled(Link)`
   display: inline-block;
   margin: 10px 15px 0;
+`
+const ButtonContainer = styled.div`
+  text-align: center;
+`
+const SubmitButton = styled(InvertedButton)`
+  font-size: 1.2em;
+  border-radius: 25px;
+  padding: 5px 30px;
+`
+const Form = styled.form`
+  margin-bottom: 20px;
 `
 
 export default inject('Stores')(observer(Qvain))
