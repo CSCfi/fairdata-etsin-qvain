@@ -253,6 +253,13 @@ const english = {
     },
   },
   qvain: {
+    submit: 'Submit Dataset',
+    submitStatus: {
+      success: 'Dataset published!',
+      fail: 'Something went wrong...',
+    },
+    openErrorMessages: 'Open error messages',
+    closeErrorMessages: 'Close error messages',
     unsuccessfullLogin: 'Login unsuccessful.',
     notCSCUser1:
       'Please make sure that you have a valid CSC account. If you tried to log in with an external account (for example Haka) you might get this error if your account is not associated with CSC account. Please do the registration in',
@@ -260,6 +267,7 @@ const english = {
     notCSCUser2: ' You can register with or without Haka account.',
     notLoggedIn: 'Please login with your CSC account to use Qvain-light service.',
     title: 'Publish Dataset',
+    backLink: ' Back to datasets',
     common: {
       cancel: 'Cancel',
       save: 'Save',
@@ -303,6 +311,7 @@ const english = {
         instructions:
           'Identifier for the metadata will be created automatically but if there alredy is an EXISTING identifier please insert it here.',
         addButton: '+ Add new',
+        alredyAdded: 'Identifier already added',
       },
       fieldOfScience: {
         title: 'Field of Science',
