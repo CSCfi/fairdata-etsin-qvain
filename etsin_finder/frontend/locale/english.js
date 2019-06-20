@@ -253,10 +253,13 @@ const english = {
     },
   },
   qvain: {
+    submit: 'Submit Dataset',
     submitStatus: {
       success: 'Dataset published!',
       fail: 'Something went wrong...',
     },
+    openErrorMessages: 'Open error messages',
+    closeErrorMessages: 'Close error messages',
     unsuccessfullLogin: 'Login unsuccessful.',
     notCSCUser1:
       'Please make sure that you have a valid CSC account. If you tried to log in with an external account (for example Haka) you might get this error if your account is not associated with CSC account. Please do the registration in',
