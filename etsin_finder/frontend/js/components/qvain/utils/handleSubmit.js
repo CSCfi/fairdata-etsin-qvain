@@ -16,7 +16,9 @@ const filesToMetax = files => {
     identifier: file.identifier,
     title: file.title,
     description: file.description ? file.description : undefined,
-    fileType: file.fileType ? file.fileType : undefined,
+    fileType: file.fileType ? {
+      identifier: file.fileType ? file.fileType : undefined
+    } : undefined,
     useCategory: {
       identifier: file.useCategory
     }
