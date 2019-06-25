@@ -163,6 +163,7 @@ const fileTitleSchema = yup
 
 const fileDescriptionSchema = yup
   .string()
+  .required(translate('qvain.validationMessages.files.file.description.required'))
 
 const fileSchema = yup.object().shape({
   title: fileTitleSchema,
@@ -252,7 +253,7 @@ const participantsSchema = yup
 const qvainFormSchema = yup.object().shape({
   title: titleSchema,
   description: descriptionSchema,
-  fieldOfScience: yup.string(),
+  fieldOfScience: yup.string().required(),
   keywords: keywordsSchema,
   otherIdentifiers: otherIdentifiersSchema,
   accessType: accessTypeSchema,
