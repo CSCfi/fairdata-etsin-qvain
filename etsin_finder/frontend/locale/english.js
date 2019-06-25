@@ -314,7 +314,7 @@ const english = {
         alredyAdded: 'Identifier already added',
       },
       fieldOfScience: {
-        title: 'Field of Science',
+        title: 'Field of Science *',
         placeholder: 'Select option',
       },
       keywords: {
