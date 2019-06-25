@@ -107,8 +107,8 @@ def access_rights_to_metax(data):
         license_object["license"] = data["otherLicenseUrl"]
         access_rights["license"].append(license_object)
     if data["accessType"]["url"] != access_type["OPEN"]:
-        access_rights["restriction_grounds"] = {}
-        access_rights["restriction_grounds"]["identifier"] = data["restrictionGrounds"]
+        access_rights["restriction_grounds"] = []
+        access_rights["restriction_grounds"].append({"identifier": data["restrictionGrounds"]})
     if data["accessType"]["url"] == access_type["EMBARGO"]:
         access_rights["available"] = data["embargoDate"]
     return access_rights
