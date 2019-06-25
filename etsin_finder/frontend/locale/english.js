@@ -254,6 +254,7 @@ const english = {
   },
   qvain: {
     submit: 'Submit Dataset',
+    consent: 'By using Qvain Light the user agrees that he or she has asked consent from all persons whose personal information the user will add to the descriptive data and informed them of how they can get their personal data removed. By using Qvain Light the user agrees to the <a href="https://www.fairdata.fi/hyodyntaminen/kayttopolitiikat-ja-ehdot/">Terms of Usage</a>.',
     submitStatus: {
       success: 'Dataset published!',
       fail: 'Something went wrong...',
@@ -314,7 +315,7 @@ const english = {
         alredyAdded: 'Identifier already added',
       },
       fieldOfScience: {
-        title: 'Field of Science',
+        title: 'Field of Science *',
         placeholder: 'Select option',
       },
       keywords: {

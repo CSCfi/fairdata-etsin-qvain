@@ -163,6 +163,7 @@ const fileTitleSchema = yup
 
 const fileDescriptionSchema = yup
   .string()
+  .required(translate('qvain.validationMessages.files.file.description.required'))
 
 const fileSchema = yup.object().shape({
   title: fileTitleSchema,
@@ -177,8 +178,7 @@ const directoryTitleSchema = yup
   .string()
   .required(translate('qvain.validationMessages.files.directory.title.required'))
 
-const directoryDescriptionSchema = yup
-  .string()
+const directoryDescriptionSchema = yup.string()
 
 const directoryUseCategorySchema = yup
   .string()
@@ -252,7 +252,7 @@ const participantsSchema = yup
 const qvainFormSchema = yup.object().shape({
   title: titleSchema,
   description: descriptionSchema,
-  fieldOfScience: yup.string(),
+  fieldOfScience: yup.string().required(),
   keywords: keywordsSchema,
   otherIdentifiers: otherIdentifiersSchema,
   accessType: accessTypeSchema,
@@ -262,6 +262,8 @@ const qvainFormSchema = yup.object().shape({
     then: restrictionGroundsSchema,
   }),
   participants: participantsSchema,
+  files: filesSchema,
+  directories: directoriesSchema,
 })
 
 export {
