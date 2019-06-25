@@ -21,7 +21,7 @@ export class DirectoryFormBase extends Component {
   }
 
   state = {
-    title: this.props.Stores.Qvain.inEdit.title || '',
+    title: this.props.Stores.Qvain.inEdit.title || 'Couldn\'t get title',
     description: this.props.Stores.Qvain.inEdit.description || '',
     useCategoriesEn: [],
     useCategoriesFi: [],
@@ -82,6 +82,10 @@ export class DirectoryFormBase extends Component {
           directoryError: err.errors,
         })
       })
+  }
+
+  handleOnBlur = (validator, value, errorSet) => {
+    validator.validate(value).then(() => errorSet(undefined)).catch(err => errorSet(err.errors))
   }
 
   handleTitleBlur = () => {
