@@ -305,7 +305,7 @@ class Qvain {
       .then(res => {
         const newDirs = [
           ...rootDir.directories.map(d =>
-            d.id === dirId
+            (d.id === dirId
               ? {
                   ...d,
                   directories: res.data.directories.map(newDir =>
@@ -326,7 +326,7 @@ class Qvain {
                     )
                   ),
                 }
-              : d
+              : d)
           ),
         ]
         rootDir.directories = newDirs
