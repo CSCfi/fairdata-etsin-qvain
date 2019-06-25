@@ -13,7 +13,7 @@ import Description from './description'
 import Participants from './participants'
 import { qvainFormSchema } from './utils/formValidation'
 import Files from './files'
-import { QvainContainer, SubHeader, SubHeaderText } from './general/card'
+import { QvainContainer, SubHeader, SubHeaderText, Container } from './general/card'
 import handleSubmitToBackend from './utils/handleSubmit'
 import Title from './general/title'
 import SubmitResponse from './general/submitResponse'
@@ -73,11 +73,14 @@ class Qvain extends Component {
           <Participants />
           <RightsAndLicenses />
           <Files />
-          <ButtonContainer>
-            <SubmitButton type="submit">
-              <Translate content="qvain.submit" />
-            </SubmitButton>
-          </ButtonContainer>
+          <SubmitContainer>
+            <Translate component="p" content="qvain.consent" unsafe />
+            <ButtonContainer>
+              <SubmitButton type="submit">
+                <Translate content="qvain.submit" />
+              </SubmitButton>
+            </ButtonContainer>
+          </SubmitContainer>
           {this.state.submitted ? <SubmitResponse response={this.state.response} /> : null}
         </Form>
       </QvainContainer>
@@ -99,6 +102,10 @@ const SubmitButton = styled(InvertedButton)`
 `
 const Form = styled.form`
   margin-bottom: 20px;
+`
+const SubmitContainer = styled(Container)`
+  padding-bottom: 25px;
+  margin: 15px;
 `
 
 export default inject('Stores')(observer(Qvain))
