@@ -29,6 +29,10 @@ class Qvain extends Component {
     submitted: false,
   }
 
+  componentWillUnmount() {
+    this.props.Stores.Qvain.resetQvainStore()
+  }
+
   handleSubmit = e => {
     e.preventDefault()
     this.setState({ submitted: true })
@@ -40,7 +44,10 @@ class Qvain extends Component {
         console.log(val)
         axios
           .post('/api/dataset', obj)
-          .then(res => this.setState({ response: res.data }))
+          .then(res => {
+            this.props.Stores.Qvain.resetQvainStore()
+            this.setState({ response: res.data })
+          })
           .catch(err => this.setState({ response: err }))
       })
       .catch(err => {
