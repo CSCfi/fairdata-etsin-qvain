@@ -149,8 +149,8 @@ def files_data_to_metax(files):
 
     """
     metax_files = []
-    metax_file_object = {}
     for file in files:
+        metax_file_object = {}
         metax_file_object["identifier"] = file["identifier"]
         metax_file_object["title"] = file["title"]
         metax_file_object["description"] = file["description"]
@@ -172,8 +172,8 @@ def directories_data_to_metax(files):
 
     """
     metax_directories = []
-    metax_directory_object = {}
     for file in files:
+        metax_directory_object = {}
         metax_directory_object["identifier"] = file["identifier"]
         metax_directory_object["title"] = file["title"]
         metax_directory_object["description"] = file["description"] if "description" in file else ""
