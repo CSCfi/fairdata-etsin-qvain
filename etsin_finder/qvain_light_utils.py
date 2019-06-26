@@ -51,10 +51,11 @@ def alter_role_data(participant_list, role):
             participant["@type"] = "Organization"
             participant["name"] = {}
             participant["name"]["und"] = participant_object["name"]
-            participant["is_part_of"] = {}
-            participant["is_part_of"]["name"] = {}
-            participant["is_part_of"]["name"]["und"] = participant_object["organization"]
-            participant["is_part_of"]["@type"] = "Organization"
+            if "organization" in participant_object and participant_object["organization"] != "":
+                participant["is_part_of"] = {}
+                participant["is_part_of"]["name"] = {}
+                participant["is_part_of"]["name"]["und"] = participant_object["organization"]
+                participant["is_part_of"]["@type"] = "Organization"
 
         if "email" in participant_object:
             participant["email"] = participant_object["email"]
