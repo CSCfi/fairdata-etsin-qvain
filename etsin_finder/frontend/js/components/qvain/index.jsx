@@ -45,8 +45,10 @@ class Qvain extends Component {
         axios
           .post('/api/dataset', obj)
           .then(res => {
-            this.props.Stores.Qvain.resetQvainStore()
             this.setState({ response: res.data })
+            if (this.state.response && 'identifier' in this.state.response) {
+              this.props.Stores.Qvain.resetQvainStore()
+            }
           })
           .catch(err => this.setState({ response: err }))
       })
