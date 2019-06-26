@@ -203,6 +203,33 @@ class MetaxQvainLightAPIService(FlaskService):
 
         return metax_api_response.json()
 
+    def delete_dataset(self, cr_id):
+        """
+        Delete dataset from Metax.
+
+        Arguments:
+            cr_id {string} -- The identifier of the dataset.
+
+        Returns:
+            [type] -- Metax response.
+        """
+        req_url = self.METAX_CREATE_DATASET + "/" + cr_id
+        headers = {'Accept': 'application/json'}
+        try:
+            metax_api_response = requests.delete(req_url,
+                                                headers=headers,
+                                                auth=(self.user, self.pw),
+                                                verify=self.verify_ssl,
+                                                timeout=10)
+        except Exception as e:
+            if isinstance(e, requests.HTTPError):
+                log.debug("Failed to deletedataset.")
+                log.debug('Response status code: {0}'.format(metax_api_response.status_code))
+                log.debug('Response text: {0}'.format(json_or_empty(metax_api_response) or metax_api_response.text))
+            return {'Error_message': 'Error trying to send data to metax.'}
+
+        return metax_api_response.status_code
+
 
 _metax_api = MetaxQvainLightAPIService(app)
 
@@ -259,3 +286,15 @@ def update_dataset(form_data, cr_id):
 
     """
     return _metax_api.update_dataset(form_data, cr_id)
+
+def delete_dataset(cr_id):
+    """
+    Delete dataset from Metax.
+
+    Arguments:
+        cr_id {string} -- The identifier of the dataset.
+
+    Returns:
+        [type] -- Metax response.
+    """
+    return _metax_api.delete_dataset(cr_id)
