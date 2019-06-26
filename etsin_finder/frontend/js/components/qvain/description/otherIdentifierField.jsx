@@ -72,6 +72,11 @@ class OtherIdentifierField extends React.Component {
     this.validateIdentifiers()
   }
 
+  handleBlur = () => {
+    this.setState({ validationError: undefined })
+    this.validateIdentifiers()
+  }
+
   validateIdentifiers = () => {
     otherIdentifiersSchema
       .validate(this.props.Stores.Qvain.otherIdentifiers)

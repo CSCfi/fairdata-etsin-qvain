@@ -48,7 +48,6 @@ class Login extends Component {
       },
       () => {
         window.location = '/slo'
-        Stores.Auth.logout()
       }
     )
   }

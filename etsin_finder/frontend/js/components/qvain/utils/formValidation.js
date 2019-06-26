@@ -178,8 +178,7 @@ const directoryTitleSchema = yup
   .string()
   .required(translate('qvain.validationMessages.files.directory.title.required'))
 
-const directoryDescriptionSchema = yup
-  .string()
+const directoryDescriptionSchema = yup.string()
 
 const directoryUseCategorySchema = yup
   .string()
@@ -263,6 +262,8 @@ const qvainFormSchema = yup.object().shape({
     then: restrictionGroundsSchema,
   }),
   participants: participantsSchema,
+  files: filesSchema,
+  directories: directoriesSchema,
 })
 
 export {
