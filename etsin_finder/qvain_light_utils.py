@@ -218,3 +218,8 @@ def data_to_metax(data, metadata_provider_org, metadata_provider_user, data_cata
         }
     }
     return clean_empty_keyvalues_from_dict(dataset_data)
+
+def remove_deleted_datasets_from_results(result):
+    new_results = [dataset for dataset in result['results'] if dataset['removed'] is False]
+    result['results'] = new_results
+    return result
