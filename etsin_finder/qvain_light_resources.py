@@ -23,7 +23,9 @@ from etsin_finder.utils import \
     sort_array_of_obj_by_key, \
     slice_array_on_limit
 from etsin_finder.qvain_light_dataset_schema import DatasetValidationSchema
-from etsin_finder.qvain_light_utils import data_to_metax
+from etsin_finder.qvain_light_utils import data_to_metax, \
+    remove_deleted_datasets_from_results, \
+    sort_datasets_by_date_created
 from etsin_finder.qvain_light_service import create_dataset, update_dataset
 
 log = app.logger
@@ -137,14 +139,15 @@ class UserDatasets(Resource):
         offset = args.get('offset', None)
 
         result = qvain_light_service.get_datasets_for_user(user_id, limit, offset)
-
+        # Sort the datasets in the result by its dataset_created flag.
+        sort_datasets_by_date_created(result)
         # Return data only if authenticated
         if result and authentication.is_authenticated():
-
             # Limit the amount of items to be sent to the frontend
             if 'results' in result:
+                # Remove the datasets that have the metax property 'removed': True
+                result = remove_deleted_datasets_from_results(result)
                 result['results'] = slice_array_on_limit(result['results'], TOTAL_ITEM_LIMIT)
-
             return result, 200
         return '', 404
 

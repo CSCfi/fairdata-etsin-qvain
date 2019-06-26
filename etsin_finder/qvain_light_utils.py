@@ -51,10 +51,11 @@ def alter_role_data(participant_list, role):
             participant["@type"] = "Organization"
             participant["name"] = {}
             participant["name"]["und"] = participant_object["name"]
-            participant["is_part_of"] = {}
-            participant["is_part_of"]["name"] = {}
-            participant["is_part_of"]["name"]["und"] = participant_object["organization"]
-            participant["is_part_of"]["@type"] = "Organization"
+            if "organization" in participant_object and participant_object["organization"] != "":
+                participant["is_part_of"] = {}
+                participant["is_part_of"]["name"] = {}
+                participant["is_part_of"]["name"]["und"] = participant_object["organization"]
+                participant["is_part_of"]["@type"] = "Organization"
 
         if "email" in participant_object:
             participant["email"] = participant_object["email"]
@@ -218,3 +219,12 @@ def data_to_metax(data, metadata_provider_org, metadata_provider_user, data_cata
         }
     }
     return clean_empty_keyvalues_from_dict(dataset_data)
+
+def remove_deleted_datasets_from_results(result):
+    new_results = [dataset for dataset in result['results'] if dataset['removed'] is False]
+    result['results'] = new_results
+    return result
+
+def sort_datasets_by_date_created(result):
+    result['results'] = sorted(result['results'], key=lambda i: i['date_created'], reverse=True)
+    return result
