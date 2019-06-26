@@ -223,3 +223,7 @@ def remove_deleted_datasets_from_results(result):
     new_results = [dataset for dataset in result['results'] if dataset['removed'] is False]
     result['results'] = new_results
     return result
+
+def sort_datasets_by_date_created(result):
+    result['results'] = sorted(result['results'], key=lambda i: i['date_created'], reverse=True)
+    return result
