@@ -3,6 +3,7 @@ access_type = {}
 access_type["EMBARGO"] = "http://uri.suomi.fi/codelist/fairdata/access_type/code/embargo"
 access_type["OPEN"] = "http://uri.suomi.fi/codelist/fairdata/access_type/code/open"
 
+from etsin_finder.cr_service import get_catalog_record
 
 def clean_empty_keyvalues_from_dict(d):
     """
@@ -218,3 +219,8 @@ def data_to_metax(data, metadata_provider_org, metadata_provider_user, data_cata
         }
     }
     return clean_empty_keyvalues_from_dict(dataset_data)
+
+def get_dataset_creator(cr_id):
+    # get dataset
+    dataset = get_catalog_record(cr_id, False)
+    return dataset['metadata_provider_user']
