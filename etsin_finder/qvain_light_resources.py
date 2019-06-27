@@ -23,7 +23,10 @@ from etsin_finder.utils import \
     sort_array_of_obj_by_key, \
     slice_array_on_limit
 from etsin_finder.qvain_light_dataset_schema import DatasetValidationSchema
-from etsin_finder.qvain_light_utils import data_to_metax
+from etsin_finder.qvain_light_utils import data_to_metax, \
+    get_dataset_creator, \
+    remove_deleted_datasets_from_results, \
+    sort_datasets_by_date_created
 from etsin_finder.qvain_light_service import create_dataset, update_dataset, delete_dataset
 
 log = app.logger
@@ -137,14 +140,15 @@ class UserDatasets(Resource):
         offset = args.get('offset', None)
 
         result = qvain_light_service.get_datasets_for_user(user_id, limit, offset)
-
+        # Sort the datasets in the result by its dataset_created flag.
+        sort_datasets_by_date_created(result)
         # Return data only if authenticated
         if result and authentication.is_authenticated():
-
             # Limit the amount of items to be sent to the frontend
             if 'results' in result:
+                # Remove the datasets that have the metax property 'removed': True
+                result = remove_deleted_datasets_from_results(result)
                 result['results'] = slice_array_on_limit(result['results'], TOTAL_ITEM_LIMIT)
-
             return result, 200
         return '', 404
 
@@ -245,12 +249,12 @@ class QvainDatasetDelete(Resource):
         is_authd = authentication.is_authenticated()
         if not is_authd:
             return 'Not logged in', 400
-        # todo ensure user has rights to do this
-        # try:
-        #     metadata_provider_org = session["samlUserdata"]["urn:oid:1.3.6.1.4.1.25178.1.2.9"]
-        #     metadata_provider_user = session["samlUserdata"]["urn:oid:1.3.6.1.4.1.8057.2.80.26"]
-        # except KeyError as err:
-        #     log.warning("The Metadata provider is not specified: \n{0}".format(err))
-        #     return "The Metadata provider is not specified", 400
+
+        # only creator of the dataset is allowed to delete it
+        user = session["samlUserdata"]["urn:oid:1.3.6.1.4.1.16161.4.0.53"][0]
+        creator = get_dataset_creator(cr_id)
+        if user != creator:
+            return 'No permission', 403
+
         metax_response = delete_dataset(cr_id)
         return metax_response, 200
