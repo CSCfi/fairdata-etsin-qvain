@@ -84,6 +84,7 @@ class DatasetTable extends Component {
   }
 
   handleEnterEdit = dataset => () => {
+    console.log(dataset)
     this.props.Stores.Qvain.editDataset(dataset)
     this.props.history.push('/qvain/dataset')
   }
