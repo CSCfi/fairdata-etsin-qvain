@@ -52,10 +52,11 @@ def alter_role_data(participant_list, role):
             participant["@type"] = "Organization"
             participant["name"] = {}
             participant["name"]["und"] = participant_object["name"]
-            participant["is_part_of"] = {}
-            participant["is_part_of"]["name"] = {}
-            participant["is_part_of"]["name"]["und"] = participant_object["organization"]
-            participant["is_part_of"]["@type"] = "Organization"
+            if "organization" in participant_object and participant_object["organization"] != "":
+                participant["is_part_of"] = {}
+                participant["is_part_of"]["name"] = {}
+                participant["is_part_of"]["name"]["und"] = participant_object["organization"]
+                participant["is_part_of"]["@type"] = "Organization"
 
         if "email" in participant_object:
             participant["email"] = participant_object["email"]
@@ -224,3 +225,12 @@ def get_dataset_creator(cr_id):
     # get dataset
     dataset = get_catalog_record(cr_id, False)
     return dataset['metadata_provider_user']
+  
+def remove_deleted_datasets_from_results(result):
+    new_results = [dataset for dataset in result['results'] if dataset['removed'] is False]
+    result['results'] = new_results
+    return result
+
+def sort_datasets_by_date_created(result):
+    result['results'] = sorted(result['results'], key=lambda i: i['date_created'], reverse=True)
+    return result
