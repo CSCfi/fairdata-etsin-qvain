@@ -91,10 +91,6 @@ class DatasetTable extends Component {
     this.props.history.push('/qvain/dataset')
   }
 
-  handleGoToEtsin = identifier => () => {
-    this.props.history.push('/dataset/' + identifier)
-  }
-
   handleChangePage = pageNum => () => {
     this.setState({ page: pageNum, datasets: [] })
     this.getDatasets((pageNum - 1) * this.state.limit)
@@ -154,11 +150,11 @@ class DatasetTable extends Component {
                     />
                   </BodyCell>
                   <BodyCell>
-                    <Translate
-                      component={CancelButton}
-                      onClick={this.handleGoToEtsin(dataset.identifier)}
-                      content="qvain.datasets.goToEtsin"
-                    />
+                      <Translate
+                        component={CancelButton}
+                        onClick={()=> window.open('/dataset/' + dataset.identifier, '_blank')}
+                        content="qvain.datasets.goToEtsin"
+                      />
                   </BodyCell>
                   <BodyCell>
                     <Translate
