@@ -73,9 +73,12 @@ class DatasetTable extends Component {
 
   handleRemove = identifier => event => {
     event.preventDefault()
-    this.setState(state => ({
-      datasets: [...state.datasets.filter(d => d.identifier !== identifier)],
-    }))
+    axios
+      .delete('/api/dataset/' + identifier)
+      .then(this.setState(state => ({
+          datasets: [...state.datasets.filter(d => d.identifier !== identifier)],
+        })))
+      .catch(err => { this.setState({ error: true, errorMessage: err.message })})
   }
 
   noDatasets = () => {

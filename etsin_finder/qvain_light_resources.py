@@ -24,9 +24,10 @@ from etsin_finder.utils import \
     slice_array_on_limit
 from etsin_finder.qvain_light_dataset_schema import DatasetValidationSchema
 from etsin_finder.qvain_light_utils import data_to_metax, \
+    get_dataset_creator, \
     remove_deleted_datasets_from_results, \
     sort_datasets_by_date_created
-from etsin_finder.qvain_light_service import create_dataset, update_dataset
+from etsin_finder.qvain_light_service import create_dataset, update_dataset, delete_dataset
 
 log = app.logger
 
@@ -152,7 +153,7 @@ class UserDatasets(Resource):
         return '', 404
 
 class QvainDataset(Resource):
-    """POST and PATCH request handling coming in from Qvain Light. Used for adding datasets to METAX."""
+    """POST and PATCH request handling coming in from Qvain Light. Used for adding/editing datasets in METAX."""
 
     def __init__(self):
         """Setup required utils for dataset metadata handling"""
@@ -228,4 +229,32 @@ class QvainDataset(Resource):
             data_catalog = "urn:nbn:fi:att:data-catalog-att"
         metax_redy_data = data_to_metax(data, metadata_provider_org, metadata_provider_user, data_catalog)
         metax_response = update_dataset(metax_redy_data)
+        return metax_response, 200
+
+class QvainDatasetDelete(Resource):
+    """DELETE request handling coming in from Qvain Light. Used for deleting datasets in METAX."""
+
+    @log_request
+    def delete(self, cr_id):
+        """
+        Delete dataset from Metax.
+
+        Arguments:
+            config {object} -- Includes 'data' key that has the identifier of the dataset.
+
+        Returns:
+            [type] -- Metax response.
+        """
+
+        is_authd = authentication.is_authenticated()
+        if not is_authd:
+            return 'Not logged in', 400
+
+        # only creator of the dataset is allowed to delete it
+        user = session["samlUserdata"]["urn:oid:1.3.6.1.4.1.16161.4.0.53"][0]
+        creator = get_dataset_creator(cr_id)
+        if user != creator:
+            return 'No permission', 403
+
+        metax_response = delete_dataset(cr_id)
         return metax_response, 200
