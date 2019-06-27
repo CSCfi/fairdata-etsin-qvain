@@ -280,11 +280,11 @@ const english = {
       tableRows: {
         id: 'ID',
         name: 'Name',
-        edit: 'Edit',
-        remove: 'Remove',
+        actions: 'Actions',
       },
       editButton: 'Edit',
       deleteButton: 'Remove',
+      goToEtsin: 'View in Etsin',
       noDatasets: 'You have no datasets',
       reload: 'Reload',
       loading: 'Loading...',

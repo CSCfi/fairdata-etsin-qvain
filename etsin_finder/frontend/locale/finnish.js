@@ -280,11 +280,11 @@ const finnish = {
       tableRows: {
         id: 'ID',
         name: 'Nimi',
-        edit: 'Muokkaa',
-        remove: 'Poista',
+        actions: 'Toiminnot',
       },
       editButton: 'Muokkaa',
       deleteButton: 'Poista',
+      goToEtsin: 'Katso Etsimessä',
       noDatasets: 'Sinulla ei ole olemassa olevia aineistoja',
       reload: 'Lataa uudelleen',
       loading: 'Lataa...',

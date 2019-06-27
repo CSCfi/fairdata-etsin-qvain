@@ -33,7 +33,8 @@ export const HeaderCell = styled.th`
 `;
 
 export const BodyCell = styled.td`
-  padding: inherit;
+  padding: 5px;
+  vertical-align: top;
 `;
 
 export const TableNoteStyles = styled.tr`
