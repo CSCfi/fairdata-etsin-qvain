@@ -401,8 +401,10 @@ class Qvain {
     const researchDataset = dataset.research_dataset
 
     // Load description
-    this.title = researchDataset.title
-    this.description = researchDataset.description
+    this.title.en = researchDataset.title.en ? researchDataset.title.en : ''
+    this.title.fi = researchDataset.title.fi ? researchDataset.title.fi : ''
+    this.description.en = researchDataset.description.en ? researchDataset.description.en : ''
+    this.description.fi = researchDataset.description.fi ? researchDataset.description.fi : ''
 
     // Other identifiers
     this.otherIdentifiers = researchDataset.other_identifier
@@ -414,7 +416,11 @@ class Qvain {
       const primary = researchDataset.field_of_science[0]
       if (primary !== undefined) {
         this.fieldOfScience = FieldOfScience(primary.pref_label, primary.identifier)
+      } else {
+        this.fieldOfScience = undefined
       }
+    } else {
+      this.fieldOfScience = undefined
     }
 
     // keywords
@@ -422,15 +428,48 @@ class Qvain {
 
     // access type
     const at = researchDataset.access_rights.access_type
-    this.accessType = AccessType(at.pref_label, at.identifier)
+      ? researchDataset.access_rights.access_type
+      : undefined
+    this.accessType = at
+    ? AccessType(at.pref_label, at.identifier)
+    : AccessType(undefined, AccessTypeURLs.OPEN)
+
+    // embargo date
+    const date = researchDataset.access_rights.available
+      ? researchDataset.access_rights.available
+      : undefined
+    this.embargoExpDate = date || undefined
 
     // license
     const l = researchDataset.access_rights.license
       ? researchDataset.access_rights.license[0]
       : undefined
-    this.license = l ? License(l.title, l.identifier) : undefined
+    if (l.identifier !== undefined) {
+      this.license = l
+        ? License(l.title, l.identifier)
+        : License(undefined, LicenseUrls.CCBY4)
+    } else {
+      this.license = l
+        ? License(
+          {
+            en: 'Other (URL)',
+            fi: 'Muu (URL)'
+          }, 'other')
+        : License(undefined, LicenseUrls.CCBY4)
+      this.otherLicenseUrl = l.license
+    }
+
+    // TODO: other license url
+    // restriction grounds
+    const rg = researchDataset.access_rights.restriction_grounds
+      ? researchDataset.access_rights.restriction_grounds[0]
+      : undefined
+    this.restrictionGrounds = rg
+      ? RestrictionGrounds(rg.pref_label, rg.identifier)
+      : undefined
 
     // Load participants
+    // FIXME: adding the participants is curently not working
     let participants = []
     participants = [
       ...participants,
@@ -657,6 +696,11 @@ export const AccessType = (name, url) => ({
 })
 
 export const License = (name, identifier) => ({
+  name,
+  identifier,
+})
+
+export const RestrictionGrounds = (name, identifier) => ({
   name,
   identifier,
 })

@@ -5,6 +5,8 @@ import { inject, observer } from 'mobx-react'
 import Select from 'react-select'
 import Translate from 'react-translate-component'
 
+import { RestrictionGrounds as RestrictionGroundsConstructor } from '../../../stores/view/qvain'
+import { onChange, getCurrentValue } from '../utils/select'
 import getReferenceData from '../utils/getReferenceData';
 import { restrictionGroundsSchema } from '../utils/formValidation';
 import ValidationError from '../general/validationError';
@@ -19,7 +21,7 @@ class RestrictionGrounds extends Component {
       en: [],
       fi: []
     },
-    restrictionGroundsValidationError: null
+    errorMessage: null
   }
 
   componentDidMount = () => {
@@ -65,40 +67,43 @@ class RestrictionGrounds extends Component {
     this.props.Stores.Qvain.removeRestrictionGrounds();
   }
 
-  handleChange = (restrictionGrounds) => {
-    this.props.Stores.Qvain.setRestrictionGrounds(restrictionGrounds)
-    this.setState({ restrictionGroundsValidationError: null })
-  }
-
   handleBlur = () => {
-    restrictionGroundsSchema.validate(this.props.Stores.Qvain.restrictionGrounds.value)
+    const { identifier } = this.props.Stores.Qvain.restrictionGrounds || ''
+    restrictionGroundsSchema.validate(identifier)
       .then(() => {
-        this.setState({ restrictionGroundsValidationError: null })
+        this.setState({
+          errorMessage: null
+        })
       })
       .catch((err) => {
-        this.setState({ restrictionGroundsValidationError: err.errors })
+        this.setState({
+          errorMessage: err.errors
+        })
       })
   }
 
   render() {
-    const { options } = this.state
+    const { options, errorMessage } = this.state
     const { lang } = this.props.Stores.Locale
+    const { restrictionGrounds, setRestrictionGrounds } = this.props.Stores.Qvain
     return (
       <RestrictionGroundsContainer>
         <Translate component="h3" content="qvain.rightsAndLicenses.restrictionGrounds.title" />
         <Translate
           component={Select}
           name="restrictionGrounds"
+          value={getCurrentValue(restrictionGrounds, options, lang)}
           options={options[lang]}
-          clearable
-          onChange={this.handleChange}
+          isClearable
+          onChange={
+            onChange(options, lang, setRestrictionGrounds, RestrictionGroundsConstructor)
+          }
           onBlur={this.handleBlur}
           attributes={{
             placeholder: 'qvain.rightsAndLicenses.restrictionGrounds.placeholder'
           }}
         />
-        <ValidationError>{this.state.restrictionGroundsValidationError}</ValidationError>
-        <Text><Translate content="qvain.rightsAndLicenses.restrictionGrounds.text" /></Text>
+        {errorMessage && <ValidationError>{errorMessage}</ValidationError>}        <Text><Translate content="qvain.rightsAndLicenses.restrictionGrounds.text" /></Text>
       </RestrictionGroundsContainer>
     )
   }
