@@ -12,7 +12,7 @@ import {
 
 export const CancelButton = styled.button`
   width: 84px;
-  height: 38px;
+  height: 42px;
   border-radius: 4px;
   border: solid 1px #4f4f4f;
   font-size: 16px;
