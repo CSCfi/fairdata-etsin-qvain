@@ -284,6 +284,7 @@ const finnish = {
       },
       editButton: 'Muokkaa',
       deleteButton: 'Poista',
+      confirmDelete: 'Oletko varma, että haluat poistaa aineiston? Aineiston poiston jälkeen se ei enää näy Qvaimessa eikä Etsimen haku löydä sitä. Aineiston laskeutumissivua ei poisteta.',
       goToEtsin: 'Katso Etsimessä',
       noDatasets: 'Sinulla ei ole olemassa olevia aineistoja',
       reload: 'Lataa uudelleen',

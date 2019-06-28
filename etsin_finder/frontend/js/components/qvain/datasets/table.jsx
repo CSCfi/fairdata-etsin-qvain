@@ -5,6 +5,7 @@ import { withRouter } from 'react-router-dom'
 import axios from 'axios'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
+import translate from 'counterpart'
 import {
   Table,
   TableHeader,
@@ -72,13 +73,15 @@ class DatasetTable extends Component {
   }
 
   handleRemove = identifier => event => {
-    event.preventDefault()
-    axios
-      .delete('/api/dataset/' + identifier)
-      .then(this.setState(state => ({
-          datasets: [...state.datasets.filter(d => d.identifier !== identifier)],
-        })))
-      .catch(err => { this.setState({ error: true, errorMessage: err.message })})
+    if (window.confirm(translate("qvain.datasets.confirmDelete"))) {
+      event.preventDefault()
+      axios
+        .delete('/api/dataset/' + identifier)
+        .then(this.setState(state => ({
+            datasets: [...state.datasets.filter(d => d.identifier !== identifier)],
+          })))
+        .catch(err => { this.setState({ error: true, errorMessage: err.message })})
+    }
   }
 
   noDatasets = () => {
