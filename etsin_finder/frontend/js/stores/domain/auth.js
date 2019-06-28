@@ -8,7 +8,8 @@
  * @license   MIT
  */
 
-import { observable, action, toJS } from 'mobx'
+import { observable, action } from 'mobx'
+// import { observable, action, toJS } from 'mobx'
 import axios from 'axios'
 
 class Auth {
@@ -29,14 +30,14 @@ class Auth {
           headers: { 'content-type': 'application/json', charset: 'utf-8' },
         })
         .then(res => {
-          console.log(res.data)
+          // console.log(res.data)
           this.userLogged = res.data.is_authenticated
           this.cscUserLogged = res.data.is_authenticated_CSC_user
           this.user = {
             name: res.data.user_csc_name,
             idaGroups: res.data.user_ida_groups,
           }
-          console.log(toJS(this.user))
+          // console.log(toJS(this.user))
           this.loading = false
           resolve(res)
         })
