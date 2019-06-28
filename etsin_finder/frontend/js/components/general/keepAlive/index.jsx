@@ -36,7 +36,8 @@ export default class KeepAlive extends Component {
     // user was idle for custom time and is logged in
     if (idle && Auth.userLogged) {
       this.timeout = setTimeout(() => {
-        Auth.logout()
+        // Auth.logout()
+        window.location = '/slo'
         this.setState({
           showNotice: true,
         })
