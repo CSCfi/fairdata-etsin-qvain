@@ -107,8 +107,8 @@ def access_rights_to_metax(data):
         license_object["license"] = data["otherLicenseUrl"]
         access_rights["license"].append(license_object)
     if data["accessType"]["url"] != access_type["OPEN"]:
-        access_rights["restriction_grounds"] = {}
-        access_rights["restriction_grounds"]["identifier"] = data["restrictionGrounds"]
+        access_rights["restriction_grounds"] = []
+        access_rights["restriction_grounds"].append({"identifier": data["restrictionGrounds"]})
     if data["accessType"]["url"] == access_type["EMBARGO"]:
         access_rights["available"] = data["embargoDate"]
     return access_rights
@@ -149,8 +149,8 @@ def files_data_to_metax(files):
 
     """
     metax_files = []
-    metax_file_object = {}
     for file in files:
+        metax_file_object = {}
         metax_file_object["identifier"] = file["identifier"]
         metax_file_object["title"] = file["title"]
         metax_file_object["description"] = file["description"]
@@ -172,8 +172,8 @@ def directories_data_to_metax(files):
 
     """
     metax_directories = []
-    metax_directory_object = {}
     for file in files:
+        metax_directory_object = {}
         metax_directory_object["identifier"] = file["identifier"]
         metax_directory_object["title"] = file["title"]
         metax_directory_object["description"] = file["description"] if "description" in file else ""
