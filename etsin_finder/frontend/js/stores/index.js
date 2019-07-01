@@ -15,6 +15,7 @@ import ElasticQuery from './view/elasticquery'
 import DatasetQuery from './view/datasetquery'
 import Accessibility from './view/accessibility'
 import Map from './view/map'
+// import Qvain from './view/qvain'
 
 const Stores = {
   Env,
@@ -24,6 +25,7 @@ const Stores = {
   DatasetQuery,
   Accessibility,
   Map,
+  // Qvain
 }
 
 export default Stores

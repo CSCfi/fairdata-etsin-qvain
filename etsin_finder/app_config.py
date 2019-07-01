@@ -138,3 +138,22 @@ def get_metax_api_config(is_testing):
         return None
 
     return metax_api_conf
+
+def get_metax_qvain_api_config(is_testing):
+    """
+    Get Metax API config for Qvain-Light.
+
+    :return:
+    """
+    if executing_travis() or is_testing:
+        return None
+
+    metax_qvain_api_conf = get_app_config(is_testing).get('METAX_QVAIN_API', False)
+    if not metax_qvain_api_conf or not isinstance(metax_qvain_api_conf, dict):
+        return None
+
+    if 'HOST' not in metax_qvain_api_conf or 'USER' not in metax_qvain_api_conf \
+            or 'PASSWORD' not in metax_qvain_api_conf or 'VERIFY_SSL' not in metax_qvain_api_conf:
+        return None
+
+    return metax_qvain_api_conf

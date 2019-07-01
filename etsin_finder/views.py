@@ -52,7 +52,9 @@ def logout():
         name_id = session['samlNameId']
     if 'samlSessionIndex' in session:
         session_index = session['samlSessionIndex']
-
+    log.debug("LOGOUT request to /slo")
+    # Clear the flask session here because the idp doesnt seem to call the sls route.
+    session.clear()
     return redirect(auth.logout(name_id=name_id, session_index=session_index))
 
 
