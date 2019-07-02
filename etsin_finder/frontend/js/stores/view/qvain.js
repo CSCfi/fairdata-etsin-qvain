@@ -63,6 +63,7 @@ class Qvain {
     this.participants = []
     this.participantInEdit = EmptyParticipant
     // Reset Files/Directories related data
+    this.dataCatalog = undefined
     this.idaPickerOpen = false
     this._selectedProject = undefined
     this._selectedFiles = []
@@ -191,6 +192,8 @@ class Qvain {
 
   @observable idaPickerOpen = false
 
+  @observable dataCatalog = undefined
+
   @observable _selectedProject = undefined
 
   @observable _selectedFiles = []
@@ -212,6 +215,11 @@ class Qvain {
 
   // directories visited, used to go up the directory hierarchy
   @observable _previousDirectories = new Map()
+
+  @action
+  setDataCatalog = selectedDataCatalog => {
+    this.dataCatalog = selectedDataCatalog
+  }
 
   @action toggleSelectedFile = (file, select) => {
     const newHier = { ...this._hierarchy }
