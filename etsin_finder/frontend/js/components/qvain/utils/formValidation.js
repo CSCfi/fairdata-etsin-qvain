@@ -156,6 +156,11 @@ const participantOrganizationSchema = yup.object().shape({
   }),
 })
 
+// DATA CATALOG
+const dataCatalogSchema = yup
+  .string()
+  .required(translate('qvain.validationMessages.files.dataCatalog.required'))
+
 // FILE AND DIRECTORY (IDA RESOURCES) VALIDATION
 
 const fileUseCategorySchema = yup
@@ -281,6 +286,7 @@ const qvainFormSchema = yup.object().shape({
     then: restrictionGroundsSchema,
   }),
   participants: participantsSchema,
+  dataCatalog: dataCatalogSchema,
   files: filesSchema,
   directories: directoriesSchema,
 })
@@ -304,6 +310,7 @@ export {
   participantEmailSchema,
   participantIdentifierSchema,
   participantOrganizationSchema,
+  dataCatalogSchema,
   fileTitleSchema,
   fileDescriptionSchema,
   fileUseCategorySchema,
