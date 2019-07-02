@@ -483,6 +483,9 @@ const finnish = {
         },
       },
       files: {
+        dataCatalog: {
+          required: 'Tiedosto lähde on pakollinen'
+        },
         file: {
           title: {
             required: 'Tiedoston otsikko on pakollinen',
@@ -512,6 +515,11 @@ const finnish = {
     },
     files: {
       title: 'Tiedostot',
+      dataCatalog: {
+        label: 'Tiedosto lähde',
+        explanation: 'Valitse IDA jos tiedostot on tallennettu Fairdata Ida palveluun. Valitse ATT jos tiedostot tulevat muualta.',
+        placeholder: 'Select data catalog'
+      },
       help:
         'Aineistoon kuuluvat tiedostot. Aineistoon voi kuulua vain joko IDAssa olevia tiedostoja tai ulkopuolisia tiedostoja. Tiedostojen metadata ei ole osa aineistojen metadataa, joten muista tallentaa muutokset jotka teet tiedostojen metadataan.',
       ida: {
