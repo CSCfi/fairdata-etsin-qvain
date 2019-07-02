@@ -481,6 +481,9 @@ const english = {
         },
       },
       files: {
+        dataCatalog: {
+          required: 'File origin is required'
+        },
         file: {
           title: {
             required: 'File title is required',
@@ -510,6 +513,11 @@ const english = {
     },
     files: {
       title: 'Files',
+      dataCatalog: {
+        label: 'File origin',
+        explanation: 'Choose IDA if the data is stored in Fairdata Ida service. Choose ATT if the data is stored elsewhere.',
+        placeholder: 'Select option'
+      },
       help:
         'Files associated with this dataset. A dataset can only have either IDA files or external files. File metadata will not be associated with datasets, so remember to save edits to file metadata.',
       ida: {
