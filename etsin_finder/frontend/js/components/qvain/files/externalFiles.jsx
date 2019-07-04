@@ -18,11 +18,17 @@ import {
 import { Input, SelectedFilesTitle } from '../general/form'
 import { FileContainer, SlidingContent } from '../general/card'
 import ExternalEditForm from './externalFileForm'
+import { externalResourceUrlSchema } from '../utils/formValidation'
 
 export class ExternalFilesBase extends Component {
   static propTypes = {
     Stores: PropTypes.object.isRequired
   }
+
+  /*state = {
+    resourceError: undefined,
+    urlError: undefined,
+  }*/
 
   handleToggleForm = (event) => {
     event.preventDefault()
@@ -33,6 +39,18 @@ export class ExternalFilesBase extends Component {
       this.props.Stores.Qvain.extResFormOpen = true
       this.props.Stores.Qvain.idaPickerOpen = false
     }
+  }
+
+  verifyURL = () => {
+    const resource = this.props.Stores.Qvain.resourceInEdit
+    externalResourceUrlSchema
+      .validate(resource.url)
+      .then(() => {
+        this.props.Stores.Qvain.resetInEditResource()  
+      })
+      .catch(err => {
+        console.log(err)
+      }) 
   }
 
   handleRemoveResource = (resourceId) => (event) => {
@@ -47,7 +65,7 @@ export class ExternalFilesBase extends Component {
 
   handleCloseEdit = (event) => {
     event.preventDefault()
-    this.props.Stores.Qvain.resetInEditResource()
+    this.verifyURL();
   }
 
   render() {
