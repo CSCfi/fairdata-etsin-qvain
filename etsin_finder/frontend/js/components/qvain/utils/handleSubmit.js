@@ -60,6 +60,7 @@ const handleSubmitToBackend = (values) => {
     // Send no values if empty instead of empty values.
     remote_resources:
       values._externalResources.length > 0 ? values._externalResources : undefined,
+    dataCatalog: values.dataCatalog.value,
     files: values._selectedFiles ? filesToMetax(values._selectedFiles) : undefined,
     directories: values._selectedDirectories ? directoriesToMetax(values._selectedDirectories) : undefined,
   }
