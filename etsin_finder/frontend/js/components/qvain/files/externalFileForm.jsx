@@ -54,16 +54,21 @@ export class ExternalEditFormBase extends Component {
     })
   }
 
-  handleOnUrlBlur = () => {
+  verifyURL = () => {
     const resource = this.props.Stores.Qvain.resourceInEdit
     externalResourceUrlSchema
       .validate(resource ? resource.url : this.state.url)
       .then(() => {
         this.setState({ urlError: undefined, resourceError: undefined })
+        this.props.Stores.Qvain.resetInEditResource()  
       })
       .catch(err => {
         this.setState({ urlError: err.errors })
-      })
+      }) 
+  }
+
+  handleOnUrlBlur = () => {
+    this.verifyURL();
   }
 
   handleAddResource = event => {
@@ -98,7 +103,7 @@ export class ExternalEditFormBase extends Component {
 
   handleCloseEdit = event => {
     event.preventDefault()
-    this.props.Stores.Qvain.resetInEditResource()
+    this.verifyURL();
   }
 
   render() {
