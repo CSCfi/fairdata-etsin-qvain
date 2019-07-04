@@ -7,10 +7,11 @@ import Translate from 'react-translate-component'
 import Card from '../general/card'
 import { dataCatalogSchema } from '../utils/formValidation'
 import ValidationError from '../general/validationError'
+import { DataCatalogIdentifiers } from '../utils/constants'
 
 const options = [
-  { value: 'urn:nbn:fi:att:data-catalog-ida', label: 'IDA' },
-  { value: 'urn:nbn:fi:att:data-catalog-att', label: 'ATT' }
+  { value: DataCatalogIdentifiers.IDA, label: 'IDA' },
+  { value: DataCatalogIdentifiers.ATT, label: 'ATT' }
 ]
 
 class DataCatalog extends Component {
