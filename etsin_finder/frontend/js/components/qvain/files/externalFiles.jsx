@@ -25,11 +25,6 @@ export class ExternalFilesBase extends Component {
     Stores: PropTypes.object.isRequired
   }
 
-  /*state = {
-    resourceError: undefined,
-    urlError: undefined,
-  }*/
-
   handleToggleForm = (event) => {
     event.preventDefault()
     const { extResFormOpen } = this.props.Stores.Qvain
