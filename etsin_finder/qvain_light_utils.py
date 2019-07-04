@@ -184,7 +184,7 @@ def directories_data_to_metax(files):
     return metax_directories
 
 
-def data_to_metax(data, metadata_provider_org, metadata_provider_user, data_catalog):
+def data_to_metax(data, metadata_provider_org, metadata_provider_user):
     """
     Converts all the data from the frontend to conform to Metax schema.
 
@@ -192,7 +192,6 @@ def data_to_metax(data, metadata_provider_org, metadata_provider_user, data_cata
         data {object} -- All form data sent from the frontend.
         metadata_provider_org {string} -- The name of the metadata providers organisation taken from authentication information.
         metadata_provider_user {string} -- The name of the metadata provider taken from authentication information.
-        data_catalog {string} -- The correct data catalog value for the dataset taken from the data.
 
     Returns:
         object -- Returns an object that has been validated and should conform to Metax schema and is ready to be sent to Metax.
@@ -201,7 +200,7 @@ def data_to_metax(data, metadata_provider_org, metadata_provider_user, data_cata
     dataset_data = {
         "metadata_provider_org": metadata_provider_org,
         "metadata_provider_user": metadata_provider_user,
-        "data_catalog": data_catalog,
+        "data_catalog": data["dataCatalog"],
         "research_dataset": {
             "title": data["title"],
             "description": data["description"],
@@ -214,9 +213,9 @@ def data_to_metax(data, metadata_provider_org, metadata_provider_user, data_cata
             }],
             "keyword": data["keywords"],
             "access_rights": access_rights_to_metax(data),
-            "remote_resources": remote_resources_data_to_metax(data["remote_resources"]) if data_catalog == "urn:nbn:fi:att:data-catalog-att" else "",
-            "files": files_data_to_metax(data["files"]) if data_catalog == "urn:nbn:fi:att:data-catalog-ida" else "",
-            "directories": directories_data_to_metax(data["directories"]) if data_catalog == "urn:nbn:fi:att:data-catalog-ida" else ""
+            "remote_resources": remote_resources_data_to_metax(data["remote_resources"]) if data["dataCatalog"] == "urn:nbn:fi:att:data-catalog-att" else "",
+            "files": files_data_to_metax(data["files"]) if data["dataCatalog"] == "urn:nbn:fi:att:data-catalog-ida" else "",
+            "directories": directories_data_to_metax(data["directories"]) if data["dataCatalog"] == "urn:nbn:fi:att:data-catalog-ida" else ""
         }
     }
     return clean_empty_keyvalues_from_dict(dataset_data)

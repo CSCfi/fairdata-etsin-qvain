@@ -78,6 +78,7 @@ class DatasetValidationSchema(Schema):
         required=True
     )
     otherLicenseUrl = fields.Str()
+    dataCatalog = fields.Str()
     files = fields.List(fields.Dict())
     directories = fields.List(fields.Dict())
     remote_resources = fields.List(fields.Dict())
