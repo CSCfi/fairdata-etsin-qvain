@@ -6,6 +6,7 @@ import {
   LicenseUrls,
   FileAPIURLs,
   UseCategoryURLs,
+  DataCatalogIdentifiers
 } from '../../components/qvain/utils/constants'
 import { getPath } from '../../components/qvain/utils/object'
 
@@ -406,6 +407,7 @@ class Qvain {
   // perform schema transformation METAX JSON -> etsin backend / internal schema
   @action editDataset = dataset => {
     this.original = dataset
+    console.log(dataset)
     const researchDataset = dataset.research_dataset
 
     // Load description
@@ -493,17 +495,43 @@ class Qvain {
     ]
     this.participants = participants
 
+    // Load data catalog
+    this.dataCatalog = dataset.data_catalog && {
+      label: dataset.data_catalog.identifier === DataCatalogIdentifiers.IDA
+        ? 'IDA'
+        : 'ATT',
+      value: dataset.data_catalog.identifier
+    }
+
     // Load files
     const dsFiles = researchDataset.files
     const dsDirectories = researchDataset.directories
+
     if (dsFiles !== undefined || dsDirectories !== undefined) {
       this.idaPickerOpen = true
-      this._selectedProject = dsFiles[0].details.project_identifier
+      this._selectedProject = (dsFiles !== undefined)
+        ? dsFiles[0].details.project_identifier
+        : dsDirectories[0].details.project_identifier
       this.getInitialDirectories()
       this._selectedDirectories = dsDirectories
-        ? dsDirectories.map(d => Directory(d, undefined, true, false))
+        ? dsDirectories.map(d => {
+          // Directory(d, undefined, true, false)
+          const parent = d.details.parent_directory || undefined
+          const dir = {
+            ...Hierarchy(d, parent, true),
+            open: false,
+            directoryName: d.details.directory_name,
+            useCategory: d.use_category.identifier || UseCategoryURLs.OUTCOME_MATERIAL,
+            description: d.description,
+            title: d.title,
+            identifier: d.identifier
+          }
+          return dir
+        })
         : []
-      this._selectedFiles = dsFiles ? dsFiles.map(f => DatasetFile(f, undefined, true)) : []
+      this._selectedFiles = dsFiles
+        ? dsFiles.map(f => DatasetFile(f, undefined, true))
+        : []
     }
 
     // external resources
@@ -657,7 +685,7 @@ const File = (file, parent, selected) => ({
 
 const DatasetFile = file => ({
   identifier: file.identifier,
-  useCategory: getPath('use_category.identifier'),
+  useCategory: getPath('use_category.identifier', file),
   fileType: getPath('file_type.identifier', file),
   projectIdentifier: getPath('details.project_identifier', file),
   title: file.title,
