@@ -42,7 +42,7 @@ export const SubHeader = styled.div`
 `
 
 export const SubHeaderText = styled.div`
-  font-family: Lato;
+  font-family: 'Open Sans', sans-serif;
   font-size: 32px;
   font-weight: bold;
   font-style: normal;
