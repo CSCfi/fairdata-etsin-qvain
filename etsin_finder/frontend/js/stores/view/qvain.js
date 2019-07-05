@@ -407,7 +407,6 @@ class Qvain {
   // perform schema transformation METAX JSON -> etsin backend / internal schema
   @action editDataset = dataset => {
     this.original = dataset
-    console.log(dataset)
     const researchDataset = dataset.research_dataset
 
     // Load description
@@ -469,7 +468,6 @@ class Qvain {
       this.otherLicenseUrl = l.license
     }
 
-    // TODO: other license url
     // restriction grounds
     const rg = researchDataset.access_rights.restriction_grounds
       ? researchDataset.access_rights.restriction_grounds[0]
@@ -479,21 +477,21 @@ class Qvain {
       : undefined
 
     // Load participants
-    // FIXME: adding the participants is curently not working
-    let participants = []
-    participants = [
-      ...participants,
-      ...this.createParticipants(participants, researchDataset.creator || [], Role.CREATOR),
-    ]
-    participants = [
-      ...participants,
-      ...this.createParticipants(participants, researchDataset.publisher || [], Role.PUBLISHER),
-    ]
-    participants = [
-      ...participants,
-      ...this.createParticipants(participants, researchDataset.curator || [], Role.CURATOR),
-    ]
-    this.participants = participants
+    const participants = []
+    if ('publisher' in researchDataset) {
+      participants.push(this.createParticipant(researchDataset.publisher, Role.PUBLISHER, participants))
+    }
+    if ('curator' in researchDataset) {
+      researchDataset.curator.forEach(curator => (
+        participants.push(this.createParticipant(curator, Role.CURATOR, participants))
+      ))
+    }
+    if ('creator' in researchDataset) {
+      researchDataset.creator.forEach(creator => (
+        participants.push(this.createParticipant(creator, Role.CREATOR, participants))
+      ))
+    }
+    this.participants = this.mergeTheSameParticipants(participants)
 
     // Load data catalog
     this.dataCatalog = dataset.data_catalog && {
@@ -503,7 +501,7 @@ class Qvain {
       value: dataset.data_catalog.identifier
     }
 
-    // Load files
+    // Load files and directories
     const dsFiles = researchDataset.files
     const dsDirectories = researchDataset.directories
 
@@ -549,18 +547,12 @@ class Qvain {
     }
   }
 
-  createParticipants = (existing, toAdd, role) => {
-    let added = []
-    if (toAdd.length > 0) {
-      added = [...toAdd.map(participant => this.createParticipant(participant, role, existing))]
-    }
-    return added
-  }
-
+  // Creates a sigle instance of a participant, only has one role.
+  // Returns a Participant.
   createParticipant = (participantJson, role, participants) => {
     let name
     if (participantJson['@type'].toLowerCase() === EntityType.ORGANIZATION) {
-      name = participantJson.name ? participantJson.name.en : undefined
+      name = participantJson.name ? participantJson.name.und : undefined
     } else {
       name = participantJson.name
     }
@@ -569,16 +561,14 @@ class Qvain {
     if (participantJson['@type'].toLowerCase() === EntityType.ORGANIZATION) {
       const isPartOf = participantJson.is_part_of
       if (isPartOf !== undefined) {
-        parentOrg = isPartOf.name.en
+        parentOrg = isPartOf.name.und
       } else {
         parentOrg = undefined
       }
     } else {
       const parentOrgName = participantJson.member_of.name
-      if (parentOrgName !== undefined && parentOrgName.en !== undefined) {
-        parentOrg = parentOrgName.en
-      } else if (parentOrgName !== undefined) {
-        parentOrg = parentOrgName.fi
+      if (parentOrgName !== undefined && parentOrgName.und !== undefined) {
+        parentOrg = parentOrgName.und
       } else {
         parentOrg = undefined
       }
@@ -590,11 +580,56 @@ class Qvain {
         : EntityType.ORGANIZATION,
       [role],
       name,
-      participantJson.email,
-      participantJson.identifier,
+      participantJson.email ? participantJson.email : '',
+      participantJson.identifier ? participantJson.identifier : '',
       parentOrg,
       this.createParticipantUIId(participants)
     )
+  }
+
+  // Function that 'Merge' the participants with the same metadata (except UIid).
+  // It looks for partisipants with the same info but different roles and adds their
+  // roles together to get one participant with multiple roles.
+  // Retruns a nw array with the merged participants.
+  mergeTheSameParticipants = participants => {
+    if (participants.length <= 1) return participants
+    const mergedParticipants = []
+    participants.forEach((participant1) => {
+      participants.forEach((participant2, index) => {
+        if (this.isEqual(participant1, participant2)) {
+          participant1.role = [...new Set([].concat(...[participant1.role, participant2.role]))]
+          delete participants[index]
+        }
+      })
+      mergedParticipants.push(participant1)
+    })
+    return mergedParticipants
+  }
+
+  // Function to compare two perticipants and see if they are the same perticipant.
+  // Returns True if the participants seem the same, or False if not.
+  isEqual = (p1, p2) => {
+    if ('identifier' in p1 && 'identifier' in p2) {
+      if (p1.identifier === p2.identifier) return true
+      return false
+    }
+    if ('email' in p1 && 'emain' in p2) {
+      if (p1.email === p2.email && p1.name === p2.name && p1['@type'] === p2['@type']) return true
+      return false
+    }
+    if (p1['@type'] === EntityType.PERSON && p2['@type'] === EntityType.PERSON) {
+      if (p1.name === p2.name && p1.member_of.name.und === p2.member_of.name.und) return true
+      return false
+    }
+    if (p1['@type'] === EntityType.ORGANIZATION && p2['@type'] === EntityType.ORGANIZATION) {
+      if ('is_part_of' in p1 && 'is_part_of' in p2) {
+        if (p1.name === p2.name && p1.is_part_of.name.und === p2.is_part_of.name.und) return true
+        return false
+      }
+      if (p1.name === p2.name) return true
+      return false
+    }
+    return false
   }
 
   // create a new UI Identifier based on existing UI IDs
