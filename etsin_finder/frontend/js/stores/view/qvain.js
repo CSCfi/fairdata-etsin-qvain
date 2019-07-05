@@ -534,14 +534,14 @@ class Qvain {
 
     // external resources
     const remoteResources = researchDataset.remote_resources
-    this._externalResources = remoteResources
-      ? remoteResources.map(r =>
-          ExternalResource(this.createExternalResourceUIId(), r.title, r.identifier)
-        )
-      : []
     if (remoteResources !== undefined) {
       this._externalResources = remoteResources.map(r =>
-        ExternalResource(this.createExternalResourceUIId(), r.title, r.identifier)
+        ExternalResource(
+          this.createExternalResourceUIId(),
+          r.title,
+          r.access_url ? r.access_url.identifier : undefined,
+          r.use_category ? r.use_category.identifier : undefined
+        )
       )
       this.extResFormOpen = true
     }
