@@ -52,7 +52,7 @@ export class ExternalEditFormBase extends Component {
     return uc
   }
 
-  handleOnUrlBlur = () => {
+  verifyURL = () => {
     const resource = this.props.Stores.Qvain.resourceInEdit
     externalResourceUrlSchema
       .validate(resource ? resource.url : this.state.url)
