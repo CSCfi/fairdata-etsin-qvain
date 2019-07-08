@@ -280,6 +280,7 @@ const english = {
       tableRows: {
         id: 'ID',
         name: 'Name',
+        modified: 'Modified',
         actions: 'Actions',
       },
       editButton: 'Edit',

@@ -280,6 +280,7 @@ const finnish = {
       tableRows: {
         id: 'ID',
         name: 'Nimi',
+        modified: 'Muokattu',
         actions: 'Toiminnot',
       },
       editButton: 'Muokkaa',
