@@ -15,6 +15,7 @@ import { qvainFormSchema } from './utils/formValidation'
 import Files from './files'
 import { QvainContainer, SubHeader, SubHeaderText, Container } from './general/card'
 import handleSubmitToBackend from './utils/handleSubmit'
+import Title from './general/title'
 import SubmitResponse from './general/submitResponse'
 import { InvertedButton } from '../general/button'
 
@@ -62,7 +63,7 @@ class Qvain extends Component {
       <QvainContainer>
         <SubHeader>
           <SubHeaderText>
-            <Translate content="qvain.title" />
+            <Translate component={Title} content="qvain.title" />
           </SubHeaderText>
         </SubHeader>
         <Form onSubmit={this.handleSubmit} className="container">

@@ -281,7 +281,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   p, .paragraph {
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Lato', sans-serif;
     font-size: 1em;
     line-height: calc(1.7 * 1em);
   }
