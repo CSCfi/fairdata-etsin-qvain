@@ -52,12 +52,6 @@ export class ExternalEditFormBase extends Component {
     return uc
   }
 
-  handleChangeUse = selectedOption => {
-    this.setState({
-      useCategory: selectedOption,
-    })
-  }
-
   handleOnUrlBlur = () => {
     const resource = this.props.Stores.Qvain.resourceInEdit
     externalResourceUrlSchema
