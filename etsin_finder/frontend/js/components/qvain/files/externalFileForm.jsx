@@ -20,8 +20,10 @@ export class ExternalEditFormBase extends Component {
   }
 
   state = {
-    useCategoriesEn: [],
-    useCategoriesFi: [],
+    useCategories: {
+      en: [],
+      fi: [],
+    },
     title: '',
     url: '',
     useCategory: '',
@@ -32,9 +34,11 @@ export class ExternalEditFormBase extends Component {
   componentDidMount = () => {
     getLocalizedOptions('use_category').then(translations => {
       this.setState({
-        useCategoriesEn: translations.en,
-        useCategoriesFi: translations.fi,
-      })
+          useCategories: {
+            en: translations.en,
+            fi: translations.fi
+          }
+        })
     })
   }
 
@@ -46,12 +50,6 @@ export class ExternalEditFormBase extends Component {
       uc = fi.find(opt => opt.value === stores.Qvain.inEdit.useCategory)
     }
     return uc
-  }
-
-  handleChangeUse = selectedOption => {
-    this.setState({
-      useCategory: selectedOption,
-    })
   }
 
   verifyURL = () => {
@@ -109,6 +107,8 @@ export class ExternalEditFormBase extends Component {
   render() {
     const resource = this.props.Stores.Qvain.resourceInEdit
     const { isEditForm } = this.props
+    const { lang } = this.props.Stores.Locale
+    const { useCategories } = this.state
     return (
       <Fragment>
         <Translate component={Label} content="qvain.files.external.form.title.label" />
@@ -129,13 +129,12 @@ export class ExternalEditFormBase extends Component {
         <Translate component={Label} content="qvain.files.external.form.useCategory.label" />
         <Translate
           component={CustomSelect}
-          value={this.state.useCategory}
-          options={
-            this.props.Stores.Locale.lang === 'en'
-              ? this.state.useCategoriesEn
-              : this.state.useCategoriesFi
+          value={isEditForm ? resource.useCategory : this.state.useCategory
           }
-          onChange={this.handleChangeUse}
+          options={useCategories[lang]}
+          onChange={(selection) => {
+            isEditForm ? resource.useCategory = selection : this.setState({useCategory: selection})
+          }}
           attributes={{ placeholder: 'qvain.files.external.form.useCategory.placeholder' }}
         />
         <Translate component={Label} content="qvain.files.external.form.url.label" />
