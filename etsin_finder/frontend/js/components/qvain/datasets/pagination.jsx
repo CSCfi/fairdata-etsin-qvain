@@ -55,18 +55,7 @@ class DatasetPagination extends Component {
 
   // Calculates the entire amount of pages needed for displaying datasets.
   // Takes into account the division remainders.
-  getPageCount = (count, limit) => {
-    const amount = (count / limit)
-    if ((count % limit) > 0) {
-      const remainder = count % limit
-      const decimalRemainder = (limit / remainder) - 1
-      const additional = decimalRemainder >= 0.5 ?
-        decimalRemainder :
-        decimalRemainder + (0.5 - decimalRemainder)
-      return Math.round(amount + additional)
-    }
-    return amount
-  }
+  getPageCount = (count, limit) => Math.ceil(count / limit)
 
   singlePage(value, link) {
     if (value === '...') {
