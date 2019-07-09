@@ -5,6 +5,7 @@ import { toJS } from 'mobx'
 import axios from 'axios';
 import styled from 'styled-components';
 import Translate from 'react-translate-component'
+import { createFilter } from 'react-select'
 import CreatableSelect from 'react-select/lib/Creatable'
 import {
   SaveButton,
@@ -238,6 +239,7 @@ export class ParticipantInfoBase extends Component {
           onChange={(selection) => { participant.organization = selection.label }}
           onBlur={this.handleOnOrganizationBlur}
           value={{ label: participant.organization, value: participant.organization }}
+          filterOption={createFilter({ ignoreAccents: false })}
         />
         {organizationError && <ValidationError>{organizationError}</ValidationError>}
         {participantError && <ParticipantValidationError>{participantError}</ParticipantValidationError>}
