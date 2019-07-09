@@ -233,3 +233,21 @@ def remove_deleted_datasets_from_results(result):
 def sort_datasets_by_date_created(result):
     result['results'] = sorted(result['results'], key=lambda i: i['date_created'], reverse=True)
     return result
+
+def edited_data_to_metax(data, original):
+    original["research_dataset"]["title"] = data["title"]
+    original["research_dataset"]["description"] = data["description"]
+    original["research_dataset"]["creator"] = alter_role_data(data["participants"], "creator")
+    original["research_dataset"]["publisher"] = alter_role_data(data["participants"], "publisher")[0]
+    original["research_dataset"]["curator"] = alter_role_data(data["participants"], "curator")
+    original["research_dataset"]["other_identifier"] = other_identifiers_to_metax(data["identifiers"])
+    original["research_dataset"]["field_of_science"] = [{"identifier": data["fieldOfScience"]}]
+    original["research_dataset"]["keyword"] = data["keywords"]
+    original["research_dataset"]["access_rights"] = access_rights_to_metax(data)
+    original["research_dataset"]["remote_resources"] = remote_resources_data_to_metax(data["remote_resources"]) if data["dataCatalog"] == "urn:nbn:fi:att:data-catalog-att" else ""
+    original["research_dataset"]["files"] = files_data_to_metax(data["files"]) if data["dataCatalog"] == "urn:nbn:fi:att:data-catalog-ida" else ""
+    original["research_dataset"]["directories"] = directories_data_to_metax(data["directories"]) if data["dataCatalog"] == "urn:nbn:fi:att:data-catalog-ida" else ""
+    edited_data = {
+        "research_dataset": original["research_dataset"]
+    }
+    return clean_empty_keyvalues_from_dict(edited_data)
