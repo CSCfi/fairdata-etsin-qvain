@@ -185,7 +185,8 @@ export class ParticipantInfoBase extends Component {
                 // identifier
                 if (orgs[lang].filter(opt => opt.value === selection.value).length > 0) {
                   participant.identifier = selection.value
-                  participant.name = selection.label
+                } else {
+                  participant.identifier = ''
                 }
               }}
               value={{ label: participant.name, value: participant.identifier }}
