@@ -254,10 +254,13 @@ const finnish = {
   },
   qvain: {
     submit: 'Julkaise Aineisto',
+    edit: 'Päivitä Aineisto',
     consent: 'Käyttämällä Qvain Lightia käyttäjä hyväksyy, että hän on pyytänyt suostumusta kaikilta henkilöiltä, joiden hankilökohtaisia tietoja käyttäjä lisää kuvattaviin tietoihin, ja ilmoitti heille, miten he voivat saada tietonsa poistettua. Käyttämällä Qvain Lightia käyttäjä hyväksyy <a href="https://www.fairdata.fi/hyodyntaminen/kayttopolitiikat-ja-ehdot/">käyttöehdot</a>.',
     submitStatus: {
       success: 'Aineisto julkaistu!',
       fail: 'Jotain meni pieleen...',
+      editSuccess: 'Uusi aineisto versio luotu!',
+      editMetadataSuccess: 'Aineisto päivitys onnistui!',
     },
     openErrorMessages: 'Avaa virhe viestit',
     closeErrorMessages: 'Sulje virhe viestit',
