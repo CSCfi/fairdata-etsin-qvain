@@ -140,8 +140,6 @@ class UserDatasets(Resource):
         offset = args.get('offset', None)
 
         result = qvain_light_service.get_datasets_for_user(user_id, limit, offset)
-        # Sort the datasets in the result by its dataset_created flag.
-        sort_datasets_by_date_created(result)
         # Return data only if authenticated
         if result and authentication.is_authenticated():
             # Limit the amount of items to be sent to the frontend

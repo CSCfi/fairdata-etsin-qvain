@@ -8,6 +8,7 @@ import { ButtonLabel, EditButton, DeleteButton, FileItem } from '../general/butt
 import { SelectedFilesTitle } from '../general/form'
 import FileForm from './fileForm'
 import DirectoryForm from './directoryForm'
+import { randomStr } from '../utils/fileHierarchy'
 
 export class SelectedFilesBase extends Component {
   static propTypes = {
@@ -30,15 +31,17 @@ export class SelectedFilesBase extends Component {
       toggleSelectedDirectory,
       selectedFiles,
       selectedDirectories,
+      existingFiles,
+      existingDirectories,
       inEdit
     } = this.props.Stores.Qvain
-    const selected = [...selectedDirectories, ...selectedFiles]
+    const selected = [...existingDirectories, ...existingFiles, ...selectedDirectories, ...selectedFiles]
     return (
       <Fragment>
         <Translate component={SelectedFilesTitle} content="qvain.files.selected.title" />
         {selected.length === 0 && <Translate component="p" content="qvain.files.selected.none" />}
         {selected.map(s => (
-          <Fragment key={`${s.id}-${s.identifier}`}>
+          <Fragment key={`${s.id}-${randomStr()}`}>
             <FileItem active={isInEdit(inEdit, s.identifier)}>
               <ButtonLabel>
                 <FontAwesomeIcon icon={(s.directoryName ? faFolder : faCopy)} style={{ marginRight: '8px' }} />

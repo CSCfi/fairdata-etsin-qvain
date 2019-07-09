@@ -69,10 +69,6 @@ class Qvain {
     this._selectedDirectories = []
     this._hierarchy = {}
     this._inEdit = undefined
-    this._parentDirs.clear()
-    this._files = []
-    this._directories = []
-    this._previousDirectories.clear()
     // Reset External resources related data
     this._externalResources = []
     this.extResFormOpen = false
@@ -197,62 +193,67 @@ class Qvain {
 
   @observable _selectedDirectories = []
 
+  @observable _existingFiles = []
+
+  @observable _existingDirectories = []
+
   @observable _hierarchy = {}
 
   @observable _inEdit = undefined
 
-  // acquired directories parent directories' ids
-  @observable _parentDirs = new Map()
-
-  // files in the view
-  @observable _files = []
-
-  // directories in the view
-  @observable _directories = []
-
-  // directories visited, used to go up the directory hierarchy
-  @observable _previousDirectories = new Map()
-
   @action toggleSelectedFile = (file, select) => {
-    const newHier = { ...this._hierarchy }
-    const flat = getDirectories(newHier)
-    // file.selected = select
-    getFiles(newHier).find(f => f.identifier === file.identifier).selected = select
-    if (select) {
-      const theDir = flat.find(d => d.directoryName === file.parentDirectory.directoryName)
-      this.deselectParents(theDir, flat)
-      this._selectedFiles = [...this._selectedFiles, file]
+    // are we removing an old selected file or are we editing the selections in the current session
+    if (file.existing && !select) {
+      this._existingFiles = this._existingFiles.filter(f => f.identifier !== file.identifier)
     } else {
-      this._selectedFiles = this._selectedFiles.filter(f => f.identifier !== file.identifier)
+      const newHier = { ...this._hierarchy }
+      const flat = getDirectories(newHier)
+      // file.selected = select
+      getFiles(newHier).find(f => f.identifier === file.identifier).selected = select
+      if (select) {
+        const theDir = flat.find(d => d.directoryName === file.parentDirectory.directoryName)
+        this.deselectParents(theDir, flat)
+        this._selectedFiles = [...this._selectedFiles, file]
+      } else {
+        this._selectedFiles = this._selectedFiles.filter(f => f.identifier !== file.identifier)
+      }
+      this._hierarchy = newHier
     }
-    this._hierarchy = newHier
   }
 
   @action toggleSelectedDirectory = (dir, select) => {
-    const newHier = { ...this._hierarchy }
-    const flat = getDirectories(newHier)
-    const theDir = flat.find(d => d.directoryName === dir.directoryName)
-    theDir.selected = select
-    if (select) {
-      // deselect and remove the files within the selected directory
-      theDir.files.forEach(f => {
-        f.selected = false
-        this._selectedFiles = [
-          ...this._selectedFiles.filter(file => file.identifier !== f.identifier),
-        ]
-      })
-      // deselect directories and files downwards in the hierarchy, remove them from selections
-      theDir.directories.forEach(d => this.deselectChildren(d))
-      // deselect parents
-      const parent = flat.find(d => d.directoryName === theDir.parentDirectory.directoryName)
-      this.deselectParents(parent, flat)
-      this._selectedDirectories = [...this._selectedDirectories, dir]
-    } else {
-      this._selectedDirectories = this._selectedDirectories.filter(
+    // don't edit selected state in hierarchy if editing existing directories
+    // otherwise do necessary edits to the hierarchy (to display the correct changes to file selector)
+    if (dir.existing && !select) {
+      this._existingDirectories = this._existingDirectories.filter(
         d => d.identifier !== dir.identifier
       )
+    } else {
+      const newHier = { ...this._hierarchy }
+      const flat = getDirectories(newHier)
+      const theDir = flat.find(d => d.directoryName === dir.directoryName)
+      theDir.selected = select
+      if (select) {
+        // deselect and remove the files within the selected directory
+        theDir.files.forEach(f => {
+          f.selected = false
+          this._selectedFiles = [
+            ...this._selectedFiles.filter(file => file.identifier !== f.identifier),
+          ]
+        })
+        // deselect directories and files downwards in the hierarchy, remove them from selections
+        theDir.directories.forEach(d => this.deselectChildren(d))
+        // deselect parents
+        const parent = flat.find(d => d.directoryName === theDir.parentDirectory.directoryName)
+        this.deselectParents(parent, flat)
+        this._selectedDirectories = [...this._selectedDirectories, dir]
+      } else {
+        this._selectedDirectories = this._selectedDirectories.filter(
+          d => d.identifier !== dir.identifier
+        )
+      }
+      this._hierarchy = newHier
     }
-    this._hierarchy = newHier
   }
 
   deselectChildren = dir => {
@@ -368,6 +369,16 @@ class Qvain {
   }
 
   @computed
+  get existingFiles() {
+    return this._existingFiles
+  }
+
+  @computed
+  get existingDirectories() {
+    return this._existingDirectories
+  }
+
+  @computed
   get inEdit() {
     return this._inEdit
   }
@@ -375,21 +386,6 @@ class Qvain {
   @computed
   get hierarchy() {
     return this._hierarchy
-  }
-
-  @computed
-  get directories() {
-    return this._directories
-  }
-
-  @computed
-  get files() {
-    return this._files
-  }
-
-  @computed
-  get parentDirs() {
-    return this._parentDirs
   }
 
   // Dataset related
@@ -451,12 +447,13 @@ class Qvain {
     const dsDirectories = researchDataset.directories
     if (dsFiles !== undefined || dsDirectories !== undefined) {
       this.idaPickerOpen = true
-      this._selectedProject = dsFiles[0].details.project_identifier
+      const toCheck = [...(dsFiles || []), ...(dsDirectories || [])]
+      this._selectedProject = toCheck.length > 0 ? toCheck[0].details.project_identifier : undefined
       this.getInitialDirectories()
-      this._selectedDirectories = dsDirectories
-        ? dsDirectories.map(d => Directory(d, undefined, true, false))
+      this._existingDirectories = dsDirectories
+        ? dsDirectories.map(d => DatasetDirectory(d))
         : []
-      this._selectedFiles = dsFiles ? dsFiles.map(f => DatasetFile(f, undefined, true)) : []
+      this._existingFiles = dsFiles ? dsFiles.map(f => DatasetFile(f, undefined, true)) : []
     }
 
     // external resources
@@ -595,6 +592,7 @@ export const Directory = (dir, parent, selected, open) => ({
   useCategory: dir.use_category || UseCategoryURLs.OUTCOME_MATERIAL,
   fileType: dir.file_type,
   files: dir.files ? dir.files.map(f => File(f, dir, false)) : [],
+  existing: false
 })
 
 const File = (file, parent, selected) => ({
@@ -606,11 +604,13 @@ const File = (file, parent, selected) => ({
   fileType: getPath('file_characteristics.file_type', file),
   description: getPath('file_characteristics.description', file),
   title: getPath('file_characteristics.title', file),
+  existing: false
 })
 
 const DatasetFile = file => ({
+  ...File(file.details, file.details.parent_directory, true),
   identifier: file.identifier,
-  useCategory: getPath('use_category.identifier'),
+  useCategory: getPath('use_category.identifier', file),
   fileType: getPath('file_type.identifier', file),
   projectIdentifier: getPath('details.project_identifier', file),
   title: file.title,
@@ -621,6 +621,15 @@ const DatasetFile = file => ({
     fileType: file.file_type,
     title: file.title,
   },
+  existing: true
+})
+
+const DatasetDirectory = directory => ({
+  ...Directory(directory.details, undefined, true, false),
+  identifier: directory.identifier,
+  description: directory.description,
+  title: directory.title,
+  existing: true
 })
 
 export const EntityType = {
