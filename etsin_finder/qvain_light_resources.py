@@ -26,10 +26,9 @@ from etsin_finder.qvain_light_dataset_schema import DatasetValidationSchema
 from etsin_finder.qvain_light_utils import data_to_metax, \
     get_dataset_creator, \
     remove_deleted_datasets_from_results, \
-    sort_datasets_by_date_created
+    sort_datasets_by_date_created, \
+    edited_data_to_metax
 from etsin_finder.qvain_light_service import create_dataset, update_dataset, delete_dataset
-from etsin_finder.qvain_light_utils import data_to_metax, edited_data_to_metax
-from etsin_finder.qvain_light_service import create_dataset, update_dataset
 
 log = app.logger
 
