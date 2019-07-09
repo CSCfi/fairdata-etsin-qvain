@@ -61,6 +61,7 @@ class Locale {
     const storedLang = localStorage.getItem('lang')
     if (storedLang) {
       this.setLang(storedLang)
+      moment.locale(storedLang)
     }
   }
 }

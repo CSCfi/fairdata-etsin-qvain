@@ -60,6 +60,7 @@ class EmbargoExpires extends Component {
             showClearDate
             attributes={{ placeholder: 'qvain.rightsAndLicenses.embargoDate.placeholder' }}
             onClose={this.validate}
+            displayFormat={DateFormats.ISO8601_DATE_FORMAT}
           />
         </DatePickerWrapper>
         {error && <ValidationError>{errorMessage}</ValidationError>}
