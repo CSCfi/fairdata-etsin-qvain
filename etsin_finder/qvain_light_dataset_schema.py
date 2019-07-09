@@ -46,7 +46,7 @@ class DatasetValidationSchema(Schema):
         Schema {library} -- Marshmallows Schema library.
     """
 
-    original = fields.Str()
+    original = fields.Dict()
     title = fields.Nested(
         LangValidationSchema,
         required=True,

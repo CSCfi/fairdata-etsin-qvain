@@ -28,6 +28,8 @@ from etsin_finder.qvain_light_utils import data_to_metax, \
     remove_deleted_datasets_from_results, \
     sort_datasets_by_date_created
 from etsin_finder.qvain_light_service import create_dataset, update_dataset, delete_dataset
+from etsin_finder.qvain_light_utils import data_to_metax, edited_data_to_metax
+from etsin_finder.qvain_light_service import create_dataset, update_dataset
 
 log = app.logger
 
@@ -170,7 +172,7 @@ class QvainDataset(Resource):
         """
         is_authd = authentication.is_authenticated()
         if not is_authd:
-            return 'Not logged in'
+            return {"Error": "Not logged in"}
         try:
             data = self.validationSchema.loads(request.data)
         except ValidationError as err:
@@ -181,19 +183,16 @@ class QvainDataset(Resource):
             metadata_provider_user = session["samlUserdata"]["urn:oid:1.3.6.1.4.1.16161.4.0.53"][0]
         except KeyError as err:
             log.warning("The Metadata provider is not specified: \n{0}".format(err))
-            return "The Metadata provider is not specified"
+            return {"Error": "The Metadata provider is not specified"}
 
         metax_redy_data = data_to_metax(data, metadata_provider_org, metadata_provider_user)
         metax_response = create_dataset(metax_redy_data)
         return metax_response
 
     @log_request
-    def patch(self, cr_id):
+    def patch(self):
         """
         Updete existing detaset.
-
-        Arguments:
-            cr_id {string} -- The identifier of the dataset.
 
         Returns:
             object -- The response from metax or if error an error message.
@@ -201,22 +200,19 @@ class QvainDataset(Resource):
         """
         is_authd = authentication.is_authenticated()
         if not is_authd:
-            return 'Not logged in', 400
+            return {"Error": "Not logged in"}
         try:
-            data, error = self.validationSchema.loads(request.data)
+            data = self.validationSchema.loads(request.data)
         except ValidationError as err:
             log.warning("INVALID FORM DATA: {0}".format(err.messages))
-            return err.messages, 400
-        try:
-            metadata_provider_org = session["samlUserdata"]["urn:oid:1.3.6.1.4.1.25178.1.2.9"]
-            metadata_provider_user = session["samlUserdata"]["urn:oid:1.3.6.1.4.1.8057.2.80.26"]
-        except KeyError as err:
-            log.warning("The Metadata provider is not specified: \n{0}".format(err))
-            return "The Metadata provider is not specified", 400
-        
-        metax_redy_data = data_to_metax(data, metadata_provider_org, metadata_provider_user)
-        metax_response = update_dataset(metax_redy_data)
-        return metax_response, 200
+            return err.messages
+        cr_id = data["original"]["identifier"]
+        original = data["original"]
+        del data["original"]
+        metax_redy_data = edited_data_to_metax(data, original)
+        metax_response = update_dataset(metax_redy_data, cr_id)
+        log.debug("METAX RESPONSE: {0}".format(metax_response))
+        return metax_response
 
 class QvainDatasetDelete(Resource):
     """DELETE request handling coming in from Qvain Light. Used for deleting datasets in METAX."""
