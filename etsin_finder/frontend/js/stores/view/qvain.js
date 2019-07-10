@@ -6,6 +6,7 @@ import {
   LicenseUrls,
   FileAPIURLs,
   UseCategoryURLs,
+  DataCatalogIdentifiers
 } from '../../components/qvain/utils/constants'
 import { getPath } from '../../components/qvain/utils/object'
 
@@ -63,6 +64,7 @@ class Qvain {
     this.participants = []
     this.participantInEdit = EmptyParticipant
     // Reset Files/Directories related data
+    this.dataCatalog = undefined
     this.idaPickerOpen = false
     this._selectedProject = undefined
     this._selectedFiles = []
@@ -191,6 +193,8 @@ class Qvain {
 
   @observable idaPickerOpen = false
 
+  @observable dataCatalog = undefined
+
   @observable _selectedProject = undefined
 
   @observable _selectedFiles = []
@@ -212,6 +216,11 @@ class Qvain {
 
   // directories visited, used to go up the directory hierarchy
   @observable _previousDirectories = new Map()
+
+  @action
+  setDataCatalog = selectedDataCatalog => {
+    this.dataCatalog = selectedDataCatalog
+  }
 
   @action toggleSelectedFile = (file, select) => {
     const newHier = { ...this._hierarchy }
@@ -401,8 +410,10 @@ class Qvain {
     const researchDataset = dataset.research_dataset
 
     // Load description
-    this.title = researchDataset.title
-    this.description = researchDataset.description
+    this.title.en = researchDataset.title.en ? researchDataset.title.en : ''
+    this.title.fi = researchDataset.title.fi ? researchDataset.title.fi : ''
+    this.description.en = researchDataset.description.en ? researchDataset.description.en : ''
+    this.description.fi = researchDataset.description.fi ? researchDataset.description.fi : ''
 
     // Other identifiers
     this.otherIdentifiers = researchDataset.other_identifier
@@ -414,7 +425,11 @@ class Qvain {
       const primary = researchDataset.field_of_science[0]
       if (primary !== undefined) {
         this.fieldOfScience = FieldOfScience(primary.pref_label, primary.identifier)
+      } else {
+        this.fieldOfScience = undefined
       }
+    } else {
+      this.fieldOfScience = undefined
     }
 
     // keywords
@@ -422,70 +437,125 @@ class Qvain {
 
     // access type
     const at = researchDataset.access_rights.access_type
-    this.accessType = AccessType(at.pref_label, at.identifier)
+      ? researchDataset.access_rights.access_type
+      : undefined
+    this.accessType = at
+    ? AccessType(at.pref_label, at.identifier)
+    : AccessType(undefined, AccessTypeURLs.OPEN)
+
+    // embargo date
+    const date = researchDataset.access_rights.available
+      ? researchDataset.access_rights.available
+      : undefined
+    this.embargoExpDate = date || undefined
 
     // license
     const l = researchDataset.access_rights.license
       ? researchDataset.access_rights.license[0]
       : undefined
-    this.license = l ? License(l.title, l.identifier) : undefined
+    if (l.identifier !== undefined) {
+      this.license = l
+        ? License(l.title, l.identifier)
+        : License(undefined, LicenseUrls.CCBY4)
+    } else {
+      this.license = l
+        ? License(
+          {
+            en: 'Other (URL)',
+            fi: 'Muu (URL)'
+          }, 'other')
+        : License(undefined, LicenseUrls.CCBY4)
+      this.otherLicenseUrl = l.license
+    }
+
+    // restriction grounds
+    const rg = researchDataset.access_rights.restriction_grounds
+      ? researchDataset.access_rights.restriction_grounds[0]
+      : undefined
+    this.restrictionGrounds = rg
+      ? RestrictionGrounds(rg.pref_label, rg.identifier)
+      : undefined
 
     // Load participants
-    let participants = []
-    participants = [
-      ...participants,
-      ...this.createParticipants(participants, researchDataset.creator || [], Role.CREATOR),
-    ]
-    participants = [
-      ...participants,
-      ...this.createParticipants(participants, researchDataset.publisher || [], Role.PUBLISHER),
-    ]
-    participants = [
-      ...participants,
-      ...this.createParticipants(participants, researchDataset.curator || [], Role.CURATOR),
-    ]
-    this.participants = participants
+    const participants = []
+    if ('publisher' in researchDataset) {
+      participants.push(this.createParticipant(researchDataset.publisher, Role.PUBLISHER, participants))
+    }
+    if ('curator' in researchDataset) {
+      researchDataset.curator.forEach(curator => (
+        participants.push(this.createParticipant(curator, Role.CURATOR, participants))
+      ))
+    }
+    if ('creator' in researchDataset) {
+      researchDataset.creator.forEach(creator => (
+        participants.push(this.createParticipant(creator, Role.CREATOR, participants))
+      ))
+    }
+    this.participants = this.mergeTheSameParticipants(participants)
+
+    // Load data catalog
+    this.dataCatalog = dataset.data_catalog && {
+      label: dataset.data_catalog.identifier === DataCatalogIdentifiers.IDA
+        ? 'IDA'
+        : 'ATT',
+      value: dataset.data_catalog.identifier
+    }
+
+    // load data catalog
+    this.dataCatalog = dataset.data_catalog !== undefined ? dataset.data_catalog.identifier : undefined
 
     // Load files
     const dsFiles = researchDataset.files
     const dsDirectories = researchDataset.directories
+
     if (dsFiles !== undefined || dsDirectories !== undefined) {
       this.idaPickerOpen = true
-      this._selectedProject = dsFiles[0].details.project_identifier
+      this._selectedProject = (dsFiles !== undefined)
+        ? dsFiles[0].details.project_identifier
+        : dsDirectories[0].details.project_identifier
       this.getInitialDirectories()
       this._selectedDirectories = dsDirectories
-        ? dsDirectories.map(d => Directory(d, undefined, true, false))
+        ? dsDirectories.map(d => {
+          // Directory(d, undefined, true, false)
+          const parent = d.details.parent_directory || undefined
+          const dir = {
+            ...Hierarchy(d, parent, true),
+            open: false,
+            directoryName: d.details.directory_name,
+            useCategory: d.use_category.identifier || UseCategoryURLs.OUTCOME_MATERIAL,
+            description: d.description,
+            title: d.title,
+            identifier: d.identifier
+          }
+          return dir
+        })
         : []
-      this._selectedFiles = dsFiles ? dsFiles.map(f => DatasetFile(f, undefined, true)) : []
+      this._selectedFiles = dsFiles
+        ? dsFiles.map(f => DatasetFile(f, undefined, true))
+        : []
     }
 
     // external resources
     const remoteResources = researchDataset.remote_resources
-    this._externalResources = remoteResources
-      ? remoteResources.map(r =>
-          ExternalResource(this.createExternalResourceUIId(), r.title, r.identifier)
-        )
-      : []
     if (remoteResources !== undefined) {
       this._externalResources = remoteResources.map(r =>
-        ExternalResource(this.createExternalResourceUIId(), r.title, r.identifier)
+        ExternalResource(
+          this.createExternalResourceUIId(),
+          r.title,
+          r.access_url ? r.access_url.identifier : undefined,
+          r.use_category ? r.use_category.identifier : undefined
+        )
       )
       this.extResFormOpen = true
     }
   }
 
-  createParticipants = (existing, toAdd, role) => {
-    let added = []
-    if (toAdd.length > 0) {
-      added = [...toAdd.map(participant => this.createParticipant(participant, role, existing))]
-    }
-    return added
-  }
-
+  // Creates a sigle instance of a participant, only has one role.
+  // Returns a Participant.
   createParticipant = (participantJson, role, participants) => {
     let name
     if (participantJson['@type'].toLowerCase() === EntityType.ORGANIZATION) {
-      name = participantJson.name ? participantJson.name.en : undefined
+      name = participantJson.name ? participantJson.name.und : undefined
     } else {
       name = participantJson.name
     }
@@ -494,16 +564,14 @@ class Qvain {
     if (participantJson['@type'].toLowerCase() === EntityType.ORGANIZATION) {
       const isPartOf = participantJson.is_part_of
       if (isPartOf !== undefined) {
-        parentOrg = isPartOf.name.en
+        parentOrg = isPartOf.name.und
       } else {
         parentOrg = undefined
       }
     } else {
       const parentOrgName = participantJson.member_of.name
-      if (parentOrgName !== undefined && parentOrgName.en !== undefined) {
-        parentOrg = parentOrgName.en
-      } else if (parentOrgName !== undefined) {
-        parentOrg = parentOrgName.fi
+      if (parentOrgName !== undefined && parentOrgName.und !== undefined) {
+        parentOrg = parentOrgName.und
       } else {
         parentOrg = undefined
       }
@@ -515,11 +583,56 @@ class Qvain {
         : EntityType.ORGANIZATION,
       [role],
       name,
-      participantJson.email,
-      participantJson.identifier,
+      participantJson.email ? participantJson.email : '',
+      participantJson.identifier ? participantJson.identifier : '',
       parentOrg,
       this.createParticipantUIId(participants)
     )
+  }
+
+  // Function that 'Merge' the participants with the same metadata (except UIid).
+  // It looks for partisipants with the same info but different roles and adds their
+  // roles together to get one participant with multiple roles.
+  // Retruns a nw array with the merged participants.
+  mergeTheSameParticipants = participants => {
+    if (participants.length <= 1) return participants
+    const mergedParticipants = []
+    participants.forEach((participant1) => {
+      participants.forEach((participant2, index) => {
+        if (this.isEqual(participant1, participant2)) {
+          participant1.role = [...new Set([].concat(...[participant1.role, participant2.role]))]
+          delete participants[index]
+        }
+      })
+      mergedParticipants.push(participant1)
+    })
+    return mergedParticipants
+  }
+
+  // Function to compare two perticipants and see if they are the same perticipant.
+  // Returns True if the participants seem the same, or False if not.
+  isEqual = (p1, p2) => {
+    if ('identifier' in p1 && 'identifier' in p2) {
+      if (p1.identifier === p2.identifier) return true
+      return false
+    }
+    if ('email' in p1 && 'emain' in p2) {
+      if (p1.email === p2.email && p1.name === p2.name && p1['@type'] === p2['@type']) return true
+      return false
+    }
+    if (p1['@type'] === EntityType.PERSON && p2['@type'] === EntityType.PERSON) {
+      if (p1.name === p2.name && p1.member_of.name.und === p2.member_of.name.und) return true
+      return false
+    }
+    if (p1['@type'] === EntityType.ORGANIZATION && p2['@type'] === EntityType.ORGANIZATION) {
+      if ('is_part_of' in p1 && 'is_part_of' in p2) {
+        if (p1.name === p2.name && p1.is_part_of.name.und === p2.is_part_of.name.und) return true
+        return false
+      }
+      if (p1.name === p2.name) return true
+      return false
+    }
+    return false
   }
 
   // create a new UI Identifier based on existing UI IDs
@@ -610,7 +723,7 @@ const File = (file, parent, selected) => ({
 
 const DatasetFile = file => ({
   identifier: file.identifier,
-  useCategory: getPath('use_category.identifier'),
+  useCategory: getPath('use_category.identifier', file),
   fileType: getPath('file_type.identifier', file),
   projectIdentifier: getPath('details.project_identifier', file),
   title: file.title,
@@ -657,6 +770,11 @@ export const AccessType = (name, url) => ({
 })
 
 export const License = (name, identifier) => ({
+  name,
+  identifier,
+})
+
+export const RestrictionGrounds = (name, identifier) => ({
   name,
   identifier,
 })
