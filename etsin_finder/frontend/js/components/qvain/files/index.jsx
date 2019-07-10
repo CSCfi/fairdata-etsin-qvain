@@ -8,6 +8,7 @@ import { HelpIcon } from '../general/form'
 import IDAFilePicker from './idaFilePicker'
 import ExternalFiles from './externalFiles'
 import DataCatalog from './dataCatalog'
+import { DataCatalogIdentifiers } from '../utils/constants'
 
 class Files extends Component {
   static propTypes = {
@@ -17,14 +18,18 @@ class Files extends Component {
   render() {
     const { dataCatalog } = this.props.Stores.Qvain
     let data = null
-    if (dataCatalog === 'urn:nbn:fi:att:data-catalog-ida') {
+    if (dataCatalog === DataCatalogIdentifiers.IDA) {
       data = (
         <ContainerSubsection>
           <IDAFilePicker />
         </ContainerSubsection>
       )
     }
-    if (dataCatalog === 'urn:nbn:fi:att:data-catalog-att') {
+<<<<<<< HEAD
+    if (dataCatalog === DataCatalogIdentifiers.ATT) {
+=======
+    if (dataCatalog && dataCatalog.value === DataCatalogIdentifiers.ATT) {
+>>>>>>> 3406e976dd0712d30d5af6a5e6fbe0ca45f19158
       data = (
         <ContainerSubsection>
           <ExternalFiles />

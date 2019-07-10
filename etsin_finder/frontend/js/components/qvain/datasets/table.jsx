@@ -5,6 +5,7 @@ import { withRouter } from 'react-router-dom'
 import axios from 'axios'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
+import translate from 'counterpart'
 import {
   Table,
   TableHeader,
@@ -16,9 +17,9 @@ import {
 } from '../general/table'
 import DatasetPagination from './pagination'
 import { CancelButton } from '../general/buttons'
+import { checkLogin, getUsername } from '../utils/auth'
 
 const USER_DATASETS_URL = '/api/datasets/'
-// const tempuser = 'abc-user-123'
 
 class DatasetTable extends Component {
   static propTypes = {
@@ -29,7 +30,7 @@ class DatasetTable extends Component {
   state = {
     datasets: [],
     count: 0,
-    limit: 5,
+    limit: 20,
     page: 1,
     loading: false,
     error: false,
@@ -43,10 +44,10 @@ class DatasetTable extends Component {
   getDatasets = offset => {
     this.setState({ loading: true, error: false, errorMessage: '' })
     const { limit } = this.state
-    this.props.Stores.Auth.checkLogin()
+    checkLogin(this.props)
       .then(() => {
         const url = `${USER_DATASETS_URL}${
-          this.props.Stores.Auth.user.name
+          getUsername(this.props)
         }?limit=${limit}&offset=${offset}`
         console.log(url)
         return axios
@@ -72,10 +73,15 @@ class DatasetTable extends Component {
   }
 
   handleRemove = identifier => event => {
-    event.preventDefault()
-    this.setState(state => ({
-      datasets: [...state.datasets.filter(d => d.identifier !== identifier)],
-    }))
+    if (window.confirm(translate('qvain.datasets.confirmDelete'))) {
+      event.preventDefault()
+      axios
+        .delete(`/api/dataset/${identifier}`)
+        .then(this.setState(state => ({
+            datasets: [...state.datasets.filter(d => d.identifier !== identifier)],
+          })))
+        .catch(err => { this.setState({ error: true, errorMessage: err.message }) })
+    }
   }
 
   noDatasets = () => {
@@ -109,8 +115,8 @@ class DatasetTable extends Component {
             <Row>
               <Translate component={HeaderCell} content="qvain.datasets.tableRows.id" />
               <Translate component={HeaderCell} content="qvain.datasets.tableRows.name" />
-              <Translate component={HeaderCell} content="qvain.datasets.tableRows.edit" />
-              <Translate component={HeaderCell} content="qvain.datasets.tableRows.remove" />
+              <Translate component={HeaderCell} content="qvain.datasets.tableRows.modified" />
+              <Translate component={HeaderCell} content="qvain.datasets.tableRows.actions" />
             </Row>
           </TableHeader>
           <TableBody striped>
@@ -141,11 +147,19 @@ class DatasetTable extends Component {
                   <BodyCell>
                     {dataset.research_dataset.title.en || dataset.research_dataset.title.fi}
                   </BodyCell>
+                  <BodyCell>{dataset.date_modified}</BodyCell>
                   <BodyCell>
                     <Translate
                       component={CancelButton}
                       onClick={this.handleEnterEdit(dataset)}
                       content="qvain.datasets.editButton"
+                    />
+                  </BodyCell>
+                  <BodyCell>
+                    <Translate
+                      component={CancelButton}
+                      onClick={() => window.open(`/dataset/${dataset.identifier}`, '_blank')}
+                      content="qvain.datasets.goToEtsin"
                     />
                   </BodyCell>
                   <BodyCell>

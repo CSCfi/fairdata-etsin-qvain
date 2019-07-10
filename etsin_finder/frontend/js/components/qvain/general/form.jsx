@@ -74,7 +74,7 @@ export const Checkbox = (props) => <CheckboxStyles {...props} type="checkbox" />
 
 export const HelpField = styled.span`
   font-weight: 200;
-  font-family: "Lato"
+  font-family: 'Lato', sans-serif;
 `
 
 export const HelpIconStyles = styled(FontAwesomeIcon)`
