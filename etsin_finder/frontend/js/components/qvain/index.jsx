@@ -31,9 +31,10 @@ class Qvain extends Component {
 
   componentWillUnmount() {
     this.props.Stores.Qvain.resetQvainStore()
+    this.props.Stores.Qvain.original = undefined
   }
 
-  handleSubmit = e => {
+  handleCreate = e => {
     e.preventDefault()
     this.setState({ submitted: true })
     const obj = handleSubmitToBackend(this.props.Stores.Qvain)
@@ -58,6 +59,30 @@ class Qvain extends Component {
       })
   }
 
+  handleUpdate = e => {
+    e.preventDefault()
+    this.setState({ submitted: true })
+    const obj = handleSubmitToBackend(this.props.Stores.Qvain)
+    obj.original = this.props.Stores.Qvain.original
+    console.log(JSON.stringify(obj, null, 4))
+    qvainFormSchema
+      .validate(obj, { abortEarly: false })
+      .then(val => {
+        console.log(val)
+        axios
+          .patch('/api/dataset', obj)
+          .then(res => {
+            this.props.Stores.Qvain.resetQvainStore()
+            this.setState({ response: res.data })
+          })
+          .catch(err => this.setState({ response: err }))
+      })
+      .catch(err => {
+        console.log(err.errors)
+        this.setState({ response: err.errors })
+      })
+  }
+
   render() {
     return (
       <QvainContainer>
@@ -66,7 +91,7 @@ class Qvain extends Component {
             <Translate component={Title} content="qvain.title" />
           </SubHeaderText>
         </SubHeader>
-        <Form onSubmit={this.handleSubmit} className="container">
+        <Form className="container">
           <LinkBack to="/qvain">
             <FontAwesomeIcon size="lg" icon={faChevronLeft} />
             <Translate component="span" content="qvain.backLink" />
@@ -78,9 +103,18 @@ class Qvain extends Component {
           <SubmitContainer>
             <Translate component="p" content="qvain.consent" unsafe />
             <ButtonContainer>
-              <SubmitButton type="submit">
-                <Translate content="qvain.submit" />
-              </SubmitButton>
+              {this.props.Stores.Qvain.original
+                ? (
+                  <SubmitButton type="button" onClick={this.handleUpdate}>
+                    <Translate content="qvain.edit" />
+                  </SubmitButton>
+                )
+                : (
+                  <SubmitButton type="button" onClick={this.handleCreate}>
+                    <Translate content="qvain.submit" />
+                  </SubmitButton>
+                )
+              }
             </ButtonContainer>
           </SubmitContainer>
           {this.state.submitted ? <SubmitResponse response={this.state.response} /> : null}
