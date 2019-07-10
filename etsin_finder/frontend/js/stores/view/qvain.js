@@ -493,6 +493,9 @@ class Qvain {
     ]
     this.participants = participants
 
+    // load data catalog
+    this.dataCatalog = dataset.data_catalog !== undefined ? dataset.data_catalog.identifier : undefined
+
     // Load files
     const dsFiles = researchDataset.files
     const dsDirectories = researchDataset.directories

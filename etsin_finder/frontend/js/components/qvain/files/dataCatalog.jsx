@@ -41,7 +41,8 @@ class DataCatalog extends Component {
 
   render() {
     const { errorMessage } = this.state
-    const { dataCatalog, setDataCatalog } = this.props.Stores.Qvain
+    const { dataCatalog, setDataCatalog, selectedFiles, selectedDirectories, externalResources } = this.props.Stores.Qvain
+    const selected = [...selectedFiles, ...selectedDirectories, ...externalResources]
     return (
       <Card>
         <Translate component="h3" content="qvain.files.dataCatalog.label" />
@@ -49,14 +50,15 @@ class DataCatalog extends Component {
         <Translate
           component={Select}
           name="dataCatalog"
-          value={dataCatalog}
+          value={options.find(opt => opt.value === dataCatalog)}
           options={options}
           onChange={(selection) => {
-            setDataCatalog(selection)
+            setDataCatalog(selection.value)
             this.setState({ errorMessage: undefined })
           }}
           onBlur={this.handleOnBlur}
           attributes={{ placeholder: 'qvain.files.dataCatalog.placeholder' }}
+          isDisabled={selected.length > 0}
         />
         {errorMessage && <ValidationError>{errorMessage}</ValidationError>}
       </Card>

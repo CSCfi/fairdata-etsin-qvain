@@ -17,14 +17,14 @@ class Files extends Component {
   render() {
     const { dataCatalog } = this.props.Stores.Qvain
     let data = null
-    if (dataCatalog && dataCatalog.value === 'urn:nbn:fi:att:data-catalog-ida') {
+    if (dataCatalog === 'urn:nbn:fi:att:data-catalog-ida') {
       data = (
         <ContainerSubsection>
           <IDAFilePicker />
         </ContainerSubsection>
       )
     }
-    if (dataCatalog && dataCatalog.value === 'urn:nbn:fi:att:data-catalog-att') {
+    if (dataCatalog === 'urn:nbn:fi:att:data-catalog-att') {
       data = (
         <ContainerSubsection>
           <ExternalFiles />
