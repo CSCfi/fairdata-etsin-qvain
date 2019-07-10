@@ -21,12 +21,12 @@ export class AddedParticipantsBase extends Component {
     Stores: PropTypes.object.isRequired
   }
 
-  handleEdit = (participant) => (event) => {
+  handleEditParticipant = (participant) => (event) => {
     event.preventDefault()
     this.props.Stores.Qvain.editParticipant(participant)
   }
 
-  handleRemove = (participant) => (event) => {
+  handleRemoveParticipant = (participant) => (event) => {
     event.preventDefault()
     this.props.Stores.Qvain.removeParticipant(participant)
     this.props.Stores.Qvain.editParticipant(EmptyParticipant)
@@ -48,8 +48,8 @@ export class AddedParticipantsBase extends Component {
               <FontAwesomeIcon icon={addedParticipant.type === EntityType.PERSON ? faUser : faBuilding} style={{ marginRight: '8px' }} />
               {addedParticipant.name}{addedParticipant.role.map(role => (` / ${ role }`))}
             </ButtonLabel>
-            <EditButton onClick={this.handleEdit(addedParticipant)} />
-            <DeleteButton onClick={this.handleRemove(addedParticipant)} />
+            <EditButton onClick={this.handleEditParticipant(addedParticipant)} />
+            <DeleteButton onClick={this.handleRemoveParticipant(addedParticipant)} />
           </ButtonGroup>
         ))}
       </ContainerSubsection>
