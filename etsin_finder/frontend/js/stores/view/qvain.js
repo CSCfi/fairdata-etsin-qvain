@@ -42,6 +42,8 @@ class Qvain {
 
   @observable participantInEdit = EmptyParticipant
 
+  @observable externalResourceInEdit = EmptyExternalResource
+
   @action
   resetQvainStore = () => {
     this.title = {
@@ -75,6 +77,8 @@ class Qvain {
     this._previousDirectories.clear()
     // Reset External resources related data
     this._externalResources = []
+    this.externalResources = []
+    this.externalResourceInEdit = EmptyExternalResource
     this.extResFormOpen = false
     this.resourceInEdit = undefined
   }
@@ -149,10 +153,9 @@ class Qvain {
     this.participants = participants
   }
 
-  @action
-  addParticipant = participant => {
+  @action saveParticipant = participant => {
     if (participant.uiId !== undefined) {
-      // we are saving a participant that was previously added
+      // Saving a participant that was previously added
       const existing = this.participants.find(
         addedParticipant => addedParticipant.uiId === participant.uiId
       )
@@ -160,7 +163,7 @@ class Qvain {
         this.removeParticipant(participant)
       }
     } else {
-      // we are adding a new participant, generate a new UI ID for them
+      // Adding a new participant, generate a new UI ID for them
       participant.uiId = this.createParticipantUIId()
     }
     this.setParticipants([...this.participants, participant])
@@ -182,10 +185,55 @@ class Qvain {
     return this.participants
   }
 
+  @action
+  setExternalResources = externalResources => {
+    this.externalResources = externalResources
+  }
+
+  @action saveExternalResource = resource => {
+    const existing = this._externalResources.find(r => r.id === resource.id)
+    if (existing !== undefined) {
+      existing.title = resource.title
+      existing.url = resource.url
+      existing.useCategory = resource.useCategory
+    } else {
+      // Create an internal identifier for the resource to help with UI interaction
+      const newId = this.createExternalResourceUIId()
+      const newResource = ExternalResource(
+        newId,
+        resource.title,
+        resource.url,
+        resource.useCategory
+      )
+      this._externalResources = [...this._externalResources, newResource]
+    }
+  }
+
+  @action
+  removeExternalResource = externalResource => {
+    const externalResources = this.externalResources.filter(p => p.id !== externalResource.id)
+    this.setExternalResources(externalResources)
+  }
+
+  @action
+  editExternalResource = externalResource => {
+    this.externalResourceInEdit = { ...externalResource }
+  }
+
   @computed
   get getParticipantInEdit() {
     return this.participantInEdit
   }
+
+  @computed
+  get addedExternalResources() {
+    return this.externalResources
+  }
+
+ @computed
+ get getExternalResourceInEdit() {
+   return this.externalResourceInEdit
+ }
 
   // FILE PICKER STATE MANAGEMENT
 
@@ -535,11 +583,11 @@ class Qvain {
 
   @observable extResFormOpen = false
 
-  @observable resourceInEdit = undefined
+  // @observable resourceInEdit = undefined
 
-  @action resetInEditResource = () => {
+  /* @action resetInEditResource = () => {
     this.resourceInEdit = undefined
-  }
+  } */
 
   @computed get externalResources() {
     return this._externalResources
@@ -550,7 +598,7 @@ class Qvain {
     return latestId + 1
   }
 
-  @action saveExternalResource = resource => {
+  /*@action removeExternalResource = resource => {
     const existing = this._externalResources.find(r => r.id === resource.id)
     if (existing !== undefined) {
       existing.title = resource.title
@@ -567,11 +615,11 @@ class Qvain {
       )
       this._externalResources = [...this._externalResources, newResource]
     }
-  }
+  }*/
 
-  @action removeExternalResource = id => {
+  /* @action removeExternalResource = id => {
     this._externalResources = this._externalResources.filter(r => r.id !== id)
-  }
+  } */
 
   @action setResourceInEdit = id => {
     this.resourceInEdit = this._externalResources.find(r => r.id === id)
@@ -661,11 +709,13 @@ export const License = (name, identifier) => ({
   identifier,
 })
 
-const ExternalResource = (id, title, url, useCategory) => ({
+export const ExternalResource = (id, title, url, useCategory) => ({
   id,
   title,
   url,
   useCategory,
 })
+
+export const EmptyExternalResource = ExternalResource(undefined, '', '', '')
 
 export default new Qvain()
