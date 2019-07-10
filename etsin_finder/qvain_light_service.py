@@ -200,7 +200,6 @@ class MetaxQvainLightAPIService(FlaskService):
                 log.error("Failed to get data for directory {0} from Metax API")
                 log.error(e)
             return {'Error_message': 'Error trying to send data to metax.'}
-
         return metax_api_response.json()
 
     def delete_dataset(self, cr_id):

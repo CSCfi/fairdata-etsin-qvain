@@ -254,10 +254,13 @@ const english = {
   },
   qvain: {
     submit: 'Submit Dataset',
+    edit: 'Update Dataset',
     consent: 'By using Qvain Light the user agrees that he or she has asked consent from all persons whose personal information the user will add to the descriptive data and informed them of how they can get their personal data removed. By using Qvain Light the user agrees to the <a href="https://www.fairdata.fi/hyodyntaminen/kayttopolitiikat-ja-ehdot/">Terms of Usage</a>.',
     submitStatus: {
       success: 'Dataset published!',
       fail: 'Something went wrong...',
+      editFilesSuccess: 'New dataset version has been created!',
+      editMetadataSuccess: 'Dataset successfully updated!',
     },
     openErrorMessages: 'Open error messages',
     closeErrorMessages: 'Close error messages',
@@ -481,6 +484,9 @@ const english = {
         },
       },
       files: {
+        dataCatalog: {
+          required: 'File origin is required'
+        },
         file: {
           title: {
             required: 'File title is required',
@@ -513,6 +519,11 @@ const english = {
     },
     files: {
       title: 'Files',
+      dataCatalog: {
+        label: 'File origin',
+        explanation: 'Choose IDA if the data is stored in Fairdata Ida service. Choose ATT if the data is stored elsewhere.',
+        placeholder: 'Select option'
+      },
       help:
         'Files associated with this dataset. A dataset can only have either IDA files or external files. File metadata will not be associated with datasets, so remember to save edits to file metadata.',
       ida: {

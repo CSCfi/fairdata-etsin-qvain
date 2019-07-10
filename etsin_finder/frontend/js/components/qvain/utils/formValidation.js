@@ -58,7 +58,7 @@ const otherIdentifiersSchema = yup
 
 // LICENSE AND ACCESS VALIDATION
 
-// you have to provide both the license object and the otherLicenseUrl as an object
+// you have to provide the license object and the otherLicenseUrl
 const licenseSchema = yup.object().shape({
   name: yup.object().nullable(),
   identifier: yup.string().required(),
@@ -76,6 +76,11 @@ const licenseSchema = yup.object().shape({
         .nullable(),
     })
     .nullable(),
+})
+
+const licenseSchemaForm = yup.object().shape({
+  name: yup.object().nullable(),
+  identifier: yup.string().required()
 })
 
 const accessTypeSchema = yup.object().shape({
@@ -150,6 +155,11 @@ const participantOrganizationSchema = yup.object().shape({
       }),
   }),
 })
+
+// DATA CATALOG
+const dataCatalogSchema = yup
+  .string()
+  .required(translate('qvain.validationMessages.files.dataCatalog.required'))
 
 // FILE AND DIRECTORY (IDA RESOURCES) VALIDATION
 
@@ -259,12 +269,27 @@ const qvainFormSchema = yup.object().shape({
   keywords: keywordsSchema,
   otherIdentifiers: otherIdentifiersSchema,
   accessType: accessTypeSchema,
-  license: licenseSchema,
+  license: licenseSchemaForm,
+  otherLicenseUrl: yup
+    .mixed()
+    .when('license.identifier', {
+      is: 'other',
+      then: yup
+        .string(translate('qvain.validationMessages.license.otherUrl.string'))
+        .url(translate('qvain.validationMessages.license.otherUrl.url'))
+        .required(translate('qvain.validationMessages.license.otherUrl.required')),
+      otherwise: yup
+        .string()
+        .url()
+        .nullable(),
+    })
+    .nullable(),
   restrictionGrounds: yup.mixed().when('accessType.value', {
     is: 'Open',
     then: restrictionGroundsSchema,
   }),
   participants: participantsSchema,
+  dataCatalog: dataCatalogSchema,
   files: filesSchema,
   directories: directoriesSchema,
 })
@@ -288,6 +313,7 @@ export {
   participantEmailSchema,
   participantIdentifierSchema,
   participantOrganizationSchema,
+  dataCatalogSchema,
   fileTitleSchema,
   fileDescriptionSchema,
   fileUseCategorySchema,
