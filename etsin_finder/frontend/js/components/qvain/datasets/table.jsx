@@ -30,7 +30,7 @@ class DatasetTable extends Component {
   state = {
     datasets: [],
     count: 0,
-    limit: 1,
+    limit: 20,
     page: 1,
     loading: false,
     error: false,
