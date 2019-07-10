@@ -25,21 +25,13 @@ export class SelectedFilesBase extends Component {
     }
   }
 
-  render() {
+  renderFiles = (selected, inEdit, existing) => {
     const {
       toggleSelectedFile,
-      toggleSelectedDirectory,
-      selectedFiles,
-      selectedDirectories,
-      existingFiles,
-      existingDirectories,
-      inEdit
+      toggleSelectedDirectory
     } = this.props.Stores.Qvain
-    const selected = [...existingDirectories, ...existingFiles, ...selectedDirectories, ...selectedFiles]
     return (
       <Fragment>
-        <Translate component={SelectedFilesTitle} content="qvain.files.selected.title" />
-        {selected.length === 0 && <Translate component="p" content="qvain.files.selected.none" />}
         {selected.map(s => (
           <Fragment key={`${s.id}-${randomStr()}`}>
             <FileItem active={isInEdit(inEdit, s.identifier)}>
@@ -59,7 +51,7 @@ export class SelectedFilesBase extends Component {
                 }}
               />
             </FileItem>
-            {isInEdit(inEdit, s.identifier) && (
+            {isInEdit(inEdit, s.identifier, existing) && (
               <Fragment>
                 {isDirectory(inEdit) && (<DirectoryForm />)}
                 {!isDirectory(inEdit) && (<FileForm />)}
@@ -70,9 +62,33 @@ export class SelectedFilesBase extends Component {
       </Fragment>
     )
   }
+
+  render() {
+    const {
+      selectedFiles,
+      selectedDirectories,
+      existingFiles,
+      existingDirectories,
+      inEdit
+    } = this.props.Stores.Qvain
+    const selected = [...selectedDirectories, ...selectedFiles]
+    const existing = [...existingDirectories, ...existingFiles]
+    return (
+      <Fragment>
+        <Translate component={SelectedFilesTitle} content="qvain.files.selected.title" />
+        {selected.length === 0 && <Translate component="p" content="qvain.files.selected.none" />}
+        {this.renderFiles(selected, inEdit, false)}
+        <Translate component={SelectedFilesTitle} content="qvain.files.existing.title" />
+        <Translate component="p" content="qvain.files.existing.help" />
+        {this.renderFiles(existing, inEdit, true)}
+      </Fragment>
+    )
+  }
 }
 
-const isInEdit = (inEdit, identifier) => (inEdit !== undefined) && inEdit.identifier === identifier
+const isInEdit = (inEdit, identifier, existing) => (
+  (inEdit !== undefined) && inEdit.identifier === identifier && (existing === inEdit.existing)
+)
 
 const isDirectory = (inEdit) => inEdit.directoryName !== undefined
 
