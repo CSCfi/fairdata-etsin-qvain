@@ -460,7 +460,7 @@ const english = {
           mixed: '',
           object: 'The Selected Organization should be an Object.',
           string: 'The Organization value must be string.',
-          required: 'Organization is required if the partisipant is a person.',
+          required: 'Organization is required if the participant is a person.',
         },
       },
       accessType: {
