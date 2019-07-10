@@ -11,7 +11,25 @@ const participantsToMetax = participants => {
   return parsedParticipant
 }
 
-const filesToMetax = files => {
+const directoriesToMetax = (selectedDirectories, existingDirectories) => {
+  const selectedDirectoryIdentifiers = selectedDirectories.map(sd => sd.identifier)
+  const notOverwrittenExistingDirectories = existingDirectories.filter(ed => !selectedDirectoryIdentifiers.includes(ed.identifier))
+  const directories = [...selectedDirectories, ...notOverwrittenExistingDirectories]
+  const parsedDirectoryData = directories.map(dir => ({
+    identifier: dir.identifier,
+    title: dir.title,
+    description: dir.description ? dir.description : undefined,
+    useCategory: {
+      identifier: dir.useCategory
+    }
+  }))
+  return parsedDirectoryData
+}
+
+const filesToMetax = (selectedFiles, existingFiles) => {
+  const selectedFileIdentifiers = selectedFiles.map(sf => sf.identifier)
+  const notOverwrittenExistingFiles = existingFiles.filter(ef => !selectedFileIdentifiers.includes(ef.identifier))
+  const files = [...selectedFiles, ...notOverwrittenExistingFiles]
   const parsedFileData = files.map(file => ({
     identifier: file.identifier,
     title: file.title,
@@ -24,18 +42,6 @@ const filesToMetax = files => {
     }
   }))
   return parsedFileData
-}
-
-const directoriesToMetax = directories => {
-  const parsedDirectoryData = directories.map(dir => ({
-    identifier: dir.identifier,
-    title: dir.title,
-    description: dir.description ? dir.description : undefined,
-    useCategory: {
-      identifier: dir.useCategory
-    }
-  }))
-  return parsedDirectoryData
 }
 
 const handleSubmitToBackend = (values) => {
@@ -61,8 +67,8 @@ const handleSubmitToBackend = (values) => {
     remote_resources:
       values._externalResources.length > 0 ? values._externalResources : undefined,
     dataCatalog: values.dataCatalog,
-    files: values._selectedFiles ? filesToMetax(values._selectedFiles) : undefined,
-    directories: values._selectedDirectories ? directoriesToMetax(values._selectedDirectories) : undefined,
+    files: values._selectedFiles ? filesToMetax(values._selectedFiles, values._existingFiles || []) : undefined,
+    directories: values._selectedDirectories ? directoriesToMetax(values._selectedDirectories, values._existingDirectories || []) : undefined,
   }
   return obj
 }
