@@ -25,11 +25,7 @@ class Files extends Component {
         </ContainerSubsection>
       )
     }
-<<<<<<< HEAD
     if (dataCatalog === DataCatalogIdentifiers.ATT) {
-=======
-    if (dataCatalog && dataCatalog.value === DataCatalogIdentifiers.ATT) {
->>>>>>> 3406e976dd0712d30d5af6a5e6fbe0ca45f19158
       data = (
         <ContainerSubsection>
           <ExternalFiles />
