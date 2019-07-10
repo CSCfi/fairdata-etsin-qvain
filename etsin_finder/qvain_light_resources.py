@@ -208,6 +208,13 @@ class QvainDataset(Resource):
         cr_id = data["original"]["identifier"]
         original = data["original"]
         del data["original"]
+
+        # Only creator of the dataset is allowed to update it
+        user = session["samlUserdata"]["urn:oid:1.3.6.1.4.1.16161.4.0.53"][0]
+        creator = get_dataset_creator(cr_id)
+        if user != creator:
+            return {"Error": "No permission"}
+
         metax_redy_data = edited_data_to_metax(data, original)
         metax_response = update_dataset(metax_redy_data, cr_id)
         log.debug("METAX RESPONSE: {0}".format(metax_response))
