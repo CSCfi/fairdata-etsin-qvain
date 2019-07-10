@@ -195,7 +195,7 @@ class DatasetTable extends Component {
           limit={limit}
           onChangePage={this.handleChangePage}
         />
-        <Modal isOpen={this.state.removeModalOpen} onRequestClose={this.closeRemoveModal}>
+        <Modal isOpen={this.state.removeModalOpen} onRequestClose={this.closeRemoveModal} contentLabel="removeDatasetModal">
           <Translate component="p" content="qvain.datasets.confirmDelete" />
           <CancelButton onClick={this.closeRemoveModal}>Cancel</CancelButton>
           <DangerButton onClick={this.handleRemove(this.state.removableDatasetIdentifier)}>Remove</DangerButton>
