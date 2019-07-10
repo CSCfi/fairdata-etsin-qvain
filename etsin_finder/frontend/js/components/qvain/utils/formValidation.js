@@ -286,7 +286,6 @@ const qvainFormSchema = yup.object().shape({
     then: restrictionGroundsSchema,
   }),
   participants: participantsSchema,
-  dataCatalog: dataCatalogSchema,
   files: filesSchema,
   directories: directoriesSchema,
 })
