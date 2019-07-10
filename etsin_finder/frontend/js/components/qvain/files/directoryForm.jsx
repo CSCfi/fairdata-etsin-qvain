@@ -21,7 +21,7 @@ export class DirectoryFormBase extends Component {
   }
 
   state = {
-    title: this.props.Stores.Qvain.inEdit.title || 'Couldn\'t get title',
+    title: this.props.Stores.Qvain.inEdit.title,
     description: this.props.Stores.Qvain.inEdit.description || '',
     useCategoriesEn: [],
     useCategoriesFi: [],
