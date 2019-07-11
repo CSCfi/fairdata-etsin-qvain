@@ -22,7 +22,7 @@ import {
 import {
   ExternalFilesBase,
   ResourceItem
-} from '../js/components/qvain/files/ExternalFiles'
+} from '../js/components/qvain/files/externalFiles'
 import {
   ButtonGroup,
   FilePickerButton,
