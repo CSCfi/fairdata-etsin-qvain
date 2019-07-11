@@ -133,8 +133,8 @@ describe('Qvain.Files', () => {
   it('allows selecting directories in the file selector', () => {
     const stores = getStores()
     const component = mount(<FileSelectorBase Stores={stores} />)
-    stores.Qvain._selectedProject = 'project_y'
-    stores.Qvain._hierarchy = Directory(
+    stores.Qvain.selectedProject = 'project_y'
+    stores.Qvain.hierarchy = Directory(
       {
         id: 'test1',
         identifier: 'test-ident-1',
@@ -164,18 +164,18 @@ describe('Qvain.Files', () => {
     component.update()
     expect(component.find('li').length).toBe(1)
     component.find('li').find('input').simulate('change')
-    expect(component.props().Stores.Qvain._hierarchy.directories[0].selected)
+    expect(component.props().Stores.Qvain.hierarchy.directories[0].selected)
   })
 
   it('allows modifying the metadata of selected directories', () => {
     // repeat previous one
     const stores = getStores()
     // reset selected directories
-    stores.Qvain._selectedDirectories = []
+    stores.Qvain.selectedDirectories = []
     const fileSelector = mount(<FileSelectorBase Stores={stores} />)
 
-    stores.Qvain._selectedProject = 'project_y'
-    stores.Qvain._hierarchy = Directory(
+    stores.Qvain.selectedProject = 'project_y'
+    stores.Qvain.hierarchy = Directory(
       {
         id: 'test1',
         identifier: 'test-ident-1',
