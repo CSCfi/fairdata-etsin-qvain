@@ -1,4 +1,4 @@
-import { observable, action, computed } from 'mobx'
+import { observable, action, computed, toJS } from 'mobx'
 import axios from 'axios'
 import { getDirectories, getFiles } from '../../components/qvain/utils/fileHierarchy'
 import {
@@ -69,8 +69,8 @@ class Qvain {
     this._selectedProject = undefined
     this._selectedFiles = []
     this._selectedDirectories = []
-    this._existingFiles = []
-    this._existingDirectories = []
+    this.existingFiles = []
+    this.existingDirectories = []
     this._hierarchy = {}
     this._inEdit = undefined
     // Reset External resources related data
@@ -199,9 +199,9 @@ class Qvain {
 
   @observable _selectedDirectories = []
 
-  @observable _existingFiles = []
+  @observable existingFiles = []
 
-  @observable _existingDirectories = []
+  @observable existingDirectories = []
 
   @observable _hierarchy = {}
 
@@ -215,7 +215,7 @@ class Qvain {
   @action toggleSelectedFile = (file, select) => {
     // are we removing an old selected file or are we editing the selections in the current session
     if (file.existing && !select) {
-      this._existingFiles = this._existingFiles.filter(f => f.identifier !== file.identifier)
+      this.existingFiles = this.existingFiles.filter(f => f.identifier !== file.identifier)
     } else {
       const newHier = { ...this._hierarchy }
       const flat = getDirectories(newHier)
@@ -236,7 +236,7 @@ class Qvain {
     // don't edit selected state in hierarchy if editing existing directories
     // otherwise do necessary edits to the hierarchy (to display the correct changes to file selector)
     if (dir.existing && !select) {
-      this._existingDirectories = this._existingDirectories.filter(
+      this.existingDirectories = this.existingDirectories.filter(
         d => d.identifier !== dir.identifier
       )
     } else {
@@ -354,7 +354,8 @@ class Qvain {
   }
 
   @action setDirFileSettings = (directory, title, description, useCategory) => {
-    const theDir = this._selectedDirectories.find(d => d.directoryName === directory.directoryName)
+    const collection = directory.existing ? this.existingDirectories : this._selectedDirectories
+    const theDir = collection.find(d => d.identifier === directory.identifier)
     theDir.title = title
     theDir.description = description
     theDir.useCategory = useCategory
@@ -380,13 +381,13 @@ class Qvain {
   }
 
   @computed
-  get existingFiles() {
-    return this._existingFiles
+  get getExistingFiles() {
+    return this.existingFiles
   }
 
   @computed
-  get existingDirectories() {
-    return this._existingDirectories
+  get getExistingDirectories() {
+    return this.existingDirectories
   }
 
   @computed
@@ -511,10 +512,10 @@ class Qvain {
       const toCheck = [...(dsFiles || []), ...(dsDirectories || [])]
       this._selectedProject = toCheck.length > 0 ? toCheck[0].details.project_identifier : undefined
       this.getInitialDirectories()
-      this._existingDirectories = dsDirectories
+      this.existingDirectories = dsDirectories
         ? dsDirectories.map(d => DatasetDirectory(d))
         : []
-      this._existingFiles = dsFiles ? dsFiles.map(f => DatasetFile(f, undefined, true)) : []
+      this.existingFiles = dsFiles ? dsFiles.map(f => DatasetFile(f, undefined, true)) : []
     }
 
     // external resources

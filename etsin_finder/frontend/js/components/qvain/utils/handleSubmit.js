@@ -67,8 +67,8 @@ const handleSubmitToBackend = (values) => {
     remote_resources:
       values._externalResources.length > 0 ? values._externalResources : undefined,
     dataCatalog: values.dataCatalog,
-    files: values._selectedFiles ? filesToMetax(values._selectedFiles, values._existingFiles || []) : undefined,
-    directories: values._selectedDirectories ? directoriesToMetax(values._selectedDirectories, values._existingDirectories || []) : undefined,
+    files: values._selectedFiles ? filesToMetax(values._selectedFiles, values.existingFiles || []) : undefined,
+    directories: values._selectedDirectories ? directoriesToMetax(values._selectedDirectories, values.existingDirectories || []) : undefined,
   }
   return obj
 }
