@@ -108,6 +108,7 @@ export class ParticipantInfoBase extends Component {
   handleCancel = (event) => {
     event.preventDefault()
     this.props.Stores.Qvain.editParticipant(EmptyParticipant)
+    this.resetErrorMessages()
   }
 
   handleOnBlur = (validator, value, errorSet) => {

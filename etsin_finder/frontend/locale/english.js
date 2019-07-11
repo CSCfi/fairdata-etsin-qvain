@@ -502,6 +502,9 @@ const english = {
         },
       },
       externalResources: {
+        title: {
+          required: 'External resource title is required',
+        },
         url: {
           required: 'External resource URL is required',
           url: 'External Resource URL needs to be of valid URL format',
@@ -601,6 +604,9 @@ const english = {
           url: {
             label: 'URL',
             placeholder: 'https://',
+          },
+          cancel: {
+            label: 'Cancel',
           },
           save: {
             label: 'Save',

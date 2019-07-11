@@ -195,14 +195,17 @@ const directoriesSchema = yup.array().of(directorySchema)
 
 // EXTERNAL RESOURCES VALIDATION
 
+const externalResourceTitleSchema = yup
+  .string()
+  .required(translate('qvain.validationMessages.externalResources.title.required'))
+
 const externalResourceUrlSchema = yup
   .string()
   .url(translate('qvain.validationMessages.externalResources.url.url'))
   .required(translate('qvain.validationMessages.externalResources.url.required'))
 
 const externalResourceSchema = yup.object().shape({
-  id: yup.number().nullable(),
-  title: yup.string().nullable(),
+  title: externalResourceTitleSchema,
   url: externalResourceUrlSchema,
 })
 
@@ -296,5 +299,6 @@ export {
   directorySchema,
   directoriesSchema,
   externalResourceSchema,
+  externalResourceTitleSchema,
   externalResourceUrlSchema,
 }

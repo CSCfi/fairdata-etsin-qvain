@@ -506,6 +506,9 @@ const finnish = {
         },
       },
       externalResources: {
+        title: {
+          required: 'Ulkoisen aineiston otsikko on pakollinen',
+        },
         url: {
           required: 'Ulkoisen aineiston URL osoite on pakollinen',
           url: 'Ulkoisen aineiston URL osoitteen pitää olla oikeassa URL formaatissa',
@@ -562,16 +565,19 @@ const finnish = {
         },
         form: {
           title: {
-            label: 'Title',
+            label: 'Otsikko *',
             placeholder: 'A Resource',
           },
           useCategory: {
-            label: 'Käyttökategoria',
+            label: 'Käyttökategoria *',
             placeholder: 'Valitse vaihtoehto',
           },
           url: {
             label: 'URL',
             placeholder: 'https://',
+          },
+          cancel: {
+            label: 'Cancel',
           },
           save: {
             label: 'Save',

@@ -1,15 +1,13 @@
 import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { inject, observer } from 'mobx-react'
+import { toJS } from 'mobx'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import { Input, Label, CustomSelect } from '../general/form'
 import { SaveButton, CancelButton, FileItem } from '../general/buttons'
 import ValidationError from '../general/validationError'
-import { 
-  externalResourceSchema,
-  externalResourceUrlSchema
-} from '../utils/formValidation'
+import { externalResourceSchema } from '../utils/formValidation'
 import { getLocalizedOptions } from '../utils/getReferenceData'
 import { EmptyExternalResource } from '../../../stores/view/qvain'
 
@@ -27,7 +25,6 @@ export class ExternalFileFormBase extends Component {
     url: '',
     useCategory: '',
     externalResourceError: undefined,
-    urlError: undefined,
   }
 
   componentDidMount = () => {
@@ -51,10 +48,17 @@ export class ExternalFileFormBase extends Component {
     return uc
   }
 
+  resetErrorMessages = () => {
+    this.setState({
+      externalResourceError: undefined,
+    })
+  }
+
   handleSaveExternalResource = (event) => {
     event.preventDefault()
     const { Qvain } = this.props.Stores
-    externalResourceSchema.validate(Qvain.externalResourceInEdit).then(() => {
+    const externalResource = toJS(Qvain.externalResourceInEdit)
+    externalResourceSchema.validate(externalResource).then(() => {
       Qvain.saveExternalResource(Qvain.externalResourceInEdit)
       Qvain.editExternalResource(EmptyExternalResource)
       this.resetErrorMessages()
@@ -73,26 +77,44 @@ export class ExternalFileFormBase extends Component {
   handleCancel = (event) => {
     event.preventDefault()
     this.props.Stores.Qvain.editExternalResource(EmptyExternalResource)
+    this.resetErrorMessages()
   }
 
+  /********************
+  Can be used if needed 
+  *********************
+  
   handleOnBlur = (validator, value, errorSet) => {
     validator.validate(value).then(() => errorSet(undefined)).catch(err => errorSet(err.errors))
   }
 
-  handleOn
-
-  handleOnUrlBlur = () => {
+  handleOnTitleBlur = () => {
     const externalResource = this.props.Stores.Qvain.externalResourceInEdit
-    this.handleOnBlur(externalResourceUrlSchema, externalResource.url, value => this.setState({ urlError: value }))
+    this.handleOnBlur(externalResourceTitleSchema, externalResource.title, value => this.setState({ externalResourceError: value }))
   }
+
+  handleOnUseCategoryBlur = () => {
+    const externalResource = this.props.Stores.Qvain.externalResourceInEdit
+    this.handleOnBlur(externalResourceUseCategorySchema, externalResource.useCategory, value => this.setState({ externalResourceError: value}))
+  } */
+
+  /* handleOnUrlBlur = () => {
+    const externalResource = this.props.Stores.Qvain.externalResourceInEdit
+    this.handleOnBlur(externalResourceUrlSchema, externalResource.url, value => this.setState({ externalResourceError: value }))
+  } */
 
   render() {
     const externalResource = this.props.Stores.Qvain.externalResourceInEdit
     const { lang } = this.props.Stores.Locale
-    const { useCategories } = this.state
+    const {
+      useCategories,
+      externalResourceError
+    } = this.state
     return (
       <Fragment>
-        <Translate component={Label} content="qvain.files.external.form.title.label" />
+        <Label htmlFor="titleInput">
+          <Translate content="qvain.files.external.form.title.label" /> *
+        </Label>
         <Translate
           component={ResourceInput}
           type="text"
@@ -101,15 +123,20 @@ export class ExternalFileFormBase extends Component {
           onChange={(event) => { externalResource.title = event.target.value }}
           attributes={{ placeholder: 'qvain.files.external.form.title.placeholder' }}
         />
-        <Translate component={Label} content="qvain.files.external.form.useCategory.label" />
+        <Label htmlFor="useCategoryInput">
+          <Translate content="qvain.files.external.form.useCategory.label" />
+        </Label>
         <Translate
           component={CustomSelect}
+          id="useCategoryInput"
           value={externalResource.useCategory}
           options={useCategories[lang]}
           onChange={(selection) => {externalResource.useCategory = selection}}
           attributes={{ placeholder: 'qvain.files.external.form.useCategory.placeholder' }}
         />
-        <Translate component={Label} content="qvain.files.external.form.url.label" />
+        <Label htmlFor="urlInput">
+          <Translate content="qvain.files.external.form.url.label" /> *
+        </Label>
         <Translate
           component={ResourceInput}
           type="text"
@@ -119,16 +146,11 @@ export class ExternalFileFormBase extends Component {
           onBlur={this.handleOnUrlBlur}
           attributes={{ placeholder: 'qvain.files.external.form.url.placeholder' }}
         />
-        {this.state.urlError !== undefined && (
-          <ValidationError>{this.state.urlError}</ValidationError>
-        )}
-        {this.state.externalResourceError !== undefined && (
-          <ValidationError>{this.state.externalResourceError}</ValidationError>
-        )}
+        {externalResourceError && <ValidationError>{externalResourceError}</ValidationError>}
         <Translate
           component={CancelButton}
           onClick={this.handleCancel}
-          content="qvain.participants.add.cancel.label"
+          content="qvain.files.external.form.cancel.label"
         />
         <Translate
           component={SaveButton}
