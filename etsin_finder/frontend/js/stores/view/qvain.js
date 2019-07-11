@@ -78,7 +78,7 @@ class Qvain {
     this._previousDirectories.clear()
 
     // Reset External resources related data
-    this._externalResources = []
+    this.externalResources = []
     this.externalResourceInEdit = EmptyExternalResource
     this.extResFormOpen = false
     this.resourceInEdit = undefined
@@ -187,7 +187,7 @@ class Qvain {
   }
 
   @action saveExternalResource = resource => {
-    const existing = this._externalResources.find(r => r.id === resource.id)
+    const existing = this.externalResources.find(r => r.id === resource.id)
     if (existing !== undefined) {
       existing.title = resource.title
       existing.url = resource.url
@@ -201,7 +201,7 @@ class Qvain {
         resource.url,
         resource.useCategory
       )
-      this._externalResources = [...this._externalResources, newResource]
+      this.externalResources = [...this.externalResources, newResource]
     }
   }
 
@@ -217,7 +217,7 @@ class Qvain {
 
   @computed
   get addedExternalResources() {
-    return this._externalResources
+    return this.externalResources
   }
 
  @computed
@@ -499,13 +499,13 @@ class Qvain {
 
     // external resources
     const remoteResources = researchDataset.remote_resources
-    this._externalResources = remoteResources
+    this.externalResources = remoteResources
       ? remoteResources.map(r =>
           ExternalResource(this.createExternalResourceUIId(), r.title, r.identifier)
         )
       : []
     if (remoteResources !== undefined) {
-      this._externalResources = remoteResources.map(r =>
+      this.externalResources = remoteResources.map(r =>
         ExternalResource(this.createExternalResourceUIId(), r.title, r.identifier)
       )
       this.extResFormOpen = true
@@ -569,21 +569,21 @@ class Qvain {
   }
   // EXTERNAL FILES
 
-  @observable _externalResources = []
+  @observable externalResources = []
 
   @observable extResFormOpen = false
 
-  createExternalResourceUIId = (resources = this._externalResources) => {
+  createExternalResourceUIId = (resources = this.externalResources) => {
     const latestId = resources.length > 0 ? Math.max(...resources.map(r => r.id)) : 0
     return latestId + 1
   }
 
   @action removeExternalResource = id => {
-    this._externalResources = this._externalResources.filter(r => r.id !== id)
+    this.externalResources = this.externalResources.filter(r => r.id !== id)
   }
 
   @action setResourceInEdit = id => {
-    this.resourceInEdit = this._externalResources.find(r => r.id === id)
+    this.resourceInEdit = this.externalResources.find(r => r.id === id)
   }
 }
 
