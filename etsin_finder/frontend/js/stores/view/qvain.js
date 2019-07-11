@@ -69,6 +69,8 @@ class Qvain {
     this._selectedProject = undefined
     this._selectedFiles = []
     this._selectedDirectories = []
+    this._existingFiles = []
+    this._existingDirectories = []
     this._hierarchy = {}
     this._inEdit = undefined
     // Reset External resources related data
