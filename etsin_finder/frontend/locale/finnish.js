@@ -565,11 +565,11 @@ const finnish = {
         },
         form: {
           title: {
-            label: 'Otsikko *',
+            label: 'Otsikko',
             placeholder: 'A Resource',
           },
           useCategory: {
-            label: 'Käyttökategoria *',
+            label: 'Käyttökategoria',
             placeholder: 'Valitse vaihtoehto',
           },
           url: {
