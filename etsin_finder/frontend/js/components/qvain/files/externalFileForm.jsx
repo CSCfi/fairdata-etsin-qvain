@@ -88,8 +88,6 @@ export class ExternalFileFormBase extends Component {
 
   render() {
     const externalResource = this.props.Stores.Qvain.externalResourceInEdit
-    const resource = this.props.Stores.Qvain.resourceInEdit
-    // const { isEditForm } = this.props
     const { lang } = this.props.Stores.Locale
     const { useCategories } = this.state
     return (

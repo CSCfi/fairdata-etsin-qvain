@@ -64,6 +64,7 @@ class Qvain {
     this.restrictionGrounds = {}
     this.participants = []
     this.participantInEdit = EmptyParticipant
+
     // Reset Files/Directories related data
     this.idaPickerOpen = false
     this._selectedProject = undefined
@@ -75,9 +76,9 @@ class Qvain {
     this._files = []
     this._directories = []
     this._previousDirectories.clear()
+
     // Reset External resources related data
     this._externalResources = []
-    this.externalResources = []
     this.externalResourceInEdit = EmptyExternalResource
     this.extResFormOpen = false
     this.resourceInEdit = undefined
@@ -185,11 +186,6 @@ class Qvain {
     return this.participants
   }
 
-  @action
-  setExternalResources = externalResources => {
-    this.externalResources = externalResources
-  }
-
   @action saveExternalResource = resource => {
     const existing = this._externalResources.find(r => r.id === resource.id)
     if (existing !== undefined) {
@@ -210,12 +206,6 @@ class Qvain {
   }
 
   @action
-  removeExternalResource = externalResource => {
-    const externalResources = this.externalResources.filter(p => p.id !== externalResource.id)
-    this.setExternalResources(externalResources)
-  }
-
-  @action
   editExternalResource = externalResource => {
     this.externalResourceInEdit = { ...externalResource }
   }
@@ -227,7 +217,7 @@ class Qvain {
 
   @computed
   get addedExternalResources() {
-    return this.externalResources
+    return this._externalResources
   }
 
  @computed
@@ -583,43 +573,14 @@ class Qvain {
 
   @observable extResFormOpen = false
 
-  // @observable resourceInEdit = undefined
-
-  /* @action resetInEditResource = () => {
-    this.resourceInEdit = undefined
-  } */
-
-  @computed get externalResources() {
-    return this._externalResources
-  }
-
   createExternalResourceUIId = (resources = this._externalResources) => {
     const latestId = resources.length > 0 ? Math.max(...resources.map(r => r.id)) : 0
     return latestId + 1
   }
 
-  /*@action removeExternalResource = resource => {
-    const existing = this._externalResources.find(r => r.id === resource.id)
-    if (existing !== undefined) {
-      existing.title = resource.title
-      existing.url = resource.url
-      existing.useCategory = resource.useCategory
-    } else {
-      // Create an internal identifier for the resource to help with UI interaction
-      const newId = this.createExternalResourceUIId()
-      const newResource = ExternalResource(
-        newId,
-        resource.title,
-        resource.url,
-        resource.useCategory
-      )
-      this._externalResources = [...this._externalResources, newResource]
-    }
-  }*/
-
-  /* @action removeExternalResource = id => {
+  @action removeExternalResource = id => {
     this._externalResources = this._externalResources.filter(r => r.id !== id)
-  } */
+  }
 
   @action setResourceInEdit = id => {
     this.resourceInEdit = this._externalResources.find(r => r.id === id)

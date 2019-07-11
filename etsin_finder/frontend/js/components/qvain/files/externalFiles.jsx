@@ -50,35 +50,19 @@ export class ExternalFilesBase extends Component {
       }) 
   }
 
-  /* handleRemoveResource = (resourceId) => (event) => {
-    event.preventDefault()
-    this.props.Stores.Qvain.removeExternalResource(resourceId)
-  }
-
-  handleEditResource = (resourceId) => (event) => {
-    event.preventDefault()
-    this.props.Stores.Qvain.setResourceInEdit(resourceId)
-  } */
-
-  /* handleCloseEdit = (event) => {
-    event.preventDefault()
-    this.verifyURL();
-  } */
-
   handleEditExternalResource = (externalResource) => (event) => {
     event.preventDefault()
     this.props.Stores.Qvain.editExternalResource(externalResource)
   }
 
-  handleRemoveExternalResource = (externalResource) => (event) => {
+  handleRemoveExternalResource = (externalResourceId) => (event) => {
     event.preventDefault()
-    this.props.Stores.Qvain.removeExternalResource(externalResource)
+    this.props.Stores.Qvain.removeExternalResource(externalResourceId)
     this.props.Stores.Qvain.editExternalResource(EmptyExternalResource)
   }
 
   render() {
-    const { externalResourceInEdit } = this.props.Stores.Qvain
-    const { externalResources, extResFormOpen, selectedFiles, selectedDirectories } = this.props.Stores.Qvain
+    const { extResFormOpen, selectedFiles, selectedDirectories, addedExternalResources } = this.props.Stores.Qvain
     const hasIDAItems = [...selectedFiles, ...selectedDirectories].length > 0
     return (
       <Fragment>
@@ -90,21 +74,19 @@ export class ExternalFilesBase extends Component {
         </FilePickerButtonInverse>
         <SlidingContent open={extResFormOpen}>
           <Translate component={SelectedFilesTitle} content="qvain.files.external.addedResources.title" />
-          {this.props.Stores.Qvain.addedExternalResources.length === 0 &&
+          {addedExternalResources.length === 0 &&
             <Translate component="p" content="qvain.files.external.addedResources.none" />
           }
-          {this.props.Stores.Qvain.addedExternalResources.map((addedExternalResource) => (
+          {addedExternalResources.map((addedExternalResource) => (
             <ButtonGroup key={addedExternalResource.id}>
               <ButtonLabel>
                 {addedExternalResource.title} / {addedExternalResource.url}
               </ButtonLabel>
               <EditButton
-                // onClick={isInEdit(externalResourceInEdit, r) ? this.handleCloseEdit : this.handleEditExternalResource(r.id)}
                 onClick={this.handleEditExternalResource(addedExternalResource)}
               />
               <DeleteButton
-              // onClick={this.handleRemoveResource(r.id)}
-                onClick={this.handleRemoveExternalResource(addedExternalResource)}
+                onClick={this.handleRemoveExternalResource(addedExternalResource.id)}
               />
             </ButtonGroup>
             ))}
