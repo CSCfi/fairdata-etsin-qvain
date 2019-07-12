@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react'
 import { inject, observer } from 'mobx-react'
+import { reaction } from 'mobx'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import axios from 'axios'
@@ -17,7 +18,6 @@ import {
 } from '../general/table'
 import DatasetPagination from './pagination'
 import { CancelButton } from '../general/buttons'
-import { checkLogin, getUsername } from '../utils/auth'
 
 const USER_DATASETS_URL = '/api/datasets/'
 
@@ -39,37 +39,32 @@ class DatasetTable extends Component {
 
   componentDidMount() {
     this.getDatasets((this.state.page - 1) * this.state.limit)
+    // once we get login info, reload
+    reaction(
+      () => this.props.Stores.Auth.user.name,
+      () => this.getDatasets((this.state.page - 1) * this.state.limit)
+    )
   }
 
   getDatasets = offset => {
     this.setState({ loading: true, error: false, errorMessage: '' })
     const { limit } = this.state
-    checkLogin(this.props)
-      .then(() => {
-        const url = `${USER_DATASETS_URL}${
-          getUsername(this.props)
-        }?limit=${limit}&offset=${offset}`
-        console.log(url)
-        return axios
-          .get(url)
-          .then(result => {
-            const { count, results } = result.data
-            const datasets = [...results]
-            console.log('datasets ', datasets)
-            this.setState({ count, datasets, loading: false })
-          })
-          .catch(e => {
-            console.log(e.message)
-            this.setState({ loading: false, error: true, errorMessage: 'Failed to load datasets' })
-          })
+    const url = `${USER_DATASETS_URL}${
+      this.props.Stores.Auth.user.name
+    }?limit=${limit}&offset=${offset}`
+    console.log(url)
+    return axios
+      .get(url)
+      .then(result => {
+        const { count, results } = result.data
+        const datasets = [...results]
+        console.log('datasets ', datasets)
+        this.setState({ count, datasets, loading: false })
       })
-      .catch(() =>
-        this.setState({
-          loading: false,
-          error: true,
-          errorMessage: 'There was an error loading the datasets',
-        })
-      )
+      .catch(e => {
+        console.log(e.message)
+        this.setState({ loading: false, error: true, errorMessage: 'Failed to load datasets' })
+      })
   }
 
   handleRemove = identifier => event => {
@@ -77,9 +72,14 @@ class DatasetTable extends Component {
       event.preventDefault()
       axios
         .delete(`/api/dataset/${identifier}`)
-        .then(this.setState(state => ({
+        .then(() => {
+          this.setState(state => ({
             datasets: [...state.datasets.filter(d => d.identifier !== identifier)],
-          })))
+          }))
+          if (this.state.datasets.length === 0 && this.state.page !== 1) {
+            this.handleChangePage(this.state.page - 1)()
+          }
+        })
         .catch(err => { this.setState({ error: true, errorMessage: err.message }) })
     }
   }
