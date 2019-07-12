@@ -26,7 +26,6 @@ from etsin_finder.qvain_light_dataset_schema import DatasetValidationSchema
 from etsin_finder.qvain_light_utils import data_to_metax, \
     get_dataset_creator, \
     remove_deleted_datasets_from_results, \
-    sort_datasets_by_date_created, \
     edited_data_to_metax
 from etsin_finder.qvain_light_service import create_dataset, update_dataset, delete_dataset
 
@@ -141,8 +140,6 @@ class UserDatasets(Resource):
         offset = args.get('offset', None)
 
         result = qvain_light_service.get_datasets_for_user(user_id, limit, offset)
-        # Sort the datasets in the result by its dataset_created flag.
-        sort_datasets_by_date_created(result)
         # Return data only if authenticated
         if result and authentication.is_authenticated():
             # Limit the amount of items to be sent to the frontend
