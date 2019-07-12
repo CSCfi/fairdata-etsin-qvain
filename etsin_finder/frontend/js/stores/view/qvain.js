@@ -1,4 +1,4 @@
-import { observable, action, computed, toJS } from 'mobx'
+import { observable, action, computed } from 'mobx'
 import axios from 'axios'
 import { getDirectories, getFiles } from '../../components/qvain/utils/fileHierarchy'
 import {

@@ -58,11 +58,11 @@ export class ExternalEditFormBase extends Component {
       .validate(resource ? resource.url : this.state.url)
       .then(() => {
         this.setState({ urlError: undefined, resourceError: undefined })
-        this.props.Stores.Qvain.resetInEditResource()  
+        this.props.Stores.Qvain.resetInEditResource()
       })
       .catch(err => {
         this.setState({ urlError: err.errors })
-      }) 
+      })
   }
 
   handleOnUrlBlur = () => {
@@ -133,7 +133,8 @@ export class ExternalEditFormBase extends Component {
           }
           options={useCategories[lang]}
           onChange={(selection) => {
-            isEditForm ? resource.useCategory = selection : this.setState({useCategory: selection})
+            // eslint-disable-next-line no-unused-expressions
+            isEditForm ? resource.useCategory = selection : this.setState({ useCategory: selection })
           }}
           attributes={{ placeholder: 'qvain.files.external.form.useCategory.placeholder' }}
         />
