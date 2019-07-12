@@ -18,7 +18,7 @@ import {
 } from '../general/buttons'
 import { EmptyExternalResource } from '../../../stores/view/qvain'
 import { Input, SelectedFilesTitle } from '../general/form'
-import { FileContainer, SlidingContent } from '../general/card'
+import { SlidingContent } from '../general/card'
 import ExternalFileForm from './externalFileForm'
 import { externalResourceUrlSchema } from '../utils/formValidation'
 
@@ -97,8 +97,6 @@ export class ExternalFilesBase extends Component {
   }
 }
 
-const isInEdit = (inEdit, resource) => (inEdit !== undefined) && inEdit.id === resource.id
-
 export const ResourceInput = styled(Input)`
   width: 100%;
 `;
@@ -110,13 +108,5 @@ export const ResourceSave = styled(SaveButton)`
 export const ResourceItem = styled(FileItem)`
   margin-bottom: ${props => (props.active ? '0' : '10px')}
 `
-
-const ResourceContainer = styled(FileContainer)`
-  margin-bottom: 20px;
-`;
-
-const ResourceForm = styled.div`
-  padding-top: 20px;
-`;
 
 export default inject('Stores')(observer(ExternalFilesBase))

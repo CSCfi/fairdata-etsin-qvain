@@ -80,29 +80,6 @@ export class ExternalFileFormBase extends Component {
     this.resetErrorMessages()
   }
 
-  /********************
-  Can be used if needed 
-  *********************
-  
-  handleOnBlur = (validator, value, errorSet) => {
-    validator.validate(value).then(() => errorSet(undefined)).catch(err => errorSet(err.errors))
-  }
-
-  handleOnTitleBlur = () => {
-    const externalResource = this.props.Stores.Qvain.externalResourceInEdit
-    this.handleOnBlur(externalResourceTitleSchema, externalResource.title, value => this.setState({ externalResourceError: value }))
-  }
-
-  handleOnUseCategoryBlur = () => {
-    const externalResource = this.props.Stores.Qvain.externalResourceInEdit
-    this.handleOnBlur(externalResourceUseCategorySchema, externalResource.useCategory, value => this.setState({ externalResourceError: value}))
-  } */
-
-  /* handleOnUrlBlur = () => {
-    const externalResource = this.props.Stores.Qvain.externalResourceInEdit
-    this.handleOnBlur(externalResourceUrlSchema, externalResource.url, value => this.setState({ externalResourceError: value }))
-  } */
-
   render() {
     const externalResource = this.props.Stores.Qvain.externalResourceInEdit
     const { lang } = this.props.Stores.Locale
