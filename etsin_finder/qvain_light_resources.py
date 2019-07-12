@@ -226,8 +226,8 @@ class QvainDatasetDelete(Resource):
 
         Returns:
             [type] -- Metax response.
-        """
 
+        """
         is_authd = authentication.is_authenticated()
         if not is_authd:
             return 'Not logged in', 400
