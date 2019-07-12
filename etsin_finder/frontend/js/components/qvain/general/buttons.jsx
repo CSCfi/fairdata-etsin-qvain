@@ -39,6 +39,21 @@ export const SaveButton = styled.button`
   }
 `
 
+export const RemoveButton = styled.button`
+  width: 84px;
+  height: 42px;
+  border-radius: 4px;
+  border: solid 1px #cc0000;
+  font-size: 16px;
+  font-weight: 600px;
+  line-height: 1.31;
+  color: #cc0000;
+  &:hover {
+    background-color: #ffb2b2;
+    border: solid 2px #cc0000;
+  }
+`;
+
 export const ButtonGroup = styled.div`
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.13);
   border: solid 1px #eceeef;

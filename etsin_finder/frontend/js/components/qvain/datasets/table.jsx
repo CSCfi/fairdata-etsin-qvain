@@ -17,7 +17,7 @@ import {
   TableNote,
 } from '../general/table'
 import DatasetPagination from './pagination'
-import { CancelButton } from '../general/buttons'
+import { CancelButton, RemoveButton } from '../general/buttons'
 
 const USER_DATASETS_URL = '/api/datasets/'
 
@@ -162,7 +162,7 @@ class DatasetTable extends Component {
                   </BodyCell>
                   <BodyCell>
                     <Translate
-                      component={CancelButton}
+                      component={RemoveButton}
                       onClick={this.handleRemove(dataset.identifier)}
                       content="qvain.datasets.deleteButton"
                     />
