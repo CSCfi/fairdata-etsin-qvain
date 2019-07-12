@@ -113,7 +113,6 @@ class DatasetTable extends Component {
         <TablePadded className="table">
           <TableHeader>
             <Row>
-              <Translate component={HeaderCell} content="qvain.datasets.tableRows.id" />
               <Translate component={HeaderCell} content="qvain.datasets.tableRows.name" />
               <Translate component={HeaderCell} content="qvain.datasets.tableRows.modified" />
               <Translate component={HeaderCell} content="qvain.datasets.tableRows.actions" />
@@ -143,7 +142,6 @@ class DatasetTable extends Component {
             {!error &&
               datasets.map(dataset => (
                 <Row key={dataset.identifier}>
-                  <BodyCell>{dataset.identifier}</BodyCell>
                   <BodyCell>
                     {dataset.research_dataset.title.en || dataset.research_dataset.title.fi}
                   </BodyCell>
