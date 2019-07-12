@@ -7,6 +7,7 @@ import axios from 'axios'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import translate from 'counterpart'
+import Select from 'react-select'
 import {
   Table,
   TableHeader,
@@ -16,7 +17,6 @@ import {
   BodyCell,
   TableNote,
 } from '../general/table'
-import Label from '../general/label'
 import DatasetPagination from './pagination'
 import { CancelButton, RemoveButton } from '../general/buttons'
 
@@ -60,10 +60,24 @@ class DatasetTable extends Component {
         const { count, results } = result.data
         const datasets = [...results]
         console.log('datasets ', datasets)
-        this.setState({ count, datasets, loading: false })
+        let modded = []
+        datasets.forEach(d => {
+          if (d.next_dataset_version !== undefined) {
+            const newer = modded.find(ds => ds.identifier === d.next_dataset_version.identifier)
+            if (newer !== undefined) {
+              newer.versions = [...newer.versions || [], { ...d }]
+            }
+          } else {
+            d.target = { ...d }
+            d.versions = [...(d.versions || []), { ...d }]
+            modded = [...modded, d]
+          }
+        })
+        console.log('modded: ', modded)
+        this.setState({ count, datasets: modded, loading: false })
       })
       .catch(e => {
-        console.log(e.message)
+        console.log(e)
         this.setState({ loading: false, error: true, errorMessage: 'Failed to load datasets' })
       })
   }
@@ -103,6 +117,7 @@ class DatasetTable extends Component {
 
   render() {
     const { datasets, loading, error, errorMessage, page, count, limit } = this.state
+    console.log('render datasets ', datasets)
     return (
       <Fragment>
         <DatasetPagination
@@ -115,6 +130,7 @@ class DatasetTable extends Component {
           <TableHeader>
             <Row>
               <Translate component={HeaderCell} content="qvain.datasets.tableRows.name" />
+              <HeaderCell>Version</HeaderCell>
               <Translate component={HeaderCell} content="qvain.datasets.tableRows.modified" />
               <Translate component={HeaderCell} content="qvain.datasets.tableRows.actions" />
             </Row>
@@ -145,15 +161,30 @@ class DatasetTable extends Component {
                 <Row key={dataset.identifier}>
                   <BodyCell>
                     {dataset.research_dataset.title.en || dataset.research_dataset.title.fi}
-                    {dataset.next_dataset_version !== undefined &&
-                      <Translate component={OldVersionLabel} content="qvain.datasets.oldVersion" color="yellow" />
-                    }
                   </BodyCell>
-                  <BodyCell>{dataset.date_modified}</BodyCell>
+                  <VersionSelectCell>
+                    {dataset.dataset_version_set.length > 0 && (
+                      <Select
+                        options={dataset.versions.map(version => (
+                          { value: version.identifier, label: version.date_modified || version.date_created }
+                        ))}
+                        onChange={(selection) => {
+                          console.log('selection ', selection)
+                          dataset.target = dataset.versions.find(d => d.identifier === selection.value)
+                          console.log('target ', dataset.target)
+                          this.setState({
+                            datasets
+                          })
+                        }}
+                        value={{ value: dataset.target.identifier, label: dataset.target.date_modified || dataset.target.date_created }}
+                      />
+                    )}
+                  </VersionSelectCell>
+                  <BodyCell>{dataset.target.date_modified}</BodyCell>
                   <BodyCell>
                     <Translate
                       component={CancelButton}
-                      onClick={this.handleEnterEdit(dataset)}
+                      onClick={this.handleEnterEdit(dataset.target)}
                       content="qvain.datasets.editButton"
                     />
                   </BodyCell>
@@ -190,16 +221,15 @@ const ErrorMessage = styled.span`
   margin-left: 10px;
 `
 
-const OldVersionLabel = styled(Label)`
-  margin-left: 10px;
-  text-transform: uppercase;
-`;
-
 const TablePadded = styled(Table)`
   padding-top: 10px;
   padding-bottom: 10px;
   margin-top: 30px;
   margin-bottom: 30px;
 `
+
+const VersionSelectCell = styled(BodyCell)`
+  width: 30%;
+`;
 
 export default withRouter(inject('Stores')(observer(DatasetTable)))
