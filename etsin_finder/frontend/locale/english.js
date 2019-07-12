@@ -287,7 +287,7 @@ const english = {
         actions: 'Actions',
       },
       editButton: 'Edit',
-      deleteButton: 'Remove',
+      deleteButton: 'Delete',
       confirmDelete: 'Are you sure you want to delete this dataset? Deleting the dataset will remove it from Qvain, and Etsin Search cannot find it anymore. Landing page for the dataset will NOT be removed.',
       goToEtsin: 'View in Etsin',
       noDatasets: 'You have no datasets',
