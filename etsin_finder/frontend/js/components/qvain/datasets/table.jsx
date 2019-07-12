@@ -114,7 +114,7 @@ class DatasetTable extends Component {
           <TableHeader>
             <Row>
               <Translate component={HeaderCell} content="qvain.datasets.tableRows.id" />
-              <Translate component={HeaderCell} content="qvain.datasets.tableRows.name" />
+              <Translate component={HeaderCell} content="qvain.datasets.tableRows.title" />
               <Translate component={HeaderCell} content="qvain.datasets.tableRows.modified" />
               <Translate component={HeaderCell} content="qvain.datasets.tableRows.actions" />
             </Row>
