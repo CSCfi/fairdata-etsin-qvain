@@ -286,6 +286,7 @@ const english = {
         modified: 'Modified',
         actions: 'Actions',
       },
+      oldVersion: 'Old',
       editButton: 'Edit',
       deleteButton: 'Delete',
       confirmDelete: 'Are you sure you want to delete this dataset? Deleting the dataset will remove it from Qvain, and Etsin Search cannot find it anymore. Landing page for the dataset will NOT be removed.',

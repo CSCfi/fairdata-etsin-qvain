@@ -16,6 +16,7 @@ import {
   BodyCell,
   TableNote,
 } from '../general/table'
+import Label from '../general/label'
 import DatasetPagination from './pagination'
 import { CancelButton, RemoveButton } from '../general/buttons'
 
@@ -144,6 +145,9 @@ class DatasetTable extends Component {
                 <Row key={dataset.identifier}>
                   <BodyCell>
                     {dataset.research_dataset.title.en || dataset.research_dataset.title.fi}
+                    {dataset.next_dataset_version !== undefined &&
+                      <Translate component={OldVersionLabel} content="qvain.datasets.oldVersion" color="yellow" />
+                    }
                   </BodyCell>
                   <BodyCell>{dataset.date_modified}</BodyCell>
                   <BodyCell>
@@ -185,6 +189,11 @@ class DatasetTable extends Component {
 const ErrorMessage = styled.span`
   margin-left: 10px;
 `
+
+const OldVersionLabel = styled(Label)`
+  margin-left: 10px;
+  text-transform: uppercase;
+`;
 
 const TablePadded = styled(Table)`
   padding-top: 10px;
