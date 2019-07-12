@@ -1,4 +1,4 @@
-import { observable, action, computed } from 'mobx'
+import { observable, action, computed, toJS } from 'mobx'
 import axios from 'axios'
 import { getDirectories, getFiles } from '../../components/qvain/utils/fileHierarchy'
 import {
@@ -66,15 +66,13 @@ class Qvain {
     // Reset Files/Directories related data
     this.dataCatalog = undefined
     this.idaPickerOpen = false
-    this._selectedProject = undefined
-    this._selectedFiles = []
-    this._selectedDirectories = []
-    this._hierarchy = {}
-    this._inEdit = undefined
-    this._parentDirs.clear()
-    this._files = []
-    this._directories = []
-    this._previousDirectories.clear()
+    this.selectedProject = undefined
+    this.selectedFiles = []
+    this.selectedDirectories = []
+    this.existingFiles = []
+    this.existingDirectories = []
+    this.hierarchy = {}
+    this.inEdit = undefined
     // Reset External resources related data
     this._externalResources = []
     this.extResFormOpen = false
@@ -195,27 +193,19 @@ class Qvain {
 
   @observable dataCatalog = undefined
 
-  @observable _selectedProject = undefined
+  @observable selectedProject = undefined
 
-  @observable _selectedFiles = []
+  @observable selectedFiles = []
 
-  @observable _selectedDirectories = []
+  @observable selectedDirectories = []
 
-  @observable _hierarchy = {}
+  @observable existingFiles = []
 
-  @observable _inEdit = undefined
+  @observable existingDirectories = []
 
-  // acquired directories parent directories' ids
-  @observable _parentDirs = new Map()
+  @observable hierarchy = {}
 
-  // files in the view
-  @observable _files = []
-
-  // directories in the view
-  @observable _directories = []
-
-  // directories visited, used to go up the directory hierarchy
-  @observable _previousDirectories = new Map()
+  @observable inEdit = undefined
 
   @action
   setDataCatalog = selectedDataCatalog => {
@@ -223,56 +213,69 @@ class Qvain {
   }
 
   @action toggleSelectedFile = (file, select) => {
-    const newHier = { ...this._hierarchy }
-    const flat = getDirectories(newHier)
-    // file.selected = select
-    getFiles(newHier).find(f => f.identifier === file.identifier).selected = select
-    if (select) {
-      const theDir = flat.find(d => d.directoryName === file.parentDirectory.directoryName)
-      this.deselectParents(theDir, flat)
-      this._selectedFiles = [...this._selectedFiles, file]
+    // are we removing an old selected file or are we editing the selections in the current session
+    if (file.existing && !select) {
+      this.existingFiles = this.existingFiles.filter(f => f.identifier !== file.identifier)
     } else {
-      this._selectedFiles = this._selectedFiles.filter(f => f.identifier !== file.identifier)
+      const newHier = { ...this.hierarchy }
+      const flat = getDirectories(newHier)
+      // file.selected = select
+      getFiles(newHier).find(f => f.identifier === file.identifier).selected = select
+      if (select) {
+        const theDir = flat.find(d => d.directoryName === file.parentDirectory.directoryName)
+        this.deselectParents(theDir, flat)
+        this.selectedFiles = [...this.selectedFiles, file]
+      } else {
+        this.selectedFiles = this.selectedFiles.filter(f => f.identifier !== file.identifier)
+      }
+      this.hierarchy = newHier
     }
-    this._hierarchy = newHier
   }
 
   @action toggleSelectedDirectory = (dir, select) => {
-    const newHier = { ...this._hierarchy }
-    const flat = getDirectories(newHier)
-    const theDir = flat.find(d => d.directoryName === dir.directoryName)
-    theDir.selected = select
-    if (select) {
-      // deselect and remove the files within the selected directory
-      theDir.files.forEach(f => {
-        f.selected = false
-        this._selectedFiles = [
-          ...this._selectedFiles.filter(file => file.identifier !== f.identifier),
-        ]
-      })
-      // deselect directories and files downwards in the hierarchy, remove them from selections
-      theDir.directories.forEach(d => this.deselectChildren(d))
-      // deselect parents
-      const parent = flat.find(d => d.directoryName === theDir.parentDirectory.directoryName)
-      this.deselectParents(parent, flat)
-      this._selectedDirectories = [...this._selectedDirectories, dir]
-    } else {
-      this._selectedDirectories = this._selectedDirectories.filter(
+    // don't edit selected state in hierarchy if editing existing directories
+    // otherwise do necessary edits to the hierarchy (to display the correct changes to file selector)
+    if (dir.existing && !select) {
+      this.existingDirectories = this.existingDirectories.filter(
         d => d.identifier !== dir.identifier
       )
+    } else {
+      const newHier = { ...this.hierarchy }
+      const flat = getDirectories(newHier)
+      const theDir = flat.find(d => d.directoryName === dir.directoryName)
+      theDir.selected = select
+      if (select) {
+        // deselect and remove the files within the selected directory
+        theDir.files.forEach(f => {
+          f.selected = false
+          this.selectedFiles = [
+            ...this.selectedFiles.filter(file => file.identifier !== f.identifier),
+          ]
+        })
+        // deselect directories and files downwards in the hierarchy, remove them from selections
+        theDir.directories.forEach(d => this.deselectChildren(d))
+        // deselect parents
+        const parent = flat.find(d => d.directoryName === theDir.parentDirectory.directoryName)
+        this.deselectParents(parent, flat)
+        this.selectedDirectories = [...this.selectedDirectories, dir]
+      } else {
+        this.selectedDirectories = this.selectedDirectories.filter(
+          d => d.identifier !== dir.identifier
+        )
+      }
+      this.hierarchy = newHier
     }
-    this._hierarchy = newHier
   }
 
   deselectChildren = dir => {
     dir.selected = false
-    this._selectedDirectories = [
-      ...this._selectedDirectories.filter(d => d.identifier !== dir.identifier),
+    this.selectedDirectories = [
+      ...this.selectedDirectories.filter(d => d.identifier !== dir.identifier),
     ]
     dir.files.forEach(f => {
       f.selected = false
-      this._selectedFiles = [
-        ...this._selectedFiles.filter(file => file.identifier !== f.identifier),
+      this.selectedFiles = [
+        ...this.selectedFiles.filter(file => file.identifier !== f.identifier),
       ]
     })
     dir.directories.forEach(d => this.deselectChildren(d))
@@ -282,8 +285,8 @@ class Qvain {
     // deselect directories upwards in the hierarchy, remove them from selected directories
     if (dir !== undefined) {
       dir.selected = false
-      this._selectedDirectories = [
-        ...this._selectedDirectories.filter(d => d.identifier !== dir.identifier),
+      this.selectedDirectories = [
+        ...this.selectedDirectories.filter(d => d.identifier !== dir.identifier),
       ]
       if (dir.parentDirectory !== undefined) {
         const aDir = flattenedHierarchy.find(d => d.identifier === dir.parentDirectory.identifier)
@@ -295,16 +298,16 @@ class Qvain {
   }
 
   @action getInitialDirectories = () =>
-    axios.get(FileAPIURLs.PROJECT_DIR_URL + this._selectedProject).then(res => {
-      this._hierarchy = Directory(res.data, undefined, false, false)
-      return this._hierarchy
+    axios.get(FileAPIURLs.PROJECT_DIR_URL + this.selectedProject).then(res => {
+      this.hierarchy = Directory(res.data, undefined, false, false)
+      return this.hierarchy
     })
 
   @action changeProject = projectId => {
-    this._selectedProject = projectId
-    this._hierarchy = {}
-    this._selectedFiles = []
-    this._selectedDirectories = []
+    this.selectedProject = projectId
+    this.hierarchy = {}
+    this.selectedFiles = []
+    this.selectedDirectories = []
     return this.getInitialDirectories()
   }
 
@@ -321,7 +324,7 @@ class Qvain {
                     Directory(
                       newDir,
                       d,
-                      this._selectedDirectories
+                      this.selectedDirectories
                         .map(sd => sd.identifier)
                         .includes(newDir.identifier),
                       false
@@ -331,7 +334,7 @@ class Qvain {
                     File(
                       newFile,
                       d,
-                      this._selectedFiles.map(sf => sf.identifier).includes(newFile.identifier)
+                      this.selectedFiles.map(sf => sf.identifier).includes(newFile.identifier)
                     )
                   ),
                 }
@@ -351,54 +354,50 @@ class Qvain {
   }
 
   @action setDirFileSettings = (directory, title, description, useCategory) => {
-    const theDir = this._selectedDirectories.find(d => d.directoryName === directory.directoryName)
+    const collection = directory.existing ? this.existingDirectories : this.selectedDirectories
+    const theDir = collection.find(d => d.identifier === directory.identifier)
     theDir.title = title
     theDir.description = description
     theDir.useCategory = useCategory
   }
 
   @action setInEdit = selectedItem => {
-    this._inEdit = selectedItem
+    this.inEdit = selectedItem
   }
 
   @computed
-  get selectedProject() {
-    return this._selectedProject
+  get getSelectedProject() {
+    return this.selectedProject
   }
 
   @computed
-  get selectedFiles() {
-    return this._selectedFiles
+  get getSelectedFiles() {
+    return this.selectedFiles
   }
 
   @computed
-  get selectedDirectories() {
-    return this._selectedDirectories
+  get getSelectedDirectories() {
+    return this.selectedDirectories
   }
 
   @computed
-  get inEdit() {
-    return this._inEdit
+  get getExistingFiles() {
+    return this.existingFiles
   }
 
   @computed
-  get hierarchy() {
-    return this._hierarchy
+  get getExistingDirectories() {
+    return this.existingDirectories
   }
 
   @computed
-  get directories() {
-    return this._directories
+  get getInEdit() {
+    return this.inEdit
   }
 
   @computed
-  get files() {
-    return this._files
-  }
-
-  @computed
-  get parentDirs() {
-    return this._parentDirs
+  get getHierarchy() {
+    return this.hierarchy
   }
 
   // Dataset related
@@ -510,29 +509,13 @@ class Qvain {
 
     if (dsFiles !== undefined || dsDirectories !== undefined) {
       this.idaPickerOpen = true
-      this._selectedProject = (dsFiles !== undefined)
-        ? dsFiles[0].details.project_identifier
-        : dsDirectories[0].details.project_identifier
+      const toCheck = [...(dsFiles || []), ...(dsDirectories || [])]
+      this.selectedProject = toCheck.length > 0 ? toCheck[0].details.project_identifier : undefined
       this.getInitialDirectories()
-      this._selectedDirectories = dsDirectories
-        ? dsDirectories.map(d => {
-          // Directory(d, undefined, true, false)
-          const parent = d.details.parent_directory || undefined
-          const dir = {
-            ...Hierarchy(d, parent, true),
-            open: false,
-            directoryName: d.details.directory_name,
-            useCategory: d.use_category.identifier || UseCategoryURLs.OUTCOME_MATERIAL,
-            description: d.description,
-            title: d.title,
-            identifier: d.identifier
-          }
-          return dir
-        })
+      this.existingDirectories = dsDirectories
+        ? dsDirectories.map(d => DatasetDirectory(d))
         : []
-      this._selectedFiles = dsFiles
-        ? dsFiles.map(f => DatasetFile(f, undefined, true))
-        : []
+      this.existingFiles = dsFiles ? dsFiles.map(f => DatasetFile(f, undefined, true)) : []
     }
 
     // external resources
@@ -708,6 +691,7 @@ export const Directory = (dir, parent, selected, open) => ({
   useCategory: dir.use_category || UseCategoryURLs.OUTCOME_MATERIAL,
   fileType: dir.file_type,
   files: dir.files ? dir.files.map(f => File(f, dir, false)) : [],
+  existing: false
 })
 
 const File = (file, parent, selected) => ({
@@ -719,9 +703,11 @@ const File = (file, parent, selected) => ({
   fileType: getPath('file_characteristics.file_type', file),
   description: getPath('file_characteristics.description', file),
   title: getPath('file_characteristics.title', file),
+  existing: false
 })
 
 const DatasetFile = file => ({
+  ...File(file.details, file.details.parent_directory, true),
   identifier: file.identifier,
   useCategory: getPath('use_category.identifier', file),
   fileType: getPath('file_type.identifier', file),
@@ -734,6 +720,15 @@ const DatasetFile = file => ({
     fileType: file.file_type,
     title: file.title,
   },
+  existing: true
+})
+
+const DatasetDirectory = directory => ({
+  ...Directory(directory.details, undefined, true, false),
+  identifier: directory.identifier,
+  description: directory.description,
+  title: directory.title,
+  existing: true
 })
 
 export const EntityType = {

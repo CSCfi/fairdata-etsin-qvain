@@ -27,7 +27,7 @@ class FileForm extends Component {
     fileTypesFi: [],
     useCategoriesEn: [],
     useCategoriesFi: [],
-    title: this.props.Stores.Qvain.inEdit.title || 'Couldn\'t get title',
+    title: this.props.Stores.Qvain.inEdit.title,
     description: this.props.Stores.Qvain.inEdit.description || '',
     useCategory: undefined,
     fileType: undefined,

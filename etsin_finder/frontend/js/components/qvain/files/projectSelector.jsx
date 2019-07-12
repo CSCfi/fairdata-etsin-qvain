@@ -35,7 +35,6 @@ export class ProjectSelectorBase extends Component {
   }
 
   handleOnChange = (selectedOption) => {
-    console.log('ProjectSelect handleOnChange')
     this.props.Stores.Qvain.changeProject(selectedOption.value).then(() => {
       this.setState({ error: undefined })
     }).catch(e => {
