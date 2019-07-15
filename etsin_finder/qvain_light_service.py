@@ -211,15 +211,16 @@ class MetaxQvainLightAPIService(FlaskService):
 
         Returns:
             [type] -- Metax response.
+
         """
         req_url = self.METAX_CREATE_DATASET + "/" + cr_id
         headers = {'Accept': 'application/json'}
         try:
             metax_api_response = requests.delete(req_url,
-                                                headers=headers,
-                                                auth=(self.user, self.pw),
-                                                verify=self.verify_ssl,
-                                                timeout=10)
+                                                 headers=headers,
+                                                 auth=(self.user, self.pw),
+                                                 verify=self.verify_ssl,
+                                                 timeout=10)
         except Exception as e:
             if isinstance(e, requests.HTTPError):
                 log.debug("Failed to deletedataset.")
@@ -295,5 +296,6 @@ def delete_dataset(cr_id):
 
     Returns:
         [type] -- Metax response.
+
     """
     return _metax_api.delete_dataset(cr_id)

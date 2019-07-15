@@ -17,8 +17,9 @@ import {
   BodyCell,
   TableNote,
 } from '../general/table'
+import Modal from '../../general/modal'
 import DatasetPagination from './pagination'
-import { CancelButton, RemoveButton } from '../general/buttons'
+import { CancelButton, RemoveButton, DangerButton } from '../general/buttons'
 
 const USER_DATASETS_URL = '/api/datasets/'
 
@@ -36,6 +37,8 @@ class DatasetTable extends Component {
     loading: false,
     error: false,
     errorMessage: '',
+    removeModalOpen: false,
+    removableDatasetIdentifier: undefined
   }
 
   componentDidMount() {
@@ -82,20 +85,34 @@ class DatasetTable extends Component {
   }
 
   handleRemove = identifier => event => {
-    if (window.confirm(translate('qvain.datasets.confirmDelete'))) {
-      event.preventDefault()
-      axios
-        .delete(`/api/dataset/${identifier}`)
-        .then(() => {
-          this.setState(state => ({
-            datasets: [...state.datasets.filter(d => d.identifier !== identifier)],
-          }))
-          if (this.state.datasets.length === 0 && this.state.page !== 1) {
-            this.handleChangePage(this.state.page - 1)()
-          }
-        })
-        .catch(err => { this.setState({ error: true, errorMessage: err.message }) })
-    }
+    event.preventDefault()
+    axios
+      .delete(`/api/dataset/${identifier}`)
+      .then(() => {
+        this.setState(state => ({
+          datasets: [...state.datasets.filter(d => d.identifier !== identifier)],
+          removeModalOpen: false,
+          removableDatasetIdentifier: undefined
+        }))
+        if (this.state.datasets.length === 0 && this.state.page !== 1) {
+          this.handleChangePage(this.state.page - 1)()
+        }
+      })
+      .catch(err => { this.setState({ error: true, errorMessage: err.message }) })
+  }
+
+  openRemoveModal = (identifier) => () => {
+    this.setState({
+      removeModalOpen: true,
+      removableDatasetIdentifier: identifier
+    })
+  }
+
+  closeRemoveModal = () => {
+    this.setState({
+      removeModalOpen: false,
+      removableDatasetIdentifier: undefined
+    })
   }
 
   noDatasets = () => {
@@ -194,7 +211,7 @@ class DatasetTable extends Component {
                   <BodyCell>
                     <Translate
                       component={RemoveButton}
-                      onClick={this.handleRemove(dataset.identifier)}
+                      onClick={this.openRemoveModal(dataset.identifier)}
                       content="qvain.datasets.deleteButton"
                     />
                   </BodyCell>
@@ -208,6 +225,11 @@ class DatasetTable extends Component {
           limit={limit}
           onChangePage={this.handleChangePage}
         />
+        <Modal isOpen={this.state.removeModalOpen} onRequestClose={this.closeRemoveModal} contentLabel="removeDatasetModal">
+          <Translate component="p" content="qvain.datasets.confirmDelete" />
+          <CancelButton onClick={this.closeRemoveModal}>Cancel</CancelButton>
+          <DangerButton onClick={this.handleRemove(this.state.removableDatasetIdentifier)}>Remove</DangerButton>
+        </Modal>
       </Fragment>
     )
   }

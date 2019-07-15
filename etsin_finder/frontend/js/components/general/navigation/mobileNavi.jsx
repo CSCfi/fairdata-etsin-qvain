@@ -54,8 +54,10 @@ export default class MobileNavi extends React.Component {
               <TextContainer> <Translate content="nav.addDataset" /> </TextContainer>
               <Row>
                 <Link
-                  width="50%"
-                  margin="0em 0.4em 0.6em 0em"
+                  width="100%"
+                  // width="50%"
+                  margin="0em 0em 0.6em 0em"
+                  // margin="0em 0.4em 0.6em 0em"
                   href="https://qvain.fairdata.fi"
                   rel="noopener noreferrer"
                   target="_blank"

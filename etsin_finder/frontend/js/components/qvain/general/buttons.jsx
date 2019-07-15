@@ -39,6 +39,21 @@ export const SaveButton = styled.button`
   }
 `
 
+export const DangerButton = styled.button`
+  border-radius: 4px;
+  border: solid 1px #ff0000;
+  background-color: #ff0000;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.31;
+  color: #fff;
+  margin-left: 20px;
+  padding: 10px 25px;
+  &:hover {
+    background-color: #ff4c4c;
+  }
+`
+
 export const RemoveButton = styled.button`
   width: 84px;
   height: 42px;

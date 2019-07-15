@@ -221,20 +221,46 @@ def data_to_metax(data, metadata_provider_org, metadata_provider_user):
     return clean_empty_keyvalues_from_dict(dataset_data)
 
 def get_dataset_creator(cr_id):
-    # get dataset
+    """
+    Get creator of dataset.
+
+    Arguments:
+        cr_id {string} -- Identifier of datset.
+
+    Returns:
+        [type] -- [description]
+
+    """
     dataset = get_catalog_record(cr_id, False)
     return dataset['metadata_provider_user']
-  
+
 def remove_deleted_datasets_from_results(result):
+    """
+    Remove datasets marked as removed from results.
+
+    Arguments:
+        result {object} -- Results with all datasets.
+
+    Returns:
+        [object] -- Results where removed datasets are removed.
+
+    """
     new_results = [dataset for dataset in result['results'] if dataset['removed'] is False]
     result['results'] = new_results
     return result
 
-def sort_datasets_by_date_created(result):
-    result['results'] = sorted(result['results'], key=lambda i: i['date_created'], reverse=True)
-    return result
-
 def edited_data_to_metax(data, original):
+    """
+    Alter the researsh_dataset field to contain the new changes from editing.
+
+    Arguments:
+        data {object} -- Data from frontend.
+        original {object} -- Original data that the dataset contained befor editing.
+
+    Returns:
+        [object] -- Metax ready data.
+
+    """
     original["research_dataset"]["title"] = data["title"]
     original["research_dataset"]["description"] = data["description"]
     original["research_dataset"]["creator"] = alter_role_data(data["participants"], "creator")
