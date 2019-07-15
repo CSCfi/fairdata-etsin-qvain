@@ -168,18 +168,18 @@ class QvainDataset(Resource):
         """
         is_authd = authentication.is_authenticated()
         if not is_authd:
-            return {"Error": "Not logged in"}
+            return {"PermissionError": "User not logged in."}, 401
         try:
             data = self.validationSchema.loads(request.data)
         except ValidationError as err:
             log.warning("INVALID FORM DATA: {0}".format(err.messages))
-            return err.messages
+            return err.messages, 400
         try:
             metadata_provider_org = session["samlUserdata"]["urn:oid:1.3.6.1.4.1.25178.1.2.9"][0]
             metadata_provider_user = session["samlUserdata"]["urn:oid:1.3.6.1.4.1.16161.4.0.53"][0]
         except KeyError as err:
             log.warning("The Metadata provider is not specified: \n{0}".format(err))
-            return {"Error": "The Metadata provider is not specified"}
+            return {"PermissionError": "The Metadata provider is not found in login information."}, 401
 
         metax_redy_data = data_to_metax(data, metadata_provider_org, metadata_provider_user)
         metax_response = create_dataset(metax_redy_data)
@@ -196,12 +196,12 @@ class QvainDataset(Resource):
         """
         is_authd = authentication.is_authenticated()
         if not is_authd:
-            return {"Error": "Not logged in"}
+            return {"PermissionError": "User not logged in."}, 401
         try:
             data = self.validationSchema.loads(request.data)
         except ValidationError as err:
             log.warning("INVALID FORM DATA: {0}".format(err.messages))
-            return err.messages
+            return err.messages, 400
         cr_id = data["original"]["identifier"]
         original = data["original"]
         del data["original"]
@@ -210,7 +210,7 @@ class QvainDataset(Resource):
         user = session["samlUserdata"]["urn:oid:1.3.6.1.4.1.16161.4.0.53"][0]
         creator = get_dataset_creator(cr_id)
         if user != creator:
-            return {"Error": "No permission"}
+            return {"PermissionError": "User not authorized to to edit dataset."}, 403
 
         metax_redy_data = edited_data_to_metax(data, original)
         metax_response = update_dataset(metax_redy_data, cr_id)
@@ -234,13 +234,13 @@ class QvainDatasetDelete(Resource):
         """
         is_authd = authentication.is_authenticated()
         if not is_authd:
-            return 'Not logged in', 400
+            return {"PermissionError": "User not logged in."}, 401
 
         # only creator of the dataset is allowed to delete it
         user = session["samlUserdata"]["urn:oid:1.3.6.1.4.1.16161.4.0.53"][0]
         creator = get_dataset_creator(cr_id)
         if user != creator:
-            return 'No permission', 403
+            return {"PermissionError": "User not authorized to to delete dataset."}, 403
 
         metax_response = delete_dataset(cr_id)
-        return metax_response, 200
+        return metax_response
