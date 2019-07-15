@@ -78,7 +78,7 @@ const DatePickerWrapper = styled.div`
   };
   & .SingleDatePickerInput {
     border-radius: 3px;
-    border: 1px solid #eceeef;
+    border: 1px solid #cccccc;
     width: 100%;
   };
   & .DateInput {

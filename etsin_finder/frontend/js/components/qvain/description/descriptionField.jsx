@@ -150,7 +150,7 @@ const LangButton = styled.div`
   width: 25%;
   padding: 5px 20px;
   background-color: #fff;
-  border: 1px solid ${props => (props.active ? '#007fad' : '#eceeef')};
+  border: 1px solid ${props => (props.active ? '#007fad' : '#cccccc')};
   border-bottom: ${props => (props.active ? 'none' : '1px solid #007fad')};
   border-radius: 4px 4px 0 0;
 `
@@ -161,7 +161,7 @@ const EmptyBlock = styled.div`
 const Input = styled.input`
   width: 100%;
   border-radius: 3px;
-  border: 1px solid #eceeef;
+  border: 1px solid #cccccc;
   padding: 8px;
   color: #808080;
   margin-bottom: 20px;
