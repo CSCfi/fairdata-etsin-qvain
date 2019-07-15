@@ -73,7 +73,6 @@ class DatasetTable extends Component {
             modded = [...modded, d]
           }
         })
-        console.log('modded: ', modded)
         this.setState({ count, datasets: modded, loading: false })
       })
       .catch(e => {
@@ -105,7 +104,6 @@ class DatasetTable extends Component {
   }
 
   handleEnterEdit = dataset => () => {
-    console.log(dataset)
     this.props.Stores.Qvain.editDataset(dataset)
     this.props.history.push('/qvain/dataset')
   }
@@ -117,7 +115,6 @@ class DatasetTable extends Component {
 
   render() {
     const { datasets, loading, error, errorMessage, page, count, limit } = this.state
-    console.log('render datasets ', datasets)
     return (
       <Fragment>
         <DatasetPagination
@@ -130,8 +127,8 @@ class DatasetTable extends Component {
           <TableHeader>
             <Row>
               <Translate component={HeaderCell} content="qvain.datasets.tableRows.name" />
-              <HeaderCell>Version</HeaderCell>
-              <Translate component={HeaderCell} content="qvain.datasets.tableRows.modified" />
+              <Translate component={HeaderCell} content="qvain.datasets.tableRows.version" />
+              <Translate component={HeaderCell} content="qvain.datasets.tableRows.created" />
               <Translate component={HeaderCell} content="qvain.datasets.tableRows.actions" />
             </Row>
           </TableHeader>
@@ -166,21 +163,20 @@ class DatasetTable extends Component {
                     {dataset.dataset_version_set.length > 0 && (
                       <Select
                         options={dataset.versions.map(version => (
-                          { value: version.identifier, label: version.date_modified || version.date_created }
+                          { value: version.identifier, label: getLabel(version) }
                         ))}
                         onChange={(selection) => {
-                          console.log('selection ', selection)
                           dataset.target = dataset.versions.find(d => d.identifier === selection.value)
-                          console.log('target ', dataset.target)
                           this.setState({
                             datasets
                           })
                         }}
-                        value={{ value: dataset.target.identifier, label: dataset.target.date_modified || dataset.target.date_created }}
+                        value={{ value: dataset.target.identifier, label: getLabel(dataset.target) }}
+                        isDisabled={dataset.versions.length <= 1}
                       />
                     )}
                   </VersionSelectCell>
-                  <BodyCell>{dataset.target.date_modified}</BodyCell>
+                  <BodyCell>{dataset.target.date_created}</BodyCell>
                   <BodyCell>
                     <Translate
                       component={CancelButton}
@@ -216,6 +212,8 @@ class DatasetTable extends Component {
     )
   }
 }
+
+const getLabel = (dataset) => (dataset.date_modified !== undefined ? dataset.date_modified : translate('qvain.datasets.latestVersion'))
 
 const ErrorMessage = styled.span`
   margin-left: 10px;

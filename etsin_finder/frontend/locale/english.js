@@ -283,10 +283,13 @@ const english = {
       tableRows: {
         id: 'ID',
         name: 'Name',
+        version: 'Version',
         modified: 'Modified',
+        created: 'Created',
         actions: 'Actions',
       },
       oldVersion: 'Old',
+      latestVersion: 'Latest',
       editButton: 'Edit',
       deleteButton: 'Delete',
       confirmDelete: 'Are you sure you want to delete this dataset? Deleting the dataset will remove it from Qvain, and Etsin Search cannot find it anymore. Landing page for the dataset will NOT be removed.',
