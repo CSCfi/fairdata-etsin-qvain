@@ -43,6 +43,7 @@ import QvainStore, {
   Participant
 } from '../js/stores/view/qvain'
 import LocaleStore from '../js/stores/view/language'
+import { DataCatalogIdentifiers } from '../js/components/qvain/utils/constants'
 
 describe('Qvain', () => {
   it('should render correctly', () => {
@@ -118,8 +119,11 @@ describe('Qvain.Participants', () => {
 
 describe('Qvain.Files', () => {
   it('should render file picker', () => {
-    const component = shallow(<Files Stores={getStores()} />)
-    expect(component.find(IDAFilePicker).length).toBe(1)
+    const store = getStores()
+    store.Qvain.dataCatalog = DataCatalogIdentifiers.IDA
+    store.Qvain.idaPickerOpen = true
+    const component = shallow(<Files Stores={store} />)
+    expect(component.dive().find(IDAFilePicker).length).toBe(1)
   })
 
   it('should open file selector upon selecting file picker', () => {
