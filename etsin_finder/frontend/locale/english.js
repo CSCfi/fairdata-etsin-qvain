@@ -338,7 +338,7 @@ const english = {
         placeholder: 'Select option',
       },
       embargoDate: {
-        label: 'Embargo expiration date',
+        label: 'Embargo expiration date (yyyy-mm-dd)',
         placeholder: 'Date',
         help: 'By default, expiration date will be indefinite if not set.',
       },

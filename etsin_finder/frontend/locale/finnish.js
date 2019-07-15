@@ -342,7 +342,7 @@ const finnish = {
         placeholder: 'Valitse vaihtoehto',
       },
       embargoDate: {
-        label: 'Embargo loppumispäivämäärä',
+        label: 'Embargo loppumispäivämäärä (vvvv-kk-pp)',
         placeholder: 'Päivämäärä',
         help: 'Oletuksena embargo ei lopu jollei päivämäärää aseteta.',
       },
