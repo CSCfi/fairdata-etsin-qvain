@@ -13,7 +13,8 @@ import {
   FileItem,
   EditButton,
   DeleteButton,
-  ButtonLabel
+  ButtonLabel,
+  ButtonContainer
 } from '../general/buttons'
 import { Input, SelectedFilesTitle } from '../general/form'
 import { FileContainer, SlidingContent } from '../general/card'
@@ -84,10 +85,12 @@ export class ExternalFilesBase extends Component {
             <Fragment key={r.id}>
               <ResourceItem active={isInEdit(resourceInEdit, r)}>
                 <ButtonLabel><a target="_blank" rel="noopener noreferrer" href={r.url}>{r.title} / {r.url}</a></ButtonLabel>
-                <EditButton
-                  onClick={isInEdit(resourceInEdit, r) ? this.handleCloseEdit : this.handleEditResource(r.id)}
-                />
-                <DeleteButton onClick={this.handleRemoveResource(r.id)} />
+                <ButtonContainer>
+                  <EditButton
+                    onClick={isInEdit(resourceInEdit, r) ? this.handleCloseEdit : this.handleEditResource(r.id)}
+                  />
+                  <DeleteButton onClick={this.handleRemoveResource(r.id)} />
+                </ButtonContainer>
               </ResourceItem>
               {isInEdit(resourceInEdit, r) && (
                 <ResourceContainer>

@@ -41,7 +41,8 @@ export const SaveButton = styled.button`
 
 export const ButtonGroup = styled.div`
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.13);
-  border: solid 1px #eceeef;
+  border: solid 1px #cccccc;
+  border-radius: 4px;
   background-color: #fff;
   margin-bottom: 12px;
   overflow: overlay;
@@ -75,12 +76,20 @@ export const ButtonLabel = styled.span`
 `;
 
 export const EditButtonStyles = styled.button`
-  background-color: rgba(0,187,255, 0.1);
+  background-color: #fff;
   width: 60px;
   height: 56px;
   border: none;
   text-align: center;
   color: #007fad;
+  display: inline-block;
+  margin: 5px 5px 5px 5px;
+  border-radius: 4px;
+  border: solid 1px #cccccc;
+  &:hover {
+    background-color: rgba(0,187,255, 0.1);
+    border-color: rgb(0, 127, 173);
+  }
 `;
 
 export const EditButton = (props) => (
@@ -90,12 +99,20 @@ export const EditButton = (props) => (
 )
 
 export const DeleteButtonStyles = styled.button`
-  background-color: rgba(255, 52, 0, 0.1);
+  background-color: #fff;
   width: 60px;
   height: 56px;
   border: none;
   text-align: center;
   color: #ad2300;
+  display: inline-block;
+  margin: 5px 5px 5px 5px;
+  border-radius: 4px;
+  border: solid 1px #cccccc;
+  &:hover {
+    background-color: rgba(255, 52, 0, 0.1);
+    border-color: rgb(173, 35, 0);
+  }
 `;
 
 export const DeleteButton = (props) => (
@@ -103,6 +120,10 @@ export const DeleteButton = (props) => (
     <FontAwesomeIcon size="lg" icon={faTimes} />
   </DeleteButtonStyles>
 )
+
+export const ButtonContainer = styled.div`
+  text-align: right;
+`;
 
 export const FilePickerButton = styled.button`
   background-color: ${props => (
