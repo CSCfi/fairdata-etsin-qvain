@@ -254,10 +254,13 @@ const english = {
   },
   qvain: {
     submit: 'Submit Dataset',
+    edit: 'Update Dataset',
     consent: 'By using Qvain Light the user agrees that he or she has asked consent from all persons whose personal information the user will add to the descriptive data and informed them of how they can get their personal data removed. By using Qvain Light the user agrees to the <a href="https://www.fairdata.fi/hyodyntaminen/kayttopolitiikat-ja-ehdot/">Terms of Usage</a>.',
     submitStatus: {
       success: 'Dataset published!',
       fail: 'Something went wrong...',
+      editFilesSuccess: 'New dataset version has been created!',
+      editMetadataSuccess: 'Dataset successfully updated!',
     },
     openErrorMessages: 'Open error messages',
     closeErrorMessages: 'Close error messages',
@@ -280,11 +283,13 @@ const english = {
       tableRows: {
         id: 'ID',
         name: 'Name',
-        edit: 'Edit',
-        remove: 'Remove',
+        modified: 'Modified',
+        actions: 'Actions',
       },
       editButton: 'Edit',
       deleteButton: 'Remove',
+      confirmDelete: 'Are you sure you want to delete this dataset? Deleting the dataset will remove it from Qvain, and Etsin Search cannot find it anymore. Landing page for the dataset will NOT be removed.',
+      goToEtsin: 'View in Etsin',
       noDatasets: 'You have no datasets',
       reload: 'Reload',
       loading: 'Loading...',
@@ -479,6 +484,9 @@ const english = {
         },
       },
       files: {
+        dataCatalog: {
+          required: 'File origin is required'
+        },
         file: {
           title: {
             required: 'File title is required',
@@ -508,6 +516,11 @@ const english = {
     },
     files: {
       title: 'Files',
+      dataCatalog: {
+        label: 'File origin',
+        explanation: 'Choose IDA if the data is stored in Fairdata Ida service. Choose ATT if the data is stored elsewhere.',
+        placeholder: 'Select option'
+      },
       help:
         'Files associated with this dataset. A dataset can only have either IDA files or external files. File metadata will not be associated with datasets, so remember to save edits to file metadata.',
       ida: {
@@ -577,6 +590,10 @@ const english = {
             label: 'Identifier',
           },
         },
+      },
+      existing: {
+        title: 'Previously selected files',
+        help: 'These are the files and directories that you have added before. If you do not touch these, upon saving the changes to the dataset METAX will go through all the selected directories and associate any files and directories within, even the new ones. In other words, if you don\'t touch these and save, you can associate new files within the directory structure with your dataset.'
       },
       external: {
         help: 'Add link to external files from here:',

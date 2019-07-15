@@ -43,6 +43,7 @@ import QvainStore, {
   Participant
 } from '../js/stores/view/qvain'
 import LocaleStore from '../js/stores/view/language'
+import { DataCatalogIdentifiers } from '../js/components/qvain/utils/constants'
 
 describe('Qvain', () => {
   it('should render correctly', () => {
@@ -118,8 +119,11 @@ describe('Qvain.Participants', () => {
 
 describe('Qvain.Files', () => {
   it('should render file picker', () => {
-    const component = shallow(<Files Stores={getStores()} />)
-    expect(component.find(IDAFilePicker).length).toBe(1)
+    const store = getStores()
+    store.Qvain.dataCatalog = DataCatalogIdentifiers.IDA
+    store.Qvain.idaPickerOpen = true
+    const component = shallow(<Files Stores={store} />)
+    expect(component.dive().find(IDAFilePicker).length).toBe(1)
   })
 
   it('should open file selector upon selecting file picker', () => {
@@ -133,8 +137,8 @@ describe('Qvain.Files', () => {
   it('allows selecting directories in the file selector', () => {
     const stores = getStores()
     const component = mount(<FileSelectorBase Stores={stores} />)
-    stores.Qvain._selectedProject = 'project_y'
-    stores.Qvain._hierarchy = Directory(
+    stores.Qvain.selectedProject = 'project_y'
+    stores.Qvain.hierarchy = Directory(
       {
         id: 'test1',
         identifier: 'test-ident-1',
@@ -164,18 +168,18 @@ describe('Qvain.Files', () => {
     component.update()
     expect(component.find('li').length).toBe(1)
     component.find('li').find('input').simulate('change')
-    expect(component.props().Stores.Qvain._hierarchy.directories[0].selected)
+    expect(component.props().Stores.Qvain.hierarchy.directories[0].selected)
   })
 
   it('allows modifying the metadata of selected directories', () => {
     // repeat previous one
     const stores = getStores()
     // reset selected directories
-    stores.Qvain._selectedDirectories = []
+    stores.Qvain.selectedDirectories = []
     const fileSelector = mount(<FileSelectorBase Stores={stores} />)
 
-    stores.Qvain._selectedProject = 'project_y'
-    stores.Qvain._hierarchy = Directory(
+    stores.Qvain.selectedProject = 'project_y'
+    stores.Qvain.hierarchy = Directory(
       {
         id: 'test1',
         identifier: 'test-ident-1',

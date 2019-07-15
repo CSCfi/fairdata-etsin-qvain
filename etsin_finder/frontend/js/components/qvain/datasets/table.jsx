@@ -14,11 +14,12 @@ import {
   BodyCell,
   TableNote,
 } from '../general/table'
+import Modal from '../../general/modal'
 import DatasetPagination from './pagination'
-import { CancelButton } from '../general/buttons'
+import { CancelButton, DangerButton } from '../general/buttons'
+import { checkLogin, getUsername } from '../utils/auth'
 
 const USER_DATASETS_URL = '/api/datasets/'
-// const tempuser = 'abc-user-123'
 
 class DatasetTable extends Component {
   static propTypes = {
@@ -29,11 +30,13 @@ class DatasetTable extends Component {
   state = {
     datasets: [],
     count: 0,
-    limit: 5,
+    limit: 20,
     page: 1,
     loading: false,
     error: false,
     errorMessage: '',
+    removeModalOpen: false,
+    removableDatasetIdentifier: undefined
   }
 
   componentDidMount() {
@@ -43,10 +46,10 @@ class DatasetTable extends Component {
   getDatasets = offset => {
     this.setState({ loading: true, error: false, errorMessage: '' })
     const { limit } = this.state
-    this.props.Stores.Auth.checkLogin()
+    checkLogin(this.props)
       .then(() => {
         const url = `${USER_DATASETS_URL}${
-          this.props.Stores.Auth.user.name
+          getUsername(this.props)
         }?limit=${limit}&offset=${offset}`
         console.log(url)
         return axios
@@ -73,9 +76,28 @@ class DatasetTable extends Component {
 
   handleRemove = identifier => event => {
     event.preventDefault()
-    this.setState(state => ({
-      datasets: [...state.datasets.filter(d => d.identifier !== identifier)],
-    }))
+    axios
+      .delete(`/api/dataset/${identifier}`)
+      .then(this.setState(state => ({
+          datasets: [...state.datasets.filter(d => d.identifier !== identifier)],
+          removeModalOpen: false,
+          removableDatasetIdentifier: undefined
+        })))
+      .catch(err => { this.setState({ error: true, errorMessage: err.message }) })
+  }
+
+  openRemoveModal = (identifier) => () => {
+    this.setState({
+      removeModalOpen: true,
+      removableDatasetIdentifier: identifier
+    })
+  }
+
+  closeRemoveModal = () => {
+    this.setState({
+      removeModalOpen: false,
+      removableDatasetIdentifier: undefined
+    })
   }
 
   noDatasets = () => {
@@ -84,6 +106,7 @@ class DatasetTable extends Component {
   }
 
   handleEnterEdit = dataset => () => {
+    console.log(dataset)
     this.props.Stores.Qvain.editDataset(dataset)
     this.props.history.push('/qvain/dataset')
   }
@@ -108,8 +131,8 @@ class DatasetTable extends Component {
             <Row>
               <Translate component={HeaderCell} content="qvain.datasets.tableRows.id" />
               <Translate component={HeaderCell} content="qvain.datasets.tableRows.name" />
-              <Translate component={HeaderCell} content="qvain.datasets.tableRows.edit" />
-              <Translate component={HeaderCell} content="qvain.datasets.tableRows.remove" />
+              <Translate component={HeaderCell} content="qvain.datasets.tableRows.modified" />
+              <Translate component={HeaderCell} content="qvain.datasets.tableRows.actions" />
             </Row>
           </TableHeader>
           <TableBody striped>
@@ -140,6 +163,7 @@ class DatasetTable extends Component {
                   <BodyCell>
                     {dataset.research_dataset.title.en || dataset.research_dataset.title.fi}
                   </BodyCell>
+                  <BodyCell>{dataset.date_modified}</BodyCell>
                   <BodyCell>
                     <Translate
                       component={CancelButton}
@@ -150,7 +174,14 @@ class DatasetTable extends Component {
                   <BodyCell>
                     <Translate
                       component={CancelButton}
-                      onClick={this.handleRemove(dataset.identifier)}
+                      onClick={() => window.open(`/dataset/${dataset.identifier}`, '_blank')}
+                      content="qvain.datasets.goToEtsin"
+                    />
+                  </BodyCell>
+                  <BodyCell>
+                    <Translate
+                      component={CancelButton}
+                      onClick={this.openRemoveModal(dataset.identifier)}
                       content="qvain.datasets.deleteButton"
                     />
                   </BodyCell>
@@ -164,6 +195,11 @@ class DatasetTable extends Component {
           limit={limit}
           onChangePage={this.handleChangePage}
         />
+        <Modal isOpen={this.state.removeModalOpen} onRequestClose={this.closeRemoveModal} contentLabel="removeDatasetModal">
+          <Translate component="p" content="qvain.datasets.confirmDelete" />
+          <CancelButton onClick={this.closeRemoveModal}>Cancel</CancelButton>
+          <DangerButton onClick={this.handleRemove(this.state.removableDatasetIdentifier)}>Remove</DangerButton>
+        </Modal>
       </Fragment>
     )
   }

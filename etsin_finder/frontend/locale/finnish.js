@@ -254,10 +254,13 @@ const finnish = {
   },
   qvain: {
     submit: 'Julkaise Aineisto',
+    edit: 'Päivitä Aineisto',
     consent: 'Käyttämällä Qvain Lightia käyttäjä hyväksyy, että hän on pyytänyt suostumusta kaikilta henkilöiltä, joiden hankilökohtaisia tietoja käyttäjä lisää kuvattaviin tietoihin, ja ilmoitti heille, miten he voivat saada tietonsa poistettua. Käyttämällä Qvain Lightia käyttäjä hyväksyy <a href="https://www.fairdata.fi/hyodyntaminen/kayttopolitiikat-ja-ehdot/">käyttöehdot</a>.',
     submitStatus: {
       success: 'Aineisto julkaistu!',
       fail: 'Jotain meni pieleen...',
+      editSuccess: 'Uusi aineisto versio luotu!',
+      editMetadataSuccess: 'Aineisto päivitys onnistui!',
     },
     openErrorMessages: 'Avaa virhe viestit',
     closeErrorMessages: 'Sulje virhe viestit',
@@ -280,11 +283,13 @@ const finnish = {
       tableRows: {
         id: 'ID',
         name: 'Nimi',
-        edit: 'Muokkaa',
-        remove: 'Poista',
+        modified: 'Muokattu',
+        actions: 'Toiminnot',
       },
       editButton: 'Muokkaa',
       deleteButton: 'Poista',
+      confirmDelete: 'Oletko varma, että haluat poistaa aineiston? Aineiston poiston jälkeen se ei enää näy Qvaimessa eikä Etsimen haku löydä sitä. Aineiston laskeutumissivua ei poisteta.',
+      goToEtsin: 'Katso Etsimessä',
       noDatasets: 'Sinulla ei ole olemassa olevia aineistoja',
       reload: 'Lataa uudelleen',
       loading: 'Lataa...',
@@ -483,6 +488,9 @@ const finnish = {
         },
       },
       files: {
+        dataCatalog: {
+          required: 'Tiedosto lähde on pakollinen'
+        },
         file: {
           title: {
             required: 'Tiedoston otsikko on pakollinen',
@@ -512,6 +520,11 @@ const finnish = {
     },
     files: {
       title: 'Tiedostot',
+      dataCatalog: {
+        label: 'Tiedosto lähde',
+        explanation: 'Valitse IDA jos tiedostot on tallennettu Fairdata Ida palveluun. Valitse ATT jos tiedostot tulevat muualta.',
+        placeholder: 'Select data catalog'
+      },
       help:
         'Aineistoon kuuluvat tiedostot. Aineistoon voi kuulua vain joko IDAssa olevia tiedostoja tai ulkopuolisia tiedostoja. Tiedostojen metadata ei ole osa aineistojen metadataa, joten muista tallentaa muutokset jotka teet tiedostojen metadataan.',
       ida: {
@@ -548,6 +561,10 @@ const finnish = {
             label: 'Tunniste',
           },
         },
+      },
+      existing: {
+        title: 'Aikaisemmin valitut tiedostot',
+        help: 'Nämä ovat sinun aiemmin valitsemia tiedostoja. Jos tallennat aineiston tekemättä muutoksia näihin, METAX katsoo läpi kaikki sisäkkäiset hakemistot ja tiedostot valitsemistasi hakemistoista ja lisää kaikki tiedostot mitä se ei ole aiemmin liittänyt aineistoon. Toisin sanoen, jos olet jälkikäteen lisännyt IDAan tiedostoja, voit liittää nämä uudet tiedostot aineistoon päivittämällä aineiston.'
       },
       external: {
         help: 'Lisää linkkejä ulkoisiin tiedostoihin:',

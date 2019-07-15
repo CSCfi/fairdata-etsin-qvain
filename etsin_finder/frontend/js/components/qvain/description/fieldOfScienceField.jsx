@@ -58,7 +58,7 @@ class FieldOfScienceField extends React.Component {
   }
 
   render() {
-    const { fieldOfScience } = this.props.Stores.Qvain
+    const { fieldOfScience, setFieldOfScience } = this.props.Stores.Qvain
     const { lang } = this.props.Stores.Locale
     const { options } = this.state
     return (
@@ -72,7 +72,7 @@ class FieldOfScienceField extends React.Component {
           className="basic-single"
           classNamePrefix="select"
           options={options[lang]}
-          onChange={onChange(options, lang, this.props.Stores.Qvain.setFieldOfScience, FieldOfScience)}
+          onChange={onChange(options, lang, setFieldOfScience, FieldOfScience)}
         />
       </Card>
     )

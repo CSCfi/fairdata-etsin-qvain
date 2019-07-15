@@ -101,7 +101,7 @@ export class ParticipantTypeSelectBase extends Component {
                 />
                 <Label htmlFor="personPublisher">
                   <Translate content="qvain.participants.add.checkbox.publisher" /> *{' '}
-                  <HelpField>max 1</HelpField>
+                  <HelpField>(max 1)</HelpField>
                 </Label>
               </FormField>
             </ListItem>
@@ -128,7 +128,7 @@ export class ParticipantTypeSelectBase extends Component {
                 />
                 <Label htmlFor="personCurator">
                   <Translate content="qvain.participants.add.checkbox.curator" />{' '}
-                  <HelpField>max 1</HelpField>
+                  <HelpField>(max 1)</HelpField>
                 </Label>
               </FormField>
             </ListItem>
@@ -191,7 +191,7 @@ export class ParticipantTypeSelectBase extends Component {
                 />
                 <Label htmlFor="orgPublisher">
                   <Translate content="qvain.participants.add.checkbox.publisher" />{' '}
-                  <HelpField>max 1</HelpField>
+                  <HelpField>(max 1)</HelpField>
                 </Label>
               </FormField>
             </ListItem>
@@ -218,7 +218,7 @@ export class ParticipantTypeSelectBase extends Component {
                 />
                 <Label htmlFor="orgCurator">
                   <Translate content="qvain.participants.add.checkbox.curator" />{' '}
-                  <HelpField>max 1</HelpField>
+                  <HelpField>(max 1)</HelpField>
                 </Label>
               </FormField>
             </ListItem>

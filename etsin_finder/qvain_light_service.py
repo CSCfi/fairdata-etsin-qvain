@@ -35,7 +35,7 @@ class MetaxQvainLightAPIService(FlaskService):
             self.METAX_GET_DIRECTORY = 'https://{0}/rest/directories'.format(metax_qvain_api_config['HOST']) + \
                                        '/{0}/files'
             self.METAX_GET_DATASETS_FOR_USER = 'https://{0}/rest/datasets'.format(metax_qvain_api_config['HOST']) + \
-                                               '?metadata_provider_user={0}&file_details'
+                                               '?metadata_provider_user={0}&file_details&ordering=-date_modified'
             self.METAX_CREATE_DATASET = 'https://{0}/rest/datasets'.format(metax_qvain_api_config['HOST'])
             self.user = metax_qvain_api_config['USER']
             self.pw = metax_qvain_api_config['PASSWORD']
@@ -200,8 +200,35 @@ class MetaxQvainLightAPIService(FlaskService):
                 log.error("Failed to get data for directory {0} from Metax API")
                 log.error(e)
             return {'Error_message': 'Error trying to send data to metax.'}
-
         return metax_api_response.json()
+
+    def delete_dataset(self, cr_id):
+        """
+        Delete dataset from Metax.
+
+        Arguments:
+            cr_id {string} -- The identifier of the dataset.
+
+        Returns:
+            [type] -- Metax response.
+
+        """
+        req_url = self.METAX_CREATE_DATASET + "/" + cr_id
+        headers = {'Accept': 'application/json'}
+        try:
+            metax_api_response = requests.delete(req_url,
+                                                 headers=headers,
+                                                 auth=(self.user, self.pw),
+                                                 verify=self.verify_ssl,
+                                                 timeout=10)
+        except Exception as e:
+            if isinstance(e, requests.HTTPError):
+                log.debug("Failed to deletedataset.")
+                log.debug('Response status code: {0}'.format(metax_api_response.status_code))
+                log.debug('Response text: {0}'.format(json_or_empty(metax_api_response) or metax_api_response.text))
+            return {'Error_message': 'Error trying to send data to metax.'}
+
+        return metax_api_response.status_code
 
 
 _metax_api = MetaxQvainLightAPIService(app)
@@ -259,3 +286,16 @@ def update_dataset(form_data, cr_id):
 
     """
     return _metax_api.update_dataset(form_data, cr_id)
+
+def delete_dataset(cr_id):
+    """
+    Delete dataset from Metax.
+
+    Arguments:
+        cr_id {string} -- The identifier of the dataset.
+
+    Returns:
+        [type] -- Metax response.
+
+    """
+    return _metax_api.delete_dataset(cr_id)

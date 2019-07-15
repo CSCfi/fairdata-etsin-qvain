@@ -6,6 +6,7 @@ import {
   LicenseUrls,
   FileAPIURLs,
   UseCategoryURLs,
+  DataCatalogIdentifiers
 } from '../../components/qvain/utils/constants'
 import { getPath } from '../../components/qvain/utils/object'
 
@@ -63,16 +64,15 @@ class Qvain {
     this.participants = []
     this.participantInEdit = EmptyParticipant
     // Reset Files/Directories related data
+    this.dataCatalog = undefined
     this.idaPickerOpen = false
-    this._selectedProject = undefined
-    this._selectedFiles = []
-    this._selectedDirectories = []
-    this._hierarchy = {}
-    this._inEdit = undefined
-    this._parentDirs.clear()
-    this._files = []
-    this._directories = []
-    this._previousDirectories.clear()
+    this.selectedProject = undefined
+    this.selectedFiles = []
+    this.selectedDirectories = []
+    this.existingFiles = []
+    this.existingDirectories = []
+    this.hierarchy = {}
+    this.inEdit = undefined
     // Reset External resources related data
     this._externalResources = []
     this.extResFormOpen = false
@@ -191,79 +191,91 @@ class Qvain {
 
   @observable idaPickerOpen = false
 
-  @observable _selectedProject = undefined
+  @observable dataCatalog = undefined
 
-  @observable _selectedFiles = []
+  @observable selectedProject = undefined
 
-  @observable _selectedDirectories = []
+  @observable selectedFiles = []
 
-  @observable _hierarchy = {}
+  @observable selectedDirectories = []
 
-  @observable _inEdit = undefined
+  @observable existingFiles = []
 
-  // acquired directories parent directories' ids
-  @observable _parentDirs = new Map()
+  @observable existingDirectories = []
 
-  // files in the view
-  @observable _files = []
+  @observable hierarchy = {}
 
-  // directories in the view
-  @observable _directories = []
+  @observable inEdit = undefined
 
-  // directories visited, used to go up the directory hierarchy
-  @observable _previousDirectories = new Map()
+  @action
+  setDataCatalog = selectedDataCatalog => {
+    this.dataCatalog = selectedDataCatalog
+  }
 
   @action toggleSelectedFile = (file, select) => {
-    const newHier = { ...this._hierarchy }
-    const flat = getDirectories(newHier)
-    // file.selected = select
-    getFiles(newHier).find(f => f.identifier === file.identifier).selected = select
-    if (select) {
-      const theDir = flat.find(d => d.directoryName === file.parentDirectory.directoryName)
-      this.deselectParents(theDir, flat)
-      this._selectedFiles = [...this._selectedFiles, file]
+    // are we removing an old selected file or are we editing the selections in the current session
+    if (file.existing && !select) {
+      this.existingFiles = this.existingFiles.filter(f => f.identifier !== file.identifier)
     } else {
-      this._selectedFiles = this._selectedFiles.filter(f => f.identifier !== file.identifier)
+      const newHier = { ...this.hierarchy }
+      const flat = getDirectories(newHier)
+      // file.selected = select
+      getFiles(newHier).find(f => f.identifier === file.identifier).selected = select
+      if (select) {
+        const theDir = flat.find(d => d.directoryName === file.parentDirectory.directoryName)
+        this.deselectParents(theDir, flat)
+        this.selectedFiles = [...this.selectedFiles, file]
+      } else {
+        this.selectedFiles = this.selectedFiles.filter(f => f.identifier !== file.identifier)
+      }
+      this.hierarchy = newHier
     }
-    this._hierarchy = newHier
   }
 
   @action toggleSelectedDirectory = (dir, select) => {
-    const newHier = { ...this._hierarchy }
-    const flat = getDirectories(newHier)
-    const theDir = flat.find(d => d.directoryName === dir.directoryName)
-    theDir.selected = select
-    if (select) {
-      // deselect and remove the files within the selected directory
-      theDir.files.forEach(f => {
-        f.selected = false
-        this._selectedFiles = [
-          ...this._selectedFiles.filter(file => file.identifier !== f.identifier),
-        ]
-      })
-      // deselect directories and files downwards in the hierarchy, remove them from selections
-      theDir.directories.forEach(d => this.deselectChildren(d))
-      // deselect parents
-      const parent = flat.find(d => d.directoryName === theDir.parentDirectory.directoryName)
-      this.deselectParents(parent, flat)
-      this._selectedDirectories = [...this._selectedDirectories, dir]
-    } else {
-      this._selectedDirectories = this._selectedDirectories.filter(
+    // don't edit selected state in hierarchy if editing existing directories
+    // otherwise do necessary edits to the hierarchy (to display the correct changes to file selector)
+    if (dir.existing && !select) {
+      this.existingDirectories = this.existingDirectories.filter(
         d => d.identifier !== dir.identifier
       )
+    } else {
+      const newHier = { ...this.hierarchy }
+      const flat = getDirectories(newHier)
+      const theDir = flat.find(d => d.directoryName === dir.directoryName)
+      theDir.selected = select
+      if (select) {
+        // deselect and remove the files within the selected directory
+        theDir.files.forEach(f => {
+          f.selected = false
+          this.selectedFiles = [
+            ...this.selectedFiles.filter(file => file.identifier !== f.identifier),
+          ]
+        })
+        // deselect directories and files downwards in the hierarchy, remove them from selections
+        theDir.directories.forEach(d => this.deselectChildren(d))
+        // deselect parents
+        const parent = flat.find(d => d.directoryName === theDir.parentDirectory.directoryName)
+        this.deselectParents(parent, flat)
+        this.selectedDirectories = [...this.selectedDirectories, dir]
+      } else {
+        this.selectedDirectories = this.selectedDirectories.filter(
+          d => d.identifier !== dir.identifier
+        )
+      }
+      this.hierarchy = newHier
     }
-    this._hierarchy = newHier
   }
 
   deselectChildren = dir => {
     dir.selected = false
-    this._selectedDirectories = [
-      ...this._selectedDirectories.filter(d => d.identifier !== dir.identifier),
+    this.selectedDirectories = [
+      ...this.selectedDirectories.filter(d => d.identifier !== dir.identifier),
     ]
     dir.files.forEach(f => {
       f.selected = false
-      this._selectedFiles = [
-        ...this._selectedFiles.filter(file => file.identifier !== f.identifier),
+      this.selectedFiles = [
+        ...this.selectedFiles.filter(file => file.identifier !== f.identifier),
       ]
     })
     dir.directories.forEach(d => this.deselectChildren(d))
@@ -273,8 +285,8 @@ class Qvain {
     // deselect directories upwards in the hierarchy, remove them from selected directories
     if (dir !== undefined) {
       dir.selected = false
-      this._selectedDirectories = [
-        ...this._selectedDirectories.filter(d => d.identifier !== dir.identifier),
+      this.selectedDirectories = [
+        ...this.selectedDirectories.filter(d => d.identifier !== dir.identifier),
       ]
       if (dir.parentDirectory !== undefined) {
         const aDir = flattenedHierarchy.find(d => d.identifier === dir.parentDirectory.identifier)
@@ -286,16 +298,16 @@ class Qvain {
   }
 
   @action getInitialDirectories = () =>
-    axios.get(FileAPIURLs.PROJECT_DIR_URL + this._selectedProject).then(res => {
-      this._hierarchy = Directory(res.data, undefined, false, false)
-      return this._hierarchy
+    axios.get(FileAPIURLs.PROJECT_DIR_URL + this.selectedProject).then(res => {
+      this.hierarchy = Directory(res.data, undefined, false, false)
+      return this.hierarchy
     })
 
   @action changeProject = projectId => {
-    this._selectedProject = projectId
-    this._hierarchy = {}
-    this._selectedFiles = []
-    this._selectedDirectories = []
+    this.selectedProject = projectId
+    this.hierarchy = {}
+    this.selectedFiles = []
+    this.selectedDirectories = []
     return this.getInitialDirectories()
   }
 
@@ -312,7 +324,7 @@ class Qvain {
                     Directory(
                       newDir,
                       d,
-                      this._selectedDirectories
+                      this.selectedDirectories
                         .map(sd => sd.identifier)
                         .includes(newDir.identifier),
                       false
@@ -322,7 +334,7 @@ class Qvain {
                     File(
                       newFile,
                       d,
-                      this._selectedFiles.map(sf => sf.identifier).includes(newFile.identifier)
+                      this.selectedFiles.map(sf => sf.identifier).includes(newFile.identifier)
                     )
                   ),
                 }
@@ -342,54 +354,50 @@ class Qvain {
   }
 
   @action setDirFileSettings = (directory, title, description, useCategory) => {
-    const theDir = this._selectedDirectories.find(d => d.directoryName === directory.directoryName)
+    const collection = directory.existing ? this.existingDirectories : this.selectedDirectories
+    const theDir = collection.find(d => d.identifier === directory.identifier)
     theDir.title = title
     theDir.description = description
     theDir.useCategory = useCategory
   }
 
   @action setInEdit = selectedItem => {
-    this._inEdit = selectedItem
+    this.inEdit = selectedItem
   }
 
   @computed
-  get selectedProject() {
-    return this._selectedProject
+  get getSelectedProject() {
+    return this.selectedProject
   }
 
   @computed
-  get selectedFiles() {
-    return this._selectedFiles
+  get getSelectedFiles() {
+    return this.selectedFiles
   }
 
   @computed
-  get selectedDirectories() {
-    return this._selectedDirectories
+  get getSelectedDirectories() {
+    return this.selectedDirectories
   }
 
   @computed
-  get inEdit() {
-    return this._inEdit
+  get getExistingFiles() {
+    return this.existingFiles
   }
 
   @computed
-  get hierarchy() {
-    return this._hierarchy
+  get getExistingDirectories() {
+    return this.existingDirectories
   }
 
   @computed
-  get directories() {
-    return this._directories
+  get getInEdit() {
+    return this.inEdit
   }
 
   @computed
-  get files() {
-    return this._files
-  }
-
-  @computed
-  get parentDirs() {
-    return this._parentDirs
+  get getHierarchy() {
+    return this.hierarchy
   }
 
   // Dataset related
@@ -401,8 +409,10 @@ class Qvain {
     const researchDataset = dataset.research_dataset
 
     // Load description
-    this.title = researchDataset.title
-    this.description = researchDataset.description
+    this.title.en = researchDataset.title.en ? researchDataset.title.en : ''
+    this.title.fi = researchDataset.title.fi ? researchDataset.title.fi : ''
+    this.description.en = researchDataset.description.en ? researchDataset.description.en : ''
+    this.description.fi = researchDataset.description.fi ? researchDataset.description.fi : ''
 
     // Other identifiers
     this.otherIdentifiers = researchDataset.other_identifier
@@ -414,7 +424,11 @@ class Qvain {
       const primary = researchDataset.field_of_science[0]
       if (primary !== undefined) {
         this.fieldOfScience = FieldOfScience(primary.pref_label, primary.identifier)
+      } else {
+        this.fieldOfScience = undefined
       }
+    } else {
+      this.fieldOfScience = undefined
     }
 
     // keywords
@@ -422,70 +436,109 @@ class Qvain {
 
     // access type
     const at = researchDataset.access_rights.access_type
-    this.accessType = AccessType(at.pref_label, at.identifier)
+      ? researchDataset.access_rights.access_type
+      : undefined
+    this.accessType = at
+    ? AccessType(at.pref_label, at.identifier)
+    : AccessType(undefined, AccessTypeURLs.OPEN)
+
+    // embargo date
+    const date = researchDataset.access_rights.available
+      ? researchDataset.access_rights.available
+      : undefined
+    this.embargoExpDate = date || undefined
 
     // license
     const l = researchDataset.access_rights.license
       ? researchDataset.access_rights.license[0]
       : undefined
-    this.license = l ? License(l.title, l.identifier) : undefined
+    if (l.identifier !== undefined) {
+      this.license = l
+        ? License(l.title, l.identifier)
+        : License(undefined, LicenseUrls.CCBY4)
+    } else {
+      this.license = l
+        ? License(
+          {
+            en: 'Other (URL)',
+            fi: 'Muu (URL)'
+          }, 'other')
+        : License(undefined, LicenseUrls.CCBY4)
+      this.otherLicenseUrl = l.license
+    }
+
+    // restriction grounds
+    const rg = researchDataset.access_rights.restriction_grounds
+      ? researchDataset.access_rights.restriction_grounds[0]
+      : undefined
+    this.restrictionGrounds = rg
+      ? RestrictionGrounds(rg.pref_label, rg.identifier)
+      : undefined
 
     // Load participants
-    let participants = []
-    participants = [
-      ...participants,
-      ...this.createParticipants(participants, researchDataset.creator || [], Role.CREATOR),
-    ]
-    participants = [
-      ...participants,
-      ...this.createParticipants(participants, researchDataset.publisher || [], Role.PUBLISHER),
-    ]
-    participants = [
-      ...participants,
-      ...this.createParticipants(participants, researchDataset.curator || [], Role.CURATOR),
-    ]
-    this.participants = participants
+    const participants = []
+    if ('publisher' in researchDataset) {
+      participants.push(this.createParticipant(researchDataset.publisher, Role.PUBLISHER, participants))
+    }
+    if ('curator' in researchDataset) {
+      researchDataset.curator.forEach(curator => (
+        participants.push(this.createParticipant(curator, Role.CURATOR, participants))
+      ))
+    }
+    if ('creator' in researchDataset) {
+      researchDataset.creator.forEach(creator => (
+        participants.push(this.createParticipant(creator, Role.CREATOR, participants))
+      ))
+    }
+    this.participants = this.mergeTheSameParticipants(participants)
+
+    // Load data catalog
+    this.dataCatalog = dataset.data_catalog && {
+      label: dataset.data_catalog.identifier === DataCatalogIdentifiers.IDA
+        ? 'IDA'
+        : 'ATT',
+      value: dataset.data_catalog.identifier
+    }
+
+    // load data catalog
+    this.dataCatalog = dataset.data_catalog !== undefined ? dataset.data_catalog.identifier : undefined
 
     // Load files
     const dsFiles = researchDataset.files
     const dsDirectories = researchDataset.directories
+
     if (dsFiles !== undefined || dsDirectories !== undefined) {
       this.idaPickerOpen = true
-      this._selectedProject = dsFiles[0].details.project_identifier
+      const toCheck = [...(dsFiles || []), ...(dsDirectories || [])]
+      this.selectedProject = toCheck.length > 0 ? toCheck[0].details.project_identifier : undefined
       this.getInitialDirectories()
-      this._selectedDirectories = dsDirectories
-        ? dsDirectories.map(d => Directory(d, undefined, true, false))
+      this.existingDirectories = dsDirectories
+        ? dsDirectories.map(d => DatasetDirectory(d))
         : []
-      this._selectedFiles = dsFiles ? dsFiles.map(f => DatasetFile(f, undefined, true)) : []
+      this.existingFiles = dsFiles ? dsFiles.map(f => DatasetFile(f, undefined, true)) : []
     }
 
     // external resources
     const remoteResources = researchDataset.remote_resources
-    this._externalResources = remoteResources
-      ? remoteResources.map(r =>
-          ExternalResource(this.createExternalResourceUIId(), r.title, r.identifier)
-        )
-      : []
     if (remoteResources !== undefined) {
       this._externalResources = remoteResources.map(r =>
-        ExternalResource(this.createExternalResourceUIId(), r.title, r.identifier)
+        ExternalResource(
+          this.createExternalResourceUIId(),
+          r.title,
+          r.access_url ? r.access_url.identifier : undefined,
+          r.use_category ? r.use_category.identifier : undefined
+        )
       )
       this.extResFormOpen = true
     }
   }
 
-  createParticipants = (existing, toAdd, role) => {
-    let added = []
-    if (toAdd.length > 0) {
-      added = [...toAdd.map(participant => this.createParticipant(participant, role, existing))]
-    }
-    return added
-  }
-
+  // Creates a sigle instance of a participant, only has one role.
+  // Returns a Participant.
   createParticipant = (participantJson, role, participants) => {
     let name
     if (participantJson['@type'].toLowerCase() === EntityType.ORGANIZATION) {
-      name = participantJson.name ? participantJson.name.en : undefined
+      name = participantJson.name ? participantJson.name.und : undefined
     } else {
       name = participantJson.name
     }
@@ -494,16 +547,14 @@ class Qvain {
     if (participantJson['@type'].toLowerCase() === EntityType.ORGANIZATION) {
       const isPartOf = participantJson.is_part_of
       if (isPartOf !== undefined) {
-        parentOrg = isPartOf.name.en
+        parentOrg = isPartOf.name.und
       } else {
         parentOrg = undefined
       }
     } else {
       const parentOrgName = participantJson.member_of.name
-      if (parentOrgName !== undefined && parentOrgName.en !== undefined) {
-        parentOrg = parentOrgName.en
-      } else if (parentOrgName !== undefined) {
-        parentOrg = parentOrgName.fi
+      if (parentOrgName !== undefined && parentOrgName.und !== undefined) {
+        parentOrg = parentOrgName.und
       } else {
         parentOrg = undefined
       }
@@ -515,11 +566,56 @@ class Qvain {
         : EntityType.ORGANIZATION,
       [role],
       name,
-      participantJson.email,
-      participantJson.identifier,
+      participantJson.email ? participantJson.email : '',
+      participantJson.identifier ? participantJson.identifier : '',
       parentOrg,
       this.createParticipantUIId(participants)
     )
+  }
+
+  // Function that 'Merge' the participants with the same metadata (except UIid).
+  // It looks for partisipants with the same info but different roles and adds their
+  // roles together to get one participant with multiple roles.
+  // Retruns a nw array with the merged participants.
+  mergeTheSameParticipants = participants => {
+    if (participants.length <= 1) return participants
+    const mergedParticipants = []
+    participants.forEach((participant1) => {
+      participants.forEach((participant2, index) => {
+        if (this.isEqual(participant1, participant2)) {
+          participant1.role = [...new Set([].concat(...[participant1.role, participant2.role]))]
+          delete participants[index]
+        }
+      })
+      mergedParticipants.push(participant1)
+    })
+    return mergedParticipants
+  }
+
+  // Function to compare two perticipants and see if they are the same perticipant.
+  // Returns True if the participants seem the same, or False if not.
+  isEqual = (p1, p2) => {
+    if ('identifier' in p1 && 'identifier' in p2) {
+      if (p1.identifier === p2.identifier) return true
+      return false
+    }
+    if ('email' in p1 && 'emain' in p2) {
+      if (p1.email === p2.email && p1.name === p2.name && p1['@type'] === p2['@type']) return true
+      return false
+    }
+    if (p1['@type'] === EntityType.PERSON && p2['@type'] === EntityType.PERSON) {
+      if (p1.name === p2.name && p1.member_of.name.und === p2.member_of.name.und) return true
+      return false
+    }
+    if (p1['@type'] === EntityType.ORGANIZATION && p2['@type'] === EntityType.ORGANIZATION) {
+      if ('is_part_of' in p1 && 'is_part_of' in p2) {
+        if (p1.name === p2.name && p1.is_part_of.name.und === p2.is_part_of.name.und) return true
+        return false
+      }
+      if (p1.name === p2.name) return true
+      return false
+    }
+    return false
   }
 
   // create a new UI Identifier based on existing UI IDs
@@ -595,6 +691,7 @@ export const Directory = (dir, parent, selected, open) => ({
   useCategory: dir.use_category || UseCategoryURLs.OUTCOME_MATERIAL,
   fileType: dir.file_type,
   files: dir.files ? dir.files.map(f => File(f, dir, false)) : [],
+  existing: false
 })
 
 const File = (file, parent, selected) => ({
@@ -606,11 +703,13 @@ const File = (file, parent, selected) => ({
   fileType: getPath('file_characteristics.file_type', file),
   description: getPath('file_characteristics.description', file),
   title: getPath('file_characteristics.title', file),
+  existing: false
 })
 
 const DatasetFile = file => ({
+  ...File(file.details, file.details.parent_directory, true),
   identifier: file.identifier,
-  useCategory: getPath('use_category.identifier'),
+  useCategory: getPath('use_category.identifier', file),
   fileType: getPath('file_type.identifier', file),
   projectIdentifier: getPath('details.project_identifier', file),
   title: file.title,
@@ -621,6 +720,15 @@ const DatasetFile = file => ({
     fileType: file.file_type,
     title: file.title,
   },
+  existing: true
+})
+
+const DatasetDirectory = directory => ({
+  ...Directory(directory.details, undefined, true, false),
+  identifier: directory.identifier,
+  description: directory.description,
+  title: directory.title,
+  existing: true
 })
 
 export const EntityType = {
@@ -657,6 +765,11 @@ export const AccessType = (name, url) => ({
 })
 
 export const License = (name, identifier) => ({
+  name,
+  identifier,
+})
+
+export const RestrictionGrounds = (name, identifier) => ({
   name,
   identifier,
 })

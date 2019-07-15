@@ -18,8 +18,8 @@ import {
   faFileImage,
   faFile,
   faFileAlt,
-  faCloud,
 } from '@fortawesome/free-regular-svg-icons'
+import { faCloud } from '@fortawesome/free-solid-svg-icons'
 import PropTypes from 'prop-types'
 import translate from 'counterpart'
 
