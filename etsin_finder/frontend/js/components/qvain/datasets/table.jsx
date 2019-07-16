@@ -18,7 +18,8 @@ import {
 import Modal from '../../general/modal'
 import DatasetPagination from './pagination'
 import Label from '../general/label'
-import { CancelButton, RemoveButton, DangerButton } from '../general/buttons'
+import { CancelButton, RemoveButton, DangerButton, SaveButton } from '../general/buttons'
+import { FormField, Input } from '../general/form'
 
 const USER_DATASETS_URL = '/api/datasets/'
 
@@ -29,16 +30,18 @@ class DatasetTable extends Component {
   }
 
   state = {
-    datasets: [],
-    count: 0,
-    limit: 20,
-    onPage: [],
-    page: 1,
-    loading: false,
-    error: false,
-    errorMessage: '',
-    removeModalOpen: false,
-    removableDatasetIdentifier: undefined
+    datasets: [], // all datasets from METAX
+    filtered: [], // narrowed datasets based on searchTerm
+    count: 0, // how many there are, used to calculate page count
+    limit: 1, // how many on one page, used to slice filtered into onPage content
+    onPage: [], // what we see on the page
+    page: 1, // current page
+    loading: false, // used to display loading notification in the table
+    error: false, // error notification status
+    errorMessage: '', // error notification itself
+    removeModalOpen: false, // delete/remove modal state
+    removableDatasetIdentifier: undefined, // used to send the delete request to backend to target the correct dataset
+    searchTerm: undefined // used to narrow down content
   }
 
   componentDidMount() {
@@ -63,6 +66,7 @@ class DatasetTable extends Component {
         this.setState({
           count: datasets.length,
           datasets,
+          filtered: datasets,
           loading: false,
           error: false,
           errorMessage: undefined
@@ -118,15 +122,38 @@ class DatasetTable extends Component {
   handleChangePage = pageNum => () => {
     const actualNum = pageNum - 1
     this.setState((state) => ({
-      onPage: state.datasets.slice(actualNum * state.limit, (actualNum * state.limit) + state.limit),
+      onPage: state.filtered.slice(actualNum * state.limit, (actualNum * state.limit) + state.limit),
       page: pageNum
     }))
   }
 
   render() {
-    const { onPage, loading, error, errorMessage, page, count, limit } = this.state
+    const { onPage, loading, error, errorMessage, page, count, limit, searchTerm } = this.state
     return (
       <Fragment>
+        <SearchField>
+          <SearchInput
+            placeholder="Enter name of dataset"
+            value={searchTerm}
+            onChange={(event) => {
+              const searchStr = event.target.value
+              this.setState((state) => ({
+                searchTerm: searchStr,
+                // if we have a search term, look through all the titles of all the datasets and return the matching datasets
+                filtered: searchStr.trim().length > 0 ? state.datasets.filter(ds => {
+                  const titles = Object.values(ds.research_dataset.title)
+                  const matches = titles.map(title => title.toLowerCase().includes(searchStr.toLowerCase()))
+                  return matches.includes(true)
+                }) : state.datasets // otherwise, return all the datasets
+              }), () => {
+                // as the callback, set count to reflect the new filtered datasets
+                this.setState((state) => ({ count: state.filtered.length }))
+                // reload
+                this.handleChangePage(page)()
+              })
+            }}
+          />
+        </SearchField>
         <DatasetPagination
           page={page}
           count={count}
@@ -228,5 +255,15 @@ const TablePadded = styled(Table)`
   margin-top: 30px;
   margin-bottom: 30px;
 `
+
+const SearchField = styled(FormField)`
+  vertical-align: middle;
+  width: 100%;
+  align-items: center;
+`
+
+const SearchInput = styled(Input)`
+  margin-bottom: inherit;
+`;
 
 export default withRouter(inject('Stores')(observer(DatasetTable)))
