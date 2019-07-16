@@ -32,6 +32,7 @@ class DatasetTable extends Component {
     datasets: [],
     count: 0,
     limit: 20,
+    onPage: [],
     page: 1,
     loading: false,
     error: false,
@@ -41,31 +42,34 @@ class DatasetTable extends Component {
   }
 
   componentDidMount() {
-    this.getDatasets((this.state.page - 1) * this.state.limit)
+    this.getDatasets()
     // once we get login info, reload
     reaction(
       () => this.props.Stores.Auth.user.name,
-      () => this.getDatasets((this.state.page - 1) * this.state.limit)
+      () => this.getDatasets()
     )
   }
 
-  getDatasets = offset => {
+  getDatasets = () => {
     this.setState({ loading: true, error: false, errorMessage: '' })
-    const { limit } = this.state
     const url = `${USER_DATASETS_URL}${
       this.props.Stores.Auth.user.name
-    }?limit=${limit}&offset=${offset}`
+    }?no_pagination=true`
     console.log(url)
     return axios
       .get(url)
       .then(result => {
-        const { count, results } = result.data
-        const datasets = [...results]
-        console.log('datasets ', datasets)
-        this.setState({ count, datasets, loading: false })
+        const datasets = [...result.data]
+        this.setState({
+          count: datasets.length,
+          datasets,
+          loading: false,
+          error: false,
+          errorMessage: undefined
+        }, this.handleChangePage(1))
       })
       .catch(e => {
-        console.log(e)
+        console.log(e.message)
         this.setState({ loading: false, error: true, errorMessage: 'Failed to load datasets' })
       })
   }
@@ -112,12 +116,15 @@ class DatasetTable extends Component {
   }
 
   handleChangePage = pageNum => () => {
-    this.setState({ page: pageNum, datasets: [] })
-    this.getDatasets((pageNum - 1) * this.state.limit)
+    const actualNum = pageNum - 1
+    this.setState((state) => ({
+      onPage: state.datasets.slice(actualNum * state.limit, (actualNum * state.limit) + state.limit),
+      page: pageNum
+    }))
   }
 
   render() {
-    const { datasets, loading, error, errorMessage, page, count, limit } = this.state
+    const { onPage, loading, error, errorMessage, page, count, limit } = this.state
     return (
       <Fragment>
         <DatasetPagination
@@ -156,7 +163,7 @@ class DatasetTable extends Component {
               <Translate component={TableNote} content="qvain.datasets.noDatasets" />
             )}
             {!error &&
-              datasets.map(dataset => (
+              onPage.map(dataset => (
                 <Row key={dataset.identifier}>
                   <BodyCell>
                     {dataset.research_dataset.title.en || dataset.research_dataset.title.fi}

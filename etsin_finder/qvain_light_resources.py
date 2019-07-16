@@ -127,19 +127,22 @@ class UserDatasets(Resource):
         self.parser = reqparse.RequestParser()
         self.parser.add_argument('limit', type=str, action='append', required=False)
         self.parser.add_argument('offset', type=str, action='append', required=False)
+        self.parser.add_argument('no_pagination', type=bool, action='append', required=False)
 
     def get(self, user_id):
         """
-        Get files and directory objects for frontend.
+        Get datasets for user. Used by qvain light dataset table. If request has query parameter no_pagination=true,
+        fetches ALL datasets for user (warning: might result in performance issue).
 
-        :param dir_id:
+        :param user_id:
         :return:
         """
         args = self.parser.parse_args()
         limit = args.get('limit', None)
         offset = args.get('offset', None)
+        no_pagination = args.get('no_pagination', None)
 
-        result = qvain_light_service.get_datasets_for_user(user_id, limit, offset)
+        result = qvain_light_service.get_datasets_for_user(user_id, limit, offset, no_pagination)
         # Return data only if authenticated
         if result and authentication.is_authenticated():
             # Limit the amount of items to be sent to the frontend
