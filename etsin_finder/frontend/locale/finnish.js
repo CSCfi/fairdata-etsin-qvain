@@ -282,7 +282,7 @@ const finnish = {
       createButton: 'Luo aineisto',
       tableRows: {
         id: 'ID',
-        name: 'Nimi',
+        title: 'Otsikko',
         modified: 'Muokattu',
         actions: 'Toiminnot',
       },

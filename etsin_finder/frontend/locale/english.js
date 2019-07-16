@@ -282,7 +282,7 @@ const english = {
       createButton: 'Create dataset',
       tableRows: {
         id: 'ID',
-        name: 'Name',
+        title: 'Title',
         modified: 'Modified',
         actions: 'Actions',
       },
