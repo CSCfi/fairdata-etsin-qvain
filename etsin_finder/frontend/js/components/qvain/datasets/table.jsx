@@ -33,7 +33,7 @@ class DatasetTable extends Component {
     datasets: [], // all datasets from METAX
     filtered: [], // narrowed datasets based on searchTerm
     count: 0, // how many there are, used to calculate page count
-    limit: 1, // how many on one page, used to slice filtered into onPage content
+    limit: 20, // how many on one page, used to slice filtered into onPage content
     onPage: [], // what we see on the page
     page: 1, // current page
     loading: false, // used to display loading notification in the table
@@ -142,7 +142,7 @@ class DatasetTable extends Component {
                 // if we have a search term, look through all the titles of all the datasets and return the matching datasets
                 filtered: searchStr.trim().length > 0 ? state.datasets.filter(ds => {
                   const titles = Object.values(ds.research_dataset.title)
-                  const matches = titles.map(title => title.toLowerCase().includes(searchStr.toLowerCase()))
+                  const matches = titles.map(title => title.toLowerCase().includes(searchStr.toLowerCase())) // ignore cases
                   return matches.includes(true)
                 }) : state.datasets // otherwise, return all the datasets
               }), () => {
