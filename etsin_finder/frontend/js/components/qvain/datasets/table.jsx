@@ -18,7 +18,7 @@ import {
 import Modal from '../../general/modal'
 import DatasetPagination from './pagination'
 import Label from '../general/label'
-import { CancelButton, RemoveButton, DangerButton, SaveButton } from '../general/buttons'
+import { CancelButton, RemoveButton, DangerButton } from '../general/buttons'
 import { FormField, Input } from '../general/form'
 
 const USER_DATASETS_URL = '/api/datasets/'
@@ -163,7 +163,7 @@ class DatasetTable extends Component {
         <TablePadded className="table">
           <TableHeader>
             <Row>
-              <Translate component={HeaderCell} content="qvain.datasets.tableRows.name" />
+              <Translate component={HeaderCell} content="qvain.datasets.tableRows.title" />
               <Translate component={HeaderCell} content="qvain.datasets.tableRows.created" />
               <Translate component={HeaderCell} content="qvain.datasets.tableRows.actions" />
             </Row>

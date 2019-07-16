@@ -282,7 +282,7 @@ const english = {
       createButton: 'Create dataset',
       tableRows: {
         id: 'ID',
-        name: 'Name',
+        title: 'Title',
         version: 'Version',
         modified: 'Modified',
         created: 'Created',
@@ -342,7 +342,7 @@ const english = {
         placeholder: 'Select option',
       },
       embargoDate: {
-        label: 'Embargo expiration date',
+        label: 'Embargo expiration date (yyyy-mm-dd)',
         placeholder: 'Date',
         help: 'By default, expiration date will be indefinite if not set.',
       },
