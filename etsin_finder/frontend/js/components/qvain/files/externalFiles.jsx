@@ -43,11 +43,11 @@ export class ExternalFilesBase extends Component {
     externalResourceUrlSchema
       .validate(resource.url)
       .then(() => {
-        this.props.Stores.Qvain.resetInEditResource()  
+        this.props.Stores.Qvain.resetInEditResource()
       })
       .catch(err => {
         console.log(err)
-      }) 
+      })
   }
 
   handleEditExternalResource = (externalResource) => (event) => {

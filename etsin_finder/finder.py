@@ -85,7 +85,6 @@ def add_restful_resources(app):
     api.add_resource(QvainDatasetDelete, '/api/dataset/<string:cr_id>')
     api.add_resource(QvainDataset, '/api/dataset')
 
-
 app = create_app()
 add_restful_resources(app)
 import etsin_finder.views

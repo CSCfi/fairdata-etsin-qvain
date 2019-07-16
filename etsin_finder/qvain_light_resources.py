@@ -26,7 +26,6 @@ from etsin_finder.qvain_light_dataset_schema import DatasetValidationSchema
 from etsin_finder.qvain_light_utils import data_to_metax, \
     get_dataset_creator, \
     remove_deleted_datasets_from_results, \
-    sort_datasets_by_date_created, \
     edited_data_to_metax
 from etsin_finder.qvain_light_service import create_dataset, update_dataset, delete_dataset
 
@@ -141,8 +140,6 @@ class UserDatasets(Resource):
         offset = args.get('offset', None)
 
         result = qvain_light_service.get_datasets_for_user(user_id, limit, offset)
-        # Sort the datasets in the result by its dataset_created flag.
-        sort_datasets_by_date_created(result)
         # Return data only if authenticated
         if result and authentication.is_authenticated():
             # Limit the amount of items to be sent to the frontend
@@ -208,6 +205,16 @@ class QvainDataset(Resource):
         cr_id = data["original"]["identifier"]
         original = data["original"]
         del data["original"]
+<<<<<<< HEAD
+=======
+
+        # Only creator of the dataset is allowed to update it
+        user = session["samlUserdata"]["urn:oid:1.3.6.1.4.1.16161.4.0.53"][0]
+        creator = get_dataset_creator(cr_id)
+        if user != creator:
+            return {"Error": "No permission"}
+
+>>>>>>> qvain-light
         metax_redy_data = edited_data_to_metax(data, original)
         metax_response = update_dataset(metax_redy_data, cr_id)
         log.debug("METAX RESPONSE: {0}".format(metax_response))
@@ -226,8 +233,8 @@ class QvainDatasetDelete(Resource):
 
         Returns:
             [type] -- Metax response.
-        """
 
+        """
         is_authd = authentication.is_authenticated()
         if not is_authd:
             return 'Not logged in', 400
