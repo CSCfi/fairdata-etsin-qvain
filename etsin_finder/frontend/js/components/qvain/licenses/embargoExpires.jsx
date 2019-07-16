@@ -46,6 +46,7 @@ class EmbargoExpires extends Component {
         <DatePickerWrapper>
           <Translate
             component={SingleDatePicker}
+            hideKeyboardShortcutsPanel
             date={embargoExpDate ? moment.utc(embargoExpDate) : null}
             onDateChange={date => {
               if (date === null) {
