@@ -91,7 +91,7 @@ class KeywordsField extends Component {
 const Input = styled.input`
   width: 100%;
   border-radius: 3px;
-  border: 1px solid #eceeef;
+  border: 1px solid #cccccc;
   padding: 8px;
   color: #808080;
   margin-bottom: 20px;

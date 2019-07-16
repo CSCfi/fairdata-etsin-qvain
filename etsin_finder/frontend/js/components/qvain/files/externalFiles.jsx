@@ -14,7 +14,8 @@ import {
   FileItem,
   EditButton,
   DeleteButton,
-  ButtonLabel
+  ButtonLabel,
+  ButtonContainer
 } from '../general/buttons'
 import { EmptyExternalResource } from '../../../stores/view/qvain'
 import { Input, SelectedFilesTitle } from '../general/form'
@@ -82,15 +83,17 @@ export class ExternalFilesBase extends Component {
               <ButtonLabel>
                 {addedExternalResource.title} / {addedExternalResource.url}
               </ButtonLabel>
-              <EditButton
-                onClick={this.handleEditExternalResource(addedExternalResource)}
-              />
-              <DeleteButton
-                onClick={this.handleRemoveExternalResource(addedExternalResource.id)}
-              />
+              <ButtonContainer>
+                <EditButton
+                  onClick={this.handleEditExternalResource(addedExternalResource)}
+                />
+                <DeleteButton
+                  onClick={this.handleRemoveExternalResource(addedExternalResource.id)}
+                />
+              </ButtonContainer>
             </ButtonGroup>
-            ))}
-            <ExternalFileForm />
+          ))}
+          <ExternalFileForm />
         </SlidingContent>
       </Fragment>
     )

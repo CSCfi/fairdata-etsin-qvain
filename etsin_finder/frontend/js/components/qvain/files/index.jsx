@@ -3,7 +3,7 @@ import Translate from 'react-translate-component'
 import PropTypes from 'prop-types'
 import { inject, observer } from 'mobx-react'
 import { SectionTitle } from '../general/section'
-import { ContainerLight, ContainerSubsection } from '../general/card'
+import { ContainerLight, ContainerSubsectionBottom } from '../general/card'
 import { HelpIcon } from '../general/form'
 import IDAFilePicker from './idaFilePicker'
 import ExternalFiles from './externalFiles'
@@ -20,16 +20,16 @@ class Files extends Component {
     let data = null
     if (dataCatalog === DataCatalogIdentifiers.IDA) {
       data = (
-        <ContainerSubsection>
+        <ContainerSubsectionBottom>
           <IDAFilePicker />
-        </ContainerSubsection>
+        </ContainerSubsectionBottom>
       )
     }
     if (dataCatalog === DataCatalogIdentifiers.ATT) {
       data = (
-        <ContainerSubsection>
+        <ContainerSubsectionBottom>
           <ExternalFiles />
-        </ContainerSubsection>
+        </ContainerSubsectionBottom>
       )
     }
     return (

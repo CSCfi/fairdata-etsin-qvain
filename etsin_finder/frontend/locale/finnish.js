@@ -282,7 +282,7 @@ const finnish = {
       createButton: 'Luo aineisto',
       tableRows: {
         id: 'ID',
-        name: 'Nimi',
+        title: 'Otsikko',
         modified: 'Muokattu',
         actions: 'Toiminnot',
       },
@@ -342,7 +342,7 @@ const finnish = {
         placeholder: 'Valitse vaihtoehto',
       },
       embargoDate: {
-        label: 'Embargo loppumispäivämäärä',
+        label: 'Embargo loppumispäivämäärä (vvvv-kk-pp)',
         placeholder: 'Päivämäärä',
         help: 'Oletuksena embargo ei lopu jollei päivämäärää aseteta.',
       },
