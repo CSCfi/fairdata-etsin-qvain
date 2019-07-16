@@ -4,7 +4,7 @@ import { inject, observer } from 'mobx-react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCopy, faFolder } from '@fortawesome/free-solid-svg-icons'
 import Translate from 'react-translate-component'
-import { ButtonLabel, EditButton, DeleteButton, FileItem } from '../general/buttons'
+import { ButtonLabel, EditButton, DeleteButton, FileItem, ButtonContainer } from '../general/buttons'
 import { SelectedFilesTitle } from '../general/form'
 import FileForm from './fileForm'
 import DirectoryForm from './directoryForm'
@@ -44,17 +44,19 @@ export class SelectedFilesBase extends Component {
                 <FontAwesomeIcon icon={(s.directoryName ? faFolder : faCopy)} style={{ marginRight: '8px' }} />
                 {s.projectIdentifier} / {s.directoryName || s.title}
               </ButtonLabel>
-              <EditButton onClick={this.handleEdit(s)} />
-              <DeleteButton
-                onClick={(event) => {
-                  event.preventDefault()
-                  if (s.directoryName !== undefined) {
-                    toggleSelectedDirectory(s, false)
-                  } else {
-                    toggleSelectedFile(s, false)
-                  }
-                }}
-              />
+              <ButtonContainer>
+                <EditButton onClick={this.handleEdit(s)} />
+                <DeleteButton
+                  onClick={(event) => {
+                    event.preventDefault()
+                    if (s.directoryName !== undefined) {
+                      toggleSelectedDirectory(s, false)
+                    } else {
+                      toggleSelectedFile(s, false)
+                    }
+                  }}
+                />
+              </ButtonContainer>
             </FileItem>
             {isInEdit(inEdit, s.identifier) && (
               <Fragment>
