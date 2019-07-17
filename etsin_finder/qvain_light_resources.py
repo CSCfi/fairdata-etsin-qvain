@@ -26,7 +26,8 @@ from etsin_finder.qvain_light_dataset_schema import DatasetValidationSchema
 from etsin_finder.qvain_light_utils import data_to_metax, \
     get_dataset_creator, \
     remove_deleted_datasets_from_results, \
-    edited_data_to_metax
+    edited_data_to_metax, \
+    check_if_data_in_user_IDA_project
 from etsin_finder.qvain_light_service import create_dataset, update_dataset, delete_dataset
 
 log = app.logger
@@ -180,7 +181,9 @@ class QvainDataset(Resource):
         except KeyError as err:
             log.warning("The Metadata provider is not specified: \n{0}".format(err))
             return {"Error": "The Metadata provider is not specified"}
-
+        user_projects = session["samlUserdata"]["urn:oid:1.3.6.1.4.1.8057.2.80.26"]
+        if not check_if_data_in_user_IDA_project(data, user_projects):
+            return {"Error": "Permission to project data not granted."}, 403
         metax_redy_data = data_to_metax(data, metadata_provider_org, metadata_provider_user)
         metax_response = create_dataset(metax_redy_data)
         return metax_response

@@ -277,3 +277,34 @@ def edited_data_to_metax(data, original):
         "research_dataset": original["research_dataset"]
     }
     return clean_empty_keyvalues_from_dict(edited_data)
+
+def check_if_data_in_user_IDA_project(data, projects):
+    """
+    Check if the user creating a dataset belongs to the project that the files/folders
+    belogs to.
+
+    Arguments:
+        data {object} -- The dataset that the user is trying to create.
+        projects {list} -- List containing the users projects. Taken from the saml data.
+
+    Returns:
+        [bool] -- True if data belongs to user, and False is not.
+
+    """
+    user_projects = [project.split(":")[0] for project in projects]
+    # Add the test project 'project_x' for local development.
+    user_projects.append("project_x")
+    if "files" or "directories" in data:
+        files = data["files"]
+        directories = data["directories"]
+        if files:
+            for file in files:
+                identifier = file["projectIdentifier"]
+                if identifier in user_projects:
+                    return True
+        if directories:
+            for directory in directories:
+                identifier = directory["projectIdentifier"]
+                if identifier in user_projects:
+                    return True
+    return False

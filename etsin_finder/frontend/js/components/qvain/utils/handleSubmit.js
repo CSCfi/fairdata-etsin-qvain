@@ -21,7 +21,8 @@ const directoriesToMetax = (selectedDirectories, existingDirectories) => {
     description: dir.description ? dir.description : undefined,
     useCategory: {
       identifier: dir.useCategory
-    }
+    },
+    projectIdentifier: dir.projectIdentifier ? dir.projectIdentifier : undefined
   }))
   return parsedDirectoryData
 }
@@ -39,7 +40,8 @@ const filesToMetax = (selectedFiles, existingFiles) => {
     } : undefined,
     useCategory: {
       identifier: file.useCategory
-    }
+    },
+    projectIdentifier: file.projectIdentifier ? file.projectIdentifier : undefined
   }))
   return parsedFileData
 }
