@@ -21,9 +21,6 @@ export class ExternalFileFormBase extends Component {
       en: [],
       fi: [],
     },
-    title: '',
-    url: '',
-    useCategory: '',
     externalResourceError: undefined,
   }
 
@@ -68,7 +65,6 @@ export class ExternalFileFormBase extends Component {
       if (this.props.Stores.Qvain.idaPickerOpen) {
         this.props.Stores.Qvain.idaPickerOpen = false
       }
-
     }).catch(err => {
       this.setState({ externalResourceError: err.errors })
     })
@@ -108,7 +104,7 @@ export class ExternalFileFormBase extends Component {
           id="useCategoryInput"
           value={externalResource.useCategory}
           options={useCategories[lang]}
-          onChange={(selection) => {externalResource.useCategory = selection}}
+          onChange={(selection) => { externalResource.useCategory = selection }}
           attributes={{ placeholder: 'qvain.files.external.form.useCategory.placeholder' }}
         />
         <Label htmlFor="urlInput">
