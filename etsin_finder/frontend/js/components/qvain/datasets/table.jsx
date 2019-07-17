@@ -89,7 +89,7 @@ class DatasetTable extends Component {
           removableDatasetIdentifier: undefined
         }))
         if (this.state.datasets.length === 0 && this.state.page !== 1) {
-          this.handleChangePage(this.state.page - 1)()
+          this.handleChangePage(this.state.page)()
         }
       })
       .catch(err => { this.setState({ error: true, errorMessage: err.message }) })
