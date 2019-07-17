@@ -728,6 +728,7 @@ const DatasetDirectory = directory => ({
   identifier: directory.identifier,
   description: directory.description,
   title: directory.title,
+  useCategory: directory.use_category.identifier,
   existing: true
 })
 
