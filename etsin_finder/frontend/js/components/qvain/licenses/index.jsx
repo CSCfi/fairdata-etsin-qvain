@@ -9,8 +9,8 @@ class RightsAndLicenses extends Component {
     return (
       <div className="container">
         <Translate component={SectionTitle} content="qvain.rightsAndLicenses.title" />
-        <AccessType />
         <Licenses />
+        <AccessType />
       </div>
     )
   }
