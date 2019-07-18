@@ -283,9 +283,13 @@ const finnish = {
       tableRows: {
         id: 'ID',
         title: 'Otsikko',
+        version: 'Versio',
         modified: 'Muokattu',
+        created: 'Luotu',
         actions: 'Toiminnot',
       },
+      oldVersion: 'Vanha',
+      latestVersion: 'Uusin',
       editButton: 'Muokkaa',
       deleteButton: 'Poista',
       confirmDelete: 'Oletko varma, että haluat poistaa aineiston? Aineiston poiston jälkeen se ei enää näy Qvaimessa eikä Etsimen haku löydä sitä. Aineiston laskeutumissivua ei poisteta.',
