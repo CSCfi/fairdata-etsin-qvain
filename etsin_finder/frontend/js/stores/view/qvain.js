@@ -568,7 +568,10 @@ class Qvain {
           this.createExternalResourceUIId(),
           r.title,
           r.access_url ? r.access_url.identifier : undefined,
-          r.use_category ? r.use_category.identifier : undefined
+          r.use_category ? {
+            label: r.use_category.pref_label.en,
+            value: r.use_category.identifier
+          } : undefined
         )
       )
       this.extResFormOpen = true
