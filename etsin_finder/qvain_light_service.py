@@ -12,6 +12,7 @@ import requests
 from etsin_finder.finder import app
 from etsin_finder.app_config import get_metax_qvain_api_config
 from etsin_finder.utils import json_or_empty, FlaskService
+import json
 
 log = app.logger
 
@@ -172,7 +173,7 @@ class MetaxQvainLightAPIService(FlaskService):
                 log.error(e)
             return {'Error_message': 'Error trying to send data to metax.'}
 
-        return metax_api_response.json()
+        return metax_api_response.text, metax_api_response.status_code
 
     def update_dataset(self, data, cr_id):
         """
@@ -204,7 +205,7 @@ class MetaxQvainLightAPIService(FlaskService):
                 log.error("Failed to get data for directory {0} from Metax API")
                 log.error(e)
             return {'Error_message': 'Error trying to send data to metax.'}
-        return metax_api_response.json()
+        return metax_api_response.text, metax_api_response.status_code
 
     def delete_dataset(self, cr_id):
         """

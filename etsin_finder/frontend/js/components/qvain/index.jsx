@@ -18,6 +18,7 @@ import handleSubmitToBackend from './utils/handleSubmit'
 import Title from './general/title'
 import SubmitResponse from './general/submitResponse'
 import { InvertedButton } from '../general/button'
+import isJsonString from './utils/isJsonSring'
 
 class Qvain extends Component {
   static propTypes = {
@@ -46,12 +47,24 @@ class Qvain extends Component {
         axios
           .post('/api/dataset', obj)
           .then(res => {
-            this.setState({ response: res.data })
+            this.setState({ response: JSON.parse(res.data) })
             if (this.state.response && 'identifier' in this.state.response) {
               this.props.Stores.Qvain.resetQvainStore()
             }
           })
-          .catch(err => this.setState({ response: err }))
+          .catch(err => {
+            console.log(err.response)
+            const res = {
+              Error: isJsonString(err.response.data)
+                ? JSON.parse(err.response.data)
+                : err.response.data,
+              Status: err.response.status,
+              Data: isJsonString(err.response.config.data)
+                ? JSON.parse(err.response.config.data)
+                : err.response.config.data,
+            }
+            this.setState(err ? { response: res } : { response: 'Error...' })
+          })
       })
       .catch(err => {
         console.log(err.errors)
@@ -73,9 +86,21 @@ class Qvain extends Component {
           .patch('/api/dataset', obj)
           .then(res => {
             this.props.Stores.Qvain.resetQvainStore()
-            this.setState({ response: res.data })
+            this.setState({ response: JSON.parse(res.data) })
           })
-          .catch(err => this.setState({ response: err }))
+          .catch(err => {
+            console.log(err.response)
+            const res = {
+              Error: isJsonString(err.response.data)
+                ? JSON.parse(err.response.data)
+                : err.response.data,
+              Status: err.response.status,
+              Data: isJsonString(err.response.config.data)
+                ? JSON.parse(err.response.config.data)
+                : err.response.config.data,
+            }
+            this.setState(err ? { response: res } : { response: 'Error...' })
+          })
       })
       .catch(err => {
         console.log(err.errors)
