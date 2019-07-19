@@ -565,7 +565,8 @@ class Qvain {
     if (remoteResources !== undefined) {
       this.externalResources = remoteResources.map(r =>
         ExternalResource(
-          this.createExternalResourceUIId(),
+          // Iterate over existing elements from MobX, to assign them a local externalResourceUIId
+          remoteResources.indexOf(r),
           r.title,
           r.access_url ? r.access_url.identifier : undefined,
           r.use_category ? {
@@ -790,7 +791,7 @@ export const RestrictionGrounds = (name, identifier) => ({
   identifier,
 })
 
-const ExternalResource = (id, title, url, useCategory) => ({
+export const ExternalResource = (id, title, url, useCategory) => ({
   id,
   title,
   url,
