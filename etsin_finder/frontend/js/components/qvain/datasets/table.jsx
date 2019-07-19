@@ -41,7 +41,7 @@ class DatasetTable extends Component {
     errorMessage: '', // error notification itself
     removeModalOpen: false, // delete/remove modal state
     removableDatasetIdentifier: undefined, // used to send the delete request to backend to target the correct dataset
-    searchTerm: undefined // used to narrow down content
+    searchTerm: '' // used to narrow down content
   }
 
   componentDidMount() {
@@ -83,14 +83,16 @@ class DatasetTable extends Component {
     axios
       .delete(`/api/dataset/${identifier}`)
       .then(() => {
+        const datasets = [...this.state.datasets.filter(d => d.identifier !== identifier)]
         this.setState(state => ({
-          datasets: [...state.datasets.filter(d => d.identifier !== identifier)],
+          datasets,
+          filtered: this.filterByTitle(state.searchTerm, datasets),
           removeModalOpen: false,
           removableDatasetIdentifier: undefined
-        }))
-        if (this.state.datasets.length === 0 && this.state.page !== 1) {
+        }), () => {
+          // and refresh
           this.handleChangePage(this.state.page)()
-        }
+        })
       })
       .catch(err => { this.setState({ error: true, errorMessage: err.message }) })
   }
@@ -127,6 +129,14 @@ class DatasetTable extends Component {
     }))
   }
 
+  filterByTitle = (searchStr, datasets) => (
+    searchStr.trim().length > 0 ? datasets.filter(ds => {
+      const titles = Object.values(ds.research_dataset.title)
+      const matches = titles.map(title => title.toLowerCase().includes(searchStr.toLowerCase())) // ignore cases
+      return matches.includes(true)
+    }) : datasets
+  )
+
   render() {
     const { onPage, loading, error, errorMessage, page, count, limit, searchTerm } = this.state
     return (
@@ -140,11 +150,7 @@ class DatasetTable extends Component {
               this.setState((state) => ({
                 searchTerm: searchStr,
                 // if we have a search term, look through all the titles of all the datasets and return the matching datasets
-                filtered: searchStr.trim().length > 0 ? state.datasets.filter(ds => {
-                  const titles = Object.values(ds.research_dataset.title)
-                  const matches = titles.map(title => title.toLowerCase().includes(searchStr.toLowerCase())) // ignore cases
-                  return matches.includes(true)
-                }) : state.datasets // otherwise, return all the datasets
+                filtered: this.filterByTitle(searchStr, state.datasets)
               }), () => {
                 // as the callback, set count to reflect the new filtered datasets
                 this.setState((state) => ({ count: state.filtered.length }))
