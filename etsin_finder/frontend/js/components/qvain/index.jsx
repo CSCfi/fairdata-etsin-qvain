@@ -18,6 +18,7 @@ import handleSubmitToBackend from './utils/handleSubmit'
 import Title from './general/title'
 import SubmitResponse from './general/submitResponse'
 import { InvertedButton } from '../general/button'
+import isJsonString from './utils/isJsonSring'
 
 class Qvain extends Component {
   static propTypes = {
@@ -32,15 +33,6 @@ class Qvain extends Component {
   componentWillUnmount() {
     this.props.Stores.Qvain.resetQvainStore()
     this.props.Stores.Qvain.original = undefined
-  }
-
-  IsJsonString = (str) => {
-    try {
-        JSON.parse(str);
-    } catch (e) {
-        return false;
-    }
-    return true;
   }
 
   handleCreate = e => {
@@ -63,11 +55,11 @@ class Qvain extends Component {
           .catch(err => {
             console.log(err.response)
             const res = {
-              Error: this.IsJsonString(err.response.data)
+              Error: isJsonString(err.response.data)
                 ? JSON.parse(err.response.data)
                 : err.response.data,
               Status: err.response.status,
-              Data: this.IsJsonString(err.response.config.data)
+              Data: isJsonString(err.response.config.data)
                 ? JSON.parse(err.response.config.data)
                 : err.response.config.data,
             }
@@ -99,11 +91,11 @@ class Qvain extends Component {
           .catch(err => {
             console.log(err.response)
             const res = {
-              Error: this.IsJsonString(err.response.data)
+              Error: isJsonString(err.response.data)
                 ? JSON.parse(err.response.data)
                 : err.response.data,
               Status: err.response.status,
-              Data: this.IsJsonString(err.response.config.data)
+              Data: isJsonString(err.response.config.data)
                 ? JSON.parse(err.response.config.data)
                 : err.response.config.data,
             }
