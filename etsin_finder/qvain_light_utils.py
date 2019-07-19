@@ -300,11 +300,11 @@ def check_if_data_in_user_IDA_project(data, projects):
         if files:
             for file in files:
                 identifier = file["projectIdentifier"]
-                if identifier in user_projects:
-                    return True
+                if identifier not in user_projects:
+                    return False
         if directories:
             for directory in directories:
                 identifier = directory["projectIdentifier"]
-                if identifier in user_projects:
-                    return True
-    return False
+                if identifier not in user_projects:
+                    return False
+    return True
