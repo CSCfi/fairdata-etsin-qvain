@@ -128,10 +128,10 @@ def remote_resources_data_to_metax(resources):
 
     """
     metax_remote_resources = []
-    metax_remote_resources_object = {}
-    metax_remote_resources_object["use_category"] = {}
-    metax_remote_resources_object["access_url"] = {}
     for resource in resources:
+        metax_remote_resources_object = {}
+        metax_remote_resources_object["use_category"] = {}
+        metax_remote_resources_object["access_url"] = {}
         metax_remote_resources_object["title"] = resource["title"]
         metax_remote_resources_object["access_url"]["identifier"] = resource["url"]
         metax_remote_resources_object["use_category"]["identifier"] = resource["useCategory"]["value"]

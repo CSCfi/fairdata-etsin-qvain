@@ -43,6 +43,8 @@ class Qvain {
 
   @observable participantInEdit = EmptyParticipant
 
+  @observable externalResourceInEdit = EmptyExternalResource
+
   @action
   resetQvainStore = () => {
     this.title = {
@@ -63,6 +65,7 @@ class Qvain {
     this.restrictionGrounds = {}
     this.participants = []
     this.participantInEdit = EmptyParticipant
+
     // Reset Files/Directories related data
     this.dataCatalog = undefined
     this.idaPickerOpen = false
@@ -74,7 +77,8 @@ class Qvain {
     this.hierarchy = {}
     this.inEdit = undefined
     // Reset External resources related data
-    this._externalResources = []
+    this.externalResources = []
+    this.externalResourceInEdit = EmptyExternalResource
     this.extResFormOpen = false
     this.resourceInEdit = undefined
   }
@@ -149,10 +153,9 @@ class Qvain {
     this.participants = participants
   }
 
-  @action
-  addParticipant = participant => {
+  @action saveParticipant = participant => {
     if (participant.uiId !== undefined) {
-      // we are saving a participant that was previously added
+      // Saving a participant that was previously added
       const existing = this.participants.find(
         addedParticipant => addedParticipant.uiId === participant.uiId
       )
@@ -160,7 +163,7 @@ class Qvain {
         this.removeParticipant(participant)
       }
     } else {
-      // we are adding a new participant, generate a new UI ID for them
+      // Adding a new participant, generate a new UI ID for them
       participant.uiId = this.createParticipantUIId()
     }
     this.setParticipants([...this.participants, participant])
@@ -182,10 +185,44 @@ class Qvain {
     return this.participants
   }
 
+  @action saveExternalResource = resource => {
+    const existing = this.externalResources.find(r => r.id === resource.id)
+    if (existing !== undefined) {
+      existing.title = resource.title
+      existing.url = resource.url
+      existing.useCategory = resource.useCategory
+    } else {
+      // Create an internal identifier for the resource to help with UI interaction
+      const newId = this.createExternalResourceUIId()
+      const newResource = ExternalResource(
+        newId,
+        resource.title,
+        resource.url,
+        resource.useCategory
+      )
+      this.externalResources = [...this.externalResources, newResource]
+    }
+  }
+
+  @action
+  editExternalResource = externalResource => {
+    this.externalResourceInEdit = { ...externalResource }
+  }
+
   @computed
   get getParticipantInEdit() {
     return this.participantInEdit
   }
+
+  @computed
+  get addedExternalResources() {
+    return this.externalResources
+  }
+
+ @computed
+ get getExternalResourceInEdit() {
+   return this.externalResourceInEdit
+ }
 
   // FILE PICKER STATE MANAGEMENT
 
@@ -206,6 +243,11 @@ class Qvain {
   @observable hierarchy = {}
 
   @observable inEdit = undefined
+
+  @action
+  setDataCatalog = selectedDataCatalog => {
+    this.dataCatalog = selectedDataCatalog
+  }
 
   @action
   setDataCatalog = selectedDataCatalog => {
@@ -521,12 +563,16 @@ class Qvain {
     // external resources
     const remoteResources = researchDataset.remote_resources
     if (remoteResources !== undefined) {
-      this._externalResources = remoteResources.map(r =>
+      this.externalResources = remoteResources.map(r =>
         ExternalResource(
-          this.createExternalResourceUIId(),
+          // Iterate over existing elements from MobX, to assign them a local externalResourceUIId
+          remoteResources.indexOf(r),
           r.title,
           r.access_url ? r.access_url.identifier : undefined,
-          r.use_category ? r.use_category.identifier : undefined
+          r.use_category ? {
+            label: r.use_category.pref_label.en,
+            value: r.use_category.identifier
+          } : undefined
         )
       )
       this.extResFormOpen = true
@@ -627,50 +673,21 @@ class Qvain {
   }
   // EXTERNAL FILES
 
-  @observable _externalResources = []
+  @observable externalResources = []
 
   @observable extResFormOpen = false
 
-  @observable resourceInEdit = undefined
-
-  @action resetInEditResource = () => {
-    this.resourceInEdit = undefined
-  }
-
-  @computed get externalResources() {
-    return this._externalResources
-  }
-
-  createExternalResourceUIId = (resources = this._externalResources) => {
+  createExternalResourceUIId = (resources = this.externalResources) => {
     const latestId = resources.length > 0 ? Math.max(...resources.map(r => r.id)) : 0
     return latestId + 1
   }
 
-  @action saveExternalResource = resource => {
-    const existing = this._externalResources.find(r => r.id === resource.id)
-    if (existing !== undefined) {
-      existing.title = resource.title
-      existing.url = resource.url
-      existing.useCategory = resource.useCategory
-    } else {
-      // Create an internal identifier for the resource to help with UI interaction
-      const newId = this.createExternalResourceUIId()
-      const newResource = ExternalResource(
-        newId,
-        resource.title,
-        resource.url,
-        resource.useCategory
-      )
-      this._externalResources = [...this._externalResources, newResource]
-    }
-  }
-
   @action removeExternalResource = id => {
-    this._externalResources = this._externalResources.filter(r => r.id !== id)
+    this.externalResources = this.externalResources.filter(r => r.id !== id)
   }
 
   @action setResourceInEdit = id => {
-    this.resourceInEdit = this._externalResources.find(r => r.id === id)
+    this.resourceInEdit = this.externalResources.find(r => r.id === id)
   }
 }
 
@@ -775,11 +792,13 @@ export const RestrictionGrounds = (name, identifier) => ({
   identifier,
 })
 
-const ExternalResource = (id, title, url, useCategory) => ({
+export const ExternalResource = (id, title, url, useCategory) => ({
   id,
   title,
   url,
   useCategory,
 })
+
+export const EmptyExternalResource = ExternalResource(undefined, '', '', '')
 
 export default new Qvain()

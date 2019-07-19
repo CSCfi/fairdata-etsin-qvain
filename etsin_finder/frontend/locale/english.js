@@ -467,7 +467,7 @@ const english = {
           mixed: '',
           object: 'The Selected Organization should be an Object.',
           string: 'The Organization value must be string.',
-          required: 'Organization is required if the partisipant is a person.',
+          required: 'Organization is required if the participant is a person.',
         },
       },
       accessType: {
@@ -512,6 +512,9 @@ const english = {
         },
       },
       externalResources: {
+        title: {
+          required: 'External resource title is required',
+        },
         url: {
           required: 'External resource URL is required',
           url: 'External Resource URL needs to be of valid URL format',
@@ -620,6 +623,9 @@ const english = {
           url: {
             label: 'URL',
             placeholder: 'https://',
+          },
+          cancel: {
+            label: 'Cancel',
           },
           save: {
             label: 'Save',

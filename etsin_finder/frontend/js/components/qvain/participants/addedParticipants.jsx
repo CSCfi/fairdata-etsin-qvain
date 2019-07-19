@@ -22,12 +22,12 @@ export class AddedParticipantsBase extends Component {
     Stores: PropTypes.object.isRequired
   }
 
-  handleEdit = (participant) => (event) => {
+  handleEditParticipant = (participant) => (event) => {
     event.preventDefault()
     this.props.Stores.Qvain.editParticipant(participant)
   }
 
-  handleRemove = (participant) => (event) => {
+  handleRemoveParticipant = (participant) => (event) => {
     event.preventDefault()
     this.props.Stores.Qvain.removeParticipant(participant)
     this.props.Stores.Qvain.editParticipant(EmptyParticipant)
@@ -50,8 +50,8 @@ export class AddedParticipantsBase extends Component {
               {addedParticipant.name}{addedParticipant.role.map(role => (` / ${ role }`))}
             </ButtonLabel>
             <ButtonContainer>
-              <EditButton onClick={this.handleEdit(addedParticipant)} />
-              <DeleteButton onClick={this.handleRemove(addedParticipant)} />
+              <EditButton onClick={this.handleEditParticipant(addedParticipant)} />
+              <DeleteButton onClick={this.handleRemoveParticipant(addedParticipant)} />
             </ButtonContainer>
           </ButtonGroup>
         ))}

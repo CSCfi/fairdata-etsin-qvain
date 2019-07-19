@@ -15,7 +15,7 @@ import FileSelector, { FileSelectorBase } from '../js/components/qvain/files/fil
 import { SelectedFilesBase, FileItem } from '../js/components/qvain/files/selectedFiles'
 import DirectoryForm from '../js/components/qvain/files/directoryForm'
 import {
-  ExternalEditFormBase,
+  ExternalFileFormBase,
   ResourceInput,
   ResourceSave
 } from '../js/components/qvain/files/externalFileForm'
@@ -105,7 +105,7 @@ describe('Qvain.Participants', () => {
     const stores = getStores()
     const addedParticipants = mount(<AddedParticipantsBase Stores={stores} />)
     expect(addedParticipants.find(ButtonGroup).length).toBe(0)
-    stores.Qvain.addParticipant(Participant(
+    stores.Qvain.saveParticipant(Participant(
       EntityType.ORGANIZATION,
       [Role.PUBLISHER],
       'University of Helsinki',
@@ -220,7 +220,7 @@ describe('Qvain.ExternalFiles', () => {
 
   it('should add resources', async () => {
     const stores = getStores()
-    const extFileForm = mount(<ExternalEditFormBase Stores={stores} />)
+    const extFileForm = mount(<ExternalFileFormBase Stores={stores} />)
     const title = 'Test title'
     extFileForm.find('#titleInput').first().simulate('change', {
       target: {
