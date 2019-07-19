@@ -405,7 +405,7 @@ class Qvain {
   // dataset - METAX dataset JSON
   // perform schema transformation METAX JSON -> etsin backend / internal schema
   @action editDataset = dataset => {
-    this.original = dataset
+    this.original = { ...dataset }
     const researchDataset = dataset.research_dataset
 
     // Load description
@@ -728,6 +728,7 @@ const DatasetDirectory = directory => ({
   identifier: directory.identifier,
   description: directory.description,
   title: directory.title,
+  useCategory: directory.use_category.identifier,
   existing: true
 })
 
