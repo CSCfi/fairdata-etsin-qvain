@@ -11,7 +11,26 @@ const participantsToMetax = participants => {
   return parsedParticipant
 }
 
-const filesToMetax = files => {
+const directoriesToMetax = (selectedDirectories, existingDirectories) => {
+  const selectedDirectoryIdentifiers = selectedDirectories.map(sd => sd.identifier)
+  const notOverwrittenExistingDirectories = existingDirectories.filter(ed => !selectedDirectoryIdentifiers.includes(ed.identifier))
+  const directories = [...selectedDirectories, ...notOverwrittenExistingDirectories]
+  const parsedDirectoryData = directories.map(dir => ({
+    identifier: dir.identifier,
+    title: dir.title,
+    description: dir.description ? dir.description : undefined,
+    useCategory: {
+      identifier: dir.useCategory
+    },
+    projectIdentifier: dir.projectIdentifier ? dir.projectIdentifier : undefined
+  }))
+  return parsedDirectoryData
+}
+
+const filesToMetax = (selectedFiles, existingFiles) => {
+  const selectedFileIdentifiers = selectedFiles.map(sf => sf.identifier)
+  const notOverwrittenExistingFiles = existingFiles.filter(ef => !selectedFileIdentifiers.includes(ef.identifier))
+  const files = [...selectedFiles, ...notOverwrittenExistingFiles]
   const parsedFileData = files.map(file => ({
     identifier: file.identifier,
     title: file.title,
@@ -21,21 +40,10 @@ const filesToMetax = files => {
     } : undefined,
     useCategory: {
       identifier: file.useCategory
-    }
+    },
+    projectIdentifier: file.projectIdentifier ? file.projectIdentifier : undefined
   }))
   return parsedFileData
-}
-
-const directoriesToMetax = directories => {
-  const parsedDirectoryData = directories.map(dir => ({
-    identifier: dir.identifier,
-    title: dir.title,
-    description: dir.description ? dir.description : undefined,
-    useCategory: {
-      identifier: dir.useCategory
-    }
-  }))
-  return parsedDirectoryData
 }
 
 const handleSubmitToBackend = (values) => {
@@ -59,9 +67,10 @@ const handleSubmitToBackend = (values) => {
     otherLicenseUrl: values.otherLicenseUrl,
     // Send no values if empty instead of empty values.
     remote_resources:
-      values._externalResources.length > 0 ? values._externalResources : undefined,
-    files: values._selectedFiles ? filesToMetax(values._selectedFiles) : undefined,
-    directories: values._selectedDirectories ? directoriesToMetax(values._selectedDirectories) : undefined,
+      values.externalResources.length > 0 ? values.externalResources : undefined,
+      dataCatalog: values.dataCatalog,
+      files: values.selectedFiles.length > 0 ? filesToMetax(values.selectedFiles) : undefined,
+      directories: values.selectedDirectories.length > 0 ? directoriesToMetax(values.selectedDirectories) : undefined,
   }
   return obj
 }

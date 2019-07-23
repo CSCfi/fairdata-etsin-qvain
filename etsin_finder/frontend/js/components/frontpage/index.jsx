@@ -21,18 +21,77 @@ import HeroBanner from '../general/hero'
 import KeyValues from './keyValues'
 import Accessibility from '../../stores/view/accessibility'
 import Tracking from '../../utils/tracking'
+import Modal from '../general/modal'
+import Auth from '../../stores/domain/auth'
+
+import Stores from '../../stores'
+
+const customStyles = {
+  content: {
+    minWidth: '20vw',
+    maxWidth: '800px',
+    padding: '3em',
+  },
+}
 
 export default class FrontPage extends Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      userPermissionErrorModalIsOpen: false,
+    }
+
+    this.closeModal = this.closeModal.bind(this)
+  }
+
   componentDidMount() {
     Accessibility.handleNavigation('home')
     Tracking.newPageView('Etsin | Tutkimusaineistojen hakupalvelu', this.props.location.pathname)
     // preload search page
     Search.preload()
+
+    // Check the user status, and display modal message if user is not authenticated
+    this.checkUserLoginStatus()
+  }
+
+  checkUserLoginStatus() {
+    // If the user has a user.commonName, but not a user.name, it means they were verified through HAKA, but do not have a CSC account.
+    Stores.Auth.checkLogin()
+      .then(() => {
+        if (Stores.Auth.user.commonName !== undefined && Stores.Auth.user.name === undefined) {
+          this.setState({
+            userPermissionErrorModalIsOpen: true,
+          })
+        }
+      })
+      .catch(err => {
+        console.log('ERROR in checkLogin')
+        console.log(err)
+      })
+  }
+
+  closeModal() {
+    this.setState({
+      userPermissionErrorModalIsOpen: false,
+    })
+    // At this point, the user is "logged in", but not verified.
+    // Performing Auth.logout(), ensuring the user is not still logged in with their unverified HAKA-account onRefreshPage
+    Auth.logout()
   }
 
   render() {
     return (
       <div className="search-page">
+        <Modal
+          isOpen={this.state.userPermissionErrorModalIsOpen}
+          onRequestClose={this.closeModal}
+          customStyles={customStyles}
+          contentLabel="LoginUnsuccessful"
+        >
+          <Translate content="userAuthenticationError.header" component="h2" />
+          <Translate content="userAuthenticationError.content" component="p" />
+        </Modal>
         <HeroBanner className="hero-primary">
           <div className="container">
             <section className="text-center">

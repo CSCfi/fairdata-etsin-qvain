@@ -15,7 +15,7 @@ export const FormField = styled.div`
 export const Input = styled.input`
   width: 100%;
   border-radius: 3px;
-  border: 1px solid #eceeef;
+  border: solid 1px #cccccc;
   padding: 8px;
   color: #808080;
   margin-bottom: 20px;
@@ -24,7 +24,7 @@ export const Input = styled.input`
 export const Textarea = styled.textarea`
   width: 100%;
   border-radius: 3px;
-  border: 1px solid #eceeef;
+  border: solid 1px #cccccc;
   padding: 8px;
   color: #808080;
   margin-bottom: 20px;
@@ -74,7 +74,7 @@ export const Checkbox = (props) => <CheckboxStyles {...props} type="checkbox" />
 
 export const HelpField = styled.span`
   font-weight: 200;
-  font-family: "Lato"
+  font-family: 'Lato', sans-serif;
 `
 
 export const HelpIconStyles = styled(FontAwesomeIcon)`

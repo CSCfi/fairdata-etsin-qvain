@@ -4,10 +4,11 @@ import { inject, observer } from 'mobx-react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCopy, faFolder } from '@fortawesome/free-solid-svg-icons'
 import Translate from 'react-translate-component'
-import { ButtonLabel, EditButton, DeleteButton, FileItem } from '../general/buttons'
+import { ButtonLabel, EditButton, DeleteButton, FileItem, ButtonContainer } from '../general/buttons'
 import { SelectedFilesTitle } from '../general/form'
 import FileForm from './fileForm'
 import DirectoryForm from './directoryForm'
+import { randomStr } from '../utils/fileHierarchy'
 
 export class SelectedFilesBase extends Component {
   static propTypes = {
@@ -24,39 +25,35 @@ export class SelectedFilesBase extends Component {
     }
   }
 
-  render() {
+  renderFiles = (selected, inEdit, existing) => {
     const {
       toggleSelectedFile,
-      toggleSelectedDirectory,
-      selectedFiles,
-      selectedDirectories,
-      inEdit
+      toggleSelectedDirectory
     } = this.props.Stores.Qvain
-    const selected = [...selectedDirectories, ...selectedFiles]
     return (
       <Fragment>
-        <Translate component={SelectedFilesTitle} content="qvain.files.selected.title" />
-        {selected.length === 0 && <Translate component="p" content="qvain.files.selected.none" />}
         {selected.map(s => (
-          <Fragment key={`${s.id}-${s.identifier}`}>
+          <Fragment key={`${s.id}-${randomStr()}`}>
             <FileItem active={isInEdit(inEdit, s.identifier)}>
               <ButtonLabel>
                 <FontAwesomeIcon icon={(s.directoryName ? faFolder : faCopy)} style={{ marginRight: '8px' }} />
                 {s.projectIdentifier} / {s.directoryName || s.title}
               </ButtonLabel>
-              <EditButton onClick={this.handleEdit(s)} />
-              <DeleteButton
-                onClick={(event) => {
-                  event.preventDefault()
-                  if (s.directoryName !== undefined) {
-                    toggleSelectedDirectory(s, false)
-                  } else {
-                    toggleSelectedFile(s, false)
-                  }
-                }}
-              />
+              <ButtonContainer>
+                <EditButton onClick={this.handleEdit(s)} />
+                <DeleteButton
+                  onClick={(event) => {
+                    event.preventDefault()
+                    if (s.directoryName !== undefined) {
+                      toggleSelectedDirectory(s, false)
+                    } else {
+                      toggleSelectedFile(s, false)
+                    }
+                  }}
+                />
+              </ButtonContainer>
             </FileItem>
-            {isInEdit(inEdit, s.identifier) && (
+            {isInEdit(inEdit, s.identifier, existing) && (
               <Fragment>
                 {isDirectory(inEdit) && (<DirectoryForm />)}
                 {!isDirectory(inEdit) && (<FileForm />)}
@@ -67,9 +64,33 @@ export class SelectedFilesBase extends Component {
       </Fragment>
     )
   }
+
+  render() {
+    const {
+      selectedFiles,
+      selectedDirectories,
+      existingFiles,
+      existingDirectories,
+      inEdit
+    } = this.props.Stores.Qvain
+    const selected = [...selectedDirectories, ...selectedFiles]
+    const existing = [...existingDirectories, ...existingFiles]
+    return (
+      <Fragment>
+        <Translate component={SelectedFilesTitle} content="qvain.files.selected.title" />
+        {selected.length === 0 && <Translate component="p" content="qvain.files.selected.none" />}
+        {this.renderFiles(selected, inEdit, false)}
+        <Translate component={SelectedFilesTitle} content="qvain.files.existing.title" />
+        <Translate component="p" content="qvain.files.existing.help" />
+        {this.renderFiles(existing, inEdit, true)}
+      </Fragment>
+    )
+  }
 }
 
-const isInEdit = (inEdit, identifier) => (inEdit !== undefined) && inEdit.identifier === identifier
+const isInEdit = (inEdit, identifier, existing) => (
+  (inEdit !== undefined) && inEdit.identifier === identifier && (existing === inEdit.existing)
+)
 
 const isDirectory = (inEdit) => inEdit.directoryName !== undefined
 

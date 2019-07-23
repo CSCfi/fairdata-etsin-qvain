@@ -254,10 +254,13 @@ const english = {
   },
   qvain: {
     submit: 'Submit Dataset',
+    edit: 'Update Dataset',
     consent: 'By using Qvain Light the user agrees that he or she has asked consent from all persons whose personal information the user will add to the descriptive data and informed them of how they can get their personal data removed. By using Qvain Light the user agrees to the <a href="https://www.fairdata.fi/hyodyntaminen/kayttopolitiikat-ja-ehdot/">Terms of Usage</a>.',
     submitStatus: {
       success: 'Dataset published!',
       fail: 'Something went wrong...',
+      editFilesSuccess: 'New dataset version has been created!',
+      editMetadataSuccess: 'Dataset successfully updated!',
     },
     openErrorMessages: 'Open error messages',
     closeErrorMessages: 'Close error messages',
@@ -279,12 +282,18 @@ const english = {
       createButton: 'Create dataset',
       tableRows: {
         id: 'ID',
-        name: 'Name',
-        edit: 'Edit',
-        remove: 'Remove',
+        title: 'Title',
+        version: 'Version',
+        modified: 'Modified',
+        created: 'Created',
+        actions: 'Actions',
       },
+      oldVersion: 'Old',
+      latestVersion: 'Latest',
       editButton: 'Edit',
-      deleteButton: 'Remove',
+      deleteButton: 'Delete',
+      confirmDelete: 'Are you sure you want to delete this dataset? Deleting the dataset will remove it from Qvain, and Etsin Search cannot find it anymore. Landing page for the dataset will NOT be removed.',
+      goToEtsin: 'View in Etsin',
       noDatasets: 'You have no datasets',
       reload: 'Reload',
       loading: 'Loading...',
@@ -333,7 +342,7 @@ const english = {
         placeholder: 'Select option',
       },
       embargoDate: {
-        label: 'Embargo expiration date',
+        label: 'Embargo expiration date (yyyy-mm-dd)',
         placeholder: 'Date',
         help: 'By default, expiration date will be indefinite if not set.',
       },
@@ -458,7 +467,7 @@ const english = {
           mixed: '',
           object: 'The Selected Organization should be an Object.',
           string: 'The Organization value must be string.',
-          required: 'Organization is required if the partisipant is a person.',
+          required: 'Organization is required if the participant is a person.',
         },
       },
       accessType: {
@@ -479,6 +488,9 @@ const english = {
         },
       },
       files: {
+        dataCatalog: {
+          required: 'File origin is required'
+        },
         file: {
           title: {
             required: 'File title is required',
@@ -500,6 +512,9 @@ const english = {
         },
       },
       externalResources: {
+        title: {
+          required: 'External resource title is required',
+        },
         url: {
           required: 'External resource URL is required',
           url: 'External Resource URL needs to be of valid URL format',
@@ -508,6 +523,11 @@ const english = {
     },
     files: {
       title: 'Files',
+      dataCatalog: {
+        label: 'File origin',
+        explanation: 'Choose IDA if the data is stored in Fairdata Ida service. Choose ATT if the data is stored elsewhere.',
+        placeholder: 'Select option'
+      },
       help:
         'Files associated with this dataset. A dataset can only have either IDA files or external files. File metadata will not be associated with datasets, so remember to save edits to file metadata.',
       ida: {
@@ -578,6 +598,10 @@ const english = {
           },
         },
       },
+      existing: {
+        title: 'Previously selected files',
+        help: 'These are the files and directories that you have added before. If you do not touch these, upon saving the changes to the dataset METAX will go through all the selected directories and associate any files and directories within, even the new ones. In other words, if you don\'t touch these and save, you can associate new files within the directory structure with your dataset.'
+      },
       external: {
         help: 'Add link to external files from here:',
         button: {
@@ -600,6 +624,9 @@ const english = {
             label: 'URL',
             placeholder: 'https://',
           },
+          cancel: {
+            label: 'Cancel',
+          },
           save: {
             label: 'Save',
           },
@@ -614,6 +641,10 @@ const english = {
   stc: 'Skip to content',
   tombstone: {
     info: 'The dataset has been either deprecated or removed',
+  },
+  userAuthenticationError: {
+    header: 'Login unsuccessful.',
+    content: 'Please make sure that you have a valid CSC account. If you tried to log in with an external account (for example Haka) you might get this error if your account is not associated with a CSC account. Please register a CSC account at https://sui.csc.fi. You can register with or without a Haka account.',
   },
 }
 

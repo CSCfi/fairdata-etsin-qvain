@@ -13,7 +13,7 @@ class DescriptionField extends Component {
   }
 
   state = {
-    active: 'ENGLISH',
+    active: 'FINNISH',
     titleError: null,
     descriptionError: null
   }
@@ -52,20 +52,20 @@ class DescriptionField extends Component {
 
   handleLanguageButtonClicks = () => {
     /* eslint-disable no-unused-expressions */
-    this.state.active === 'ENGLISH'
-      ? this.setState({ active: 'FINNISH' })
-      : this.setState({ active: 'ENGLISH' })
+    this.state.active === 'FINNISH'
+      ? this.setState({ active: 'ENGLISH' })
+      : this.setState({ active: 'FINNISH' })
   }
 
   getLangButton = (activeLang, buttonLang) => (
     <LangButton active={activeLang === buttonLang} onClick={this.handleLanguageButtonClicks}>
-      <Translate content={buttonLang === 'ENGLISH' ? 'qvain.description.description.langEn' : 'qvain.description.description.langFi'} />
+      <Translate content={buttonLang === 'FINNISH' ? 'qvain.description.description.langFi' : 'qvain.description.description.langEn'} />
     </LangButton>
   )
 
   getPlaceholder = (field, activeLang) => {
     const stub = `qvain.description.description.${field}.`
-    return activeLang === 'ENGLISH' ? `${stub}placeholderEn` : `${stub}placeholderFi`
+    return activeLang === 'FINNISH' ? `${stub}placeholderFi` : `${stub}placeholderEn`
   }
 
   render() {
@@ -74,23 +74,13 @@ class DescriptionField extends Component {
     return (
       <React.Fragment>
         <LangButtonContainer>
-          {this.getLangButton(this.state.active, 'ENGLISH')}
-          <EmptyBlock width="2%" />
           {this.getLangButton(this.state.active, 'FINNISH')}
+          <EmptyBlock width="2%" />
+          {this.getLangButton(this.state.active, 'ENGLISH')}
           <EmptyBlock width="48%" />
         </LangButtonContainer>
         <DescriptionCard>
           <h3><Translate content="qvain.description.description.title.label" /></h3>
-          {activeLang === 'ENGLISH' && (
-            <Translate
-              component={Input}
-              type="text"
-              value={title.en}
-              onChange={(event) => { title.en = event.target.value }}
-              onBlur={this.handleTitleBlur}
-              attributes={{ placeholder: this.getPlaceholder('title', 'ENGLISH') }}
-            />
-          )}
           {activeLang === 'FINNISH' && (
             <Translate
               component={Input}
@@ -101,24 +91,34 @@ class DescriptionField extends Component {
               attributes={{ placeholder: this.getPlaceholder('title', 'FINNISH') }}
             />
           )}
-          <ValidationError>{this.state.titleError}</ValidationError>
-          <h3><Translate content="qvain.description.description.description.label" /></h3>
           {activeLang === 'ENGLISH' && (
             <Translate
-              component={Textarea}
-              rows="8"
-              value={description.en}
-              onChange={(event) => { description.en = event.target.value }}
-              onBlur={this.handleDescriptionBlur}
-              attributes={{ placeholder: this.getPlaceholder('description', this.state.active) }}
+              component={Input}
+              type="text"
+              value={title.en}
+              onChange={(event) => { title.en = event.target.value }}
+              onBlur={this.handleTitleBlur}
+              attributes={{ placeholder: this.getPlaceholder('title', 'ENGLISH') }}
             />
           )}
+          <ValidationError>{this.state.titleError}</ValidationError>
+          <h3><Translate content="qvain.description.description.description.label" /></h3>
           {activeLang === 'FINNISH' && (
             <Translate
               component={Textarea}
               rows="8"
               value={description.fi}
               onChange={(event) => { description.fi = event.target.value }}
+              onBlur={this.handleDescriptionBlur}
+              attributes={{ placeholder: this.getPlaceholder('description', this.state.active) }}
+            />
+          )}
+          {activeLang === 'ENGLISH' && (
+            <Translate
+              component={Textarea}
+              rows="8"
+              value={description.en}
+              onChange={(event) => { description.en = event.target.value }}
               onBlur={this.handleDescriptionBlur}
               attributes={{ placeholder: this.getPlaceholder('description', this.state.active) }}
             />
@@ -150,7 +150,7 @@ const LangButton = styled.div`
   width: 25%;
   padding: 5px 20px;
   background-color: #fff;
-  border: 1px solid ${props => (props.active ? '#007fad' : '#eceeef')};
+  border: 1px solid ${props => (props.active ? '#007fad' : '#cccccc')};
   border-bottom: ${props => (props.active ? 'none' : '1px solid #007fad')};
   border-radius: 4px 4px 0 0;
 `
@@ -161,7 +161,7 @@ const EmptyBlock = styled.div`
 const Input = styled.input`
   width: 100%;
   border-radius: 3px;
-  border: 1px solid #eceeef;
+  border: 1px solid #cccccc;
   padding: 8px;
   color: #808080;
   margin-bottom: 20px;

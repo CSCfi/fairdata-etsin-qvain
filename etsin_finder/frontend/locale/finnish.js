@@ -254,10 +254,13 @@ const finnish = {
   },
   qvain: {
     submit: 'Julkaise Aineisto',
+    edit: 'Päivitä Aineisto',
     consent: 'Käyttämällä Qvain Lightia käyttäjä hyväksyy, että hän on pyytänyt suostumusta kaikilta henkilöiltä, joiden hankilökohtaisia tietoja käyttäjä lisää kuvattaviin tietoihin, ja ilmoitti heille, miten he voivat saada tietonsa poistettua. Käyttämällä Qvain Lightia käyttäjä hyväksyy <a href="https://www.fairdata.fi/hyodyntaminen/kayttopolitiikat-ja-ehdot/">käyttöehdot</a>.',
     submitStatus: {
       success: 'Aineisto julkaistu!',
       fail: 'Jotain meni pieleen...',
+      editSuccess: 'Uusi aineisto versio luotu!',
+      editMetadataSuccess: 'Aineisto päivitys onnistui!',
     },
     openErrorMessages: 'Avaa virhe viestit',
     closeErrorMessages: 'Sulje virhe viestit',
@@ -279,12 +282,18 @@ const finnish = {
       createButton: 'Luo aineisto',
       tableRows: {
         id: 'ID',
-        name: 'Nimi',
-        edit: 'Muokkaa',
-        remove: 'Poista',
+        title: 'Otsikko',
+        version: 'Versio',
+        modified: 'Muokattu',
+        created: 'Luotu',
+        actions: 'Toiminnot',
       },
+      oldVersion: 'Vanha',
+      latestVersion: 'Uusin',
       editButton: 'Muokkaa',
       deleteButton: 'Poista',
+      confirmDelete: 'Oletko varma, että haluat poistaa aineiston? Aineiston poiston jälkeen se ei enää näy Qvaimessa eikä Etsimen haku löydä sitä. Aineiston laskeutumissivua ei poisteta.',
+      goToEtsin: 'Katso Etsimessä',
       noDatasets: 'Sinulla ei ole olemassa olevia aineistoja',
       reload: 'Lataa uudelleen',
       loading: 'Lataa...',
@@ -337,7 +346,7 @@ const finnish = {
         placeholder: 'Valitse vaihtoehto',
       },
       embargoDate: {
-        label: 'Embargo loppumispäivämäärä',
+        label: 'Embargo loppumispäivämäärä (vvvv-kk-pp)',
         placeholder: 'Päivämäärä',
         help: 'Oletuksena embargo ei lopu jollei päivämäärää aseteta.',
       },
@@ -483,6 +492,9 @@ const finnish = {
         },
       },
       files: {
+        dataCatalog: {
+          required: 'Tiedosto lähde on pakollinen'
+        },
         file: {
           title: {
             required: 'Tiedoston otsikko on pakollinen',
@@ -504,6 +516,9 @@ const finnish = {
         },
       },
       externalResources: {
+        title: {
+          required: 'Ulkoisen aineiston otsikko on pakollinen',
+        },
         url: {
           required: 'Ulkoisen aineiston URL osoite on pakollinen',
           url: 'Ulkoisen aineiston URL osoitteen pitää olla oikeassa URL formaatissa',
@@ -512,6 +527,11 @@ const finnish = {
     },
     files: {
       title: 'Tiedostot',
+      dataCatalog: {
+        label: 'Tiedosto lähde',
+        explanation: 'Valitse IDA jos tiedostot on tallennettu Fairdata Ida palveluun. Valitse ATT jos tiedostot tulevat muualta.',
+        placeholder: 'Select data catalog'
+      },
       help:
         'Aineistoon kuuluvat tiedostot. Aineistoon voi kuulua vain joko IDAssa olevia tiedostoja tai ulkopuolisia tiedostoja. Tiedostojen metadata ei ole osa aineistojen metadataa, joten muista tallentaa muutokset jotka teet tiedostojen metadataan.',
       ida: {
@@ -549,6 +569,10 @@ const finnish = {
           },
         },
       },
+      existing: {
+        title: 'Aikaisemmin valitut tiedostot',
+        help: 'Nämä ovat sinun aiemmin valitsemia tiedostoja. Jos tallennat aineiston tekemättä muutoksia näihin, METAX katsoo läpi kaikki sisäkkäiset hakemistot ja tiedostot valitsemistasi hakemistoista ja lisää kaikki tiedostot mitä se ei ole aiemmin liittänyt aineistoon. Toisin sanoen, jos olet jälkikäteen lisännyt IDAan tiedostoja, voit liittää nämä uudet tiedostot aineistoon päivittämällä aineiston.'
+      },
       external: {
         help: 'Lisää linkkejä ulkoisiin tiedostoihin:',
         button: {
@@ -560,7 +584,7 @@ const finnish = {
         },
         form: {
           title: {
-            label: 'Title',
+            label: 'Otsikko',
             placeholder: 'A Resource',
           },
           useCategory: {
@@ -570,6 +594,9 @@ const finnish = {
           url: {
             label: 'URL',
             placeholder: 'https://',
+          },
+          cancel: {
+            label: 'Cancel',
           },
           save: {
             label: 'Save',
@@ -585,6 +612,10 @@ const finnish = {
   stc: 'Siirry sivun pääsisältöön',
   tombstone: {
     info: 'Aineisto on joko vanhentunut tai poistettu',
+  },
+  userAuthenticationError: {
+    header: 'Kirjautuminen epäonnistui.',
+    content: 'Tarkistathan, että sinulla on voimassaoleva CSC-tunnus (Qvaimen ja Qvain Lightin käyttö vaatii sen). Jos yritit kirjaututua jollain toisella tunnuksella (esim. Haka), sitä ei todennäköisesti ole liitetty CSC-tunnukseen. Voit rekisteröidä itsellesi CSC-tunnuksen osoitteessa https://sui.csc.fi.',
   },
 }
 

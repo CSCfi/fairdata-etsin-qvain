@@ -7,12 +7,13 @@ import {
   faUser
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { ContainerSubsection } from '../general/card';
+import { ContainerSubsectionBottom } from '../general/card';
 import {
   ButtonGroup,
   ButtonLabel,
   EditButton,
-  DeleteButton
+  DeleteButton,
+  ButtonContainer
 } from '../general/buttons'
 import { EntityType, EmptyParticipant } from '../../../stores/view/qvain'
 
@@ -21,12 +22,12 @@ export class AddedParticipantsBase extends Component {
     Stores: PropTypes.object.isRequired
   }
 
-  handleEdit = (participant) => (event) => {
+  handleEditParticipant = (participant) => (event) => {
     event.preventDefault()
     this.props.Stores.Qvain.editParticipant(participant)
   }
 
-  handleRemove = (participant) => (event) => {
+  handleRemoveParticipant = (participant) => (event) => {
     event.preventDefault()
     this.props.Stores.Qvain.removeParticipant(participant)
     this.props.Stores.Qvain.editParticipant(EmptyParticipant)
@@ -34,7 +35,7 @@ export class AddedParticipantsBase extends Component {
 
   render() {
     return (
-      <ContainerSubsection>
+      <ContainerSubsectionBottom>
         <Translate
           component="h3"
           content="qvain.participants.added.title"
@@ -48,11 +49,13 @@ export class AddedParticipantsBase extends Component {
               <FontAwesomeIcon icon={addedParticipant.type === EntityType.PERSON ? faUser : faBuilding} style={{ marginRight: '8px' }} />
               {addedParticipant.name}{addedParticipant.role.map(role => (` / ${ role }`))}
             </ButtonLabel>
-            <EditButton onClick={this.handleEdit(addedParticipant)} />
-            <DeleteButton onClick={this.handleRemove(addedParticipant)} />
+            <ButtonContainer>
+              <EditButton onClick={this.handleEditParticipant(addedParticipant)} />
+              <DeleteButton onClick={this.handleRemoveParticipant(addedParticipant)} />
+            </ButtonContainer>
           </ButtonGroup>
         ))}
-      </ContainerSubsection>
+      </ContainerSubsectionBottom>
     );
   }
 }

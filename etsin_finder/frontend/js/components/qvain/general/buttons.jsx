@@ -12,7 +12,7 @@ import {
 
 export const CancelButton = styled.button`
   width: 84px;
-  height: 38px;
+  height: 42px;
   border-radius: 4px;
   border: solid 1px #4f4f4f;
   font-size: 16px;
@@ -39,9 +39,40 @@ export const SaveButton = styled.button`
   }
 `
 
+export const DangerButton = styled.button`
+  border-radius: 4px;
+  border: solid 1px #ff0000;
+  background-color: #ff0000;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.31;
+  color: #fff;
+  margin-left: 20px;
+  padding: 10px 25px;
+  &:hover {
+    background-color: #ff4c4c;
+  }
+`
+
+export const RemoveButton = styled.button`
+  width: 84px;
+  height: 42px;
+  border-radius: 4px;
+  border: solid 1px #cc0000;
+  font-size: 16px;
+  font-weight: 600px;
+  line-height: 1.31;
+  color: #cc0000;
+  &:hover {
+    background-color: #ffb2b2;
+    border: solid 2px #cc0000;
+  }
+`;
+
 export const ButtonGroup = styled.div`
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.13);
-  border: solid 1px #eceeef;
+  border: solid 1px #cccccc;
+  border-radius: 4px;
   background-color: #fff;
   margin-bottom: 12px;
   overflow: overlay;
@@ -75,12 +106,20 @@ export const ButtonLabel = styled.span`
 `;
 
 export const EditButtonStyles = styled.button`
-  background-color: rgba(0,187,255, 0.1);
+  background-color: #fff;
   width: 60px;
   height: 56px;
   border: none;
   text-align: center;
   color: #007fad;
+  display: inline-block;
+  margin: 5px 5px 5px 5px;
+  border-radius: 4px;
+  border: solid 1px #cccccc;
+  &:hover {
+    background-color: rgba(0,187,255, 0.1);
+    border-color: rgb(0, 127, 173);
+  }
 `;
 
 export const EditButton = (props) => (
@@ -90,12 +129,20 @@ export const EditButton = (props) => (
 )
 
 export const DeleteButtonStyles = styled.button`
-  background-color: rgba(255, 52, 0, 0.1);
+  background-color: #fff;
   width: 60px;
   height: 56px;
   border: none;
   text-align: center;
   color: #ad2300;
+  display: inline-block;
+  margin: 5px 5px 5px 5px;
+  border-radius: 4px;
+  border: solid 1px #cccccc;
+  &:hover {
+    background-color: rgba(255, 52, 0, 0.1);
+    border-color: rgb(173, 35, 0);
+  }
 `;
 
 export const DeleteButton = (props) => (
@@ -103,6 +150,10 @@ export const DeleteButton = (props) => (
     <FontAwesomeIcon size="lg" icon={faTimes} />
   </DeleteButtonStyles>
 )
+
+export const ButtonContainer = styled.div`
+  text-align: right;
+`;
 
 export const FilePickerButton = styled.button`
   background-color: ${props => (

@@ -42,7 +42,8 @@ class KeywordsField extends Component {
     e.preventDefault()
     if (this.state.value.length > 0) {
       const keywords = this.state.value.split(',').map(word => word.trim())
-      const uniqKeywords = [...new Set(keywords)]
+      const noEmptyKeywords = keywords.filter(kw => kw !== '')
+      const uniqKeywords = [...new Set(noEmptyKeywords)]
       const keywordsToStore = uniqKeywords.filter(
         word => !this.props.Stores.Qvain.keywords.includes(word)
       )
@@ -90,7 +91,7 @@ class KeywordsField extends Component {
 const Input = styled.input`
   width: 100%;
   border-radius: 3px;
-  border: 1px solid #eceeef;
+  border: 1px solid #cccccc;
   padding: 8px;
   color: #808080;
   margin-bottom: 20px;

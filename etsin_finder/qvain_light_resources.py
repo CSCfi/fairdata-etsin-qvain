@@ -23,8 +23,12 @@ from etsin_finder.utils import \
     sort_array_of_obj_by_key, \
     slice_array_on_limit
 from etsin_finder.qvain_light_dataset_schema import DatasetValidationSchema
-from etsin_finder.qvain_light_utils import data_to_metax
-from etsin_finder.qvain_light_service import create_dataset, update_dataset
+from etsin_finder.qvain_light_utils import data_to_metax, \
+    get_dataset_creator, \
+    remove_deleted_datasets_from_results, \
+    edited_data_to_metax, \
+    check_if_data_in_user_IDA_project
+from etsin_finder.qvain_light_service import create_dataset, update_dataset, delete_dataset
 
 log = app.logger
 
@@ -124,32 +128,33 @@ class UserDatasets(Resource):
         self.parser = reqparse.RequestParser()
         self.parser.add_argument('limit', type=str, action='append', required=False)
         self.parser.add_argument('offset', type=str, action='append', required=False)
+        self.parser.add_argument('no_pagination', type=bool, action='append', required=False)
 
     def get(self, user_id):
         """
-        Get files and directory objects for frontend.
+        Get datasets for user. Used by qvain light dataset table. If request has query parameter no_pagination=true, fetches ALL datasets for user (warning: might result in performance issue).
 
-        :param dir_id:
+        :param user_id:
         :return:
         """
         args = self.parser.parse_args()
         limit = args.get('limit', None)
         offset = args.get('offset', None)
+        no_pagination = args.get('no_pagination', None)
 
-        result = qvain_light_service.get_datasets_for_user(user_id, limit, offset)
-
+        result = qvain_light_service.get_datasets_for_user(user_id, limit, offset, no_pagination)
         # Return data only if authenticated
         if result and authentication.is_authenticated():
-
             # Limit the amount of items to be sent to the frontend
             if 'results' in result:
+                # Remove the datasets that have the metax property 'removed': True
+                result = remove_deleted_datasets_from_results(result)
                 result['results'] = slice_array_on_limit(result['results'], TOTAL_ITEM_LIMIT)
-
             return result, 200
         return '', 404
 
 class QvainDataset(Resource):
-    """POST and PATCH request handling coming in from Qvain Light. Used for adding datasets to METAX."""
+    """POST and PATCH request handling coming in from Qvain Light. Used for adding/editing datasets in METAX."""
 
     def __init__(self):
         """Setup required utils for dataset metadata handling"""
@@ -166,37 +171,34 @@ class QvainDataset(Resource):
         """
         is_authd = authentication.is_authenticated()
         if not is_authd:
-            return 'Not logged in'
+            return {"PermissionError": "User not logged in."}, 401
         try:
             data = self.validationSchema.loads(request.data)
         except ValidationError as err:
             log.warning("INVALID FORM DATA: {0}".format(err.messages))
-            return err.messages
+            return err.messages, 400
         try:
             metadata_provider_org = session["samlUserdata"]["urn:oid:1.3.6.1.4.1.25178.1.2.9"][0]
             metadata_provider_user = session["samlUserdata"]["urn:oid:1.3.6.1.4.1.16161.4.0.53"][0]
         except KeyError as err:
             log.warning("The Metadata provider is not specified: \n{0}".format(err))
-            return "The Metadata provider is not specified"
-
-        if all(["remote_resources" in data, "files" not in data, "directorys" not in data]):
-            data_catalog = "urn:nbn:fi:att:data-catalog-att"
-        elif all(["remote_resources" not in data, "files" in data or "directorys" in data]):
-            data_catalog = "urn:nbn:fi:att:data-catalog-ida"
-        else:
-            # If the user whants to add a dataset without data, the data_catalog is set to att.
-            data_catalog = "urn:nbn:fi:att:data-catalog-att"
-        metax_redy_data = data_to_metax(data, metadata_provider_org, metadata_provider_user, data_catalog)
+            return {"PermissionError": "The Metadata provider is not found in login information."}, 401
+        try:
+            user_projects = session["samlUserdata"]["urn:oid:1.3.6.1.4.1.8057.2.80.26"]
+        except KeyError as err:
+            log.warning("User projects not found in saml metadata: \n{0}".format(err))
+            return {"Error": "The user doesn't belong to any IDA projects."}, 400
+        if data["dataCatalog"] == "urn:nbn:fi:att:data-catalog-ida":
+            if not check_if_data_in_user_IDA_project(data, user_projects):
+                return {"Error": "Permission to project data not granted."}, 403
+        metax_redy_data = data_to_metax(data, metadata_provider_org, metadata_provider_user)
         metax_response = create_dataset(metax_redy_data)
         return metax_response
 
     @log_request
-    def patch(self, cr_id):
+    def patch(self):
         """
         Updete existing detaset.
-
-        Arguments:
-            cr_id {string} -- The identifier of the dataset.
 
         Returns:
             object -- The response from metax or if error an error message.
@@ -204,25 +206,51 @@ class QvainDataset(Resource):
         """
         is_authd = authentication.is_authenticated()
         if not is_authd:
-            return 'Not logged in', 400
+            return {"PermissionError": "User not logged in."}, 401
         try:
-            data, error = self.validationSchema.loads(request.data)
+            data = self.validationSchema.loads(request.data)
         except ValidationError as err:
             log.warning("INVALID FORM DATA: {0}".format(err.messages))
             return err.messages, 400
-        try:
-            metadata_provider_org = session["samlUserdata"]["urn:oid:1.3.6.1.4.1.25178.1.2.9"]
-            metadata_provider_user = session["samlUserdata"]["urn:oid:1.3.6.1.4.1.8057.2.80.26"]
-        except KeyError as err:
-            log.warning("The Metadata provider is not specified: \n{0}".format(err))
-            return "The Metadata provider is not specified", 400
-        if all(["remote_resources" in data, "files" not in data, "directorys" not in data]):
-            data_catalog = "urn:nbn:fi:att:data-catalog-att"
-        elif all(["remote_resources" not in data, "files" in data or "directorys" in data]):
-            data_catalog = "urn:nbn:fi:att:data-catalog-ida"
-        else:
-            # If the user whants to add a dataset without data, the data_catalog is set to att.
-            data_catalog = "urn:nbn:fi:att:data-catalog-att"
-        metax_redy_data = data_to_metax(data, metadata_provider_org, metadata_provider_user, data_catalog)
-        metax_response = update_dataset(metax_redy_data)
-        return metax_response, 200
+        cr_id = data["original"]["identifier"]
+        original = data["original"]
+        del data["original"]
+
+        # Only creator of the dataset is allowed to update it
+        user = session["samlUserdata"]["urn:oid:1.3.6.1.4.1.16161.4.0.53"][0]
+        creator = get_dataset_creator(cr_id)
+        if user != creator:
+            return {"PermissionError": "User not authorized to to edit dataset."}, 403
+
+        metax_redy_data = edited_data_to_metax(data, original)
+        metax_response = update_dataset(metax_redy_data, cr_id)
+        log.debug("METAX RESPONSE: {0}".format(metax_response))
+        return metax_response
+
+class QvainDatasetDelete(Resource):
+    """DELETE request handling coming in from Qvain Light. Used for deleting datasets in METAX."""
+
+    @log_request
+    def delete(self, cr_id):
+        """
+        Delete dataset from Metax.
+
+        Arguments:
+            config {object} -- Includes 'data' key that has the identifier of the dataset.
+
+        Returns:
+            [type] -- Metax response.
+
+        """
+        is_authd = authentication.is_authenticated()
+        if not is_authd:
+            return {"PermissionError": "User not logged in."}, 401
+
+        # only creator of the dataset is allowed to delete it
+        user = session["samlUserdata"]["urn:oid:1.3.6.1.4.1.16161.4.0.53"][0]
+        creator = get_dataset_creator(cr_id)
+        if user != creator:
+            return {"PermissionError": "User not authorized to to delete dataset."}, 403
+
+        metax_response = delete_dataset(cr_id)
+        return metax_response

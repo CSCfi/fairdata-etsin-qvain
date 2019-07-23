@@ -15,7 +15,7 @@ import FileSelector, { FileSelectorBase } from '../js/components/qvain/files/fil
 import { SelectedFilesBase, FileItem } from '../js/components/qvain/files/selectedFiles'
 import DirectoryForm from '../js/components/qvain/files/directoryForm'
 import {
-  ExternalEditFormBase,
+  ExternalFileFormBase,
   ResourceInput,
   ResourceSave
 } from '../js/components/qvain/files/externalFileForm'
@@ -40,9 +40,11 @@ import QvainStore, {
   Directory,
   EntityType,
   Role,
-  Participant
+  Participant,
+  ExternalResource
 } from '../js/stores/view/qvain'
 import LocaleStore from '../js/stores/view/language'
+import { DataCatalogIdentifiers } from '../js/components/qvain/utils/constants'
 
 describe('Qvain', () => {
   it('should render correctly', () => {
@@ -104,7 +106,7 @@ describe('Qvain.Participants', () => {
     const stores = getStores()
     const addedParticipants = mount(<AddedParticipantsBase Stores={stores} />)
     expect(addedParticipants.find(ButtonGroup).length).toBe(0)
-    stores.Qvain.addParticipant(Participant(
+    stores.Qvain.saveParticipant(Participant(
       EntityType.ORGANIZATION,
       [Role.PUBLISHER],
       'University of Helsinki',
@@ -118,8 +120,11 @@ describe('Qvain.Participants', () => {
 
 describe('Qvain.Files', () => {
   it('should render file picker', () => {
-    const component = shallow(<Files Stores={getStores()} />)
-    expect(component.find(IDAFilePicker).length).toBe(1)
+    const store = getStores()
+    store.Qvain.dataCatalog = DataCatalogIdentifiers.IDA
+    store.Qvain.idaPickerOpen = true
+    const component = shallow(<Files Stores={store} />)
+    expect(component.dive().find(IDAFilePicker).length).toBe(1)
   })
 
   it('should open file selector upon selecting file picker', () => {
@@ -133,8 +138,8 @@ describe('Qvain.Files', () => {
   it('allows selecting directories in the file selector', () => {
     const stores = getStores()
     const component = mount(<FileSelectorBase Stores={stores} />)
-    stores.Qvain._selectedProject = 'project_y'
-    stores.Qvain._hierarchy = Directory(
+    stores.Qvain.selectedProject = 'project_y'
+    stores.Qvain.hierarchy = Directory(
       {
         id: 'test1',
         identifier: 'test-ident-1',
@@ -164,18 +169,18 @@ describe('Qvain.Files', () => {
     component.update()
     expect(component.find('li').length).toBe(1)
     component.find('li').find('input').simulate('change')
-    expect(component.props().Stores.Qvain._hierarchy.directories[0].selected)
+    expect(component.props().Stores.Qvain.hierarchy.directories[0].selected)
   })
 
   it('allows modifying the metadata of selected directories', () => {
     // repeat previous one
     const stores = getStores()
     // reset selected directories
-    stores.Qvain._selectedDirectories = []
+    stores.Qvain.selectedDirectories = []
     const fileSelector = mount(<FileSelectorBase Stores={stores} />)
 
-    stores.Qvain._selectedProject = 'project_y'
-    stores.Qvain._hierarchy = Directory(
+    stores.Qvain.selectedProject = 'project_y'
+    stores.Qvain.hierarchy = Directory(
       {
         id: 'test1',
         identifier: 'test-ident-1',
@@ -210,32 +215,21 @@ describe('Qvain.Files', () => {
 
 describe('Qvain.ExternalFiles', () => {
   it('should render correctly', () => {
-    const extFiles = shallow(<ExternalFilesBase Stores={getStores()} />)
-    expect(extFiles.find(SlidingContent).length).toBe(1)
+    const externalFiles = shallow(<ExternalFilesBase Stores={getStores()} />)
+    expect(externalFiles.find(SlidingContent).length).toBe(1)
   })
 
-  it('should add resources', async () => {
+  // External resources should be listed if there are any
+  it('should list all added resources', () => {
     const stores = getStores()
-    const extFileForm = mount(<ExternalEditFormBase Stores={stores} />)
-    const title = 'Test title'
-    extFileForm.find('#titleInput').first().simulate('change', {
-      target: {
-        value: title
-      }
-    })
-    const url = 'https://en.wikipedia.org'
-    extFileForm.find('#urlInput').first().simulate('change', {
-      target: {
-        value: url
-      }
-    })
-    // extFiles.find(ResourceSave).simulate('click')
-    await extFileForm.instance().handleAddResource({
-      preventDefault: () => console.log('handleAddResource preventDefault')
-    })
-    extFileForm.unmount()
-    const extFiles = shallow(<ExternalFilesBase Stores={stores} />)
-    expect(extFiles.find(ResourceItem).length).toBe(1)
-    expect(extFiles.find(ButtonLabel).text()).toBe(`${title} / ${url}`)
+    const externalFiles = shallow(<ExternalFilesBase Stores={stores} />)
+    expect(externalFiles.find(ButtonGroup).length).toBe(0)
+    stores.Qvain.saveExternalResource(ExternalResource(
+      1,
+      'External Resource Title',
+      'http://en.wikipedia.org'
+    ))
+    externalFiles.update()
+    expect(externalFiles.find(ButtonGroup).length).toBe(1)
   })
 })

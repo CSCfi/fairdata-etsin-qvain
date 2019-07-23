@@ -5,6 +5,7 @@ import { toJS } from 'mobx'
 import axios from 'axios';
 import styled from 'styled-components';
 import Translate from 'react-translate-component'
+import { createFilter } from 'react-select'
 import CreatableSelect from 'react-select/lib/Creatable'
 import {
   SaveButton,
@@ -91,12 +92,12 @@ export class ParticipantInfoBase extends Component {
     })
   }
 
-  handleSave = (event) => {
+  handleSaveParticipant = (event) => {
     event.preventDefault()
     const { Qvain } = this.props.Stores
     const participant = toJS(Qvain.participantInEdit)
     participantSchema.validate(participant).then(() => {
-      Qvain.addParticipant(deepCopy(toJS(Qvain.participantInEdit)))
+      Qvain.saveParticipant(deepCopy(toJS(Qvain.participantInEdit)))
       Qvain.editParticipant(EmptyParticipant)
       this.resetErrorMessages()
     }).catch(err => {
@@ -107,6 +108,7 @@ export class ParticipantInfoBase extends Component {
   handleCancel = (event) => {
     event.preventDefault()
     this.props.Stores.Qvain.editParticipant(EmptyParticipant)
+    this.resetErrorMessages()
   }
 
   handleOnBlur = (validator, value, errorSet) => {
@@ -184,7 +186,8 @@ export class ParticipantInfoBase extends Component {
                 // identifier
                 if (orgs[lang].filter(opt => opt.value === selection.value).length > 0) {
                   participant.identifier = selection.value
-                  participant.name = selection.label
+                } else {
+                  participant.identifier = ''
                 }
               }}
               value={{ label: participant.name, value: participant.identifier }}
@@ -238,6 +241,7 @@ export class ParticipantInfoBase extends Component {
           onChange={(selection) => { participant.organization = selection.label }}
           onBlur={this.handleOnOrganizationBlur}
           value={{ label: participant.organization, value: participant.organization }}
+          filterOption={createFilter({ ignoreAccents: false })}
         />
         {organizationError && <ValidationError>{organizationError}</ValidationError>}
         {participantError && <ParticipantValidationError>{participantError}</ParticipantValidationError>}
@@ -248,7 +252,7 @@ export class ParticipantInfoBase extends Component {
         />
         <Translate
           component={SaveButton}
-          onClick={this.handleSave}
+          onClick={this.handleSaveParticipant}
           content="qvain.participants.add.save.label"
         />
       </Fragment>

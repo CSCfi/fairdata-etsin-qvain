@@ -9,7 +9,6 @@
  */
 
 import { observable, action } from 'mobx'
-// import { observable, action, toJS } from 'mobx'
 import axios from 'axios'
 
 class Auth {
@@ -30,14 +29,21 @@ class Auth {
           headers: { 'content-type': 'application/json', charset: 'utf-8' },
         })
         .then(res => {
-          // console.log(res.data)
-          this.userLogged = res.data.is_authenticated
-          this.cscUserLogged = res.data.is_authenticated_CSC_user
           this.user = {
             name: res.data.user_csc_name,
+            commonName: res.data.user_display_name,
             idaGroups: res.data.user_ida_groups,
           }
-          // console.log(toJS(this.user))
+          if (res.data.is_authenticated && !res.data.is_authenticated_CSC_user) {
+            // The user was able to verify themself using HAKA or some other external verification,
+            // but do not have a valid CSC account and should not be granted permission.
+            this.userLogged = false
+            this.cscUserLogged = false
+          } else if (res.data.is_authenticated && res.data.is_authenticated_CSC_user) {
+            // The user has a valid CSC account and was logged in.
+            this.userLogged = res.data.is_authenticated
+            this.cscUserLogged = res.data.is_authenticated_CSC_user
+          }
           this.loading = false
           resolve(res)
         })

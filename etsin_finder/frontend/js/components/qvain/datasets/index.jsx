@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { observer, inject } from 'mobx-react'
 import Translate from 'react-translate-component'
 import { withRouter } from 'react-router-dom'
 import styled from 'styled-components';
@@ -18,6 +19,7 @@ import {
 class Datasets extends Component {
   static propTypes = {
     history: PropTypes.object.isRequired,
+    Stores: PropTypes.object.isRequired
   }
 
   render() {
@@ -32,7 +34,10 @@ class Datasets extends Component {
               <Translate content="qvain.datasets.help" />
               <Translate
                 component={SaveButton}
-                onClick={() => this.props.history.push('/qvain/dataset')}
+                onClick={() => {
+                  this.props.Stores.Qvain.resetQvainStore()
+                  this.props.history.push('/qvain/dataset')
+                }}
                 content="qvain.datasets.createButton"
               />
             </DatasetHelp>
@@ -48,4 +53,4 @@ const DatasetHelp = styled.p`
   margin-bottom: 30px;
 `;
 
-export default withRouter(Datasets)
+export default inject('Stores')(observer(withRouter(Datasets)))

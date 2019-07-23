@@ -24,7 +24,6 @@ class AccessType extends Component {
       en: [],
       fi: []
     },
-    accessTypeRestricted: false,
     accessTypeValidationError: null
   }
 
@@ -72,11 +71,6 @@ class AccessType extends Component {
     const { options } = this.state
     const { setAccessType } = this.props.Stores.Qvain
     onChange(options, lang, setAccessType, AccessTypeConstructor)(selection)
-    if (selection.value !== AccessTypeURLs.OPEN) {
-      this.setState({ accessTypeRestricted: true })
-    } else if (selection.value === AccessTypeURLs.OPEN) {
-      this.setState({ accessTypeRestricted: false })
-    }
     this.setState({ accessTypeValidationError: null })
   }
 
@@ -113,7 +107,7 @@ class AccessType extends Component {
         />
         <ValidationError>{this.state.accessTypeValidationError}</ValidationError>
         {(accessType !== undefined && accessType.url === AccessTypeURLs.EMBARGO) && (<EmbargoExpires />)}
-        { this.state.accessTypeRestricted
+        { accessType.url !== AccessTypeURLs.OPEN
           ? <RestrictionGrounds /> : null}
       </Card>
     )

@@ -1,12 +1,18 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import { inject, observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 import { Container, SlidingContent } from './card'
 import Loader from '../../general/loader'
 import { InvertedButton } from '../../general/button'
 
 class SubmitResponse extends Component {
+  static propTypes = {
+    Stores: PropTypes.object.isRequired,
+    response: PropTypes.oneOfType([PropTypes.string, PropTypes.object, PropTypes.array]),
+  }
+
   state = {
     openResponse: false,
   }
@@ -14,7 +20,13 @@ class SubmitResponse extends Component {
   render() {
     const { response } = this.props
     const { openResponse } = this.state
-    if (response && 'identifier' in response) {
+    const { original } = this.props.Stores.Qvain
+    // If a NEW dataset has been created successfully.
+    if (response &&
+        'identifier' in response &&
+        !('new_version_created' in response) &&
+        original === undefined
+    ) {
       const identifier = response.identifier
       return (
         <ResponseContainer>
@@ -25,6 +37,43 @@ class SubmitResponse extends Component {
         </ResponseContainer>
       )
     }
+    // If an existing datasets metadata has successfully been updated.
+    if (
+      response &&
+      'identifier' in response &&
+      !('new_version_created' in response) &&
+      original !== undefined &&
+      response.research_dataset !== undefined &&
+      'metadata_version_identifier' in response.research_dataset &&
+      'metadata_version_identifier' in original.research_dataset &&
+      response.metadata_version_identifier !== original.research_dataset.metadata_version_identifier
+    ) {
+      const identifier = response.identifier
+      return (
+        <ResponseContainer>
+          <ResponseLabel success>
+            <Translate content="qvain.submitStatus.editMetadataSuccess" />
+          </ResponseLabel>
+          <p>Identifier: {identifier}</p>
+        </ResponseContainer>
+      )
+    }
+    // If an existing datasets files or directorys have changed and the update
+    // creates a new Version of the dataset with its own identifiers.
+    if (response && 'new_version_created' in response) {
+      const identifier = response.dataset_version_set
+        ? response.dataset_version_set[0].identifier
+        : response.identifier
+      return (
+        <ResponseContainer>
+          <ResponseLabel success>
+            <Translate content="qvain.submitStatus.editFilesSuccess" />
+          </ResponseLabel>
+          <p>Identifier: {identifier}</p>
+        </ResponseContainer>
+      )
+    }
+    // If something went wrong.
     if (response) {
       return (
         <ResponseContainer>
@@ -43,7 +92,7 @@ class SubmitResponse extends Component {
             )}
           </InvertedButton>
           <SlidingContent open={openResponse}>
-            <Pre>{JSON.stringify(response, null, 4)}</Pre>
+            <Pre>{JSON.stringify(response, null, 8)}</Pre>
           </SlidingContent>
         </ResponseContainer>
       )
@@ -54,10 +103,6 @@ class SubmitResponse extends Component {
       </ResponseContainer>
     )
   }
-}
-
-SubmitResponse.propTypes = {
-  response: PropTypes.oneOfType([PropTypes.string, PropTypes.object, PropTypes.array]),
 }
 
 SubmitResponse.defaultProps = {
@@ -83,4 +128,4 @@ const Pre = styled.pre`
   white-space: -o-pre-wrap; /* Opera 7 */
   word-wrap: break-word;
 `
-export default SubmitResponse
+export default inject('Stores')(observer(SubmitResponse))

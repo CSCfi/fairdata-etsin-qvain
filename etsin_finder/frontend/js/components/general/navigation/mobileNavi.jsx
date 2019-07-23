@@ -55,22 +55,20 @@ export default class MobileNavi extends React.Component {
               <Row>
                 <Link
                   width="100%"
-                  // width="50%"
                   margin="0em 0em 0.6em 0em"
-                  // margin="0em 0.4em 0.6em 0em"
                   href="https://qvain.fairdata.fi"
                   rel="noopener noreferrer"
                   target="_blank"
                 >
                   Qvain
                 </Link>
-                {/* <QvainNavLink
+                <QvainNavLink
                   width="50%"
                   margin="0em 0em 0.6em 0em"
                   to="/qvain"
                 >
                   Qvain Light
-                </QvainNavLink> */}
+                </QvainNavLink>
               </Row>
             </DatasetCont>
             <Row>
@@ -157,7 +155,7 @@ const NavItem = styled(NavLink)`
   }
 `
 
-// const QvainNavLink = Link.withComponent(NavLink)
+const QvainNavLink = Link.withComponent(NavLink)
 
 const CustomContainer = styled.div`
   margin: 0 auto;
