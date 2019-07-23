@@ -79,6 +79,7 @@ class Qvain {
     // Reset External resources related data
     this.externalResources = []
     this.externalResourceInEdit = EmptyExternalResource
+<<<<<<< HEAD
     this.extResFormOpen = false
     this.resourceInEdit = undefined
   }
@@ -116,6 +117,8 @@ class Qvain {
     this._previousDirectories.clear()
     // Reset External resources related data
     this._externalResources = []
+=======
+>>>>>>> e3ba04fb39a193c30018fb95138814dcc5e9d75d
     this.extResFormOpen = false
     this.resourceInEdit = undefined
   }
