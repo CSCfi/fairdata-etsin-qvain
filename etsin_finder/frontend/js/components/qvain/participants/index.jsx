@@ -8,17 +8,35 @@ import SelectedParticipant from './participantSelection'
 import ParticipantInfo from './participantInfo'
 import { SectionTitle } from '../general/section'
 import { ContainerLight, ContainerSubsection } from '../general/card';
+import Tooltip from '../general/tooltip'
+import { HelpIcon } from '../general/form'
+import ParticipantsInfoTooltip from './participantsInfoTooltip'
 
 export class ParticipantsBase extends Component {
   static propTypes = {
     Stores: PropTypes.object.isRequired
   }
 
+  state = {
+    tooltipOpen: false
+  }
+
   render() {
     const participant = this.props.Stores.Qvain.participantInEdit
     return (
       <div className="container">
-        <Translate component={SectionTitle} content="qvain.participants.title" />
+        <SectionTitle>
+          <Translate content="qvain.participants.title" />
+          <Tooltip
+            isOpen={this.state.tooltipOpen}
+            align="Right"
+            text={<ParticipantsInfoTooltip />}
+          >
+            <HelpIcon
+              onClick={() => this.setState(prevState => ({ tooltipOpen: !prevState.tooltipOpen }))}
+            />
+          </Tooltip>
+        </SectionTitle>
         <ContainerLight>
           <ContainerSubsection>
             <h3><Translate content="qvain.participants.add.title" /> *</h3>

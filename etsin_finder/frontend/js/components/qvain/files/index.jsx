@@ -10,6 +10,7 @@ import ExternalFiles from './externalFiles'
 import DataCatalog from './dataCatalog'
 import { DataCatalogIdentifiers } from '../utils/constants'
 import Tooltip from '../general/tooltip'
+import FilesInfo from './filesInfo'
 
 class Files extends Component {
   static propTypes = {
@@ -17,7 +18,7 @@ class Files extends Component {
   }
 
   state = {
-    popUpOpen: false,
+    tooltipOpen: false,
   }
 
   render() {
@@ -41,11 +42,15 @@ class Files extends Component {
       <ContainerLight className="container">
         <SectionTitle>
           <Translate content="qvain.files.title" />
-          <Tooltip isOpen={this.state.popUpOpen} align="Right" text="qvain.files.help">
+          <Tooltip
+            isOpen={this.state.tooltipOpen}
+            align="Right"
+            text={<FilesInfo />}
+          >
             <HelpIcon
               onClick={() =>
                 this.setState(prevState => ({
-                  popUpOpen: !prevState.popUpOpen,
+                  tooltipOpen: !prevState.tooltipOpen,
                 }))
               }
             />

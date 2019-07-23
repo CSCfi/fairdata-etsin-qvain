@@ -301,6 +301,8 @@ const english = {
     },
     description: {
       title: 'Description',
+      infoTitle: 'Description info',
+      infoText: 'add text',
       description: {
         langEn: 'ENGLISH',
         langFi: 'FINNISH',
@@ -314,10 +316,11 @@ const english = {
           placeholderEn: 'Description (English)',
           placeholderFi: 'Description (Finnish)',
         },
-        instructions: 'Only one launguage selection is mandatory',
+        instructions: 'Only one language selection is mandatory',
       },
       otherIdentifiers: {
         title: 'Other Identifiers',
+        infoText: 'add text',
         instructions:
           'Identifier for the metadata will be created automatically but if there alredy is an EXISTING identifier please insert it here.',
         addButton: '+ Add new',
@@ -325,10 +328,12 @@ const english = {
       },
       fieldOfScience: {
         title: 'Field of Science *',
+        infoText: 'add text',
         placeholder: 'Select option',
       },
       keywords: {
         title: 'Keywords',
+        infoText: 'add text',
         placeholder: 'E.g. economy',
         addButton: 'Add keywords',
         help:
@@ -337,8 +342,10 @@ const english = {
     },
     rightsAndLicenses: {
       title: 'Rights And Licenses',
+      infoTitle: 'Rights And Licenses info',
       accessType: {
         title: 'Access Type',
+        infoText: 'add text',
         placeholder: 'Select option',
       },
       embargoDate: {
@@ -353,6 +360,7 @@ const english = {
       },
       license: {
         title: 'License',
+        infoText: 'add text',
         placeholder: 'Select option',
         other: {
           label: 'URL address',
@@ -362,6 +370,8 @@ const english = {
     },
     participants: {
       title: 'Participants',
+      infoTitle: 'Participants info',
+      infoText: 'add text',
       add: {
         title: 'Participants',
         help:
@@ -520,14 +530,19 @@ const english = {
     },
     files: {
       title: 'Files',
+      infoTitle: 'Files info',
+      infoText: 'add text',
       dataCatalog: {
         label: 'File origin',
+        infoText: 'add text',
         explanation: 'Choose IDA if the data is stored in Fairdata Ida service. Choose ATT if the data is stored elsewhere.',
         placeholder: 'Select option'
       },
       help:
         'Files associated with this dataset. A dataset can only have either IDA files or external files. File metadata will not be associated with datasets, so remember to save edits to file metadata.',
       ida: {
+        title: 'Fairdata IDA files',
+        infoText: 'add text',
         help: 'If you have files in Fairdata IDA you can link them from here:',
         button: {
           label: 'Link files from Fairdata IDA',
@@ -600,6 +615,8 @@ const english = {
         help: 'These are the files and directories that you have added before. If you do not touch these, upon saving the changes to the dataset METAX will go through all the selected directories and associate any files and directories within, even the new ones. In other words, if you don\'t touch these and save, you can associate new files within the directory structure with your dataset.'
       },
       external: {
+        title: 'External resources (ATT)',
+        infoText: 'add text',
         help: 'Add link to external files from here:',
         button: {
           label: 'Add link to external files',

@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Translate from 'react-translate-component'
 import styled from 'styled-components'
 
 const Tooltip = ({ isOpen, align, text, children }) => {
@@ -13,7 +12,7 @@ const Tooltip = ({ isOpen, align, text, children }) => {
           <Wrapper>
             <TooltipRight>
               <TooltipArrowRight />
-              <Translate component={TooltipText} content={text} />
+              <TooltipText>{text}</TooltipText>
             </TooltipRight>
           </Wrapper>
         </React.Fragment>
@@ -25,7 +24,7 @@ const Tooltip = ({ isOpen, align, text, children }) => {
           {children}
           <Wrapper>
             <TooltipLeft>
-              <Translate component={TooltipText} content={text} />
+              <TooltipText>{text}</TooltipText>
               <TooltipArrowLeft />
             </TooltipLeft>
           </Wrapper>
@@ -39,7 +38,7 @@ const Tooltip = ({ isOpen, align, text, children }) => {
           <Wrapper>
             <TooltipDown>
               <TooltipArrowDown />
-              <Translate component={TooltipText} content={text} />
+              <TooltipText>{text}</TooltipText>
             </TooltipDown>
           </Wrapper>
         </React.Fragment>
@@ -51,7 +50,7 @@ const Tooltip = ({ isOpen, align, text, children }) => {
           {children}
           <Wrapper>
             <TooltipUp>
-              <Translate component={TooltipText} content={text} />
+              <TooltipText>{text}</TooltipText>
               <TooltipArrowUp />
             </TooltipUp>
           </Wrapper>
@@ -64,7 +63,7 @@ const Tooltip = ({ isOpen, align, text, children }) => {
           {children}
           <Wrapper>
             <TooltipDown>
-              <Translate component={TooltipText} content={text} />
+              <TooltipText>{text}</TooltipText>
               <TooltipArrowDown />
             </TooltipDown>
           </Wrapper>
@@ -77,7 +76,7 @@ const Tooltip = ({ isOpen, align, text, children }) => {
 Tooltip.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   align: PropTypes.string.isRequired,
-  text: PropTypes.string.isRequired,
+  text: PropTypes.element.isRequired,
   children: PropTypes.element.isRequired,
 }
 
@@ -88,7 +87,7 @@ const Wrapper = styled.span`
 `
 
 const TooltipStyle = styled.div`
-  z-index: 1;
+  z-index: 10;
   text-align: left;
   text-align: start;
   text-shadow: none;
@@ -177,7 +176,7 @@ const TooltipText = styled.div`
   font-size: initial;
   line-height: initial;
   font-weight: initial;
-  text-align: center;
+  text-align: inherit;
   background-color: ${p => p.theme.color.white};
   @media (max-width: ${p => p.theme.breakpoints.sm}) {
     max-width: 200px;
