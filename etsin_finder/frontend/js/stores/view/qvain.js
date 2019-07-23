@@ -84,43 +84,6 @@ class Qvain {
   }
 
   @action
-  resetQvainStore = () => {
-    this.title = {
-      en: '',
-      fi: '',
-    }
-    this.description = {
-      en: '',
-      fi: '',
-    }
-    this.otherIdentifiers = []
-    this.fieldOfScience = undefined
-    this.keywords = []
-    this.license = License(undefined, LicenseUrls.CCBY4)
-    this.otherLicenseUrl = undefined
-    this.accessType = AccessType(undefined, AccessTypeURLs.OPEN)
-    this.embargoExpDate = undefined
-    this.restrictionGrounds = {}
-    this.participants = []
-    this.participantInEdit = EmptyParticipant
-    // Reset Files/Directories related data
-    this.idaPickerOpen = false
-    this._selectedProject = undefined
-    this._selectedFiles = []
-    this._selectedDirectories = []
-    this._hierarchy = {}
-    this._inEdit = undefined
-    this._parentDirs.clear()
-    this._files = []
-    this._directories = []
-    this._previousDirectories.clear()
-    // Reset External resources related data
-    this._externalResources = []
-    this.extResFormOpen = false
-    this.resourceInEdit = undefined
-  }
-
-  @action
   setTitle = (title, lang) => {
     if (lang === 'ENGLISH') {
       this.title.en = title
@@ -280,11 +243,6 @@ class Qvain {
   @observable hierarchy = {}
 
   @observable inEdit = undefined
-
-  @action
-  setDataCatalog = selectedDataCatalog => {
-    this.dataCatalog = selectedDataCatalog
-  }
 
   @action
   setDataCatalog = selectedDataCatalog => {
