@@ -79,46 +79,6 @@ class Qvain {
     // Reset External resources related data
     this.externalResources = []
     this.externalResourceInEdit = EmptyExternalResource
-<<<<<<< HEAD
-    this.extResFormOpen = false
-    this.resourceInEdit = undefined
-  }
-
-  @action
-  resetQvainStore = () => {
-    this.title = {
-      en: '',
-      fi: '',
-    }
-    this.description = {
-      en: '',
-      fi: '',
-    }
-    this.otherIdentifiers = []
-    this.fieldOfScience = undefined
-    this.keywords = []
-    this.license = License(undefined, LicenseUrls.CCBY4)
-    this.otherLicenseUrl = undefined
-    this.accessType = AccessType(undefined, AccessTypeURLs.OPEN)
-    this.embargoExpDate = undefined
-    this.restrictionGrounds = {}
-    this.participants = []
-    this.participantInEdit = EmptyParticipant
-    // Reset Files/Directories related data
-    this.idaPickerOpen = false
-    this._selectedProject = undefined
-    this._selectedFiles = []
-    this._selectedDirectories = []
-    this._hierarchy = {}
-    this._inEdit = undefined
-    this._parentDirs.clear()
-    this._files = []
-    this._directories = []
-    this._previousDirectories.clear()
-    // Reset External resources related data
-    this._externalResources = []
-=======
->>>>>>> e3ba04fb39a193c30018fb95138814dcc5e9d75d
     this.extResFormOpen = false
     this.resourceInEdit = undefined
   }
