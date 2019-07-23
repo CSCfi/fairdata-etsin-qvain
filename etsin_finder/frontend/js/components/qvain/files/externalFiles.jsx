@@ -112,4 +112,4 @@ export const ResourceItem = styled(FileItem)`
   margin-bottom: ${props => (props.active ? '0' : '10px')}
 `
 
-export default inject('Stores')(observer(ExternalFilesBase))
+export default inject('Stores')(observer(ExternalFilesBase));
