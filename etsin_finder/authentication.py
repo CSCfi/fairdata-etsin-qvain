@@ -166,7 +166,7 @@ def get_user_ida_groups():
         ida_groups = [group for group in groups if group.startswith('IDA')]
         return ida_groups
     else:
-        log.warn("User seems to be authenticated but groups not in session object. "
-                 "Saml userdata:\n{0}".format(session['samlUserdata']))
+        log.warning("User seems to be authenticated but groups not in session object. "
+                    "Saml userdata:\n{0}".format(session['samlUserdata']))
 
     return None

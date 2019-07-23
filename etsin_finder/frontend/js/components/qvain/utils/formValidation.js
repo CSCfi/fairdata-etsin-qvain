@@ -9,15 +9,15 @@ const titleSchema = yup.object().shape({
     is: val => val.length > 0,
     then: yup
       .string(translate('qvain.validationMessages.title.string'))
-      .max(100, translate('qvain.validationMessages.title.max')),
+      .max(500, translate('qvain.validationMessages.title.max')),
     otherwise: yup
       .string(translate('qvain.validationMessages.title.string'))
-      .max(100, translate('qvain.validationMessages.title.max'))
+      .max(500, translate('qvain.validationMessages.title.max'))
       .required(translate('qvain.validationMessages.title.required')),
   }),
   en: yup
     .string(translate('qvain.validationMessages.title.string'))
-    .max(100, translate('qvain.validationMessages.title.max')),
+    .max(500, translate('qvain.validationMessages.title.max')),
 })
 
 const descriptionSchema = yup.object().shape({
@@ -25,15 +25,15 @@ const descriptionSchema = yup.object().shape({
     is: val => val.length > 0,
     then: yup
       .string(translate('qvain.validationMessages.description.string'))
-      .max(100, translate('qvain.validationMessages.description.max')),
+      .max(50000, translate('qvain.validationMessages.description.max')),
     otherwise: yup
       .string(translate('qvain.validationMessages.description.string'))
-      .max(100, translate('qvain.validationMessages.description.max'))
+      .max(50000, translate('qvain.validationMessages.description.max'))
       .required(translate('qvain.validationMessages.description.required')),
   }),
   en: yup
     .string(translate('qvain.validationMessages.description.string'))
-    .max(100, translate('qvain.validationMessages.description.max')),
+    .max(50000, translate('qvain.validationMessages.description.max')),
 })
 
 const keywordsSchema = yup
@@ -41,7 +41,7 @@ const keywordsSchema = yup
   .of(
     yup
       .string(translate('qvain.validationMessages.keywords.string'))
-      .max(100, translate('qvain.validationMessages.keywords.max'))
+      .max(1000, translate('qvain.validationMessages.keywords.max'))
   )
   .required(translate('qvain.validationMessages.keywords.required'))
 
@@ -49,7 +49,7 @@ const otherIdentifierSchema = yup
   .string(translate('qvain.validationMessages.otherIdentifiers.string'))
   .min(10, translate('qvain.validationMessages.otherIdentifiers.min'))
   .url(translate('qvain.validationMessages.otherIdentifiers.url'))
-  .max(100, translate('qvain.validationMessages.otherIdentifiers.max'))
+  .max(1000, translate('qvain.validationMessages.otherIdentifiers.max'))
 
 const otherIdentifiersSchema = yup
   .array()
@@ -119,18 +119,18 @@ const participantRolesSchema = yup
 
 const participantNameSchema = yup
   .string(translate('qvain.validationMessages.participants.name.string'))
-  .max(100, translate('qvain.validationMessages.participants.name.max'))
+  .max(1000, translate('qvain.validationMessages.participants.name.max'))
   .required(translate('qvain.validationMessages.participants.name.required'))
 
 const participantEmailSchema = yup
   .string(translate('qvain.validationMessages.participants.email.string'))
-  .max(100, translate('qvain.validationMessages.participants.email.max'))
+  .max(1000, translate('qvain.validationMessages.participants.email.max'))
   .email(translate('qvain.validationMessages.participants.email.email'))
   .nullable()
 
 const participantIdentifierSchema = yup
   .string()
-  .max(100, translate('qvain.validationMessages.participants.identifier.max'))
+  .max(1000, translate('qvain.validationMessages.participants.identifier.max'))
   .nullable()
 
 const participantOrganizationSchema = yup.object().shape({
@@ -205,14 +205,17 @@ const directoriesSchema = yup.array().of(directorySchema)
 
 // EXTERNAL RESOURCES VALIDATION
 
+const externalResourceTitleSchema = yup
+  .string()
+  .required(translate('qvain.validationMessages.externalResources.title.required'))
+
 const externalResourceUrlSchema = yup
   .string()
   .url(translate('qvain.validationMessages.externalResources.url.url'))
   .required(translate('qvain.validationMessages.externalResources.url.required'))
 
 const externalResourceSchema = yup.object().shape({
-  id: yup.number().nullable(),
-  title: yup.string().nullable(),
+  title: externalResourceTitleSchema,
   url: externalResourceUrlSchema,
 })
 
@@ -322,5 +325,6 @@ export {
   directorySchema,
   directoriesSchema,
   externalResourceSchema,
+  externalResourceTitleSchema,
   externalResourceUrlSchema,
 }

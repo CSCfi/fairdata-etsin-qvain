@@ -21,7 +21,8 @@ const directoriesToMetax = (selectedDirectories, existingDirectories) => {
     description: dir.description ? dir.description : undefined,
     useCategory: {
       identifier: dir.useCategory
-    }
+    },
+    projectIdentifier: dir.projectIdentifier ? dir.projectIdentifier : undefined
   }))
   return parsedDirectoryData
 }
@@ -39,7 +40,8 @@ const filesToMetax = (selectedFiles, existingFiles) => {
     } : undefined,
     useCategory: {
       identifier: file.useCategory
-    }
+    },
+    projectIdentifier: file.projectIdentifier ? file.projectIdentifier : undefined
   }))
   return parsedFileData
 }
@@ -65,10 +67,10 @@ const handleSubmitToBackend = (values) => {
     otherLicenseUrl: values.otherLicenseUrl,
     // Send no values if empty instead of empty values.
     remote_resources:
-      values._externalResources.length > 0 ? values._externalResources : undefined,
-    dataCatalog: values.dataCatalog,
-    files: values.selectedFiles ? filesToMetax(values.selectedFiles, values.existingFiles || []) : undefined,
-    directories: values.selectedDirectories ? directoriesToMetax(values.selectedDirectories, values.existingDirectories || []) : undefined,
+      values.externalResources.length > 0 ? values.externalResources : undefined,
+      dataCatalog: values.dataCatalog,
+      files: values.selectedFiles.length > 0 ? filesToMetax(values.selectedFiles) : undefined,
+      directories: values.selectedDirectories.length > 0 ? directoriesToMetax(values.selectedDirectories) : undefined,
   }
   return obj
 }

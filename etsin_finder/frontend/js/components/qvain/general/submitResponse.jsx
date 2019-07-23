@@ -92,7 +92,7 @@ class SubmitResponse extends Component {
             )}
           </InvertedButton>
           <SlidingContent open={openResponse}>
-            <Pre>{JSON.stringify(response, null, 4)}</Pre>
+            <Pre>{JSON.stringify(response, null, 8)}</Pre>
           </SlidingContent>
         </ResponseContainer>
       )

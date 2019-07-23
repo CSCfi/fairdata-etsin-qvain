@@ -282,10 +282,14 @@ const finnish = {
       createButton: 'Luo aineisto',
       tableRows: {
         id: 'ID',
-        name: 'Nimi',
+        title: 'Otsikko',
+        version: 'Versio',
         modified: 'Muokattu',
+        created: 'Luotu',
         actions: 'Toiminnot',
       },
+      oldVersion: 'Vanha',
+      latestVersion: 'Uusin',
       editButton: 'Muokkaa',
       deleteButton: 'Poista',
       confirmDelete: 'Oletko varma, että haluat poistaa aineiston? Aineiston poiston jälkeen se ei enää näy Qvaimessa eikä Etsimen haku löydä sitä. Aineiston laskeutumissivua ei poisteta.',
@@ -342,7 +346,7 @@ const finnish = {
         placeholder: 'Valitse vaihtoehto',
       },
       embargoDate: {
-        label: 'Embargo loppumispäivämäärä',
+        label: 'Embargo loppumispäivämäärä (vvvv-kk-pp)',
         placeholder: 'Päivämäärä',
         help: 'Oletuksena embargo ei lopu jollei päivämäärää aseteta.',
       },
@@ -512,6 +516,9 @@ const finnish = {
         },
       },
       externalResources: {
+        title: {
+          required: 'Ulkoisen aineiston otsikko on pakollinen',
+        },
         url: {
           required: 'Ulkoisen aineiston URL osoite on pakollinen',
           url: 'Ulkoisen aineiston URL osoitteen pitää olla oikeassa URL formaatissa',
@@ -577,7 +584,7 @@ const finnish = {
         },
         form: {
           title: {
-            label: 'Title',
+            label: 'Otsikko',
             placeholder: 'A Resource',
           },
           useCategory: {
@@ -587,6 +594,9 @@ const finnish = {
           url: {
             label: 'URL',
             placeholder: 'https://',
+          },
+          cancel: {
+            label: 'Cancel',
           },
           save: {
             label: 'Save',
@@ -602,6 +612,10 @@ const finnish = {
   stc: 'Siirry sivun pääsisältöön',
   tombstone: {
     info: 'Aineisto on joko vanhentunut tai poistettu',
+  },
+  userAuthenticationError: {
+    header: 'Kirjautuminen epäonnistui.',
+    content: 'Tarkistathan, että sinulla on voimassaoleva CSC-tunnus (Qvaimen ja Qvain Lightin käyttö vaatii sen). Jos yritit kirjaututua jollain toisella tunnuksella (esim. Haka), sitä ei todennäköisesti ole liitetty CSC-tunnukseen. Voit rekisteröidä itsellesi CSC-tunnuksen osoitteessa https://sui.csc.fi.',
   },
 }
 
