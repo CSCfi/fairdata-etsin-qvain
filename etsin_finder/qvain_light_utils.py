@@ -280,8 +280,7 @@ def edited_data_to_metax(data, original):
 
 def check_if_data_in_user_IDA_project(data, projects):
     """
-    Check if the user creating a dataset belongs to the project that the files/folders
-    belogs to.
+    Check if the user creating a dataset belongs to the project that the files/folders belongs to.
 
     Arguments:
         data {object} -- The dataset that the user is trying to create.

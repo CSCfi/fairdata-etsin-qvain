@@ -132,8 +132,7 @@ class UserDatasets(Resource):
 
     def get(self, user_id):
         """
-        Get datasets for user. Used by qvain light dataset table. If request has query parameter no_pagination=true,
-        fetches ALL datasets for user (warning: might result in performance issue).
+        Get datasets for user. Used by qvain light dataset table. If request has query parameter no_pagination=true, fetches ALL datasets for user (warning: might result in performance issue).
 
         :param user_id:
         :return:
