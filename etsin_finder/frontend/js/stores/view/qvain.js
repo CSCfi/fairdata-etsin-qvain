@@ -249,11 +249,6 @@ class Qvain {
     this.dataCatalog = selectedDataCatalog
   }
 
-  @action
-  setDataCatalog = selectedDataCatalog => {
-    this.dataCatalog = selectedDataCatalog
-  }
-
   @action toggleSelectedFile = (file, select) => {
     // are we removing an old selected file or are we editing the selections in the current session
     if (file.existing && !select) {
