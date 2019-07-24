@@ -29,7 +29,6 @@ class Auth {
           headers: { 'content-type': 'application/json', charset: 'utf-8' },
         })
         .then(res => {
-          console.log(res)
           this.user = {
             name: res.data.user_csc_name,
             commonName: res.data.user_display_name,

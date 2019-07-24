@@ -60,7 +60,6 @@ export default class FrontPage extends Component {
   checkUserLoginStatus() {
     Stores.Auth.checkLogin()
       .then(() => {
-        console.log(Stores.Auth.user)
         // If the user has a user.commonName, but not a user.name,
         // it means they were verified through HAKA, but do not have a CSC account.
         if (
