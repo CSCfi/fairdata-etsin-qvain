@@ -1,10 +1,8 @@
-import React from 'react';
-import styled from 'styled-components';
-import Select from 'react-select';
+import React from 'react'
+import styled from 'styled-components'
+import Select from 'react-select'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {
-  faInfoCircle
-} from '@fortawesome/free-solid-svg-icons'
+import { faInfoCircle } from '@fortawesome/free-solid-svg-icons'
 
 export const FormField = styled.div`
   display: inline-flex;
@@ -28,7 +26,7 @@ export const Textarea = styled.textarea`
   padding: 8px;
   color: #808080;
   margin-bottom: 20px;
-`;
+`
 
 export const CustomSelect = styled(Select)`
   margin-bottom: 20px;
@@ -70,7 +68,7 @@ export const CheckboxStyles = styled.input`
   vertical-align: bottom;
 `
 
-export const Checkbox = (props) => <CheckboxStyles {...props} type="checkbox" />
+export const Checkbox = props => <CheckboxStyles {...props} type="checkbox" />
 
 export const HelpField = styled.span`
   font-weight: 200;
@@ -78,10 +76,21 @@ export const HelpField = styled.span`
 `
 
 export const HelpIconStyles = styled(FontAwesomeIcon)`
-  margin-left: 10px;
+  :hover {
+    color: ${props => props.theme.color.primary};
+  }
 `
 
-export const HelpIcon = (props) => <HelpIconStyles {...props} icon={faInfoCircle} />
+export const NoStyleButton = styled.button`
+  border: none;
+  background-color: unset;
+`
+
+export const HelpIcon = props => (
+  <NoStyleButton {...props} type="button">
+    <HelpIconStyles icon={faInfoCircle} />
+  </NoStyleButton>
+)
 
 export const SelectedFilesTitle = styled.label`
   display: block;
@@ -89,4 +98,4 @@ export const SelectedFilesTitle = styled.label`
   color: #4f4f4f;
   margin-bottom: 8px;
   text-transform: uppercase;
-`;
+`
