@@ -294,8 +294,8 @@ def check_if_data_in_user_IDA_project(data, projects):
     # Add the test project 'project_x' for local development.
     user_projects.append("project_x")
     if "files" or "directories" in data:
-        files = data["files"]
-        directories = data["directories"]
+        files = data["files"] if "files" in data else []
+        directories = data["directories"] if "directories" in data else []
         if files:
             for file in files:
                 identifier = file["projectIdentifier"]
