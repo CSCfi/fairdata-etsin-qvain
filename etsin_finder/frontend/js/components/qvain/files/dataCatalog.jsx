@@ -8,6 +8,7 @@ import Card from '../general/card'
 import { dataCatalogSchema } from '../utils/formValidation'
 import ValidationError from '../general/validationError'
 import { DataCatalogIdentifiers } from '../utils/constants'
+import { LabelLarge } from '../general/form'
 
 const options = [
   { value: DataCatalogIdentifiers.IDA, label: 'IDA' },
@@ -46,10 +47,13 @@ class DataCatalog extends Component {
     const selected = [...selectedFiles, ...selectedDirectories, ...externalResources]
     return (
       <Card>
-        <Translate component="h3" content="qvain.files.dataCatalog.label" />
+        <LabelLarge htmlFor="dataCatalogSelect">
+          <Translate content="qvain.files.dataCatalog.label" />
+        </LabelLarge>
         <Translate component="p" content="qvain.files.dataCatalog.explanation" />
         <Translate
           component={Select}
+          inputId="dataCatalogSelect"
           name="dataCatalog"
           value={options.find(opt => opt.value === dataCatalog)}
           options={options}

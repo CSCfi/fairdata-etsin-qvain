@@ -8,6 +8,7 @@ import getReferenceData from '../utils/getReferenceData';
 import Card from '../general/card';
 import { FieldOfScience } from '../../../stores/view/qvain'
 import { onChange, getCurrentValue } from '../utils/select'
+import { LabelLarge } from '../general/form'
 
 class FieldOfScienceField extends React.Component {
   static propTypes = {
@@ -63,9 +64,12 @@ class FieldOfScienceField extends React.Component {
     const { options } = this.state
     return (
       <Card>
-        <Translate component="h3" content="qvain.description.fieldOfScience.title" />
+        <LabelLarge htmlFor="fieldOfScienceSelect">
+          <Translate content="qvain.description.fieldOfScience.title" />
+        </LabelLarge>
         <Translate
           name="field-of-science"
+          inputId="fieldOfScienceSelect"
           component={Select}
           attributes={{ placeholder: 'qvain.description.fieldOfScience.placeholder' }}
           value={getCurrentValue(fieldOfScience, options, lang)}

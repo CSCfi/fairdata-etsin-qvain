@@ -6,7 +6,7 @@ import Translate from 'react-translate-component'
 
 import getReferenceData from '../utils/getReferenceData'
 import Card from '../general/card'
-import { Label, Input } from '../general/form'
+import { Label, Input, LabelLarge } from '../general/form'
 import { License as LicenseConstructor } from '../../../stores/view/qvain'
 import { onChange, getCurrentValue } from '../utils/select'
 import { licenseSchema } from '../utils/formValidation'
@@ -104,9 +104,12 @@ class License extends Component {
     const { license, setLicense, otherLicenseUrl } = this.props.Stores.Qvain
     return (
       <Card>
-        <Translate component="h3" content="qvain.rightsAndLicenses.license.title" />
+        <LabelLarge htmlFor="licenseSelect">
+          <Translate content="qvain.rightsAndLicenses.license.title" />
+        </LabelLarge>
         <Translate
           component={Select}
+          inputId="licenseSelect"
           name="license"
           value={getCurrentValue(license, options, lang)}
           options={options[lang]}

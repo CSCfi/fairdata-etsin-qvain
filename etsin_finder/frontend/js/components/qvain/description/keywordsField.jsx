@@ -11,6 +11,7 @@ import Label from '../general/label'
 import Button from '../../general/button'
 import { keywordsSchema } from '../utils/formValidation'
 import ValidationError from '../general/validationError'
+import { LabelLarge } from '../general/form'
 
 class KeywordsField extends Component {
   static propTypes = {
@@ -65,13 +66,14 @@ class KeywordsField extends Component {
     ))
     return (
       <Card>
-        <h3>
+        <LabelLarge htmlFor="keywordsInput">
           <Translate content="qvain.description.keywords.title" /> *
-        </h3>
+        </LabelLarge>
         <Translate component="p" content="qvain.description.keywords.help" />
         {keywords}
         <Translate
           component={Input}
+          id="keywordsInput"
           value={this.state.value}
           onChange={this.handleChange}
           type="text"

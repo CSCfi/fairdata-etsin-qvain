@@ -6,7 +6,7 @@ import Translate from 'react-translate-component'
 import '../../../../locale/translations'
 import { titleSchema, descriptionSchema } from '../utils/formValidation'
 import ValidationError from '../general/validationError'
-import { Input, Textarea } from '../general/form'
+import { Input, Textarea, LabelLarge } from '../general/form'
 
 class DescriptionField extends Component {
   static propTypes = {
@@ -89,13 +89,14 @@ class DescriptionField extends Component {
           <EmptyBlock width="48%" />
         </LangButtonContainer>
         <DescriptionCard>
-          <h3>
+          <LabelLarge htmlFor="titleInput">
             <Translate content="qvain.description.description.title.label" />
-          </h3>
+          </LabelLarge>
           {activeLang === 'FINNISH' && (
             <Translate
               component={Input}
               type="text"
+              id="titleInput"
               value={title.fi}
               onChange={event => {
                 title.fi = event.target.value
@@ -108,6 +109,7 @@ class DescriptionField extends Component {
             <Translate
               component={Input}
               type="text"
+              id="titleInput"
               value={title.en}
               onChange={event => {
                 title.en = event.target.value
@@ -117,12 +119,13 @@ class DescriptionField extends Component {
             />
           )}
           <ValidationError>{this.state.titleError}</ValidationError>
-          <h3>
+          <LabelLarge htmlFor="descriptionInput">
             <Translate content="qvain.description.description.description.label" />
-          </h3>
+          </LabelLarge>
           {activeLang === 'FINNISH' && (
             <Translate
               component={Textarea}
+              id="descriptionInput"
               rows="8"
               value={description.fi}
               onChange={event => {
@@ -135,6 +138,7 @@ class DescriptionField extends Component {
           {activeLang === 'ENGLISH' && (
             <Translate
               component={Textarea}
+              id="descriptionInput"
               rows="8"
               value={description.en}
               onChange={event => {

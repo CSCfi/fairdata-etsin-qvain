@@ -38,6 +38,12 @@ export const Label = styled.label`
   display: block;
 `
 
+export const LabelLarge = styled.label`
+  font-size: 1.2em;
+  line-height: calc(1.5 * 1.2em);
+  font-weight: 700
+`
+
 export const RadioContainer = styled.div`
   display: inline-block;
   position: relative;

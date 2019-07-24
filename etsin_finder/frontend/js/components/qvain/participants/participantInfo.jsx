@@ -171,7 +171,7 @@ export class ParticipantInfoBase extends Component {
             <Translate
               component={SelectOrg}
               name="nameField"
-              id="nameField"
+              inputTd="nameField"
               options={orgs[lang]}
               formatCreateLabel={inputValue => (
                 <Fragment>
@@ -229,7 +229,7 @@ export class ParticipantInfoBase extends Component {
         <Translate
           component={SelectOrg}
           name="orgField"
-          id="orgField"
+          inputId="orgField"
           options={orgs[lang]}
           formatCreateLabel={inputValue => (
             <Fragment>
