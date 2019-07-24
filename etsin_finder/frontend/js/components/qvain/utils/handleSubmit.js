@@ -13,7 +13,9 @@ const participantsToMetax = participants => {
 
 const directoriesToMetax = (selectedDirectories, existingDirectories) => {
   const selectedDirectoryIdentifiers = selectedDirectories.map(sd => sd.identifier)
-  const notOverwrittenExistingDirectories = existingDirectories.filter(ed => !selectedDirectoryIdentifiers.includes(ed.identifier))
+  const notOverwrittenExistingDirectories = existingDirectories
+    ? existingDirectories.filter(ed => !selectedDirectoryIdentifiers.includes(ed.identifier))
+    : []
   const directories = [...selectedDirectories, ...notOverwrittenExistingDirectories]
   const parsedDirectoryData = directories.map(dir => ({
     identifier: dir.identifier,
@@ -29,7 +31,9 @@ const directoriesToMetax = (selectedDirectories, existingDirectories) => {
 
 const filesToMetax = (selectedFiles, existingFiles) => {
   const selectedFileIdentifiers = selectedFiles.map(sf => sf.identifier)
-  const notOverwrittenExistingFiles = existingFiles.filter(ef => !selectedFileIdentifiers.includes(ef.identifier))
+  const notOverwrittenExistingFiles = existingFiles
+    ? existingFiles.filter(ef => !selectedFileIdentifiers.includes(ef.identifier))
+    : []
   const files = [...selectedFiles, ...notOverwrittenExistingFiles]
   const parsedFileData = files.map(file => ({
     identifier: file.identifier,
@@ -67,10 +71,10 @@ const handleSubmitToBackend = (values) => {
     otherLicenseUrl: values.otherLicenseUrl,
     // Send no values if empty instead of empty values.
     remote_resources:
-      values.externalResources.length > 0 ? values.externalResources : undefined,
+      values.externalResources.length > 0 ? values.externalResources : [],
       dataCatalog: values.dataCatalog,
-      files: values.selectedFiles.length > 0 ? filesToMetax(values.selectedFiles) : undefined,
-      directories: values.selectedDirectories.length > 0 ? directoriesToMetax(values.selectedDirectories) : undefined,
+      files: values.selectedFiles.length > 0 ? filesToMetax(values.selectedFiles) : [],
+      directories: values.selectedDirectories.length > 0 ? directoriesToMetax(values.selectedDirectories) : [],
   }
   return obj
 }
