@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import Translate from 'react-translate-component'
 import PropTypes from 'prop-types'
 import { inject, observer } from 'mobx-react'
@@ -9,10 +9,16 @@ import IDAFilePicker from './idaFilePicker'
 import ExternalFiles from './externalFiles'
 import DataCatalog from './dataCatalog'
 import { DataCatalogIdentifiers } from '../utils/constants'
+import Tooltip from '../general/tooltip'
+import FilesInfo from './filesInfo'
 
 class Files extends Component {
   static propTypes = {
-    Stores: PropTypes.object.isRequired
+    Stores: PropTypes.object.isRequired,
+  }
+
+  state = {
+    tooltipOpen: false,
   }
 
   render() {
@@ -36,10 +42,27 @@ class Files extends Component {
       <ContainerLight className="container">
         <SectionTitle>
           <Translate content="qvain.files.title" />
-          <Translate component={HelpIcon} attributes={{ title: 'qvain.files.help' }} />
+          <Tooltip
+            isOpen={this.state.tooltipOpen}
+            close={() =>
+              this.setState(prevState => ({
+                tooltipOpen: !prevState.tooltipOpen,
+              }))
+            }
+            align="Right"
+            text={<FilesInfo />}
+          >
+            <HelpIcon
+              onClick={() =>
+                this.setState(prevState => ({
+                  tooltipOpen: !prevState.tooltipOpen,
+                }))
+              }
+            />
+          </Tooltip>
         </SectionTitle>
         <DataCatalog />
-        { data }
+        {data}
       </ContainerLight>
     )
   }
