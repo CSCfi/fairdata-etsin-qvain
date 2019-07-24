@@ -170,3 +170,35 @@ def get_user_ida_groups():
                     "Saml userdata:\n{0}".format(session['samlUserdata']))
 
     return None
+
+def get_user_home_organization_id():
+    """
+    Get the organization id from the saml userdata
+
+    :return:
+    """
+    if not is_authenticated() or 'samlUserdata' not in session:
+        return None
+
+    home_organization = session['samlUserdata'].get('urn:oid:1.3.6.1.4.1.25178.1.2.9', False)
+    if home_organization:
+        return home_organization[0]
+    else:
+        log.warning("User seems to be authenticated but CSC organization id not in session object."
+                    "Saml userdata:\n{0}".format(session['samlUserdata']))
+
+def get_user_home_organization_name():
+    """
+    Get the organization id from the saml userdata
+
+    :return:
+    """
+    if not is_authenticated() or 'samlUserdata' not in session:
+        return None
+
+    home_organization_id = session['samlUserdata'].get('urn:oid:1.3.6.1.4.1.16161.4.0.88', False)
+    if home_organization_id:
+        return home_organization_id[0]
+    else:
+        log.warning("User seems to be authenticated but CSC organization name not in session object."
+                    "Saml userdata:\n{0}".format(session['samlUserdata']))
