@@ -13,7 +13,7 @@ import Card from '../general/card'
 import Label from '../general/label'
 import { otherIdentifiersSchema, otherIdentifierSchema } from '../utils/formValidation'
 import ValidationError from '../general/validationError'
-import { Input } from '../general/form'
+import { Input, LabelLarge } from '../general/form'
 
 class OtherIdentifierField extends React.Component {
   static propTypes = {
@@ -100,11 +100,14 @@ class OtherIdentifierField extends React.Component {
     )
     return (
       <Card bottomContent>
-        <Translate component="h3" content="qvain.description.otherIdentifiers.title" />
+        <LabelLarge htmlFor="otherIdentifiersInput">
+          <Translate content="qvain.description.otherIdentifiers.title" />
+        </LabelLarge>
         <Translate component="p" content="qvain.description.otherIdentifiers.instructions" />
         {otherIdentifiers}
         <Input
           type="text"
+          id="otherIdentifiersInput"
           value={this.state.identifier}
           onChange={this.handleInputChange}
           placeholder="http://orcid.org/"
