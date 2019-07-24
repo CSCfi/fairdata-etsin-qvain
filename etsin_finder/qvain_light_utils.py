@@ -128,10 +128,10 @@ def remote_resources_data_to_metax(resources):
 
     """
     metax_remote_resources = []
-    metax_remote_resources_object = {}
-    metax_remote_resources_object["use_category"] = {}
-    metax_remote_resources_object["access_url"] = {}
     for resource in resources:
+        metax_remote_resources_object = {}
+        metax_remote_resources_object["use_category"] = {}
+        metax_remote_resources_object["access_url"] = {}
         metax_remote_resources_object["title"] = resource["title"]
         metax_remote_resources_object["access_url"]["identifier"] = resource["url"]
         metax_remote_resources_object["use_category"]["identifier"] = resource["useCategory"]["value"]
@@ -280,8 +280,7 @@ def edited_data_to_metax(data, original):
 
 def check_if_data_in_user_IDA_project(data, projects):
     """
-    Check if the user creating a dataset belongs to the project that the files/folders
-    belogs to.
+    Check if the user creating a dataset belongs to the project that the files/folders belongs to.
 
     Arguments:
         data {object} -- The dataset that the user is trying to create.
@@ -300,11 +299,11 @@ def check_if_data_in_user_IDA_project(data, projects):
         if files:
             for file in files:
                 identifier = file["projectIdentifier"]
-                if identifier in user_projects:
-                    return True
+                if identifier not in user_projects:
+                    return False
         if directories:
             for directory in directories:
                 identifier = directory["projectIdentifier"]
-                if identifier in user_projects:
-                    return True
-    return False
+                if identifier not in user_projects:
+                    return False
+    return True

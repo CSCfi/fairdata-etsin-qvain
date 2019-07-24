@@ -283,11 +283,15 @@ const english = {
       tableRows: {
         id: 'ID',
         title: 'Title',
+        version: 'Version',
         modified: 'Modified',
+        created: 'Created',
         actions: 'Actions',
       },
+      oldVersion: 'Old',
+      latestVersion: 'Latest',
       editButton: 'Edit',
-      deleteButton: 'Remove',
+      deleteButton: 'Delete',
       confirmDelete: 'Are you sure you want to delete this dataset? Deleting the dataset will remove it from Qvain, and Etsin Search cannot find it anymore. Landing page for the dataset will NOT be removed.',
       goToEtsin: 'View in Etsin',
       noDatasets: 'You have no datasets',
@@ -297,6 +301,8 @@ const english = {
     },
     description: {
       title: 'Description',
+      infoTitle: 'Description info',
+      infoText: 'add text',
       description: {
         langEn: 'ENGLISH',
         langFi: 'FINNISH',
@@ -310,10 +316,11 @@ const english = {
           placeholderEn: 'Description (English)',
           placeholderFi: 'Description (Finnish)',
         },
-        instructions: 'Only one launguage selection is mandatory',
+        instructions: 'Only one language selection is mandatory',
       },
       otherIdentifiers: {
         title: 'Other Identifiers',
+        infoText: 'add text',
         instructions:
           'Identifier for the metadata will be created automatically but if there alredy is an EXISTING identifier please insert it here.',
         addButton: '+ Add new',
@@ -321,10 +328,12 @@ const english = {
       },
       fieldOfScience: {
         title: 'Field of Science *',
+        infoText: 'add text',
         placeholder: 'Select option',
       },
       keywords: {
         title: 'Keywords',
+        infoText: 'add text',
         placeholder: 'E.g. economy',
         addButton: 'Add keywords',
         help:
@@ -333,8 +342,10 @@ const english = {
     },
     rightsAndLicenses: {
       title: 'Rights And Licenses',
+      infoTitle: 'Rights And Licenses info',
       accessType: {
         title: 'Access Type',
+        infoText: 'add text',
         placeholder: 'Select option',
       },
       embargoDate: {
@@ -349,6 +360,7 @@ const english = {
       },
       license: {
         title: 'License',
+        infoText: 'add text',
         placeholder: 'Select option',
         other: {
           label: 'URL address',
@@ -358,6 +370,8 @@ const english = {
     },
     participants: {
       title: 'Participants',
+      infoTitle: 'Participants info',
+      infoText: 'add text',
       add: {
         title: 'Participants',
         help:
@@ -463,7 +477,7 @@ const english = {
           mixed: '',
           object: 'The Selected Organization should be an Object.',
           string: 'The Organization value must be string.',
-          required: 'Organization is required if the partisipant is a person.',
+          required: 'Organization is required if the participant is a person.',
         },
       },
       accessType: {
@@ -508,6 +522,9 @@ const english = {
         },
       },
       externalResources: {
+        title: {
+          required: 'External resource title is required',
+        },
         url: {
           required: 'External resource URL is required',
           url: 'External Resource URL needs to be of valid URL format',
@@ -516,14 +533,19 @@ const english = {
     },
     files: {
       title: 'Files',
+      infoTitle: 'Files info',
+      infoText: 'add text',
       dataCatalog: {
         label: 'File origin',
+        infoText: 'add text',
         explanation: 'Choose IDA if the data is stored in Fairdata Ida service. Choose ATT if the data is stored elsewhere.',
         placeholder: 'Select option'
       },
       help:
         'Files associated with this dataset. A dataset can only have either IDA files or external files. File metadata will not be associated with datasets, so remember to save edits to file metadata.',
       ida: {
+        title: 'Fairdata IDA files',
+        infoText: 'add text',
         help: 'If you have files in Fairdata IDA you can link them from here:',
         button: {
           label: 'Link files from Fairdata IDA',
@@ -596,6 +618,8 @@ const english = {
         help: 'These are the files and directories that you have added before. If you do not touch these, upon saving the changes to the dataset METAX will go through all the selected directories and associate any files and directories within, even the new ones. In other words, if you don\'t touch these and save, you can associate new files within the directory structure with your dataset.'
       },
       external: {
+        title: 'External resources (ATT)',
+        infoText: 'add text',
         help: 'Add link to external files from here:',
         button: {
           label: 'Add link to external files',
@@ -617,6 +641,9 @@ const english = {
             label: 'URL',
             placeholder: 'https://',
           },
+          cancel: {
+            label: 'Cancel',
+          },
           save: {
             label: 'Save',
           },
@@ -631,6 +658,10 @@ const english = {
   stc: 'Skip to content',
   tombstone: {
     info: 'The dataset has been either deprecated or removed',
+  },
+  userAuthenticationError: {
+    header: 'Login unsuccessful.',
+    content: 'Please make sure that you have a valid CSC account. If you tried to log in with an external account (for example Haka) you might get this error if your account is not associated with a CSC account. Please register a CSC account at https://sui.csc.fi. You can register with or without a Haka account.',
   },
 }
 

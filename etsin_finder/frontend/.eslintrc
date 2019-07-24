@@ -1,6 +1,6 @@
 {
   "parser": "babel-eslint",
-  "plugins": ["react", "import"],
+  "plugins": ["react", "import", "react-hooks"],
   "env": {
     "browser": true,
     "jest": true
@@ -54,7 +54,9 @@
         },
         "allowChildren": true
       }
-    ]
+    ],
+    "react-hooks/rules-of-hooks": "error", // Checks rules of Hooks
+    "react-hooks/exhaustive-deps": "warn" // Checks effect dependencies
   },
   "extends": ["airbnb"]
 }

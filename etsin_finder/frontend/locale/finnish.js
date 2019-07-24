@@ -283,9 +283,13 @@ const finnish = {
       tableRows: {
         id: 'ID',
         title: 'Otsikko',
+        version: 'Versio',
         modified: 'Muokattu',
+        created: 'Luotu',
         actions: 'Toiminnot',
       },
+      oldVersion: 'Vanha',
+      latestVersion: 'Uusin',
       editButton: 'Muokkaa',
       deleteButton: 'Poista',
       confirmDelete: 'Oletko varma, että haluat poistaa aineiston? Aineiston poiston jälkeen se ei enää näy Qvaimessa eikä Etsimen haku löydä sitä. Aineiston laskeutumissivua ei poisteta.',
@@ -301,6 +305,8 @@ const finnish = {
     },
     description: {
       title: 'Kuvaus',
+      infoTitle: 'Kuvaus info',
+      infoText: 'lisää texti',
       description: {
         langEn: 'ENGLANTI',
         langFi: 'SUOMI',
@@ -318,6 +324,7 @@ const finnish = {
       },
       otherIdentifiers: {
         title: 'Muut tunnisteet',
+        infoText: 'lisää texti',
         instructions:
           'Metadatan tunniste luodaan automaattisesti mutta jos on jo OLEMASSA OLEVA tunniste, syötä se tähän.',
         addButton: '+ Lisää uusi',
@@ -325,10 +332,12 @@ const finnish = {
       },
       fieldOfScience: {
         title: 'Tutkimusala *',
+        infoText: 'lisää texti',
         placeholder: 'Valitse vaihtoehto',
       },
       keywords: {
         title: 'Avainsanat',
+        infoText: 'lisää texti',
         placeholder: 'Esim. taloustiede',
         addButton: 'Lisää avainsanoja',
         help:
@@ -337,8 +346,10 @@ const finnish = {
     },
     rightsAndLicenses: {
       title: 'Oikeudet ja lisenssit',
+      infoTitle: 'Oikeudet ja lisenssit info',
       accessType: {
         title: 'Pääsyoikeus',
+        infoText: 'lisää texti',
         placeholder: 'Valitse vaihtoehto',
       },
       embargoDate: {
@@ -353,6 +364,7 @@ const finnish = {
       },
       license: {
         title: 'Lisenssi',
+        infoText: 'lisää texti',
         placeholder: 'Valitse vaihtoehto',
         other: {
           label: 'URL',
@@ -362,6 +374,8 @@ const finnish = {
     },
     participants: {
       title: 'Toimijat',
+      infoTitle: 'Toimijat info',
+      infoText: 'lisää texti',
       add: {
         title: 'Toimijat',
         help:
@@ -512,6 +526,9 @@ const finnish = {
         },
       },
       externalResources: {
+        title: {
+          required: 'Ulkoisen aineiston otsikko on pakollinen',
+        },
         url: {
           required: 'Ulkoisen aineiston URL osoite on pakollinen',
           url: 'Ulkoisen aineiston URL osoitteen pitää olla oikeassa URL formaatissa',
@@ -520,14 +537,19 @@ const finnish = {
     },
     files: {
       title: 'Tiedostot',
+      infoTitle: 'Tiedostot info',
+      infoText: 'lisää texti',
       dataCatalog: {
         label: 'Tiedosto lähde',
+        infoText: 'lisää texti',
         explanation: 'Valitse IDA jos tiedostot on tallennettu Fairdata Ida palveluun. Valitse ATT jos tiedostot tulevat muualta.',
         placeholder: 'Select data catalog'
       },
       help:
         'Aineistoon kuuluvat tiedostot. Aineistoon voi kuulua vain joko IDAssa olevia tiedostoja tai ulkopuolisia tiedostoja. Tiedostojen metadata ei ole osa aineistojen metadataa, joten muista tallentaa muutokset jotka teet tiedostojen metadataan.',
       ida: {
+        title: 'Fairdata IDA tiedostot',
+        infoText: 'lisää texti',
         help: 'Jos sinulla on tiedostoja Fairdata IDA:ssa, voit liittää ne tässä:',
         button: {
           label: 'Liitä tiedostoja Fairdata IDA:sta',
@@ -567,6 +589,8 @@ const finnish = {
         help: 'Nämä ovat sinun aiemmin valitsemia tiedostoja. Jos tallennat aineiston tekemättä muutoksia näihin, METAX katsoo läpi kaikki sisäkkäiset hakemistot ja tiedostot valitsemistasi hakemistoista ja lisää kaikki tiedostot mitä se ei ole aiemmin liittänyt aineistoon. Toisin sanoen, jos olet jälkikäteen lisännyt IDAan tiedostoja, voit liittää nämä uudet tiedostot aineistoon päivittämällä aineiston.'
       },
       external: {
+        title: 'Ulkoiset aineistot (ATT)',
+        infoText: 'lisää texti',
         help: 'Lisää linkkejä ulkoisiin tiedostoihin:',
         button: {
           label: 'Lisää linkki ulkoiseen tiedostoon',
@@ -577,7 +601,7 @@ const finnish = {
         },
         form: {
           title: {
-            label: 'Title',
+            label: 'Otsikko',
             placeholder: 'A Resource',
           },
           useCategory: {
@@ -587,6 +611,9 @@ const finnish = {
           url: {
             label: 'URL',
             placeholder: 'https://',
+          },
+          cancel: {
+            label: 'Cancel',
           },
           save: {
             label: 'Save',
@@ -602,6 +629,10 @@ const finnish = {
   stc: 'Siirry sivun pääsisältöön',
   tombstone: {
     info: 'Aineisto on joko vanhentunut tai poistettu',
+  },
+  userAuthenticationError: {
+    header: 'Kirjautuminen epäonnistui.',
+    content: 'Tarkistathan, että sinulla on voimassaoleva CSC-tunnus (Qvaimen ja Qvain Lightin käyttö vaatii sen). Jos yritit kirjaututua jollain toisella tunnuksella (esim. Haka), sitä ei todennäköisesti ole liitetty CSC-tunnukseen. Voit rekisteröidä itsellesi CSC-tunnuksen osoitteessa https://sui.csc.fi.',
   },
 }
 

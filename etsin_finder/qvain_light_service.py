@@ -12,6 +12,7 @@ import requests
 from etsin_finder.finder import app
 from etsin_finder.app_config import get_metax_qvain_api_config
 from etsin_finder.utils import json_or_empty, FlaskService
+import json
 
 log = app.logger
 
@@ -36,6 +37,8 @@ class MetaxQvainLightAPIService(FlaskService):
                                        '/{0}/files'
             self.METAX_GET_DATASETS_FOR_USER = 'https://{0}/rest/datasets'.format(metax_qvain_api_config['HOST']) + \
                                                '?metadata_provider_user={0}&file_details&ordering=-date_modified'
+            self.METAX_GET_ALL_DATASETS_FOR_USER = 'https://{0}/rest/datasets'.format(metax_qvain_api_config['HOST']) + \
+                '?metadata_provider_user={0}&file_details&ordering=-date_modified&no_pagination=true'
             self.METAX_CREATE_DATASET = 'https://{0}/rest/datasets'.format(metax_qvain_api_config['HOST'])
             self.user = metax_qvain_api_config['USER']
             self.pw = metax_qvain_api_config['PASSWORD']
@@ -103,7 +106,7 @@ class MetaxQvainLightAPIService(FlaskService):
 
         return metax_qvain_api_response.json()
 
-    def get_datasets_for_user(self, user_id, limit, offset):
+    def get_datasets_for_user(self, user_id, limit, offset, no_pagination):
         """
         Get datasets created by the specified user. Uses pagination, so offset and limit are used as well.
 
@@ -111,6 +114,8 @@ class MetaxQvainLightAPIService(FlaskService):
         :return datasets:
         """
         req_url = self.METAX_GET_DATASETS_FOR_USER.format(user_id)
+        if (no_pagination):
+            req_url = self.METAX_GET_ALL_DATASETS_FOR_USER.format(user_id)
 
         if (limit):
             req_url = req_url + "&limit={0}".format(limit[0])
@@ -168,7 +173,7 @@ class MetaxQvainLightAPIService(FlaskService):
                 log.error(e)
             return {'Error_message': 'Error trying to send data to metax.'}
 
-        return metax_api_response.json()
+        return metax_api_response.text, metax_api_response.status_code
 
     def update_dataset(self, data, cr_id):
         """
@@ -200,7 +205,7 @@ class MetaxQvainLightAPIService(FlaskService):
                 log.error("Failed to get data for directory {0} from Metax API")
                 log.error(e)
             return {'Error_message': 'Error trying to send data to metax.'}
-        return metax_api_response.json()
+        return metax_api_response.text, metax_api_response.status_code
 
     def delete_dataset(self, cr_id):
         """
@@ -230,7 +235,6 @@ class MetaxQvainLightAPIService(FlaskService):
 
         return metax_api_response.status_code
 
-
 _metax_api = MetaxQvainLightAPIService(app)
 
 def get_directory(dir_id):
@@ -251,14 +255,14 @@ def get_directory_for_project(project_id):
     """
     return _metax_api.get_directory_for_project(project_id)
 
-def get_datasets_for_user(user_id, limit, offset):
+def get_datasets_for_user(user_id, limit, offset, no_pagination):
     """
     Get datasets for user
 
     :param user_id, limit:
     :return:
     """
-    return _metax_api.get_datasets_for_user(user_id, limit, offset)
+    return _metax_api.get_datasets_for_user(user_id, limit, offset, no_pagination)
 
 def create_dataset(form_data):
     """
