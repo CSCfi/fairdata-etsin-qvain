@@ -15,6 +15,7 @@ const RightsAndLicenses = () => {
         <Translate content="qvain.rightsAndLicenses.title" />
         <Tooltip
           isOpen={tooltipOpen}
+          close={() => setTooltipOpen(!tooltipOpen)}
           align="Right"
           text={<LicensesInfo />}
         >

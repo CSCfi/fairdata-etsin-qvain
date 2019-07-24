@@ -44,6 +44,11 @@ class Files extends Component {
           <Translate content="qvain.files.title" />
           <Tooltip
             isOpen={this.state.tooltipOpen}
+            close={() =>
+              this.setState(prevState => ({
+                tooltipOpen: !prevState.tooltipOpen,
+              }))
+            }
             align="Right"
             text={<FilesInfo />}
           >

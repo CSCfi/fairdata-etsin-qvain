@@ -18,6 +18,7 @@ const Description = () => {
         <Translate content="qvain.description.title" />
         <Tooltip
           isOpen={tooltipOpen}
+          close={() => setTooltipOpen(!tooltipOpen)}
           align="Right"
           text={<DescriptionInfo />}
         >

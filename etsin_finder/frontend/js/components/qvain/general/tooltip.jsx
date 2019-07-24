@@ -1,73 +1,97 @@
-import React from 'react'
+import React, { useRef, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
-const Tooltip = ({ isOpen, align, text, children }) => {
+const Tooltip = ({ isOpen, close, align, text, children }) => {
+  const wrapperRef = useRef(null)
+  const handleClickOutside = event => {
+    if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+      close()
+    }
+  }
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  })
+
   let tooltip
   switch (align) {
     case 'Right':
       tooltip = (
-        <React.Fragment>
-          {children}
+        <>
+          <span ref={wrapperRef}>
+            {children}
+          </span>
           <Wrapper>
             <TooltipRight>
               <TooltipArrowRight />
               <TooltipText>{text}</TooltipText>
             </TooltipRight>
           </Wrapper>
-        </React.Fragment>
+        </>
       )
       break
     case 'Left':
       tooltip = (
-        <React.Fragment>
-          {children}
+        <>
+          <span ref={wrapperRef}>
+            {children}
+          </span>
           <Wrapper>
             <TooltipLeft>
               <TooltipText>{text}</TooltipText>
               <TooltipArrowLeft />
             </TooltipLeft>
           </Wrapper>
-        </React.Fragment>
+        </>
       )
       break
     case 'Down':
       tooltip = (
-        <React.Fragment>
-          {children}
+        <>
+          <span ref={wrapperRef}>
+            {children}
+          </span>
           <Wrapper>
             <TooltipDown>
               <TooltipArrowDown />
               <TooltipText>{text}</TooltipText>
             </TooltipDown>
           </Wrapper>
-        </React.Fragment>
+        </>
       )
       break
     case 'Up':
       tooltip = (
-        <React.Fragment>
-          {children}
+        <>
+          <span ref={wrapperRef}>
+            {children}
+          </span>
           <Wrapper>
             <TooltipUp>
               <TooltipText>{text}</TooltipText>
               <TooltipArrowUp />
             </TooltipUp>
           </Wrapper>
-        </React.Fragment>
+        </>
       )
       break
     default:
       tooltip = (
-        <React.Fragment>
-          {children}
+        <>
+          <span ref={wrapperRef}>
+            {children}
+          </span>
           <Wrapper>
             <TooltipDown>
               <TooltipText>{text}</TooltipText>
               <TooltipArrowDown />
             </TooltipDown>
           </Wrapper>
-        </React.Fragment>
+        </>
       )
   }
   return isOpen ? tooltip : children
@@ -75,6 +99,7 @@ const Tooltip = ({ isOpen, align, text, children }) => {
 
 Tooltip.propTypes = {
   isOpen: PropTypes.bool.isRequired,
+  close: PropTypes.func.isRequired,
   align: PropTypes.string.isRequired,
   text: PropTypes.element.isRequired,
   children: PropTypes.element.isRequired,
