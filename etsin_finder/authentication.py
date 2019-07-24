@@ -184,8 +184,8 @@ def get_user_home_organization_id():
     if home_organization:
         return home_organization[0]
     else:
-        log.warn("User seems to be authenticated but CSC organization id not in session object."
-                            "Saml userdata:\n{0}".format(session['samlUserdata']))
+        log.warning("User seems to be authenticated but CSC organization id not in session object."
+                    "Saml userdata:\n{0}".format(session['samlUserdata']))
 
 def get_user_home_organization_name():
     """
@@ -200,5 +200,5 @@ def get_user_home_organization_name():
     if home_organization_id:
         return home_organization_id[0]
     else:
-        log.warn("User seems to be authenticated but CSC organization name not in session object."
-                            "Saml userdata:\n{0}".format(session['samlUserdata']))
+        log.warning("User seems to be authenticated but CSC organization name not in session object."
+                    "Saml userdata:\n{0}".format(session['samlUserdata']))
