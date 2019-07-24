@@ -12,41 +12,49 @@ const participantsToMetax = participants => {
 }
 
 const directoriesToMetax = (selectedDirectories, existingDirectories) => {
-  const selectedDirectoryIdentifiers = selectedDirectories.map(sd => sd.identifier)
+  const selectedDirectoryIdentifiers = selectedDirectories
+    ? selectedDirectories.map(sd => sd.identifier)
+    : []
   const notOverwrittenExistingDirectories = existingDirectories
     ? existingDirectories.filter(ed => !selectedDirectoryIdentifiers.includes(ed.identifier))
     : []
   const directories = [...selectedDirectories, ...notOverwrittenExistingDirectories]
-  const parsedDirectoryData = directories.map(dir => ({
-    identifier: dir.identifier,
-    title: dir.title,
-    description: dir.description ? dir.description : undefined,
-    useCategory: {
-      identifier: dir.useCategory
-    },
-    projectIdentifier: dir.projectIdentifier ? dir.projectIdentifier : undefined
-  }))
+  const parsedDirectoryData = directories
+    ? directories.map(dir => ({
+      identifier: dir.identifier,
+      title: dir.title,
+      description: dir.description ? dir.description : undefined,
+      useCategory: {
+        identifier: dir.useCategory
+      },
+      projectIdentifier: dir.projectIdentifier ? dir.projectIdentifier : undefined
+    }))
+    : []
   return parsedDirectoryData
 }
 
 const filesToMetax = (selectedFiles, existingFiles) => {
-  const selectedFileIdentifiers = selectedFiles.map(sf => sf.identifier)
+  const selectedFileIdentifiers = selectedFiles
+    ? selectedFiles.map(sf => sf.identifier)
+    : []
   const notOverwrittenExistingFiles = existingFiles
     ? existingFiles.filter(ef => !selectedFileIdentifiers.includes(ef.identifier))
     : []
   const files = [...selectedFiles, ...notOverwrittenExistingFiles]
-  const parsedFileData = files.map(file => ({
-    identifier: file.identifier,
-    title: file.title,
-    description: file.description ? file.description : undefined,
-    fileType: file.fileType ? {
-      identifier: file.fileType ? file.fileType : undefined
-    } : undefined,
-    useCategory: {
-      identifier: file.useCategory
-    },
-    projectIdentifier: file.projectIdentifier ? file.projectIdentifier : undefined
-  }))
+  const parsedFileData = files
+    ? files.map(file => ({
+      identifier: file.identifier,
+      title: file.title,
+      description: file.description ? file.description : undefined,
+      fileType: file.fileType ? {
+        identifier: file.fileType ? file.fileType : undefined
+      } : undefined,
+      useCategory: {
+        identifier: file.useCategory
+      },
+      projectIdentifier: file.projectIdentifier ? file.projectIdentifier : undefined
+    }))
+    : []
   return parsedFileData
 }
 
@@ -73,8 +81,8 @@ const handleSubmitToBackend = (values) => {
     remote_resources:
       values.externalResources.length > 0 ? values.externalResources : [],
       dataCatalog: values.dataCatalog,
-      files: values.selectedFiles.length > 0 ? filesToMetax(values.selectedFiles) : [],
-      directories: values.selectedDirectories.length > 0 ? directoriesToMetax(values.selectedDirectories) : [],
+      files: filesToMetax(values.selectedFiles, values.existingFiles),
+      directories: directoriesToMetax(values.selectedDirectories, values.existingDirectories),
   }
   return obj
 }
