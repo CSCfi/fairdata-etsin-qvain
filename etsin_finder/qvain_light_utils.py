@@ -290,7 +290,7 @@ def check_if_data_in_user_IDA_project(data, projects):
         [bool] -- True if data belongs to user, and False is not.
 
     """
-    user_projects = [project.split(":")[0] for project in projects]
+    user_projects = [project.split(":")[1] for project in projects]
     # Add the test project 'project_x' for local development.
     user_projects.append("project_x")
     if "files" or "directories" in data:
