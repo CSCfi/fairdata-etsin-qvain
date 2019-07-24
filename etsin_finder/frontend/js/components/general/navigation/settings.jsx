@@ -20,7 +20,6 @@ import Login from './loginButton'
 import { Link } from '../button'
 import LangToggle from './langToggle'
 import DropdownMenu from './dropdownMenu'
-import { VerticalSeparator } from '../separator'
 
 export default class Settings extends Component {
   render() {
@@ -48,7 +47,6 @@ export default class Settings extends Component {
                 >Qvain
                 </Link>
               </Row>
-              <VerticalSeparator />
               <Row>
                 <QvainNavLink
                   width="100%"
