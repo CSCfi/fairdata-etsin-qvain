@@ -40,9 +40,11 @@ export default class FrontPage extends Component {
 
     this.state = {
       userPermissionErrorModalIsOpen: false,
+      userHomeOrganizationErrorModalIsOpen: false,
     }
 
-    this.closeModal = this.closeModal.bind(this)
+    this.closeUserPermissionErrorModal = this.closeUserPermissionErrorModal.bind(this)
+    this.closeUserHomeOrganizationErrorModal = this.closeUserHomeOrganizationErrorModal.bind(this)
   }
 
   componentDidMount() {
@@ -56,12 +58,23 @@ export default class FrontPage extends Component {
   }
 
   checkUserLoginStatus() {
-    // If the user has a user.commonName, but not a user.name, it means they were verified through HAKA, but do not have a CSC account.
     Stores.Auth.checkLogin()
       .then(() => {
-        if (Stores.Auth.user.commonName !== undefined && Stores.Auth.user.name === undefined) {
+        // If the user has a user.commonName, but not a user.name,
+        // it means they were verified through HAKA, but do not have a CSC account.
+        if (
+          Stores.Auth.user.commonName !== undefined &&
+          Stores.Auth.user.name === undefined) {
           this.setState({
             userPermissionErrorModalIsOpen: true,
+          })
+        // If the user has a user.name, but not a user.homeOrganizationName,
+        // it means they have a CSC account, but no home organization set.
+        } else if (
+          Stores.Auth.user.name !== undefined &&
+          Stores.Auth.user.homeOrganizationName === undefined) {
+          this.setState({
+            userHomeOrganizationErrorModalIsOpen: true,
           })
         }
       })
@@ -71,7 +84,7 @@ export default class FrontPage extends Component {
       })
   }
 
-  closeModal() {
+  closeUserPermissionErrorModal() {
     this.setState({
       userPermissionErrorModalIsOpen: false,
     })
@@ -80,17 +93,35 @@ export default class FrontPage extends Component {
     Auth.logout()
   }
 
+  closeUserHomeOrganizationErrorModal() {
+    this.setState({
+      userHomeOrganizationErrorModalIsOpen: false,
+    })
+    // At this point, the user is "logged in" and has a CSC account, but does not have a home organization set in sui.csc.fi.
+    // Performing Auth.logout(), ensuring the user is not still logged in onRefreshPage
+    Auth.logout()
+  }
+
   render() {
     return (
       <div className="search-page">
         <Modal
           isOpen={this.state.userPermissionErrorModalIsOpen}
-          onRequestClose={this.closeModal}
+          onRequestClose={this.closeUserPermissionErrorModal}
           customStyles={customStyles}
-          contentLabel="LoginUnsuccessful"
+          contentLabel="LoginUnsuccessfulPermissionError"
         >
           <Translate content="userAuthenticationError.header" component="h2" />
           <Translate content="userAuthenticationError.content" component="p" />
+        </Modal>
+        <Modal
+          isOpen={this.state.userHomeOrganizationErrorModalIsOpen}
+          onRequestClose={this.closeUserHomeOrganizationErrorModal}
+          customStyles={customStyles}
+          contentLabel="LoginUnsuccessfulHomeOrganizationError"
+        >
+          <Translate content="userHomeOrganizationErrror.header" component="h2" />
+          <Translate content="userHomeOrganizationErrror.content" component="p" />
         </Modal>
         <HeroBanner className="hero-primary">
           <div className="container">
