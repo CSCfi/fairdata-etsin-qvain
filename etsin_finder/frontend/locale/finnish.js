@@ -617,6 +617,10 @@ const finnish = {
     header: 'Kirjautuminen epäonnistui.',
     content: 'Tarkistathan, että sinulla on voimassaoleva CSC-tunnus (Qvaimen ja Qvain Lightin käyttö vaatii sen). Jos yritit kirjaututua jollain toisella tunnuksella (esim. Haka), sitä ei todennäköisesti ole liitetty CSC-tunnukseen. Voit rekisteröidä itsellesi CSC-tunnuksen osoitteessa https://sui.csc.fi.',
   },
+  userHomeOrganizationErrror: {
+    header: 'Kirjautuminen epäonnistui.',
+    content: 'Tunnusta ei ole liitetty mihinkään kotiorganisaatioon. Olethan yhteydessä CSC:n asiakaspalveluun.',
+  }
 }
 
 export default finnish

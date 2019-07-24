@@ -29,9 +29,11 @@ class Auth {
           headers: { 'content-type': 'application/json', charset: 'utf-8' },
         })
         .then(res => {
+          console.log(res)
           this.user = {
             name: res.data.user_csc_name,
             commonName: res.data.user_display_name,
+            homeOrganizationName: res.data.home_organization_name,
             idaGroups: res.data.user_ida_groups,
           }
           if (res.data.is_authenticated && !res.data.is_authenticated_CSC_user) {
@@ -39,7 +41,12 @@ class Auth {
             // but do not have a valid CSC account and should not be granted permission.
             this.userLogged = false
             this.cscUserLogged = false
-          } else if (res.data.is_authenticated && res.data.is_authenticated_CSC_user) {
+          } else if (!res.data.home_organization_name) {
+            // The user was able to verify themself using their CSC account,
+            // but do not have a home organization set (sui.csc.fi) and should not be granted permission.
+            this.userLogged = false
+            this.cscUserLogged = false
+          } else if (res.data.is_authenticated && res.data.is_authenticated_CSC_user && res.data.home_organization_name) {
             // The user has a valid CSC account and was logged in.
             this.userLogged = res.data.is_authenticated
             this.cscUserLogged = res.data.is_authenticated_CSC_user

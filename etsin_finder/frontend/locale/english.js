@@ -646,6 +646,10 @@ const english = {
     header: 'Login unsuccessful.',
     content: 'Please make sure that you have a valid CSC account. If you tried to log in with an external account (for example Haka) you might get this error if your account is not associated with a CSC account. Please register a CSC account at https://sui.csc.fi. You can register with or without a Haka account.',
   },
+  userHomeOrganizationErrror: {
+    header: 'Login unsuccesful.',
+    content: 'You have a verified CSC account, but your account does not seem to have a home organization. Please contact the CSC Helpdesk to set a home organization for your CSC account.',
+  }
 }
 
 export default english
