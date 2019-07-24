@@ -15,7 +15,7 @@ export const Input = styled.input`
   border-radius: 3px;
   border: solid 1px #cccccc;
   padding: 8px;
-  color: #808080;
+  color: #000;
   margin-bottom: 20px;
 `
 
@@ -24,7 +24,7 @@ export const Textarea = styled.textarea`
   border-radius: 3px;
   border: solid 1px #cccccc;
   padding: 8px;
-  color: #808080;
+  color: #000;
   margin-bottom: 20px;
 `
 

@@ -13,6 +13,7 @@ import Card from '../general/card'
 import Label from '../general/label'
 import { otherIdentifiersSchema, otherIdentifierSchema } from '../utils/formValidation'
 import ValidationError from '../general/validationError'
+import { Input } from '../general/form'
 
 class OtherIdentifierField extends React.Component {
   static propTypes = {
@@ -120,13 +121,6 @@ class OtherIdentifierField extends React.Component {
   }
 }
 
-const Input = styled.input`
-  width: 100%;
-  border-radius: 3px;
-  border: 1px solid #cccccc;
-  padding: 8px;
-  color: #808080;
-`
 const ButtonContainer = styled.div`
   text-align: right;
 `
