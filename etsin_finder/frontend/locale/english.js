@@ -525,6 +525,9 @@ const english = {
         title: {
           required: 'External resource title is required',
         },
+        useCategory: {
+          required: 'External resource use category is required',
+        },
         url: {
           required: 'External resource URL is required',
           url: 'External Resource URL needs to be of valid URL format',
