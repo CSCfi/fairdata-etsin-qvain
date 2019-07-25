@@ -80,7 +80,7 @@ const licenseSchema = yup.object().shape({
 
 const licenseSchemaForm = yup.object().shape({
   name: yup.object().nullable(),
-  identifier: yup.string().required()
+  identifier: yup.string().nullable()
 })
 
 const accessTypeSchema = yup.object().shape({
@@ -269,7 +269,19 @@ const qvainFormSchema = yup.object().shape({
   keywords: keywordsSchema,
   otherIdentifiers: otherIdentifiersSchema,
   accessType: accessTypeSchema,
-  license: licenseSchemaForm,
+  license: yup
+    .mixed()
+    .when('dataCatalog', {
+      is: 'urn:nbn:fi:att:data-catalog-ida',
+      then: yup.object().shape({
+        name: yup.object().nullable(),
+        identifier: yup.string()
+        }).required(translate('qvain.validationMessages.license.requiredIfIDA')),
+      otherwise: yup.object().shape({
+        name: yup.object().nullable(),
+        identifier: yup.string()
+        }),
+    }),
   otherLicenseUrl: yup
     .mixed()
     .when('license.identifier', {

@@ -491,6 +491,7 @@ const english = {
         required: 'Restriction Grounds are required if Access Type is not "Open".',
       },
       license: {
+        requiredIfIDA: 'License is mandatory for datasets where File origin is set to IDA.',
         otherUrl: {
           string: 'The license URL must be a valid string of text',
           url: 'The license URL must be a valid URL',

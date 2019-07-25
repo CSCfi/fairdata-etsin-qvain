@@ -6,7 +6,6 @@ import {
   LicenseUrls,
   FileAPIURLs,
   UseCategoryURLs,
-  DataCatalogIdentifiers
 } from '../../components/qvain/utils/constants'
 import { getPath } from '../../components/qvain/utils/object'
 
@@ -489,19 +488,23 @@ class Qvain {
     const l = researchDataset.access_rights.license
       ? researchDataset.access_rights.license[0]
       : undefined
-    if (l.identifier !== undefined) {
-      this.license = l
-        ? License(l.title, l.identifier)
-        : License(undefined, LicenseUrls.CCBY4)
+    if (l !== undefined) {
+      if (l.identifier !== undefined) {
+        this.license = l
+          ? License(l.title, l.identifier)
+          : License(undefined, LicenseUrls.CCBY4)
+      } else {
+        this.license = l
+          ? License(
+            {
+              en: 'Other (URL)',
+              fi: 'Muu (URL)'
+            }, 'other')
+          : License(undefined, LicenseUrls.CCBY4)
+        this.otherLicenseUrl = l.license
+      }
     } else {
-      this.license = l
-        ? License(
-          {
-            en: 'Other (URL)',
-            fi: 'Muu (URL)'
-          }, 'other')
-        : License(undefined, LicenseUrls.CCBY4)
-      this.otherLicenseUrl = l.license
+      this.license = undefined
     }
 
     // restriction grounds
@@ -528,14 +531,6 @@ class Qvain {
       ))
     }
     this.participants = this.mergeTheSameParticipants(participants)
-
-    // Load data catalog
-    this.dataCatalog = dataset.data_catalog && {
-      label: dataset.data_catalog.identifier === DataCatalogIdentifiers.IDA
-        ? 'IDA'
-        : 'ATT',
-      value: dataset.data_catalog.identifier
-    }
 
     // load data catalog
     this.dataCatalog = dataset.data_catalog !== undefined ? dataset.data_catalog.identifier : undefined
@@ -574,7 +569,7 @@ class Qvain {
     }
   }
 
-  // Creates a sigle instance of a participant, only has one role.
+  // Creates a single instance of a participant, only has one role.
   // Returns a Participant.
   createParticipant = (participantJson, role, participants) => {
     let name
@@ -615,9 +610,9 @@ class Qvain {
   }
 
   // Function that 'Merge' the participants with the same metadata (except UIid).
-  // It looks for partisipants with the same info but different roles and adds their
+  // It looks for participants with the same info but different roles and adds their
   // roles together to get one participant with multiple roles.
-  // Retruns a nw array with the merged participants.
+  // Returns a nw array with the merged participants.
   mergeTheSameParticipants = participants => {
     if (participants.length <= 1) return participants
     const mergedParticipants = []
@@ -633,14 +628,14 @@ class Qvain {
     return mergedParticipants
   }
 
-  // Function to compare two perticipants and see if they are the same perticipant.
+  // Function to compare two participants and see if they are the same participant.
   // Returns True if the participants seem the same, or False if not.
   isEqual = (p1, p2) => {
     if ('identifier' in p1 && 'identifier' in p2) {
       if (p1.identifier === p2.identifier) return true
       return false
     }
-    if ('email' in p1 && 'emain' in p2) {
+    if ('email' in p1 && 'email' in p2) {
       if (p1.email === p2.email && p1.name === p2.name && p1['@type'] === p2['@type']) return true
       return false
     }
