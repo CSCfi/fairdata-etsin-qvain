@@ -495,6 +495,7 @@ const finnish = {
         required: 'Saatavuutta rajoitettu on pakollinen kenttä jos Pääsyoikeus ei ole "Avoin".',
       },
       license: {
+        requiredIfIDA: 'Lisenssi on pakollinen kenttä kun Tiedosto lähde on IDA.',
         otherUrl: {
           string: 'Lisenssi URL pitää olla merkkijono',
           url: 'Lisenssi URL pitää olla oikeanlainen URL',

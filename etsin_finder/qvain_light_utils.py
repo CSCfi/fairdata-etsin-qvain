@@ -97,22 +97,24 @@ def access_rights_to_metax(data):
 
     """
     access_rights = {}
-    access_rights["access_type"] = {}
-    access_rights["access_type"]["identifier"] = data["accessType"]["url"]
-    access_rights["license"] = []
-    if "identifier" in data["license"] and data["license"]["identifier"] != 'other':
-        license_object = {}
-        license_object["identifier"] = data["license"]["identifier"]
-        access_rights["license"].append(license_object)
-    elif "otherLicenseUrl" in data:
-        license_object = {}
-        license_object["license"] = data["otherLicenseUrl"]
-        access_rights["license"].append(license_object)
-    if data["accessType"]["url"] != access_type["OPEN"]:
-        access_rights["restriction_grounds"] = []
-        access_rights["restriction_grounds"].append({"identifier": data["restrictionGrounds"]})
-    if data["accessType"]["url"] == access_type["EMBARGO"]:
-        access_rights["available"] = data["embargoDate"]
+    if "license" in data:
+        access_rights["license"] = []
+        if "identifier" in data["license"] and data["license"]["identifier"] != 'other':
+            license_object = {}
+            license_object["identifier"] = data["license"]["identifier"]
+            access_rights["license"].append(license_object)
+        elif "otherLicenseUrl" in data:
+            license_object = {}
+            license_object["license"] = data["otherLicenseUrl"]
+            access_rights["license"].append(license_object)
+    if "accessType" in data:
+        access_rights["access_type"] = {}
+        access_rights["access_type"]["identifier"] = data["accessType"]["url"]
+        if data["accessType"]["url"] != access_type["OPEN"]:
+            access_rights["restriction_grounds"] = []
+            access_rights["restriction_grounds"].append({"identifier": data["restrictionGrounds"]})
+        if data["accessType"]["url"] == access_type["EMBARGO"]:
+            access_rights["available"] = data["embargoDate"]
     return access_rights
 
 

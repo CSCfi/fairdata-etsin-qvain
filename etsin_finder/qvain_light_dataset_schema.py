@@ -74,9 +74,7 @@ class DatasetValidationSchema(Schema):
     )
     embargoDate = fields.Str()
     restrictionGrounds = fields.Str()
-    license = fields.Dict(
-        required=True
-    )
+    license = fields.Dict()
     otherLicenseUrl = fields.Str()
     dataCatalog = fields.Str()
     files = fields.List(fields.Dict())
