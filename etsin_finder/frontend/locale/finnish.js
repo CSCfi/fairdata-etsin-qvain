@@ -529,6 +529,9 @@ const finnish = {
         title: {
           required: 'Ulkoisen aineiston otsikko on pakollinen',
         },
+        useCategory: {
+          required: 'Ulkoisen aineiston käyttökategoria on pakollinen',
+        },
         url: {
           required: 'Ulkoisen aineiston URL osoite on pakollinen',
           url: 'Ulkoisen aineiston URL osoitteen pitää olla oikeassa URL formaatissa',
