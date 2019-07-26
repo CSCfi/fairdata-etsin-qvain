@@ -73,7 +73,7 @@ const handleSubmitToBackend = (values) => {
     keywords: values.keywords,
     participants: participantsToMetax(values.participants),
     accessType: values.accessType ? values.accessType : undefined,
-    restrictionGrounds: values.restrictionGrounds ? values.restrictionGrounds.value : undefined,
+    restrictionGrounds: values.restrictionGrounds ? values.restrictionGrounds.identifier : undefined,
     embargoDate: values.embargoExpDate,
     license: values.license ? values.license : undefined,
     otherLicenseUrl: values.otherLicenseUrl,
