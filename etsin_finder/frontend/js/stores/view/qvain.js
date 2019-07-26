@@ -574,7 +574,7 @@ class Qvain {
   createParticipant = (participantJson, role, participants) => {
     let name
     if (participantJson['@type'].toLowerCase() === EntityType.ORGANIZATION) {
-      name = participantJson.name ? participantJson.name.und : undefined
+      name = participantJson.name ? participantJson.name : undefined
     } else {
       name = participantJson.name
     }
@@ -583,14 +583,15 @@ class Qvain {
     if (participantJson['@type'].toLowerCase() === EntityType.ORGANIZATION) {
       const isPartOf = participantJson.is_part_of
       if (isPartOf !== undefined) {
-        parentOrg = isPartOf.name.und
+        parentOrg = isPartOf.name
       } else {
         parentOrg = undefined
       }
     } else {
       const parentOrgName = participantJson.member_of.name
-      if (parentOrgName !== undefined && parentOrgName.und !== undefined) {
-        parentOrg = parentOrgName.und
+      if (parentOrgName !== undefined) {
+        parentOrg = parentOrgName
+        console.log(parentOrgName)
       } else {
         parentOrg = undefined
       }
