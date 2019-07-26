@@ -479,6 +479,9 @@ const english = {
           string: 'The Organization value must be string.',
           required: 'Organization is required if the participant is a person.',
         },
+        requiredParticipants: {
+          required: 'Participants: Creator and publisher roles are mandatory. You must specify at least one creator, as well as a publisher, for your dataset. Note: one person can have both these roles.',
+        },
       },
       accessType: {
         string: 'Access Type must be string value.',
