@@ -483,6 +483,9 @@ const finnish = {
           string: 'Organisaation arvo tulisi olla merkkijono.',
           required: 'Organisaatio on pakollinen kenttä jos Toimija on Luonnollinen henkilö.',
         },
+        requiredParticipants: {
+          required: 'Toimijat: Tekijä ja julkaisija-roolit ovat pakollisia. Määrittele vähintään yksi tekijä ja likäksi julkaisija. Huomioi: yksittäisellä toimijalla voi olla useampi rooli.',
+        },
       },
       accessType: {
         string: 'Pääsyoikeus tulisi olla arvoltaan merkkijono.',

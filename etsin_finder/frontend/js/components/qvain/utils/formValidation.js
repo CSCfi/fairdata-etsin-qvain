@@ -264,6 +264,28 @@ const participantsSchema = yup
       }),
     })
   )
+  // Test: loop through the participant list and the roles of each participant
+  // A Creator and a Publisher must be found in the participant list in order to allow the dataset to be posted to the database
+  .test(
+    'contains-creator-and-publisher',
+    translate('qvain.validationMessages.participants.requiredParticipants.required'),
+    (value) => {
+      let foundCreator = false;
+      let foundPublisher = false;
+        for (let i = 0; i < value.length; i += 1) {
+          for (let j = 0; j < value[i].role.length; j += 1) {
+          if (value[i].role[j] === 'creator') {
+            foundCreator = true;
+          } else if (value[i].role[j] === 'publisher') {
+            foundPublisher = true;
+          }
+        }
+      }
+      if (foundCreator && foundPublisher) {
+        return true;
+      }
+      return false;
+    })
   .required()
 
 // ENTIRE FORM VALIDATION
