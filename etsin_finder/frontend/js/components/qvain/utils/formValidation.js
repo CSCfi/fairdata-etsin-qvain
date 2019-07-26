@@ -139,7 +139,7 @@ const participantOrganizationSchema = yup.object().shape({
   organization: yup.mixed().when('type', {
     is: 'person',
     then: yup
-      .string(translate('qvain.validationMessages.participants.organization.string'))
+      .object()
       .required(translate('qvain.validationMessages.participants.organization.required')),
     otherwise: yup
       .object(translate('qvain.validationMessages.participants.organization.object'))
@@ -231,10 +231,10 @@ const participantSchema = yup.object().shape({
   organization: yup.mixed().when('type', {
     is: 'person',
     then: yup
-      .string(translate('qvain.validationMessages.participants.organization.string'))
+      .object()
       .required(translate('qvain.validationMessages.participants.organization.required')),
     otherwise: yup
-      .string(translate('qvain.validationMessages.participants.organization.string'))
+      .object()
       .nullable(),
   }),
 })
@@ -251,10 +251,10 @@ const participantsSchema = yup
       organization: yup.mixed().when('type', {
         is: 'person',
         then: yup
-          .string(translate('qvain.validationMessages.participants.organization.string'))
+          .object()
           .required(translate('qvain.validationMessages.participants.organization.required')),
         otherwise: yup
-          .string(translate('qvain.validationMessages.participants.organization.string'))
+          .object()
           .nullable(),
       }),
     })
