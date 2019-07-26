@@ -30,13 +30,12 @@ class ParticipantsValidationSchema(Schema):
         fields.Str(validate=Length(min=1)),
         required=True
     )
-    name = fields.Str(
+    name = fields.Raw(
         required=True,
-        validate=Length(min=1)
     )
     email = fields.Email()
     identifier = fields.Str()
-    organization = fields.Str()
+    organization = fields.Dict()
 
 class DatasetValidationSchema(Schema):
     """
@@ -74,9 +73,7 @@ class DatasetValidationSchema(Schema):
     )
     embargoDate = fields.Str()
     restrictionGrounds = fields.Str()
-    license = fields.Dict(
-        required=True
-    )
+    license = fields.Dict()
     otherLicenseUrl = fields.Str()
     dataCatalog = fields.Str()
     files = fields.List(fields.Dict())

@@ -33,7 +33,22 @@ export class AddedParticipantsBase extends Component {
     this.props.Stores.Qvain.editParticipant(EmptyParticipant)
   }
 
+  getAddedParticipantName = (name, lang) => {
+    if (typeof name === 'object' && name !== null) {
+      if (lang in name) {
+        return name[lang]
+      }
+      if ('und' in name) {
+        return name.und
+      }
+      const langX = Object.keys(name)[0]
+      return name[langX]
+    }
+    return name
+  }
+
   render() {
+    const { lang } = this.props.Stores.Locale
     return (
       <ContainerSubsectionBottom>
         <Translate
@@ -47,7 +62,7 @@ export class AddedParticipantsBase extends Component {
           <ButtonGroup key={addedParticipant.uiId}>
             <ButtonLabel>
               <FontAwesomeIcon icon={addedParticipant.type === EntityType.PERSON ? faUser : faBuilding} style={{ marginRight: '8px' }} />
-              {addedParticipant.name}{addedParticipant.role.map(role => (` / ${ role }`))}
+              {this.getAddedParticipantName(addedParticipant.name, lang)}{addedParticipant.role.map(role => (` / ${ role }`))}
             </ButtonLabel>
             <ButtonContainer>
               <EditButton onClick={this.handleEditParticipant(addedParticipant)} />
