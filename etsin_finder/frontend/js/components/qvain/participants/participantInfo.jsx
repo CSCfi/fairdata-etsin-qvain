@@ -139,6 +139,25 @@ export class ParticipantInfoBase extends Component {
     )
   }
 
+  getOrganizationName = (org, lang) => {
+    // Check if org is object. If object then it comes from edit and the
+    // values can be uncertain.
+    // If the org object contains the current language, return that.
+    // If not but contains 'und' language, return that.
+    // Else find any language it contains and return that.
+    if (typeof org === 'object' && org !== null) {
+      if (lang in org) {
+        return org[lang]
+      }
+      if ('und' in org) {
+        return org.und
+      }
+      const langX = Object.keys(org)[0]
+      return org[langX]
+    }
+    return org
+  }
+
   render() {
     const participant = this.props.Stores.Qvain.participantInEdit
     const { lang } = this.props.Stores.Locale
@@ -190,7 +209,7 @@ export class ParticipantInfoBase extends Component {
                   participant.identifier = ''
                 }
               }}
-              value={{ label: participant.name, value: participant.identifier }}
+              value={{ label: this.getOrganizationName(participant.name, lang), value: participant.identifier }}
               onBlur={this.handleOnNameBlur}
             />
             )}
@@ -240,7 +259,10 @@ export class ParticipantInfoBase extends Component {
           attributes={{ placeholder: 'qvain.participants.add.organization.placeholder' }}
           onChange={(selection) => { participant.organization = selection.label }}
           onBlur={this.handleOnOrganizationBlur}
-          value={{ label: participant.organization, value: participant.organization }}
+          value={{
+            label: this.getOrganizationName(participant.organization, lang),
+            value: this.getOrganizationName(participant.organization, lang)
+          }}
           filterOption={createFilter({ ignoreAccents: false })}
         />
         {organizationError && <ValidationError>{organizationError}</ValidationError>}
