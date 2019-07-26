@@ -263,7 +263,7 @@ const participantsSchema = yup
   // A Creator and a Publisher must be found in the participant list in order to allow the dataset to be posted to the database
   .test(
     'contains-creator-and-publisher',
-    translate('qvain.validationMessages.participants.requiredParticipants.required'),
+    translate('qvain.validationMessages.participants.requiredParticipants.mandatoryParticipants'),
     (value) => {
       let foundCreator = false;
       let foundPublisher = false;
@@ -281,7 +281,7 @@ const participantsSchema = yup
       }
       return false;
     })
-  .required()
+  .required(translate('qvain.validationMessages.participants.requiredParticipants.atLeastOneParticipant'))
 
 // ENTIRE FORM VALIDATION
 
