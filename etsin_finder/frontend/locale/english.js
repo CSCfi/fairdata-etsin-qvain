@@ -327,7 +327,7 @@ const english = {
         alredyAdded: 'Identifier already added',
       },
       fieldOfScience: {
-        title: 'Field of Science *',
+        title: 'Field of Science',
         infoText: 'add text',
         placeholder: 'Select option',
       },
@@ -424,120 +424,128 @@ const english = {
     },
     validationMessages: {
       title: {
-        string: 'The Title must be a string value.',
-        max: 'The Title is too long.',
-        required: 'The Title is required in at least one language.',
+        string: 'The title must be a string value.',
+        max: 'The title is too long.',
+        required: 'A title is required in at least one language.',
       },
       description: {
-        string: 'The Description must be a string value.',
+        string: 'The description must be a string value.',
         max: 'The description is too long.',
-        required: 'The Description is required in at least one language.',
+        required: 'A description is required in at least one language.',
       },
       otherIdentifiers: {
-        string: 'Other Identifiers must be string value.',
-        url: 'Ther Identifiers should be valid URLs.',
-        max: 'Identifier too long.',
-        min: 'Identifier needs to be at least 10 characters long',
+        string: 'Other identifiers must be string value.',
+        url: 'The identifiers have to be valid URLs.',
+        max: 'The identifier is too long.',
+        min: 'The identifier needs to be at least 10 characters long.',
       },
       fieldOfScience: {},
       keywords: {
-        string: 'Keywords must be string value.',
-        max: 'Keyword too long.',
+        string: 'The keyword must be a string value.',
+        max: 'The keyword is too long.',
         required: 'At least one keyword is required.',
       },
       participants: {
         type: {
           mixed: '',
           oneOf: 'Participant type can only be "person" or "organization"',
-          required: 'The Type of the Participant is required.',
+          required: 'Participant type is required.',
         },
         roles: {
           mixed: '',
           oneOf: 'Roles must be one of "creator", "publisher" or "curator".',
           required:
-            'You must specify the role of the participant. Creator field is mandatory and there must be exactly one Publisher.',
+            'You must specify the role of the participant. A creator is mandatory and there must be exactly one publisher.',
         },
         name: {
-          string: 'The Name must be a string value.',
-          max: 'Name too long.',
+          string: 'The name must be a string value.',
+          max: 'The name is too long.',
           required: 'Name is a required field.',
         },
         email: {
           string: '',
-          max: 'Email too long.',
-          email: 'Please insert a valid Email address.',
+          max: 'The email address is too long.',
+          email: 'Please insert a valid email address.',
           nullable: '',
         },
         identifier: {
           string: '',
-          max: 'Identifier too long.',
+          max: 'The identifier is too long.',
           nullable: '',
         },
         organization: {
           mixed: '',
-          object: 'The Selected Organization should be an Object.',
-          string: 'The Organization value must be string.',
+          object: 'The selected organization should be an object.',
+          string: 'The organization value must be string.',
           required: 'Organization is required if the participant is a person.',
+        },
+        requiredParticipants: {
+          atLeastOneParticipant: 'You must add at least one participant to your dataset.',
+          mandatoryParticipants: 'Participants: Creator and publisher roles are mandatory. You must specify at least one creator, as well as a publisher, for your dataset. Note: one person can have both these roles.',
         },
       },
       accessType: {
-        string: 'Access Type must be string value.',
-        url: 'Reference value ERROR.',
-        required: 'Access Type is a required field.',
+        string: 'Access type must be string value.',
+        url: 'Reference value error.',
+        required: 'Access type is a required field.',
       },
       restrictionGrounds: {
-        string: 'Restriction Grounds must be string value.',
-        url: 'Reference value ERROR.',
-        required: 'Restriction Grounds are required if Access Type is not "Open".',
+        string: 'Restriction grounds must be string value.',
+        url: 'Reference value error.',
+        required: 'Restriction grounds are required if access type is not "Open".',
       },
       license: {
+        requiredIfIDA: 'License is mandatory for datasets where File origin is set to IDA.',
         otherUrl: {
           string: 'The license URL must be a valid string of text',
           url: 'The license URL must be a valid URL',
-          required: 'License URL is a required value',
+          required: 'License URL is a required field.',
         },
       },
       files: {
         dataCatalog: {
-          required: 'File origin is required'
+          required: 'File origin is required.'
         },
         file: {
           title: {
-            required: 'File title is required',
+            required: 'File title is required.',
           },
           description: {
-            required: 'File description is required',
+            required: 'File description is required.',
           },
           useCategory: {
-            required: 'File use category is required',
+            required: 'File use category is required.',
           },
         },
         directory: {
           title: {
-            required: 'Directory Title is required',
+            required: 'Directory title is required.',
           },
           useCategory: {
-            required: 'Directory use category is required',
+            required: 'Directory use category is required.',
           },
         },
       },
       externalResources: {
         title: {
-          required: 'External resource title is required',
+          required: 'External resource title is required.',
+        },
+        useCategory: {
+          required: 'External resource use category is required.',
         },
         url: {
-          required: 'External resource URL is required',
-          url: 'External Resource URL needs to be of valid URL format',
+          required: 'External resource URL is required.',
+          url: 'External resource URL needs to be of valid URL format.',
         },
       },
     },
     files: {
       title: 'Files',
       infoTitle: 'Files info',
-      infoText: 'add text',
+      infoText: 'Add text',
       dataCatalog: {
         label: 'File origin',
-        infoText: 'add text',
+        infoText: 'Add text',
         explanation: 'Choose IDA if the data is stored in Fairdata Ida service. Choose ATT if the data is stored elsewhere.',
         placeholder: 'Select option'
       },
@@ -545,7 +553,7 @@ const english = {
         'Files associated with this dataset. A dataset can only have either IDA files or external files. File metadata will not be associated with datasets, so remember to save edits to file metadata.',
       ida: {
         title: 'Fairdata IDA files',
-        infoText: 'add text',
+        infoText: 'Add text',
         help: 'If you have files in Fairdata IDA you can link them from here:',
         button: {
           label: 'Link files from Fairdata IDA',

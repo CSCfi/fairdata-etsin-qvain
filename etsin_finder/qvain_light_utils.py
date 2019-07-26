@@ -45,17 +45,14 @@ def alter_role_data(participant_list, role):
             participant["@type"] = "Person"
             participant["name"] = participant_object["name"]
             participant["member_of"] = {}
-            participant["member_of"]["name"] = {}
-            participant["member_of"]["name"]["und"] = participant_object["organization"]
+            participant["member_of"]["name"] = participant_object["organization"]
             participant["member_of"]["@type"] = "Organization"
         else:
             participant["@type"] = "Organization"
-            participant["name"] = {}
-            participant["name"]["und"] = participant_object["name"]
-            if "organization" in participant_object and participant_object["organization"] != "":
+            participant["name"] = participant_object["name"]
+            if "organization" in participant_object and participant_object["organization"] != {}:
                 participant["is_part_of"] = {}
-                participant["is_part_of"]["name"] = {}
-                participant["is_part_of"]["name"]["und"] = participant_object["organization"]
+                participant["is_part_of"]["name"] = participant_object["organization"]
                 participant["is_part_of"]["@type"] = "Organization"
 
         if "email" in participant_object:
@@ -97,22 +94,24 @@ def access_rights_to_metax(data):
 
     """
     access_rights = {}
-    access_rights["access_type"] = {}
-    access_rights["access_type"]["identifier"] = data["accessType"]["url"]
-    access_rights["license"] = []
-    if "identifier" in data["license"] and data["license"]["identifier"] != 'other':
-        license_object = {}
-        license_object["identifier"] = data["license"]["identifier"]
-        access_rights["license"].append(license_object)
-    elif "otherLicenseUrl" in data:
-        license_object = {}
-        license_object["license"] = data["otherLicenseUrl"]
-        access_rights["license"].append(license_object)
-    if data["accessType"]["url"] != access_type["OPEN"]:
-        access_rights["restriction_grounds"] = []
-        access_rights["restriction_grounds"].append({"identifier": data["restrictionGrounds"]})
-    if data["accessType"]["url"] == access_type["EMBARGO"]:
-        access_rights["available"] = data["embargoDate"]
+    if "license" in data:
+        access_rights["license"] = []
+        if "identifier" in data["license"] and data["license"]["identifier"] != 'other':
+            license_object = {}
+            license_object["identifier"] = data["license"]["identifier"]
+            access_rights["license"].append(license_object)
+        elif "otherLicenseUrl" in data:
+            license_object = {}
+            license_object["license"] = data["otherLicenseUrl"]
+            access_rights["license"].append(license_object)
+    if "accessType" in data:
+        access_rights["access_type"] = {}
+        access_rights["access_type"]["identifier"] = data["accessType"]["url"]
+        if data["accessType"]["url"] != access_type["OPEN"]:
+            access_rights["restriction_grounds"] = []
+            access_rights["restriction_grounds"].append({"identifier": data["restrictionGrounds"]})
+        if data["accessType"]["url"] == access_type["EMBARGO"]:
+            access_rights["available"] = data["embargoDate"]
     return access_rights
 
 
@@ -209,7 +208,7 @@ def data_to_metax(data, metadata_provider_org, metadata_provider_user):
             "curator": alter_role_data(data["participants"], "curator"),
             "other_identifier": other_identifiers_to_metax(data["identifiers"]),
             "field_of_science": [{
-                "identifier": data["fieldOfScience"]
+                "identifier": data["fieldOfScience"] if "fieldOfScience" in data else ""
             }],
             "keyword": data["keywords"],
             "access_rights": access_rights_to_metax(data),
@@ -267,7 +266,7 @@ def edited_data_to_metax(data, original):
     original["research_dataset"]["publisher"] = alter_role_data(data["participants"], "publisher")[0]
     original["research_dataset"]["curator"] = alter_role_data(data["participants"], "curator")
     original["research_dataset"]["other_identifier"] = other_identifiers_to_metax(data["identifiers"])
-    original["research_dataset"]["field_of_science"] = [{"identifier": data["fieldOfScience"]}]
+    original["research_dataset"]["field_of_science"] = [{"identifier": data["fieldOfScience"] if "fieldOfScience" in data else ""}]
     original["research_dataset"]["keyword"] = data["keywords"]
     original["research_dataset"]["access_rights"] = access_rights_to_metax(data)
     original["research_dataset"]["remote_resources"] = remote_resources_data_to_metax(data["remote_resources"]) if data["dataCatalog"] == "urn:nbn:fi:att:data-catalog-att" else ""

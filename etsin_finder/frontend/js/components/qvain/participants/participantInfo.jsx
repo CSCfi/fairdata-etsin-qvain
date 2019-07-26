@@ -32,10 +32,8 @@ export class ParticipantInfoBase extends Component {
   }
 
   state = {
-    orgs: {
-      en: [],
-      fi: []
-    },
+    orgs: [],
+    orgsLang: [],
     nameError: undefined,
     emailError: undefined,
     participantError: undefined,
@@ -46,25 +44,16 @@ export class ParticipantInfoBase extends Component {
   componentDidMount = () => {
     axios.get('https://metax.fairdata.fi/es/organization_data/organization/_search?size=1000')
       .then(res => {
+        const { lang } = this.props.Stores.Locale
         const list = res.data.hits.hits;
-        const refsEn = list.map(ref => (
+        const refs = list.map(ref => (
           {
             value: ref._source.code,
-            label: ref._source.label.und,
+            label: ref._source.label,
           }
           ))
-        const refsFi = list.map(ref => (
-          {
-            value: ref._source.code,
-            label: ref._source.label.fi,
-          }
-          ))
-        this.setState({
-          orgs: {
-            en: refsEn,
-            fi: refsFi
-          }
-        })
+        this.setState({ orgs: refs })
+        this.setState({ orgsLang: this.getOrgOptionsWithLang(refs, lang) })
       })
       .catch(error => {
         if (error.response) {
@@ -139,11 +128,44 @@ export class ParticipantInfoBase extends Component {
     )
   }
 
+  getOrgOptionsWithLang = (orgs, lang) => {
+    // From the reference data parse the values with the current lang
+    // or und.
+    const organizations = orgs.map(org => {
+      const orgWithLang = {
+        label: org.label[lang] ? org.label[lang] : org.label.und,
+        value: org.value
+      }
+      return orgWithLang
+    })
+    return organizations
+  }
+
+  getOrganizationName = (org, lang) => {
+    // Check if org is object. If object then it comes from edit and the
+    // values can be uncertain.
+    // If the org object contains the current language, return that.
+    // If not but contains 'und' language, return that.
+    // Else find any language it contains and return that.
+    if (typeof org === 'object' && org !== null) {
+      if (lang in org) {
+        return org[lang]
+      }
+      if ('und' in org) {
+        return org.und
+      }
+      const langX = Object.keys(org)[0]
+      return org[langX]
+    }
+    return org
+  }
+
   render() {
     const participant = this.props.Stores.Qvain.participantInEdit
     const { lang } = this.props.Stores.Locale
     const {
       orgs,
+      orgsLang,
       nameError,
       emailError,
       participantError,
@@ -172,7 +194,7 @@ export class ParticipantInfoBase extends Component {
               component={SelectOrg}
               name="nameField"
               id="nameField"
-              options={orgs[lang]}
+              options={orgsLang}
               formatCreateLabel={inputValue => (
                 <Fragment>
                   <Translate content="qvain.participants.add.newOrganization.label" />
@@ -181,16 +203,19 @@ export class ParticipantInfoBase extends Component {
               )}
               attributes={{ placeholder: 'qvain.participants.add.organization.placeholder' }}
               onChange={(selection) => {
-                participant.name = selection.label
+                participant.name = orgs.find(org => org.value === selection.value).label
                 // if selection value ie the org identifier is not in the reference data, then we are adding a new org, so do not define
                 // identifier
-                if (orgs[lang].filter(opt => opt.value === selection.value).length > 0) {
+                if (orgs.filter(opt => opt.value === selection.value).length > 0) {
                   participant.identifier = selection.value
                 } else {
                   participant.identifier = ''
                 }
               }}
-              value={{ label: participant.name, value: participant.identifier }}
+              value={{
+                label: this.getOrganizationName(participant.name, lang),
+                value: participant.identifier
+              }}
               onBlur={this.handleOnNameBlur}
             />
             )}
@@ -215,7 +240,7 @@ export class ParticipantInfoBase extends Component {
           id="identifierField"
           component={Input}
           type="text"
-          disabled={orgs[lang].find(opt => opt.value === participant.identifier)}
+          disabled={orgsLang.find(opt => opt.value === participant.identifier)}
           attributes={{ placeholder: 'qvain.participants.add.identifier.placeholder' }}
           onChange={(event) => { participant.identifier = event.target.value }}
           value={participant.identifier}
@@ -230,7 +255,7 @@ export class ParticipantInfoBase extends Component {
           component={SelectOrg}
           name="orgField"
           id="orgField"
-          options={orgs[lang]}
+          options={orgsLang}
           formatCreateLabel={inputValue => (
             <Fragment>
               <Translate content="qvain.participants.add.newOrganization.label" />
@@ -238,9 +263,14 @@ export class ParticipantInfoBase extends Component {
             </Fragment>
           )}
           attributes={{ placeholder: 'qvain.participants.add.organization.placeholder' }}
-          onChange={(selection) => { participant.organization = selection.label }}
+          onChange={(selection) => {
+            participant.organization = orgs.find(org => org.value === selection.value).label
+          }}
           onBlur={this.handleOnOrganizationBlur}
-          value={{ label: participant.organization, value: participant.organization }}
+          value={{
+            label: this.getOrganizationName(participant.organization, lang),
+            value: this.getOrganizationName(participant.organization, lang)
+          }}
           filterOption={createFilter({ ignoreAccents: false })}
         />
         {organizationError && <ValidationError>{organizationError}</ValidationError>}

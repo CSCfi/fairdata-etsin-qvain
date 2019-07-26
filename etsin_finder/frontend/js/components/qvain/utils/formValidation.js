@@ -78,11 +78,6 @@ const licenseSchema = yup.object().shape({
     .nullable(),
 })
 
-const licenseSchemaForm = yup.object().shape({
-  name: yup.object().nullable(),
-  identifier: yup.string().required()
-})
-
 const accessTypeSchema = yup.object().shape({
   name: yup.string(),
   url: yup
@@ -144,7 +139,7 @@ const participantOrganizationSchema = yup.object().shape({
   organization: yup.mixed().when('type', {
     is: 'person',
     then: yup
-      .string(translate('qvain.validationMessages.participants.organization.string'))
+      .object()
       .required(translate('qvain.validationMessages.participants.organization.required')),
     otherwise: yup
       .object(translate('qvain.validationMessages.participants.organization.object'))
@@ -209,6 +204,11 @@ const externalResourceTitleSchema = yup
   .string()
   .required(translate('qvain.validationMessages.externalResources.title.required'))
 
+// Use category is one of preset 7 options (all strings)
+const externalResourceUseCategorySchema = yup
+  .string()
+  .required(translate('qvain.validationMessages.externalResources.useCategory.required'))
+
 const externalResourceUrlSchema = yup
   .string()
   .url(translate('qvain.validationMessages.externalResources.url.url'))
@@ -216,6 +216,7 @@ const externalResourceUrlSchema = yup
 
 const externalResourceSchema = yup.object().shape({
   title: externalResourceTitleSchema,
+  useCategory: externalResourceUseCategorySchema,
   url: externalResourceUrlSchema,
 })
 
@@ -230,10 +231,10 @@ const participantSchema = yup.object().shape({
   organization: yup.mixed().when('type', {
     is: 'person',
     then: yup
-      .string(translate('qvain.validationMessages.participants.organization.string'))
+      .object()
       .required(translate('qvain.validationMessages.participants.organization.required')),
     otherwise: yup
-      .string(translate('qvain.validationMessages.participants.organization.string'))
+      .object()
       .nullable(),
   }),
 })
@@ -250,26 +251,60 @@ const participantsSchema = yup
       organization: yup.mixed().when('type', {
         is: 'person',
         then: yup
-          .string(translate('qvain.validationMessages.participants.organization.string'))
+          .object()
           .required(translate('qvain.validationMessages.participants.organization.required')),
         otherwise: yup
-          .string(translate('qvain.validationMessages.participants.organization.string'))
+          .object()
           .nullable(),
       }),
     })
   )
-  .required()
+  // Test: loop through the participant list and the roles of each participant
+  // A Creator and a Publisher must be found in the participant list in order to allow the dataset to be posted to the database
+  .test(
+    'contains-creator-and-publisher',
+    translate('qvain.validationMessages.participants.requiredParticipants.mandatoryParticipants'),
+    (value) => {
+      let foundCreator = false;
+      let foundPublisher = false;
+        for (let i = 0; i < value.length; i += 1) {
+          for (let j = 0; j < value[i].role.length; j += 1) {
+          if (value[i].role[j] === 'creator') {
+            foundCreator = true;
+          } else if (value[i].role[j] === 'publisher') {
+            foundPublisher = true;
+          }
+        }
+      }
+      if (foundCreator && foundPublisher) {
+        return true;
+      }
+      return false;
+    })
+  .required(translate('qvain.validationMessages.participants.requiredParticipants.atLeastOneParticipant'))
 
 // ENTIRE FORM VALIDATION
 
 const qvainFormSchema = yup.object().shape({
   title: titleSchema,
   description: descriptionSchema,
-  fieldOfScience: yup.string().required(),
+  fieldOfScience: yup.string(),
   keywords: keywordsSchema,
   otherIdentifiers: otherIdentifiersSchema,
   accessType: accessTypeSchema,
-  license: licenseSchemaForm,
+  license: yup
+    .mixed()
+    .when('dataCatalog', {
+      is: 'urn:nbn:fi:att:data-catalog-ida',
+      then: yup.object().shape({
+        name: yup.object().nullable(),
+        identifier: yup.string()
+        }).required(translate('qvain.validationMessages.license.requiredIfIDA')),
+      otherwise: yup.object().shape({
+        name: yup.object().nullable(),
+        identifier: yup.string()
+        }),
+    }),
   otherLicenseUrl: yup
     .mixed()
     .when('license.identifier', {
