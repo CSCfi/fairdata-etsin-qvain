@@ -262,8 +262,8 @@ const finnish = {
       editSuccess: 'Uusi aineisto versio luotu!',
       editMetadataSuccess: 'Aineisto päivitys onnistui!',
     },
-    openErrorMessages: 'Avaa virhe viestit',
-    closeErrorMessages: 'Sulje virhe viestit',
+    openErrorMessages: 'Avaa virheviestit',
+    closeErrorMessages: 'Sulje virheviestit',
     unsuccessfullLogin: 'Kirjautuminen epäonnistui.',
     notCSCUser1:
       'Varmistakaa että teillä on voimassaoleva CSC tunnus. Jos yritit kirjautua sisään ulkoisella tunnuksella (kuten Haka) Niin saatat saada tämän virhe ilmoituksen jos titlit eivät ole linkitetty. Linkityksen voi tehdä',
@@ -439,8 +439,8 @@ const finnish = {
       },
       otherIdentifiers: {
         string: 'Tunnisteet tulisivat olla arvoltaan merkkijonoja.',
-        url: 'Tunnisteet täytyy olla valiideja URL;eja',
-        max: 'Tunniste liian pitkä.',
+        url: 'Tunnisteet täytyy olla valiideja URL:eja',
+        max: 'Tunniste on liian pitkä.',
         min: 'Tunnisteen pitää olla vähintään 10 merkkiä pitkä.',
       },
       fieldOfScience: {},
@@ -452,14 +452,14 @@ const finnish = {
       participants: {
         type: {
           mixed: '',
-          oneOf: 'Toimijan tyyppi pitää olla joko "person" tai "organization"',
+          oneOf: 'Toimijan tyyppi pitää olla joko "Luonnollinen henkilö" tai "Organisaatio".',
           required: 'Toimijan tyyppi on pakollinen.',
         },
         roles: {
           mixed: '',
-          oneOf: 'Roolin kuuluisi olla "creator", "publisher" tai "curator".',
+          oneOf: 'Roolin kuuluisi olla "Tekijä", "Julkasija" tai "Kuraattori".',
           required:
-            'Tekijän rooli on pakollinen. On myös pakollista määrittää tasan yhden Julkaisijan.',
+            'Tekijän rooli on pakollinen. On myös pakollista määrittää tasan yhden julkaisijan.',
         },
         name: {
           string: 'Nimi pitää olla arvoltaan merkkijono.',
@@ -479,84 +479,85 @@ const finnish = {
         },
         organization: {
           mixed: '',
-          object: 'Valittu Organisaatio tulisi olla olio.',
+          object: 'Valittu organisaatio tulisi olla olio.',
           string: 'Organisaation arvo tulisi olla merkkijono.',
-          required: 'Organisaatio on pakollinen kenttä jos Toimija on Luonnollinen henkilö.',
+          required: 'Organisaatio on pakollinen kenttä jos toimija on luonnollinen henkilö.',
         },
         requiredParticipants: {
-          required: 'Toimijat: Tekijä ja julkaisija-roolit ovat pakollisia. Määrittele vähintään yksi tekijä ja likäksi julkaisija. Huomioi: yksittäisellä toimijalla voi olla useampi rooli.',
+          atLeastOneParticipant: 'Aineistoon on lisättävä vähintään yksi toimija.',
+          mandatoryParticipants: 'Toimijat: Tekijä ja julkaisija-roolit ovat pakollisia. Määrittele vähintään yksi tekijä ja likäksi julkaisija. Huomioi: yksittäisellä toimijalla voi olla useampi rooli.',
         },
       },
       accessType: {
         string: 'Pääsyoikeus tulisi olla arvoltaan merkkijono.',
-        url: 'Referenssi arvo ERROR.',
+        url: 'Virhe pääsyoikeuden referenssiarvossa.',
         required: 'Pääsyoikeus on pakollimen kenttä.',
       },
       restrictionGrounds: {
-        string: 'kentän arvo tulisi olla merkkijono.',
-        url: 'Referenssi arvo ERROR.',
-        required: 'Saatavuutta rajoitettu on pakollinen kenttä jos Pääsyoikeus ei ole "Avoin".',
+        string: 'Kentän arvo tulisi olla merkkijono.',
+        url: 'Virhe satavuutta rajoitettu-kentän referenssiarvossa.',
+        required: 'Saatavuutta rajoitettu on pakollinen kenttä jos pääsyoikeus ei ole "Avoin".',
       },
       license: {
-        requiredIfIDA: 'Lisenssi on pakollinen kenttä kun Tiedosto lähde on IDA.',
+        requiredIfIDA: 'Lisenssi on pakollinen kenttä kun tiedoston lähde on IDA.',
         otherUrl: {
-          string: 'Lisenssi URL pitää olla merkkijono',
-          url: 'Lisenssi URL pitää olla oikeanlainen URL',
-          required: 'Lisenssi URL on pakollinen',
+          string: 'Lisenssin URL pitää olla merkkijono.',
+          url: 'Lisenssin URL pitää olla oikeanlainen URL.',
+          required: 'Lisenssin URL on pakollinen kenttä.',
         },
       },
       files: {
         dataCatalog: {
-          required: 'Tiedosto lähde on pakollinen'
+          required: 'Tiedoston lähde on pakollinen kenttä.'
         },
         file: {
           title: {
-            required: 'Tiedoston otsikko on pakollinen',
+            required: 'Tiedoston otsikko on pakollinen kenttä.',
           },
           description: {
-            required: 'Tiedoston kuvaus on pakollinen',
+            required: 'Tiedoston kuvaus on pakollinen kenttä.',
           },
           useCategory: {
-            required: 'Tiedoston käyttökategoria on pakollinen',
+            required: 'Tiedoston käyttökategoria on pakollinen kenttä.',
           },
         },
         directory: {
           title: {
-            required: 'Hakemiston otsikko on pakollinen',
+            required: 'Hakemiston otsikko on pakollinen kenttä.',
           },
           useCategory: {
-            required: 'Hakemiston käyttökategoria on pakollinen',
+            required: 'Hakemiston käyttökategoria on pakollinen kenttä.',
           },
         },
       },
       externalResources: {
         title: {
-          required: 'Ulkoisen aineiston otsikko on pakollinen',
+          required: 'Ulkoisen aineiston otsikko on pakollinen kenttä.',
         },
         useCategory: {
-          required: 'Ulkoisen aineiston käyttökategoria on pakollinen',
+          required: 'Ulkoisen aineiston käyttökategoria on pakollinen kenttä.',
         },
         url: {
-          required: 'Ulkoisen aineiston URL osoite on pakollinen',
-          url: 'Ulkoisen aineiston URL osoitteen pitää olla oikeassa URL formaatissa',
+          required: 'Ulkoisen aineiston URL osoite on pakollinen kenttä.',
+          url: 'Ulkoisen aineiston URL osoitteen pitää olla oikeassa URL-formaatissa',
         },
       },
     },
     files: {
       title: 'Tiedostot',
       infoTitle: 'Tiedostot info',
-      infoText: 'lisää texti',
+      infoText: 'Lisää texti',
       dataCatalog: {
-        label: 'Tiedosto lähde',
-        infoText: 'lisää texti',
+        label: 'Tiedoston lähde',
+        infoText: 'Lisää texti',
         explanation: 'Valitse IDA jos tiedostot on tallennettu Fairdata Ida palveluun. Valitse ATT jos tiedostot tulevat muualta.',
-        placeholder: 'Select data catalog'
+        placeholder: 'Valitse vaihtoehto'
       },
       help:
         'Aineistoon kuuluvat tiedostot. Aineistoon voi kuulua vain joko IDAssa olevia tiedostoja tai ulkopuolisia tiedostoja. Tiedostojen metadata ei ole osa aineistojen metadataa, joten muista tallentaa muutokset jotka teet tiedostojen metadataan.',
       ida: {
         title: 'Fairdata IDA tiedostot',
-        infoText: 'lisää texti',
+        infoText: 'Lisää texti',
         help: 'Jos sinulla on tiedostoja Fairdata IDA:ssa, voit liittää ne tässä:',
         button: {
           label: 'Liitä tiedostoja Fairdata IDA:sta',
@@ -609,7 +610,7 @@ const finnish = {
         form: {
           title: {
             label: 'Otsikko',
-            placeholder: 'A Resource',
+            placeholder: 'Tiedoston nimi',
           },
           useCategory: {
             label: 'Käyttökategoria',
@@ -620,13 +621,13 @@ const finnish = {
             placeholder: 'https://',
           },
           cancel: {
-            label: 'Cancel',
+            label: 'Kumoa',
           },
           save: {
-            label: 'Save',
+            label: 'Tallenna',
           },
           add: {
-            label: 'Add',
+            label: 'Lisää',
           },
         },
       },
