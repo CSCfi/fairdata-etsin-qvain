@@ -269,7 +269,7 @@ def edited_data_to_metax(data, original):
     original["research_dataset"]["publisher"] = alter_role_data(data["participants"], "publisher")[0]
     original["research_dataset"]["curator"] = alter_role_data(data["participants"], "curator")
     original["research_dataset"]["other_identifier"] = other_identifiers_to_metax(data["identifiers"])
-    original["research_dataset"]["field_of_science"] = [{"identifier": data["fieldOfScience"]}]
+    original["research_dataset"]["field_of_science"] = [{"identifier": data["fieldOfScience"] if "fieldOfScience" in data else ""}]
     original["research_dataset"]["keyword"] = data["keywords"]
     original["research_dataset"]["access_rights"] = access_rights_to_metax(data)
     original["research_dataset"]["remote_resources"] = remote_resources_data_to_metax(data["remote_resources"]) if data["dataCatalog"] == "urn:nbn:fi:att:data-catalog-att" else ""
