@@ -211,7 +211,7 @@ def data_to_metax(data, metadata_provider_org, metadata_provider_user):
             "curator": alter_role_data(data["participants"], "curator"),
             "other_identifier": other_identifiers_to_metax(data["identifiers"]),
             "field_of_science": [{
-                "identifier": data["fieldOfScience"]
+                "identifier": data["fieldOfScience"] if "fieldOfScience" in data else ""
             }],
             "keyword": data["keywords"],
             "access_rights": access_rights_to_metax(data),

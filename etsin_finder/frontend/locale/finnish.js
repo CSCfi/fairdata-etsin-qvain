@@ -331,7 +331,7 @@ const finnish = {
         alredyAdded: 'Tunniste on jo lisätty',
       },
       fieldOfScience: {
-        title: 'Tutkimusala *',
+        title: 'Tutkimusala',
         infoText: 'lisää texti',
         placeholder: 'Valitse vaihtoehto',
       },
