@@ -327,7 +327,7 @@ const english = {
         alredyAdded: 'Identifier already added',
       },
       fieldOfScience: {
-        title: 'Field of Science *',
+        title: 'Field of Science',
         infoText: 'add text',
         placeholder: 'Select option',
       },

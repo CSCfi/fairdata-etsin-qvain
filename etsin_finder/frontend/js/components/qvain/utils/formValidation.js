@@ -78,11 +78,6 @@ const licenseSchema = yup.object().shape({
     .nullable(),
 })
 
-const licenseSchemaForm = yup.object().shape({
-  name: yup.object().nullable(),
-  identifier: yup.string().nullable()
-})
-
 const accessTypeSchema = yup.object().shape({
   name: yup.string(),
   url: yup
@@ -293,7 +288,7 @@ const participantsSchema = yup
 const qvainFormSchema = yup.object().shape({
   title: titleSchema,
   description: descriptionSchema,
-  fieldOfScience: yup.string().required(),
+  fieldOfScience: yup.string(),
   keywords: keywordsSchema,
   otherIdentifiers: otherIdentifiersSchema,
   accessType: accessTypeSchema,
