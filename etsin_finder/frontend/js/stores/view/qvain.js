@@ -445,6 +445,8 @@ class Qvain {
     const researchDataset = dataset.research_dataset
 
     // Load description
+    this.title = { ...researchDataset.title }
+    this.description = { ...researchDataset.description }
     this.title.en = researchDataset.title.en ? researchDataset.title.en : ''
     this.title.fi = researchDataset.title.fi ? researchDataset.title.fi : ''
     this.description.en = researchDataset.description.en ? researchDataset.description.en : ''
@@ -591,7 +593,6 @@ class Qvain {
       const parentOrgName = participantJson.member_of.name
       if (parentOrgName !== undefined) {
         parentOrg = parentOrgName
-        console.log(parentOrgName)
       } else {
         parentOrg = undefined
       }
