@@ -762,7 +762,7 @@ export const Participant = (entityType, roles, name, email, identifier, organiza
   uiId,
 })
 
-export const EmptyParticipant = Participant(EntityType.PERSON, [], '', '', '', '', undefined)
+export const EmptyParticipant = Participant(EntityType.PERSON, [], '', '', '', {}, undefined)
 
 export const FieldOfScience = (name, url) => ({
   name,
