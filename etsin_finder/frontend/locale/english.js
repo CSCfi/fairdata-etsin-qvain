@@ -276,6 +276,7 @@ const english = {
     },
     datasets: {
       title: 'Your Datasets',
+      search: 'Search',
       help: 'Choose a dataset to edit or create a new dataset',
       createButton: 'Create dataset',
       tableRows: {

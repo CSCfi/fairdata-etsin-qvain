@@ -194,7 +194,7 @@ export class ParticipantInfoBase extends Component {
               component={SelectOrg}
               name="nameField"
               options={orgsLang}
-              inputTd="nameField"
+              inputId="nameField"
               formatCreateLabel={inputValue => (
                 <Fragment>
                   <Translate content="qvain.participants.add.newOrganization.label" />
