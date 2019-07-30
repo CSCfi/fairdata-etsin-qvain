@@ -218,10 +218,10 @@ class Qvain {
     return this.externalResources
   }
 
- @computed
- get getExternalResourceInEdit() {
-   return this.externalResourceInEdit
- }
+  @computed
+  get getExternalResourceInEdit() {
+    return this.externalResourceInEdit
+  }
 
   // FILE PICKER STATE MANAGEMENT
 
@@ -310,9 +310,7 @@ class Qvain {
     ]
     dir.files.forEach(f => {
       f.selected = false
-      this.selectedFiles = [
-        ...this.selectedFiles.filter(file => file.identifier !== f.identifier),
-      ]
+      this.selectedFiles = [...this.selectedFiles.filter(file => file.identifier !== f.identifier)]
     })
     dir.directories.forEach(d => this.deselectChildren(d))
   }
@@ -360,9 +358,7 @@ class Qvain {
                     Directory(
                       newDir,
                       d,
-                      this.selectedDirectories
-                        .map(sd => sd.identifier)
-                        .includes(newDir.identifier),
+                      this.selectedDirectories.map(sd => sd.identifier).includes(newDir.identifier),
                       false
                     )
                   ),
@@ -477,8 +473,8 @@ class Qvain {
       ? researchDataset.access_rights.access_type
       : undefined
     this.accessType = at
-    ? AccessType(at.pref_label, at.identifier)
-    : AccessType(undefined, AccessTypeURLs.OPEN)
+      ? AccessType(at.pref_label, at.identifier)
+      : AccessType(undefined, AccessTypeURLs.OPEN)
 
     // embargo date
     const date = researchDataset.access_rights.available
@@ -492,16 +488,16 @@ class Qvain {
       : undefined
     if (l !== undefined) {
       if (l.identifier !== undefined) {
-        this.license = l
-          ? License(l.title, l.identifier)
-          : License(undefined, LicenseUrls.CCBY4)
+        this.license = l ? License(l.title, l.identifier) : License(undefined, LicenseUrls.CCBY4)
       } else {
         this.license = l
           ? License(
-            {
-              en: 'Other (URL)',
-              fi: 'Muu (URL)'
-            }, 'other')
+              {
+                en: 'Other (URL)',
+                fi: 'Muu (URL)',
+              },
+              'other'
+            )
           : License(undefined, LicenseUrls.CCBY4)
         this.otherLicenseUrl = l.license
       }
@@ -513,29 +509,31 @@ class Qvain {
     const rg = researchDataset.access_rights.restriction_grounds
       ? researchDataset.access_rights.restriction_grounds[0]
       : undefined
-    this.restrictionGrounds = rg
-      ? RestrictionGrounds(rg.pref_label, rg.identifier)
-      : undefined
+    this.restrictionGrounds = rg ? RestrictionGrounds(rg.pref_label, rg.identifier) : undefined
 
     // Load participants
     const participants = []
     if ('publisher' in researchDataset) {
-      participants.push(this.createParticipant(researchDataset.publisher, Role.PUBLISHER, participants))
+      participants.push(
+        this.createParticipant(researchDataset.publisher, Role.PUBLISHER, participants)
+      )
     }
     if ('curator' in researchDataset) {
-      researchDataset.curator.forEach(curator => (
+      researchDataset.curator.forEach(curator =>
         participants.push(this.createParticipant(curator, Role.CURATOR, participants))
-      ))
+      )
     }
     if ('creator' in researchDataset) {
-      researchDataset.creator.forEach(creator => (
+      researchDataset.creator.forEach(creator =>
         participants.push(this.createParticipant(creator, Role.CREATOR, participants))
-      ))
+      )
     }
+    participants.map(p => console.log(p))
     this.participants = this.mergeTheSameParticipants(participants)
 
     // load data catalog
-    this.dataCatalog = dataset.data_catalog !== undefined ? dataset.data_catalog.identifier : undefined
+    this.dataCatalog =
+      dataset.data_catalog !== undefined ? dataset.data_catalog.identifier : undefined
 
     // Load files
     const dsFiles = researchDataset.files
@@ -546,9 +544,7 @@ class Qvain {
       const toCheck = [...(dsFiles || []), ...(dsDirectories || [])]
       this.selectedProject = toCheck.length > 0 ? toCheck[0].details.project_identifier : undefined
       this.getInitialDirectories()
-      this.existingDirectories = dsDirectories
-        ? dsDirectories.map(d => DatasetDirectory(d))
-        : []
+      this.existingDirectories = dsDirectories ? dsDirectories.map(d => DatasetDirectory(d)) : []
       this.existingFiles = dsFiles ? dsFiles.map(f => DatasetFile(f, undefined, true)) : []
     }
 
@@ -561,10 +557,12 @@ class Qvain {
           remoteResources.indexOf(r),
           r.title,
           r.access_url ? r.access_url.identifier : undefined,
-          r.use_category ? {
-            label: r.use_category.pref_label.en,
-            value: r.use_category.identifier
-          } : undefined
+          r.use_category
+            ? {
+                label: r.use_category.pref_label.en,
+                value: r.use_category.identifier,
+              }
+            : undefined
         )
       )
       this.extResFormOpen = true
@@ -576,25 +574,25 @@ class Qvain {
   createParticipant = (participantJson, role, participants) => {
     let name
     if (participantJson['@type'].toLowerCase() === EntityType.ORGANIZATION) {
-      name = participantJson.name ? participantJson.name : undefined
+      name = participantJson.name ? participantJson.name : {}
     } else {
       name = participantJson.name
     }
 
     let parentOrg
     if (participantJson['@type'].toLowerCase() === EntityType.ORGANIZATION) {
-      const isPartOf = participantJson.is_part_of
-      if (isPartOf !== undefined) {
+      const isPartOf = participantJson.is_part_of ? participantJson.is_part_of : {}
+      if (isPartOf !== {}) {
         parentOrg = isPartOf.name
       } else {
-        parentOrg = undefined
+        parentOrg = {}
       }
     } else {
-      const parentOrgName = participantJson.member_of.name
-      if (parentOrgName !== undefined) {
+      const parentOrgName = participantJson.member_of ? participantJson.member_of.name : {}
+      if (parentOrgName !== {}) {
         parentOrg = parentOrgName
       } else {
-        parentOrg = undefined
+        parentOrg = {}
       }
     }
 
@@ -618,7 +616,7 @@ class Qvain {
   mergeTheSameParticipants = participants => {
     if (participants.length <= 1) return participants
     const mergedParticipants = []
-    participants.forEach((participant1) => {
+    participants.forEach(participant1 => {
       participants.forEach((participant2, index) => {
         if (this.isEqual(participant1, participant2)) {
           participant1.role = [...new Set([].concat(...[participant1.role, participant2.role]))]
@@ -633,26 +631,101 @@ class Qvain {
   // Function to compare two participants and see if they are the same participant.
   // Returns True if the participants seem the same, or False if not.
   isEqual = (p1, p2) => {
-    if ('identifier' in p1 && 'identifier' in p2) {
-      if (p1.identifier === p2.identifier) return true
+    console.log(
+      `Compare: ${p1.name.en ? p1.name.en : p1.name} and ${p2.name.en ? p2.name.en : p2.name}`
+    )
+    if (!!p1.identifier && !!p2.identifier) {
+      // If p1 and p2 have identifiers.
+      if (p1.identifier === p2.identifier) {
+        // If the identifiers are the same.
+        console.log(true)
+        return true
+      }
+      // If p1 and p2 have identifiers but they are not the same, then they
+      // are not the same participant.
+      console.log(false)
       return false
     }
-    if ('email' in p1 && 'email' in p2) {
-      if (p1.email === p2.email && p1.name === p2.name && p1['@type'] === p2['@type']) return true
-      return false
-    }
-    if (p1['@type'] === EntityType.PERSON && p2['@type'] === EntityType.PERSON) {
-      if (p1.name === p2.name && p1.member_of.name.und === p2.member_of.name.und) return true
-      return false
-    }
-    if (p1['@type'] === EntityType.ORGANIZATION && p2['@type'] === EntityType.ORGANIZATION) {
-      if ('is_part_of' in p1 && 'is_part_of' in p2) {
-        if (p1.name === p2.name && p1.is_part_of.name.und === p2.is_part_of.name.und) return true
+    if (!!p1.email && !!p2.email) {
+      // If p1 and p2 have emails.
+      if (p1.type === EntityType.PERSON && p2.type === EntityType.PERSON) {
+        // If they have emails and are type PERSON.
+        if (p1.email === p2.email && p1.name === p2.name) {
+          // If they have emails and are type PERSON and the emails and names are equal.
+          console.log(true)
+          return true
+        }
+        // If they have emails and are type person but the emails or names are not equal.
+        console.log(false)
         return false
       }
-      if (p1.name === p2.name) return true
+      if (p1.type === EntityType.ORGANIZATION && p2.type === EntityType.ORGANIZATION) {
+        // If they have emails an are of type ORGANIZATION.
+        if (p1.email === p2.email && JSON.stringify(p1.name) === JSON.stringify(p2.name)) {
+          // If they have emails and are of type ORGANIZATION and the emails
+          // and name objects are equal.
+          console.log(true)
+          return true
+        }
+        // If they have emails and are type ORGANIZATION but the emails or
+        // name objects are not equal.
+        console.log(false)
+        return false
+      }
+    }
+    if (p1.type === EntityType.PERSON && p2.type === EntityType.PERSON) {
+      // If p1 and p2 are of type PERSON.
+      if (
+        p1.name === p2.name &&
+        JSON.stringify(p1.organization) === JSON.stringify(p2.organization)
+      ) {
+        // if they are of type PERSON and the names and organization objects
+        // are equal.
+        console.log(true)
+        return true
+      }
+      // If they are of type PERSON but the names or organization objects
+      // are not equal.
+      console.log(false)
       return false
     }
+    if (p1.type === EntityType.ORGANIZATION && p2.type === EntityType.ORGANIZATION) {
+      // If p1 and p2 are of type ORGANIZATION.
+      if (
+        Object.keys(p1.organization).length === 0 &&
+        p1.organization.constructor === Object &&
+        Object.keys(p2.organization).length === 0 &&
+        p2.organization.constructor === Object
+      ) {
+        // If they are of type ORGANIZATION and their parent organizations
+        // are not empty objects.
+        if (
+          JSON.stringify(p1.name) === JSON.stringify(p2.name) &&
+          JSON.stringify(p1.organization) === JSON.stringify(p2.organization)
+        ) {
+          // If they are of type ORGANIZATION and their parent organization objects
+          // are not empty and their names and parent organization objects are equal.
+          console.log(true)
+          return true
+        }
+        // If they are of type ORGANIZATION and their parent organization objects
+        // are not empty, but their names or parent organization objects are not equal.
+        console.log(false)
+        return false
+      }
+      if (JSON.stringify(p1.name) === JSON.stringify(p2.name)) {
+        // If they are of type ORGANIZATION and their parent organization objects
+        // are empty and their name objects are equal.
+        console.log(true)
+        return true
+      }
+      // If they are of type ORGANIZATION and their parent organization objects
+      // are empty and their name objects are not equal.
+      console.log(false)
+      return false
+    }
+    // If p1 and p2 don't have identifiers or emails and they are not the same entity type.
+    console.log(false)
     return false
   }
 
