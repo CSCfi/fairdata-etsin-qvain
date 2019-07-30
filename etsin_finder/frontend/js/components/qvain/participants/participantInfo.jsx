@@ -203,7 +203,12 @@ export class ParticipantInfoBase extends Component {
               )}
               attributes={{ placeholder: 'qvain.participants.add.organization.placeholder' }}
               onChange={(selection) => {
-                participant.name = orgs.find(org => org.value === selection.value).label
+                participant.name = orgs.find(org => org.value === selection.value)
+                  ? orgs.find(org => org.value === selection.value).label
+                  : {
+                    [lang]: selection.label,
+                    und: selection.label
+                  }
                 // if selection value ie the org identifier is not in the reference data, then we are adding a new org, so do not define
                 // identifier
                 if (orgs.filter(opt => opt.value === selection.value).length > 0) {
@@ -264,7 +269,12 @@ export class ParticipantInfoBase extends Component {
           )}
           attributes={{ placeholder: 'qvain.participants.add.organization.placeholder' }}
           onChange={(selection) => {
-            participant.organization = orgs.find(org => org.value === selection.value).label
+            participant.organization = orgs.find(org => org.value === selection.value)
+              ? orgs.find(org => org.value === selection.value).label
+              : {
+                [lang]: selection.label,
+                und: selection.label
+              }
           }}
           onBlur={this.handleOnOrganizationBlur}
           value={{

@@ -46,7 +46,9 @@ class DataCatalog extends Component {
     const selected = [...selectedFiles, ...selectedDirectories, ...externalResources]
     return (
       <Card>
-        <Translate component="h3" content="qvain.files.dataCatalog.label" />
+        <h3>
+          <Translate content="qvain.files.dataCatalog.label" /> *
+        </h3>
         <Translate component="p" content="qvain.files.dataCatalog.explanation" />
         <Translate
           component={Select}
