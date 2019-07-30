@@ -60,14 +60,8 @@ const filesToMetax = (selectedFiles, existingFiles) => {
 
 const handleSubmitToBackend = (values) => {
   const obj = {
-    title: {
-      fi: values.title.fi,
-      en: values.title.en,
-    },
-    description: {
-      fi: values.description.fi,
-      en: values.description.en,
-    },
+    title: values.title,
+    description: values.description,
     identifiers: values.otherIdentifiers,
     fieldOfScience: values.fieldOfScience ? values.fieldOfScience.url : undefined,
     keywords: values.keywords,
