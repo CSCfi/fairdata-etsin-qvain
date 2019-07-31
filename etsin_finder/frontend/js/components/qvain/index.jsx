@@ -183,6 +183,7 @@ const LinkBack = styled(Link)`
 `
 const ButtonContainer = styled.div`
   text-align: center;
+  padding-top: 2px;
 `
 const SubmitButton = styled(InvertedButton)`
   background: #fff;
