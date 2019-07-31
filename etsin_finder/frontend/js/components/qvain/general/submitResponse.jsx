@@ -149,7 +149,6 @@ const ResponseContainer = styled.div`
   background-color: #E8FFEB;
   color: green;
   z-index: 2;
-  scroll-margin-top: 100px;
   width: 100%;
   border-bottom: 1px solid rgba(0,0,0,0.3);
 `
@@ -157,7 +156,6 @@ const ResponseContainer = styled.div`
 const ResponseContainerLoading = styled.div`
   background-color: #fff;
   z-index: 2;
-  scroll-margin-top: 100px;
   width: 100%;
   height: 105px;
   padding-top: 30px;
@@ -168,7 +166,6 @@ const ResponseContainerError = styled.div`
   background-color: #FFEBE8;
   color: red;
   z-index: 2;
-  scroll-margin-top: 100px;
   width: 100%;
   border-bottom: 1px solid rgba(0,0,0,0.3);
 `

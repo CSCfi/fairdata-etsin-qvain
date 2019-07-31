@@ -55,7 +55,6 @@ export const SubHeader = styled.div`
 export const StickySubHeaderWrapper = styled.div`
   top: 0;
   position: sticky;
-  scroll-margin-top: 50px;
   z-index: 2;
 `
 
