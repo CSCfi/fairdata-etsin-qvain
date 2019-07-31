@@ -13,12 +13,20 @@ import Description from './description'
 import Participants from './participants'
 import { qvainFormSchema } from './utils/formValidation'
 import Files from './files'
-import { QvainContainer, SubHeader, SubHeaderText, Container } from './general/card'
+import {
+  QvainContainer,
+  SubHeader,
+  StickySubHeaderWrapper,
+  StickySubHeader,
+  StickySubHeaderResponse,
+  SubHeaderText,
+  Container
+} from './general/card'
 import handleSubmitToBackend from './utils/handleSubmit'
 import Title from './general/title'
 import SubmitResponse from './general/submitResponse'
-import { InvertedButton } from '../general/button'
 import isJsonString from './utils/isJsonSring'
+import { InvertedButton } from '../general/button';
 
 class Qvain extends Component {
   static propTypes = {
@@ -112,21 +120,20 @@ class Qvain extends Component {
     return (
       <QvainContainer>
         <SubHeader>
-          <SubHeaderText>
-            <Translate component={Title} content="qvain.title" />
-          </SubHeaderText>
+          <SubHeaderTextContainer>
+            <SubHeaderText>
+              <Translate component={Title} content="qvain.title" />
+            </SubHeaderText>
+          </SubHeaderTextContainer>
+          <LinkBackContainer>
+            <LinkBack to="/qvain">
+              <FontAwesomeIcon size="lg" icon={faChevronLeft} />
+              <Translate component="span" display="block" content="qvain.backLink" />
+            </LinkBack>
+          </LinkBackContainer>
         </SubHeader>
-        <Form className="container">
-          <LinkBack to="/qvain">
-            <FontAwesomeIcon size="lg" icon={faChevronLeft} />
-            <Translate component="span" content="qvain.backLink" />
-          </LinkBack>
-          <Description />
-          <Participants />
-          <RightsAndLicenses />
-          <Files />
-          <SubmitContainer>
-            <Translate component="p" content="qvain.consent" unsafe />
+        <StickySubHeaderWrapper>
+          <StickySubHeader>
             <ButtonContainer>
               {this.props.Stores.Qvain.original
                 ? (
@@ -141,25 +148,49 @@ class Qvain extends Component {
                 )
               }
             </ButtonContainer>
+          </StickySubHeader>
+          {this.state.submitted ? (
+            <StickySubHeaderResponse>
+              <SubmitResponse response={this.state.response} />
+            </StickySubHeaderResponse>
+          ) : null}
+        </StickySubHeaderWrapper>
+        <Form className="container">
+          <Description />
+          <Participants />
+          <RightsAndLicenses />
+          <Files />
+          <SubmitContainer>
+            <Translate component="p" content="qvain.consent" unsafe />
           </SubmitContainer>
-          {this.state.submitted ? <SubmitResponse response={this.state.response} /> : null}
         </Form>
       </QvainContainer>
     )
   }
 }
 
+const SubHeaderTextContainer = styled.div`
+  white-space: nowrap;
+`
+const LinkBackContainer = styled.div`
+  text-align: right;
+  width: 100%;
+  white-space: nowrap;
+`
 const LinkBack = styled(Link)`
-  display: inline-block;
-  margin: 10px 15px 0;
+  color: #fff;
+  margin-right: 40px;
 `
 const ButtonContainer = styled.div`
   text-align: center;
 `
 const SubmitButton = styled(InvertedButton)`
+  background: #fff;
   font-size: 1.2em;
   border-radius: 25px;
   padding: 5px 30px;
+  border-color: #007fad;
+  border: 1px solid;
 `
 const Form = styled.form`
   margin-bottom: 20px;

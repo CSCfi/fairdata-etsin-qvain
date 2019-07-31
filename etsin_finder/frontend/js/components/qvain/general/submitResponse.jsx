@@ -3,9 +3,8 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { inject, observer } from 'mobx-react'
 import Translate from 'react-translate-component'
-import { Container, SlidingContent } from './card'
 import Loader from '../../general/loader'
-import { InvertedButton } from '../../general/button'
+import { LinkButtonDarkGray } from '../../general/button';
 
 class SubmitResponse extends Component {
   static propTypes = {
@@ -13,15 +12,32 @@ class SubmitResponse extends Component {
     response: PropTypes.oneOfType([PropTypes.string, PropTypes.object, PropTypes.array]),
   }
 
-  state = {
-    openResponse: false,
+  constructor() {
+    super()
+    this.state = {
+      clearSubmitResponse: false,
+    }
+
+    this.closeSubmitResponse = this.closeSubmitResponse.bind(this)
+  }
+
+  closeSubmitResponse() {
+    this.setState({
+      clearSubmitResponse: true,
+    })
   }
 
   render() {
     const { response } = this.props
-    const { openResponse } = this.state
     const { original } = this.props.Stores.Qvain
-    // If a NEW dataset has been created successfully.
+
+    // If the user wants to clear the submitResponse
+    if (this.state.clearSubmitResponse) {
+      this.state.clearSubmitResponse = false;
+      return null;
+    }
+
+    // If a new dataset has been created successfully.
     if (response &&
         'identifier' in response &&
         !('new_version_created' in response) &&
@@ -30,10 +46,17 @@ class SubmitResponse extends Component {
       const identifier = response.identifier
       return (
         <ResponseContainer>
-          <ResponseLabel success>
-            <Translate content="qvain.submitStatus.success" />
-          </ResponseLabel>
-          <p>Identifier: {identifier}</p>
+          <ResponseContainerLeftColumn>
+            <ResponseLabel success>
+              <Translate content="qvain.submitStatus.success" />
+            </ResponseLabel>
+            <p>Identifier: {identifier}</p>
+          </ResponseContainerLeftColumn>
+          <ResponseContainerRightColumn>
+            <LinkButtonDarkGray type="button" onClick={this.closeSubmitResponse}>
+              x
+            </LinkButtonDarkGray>
+          </ResponseContainerRightColumn>
         </ResponseContainer>
       )
     }
@@ -51,10 +74,17 @@ class SubmitResponse extends Component {
       const identifier = response.identifier
       return (
         <ResponseContainer>
-          <ResponseLabel success>
-            <Translate content="qvain.submitStatus.editMetadataSuccess" />
-          </ResponseLabel>
-          <p>Identifier: {identifier}</p>
+          <ResponseContainerLeftColumn>
+            <ResponseLabel success>
+              <Translate content="qvain.submitStatus.editMetadataSuccess" />
+            </ResponseLabel>
+            <p>Identifier: {identifier}</p>
+          </ResponseContainerLeftColumn>
+          <ResponseContainerRightColumn>
+            <LinkButtonDarkGray type="button" onClick={this.closeSubmitResponse}>
+              x
+            </LinkButtonDarkGray>
+          </ResponseContainerRightColumn>
         </ResponseContainer>
       )
     }
@@ -66,41 +96,43 @@ class SubmitResponse extends Component {
         : response.identifier
       return (
         <ResponseContainer>
-          <ResponseLabel success>
-            <Translate content="qvain.submitStatus.editFilesSuccess" />
-          </ResponseLabel>
-          <p>Identifier: {identifier}</p>
+          <ResponseContainerLeftColumn>
+            <ResponseLabel success>
+              <Translate content="qvain.submitStatus.editFilesSuccess" />
+            </ResponseLabel>
+            <p>Identifier: {identifier}</p>
+          </ResponseContainerLeftColumn>
+          <ResponseContainerRightColumn>
+            <LinkButtonDarkGray type="button" onClick={this.closeSubmitResponse}>
+              x
+            </LinkButtonDarkGray>
+          </ResponseContainerRightColumn>
         </ResponseContainer>
       )
     }
     // If something went wrong.
     if (response) {
       return (
-        <ResponseContainer>
-          <ResponseLabel>
-            <Translate content="qvain.submitStatus.fail" />
-          </ResponseLabel>
-          <InvertedButton
-            color="red"
-            onClick={() => this.setState(prevState => ({ openResponse: !prevState.openResponse }))}
-            type="button"
-          >
-            {openResponse ? (
-              <Translate content="qvain.closeErrorMessages" />
-            ) : (
-              <Translate content="qvain.openErrorMessages" />
-            )}
-          </InvertedButton>
-          <SlidingContent open={openResponse}>
-            <Pre>{JSON.stringify(response, null, 8)}</Pre>
-          </SlidingContent>
-        </ResponseContainer>
+        <ResponseContainerError>
+          <ResponseContainerLeftColumn>
+            <ResponseLabel>
+              <Translate content="qvain.submitStatus.fail" />
+            </ResponseLabel>
+            <p>{(response.toString().replace(/,/g, '\n'))}</p>
+          </ResponseContainerLeftColumn>
+          <ResponseContainerRightColumn>
+            <LinkButtonDarkGray type="button" onClick={this.closeSubmitResponse}>
+              x
+            </LinkButtonDarkGray>
+          </ResponseContainerRightColumn>
+        </ResponseContainerError>
       )
     }
+
     return (
-      <ResponseContainer>
+      <ResponseContainerLoading>
         <Loader active />
-      </ResponseContainer>
+      </ResponseContainerLoading>
     )
   }
 }
@@ -110,22 +142,49 @@ SubmitResponse.defaultProps = {
 }
 
 const ResponseLabel = styled.p`
+  font-weight: bold;
   color: ${props => (props.success ? 'green' : 'red')};
-  font-size: 2em;
 `
-const ResponseContainer = styled(Container)`
-  padding: 25px 45px 45px 45px;
-  margin: 15px;
+const ResponseContainer = styled.div`
+  background-color: #E8FFEB;
+  color: green;
+  z-index: 2;
+  scroll-margin-top: 100px;
+  width: 100%;
+  border-bottom: 1px solid rgba(0,0,0,0.3);
 `
-const Pre = styled.pre`
-  color: white;
-  margin-top: inherit;
-  padding: 15px;
-  background-color: black;
-  white-space: pre-wrap; /* Since CSS 2.1 */
-  white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
-  white-space: -pre-wrap; /* Opera 4-6 */
-  white-space: -o-pre-wrap; /* Opera 7 */
-  word-wrap: break-word;
+
+const ResponseContainerLoading = styled.div`
+  background-color: #fff;
+  z-index: 2;
+  scroll-margin-top: 100px;
+  width: 100%;
+  height: 105px;
+  padding-top: 30px;
+  border-bottom: 1px solid rgba(0,0,0,0.3);
+`
+
+const ResponseContainerError = styled.div`
+  background-color: #FFEBE8;
+  color: red;
+  z-index: 2;
+  scroll-margin-top: 100px;
+  width: 100%;
+  border-bottom: 1px solid rgba(0,0,0,0.3);
+`
+const ResponseContainerLeftColumn = styled.div`
+  padding-left: 20px;
+  padding-top: 20px;
+  display:inline-block;
+  width: 90%;
+  white-space: pre-line;
+`
+const ResponseContainerRightColumn = styled.div`
+  display:inline-block;
+  width: 10%;
+  text-align: right;
+  padding-top: 10px;
+  padding-right: 10px;
+  vertical-align: top;
 `
 export default inject('Stores')(observer(SubmitResponse))
