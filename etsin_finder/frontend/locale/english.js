@@ -662,6 +662,7 @@ const english = {
   },
   slogan: 'Research data finder',
   stc: 'Skip to content',
+  stsd: 'Skip to submit dataset',
   tombstone: {
     info: 'The dataset has been either deprecated or removed',
   },

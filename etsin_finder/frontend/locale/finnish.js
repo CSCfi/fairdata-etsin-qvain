@@ -633,6 +633,7 @@ const finnish = {
   },
   slogan: 'Tutkimustenhaku palvelu',
   stc: 'Siirry sivun pääsisältöön',
+  stsd: 'Siirry "Julkaise Aineisto"-nappiin',
   tombstone: {
     info: 'Aineisto on joko vanhentunut tai poistettu',
   },

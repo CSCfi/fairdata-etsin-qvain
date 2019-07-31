@@ -33,6 +33,13 @@ class Qvain extends Component {
     Stores: PropTypes.object.isRequired,
   }
 
+  constructor(props) {
+    super(props)
+    this.setFocusOnSubmitOrUpdateButton = this.setFocusOnSubmitOrUpdateButton.bind(this);
+    this.submitDatasetButton = React.createRef();
+    this.updateDatasetButton = React.createRef();
+  }
+
   state = {
     response: null,
     submitted: false,
@@ -41,6 +48,16 @@ class Qvain extends Component {
   componentWillUnmount() {
     this.props.Stores.Qvain.resetQvainStore()
     this.props.Stores.Qvain.original = undefined
+  }
+
+  setFocusOnSubmitOrUpdateButton(event) {
+    if (this.props.Stores.Qvain.original) {
+      this.updateDatasetButton.current.focus()
+    } else {
+      this.submitDatasetButton.current.focus()
+    }
+    // preventDefault, since the page wants to refresh at this point
+    event.preventDefault();
   }
 
   handleCreate = e => {
@@ -137,12 +154,12 @@ class Qvain extends Component {
             <ButtonContainer>
               {this.props.Stores.Qvain.original
                 ? (
-                  <SubmitButton type="button" onClick={this.handleUpdate}>
+                  <SubmitButton ref={this.updateDatasetButton} type="button" onClick={this.handleUpdate}>
                     <Translate content="qvain.edit" />
                   </SubmitButton>
                 )
                 : (
-                  <SubmitButton type="button" onClick={this.handleCreate}>
+                  <SubmitButton ref={this.submitDatasetButton} type="button" onClick={this.handleCreate}>
                     <Translate content="qvain.submit" />
                   </SubmitButton>
                 )
@@ -163,12 +180,31 @@ class Qvain extends Component {
           <SubmitContainer>
             <Translate component="p" content="qvain.consent" unsafe />
           </SubmitContainer>
+          <STSD onClick={this.setFocusOnSubmitOrUpdateButton}>
+            <Translate content="stsd" />
+          </STSD>
         </Form>
       </QvainContainer>
     )
   }
 }
 
+const STSD = styled.button`
+    background: ${p => p.theme.color.primary};
+    color: #fafafa;
+    max-height: 0;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    border: none;
+    letter-spacing: 2px;
+    transition: 0.2s ease;
+    &:focus {
+    text-decoration: underline;
+    padding: 0.5em;
+    max-height: 3em;
+    }
+`
 const SubHeaderTextContainer = styled.div`
   white-space: nowrap;
 `
