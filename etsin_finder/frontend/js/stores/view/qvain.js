@@ -528,7 +528,9 @@ class Qvain {
         participants.push(this.createParticipant(creator, Role.CREATOR, participants))
       )
     }
-    participants.map(p => console.log(p))
+    console.groupCollapsed('Participants to be compared DEBUG')
+    console.table(JSON.parse(JSON.stringify(participants)))
+    console.groupEnd()
     this.participants = this.mergeTheSameParticipants(participants)
 
     // load data catalog
@@ -572,24 +574,25 @@ class Qvain {
   // Creates a single instance of a participant, only has one role.
   // Returns a Participant.
   createParticipant = (participantJson, role, participants) => {
+    const entityType = participantJson['@type'].toLowerCase()
     let name
-    if (participantJson['@type'].toLowerCase() === EntityType.ORGANIZATION) {
+    if (entityType === EntityType.ORGANIZATION) {
       name = participantJson.name ? participantJson.name : {}
     } else {
       name = participantJson.name
     }
 
     let parentOrg
-    if (participantJson['@type'].toLowerCase() === EntityType.ORGANIZATION) {
+    if (entityType === EntityType.ORGANIZATION) {
       const isPartOf = participantJson.is_part_of ? participantJson.is_part_of : {}
-      if (isPartOf !== {}) {
+      if (!this.isObjectEmpty(isPartOf)) {
         parentOrg = isPartOf.name
       } else {
         parentOrg = {}
       }
     } else {
       const parentOrgName = participantJson.member_of ? participantJson.member_of.name : {}
-      if (parentOrgName !== {}) {
+      if (!this.isObjectEmpty(parentOrgName)) {
         parentOrg = parentOrgName
       } else {
         parentOrg = {}
@@ -597,7 +600,7 @@ class Qvain {
     }
 
     return Participant(
-      participantJson['@type'].toLowerCase() === EntityType.PERSON
+      entityType === EntityType.PERSON
         ? EntityType.PERSON
         : EntityType.ORGANIZATION,
       [role],
@@ -614,6 +617,7 @@ class Qvain {
   // roles together to get one participant with multiple roles.
   // Returns a nw array with the merged participants.
   mergeTheSameParticipants = participants => {
+    console.groupCollapsed('Participant object comparison DEBUG')
     if (participants.length <= 1) return participants
     const mergedParticipants = []
     participants.forEach(participant1 => {
@@ -625,6 +629,7 @@ class Qvain {
       })
       mergedParticipants.push(participant1)
     })
+    console.groupEnd()
     return mergedParticipants
   }
 
@@ -632,7 +637,8 @@ class Qvain {
   // Returns True if the participants seem the same, or False if not.
   isEqual = (p1, p2) => {
     console.log(
-      `Compare: ${p1.name.en ? p1.name.en : p1.name} and ${p2.name.en ? p2.name.en : p2.name}`
+      // eslint-disable-next-line no-nested-ternary
+      `Compare: ${p1.name.en ? p1.name.en : p1.name.und ? p1.name.und : p1.name} and ${p2.name.en ? p2.name.en : p2.name.und ? p2.name.und : p2.name}`
     )
     if (!!p1.identifier && !!p2.identifier) {
       // If p1 and p2 have identifiers.
@@ -661,7 +667,7 @@ class Qvain {
       }
       if (p1.type === EntityType.ORGANIZATION && p2.type === EntityType.ORGANIZATION) {
         // If they have emails an are of type ORGANIZATION.
-        if (p1.email === p2.email && JSON.stringify(p1.name) === JSON.stringify(p2.name)) {
+        if (p1.email === p2.email && this.isEqualObj(p1.name, p2.name)) {
           // If they have emails and are of type ORGANIZATION and the emails
           // and name objects are equal.
           console.log(true)
@@ -675,10 +681,7 @@ class Qvain {
     }
     if (p1.type === EntityType.PERSON && p2.type === EntityType.PERSON) {
       // If p1 and p2 are of type PERSON.
-      if (
-        p1.name === p2.name &&
-        JSON.stringify(p1.organization) === JSON.stringify(p2.organization)
-      ) {
+      if (p1.name === p2.name && this.isEqualObj(p1.organization, p2.organization)) {
         // if they are of type PERSON and the names and organization objects
         // are equal.
         console.log(true)
@@ -691,18 +694,10 @@ class Qvain {
     }
     if (p1.type === EntityType.ORGANIZATION && p2.type === EntityType.ORGANIZATION) {
       // If p1 and p2 are of type ORGANIZATION.
-      if (
-        Object.keys(p1.organization).length === 0 &&
-        p1.organization.constructor === Object &&
-        Object.keys(p2.organization).length === 0 &&
-        p2.organization.constructor === Object
-      ) {
+      if (!(this.isObjectEmpty(p1.organization) && this.isObjectEmpty(p2.organization))) {
         // If they are of type ORGANIZATION and their parent organizations
         // are not empty objects.
-        if (
-          JSON.stringify(p1.name) === JSON.stringify(p2.name) &&
-          JSON.stringify(p1.organization) === JSON.stringify(p2.organization)
-        ) {
+        if (this.isEqualObj(p1.name, p2.name) && this.isEqualObj(p1.organization, p2.organization)) {
           // If they are of type ORGANIZATION and their parent organization objects
           // are not empty and their names and parent organization objects are equal.
           console.log(true)
@@ -713,7 +708,7 @@ class Qvain {
         console.log(false)
         return false
       }
-      if (JSON.stringify(p1.name) === JSON.stringify(p2.name)) {
+      if (this.isEqualObj(p1.name, p2.name)) {
         // If they are of type ORGANIZATION and their parent organization objects
         // are empty and their name objects are equal.
         console.log(true)
@@ -726,6 +721,22 @@ class Qvain {
     }
     // If p1 and p2 don't have identifiers or emails and they are not the same entity type.
     console.log(false)
+    return false
+  }
+
+  isObjectEmpty = (obj) => {
+    // ECMA 5+ way to check if object is empty.
+    if (Object.keys(obj).length === 0 && obj.constructor === Object) {
+      return true
+    }
+    return false
+  }
+
+  isEqualObj = (obj1, obj2) => {
+    // Checks if the objects have the same key-value pairs.
+    if (JSON.stringify(obj1) === JSON.stringify(obj2)) {
+      return true
+    }
     return false
   }
 
