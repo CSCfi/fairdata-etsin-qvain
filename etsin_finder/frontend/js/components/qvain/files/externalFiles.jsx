@@ -74,20 +74,22 @@ export class ExternalFilesBase extends Component {
           {extResFormOpen ? <ChevronDown /> : <ChevronRight />}
         </FilePickerButtonInverse>
         <SlidingContent open={extResFormOpen}>
-          <Translate component={SelectedFilesTitle} content="qvain.files.external.addedResources.title" />
+          <Translate tabIndex="0" component={SelectedFilesTitle} content="qvain.files.external.addedResources.title" />
           {addedExternalResources.length === 0 &&
-            <Translate component="p" content="qvain.files.external.addedResources.none" />
+            <Translate tabIndex="0" component="p" content="qvain.files.external.addedResources.none" />
           }
           {addedExternalResources.map((addedExternalResource) => (
-            <ButtonGroup key={addedExternalResource.id}>
+            <ButtonGroup tabIndex="0" key={addedExternalResource.id}>
               <ButtonLabel>
                 {addedExternalResource.title} / {addedExternalResource.url}
               </ButtonLabel>
               <ButtonContainer>
                 <EditButton
+                  aria-label="Edit"
                   onClick={this.handleEditExternalResource(addedExternalResource)}
                 />
                 <DeleteButton
+                  aria-label="Remove"
                   onClick={this.handleRemoveExternalResource(addedExternalResource.id)}
                 />
               </ButtonContainer>
