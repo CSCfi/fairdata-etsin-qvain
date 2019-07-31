@@ -40,8 +40,9 @@ export class SelectedFilesBase extends Component {
                 {s.projectIdentifier} / {s.directoryName || s.fileName}
               </ButtonLabel>
               <ButtonContainer>
-                <EditButton onClick={this.handleEdit(s)} />
+                <EditButton aria-label="Edit" onClick={this.handleEdit(s)} />
                 <DeleteButton
+                  aria-label="Remove"
                   onClick={(event) => {
                     event.preventDefault()
                     if (s.directoryName !== undefined) {
