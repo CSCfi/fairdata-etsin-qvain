@@ -65,8 +65,8 @@ export class AddedParticipantsBase extends Component {
               {this.getAddedParticipantName(addedParticipant.name, lang)}{addedParticipant.role.map(role => (` / ${ role }`))}
             </ButtonLabel>
             <ButtonContainer>
-              <EditButton onClick={this.handleEditParticipant(addedParticipant)} />
-              <DeleteButton onClick={this.handleRemoveParticipant(addedParticipant)} />
+              <EditButton aria-label="Edit participant" onClick={this.handleEditParticipant(addedParticipant)} />
+              <DeleteButton aria-label="Remove participant" onClick={this.handleRemoveParticipant(addedParticipant)} />
             </ButtonContainer>
           </ButtonGroup>
         ))}
