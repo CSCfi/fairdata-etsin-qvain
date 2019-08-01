@@ -13,6 +13,7 @@ import {
 export const CancelButton = styled.button`
   width: 84px;
   height: 42px;
+  background-color: #fff;
   border-radius: 4px;
   border: solid 1px #4f4f4f;
   font-size: 16px;
@@ -59,6 +60,7 @@ export const RemoveButton = styled.button`
   height: 42px;
   border-radius: 4px;
   border: solid 1px #cc0000;
+  background-color: #fff;
   font-size: 16px;
   font-weight: 600px;
   line-height: 1.31;
