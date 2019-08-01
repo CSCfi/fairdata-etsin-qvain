@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Translate from 'react-translate-component'
+import translate from 'counterpart'
 import PropTypes from 'prop-types'
 import { inject, observer } from 'mobx-react'
 import { SectionTitle } from '../general/section'
@@ -53,6 +54,7 @@ class Files extends Component {
             text={<FilesInfo />}
           >
             <HelpIcon
+              aria-label={translate('qvain.files.infoTitle')}
               onClick={() =>
                 this.setState(prevState => ({
                   tooltipOpen: !prevState.tooltipOpen,

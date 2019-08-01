@@ -10,7 +10,7 @@ import {
   faChevronDown
 } from '@fortawesome/free-solid-svg-icons'
 
-export const CancelButton = styled.button`
+export const TableButton = styled.button`
   width: 84px;
   height: 42px;
   background-color: #fff;
@@ -25,13 +25,24 @@ export const CancelButton = styled.button`
   }
 `;
 
+export const CancelButton = styled.button`
+  border-radius: 4px;
+  border: solid 1px #4f4f4f;
+  font-size: 20px;
+  font-weight: bold;
+  color: #4f4f4f;
+  padding: 10px 20px;
+  &:hover {
+    background-color: #ccc;
+  }
+`;
+
 export const SaveButton = styled.button`
   border-radius: 4px;
   border: solid 1px #49a24a;
   background-color: #49a24a;
-  font-size: 16px;
-  font-weight: 600;
-  line-height: 1.31;
+  font-size: 20px;
+  font-weight: bold;
   color: #fff;
   margin-left: 20px;
   padding: 10px 25px;

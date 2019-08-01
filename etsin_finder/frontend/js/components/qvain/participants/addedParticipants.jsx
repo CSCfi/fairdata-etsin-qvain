@@ -52,21 +52,22 @@ export class AddedParticipantsBase extends Component {
     return (
       <ContainerSubsectionBottom>
         <Translate
+          tabIndex="0"
           component="h3"
           content="qvain.participants.added.title"
         />
         {this.props.Stores.Qvain.addedParticipants.length === 0 &&
-          (<Translate component="p" content="qvain.participants.added.noneAddedNotice" />)
+          (<Translate tabIndex="0" component="p" content="qvain.participants.added.noneAddedNotice" />)
         }
         {this.props.Stores.Qvain.addedParticipants.map((addedParticipant) => (
-          <ButtonGroup key={addedParticipant.uiId}>
+          <ButtonGroup tabIndex="0" key={addedParticipant.uiId}>
             <ButtonLabel>
               <FontAwesomeIcon icon={addedParticipant.type === EntityType.PERSON ? faUser : faBuilding} style={{ marginRight: '8px' }} />
               {this.getAddedParticipantName(addedParticipant.name, lang)}{addedParticipant.role.map(role => (` / ${ role }`))}
             </ButtonLabel>
             <ButtonContainer>
-              <EditButton onClick={this.handleEditParticipant(addedParticipant)} />
-              <DeleteButton onClick={this.handleRemoveParticipant(addedParticipant)} />
+              <EditButton aria-label="Edit" onClick={this.handleEditParticipant(addedParticipant)} />
+              <DeleteButton aria-label="Remove" onClick={this.handleRemoveParticipant(addedParticipant)} />
             </ButtonContainer>
           </ButtonGroup>
         ))}

@@ -268,7 +268,8 @@ const finnish = {
     notCSCUserLink: ' CSC asiakas porttaalissa',
     notCSCUser2: ' Voit rekisteröityä Hakatunuksella tai ilman.',
     notLoggedIn: 'Kirjaudu sisään CSC -tililläsi käyttääksesi Qvain-light palvelua.',
-    title: 'Julkaise tiedosto',
+    titleCreate: 'Julkaise Aineisto',
+    titleEdit: 'Muokkaa Aineistoa',
     backLink: ' Takaisin hakemistoihin',
     common: {
       save: 'Tallenna',
@@ -276,6 +277,7 @@ const finnish = {
     },
     datasets: {
       title: 'Aineistot',
+      search: 'Haku',
       help: 'Muokkaa olemassa olevaa aineistoa tai luo uusi',
       createButton: 'Luo aineisto',
       tableRows: {

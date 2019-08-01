@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import Translate from 'react-translate-component'
+import translate from 'counterpart'
 import DescriptionFeild from './descriptionField';
 import OtherIdentifierField from './otherIdentifierField';
 import FieldOfScienceField from './fieldOfScienceField';
@@ -23,6 +24,7 @@ const Description = () => {
           text={<DescriptionInfo />}
         >
           <HelpIcon
+            aria-label={translate('qvain.description.infoTitle')}
             onClick={() => setTooltipOpen(!tooltipOpen)}
           />
         </Tooltip>

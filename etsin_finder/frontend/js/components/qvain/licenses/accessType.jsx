@@ -13,6 +13,7 @@ import EmbargoExpires from './embargoExpires'
 import { onChange, getCurrentValue } from '../utils/select'
 import { AccessType as AccessTypeConstructor } from '../../../stores/view/qvain'
 import { AccessTypeURLs } from '../utils/constants'
+import { LabelLarge } from '../general/form'
 
 class AccessType extends Component {
   static propTypes = {
@@ -90,9 +91,12 @@ class AccessType extends Component {
     const { accessType } = this.props.Stores.Qvain
     return (
       <Card>
-        <Translate component="h3" content="qvain.rightsAndLicenses.accessType.title" />
+        <LabelLarge htmlFor="accessTypeSelect">
+          <Translate content="qvain.rightsAndLicenses.accessType.title" />
+        </LabelLarge>
         <Translate
           component={Select}
+          inputId="accessTypeSelect"
           name="accessType"
           options={this.state.options[lang]}
           clearable

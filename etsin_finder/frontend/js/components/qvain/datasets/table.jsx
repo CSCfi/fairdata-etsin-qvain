@@ -18,8 +18,8 @@ import {
 import Modal from '../../general/modal'
 import DatasetPagination from './pagination'
 import Label from '../general/label'
-import { CancelButton, RemoveButton, DangerButton } from '../general/buttons'
-import { FormField, Input } from '../general/form'
+import { TableButton, RemoveButton, DangerButton } from '../general/buttons'
+import { FormField, Input, Label as inputLabel } from '../general/form'
 
 const USER_DATASETS_URL = '/api/datasets/'
 
@@ -143,7 +143,9 @@ class DatasetTable extends Component {
     return (
       <Fragment>
         <SearchField>
+          <Translate className="visuallyhidden" htmlFor="datasetSearchInput" component={inputLabel} content="qvain.datasets.search" />
           <SearchInput
+            id="datasetSearchInput"
             placeholder="Enter name of dataset"
             value={searchTerm}
             onChange={(event) => {
@@ -162,6 +164,7 @@ class DatasetTable extends Component {
           />
         </SearchField>
         <DatasetPagination
+          id="pagnation-top"
           page={page}
           count={count}
           limit={limit}
@@ -186,7 +189,7 @@ class DatasetTable extends Component {
                 <TableNote>
                   <Translate
                     style={{ height: '100%' }}
-                    component={CancelButton}
+                    component={TableButton}
                     onClick={this.handleChangePage(page)}
                     content="qvain.datasets.reload"
                   />
@@ -208,14 +211,14 @@ class DatasetTable extends Component {
                   <BodyCell>{dataset.date_created}</BodyCell>
                   <BodyCell>
                     <Translate
-                      component={CancelButton}
+                      component={TableButton}
                       onClick={this.handleEnterEdit(dataset)}
                       content="qvain.datasets.editButton"
                     />
                   </BodyCell>
                   <BodyCell>
                     <Translate
-                      component={CancelButton}
+                      component={TableButton}
                       onClick={() => window.open(`/dataset/${dataset.identifier}`, '_blank')}
                       content="qvain.datasets.goToEtsin"
                     />
@@ -232,6 +235,7 @@ class DatasetTable extends Component {
           </TableBody>
         </TablePadded>
         <DatasetPagination
+          id="pagnation-bottom"
           page={page}
           count={count}
           limit={limit}
@@ -239,7 +243,7 @@ class DatasetTable extends Component {
         />
         <Modal isOpen={this.state.removeModalOpen} onRequestClose={this.closeRemoveModal} contentLabel="removeDatasetModal">
           <Translate component="p" content="qvain.datasets.confirmDelete" />
-          <CancelButton onClick={this.closeRemoveModal}>Cancel</CancelButton>
+          <TableButton onClick={this.closeRemoveModal}>Cancel</TableButton>
           <DangerButton onClick={this.handleRemove(this.state.removableDatasetIdentifier)}>Remove</DangerButton>
         </Modal>
       </Fragment>
