@@ -52,6 +52,29 @@ export const SubHeader = styled.div`
   align-items: center;
 `
 
+export const StickySubHeaderWrapper = styled.div`
+  top: 0;
+  position: sticky;
+  z-index: 2;
+`
+
+export const StickySubHeader = styled.div`
+  height: 50px;
+  background-color: rgb(231,233,237);
+  font-color: #4F4F4F;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  border-bottom: 1px solid rgba(0,0,0,0.3);
+`
+
+export const StickySubHeaderResponse = styled.div`
+  font-color: #4F4F4F;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+`
+
 export const SubHeaderText = styled.div`
   font-family: 'Lato', sans-serif;
   font-size: 32px;
