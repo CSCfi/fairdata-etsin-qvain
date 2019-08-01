@@ -139,7 +139,7 @@ class Qvain extends Component {
         <SubHeader>
           <SubHeaderTextContainer>
             <SubHeaderText>
-              <Translate component={Title} content="qvain.title" />
+              <Translate component={Title} content={this.props.Stores.Qvain.original ? 'qvain.titleEdit' : 'qvain.titleCreate'} />
             </SubHeaderText>
           </SubHeaderTextContainer>
           <LinkBackContainer>
