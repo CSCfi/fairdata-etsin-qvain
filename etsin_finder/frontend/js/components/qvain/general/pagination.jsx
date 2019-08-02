@@ -35,7 +35,7 @@ export const PaginationItem = styled.span.attrs(() => ({
 
 export const PaginationButton = PaginationItem.withComponent('button')
 
-export const PaginationContainer = styled.nav`
+export const PaginationContainer = styled.div`
   margin-top: 1em;
   justify-content: center;
   flex-wrap: wrap;

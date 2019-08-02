@@ -38,6 +38,7 @@ export class FileSelectorBase extends Component {
       <Fragment key={h.identifier}>
         <li style={{ paddingLeft: '20px' }}>
           <LinkButton
+            aria-label={h.open ? 'Close directory' : 'Open directory'}
             type="button"
             onKeyPress={this.handleOpenDirectory(h.id, root, !h.open)}
             onClick={this.handleOpenDirectory(h.id, root, !h.open)}
@@ -45,6 +46,7 @@ export class FileSelectorBase extends Component {
             <FontAwesomeIcon icon={h.open ? faChevronDown : faChevronRight} />
           </LinkButton>
           <Checkbox
+            aria-label={`${h.directoryName}`}
             checked={h.selected || false}
             id={`${h.id}Checkbox`}
             type="checkbox"

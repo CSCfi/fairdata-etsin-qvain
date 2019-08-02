@@ -34,14 +34,15 @@ export class SelectedFilesBase extends Component {
       <Fragment>
         {selected.map(s => (
           <Fragment key={`${s.id}-${randomStr()}`}>
-            <FileItem active={isInEdit(inEdit, s.identifier)}>
+            <FileItem tabIndex="0" active={isInEdit(inEdit, s.identifier)}>
               <ButtonLabel>
                 <FontAwesomeIcon icon={(s.directoryName ? faFolder : faCopy)} style={{ marginRight: '8px' }} />
                 {s.projectIdentifier} / {s.directoryName || s.fileName}
               </ButtonLabel>
               <ButtonContainer>
-                <EditButton onClick={this.handleEdit(s)} />
+                <EditButton aria-label="Edit" onClick={this.handleEdit(s)} />
                 <DeleteButton
+                  aria-label="Remove"
                   onClick={(event) => {
                     event.preventDefault()
                     if (s.directoryName !== undefined) {
@@ -77,11 +78,11 @@ export class SelectedFilesBase extends Component {
     const existing = [...existingDirectories, ...existingFiles]
     return (
       <Fragment>
-        <Translate component={SelectedFilesTitle} content="qvain.files.selected.title" />
-        {selected.length === 0 && <Translate component="p" content="qvain.files.selected.none" />}
+        <Translate tabIndex="0" component={SelectedFilesTitle} content="qvain.files.selected.title" />
+        {selected.length === 0 && <Translate tabIndex="0" component="p" content="qvain.files.selected.none" />}
         {this.renderFiles(selected, inEdit, false)}
-        <Translate component={SelectedFilesTitle} content="qvain.files.existing.title" />
-        <Translate component="p" content="qvain.files.existing.help" />
+        <Translate tabIndex="0" component={SelectedFilesTitle} content="qvain.files.existing.title" />
+        <Translate tabIndex="0" component="p" content="qvain.files.existing.help" />
         {this.renderFiles(existing, inEdit, true)}
       </Fragment>
     )

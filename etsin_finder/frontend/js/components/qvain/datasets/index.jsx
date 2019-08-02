@@ -15,6 +15,7 @@ import {
 import {
   SaveButton
 } from '../general/buttons'
+import Title from '../general/title';
 
 class Datasets extends Component {
   static propTypes = {
@@ -26,7 +27,9 @@ class Datasets extends Component {
     return (
       <QvainContainer>
         <SubHeader>
-          <SubHeaderText><Translate content="qvain.datasets.title" /></SubHeaderText>
+          <SubHeaderText>
+            <Translate component={Title} content="qvain.datasets.title" />
+          </SubHeaderText>
         </SubHeader>
         <ContainerLight className="container" style={{ paddingTop: '20px' }}>
           <ContainerSubsection>

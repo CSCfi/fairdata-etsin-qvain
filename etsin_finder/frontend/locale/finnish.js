@@ -262,15 +262,14 @@ const finnish = {
       editSuccess: 'Uusi aineisto versio luotu!',
       editMetadataSuccess: 'Aineisto päivitys onnistui!',
     },
-    openErrorMessages: 'Avaa virheviestit',
-    closeErrorMessages: 'Sulje virheviestit',
     unsuccessfullLogin: 'Kirjautuminen epäonnistui.',
     notCSCUser1:
       'Varmistakaa että teillä on voimassaoleva CSC tunnus. Jos yritit kirjautua sisään ulkoisella tunnuksella (kuten Haka) Niin saatat saada tämän virhe ilmoituksen jos titlit eivät ole linkitetty. Linkityksen voi tehdä',
     notCSCUserLink: ' CSC asiakas porttaalissa',
     notCSCUser2: ' Voit rekisteröityä Hakatunuksella tai ilman.',
     notLoggedIn: 'Kirjaudu sisään CSC -tililläsi käyttääksesi Qvain-light palvelua.',
-    title: 'Julkaise tiedosto',
+    titleCreate: 'Julkaise Aineisto',
+    titleEdit: 'Muokkaa Aineistoa',
     backLink: ' Takaisin hakemistoihin',
     common: {
       save: 'Tallenna',
@@ -278,6 +277,7 @@ const finnish = {
     },
     datasets: {
       title: 'Aineistot',
+      search: 'Haku',
       help: 'Muokkaa olemassa olevaa aineistoa tai luo uusi',
       createButton: 'Luo aineisto',
       tableRows: {
@@ -485,7 +485,7 @@ const finnish = {
         },
         requiredParticipants: {
           atLeastOneParticipant: 'Aineistoon on lisättävä vähintään yksi toimija.',
-          mandatoryParticipants: 'Toimijat: Tekijä ja julkaisija-roolit ovat pakollisia. Määrittele vähintään yksi tekijä ja likäksi julkaisija. Huomioi: yksittäisellä toimijalla voi olla useampi rooli.',
+          mandatoryParticipants: 'Toimijat: Tekijä ja julkaisija-roolit ovat pakollisia. Huomioi: yksittäisellä toimijalla voi olla useampi rooli.',
         },
       },
       accessType: {
@@ -635,6 +635,7 @@ const finnish = {
   },
   slogan: 'Tutkimustenhaku palvelu',
   stc: 'Siirry sivun pääsisältöön',
+  stsd: 'Siirry "Julkaise Aineisto"-nappiin',
   tombstone: {
     info: 'Aineisto on joko vanhentunut tai poistettu',
   },

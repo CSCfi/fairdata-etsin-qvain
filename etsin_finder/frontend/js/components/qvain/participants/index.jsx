@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { inject, observer } from 'mobx-react'
 import Translate from 'react-translate-component'
+import translate from 'counterpart'
 import AddedParticipants from './addedParticipants'
 import ParticipantTypeSelect from './participantTypeSelect'
 import SelectedParticipant from './participantSelection'
@@ -34,6 +35,7 @@ export class ParticipantsBase extends Component {
             text={<ParticipantsInfoTooltip />}
           >
             <HelpIcon
+              aria-label={translate('qvain.participants.infoTitle')}
               onClick={() => this.setState(prevState => ({ tooltipOpen: !prevState.tooltipOpen }))}
             />
           </Tooltip>

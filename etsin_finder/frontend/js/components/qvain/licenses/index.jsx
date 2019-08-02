@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import Translate from 'react-translate-component'
+import translate from 'counterpart'
 import AccessType from './accessType'
 import Licenses from './licenses'
 import { SectionTitle } from '../general/section'
@@ -20,6 +21,7 @@ const RightsAndLicenses = () => {
           text={<LicensesInfo />}
         >
           <HelpIcon
+            aria-label={translate('qvain.rightsAndLicenses.infoTitle')}
             onClick={() => setTooltipOpen(!tooltipOpen)}
           />
         </Tooltip>
