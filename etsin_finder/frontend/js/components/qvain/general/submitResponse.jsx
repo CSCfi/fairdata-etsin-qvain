@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 import { inject, observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 import Loader from '../../general/loader'
@@ -174,7 +174,6 @@ const LinkToEtsin = styled.p`
 `
 const ResponseLabel = styled.p`
   font-weight: bold;
-  color: ${props => (props.success ? 'green' : 'red')};
   display: inline-block;
   vertical-align: top;
 `
@@ -195,6 +194,14 @@ const ResponseContainerLoading = styled.div`
   padding-top: 30px;
   border-bottom: 1px solid rgba(0,0,0,0.3);
 `
+const FadeInAnimation = keyframes`
+  from {
+    color: #FFEBE8;
+  }
+  to {
+    color: red;
+  }
+`
 const ResponseContainerError = styled.div`
   background-color: #FFEBE8;
   text-align: center;
@@ -202,6 +209,8 @@ const ResponseContainerError = styled.div`
   color: red;
   z-index: 2;
   border-bottom: 1px solid rgba(0,0,0,0.3);
+  animation-name: ${FadeInAnimation};
+  animation-duration: 1.5s;
 `
 const ResponseContainerContent = styled.div`
   max-width: 1140px;

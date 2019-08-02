@@ -93,6 +93,7 @@ class Qvain extends Component {
       })
       .catch(err => {
         console.log(err.errors)
+        this.setState({ response: null })
         this.setState({ response: err.errors })
       })
   }
