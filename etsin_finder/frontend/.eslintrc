@@ -15,6 +15,7 @@
     "import/first": 0,
     "import/no-extraneous-dependencies": 0,
     "import/no-unresolved": 0,
+    "import/no-named-as-default": "off",
     "indent": 0,
     "max-len": ["warn", { "code": 150 }],
     "no-console": 0,
