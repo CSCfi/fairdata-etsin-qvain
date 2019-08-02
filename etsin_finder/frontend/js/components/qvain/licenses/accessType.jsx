@@ -14,7 +14,7 @@ import { onChange, getCurrentValue } from '../utils/select'
 import { AccessType as AccessTypeConstructor } from '../../../stores/view/qvain'
 import { AccessTypeURLs } from '../utils/constants'
 
-class AccessType extends Component {
+export class AccessType extends Component {
   static propTypes = {
     Stores: PropTypes.object.isRequired
   }
