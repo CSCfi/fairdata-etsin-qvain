@@ -27,7 +27,7 @@ const otherOpt = locale => ({
   label: otherOptLabel(locale),
 })
 
-class License extends Component {
+export class License extends Component {
   static propTypes = {
     Stores: PropTypes.object.isRequired,
   }
@@ -121,11 +121,13 @@ class License extends Component {
         {license !== undefined && license.identifier === otherOptValue && (
           <Fragment>
             <Translate
+              htmlFor="otherLicenseURL"
               component={Label}
               content="qvain.rightsAndLicenses.license.other.label"
               style={{ marginTop: '20px' }}
             />
             <Input
+              id="otherLicenseURL"
               value={otherLicenseUrl}
               onChange={event => {
                 this.props.Stores.Qvain.otherLicenseUrl = event.target.value

@@ -15,7 +15,7 @@ import { AccessType as AccessTypeConstructor } from '../../../stores/view/qvain'
 import { AccessTypeURLs } from '../utils/constants'
 import { LabelLarge } from '../general/form'
 
-class AccessType extends Component {
+export class AccessType extends Component {
   static propTypes = {
     Stores: PropTypes.object.isRequired
   }
