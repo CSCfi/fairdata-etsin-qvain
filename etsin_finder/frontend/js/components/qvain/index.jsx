@@ -93,6 +93,7 @@ class Qvain extends Component {
       })
       .catch(err => {
         console.log(err.errors)
+        this.setState({ response: null })
         this.setState({ response: err.errors })
       })
   }
@@ -111,6 +112,7 @@ class Qvain extends Component {
           .patch('/api/dataset', obj)
           .then(res => {
             this.props.Stores.Qvain.resetQvainStore()
+            this.props.Stores.Qvain.original = undefined
             this.setState({ response: JSON.parse(res.data) })
           })
           .catch(err => {
