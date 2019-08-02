@@ -91,7 +91,6 @@ describe('Qvain.RightsAndLicenses', () => {
     const stores = getStores()
     stores.Qvain.setLicense(LicenseConstructor({en: 'Other (URL)', fi: 'Muu (URL)',},'other'))
     const component = shallow(<License Stores={stores} />)
-    console.log(component.debug())
     expect(component.find('#otherLicenseURL').length).toBe(1)
   })
   it('should NOT render other license URL field', () => {
