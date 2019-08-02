@@ -2,46 +2,42 @@ import React from 'react';
 import { shallow, mount } from 'enzyme'
 
 import Qvain from '../js/components/qvain'
+import Description from '../js/components/qvain/description'
+import DescriptionFeild from '../js/components/qvain/description/descriptionField'
+import OtherIdentifierField from '../js/components/qvain/description/otherIdentifierField'
+import FieldOfScienceField from '../js/components/qvain/description/fieldOfScienceField'
+import KeywordsField from '../js/components/qvain/description/keywordsField'
+import RightsAndLicenses from '../js/components/qvain/licenses'
+import { License } from '../js/components/qvain/licenses/licenses'
+import { AccessType } from '../js/components/qvain/licenses/accessType'
+import RestrictionGrounds from '../js/components/qvain/licenses/resctrictionGrounds'
+import EmbargoExpires from '../js/components/qvain/licenses/embargoExpires'
+import { AccessTypeURLs, LicenseUrls } from '../js/components/qvain/utils/constants'
 import {
   ParticipantsBase
 } from '../js/components/qvain/participants'
 import { ParticipantTypeSelectBase } from '../js/components/qvain/participants/participantTypeSelect'
 import { SelectedParticipantBase, ParticipantSelection } from '../js/components/qvain/participants/participantSelection'
-import { ParticipantInfoBase } from '../js/components/qvain/participants/participantInfo'
 import { AddedParticipantsBase } from '../js/components/qvain/participants/addedParticipants'
 import Files from '../js/components/qvain/files'
 import IDAFilePicker, { IDAFilePickerBase } from '../js/components/qvain/files/idaFilePicker'
 import FileSelector, { FileSelectorBase } from '../js/components/qvain/files/fileSelector'
-import { SelectedFilesBase, FileItem } from '../js/components/qvain/files/selectedFiles'
-import DirectoryForm from '../js/components/qvain/files/directoryForm'
-import {
-  ExternalFileFormBase,
-  ResourceInput,
-  ResourceSave
-} from '../js/components/qvain/files/externalFileForm'
-import {
-  ExternalFilesBase,
-  ResourceItem
-} from '../js/components/qvain/files/externalFiles'
+import { SelectedFilesBase } from '../js/components/qvain/files/selectedFiles'
+import { ExternalFilesBase } from '../js/components/qvain/files/externalFiles'
 import {
   ButtonGroup,
-  FilePickerButton,
-  FilePickerButtonInverse,
   ButtonLabel,
   DeleteButton
 } from '../js/components/qvain/general/buttons'
-import {
-  List,
-  ListItem
-} from '../js/components/qvain/general/list'
 import { SlidingContent } from '../js/components/qvain/general/card'
-import { SectionTitle } from '../js/components/qvain/general/section'
 import QvainStore, {
   Directory,
   EntityType,
   Role,
   Participant,
-  ExternalResource
+  ExternalResource,
+  AccessType as AccessTypeConstructor,
+  License as LicenseConstructor
 } from '../js/stores/view/qvain'
 import LocaleStore from '../js/stores/view/language'
 import { DataCatalogIdentifiers } from '../js/components/qvain/utils/constants'
@@ -57,6 +53,81 @@ describe('Qvain', () => {
 const getStores = () => ({
   Qvain: QvainStore,
   Locale: LocaleStore
+})
+
+describe('Qvain.Description', () => {
+  it('should render <Description />', () => {
+    const component = shallow(<Description Stores={getStores()} />)
+    expect(component).toMatchSnapshot()
+  })
+  it('should render <DescriptionFeild />', () => {
+    const component = shallow(<DescriptionFeild Stores={getStores()}/>)
+    expect(component).toMatchSnapshot()
+  })
+  it('should render <OtherIdentifierField />', () => {
+    const component = shallow(<OtherIdentifierField Stores={getStores()}/>)
+    expect(component).toMatchSnapshot()
+  })
+  it('should render <FieldOfScienceField />', () => {
+    const component = shallow(<FieldOfScienceField Stores={getStores()}/>)
+    expect(component).toMatchSnapshot()
+  })
+  it('should render <KeywordsField />', () => {
+    const component = shallow(<KeywordsField Stores={getStores()}/>)
+    expect(component).toMatchSnapshot()
+  })
+})
+
+describe('Qvain.RightsAndLicenses', () => {
+  it('should render <RightsAndLicenses />', () => {
+    const component = shallow(<RightsAndLicenses />)
+    expect(component).toMatchSnapshot()
+  })
+  it('should render <Licenses />', () => {
+    const component = shallow(<License Stores={getStores()} />)
+    expect(component).toMatchSnapshot()
+  })
+  it('should render other license URL field', () => {
+    const stores = getStores()
+    stores.Qvain.setLicense(LicenseConstructor({en: 'Other (URL)', fi: 'Muu (URL)',},'other'))
+    const component = shallow(<License Stores={stores} />)
+    console.log(component.debug())
+    expect(component.find('#otherLicenseURL').length).toBe(1)
+  })
+  it('should NOT render other license URL field', () => {
+    const stores = getStores()
+    stores.Qvain.setLicense(LicenseConstructor(undefined, LicenseUrls.CCBY4))
+    const component = shallow(<License Stores={stores} />)
+    expect(component.find('#otherLicenseURL').length).toBe(0)
+  })
+  it('should render <AccessType />', () => {
+    const component = shallow(<AccessType Stores={getStores()} />)
+    expect(component).toMatchSnapshot()
+  })
+  it('should render <RestrictionGrounds />', () => {
+    const stores = getStores()
+    stores.Qvain.setAccessType(AccessTypeConstructor(undefined, AccessTypeURLs.EMBARGO))
+    const component = shallow(<AccessType Stores={stores} />)
+    expect(component.find(RestrictionGrounds).length).toBe(1)
+  })
+  it('should NOT render <RestrictionGrounds />', () => {
+    const stores = getStores()
+    stores.Qvain.setAccessType(AccessTypeConstructor(undefined, AccessTypeURLs.OPEN))
+    const component = shallow(<AccessType Stores={stores} />)
+    expect(component.find(RestrictionGrounds).length).toBe(0)
+  })
+  it('should render <EmbargoExpires />', () => {
+    const stores = getStores()
+    stores.Qvain.setAccessType(AccessTypeConstructor(undefined, AccessTypeURLs.EMBARGO))
+    const component = shallow(<AccessType Stores={stores} />)
+    expect(component.find(EmbargoExpires).length).toBe(1)
+  })
+  it('should NOT render <EmbargoExpires />', () => {
+    const stores = getStores()
+    stores.Qvain.setAccessType(AccessTypeConstructor(undefined, AccessTypeURLs.OPEN))
+    const component = shallow(<AccessType Stores={stores} />)
+    expect(component.find(EmbargoExpires).length).toBe(0)
+  })
 })
 
 describe('Qvain.Participants', () => {
