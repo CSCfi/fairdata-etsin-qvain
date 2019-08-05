@@ -53,6 +53,7 @@ export class ProjectSelectorBase extends Component {
     return (
       <Fragment>
         <Translate
+          aria-label="Select project"
           options={options}
           isDisabled={editing}
           component={ProjectSelect}
@@ -81,6 +82,7 @@ export const ProjectSelect = styled(Select)`
   height: 38px;
   margin-top: 30px;
   margin-bottom: 10px;
+  color: #808080;
 `;
 
 export default inject('Stores')(observer(ProjectSelectorBase))

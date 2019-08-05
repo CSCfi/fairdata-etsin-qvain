@@ -85,13 +85,13 @@ export class ExternalFileFormBase extends Component {
     } = this.state
     return (
       <Fragment>
-        <Label htmlFor="titleInput">
+        <Label htmlFor="externalResourceTitleInput">
           <Translate content="qvain.files.external.form.title.label" /> *
         </Label>
         <Translate
           component={ResourceInput}
           type="text"
-          id="titleInput"
+          id="externalResourceTitleInput"
           value={externalResource.title}
           onChange={(event) => { externalResource.title = event.target.value }}
           attributes={{ placeholder: 'qvain.files.external.form.title.placeholder' }}
@@ -101,7 +101,7 @@ export class ExternalFileFormBase extends Component {
         </Label>
         <Translate
           component={CustomSelect}
-          id="useCategoryInput"
+          inputId="useCategoryInput"
           value={externalResource.useCategory}
           options={useCategories[lang]}
           onChange={(selection) => { externalResource.useCategory = selection }}

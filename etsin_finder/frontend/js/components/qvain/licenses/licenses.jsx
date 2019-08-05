@@ -6,7 +6,7 @@ import Translate from 'react-translate-component'
 
 import getReferenceData from '../utils/getReferenceData'
 import Card from '../general/card'
-import { Label, Input } from '../general/form'
+import { Label, Input, LabelLarge } from '../general/form'
 import { License as LicenseConstructor } from '../../../stores/view/qvain'
 import { onChange, getCurrentValue } from '../utils/select'
 import { licenseSchema } from '../utils/formValidation'
@@ -27,7 +27,7 @@ const otherOpt = locale => ({
   label: otherOptLabel(locale),
 })
 
-class License extends Component {
+export class License extends Component {
   static propTypes = {
     Stores: PropTypes.object.isRequired,
   }
@@ -104,9 +104,12 @@ class License extends Component {
     const { license, setLicense, otherLicenseUrl } = this.props.Stores.Qvain
     return (
       <Card>
-        <Translate component="h3" content="qvain.rightsAndLicenses.license.title" />
+        <LabelLarge htmlFor="licenseSelect">
+          <Translate content="qvain.rightsAndLicenses.license.title" />
+        </LabelLarge>
         <Translate
           component={Select}
+          inputId="licenseSelect"
           name="license"
           value={getCurrentValue(license, options, lang)}
           options={options[lang]}
@@ -118,11 +121,13 @@ class License extends Component {
         {license !== undefined && license.identifier === otherOptValue && (
           <Fragment>
             <Translate
+              htmlFor="otherLicenseURL"
               component={Label}
               content="qvain.rightsAndLicenses.license.other.label"
               style={{ marginTop: '20px' }}
             />
             <Input
+              id="otherLicenseURL"
               value={otherLicenseUrl}
               onChange={event => {
                 this.props.Stores.Qvain.otherLicenseUrl = event.target.value

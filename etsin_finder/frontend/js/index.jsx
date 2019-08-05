@@ -15,6 +15,7 @@ import ReactDOM from 'react-dom'
 
 import App from './app'
 
+
 global.Promise = require('bluebird')
 
 Promise.config({

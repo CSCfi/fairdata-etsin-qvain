@@ -1,11 +1,10 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 import { inject, observer } from 'mobx-react'
 import Translate from 'react-translate-component'
-import { Container, SlidingContent } from './card'
 import Loader from '../../general/loader'
-import { InvertedButton } from '../../general/button'
+import { LinkButtonDarkGray } from '../../general/button';
 
 class SubmitResponse extends Component {
   static propTypes = {
@@ -13,15 +12,32 @@ class SubmitResponse extends Component {
     response: PropTypes.oneOfType([PropTypes.string, PropTypes.object, PropTypes.array]),
   }
 
-  state = {
-    openResponse: false,
+  constructor() {
+    super()
+    this.state = {
+      clearSubmitResponse: false,
+    }
+
+    this.closeSubmitResponse = this.closeSubmitResponse.bind(this)
+  }
+
+  closeSubmitResponse() {
+    this.setState({
+      clearSubmitResponse: true,
+    })
   }
 
   render() {
     const { response } = this.props
-    const { openResponse } = this.state
     const { original } = this.props.Stores.Qvain
-    // If a NEW dataset has been created successfully.
+
+    // If the user wants to clear the submitResponse
+    if (this.state.clearSubmitResponse) {
+      this.state.clearSubmitResponse = false;
+      return null;
+    }
+
+    // If a new dataset has been created successfully.
     if (response &&
         'identifier' in response &&
         !('new_version_created' in response) &&
@@ -29,12 +45,26 @@ class SubmitResponse extends Component {
     ) {
       const identifier = response.identifier
       return (
-        <ResponseContainer>
-          <ResponseLabel success>
-            <Translate content="qvain.submitStatus.success" />
-          </ResponseLabel>
-          <p>Identifier: {identifier}</p>
-        </ResponseContainer>
+        <ResponseContainerSuccess>
+          <ResponseContainerContent>
+            <ResponseLabel success>
+              <Translate content="qvain.submitStatus.success" />
+            </ResponseLabel>
+            <LinkToEtsin>
+              <Translate
+                component="span"
+                onClick={() => window.open(`/dataset/${identifier}`, '_blank')}
+                content="qvain.datasets.goToEtsin"
+              />
+            </LinkToEtsin>
+            <p>Identifier: {identifier}</p>
+          </ResponseContainerContent>
+          <ResponseContainerCloseButtonContainer>
+            <LinkButtonDarkGray type="button" onClick={this.closeSubmitResponse}>
+              x
+            </LinkButtonDarkGray>
+          </ResponseContainerCloseButtonContainer>
+        </ResponseContainerSuccess>
       )
     }
     // If an existing datasets metadata has successfully been updated.
@@ -50,57 +80,81 @@ class SubmitResponse extends Component {
     ) {
       const identifier = response.identifier
       return (
-        <ResponseContainer>
-          <ResponseLabel success>
-            <Translate content="qvain.submitStatus.editMetadataSuccess" />
-          </ResponseLabel>
-          <p>Identifier: {identifier}</p>
-        </ResponseContainer>
+        <ResponseContainerSuccess>
+          <ResponseContainerContent>
+            <ResponseLabel success>
+              <Translate content="qvain.submitStatus.editMetadataSuccess" />
+            </ResponseLabel>
+            <LinkToEtsin>
+              <Translate
+                component="span"
+                onClick={() => window.open(`/dataset/${identifier}`, '_blank')}
+                content="qvain.datasets.goToEtsin"
+              />
+            </LinkToEtsin>
+            <p>Identifier: {identifier}</p>
+          </ResponseContainerContent>
+          <ResponseContainerCloseButtonContainer>
+            <LinkButtonDarkGray type="button" onClick={this.closeSubmitResponse}>
+              x
+            </LinkButtonDarkGray>
+          </ResponseContainerCloseButtonContainer>
+        </ResponseContainerSuccess>
       )
     }
     // If an existing datasets files or directorys have changed and the update
-    // creates a new Version of the dataset with its own identifiers.
+    // creates a new version of the dataset with its own identifiers.
     if (response && 'new_version_created' in response) {
       const identifier = response.dataset_version_set
         ? response.dataset_version_set[0].identifier
         : response.identifier
       return (
-        <ResponseContainer>
-          <ResponseLabel success>
-            <Translate content="qvain.submitStatus.editFilesSuccess" />
-          </ResponseLabel>
-          <p>Identifier: {identifier}</p>
-        </ResponseContainer>
+        <ResponseContainerSuccess>
+          <ResponseContainerContent>
+            <ResponseLabel success>
+              <Translate content="qvain.submitStatus.editFilesSuccess" />
+            </ResponseLabel>
+            <LinkToEtsin>
+              <Translate
+                component="span"
+                onClick={() => window.open(`/dataset/${identifier}`, '_blank')}
+                content="qvain.datasets.goToEtsin"
+              />
+            </LinkToEtsin>
+            <p>Identifier: {identifier}</p>
+          </ResponseContainerContent>
+          <ResponseContainerCloseButtonContainer>
+            <LinkButtonDarkGray type="button" onClick={this.closeSubmitResponse}>
+              x
+            </LinkButtonDarkGray>
+          </ResponseContainerCloseButtonContainer>
+        </ResponseContainerSuccess>
       )
     }
     // If something went wrong.
     if (response) {
       return (
-        <ResponseContainer>
-          <ResponseLabel>
-            <Translate content="qvain.submitStatus.fail" />
-          </ResponseLabel>
-          <InvertedButton
-            color="red"
-            onClick={() => this.setState(prevState => ({ openResponse: !prevState.openResponse }))}
-            type="button"
-          >
-            {openResponse ? (
-              <Translate content="qvain.closeErrorMessages" />
-            ) : (
-              <Translate content="qvain.openErrorMessages" />
-            )}
-          </InvertedButton>
-          <SlidingContent open={openResponse}>
-            <Pre>{JSON.stringify(response, null, 8)}</Pre>
-          </SlidingContent>
-        </ResponseContainer>
+        <ResponseContainerError>
+          <ResponseContainerContent>
+            <ResponseLabel>
+              <Translate content="qvain.submitStatus.fail" />
+            </ResponseLabel>
+            <p>{(response.toString().replace(/,/g, '\n'))}</p>
+          </ResponseContainerContent>
+          <ResponseContainerCloseButtonContainer>
+            <LinkButtonDarkGray type="button" onClick={this.closeSubmitResponse}>
+              x
+            </LinkButtonDarkGray>
+          </ResponseContainerCloseButtonContainer>
+        </ResponseContainerError>
       )
     }
+
     return (
-      <ResponseContainer>
+
+      <ResponseContainerLoading>
         <Loader active />
-      </ResponseContainer>
+      </ResponseContainerLoading>
     )
   }
 }
@@ -109,23 +163,70 @@ SubmitResponse.defaultProps = {
   response: null,
 }
 
+const LinkToEtsin = styled.p`
+  color: green;
+  display: inline-block;
+  vertical-align: top;
+  text-decoration: underline;
+  margin-left: 10px;
+  margin-bottom: 0px;
+  cursor: pointer;
+`
 const ResponseLabel = styled.p`
-  color: ${props => (props.success ? 'green' : 'red')};
-  font-size: 2em;
+  font-weight: bold;
+  display: inline-block;
+  vertical-align: top;
 `
-const ResponseContainer = styled(Container)`
-  padding: 25px 45px 45px 45px;
-  margin: 15px;
+const ResponseContainerSuccess = styled.div`
+  background-color: #e8ffeb;
+  text-align: center;
+  width: 100%;
+  color: green;
+  z-index: 2;
+  border-bottom: 1px solid rgba(0,0,0,0.3);
 `
-const Pre = styled.pre`
-  color: white;
-  margin-top: inherit;
-  padding: 15px;
-  background-color: black;
-  white-space: pre-wrap; /* Since CSS 2.1 */
-  white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
-  white-space: -pre-wrap; /* Opera 4-6 */
-  white-space: -o-pre-wrap; /* Opera 7 */
-  word-wrap: break-word;
+const ResponseContainerLoading = styled.div`
+  background-color: #fff;
+  text-align: center;
+  width: 100%;
+  z-index: 2;
+  height: 105px;
+  padding-top: 30px;
+  border-bottom: 1px solid rgba(0,0,0,0.3);
+`
+const FadeInAnimation = keyframes`
+  from {
+    color: #FFEBE8;
+  }
+  to {
+    color: red;
+  }
+`
+const ResponseContainerError = styled.div`
+  background-color: #FFEBE8;
+  text-align: center;
+  width: 100%;
+  color: red;
+  z-index: 2;
+  border-bottom: 1px solid rgba(0,0,0,0.3);
+  animation-name: ${FadeInAnimation};
+  animation-duration: 1.5s;
+`
+const ResponseContainerContent = styled.div`
+  max-width: 1140px;
+  width: 100%;
+  text-align: left;
+  display: inline-block;
+  padding-left: 30px;
+  padding-top: 20px;
+  white-space: pre-line;
+`
+const ResponseContainerCloseButtonContainer = styled.div`
+  right: 0;
+  display:inline-block;
+  text-align: right;
+  padding-top: 10px;
+  padding-right: 20px;
+  position: absolute;
 `
 export default inject('Stores')(observer(SubmitResponse))

@@ -262,15 +262,14 @@ const english = {
       editFilesSuccess: 'New dataset version has been created!',
       editMetadataSuccess: 'Dataset successfully updated!',
     },
-    openErrorMessages: 'Open error messages',
-    closeErrorMessages: 'Close error messages',
     unsuccessfullLogin: 'Login unsuccessful.',
     notCSCUser1:
       'Please make sure that you have a valid CSC account. If you tried to log in with an external account (for example Haka) you might get this error if your account is not associated with CSC account. Please do the registration in',
     notCSCUserLink: ' CSC Customer Portal',
     notCSCUser2: ' You can register with or without Haka account.',
     notLoggedIn: 'Please login with your CSC account to use Qvain-light service.',
-    title: 'Publish Dataset',
+    titleCreate: 'Publish Dataset',
+    titleEdit: 'Edit Dataset',
     backLink: ' Back to datasets',
     common: {
       cancel: 'Cancel',
@@ -278,6 +277,7 @@ const english = {
     },
     datasets: {
       title: 'Your Datasets',
+      search: 'Search',
       help: 'Choose a dataset to edit or create a new dataset',
       createButton: 'Create dataset',
       tableRows: {
@@ -481,7 +481,7 @@ const english = {
         },
         requiredParticipants: {
           atLeastOneParticipant: 'You must add at least one participant to your dataset.',
-          mandatoryParticipants: 'Participants: Creator and publisher roles are mandatory. You must specify at least one creator, as well as a publisher, for your dataset. Note: one person can have both these roles.',
+          mandatoryParticipants: 'Participants: Creator and publisher roles are mandatory. Note: one person can have both these roles.',
         },
       },
       accessType: {
@@ -664,6 +664,7 @@ const english = {
   },
   slogan: 'Research data finder',
   stc: 'Skip to content',
+  stsd: 'Skip to submit dataset',
   tombstone: {
     info: 'The dataset has been either deprecated or removed',
   },

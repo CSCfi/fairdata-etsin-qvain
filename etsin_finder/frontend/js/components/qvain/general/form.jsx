@@ -15,7 +15,7 @@ export const Input = styled.input`
   border-radius: 3px;
   border: solid 1px #cccccc;
   padding: 8px;
-  color: #808080;
+  color: #000;
   margin-bottom: 20px;
 `
 
@@ -24,7 +24,7 @@ export const Textarea = styled.textarea`
   border-radius: 3px;
   border: solid 1px #cccccc;
   padding: 8px;
-  color: #808080;
+  color: #000;
   margin-bottom: 20px;
 `
 
@@ -36,6 +36,12 @@ export const Label = styled.label`
   margin-right: auto;
   padding-left: 4px;
   display: block;
+`
+
+export const LabelLarge = styled.label`
+  font-size: 1.2em;
+  line-height: calc(1.5 * 1.2em);
+  font-weight: 700
 `
 
 export const RadioContainer = styled.div`

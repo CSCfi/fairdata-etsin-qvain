@@ -104,6 +104,7 @@ const MenuContainer = styled.div`
   display: flex;
   align-items: center;
   height: 100%;
+  z-index: 3;
 `
 
 const ButtonContainer = styled.div`

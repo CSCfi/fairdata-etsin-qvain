@@ -104,6 +104,15 @@ export const LinkButton = styled(TransparentButton)`
   }
 `
 
+export const LinkButtonDarkGray = styled(TransparentButton)`
+  margin: 0;
+  padding: 0;
+  color: rgb(110, 110, 110)
+  &:hover {
+    color: ${p => darken(0.1, p.color ? checkColor(p.color) : p.theme.color.primary)};
+  }
+`
+
 // prettier-ignore
 export const Link = styled.a.attrs(props => ({
   padding: props.padding ? props.padding : '0.3em 0.6em 0.4em',
