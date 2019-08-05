@@ -48,7 +48,7 @@ class DataCatalog extends Component {
     return (
       <Card>
         <LabelLarge htmlFor="dataCatalogSelect">
-          <Translate content="qvain.files.dataCatalog.label" />
+          <Translate content="qvain.files.dataCatalog.label" /> *
         </LabelLarge>
         <Translate component="p" content="qvain.files.dataCatalog.explanation" />
         <Translate
