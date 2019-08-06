@@ -625,6 +625,10 @@ const english = {
         title: 'Previously selected files',
         help: 'These are the files and directories that you have added before. If you do not touch these, upon saving the changes to the dataset METAX will go through all the selected directories and associate any files and directories within, even the new ones. In other words, if you don\'t touch these and save, you can associate new files within the directory structure with your dataset.'
       },
+      notificationNewDatasetWillBeCreated: {
+        header: 'Editing files and folders',
+        content: 'If you have already published the dataset, removing / adding files or folders will automatically create a new version of the dataset (excluding a published dataset without any files; you can add files/folder one time in the existing version). The old version will be tagged as "Old" and the files linked to it will remain untouched.',
+      },
       external: {
         title: 'External resources (ATT)',
         infoText: 'add text',
