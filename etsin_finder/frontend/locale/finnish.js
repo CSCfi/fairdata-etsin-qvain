@@ -270,7 +270,7 @@ const finnish = {
     notLoggedIn: 'Kirjaudu sisään CSC -tililläsi käyttääksesi Qvain-light palvelua.',
     titleCreate: 'Julkaise Aineisto',
     titleEdit: 'Muokkaa Aineistoa',
-    backLink: ' Takaisin hakemistoihin',
+    backLink: ' Takaisin aineistolistaan',
     common: {
       save: 'Tallenna',
       cancel: 'Peruuta',
@@ -306,7 +306,7 @@ const finnish = {
     description: {
       title: 'Kuvaus',
       infoTitle: 'Kuvaus info',
-      infoText: 'lisää texti',
+      infoText: 'Anna aineistolle kuvaava ja yksilöivä nimi. Kirjoita myös kuvaus mahdollisimman tarkasti. Kerro miten aineisto on syntynyt, mihin tarkoitukseen, miten se rakentuu ja miten sitä on käsitelty. Kerro myös sisällöstä, mahdollisista puutteista ja rajauksista.',
       description: {
         langEn: 'ENGLANTI',
         langFi: 'SUOMI',
@@ -324,7 +324,7 @@ const finnish = {
       },
       otherIdentifiers: {
         title: 'Muut tunnisteet',
-        infoText: 'lisää texti',
+        infoText: 'Jos aineistollasi on jo tunniste (tai useita), yleensä esim. DOI, anna ne tässä. Olemassaolevien tunnisteiden lisäksi aineisto saa tallennusvaiheessa pysyvän tunnisteen, joka tulee resolvoitumaan Etsimen laskeutumissivulle.',
         instructions:
           'Metadatan tunniste luodaan automaattisesti mutta jos on jo OLEMASSA OLEVA tunniste, syötä se tähän.',
         addButton: '+ Lisää uusi',
@@ -332,12 +332,12 @@ const finnish = {
       },
       fieldOfScience: {
         title: 'Tutkimusala',
-        infoText: 'lisää texti',
+        infoText: 'Valitse tieteenala. Alasvetovalikkosa on Opetus- ja Kulttuuriministeriön mukainen luokitus tieteenaloille.',
         placeholder: 'Valitse vaihtoehto',
       },
       keywords: {
         title: 'Avainsanat',
-        infoText: 'lisää texti',
+        infoText: 'Vapaat hakusanat aineistollesi. Vaikuttaa aineistosi löytymiseen Etsimen haussa. Käytä mahdollisimman tarkkoja termejä. Tässä kentässä ei ole automaattista käännöstä eri kielille.',
         placeholder: 'Esim. taloustiede',
         addButton: 'Lisää avainsanoja',
         help:
@@ -349,7 +349,7 @@ const finnish = {
       infoTitle: 'Oikeudet ja lisenssit info',
       accessType: {
         title: 'Pääsyoikeus',
-        infoText: 'lisää texti',
+        infoText: 'Tällä kentällä määrittelet, miten aineiston (tiedostot) saa käyttöönsä. Tämä kenttä ei vaikuta siihen, miten tämä kuvailu näkyy. Kuvailu näkyy aina automaattisesti Etsimessä julkaisun jälkeen. Jos valitset jotain muuta kuin Avoin (Open), myös syy, miksi tiedostojen latausta on rajoitettu (Restricition Grounds) on pakollinen tieto. Jos valitse "Embargo", määrittele myös embargon expiroitumisajankohta.',
         placeholder: 'Valitse vaihtoehto',
       },
       embargoDate: {
@@ -364,7 +364,7 @@ const finnish = {
       },
       license: {
         title: 'Lisenssi',
-        infoText: 'lisää texti',
+        infoText: 'Lisenssi on tärkeä osa aineiston kuvailua. Lisenssillä määrittelet, miten aineistoa voi käyttää. Oletuksena on valittuna suositeltu CC BY 4.0. Jos haluat alasvetovalikosta valinnan sijaan määrittää lisenssin URL -osoitteen itse, valitse alasvetovalikosta "Muu (URL)", minkä jälkeen pääset kirjoittamaan URL-osoitteen.',
         placeholder: 'Valitse vaihtoehto',
         other: {
           label: 'URL',
@@ -375,7 +375,7 @@ const finnish = {
     participants: {
       title: 'Toimijat',
       infoTitle: 'Toimijat info',
-      infoText: 'lisää texti',
+      infoText: 'Tutkimukseen tai aineiston tekemiseen osallistuneet henkilöt ja organisaatiot. Voit määrittää tekijät (pakollinen), julkaisijat (pakollinen) ja kuraattorit. Valitse ensin, onko kyseessä henkilö vai organisaatio. Määritä sen jälkeen, missä roolissa ko. toimija osallistui tutkimukseen (voit valita useita), ja määritä sen jälkeen tarvittavat tiedot. Jos kyseessä on henkilö, on organisaatiotieto pakollinen tieto. Jo annettuja tietoja pääset muuttamaan klikkaamalla tallennetun toimijan kohdalla kynä -ikonia.',
       add: {
         title: 'Toimijat',
         help:
@@ -549,7 +549,7 @@ const finnish = {
       infoText: 'Lisää texti',
       dataCatalog: {
         label: 'Tiedoston lähde',
-        infoText: 'Lisää texti',
+        infoText: 'Ennenkuin pääset linkittämään tiedostoja aineistoosi, sinun tulee valita, linkitätkö tiedostoja IDAsta vai annatko ulkopuolisen palvelun URL-osoitteet, joista tiedostot löytyvät.',
         explanation: 'Valitse IDA jos tiedostot on tallennettu Fairdata Ida palveluun. Valitse ATT jos tiedostot tulevat muualta.',
         placeholder: 'Valitse vaihtoehto'
       },
@@ -557,7 +557,7 @@ const finnish = {
         'Aineistoon kuuluvat tiedostot. Aineistoon voi kuulua vain joko IDAssa olevia tiedostoja tai ulkopuolisia tiedostoja. Tiedostojen metadata ei ole osa aineistojen metadataa, joten muista tallentaa muutokset jotka teet tiedostojen metadataan.',
       ida: {
         title: 'Fairdata IDA tiedostot',
-        infoText: 'Lisää texti',
+        infoText: 'Jos linkität IDA-tiedostoja, sinun tulee ensin valita IDA-projekti, minkä jälkeen näet ko. projektiin kuuluvat tiedostot ja hakemistot. Kun olet valinnut haluamasi projektin, sivu listaa sinulle ko. projektin sisältämät jäädytetyt hakemistot ja tiedostot. Valitse listasta ne hakemistot ja tiedostot, jotka haluat liittää aineistoosi. Jos liität hakemistot, KAIKKI sen alla olevat tiedostot liitetään aineistoon (älä siinä tapauksessa valitse hakemiston alta enää yksittäisiä tiedostoja).',
         help: 'Jos sinulla on tiedostoja Fairdata IDA:ssa, voit liittää ne tässä:',
         button: {
           label: 'Liitä tiedostoja Fairdata IDA:sta',
@@ -598,7 +598,7 @@ const finnish = {
       },
       external: {
         title: 'Ulkoiset aineistot (ATT)',
-        infoText: 'lisää texti',
+        infoText: 'Määritä tiedostolle otsikko, käyttökategoria (alasvetovalikosta) sekä, kerro, mistä tiedosto löytyy. Tiedosto ei ladata Qvain Lightiin, vaan antamasi URL toimii aktiivisena linkkinä ko. tiedostoon.',
         help: 'Lisää linkkejä ulkoisiin tiedostoihin:',
         button: {
           label: 'Lisää linkki ulkoiseen tiedostoon',
