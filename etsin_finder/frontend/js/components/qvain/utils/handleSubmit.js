@@ -1,14 +1,14 @@
 
-const participantsToMetax = participants => {
-  const parsedParticipant = participants.map(participant => ({
-      type: participant.type,
-      role: participant.role,
-      name: participant.name,
-      email: participant.email ? participant.email : undefined,
-      identifier: participant.identifier ? participant.identifier : undefined,
-      organization: participant.organization,
+const actorsToMetax = actors => {
+  const parsedActor = actors.map(actor => ({
+      type: actor.type,
+      role: actor.role,
+      name: actor.name,
+      email: actor.email ? actor.email : undefined,
+      identifier: actor.identifier ? actor.identifier : undefined,
+      organization: actor.organization,
     }))
-  return parsedParticipant
+  return parsedActor
 }
 
 const directoriesToMetax = (selectedDirectories, existingDirectories) => {
@@ -65,7 +65,7 @@ const handleSubmitToBackend = (values) => {
     identifiers: values.otherIdentifiers,
     fieldOfScience: values.fieldOfScience ? values.fieldOfScience.url : undefined,
     keywords: values.keywords,
-    participants: participantsToMetax(values.participants),
+    actors: actorsToMetax(values.actors),
     accessType: values.accessType ? values.accessType : undefined,
     restrictionGrounds: values.restrictionGrounds ? values.restrictionGrounds.identifier : undefined,
     embargoDate: values.embargoExpDate,

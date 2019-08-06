@@ -38,9 +38,9 @@ class Qvain {
 
   @observable restrictionGrounds = {}
 
-  @observable participants = []
+  @observable actors = []
 
-  @observable participantInEdit = EmptyParticipant
+  @observable actorInEdit = EmptyActor
 
   @observable externalResourceInEdit = EmptyExternalResource
 
@@ -62,8 +62,8 @@ class Qvain {
     this.accessType = AccessType(undefined, AccessTypeURLs.OPEN)
     this.embargoExpDate = undefined
     this.restrictionGrounds = {}
-    this.participants = []
-    this.participantInEdit = EmptyParticipant
+    this.actors = []
+    this.actorInEdit = EmptyActor
 
     // Reset Files/Directories related data
     this.dataCatalog = undefined
@@ -148,40 +148,40 @@ class Qvain {
   }
 
   @action
-  setParticipants = participants => {
-    this.participants = participants
+  setActors = actors => {
+    this.actors = actors
   }
 
-  @action saveParticipant = participant => {
-    if (participant.uiId !== undefined) {
+  @action saveActor = actor => {
+    if (actor.uiId !== undefined) {
       // Saving a participant that was previously added
-      const existing = this.participants.find(
-        addedParticipant => addedParticipant.uiId === participant.uiId
+      const existing = this.actors.find(
+        addedActor => addedActor.uiId === actor.uiId
       )
       if (existing !== undefined) {
-        this.removeParticipant(participant)
+        this.removeActor(actor)
       }
     } else {
       // Adding a new participant, generate a new UI ID for them
-      participant.uiId = this.createParticipantUIId()
+      actor.uiId = this.createActorUIId()
     }
-    this.setParticipants([...this.participants, participant])
+    this.setActors([...this.actors, actor])
   }
 
   @action
-  removeParticipant = participant => {
-    const participants = this.participants.filter(p => p.uiId !== participant.uiId)
-    this.setParticipants(participants)
+  removeActor = actor => {
+    const actors = this.actors.filter(p => p.uiId !== actor.uiId)
+    this.setActors(actors)
   }
 
   @action
-  editParticipant = participant => {
-    this.participantInEdit = { ...participant }
+  editActor = actor => {
+    this.actorInEdit = { ...actor }
   }
 
   @computed
-  get addedParticipants() {
-    return this.participants
+  get addedActors() {
+    return this.actors
   }
 
   @action saveExternalResource = resource => {
@@ -209,8 +209,8 @@ class Qvain {
   }
 
   @computed
-  get getParticipantInEdit() {
-    return this.participantInEdit
+  get getActorInEdit() {
+    return this.actorInEdit
   }
 
   @computed
@@ -511,27 +511,27 @@ class Qvain {
       : undefined
     this.restrictionGrounds = rg ? RestrictionGrounds(rg.pref_label, rg.identifier) : undefined
 
-    // Load participants
-    const participants = []
+    // Load actors
+    const actors = []
     if ('publisher' in researchDataset) {
-      participants.push(
-        this.createParticipant(researchDataset.publisher, Role.PUBLISHER, participants)
+      actors.push(
+        this.createActor(researchDataset.publisher, Role.PUBLISHER, actors)
       )
     }
     if ('curator' in researchDataset) {
       researchDataset.curator.forEach(curator =>
-        participants.push(this.createParticipant(curator, Role.CURATOR, participants))
+        actors.push(this.createActor(curator, Role.CURATOR, actors))
       )
     }
     if ('creator' in researchDataset) {
       researchDataset.creator.forEach(creator =>
-        participants.push(this.createParticipant(creator, Role.CREATOR, participants))
+        actors.push(this.createActor(creator, Role.CREATOR, actors))
       )
     }
-    console.groupCollapsed('Participants to be compared DEBUG')
-    console.table(JSON.parse(JSON.stringify(participants)))
+    console.groupCollapsed('Actors to be compared DEBUG')
+    console.table(JSON.parse(JSON.stringify(actors)))
     console.groupEnd()
-    this.participants = this.mergeTheSameParticipants(participants)
+    this.actors = this.mergeTheSameActors(actors)
 
     // load data catalog
     this.dataCatalog =
@@ -573,25 +573,25 @@ class Qvain {
 
   // Creates a single instance of a participant, only has one role.
   // Returns a Participant.
-  createParticipant = (participantJson, role, participants) => {
-    const entityType = participantJson['@type'].toLowerCase()
+  createActor = (actorJson, role, actors) => {
+    const entityType = actorJson['@type'].toLowerCase()
     let name
     if (entityType === EntityType.ORGANIZATION) {
-      name = participantJson.name ? participantJson.name : {}
+      name = actorJson.name ? actorJson.name : {}
     } else {
-      name = participantJson.name
+      name = actorJson.name
     }
 
     let parentOrg
     if (entityType === EntityType.ORGANIZATION) {
-      const isPartOf = participantJson.is_part_of ? participantJson.is_part_of : {}
+      const isPartOf = actorJson.is_part_of ? actorJson.is_part_of : {}
       if (!this.isObjectEmpty(isPartOf)) {
         parentOrg = isPartOf.name
       } else {
         parentOrg = {}
       }
     } else {
-      const parentOrgName = participantJson.member_of ? participantJson.member_of.name : {}
+      const parentOrgName = actorJson.member_of ? actorJson.member_of.name : {}
       if (!this.isObjectEmpty(parentOrgName)) {
         parentOrg = parentOrgName
       } else {
@@ -599,50 +599,50 @@ class Qvain {
       }
     }
 
-    return Participant(
+    return Actor(
       entityType === EntityType.PERSON
         ? EntityType.PERSON
         : EntityType.ORGANIZATION,
       [role],
       name,
-      participantJson.email ? participantJson.email : '',
-      participantJson.identifier ? participantJson.identifier : '',
+      actorJson.email ? actorJson.email : '',
+      actorJson.identifier ? actorJson.identifier : '',
       parentOrg,
-      this.createParticipantUIId(participants)
+      this.createActorUIId(actors)
     )
   }
 
-  // Function that 'Merge' the participants with the same metadata (except UIid).
-  // It looks for participants with the same info but different roles and adds their
+  // Function that 'Merge' the actors with the same metadata (except UIid).
+  // It looks for actors with the same info but different roles and adds their
   // roles together to get one participant with multiple roles.
-  // Returns a nw array with the merged participants.
-  mergeTheSameParticipants = participants => {
-    console.groupCollapsed('Participant object comparison DEBUG')
-    if (participants.length <= 1) return participants
-    const mergedParticipants = []
-    participants.forEach(participant1 => {
-      participants.forEach((participant2, index) => {
-        if (this.isEqual(participant1, participant2)) {
-          participant1.role = [...new Set([].concat(...[participant1.role, participant2.role]))]
-          delete participants[index]
+  // Returns a nw array with the merged actors.
+  mergeTheSameActors = actors => {
+    console.groupCollapsed('Actor object comparison DEBUG')
+    if (actors.length <= 1) return actors
+    const mergedActors = []
+    actors.forEach(actor1 => {
+      actors.forEach((actor2, index) => {
+        if (this.isEqual(actor1, actor2)) {
+          actor1.role = [...new Set([].concat(...[actor1.role, actor2.role]))]
+          delete actors[index]
         }
       })
-      mergedParticipants.push(participant1)
+      mergedActors.push(actor1)
     })
     console.groupEnd()
-    return mergedParticipants
+    return mergedActors
   }
 
-  // Function to compare two participants and see if they are the same participant.
-  // Returns True if the participants seem the same, or False if not.
-  isEqual = (p1, p2) => {
+  // Function to compare two actors and see if they are the same participant.
+  // Returns True if the actors seem the same, or False if not.
+  isEqual = (a1, a2) => {
     console.log(
       // eslint-disable-next-line no-nested-ternary
-      `Compare: ${p1.name.en ? p1.name.en : p1.name.und ? p1.name.und : p1.name} and ${p2.name.en ? p2.name.en : p2.name.und ? p2.name.und : p2.name}`
+      `Compare: ${a1.name.en ? a1.name.en : a1.name.und ? a1.name.und : a1.name} and ${a2.name.en ? a2.name.en : a2.name.und ? a2.name.und : a2.name}`
     )
-    if (!!p1.identifier && !!p2.identifier) {
+    if (!!a1.identifier && !!a2.identifier) {
       // If p1 and p2 have identifiers.
-      if (p1.identifier === p2.identifier) {
+      if (a1.identifier === a2.identifier) {
         // If the identifiers are the same.
         console.log(true)
         return true
@@ -652,11 +652,11 @@ class Qvain {
       console.log(false)
       return false
     }
-    if (!!p1.email && !!p2.email) {
+    if (!!a1.email && !!a2.email) {
       // If p1 and p2 have emails.
-      if (p1.type === EntityType.PERSON && p2.type === EntityType.PERSON) {
+      if (a1.type === EntityType.PERSON && a2.type === EntityType.PERSON) {
         // If they have emails and are type PERSON.
-        if (p1.email === p2.email && p1.name === p2.name) {
+        if (a1.email === a2.email && a1.name === a2.name) {
           // If they have emails and are type PERSON and the emails and names are equal.
           console.log(true)
           return true
@@ -665,9 +665,9 @@ class Qvain {
         console.log(false)
         return false
       }
-      if (p1.type === EntityType.ORGANIZATION && p2.type === EntityType.ORGANIZATION) {
+      if (a1.type === EntityType.ORGANIZATION && a2.type === EntityType.ORGANIZATION) {
         // If they have emails an are of type ORGANIZATION.
-        if (p1.email === p2.email && this.isEqualObj(p1.name, p2.name)) {
+        if (a1.email === a2.email && this.isEqualObj(a1.name, a2.name)) {
           // If they have emails and are of type ORGANIZATION and the emails
           // and name objects are equal.
           console.log(true)
@@ -679,9 +679,9 @@ class Qvain {
         return false
       }
     }
-    if (p1.type === EntityType.PERSON && p2.type === EntityType.PERSON) {
+    if (a1.type === EntityType.PERSON && a2.type === EntityType.PERSON) {
       // If p1 and p2 are of type PERSON.
-      if (p1.name === p2.name && this.isEqualObj(p1.organization, p2.organization)) {
+      if (a1.name === a2.name && this.isEqualObj(a1.organization, a2.organization)) {
         // if they are of type PERSON and the names and organization objects
         // are equal.
         console.log(true)
@@ -692,12 +692,12 @@ class Qvain {
       console.log(false)
       return false
     }
-    if (p1.type === EntityType.ORGANIZATION && p2.type === EntityType.ORGANIZATION) {
+    if (a1.type === EntityType.ORGANIZATION && a2.type === EntityType.ORGANIZATION) {
       // If p1 and p2 are of type ORGANIZATION.
-      if (!(this.isObjectEmpty(p1.organization) && this.isObjectEmpty(p2.organization))) {
+      if (!(this.isObjectEmpty(a1.organization) && this.isObjectEmpty(a2.organization))) {
         // If they are of type ORGANIZATION and their parent organizations
         // are not empty objects.
-        if (this.isEqualObj(p1.name, p2.name) && this.isEqualObj(p1.organization, p2.organization)) {
+        if (this.isEqualObj(a1.name, a2.name) && this.isEqualObj(a1.organization, a2.organization)) {
           // If they are of type ORGANIZATION and their parent organization objects
           // are not empty and their names and parent organization objects are equal.
           console.log(true)
@@ -708,7 +708,7 @@ class Qvain {
         console.log(false)
         return false
       }
-      if (this.isEqualObj(p1.name, p2.name)) {
+      if (this.isEqualObj(a1.name, a2.name)) {
         // If they are of type ORGANIZATION and their parent organization objects
         // are empty and their name objects are equal.
         console.log(true)
@@ -742,9 +742,9 @@ class Qvain {
 
   // create a new UI Identifier based on existing UI IDs
   // basically a simple number increment
-  // use the store participants by default
-  createParticipantUIId = (participants = this.participants) => {
-    const latestId = participants.length > 0 ? Math.max(...participants.map(p => p.uiId)) : 0
+  // use the store actors by default
+  createActorUIId = (actors = this.actors) => {
+    const latestId = actors.length > 0 ? Math.max(...actors.map(p => p.uiId)) : 0
     return latestId + 1
   }
   // EXTERNAL FILES
@@ -836,7 +836,7 @@ export const Role = {
   CURATOR: 'curator',
 }
 
-export const Participant = (entityType, roles, name, email, identifier, organization, uiId) => ({
+export const Actor = (entityType, roles, name, email, identifier, organization, uiId) => ({
   type: entityType,
   role: roles,
   name,
@@ -846,7 +846,7 @@ export const Participant = (entityType, roles, name, email, identifier, organiza
   uiId,
 })
 
-export const EmptyParticipant = Participant(EntityType.PERSON, [], '', '', '', {}, undefined)
+export const EmptyActor = Actor(EntityType.PERSON, [], '', '', '', {}, undefined)
 
 export const FieldOfScience = (name, url) => ({
   name,

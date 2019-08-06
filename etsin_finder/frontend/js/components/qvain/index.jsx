@@ -10,7 +10,7 @@ import styled from 'styled-components'
 
 import RightsAndLicenses from './licenses'
 import Description from './description'
-import Participants from './participants'
+import Actors from './actors'
 import { qvainFormSchema } from './utils/formValidation'
 import Files from './files'
 import {
@@ -176,7 +176,7 @@ class Qvain extends Component {
         </StickySubHeaderWrapper>
         <Form className="container">
           <Description />
-          <Participants />
+          <Actors />
           <RightsAndLicenses />
           <Files />
           <SubmitContainer>

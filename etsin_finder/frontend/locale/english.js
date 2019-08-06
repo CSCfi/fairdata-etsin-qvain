@@ -368,14 +368,14 @@ const english = {
         },
       },
     },
-    participants: {
-      title: 'Participants',
-      infoTitle: 'Participants info',
+    actors: {
+      title: 'Actors',
+      infoTitle: 'Actors info',
       infoText: 'Add at least one creator and one publisher. A curator is not mandatory. First, select the type of actor (person or organization). Then choose the roles the actor has (you can add multiple). After that, fill in the details: organization is mandatory for a person. You can edit added actors by clicking the pen icon or remove it by clicking the X icon.',
       add: {
-        title: 'Participants',
+        title: 'Actors',
         help:
-          'Creator (1+) and publisher (max 1) roles are mandatory. Notice that one participant can have multiple roles.',
+          'Creator (1+) and publisher (max 1) roles are mandatory. Notice that one actor can have multiple roles.',
         radio: {
           person: 'Person',
           organization: 'Organization',
@@ -418,8 +418,8 @@ const english = {
         },
       },
       added: {
-        title: 'Added Participants',
-        noneAddedNotice: 'No participants added',
+        title: 'Added Actors',
+        noneAddedNotice: 'No actors added',
       },
     },
     validationMessages: {
@@ -445,17 +445,17 @@ const english = {
         max: 'The keyword is too long.',
         required: 'At least one keyword is required.',
       },
-      participants: {
+      actors: {
         type: {
           mixed: '',
-          oneOf: 'Participant type can only be "person" or "organization"',
-          required: 'Participant type is required.',
+          oneOf: 'Actor type can only be "person" or "organization"',
+          required: 'Actor type is required.',
         },
         roles: {
           mixed: '',
           oneOf: 'Roles must be one of "creator", "publisher" or "curator".',
           required:
-            'You must specify the role of the participant. A creator is mandatory and there must be exactly one publisher.',
+            'You must specify the role of the actor. A creator is mandatory and there must be exactly one publisher.',
         },
         name: {
           string: 'The name must be a string value.',
@@ -477,11 +477,11 @@ const english = {
           mixed: '',
           object: 'The selected organization should be an object.',
           string: 'The organization value must be string.',
-          required: 'Organization is required if the participant is a person.',
+          required: 'Organization is required if the actor is a person.',
         },
-        requiredParticipants: {
-          atLeastOneParticipant: 'You must add at least one participant to your dataset.',
-          mandatoryParticipants: 'Participants: Creator and publisher roles are mandatory. Note: one person can have both these roles.',
+        requiredActors: {
+          atLeastOneActor: 'You must add at least one actor to your dataset.',
+          mandatoryActors: 'Actors: Creator and publisher roles are mandatory. Note: one person can have both these roles.',
         },
       },
       accessType: {
@@ -673,7 +673,7 @@ const english = {
     content: 'Please make sure that you have a valid CSC account. If you tried to log in with an external account (for example Haka) you might get this error if your account is not associated with a CSC account. Please register a CSC account at https://sui.csc.fi. You can register with or without a Haka account.',
   },
   userHomeOrganizationErrror: {
-    header: 'Login unsuccesful.',
+    header: 'Login unsuccessful.',
     content: 'You have a verified CSC account, but your account does not seem to have a home organization. Please contact the CSC Helpdesk to set a home organization for your CSC account.',
   }
 }

@@ -372,7 +372,7 @@ const finnish = {
         },
       },
     },
-    participants: {
+    actors: {
       title: 'Toimijat',
       infoTitle: 'Toimijat info',
       infoText: 'Tutkimukseen tai aineiston tekemiseen osallistuneet henkilöt ja organisaatiot. Voit määrittää tekijät (pakollinen), julkaisijat (pakollinen) ja kuraattorit. Valitse ensin, onko kyseessä henkilö vai organisaatio. Määritä sen jälkeen, missä roolissa ko. toimija osallistui tutkimukseen (voit valita useita), ja määritä sen jälkeen tarvittavat tiedot. Jos kyseessä on henkilö, on organisaatiotieto pakollinen tieto. Jo annettuja tietoja pääset muuttamaan klikkaamalla tallennetun toimijan kohdalla kynä -ikonia.',
@@ -449,7 +449,7 @@ const finnish = {
         max: 'Avainsana on liian pitkä.',
         required: 'Vähintään yksi avainsana on pakollinen.',
       },
-      participants: {
+      actors: {
         type: {
           mixed: '',
           oneOf: 'Toimijan tyyppi pitää olla joko "Luonnollinen henkilö" tai "Organisaatio".',
@@ -483,9 +483,9 @@ const finnish = {
           string: 'Organisaation arvo tulisi olla merkkijono.',
           required: 'Organisaatio on pakollinen kenttä jos toimija on luonnollinen henkilö.',
         },
-        requiredParticipants: {
-          atLeastOneParticipant: 'Aineistoon on lisättävä vähintään yksi toimija.',
-          mandatoryParticipants: 'Toimijat: Tekijä ja julkaisija-roolit ovat pakollisia. Huomioi: yksittäisellä toimijalla voi olla useampi rooli.',
+        requiredActors: {
+          atLeastOneActor: 'Aineistoon on lisättävä vähintään yksi toimija.',
+          mandatoryActors: 'Toimijat: Tekijä ja julkaisija-roolit ovat pakollisia. Huomioi: yksittäisellä toimijalla voi olla useampi rooli.',
         },
       },
       accessType: {
