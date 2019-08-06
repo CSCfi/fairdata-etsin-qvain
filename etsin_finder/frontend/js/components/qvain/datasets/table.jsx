@@ -6,6 +6,8 @@ import { withRouter } from 'react-router-dom'
 import axios from 'axios'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
+import translate from 'counterpart'
+import moment from 'moment';
 import {
   Table,
   TableHeader,
@@ -41,10 +43,12 @@ class DatasetTable extends Component {
     errorMessage: '', // error notification itself
     removeModalOpen: false, // delete/remove modal state
     removableDatasetIdentifier: undefined, // used to send the delete request to backend to target the correct dataset
-    searchTerm: '' // used to narrow down content
+    searchTerm: '', // used to narrow down content
+    currentTimestamp: undefined // Only need to set this once, when the page is loaded
   }
 
   componentDidMount() {
+    this.state.currentTimestamp = new Date();
     this.getDatasets()
     // once we get login info, reload
     reaction(
@@ -63,6 +67,7 @@ class DatasetTable extends Component {
       .get(url)
       .then(result => {
         const datasets = [...result.data]
+        console.log(datasets)
         this.setState({
           count: datasets.length,
           datasets,
@@ -138,6 +143,50 @@ class DatasetTable extends Component {
     }) : datasets
   )
 
+  formatDatasetDateCreated = (datasetDateCreated) => {
+    const timestampInSecondsCurrentTime = moment(this.state.currentTimestamp)
+    const timestampInSecondsDateCreated = moment(datasetDateCreated)
+
+    const secondsSinceCreation = timestampInSecondsCurrentTime.diff(timestampInSecondsDateCreated, 'seconds')
+
+    let formattedMessageDateCreated
+
+    // Time intervals retrieved from Moment.js documentation
+    // For instance, 45 seconds is not exactly a minute, but roughly a minute, and can be displayed as one.
+    if (secondsSinceCreation < 45) {
+      formattedMessageDateCreated = translate('qvain.datasets.tableRows.dateFormat.momentsAgo')
+    } else if (secondsSinceCreation < 90) {
+      formattedMessageDateCreated = translate('qvain.datasets.tableRows.dateFormat.oneMinuteAgo')
+    } else if (secondsSinceCreation < 3700) {
+      formattedMessageDateCreated = `${Math.round(secondsSinceCreation / 60)} ${translate('qvain.datasets.tableRows.dateFormat.minutesAgo')}`
+    } else if (secondsSinceCreation < 5400) {
+      formattedMessageDateCreated = translate('qvain.datasets.tableRows.dateFormat.oneHourAgo')
+    } else if (secondsSinceCreation < 79200) {
+      formattedMessageDateCreated = `${Math.round(secondsSinceCreation / 3600)} ${translate('qvain.datasets.tableRows.dateFormat.hoursAgo')}`
+    } else if (secondsSinceCreation < 129600) {
+      formattedMessageDateCreated = translate('qvain.datasets.tableRows.dateFormat.oneDayAgo')
+    } else if (secondsSinceCreation < 2160000) {
+      formattedMessageDateCreated = `${Math.round(secondsSinceCreation / 90000)} ${translate('qvain.datasets.tableRows.dateFormat.daysAgo')}`
+    } else {
+      // More than a month ago, compare by months
+      const monthsSinceCreation = timestampInSecondsCurrentTime.diff(timestampInSecondsDateCreated, 'months')
+
+      if (monthsSinceCreation >= 1) {
+        formattedMessageDateCreated = translate('qvain.datasets.tableRows.dateFormat.oneMonthAgo')
+      } else if (monthsSinceCreation >= 10) {
+        formattedMessageDateCreated = `${monthsSinceCreation} ${translate('qvain.datasets.tableRows.dateFormat.monthsAgo')}`
+      } else if (monthsSinceCreation >= 18) {
+        formattedMessageDateCreated = translate('qvain.datasets.tableRows.dateFormat.oneYearAgo')
+      } else {
+        // Years (in plural), compare by years
+        formattedMessageDateCreated =
+        `${timestampInSecondsCurrentTime.diff(timestampInSecondsDateCreated, 'years')} ${translate('qvain.datasets.tableRows.dateFormat.yearsAgo')}`
+      }
+    }
+
+    return formattedMessageDateCreated
+  }
+
   render() {
     const { onPage, loading, error, errorMessage, page, count, limit, searchTerm } = this.state
     return (
@@ -208,7 +257,7 @@ class DatasetTable extends Component {
                       <Translate color="yellow" content="qvain.datasets.oldVersion" component={OldVersionLabel} />
                     )}
                   </BodyCell>
-                  <BodyCell>{dataset.date_created}</BodyCell>
+                  <BodyCell>{this.formatDatasetDateCreated(dataset.date_created)}</BodyCell>
                   <BodyCell>
                     <Translate
                       component={TableButton}
