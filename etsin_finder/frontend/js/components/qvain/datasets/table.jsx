@@ -144,47 +144,46 @@ class DatasetTable extends Component {
   )
 
   formatDatasetDateCreated = (datasetDateCreated) => {
-    const timestampInSecondsCurrentTime = moment(this.state.currentTimestamp)
-    const timestampInSecondsDateCreated = moment(datasetDateCreated)
+    const timestampCurrentTime = moment(this.state.currentTimestamp)
+    const timestampDateCreated = moment(datasetDateCreated)
 
-    const secondsSinceCreation = timestampInSecondsCurrentTime.diff(timestampInSecondsDateCreated, 'seconds')
+    const secondsSinceCreation = timestampCurrentTime.diff(timestampDateCreated, 'seconds')
 
-    let formattedMessageDateCreated
+    let formattedDate
 
     // Time intervals retrieved from Moment.js documentation
     // For instance, 45 seconds is not exactly a minute, but roughly a minute, and can be displayed as one.
     if (secondsSinceCreation < 45) {
-      formattedMessageDateCreated = translate('qvain.datasets.tableRows.dateFormat.momentsAgo')
+      formattedDate = translate('qvain.datasets.tableRows.dateFormat.moments')
     } else if (secondsSinceCreation < 90) {
-      formattedMessageDateCreated = translate('qvain.datasets.tableRows.dateFormat.oneMinuteAgo')
+      formattedDate = translate('qvain.datasets.tableRows.dateFormat.oneMinute')
     } else if (secondsSinceCreation < 3700) {
-      formattedMessageDateCreated = `${Math.round(secondsSinceCreation / 60)} ${translate('qvain.datasets.tableRows.dateFormat.minutesAgo')}`
+      formattedDate = `${timestampCurrentTime.diff(timestampDateCreated, 'minutes')} ${translate('qvain.datasets.tableRows.dateFormat.minutes')}`
     } else if (secondsSinceCreation < 5400) {
-      formattedMessageDateCreated = translate('qvain.datasets.tableRows.dateFormat.oneHourAgo')
+      formattedDate = translate('qvain.datasets.tableRows.dateFormat.oneHour')
     } else if (secondsSinceCreation < 79200) {
-      formattedMessageDateCreated = `${Math.round(secondsSinceCreation / 3600)} ${translate('qvain.datasets.tableRows.dateFormat.hoursAgo')}`
+      formattedDate = `${timestampCurrentTime.diff(timestampDateCreated, 'hours')} ${translate('qvain.datasets.tableRows.dateFormat.hours')}`
     } else if (secondsSinceCreation < 129600) {
-      formattedMessageDateCreated = translate('qvain.datasets.tableRows.dateFormat.oneDayAgo')
+      formattedDate = translate('qvain.datasets.tableRows.dateFormat.oneDay')
     } else if (secondsSinceCreation < 2160000) {
-      formattedMessageDateCreated = `${Math.round(secondsSinceCreation / 90000)} ${translate('qvain.datasets.tableRows.dateFormat.daysAgo')}`
+      formattedDate = `${timestampCurrentTime.diff(timestampDateCreated, 'days')} ${translate('qvain.datasets.tableRows.dateFormat.days')}`
     } else {
       // More than a month ago, compare by months
-      const monthsSinceCreation = timestampInSecondsCurrentTime.diff(timestampInSecondsDateCreated, 'months')
+      const monthsSinceCreation = timestampCurrentTime.diff(timestampDateCreated, 'months')
 
       if (monthsSinceCreation >= 1) {
-        formattedMessageDateCreated = translate('qvain.datasets.tableRows.dateFormat.oneMonthAgo')
+        formattedDate = translate('qvain.datasets.tableRows.dateFormat.oneMonth')
       } else if (monthsSinceCreation >= 10) {
-        formattedMessageDateCreated = `${monthsSinceCreation} ${translate('qvain.datasets.tableRows.dateFormat.monthsAgo')}`
+        formattedDate = `${monthsSinceCreation} ${translate('qvain.datasets.tableRows.dateFormat.months')}`
       } else if (monthsSinceCreation >= 18) {
-        formattedMessageDateCreated = translate('qvain.datasets.tableRows.dateFormat.oneYearAgo')
+        formattedDate = translate('qvain.datasets.tableRows.dateFormat.oneYear')
       } else {
         // Years (in plural), compare by years
-        formattedMessageDateCreated =
-        `${timestampInSecondsCurrentTime.diff(timestampInSecondsDateCreated, 'years')} ${translate('qvain.datasets.tableRows.dateFormat.yearsAgo')}`
+        formattedDate = `${timestampCurrentTime.diff(timestampDateCreated, 'years')} ${translate('qvain.datasets.tableRows.dateFormat.years')}`
       }
     }
 
-    return formattedMessageDateCreated
+    return formattedDate
   }
 
   render() {
