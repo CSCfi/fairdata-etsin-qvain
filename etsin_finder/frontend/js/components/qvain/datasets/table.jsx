@@ -67,7 +67,6 @@ class DatasetTable extends Component {
       .get(url)
       .then(result => {
         const datasets = [...result.data]
-        console.log(datasets)
         this.setState({
           count: datasets.length,
           datasets,
