@@ -546,7 +546,7 @@ const english = {
       dataCatalog: {
         label: 'File origin',
         infoText: 'Add text',
-        explanation: 'Choose IDA if the data is stored in Fairdata Ida service. Choose ATT if the data is stored elsewhere.',
+        explanation: 'Choose IDA if the data is stored in the Fairdata IDA service. Choose ATT if the data is stored elsewhere.',
         placeholder: 'Select option'
       },
       help:
