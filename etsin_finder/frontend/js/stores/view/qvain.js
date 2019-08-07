@@ -641,19 +641,19 @@ class Qvain {
       `Compare: ${a1.name.en ? a1.name.en : a1.name.und ? a1.name.und : a1.name} and ${a2.name.en ? a2.name.en : a2.name.und ? a2.name.und : a2.name}`
     )
     if (!!a1.identifier && !!a2.identifier) {
-      // If p1 and p2 have identifiers.
+      // If a1 and a2 have identifiers.
       if (a1.identifier === a2.identifier) {
         // If the identifiers are the same.
         console.log(true)
         return true
       }
-      // If p1 and p2 have identifiers but they are not the same, then they
+      // If a1 and a2 have identifiers but they are not the same, then they
       // are not the same actor.
       console.log(false)
       return false
     }
     if (!!a1.email && !!a2.email) {
-      // If p1 and p2 have emails.
+      // If a1 and a2 have emails.
       if (a1.type === EntityType.PERSON && a2.type === EntityType.PERSON) {
         // If they have emails and are type PERSON.
         if (a1.email === a2.email && a1.name === a2.name) {
@@ -680,7 +680,7 @@ class Qvain {
       }
     }
     if (a1.type === EntityType.PERSON && a2.type === EntityType.PERSON) {
-      // If p1 and p2 are of type PERSON.
+      // If a1 and a2 are of type PERSON.
       if (a1.name === a2.name && this.isEqualObj(a1.organization, a2.organization)) {
         // if they are of type PERSON and the names and organization objects
         // are equal.
@@ -693,7 +693,7 @@ class Qvain {
       return false
     }
     if (a1.type === EntityType.ORGANIZATION && a2.type === EntityType.ORGANIZATION) {
-      // If p1 and p2 are of type ORGANIZATION.
+      // If a1 and a2 are of type ORGANIZATION.
       if (!(this.isObjectEmpty(a1.organization) && this.isObjectEmpty(a2.organization))) {
         // If they are of type ORGANIZATION and their parent organizations
         // are not empty objects.
@@ -719,7 +719,7 @@ class Qvain {
       console.log(false)
       return false
     }
-    // If p1 and p2 don't have identifiers or emails and they are not the same entity type.
+    // If a1 and a2 don't have identifiers or emails and they are not the same entity type.
     console.log(false)
     return false
   }

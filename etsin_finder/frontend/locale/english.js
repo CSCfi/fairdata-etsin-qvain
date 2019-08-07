@@ -519,10 +519,10 @@ const english = {
         },
         directory: {
           title: {
-            required: 'Directory title is required.',
+            required: 'Folder title is required.',
           },
           useCategory: {
-            required: 'Directory use category is required.',
+            required: 'Folder use category is required.',
           },
         },
       },
@@ -561,11 +561,11 @@ const english = {
       },
       projectSelect: {
         placeholder: 'Select project',
-        loadError: 'Failed to load project directories, error: ',
+        loadError: 'Failed to load project folders, error: ',
       },
       selected: {
         title: 'Selected files',
-        none: 'No files or directories selected',
+        none: 'No files or folders selected',
         form: {
           title: {
             label: 'Title',
@@ -576,7 +576,7 @@ const english = {
             placeholder: 'Description',
           },
           directoryFiles: {
-            label: 'Files within directory',
+            label: 'Files within folders',
           },
           use: {
             label: 'Use category',
@@ -623,7 +623,7 @@ const english = {
       },
       existing: {
         title: 'Previously selected files',
-        help: 'These are the files and directories that you have added before. If you do not touch these, upon saving the changes to the dataset METAX will go through all the selected directories and associate any files and directories within, even the new ones. In other words, if you don\'t touch these and save, you can associate new files within the directory structure with your dataset.'
+        help: 'These are the files and folders that you have added before. If you do not touch these, upon saving the changes to the dataset METAX will go through all the selected folders and associate any files and folders within, even the new ones. In other words, if you don\'t touch these and save, you can associate new files within the folder structure with your dataset.'
       },
       external: {
         title: 'External resources (ATT)',
