@@ -53,7 +53,8 @@ class DescriptionField extends Component {
       })
   }
 
-  handleLanguageButtonClicks = () => {
+  handleLanguageButtonClicks = (e) => {
+    e.preventDefault()
     /* eslint-disable no-unused-expressions */
     this.state.active === 'FINNISH'
       ? this.setState({ active: 'ENGLISH' })
@@ -171,7 +172,7 @@ const LangButtonContainer = styled.div`
   display: flex;
   flex-direction: row;
 `
-const LangButton = styled.div`
+const LangButton = styled.button`
   width: 25%;
   padding: 5px 20px;
   background-color: #fff;

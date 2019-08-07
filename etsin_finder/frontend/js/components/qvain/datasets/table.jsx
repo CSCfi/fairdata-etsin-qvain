@@ -248,7 +248,7 @@ class DatasetTable extends Component {
             )}
             {!error &&
               onPage.map(dataset => (
-                <Row key={dataset.identifier}>
+                <Row key={dataset.identifier} tabIndex="0">
                   <BodyCell>
                     {dataset.research_dataset.title.en || dataset.research_dataset.title.fi}
                     {dataset.next_dataset_version !== undefined && (
