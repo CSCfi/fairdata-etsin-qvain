@@ -46,7 +46,7 @@ const customStyles = {
   },
 }
 
-ReactModal.setAppElement('#root')
+if (process.env.NODE_ENV !== 'test') ReactModal.setAppElement('#root');
 
 export default class Modal extends Component {
   static propTypes = {
