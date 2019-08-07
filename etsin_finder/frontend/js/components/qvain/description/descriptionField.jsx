@@ -53,7 +53,8 @@ class DescriptionField extends Component {
       })
   }
 
-  handleLanguageButtonClicks = () => {
+  handleLanguageButtonClicks = (e) => {
+    e.preventDefault()
     /* eslint-disable no-unused-expressions */
     this.state.active === 'FINNISH'
       ? this.setState({ active: 'ENGLISH' })
@@ -90,7 +91,7 @@ class DescriptionField extends Component {
         </LangButtonContainer>
         <DescriptionCard>
           <LabelLarge htmlFor="titleInput">
-            <Translate content="qvain.description.description.title.label" />
+            <Translate content="qvain.description.description.title.label" /> *
           </LabelLarge>
           {activeLang === 'FINNISH' && (
             <Translate
@@ -120,7 +121,7 @@ class DescriptionField extends Component {
           )}
           <ValidationError>{this.state.titleError}</ValidationError>
           <LabelLarge htmlFor="descriptionInput">
-            <Translate content="qvain.description.description.description.label" />
+            <Translate content="qvain.description.description.description.label" /> *
           </LabelLarge>
           {activeLang === 'FINNISH' && (
             <Translate
@@ -171,7 +172,7 @@ const LangButtonContainer = styled.div`
   display: flex;
   flex-direction: row;
 `
-const LangButton = styled.div`
+const LangButton = styled.button`
   width: 25%;
   padding: 5px 20px;
   background-color: #fff;

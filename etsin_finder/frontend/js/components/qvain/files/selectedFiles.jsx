@@ -4,15 +4,20 @@ import { inject, observer } from 'mobx-react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCopy, faFolder } from '@fortawesome/free-solid-svg-icons'
 import Translate from 'react-translate-component'
-import { ButtonLabel, EditButton, DeleteButton, FileItem, ButtonContainer } from '../general/buttons'
+import { ButtonLabel, EditButton, DeleteButton, FileItem, ButtonContainer, TableButton } from '../general/buttons'
 import { SelectedFilesTitle } from '../general/form'
 import FileForm from './fileForm'
 import DirectoryForm from './directoryForm'
 import { randomStr } from '../utils/fileHierarchy'
+import Modal from '../../general/modal'
 
 export class SelectedFilesBase extends Component {
   static propTypes = {
     Stores: PropTypes.object.isRequired
+  }
+
+  state = {
+    datasetDuplicationModalHasNotBeenShown: true,
   }
 
   handleEdit = (selected) => (event) => {
@@ -23,6 +28,13 @@ export class SelectedFilesBase extends Component {
     } else {
       this.props.Stores.Qvain.setInEdit(selected)
     }
+  }
+
+  closeDatasetDuplicationInformationModal = () => {
+    // Set to false permanently, since the warning only needs to be shown once, not every time a new file is added.
+    this.setState({
+      datasetDuplicationModalHasNotBeenShown: false,
+    })
   }
 
   renderFiles = (selected, inEdit, existing) => {
@@ -84,6 +96,16 @@ export class SelectedFilesBase extends Component {
         <Translate tabIndex="0" component={SelectedFilesTitle} content="qvain.files.existing.title" />
         <Translate tabIndex="0" component="p" content="qvain.files.existing.help" />
         {this.renderFiles(existing, inEdit, true)}
+        <Modal
+          // Inform the user that a new dataset will be created, if both existing and selected files are present.
+          isOpen={(selected.length) > 0 && (existing.length > 0) && (this.state.datasetDuplicationModalHasNotBeenShown === true)}
+          onRequestClose={this.closeDatasetDuplicationInformationModal}
+          contentLabel="notificationNewDatasetWillBeCreatedModal"
+        >
+          <Translate component="h3" content="qvain.files.notificationNewDatasetWillBeCreated.header" />
+          <Translate component="p" content="qvain.files.notificationNewDatasetWillBeCreated.content" />
+          <TableButton onClick={this.closeDatasetDuplicationInformationModal}>Ok.</TableButton>
+        </Modal>
       </Fragment>
     )
   }

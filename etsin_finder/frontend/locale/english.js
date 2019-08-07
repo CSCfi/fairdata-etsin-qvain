@@ -249,7 +249,7 @@ const english = {
     },
     noResults: {
       searchterm: 'Your search - <strong>%(search)s</strong> - did not match any documents.',
-      nosearchterm: 'Your seach did not match any documents.',
+      nosearchterm: 'Your search did not match any documents.',
     },
   },
   qvain: {
@@ -287,6 +287,19 @@ const english = {
         modified: 'Modified',
         created: 'Created',
         actions: 'Actions',
+        dateFormat: {
+          moments: 'A few moments ago',
+          oneMinute: '1 minute ago',
+          minutes: ' minutes ago',
+          oneHour: '1 hour ago',
+          hours: 'hours ago',
+          oneDay: '1 day ago',
+          days: ' days ago',
+          oneMonth: '1 month ago',
+          months: ' months ago',
+          oneYear: '1 year ago',
+          years: ' years ago',
+        },
       },
       oldVersion: 'Old',
       latestVersion: 'Latest',
@@ -302,7 +315,7 @@ const english = {
     description: {
       title: 'Description',
       infoTitle: 'Description info',
-      infoText: 'add text',
+      infoText: 'Give a descriptive title for your dataset. Also, write the description as detailed as you possibly can; explain how the dataset was created, how it is structured, and how it has been handled. Describe also the content.',
       description: {
         langEn: 'ENGLISH',
         langFi: 'FINNISH',
@@ -320,20 +333,20 @@ const english = {
       },
       otherIdentifiers: {
         title: 'Other Identifiers',
-        infoText: 'add text',
+        infoText: "If your dataset already has an identifier (usually a DOI) insert it here. The dataset still gets the permanent identifier which resolves to Etsin's Landing page.",
         instructions:
-          'Identifier for the metadata will be created automatically but if there alredy is an EXISTING identifier please insert it here.',
+          'Identifier for the metadata will be created automatically but if there already is an EXISTING identifier please insert it here.',
         addButton: '+ Add new',
         alredyAdded: 'Identifier already added',
       },
       fieldOfScience: {
         title: 'Field of Science',
-        infoText: 'add text',
+        infoText: 'Select a value from the dropdown menu. The drop down uses the classification of the Ministry of Education and Culture.',
         placeholder: 'Select option',
       },
       keywords: {
         title: 'Keywords',
-        infoText: 'add text',
+        infoText: 'Set keywords that characterize the dataset. Below, there is another field for controlled subject headings.',
         placeholder: 'E.g. economy',
         addButton: 'Add keywords',
         help:
@@ -345,7 +358,7 @@ const english = {
       infoTitle: 'Rights And Licenses info',
       accessType: {
         title: 'Access Type',
-        infoText: 'add text',
+        infoText: 'This field sets how the data in your dataset can be accessed. Whichever option is selected does not affect the visibility of the dataset description (metadata) itself; it only affects the openness of the linked data (files). If you select anything else than "Open", you must also choose a reason for the restriction (field "Restriction Grounds" will appear). If you select "Embargo", please also specify the embargo expiration date ("Embargo expiration date" field will appear).',
         placeholder: 'Select option',
       },
       embargoDate: {
@@ -360,7 +373,7 @@ const english = {
       },
       license: {
         title: 'License',
-        infoText: 'add text',
+        infoText: 'License is an essential part of the dataset description. The license describes how the dataset can be used. As a default, the recommended CC BY 4.0 license is selected, but you can change it if needed. If you want to add a URL to an existing license page, please select "Other (URL)" and then insert the URL.',
         placeholder: 'Select option',
         other: {
           label: 'URL address',
@@ -368,14 +381,14 @@ const english = {
         },
       },
     },
-    participants: {
-      title: 'Participants',
-      infoTitle: 'Participants info',
-      infoText: 'add text',
+    actors: {
+      title: 'Actors',
+      infoTitle: 'Actors info',
+      infoText: 'Add at least one creator and one publisher. A curator is not mandatory. First, select the type of actor (person or organization). Then choose the roles the actor has (you can add multiple). After that, fill in the details: organization is mandatory for a person. You can edit added actors by clicking the pen icon or remove it by clicking the X icon.',
       add: {
-        title: 'Participants',
+        title: 'Actors',
         help:
-          'Creator (1+) and publisher (max 1) roles are mandatory. Notice that one participant can have multiple roles.',
+          'Creator (1+) and publisher (max 1) roles are mandatory. Notice that one actor can have multiple roles.',
         radio: {
           person: 'Person',
           organization: 'Organization',
@@ -418,8 +431,8 @@ const english = {
         },
       },
       added: {
-        title: 'Added Participants',
-        noneAddedNotice: 'No participants added',
+        title: 'Added Actors',
+        noneAddedNotice: 'No actors added',
       },
     },
     validationMessages: {
@@ -445,17 +458,17 @@ const english = {
         max: 'The keyword is too long.',
         required: 'At least one keyword is required.',
       },
-      participants: {
+      actors: {
         type: {
           mixed: '',
-          oneOf: 'Participant type can only be "person" or "organization"',
-          required: 'Participant type is required.',
+          oneOf: 'Actor type can only be "person" or "organization"',
+          required: 'Actor type is required.',
         },
         roles: {
           mixed: '',
           oneOf: 'Roles must be one of "creator", "publisher" or "curator".',
           required:
-            'You must specify the role of the participant. A creator is mandatory and there must be exactly one publisher.',
+            'You must specify the role of the actor. A creator is mandatory and there must be exactly one publisher.',
         },
         name: {
           string: 'The name must be a string value.',
@@ -477,11 +490,11 @@ const english = {
           mixed: '',
           object: 'The selected organization should be an object.',
           string: 'The organization value must be string.',
-          required: 'Organization is required if the participant is a person.',
+          required: 'Organization is required if the actor is a person.',
         },
-        requiredParticipants: {
-          atLeastOneParticipant: 'You must add at least one participant to your dataset.',
-          mandatoryParticipants: 'Participants: Creator and publisher roles are mandatory. Note: one person can have both these roles.',
+        requiredActors: {
+          atLeastOneActor: 'You must add at least one actor to your dataset.',
+          mandatoryActors: 'Actors: Creator and publisher roles are mandatory. Note: one person can have both these roles.',
         },
       },
       accessType: {
@@ -519,10 +532,10 @@ const english = {
         },
         directory: {
           title: {
-            required: 'Directory title is required.',
+            required: 'Folder title is required.',
           },
           useCategory: {
-            required: 'Directory use category is required.',
+            required: 'Folder use category is required.',
           },
         },
       },
@@ -545,7 +558,7 @@ const english = {
       infoText: 'Add text',
       dataCatalog: {
         label: 'File origin',
-        infoText: 'Add text',
+        infoText: "Fairdata Services need to know whether you are linking files from IDA or remote resources. You can also publish datasets without any files. In that case, please still select either one. The selection cannot be re-done, so if you are not sure whether you'll add files later, select the one you think you'll need in the future.",
         explanation: 'Choose IDA if the data is stored in Fairdata Ida service. Choose ATT if the data is stored elsewhere.',
         placeholder: 'Select option'
       },
@@ -553,7 +566,7 @@ const english = {
         'Files associated with this dataset. A dataset can only have either IDA files or external files. File metadata will not be associated with datasets, so remember to save edits to file metadata.',
       ida: {
         title: 'Fairdata IDA files',
-        infoText: 'Add text',
+        infoText: "Project dropdown will show all your IDA projects. Select the project from which you want to link your files. Note! One dataset can have files or folder from only one project. After you have chosen the project, you'll get a list of all files and folders that are FROZEN in that project. Select all files and folders you wish to link to your dataset. If you select a folder, ALL files and subfolders in that folder will be linked. In that case, do not select individual files or subfolders from that folder.",
         help: 'If you have files in Fairdata IDA you can link them from here:',
         button: {
           label: 'Link files from Fairdata IDA',
@@ -561,11 +574,11 @@ const english = {
       },
       projectSelect: {
         placeholder: 'Select project',
-        loadError: 'Failed to load project directories, error: ',
+        loadError: 'Failed to load project folders, error: ',
       },
       selected: {
         title: 'Selected files',
-        none: 'No files or directories selected',
+        none: 'No files or folders selected',
         form: {
           title: {
             label: 'Title',
@@ -576,7 +589,7 @@ const english = {
             placeholder: 'Description',
           },
           directoryFiles: {
-            label: 'Files within directory',
+            label: 'Files within folders',
           },
           use: {
             label: 'Use category',
@@ -623,11 +636,15 @@ const english = {
       },
       existing: {
         title: 'Previously selected files',
-        help: 'These are the files and directories that you have added before. If you do not touch these, upon saving the changes to the dataset METAX will go through all the selected directories and associate any files and directories within, even the new ones. In other words, if you don\'t touch these and save, you can associate new files within the directory structure with your dataset.'
+        help: 'These are the files and folders that you have added before. If you do not touch these, upon saving the changes to the dataset METAX will go through all the selected folders and associate any files and folders within, even the new ones. In other words, if you don\'t touch these and save, you can associate new files within the folder structure with your dataset.'
+      },
+      notificationNewDatasetWillBeCreated: {
+        header: 'Editing files and folders',
+        content: 'If you have already published the dataset, removing / adding files or folders will automatically create a new version of the dataset (excluding a published dataset without any files; you can add files/folder one time in the existing version). The old version will be tagged as "Old" and the files linked to it will remain untouched.',
       },
       external: {
         title: 'External resources (ATT)',
-        infoText: 'add text',
+        infoText: 'Please insert Title and URL for the remote files. Qvain Light does not upload or store the files, but the URLs act as active links to the files.',
         help: 'Add link to external files from here:',
         button: {
           label: 'Add link to external files',
@@ -673,7 +690,7 @@ const english = {
     content: 'Please make sure that you have a valid CSC account. If you tried to log in with an external account (for example Haka) you might get this error if your account is not associated with a CSC account. Please register a CSC account at https://sui.csc.fi. You can register with or without a Haka account.',
   },
   userHomeOrganizationErrror: {
-    header: 'Login unsuccesful.',
+    header: 'Login unsuccessful.',
     content: 'You have a verified CSC account, but your account does not seem to have a home organization. Please contact the CSC Helpdesk to set a home organization for your CSC account.',
   }
 }

@@ -3,9 +3,9 @@ from marshmallow import Schema, fields
 from marshmallow.validate import Length
 import json
 
-class ParticipantsValidationSchema(Schema):
+class ActorsValidationSchema(Schema):
     """
-    Validation schema for participants.
+    Validation schema for actors.
 
     Arguments:
         Schema {library} -- Marshmallows Schema library.
@@ -50,8 +50,8 @@ class DatasetValidationSchema(Schema):
         required=True,
         validate=lambda list: len(list) > 0
     )
-    participants = fields.List(fields.Nested(
-        ParticipantsValidationSchema),
+    actors = fields.List(fields.Nested(
+        ActorsValidationSchema),
         required=True,
         validate=lambda list: len(list) > 0
     )

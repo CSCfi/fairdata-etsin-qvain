@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import styled, { keyframes } from 'styled-components'
 import { inject, observer } from 'mobx-react'
 import Translate from 'react-translate-component'
+import { Link } from 'react-router-dom'
 import Loader from '../../general/loader'
 import { LinkButtonDarkGray } from '../../general/button';
 
@@ -50,12 +51,8 @@ class SubmitResponse extends Component {
             <ResponseLabel success>
               <Translate content="qvain.submitStatus.success" />
             </ResponseLabel>
-            <LinkToEtsin>
-              <Translate
-                component="span"
-                onClick={() => window.open(`/dataset/${identifier}`, '_blank')}
-                content="qvain.datasets.goToEtsin"
-              />
+            <LinkToEtsin to={`/dataset/${identifier}`}>
+              <Translate content="qvain.datasets.goToEtsin" />
             </LinkToEtsin>
             <p>Identifier: {identifier}</p>
           </ResponseContainerContent>
@@ -85,12 +82,8 @@ class SubmitResponse extends Component {
             <ResponseLabel success>
               <Translate content="qvain.submitStatus.editMetadataSuccess" />
             </ResponseLabel>
-            <LinkToEtsin>
-              <Translate
-                component="span"
-                onClick={() => window.open(`/dataset/${identifier}`, '_blank')}
-                content="qvain.datasets.goToEtsin"
-              />
+            <LinkToEtsin to={`/dataset/${identifier}`}>
+              <Translate content="qvain.datasets.goToEtsin" />
             </LinkToEtsin>
             <p>Identifier: {identifier}</p>
           </ResponseContainerContent>
@@ -114,12 +107,8 @@ class SubmitResponse extends Component {
             <ResponseLabel success>
               <Translate content="qvain.submitStatus.editFilesSuccess" />
             </ResponseLabel>
-            <LinkToEtsin>
-              <Translate
-                component="span"
-                onClick={() => window.open(`/dataset/${identifier}`, '_blank')}
-                content="qvain.datasets.goToEtsin"
-              />
+            <LinkToEtsin to={`/dataset/${identifier}`}>
+              <Translate content="qvain.datasets.goToEtsin" />
             </LinkToEtsin>
             <p>Identifier: {identifier}</p>
           </ResponseContainerContent>
@@ -163,7 +152,7 @@ SubmitResponse.defaultProps = {
   response: null,
 }
 
-const LinkToEtsin = styled.p`
+const LinkToEtsin = styled(Link)`
   color: green;
   display: inline-block;
   vertical-align: top;
