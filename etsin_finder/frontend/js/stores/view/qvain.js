@@ -577,25 +577,25 @@ class Qvain {
     const entityType = actorJson['@type'].toLowerCase()
     let name
     if (entityType === EntityType.ORGANIZATION) {
-      name = actorJson.name ? actorJson.name : {}
+      name = actorJson.name ? actorJson.name : undefined
     } else {
       name = actorJson.name
     }
 
     let parentOrg
     if (entityType === EntityType.ORGANIZATION) {
-      const isPartOf = actorJson.is_part_of ? actorJson.is_part_of : {}
-      if (!this.isObjectEmpty(isPartOf)) {
+      const isPartOf = actorJson.is_part_of ? actorJson.is_part_of : undefined
+      if (isPartOf) {
         parentOrg = isPartOf.name
       } else {
-        parentOrg = {}
+        parentOrg = undefined
       }
     } else {
-      const parentOrgName = actorJson.member_of ? actorJson.member_of.name : {}
-      if (!this.isObjectEmpty(parentOrgName)) {
+      const parentOrgName = actorJson.member_of ? actorJson.member_of.name : undefined
+      if (parentOrgName) {
         parentOrg = parentOrgName
       } else {
-        parentOrg = {}
+        parentOrg = undefined
       }
     }
 
@@ -694,7 +694,7 @@ class Qvain {
     }
     if (a1.type === EntityType.ORGANIZATION && a2.type === EntityType.ORGANIZATION) {
       // If a1 and a2 are of type ORGANIZATION.
-      if (!(this.isObjectEmpty(a1.organization) && this.isObjectEmpty(a2.organization))) {
+      if (!(a1.organization === undefined && a2.organization === undefined)) {
         // If they are of type ORGANIZATION and their parent organizations
         // are not empty objects.
         if (this.isEqualObj(a1.name, a2.name) && this.isEqualObj(a1.organization, a2.organization)) {
@@ -846,7 +846,7 @@ export const Actor = (entityType, roles, name, email, identifier, organization, 
   uiId,
 })
 
-export const EmptyActor = Actor(EntityType.PERSON, [], '', '', '', {}, undefined)
+export const EmptyActor = Actor(EntityType.PERSON, [], '', '', '', undefined, undefined)
 
 export const FieldOfScience = (name, url) => ({
   name,
