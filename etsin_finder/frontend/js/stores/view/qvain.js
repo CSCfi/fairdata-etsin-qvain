@@ -577,25 +577,25 @@ class Qvain {
     const entityType = participantJson['@type'].toLowerCase()
     let name
     if (entityType === EntityType.ORGANIZATION) {
-      name = participantJson.name ? participantJson.name : {}
+      name = participantJson.name ? participantJson.name : undefined
     } else {
       name = participantJson.name
     }
 
     let parentOrg
     if (entityType === EntityType.ORGANIZATION) {
-      const isPartOf = participantJson.is_part_of ? participantJson.is_part_of : {}
-      if (!this.isObjectEmpty(isPartOf)) {
+      const isPartOf = participantJson.is_part_of ? participantJson.is_part_of : undefined
+      if (isPartOf) {
         parentOrg = isPartOf.name
       } else {
-        parentOrg = {}
+        parentOrg = undefined
       }
     } else {
-      const parentOrgName = participantJson.member_of ? participantJson.member_of.name : {}
-      if (!this.isObjectEmpty(parentOrgName)) {
+      const parentOrgName = participantJson.member_of ? participantJson.member_of.name : undefined
+      if (parentOrgName) {
         parentOrg = parentOrgName
       } else {
-        parentOrg = {}
+        parentOrg = undefined
       }
     }
 
@@ -694,7 +694,7 @@ class Qvain {
     }
     if (p1.type === EntityType.ORGANIZATION && p2.type === EntityType.ORGANIZATION) {
       // If p1 and p2 are of type ORGANIZATION.
-      if (!(this.isObjectEmpty(p1.organization) && this.isObjectEmpty(p2.organization))) {
+      if (!(p1.organization === undefined && p2.organization === undefined)) {
         // If they are of type ORGANIZATION and their parent organizations
         // are not empty objects.
         if (this.isEqualObj(p1.name, p2.name) && this.isEqualObj(p1.organization, p2.organization)) {
@@ -846,7 +846,7 @@ export const Participant = (entityType, roles, name, email, identifier, organiza
   uiId,
 })
 
-export const EmptyParticipant = Participant(EntityType.PERSON, [], '', '', '', {}, undefined)
+export const EmptyParticipant = Participant(EntityType.PERSON, [], '', '', '', undefined, undefined)
 
 export const FieldOfScience = (name, url) => ({
   name,
