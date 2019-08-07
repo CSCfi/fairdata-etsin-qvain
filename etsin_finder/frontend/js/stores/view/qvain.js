@@ -154,7 +154,7 @@ class Qvain {
 
   @action saveActor = actor => {
     if (actor.uiId !== undefined) {
-      // Saving a participant that was previously added
+      // Saving a actor that was previously added
       const existing = this.actors.find(
         addedActor => addedActor.uiId === actor.uiId
       )
@@ -162,7 +162,7 @@ class Qvain {
         this.removeActor(actor)
       }
     } else {
-      // Adding a new participant, generate a new UI ID for them
+      // Adding a new actor, generate a new UI ID for them
       actor.uiId = this.createActorUIId()
     }
     this.setActors([...this.actors, actor])
@@ -571,8 +571,8 @@ class Qvain {
     }
   }
 
-  // Creates a single instance of a participant, only has one role.
-  // Returns a Participant.
+  // Creates a single instance of a actor, only has one role.
+  // Returns a Actor.
   createActor = (actorJson, role, actors) => {
     const entityType = actorJson['@type'].toLowerCase()
     let name
@@ -614,7 +614,7 @@ class Qvain {
 
   // Function that 'Merge' the actors with the same metadata (except UIid).
   // It looks for actors with the same info but different roles and adds their
-  // roles together to get one participant with multiple roles.
+  // roles together to get one actor with multiple roles.
   // Returns a nw array with the merged actors.
   mergeTheSameActors = actors => {
     console.groupCollapsed('Actor object comparison DEBUG')
@@ -633,7 +633,7 @@ class Qvain {
     return mergedActors
   }
 
-  // Function to compare two actors and see if they are the same participant.
+  // Function to compare two actors and see if they are the same actor.
   // Returns True if the actors seem the same, or False if not.
   isEqual = (a1, a2) => {
     console.log(
@@ -648,7 +648,7 @@ class Qvain {
         return true
       }
       // If p1 and p2 have identifiers but they are not the same, then they
-      // are not the same participant.
+      // are not the same actor.
       console.log(false)
       return false
     }
