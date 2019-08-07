@@ -78,21 +78,32 @@ class Qvain extends Component {
             }
           })
           .catch(err => {
-            console.log(err.response)
-            const res = {
-              Error: isJsonString(err.response.data)
-                ? JSON.parse(err.response.data)
-                : err.response.data,
-              Status: err.response.status,
-              Data: isJsonString(err.response.config.data)
-                ? JSON.parse(err.response.config.data)
-                : err.response.config.data,
+            // Refreshing error header
+            this.setState({ response: null })
+
+            // If user is not logged in, display logged in error
+            if (err.response.data.PermissionError) {
+              this.setState({ response: [err.response.data.PermissionError] })
+            // Otherwise, display the formatted Metax error
+            } else {
+              this.setState(
+                err ?
+                { response:
+                    [err.response.data.slice(
+                      err.response.data.indexOf(':["') + 3,
+                      err.response.data.indexOf('"],'))
+                    ]
+                }
+                :
+                { response: 'Error...' }
+              )
             }
-            this.setState(err ? { response: res } : { response: 'Error...' })
           })
       })
       .catch(err => {
         console.log(err.errors)
+
+        // Refreshing error header
         this.setState({ response: null })
         this.setState({ response: err.errors })
       })
