@@ -93,59 +93,59 @@ const restrictionGroundsSchema = yup
   .url(translate('qvain.validationMessages.restrictionGrounds.url'))
   .required(translate('qvain.validationMessages.restrictionGrounds.required'))
 
-// PARTICIPANT VALIDATION SCHEMAS
+// ACTOR VALIDATION SCHEMAS
 
-const participantType = yup
+const actorType = yup
   .mixed()
-  .oneOf(['person', 'organization'], translate('qvain.validationMessages.participants.type.oneOf'))
-  .required(translate('qvain.validationMessages.participants.type.required'))
+  .oneOf(['person', 'organization'], translate('qvain.validationMessages.actors.type.oneOf'))
+  .required(translate('qvain.validationMessages.actors.type.required'))
 
-const participantRolesSchema = yup
+const actorRolesSchema = yup
   .array()
   .of(
     yup
       .mixed()
       .oneOf(
         ['creator', 'curator', 'publisher'],
-        translate('qvain.validationMessages.participants.roles.oneOf')
+        translate('qvain.validationMessages.actors.roles.oneOf')
       )
   )
-  .required(translate('qvain.validationMessages.participants.roles.required'))
+  .required(translate('qvain.validationMessages.actors.roles.required'))
 
-const participantNameSchema = yup
-  .string(translate('qvain.validationMessages.participants.name.string'))
-  .max(1000, translate('qvain.validationMessages.participants.name.max'))
-  .required(translate('qvain.validationMessages.participants.name.required'))
+const actorNameSchema = yup
+  .string(translate('qvain.validationMessages.actors.name.string'))
+  .max(1000, translate('qvain.validationMessages.actors.name.max'))
+  .required(translate('qvain.validationMessages.actors.name.required'))
 
-const participantEmailSchema = yup
-  .string(translate('qvain.validationMessages.participants.email.string'))
-  .max(1000, translate('qvain.validationMessages.participants.email.max'))
-  .email(translate('qvain.validationMessages.participants.email.email'))
+const actorEmailSchema = yup
+  .string(translate('qvain.validationMessages.actors.email.string'))
+  .max(1000, translate('qvain.validationMessages.actors.email.max'))
+  .email(translate('qvain.validationMessages.actors.email.email'))
   .nullable()
 
-const participantIdentifierSchema = yup
+const actorIdentifierSchema = yup
   .string()
-  .max(1000, translate('qvain.validationMessages.participants.identifier.max'))
+  .max(1000, translate('qvain.validationMessages.actors.identifier.max'))
   .nullable()
 
-const participantOrganizationSchema = yup.object().shape({
+const actorOrganizationSchema = yup.object().shape({
   type: yup
     .mixed()
     .oneOf(
       ['person', 'organization'],
-      translate('qvain.validationMessages.participants.type.oneOf')
+      translate('qvain.validationMessages.actors.type.oneOf')
     )
-    .required(translate('qvain.validationMessages.participants.type.required')),
+    .required(translate('qvain.validationMessages.actors.type.required')),
   organization: yup.mixed().when('type', {
     is: 'person',
     then: yup
       .object()
-      .required(translate('qvain.validationMessages.participants.organization.required')),
+      .required(translate('qvain.validationMessages.actors.organization.required')),
     otherwise: yup
-      .object(translate('qvain.validationMessages.participants.organization.object'))
+      .object(translate('qvain.validationMessages.actors.organization.object'))
       .shape({
         value: yup
-          .string(translate('qvain.validationMessages.participants.organization.string'))
+          .string(translate('qvain.validationMessages.actors.organization.string'))
           .nullable(),
       }),
   }),
@@ -220,50 +220,50 @@ const externalResourceSchema = yup.object().shape({
   url: externalResourceUrlSchema,
 })
 
-// ENTIRE PARTICIPANT SCHEMAS
+// ENTIRE ACTOR SCHEMAS
 
-const participantSchema = yup.object().shape({
-  type: participantType,
-  role: participantRolesSchema,
-  name: participantNameSchema,
-  email: participantEmailSchema,
-  identifier: participantIdentifierSchema,
+const actorSchema = yup.object().shape({
+  type: actorType,
+  role: actorRolesSchema,
+  name: actorNameSchema,
+  email: actorEmailSchema,
+  identifier: actorIdentifierSchema,
   organization: yup.mixed().when('type', {
     is: 'person',
     then: yup
       .object()
-      .required(translate('qvain.validationMessages.participants.organization.required')),
+      .required(translate('qvain.validationMessages.actors.organization.required')),
     otherwise: yup
       .object()
       .nullable(),
   }),
 })
 
-const participantsSchema = yup
+const actorsSchema = yup
   .array()
   .of(
     yup.object().shape({
-      type: participantType,
-      role: participantRolesSchema,
-      name: participantNameSchema,
-      email: participantEmailSchema,
-      identifier: participantIdentifierSchema,
+      type: actorType,
+      role: actorRolesSchema,
+      name: actorNameSchema,
+      email: actorEmailSchema,
+      identifier: actorIdentifierSchema,
       organization: yup.mixed().when('type', {
         is: 'person',
         then: yup
           .object()
-          .required(translate('qvain.validationMessages.participants.organization.required')),
+          .required(translate('qvain.validationMessages.actors.organization.required')),
         otherwise: yup
           .object()
           .nullable(),
       }),
     })
   )
-  // Test: loop through the participant list and the roles of each participant
-  // A Creator and a Publisher must be found in the participant list in order to allow the dataset to be posted to the database
+  // Test: loop through the actor list and the roles of each actor
+  // A Creator and a Publisher must be found in the actor list in order to allow the dataset to be posted to the database
   .test(
     'contains-creator-and-publisher',
-    translate('qvain.validationMessages.participants.requiredParticipants.mandatoryParticipants'),
+    translate('qvain.validationMessages.actors.requiredActors.mandatoryActors'),
     (value) => {
       let foundCreator = false;
       let foundPublisher = false;
@@ -281,7 +281,7 @@ const participantsSchema = yup
       }
       return false;
     })
-  .required(translate('qvain.validationMessages.participants.requiredParticipants.atLeastOneParticipant'))
+  .required(translate('qvain.validationMessages.actors.requiredActors.atLeastOneActor'))
 
 // ENTIRE FORM VALIDATION
 
@@ -323,7 +323,7 @@ const qvainFormSchema = yup.object().shape({
     is: 'Open',
     then: restrictionGroundsSchema,
   }),
-  participants: participantsSchema,
+  actors: actorsSchema,
   dataCatalog: dataCatalogSchema,
   files: filesSchema,
   directories: directoriesSchema,
@@ -340,14 +340,14 @@ export {
   licenseSchema,
   embargoExpDateSchema,
   restrictionGroundsSchema,
-  participantsSchema,
-  participantSchema,
-  participantType,
-  participantNameSchema,
-  participantRolesSchema,
-  participantEmailSchema,
-  participantIdentifierSchema,
-  participantOrganizationSchema,
+  actorsSchema,
+  actorSchema,
+  actorType,
+  actorNameSchema,
+  actorRolesSchema,
+  actorEmailSchema,
+  actorIdentifierSchema,
+  actorOrganizationSchema,
   dataCatalogSchema,
   fileTitleSchema,
   fileDescriptionSchema,

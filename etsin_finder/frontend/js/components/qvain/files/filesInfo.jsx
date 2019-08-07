@@ -4,7 +4,6 @@ import Translate from 'react-translate-component'
 const FilesInfo = () => (
   <>
     <Translate component="h2" content="qvain.files.infoTitle" />
-    <Translate component="p" content="qvain.files.infoText" />
     <Translate component="h3" content="qvain.files.dataCatalog.label" />
     <Translate component="p" content="qvain.files.dataCatalog.infoText" />
     <Translate component="h3" content="qvain.files.ida.title" />

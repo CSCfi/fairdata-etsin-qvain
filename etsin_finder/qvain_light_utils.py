@@ -23,44 +23,44 @@ def clean_empty_keyvalues_from_dict(d):
     return {k: v for k, v in ((k, clean_empty_keyvalues_from_dict(v)) for k, v in d.items()) if v}
 
 
-def alter_role_data(participant_list, role):
+def alter_role_data(actor_list, role):
     """
     Converts the role data fom the frontend to comply with the Metax schema.
 
     Arguments:
-        participant_list {list} -- A list of all the participants from the frontend.
+        actor_list {list} -- A list of all the actors from the frontend.
         role {string} -- The role, can be 'creator', 'publisher' or 'curator'.
 
     Returns:
-        list -- List of the participants with the role in question complyant to Metax schema.
+        list -- List of the actors with the role in question complyant to Metax schema.
 
     """
-    participants = []
-    participant_list_with_role = [x for x in participant_list if role in x["role"] ]
-    for participant_object in participant_list_with_role:
-        participant = {}
-        participant["member_of"] = {}
-        participant["member_of"]["name"] = {}
-        if participant_object["type"] == "person":
-            participant["@type"] = "Person"
-            participant["name"] = participant_object["name"]
-            participant["member_of"] = {}
-            participant["member_of"]["name"] = participant_object["organization"]
-            participant["member_of"]["@type"] = "Organization"
+    actors = []
+    actor_list_with_role = [x for x in actor_list if role in x["role"] ]
+    for actor_object in actor_list_with_role:
+        actor = {}
+        actor["member_of"] = {}
+        actor["member_of"]["name"] = {}
+        if actor_object["type"] == "person":
+            actor["@type"] = "Person"
+            actor["name"] = actor_object["name"]
+            actor["member_of"] = {}
+            actor["member_of"]["name"] = actor_object["organization"]
+            actor["member_of"]["@type"] = "Organization"
         else:
-            participant["@type"] = "Organization"
-            participant["name"] = participant_object["name"]
-            if "organization" in participant_object and participant_object["organization"] != {}:
-                participant["is_part_of"] = {}
-                participant["is_part_of"]["name"] = participant_object["organization"]
-                participant["is_part_of"]["@type"] = "Organization"
+            actor["@type"] = "Organization"
+            actor["name"] = actor_object["name"]
+            if "organization" in actor_object and actor_object["organization"] != {}:
+                actor["is_part_of"] = {}
+                actor["is_part_of"]["name"] = actor_object["organization"]
+                actor["is_part_of"]["@type"] = "Organization"
 
-        if "email" in participant_object:
-            participant["email"] = participant_object["email"]
-        if "identifier" in participant_object:
-            participant["identifier"] = participant_object["identifier"]
-        participants.append(participant)
-    return participants
+        if "email" in actor_object:
+            actor["email"] = actor_object["email"]
+        if "identifier" in actor_object:
+            actor["identifier"] = actor_object["identifier"]
+        actors.append(actor)
+    return actors
 
 
 def other_identifiers_to_metax(identifiers_list):
@@ -203,9 +203,9 @@ def data_to_metax(data, metadata_provider_org, metadata_provider_user):
         "research_dataset": {
             "title": data["title"],
             "description": data["description"],
-            "creator": alter_role_data(data["participants"], "creator"),
-            "publisher": alter_role_data(data["participants"], "publisher")[0],
-            "curator": alter_role_data(data["participants"], "curator"),
+            "creator": alter_role_data(data["actors"], "creator"),
+            "publisher": alter_role_data(data["actors"], "publisher")[0],
+            "curator": alter_role_data(data["actors"], "curator"),
             "other_identifier": other_identifiers_to_metax(data["identifiers"]),
             "field_of_science": [{
                 "identifier": data["fieldOfScience"] if "fieldOfScience" in data else ""
@@ -262,9 +262,9 @@ def edited_data_to_metax(data, original):
     """
     original["research_dataset"]["title"] = data["title"]
     original["research_dataset"]["description"] = data["description"]
-    original["research_dataset"]["creator"] = alter_role_data(data["participants"], "creator")
-    original["research_dataset"]["publisher"] = alter_role_data(data["participants"], "publisher")[0]
-    original["research_dataset"]["curator"] = alter_role_data(data["participants"], "curator")
+    original["research_dataset"]["creator"] = alter_role_data(data["actors"], "creator")
+    original["research_dataset"]["publisher"] = alter_role_data(data["actors"], "publisher")[0]
+    original["research_dataset"]["curator"] = alter_role_data(data["actors"], "curator")
     original["research_dataset"]["other_identifier"] = other_identifiers_to_metax(data["identifiers"])
     original["research_dataset"]["field_of_science"] = [{"identifier": data["fieldOfScience"] if "fieldOfScience" in data else ""}]
     original["research_dataset"]["keyword"] = data["keywords"]
