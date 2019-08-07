@@ -24,7 +24,6 @@ class DataCatalog extends Component {
     errorMessage: undefined,
   }
 
-
   handleOnBlur = () => {
     const dataCatalog = this.props.Stores.Qvain.dataCatalog
     dataCatalogSchema
@@ -43,12 +42,12 @@ class DataCatalog extends Component {
 
   render() {
     const { errorMessage } = this.state
-    const { dataCatalog, setDataCatalog, selectedFiles, selectedDirectories, externalResources } = this.props.Stores.Qvain
+    const { dataCatalog, setDataCatalog, selectedFiles, selectedDirectories, externalResources, original } = this.props.Stores.Qvain
     const selected = [...selectedFiles, ...selectedDirectories, ...externalResources]
     return (
       <Card>
         <LabelLarge htmlFor="dataCatalogSelect">
-          <Translate content="qvain.files.dataCatalog.label" />
+          <Translate content="qvain.files.dataCatalog.label" /> *
         </LabelLarge>
         <Translate component="p" content="qvain.files.dataCatalog.explanation" />
         <Translate
@@ -63,7 +62,7 @@ class DataCatalog extends Component {
           }}
           onBlur={this.handleOnBlur}
           attributes={{ placeholder: 'qvain.files.dataCatalog.placeholder' }}
-          isDisabled={selected.length > 0}
+          isDisabled={(selected.length > 0) || (original !== undefined)}
         />
         {errorMessage && <ValidationError>{errorMessage}</ValidationError>}
       </Card>

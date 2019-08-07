@@ -90,7 +90,7 @@ class DescriptionField extends Component {
         </LangButtonContainer>
         <DescriptionCard>
           <LabelLarge htmlFor="titleInput">
-            <Translate content="qvain.description.description.title.label" />
+            <Translate content="qvain.description.description.title.label" /> *
           </LabelLarge>
           {activeLang === 'FINNISH' && (
             <Translate
@@ -120,7 +120,7 @@ class DescriptionField extends Component {
           )}
           <ValidationError>{this.state.titleError}</ValidationError>
           <LabelLarge htmlFor="descriptionInput">
-            <Translate content="qvain.description.description.description.label" />
+            <Translate content="qvain.description.description.description.label" /> *
           </LabelLarge>
           {activeLang === 'FINNISH' && (
             <Translate

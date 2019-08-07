@@ -22,13 +22,15 @@ class FileForm extends Component {
     Stores: PropTypes.object.isRequired
   }
 
+  inEdit = this.props.Stores.Qvain.inEdit
+
   state = {
     fileTypesEn: [],
     fileTypesFi: [],
     useCategoriesEn: [],
     useCategoriesFi: [],
-    title: this.props.Stores.Qvain.inEdit.title,
-    description: this.props.Stores.Qvain.inEdit.description || '',
+    title: this.inEdit.title || (this.inEdit.fileName ? this.fileName : 'File'),
+    description: this.inEdit.description || 'File',
     useCategory: undefined,
     fileType: undefined,
     fileError: undefined,
