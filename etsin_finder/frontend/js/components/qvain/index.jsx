@@ -10,7 +10,7 @@ import styled from 'styled-components'
 
 import RightsAndLicenses from './licenses'
 import Description from './description'
-import Participants from './participants'
+import Actors from './actors'
 import { qvainFormSchema } from './utils/formValidation'
 import Files from './files'
 import {
@@ -25,7 +25,6 @@ import {
 import handleSubmitToBackend from './utils/handleSubmit'
 import Title from './general/title'
 import SubmitResponse from './general/submitResponse'
-import isJsonString from './utils/isJsonSring'
 import { InvertedButton } from '../general/button';
 
 class Qvain extends Component {
@@ -78,21 +77,41 @@ class Qvain extends Component {
             }
           })
           .catch(err => {
-            console.log(err.response)
-            const res = {
-              Error: isJsonString(err.response.data)
-                ? JSON.parse(err.response.data)
-                : err.response.data,
-              Status: err.response.status,
-              Data: isJsonString(err.response.config.data)
-                ? JSON.parse(err.response.config.data)
-                : err.response.config.data,
+            // Refreshing error header
+            this.setState({ response: null })
+
+            // If user is not logged in, display logged in error
+            if (err.response.data.PermissionError) {
+              this.setState({ response: [err.response.data.PermissionError] })
+
+            // If user is logged in, display the formatted Metax error
+            } else if ((err.response.data.includes(':["')) && (err.response.data.includes('"],'))) {
+              this.setState({
+                response:
+                  [err.response.data.slice(
+                    err.response.data.indexOf(':["') + 3,
+                    err.response.data.indexOf('"],'))
+                  ]
+              })
+
+            // If formatting cannot be done, just display the entire error
+            } else if (err.response.data) {
+              this.setState({
+                response: [err.response.data]
+              })
+
+            // If error response is empty, just display 'Error...'
+            } else {
+              this.setState({
+                response: ['Error...']
+              })
             }
-            this.setState(err ? { response: res } : { response: 'Error...' })
           })
       })
       .catch(err => {
         console.log(err.errors)
+
+        // Refreshing error header
         this.setState({ response: null })
         this.setState({ response: err.errors })
       })
@@ -116,21 +135,42 @@ class Qvain extends Component {
             this.setState({ response: JSON.parse(res.data) })
           })
           .catch(err => {
-            console.log(err.response)
-            const res = {
-              Error: isJsonString(err.response.data)
-                ? JSON.parse(err.response.data)
-                : err.response.data,
-              Status: err.response.status,
-              Data: isJsonString(err.response.config.data)
-                ? JSON.parse(err.response.config.data)
-                : err.response.config.data,
+            // Refreshing error header
+            this.setState({ response: null })
+
+            // If user is not logged in, display logged in error
+            if (err.response.data.PermissionError) {
+              this.setState({ response: [err.response.data.PermissionError] })
+
+            // If user is logged in, display the formatted Metax error
+            } else if ((err.response.data.includes(':["')) && (err.response.data.includes('"],'))) {
+              this.setState({
+                response:
+                  [err.response.data.slice(
+                    err.response.data.indexOf(':["') + 3,
+                    err.response.data.indexOf('"],'))
+                  ]
+              })
+
+            // If formatting cannot be done, just display the entire error
+            } else if (err.response.data) {
+              this.setState({
+                response: [err.response.data]
+              })
+
+            // If error response is empty, just display 'Error...'
+            } else {
+              this.setState({
+                response: ['Error...']
+              })
             }
-            this.setState(err ? { response: res } : { response: 'Error...' })
           })
       })
       .catch(err => {
         console.log(err.errors)
+
+        // Refreshing error header
+        this.setState({ response: null })
         this.setState({ response: err.errors })
       })
   }
@@ -176,7 +216,7 @@ class Qvain extends Component {
         </StickySubHeaderWrapper>
         <Form className="container">
           <Description />
-          <Participants />
+          <Actors />
           <RightsAndLicenses />
           <Files />
           <SubmitContainer>

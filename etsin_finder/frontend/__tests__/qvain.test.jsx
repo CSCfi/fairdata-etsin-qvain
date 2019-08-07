@@ -14,11 +14,11 @@ import RestrictionGrounds from '../js/components/qvain/licenses/resctrictionGrou
 import EmbargoExpires from '../js/components/qvain/licenses/embargoExpires'
 import { AccessTypeURLs, LicenseUrls } from '../js/components/qvain/utils/constants'
 import {
-  ParticipantsBase
-} from '../js/components/qvain/participants'
-import { ParticipantTypeSelectBase } from '../js/components/qvain/participants/participantTypeSelect'
-import { SelectedParticipantBase, ParticipantSelection } from '../js/components/qvain/participants/participantSelection'
-import { AddedParticipantsBase } from '../js/components/qvain/participants/addedParticipants'
+  ActorsBase
+} from '../js/components/qvain/actors'
+import { ActorTypeSelectBase } from '../js/components/qvain/actors/actorTypeSelect'
+import { SelectedActorBase, ActorSelection } from '../js/components/qvain/actors/actorSelection'
+import { AddedActorsBase } from '../js/components/qvain/actors/addedActors'
 import Files from '../js/components/qvain/files'
 import IDAFilePicker, { IDAFilePickerBase } from '../js/components/qvain/files/idaFilePicker'
 import FileSelector, { FileSelectorBase } from '../js/components/qvain/files/fileSelector'
@@ -34,7 +34,7 @@ import QvainStore, {
   Directory,
   EntityType,
   Role,
-  Participant,
+  Actor,
   ExternalResource,
   AccessType as AccessTypeConstructor,
   License as LicenseConstructor
@@ -129,35 +129,35 @@ describe('Qvain.RightsAndLicenses', () => {
   })
 })
 
-describe('Qvain.Participants', () => {
+describe('Qvain.Actors', () => {
   it('should render correctly', () => {
-    const component = shallow(<ParticipantsBase Stores={getStores()} />)
+    const component = shallow(<ActorsBase Stores={getStores()} />)
     expect(component).toMatchSnapshot()
   })
 
   it('should render person selection by default', () => {
-    const component = mount(<SelectedParticipantBase Stores={getStores()} />)
-    expect(component.find(ParticipantSelection).html().includes('Person')).toBe(true)
+    const component = mount(<SelectedActorBase Stores={getStores()} />)
+    expect(component.find(ActorSelection).html().includes('Person')).toBe(true)
     component.unmount()
-    const form = mount(<ParticipantTypeSelectBase Stores={getStores()} />)
+    const form = mount(<ActorTypeSelectBase Stores={getStores()} />)
     expect(form.find('#entityPerson input').props().checked).toBe(true)
   })
 
   // By default person should be selected. Upon clicking the Organization radio button
   // the checkboxes should be reset and active selection field should display
   // 'Organization'
-  it('should change selected participant entity', () => {
+  it('should change selected actor entity', () => {
     const stores = getStores()
-    const entityRoleForm = mount(<ParticipantTypeSelectBase Stores={stores} />)
+    const entityRoleForm = mount(<ActorTypeSelectBase Stores={stores} />)
     entityRoleForm.find('#personCreator').first().simulate('change', {
       target: {
         checked: true
       }
     })
     entityRoleForm.unmount()
-    const selectedParticipant = mount(<SelectedParticipantBase Stores={stores} />)
-    expect(selectedParticipant.text()).toBe('Person / Creator')
-    selectedParticipant.unmount()
+    const selectedActor = mount(<SelectedActorBase Stores={stores} />)
+    expect(selectedActor.text()).toBe('Person / Creator')
+    selectedActor.unmount()
     entityRoleForm.mount()
     entityRoleForm.find('#entityOrg input').simulate('change')
     entityRoleForm.find('#orgPublisher input').simulate('change', {
@@ -167,24 +167,24 @@ describe('Qvain.Participants', () => {
     })
     // expect(entityRoleForm.find('#entityOrg input').checked).toBe(true)
     entityRoleForm.unmount()
-    selectedParticipant.mount()
-    expect(selectedParticipant.text()).toBe('Organization / Publisher')
+    selectedActor.mount()
+    expect(selectedActor.text()).toBe('Organization / Publisher')
   })
 
-  // Added participants should be listed if there are any
-  it('should list all added participants', () => {
+  // Added actors should be listed if there are any
+  it('should list all added actors', () => {
     const stores = getStores()
-    const addedParticipants = mount(<AddedParticipantsBase Stores={stores} />)
-    expect(addedParticipants.find(ButtonGroup).length).toBe(0)
-    stores.Qvain.saveParticipant(Participant(
+    const addedActors = mount(<AddedActorsBase Stores={stores} />)
+    expect(addedActors.find(ButtonGroup).length).toBe(0)
+    stores.Qvain.saveActor(Actor(
       EntityType.ORGANIZATION,
       [Role.PUBLISHER],
       'University of Helsinki',
       'test@test.fi',
       'uohIdentifier'
     ))
-    addedParticipants.update()
-    expect(addedParticipants.find(ButtonGroup).length).toBe(1)
+    addedActors.update()
+    expect(addedActors.find(ButtonGroup).length).toBe(1)
   })
 })
 

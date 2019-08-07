@@ -16,17 +16,17 @@ import {
   Label,
 } from '../general/form'
 import ValidationError from '../general/validationError'
-import { EntityType, EmptyParticipant } from '../../../stores/view/qvain'
+import { EntityType, EmptyActor } from '../../../stores/view/qvain'
 import { deepCopy } from '../utils/fileHierarchy'
 import {
-  participantSchema,
-  participantNameSchema,
-  participantEmailSchema,
-  participantIdentifierSchema,
-  participantOrganizationSchema
+  actorSchema,
+  actorNameSchema,
+  actorEmailSchema,
+  actorIdentifierSchema,
+  actorOrganizationSchema
 } from '../utils/formValidation'
 
-export class ParticipantInfoBase extends Component {
+export class ActorInfoBase extends Component {
   static propTypes = {
     Stores: PropTypes.object.isRequired
   }
@@ -36,7 +36,7 @@ export class ParticipantInfoBase extends Component {
     orgsLang: [],
     nameError: undefined,
     emailError: undefined,
-    participantError: undefined,
+    actorError: undefined,
     identifierError: undefined,
     organizationError: undefined
   }
@@ -75,28 +75,28 @@ export class ParticipantInfoBase extends Component {
     this.setState({
       nameError: undefined,
       emailError: undefined,
-      participantError: undefined,
+      actorError: undefined,
       identifierError: undefined,
       organizationError: undefined
     })
   }
 
-  handleSaveParticipant = (event) => {
+  handleSaveActor = (event) => {
     event.preventDefault()
     const { Qvain } = this.props.Stores
-    const participant = toJS(Qvain.participantInEdit)
-    participantSchema.validate(participant).then(() => {
-      Qvain.saveParticipant(deepCopy(toJS(Qvain.participantInEdit)))
-      Qvain.editParticipant(EmptyParticipant)
+    const actor = toJS(Qvain.actorInEdit)
+    actorSchema.validate(actor).then(() => {
+      Qvain.saveActor(deepCopy(toJS(Qvain.actorInEdit)))
+      Qvain.editActor(EmptyActor)
       this.resetErrorMessages()
     }).catch(err => {
-      this.setState({ participantError: err.errors })
+      this.setState({ actorError: err.errors })
     })
   }
 
   handleCancel = (event) => {
     event.preventDefault()
-    this.props.Stores.Qvain.editParticipant(EmptyParticipant)
+    this.props.Stores.Qvain.editActor(EmptyActor)
     this.resetErrorMessages()
   }
 
@@ -105,24 +105,24 @@ export class ParticipantInfoBase extends Component {
   }
 
   handleOnNameBlur = () => {
-    const participant = this.props.Stores.Qvain.participantInEdit
-    this.handleOnBlur(participantNameSchema, participant.name, value => this.setState({ nameError: value }))
+    const actor = this.props.Stores.Qvain.actorInEdit
+    this.handleOnBlur(actorNameSchema, actor.name, value => this.setState({ nameError: value }))
   }
 
   handleOnEmailBlur = () => {
-    const participant = this.props.Stores.Qvain.participantInEdit
-    this.handleOnBlur(participantEmailSchema, participant.email, value => this.setState({ emailError: value }))
+    const actor = this.props.Stores.Qvain.actorInEdit
+    this.handleOnBlur(actorEmailSchema, actor.email, value => this.setState({ emailError: value }))
   }
 
   handleOnIdentifierBlur = () => {
-    const participant = this.props.Stores.Qvain.participantInEdit
-    this.handleOnBlur(participantIdentifierSchema, participant.identifier, value => this.setState({ identifierError: value }))
+    const actor = this.props.Stores.Qvain.actorInEdit
+    this.handleOnBlur(actorIdentifierSchema, actor.identifier, value => this.setState({ identifierError: value }))
   }
 
   handleOnOrganizationBlur = () => {
-    const { type, organization } = this.props.Stores.Qvain.participantInEdit
+    const { type, organization } = this.props.Stores.Qvain.actorInEdit
     this.handleOnBlur(
-      participantOrganizationSchema,
+      actorOrganizationSchema,
       { type, organization },
       value => this.setState({ organizationError: value })
     )
@@ -161,31 +161,31 @@ export class ParticipantInfoBase extends Component {
   }
 
   render() {
-    const participant = this.props.Stores.Qvain.participantInEdit
+    const actor = this.props.Stores.Qvain.actorInEdit
     const { lang } = this.props.Stores.Locale
     const {
       orgs,
       orgsLang,
       nameError,
       emailError,
-      participantError,
+      actorError,
       identifierError,
       organizationError
     } = this.state
     return (
       <Fragment>
         <Label htmlFor="nameField">
-          <Translate content="qvain.participants.add.name.label" /> *
+          <Translate content="qvain.actors.add.name.label" /> *
         </Label>
-        {participant.type === EntityType.PERSON
+        {actor.type === EntityType.PERSON
           ? (
             <Translate
               component={Input}
               type="text"
               id="nameField"
-              attributes={{ placeholder: `qvain.participants.add.name.placeholder.${participant.type}` }}
-              value={participant.name}
-              onChange={(event) => { participant.name = event.target.value }}
+              attributes={{ placeholder: `qvain.actors.add.name.placeholder.${actor.type}` }}
+              value={actor.name}
+              onChange={(event) => { actor.name = event.target.value }}
               onBlur={this.handleOnNameBlur}
             />
           )
@@ -197,13 +197,13 @@ export class ParticipantInfoBase extends Component {
               inputId="nameField"
               formatCreateLabel={inputValue => (
                 <Fragment>
-                  <Translate content="qvain.participants.add.newOrganization.label" />
+                  <Translate content="qvain.actors.add.newOrganization.label" />
                   <span>: &rsquo;{inputValue}&rsquo;</span>
                 </Fragment>
               )}
-              attributes={{ placeholder: 'qvain.participants.add.organization.placeholder' }}
+              attributes={{ placeholder: 'qvain.actors.add.organization.placeholder' }}
               onChange={(selection) => {
-                participant.name = orgs.find(org => org.value === selection.value)
+                actor.name = orgs.find(org => org.value === selection.value)
                   ? orgs.find(org => org.value === selection.value).label
                   : {
                     [lang]: selection.label,
@@ -212,49 +212,49 @@ export class ParticipantInfoBase extends Component {
                 // if selection value ie the org identifier is not in the reference data, then we are adding a new org, so do not define
                 // identifier
                 if (orgs.filter(opt => opt.value === selection.value).length > 0) {
-                  participant.identifier = selection.value
+                  actor.identifier = selection.value
                 } else {
-                  participant.identifier = ''
+                  actor.identifier = ''
                 }
               }}
               value={{
-                label: this.getOrganizationName(participant.name, lang),
-                value: participant.identifier
+                label: this.getOrganizationName(actor.name, lang),
+                value: actor.identifier
               }}
               onBlur={this.handleOnNameBlur}
             />
             )}
         {nameError && <ValidationError>{nameError}</ValidationError>}
         <Label htmlFor="emailField">
-          <Translate content="qvain.participants.add.email.label" />
+          <Translate content="qvain.actors.add.email.label" />
         </Label>
         <Translate
           component={Input}
           id="emailField"
           type="email"
-          attributes={{ placeholder: 'qvain.participants.add.email.placeholder' }}
-          onChange={(event) => { participant.email = event.target.value }}
-          value={participant.email}
+          attributes={{ placeholder: 'qvain.actors.add.email.placeholder' }}
+          onChange={(event) => { actor.email = event.target.value }}
+          value={actor.email}
           onBlur={this.handleOnEmailBlur}
         />
         {emailError && <ValidationError>{emailError}</ValidationError>}
         <Label htmlFor="identifierField">
-          <Translate content="qvain.participants.add.identifier.label" />
+          <Translate content="qvain.actors.add.identifier.label" />
         </Label>
         <Translate
           id="identifierField"
           component={Input}
           type="text"
-          disabled={orgsLang.find(opt => opt.value === participant.identifier)}
-          attributes={{ placeholder: 'qvain.participants.add.identifier.placeholder' }}
-          onChange={(event) => { participant.identifier = event.target.value }}
-          value={participant.identifier}
+          disabled={orgsLang.find(opt => opt.value === actor.identifier)}
+          attributes={{ placeholder: 'qvain.actors.add.identifier.placeholder' }}
+          onChange={(event) => { actor.identifier = event.target.value }}
+          value={actor.identifier}
           onBlur={this.handleOnIdentifierBlur}
         />
         {identifierError && <ValidationError>{identifierError}</ValidationError>}
         <Label htmlFor="orgField">
-          <Translate content={`qvain.participants.add.organization.label.${participant.type.toLowerCase()}`} />
-          {participant.type === EntityType.PERSON && ' *'}
+          <Translate content={`qvain.actors.add.organization.label.${actor.type.toLowerCase()}`} />
+          {actor.type === EntityType.PERSON && ' *'}
         </Label>
         <Translate
           component={SelectOrg}
@@ -263,13 +263,13 @@ export class ParticipantInfoBase extends Component {
           inputId="orgField"
           formatCreateLabel={inputValue => (
             <Fragment>
-              <Translate content="qvain.participants.add.newOrganization.label" />
+              <Translate content="qvain.actors.add.newOrganization.label" />
               <span>: &rsquo;{inputValue}&rsquo;</span>
             </Fragment>
           )}
-          attributes={{ placeholder: 'qvain.participants.add.organization.placeholder' }}
+          attributes={{ placeholder: 'qvain.actors.add.organization.placeholder' }}
           onChange={(selection) => {
-            participant.organization = orgs.find(org => org.value === selection.value)
+            actor.organization = orgs.find(org => org.value === selection.value)
               ? orgs.find(org => org.value === selection.value).label
               : {
                 [lang]: selection.label,
@@ -278,29 +278,29 @@ export class ParticipantInfoBase extends Component {
           }}
           onBlur={this.handleOnOrganizationBlur}
           value={{
-            label: this.getOrganizationName(participant.organization, lang),
-            value: this.getOrganizationName(participant.organization, lang)
+            label: this.getOrganizationName(actor.organization, lang),
+            value: this.getOrganizationName(actor.organization, lang)
           }}
           filterOption={createFilter({ ignoreAccents: false })}
         />
         {organizationError && <ValidationError>{organizationError}</ValidationError>}
-        {participantError && <ParticipantValidationError>{participantError}</ParticipantValidationError>}
+        {actorError && <ActorValidationError>{actorError}</ActorValidationError>}
         <Translate
           component={CancelButton}
           onClick={this.handleCancel}
-          content="qvain.participants.add.cancel.label"
+          content="qvain.actors.add.cancel.label"
         />
         <Translate
           component={SaveButton}
-          onClick={this.handleSaveParticipant}
-          content="qvain.participants.add.save.label"
+          onClick={this.handleSaveActor}
+          content="qvain.actors.add.save.label"
         />
       </Fragment>
     );
   }
 }
 
-const ParticipantValidationError = styled(ValidationError)`
+const ActorValidationError = styled(ValidationError)`
   margin-top: 40px;
   margin-bottom: 40px;
 `;
@@ -309,4 +309,4 @@ const SelectOrg = styled(CreatableSelect)`
   margin-bottom: 20px;
 `
 
-export default inject('Stores')(observer(ParticipantInfoBase));
+export default inject('Stores')(observer(ActorInfoBase));
