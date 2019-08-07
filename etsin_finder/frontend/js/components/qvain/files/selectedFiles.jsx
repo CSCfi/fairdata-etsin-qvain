@@ -4,13 +4,12 @@ import { inject, observer } from 'mobx-react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCopy, faFolder } from '@fortawesome/free-solid-svg-icons'
 import Translate from 'react-translate-component'
-import { ButtonLabel, EditButton, DeleteButton, FileItem, ButtonContainer } from '../general/buttons'
+import { ButtonLabel, EditButton, DeleteButton, FileItem, ButtonContainer, TableButton } from '../general/buttons'
 import { SelectedFilesTitle } from '../general/form'
 import FileForm from './fileForm'
 import DirectoryForm from './directoryForm'
 import { randomStr } from '../utils/fileHierarchy'
 import Modal from '../../general/modal'
-import { TableButton } from '../general/buttons'
 
 export class SelectedFilesBase extends Component {
   static propTypes = {
