@@ -110,7 +110,7 @@ def access_rights_to_metax(data):
         if data["accessType"]["url"] != access_type["OPEN"]:
             access_rights["restriction_grounds"] = []
             access_rights["restriction_grounds"].append({"identifier": data["restrictionGrounds"]})
-        if data["accessType"]["url"] == access_type["EMBARGO"]:
+        if data["accessType"]["url"] == access_type["EMBARGO"] and "embargoDate" in data:
             access_rights["available"] = data["embargoDate"]
     return access_rights
 
