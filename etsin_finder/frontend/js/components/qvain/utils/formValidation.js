@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-expressions */
 import * as yup from 'yup'
 import translate from 'counterpart'
+import { AccessTypeURLs } from './constants'
 
 // DATASET DESCRIPTION VALIDATION
 
@@ -319,8 +320,8 @@ const qvainFormSchema = yup.object().shape({
         .nullable(),
     })
     .nullable(),
-  restrictionGrounds: yup.mixed().when('accessType.value', {
-    is: 'Open',
+  restrictionGrounds: yup.mixed().when('accessType.url', {
+    is: url => url !== AccessTypeURLs.OPEN,
     then: restrictionGroundsSchema,
   }),
   actors: actorsSchema,
