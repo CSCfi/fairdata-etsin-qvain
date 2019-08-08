@@ -23,8 +23,8 @@ export class DirectoryFormBase extends Component {
   inEdit = this.props.Stores.Qvain.inEdit
 
   state = {
-    title: this.inEdit.title || (this.inEdit.directoryName ? this.inEdit.directoryName : 'Directory'),
-    description: this.inEdit.description || 'Directory',
+    title: this.inEdit.title,
+    description: this.inEdit.description,
     useCategoriesEn: [],
     useCategoriesFi: [],
     useCategory: undefined,
