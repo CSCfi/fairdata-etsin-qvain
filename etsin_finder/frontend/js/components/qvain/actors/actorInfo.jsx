@@ -42,7 +42,7 @@ export class ActorInfoBase extends Component {
   }
 
   componentDidMount = () => {
-    axios.get('https://metax.fairdata.fi/es/organization_data/organization/_search?size=1000')
+    axios.get('https://metax.fairdata.fi/es/organization_data/organization/_search?size=3000')
       .then(res => {
         const { lang } = this.props.Stores.Locale
         const list = res.data.hits.hits;

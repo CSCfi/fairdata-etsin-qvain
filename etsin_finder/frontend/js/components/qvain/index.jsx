@@ -25,7 +25,7 @@ import {
 import handleSubmitToBackend from './utils/handleSubmit'
 import Title from './general/title'
 import SubmitResponse from './general/submitResponse'
-import { InvertedButton } from '../general/button'
+import { InvertedButton } from '../general/button';
 
 class Qvain extends Component {
   static propTypes = {

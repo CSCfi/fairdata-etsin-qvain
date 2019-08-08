@@ -784,6 +784,8 @@ export const Directory = (dir, parent, selected, open) => ({
   useCategory: dir.use_category || UseCategoryURLs.OUTCOME_MATERIAL,
   fileType: dir.file_type,
   files: dir.files ? dir.files.map(f => File(f, dir, false)) : [],
+  description: dir.description || 'Folder',
+  title: dir.title || dir.directory_name,
   existing: false
 })
 
@@ -794,8 +796,8 @@ const File = (file, parent, selected) => ({
   useCategory:
     getPath('file_characteristics.use_category', file) || UseCategoryURLs.OUTCOME_MATERIAL,
   fileType: getPath('file_characteristics.file_type', file),
-  description: getPath('file_characteristics.description', file),
-  title: getPath('file_characteristics.title', file),
+  description: getPath('file_characteristics.description', file) || 'File',
+  title: getPath('file_characteristics.title', file) || file.file_name,
   existing: false
 })
 
