@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import styled, { keyframes } from 'styled-components'
 import { inject, observer } from 'mobx-react'
 import Translate from 'react-translate-component'
-import { Link } from 'react-router-dom'
 import Loader from '../../general/loader'
 import { LinkButtonDarkGray } from '../../general/button';
 
@@ -51,7 +50,7 @@ class SubmitResponse extends Component {
             <ResponseLabel success>
               <Translate content="qvain.submitStatus.success" />
             </ResponseLabel>
-            <LinkToEtsin to={`/dataset/${identifier}`}>
+            <LinkToEtsin onClick={() => window.open(`/dataset/${identifier}`, '_blank')}>
               <Translate content="qvain.datasets.goToEtsin" />
             </LinkToEtsin>
             <p>Identifier: {identifier}</p>
@@ -82,7 +81,7 @@ class SubmitResponse extends Component {
             <ResponseLabel success>
               <Translate content="qvain.submitStatus.editMetadataSuccess" />
             </ResponseLabel>
-            <LinkToEtsin to={`/dataset/${identifier}`}>
+            <LinkToEtsin onClick={() => window.open(`/dataset/${identifier}`, '_blank')}>
               <Translate content="qvain.datasets.goToEtsin" />
             </LinkToEtsin>
             <p>Identifier: {identifier}</p>
@@ -107,7 +106,7 @@ class SubmitResponse extends Component {
             <ResponseLabel success>
               <Translate content="qvain.submitStatus.editFilesSuccess" />
             </ResponseLabel>
-            <LinkToEtsin to={`/dataset/${identifier}`}>
+            <LinkToEtsin onClick={() => window.open(`/dataset/${identifier}`, '_blank')}>
               <Translate content="qvain.datasets.goToEtsin" />
             </LinkToEtsin>
             <p>Identifier: {identifier}</p>
@@ -152,7 +151,7 @@ SubmitResponse.defaultProps = {
   response: null,
 }
 
-const LinkToEtsin = styled(Link)`
+const LinkToEtsin = styled.button`
   color: green;
   display: inline-block;
   vertical-align: top;
@@ -160,6 +159,8 @@ const LinkToEtsin = styled(Link)`
   margin-left: 10px;
   margin-bottom: 0px;
   cursor: pointer;
+  border: none;
+  background-color: transparent;
 `
 const ResponseLabel = styled.p`
   font-weight: bold;
