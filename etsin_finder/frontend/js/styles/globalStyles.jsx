@@ -281,7 +281,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   p, .paragraph {
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Lato', sans-serif;
     font-size: 1em;
     line-height: calc(1.7 * 1em);
   }
@@ -320,6 +320,23 @@ const GlobalStyle = createGlobalStyle`
   /* modal blur */
   .blur {
     filter: blur(1px);
+  }
+
+  /* Visually hide element from screen, still readable for screen readers. */
+  .visuallyhidden:not(:focus):not(:active) {
+    position: absolute;
+  
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    border: 0;
+    padding: 0;
+  
+    white-space: nowrap;
+  
+    clip-path: inset(100%);
+    clip: rect(0 0 0 0);
+    overflow: hidden;
   }
 `
 

@@ -13,8 +13,9 @@ import EmbargoExpires from './embargoExpires'
 import { onChange, getCurrentValue } from '../utils/select'
 import { AccessType as AccessTypeConstructor } from '../../../stores/view/qvain'
 import { AccessTypeURLs } from '../utils/constants'
+import { LabelLarge } from '../general/form'
 
-class AccessType extends Component {
+export class AccessType extends Component {
   static propTypes = {
     Stores: PropTypes.object.isRequired
   }
@@ -24,7 +25,6 @@ class AccessType extends Component {
       en: [],
       fi: []
     },
-    accessTypeRestricted: false,
     accessTypeValidationError: null
   }
 
@@ -72,11 +72,6 @@ class AccessType extends Component {
     const { options } = this.state
     const { setAccessType } = this.props.Stores.Qvain
     onChange(options, lang, setAccessType, AccessTypeConstructor)(selection)
-    if (selection.value !== AccessTypeURLs.OPEN) {
-      this.setState({ accessTypeRestricted: true })
-    } else if (selection.value === AccessTypeURLs.OPEN) {
-      this.setState({ accessTypeRestricted: false })
-    }
     this.setState({ accessTypeValidationError: null })
   }
 
@@ -96,9 +91,12 @@ class AccessType extends Component {
     const { accessType } = this.props.Stores.Qvain
     return (
       <Card>
-        <Translate component="h3" content="qvain.rightsAndLicenses.accessType.title" />
+        <LabelLarge htmlFor="accessTypeSelect">
+          <Translate content="qvain.rightsAndLicenses.accessType.title" />
+        </LabelLarge>
         <Translate
           component={Select}
+          inputId="accessTypeSelect"
           name="accessType"
           options={this.state.options[lang]}
           clearable
@@ -113,7 +111,7 @@ class AccessType extends Component {
         />
         <ValidationError>{this.state.accessTypeValidationError}</ValidationError>
         {(accessType !== undefined && accessType.url === AccessTypeURLs.EMBARGO) && (<EmbargoExpires />)}
-        { this.state.accessTypeRestricted
+        { accessType.url !== AccessTypeURLs.OPEN
           ? <RestrictionGrounds /> : null}
       </Card>
     )

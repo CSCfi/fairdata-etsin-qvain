@@ -14,13 +14,12 @@ import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 import Translate from 'react-translate-component'
 import styled from 'styled-components'
-// import { NavLink } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 
 import Login from './loginButton'
 import { Link } from '../button'
 import LangToggle from './langToggle'
 import DropdownMenu from './dropdownMenu'
-// import { VerticalSeparator } from '../separator'
 
 export default class Settings extends Component {
   render() {
@@ -48,14 +47,14 @@ export default class Settings extends Component {
                 >Qvain
                 </Link>
               </Row>
-              {/* <Row>
+              <Row>
                 <QvainNavLink
                   width="100%"
                   margin="0.4em 0em 0.4em 0.4em"
                   to="/qvain"
                 >Qvain Light
                 </QvainNavLink>
-              </Row> */}
+              </Row>
             </CustomContainer>
           </DropdownMenu>
           <LangToggle margin="0em 0em 0em 0em" />
@@ -90,7 +89,7 @@ const CustomContainer = styled.div`
   width: 100%;
 `
 
-// const QvainNavLink = Link.withComponent(NavLink)
+const QvainNavLink = Link.withComponent(NavLink)
 
 const Row = styled.div`
   display: inline-flex;

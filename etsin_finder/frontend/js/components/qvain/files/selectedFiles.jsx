@@ -4,14 +4,20 @@ import { inject, observer } from 'mobx-react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCopy, faFolder } from '@fortawesome/free-solid-svg-icons'
 import Translate from 'react-translate-component'
-import { ButtonLabel, EditButton, DeleteButton, FileItem } from '../general/buttons'
+import { ButtonLabel, EditButton, DeleteButton, FileItem, ButtonContainer, TableButton } from '../general/buttons'
 import { SelectedFilesTitle } from '../general/form'
 import FileForm from './fileForm'
 import DirectoryForm from './directoryForm'
+import { randomStr } from '../utils/fileHierarchy'
+import Modal from '../../general/modal'
 
 export class SelectedFilesBase extends Component {
   static propTypes = {
     Stores: PropTypes.object.isRequired
+  }
+
+  state = {
+    datasetDuplicationModalHasNotBeenShown: true,
   }
 
   handleEdit = (selected) => (event) => {
@@ -24,39 +30,43 @@ export class SelectedFilesBase extends Component {
     }
   }
 
-  render() {
+  closeDatasetDuplicationInformationModal = () => {
+    // Set to false permanently, since the warning only needs to be shown once, not every time a new file is added.
+    this.setState({
+      datasetDuplicationModalHasNotBeenShown: false,
+    })
+  }
+
+  renderFiles = (selected, inEdit, existing) => {
     const {
       toggleSelectedFile,
-      toggleSelectedDirectory,
-      selectedFiles,
-      selectedDirectories,
-      inEdit
+      toggleSelectedDirectory
     } = this.props.Stores.Qvain
-    const selected = [...selectedDirectories, ...selectedFiles]
     return (
       <Fragment>
-        <Translate component={SelectedFilesTitle} content="qvain.files.selected.title" />
-        {selected.length === 0 && <Translate component="p" content="qvain.files.selected.none" />}
         {selected.map(s => (
-          <Fragment key={`${s.id}-${s.identifier}`}>
-            <FileItem active={isInEdit(inEdit, s.identifier)}>
+          <Fragment key={`${s.id}-${randomStr()}`}>
+            <FileItem tabIndex="0" active={isInEdit(inEdit, s.identifier)}>
               <ButtonLabel>
                 <FontAwesomeIcon icon={(s.directoryName ? faFolder : faCopy)} style={{ marginRight: '8px' }} />
-                {s.projectIdentifier} / {s.directoryName || s.title}
+                {s.projectIdentifier} / {s.directoryName || s.fileName}
               </ButtonLabel>
-              <EditButton onClick={this.handleEdit(s)} />
-              <DeleteButton
-                onClick={(event) => {
-                  event.preventDefault()
-                  if (s.directoryName !== undefined) {
-                    toggleSelectedDirectory(s, false)
-                  } else {
-                    toggleSelectedFile(s, false)
-                  }
-                }}
-              />
+              <ButtonContainer>
+                <EditButton aria-label="Edit" onClick={this.handleEdit(s)} />
+                <DeleteButton
+                  aria-label="Remove"
+                  onClick={(event) => {
+                    event.preventDefault()
+                    if (s.directoryName !== undefined) {
+                      toggleSelectedDirectory(s, false)
+                    } else {
+                      toggleSelectedFile(s, false)
+                    }
+                  }}
+                />
+              </ButtonContainer>
             </FileItem>
-            {isInEdit(inEdit, s.identifier) && (
+            {isInEdit(inEdit, s.identifier, existing) && (
               <Fragment>
                 {isDirectory(inEdit) && (<DirectoryForm />)}
                 {!isDirectory(inEdit) && (<FileForm />)}
@@ -67,9 +77,43 @@ export class SelectedFilesBase extends Component {
       </Fragment>
     )
   }
+
+  render() {
+    const {
+      selectedFiles,
+      selectedDirectories,
+      existingFiles,
+      existingDirectories,
+      inEdit
+    } = this.props.Stores.Qvain
+    const selected = [...selectedDirectories, ...selectedFiles]
+    const existing = [...existingDirectories, ...existingFiles]
+    return (
+      <Fragment>
+        <Translate tabIndex="0" component={SelectedFilesTitle} content="qvain.files.selected.title" />
+        {selected.length === 0 && <Translate tabIndex="0" component="p" content="qvain.files.selected.none" />}
+        {this.renderFiles(selected, inEdit, false)}
+        <Translate tabIndex="0" component={SelectedFilesTitle} content="qvain.files.existing.title" />
+        <Translate tabIndex="0" component="p" content="qvain.files.existing.help" />
+        {this.renderFiles(existing, inEdit, true)}
+        <Modal
+          // Inform the user that a new dataset will be created, if both existing and selected files are present.
+          isOpen={(selected.length) > 0 && (existing.length > 0) && (this.state.datasetDuplicationModalHasNotBeenShown === true)}
+          onRequestClose={this.closeDatasetDuplicationInformationModal}
+          contentLabel="notificationNewDatasetWillBeCreatedModal"
+        >
+          <Translate component="h3" content="qvain.files.notificationNewDatasetWillBeCreated.header" />
+          <Translate component="p" content="qvain.files.notificationNewDatasetWillBeCreated.content" />
+          <TableButton onClick={this.closeDatasetDuplicationInformationModal}>Ok.</TableButton>
+        </Modal>
+      </Fragment>
+    )
+  }
 }
 
-const isInEdit = (inEdit, identifier) => (inEdit !== undefined) && inEdit.identifier === identifier
+const isInEdit = (inEdit, identifier, existing) => (
+  (inEdit !== undefined) && inEdit.identifier === identifier && (existing === inEdit.existing)
+)
 
 const isDirectory = (inEdit) => inEdit.directoryName !== undefined
 

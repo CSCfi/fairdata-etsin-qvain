@@ -35,7 +35,6 @@ export class ProjectSelectorBase extends Component {
   }
 
   handleOnChange = (selectedOption) => {
-    console.log('ProjectSelect handleOnChange')
     this.props.Stores.Qvain.changeProject(selectedOption.value).then(() => {
       this.setState({ error: undefined })
     }).catch(e => {
@@ -54,6 +53,7 @@ export class ProjectSelectorBase extends Component {
     return (
       <Fragment>
         <Translate
+          aria-label="Select project"
           options={options}
           isDisabled={editing}
           component={ProjectSelect}
@@ -82,6 +82,7 @@ export const ProjectSelect = styled(Select)`
   height: 38px;
   margin-top: 30px;
   margin-bottom: 10px;
+  color: #808080;
 `;
 
 export default inject('Stores')(observer(ProjectSelectorBase))

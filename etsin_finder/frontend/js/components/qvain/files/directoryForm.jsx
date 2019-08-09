@@ -20,9 +20,11 @@ export class DirectoryFormBase extends Component {
     Stores: PropTypes.object.isRequired,
   }
 
+  inEdit = this.props.Stores.Qvain.inEdit
+
   state = {
-    title: this.props.Stores.Qvain.inEdit.title || 'Couldn\'t get title',
-    description: this.props.Stores.Qvain.inEdit.description || '',
+    title: this.inEdit.title,
+    description: this.inEdit.description,
     useCategoriesEn: [],
     useCategoriesFi: [],
     useCategory: undefined,
@@ -138,7 +140,7 @@ export class DirectoryFormBase extends Component {
           />
           {titleError !== undefined && <ValidationError>{titleError}</ValidationError>}
           <Label>
-            <Translate content="qvain.files.selected.form.description.label" /> *
+            <Translate content="qvain.files.selected.form.description.label" />
           </Label>
           <Translate
             component={Textarea}

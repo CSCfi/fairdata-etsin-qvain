@@ -11,6 +11,7 @@ import Label from '../general/label'
 import Button from '../../general/button'
 import { keywordsSchema } from '../utils/formValidation'
 import ValidationError from '../general/validationError'
+import { LabelLarge } from '../general/form'
 
 class KeywordsField extends Component {
   static propTypes = {
@@ -42,7 +43,8 @@ class KeywordsField extends Component {
     e.preventDefault()
     if (this.state.value.length > 0) {
       const keywords = this.state.value.split(',').map(word => word.trim())
-      const uniqKeywords = [...new Set(keywords)]
+      const noEmptyKeywords = keywords.filter(kw => kw !== '')
+      const uniqKeywords = [...new Set(noEmptyKeywords)]
       const keywordsToStore = uniqKeywords.filter(
         word => !this.props.Stores.Qvain.keywords.includes(word)
       )
@@ -64,13 +66,14 @@ class KeywordsField extends Component {
     ))
     return (
       <Card>
-        <h3>
+        <LabelLarge htmlFor="keywordsInput">
           <Translate content="qvain.description.keywords.title" /> *
-        </h3>
+        </LabelLarge>
         <Translate component="p" content="qvain.description.keywords.help" />
         {keywords}
         <Translate
           component={Input}
+          id="keywordsInput"
           value={this.state.value}
           onChange={this.handleChange}
           type="text"
@@ -90,7 +93,7 @@ class KeywordsField extends Component {
 const Input = styled.input`
   width: 100%;
   border-radius: 3px;
-  border: 1px solid #eceeef;
+  border: 1px solid #cccccc;
   padding: 8px;
   color: #808080;
   margin-bottom: 20px;

@@ -9,6 +9,7 @@ import {
 
 class DatasetPagination extends Component {
   static propTypes = {
+    id: PropTypes.string.isRequired,
     page: PropTypes.number.isRequired,
     count: PropTypes.number.isRequired,
     limit: PropTypes.number.isRequired,
@@ -55,18 +56,7 @@ class DatasetPagination extends Component {
 
   // Calculates the entire amount of pages needed for displaying datasets.
   // Takes into account the division remainders.
-  getPageCount = (count, limit) => {
-    const amount = (count / limit)
-    if ((count % limit) > 0) {
-      const remainder = count % limit
-      const decimalRemainder = (limit / remainder) - 1
-      const additional = decimalRemainder >= 0.5 ?
-        decimalRemainder :
-        decimalRemainder + (0.5 - decimalRemainder)
-      return Math.round(amount + additional)
-    }
-    return amount
-  }
+  getPageCount = (count, limit) => Math.ceil(count / limit)
 
   singlePage(value, link) {
     if (value === '...') {
@@ -115,7 +105,7 @@ class DatasetPagination extends Component {
   )
 
   renderPagination = () => {
-    const { count, page, limit } = this.props
+    const { id, count, page, limit } = this.props
     const pageCount = this.getPageCount(count, limit)
     const completeRange = Array.from(Array(pageCount).keys()).map(n => n + 1)
     let lowerRange = completeRange.slice(0, page - 1)
@@ -124,16 +114,17 @@ class DatasetPagination extends Component {
     }
     const higherRange = completeRange.slice(page, page + 3)
     return (
-      <PaginationContainer className="col-lg-12" aria-labelledby="pagination-label">
+      <PaginationContainer className="col-lg-12" aria-labelledby={id}>
         <Translate
           content="search.pagination.SRpagination"
           className="pagination-label sr-only"
           aria-hidden
-          id="pagination-label"
+          id={id}
         />
         <ul>
           <li>
             <PaginationButton
+              aria-label="Previous page"
               disabled={page === 1}
               onClick={this.handleChangePage(page - 1)}
               type="button"
@@ -146,6 +137,7 @@ class DatasetPagination extends Component {
           {this.renderPageButtons(higherRange)}
           <li>
             <PaginationButton
+              aria-label="Next page"
               disabled={page === pageCount || pageCount === 0}
               onClick={this.handleChangePage(page + 1)}
               type="button"

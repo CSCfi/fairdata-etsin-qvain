@@ -1,6 +1,6 @@
 {
   "parser": "babel-eslint",
-  "plugins": ["react", "import"],
+  "plugins": ["react", "import", "react-hooks"],
   "env": {
     "browser": true,
     "jest": true
@@ -15,6 +15,7 @@
     "import/first": 0,
     "import/no-extraneous-dependencies": 0,
     "import/no-unresolved": 0,
+    "import/no-named-as-default": "off",
     "indent": 0,
     "max-len": ["warn", { "code": 150 }],
     "no-console": 0,
@@ -54,7 +55,9 @@
         },
         "allowChildren": true
       }
-    ]
+    ],
+    "react-hooks/rules-of-hooks": "error", // Checks rules of Hooks
+    "react-hooks/exhaustive-deps": "warn" // Checks effect dependencies
   },
   "extends": ["airbnb"]
 }

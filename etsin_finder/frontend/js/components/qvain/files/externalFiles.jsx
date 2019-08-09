@@ -9,15 +9,19 @@ import {
   LinkIcon,
   ChevronRight,
   ChevronDown,
+  ButtonGroup,
   SaveButton,
   FileItem,
   EditButton,
   DeleteButton,
-  ButtonLabel
+  ButtonLabel,
+  ButtonContainer
 } from '../general/buttons'
+import { EmptyExternalResource } from '../../../stores/view/qvain'
 import { Input, SelectedFilesTitle } from '../general/form'
-import { FileContainer, SlidingContent } from '../general/card'
-import ExternalEditForm from './externalFileForm'
+import { SlidingContent } from '../general/card'
+import ExternalFileForm from './externalFileForm'
+import { externalResourceUrlSchema } from '../utils/formValidation'
 
 export class ExternalFilesBase extends Component {
   static propTypes = {
@@ -35,24 +39,31 @@ export class ExternalFilesBase extends Component {
     }
   }
 
-  handleRemoveResource = (resourceId) => (event) => {
-    event.preventDefault()
-    this.props.Stores.Qvain.removeExternalResource(resourceId)
+  verifyURL = () => {
+    const resource = this.props.Stores.Qvain.externalResourceInEdit
+    externalResourceUrlSchema
+      .validate(resource.url)
+      .then(() => {
+        this.props.Stores.Qvain.resetInEditResource()
+      })
+      .catch(err => {
+        console.log(err)
+      })
   }
 
-  handleEditResource = (resourceId) => (event) => {
+  handleEditExternalResource = (externalResource) => (event) => {
     event.preventDefault()
-    this.props.Stores.Qvain.setResourceInEdit(resourceId)
+    this.props.Stores.Qvain.editExternalResource(externalResource)
   }
 
-  handleCloseEdit = (event) => {
+  handleRemoveExternalResource = (externalResourceId) => (event) => {
     event.preventDefault()
-    this.props.Stores.Qvain.resetInEditResource()
+    this.props.Stores.Qvain.removeExternalResource(externalResourceId)
+    this.props.Stores.Qvain.editExternalResource(EmptyExternalResource)
   }
 
   render() {
-    const { resourceInEdit } = this.props.Stores.Qvain
-    const { externalResources, extResFormOpen, selectedFiles, selectedDirectories } = this.props.Stores.Qvain
+    const { extResFormOpen, selectedFiles, selectedDirectories, addedExternalResources } = this.props.Stores.Qvain
     const hasIDAItems = [...selectedFiles, ...selectedDirectories].length > 0
     return (
       <Fragment>
@@ -63,36 +74,33 @@ export class ExternalFilesBase extends Component {
           {extResFormOpen ? <ChevronDown /> : <ChevronRight />}
         </FilePickerButtonInverse>
         <SlidingContent open={extResFormOpen}>
-          <Translate component={SelectedFilesTitle} content="qvain.files.external.addedResources.title" />
-          {externalResources.length === 0 &&
-            <Translate component="p" content="qvain.files.external.addedResources.none" />
+          <Translate tabIndex="0" component={SelectedFilesTitle} content="qvain.files.external.addedResources.title" />
+          {addedExternalResources.length === 0 &&
+            <Translate tabIndex="0" component="p" content="qvain.files.external.addedResources.none" />
           }
-          {externalResources.map(r => (
-            <Fragment key={r.id}>
-              <ResourceItem active={isInEdit(resourceInEdit, r)}>
-                <ButtonLabel><a target="_blank" rel="noopener noreferrer" href={r.url}>{r.title} / {r.url}</a></ButtonLabel>
+          {addedExternalResources.map((addedExternalResource) => (
+            <ButtonGroup tabIndex="0" key={addedExternalResource.id}>
+              <ButtonLabel>
+                {addedExternalResource.title} / {addedExternalResource.url}
+              </ButtonLabel>
+              <ButtonContainer>
                 <EditButton
-                  onClick={isInEdit(resourceInEdit, r) ? this.handleCloseEdit : this.handleEditResource(r.id)}
+                  aria-label="Edit"
+                  onClick={this.handleEditExternalResource(addedExternalResource)}
                 />
-                <DeleteButton onClick={this.handleRemoveResource(r.id)} />
-              </ResourceItem>
-              {isInEdit(resourceInEdit, r) && (
-                <ResourceContainer>
-                  <ExternalEditForm isEditForm />
-                </ResourceContainer>
-              )}
-            </Fragment>
+                <DeleteButton
+                  aria-label="Remove"
+                  onClick={this.handleRemoveExternalResource(addedExternalResource.id)}
+                />
+              </ButtonContainer>
+            </ButtonGroup>
           ))}
-          <ResourceForm>
-            <ExternalEditForm />
-          </ResourceForm>
+          <ExternalFileForm />
         </SlidingContent>
       </Fragment>
     )
   }
 }
-
-const isInEdit = (inEdit, resource) => (inEdit !== undefined) && inEdit.id === resource.id
 
 export const ResourceInput = styled(Input)`
   width: 100%;
@@ -106,12 +114,4 @@ export const ResourceItem = styled(FileItem)`
   margin-bottom: ${props => (props.active ? '0' : '10px')}
 `
 
-const ResourceContainer = styled(FileContainer)`
-  margin-bottom: 20px;
-`;
-
-const ResourceForm = styled.div`
-  padding-top: 20px;
-`;
-
-export default inject('Stores')(observer(ExternalFilesBase))
+export default inject('Stores')(observer(ExternalFilesBase));

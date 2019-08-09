@@ -15,3 +15,8 @@ export const FileAPIURLs = {
 export const UseCategoryURLs = {
   OUTCOME_MATERIAL: 'http://uri.suomi.fi/codelist/fairdata/use_category/code/outcome'
 }
+
+export const DataCatalogIdentifiers = {
+  IDA: 'urn:nbn:fi:att:data-catalog-ida',
+  ATT: 'urn:nbn:fi:att:data-catalog-att'
+}

@@ -11,7 +11,7 @@ export const Container = styled.div`
   padding-top: 25px;
   padding-bottom: ${props => (props.bottomContent ? '31px' : '56px')};
   margin-top: 20px;
-  border: 1px solid #eceeef;
+  border: 1px solid #cccccc;
   min-height: 150px;
   background-color: #fff;
   overflow: visible;
@@ -23,10 +23,21 @@ export const ContainerLight = styled.div`
 
 export const ContainerSubsection = styled.div`
   padding: 25px 45px 56px 45px;
-  border: 1px solid #eceeef;
+  border: 1px solid #cccccc;
   min-height: 150px;
   background-color: #fff;
   overflow: visible;
+`
+
+export const ContainerSubsectionBottom = styled.div`
+padding: 25px 45px 56px 45px;
+border-top: 0px;
+border-left: 1px solid #cccccc;
+border-right: 1px solid #cccccc;
+border-bottom: 1px solid #cccccc;
+min-height: 150px;
+background-color: #fff;
+overflow: visible;
 `
 
 export const QvainContainer = styled.div`
@@ -41,8 +52,31 @@ export const SubHeader = styled.div`
   align-items: center;
 `
 
+export const StickySubHeaderWrapper = styled.div`
+  top: 0;
+  position: sticky;
+  z-index: 2;
+`
+
+export const StickySubHeader = styled.div`
+  height: 50px;
+  background-color: rgb(231,233,237);
+  font-color: #4F4F4F;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  border-bottom: 1px solid rgba(0,0,0,0.3);
+`
+
+export const StickySubHeaderResponse = styled.div`
+  font-color: #4F4F4F;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+`
+
 export const SubHeaderText = styled.div`
-  font-family: Lato;
+  font-family: 'Lato', sans-serif;
   font-size: 32px;
   font-weight: bold;
   font-style: normal;

@@ -2,47 +2,45 @@ import React from 'react';
 import { shallow, mount } from 'enzyme'
 
 import Qvain from '../js/components/qvain'
+import Description from '../js/components/qvain/description'
+import DescriptionFeild from '../js/components/qvain/description/descriptionField'
+import OtherIdentifierField from '../js/components/qvain/description/otherIdentifierField'
+import FieldOfScienceField from '../js/components/qvain/description/fieldOfScienceField'
+import KeywordsField from '../js/components/qvain/description/keywordsField'
+import RightsAndLicenses from '../js/components/qvain/licenses'
+import { License } from '../js/components/qvain/licenses/licenses'
+import { AccessType } from '../js/components/qvain/licenses/accessType'
+import RestrictionGrounds from '../js/components/qvain/licenses/resctrictionGrounds'
+import EmbargoExpires from '../js/components/qvain/licenses/embargoExpires'
+import { AccessTypeURLs, LicenseUrls } from '../js/components/qvain/utils/constants'
 import {
-  ParticipantsBase
-} from '../js/components/qvain/participants'
-import { ParticipantTypeSelectBase } from '../js/components/qvain/participants/participantTypeSelect'
-import { SelectedParticipantBase, ParticipantSelection } from '../js/components/qvain/participants/participantSelection'
-import { ParticipantInfoBase } from '../js/components/qvain/participants/participantInfo'
-import { AddedParticipantsBase } from '../js/components/qvain/participants/addedParticipants'
+  ActorsBase
+} from '../js/components/qvain/actors'
+import { ActorTypeSelectBase } from '../js/components/qvain/actors/actorTypeSelect'
+import { SelectedActorBase, ActorSelection } from '../js/components/qvain/actors/actorSelection'
+import { AddedActorsBase } from '../js/components/qvain/actors/addedActors'
 import Files from '../js/components/qvain/files'
 import IDAFilePicker, { IDAFilePickerBase } from '../js/components/qvain/files/idaFilePicker'
 import FileSelector, { FileSelectorBase } from '../js/components/qvain/files/fileSelector'
-import { SelectedFilesBase, FileItem } from '../js/components/qvain/files/selectedFiles'
-import DirectoryForm from '../js/components/qvain/files/directoryForm'
-import {
-  ExternalEditFormBase,
-  ResourceInput,
-  ResourceSave
-} from '../js/components/qvain/files/externalFileForm'
-import {
-  ExternalFilesBase,
-  ResourceItem
-} from '../js/components/qvain/files/externalFiles'
+import { SelectedFilesBase } from '../js/components/qvain/files/selectedFiles'
+import { ExternalFilesBase } from '../js/components/qvain/files/externalFiles'
 import {
   ButtonGroup,
-  FilePickerButton,
-  FilePickerButtonInverse,
   ButtonLabel,
   DeleteButton
 } from '../js/components/qvain/general/buttons'
-import {
-  List,
-  ListItem
-} from '../js/components/qvain/general/list'
 import { SlidingContent } from '../js/components/qvain/general/card'
-import { SectionTitle } from '../js/components/qvain/general/section'
 import QvainStore, {
   Directory,
   EntityType,
   Role,
-  Participant
+  Actor,
+  ExternalResource,
+  AccessType as AccessTypeConstructor,
+  License as LicenseConstructor
 } from '../js/stores/view/qvain'
 import LocaleStore from '../js/stores/view/language'
+import { DataCatalogIdentifiers } from '../js/components/qvain/utils/constants'
 
 describe('Qvain', () => {
   it('should render correctly', () => {
@@ -57,35 +55,109 @@ const getStores = () => ({
   Locale: LocaleStore
 })
 
-describe('Qvain.Participants', () => {
+describe('Qvain.Description', () => {
+  it('should render <Description />', () => {
+    const component = shallow(<Description Stores={getStores()} />)
+    expect(component).toMatchSnapshot()
+  })
+  it('should render <DescriptionFeild />', () => {
+    const component = shallow(<DescriptionFeild Stores={getStores()}/>)
+    expect(component).toMatchSnapshot()
+  })
+  it('should render <OtherIdentifierField />', () => {
+    const component = shallow(<OtherIdentifierField Stores={getStores()}/>)
+    expect(component).toMatchSnapshot()
+  })
+  it('should render <FieldOfScienceField />', () => {
+    const component = shallow(<FieldOfScienceField Stores={getStores()}/>)
+    expect(component).toMatchSnapshot()
+  })
+  it('should render <KeywordsField />', () => {
+    const component = shallow(<KeywordsField Stores={getStores()}/>)
+    expect(component).toMatchSnapshot()
+  })
+})
+
+describe('Qvain.RightsAndLicenses', () => {
+  it('should render <RightsAndLicenses />', () => {
+    const component = shallow(<RightsAndLicenses />)
+    expect(component).toMatchSnapshot()
+  })
+  it('should render <Licenses />', () => {
+    const component = shallow(<License Stores={getStores()} />)
+    expect(component).toMatchSnapshot()
+  })
+  it('should render other license URL field', () => {
+    const stores = getStores()
+    stores.Qvain.setLicense(LicenseConstructor({en: 'Other (URL)', fi: 'Muu (URL)',},'other'))
+    const component = shallow(<License Stores={stores} />)
+    expect(component.find('#otherLicenseURL').length).toBe(1)
+  })
+  it('should NOT render other license URL field', () => {
+    const stores = getStores()
+    stores.Qvain.setLicense(LicenseConstructor(undefined, LicenseUrls.CCBY4))
+    const component = shallow(<License Stores={stores} />)
+    expect(component.find('#otherLicenseURL').length).toBe(0)
+  })
+  it('should render <AccessType />', () => {
+    const component = shallow(<AccessType Stores={getStores()} />)
+    expect(component).toMatchSnapshot()
+  })
+  it('should render <RestrictionGrounds />', () => {
+    const stores = getStores()
+    stores.Qvain.setAccessType(AccessTypeConstructor(undefined, AccessTypeURLs.EMBARGO))
+    const component = shallow(<AccessType Stores={stores} />)
+    expect(component.find(RestrictionGrounds).length).toBe(1)
+  })
+  it('should NOT render <RestrictionGrounds />', () => {
+    const stores = getStores()
+    stores.Qvain.setAccessType(AccessTypeConstructor(undefined, AccessTypeURLs.OPEN))
+    const component = shallow(<AccessType Stores={stores} />)
+    expect(component.find(RestrictionGrounds).length).toBe(0)
+  })
+  it('should render <EmbargoExpires />', () => {
+    const stores = getStores()
+    stores.Qvain.setAccessType(AccessTypeConstructor(undefined, AccessTypeURLs.EMBARGO))
+    const component = shallow(<AccessType Stores={stores} />)
+    expect(component.find(EmbargoExpires).length).toBe(1)
+  })
+  it('should NOT render <EmbargoExpires />', () => {
+    const stores = getStores()
+    stores.Qvain.setAccessType(AccessTypeConstructor(undefined, AccessTypeURLs.OPEN))
+    const component = shallow(<AccessType Stores={stores} />)
+    expect(component.find(EmbargoExpires).length).toBe(0)
+  })
+})
+
+describe('Qvain.Actors', () => {
   it('should render correctly', () => {
-    const component = shallow(<ParticipantsBase Stores={getStores()} />)
+    const component = shallow(<ActorsBase Stores={getStores()} />)
     expect(component).toMatchSnapshot()
   })
 
   it('should render person selection by default', () => {
-    const component = mount(<SelectedParticipantBase Stores={getStores()} />)
-    expect(component.find(ParticipantSelection).html().includes('Person')).toBe(true)
+    const component = mount(<SelectedActorBase Stores={getStores()} />)
+    expect(component.find(ActorSelection).html().includes('Person')).toBe(true)
     component.unmount()
-    const form = mount(<ParticipantTypeSelectBase Stores={getStores()} />)
+    const form = mount(<ActorTypeSelectBase Stores={getStores()} />)
     expect(form.find('#entityPerson input').props().checked).toBe(true)
   })
 
   // By default person should be selected. Upon clicking the Organization radio button
   // the checkboxes should be reset and active selection field should display
   // 'Organization'
-  it('should change selected participant entity', () => {
+  it('should change selected actor entity', () => {
     const stores = getStores()
-    const entityRoleForm = mount(<ParticipantTypeSelectBase Stores={stores} />)
+    const entityRoleForm = mount(<ActorTypeSelectBase Stores={stores} />)
     entityRoleForm.find('#personCreator').first().simulate('change', {
       target: {
         checked: true
       }
     })
     entityRoleForm.unmount()
-    const selectedParticipant = mount(<SelectedParticipantBase Stores={stores} />)
-    expect(selectedParticipant.text()).toBe('Person / Creator')
-    selectedParticipant.unmount()
+    const selectedActor = mount(<SelectedActorBase Stores={stores} />)
+    expect(selectedActor.text()).toBe('Person / Creator')
+    selectedActor.unmount()
     entityRoleForm.mount()
     entityRoleForm.find('#entityOrg input').simulate('change')
     entityRoleForm.find('#orgPublisher input').simulate('change', {
@@ -95,31 +167,34 @@ describe('Qvain.Participants', () => {
     })
     // expect(entityRoleForm.find('#entityOrg input').checked).toBe(true)
     entityRoleForm.unmount()
-    selectedParticipant.mount()
-    expect(selectedParticipant.text()).toBe('Organization / Publisher')
+    selectedActor.mount()
+    expect(selectedActor.text()).toBe('Organization / Publisher')
   })
 
-  // Added participants should be listed if there are any
-  it('should list all added participants', () => {
+  // Added actors should be listed if there are any
+  it('should list all added actors', () => {
     const stores = getStores()
-    const addedParticipants = mount(<AddedParticipantsBase Stores={stores} />)
-    expect(addedParticipants.find(ButtonGroup).length).toBe(0)
-    stores.Qvain.addParticipant(Participant(
+    const addedActors = mount(<AddedActorsBase Stores={stores} />)
+    expect(addedActors.find(ButtonGroup).length).toBe(0)
+    stores.Qvain.saveActor(Actor(
       EntityType.ORGANIZATION,
       [Role.PUBLISHER],
       'University of Helsinki',
       'test@test.fi',
       'uohIdentifier'
     ))
-    addedParticipants.update()
-    expect(addedParticipants.find(ButtonGroup).length).toBe(1)
+    addedActors.update()
+    expect(addedActors.find(ButtonGroup).length).toBe(1)
   })
 })
 
 describe('Qvain.Files', () => {
   it('should render file picker', () => {
-    const component = shallow(<Files Stores={getStores()} />)
-    expect(component.find(IDAFilePicker).length).toBe(1)
+    const store = getStores()
+    store.Qvain.dataCatalog = DataCatalogIdentifiers.IDA
+    store.Qvain.idaPickerOpen = true
+    const component = shallow(<Files Stores={store} />)
+    expect(component.dive().find(IDAFilePicker).length).toBe(1)
   })
 
   it('should open file selector upon selecting file picker', () => {
@@ -133,8 +208,8 @@ describe('Qvain.Files', () => {
   it('allows selecting directories in the file selector', () => {
     const stores = getStores()
     const component = mount(<FileSelectorBase Stores={stores} />)
-    stores.Qvain._selectedProject = 'project_y'
-    stores.Qvain._hierarchy = Directory(
+    stores.Qvain.selectedProject = 'project_y'
+    stores.Qvain.hierarchy = Directory(
       {
         id: 'test1',
         identifier: 'test-ident-1',
@@ -164,18 +239,18 @@ describe('Qvain.Files', () => {
     component.update()
     expect(component.find('li').length).toBe(1)
     component.find('li').find('input').simulate('change')
-    expect(component.props().Stores.Qvain._hierarchy.directories[0].selected)
+    expect(component.props().Stores.Qvain.hierarchy.directories[0].selected)
   })
 
   it('allows modifying the metadata of selected directories', () => {
     // repeat previous one
     const stores = getStores()
     // reset selected directories
-    stores.Qvain._selectedDirectories = []
+    stores.Qvain.selectedDirectories = []
     const fileSelector = mount(<FileSelectorBase Stores={stores} />)
 
-    stores.Qvain._selectedProject = 'project_y'
-    stores.Qvain._hierarchy = Directory(
+    stores.Qvain.selectedProject = 'project_y'
+    stores.Qvain.hierarchy = Directory(
       {
         id: 'test1',
         identifier: 'test-ident-1',
@@ -210,32 +285,21 @@ describe('Qvain.Files', () => {
 
 describe('Qvain.ExternalFiles', () => {
   it('should render correctly', () => {
-    const extFiles = shallow(<ExternalFilesBase Stores={getStores()} />)
-    expect(extFiles.find(SlidingContent).length).toBe(1)
+    const externalFiles = shallow(<ExternalFilesBase Stores={getStores()} />)
+    expect(externalFiles.find(SlidingContent).length).toBe(1)
   })
 
-  it('should add resources', async () => {
+  // External resources should be listed if there are any
+  it('should list all added resources', () => {
     const stores = getStores()
-    const extFileForm = mount(<ExternalEditFormBase Stores={stores} />)
-    const title = 'Test title'
-    extFileForm.find('#titleInput').first().simulate('change', {
-      target: {
-        value: title
-      }
-    })
-    const url = 'https://en.wikipedia.org'
-    extFileForm.find('#urlInput').first().simulate('change', {
-      target: {
-        value: url
-      }
-    })
-    // extFiles.find(ResourceSave).simulate('click')
-    await extFileForm.instance().handleAddResource({
-      preventDefault: () => console.log('handleAddResource preventDefault')
-    })
-    extFileForm.unmount()
-    const extFiles = shallow(<ExternalFilesBase Stores={stores} />)
-    expect(extFiles.find(ResourceItem).length).toBe(1)
-    expect(extFiles.find(ButtonLabel).text()).toBe(`${title} / ${url}`)
+    const externalFiles = shallow(<ExternalFilesBase Stores={stores} />)
+    expect(externalFiles.find(ButtonGroup).length).toBe(0)
+    stores.Qvain.saveExternalResource(ExternalResource(
+      1,
+      'External Resource Title',
+      'http://en.wikipedia.org'
+    ))
+    externalFiles.update()
+    expect(externalFiles.find(ButtonGroup).length).toBe(1)
   })
 })

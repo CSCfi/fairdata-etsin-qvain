@@ -226,7 +226,9 @@ class User(Resource):
         """
         user_info = {
             'is_authenticated': authentication.is_authenticated(),
-            'is_authenticated_CSC_user': authentication.is_authenticated_CSC_user()}
+            'is_authenticated_CSC_user': authentication.is_authenticated_CSC_user(),
+            'home_organization_id': authentication.get_user_home_organization_id(),
+            'home_organization_name': authentication.get_user_home_organization_name()}
         dn = authentication.get_user_display_name()
         csc_user = authentication.get_user_csc_name()
         groups = authentication.get_user_ida_groups()

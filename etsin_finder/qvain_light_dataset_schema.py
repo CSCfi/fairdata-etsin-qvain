@@ -3,20 +3,9 @@ from marshmallow import Schema, fields
 from marshmallow.validate import Length
 import json
 
-class LangValidationSchema(Schema):
+class ActorsValidationSchema(Schema):
     """
-    Validation schema for language.
-
-    Arguments:
-        Schema {library} -- Marshmallows Schema library.
-    """
-
-    en = fields.Str()
-    fi = fields.Str()
-
-class ParticipantsValidationSchema(Schema):
-    """
-    Validation schema for participants.
+    Validation schema for actors.
 
     Arguments:
         Schema {library} -- Marshmallows Schema library.
@@ -30,13 +19,12 @@ class ParticipantsValidationSchema(Schema):
         fields.Str(validate=Length(min=1)),
         required=True
     )
-    name = fields.Str(
+    name = fields.Raw(
         required=True,
-        validate=Length(min=1)
     )
     email = fields.Email()
     identifier = fields.Str()
-    organization = fields.Str()
+    organization = fields.Dict()
 
 class DatasetValidationSchema(Schema):
     """
@@ -46,14 +34,12 @@ class DatasetValidationSchema(Schema):
         Schema {library} -- Marshmallows Schema library.
     """
 
-    original = fields.Str()
-    title = fields.Nested(
-        LangValidationSchema,
+    original = fields.Dict()
+    title = fields.Dict(
         required=True,
         validate=lambda x: len(x['en']) + len(x['fi']) > 0
     )
-    description = fields.Nested(
-        LangValidationSchema,
+    description = fields.Dict(
         required=True,
         validate=lambda x: len(x['en']) + len(x['fi']) > 0
     )
@@ -64,8 +50,8 @@ class DatasetValidationSchema(Schema):
         required=True,
         validate=lambda list: len(list) > 0
     )
-    participants = fields.List(fields.Nested(
-        ParticipantsValidationSchema),
+    actors = fields.List(fields.Nested(
+        ActorsValidationSchema),
         required=True,
         validate=lambda list: len(list) > 0
     )
@@ -74,9 +60,9 @@ class DatasetValidationSchema(Schema):
     )
     embargoDate = fields.Str()
     restrictionGrounds = fields.Str()
-    license = fields.Dict(
-        required=True
-    )
+    license = fields.Dict()
+    otherLicenseUrl = fields.Str()
+    dataCatalog = fields.Str()
     files = fields.List(fields.Dict())
     directories = fields.List(fields.Dict())
     remote_resources = fields.List(fields.Dict())

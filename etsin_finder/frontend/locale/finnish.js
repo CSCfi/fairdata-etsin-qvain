@@ -254,37 +254,59 @@ const finnish = {
   },
   qvain: {
     submit: 'Julkaise Aineisto',
+    edit: 'Päivitä Aineisto',
     consent: 'Käyttämällä Qvain Lightia käyttäjä hyväksyy, että hän on pyytänyt suostumusta kaikilta henkilöiltä, joiden hankilökohtaisia tietoja käyttäjä lisää kuvattaviin tietoihin, ja ilmoitti heille, miten he voivat saada tietonsa poistettua. Käyttämällä Qvain Lightia käyttäjä hyväksyy <a href="https://www.fairdata.fi/hyodyntaminen/kayttopolitiikat-ja-ehdot/">käyttöehdot</a>.',
     submitStatus: {
       success: 'Aineisto julkaistu!',
       fail: 'Jotain meni pieleen...',
+      editSuccess: 'Uusi aineisto versio luotu!',
+      editMetadataSuccess: 'Aineisto päivitys onnistui!',
     },
-    openErrorMessages: 'Avaa virhe viestit',
-    closeErrorMessages: 'Sulje virhe viestit',
     unsuccessfullLogin: 'Kirjautuminen epäonnistui.',
     notCSCUser1:
       'Varmistakaa että teillä on voimassaoleva CSC tunnus. Jos yritit kirjautua sisään ulkoisella tunnuksella (kuten Haka) Niin saatat saada tämän virhe ilmoituksen jos titlit eivät ole linkitetty. Linkityksen voi tehdä',
     notCSCUserLink: ' CSC asiakas porttaalissa',
     notCSCUser2: ' Voit rekisteröityä Hakatunuksella tai ilman.',
     notLoggedIn: 'Kirjaudu sisään CSC -tililläsi käyttääksesi Qvain-light palvelua.',
-    title: 'Julkaise tiedosto',
-    backLink: ' Takaisin hakemistoihin',
+    titleCreate: 'Julkaise Aineisto',
+    titleEdit: 'Muokkaa Aineistoa',
+    backLink: ' Takaisin aineistolistaan',
     common: {
       save: 'Tallenna',
       cancel: 'Peruuta',
     },
     datasets: {
       title: 'Aineistot',
+      search: 'Haku',
       help: 'Muokkaa olemassa olevaa aineistoa tai luo uusi',
       createButton: 'Luo aineisto',
       tableRows: {
         id: 'ID',
-        name: 'Nimi',
-        edit: 'Muokkaa',
-        remove: 'Poista',
+        title: 'Otsikko',
+        version: 'Versio',
+        modified: 'Muokattu',
+        created: 'Luotu',
+        actions: 'Toiminnot',
+        dateFormat: {
+          moments: 'Muutama hetki sitten',
+          oneMinute: '1 minuutti sitten',
+          minutes: ' minuuttia sitten',
+          oneHour: '1 tunti sitten',
+          hours: ' tuntia sitten',
+          oneDay: '1 päivä sitten',
+          days: ' päivää sitten',
+          oneMonth: '1 kuukausi sitten',
+          months: ' kuukautta sitten',
+          oneYear: '1 vuosi sitten',
+          years: ' vuotta sitten',
+        },
       },
+      oldVersion: 'Vanha',
+      latestVersion: 'Uusin',
       editButton: 'Muokkaa',
       deleteButton: 'Poista',
+      confirmDelete: 'Oletko varma, että haluat poistaa aineiston? Aineiston poiston jälkeen se ei enää näy Qvaimessa eikä Etsimen haku löydä sitä. Aineiston laskeutumissivua ei poisteta.',
+      goToEtsin: 'Katso Etsimessä',
       noDatasets: 'Sinulla ei ole olemassa olevia aineistoja',
       reload: 'Lataa uudelleen',
       loading: 'Lataa...',
@@ -296,6 +318,8 @@ const finnish = {
     },
     description: {
       title: 'Kuvaus',
+      infoTitle: 'Kuvaus info',
+      infoText: 'Anna aineistolle kuvaava ja yksilöivä nimi. Kirjoita myös kuvaus mahdollisimman tarkasti. Kerro miten aineisto on syntynyt, mihin tarkoitukseen, miten se rakentuu ja miten sitä on käsitelty. Kerro myös sisällöstä, mahdollisista puutteista ja rajauksista.',
       description: {
         langEn: 'ENGLANTI',
         langFi: 'SUOMI',
@@ -313,17 +337,20 @@ const finnish = {
       },
       otherIdentifiers: {
         title: 'Muut tunnisteet',
+        infoText: 'Jos aineistollasi on jo tunniste (tai useita), yleensä esim. DOI, anna ne tässä. Olemassaolevien tunnisteiden lisäksi aineisto saa tallennusvaiheessa pysyvän tunnisteen, joka tulee resolvoitumaan Etsimen laskeutumissivulle.',
         instructions:
           'Metadatan tunniste luodaan automaattisesti mutta jos on jo OLEMASSA OLEVA tunniste, syötä se tähän.',
         addButton: '+ Lisää uusi',
         alredyAdded: 'Tunniste on jo lisätty',
       },
       fieldOfScience: {
-        title: 'Tutkimusala *',
+        title: 'Tutkimusala',
+        infoText: 'Valitse tieteenala. Alasvetovalikkosa on Opetus- ja Kulttuuriministeriön mukainen luokitus tieteenaloille.',
         placeholder: 'Valitse vaihtoehto',
       },
       keywords: {
         title: 'Avainsanat',
+        infoText: 'Vapaat hakusanat aineistollesi. Vaikuttaa aineistosi löytymiseen Etsimen haussa. Käytä mahdollisimman tarkkoja termejä. Tässä kentässä ei ole automaattista käännöstä eri kielille.',
         placeholder: 'Esim. taloustiede',
         addButton: 'Lisää avainsanoja',
         help:
@@ -332,12 +359,14 @@ const finnish = {
     },
     rightsAndLicenses: {
       title: 'Oikeudet ja lisenssit',
+      infoTitle: 'Oikeudet ja lisenssit info',
       accessType: {
         title: 'Pääsyoikeus',
+        infoText: 'Tällä kentällä määrittelet, miten aineiston (tiedostot) saa käyttöönsä. Tämä kenttä ei vaikuta siihen, miten tämä kuvailu näkyy. Kuvailu näkyy aina automaattisesti Etsimessä julkaisun jälkeen. Jos valitset jotain muuta kuin Avoin (Open), myös syy, miksi tiedostojen latausta on rajoitettu (Restricition Grounds) on pakollinen tieto. Jos valitse "Embargo", määrittele myös embargon expiroitumisajankohta.',
         placeholder: 'Valitse vaihtoehto',
       },
       embargoDate: {
-        label: 'Embargo loppumispäivämäärä',
+        label: 'Embargo loppumispäivämäärä (vvvv-kk-pp)',
         placeholder: 'Päivämäärä',
         help: 'Oletuksena embargo ei lopu jollei päivämäärää aseteta.',
       },
@@ -348,6 +377,7 @@ const finnish = {
       },
       license: {
         title: 'Lisenssi',
+        infoText: 'Lisenssi on tärkeä osa aineiston kuvailua. Lisenssillä määrittelet, miten aineistoa voi käyttää. Oletuksena on valittuna suositeltu CC BY 4.0. Jos haluat alasvetovalikosta valinnan sijaan määrittää lisenssin URL -osoitteen itse, valitse alasvetovalikosta "Muu (URL)", minkä jälkeen pääset kirjoittamaan URL-osoitteen.',
         placeholder: 'Valitse vaihtoehto',
         other: {
           label: 'URL',
@@ -355,8 +385,10 @@ const finnish = {
         },
       },
     },
-    participants: {
+    actors: {
       title: 'Toimijat',
+      infoTitle: 'Toimijat info',
+      infoText: 'Tutkimukseen tai aineiston tekemiseen osallistuneet henkilöt ja organisaatiot. Voit määrittää tekijät (pakollinen), julkaisijat (pakollinen) ja kuraattorit. Valitse ensin, onko kyseessä henkilö vai organisaatio. Määritä sen jälkeen, missä roolissa ko. toimija osallistui tutkimukseen (voit valita useita), ja määritä sen jälkeen tarvittavat tiedot. Jos kyseessä on henkilö, on organisaatiotieto pakollinen tieto. Jo annettuja tietoja pääset muuttamaan klikkaamalla tallennetun toimijan kohdalla kynä -ikonia.',
       add: {
         title: 'Toimijat',
         help:
@@ -420,8 +452,8 @@ const finnish = {
       },
       otherIdentifiers: {
         string: 'Tunnisteet tulisivat olla arvoltaan merkkijonoja.',
-        url: 'Tunnisteet täytyy olla valiideja URL;eja',
-        max: 'Tunniste liian pitkä.',
+        url: 'Tunnisteet täytyy olla valiideja URL:eja',
+        max: 'Tunniste on liian pitkä.',
         min: 'Tunnisteen pitää olla vähintään 10 merkkiä pitkä.',
       },
       fieldOfScience: {},
@@ -430,17 +462,17 @@ const finnish = {
         max: 'Avainsana on liian pitkä.',
         required: 'Vähintään yksi avainsana on pakollinen.',
       },
-      participants: {
+      actors: {
         type: {
           mixed: '',
-          oneOf: 'Toimijan tyyppi pitää olla joko "person" tai "organization"',
+          oneOf: 'Toimijan tyyppi pitää olla joko "Luonnollinen henkilö" tai "Organisaatio".',
           required: 'Toimijan tyyppi on pakollinen.',
         },
         roles: {
           mixed: '',
-          oneOf: 'Roolin kuuluisi olla "creator", "publisher" tai "curator".',
+          oneOf: 'Roolin kuuluisi olla "Tekijä", "Julkasija" tai "Kuraattori".',
           required:
-            'Tekijän rooli on pakollinen. On myös pakollista määrittää tasan yhden Julkaisijan.',
+            'Tekijän rooli on pakollinen. On myös pakollista määrittää tasan yhden julkaisijan.',
         },
         name: {
           string: 'Nimi pitää olla arvoltaan merkkijono.',
@@ -460,61 +492,85 @@ const finnish = {
         },
         organization: {
           mixed: '',
-          object: 'Valittu Organisaatio tulisi olla olio.',
+          object: 'Valittu organisaatio tulisi olla olio.',
           string: 'Organisaation arvo tulisi olla merkkijono.',
-          required: 'Organisaatio on pakollinen kenttä jos Toimija on Luonnollinen henkilö.',
+          required: 'Organisaatio on pakollinen kenttä jos toimija on luonnollinen henkilö.',
+        },
+        requiredActors: {
+          atLeastOneActor: 'Aineistoon on lisättävä vähintään yksi toimija.',
+          mandatoryActors: 'Toimijat: Tekijä ja julkaisija-roolit ovat pakollisia. Huomioi: yksittäisellä toimijalla voi olla useampi rooli.',
         },
       },
       accessType: {
         string: 'Pääsyoikeus tulisi olla arvoltaan merkkijono.',
-        url: 'Referenssi arvo ERROR.',
+        url: 'Virhe pääsyoikeuden referenssiarvossa.',
         required: 'Pääsyoikeus on pakollimen kenttä.',
       },
       restrictionGrounds: {
-        string: 'kentän arvo tulisi olla merkkijono.',
-        url: 'Referenssi arvo ERROR.',
-        required: 'Saatavuutta rajoitettu on pakollinen kenttä jos Pääsyoikeus ei ole "Avoin".',
+        string: 'Kentän arvo tulisi olla merkkijono.',
+        url: 'Virhe satavuutta rajoitettu-kentän referenssiarvossa.',
+        required: 'Saatavuutta rajoitettu on pakollinen kenttä jos pääsyoikeus ei ole "Avoin".',
       },
       license: {
+        requiredIfIDA: 'Lisenssi on pakollinen kenttä kun tiedoston lähde on IDA.',
         otherUrl: {
-          string: 'Lisenssi URL pitää olla merkkijono',
-          url: 'Lisenssi URL pitää olla oikeanlainen URL',
-          required: 'Lisenssi URL on pakollinen',
+          string: 'Lisenssin URL pitää olla merkkijono.',
+          url: 'Lisenssin URL pitää olla oikeanlainen URL.',
+          required: 'Lisenssin URL on pakollinen kenttä.',
         },
       },
       files: {
+        dataCatalog: {
+          required: 'Tiedoston lähde on pakollinen kenttä.'
+        },
         file: {
           title: {
-            required: 'Tiedoston otsikko on pakollinen',
+            required: 'Tiedoston otsikko on pakollinen kenttä.',
           },
           description: {
-            required: 'Tiedoston kuvaus on pakollinen',
+            required: 'Tiedoston kuvaus on pakollinen kenttä.',
           },
           useCategory: {
-            required: 'Tiedoston käyttökategoria on pakollinen',
+            required: 'Tiedoston käyttökategoria on pakollinen kenttä.',
           },
         },
         directory: {
           title: {
-            required: 'Hakemiston otsikko on pakollinen',
+            required: 'Hakemiston otsikko on pakollinen kenttä.',
           },
           useCategory: {
-            required: 'Hakemiston käyttökategoria on pakollinen',
+            required: 'Hakemiston käyttökategoria on pakollinen kenttä.',
           },
         },
       },
       externalResources: {
+        title: {
+          required: 'Ulkoisen aineiston otsikko on pakollinen kenttä.',
+        },
+        useCategory: {
+          required: 'Ulkoisen aineiston käyttökategoria on pakollinen kenttä.',
+        },
         url: {
-          required: 'Ulkoisen aineiston URL osoite on pakollinen',
-          url: 'Ulkoisen aineiston URL osoitteen pitää olla oikeassa URL formaatissa',
+          required: 'Ulkoisen aineiston URL osoite on pakollinen kenttä.',
+          url: 'Ulkoisen aineiston URL osoitteen pitää olla oikeassa URL-formaatissa',
         },
       },
     },
     files: {
       title: 'Tiedostot',
+      infoTitle: 'Tiedostot info',
+      infoText: 'Lisää texti',
+      dataCatalog: {
+        label: 'Tiedoston lähde',
+        infoText: 'Ennenkuin pääset linkittämään tiedostoja aineistoosi, sinun tulee valita, linkitätkö tiedostoja IDAsta vai annatko ulkopuolisen palvelun URL-osoitteet, joista tiedostot löytyvät.',
+        explanation: 'Valitse IDA jos tiedostot on tallennettu Fairdata Ida palveluun. Valitse ATT jos tiedostot tulevat muualta.',
+        placeholder: 'Valitse vaihtoehto'
+      },
       help:
         'Aineistoon kuuluvat tiedostot. Aineistoon voi kuulua vain joko IDAssa olevia tiedostoja tai ulkopuolisia tiedostoja. Tiedostojen metadata ei ole osa aineistojen metadataa, joten muista tallentaa muutokset jotka teet tiedostojen metadataan.',
       ida: {
+        title: 'Fairdata IDA tiedostot',
+        infoText: 'Jos linkität IDA-tiedostoja, sinun tulee ensin valita IDA-projekti, minkä jälkeen näet ko. projektiin kuuluvat tiedostot ja hakemistot. Kun olet valinnut haluamasi projektin, sivu listaa sinulle ko. projektin sisältämät jäädytetyt hakemistot ja tiedostot. Valitse listasta ne hakemistot ja tiedostot, jotka haluat liittää aineistoosi. Jos liität hakemistot, KAIKKI sen alla olevat tiedostot liitetään aineistoon (älä siinä tapauksessa valitse hakemiston alta enää yksittäisiä tiedostoja).',
         help: 'Jos sinulla on tiedostoja Fairdata IDA:ssa, voit liittää ne tässä:',
         button: {
           label: 'Liitä tiedostoja Fairdata IDA:sta',
@@ -549,7 +605,17 @@ const finnish = {
           },
         },
       },
+      existing: {
+        title: 'Aikaisemmin valitut tiedostot',
+        help: 'Nämä ovat sinun aiemmin valitsemia tiedostoja. Jos tallennat aineiston tekemättä muutoksia näihin, METAX katsoo läpi kaikki sisäkkäiset hakemistot ja tiedostot valitsemistasi hakemistoista ja lisää kaikki tiedostot mitä se ei ole aiemmin liittänyt aineistoon. Toisin sanoen, jos olet jälkikäteen lisännyt IDAan tiedostoja, voit liittää nämä uudet tiedostot aineistoon päivittämällä aineiston.',
+      },
+      notificationNewDatasetWillBeCreated: {
+        header: 'Tiedostojen ja kansioiden muokkaaminen',
+        content: 'Jos julkaistuun aineistoon lisätään tiedostoja tai hakemistoja, tai siitä poistetaan tiedostoja tai hakemistoja, ko. aineistosta syntyy automaattisesti uusi versio. Vanha versio pysyy muuttumattomana ja siihen lisätään "vanha" -tagi. Jos julkaistu aineisto ei sisältänyt yhtään tiedostoa, voit lisätä tiedostoja ja/tai hakemistoja yhden kerran ilman, että uusi versio syntyy.',
+      },
       external: {
+        title: 'Ulkoiset aineistot (ATT)',
+        infoText: 'Määritä tiedostolle otsikko, käyttökategoria (alasvetovalikosta) sekä, kerro, mistä tiedosto löytyy. Tiedosto ei ladata Qvain Lightiin, vaan antamasi URL toimii aktiivisena linkkinä ko. tiedostoon.',
         help: 'Lisää linkkejä ulkoisiin tiedostoihin:',
         button: {
           label: 'Lisää linkki ulkoiseen tiedostoon',
@@ -560,8 +626,8 @@ const finnish = {
         },
         form: {
           title: {
-            label: 'Title',
-            placeholder: 'A Resource',
+            label: 'Otsikko',
+            placeholder: 'Tiedoston nimi',
           },
           useCategory: {
             label: 'Käyttökategoria',
@@ -571,11 +637,14 @@ const finnish = {
             label: 'URL',
             placeholder: 'https://',
           },
+          cancel: {
+            label: 'Kumoa',
+          },
           save: {
-            label: 'Save',
+            label: 'Tallenna',
           },
           add: {
-            label: 'Add',
+            label: 'Lisää',
           },
         },
       },
@@ -583,9 +652,18 @@ const finnish = {
   },
   slogan: 'Tutkimustenhaku palvelu',
   stc: 'Siirry sivun pääsisältöön',
+  stsd: 'Siirry "Julkaise Aineisto"-nappiin',
   tombstone: {
     info: 'Aineisto on joko vanhentunut tai poistettu',
   },
+  userAuthenticationError: {
+    header: 'Kirjautuminen epäonnistui.',
+    content: 'Tarkistathan, että sinulla on voimassaoleva CSC-tunnus (Qvaimen ja Qvain Lightin käyttö vaatii sen). Jos yritit kirjaututua jollain toisella tunnuksella (esim. Haka), sitä ei todennäköisesti ole liitetty CSC-tunnukseen. Voit rekisteröidä itsellesi CSC-tunnuksen osoitteessa https://sui.csc.fi.',
+  },
+  userHomeOrganizationErrror: {
+    header: 'Kirjautuminen epäonnistui.',
+    content: 'Tunnusta ei ole liitetty mihinkään kotiorganisaatioon. Olethan yhteydessä CSC:n asiakaspalveluun.',
+  }
 }
 
 export default finnish
