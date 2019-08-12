@@ -38,7 +38,7 @@ export default class License extends Component {
   }
 
   licenseIsUrl(license) {
-    return license.startsWith('http://') || license.startsWith('https://')
+    return  license.startsWith('http://') || license.startsWith('https://')
   }
 
   renderPopUpContent(data) {
@@ -77,13 +77,17 @@ export default class License extends Component {
             rel="noopener noreferrer"
             lang={getDataLang(this.props.data.title)}
           >
-            {checkDataLang(this.props.data.title)}
+            {checkDataLang(this.props.data.title)} 
+            {!checkDataLang(this.props.data.title) && checkDataLang(this.props.data.license)} 
           </MainLink>
         )}
         {!licenseIsUrl && (
-          <span lang={getDataLang(this.props.data.title)}>
+          <MainLink
+            
+            lang={getDataLang(this.props.data.title)}>
             {checkDataLang(this.props.data.title)}
-          </span>
+            {!checkDataLang(this.props.data.title) && checkDataLang(this.props.data.license)} 
+          </MainLink>
         )}
         {this.props.data.description && (
           <PopUp
@@ -119,6 +123,7 @@ const Name = styled.h4`
 `
 
 const MainLink = styled.a`
+  color: "lightblue";
   margin-right: 0.2em;
 `
 
