@@ -196,6 +196,7 @@ const english = {
       fos: 'fields of science',
       research: 'projects',
     },
+    includePas: 'Include Fairdata PAS datasets',
   },
   nav: {
     login: 'Login',

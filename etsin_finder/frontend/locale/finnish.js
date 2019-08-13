@@ -195,6 +195,7 @@ const finnish = {
       fos: 'tieteenalaa',
       research: 'tutkimusprojektia',
     },
+    includePas: 'Ota mukaan Fairdata PAS-datasettejä',
   },
   nav: {
     login: 'Kirjaudu',

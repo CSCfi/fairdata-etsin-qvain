@@ -13,6 +13,7 @@
 import React, { Component } from 'react'
 import Translate from 'react-translate-component'
 import PropTypes from 'prop-types'
+import styled from 'styled-components'
 
 import ElasticQuery from '../../stores/view/elasticquery'
 import Accessibility from '../../stores/view/accessibility'
@@ -21,12 +22,14 @@ import HeroBanner from '../general/hero'
 import SearchBar from './searchBar'
 import Results from './results'
 import Tracking from '../../utils/tracking'
+import { Checkbox } from '../qvain/general/form';
 
 export default class Search extends Component {
   constructor() {
     super()
     this.state = {
       initialLoad: false,
+      pasCheckboxChecked: false,
     }
   }
 
@@ -41,6 +44,12 @@ export default class Search extends Component {
     } else {
       Tracking.newPageView('Search', this.props.location.pathname)
     }
+  }
+
+  handlePasCheckboxChange = event => {
+    this.setState({
+      pasCheckboxChecked: event.target.checked,
+    })
   }
 
   initialQuery = () => {
@@ -66,6 +75,13 @@ export default class Search extends Component {
                   this.search = input
                 }}
               />
+              <PasContainer>
+                <Checkbox
+                  checked={this.state.pasCheckboxChecked}
+                  onChange={this.handlePasCheckboxChange}
+                />
+                <Translate content="home.includePas" />
+              </PasContainer>
             </section>
           </div>
         </HeroBanner>
@@ -85,3 +101,10 @@ Search.propTypes = {
     }).isRequired,
   }).isRequired,
 }
+
+const PasContainer = styled.div`
+  padding-top: 10px;
+  text-align: right;
+  right: 0;
+  max-width: 954px;
+`
