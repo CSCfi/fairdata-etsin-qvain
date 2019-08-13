@@ -38,7 +38,7 @@ export default class License extends Component {
   }
 
   licenseIsUrl(license) {
-    return  license.startsWith('http://') || license.startsWith('https://')
+    return license.startsWith('http://') || license.startsWith('https://')
   }
 
   renderPopUpContent(data) {
@@ -77,16 +77,16 @@ export default class License extends Component {
             rel="noopener noreferrer"
             lang={getDataLang(this.props.data.title)}
           >
-            {checkDataLang(this.props.data.title)} 
-            {!checkDataLang(this.props.data.title) && checkDataLang(this.props.data.license)} 
+            {checkDataLang(this.props.data.title)}
+            {!checkDataLang(this.props.data.title) && checkDataLang(this.props.data.license)}
           </MainLink>
         )}
         {!licenseIsUrl && (
           <MainLink
-            
-            lang={getDataLang(this.props.data.title)}>
+            lang={getDataLang(this.props.data.title)}
+          >
             {checkDataLang(this.props.data.title)}
-            {!checkDataLang(this.props.data.title) && checkDataLang(this.props.data.license)} 
+            {!checkDataLang(this.props.data.title) && checkDataLang(this.props.data.license)}
           </MainLink>
         )}
         {this.props.data.description && (
