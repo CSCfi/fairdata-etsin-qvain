@@ -19,6 +19,7 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { mix } from 'polished'
 
+import ElasticQuery from '../../../stores/view/elasticquery'
 import checkDataLang from '../../../utils/checkDataLang'
 import FilterItem from './filterItem'
 import { TransparentLink } from '../../general/button'
@@ -160,7 +161,17 @@ class FilterSection extends Component {
       return ''
     }
 
-    let aggItems = this.props.Stores.ElasticQuery.results.aggregations[this.aggregationName].buckets
+    let aggItems
+
+    if ((this.aggregationName === 'data_catalog_en') && !ElasticQuery.includePasDatasets) {
+      for (let i = 0; i < this.props.Stores.ElasticQuery.results.aggregations[this.aggregationName].buckets.length; i += 1) {
+        if (this.props.Stores.ElasticQuery.results.aggregations[this.aggregationName].buckets[i].key === 'Fairdata PAS datasets') {
+          aggItems = this.props.Stores.ElasticQuery.results.aggregations[this.aggregationName].buckets.splice(i)
+        }
+      }
+    }
+
+    aggItems = this.props.Stores.ElasticQuery.results.aggregations[this.aggregationName].buckets
     const displayShowButton = aggItems.length > this.cutoff
     if (!this.state.show) {
       aggItems = aggItems.slice(0, this.cutoff)

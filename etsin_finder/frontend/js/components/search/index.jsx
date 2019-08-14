@@ -50,6 +50,7 @@ export default class Search extends Component {
     this.setState({
       pasCheckboxChecked: event.target.checked,
     })
+    ElasticQuery.toggleIncludePasDatasets(this.state.pasCheckboxChecked)
   }
 
   initialQuery = () => {
@@ -106,5 +107,5 @@ const PasContainer = styled.div`
   padding-top: 10px;
   text-align: right;
   right: 0;
-  max-width: 954px;
+  max-width: 953px;
 `
