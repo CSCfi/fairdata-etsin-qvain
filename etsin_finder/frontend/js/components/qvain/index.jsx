@@ -84,21 +84,25 @@ class Qvain extends Component {
             if (err.response.data.PermissionError) {
               this.setState({ response: [err.response.data.PermissionError] })
 
-            // If user is logged in, display the formatted Metax error
-            } else if ((err.response.data.includes(':["')) && (err.response.data.includes('"],'))) {
+            // If user is logged in...
+            } else if (err.response.data) {
+            // ...try to format the Metax error
+            if ((err.response.data.includes(':["')) && (err.response.data.includes('"],'))) {
               this.setState({
                 response:
-                  [err.response.data.slice(
+                  [
+                    err.response.data.slice(
                     err.response.data.indexOf(':["') + 3,
                     err.response.data.indexOf('"],'))
                   ]
               })
 
-            // If formatting cannot be done, just display the entire error
-            } else if (err.response.data) {
+            // If the Metax error message formatting cannot be done, just display the entire error
+            } else {
               this.setState({
                 response: [err.response.data]
               })
+            }
 
             // If error response is empty, just display 'Error...'
             } else {
@@ -140,21 +144,25 @@ class Qvain extends Component {
             if (err.response.data.PermissionError) {
               this.setState({ response: [err.response.data.PermissionError] })
 
-            // If user is logged in, display the formatted Metax error
-            } else if ((err.response.data.includes(':["')) && (err.response.data.includes('"],'))) {
+            // If user is logged in...
+            } else if (err.response.data) {
+            // ...try to format the Metax error
+            if ((err.response.data.includes(':["')) && (err.response.data.includes('"],'))) {
               this.setState({
                 response:
-                  [err.response.data.slice(
+                  [
+                    err.response.data.slice(
                     err.response.data.indexOf(':["') + 3,
                     err.response.data.indexOf('"],'))
                   ]
               })
 
-            // If formatting cannot be done, just display the entire error
-            } else if (err.response.data) {
+            // If the Metax error message formatting cannot be done, just display the entire error
+            } else {
               this.setState({
                 response: [err.response.data]
               })
+            }
 
             // If error response is empty, just display 'Error...'
             } else {
