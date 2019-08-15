@@ -92,6 +92,8 @@ class FilterSection extends Component {
     this.state = {
       open: false,
       show: false,
+      aggregateItems: undefined,
+      displayShowButton: undefined,
     }
 
     this.cutoff = 10
@@ -99,6 +101,11 @@ class FilterSection extends Component {
 
   componentWillMount() {
     this.checkActive()
+    this.filterPasDatasets()
+  }
+
+  componentWillUpdate() {
+    this.filterPasDatasets()
   }
 
   toggleFilter = () => {
@@ -130,7 +137,7 @@ class FilterSection extends Component {
     return true
   }
 
-  // opens the section if it contains an active filter
+  // Opens the section if it contains an active filter
   checkActive = () => {
     if (this.checkIfValid()) {
       this.props.Stores.ElasticQuery.results.aggregations[this.aggregationName].buckets.map(a => {
@@ -151,7 +158,27 @@ class FilterSection extends Component {
     }
   }
 
+  // Filter PAS datasets, if they are not to be included
+  filterPasDatasets() {
+    if (((this.aggregationName === 'data_catalog_en') || (this.aggregationName === 'data_catalog_fi')) && !ElasticQuery.includePasDatasets) {
+      for (let i = 0; i < this.props.Stores.ElasticQuery.results.aggregations[this.aggregationName].buckets.length; i += 1) {
+        if (
+          (this.props.Stores.ElasticQuery.results.aggregations[this.aggregationName].buckets[i].key === 'Fairdata PAS datasets')
+          ||
+          (this.props.Stores.ElasticQuery.results.aggregations[this.aggregationName].buckets[i].key === 'Fairdata PAS-aineistot')
+          ) {
+          this.state.aggregateItems = this.props.Stores.ElasticQuery.results.aggregations[this.aggregationName].buckets.splice(i)
+        }
+      }
+    }
+  }
+
   render() {
+    this.state.aggregateItems = this.props.Stores.ElasticQuery.results.aggregations[this.aggregationName].buckets
+    this.state.displayShowButton = this.state.aggregateItems.length > this.cutoff
+    if (!this.state.show) {
+      this.state.aggregateItems = this.state.aggregateItems.slice(0, this.cutoff)
+    }
     if (this.props.Stores.ElasticQuery.results.total === 0) {
       return null
     }
@@ -160,23 +187,6 @@ class FilterSection extends Component {
     if (!this.checkIfValid()) {
       return ''
     }
-
-    let aggItems
-
-    if ((this.aggregationName === 'data_catalog_en') && !ElasticQuery.includePasDatasets) {
-      for (let i = 0; i < this.props.Stores.ElasticQuery.results.aggregations[this.aggregationName].buckets.length; i += 1) {
-        if (this.props.Stores.ElasticQuery.results.aggregations[this.aggregationName].buckets[i].key === 'Fairdata PAS datasets') {
-          aggItems = this.props.Stores.ElasticQuery.results.aggregations[this.aggregationName].buckets.splice(i)
-        }
-      }
-    }
-
-    aggItems = this.props.Stores.ElasticQuery.results.aggregations[this.aggregationName].buckets
-    const displayShowButton = aggItems.length > this.cutoff
-    if (!this.state.show) {
-      aggItems = aggItems.slice(0, this.cutoff)
-    }
-
     return (
       <Section>
         <FilterCategory onClick={this.toggleFilter} aria-expanded={this.state.open}>
@@ -185,7 +195,7 @@ class FilterSection extends Component {
         </FilterCategory>
         <FilterItems className={this.state.open ? 'open' : ''} aria-hidden={!this.state.open}>
           <ul aria-label={this.titleName}>
-            {aggItems.map(item => (
+            {this.state.aggregateItems.map(item => (
               <FilterItem
                 key={item.key}
                 item={item}
@@ -195,7 +205,7 @@ class FilterSection extends Component {
               />
             ))}
           </ul>
-          {displayShowButton ? (
+          {this.state.displayShowButton ? (
             <div>
               <hr />
               <ShowHide onClick={this.toggleShowHideItems}>
