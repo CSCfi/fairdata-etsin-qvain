@@ -107,7 +107,7 @@ def get_email_recipient_addresses(catalog_record, agent_type_str):
         return [rights_holder['email'] for rights_holder in rd['rights_holder'] if 'email' in rights_holder ]
     if agent_type == AgentType.CURATOR and rd.get('curator', False)[0].get('email'):
         return [curator['email'] for curator in rd['curator'] if 'email' in curator ]
-        
+
     from etsin_finder.finder import app
     app.logger.error("No email addresses found with given agent type {0}".format(agent_type_str))
     return None
