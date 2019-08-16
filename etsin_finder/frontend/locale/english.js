@@ -66,6 +66,7 @@ const english = {
       category: 'Category',
       dirContent: 'Folder content',
       download: 'Download',
+      downloadFailed: 'Download failed',
       downloadAll: 'Download all',
       downloading: 'Downloading...',
       fileAmount: '%(amount)s objects',
