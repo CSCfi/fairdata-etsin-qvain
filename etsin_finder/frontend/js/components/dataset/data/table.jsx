@@ -10,7 +10,7 @@
    */
 }
 
-import React, { Component } from 'react'
+import React from 'react'
 import Translate from 'react-translate-component'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
@@ -21,110 +21,73 @@ import TableItem from './tableItem'
 
 const itemMaxAmt = 500
 
-export default class Table extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      downloadUrl: '/api/dl',
-    }
-
-    this.downloadRef = React.createRef()
-  }
-
-  downloadFile = (itemID, type) => {
-    let urlParams = `?cr_id=${this.props.cr_id}`
-    if (type === 'dir') {
-      urlParams += `&dir_id=${itemID}`
-    } else {
-      urlParams += `&file_id=${itemID}`
-    }
-    this.setState(
-      {
-        downloadUrl: `/api/dl${urlParams}`,
-      },
-      () => {
-        this.downloadRef.current.click()
-      }
-    )
-  }
-
-  downloadProgress = pe => {
-    console.log(pe)
-  }
-
+const Table = props => {
   // prints files to dom as list items
-  tableItems(data) {
+  const tableItems = (data) =>
     /* eslint-disable react/no-array-index-key */
-    return data.map((single, i) => (
+    data.map((single, i) => (
       <TableItem
         key={`dataitem-${single.identifier}-${single.name}`}
         item={single}
         index={i}
-        changeFolder={this.props.changeFolder}
-        allowInfo={this.props.allowInfo}
-        allowDownload={this.props.allowDownload}
-        fields={this.props.fields}
-        download={this.downloadFile}
-        isRemote={this.props.isRemote}
+        changeFolder={props.changeFolder}
+        allowInfo={props.allowInfo}
+        allowDownload={props.allowDownload}
+        fields={props.fields}
+        isRemote={props.isRemote}
+        cr_id={props.cr_id}
       />
-    ))
-  }
-  /* eslint-enable react/no-array-index-key */
+  ))
 
-  render() {
-    const sliced = this.props.data.length > itemMaxAmt
-    const data = sliced ? this.props.data.slice(0, itemMaxAmt) : this.props.data
-
-    return (
-      <TableContainer>
-        <StyledTable>
-          <THead>
-            <tr>
-              <Icon scope="col">
-                <Translate content="dataset.dl.type" className="sr-only" />
-              </Icon>
-              {this.props.fields.name && (
-                <Name scope="col">
-                  <Translate content="dataset.dl.name" />
-                </Name>
-              )}
-              {this.props.fields.size && (
-                <Size scope="col">
-                  <Translate content="dataset.dl.size" />
-                </Size>
-              )}
-              {this.props.fields.category && (
-                <Category scope="col">
-                  <Translate content="dataset.dl.category" />
-                </Category>
-              )}
-              {(this.props.fields.downloadBtn || this.props.fields.infoBtn) && (
-                <Buttons scope="col">
-                  <Translate content="dataset.dl.info" className="sr-only" />
-                </Buttons>
-              )}
-            </tr>
-          </THead>
-          <TBody>
-            {sliced && (
-              <tr>
-                <SlicedInfo colSpan="5">
-                  <FontAwesomeIcon icon={faExclamation} />
-                  {' '}
-                  <Translate content="dataset.dl.sliced" />
-                </SlicedInfo>
-              </tr>
+  const sliced = props.data.length > itemMaxAmt
+  const data = sliced ? props.data.slice(0, itemMaxAmt) : props.data
+  return (
+    <TableContainer>
+      <StyledTable>
+        <THead>
+          <tr>
+            <Icon scope="col">
+              <Translate content="dataset.dl.type" className="sr-only" />
+            </Icon>
+            {props.fields.name && (
+              <Name scope="col">
+                <Translate content="dataset.dl.name" />
+              </Name>
             )}
-            {this.tableItems(data)}
-          </TBody>
-        </StyledTable>
-        {this.state.downloadUrl && (
-          <HiddenLink ref={this.downloadRef} href={this.state.downloadUrl} download />
-        )}
-      </TableContainer>
-    )
+            {props.fields.size && (
+              <Size scope="col">
+                <Translate content="dataset.dl.size" />
+              </Size>
+            )}
+            {props.fields.category && (
+              <Category scope="col">
+                <Translate content="dataset.dl.category" />
+              </Category>
+            )}
+            {(props.fields.downloadBtn || props.fields.infoBtn) && (
+              <Buttons scope="col">
+                <Translate content="dataset.dl.info" className="sr-only" />
+              </Buttons>
+            )}
+          </tr>
+        </THead>
+        <TBody>
+          {sliced && (
+            <tr>
+              <SlicedInfo colSpan="5">
+                <FontAwesomeIcon icon={faExclamation} />
+                {' '}
+                <Translate content="dataset.dl.sliced" />
+              </SlicedInfo>
+            </tr>
+          )}
+          {tableItems(data)}
+        </TBody>
+      </StyledTable>
+    </TableContainer>
+  )
   }
-}
+
 
 Table.defaultProps = {
   changeFolder: () => {},
@@ -145,6 +108,8 @@ Table.propTypes = {
     infoBtn: PropTypes.bool.isRequired,
   }).isRequired,
 }
+
+export default Table
 
 const Category = styled.th`
   display: none;
@@ -195,9 +160,4 @@ const TableContainer = styled.div`
   @media screen and (min-width: ${p => p.theme.breakpoints.sm}) {
     overflow-x: hidden;
   }
-`
-
-const HiddenLink = styled.a`
-  visibility: hidden;
-  display: none;
 `
