@@ -13,7 +13,7 @@
 import React from 'react'
 import Translate from 'react-translate-component'
 import PropTypes from 'prop-types'
-import { withRouter } from 'react-router'
+import { withRouter } from 'react-router-dom'
 
 import HeroBanner from '../general/hero'
 import Tracking from '../../utils/tracking'

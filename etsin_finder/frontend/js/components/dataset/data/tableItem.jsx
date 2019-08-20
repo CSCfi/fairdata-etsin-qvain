@@ -15,6 +15,7 @@ import styled, { withTheme } from 'styled-components'
 import Translate from 'react-translate-component'
 import translate from 'counterpart'
 import PropTypes from 'prop-types'
+import axios from 'axios'
 
 import checkDataLang, { getDataLang } from '../../../utils/checkDataLang'
 import sizeParse from '../../../utils/sizeParse'
@@ -47,6 +48,7 @@ class TableItem extends Component {
       checksum,
       loader: false,
       downloadDisabled: false,
+      downloadFailed: false
     }
 
     this.openModal = this.openModal.bind(this)
@@ -71,18 +73,60 @@ class TableItem extends Component {
   }
 
   downloadItem() {
-    this.setState(
-      {
-        downloadDisabled: true,
-      },
+    this.setState({ downloadDisabled: true },
       () => {
-        this.props.download(this.props.item.identifier, this.props.item.type)
+        const url = `/api/dl?cr_id=${this.props.cr_id}${this.props.item.type === 'dir'
+          ? `&dir_id=${this.props.item.identifier}`
+          : `&file_id=${this.props.item.identifier}`}`
+        axios.get(url)
+          .then((res) => {
+            console.groupCollapsed('%cDownload Response', 'color: blue;')
+            console.log('Response data:', res.data);
+            console.log('Response status:', res.status);
+            console.log('Response status text:', res.statusText);
+            console.log('Response headers:', res.headers);
+            console.log('Config:', res.config);
+            console.groupEnd()
+            this.setState({
+              downloadDisabled: false,
+              downloadFailed: false
+            })
+            const a = document.createElement('a')
+            a.href = url
+            a.setAttribute('download', this.props.item.name)
+            document.body.appendChild(a)
+            a.click()
+            // Cleanup
+            window.URL.revokeObjectURL(a.href);
+            document.body.removeChild(a);
+          })
+          .catch((err) => {
+            console.groupCollapsed('%cError in Download', 'color: red;')
+            if (err.response) {
+              // The request was made and the server responded with a status code
+              // that falls out of the range of 2xx
+              console.log(`Response status: %c${err.response.status}`, 'color: red;');
+              console.log('Response data:', err.response.data);
+              console.log('Response headers:', err.response.headers);
+            } else if (err.request) {
+              // The request was made but no response was received
+              // `err.request` is an instance of XMLHttpRequest in the browser and an instance of
+              // http.ClientRequest in node.js
+              console.log('Request: ');
+              console.log(err.request);
+            } else {
+              // Something happened in setting up the request that triggered an Error
+              console.log('Error', err.message);
+            }
+            console.log('Config:', err.config);
+            this.setState({
+              downloadDisabled: false,
+              downloadFailed: true
+            })
+            console.groupEnd()
+          })
       }
-    );
-    // Wait 5 seconds and return the button to its initial state (enabled)
-    setTimeout(() => (
-      this.setState({ downloadDisabled: false })
-    ), 5000)
+    )
   }
 
   render() {
@@ -230,16 +274,13 @@ class TableItem extends Component {
               </RemoteDlButton>
             )}
           {!this.props.isRemote && this.props.fields.downloadBtn && !this.state.downloadDisabled && (
-            // Ida download button enabled
-            // TODO: add download functionality, probably an axios post request,
-            // but it will also be used in the info modal, so a utility for both.
-            // TODO: change to button because disabled won't work in link
             <HideSmButton
               thin
               onClick={() => this.downloadItem()}
               disabled={!this.props.allowDownload}
+              downloadFailed={this.state.downloadFailed}
             >
-              <Translate content="dataset.dl.download" />
+              <Translate content={this.state.downloadFailed ? 'dataset.dl.downloadFailed' : 'dataset.dl.download'} />
               <Translate
                 className="sr-only"
                 content="dataset.dl.item"
@@ -272,6 +313,13 @@ const TitleAlt = styled.p`
 
 const HideSmButton = styled(InvertedButton)`
   display: none;
+  color: ${props => (props.downloadFailed ? props.theme.color.error : props.theme.color.primary)};
+  border-color: ${props => (props.downloadFailed ? props.theme.color.error : props.theme.color.primary)};
+  :hover {
+    color: white;
+    background-color: ${props => (props.downloadFailed ? props.theme.color.error : props.theme.color.primary)};
+    border-color: ${props => (props.downloadFailed ? props.theme.color.error : props.theme.color.primary)};
+  }
   @media (min-width: ${props => props.theme.breakpoints.sm}) {
     display: initial;
   }
@@ -327,8 +375,7 @@ const FileButtons = styled.td`
 `
 
 TableItem.defaultProps = {
-  changeFolder: () => {},
-  download: () => {},
+  changeFolder: () => {}
 }
 
 TableItem.propTypes = {
@@ -361,8 +408,8 @@ TableItem.propTypes = {
   changeFolder: PropTypes.func,
   allowDownload: PropTypes.bool.isRequired,
   allowInfo: PropTypes.bool.isRequired,
-  download: PropTypes.func,
   isRemote: PropTypes.bool.isRequired,
+  cr_id: PropTypes.string.isRequired,
 }
 
 export default withTheme(TableItem)

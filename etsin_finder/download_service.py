@@ -58,18 +58,18 @@ class DownloadAPIService(FlaskService):
         except requests.Timeout as t:
             log.error('Request to Download API timed out')
             log.error(t)
-            return self._get_error_response(200)
+            return self._get_error_response(dl_api_response.status_code)
         except requests.ConnectionError as c:
             log.error('Unable to connect to Download API')
             log.error(c)
-            return self._get_error_response(200)
+            return self._get_error_response(dl_api_response.status_code)
         except requests.HTTPError:
             log.warning('Download API returned an unsuccessful status code: {0}'.format(dl_api_response.status_code))
             log.warning('Response: {0}'.format(json_or_empty(dl_api_response)))
-            return self._get_error_response(200)
+            return self._get_error_response(dl_api_response.status_code)
         except Exception as e:
             log.error(e)
-            return self._get_error_response(200)
+            return self._get_error_response(dl_api_response.status_code)
         else:
             response = Response(response=stream_with_context(dl_api_response.iter_content(chunk_size=1024)),
                                 status=dl_api_response.status_code)
