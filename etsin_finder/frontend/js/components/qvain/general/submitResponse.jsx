@@ -158,6 +158,7 @@ const LinkToEtsin = styled.button`
   text-decoration: underline;
   margin-left: 10px;
   margin-bottom: 0px;
+  margin-top: 2.5px;
   cursor: pointer;
   border: none;
   background-color: transparent;

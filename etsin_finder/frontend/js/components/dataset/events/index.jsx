@@ -116,10 +116,16 @@ class Events extends Component {
       <span>
         {dateFormat(temp.start_date)}
         {' '}
--
+        -
         {dateFormat(temp.end_date)}
       </span>
     )
+  }
+
+  // If data does not have Identifier defined in 'Related material and history > Reference to a related source', an empty string is returned
+  checkRelation(rela) {
+    rela[0].entity.identifier = rela[0].entity.identifier || '';
+    return true
   }
 
   relationIdentifierIsUrl(identifier) {
@@ -127,6 +133,7 @@ class Events extends Component {
   }
 
   render() {
+    console.log(this.props.relation)
     return (
       <Margin>
         {this.checkProvenance(this.props.provenance) && (
@@ -219,7 +226,7 @@ class Events extends Component {
             </ul>
           </Margin>
         )}
-        {this.props.relation && (
+        {this.checkRelation(this.props.relation) && (
           <Margin>
             <h2>
               <Translate content="dataset.events_idn.relations.title" />
@@ -246,7 +253,7 @@ class Events extends Component {
                     </td>
                     <td lang={getDataLang(single.entity.title)}>
                       {checkDataLang(single.entity.title)}
-.
+                      .
                     </td>
                     <td>
                       <span className="sr-only">Identifier:</span>
@@ -258,9 +265,10 @@ class Events extends Component {
                         >
                           {single.entity.identifier}
                         </IDLink>
-                      ) : (
-                        <ID>{single.entity.identifier}</ID>
-                      )}
+                      )
+                        : (
+                          <ID>{single.entity.identifier}</ID>
+                        )}
                     </td>
                   </tr>
                 ))}

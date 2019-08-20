@@ -33,21 +33,19 @@
         }
       }
     </style>
-    <!-- Matomo, activated if in production -->
-    <% if (process.env.NODE_ENV === 'production') { %>
+    <!-- Load Matomo script, add a PageView -->
+    <% if (process.env['8']) { %>
     <script>
-      var _paq = _paq || [];
-      /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+      window._paq = [];
       _paq.push(['trackPageView']);
       _paq.push(['enableLinkTracking']);
       (function() {
         var u="//matomo.rahtiapp.fi/";
         _paq.push(['setTrackerUrl', u+'piwik.php']);
-        _paq.push(['setSiteId', '8']);
+        _paq.push(['setSiteId', process.env['8']]);
         var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
         g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
       })();
-      // }
     </script>
     <% } %>
     <!-- End Matomo Code -->

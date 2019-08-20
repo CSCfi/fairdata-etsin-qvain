@@ -141,6 +141,9 @@ class MetaxQvainLightAPIService(FlaskService):
                 log.error(e)
             return None
 
+        if (len(metax_api_response.json()) == 0):
+            return 'no datasets'
+
         return metax_api_response.json()
 
     def create_dataset(self, data):
