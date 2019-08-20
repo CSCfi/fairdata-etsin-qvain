@@ -8,7 +8,7 @@
         ["@babel/plugin-transform-runtime"]
       ],
       "presets": [
-        ["@babel/env", { "useBuiltIns": "entry", "corejs": 2, "targets": "> 0.25%, not dead" }],
+        ["@babel/preset-env", { "useBuiltIns": "entry", "corejs": 2, "targets": "> 0.25%, not dead" }],
         "@babel/preset-react"
       ]
     }
@@ -22,7 +22,7 @@
   ],
   "presets": [
     [
-      "@babel/env",
+      "@babel/preset-env",
       {
         "modules": false,
         "targets": "> 0.25%, not dead"
