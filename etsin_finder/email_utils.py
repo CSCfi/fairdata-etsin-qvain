@@ -85,30 +85,31 @@ def validate_send_message_request(user_email, user_body, agent_type):
     return True
 
 
-def get_email_recipient_address(catalog_record, agent_type_str):
+def get_email_recipient_addresses(catalog_record, agent_type_str):
     """
-    Get email recipient address based on agent type.
+    Get email recipient addresses based on agent type.
 
     :param catalog_record:
     :param agent_type_str: agent_type enum name as string
     :return:
     """
     rd = catalog_record['research_dataset']
+
     agent_type = AgentType[agent_type_str]
 
     if agent_type == AgentType.CREATOR and rd.get('creator', False)[0].get('email'):
-        return rd['creator'][0]['email']
+        return [creator['email'] for creator in rd['creator'] if 'email' in creator ]
     if agent_type == AgentType.PUBLISHER and rd.get('publisher', False).get('email'):
-        return rd['publisher']['email']
+        return [publisher['email'] for publisher in rd['publisher'] if 'email' in publisher ]
     if agent_type == AgentType.CONTRIBUTOR and rd.get('contributor', False)[0].get('email'):
-        return rd['contributor'][0]['email']
+        return [contributor['email'] for contributor in rd['contributor'] if 'email' in contributor ]
     if agent_type == AgentType.RIGHTS_HOLDER and rd.get('rights_holder', False)[0].get('email'):
-        return rd['rights_holder'][0]['email']
+        return [rights_holder['email'] for rights_holder in rd['rights_holder'] if 'email' in rights_holder ]
     if agent_type == AgentType.CURATOR and rd.get('curator', False)[0].get('email'):
-        return rd['curator'][0]['email']
+        return [curator['email'] for curator in rd['curator'] if 'email' in curator ]
 
     from etsin_finder.finder import app
-    app.logger.error("No email address found with given agent type {0}".format(agent_type_str))
+    app.logger.error("No email addresses found with given agent type {0}".format(agent_type_str))
     return None
 
 

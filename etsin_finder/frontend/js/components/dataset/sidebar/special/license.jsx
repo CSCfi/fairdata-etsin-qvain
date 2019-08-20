@@ -78,12 +78,16 @@ export default class License extends Component {
             lang={getDataLang(this.props.data.title)}
           >
             {checkDataLang(this.props.data.title)}
+            {!checkDataLang(this.props.data.title) && checkDataLang(this.props.data.license)}
           </MainLink>
         )}
         {!licenseIsUrl && (
-          <span lang={getDataLang(this.props.data.title)}>
+          <MainLink
+            lang={getDataLang(this.props.data.title)}
+          >
             {checkDataLang(this.props.data.title)}
-          </span>
+            {!checkDataLang(this.props.data.title) && checkDataLang(this.props.data.license)}
+          </MainLink>
         )}
         {this.props.data.description && (
           <PopUp
@@ -119,6 +123,7 @@ const Name = styled.h4`
 `
 
 const MainLink = styled.a`
+  color: "lightblue";
   margin-right: 0.2em;
 `
 
