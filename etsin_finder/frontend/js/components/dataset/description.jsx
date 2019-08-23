@@ -116,6 +116,15 @@ class Description extends Component {
           </Flex>
         </Labels>
         <section>
+          <div>
+            {this.props.dataset.data_catalog.catalog_json.title.en === 'Fairdata PAS datasets' && (
+            <MainInfo>
+              <p>
+                <Translate content="dataset.existsInPas" />
+              </p>
+            </MainInfo>
+            )}
+          </div>
           <div className="d-md-flex align-items-center dataset-title justify-content-between">
             <Title lang={getDataLang(this.state.title)}>{checkDataLang(this.state.title)}</Title>
           </div>

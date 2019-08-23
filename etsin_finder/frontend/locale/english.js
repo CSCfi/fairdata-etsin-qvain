@@ -151,6 +151,7 @@ const english = {
       homepage: 'Homepage',
     },
     language: 'Language',
+    existsInPas: 'This dataset is stored in Fairdata PAS.'
   },
   error: {
     notFound:

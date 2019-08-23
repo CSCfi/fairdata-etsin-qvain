@@ -150,6 +150,7 @@ const finnish = {
       homepage: 'Kotisivu',
     },
     language: 'Kieli',
+    existsInPas: 'Tämä ainesto on säilytetty Fairdata PAS:issa.'
   },
   error: {
     notFound:
