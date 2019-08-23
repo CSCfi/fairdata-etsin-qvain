@@ -17,6 +17,7 @@ import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 
 import AccessRights from './accessRights'
+import FairdataPasDatasetIcon from './FairdataPasDatasetIcon'
 import Accessiblity from '../../stores/view/accessibility'
 import AskForAccess from './askForAccess'
 import Contact from './contact'
@@ -87,6 +88,7 @@ class Description extends Component {
                   idn={this.props.dataset.identifier}
                 />
               )}
+            {this.props.dataset.data_catalog.catalog_json.title.en === 'Fairdata PAS datasets' && <FairdataPasDatasetIcon /> }
             <AccessRights
               button
               access_rights={
