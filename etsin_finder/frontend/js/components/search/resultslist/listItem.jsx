@@ -51,7 +51,10 @@ export default class ListItem extends Component {
                     {checkDataLang(this.props.item.title)}
                   </h2>
                   <WrapperDivRight>
-                    {this.props.item.data_catalog.en === 'Fairdata PAS datasets' && <FairdataPasDatasetIcon /> }
+                    {
+                      ((this.props.item.data_catalog.en === 'Fairdata PAS datasets') || (this.props.item.preservation_state > 0))
+                      && <FairdataPasDatasetIcon />
+                    }
                     <AccessRights
                       access_rights={this.props.item.access_rights}
                     />
@@ -89,6 +92,7 @@ ListItem.propTypes = {
   item: PropTypes.shape({
     title: PropTypes.object.isRequired,
     access_rights: PropTypes.object,
+    preservation_state: PropTypes.number,
     field_of_science: PropTypes.array,
     description: PropTypes.object.isRequired,
     data_catalog: PropTypes.object,
