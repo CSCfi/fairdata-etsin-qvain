@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import translate from 'counterpart'
 
+import PropTypes from 'prop-types'
+
 import DatasetQuery from '../../../../stores/view/datasetquery'
 import createTree from '../../../../utils/createTree'
 import TableHeader from '../tableHeader'
@@ -38,6 +40,15 @@ export default class IdaResources extends Component {
     this.changeFolder = this.changeFolder.bind(this)
     this.query = this.query.bind(this)
     this.tableFocusReset = React.createRef()
+  }
+
+  componentDidMount() {
+    // If this is a PAS dataset, dowload should be disabled
+    if (this.props.dataset.data_catalog.catalog_json.title.en === 'Fairdata PAS datasets') {
+      this.setState({
+        allowDownload: false
+      })
+    }
   }
 
   // combines folders and files into single array of objects
@@ -263,3 +274,7 @@ export default class IdaResources extends Component {
 const DataTable = styled.div`
   margin-top: 1em;
 `
+
+IdaResources.propTypes = {
+  dataset: PropTypes.object.isRequired,
+}
