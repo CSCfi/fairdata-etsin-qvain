@@ -81,7 +81,7 @@ class Content extends Component {
 
         {/* Initial route */}
         <Route
-          exact={this.showData() || this.showEvents()}
+          exact={this.showData() || this.showEvents() || this.showMaps()}
           path="/dataset/:identifier"
           render={props => (
             <Description
