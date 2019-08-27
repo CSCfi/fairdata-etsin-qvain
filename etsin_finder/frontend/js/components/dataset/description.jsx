@@ -88,7 +88,13 @@ class Description extends Component {
                   idn={this.props.dataset.identifier}
                 />
               )}
-            {this.props.dataset.data_catalog.catalog_json.title.en === 'Fairdata PAS datasets' && <FairdataPasDatasetIcon /> }
+            {
+              (
+              (this.props.dataset.data_catalog.catalog_json.title.en === 'Fairdata PAS datasets') ||
+              (this.props.dataset.preservation_state > 0)
+              )
+              && <FairdataPasDatasetIcon />
+            }
             <AccessRights
               button
               access_rights={
@@ -117,13 +123,20 @@ class Description extends Component {
         </Labels>
         <section>
           <div>
-            {this.props.dataset.data_catalog.catalog_json.title.en === 'Fairdata PAS datasets' && (
-            <MainInfo>
-              <p>
-                <Translate content="dataset.existsInPas" />
-              </p>
-            </MainInfo>
-            )}
+            {
+              (
+              (this.props.dataset.data_catalog.catalog_json.title.en === 'Fairdata PAS datasets') ||
+              (this.props.dataset.preservation_state > 0)
+              )
+              &&
+              (
+              <MainInfo>
+                <p>
+                  <Translate content="dataset.existsInPas" />
+                </p>
+              </MainInfo>
+              )
+            }
           </div>
           <div className="d-md-flex align-items-center dataset-title justify-content-between">
             <Title lang={getDataLang(this.state.title)}>{checkDataLang(this.state.title)}</Title>

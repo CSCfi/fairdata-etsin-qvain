@@ -44,7 +44,11 @@ export default class IdaResources extends Component {
 
   componentDidMount() {
     // If this is a PAS dataset, dowload should be disabled
-    if (this.props.dataset.data_catalog.catalog_json.title.en === 'Fairdata PAS datasets') {
+    // (this.props.item.preservation_state > 0))
+    if (
+      (this.props.dataset.data_catalog.catalog_json.title.en === 'Fairdata PAS datasets') ||
+      (this.props.dataset.preservation_state > 0)
+    ) {
       this.setState({
         allowDownload: false
       })
