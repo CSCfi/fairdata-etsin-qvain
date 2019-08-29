@@ -68,6 +68,12 @@ class ElasticQuery {
     }
   }
 
+  // Set 'Include Fairdata PAS datasets' to false
+  @action
+  setIncludePasDatasetsToFalse = () => {
+    this.includePasDatasets = false
+  }
+
   // update query search term and url
   @action
   updateSearch = (newSearch, updateUrl = true) => {

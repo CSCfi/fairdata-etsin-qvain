@@ -46,6 +46,11 @@ export default class Search extends Component {
     }
   }
 
+  // Set 'Include Fairdata PAS datasets' to false, upon exit page
+  componentWillUnmount() {
+    ElasticQuery.setIncludePasDatasetsToFalse()
+  }
+
   handlePasCheckboxChange = event => {
     this.setState({
       pasCheckboxChecked: event.target.checked,
