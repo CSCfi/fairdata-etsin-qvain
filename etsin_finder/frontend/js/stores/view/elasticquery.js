@@ -56,7 +56,7 @@ class ElasticQuery {
 
   @observable perPage = 20
 
-  @observable includePasDatasets
+  @observable includePasDatasets = false
 
   // Toggle 'Include Fairdata PAS datasets'
   @action

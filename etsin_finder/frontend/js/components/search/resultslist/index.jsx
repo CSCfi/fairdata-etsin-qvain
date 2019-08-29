@@ -28,12 +28,15 @@ class ResultsList extends Component {
   renderList(lang) {
     const list = ElasticQuery.results.hits.map(
       single => (
-        <ListItem
-          key={single._id}
-          catId={single._source.identifier}
-          item={single._source}
-          lang={lang}
-        />
+        // Filter list to exclude datasetes with a preservation state, if PAS datasets should be excluded
+        !((ElasticQuery.includePasDatasets === false) && (single._source.preservation_state > 0)) && (
+          <ListItem
+            key={single._id}
+            catId={single._source.identifier}
+            item={single._source}
+            lang={lang}
+          />
+        )
       ),
       this
     )
