@@ -32,9 +32,9 @@ class MetaxQvainLightAPIService(FlaskService):
         if metax_qvain_api_config:
 
             self.METAX_GET_DIRECTORY_FOR_PROJECT_URL = 'https://{0}/rest/directories'.format(metax_qvain_api_config['HOST']) + \
-                                                       '/files?project={0}&path=%2F'
+                                                       '/root?project={0}'
             self.METAX_GET_DIRECTORY = 'https://{0}/rest/directories'.format(metax_qvain_api_config['HOST']) + \
-                                       '/{0}/files?project={0}&path=%2F'
+                                       '/{0}/files'
             self.METAX_GET_DATASETS_FOR_USER = 'https://{0}/rest/datasets'.format(metax_qvain_api_config['HOST']) + \
                                                '?metadata_provider_user={0}&file_details&ordering=-date_modified'
             self.METAX_GET_ALL_DATASETS_FOR_USER = 'https://{0}/rest/datasets'.format(metax_qvain_api_config['HOST']) + \
