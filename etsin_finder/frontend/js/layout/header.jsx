@@ -20,15 +20,11 @@ import Navi from '../components/general/navigation/index'
 import MobileNavi from '../components/general/navigation/mobileNavi'
 
 export default class Header extends Component {
-  constructor() {
-    super()
-    this.state = {
-      lang: counterpart.getLocale(),
-    }
-    this.localeChanged = this.localeChanged.bind(this)
+  state = {
+    lang: counterpart.getLocale(),
   }
 
-  componentWillMount() {
+  componentDidMount() {
     counterpart.onLocaleChange(this.localeChanged)
   }
 
@@ -36,7 +32,7 @@ export default class Header extends Component {
     counterpart.offLocaleChange(this.localeChanged)
   }
 
-  localeChanged() {
+  localeChanged = () => {
     this.setState({
       lang: counterpart.getLocale(),
     })
