@@ -182,8 +182,7 @@ export default class Agent extends Component {
               noMargin
               noPadding
               color="primary"
-              /* eslint-disable-next-line no-script-url */
-              href="javascript:;"
+              href="#0"
               onMouseDown={e => {
                 // this prevents the popup not closing and opening
                 // when using this button to close
