@@ -122,10 +122,12 @@ class Events extends Component {
     )
   }
 
-  // If data does not have Identifier defined in 'Related material and history > Reference to a related source', an empty string is returned
-  checkRelation(rela) {
-    rela[0].entity.identifier = rela[0].entity.identifier || '';
-    return true
+  checkRelation(relation) {
+    if (relation[0]) {
+      relation[0].entity.identifier = relation[0].entity.identifier || '';
+      return true
+    }
+    return false
   }
 
   relationIdentifierIsUrl(identifier) {
@@ -133,7 +135,6 @@ class Events extends Component {
   }
 
   render() {
-    console.log(this.props.relation)
     return (
       <Margin>
         {this.checkProvenance(this.props.provenance) && (
