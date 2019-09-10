@@ -22,21 +22,13 @@ import ElasticQuery from '../../stores/view/elasticquery'
 import ErrorBoundary from '../general/errorBoundary'
 
 export default class SearchBar extends Component {
-  constructor(props) {
-    super(props)
-
-    // Handle possible empty initial query
-    this.state = {
-      query: ElasticQuery.search || '',
-      placeholder: counterpart('search.placeholder'),
-    }
-
-    this.handleChange = this.handleChange.bind(this)
-    this.handleSubmit = this.handleSubmit.bind(this)
-    this.localeChanged = this.localeChanged.bind(this)
+  // Handle possible empty initial query
+  state = {
+    query: ElasticQuery.search || '',
+    placeholder: counterpart('search.placeholder'),
   }
 
-  componentWillMount() {
+  componentDidMount() {
     counterpart.onLocaleChange(this.localeChanged)
   }
 
@@ -44,18 +36,18 @@ export default class SearchBar extends Component {
     counterpart.offLocaleChange(this.localeChanged)
   }
 
-  localeChanged() {
+  localeChanged = () => {
     this.setState({
       placeholder: counterpart('search.placeholder'),
     })
   }
 
-  handleChange(event) {
+  handleChange = (event) => {
     Search.preload()
     this.setState({ query: event.target.value })
   }
 
-  handleSubmit(e) {
+  handleSubmit = (e) => {
     e.preventDefault()
     ElasticQuery.updateSearch(this.state.query)
     ElasticQuery.queryES(false)

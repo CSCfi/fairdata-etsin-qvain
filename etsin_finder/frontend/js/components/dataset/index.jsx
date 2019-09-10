@@ -53,7 +53,8 @@ class Dataset extends React.Component {
     this.query()
   }
 
-  componentWillReceiveProps(newProps) {
+  // eslint-disable-next-line camelcase
+  UNSAFE_componentWillReceiveProps(newProps) {
     if (this.props.match.params.identifier !== newProps.match.params.identifier) {
       this.setState(
         {

@@ -96,7 +96,7 @@ class FilterSection extends Component {
     this.cutoff = 10
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.checkActive()
   }
 
