@@ -28,8 +28,13 @@ class ResultsList extends Component {
   renderList(lang) {
     const list = ElasticQuery.results.hits.map(
       single => (
-        // Filter list to exclude datasetes with a preservation state, if PAS datasets should be excluded
-        !((ElasticQuery.includePasDatasets === false) && (single._source.preservation_state > 0)) && (
+        (
+          // Exclude linked PAS datasets (they contain this value), in order to only show the ATT/IDA version
+          !(single._source.preservation_dataset_origin_version)
+          &&
+          // Filter list to exclude datasetes with a preservation state, if PAS datasets should be excluded
+          !((ElasticQuery.includePasDatasets === false) && (single._source.preservation_state > 0))
+        ) && (
           <ListItem
             key={single._id}
             catId={single._source.identifier}
