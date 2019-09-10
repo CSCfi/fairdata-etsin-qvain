@@ -53,7 +53,8 @@ export default class Contact extends Component {
     this.closeModal = this.closeModal.bind(this)
   }
 
-  componentWillReceiveProps(newProps) {
+  // eslint-disable-next-line camelcase
+  UNSAFE_componentWillReceiveProps(newProps) {
     const recipients = this.buildRecipients(newProps.emails)
     const translations = translate('dataset.contact')
     this.setState({

@@ -27,7 +27,8 @@ export default class FilterItem extends Component {
     this.updateFilter = this.updateFilter.bind(this)
   }
 
-  componentWillReceiveProps(newProps) {
+  // eslint-disable-next-line camelcase
+  UNSAFE_componentWillReceiveProps(newProps) {
     this.setState({
       doc_count: newProps.item.doc_count,
       term: newProps.term,

@@ -44,7 +44,8 @@ export default class Project extends Component {
         this.closeModal = this.closeModal.bind(this)
     }
 
-    componentWillReceiveProps(newProps) {
+    // eslint-disable-next-line camelcase
+    UNSAFE_componentWillReceiveProps(newProps) {
         const project = newProps.project
         this.setState({
             project

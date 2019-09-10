@@ -20,6 +20,11 @@ import Auth from '../stores/domain/auth'
 import Env from '../stores/domain/env'
 import QvainLogin from '../components/qvain/qvainLogin'
 
+// import { Home, Search, Dataset, Qvain, QvainDatasets } from '../routes'
+// import ErrorPage from '../components/errorpage'
+// import Auth from '../stores/domain/auth'
+// import Env from '../stores/domain/env'
+// import QvainLogin from '../components/qvain/qvainLogin'
 export default class Content extends Component {
   static propTypes = {
     contentRef: PropTypes.object.isRequired,
