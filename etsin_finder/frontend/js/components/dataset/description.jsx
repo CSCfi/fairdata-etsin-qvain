@@ -134,6 +134,16 @@ class Description extends Component {
                 <p>
                   <Translate content="dataset.existsInPas" />
                 </p>
+                {
+                  (this.props.dataset.preservation_dataset_version) && (
+                    <p>
+                      <Translate content="dataset.pasDatasetVersionExists" />
+                      <a href={`/dataset/${this.props.dataset.preservation_dataset_version.identifier}`}>
+                        <Translate content="dataset.linkToPasDataset" />
+                      </a>
+                    </p>
+                  )
+                }
               </MainInfo>
               )
             }

@@ -151,7 +151,9 @@ const english = {
       homepage: 'Homepage',
     },
     language: 'Language',
-    existsInPas: 'This dataset is stored in Fairdata PAS.'
+    existsInPas: 'This dataset is stored in Fairdata PAS.',
+    pasDatasetVersionExists: 'A Fairdata PAS version of this dataset exists: ',
+    linkToPasDataset: 'Link',
   },
   error: {
     notFound:

@@ -32,7 +32,7 @@ class ResultsList extends Component {
           // Exclude linked PAS datasets (they contain this value), in order to only show the ATT/IDA version
           !(single._source.preservation_dataset_origin_version)
           &&
-          // Filter list to exclude datasetes with a preservation state, if PAS datasets should be excluded
+          // Filter list to exclude datasets with a preservation state, if PAS datasets should be excluded
           !((ElasticQuery.includePasDatasets === false) && (single._source.preservation_state > 0))
         ) && (
           <ListItem
