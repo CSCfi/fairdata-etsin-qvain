@@ -395,7 +395,19 @@ class ElasticQuery {
           query: queryObject,
           sort: sorting,
           // Return only the following fields in source attribute to minimize traffic
-          _source: ['identifier', 'title.*', 'description.*', 'access_rights.*', 'data_catalog.*', 'preservation_state'],
+          _source: [
+            'access_rights.*',
+            'data_catalog.*',
+            'description.*',
+            'identifier',
+            'preservation_state',
+            'title.*',
+
+            // Fields needed for ATT/IDA <--> PAS link detection
+            'preservation_identifier',
+            'preservation_dataset_version',
+            'preservation_dataset_origin_version'
+          ],
           highlight: {
             // pre_tags: ['<b>'], # default is <em>
             // post_tags: ['</b>'],
