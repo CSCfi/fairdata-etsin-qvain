@@ -53,7 +53,12 @@ export default class ListItem extends Component {
                   <WrapperDivRight>
                     {
                       ((this.props.item.data_catalog.en === 'Fairdata PAS datasets') || (this.props.item.preservation_state > 0))
-                      && <FairdataPasDatasetIcon />
+                      &&
+                      (
+                        <FairdataPasDatasetIcon
+                          preservation_state={this.props.item.preservation_state}
+                        />
+                      )
                     }
                     <AccessRights
                       access_rights={this.props.item.access_rights}

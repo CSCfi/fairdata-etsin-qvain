@@ -154,6 +154,7 @@ const english = {
     existsInPas: 'This dataset is stored in Fairdata PAS.',
     pasDatasetVersionExists: 'A Fairdata PAS version of this dataset exists: ',
     linkToPasDataset: 'Link',
+    enteringPas: 'Entering PAS',
   },
   error: {
     notFound:

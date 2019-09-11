@@ -13,29 +13,54 @@
   import React, { Component } from 'react'
   import { inject, observer } from 'mobx-react'
   import styled from 'styled-components'
+  import PropTypes from 'prop-types'
+  import Translate from 'react-translate-component'
 
   class FairdataPasDatasetIcon extends Component {
     render() {
-      return (
-        <FairdataPasIconContainer>
-          <FairdataPasIconLabel>
-            Fairdata PAS
-          </FairdataPasIconLabel>
-        </FairdataPasIconContainer>
-      )
+      if (this.props.preservation_state === 80) {
+        return (
+          <FairdataPasIconContainerEnteringPas>
+            <FairdataPasIconLabel>
+              <Translate content="dataset.enteringPas" />
+            </FairdataPasIconLabel>
+          </FairdataPasIconContainerEnteringPas>
+        )
+      }
+        return (
+          <FairdataPasIconContainerInPas>
+            <FairdataPasIconLabel>
+              Fairdata PAS
+            </FairdataPasIconLabel>
+          </FairdataPasIconContainerInPas>
+        )
     }
   }
 
   export default inject('Stores')(observer(FairdataPasDatasetIcon))
   export const undecorated = FairdataPasDatasetIcon
 
-  const FairdataPasIconContainer = styled.div`
+  const FairdataPasIconContainerInPas = styled.div`
     padding: 0.2em 0.9em;
     background-color: #EFE4B0;
     border-radius: 1em;
     margin-right: 5px;
   `
 
+  const FairdataPasIconContainerEnteringPas = styled.div`
+  padding: 0.2em 0.9em;
+  background-color: #e7e9ed;
+  border-radius: 1em;
+  margin-right: 5px;
+`
+
   const FairdataPasIconLabel = styled.div`
     display: inline;
   `
+  FairdataPasDatasetIcon.defaultProps = {
+    preservation_state: undefined,
+  }
+
+  FairdataPasDatasetIcon.propTypes = {
+    preservation_state: PropTypes.number,
+  }

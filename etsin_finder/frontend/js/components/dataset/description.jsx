@@ -93,7 +93,12 @@ class Description extends Component {
               (this.props.dataset.data_catalog.catalog_json.title.en === 'Fairdata PAS datasets') ||
               (this.props.dataset.preservation_state > 0)
               )
-              && <FairdataPasDatasetIcon />
+              &&
+              (
+                <FairdataPasDatasetIcon
+                  preservation_state={this.props.dataset.preservation_state}
+                />
+              )
             }
             <AccessRights
               button
