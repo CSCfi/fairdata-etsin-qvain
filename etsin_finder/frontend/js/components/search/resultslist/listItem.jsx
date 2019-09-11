@@ -52,12 +52,16 @@ export default class ListItem extends Component {
                   </h2>
                   <WrapperDivRight>
                     {
-                      ((this.props.item.data_catalog.en === 'Fairdata PAS datasets') || (this.props.item.preservation_state > 0))
+                      (
+                        (this.props.item.data_catalog_identifier === 'urn:nbn:fi:att:data-catalog-pas')
+                        ||
+                        (this.props.item.preservation_state > 0)
+                      )
                       &&
                       (
                         <FairdataPasDatasetIcon
                           preservation_state={this.props.item.preservation_state}
-                          data_catalog_en={this.props.item.data_catalog.en}
+                          data_catalog_en={this.props.item.data_catalog_identifier}
                         />
                       )
                     }
@@ -102,6 +106,7 @@ ListItem.propTypes = {
     field_of_science: PropTypes.array,
     description: PropTypes.object.isRequired,
     data_catalog: PropTypes.object,
+    data_catalog_identifier: PropTypes.string
   }).isRequired,
 }
 

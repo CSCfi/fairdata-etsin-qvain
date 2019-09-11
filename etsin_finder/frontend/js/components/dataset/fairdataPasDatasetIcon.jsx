@@ -21,7 +21,7 @@
       if (
         (this.props.preservation_state === 80)
         &&
-        (this.props.data_catalog_en !== 'Fairdata PAS datasets')
+        (this.props.data_catalog_identifier !== 'urn:nbn:fi:att:data-catalog-pas')
       ) {
         return (
           <FairdataPasIconContainerEnteringPas>
@@ -64,10 +64,10 @@
   `
   FairdataPasDatasetIcon.defaultProps = {
     preservation_state: undefined,
-    data_catalog_en: undefined,
+    data_catalog_identifier: undefined,
   }
 
   FairdataPasDatasetIcon.propTypes = {
     preservation_state: PropTypes.number,
-    data_catalog_en: PropTypes.string,
+    data_catalog_identifier: PropTypes.string,
   }

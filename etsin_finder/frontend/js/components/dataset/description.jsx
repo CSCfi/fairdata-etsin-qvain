@@ -90,14 +90,15 @@ class Description extends Component {
               )}
             {
               (
-              (this.props.dataset.data_catalog.catalog_json.title.en === 'Fairdata PAS datasets') ||
-              (this.props.dataset.preservation_state > 0)
+                (this.props.dataset.data_catalog.catalog_json.identifier === 'urn:nbn:fi:att:data-catalog-pas')
+                ||
+                (this.props.dataset.preservation_state > 0)
               )
               &&
               (
                 <FairdataPasDatasetIcon
                   preservation_state={this.props.dataset.preservation_state}
-                  data_catalog_en={this.props.dataset.data_catalog.catalog_json.title.en}
+                  data_catalog_en={this.props.dataset.data_catalog.catalog_json.identifier}
                 />
               )
             }
