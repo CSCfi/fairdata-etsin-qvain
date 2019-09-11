@@ -18,7 +18,11 @@
 
   class FairdataPasDatasetIcon extends Component {
     render() {
-      if (this.props.preservation_state === 80) {
+      if (
+        (this.props.preservation_state === 80)
+        &&
+        (this.props.data_catalog_en !== 'Fairdata PAS datasets')
+      ) {
         return (
           <FairdataPasIconContainerEnteringPas>
             <FairdataPasIconLabel>
@@ -56,11 +60,14 @@
 
   const FairdataPasIconLabel = styled.div`
     display: inline;
+    white-space: nowrap;
   `
   FairdataPasDatasetIcon.defaultProps = {
     preservation_state: undefined,
+    data_catalog_en: undefined,
   }
 
   FairdataPasDatasetIcon.propTypes = {
     preservation_state: PropTypes.number,
+    data_catalog_en: PropTypes.string,
   }

@@ -57,6 +57,7 @@ export default class ListItem extends Component {
                       (
                         <FairdataPasDatasetIcon
                           preservation_state={this.props.item.preservation_state}
+                          data_catalog_en={this.props.item.data_catalog.en}
                         />
                       )
                     }
