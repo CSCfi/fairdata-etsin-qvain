@@ -92,7 +92,7 @@ class Description extends Component {
               (
                 (this.props.dataset.data_catalog.catalog_json.identifier === 'urn:nbn:fi:att:data-catalog-pas')
                 ||
-                (this.props.dataset.preservation_state > 0)
+                (this.props.dataset.preservation_state === 80)
               )
               &&
               (

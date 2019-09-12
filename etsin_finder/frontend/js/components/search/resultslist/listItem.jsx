@@ -55,7 +55,7 @@ export default class ListItem extends Component {
                       (
                         (this.props.item.data_catalog_identifier === 'urn:nbn:fi:att:data-catalog-pas')
                         ||
-                        (this.props.item.preservation_state > 0)
+                        (this.props.item.preservation_state === 80)
                       )
                       &&
                       (

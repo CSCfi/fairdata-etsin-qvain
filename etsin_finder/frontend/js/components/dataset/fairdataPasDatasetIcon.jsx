@@ -46,14 +46,14 @@
 
   const FairdataPasIconContainerInPas = styled.div`
     padding: 0.2em 0.9em;
-    background-color: #EFE4B0;
+    background-color: #b3efb0;
     border-radius: 1em;
     margin-right: 5px;
   `
 
   const FairdataPasIconContainerEnteringPas = styled.div`
   padding: 0.2em 0.9em;
-  background-color: #e7e9ed;
+  background-color: #EFE4B0;
   border-radius: 1em;
   margin-right: 5px;
 `

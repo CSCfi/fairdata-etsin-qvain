@@ -33,7 +33,7 @@ class ResultsList extends Component {
           !(single._source.preservation_dataset_origin_version)
           &&
           // Filter list to exclude datasets with a preservation state, if PAS datasets should be excluded
-          !((ElasticQuery.includePasDatasets === false) && (single._source.preservation_state > 0))
+          !((ElasticQuery.includePasDatasets === false) && (single._source.data_catalog === 'urn:nbn:fi:att:data-catalog-pas'))
         ) && (
           <ListItem
             key={single._id}
