@@ -406,7 +406,8 @@ class ElasticQuery {
             // Fields needed for ATT/IDA <--> PAS link detection
             'preservation_identifier',
             'preservation_dataset_version',
-            'preservation_dataset_origin_version'
+            'preservation_dataset_origin_version',
+            'data_catalog_identifier'
           ],
           highlight: {
             // pre_tags: ['<b>'], # default is <em>
