@@ -15,6 +15,7 @@ import { inject, observer } from 'mobx-react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
+import { Link } from 'react-router-dom'
 
 import AccessRights from './accessRights'
 import FairdataPasDatasetIcon from './FairdataPasDatasetIcon'
@@ -98,7 +99,7 @@ class Description extends Component {
               (
                 <FairdataPasDatasetIcon
                   preservation_state={this.props.dataset.preservation_state}
-                  data_catalog_en={this.props.dataset.data_catalog.catalog_json.identifier}
+                  data_catalog_identifier={this.props.dataset.data_catalog.catalog_json.identifier}
                 />
               )
             }
@@ -131,27 +132,28 @@ class Description extends Component {
         <section>
           <div>
             {
-              (
-              (this.props.dataset.data_catalog.catalog_json.title.en === 'Fairdata PAS datasets') ||
-              (this.props.dataset.preservation_state > 0)
-              )
-              &&
+              (this.props.dataset.data_catalog.catalog_json.identifier === 'urn:nbn:fi:att:data-catalog-pas') &&
               (
               <MainInfo>
                 <p>
-                  <Translate content="dataset.existsInPas" />
+                  <Translate content="dataset.storedInPas" />
                 </p>
-                {
-                  (this.props.dataset.preservation_dataset_version) && (
-                    <p>
-                      <Translate content="dataset.pasDatasetVersionExists" />
-                      <a href={`/dataset/${this.props.dataset.preservation_dataset_version.identifier}`}>
-                        <Translate content="dataset.linkToPasDataset" />
-                      </a>
-                    </p>
-                  )
-                }
               </MainInfo>
+              )
+            }
+            {
+              (this.props.dataset.preservation_dataset_version) &&
+              (
+                <MainInfo>
+                  <p>
+                    <Translate content="dataset.pasDatasetVersionExists" />
+                    <Link
+                      to={`/dataset/${this.props.dataset.preservation_dataset_version.identifier}`}
+                    >
+                      <Translate content="dataset.linkToPasDataset" />
+                    </Link>
+                  </p>
+                </MainInfo>
               )
             }
           </div>
