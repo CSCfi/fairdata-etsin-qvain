@@ -3,7 +3,7 @@ import { shallow, mount } from 'enzyme'
 
 import Qvain from '../js/components/qvain'
 import Description from '../js/components/qvain/description'
-import DescriptionFeild from '../js/components/qvain/description/descriptionField'
+import DescriptionField from '../js/components/qvain/description/descriptionField'
 import OtherIdentifierField from '../js/components/qvain/description/otherIdentifierField'
 import FieldOfScienceField from '../js/components/qvain/description/fieldOfScienceField'
 import KeywordsField from '../js/components/qvain/description/keywordsField'
@@ -60,8 +60,8 @@ describe('Qvain.Description', () => {
     const component = shallow(<Description Stores={getStores()} />)
     expect(component).toMatchSnapshot()
   })
-  it('should render <DescriptionFeild />', () => {
-    const component = shallow(<DescriptionFeild Stores={getStores()}/>)
+  it('should render <DescriptionField />', () => {
+    const component = shallow(<DescriptionField Stores={getStores()}/>)
     expect(component).toMatchSnapshot()
   })
   it('should render <OtherIdentifierField />', () => {
