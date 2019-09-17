@@ -134,26 +134,35 @@ class Description extends Component {
             {
               (this.props.dataset.data_catalog.catalog_json.identifier === 'urn:nbn:fi:att:data-catalog-pas') &&
               (
-              <MainInfo>
-                <p>
-                  <Translate content="dataset.storedInPas" />
-                </p>
-              </MainInfo>
+              <PasInfo>
+                <Translate content="dataset.storedInPas" />
+              </PasInfo>
+              )
+            }
+            {
+              (this.props.dataset.preservation_dataset_origin_version) &&
+              (
+                <PasInfo>
+                  <Translate content="dataset.originalDatasetVersionExists" />
+                  <Link
+                    to={`/dataset/${this.props.dataset.preservation_dataset_origin_version.identifier}`}
+                  >
+                    <Translate content="dataset.linkToOriginalDataset" />
+                  </Link>
+                </PasInfo>
               )
             }
             {
               (this.props.dataset.preservation_dataset_version) &&
               (
-                <MainInfo>
-                  <p>
-                    <Translate content="dataset.pasDatasetVersionExists" />
-                    <Link
-                      to={`/dataset/${this.props.dataset.preservation_dataset_version.identifier}`}
-                    >
-                      <Translate content="dataset.linkToPasDataset" />
-                    </Link>
-                  </p>
-                </MainInfo>
+                <PasInfo>
+                  <Translate content="dataset.pasDatasetVersionExists" />
+                  <Link
+                    to={`/dataset/${this.props.dataset.preservation_dataset_version.identifier}`}
+                  >
+                    <Translate content="dataset.linkToPasDataset" />
+                  </Link>
+                </PasInfo>
               )
             }
           </div>
@@ -250,6 +259,13 @@ const Title = styled.h1`
 const MainInfo = styled.div`
   color: ${p => p.theme.color.gray};
   font-size: 0.9em;
+`
+
+const PasInfo = styled.div`
+  color: ${p => p.theme.color.gray};
+  font-size: 0.9em;
+  padding-top: 5px;
+  padding-bottom: 5px;
 `
 
 const DatasetDescription = styled.div`
