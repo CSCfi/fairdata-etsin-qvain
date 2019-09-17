@@ -29,9 +29,6 @@ class ResultsList extends Component {
     const list = ElasticQuery.results.hits.map(
       single => (
         (
-          // Exclude linked PAS datasets (they contain this value), in order to only show the ATT/IDA version
-          !(single._source.preservation_dataset_origin_version)
-          &&
           // Filter list to exclude datasets with a preservation state, if PAS datasets should be excluded
           !((ElasticQuery.includePasDatasets === false) && (single._source.data_catalog === 'urn:nbn:fi:att:data-catalog-pas'))
         ) && (
