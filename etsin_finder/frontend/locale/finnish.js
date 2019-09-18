@@ -349,7 +349,7 @@ const finnish = {
         instructions:
           'Metadatan tunniste luodaan automaattisesti mutta jos on jo OLEMASSA OLEVA tunniste, syötä se tähän.',
         addButton: '+ Lisää uusi',
-        alredyAdded: 'Tunniste on jo lisätty',
+        alreadyAdded: 'Tunniste on jo lisätty',
       },
       fieldOfScience: {
         title: 'Tutkimusala',

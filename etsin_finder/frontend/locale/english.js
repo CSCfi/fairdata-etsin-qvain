@@ -345,7 +345,7 @@ const english = {
         instructions:
           'Identifier for the metadata will be created automatically but if there already is an EXISTING identifier please insert it here.',
         addButton: '+ Add new',
-        alredyAdded: 'Identifier already added',
+        alreadyAdded: 'Identifier already added',
       },
       fieldOfScience: {
         title: 'Field of Science',
