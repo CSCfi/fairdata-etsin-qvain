@@ -252,6 +252,7 @@ export default class IdaResources extends Component {
           downloadAll
         />
         <Breadcrumbs
+          dataset={this.props.dataset}
           path={this.state.currentPath}
           folderIds={this.state.currentIDs}
           changeFolder={this.updatePath}

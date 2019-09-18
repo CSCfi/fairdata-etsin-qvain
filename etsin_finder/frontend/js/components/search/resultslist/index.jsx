@@ -29,7 +29,7 @@ class ResultsList extends Component {
     const list = ElasticQuery.results.hits.map(
       single => (
         (
-          // Filter list to exclude datasets with a preservation state, if PAS datasets should be excluded
+          // Filter list to exclude datasets with data-catalog-pas , if PAS datasets should be excluded
           !((ElasticQuery.includePasDatasets === false) && (single._source.data_catalog === 'urn:nbn:fi:att:data-catalog-pas'))
         ) && (
           <ListItem

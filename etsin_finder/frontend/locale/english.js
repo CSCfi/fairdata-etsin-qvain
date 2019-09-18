@@ -157,6 +157,7 @@ const english = {
     linkToPasDataset: 'Link',
     linkToOriginalDataset: 'Link',
     enteringPas: 'Entering PAS',
+    dataInPasDatasetsCanNotBeDownloaded: 'PAS dataset data cannot be downloaded'
   },
   error: {
     notFound:

@@ -156,6 +156,7 @@ const finnish = {
     linkToPasDataset: 'Linkki',
     linkToOriginalDataset: 'Linkki',
     enteringPas: 'Menemässä PAS:iin',
+    dataInPasDatasetsCanNotBeDownloaded: 'PAS-aineistojen dataa ei voida ladata'
   },
   error: {
     notFound:
