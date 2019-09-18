@@ -268,6 +268,15 @@ class Events extends Component {
             </Table>
           </Margin>
         )}
+        {
+          this.props.preservation_dataset_origin_version_identifier && (
+            <Margin>
+              <ul>
+                <OtherID>URN: {this.props.preservation_dataset_origin_version_identifier.preferred_identifier}</OtherID>
+              </ul>
+            </Margin>
+          )
+        }
       </Margin>
     )
   }
@@ -277,6 +286,7 @@ Events.defaultProps = {
   relation: false,
   provenance: false,
   other_identifier: false,
+  preservation_dataset_origin_version_identifier: undefined,
 }
 
 Events.propTypes = {
@@ -291,6 +301,7 @@ Events.propTypes = {
   relation: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
   provenance: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
   other_identifier: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
+  preservation_dataset_origin_version_identifier: PropTypes.object,
 }
 
 const InlineUl = styled.ul`
