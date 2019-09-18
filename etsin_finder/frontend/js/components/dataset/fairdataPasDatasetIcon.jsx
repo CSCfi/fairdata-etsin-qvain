@@ -19,7 +19,7 @@
   class FairdataPasDatasetIcon extends Component {
     render() {
       if (
-        (this.props.preservation_state === 80)
+        (this.props.preservation_state > 0)
         &&
         (this.props.data_catalog_identifier !== 'urn:nbn:fi:att:data-catalog-pas')
       ) {
