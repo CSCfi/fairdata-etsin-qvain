@@ -163,11 +163,10 @@ class FilterSection extends Component {
     if (((this.aggregationName === 'data_catalog_en') || (this.aggregationName === 'data_catalog_fi')) && !ElasticQuery.includePasDatasets) {
       for (let i = 0; i < this.props.Stores.ElasticQuery.results.aggregations[this.aggregationName].buckets.length; i += 1) {
         if (
-          (this.props.Stores.ElasticQuery.results.aggregations[this.aggregationName].buckets[i].key === 'Fairdata PAS datasets')
-          ||
+          (this.props.Stores.ElasticQuery.results.aggregations[this.aggregationName].buckets[i].key === 'Fairdata PAS datasets') ||
           (this.props.Stores.ElasticQuery.results.aggregations[this.aggregationName].buckets[i].key === 'Fairdata PAS-aineistot')
-          ) {
-          this.state.aggregateItems = this.props.Stores.ElasticQuery.results.aggregations[this.aggregationName].buckets.splice(i)
+        ) {
+          this.props.Stores.ElasticQuery.results.aggregations[this.aggregationName].buckets.splice(i, 1)
         }
       }
     }
