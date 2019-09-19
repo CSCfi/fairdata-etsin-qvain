@@ -66,6 +66,7 @@ class ElasticQuery {
     } else {
       this.includePasDatasets = true
     }
+    this.queryES(false)
   }
 
   // Set 'Include Fairdata PAS datasets' to false
