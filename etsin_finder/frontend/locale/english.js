@@ -102,6 +102,7 @@ const english = {
         description: 'Description',
       },
       other_idn: 'Other identifiers',
+      origin_identifier: 'Origin dataset identifier',
       relations: {
         title: 'Relations',
         type: 'Type',

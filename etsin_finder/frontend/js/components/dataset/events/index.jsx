@@ -271,8 +271,13 @@ class Events extends Component {
         {
           this.props.preservation_dataset_origin_version_identifier && (
             <Margin>
+              <h2>
+                <Translate content="dataset.events_idn.origin_identifier" />
+              </h2>
               <ul>
-                <OtherID>URN: {this.props.preservation_dataset_origin_version_identifier.preferred_identifier}</OtherID>
+                <OtherID>
+                  {this.props.preservation_dataset_origin_version_identifier.preferred_identifier}
+                </OtherID>
               </ul>
             </Margin>
           )

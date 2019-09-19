@@ -101,6 +101,7 @@ const finnish = {
         description: 'Kuvaus',
       },
       other_idn: 'Muut tunnisteet',
+      origin_identifier: 'Alkuperäisen aineiston tunniste',
       relations: {
         title: 'Relaatiot',
         type: 'Tyyppi',
