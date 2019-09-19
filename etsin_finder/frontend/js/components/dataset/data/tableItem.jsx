@@ -53,6 +53,15 @@ class TableItem extends Component {
     this.closeModal = this.closeModal.bind(this)
   }
 
+  download = () => {
+    const handle = window.open(`/api/dl?cr_id=${this.props.cr_id}${this.props.item.type === 'dir'
+      ? `&dir_id=${this.props.item.identifier}`
+      : `&file_id=${this.props.item.identifier}`}`)
+    if (handle == null) {
+      console.error('Unable to open new browser window for download, popup blocker?')
+    }
+  }
+
   openModal() {
     this.setState({ modalIsOpen: true })
   }
@@ -68,21 +77,6 @@ class TableItem extends Component {
       },
       () => this.props.changeFolder(name, id)
     )
-  }
-
-  downloadItem() {
-    this.setState(
-      {
-        downloadDisabled: true,
-      },
-      () => {
-        this.props.download(this.props.item.identifier, this.props.item.type)
-      }
-    );
-    // Wait 5 seconds and return the button to its initial state (enabled)
-    setTimeout(() => (
-      this.setState({ downloadDisabled: false })
-    ), 5000)
   }
 
   render() {
@@ -230,16 +224,12 @@ class TableItem extends Component {
               </RemoteDlButton>
             )}
           {!this.props.isRemote && this.props.fields.downloadBtn && !this.state.downloadDisabled && (
-            // Ida download button enabled
-            // TODO: add download functionality, probably an axios post request,
-            // but it will also be used in the info modal, so a utility for both.
-            // TODO: change to button because disabled won't work in link
             <HideSmButton
               thin
-              onClick={() => this.downloadItem()}
               disabled={!this.props.allowDownload}
+              onClick={() => this.download()}
             >
-              <Translate content="dataset.dl.download" />
+              <Translate content={'dataset.dl.download'} />
               <Translate
                 className="sr-only"
                 content="dataset.dl.item"
@@ -272,6 +262,13 @@ const TitleAlt = styled.p`
 
 const HideSmButton = styled(InvertedButton)`
   display: none;
+  color: ${props => (props.theme.color.primary)};
+  border-color: ${props => (props.theme.color.primary)};
+  :hover {
+    color: white;
+    background-color: ${props => (props.theme.color.primary)};
+    border-color: ${props => (props.theme.color.primary)};
+  }
   @media (min-width: ${props => props.theme.breakpoints.sm}) {
     display: initial;
   }
@@ -327,8 +324,7 @@ const FileButtons = styled.td`
 `
 
 TableItem.defaultProps = {
-  changeFolder: () => {},
-  download: () => {},
+  changeFolder: () => {}
 }
 
 TableItem.propTypes = {
@@ -361,8 +357,8 @@ TableItem.propTypes = {
   changeFolder: PropTypes.func,
   allowDownload: PropTypes.bool.isRequired,
   allowInfo: PropTypes.bool.isRequired,
-  download: PropTypes.func,
   isRemote: PropTypes.bool.isRequired,
+  cr_id: PropTypes.string.isRequired,
 }
 
 export default withTheme(TableItem)

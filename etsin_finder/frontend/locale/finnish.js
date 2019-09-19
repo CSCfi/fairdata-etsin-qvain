@@ -65,6 +65,7 @@ const finnish = {
       category: 'Kategoria',
       dirContent: 'Kansion sisältö',
       download: 'Lataa',
+      downloadFailed: 'Lataus epäonnistui',
       downloadAll: 'Lataa kaikki',
       downloading: 'Ladataan...',
       fileAmount: '%(amount)s objektia',

@@ -10,30 +10,15 @@
    */
 }
 
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
-export default class HeroBanner extends Component {
-  constructor(props) {
-    super(props)
-    this.state = { classes: '' }
-  }
-
-  componentWillMount() {
-    if (this.props.className) {
-      this.setState({ classes: this.props.className })
-    }
-  }
-
-  render() {
-    return (
-      <Hero className={this.state.classes}>
-        <Center>{this.props.children}</Center>
-      </Hero>
-    )
-  }
-}
+const HeroBanner = ({ className, children }) => (
+  <Hero className={className}>
+    <Center>{children}</Center>
+  </Hero>
+)
 
 const Hero = styled.div`
   width: 100%;
@@ -69,3 +54,5 @@ HeroBanner.propTypes = {
   children: PropTypes.node.isRequired,
   className: PropTypes.string,
 }
+
+export default HeroBanner

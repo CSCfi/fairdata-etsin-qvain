@@ -29,7 +29,8 @@ class VersionChanger extends Component {
     }
   }
 
-  componentWillReceiveProps = () => {
+  // eslint-disable-next-line camelcase
+  UNSAFE_componentWillReceiveProps = () => {
     const versions = this.versionLabels(this.props.versionSet)
     this.setState({
       versions,

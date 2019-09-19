@@ -150,6 +150,9 @@ class UserDatasets(Resource):
                 # Remove the datasets that have the metax property 'removed': True
                 result = remove_deleted_datasets_from_results(result)
                 result['results'] = slice_array_on_limit(result['results'], TOTAL_ITEM_LIMIT)
+            # If no datasets are created, an empty response should be returned, without error
+            if (result == 'no datasets'):
+                return '', 200
             return result, 200
         return '', 404
 

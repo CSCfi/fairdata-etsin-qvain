@@ -14,7 +14,6 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import PropTypes from 'prop-types'
-// import axios from 'axios'
 
 import sizeParse from '../../../utils/sizeParse'
 import { InvertedButton } from '../../general/button'
@@ -23,22 +22,15 @@ export default class TableHeader extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      downloadAllUrl: '',
       downloadDisabled: false,
     }
-    this.downloadAllRef = React.createRef()
   }
 
   downloadAll = () => {
-    this.setState(
-      {
-        downloadAllUrl: `/api/dl?cr_id=${this.props.crId}`,
-        downloadDisabled: true,
-      },
-      () => {
-        this.downloadAllRef.current.click()
-      }
-    )
+    const handle = window.open(`/api/dl?cr_id=${this.props.crId}`)
+    if (handle == null) {
+      console.error('Unable to open new browser window for download, popup blocker?')
+    }
   }
 
   render() {
@@ -64,7 +56,7 @@ export default class TableHeader extends Component {
               disabled={!this.props.allowDownload}
               onClick={() => this.downloadAll()}
             >
-              <Translate content="dataset.dl.downloadAll" />
+              <Translate content={'dataset.dl.downloadAll'} />
               <Translate className="sr-only" content="dataset.dl.file_types.both" />
             </InvertedButton>
           </ButtonsCont>
@@ -80,9 +72,6 @@ export default class TableHeader extends Component {
             </InvertedButton>
           </ButtonsCont>
 
-        )}
-        {this.state.downloadAllUrl && (
-          <HiddenLink href={this.state.downloadAllUrl} ref={this.downloadAllRef} download />
         )}
       </Header>
     )
@@ -108,11 +97,6 @@ const TableTitle = styled.h4`
 
 const ObjectCount = styled.p`
   margin-bottom: 0;
-`
-
-const HiddenLink = styled.a`
-  display: none;
-  visibility: hidden;
 `
 
 TableHeader.defaultProps = {

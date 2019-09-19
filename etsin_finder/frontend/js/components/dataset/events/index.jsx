@@ -116,10 +116,18 @@ class Events extends Component {
       <span>
         {dateFormat(temp.start_date)}
         {' '}
--
+        -
         {dateFormat(temp.end_date)}
       </span>
     )
+  }
+
+  checkRelation(relation) {
+    if (relation[0]) {
+      relation[0].entity.identifier = relation[0].entity.identifier || '';
+      return true
+    }
+    return false
   }
 
   relationIdentifierIsUrl(identifier) {
@@ -219,7 +227,7 @@ class Events extends Component {
             </ul>
           </Margin>
         )}
-        {this.props.relation && (
+        {this.checkRelation(this.props.relation) && (
           <Margin>
             <h2>
               <Translate content="dataset.events_idn.relations.title" />
@@ -246,7 +254,7 @@ class Events extends Component {
                     </td>
                     <td lang={getDataLang(single.entity.title)}>
                       {checkDataLang(single.entity.title)}
-.
+                      .
                     </td>
                     <td>
                       <span className="sr-only">Identifier:</span>
@@ -258,9 +266,10 @@ class Events extends Component {
                         >
                           {single.entity.identifier}
                         </IDLink>
-                      ) : (
-                        <ID>{single.entity.identifier}</ID>
-                      )}
+                      )
+                        : (
+                          <ID>{single.entity.identifier}</ID>
+                        )}
                     </td>
                   </tr>
                 ))}

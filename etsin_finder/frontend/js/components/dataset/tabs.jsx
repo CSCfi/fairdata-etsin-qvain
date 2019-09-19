@@ -20,78 +20,76 @@ export default class Tabs extends Component {
   render() {
     return (
       <Fragment>
-        {(this.props.showData || this.props.showEvents) && (
-          <EtsinTabs className="nav nav-tabs" role="tablist">
+        <EtsinTabs className="nav nav-tabs" role="tablist">
+          <li className="nav-item" role="presentation">
+            <NavLink
+              exact
+              replace
+              to={`/dataset/${this.props.identifier}`}
+              id="tab-for-description"
+              aria-controls="tab-description"
+              role="tab"
+              className="nav-link"
+              aria-selected={this.props.location.pathname === `/dataset/${this.props.identifier}`}
+            >
+              <Translate content="nav.dataset" fallback="Dataset" />
+            </NavLink>
+          </li>
+          {this.props.showData && (
             <li className="nav-item" role="presentation">
               <NavLink
                 exact
                 replace
-                to={`/dataset/${this.props.identifier}`}
-                id="tab-for-description"
-                aria-controls="tab-description"
+                to={`/dataset/${this.props.identifier}/data`}
+                id="tab-for-data"
+                aria-controls="tab-data"
                 role="tab"
                 className="nav-link"
-                aria-selected={this.props.location.pathname === `/dataset/${this.props.identifier}`}
+                aria-selected={
+                      this.props.location.pathname === `/dataset/${this.props.identifier}/data`
+                    }
               >
-                <Translate content="nav.dataset" fallback="Dataset" />
+                <Translate content="nav.data" fallback="Data" />
               </NavLink>
             </li>
-            {this.props.showData && (
-              <li className="nav-item" role="presentation">
-                <NavLink
-                  exact
-                  replace
-                  to={`/dataset/${this.props.identifier}/data`}
-                  id="tab-for-data"
-                  aria-controls="tab-data"
-                  role="tab"
-                  className="nav-link"
-                  aria-selected={
-                    this.props.location.pathname === `/dataset/${this.props.identifier}/data`
-                  }
-                >
-                  <Translate content="nav.data" fallback="Data" />
-                </NavLink>
-              </li>
-            )}
-            {this.props.showEvents && (
-              <li className="nav-item" role="presentation">
-                <NavLink
-                  exact
-                  replace
-                  to={`/dataset/${this.props.identifier}/events`}
-                  id="tab-for-events"
-                  aria-controls="tab-events"
-                  role="tab"
-                  className="nav-link"
-                  aria-selected={
-                    this.props.location.pathname === `/dataset/${this.props.identifier}/events`
-                  }
-                >
-                  <Translate content="nav.events" fallback="Identifiers and events" />
-                </NavLink>
-              </li>
-            )}
-            {this.props.showMaps && (
-              <li className="nav-item" role="presentation">
-                <NavLink
-                  exact
-                  replace
-                  to={`/dataset/${this.props.identifier}/maps`}
-                  id="tab-for-maps"
-                  aria-controls="tab-maps"
-                  role="tab"
-                  className="nav-link"
-                  aria-selected={
-                    this.props.location.pathname === `/dataset/${this.props.identifier}/maps  `
-                  }
-                >
-                  <Translate content="nav.maps" fallback="Maps" />
-                </NavLink>
-              </li>
-            )}
-          </EtsinTabs>
-        )}
+          )}
+          {this.props.showEvents && (
+            <li className="nav-item" role="presentation">
+              <NavLink
+                exact
+                replace
+                to={`/dataset/${this.props.identifier}/events`}
+                id="tab-for-events"
+                aria-controls="tab-events"
+                role="tab"
+                className="nav-link"
+                aria-selected={
+                  this.props.location.pathname === `/dataset/${this.props.identifier}/events`
+                }
+              >
+                <Translate content="nav.events" fallback="Identifiers and events" />
+              </NavLink>
+            </li>
+          )}
+          {this.props.showMaps && (
+            <li className="nav-item" role="presentation">
+              <NavLink
+                exact
+                replace
+                to={`/dataset/${this.props.identifier}/maps`}
+                id="tab-for-maps"
+                aria-controls="tab-maps"
+                role="tab"
+                className="nav-link"
+                aria-selected={
+                  this.props.location.pathname === `/dataset/${this.props.identifier}/maps`
+                }
+              >
+                <Translate content="nav.maps" fallback="Maps" />
+              </NavLink>
+            </li>
+          )}
+        </EtsinTabs>
       </Fragment>
     )
   }

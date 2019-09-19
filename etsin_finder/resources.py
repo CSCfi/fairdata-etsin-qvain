@@ -22,7 +22,7 @@ from etsin_finder.email_utils import \
     create_email_message_body, \
     get_email_info, \
     get_email_message_subject, \
-    get_email_recipient_address, \
+    get_email_recipient_addresses, \
     get_harvest_info, \
     validate_send_message_request
 from etsin_finder.finder import app
@@ -182,10 +182,10 @@ class Contact(Resource):
         if harvested:
             abort(400, message="Contact form is not available for harvested datasets")
 
-        # Get the chose email recipient
-        recipient = get_email_recipient_address(cr, recipient_agent_role)
-        if not recipient:
-            abort(500, message="No recipient could be inferred from the dataset")
+        # Get the email recipients
+        recipients = get_email_recipient_addresses(cr, recipient_agent_role)
+        if not recipients:
+            abort(500, message="No recipients could be inferred from the dataset")
 
         app_config = get_app_config(app.testing)
         sender = app_config.get('MAIL_DEFAULT_SENDER', 'etsin-no-reply@fairdata.fi')
@@ -194,7 +194,7 @@ class Contact(Resource):
                                          user_email, user_subject, user_body)
 
         # Create the message
-        msg = Message(sender=sender, reply_to=user_email, recipients=[recipient], subject=subject, body=body)
+        msg = Message(sender=sender, reply_to=user_email, recipients=recipients, subject=subject, body=body)
 
         # Send the message
         with app.mail.record_messages() as outbox:

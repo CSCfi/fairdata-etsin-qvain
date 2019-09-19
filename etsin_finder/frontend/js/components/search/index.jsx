@@ -39,6 +39,7 @@ export default class Search extends Component {
 
   componentDidMount() {
     Accessibility.handleNavigation('datasets')
+    this.initialQuery()
     if (this.props.match.params.query) {
       Tracking.newPageView(`Search: ${this.props.match.params.query}`, this.props.location.pathname)
     } else {
