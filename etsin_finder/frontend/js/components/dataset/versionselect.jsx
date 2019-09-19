@@ -86,16 +86,6 @@ export default class VersionSelect extends Component {
     }
   }
 
-  componentWillReceiveProps(newProps) {
-    if (newProps !== this.props) {
-      this.setState({
-        isOpen: false,
-        options: newProps.options,
-        selected: newProps.value,
-      })
-    }
-  }
-
   onBlur = () => {
     this.timeoutID = setTimeout(() => {
       if (this.state.isFocused) {
@@ -152,6 +142,17 @@ export default class VersionSelect extends Component {
         }
       }
     )
+  }
+
+  // eslint-disable-next-line camelcase
+  UNSAFE_componentWillReceiveProps(newProps) {
+    if (newProps !== this.props) {
+      this.setState({
+        isOpen: false,
+        options: newProps.options,
+        selected: newProps.value,
+      })
+    }
   }
 
   render() {
