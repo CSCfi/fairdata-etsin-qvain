@@ -30,7 +30,13 @@ class ResultsList extends Component {
       single => (
         (
           // Filter list to exclude datasets with data-catalog-pas , if PAS datasets should be excluded
-          !((ElasticQuery.includePasDatasets === false) && (single._source.data_catalog === 'urn:nbn:fi:att:data-catalog-pas'))
+          !(
+            (ElasticQuery.includePasDatasets === false) &&
+            (
+              (single._source.data_catalog.en === 'Fairdata PAS datasets') ||
+              (single._source.data_catalog.fi === 'Fairdata PAS-aineistot')
+            )
+          )
         ) && (
           <ListItem
             key={single._id}
