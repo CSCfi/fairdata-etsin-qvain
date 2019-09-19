@@ -18,7 +18,7 @@ import styled from 'styled-components'
 import checkDataLang, { getDataLang } from '../../../utils/checkDataLang'
 import ErrorBoundary from '../../general/errorBoundary'
 import AccessRights from '../../dataset/accessRights'
-import FairdataPasDatasetIcon from '../../dataset/FairdataPasDatasetIcon'
+import FairdataPasDatasetIcon from '../../dataset/fairdataPasDatasetIcon'
 import ContentBox from '../../general/contentBox'
 
 export default class ListItem extends Component {

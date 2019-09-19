@@ -18,7 +18,7 @@ import Translate from 'react-translate-component'
 import { Link } from 'react-router-dom'
 
 import AccessRights from './accessRights'
-import FairdataPasDatasetIcon from './FairdataPasDatasetIcon'
+import FairdataPasDatasetIcon from './fairdataPasDatasetIcon'
 import Accessiblity from '../../stores/view/accessibility'
 import AskForAccess from './askForAccess'
 import Contact from './contact'
