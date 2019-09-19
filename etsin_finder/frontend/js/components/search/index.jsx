@@ -29,7 +29,7 @@ export default class Search extends Component {
     super()
     this.state = {
       initialLoad: false,
-      pasCheckboxChecked: false,
+      includePasDatasets: ElasticQuery.includePasDatasets || false,
     }
   }
 
@@ -47,16 +47,11 @@ export default class Search extends Component {
     }
   }
 
-  // Set 'Include Fairdata PAS datasets' to false, upon exit page
-  componentWillUnmount() {
-    ElasticQuery.setIncludePasDatasetsToFalse()
-  }
-
-  handlePasCheckboxChange = event => {
+  handlePasCheckboxToggle = event => {
     this.setState({
-      pasCheckboxChecked: event.target.checked,
+      includePasDatasets: event.target.checked,
     })
-    ElasticQuery.toggleIncludePasDatasets(this.state.pasCheckboxChecked)
+    ElasticQuery.toggleIncludePasDatasets(this.state.includePasDatasets)
   }
 
   initialQuery = () => {
@@ -84,8 +79,8 @@ export default class Search extends Component {
               />
               <PasContainer>
                 <Checkbox
-                  checked={this.state.pasCheckboxChecked}
-                  onChange={this.handlePasCheckboxChange}
+                  checked={this.state.includePasDatasets}
+                  onChange={this.handlePasCheckboxToggle}
                 />
                 <Translate content="home.includePas" />
               </PasContainer>

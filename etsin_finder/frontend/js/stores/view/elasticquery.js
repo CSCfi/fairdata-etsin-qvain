@@ -58,21 +58,13 @@ class ElasticQuery {
 
   @observable includePasDatasets = false
 
-  // Toggle 'Include Fairdata PAS datasets'
-  @action
-  toggleIncludePasDatasets = (previouslyChecked) => {
-    if (previouslyChecked) {
+  toggleIncludePasDatasets = (includePasDatasets) => {
+    if (includePasDatasets) {
       this.includePasDatasets = false
     } else {
       this.includePasDatasets = true
     }
     this.queryES(false)
-  }
-
-  // Set 'Include Fairdata PAS datasets' to false
-  @action
-  setIncludePasDatasetsToFalse = () => {
-    this.includePasDatasets = false
   }
 
   // update query search term and url
