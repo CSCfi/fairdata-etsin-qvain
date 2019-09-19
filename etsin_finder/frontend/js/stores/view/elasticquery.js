@@ -433,9 +433,21 @@ class ElasticQuery {
             // track queries, categories, and hits
             // category tracking turned off because filter contains a lot of different fields
             Tracking.newSearch(currentSearch, false, res.data.hits.hits.length)
+
+            let totalHits = res.data.hits.total
+
+            // If pas datasets are not to be included, they must be removed from the search results count
+            if (this.includePasDatasets === false) {
+              for (let i = 0; i < res.data.aggregations.data_catalog_en.buckets.length; i += 1) {
+                if (res.data.aggregations.data_catalog_en.buckets[i].key === 'Fairdata PAS datasets') {
+                  totalHits -= res.data.aggregations.data_catalog_en.buckets[i].doc_count
+                  break;
+                }
+              }
+            }
             this.results = {
               hits: res.data.hits.hits,
-              total: res.data.hits.total,
+              total: totalHits,
               aggregations: res.data.aggregations,
             }
             this.loading = false
