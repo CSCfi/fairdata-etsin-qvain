@@ -121,12 +121,6 @@ class FilterSection extends Component {
   }
 
   checkIfValid = () => {
-    if (this.aggregations[this.props.aggregation] !== undefined) {
-      const { title, aggregation, term } = this.aggregations[this.props.aggregation]
-      this.titleName = checkDataLang(title)
-      this.aggregationName = checkDataLang(aggregation)
-      this.termName = checkDataLang(term)
-    }
     if (
       this.aggregations[this.props.aggregation] === undefined ||
       this.props.Stores.ElasticQuery.results.aggregations[this.aggregationName] === 'undefined' ||
@@ -172,12 +166,25 @@ class FilterSection extends Component {
     }
   }
 
-  render() {
+  // Code that needs to be run before render()
+  prepareForRender() {
+    if (this.aggregations[this.props.aggregation] !== undefined) {
+      const { title, aggregation, term } = this.aggregations[this.props.aggregation]
+      this.titleName = checkDataLang(title)
+      this.aggregationName = checkDataLang(aggregation)
+      this.termName = checkDataLang(term)
+    }
+
     this.state.aggregateItems = this.props.Stores.ElasticQuery.results.aggregations[this.aggregationName].buckets
     this.state.displayShowButton = this.state.aggregateItems.length > this.cutoff
     if (!this.state.show) {
       this.state.aggregateItems = this.state.aggregateItems.slice(0, this.cutoff)
     }
+  }
+
+  render() {
+    this.prepareForRender()
+
     if (this.props.Stores.ElasticQuery.results.total === 0) {
       return null
     }
