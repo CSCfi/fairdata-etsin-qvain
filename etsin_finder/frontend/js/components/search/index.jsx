@@ -33,10 +33,6 @@ export default class Search extends Component {
     }
   }
 
-  componentWillMount() {
-    this.initialQuery()
-  }
-
   componentDidMount() {
     Accessibility.handleNavigation('datasets')
     this.initialQuery()
