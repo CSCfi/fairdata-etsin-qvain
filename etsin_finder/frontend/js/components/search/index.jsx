@@ -22,7 +22,7 @@ import HeroBanner from '../general/hero'
 import SearchBar from './searchBar'
 import Results from './results'
 import Tracking from '../../utils/tracking'
-import { Checkbox } from '../qvain/general/form';
+import { Checkbox, Label } from '../qvain/general/form'
 
 export default class Search extends Component {
   constructor() {
@@ -73,13 +73,23 @@ export default class Search extends Component {
                   this.search = input
                 }}
               />
-              <PasContainer>
-                <Checkbox
-                  checked={this.state.includePasDatasets}
-                  onChange={this.handlePasCheckboxToggle}
-                />
-                <Translate content="home.includePas" />
-              </PasContainer>
+              <IncludePasDatasetsContainer>
+                <IncludePasDatasetsInner>
+                  <IncludePasDatasetsCheckboxContainer>
+                    <Checkbox
+                      id="pasCheckbox"
+                      checked={this.state.includePasDatasets}
+                      onChange={this.handlePasCheckboxToggle}
+                    />
+                    <Label
+                      htmlFor="pasCheckbox"
+                    >
+                      <Translate content="home.includePas" />
+                    </Label>
+
+                  </IncludePasDatasetsCheckboxContainer>
+                </IncludePasDatasetsInner>
+              </IncludePasDatasetsContainer>
             </section>
           </div>
         </HeroBanner>
@@ -100,9 +110,22 @@ Search.propTypes = {
   }).isRequired,
 }
 
-const PasContainer = styled.div`
+const IncludePasDatasetsContainer = styled.div`
+  display: flex;
+  justify-content: center;
   padding-top: 10px;
-  text-align: right;
+`
+
+const IncludePasDatasetsInner = styled.div`
+  max-width: 800px;
+  width: 100%;
+  position: relative;
+  display: flex;
+`
+
+const IncludePasDatasetsCheckboxContainer = styled.div`
+  display: flex;
+  position: absolute;
+  vertical-align: middle;
   right: 0;
-  max-width: 953px;
 `
