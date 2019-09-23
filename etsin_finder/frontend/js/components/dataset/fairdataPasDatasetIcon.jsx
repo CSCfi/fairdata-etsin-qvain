@@ -10,18 +10,17 @@
    */
 }
 
-import React, { Component } from 'react'
+import React from 'react'
 import { inject, observer } from 'mobx-react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 
-class FairdataPasDatasetIcon extends Component {
-  render() {
+const FairdataPasDatasetIcon = (props) => {
     if (
-      (this.props.preservation_state > 0)
+      (`${props.preservation_state}` > 0)
       &&
-      (this.props.data_catalog_identifier !== 'urn:nbn:fi:att:data-catalog-pas')
+      (`${props.data_catalog_identifier}` !== 'urn:nbn:fi:att:data-catalog-pas')
     ) {
       return (
         <FairdataPasIconContainerEnteringPas>
@@ -38,7 +37,6 @@ class FairdataPasDatasetIcon extends Component {
           </FairdataPasIconLabel>
         </FairdataPasIconContainerInPas>
       )
-  }
 }
 
 export default inject('Stores')(observer(FairdataPasDatasetIcon))
