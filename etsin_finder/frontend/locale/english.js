@@ -92,6 +92,7 @@ const english = {
       type: 'Type',
       go_to_original: 'Go to original',
       sliced: 'Some files are not displayed in this view due to large amount of files',
+      cumulativeDatasetLabel: '"Note: Dataset is growing"',
     },
     events_idn: {
       events: {

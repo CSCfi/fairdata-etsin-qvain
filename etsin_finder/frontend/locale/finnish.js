@@ -91,6 +91,7 @@ const finnish = {
       type: 'Tyyppi',
       go_to_original: 'Siirry sivulle',
       sliced: 'Joitain tiedostoja ei näytetä tässä näkymässä tiedostojen suuren lukumäärän vuoksi',
+      cumulativeDatasetLabel: 'Huom: Aineisto on kasvava',
     },
     events_idn: {
       events: {

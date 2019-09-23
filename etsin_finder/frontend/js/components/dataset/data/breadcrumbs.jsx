@@ -36,13 +36,21 @@ export default class Breadcrumbs extends Component {
   pathItems(path, i, id) {
     if (!path) {
       return (
-        <Path key="path-home">
-          <TransparentButton onClick={() => this.props.changeFolder()}>
-            <Translate className="sr-only" content="dataset.dl.file_types.directory" />
-            <Translate className="sr-only" content="dataset.dl.root" />
-            <FontAwesomeIcon icon={faHome} />
-          </TransparentButton>
-        </Path>
+        <BreadcrumbsContainer>
+          <Path key="path-home">
+            <TransparentButton onClick={() => this.props.changeFolder()}>
+              <Translate className="sr-only" content="dataset.dl.file_types.directory" />
+              <Translate className="sr-only" content="dataset.dl.root" />
+              <FontAwesomeIcon icon={faHome} />
+            </TransparentButton>
+          </Path>
+          {
+              (this.props.dataset.data_catalog.catalog_json.cumulative_state === 1) &&
+              (
+                <Translate content="dataset.dl.cumulativeDatasetLabel" />
+              )
+          }
+        </BreadcrumbsContainer>
       )
     }
 
@@ -136,8 +144,16 @@ const Rest = styled.div`
   display: flex;
 `
 
+const BreadcrumbsContainer = styled.div`
+  display: inline-flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: flex-start;
+`
+
 /* eslint-disable react/no-unused-prop-types */
 Breadcrumbs.propTypes = {
+  dataset: PropTypes.object.isRequired,
   changeFolder: PropTypes.func.isRequired,
   path: PropTypes.array.isRequired,
   folderIds: PropTypes.array.isRequired,

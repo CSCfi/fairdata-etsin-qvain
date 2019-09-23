@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import translate from 'counterpart'
 
+import PropTypes from 'prop-types'
+
 import DatasetQuery from '../../../../stores/view/datasetquery'
 import createTree from '../../../../utils/createTree'
 import TableHeader from '../tableHeader'
@@ -241,6 +243,7 @@ export default class IdaResources extends Component {
           downloadAll
         />
         <Breadcrumbs
+          dataset={this.props.dataset}
           path={this.state.currentPath}
           folderIds={this.state.currentIDs}
           changeFolder={this.updatePath}
@@ -263,3 +266,7 @@ export default class IdaResources extends Component {
 const DataTable = styled.div`
   margin-top: 1em;
 `
+
+IdaResources.propTypes = {
+  dataset: PropTypes.object.isRequired,
+}
