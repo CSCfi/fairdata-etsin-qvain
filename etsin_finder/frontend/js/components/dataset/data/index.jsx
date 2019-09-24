@@ -30,7 +30,11 @@ export default class Data extends Component {
   render() {
     return (
       <div>
-        {this.props.hasFiles && <IdaResources />}
+        {this.props.hasFiles && (
+          <IdaResources
+            dataset={this.props.dataset}
+          />
+        )}
         {this.props.hasRemote && <ExternalResources />}
       </div>
     )
@@ -38,6 +42,7 @@ export default class Data extends Component {
 }
 
 Data.propTypes = {
+  dataset: PropTypes.object.isRequired,
   location: PropTypes.shape({
     pathname: PropTypes.string,
   }).isRequired,
