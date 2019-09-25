@@ -42,6 +42,15 @@ export default class IdaResources extends Component {
     this.tableFocusReset = React.createRef()
   }
 
+  componentDidMount() {
+    // If this is a PAS dataset, dowload should be disabled
+    if (this.props.dataset.data_catalog.catalog_json.identifier === 'urn:nbn:fi:att:data-catalog-pas') {
+      this.setState({
+        allowDownload: false
+      })
+    }
+  }
+
   // combines folders and files into single array of objects
   /*
     {

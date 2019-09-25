@@ -20,6 +20,7 @@ import { faHome } from '@fortawesome/free-solid-svg-icons'
 
 import { TransparentButton } from '../../general/button'
 import DatasetIsCumulativeNotificationBar from '../../general/datasetIsCumulativeNotificationBar'
+import FairdataPasDatasetIcon from '../fairdataPasDatasetIcon';
 
 export default class Breadcrumbs extends Component {
   slicePath(props) {
@@ -46,11 +47,22 @@ export default class Breadcrumbs extends Component {
             </TransparentButton>
           </Path>
           {
-              (this.props.dataset.cumulative_state === 1) &&
+            (this.props.dataset.cumulative_state === 1) &&
               (
                 <DatasetIsCumulativeNotificationBar
                   directionToDisplayTooltip="Down"
                 />
+              )
+          }
+          {
+            (this.props.dataset.data_catalog.catalog_json.identifier === 'urn:nbn:fi:att:data-catalog-pas') &&
+              (
+                <BreadcrumbsPasContainer>
+                  <PasInfo>
+                    <Translate content="dataset.dataInPasDatasetsCanNotBeDownloaded" />
+                  </PasInfo>
+                  <FairdataPasDatasetIcon />
+                </BreadcrumbsPasContainer>
               )
           }
         </BreadcrumbsContainer>
@@ -152,6 +164,19 @@ const BreadcrumbsContainer = styled.div`
   width: 100%;
   justify-content: space-between;
   align-items: flex-start;
+`
+
+const BreadcrumbsPasContainer = styled.div`
+  display: inline-flex;
+  margin-top: 5px;
+`
+
+const PasInfo = styled.div`
+  color: ${p => p.theme.color.gray};
+  font-size: 0.9em;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  margin-right: 15px;
 `
 
 /* eslint-disable react/no-unused-prop-types */

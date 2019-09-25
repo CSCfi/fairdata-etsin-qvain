@@ -107,6 +107,7 @@ const finnish = {
         description: 'Kuvaus',
       },
       other_idn: 'Muut tunnisteet',
+      origin_identifier: 'Alkuperäisen aineiston tunniste',
       relations: {
         title: 'Relaatiot',
         type: 'Tyyppi',
@@ -156,6 +157,13 @@ const finnish = {
       homepage: 'Kotisivu',
     },
     language: 'Kieli',
+    storedInPas: 'Tämä ainesto on säilytetty Fairdata PAS:issa.',
+    pasDatasetVersionExists: 'Fairdata PAS-versio tästä aineistosta on olemassa: ',
+    originalDatasetVersionExists: 'Alkuperäinen versio tästä aineistosta on olemassa: ',
+    linkToPasDataset: 'Linkki',
+    linkToOriginalDataset: 'Linkki',
+    enteringPas: 'Menemässä PAS:iin',
+    dataInPasDatasetsCanNotBeDownloaded: 'PAS-aineistojen dataa ei voida ladata'
   },
   error: {
     notFound:
@@ -201,6 +209,7 @@ const finnish = {
       fos: 'tieteenalaa',
       research: 'tutkimusprojektia',
     },
+    includePas: 'Ota mukaan Fairdata PAS-datasettejä',
   },
   nav: {
     login: 'Kirjaudu',
@@ -347,7 +356,7 @@ const finnish = {
         instructions:
           'Metadatan tunniste luodaan automaattisesti mutta jos on jo OLEMASSA OLEVA tunniste, syötä se tähän.',
         addButton: '+ Lisää uusi',
-        alredyAdded: 'Tunniste on jo lisätty',
+        alreadyAdded: 'Tunniste on jo lisätty',
       },
       fieldOfScience: {
         title: 'Tutkimusala',

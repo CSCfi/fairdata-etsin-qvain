@@ -108,6 +108,7 @@ const english = {
         description: 'Description',
       },
       other_idn: 'Other identifiers',
+      origin_identifier: 'Origin dataset identifier',
       relations: {
         title: 'Relations',
         type: 'Type',
@@ -157,6 +158,13 @@ const english = {
       homepage: 'Homepage',
     },
     language: 'Language',
+    storedInPas: 'This dataset is stored in Fairdata PAS.',
+    pasDatasetVersionExists: 'A Fairdata PAS version of this dataset exists: ',
+    originalDatasetVersionExists: 'An original version of this dataset exists: ',
+    linkToPasDataset: 'Link',
+    linkToOriginalDataset: 'Link',
+    enteringPas: 'Entering PAS',
+    dataInPasDatasetsCanNotBeDownloaded: 'PAS dataset data cannot be downloaded'
   },
   error: {
     notFound:
@@ -202,6 +210,7 @@ const english = {
       fos: 'fields of science',
       research: 'projects',
     },
+    includePas: 'Include Fairdata PAS datasets',
   },
   nav: {
     login: 'Login',
@@ -343,7 +352,7 @@ const english = {
         instructions:
           'Identifier for the metadata will be created automatically but if there already is an EXISTING identifier please insert it here.',
         addButton: '+ Add new',
-        alredyAdded: 'Identifier already added',
+        alreadyAdded: 'Identifier already added',
       },
       fieldOfScience: {
         title: 'Field of Science',
