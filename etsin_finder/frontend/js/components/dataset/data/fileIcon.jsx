@@ -23,7 +23,7 @@ import { faCloud } from '@fortawesome/free-solid-svg-icons'
 import PropTypes from 'prop-types'
 import translate from 'counterpart'
 
-import HoverTooltip from '../../general/hoverTooltip'
+import TooltipHover from '../../general/tooltipHover'
 import { TypeConcept } from '../../../utils/propTypes'
 import checkDataLang, { getDataLang } from '../../../utils/checkDataLang'
 
@@ -56,7 +56,7 @@ const FileIcon = props => {
         <div className="sr-only" lang={getDataLang(props.type.pref_label)}>
           {checkDataLang(props.type.pref_label)}
         </div>
-        <HoverTooltip
+        <TooltipHover
           title={checkDataLang(props.type.pref_label)}
           lang={getDataLang(props.type.pref_label)}
         >
@@ -68,7 +68,7 @@ const FileIcon = props => {
             lang={getDataLang(props.type.pref_label)}
             title={checkDataLang(props.type.pref_label)}
           />
-        </HoverTooltip>
+        </TooltipHover>
       </React.Fragment>
     )
   }
