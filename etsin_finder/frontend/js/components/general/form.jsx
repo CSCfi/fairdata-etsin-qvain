@@ -30,6 +30,7 @@ export const HelpIconStyles = styled(FontAwesomeIcon)`
 export const NoStyleButton = styled.button`
   border: none;
   background-color: unset;
+  padding-left: 0;
 `
 
 export const HelpIcon = props => (

@@ -135,11 +135,13 @@ class Sidebar extends Component {
               <Identifier idn={this.state.pid} />
 
               { /* INFORMATION DISPLAYED FOR CUMULATIVE DATASETS */
-                (this.props.dataset.data_catalog.catalog_json) && // .cumulative_state === 1
+                (this.props.dataset.cumulative_state === 1) &&
                 (
-                  <DatasetIsCumulativeNotificationBar
-                    directionToDisplayTooltip="Left"
-                  />
+                  <SidebarContainerForCumulativeInfo>
+                    <DatasetIsCumulativeNotificationBar
+                      directionToDisplayTooltip="Left"
+                    />
+                  </SidebarContainerForCumulativeInfo>
                 )
               }
 
@@ -354,6 +356,10 @@ const SidebarContainer = styled.aside`
   -ms-hyphens: auto;
   hyphens: auto;
   padding: 20px 0;
+`
+
+const SidebarContainerForCumulativeInfo = styled.div`
+  padding: 0.5em 0em 0em 0em;
 `
 
 const HorizontalLine = styled.hr`

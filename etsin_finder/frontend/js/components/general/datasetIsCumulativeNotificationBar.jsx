@@ -44,8 +44,7 @@ const DatasetIsCumulativeNotificationBar = props => {
 }
 
 const DatasetIsCumulativeContainer = styled.div`
-  line-height: 1.75;
-  padding: 0.5em 0em;
+  padding: 0.55em 0em 0em 0em;
 `
 
 DatasetIsCumulativeNotificationBar.propTypes = {

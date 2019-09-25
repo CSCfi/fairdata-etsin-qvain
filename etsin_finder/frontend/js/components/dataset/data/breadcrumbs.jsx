@@ -46,7 +46,7 @@ export default class Breadcrumbs extends Component {
             </TransparentButton>
           </Path>
           {
-              (this.props.dataset.data_catalog.catalog_json) && // cumulative_state === 1
+              (this.props.dataset.cumulative_state === 1) &&
               (
                 <DatasetIsCumulativeNotificationBar
                   directionToDisplayTooltip="Down"
