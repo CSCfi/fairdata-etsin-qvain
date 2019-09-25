@@ -19,6 +19,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHome } from '@fortawesome/free-solid-svg-icons'
 
 import { TransparentButton } from '../../general/button'
+import DatasetIsCumulativeNotificationBar from '../../general/datasetIsCumulativeNotificationBar'
 
 export default class Breadcrumbs extends Component {
   slicePath(props) {
@@ -45,9 +46,11 @@ export default class Breadcrumbs extends Component {
             </TransparentButton>
           </Path>
           {
-              (this.props.dataset.data_catalog.catalog_json.cumulative_state === 1) &&
+              (this.props.dataset.data_catalog.catalog_json) && // cumulative_state === 1
               (
-                <Translate content="dataset.dl.cumulativeDatasetLabel" />
+                <DatasetIsCumulativeNotificationBar
+                  directionToDisplayTooltip="Down"
+                />
               )
           }
         </BreadcrumbsContainer>

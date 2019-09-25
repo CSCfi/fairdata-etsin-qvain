@@ -92,6 +92,10 @@ const finnish = {
       go_to_original: 'Siirry sivulle',
       sliced: 'Joitain tiedostoja ei näytetä tässä näkymässä tiedostojen suuren lukumäärän vuoksi',
       cumulativeDatasetLabel: 'Huom: Aineisto on kasvava',
+      cumulativeDatasetTooltip: {
+        header: 'Kasvava aineisto',
+        info: 'Tämä on karttuva aineisto, johon mahdollisesti vielä lisätään tiedostoja. Huomio tämä kun käytät aineistoa tai viittaat siihen (esim. ajallinen kattavuus hyvä mainita). Aineistosta ei kuitenkaan voi poistaa tai muuttaa olemassa olevia tiedostoja.',
+      },
     },
     events_idn: {
       events: {
