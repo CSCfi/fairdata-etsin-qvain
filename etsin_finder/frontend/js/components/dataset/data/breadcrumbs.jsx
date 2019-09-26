@@ -19,6 +19,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHome } from '@fortawesome/free-solid-svg-icons'
 
 import { TransparentButton } from '../../general/button'
+import DatasetIsCumulativeNotificationBar from '../../general/datasetIsCumulativeNotificationBar'
 import FairdataPasDatasetIcon from '../fairdataPasDatasetIcon';
 
 export default class Breadcrumbs extends Component {
@@ -46,14 +47,22 @@ export default class Breadcrumbs extends Component {
             </TransparentButton>
           </Path>
           {
-              (this.props.dataset.data_catalog.catalog_json.identifier === 'urn:nbn:fi:att:data-catalog-pas') &&
+            (this.props.dataset.cumulative_state === 1) &&
               (
-              <BreadcrumbsPasContainer>
-                <PasInfo>
-                  <Translate content="dataset.dataInPasDatasetsCanNotBeDownloaded" />
-                </PasInfo>
-                <FairdataPasDatasetIcon />
-              </BreadcrumbsPasContainer>
+                <DatasetIsCumulativeNotificationBar
+                  directionToDisplayTooltip="Down"
+                />
+              )
+          }
+          {
+            (this.props.dataset.data_catalog.catalog_json.identifier === 'urn:nbn:fi:att:data-catalog-pas') &&
+              (
+                <BreadcrumbsPasContainer>
+                  <PasInfo>
+                    <Translate content="dataset.dataInPasDatasetsCanNotBeDownloaded" />
+                  </PasInfo>
+                  <FairdataPasDatasetIcon />
+                </BreadcrumbsPasContainer>
               )
           }
         </BreadcrumbsContainer>
