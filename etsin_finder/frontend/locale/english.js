@@ -394,11 +394,11 @@ const english = {
     actors: {
       title: 'Actors',
       infoTitle: 'Actors info',
-      infoText: 'Add at least one creator and one publisher. A curator is not mandatory. First, select the type of actor (person or organization). Then choose the roles the actor has (you can add multiple). After that, fill in the details: organization is mandatory for a person. You can edit added actors by clicking the pen icon or remove it by clicking the X icon.',
+      infoText: 'Add at least one Creator. First, select the type of actor (person or organization). Then choose the roles the actor has (you can add multiple). After that, fill in the details: organization is mandatory for a person. You can edit added actors by clicking the pen icon or remove it by clicking the X icon.',
       add: {
         title: 'Actors',
         help:
-          'Creator (1+) and publisher (max 1) roles are mandatory. Notice that one actor can have multiple roles.',
+          'Creator (1+) role is mandatory. Notice that one actor can have multiple roles.',
         radio: {
           person: 'Person',
           organization: 'Organization',
@@ -407,6 +407,8 @@ const english = {
           creator: 'Creator',
           publisher: 'Publisher',
           curator: 'Curator',
+          rights_holder: 'Rights holder',
+          contributor: 'Contributor'
         },
         name: {
           placeholder: {
@@ -476,9 +478,9 @@ const english = {
         },
         roles: {
           mixed: '',
-          oneOf: 'Roles must be one of "creator", "publisher" or "curator".',
+          oneOf: 'Roles must be one of "Creator", "Publisher", "Curator", "Rights holder" or "Contributor".',
           required:
-            'You must specify the role of the actor. A creator is mandatory and there must be exactly one publisher.',
+            'You must specify the role of the actor. The creator role is mandatory.',
         },
         name: {
           string: 'The name must be a string value.',
@@ -504,7 +506,7 @@ const english = {
         },
         requiredActors: {
           atLeastOneActor: 'You must add at least one actor to your dataset.',
-          mandatoryActors: 'Actors: Creator and publisher roles are mandatory. Note: one person can have both these roles.',
+          mandatoryActors: 'Actors: Creator role is mandatory. Note: one actor can have multiple roles.',
         },
       },
       accessType: {

@@ -29,7 +29,7 @@ def alter_role_data(actor_list, role):
 
     Arguments:
         actor_list {list} -- A list of all the actors from the frontend.
-        role {string} -- The role, can be 'creator', 'publisher' or 'curator'.
+        role {string} -- The role, can be 'creator', 'publisher', 'curator', 'rights_holder' or 'contributor'.
 
     Returns:
         list -- List of the actors with the role in question complyant to Metax schema.
@@ -196,6 +196,7 @@ def data_to_metax(data, metadata_provider_org, metadata_provider_user):
         object -- Returns an object that has been validated and should conform to Metax schema and is ready to be sent to Metax.
 
     """
+    publisher_array = alter_role_data(data["actors"], "publisher")
     dataset_data = {
         "metadata_provider_org": metadata_provider_org,
         "metadata_provider_user": metadata_provider_user,
@@ -204,8 +205,10 @@ def data_to_metax(data, metadata_provider_org, metadata_provider_user):
             "title": data["title"],
             "description": data["description"],
             "creator": alter_role_data(data["actors"], "creator"),
-            "publisher": alter_role_data(data["actors"], "publisher")[0],
+            "publisher": publisher_array[0] if publisher_array else {},
             "curator": alter_role_data(data["actors"], "curator"),
+            "rights_holder": alter_role_data(data["actors"], "rights_holder"),
+            "contributor": alter_role_data(data["actors"], "contributor"),
             "other_identifier": other_identifiers_to_metax(data["identifiers"]),
             "field_of_science": [{
                 "identifier": data["fieldOfScience"] if "fieldOfScience" in data else ""
@@ -263,8 +266,11 @@ def edited_data_to_metax(data, original):
     original["research_dataset"]["title"] = data["title"]
     original["research_dataset"]["description"] = data["description"]
     original["research_dataset"]["creator"] = alter_role_data(data["actors"], "creator")
-    original["research_dataset"]["publisher"] = alter_role_data(data["actors"], "publisher")[0]
+    publisher_array = alter_role_data(data["actors"], "publisher")
+    original["research_dataset"]["publisher"] = publisher_array[0] if publisher_array else {},
     original["research_dataset"]["curator"] = alter_role_data(data["actors"], "curator")
+    original["research_dataset"]["rights_holder"] = alter_role_data(data["actors"], "rights_holder")
+    original["research_dataset"]["contributor"] = alter_role_data(data["actors"], "contributor")
     original["research_dataset"]["other_identifier"] = other_identifiers_to_metax(data["identifiers"])
     original["research_dataset"]["field_of_science"] = [{"identifier": data["fieldOfScience"] if "fieldOfScience" in data else ""}]
     original["research_dataset"]["keyword"] = data["keywords"]
