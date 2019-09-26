@@ -20,3 +20,16 @@ export const DataCatalogIdentifiers = {
   IDA: 'urn:nbn:fi:att:data-catalog-ida',
   ATT: 'urn:nbn:fi:att:data-catalog-att'
 }
+
+export const EntityType = {
+  PERSON: 'person',
+  ORGANIZATION: 'organization',
+}
+
+export const Role = {
+  CREATOR: 'creator',
+  PUBLISHER: 'publisher',
+  CURATOR: 'curator',
+  RIGHTS_HOLDER: 'rights_holder',
+  CONTRIBUTOR: 'contributor'
+}
