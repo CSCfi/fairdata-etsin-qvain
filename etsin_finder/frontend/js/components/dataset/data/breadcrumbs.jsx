@@ -19,6 +19,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHome } from '@fortawesome/free-solid-svg-icons'
 
 import { TransparentButton } from '../../general/button'
+import FairdataPasDatasetIcon from '../fairdataPasDatasetIcon';
 
 export default class Breadcrumbs extends Component {
   slicePath(props) {
@@ -36,13 +37,26 @@ export default class Breadcrumbs extends Component {
   pathItems(path, i, id) {
     if (!path) {
       return (
-        <Path key="path-home">
-          <TransparentButton onClick={() => this.props.changeFolder()}>
-            <Translate className="sr-only" content="dataset.dl.file_types.directory" />
-            <Translate className="sr-only" content="dataset.dl.root" />
-            <FontAwesomeIcon icon={faHome} />
-          </TransparentButton>
-        </Path>
+        <BreadcrumbsContainer>
+          <Path key="path-home">
+            <TransparentButton onClick={() => this.props.changeFolder()}>
+              <Translate className="sr-only" content="dataset.dl.file_types.directory" />
+              <Translate className="sr-only" content="dataset.dl.root" />
+              <FontAwesomeIcon icon={faHome} />
+            </TransparentButton>
+          </Path>
+          {
+              (this.props.dataset.data_catalog.catalog_json.identifier === 'urn:nbn:fi:att:data-catalog-pas') &&
+              (
+              <BreadcrumbsPasContainer>
+                <PasInfo>
+                  <Translate content="dataset.dataInPasDatasetsCanNotBeDownloaded" />
+                </PasInfo>
+                <FairdataPasDatasetIcon />
+              </BreadcrumbsPasContainer>
+              )
+          }
+        </BreadcrumbsContainer>
       )
     }
 
@@ -136,8 +150,29 @@ const Rest = styled.div`
   display: flex;
 `
 
+const BreadcrumbsContainer = styled.div`
+  display: inline-flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: flex-start;
+`
+
+const BreadcrumbsPasContainer = styled.div`
+  display: inline-flex;
+  margin-top: 5px;
+`
+
+const PasInfo = styled.div`
+  color: ${p => p.theme.color.gray};
+  font-size: 0.9em;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  margin-right: 15px;
+`
+
 /* eslint-disable react/no-unused-prop-types */
 Breadcrumbs.propTypes = {
+  dataset: PropTypes.object.isRequired,
   changeFolder: PropTypes.func.isRequired,
   path: PropTypes.array.isRequired,
   folderIds: PropTypes.array.isRequired,
