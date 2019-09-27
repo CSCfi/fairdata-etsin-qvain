@@ -14,6 +14,7 @@ import License from './special/license'
 import ErrorBoundary from '../../general/errorBoundary'
 import Agent from '../agent'
 import Project from './special/project'
+import DatasetIsCumulativeNotificationBar from '../../general/datasetIsCumulativeNotificationBar'
 
 class Sidebar extends Component {
   constructor(props) {
@@ -132,6 +133,18 @@ class Sidebar extends Component {
 
             <SidebarItem component="dd" trans="dataset.identifier">
               <Identifier idn={this.state.pid} />
+
+              { /* INFORMATION DISPLAYED FOR CUMULATIVE DATASETS */
+                (this.props.dataset.cumulative_state === 1) &&
+                (
+                  <SidebarContainerForCumulativeInfo>
+                    <DatasetIsCumulativeNotificationBar
+                      directionToDisplayTooltip="Left"
+                    />
+                  </SidebarContainerForCumulativeInfo>
+                )
+              }
+
             </SidebarItem>
             <HorizontalLine aria-hidden />
             {/* FIELD OF SCIENCE */}
@@ -343,6 +356,10 @@ const SidebarContainer = styled.aside`
   -ms-hyphens: auto;
   hyphens: auto;
   padding: 20px 0;
+`
+
+const SidebarContainerForCumulativeInfo = styled.div`
+  padding: 0.5em 0em 0em 0em;
 `
 
 const HorizontalLine = styled.hr`
