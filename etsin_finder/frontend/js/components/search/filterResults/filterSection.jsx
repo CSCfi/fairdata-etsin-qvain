@@ -104,7 +104,7 @@ class FilterSection extends Component {
     this.filterPasDatasets()
   }
 
-  componentWillUpdate() {
+  componentDidUpdate() {
     this.filterPasDatasets()
   }
 
