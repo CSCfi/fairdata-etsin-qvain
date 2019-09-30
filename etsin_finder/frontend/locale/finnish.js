@@ -403,11 +403,11 @@ const finnish = {
     actors: {
       title: 'Toimijat',
       infoTitle: 'Toimijat info',
-      infoText: 'Tutkimukseen tai aineiston tekemiseen osallistuneet henkilöt ja organisaatiot. Voit määrittää tekijät (pakollinen), julkaisijat (pakollinen) ja kuraattorit. Valitse ensin, onko kyseessä henkilö vai organisaatio. Määritä sen jälkeen, missä roolissa ko. toimija osallistui tutkimukseen (voit valita useita), ja määritä sen jälkeen tarvittavat tiedot. Jos kyseessä on henkilö, on organisaatiotieto pakollinen tieto. Jo annettuja tietoja pääset muuttamaan klikkaamalla tallennetun toimijan kohdalla kynä -ikonia.',
+      infoText: 'Tutkimukseen tai aineiston tekemiseen osallistuneet henkilöt ja organisaatiot. Voit määrittää tekijät (pakollinen), Julkaisijan, Kuraattorit, Oikeuksienhaltijat sekä Muut tekijät. Valitse ensin, onko kyseessä henkilö vai organisaatio. Määritä sen jälkeen, missä roolissa ko. toimija osallistui tutkimukseen (voit valita useita), ja määritä sen jälkeen tarvittavat tiedot. Jos kyseessä on henkilö, on organisaatiotieto pakollinen tieto. Jo annettuja tietoja pääset muuttamaan klikkaamalla tallennetun toimijan kohdalla kynä -ikonia.',
       add: {
         title: 'Toimijat',
         help:
-          'Tekijä (1+) ja julkaisija (max 1) roolit ovat pakollisia. Huomioi että yksittäisellä toimijalla voi olla useampi rooli.',
+          'Tekijä (1+) rooli on pakollinen. Huomioi että yksittäisellä toimijalla voi olla useampi rooli.',
         radio: {
           person: 'Luonnollinen henkilö',
           organization: 'Organisaatio',
@@ -416,6 +416,8 @@ const finnish = {
           creator: 'Tekijä',
           publisher: 'Julkaisija',
           curator: 'Kuraattori',
+          rights_holder: 'Oikeuksienhaltija',
+          contributor: 'Muu tekijä'
         },
         name: {
           placeholder: {
@@ -485,9 +487,9 @@ const finnish = {
         },
         roles: {
           mixed: '',
-          oneOf: 'Roolin kuuluisi olla "Tekijä", "Julkasija" tai "Kuraattori".',
+          oneOf: 'Roolin kuuluisi olla "Tekijä", "Julkasija", "Kuraattori", "Oikeuksienhaltija" tai "Muut tekijät".',
           required:
-            'Tekijän rooli on pakollinen. On myös pakollista määrittää tasan yhden julkaisijan.',
+            'Tekijän rooli on pakollinen.',
         },
         name: {
           string: 'Nimi pitää olla arvoltaan merkkijono.',
@@ -513,7 +515,7 @@ const finnish = {
         },
         requiredActors: {
           atLeastOneActor: 'Aineistoon on lisättävä vähintään yksi toimija.',
-          mandatoryActors: 'Toimijat: Tekijä ja julkaisija-roolit ovat pakollisia. Huomioi: yksittäisellä toimijalla voi olla useampi rooli.',
+          mandatoryActors: 'Toimijat: Tekijä on pakollinen kenttä. Huomioi: yksittäisellä toimijalla voi olla useampi rooli.',
         },
       },
       accessType: {

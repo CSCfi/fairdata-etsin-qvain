@@ -32,15 +32,15 @@ import {
 import { SlidingContent } from '../js/components/qvain/general/card'
 import QvainStore, {
   Directory,
-  EntityType,
-  Role,
   Actor,
   ExternalResource,
   AccessType as AccessTypeConstructor,
   License as LicenseConstructor
 } from '../js/stores/view/qvain'
 import LocaleStore from '../js/stores/view/language'
-import { DataCatalogIdentifiers } from '../js/components/qvain/utils/constants'
+import { DataCatalogIdentifiers, EntityType, Role, } from '../js/components/qvain/utils/constants'
+import { RadioInput } from '../js/components/qvain/general/form';
+import { ListItem } from '../js/components/qvain/general/list';
 
 describe('Qvain', () => {
   it('should render correctly', () => {
@@ -183,8 +183,59 @@ describe('Qvain.Actors', () => {
       'test@test.fi',
       'uohIdentifier'
     ))
+    stores.Qvain.saveActor(Actor(
+      EntityType.PERSON,
+      [Role.CREATOR],
+      'Teppo Testaaja',
+      'test@test.fi',
+      'uohIdentifier'
+    ))
+    stores.Qvain.saveActor(Actor(
+      EntityType.PERSON,
+      [Role.RIGHTS_HOLDER],
+      'Tuppo Testaaja',
+      'test@test.fi',
+      'uohIdentifier'
+    ))
+    stores.Qvain.saveActor(Actor(
+      EntityType.PERSON,
+      [Role.CONTRIBUTOR],
+      'Toppo Testaaja',
+      'test@test.fi',
+      'uohIdentifier'
+    ))
     addedActors.update()
-    expect(addedActors.find(ButtonGroup).length).toBe(1)
+    expect(addedActors.find(ButtonGroup).length).toBe(4)
+  })
+
+  // Test that <ActorTypeSelectBase> renders correctly
+  const component = shallow(<ActorTypeSelectBase Stores={getStores()} />)
+  it('ActorTypeSelect contains two <Column> elements', () => {
+    expect(component.find('Column').length).toBe(2);
+  })
+
+  it('ActorTypeSelect contains two <RadioInput> elements', () => {
+    expect(component.find(RadioInput).length).toBe(2);
+  })
+
+  it('ActorTypeSelect contains two <RadioInput> elements for Person and Org', () => {
+    expect(component.find(RadioInput).length).toBe(2);
+    expect(component.find('#entityPerson').length).toBe(1);
+    expect(component.find('#entityOrg').length).toBe(1);
+  })
+
+  it('ActorTypeSelect contains 10 <ListItem> elements with right ids', () => {
+    expect(component.find(ListItem).length).toBe(10);
+    expect(component.find('#personCreator').length).toBe(1);
+    expect(component.find('#personPublisher').length).toBe(1);
+    expect(component.find('#personCurator').length).toBe(1);
+    expect(component.find('#personRightsHolder').length).toBe(1);
+    expect(component.find('#personContributor').length).toBe(1);
+    expect(component.find('#orgCreator').length).toBe(1);
+    expect(component.find('#orgPublisher').length).toBe(1);
+    expect(component.find('#orgCurator').length).toBe(1);
+    expect(component.find('#orgRightsHolder').length).toBe(1);
+    expect(component.find('#orgContributor').length).toBe(1);
   })
 })
 

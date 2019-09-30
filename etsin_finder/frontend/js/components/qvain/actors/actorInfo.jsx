@@ -16,7 +16,8 @@ import {
   Label,
 } from '../general/form'
 import ValidationError from '../general/validationError'
-import { EntityType, EmptyActor } from '../../../stores/view/qvain'
+import { EntityType } from '../utils/constants'
+import { EmptyActor } from '../../../stores/view/qvain'
 import { deepCopy } from '../utils/fileHierarchy'
 import {
   actorSchema,

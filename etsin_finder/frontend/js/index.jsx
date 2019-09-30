@@ -19,9 +19,7 @@ import App from './app'
 global.Promise = require('bluebird')
 
 Promise.config({
-  warnings: {
-    wForgottenReturn: false,
-  },
+  warnings: false
 })
 
 if (process.env.NODE_ENV === 'development') {
