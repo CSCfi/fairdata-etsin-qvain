@@ -263,23 +263,30 @@ def edited_data_to_metax(data, original):
         [object] -- Metax ready data.
 
     """
-    original["research_dataset"]["title"] = data["title"]
-    original["research_dataset"]["description"] = data["description"]
-    original["research_dataset"]["creator"] = alter_role_data(data["actors"], "creator")
     publisher_array = alter_role_data(data["actors"], "publisher")
-    original["research_dataset"]["publisher"] = publisher_array[0] if publisher_array else {},
-    original["research_dataset"]["curator"] = alter_role_data(data["actors"], "curator")
-    original["research_dataset"]["rights_holder"] = alter_role_data(data["actors"], "rights_holder")
-    original["research_dataset"]["contributor"] = alter_role_data(data["actors"], "contributor")
-    original["research_dataset"]["other_identifier"] = other_identifiers_to_metax(data["identifiers"])
-    original["research_dataset"]["field_of_science"] = [{"identifier": data["fieldOfScience"] if "fieldOfScience" in data else ""}]
-    original["research_dataset"]["keyword"] = data["keywords"]
-    original["research_dataset"]["access_rights"] = access_rights_to_metax(data)
-    original["research_dataset"]["remote_resources"] = remote_resources_data_to_metax(data["remote_resources"]) if data["dataCatalog"] == "urn:nbn:fi:att:data-catalog-att" else ""
-    original["research_dataset"]["files"] = files_data_to_metax(data["files"]) if data["dataCatalog"] == "urn:nbn:fi:att:data-catalog-ida" else ""
-    original["research_dataset"]["directories"] = directories_data_to_metax(data["directories"]) if data["dataCatalog"] == "urn:nbn:fi:att:data-catalog-ida" else ""
+    research_dataset = original["research_dataset"]
+    research_dataset.update({
+        "title": data["title"],
+        "description": data["description"],
+        "creator": alter_role_data(data["actors"], "creator"),
+        "publisher": publisher_array[0] if publisher_array else {},
+        "curator": alter_role_data(data["actors"], "curator"),
+        "rights_holder": alter_role_data(data["actors"], "rights_holder"),
+        "contributor": alter_role_data(data["actors"], "contributor"),
+        "other_identifier": other_identifiers_to_metax(data["identifiers"]),
+        "field_of_science": [
+            {
+                "identifier": data["fieldOfScience"] if "fieldOfScience" in data else ""
+            }
+        ],
+        "keyword": data["keywords"],
+        "access_rights": access_rights_to_metax(data),
+        "remote_resources": remote_resources_data_to_metax(data["remote_resources"]) if data["dataCatalog"] == "urn:nbn:fi:att:data-catalog-att" else "",
+        "files": files_data_to_metax(data["files"]) if data["dataCatalog"] == "urn:nbn:fi:att:data-catalog-ida" else "",
+        "directories": directories_data_to_metax(data["directories"]) if data["dataCatalog"] == "urn:nbn:fi:att:data-catalog-ida" else "",
+    })
     edited_data = {
-        "research_dataset": original["research_dataset"]
+        "research_dataset": research_dataset
     }
     return clean_empty_keyvalues_from_dict(edited_data)
 
