@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Translate from 'react-translate-component'
 import translate from 'counterpart'
-import DescriptionFeild from './descriptionField';
+import DescriptionField from './descriptionField';
 import OtherIdentifierField from './otherIdentifierField';
 import FieldOfScienceField from './fieldOfScienceField';
 import KeywordsField from './keywordsField';
@@ -30,7 +30,7 @@ const Description = () => {
         </Tooltip>
       </SectionTitle>
       <React.Fragment>
-        <DescriptionFeild />
+        <DescriptionField />
         <OtherIdentifierField />
         <FieldOfScienceField />
         <KeywordsField />

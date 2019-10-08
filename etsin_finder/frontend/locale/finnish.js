@@ -91,6 +91,11 @@ const finnish = {
       type: 'Tyyppi',
       go_to_original: 'Siirry sivulle',
       sliced: 'Joitain tiedostoja ei näytetä tässä näkymässä tiedostojen suuren lukumäärän vuoksi',
+      cumulativeDatasetLabel: 'Huom: Aineisto on kasvava',
+      cumulativeDatasetTooltip: {
+        header: 'Kasvava aineisto',
+        info: 'Tämä on karttuva aineisto, johon mahdollisesti vielä lisätään tiedostoja. Huomio tämä kun käytät aineistoa tai viittaat siihen (esim. ajallinen kattavuus hyvä mainita). Aineistosta ei kuitenkaan voi poistaa tai muuttaa olemassa olevia tiedostoja.',
+      },
     },
     events_idn: {
       events: {
@@ -102,6 +107,7 @@ const finnish = {
         description: 'Kuvaus',
       },
       other_idn: 'Muut tunnisteet',
+      origin_identifier: 'Alkuperäisen aineiston tunniste',
       relations: {
         title: 'Relaatiot',
         type: 'Tyyppi',
@@ -151,6 +157,13 @@ const finnish = {
       homepage: 'Kotisivu',
     },
     language: 'Kieli',
+    storedInPas: 'Tämä ainesto on säilytetty Fairdata PAS:issa.',
+    pasDatasetVersionExists: 'Fairdata PAS-versio tästä aineistosta on olemassa: ',
+    originalDatasetVersionExists: 'Alkuperäinen versio tästä aineistosta on olemassa: ',
+    linkToPasDataset: 'Linkki',
+    linkToOriginalDataset: 'Linkki',
+    enteringPas: 'Menemässä PAS:iin',
+    dataInPasDatasetsCanNotBeDownloaded: 'PAS-aineistojen dataa ei voida ladata'
   },
   error: {
     notFound:
@@ -196,6 +209,7 @@ const finnish = {
       fos: 'tieteenalaa',
       research: 'tutkimusprojektia',
     },
+    includePas: 'Ota mukaan Fairdata PAS-datasettejä',
   },
   nav: {
     login: 'Kirjaudu',
@@ -342,7 +356,7 @@ const finnish = {
         instructions:
           'Metadatan tunniste luodaan automaattisesti mutta jos on jo OLEMASSA OLEVA tunniste, syötä se tähän.',
         addButton: '+ Lisää uusi',
-        alredyAdded: 'Tunniste on jo lisätty',
+        alreadyAdded: 'Tunniste on jo lisätty',
       },
       fieldOfScience: {
         title: 'Tutkimusala',
@@ -389,11 +403,11 @@ const finnish = {
     actors: {
       title: 'Toimijat',
       infoTitle: 'Toimijat info',
-      infoText: 'Tutkimukseen tai aineiston tekemiseen osallistuneet henkilöt ja organisaatiot. Voit määrittää tekijät (pakollinen), julkaisijat (pakollinen) ja kuraattorit. Valitse ensin, onko kyseessä henkilö vai organisaatio. Määritä sen jälkeen, missä roolissa ko. toimija osallistui tutkimukseen (voit valita useita), ja määritä sen jälkeen tarvittavat tiedot. Jos kyseessä on henkilö, on organisaatiotieto pakollinen tieto. Jo annettuja tietoja pääset muuttamaan klikkaamalla tallennetun toimijan kohdalla kynä -ikonia.',
+      infoText: 'Tutkimukseen tai aineiston tekemiseen osallistuneet henkilöt ja organisaatiot. Voit määrittää tekijät (pakollinen), Julkaisijan, Kuraattorit, Oikeuksienhaltijat sekä Muut tekijät. Valitse ensin, onko kyseessä henkilö vai organisaatio. Määritä sen jälkeen, missä roolissa ko. toimija osallistui tutkimukseen (voit valita useita), ja määritä sen jälkeen tarvittavat tiedot. Jos kyseessä on henkilö, on organisaatiotieto pakollinen tieto. Jo annettuja tietoja pääset muuttamaan klikkaamalla tallennetun toimijan kohdalla kynä -ikonia.',
       add: {
         title: 'Toimijat',
         help:
-          'Tekijä (1+) ja julkaisija (max 1) roolit ovat pakollisia. Huomioi että yksittäisellä toimijalla voi olla useampi rooli.',
+          'Tekijä (1+) rooli on pakollinen. Huomioi että yksittäisellä toimijalla voi olla useampi rooli.',
         radio: {
           person: 'Luonnollinen henkilö',
           organization: 'Organisaatio',
@@ -402,6 +416,8 @@ const finnish = {
           creator: 'Tekijä',
           publisher: 'Julkaisija',
           curator: 'Kuraattori',
+          rights_holder: 'Oikeuksienhaltija',
+          contributor: 'Muu tekijä'
         },
         name: {
           placeholder: {
@@ -471,9 +487,9 @@ const finnish = {
         },
         roles: {
           mixed: '',
-          oneOf: 'Roolin kuuluisi olla "Tekijä", "Julkasija" tai "Kuraattori".',
+          oneOf: 'Roolin kuuluisi olla "Tekijä", "Julkasija", "Kuraattori", "Oikeuksienhaltija" tai "Muut tekijät".',
           required:
-            'Tekijän rooli on pakollinen. On myös pakollista määrittää tasan yhden julkaisijan.',
+            'Tekijän rooli on pakollinen.',
         },
         name: {
           string: 'Nimi pitää olla arvoltaan merkkijono.',
@@ -499,7 +515,7 @@ const finnish = {
         },
         requiredActors: {
           atLeastOneActor: 'Aineistoon on lisättävä vähintään yksi toimija.',
-          mandatoryActors: 'Toimijat: Tekijä ja julkaisija-roolit ovat pakollisia. Huomioi: yksittäisellä toimijalla voi olla useampi rooli.',
+          mandatoryActors: 'Toimijat: Tekijä on pakollinen kenttä. Huomioi: yksittäisellä toimijalla voi olla useampi rooli.',
         },
       },
       accessType: {

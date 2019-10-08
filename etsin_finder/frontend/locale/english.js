@@ -92,6 +92,11 @@ const english = {
       type: 'Type',
       go_to_original: 'Go to original',
       sliced: 'Some files are not displayed in this view due to large amount of files',
+      cumulativeDatasetLabel: 'Note: Dataset is growing',
+      cumulativeDatasetTooltip: {
+        header: 'Growing dataset',
+        info: 'This dataset is still growing, be aware of this when you cite it or use it. Temporal coverage should be mentioned. No existing files can, however, be removed or changed.',
+      },
     },
     events_idn: {
       events: {
@@ -103,6 +108,7 @@ const english = {
         description: 'Description',
       },
       other_idn: 'Other identifiers',
+      origin_identifier: 'Origin dataset identifier',
       relations: {
         title: 'Relations',
         type: 'Type',
@@ -152,6 +158,13 @@ const english = {
       homepage: 'Homepage',
     },
     language: 'Language',
+    storedInPas: 'This dataset is stored in Fairdata PAS.',
+    pasDatasetVersionExists: 'A Fairdata PAS version of this dataset exists: ',
+    originalDatasetVersionExists: 'An original version of this dataset exists: ',
+    linkToPasDataset: 'Link',
+    linkToOriginalDataset: 'Link',
+    enteringPas: 'Entering PAS',
+    dataInPasDatasetsCanNotBeDownloaded: 'PAS dataset data cannot be downloaded'
   },
   error: {
     notFound:
@@ -197,6 +210,7 @@ const english = {
       fos: 'fields of science',
       research: 'projects',
     },
+    includePas: 'Include Fairdata PAS datasets',
   },
   nav: {
     login: 'Login',
@@ -338,7 +352,7 @@ const english = {
         instructions:
           'Identifier for the metadata will be created automatically but if there already is an EXISTING identifier please insert it here.',
         addButton: '+ Add new',
-        alredyAdded: 'Identifier already added',
+        alreadyAdded: 'Identifier already added',
       },
       fieldOfScience: {
         title: 'Field of Science',
@@ -385,11 +399,11 @@ const english = {
     actors: {
       title: 'Actors',
       infoTitle: 'Actors info',
-      infoText: 'Add at least one creator and one publisher. A curator is not mandatory. First, select the type of actor (person or organization). Then choose the roles the actor has (you can add multiple). After that, fill in the details: organization is mandatory for a person. You can edit added actors by clicking the pen icon or remove it by clicking the X icon.',
+      infoText: 'Add at least one Creator. First, select the type of actor (person or organization). Then choose the roles the actor has (you can add multiple). After that, fill in the details: organization is mandatory for a person. You can edit added actors by clicking the pen icon or remove it by clicking the X icon.',
       add: {
         title: 'Actors',
         help:
-          'Creator (1+) and publisher (max 1) roles are mandatory. Notice that one actor can have multiple roles.',
+          'Creator (1+) role is mandatory. Notice that one actor can have multiple roles.',
         radio: {
           person: 'Person',
           organization: 'Organization',
@@ -398,6 +412,8 @@ const english = {
           creator: 'Creator',
           publisher: 'Publisher',
           curator: 'Curator',
+          rights_holder: 'Rights holder',
+          contributor: 'Contributor'
         },
         name: {
           placeholder: {
@@ -467,9 +483,9 @@ const english = {
         },
         roles: {
           mixed: '',
-          oneOf: 'Roles must be one of "creator", "publisher" or "curator".',
+          oneOf: 'Roles must be one of "Creator", "Publisher", "Curator", "Rights holder" or "Contributor".',
           required:
-            'You must specify the role of the actor. A creator is mandatory and there must be exactly one publisher.',
+            'You must specify the role of the actor. The creator role is mandatory.',
         },
         name: {
           string: 'The name must be a string value.',
@@ -495,7 +511,7 @@ const english = {
         },
         requiredActors: {
           atLeastOneActor: 'You must add at least one actor to your dataset.',
-          mandatoryActors: 'Actors: Creator and publisher roles are mandatory. Note: one person can have both these roles.',
+          mandatoryActors: 'Actors: Creator role is mandatory. Note: one actor can have multiple roles.',
         },
       },
       accessType: {

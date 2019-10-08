@@ -6,6 +6,8 @@ import {
   LicenseUrls,
   FileAPIURLs,
   UseCategoryURLs,
+  EntityType,
+  Role
 } from '../../components/qvain/utils/constants'
 import { getPath } from '../../components/qvain/utils/object'
 
@@ -528,6 +530,16 @@ class Qvain {
         actors.push(this.createActor(creator, Role.CREATOR, actors))
       )
     }
+    if ('rights_holder' in researchDataset) {
+      researchDataset.rights_holder.forEach(rightsHolder =>
+        actors.push(this.createActor(rightsHolder, Role.RIGHTS_HOLDER, actors))
+      )
+    }
+    if ('contributor' in researchDataset) {
+      researchDataset.contributor.forEach(contributor =>
+        actors.push(this.createActor(contributor, Role.CONTRIBUTOR, actors))
+      )
+    }
     console.groupCollapsed('Actors to be compared DEBUG')
     console.table(JSON.parse(JSON.stringify(actors)))
     console.groupEnd()
@@ -826,17 +838,6 @@ const DatasetDirectory = directory => ({
   useCategory: directory.use_category.identifier,
   existing: true
 })
-
-export const EntityType = {
-  PERSON: 'person',
-  ORGANIZATION: 'organization',
-}
-
-export const Role = {
-  CREATOR: 'creator',
-  PUBLISHER: 'publisher',
-  CURATOR: 'curator',
-}
 
 export const Actor = (entityType, roles, name, email, identifier, organization, uiId) => ({
   type: entityType,
