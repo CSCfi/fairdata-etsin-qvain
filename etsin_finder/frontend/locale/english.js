@@ -702,8 +702,8 @@ const english = {
   tombstone: {
     removedInfo: 'The dataset has been removed',
     deprecatedInfo: 'The dataset has been deprecated',
-    urlToNew: '"A new version of this dataset is available. You can see open it via this ',
-    urlToOld: '"An older (published) version of this dataset is available. You can see open it via this ',
+    urlToNew: 'A new version of this dataset is available. You can open it via this ',
+    urlToOld: 'An older (published) version of this dataset is available. You can open it via this ',
     link: 'link'
   },
   userAuthenticationError: {
