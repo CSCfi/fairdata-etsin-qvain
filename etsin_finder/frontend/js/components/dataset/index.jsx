@@ -26,6 +26,7 @@ import ErrorPage from '../errorpage'
 import ErrorBoundary from '../general/errorBoundary'
 import NoticeBar from '../general/noticeBar'
 import Loader from '../general/loader'
+import { S_IFBLK } from 'constants';
 
 const BackButton = styled(NavLink)`
   color: ${props => props.theme.color.primary};
@@ -108,6 +109,53 @@ class Dataset extends React.Component {
     this.props.history.goBack()
   }
 
+  // modifies the message shown in notice bar in case the dataset is removed or deprecated
+  noticeBarText() {
+    let stateInfo = '';
+    let urlText = '';
+    const data = this.state.dataset.dataset_version_set;
+    let latestDate = '';
+    const currentDate = new Date(this.state.dataset.date_created);
+    let ID = '';
+
+    if (this.state.removed) {
+      stateInfo = 'tombstone.removedInfo'
+    } else if (this.state.deprecated) {
+      stateInfo = 'tombstone.deprecatedInfo'
+    }
+
+    if (data && data.length > 0) { // / If there are other versions of the removed / deprecated dataset
+      latestDate = new Date(Math.max.apply(null, data // /Date of the latest existing version
+        .filter(version => !version.removed)
+        .map((version) =>
+          new Date(version.date_created)
+        )));
+
+      if (latestDate.getTime() > currentDate.getTime()) {
+        urlText = 'tombstone.urlToNew'
+      } else if (latestDate.getTime() < currentDate.getTime()) {
+        urlText = 'tombstone.urlToOld'
+      }
+
+      for (const k of data.keys()) {
+        if (new Date(data[k].date_created).getTime() === latestDate.getTime()) {
+          ID = data[k].identifier;
+        }
+      }
+    }
+
+    return (
+      <div>
+        <Translate content={stateInfo} /><br />
+        <Translate content={urlText} />
+        <Link href={ID} target="_blank" rel="noopener noreferrer" content={'tombstone.link'}>
+          <Translate content={'tombstone.link'} />
+        </Link>
+      </div>
+    )
+  }
+
+
   render() {
     // CASE 1: Houston, we have a problem
     if (this.state.error !== false) {
@@ -116,9 +164,9 @@ class Dataset extends React.Component {
     // CASE 2: Business as usual
     return this.state.loaded ? (
       <div>
-        {(this.state.deprecated || this.state.removed) && (
+        {(this.state.removed || this.state.deprecated) && (
           <NoticeBar bg="error">
-            <Translate content="tombstone.info" />
+            {this.noticeBarText()}
           </NoticeBar>
         )}
         <article className="container regular-row">
@@ -157,12 +205,12 @@ class Dataset extends React.Component {
             </div>
           </div>
         </article>
-      </div>
+      </div >
     ) : (
-      <LoadingSplash>
-        <Loader active />
-      </LoadingSplash>
-    )
+        <LoadingSplash>
+          <Loader active />
+        </LoadingSplash>
+      )
   }
 }
 
@@ -171,6 +219,10 @@ const LoadingSplash = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+`
+
+const Link = styled.a`
+  font-size: 0.9em;
 `
 
 Dataset.propTypes = {
