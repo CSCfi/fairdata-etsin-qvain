@@ -26,7 +26,6 @@ import ErrorPage from '../errorpage'
 import ErrorBoundary from '../general/errorBoundary'
 import NoticeBar from '../general/noticeBar'
 import Loader from '../general/loader'
-import { S_IFBLK } from 'constants';
 
 const BackButton = styled(NavLink)`
   color: ${props => props.theme.color.primary};
