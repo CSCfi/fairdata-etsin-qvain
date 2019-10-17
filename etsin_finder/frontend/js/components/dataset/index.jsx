@@ -204,11 +204,11 @@ class Dataset extends React.Component {
             </div>
           </div>
         </article>
-      </div >
+      </div>
     ) : (
-        <LoadingSplash>
-          <Loader active />
-        </LoadingSplash>
+      <LoadingSplash>
+        <Loader active />
+      </LoadingSplash>
       )
   }
 }
