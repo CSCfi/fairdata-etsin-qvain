@@ -116,6 +116,7 @@ class Dataset extends React.Component {
     let latestDate = '';
     const currentDate = new Date(this.state.dataset.date_created);
     let ID = '';
+    let linkToOtherVersion = '';
 
     if (this.state.removed) {
       stateInfo = 'tombstone.removedInfo'
@@ -123,7 +124,9 @@ class Dataset extends React.Component {
       stateInfo = 'tombstone.deprecatedInfo'
     }
 
-    if (data && data.length > 0) { // / If there are other versions of the removed / deprecated dataset
+    if (data.length > 1) { // / If there are other versions of the removed / deprecated dataset
+      linkToOtherVersion = 'tombstone.link'
+
       latestDate = new Date(Math.max.apply(null, data // /Date of the latest existing version
         .filter(version => !version.removed)
         .map((version) =>
@@ -148,7 +151,7 @@ class Dataset extends React.Component {
         <Translate content={stateInfo} /><br />
         <Translate content={urlText} />
         <Link href={ID} target="_blank" rel="noopener noreferrer" content={'tombstone.link'}>
-          <Translate content={'tombstone.link'} />
+          <Translate content={linkToOtherVersion} />
         </Link>
       </div>
     )
