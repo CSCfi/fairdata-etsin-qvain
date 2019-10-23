@@ -7,9 +7,9 @@
 
 """Main app initialization file"""
 
-import logging
-from logging.handlers import RotatingFileHandler
 import os
+import logging
+import logging.config
 
 from flask import Flask
 from flask_mail import Mail
@@ -30,14 +30,10 @@ def create_app():
     is_testing = bool(os.environ.get('TESTING', False))
     app = Flask(__name__, template_folder="./frontend/build")
     app.config.update(get_app_config(is_testing))
-
     if not app.testing and not executing_travis():
         _setup_app_logging(app)
     if not executing_travis():
         app.config.update({'SAML_PATH': '/home/etsin-user'})
-
-    app.logger.info("Application configuration: {0}".format(app.config))
-
     app.mail = Mail(app)
     app.cr_cache = CatalogRecordCache(app)
     app.rems_cache = RemsCache(app)
@@ -46,18 +42,49 @@ def create_app():
 
 
 def _setup_app_logging(app):
+    # log_file_path = app.config.get('APP_LOG_PATH', None)
+    # if log_file_path:
+    #     level = logging.getLevelName(app.config.get('APP_LOG_LEVEL', 'INFO'))
+    #     app.logger.setLevel(level)
+    #     formatter = logging.Formatter(
+    #         "[%(asctime)s] {%(pathname)s:%(lineno)d} %(levelname)s - %(message)s")
+    #     handler = RotatingFileHandler(log_file_path, maxBytes=10000000, mode='a', backupCount=30)
+    #     handler.setLevel(level)
+    #     handler.setFormatter(formatter)
+    #     app.logger.addHandler(handler)
+    #     default_handler.setFormatter(formatter)
+    # else:
+    #     app.logger.error('Logging not correctly set up due to missing app log path configuration')
     log_file_path = app.config.get('APP_LOG_PATH', None)
     if log_file_path:
-        level = logging.getLevelName(app.config.get('APP_LOG_LEVEL', 'INFO'))
-        app.logger.setLevel(level)
-
-        handler = RotatingFileHandler(log_file_path, maxBytes=10000000, mode='a', backupCount=30)
-        handler.setLevel(level)
-        formatter = logging.Formatter(
-            "[%(asctime)s] {%(pathname)s:%(lineno)d} %(levelname)s - %(message)s")
-        handler.setFormatter(formatter)
-        app.logger.addHandler(handler)
-        default_handler.setFormatter(formatter)
+        logging.config.dictConfig({
+            'version': 1,
+            'formatters': {
+                'standard': {
+                    'format': '--------------\n[%(asctime)s] [%(process)d] %(levelname)s in %(module)s:%(lineno)d: %(message)s',
+                    'datefmt': '%Y-%M-%d %H:%M:%S %z',
+                },
+            },
+            'handlers': {
+                'file': {
+                    'class': 'logging.handlers.RotatingFileHandler',
+                    'formatter': 'standard',
+                    'filename': log_file_path,
+                    'maxBytes': 10000000,
+                    'mode': 'a',
+                    'backupCount': 30
+                },
+                'console': {
+                    'class': 'logging.StreamHandler',
+                    'formatter': 'standard',
+                    'stream': 'ext://sys.stdout'
+                }
+            },
+            'root': {
+                'level': 'INFO',
+                'handlers': ['file', 'console']
+            }
+        })
     else:
         app.logger.error('Logging not correctly set up due to missing app log path configuration')
 
