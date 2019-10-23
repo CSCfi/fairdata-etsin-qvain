@@ -653,7 +653,7 @@ const english = {
       },
       existing: {
         title: 'Previously selected files',
-        help: 'These are the files and folders that you have added before. If you do not touch these, upon saving the changes to the dataset METAX will go through all the selected folders and associate any files and folders within, even the new ones. In other words, if you don\'t touch these and save, you can associate new files within the folder structure with your dataset.'
+        help: "These are the files and folders that you have added before. If you have added a folder and the content has changed in IDA, it's NOT automatically updated into your dataset. All new files need to be manually added. Note the Versioning Rules!"
       },
       notificationNewDatasetWillBeCreated: {
         header: 'Editing files and folders',
