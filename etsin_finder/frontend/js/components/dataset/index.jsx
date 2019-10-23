@@ -120,18 +120,20 @@ class Dataset extends React.Component {
   async getAllVersions(data) {
     const promises = [];
 
+    let stateInfo = 'lkj';
     for (const k of data.keys()) {
       const versionUrl = `/api/dataset/${data[k].identifier}`;
       promises.push(axios.get(versionUrl))
     }
 
     const retval = await axios.all(promises) //will fetch all dataset versions
-    let stateInfo = '';
+
     let urlText = '';
     let latestDate = '';
     const currentDate = new Date(this.state.dataset.date_created);
     let ID = '';
     let linkToOtherVersion = '';
+
 
     if (this.state.removed) {
       stateInfo = 'tombstone.removedInfo'
@@ -148,11 +150,11 @@ class Dataset extends React.Component {
 
       if (latestDate.getTime() > currentDate.getTime()) {
         urlText = 'tombstone.urlToNew'
+        linkToOtherVersion = 'tombstone.link'
       } else if (latestDate.getTime() < currentDate.getTime()) {
         urlText = 'tombstone.urlToOld'
+        linkToOtherVersion = 'tombstone.link'
       }
-
-      linkToOtherVersion = 'tombstone.link'
 
       for (const k of data.keys()) {
         if (new Date(data[k].date_created).getTime() === latestDate.getTime()) {
@@ -160,6 +162,7 @@ class Dataset extends React.Component {
           break
         }
       }
+    }
 
     this.setState({ versionInfo: {
       stateInfo,
@@ -167,7 +170,6 @@ class Dataset extends React.Component {
       ID,
       linkToOtherVersion
     } })
-    }
   }
 
 
