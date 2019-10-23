@@ -3,6 +3,7 @@ import { inject, observer } from 'mobx-react'
 import Select from 'react-select'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
+import translate from 'counterpart'
 
 import Card from '../general/card'
 import { dataCatalogSchema } from '../utils/formValidation'
@@ -11,8 +12,8 @@ import { DataCatalogIdentifiers } from '../utils/constants'
 import { LabelLarge } from '../general/form'
 
 const options = [
-  { value: DataCatalogIdentifiers.IDA, label: 'IDA' },
-  { value: DataCatalogIdentifiers.ATT, label: 'ATT' }
+  { value: DataCatalogIdentifiers.IDA, label: translate('qvain.files.dataCatalog.ida') },
+  { value: DataCatalogIdentifiers.ATT, label: translate('qvain.files.dataCatalog.att') }
 ]
 
 class DataCatalog extends Component {
