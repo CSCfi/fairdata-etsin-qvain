@@ -30,10 +30,8 @@ from etsin_finder.utils import \
     sort_array_of_obj_by_key, \
     slice_array_on_limit
 
-log = app.logger
-
 TOTAL_ITEM_LIMIT = 1000
-
+log = app.logger
 
 def log_request(f):
     """
@@ -51,16 +49,14 @@ def log_request(f):
         :param kwargs:
         :return:
         """
-        user_id = authentication.get_user_id() if not app.testing else ''
-        log.info('{0} - {1} - {2} - {3} - {4}'.format(
-            request.environ['HTTP_X_REAL_IP'] if 'HTTP_X_REAL_IP' in request.environ else 'N/A',
-            user_id if user_id else '',
+        csc_name = authentication.get_user_csc_name() if not app.testing else ''
+        app.logger.info('{0} {1} {2} USER AGENT: {3}'.format(
+            csc_name if csc_name else 'UNAUTHENTICATED',
             request.environ['REQUEST_METHOD'],
             request.path,
             request.user_agent))
         return f(*args, **kwargs)
     return func
-
 
 class Dataset(Resource):
     """Dataset related REST endpoints for frontend"""
@@ -102,6 +98,7 @@ class Files(Resource):
         self.parser.add_argument('file_fields', required=False, type=str)
         self.parser.add_argument('directory_fields', required=False, type=str)
 
+    @log_request
     def get(self, cr_id):
         """
         Get files and directory objects for frontend.
@@ -172,7 +169,9 @@ class Contact(Resource):
 
         # Validate incoming request values are all there and are valid
         if not validate_send_message_request(user_email, user_body, recipient_agent_role):
-            abort(400, message="Request parameters are not valid")
+            message = "Request parameters are not valid"
+            log.warning(message)
+            abort(400, message=message)
 
         # Get the full catalog record from Metax
         cr = cr_service.get_catalog_record(cr_id, False, False)
@@ -180,12 +179,16 @@ class Contact(Resource):
         # Ensure dataset is not harvested
         harvested = get_harvest_info(cr)
         if harvested:
-            abort(400, message="Contact form is not available for harvested datasets")
+            message = "Contact form is not available for harvested datasets"
+            log.warning(message)
+            abort(400, message=message)
 
         # Get the email recipients
         recipients = get_email_recipient_addresses(cr, recipient_agent_role)
         if not recipients:
-            abort(500, message="No recipients could be inferred from the dataset")
+            message = "No recipients could be inferred from the dataset"
+            log.error(message)
+            abort(500, message=message)
 
         app_config = get_app_config(app.testing)
         sender = app_config.get('MAIL_DEFAULT_SENDER', 'etsin-no-reply@fairdata.fi')
@@ -203,10 +206,10 @@ class Contact(Resource):
                 if len(outbox) != 1:
                     raise Exception
             except Exception as e:
-                log.error("Unable to send email message".format(sender=[user_email]))
-                log.error(e)
-                abort(500, message="Sending email failed")
-
+                message = "Sending email failed"
+                app.logger.error("{0}\n{1}\n{2}".format(message, msg, e))
+                abort(500, message=message)
+        log.debug("Sending email OK\n{0}".format(msg))
         return '', 204
 
 
@@ -218,6 +221,7 @@ class User(Resource):
     OID 2.5.4.3 = cn / commonName
     """
 
+    @log_request
     def get(self):
         """
         Get (logged-in) user info.
@@ -243,6 +247,7 @@ class User(Resource):
 class Session(Resource):
     """Session related endpoints"""
 
+    @log_request
     def get(self):
         """
         Renew Flask session, used by frontend.
@@ -254,6 +259,7 @@ class Session(Resource):
             return '', 200
         return '', 401
 
+    @log_request
     def delete(self):
         """
         Delete Flask session, used by frontend.

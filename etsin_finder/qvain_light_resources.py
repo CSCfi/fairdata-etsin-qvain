@@ -8,6 +8,7 @@
 """RESTful API endpoints, meant to be used by Qvain Light form"""
 
 from functools import wraps
+import inspect
 from marshmallow import ValidationError
 from flask import request, session
 from flask_mail import Message
@@ -41,6 +42,7 @@ def log_request(f):
     :param f:
     :return:
     """
+    line_no = inspect.getsourcelines(f)[-1]
     @wraps(f)
     def func(*args, **kwargs):
         """
@@ -50,13 +52,12 @@ def log_request(f):
         :param kwargs:
         :return:
         """
-        user_id = authentication.get_user_id() if not app.testing else ''
-        log.info('{0} - {1} - {2} - {3} - {4}'.format(
-            request.environ['HTTP_X_REAL_IP'] if 'HTTP_X_REAL_IP' in request.environ else 'N/A',
-            user_id if user_id else '',
+        csc_name = authentication.get_user_csc_name() if not app.testing else ''
+        log.info('{0} {1} {2} USER AGENT: {3}'.format(
+            csc_name if csc_name else 'UNAUTHENTICATED',
             request.environ['REQUEST_METHOD'],
             request.path,
-            request.user_agent))
+            request.user_agent), extra={'lineno': line_no})
         return f(*args, **kwargs)
     return func
 
@@ -66,6 +67,7 @@ class ProjectFiles(Resource):
     def __init__(self):
         """Setup file endpoints"""
 
+    @log_request
     def get(self, pid):
         """
         Get files and directory objects for frontend.
@@ -96,6 +98,7 @@ class FileDirectory(Resource):
     def __init__(self):
         """Setup file endpoints"""
 
+    @log_request
     def get(self, dir_id):
         """
         Get files and directory objects for frontend.
@@ -130,6 +133,7 @@ class UserDatasets(Resource):
         self.parser.add_argument('offset', type=str, action='append', required=False)
         self.parser.add_argument('no_pagination', type=bool, action='append', required=False)
 
+    @log_request
     def get(self, user_id):
         """
         Get datasets for user. Used by qvain light dataset table. If request has query parameter no_pagination=true, fetches ALL datasets for user (warning: might result in performance issue).

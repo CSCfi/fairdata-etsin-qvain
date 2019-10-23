@@ -64,14 +64,17 @@ class MetaxQvainLightAPIService(FlaskService):
             metax_qvain_api_response.raise_for_status()
         except Exception as e:
             if isinstance(e, requests.HTTPError):
-                log.debug("Failed to get data for project {0} from Metax API".
-                          format(project_identifier))
-                log.debug('Response status code: {0}'.format(metax_qvain_api_response.status_code))
-                log.debug('Response text: {0}'.format(json_or_empty(metax_qvain_api_response) or metax_qvain_api_response.text))
+                log.debug(
+                    "Failed to get data for project {0} from Metax API\n\
+                    Response status code: {1}\n\
+                    Response text: {2}".format(
+                        project_identifier,
+                        metax_qvain_api_response.status_code,
+                        json_or_empty(metax_qvain_api_response) or metax_qvain_api_response.text
+                    ))
             else:
-                log.error("Failed to get data for project {0} from Metax API".
-                          format(project_identifier))
-                log.error(e)
+                log.error("Failed to get data for project {0} from Metax API\n{1}".
+                          format(project_identifier, e))
             return None
 
         return metax_qvain_api_response.json()
@@ -94,14 +97,17 @@ class MetaxQvainLightAPIService(FlaskService):
             metax_qvain_api_response.raise_for_status()
         except Exception as e:
             if isinstance(e, requests.HTTPError):
-                log.debug("Failed to get data for directory {0} from Metax API".
-                          format(dir_identifier))
-                log.debug('Response status code: {0}'.format(metax_qvain_api_response.status_code))
-                log.debug('Response text: {0}'.format(json_or_empty(metax_qvain_api_response) or metax_qvain_api_response.text))
+                log.warning(
+                    "Failed to get data for directory {0} from Metax API\n\
+                    Response status code: {1}\n\
+                    Response text: {2}".format(
+                        dir_identifier,
+                        metax_qvain_api_response.status_code,
+                        json_or_empty(metax_qvain_api_response) or metax_qvain_api_response.text
+                    ))
             else:
-                log.error("Failed to get data for directory {0} from Metax API".
-                          format(dir_identifier))
-                log.error(e)
+                log.error("Failed to get data for directory {0} from Metax API\n{1}".
+                          format(dir_identifier, e))
             return None
 
         return metax_qvain_api_response.json()
@@ -131,14 +137,17 @@ class MetaxQvainLightAPIService(FlaskService):
             metax_api_response.raise_for_status()
         except Exception as e:
             if isinstance(e, requests.HTTPError):
-                log.debug("Failed to get datasets for user {0} from Metax API".
-                          format(user_id))
-                log.debug('Response status code: {0}'.format(metax_api_response.status_code))
-                log.debug('Response text: {0}'.format(json_or_empty(metax_api_response) or metax_api_response.text))
+                log.warning(
+                    "Failed to get datasets for user {0} from Metax API\n\
+                    Response status code: {1}\n\
+                    Response text: {2}".format(
+                        user_id,
+                        metax_api_response.status_code,
+                        json_or_empty(metax_api_response) or metax_api_response.text
+                    ))
             else:
-                log.debug("Failed to get datasets for user {0} from Metax API".
-                          format(user_id))
-                log.error(e)
+                log.error("Failed to get datasets for user {0} from Metax API{1}".
+                          format(user_id, e))
             return None
 
         if (len(metax_api_response.json()) == 0):
@@ -168,12 +177,15 @@ class MetaxQvainLightAPIService(FlaskService):
                                                timeout=10)
         except Exception as e:
             if isinstance(e, requests.HTTPError):
-                log.debug("Failed to create dataset.")
-                log.debug('Response status code: {0}'.format(metax_api_response.status_code))
-                log.debug('Response text: {0}'.format(json_or_empty(metax_api_response) or metax_api_response.text))
+                log.debug(
+                    "Failed to create dataset.\n\
+                    Response status code: {0}\n\
+                    Response text: {1}".format(
+                        metax_api_response.status_code,
+                        json_or_empty(metax_api_response) or metax_api_response.text
+                    ))
             else:
-                log.error("Failed to get data for directory {0} from Metax API")
-                log.error(e)
+                log.error("Error creating dataset\n{0}".format(e))
             return {'Error_message': 'Error trying to send data to metax.'}
 
         return metax_api_response.text, metax_api_response.status_code
@@ -201,12 +213,17 @@ class MetaxQvainLightAPIService(FlaskService):
                                                 timeout=10)
         except Exception as e:
             if isinstance(e, requests.HTTPError):
-                log.debug("Failed to create dataset.")
-                log.debug('Response status code: {0}'.format(metax_api_response.status_code))
-                log.debug('Response text: {0}'.format(json_or_empty(metax_api_response) or metax_api_response.text))
+                log.warning(
+                    "Failed to update dataset {0}.\n\
+                    Response status code: {1}\n\
+                    Response text: {2}".format(
+                        cr_id,
+                        metax_api_response.status_code,
+                        json_or_empty(metax_api_response) or metax_api_response.text
+                    ))
             else:
-                log.error("Failed to get data for directory {0} from Metax API")
-                log.error(e)
+                log.error("Error updating dataset {0}\n{0}"
+                          .format(cr_id, e))
             return {'Error_message': 'Error trying to send data to metax.'}
         return metax_api_response.text, metax_api_response.status_code
 
@@ -231,9 +248,16 @@ class MetaxQvainLightAPIService(FlaskService):
                                                  timeout=10)
         except Exception as e:
             if isinstance(e, requests.HTTPError):
-                log.debug("Failed to deletedataset.")
-                log.debug('Response status code: {0}'.format(metax_api_response.status_code))
-                log.debug('Response text: {0}'.format(json_or_empty(metax_api_response) or metax_api_response.text))
+                log.warning(
+                    "Failed to delete dataset {0}\n\
+                    Response status code: {0}\n\
+                    Response text: {0}".format(
+                        cr_id,
+                        metax_api_response.status_code,
+                        json_or_empty(metax_api_response) or metax_api_response.text
+                    ))
+            else:
+                log.error("Error deleting dataset {0}\n{1}".format(cr_id, e))
             return {'Error_message': 'Error trying to send data to metax.'}
 
         return metax_api_response.status_code
