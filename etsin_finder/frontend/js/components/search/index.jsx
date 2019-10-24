@@ -22,6 +22,7 @@ import HeroBanner from '../general/hero'
 import SearchBar from './searchBar'
 import Results from './results'
 import Tracking from '../../utils/tracking'
+// The row below should be de-commented when continuing work on the PAS dataset functionality.
 // import { Checkbox, Label } from '../qvain/general/form'
 
 export default class Search extends Component {
@@ -77,6 +78,7 @@ export default class Search extends Component {
                 <IncludePasDatasetsInner>
                   <IncludePasDatasetsCheckboxContainer>
                     { /*
+                    // These rows should be de-commented when continuing work on the PAS dataset functionality.
                     <Checkbox
                       id="pasCheckbox"
                       checked={this.state.includePasDatasets}
