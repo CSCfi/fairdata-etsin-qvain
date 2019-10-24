@@ -580,8 +580,10 @@ const finnish = {
       dataCatalog: {
         label: 'Tiedoston lähde',
         infoText: 'Ennenkuin pääset linkittämään tiedostoja aineistoosi, sinun tulee valita, linkitätkö tiedostoja IDAsta vai annatko ulkopuolisen palvelun URL-osoitteet, joista tiedostot löytyvät.',
-        explanation: 'Valitse IDA jos tiedostot on tallennettu Fairdata Ida palveluun. Valitse ATT jos tiedostot tulevat muualta.',
-        placeholder: 'Valitse vaihtoehto'
+        explanation: 'Valitse "IDA", jos tiedostot on tallennettu Fairdata IDA -palveluun. Valitse "Ulkoinen lähde" jos tiedostot sijaitsevat muualla.',
+        placeholder: 'Valitse vaihtoehto',
+        ida: 'IDA',
+        att: 'Ulkoinen lähde'
       },
       help:
         'Aineistoon kuuluvat tiedostot. Aineistoon voi kuulua vain joko IDAssa olevia tiedostoja tai ulkopuolisia tiedostoja. Tiedostojen metadata ei ole osa aineistojen metadataa, joten muista tallentaa muutokset jotka teet tiedostojen metadataan.',
@@ -624,22 +626,22 @@ const finnish = {
       },
       existing: {
         title: 'Aikaisemmin valitut tiedostot',
-        help: 'Nämä ovat sinun aiemmin valitsemia tiedostoja. Jos tallennat aineiston tekemättä muutoksia näihin, METAX katsoo läpi kaikki sisäkkäiset hakemistot ja tiedostot valitsemistasi hakemistoista ja lisää kaikki tiedostot mitä se ei ole aiemmin liittänyt aineistoon. Toisin sanoen, jos olet jälkikäteen lisännyt IDAan tiedostoja, voit liittää nämä uudet tiedostot aineistoon päivittämällä aineiston.',
+        help: 'Nämä ovat sinun aiemmin valitsemia tiedostoja. Jos olet liittänyt aineistoosi hakemiston, sen sisältöä ei automaattisesti päivitetä, vaikka sen sisältö olisi muuttunut IDAssa. Jos haluat lisätä puuttuvia tiedostoja, valitse ne tiedostolistasta. HUOM! Tiedostojen lisääminen luo aineistostasi uuden version.',
       },
       notificationNewDatasetWillBeCreated: {
         header: 'Tiedostojen ja kansioiden muokkaaminen',
         content: 'Jos julkaistuun aineistoon lisätään tiedostoja tai hakemistoja, tai siitä poistetaan tiedostoja tai hakemistoja, ko. aineistosta syntyy automaattisesti uusi versio. Vanha versio pysyy muuttumattomana ja siihen lisätään "vanha" -tagi. Jos julkaistu aineisto ei sisältänyt yhtään tiedostoa, voit lisätä tiedostoja ja/tai hakemistoja yhden kerran ilman, että uusi versio syntyy.',
       },
       external: {
-        title: 'Ulkoiset aineistot (ATT)',
+        title: 'Ulkoiset tiedostot (ATT)',
         infoText: 'Määritä tiedostolle otsikko, käyttökategoria (alasvetovalikosta) sekä, kerro, mistä tiedosto löytyy. Tiedosto ei ladata Qvain Lightiin, vaan antamasi URL toimii aktiivisena linkkinä ko. tiedostoon.',
         help: 'Lisää linkkejä ulkoisiin tiedostoihin:',
         button: {
           label: 'Lisää linkki ulkoiseen tiedostoon',
         },
         addedResources: {
-          title: 'Lisätyt ulkoiset aineistot',
-          none: 'Aineistoja ei ole lisätty',
+          title: 'Lisätyt ulkoiset tiedostot',
+          none: 'Tiedostoja ei ole lisätty',
         },
         form: {
           title: {
