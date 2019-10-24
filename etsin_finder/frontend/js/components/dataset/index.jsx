@@ -47,7 +47,7 @@ class Dataset extends React.Component {
       email_info: DatasetQuery.email_info,
       error: false,
       identifier: props.match.params.identifier,
-      versionInfo: {},
+      versionInfo: {}
     }
 
     this.query = this.query.bind(this)
@@ -61,30 +61,32 @@ class Dataset extends React.Component {
   }
 
   async getAllVersions(data) {
-    const promises = [];
-
+    const datasetVersionSet = data.dataset_version_set
     let stateInfo = '';
-    for (const k of data.keys()) {
-      const versionUrl = `/api/dataset/${data[k].identifier}`;
-      promises.push(axios.get(versionUrl))
-    }
 
-    const retval = await axios.all(promises) // will fetch all dataset versions
-
+    let retval = {};
     let urlText = '';
     let latestDate = '';
     const currentDate = new Date(this.state.dataset.date_created);
     let ID = '';
     let linkToOtherVersion = '';
 
-
-    if (this.state.removed) {
+    if (data.removed) {
       stateInfo = 'tombstone.removedInfo'
-    } else if (this.state.deprecated) {
+    } else if (data.deprecated) {
       stateInfo = 'tombstone.deprecatedInfo'
     }
 
-    if (retval.length > 1) { // If there are more than 1 version
+    const promises = [];
+
+    if (typeof datasetVersionSet !== 'undefined') { // If there are more than 1 version
+      for (const k of datasetVersionSet.keys()) {
+        const versionUrl = `/api/dataset/${datasetVersionSet[k].identifier}`;
+        promises.push(axios.get(versionUrl))
+      }
+
+      retval = await axios.all(promises) // will fetch all dataset versions
+
      latestDate = new Date(Math.max.apply(null, retval // Date of the latest existing version
       .filter(version => !version.data.catalog_record.removed && !version.data.catalog_record.deprecated)
       .map((version) =>
@@ -99,9 +101,9 @@ class Dataset extends React.Component {
         linkToOtherVersion = 'tombstone.link'
       }
 
-      for (const k of data.keys()) {
-        if (new Date(data[k].date_created).getTime() === latestDate.getTime()) {
-          ID = data[k].identifier;
+      for (const k of datasetVersionSet.keys()) {
+        if (new Date(datasetVersionSet[k].date_created).getTime() === latestDate.getTime()) {
+          ID = datasetVersionSet[k].identifier;
           break
         }
       }
@@ -149,7 +151,7 @@ class Dataset extends React.Component {
           removed: result.catalog_record.removed,
           loaded: true,
         })
-        this.getAllVersions(result.catalog_record.dataset_version_set)
+        this.getAllVersions(result.catalog_record)
       })
       .catch(error => {
         console.log(error)
