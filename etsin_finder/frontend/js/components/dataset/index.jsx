@@ -60,19 +60,64 @@ class Dataset extends React.Component {
     this.query()
   }
 
+  async getAllVersions(data) {
+    const promises = [];
 
-  // eslint-disable-next-line camelcase
-  UNSAFE_componentWillReceiveProps(newProps) {
-    if (this.props.match.params.identifier !== newProps.match.params.identifier) {
-      this.setState(
-        {
-          loaded: false,
-        },
-        () => {
-          this.query(newProps.match.params.identifier)
-        }
-      )
+    let stateInfo = '';
+    for (const k of data.keys()) {
+      const versionUrl = `/api/dataset/${data[k].identifier}`;
+      promises.push(axios.get(versionUrl))
     }
+
+    const retval = await axios.all(promises) // will fetch all dataset versions
+
+    let urlText = '';
+    let latestDate = '';
+    const currentDate = new Date(this.state.dataset.date_created);
+    let ID = '';
+    let linkToOtherVersion = '';
+
+
+    if (this.state.removed) {
+      stateInfo = 'tombstone.removedInfo'
+    } else if (this.state.deprecated) {
+      stateInfo = 'tombstone.deprecatedInfo'
+    }
+
+    if (retval.length > 1) { // If there are more than 1 version
+     latestDate = new Date(Math.max.apply(null, retval // Date of the latest existing version
+      .filter(version => !version.data.catalog_record.removed && !version.data.catalog_record.deprecated)
+      .map((version) =>
+        new Date(version.data.catalog_record.date_created)
+      )));
+
+      if (latestDate.getTime() > currentDate.getTime()) {
+        urlText = 'tombstone.urlToNew'
+        linkToOtherVersion = 'tombstone.link'
+      } else if (latestDate.getTime() < currentDate.getTime()) {
+        urlText = 'tombstone.urlToOld'
+        linkToOtherVersion = 'tombstone.link'
+      }
+
+      for (const k of data.keys()) {
+        if (new Date(data[k].date_created).getTime() === latestDate.getTime()) {
+          ID = data[k].identifier;
+          break
+        }
+      }
+    }
+
+    this.setState({ versionInfo: {
+      stateInfo,
+      urlText,
+      ID,
+      linkToOtherVersion
+    } })
+  }
+
+  // goes back to previous page, which might be outside
+  goBack() {
+    this.props.history.goBack()
   }
 
   query(customId) {
@@ -112,66 +157,20 @@ class Dataset extends React.Component {
       })
   }
 
-  // goes back to previous page, which might be outside
-  goBack() {
-    this.props.history.goBack()
-  }
 
-  async getAllVersions(data) {
-    const promises = [];
-
-    let stateInfo = 'lkj';
-    for (const k of data.keys()) {
-      const versionUrl = `/api/dataset/${data[k].identifier}`;
-      promises.push(axios.get(versionUrl))
-    }
-
-    const retval = await axios.all(promises) //will fetch all dataset versions
-
-    let urlText = '';
-    let latestDate = '';
-    const currentDate = new Date(this.state.dataset.date_created);
-    let ID = '';
-    let linkToOtherVersion = '';
-
-
-    if (this.state.removed) {
-      stateInfo = 'tombstone.removedInfo'
-    } else if (this.state.deprecated) {
-      stateInfo = 'tombstone.deprecatedInfo'
-    }
-
-    if (retval.length > 1) { // / If there are more than 1 version
-     latestDate = new Date(Math.max.apply(null, retval // /Date of the latest existing version
-      .filter(version => !version.data.catalog_record.removed && !version.data.catalog_record.deprecated)
-      .map((version) =>
-        new Date(version.data.catalog_record.date_created)
-      )));
-
-      if (latestDate.getTime() > currentDate.getTime()) {
-        urlText = 'tombstone.urlToNew'
-        linkToOtherVersion = 'tombstone.link'
-      } else if (latestDate.getTime() < currentDate.getTime()) {
-        urlText = 'tombstone.urlToOld'
-        linkToOtherVersion = 'tombstone.link'
-      }
-
-      for (const k of data.keys()) {
-        if (new Date(data[k].date_created).getTime() === latestDate.getTime()) {
-          ID = data[k].identifier;
-          break
+  // eslint-disable-next-line camelcase
+  UNSAFE_componentWillReceiveProps(newProps) {
+    if (this.props.match.params.identifier !== newProps.match.params.identifier) {
+      this.setState(
+        {
+          loaded: false,
+        },
+        () => {
+          this.query(newProps.match.params.identifier)
         }
-      }
+      )
     }
-
-    this.setState({ versionInfo: {
-      stateInfo,
-      urlText,
-      ID,
-      linkToOtherVersion
-    } })
   }
-
 
   render() {
     // CASE 1: Houston, we have a problem
