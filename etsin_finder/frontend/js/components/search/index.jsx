@@ -76,6 +76,7 @@ export default class Search extends Component {
               <IncludePasDatasetsContainer>
                 <IncludePasDatasetsInner>
                   <IncludePasDatasetsCheckboxContainer>
+                    { /*
                     <Checkbox
                       id="pasCheckbox"
                       checked={this.state.includePasDatasets}
@@ -86,6 +87,7 @@ export default class Search extends Component {
                     >
                       <Translate content="home.includePas" />
                     </Label>
+                    */ }
 
                   </IncludePasDatasetsCheckboxContainer>
                 </IncludePasDatasetsInner>
