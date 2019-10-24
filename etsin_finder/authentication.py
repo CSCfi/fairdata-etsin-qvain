@@ -48,10 +48,10 @@ def is_authenticated():
         return False
     return True if 'samlUserdata' in session and len(session['samlUserdata']) > 0 else False
 
-
 def is_authenticated_CSC_user():
     """
     Is the user authenticated with CSC username or not.
+
     :return:
     """
     key = 'urn:oid:1.3.6.1.4.1.16161.4.0.53'
