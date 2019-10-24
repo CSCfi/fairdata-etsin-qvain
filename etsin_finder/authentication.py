@@ -48,6 +48,18 @@ def is_authenticated():
         return False
     return True if 'samlUserdata' in session and len(session['samlUserdata']) > 0 else False
 
+
+def is_authenticated_CSC_user():
+    """
+    Is the user authenticated with CSC username or not.
+    :return:
+    """
+    key = 'urn:oid:1.3.6.1.4.1.16161.4.0.53'
+    if executing_travis():
+        return False
+    return True if 'samlUserdata' in session and len(session['samlUserdata']) > 0 and key in session['samlUserdata'] else False
+
+
 def prepare_flask_request_for_saml(request):
     """
     Used by saml library.
@@ -109,7 +121,7 @@ def get_user_csc_name():
 
     :return:
     """
-    if not is_authenticated() or 'samlUserdata' not in session:
+    if not is_authenticated() or not is_authenticated_CSC_user() or 'samlUserdata' not in session:
         return None
 
     csc_name = session['samlUserdata'].get('urn:oid:1.3.6.1.4.1.16161.4.0.53', False)
