@@ -22,7 +22,7 @@ import HeroBanner from '../general/hero'
 import SearchBar from './searchBar'
 import Results from './results'
 import Tracking from '../../utils/tracking'
-import { Checkbox, Label } from '../qvain/general/form'
+// import { Checkbox, Label } from '../qvain/general/form'
 
 export default class Search extends Component {
   constructor() {
