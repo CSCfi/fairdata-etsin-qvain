@@ -41,6 +41,7 @@ class RemsAPIService(FlaskService):
         :return:
         """
         if not user_id or not rems_resource:
+            log.error('Failed to get REMS permission, user_id: {0} or rems_resource: {1} not valid.'. format(user_id, rems_resource))
             return False
         try:
             rems_api_response = requests.get(self.REMS_URL.format(rems_resource),
@@ -55,10 +56,9 @@ class RemsAPIService(FlaskService):
             log.error('Failed to get entitlement data from Fairdata REMS for user_id: {0}, resource: {1}'.
                       format(user_id, rems_resource))
             if isinstance(e, requests.HTTPError):
-                log.warning('Response status code: {0}'.format(rems_api_response.status_code))
-                log.warning('Response text: {0}'.format(json_or_empty(rems_api_response)))
+                log.warning('Response status code: {0}\nResponse text: {1}'.format(rems_api_response.status_code, json_or_empty(rems_api_response)))
             else:
-                log.error(e)
+                log.error('Error in rems_api_response\n{0}'.format(e))
             return False
 
         return len(rems_api_response.json()) > 0
@@ -76,14 +76,16 @@ def get_user_rems_permission_for_catalog_record(cr_id, user_id):
     :return:
     """
     if not user_id or not cr_id:
+        log.error('Failed to get rems permission for catalog record. user_id: {0} or cr_id: {1} is invalid'.format(user_id, cr_id))
         return False
 
     cr = get_catalog_record(cr_id, False, False)
     if cr and is_rems_catalog_record(cr):
         pref_id = get_catalog_record_preferred_identifier(cr)
         if not pref_id:
+            log.error('Could not get cr_id: {0} preferred identifier.'.format(cr_id))
             return False
 
         return _rems_api.get_rems_permission(user_id, pref_id)
-
+    log.warning('Invalid catalog record or not a REMS catalog record. cr_id: {0}'.format(cr_id))
     return False

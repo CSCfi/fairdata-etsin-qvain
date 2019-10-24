@@ -8,7 +8,7 @@
 """RESTful API endpoints, meant to be used by the frontend"""
 
 from functools import wraps
-
+import logging
 from flask import request, session
 from flask_mail import Message
 from flask_restful import abort, reqparse, Resource
@@ -50,7 +50,9 @@ def log_request(f):
         :return:
         """
         csc_name = authentication.get_user_csc_name() if not app.testing else ''
-        app.logger.info('{0} {1} {2} USER AGENT: {3}'.format(
+        log.info('[{0}.{1}] {2} {3} {4} USER AGENT: {5}'.format(
+            args[0].__class__.__name__,
+            f.__name__,
             csc_name if csc_name else 'UNAUTHENTICATED',
             request.environ['REQUEST_METHOD'],
             request.path,
@@ -215,10 +217,7 @@ class Contact(Resource):
 
 class User(Resource):
     """
-    Cf. saml attributes: https://wiki.eduuni.fi/display/CSCHAKA/funetEduPersonSchema2dot2
-
-    OID 1.3.6.1.4.1.5923.1.1.1.6 = eduPersonPrincipalName
-    OID 2.5.4.3 = cn / commonName
+    Saml attributes: https://wiki.eduuni.fi/pages/viewpage.action?spaceKey=cscfairdata&title=Proxy+Attributes
     """
 
     @log_request
@@ -233,12 +232,9 @@ class User(Resource):
             'is_authenticated_CSC_user': authentication.is_authenticated_CSC_user(),
             'home_organization_id': authentication.get_user_home_organization_id(),
             'home_organization_name': authentication.get_user_home_organization_name()}
-        dn = authentication.get_user_display_name()
         csc_user = authentication.get_user_csc_name()
         groups = authentication.get_user_ida_groups()
         user_info['user_ida_groups'] = groups
-        if dn is not None:
-            user_info['user_display_name'] = dn
         if csc_user is not None:
             user_info['user_csc_name'] = csc_user
         return user_info, 200

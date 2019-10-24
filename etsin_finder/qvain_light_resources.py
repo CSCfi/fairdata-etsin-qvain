@@ -42,7 +42,6 @@ def log_request(f):
     :param f:
     :return:
     """
-    line_no = inspect.getsourcelines(f)[-1]
     @wraps(f)
     def func(*args, **kwargs):
         """
@@ -53,13 +52,16 @@ def log_request(f):
         :return:
         """
         csc_name = authentication.get_user_csc_name() if not app.testing else ''
-        log.info('{0} {1} {2} USER AGENT: {3}'.format(
+        log.info('[{0}.{1}] {2} {3} {4} USER AGENT: {5}'.format(
+            args[0].__class__.__name__,
+            f.__name__,
             csc_name if csc_name else 'UNAUTHENTICATED',
             request.environ['REQUEST_METHOD'],
             request.path,
-            request.user_agent), extra={'lineno': line_no})
+            request.user_agent))
         return f(*args, **kwargs)
     return func
+
 
 class ProjectFiles(Resource):
     """File/directory related REST endpoints for getting project directory"""
@@ -90,6 +92,7 @@ class ProjectFiles(Resource):
                 project_dir_obj['files'] = slice_array_on_limit(project_dir_obj['files'], TOTAL_ITEM_LIMIT)
 
             return project_dir_obj, 200
+        log.warning('User not authenticated or project_dir_obj is invalid\npid: {0}'.format(pid))
         return '', 404
 
 class FileDirectory(Resource):
@@ -119,8 +122,8 @@ class FileDirectory(Resource):
                 dir_obj['directories'] = slice_array_on_limit(dir_obj['directories'], TOTAL_ITEM_LIMIT)
             if 'files' in dir_obj:
                 dir_obj['files'] = slice_array_on_limit(dir_obj['files'], TOTAL_ITEM_LIMIT)
-
             return dir_obj, 200
+        log.warning('User not authenticated or dir_obj is invalid\ndir_id: {0}'.format(dir_id))
         return '', 404
 
 class UserDatasets(Resource):
@@ -158,6 +161,7 @@ class UserDatasets(Resource):
             if (result == 'no datasets'):
                 return '', 200
             return result, 200
+        log.warning('User not authenticated or result for user_id is invalid\nuser_id: {0}'.format(user_id))
         return '', 404
 
 class QvainDataset(Resource):
@@ -182,7 +186,7 @@ class QvainDataset(Resource):
         try:
             data = self.validationSchema.loads(request.data)
         except ValidationError as err:
-            log.warning("INVALID FORM DATA: {0}".format(err.messages))
+            log.warning("Invalid form data: {0}".format(err.messages))
             return err.messages, 400
         try:
             metadata_provider_org = session["samlUserdata"]["urn:oid:1.3.6.1.4.1.25178.1.2.9"][0]
@@ -217,7 +221,7 @@ class QvainDataset(Resource):
         try:
             data = self.validationSchema.loads(request.data)
         except ValidationError as err:
-            log.warning("INVALID FORM DATA: {0}".format(err.messages))
+            log.warning("Invalid form data: {0}".format(err.messages))
             return err.messages, 400
         cr_id = data["original"]["identifier"]
         original = data["original"]
@@ -227,11 +231,12 @@ class QvainDataset(Resource):
         user = session["samlUserdata"]["urn:oid:1.3.6.1.4.1.16161.4.0.53"][0]
         creator = get_dataset_creator(cr_id)
         if user != creator:
+            log.warning('User: \"{0}\" is not the creator of the dataset. Update operation not allowed. Creator: \"{1}\"'.format(user, creator))
             return {"PermissionError": "User not authorized to to edit dataset."}, 403
 
         metax_redy_data = edited_data_to_metax(data, original)
         metax_response = update_dataset(metax_redy_data, cr_id)
-        log.debug("METAX RESPONSE: {0}".format(metax_response))
+        log.debug("METAX RESPONSE: \n{0}".format(metax_response))
         return metax_response
 
 class QvainDatasetDelete(Resource):
@@ -257,6 +262,7 @@ class QvainDatasetDelete(Resource):
         user = session["samlUserdata"]["urn:oid:1.3.6.1.4.1.16161.4.0.53"][0]
         creator = get_dataset_creator(cr_id)
         if user != creator:
+            log.warning('User: \"{0}\" is not the creator of the dataset. Delete operation not allowed. Creator: \"{1}\"'.format(user, creator))
             return {"PermissionError": "User not authorized to to delete dataset."}, 403
 
         metax_response = delete_dataset(cr_id)

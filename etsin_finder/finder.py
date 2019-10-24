@@ -18,7 +18,7 @@ from flask.logging import default_handler
 
 from etsin_finder.app_config import get_app_config
 from etsin_finder.cache import CatalogRecordCache, RemsCache
-from etsin_finder.utils import executing_travis
+from etsin_finder.utils import executing_travis, get_log_config
 
 
 def create_app():
@@ -42,49 +42,11 @@ def create_app():
 
 
 def _setup_app_logging(app):
-    # log_file_path = app.config.get('APP_LOG_PATH', None)
-    # if log_file_path:
-    #     level = logging.getLevelName(app.config.get('APP_LOG_LEVEL', 'INFO'))
-    #     app.logger.setLevel(level)
-    #     formatter = logging.Formatter(
-    #         "[%(asctime)s] {%(pathname)s:%(lineno)d} %(levelname)s - %(message)s")
-    #     handler = RotatingFileHandler(log_file_path, maxBytes=10000000, mode='a', backupCount=30)
-    #     handler.setLevel(level)
-    #     handler.setFormatter(formatter)
-    #     app.logger.addHandler(handler)
-    #     default_handler.setFormatter(formatter)
-    # else:
-    #     app.logger.error('Logging not correctly set up due to missing app log path configuration')
     log_file_path = app.config.get('APP_LOG_PATH', None)
-    if log_file_path:
-        logging.config.dictConfig({
-            'version': 1,
-            'formatters': {
-                'standard': {
-                    'format': '--------------\n[%(asctime)s] [%(process)d] %(levelname)s in %(module)s:%(lineno)d: %(message)s',
-                    'datefmt': '%Y-%M-%d %H:%M:%S %z',
-                },
-            },
-            'handlers': {
-                'file': {
-                    'class': 'logging.handlers.RotatingFileHandler',
-                    'formatter': 'standard',
-                    'filename': log_file_path,
-                    'maxBytes': 10000000,
-                    'mode': 'a',
-                    'backupCount': 30
-                },
-                'console': {
-                    'class': 'logging.StreamHandler',
-                    'formatter': 'standard',
-                    'stream': 'ext://sys.stdout'
-                }
-            },
-            'root': {
-                'level': 'INFO',
-                'handlers': ['file', 'console']
-            }
-        })
+    log_lvl = app.config.get('APP_LOG_LEVEL', 'INFO')
+    config = get_log_config(log_file_path, log_lvl)
+    if config:
+        logging.config.dictConfig(config)
     else:
         app.logger.error('Logging not correctly set up due to missing app log path configuration')
 

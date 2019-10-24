@@ -5,7 +5,7 @@
 # :author: CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
 # :license: MIT
 
-"""Various utils"""
+"""Various utils and constants"""
 
 import json
 import os
@@ -30,6 +30,45 @@ SAML_ATTRIBUTES = {
     'CSC_username': 'urn:oid:1.3.6.1.4.1.16161.4.0.53',
     'idm_groups': 'urn:oid:1.3.6.1.4.1.8057.2.80.26'
 }
+
+DATA_CATALOG_IDENTIFIERS = {
+    'ida': 'urn:nbn:fi:att:data-catalog-ida',
+    'att': 'urn:nbn:fi:att:data-catalog-att'
+}
+
+def get_log_config(log_file_path, log_lvl):
+    if (log_file_path and log_lvl):
+        CONFIG = {
+            'version': 1,
+            'formatters': {
+                'standard': {
+                    'format': '--------------\n[%(asctime)s] [%(process)d] %(levelname)s in %(filename)s:%(lineno)d: %(message)s',
+                    'datefmt': '%Y-%M-%d %H:%M:%S %z',
+                }
+            },
+            'handlers': {
+                'file': {
+                    'class': 'logging.handlers.RotatingFileHandler',
+                    'formatter': 'standard',
+                    'filename': log_file_path,
+                    'maxBytes': 10000000,
+                    'mode': 'a',
+                    'backupCount': 30
+                },
+                'console': {
+                    'class': 'logging.StreamHandler',
+                    'formatter': 'standard',
+                    'stream': 'ext://sys.stdout'
+                }
+            },
+            'root': {
+                'level': log_lvl,
+                'handlers': ['file', 'console']
+            }
+        }
+        return CONFIG
+    return False
+
 
 def executing_travis():
     """Returns True whenever code is being executed by travis"""

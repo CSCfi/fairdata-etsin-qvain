@@ -4,6 +4,9 @@ access_type["EMBARGO"] = "http://uri.suomi.fi/codelist/fairdata/access_type/code
 access_type["OPEN"] = "http://uri.suomi.fi/codelist/fairdata/access_type/code/open"
 
 from etsin_finder.cr_service import get_catalog_record
+from etsin_finder.finder import app
+
+log = app.logger
 
 def clean_empty_keyvalues_from_dict(d):
     """
@@ -312,10 +315,14 @@ def check_if_data_in_user_IDA_project(data, projects):
             for file in files:
                 identifier = file["projectIdentifier"]
                 if identifier not in user_projects:
+                    log.warning('File projectIdentifier not in user projects.\nidentifier: {0}, user_projects: {1}'
+                        .format(identifier, user_projects))
                     return False
         if directories:
             for directory in directories:
                 identifier = directory["projectIdentifier"]
                 if identifier not in user_projects:
+                    log.warning('Directory projectIdentifier not in user projects.\nidentifier: {0}, user_projects: {1}'
+                        .format(identifier, user_projects))
                     return False
     return True
