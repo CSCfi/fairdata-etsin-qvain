@@ -166,10 +166,10 @@ class Description extends Component {
               )
             }
           </div>
-          <div className="d-inline-flex align-items-center dataset-title justify-content-between">
+          <div className="d-md-flex align-items-center dataset-title justify-content-between">
             <Title lang={getDataLang(this.state.title)}>{checkDataLang(this.state.title)}</Title>
           </div>
-          <div className="d-inline-flex justify-content-between basic-info">
+          <div className="d-flex justify-content-between basic-info">
             <MainInfo>
               <ErrorBoundary>
                 <TogglableAgentList agents={this.state.creator} agentType="creator" />
