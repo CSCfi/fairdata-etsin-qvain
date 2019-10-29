@@ -37,6 +37,17 @@ DATA_CATALOG_IDENTIFIERS = {
 }
 
 def get_log_config(log_file_path, log_lvl):
+    """
+    Function to get the logging configuration from utils.py
+
+    Arguments:
+        log_file_path {string} -- The log file path.
+        log_lvl {string} -- The logging level
+
+    Returns:
+        [dict] -- Dict containgin the logging configuration.
+
+    """
     if (log_file_path and log_lvl):
         CONFIG = {
             'version': 1,

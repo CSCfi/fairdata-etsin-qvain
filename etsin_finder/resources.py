@@ -216,9 +216,7 @@ class Contact(Resource):
 
 
 class User(Resource):
-    """
-    Saml attributes: https://wiki.eduuni.fi/pages/viewpage.action?spaceKey=cscfairdata&title=Proxy+Attributes
-    """
+    """Saml attributes: https://wiki.eduuni.fi/pages/viewpage.action?spaceKey=cscfairdata&title=Proxy+Attributes"""
 
     @log_request
     def get(self):

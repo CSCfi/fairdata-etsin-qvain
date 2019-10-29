@@ -66,7 +66,6 @@ def validate_send_message_request(user_email, user_body, agent_type):
     :param agent_type:
     :return:
     """
-
     if not re.match(r"^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+\.[a-zA-Z]*$", user_email):
         log.warning("Reply-to email address not formally valid: {0}".format(user_email))
         return False
