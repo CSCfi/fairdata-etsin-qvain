@@ -359,7 +359,3 @@ const FilterItems = styled.div`
     }
   }
 `
-
-const PasCheckboxContainer = styled.div`
-
-`
