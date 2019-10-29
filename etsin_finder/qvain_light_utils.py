@@ -1,4 +1,9 @@
 """Utilities for transforming the data from Qvain Light form to METAX compatible format"""
+
+from etsin_finder.cr_service import get_catalog_record
+from etsin_finder.finder import app
+from etsin_finder.authentication import get_user_ida_groups
+
 access_type = {}
 access_type["EMBARGO"] = "http://uri.suomi.fi/codelist/fairdata/access_type/code/embargo"
 access_type["OPEN"] = "http://uri.suomi.fi/codelist/fairdata/access_type/code/open"
@@ -305,9 +310,18 @@ def check_if_data_in_user_IDA_project(data, projects):
         [bool] -- True if data belongs to user, and False is not.
 
     """
-    user_projects = [project.split(":")[1] for project in projects]
+    user_ida_projects = get_user_ida_groups()
+    try:
+        user_ida_projects_ids = [project.split(":")[1] for project in user_ida_projects]
+    except IndexError as e:
+        log.error('Index error while parsing user IDA projects:\n{0}'.fromat(e))
+        return False
+    if not user_ida_projects:
+        log.warning('Could not get user IDA groups.')
+        return False
+    log.debug('User IDA groups: {0}'.format(user_ida_projects_ids))
     # Add the test project 'project_x' for local development.
-    user_projects.append("project_x")
+    user_ida_projects_ids.append("project_x")
     if "files" or "directories" in data:
         files = data["files"] if "files" in data else []
         directories = data["directories"] if "directories" in data else []
