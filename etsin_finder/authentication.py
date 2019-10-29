@@ -54,7 +54,7 @@ def is_authenticated_CSC_user():
 
     :return:
     """
-    key = 'urn:oid:1.3.6.1.4.1.8057.2.80.26'
+    key = 'urn:oid:1.3.6.1.4.1.16161.4.0.53'
     if executing_travis():
         return False
     return True if 'samlUserdata' in session and len(session['samlUserdata']) > 0 and key in session['samlUserdata'] else False
