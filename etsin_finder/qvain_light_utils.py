@@ -326,10 +326,14 @@ def check_if_data_in_user_IDA_project(data, projects):
             for file in files:
                 identifier = file["projectIdentifier"]
                 if identifier not in user_ida_projects_ids:
+                    log.warning('File projectIdentifier not in user projects.\nidentifier: {0}, user_ida_projects_ids: {1}'
+                        .format(identifier, user_ida_projects_ids))
                     return False
         if directories:
             for directory in directories:
                 identifier = directory["projectIdentifier"]
                 if identifier not in user_ida_projects_ids:
+                    log.warning('Directory projectIdentifier not in user projects.\nidentifier: {0}, user_ida_projects_ids: {1}'
+                        .format(identifier, user_ida_projects_ids))
                     return False
     return True

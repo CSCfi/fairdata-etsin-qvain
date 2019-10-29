@@ -97,24 +97,6 @@ def reset_flask_session_on_logout():
     session.clear()
 
 
-def get_user_display_name():
-    """
-    Get user display name from saml userdata.
-
-    :return:
-    """
-    if not is_authenticated() or 'samlUserdata' not in session:
-        return None
-
-    cn = session['samlUserdata'].get('urn:oid:2.5.4.3', False)
-    if cn:
-        return cn[0]
-    else:
-        log.warn("User seems to be authenticated but cn not in session object. "
-                 "Saml userdata:\n{0}".format(session['samlUserdata']))
-
-    return None
-
 def get_user_csc_name():
     """
     Get user csc name from saml userdata.
@@ -128,7 +110,7 @@ def get_user_csc_name():
     if csc_name:
         return csc_name[0]
     else:
-        log.warn("User seems to be authenticated but CSC user name not in session object. "
+        log.warning("User seems to be authenticated but CSC user name not in session object. "
                  "Saml userdata:\n{0}".format(session['samlUserdata']))
 
     return None
@@ -147,7 +129,7 @@ def get_user_id():
     if user_fd_id:
         return user_fd_id[0]
     else:
-        log.warn("User seems to be authenticated but fairdata id not in session object. "
+        log.warning("User seems to be authenticated but fairdata id not in session object. "
                  "Saml userdata:\n{0}".format(session['samlUserdata']))
 
     return None

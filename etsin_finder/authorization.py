@@ -15,14 +15,9 @@ from etsin_finder.cr_service import \
 from etsin_finder.finder import app
 from etsin_finder import rems_service
 from etsin_finder.utils import tz_now_is_later_than_timestamp_str, remove_keys_recursively, leave_keys_in_dict, \
-    ACCESS_TYPES
+    ACCESS_TYPES, DATA_CATALOG_IDENTIFIERS
 
 log = app.logger
-
-DATA_CATALOG_IDENTIFIERS = {
-    'ida': 'urn:nbn:fi:att:data-catalog-ida',
-    'att': 'urn:nbn:fi:att:data-catalog-att'
-}
 
 
 def user_has_rems_permission_for_catalog_record(cr_id, user_id, is_authd):
