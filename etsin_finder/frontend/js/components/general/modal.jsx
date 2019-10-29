@@ -76,17 +76,18 @@ export default class Modal extends Component {
     this.onClose = this.onClose.bind(this)
   }
 
-  componentWillReceiveProps(newProps) {
-    if (newProps.isOpen === false && this.props.isOpen === true) {
-      const root = document.getElementById('root')
-      root.classList.remove('blur')
-    }
-  }
-
   onClose() {
     const root = document.getElementById('root')
     root.classList.remove('blur')
     this.props.onRequestClose()
+  }
+
+   // eslint-disable-next-line camelcase
+   UNSAFE_componentWillReceiveProps(newProps) {
+    if (newProps.isOpen === false && this.props.isOpen === true) {
+      const root = document.getElementById('root')
+      root.classList.remove('blur')
+    }
   }
 
   afterOpen() {

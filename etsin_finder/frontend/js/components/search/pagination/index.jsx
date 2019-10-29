@@ -37,7 +37,7 @@ class Pagination extends Component {
     this.createPagination = this.createPagination.bind(this)
   }
 
-  componentWillMount() {
+  componentDidMount() {
     if (!this.pageAmount) {
       const pages = Math.ceil(this.props.totalResults / this.props.perPage)
       this.setState(
@@ -52,7 +52,8 @@ class Pagination extends Component {
     }
   }
 
-  componentWillReceiveProps(newProps) {
+  // eslint-disable-next-line camelcase
+  UNSAFE_componentWillReceiveProps(newProps) {
     if (!newProps.loading) {
       const pages = Math.ceil(this.props.totalResults / this.props.perPage)
       this.setState(

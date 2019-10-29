@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject, observer } from 'mobx-react'
+import translate from 'counterpart'
 import Translate from 'react-translate-component'
 import {
   faBuilding,
@@ -15,7 +16,8 @@ import {
   DeleteButton,
   ButtonContainer
 } from '../general/buttons'
-import { EntityType, EmptyActor } from '../../../stores/view/qvain'
+import { EmptyActor } from '../../../stores/view/qvain'
+import { EntityType } from '../utils/constants'
 
 export class AddedActorsBase extends Component {
   static propTypes = {
@@ -63,7 +65,7 @@ export class AddedActorsBase extends Component {
           <ButtonGroup tabIndex="0" key={addedActor.uiId}>
             <ButtonLabel>
               <FontAwesomeIcon icon={addedActor.type === EntityType.PERSON ? faUser : faBuilding} style={{ marginRight: '8px' }} />
-              {this.getAddedActorName(addedActor.name, lang)}{addedActor.role.map(role => (` / ${ role }`))}
+              {this.getAddedActorName(addedActor.name, lang)}{addedActor.role.map(role => (`/${ translate(`qvain.actors.add.checkbox.${role}`)}`))}
             </ButtonLabel>
             <ButtonContainer>
               <EditButton aria-label="Edit" onClick={this.handleEditActor(addedActor)} />

@@ -4,7 +4,7 @@ exports[`Qvain should render correctly 1`] = `ShallowWrapper {}`;
 
 exports[`Qvain.Description should render <Description /> 1`] = `ShallowWrapper {}`;
 
-exports[`Qvain.Description should render <DescriptionFeild /> 1`] = `ShallowWrapper {}`;
+exports[`Qvain.Description should render <DescriptionField /> 1`] = `ShallowWrapper {}`;
 
 exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `ShallowWrapper {}`;
 

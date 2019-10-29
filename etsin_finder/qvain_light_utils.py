@@ -1,9 +1,14 @@
 """Utilities for transforming the data from Qvain Light form to METAX compatible format"""
+
+from etsin_finder.cr_service import get_catalog_record
+from etsin_finder.finder import app
+from etsin_finder.authentication import get_user_ida_groups
+
 access_type = {}
 access_type["EMBARGO"] = "http://uri.suomi.fi/codelist/fairdata/access_type/code/embargo"
 access_type["OPEN"] = "http://uri.suomi.fi/codelist/fairdata/access_type/code/open"
 
-from etsin_finder.cr_service import get_catalog_record
+log = app.logger
 
 def clean_empty_keyvalues_from_dict(d):
     """
@@ -29,7 +34,7 @@ def alter_role_data(actor_list, role):
 
     Arguments:
         actor_list {list} -- A list of all the actors from the frontend.
-        role {string} -- The role, can be 'creator', 'publisher' or 'curator'.
+        role {string} -- The role, can be 'creator', 'publisher', 'curator', 'rights_holder' or 'contributor'.
 
     Returns:
         list -- List of the actors with the role in question complyant to Metax schema.
@@ -196,6 +201,7 @@ def data_to_metax(data, metadata_provider_org, metadata_provider_user):
         object -- Returns an object that has been validated and should conform to Metax schema and is ready to be sent to Metax.
 
     """
+    publisher_array = alter_role_data(data["actors"], "publisher")
     dataset_data = {
         "metadata_provider_org": metadata_provider_org,
         "metadata_provider_user": metadata_provider_user,
@@ -204,8 +210,10 @@ def data_to_metax(data, metadata_provider_org, metadata_provider_user):
             "title": data["title"],
             "description": data["description"],
             "creator": alter_role_data(data["actors"], "creator"),
-            "publisher": alter_role_data(data["actors"], "publisher")[0],
+            "publisher": publisher_array[0] if publisher_array else {},
             "curator": alter_role_data(data["actors"], "curator"),
+            "rights_holder": alter_role_data(data["actors"], "rights_holder"),
+            "contributor": alter_role_data(data["actors"], "contributor"),
             "other_identifier": other_identifiers_to_metax(data["identifiers"]),
             "field_of_science": [{
                 "identifier": data["fieldOfScience"] if "fieldOfScience" in data else ""
@@ -260,20 +268,30 @@ def edited_data_to_metax(data, original):
         [object] -- Metax ready data.
 
     """
-    original["research_dataset"]["title"] = data["title"]
-    original["research_dataset"]["description"] = data["description"]
-    original["research_dataset"]["creator"] = alter_role_data(data["actors"], "creator")
-    original["research_dataset"]["publisher"] = alter_role_data(data["actors"], "publisher")[0]
-    original["research_dataset"]["curator"] = alter_role_data(data["actors"], "curator")
-    original["research_dataset"]["other_identifier"] = other_identifiers_to_metax(data["identifiers"])
-    original["research_dataset"]["field_of_science"] = [{"identifier": data["fieldOfScience"] if "fieldOfScience" in data else ""}]
-    original["research_dataset"]["keyword"] = data["keywords"]
-    original["research_dataset"]["access_rights"] = access_rights_to_metax(data)
-    original["research_dataset"]["remote_resources"] = remote_resources_data_to_metax(data["remote_resources"]) if data["dataCatalog"] == "urn:nbn:fi:att:data-catalog-att" else ""
-    original["research_dataset"]["files"] = files_data_to_metax(data["files"]) if data["dataCatalog"] == "urn:nbn:fi:att:data-catalog-ida" else ""
-    original["research_dataset"]["directories"] = directories_data_to_metax(data["directories"]) if data["dataCatalog"] == "urn:nbn:fi:att:data-catalog-ida" else ""
+    publisher_array = alter_role_data(data["actors"], "publisher")
+    research_dataset = original["research_dataset"]
+    research_dataset.update({
+        "title": data["title"],
+        "description": data["description"],
+        "creator": alter_role_data(data["actors"], "creator"),
+        "publisher": publisher_array[0] if publisher_array else {},
+        "curator": alter_role_data(data["actors"], "curator"),
+        "rights_holder": alter_role_data(data["actors"], "rights_holder"),
+        "contributor": alter_role_data(data["actors"], "contributor"),
+        "other_identifier": other_identifiers_to_metax(data["identifiers"]),
+        "field_of_science": [
+            {
+                "identifier": data["fieldOfScience"] if "fieldOfScience" in data else ""
+            }
+        ],
+        "keyword": data["keywords"],
+        "access_rights": access_rights_to_metax(data),
+        "remote_resources": remote_resources_data_to_metax(data["remote_resources"]) if data["dataCatalog"] == "urn:nbn:fi:att:data-catalog-att" else "",
+        "files": files_data_to_metax(data["files"]) if data["dataCatalog"] == "urn:nbn:fi:att:data-catalog-ida" else "",
+        "directories": directories_data_to_metax(data["directories"]) if data["dataCatalog"] == "urn:nbn:fi:att:data-catalog-ida" else "",
+    })
     edited_data = {
-        "research_dataset": original["research_dataset"]
+        "research_dataset": research_dataset
     }
     return clean_empty_keyvalues_from_dict(edited_data)
 
@@ -289,20 +307,33 @@ def check_if_data_in_user_IDA_project(data, projects):
         [bool] -- True if data belongs to user, and False is not.
 
     """
-    user_projects = [project.split(":")[1] for project in projects]
+    user_ida_projects = get_user_ida_groups()
+    try:
+        user_ida_projects_ids = [project.split(":")[1] for project in user_ida_projects]
+    except IndexError as e:
+        log.error('Index error while parsing user IDA projects:\n{0}'.fromat(e))
+        return False
+    if not user_ida_projects:
+        log.warning('Could not get user IDA groups.')
+        return False
+    log.debug('User IDA groups: {0}'.format(user_ida_projects_ids))
     # Add the test project 'project_x' for local development.
-    user_projects.append("project_x")
+    user_ida_projects_ids.append("project_x")
     if "files" or "directories" in data:
         files = data["files"] if "files" in data else []
         directories = data["directories"] if "directories" in data else []
         if files:
             for file in files:
                 identifier = file["projectIdentifier"]
-                if identifier not in user_projects:
+                if identifier not in user_ida_projects_ids:
+                    log.warning('File projectIdentifier not in user projects.\nidentifier: {0}, user_ida_projects_ids: {1}'
+                        .format(identifier, user_ida_projects_ids))
                     return False
         if directories:
             for directory in directories:
                 identifier = directory["projectIdentifier"]
-                if identifier not in user_projects:
+                if identifier not in user_ida_projects_ids:
+                    log.warning('Directory projectIdentifier not in user projects.\nidentifier: {0}, user_ida_projects_ids: {1}'
+                        .format(identifier, user_ida_projects_ids))
                     return False
     return True
