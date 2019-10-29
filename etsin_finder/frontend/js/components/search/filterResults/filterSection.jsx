@@ -23,6 +23,7 @@ import ElasticQuery from '../../../stores/view/elasticquery'
 import checkDataLang from '../../../utils/checkDataLang'
 import FilterItem from './filterItem'
 import { TransparentLink } from '../../general/button'
+import { Checkbox, Label } from '../../qvain/general/form'
 
 class FilterSection extends Component {
   constructor(props) {
@@ -94,6 +95,7 @@ class FilterSection extends Component {
       show: false,
       aggregateItems: undefined,
       displayShowButton: undefined,
+      includePasDatasets: ElasticQuery.includePasDatasets || false
     }
 
     this.cutoff = 10
@@ -150,6 +152,13 @@ class FilterSection extends Component {
         return false
       })
     }
+  }
+
+  handlePasCheckboxToggle = event => {
+    this.setState({
+      includePasDatasets: event.target.checked,
+    })
+    ElasticQuery.toggleIncludePasDatasets(this.state.includePasDatasets)
   }
 
   // Filter PAS datasets, if they are not to be included
@@ -211,6 +220,20 @@ class FilterSection extends Component {
               />
             ))}
           </ul>
+          {this.props.aggregation === 'data_catalog' && (
+            <>
+              <Label
+                htmlFor="pasCheckbox"
+              >
+                <Checkbox
+                  id="pasCheckbox"
+                  checked={this.state.includePasDatasets}
+                  onChange={this.handlePasCheckboxToggle}
+                />
+                <Translate content="home.includePas" />
+              </Label>
+            </>
+          )}
           {this.state.displayShowButton ? (
             <div>
               <hr />
@@ -335,4 +358,8 @@ const FilterItems = styled.div`
       text-decoration: underline;
     }
   }
+`
+
+const PasCheckboxContainer = styled.div`
+
 `
