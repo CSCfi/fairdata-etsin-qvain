@@ -23,6 +23,7 @@ export class ActorTypeSelectBase extends Component {
   handleChangeEntity = (actor, type) => () => {
     actor.type = type
     actor.role = []
+    this.props.Stores.Qvain.emptyActorInEdit(type)
   }
 
   checkIfActorRoleExists = role => {
