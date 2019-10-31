@@ -108,7 +108,7 @@ export class ExternalFileFormBase extends Component {
           attributes={{ placeholder: 'qvain.files.external.form.useCategory.placeholder' }}
         />
         <Label htmlFor="urlInput">
-          <Translate content="qvain.files.external.form.url.label" /> *
+          <Translate content="qvain.files.external.form.url.label" />
         </Label>
         <Translate
           component={ResourceInput}

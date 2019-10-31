@@ -213,7 +213,6 @@ const externalResourceUseCategorySchema = yup
 const externalResourceUrlSchema = yup
   .string()
   .url(translate('qvain.validationMessages.externalResources.url.url'))
-  .required(translate('qvain.validationMessages.externalResources.url.required'))
 
 const externalResourceSchema = yup.object().shape({
   title: externalResourceTitleSchema,
