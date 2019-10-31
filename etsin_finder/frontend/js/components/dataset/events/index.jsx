@@ -122,10 +122,12 @@ class Events extends Component {
     )
   }
 
-  // If data does not have Identifier defined in 'Related material and history > Reference to a related source', an empty string is returned
-  checkRelation(rela) {
-    rela[0].entity.identifier = rela[0].entity.identifier || '';
-    return true
+  checkRelation(relation) {
+    if (relation[0]) {
+      relation[0].entity.identifier = relation[0].entity.identifier || '';
+      return true
+    }
+    return false
   }
 
   relationIdentifierIsUrl(identifier) {
@@ -133,7 +135,6 @@ class Events extends Component {
   }
 
   render() {
-    console.log(this.props.relation)
     return (
       <Margin>
         {this.checkProvenance(this.props.provenance) && (
@@ -276,6 +277,20 @@ class Events extends Component {
             </Table>
           </Margin>
         )}
+        {
+          this.props.preservation_dataset_origin_version_identifier && (
+            <Margin>
+              <h2>
+                <Translate content="dataset.events_idn.origin_identifier" />
+              </h2>
+              <ul>
+                <OtherID>
+                  {this.props.preservation_dataset_origin_version_identifier.preferred_identifier}
+                </OtherID>
+              </ul>
+            </Margin>
+          )
+        }
       </Margin>
     )
   }
@@ -285,6 +300,7 @@ Events.defaultProps = {
   relation: false,
   provenance: false,
   other_identifier: false,
+  preservation_dataset_origin_version_identifier: undefined,
 }
 
 Events.propTypes = {
@@ -299,6 +315,7 @@ Events.propTypes = {
   relation: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
   provenance: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
   other_identifier: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
+  preservation_dataset_origin_version_identifier: PropTypes.object,
 }
 
 const InlineUl = styled.ul`

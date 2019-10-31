@@ -56,6 +56,17 @@ class ElasticQuery {
 
   @observable perPage = 20
 
+  @observable includePasDatasets = false
+
+  toggleIncludePasDatasets = (includePasDatasets) => {
+    if (includePasDatasets) {
+      this.includePasDatasets = false
+    } else {
+      this.includePasDatasets = true
+    }
+    this.queryES(false)
+  }
+
   // update query search term and url
   @action
   updateSearch = (newSearch, updateUrl = true) => {
@@ -377,7 +388,20 @@ class ElasticQuery {
           query: queryObject,
           sort: sorting,
           // Return only the following fields in source attribute to minimize traffic
-          _source: ['identifier', 'title.*', 'description.*', 'access_rights.*'],
+          _source: [
+            'access_rights.*',
+            'data_catalog.*',
+            'description.*',
+            'identifier',
+            'preservation_state',
+            'title.*',
+
+            // Fields needed for ATT/IDA <--> PAS link detection
+            'preservation_identifier',
+            'preservation_dataset_version',
+            'preservation_dataset_origin_version',
+            'data_catalog_identifier'
+          ],
           highlight: {
             // pre_tags: ['<b>'], # default is <em>
             // post_tags: ['</b>'],
@@ -402,9 +426,21 @@ class ElasticQuery {
             // track queries, categories, and hits
             // category tracking turned off because filter contains a lot of different fields
             Tracking.newSearch(currentSearch, false, res.data.hits.hits.length)
+
+            let totalHits = res.data.hits.total
+
+            // If pas datasets are not to be included, they must be removed from the search results count
+            if (this.includePasDatasets === false) {
+              for (let i = 0; i < res.data.aggregations.data_catalog_en.buckets.length; i += 1) {
+                if (res.data.aggregations.data_catalog_en.buckets[i].key === 'Fairdata PAS datasets') {
+                  totalHits -= res.data.aggregations.data_catalog_en.buckets[i].doc_count
+                  break;
+                }
+              }
+            }
             this.results = {
               hits: res.data.hits.hits,
-              total: res.data.hits.total,
+              total: totalHits,
               aggregations: res.data.aggregations,
             }
             this.loading = false

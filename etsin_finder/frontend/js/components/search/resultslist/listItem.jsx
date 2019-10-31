@@ -18,6 +18,7 @@ import styled from 'styled-components'
 import checkDataLang, { getDataLang } from '../../../utils/checkDataLang'
 import ErrorBoundary from '../../general/errorBoundary'
 import AccessRights from '../../dataset/accessRights'
+import FairdataPasDatasetIcon from '../../dataset/fairdataPasDatasetIcon'
 import ContentBox from '../../general/contentBox'
 
 export default class ListItem extends Component {
@@ -49,10 +50,25 @@ export default class ListItem extends Component {
                   <h2 className="title" lang={getDataLang(this.props.item.title)}>
                     {checkDataLang(this.props.item.title)}
                   </h2>
-                  <AccessRights
-                    access_rights={this.props.item.access_rights}
-                    style={{ marginBottom: '1em' }}
-                  />
+                  <WrapperDivRight>
+                    {
+                      (
+                        (this.props.item.data_catalog_identifier === 'urn:nbn:fi:att:data-catalog-pas')
+                        ||
+                        (this.props.item.preservation_state === 80)
+                      )
+                      &&
+                      (
+                        <FairdataPasDatasetIcon
+                          preservation_state={this.props.item.preservation_state}
+                          data_catalog_identifier={this.props.item.data_catalog_identifier}
+                        />
+                      )
+                    }
+                    <AccessRights
+                      access_rights={this.props.item.access_rights}
+                    />
+                  </WrapperDivRight>
                 </ItemHeader>
               </ErrorBoundary>
               <ErrorBoundary>
@@ -86,8 +102,11 @@ ListItem.propTypes = {
   item: PropTypes.shape({
     title: PropTypes.object.isRequired,
     access_rights: PropTypes.object,
+    preservation_state: PropTypes.number,
     field_of_science: PropTypes.array,
     description: PropTypes.object.isRequired,
+    data_catalog: PropTypes.object,
+    data_catalog_identifier: PropTypes.string
   }).isRequired,
 }
 
@@ -108,6 +127,10 @@ const ItemHeader = styled.div`
     margin-right: 1em;
     line-height: 1.5em;
   }
+`
+
+const WrapperDivRight = styled.div`
+  display: inline-flex;
 `
 
 const Item = styled.article`

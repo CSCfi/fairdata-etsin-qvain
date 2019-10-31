@@ -54,7 +54,7 @@ def is_authenticated_CSC_user():
 
     :return:
     """
-    key = 'urn:oid:1.3.6.1.4.1.8057.2.80.26'
+    key = 'urn:oid:1.3.6.1.4.1.16161.4.0.53'
     if executing_travis():
         return False
     return True if 'samlUserdata' in session and len(session['samlUserdata']) > 0 and key in session['samlUserdata'] else False
@@ -97,24 +97,6 @@ def reset_flask_session_on_logout():
     session.clear()
 
 
-def get_user_display_name():
-    """
-    Get user display name from saml userdata.
-
-    :return:
-    """
-    if not is_authenticated() or 'samlUserdata' not in session:
-        return None
-
-    cn = session['samlUserdata'].get('urn:oid:2.5.4.3', False)
-    if cn:
-        return cn[0]
-    else:
-        log.warn("User seems to be authenticated but cn not in session object. "
-                 "Saml userdata:\n{0}".format(session['samlUserdata']))
-
-    return None
-
 def get_user_csc_name():
     """
     Get user csc name from saml userdata.
@@ -128,7 +110,7 @@ def get_user_csc_name():
     if csc_name:
         return csc_name[0]
     else:
-        log.warn("User seems to be authenticated but CSC user name not in session object. "
+        log.warning("User seems to be authenticated but CSC user name not in session object. "
                  "Saml userdata:\n{0}".format(session['samlUserdata']))
 
     return None
@@ -147,7 +129,7 @@ def get_user_id():
     if user_fd_id:
         return user_fd_id[0]
     else:
-        log.warn("User seems to be authenticated but fairdata id not in session object. "
+        log.warning("User seems to be authenticated but fairdata id not in session object. "
                  "Saml userdata:\n{0}".format(session['samlUserdata']))
 
     return None

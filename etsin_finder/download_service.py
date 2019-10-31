@@ -56,19 +56,17 @@ class DownloadAPIService(FlaskService):
                                                                                self.PASSWORD.encode('utf-8')))
             dl_api_response.raise_for_status()
         except requests.Timeout as t:
-            log.error('Request to Download API timed out')
-            log.error(t)
+            log.error('Request to Download API timed out\n{0}'.format(t))
             return self._get_error_response(dl_api_response.status_code)
         except requests.ConnectionError as c:
-            log.error('Unable to connect to Download API')
-            log.error(c)
+            log.error('Unable to connect to Download API\n{0}'.format(c))
             return self._get_error_response(dl_api_response.status_code)
         except requests.HTTPError:
-            log.warning('Download API returned an unsuccessful status code: {0}'.format(dl_api_response.status_code))
-            log.warning('Response: {0}'.format(json_or_empty(dl_api_response)))
+            log.warning('Download API returned an unsuccessful status code: {0}\n\
+                Response: {1}'.format(dl_api_response.status_code, dl_api_response))
             return self._get_error_response(dl_api_response.status_code)
         except Exception as e:
-            log.error(e)
+            log.error('Error in Download:\n{0}'.format(e))
             return self._get_error_response(dl_api_response.status_code)
         else:
             response = Response(response=stream_with_context(dl_api_response.iter_content(chunk_size=1024)),
@@ -81,6 +79,7 @@ class DownloadAPIService(FlaskService):
             if 'Content-Length' in dl_api_response.headers:
                 response.headers['Content-Length'] = dl_api_response.headers['Content-Length']
 
+            log.debug('Download URL: {0} Responded with HTTP status {1}'.format(url, dl_api_response.status_code))
             return response
 
     @staticmethod

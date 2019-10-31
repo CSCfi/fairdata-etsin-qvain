@@ -15,8 +15,10 @@ import { inject, observer } from 'mobx-react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
+import { Link } from 'react-router-dom'
 
 import AccessRights from './accessRights'
+import FairdataPasDatasetIcon from './fairdataPasDatasetIcon'
 import Accessiblity from '../../stores/view/accessibility'
 import AskForAccess from './askForAccess'
 import Contact from './contact'
@@ -87,6 +89,20 @@ class Description extends Component {
                   idn={this.props.dataset.identifier}
                 />
               )}
+            {
+              (
+                (this.props.dataset.data_catalog.catalog_json.identifier === 'urn:nbn:fi:att:data-catalog-pas')
+                ||
+                (this.props.dataset.preservation_state === 80)
+              )
+              &&
+              (
+                <FairdataPasDatasetIcon
+                  preservation_state={this.props.dataset.preservation_state}
+                  data_catalog_identifier={this.props.dataset.data_catalog.catalog_json.identifier}
+                />
+              )
+            }
             <AccessRights
               button
               access_rights={
@@ -114,6 +130,42 @@ class Description extends Component {
           </Flex>
         </Labels>
         <section>
+          <div>
+            {
+              (this.props.dataset.data_catalog.catalog_json.identifier === 'urn:nbn:fi:att:data-catalog-pas') &&
+              (
+              <PasInfo>
+                <Translate content="dataset.storedInPas" />
+              </PasInfo>
+              )
+            }
+            {
+              (this.props.dataset.preservation_dataset_origin_version) &&
+              (
+                <PasInfo>
+                  <Translate content="dataset.originalDatasetVersionExists" />
+                  <Link
+                    to={`/dataset/${this.props.dataset.preservation_dataset_origin_version.identifier}`}
+                  >
+                    <Translate content="dataset.linkToOriginalDataset" />
+                  </Link>
+                </PasInfo>
+              )
+            }
+            {
+              (this.props.dataset.preservation_dataset_version) &&
+              (
+                <PasInfo>
+                  <Translate content="dataset.pasDatasetVersionExists" />
+                  <Link
+                    to={`/dataset/${this.props.dataset.preservation_dataset_version.identifier}`}
+                  >
+                    <Translate content="dataset.linkToPasDataset" />
+                  </Link>
+                </PasInfo>
+              )
+            }
+          </div>
           <div className="d-md-flex align-items-center dataset-title justify-content-between">
             <Title lang={getDataLang(this.state.title)}>{checkDataLang(this.state.title)}</Title>
           </div>
@@ -202,11 +254,21 @@ Description.propTypes = {
 
 const Title = styled.h1`
   margin-bottom: 0.1rem;
+  color: ${p => p.theme.color.superdarkgray};
+  word-wrap: break-word;
+  
 `
 
 const MainInfo = styled.div`
   color: ${p => p.theme.color.gray};
   font-size: 0.9em;
+`
+
+const PasInfo = styled.div`
+  color: ${p => p.theme.color.gray};
+  font-size: 0.9em;
+  padding-top: 5px;
+  padding-bottom: 5px;
 `
 
 const DatasetDescription = styled.div`

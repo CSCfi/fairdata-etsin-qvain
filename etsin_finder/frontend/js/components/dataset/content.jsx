@@ -30,11 +30,15 @@ class Content extends Component {
   showEvents() {
     return (
       (this.props.dataset.research_dataset.provenance !== undefined
-        && this.props.dataset.research_dataset.provenance.length > 0)
+      && this.props.dataset.research_dataset.provenance.length > 0)
+
       || (this.props.dataset.research_dataset.other_identifier !== undefined
-        && this.props.dataset.research_dataset.other_identifier.length > 0)
+      && this.props.dataset.research_dataset.other_identifier.length > 0)
+
       || (this.props.dataset.research_dataset.relation !== undefined
-        && this.props.dataset.research_dataset.relation.length > 0)
+      && this.props.dataset.research_dataset.relation.length > 0)
+
+      || (this.props.dataset.preservation_dataset_origin_version !== undefined)
     )
   }
 
@@ -107,6 +111,7 @@ class Content extends Component {
                 id="tab-data"
                 aria-labelledby="tab-for-data"
                 role="tabpanel"
+                dataset={this.props.dataset}
                 hasRemote={this.props.hasRemote}
                 hasFiles={this.props.hasFiles}
                 {...props}
@@ -127,6 +132,7 @@ class Content extends Component {
                 role="tabpanel"
                 provenance={this.props.dataset.research_dataset.provenance}
                 other_identifier={this.props.dataset.research_dataset.other_identifier}
+                preservation_dataset_origin_version_identifier={this.props.dataset.preservation_dataset_origin_version}
                 relation={this.props.dataset.research_dataset.relation}
                 {...props}
               />

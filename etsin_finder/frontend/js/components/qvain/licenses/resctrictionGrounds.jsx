@@ -103,7 +103,8 @@ class RestrictionGrounds extends Component {
             placeholder: 'qvain.rightsAndLicenses.restrictionGrounds.placeholder'
           }}
         />
-        {errorMessage && <ValidationError>{errorMessage}</ValidationError>}        <Text><Translate content="qvain.rightsAndLicenses.restrictionGrounds.text" /></Text>
+        {errorMessage && <ValidationError>{errorMessage}</ValidationError>}
+        <Text><Translate content="qvain.rightsAndLicenses.restrictionGrounds.text" /></Text>
       </RestrictionGroundsContainer>
     )
   }
