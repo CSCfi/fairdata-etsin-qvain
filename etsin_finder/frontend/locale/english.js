@@ -92,6 +92,11 @@ const english = {
       type: 'Type',
       go_to_original: 'Go to original',
       sliced: 'Some files are not displayed in this view due to large amount of files',
+      cumulativeDatasetLabel: 'Note: Dataset is growing',
+      cumulativeDatasetTooltip: {
+        header: 'Growing dataset',
+        info: 'This dataset is still growing, be aware of this when you cite it or use it. Temporal coverage should be mentioned. No existing files can, however, be removed or changed.',
+      },
     },
     events_idn: {
       events: {
@@ -103,6 +108,7 @@ const english = {
         description: 'Description',
       },
       other_idn: 'Other identifiers',
+      origin_identifier: 'Origin dataset identifier',
       relations: {
         title: 'Relations',
         type: 'Type',
@@ -152,6 +158,13 @@ const english = {
       homepage: 'Homepage',
     },
     language: 'Language',
+    storedInPas: 'This dataset is stored in Fairdata PAS.',
+    pasDatasetVersionExists: 'A Fairdata PAS version of this dataset exists: ',
+    originalDatasetVersionExists: 'An original version of this dataset exists: ',
+    linkToPasDataset: 'Link',
+    linkToOriginalDataset: 'Link',
+    enteringPas: 'Entering PAS',
+    dataInPasDatasetsCanNotBeDownloaded: 'PAS dataset data cannot be downloaded'
   },
   error: {
     notFound:
@@ -197,6 +210,7 @@ const english = {
       fos: 'fields of science',
       research: 'projects',
     },
+    includePas: 'Include Fairdata PAS datasets',
   },
   nav: {
     login: 'Login',
@@ -338,7 +352,7 @@ const english = {
         instructions:
           'Identifier for the metadata will be created automatically but if there already is an EXISTING identifier please insert it here.',
         addButton: '+ Add new',
-        alredyAdded: 'Identifier already added',
+        alreadyAdded: 'Identifier already added',
       },
       fieldOfScience: {
         title: 'Field of Science',
@@ -385,11 +399,11 @@ const english = {
     actors: {
       title: 'Actors',
       infoTitle: 'Actors info',
-      infoText: 'Add at least one creator and one publisher. A curator is not mandatory. First, select the type of actor (person or organization). Then choose the roles the actor has (you can add multiple). After that, fill in the details: organization is mandatory for a person. You can edit added actors by clicking the pen icon or remove it by clicking the X icon.',
+      infoText: 'Add at least one Creator. First, select the type of actor (person or organization). Then choose the roles the actor has (you can add multiple). After that, fill in the details: organization is mandatory for a person. You can edit added actors by clicking the pen icon or remove it by clicking the X icon.',
       add: {
         title: 'Actors',
         help:
-          'Creator (1+) and publisher (max 1) roles are mandatory. Notice that one actor can have multiple roles.',
+          'Creator (1+) role is mandatory. Notice that one actor can have multiple roles.',
         radio: {
           person: 'Person',
           organization: 'Organization',
@@ -398,6 +412,8 @@ const english = {
           creator: 'Creator',
           publisher: 'Publisher',
           curator: 'Curator',
+          rights_holder: 'Rights holder',
+          contributor: 'Contributor'
         },
         name: {
           placeholder: {
@@ -467,9 +483,9 @@ const english = {
         },
         roles: {
           mixed: '',
-          oneOf: 'Roles must be one of "creator", "publisher" or "curator".',
+          oneOf: 'Roles must be one of "Creator", "Publisher", "Curator", "Rights holder" or "Contributor".',
           required:
-            'You must specify the role of the actor. A creator is mandatory and there must be exactly one publisher.',
+            'You must specify the role of the actor. The creator role is mandatory.',
         },
         name: {
           string: 'The name must be a string value.',
@@ -495,7 +511,7 @@ const english = {
         },
         requiredActors: {
           atLeastOneActor: 'You must add at least one actor to your dataset.',
-          mandatoryActors: 'Actors: Creator and publisher roles are mandatory. Note: one person can have both these roles.',
+          mandatoryActors: 'Actors: Creator role is mandatory. Note: one actor can have multiple roles.',
         },
       },
       accessType: {
@@ -542,14 +558,14 @@ const english = {
       },
       externalResources: {
         title: {
-          required: 'External resource title is required.',
+          required: 'Remote resource title is required.',
         },
         useCategory: {
-          required: 'External resource use category is required.',
+          required: 'Remote resource use category is required.',
         },
         url: {
-          required: 'External resource URL is required.',
-          url: 'External resource URL needs to be of valid URL format.',
+          required: 'Remote resource URL is required.',
+          url: 'Remote resource URL needs to be of valid URL format.',
         },
       },
     },
@@ -560,11 +576,13 @@ const english = {
       dataCatalog: {
         label: 'File origin',
         infoText: "Fairdata Services need to know whether you are linking files from IDA or remote resources. You can also publish datasets without any files. In that case, please still select either one. The selection cannot be re-done, so if you are not sure whether you'll add files later, select the one you think you'll need in the future.",
-        explanation: 'Choose IDA if the data is stored in Fairdata Ida service. Choose ATT if the data is stored elsewhere.',
-        placeholder: 'Select option'
+        explanation: 'Choose "IDA" if the data is stored in Fairdata IDA Service. Choose "Remote resources" if the data is in remote location.',
+        placeholder: 'Select option',
+        ida: 'IDA',
+        att: 'Remote resources'
       },
       help:
-        'Files associated with this dataset. A dataset can only have either IDA files or external files. File metadata will not be associated with datasets, so remember to save edits to file metadata.',
+        'Files associated with this dataset. A dataset can only have either IDA files or remote files. File metadata will not be associated with datasets, so remember to save edits to file metadata.',
       ida: {
         title: 'Fairdata IDA files',
         infoText: "Project dropdown will show all your IDA projects. Select the project from which you want to link your files. Note! One dataset can have files or folder from only one project. After you have chosen the project, you'll get a list of all files and folders that are FROZEN in that project. Select all files and folders you wish to link to your dataset. If you select a folder, ALL files and subfolders in that folder will be linked. In that case, do not select individual files or subfolders from that folder.",
@@ -637,21 +655,21 @@ const english = {
       },
       existing: {
         title: 'Previously selected files',
-        help: 'These are the files and folders that you have added before. If you do not touch these, upon saving the changes to the dataset METAX will go through all the selected folders and associate any files and folders within, even the new ones. In other words, if you don\'t touch these and save, you can associate new files within the folder structure with your dataset.'
+        help: "These are the files and folders that you have added before. If you have added a folder and the content has changed in IDA, it's NOT automatically updated into your dataset. All new files need to be manually added. Note the Versioning Rules!"
       },
       notificationNewDatasetWillBeCreated: {
         header: 'Editing files and folders',
         content: 'If you have already published the dataset, removing / adding files or folders will automatically create a new version of the dataset (excluding a published dataset without any files; you can add files/folder one time in the existing version). The old version will be tagged as "Old" and the files linked to it will remain untouched.',
       },
       external: {
-        title: 'External resources (ATT)',
+        title: 'Remote resources (ATT)',
         infoText: 'Please insert Title and URL for the remote files. Qvain Light does not upload or store the files, but the URLs act as active links to the files.',
-        help: 'Add link to external files from here:',
+        help: 'Add link to remote files from here:',
         button: {
-          label: 'Add link to external files',
+          label: 'Add link to remote files',
         },
         addedResources: {
-          title: 'Added external resources',
+          title: 'Added remote resources',
           none: 'None added',
         },
         form: {
@@ -684,7 +702,11 @@ const english = {
   stc: 'Skip to content',
   stsd: 'Skip to submit dataset',
   tombstone: {
-    info: 'The dataset has been either deprecated or removed',
+    removedInfo: 'The dataset has been removed',
+    deprecatedInfo: 'The dataset has been deprecated',
+    urlToNew: 'A new version of this dataset is available. You can open it via this ',
+    urlToOld: 'An older (published) version of this dataset is available. You can open it via this ',
+    link: 'link'
   },
   userAuthenticationError: {
     header: 'Login unsuccessful.',

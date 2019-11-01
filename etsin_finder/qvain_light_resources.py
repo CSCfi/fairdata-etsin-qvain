@@ -8,6 +8,7 @@
 """RESTful API endpoints, meant to be used by Qvain Light form"""
 
 from functools import wraps
+import inspect
 from marshmallow import ValidationError
 from flask import request, session
 from flask_mail import Message
@@ -50,15 +51,17 @@ def log_request(f):
         :param kwargs:
         :return:
         """
-        user_id = authentication.get_user_id() if not app.testing else ''
-        log.info('{0} - {1} - {2} - {3} - {4}'.format(
-            request.environ['HTTP_X_REAL_IP'] if 'HTTP_X_REAL_IP' in request.environ else 'N/A',
-            user_id if user_id else '',
+        csc_name = authentication.get_user_csc_name() if not app.testing else ''
+        log.info('[{0}.{1}] {2} {3} {4} USER AGENT: {5}'.format(
+            args[0].__class__.__name__,
+            f.__name__,
+            csc_name if csc_name else 'UNAUTHENTICATED',
             request.environ['REQUEST_METHOD'],
             request.path,
             request.user_agent))
         return f(*args, **kwargs)
     return func
+
 
 class ProjectFiles(Resource):
     """File/directory related REST endpoints for getting project directory"""
@@ -66,6 +69,7 @@ class ProjectFiles(Resource):
     def __init__(self):
         """Setup file endpoints"""
 
+    @log_request
     def get(self, pid):
         """
         Get files and directory objects for frontend.
@@ -88,6 +92,7 @@ class ProjectFiles(Resource):
                 project_dir_obj['files'] = slice_array_on_limit(project_dir_obj['files'], TOTAL_ITEM_LIMIT)
 
             return project_dir_obj, 200
+        log.warning('User not authenticated or project_dir_obj is invalid\npid: {0}'.format(pid))
         return '', 404
 
 class FileDirectory(Resource):
@@ -96,6 +101,7 @@ class FileDirectory(Resource):
     def __init__(self):
         """Setup file endpoints"""
 
+    @log_request
     def get(self, dir_id):
         """
         Get files and directory objects for frontend.
@@ -116,8 +122,8 @@ class FileDirectory(Resource):
                 dir_obj['directories'] = slice_array_on_limit(dir_obj['directories'], TOTAL_ITEM_LIMIT)
             if 'files' in dir_obj:
                 dir_obj['files'] = slice_array_on_limit(dir_obj['files'], TOTAL_ITEM_LIMIT)
-
             return dir_obj, 200
+        log.warning('User not authenticated or dir_obj is invalid\ndir_id: {0}'.format(dir_id))
         return '', 404
 
 class UserDatasets(Resource):
@@ -130,6 +136,7 @@ class UserDatasets(Resource):
         self.parser.add_argument('offset', type=str, action='append', required=False)
         self.parser.add_argument('no_pagination', type=bool, action='append', required=False)
 
+    @log_request
     def get(self, user_id):
         """
         Get datasets for user. Used by qvain light dataset table. If request has query parameter no_pagination=true, fetches ALL datasets for user (warning: might result in performance issue).
@@ -154,6 +161,7 @@ class UserDatasets(Resource):
             if (result == 'no datasets'):
                 return '', 200
             return result, 200
+        log.warning('User not authenticated or result for user_id is invalid\nuser_id: {0}'.format(user_id))
         return '', 404
 
 class QvainDataset(Resource):
@@ -178,7 +186,7 @@ class QvainDataset(Resource):
         try:
             data = self.validationSchema.loads(request.data)
         except ValidationError as err:
-            log.warning("INVALID FORM DATA: {0}".format(err.messages))
+            log.warning("Invalid form data: {0}".format(err.messages))
             return err.messages, 400
         try:
             metadata_provider_org = session["samlUserdata"]["urn:oid:1.3.6.1.4.1.25178.1.2.9"][0]
@@ -193,7 +201,7 @@ class QvainDataset(Resource):
             return {"Error": "The user doesn't belong to any IDA projects."}, 400
         if data["dataCatalog"] == "urn:nbn:fi:att:data-catalog-ida":
             if not check_if_data_in_user_IDA_project(data, user_projects):
-                return {"Error": "Permission to project data not granted."}, 403
+                return {"Error": "Error in IDA groups user Permission or user groups."}, 403
         metax_redy_data = data_to_metax(data, metadata_provider_org, metadata_provider_user)
         metax_response = create_dataset(metax_redy_data)
         return metax_response
@@ -213,7 +221,7 @@ class QvainDataset(Resource):
         try:
             data = self.validationSchema.loads(request.data)
         except ValidationError as err:
-            log.warning("INVALID FORM DATA: {0}".format(err.messages))
+            log.warning("Invalid form data: {0}".format(err.messages))
             return err.messages, 400
         cr_id = data["original"]["identifier"]
         original = data["original"]
@@ -223,11 +231,12 @@ class QvainDataset(Resource):
         user = session["samlUserdata"]["urn:oid:1.3.6.1.4.1.16161.4.0.53"][0]
         creator = get_dataset_creator(cr_id)
         if user != creator:
+            log.warning('User: \"{0}\" is not the creator of the dataset. Update operation not allowed. Creator: \"{1}\"'.format(user, creator))
             return {"PermissionError": "User not authorized to to edit dataset."}, 403
 
         metax_redy_data = edited_data_to_metax(data, original)
         metax_response = update_dataset(metax_redy_data, cr_id)
-        log.debug("METAX RESPONSE: {0}".format(metax_response))
+        log.debug("METAX RESPONSE: \n{0}".format(metax_response))
         return metax_response
 
 class QvainDatasetDelete(Resource):
@@ -253,6 +262,7 @@ class QvainDatasetDelete(Resource):
         user = session["samlUserdata"]["urn:oid:1.3.6.1.4.1.16161.4.0.53"][0]
         creator = get_dataset_creator(cr_id)
         if user != creator:
+            log.warning('User: \"{0}\" is not the creator of the dataset. Delete operation not allowed. Creator: \"{1}\"'.format(user, creator))
             return {"PermissionError": "User not authorized to to delete dataset."}, 403
 
         metax_response = delete_dataset(cr_id)

@@ -1,7 +1,6 @@
-/* eslint-disable no-unused-expressions */
 import * as yup from 'yup'
 import translate from 'counterpart'
-import { AccessTypeURLs } from './constants'
+import { AccessTypeURLs, EntityType, Role } from './constants'
 
 // DATASET DESCRIPTION VALIDATION
 
@@ -98,7 +97,7 @@ const restrictionGroundsSchema = yup
 
 const actorType = yup
   .mixed()
-  .oneOf(['person', 'organization'], translate('qvain.validationMessages.actors.type.oneOf'))
+  .oneOf([EntityType.PERSON, EntityType.ORGANIZATION], translate('qvain.validationMessages.actors.type.oneOf'))
   .required(translate('qvain.validationMessages.actors.type.required'))
 
 const actorRolesSchema = yup
@@ -107,7 +106,7 @@ const actorRolesSchema = yup
     yup
       .mixed()
       .oneOf(
-        ['creator', 'curator', 'publisher'],
+        [Role.CREATOR, Role.CURATOR, Role.PUBLISHER, Role.RIGHTS_HOLDER, Role.CONTRIBUTOR],
         translate('qvain.validationMessages.actors.roles.oneOf')
       )
   )
@@ -133,12 +132,12 @@ const actorOrganizationSchema = yup.object().shape({
   type: yup
     .mixed()
     .oneOf(
-      ['person', 'organization'],
+      [EntityType.PERSON, EntityType.ORGANIZATION],
       translate('qvain.validationMessages.actors.type.oneOf')
     )
     .required(translate('qvain.validationMessages.actors.type.required')),
   organization: yup.mixed().when('type', {
-    is: 'person',
+    is: EntityType.PERSON,
     then: yup
       .object()
       .required(translate('qvain.validationMessages.actors.organization.required')),
@@ -230,7 +229,7 @@ const actorSchema = yup.object().shape({
   email: actorEmailSchema,
   identifier: actorIdentifierSchema,
   organization: yup.mixed().when('type', {
-    is: 'person',
+    is: EntityType.PERSON,
     then: yup
       .object()
       .required(translate('qvain.validationMessages.actors.organization.required')),
@@ -250,7 +249,7 @@ const actorsSchema = yup
       email: actorEmailSchema,
       identifier: actorIdentifierSchema,
       organization: yup.mixed().when('type', {
-        is: 'person',
+        is: EntityType.PERSON,
         then: yup
           .object()
           .required(translate('qvain.validationMessages.actors.organization.required')),
@@ -261,23 +260,20 @@ const actorsSchema = yup
     })
   )
   // Test: loop through the actor list and the roles of each actor
-  // A Creator and a Publisher must be found in the actor list in order to allow the dataset to be posted to the database
+  // A Creator must be found in the actor list in order to allow the dataset to be posted to the database
   .test(
-    'contains-creator-and-publisher',
+    'contains-creator',
     translate('qvain.validationMessages.actors.requiredActors.mandatoryActors'),
     (value) => {
       let foundCreator = false;
-      let foundPublisher = false;
         for (let i = 0; i < value.length; i += 1) {
           for (let j = 0; j < value[i].role.length; j += 1) {
-          if (value[i].role[j] === 'creator') {
+          if (value[i].role[j] === Role.CREATOR) {
             foundCreator = true;
-          } else if (value[i].role[j] === 'publisher') {
-            foundPublisher = true;
           }
         }
       }
-      if (foundCreator && foundPublisher) {
+      if (foundCreator) {
         return true;
       }
       return false;

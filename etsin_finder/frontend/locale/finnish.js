@@ -91,6 +91,11 @@ const finnish = {
       type: 'Tyyppi',
       go_to_original: 'Siirry sivulle',
       sliced: 'Joitain tiedostoja ei näytetä tässä näkymässä tiedostojen suuren lukumäärän vuoksi',
+      cumulativeDatasetLabel: 'Huom: Aineisto on kasvava',
+      cumulativeDatasetTooltip: {
+        header: 'Kasvava aineisto',
+        info: 'Tämä on karttuva aineisto, johon mahdollisesti vielä lisätään tiedostoja. Huomio tämä kun käytät aineistoa tai viittaat siihen (esim. ajallinen kattavuus hyvä mainita). Aineistosta ei kuitenkaan voi poistaa tai muuttaa olemassa olevia tiedostoja.',
+      },
     },
     events_idn: {
       events: {
@@ -102,6 +107,7 @@ const finnish = {
         description: 'Kuvaus',
       },
       other_idn: 'Muut tunnisteet',
+      origin_identifier: 'Alkuperäisen aineiston tunniste',
       relations: {
         title: 'Relaatiot',
         type: 'Tyyppi',
@@ -151,6 +157,13 @@ const finnish = {
       homepage: 'Kotisivu',
     },
     language: 'Kieli',
+    storedInPas: 'Tämä ainesto on säilytetty Fairdata PAS:issa.',
+    pasDatasetVersionExists: 'Fairdata PAS-versio tästä aineistosta on olemassa: ',
+    originalDatasetVersionExists: 'Alkuperäinen versio tästä aineistosta on olemassa: ',
+    linkToPasDataset: 'Linkki',
+    linkToOriginalDataset: 'Linkki',
+    enteringPas: 'Menemässä PAS:iin',
+    dataInPasDatasetsCanNotBeDownloaded: 'PAS-aineistojen dataa ei voida ladata'
   },
   error: {
     notFound:
@@ -196,6 +209,7 @@ const finnish = {
       fos: 'tieteenalaa',
       research: 'tutkimusprojektia',
     },
+    includePas: 'Ota mukaan Fairdata PAS-datasettejä',
   },
   nav: {
     login: 'Kirjaudu',
@@ -342,7 +356,7 @@ const finnish = {
         instructions:
           'Metadatan tunniste luodaan automaattisesti mutta jos on jo OLEMASSA OLEVA tunniste, syötä se tähän.',
         addButton: '+ Lisää uusi',
-        alredyAdded: 'Tunniste on jo lisätty',
+        alreadyAdded: 'Tunniste on jo lisätty',
       },
       fieldOfScience: {
         title: 'Tutkimusala',
@@ -389,11 +403,11 @@ const finnish = {
     actors: {
       title: 'Toimijat',
       infoTitle: 'Toimijat info',
-      infoText: 'Tutkimukseen tai aineiston tekemiseen osallistuneet henkilöt ja organisaatiot. Voit määrittää tekijät (pakollinen), julkaisijat (pakollinen) ja kuraattorit. Valitse ensin, onko kyseessä henkilö vai organisaatio. Määritä sen jälkeen, missä roolissa ko. toimija osallistui tutkimukseen (voit valita useita), ja määritä sen jälkeen tarvittavat tiedot. Jos kyseessä on henkilö, on organisaatiotieto pakollinen tieto. Jo annettuja tietoja pääset muuttamaan klikkaamalla tallennetun toimijan kohdalla kynä -ikonia.',
+      infoText: 'Tutkimukseen tai aineiston tekemiseen osallistuneet henkilöt ja organisaatiot. Voit määrittää tekijät (pakollinen), Julkaisijan, Kuraattorit, Oikeuksienhaltijat sekä Muut tekijät. Valitse ensin, onko kyseessä henkilö vai organisaatio. Määritä sen jälkeen, missä roolissa ko. toimija osallistui tutkimukseen (voit valita useita), ja määritä sen jälkeen tarvittavat tiedot. Jos kyseessä on henkilö, on organisaatiotieto pakollinen tieto. Jo annettuja tietoja pääset muuttamaan klikkaamalla tallennetun toimijan kohdalla kynä -ikonia.',
       add: {
         title: 'Toimijat',
         help:
-          'Tekijä (1+) ja julkaisija (max 1) roolit ovat pakollisia. Huomioi että yksittäisellä toimijalla voi olla useampi rooli.',
+          'Tekijä (1+) rooli on pakollinen. Huomioi että yksittäisellä toimijalla voi olla useampi rooli.',
         radio: {
           person: 'Luonnollinen henkilö',
           organization: 'Organisaatio',
@@ -402,6 +416,8 @@ const finnish = {
           creator: 'Tekijä',
           publisher: 'Julkaisija',
           curator: 'Kuraattori',
+          rights_holder: 'Oikeuksienhaltija',
+          contributor: 'Muu tekijä'
         },
         name: {
           placeholder: {
@@ -471,9 +487,9 @@ const finnish = {
         },
         roles: {
           mixed: '',
-          oneOf: 'Roolin kuuluisi olla "Tekijä", "Julkasija" tai "Kuraattori".',
+          oneOf: 'Roolin kuuluisi olla "Tekijä", "Julkasija", "Kuraattori", "Oikeuksienhaltija" tai "Muut tekijät".',
           required:
-            'Tekijän rooli on pakollinen. On myös pakollista määrittää tasan yhden julkaisijan.',
+            'Tekijän rooli on pakollinen.',
         },
         name: {
           string: 'Nimi pitää olla arvoltaan merkkijono.',
@@ -499,7 +515,7 @@ const finnish = {
         },
         requiredActors: {
           atLeastOneActor: 'Aineistoon on lisättävä vähintään yksi toimija.',
-          mandatoryActors: 'Toimijat: Tekijä ja julkaisija-roolit ovat pakollisia. Huomioi: yksittäisellä toimijalla voi olla useampi rooli.',
+          mandatoryActors: 'Toimijat: Tekijä on pakollinen kenttä. Huomioi: yksittäisellä toimijalla voi olla useampi rooli.',
         },
       },
       accessType: {
@@ -564,8 +580,10 @@ const finnish = {
       dataCatalog: {
         label: 'Tiedoston lähde',
         infoText: 'Ennenkuin pääset linkittämään tiedostoja aineistoosi, sinun tulee valita, linkitätkö tiedostoja IDAsta vai annatko ulkopuolisen palvelun URL-osoitteet, joista tiedostot löytyvät.',
-        explanation: 'Valitse IDA jos tiedostot on tallennettu Fairdata Ida palveluun. Valitse ATT jos tiedostot tulevat muualta.',
-        placeholder: 'Valitse vaihtoehto'
+        explanation: 'Valitse "IDA", jos tiedostot on tallennettu Fairdata IDA -palveluun. Valitse "Ulkoinen lähde" jos tiedostot sijaitsevat muualla.',
+        placeholder: 'Valitse vaihtoehto',
+        ida: 'IDA',
+        att: 'Ulkoinen lähde'
       },
       help:
         'Aineistoon kuuluvat tiedostot. Aineistoon voi kuulua vain joko IDAssa olevia tiedostoja tai ulkopuolisia tiedostoja. Tiedostojen metadata ei ole osa aineistojen metadataa, joten muista tallentaa muutokset jotka teet tiedostojen metadataan.',
@@ -608,22 +626,22 @@ const finnish = {
       },
       existing: {
         title: 'Aikaisemmin valitut tiedostot',
-        help: 'Nämä ovat sinun aiemmin valitsemia tiedostoja. Jos tallennat aineiston tekemättä muutoksia näihin, METAX katsoo läpi kaikki sisäkkäiset hakemistot ja tiedostot valitsemistasi hakemistoista ja lisää kaikki tiedostot mitä se ei ole aiemmin liittänyt aineistoon. Toisin sanoen, jos olet jälkikäteen lisännyt IDAan tiedostoja, voit liittää nämä uudet tiedostot aineistoon päivittämällä aineiston.',
+        help: 'Nämä ovat sinun aiemmin valitsemia tiedostoja. Jos olet liittänyt aineistoosi hakemiston, sen sisältöä ei automaattisesti päivitetä, vaikka sen sisältö olisi muuttunut IDAssa. Jos haluat lisätä puuttuvia tiedostoja, valitse ne tiedostolistasta. HUOM! Tiedostojen lisääminen luo aineistostasi uuden version.',
       },
       notificationNewDatasetWillBeCreated: {
         header: 'Tiedostojen ja kansioiden muokkaaminen',
         content: 'Jos julkaistuun aineistoon lisätään tiedostoja tai hakemistoja, tai siitä poistetaan tiedostoja tai hakemistoja, ko. aineistosta syntyy automaattisesti uusi versio. Vanha versio pysyy muuttumattomana ja siihen lisätään "vanha" -tagi. Jos julkaistu aineisto ei sisältänyt yhtään tiedostoa, voit lisätä tiedostoja ja/tai hakemistoja yhden kerran ilman, että uusi versio syntyy.',
       },
       external: {
-        title: 'Ulkoiset aineistot (ATT)',
+        title: 'Ulkoiset tiedostot (ATT)',
         infoText: 'Määritä tiedostolle otsikko, käyttökategoria (alasvetovalikosta) sekä, kerro, mistä tiedosto löytyy. Tiedosto ei ladata Qvain Lightiin, vaan antamasi URL toimii aktiivisena linkkinä ko. tiedostoon.',
         help: 'Lisää linkkejä ulkoisiin tiedostoihin:',
         button: {
           label: 'Lisää linkki ulkoiseen tiedostoon',
         },
         addedResources: {
-          title: 'Lisätyt ulkoiset aineistot',
-          none: 'Aineistoja ei ole lisätty',
+          title: 'Lisätyt ulkoiset tiedostot',
+          none: 'Tiedostoja ei ole lisätty',
         },
         form: {
           title: {
@@ -655,7 +673,11 @@ const finnish = {
   stc: 'Siirry sivun pääsisältöön',
   stsd: 'Siirry "Julkaise Aineisto"-nappiin',
   tombstone: {
-    info: 'Aineisto on joko vanhentunut tai poistettu',
+    removedInfo: 'Aineisto on poistettu',
+    deprecatedInfo: 'Aineisto on vanhentunut',
+    urlToNew: 'Aineistosta on olemassa uudempi, julkaistu versio. Saat sen avattua ',
+    urlToOld: 'Aineistosta on olemassa vanhempi, julkaistu versio. Saat sen avattua ',
+    link: 'tästä'
   },
   userAuthenticationError: {
     header: 'Kirjautuminen epäonnistui.',

@@ -53,7 +53,7 @@ class OtherIdentifierField extends React.Component {
           this.props.Stores.Qvain.addOtherIdentifier(this.state.identifier)
         } else {
           this.setState({
-            validationError: translate('qvain.description.otherIdentifiers.alredyAdded'),
+            validationError: translate('qvain.description.otherIdentifiers.alreadyAdded'),
           })
         }
         this.clearInput()

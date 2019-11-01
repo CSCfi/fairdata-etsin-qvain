@@ -60,10 +60,10 @@ export default class FrontPage extends Component {
   checkUserLoginStatus() {
     Stores.Auth.checkLogin()
       .then(() => {
-        // If the user has a user.commonName, but not a user.name,
+        // If the user was logged in but does not have a user.name,
         // it means they were verified through HAKA, but do not have a CSC account.
         if (
-          Stores.Auth.user.commonName !== undefined &&
+          Stores.Auth.user.loggedIn &&
           Stores.Auth.user.name === undefined) {
           this.setState({
             userPermissionErrorModalIsOpen: true,
