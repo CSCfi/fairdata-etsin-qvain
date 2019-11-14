@@ -353,8 +353,8 @@ const CustomMarkdown = styled(ReactMarkdown)`
   h4:first-child,
   h5:first-child,
   h6:first-child {
-    margin-top: 50;
-    padding-top:50;
+    margin-top: 0;
+    padding-top:0;
   }
 
   h1:hover a.anchor,
@@ -569,7 +569,7 @@ const CustomMarkdown = styled(ReactMarkdown)`
     padding: 0;
     tr {
       border-top: 1px solid ${p => p.theme.color.medgray};
-      background-color: yellow;
+      background-color: white;
       margin: 0;
       padding: 0;
       &:nth-child(2n) {
