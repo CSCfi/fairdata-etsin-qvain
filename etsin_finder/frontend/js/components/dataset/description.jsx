@@ -27,6 +27,7 @@ import GoToOriginal from './goToOriginal'
 import Label from '../general/label'
 import TogglableAgentList from './togglableAgentList'
 import VersionChanger from './versionChanger'
+import FormatChanger from './formatChanger'
 import checkDataLang, { getDataLang } from '../../utils/checkDataLang'
 import checkNested from '../../utils/checkNested'
 import dateFormat from '../../utils/dateFormat'
@@ -112,6 +113,11 @@ class Description extends Component {
               }
             />
           </Flex>
+          <FormatChangerPosition>
+            <FormatChanger
+              idn={this.props.match.params.identifier}
+            />
+          </FormatChangerPosition>
           <Flex>
             <ErrorBoundary>
               {this.checkEmails(this.props.emails) && !this.props.harvested && (
@@ -268,6 +274,12 @@ const PasInfo = styled.div`
   padding-bottom: 5px;
 `
 
+const FormatChangerPosition = styled.div`
+  position: absolute;
+  top: -5px;
+  right: 0px;
+`
+
 const DatasetDescription = styled.div`
   padding: 0.5em 1em;
   margin-bottom: 1em;
@@ -341,8 +353,8 @@ const CustomMarkdown = styled(ReactMarkdown)`
   h4:first-child,
   h5:first-child,
   h6:first-child {
-    margin-top: 0;
-    padding-top: 0;
+    margin-top: 50;
+    padding-top:50;
   }
 
   h1:hover a.anchor,
@@ -557,7 +569,7 @@ const CustomMarkdown = styled(ReactMarkdown)`
     padding: 0;
     tr {
       border-top: 1px solid ${p => p.theme.color.medgray};
-      background-color: white;
+      background-color: yellow;
       margin: 0;
       padding: 0;
       &:nth-child(2n) {
