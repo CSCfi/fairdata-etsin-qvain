@@ -194,13 +194,8 @@ class QvainDataset(Resource):
         except KeyError as err:
             log.warning("The Metadata provider is not specified: \n{0}".format(err))
             return {"PermissionError": "The Metadata provider is not found in login information."}, 401
-        try:
-            user_projects = session["samlUserdata"]["urn:oid:1.3.6.1.4.1.8057.2.80.26"]
-        except KeyError as err:
-            log.warning("User projects not found in saml metadata: \n{0}".format(err))
-            return {"Error": "The user doesn't belong to any IDA projects."}, 400
         if data["dataCatalog"] == "urn:nbn:fi:att:data-catalog-ida":
-            if not check_if_data_in_user_IDA_project(data, user_projects):
+            if not check_if_data_in_user_IDA_project(data):
                 return {"Error": "Error in IDA groups user Permission or user groups."}, 403
         metax_redy_data = data_to_metax(data, metadata_provider_org, metadata_provider_user)
         metax_response = create_dataset(metax_redy_data)
