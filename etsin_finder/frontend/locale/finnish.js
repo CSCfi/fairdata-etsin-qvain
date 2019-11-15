@@ -598,6 +598,7 @@ const finnish = {
       projectSelect: {
         placeholder: 'Valitse projekti',
         loadError: 'Projektin hakemistojen lataus epäonnistui, virhe: ',
+        loadErrorNoFiles: 'Tiedostoja ei löytynyt. Jos haluat saada tiedostot näkyviin, tarkista että olet jäädyttänyt kyseessä olevat tiedostot IDA:ssa.',
       },
       selected: {
         title: 'Valitut tiedostot',

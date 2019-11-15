@@ -19,7 +19,12 @@ class Auth {
 
   @observable loading = false
 
-  @observable user = { name: undefined, idaGroups: [] }
+  @observable user = {
+    name: undefined,
+    loggedIn: false,
+    homeOrganizationName: undefined,
+    idaGroups: [],
+  }
 
   @action
   checkLogin() {
@@ -32,6 +37,7 @@ class Auth {
         .then(res => {
           this.user = {
             name: res.data.user_csc_name,
+            loggedIn: res.data.is_authenticated,
             homeOrganizationName: res.data.home_organization_name,
             idaGroups: res.data.user_ida_groups,
           }
@@ -46,9 +52,13 @@ class Auth {
             this.userLogged = false
             this.cscUserLogged = false
           } else if (res.data.is_authenticated && res.data.is_authenticated_CSC_user && res.data.home_organization_name) {
-            // The user has a valid CSC account and was logged in.
+            // The user has a valid CSC account with a defined home organization. Login successful.
             this.userLogged = res.data.is_authenticated
             this.cscUserLogged = res.data.is_authenticated_CSC_user
+          } else {
+            // If any of the checks failed, the user should not be logged in. The variables keep their 'false' value.
+            this.userLogged = false
+            this.cscUserLogged = false
           }
           this.loading = false
           resolve(res)
@@ -69,7 +79,14 @@ class Auth {
         .then(res => {
           this.userLogged = false
           this.cscUserLogged = false
-          this.user = { name: undefined }
+
+          // Since the user will be logged out, all user.* variables should be reset to default values.
+          this.user = {
+            name: undefined,
+            loggedIn: false,
+            homeOrganizationName: undefined,
+            idaGroups: [],
+          }
           resolve(res)
         })
         .catch(err => {
