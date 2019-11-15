@@ -5,12 +5,11 @@
 # :author: CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
 # :license: MIT
 
-"""Various utils"""
+"""Various utils and constants"""
 
 import json
 import os
 from datetime import datetime
-
 import pytz
 from dateutil import parser
 
@@ -21,6 +20,65 @@ ACCESS_TYPES = {
     'embargo': 'http://uri.suomi.fi/codelist/fairdata/access_type/code/embargo',
     'restricted': 'http://uri.suomi.fi/codelist/fairdata/access_type/code/restricted'
 }
+
+SAML_ATTRIBUTES = {
+    'first_name': 'urn:oid:2.5.4.42',
+    'last_name': 'urn:oid:2.5.4.4',
+    'email': 'urn:oid:0.9.2342.19200300.100.1.3',
+    'haka_id': 'urn:oid:1.3.6.1.4.1.5923.1.1.1.6',
+    'haka_org_id': 'urn:oid:1.3.6.1.4.1.25178.1.2.9',
+    'CSC_username': 'urn:oid:1.3.6.1.4.1.16161.4.0.53',
+    'idm_groups': 'urn:oid:1.3.6.1.4.1.8057.2.80.26'
+}
+
+DATA_CATALOG_IDENTIFIERS = {
+    'ida': 'urn:nbn:fi:att:data-catalog-ida',
+    'att': 'urn:nbn:fi:att:data-catalog-att'
+}
+
+def get_log_config(log_file_path, log_lvl):
+    """
+    Function to get the logging configuration from utils.py
+
+    Arguments:
+        log_file_path {string} -- The log file path.
+        log_lvl {string} -- The logging level
+
+    Returns:
+        [dict] -- Dict containgin the logging configuration.
+
+    """
+    if (log_file_path and log_lvl):
+        CONFIG = {
+            'version': 1,
+            'formatters': {
+                'standard': {
+                    'format': '--------------\n[%(asctime)s] [%(process)d] %(levelname)s in %(filename)s:%(lineno)d: %(message)s',
+                    'datefmt': '%Y-%M-%d %H:%M:%S %z',
+                }
+            },
+            'handlers': {
+                'file': {
+                    'class': 'logging.handlers.RotatingFileHandler',
+                    'formatter': 'standard',
+                    'filename': log_file_path,
+                    'maxBytes': 10000000,
+                    'mode': 'a',
+                    'backupCount': 30
+                },
+                'console': {
+                    'class': 'logging.StreamHandler',
+                    'formatter': 'standard',
+                    'stream': 'ext://sys.stdout'
+                }
+            },
+            'root': {
+                'level': log_lvl,
+                'handlers': ['file', 'console']
+            }
+        }
+        return CONFIG
+    return False
 
 
 def executing_travis():

@@ -7,9 +7,9 @@
 
 """Main app initialization file"""
 
-import logging
-from logging.handlers import RotatingFileHandler
 import os
+import logging
+import logging.config
 
 from flask import Flask
 from flask_mail import Mail
@@ -18,7 +18,7 @@ from flask.logging import default_handler
 
 from etsin_finder.app_config import get_app_config
 from etsin_finder.cache import CatalogRecordCache, RemsCache
-from etsin_finder.utils import executing_travis
+from etsin_finder.utils import executing_travis, get_log_config
 
 
 def create_app():
@@ -30,14 +30,10 @@ def create_app():
     is_testing = bool(os.environ.get('TESTING', False))
     app = Flask(__name__, template_folder="./frontend/build")
     app.config.update(get_app_config(is_testing))
-
     if not app.testing and not executing_travis():
         _setup_app_logging(app)
     if not executing_travis():
         app.config.update({'SAML_PATH': '/home/etsin-user'})
-
-    app.logger.info("Application configuration: {0}".format(app.config))
-
     app.mail = Mail(app)
     app.cr_cache = CatalogRecordCache(app)
     app.rems_cache = RemsCache(app)
@@ -47,17 +43,10 @@ def create_app():
 
 def _setup_app_logging(app):
     log_file_path = app.config.get('APP_LOG_PATH', None)
-    if log_file_path:
-        level = logging.getLevelName(app.config.get('APP_LOG_LEVEL', 'INFO'))
-        app.logger.setLevel(level)
-
-        handler = RotatingFileHandler(log_file_path, maxBytes=10000000, mode='a', backupCount=30)
-        handler.setLevel(level)
-        formatter = logging.Formatter(
-            "[%(asctime)s] {%(pathname)s:%(lineno)d} %(levelname)s - %(message)s")
-        handler.setFormatter(formatter)
-        app.logger.addHandler(handler)
-        default_handler.setFormatter(formatter)
+    log_lvl = app.config.get('APP_LOG_LEVEL', 'INFO')
+    config = get_log_config(log_file_path, log_lvl)
+    if config:
+        logging.config.dictConfig(config)
     else:
         app.logger.error('Logging not correctly set up due to missing app log path configuration')
 

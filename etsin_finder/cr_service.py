@@ -69,14 +69,19 @@ class MetaxAPIService(FlaskService):
             metax_api_response.raise_for_status()
         except Exception as e:
             if isinstance(e, requests.HTTPError):
-                log.debug("Failed to get data for directory {0} in catalog record {1} from Metax API".
-                          format(dir_identifier, cr_identifier))
-                log.debug('Response status code: {0}'.format(metax_api_response.status_code))
-                log.debug('Response text: {0}'.format(json_or_empty(metax_api_response) or metax_api_response.text))
+                log.warning(
+                    "Failed to get data for directory {0} in catalog record {1} from Metax API\n\
+                    Response status code: {2}\n\
+                    Response text: {3}"
+                    .format(
+                        dir_identifier,
+                        cr_identifier,
+                        metax_api_response.status_code,
+                        json_or_empty(metax_api_response) or metax_api_response.text
+                    ))
             else:
-                log.error("Failed to get data for directory {0} in catalog record {1} from Metax API".
-                          format(dir_identifier, cr_identifier))
-                log.error(e)
+                log.error("Failed to get data for directory {0} in catalog record {1} from Metax API\n\
+                    {2}".format(dir_identifier, cr_identifier, e))
             return None
 
         return metax_api_response.json()
@@ -96,12 +101,17 @@ class MetaxAPIService(FlaskService):
             metax_api_response.raise_for_status()
         except Exception as e:
             if isinstance(e, requests.HTTPError):
-                log.debug("Failed to get catalog record {0} from Metax API".format(identifier))
-                log.debug('Response status code: {0}'.format(metax_api_response.status_code))
-                log.debug('Response text: {0}'.format(json_or_empty(metax_api_response) or metax_api_response.text))
+                log.warning(
+                    "Failed to get catalog record {0} from Metax API\n\
+                    Response status code: {1}\n\
+                    Response text: {0}"
+                    .format(
+                        identifier,
+                        metax_api_response.status_code,
+                        json_or_empty(metax_api_response) or metax_api_response.text)
+                )
             else:
-                log.error("Failed to get catalog record {0} from Metax API".format(identifier))
-                log.error(e)
+                log.error("Failed to get catalog record {0} from Metax API\n{1}".format(identifier, e))
             return None
         return metax_api_response.json()
 
@@ -122,12 +132,16 @@ class MetaxAPIService(FlaskService):
             metax_api_response.raise_for_status()
         except Exception as e:
             if isinstance(e, requests.HTTPError):
-                log.debug("Failed to get removed catalog record {0} from Metax API".format(identifier))
-                log.debug('Response status code: {0}'.format(metax_api_response.status_code))
-                log.debug('Response text: {0}'.format(json_or_empty(metax_api_response) or metax_api_response.text))
+                log.warning(
+                    "Failed to get removed catalog record {0} from Metax API\n\
+                    Response status code: {0}\n\
+                    Response text: {0}".format(
+                        identifier,
+                        metax_api_response.status_code,
+                        json_or_empty(metax_api_response) or metax_api_response.text
+                    ))
             else:
-                log.error("Failed to get removed catalog record {0} from Metax API".format(identifier))
-                log.error(e)
+                log.error("Failed to get removed catalog record {0} from Metax API\n{1}".format(identifier, e))
             return None
 
         return metax_api_response.json()

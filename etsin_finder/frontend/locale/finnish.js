@@ -602,6 +602,7 @@ const finnish = {
       projectSelect: {
         placeholder: 'Valitse projekti',
         loadError: 'Projektin hakemistojen lataus epäonnistui, virhe: ',
+        loadErrorNoFiles: 'Tiedostoja ei löytynyt. Jos haluat saada tiedostot näkyviin, tarkista että olet jäädyttänyt kyseessä olevat tiedostot IDA:ssa.',
       },
       selected: {
         title: 'Valitut tiedostot',
@@ -677,7 +678,11 @@ const finnish = {
   stc: 'Siirry sivun pääsisältöön',
   stsd: 'Siirry "Julkaise Aineisto"-nappiin',
   tombstone: {
-    info: 'Aineisto on joko vanhentunut tai poistettu',
+    removedInfo: 'Aineisto on poistettu',
+    deprecatedInfo: 'Aineisto on vanhentunut',
+    urlToNew: 'Aineistosta on olemassa uudempi, julkaistu versio. Saat sen avattua ',
+    urlToOld: 'Aineistosta on olemassa vanhempi, julkaistu versio. Saat sen avattua ',
+    link: 'tästä'
   },
   userAuthenticationError: {
     header: 'Kirjautuminen epäonnistui.',

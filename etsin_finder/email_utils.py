@@ -6,11 +6,12 @@
 # :license: MIT
 
 """Email sending related utils"""
-
+from etsin_finder.finder import app
 import datetime
 import re
 from enum import Enum
 
+log = app.logger
 
 class AgentType(Enum):
     """Types of agents"""
@@ -65,21 +66,18 @@ def validate_send_message_request(user_email, user_body, agent_type):
     :param agent_type:
     :return:
     """
-    from etsin_finder.finder import app
-    log = app.logger
-
     if not re.match(r"^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+\.[a-zA-Z]*$", user_email):
-        log.error("Reply-to email address not formally valid: {0}".format(user_email))
+        log.warning("Reply-to email address not formally valid: {0}".format(user_email))
         return False
 
     try:
         AgentType[agent_type]
     except KeyError:
-        log.error("Unrecognized agent type")
+        log.warning("Unrecognized agent type")
         return False
 
     if len(user_body) > 1000:
-        log.error("Body is too long")
+        log.warning("Body is too long")
         return False
 
     return True
@@ -108,8 +106,7 @@ def get_email_recipient_addresses(catalog_record, agent_type_str):
     if agent_type == AgentType.CURATOR and rd.get('curator', False)[0].get('email'):
         return [curator['email'] for curator in rd['curator'] if 'email' in curator ]
 
-    from etsin_finder.finder import app
-    app.logger.error("No email addresses found with given agent type {0}".format(agent_type_str))
+    log.error("No email addresses found with given agent type {0}".format(agent_type_str))
     return None
 
 
