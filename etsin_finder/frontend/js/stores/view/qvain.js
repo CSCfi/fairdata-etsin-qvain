@@ -181,6 +181,12 @@ class Qvain {
     this.actorInEdit = { ...actor }
   }
 
+  // Used to reset all actor values if the user switches actor type
+  @action
+  emptyActorInEdit = actorType => {
+    this.actorInEdit = Actor(actorType, [], '', '', '', undefined, undefined)
+  }
+
   @computed
   get addedActors() {
     return this.actors

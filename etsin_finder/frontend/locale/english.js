@@ -594,6 +594,7 @@ const english = {
       projectSelect: {
         placeholder: 'Select project',
         loadError: 'Failed to load project folders, error: ',
+        loadErrorNoFiles: 'No files found. If you wish to make files available here, make sure that you have frozen the project files in IDA.',
       },
       selected: {
         title: 'Selected files',

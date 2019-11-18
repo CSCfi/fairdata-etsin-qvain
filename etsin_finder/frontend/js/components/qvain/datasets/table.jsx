@@ -249,12 +249,12 @@ class DatasetTable extends Component {
             {!error &&
               onPage.map(dataset => (
                 <Row key={dataset.identifier} tabIndex="0">
-                  <BodyCell>
+                  <BodyCellWordWrap>
                     {dataset.research_dataset.title.en || dataset.research_dataset.title.fi}
                     {dataset.next_dataset_version !== undefined && (
                       <Translate color="yellow" content="qvain.datasets.oldVersion" component={OldVersionLabel} />
                     )}
-                  </BodyCell>
+                  </BodyCellWordWrap>
                   <BodyCell>{this.formatDatasetDateCreated(dataset.date_created)}</BodyCell>
                   <BodyCell>
                     <Translate
@@ -323,5 +323,9 @@ const SearchField = styled(FormField)`
 const SearchInput = styled(Input)`
   margin-bottom: inherit;
 `;
+
+const BodyCellWordWrap = styled(BodyCell)`
+  word-break: break-word;
+`
 
 export default withRouter(inject('Stores')(observer(DatasetTable)))

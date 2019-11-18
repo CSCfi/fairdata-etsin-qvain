@@ -68,7 +68,12 @@ export class ProjectSelectorBase extends Component {
           onChange={this.handleOnChange}
           attributes={{ placeholder: 'qvain.files.projectSelect.placeholder' }}
         />
-        {error !== undefined && (
+        {error === 'Request failed with status code 404' && (
+          <ErrorMessage>
+            <Translate content="qvain.files.projectSelect.loadErrorNoFiles" />
+          </ErrorMessage>
+        )}
+        {(error !== undefined) && (error !== 'Request failed with status code 404') && (
           <ErrorMessage>
             <Translate content="qvain.files.projectSelect.loadError" />
             {error}
