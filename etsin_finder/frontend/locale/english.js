@@ -369,7 +369,7 @@ const english = {
       },
       keywords: {
         title: 'Keywords',
-        infoText: 'Set keywords that characterize the dataset. Below, there is another field for controlled subject headings.',
+        infoText: 'Set keywords that characterize the dataset.',
         placeholder: 'E.g. economy',
         addButton: 'Add keywords',
         help:
