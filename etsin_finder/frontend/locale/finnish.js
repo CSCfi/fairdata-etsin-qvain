@@ -11,6 +11,14 @@
 const finnish = {
   changepage: 'Siirryit sivulle: %(page)s',
   dataset: {
+    access_rights_description: {
+      none: '',
+      open: 'Kuka tahansa voi ladata datan.',
+      login: 'Käyttän pitää olla sisään kirjautunut ladatakseen datan.',
+      embargo: 'Datan voi ladata vasta, kun embargo-pvm on ohitettu.',
+      permit: 'Datan voi ladata ainoastaan hakemalla erillisen luvan lataamista varten. Luvan hakeminen vaatii kirjautumisen.',
+      restricted: 'Data ei ladattavissa.'
+    },
     access_permission: 'Hae käyttölupaa',
     access_locked: 'Rajattu käyttöoikeus',
     access_open: 'Avoin',
