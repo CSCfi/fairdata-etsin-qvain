@@ -589,6 +589,33 @@ const english = {
         ida: 'IDA',
         att: 'Remote resources'
       },
+      cumulativeState: {
+        label: 'Cumulative dataset',
+        radio: {
+          no: 'No. (Adding files or folders will automatically create a new version of the dataset.)',
+          yes: 'Yes. (New files or folders will be added without a version change.)',
+          note: 'Note! Once the dataset has been submitted, changing the value from "No" to "Yes" will cause a new version of the dataset to be created. Change from "Yes" to "No" will not cause a new version.',
+        },
+        enabled: {
+          state: 'This dataset has been marked as a cumulative dataset.',
+          explanation: 'It means that data is added to it regularly. If data is no longer being added to this dataset, you should turn it non-cumulative.',
+          button: 'Turn non-cumulative',
+          note: 'Note! Once changed, turning the dataset back to cumulative will create a new version of the dataset.',
+          confirm: 'Are you sure you want to turn this dataset non-cumulative? If you later wish to change it back to cumulative, a new version will be created! Any changes you have made to the dataset will be saved.',
+          cancel: 'Cancel',
+        },
+        disabled: {
+          state: 'This dataset has been marked non-cumulative.',
+          explanation: 'It means that if new data is added, a new version of the dataset will be created automatically.',
+          button: 'Turn Cumulative',
+          note: 'Note! Changing the dataset cumulative will create a new version of the dataset. The old version will remain non-cumulative.',
+          confirm: 'Are you sure you want to turn the dataset cumulative (you want to start regularly adding data into it)? A new version will be created and gets a new identifier. The old version stays non-cumulative. Any changes you have made to the dataset will be saved.',
+          cancel: 'Cancel',
+        },
+        changes: 'You need to save your changes to the dataset before you can change this setting.',
+        changeComplete: 'Update complete.',
+        versionCreated: 'A new dataset version has been created with identifier %(identifier)s.',
+      },
       help:
         'Files associated with this dataset. A dataset can only have either IDA files or remote files. File metadata will not be associated with datasets, so remember to save edits to file metadata.',
       ida: {
@@ -664,7 +691,10 @@ const english = {
       },
       existing: {
         title: 'Previously selected files',
-        help: "These are the files and folders that you have added before. If you have added a folder and the content has changed in IDA, it's NOT automatically updated into your dataset. All new files need to be manually added. Note the Versioning Rules!"
+        help: {
+          noncumulative: "These are the files and folders that you have added before. If you have added a folder and the content has changed  in IDA, it's NOT automatically updated into your dataset. All new files need to be manually added. Note the Versioning Rules!",
+          cumulative: "These are the files and folders that you have added before. If you have added a folder and the content has changed in IDA, it's NOT automatically updated into your dataset. All new files need to be manually added. To be able to remove files, you first need to make the dataset non-cumulative.",
+        }
       },
       notificationNewDatasetWillBeCreated: {
         header: 'Editing files and folders',
