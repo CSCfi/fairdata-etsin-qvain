@@ -13,6 +13,7 @@
 import React, { Component } from 'react'
 import { inject, observer } from 'mobx-react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import translate from 'counterpart'
 import {
   faLock,
   faLockOpen,
@@ -27,6 +28,7 @@ import checkNested from '../../utils/checkNested'
 import checkDataLang, { getDataLang } from '../../utils/checkDataLang'
 import Button from '../general/button'
 import Modal from '../general/modal'
+import { accessTypes } from '../../stores/view/access'
 
 export const accessRightsBool = accessRights => {
   const openValue = 'http://uri.suomi.fi/codelist/fairdata/access_type/code/open'
@@ -47,12 +49,16 @@ class AccessRights extends Component {
     super(props)
     let title = { en: 'Restricted Access', fi: 'Rajoitettu käyttöoikeus' }
     let description = ''
+    let identifier = ''
     let url = ''
+    let id = ''
     if (props.access_rights !== undefined && props.access_rights !== null) {
       if (checkNested(props.access_rights, 'access_type', 'pref_label')) {
         title = props.access_rights.access_type.pref_label
       }
-      description = props.access_rights.description
+      identifier = props.access_rights.access_type.identifier
+      id = Object.keys(accessTypes).find(key => accessTypes[key] === identifier)
+      description = translate(`dataset.access_rights_description.${id !== undefined ? id : ''}`)
       url = props.access_rights.access_url
     }
     this.state = {
