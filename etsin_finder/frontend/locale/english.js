@@ -169,8 +169,8 @@ const english = {
     storedInPas: 'This dataset is stored in Fairdata PAS.',
     pasDatasetVersionExists: 'A Fairdata PAS version of this dataset exists: ',
     originalDatasetVersionExists: 'An original version of this dataset exists: ',
-    linkToPasDataset: 'Link',
-    linkToOriginalDataset: 'Link',
+    linkToPasDataset: 'Go to PAS version',
+    linkToOriginalDataset: 'Go to original version',
     enteringPas: 'Entering PAS',
     dataInPasDatasetsCanNotBeDownloaded: 'PAS dataset data cannot be downloaded'
   },

@@ -168,8 +168,8 @@ const finnish = {
     storedInPas: 'Tämä ainesto on säilytetty Fairdata PAS:issa.',
     pasDatasetVersionExists: 'Fairdata PAS-versio tästä aineistosta on olemassa: ',
     originalDatasetVersionExists: 'Alkuperäinen versio tästä aineistosta on olemassa: ',
-    linkToPasDataset: 'Linkki',
-    linkToOriginalDataset: 'Linkki',
+    linkToPasDataset: 'Siirry PAS-versioon',
+    linkToOriginalDataset: 'Siirry alkuperäiseen versioon',
     enteringPas: 'Menemässä PAS:iin',
     dataInPasDatasetsCanNotBeDownloaded: 'PAS-aineistojen dataa ei voida ladata'
   },
@@ -217,7 +217,7 @@ const finnish = {
       fos: 'tieteenalaa',
       research: 'tutkimusprojektia',
     },
-    includePas: 'Ota mukaan Fairdata PAS-datasettejä',
+    includePas: 'Ota mukaan Fairdata PAS -datasetit',
   },
   nav: {
     login: 'Kirjaudu',
