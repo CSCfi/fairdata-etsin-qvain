@@ -53,7 +53,7 @@ class CumulativeStateResponse extends Component {
               <Translate content="qvain.files.cumulativeState.changeComplete" />
             </ResponseLabel>
             { newIdentifier ?
-              <Translate component="p" content="qvain.files.cumulativeState.versionCreated" with={{identifier: newIdentifier}} />
+              <Translate component="p" content="qvain.files.cumulativeState.versionCreated" with={{ identifier: newIdentifier }} />
               : null
             }
           </ResponseContainerContent>

@@ -54,7 +54,7 @@ export class SelectedFilesBase extends Component {
               </ButtonLabel>
               <ButtonContainer>
                 <EditButton aria-label="Edit" onClick={this.handleEdit(s)} />
-                { removable ?
+                { removable ? (
                   <DeleteButton
                     aria-label="Remove"
                     onClick={(event) => {
@@ -65,7 +65,8 @@ export class SelectedFilesBase extends Component {
                         toggleSelectedFile(s, false)
                       }
                     }}
-                  /> :
+                  />
+                ) :
                   null
                 }
               </ButtonContainer>
@@ -94,14 +95,14 @@ export class SelectedFilesBase extends Component {
     const selected = [...selectedDirectories, ...selectedFiles]
     const existing = [...existingDirectories, ...existingFiles]
     const isCumulative = cumulativeState === CumulativeStates.YES
-    const cumulativeKey = isCumulative ? "cumulative" : "noncumulative"
+    const cumulativeKey = isCumulative ? 'cumulative' : 'noncumulative'
     return (
       <Fragment>
         <Translate tabIndex="0" component={SelectedFilesTitle} content="qvain.files.selected.title" />
         {selected.length === 0 && <Translate tabIndex="0" component="p" content="qvain.files.selected.none" />}
         {this.renderFiles(selected, inEdit, false, true)}
         <Translate tabIndex="0" component={SelectedFilesTitle} content="qvain.files.existing.title" />
-        <Translate tabIndex="0" content={"qvain.files.existing.help." + cumulativeKey} />
+        <Translate tabIndex="0" content={`qvain.files.existing.help.${ cumulativeKey}`} />
         {this.renderFiles(existing, inEdit, true, !isCumulative)}
         <Modal
           // Inform the user that a new dataset will be created, if both existing and selected files are present.

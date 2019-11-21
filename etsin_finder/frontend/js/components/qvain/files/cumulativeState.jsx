@@ -6,19 +6,16 @@ import axios from 'axios'
 
 import { ContainerSubsectionBottom } from '../general/card'
 import { CumulativeStates } from '../utils/constants'
-import { LabelLarge } from '../general/form'
+import { LabelLarge, FormField, RadioInput, RadioContainer, Label, HelpField } from '../general/form'
 
 import Modal from '../../general/modal'
-import { TableButton,DangerButton } from '../general/buttons'
-
-import CumulativeStateResponse from './cumulativeStateResponse'
-
-import {
+import { TableButton, DangerButton,
   CumulativeStateButton,
   CumulativeStateButtonText,
 } from '../general/buttons'
 
-import { FormField, RadioInput, RadioContainer, Label, HelpField } from '../general/form'
+import CumulativeStateResponse from './cumulativeStateResponse'
+
 
 class CumulativeState extends Component {
   static propTypes = {
@@ -65,9 +62,9 @@ class CumulativeState extends Component {
       identifier: this.props.Stores.Qvain.original.identifier,
       cumulative_state: newState
     }
-    return axios.post('/api/rpc/datasets/change_cumulative_state', obj)
+    axios.post('/api/rpc/datasets/change_cumulative_state', obj)
       .then(response => {
-        const data = response.data || {}
+        const data = response.data || {}
         this.setState({
           response: {
             new_version_created: data.new_version_created
@@ -79,7 +76,7 @@ class CumulativeState extends Component {
         }
       })
       .catch(err => {
-        let error = ""
+        let error = ''
         if (err.response && err.response.data && err.response.data.detail) {
           error = err.response.data.detail
         } else if (err.response && err.response.data) {
@@ -103,7 +100,7 @@ class CumulativeState extends Component {
 
   render() {
     const { changed, cumulativeState, setCumulativeState, original } = this.props.Stores.Qvain
-    const stateKey = this.props.Stores.Qvain.cumulativeState === CumulativeStates.YES ? "enabled" : "disabled"
+    const stateKey = this.props.Stores.Qvain.cumulativeState === CumulativeStates.YES ? 'enabled' : 'disabled'
 
     let content = null
     if (original === undefined) {
@@ -115,13 +112,13 @@ class CumulativeState extends Component {
               <RadioInput
                 id="cumulativeStateNo"
                 name="cumulativeState"
-                onChange={()=>setCumulativeState(0)}
+                onChange={() => setCumulativeState(0)}
                 type="radio"
                 checked={cumulativeState === 0}
               />
             </RadioContainer>
             <Label htmlFor="cumulativeStateNo">
-            < Translate content="qvain.files.cumulativeState.radio.no" />
+              <Translate content="qvain.files.cumulativeState.radio.no" />
             </Label>
           </FormField>
           <FormField>
@@ -129,7 +126,7 @@ class CumulativeState extends Component {
               <RadioInput
                 id="cumulativeStateYes"
                 name="cumulativeState"
-                onChange={()=>setCumulativeState(1)}
+                onChange={() => setCumulativeState(1)}
                 type="radio"
                 checked={cumulativeState === 1}
               />
@@ -146,7 +143,7 @@ class CumulativeState extends Component {
       )
     } else {
       // existing datasets need to use the RPC for changing cumulative state
-      const note = changed ? `qvain.files.cumulativeState.changes` : `qvain.files.cumulativeState.${stateKey}.note`
+      const note = changed ? 'qvain.files.cumulativeState.changes' : `qvain.files.cumulativeState.${stateKey}.note`
       content = (
         <div>
           <p>
@@ -166,12 +163,15 @@ class CumulativeState extends Component {
     }
 
     return (
-      <ContainerSubsectionBottom >
+      <ContainerSubsectionBottom>
         <LabelLarge htmlFor="cumulativeStateSelect">
           <Translate content="qvain.files.cumulativeState.label" />
         </LabelLarge>
         {content}
-        {this.state.loading || this.state.response ? <CumulativeStateResponse response={this.state.response} onClearResponse={this.clearResponse} /> : null }
+        {this.state.loading || this.state.response ?
+          <CumulativeStateResponse response={this.state.response} onClearResponse={this.clearResponse} />
+          : null
+        }
         <Modal isOpen={this.state.modalOpen} onRequestClose={this.closeModal} contentLabel="changeCumulativeStateModal">
           <Translate component="p" content={`qvain.files.cumulativeState.${stateKey}.confirm`} />
           <TableButton onClick={this.closeModal}>
