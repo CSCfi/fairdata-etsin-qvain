@@ -14,7 +14,7 @@ import { TableButton, DangerButton,
   CumulativeStateButtonText,
 } from '../general/buttons'
 
-import CumulativeStateResponse from './cumulativeStateResponse'
+import Response from './response'
 
 
 class CumulativeState extends Component {
@@ -35,8 +35,12 @@ class CumulativeState extends Component {
   }
 
   closeModal = () => {
+    if (this.loading) {
+      return
+    }
     this.setState({
       modalOpen: false,
+      response: null
     })
   }
 
@@ -47,7 +51,6 @@ class CumulativeState extends Component {
   }
 
   handleToggleCumulativeState = () => {
-    this.closeModal()
     if (!this.props.Stores.Qvain.original) { // only published datasets can be toggled with the RPC
       return
     }
@@ -162,17 +165,19 @@ class CumulativeState extends Component {
       )
     }
 
-    return (
-      <ContainerSubsectionBottom>
-        <LabelLarge htmlFor="cumulativeStateSelect">
-          <Translate content="qvain.files.cumulativeState.label" />
-        </LabelLarge>
-        {content}
-        {this.state.loading || this.state.response ?
-          <CumulativeStateResponse response={this.state.response} onClearResponse={this.clearResponse} />
-          : null
-        }
-        <Modal isOpen={this.state.modalOpen} onRequestClose={this.closeModal} contentLabel="changeCumulativeStateModal">
+    let modalContent
+    if (this.state.loading || this.state.response) {
+      modalContent = (
+        <>
+          <Response response={this.state.response} />
+          <TableButton disabled={this.state.loading} onClick={this.closeModal}>
+            <Translate content={'qvain.files.cumulativeState.closeButton'} />
+          </TableButton>
+        </>
+      )
+    } else {
+      modalContent = (
+        <>
           <Translate component="p" content={`qvain.files.cumulativeState.${stateKey}.confirm`} />
           <TableButton onClick={this.closeModal}>
             <Translate content={`qvain.files.cumulativeState.${stateKey}.cancel`} />
@@ -180,6 +185,19 @@ class CumulativeState extends Component {
           <DangerButton onClick={this.handleToggleCumulativeState}>
             <Translate content={`qvain.files.cumulativeState.${stateKey}.button`} />
           </DangerButton>
+        </>
+      )
+    }
+
+    return (
+      <ContainerSubsectionBottom>
+        <LabelLarge htmlFor="cumulativeStateSelect">
+          <Translate content="qvain.files.cumulativeState.label" />
+        </LabelLarge>
+        {content}
+        <Modal isOpen={this.state.modalOpen} onRequestClose={this.closeModal} contentLabel="changeCumulativeStateModal">
+          <Translate component="h3" content="qvain.files.cumulativeState.modalHeader" />
+          { modalContent }
         </Modal>
       </ContainerSubsectionBottom>
     )

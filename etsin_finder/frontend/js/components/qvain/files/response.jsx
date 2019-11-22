@@ -3,21 +3,11 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import Loader from '../../general/loader'
-import { LinkButtonDarkGray } from '../../general/button';
 
-class CumulativeStateResponse extends Component {
+// Shows success/fail based on a RPC request response. If the response prop is null, shows a loader.
+class Response extends Component {
   static propTypes = {
     response: PropTypes.object,
-    onClearResponse: PropTypes.func.isRequired,
-  }
-
-  constructor() {
-    super()
-    this.closeResponse = this.closeResponse.bind(this)
-  }
-
-  closeResponse() {
-    this.props.onClearResponse()
   }
 
   render() {
@@ -29,15 +19,10 @@ class CumulativeStateResponse extends Component {
         <ResponseContainerError>
           <ResponseContainerContent>
             <ResponseLabel>
-              <Translate content="qvain.submitStatus.fail" />
+              <Translate content="qvain.files.responses.fail" />
             </ResponseLabel>
             <p>{(response.error.toString().replace(/,/g, '\n'))}</p>
           </ResponseContainerContent>
-          <ResponseContainerCloseButtonContainer>
-            <LinkButtonDarkGray type="button" onClick={this.closeResponse}>
-              x
-            </LinkButtonDarkGray>
-          </ResponseContainerCloseButtonContainer>
         </ResponseContainerError>
       )
     }
@@ -50,18 +35,12 @@ class CumulativeStateResponse extends Component {
         <ResponseContainerSuccess>
           <ResponseContainerContent>
             <ResponseLabel success>
-              <Translate content="qvain.files.cumulativeState.changeComplete" />
+              <Translate content="qvain.files.responses.changeComplete" />
             </ResponseLabel>
-            { newIdentifier ?
-              <Translate component="p" content="qvain.files.cumulativeState.versionCreated" with={{ identifier: newIdentifier }} />
-              : null
+            { newIdentifier &&
+              <Translate component="p" content="qvain.files.responses.versionCreated" with={{ identifier: newIdentifier }} />
             }
           </ResponseContainerContent>
-          <ResponseContainerCloseButtonContainer>
-            <LinkButtonDarkGray type="button" onClick={this.closeResponse}>
-              x
-            </LinkButtonDarkGray>
-          </ResponseContainerCloseButtonContainer>
         </ResponseContainerSuccess>
       )
     }
@@ -75,7 +54,7 @@ class CumulativeStateResponse extends Component {
   }
 }
 
-CumulativeStateResponse.defaultProps = {
+Response.defaultProps = {
   response: null,
 }
 
@@ -93,6 +72,8 @@ const ResponseContainerSuccess = styled.div`
   z-index: 2;
   border-bottom: 1px solid rgba(0,0,0,0.3);
   position: relative;
+  margin-bottom: 0.5em;
+  min-width: 300px;
 `
 const ResponseContainerError = styled.div`
   background-color: #FFEBE8;
@@ -102,6 +83,8 @@ const ResponseContainerError = styled.div`
   z-index: 2;
   border-bottom: 1px solid rgba(0,0,0,0.3);
   position: relative;
+  margin-bottom: 0.5em;
+  min-width: 300px;
 `
 
 const ResponseContainerLoading = styled.div`
@@ -111,6 +94,7 @@ const ResponseContainerLoading = styled.div`
   z-index: 2;
   height: 105px;
   padding-top: 30px;
+  min-width: 300px;
 `
 
 const ResponseContainerContent = styled.div`
@@ -123,12 +107,4 @@ const ResponseContainerContent = styled.div`
   white-space: pre-line;
 `
 
-const ResponseContainerCloseButtonContainer = styled.div`
-  right: 0;
-  display:inline-block;
-  text-align: right;
-  padding-top: 10px;
-  padding-right: 20px;
-  position: absolute;
-`
-export default CumulativeStateResponse
+export default Response

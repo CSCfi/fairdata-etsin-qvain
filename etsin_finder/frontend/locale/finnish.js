@@ -616,8 +616,13 @@ const finnish = {
           confirm: 'Oletko varma, että haluat tehdä aineistosta kasvavan? Muutos aiheuttaa uuden version syntymisen ja uu. Uudella versiolla on aina uusi tunniste.',
           cancel: 'Peruuta',
         },
+        modalHeader: 'Muuta aineiston kasvavuutta',
+        closeButton: 'Sulje',
         changes: 'Aineistoon tehdyt muutokset on tallennettava ennen tämän asetuksen muuttamista.',
-        changeComplete: 'Asetus muutettu.',
+      },
+      responses: {
+        fail: 'Jotain meni pieleen...',
+        changeComplete: 'Toiminto suoritettu.',
         versionCreated: 'Aineistosta on luotu uusi versio tunnisteella %(identifier)s.',
       },
       help:
