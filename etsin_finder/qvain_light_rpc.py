@@ -76,7 +76,7 @@ class QvainDatasetChangeCumulativeState(Resource):
         if not is_authd:
             return {"PermissionError": "User not logged in."}, 401
 
-        # only creator of the dataset is allowed to delete it
+        # only creator of the dataset is allowed to modify it
         user = session["samlUserdata"]["urn:oid:1.3.6.1.4.1.16161.4.0.53"][0]
         creator = get_dataset_creator(cr_id)
         if user != creator:
