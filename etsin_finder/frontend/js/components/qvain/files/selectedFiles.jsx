@@ -54,7 +54,7 @@ export class SelectedFilesBase extends Component {
               </ButtonLabel>
               <ButtonContainer>
                 <EditButton aria-label="Edit" onClick={this.handleEdit(s)} />
-                { removable ? (
+                { removable && (
                   <DeleteButton
                     aria-label="Remove"
                     onClick={(event) => {
@@ -66,9 +66,7 @@ export class SelectedFilesBase extends Component {
                       }
                     }}
                   />
-                ) :
-                  null
-                }
+                )}
               </ButtonContainer>
             </FileItem>
             {isInEdit(inEdit, s.identifier, existing) && (
