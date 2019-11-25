@@ -4,13 +4,17 @@ import { inject, observer } from 'mobx-react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCopy, faFolder } from '@fortawesome/free-solid-svg-icons'
 import Translate from 'react-translate-component'
-import { ButtonLabel, EditButton, DeleteButton, FileItem, ButtonContainer, TableButton } from '../general/buttons'
+import axios from 'axios'
+
+import { ButtonLabel, EditButton, DangerButton, DeleteButton, FileItem, ButtonContainer, TableButton,
+  RefreshDirectoryButton, RefreshDirectoryButtonText } from '../general/buttons'
 import { SelectedFilesTitle } from '../general/form'
 import FileForm from './fileForm'
 import DirectoryForm from './directoryForm'
 import { randomStr } from '../utils/fileHierarchy'
 import Modal from '../../general/modal'
 import { CumulativeStates } from '../utils/constants'
+import Response from './response';
 
 export class SelectedFilesBase extends Component {
   static propTypes = {
@@ -19,6 +23,9 @@ export class SelectedFilesBase extends Component {
 
   state = {
     datasetDuplicationModalHasNotBeenShown: true,
+    refreshResponse: null,
+    refreshLoading: false,
+    refreshModalDirectory: null
   }
 
   handleEdit = (selected) => (event) => {
@@ -38,6 +45,74 @@ export class SelectedFilesBase extends Component {
     })
   }
 
+  setRefreshModalDirectory = (directory) => {
+    if (this.state.refreshLoading) {
+      return
+    }
+    this.setState({
+      refreshModalDirectory: directory,
+      refreshResponse: null
+    })
+  }
+
+  clearRefreshResponse = () => {
+    this.setState({
+      refreshResponse: null
+    })
+  }
+
+  refreshDirectoryContent = () => {
+    const identifier = this.state.refreshModalDirectory
+    if (!this.props.Stores.Qvain.original) { // only published datasets can be refreshed with the RPC
+      return
+    }
+    this.setState({
+      refreshResponse: null,
+      refreshLoading: true
+    })
+
+    const currentState = this.props.Stores.Qvain.cumulativeState
+    const newState = currentState === CumulativeStates.YES ? CumulativeStates.CLOSED : CumulativeStates.YES
+    const obj = {
+      cr_identifier: this.props.Stores.Qvain.original.identifier,
+      dir_identifier: identifier
+    }
+    axios.post('/api/rpc/datasets/refresh_directory_content', obj)
+      .then(response => {
+        const data = response.data || {}
+        this.setState({
+          refreshResponse: {
+            new_version_created: data.new_version_created
+          }
+        })
+        // when a new version is created, the cumulative_state of the current version remains unchanged
+        if (!data.new_version_created) {
+          this.props.Stores.Qvain.setCumulativeState(newState)
+        }
+      })
+      .catch(err => {
+        let error = ''
+        if (err.response && err.response.data && err.response.data.detail) {
+          error = err.response.data.detail
+        } else if (err.response && err.response.data) {
+          error = err.response.data
+        } else {
+          error = this.response.errorMessage
+        }
+
+        this.setState({
+          refreshResponse: {
+            error
+          }
+        })
+      })
+      .finally(() => {
+        this.setState({
+          refreshLoading: false
+        })
+      })
+  }
+
   renderFiles = (selected, inEdit, existing, removable) => {
     const {
       toggleSelectedFile,
@@ -53,6 +128,11 @@ export class SelectedFilesBase extends Component {
                 {s.projectIdentifier} / {s.directoryName || s.fileName}
               </ButtonLabel>
               <ButtonContainer>
+                { s.directoryName && (
+                  <RefreshDirectoryButton disabled={this.state.refreshLoading} type="button" onClick={() => this.setRefreshModalDirectory(s.identifier)}>
+                    <Translate component={RefreshDirectoryButtonText} content="qvain.files.refreshModal.buttons.show" />
+                  </RefreshDirectoryButton>
+                )}
                 <EditButton aria-label="Edit" onClick={this.handleEdit(s)} />
                 { removable && (
                   <DeleteButton
@@ -88,7 +168,8 @@ export class SelectedFilesBase extends Component {
       existingFiles,
       existingDirectories,
       inEdit,
-      cumulativeState
+      cumulativeState,
+      changed
     } = this.props.Stores.Qvain
     const selected = [...selectedDirectories, ...selectedFiles]
     const existing = [...existingDirectories, ...existingFiles]
@@ -111,6 +192,37 @@ export class SelectedFilesBase extends Component {
           <Translate component="h3" content="qvain.files.notificationNewDatasetWillBeCreated.header" />
           <Translate component="p" content="qvain.files.notificationNewDatasetWillBeCreated.content" />
           <TableButton onClick={this.closeDatasetDuplicationInformationModal}>Ok.</TableButton>
+        </Modal>
+
+        <Modal
+          // Modal for refreshing folder content
+          isOpen={!!this.state.refreshModalDirectory}
+          onRequestClose={() => this.setRefreshModalDirectory(null)}
+          contentLabel="refreshDirectoryModal"
+        >
+          <Translate component="h3" content="qvain.files.refreshModal.header" />
+          {this.state.refreshLoading || this.state.refreshResponse ?
+            <Response response={this.state.refreshResponse} />
+          : (
+            <>
+              <Translate component="p" content={`qvain.files.refreshModal.${cumulativeKey}`} />
+              { changed && <Translate component="p" content={'qvain.files.refreshModal.changes'} /> }
+            </>
+          )}
+          {this.state.refreshResponse ? (
+            <TableButton onClick={() => this.setRefreshModalDirectory(null)}>
+              <Translate content={'qvain.files.refreshModal.buttons.close'} />
+            </TableButton>
+          ) : (
+            <>
+              <TableButton disabled={this.state.refreshLoading} onClick={() => this.setRefreshModalDirectory(null)}>
+                <Translate content={'qvain.files.refreshModal.buttons.cancel'} />
+              </TableButton>
+              <DangerButton disabled={changed || this.state.refreshLoading} onClick={() => this.refreshDirectoryContent()}>
+                <Translate content={'qvain.files.refreshModal.buttons.ok'} />
+              </DangerButton>
+            </>
+          )}
         </Modal>
       </Fragment>
     )

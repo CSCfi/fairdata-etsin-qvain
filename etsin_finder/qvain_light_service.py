@@ -41,6 +41,7 @@ class MetaxQvainLightAPIService(FlaskService):
                 '?metadata_provider_user={0}&file_details&ordering=-date_created&no_pagination=true'
             self.METAX_CREATE_DATASET = 'https://{0}/rest/datasets'.format(metax_qvain_api_config['HOST'])
             self.METAX_CHANGE_CUMULATIVE_STATE = 'https://{0}/rpc/datasets/change_cumulative_state'.format(metax_qvain_api_config['HOST'])
+            self.METAX_REFRESH_DIRECTORY_CONTENT = 'https://{0}/rpc/datasets/refresh_directory_content'.format(metax_qvain_api_config['HOST'])
             self.user = metax_qvain_api_config['USER']
             self.pw = metax_qvain_api_config['PASSWORD']
             self.verify_ssl = metax_qvain_api_config.get('VERIFY_SSL', True)
@@ -292,6 +293,47 @@ class MetaxQvainLightAPIService(FlaskService):
         log.info('Changed cumulative state of dataset {} to {}'.format(cr_id, cumulative_state))
         return (json_or_empty(metax_api_response) or metax_api_response.text), metax_api_response.status_code
 
+
+    def refresh_directory_content(self, cr_identifier, dir_identifier):
+        """
+        Call Metax refresh_directory_content RPC.
+
+        Arguments:
+            cr_identifier {string} -- The identifier of the dataset.
+            dir_identifier {integer} -- The identifier of the directory.
+
+        Returns:
+            [type] -- Metax response.
+
+        """
+        req_url = self.METAX_REFRESH_DIRECTORY_CONTENT
+        params = {
+            "cr_identifier": cr_identifier,
+            "dir_identifier": dir_identifier
+        }
+        headers = {'Accept': 'application/json'}
+        try:
+            metax_api_response = requests.post( req_url,
+                                                headers=headers,
+                                                auth=(self.user, self.pw),
+                                                verify=self.verify_ssl,
+                                                params=params,
+                                                timeout=10)
+        except Exception as e:
+            if isinstance(e, requests.HTTPError):
+                log.warning(
+                    "Failed to refresh dataset {0} directory {1}\nResponse status code: {2}\nResponse text: {3}".format(
+                        cr_identifier,
+                        dir_identifier,
+                        metax_api_response.status_code,
+                        json_or_empty(metax_api_response) or metax_api_response.text
+                    ))
+            else:
+                log.error("Error refreshing dataset {0} directory {1}\n{2}".format(cr_identifier, dir_identifier, e))
+            return {'detail': 'Error trying to send data to metax.'}, 500
+        log.info('Refreshed dataset {} directory {}'.format(cr_identifier, dir_identifier))
+        return (json_or_empty(metax_api_response) or metax_api_response.text), metax_api_response.status_code
+
 _metax_api = MetaxQvainLightAPIService(app)
 
 def get_directory(dir_id):
@@ -374,3 +416,17 @@ def change_cumulative_state(cr_id, cumulative_state):
 
     """
     return _metax_api.change_cumulative_state(cr_id, cumulative_state)
+
+def refresh_directory_content(cr_identifier, dir_identifier):
+    """
+    Call Metax refresh_directory_content RPC.
+
+    Arguments:
+        cr_identifier {string} -- The identifier of the dataset.
+        dir_identifier {string} -- The identifier of the directory.
+
+    Returns:
+        [type] -- Metax response.
+
+    """
+    return _metax_api.refresh_directory_content(cr_identifier, dir_identifier)
