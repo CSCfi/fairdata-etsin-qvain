@@ -24,7 +24,7 @@ const english = {
     access_open: 'Open Access',
     access_rights: 'Access',
     catalog_publisher: 'Catalog publisher',
-    citation: 'Citation',
+    citation: 'Citation / Reference',
     citation_formats: 'Show more citation formats',
     contact: {
       access: 'Contact the curator on issues related to dataset access',
