@@ -1,57 +1,55 @@
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import Loader from '../../general/loader'
 
 // Shows success/fail based on a RPC request response. If the response prop is null, shows a loader.
-class Response extends Component {
-  static propTypes = {
-    response: PropTypes.object,
-  }
+const Response = (props) => {
+  const { response } = props
 
-  render() {
-    const { response } = this.props
-
-    // If something went wrong.
-    if (response && response.error) {
-      return (
-        <ResponseContainerError>
-          <ResponseContainerContent>
-            <ResponseLabel>
-              <Translate content="qvain.files.responses.fail" />
-            </ResponseLabel>
-            <p>{(response.error.toString().replace(/,/g, '\n'))}</p>
-          </ResponseContainerContent>
-        </ResponseContainerError>
-      )
-    }
-
-    // If response was ok.
-    if (response) {
-      // Get new identifier if new version was created.
-      const newIdentifier = response.new_version_created && response.new_version_created.identifier
-      return (
-        <ResponseContainerSuccess>
-          <ResponseContainerContent>
-            <ResponseLabel success>
-              <Translate content="qvain.files.responses.changeComplete" />
-            </ResponseLabel>
-            { newIdentifier &&
-              <Translate component="p" content="qvain.files.responses.versionCreated" with={{ identifier: newIdentifier }} />
-            }
-          </ResponseContainerContent>
-        </ResponseContainerSuccess>
-      )
-    }
-
-    // No response loaded yet, show loader.
+  // If something went wrong.
+  if (response && response.error) {
     return (
-      <ResponseContainerLoading>
-        <Loader active />
-      </ResponseContainerLoading>
+      <ResponseContainerError>
+        <ResponseContainerContent>
+          <ResponseLabel>
+            <Translate content="qvain.files.responses.fail" />
+          </ResponseLabel>
+          <p>{(response.error.toString().replace(/,/g, '\n'))}</p>
+        </ResponseContainerContent>
+      </ResponseContainerError>
     )
   }
+
+  // If response was ok.
+  if (response) {
+    // Get new identifier if new version was created.
+    const newIdentifier = response.new_version_created && response.new_version_created.identifier
+    return (
+      <ResponseContainerSuccess>
+        <ResponseContainerContent>
+          <ResponseLabel success>
+            <Translate content="qvain.files.responses.changeComplete" />
+          </ResponseLabel>
+          { newIdentifier &&
+            <Translate component="p" content="qvain.files.responses.versionCreated" with={{ identifier: newIdentifier }} />
+          }
+        </ResponseContainerContent>
+      </ResponseContainerSuccess>
+    )
+  }
+
+  // No response loaded yet, show loader.
+  return (
+    <ResponseContainerLoading>
+      <Loader active />
+    </ResponseContainerLoading>
+  )
+}
+
+Response.propTypes = {
+  response: PropTypes.object,
 }
 
 Response.defaultProps = {
