@@ -97,6 +97,14 @@ export default class FormatSelect extends Component {
     }
   }
 
+  static getDerivedStateFromProps(newProps, prevState) {
+    if (newProps !== prevState) {
+      return {
+        options: newProps.options
+      }
+    }
+    return null;
+  }
 
   onBlur = () => {
     this.timeoutID = setTimeout(() => {
@@ -153,15 +161,6 @@ export default class FormatSelect extends Component {
         }
       }
     )
-  }
-
-  static getDerivedStateFromProps(newProps, prevState) {
-    if (newProps !== prevState) {
-      return {
-        options: newProps.options
-      }
-    }
-    return null;
   }
 
   render() {
