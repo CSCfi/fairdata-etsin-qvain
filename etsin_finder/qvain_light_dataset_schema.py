@@ -1,6 +1,6 @@
 """Validation schemas for form data coming in from Qvain Light"""
 from marshmallow import Schema, fields
-from marshmallow.validate import Length
+from marshmallow.validate import Length, OneOf
 import json
 
 class ActorsValidationSchema(Schema):
@@ -63,6 +63,7 @@ class DatasetValidationSchema(Schema):
     license = fields.Dict()
     otherLicenseUrl = fields.Str()
     dataCatalog = fields.Str()
+    cumulativeState = fields.Int(OneOf([0, 1, 2]))
     files = fields.List(fields.Dict())
     directories = fields.List(fields.Dict())
     remote_resources = fields.List(fields.Dict())

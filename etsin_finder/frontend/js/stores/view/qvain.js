@@ -1,18 +1,21 @@
 import { observable, action, computed } from 'mobx'
 import axios from 'axios'
-import { getDirectories, getFiles } from '../../components/qvain/utils/fileHierarchy'
+import { getDirectories, getFiles, deepCopy } from '../../components/qvain/utils/fileHierarchy'
 import {
   AccessTypeURLs,
   LicenseUrls,
   FileAPIURLs,
   UseCategoryURLs,
   EntityType,
-  Role
+  Role,
+  CumulativeStates
 } from '../../components/qvain/utils/constants'
 import { getPath } from '../../components/qvain/utils/object'
 
 class Qvain {
   @observable original = undefined // used if editing, otherwise undefined
+
+  @observable changed = false // has dataset been changed
 
   @observable title = {
     en: '',
@@ -69,6 +72,7 @@ class Qvain {
 
     // Reset Files/Directories related data
     this.dataCatalog = undefined
+    this.cumulativeState = CumulativeStates.NO
     this.idaPickerOpen = false
     this.selectedProject = undefined
     this.selectedFiles = []
@@ -82,6 +86,12 @@ class Qvain {
     this.externalResourceInEdit = EmptyExternalResource
     this.extResFormOpen = false
     this.resourceInEdit = undefined
+    this.changed = false
+  }
+
+  @action
+  setChanged = changed => {
+    this.changed = changed
   }
 
   @action
@@ -91,6 +101,7 @@ class Qvain {
     } else if (lang === 'FINNISH') {
       this.title.fi = title
     }
+    this.changed = true
   }
 
   @action
@@ -100,15 +111,18 @@ class Qvain {
     } else if (lang === 'FINNISH') {
       this.description.fi = description
     }
+    this.changed = true
   }
 
   @action
   addOtherIdentifier = identifier => {
+    this.changed = true
     this.otherIdentifiers = [...this.otherIdentifiers, identifier]
   }
 
   @action
   removeOtherIdentifier = identifier => {
+    this.changed = true
     this.otherIdentifiers = this.otherIdentifiers.filter(
       otherIdentifier => otherIdentifier !== identifier
     )
@@ -117,41 +131,49 @@ class Qvain {
   @action
   setFieldOfScience = fieldOfScience => {
     this.fieldOfScience = fieldOfScience
+    this.changed = true
   }
 
   @action
   setKeywords = keywords => {
     this.keywords = keywords
+    this.changed = true
   }
 
   @action
   removeKeyword = keyword => {
     this.keywords = this.keywords.filter(word => word !== keyword)
+    this.changed = true
   }
 
   @action
   setLicense = license => {
     this.license = license
+    this.changed = true
   }
 
   @action
   setAccessType = accessType => {
     this.accessType = accessType
+    this.changed = true
   }
 
   @action
   setRestrictionGrounds = restrictionGrounds => {
     this.restrictionGrounds = restrictionGrounds
+    this.changed = true
   }
 
   @action
   removeRestrictionGrounds = () => {
     this.restrictionGrounds = {}
+    this.changed = true
   }
 
   @action
   setActors = actors => {
     this.actors = actors
+    this.changed = true
   }
 
   @action saveActor = actor => {
@@ -209,6 +231,7 @@ class Qvain {
       )
       this.externalResources = [...this.externalResources, newResource]
     }
+    this.changed = true
   }
 
   @action
@@ -237,6 +260,8 @@ class Qvain {
 
   @observable dataCatalog = undefined
 
+  @observable cumulativeState = CumulativeStates.NO
+
   @observable selectedProject = undefined
 
   @observable selectedFiles = []
@@ -254,6 +279,11 @@ class Qvain {
   @action
   setDataCatalog = selectedDataCatalog => {
     this.dataCatalog = selectedDataCatalog
+  }
+
+  @action
+  setCumulativeState = selectedCumulativeState => {
+    this.cumulativeState = selectedCumulativeState
   }
 
   @action toggleSelectedFile = (file, select) => {
@@ -274,6 +304,7 @@ class Qvain {
       }
       this.hierarchy = newHier
     }
+    this.changed = true
   }
 
   @action toggleSelectedDirectory = (dir, select) => {
@@ -309,6 +340,32 @@ class Qvain {
       }
       this.hierarchy = newHier
     }
+    this.changed = true
+  }
+
+  // Move selected files and directories to existing.
+  @action moveSelectedToExisting = () => {
+    this.existingDirectories = this.mergeArraysByIdentifier(this.selectedDirectories, this.existingDirectories)
+    this.selectedDirectories = []
+    this.existingFiles = this.mergeArraysByIdentifier(this.selectedFiles, this.existingFiles)
+    this.selectedFiles = []
+
+    // deselect all items in hierarchy
+    const newHier = deepCopy(this.hierarchy)
+    getDirectories(newHier).forEach(dir => { dir.selected = false })
+    getFiles(newHier).forEach(file => { file.selected = false })
+    this.hierarchy = newHier
+  }
+
+  // Create new array by joining two arrays. If some objects have duplicate identifiers, use the object from the first array.
+  mergeArraysByIdentifier = (a, b) => {
+    const result = [...a]
+    b.forEach(item => {
+      if (!result.some(other => other.identifier === item.identifier)) {
+        result.push(item)
+      }
+    })
+    return result
   }
 
   deselectChildren = dir => {
@@ -321,6 +378,7 @@ class Qvain {
       this.selectedFiles = [...this.selectedFiles.filter(file => file.identifier !== f.identifier)]
     })
     dir.directories.forEach(d => this.deselectChildren(d))
+    this.changed = true
   }
 
   deselectParents = (dir, flattenedHierarchy) => {
@@ -337,6 +395,7 @@ class Qvain {
         }
       }
     }
+    this.changed = true
   }
 
   @action getInitialDirectories = () =>
@@ -555,6 +614,9 @@ class Qvain {
     this.dataCatalog =
       dataset.data_catalog !== undefined ? dataset.data_catalog.identifier : undefined
 
+    // load cumulative state
+    this.cumulativeState = dataset.cumulative_state
+
     // Load files
     const dsFiles = researchDataset.files
     const dsDirectories = researchDataset.directories
@@ -587,6 +649,7 @@ class Qvain {
       )
       this.extResFormOpen = true
     }
+    this.changed = false
   }
 
   // Creates a single instance of a actor, only has one role.

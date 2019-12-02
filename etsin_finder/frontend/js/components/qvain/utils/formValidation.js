@@ -1,6 +1,6 @@
 import * as yup from 'yup'
 import translate from 'counterpart'
-import { AccessTypeURLs, EntityType, Role } from './constants'
+import { AccessTypeURLs, EntityType, Role, CumulativeStates } from './constants'
 
 // DATASET DESCRIPTION VALIDATION
 
@@ -155,6 +155,11 @@ const actorOrganizationSchema = yup.object().shape({
 const dataCatalogSchema = yup
   .string()
   .required(translate('qvain.validationMessages.files.dataCatalog.required'))
+
+// CUMULATIVE STATE
+const cumulativeStateSchema = yup
+  .mixed()
+  .oneOf([CumulativeStates.NO, CumulativeStates.YES, CumulativeStates.CLOSED])
 
 // FILE AND DIRECTORY (IDA RESOURCES) VALIDATION
 
@@ -321,6 +326,7 @@ const qvainFormSchema = yup.object().shape({
   }),
   actors: actorsSchema,
   dataCatalog: dataCatalogSchema,
+  cumulativeState: cumulativeStateSchema,
   files: filesSchema,
   directories: directoriesSchema,
 })
