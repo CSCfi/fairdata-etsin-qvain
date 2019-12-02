@@ -168,6 +168,42 @@ export const ButtonContainer = styled.div`
   text-align: right;
 `;
 
+export const CumulativeStateButton = styled.button`
+  background-color: ${props => (
+    props.disabled ? '#7fbfd6' : '#007fad'
+  )};
+  color: #fff;
+  height: 47px;
+  border-radius: 31.5px;
+  border: solid 1px ${props => (
+    props.disabled ? '#7fbfd6' : '#007fad'
+  )};
+  text-transform: none;
+  font-weight: 600;
+  padding-left: 27px;
+  padding-right: 27px;
+  display: inline-flex;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-width: 64px;
+  outline: none;
+  -webkit-appearance: none;
+  overflow: hidden;
+  vertical-align: middle;
+  ${props => !props.disabled && css`
+    cursor: pointer;
+  `}
+`;
+
+export const CumulativeStateButtonText = styled.span`
+  text-align: center;
+  color: inherit;
+  font-weight: 400;
+  text-transform: none;
+`
+
 export const FilePickerButton = styled.button`
   background-color: ${props => (
     props.disabled ? '#7fbfd6' : '#007fad'

@@ -10,6 +10,7 @@ import FileForm from './fileForm'
 import DirectoryForm from './directoryForm'
 import { randomStr } from '../utils/fileHierarchy'
 import Modal from '../../general/modal'
+import { CumulativeStates } from '../utils/constants'
 
 export class SelectedFilesBase extends Component {
   static propTypes = {
@@ -37,7 +38,7 @@ export class SelectedFilesBase extends Component {
     })
   }
 
-  renderFiles = (selected, inEdit, existing) => {
+  renderFiles = (selected, inEdit, existing, removable) => {
     const {
       toggleSelectedFile,
       toggleSelectedDirectory
@@ -53,17 +54,19 @@ export class SelectedFilesBase extends Component {
               </ButtonLabel>
               <ButtonContainer>
                 <EditButton aria-label="Edit" onClick={this.handleEdit(s)} />
-                <DeleteButton
-                  aria-label="Remove"
-                  onClick={(event) => {
-                    event.preventDefault()
-                    if (s.directoryName !== undefined) {
-                      toggleSelectedDirectory(s, false)
-                    } else {
-                      toggleSelectedFile(s, false)
-                    }
-                  }}
-                />
+                { removable && (
+                  <DeleteButton
+                    aria-label="Remove"
+                    onClick={(event) => {
+                      event.preventDefault()
+                      if (s.directoryName !== undefined) {
+                        toggleSelectedDirectory(s, false)
+                      } else {
+                        toggleSelectedFile(s, false)
+                      }
+                    }}
+                  />
+                )}
               </ButtonContainer>
             </FileItem>
             {isInEdit(inEdit, s.identifier, existing) && (
@@ -84,21 +87,24 @@ export class SelectedFilesBase extends Component {
       selectedDirectories,
       existingFiles,
       existingDirectories,
-      inEdit
+      inEdit,
+      cumulativeState
     } = this.props.Stores.Qvain
     const selected = [...selectedDirectories, ...selectedFiles]
     const existing = [...existingDirectories, ...existingFiles]
+    const isCumulative = cumulativeState === CumulativeStates.YES
+    const cumulativeKey = isCumulative ? 'cumulative' : 'noncumulative'
     return (
       <Fragment>
         <Translate tabIndex="0" component={SelectedFilesTitle} content="qvain.files.selected.title" />
         {selected.length === 0 && <Translate tabIndex="0" component="p" content="qvain.files.selected.none" />}
-        {this.renderFiles(selected, inEdit, false)}
+        {this.renderFiles(selected, inEdit, false, true)}
         <Translate tabIndex="0" component={SelectedFilesTitle} content="qvain.files.existing.title" />
-        <Translate tabIndex="0" component="p" content="qvain.files.existing.help" />
-        {this.renderFiles(existing, inEdit, true)}
+        <Translate tabIndex="0" content={`qvain.files.existing.help.${cumulativeKey}`} />
+        {this.renderFiles(existing, inEdit, true, !isCumulative)}
         <Modal
           // Inform the user that a new dataset will be created, if both existing and selected files are present.
-          isOpen={(selected.length) > 0 && (existing.length > 0) && (this.state.datasetDuplicationModalHasNotBeenShown === true)}
+          isOpen={(selected.length) > 0 && (existing.length > 0) && (this.state.datasetDuplicationModalHasNotBeenShown === true) && !isCumulative}
           onRequestClose={this.closeDatasetDuplicationInformationModal}
           contentLabel="notificationNewDatasetWillBeCreatedModal"
         >
