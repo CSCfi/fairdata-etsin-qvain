@@ -1,6 +1,3 @@
-/* eslint-disable react/jsx-indent-props */
-/* eslint-disable react/jsx-indent */
-/* eslint-disable no-trailing-spaces */
 {
   /**
    * This file is part of the Etsin service
@@ -100,6 +97,7 @@ export default class FormatSelect extends Component {
     }
   }
 
+
   onBlur = () => {
     this.timeoutID = setTimeout(() => {
       if (this.state.isFocused) {
@@ -157,14 +155,13 @@ export default class FormatSelect extends Component {
     )
   }
 
-  // eslint-disable-next-line camelcase
-  UNSAFE_componentWillReceiveProps(newProps) {
-    if (newProps !== this.props) {
-      this.setState({
-        isOpen: false,
-        options: newProps.options,
-      })
+  static getDerivedStateFromProps(newProps, prevState) {
+    if (newProps !== prevState) {
+      return {
+        options: newProps.options
+      }
     }
+    return null;
   }
 
   render() {
@@ -202,21 +199,21 @@ export default class FormatSelect extends Component {
             </ListItem>
           ))
         )}
-      {this.state.options.length > 1 && (
-        <InfoPosition>
-          <Tooltip
-            isOpen={this.state.tooltipOpen}
-            close={() => this.setState(prev => ({ tooltipOpen: !prev.tooltipOpen }))}
-            align="Right"
-            text={<Translate component="p" content="dataset.datasetAsFile.infoText" />}
-          >
-            <HelpIcon
-              onClick={() => this.setState(prev => ({ tooltipOpen: !prev.tooltipOpen }))}
-              align="Left"
-            />
-          </Tooltip>
-        </InfoPosition>
-      )}
+        {this.state.options.length > 1 && (
+          <InfoPosition>
+            <Tooltip
+              isOpen={this.state.tooltipOpen}
+              close={() => this.setState(prev => ({ tooltipOpen: !prev.tooltipOpen }))}
+              align="Right"
+              text={<Translate component="p" content="dataset.datasetAsFile.infoText" />}
+            >
+              <HelpIcon
+                onClick={() => this.setState(prev => ({ tooltipOpen: !prev.tooltipOpen }))}
+                align="Left"
+              />
+            </Tooltip>
+          </InfoPosition>
+        )}
       </SelectContainer>
     )
   }

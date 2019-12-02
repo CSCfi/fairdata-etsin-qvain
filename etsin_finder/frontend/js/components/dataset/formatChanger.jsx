@@ -1,5 +1,3 @@
-/* eslint-disable no-multiple-empty-lines */
-/* eslint-disable no-trailing-spaces */
 {
   /**
    * This file is part of the Etsin service
@@ -11,7 +9,7 @@
    * @license   MIT
    */
   }
-  
+
   import React, { Component } from 'react'
   import PropTypes from 'prop-types'
   import { withRouter } from 'react-router-dom'
@@ -23,7 +21,7 @@
 
   import FormatSelect from './formatselect'
 
-  
+
   class FormatChanger extends Component {
     constructor(props) {
       super(props)
@@ -33,7 +31,7 @@
         error: false,
         selected: '',
       }
-  
+
       this.query = this.query.bind(this)
     }
 
@@ -42,15 +40,8 @@
       this.query()
     }
 
-    // eslint-disable-next-line camelcase
-    UNSAFE_componentWillReceiveProps = () => {
-      this.query()
-    }
-  
-
     checkFields = (data) => {
       const rd = data.research_dataset;
-
       let dataciteExists = false;
       let fields = {};
 
@@ -58,7 +49,7 @@
       if ((typeof data.preservation_identifier !== 'undefined' && data.preservation_identifier.includes('doi'))
       || (typeof rd.preferred_identifier !== 'undefined' && rd.preferred_identifier.includes('doi'))) {
         dataciteExists = true;
-      } 
+      }
 
       if (dataciteExists) {
         fields = [{ label: 'Metax JSON', value: 'metax' },
@@ -67,7 +58,6 @@
       } else {
         fields = [{ label: 'Metax JSON', value: 'metax' }]
       }
-    
       this.setState({
         formats: fields,
         error: false,
@@ -107,8 +97,6 @@
         this.setState({ error })
       })
     }
-    
-
 
     render() {
       // CASE 1: Houston, we have a problem
@@ -126,14 +114,15 @@
           onChange={this.changeFormat}
           onBlur={this.closeModal}
           options={this.state.formats}
+          notRemoved={this.state.notRemoved}
         />
       )
     }
   }
-  
+
   FormatChanger.propTypes = {
     idn: PropTypes.string.isRequired,
     theme: PropTypes.object.isRequired,
   }
-  
+
   export default withRouter(withTheme(FormatChanger))
