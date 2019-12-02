@@ -11,7 +11,10 @@
 const english = {
   changepage: 'Navigated to page: %(page)s',
   dataset: {
-    access_permission: 'Ask for access',
+    access_permission: 'Apply for access',
+    access_denied: 'Application denied',
+    access_request_sent: 'Access request sent',
+    access_granted: 'Access granted',
     access_locked: 'Restricted Access',
     access_open: 'Open Access',
     access_rights: 'Access',

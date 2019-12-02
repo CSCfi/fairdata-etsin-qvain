@@ -103,10 +103,12 @@ def get_user_csc_name():
 
     :return:
     """
+
     if not is_authenticated() or not is_authenticated_CSC_user() or 'samlUserdata' not in session:
         return None
 
     csc_name = session['samlUserdata'].get('urn:oid:1.3.6.1.4.1.16161.4.0.53', False)
+
     if csc_name:
         return csc_name[0]
     else:
@@ -115,6 +117,45 @@ def get_user_csc_name():
 
     return None
 
+def get_user_csc_email():
+    """
+    Get user csc name from saml userdata.
+
+    :return:
+    """
+
+    if not is_authenticated() or not is_authenticated_CSC_user() or 'samlUserdata' not in session:
+        return None
+
+    csc_email = session['samlUserdata'].get('urn:oid:0.9.2342.19200300.100.1.3', False)
+
+    if csc_email:
+        return csc_email[0]
+    else:
+        log.warning("User seems to be authenticated but CSC email not in session object. "
+                 "Saml userdata:\n{0}".format(session['samlUserdata']))
+
+    return None
+
+def get_user_lastname():
+    """
+    Get user csc name from saml userdata.
+
+    :return:
+    """
+
+    if not is_authenticated() or not is_authenticated_CSC_user() or 'samlUserdata' not in session:
+        return None
+
+    lastname = session['samlUserdata'].get('urn:oid:2.5.4.4', False)
+
+    if lastname:
+        return lastname[0]
+    else:
+        log.warning("User seems to be authenticated but lastname not in session object. "
+                 "Saml userdata:\n{0}".format(session['samlUserdata']))
+
+    return None
 
 def get_user_id():
     """

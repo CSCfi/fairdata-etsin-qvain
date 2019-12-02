@@ -12,6 +12,9 @@ const finnish = {
   changepage: 'Siirryit sivulle: %(page)s',
   dataset: {
     access_permission: 'Hae käyttölupaa',
+    access_denied: 'Hakemus evätty',
+    access_request_sent: 'Käyttölupaa haettu',
+    access_granted: 'Käyttölupa myönnetty',
     access_locked: 'Rajattu käyttöoikeus',
     access_open: 'Avoin',
     access_rights: 'Saatavuus',
