@@ -9,6 +9,7 @@ import { HelpIcon } from '../general/form'
 import IDAFilePicker from './idaFilePicker'
 import ExternalFiles from './externalFiles'
 import DataCatalog from './dataCatalog'
+import CumulativeState from './cumulativeState'
 import { DataCatalogIdentifiers } from '../utils/constants'
 import Tooltip from '../general/tooltip'
 import FilesInfo from './filesInfo'
@@ -27,9 +28,12 @@ class Files extends Component {
     let data = null
     if (dataCatalog === DataCatalogIdentifiers.IDA) {
       data = (
-        <ContainerSubsectionBottom>
-          <IDAFilePicker />
-        </ContainerSubsectionBottom>
+        <>
+          <CumulativeState />
+          <ContainerSubsectionBottom>
+            <IDAFilePicker />
+          </ContainerSubsectionBottom>
+        </>
       )
     }
     if (dataCatalog === DataCatalogIdentifiers.ATT) {

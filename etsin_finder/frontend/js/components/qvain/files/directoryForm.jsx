@@ -16,11 +16,11 @@ import {
 } from '../utils/formValidation'
 
 export class DirectoryFormBase extends Component {
+  inEdit = this.props.Stores.Qvain.inEdit
+
   static propTypes = {
     Stores: PropTypes.object.isRequired,
   }
-
-  inEdit = this.props.Stores.Qvain.inEdit
 
   state = {
     title: this.inEdit.title,

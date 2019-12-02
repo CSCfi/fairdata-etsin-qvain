@@ -206,6 +206,7 @@ def data_to_metax(data, metadata_provider_org, metadata_provider_user):
         "metadata_provider_org": metadata_provider_org,
         "metadata_provider_user": metadata_provider_user,
         "data_catalog": data["dataCatalog"],
+        "cumulative_state": data["cumulativeState"],
         "research_dataset": {
             "title": data["title"],
             "description": data["description"],
