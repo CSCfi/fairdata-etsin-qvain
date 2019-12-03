@@ -22,11 +22,10 @@ import { AddedActorsBase } from '../js/components/qvain/actors/addedActors'
 import Files from '../js/components/qvain/files'
 import IDAFilePicker, { IDAFilePickerBase } from '../js/components/qvain/files/idaFilePicker'
 import FileSelector, { FileSelectorBase } from '../js/components/qvain/files/fileSelector'
-import { SelectedFilesBase } from '../js/components/qvain/files/selectedFiles'
+import { SelectedFilesBase, FileLabel } from '../js/components/qvain/files/selectedFiles'
 import { ExternalFilesBase } from '../js/components/qvain/files/externalFiles'
 import {
   ButtonGroup,
-  ButtonLabel,
   DeleteButton
 } from '../js/components/qvain/general/buttons'
 import { SlidingContent } from '../js/components/qvain/general/card'
@@ -327,10 +326,10 @@ describe('Qvain.Files', () => {
     fileSelector.find('#test2Checkbox input').simulate('change')
     fileSelector.unmount()
     // mount the SelectedFiles component
-    const selectedFiles = mount(<SelectedFilesBase Stores={stores} />)
-    expect(selectedFiles.find(ButtonLabel).last().text()).toBe('project_y / directory2')
+    const selectedFiles = shallow(<SelectedFilesBase Stores={stores} />)
+    expect(selectedFiles.find(FileLabel).last().text()).toBe('<FontAwesomeIcon />project_y / directory2')
     selectedFiles.find(DeleteButton).last().simulate('click', { preventDefault: () => {} })
-    expect(selectedFiles.find(ButtonLabel).length).toBe(0)
+    expect(selectedFiles.find(FileLabel).length).toBe(0)
   })
 })
 

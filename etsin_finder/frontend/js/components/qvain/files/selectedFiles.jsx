@@ -154,7 +154,7 @@ const FileButtonsContainer = styled(ButtonContainer)`{
   margin-left: auto;
 }`
 
-const FileLabel = styled(ButtonLabel)`{
+export const FileLabel = styled(ButtonLabel)`{
   margin-top: 0;
   margin-bottom: 0;
   margin-left: 0;
