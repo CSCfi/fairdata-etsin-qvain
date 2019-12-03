@@ -293,7 +293,6 @@ class MetaxQvainLightAPIService(FlaskService):
         log.info('Changed cumulative state of dataset {} to {}'.format(cr_id, cumulative_state))
         return (json_or_empty(metax_api_response) or metax_api_response.text), metax_api_response.status_code
 
-
     def refresh_directory_content(self, cr_identifier, dir_identifier):
         """
         Call Metax refresh_directory_content RPC.
