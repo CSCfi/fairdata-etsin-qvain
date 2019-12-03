@@ -35,8 +35,6 @@ class RefreshDirectoryModal extends Component {
       loading: true
     })
 
-    const currentState = this.props.Stores.Qvain.cumulativeState
-    const newState = currentState === CumulativeStates.YES ? CumulativeStates.CLOSED : CumulativeStates.YES
     const obj = {
       cr_identifier: this.props.Stores.Qvain.original.identifier,
       dir_identifier: identifier
@@ -49,10 +47,6 @@ class RefreshDirectoryModal extends Component {
             new_version_created: data.new_version_created
           }
         })
-        // when a new version is created, the cumulative_state of the current version remains unchanged
-        if (!data.new_version_created) {
-          this.props.Stores.Qvain.setCumulativeState(newState)
-        }
       })
       .catch(err => {
         let error = ''
