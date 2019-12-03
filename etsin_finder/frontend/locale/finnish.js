@@ -627,7 +627,7 @@ const finnish = {
       },
       refreshModal: {
         header: 'Päivitä kansion tiedostot',
-        noncumulative: 'Toiminto lisää kansioon lisätyt tiedostot aineistoon. Aineistosta luodaan uusi versio.',
+        noncumulative: 'Mikäli kansioon on lisätty uusia tiedostoja, toiminto lisää ne aineistoon ja luo siitä uuden version.',
         cumulative: 'Toiminto lisää kansioon lisätyt tiedostot aineistoon. Muutos näkyy välittömästi aineiston julkaistussa versiossa.',
         changes: 'Aineistoon tehdyt muutokset on tallennettava ensin.',
         buttons: {

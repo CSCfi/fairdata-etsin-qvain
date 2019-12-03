@@ -97,7 +97,7 @@ class QvainDatasetRefreshDirectoryContent(Resource):
     @log_request
     def post(self):
         """
-        Change cumulative_state of a dataset in Metax.<
+        Refresh contents of a directory in a dataset. May create a new dataset version.
 
         Arguments:
             cr_identifier {string} -- The identifier of the dataset.
@@ -118,7 +118,7 @@ class QvainDatasetRefreshDirectoryContent(Resource):
         user = session["samlUserdata"]["urn:oid:1.3.6.1.4.1.16161.4.0.53"][0]
         creator = get_dataset_creator(cr_identifier)
         if user != creator:
-            log.warning('User: \"{0}\" is not the creator of the dataset. Changing cumulative state not allowed. Creator: \"{1}\"'.format(user, creator))
-            return {"PermissionError": "User not authorized to to change cumulative state of dataset."}, 403
+            log.warning('User: \"{0}\" is not the creator of the dataset. Refreshing directory is not allowed. Creator: \"{1}\"'.format(user, creator))
+            return {"PermissionError": "User not authorized to to refresh directory in dataset."}, 403
         metax_response = refresh_directory_content(cr_identifier, dir_identifier)
         return metax_response
