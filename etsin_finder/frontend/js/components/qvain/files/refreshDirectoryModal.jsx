@@ -80,6 +80,9 @@ class RefreshDirectoryModal extends Component {
   handleRequestClose = () => {
     if (!this.state.loading) {
       this.props.onClose()
+      this.setState({
+        response: null,
+      })
     }
   }
 
@@ -103,12 +106,12 @@ class RefreshDirectoryModal extends Component {
           </>
         )}
         {this.state.response ? (
-          <TableButton onClick={() => this.setRefreshModalDirectory(null)}>
+          <TableButton onClick={this.handleRequestClose}>
             <Translate content={'qvain.files.refreshModal.buttons.close'} />
           </TableButton>
         ) : (
           <>
-            <TableButton disabled={this.state.loading} onClick={() => this.setRefreshModalDirectory(null)}>
+            <TableButton disabled={this.state.loading} onClick={this.handleRequestClose}>
               <Translate content={'qvain.files.refreshModal.buttons.cancel'} />
             </TableButton>
             <DangerButton disabled={changed || this.state.loading} onClick={() => this.refreshDirectoryContent()}>
