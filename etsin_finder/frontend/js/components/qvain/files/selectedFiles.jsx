@@ -4,10 +4,9 @@ import { inject, observer } from 'mobx-react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCopy, faFolder } from '@fortawesome/free-solid-svg-icons'
 import Translate from 'react-translate-component'
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
-import { ButtonLabel, EditButton, DeleteButton, FileItem, ButtonContainer, TableButton,
-  RefreshDirectoryButton, RefreshDirectoryButtonText } from '../general/buttons'
+import { ButtonLabel, EditButton, DeleteButton, FileItem, ButtonContainer, TableButton } from '../general/buttons'
 import { SelectedFilesTitle } from '../general/form'
 import FileForm from './fileForm'
 import DirectoryForm from './directoryForm'
@@ -160,7 +159,42 @@ const FileLabel = styled(ButtonLabel)`{
   margin-bottom: 0;
   margin-left: 0;
   flex-shrink: 0;
-}
+}`
+
+const RefreshDirectoryButton = styled.button`
+  background-color: ${props => (
+    props.disabled ? '#7fbfd6' : '#007fad'
+  )};
+  color: #fff;
+  height: 56px;
+  border-radius: 4px;
+  border: solid 1px ${props => (
+    props.disabled ? '#7fbfd6' : '#007fad'
+  )};
+  text-transform: none;
+  font-weight: 600;
+  margin-right: 5px;
+  padding-left: 27px;
+  padding-right: 27px;
+  display: inline-flex;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-width: 64px;
+  outline: none;
+  -webkit-appearance: none;
+  overflow: hidden;
+  ${props => !props.disabled && css`
+    cursor: pointer;
+  `}
+`;
+
+const RefreshDirectoryButtonText = styled.span`
+  text-align: center;
+  color: inherit;
+  font-weight: 400;
+  text-transform: none;
 `
 
 const isDirectory = (inEdit) => inEdit.directoryName !== undefined

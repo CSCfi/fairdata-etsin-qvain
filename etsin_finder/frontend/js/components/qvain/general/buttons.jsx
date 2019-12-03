@@ -210,42 +210,6 @@ export const CumulativeStateButtonText = styled.span`
   text-transform: none;
 `
 
-export const RefreshDirectoryButton = styled.button`
-  background-color: ${props => (
-    props.disabled ? '#7fbfd6' : '#007fad'
-  )};
-  color: #fff;
-  height: 56px;
-  border-radius: 4px;
-  border: solid 1px ${props => (
-    props.disabled ? '#7fbfd6' : '#007fad'
-  )};
-  text-transform: none;
-  font-weight: 600;
-  margin-right: 5px;
-  padding-left: 27px;
-  padding-right: 27px;
-  display: inline-flex;
-  position: relative;
-  align-items: center;
-  justify-content: center;
-  box-sizing: border-box;
-  min-width: 64px;
-  outline: none;
-  -webkit-appearance: none;
-  overflow: hidden;
-  ${props => !props.disabled && css`
-    cursor: pointer;
-  `}
-`;
-
-export const RefreshDirectoryButtonText = styled.span`
-  text-align: center;
-  color: inherit;
-  font-weight: 400;
-  text-transform: none;
-`
-
 export const FilePickerButton = styled.button`
   background-color: ${props => (
     props.disabled ? '#7fbfd6' : '#007fad'
