@@ -238,5 +238,4 @@ class TestUserResources(BaseTest):
         r = authd_client.get('/api/user')
         assert r.status_code == 200
         r_json = json.loads(r.get_data())
-        assert 'is_authenticated' in r_json and 'user_display_name' in r_json
-        assert r_json['is_authenticated'] and r_json['user_display_name'] == 'Teppo Testaaja'
+        assert 'is_authenticated' in r_json

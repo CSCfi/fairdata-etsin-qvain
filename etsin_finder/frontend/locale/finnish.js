@@ -11,6 +11,14 @@
 const finnish = {
   changepage: 'Siirryit sivulle: %(page)s',
   dataset: {
+    access_rights_description: {
+      none: '',
+      open: 'Kuka tahansa voi ladata datan.',
+      login: 'Käyttän pitää olla sisään kirjautunut ladatakseen datan.',
+      embargo: 'Datan voi ladata vasta, kun embargo-pvm on ohitettu.',
+      permit: 'Datan voi ladata ainoastaan hakemalla erillisen luvan lataamista varten. Luvan hakeminen vaatii kirjautumisen.',
+      restricted: 'Data ei ladattavissa.'
+    },
     access_permission: 'Hae käyttölupaa',
     access_locked: 'Rajattu käyttöoikeus',
     access_open: 'Avoin',
@@ -602,6 +610,7 @@ const finnish = {
       projectSelect: {
         placeholder: 'Valitse projekti',
         loadError: 'Projektin hakemistojen lataus epäonnistui, virhe: ',
+        loadErrorNoFiles: 'Tiedostoja ei löytynyt. Jos haluat saada tiedostot näkyviin, tarkista että olet jäädyttänyt kyseessä olevat tiedostot IDA:ssa.',
       },
       selected: {
         title: 'Valitut tiedostot',
@@ -677,7 +686,11 @@ const finnish = {
   stc: 'Siirry sivun pääsisältöön',
   stsd: 'Siirry "Julkaise Aineisto"-nappiin',
   tombstone: {
-    info: 'Aineisto on joko vanhentunut tai poistettu',
+    removedInfo: 'Aineisto on poistettu',
+    deprecatedInfo: 'Aineisto on vanhentunut',
+    urlToNew: 'Aineistosta on olemassa uudempi, julkaistu versio. Saat sen avattua ',
+    urlToOld: 'Aineistosta on olemassa vanhempi, julkaistu versio. Saat sen avattua ',
+    link: 'tästä'
   },
   userAuthenticationError: {
     header: 'Kirjautuminen epäonnistui.',

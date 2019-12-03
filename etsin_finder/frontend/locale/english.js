@@ -11,6 +11,14 @@
 const english = {
   changepage: 'Navigated to page: %(page)s',
   dataset: {
+    access_rights_description: {
+      none: '',
+      open: 'Anyone can access the data.',
+      login: 'Users have to log in to access the data.',
+      embargo: 'Data can be accessed only after the embargo has expired.',
+      permit: 'Data can be accessed only by applying for permission. You need to be logged in to be able to fill-in the application.',
+      restricted: 'Data cannot be accessed.'
+    },
     access_permission: 'Ask for access',
     access_locked: 'Restricted Access',
     access_open: 'Open Access',
@@ -365,7 +373,7 @@ const english = {
       },
       keywords: {
         title: 'Keywords',
-        infoText: 'Set keywords that characterize the dataset. Below, there is another field for controlled subject headings.',
+        infoText: 'Set keywords that characterize the dataset.',
         placeholder: 'E.g. economy',
         addButton: 'Add keywords',
         help:
@@ -598,6 +606,7 @@ const english = {
       projectSelect: {
         placeholder: 'Select project',
         loadError: 'Failed to load project folders, error: ',
+        loadErrorNoFiles: 'No files found. If you wish to make files available here, make sure that you have frozen the project files in IDA.',
       },
       selected: {
         title: 'Selected files',
@@ -706,7 +715,11 @@ const english = {
   stc: 'Skip to content',
   stsd: 'Skip to submit dataset',
   tombstone: {
-    info: 'The dataset has been either deprecated or removed',
+    removedInfo: 'The dataset has been removed',
+    deprecatedInfo: 'The dataset has been deprecated',
+    urlToNew: 'A new version of this dataset is available. You can open it via this ',
+    urlToOld: 'An older (published) version of this dataset is available. You can open it via this ',
+    link: 'link'
   },
   userAuthenticationError: {
     header: 'Login unsuccessful.',

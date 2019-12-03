@@ -260,6 +260,9 @@ Description.propTypes = {
 
 const Title = styled.h1`
   margin-bottom: 0.1rem;
+  color: ${p => p.theme.color.superdarkgray};
+  word-wrap: break-word;
+  
 `
 
 const MainInfo = styled.div`
