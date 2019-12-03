@@ -102,7 +102,7 @@ export class SelectedFilesBase extends Component {
       existingFiles,
       existingDirectories,
       inEdit,
-      cumulativeState,
+      cumulativeState
     } = this.props.Stores.Qvain
     const selected = [...selectedDirectories, ...selectedFiles]
     const existing = [...existingDirectories, ...existingFiles]
@@ -188,7 +188,7 @@ const RefreshDirectoryButton = styled.button`
   ${props => !props.disabled && css`
     cursor: pointer;
   `}
-`;
+`
 
 const RefreshDirectoryButtonText = styled.span`
   text-align: center;
