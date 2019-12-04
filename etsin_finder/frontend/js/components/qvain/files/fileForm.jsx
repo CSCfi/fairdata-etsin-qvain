@@ -18,11 +18,11 @@ import {
 } from '../utils/formValidation'
 
 class FileForm extends Component {
+  inEdit = this.props.Stores.Qvain.inEdit
+
   static propTypes = {
     Stores: PropTypes.object.isRequired
   }
-
-  inEdit = this.props.Stores.Qvain.inEdit
 
   state = {
     fileTypesEn: [],
