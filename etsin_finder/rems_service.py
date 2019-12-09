@@ -7,8 +7,7 @@
 
 """Used for performing operations related to Fairdata Rems"""
 
-import requests
-
+from requests import request, HTTPError
 
 from etsin_finder.cr_service import get_catalog_record_preferred_identifier, get_catalog_record, is_rems_catalog_record
 from etsin_finder.app_config import get_fairdata_rems_api_config
@@ -22,24 +21,46 @@ log = app.logger
 class RemsAPIService(FlaskService):
     """Rems Service"""
 
-    def __init__(self, app, csc_user):
+    def __init__(self, app, user):
         """Setup Rems API Service"""
         super().__init__(app)
+        self.USER_ID = user # 'RDowner@funet.fi'
+        self.REMS_URL = 'https://{0}'.format(self.HOST) + '/api/entitlements?resource={0}'
+        self.REMS_ENTITLEMENTS = 'https://{0}'.format(self.HOST) + '/api/entitlements'
+        self.REMS_CREATE_USER = 'https://{0}'.format(self.HOST) + '/api/users/create'
+        self.REMS_GET_APPLICATIONS = 'https://{0}'.format(self.HOST) + '/api/applications/{0}'
+        self.REMS_CATALOGUE_ITEMS = 'https://{0}'.format(self.HOST) + '/api/catalogue-items?resource={0}'
+        self.REMS_CREATE_APPLICATION = 'https://{0}'.format(self.HOST) + '/api/applications/create'
 
         rems_api_config = get_fairdata_rems_api_config(app.testing)
-        
+
         if rems_api_config:
             self.API_KEY = rems_api_config['API_KEY']
-            self.USER_ID = 'katriteg' #'RDowner@funet.fi'
             self.HOST = rems_api_config['HOST']
-            self.REMS_URL = 'https://{0}'.format(self.HOST) + '/api/entitlements?resource={0}'
-            self.REMS_ENTITLEMENTS = 'https://{0}'.format(self.HOST) + '/api/entitlements'
-            self.REMS_CREATE_USER = 'https://{0}'.format(self.HOST) + '/api/users/create'
-            self.REMS_GET_APPLICATIONS = 'https://{0}'.format(self.HOST) + '/api/applications/{0}'
-            self.REMS_CATALOGUE_ITEMS = 'https://{0}'.format(self.HOST) + '/api/catalogue-items?resource={0}'
-            self.REMS_CREATE_APPLICATION = 'https://{0}'.format(self.HOST) + '/api/applications/create'
+            self.HEADERS = {
+                'Accept': 'application/json',
+                'x-rems-api-key': self.API_KEY,
+                'x-rems-user-id': self.USER_ID
+            }
         elif not self.is_testing:
             log.error("Unable to initialize RemsAPIService due to missing config")
+
+    def rems_request(self, method, url, err_message, json=None):
+        assert method in ['GET', 'POST'], 'Method attribute must be one of [GET, POST].'
+        try:
+            if json:
+                rems_api_response = request(method=method, headers=self.HEADERS, url=url, json=json, verify=False, timeout=3)
+            else:
+                rems_api_response = request(method=method, headers=self.HEADERS, url=url, verify=False, timeout=3)
+        except Exception as e:
+            log.warning(err_message)
+            if isinstance(e, HTTPError):
+                log.warning('Response status code: {0}\nResponse text: {1}'.format(rems_api_response.status_code, json_or_empty(rems_api_response)))
+            else:
+                log.error('Error in rems_api_response\n{0}'.format(e))
+            return False
+
+        return rems_api_response.json()
 
     def get_user_applications(self, application_id):
         """
@@ -47,101 +68,42 @@ class RemsAPIService(FlaskService):
         :param application_id:
         :return:
         """
-        try:
-            rems_api_response = requests.get(self.REMS_GET_APPLICATIONS.format(application_id),
-                                            headers={
-                                                'Accept': 'application/json',
-                                                'x-rems-api-key': self.API_KEY,
-                                                'x-rems-user-id': self.USER_ID},  #Tested with RDapplicant1@funet.fi
-                                            verify=False,
-                                            timeout=3)
-        except Exception as e:
-            log.error('Failed to get catalogue item data from Fairdata REMS for user_id: {0}'.
-                      format(self.USER_ID))
-            if isinstance(e, requests.HTTPError):
-                log.warning('Response status code: {0}\nResponse text: {1}'.format(rems_api_response.status_code, json_or_empty(rems_api_response)))
-            else:
-                log.error('Error in rems_api_response\n{0}'.format(e))
-            return False
-
-        return rems_api_response.json()
+        method = 'GET'
+        url = self.REMS_GET_APPLICATIONS.format(application_id)
+        err_message = 'Failed to get catalogue item data from Fairdata REMS for user_id: {0}'.format(self.USER_ID)
+        return self.rems_request(method, url, err_message)
 
     def create_application(self, id):
         """
         Creates application in REMS
-        
+
         :param id = id fetched from get_catalogue_item_id()
         """
-
-        catalogue_item_id = {"catalogue-item-ids":[id]}
-
-        try:
-            rems_api_response = requests.post(self.REMS_CREATE_APPLICATION,
-                                            json=catalogue_item_id,
-                                            headers={
-                                                'Accept': 'application/json',
-                                                'x-rems-api-key': self.API_KEY,
-                                                'x-rems-user-id': self.USER_ID},
-                                            verify=False,
-                                            timeout=3)
-        except Exception as e:
-            log.error('Failed to create application for user_id: {0}'.
-                      format(self.USER_ID))
-            if isinstance(e, requests.HTTPError):
-                log.warning('Response status code: {0}\nResponse text: {1}'.format(rems_api_response.status_code, json_or_empty(rems_api_response)))
-            else:
-                log.error('Error in rems_api_response\n{0}'.format(e))
-            return False
-
-        return rems_api_response.json()
-
+        method = 'POST'
+        url = self.REMS_CREATE_APPLICATION
+        err_message = 'Failed to create application for user_id: {0}'.format(self.USER_ID)
+        json = {'catalogue-item-ids': [id]}
+        return self.rems_request(method, url, err_message, json)
 
     def get_catalogue_item_id(self, resource):
         """
         return catalogue item id from REMS
         """
-        try:
-            rems_api_response = requests.get(self.REMS_CATALOGUE_ITEMS.format(resource),
-                                            headers={
-                                                'Accept': 'application/json',
-                                                'x-rems-api-key': self.API_KEY,
-                                                'x-rems-user-id': self.USER_ID},
-                                            verify=False,
-                                            timeout=3)
-        except Exception as e:
-            log.error('Failed to get catalogue item data from Fairdata REMS for user_id: {0}'.
-                      format(self.USER_ID))
-            if isinstance(e, requests.HTTPError):
-                log.warning('Response status code: {0}\nResponse text: {1}'.format(rems_api_response.status_code, json_or_empty(rems_api_response)))
-            else:
-                log.error('Error in rems_api_response\n{0}'.format(e))
-            return False
-
-        return rems_api_response.json()
+        method = 'GET'
+        url = self.REMS_CATALOGUE_ITEMS.format(resource)
+        err_message = 'Failed to get catalogue item data from Fairdata REMS for user_id: {0}'.format(self.USER_ID)
+        return self.rems_request(method, url, err_message)
 
     def create_user(self, userdata):
         """
         Create user in REMS
         """
-
-        try:
-            rems_api_response = requests.post(self.REMS_CREATE_USER,
-                                            json=userdata,
-                                            headers={
-                                                'Accept': 'application/json',
-                                                'x-rems-api-key': self.API_KEY,
-                                                'x-rems-user-id': self.USER_ID},
-                                            verify=False,
-                                            timeout=3)
-        except Exception as e:
-            log.error('Failed to create user to REMS for user_id: {0}'.format(userdata.userid))
-            if isinstance(e, requests.HTTPError):
-                log.warning('Response status code: {0}\nResponse text: {1}'.format(rems_api_response.status_code, json_or_empty(rems_api_response)))
-            else:
-                log.error('Error in rems_api_response\n{0}'.format(e))
-            return False
-
-        return rems_api_response.json()
+        assert isinstance(userdata, dict), 'userdata should be dict, userdata: {0}'.format(userdata)
+        method = 'POST'
+        url = self.REMS_CREATE_USER
+        err_message = 'Failed to create user to REMS for user_id: {0}'.format(userdata.userid)
+        json = userdata
+        return self.rems_request(method, url, err_message, json)
 
     def entitlements(self):
         """
@@ -149,77 +111,43 @@ class RemsAPIService(FlaskService):
         :param user_id:
         :return:
         """
+        method = 'GET'
+        url = self.REMS_ENTITLEMENTS
+        err_message = 'Failed to get entitlement data from Fairdata REMS for user_id: {0}'.format(self.USER_ID)
+        return self.rems_request(method, url, err_message)
 
-        try:
-            rems_api_response = requests.get(self.REMS_ENTITLEMENTS,
-                                            headers={
-                                                'Accept': 'application/json',
-                                                'x-rems-api-key': self.API_KEY,
-                                                'x-rems-user-id': self.USER_ID},
-                                            verify=False,
-                                            timeout=3)
-        except Exception as e:
-            log.error('Failed to get entitlement data from Fairdata REMS for user_id: {0}'.
-                      format(self.USER_ID))
-            if isinstance(e, requests.HTTPError):
-                log.warning('Response status code: {0}\nResponse text: {1}'.format(rems_api_response.status_code, json_or_empty(rems_api_response)))
-            else:
-                log.error('Error in rems_api_response\n{0}'.format(e))
-            return False
-
-        return rems_api_response.json()
-
-    def get_rems_permission(self, user_id, rems_resource):
+    def get_rems_permission(self, rems_resource):
         """
         Get user entitlement for a rems resource.
 
-        :param user_id:
         :param rems_resource:
         :return:
         """
-        if not user_id or not rems_resource:
-            log.error('Failed to get REMS permission, user_id: {0} or rems_resource: {1} not valid.'. format(user_id, rems_resource))
-            return False
-        try:
-            rems_api_response = requests.get(self.REMS_URL.format(rems_resource),
-                                             headers={
-                                                 'Accept': 'application/json',
-                                                 'x-rems-api-key': self.API_KEY,
-                                                 'x-rems-user-id': user_id},
-                                             verify=False,
-                                             timeout=3)
-            rems_api_response.raise_for_status()
-        except Exception as e:
-            log.error('Failed to get entitlement data from Fairdata REMS for user_id: {0}, resource: {1}'.
-                      format(user_id, rems_resource))
-            if isinstance(e, requests.HTTPError):
-                log.warning('Response status code: {0}\nResponse text: {1}'.format(rems_api_response.status_code, json_or_empty(rems_api_response)))
-            else:
-                log.error('Error in rems_api_response\n{0}'.format(e))
-            return False
-
-        return len(rems_api_response.json()) > 0
-
+        assert rems_resource, 'rems_resource should be string, rems_resource: {0}'.format(rems_resource)
+        method = 'GET'
+        url = self.REMS_URL.format(rems_resource)
+        err_message = 'Failed to get entitlement data from Fairdata REMS for user_id: {0}, resource: {1}'.format(self.USER_ID, rems_resource)
+        return len(self.rems_request(method, url, err_message)) > 0
 
 def create_new_application(api, resource):
     """
     Get catalogue item id and feed it into creating new application
     :return:
     """
-    
+
     catalogue_item_id = api.get_catalogue_item_id(resource)
     new_application = api.create_application(catalogue_item_id[0]["id"])
 
     return new_application
 
 """def get_user_rems_permission_for_catalog_record(cr_id, user_id):
-    
+
     Get info about whether user is entitled for a catalog record.
 
     :param cr_id:
     :param user_id:
     :return:
-    
+
     if not user_id or not cr_id:
         log.error('Failed to get rems permission for catalog record. user_id: {0} or cr_id: {1} is invalid'.format(user_id, cr_id))
         return False
@@ -234,5 +162,3 @@ def create_new_application(api, resource):
         return _rems_api.get_rems_permission(user_id, pref_id)
     log.warning('Invalid catalog record or not a REMS catalog record. cr_id: {0}'.format(cr_id))
     return False"""
-
-
