@@ -19,12 +19,12 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { mix } from 'polished'
 
-import ElasticQuery from '../../../stores/view/elasticquery'
 import checkDataLang from '../../../utils/checkDataLang'
 import FilterItem from './filterItem'
 import { TransparentLink } from '../../general/button'
+import PasCheckBox from './PasCheckBox'
 
-class FilterSection extends Component {
+export class FilterSection extends Component {
   constructor(props) {
     super(props)
 
@@ -101,11 +101,6 @@ class FilterSection extends Component {
 
   componentDidMount() {
     this.checkActive()
-    this.filterPasDatasets()
-  }
-
-  componentDidUpdate() {
-    this.filterPasDatasets()
   }
 
   toggleFilter = () => {
@@ -152,20 +147,6 @@ class FilterSection extends Component {
     }
   }
 
-  // Filter PAS datasets, if they are not to be included
-  filterPasDatasets() {
-    if (((this.aggregationName === 'data_catalog_en') || (this.aggregationName === 'data_catalog_fi')) && !ElasticQuery.includePasDatasets) {
-      for (let i = 0; i < this.props.Stores.ElasticQuery.results.aggregations[this.aggregationName].buckets.length; i += 1) {
-        if (
-          (this.props.Stores.ElasticQuery.results.aggregations[this.aggregationName].buckets[i].key === 'Fairdata PAS datasets') ||
-          (this.props.Stores.ElasticQuery.results.aggregations[this.aggregationName].buckets[i].key === 'Fairdata PAS-aineistot')
-        ) {
-          this.props.Stores.ElasticQuery.results.aggregations[this.aggregationName].buckets.splice(i, 1)
-        }
-      }
-    }
-  }
-
   // Code that needs to be run before render()
   prepareForRender() {
     if (this.aggregations[this.props.aggregation] !== undefined) {
@@ -184,8 +165,8 @@ class FilterSection extends Component {
 
   render() {
     this.prepareForRender()
-
-    if (this.props.Stores.ElasticQuery.results.total === 0) {
+    const { results } = this.props.Stores.ElasticQuery
+    if (results.total === 0) {
       return null
     }
 
@@ -211,6 +192,7 @@ class FilterSection extends Component {
               />
             ))}
           </ul>
+          <PasCheckBox aggr={this.props.aggregation} />
           {this.state.displayShowButton ? (
             <div>
               <hr />
@@ -250,12 +232,12 @@ const ShowHideBtn = styled(TransparentLink)`
   margin-left: 8px;
 `
 
-const Section = styled.li`
+export const Section = styled.li`
   margin-bottom: 4px;
 `
 
 // TODO: Better filter styles and animation
-const FilterCategory = styled.button`
+export const FilterCategory = styled.button`
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -289,7 +271,7 @@ const FilterCategory = styled.button`
   }
 `
 
-const FilterItems = styled.div`
+export const FilterItems = styled.div`
   border: 2px solid ${p => p.theme.color.lightgray};
   padding: 0em 1em;
   max-height: 0px;

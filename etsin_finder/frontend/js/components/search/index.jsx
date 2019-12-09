@@ -13,7 +13,6 @@
 import React, { Component } from 'react'
 import Translate from 'react-translate-component'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
 
 import ElasticQuery from '../../stores/view/elasticquery'
 import Accessibility from '../../stores/view/accessibility'
@@ -22,15 +21,12 @@ import HeroBanner from '../general/hero'
 import SearchBar from './searchBar'
 import Results from './results'
 import Tracking from '../../utils/tracking'
-// The row below should be de-commented when continuing work on the PAS dataset functionality.
-// import { Checkbox, Label } from '../qvain/general/form'
 
 export default class Search extends Component {
   constructor() {
     super()
     this.state = {
       initialLoad: false,
-      includePasDatasets: ElasticQuery.includePasDatasets || false,
     }
   }
 
@@ -42,13 +38,6 @@ export default class Search extends Component {
     } else {
       Tracking.newPageView('Search', this.props.location.pathname)
     }
-  }
-
-  handlePasCheckboxToggle = event => {
-    this.setState({
-      includePasDatasets: event.target.checked,
-    })
-    ElasticQuery.toggleIncludePasDatasets(this.state.includePasDatasets)
   }
 
   initialQuery = () => {
@@ -74,26 +63,6 @@ export default class Search extends Component {
                   this.search = input
                 }}
               />
-              <IncludePasDatasetsContainer>
-                <IncludePasDatasetsInner>
-                  <IncludePasDatasetsCheckboxContainer>
-                    { /*
-                    // These rows should be de-commented when continuing work on the PAS dataset functionality.
-                    <Checkbox
-                      id="pasCheckbox"
-                      checked={this.state.includePasDatasets}
-                      onChange={this.handlePasCheckboxToggle}
-                    />
-                    <Label
-                      htmlFor="pasCheckbox"
-                    >
-                      <Translate content="home.includePas" />
-                    </Label>
-                    */ }
-
-                  </IncludePasDatasetsCheckboxContainer>
-                </IncludePasDatasetsInner>
-              </IncludePasDatasetsContainer>
             </section>
           </div>
         </HeroBanner>
@@ -113,23 +82,3 @@ Search.propTypes = {
     }).isRequired,
   }).isRequired,
 }
-
-const IncludePasDatasetsContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  padding-top: 10px;
-`
-
-const IncludePasDatasetsInner = styled.div`
-  max-width: 800px;
-  width: 100%;
-  position: relative;
-  display: flex;
-`
-
-const IncludePasDatasetsCheckboxContainer = styled.div`
-  display: flex;
-  position: absolute;
-  vertical-align: middle;
-  right: 0;
-`
