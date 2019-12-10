@@ -59,7 +59,7 @@ def add_restful_resources(app):
     :return:
     """
     api = Api(app)
-    from etsin_finder.resources import REMSGetApplications, REMSCreateNewApplication, REMSCreateUser, REMSGetEntitlements, Contact, Dataset, User, Session, Files, Download
+    from etsin_finder.resources import REMSApplyForPermission, Contact, Dataset, User, Session, Files, Download
     from etsin_finder.qvain_light_resources import ProjectFiles, FileDirectory, UserDatasets, QvainDataset, QvainDatasetDelete
     api.add_resource(Dataset, '/api/dataset/<string:cr_id>')
     api.add_resource(Files, '/api/files/<string:cr_id>')
@@ -74,10 +74,11 @@ def add_restful_resources(app):
     api.add_resource(QvainDatasetDelete, '/api/dataset/<string:cr_id>')
     api.add_resource(QvainDataset, '/api/dataset')
     # REMS API endpoints
-    api.add_resource(REMSCreateUser, '/api/users/create')
-    api.add_resource(REMSGetEntitlements, '/api/entitlements')
-    api.add_resource(REMSGetApplications, '/api/applications/<string:application_id>')
-    api.add_resource(REMSCreateNewApplication, '/api/applications/create')
+    api.add_resource(REMSApplyForPermission, '/api/rems/<string:cr_id>')
+    # api.add_resource(REMSCreateUser, '/api/users/create')
+    # api.add_resource(REMSGetEntitlements, '/api/entitlements')
+    # api.add_resource(REMSGetApplications, '/api/applications/<string:application_id>')
+    # api.add_resource(REMSCreateNewApplication, '/api/applications/create')
 
 app = create_app()
 add_restful_resources(app)

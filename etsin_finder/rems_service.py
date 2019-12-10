@@ -25,13 +25,13 @@ class RemsAPIService(FlaskService):
         rems_api_config = get_fairdata_rems_api_config(app.testing)
 
         if rems_api_config:
-            self.USER_ID = user # 'RDowner@funet.fi'
+            self.USER_ID = user
             self.API_KEY = str(rems_api_config['API_KEY'])
             self.HOST = rems_api_config['HOST']
             self.HEADERS = {
                 'Accept': 'application/json',
                 'x-rems-api-key': self.API_KEY,
-                'x-rems-user-id': self.USER_ID
+                'x-rems-user-id': 'RDowner@funet.fi'
             }
             self.REMS_URL = 'https://{0}'.format(self.HOST) + '/api/entitlements?resource={0}'
             self.REMS_ENTITLEMENTS = 'https://{0}'.format(self.HOST) + '/api/entitlements'
@@ -83,7 +83,7 @@ class RemsAPIService(FlaskService):
         log.info('Create REMS application for catalogue item with id: {0}'.format(id))
         method = 'POST'
         url = self.REMS_CREATE_APPLICATION
-        err_message = 'Failed to create application for user_id: {0}'.format(self.USER_ID)
+        err_message = 'Failed to create application'
         json = {'catalogue-item-ids': [id]}
         return self.rems_request(method, url, err_message, json)
 
@@ -94,19 +94,17 @@ class RemsAPIService(FlaskService):
         log.info('Get catalog item id for resource: {0}'.format(resource))
         method = 'GET'
         url = self.REMS_CATALOGUE_ITEMS.format(resource)
-        err_message = 'Failed to get catalogue item data from Fairdata REMS for user_id: {0}'.format(self.USER_ID)
+        err_message = 'Failed to get catalogue item data from Fairdata REMS for resource: {0}'.format(resource)
         return self.rems_request(method, url, err_message)
 
     def create_user(self, userdata):
         """
         Create user in REMS
         """
-        assert isinstance(userdata, dict), 'userdata should be dict, userdata: {0}'.format(userdata)
-
         log.info('Create user in REMS')
         method = 'POST'
         url = self.REMS_CREATE_USER
-        err_message = 'Failed to create user to REMS for user_id: {0}'.format(userdata.userid)
+        err_message = 'Failed to create user to REMS'
         json = userdata
         return self.rems_request(method, url, err_message, json)
 

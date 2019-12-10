@@ -238,83 +238,120 @@ class User(Resource):
             user_info['user_csc_name'] = csc_user
         return user_info, 200
 
-class REMSGetEntitlements(Resource):
-    """
-        Get datasets from REMS (just the ones that have been approved)
-        :param rems_api: id to use to fetch the record from REMS
-        :return:
-    """
+
+class REMSApplyForPermission(Resource):
     @log_request
-    def get(self):
-        """
-        Get (logged-in) user info.
-
-        :return:
-        """
-        # csc_user = authentication.get_user_csc_name()
-        csc_user = "kakeinan"
-        if not csc_user:
-            return "Unauthorized request", 401
-        _rems_api = RemsAPIService(app, csc_user)
-        return _rems_api.entitlements()
-
-class REMSCreateNewApplication(Resource):
-    '''
-        Create new application to REMS
-
-        :param rems_api: 
-        :param resource: preferred identifier from Metax
-        :return:
-    '''
-    @log_request
-    def post(self):
-        cr = cr_service.get_catalog_record("911b1e17-7fd6-440c-a6c0-dc17752b65f6", False, False)
-        resource = cr['dataset_version_set'][0]['preferred_identifier']
-
-        csc_user = authentication.get_user_csc_name()
-        _rems_api = RemsAPIService(app, csc_user)
-        application = rems_service.create_new_application(_rems_api, resource)
-        return application
-
-
-class REMSGetApplications(Resource):
-    """
-        Get all applications from REMS which the current user can see 
-
-        :param application_id: id of the applicant
-        :return:
-    """
-    @log_request
-    def get(self, application_id):
-        csc_user = authentication.get_user_csc_name()
-        _rems_api = RemsAPIService(app, csc_user)
-        cr = _rems_api.get_user_applications(application_id)
-        return cr
-
-
-class REMSCreateUser(Resource):
-    """
-        Create user to REMS
-
-        :param csc_user
-        :return:
-    """
-    @log_request
-    def post(self):
-        """
-        Get (logged-in) user info.
-
-        :return:
-        """
-
+    def get(self, cr_id):
+        # Create user
+        user_id = authentication.get_user_id()
+        firstname = authentication.get_user_firstname()
+        lastname = authentication.get_user_lastname()
+        email = authentication.get_user_email()
+        if not user_id and not firstname and not lastname and not email:
+            return 'Unauthorized request', 401
+        _rems_api = RemsAPIService(app, user_id)
         userdata = {
-            'userid': authentication.get_user_csc_name(),
-            'name': authentication.get_user_lastname(),
-            'email': authentication.get_user_email()
+            'userid': user_id,
+            'name': "{0} {1}".format(firstname, lastname),
+            'email': email
         }
-        _rems_api = RemsAPIService(app, csc_user)
-        user_created = _rems_api.create_user(userdata)
-        return user_created
+        res_create_user = _rems_api.create_user(userdata)
+        if 'success' not in res_create_user or not res_create_user['success']:
+            log.warning('Could not create user, res: {}'.format(res_create_user))
+            return 'Could not create user', 500
+
+        # Get catalog item id
+        res_get_catalogue_item_id = _rems_api.get_catalogue_item_id(cr_id)
+
+        if not res_get_catalogue_item_id:
+            if res_get_catalogue_item_id == []:
+                log.warning('No catalogue item found for resource: {0}'.format(cr_id))
+                return 'No catalogue item found for resource', 500
+            else:
+                log.warning('Unable to get catalogue item id for resource: {0}'.format(cr_id))
+                return 'Could not get catalogue item id', 500
+        catalog_item_id = res_get_catalogue_item_id['id']
+        # Create Application
+        _rems_api.create_application(catalog_item_id)
+        return "res", 200
+
+# class REMSGetEntitlements(Resource):
+#     """
+#         Get datasets from REMS (just the ones that have been approved)
+#         :param rems_api: id to use to fetch the record from REMS
+#         :return:
+#     """
+#     @log_request
+#     def get(self):
+#         """
+#         Get (logged-in) user info.
+
+#         :return:
+#         """
+#         # csc_user = authentication.get_user_csc_name()
+#         csc_user = "kakeinan"
+#         if not csc_user:
+#             return "Unauthorized request", 401
+#         _rems_api = RemsAPIService(app, csc_user)
+#         return _rems_api.entitlements()
+
+# class REMSCreateNewApplication(Resource):
+#     '''
+#         Create new application to REMS
+
+#         :param rems_api:
+#         :param resource: preferred identifier from Metax
+#         :return:
+#     '''
+#     @log_request
+#     def post(self):
+#         cr = cr_service.get_catalog_record("911b1e17-7fd6-440c-a6c0-dc17752b65f6", False, False)
+#         resource = cr['dataset_version_set'][0]['preferred_identifier']
+
+#         csc_user = authentication.get_user_csc_name()
+#         _rems_api = RemsAPIService(app, csc_user)
+#         application = rems_service.create_new_application(_rems_api, resource)
+#         return application
+
+
+# class REMSGetApplications(Resource):
+#     """
+#         Get all applications from REMS which the current user can see
+
+#         :param application_id: id of the applicant
+#         :return:
+#     """
+#     @log_request
+#     def get(self, application_id):
+#         csc_user = authentication.get_user_csc_name()
+#         _rems_api = RemsAPIService(app, csc_user)
+#         cr = _rems_api.get_user_applications(application_id)
+#         return cr
+
+
+# class REMSCreateUser(Resource):
+#     """
+#         Create user to REMS
+
+#         :param csc_user
+#         :return:
+#     """
+#     @log_request
+#     def post(self):
+#         """
+#         Get (logged-in) user info.
+
+#         :return:
+#         """
+
+#         userdata = {
+#             'userid': authentication.get_user_csc_name(),
+#             'name': authentication.get_user_lastname(),
+#             'email': authentication.get_user_email()
+#         }
+#         _rems_api = RemsAPIService(app, csc_user)
+#         user_created = _rems_api.create_user(userdata)
+#         return user_created
 
 
 class Session(Resource):
