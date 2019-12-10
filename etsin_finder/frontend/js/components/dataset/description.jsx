@@ -51,7 +51,14 @@ const Flex = styled.div`
 class Description extends Component {
   constructor(props) {
     super(props)
-    const { creator, contributor, title, issued, modified, description } = props.dataset.research_dataset
+    const {
+      creator,
+      contributor,
+      title,
+      issued,
+      modified,
+      description,
+    } = props.dataset.research_dataset
     this.state = {
       creator,
       contributor,
@@ -80,29 +87,23 @@ class Description extends Component {
       <div className="dsContent">
         <Labels>
           <Flex>
-            {this.props.dataset.data_catalog.catalog_json.dataset_versioning
-              && this.props.dataset.dataset_version_set
-              && this.props.dataset.dataset_version_set[0]
-              && this.props.dataset.dataset_version_set.length > 1 && (
+            {this.props.dataset.data_catalog.catalog_json.dataset_versioning &&
+              this.props.dataset.dataset_version_set &&
+              this.props.dataset.dataset_version_set[0] &&
+              this.props.dataset.dataset_version_set.length > 1 && (
                 <VersionChanger
                   versionSet={this.props.dataset.dataset_version_set}
                   idn={this.props.dataset.identifier}
                 />
               )}
-            {
-              (
-                (this.props.dataset.data_catalog.catalog_json.identifier === 'urn:nbn:fi:att:data-catalog-pas')
-                ||
-                (this.props.dataset.preservation_state === 80)
-              )
-              &&
-              (
-                <FairdataPasDatasetIcon
-                  preservation_state={this.props.dataset.preservation_state}
-                  data_catalog_identifier={this.props.dataset.data_catalog.catalog_json.identifier}
-                />
-              )
-            }
+            {(this.props.dataset.data_catalog.catalog_json.identifier ===
+              'urn:nbn:fi:att:data-catalog-pas' ||
+              this.props.dataset.preservation_state === 80) && (
+              <FairdataPasDatasetIcon
+                preservation_state={this.props.dataset.preservation_state}
+                data_catalog_identifier={this.props.dataset.data_catalog.catalog_json.identifier}
+              />
+            )}
             <AccessRights
               button
               access_rights={
@@ -120,51 +121,41 @@ class Description extends Component {
                   emails={this.props.emails}
                   // TEMPORARY: rems check won't be needed in contact later.
                   isRems={
-                    this.props.dataset.research_dataset.access_rights.access_type.identifier
-                    === 'http://uri.suomi.fi/codelist/fairdata/access_type/code/permit'
+                    this.props.dataset.research_dataset.access_rights.access_type.identifier ===
+                    'http://uri.suomi.fi/codelist/fairdata/access_type/code/permit'
                   }
                 />
               )}
             </ErrorBoundary>
-            <AskForAccess />
+            <AskForAccess cr_id={this.props.dataset.identifier} />
           </Flex>
         </Labels>
         <section>
           <div>
-            {
-              (this.props.dataset.data_catalog.catalog_json.identifier === 'urn:nbn:fi:att:data-catalog-pas') &&
-              (
+            {this.props.dataset.data_catalog.catalog_json.identifier ===
+              'urn:nbn:fi:att:data-catalog-pas' && (
               <PasInfo>
                 <Translate content="dataset.storedInPas" />
               </PasInfo>
-              )
-            }
-            {
-              (this.props.dataset.preservation_dataset_origin_version) &&
-              (
-                <PasInfo>
-                  <Translate content="dataset.originalDatasetVersionExists" />
-                  <Link
-                    to={`/dataset/${this.props.dataset.preservation_dataset_origin_version.identifier}`}
-                  >
-                    <Translate content="dataset.linkToOriginalDataset" />
-                  </Link>
-                </PasInfo>
-              )
-            }
-            {
-              (this.props.dataset.preservation_dataset_version) &&
-              (
-                <PasInfo>
-                  <Translate content="dataset.pasDatasetVersionExists" />
-                  <Link
-                    to={`/dataset/${this.props.dataset.preservation_dataset_version.identifier}`}
-                  >
-                    <Translate content="dataset.linkToPasDataset" />
-                  </Link>
-                </PasInfo>
-              )
-            }
+            )}
+            {this.props.dataset.preservation_dataset_origin_version && (
+              <PasInfo>
+                <Translate content="dataset.originalDatasetVersionExists" />
+                <Link
+                  to={`/dataset/${this.props.dataset.preservation_dataset_origin_version.identifier}`}
+                >
+                  <Translate content="dataset.linkToOriginalDataset" />
+                </Link>
+              </PasInfo>
+            )}
+            {this.props.dataset.preservation_dataset_version && (
+              <PasInfo>
+                <Translate content="dataset.pasDatasetVersionExists" />
+                <Link to={`/dataset/${this.props.dataset.preservation_dataset_version.identifier}`}>
+                  <Translate content="dataset.linkToPasDataset" />
+                </Link>
+              </PasInfo>
+            )}
           </div>
           <div className="d-md-flex align-items-center dataset-title justify-content-between">
             <Title lang={getDataLang(this.state.title)}>{checkDataLang(this.state.title)}</Title>
@@ -256,7 +247,6 @@ const Title = styled.h1`
   margin-bottom: 0.1rem;
   color: ${p => p.theme.color.superdarkgray};
   word-wrap: break-word;
-  
 `
 
 const MainInfo = styled.div`
