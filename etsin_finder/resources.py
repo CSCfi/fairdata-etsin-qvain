@@ -87,7 +87,7 @@ class Dataset(Resource):
                    'email_info': get_email_info(cr)}
         if cr_service.is_rems_catalog_record(cr):
             ret_obj['has_permit'] = authorization.user_has_rems_permission_for_catalog_record(
-                cr_id, authentication.get_user_id(), is_authd)
+                cr_id, authentication.get_user_csc_name(), is_authd)
 
         return ret_obj, 200
 
@@ -251,10 +251,12 @@ class REMSGetEntitlements(Resource):
 
         :return:
         """
-        csc_user = authentication.get_user_csc_name()
+        # csc_user = authentication.get_user_csc_name()
+        csc_user = "kakeinan"
+        if not csc_user:
+            return "Unauthorized request", 401
         _rems_api = RemsAPIService(app, csc_user)
-        crs = _rems_api.entitlements()
-        return crs
+        return _rems_api.entitlements()
 
 class REMSCreateNewApplication(Resource):
     '''
@@ -272,7 +274,7 @@ class REMSCreateNewApplication(Resource):
         csc_user = authentication.get_user_csc_name()
         _rems_api = RemsAPIService(app, csc_user)
         application = rems_service.create_new_application(_rems_api, resource)
-        return application 
+        return application
 
 
 class REMSGetApplications(Resource):
@@ -306,14 +308,13 @@ class REMSCreateUser(Resource):
         """
 
         userdata = {
-            'userid': authentication.get_user_csc_name(), 
+            'userid': authentication.get_user_csc_name(),
             'name': authentication.get_user_lastname(),
             'email': authentication.get_user_csc_email()
         }
         _rems_api = RemsAPIService(app, csc_user)
         user_created = _rems_api.create_user(userdata)
         return user_created
-
 
 
 class Session(Resource):
