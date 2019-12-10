@@ -152,9 +152,9 @@ def get_user_id():
         [string] -- User identifer.
     """
     csc_name = get_user_csc_name()
-    return csc_name[0] if csc_name else not_found('csc_name')
+    return csc_name if csc_name else not_found('csc_name')
     haka_id = get_user_haka_identifier()
-    return haka_id[0] if haka_id else not_found('haka_id')
+    return haka_id if haka_id else not_found('haka_id')
     return None
 
 
@@ -187,6 +187,22 @@ def get_user_lastname():
     lastname = session['samlUserdata'].get(SAML_ATTRIBUTES['last_name'], False)
 
     return lastname[0] if lastname else not_found('lastname')
+    return None
+
+
+def get_user_firstname():
+    """Get user first name from saml userdata.
+
+    Returns:
+        [string] -- The users first name
+    """
+
+    if not is_authenticated() or 'samlUserdata' not in session:
+        return None
+
+    first_name = session['samlUserdata'].get(SAML_ATTRIBUTES['first_name'], False)
+
+    return first_name[0] if first_name else not_found('first_name')
     return None
 
 
