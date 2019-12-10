@@ -310,7 +310,7 @@ class REMSCreateUser(Resource):
         userdata = {
             'userid': authentication.get_user_csc_name(),
             'name': authentication.get_user_lastname(),
-            'email': authentication.get_user_csc_email()
+            'email': authentication.get_user_email()
         }
         _rems_api = RemsAPIService(app, csc_user)
         user_created = _rems_api.create_user(userdata)
