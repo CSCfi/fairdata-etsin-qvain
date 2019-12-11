@@ -28,6 +28,7 @@ from etsin_finder.qvain_light_utils import data_to_metax, \
     get_dataset_creator, \
     remove_deleted_datasets_from_results, \
     edited_data_to_metax, \
+    get_user_ida_projects, \
     check_if_data_in_user_IDA_project
 from etsin_finder.qvain_light_service import create_dataset, update_dataset, delete_dataset
 
@@ -77,10 +78,15 @@ class ProjectFiles(Resource):
         :param pid:
         :return:
         """
-        project_dir_obj = qvain_light_service.get_directory_for_project(pid)
 
-        # Return data only if authenticated
-        if project_dir_obj and authentication.is_authenticated():
+        # Return data only if user is a member of the project
+        user_ida_projects = get_user_ida_projects() or []
+        if pid in user_ida_projects:
+            project_dir_obj = qvain_light_service.get_directory_for_project(pid)
+        else:
+            project_dir_obj = None
+
+        if project_dir_obj:
             # Sort the items
             sort_array_of_obj_by_key(project_dir_obj.get('directories', []), 'directory_name')
             sort_array_of_obj_by_key(project_dir_obj.get('files', []), 'file_name')
@@ -92,7 +98,7 @@ class ProjectFiles(Resource):
                 project_dir_obj['files'] = slice_array_on_limit(project_dir_obj['files'], TOTAL_ITEM_LIMIT)
 
             return project_dir_obj, 200
-        log.warning('User not authenticated or project_dir_obj is invalid\npid: {0}'.format(pid))
+        log.warning('User is missing project or project_dir_obj is invalid\npid: {0}'.format(pid))
         return '', 404
 
 class FileDirectory(Resource):
@@ -125,6 +131,59 @@ class FileDirectory(Resource):
             return dir_obj, 200
         log.warning('User not authenticated or dir_obj is invalid\ndir_id: {0}'.format(dir_id))
         return '', 404
+
+class FileCharacteristics(Resource):
+    """File/directory related REST endpoints for getting a directory"""
+
+    def __init__(self):
+        """Setup arguments"""
+        self.parser = reqparse.RequestParser()
+
+    @log_request
+    def patch(self, file_id):
+        """
+        Get files and directory objects for frontend.
+
+        :param file_id:
+        :return:
+        """
+
+        if request.content_type != 'application/json':
+            return 'Expected content-type application/json', 403
+
+        file_obj = qvain_light_service.get_file(file_id)
+        project_identifier = file_obj['project_identifier']
+        user_ida_projects = get_user_ida_projects() or []
+
+        if project_identifier not in user_ida_projects:
+            log.warning('User not authenticated or does not have access to project {0} for file {1}'.format(project_identifier, file_id))
+            return 'Project missing from user or user is not authenticated', 403
+
+        try:
+            new_characteristics = request.json
+        except Exception as e:
+            return str(e), 400
+
+        characteristics = file_obj.get('file_characteristics', {})
+
+        # Make sure that only fields specified here are changed
+        allowed_fields = {
+            "file_format", "format_version", "encoding",
+            "csv_delimiter", "csv_record_separator", "csv_quoting_char", "csv_has_header"
+        }
+        for key, value in new_characteristics.items():
+            if (key not in characteristics) or (characteristics[key] != value):
+                if key not in allowed_fields:
+                    return "Changing field {} is not allowed".format(key), 400
+
+        # Update file_characteristics with new values
+        characteristics.update(new_characteristics)
+        data = {
+            'file_characteristics': characteristics
+        }
+
+        return qvain_light_service.patch_file(file_id, data)
+
 
 class UserDatasets(Resource):
     """Get user's datasets from the METAX dataset REST API"""

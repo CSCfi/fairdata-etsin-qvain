@@ -64,7 +64,11 @@ export class SelectedFilesBase extends Component {
             </FileLabel>
             <FileButtonsContainer>
               { s.directoryName && (
-                <RefreshDirectoryButton disabled={this.state.refreshLoading} type="button" onClick={() => this.setRefreshModalDirectory(s.identifier)}>
+                <RefreshDirectoryButton
+                  type="button"
+                  disabled={this.state.refreshLoading}
+                  onClick={() => this.setRefreshModalDirectory(s.identifier)}
+                >
                   <Translate component={RefreshDirectoryButtonText} content="qvain.files.refreshModal.buttons.show" />
                 </RefreshDirectoryButton>
               )}

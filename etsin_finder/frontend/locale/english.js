@@ -633,8 +633,35 @@ const english = {
           close: 'Close',
         }
       },
-      help:
-        'Files associated with this dataset. A dataset can only have either IDA files or remote files. File metadata will not be associated with datasets, so remember to save edits to file metadata.',
+      metadataModal: {
+        header: 'Edit PAS Metadata',
+        help: 'Help text for pas metadata editing',
+        csvOptions: 'CSV Options',
+        fields: {
+          fileFormat: 'File format',
+          formatVersion: 'File format version',
+          encoding: 'Encoding',
+          csvDelimiter: 'Delimiter',
+          csvRecordSeparator: 'Record separator',
+          csvQuotingChar: 'Quoting character',
+          csvHasHeader: 'Has header'
+        },
+        warning: 'You have unsaved changes. Are you sure you want to discard your changes?',
+        errors: {
+          formatVersionRequired: 'Invalid or missing file format version.',
+          formatVersionNotAllowed: 'File format version is not allowed for selected file format.',
+          loadingFileFormats: 'Failed to load list of allowed file formats.'
+        },
+        buttons: {
+          show: 'Edit PAS metadata',
+          close: 'Close',
+          save: 'Save changes',
+          confirmClose: 'Yes, discard changes',
+          cancelClose: 'No, continue editing',
+          hideError: 'Continue editing'
+        }
+      },
+      help: 'Files associated with this dataset. A dataset can only have either IDA files or remote files. File metadata will not be associated with datasets, so remember to save edits to file metadata.',
       ida: {
         title: 'Fairdata IDA files',
         infoText: "Project dropdown will show all your IDA projects. Select the project from which you want to link your files. Note! One dataset can have files or folder from only one project. After you have chosen the project, you'll get a list of all files and folders that are FROZEN in that project. Select all files and folders you wish to link to your dataset. If you select a folder, ALL files and subfolders in that folder will be linked. In that case, do not select individual files or subfolders from that folder.",

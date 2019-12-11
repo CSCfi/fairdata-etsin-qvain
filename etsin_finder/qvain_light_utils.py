@@ -296,6 +296,19 @@ def edited_data_to_metax(data, original):
     }
     return clean_empty_keyvalues_from_dict(edited_data)
 
+def get_user_ida_projects():
+    user_ida_groups = get_user_ida_groups()
+    if user_ida_groups is None:
+        log.error('Could not get user IDA projects.\n')
+        return None
+
+    try:
+        return [project.split(":")[1] for project in user_ida_groups]
+    except IndexError as e:
+        log.error('Index error while parsing user IDA projects:\n{0}'.format(e))
+        return None
+
+
 def check_if_data_in_user_IDA_project(data):
     """
     Check if the user creating a dataset belongs to the project that the files/folders belongs to.
@@ -307,13 +320,9 @@ def check_if_data_in_user_IDA_project(data):
         [bool] -- True if data belongs to user, and False is not.
 
     """
-    user_ida_projects = get_user_ida_groups()
-    try:
-        user_ida_projects_ids = [project.split(":")[1] for project in user_ida_projects]
-    except IndexError as e:
-        log.error('Index error while parsing user IDA projects:\n{0}'.fromat(e))
-        return False
-    if not user_ida_projects:
+
+    user_ida_projects_ids = get_user_ida_projects()
+    if not user_ida_projects_ids:
         log.warning('Could not get user IDA groups.')
         return False
     log.debug('User IDA groups: {0}'.format(user_ida_projects_ids))

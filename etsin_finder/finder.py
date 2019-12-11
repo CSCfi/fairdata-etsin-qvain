@@ -60,7 +60,7 @@ def add_restful_resources(app):
     """
     api = Api(app)
     from etsin_finder.resources import Contact, Dataset, User, Session, Files, Download
-    from etsin_finder.qvain_light_resources import ProjectFiles, FileDirectory, UserDatasets, QvainDataset, QvainDatasetDelete
+    from etsin_finder.qvain_light_resources import ProjectFiles, FileDirectory, FileCharacteristics, UserDatasets, QvainDataset, QvainDatasetDelete
     from etsin_finder.qvain_light_rpc import QvainDatasetChangeCumulativeState, QvainDatasetRefreshDirectoryContent
 
     api.add_resource(Dataset, '/api/dataset/<string:cr_id>')
@@ -72,6 +72,7 @@ def add_restful_resources(app):
     # Qvain light API endpoints
     api.add_resource(ProjectFiles, '/api/files/project/<string:pid>')
     api.add_resource(FileDirectory, '/api/files/directory/<string:dir_id>')
+    api.add_resource(FileCharacteristics, '/api/files/file_characteristics/<string:file_id>')
     api.add_resource(UserDatasets, '/api/datasets/<string:user_id>')
     api.add_resource(QvainDatasetDelete, '/api/dataset/<string:cr_id>')
     api.add_resource(QvainDataset, '/api/dataset')

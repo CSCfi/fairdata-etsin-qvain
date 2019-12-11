@@ -73,7 +73,7 @@ export default class Modal extends Component {
     }
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.updateBlur()
   }
 
@@ -89,12 +89,16 @@ export default class Modal extends Component {
 
   showBlur() {
     const root = document.getElementById('root')
-    root.classList.add('blur')
+    if (root) {
+      root.classList.add('blur')
+    }
   }
 
   hideBlur() {
     const root = document.getElementById('root')
-    root.classList.remove('blur')
+    if (root) {
+      root.classList.remove('blur')
+    }
   }
 
   updateBlur() {

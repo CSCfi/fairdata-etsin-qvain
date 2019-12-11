@@ -81,6 +81,9 @@ class Qvain {
     this.existingDirectories = []
     this.hierarchy = {}
     this.inEdit = undefined
+
+    this.metadataModalFile = undefined
+
     // Reset External resources related data
     this.externalResources = []
     this.externalResourceInEdit = EmptyExternalResource
@@ -276,6 +279,8 @@ class Qvain {
 
   @observable inEdit = undefined
 
+  @observable metadataModalFile = undefined
+
   @action
   setDataCatalog = selectedDataCatalog => {
     this.dataCatalog = selectedDataCatalog
@@ -462,6 +467,19 @@ class Qvain {
 
   @action setInEdit = selectedItem => {
     this.inEdit = selectedItem
+  }
+
+  @action setMetadataModalFile = file => {
+    this.metadataModalFile = file
+  }
+
+  @action updateFileMetadata = file => {
+    // After editing file metadata, update the file in the hierarchy if possible.
+    const flat = getFiles(this.hierarchy)
+    const existing = flat.find(f => f.identifier === file.identifier)
+    if (existing) {
+      Object.assign(existing, File(file, existing.parentDirectory, existing.selected))
+    }
   }
 
   @computed
@@ -698,7 +716,6 @@ class Qvain {
   // roles together to get one actor with multiple roles.
   // Returns a nw array with the merged actors.
   mergeTheSameActors = actors => {
-    console.groupCollapsed('Actor object comparison DEBUG')
     if (actors.length <= 1) return actors
     const mergedActors = []
     actors.forEach(actor1 => {
@@ -710,7 +727,6 @@ class Qvain {
       })
       mergedActors.push(actor1)
     })
-    console.groupEnd()
     return mergedActors
   }
 
@@ -879,7 +895,16 @@ const File = (file, parent, selected) => ({
   fileType: getPath('file_characteristics.file_type', file),
   description: getPath('file_characteristics.description', file) || 'File',
   title: getPath('file_characteristics.title', file) || file.file_name,
-  existing: false
+  existing: false,
+
+  // PAS metadata
+  fileFormat: getPath('file_characteristics.file_format', file),
+  formatVersion: getPath('file_characteristics.format_version', file),
+  encoding: getPath('file_characteristics.encoding', file),
+  csvHasHeader: getPath('file_characteristics.csv_has_header', file),
+  csvDelimiter: getPath('file_characteristics.csv_delimiter', file),
+  csvRecordSeparator: getPath('file_characteristics.csv_record_separator', file),
+  csvQuotingChar: getPath('file_characteristics.csv_quoting_char', file)
 })
 
 const DatasetFile = file => ({

@@ -13,6 +13,7 @@ import CumulativeState from './cumulativeState'
 import { DataCatalogIdentifiers } from '../utils/constants'
 import Tooltip from '../general/tooltip'
 import FilesInfo from './filesInfo'
+import MetadataModal from './metadataModal'
 
 class Files extends Component {
   static propTypes = {
@@ -69,6 +70,7 @@ class Files extends Component {
         </SectionTitle>
         <DataCatalog />
         {data}
+        <MetadataModal />
       </ContainerLight>
     )
   }
