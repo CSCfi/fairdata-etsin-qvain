@@ -71,41 +71,50 @@ export default class Modal extends Component {
     this.state = {
       styles: { overlay: overlayStyle, content: contentStyle },
     }
-
-    this.afterOpen = this.afterOpen.bind(this)
-    this.onClose = this.onClose.bind(this)
   }
 
-  onClose() {
-    const root = document.getElementById('root')
-    root.classList.remove('blur')
-    this.props.onRequestClose()
+  componentWillMount() {
+    this.updateBlur()
   }
 
-   // eslint-disable-next-line camelcase
-   UNSAFE_componentWillReceiveProps(newProps) {
-    if (newProps.isOpen === false && this.props.isOpen === true) {
-      const root = document.getElementById('root')
-      root.classList.remove('blur')
+  componentDidUpdate(prevProps) {
+    if (this.props.isOpen !== prevProps.isOpen) {
+      this.updateBlur()
     }
   }
 
-  afterOpen() {
-    this.props.onAfterOpen()
+  componentWillUnmount() {
+    this.hideBlur()
+  }
+
+  showBlur() {
     const root = document.getElementById('root')
     root.classList.add('blur')
+  }
+
+  hideBlur() {
+    const root = document.getElementById('root')
+    root.classList.remove('blur')
+  }
+
+  updateBlur() {
+    if (this.props.isOpen) {
+      this.showBlur()
+    } else {
+      this.hideBlur()
+    }
   }
 
   render() {
     return (
       <ReactModal
         isOpen={this.props.isOpen}
-        onAfterOpen={this.afterOpen}
-        onRequestClose={this.onClose}
+        onAfterOpen={this.props.onAfterOpen}
+        onRequestClose={this.props.onRequestClose}
         style={this.state.styles}
         contentLabel={this.props.contentLabel}
       >
-        <CloseButton onClick={this.onClose} noMargin>
+        <CloseButton onClick={this.props.onRequestClose} noMargin>
           <Translate className="sr-only" content="dataset.dl.close_modal" />
           <span aria-hidden>X</span>
         </CloseButton>
