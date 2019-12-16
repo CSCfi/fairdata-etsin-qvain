@@ -42,7 +42,8 @@ class RemsAPIService(FlaskService):
         elif not self.is_testing:
             log.error("Unable to initialize RemsAPIService due to missing config")
 
-    def rems_request(self, method, url, err_message, json=None):
+    def rems_request(self, method, url, err_message, json=None, user_id='RDowner@funet.fi'):
+        self.HEADERS['x-rems-user-id'] = user_id
         assert method in ['GET', 'POST'], 'Method attribute must be one of [GET, POST].'
         log.info('Sending {0} request to {1}'.format(method, url))
         try:
@@ -74,7 +75,7 @@ class RemsAPIService(FlaskService):
         err_message = 'Failed to get catalogue item data from Fairdata REMS for user_id: {0}'.format(self.USER_ID)
         return self.rems_request(method, url, err_message)
 
-    def create_application(self, id):
+    def create_application(self, id, user_id):
         """
         Creates application in REMS
 
@@ -85,7 +86,7 @@ class RemsAPIService(FlaskService):
         url = self.REMS_CREATE_APPLICATION
         err_message = 'Failed to create application'
         json = {'catalogue-item-ids': [id]}
-        return self.rems_request(method, url, err_message, json)
+        return self.rems_request(method, url, err_message, json, user_id)
 
     def get_catalogue_item_id(self, resource):
         """
@@ -135,16 +136,6 @@ class RemsAPIService(FlaskService):
         err_message = 'Failed to get entitlement data from Fairdata REMS for user_id: {0}, resource: {1}'.format(self.USER_ID, rems_resource)
         return len(self.rems_request(method, url, err_message)) > 0
 
-def create_new_application(api, resource):
-    """
-    Get catalogue item id and feed it into creating new application
-    :return:
-    """
-
-    catalogue_item_id = api.get_catalogue_item_id(resource)
-    new_application = api.create_application(catalogue_item_id[0]["id"])
-
-    return new_application
 
 def get_user_rems_permission_for_catalog_record(cr_id, user_id):
     """

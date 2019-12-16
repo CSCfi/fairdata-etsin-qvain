@@ -256,7 +256,7 @@ class REMSApplyForPermission(Resource):
             'email': email
         }
         res_create_user = _rems_api.create_user(userdata)
-        if 'success' not in res_create_user or not res_create_user['success']:
+        if not res_create_user.get('success', None):
             log.warning('Could not create user, res: {}'.format(res_create_user))
             return 'Could not create user', 500
 
@@ -270,10 +270,27 @@ class REMSApplyForPermission(Resource):
             else:
                 log.warning('Unable to get catalogue item id for resource: {0}'.format(cr_id))
                 return 'Could not get catalogue item id', 500
-        catalog_item_id = res_get_catalogue_item_id['id']
+        catalog_item_id = res_get_catalogue_item_id[0].get('id', None)
+        if not catalog_item_id:
+            log.error('Error in getting catalogue item id for resource: {0}'.format(cr_id))
+            return 'Failed to get catalogue item id', 500
         # Create Application
-        _rems_api.create_application(catalog_item_id)
-        return "res", 200
+        res_create_application = _rems_api.create_application(catalog_item_id, user_id)
+        if not res_create_application.get('success', None):
+            if res_create_application.get('errers', None) is None:
+                log.error('Error in creating application for resource: {0}'.format(cr_id))
+                return 'Failed to create application', 500
+            else:
+                log.warning('Failed to create application for resource {0}, errors: {1}'.format(cr_id, res_create_application.get('errers')))
+                return 'Failed to create application', 500
+
+        application_id = res_create_application.get('application-id', None)
+        if application_id is None:
+            log.error('Failed to get application_id')
+            return 'Failed to get application_id', 500
+        log.info('Created application for user with application-id: {0}'.format(application_id))
+
+        return application_id, 200
 
 # class REMSGetEntitlements(Resource):
 #     """
