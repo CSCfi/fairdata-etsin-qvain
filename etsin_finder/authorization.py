@@ -31,13 +31,7 @@ def user_has_rems_permission_for_catalog_record(cr_id, user_id, is_authd):
     """
     if not cr_id or not user_id or not is_authd:
         return False
-
-    permission = app.rems_cache.get_from_cache(cr_id, user_id)
-    if permission is None:
-        permission = rems_service.get_user_rems_permission_for_catalog_record(cr_id, user_id)
-        return app.rems_cache.update_cache(cr_id, user_id, permission)
-    else:
-        return permission
+    return rems_service.get_user_rems_permission_for_catalog_record(cr_id, user_id)
 
 
 def user_is_allowed_to_download_from_ida(catalog_record, is_authd):
