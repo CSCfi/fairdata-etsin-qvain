@@ -36,13 +36,27 @@ class RemsAPIService(FlaskService):
             self.REMS_URL = 'https://{0}'.format(self.HOST) + '/api/entitlements?resource={0}'
             self.REMS_ENTITLEMENTS = 'https://{0}'.format(self.HOST) + '/api/entitlements'
             self.REMS_CREATE_USER = 'https://{0}'.format(self.HOST) + '/api/users/create'
-            self.REMS_GET_APPLICATIONS = 'https://{0}'.format(self.HOST) + '/api/applications/{0}'
+            self.REMS_GET_MY_APPLICATIONS = 'https://{0}'.format(self.HOST) + '/api/my-applications/'
             self.REMS_CATALOGUE_ITEMS = 'https://{0}'.format(self.HOST) + '/api/catalogue-items?resource={0}'
             self.REMS_CREATE_APPLICATION = 'https://{0}'.format(self.HOST) + '/api/applications/create'
         elif not self.is_testing:
             log.error("Unable to initialize RemsAPIService due to missing config")
 
     def rems_request(self, method, url, err_message, json=None, user_id='RDowner@funet.fi'):
+        """Genaral method for sending requests to REMS
+
+        Arguments:
+            method [string] -- The http verb, GET or POST
+            url [string] -- The url for the request
+            err_message [string] -- An error message to log if something goes wrong
+
+        Keyword Arguments:
+            json dict -- Data to be sent in a POST requests body (default: {None})
+            user_id str -- The user id if needed (default: {'RDowner@funet.fi'})
+
+        Returns:
+            [tuple] -- Message for the response as first argument, and status code as second.
+        """
         self.HEADERS['x-rems-user-id'] = user_id
         assert method in ['GET', 'POST'], 'Method attribute must be one of [GET, POST].'
         log.info('Sending {0} request to {1}'.format(method, url))
@@ -63,57 +77,76 @@ class RemsAPIService(FlaskService):
         log.info('rems_api_response: {0}'.format(rems_api_response.json()))
         return rems_api_response.json()
 
-    def get_user_applications(self, application_id):
-        """
-        Get all applications which the current user can see
-        :param application_id:
-        :return:
+    def get_user_applications(self):
+        """Get all applications which the current user can see
+
+        Returns:
+            [list] -- List of application dicts
         """
         log.info('Get all applications for current user')
         method = 'GET'
-        url = self.REMS_GET_APPLICATIONS.format(application_id)
-        err_message = 'Failed to get catalogue item data from Fairdata REMS for user_id: {0}'.format(self.USER_ID)
-        return self.rems_request(method, url, err_message)
+        url = self.REMS_GET_MY_APPLICATIONS
+        err_message = 'Failed to get applications from Fairdata REMS'
+        return self.rems_request(method, url, err_message, user_id=self.USER_ID)
 
-    def create_application(self, id, user_id):
-        """
-        Creates application in REMS
+    def create_application(self, id):
+        """Creates application in REMS
 
-        :param id = id fetched from get_catalogue_item_id()
+        Arguments:
+            id [int] -- Catalogue item id
+
+        Returns:
+            [dict] -- Dict with info if the operation was successful
         """
+        assert isinstance(id, int), 'id should be integer, id: {0}'.format(id)
+
         log.info('Create REMS application for catalogue item with id: {0}'.format(id))
         method = 'POST'
         url = self.REMS_CREATE_APPLICATION
         err_message = 'Failed to create application'
         json = {'catalogue-item-ids': [id]}
-        return self.rems_request(method, url, err_message, json, user_id)
+        return self.rems_request(method, url, err_message, json=json, user_id=self.USER_ID)
 
-    def get_catalogue_item_id(self, resource):
+    def get_catalogue_item_for_resource(self, resource):
+        """Get catalogue item for resource from REMS
+
+        Arguments:
+            resource [string] -- The preferred identifier of the resource
+
+        Returns:
+            [list] -- List containing dict of catalogue item
         """
-        return catalogue item id from REMS
-        """
-        log.info('Get catalog item id for resource: {0}'.format(resource))
+        assert isinstance(resource, str), 'resource should be string, resource: {0}'.format(resource)
+
+        log.info('Get catalog item for resource: {0}'.format(resource))
         method = 'GET'
         url = self.REMS_CATALOGUE_ITEMS.format(resource)
         err_message = 'Failed to get catalogue item data from Fairdata REMS for resource: {0}'.format(resource)
         return self.rems_request(method, url, err_message)
 
     def create_user(self, userdata):
+        """Create user in REMS
+
+        Arguments:
+            userdata [dict] -- Dict with name, user_id and email.
+
+        Returns:
+            [dict] -- Information if the creation succeeded.
         """
-        Create user in REMS
-        """
+        assert isinstance(userdata, dict) and userdata.keys() >= {'userid', 'name', 'email'}, \
+            'usedata should be a dict containing userid, name and email.'
         log.info('Create user in REMS')
         method = 'POST'
         url = self.REMS_CREATE_USER
         err_message = 'Failed to create user to REMS'
         json = userdata
-        return self.rems_request(method, url, err_message, json)
+        return self.rems_request(method, url, err_message, json=json)
 
     def entitlements(self):
-        """
-        Get all approved catalog records.
-        :param user_id:
-        :return:
+        """Get all approved catalog records.
+
+        Returns:
+            [list] -- List of dicts with entitlements.
         """
         log.info('Get all approved catalog records')
         method = 'GET'
@@ -122,11 +155,13 @@ class RemsAPIService(FlaskService):
         return self.rems_request(method, url, err_message)
 
     def get_rems_permission(self, rems_resource):
-        """
-        Get user entitlement for a rems resource.
+        """Check if user is entitled for a REMS resource.
 
-        :param rems_resource:
-        :return:
+        Arguments:
+            rems_resource [string] -- The resource
+
+        Returns:
+            [boolean] -- True/False if user is entitled.
         """
         assert rems_resource, 'rems_resource should be string, rems_resource: {0}'.format(rems_resource)
 
@@ -137,13 +172,51 @@ class RemsAPIService(FlaskService):
         return len(self.rems_request(method, url, err_message)) > 0
 
 
-def get_user_rems_permission_for_catalog_record(cr_id, user_id):
-    """
-    Get info about whether user is entitled for a catalog record.
+def get_application_state_for_resource(cr, user_id):
+    """Get the state of the users applications for resource.
 
-    :param cr_id:
-    :param user_id:
-    :return:
+    Arguments:
+        cr [dict] -- Catalog record
+        user_id [string] -- The user id
+
+    Returns:
+        [string] -- The application state or False.
+    """
+
+    state = 'apply'
+    if not user_id or not cr:
+        log.error('Failed to get user application state')
+        return False
+
+    pref_id = get_catalog_record_preferred_identifier(cr)
+    if not pref_id:
+        log.error('Could not get preferred identifier.')
+        return False
+    _rems_api = RemsAPIService(app, user_id)
+    user_applications = _rems_api.get_user_applications()
+    if not isinstance(user_applications, list) or not user_applications:
+        log.warning('Could get any applications belonging to user.')
+        return False
+    log.info('Got {0} applications for the user.'.format(len(user_applications)))
+
+    for application in user_applications:
+        resources = application.get('application/resources')
+        for resource in resources:
+            if resource.get('resource/ext-id') == pref_id:
+                state = application.get('application/state').split('/')[1]
+                return state
+    return state
+
+
+def get_user_rems_permission_for_catalog_record(cr_id, user_id):
+    """Get info about whether user is entitled for a catalog record.
+
+    Arguments:
+        cr_id [string] -- The catalog record identifier.
+        user_id [string] -- The user id.
+
+    Returns:
+        [boolean] -- Returns True/False if user is entitled.
     """
     if not user_id or not cr_id:
         log.error('Failed to get rems permission for catalog record. user_id: {0} or cr_id: {1} is invalid'.format(user_id, cr_id))
