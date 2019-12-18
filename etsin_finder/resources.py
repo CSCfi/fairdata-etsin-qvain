@@ -88,7 +88,9 @@ class Dataset(Resource):
         if cr_service.is_rems_catalog_record(cr) and is_authd:
             # ret_obj['has_permit'] = authorization.user_has_rems_permission_for_catalog_record(
             #     cr_id, authentication.get_user_csc_name(), is_authd)
-            ret_obj['application_state'] = rems_service.get_application_state_for_resource(cr, authentication.get_user_id())
+            state = rems_service.get_application_state_for_resource(cr, authentication.get_user_id())
+            ret_obj['application_state'] = state
+            ret_obj['has_permit'] = state == 'approved'
 
         return ret_obj, 200
 

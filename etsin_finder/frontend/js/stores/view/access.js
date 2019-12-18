@@ -34,10 +34,12 @@ class Access {
     // toggles whether to download button is disabled or not for ida files/dirs
     allowDataIdaDownloadButton: false,
     // Special button, use case for rems datasets
-    allowAskForPermit: false,
+    showREMSbutton: false,
+    // The state of user application for resource in REMS
+    applicationState: undefined,
   }
 
-  updateAccess(access, hasPermit) {
+  updateAccess(access, hasPermit, state) {
     switch (access.access_type.identifier) {
       case accessTypes.open:
         this.open()
@@ -49,7 +51,7 @@ class Access {
         this.restrictedAccess()
         break
       case accessTypes.permit:
-        this.permitAccess(hasPermit)
+        this.permitAccess(hasPermit, state)
         break
       case accessTypes.login:
         this.loginAccess()
@@ -67,7 +69,8 @@ class Access {
       allowDataIda: true,
       allowDataIdaInfoButton: true,
       allowDataIdaDownloadButton: true,
-      allowAskForPermit: false,
+      showREMSbutton: false,
+      applicationState: undefined,
     }
   }
 
@@ -80,7 +83,8 @@ class Access {
         allowDataIda: true,
         allowDataIdaInfoButton: true,
         allowDataIdaDownloadButton: true,
-        allowAskForPermit: false,
+        showREMSbutton: false,
+        applicationState: undefined,
       }
     } else {
       this.restrictions = {
@@ -89,7 +93,8 @@ class Access {
         allowDataIda: true,
         allowDataIdaInfoButton: false,
         allowDataIdaDownloadButton: false,
-        allowAskForPermit: false,
+        showREMSbutton: false,
+        applicationState: undefined,
       }
     }
   }
@@ -102,12 +107,13 @@ class Access {
       allowDataIda: true,
       allowDataIdaInfoButton: false,
       allowDataIdaDownloadButton: false,
-      allowAskForPermit: false,
+      showREMSbutton: false,
+      applicationState: undefined,
     }
   }
 
   @action
-  permitAccess(hasPermit) {
+  permitAccess(hasPermit, state) {
     if (hasPermit) {
       this.restrictions = {
         open: false,
@@ -115,7 +121,8 @@ class Access {
         allowDataIda: true,
         allowDataIdaInfoButton: true,
         allowDataIdaDownloadButton: true,
-        allowAskForPermit: false,
+        showREMSbutton: true,
+        applicationState: state,
       }
     } else {
       this.restrictions = {
@@ -124,7 +131,8 @@ class Access {
         allowDataIda: true,
         allowDataIdaInfoButton: false,
         allowDataIdaDownloadButton: false,
-        allowAskForPermit: true,
+        showREMSbutton: true,
+        applicationState: state,
       }
     }
   }
@@ -138,7 +146,8 @@ class Access {
         allowDataIda: true,
         allowDataIdaInfoButton: true,
         allowDataIdaDownloadButton: true,
-        allowAskForPermit: false,
+        showREMSbutton: false,
+        applicationState: undefined,
       }
     } else {
       this.restrictions = {
@@ -147,7 +156,8 @@ class Access {
         allowDataIda: true,
         allowDataIdaInfoButton: false,
         allowDataIdaDownloadButton: false,
-        allowAskForPermit: false,
+        showREMSbutton: false,
+        applicationState: undefined,
       }
     }
   }

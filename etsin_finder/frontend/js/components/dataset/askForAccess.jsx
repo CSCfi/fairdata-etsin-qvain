@@ -5,9 +5,13 @@ import { inject, observer } from 'mobx-react'
 
 import axios from 'axios'
 import Button from '../general/button'
-import access from '../../stores/view/access'
+import REMSButton from './REMSButton'
 
 class AskForAccess extends Component {
+  state = {
+    applicationState: this.props.Stores.Access.restrictions.applicationState,
+  }
+
   onClick = () => {
     axios
       .get(`/api/rems/${this.props.cr_id}`)
@@ -19,18 +23,21 @@ class AskForAccess extends Component {
       .catch(err => {
         console.log('NOT OK')
         console.log(err)
+        this.setState({ applicationState: 'Error' })
       })
   }
 
   render() {
-    if (!access.restrictions.allowAskForPermit) {
+    if (!this.props.Stores.Access.restrictions.showREMSbutton) {
       return null
     }
     const button = this.props.Stores.Auth.userLogged ? (
-      <Button onClick={this.onClick} noMargin>
-        <Translate content="dataset.access_permission" />
-      </Button>
+      <REMSButton applicationState={this.state.applicationState} onClick={this.onClick} />
     ) : (
+      // <Button onClick={this.onClick} noMargin>
+      //   {/* <Translate content="dataset.access_permission" /> */}
+      //   {this.props.Stores.Access.restrictions.applicationState}
+      // </Button>
       <Button disabled noMargin>
         <Translate content="dataset.access_permission" />
       </Button>
