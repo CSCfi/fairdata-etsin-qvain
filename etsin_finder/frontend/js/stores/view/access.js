@@ -36,7 +36,7 @@ class Access {
     // Special button, use case for rems datasets
     showREMSbutton: false,
     // The state of user application for resource in REMS
-    applicationState: undefined,
+    applicationState: null,
   }
 
   updateAccess(access, hasPermit, state) {
@@ -70,7 +70,7 @@ class Access {
       allowDataIdaInfoButton: true,
       allowDataIdaDownloadButton: true,
       showREMSbutton: false,
-      applicationState: undefined,
+      applicationState: null,
     }
   }
 
@@ -84,7 +84,7 @@ class Access {
         allowDataIdaInfoButton: true,
         allowDataIdaDownloadButton: true,
         showREMSbutton: false,
-        applicationState: undefined,
+        applicationState: null,
       }
     } else {
       this.restrictions = {
@@ -94,7 +94,7 @@ class Access {
         allowDataIdaInfoButton: false,
         allowDataIdaDownloadButton: false,
         showREMSbutton: false,
-        applicationState: undefined,
+        applicationState: null,
       }
     }
   }
@@ -108,7 +108,7 @@ class Access {
       allowDataIdaInfoButton: false,
       allowDataIdaDownloadButton: false,
       showREMSbutton: false,
-      applicationState: undefined,
+      applicationState: null,
     }
   }
 
@@ -147,7 +147,7 @@ class Access {
         allowDataIdaInfoButton: true,
         allowDataIdaDownloadButton: true,
         showREMSbutton: false,
-        applicationState: undefined,
+        applicationState: null,
       }
     } else {
       this.restrictions = {
@@ -157,7 +157,7 @@ class Access {
         allowDataIdaInfoButton: false,
         allowDataIdaDownloadButton: false,
         showREMSbutton: false,
-        applicationState: undefined,
+        applicationState: null,
       }
     }
   }
