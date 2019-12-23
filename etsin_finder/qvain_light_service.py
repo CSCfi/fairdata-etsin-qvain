@@ -36,7 +36,7 @@ class MetaxQvainLightAPIService(FlaskService):
             self.METAX_GET_DIRECTORY = 'https://{0}/rest/directories'.format(metax_qvain_api_config['HOST']) + \
                                        '/{0}/files'
             self.METAX_GET_FILE = 'https://{0}/rest/files'.format(metax_qvain_api_config['HOST']) + \
-                                '/{0}'
+                                  '/{0}'
             self.METAX_GET_DATASETS_FOR_USER = 'https://{0}/rest/datasets'.format(metax_qvain_api_config['HOST']) + \
                                                '?metadata_provider_user={0}&file_details&ordering=-date_created'
             self.METAX_GET_ALL_DATASETS_FOR_USER = 'https://{0}/rest/datasets'.format(metax_qvain_api_config['HOST']) + \
@@ -112,7 +112,6 @@ class MetaxQvainLightAPIService(FlaskService):
 
         return metax_qvain_api_response.json()
 
-
     def get_file(self, file_identifier):
         """
         Get a specific file with file's id
@@ -146,7 +145,9 @@ class MetaxQvainLightAPIService(FlaskService):
 
     def patch_file(self, file_identifier, data):
         """
-        Patch metadata for a file with given data. Useful for updating file_characteristics. Can be also used to change other fields
+        Patch metadata for a file with given data.
+
+        Useful for updating file_characteristics. Can be also used to change other fields
         such as identifier, so be careful when passing user input to avoid data corruption.
 
         Arguments:
@@ -157,8 +158,8 @@ class MetaxQvainLightAPIService(FlaskService):
 
         Returns:
             [type] -- The response from Metax.
-        """
 
+        """
         req_url = self.METAX_GET_FILE.format(file_identifier)
 
         try:

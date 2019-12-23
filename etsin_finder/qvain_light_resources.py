@@ -78,7 +78,6 @@ class ProjectFiles(Resource):
         :param pid:
         :return:
         """
-
         # Return data only if user is a member of the project
         user_ida_projects = get_user_ida_projects() or []
         if pid in user_ida_projects:
@@ -147,7 +146,6 @@ class FileCharacteristics(Resource):
         :param file_id:
         :return:
         """
-
         if request.content_type != 'application/json':
             return 'Expected content-type application/json', 403
 
