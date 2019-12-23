@@ -11,9 +11,11 @@ import REMSButton from './REMSButton'
 class AskForAccess extends Component {
   state = {
     applicationState: this.props.Stores.Access.restrictions.applicationState,
+    loading: false,
   }
 
   onClick = () => {
+    this.setState({ loading: true })
     axios
       .get(`/api/rems/${this.props.cr_id}`)
       .then(res => {
@@ -24,6 +26,9 @@ class AskForAccess extends Component {
         console.log(err)
         this.setState({ applicationState: 'Error' })
       })
+      .finally(() => {
+        this.setState({ loading: false })
+      })
   }
 
   render() {
@@ -31,7 +36,11 @@ class AskForAccess extends Component {
       return null
     }
     const button = this.props.Stores.Auth.userLogged ? (
-      <REMSButton applicationState={this.state.applicationState} onClick={this.onClick} />
+      <REMSButton
+        loading={this.state.loading}
+        applicationState={this.state.applicationState}
+        onClick={this.onClick}
+      />
     ) : (
       <div aria-hidden="true" title={translate('dataset.access_login')}>
         <Button disabled noMargin>
