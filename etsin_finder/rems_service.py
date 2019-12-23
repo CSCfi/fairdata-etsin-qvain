@@ -25,9 +25,10 @@ class RemsAPIService(FlaskService):
         rems_api_config = get_fairdata_rems_api_config(app.testing)
 
         if rems_api_config:
+            self.ENABLED = rems_api_config.get('ENABLED', False)
             self.USER_ID = user
-            self.API_KEY = str(rems_api_config['API_KEY'])
-            self.HOST = rems_api_config['HOST']
+            self.API_KEY = str(rems_api_config.get('API_KEY'))
+            self.HOST = rems_api_config.get('HOST')
             self.HEADERS = {
                 'Accept': 'application/json',
                 'x-rems-api-key': self.API_KEY,
@@ -40,6 +41,7 @@ class RemsAPIService(FlaskService):
             self.REMS_CATALOGUE_ITEMS = 'https://{0}'.format(self.HOST) + '/api/catalogue-items?resource={0}'
             self.REMS_CREATE_APPLICATION = 'https://{0}'.format(self.HOST) + '/api/applications/create'
         elif not self.is_testing:
+            self.ENABLED = False
             log.error("Unable to initialize RemsAPIService due to missing config")
 
     def rems_request(self, method, url, err_message, json=None, user_id='RDowner@funet.fi'):
@@ -57,6 +59,9 @@ class RemsAPIService(FlaskService):
         Returns:
             [tuple] -- Message for the response as first argument, and status code as second.
         """
+        if not self.ENABLED:
+            return False
+
         self.HEADERS['x-rems-user-id'] = user_id
         assert method in ['GET', 'POST'], 'Method attribute must be one of [GET, POST].'
         log.info('Sending {0} request to {1}'.format(method, url))
@@ -83,6 +88,9 @@ class RemsAPIService(FlaskService):
         Returns:
             [list] -- List of application dicts
         """
+        if not self.ENABLED:
+            return False
+
         log.info('Get all applications for current user')
         method = 'GET'
         url = self.REMS_GET_MY_APPLICATIONS
@@ -98,6 +106,9 @@ class RemsAPIService(FlaskService):
         Returns:
             [dict] -- Dict with info if the operation was successful
         """
+        if not self.ENABLED:
+            return False
+
         assert isinstance(id, int), 'id should be integer, id: {0}'.format(id)
 
         log.info('Create REMS application for catalogue item with id: {0}'.format(id))
@@ -116,6 +127,9 @@ class RemsAPIService(FlaskService):
         Returns:
             [list] -- List containing dict of catalogue item
         """
+        if not self.ENABLED:
+            return False
+
         assert isinstance(resource, str), 'resource should be string, resource: {0}'.format(resource)
 
         log.info('Get catalog item for resource: {0}'.format(resource))
@@ -133,6 +147,9 @@ class RemsAPIService(FlaskService):
         Returns:
             [dict] -- Information if the creation succeeded.
         """
+        if not self.ENABLED:
+            return False
+
         assert isinstance(userdata, dict) and userdata.keys() >= {'userid', 'name', 'email'}, \
             'usedata should be a dict containing userid, name and email.'
         log.info('Create user in REMS')
@@ -148,6 +165,9 @@ class RemsAPIService(FlaskService):
         Returns:
             [list] -- List of dicts with entitlements.
         """
+        if not self.ENABLED:
+            return False
+
         log.info('Get all approved catalog records')
         method = 'GET'
         url = self.REMS_ENTITLEMENTS
@@ -163,6 +183,9 @@ class RemsAPIService(FlaskService):
         Returns:
             [boolean] -- True/False if user is entitled.
         """
+        if not self.ENABLED:
+            return False
+
         assert rems_resource, 'rems_resource should be string, rems_resource: {0}'.format(rems_resource)
 
         log.info('Get entitlements for resource: {0}'.format(rems_resource))
