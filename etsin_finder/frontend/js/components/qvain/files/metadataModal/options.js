@@ -1,30 +1,31 @@
-export const separatorOptions = [
-  { value: 'LF', label: 'LF' },
-  { value: 'CRLF', label: 'CRLF' },
-  { value: 'CR', label: 'CR' },
-]
+import translate from 'counterpart'
 
-export const delimiterOptions = [
-  { value: '\t', label: 'Tab' },
-  { value: ' ', label: 'Space' },
-  { value: ';', label: 'Semicolon ;' },
-  { value: ',', label: 'Comma ,' },
-  { value: ':', label: 'Colon :' },
-  { value: '.', label: 'Dot .' },
-  { value: '|', label: 'Pipe |' },
-]
-
-export const encodingOptions = [
-  { value: 'UTF-8', label: 'UTF-8' },
-  { value: 'UTF-16', label: 'UTF-16' },
-  { value: 'UTF-32', label: 'UTF-32' },
-  { value: 'ISO-8859-15', label: 'ISO-8859-15' },
-]
-
-export const hasheaderOptions = [
-  { value: false, label: 'No' },
-  { value: true, label: 'Yes' },
-]
+export const getOptions = () => ({
+  separator: [
+    { value: 'LF', label: 'LF' },
+    { value: 'CRLF', label: 'CRLF' },
+    { value: 'CR', label: 'CR' },
+  ],
+  delimiter: [
+    { value: '\t', label: translate('qvain.files.metadataModal.options.delimiter.tab') },
+    { value: ' ', label: translate('qvain.files.metadataModal.options.delimiter.space') },
+    { value: ';', label: translate('qvain.files.metadataModal.options.delimiter.semicolon') },
+    { value: ',', label: translate('qvain.files.metadataModal.options.delimiter.comma') },
+    { value: ':', label: translate('qvain.files.metadataModal.options.delimiter.colon') },
+    { value: '.', label: translate('qvain.files.metadataModal.options.delimiter.dot') },
+    { value: '|', label: translate('qvain.files.metadataModal.options.delimiter.pipe') },
+  ],
+  encoding: [
+    { value: 'UTF-8', label: 'UTF-8' },
+    { value: 'UTF-16', label: 'UTF-16' },
+    { value: 'UTF-32', label: 'UTF-32' },
+    { value: 'ISO-8859-15', label: 'ISO-8859-15' },
+  ],
+  hasHeader: [
+    { value: false, label: translate('qvain.files.metadataModal.options.header.false') },
+    { value: true, label: translate('qvain.files.metadataModal.options.header.true') }
+  ]
+})
 
 export const getDefaultOptions = () => ({
   fileFormat: 'text/csv',

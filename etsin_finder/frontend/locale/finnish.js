@@ -637,6 +637,54 @@ const finnish = {
           close: 'Sulje',
         }
       },
+      metadataModal: {
+        header: 'Muokkaa PAS-metadataa',
+        help: 'Datan tallentaminen päivittää tiedoston metadatan riippumatta siitä onko se aineistossa.',
+        csvOptions: 'CSV-määritykset',
+        fields: {
+          fileFormat: 'Tiedostomuoto',
+          formatVersion: 'Tiedostomuodon versio',
+          encoding: 'Merkistökoodaus',
+          csvDelimiter: 'Sarake-erotin',
+          csvRecordSeparator: 'Rivierotin',
+          csvQuotingChar: 'Lainausmerkki',
+          csvHasHeader: 'Sisältää otsikkorivin'
+        },
+        warning: 'Sinulla on tallentamattomia muutoksia. Perutaanko muutokset?',
+        errors: {
+          formatVersionRequired: 'Versio puuttuu tai on epäkelpo valitulle tiedostomuodolle.',
+          formatVersionNotAllowed: 'Valitulle tiedostomuodolle ei voi asettaa versiota.',
+          loadingFileFormats: 'Tiedostomuotolistan hakeminen epäonnistui.'
+        },
+        buttons: {
+          show: 'Muokkaa PAS-metadataa',
+          close: 'Sulje',
+          save: 'Tallenna muutokset',
+          confirmClose: 'Kyllä, peru muutokset',
+          cancelClose: 'Ei, jatka muokkausta',
+          hideError: 'Jatka muokkausta'
+        },
+        options: {
+          delimiter: {
+            tab: 'Tab',
+            space: 'Välilyönti',
+            semicolon: 'Puolipiste ;',
+            comma: 'Pilkku ,',
+            colon: 'Kaksoispiste :',
+            dot: 'Piste .',
+            pipe: 'Pystyviiva |'
+          },
+          header: {
+            false: 'Ei',
+            true: 'Kyllä'
+          }
+        },
+        placeholders: {
+          noOptions: 'Ei vaihtoehtoja saatavilla',
+          selectOption: 'Valitse yksi',
+          csvQuotingChar: 'Kirjoita merkki'
+        }
+      },
       help:
         'Aineistoon kuuluvat tiedostot. Aineistoon voi kuulua vain joko IDAssa olevia tiedostoja tai ulkopuolisia tiedostoja. Tiedostojen metadata ei ole osa aineistojen metadataa, joten muista tallentaa muutokset jotka teet tiedostojen metadataan.',
       ida: {

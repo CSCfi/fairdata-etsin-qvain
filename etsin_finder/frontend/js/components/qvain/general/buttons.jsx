@@ -251,6 +251,7 @@ export const FilePickerFileButton = styled.button`
   background-color: ${props => (
     props.disabled ? '#7fbfd6' : '#007fad'
   )};
+  font-size: 0.9em;
   color: #fff;
   height: 22px;
   border-radius: 2px;

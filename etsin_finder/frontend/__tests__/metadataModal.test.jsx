@@ -11,7 +11,7 @@ import etsinTheme from '../js/styles/theme'
 import FileSelector from '../js/components/qvain/files/fileSelector'
 import MetadataModal from '../js/components/qvain/files/metadataModal'
 import QvainStore, {
-  Directory
+  DatasetFile, Directory
 } from '../js/stores/view/qvain'
 import LocaleStore from '../js/stores/view/language'
 
@@ -37,6 +37,22 @@ const testFile = {
     csv_has_header: true,
     csv_record_separator: 'LF',
     csv_quoting_char: '"',
+  },
+
+}
+
+const testDatasetFile = {
+  ...testFile,
+  details: {
+    parent_directory: 'test1',
+    file_characteristics: {
+      file_format: 'text/csv',
+      format_version: '',
+      encoding: 'UTF-8',
+      csv_has_header: true,
+      csv_record_separator: 'LF',
+      csv_quoting_char: '"',
+    },
   }
 }
 
@@ -144,6 +160,7 @@ describe('Qvain.MetadataModal', () => {
 
     // Set directory hierarchy
     stores.Qvain.selectedDirectories = []
+    stores.Qvain.existingFiles = [ DatasetFile(testDatasetFile) ]
     stores.Qvain.selectedProject = 'project_y'
     stores.Qvain.hierarchy = Directory(
       {
@@ -202,6 +219,33 @@ describe('Qvain.MetadataModal', () => {
     wrapper.find('button#test_file4-open-metadata-modal').simulate('click')
     expect(instance.state.fileIdentifier).toBe('test_file4')
     expect(instance.validateMetadata).toThrow()
+  })
+
+  it('updates existing files on metadata save', async () => {
+    // Open modal, wait until versions have been fetched
+    wrapper.find('button#test_file-open-metadata-modal').simulate('click')
+    const instance = wrapper.find(MetadataModal).instance().wrappedInstance
+    await when(() => instance.formatFetchStatus !== 'loading')
+
+    expect(stores.Qvain.existingFiles[0].csvHasHeader).toBe(true)
+    expect(instance.state.csvHasHeader).toBe(true)
+    instance.setCsvHasHeader({value: false})
+    expect(instance.state.csvHasHeader).toBe(false)
+
+    // Mock the patch RPC used by save
+    axios.patch.mockImplementationOnce((url, data) => {
+      return {
+        data: {
+          ...testFile,
+          file_characteristics: {
+            ...testFile.file_characteristics,
+            ...data
+          }
+        }
+      }
+    })
+    await instance.saveChanges()
+    expect(stores.Qvain.existingFiles[0].csvHasHeader).toBe(false)
   })
 
   it('allows modifying the pas metadata of files in hierarchy', async () => {

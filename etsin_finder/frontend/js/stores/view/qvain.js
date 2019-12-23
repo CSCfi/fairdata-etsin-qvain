@@ -475,10 +475,27 @@ class Qvain {
 
   @action updateFileMetadata = file => {
     // After editing file metadata, update the file in the hierarchy if possible.
+    // The input file comes from a Metax response so needs to be transformed into Qvain light format.
     const flat = getFiles(this.hierarchy)
-    const existing = flat.find(f => f.identifier === file.identifier)
-    if (existing) {
-      Object.assign(existing, File(file, existing.parentDirectory, existing.selected))
+    const hierarchyFile = flat.find(f => f.identifier === file.identifier)
+    if (hierarchyFile) {
+      Object.assign(hierarchyFile, File(file, hierarchyFile.parentDirectory, hierarchyFile.selected))
+    }
+
+    // Update existing file if available.
+    const existingFile = this.existingFiles.find(f => f.identifier === file.identifier)
+    if (existingFile) {
+      const parsed = File(file, existingFile.parentDirectory, existingFile.selected)
+      const newMetadata = {
+        fileFormat: parsed.fileFormat,
+        formatVersion: parsed.formatVersion,
+        encoding: parsed.encoding,
+        csvHasHeader: parsed.csvHasHeader,
+        csvDelimiter: parsed.csvDelimiter,
+        csvRecordSeparator: parsed.csvRecordSeparator,
+        csvQuotingChar: parsed.csvQuotingChar,
+      }
+      Object.assign(existingFile, newMetadata)
     }
   }
 
@@ -907,7 +924,7 @@ const File = (file, parent, selected) => ({
   csvQuotingChar: getPath('file_characteristics.csv_quoting_char', file)
 })
 
-const DatasetFile = file => ({
+export const DatasetFile = file => ({
   ...File(file.details, file.details.parent_directory, true),
   identifier: file.identifier,
   useCategory: getPath('use_category.identifier', file),

@@ -19,7 +19,10 @@ export const MetadataSelect = (props) => {
         menuShouldScrollIntoView={false}
         name={props.inputId}
         isDisabled={noOptions}
-        placeholder={noOptions ? 'No options available' : props.placeholder || 'Select an option'}
+        placeholder={noOptions ?
+          translate('qvain.files.metadataModal.placeholders.noOptions') :
+          props.placeholder || translate('qvain.files.metadataModal.placeholders.selectOption')
+        }
         {...props}
       />
     </Label>

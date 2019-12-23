@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { inject, observer } from 'mobx-react'
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faFolder, faChevronRight, faChevronDown, faEdit } from '@fortawesome/free-solid-svg-icons'
+import { faFolder, faChevronRight, faChevronDown } from '@fortawesome/free-solid-svg-icons'
 import { Checkbox } from '../general/form'
 import {
   FileIcon,
@@ -54,7 +54,6 @@ export class FileSelectorBase extends Component {
         </label>
         <FilePickerFileButton id={`${f.identifier}-open-metadata-modal`} type="button" onClick={() => setMetadataModalFile(f)}>
           { translate('qvain.files.metadataModal.buttons.show') }
-          <FileEditIcon style={{ height: '16px', width: '16px', marginLeft: '4px', color: 'red' }} />
         </FilePickerFileButton>
       </li>
     )
@@ -126,18 +125,5 @@ const LinkButton = styled.button`
    font: inherit;
    cursor: pointer;
 `;
-
-const FileEditIconStyles = styled(FontAwesomeIcon)`
-  width: 5%;
-  color: inherit;
-  margin-left: 0px;
-  margin-right: 0px;
-  display: inline-block;
-  height: 18px;
-  font-size: 18px;
-  vertical-align: top;
-`;
-
-export const FileEditIcon = () => <FileEditIconStyles icon={faEdit} />
 
 export default inject('Stores')(observer(FileSelectorBase))

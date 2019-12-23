@@ -15,8 +15,7 @@ import { Label, HelpField, Input } from '../../general/form'
 import { DangerButton, TableButton } from '../../general/buttons'
 import Response from '../response'
 
-import { separatorOptions, delimiterOptions, encodingOptions, hasheaderOptions,
-  getDefaultOptions, makeOption, findOption } from './options'
+import { getOptions, getDefaultOptions, makeOption, findOption } from './options'
 import { MetadataSelect, selectStylesNarrow, labelStyle } from './select'
 
 
@@ -213,8 +212,10 @@ class MetadataModal extends Component {
         error = err.response.data.detail
       } else if (err.response && err.response.data) {
         error = err.response.data
-      } else {
+      } else if (err.response && err.response.errorMessage) {
         error = err.response.errorMessage
+      } else {
+        error = err.message
       }
       if (error.file_characteristics) {
         error = error.file_characteristics
@@ -319,6 +320,7 @@ class MetadataModal extends Component {
 
   render() {
     const { metadataModalFile } = this.props.Stores.Qvain
+    const options = getOptions()
 
     return (
       <Modal
@@ -327,7 +329,7 @@ class MetadataModal extends Component {
         onRequestClose={this.requestClose}
         customStyles={modalStyles}
       >
-        <h2 style={{ marginBottom: 0 }}>Edit PAS Metadata</h2>
+        <Translate content="qvain.files.metadataModal.header" component="h2" style={{ marginBottom: 0 }} />
         <Translate content="qvain.files.metadataModal.help" component={HelpField} />
 
         <MetadataSelect
@@ -351,19 +353,19 @@ class MetadataModal extends Component {
 
         <MetadataSelect
           inputId="pas_file_encoding"
-          options={encodingOptions}
-          value={findOption(this.state.encoding, encodingOptions)}
+          options={options.encoding}
+          value={findOption(this.state.encoding, options.encoding)}
           onChange={this.setEncoding}
           field="encoding"
         />
 
-        <h3 style={{ marginBottom: 0, marginTop: '0.3rem' }}>CSV Options</h3>
+        <Translate content="qvain.files.metadataModal.csvOptions" component="h3" style={{ marginBottom: 0, marginTop: '0.3rem' }} />
 
         <div style={{ display: 'flex', flexWrap: 'wrap', maxWidth: '26em' }}>
           <MetadataSelect
             inputId="pas_csv_delimiter"
-            options={delimiterOptions}
-            value={findOption(this.state.csvDelimiter, delimiterOptions)}
+            options={options.delimiter}
+            value={findOption(this.state.csvDelimiter, options.delimiter)}
             onChange={this.setCsvDelimiter}
             styles={selectStylesNarrow}
             field="csvDelimiter"
@@ -371,8 +373,8 @@ class MetadataModal extends Component {
 
           <MetadataSelect
             inputId="pas_csv_record_separator"
-            options={separatorOptions}
-            value={findOption(this.state.csvRecordSeparator, separatorOptions)}
+            options={options.separator}
+            value={findOption(this.state.csvRecordSeparator, options.separator)}
             onChange={this.setCsvRecordSeparator}
             styles={selectStylesNarrow}
             field="csvRecordSeparator"
@@ -385,7 +387,7 @@ class MetadataModal extends Component {
             <div style={selectStylesNarrow.control()}>
               <Input
                 id="pas_csv_quoting_char"
-                placeholder="Type a character"
+                placeholder={translate('qvain.files.metadataModal.placeholders.csvQuotingChar')}
                 type="text"
                 value={this.state.csvQuotingChar}
                 onChange={this.handleChangeCsvQuotingChar}
@@ -395,8 +397,8 @@ class MetadataModal extends Component {
 
           <MetadataSelect
             inputId="pas_csv_has_header"
-            options={hasheaderOptions}
-            value={findOption(this.state.csvHasHeader, hasheaderOptions)}
+            options={options.hasHeader}
+            value={findOption(this.state.csvHasHeader, options.hasHeader)}
             onChange={this.setCsvHasHeader}
             styles={selectStylesNarrow}
             field="csvHasHeader"

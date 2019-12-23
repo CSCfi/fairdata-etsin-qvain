@@ -635,7 +635,7 @@ const english = {
       },
       metadataModal: {
         header: 'Edit PAS Metadata',
-        help: 'Help text for pas metadata editing',
+        help: 'Saving the data will change the file metadata regardless of whether the file is in your dataset or not.',
         csvOptions: 'CSV Options',
         fields: {
           fileFormat: 'File format',
@@ -659,6 +659,26 @@ const english = {
           confirmClose: 'Yes, discard changes',
           cancelClose: 'No, continue editing',
           hideError: 'Continue editing'
+        },
+        options: {
+          delimiter: {
+            tab: 'Tab',
+            space: 'Space',
+            semicolon: 'Semicolon ;',
+            comma: 'Comma ,',
+            colon: 'Colon :',
+            dot: 'Dot .',
+            pipe: 'Pipe |'
+          },
+          header: {
+            false: 'No',
+            true: 'Yes'
+          }
+        },
+        placeholders: {
+          noOptions: 'No options available',
+          selectOption: 'Select an option',
+          csvQuotingChar: 'Type a character'
         }
       },
       help: 'Files associated with this dataset. A dataset can only have either IDA files or remote files. File metadata will not be associated with datasets, so remember to save edits to file metadata.',
