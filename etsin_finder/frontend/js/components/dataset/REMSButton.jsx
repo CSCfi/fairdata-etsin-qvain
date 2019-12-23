@@ -12,7 +12,7 @@ const REMSButton = props => {
     case 'Error':
       button = (
         <div aria-hidden="true" title={translate('dataset.access_unavailable')}>
-          <Button disabled noMargin>
+          <Button id="rems-button-error" disabled noMargin>
             {props.loading ? (
               <>
                 <Translate content="dataset.access_permission" />
@@ -27,7 +27,7 @@ const REMSButton = props => {
       break
     case 'apply':
       button = (
-        <Button onClick={props.onClick} noMargin>
+        <Button id="rems-button-apply" onClick={props.onClick} noMargin>
           {props.loading ? (
             <>
               <Translate content="dataset.access_permission" />
@@ -41,7 +41,12 @@ const REMSButton = props => {
       break
     case 'draft':
       button = (
-        <Button onClick={props.onClick} color={etsinTheme.color.yellow} noMargin>
+        <Button
+          id="rems-button-draft"
+          onClick={props.onClick}
+          color={etsinTheme.color.yellow}
+          noMargin
+        >
           {props.loading ? (
             <>
               <Translate content="dataset.access_draft" />
@@ -55,7 +60,12 @@ const REMSButton = props => {
       break
     case 'submitted':
       button = (
-        <Button onClick={props.onClick} color={etsinTheme.color.yellow} noMargin>
+        <Button
+          id="rems-button-submitted"
+          onClick={props.onClick}
+          color={etsinTheme.color.yellow}
+          noMargin
+        >
           {props.loading ? (
             <>
               <Translate content="dataset.access_request_sent" />
@@ -69,7 +79,12 @@ const REMSButton = props => {
       break
     case 'approved':
       button = (
-        <Button onClick={props.onClick} color={etsinTheme.color.primary} noMargin>
+        <Button
+          id="rems-button-approved"
+          onClick={props.onClick}
+          color={etsinTheme.color.primary}
+          noMargin
+        >
           {props.loading ? (
             <>
               <Translate content="dataset.access_granted" />
@@ -83,7 +98,12 @@ const REMSButton = props => {
       break
     case 'rejected':
       button = (
-        <Button onClick={props.onClick} color={etsinTheme.color.error} noMargin>
+        <Button
+          id="rems-button-rejected"
+          onClick={props.onClick}
+          color={etsinTheme.color.error}
+          noMargin
+        >
           {props.loading ? (
             <>
               <Translate content="dataset.access_denied" />

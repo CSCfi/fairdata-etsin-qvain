@@ -8,7 +8,7 @@ import axios from 'axios'
 import Button from '../general/button'
 import REMSButton from './REMSButton'
 
-class AskForAccess extends Component {
+export class AskForAccess extends Component {
   state = {
     applicationState: this.props.Stores.Access.restrictions.applicationState,
     loading: false,
@@ -43,7 +43,7 @@ class AskForAccess extends Component {
       />
     ) : (
       <div aria-hidden="true" title={translate('dataset.access_login')}>
-        <Button disabled noMargin>
+        <Button id="disabled-rems-button" disabled noMargin>
           <Translate content="dataset.access_permission" />
         </Button>
       </div>
