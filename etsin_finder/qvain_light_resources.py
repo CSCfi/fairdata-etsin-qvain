@@ -132,7 +132,7 @@ class FileDirectory(Resource):
         return '', 404
 
 class FileCharacteristics(Resource):
-    """File/directory related REST endpoints for getting a directory"""
+    """REST endpoint for updating file_characteristics of a file."""
 
     def __init__(self):
         """Setup arguments"""
@@ -141,10 +141,14 @@ class FileCharacteristics(Resource):
     @log_request
     def patch(self, file_id):
         """
-        Get files and directory objects for frontend.
+        Update file_characteristics of a file.
 
-        :param file_id:
-        :return:
+        Arguments:
+            file {object} -- File object as json, should contain a file_characteristics object that will be updated.
+
+        Returns:
+            [type] -- Metax response.
+
         """
         if request.content_type != 'application/json':
             return 'Expected content-type application/json', 403
