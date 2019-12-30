@@ -8,6 +8,7 @@
 """Used for performing operations related to Fairdata Rems"""
 
 from requests import request, HTTPError
+from datetime import datetime
 
 from etsin_finder.cr_service import get_catalog_record_preferred_identifier, get_catalog_record, is_rems_catalog_record
 from etsin_finder.app_config import get_fairdata_rems_api_config
@@ -221,6 +222,9 @@ def get_application_state_for_resource(cr, user_id):
         log.warning('Could get any applications belonging to user.')
         return False
     log.info('Got {0} applications for the user.'.format(len(user_applications)))
+
+    # Sort applications to get the newest first
+    user_applications.sort(reverse=True, key=lambda x: datetime.strptime(x['application/last-activity'], '%Y-%m-%dT%H:%M:%S.%fZ'))
 
     for application in user_applications:
         resources = application.get('application/resources')
