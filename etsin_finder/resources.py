@@ -86,8 +86,6 @@ class Dataset(Resource):
         ret_obj = {'catalog_record': authorization.strip_information_from_catalog_record(cr, is_authd),
                    'email_info': get_email_info(cr)}
         if cr_service.is_rems_catalog_record(cr) and is_authd:
-            # ret_obj['has_permit'] = authorization.user_has_rems_permission_for_catalog_record(
-            #     cr_id, authentication.get_user_csc_name(), is_authd)
             state = rems_service.get_application_state_for_resource(cr, authentication.get_user_id())
             ret_obj['application_state'] = state
             ret_obj['has_permit'] = state == 'approved'
@@ -296,23 +294,30 @@ class REMSApplyForPermission(Resource):
             log.error('Error in getting catalogue item id for resource: {0}'.format(pref_id))
             return 'Failed to get catalogue item id', 500
 
-        # Create Application
-        res_create_application = _rems_api.create_application(catalog_item_id)
-        if not res_create_application.get('success', None):
-            if res_create_application.get('errers', None) is None:
-                log.error('Error in creating application for resource: {0}'.format(pref_id))
-                return 'Failed to create application', 500
-            else:
-                log.warning('Failed to create application for resource {0}, errors: {1}'.format(pref_id, res_create_application.get('errers')))
-                return 'Failed to create application', 500
+        # Check if User has any applications for the resource
+        application_id = session.get('REMS_application_id', None)
+        if application_id:
+            log.info('Application with id: {0} found from session.'.format(application_id))
+            return application_id, 200
+        else:
+            # Create Application
+            log.info('No application id in session, creating new application for resource: {0}'.format(pref_id))
+            res_create_application = _rems_api.create_application(catalog_item_id)
+            if not res_create_application.get('success', None):
+                if res_create_application.get('errers', None) is None:
+                    log.error('Error in creating application for resource: {0}'.format(pref_id))
+                    return 'Failed to create application', 500
+                else:
+                    log.warning('Failed to create application for resource {0}, errors: {1}'.format(pref_id, res_create_application.get('errers')))
+                    return 'Failed to create application', 500
 
-        application_id = res_create_application.get('application-id', None)
-        if application_id is None:
-            log.error('Failed to get application_id')
-            return 'Failed to get application_id', 500
-        log.info('Created application for user with application-id: {0}'.format(application_id))
+            application_id = res_create_application.get('application-id', None)
+            if application_id is None:
+                log.error('Failed to get application_id')
+                return 'Failed to get application_id', 500
+            log.info('Created application for user with application-id: {0}'.format(application_id))
 
-        return application_id, 200
+            return application_id, 200
 
 
 class Session(Resource):

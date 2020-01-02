@@ -8,6 +8,7 @@
 """Used for performing operations related to Fairdata Rems"""
 
 from requests import request, HTTPError
+from flask import session
 from datetime import datetime
 
 from etsin_finder.cr_service import get_catalog_record_preferred_identifier, get_catalog_record, is_rems_catalog_record
@@ -231,7 +232,12 @@ def get_application_state_for_resource(cr, user_id):
         for resource in resources:
             if resource.get('resource/ext-id') == pref_id:
                 state = application.get('application/state').split('/')[1]
+                # Set the application id to the session so it can be used directly
+                # by REMSApplyForPermission if the users has already created applications
+                session['REMS_application_id'] = application.get('application/id')
                 return state
+    # Set the value to None if no application for the resource is found
+    session['REMS_application_id'] = None
     return state
 
 
