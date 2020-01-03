@@ -438,6 +438,7 @@ const finnish = {
         infoText:
           'Tällä kentällä määrittelet, miten aineiston (tiedostot) saa käyttöönsä. Tämä kenttä ei vaikuta siihen, miten tämä kuvailu näkyy. Kuvailu näkyy aina automaattisesti Etsimessä julkaisun jälkeen. Jos valitset jotain muuta kuin Avoin (Open), myös syy, miksi tiedostojen latausta on rajoitettu (Restricition Grounds) on pakollinen tieto. Jos valitse "Embargo", määrittele myös embargon expiroitumisajankohta.',
         placeholder: 'Valitse vaihtoehto',
+        permitInfo: 'Aineiston omistaja (alkuperäinen kuvailun tekijä) pystyy oletuksena hyväksymään aineiston datan käyttöön liittyvät käyttölupahakemukset. Käyttölupatoimintoa kehitetään, ja jossain vaiheessa tullaan lisäämään mahdollisuus myös muiden ko. organisaation edustajien päästä, joko omistajan lisäksi tai sijaan, hyväksymään käyttölupahakemuksia. Valitsemalla pääsyoikeudeksi "Vaatii luvan hakemista" / "Requires permission" käyttäjä sitoutuu näihin muutoksiin.'
       },
       embargoDate: {
         label: 'Embargo loppumispäivämäärä (vvvv-kk-pp)',
