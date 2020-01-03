@@ -29,6 +29,7 @@ import SubmitResponse from './general/submitResponse'
 import Button, { InvertedButton } from '../general/button';
 
 const EDIT_DATASET_URL = '/api/datasets/edit'
+import PasState from './pasState'
 
 class Qvain extends Component {
   promises = []
@@ -273,6 +274,7 @@ class Qvain extends Component {
   }
 
   render() {
+    const { original, readonly } = this.props.Stores.Qvain
     // Title text
     let titleKey
     if (this.state.datasetLoading) {
@@ -280,7 +282,7 @@ class Qvain extends Component {
     } else if (this.state.datasetError) {
       titleKey = 'qvain.titleLoadingFailed'
     } else {
-      titleKey = this.props.Stores.Qvain.original ? 'qvain.titleEdit' : 'qvain.titleCreate'
+      titleKey = original ? 'qvain.titleEdit' : 'qvain.titleCreate'
     }
 
     // Sticky header content
@@ -307,9 +309,9 @@ class Qvain extends Component {
         <StickySubHeaderWrapper>
           <StickySubHeader>
             <ButtonContainer>
-              {this.props.Stores.Qvain.original
+              {original
                 ? (
-                  <SubmitButton ref={this.updateDatasetButton} type="button" onClick={this.handleUpdate}>
+                  <SubmitButton ref={this.updateDatasetButton} disabled={readonly} type="button" onClick={this.handleUpdate}>
                     <Translate content="qvain.edit" />
                   </SubmitButton>
                 )
@@ -321,6 +323,7 @@ class Qvain extends Component {
               }
             </ButtonContainer>
           </StickySubHeader>
+          <PasState />
           {this.state.submitted ? (
             <StickySubHeaderResponse>
               <SubmitResponse response={this.state.response} />

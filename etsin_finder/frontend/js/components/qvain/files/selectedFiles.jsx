@@ -53,7 +53,8 @@ export class SelectedFilesBase extends Component {
     const {
       toggleSelectedFile,
       toggleSelectedDirectory,
-      cumulativeState
+      cumulativeState,
+      canSelectFiles
     } = this.props.Stores.Qvain
     const isCumulative = cumulativeState === CumulativeStates.YES
     return (
@@ -65,7 +66,7 @@ export class SelectedFilesBase extends Component {
               {s.projectIdentifier} / {s.directoryName || s.fileName}
             </FileLabel>
             <FileButtonsContainer>
-              {s.directoryName && existing && isCumulative && (
+              {s.directoryName && existing && isCumulative && canSelectFiles && (
                 <RefreshDirectoryButton
                   type="button"
                   disabled={this.state.refreshLoading}
@@ -108,20 +109,33 @@ export class SelectedFilesBase extends Component {
       existingFiles,
       existingDirectories,
       inEdit,
-      cumulativeState
+      cumulativeState,
+      isPas,
+      canSelectFiles,
+      readonly,
     } = this.props.Stores.Qvain
     const selected = [...selectedDirectories, ...selectedFiles]
     const existing = [...existingDirectories, ...existingFiles]
     const isCumulative = cumulativeState === CumulativeStates.YES
-    const cumulativeKey = isCumulative ? 'cumulative' : 'noncumulative'
+    let existingHelpKey
+    if (isPas) {
+      existingHelpKey = readonly ? 'pasReadonly' : 'pasEditable'
+    } else {
+      existingHelpKey = isCumulative ? 'cumulative' : 'noncumulative'
+    }
+
     return (
       <Fragment>
-        <Translate tabIndex="0" component={SelectedFilesTitle} content="qvain.files.selected.title" />
-        {selected.length === 0 && <Translate tabIndex="0" component="p" content="qvain.files.selected.none" />}
-        {this.renderFiles(selected, inEdit, false, true)}
+        { canSelectFiles && (
+          <>
+            <Translate tabIndex="0" component={SelectedFilesTitle} content="qvain.files.selected.title" />
+            {selected.length === 0 && <Translate tabIndex="0" component="p" content="qvain.files.selected.none" />}
+            {this.renderFiles(selected, inEdit, false, true)}
+          </>
+        ) }
         <Translate tabIndex="0" component={SelectedFilesTitle} content="qvain.files.existing.title" />
-        <Translate tabIndex="0" content={`qvain.files.existing.help.${cumulativeKey}`} />
-        {this.renderFiles(existing, inEdit, true, !isCumulative)}
+        <Translate tabIndex="0" content={`qvain.files.existing.help.${existingHelpKey}`} />
+        {this.renderFiles(existing, inEdit, true, canSelectFiles && !isCumulative)}
         <Modal
           // Inform the user that a new dataset will be created, if both existing and selected files are present.
           isOpen={(selected.length) > 0 && (existing.length > 0) && (this.state.datasetDuplicationModalHasNotBeenShown === true) && !isCumulative}
