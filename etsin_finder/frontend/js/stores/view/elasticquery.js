@@ -10,6 +10,7 @@
 
 import { observable, action } from 'mobx'
 import axios from 'axios'
+import counterpart from 'counterpart'
 
 import isUrnQuery, { transformQuery } from '../../utils/transformQuery'
 import UrlParse from '../../utils/urlParse'
@@ -58,11 +59,122 @@ class ElasticQuery {
 
   @observable includePasDatasets = false
 
-  toggleIncludePasDatasets = (includePasDatasets) => {
-    if (includePasDatasets) {
-      this.includePasDatasets = false
+  @observable aggregations = {
+    access_type_fi: {
+      terms: {
+        field: 'access_rights.access_type.pref_label.fi.keyword',
+      },
+    },
+    access_type_en: {
+      terms: {
+        field: 'access_rights.access_type.pref_label.en.keyword',
+      },
+    },
+    organization_name_fi: {
+      terms: {
+        field: 'organization_name_fi.keyword',
+        size: 40,
+      },
+    },
+    organization_name_en: {
+      terms: {
+        field: 'organization_name_en.keyword',
+        size: 40,
+      },
+    },
+    creator: {
+      terms: {
+        field: 'creator_name.keyword',
+        size: 40,
+      },
+    },
+    field_of_science_en: {
+      terms: {
+        field: 'field_of_science.pref_label.en.keyword',
+        size: 40,
+      },
+    },
+    field_of_science_fi: {
+      terms: {
+        field: 'field_of_science.pref_label.fi.keyword',
+        size: 40,
+      },
+    },
+    all_keywords_en: {
+      terms: {
+        field: 'all_keywords_en',
+        size: 40,
+      },
+    },
+    all_keywords_fi: {
+      terms: {
+        field: 'all_keywords_fi',
+        size: 40,
+      },
+    },
+    infrastructure_en: {
+      terms: {
+        field: 'infrastructure.pref_label.en.keyword',
+      },
+    },
+    infrastructure_fi: {
+      terms: {
+        field: 'infrastructure.pref_label.fi.keyword',
+      },
+    },
+    project_name_fi: {
+      terms: {
+        field: 'project_name_fi.keyword',
+        size: 40,
+      },
+    },
+    project_name_en: {
+      terms: {
+        field: 'project_name_en.keyword',
+        size: 40,
+      },
+    },
+    file_type_en: {
+      terms: {
+        field: 'file_type.pref_label.en.keyword',
+      },
+    },
+    file_type_fi: {
+      terms: {
+        field: 'file_type.pref_label.fi.keyword',
+      },
+    },
+    data_catalog_fi: {
+      terms: {
+        field: 'data_catalog.fi',
+        exclude: '.*Fairdata PAS-aineistot.*'
+      },
+    },
+    data_catalog_en: {
+      terms: {
+        field: 'data_catalog.en',
+        exclude: '.*Fairdata PAS datasets.*'
+      },
+    },
+  }
+
+  @action
+  toggleIncludePasDatasets = () => {
+    // If includePasDatasets conditional is true then remove the 'exclude' from the
+    // data_catalog aggregations.
+    this.includePasDatasets = !this.includePasDatasets
+    if (this.includePasDatasets) {
+      this.aggregations.data_catalog_en.terms = { field: 'data_catalog.en' }
+      this.aggregations.data_catalog_fi.terms = { field: 'data_catalog.fi' }
     } else {
-      this.includePasDatasets = true
+      this.aggregations.data_catalog_en.terms = {
+        field: 'data_catalog.en',
+        exclude: '.*Fairdata PAS datasets.*'
+      }
+      this.aggregations.data_catalog_fi.terms = {
+        field: 'data_catalog.fi',
+        exclude: '.*Fairdata PAS-aineistot.*'
+      }
     }
     this.queryES(false)
   }
@@ -207,10 +319,12 @@ class ElasticQuery {
 
     // Filters
     const createFilters = () => {
-      const filters = []
-      for (let i = 0; i < this.filter.length; i += 1) {
-        filters.push({ term: { [this.filter[i].term]: this.filter[i].key } })
+      // If includePasDatasets is not checked then check if the PAS filter is set
+      // and remove it if present.
+      if (!this.includePasDatasets) {
+        this.filter = this.filter.filter(obj => !obj.key.startsWith('Fairdata PAS'))
       }
+      const filters = this.filter.map(obj => ({ term: { [obj.term]: obj.key } }))
       return filters
     }
 
@@ -264,104 +378,10 @@ class ElasticQuery {
 
     return new Promise((resolve, reject) => {
       const queryObject = createQuery(this.search)
-      const filters = createFilters()
       const sorting = createSorting()
-      const aggregations = {
-        access_type_fi: {
-          terms: {
-            field: 'access_rights.access_type.pref_label.fi.keyword',
-          },
-        },
-        access_type_en: {
-          terms: {
-            field: 'access_rights.access_type.pref_label.en.keyword',
-          },
-        },
-        organization_name_fi: {
-          terms: {
-            field: 'organization_name_fi.keyword',
-            size: 40,
-          },
-        },
-        organization_name_en: {
-          terms: {
-            field: 'organization_name_en.keyword',
-            size: 40,
-          },
-        },
-        creator: {
-          terms: {
-            field: 'creator_name.keyword',
-            size: 40,
-          },
-        },
-        field_of_science_en: {
-          terms: {
-            field: 'field_of_science.pref_label.en.keyword',
-            size: 40,
-          },
-        },
-        field_of_science_fi: {
-          terms: {
-            field: 'field_of_science.pref_label.fi.keyword',
-            size: 40,
-          },
-        },
-        all_keywords_en: {
-          terms: {
-            field: 'all_keywords_en',
-            size: 40,
-          },
-        },
-        all_keywords_fi: {
-          terms: {
-            field: 'all_keywords_fi',
-            size: 40,
-          },
-        },
-        infrastructure_en: {
-          terms: {
-            field: 'infrastructure.pref_label.en.keyword',
-          },
-        },
-        infrastructure_fi: {
-          terms: {
-            field: 'infrastructure.pref_label.fi.keyword',
-          },
-        },
-        project_name_fi: {
-          terms: {
-            field: 'project_name_fi.keyword',
-            size: 40,
-          },
-        },
-        project_name_en: {
-          terms: {
-            field: 'project_name_en.keyword',
-            size: 40,
-          },
-        },
-        file_type_en: {
-          terms: {
-            field: 'file_type.pref_label.en.keyword',
-          },
-        },
-        file_type_fi: {
-          terms: {
-            field: 'file_type.pref_label.fi.keyword',
-          },
-        },
-        data_catalog_fi: {
-          terms: {
-            field: 'data_catalog.fi',
-          },
-        },
-        data_catalog_en: {
-          terms: {
-            field: 'data_catalog.en',
-          },
-        },
-      }
+      const aggregations = this.aggregations
+      const currentLang = counterpart.getLocale()
+      const filters = createFilters()
 
       // adding filters if they are set
       if (filters.length > 0) {
@@ -425,19 +445,11 @@ class ElasticQuery {
           } else {
             // track queries, categories, and hits
             // category tracking turned off because filter contains a lot of different fields
+            console.log(res.data)
+            const aggr = `data_catalog_${currentLang}`
+            const bucketLengths = res.data.aggregations[aggr].buckets.map(bucket => bucket.doc_count)
+            const totalHits = bucketLengths.reduce((partialSum, a) => (partialSum + a), 0)
             Tracking.newSearch(currentSearch, false, res.data.hits.hits.length)
-
-            let totalHits = res.data.hits.total
-
-            // If pas datasets are not to be included, they must be removed from the search results count
-            if (this.includePasDatasets === false) {
-              for (let i = 0; i < res.data.aggregations.data_catalog_en.buckets.length; i += 1) {
-                if (res.data.aggregations.data_catalog_en.buckets[i].key === 'Fairdata PAS datasets') {
-                  totalHits -= res.data.aggregations.data_catalog_en.buckets[i].doc_count
-                  break;
-                }
-              }
-            }
             this.results = {
               hits: res.data.hits.hits,
               total: totalHits,

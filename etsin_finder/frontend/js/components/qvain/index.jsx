@@ -134,6 +134,8 @@ class Qvain extends Component {
         axios
           .patch('/api/dataset', obj)
           .then(res => {
+            this.props.Stores.Qvain.moveSelectedToExisting()
+            this.props.Stores.Qvain.setChanged(false)
             this.setState({ response: JSON.parse(res.data) })
           })
           .catch(err => {
