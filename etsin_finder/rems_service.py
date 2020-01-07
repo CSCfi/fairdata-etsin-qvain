@@ -60,6 +60,7 @@ class RemsAPIService(FlaskService):
 
         Returns:
             [tuple] -- Message for the response as first argument, and status code as second.
+
         """
         if not self.ENABLED:
             return False
@@ -89,6 +90,7 @@ class RemsAPIService(FlaskService):
 
         Returns:
             [list] -- List of application dicts
+
         """
         if not self.ENABLED:
             return False
@@ -107,6 +109,7 @@ class RemsAPIService(FlaskService):
 
         Returns:
             [dict] -- Dict with info if the operation was successful
+
         """
         if not self.ENABLED:
             return False
@@ -128,6 +131,7 @@ class RemsAPIService(FlaskService):
 
         Returns:
             [list] -- List containing dict of catalogue item
+
         """
         if not self.ENABLED:
             return False
@@ -148,6 +152,7 @@ class RemsAPIService(FlaskService):
 
         Returns:
             [dict] -- Information if the creation succeeded.
+
         """
         if not self.ENABLED:
             return False
@@ -166,6 +171,7 @@ class RemsAPIService(FlaskService):
 
         Returns:
             [list] -- List of dicts with entitlements.
+
         """
         if not self.ENABLED:
             return False
@@ -184,6 +190,7 @@ class RemsAPIService(FlaskService):
 
         Returns:
             [boolean] -- True/False if user is entitled.
+
         """
         if not self.ENABLED:
             return False
@@ -206,8 +213,8 @@ def get_application_state_for_resource(cr, user_id):
 
     Returns:
         [string] -- The application state or False.
-    """
 
+    """
     state = 'apply'
     if not user_id or not cr:
         log.error('Failed to get user application state')
@@ -250,6 +257,7 @@ def get_user_rems_permission_for_catalog_record(cr_id, user_id):
 
     Returns:
         [boolean] -- Returns True/False if user is entitled.
+
     """
     if not user_id or not cr_id:
         log.error('Failed to get rems permission for catalog record. user_id: {0} or cr_id: {1} is invalid'.format(user_id, cr_id))

@@ -220,6 +220,7 @@ class Contact(Resource):
 
 class User(Resource):
     """Saml attributes: https://wiki.eduuni.fi/pages/viewpage.action?spaceKey=cscfairdata&title=Proxy+Attributes"""
+
     @log_request
     def get(self):
         """
@@ -242,6 +243,7 @@ class User(Resource):
 
 class REMSApplyForPermission(Resource):
     """REMS Apply for permission"""
+
     @log_request
     def get(self, cr_id):
         """Apply for permission to REMS resource.
@@ -252,6 +254,7 @@ class REMSApplyForPermission(Resource):
 
         Returns:
             [int] -- The id of the application
+
         """
         # Create user
         user_id = authentication.get_user_id()

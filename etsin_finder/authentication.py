@@ -21,6 +21,7 @@ def not_found(field):
 
     Arguments:
         field [string] -- Name of the field not found.
+
     """
     log.warning('User seems to be authenticated but {0} not in session object.'.format(field))
     log.debug('Saml userdata:\n{0}'.format(session['samlUserdata']))
@@ -34,6 +35,7 @@ def get_saml_auth(flask_request):
 
     Returns:
         [] -- []
+
     """
     return OneLogin_Saml2_Auth(prepare_flask_request_for_saml(flask_request), custom_base_path=app.config['SAML_PATH'])
 
@@ -46,6 +48,7 @@ def init_saml_auth(saml_prepared_flask_request):
 
     Returns:
         [] -- []
+
     """
     return OneLogin_Saml2_Auth(saml_prepared_flask_request, custom_base_path=app.config['SAML_PATH'])
 
@@ -55,6 +58,7 @@ def is_authenticated():
 
     Returns:
         [boolean] -- True/False
+
     """
     if executing_travis():
         return False
@@ -66,6 +70,7 @@ def is_authenticated_CSC_user():
 
     Returns:
         [boolean] -- True/False
+
     """
     key = SAML_ATTRIBUTES['CSC_username']
     if executing_travis():
@@ -81,6 +86,7 @@ def prepare_flask_request_for_saml(request):
 
     Returns:
         [dict] -- configs for saml
+
     """
     # If server is behind proxys or balancers use the HTTP_X_FORWARDED fields
     url_data = urlparse(request.url)
@@ -117,8 +123,8 @@ def get_user_csc_name():
 
     Returns:
         [string] -- The users CSC username.
-    """
 
+    """
     if not is_authenticated() or not is_authenticated_CSC_user() or 'samlUserdata' not in session:
         return None
 
@@ -133,8 +139,8 @@ def get_user_haka_identifier():
 
     Returns:
         [string] -- The users HAKA identifier.
-    """
 
+    """
     if not is_authenticated() or 'samlUserdata' not in session:
         return None
 
@@ -145,11 +151,11 @@ def get_user_haka_identifier():
 
 
 def get_user_id():
-    """Get user identifier. If CSC_username is found return that,
-        else try to find Haka identifier.
+    """Get user identifier. If CSC_username is found return that, else try to find Haka identifier.
 
     Returns:
         [string] -- User identifer.
+
     """
     csc_name = get_user_csc_name()
     return csc_name if csc_name else not_found('csc_name')
@@ -163,8 +169,8 @@ def get_user_email():
 
     Returns:
         [string] -- The users email.
-    """
 
+    """
     if not is_authenticated() or not is_authenticated_CSC_user() or 'samlUserdata' not in session:
         return None
 
@@ -179,8 +185,8 @@ def get_user_lastname():
 
     Returns:
         [string] -- The users last name
-    """
 
+    """
     if not is_authenticated() or 'samlUserdata' not in session:
         return None
 
@@ -195,8 +201,8 @@ def get_user_firstname():
 
     Returns:
         [string] -- The users first name
-    """
 
+    """
     if not is_authenticated() or 'samlUserdata' not in session:
         return None
 
@@ -211,6 +217,7 @@ def get_user_ida_groups():
 
     Returns:
         [list] -- List of all the IDA groups.
+
     """
     if not is_authenticated() or 'samlUserdata' not in session:
         return None
@@ -226,6 +233,7 @@ def get_user_home_organization_id():
 
     Returns:
         [string] -- The id of the users home organization.
+
     """
     if not is_authenticated() or 'samlUserdata' not in session:
         return None
@@ -241,6 +249,7 @@ def get_user_home_organization_name():
 
     Returns:
         [string] -- The name of the users home organization.
+
     """
     if not is_authenticated() or 'samlUserdata' not in session:
         return None
