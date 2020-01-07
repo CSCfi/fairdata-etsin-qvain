@@ -311,7 +311,7 @@ def check_if_data_in_user_IDA_project(data):
     try:
         user_ida_projects_ids = [project.split(":")[1] for project in user_ida_projects]
     except IndexError as e:
-        log.error('Index error while parsing user IDA projects:\n{0}'.fromat(e))
+        log.error('Index error while parsing user IDA projects:\n{0}'.format(e))
         return False
     if not user_ida_projects:
         log.warning('Could not get user IDA groups.')
