@@ -82,7 +82,7 @@ const REMSButton = props => {
         <Button
           id="rems-button-approved"
           onClick={props.onClick}
-          color={etsinTheme.color.primary}
+          color={etsinTheme.color.success}
           noMargin
         >
           {props.loading ? (
