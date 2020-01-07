@@ -18,11 +18,20 @@ const english = {
     access_draft: 'Application in draft state',
     access_request_sent: 'Access request sent',
     access_granted: 'Access granted',
+    access_rights_description: {
+      none: '',
+      open: 'Anyone can access the data.',
+      login: 'Users have to log in to access the data.',
+      embargo: 'Data can be accessed only after the embargo has expired.',
+      permit: 'Data can be accessed only by applying for permission. You need to be logged in to be able to fill-in the application.',
+      restricted: 'Data cannot be accessed.'
+    },
+    access_permission: 'Ask for access',
     access_locked: 'Restricted Access',
     access_open: 'Open Access',
     access_rights: 'Access',
     catalog_publisher: 'Catalog publisher',
-    citation: 'Citation',
+    citation: 'Citation / Reference',
     citation_formats: 'Show more citation formats',
     contact: {
       access: 'Contact the curator on issues related to dataset access',
@@ -168,8 +177,8 @@ const english = {
     storedInPas: 'This dataset is stored in Fairdata PAS.',
     pasDatasetVersionExists: 'A Fairdata PAS version of this dataset exists: ',
     originalDatasetVersionExists: 'An original version of this dataset exists: ',
-    linkToPasDataset: 'Link',
-    linkToOriginalDataset: 'Link',
+    linkToPasDataset: 'Go to PAS version',
+    linkToOriginalDataset: 'Go to original version',
     enteringPas: 'Entering PAS',
     dataInPasDatasetsCanNotBeDownloaded: 'PAS dataset data cannot be downloaded',
   },
@@ -373,8 +382,7 @@ const english = {
       },
       keywords: {
         title: 'Keywords',
-        infoText:
-          'Set keywords that characterize the dataset. Below, there is another field for controlled subject headings.',
+        infoText: 'Set keywords that characterize the dataset.',
         placeholder: 'E.g. economy',
         addButton: 'Add keywords',
         help:
@@ -599,6 +607,50 @@ const english = {
         ida: 'IDA',
         att: 'Remote resources',
       },
+      cumulativeState: {
+        label: 'Cumulative dataset',
+        radio: {
+          no: 'No. (Adding files or folders will automatically create a new version of the dataset.)',
+          yes: 'Yes. (New files or folders will be added without a version change.)',
+          note: 'Note! Once the dataset has been submitted, changing the value from "No" to "Yes" will cause a new version of the dataset to be created. Change from "Yes" to "No" will not cause a new version.',
+        },
+        enabled: {
+          state: 'This dataset has been marked as a cumulative dataset.',
+          explanation: 'It means that data is added to it regularly. If data is no longer being added to this dataset, you should turn it non-cumulative.',
+          button: 'Turn non-cumulative',
+          note: 'Note! Once changed, turning the dataset back to cumulative will create a new version of the dataset.',
+          confirm: 'Are you sure you want to turn this dataset non-cumulative? If you later wish to change it back to cumulative, a new version will be created!',
+          cancel: 'Cancel',
+        },
+        disabled: {
+          state: 'This dataset has been marked non-cumulative.',
+          explanation: 'It means that if new data is added, a new version of the dataset will be created automatically.',
+          button: 'Turn cumulative',
+          note: 'Note! Changing the dataset cumulative will create a new version of the dataset. The old version will remain non-cumulative.',
+          confirm: 'Are you sure you want to turn the dataset cumulative (you want to start regularly adding data into it)? A new version will be created and gets a new identifier. The old version stays non-cumulative.',
+          cancel: 'Cancel',
+        },
+        modalHeader: 'Change dataset cumulation',
+        closeButton: 'Close',
+        changes: 'You need to save your changes to the dataset before you can change this setting.',
+      },
+      responses: {
+        fail: 'Something went wrong...',
+        changeComplete: 'Action complete.',
+        versionCreated: 'A new dataset version has been created with identifier %(identifier)s.',
+      },
+      refreshModal: {
+        header: 'Refresh folder content',
+        noncumulative: 'If new files have been added to the folder, this will add them to the dataset and create a new version of it. The changes will take effect immediately.',
+        cumulative: 'If new files have been added to the folder, this will add them to the dataset. No new dataset version will be created. The changes will take effect immediately.',
+        changes: 'You need to save your changes to the dataset first.',
+        buttons: {
+          show: 'Refresh folder content',
+          ok: 'Ok',
+          cancel: 'Cancel',
+          close: 'Close',
+        }
+      },
       help:
         'Files associated with this dataset. A dataset can only have either IDA files or remote files. File metadata will not be associated with datasets, so remember to save edits to file metadata.',
       ida: {
@@ -676,8 +728,10 @@ const english = {
       },
       existing: {
         title: 'Previously selected files',
-        help:
-          "These are the files and folders that you have added before. If you have added a folder and the content has changed in IDA, it's NOT automatically updated into your dataset. All new files need to be manually added. Note the Versioning Rules!",
+        help: {
+          noncumulative: "These are the files and folders that you have added before. If you have added a folder and the content has changed  in IDA, it's NOT automatically updated into your dataset. All new files need to be manually added. Note the Versioning Rules!",
+          cumulative: "These are the files and folders that you have added before. If you have added a folder and the content has changed in IDA, it's NOT automatically updated into your dataset. All new files need to be manually added. To be able to remove files, you first need to make the dataset non-cumulative.",
+        }
       },
       notificationNewDatasetWillBeCreated: {
         header: 'Editing files and folders',

@@ -21,6 +21,12 @@ export const DataCatalogIdentifiers = {
   ATT: 'urn:nbn:fi:att:data-catalog-att'
 }
 
+export const CumulativeStates = {
+  NO: 0,
+  YES: 1,
+  CLOSED: 2
+}
+
 export const EntityType = {
   PERSON: 'person',
   ORGANIZATION: 'organization',

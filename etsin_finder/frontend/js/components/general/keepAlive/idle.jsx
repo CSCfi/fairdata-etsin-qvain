@@ -20,6 +20,10 @@ const eventsChanged = (oldEvents, newEvents) => {
 }
 
 export default class Idle extends Component {
+  timeout = null
+
+  keepAlive = new Date().getTime()
+
   static propTypes = {
     defaultIdle: PropTypes.bool,
     render: PropTypes.func,
@@ -43,10 +47,6 @@ export default class Idle extends Component {
   state = {
     idle: this.props.defaultIdle,
   }
-
-  timeout = null
-
-  keepAlive = new Date().getTime()
 
   componentDidMount() {
     this.attachEvents()

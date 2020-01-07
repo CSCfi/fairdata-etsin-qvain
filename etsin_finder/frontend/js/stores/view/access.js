@@ -12,7 +12,7 @@ import { observable, action } from 'mobx'
 
 import auth from '../domain/auth'
 
-const accessTypes = {
+export const accessTypes = {
   open: 'http://uri.suomi.fi/codelist/fairdata/access_type/code/open',
   login: 'http://uri.suomi.fi/codelist/fairdata/access_type/code/login',
   embargo: 'http://uri.suomi.fi/codelist/fairdata/access_type/code/embargo',

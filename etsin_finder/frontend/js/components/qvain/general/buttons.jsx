@@ -53,8 +53,12 @@ export const SaveButton = styled.button`
 
 export const DangerButton = styled.button`
   border-radius: 4px;
-  border: solid 1px #ff0000;
-  background-color: #ff0000;
+  border: 1px solid ${props => (
+    props.disabled ? '#ddb6b6' : '#ff0000'
+  )};
+  background-color: ${props => (
+    props.disabled ? '#ddb6b6' : '#ff0000'
+  )};
   font-size: 16px;
   font-weight: 600;
   line-height: 1.31;
@@ -62,7 +66,9 @@ export const DangerButton = styled.button`
   margin-left: 20px;
   padding: 10px 25px;
   &:hover {
-    background-color: #ff4c4c;
+    background-color: ${props => (
+      props.disabled ? '#ddb6b6' : '#ff4c4c'
+    )};
   }
 `
 
@@ -167,6 +173,42 @@ export const DeleteButton = (props) => (
 export const ButtonContainer = styled.div`
   text-align: right;
 `;
+
+export const CumulativeStateButton = styled.button`
+  background-color: ${props => (
+    props.disabled ? '#7fbfd6' : '#007fad'
+  )};
+  color: #fff;
+  height: 47px;
+  border-radius: 31.5px;
+  border: solid 1px ${props => (
+    props.disabled ? '#7fbfd6' : '#007fad'
+  )};
+  text-transform: none;
+  font-weight: 600;
+  padding-left: 27px;
+  padding-right: 27px;
+  display: inline-flex;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-width: 64px;
+  outline: none;
+  -webkit-appearance: none;
+  overflow: hidden;
+  vertical-align: middle;
+  ${props => !props.disabled && css`
+    cursor: pointer;
+  `}
+`;
+
+export const CumulativeStateButtonText = styled.span`
+  text-align: center;
+  color: inherit;
+  font-weight: 400;
+  text-transform: none;
+`
 
 export const FilePickerButton = styled.button`
   background-color: ${props => (

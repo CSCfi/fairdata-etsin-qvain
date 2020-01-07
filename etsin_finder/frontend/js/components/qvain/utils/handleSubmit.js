@@ -74,9 +74,10 @@ const handleSubmitToBackend = (values) => {
     // Send no values if empty instead of empty values.
     remote_resources:
       values.externalResources.length > 0 ? values.externalResources : [],
-      dataCatalog: values.dataCatalog,
-      files: filesToMetax(values.selectedFiles, values.existingFiles),
-      directories: directoriesToMetax(values.selectedDirectories, values.existingDirectories),
+    dataCatalog: values.dataCatalog,
+    cumulativeState: values.cumulativeState,
+    files: filesToMetax(values.selectedFiles, values.existingFiles),
+    directories: directoriesToMetax(values.selectedDirectories, values.existingDirectories),
   }
   return obj
 }
