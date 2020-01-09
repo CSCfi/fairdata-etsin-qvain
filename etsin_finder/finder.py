@@ -84,7 +84,7 @@ def add_restful_resources(app):
     # api.add_resource(REMSGetEntitlements, '/api/entitlements')
     # api.add_resource(REMSGetApplications, '/api/applications/<string:application_id>')
     # api.add_resource(REMSCreateNewApplication, '/api/applications/create')
-    
+
 app = create_app()
 add_restful_resources(app)
 import etsin_finder.views
