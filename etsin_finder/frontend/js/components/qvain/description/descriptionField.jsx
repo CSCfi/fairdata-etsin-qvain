@@ -99,9 +99,7 @@ class DescriptionField extends Component {
               type="text"
               id="titleInput"
               value={title.fi}
-              onChange={event => {
-                title.fi = event.target.value
-              }}
+              onChange={this.handleTitleChange}
               onBlur={this.handleTitleBlur}
               attributes={{ placeholder: this.getPlaceholder('title', 'FINNISH') }}
             />
@@ -112,9 +110,7 @@ class DescriptionField extends Component {
               type="text"
               id="titleInput"
               value={title.en}
-              onChange={event => {
-                title.en = event.target.value
-              }}
+              onChange={this.handleTitleChange}
               onBlur={this.handleTitleBlur}
               attributes={{ placeholder: this.getPlaceholder('title', 'ENGLISH') }}
             />
@@ -129,9 +125,7 @@ class DescriptionField extends Component {
               id="descriptionInput"
               rows="8"
               value={description.fi}
-              onChange={event => {
-                description.fi = event.target.value
-              }}
+              onChange={this.handleDescriptionChange}
               onBlur={this.handleDescriptionBlur}
               attributes={{ placeholder: this.getPlaceholder('description', this.state.active) }}
             />
@@ -142,9 +136,7 @@ class DescriptionField extends Component {
               id="descriptionInput"
               rows="8"
               value={description.en}
-              onChange={event => {
-                description.en = event.target.value
-              }}
+              onChange={this.handleDescriptionChange}
               onBlur={this.handleDescriptionBlur}
               attributes={{ placeholder: this.getPlaceholder('description', this.state.active) }}
             />
