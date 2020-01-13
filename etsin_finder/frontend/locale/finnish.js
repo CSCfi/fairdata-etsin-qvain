@@ -11,12 +11,20 @@
 const finnish = {
   changepage: 'Siirryit sivulle: %(page)s',
   dataset: {
+    access_rights_description: {
+      none: '',
+      open: 'Kuka tahansa voi ladata datan.',
+      login: 'Käyttän pitää olla sisään kirjautunut ladatakseen datan.',
+      embargo: 'Datan voi ladata vasta, kun embargo-pvm on ohitettu.',
+      permit: 'Datan voi ladata ainoastaan hakemalla erillisen luvan lataamista varten. Luvan hakeminen vaatii kirjautumisen.',
+      restricted: 'Data ei ladattavissa.'
+    },
     access_permission: 'Hae käyttölupaa',
     access_locked: 'Rajattu käyttöoikeus',
     access_open: 'Avoin',
     access_rights: 'Saatavuus',
     catalog_publisher: 'Katalogin julkaisija',
-    citation: 'Sitaatti',
+    citation: 'Sitaatti / Lähdeviite',
     citation_formats: 'Näytä lisää sitaattiehdotuksia',
     contact: {
       access: 'Aineiston käyttöoikeuteen liittyvissä kyselyissä ota yhteyttä kuraattoriin.',
@@ -160,8 +168,8 @@ const finnish = {
     storedInPas: 'Tämä ainesto on säilytetty Fairdata PAS:issa.',
     pasDatasetVersionExists: 'Fairdata PAS-versio tästä aineistosta on olemassa: ',
     originalDatasetVersionExists: 'Alkuperäinen versio tästä aineistosta on olemassa: ',
-    linkToPasDataset: 'Linkki',
-    linkToOriginalDataset: 'Linkki',
+    linkToPasDataset: 'Siirry PAS-versioon',
+    linkToOriginalDataset: 'Siirry alkuperäiseen versioon',
     enteringPas: 'Menemässä PAS:iin',
     dataInPasDatasetsCanNotBeDownloaded: 'PAS-aineistojen dataa ei voida ladata'
   },
@@ -209,7 +217,7 @@ const finnish = {
       fos: 'tieteenalaa',
       research: 'tutkimusprojektia',
     },
-    includePas: 'Ota mukaan Fairdata PAS-datasettejä',
+    includePas: 'Ota mukaan Fairdata PAS -datasetit',
   },
   nav: {
     login: 'Kirjaudu',
@@ -585,6 +593,50 @@ const finnish = {
         ida: 'IDA',
         att: 'Ulkoinen lähde'
       },
+      cumulativeState: {
+        label: 'Kasvava aineisto',
+        radio: {
+          no: 'Ei. (Uusia tiedostoja tai kansioita ei voi lisätä ilman, että aineistosta syntyy uusi versio.)',
+          yes: 'Kyllä. (Tiedostoja tai kansioita tullaan lisäämään aineistoon. Lisäys ei aiheuta uuden version syntymistä.)',
+          note: 'Huom! Julkaistua aineistoa ei voi muuttaa kasvavaksi ilman, että syntyy uusi versio. Kasvavan aineiston muuttaminen ei-kasvavaksi on sen sijaan sallittua.',
+        },
+        enabled: {
+          state: 'Tämä aineisto on julkaistu kasvavana aineistona.',
+          explanation: 'Kasvavaan aineistoon lisätään dataa säännöllisesti. Jos aineistoon ei enää lisätä dataa, se kannattaa muuttaa ei-kasvavaksi.',
+          button: 'Muuta ei-kasvavaksi',
+          note: 'Huom! Jos muutat kasvavan aineiston ei-kasvavaksi, et voi enää muuttaa sitä takaisin ilman, että syntyisi uusi versio.',
+          confirm: 'Oletko varma, että haluat muuttaa kasvavan aineiston ei-kasvavaksi? Muutos ei aiheuta uuden version syntymistä, mutta jos aineisto myöhemmin vaihdetaan takaisin kasvavaksi, syntyy automaattisesti uusi versio.',
+          cancel: 'Peruuta',
+        },
+        disabled: {
+          state: 'Aineisto on julkaistu tavallisena, ei-kasvavana aineistona.',
+          explanation: 'Jos aineistoon lisätään tiedostoja tai hakemistoja, siitä syntyy automaattisesti uusi versio.',
+          button: 'Muuta kasvavaksi',
+          note: 'Huom! Jos muutat tavallisen aineiston kasvavaksi aineistoksi, siitä tehdään automaattisesti uusi versio. Vanha versio jää tavalliseksi, ja uudesta tulee kasvava aineisto.',
+          confirm: 'Oletko varma, että haluat tehdä aineistosta kasvavan? Muutos aiheuttaa uuden version syntymisen ja uu. Uudella versiolla on aina uusi tunniste.',
+          cancel: 'Peruuta',
+        },
+        modalHeader: 'Muuta aineiston kasvavuutta',
+        closeButton: 'Sulje',
+        changes: 'Aineistoon tehdyt muutokset on tallennettava ennen tämän asetuksen muuttamista.',
+      },
+      responses: {
+        fail: 'Jotain meni pieleen...',
+        changeComplete: 'Toiminto suoritettu.',
+        versionCreated: 'Aineistosta on luotu uusi versio tunnisteella %(identifier)s.',
+      },
+      refreshModal: {
+        header: 'Päivitä kansion tiedostot',
+        noncumulative: 'Mikäli kansioon on lisätty uusia tiedostoja, toiminto lisää ne aineistoon ja luo siitä uuden version.',
+        cumulative: 'Toiminto lisää kansioon lisätyt tiedostot aineistoon. Muutos näkyy välittömästi aineiston julkaistussa versiossa.',
+        changes: 'Aineistoon tehdyt muutokset on tallennettava ensin.',
+        buttons: {
+          show: 'Päivitä kansion tiedostot',
+          ok: 'Päivitä',
+          cancel: 'Peruuta',
+          close: 'Sulje',
+        }
+      },
       help:
         'Aineistoon kuuluvat tiedostot. Aineistoon voi kuulua vain joko IDAssa olevia tiedostoja tai ulkopuolisia tiedostoja. Tiedostojen metadata ei ole osa aineistojen metadataa, joten muista tallentaa muutokset jotka teet tiedostojen metadataan.',
       ida: {
@@ -627,7 +679,10 @@ const finnish = {
       },
       existing: {
         title: 'Aikaisemmin valitut tiedostot',
-        help: 'Nämä ovat sinun aiemmin valitsemia tiedostoja. Jos olet liittänyt aineistoosi hakemiston, sen sisältöä ei automaattisesti päivitetä, vaikka sen sisältö olisi muuttunut IDAssa. Jos haluat lisätä puuttuvia tiedostoja, valitse ne tiedostolistasta. HUOM! Tiedostojen lisääminen luo aineistostasi uuden version.',
+        help: {
+          noncumulative: 'Nämä ovat sinun aiemmin valitsemia tiedostoja. Jos olet liittänyt aineistoosi hakemiston, sen sisältöä ei automaattisesti päivitetä, vaikka sen sisältö olisi muuttunut IDAssa. Jos haluat lisätä puuttuvia tiedostoja, valitse ne tiedostolistasta. HUOM! Tiedostojen lisääminen luo aineistostasi uuden version.',
+          cumulative: 'Nämä ovat sinun aiemmin valitsemia tiedostoja. Jos olet liittänyt aineistoosi hakemiston, sen sisältöä ei automaattisesti päivitetä, vaikka sen sisältö olisi muuttunut IDAssa. Jos haluat lisätä puuttuvia tiedostoja, valitse ne tiedostolistasta. Voidaksesi poistaa tiedostoja aineisto on ensin muutettava ei-kumulatiiviseksi.',
+        }
       },
       notificationNewDatasetWillBeCreated: {
         header: 'Tiedostojen ja kansioiden muokkaaminen',

@@ -7,7 +7,11 @@ import access from '../../stores/view/access'
 
 class AskForAccess extends Component {
   render() {
-    if (!access.restrictions.allowAskForPermit) {
+    /*
+      The second condition of this if statement was added to prevent the display of the REMS button,
+      so that it isn't visible in production. This condition should be removed once REMS development is continued.
+    */
+    if (!access.restrictions.allowAskForPermit || access.restrictions.allowAskForPermit) {
       return null
     }
     return (

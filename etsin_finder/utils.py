@@ -54,7 +54,7 @@ def get_log_config(log_file_path, log_lvl):
             'formatters': {
                 'standard': {
                     'format': '--------------\n[%(asctime)s] [%(process)d] %(levelname)s in %(filename)s:%(lineno)d: %(message)s',
-                    'datefmt': '%Y-%M-%d %H:%M:%S %z',
+                    'datefmt': '%Y-%m-%d %H:%M:%S %z',
                 }
             },
             'handlers': {

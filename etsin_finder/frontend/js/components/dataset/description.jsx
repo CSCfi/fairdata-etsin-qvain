@@ -262,6 +262,7 @@ const Title = styled.h1`
 const MainInfo = styled.div`
   color: ${p => p.theme.color.gray};
   font-size: 0.9em;
+  word-break: break-word;
 `
 
 const PasInfo = styled.div`
