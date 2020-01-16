@@ -176,7 +176,7 @@ def get_user_email():
     if not is_authenticated() or not is_authenticated_CSC_user() or 'samlUserdata' not in session:
         return None
 
-    csc_email = session.get('samlUserdata', None).get(SAML_ATTRIBUTES.get('email', None), False)
+    csc_email = session.get('samlUserdata', {}).get(SAML_ATTRIBUTES.get('email', None), False)
 
     return csc_email[0] if csc_email else not_found('csc_email')
     return None
@@ -192,7 +192,7 @@ def get_user_lastname():
     if not is_authenticated() or 'samlUserdata' not in session:
         return None
 
-    lastname = session.get('samlUserdata', None).get(SAML_ATTRIBUTES.get('last_name', None), False)
+    lastname = session.get('samlUserdata', {}).get(SAML_ATTRIBUTES.get('last_name', None), False)
 
     return lastname[0] if lastname else not_found('lastname')
     return None
@@ -208,7 +208,7 @@ def get_user_firstname():
     if not is_authenticated() or 'samlUserdata' not in session:
         return None
 
-    first_name = session.get('samlUserdata', None).get(SAML_ATTRIBUTES.get('first_name', None), False)
+    first_name = session.get('samlUserdata', {}).get(SAML_ATTRIBUTES.get('first_name', None), False)
 
     return first_name[0] if first_name else not_found('first_name')
     return None
@@ -224,7 +224,7 @@ def get_user_ida_groups():
     if not is_authenticated() or 'samlUserdata' not in session:
         return None
 
-    groups = session.get('samlUserdata', None).get(SAML_ATTRIBUTES.get('idm_groups', None), False)
+    groups = session.get('samlUserdata', {}).get(SAML_ATTRIBUTES.get('idm_groups', None), False)
 
     return [group for group in groups if group.startswith('IDA')] if groups else not_found('groups')
     return None
@@ -240,7 +240,7 @@ def get_user_home_organization_id():
     if not is_authenticated() or 'samlUserdata' not in session:
         return None
 
-    home_organization = session.get('samlUserdata', None).get(SAML_ATTRIBUTES.get('haka_org_id', None), False)
+    home_organization = session.get('samlUserdata', {}).get(SAML_ATTRIBUTES.get('haka_org_id', None), False)
 
     return home_organization[0] if home_organization else not_found('home_organization')
     return None
@@ -256,7 +256,7 @@ def get_user_home_organization_name():
     if not is_authenticated() or 'samlUserdata' not in session:
         return None
 
-    home_organization_id = session.get('samlUserdata', None).get(SAML_ATTRIBUTES.get('haka_org_name', None), False)
+    home_organization_id = session.get('samlUserdata', {}).get(SAML_ATTRIBUTES.get('haka_org_name', None), False)
 
     return home_organization_id[0] if home_organization_id else not_found('home_organization_id')
     return None
