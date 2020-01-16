@@ -24,7 +24,7 @@ def not_found(field):
 
     """
     log.warning('User seems to be authenticated but {0} not in session object.'.format(field))
-    log.debug('Saml userdata:\n{0}'.format(session['samlUserdata']))
+    log.debug('Saml userdata:\n{0}'.format(session.get('samlUserdata', None)))
 
 
 def get_saml_auth(flask_request):
@@ -37,7 +37,7 @@ def get_saml_auth(flask_request):
         [] -- []
 
     """
-    return OneLogin_Saml2_Auth(prepare_flask_request_for_saml(flask_request), custom_base_path=app.config['SAML_PATH'])
+    return OneLogin_Saml2_Auth(prepare_flask_request_for_saml(flask_request), custom_base_path=app.config.get('SAML_PATH', None))
 
 
 def init_saml_auth(saml_prepared_flask_request):
@@ -50,7 +50,7 @@ def init_saml_auth(saml_prepared_flask_request):
         [] -- []
 
     """
-    return OneLogin_Saml2_Auth(saml_prepared_flask_request, custom_base_path=app.config['SAML_PATH'])
+    return OneLogin_Saml2_Auth(saml_prepared_flask_request, custom_base_path=app.config.get('SAML_PATH', None))
 
 
 def is_authenticated():
@@ -62,7 +62,7 @@ def is_authenticated():
     """
     if executing_travis():
         return False
-    return True if 'samlUserdata' in session and len(session['samlUserdata']) > 0 else False
+    return True if 'samlUserdata' in session and len(session.get('samlUserdata', None)) > 0 else False
 
 
 def is_authenticated_CSC_user():
@@ -75,7 +75,7 @@ def is_authenticated_CSC_user():
     key = SAML_ATTRIBUTES['CSC_username']
     if executing_travis():
         return False
-    return True if 'samlUserdata' in session and len(session['samlUserdata']) > 0 and key in session['samlUserdata'] else False
+    return True if 'samlUserdata' in session and len(session.get('samlUserdata', None)) > 0 and key in session.get('samlUserdata', None) else False
 
 
 def prepare_flask_request_for_saml(request):
@@ -128,7 +128,7 @@ def get_user_csc_name():
     if not is_authenticated() or not is_authenticated_CSC_user() or 'samlUserdata' not in session:
         return None
 
-    csc_name = session['samlUserdata'].get(SAML_ATTRIBUTES['CSC_username'], False)
+    csc_name = session.get('samlUserdata', None).get(SAML_ATTRIBUTES.get('CSC_username', None), False)
 
     return csc_name[0] if csc_name else not_found('csc_name')
     return None
@@ -144,7 +144,7 @@ def get_user_haka_identifier():
     if not is_authenticated() or 'samlUserdata' not in session:
         return None
 
-    haka_id = session['samlUserdata'].get(SAML_ATTRIBUTES['haka_id'], False)
+    haka_id = session.get('samlUserdata', None).get(SAML_ATTRIBUTES.get('haka_id', None), False)
 
     return haka_id[0] if haka_id else not_found('haka_id')
     return None
@@ -158,9 +158,11 @@ def get_user_id():
 
     """
     csc_name = get_user_csc_name()
-    return csc_name if csc_name else not_found('csc_name')
+    if csc_name:
+        return csc_name
     haka_id = get_user_haka_identifier()
-    return haka_id if haka_id else not_found('haka_id')
+    if haka_id:
+        return haka_id
     return None
 
 
@@ -174,7 +176,7 @@ def get_user_email():
     if not is_authenticated() or not is_authenticated_CSC_user() or 'samlUserdata' not in session:
         return None
 
-    csc_email = session['samlUserdata'].get(SAML_ATTRIBUTES['email'], False)
+    csc_email = session.get('samlUserdata', None).get(SAML_ATTRIBUTES.get('email', None), False)
 
     return csc_email[0] if csc_email else not_found('csc_email')
     return None
@@ -190,7 +192,7 @@ def get_user_lastname():
     if not is_authenticated() or 'samlUserdata' not in session:
         return None
 
-    lastname = session['samlUserdata'].get(SAML_ATTRIBUTES['last_name'], False)
+    lastname = session.get('samlUserdata', None).get(SAML_ATTRIBUTES.get('last_name', None), False)
 
     return lastname[0] if lastname else not_found('lastname')
     return None
@@ -206,7 +208,7 @@ def get_user_firstname():
     if not is_authenticated() or 'samlUserdata' not in session:
         return None
 
-    first_name = session['samlUserdata'].get(SAML_ATTRIBUTES['first_name'], False)
+    first_name = session.get('samlUserdata', None).get(SAML_ATTRIBUTES.get('first_name', None), False)
 
     return first_name[0] if first_name else not_found('first_name')
     return None
@@ -222,7 +224,7 @@ def get_user_ida_groups():
     if not is_authenticated() or 'samlUserdata' not in session:
         return None
 
-    groups = session['samlUserdata'].get(SAML_ATTRIBUTES['idm_groups'], False)
+    groups = session.get('samlUserdata', None).get(SAML_ATTRIBUTES.get('idm_groups', None), False)
 
     return [group for group in groups if group.startswith('IDA')] if groups else not_found('groups')
     return None
@@ -238,7 +240,7 @@ def get_user_home_organization_id():
     if not is_authenticated() or 'samlUserdata' not in session:
         return None
 
-    home_organization = session['samlUserdata'].get(SAML_ATTRIBUTES['haka_org_id'], False)
+    home_organization = session.get('samlUserdata', None).get(SAML_ATTRIBUTES.get('haka_org_id', None), False)
 
     return home_organization[0] if home_organization else not_found('home_organization')
     return None
@@ -254,7 +256,7 @@ def get_user_home_organization_name():
     if not is_authenticated() or 'samlUserdata' not in session:
         return None
 
-    home_organization_id = session['samlUserdata'].get(SAML_ATTRIBUTES['haka_org_name'], False)
+    home_organization_id = session.get('samlUserdata', None).get(SAML_ATTRIBUTES.get('haka_org_name', None), False)
 
     return home_organization_id[0] if home_organization_id else not_found('home_organization_id')
     return None

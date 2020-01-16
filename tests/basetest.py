@@ -31,7 +31,7 @@ class BaseTest():
     @pytest.fixture
     def authd_client(self, app, monkeypatch):
         """
-        User-authenticated Flask test client
+        User-authenticated Flask test client, CSC user
 
         :param app:
         :param monkeypatch:
@@ -44,8 +44,10 @@ class BaseTest():
         with client as c:
             with c.session_transaction() as sess:
                 sess['samlUserdata'] = {
-                    'urn:oid:2.5.4.3': ['Teppo Testaaja'],
-                    'urn:oid:1.3.6.1.4.1.8057.2.80.9': ['teppo@yliopisto.fi']
+                    'urn:oid:1.3.6.1.4.1.16161.4.0.53': ['teppo_testaaja'],
+                    'urn:oid:2.5.4.42': ['Teppo'],
+                    'urn:oid:2.5.4.4': ['Testaaja'],
+                    'urn:oid:0.9.2342.19200300.100.1.3': ['teppo@yliopisto.fi']
                 }
         return client
 

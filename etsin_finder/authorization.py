@@ -7,7 +7,7 @@
 
 """Functionalities related to authorization and what users are allowed to see."""
 
-from etsin_finder.authentication import get_user_csc_name
+from etsin_finder.authentication import get_user_id
 from etsin_finder.cr_service import \
     get_catalog_record_access_type, \
     get_catalog_record_data_catalog_id, \
@@ -61,7 +61,7 @@ def user_is_allowed_to_download_from_ida(catalog_record, is_authd):
     elif access_type_id == ACCESS_TYPES['restricted']:
         return False
     elif access_type_id == ACCESS_TYPES['permit']:
-        return user_has_rems_permission_for_catalog_record(catalog_record['identifier'], get_user_csc_name(), is_authd)
+        return user_has_rems_permission_for_catalog_record(catalog_record['identifier'], get_user_id(), is_authd)
     elif access_type_id == ACCESS_TYPES['login']:
         if is_authd:
             return True
@@ -91,7 +91,7 @@ def strip_dir_api_object(dir_api_obj, is_authd, catalog_record):
     elif access_type_id == ACCESS_TYPES['restricted']:
         _strip_directory_api_obj_partially(dir_api_obj)
     elif access_type_id == ACCESS_TYPES['permit']:
-        if not user_has_rems_permission_for_catalog_record(catalog_record['identifier'], get_user_csc_name(), is_authd):
+        if not user_has_rems_permission_for_catalog_record(catalog_record['identifier'], get_user_id(), is_authd):
             _strip_directory_api_obj_partially(dir_api_obj)
     elif access_type_id == ACCESS_TYPES['login']:
         if not is_authd:
@@ -124,7 +124,7 @@ def strip_information_from_catalog_record(catalog_record, is_authd):
     elif access_type_id == ACCESS_TYPES['restricted']:
         _strip_catalog_record_ida_data_partially(catalog_record)
     elif access_type_id == ACCESS_TYPES['permit']:
-        if not user_has_rems_permission_for_catalog_record(catalog_record['identifier'], get_user_csc_name(), is_authd):
+        if not user_has_rems_permission_for_catalog_record(catalog_record['identifier'], get_user_id(), is_authd):
             _strip_catalog_record_ida_data_partially(catalog_record)
     elif access_type_id == ACCESS_TYPES['login']:
         if not is_authd:

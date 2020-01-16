@@ -42,9 +42,8 @@ class RemsAPIService(FlaskService):
             self.REMS_GET_MY_APPLICATIONS = 'https://{0}'.format(self.HOST) + '/api/my-applications/'
             self.REMS_CATALOGUE_ITEMS = 'https://{0}'.format(self.HOST) + '/api/catalogue-items?resource={0}'
             self.REMS_CREATE_APPLICATION = 'https://{0}'.format(self.HOST) + '/api/applications/create'
-        elif not self.is_testing:
+        elif self.is_testing:
             self.ENABLED = False
-            log.error("Unable to initialize RemsAPIService due to missing config")
 
     def rems_request(self, method, url, err_message, json=None, user_id='RDowner@funet.fi'):
         """Genaral method for sending requests to REMS
