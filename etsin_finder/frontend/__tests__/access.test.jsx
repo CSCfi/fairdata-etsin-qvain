@@ -8,7 +8,7 @@ import { AccessTypeURLs } from '../js/components/qvain/utils/constants'
 //   accessRights = response.data.research_dataset.access_rights
 //   done()
 // })
-let accessRights = {
+const accessRights = {
   license: [
     {
       title: {
