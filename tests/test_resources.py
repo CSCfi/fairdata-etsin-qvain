@@ -172,20 +172,6 @@ class TestDatasetResources(BaseTest):
         self._assert_catalog_record_basics(r_json)
         self._assert_catalog_record_is_stripped(r_json)
 
-    def test_restricted_dataset_authd_get(self, authd_client, restricted_catalog_record):
-        """
-        Test dataset API response with restricted dataset as authenticated user
-
-        :param authd_client:
-        :param login_catalog_record:
-        :return:
-        """
-        r = authd_client.get('/api/dataset/123')
-        assert r.status_code == 200
-        r_json = json.loads(r.get_data())
-        self._assert_catalog_record_basics(r_json)
-        self._assert_catalog_record_is_stripped(r_json)
-
     def _assert_catalog_record_basics(self, cr_json):
         assert 'catalog_record' in cr_json
         assert 'research_dataset' in cr_json['catalog_record']
