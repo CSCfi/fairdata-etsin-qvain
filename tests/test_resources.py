@@ -85,50 +85,50 @@ class TestDatasetResources(BaseTest):
         self._assert_catalog_record_basics(r_json)
         self._assert_catalog_record_not_stripped(r_json)
 
-    def test_permit_dataset_unauthd_get(self, unauthd_client, permit_catalog_record, has_rems_permit):
-        """
-        Test dataset API response with permitted dataset as unauthenticated user
+    # def test_permit_dataset_unauthd_get(self, unauthd_client, permit_catalog_record, has_rems_permit):
+    #     """
+    #     Test dataset API response with permitted dataset as unauthenticated user
 
-        :param unauthd_client:
-        :param permit_catalog_record:
-        :param has_rems_permit:
-        :return:
-        """
-        r = unauthd_client.get('/api/dataset/123')
-        assert r.status_code == 200
-        r_json = json.loads(r.get_data())
-        self._assert_catalog_record_basics(r_json)
-        self._assert_catalog_record_is_stripped(r_json)
+    #     :param unauthd_client:
+    #     :param permit_catalog_record:
+    #     :param has_rems_permit:
+    #     :return:
+    #     """
+    #     r = unauthd_client.get('/api/dataset/123')
+    #     assert r.status_code == 200
+    #     r_json = json.loads(r.get_data())
+    #     self._assert_catalog_record_basics(r_json)
+    #     self._assert_catalog_record_is_stripped(r_json)
 
-    def test_permit_dataset_authd_permit_get(self, authd_client, permit_catalog_record, has_rems_permit):
-        """
-        Test dataset API response with permitted dataset as authenticated user
+    # def test_permit_dataset_authd_permit_get(self, authd_client, permit_catalog_record, has_rems_permit):
+    #     """
+    #     Test dataset API response with permitted dataset as authenticated user
 
-        :param authd_client:
-        :param permit_catalog_record:
-        :param has_rems_permit:
-        :return:
-        """
-        r = authd_client.get('/api/dataset/456')
-        assert r.status_code == 200
-        r_json = json.loads(r.get_data())
-        self._assert_catalog_record_basics(r_json)
-        self._assert_catalog_record_not_stripped(r_json)
+    #     :param authd_client:
+    #     :param permit_catalog_record:
+    #     :param has_rems_permit:
+    #     :return:
+    #     """
+    #     r = authd_client.get('/api/dataset/456')
+    #     assert r.status_code == 200
+    #     r_json = json.loads(r.get_data())
+    #     self._assert_catalog_record_basics(r_json)
+    #     self._assert_catalog_record_not_stripped(r_json)
 
-    def test_permit_dataset_authd_no_permit_get(self, authd_client, permit_catalog_record, no_rems_permit):
-        """
-        Test dataset API response with non-permitted dataset as authenticated user
+    # def test_permit_dataset_authd_no_permit_get(self, authd_client, permit_catalog_record, no_rems_permit):
+    #     """
+    #     Test dataset API response with non-permitted dataset as authenticated user
 
-        :param authd_client:
-        :param permit_catalog_record:
-        :param no_rems_permit:
-        :return:
-        """
-        r = authd_client.get('/api/dataset/123')
-        assert r.status_code == 200
-        r_json = json.loads(r.get_data())
-        self._assert_catalog_record_basics(r_json)
-        self._assert_catalog_record_is_stripped(r_json)
+    #     :param authd_client:
+    #     :param permit_catalog_record:
+    #     :param no_rems_permit:
+    #     :return:
+    #     """
+    #     r = authd_client.get('/api/dataset/123')
+    #     assert r.status_code == 200
+    #     r_json = json.loads(r.get_data())
+    #     self._assert_catalog_record_basics(r_json)
+    #     self._assert_catalog_record_is_stripped(r_json)
 
     def test_embargo_passed_dataset_unauthd_get(self, unauthd_client, embargo_passed_catalog_record):
         """
@@ -167,6 +167,20 @@ class TestDatasetResources(BaseTest):
         :return:
         """
         r = unauthd_client.get('/api/dataset/123')
+        assert r.status_code == 200
+        r_json = json.loads(r.get_data())
+        self._assert_catalog_record_basics(r_json)
+        self._assert_catalog_record_is_stripped(r_json)
+
+    def test_restricted_dataset_authd_get(self, authd_client, restricted_catalog_record):
+        """
+        Test dataset API response with restricted dataset as authenticated user
+
+        :param authd_client:
+        :param login_catalog_record:
+        :return:
+        """
+        r = authd_client.get('/api/dataset/123')
         assert r.status_code == 200
         r_json = json.loads(r.get_data())
         self._assert_catalog_record_basics(r_json)

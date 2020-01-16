@@ -128,7 +128,7 @@ def get_user_csc_name():
     if not is_authenticated() or not is_authenticated_CSC_user() or 'samlUserdata' not in session:
         return None
 
-    csc_name = session.get('samlUserdata', None).get(SAML_ATTRIBUTES.get('CSC_username', None), False)
+    csc_name = session.get('samlUserdata', {}).get(SAML_ATTRIBUTES.get('CSC_username', None), False)
 
     return csc_name[0] if csc_name else not_found('csc_name')
     return None
@@ -144,7 +144,7 @@ def get_user_haka_identifier():
     if not is_authenticated() or 'samlUserdata' not in session:
         return None
 
-    haka_id = session.get('samlUserdata', None).get(SAML_ATTRIBUTES.get('haka_id', None), False)
+    haka_id = session.get('samlUserdata', {}).get(SAML_ATTRIBUTES.get('haka_id', None), False)
 
     return haka_id[0] if haka_id else not_found('haka_id')
     return None

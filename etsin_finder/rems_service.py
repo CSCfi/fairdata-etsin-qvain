@@ -226,7 +226,7 @@ def get_application_state_for_resource(cr, user_id):
     _rems_api = RemsAPIService(app, user_id)
     user_applications = _rems_api.get_user_applications()
     if not isinstance(user_applications, list) or not user_applications:
-        log.warning('Could get any applications belonging to user.')
+        log.warning('Could not get any applications belonging to user.')
         return False
     log.info('Got {0} applications for the user.'.format(len(user_applications)))
 
