@@ -39,6 +39,7 @@ class BaseTest():
         """
         from etsin_finder import authentication
         monkeypatch.setattr(authentication, 'is_authenticated', lambda: True)
+        monkeypatch.setattr(authentication, 'is_authenticated_CSC_user', lambda: True)
 
         client = app.test_client()
         with client as c:
@@ -62,6 +63,7 @@ class BaseTest():
         """
         from etsin_finder import authentication
         monkeypatch.setattr(authentication, 'is_authenticated', lambda: False)
+        monkeypatch.setattr(authentication, 'is_authenticated_CSC_user', lambda: False)
 
         client = app.test_client()
         return client
