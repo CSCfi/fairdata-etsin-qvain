@@ -7,7 +7,7 @@
 
 """Functionalities related to authorization and what users are allowed to see."""
 
-from etsin_finder.authentication import get_user_id
+from etsin_finder.authentication import get_user_id, is_authenticated
 from etsin_finder.cr_service import \
     get_catalog_record_access_type, \
     get_catalog_record_data_catalog_id, \
@@ -20,16 +20,17 @@ from etsin_finder.utils import tz_now_is_later_than_timestamp_str, remove_keys_r
 log = app.logger
 
 
-def user_has_rems_permission_for_catalog_record(cr_id, user_id, is_authd):
+def user_has_rems_permission_for_catalog_record(cr_id):
     """
     Use Fairdata REMS API to check whether user has 'entitlement' for the specified catalog record
 
     :param catalog_record:
-    :param user_id:
-    :param is_authd:
     :return:
     """
-    if not cr_id or not user_id or not is_authd:
+    if not is_authenticated():
+        return False
+    user_id = get_user_id()
+    if not cr_id or not user_id:
         return False
     return rems_service.get_user_rems_permission_for_catalog_record(cr_id, user_id)
 
@@ -53,16 +54,16 @@ def user_is_allowed_to_download_from_ida(catalog_record, is_authd):
     if not access_type_id:
         return False
 
-    if access_type_id == ACCESS_TYPES['open']:
+    if access_type_id == ACCESS_TYPES.get('open'):
         return True
-    elif access_type_id == ACCESS_TYPES['embargo']:
+    elif access_type_id == ACCESS_TYPES.get('embargo'):
         if _embargo_time_passed(catalog_record):
             return True
-    elif access_type_id == ACCESS_TYPES['restricted']:
+    elif access_type_id == ACCESS_TYPES.get('restricted'):
         return False
-    elif access_type_id == ACCESS_TYPES['permit']:
-        return user_has_rems_permission_for_catalog_record(catalog_record['identifier'], get_user_id(), is_authd)
-    elif access_type_id == ACCESS_TYPES['login']:
+    elif access_type_id == ACCESS_TYPES.get('permit'):
+        return user_has_rems_permission_for_catalog_record(catalog_record.get('identifier'))
+    elif access_type_id == ACCESS_TYPES.get('login'):
         if is_authd:
             return True
     return False
@@ -83,17 +84,17 @@ def strip_dir_api_object(dir_api_obj, is_authd, catalog_record):
     if not access_type_id:
         dir_api_obj = {}
 
-    if access_type_id == ACCESS_TYPES['open']:
+    if access_type_id == ACCESS_TYPES.get('open'):
         pass
-    elif access_type_id == ACCESS_TYPES['embargo']:
+    elif access_type_id == ACCESS_TYPES.get('embargo'):
         if not _embargo_time_passed(catalog_record):
             _strip_directory_api_obj_partially(dir_api_obj)
-    elif access_type_id == ACCESS_TYPES['restricted']:
+    elif access_type_id == ACCESS_TYPES.get('restricted'):
         _strip_directory_api_obj_partially(dir_api_obj)
-    elif access_type_id == ACCESS_TYPES['permit']:
-        if not user_has_rems_permission_for_catalog_record(catalog_record['identifier'], get_user_id(), is_authd):
+    elif access_type_id == ACCESS_TYPES.get('permit'):
+        if not user_has_rems_permission_for_catalog_record(catalog_record.get('identifier', None)):
             _strip_directory_api_obj_partially(dir_api_obj)
-    elif access_type_id == ACCESS_TYPES['login']:
+    elif access_type_id == ACCESS_TYPES.get('login'):
         if not is_authd:
             _strip_directory_api_obj_partially(dir_api_obj)
 
@@ -116,17 +117,17 @@ def strip_information_from_catalog_record(catalog_record, is_authd):
     if not access_type_id:
         return remove_keys_recursively(catalog_record, ['files', 'directories', 'remote_resources'])
 
-    if access_type_id == ACCESS_TYPES['open']:
+    if access_type_id == ACCESS_TYPES.get('open'):
         pass
-    elif access_type_id == ACCESS_TYPES['embargo']:
+    elif access_type_id == ACCESS_TYPES.get('embargo'):
         if not _embargo_time_passed(catalog_record):
             _strip_catalog_record_ida_data_partially(catalog_record)
-    elif access_type_id == ACCESS_TYPES['restricted']:
+    elif access_type_id == ACCESS_TYPES.get('restricted'):
         _strip_catalog_record_ida_data_partially(catalog_record)
-    elif access_type_id == ACCESS_TYPES['permit']:
-        if not user_has_rems_permission_for_catalog_record(catalog_record['identifier'], get_user_id(), is_authd):
+    elif access_type_id == ACCESS_TYPES.get('permit'):
+        if not user_has_rems_permission_for_catalog_record(catalog_record.get('identifier')):
             _strip_catalog_record_ida_data_partially(catalog_record)
-    elif access_type_id == ACCESS_TYPES['login']:
+    elif access_type_id == ACCESS_TYPES.get('login'):
         if not is_authd:
             _strip_catalog_record_ida_data_partially(catalog_record)
 
@@ -184,10 +185,10 @@ def _strip_catalog_record_files(catalog_record):
     details_keys_to_leave = set(['file_name', 'file_path', 'byte_size', 'identifier'])
 
     if 'research_dataset' in catalog_record:
-        for file in catalog_record['research_dataset'].get('files', []):
+        for file in catalog_record.get('research_dataset', {}).get('files', []):
             leave_keys_in_dict(file, file_keys_to_leave)
             if 'details' in file:
-                leave_keys_in_dict(file['details'], details_keys_to_leave)
+                leave_keys_in_dict(file.get('details'), details_keys_to_leave)
 
 
 def _strip_catalog_record_directories(catalog_record):
@@ -204,10 +205,10 @@ def _strip_catalog_record_directories(catalog_record):
     details_keys_to_leave = set(['directory_name', 'directory_path', 'byte_size', 'file_count', 'identifier'])
 
     if 'research_dataset' in catalog_record:
-        for dir in catalog_record['research_dataset'].get('directories', []):
+        for dir in catalog_record.get('research_dataset', {}).get('directories', []):
             leave_keys_in_dict(dir, dir_keys_to_leave)
             if 'details' in dir:
-                leave_keys_in_dict(dir['details'], details_keys_to_leave)
+                leave_keys_in_dict(dir.get('details'), details_keys_to_leave)
 
 
 def _strip_dir_api_obj_files(dir_api_obj):
