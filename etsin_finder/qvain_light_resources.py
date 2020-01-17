@@ -257,7 +257,7 @@ class QvainDataset(Resource):
             return {"PermissionError": "The Metadata provider is not found in login information."}, 401
         if data["dataCatalog"] == "urn:nbn:fi:att:data-catalog-ida":
             if not check_if_data_in_user_IDA_project(data):
-                return {"Error": "Error in IDA groups user Permission or user groups."}, 403
+                return {"IdaError": "Error in IDA group user permission or in IDA user groups."}, 403
         metax_redy_data = data_to_metax(data, metadata_provider_org, metadata_provider_user)
         metax_response = create_dataset(metax_redy_data)
         return metax_response

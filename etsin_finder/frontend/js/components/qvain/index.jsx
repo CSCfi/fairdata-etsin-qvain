@@ -86,23 +86,30 @@ class Qvain extends Component {
 
             // If user is logged in...
             } else if (err.response.data) {
-            // ...try to format the Metax error
-            if ((err.response.data.includes(':["')) && (err.response.data.includes('"],'))) {
-              this.setState({
-                response:
-                  [
-                    err.response.data.slice(
-                    err.response.data.indexOf(':["') + 3,
-                    err.response.data.indexOf('"],'))
-                  ]
-              })
+              // If no IDA projects are found, display an IDA error
+              if (err.response.data.IdaError) {
+                this.setState({
+                  response: [err.response.data.IdaError]
+                })
 
-            // If the Metax error message formatting cannot be done, just display the entire error
-            } else {
-              this.setState({
-                response: [err.response.data]
-              })
-            }
+              // ...else, try to format the Metax error
+              } else if ((err.response.data.includes(':["')) && (err.response.data.includes('"],'))) {
+                console.log('4')
+                this.setState({
+                  response:
+                    [
+                      err.response.data.slice(
+                      err.response.data.indexOf(':["') + 3,
+                      err.response.data.indexOf('"],'))
+                    ]
+                })
+
+              // If the Metax error message formatting cannot be done, just display the entire error
+              } else {
+                this.setState({
+                  response: [err.response.data]
+                })
+              }
 
             // If error response is empty, just display 'Error...'
             } else {
