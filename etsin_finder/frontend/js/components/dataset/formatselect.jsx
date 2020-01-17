@@ -97,7 +97,7 @@ export default class FormatSelect extends Component {
     }
   }
 
-  static getDerivedStateFromProps(newProps, prevState) {
+  static getDerivedStateFromProps = (newProps, prevState) => {
     if (newProps !== prevState) {
       return {
         options: newProps.options
@@ -192,8 +192,8 @@ export default class FormatSelect extends Component {
               {this.props.options[0] === single ? (
                 <span className="sr-only">Current version: </span>
               ) : (
-                ''
-              )}
+                  ''
+                )}
               {single.label}
             </ListItem>
           ))

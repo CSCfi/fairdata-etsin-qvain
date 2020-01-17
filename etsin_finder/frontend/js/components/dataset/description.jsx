@@ -140,9 +140,9 @@ class Description extends Component {
             {
               (this.props.dataset.data_catalog.catalog_json.identifier === 'urn:nbn:fi:att:data-catalog-pas') &&
               (
-              <PasInfo>
-                <Translate content="dataset.storedInPas" />
-              </PasInfo>
+                <PasInfo>
+                  <Translate content="dataset.storedInPas" />
+                </PasInfo>
               )
             }
             {
