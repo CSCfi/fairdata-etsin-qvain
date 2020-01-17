@@ -87,23 +87,12 @@ export default class FormatSelect extends Component {
 
     this.state = {
       isOpen: false,
-      options: props.options,
       newestColor: props.newestColor ? props.newestColor : props.background,
       color: props.color,
       background: props.background,
       padding: props.padding,
-      width: props.width,
       tooltipOpen: false,
     }
-  }
-
-  static getDerivedStateFromProps = (newProps, prevState) => {
-    if (newProps !== prevState) {
-      return {
-        options: newProps.options
-      }
-    }
-    return null;
   }
 
   onBlur = () => {
@@ -145,7 +134,7 @@ export default class FormatSelect extends Component {
         isFocused: false,
       },
       () => {
-        this.props.onChange('Version Select', selected)
+        this.props.onChange(selected)
       }
     )
   }
@@ -165,7 +154,7 @@ export default class FormatSelect extends Component {
 
   render() {
     return (
-      <SelectContainer width={this.state.width} onFocus={this.onFocus} onBlur={this.onBlur}>
+      <SelectContainer width={this.props.width} onFocus={this.onFocus} onBlur={this.onBlur}>
         <Controller
           noMargin
           color={this.state.color}
@@ -177,7 +166,7 @@ export default class FormatSelect extends Component {
           {translate('dataset.datasetAsFile.open')}
         </Controller>
         {this.state.isOpen && this.state.isFocused && (
-          this.state.options.map((single, i) => (
+          this.props.options.map((single, i) => (
             <ListItem
               noMargin
               color={this.state.color}
@@ -198,7 +187,7 @@ export default class FormatSelect extends Component {
             </ListItem>
           ))
         )}
-        {this.state.options.length > 1 && (
+        {this.props.options.length > 1 && (
           <InfoPosition>
             <Tooltip
               isOpen={this.state.tooltipOpen}

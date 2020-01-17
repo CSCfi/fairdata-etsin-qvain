@@ -16,9 +16,6 @@ import { withRouter } from 'react-router-dom'
 import { withTheme } from 'styled-components'
 import ErrorPage from '../errorpage'
 import DatasetQuery from '../../stores/view/datasetquery'
-import Accessibility from '../../stores/view/accessibility'
-
-
 import FormatSelect from './formatselect'
 
 
@@ -30,17 +27,16 @@ class FormatChanger extends Component {
       formats: [],
       error: false,
       selected: '',
+      data: DatasetQuery.results,
     }
-
-    this.query = this.query.bind(this)
   }
 
-  componentDidMount = () => {
-    Accessibility.resetFocus()
-    this.query()
+  componentDidMount() {
+    this.checkFields()
   }
 
-  checkFields = (data) => {
+  checkFields = () => {
+    const data = this.state.data;
     const rd = data.research_dataset;
     let dataciteExists = false;
     let fields = {};
@@ -66,7 +62,7 @@ class FormatChanger extends Component {
   }
 
 
-  changeFormat = (name, format) => {
+  changeFormat = (format) => {
     this.setState(
       {
         selected: format,
@@ -81,21 +77,6 @@ class FormatChanger extends Component {
   openFormat = (url) => {
     const win = window.open(url, '_blank');
     win.focus();
-  }
-
-  query = (customId) => {
-    let identifier = this.props.idn
-    if (customId !== undefined) {
-      identifier = customId
-    }
-    DatasetQuery.getData(identifier)
-      .then(result => {
-        this.checkFields(result.catalog_record)
-      })
-      .catch(error => {
-        console.log(error)
-        this.setState({ error })
-      })
   }
 
   render() {
