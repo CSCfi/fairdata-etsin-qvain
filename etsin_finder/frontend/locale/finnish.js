@@ -629,6 +629,18 @@ const finnish = {
         changeComplete: 'Toiminto suoritettu.',
         versionCreated: 'Aineistosta on luotu uusi versio tunnisteella %(identifier)s.',
       },
+      refreshModal: {
+        header: 'Päivitä kansion tiedostot',
+        noncumulative: 'Mikäli kansioon on lisätty uusia tiedostoja, toiminto lisää ne aineistoon ja luo siitä uuden version.',
+        cumulative: 'Toiminto lisää kansioon lisätyt tiedostot aineistoon. Muutos näkyy välittömästi aineiston julkaistussa versiossa.',
+        changes: 'Aineistoon tehdyt muutokset on tallennettava ensin.',
+        buttons: {
+          show: 'Päivitä kansion tiedostot',
+          ok: 'Päivitä',
+          cancel: 'Peruuta',
+          close: 'Sulje',
+        }
+      },
       help:
         'Aineistoon kuuluvat tiedostot. Aineistoon voi kuulua vain joko IDAssa olevia tiedostoja tai ulkopuolisia tiedostoja. Tiedostojen metadata ei ole osa aineistojen metadataa, joten muista tallentaa muutokset jotka teet tiedostojen metadataan.',
       ida: {

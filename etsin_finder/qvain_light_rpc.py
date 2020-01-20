@@ -14,7 +14,7 @@ from flask_restful import abort, reqparse, Resource
 
 from etsin_finder.app_config import get_app_config
 from etsin_finder import authentication
-from etsin_finder.qvain_light_service import change_cumulative_state
+from etsin_finder.qvain_light_service import change_cumulative_state, refresh_directory_content
 from etsin_finder.finder import app
 from etsin_finder.qvain_light_utils import get_dataset_creator
 
@@ -83,4 +83,42 @@ class QvainDatasetChangeCumulativeState(Resource):
             log.warning('User: \"{0}\" is not the creator of the dataset. Changing cumulative state not allowed. Creator: \"{1}\"'.format(user, creator))
             return {"PermissionError": "User not authorized to to change cumulative state of dataset."}, 403
         metax_response = change_cumulative_state(cr_id, cumulative_state)
+        return metax_response
+
+class QvainDatasetRefreshDirectoryContent(Resource):
+    """Metax RPC for refreshing directory content in a dataset."""
+
+    def __init__(self):
+        """Setup endpoints"""
+        self.parser = reqparse.RequestParser()
+        self.parser.add_argument('cr_identifier', type=str, required=True)
+        self.parser.add_argument('dir_identifier', type=str, required=True)
+
+    @log_request
+    def post(self):
+        """
+        Refresh contents of a directory in a dataset. May create a new dataset version.
+
+        Arguments:
+            cr_identifier {string} -- The identifier of the dataset.
+            dir_identifier {string} -- The identifier of the directory.
+
+        Returns:
+            [type] -- Metax response.
+
+        """
+        args = self.parser.parse_args()
+        cr_identifier = args['cr_identifier']
+        dir_identifier = args['dir_identifier']
+        is_authd = authentication.is_authenticated()
+        if not is_authd:
+            return {"PermissionError": "User not logged in."}, 401
+
+        # only creator of the dataset is allowed to modify it
+        user = session["samlUserdata"]["urn:oid:1.3.6.1.4.1.16161.4.0.53"][0]
+        creator = get_dataset_creator(cr_identifier)
+        if user != creator:
+            log.warning('User: \"{0}\" is not the creator of the dataset. Refreshing directory is not allowed. Creator: \"{1}\"'.format(user, creator))
+            return {"PermissionError": "User not authorized to to refresh directory in dataset."}, 403
+        metax_response = refresh_directory_content(cr_identifier, dir_identifier)
         return metax_response

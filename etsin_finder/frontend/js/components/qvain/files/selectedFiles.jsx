@@ -4,6 +4,8 @@ import { inject, observer } from 'mobx-react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCopy, faFolder } from '@fortawesome/free-solid-svg-icons'
 import Translate from 'react-translate-component'
+import styled, { css } from 'styled-components';
+
 import { ButtonLabel, EditButton, DeleteButton, FileItem, ButtonContainer, TableButton } from '../general/buttons'
 import { SelectedFilesTitle } from '../general/form'
 import FileForm from './fileForm'
@@ -11,6 +13,8 @@ import DirectoryForm from './directoryForm'
 import { randomStr } from '../utils/fileHierarchy'
 import Modal from '../../general/modal'
 import { CumulativeStates } from '../utils/constants'
+import RefreshDirectoryModal from './refreshDirectoryModal';
+
 
 export class SelectedFilesBase extends Component {
   static propTypes = {
@@ -19,6 +23,7 @@ export class SelectedFilesBase extends Component {
 
   state = {
     datasetDuplicationModalHasNotBeenShown: true,
+    refreshModalDirectory: null
   }
 
   handleEdit = (selected) => (event) => {
@@ -38,46 +43,55 @@ export class SelectedFilesBase extends Component {
     })
   }
 
+  setRefreshModalDirectory = (directory) => {
+    this.setState({
+      refreshModalDirectory: directory,
+    })
+  }
+
   renderFiles = (selected, inEdit, existing, removable) => {
     const {
       toggleSelectedFile,
       toggleSelectedDirectory
     } = this.props.Stores.Qvain
     return (
-      <Fragment>
-        {selected.map(s => (
-          <Fragment key={`${s.id}-${randomStr()}`}>
-            <FileItem tabIndex="0" active={isInEdit(inEdit, s.identifier)}>
-              <ButtonLabel>
-                <FontAwesomeIcon icon={(s.directoryName ? faFolder : faCopy)} style={{ marginRight: '8px' }} />
-                {s.projectIdentifier} / {s.directoryName || s.fileName}
-              </ButtonLabel>
-              <ButtonContainer>
-                <EditButton aria-label="Edit" onClick={this.handleEdit(s)} />
-                { removable && (
-                  <DeleteButton
-                    aria-label="Remove"
-                    onClick={(event) => {
-                      event.preventDefault()
-                      if (s.directoryName !== undefined) {
-                        toggleSelectedDirectory(s, false)
-                      } else {
-                        toggleSelectedFile(s, false)
-                      }
-                    }}
-                  />
-                )}
-              </ButtonContainer>
-            </FileItem>
-            {isInEdit(inEdit, s.identifier, existing) && (
-              <Fragment>
-                {isDirectory(inEdit) && (<DirectoryForm />)}
-                {!isDirectory(inEdit) && (<FileForm />)}
-              </Fragment>
-            )}
-          </Fragment>
-        ))}
-      </Fragment>
+      selected.map(s => (
+        <Fragment key={`${s.id}-${randomStr()}`}>
+          <SelectedFilesItem tabIndex="0" active={isInEdit(inEdit, s.identifier)}>
+            <FileLabel>
+              <FontAwesomeIcon icon={(s.directoryName ? faFolder : faCopy)} style={{ marginRight: '8px' }} />
+              {s.projectIdentifier} / {s.directoryName || s.fileName}
+            </FileLabel>
+            <FileButtonsContainer>
+              { s.directoryName && (
+                <RefreshDirectoryButton disabled={this.state.refreshLoading} type="button" onClick={() => this.setRefreshModalDirectory(s.identifier)}>
+                  <Translate component={RefreshDirectoryButtonText} content="qvain.files.refreshModal.buttons.show" />
+                </RefreshDirectoryButton>
+              )}
+              <EditButton aria-label="Edit" onClick={this.handleEdit(s)} />
+              { removable && (
+                <DeleteButton
+                  aria-label="Remove"
+                  onClick={(event) => {
+                    event.preventDefault()
+                    if (s.directoryName !== undefined) {
+                      toggleSelectedDirectory(s, false)
+                    } else {
+                      toggleSelectedFile(s, false)
+                    }
+                  }}
+                />
+              )}
+            </FileButtonsContainer>
+          </SelectedFilesItem>
+          {isInEdit(inEdit, s.identifier, existing) && (
+            <Fragment>
+              {isDirectory(inEdit) && (<DirectoryForm />)}
+              {!isDirectory(inEdit) && (<FileForm />)}
+            </Fragment>
+          )}
+        </Fragment>
+      ))
     )
   }
 
@@ -112,6 +126,11 @@ export class SelectedFilesBase extends Component {
           <Translate component="p" content="qvain.files.notificationNewDatasetWillBeCreated.content" />
           <TableButton onClick={this.closeDatasetDuplicationInformationModal}>Ok.</TableButton>
         </Modal>
+
+        <RefreshDirectoryModal
+          directory={this.state.refreshModalDirectory}
+          onClose={() => this.setRefreshModalDirectory(null)}
+        />
       </Fragment>
     )
   }
@@ -120,6 +139,63 @@ export class SelectedFilesBase extends Component {
 const isInEdit = (inEdit, identifier, existing) => (
   (inEdit !== undefined) && inEdit.identifier === identifier && (existing === inEdit.existing)
 )
+
+const SelectedFilesItem = styled(FileItem)`{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  padding-left: 8px;
+}`
+
+const FileButtonsContainer = styled(ButtonContainer)`{
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+}`
+
+export const FileLabel = styled(ButtonLabel)`{
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-left: 0;
+  flex-shrink: 0;
+}`
+
+const RefreshDirectoryButton = styled.button`
+  background-color: ${props => (
+    props.disabled ? '#7fbfd6' : '#007fad'
+  )};
+  color: #fff;
+  height: 56px;
+  border-radius: 4px;
+  border: solid 1px ${props => (
+    props.disabled ? '#7fbfd6' : '#007fad'
+  )};
+  text-transform: none;
+  font-weight: 600;
+  margin-right: 5px;
+  padding-left: 27px;
+  padding-right: 27px;
+  display: inline-flex;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-width: 64px;
+  outline: none;
+  -webkit-appearance: none;
+  overflow: hidden;
+  ${props => !props.disabled && css`
+    cursor: pointer;
+  `}
+`
+
+const RefreshDirectoryButtonText = styled.span`
+  text-align: center;
+  color: inherit;
+  font-weight: 400;
+  text-transform: none;
+`
 
 const isDirectory = (inEdit) => inEdit.directoryName !== undefined
 

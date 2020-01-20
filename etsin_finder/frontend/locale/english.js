@@ -625,6 +625,18 @@ const english = {
         changeComplete: 'Action complete.',
         versionCreated: 'A new dataset version has been created with identifier %(identifier)s.',
       },
+      refreshModal: {
+        header: 'Refresh folder content',
+        noncumulative: 'If new files have been added to the folder, this will add them to the dataset and create a new version of it. The changes will take effect immediately.',
+        cumulative: 'If new files have been added to the folder, this will add them to the dataset. No new dataset version will be created. The changes will take effect immediately.',
+        changes: 'You need to save your changes to the dataset first.',
+        buttons: {
+          show: 'Refresh folder content',
+          ok: 'Ok',
+          cancel: 'Cancel',
+          close: 'Close',
+        }
+      },
       help:
         'Files associated with this dataset. A dataset can only have either IDA files or remote files. File metadata will not be associated with datasets, so remember to save edits to file metadata.',
       ida: {
