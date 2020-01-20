@@ -1,4 +1,5 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
+import translate from 'counterpart'
 import PropTypes from 'prop-types';
 import { inject, observer } from 'mobx-react'
 import styled from 'styled-components';
@@ -7,8 +8,8 @@ import { faFolder, faChevronRight, faChevronDown } from '@fortawesome/free-solid
 import { Checkbox } from '../general/form'
 import {
   FileIcon,
+  FilePickerFileButton
 } from '../general/buttons'
-import { List, ListItem } from '../general/list'
 
 export class FileSelectorBase extends Component {
   static propTypes = {
@@ -28,97 +29,84 @@ export class FileSelectorBase extends Component {
     }
   }
 
+  drawFile = (f) => {
+    const {
+      toggleSelectedFile,
+      setMetadataModalFile
+    } = this.props.Stores.Qvain
+
+    return (
+      <li key={f.identifier} style={{ paddingLeft: '20px', display: 'flex', alignItems: 'center' }}>
+        <Checkbox
+          checked={f.selected}
+          id={`${f.id}Checkbox`}
+          type="checkbox"
+          onChange={() => toggleSelectedFile(
+            f,
+            !f.selected
+          )}
+          style={{ marginRight: '8px' }}
+        />
+
+        <FileIcon />
+        <label htmlFor={`${f.id}Checkbox`} style={{ flexGrow: 1, cursor: 'pointer', fontSize: '85%' }}>
+          {f.fileName}
+        </label>
+        <FilePickerFileButton id={`${f.identifier}-open-metadata-modal`} type="button" onClick={() => setMetadataModalFile(f)}>
+          { translate('qvain.files.metadataModal.buttons.show') }
+        </FilePickerFileButton>
+      </li>
+    )
+  }
+
   // recursive function to draw the entire file hierarchy, if so desired
   drawHierarchy = (h, root) => {
     const {
       toggleSelectedDirectory,
-      toggleSelectedFile
     } = this.props.Stores.Qvain
     return (
-      <Fragment key={h.identifier}>
-        <li style={{ paddingLeft: '20px' }}>
-          <LinkButton
-            aria-label={h.open ? 'Close directory' : 'Open directory'}
-            type="button"
-            onKeyPress={this.handleOpenDirectory(h.id, root, !h.open)}
-            onClick={this.handleOpenDirectory(h.id, root, !h.open)}
-          >
-            <FontAwesomeIcon icon={h.open ? faChevronDown : faChevronRight} />
-          </LinkButton>
-          <Checkbox
-            aria-label={`${h.directoryName}`}
-            checked={h.selected || false}
-            id={`${h.id}Checkbox`}
-            type="checkbox"
-            onChange={() => toggleSelectedDirectory(
-              { ...h },
-              !h.selected
-            )}
-          />
-          <DirectoryIcon />
-          {h.directoryName}
-          <ul>
-            {(h.directories && h.open) && (
-              <Fragment>{h.directories.map(dir => (this.drawHierarchy(dir, h)))}</Fragment>
-            )}
-            {(h.files && h.open) && (
-              <Fragment>
-                {h.files.map(f => (
-                  <li key={f.identifier} style={{ paddingLeft: '20px' }}>
-                    <Checkbox
-                      checked={f.selected}
-                      id={`${f.id}Checkbox`}
-                      type="checkbox"
-                      onChange={() => toggleSelectedFile(
-                        f,
-                        !f.selected
-                      )}
-                    />
-                    <FileIcon style={{ paddingLeft: '8px' }} />
-                    {f.fileName}
-                  </li>
-                ))}
-              </Fragment>
-            )}
-          </ul>
-        </li>
-      </Fragment>
+      <li key={h.identifier} style={{ paddingLeft: '20px' }}>
+        <LinkButton
+          aria-label={h.open ? 'Close directory' : 'Open directory'}
+          type="button"
+          onKeyPress={this.handleOpenDirectory(h.id, root, !h.open)}
+          onClick={this.handleOpenDirectory(h.id, root, !h.open)}
+        >
+          <FontAwesomeIcon icon={h.open ? faChevronDown : faChevronRight} />
+        </LinkButton>
+        <Checkbox
+          aria-label={`${h.directoryName}`}
+          checked={h.selected || false}
+          id={`${h.id}Checkbox`}
+          type="checkbox"
+          onChange={() => toggleSelectedDirectory(
+            { ...h },
+            !h.selected
+          )}
+        />
+        <DirectoryIcon />
+        {h.directoryName}
+        <ul>
+          {(h.directories && h.open) &&
+            h.directories.map(dir => (this.drawHierarchy(dir, h)))
+          }
+          {(h.files && h.open) && h.files.map(this.drawFile)}
+        </ul>
+      </li>
     )
   }
 
   render() {
     const {
-      toggleSelectedFile,
       hierarchy,
     } = this.props.Stores.Qvain
     return (
-      <Fragment>
-        <List style={{ marginBottom: '20px' }}>
-          {hierarchy.directories && (
-            <Fragment>
-              {hierarchy.directories.map(dir => this.drawHierarchy(dir, hierarchy))}
-            </Fragment>
-          )}
-          {hierarchy.files && (
-            <Fragment>
-              {hierarchy.files.map(file => (
-                <ListItem key={file.id}>
-                  <Checkbox
-                    checked={file.selected || false}
-                    id={`${file.id}Checkbox`}
-                    type="checkbox"
-                    onChange={() => toggleSelectedFile(file, !file.selected)}
-                  />
-                  <label htmlFor={`${file.id}Checkbox`}>
-                    <FileIcon style={{ paddingLeft: '8px' }} />
-                    {file.fileName}
-                  </label>
-                </ListItem>
-              ))}
-            </Fragment>
-          )}
-        </List>
-      </Fragment>
+      <ul style={{ marginBottom: '20px' }}>
+        {hierarchy.directories &&
+          hierarchy.directories.map(dir => this.drawHierarchy(dir, hierarchy))
+        }
+        {hierarchy.files && hierarchy.files.map(this.drawFile)}
+      </ul>
     )
   }
 }
@@ -130,7 +118,7 @@ const DirectoryIconStyles = styled(FontAwesomeIcon)`
 const DirectoryIcon = (props) => <DirectoryIconStyles {...props} icon={faFolder} />
 
 const LinkButton = styled.button`
-   background: none!important;
+   background: none !important;
    color: inherit;
    border: none;
    padding: 0!important;
