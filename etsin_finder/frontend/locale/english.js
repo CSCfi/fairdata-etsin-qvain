@@ -651,8 +651,55 @@ const english = {
           close: 'Close',
         }
       },
-      help:
-        'Files associated with this dataset. A dataset can only have either IDA files or remote files. File metadata will not be associated with datasets, so remember to save edits to file metadata.',
+      metadataModal: {
+        header: 'Edit PAS Metadata',
+        help: 'Saving the data will change the file metadata regardless of whether the file is in your dataset or not.',
+        csvOptions: 'CSV Options',
+        fields: {
+          fileFormat: 'File format',
+          formatVersion: 'File format version',
+          encoding: 'Encoding',
+          csvDelimiter: 'Delimiter',
+          csvRecordSeparator: 'Record separator',
+          csvQuotingChar: 'Quoting character',
+          csvHasHeader: 'Has header'
+        },
+        warning: 'You have unsaved changes. Are you sure you want to discard your changes?',
+        errors: {
+          formatVersionRequired: 'Invalid or missing file format version.',
+          formatVersionNotAllowed: 'File format version is not allowed for selected file format.',
+          loadingFileFormats: 'Failed to load list of allowed file formats.'
+        },
+        buttons: {
+          show: 'Edit PAS metadata',
+          close: 'Close',
+          save: 'Save changes',
+          confirmClose: 'Yes, discard changes',
+          cancelClose: 'No, continue editing',
+          hideError: 'Continue editing'
+        },
+        options: {
+          delimiter: {
+            tab: 'Tab',
+            space: 'Space',
+            semicolon: 'Semicolon ;',
+            comma: 'Comma ,',
+            colon: 'Colon :',
+            dot: 'Dot .',
+            pipe: 'Pipe |'
+          },
+          header: {
+            false: 'No',
+            true: 'Yes'
+          }
+        },
+        placeholders: {
+          noOptions: 'No options available',
+          selectOption: 'Select an option',
+          csvQuotingChar: 'Type a character'
+        }
+      },
+      help: 'Files associated with this dataset. A dataset can only have either IDA files or remote files. File metadata will not be associated with datasets, so remember to save edits to file metadata.',
       ida: {
         title: 'Fairdata IDA files',
         infoText:

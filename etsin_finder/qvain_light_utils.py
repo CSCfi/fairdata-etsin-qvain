@@ -259,7 +259,7 @@ def remove_deleted_datasets_from_results(result):
 
 def edited_data_to_metax(data, original):
     """
-    Alter the researsh_dataset field to contain the new changes from editing.
+    Alter the research_dataset field to contain the new changes from editing.
 
     Arguments:
         data {object} -- Data from frontend.
@@ -295,6 +295,26 @@ def edited_data_to_metax(data, original):
         "research_dataset": research_dataset
     }
     return clean_empty_keyvalues_from_dict(edited_data)
+
+def get_user_ida_projects():
+    """
+    List IDA projects for current user without the prefix.
+
+    Returns:
+        list(str) -- List of projects.
+
+    """
+    user_ida_groups = get_user_ida_groups()
+    if user_ida_groups is None:
+        log.error('Could not get user IDA projects.\n')
+        return None
+
+    try:
+        return [project.split(":")[1] for project in user_ida_groups]
+    except IndexError as e:
+        log.error('Index error while parsing user IDA projects:\n{0}'.format(e))
+        return None
+
 
 def check_if_data_in_user_IDA_project(data):
     """

@@ -203,6 +203,19 @@ const directorySchema = yup.object().shape({
 
 const directoriesSchema = yup.array().of(directorySchema)
 
+// PAS METADATA VALIDATION
+
+export const fileMetadataSchema = yup.object().shape({
+  fileFormat: yup.string().required(),
+  formatVersion: yup.string(),
+  encoding: yup.string().required(),
+  csvHasHeader: yup.boolean().required(),
+  csvDelimiter: yup.string().required(),
+  csvRecordSeparator: yup.string().required(),
+  csvQuotingChar: yup.string().required()
+})
+
+
 // EXTERNAL RESOURCES VALIDATION
 
 const externalResourceTitleSchema = yup
