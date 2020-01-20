@@ -271,7 +271,9 @@ class REMSApplyForPermission(Resource):
             'email': email
         }
         res_create_user = _rems_api.create_user(userdata)
-        if not res_create_user.get('success', None):
+        log.debug('res_create_user: {0}'.format(res_create_user))
+
+        if not res_create_user or not res_create_user.get('success', None):
             log.error('Could not create user, res: {}'.format(res_create_user))
             return 'Could not create user', 500
 
