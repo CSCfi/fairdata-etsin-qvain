@@ -29,6 +29,8 @@ from etsin_finder.finder import app
 from etsin_finder.utils import \
     sort_array_of_obj_by_key, \
     slice_array_on_limit
+from etsin_finder import rems_service
+from etsin_finder.rems_service import RemsAPIService
 
 TOTAL_ITEM_LIMIT = 1000
 log = app.logger
@@ -83,9 +85,10 @@ class Dataset(Resource):
 
         ret_obj = {'catalog_record': authorization.strip_information_from_catalog_record(cr, is_authd),
                    'email_info': get_email_info(cr)}
-        if cr_service.is_rems_catalog_record(cr):
-            ret_obj['has_permit'] = authorization.user_has_rems_permission_for_catalog_record(
-                cr_id, authentication.get_user_id(), is_authd)
+        if cr_service.is_rems_catalog_record(cr) and is_authd:
+            state = rems_service.get_application_state_for_resource(cr, authentication.get_user_id())
+            ret_obj['application_state'] = state
+            ret_obj['has_permit'] = state == 'approved'
 
         return ret_obj, 200
 
@@ -236,6 +239,90 @@ class User(Resource):
         if csc_user is not None:
             user_info['user_csc_name'] = csc_user
         return user_info, 200
+
+
+class REMSApplyForPermission(Resource):
+    """REMS Apply for permission"""
+
+    @log_request
+    def get(self, cr_id):
+        """Apply for permission to REMS resource.
+
+        Arguments:
+            Resource [class] -- Flask_restfull parent class
+            cr_id [string] -- Catalog record identifier
+
+        Returns:
+            [int] -- The id of the application
+
+        """
+        # Create user
+        user_id = authentication.get_user_id()
+        firstname = authentication.get_user_firstname()
+        lastname = authentication.get_user_lastname()
+        email = authentication.get_user_email()
+
+        if not user_id and not firstname and not lastname and not email:
+            return 'Unauthorized request', 401
+        _rems_api = RemsAPIService(app, user_id)
+        userdata = {
+            'userid': user_id,
+            'name': "{0} {1}".format(firstname, lastname),
+            'email': email
+        }
+        res_create_user = _rems_api.create_user(userdata)
+        log.debug('res_create_user: {0}'.format(res_create_user))
+
+        if not res_create_user or not res_create_user.get('success', None):
+            log.error('Could not create user, res: {}'.format(res_create_user))
+            return 'Could not create user', 500
+
+        # Get catalog item id
+        cr = cr_service.get_catalog_record(cr_id, False, False)
+        if cr and cr_service.is_rems_catalog_record(cr):
+            pref_id = cr_service.get_catalog_record_preferred_identifier(cr)
+
+        log.info('Get catalog item id for resource: {0}'.format(pref_id))
+        res_get_catalogue_item = _rems_api.get_catalogue_item_for_resource(pref_id)
+        log.debug('res_get_catalogue_item: {0}'.format(res_get_catalogue_item))
+
+        if not res_get_catalogue_item:
+            if res_get_catalogue_item == []:
+                log.warning('No catalogue item found for resource: {0}'.format(pref_id))
+                return 'No catalogue item found for resource', 500
+            else:
+                log.warning('Unable to get catalogue item id for resource: {0}'.format(pref_id))
+                return 'Could not get catalogue item id', 500
+        catalog_item_id = res_get_catalogue_item[0].get('id', None)
+
+        if not catalog_item_id:
+            log.error('Error in getting catalogue item id for resource: {0}'.format(pref_id))
+            return 'Failed to get catalogue item id', 500
+
+        # Check if User has any applications for the resource
+        application_id = session.get('REMS_application_id', None)
+        if application_id:
+            log.info('Application with id: {0} found from session.'.format(application_id))
+            return application_id, 200
+        else:
+            # Create Application
+            log.info('No application id in session, creating new application for resource: {0}'.format(pref_id))
+            res_create_application = _rems_api.create_application(catalog_item_id)
+            if not res_create_application.get('success', None):
+                if res_create_application.get('errers', None) is None:
+                    log.error('Error in creating application for resource: {0}'.format(pref_id))
+                    return 'Failed to create application', 500
+                else:
+                    log.warning('Failed to create application for resource {0}, errors: {1}'.format(pref_id, res_create_application.get('errers')))
+                    return 'Failed to create application', 500
+
+            application_id = res_create_application.get('application-id', None)
+            if application_id is None:
+                log.error('Failed to get application_id')
+                return 'Failed to get application_id', 500
+            log.info('Created application for user with application-id: {0}'.format(application_id))
+
+            return application_id, 200
 
 
 class Session(Resource):

@@ -11,6 +11,13 @@
 const english = {
   changepage: 'Navigated to page: %(page)s',
   dataset: {
+    access_login: 'Login to apply for access',
+    access_unavailable: 'Unavailable',
+    access_permission: 'Apply for access',
+    access_denied: 'Application denied',
+    access_draft: 'Application in draft state',
+    access_request_sent: 'Access request sent',
+    access_granted: 'Access granted',
     access_rights_description: {
       none: '',
       open: 'Anyone can access the data.',
@@ -103,7 +110,8 @@ const english = {
       cumulativeDatasetLabel: 'Note: Dataset is growing',
       cumulativeDatasetTooltip: {
         header: 'Growing dataset',
-        info: 'This dataset is still growing, be aware of this when you cite it or use it. Temporal coverage should be mentioned. No existing files can, however, be removed or changed.',
+        info:
+          'This dataset is still growing, be aware of this when you cite it or use it. Temporal coverage should be mentioned. No existing files can, however, be removed or changed.',
       },
     },
     events_idn: {
@@ -172,7 +180,7 @@ const english = {
     linkToPasDataset: 'Go to PAS version',
     linkToOriginalDataset: 'Go to original version',
     enteringPas: 'Entering PAS',
-    dataInPasDatasetsCanNotBeDownloaded: 'PAS dataset data cannot be downloaded'
+    dataInPasDatasetsCanNotBeDownloaded: 'PAS dataset data cannot be downloaded',
   },
   error: {
     notFound:
@@ -278,7 +286,8 @@ const english = {
   qvain: {
     submit: 'Submit Dataset',
     edit: 'Update Dataset',
-    consent: 'By using Qvain Light the user agrees that he or she has asked consent from all persons whose personal information the user will add to the descriptive data and informed them of how they can get their personal data removed. By using Qvain Light the user agrees to the <a href="https://www.fairdata.fi/hyodyntaminen/kayttopolitiikat-ja-ehdot/">Terms of Usage</a>.',
+    consent:
+      'By using Qvain Light the user agrees that he or she has asked consent from all persons whose personal information the user will add to the descriptive data and informed them of how they can get their personal data removed. By using Qvain Light the user agrees to the <a href="https://www.fairdata.fi/hyodyntaminen/kayttopolitiikat-ja-ehdot/">Terms of Usage</a>.',
     submitStatus: {
       success: 'Dataset published!',
       fail: 'Something went wrong...',
@@ -328,7 +337,8 @@ const english = {
       latestVersion: 'Latest',
       editButton: 'Edit',
       deleteButton: 'Delete',
-      confirmDelete: 'Are you sure you want to delete this dataset? Deleting the dataset will remove it from Qvain, and Etsin Search cannot find it anymore. Landing page for the dataset will NOT be removed.',
+      confirmDelete:
+        'Are you sure you want to delete this dataset? Deleting the dataset will remove it from Qvain, and Etsin Search cannot find it anymore. Landing page for the dataset will NOT be removed.',
       goToEtsin: 'View in Etsin',
       noDatasets: 'You have no datasets',
       reload: 'Reload',
@@ -338,7 +348,8 @@ const english = {
     description: {
       title: 'Description',
       infoTitle: 'Description info',
-      infoText: 'Give a descriptive title for your dataset. Also, write the description as detailed as you possibly can; explain how the dataset was created, how it is structured, and how it has been handled. Describe also the content.',
+      infoText:
+        'Give a descriptive title for your dataset. Also, write the description as detailed as you possibly can; explain how the dataset was created, how it is structured, and how it has been handled. Describe also the content.',
       description: {
         langEn: 'ENGLISH',
         langFi: 'FINNISH',
@@ -356,7 +367,8 @@ const english = {
       },
       otherIdentifiers: {
         title: 'Other Identifiers',
-        infoText: "If your dataset already has an identifier (usually a DOI) insert it here. The dataset still gets the permanent identifier which resolves to Etsin's Landing page.",
+        infoText:
+          "If your dataset already has an identifier (usually a DOI) insert it here. The dataset still gets the permanent identifier which resolves to Etsin's Landing page.",
         instructions:
           'Identifier for the metadata will be created automatically but if there already is an EXISTING identifier please insert it here.',
         addButton: '+ Add new',
@@ -364,7 +376,8 @@ const english = {
       },
       fieldOfScience: {
         title: 'Field of Science',
-        infoText: 'Select a value from the dropdown menu. The drop down uses the classification of the Ministry of Education and Culture.',
+        infoText:
+          'Select a value from the dropdown menu. The drop down uses the classification of the Ministry of Education and Culture.',
         placeholder: 'Select option',
       },
       keywords: {
@@ -381,7 +394,8 @@ const english = {
       infoTitle: 'Rights And Licenses info',
       accessType: {
         title: 'Access Type',
-        infoText: 'This field sets how the data in your dataset can be accessed. Whichever option is selected does not affect the visibility of the dataset description (metadata) itself; it only affects the openness of the linked data (files). If you select anything else than "Open", you must also choose a reason for the restriction (field "Restriction Grounds" will appear). If you select "Embargo", please also specify the embargo expiration date ("Embargo expiration date" field will appear).',
+        infoText:
+          'This field sets how the data in your dataset can be accessed. Whichever option is selected does not affect the visibility of the dataset description (metadata) itself; it only affects the openness of the linked data (files). If you select anything else than "Open", you must also choose a reason for the restriction (field "Restriction Grounds" will appear). If you select "Embargo", please also specify the embargo expiration date ("Embargo expiration date" field will appear).',
         placeholder: 'Select option',
       },
       embargoDate: {
@@ -396,7 +410,8 @@ const english = {
       },
       license: {
         title: 'License',
-        infoText: 'License is an essential part of the dataset description. The license describes how the dataset can be used. As a default, the recommended CC BY 4.0 license is selected, but you can change it if needed. If you want to add a URL to an existing license page, please select "Other (URL)" and then insert the URL.',
+        infoText:
+          'License is an essential part of the dataset description. The license describes how the dataset can be used. As a default, the recommended CC BY 4.0 license is selected, but you can change it if needed. If you want to add a URL to an existing license page, please select "Other (URL)" and then insert the URL.',
         placeholder: 'Select option',
         other: {
           label: 'URL address',
@@ -407,11 +422,11 @@ const english = {
     actors: {
       title: 'Actors',
       infoTitle: 'Actors info',
-      infoText: 'Add at least one Creator. First, select the type of actor (person or organization). Then choose the roles the actor has (you can add multiple). After that, fill in the details: organization is mandatory for a person. You can edit added actors by clicking the pen icon or remove it by clicking the X icon.',
+      infoText:
+        'Add at least one Creator. First, select the type of actor (person or organization). Then choose the roles the actor has (you can add multiple). After that, fill in the details: organization is mandatory for a person. You can edit added actors by clicking the pen icon or remove it by clicking the X icon.',
       add: {
         title: 'Actors',
-        help:
-          'Creator (1+) role is mandatory. Notice that one actor can have multiple roles.',
+        help: 'Creator (1+) role is mandatory. Notice that one actor can have multiple roles.',
         radio: {
           person: 'Person',
           organization: 'Organization',
@@ -421,7 +436,7 @@ const english = {
           publisher: 'Publisher',
           curator: 'Curator',
           rights_holder: 'Rights holder',
-          contributor: 'Contributor'
+          contributor: 'Contributor',
         },
         name: {
           placeholder: {
@@ -491,9 +506,9 @@ const english = {
         },
         roles: {
           mixed: '',
-          oneOf: 'Roles must be one of "Creator", "Publisher", "Curator", "Rights holder" or "Contributor".',
-          required:
-            'You must specify the role of the actor. The creator role is mandatory.',
+          oneOf:
+            'Roles must be one of "Creator", "Publisher", "Curator", "Rights holder" or "Contributor".',
+          required: 'You must specify the role of the actor. The creator role is mandatory.',
         },
         name: {
           string: 'The name must be a string value.',
@@ -519,7 +534,8 @@ const english = {
         },
         requiredActors: {
           atLeastOneActor: 'You must add at least one actor to your dataset.',
-          mandatoryActors: 'Actors: Creator role is mandatory. Note: one actor can have multiple roles.',
+          mandatoryActors:
+            'Actors: Creator role is mandatory. Note: one actor can have multiple roles.',
         },
       },
       accessType: {
@@ -542,7 +558,7 @@ const english = {
       },
       files: {
         dataCatalog: {
-          required: 'File origin is required.'
+          required: 'File origin is required.',
         },
         file: {
           title: {
@@ -583,11 +599,13 @@ const english = {
       infoText: 'Add text',
       dataCatalog: {
         label: 'File origin',
-        infoText: "Fairdata Services need to know whether you are linking files from IDA or remote resources. You can also publish datasets without any files. In that case, please still select either one. The selection cannot be re-done, so if you are not sure whether you'll add files later, select the one you think you'll need in the future.",
-        explanation: 'Choose "IDA" if the data is stored in Fairdata IDA Service. Choose "Remote resources" if the data is in remote location.',
+        infoText:
+          "Fairdata Services need to know whether you are linking files from IDA or remote resources. You can also publish datasets without any files. In that case, please still select either one. The selection cannot be re-done, so if you are not sure whether you'll add files later, select the one you think you'll need in the future.",
+        explanation:
+          'Choose "IDA" if the data is stored in Fairdata IDA Service. Choose "Remote resources" if the data is in remote location.',
         placeholder: 'Select option',
         ida: 'IDA',
-        att: 'Remote resources'
+        att: 'Remote resources',
       },
       cumulativeState: {
         label: 'Cumulative dataset',
@@ -684,7 +702,8 @@ const english = {
       help: 'Files associated with this dataset. A dataset can only have either IDA files or remote files. File metadata will not be associated with datasets, so remember to save edits to file metadata.',
       ida: {
         title: 'Fairdata IDA files',
-        infoText: "Project dropdown will show all your IDA projects. Select the project from which you want to link your files. Note! One dataset can have files or folder from only one project. After you have chosen the project, you'll get a list of all files and folders that are FROZEN in that project. Select all files and folders you wish to link to your dataset. If you select a folder, ALL files and subfolders in that folder will be linked. In that case, do not select individual files or subfolders from that folder.",
+        infoText:
+          "Project dropdown will show all your IDA projects. Select the project from which you want to link your files. Note! One dataset can have files or folder from only one project. After you have chosen the project, you'll get a list of all files and folders that are FROZEN in that project. Select all files and folders you wish to link to your dataset. If you select a folder, ALL files and subfolders in that folder will be linked. In that case, do not select individual files or subfolders from that folder.",
         help: 'If you have files in Fairdata IDA you can link them from here:',
         button: {
           label: 'Link files from Fairdata IDA',
@@ -693,7 +712,8 @@ const english = {
       projectSelect: {
         placeholder: 'Select project',
         loadError: 'Failed to load project folders, error: ',
-        loadErrorNoFiles: 'No files found. If you wish to make files available here, make sure that you have frozen the project files in IDA.',
+        loadErrorNoFiles:
+          'No files found. If you wish to make files available here, make sure that you have frozen the project files in IDA.',
       },
       selected: {
         title: 'Selected files',
@@ -762,11 +782,13 @@ const english = {
       },
       notificationNewDatasetWillBeCreated: {
         header: 'Editing files and folders',
-        content: 'If you have already published the dataset, removing / adding files or folders will automatically create a new version of the dataset (excluding a published dataset without any files; you can add files/folder one time in the existing version). The old version will be tagged as "Old" and the files linked to it will remain untouched.',
+        content:
+          'If you have already published the dataset, removing / adding files or folders will automatically create a new version of the dataset (excluding a published dataset without any files; you can add files/folder one time in the existing version). The old version will be tagged as "Old" and the files linked to it will remain untouched.',
       },
       external: {
         title: 'Remote resources (ATT)',
-        infoText: 'Please insert Title and URL for the remote files. Qvain Light does not upload or store the files, but the URLs act as active links to the files.',
+        infoText:
+          'Please insert Title and URL for the remote files. Qvain Light does not upload or store the files, but the URLs act as active links to the files.',
         help: 'Add link to remote files from here:',
         button: {
           label: 'Add link to remote files',
@@ -808,17 +830,20 @@ const english = {
     removedInfo: 'The dataset has been removed',
     deprecatedInfo: 'The dataset has been deprecated',
     urlToNew: 'A new version of this dataset is available. You can open it via this ',
-    urlToOld: 'An older (published) version of this dataset is available. You can open it via this ',
-    link: 'link'
+    urlToOld:
+      'An older (published) version of this dataset is available. You can open it via this ',
+    link: 'link',
   },
   userAuthenticationError: {
     header: 'Login unsuccessful.',
-    content: 'Please make sure that you have a valid CSC account. If you tried to log in with an external account (for example Haka) you might get this error if your account is not associated with a CSC account. Please register a CSC account at https://sui.csc.fi. You can register with or without a Haka account.',
+    content:
+      'Please make sure that you have a valid CSC account. If you tried to log in with an external account (for example Haka) you might get this error if your account is not associated with a CSC account. Please register a CSC account at https://sui.csc.fi. You can register with or without a Haka account.',
   },
   userHomeOrganizationErrror: {
     header: 'Login unsuccessful.',
-    content: 'You have a verified CSC account, but your account does not seem to have a home organization. Please contact the CSC Helpdesk to set a home organization for your CSC account.',
-  }
+    content:
+      'You have a verified CSC account, but your account does not seem to have a home organization. Please contact the CSC Helpdesk to set a home organization for your CSC account.',
+  },
 }
 
 export default english

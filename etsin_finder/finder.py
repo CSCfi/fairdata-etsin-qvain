@@ -59,7 +59,7 @@ def add_restful_resources(app):
     :return:
     """
     api = Api(app)
-    from etsin_finder.resources import Contact, Dataset, User, Session, Files, Download
+    from etsin_finder.resources import REMSApplyForPermission, Contact, Dataset, User, Session, Files, Download
     from etsin_finder.qvain_light_resources import ProjectFiles, FileDirectory, FileCharacteristics, UserDatasets, QvainDataset, QvainDatasetDelete
     from etsin_finder.qvain_light_rpc import QvainDatasetChangeCumulativeState, QvainDatasetRefreshDirectoryContent
 
@@ -79,6 +79,12 @@ def add_restful_resources(app):
     # Qvain light API RPC endpoints
     api.add_resource(QvainDatasetChangeCumulativeState, '/api/rpc/datasets/change_cumulative_state')
     api.add_resource(QvainDatasetRefreshDirectoryContent, '/api/rpc/datasets/refresh_directory_content')
+    # REMS API endpoints
+    api.add_resource(REMSApplyForPermission, '/api/rems/<string:cr_id>')
+    # api.add_resource(REMSCreateUser, '/api/users/create')
+    # api.add_resource(REMSGetEntitlements, '/api/entitlements')
+    # api.add_resource(REMSGetApplications, '/api/applications/<string:application_id>')
+    # api.add_resource(REMSCreateNewApplication, '/api/applications/create')
 
 app = create_app()
 add_restful_resources(app)
