@@ -55,7 +55,7 @@ class RefreshDirectoryModal extends Component {
         } else if (err.response && err.response.data) {
           error = err.response.data
         } else {
-          error = this.response.errorMessage
+          error = err.response.errorMessage
         }
 
         this.setState({

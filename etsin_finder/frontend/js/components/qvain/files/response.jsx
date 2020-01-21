@@ -101,6 +101,7 @@ const ResponseContainerContent = styled.div`
   text-align: left;
   display: inline-block;
   padding-left: 30px;
+  padding-right: 20px;
   padding-top: 20px;
   white-space: pre-line;
 `

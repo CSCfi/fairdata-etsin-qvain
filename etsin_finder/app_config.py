@@ -114,7 +114,7 @@ def get_fairdata_rems_api_config(is_testing):
     if not rems_conf or not isinstance(rems_conf, dict):
         return None
 
-    if 'API_KEY' not in rems_conf or 'HOST' not in rems_conf:
+    if 'API_KEY' not in rems_conf or 'HOST' not in rems_conf or 'ENABLED' not in rems_conf:
         return None
 
     return rems_conf
