@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
+import translate from 'counterpart'
 import { inject, observer } from 'mobx-react'
 import axios from 'axios'
-import { Link } from 'react-router-dom'
+import { withRouter, Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons'
 import styled from 'styled-components'
@@ -25,11 +26,17 @@ import {
 import handleSubmitToBackend from './utils/handleSubmit'
 import Title from './general/title'
 import SubmitResponse from './general/submitResponse'
-import { InvertedButton } from '../general/button';
+import Button, { InvertedButton } from '../general/button';
+
+const EDIT_DATASET_URL = '/api/datasets/edit'
 
 class Qvain extends Component {
+  promises = []
+
   static propTypes = {
     Stores: PropTypes.object.isRequired,
+    match: PropTypes.object.isRequired,
+    history: PropTypes.object.isRequired,
   }
 
   constructor(props) {
@@ -42,11 +49,76 @@ class Qvain extends Component {
   state = {
     response: null,
     submitted: false,
+    haveDataset: false,
+    datasetLoading: false,
+    datasetError: false,
+    datasetErrorTitle: null,
+    datasetErrorDetails: null,
+  }
+
+  componentDidMount() {
+    this.handleIdentifierChanged()
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.match.params.identifier !== prevProps.match.params.identifier) {
+      this.handleIdentifierChanged()
+    }
   }
 
   componentWillUnmount() {
     this.props.Stores.Qvain.resetQvainStore()
     this.props.Stores.Qvain.original = undefined
+    this.promises.forEach(promise => promise.cancel())
+  }
+
+  getDataset(identifier) {
+    this.setState({ datasetLoading: true, datasetError: false, response: null, submitted: false })
+    const { resetQvainStore, editDataset } = this.props.Stores.Qvain
+    const url = `${EDIT_DATASET_URL}/${identifier}`
+    const promise = axios
+      .get(url)
+      .then(result => {
+        resetQvainStore()
+        editDataset(result.data)
+        this.setState({ datasetLoading: false, datasetError: false, haveDataset: true })
+      })
+      .catch(e => {
+        const status = e.response.status
+
+        let errorTitle, errorDetails
+        if (status === 401 || status === 403) {
+          errorTitle = translate('qvain.error.permission')
+        } else if (status === 404) {
+          errorTitle = translate('qvain.error.missing')
+        } else {
+          errorTitle = translate('qvain.error.default')
+        }
+
+        if (typeof e.response.data === 'object') {
+          const values = Object.values(e.response.data)
+          if (values.length === 1) {
+            errorDetails = values[0]
+          } else {
+            errorDetails = JSON.stringify(e.response.data, null, 2)
+          }
+        } else {
+          errorDetails = e.response.data
+        }
+        if (!errorDetails) {
+          errorDetails = e.message
+        }
+
+        this.setState({
+          datasetLoading: false,
+          datasetError: true,
+          datasetErrorTitle: errorTitle,
+          datasetErrorDetails: errorDetails,
+          haveDataset: false,
+        })
+      })
+    this.promises.push(promise)
+    return promise
   }
 
   setFocusOnSubmitOrUpdateButton(event) {
@@ -71,9 +143,11 @@ class Qvain extends Component {
         axios
           .post('/api/dataset', obj)
           .then(res => {
-            this.setState({ response: JSON.parse(res.data) })
+            this.setState({ response: res.data })
+            // Open the created dataset without reloading the editor
             if (this.state.response && 'identifier' in this.state.response) {
-              this.props.Stores.Qvain.resetQvainStore()
+              this.props.Stores.Qvain.editDataset(this.state.response)
+              this.props.history.replace(`/qvain/dataset/${this.state.response.identifier}`)
             }
           })
           .catch(err => {
@@ -91,19 +165,10 @@ class Qvain extends Component {
                 this.setState({
                   response: [err.response.data.IdaError]
                 })
-
-              // ...else, try to format the Metax error
-              } else if ((err.response.data.includes(':["')) && (err.response.data.includes('"],'))) {
-                console.log('4')
+              } else if (err.response.data.detail) { // ...else, try to format the Metax error
                 this.setState({
-                  response:
-                    [
-                      err.response.data.slice(
-                      err.response.data.indexOf(':["') + 3,
-                      err.response.data.indexOf('"],'))
-                    ]
+                  response: err.response.data.detail
                 })
-
               // If the Metax error message formatting cannot be done, just display the entire error
               } else {
                 this.setState({
@@ -128,6 +193,11 @@ class Qvain extends Component {
       })
   }
 
+  handleRetry = () => {
+    this.setState({ datasetLoading: false, haveDataset: true })
+    this.handleIdentifierChanged()
+  }
+
   handleUpdate = e => {
     e.preventDefault()
     this.setState({ submitted: true })
@@ -143,7 +213,7 @@ class Qvain extends Component {
           .then(res => {
             this.props.Stores.Qvain.moveSelectedToExisting()
             this.props.Stores.Qvain.setChanged(false)
-            this.setState({ response: JSON.parse(res.data) })
+            this.setState({ response: res.data })
           })
           .catch(err => {
             // Refreshing error header
@@ -156,14 +226,9 @@ class Qvain extends Component {
             // If user is logged in...
             } else if (err.response.data) {
             // ...try to format the Metax error
-            if ((err.response.data.includes(':["')) && (err.response.data.includes('"],'))) {
+            if (err.response.data.detail) {
               this.setState({
-                response:
-                  [
-                    err.response.data.slice(
-                    err.response.data.indexOf(':["') + 3,
-                    err.response.data.indexOf('"],'))
-                  ]
+                response: err.response.data.detail
               })
 
             // If the Metax error message formatting cannot be done, just display the entire error
@@ -190,22 +255,53 @@ class Qvain extends Component {
       })
   }
 
+  handleIdentifierChanged() {
+    if (this.datasetLoading) {
+      return
+    }
+    const identifier = this.props.match.params.identifier
+    const { original } = this.props.Stores.Qvain
+
+    // Test if we need to load a dataset or do we use the one currently in store
+    if (identifier && !(original && original.identifier === identifier)) {
+      this.getDataset(identifier)
+    } else {
+      this.setState({ datasetLoading: false, haveDataset: true })
+    }
+  }
+
   render() {
-    return (
-      <QvainContainer>
-        <SubHeader>
-          <SubHeaderTextContainer>
-            <SubHeaderText>
-              <Translate component={Title} content={this.props.Stores.Qvain.original ? 'qvain.titleEdit' : 'qvain.titleCreate'} />
-            </SubHeaderText>
-          </SubHeaderTextContainer>
-          <LinkBackContainer>
-            <LinkBack to="/qvain">
-              <FontAwesomeIcon size="lg" icon={faChevronLeft} />
-              <Translate component="span" display="block" content="qvain.backLink" />
-            </LinkBack>
-          </LinkBackContainer>
-        </SubHeader>
+    // Title text
+    let titleKey
+    if (this.state.datasetLoading) {
+      titleKey = 'qvain.titleLoading'
+    } else if (this.state.datasetError) {
+      titleKey = 'qvain.titleLoadingFailed'
+    } else {
+      titleKey = this.props.Stores.Qvain.original ? 'qvain.titleEdit' : 'qvain.titleCreate'
+    }
+
+    // Sticky header content
+    let stickyheader
+    if (this.state.datasetError) {
+      stickyheader = null
+    } else if (this.state.datasetLoading) {
+      stickyheader = (
+        <StickySubHeaderWrapper>
+          <StickySubHeader>
+            <ButtonContainer>
+              <SubmitButton disabled>
+                <Translate content="qvain.titleLoading" />
+              </SubmitButton>
+            </ButtonContainer>
+          </StickySubHeader>
+          <StickySubHeaderResponse>
+            <SubmitResponse response={null} />
+          </StickySubHeaderResponse>
+        </StickySubHeaderWrapper>
+      )
+    } else {
+      stickyheader = (
         <StickySubHeaderWrapper>
           <StickySubHeader>
             <ButtonContainer>
@@ -229,6 +325,31 @@ class Qvain extends Component {
             </StickySubHeaderResponse>
           ) : null}
         </StickySubHeaderWrapper>
+      )
+    }
+
+    // Dataset form
+    let dataset
+    if (this.state.datasetError) {
+      dataset = (
+        <div className="container">
+          <ErrorContainer>
+            <ErrorLabel>
+              {this.state.datasetErrorTitle}
+            </ErrorLabel>
+            <ErrorContent>
+              {this.state.datasetErrorDetails}
+            </ErrorContent>
+            <ErrorButtons>
+              <Button onClick={this.handleRetry}>Retry</Button>
+            </ErrorButtons>
+          </ErrorContainer>
+        </div>
+      )
+    } else if (!this.state.haveDataset) {
+      dataset = null
+    } else {
+      dataset = (
         <Form className="container">
           <Description />
           <Actors />
@@ -241,6 +362,26 @@ class Qvain extends Component {
             <Translate content="stsd" />
           </STSD>
         </Form>
+      )
+    }
+
+    return (
+      <QvainContainer>
+        <SubHeader>
+          <SubHeaderTextContainer>
+            <SubHeaderText>
+              <Translate component={Title} content={titleKey} />
+            </SubHeaderText>
+          </SubHeaderTextContainer>
+          <LinkBackContainer>
+            <LinkBack to="/qvain">
+              <FontAwesomeIcon size="lg" icon={faChevronLeft} />
+              <Translate component="span" display="block" content="qvain.backLink" />
+            </LinkBack>
+          </LinkBackContainer>
+        </SubHeader>
+        {stickyheader}
+        {dataset}
       </QvainContainer>
     )
   }
@@ -294,4 +435,31 @@ const SubmitContainer = styled(Container)`
   margin: 15px;
 `
 
-export default inject('Stores')(observer(Qvain))
+const ErrorContainer = styled(Container)`
+  background-color: #FFEBE8;
+  border-bottom: 1px solid rgba(0,0,0,0.3);
+`
+
+const ErrorLabel = styled.p`
+  font-weight: bold;
+  display: inline-block;
+  vertical-align: top;
+`
+
+const ErrorContent = styled.div`
+  max-width: 1140px;
+  width: 100%;
+  text-align: left;
+  display: inline-block;
+  white-space: pre-line;
+`
+
+const ErrorButtons = styled.div`
+  margin-bottom: -2em;
+  margin-top: 1em;
+  > button:first-child {
+    margin: 0
+  }
+`
+
+export default withRouter(inject('Stores')(observer(Qvain)))

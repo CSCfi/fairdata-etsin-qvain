@@ -2,11 +2,20 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
+import { withRouter } from 'react-router-dom';
+
 import Loader from '../../general/loader'
+import { TableButton } from '../general/buttons'
+
 
 // Shows success/fail based on a RPC request response. If the response prop is null, shows a loader.
 const Response = (props) => {
-  const { response } = props
+  const { response, history, requestClose } = props
+
+  const handleOpenNewVersion = (identifier) => {
+    history.push(`/qvain/dataset/${identifier}`)
+    requestClose()
+  }
 
   // If something went wrong.
   if (response && response.error) {
@@ -32,9 +41,14 @@ const Response = (props) => {
           <ResponseLabel success>
             <Translate content="qvain.files.responses.changeComplete" />
           </ResponseLabel>
-          { newIdentifier &&
-            <Translate component="p" content="qvain.files.responses.versionCreated" with={{ identifier: newIdentifier }} />
-          }
+          { newIdentifier && (
+            <>
+              <Translate component="p" content="qvain.files.responses.versionCreated" with={{ identifier: newIdentifier }} />
+              <NewVersionButton onClick={() => handleOpenNewVersion(newIdentifier)}>
+                <Translate content={'qvain.files.responses.openNewVersion'} />
+              </NewVersionButton>
+            </>
+          )}
         </ResponseContainerContent>
       </ResponseContainerSuccess>
     )
@@ -50,10 +64,13 @@ const Response = (props) => {
 
 Response.propTypes = {
   response: PropTypes.object,
+  history: PropTypes.object.isRequired,
+  requestClose: PropTypes.func,
 }
 
 Response.defaultProps = {
   response: null,
+  requestClose: () => {},
 }
 
 const ResponseLabel = styled.p`
@@ -106,4 +123,10 @@ const ResponseContainerContent = styled.div`
   white-space: pre-line;
 `
 
-export default Response
+const NewVersionButton = styled(TableButton)`
+  width: auto;
+  margin-top: 0;
+  margin-bottom: 1em;
+`
+
+export default withRouter(Response)
