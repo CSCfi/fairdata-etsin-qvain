@@ -63,7 +63,7 @@ export class SelectedFilesBase extends Component {
               {s.projectIdentifier} / {s.directoryName || s.fileName}
             </FileLabel>
             <FileButtonsContainer>
-              { s.directoryName && (
+              { s.directoryName && existing && (
                 <RefreshDirectoryButton
                   type="button"
                   disabled={this.state.refreshLoading}
