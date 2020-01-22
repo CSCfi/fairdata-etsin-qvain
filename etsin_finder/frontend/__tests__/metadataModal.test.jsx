@@ -3,6 +3,7 @@ import { mount } from 'enzyme'
 import ReactModal from 'react-modal'
 import { ThemeProvider } from 'styled-components'
 import { Provider } from 'mobx-react'
+import { BrowserRouter } from 'react-router-dom'
 import axios from 'axios'
 import '../locale/translations.js'
 import { when } from 'mobx'
@@ -148,12 +149,14 @@ describe('Qvain.MetadataModal', () => {
     wrapper = mount(
       (
         <Provider Stores={stores}>
-          <ThemeProvider theme={etsinTheme}>
-            <>
-              <FileSelector />
-              <MetadataModal />
-            </>
-          </ThemeProvider>
+          <BrowserRouter>
+            <ThemeProvider theme={etsinTheme}>
+              <>
+                <FileSelector />
+                <MetadataModal />
+              </>
+            </ThemeProvider>
+          </BrowserRouter>
         </Provider>
       ), { attachTo: helper }
     )
