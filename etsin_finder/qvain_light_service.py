@@ -297,6 +297,8 @@ class MetaxQvainLightAPIService(FlaskService):
                           .format(cr_id, e))
             return {'Error_message': 'Error trying to send data to metax.'}
         log.info('Updated dataset with identifier: {}'.format(cr_id))
+        if metax_api_response.status_code == 412:
+            return 'Resource has been modified since last publish', 412
         return metax_api_response.text, metax_api_response.status_code
 
     def delete_dataset(self, cr_id):
