@@ -110,7 +110,7 @@ class OtherIdentifierField extends React.Component {
           id="otherIdentifiersInput"
           value={this.state.identifier}
           onChange={this.handleInputChange}
-          placeholder="http://orcid.org/"
+          placeholder="http://doi.org/"
           onBlur={this.handleBlur}
         />
         <ValidationError>{this.state.validationError}</ValidationError>
