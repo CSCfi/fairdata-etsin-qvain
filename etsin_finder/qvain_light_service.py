@@ -164,11 +164,11 @@ class MetaxQvainLightAPIService(FlaskService):
 
         try:
             metax_qvain_api_response = requests.patch(req_url,
-                                                    headers={'Accept': 'application/json', 'Content-Type': 'application/json'},
-                                                    data=json.dumps(data),
-                                                    auth=(self.user, self.pw),
-                                                    verify=self.verify_ssl,
-                                                    timeout=10)
+                                                      headers={'Accept': 'application/json', 'Content-Type': 'application/json'},
+                                                      data=json.dumps(data),
+                                                      auth=(self.user, self.pw),
+                                                      verify=self.verify_ssl,
+                                                      timeout=10)
             metax_qvain_api_response.raise_for_status()
         except Exception as e:
             if isinstance(e, requests.HTTPError):
@@ -260,20 +260,23 @@ class MetaxQvainLightAPIService(FlaskService):
         log.info('Created dataset with identifier: {}'.format(json.loads(metax_api_response.text)['identifier']))
         return metax_api_response.text, metax_api_response.status_code
 
-    def update_dataset(self, data, cr_id):
+    def update_dataset(self, data, cr_id, last_modified):
         """
         Update a dataset with the datat that the user has entered in Qvain-light.
 
         Arguments:
             data {object} -- Object with the dataset data that has been validated and converted to comply with the Metax schema.
             cr_id {string} -- The identifier of the dataset.
+            last_modified {string} -- HTTP datetime string (RFC2616)
 
         Returns:
             [type] -- The response from Metax.
 
         """
         req_url = self.METAX_CREATE_DATASET + "/" + cr_id
-        headers = {'Accept': 'application/json'}
+
+        headers = {'Accept': 'application/json', 'If-Unmodified-Since': last_modified}
+        log.debug('Request URL: {0}\nHeaders: {1}\nData: {2}'.format(req_url, headers, data))
         try:
             metax_api_response = requests.patch(req_url,
                                                 json=data,
@@ -468,19 +471,20 @@ def create_dataset(form_data):
     """
     return _metax_api.create_dataset(form_data)
 
-def update_dataset(form_data, cr_id):
+def update_dataset(form_data, cr_id, last_modified):
     """
     Update dataset in Metax.
 
     Arguments:
         form_data {object} -- Object with the dataset data that has been validated and converted to comply with the Metax schema.
         cr_id {string} -- The identifier of the dataset.
+        last_modified {string} -- HTTP datetime string (RFC2616)
 
     Returns:
         [type] -- Metax response.
 
     """
-    return _metax_api.update_dataset(form_data, cr_id)
+    return _metax_api.update_dataset(form_data, cr_id, last_modified)
 
 def delete_dataset(cr_id):
     """
