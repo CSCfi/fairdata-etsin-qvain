@@ -22,7 +22,8 @@ from etsin_finder import qvain_light_service
 from etsin_finder.finder import app
 from etsin_finder.utils import \
     sort_array_of_obj_by_key, \
-    slice_array_on_limit
+    slice_array_on_limit, \
+    SAML_ATTRIBUTES
 from etsin_finder.qvain_light_dataset_schema import DatasetValidationSchema
 from etsin_finder.qvain_light_utils import data_to_metax, \
     get_dataset_creator, \
@@ -30,7 +31,7 @@ from etsin_finder.qvain_light_utils import data_to_metax, \
     edited_data_to_metax, \
     get_user_ida_projects, \
     check_if_data_in_user_IDA_project
-from etsin_finder.qvain_light_service import create_dataset, update_dataset, delete_dataset
+from etsin_finder.qvain_light_service import create_dataset, update_dataset, get_dataset, delete_dataset
 
 log = app.logger
 
@@ -294,6 +295,35 @@ class QvainDataset(Resource):
         metax_response = update_dataset(metax_redy_data, cr_id)
         log.debug("METAX RESPONSE: \n{0}".format(metax_response))
         return metax_response
+
+class QvainDatasetEdit(Resource):
+    """Get single dataset for editing."""
+
+    @log_request
+    def get(self, cr_id):
+        """
+        Get dataset for editing from Metax. Returns with an error if the logged in user does not own the requested dataset.
+
+        Arguments:
+            cr_id {str} -- Identifier of dataset.
+
+        Returns:
+            [type] -- Metax response.
+
+        """
+        is_authd = authentication.is_authenticated()
+        if not is_authd:
+            return {"PermissionError": "User not logged in."}, 401
+        user = session["samlUserdata"][SAML_ATTRIBUTES["CSC_username"]][0]
+        response, status = get_dataset(cr_id)
+        if status != 200:
+            return response, status
+        if user != response.get('metadata_provider_user'):
+            log.warning('User: \"{0}\" is not the creator of the dataset. Editing not allowed.'.format(user))
+            return {"PermissionError": "User is not allowed to edit the dataset."}, 403
+
+        return response, status
+
 
 class QvainDatasetDelete(Resource):
     """DELETE request handling coming in from Qvain Light. Used for deleting datasets in METAX."""
