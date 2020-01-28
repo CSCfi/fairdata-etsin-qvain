@@ -47,9 +47,9 @@ class SubmitResponse extends Component {
 
     // If a new dataset has been created successfully.
     if (response &&
-        'identifier' in response &&
-        !('new_version_created' in response) &&
-        original === undefined
+      'identifier' in response &&
+      !('new_version_created' in response) &&
+      response.is_new
     ) {
       const identifier = response.identifier
       return (

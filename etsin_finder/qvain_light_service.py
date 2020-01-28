@@ -43,7 +43,11 @@ class MetaxQvainLightAPIService(FlaskService):
                                                '?metadata_provider_user={0}&file_details&ordering=-date_created'
             self.METAX_GET_ALL_DATASETS_FOR_USER = 'https://{0}/rest/datasets'.format(metax_qvain_api_config['HOST']) + \
                 '?metadata_provider_user={0}&file_details&ordering=-date_created&no_pagination=true'
-            self.METAX_CREATE_DATASET = 'https://{0}/rest/datasets'.format(metax_qvain_api_config['HOST'])
+            self.METAX_CREATE_DATASET = 'https://{0}/rest/datasets?file_details'.format(metax_qvain_api_config['HOST'])
+            self.METAX_PATCH_DATASET = 'https://{0}/rest/datasets'.format(metax_qvain_api_config['HOST'], ) + \
+                                       '/{0}?file_details'
+            self.METAX_DELETE_DATASET = 'https://{0}/rest/datasets'.format(metax_qvain_api_config['HOST'], ) + \
+                                        '/{0}'
             self.METAX_CHANGE_CUMULATIVE_STATE = 'https://{0}/rpc/datasets/change_cumulative_state'.format(metax_qvain_api_config['HOST'])
             self.METAX_REFRESH_DIRECTORY_CONTENT = 'https://{0}/rpc/datasets/refresh_directory_content'.format(metax_qvain_api_config['HOST'])
             self.user = metax_qvain_api_config['USER']
@@ -274,7 +278,7 @@ class MetaxQvainLightAPIService(FlaskService):
             [type] -- The response from Metax.
 
         """
-        req_url = self.METAX_CREATE_DATASET + "/" + cr_id
+        req_url = self.METAX_PATCH_DATASET.format(cr_id)
         headers = {'Accept': 'application/json'}
         try:
             metax_api_response = requests.patch(req_url,
@@ -341,7 +345,7 @@ class MetaxQvainLightAPIService(FlaskService):
             [type] -- Metax response.
 
         """
-        req_url = self.METAX_CREATE_DATASET + "/" + cr_id
+        req_url = self.METAX_DELETE_DATASET.format(cr_id)
         headers = {'Accept': 'application/json'}
         try:
             metax_api_response = requests.delete(req_url,

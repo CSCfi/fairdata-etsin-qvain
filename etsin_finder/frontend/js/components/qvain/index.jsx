@@ -143,11 +143,13 @@ class Qvain extends Component {
         axios
           .post('/api/dataset', obj)
           .then(res => {
-            this.setState({ response: res.data })
+            const data = res.data
+            this.setState({ response: { ...data, is_new: true } })
             // Open the created dataset without reloading the editor
-            if (this.state.response && 'identifier' in this.state.response) {
-              this.props.Stores.Qvain.editDataset(this.state.response)
-              this.props.history.replace(`/qvain/dataset/${this.state.response.identifier}`)
+            if (data && data.identifier) {
+              this.props.Stores.Qvain.resetQvainStore()
+              this.props.Stores.Qvain.editDataset(data)
+              this.props.history.replace(`/qvain/dataset/${data.identifier}`)
             }
           })
           .catch(err => {
