@@ -11,6 +11,7 @@ import { observable, action } from 'mobx'
 import Modal from '../../../general/modal'
 import getReferenceData from '../../utils/getReferenceData'
 import { fileMetadataSchema } from '../../utils/formValidation'
+import { getResponseError } from '../../utils/responseError'
 import { Label, HelpField, Input } from '../../general/form'
 import { DangerButton, TableButton } from '../../general/buttons'
 import Response from '../response'
@@ -215,25 +216,9 @@ class MetadataModal extends Component {
       })
       this.close()
     } catch (err) {
-      let error = ''
-      if (err.response && err.response.data && err.response.data.detail) {
-        error = err.response.data.detail
-      } else if (err.response && err.response.data) {
-        error = err.response.data
-      } else if (err.response && err.response.errorMessage) {
-        error = err.response.errorMessage
-      } else {
-        error = err.message
-      }
-      if (error.file_characteristics) {
-        error = error.file_characteristics
-      }
-      if (typeof error === 'object') {
-        error = JSON.stringify(error)
-      }
       this.setState({
         response: {
-          error
+          error: getResponseError(err)
         }
       })
     } finally {

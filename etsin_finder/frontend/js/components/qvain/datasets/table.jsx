@@ -252,7 +252,10 @@ class DatasetTable extends Component {
                   <BodyCellWordWrap>
                     {dataset.research_dataset.title.en || dataset.research_dataset.title.fi}
                     {dataset.next_dataset_version !== undefined && (
-                      <Translate color="yellow" content="qvain.datasets.oldVersion" component={OldVersionLabel} />
+                      <Translate color="yellow" content="qvain.datasets.oldVersion" component={DatasetLabel} />
+                    )}
+                    {dataset.deprecated && (
+                      <Translate color="error" content="qvain.datasets.deprecated" component={DatasetLabel} />
                     )}
                     {(dataset.preservation_state > 0 || dataset.data_catalog.identifier === DataCatalogIdentifiers.PAS) &&
                       <PasLabel color={PreservationStates[dataset.preservation_state].color}>PAS</PasLabel>
@@ -297,7 +300,7 @@ class DatasetTable extends Component {
   }
 }
 
-const OldVersionLabel = styled(Label)`
+const DatasetLabel = styled(Label)`
   margin-left: 10px;
   text-transform: uppercase;
 `;
