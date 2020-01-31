@@ -3,12 +3,15 @@ import PropTypes from 'prop-types'
 import styled, { keyframes } from 'styled-components'
 import { inject, observer } from 'mobx-react'
 import Translate from 'react-translate-component'
+import { withRouter } from 'react-router-dom';
+
 import Loader from '../../general/loader'
 import { LinkButtonDarkGray } from '../../general/button';
 
 class SubmitResponse extends Component {
   static propTypes = {
     Stores: PropTypes.object.isRequired,
+    history: PropTypes.object.isRequired,
     response: PropTypes.oneOfType([PropTypes.string, PropTypes.object, PropTypes.array]),
   }
 
@@ -19,6 +22,11 @@ class SubmitResponse extends Component {
     }
 
     this.closeSubmitResponse = this.closeSubmitResponse.bind(this)
+  }
+
+  handleOpenNewVersion = (identifier) => {
+    this.props.history.push(`/qvain/dataset/${identifier}`)
+    this.closeSubmitResponse()
   }
 
   closeSubmitResponse() {
@@ -39,9 +47,9 @@ class SubmitResponse extends Component {
 
     // If a new dataset has been created successfully.
     if (response &&
-        'identifier' in response &&
-        !('new_version_created' in response) &&
-        original === undefined
+      'identifier' in response &&
+      !('new_version_created' in response) &&
+      response.is_new
     ) {
       const identifier = response.identifier
       return (
@@ -106,6 +114,9 @@ class SubmitResponse extends Component {
             <ResponseLabel success>
               <Translate content="qvain.submitStatus.editFilesSuccess" />
             </ResponseLabel>
+            <LinkToEtsin onClick={() => this.handleOpenNewVersion(response.new_version_created.identifier)}>
+              <Translate content="qvain.datasets.openNewVersion" />
+            </LinkToEtsin>
             <LinkToEtsin onClick={() => window.open(`/dataset/${identifier}`, '_blank')}>
               <Translate content="qvain.datasets.goToEtsin" />
             </LinkToEtsin>
@@ -220,4 +231,4 @@ const ResponseContainerCloseButtonContainer = styled.div`
   padding-right: 20px;
   position: absolute;
 `
-export default inject('Stores')(observer(SubmitResponse))
+export default withRouter(inject('Stores')(observer(SubmitResponse)))

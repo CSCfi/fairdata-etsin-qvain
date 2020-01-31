@@ -55,7 +55,7 @@ class RefreshDirectoryModal extends Component {
         } else if (err.response && err.response.data) {
           error = err.response.data
         } else {
-          error = this.response.errorMessage
+          error = err.response.errorMessage
         }
 
         this.setState({
@@ -92,7 +92,7 @@ class RefreshDirectoryModal extends Component {
       >
         <Translate component="h3" content="qvain.files.refreshModal.header" />
         {this.state.loading || this.state.response ?
-          <Response response={this.state.response} />
+          <Response response={this.state.response} requestClose={this.handleRequestClose} />
         : (
           <>
             <Translate component="p" content={`qvain.files.refreshModal.${cumulativeKey}`} />

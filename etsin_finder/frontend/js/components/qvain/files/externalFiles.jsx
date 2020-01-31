@@ -4,11 +4,6 @@ import { inject, observer } from 'mobx-react'
 import styled from 'styled-components';
 import Translate from 'react-translate-component'
 import {
-  FilePickerButtonInverse,
-  FilePickerButtonText,
-  LinkIcon,
-  ChevronRight,
-  ChevronDown,
   ButtonGroup,
   SaveButton,
   FileItem,
@@ -63,17 +58,11 @@ export class ExternalFilesBase extends Component {
   }
 
   render() {
-    const { extResFormOpen, selectedFiles, selectedDirectories, addedExternalResources } = this.props.Stores.Qvain
-    const hasIDAItems = [...selectedFiles, ...selectedDirectories].length > 0
+    const { addedExternalResources } = this.props.Stores.Qvain
     return (
       <Fragment>
         <Translate component="p" content="qvain.files.external.help" />
-        <FilePickerButtonInverse disabled={hasIDAItems} onClick={this.handleToggleForm}>
-          <LinkIcon />
-          <Translate component={FilePickerButtonText} content="qvain.files.external.button.label" />
-          {extResFormOpen ? <ChevronDown /> : <ChevronRight />}
-        </FilePickerButtonInverse>
-        <SlidingContent open={extResFormOpen}>
+        <SlidingContent open="true">
           <Translate tabIndex="0" component={SelectedFilesTitle} content="qvain.files.external.addedResources.title" />
           {addedExternalResources.length === 0 &&
             <Translate tabIndex="0" component="p" content="qvain.files.external.addedResources.none" />
