@@ -73,6 +73,10 @@ const finnish = {
       snglr: 'Tekijä',
     },
     curator: 'Kuraattori',
+    datasetAsFile: {
+      open: 'Avaa tiedostona',
+      infoText: 'Datacite without validation: Aineisto näytetään Datacite -formaatissa, mutta ilman pakollisten kenttien validointia. Aineisto ei sellaisenaan välttämättä täytä Dataciten vaatimuksia.'
+    },
     dl: {
       root: 'juuri',
       breadcrumbs: 'Leivänmurut',

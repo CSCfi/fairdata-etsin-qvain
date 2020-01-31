@@ -27,6 +27,7 @@ import GoToOriginal from './goToOriginal'
 import Label from '../general/label'
 import TogglableAgentList from './togglableAgentList'
 import VersionChanger from './versionChanger'
+import FormatChanger from './formatChanger'
 import checkDataLang, { getDataLang } from '../../utils/checkDataLang'
 import checkNested from '../../utils/checkNested'
 import dateFormat from '../../utils/dateFormat'
@@ -113,6 +114,11 @@ class Description extends Component {
               }
             />
           </Flex>
+          <FormatChangerPosition>
+            <FormatChanger
+              idn={this.props.match.params.identifier}
+            />
+          </FormatChangerPosition>
           <Flex>
             <ErrorBoundary>
               {this.checkEmails(this.props.emails) && !this.props.harvested && (
@@ -132,30 +138,40 @@ class Description extends Component {
         </Labels>
         <section>
           <div>
-            {this.props.dataset.data_catalog.catalog_json.identifier ===
-              'urn:nbn:fi:att:data-catalog-pas' && (
-              <PasInfo>
-                <Translate content="dataset.storedInPas" />
-              </PasInfo>
-            )}
-            {this.props.dataset.preservation_dataset_origin_version && (
-              <PasInfo>
-                <Translate content="dataset.originalDatasetVersionExists" />
-                <Link
-                  to={`/dataset/${this.props.dataset.preservation_dataset_origin_version.identifier}`}
-                >
-                  <Translate content="dataset.linkToOriginalDataset" />
-                </Link>
-              </PasInfo>
-            )}
-            {this.props.dataset.preservation_dataset_version && (
-              <PasInfo>
-                <Translate content="dataset.pasDatasetVersionExists" />
-                <Link to={`/dataset/${this.props.dataset.preservation_dataset_version.identifier}`}>
-                  <Translate content="dataset.linkToPasDataset" />
-                </Link>
-              </PasInfo>
-            )}
+            {
+              (this.props.dataset.data_catalog.catalog_json.identifier === 'urn:nbn:fi:att:data-catalog-pas') &&
+              (
+                <PasInfo>
+                  <Translate content="dataset.storedInPas" />
+                </PasInfo>
+              )
+            }
+            {
+              (this.props.dataset.preservation_dataset_origin_version) &&
+              (
+                <PasInfo>
+                  <Translate content="dataset.originalDatasetVersionExists" />
+                  <Link
+                    to={`/dataset/${this.props.dataset.preservation_dataset_origin_version.identifier}`}
+                  >
+                    <Translate content="dataset.linkToOriginalDataset" />
+                  </Link>
+                </PasInfo>
+              )
+            }
+            {
+              (this.props.dataset.preservation_dataset_version) &&
+              (
+                <PasInfo>
+                  <Translate content="dataset.pasDatasetVersionExists" />
+                  <Link
+                    to={`/dataset/${this.props.dataset.preservation_dataset_version.identifier}`}
+                  >
+                    <Translate content="dataset.linkToPasDataset" />
+                  </Link>
+                </PasInfo>
+              )
+            }
           </div>
           <div className="d-md-flex align-items-center dataset-title justify-content-between">
             <Title lang={getDataLang(this.state.title)}>{checkDataLang(this.state.title)}</Title>
@@ -262,6 +278,12 @@ const PasInfo = styled.div`
   padding-bottom: 5px;
 `
 
+const FormatChangerPosition = styled.div`
+  position: absolute;
+  top: -5px;
+  right: 0px;
+`
+
 const DatasetDescription = styled.div`
   padding: 0.5em 1em;
   margin-bottom: 1em;
@@ -336,7 +358,7 @@ const CustomMarkdown = styled(ReactMarkdown)`
   h5:first-child,
   h6:first-child {
     margin-top: 0;
-    padding-top: 0;
+    padding-top:0;
   }
 
   h1:hover a.anchor,
