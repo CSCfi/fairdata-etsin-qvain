@@ -54,9 +54,7 @@ class FileForm extends Component {
           )
         }))
       }).catch(error => {
-        if (error.message !== 'canceled') {
-          throw error
-        }
+        console.error(error)
       })
     )
     this.promises.push(getLocalizedOptions('use_category')
@@ -67,9 +65,7 @@ class FileForm extends Component {
           useCategory: getUseCategory(translations.fi, translations.en, this.props.Stores)
         })
       }).catch(error => {
-        if (error.message !== 'canceled') {
-          throw error
-        }
+        console.error(error)
       })
     )
   }

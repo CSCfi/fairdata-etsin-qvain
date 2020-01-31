@@ -45,9 +45,6 @@ class FieldOfScienceField extends React.Component {
         })
       })
       .catch(error => {
-        if (error.message === 'canceled') {
-          return
-        }
         if (error.response) {
           // Error response from Metax
           console.log(error.response.data);

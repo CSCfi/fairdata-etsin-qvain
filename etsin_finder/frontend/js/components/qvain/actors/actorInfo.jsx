@@ -59,9 +59,6 @@ export class ActorInfoBase extends Component {
         this.setState({ orgsLang: this.getOrgOptionsWithLang(refs, lang) })
       })
       .catch(error => {
-        if (error.message === 'canceled') {
-          return
-        }
         if (error.response) {
           // Error response from Metax
           console.log(error.response.data);
