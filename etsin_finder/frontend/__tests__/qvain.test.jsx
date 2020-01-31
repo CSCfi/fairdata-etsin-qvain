@@ -41,17 +41,79 @@ import { DataCatalogIdentifiers, EntityType, Role, } from '../js/components/qvai
 import { RadioInput } from '../js/components/qvain/general/form';
 import { ListItem } from '../js/components/qvain/general/list';
 
+const getStores = () => ({
+  Qvain: QvainStore,
+  Locale: LocaleStore
+})
+
 describe('Qvain', () => {
   it('should render correctly', () => {
     const component = shallow(<Qvain Stores={getStores()} />)
 
     expect(component).toMatchSnapshot()
   })
-})
 
-const getStores = () => ({
-  Qvain: QvainStore,
-  Locale: LocaleStore
+  it('should open existing dataset when the identifier in the url changes', () => {
+    const stores = getStores()
+
+    // Mock react router matches for identifier
+    const emptyMatch = { params: { identifier: null } }
+    const identifierMatch = { params: { identifier: 'some_identifier' } }
+    const anotherMatch = { params: { identifier: 'another_identifier' } }
+
+    // Replace Qvain.getDataset so we can test it was called correctly
+    let callCount = 0
+    let lastCall
+    class FakeQvain extends Qvain.WrappedComponent.wrappedComponent {
+      getDataset(identifier) {
+        callCount += 1
+        lastCall = identifier
+      }
+    }
+
+    // Create empty dataset, getDataset should not be called
+    shallow(<FakeQvain Stores={stores} match={emptyMatch} history={{}} />)
+    expect(callCount).toBe(0)
+    expect(lastCall).toBe(undefined)
+
+    // Dataset already opened for editing (e.g. in the dataset view), getDataset should not be called
+    lastCall = undefined
+    const datasetOpenedStore = {
+      ...stores,
+      Qvain: {
+        ...stores.Qvain,
+        original: { identifier: identifierMatch.params.identifier }
+      }
+    }
+    shallow(<FakeQvain Stores={datasetOpenedStore} match={identifierMatch} history={{}} />)
+    expect(callCount).toBe(0)
+    expect(lastCall).toBe(undefined)
+
+    // Different dataset already opened, getDataset should be called with the new identifier
+    lastCall = undefined
+    const anotherDatasetOpenedStore = {
+      ...stores,
+      Qvain: {
+        ...stores.Qvain,
+        original: { identifier: anotherMatch.params.identifier }
+      }
+    }
+    shallow(<FakeQvain Stores={anotherDatasetOpenedStore} match={identifierMatch} history={{}} />)
+    expect(callCount).toBe(1)
+    expect(lastCall).toBe(identifierMatch.params.identifier)
+
+    // Edit existing dataset, getDataset should be called
+    lastCall = undefined
+    const wrapper = shallow(<FakeQvain Stores={stores} match={identifierMatch} history={{}} />)
+    expect(callCount).toBe(2)
+    expect(lastCall).toBe(identifierMatch.params.identifier)
+
+    // Switch to another dataset, getDataset should be called
+    lastCall = undefined
+    wrapper.setProps({ match: anotherMatch })
+    expect(callCount).toBe(3)
+    expect(lastCall).toBe(anotherMatch.params.identifier)
+  })
 })
 
 describe('Qvain.Description', () => {

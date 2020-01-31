@@ -38,6 +38,7 @@ export default class Content extends Component {
           <Route exact path="/" render={props => <Home {...props} />} />
           <Route exact path="/datasets/:query?" render={props => <Search {...props} />} />
           <Route path="/dataset/:identifier" render={props => <Dataset {...props} />} />
+          <Route path="/qvain/dataset/:identifier" render={renderIfLoggedIn(renderQvain)} />
           <Route path="/qvain/dataset" render={renderIfLoggedIn(renderQvain)} />
           <Route path="/qvain" render={renderIfLoggedIn(renderQvainDatasets)} />
           <Route render={() => <ErrorPage error={{ type: 'error' }} />} />

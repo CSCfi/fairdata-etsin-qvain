@@ -2,6 +2,8 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { inject, observer } from 'mobx-react'
 import Translate from 'react-translate-component'
+import styled from 'styled-components';
+
 import {
   SaveButton,
   CancelButton
@@ -108,6 +110,11 @@ class FileForm extends Component {
     })
   }
 
+  handleEditMetadata = (event) => {
+    event.preventDefault()
+    this.props.Stores.Qvain.setMetadataModalFile(this.props.Stores.Qvain.inEdit)
+  }
+
   getFormatVersions = (fileFormat) => {
     if (fileFormat !== undefined) {
       return this.state.formatVersions.get(fileFormat.value)
@@ -196,8 +203,15 @@ class FileForm extends Component {
           />
           <p style={{ marginLeft: '10px' }}>{this.props.Stores.Qvain.inEdit.identifier}</p>
           {fileError !== undefined && <ValidationError>{fileError}</ValidationError>}
-          <Translate component={CancelButton} onClick={this.handleCancel} content="qvain.common.cancel" />
-          <Translate component={SaveButton} onClick={this.handleSave} content="qvain.common.save" />
+          <Buttons>
+            <div>
+              <Translate component={CancelButton} onClick={this.handleCancel} content="qvain.common.cancel" />
+              <Translate component={SaveButton} onClick={this.handleSave} content="qvain.common.save" />
+            </div>
+            <div>
+              <Translate component={EditMetadataButton} onClick={this.handleEditMetadata} content="qvain.files.metadataModal.buttons.show" />
+            </div>
+          </Buttons>
         </FileContainer>
       </Fragment>
     )
@@ -213,5 +227,25 @@ const getUseCategory = (fi, en, stores) => {
   }
   return uc
 }
+
+const Buttons = styled.div`
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+`
+
+const EditMetadataButton = styled(SaveButton)`
+  border-radius: 4px;
+  border: solid 1px #007fad;
+  background-color: #007fad;
+  &:hover {
+    background-color: #007fad;
+  }
+  font-size: 20px;
+  font-weight: bold;
+  color: #fff;
+  margin-left: auto;
+  padding: 10px 25px;
+`
 
 export default inject('Stores')(observer(FileForm))

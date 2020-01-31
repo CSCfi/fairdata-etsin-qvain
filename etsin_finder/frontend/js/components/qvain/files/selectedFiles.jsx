@@ -52,8 +52,10 @@ export class SelectedFilesBase extends Component {
   renderFiles = (selected, inEdit, existing, removable) => {
     const {
       toggleSelectedFile,
-      toggleSelectedDirectory
+      toggleSelectedDirectory,
+      cumulativeState
     } = this.props.Stores.Qvain
+    const isCumulative = cumulativeState === CumulativeStates.YES
     return (
       selected.map(s => (
         <Fragment key={`${s.id}-${randomStr()}`}>
@@ -63,8 +65,12 @@ export class SelectedFilesBase extends Component {
               {s.projectIdentifier} / {s.directoryName || s.fileName}
             </FileLabel>
             <FileButtonsContainer>
-              { s.directoryName && (
-                <RefreshDirectoryButton disabled={this.state.refreshLoading} type="button" onClick={() => this.setRefreshModalDirectory(s.identifier)}>
+              {s.directoryName && existing && isCumulative && (
+                <RefreshDirectoryButton
+                  type="button"
+                  disabled={this.state.refreshLoading}
+                  onClick={() => this.setRefreshModalDirectory(s.identifier)}
+                >
                   <Translate component={RefreshDirectoryButtonText} content="qvain.files.refreshModal.buttons.show" />
                 </RefreshDirectoryButton>
               )}

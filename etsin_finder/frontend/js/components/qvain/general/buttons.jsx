@@ -247,6 +247,28 @@ export const FilePickerButtonInverse = styled(FilePickerButton)`
   background-color: #fff;
 `;
 
+export const FilePickerFileButton = styled.button`
+  background-color: ${props => (
+    props.disabled ? '#7fbfd6' : '#007fad'
+  )};
+  font-size: 0.9em;
+  color: #fff;
+  height: 22px;
+  border-radius: 2px;
+  border: solid 1px ${props => (
+    props.disabled ? '#7fbfd6' : '#007fad'
+  )};
+  text-transform: none;
+  display: inline-flex;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  ${props => !props.disabled && css`
+    cursor: pointer;
+  `}
+`;
+
 export const FilePickerButtonText = styled.span`
   width: 90%;
   text-align: left;
