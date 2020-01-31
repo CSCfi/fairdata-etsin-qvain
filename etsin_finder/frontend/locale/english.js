@@ -75,6 +75,10 @@ const english = {
     },
     curator: 'Curator',
     data_location: 'Go to harvested location',
+    datasetAsFile: {
+      open: 'Open as a file',
+      infoText: 'Datacite without validation: The dataset is shown in Datacite Format but without validation; mandatory fields might be missing. Dataset does not necessarily meet all Datacite requirements.'
+    },
     dl: {
       root: 'root',
       breadcrumbs: 'Breadcrumbs',
