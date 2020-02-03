@@ -169,7 +169,7 @@ class CumulativeState extends Component {
     if (this.state.loading || this.state.response) {
       modalContent = (
         <>
-          <Response response={this.state.response} />
+          <Response response={this.state.response} requestClose={this.closeModal} />
           <TableButton disabled={this.state.loading} onClick={this.closeModal}>
             <Translate content={'qvain.files.cumulativeState.closeButton'} />
           </TableButton>

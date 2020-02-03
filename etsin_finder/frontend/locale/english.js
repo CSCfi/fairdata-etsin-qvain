@@ -75,6 +75,10 @@ const english = {
     },
     curator: 'Curator',
     data_location: 'Go to harvested location',
+    datasetAsFile: {
+      open: 'Open as a file',
+      infoText: 'Datacite without validation: The dataset is shown in Datacite Format but without validation; mandatory fields might be missing. Dataset does not necessarily meet all Datacite requirements.'
+    },
     dl: {
       root: 'root',
       breadcrumbs: 'Breadcrumbs',
@@ -302,6 +306,13 @@ const english = {
     notLoggedIn: 'Please login with your CSC account to use Qvain-light service.',
     titleCreate: 'Publish Dataset',
     titleEdit: 'Edit Dataset',
+    titleLoading: 'Loading Dataset',
+    titleLoadingFailed: 'Loading dataset failed',
+    error: {
+      permission: 'Permission error loading dataset',
+      missing: 'Dataset not found',
+      default: 'Error loading dataset',
+    },
     backLink: ' Back to datasets',
     common: {
       cancel: 'Cancel',
@@ -340,6 +351,7 @@ const english = {
       confirmDelete:
         'Are you sure you want to delete this dataset? Deleting the dataset will remove it from Qvain, and Etsin Search cannot find it anymore. Landing page for the dataset will NOT be removed.',
       goToEtsin: 'View in Etsin',
+      openNewVersion: 'Open new version',
       noDatasets: 'You have no datasets',
       reload: 'Reload',
       loading: 'Loading...',
@@ -638,6 +650,7 @@ const english = {
         fail: 'Something went wrong...',
         changeComplete: 'Action complete.',
         versionCreated: 'A new dataset version has been created with identifier %(identifier)s.',
+        openNewVersion: 'Open new version',
       },
       refreshModal: {
         header: 'Refresh folder content',

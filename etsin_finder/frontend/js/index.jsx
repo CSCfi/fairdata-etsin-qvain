@@ -21,7 +21,8 @@ import App from './app'
 global.Promise = require('bluebird')
 
 Promise.config({
-  warnings: false
+  warnings: false,
+  cancellation: true
 })
 
 if (process.env.NODE_ENV === 'development') {

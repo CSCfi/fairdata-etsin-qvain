@@ -92,7 +92,7 @@ class RefreshDirectoryModal extends Component {
       >
         <Translate component="h3" content="qvain.files.refreshModal.header" />
         {this.state.loading || this.state.response ?
-          <Response response={this.state.response} />
+          <Response response={this.state.response} requestClose={this.handleRequestClose} />
         : (
           <>
             <Translate component="p" content={`qvain.files.refreshModal.${cumulativeKey}`} />

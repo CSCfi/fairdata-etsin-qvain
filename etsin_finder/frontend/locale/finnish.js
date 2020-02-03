@@ -73,6 +73,10 @@ const finnish = {
       snglr: 'Tekijä',
     },
     curator: 'Kuraattori',
+    datasetAsFile: {
+      open: 'Avaa tiedostona',
+      infoText: 'Datacite without validation: Aineisto näytetään Datacite -formaatissa, mutta ilman pakollisten kenttien validointia. Aineisto ei sellaisenaan välttämättä täytä Dataciten vaatimuksia.'
+    },
     dl: {
       root: 'juuri',
       breadcrumbs: 'Leivänmurut',
@@ -301,6 +305,13 @@ const finnish = {
     notLoggedIn: 'Kirjaudu sisään CSC -tililläsi käyttääksesi Qvain-light palvelua.',
     titleCreate: 'Julkaise Aineisto',
     titleEdit: 'Muokkaa Aineistoa',
+    titleLoading: 'Ladataan Aineistoa',
+    titleLoadingFailed: 'Aineiston Lataus Epäonnistui',
+    error: {
+      permission: 'Oikeusvirhe aineiston latauksessa',
+      missing: 'Aineistoa ei löydy',
+      default: 'Virhe ladattaessa aineistoa',
+    },
     backLink: ' Takaisin aineistolistaan',
     common: {
       save: 'Tallenna',
@@ -339,6 +350,7 @@ const finnish = {
       confirmDelete:
         'Oletko varma, että haluat poistaa aineiston? Aineiston poiston jälkeen se ei enää näy Qvaimessa eikä Etsimen haku löydä sitä. Aineiston laskeutumissivua ei poisteta.',
       goToEtsin: 'Katso Etsimessä',
+      openNewVersion: 'Avaa uusi versio',
       noDatasets: 'Sinulla ei ole olemassa olevia aineistoja',
       reload: 'Lataa uudelleen',
       loading: 'Lataa...',
@@ -643,6 +655,7 @@ const finnish = {
         fail: 'Jotain meni pieleen...',
         changeComplete: 'Toiminto suoritettu.',
         versionCreated: 'Aineistosta on luotu uusi versio tunnisteella %(identifier)s.',
+        openNewVersion: 'Avaa uusi versio',
       },
       refreshModal: {
         header: 'Päivitä kansion tiedostot',
