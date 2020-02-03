@@ -68,7 +68,6 @@
     "style-loader": "^0.23.1",
     "styled-components": "4.2.0",
     "terraformer-wkt-parser": "1.2.0",
-    "uglifyjs-webpack-plugin": "^2.2.0",
     "webpack": "^4.39.2",
     "webpack-cli": "^3.3.7",
     "yup": "^0.26.10"
