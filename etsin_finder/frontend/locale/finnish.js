@@ -106,6 +106,12 @@ const finnish = {
       },
     },
     events_idn: {
+      deleted_versions: {
+        title: 'Poistetut Versiot',
+        date: 'Poistumispäivämäärä',
+        version: 'Versio',
+        link_to_dataset: 'Linkki aineistoon'
+      },
       events: {
         title: 'Tapahtumat',
         event: 'Tapahtuma',
@@ -746,3 +752,4 @@ const finnish = {
 }
 
 export default finnish
+
