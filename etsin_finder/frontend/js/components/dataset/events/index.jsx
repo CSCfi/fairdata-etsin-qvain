@@ -364,4 +364,3 @@ const InlineUl = styled.ul`
 `
 
 export default inject('Stores')(observer(Events))
-

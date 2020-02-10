@@ -32,7 +32,7 @@ class Content extends Component {
 
     if (this.props.dataset.dataset_version_set !== undefined
       && this.props.dataset.dataset_version_set.length > 0) {
-      for (let i = 0; i < this.props.dataset.dataset_version_set.length; i++) {
+      for (let i = 0; i < this.props.dataset.dataset_version_set.length; i += 1) {
         if (this.props.dataset.dataset_version_set[i].date_removed !== undefined) {
           deletedVersion = true;
         }
