@@ -85,7 +85,7 @@ class CumulativeState extends Component {
         } else if (err.response && err.response.data) {
           error = err.response.data
         } else {
-          error = this.response.errorMessage
+          error = err.response.errorMessage
         }
 
         this.setState({
@@ -169,7 +169,7 @@ class CumulativeState extends Component {
     if (this.state.loading || this.state.response) {
       modalContent = (
         <>
-          <Response response={this.state.response} />
+          <Response response={this.state.response} requestClose={this.closeModal} />
           <TableButton disabled={this.state.loading} onClick={this.closeModal}>
             <Translate content={'qvain.files.cumulativeState.closeButton'} />
           </TableButton>

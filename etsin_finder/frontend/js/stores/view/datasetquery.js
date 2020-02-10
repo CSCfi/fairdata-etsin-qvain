@@ -45,8 +45,11 @@ class DatasetQuery {
         .then(res => {
           this.results = res.data.catalog_record
           this.emailInfo = res.data.email_info
-          access.updateAccess(res.data.catalog_record.research_dataset.access_rights,
-          res.data.has_permit ? res.data.has_permit : false)
+          access.updateAccess(
+            res.data.catalog_record.research_dataset.access_rights,
+            res.data.has_permit ? res.data.has_permit : false,
+            res.data.application_state ? res.data.application_state : undefined
+          )
           resolve(res.data)
         })
         .catch(error => {
