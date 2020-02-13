@@ -63,10 +63,17 @@ class FormatChanger extends Component {
 
 
   changeFormat = (format) => {
+    let urlFormat = ''
+    if (format.value === 'metax') {
+      urlFormat = `https://metax.fairdata.fi/rest/datasets/${this.props.idn}`
+    } else {
+      urlFormat = `https://metax.fairdata.fi/rest/datasets/${this.props.idn}?dataset_format=${format.value}`
+    }
+
     this.setState(
       {
         selected: format,
-        url: `https://metax-test.csc.fi/rest/datasets/${this.props.idn}?dataset_format=${format.value}`
+        url: urlFormat
       },
       () => {
         this.openFormat(this.state.url)
