@@ -18,14 +18,10 @@ class TestFinderUtils(BaseTest):
         """Test datetime_to_header function"""
         test_int = 123
         test_randome_string = "asd675634asd"
-        test_only_date = "2020-01-27"
-        test3_datetime_no_tz = "2020-01-27T07:21:35"
         test4_datetime_wrong_format = "2020/01/27T07:21:35+02:00"
         test_ISO_8601 = "2020-01-27T07:21:35+02:00"
 
         assert datetime_to_header(test_int) is False
         assert datetime_to_header(test_randome_string) is False
-        assert datetime_to_header(test_only_date) == "Sun, 26 Jan 2020 22:00:00 GMT"
-        assert datetime_to_header(test3_datetime_no_tz) == "Mon, 27 Jan 2020 05:21:35 GMT"
         assert datetime_to_header(test4_datetime_wrong_format) == "Mon, 27 Jan 2020 05:21:35 GMT"
         assert datetime_to_header(test_ISO_8601) == "Mon, 27 Jan 2020 05:21:35 GMT"
