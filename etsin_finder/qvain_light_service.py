@@ -304,7 +304,7 @@ class MetaxQvainLightAPIService(FlaskService):
         log.info('Updated dataset with identifier: {}'.format(cr_id))
         if metax_api_response.status_code == 412:
             return 'Resource has been modified since last publish', 412
-        return metax_api_response.text, metax_api_response.status_code
+
         return json_or_empty(metax_api_response) or metax_api_response.text, metax_api_response.status_code
 
     def get_dataset(self, cr_id):
