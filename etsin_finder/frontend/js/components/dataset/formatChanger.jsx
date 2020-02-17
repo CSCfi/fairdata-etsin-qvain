@@ -106,7 +106,6 @@ class FormatChanger extends Component {
   }
 
   render() {
-    console.log(this.state)
     // CASE 1: Houston, we have a problem
     if (this.state.error !== false) {
       return <ErrorPage error={{ type: 'notfound' }} />
