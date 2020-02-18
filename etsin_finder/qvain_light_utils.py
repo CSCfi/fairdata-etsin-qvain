@@ -258,7 +258,7 @@ def remove_deleted_datasets_from_results(result):
 def _to_metax_field_of_science(fieldsOfScience):
     metax_fields_of_science = []
     for element in fieldsOfScience:
-        metax_field_of_science_object = {'identifier' : element }
+        metax_field_of_science_object = {'identifier': element }
         metax_fields_of_science.append(metax_field_of_science_object)
     return metax_fields_of_science
 
