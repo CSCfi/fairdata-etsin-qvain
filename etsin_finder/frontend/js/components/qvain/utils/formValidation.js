@@ -45,14 +45,12 @@ const keywordsSchema = yup
   )
   .required(translate('qvain.validationMessages.keywords.required'))
 
-  // shreyas changes starts
   const fieldsOfScienceSchema = yup
   .array()
   .of(
     yup
-      .string(translate('qvain.validationMessages.keywords.string'))
+      .string()
   )
-  // shreyas changes ends
 
 const otherIdentifierSchema = yup
   .string(translate('qvain.validationMessages.otherIdentifiers.string'))
@@ -311,10 +309,7 @@ const actorsSchema = yup
 const qvainFormSchema = yup.object().shape({
   title: titleSchema,
   description: descriptionSchema,
- // shreyas changes starts
-  // fieldOfScience: yup.string(),
   fieldsOfScience: fieldsOfScienceSchema,
-  // shreyas changes ends
   keywords: keywordsSchema,
   otherIdentifiers: otherIdentifiersSchema,
   accessType: accessTypeSchema,
@@ -363,9 +358,6 @@ export {
   otherIdentifierSchema,
   otherIdentifiersSchema,
   keywordsSchema,
-    // shreyas changes starts
-  fieldsOfScienceSchema,
-    // shreyas changes ends
   accessTypeSchema,
   licenseSchema,
   embargoExpDateSchema,
@@ -379,6 +371,7 @@ export {
   actorIdentifierSchema,
   actorOrganizationSchema,
   dataCatalogSchema,
+  fieldsOfScienceSchema,
   fileTitleSchema,
   fileDescriptionSchema,
   fileUseCategorySchema,
@@ -392,5 +385,4 @@ export {
   externalResourceSchema,
   externalResourceTitleSchema,
   externalResourceUrlSchema,
-
 }

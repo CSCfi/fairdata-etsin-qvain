@@ -391,6 +391,9 @@ const english = {
         infoText:
           'Select a value from the dropdown menu. The drop down uses the classification of the Ministry of Education and Culture.',
         placeholder: 'Select option',
+        addButton: 'Add field of science',
+        help:
+          'You can add multiple field of science.',
       },
       keywords: {
         title: 'Keywords',

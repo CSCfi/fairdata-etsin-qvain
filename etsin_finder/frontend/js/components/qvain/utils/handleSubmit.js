@@ -11,15 +11,9 @@ const actorsToMetax = actors => {
   return parsedActor
 }
 
-//Shreyas channges starts
-
-const fieldsOfScienceToMetaxMethod = fieldsOfScience => {
-  // const outputarray = []
-  return fieldsOfScience.map(fieldOfScience =>
+const fieldsOfScienceToMetaxMethod = fieldsOfScience => fieldsOfScience.map(fieldOfScience =>
     fieldOfScience.url)
-    //return outputarray
-}
-//shreyas changes ends
+
 const directoriesToMetax = (selectedDirectories, existingDirectories) => {
   const selectedDirectoryIdentifiers = selectedDirectories
     ? selectedDirectories.map(sd => sd.identifier)
@@ -72,11 +66,7 @@ const handleSubmitToBackend = (values) => {
     title: values.title,
     description: values.description,
     identifiers: values.otherIdentifiers,
-    // fieldOfScience: values.fieldOfScience ? values.fieldOfScience.url : undefined,
-    // shreyas: Add here support for FieldOfScienceArray : We are sending array alltogether starts
-    // FieldOfScienceArray: values.FieldOfScienceArray,
-    fieldOfScience: fieldsOfScienceToMetaxMethod(values.fieldOfScienceArray),
-    // shreyas: Add here support for FieldOfScienceArray ends
+    fieldOfScience: fieldsOfScienceToMetaxMethod(values.fieldsOfScience),
     keywords: values.keywords,
     actors: actorsToMetax(values.actors),
     accessType: values.accessType ? values.accessType : undefined,
@@ -92,10 +82,6 @@ const handleSubmitToBackend = (values) => {
     files: filesToMetax(values.selectedFiles, values.existingFiles),
     directories: directoriesToMetax(values.selectedDirectories, values.existingDirectories),
   }
-  console.log('Object before sending from fronend to backend :')
-  console.table(obj)
-  console.log('fieldOfScienceArray before sending from fronend to backend :')
-  console.table(obj.fieldOfScience)
   return obj
 }
 

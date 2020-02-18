@@ -11,7 +11,7 @@ import Button from '../../general/button'
 
 import getReferenceData from '../utils/getReferenceData';
 import Card from '../general/card';
-import { FieldOfScience, FieldOfScienceArray } from '../../../stores/view/qvain';
+import { FieldOfScience, FieldsOfScience } from '../../../stores/view/qvain';
 
 
 import { onChange, getCurrentValue } from '../utils/select'
@@ -23,20 +23,19 @@ class FieldOfScienceField extends React.Component {
   }
 
   state = {
-    options: {},
+    options: {}
   }
 
-  handleFieldOfScienceAddArray = () => {
-    const { setFieldOfScienceArray } = this.props.Stores.Qvain
-    // console.log('inside the handleFieldOfScienceAddArray method')
-    const fos = { ...this.props.Stores.Qvain.fieldOfScience }
-      if (!this.props.Stores.Qvain.fieldOfScienceArray.some(field => field.url === fos.url)) {
-      setFieldOfScienceArray([...this.props.Stores.Qvain.fieldOfScienceArray, FieldOfScienceArray(fos, fos.url)])
+  addFieldOfScience = () => {
+    const { setFieldsOfScience } = this.props.Stores.Qvain
+    const fieldOfScience = { ...this.props.Stores.Qvain.fieldOfScience }
+      if (!this.props.Stores.Qvain.fieldsOfScience.some(field => field.url === fieldOfScience.url)) {
+      setFieldsOfScience([...this.props.Stores.Qvain.fieldsOfScience, FieldsOfScience(fieldOfScience.name, fieldOfScience.url)])
     }
   }
 
-  handleFieldOfScienceRemove = fos => {
-    this.props.Stores.Qvain.removeFieldOfScience(fos)
+  removeFieldOfScience = fieldOfScienceToRemove => {
+    this.props.Stores.Qvain.removeFieldOfScience(fieldOfScienceToRemove)
   }
 
   componentDidMount = () => {
@@ -83,11 +82,10 @@ class FieldOfScienceField extends React.Component {
     const { lang } = this.props.Stores.Locale
     const { options } = this.state
 
-    const fieldOfScienceFaculty = this.props.Stores.Qvain.fieldOfScienceArray.map(fieldOfScienceEntry => (
+    const fieldOfScienceFaculty = this.props.Stores.Qvain.fieldsOfScience.map(fieldOfScienceEntry => (
       <Label color="#007fad" margin="0 0.5em 0.5em 0" key={fieldOfScienceEntry.url}>
-        {/* <PaddedWord>{fieldOfScienceEntry.name.name[lang]}</PaddedWord> */}
-        <PaddedWord>{fieldOfScienceEntry.url}</PaddedWord>
-        <FontAwesomeIcon onClick={() => this.handleFieldOfScienceRemove(fieldOfScienceEntry)} icon={faTimes} size="xs" />
+        <PaddedWord>{fieldOfScienceEntry.name[lang]}</PaddedWord>
+        <FontAwesomeIcon onClick={() => this.removeFieldOfScience(fieldOfScienceEntry)} icon={faTimes} size="xs" />
       </Label>
     ))
     return (
@@ -95,7 +93,7 @@ class FieldOfScienceField extends React.Component {
         <LabelLarge htmlFor="fieldOfScienceSelect">
           <Translate content="qvain.description.fieldOfScience.title" />
         </LabelLarge>
-        You can add multiple keywords
+        <Translate component="p" content="qvain.description.fieldOfScience.help" />
         {fieldOfScienceFaculty}
         <Translate
           name="field-of-science"
@@ -109,9 +107,8 @@ class FieldOfScienceField extends React.Component {
           onChange={onChange(options, lang, setFieldOfScience, FieldOfScience)}
         />
         <ButtonContainer>
-          {/* <AddNewButton type="button" onClick={this.handleKeywordAdd}> */}
-          <AddNewButton type="button" onClick={this.handleFieldOfScienceAddArray}>
-            <Translate content="qvain.description.keywords.addButton" />
+          <AddNewButton type="button" onClick={this.addFieldOfScience}>
+            <Translate content="qvain.description.fieldOfScience.addButton" />
           </AddNewButton>
         </ButtonContainer>
       </Card>

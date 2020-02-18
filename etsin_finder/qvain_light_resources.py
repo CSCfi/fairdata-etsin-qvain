@@ -246,7 +246,6 @@ class QvainDataset(Resource):
         if not is_authd:
             return {"PermissionError": "User not logged in."}, 401
         try:
-            log.warning("Shreyas Before validating data in backend-->"+request.data)
             data = self.validationSchema.loads(request.data)
         except ValidationError as err:
             log.warning("Invalid form data: {0}".format(err.messages))
@@ -277,7 +276,6 @@ class QvainDataset(Resource):
         if not is_authd:
             return {"PermissionError": "User not logged in."}, 401
         try:
-            log.warning("Shreyas Before validating data in backend-->"+request.data)
             data = self.validationSchema.loads(request.data)
         except ValidationError as err:
             log.warning("Invalid form data: {0}".format(err.messages))

@@ -81,9 +81,6 @@ class Qvain extends Component {
       .then(result => {
         resetQvainStore()
         editDataset(result.data)
-        console.log('Inside index.js-->getDataset() method, printing result.data')
-        console.table(JSON.stringify(result.data))
-
         this.setState({ datasetLoading: false, datasetError: false, haveDataset: true })
       })
       .catch(e => {
@@ -138,12 +135,10 @@ class Qvain extends Component {
     e.preventDefault()
     this.setState({ submitted: true })
     const obj = handleSubmitToBackend(this.props.Stores.Qvain)
-    console.log('Shreyas After getting populated from handleSubmitToBackend()')
     console.log(JSON.stringify(obj, null, 4))
     qvainFormSchema
       .validate(obj, { abortEarly: false })
       .then(val => {
-        console.log('Shreyas : after validation')
         console.log(val)
         axios
           .post('/api/dataset', obj)
@@ -210,12 +205,10 @@ class Qvain extends Component {
     this.setState({ submitted: true })
     const obj = handleSubmitToBackend(this.props.Stores.Qvain)
     obj.original = this.props.Stores.Qvain.original
-    console.log('Shreyas After getting populated from handleSubmitToBackend()')
     console.log(JSON.stringify(obj, null, 4))
     qvainFormSchema
       .validate(obj, { abortEarly: false })
       .then(val => {
-        console.log('Shreyas : after validation')
         console.log(val)
         axios
           .patch('/api/dataset', obj)

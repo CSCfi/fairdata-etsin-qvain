@@ -31,7 +31,7 @@ class Qvain {
 
   @observable fieldOfScience = undefined
 
-  @observable fieldOfScienceArray = []
+  @observable fieldsOfScience = []
 
   @observable keywords = []
 
@@ -63,7 +63,7 @@ class Qvain {
     }
     this.otherIdentifiers = []
     this.fieldOfScience = undefined
-    this.fieldOfScienceArray = []
+    this.fieldsOfScience = []
     this.keywords = []
     this.license = License(undefined, LicenseUrls.CCBY4)
     this.otherLicenseUrl = undefined
@@ -141,8 +141,8 @@ class Qvain {
   }
 
   @action
-  setFieldOfScienceArray = fieldOfScienceArray => {
-   this.fieldOfScienceArray = fieldOfScienceArray
+  setFieldsOfScience = fieldsOfScience => {
+   this.fieldsOfScience = fieldsOfScience
       this.changed = true
   }
 
@@ -159,8 +159,8 @@ class Qvain {
   }
 
   @action
-  removeFieldOfScience = fieldOfScience => {
-    this.fieldOfScienceArray = this.fieldOfScienceArray.filter(fos => fos.url !== fieldOfScience.url)
+  removeFieldOfScience = fieldOfScienceToRemove => {
+    this.fieldsOfScience = this.fieldsOfScience.filter(fieldOfScience => fieldOfScience.url !== fieldOfScienceToRemove.url)
     this.changed = true
   }
 
@@ -570,31 +570,11 @@ class Qvain {
       ? researchDataset.other_identifier.map(oid => oid.notation)
       : []
 
-    // field of science
-    // if (researchDataset.field_of_science !== undefined) {
-    //   const primary = researchDataset.field_of_science[0]
-    //   if (primary !== undefined) {
-    //     this.fieldOfScience = FieldOfScience(primary.pref_label, primary.identifier)
-    //     this.fieldOfScienceArray.push(this.fieldOfScience)
-    //   } else {
-    //     this.fieldOfScience = undefined
-    //   }
-    // } else {
-    //   this.fieldOfScience = undefined
-    // }
-
-    //fieldOFScienceArray
-    //coming researchDataset.field_of_science is an array
-
+    // fields of science
     researchDataset.field_of_science.forEach(element => {
       this.fieldOfScience = FieldOfScience(element.pref_label, element.identifier)
-      this.fieldOfScienceArray.push(this.fieldOfScience)
+      this.fieldsOfScience.push(this.fieldOfScience)
     });
-
-
-    //this.fieldOfScienceArray = researchDataset.fieldOfScienceArray || []
-    console.log("fieldOfScienceArray in qvain.js-> editDataset() is =>")
-    console.table(JSON.stringify(this.fieldOfScienceArray))
 
     // keywords
     this.keywords = researchDataset.keyword || []
@@ -996,12 +976,10 @@ export const FieldOfScience = (name, url) => ({
   url,
 })
 
-//shreyas changes starts
-export const FieldOfScienceArray = (name, url) => ({
+export const FieldsOfScience = (name, url) => ({
   name,
   url,
 })
-//shreyas changes ends
 
 export const AccessType = (name, url) => ({
   name,
