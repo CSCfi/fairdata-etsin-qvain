@@ -309,7 +309,7 @@ const actorsSchema = yup
 const qvainFormSchema = yup.object().shape({
   title: titleSchema,
   description: descriptionSchema,
-  fieldsOfScience: fieldsOfScienceSchema,
+  fieldOfScience: fieldsOfScienceSchema,
   keywords: keywordsSchema,
   otherIdentifiers: otherIdentifiersSchema,
   accessType: accessTypeSchema,
