@@ -8,6 +8,7 @@
 """Used for performing operations related to Metax for Qvain Light"""
 
 import requests
+from flask import jsonify
 
 from etsin_finder.finder import app
 from etsin_finder.app_config import get_metax_qvain_api_config
@@ -170,11 +171,11 @@ class MetaxQvainLightAPIService(FlaskService):
 
         try:
             metax_qvain_api_response = requests.patch(req_url,
-                                                    headers={'Accept': 'application/json', 'Content-Type': 'application/json'},
-                                                    data=json.dumps(data),
-                                                    auth=(self.user, self.pw),
-                                                    verify=self.verify_ssl,
-                                                    timeout=10)
+                                                      headers={'Accept': 'application/json', 'Content-Type': 'application/json'},
+                                                      data=json.dumps(data),
+                                                      auth=(self.user, self.pw),
+                                                      verify=self.verify_ssl,
+                                                      timeout=10)
             metax_qvain_api_response.raise_for_status()
         except Exception as e:
             if isinstance(e, requests.HTTPError):
@@ -253,6 +254,7 @@ class MetaxQvainLightAPIService(FlaskService):
                                                auth=(self.user, self.pw),
                                                verify=self.verify_ssl,
                                                timeout=10)
+            metax_api_response.raise_for_status()
         except Exception as e:
             if isinstance(e, requests.HTTPError):
                 log.warning(
@@ -260,15 +262,17 @@ class MetaxQvainLightAPIService(FlaskService):
                         metax_api_response.status_code,
                         json_or_empty(metax_api_response) or metax_api_response.text
                     ))
+                return metax_api_response.json(), metax_api_response.status_code
             else:
                 log.error("Error creating dataset\n{0}".format(e))
-            return {'Error_message': 'Error trying to send data to metax.'}
-        log.info('Created dataset with identifier: {}'.format(json.loads(metax_api_response.text)['identifier']))
-        return json_or_empty(metax_api_response) or metax_api_response.text, metax_api_response.status_code
+                return 'Error trying to send data to metax.', 500
+
+        log.info('Created dataset with identifier: {}'.format(json.loads(metax_api_response.text).get('identifier', 'COULD-NOT-GET-IDENTIFIER')))
+        return metax_api_response.json(), metax_api_response.status_code
 
     def update_dataset(self, data, cr_id):
         """
-        Update a dataset with the datat that the user has entered in Qvain-light.
+        Update a dataset with the data that the user has entered in Qvain-light.
 
         Arguments:
             data {object} -- Object with the dataset data that has been validated and converted to comply with the Metax schema.
@@ -287,6 +291,7 @@ class MetaxQvainLightAPIService(FlaskService):
                                                 auth=(self.user, self.pw),
                                                 verify=self.verify_ssl,
                                                 timeout=10)
+            metax_api_response.raise_for_status()
         except Exception as e:
             if isinstance(e, requests.HTTPError):
                 log.warning(
@@ -295,12 +300,14 @@ class MetaxQvainLightAPIService(FlaskService):
                         metax_api_response.status_code,
                         json_or_empty(metax_api_response) or metax_api_response.text
                     ))
+                return metax_api_response.json(), metax_api_response.status_code
             else:
                 log.error("Error updating dataset {0}\n{1}"
                           .format(cr_id, e))
-            return {'Error_message': 'Error trying to send data to metax.'}
+            return 'Error trying to send data to metax.', 500
+
         log.info('Updated dataset with identifier: {}'.format(cr_id))
-        return json_or_empty(metax_api_response) or metax_api_response.text, metax_api_response.status_code
+        return metax_api_response.json(), metax_api_response.status_code
 
     def get_dataset(self, cr_id):
         """
@@ -321,6 +328,7 @@ class MetaxQvainLightAPIService(FlaskService):
                                               auth=(self.user, self.pw),
                                               verify=self.verify_ssl,
                                               timeout=10)
+            metax_api_response.raise_for_status()
         except Exception as e:
             if isinstance(e, requests.HTTPError):
                 log.warning(
@@ -353,6 +361,7 @@ class MetaxQvainLightAPIService(FlaskService):
                                                  auth=(self.user, self.pw),
                                                  verify=self.verify_ssl,
                                                  timeout=10)
+            metax_api_response.raise_for_status()
         except Exception as e:
             if isinstance(e, requests.HTTPError):
                 log.warning(
@@ -392,6 +401,7 @@ class MetaxQvainLightAPIService(FlaskService):
                                                 verify=self.verify_ssl,
                                                 params=params,
                                                 timeout=10)
+            metax_api_response.raise_for_status()
         except Exception as e:
             if isinstance(e, requests.HTTPError):
                 log.warning(
@@ -431,6 +441,7 @@ class MetaxQvainLightAPIService(FlaskService):
                                                 verify=self.verify_ssl,
                                                 params=params,
                                                 timeout=10)
+            metax_api_response.raise_for_status()
         except Exception as e:
             if isinstance(e, requests.HTTPError):
                 log.warning(
