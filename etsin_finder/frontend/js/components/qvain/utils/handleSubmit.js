@@ -95,7 +95,7 @@ const handleSubmitToBackend = (values) => {
   console.log('Object before sending from fronend to backend :')
   console.table(obj)
   console.log('fieldOfScienceArray before sending from fronend to backend :')
-  console.table(obj.fieldOfScienceArray)
+  console.table(obj.fieldOfScience)
   return obj
 }
 
