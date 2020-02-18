@@ -216,9 +216,10 @@ def data_to_metax(data, metadata_provider_org, metadata_provider_user):
             "rights_holder": alter_role_data(data["actors"], "rights_holder"),
             "contributor": alter_role_data(data["actors"], "contributor"),
             "other_identifier": other_identifiers_to_metax(data["identifiers"]),
-            "field_of_science": [{
-                "identifier": data["fieldOfScience"] if "fieldOfScience" in data else ""
-            }],
+            # "field_of_science": [{
+            #     "identifier": data["fieldOfScience"] if "fieldOfScience" in data else ""
+            # }],
+            "field_of_science": asd(data.get("fieldOfScience")),
             "keyword": data["keywords"],
             "access_rights": access_rights_to_metax(data),
             "remote_resources": remote_resources_data_to_metax(data["remote_resources"]) if data["dataCatalog"] == "urn:nbn:fi:att:data-catalog-att" else "",
@@ -257,6 +258,15 @@ def remove_deleted_datasets_from_results(result):
     result['results'] = new_results
     return result
 
+def asd(fieldOfScienceArray):
+    newarray = []
+    log.info("in qvain_light_utils.py-->asd() method--> fieldOfScienceArray is ---->"+fieldOfScienceArray)
+    for element in fieldOfScienceArray:
+        obj = {'identifier' : element }
+        newarray.append(obj)
+        log.info('new arrray in the backend is '+newarray)
+    return newarray
+
 def edited_data_to_metax(data, original):
     """
     Alter the research_dataset field to contain the new changes from editing.
@@ -271,6 +281,7 @@ def edited_data_to_metax(data, original):
     """
     publisher_array = alter_role_data(data["actors"], "publisher")
     research_dataset = original["research_dataset"]
+    log.info("field_of_science in the edited_data_to_metax() method =>" +data.get("fieldOfScienceArray"))
     research_dataset.update({
         "title": data["title"],
         "description": data["description"],
@@ -280,11 +291,14 @@ def edited_data_to_metax(data, original):
         "rights_holder": alter_role_data(data["actors"], "rights_holder"),
         "contributor": alter_role_data(data["actors"], "contributor"),
         "other_identifier": other_identifiers_to_metax(data["identifiers"]),
-        "field_of_science": [
-            {
-                "identifier": data["fieldOfScience"] if "fieldOfScience" in data else ""
-            }
-        ],
+
+        "field_of_science": asd(data.get("fieldOfScience")),
+        # "field_of_science": [
+        #     {
+        #         "identifier": data["fieldOfScience"] if "fieldOfScience" in data else ""
+        #     }
+        # ],
+        #"fieldOfScienceArray": data["fieldOfScienceArray"],
         "keyword": data["keywords"],
         "access_rights": access_rights_to_metax(data),
         "remote_resources": remote_resources_data_to_metax(data["remote_resources"]) if data["dataCatalog"] == "urn:nbn:fi:att:data-catalog-att" else "",
