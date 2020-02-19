@@ -8,12 +8,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import Label from '../general/label'
 import Button from '../../general/button'
-
 import getReferenceData from '../utils/getReferenceData';
 import Card from '../general/card';
 import { FieldOfScience, FieldsOfScience } from '../../../stores/view/qvain';
-
-
 import { onChange, getCurrentValue } from '../utils/select'
 import { LabelLarge } from '../general/form'
 
