@@ -394,6 +394,9 @@ const finnish = {
         infoText:
           'Valitse tieteenala. Alasvetovalikkosa on Opetus- ja Kulttuuriministeriön mukainen luokitus tieteenaloille.',
         placeholder: 'Valitse vaihtoehto',
+        addButton: 'Add field of science',
+        help:
+          'You can add multiple field of science.',
       },
       keywords: {
         title: 'Avainsanat',
