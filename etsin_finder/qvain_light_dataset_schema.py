@@ -44,10 +44,7 @@ class DatasetValidationSchema(Schema):
         validate=lambda x: len(x['en']) + len(x['fi']) > 0
     )
     identifiers = fields.List(fields.Str())
-    fieldOfScience = fields.List(
-        fields.Str(),
-        required=False
-    )
+    fieldOfScience = fields.Str()
     keywords = fields.List(
         fields.Str(),
         required=True,
