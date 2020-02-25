@@ -28,11 +28,14 @@ class FormatChanger extends Component {
       error: false,
       selected: '',
       data: DatasetQuery.results,
+      environment: '',
+      url: '',
     }
   }
 
   componentDidMount() {
     this.checkFields()
+    this.checkHost()
   }
 
   checkFields = () => {
@@ -61,12 +64,35 @@ class FormatChanger extends Component {
     })
   }
 
+  checkHost = () => {
+    let env = ''
+
+    if (process.env.NODE_ENV === 'test') { /* test and stable */
+      env = 'https://metax-test.csc.fi/'
+    } else if (process.env.NODE_ENV === 'development') { /* local */
+      env = 'https://metax-test.csc.fi/'
+    } else if (process.env.NODE_ENV === 'production') { /* production */
+      env = 'https://metax.fairdata.fi/'
+    }
+
+    this.setState({
+      environment: env
+    })
+  }
+
 
   changeFormat = (format) => {
+    let urlFormat = ''
+    if (format.value === 'metax') {
+      urlFormat = `${this.state.environment}rest/datasets/${this.props.idn}.json`
+    } else {
+      urlFormat = `${this.state.environment}rest/datasets/${this.props.idn}?dataset_format=${format.value}`
+    }
+
     this.setState(
       {
         selected: format,
-        url: `https://metax-test.csc.fi/rest/datasets/${this.props.idn}?dataset_format=${format.value}`
+        url: urlFormat,
       },
       () => {
         this.openFormat(this.state.url)

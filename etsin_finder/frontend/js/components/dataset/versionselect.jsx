@@ -37,9 +37,9 @@ const ListButton = styled(Button)`
   text-align: left;
   display: block;
   border: 0;
-  background: ${props => (props.removed ? props.theme.color.error : props.background)};
+  background: ${props => props.background};
   &:hover {
-    background: ${props => (props.removed ? darken(0.1, props.theme.color.error) : darken(0.1, props.background))};
+    background: ${props => darken(0.1, props.background)};
   }
 `
 
@@ -76,14 +76,9 @@ export default class VersionSelect extends Component {
 
     this.state = {
       isOpen: false,
-      options: props.options,
       selected: props.value,
       newestColor: props.newestColor ? props.newestColor : props.background,
-      color: props.color,
       background: props.background,
-      padding: props.padding,
-      width: props.width,
-      removed: props.value.removed,
     }
   }
 
@@ -127,7 +122,7 @@ export default class VersionSelect extends Component {
         isFocused: false,
       },
       () => {
-        this.props.onChange('Version Select', selected)
+        this.props.onChange(selected)
       }
     )
   }
@@ -145,60 +140,58 @@ export default class VersionSelect extends Component {
     )
   }
 
-  // eslint-disable-next-line camelcase
-  UNSAFE_componentWillReceiveProps(newProps) {
-    if (newProps !== this.props) {
-      this.setState({
-        isOpen: false,
-        options: newProps.options,
-        selected: newProps.value,
-      })
+  selectColor = (selected) => {
+    let color;
+    if (selected.label.includes('Old') && !selected.removed) {
+      color = this.state.background
+    } else if (selected.removed) {
+      color = this.props.error
+    } else {
+      color = this.state.newestColor
     }
+    return color
   }
 
   render() {
     return (
-      <SelectContainer width={this.state.width} onFocus={this.onFocus} onBlur={this.onBlur}>
+      <SelectContainer width={this.props.width} onFocus={this.onFocus} onBlur={this.onBlur}>
         <Controller
           noMargin
-          color={this.state.color}
-          padding={this.state.padding}
+          color={this.props.color}
+          padding={this.props.padding}
           background={
-            this.props.options[0] === this.state.selected
-              ? this.state.newestColor
-              : this.state.background
+            this.selectColor(this.state.selected)
           }
           isOpen={this.state.isOpen}
           onClick={this.toggleOpen}
-          removed={this.state.removed}
         >
           <span className="sr-only">Version selector (with current version) </span>
           {this.state.selected.label}
         </Controller>
         {this.state.isOpen && this.state.isFocused && (
-          <List width={this.state.width} background={this.props.background}>
-            {this.state.options.map((single, i) => (
-              <ListItem
-                noMargin
-                color={this.state.color}
-                padding={this.state.padding}
-                key={single.value}
-                onClick={() => this.changeSelected(single)}
-                value={single.value}
-                ref={e => this.setFirstOptionRef(e, i)}
-                background={
-                  this.props.options[0] === single ? this.state.newestColor : this.props.background
-                }
-                removed={single.removed}
-              >
-                {this.props.options[0] === single ? (
-                  <span className="sr-only">Current version: </span>
-                ) : (
-                  ''
-                )}
-                {single.label}
-              </ListItem>
-            ))}
+          <List width={this.props.width} background={this.props.background}>
+            {this.props.options
+              .map((single, i) => (
+                <ListItem
+                  noMargin
+                  color={this.props.color}
+                  padding={this.props.padding}
+                  key={single.value}
+                  onClick={() => this.changeSelected(single)}
+                  value={single.value}
+                  ref={e => this.setFirstOptionRef(e, i)}
+                  background={
+                    this.selectColor(single)
+                  }
+                >
+                  {this.props.options[0] === single ? (
+                    <span className="sr-only">Current version: </span>
+                  ) : (
+                      ''
+                    )}
+                  {single.label}
+                </ListItem>
+              ))}
           </List>
         )}
       </SelectContainer>
@@ -222,5 +215,6 @@ VersionSelect.propTypes = {
   color: PropTypes.string,
   padding: PropTypes.string,
   newestColor: PropTypes.string,
+  error: PropTypes.string.isRequired,
   width: PropTypes.string,
 }
