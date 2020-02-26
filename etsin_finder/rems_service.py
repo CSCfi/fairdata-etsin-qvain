@@ -214,6 +214,10 @@ def get_application_state_for_resource(cr, user_id):
         [string] -- The application state or False.
 
     """
+
+    if not self.ENABLED:
+        return False
+
     state = 'apply'
     if not user_id or not cr:
         log.error('Failed to get user application state')
