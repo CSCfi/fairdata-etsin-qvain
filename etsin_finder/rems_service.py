@@ -203,7 +203,7 @@ class RemsAPIService(FlaskService):
         return len(self.rems_request(method, url, err_message)) > 0
 
 
-def get_application_state_for_resource(cr, user_id):
+def get_application_state_for_resource(self, cr, user_id):
     """Get the state of the users applications for resource.
 
     Arguments:
@@ -214,7 +214,6 @@ def get_application_state_for_resource(cr, user_id):
         [string] -- The application state or False.
 
     """
-
     if not self.ENABLED:
         return False
 
