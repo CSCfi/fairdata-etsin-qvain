@@ -109,6 +109,7 @@ export class ExternalFileFormBase extends Component {
         />
         <Label htmlFor="urlInput">
           <Translate content="qvain.files.external.form.url.label" />
+          <Translate component="p" content="qvain.files.external.form.url.infoText" />
         </Label>
         <Translate
           component={ResourceInput}
@@ -118,6 +119,20 @@ export class ExternalFileFormBase extends Component {
           onChange={(event) => { externalResource.url = event.target.value }}
           onBlur={this.handleOnUrlBlur}
           attributes={{ placeholder: 'qvain.files.external.form.url.placeholder' }}
+        />
+        <Label htmlFor="urlDownload">
+          <Translate content="qvain.files.external.form.downloadUrl.label" />
+          <Translate component="p" content="qvain.files.external.form.downloadUrl.infoText" />
+        </Label>
+
+        <Translate
+          component={ResourceInput}
+          type="text"
+          id="urlDownload"
+          value={externalResource.downloadUrl}
+          onChange={(event) => { externalResource.downloadUrl = event.target.value }}
+          onBlur={this.handleOnUrlBlur}
+          attributes={{ placeholder: 'qvain.files.external.form.downloadUrl.placeholder' }}
         />
         {externalResourceError && <ValidationError>{externalResourceError}</ValidationError>}
         <Translate

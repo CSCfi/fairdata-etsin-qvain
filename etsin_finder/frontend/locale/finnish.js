@@ -390,10 +390,13 @@ const finnish = {
         alreadyAdded: 'Tunniste on jo lisätty',
       },
       fieldOfScience: {
-        title: 'Tutkimusala',
+        title: 'Tieteenala',
         infoText:
           'Valitse tieteenala. Alasvetovalikkosa on Opetus- ja Kulttuuriministeriön mukainen luokitus tieteenaloille.',
         placeholder: 'Valitse vaihtoehto',
+        addButton: '+ Lisää tieteenala',
+        help:
+          'Voit lisätä useita tieteenaloja.',
       },
       keywords: {
         title: 'Avainsanat',
@@ -774,7 +777,7 @@ const finnish = {
       external: {
         title: 'Ulkoiset tiedostot (ATT)',
         infoText:
-          'Määritä tiedostolle otsikko, käyttökategoria (alasvetovalikosta) sekä, kerro, mistä tiedosto löytyy. Tiedosto ei ladata Qvain Lightiin, vaan antamasi URL toimii aktiivisena linkkinä ko. tiedostoon.',
+          'Määritä tiedostolle otsikko, käyttökategoria (alasvetovalikosta) sekä, kerro, mistä tiedosto / sen lisenssitieto löytyvät (sivun URL). Voit antaa myös suoran latauslinkin, jos sellainen on. Tiedostoa ei ladata Qvain Lightiin, vaan antamasi sivun URL toimii linkkinä sivulle, jossa tiedosto sijaitsee sekä tiedoston latauslinkin kauttaja pääsee suoraan aloittamaan tiedoston lataamisen omalle koneelleen.',
         help: 'Lisää linkkejä ulkoisiin tiedostoihin:',
         button: {
           label: 'Lisää linkki ulkoiseen tiedostoon',

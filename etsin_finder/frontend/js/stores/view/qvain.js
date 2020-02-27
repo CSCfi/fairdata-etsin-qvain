@@ -222,6 +222,7 @@ class Qvain {
     if (existing !== undefined) {
       existing.title = resource.title
       existing.url = resource.url
+      existing.downloadUrl = resource.downloadUrl
       existing.useCategory = resource.useCategory
     } else {
       // Create an internal identifier for the resource to help with UI interaction
@@ -230,6 +231,7 @@ class Qvain {
         newId,
         resource.title,
         resource.url,
+        resource.downloadUrl,
         resource.useCategory
       )
       this.externalResources = [...this.externalResources, newResource]
@@ -674,6 +676,7 @@ class Qvain {
           remoteResources.indexOf(r),
           r.title,
           r.access_url ? r.access_url.identifier : undefined,
+          r.download_url ? r.download_url.identifier : undefined,
           r.use_category
             ? {
                 label: r.use_category.pref_label.en,
@@ -982,13 +985,14 @@ export const RestrictionGrounds = (name, identifier) => ({
   identifier,
 })
 
-export const ExternalResource = (id, title, url, useCategory) => ({
+export const ExternalResource = (id, title, url, downloadUrl, useCategory) => ({
   id,
   title,
   url,
+  downloadUrl,
   useCategory,
 })
 
-export const EmptyExternalResource = ExternalResource(undefined, '', '', '')
+ export const EmptyExternalResource = ExternalResource(undefined, '', '', '', '')
 
 export default new Qvain()
