@@ -44,6 +44,8 @@ class RemsAPIService(FlaskService):
             self.REMS_CREATE_APPLICATION = 'https://{0}'.format(self.HOST) + '/api/applications/create'
         elif self.is_testing:
             self.ENABLED = False
+        else:
+            self.ENABLED = False
 
     def rems_request(self, method, url, err_message, json=None, user_id='RDowner@funet.fi'):
         """Genaral method for sending requests to REMS
@@ -203,7 +205,7 @@ class RemsAPIService(FlaskService):
         return len(self.rems_request(method, url, err_message)) > 0
 
 
-def get_application_state_for_resource(self, cr, user_id):
+def get_application_state_for_resource(cr, user_id):
     """Get the state of the users applications for resource.
 
     Arguments:
@@ -214,9 +216,6 @@ def get_application_state_for_resource(self, cr, user_id):
         [string] -- The application state or False.
 
     """
-    if not self.ENABLED:
-        return False
-
     state = 'apply'
     if not user_id or not cr:
         log.error('Failed to get user application state')
