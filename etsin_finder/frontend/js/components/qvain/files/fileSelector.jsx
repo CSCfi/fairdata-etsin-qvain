@@ -85,7 +85,7 @@ export class FileSelectorBase extends Component {
           )}
         />
         <DirectoryIcon />
-        {h.directoryName}
+        {h.directoryName} ({h.original.file_count})
         <ul>
           {(h.directories && h.open) &&
             h.directories.map(dir => (this.drawHierarchy(dir, h)))
