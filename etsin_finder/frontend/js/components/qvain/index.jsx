@@ -136,14 +136,13 @@ class Qvain extends Component {
     e.preventDefault()
     this.setState({ submitted: true })
     const obj = handleSubmitToBackend(this.props.Stores.Qvain)
-    console.log(JSON.stringify(obj, null, 4))
     qvainFormSchema
       .validate(obj, { abortEarly: false })
-      .then(val => {
-        console.log(val)
+      .then(() => {
         axios
           .post('/api/dataset', obj)
           .then(res => {
+            console.log(res)
             const data = res.data
             this.setState({ response: { ...data, is_new: true } })
             // Open the created dataset without reloading the editor
@@ -154,6 +153,7 @@ class Qvain extends Component {
             }
           })
           .catch(err => {
+            console.log(err)
             // Refreshing error header
             this.setState({ response: null })
 
@@ -206,19 +206,19 @@ class Qvain extends Component {
     this.setState({ submitted: true })
     const obj = handleSubmitToBackend(this.props.Stores.Qvain)
     obj.original = this.props.Stores.Qvain.original
-    console.log(JSON.stringify(obj, null, 4))
     qvainFormSchema
       .validate(obj, { abortEarly: false })
-      .then(val => {
-        console.log(val)
+      .then(() => {
         axios
           .patch('/api/dataset', obj)
           .then(res => {
+            console.log(res)
             this.props.Stores.Qvain.moveSelectedToExisting()
             this.props.Stores.Qvain.setChanged(false)
             this.setState({ response: res.data })
           })
           .catch(err => {
+            console.log(err.response)
             // Refreshing error header
             this.setState({ response: null })
 

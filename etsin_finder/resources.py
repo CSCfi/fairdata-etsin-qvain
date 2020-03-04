@@ -31,6 +31,7 @@ from etsin_finder.utils import \
     slice_array_on_limit
 from etsin_finder import rems_service
 from etsin_finder.rems_service import RemsAPIService
+from etsin_finder.app_config import get_fairdata_rems_api_config
 
 TOTAL_ITEM_LIMIT = 1000
 log = app.logger
@@ -85,7 +86,7 @@ class Dataset(Resource):
 
         ret_obj = {'catalog_record': authorization.strip_information_from_catalog_record(cr, is_authd),
                    'email_info': get_email_info(cr)}
-        if cr_service.is_rems_catalog_record(cr) and is_authd:
+        if cr_service.is_rems_catalog_record(cr) and is_authd and get_fairdata_rems_api_config(app.testing) is not None:
             state = rems_service.get_application_state_for_resource(cr, authentication.get_user_id())
             ret_obj['application_state'] = state
             ret_obj['has_permit'] = state == 'approved'
