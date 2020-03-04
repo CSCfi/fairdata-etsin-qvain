@@ -25,18 +25,6 @@ class FieldOfScienceField extends React.Component {
     options: {}
   }
 
-  addFieldOfScience = () => {
-    const { setFieldsOfScience } = this.props.Stores.Qvain
-    const fieldOfScience = { ...this.props.Stores.Qvain.fieldOfScience }
-      if (!this.props.Stores.Qvain.fieldsOfScience.some(field => field.url === fieldOfScience.url)) {
-      setFieldsOfScience([...this.props.Stores.Qvain.fieldsOfScience, FieldsOfScience(fieldOfScience.name, fieldOfScience.url)])
-    }
-  }
-
-  removeFieldOfScience = fieldOfScienceToRemove => {
-    this.props.Stores.Qvain.removeFieldOfScience(fieldOfScienceToRemove)
-  }
-
   componentDidMount = () => {
     this.promises.push(getReferenceData('field_of_science')
       .then(res => {
@@ -78,6 +66,18 @@ class FieldOfScienceField extends React.Component {
 
   componentWillUnmount() {
     this.promises.forEach(promise => promise && promise.cancel && promise.cancel())
+  }
+
+  addFieldOfScience = () => {
+    const { setFieldsOfScience } = this.props.Stores.Qvain
+    const fieldOfScience = { ...this.props.Stores.Qvain.fieldOfScience }
+      if (!this.props.Stores.Qvain.fieldsOfScience.some(field => field.url === fieldOfScience.url)) {
+      setFieldsOfScience([...this.props.Stores.Qvain.fieldsOfScience, FieldsOfScience(fieldOfScience.name, fieldOfScience.url)])
+    }
+  }
+
+  removeFieldOfScience = fieldOfScienceToRemove => {
+    this.props.Stores.Qvain.removeFieldOfScience(fieldOfScienceToRemove)
   }
 
   render() {
