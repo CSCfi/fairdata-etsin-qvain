@@ -16,6 +16,8 @@ import { AccessTypeURLs } from '../utils/constants'
 import { LabelLarge } from '../general/form'
 
 export class AccessType extends Component {
+  promises = []
+
   static propTypes = {
     Stores: PropTypes.object.isRequired
   }
@@ -29,42 +31,47 @@ export class AccessType extends Component {
   }
 
   componentDidMount = () => {
-    getReferenceData('access_type')
-    .then(res => {
-      const list = res.data.hits.hits;
-      const refsEn = list.map(ref => (
-        {
-          value: ref._source.uri,
-          label: ref._source.label.en,
-        }
+    this.promises.push(getReferenceData('access_type')
+      .then(res => {
+        const list = res.data.hits.hits;
+        const refsEn = list.map(ref => (
+          {
+            value: ref._source.uri,
+            label: ref._source.label.en,
+          }
         ))
-      const refsFi = list.map(ref => (
-        {
-          value: ref._source.uri,
-          label: ref._source.label.fi,
-        }
+        const refsFi = list.map(ref => (
+          {
+            value: ref._source.uri,
+            label: ref._source.label.fi,
+          }
         ))
-      this.setState({
-        options: {
-          en: refsEn,
-          fi: refsFi
+        this.setState({
+          options: {
+            en: refsEn,
+            fi: refsFi
+          }
+        })
+      })
+      .catch(error => {
+        if (error.response) {
+          // Error response from Metax
+          console.log(error.response.data);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+        } else if (error.request) {
+          // No response from Metax
+          console.log(error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.log('Error', error.message);
         }
       })
-    })
-    .catch(error => {
-      if (error.response) {
-        // Error response from Metax
-        console.log(error.response.data);
-        console.log(error.response.status);
-        console.log(error.response.headers);
-      } else if (error.request) {
-        // No response from Metax
-        console.log(error.request);
-      } else {
-        // Something happened in setting up the request that triggered an Error
-        console.log('Error', error.message);
-      }
-    });
+    );
+  }
+
+  componentWillUnmount() {
+    this.promises.forEach(promise => promise && promise.cancel && promise.cancel())
   }
 
   handleChange = (selection) => {
@@ -88,7 +95,7 @@ export class AccessType extends Component {
   render() {
     const { lang } = this.props.Stores.Locale
     const { options } = this.state
-    const { accessType } = this.props.Stores.Qvain
+    const { accessType, readonly } = this.props.Stores.Qvain
     return (
       <Card>
         <LabelLarge htmlFor="accessTypeSelect">
@@ -100,6 +107,7 @@ export class AccessType extends Component {
           name="accessType"
           options={this.state.options[lang]}
           clearable
+          isDisabled={readonly}
           value={
             getCurrentValue(accessType, options, lang) // access is OPEN by default - 28.5.2019
           }
@@ -111,7 +119,7 @@ export class AccessType extends Component {
         />
         <ValidationError>{this.state.accessTypeValidationError}</ValidationError>
         {(accessType !== undefined && accessType.url === AccessTypeURLs.EMBARGO) && (<EmbargoExpires />)}
-        { accessType.url !== AccessTypeURLs.OPEN
+        {accessType.url !== AccessTypeURLs.OPEN
           ? <RestrictionGrounds /> : null}
       </Card>
     )

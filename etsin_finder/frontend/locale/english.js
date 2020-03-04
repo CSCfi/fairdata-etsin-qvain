@@ -298,6 +298,28 @@ const english = {
       editFilesSuccess: 'New dataset version has been created!',
       editMetadataSuccess: 'Dataset successfully updated!',
     },
+    pasInfo: {
+      stateInfo: 'This is a PAS dataset. The state of the dataset is "%(state)s: %(description)s".',
+      editable: 'You can edit metadata but cannot add or remove any files.',
+      readonly: 'You can view metadata but cannot make any changes.',
+    },
+    pasState: {
+      0: 'Waits for validation',
+      10: 'Proposed for digital preservation',
+      20: 'Validating',
+      30: 'Enriching failed',
+      40: 'Check metadata',
+      50: 'Validation failed',
+      60: 'Revalidating',
+      70: 'Waits for transfer',
+      80: 'Transfer started',
+      90: 'Packaging',
+      100: 'Packaging failed',
+      110: 'Transferring',
+      120: 'OK – preserved',
+      130: 'Transfer failed',
+      140: 'Available'
+    },
     unsuccessfullLogin: 'Login unsuccessful.',
     notCSCUser1:
       'Please make sure that you have a valid CSC account. If you tried to log in with an external account (for example Haka) you might get this error if your account is not associated with CSC account. Please do the registration in',
@@ -618,6 +640,7 @@ const english = {
         placeholder: 'Select option',
         ida: 'IDA',
         att: 'Remote resources',
+        pas: 'PAS'
       },
       cumulativeState: {
         label: 'Cumulative dataset',
@@ -791,6 +814,8 @@ const english = {
         help: {
           noncumulative: "These are the files and folders that you have added before. If you have added a folder and the content has changed  in IDA, it's NOT automatically updated into your dataset. All new files need to be manually added. Note the Versioning Rules!",
           cumulative: "These are the files and folders that you have added before. If you have added a folder and the content has changed in IDA, it's NOT automatically updated into your dataset. All new files need to be manually added. To be able to remove files, you first need to make the dataset non-cumulative.",
+          pasEditable: 'These are the files in the dataset. You can edit file metadata but cannot add or remove files.',
+          pasReadonly: 'These are the files in the dataset. You can view file metadata but cannot make changes.',
         }
       },
       notificationNewDatasetWillBeCreated: {

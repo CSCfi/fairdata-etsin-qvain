@@ -35,6 +35,15 @@ export const CancelButton = styled.button`
   &:hover {
     background-color: #ccc;
   }
+
+  ${props => props.disabled && `
+  opacity: 0.5;
+  background-color #ccc;
+  border-color: #ccc;
+  &:hover {
+    background-color: #ccc;
+  }
+`}
 `;
 
 export const SaveButton = styled.button`
@@ -49,6 +58,15 @@ export const SaveButton = styled.button`
   &:hover {
     background-color: #3a813b;
   }
+
+  ${props => props.disabled && `
+    opacity: 0.5;
+    border-color: #49a24a;
+    background-color: #49a24a;
+    &:hover {
+      background-color: #49a24a;
+    }
+  `}
 `
 
 export const DangerButton = styled.button`

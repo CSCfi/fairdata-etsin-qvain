@@ -14,6 +14,7 @@ import { DataCatalogIdentifiers } from '../utils/constants'
 import Tooltip from '../general/tooltip'
 import FilesInfo from './filesInfo'
 import MetadataModal from './metadataModal'
+import SelectedFiles from './selectedFiles'
 
 class Files extends Component {
   static propTypes = {
@@ -25,9 +26,17 @@ class Files extends Component {
   }
 
   render() {
-    const { dataCatalog } = this.props.Stores.Qvain
+    const { dataCatalog, isPas } = this.props.Stores.Qvain
     let data = null
-    if (dataCatalog === DataCatalogIdentifiers.IDA) {
+    if (isPas) {
+      data = (
+        <>
+          <ContainerSubsectionBottom>
+            <SelectedFiles />
+          </ContainerSubsectionBottom>
+        </>
+      )
+    } else if (dataCatalog === DataCatalogIdentifiers.IDA) {
       data = (
         <>
           <CumulativeState />
@@ -36,8 +45,7 @@ class Files extends Component {
           </ContainerSubsectionBottom>
         </>
       )
-    }
-    if (dataCatalog === DataCatalogIdentifiers.ATT) {
+    } else if (dataCatalog === DataCatalogIdentifiers.ATT) {
       data = (
         <ContainerSubsectionBottom>
           <ExternalFiles />
