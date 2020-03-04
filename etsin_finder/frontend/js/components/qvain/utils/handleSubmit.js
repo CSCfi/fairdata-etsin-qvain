@@ -11,6 +11,9 @@ const actorsToMetax = actors => {
   return parsedActor
 }
 
+const fieldsOfScienceToMetaxMethod = fieldsOfScience => fieldsOfScience.map(fieldOfScience =>
+    fieldOfScience.url)
+
 const directoriesToMetax = (selectedDirectories, existingDirectories) => {
   const selectedDirectoryIdentifiers = selectedDirectories
     ? selectedDirectories.map(sd => sd.identifier)
@@ -63,7 +66,7 @@ const handleSubmitToBackend = (values) => {
     title: values.title,
     description: values.description,
     identifiers: values.otherIdentifiers,
-    fieldOfScience: values.fieldOfScience ? values.fieldOfScience.url : undefined,
+    fieldOfScience: fieldsOfScienceToMetaxMethod(values.fieldsOfScience),
     keywords: values.keywords,
     actors: actorsToMetax(values.actors),
     accessType: values.accessType ? values.accessType : undefined,
