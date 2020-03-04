@@ -16,6 +16,10 @@ const options = [
   { value: DataCatalogIdentifiers.ATT, label: translate('qvain.files.dataCatalog.att') }
 ]
 
+const pasOptions = [
+  { value: DataCatalogIdentifiers.PAS, label: translate('qvain.files.dataCatalog.pas') }
+]
+
 class DataCatalog extends Component {
   static propTypes = {
     Stores: PropTypes.object.isRequired,
@@ -43,8 +47,11 @@ class DataCatalog extends Component {
 
   render() {
     const { errorMessage } = this.state
-    const { dataCatalog, setDataCatalog, selectedFiles, selectedDirectories, externalResources, original } = this.props.Stores.Qvain
+    const { dataCatalog, setDataCatalog, selectedFiles, selectedDirectories, externalResources, original, isPas } = this.props.Stores.Qvain
     const selected = [...selectedFiles, ...selectedDirectories, ...externalResources]
+
+    // PAS catalog cannot be selected by the user
+    const availableOptions = isPas ? pasOptions : options
     return (
       <Card>
         <LabelLarge htmlFor="dataCatalogSelect">
@@ -55,15 +62,15 @@ class DataCatalog extends Component {
           component={Select}
           inputId="dataCatalogSelect"
           name="dataCatalog"
-          value={options.find(opt => opt.value === dataCatalog)}
-          options={options}
+          value={availableOptions.find(opt => opt.value === dataCatalog)}
+          options={availableOptions}
           onChange={(selection) => {
             setDataCatalog(selection.value)
             this.setState({ errorMessage: undefined })
           }}
           onBlur={this.handleOnBlur}
           attributes={{ placeholder: 'qvain.files.dataCatalog.placeholder' }}
-          isDisabled={(selected.length > 0) || (original !== undefined)}
+          isDisabled={(selected.length > 0) || (original !== undefined) || isPas}
         />
         {errorMessage && <ValidationError>{errorMessage}</ValidationError>}
       </Card>

@@ -28,6 +28,8 @@ import {
 } from '../utils/formValidation'
 
 export class ActorInfoBase extends Component {
+  promises = []
+
   static propTypes = {
     Stores: PropTypes.object.isRequired
   }
@@ -43,7 +45,7 @@ export class ActorInfoBase extends Component {
   }
 
   componentDidMount = () => {
-    axios.get('https://metax.fairdata.fi/es/organization_data/organization/_search?size=3000')
+    this.promises.push(axios.get('https://metax.fairdata.fi/es/organization_data/organization/_search?size=3000')
       .then(res => {
         const { lang } = this.props.Stores.Locale
         const list = res.data.hits.hits;
@@ -52,7 +54,7 @@ export class ActorInfoBase extends Component {
             value: ref._source.code,
             label: ref._source.label,
           }
-          ))
+        ))
         this.setState({ orgs: refs })
         this.setState({ orgsLang: this.getOrgOptionsWithLang(refs, lang) })
       })
@@ -69,7 +71,12 @@ export class ActorInfoBase extends Component {
           // Something happened in setting up the request that triggered an Error
           console.log('Error', error.message);
         }
-      });
+      })
+    );
+  }
+
+  componentWillUnmount() {
+    this.promises.forEach(promise => promise && promise.cancel && promise.cancel())
   }
 
   resetErrorMessages = () => {
@@ -162,7 +169,7 @@ export class ActorInfoBase extends Component {
   }
 
   render() {
-    const actor = this.props.Stores.Qvain.actorInEdit
+    const { actorInEdit: actor, readonly } = this.props.Stores.Qvain
     const { lang } = this.props.Stores.Locale
     const {
       orgs,
@@ -185,6 +192,7 @@ export class ActorInfoBase extends Component {
               type="text"
               id="nameField"
               attributes={{ placeholder: `qvain.actors.add.name.placeholder.${actor.type}` }}
+              disabled={readonly}
               value={actor.name}
               onChange={(event) => { actor.name = event.target.value }}
               onBlur={this.handleOnNameBlur}
@@ -194,6 +202,7 @@ export class ActorInfoBase extends Component {
             <Translate
               component={SelectOrg}
               name="nameField"
+              isDisabled={readonly}
               options={orgsLang}
               inputId="nameField"
               formatCreateLabel={inputValue => (
@@ -224,7 +233,7 @@ export class ActorInfoBase extends Component {
               }}
               onBlur={this.handleOnNameBlur}
             />
-            )}
+          )}
         {nameError && <ValidationError>{nameError}</ValidationError>}
         <Label htmlFor="emailField">
           <Translate content="qvain.actors.add.email.label" />
@@ -235,6 +244,7 @@ export class ActorInfoBase extends Component {
           type="email"
           attributes={{ placeholder: 'qvain.actors.add.email.placeholder' }}
           onChange={(event) => { actor.email = event.target.value }}
+          disabled={readonly}
           value={actor.email}
           onBlur={this.handleOnEmailBlur}
         />
@@ -246,7 +256,7 @@ export class ActorInfoBase extends Component {
           id="identifierField"
           component={Input}
           type="text"
-          disabled={orgsLang.find(opt => opt.value === actor.identifier)}
+          disabled={orgsLang.find(opt => opt.value === actor.identifier) || readonly}
           attributes={{ placeholder: 'qvain.actors.add.identifier.placeholder' }}
           onChange={(event) => { actor.identifier = event.target.value }}
           value={actor.identifier}
@@ -260,6 +270,7 @@ export class ActorInfoBase extends Component {
         <Translate
           component={SelectOrg}
           name="orgField"
+          isDisabled={readonly}
           options={orgsLang}
           inputId="orgField"
           formatCreateLabel={inputValue => (
@@ -287,11 +298,13 @@ export class ActorInfoBase extends Component {
         {organizationError && <ValidationError>{organizationError}</ValidationError>}
         {actorError && <ActorValidationError>{actorError}</ActorValidationError>}
         <Translate
+          disabled={readonly}
           component={CancelButton}
           onClick={this.handleCancel}
           content="qvain.actors.add.cancel.label"
         />
         <Translate
+          disabled={readonly}
           component={SaveButton}
           onClick={this.handleSaveActor}
           content="qvain.actors.add.save.label"

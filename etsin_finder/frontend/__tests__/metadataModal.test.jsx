@@ -116,18 +116,18 @@ const fileFormats = {
     hits: {
       hits: [
         {
-          "_source": {
-            "input_file_format" : "text/csv",
-            "output_format_version" : "",
-            "label" : {
-              "und" : "file_format_version_text_csv"
+          _source: {
+            input_file_format: 'text/csv',
+            output_format_version: '',
+            label: {
+              und: 'file_format_version_text_csv'
             },
           }
         },
         {
-          "_source" : {
-            "input_file_format" : "application/pdf",
-            "output_format_version" : "1.6",
+          _source: {
+            input_file_format: 'application/pdf',
+            output_format_version: '1.6',
           }
         },
       ],
@@ -136,7 +136,6 @@ const fileFormats = {
 }
 
 describe('Qvain.MetadataModal', () => {
-
   let helper, wrapper, stores
 
   beforeEach(() => {
@@ -147,23 +146,22 @@ describe('Qvain.MetadataModal', () => {
     ReactModal.setAppElement(helper)
     stores = getStores()
     wrapper = mount(
-      (
-        <Provider Stores={stores}>
-          <BrowserRouter>
-            <ThemeProvider theme={etsinTheme}>
-              <>
-                <FileSelector />
-                <MetadataModal />
-              </>
-            </ThemeProvider>
-          </BrowserRouter>
-        </Provider>
-      ), { attachTo: helper }
+      <Provider Stores={stores}>
+        <BrowserRouter>
+          <ThemeProvider theme={etsinTheme}>
+            <>
+              <FileSelector />
+              <MetadataModal />
+            </>
+          </ThemeProvider>
+        </BrowserRouter>
+      </Provider>,
+      { attachTo: helper }
     )
 
     // Set directory hierarchy
     stores.Qvain.selectedDirectories = []
-    stores.Qvain.existingFiles = [ DatasetFile(testDatasetFile) ]
+    stores.Qvain.existingFiles = [DatasetFile(testDatasetFile)]
     stores.Qvain.selectedProject = 'project_y'
     stores.Qvain.hierarchy = Directory(
       {
@@ -193,6 +191,7 @@ describe('Qvain.MetadataModal', () => {
   })
 
   afterEach(() => {
+    wrapper.unmount()
     wrapper.detach()
   })
 
@@ -232,21 +231,19 @@ describe('Qvain.MetadataModal', () => {
 
     expect(stores.Qvain.existingFiles[0].csvHasHeader).toBe(true)
     expect(instance.state.csvHasHeader).toBe(true)
-    instance.setCsvHasHeader({value: false})
+    instance.setCsvHasHeader({ value: false })
     expect(instance.state.csvHasHeader).toBe(false)
 
     // Mock the patch RPC used by save
-    axios.patch.mockImplementationOnce((url, data) => {
-      return {
-        data: {
-          ...testFile,
-          file_characteristics: {
-            ...testFile.file_characteristics,
-            ...data
-          }
+    axios.patch.mockImplementationOnce((url, data) => ({
+      data: {
+        ...testFile,
+        file_characteristics: {
+          ...testFile.file_characteristics,
+          ...data
         }
       }
-    })
+    }))
     await instance.saveChanges()
     expect(stores.Qvain.existingFiles[0].csvHasHeader).toBe(false)
   })
@@ -260,21 +257,19 @@ describe('Qvain.MetadataModal', () => {
     expect(instance.state.formatVersion).not.toBe('1.6')
 
     // Change to accepted version
-    instance.setFormatVersion( { value: '1.6' } )
+    instance.setFormatVersion({ value: '1.6' })
     expect(instance.state.formatVersion).toBe('1.6')
 
     // Mock the patch RPC used by save
-    axios.patch.mockImplementationOnce((url, data) => {
-      return {
-        data: {
-          ...testFile4,
-          file_characteristics: {
-            ...testFile4.file_characteristics,
-            ...data
-          }
+    axios.patch.mockImplementationOnce((url, data) => ({
+      data: {
+        ...testFile4,
+        file_characteristics: {
+          ...testFile4.file_characteristics,
+          ...data
         }
       }
-    })
+    }))
     await instance.saveChanges()
 
     // Clear modal file
@@ -287,5 +282,28 @@ describe('Qvain.MetadataModal', () => {
     expect(instance.state.fileIdentifier).toBe('test_file4')
     expect(instance.state.formatVersion).toBe('1.6')
     expect(instance.validateMetadata).not.toThrow()
+  })
+
+  it('disables metadata editing in readonly state', async () => {
+    // Open modal, wait until versions have been fetched
+    wrapper.find('button#test_file4-open-metadata-modal').simulate('click')
+    const instance = wrapper.find(MetadataModal).instance().wrappedInstance
+    await when(() => instance.formatFetchStatus !== 'loading')
+
+    // All inputs and buttons should be enabled
+    const enabled = wrapper.find(MetadataModal).find('input').not('[type="hidden"]').not('[disabled=true]')
+    expect(enabled.length).toBe(7)
+    expect(wrapper.find(MetadataModal).find('button').not('[disabled=true]').length).toBe(3)
+    expect(wrapper.find(MetadataModal).find('button').find('[disabled=true]').length).toBe(0)
+
+    // Switch to readonly state
+    stores.Qvain.setPreservationState(80)
+    wrapper.update()
+
+    // Save button and all inputs should be disabled, close buttons should be enabled
+    const disabled = wrapper.find(MetadataModal).find('input').not('[type="hidden"]').find('[disabled=true]')
+    expect(disabled.length).toBe(7)
+    expect(wrapper.find(MetadataModal).find('button').not('[disabled=true]').length).toBe(2)
+    expect(wrapper.find(MetadataModal).find('button').find('[disabled=true]').length).toBe(1)
   })
 })
