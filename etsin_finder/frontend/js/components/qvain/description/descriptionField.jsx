@@ -79,7 +79,7 @@ class DescriptionField extends Component {
   }
 
   render() {
-    const { title, description } = this.props.Stores.Qvain
+    const { title, description, readonly } = this.props.Stores.Qvain
     const activeLang = this.state.active
     return (
       <React.Fragment>
@@ -98,6 +98,7 @@ class DescriptionField extends Component {
               component={Input}
               type="text"
               id="titleInput"
+              disabled={readonly}
               value={title.fi}
               onChange={this.handleTitleChange}
               onBlur={this.handleTitleBlur}
@@ -109,6 +110,7 @@ class DescriptionField extends Component {
               component={Input}
               type="text"
               id="titleInput"
+              disabled={readonly}
               value={title.en}
               onChange={this.handleTitleChange}
               onBlur={this.handleTitleBlur}
@@ -124,6 +126,7 @@ class DescriptionField extends Component {
               component={Textarea}
               id="descriptionInput"
               rows="8"
+              disabled={readonly}
               value={description.fi}
               onChange={this.handleDescriptionChange}
               onBlur={this.handleDescriptionBlur}
@@ -135,6 +138,7 @@ class DescriptionField extends Component {
               component={Textarea}
               id="descriptionInput"
               rows="8"
+              disabled={readonly}
               value={description.en}
               onChange={this.handleDescriptionChange}
               onBlur={this.handleDescriptionBlur}

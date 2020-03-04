@@ -44,6 +44,8 @@ class RemsAPIService(FlaskService):
             self.REMS_CREATE_APPLICATION = 'https://{0}'.format(self.HOST) + '/api/applications/create'
         elif self.is_testing:
             self.ENABLED = False
+        else:
+            self.ENABLED = False
 
     def rems_request(self, method, url, err_message, json=None, user_id='RDowner@funet.fi'):
         """Genaral method for sending requests to REMS

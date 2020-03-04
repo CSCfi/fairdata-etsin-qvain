@@ -42,7 +42,7 @@ export class ActorTypeSelectBase extends Component {
   }
 
   render() {
-    const actor = this.props.Stores.Qvain.actorInEdit
+    const { actorInEdit: actor, readonly } = this.props.Stores.Qvain
     return (
       <Fieldset>
         <Column>
@@ -51,6 +51,7 @@ export class ActorTypeSelectBase extends Component {
               <RadioInput
                 id="entityPerson"
                 name="entityType"
+                disabled={readonly}
                 onChange={this.handleChangeEntity(actor, EntityType.PERSON)}
                 type="radio"
                 checked={actor.type === EntityType.PERSON}
@@ -64,7 +65,7 @@ export class ActorTypeSelectBase extends Component {
             <ListItem disabled={actor.type !== EntityType.PERSON}>
               <FormField>
                 <Checkbox
-                  disabled={actor.type !== EntityType.PERSON}
+                  disabled={actor.type !== EntityType.PERSON || readonly}
                   onChange={this.handleChangeRole(actor, Role.CREATOR)}
                   id="personCreator"
                   type="checkbox"
@@ -85,7 +86,7 @@ export class ActorTypeSelectBase extends Component {
                 <Checkbox
                   onChange={this.handleChangeRole(actor, Role.PUBLISHER)}
                   disabled={
-                    actor.type !== EntityType.PERSON || this.checkIfActorRoleExists(Role.PUBLISHER)
+                    actor.type !== EntityType.PERSON || this.checkIfActorRoleExists(Role.PUBLISHER) || readonly
                   }
                   id="personPublisher"
                   value={Role.PUBLISHER}
@@ -101,7 +102,7 @@ export class ActorTypeSelectBase extends Component {
             <ListItem disabled={actor.type !== EntityType.PERSON}>
               <FormField>
                 <Checkbox
-                  disabled={actor.type !== EntityType.PERSON}
+                  disabled={actor.type !== EntityType.PERSON || readonly}
                   onChange={this.handleChangeRole(actor, Role.CURATOR)}
                   id="personCurator"
                   value={Role.CURATOR}
@@ -116,7 +117,7 @@ export class ActorTypeSelectBase extends Component {
             <ListItem disabled={actor.type !== EntityType.PERSON}>
               <FormField>
                 <Checkbox
-                  disabled={actor.type !== EntityType.PERSON}
+                  disabled={actor.type !== EntityType.PERSON || readonly}
                   onChange={this.handleChangeRole(actor, Role.RIGHTS_HOLDER)}
                   id="personRightsHolder"
                   type="checkbox"
@@ -133,7 +134,7 @@ export class ActorTypeSelectBase extends Component {
             <ListItem disabled={actor.type !== EntityType.PERSON}>
               <FormField>
                 <Checkbox
-                  disabled={actor.type !== EntityType.PERSON}
+                  disabled={actor.type !== EntityType.PERSON || readonly}
                   onChange={this.handleChangeRole(actor, Role.CONTRIBUTOR)}
                   id="personContributor"
                   type="checkbox"
@@ -156,6 +157,7 @@ export class ActorTypeSelectBase extends Component {
                 id="entityOrg"
                 name="entityType"
                 type="radio"
+                disabled={readonly}
                 onChange={this.handleChangeEntity(actor, EntityType.ORGANIZATION)}
                 checked={actor.type === EntityType.ORGANIZATION}
               />
@@ -170,7 +172,7 @@ export class ActorTypeSelectBase extends Component {
                 <Checkbox
                   id="orgCreator"
                   type="checkbox"
-                  disabled={actor.type !== EntityType.ORGANIZATION}
+                  disabled={actor.type !== EntityType.ORGANIZATION || readonly}
                   onChange={this.handleChangeRole(actor, Role.CREATOR)}
                   value={Role.CREATOR}
                   checked={
@@ -185,7 +187,7 @@ export class ActorTypeSelectBase extends Component {
             <ListItem
               disabled={
                 actor.type !== EntityType.ORGANIZATION ||
-                this.checkIfActorRoleExists(Role.PUBLISHER)
+                this.checkIfActorRoleExists(Role.PUBLISHER) || readonly
               }
             >
               <FormField>
@@ -194,7 +196,7 @@ export class ActorTypeSelectBase extends Component {
                   type="checkbox"
                   disabled={
                     actor.type !== EntityType.ORGANIZATION ||
-                    this.checkIfActorRoleExists(Role.PUBLISHER)
+                    this.checkIfActorRoleExists(Role.PUBLISHER) || readonly
                   }
                   onChange={this.handleChangeRole(actor, Role.PUBLISHER)}
                   value={Role.PUBLISHER}
@@ -213,7 +215,7 @@ export class ActorTypeSelectBase extends Component {
                 <Checkbox
                   id="orgCurator"
                   type="checkbox"
-                  disabled={actor.type !== EntityType.ORGANIZATION}
+                  disabled={actor.type !== EntityType.ORGANIZATION || readonly}
                   onChange={this.handleChangeRole(actor, Role.CURATOR)}
                   value={Role.CURATOR}
                   checked={
@@ -230,7 +232,7 @@ export class ActorTypeSelectBase extends Component {
                 <Checkbox
                   id="orgRightsHolder"
                   type="checkbox"
-                  disabled={actor.type !== EntityType.ORGANIZATION}
+                  disabled={actor.type !== EntityType.ORGANIZATION || readonly}
                   onChange={this.handleChangeRole(actor, Role.RIGHTS_HOLDER)}
                   value={Role.RIGHTS_HOLDER}
                   checked={
@@ -248,7 +250,7 @@ export class ActorTypeSelectBase extends Component {
                 <Checkbox
                   id="orgContributor"
                   type="checkbox"
-                  disabled={actor.type !== EntityType.ORGANIZATION}
+                  disabled={actor.type !== EntityType.ORGANIZATION || readonly}
                   onChange={this.handleChangeRole(actor, Role.CONTRIBUTOR)}
                   value={Role.CONTRIBUTOR}
                   checked={

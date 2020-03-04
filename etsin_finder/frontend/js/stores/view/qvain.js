@@ -8,7 +8,8 @@ import {
   UseCategoryURLs,
   EntityType,
   Role,
-  CumulativeStates
+  CumulativeStates,
+  DataCatalogIdentifiers
 } from '../../components/qvain/utils/constants'
 import { getPath } from '../../components/qvain/utils/object'
 
@@ -75,6 +76,7 @@ class Qvain {
 
     // Reset Files/Directories related data
     this.dataCatalog = undefined
+    this.preservationState = 0
     this.cumulativeState = CumulativeStates.NO
     this.idaPickerOpen = false
     this.selectedProject = undefined
@@ -189,6 +191,12 @@ class Qvain {
   }
 
   @action
+  setEmbargoExpDate = exp => {
+    this.embargoExpDate = exp
+    this.changed = true
+  }
+
+  @action
   setActors = actors => {
     this.actors = actors
     this.changed = true
@@ -299,11 +307,13 @@ class Qvain {
   @action
   setDataCatalog = selectedDataCatalog => {
     this.dataCatalog = selectedDataCatalog
+    this.changed = true
   }
 
   @action
   setCumulativeState = selectedCumulativeState => {
     this.cumulativeState = selectedCumulativeState
+    this.changed = true
   }
 
   @action toggleSelectedFile = (file, select) => {
@@ -660,6 +670,9 @@ class Qvain {
     this.dataCatalog =
       dataset.data_catalog !== undefined ? dataset.data_catalog.identifier : undefined
 
+    // load preservation state
+    this.preservationState = dataset.preservation_state
+
     // load cumulative state
     this.cumulativeState = dataset.cumulative_state
 
@@ -890,6 +903,31 @@ class Qvain {
   @action setResourceInEdit = id => {
     this.resourceInEdit = this.externalResources.find(r => r.id === id)
   }
+
+  // PAS
+
+  @observable preservationState = 0
+
+  @action
+  setPreservationState = state => {
+    this.preservationState = state
+    this.changed = true
+  }
+
+  @computed
+  get isPas() {
+    return this.dataCatalog === DataCatalogIdentifiers.PAS || this.preservationState > 0
+  }
+
+  @computed
+  get canSelectFiles() {
+    return !this.isPas
+  }
+
+  @computed
+  get readonly() {
+    return this.preservationState >= 80 && this.preservationState !== 100 && this.preservationState !== 130
+  }
 }
 
 const Hierarchy = (h, parent, selected) => ({
@@ -914,7 +952,7 @@ export const Directory = (dir, parent, selected, open) => ({
   existing: false
 })
 
-const File = (file, parent, selected) => ({
+export const File = (file, parent, selected) => ({
   ...Hierarchy(file, parent, selected),
   fileName: file.file_name,
   filePath: file.file_path,
