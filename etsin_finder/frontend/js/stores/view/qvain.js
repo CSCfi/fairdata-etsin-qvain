@@ -32,6 +32,8 @@ class Qvain {
 
   @observable fieldOfScience = undefined
 
+  @observable fieldsOfScience = []
+
   @observable keywords = []
 
   @observable license = License(undefined, LicenseUrls.CCBY4)
@@ -62,6 +64,7 @@ class Qvain {
     }
     this.otherIdentifiers = []
     this.fieldOfScience = undefined
+    this.fieldsOfScience = []
     this.keywords = []
     this.license = License(undefined, LicenseUrls.CCBY4)
     this.otherLicenseUrl = undefined
@@ -140,6 +143,12 @@ class Qvain {
   }
 
   @action
+  setFieldsOfScience = fieldsOfScience => {
+   this.fieldsOfScience = fieldsOfScience
+      this.changed = true
+  }
+
+  @action
   setKeywords = keywords => {
     this.keywords = keywords
     this.changed = true
@@ -148,6 +157,12 @@ class Qvain {
   @action
   removeKeyword = keyword => {
     this.keywords = this.keywords.filter(word => word !== keyword)
+    this.changed = true
+  }
+
+  @action
+  removeFieldOfScience = fieldOfScienceToRemove => {
+    this.fieldsOfScience = this.fieldsOfScience.filter(fieldOfScience => fieldOfScience.url !== fieldOfScienceToRemove.url)
     this.changed = true
   }
 
@@ -565,16 +580,12 @@ class Qvain {
       ? researchDataset.other_identifier.map(oid => oid.notation)
       : []
 
-    // field of science
+    // fields of science
     if (researchDataset.field_of_science !== undefined) {
-      const primary = researchDataset.field_of_science[0]
-      if (primary !== undefined) {
-        this.fieldOfScience = FieldOfScience(primary.pref_label, primary.identifier)
-      } else {
-        this.fieldOfScience = undefined
-      }
-    } else {
-      this.fieldOfScience = undefined
+      researchDataset.field_of_science.forEach(element => {
+        this.fieldOfScience = FieldOfScience(element.pref_label, element.identifier)
+        this.fieldsOfScience.push(this.fieldOfScience)
+      });
     }
 
     // keywords
@@ -1001,6 +1012,11 @@ export const Actor = (entityType, roles, name, email, identifier, organization, 
 export const EmptyActor = Actor(EntityType.PERSON, [], '', '', '', undefined, undefined)
 
 export const FieldOfScience = (name, url) => ({
+  name,
+  url,
+})
+
+export const FieldsOfScience = (name, url) => ({
   name,
   url,
 })

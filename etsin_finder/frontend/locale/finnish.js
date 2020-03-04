@@ -412,10 +412,13 @@ const finnish = {
         alreadyAdded: 'Tunniste on jo lisätty',
       },
       fieldOfScience: {
-        title: 'Tutkimusala',
+        title: 'Tieteenala',
         infoText:
           'Valitse tieteenala. Alasvetovalikkosa on Opetus- ja Kulttuuriministeriön mukainen luokitus tieteenaloille.',
         placeholder: 'Valitse vaihtoehto',
+        addButton: '+ Lisää tieteenala',
+        help:
+          'Voit lisätä useita tieteenaloja.',
       },
       keywords: {
         title: 'Avainsanat',
