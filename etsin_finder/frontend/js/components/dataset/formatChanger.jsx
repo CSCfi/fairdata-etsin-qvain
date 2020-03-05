@@ -14,7 +14,6 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import { withTheme } from 'styled-components'
-import ErrorPage from '../errorpage'
 import DatasetQuery from '../../stores/view/datasetquery'
 import FormatSelect from './formatselect'
 
@@ -25,7 +24,6 @@ class FormatChanger extends Component {
 
     this.state = {
       formats: [],
-      error: false,
       selected: '',
       data: DatasetQuery.results,
       environment: '',
@@ -59,7 +57,6 @@ class FormatChanger extends Component {
     }
     this.setState({
       formats: fields,
-      error: false,
       selected: '',
     })
   }
@@ -106,11 +103,7 @@ class FormatChanger extends Component {
   }
 
   render() {
-    // CASE 1: Houston, we have a problem
-    if (this.state.error !== false) {
-      return <ErrorPage error={{ type: 'notfound' }} />
-    }
-    return (
+    return (!this.state.data.removed) ? (
       <FormatSelect
         background={this.props.theme.color.primary}
         newestColor={this.props.theme.color.white}
@@ -124,6 +117,7 @@ class FormatChanger extends Component {
         notRemoved={this.state.notRemoved}
       />
     )
+      : null
   }
 }
 
