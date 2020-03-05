@@ -162,6 +162,10 @@ class Qvain extends Component {
               this.setState({ response: [err.response.data.PermissionError] })
 
             // If user is logged in...
+            } else if (err.response.data && err.response.data.Error_message) {
+              this.setState({
+                response: [err.response.data.Error_message]
+              })
             } else if (err.response.data) {
               // If no IDA projects are found, display an IDA error
               if (err.response.data.IdaError) {

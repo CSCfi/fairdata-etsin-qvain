@@ -234,12 +234,13 @@ class MetaxQvainLightAPIService(FlaskService):
 
         return metax_api_response.json()
 
-    def create_dataset(self, data):
+    def create_dataset(self, data, params=None):
         """
         Send the data from the frontend to Metax.
 
         Arguments:
             data {object} -- Object with the dataset data that has been validated and converted to comply with the Metax schema.
+            params {dict} -- Dictionary of key-value pairs of query parameters.
 
         Returns:
             [type] -- The response from Metax.
@@ -249,6 +250,7 @@ class MetaxQvainLightAPIService(FlaskService):
         headers = {'Accept': 'application/json'}
         try:
             metax_api_response = requests.post(req_url,
+                                               params=params,
                                                json=data,
                                                headers=headers,
                                                auth=(self.user, self.pw),
@@ -265,18 +267,19 @@ class MetaxQvainLightAPIService(FlaskService):
                 return metax_api_response.json(), metax_api_response.status_code
             else:
                 log.error("Error creating dataset\n{0}".format(e))
-                return 'Error trying to send data to metax.', 500
+            return {'Error_message': 'Error trying to send data to metax.'}, metax_api_response.status_code
 
         log.info('Created dataset with identifier: {}'.format(json.loads(metax_api_response.text).get('identifier', 'COULD-NOT-GET-IDENTIFIER')))
         return metax_api_response.json(), metax_api_response.status_code
 
-    def update_dataset(self, data, cr_id):
+    def update_dataset(self, data, cr_id, params):
         """
         Update a dataset with the data that the user has entered in Qvain-light.
 
         Arguments:
             data {object} -- Object with the dataset data that has been validated and converted to comply with the Metax schema.
             cr_id {string} -- The identifier of the dataset.
+            params {dict} -- Dictionary of key-value pairs of query parameters.
 
         Returns:
             [type] -- The response from Metax.
@@ -286,6 +289,7 @@ class MetaxQvainLightAPIService(FlaskService):
         headers = {'Accept': 'application/json'}
         try:
             metax_api_response = requests.patch(req_url,
+                                                params=params,
                                                 json=data,
                                                 headers=headers,
                                                 auth=(self.user, self.pw),
@@ -504,32 +508,34 @@ def get_datasets_for_user(user_id, limit, offset, no_pagination):
     """
     return _metax_api.get_datasets_for_user(user_id, limit, offset, no_pagination)
 
-def create_dataset(form_data):
+def create_dataset(form_data, params=None):
     """
     Create dataset in Metax.
 
     Arguments:
         form_data {object} -- Object with the dataset data that has been validated and converted to comply with the Metax schema.
+        params {dict} -- Dictionary of key-value pairs of query parameters.
 
     Returns:
         [type] -- Metax response.
 
     """
-    return _metax_api.create_dataset(form_data)
+    return _metax_api.create_dataset(form_data, params)
 
-def update_dataset(form_data, cr_id):
+def update_dataset(form_data, cr_id, params=None):
     """
     Update dataset in Metax.
 
     Arguments:
         form_data {object} -- Object with the dataset data that has been validated and converted to comply with the Metax schema.
         cr_id {string} -- The identifier of the dataset.
+        params {dict} -- Dictionary of key-value pairs of query parameters.
 
     Returns:
         [type] -- Metax response.
 
     """
-    return _metax_api.update_dataset(form_data, cr_id)
+    return _metax_api.update_dataset(form_data, cr_id, params)
 
 def get_dataset(cr_id):
     """
