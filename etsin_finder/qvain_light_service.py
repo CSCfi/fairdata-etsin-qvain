@@ -272,7 +272,7 @@ class MetaxQvainLightAPIService(FlaskService):
         log.info('Created dataset with identifier: {}'.format(json.loads(metax_api_response.text).get('identifier', 'COULD-NOT-GET-IDENTIFIER')))
         return metax_api_response.json(), metax_api_response.status_code
 
-    def update_dataset(self, data, cr_id):
+    def update_dataset(self, data, cr_id, params):
         """
         Update a dataset with the data that the user has entered in Qvain-light.
 
