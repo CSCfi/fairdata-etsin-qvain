@@ -12,6 +12,8 @@ import { restrictionGroundsSchema } from '../utils/formValidation';
 import ValidationError from '../general/validationError';
 
 class RestrictionGrounds extends Component {
+  promises = []
+
   static propTypes = {
     Stores: PropTypes.object.isRequired
   }
@@ -25,46 +27,48 @@ class RestrictionGrounds extends Component {
   }
 
   componentDidMount = () => {
-    getReferenceData('restriction_grounds')
-    .then(res => {
-      const list = res.data.hits.hits;
-      const refsEn = list.map(ref => (
-        {
-          value: ref._source.uri,
-          label: ref._source.label.en,
-        }
+    this.promises.push(getReferenceData('restriction_grounds')
+      .then(res => {
+        const list = res.data.hits.hits;
+        const refsEn = list.map(ref => (
+          {
+            value: ref._source.uri,
+            label: ref._source.label.en,
+          }
         ))
-      const refsFi = list.map(ref => (
-        {
-          value: ref._source.uri,
-          label: ref._source.label.fi,
-        }
+        const refsFi = list.map(ref => (
+          {
+            value: ref._source.uri,
+            label: ref._source.label.fi,
+          }
         ))
-      this.setState({
-        options: {
-          en: refsEn,
-          fi: refsFi
+        this.setState({
+          options: {
+            en: refsEn,
+            fi: refsFi
+          }
+        })
+      })
+      .catch(error => {
+        if (error.response) {
+          // Error response from Metax
+          console.log(error.response.data);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+        } else if (error.request) {
+          // No response from Metax
+          console.log(error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.log('Error', error.message);
         }
       })
-    })
-    .catch(error => {
-      if (error.response) {
-        // Error response from Metax
-        console.log(error.response.data);
-        console.log(error.response.status);
-        console.log(error.response.headers);
-      } else if (error.request) {
-        // No response from Metax
-        console.log(error.request);
-      } else {
-        // Something happened in setting up the request that triggered an Error
-        console.log('Error', error.message);
-      }
-    });
+    );
   }
 
   componentWillUnmount = () => {
     this.props.Stores.Qvain.removeRestrictionGrounds();
+    this.promises.forEach(promise => promise && promise.cancel && promise.cancel())
   }
 
   handleBlur = () => {
@@ -85,7 +89,7 @@ class RestrictionGrounds extends Component {
   render() {
     const { options, errorMessage } = this.state
     const { lang } = this.props.Stores.Locale
-    const { restrictionGrounds, setRestrictionGrounds } = this.props.Stores.Qvain
+    const { restrictionGrounds, setRestrictionGrounds, readonly } = this.props.Stores.Qvain
     return (
       <RestrictionGroundsContainer>
         <Translate component="h3" content="qvain.rightsAndLicenses.restrictionGrounds.title" />
@@ -94,6 +98,7 @@ class RestrictionGrounds extends Component {
           name="restrictionGrounds"
           value={getCurrentValue(restrictionGrounds, options, lang)}
           options={options[lang]}
+          isDisabled={readonly}
           isClearable
           onChange={
             onChange(options, lang, setRestrictionGrounds, RestrictionGroundsConstructor)

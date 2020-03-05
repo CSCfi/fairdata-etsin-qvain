@@ -45,6 +45,13 @@ const keywordsSchema = yup
   )
   .required(translate('qvain.validationMessages.keywords.required'))
 
+  const fieldsOfScienceSchema = yup
+  .array()
+  .of(
+    yup
+      .string()
+  )
+
 const otherIdentifierSchema = yup
   .string(translate('qvain.validationMessages.otherIdentifiers.string'))
   .min(10, translate('qvain.validationMessages.otherIdentifiers.min'))
@@ -302,7 +309,7 @@ const actorsSchema = yup
 const qvainFormSchema = yup.object().shape({
   title: titleSchema,
   description: descriptionSchema,
-  fieldOfScience: yup.string(),
+  fieldOfScience: fieldsOfScienceSchema,
   keywords: keywordsSchema,
   otherIdentifiers: otherIdentifiersSchema,
   accessType: accessTypeSchema,
@@ -364,6 +371,7 @@ export {
   actorIdentifierSchema,
   actorOrganizationSchema,
   dataCatalogSchema,
+  fieldsOfScienceSchema,
   fileTitleSchema,
   fileDescriptionSchema,
   fileUseCategorySchema,
