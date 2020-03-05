@@ -27,16 +27,32 @@ const MarginAfter = styled.div`
 `
 
 class Content extends Component {
+  deletedVersionsExists = () => {
+    let deletedVersion = false;
+
+    if (this.props.dataset.dataset_version_set !== undefined
+      && this.props.dataset.dataset_version_set.length > 0) {
+      for (let i = 0; i < this.props.dataset.dataset_version_set.length; i += 1) {
+        if (this.props.dataset.dataset_version_set[i].date_removed !== undefined) {
+          deletedVersion = true;
+        }
+      }
+    }
+    return deletedVersion
+  }
+
   showEvents() {
     return (
+      this.deletedVersionsExists()
+      ||
       (this.props.dataset.research_dataset.provenance !== undefined
-      && this.props.dataset.research_dataset.provenance.length > 0)
+        && this.props.dataset.research_dataset.provenance.length > 0)
 
       || (this.props.dataset.research_dataset.other_identifier !== undefined
-      && this.props.dataset.research_dataset.other_identifier.length > 0)
+        && this.props.dataset.research_dataset.other_identifier.length > 0)
 
       || (this.props.dataset.research_dataset.relation !== undefined
-      && this.props.dataset.research_dataset.relation.length > 0)
+        && this.props.dataset.research_dataset.relation.length > 0)
 
       || (this.props.dataset.preservation_dataset_origin_version !== undefined)
     )

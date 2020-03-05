@@ -119,6 +119,12 @@ const english = {
       },
     },
     events_idn: {
+      deleted_versions: {
+        title: 'Deleted Versions',
+        date: 'Delete date',
+        version: 'Version',
+        link_to_dataset: 'Link to dataset'
+      },
       events: {
         title: 'Events',
         event: 'Event',
