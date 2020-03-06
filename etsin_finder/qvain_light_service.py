@@ -273,13 +273,14 @@ class MetaxQvainLightAPIService(FlaskService):
         log.info('Created dataset with identifier: {}'.format(json.loads(metax_api_response.text).get('identifier', 'COULD-NOT-GET-IDENTIFIER')))
         return metax_api_response.json(), metax_api_response.status_code
 
-    def update_dataset(self, data, cr_id, params):
+    def update_dataset(self, data, cr_id, last_modified, params):
         """
         Update a dataset with the data that the user has entered in Qvain-light.
 
         Arguments:
             data {object} -- Object with the dataset data that has been validated and converted to comply with the Metax schema.
             cr_id {string} -- The identifier of the dataset.
+            last_modified {string} -- HTTP datetime string (RFC2616)
             params {dict} -- Dictionary of key-value pairs of query parameters.
 
         Returns:
@@ -287,7 +288,8 @@ class MetaxQvainLightAPIService(FlaskService):
 
         """
         req_url = self.METAX_PATCH_DATASET.format(cr_id)
-        headers = {'Accept': 'application/json'}
+        headers = {'Accept': 'application/json', 'If-Unmodified-Since': last_modified}
+        log.debug('Request URL: {0}\nHeaders: {1}\nData: {2}'.format(req_url, headers, data))
         try:
             metax_api_response = requests.patch(req_url,
                                                 params=params,
@@ -312,6 +314,9 @@ class MetaxQvainLightAPIService(FlaskService):
             return 'Error trying to send data to metax.', 500
 
         log.info('Updated dataset with identifier: {}'.format(cr_id))
+        if metax_api_response.status_code == 412:
+            return 'Resource has been modified since last publish', 412
+
         return metax_api_response.json(), metax_api_response.status_code
 
     def get_dataset(self, cr_id):
@@ -561,20 +566,21 @@ def create_dataset(form_data, params=None):
     """
     return _metax_api.create_dataset(form_data, params)
 
-def update_dataset(form_data, cr_id, params=None):
+def update_dataset(form_data, cr_id, last_modified, params=None):
     """
     Update dataset in Metax.
 
     Arguments:
         form_data {object} -- Object with the dataset data that has been validated and converted to comply with the Metax schema.
         cr_id {string} -- The identifier of the dataset.
+        last_modified {string} -- HTTP datetime string (RFC2616)
         params {dict} -- Dictionary of key-value pairs of query parameters.
 
     Returns:
         [type] -- Metax response.
 
     """
-    return _metax_api.update_dataset(form_data, cr_id, params)
+    return _metax_api.update_dataset(form_data, cr_id, last_modified, params)
 
 def get_dataset(cr_id):
     """
