@@ -17,6 +17,7 @@ import {
   BodyCell,
   TableNote,
 } from '../general/table'
+import { DataCatalogIdentifiers, PreservationStates } from '../utils/constants'
 import Modal from '../../general/modal'
 import DatasetPagination from './pagination'
 import Label from '../general/label'
@@ -253,29 +254,28 @@ class DatasetTable extends Component {
                     {dataset.next_dataset_version !== undefined && (
                       <Translate color="yellow" content="qvain.datasets.oldVersion" component={OldVersionLabel} />
                     )}
+                    {(dataset.preservation_state > 0 || dataset.data_catalog.identifier === DataCatalogIdentifiers.PAS) &&
+                      <PasLabel color={PreservationStates[dataset.preservation_state].color}>PAS</PasLabel>
+                    }
                   </BodyCellWordWrap>
                   <BodyCell>{this.formatDatasetDateCreated(dataset.date_created)}</BodyCell>
-                  <BodyCell>
+                  <BodyCellActions>
                     <Translate
                       component={TableButton}
                       onClick={this.handleEnterEdit(dataset)}
                       content="qvain.datasets.editButton"
                     />
-                  </BodyCell>
-                  <BodyCell>
                     <Translate
                       component={TableButton}
                       onClick={() => window.open(`/dataset/${dataset.identifier}`, '_blank')}
                       content="qvain.datasets.goToEtsin"
                     />
-                  </BodyCell>
-                  <BodyCell>
                     <Translate
                       component={RemoveButton}
                       onClick={this.openRemoveModal(dataset.identifier)}
                       content="qvain.datasets.deleteButton"
                     />
-                  </BodyCell>
+                  </BodyCellActions>
                 </Row>
               ))}
           </TableBody>
@@ -298,6 +298,11 @@ class DatasetTable extends Component {
 }
 
 const OldVersionLabel = styled(Label)`
+  margin-left: 10px;
+  text-transform: uppercase;
+`;
+
+const PasLabel = styled(Label)`
   margin-left: 10px;
   text-transform: uppercase;
 `;
@@ -325,6 +330,15 @@ const SearchInput = styled(Input)`
 
 const BodyCellWordWrap = styled(BodyCell)`
   word-break: break-word;
+`
+
+const BodyCellActions = styled(BodyCell)`
+  display: flex;
+  flex-wrap: wrap;
+  margin: -0.1rem -0.15rem;
+  > * {
+    margin: 0.1rem 0.15rem;
+  }
 `
 
 export default withRouter(inject('Stores')(observer(DatasetTable)))

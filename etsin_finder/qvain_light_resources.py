@@ -30,8 +30,10 @@ from etsin_finder.qvain_light_utils import data_to_metax, \
     get_dataset_creator, \
     remove_deleted_datasets_from_results, \
     edited_data_to_metax, \
-    get_user_ida_projects, \
-    check_if_data_in_user_IDA_project
+    check_if_data_in_user_IDA_project, \
+    get_encoded_access_granter, \
+    get_user_ida_projects
+
 from etsin_finder.qvain_light_service import create_dataset, update_dataset, get_dataset, delete_dataset
 
 log = app.logger
@@ -261,7 +263,10 @@ class QvainDataset(Resource):
             if not check_if_data_in_user_IDA_project(data):
                 return {"IdaError": "Error in IDA group user permission or in IDA user groups."}, 403
         metax_redy_data = data_to_metax(data, metadata_provider_org, metadata_provider_user)
-        metax_response = create_dataset(metax_redy_data)
+        params = {
+            "access_granter": get_encoded_access_granter()
+        }
+        metax_response = create_dataset(metax_redy_data, params)
         return metax_response
 
     @log_request
@@ -308,7 +313,10 @@ class QvainDataset(Resource):
             return {"PermissionError": "User not authorized to to edit dataset."}, 403
 
         metax_redy_data = edited_data_to_metax(data, original)
-        metax_response = update_dataset(metax_redy_data, cr_id, last_edit_converted)
+        params = {
+            "access_granter": get_encoded_access_granter()
+        }
+        metax_response = update_dataset(metax_redy_data, cr_id, params, last_edit_converted)
         log.debug("METAX RESPONSE: \n{0}".format(metax_response))
         return metax_response
 

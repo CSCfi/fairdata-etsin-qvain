@@ -8,7 +8,8 @@ import {
   UseCategoryURLs,
   EntityType,
   Role,
-  CumulativeStates
+  CumulativeStates,
+  DataCatalogIdentifiers
 } from '../../components/qvain/utils/constants'
 import { getPath } from '../../components/qvain/utils/object'
 
@@ -30,6 +31,8 @@ class Qvain {
   @observable otherIdentifiers = []
 
   @observable fieldOfScience = undefined
+
+  @observable fieldsOfScience = []
 
   @observable keywords = []
 
@@ -61,6 +64,7 @@ class Qvain {
     }
     this.otherIdentifiers = []
     this.fieldOfScience = undefined
+    this.fieldsOfScience = []
     this.keywords = []
     this.license = License(undefined, LicenseUrls.CCBY4)
     this.otherLicenseUrl = undefined
@@ -72,6 +76,7 @@ class Qvain {
 
     // Reset Files/Directories related data
     this.dataCatalog = undefined
+    this.preservationState = 0
     this.cumulativeState = CumulativeStates.NO
     this.idaPickerOpen = false
     this.selectedProject = undefined
@@ -138,6 +143,12 @@ class Qvain {
   }
 
   @action
+  setFieldsOfScience = fieldsOfScience => {
+   this.fieldsOfScience = fieldsOfScience
+      this.changed = true
+  }
+
+  @action
   setKeywords = keywords => {
     this.keywords = keywords
     this.changed = true
@@ -146,6 +157,12 @@ class Qvain {
   @action
   removeKeyword = keyword => {
     this.keywords = this.keywords.filter(word => word !== keyword)
+    this.changed = true
+  }
+
+  @action
+  removeFieldOfScience = fieldOfScienceToRemove => {
+    this.fieldsOfScience = this.fieldsOfScience.filter(fieldOfScience => fieldOfScience.url !== fieldOfScienceToRemove.url)
     this.changed = true
   }
 
@@ -170,6 +187,12 @@ class Qvain {
   @action
   removeRestrictionGrounds = () => {
     this.restrictionGrounds = {}
+    this.changed = true
+  }
+
+  @action
+  setEmbargoExpDate = exp => {
+    this.embargoExpDate = exp
     this.changed = true
   }
 
@@ -284,11 +307,13 @@ class Qvain {
   @action
   setDataCatalog = selectedDataCatalog => {
     this.dataCatalog = selectedDataCatalog
+    this.changed = true
   }
 
   @action
   setCumulativeState = selectedCumulativeState => {
     this.cumulativeState = selectedCumulativeState
+    this.changed = true
   }
 
   @action toggleSelectedFile = (file, select) => {
@@ -555,16 +580,12 @@ class Qvain {
       ? researchDataset.other_identifier.map(oid => oid.notation)
       : []
 
-    // field of science
+    // fields of science
     if (researchDataset.field_of_science !== undefined) {
-      const primary = researchDataset.field_of_science[0]
-      if (primary !== undefined) {
-        this.fieldOfScience = FieldOfScience(primary.pref_label, primary.identifier)
-      } else {
-        this.fieldOfScience = undefined
-      }
-    } else {
-      this.fieldOfScience = undefined
+      researchDataset.field_of_science.forEach(element => {
+        this.fieldOfScience = FieldOfScience(element.pref_label, element.identifier)
+        this.fieldsOfScience.push(this.fieldOfScience)
+      });
     }
 
     // keywords
@@ -648,6 +669,9 @@ class Qvain {
     // load data catalog
     this.dataCatalog =
       dataset.data_catalog !== undefined ? dataset.data_catalog.identifier : undefined
+
+    // load preservation state
+    this.preservationState = dataset.preservation_state
 
     // load cumulative state
     this.cumulativeState = dataset.cumulative_state
@@ -879,6 +903,31 @@ class Qvain {
   @action setResourceInEdit = id => {
     this.resourceInEdit = this.externalResources.find(r => r.id === id)
   }
+
+  // PAS
+
+  @observable preservationState = 0
+
+  @action
+  setPreservationState = state => {
+    this.preservationState = state
+    this.changed = true
+  }
+
+  @computed
+  get isPas() {
+    return this.dataCatalog === DataCatalogIdentifiers.PAS || this.preservationState > 0
+  }
+
+  @computed
+  get canSelectFiles() {
+    return !this.isPas
+  }
+
+  @computed
+  get readonly() {
+    return this.preservationState >= 80 && this.preservationState !== 100 && this.preservationState !== 130
+  }
 }
 
 const Hierarchy = (h, parent, selected) => ({
@@ -903,7 +952,7 @@ export const Directory = (dir, parent, selected, open) => ({
   existing: false
 })
 
-const File = (file, parent, selected) => ({
+export const File = (file, parent, selected) => ({
   ...Hierarchy(file, parent, selected),
   fileName: file.file_name,
   filePath: file.file_path,
@@ -963,6 +1012,11 @@ export const Actor = (entityType, roles, name, email, identifier, organization, 
 export const EmptyActor = Actor(EntityType.PERSON, [], '', '', '', undefined, undefined)
 
 export const FieldOfScience = (name, url) => ({
+  name,
+  url,
+})
+
+export const FieldsOfScience = (name, url) => ({
   name,
   url,
 })

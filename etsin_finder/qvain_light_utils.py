@@ -1,5 +1,10 @@
 """Utilities for transforming the data from Qvain Light form to METAX compatible format"""
 
+import json
+from flask import session
+from base64 import urlsafe_b64encode
+
+from etsin_finder.utils import SAML_ATTRIBUTES
 from etsin_finder.cr_service import get_catalog_record
 from etsin_finder.finder import app
 from etsin_finder.authentication import get_user_ida_groups
@@ -216,9 +221,7 @@ def data_to_metax(data, metadata_provider_org, metadata_provider_user):
             "rights_holder": alter_role_data(data["actors"], "rights_holder"),
             "contributor": alter_role_data(data["actors"], "contributor"),
             "other_identifier": other_identifiers_to_metax(data["identifiers"]),
-            "field_of_science": [{
-                "identifier": data["fieldOfScience"] if "fieldOfScience" in data else ""
-            }],
+            "field_of_science": _to_metax_field_of_science(data.get("fieldOfScience")),
             "keyword": data["keywords"],
             "access_rights": access_rights_to_metax(data),
             "remote_resources": remote_resources_data_to_metax(data["remote_resources"]) if data["dataCatalog"] == "urn:nbn:fi:att:data-catalog-att" else "",
@@ -227,6 +230,23 @@ def data_to_metax(data, metadata_provider_org, metadata_provider_user):
         }
     }
     return clean_empty_keyvalues_from_dict(dataset_data)
+
+def get_encoded_access_granter():
+    """Add REMS metadata as base64 encoded json. Uses data from user session."""
+    saml = session["samlUserdata"]
+    metadata_provider_user = saml[SAML_ATTRIBUTES["CSC_username"]][0]
+    email = saml[SAML_ATTRIBUTES["email"]][0]
+    name = "{} {}".format(
+        saml[SAML_ATTRIBUTES["first_name"]][0],
+        saml[SAML_ATTRIBUTES["last_name"]][0]
+    )
+    access_granter = {
+        "userid": metadata_provider_user,
+        "email": email,
+        "name": name
+    }
+    access_granter_json = json.dumps(access_granter)
+    return urlsafe_b64encode(access_granter_json.encode('utf-8'))
 
 def get_dataset_creator(cr_id):
     """
@@ -257,6 +277,13 @@ def remove_deleted_datasets_from_results(result):
     result['results'] = new_results
     return result
 
+def _to_metax_field_of_science(fieldsOfScience):
+    metax_fields_of_science = []
+    for element in fieldsOfScience:
+        metax_field_of_science_object = {'identifier': element }
+        metax_fields_of_science.append(metax_field_of_science_object)
+    return metax_fields_of_science
+
 def edited_data_to_metax(data, original):
     """
     Alter the research_dataset field to contain the new changes from editing.
@@ -280,11 +307,7 @@ def edited_data_to_metax(data, original):
         "rights_holder": alter_role_data(data["actors"], "rights_holder"),
         "contributor": alter_role_data(data["actors"], "contributor"),
         "other_identifier": other_identifiers_to_metax(data["identifiers"]),
-        "field_of_science": [
-            {
-                "identifier": data["fieldOfScience"] if "fieldOfScience" in data else ""
-            }
-        ],
+        "field_of_science": _to_metax_field_of_science(data.get("fieldOfScience")),
         "keyword": data["keywords"],
         "access_rights": access_rights_to_metax(data),
         "remote_resources": remote_resources_data_to_metax(data["remote_resources"]) if data["dataCatalog"] == "urn:nbn:fi:att:data-catalog-att" else "",

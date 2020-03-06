@@ -39,7 +39,7 @@
         var _paq = _paq || []
         _paq.push(['enableLinkTracking'])
         ;(function() {
-          let u = '//matomo-test.fairdata.fi/'
+          let u = '//' + location.hostname + '/'
           _paq.push(['setTrackerUrl', u + 'matomo.php'])
           _paq.push(['setSiteId', '8'])
           let d = document,
@@ -59,7 +59,7 @@
       var _paq = _paq || []
       _paq.push(['enableLinkTracking'])
       ;(function() {
-        let u = '//matomo-test.fairdata.fi/'
+        let u = '//' + location.hostname + '/'
         _paq.push(['setTrackerUrl', u + 'matomo.php'])
         _paq.push(['setSiteId', '3'])
         let d = document,
@@ -79,8 +79,8 @@
       var _paq = _paq || []
       _paq.push(['enableLinkTracking'])
       ;(function() {
-        let u = '//matomo.rahtiapp.fi/'
-        _paq.push(['setTrackerUrl', u + 'piwik.php'])
+        let u = '//' + location.hostname + '/'
+        _paq.push(['setTrackerUrl', u + 'matomo.php'])
         _paq.push(['setSiteId', '3'])
         let d = document,
           g = d.createElement('script'),
@@ -88,7 +88,7 @@
         g.type = 'text/javascript'
         g.async = true
         g.defer = true
-        g.src = u + 'piwik.js'
+        g.src = u + 'matomo.js'
         s.parentNode.insertBefore(g, s)
       })()
     </script>

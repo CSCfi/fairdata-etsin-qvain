@@ -22,6 +22,8 @@ import {
 class FileForm extends Component {
   inEdit = this.props.Stores.Qvain.inEdit
 
+  promises = []
+
   static propTypes = {
     Stores: PropTypes.object.isRequired
   }
@@ -42,22 +44,34 @@ class FileForm extends Component {
   }
 
   componentDidMount = () => {
-    getLocalizedOptions('file_type').then(translations => {
-      this.setState((state, props) => ({
-        fileTypesEn: translations.en,
-        fileTypesFi: translations.fi,
-        fileType: translations[props.Stores.Locale.lang].find(opt =>
-          opt.value === this.props.Stores.Qvain.inEdit.fileType
-        )
-      }))
-    })
-    getLocalizedOptions('use_category').then(translations => {
-      this.setState({
-        useCategoriesEn: translations.en,
-        useCategoriesFi: translations.fi,
-        useCategory: getUseCategory(translations.fi, translations.en, this.props.Stores)
+    this.promises.push(getLocalizedOptions('file_type')
+      .then(translations => {
+        this.setState((state, props) => ({
+          fileTypesEn: translations.en,
+          fileTypesFi: translations.fi,
+          fileType: translations[props.Stores.Locale.lang].find(opt =>
+            opt.value === this.props.Stores.Qvain.inEdit.fileType
+          )
+        }))
+      }).catch(error => {
+        console.error(error)
       })
-    })
+    )
+    this.promises.push(getLocalizedOptions('use_category')
+      .then(translations => {
+        this.setState({
+          useCategoriesEn: translations.en,
+          useCategoriesFi: translations.fi,
+          useCategory: getUseCategory(translations.fi, translations.en, this.props.Stores)
+        })
+      }).catch(error => {
+        console.error(error)
+      })
+    )
+  }
+
+  componentWillUnmount() {
+    this.promises.forEach(promise => promise && promise.cancel && promise.cancel())
   }
 
   handleCancel = (event) => {
@@ -144,12 +158,14 @@ class FileForm extends Component {
 
   render() {
     const { fileError, titleError, descriptionError, useCategoryError } = this.state
+    const { readonly, inEdit } = this.props.Stores.Qvain
     return (
       <Fragment>
         <FileContainer>
           <Label><Translate content="qvain.files.selected.form.title.label" /> *</Label>
           <Translate
             component={Input}
+            disabled={readonly}
             value={this.state.title}
             onChange={(event) => this.setState({
               title: event.target.value
@@ -161,6 +177,7 @@ class FileForm extends Component {
           <Label><Translate content="qvain.files.selected.form.description.label" /> *</Label>
           <Translate
             component={Textarea}
+            disabled={readonly}
             value={this.state.description}
             onChange={(event) => this.setState({ description: event.target.value })}
             onBlur={this.handleDescriptionBlur}
@@ -170,11 +187,12 @@ class FileForm extends Component {
           <Label><Translate content="qvain.files.selected.form.use.label" /> *</Label>
           <Translate
             component={CustomSelect}
+            isDisabled={readonly}
             value={this.state.useCategory}
             options={
               this.props.Stores.Locale.lang === 'en'
-              ? this.state.useCategoriesEn
-              : this.state.useCategoriesFi
+                ? this.state.useCategoriesEn
+                : this.state.useCategoriesFi
             }
             onChange={this.handleChangeUse}
             onBlur={this.handleUseCategoryBlur}
@@ -187,12 +205,13 @@ class FileForm extends Component {
           />
           <Translate
             component={CustomSelect}
+            isDisabled={readonly}
             value={this.state.fileType}
             onChange={this.handleChangeFileType}
             options={
               this.props.Stores.Locale.lang === 'en'
-              ? this.state.fileTypesEn
-              : this.state.fileTypesFi
+                ? this.state.fileTypesEn
+                : this.state.fileTypesFi
             }
             attributes={{ placeholder: 'qvain.files.selected.form.fileType.placeholder' }}
           />
@@ -201,7 +220,7 @@ class FileForm extends Component {
             style={{ textTransform: 'uppercase' }}
             content="qvain.files.selected.form.identifier.label"
           />
-          <p style={{ marginLeft: '10px' }}>{this.props.Stores.Qvain.inEdit.identifier}</p>
+          <p style={{ marginLeft: '10px' }}>{inEdit.identifier}</p>
           {fileError !== undefined && <ValidationError>{fileError}</ValidationError>}
           <Buttons>
             <div>

@@ -29,6 +29,7 @@ import SubmitResponse from './general/submitResponse'
 import Button, { InvertedButton } from '../general/button';
 
 const EDIT_DATASET_URL = '/api/datasets/edit'
+import PasState from './pasState'
 
 class Qvain extends Component {
   promises = []
@@ -135,14 +136,13 @@ class Qvain extends Component {
     e.preventDefault()
     this.setState({ submitted: true })
     const obj = handleSubmitToBackend(this.props.Stores.Qvain)
-    console.log(JSON.stringify(obj, null, 4))
     qvainFormSchema
       .validate(obj, { abortEarly: false })
-      .then(val => {
-        console.log(val)
+      .then(() => {
         axios
           .post('/api/dataset', obj)
           .then(res => {
+            console.log(res)
             const data = res.data
             this.setState({ response: { ...data, is_new: true } })
             // Open the created dataset without reloading the editor
@@ -153,6 +153,7 @@ class Qvain extends Component {
             }
           })
           .catch(err => {
+            console.log(err)
             // Refreshing error header
             this.setState({ response: null })
 
@@ -161,6 +162,10 @@ class Qvain extends Component {
               this.setState({ response: [err.response.data.PermissionError] })
 
             // If user is logged in...
+            } else if (err.response.data && err.response.data.Error_message) {
+              this.setState({
+                response: [err.response.data.Error_message]
+              })
             } else if (err.response.data) {
               // If no IDA projects are found, display an IDA error
               if (err.response.data.IdaError) {
@@ -205,19 +210,19 @@ class Qvain extends Component {
     this.setState({ submitted: true })
     const obj = handleSubmitToBackend(this.props.Stores.Qvain)
     obj.original = this.props.Stores.Qvain.original
-    console.log(JSON.stringify(obj, null, 4))
     qvainFormSchema
       .validate(obj, { abortEarly: false })
-      .then(val => {
-        console.log(val)
+      .then(() => {
         axios
           .patch('/api/dataset', obj)
           .then(res => {
+            console.log(res)
             this.props.Stores.Qvain.moveSelectedToExisting()
             this.props.Stores.Qvain.setChanged(false)
             this.setState({ response: res.data })
           })
           .catch(err => {
+            console.log(err.response)
             // Refreshing error header
             this.setState({ response: null })
 
@@ -273,6 +278,7 @@ class Qvain extends Component {
   }
 
   render() {
+    const { original, readonly } = this.props.Stores.Qvain
     // Title text
     let titleKey
     if (this.state.datasetLoading) {
@@ -280,7 +286,7 @@ class Qvain extends Component {
     } else if (this.state.datasetError) {
       titleKey = 'qvain.titleLoadingFailed'
     } else {
-      titleKey = this.props.Stores.Qvain.original ? 'qvain.titleEdit' : 'qvain.titleCreate'
+      titleKey = original ? 'qvain.titleEdit' : 'qvain.titleCreate'
     }
 
     // Sticky header content
@@ -307,9 +313,9 @@ class Qvain extends Component {
         <StickySubHeaderWrapper>
           <StickySubHeader>
             <ButtonContainer>
-              {this.props.Stores.Qvain.original
+              {original
                 ? (
-                  <SubmitButton ref={this.updateDatasetButton} type="button" onClick={this.handleUpdate}>
+                  <SubmitButton ref={this.updateDatasetButton} disabled={readonly} type="button" onClick={this.handleUpdate}>
                     <Translate content="qvain.edit" />
                   </SubmitButton>
                 )
@@ -321,6 +327,7 @@ class Qvain extends Component {
               }
             </ButtonContainer>
           </StickySubHeader>
+          <PasState />
           {this.state.submitted ? (
             <StickySubHeaderResponse>
               <SubmitResponse response={this.state.response} />

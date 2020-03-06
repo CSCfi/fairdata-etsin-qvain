@@ -8,6 +8,7 @@
 """Used for performing operations related to Metax for Qvain Light"""
 
 import requests
+from flask import jsonify
 
 from etsin_finder.finder import app
 from etsin_finder.app_config import get_metax_qvain_api_config
@@ -233,12 +234,13 @@ class MetaxQvainLightAPIService(FlaskService):
 
         return metax_api_response.json()
 
-    def create_dataset(self, data):
+    def create_dataset(self, data, params=None):
         """
         Send the data from the frontend to Metax.
 
         Arguments:
             data {object} -- Object with the dataset data that has been validated and converted to comply with the Metax schema.
+            params {dict} -- Dictionary of key-value pairs of query parameters.
 
         Returns:
             [type] -- The response from Metax.
@@ -248,11 +250,13 @@ class MetaxQvainLightAPIService(FlaskService):
         headers = {'Accept': 'application/json'}
         try:
             metax_api_response = requests.post(req_url,
+                                               params=params,
                                                json=data,
                                                headers=headers,
                                                auth=(self.user, self.pw),
                                                verify=self.verify_ssl,
                                                timeout=10)
+            metax_api_response.raise_for_status()
         except Exception as e:
             if isinstance(e, requests.HTTPError):
                 log.warning(
@@ -260,20 +264,23 @@ class MetaxQvainLightAPIService(FlaskService):
                         metax_api_response.status_code,
                         json_or_empty(metax_api_response) or metax_api_response.text
                     ))
+                return metax_api_response.json(), metax_api_response.status_code
             else:
                 log.error("Error creating dataset\n{0}".format(e))
-            return {'Error_message': 'Error trying to send data to metax.'}
-        log.info('Created dataset with identifier: {}'.format(json.loads(metax_api_response.text)['identifier']))
-        return json_or_empty(metax_api_response) or metax_api_response.text, metax_api_response.status_code
+            return {'Error_message': 'Error trying to send data to metax.'}, metax_api_response.status_code
 
-    def update_dataset(self, data, cr_id, last_modified):
+        log.info('Created dataset with identifier: {}'.format(json.loads(metax_api_response.text).get('identifier', 'COULD-NOT-GET-IDENTIFIER')))
+        return metax_api_response.json(), metax_api_response.status_code
+
+    def update_dataset(self, data, cr_id, params, last_modified):
         """
-        Update a dataset with the datat that the user has entered in Qvain-light.
+        Update a dataset with the data that the user has entered in Qvain-light.
 
         Arguments:
             data {object} -- Object with the dataset data that has been validated and converted to comply with the Metax schema.
             cr_id {string} -- The identifier of the dataset.
             last_modified {string} -- HTTP datetime string (RFC2616)
+            params {dict} -- Dictionary of key-value pairs of query parameters.
 
         Returns:
             [type] -- The response from Metax.
@@ -284,11 +291,13 @@ class MetaxQvainLightAPIService(FlaskService):
         log.debug('Request URL: {0}\nHeaders: {1}\nData: {2}'.format(req_url, headers, data))
         try:
             metax_api_response = requests.patch(req_url,
+                                                params=params,
                                                 json=data,
                                                 headers=headers,
                                                 auth=(self.user, self.pw),
                                                 verify=self.verify_ssl,
                                                 timeout=10)
+            metax_api_response.raise_for_status()
         except Exception as e:
             if isinstance(e, requests.HTTPError):
                 log.warning(
@@ -297,15 +306,17 @@ class MetaxQvainLightAPIService(FlaskService):
                         metax_api_response.status_code,
                         json_or_empty(metax_api_response) or metax_api_response.text
                     ))
+                return metax_api_response.json(), metax_api_response.status_code
             else:
                 log.error("Error updating dataset {0}\n{1}"
                           .format(cr_id, e))
-            return {'Error_message': 'Error trying to send data to metax.'}
+            return 'Error trying to send data to metax.', 500
+
         log.info('Updated dataset with identifier: {}'.format(cr_id))
         if metax_api_response.status_code == 412:
             return 'Resource has been modified since last publish', 412
 
-        return json_or_empty(metax_api_response) or metax_api_response.text, metax_api_response.status_code
+        return metax_api_response.json(), metax_api_response.status_code
 
     def get_dataset(self, cr_id):
         """
@@ -326,6 +337,7 @@ class MetaxQvainLightAPIService(FlaskService):
                                               auth=(self.user, self.pw),
                                               verify=self.verify_ssl,
                                               timeout=10)
+            metax_api_response.raise_for_status()
         except Exception as e:
             if isinstance(e, requests.HTTPError):
                 log.warning(
@@ -358,6 +370,7 @@ class MetaxQvainLightAPIService(FlaskService):
                                                  auth=(self.user, self.pw),
                                                  verify=self.verify_ssl,
                                                  timeout=10)
+            metax_api_response.raise_for_status()
         except Exception as e:
             if isinstance(e, requests.HTTPError):
                 log.warning(
@@ -397,6 +410,7 @@ class MetaxQvainLightAPIService(FlaskService):
                                                 verify=self.verify_ssl,
                                                 params=params,
                                                 timeout=10)
+            metax_api_response.raise_for_status()
         except Exception as e:
             if isinstance(e, requests.HTTPError):
                 log.warning(
@@ -436,6 +450,7 @@ class MetaxQvainLightAPIService(FlaskService):
                                                 verify=self.verify_ssl,
                                                 params=params,
                                                 timeout=10)
+            metax_api_response.raise_for_status()
         except Exception as e:
             if isinstance(e, requests.HTTPError):
                 log.warning(
@@ -498,20 +513,21 @@ def get_datasets_for_user(user_id, limit, offset, no_pagination):
     """
     return _metax_api.get_datasets_for_user(user_id, limit, offset, no_pagination)
 
-def create_dataset(form_data):
+def create_dataset(form_data, params=None):
     """
     Create dataset in Metax.
 
     Arguments:
         form_data {object} -- Object with the dataset data that has been validated and converted to comply with the Metax schema.
+        params {dict} -- Dictionary of key-value pairs of query parameters.
 
     Returns:
         [type] -- Metax response.
 
     """
-    return _metax_api.create_dataset(form_data)
+    return _metax_api.create_dataset(form_data, params)
 
-def update_dataset(form_data, cr_id, last_modified):
+def update_dataset(form_data, cr_id, params=None, last_modified):
     """
     Update dataset in Metax.
 
@@ -519,12 +535,13 @@ def update_dataset(form_data, cr_id, last_modified):
         form_data {object} -- Object with the dataset data that has been validated and converted to comply with the Metax schema.
         cr_id {string} -- The identifier of the dataset.
         last_modified {string} -- HTTP datetime string (RFC2616)
+        params {dict} -- Dictionary of key-value pairs of query parameters.
 
     Returns:
         [type] -- Metax response.
 
     """
-    return _metax_api.update_dataset(form_data, cr_id, last_modified)
+    return _metax_api.update_dataset(form_data, cr_id, params, last_modified)
 
 def get_dataset(cr_id):
     """
