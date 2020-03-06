@@ -38,6 +38,8 @@ class SubmitResponse extends Component {
   render() {
     const { response } = this.props
     const { original } = this.props.Stores.Qvain
+    console.log(response)
+    console.log(typeof response)
 
     // If the user wants to clear the submitResponse
     if (this.state.clearSubmitResponse) {
@@ -46,8 +48,7 @@ class SubmitResponse extends Component {
     }
 
     // If a new dataset has been created successfully.
-    if (response &&
-      typeof response === 'object' &&
+    if (response && typeof response === 'object' &&
       'identifier' in response &&
       !('new_version_created' in response) &&
       response.is_new
@@ -74,8 +75,7 @@ class SubmitResponse extends Component {
     }
     // If an existing datasets metadata has successfully been updated.
     if (
-      response &&
-      typeof response === 'object' &&
+      response && typeof response === 'object' &&
       'identifier' in response &&
       !('new_version_created' in response) &&
       original !== undefined &&
