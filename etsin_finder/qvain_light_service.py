@@ -272,7 +272,7 @@ class MetaxQvainLightAPIService(FlaskService):
         log.info('Created dataset with identifier: {}'.format(json.loads(metax_api_response.text).get('identifier', 'COULD-NOT-GET-IDENTIFIER')))
         return metax_api_response.json(), metax_api_response.status_code
 
-    def update_dataset(self, data, cr_id, params, last_modified):
+    def update_dataset(self, data, cr_id, last_modified, params):
         """
         Update a dataset with the data that the user has entered in Qvain-light.
 
@@ -527,7 +527,7 @@ def create_dataset(form_data, params=None):
     """
     return _metax_api.create_dataset(form_data, params)
 
-def update_dataset(form_data, cr_id, params=None, last_modified):
+def update_dataset(form_data, cr_id, last_modified, params=None):
     """
     Update dataset in Metax.
 
@@ -541,7 +541,7 @@ def update_dataset(form_data, cr_id, params=None, last_modified):
         [type] -- Metax response.
 
     """
-    return _metax_api.update_dataset(form_data, cr_id, params, last_modified)
+    return _metax_api.update_dataset(form_data, cr_id, last_modified, params)
 
 def get_dataset(cr_id):
     """

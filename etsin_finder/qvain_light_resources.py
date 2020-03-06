@@ -316,7 +316,7 @@ class QvainDataset(Resource):
         params = {
             "access_granter": get_encoded_access_granter()
         }
-        metax_response = update_dataset(metax_redy_data, cr_id, params, last_edit_converted)
+        metax_response = update_dataset(metax_redy_data, cr_id, last_edit_converted, params)
         log.debug("METAX RESPONSE: \n{0}".format(metax_response))
         return metax_response
 
