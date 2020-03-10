@@ -72,13 +72,34 @@ const Margin = styled.section`
 `
 
 class Events extends Component {
+  constructor(props) {
+    super(props)
+
+    const versions = this.versions(this.props.dataset_version_set)
+
+    this.state = {
+      versions,
+    }
+  }
+
   componentDidMount() {
+    this.versions(this.props.dataset_version_set)
+
     Tracking.newPageView(
       `Dataset: ${this.props.match.params.identifier} | Events`,
-      this.props.location.pathname
+      this.props.location.pathname,
     )
     Accessibility.handleNavigation('idnAndEvents', false)
   }
+
+  versions = set => set
+    .map((single, i) => ({
+      dateRemoved: single.date_removed ? /[^T]*/.exec(single.date_removed.toString()) : '',
+      label: set.length - i,
+      identifier: single.identifier,
+      removed: single.removed,
+      url: this.setUrl(single.identifier)
+    }))
 
   checkProvenance = prov => {
     if (prov) {
@@ -122,26 +143,25 @@ class Events extends Component {
   }
 
   checkDeleted = () => {
-    if (this.versions(this.props.Stores.DatasetQuery.results.dataset_version_set)
+    if (this.props.dataset_version_set
       .filter(single => single.removed).length > 0) {
       return true
     }
     return false
   }
 
-  versions = () => this.props.Stores.DatasetQuery.results.dataset_version_set
-    .filter(single => single.removed)
-    .map((single, i) => {
-      const versionNumber = this.props.Stores.DatasetQuery.results.dataset_version_set.length - i
-      const regex = /[^T]*/
-      const dateRemoved = regex.exec(single.date_removed.toString())
-      return {
-        label: versionNumber.toString(),
-        identifier: single.identifier,
-        date: dateRemoved,
-        removed: single.removed,
-      }
-    })
+  setUrl = (identifier) => {
+    let url = ''
+
+    if (process.env.NODE_ENV === 'test') { /* test and stable */
+      url = `https://etsin-test.fairdata.fi/dataset/${identifier}`
+    } else if (process.env.NODE_ENV === 'development') { /* local */
+      url = `https://etsin-finder.local/dataset/${identifier}`
+    } else if (process.env.NODE_ENV === 'production') { /* production */
+      url = `https://etsin.fairdata.fi/dataset/${identifier}`
+    }
+    return url
+  }
 
   relationIdentifierIsUrl(identifier) {
     return identifier.startsWith('http://') || identifier.startsWith('https://')
@@ -156,6 +176,7 @@ class Events extends Component {
   }
 
   render() {
+    console.log(this.state.versions)
     return (
       <Margin>
         {this.checkProvenance(this.props.provenance) && (
@@ -302,24 +323,25 @@ class Events extends Component {
                 </tr>
               </thead>
               <tbody>
-                {this.versions()
+                {this.state.versions
+                  .filter(single => single.removed)
                   .map(single => (
                     <tr key={single.identifier}>
-                      <td lang={getDataLang(single.label)}>
-                        {checkDataLang(single.label)}
+                      <td lang={single.label}>
+                        {single.label}
                       </td>
-                      <td lang={getDataLang(single.date)}>
-                        {checkDataLang(single.date)}
+                      <td lang={single.dateRemoved}>
+                        {single.dateRemoved}
                       </td>
                       <td>
                         <span className="sr-only">Identifier:</span>
                         {(
                           <IDLink
-                            href={`https://etsin.fairdata.fi/dataset/${single.identifier}`}
+                            href={single.url}
                             rel="noopener noreferrer"
                             target="_blank"
                           >
-                            {`https://etsin.fairdata.fi/dataset/${single.identifier}`}
+                            {single.url}
                           </IDLink>
                         )}
                       </td>
@@ -342,7 +364,6 @@ Events.defaultProps = {
 }
 
 Events.propTypes = {
-  Stores: PropTypes.object.isRequired,
   location: PropTypes.shape({
     pathname: PropTypes.string,
   }).isRequired,
@@ -355,6 +376,7 @@ Events.propTypes = {
   provenance: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
   other_identifier: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
   preservation_dataset_origin_version_identifier: PropTypes.object,
+  dataset_version_set: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]).isRequired,
 }
 
 const InlineUl = styled.ul`

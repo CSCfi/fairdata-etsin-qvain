@@ -150,6 +150,7 @@ class Content extends Component {
                 other_identifier={this.props.dataset.research_dataset.other_identifier}
                 preservation_dataset_origin_version_identifier={this.props.dataset.preservation_dataset_origin_version}
                 relation={this.props.dataset.research_dataset.relation}
+                dataset_version_set={this.props.dataset.dataset_version_set}
                 {...props}
               />
             )}
