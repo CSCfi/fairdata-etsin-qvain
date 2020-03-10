@@ -51,6 +51,7 @@ class MetaxQvainLightAPIService(FlaskService):
                                         '/{0}'
             self.METAX_CHANGE_CUMULATIVE_STATE = 'https://{0}/rpc/datasets/change_cumulative_state'.format(metax_qvain_api_config['HOST'])
             self.METAX_REFRESH_DIRECTORY_CONTENT = 'https://{0}/rpc/datasets/refresh_directory_content'.format(metax_qvain_api_config['HOST'])
+            self.METAX_FIX_DEPRECATED = 'https://{0}/rpc/datasets/fix_deprecated'.format(metax_qvain_api_config['HOST'])
             self.user = metax_qvain_api_config['USER']
             self.pw = metax_qvain_api_config['PASSWORD']
             self.verify_ssl = metax_qvain_api_config.get('VERIFY_SSL', True)
@@ -466,6 +467,44 @@ class MetaxQvainLightAPIService(FlaskService):
         log.info('Refreshed dataset {} directory {}'.format(cr_identifier, dir_identifier))
         return (json_or_empty(metax_api_response) or metax_api_response.text), metax_api_response.status_code
 
+    def fix_deprecated_dataset(self, cr_identifier):
+        """
+        Call Metax fix_deprecated RPC.
+
+        Arguments:
+            cr_identifier {string} -- The identifier of the dataset.
+
+        Returns:
+            [type] -- Metax response.
+
+        """
+        req_url = self.METAX_FIX_DEPRECATED
+        params = {
+            "identifier": cr_identifier,
+        }
+        headers = {'Accept': 'application/json'}
+        try:
+            metax_api_response = requests.post( req_url,
+                                                headers=headers,
+                                                auth=(self.user, self.pw),
+                                                verify=self.verify_ssl,
+                                                params=params,
+                                                timeout=10)
+            metax_api_response.raise_for_status()
+        except Exception as e:
+            if isinstance(e, requests.HTTPError):
+                log.warning(
+                    "Failed to fix deprecated dataset {0}\nResponse status code: {1}\nResponse text: {2}".format(
+                        cr_identifier,
+                        metax_api_response.status_code,
+                        json_or_empty(metax_api_response) or metax_api_response.text
+                    ))
+            else:
+                log.error("Error fixing deprecated dataset {0} \n{1}".format(cr_identifier, e))
+            return {'detail': 'Error trying to send data to metax.'}, 500
+        log.info('Fixed deprecated dataset {}'.format(cr_identifier))
+        return (json_or_empty(metax_api_response) or metax_api_response.text), metax_api_response.status_code
+
 _metax_api = MetaxQvainLightAPIService(app)
 
 def get_directory(dir_id):
@@ -597,3 +636,16 @@ def refresh_directory_content(cr_identifier, dir_identifier):
 
     """
     return _metax_api.refresh_directory_content(cr_identifier, dir_identifier)
+
+def fix_deprecated_dataset(cr_id):
+    """
+    Call Metax fix_deprecated RPC.
+
+    Arguments:
+        cr_id {string} -- The identifier of the dataset.
+
+    Returns:
+        [type] -- Metax response.
+
+    """
+    return _metax_api.fix_deprecated_dataset(cr_id)

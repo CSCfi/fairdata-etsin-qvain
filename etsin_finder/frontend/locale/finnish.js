@@ -295,7 +295,7 @@ const finnish = {
       success: 'Aineisto julkaistu!',
       fail: 'Jotain meni pieleen...',
       editSuccess: 'Uusi aineisto versio luotu!',
-      editMetadataSuccess: 'Aineisto päivitys onnistui!',
+      editMetadataSuccess: 'Aineiston päivitys onnistui!',
     },
     pasInfo: {
       stateInfo: 'Tämä on PAS-aineisto. Aineiston tila on "%(state)s: %(description)s".',
@@ -365,8 +365,9 @@ const finnish = {
           years: ' vuotta sitten',
         },
       },
-      oldVersion: 'Vanha',
+      oldVersion: 'Vanha versio',
       latestVersion: 'Uusin',
+      deprecated: 'Vanhentunut',
       editButton: 'Muokkaa',
       deleteButton: 'Poista',
       confirmDelete:
@@ -640,6 +641,7 @@ const finnish = {
       title: 'Tiedostot',
       infoTitle: 'Tiedostot info',
       infoText: 'Lisää texti',
+      deletedLabel: 'Poistettu',
       dataCatalog: {
         label: 'Tiedoston lähde',
         infoText:
@@ -692,6 +694,18 @@ const finnish = {
         buttons: {
           show: 'Päivitä kansion tiedostot',
           ok: 'Päivitä',
+          cancel: 'Peruuta',
+          close: 'Sulje',
+        }
+      },
+      fixDeprecatedModal: {
+        statusText: 'Aineisto on vanhentunut. Jotkin aineiston tiedostot eivät ole enää saatavilla.',
+        header: 'Korjaa vanhentunut aineisto',
+        help: 'Tämä toiminto korjaa aineiston poistamalla siitä kaikki tiedostot ja hakemistot jotka eivät ole enää saatavilla. Aineistosta tehdään uusi versio.',
+        changes: 'Aineistoon tehdyt muutokset on tallennettava ennen tätä toimintoa.',
+        buttons: {
+          show: 'Korjaa vanhentunut aineisto',
+          ok: 'Korjaa aineisto',
           cancel: 'Peruuta',
           close: 'Sulje',
         }

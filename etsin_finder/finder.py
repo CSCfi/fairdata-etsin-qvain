@@ -62,9 +62,12 @@ def add_restful_resources(app):
     from etsin_finder.resources import REMSApplyForPermission, Contact, Dataset, User, Session, Files, Download
     from etsin_finder.qvain_light_resources import (
         ProjectFiles, FileDirectory, FileCharacteristics, UserDatasets,
-        QvainDataset,  QvainDatasetEdit, QvainDatasetDelete
+        QvainDataset, QvainDatasetEdit, QvainDatasetDelete
     )
-    from etsin_finder.qvain_light_rpc import QvainDatasetChangeCumulativeState, QvainDatasetRefreshDirectoryContent
+    from etsin_finder.qvain_light_rpc import (
+        QvainDatasetChangeCumulativeState, QvainDatasetRefreshDirectoryContent,
+        QvainDatasetFixDeprecated
+    )
 
     api.add_resource(Dataset, '/api/dataset/<string:cr_id>')
     api.add_resource(Files, '/api/files/<string:cr_id>')
@@ -83,12 +86,14 @@ def add_restful_resources(app):
     # Qvain light API RPC endpoints
     api.add_resource(QvainDatasetChangeCumulativeState, '/api/rpc/datasets/change_cumulative_state')
     api.add_resource(QvainDatasetRefreshDirectoryContent, '/api/rpc/datasets/refresh_directory_content')
+    api.add_resource(QvainDatasetFixDeprecated, '/api/rpc/datasets/fix_deprecated')
     # REMS API endpoints
     api.add_resource(REMSApplyForPermission, '/api/rems/<string:cr_id>')
     # api.add_resource(REMSCreateUser, '/api/users/create')
     # api.add_resource(REMSGetEntitlements, '/api/entitlements')
     # api.add_resource(REMSGetApplications, '/api/applications/<string:application_id>')
     # api.add_resource(REMSCreateNewApplication, '/api/applications/create')
+
 
 app = create_app()
 add_restful_resources(app)
