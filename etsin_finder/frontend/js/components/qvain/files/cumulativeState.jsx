@@ -6,10 +6,12 @@ import axios from 'axios'
 
 import { ContainerSubsectionBottom } from '../general/card'
 import { CumulativeStates } from '../utils/constants'
+import { getResponseError } from '../utils/responseError'
 import { LabelLarge, FormField, RadioInput, RadioContainer, Label, HelpField } from '../general/form'
 
 import Modal from '../../general/modal'
-import { TableButton, DangerButton,
+import {
+  TableButton, DangerButton,
   CumulativeStateButton,
   CumulativeStateButtonText,
 } from '../general/buttons'
@@ -79,18 +81,9 @@ class CumulativeState extends Component {
         }
       })
       .catch(err => {
-        let error = ''
-        if (err.response && err.response.data && err.response.data.detail) {
-          error = err.response.data.detail
-        } else if (err.response && err.response.data) {
-          error = err.response.data
-        } else {
-          error = err.response.errorMessage
-        }
-
         this.setState({
           response: {
-            error
+            error: getResponseError(err)
           }
         })
       })
@@ -197,7 +190,7 @@ class CumulativeState extends Component {
         {content}
         <Modal isOpen={this.state.modalOpen} onRequestClose={this.closeModal} contentLabel="changeCumulativeStateModal">
           <Translate component="h3" content="qvain.files.cumulativeState.modalHeader" />
-          { modalContent }
+          {modalContent}
         </Modal>
       </ContainerSubsectionBottom>
     )

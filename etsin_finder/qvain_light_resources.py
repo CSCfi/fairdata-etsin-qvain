@@ -23,14 +23,17 @@ from etsin_finder.finder import app
 from etsin_finder.utils import \
     sort_array_of_obj_by_key, \
     slice_array_on_limit, \
+    datetime_to_header, \
     SAML_ATTRIBUTES
 from etsin_finder.qvain_light_dataset_schema import DatasetValidationSchema
 from etsin_finder.qvain_light_utils import data_to_metax, \
     get_dataset_creator, \
     remove_deleted_datasets_from_results, \
     edited_data_to_metax, \
-    get_user_ida_projects, \
-    check_if_data_in_user_IDA_project
+    check_if_data_in_user_IDA_project, \
+    get_encoded_access_granter, \
+    get_user_ida_projects
+
 from etsin_finder.qvain_light_service import create_dataset, update_dataset, get_dataset, delete_dataset
 
 log = app.logger
@@ -260,7 +263,10 @@ class QvainDataset(Resource):
             if not check_if_data_in_user_IDA_project(data):
                 return {"IdaError": "Error in IDA group user permission or in IDA user groups."}, 403
         metax_redy_data = data_to_metax(data, metadata_provider_org, metadata_provider_user)
-        metax_response = create_dataset(metax_redy_data)
+        params = {
+            "access_granter": get_encoded_access_granter()
+        }
+        metax_response = create_dataset(metax_redy_data, params)
         return metax_response
 
     @log_request
@@ -282,6 +288,21 @@ class QvainDataset(Resource):
             return err.messages, 400
         cr_id = data["original"]["identifier"]
         original = data["original"]
+
+        # If date_modified not present, then the dataset has not been modified
+        # after it was created, use date_created instead
+        last_edit = original.get('date_modified') or original.get('date_created')
+        if not last_edit:
+            log.error('Could not find date_modified or date_created from dataset.')
+            return 'Error getting dataset creation or modification date.', 500
+
+        last_edit_converted = datetime_to_header(last_edit)
+        if not last_edit_converted:
+            log.error('Could not convert last_edit: {0} to http datetime.\nlast_edit is of type: {1}'.format(last_edit, type(last_edit)))
+            return 'Error in dataset creation or modification date..', 500
+
+        log.info('Converted datetime from metax: {0} to HTTP datetime: {1}'.format(last_edit, last_edit_converted))
+
         del data["original"]
 
         # Only creator of the dataset is allowed to update it
@@ -292,7 +313,10 @@ class QvainDataset(Resource):
             return {"PermissionError": "User not authorized to to edit dataset."}, 403
 
         metax_redy_data = edited_data_to_metax(data, original)
-        metax_response = update_dataset(metax_redy_data, cr_id)
+        params = {
+            "access_granter": get_encoded_access_granter()
+        }
+        metax_response = update_dataset(metax_redy_data, cr_id, last_edit_converted, params)
         log.debug("METAX RESPONSE: \n{0}".format(metax_response))
         return metax_response
 

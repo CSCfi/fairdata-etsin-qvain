@@ -18,6 +18,8 @@ class Qvain {
 
   @observable changed = false // has dataset been changed
 
+  @observable deprecated = false
+
   @observable title = {
     en: '',
     fi: '',
@@ -88,13 +90,16 @@ class Qvain {
     this.inEdit = undefined
 
     this.metadataModalFile = undefined
+    this.fixDeprecatedModalOpen = false
 
     // Reset External resources related data
     this.externalResources = []
     this.externalResourceInEdit = EmptyExternalResource
     this.extResFormOpen = false
     this.resourceInEdit = undefined
+
     this.changed = false
+    this.deprecated = false
   }
 
   @action
@@ -144,8 +149,8 @@ class Qvain {
 
   @action
   setFieldsOfScience = fieldsOfScience => {
-   this.fieldsOfScience = fieldsOfScience
-      this.changed = true
+    this.fieldsOfScience = fieldsOfScience
+    this.changed = true
   }
 
   @action
@@ -304,6 +309,8 @@ class Qvain {
 
   @observable metadataModalFile = undefined
 
+  @observable fixDeprecatedModalOpen = undefined
+
   @action
   setDataCatalog = selectedDataCatalog => {
     this.dataCatalog = selectedDataCatalog
@@ -450,23 +457,23 @@ class Qvain {
           ...rootDir.directories.map(d =>
             (d.id === dirId
               ? {
-                  ...d,
-                  directories: res.data.directories.map(newDir =>
-                    Directory(
-                      newDir,
-                      d,
-                      this.selectedDirectories.map(sd => sd.identifier).includes(newDir.identifier),
-                      false
-                    )
-                  ),
-                  files: res.data.files.map(newFile =>
-                    File(
-                      newFile,
-                      d,
-                      this.selectedFiles.map(sf => sf.identifier).includes(newFile.identifier)
-                    )
-                  ),
-                }
+                ...d,
+                directories: res.data.directories.map(newDir =>
+                  Directory(
+                    newDir,
+                    d,
+                    this.selectedDirectories.map(sd => sd.identifier).includes(newDir.identifier),
+                    false
+                  )
+                ),
+                files: res.data.files.map(newFile =>
+                  File(
+                    newFile,
+                    d,
+                    this.selectedFiles.map(sf => sf.identifier).includes(newFile.identifier)
+                  )
+                ),
+              }
               : d)
           ),
         ]
@@ -496,6 +503,14 @@ class Qvain {
 
   @action setMetadataModalFile = file => {
     this.metadataModalFile = file
+  }
+
+  @action showFixDeprecatedModal = () => {
+    this.fixDeprecatedModalOpen = true
+  }
+
+  @action closeFixDeprecatedModal = () => {
+    this.fixDeprecatedModalOpen = false
   }
 
   @action updateFileMetadata = file => {
@@ -565,6 +580,7 @@ class Qvain {
   // perform schema transformation METAX JSON -> etsin backend / internal schema
   @action editDataset = dataset => {
     this.original = { ...dataset }
+    this.deprecated = dataset.deprecated
     const researchDataset = dataset.research_dataset
 
     // Load description
@@ -615,12 +631,12 @@ class Qvain {
       } else {
         this.license = l
           ? License(
-              {
-                en: 'Other (URL)',
-                fi: 'Muu (URL)',
-              },
-              'other'
-            )
+            {
+              en: 'Other (URL)',
+              fi: 'Muu (URL)',
+            },
+            'other'
+          )
           : License(undefined, LicenseUrls.CCBY4)
         this.otherLicenseUrl = l.license
       }
@@ -682,11 +698,41 @@ class Qvain {
 
     if (dsFiles !== undefined || dsDirectories !== undefined) {
       this.idaPickerOpen = true
+      // Find out the dataset IDA project by iterating through files/directories
       const toCheck = [...(dsFiles || []), ...(dsDirectories || [])]
-      this.selectedProject = toCheck.length > 0 ? toCheck[0].details.project_identifier : undefined
-      this.getInitialDirectories()
-      this.existingDirectories = dsDirectories ? dsDirectories.map(d => DatasetDirectory(d)) : []
-      this.existingFiles = dsFiles ? dsFiles.map(f => DatasetFile(f, undefined, true)) : []
+      for (let i = 0; i < toCheck.length; i += 1) {
+        // Get project identifier from item.details
+        if (toCheck[i].details) {
+          this.selectedProject = toCheck[i].details.project_identifier
+          break
+        }
+      }
+      if (this.selectedProject) {
+        this.getInitialDirectories()
+      }
+      this.existingDirectories = dsDirectories ? dsDirectories.map(d => {
+        // Removed directories don't have details
+        if (!d.details) {
+          d.details = {
+            directory_name: d.title,
+            file_path: '',
+            removed: true
+          }
+        }
+        return DatasetDirectory(d)
+      }) : []
+      this.existingFiles = dsFiles ? dsFiles.map(f => {
+        // Removed files don't have details
+        if (!f.details) {
+          f.details = {
+            file_name: f.title,
+            file_path: '',
+            removed: true
+          }
+        }
+        return DatasetFile(f, undefined, true)
+      }) : []
+      window.qvain = this
     }
 
     // external resources
@@ -700,9 +746,9 @@ class Qvain {
           r.access_url ? r.access_url.identifier : undefined,
           r.use_category
             ? {
-                label: r.use_category.pref_label.en,
-                value: r.use_category.identifier,
-              }
+              label: r.use_category.pref_label.en,
+              value: r.use_category.identifier,
+            }
             : undefined
         )
       )
@@ -921,7 +967,7 @@ class Qvain {
 
   @computed
   get canSelectFiles() {
-    return !this.isPas
+    return !this.isPas && !this.deprecated && !this.readonly
   }
 
   @computed
@@ -949,7 +995,8 @@ export const Directory = (dir, parent, selected, open) => ({
   files: dir.files ? dir.files.map(f => File(f, dir, false)) : [],
   description: dir.description || 'Folder',
   title: dir.title || dir.directory_name,
-  existing: false
+  existing: false,
+  removed: dir.removed,
 })
 
 export const File = (file, parent, selected) => ({
@@ -962,6 +1009,7 @@ export const File = (file, parent, selected) => ({
   description: getPath('file_characteristics.description', file) || 'File',
   title: getPath('file_characteristics.title', file) || file.file_name,
   existing: false,
+  removed: file.removed,
 
   // PAS metadata
   fileFormat: getPath('file_characteristics.file_format', file),
