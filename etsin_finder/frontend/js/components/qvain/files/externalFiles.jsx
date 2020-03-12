@@ -16,7 +16,7 @@ import { EmptyExternalResource } from '../../../stores/view/qvain'
 import { Input, SelectedFilesTitle } from '../general/form'
 import { SlidingContent } from '../general/card'
 import ExternalFileForm from './externalFileForm'
-import { externalResourceUrlSchema } from '../utils/formValidation'
+import { externalResourceAccessUrlSchema } from '../utils/formValidation'
 
 export class ExternalFilesBase extends Component {
   static propTypes = {
@@ -36,7 +36,7 @@ export class ExternalFilesBase extends Component {
 
   verifyURL = () => {
     const resource = this.props.Stores.Qvain.externalResourceInEdit
-    externalResourceUrlSchema
+    externalResourceAccessUrlSchema
       .validate(resource.accessUrl)
       .then(() => {
         this.props.Stores.Qvain.resetInEditResource()
