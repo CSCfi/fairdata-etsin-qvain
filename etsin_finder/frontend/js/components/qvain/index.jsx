@@ -24,12 +24,14 @@ import {
   Container
 } from './general/card'
 import handleSubmitToBackend from './utils/handleSubmit'
+import { getResponseError } from './utils/responseError'
 import Title from './general/title'
 import SubmitResponse from './general/submitResponse'
 import Button, { InvertedButton } from '../general/button';
+import DeprecatedState from './deprecatedState';
+import PasState from './pasState'
 
 const EDIT_DATASET_URL = '/api/datasets/edit'
-import PasState from './pasState'
 
 class Qvain extends Component {
   promises = []
@@ -132,6 +134,12 @@ class Qvain extends Component {
     event.preventDefault();
   }
 
+  handlePublishError = err => {
+    this.setState({
+      response: getResponseError(err)
+    })
+  }
+
   handleCreate = e => {
     e.preventDefault()
     this.setState({ submitted: true })
@@ -142,7 +150,6 @@ class Qvain extends Component {
         axios
           .post('/api/dataset', obj)
           .then(res => {
-            console.log(res)
             const data = res.data
             this.setState({ response: { ...data, is_new: true } })
             // Open the created dataset without reloading the editor
@@ -151,41 +158,7 @@ class Qvain extends Component {
               this.props.Stores.Qvain.editDataset(data)
               this.props.history.replace(`/qvain/dataset/${data.identifier}`)
             }
-          })
-          .catch(err => {
-            console.log(err)
-            // Refreshing error header
-            this.setState({ response: null })
-
-            // If user is not logged in, display logged in error
-            if (err.response.data.PermissionError) {
-              this.setState({ response: [err.response.data.PermissionError] })
-
-            // If user is logged in...
-            } else if (err.response.data) {
-              // If no IDA projects are found, display an IDA error
-              if (err.response.data.IdaError) {
-                this.setState({
-                  response: [err.response.data.IdaError]
-                })
-              } else if (err.response.data.detail) { // ...else, try to format the Metax error
-                this.setState({
-                  response: err.response.data.detail
-                })
-              // If the Metax error message formatting cannot be done, just display the entire error
-              } else {
-                this.setState({
-                  response: [err.response.data]
-                })
-              }
-
-            // If error response is empty, just display 'Error...'
-            } else {
-              this.setState({
-                response: ['Error...']
-              })
-            }
-          })
+          }).catch(this.handlePublishError)
       })
       .catch(err => {
         console.log(err.errors)
@@ -212,42 +185,11 @@ class Qvain extends Component {
         axios
           .patch('/api/dataset', obj)
           .then(res => {
-            console.log(res)
             this.props.Stores.Qvain.moveSelectedToExisting()
             this.props.Stores.Qvain.setChanged(false)
             this.setState({ response: res.data })
           })
-          .catch(err => {
-            console.log(err.response)
-            // Refreshing error header
-            this.setState({ response: null })
-
-            // If user is not logged in, display logged in error
-            if (err.response.data.PermissionError) {
-              this.setState({ response: [err.response.data.PermissionError] })
-
-            // If user is logged in...
-            } else if (err.response.data) {
-            // ...try to format the Metax error
-            if (err.response.data.detail) {
-              this.setState({
-                response: err.response.data.detail
-              })
-
-            // If the Metax error message formatting cannot be done, just display the entire error
-            } else {
-              this.setState({
-                response: [err.response.data]
-              })
-            }
-
-            // If error response is empty, just display 'Error...'
-            } else {
-              this.setState({
-                response: ['Error...']
-              })
-            }
-          })
+          .catch(this.handlePublishError)
       })
       .catch(err => {
         console.log(err.errors)
@@ -324,6 +266,7 @@ class Qvain extends Component {
             </ButtonContainer>
           </StickySubHeader>
           <PasState />
+          <DeprecatedState />
           {this.state.submitted ? (
             <StickySubHeaderResponse>
               <SubmitResponse response={this.state.response} />

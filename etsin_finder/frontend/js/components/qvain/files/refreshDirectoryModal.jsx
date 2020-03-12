@@ -7,6 +7,7 @@ import axios from 'axios'
 import Modal from '../../general/modal'
 import Response from './response'
 import { CumulativeStates } from '../utils/constants'
+import { getResponseError } from '../utils/responseError'
 import { DangerButton, TableButton } from '../general/buttons'
 
 class RefreshDirectoryModal extends Component {
@@ -49,18 +50,9 @@ class RefreshDirectoryModal extends Component {
         })
       })
       .catch(err => {
-        let error = ''
-        if (err.response && err.response.data && err.response.data.detail) {
-          error = err.response.data.detail
-        } else if (err.response && err.response.data) {
-          error = err.response.data
-        } else {
-          error = err.response.errorMessage
-        }
-
         this.setState({
           response: {
-            error
+            error: getResponseError(err)
           }
         })
       })
@@ -91,12 +83,12 @@ class RefreshDirectoryModal extends Component {
         contentLabel="refreshDirectoryModal"
       >
         <Translate component="h3" content="qvain.files.refreshModal.header" />
-        {this.state.loading || this.state.response ?
+        {this.state.loading || this.state.response ? (
           <Response response={this.state.response} requestClose={this.handleRequestClose} />
-        : (
+        ) : (
           <>
             <Translate component="p" content={`qvain.files.refreshModal.${cumulativeKey}`} />
-            { changed && <Translate component="p" content={'qvain.files.refreshModal.changes'} /> }
+            {changed && <Translate component="p" content={'qvain.files.refreshModal.changes'} />}
           </>
         )}
         {this.state.response ? (

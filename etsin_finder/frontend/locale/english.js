@@ -119,6 +119,12 @@ const english = {
       },
     },
     events_idn: {
+      deleted_versions: {
+        title: 'Deleted Versions',
+        date: 'Delete date',
+        version: 'Version',
+        link_to_dataset: 'Link to dataset'
+      },
       events: {
         title: 'Events',
         event: 'Event',
@@ -368,6 +374,7 @@ const english = {
       },
       oldVersion: 'Old',
       latestVersion: 'Latest',
+      deprecated: 'Deprecated',
       editButton: 'Edit',
       deleteButton: 'Delete',
       confirmDelete:
@@ -434,6 +441,7 @@ const english = {
         infoText:
           'This field sets how the data in your dataset can be accessed. Whichever option is selected does not affect the visibility of the dataset description (metadata) itself; it only affects the openness of the linked data (files). If you select anything else than "Open", you must also choose a reason for the restriction (field "Restriction Grounds" will appear). If you select "Embargo", please also specify the embargo expiration date ("Embargo expiration date" field will appear).',
         placeholder: 'Select option',
+        permitInfo: 'By default the dataset owner (the original describer) can approve the applications. In addition, functionality is under development to allow chosen representatives (only or in addition to the owner) of the dataset\'s organization to make the approvals. By using the access type "Requires permission" the dataset owner agrees to these upcoming changes.'
       },
       embargoDate: {
         label: 'Embargo expiration date (yyyy-mm-dd)',
@@ -636,6 +644,7 @@ const english = {
       title: 'Files',
       infoTitle: 'Files info',
       infoText: 'Add text',
+      deletedLabel: 'Deleted',
       dataCatalog: {
         label: 'File origin',
         infoText:
@@ -688,6 +697,18 @@ const english = {
         buttons: {
           show: 'Refresh folder content',
           ok: 'Ok',
+          cancel: 'Cancel',
+          close: 'Close',
+        }
+      },
+      fixDeprecatedModal: {
+        statusText: 'This dataset is deprecated. Some of the files in the dataset are no longer available.',
+        header: 'Fix Deprecated Dataset',
+        help: 'This will fix the dataset by removing any included files and directories that are no longer available. A new dataset version will be created. The changes will take place immediately.',
+        changes: 'You need to save your changes to the dataset first.',
+        buttons: {
+          show: 'Fix deprecated dataset',
+          ok: 'Fix dataset',
           cancel: 'Cancel',
           close: 'Close',
         }

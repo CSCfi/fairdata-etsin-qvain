@@ -1,5 +1,5 @@
-{
-  /**
+
+/**
    * This file is part of the Etsin service
    *
    * Copyright 2017-2018 Ministry of Education and Culture, Finland
@@ -8,8 +8,6 @@
    * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
    * @license   MIT
    */
-}
-
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
@@ -21,6 +19,7 @@ import checkDataLang, { getDataLang } from '../../../utils/checkDataLang'
 import dateFormat from '../../../utils/dateFormat'
 import Tracking from '../../../utils/tracking'
 import Agent from '../agent'
+
 
 const Table = styled.table`
   overflow-x: scroll;
@@ -73,13 +72,34 @@ const Margin = styled.section`
 `
 
 class Events extends Component {
+  constructor(props) {
+    super(props)
+
+    const versions = this.versions(this.props.dataset_version_set)
+
+    this.state = {
+      versions,
+    }
+  }
+
   componentDidMount() {
+    this.versions(this.props.dataset_version_set)
+
     Tracking.newPageView(
       `Dataset: ${this.props.match.params.identifier} | Events`,
-      this.props.location.pathname
+      this.props.location.pathname,
     )
     Accessibility.handleNavigation('idnAndEvents', false)
   }
+
+  versions = set => set
+    .map((single, i) => ({
+      dateRemoved: single.date_removed ? /[^T]*/.exec(single.date_removed.toString()) : '',
+      label: set.length - i,
+      identifier: single.identifier,
+      removed: single.removed,
+      url: this.setUrl(single.identifier)
+    }))
 
   checkProvenance = prov => {
     if (prov) {
@@ -122,6 +142,31 @@ class Events extends Component {
     )
   }
 
+  checkDeleted = () => {
+    if (this.props.dataset_version_set
+      .filter(single => single.removed).length > 0) {
+      return true
+    }
+    return false
+  }
+
+  setUrl = (identifier) => {
+    let url = ''
+
+    if (process.env.NODE_ENV === 'test') { /* test and stable */
+      url = `https://etsin-test.fairdata.fi/dataset/${identifier}`
+    } else if (process.env.NODE_ENV === 'development') { /* local */
+      url = `https://etsin-finder.local/dataset/${identifier}`
+    } else if (process.env.NODE_ENV === 'production') { /* production */
+      url = `https://etsin.fairdata.fi/dataset/${identifier}`
+    }
+    return url
+  }
+
+  relationIdentifierIsUrl(identifier) {
+    return identifier.startsWith('http://') || identifier.startsWith('https://')
+  }
+
   checkRelation(relation) {
     if (relation[0]) {
       relation[0].entity.identifier = relation[0].entity.identifier || '';
@@ -130,11 +175,8 @@ class Events extends Component {
     return false
   }
 
-  relationIdentifierIsUrl(identifier) {
-    return identifier.startsWith('http://') || identifier.startsWith('https://')
-  }
-
   render() {
+    console.log(this.state.versions)
     return (
       <Margin>
         {this.checkProvenance(this.props.provenance) && (
@@ -145,21 +187,11 @@ class Events extends Component {
             <Table>
               <thead>
                 <tr>
-                  <th className="rowIcon" scope="col">
-                    <Translate content="dataset.events_idn.events.event" />
-                  </th>
-                  <th className="rowIcon" scope="col">
-                    <Translate content="dataset.events_idn.events.who" />
-                  </th>
-                  <th className="rowIcon" scope="col">
-                    <Translate content="dataset.events_idn.events.when" />
-                  </th>
-                  <th className="rowIcon" scope="col">
-                    <Translate content="dataset.events_idn.events.event_title" />
-                  </th>
-                  <th className="rowIcon" scope="col">
-                    <Translate content="dataset.events_idn.events.description" />
-                  </th>
+                  <th className="rowIcon" scope="col"><Translate content="dataset.events_idn.events.event" /></th>
+                  <th className="rowIcon" scope="col"><Translate content="dataset.events_idn.events.who" /></th>
+                  <th className="rowIcon" scope="col"> <Translate content="dataset.events_idn.events.when" /></th>
+                  <th className="rowIcon" scope="col"><Translate content="dataset.events_idn.events.event_title" /></th>
+                  <th className="rowIcon" scope="col"><Translate content="dataset.events_idn.events.description" /></th>
                 </tr>
               </thead>
               <tbody>
@@ -217,9 +249,7 @@ class Events extends Component {
         )}
         {this.props.other_identifier && this.props.other_identifier.length > 0 && (
           <Margin>
-            <h2>
-              <Translate content="dataset.events_idn.other_idn" />
-            </h2>
+            <h2><Translate content="dataset.events_idn.other_idn" /></h2>
             <ul>
               {this.props.other_identifier.map(single => (
                 <OtherID key={single.notation}>{single.notation}</OtherID>
@@ -229,21 +259,13 @@ class Events extends Component {
         )}
         {this.checkRelation(this.props.relation) && (
           <Margin>
-            <h2>
-              <Translate content="dataset.events_idn.relations.title" />
-            </h2>
+            <h2><Translate content="dataset.events_idn.relations.title" /></h2>
             <Table>
               <thead>
                 <tr>
-                  <th>
-                    <Translate content="dataset.events_idn.relations.type" />
-                  </th>
-                  <th>
-                    <Translate content="dataset.events_idn.relations.name" />
-                  </th>
-                  <th>
-                    <Translate content="dataset.events_idn.relations.idn" />
-                  </th>
+                  <th><Translate content="dataset.events_idn.relations.type" /></th>
+                  <th><Translate content="dataset.events_idn.relations.name" /></th>
+                  <th><Translate content="dataset.events_idn.relations.idn" /></th>
                 </tr>
               </thead>
               <tbody>
@@ -280,9 +302,7 @@ class Events extends Component {
         {
           this.props.preservation_dataset_origin_version_identifier && (
             <Margin>
-              <h2>
-                <Translate content="dataset.events_idn.origin_identifier" />
-              </h2>
+              <h2><Translate content="dataset.events_idn.origin_identifier" /></h2>
               <ul>
                 <OtherID>
                   {this.props.preservation_dataset_origin_version_identifier.preferred_identifier}
@@ -291,6 +311,46 @@ class Events extends Component {
             </Margin>
           )
         }
+        {this.checkDeleted() && (
+          <Margin>
+            <h2><Translate content="dataset.events_idn.deleted_versions.title" /></h2>
+            <Table>
+              <thead>
+                <tr>
+                  <th><Translate content="dataset.events_idn.deleted_versions.version" /></th>
+                  <th><Translate content="dataset.events_idn.deleted_versions.date" /></th>
+                  <th><Translate content="dataset.events_idn.deleted_versions.link_to_dataset" /></th>
+                </tr>
+              </thead>
+              <tbody>
+                {this.state.versions
+                  .filter(single => single.removed)
+                  .map(single => (
+                    <tr key={single.identifier}>
+                      <td lang={single.label}>
+                        {single.label}
+                      </td>
+                      <td lang={single.dateRemoved}>
+                        {single.dateRemoved}
+                      </td>
+                      <td>
+                        <span className="sr-only">Identifier:</span>
+                        {(
+                          <IDLink
+                            href={single.url}
+                            rel="noopener noreferrer"
+                            target="_blank"
+                          >
+                            {single.url}
+                          </IDLink>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </Table>
+          </Margin>
+        )}
       </Margin>
     )
   }
@@ -316,6 +376,7 @@ Events.propTypes = {
   provenance: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
   other_identifier: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
   preservation_dataset_origin_version_identifier: PropTypes.object,
+  dataset_version_set: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]).isRequired,
 }
 
 const InlineUl = styled.ul`

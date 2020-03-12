@@ -1,5 +1,10 @@
 """Utilities for transforming the data from Qvain Light form to METAX compatible format"""
 
+import json
+from flask import session
+from base64 import urlsafe_b64encode
+
+from etsin_finder.utils import SAML_ATTRIBUTES
 from etsin_finder.cr_service import get_catalog_record
 from etsin_finder.finder import app
 from etsin_finder.authentication import get_user_ida_groups
@@ -227,6 +232,23 @@ def data_to_metax(data, metadata_provider_org, metadata_provider_user):
         }
     }
     return clean_empty_keyvalues_from_dict(dataset_data)
+
+def get_encoded_access_granter():
+    """Add REMS metadata as base64 encoded json. Uses data from user session."""
+    saml = session["samlUserdata"]
+    metadata_provider_user = saml[SAML_ATTRIBUTES["CSC_username"]][0]
+    email = saml[SAML_ATTRIBUTES["email"]][0]
+    name = "{} {}".format(
+        saml[SAML_ATTRIBUTES["first_name"]][0],
+        saml[SAML_ATTRIBUTES["last_name"]][0]
+    )
+    access_granter = {
+        "userid": metadata_provider_user,
+        "email": email,
+        "name": name
+    }
+    access_granter_json = json.dumps(access_granter)
+    return urlsafe_b64encode(access_granter_json.encode('utf-8'))
 
 def get_dataset_creator(cr_id):
     """

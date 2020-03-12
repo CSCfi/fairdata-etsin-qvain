@@ -70,8 +70,11 @@ export const CheckboxStyles = styled.input`
   padding: 11px;
   line-height: 0;
   white-space: nowrap;
-  cursor: pointer;
   vertical-align: bottom;
+
+  :not(:disabled) {
+    cursor: pointer;
+  }
 `
 
 export const Checkbox = props => <CheckboxStyles {...props} type="checkbox" />
