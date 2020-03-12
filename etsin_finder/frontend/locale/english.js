@@ -632,9 +632,11 @@ const english = {
         useCategory: {
           required: 'Remote resource use category is required.',
         },
-        url: {
-          required: 'Remote resource URL is required.',
-          url: 'Remote resource URL needs to be of valid URL format.',
+        accessUrl: {
+          validFormat: 'Access URL needs to be of valid URL format.',
+        },
+        downloadUrl: {
+          validFormat: 'Download URL needs to be of valid URL format.',
         },
       },
     },
@@ -850,7 +852,7 @@ const english = {
       external: {
         title: 'Remote resources (ATT)',
         infoText:
-          'Please insert Title and URL for the remote files. Qvain Light does not upload or store the files, but the URLs act as active links to the files.',
+          'Please insert Title, Use Category and URLs for the remote files. Qvain Light does not upload or store the files, but the URLs act as active links to the files. Access URL = link to the page where the link / license information is. Download URL = direct link to download the file.',
         help: 'Add link to remote files from here:',
         button: {
           label: 'Add link to remote files',
@@ -868,9 +870,15 @@ const english = {
             label: 'Use Category',
             placeholder: 'Select option',
           },
-          url: {
-            label: 'URL',
+          accessUrl: {
+            label: 'Access URL',
             placeholder: 'https://',
+            infoText: 'Page where the link to the file / license information can be found'
+          },
+          downloadUrl: {
+            label: 'Download URL',
+            placeholder: 'https://',
+            infoText: 'Direct link to start the download'
           },
           cancel: {
             label: 'Cancel',
