@@ -138,7 +138,7 @@ def remote_resources_data_to_metax(resources):
         metax_remote_resources_object["access_url"] = {}
         metax_remote_resources_object["download_url"] = {}
         metax_remote_resources_object["title"] = resource["title"]
-        metax_remote_resources_object["access_url"]["identifier"] = resource["url"]
+        metax_remote_resources_object["access_url"]["identifier"] = resource["accessUrl"]
         metax_remote_resources_object["download_url"]["identifier"] = resource["downloadUrl"]
         metax_remote_resources_object["use_category"]["identifier"] = resource["useCategory"]["value"]
         metax_remote_resources.append(metax_remote_resources_object)

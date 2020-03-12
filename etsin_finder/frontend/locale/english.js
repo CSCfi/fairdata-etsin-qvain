@@ -624,9 +624,11 @@ const english = {
         useCategory: {
           required: 'Remote resource use category is required.',
         },
-        url: {
-          required: 'Remote resource URL is required.',
-          url: 'Remote resource URL needs to be of valid URL format.',
+        accessUrl: {
+          validFormat: 'Access URL needs to be of valid URL format.',
+        },
+        downloadUrl: {
+          validFormat: 'Download URL needs to be of valid URL format.',
         },
       },
     },
@@ -847,7 +849,7 @@ const english = {
             label: 'Use Category',
             placeholder: 'Select option',
           },
-          url: {
+          accessUrl: {
             label: 'Access URL',
             placeholder: 'https://',
             infoText: 'Page where the link to the file / license information can be found'

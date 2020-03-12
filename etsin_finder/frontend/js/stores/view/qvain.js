@@ -244,7 +244,7 @@ class Qvain {
     const existing = this.externalResources.find(r => r.id === resource.id)
     if (existing !== undefined) {
       existing.title = resource.title
-      existing.url = resource.url
+      existing.accessUrl = resource.accessUrl
       existing.downloadUrl = resource.downloadUrl
       existing.useCategory = resource.useCategory
     } else {
@@ -253,7 +253,7 @@ class Qvain {
       const newResource = ExternalResource(
         newId,
         resource.title,
-        resource.url,
+        resource.accessUrl,
         resource.downloadUrl,
         resource.useCategory
       )
@@ -1039,10 +1039,10 @@ export const RestrictionGrounds = (name, identifier) => ({
   identifier,
 })
 
-export const ExternalResource = (id, title, url, downloadUrl, useCategory) => ({
+export const ExternalResource = (id, title, accessUrl, downloadUrl, useCategory) => ({
   id,
   title,
-  url,
+  accessUrl,
   downloadUrl,
   useCategory,
 })

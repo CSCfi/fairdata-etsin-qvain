@@ -16,7 +16,7 @@ const finnish = {
     access_rights_description: {
       none: '',
       open: 'Kuka tahansa voi ladata datan.',
-      login: 'Käyttän pitää olla sisään kirjautunut ladatakseen datan.',
+      login: 'Käyttäjän pitää olla sisään kirjautunut ladatakseen datan.',
       embargo: 'Datan voi ladata vasta, kun embargo-pvm on ohitettu.',
       permit: 'Datan voi ladata ainoastaan hakemalla erillisen luvan lataamista varten. Luvan hakeminen vaatii kirjautumisen.',
       restricted: 'Data ei ladattavissa.'
@@ -629,9 +629,11 @@ const finnish = {
         useCategory: {
           required: 'Ulkoisen aineiston käyttökategoria on pakollinen kenttä.',
         },
-        url: {
-          required: 'Ulkoisen aineiston URL osoite on pakollinen kenttä.',
-          url: 'Ulkoisen aineiston URL osoitteen pitää olla oikeassa URL-formaatissa',
+        accessUrl: {
+          validFormat: 'Ulkoisen aineiston sivun URL pitää olla oikeassa URL-formaatissa.',
+        },
+        downloadUrl: {
+          validFormat: 'Ulkoisen aineiston latauslinkin URL pitää olla oikeassa URL-formaatissa.',
         },
       },
     },
@@ -820,9 +822,15 @@ const finnish = {
             label: 'Käyttökategoria',
             placeholder: 'Valitse vaihtoehto',
           },
-          url: {
-            label: 'URL',
+          accessUrl: {
+            label: 'Sivun URL',
             placeholder: 'https://',
+            infoText: 'Sivu, jossa tiedoston linkki ja tiedostoon mahdollisesti liittyvä lisenssitieto sijaitsevat'
+          },
+          downloadUrl: {
+            label: 'Latauslinkki',
+            placeholder: 'https://',
+            infoText: 'Linkki, jolla tiedoston saa ladattua suoraan omalle koneelle'
           },
           cancel: {
             label: 'Kumoa',

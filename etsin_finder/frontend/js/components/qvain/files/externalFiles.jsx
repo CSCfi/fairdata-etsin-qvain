@@ -37,7 +37,7 @@ export class ExternalFilesBase extends Component {
   verifyURL = () => {
     const resource = this.props.Stores.Qvain.externalResourceInEdit
     externalResourceUrlSchema
-      .validate(resource.url)
+      .validate(resource.accessUrl)
       .then(() => {
         this.props.Stores.Qvain.resetInEditResource()
       })
@@ -70,9 +70,9 @@ export class ExternalFilesBase extends Component {
           {addedExternalResources.map((addedExternalResource) => (
             <ButtonGroup tabIndex="0" key={addedExternalResource.id}>
               <ButtonLabel>
-                {addedExternalResource.title} / {addedExternalResource.url.length > 40 ?
-                addedExternalResource.url.substring(0, 40).concat('... ') :
-                addedExternalResource.url} / {addedExternalResource.downloadUrl.length > 40 ?
+                {addedExternalResource.title} / {addedExternalResource.accessUrl.length > 40 ?
+                addedExternalResource.accessUrl.substring(0, 40).concat('... ') :
+                addedExternalResource.accessUrl} / {addedExternalResource.downloadUrl.length > 40 ?
                 addedExternalResource.downloadUrl.substring(0, 40).concat('... ') :
                 addedExternalResource.downloadUrl}
               </ButtonLabel>
