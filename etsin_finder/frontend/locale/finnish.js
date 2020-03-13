@@ -694,6 +694,15 @@ const finnish = {
         versionCreated: 'Aineistosta on luotu uusi versio tunnisteella %(identifier)s.',
         openNewVersion: 'Avaa uusi versio',
       },
+      addItemsModal: {
+        allSelected: 'Kaikki projektin tiedostot ja hakemistot ovat jo aineistossa.',
+        title: 'Lisää tiedostoja projektista',
+        buttons: {
+          save: 'Lisää tiedostot',
+          close: 'Sulje',
+        },
+        versionInfo: 'Tiedostojen tai hakemistojen lisääminen tai poistaminen synnyttää julkaistusta aineistosta uuden version kun muutokset julkaistaan. Vanha versio pysyy muuttumattomana ja siihen lisätään "vanha"-tagi.',
+      },
       refreshModal: {
         header: 'Päivitä kansion tiedostot',
         noncumulative: 'Mikäli kansioon on lisätty uusia tiedostoja, toiminto lisää ne aineistoon ja luo siitä uuden version.',
@@ -785,7 +794,17 @@ const finnish = {
       },
       selected: {
         title: 'Valitut tiedostot',
-        none: 'Tiedostoja tai hakemistoja ei ole valittu',
+        none: 'Tiedostoja tai hakemistoja ei ole vielä valittu.',
+        newTag: 'Uusi',
+        buttons: {
+          edit: 'Muokkaa %(name)s',
+          remove: 'Poista %(name)s',
+          refresh: 'Päivitä %(name)s',
+          open: 'Avaa %(name)s',
+          close: 'Sulje %(name)s',
+          select: 'Valitse %(name)s',
+          deselect: 'Poista valinta %(name)s'
+        },
         form: {
           title: {
             label: 'Otsikko',

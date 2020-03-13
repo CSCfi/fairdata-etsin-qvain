@@ -13,6 +13,7 @@ export const LicenseUrls = {
 export const FileAPIURLs = {
   DIR_URL: '/api/files/directory/',
   PROJECT_DIR_URL: '/api/files/project/',
+  DATASET_DIR_URL: '/api/files/'
 }
 
 export const UseCategoryURLs = {

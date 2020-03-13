@@ -5,11 +5,11 @@ import { inject, observer } from 'mobx-react'
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFolder, faChevronRight, faChevronDown } from '@fortawesome/free-solid-svg-icons'
-import { Checkbox } from '../general/form'
+import { Checkbox } from '../../general/form'
 import {
   FileIcon,
   FilePickerFileButton
-} from '../general/buttons'
+} from '../../general/buttons'
 
 export class FileSelectorBase extends Component {
   static propTypes = {

@@ -3,23 +3,28 @@ import PropTypes from 'prop-types'
 import { inject, observer } from 'mobx-react'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
-import { SaveButton, CancelButton } from '../general/buttons'
-import { Label, CustomSelect, Input, Textarea } from '../general/form'
-import { Container } from '../general/card'
-import ValidationError from '../general/validationError'
-import { getLocalizedOptions } from '../utils/getReferenceData'
+import { SaveButton, CancelButton } from '../../general/buttons'
+import { Label, CustomSelect, Input, Textarea } from '../../general/form'
+import { Container } from '../../general/card'
+import ValidationError from '../../general/validationError'
+import { getLocalizedOptions } from '../../utils/getReferenceData'
 import {
   directorySchema,
   directoryTitleSchema,
   directoryDescriptionSchema,
   directoryUseCategorySchema,
-} from '../utils/formValidation'
+} from '../../utils/formValidation'
 
 export class DirectoryFormBase extends Component {
   inEdit = this.props.Stores.Qvain.inEdit
 
   static propTypes = {
     Stores: PropTypes.object.isRequired,
+    className: PropTypes.string
+  }
+
+  static defaultProps = {
+    className: ''
   }
 
   state = {
@@ -123,7 +128,7 @@ export class DirectoryFormBase extends Component {
     const { titleError, descriptionError, directoryError, useCategoryError } = this.state
     return (
       <Fragment>
-        <FileContainer>
+        <FileContainer className={this.props.className}>
           <Label>
             <Translate content="qvain.files.selected.form.title.label" /> *
           </Label>
@@ -167,17 +172,29 @@ export class DirectoryFormBase extends Component {
           />
           {useCategoryError !== undefined && <ValidationError>{useCategoryError}</ValidationError>}
           {directoryError !== undefined && <ValidationError>{directoryError}</ValidationError>}
-          <Translate
-            component={CancelButton}
-            onClick={this.handleCancel}
-            content="qvain.common.cancel"
-          />
-          <Translate component={SaveButton} onClick={this.handleSave} content="qvain.common.save" />
+          <Buttons>
+            <Translate
+              component={CancelButton}
+              onClick={this.handleCancel}
+              content="qvain.common.cancel"
+            />
+            <Translate component={SaveButton} onClick={this.handleSave} content="qvain.common.save" />
+          </Buttons>
         </FileContainer>
       </Fragment>
     )
   }
 }
+
+const Buttons = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  * {
+    margin: 0.25rem;
+    flex-grow: 1;
+  }
+  margin: -0.25rem;
+`
 
 const getUseCategory = (directory, translations) =>
   translations.find(opt => opt.value === directory.useCategory)

@@ -15,6 +15,7 @@ import { getResponseError } from '../../utils/responseError'
 import { Label, HelpField, Input } from '../../general/form'
 import { DangerButton, TableButton } from '../../general/buttons'
 import Response from '../response'
+import { getPASMeta } from '../../../../stores/view/qvain.files'
 
 import { getOptions, getDefaultOptions, makeOption, findOption } from './options'
 import { MetadataSelect, selectStylesNarrow, labelStyle } from './select'
@@ -210,7 +211,11 @@ class MetadataModal extends Component {
       const response = await patchPromise
 
       // Update file hierarchy with response data, close modal
-      this.props.Stores.Qvain.updateFileMetadata(response.data)
+      if (this.props.Stores.Qvain.legacyFilePicker) {
+        this.props.Stores.Qvain.updateFileMetadata(response.data)
+      } else {
+        this.props.Stores.Qvain.Files.applyPASMeta(getPASMeta(response.data))
+      }
       this.setState({
         fileChanged: false
       })
@@ -283,20 +288,23 @@ class MetadataModal extends Component {
   }
 
   initialize() {
-    const file = this.props.Stores.Qvain.metadataModalFile || {}
+    const { Qvain } = this.props.Stores
+    const file = Qvain.metadataModalFile || {}
+    const pasObj = (Qvain.legacyFilePicker ? file : file.pasMeta) || {}
+
     const newState = {
       response: null,
       fileChanged: false,
       confirmClose: false,
       criticalError: false,
       fileIdentifier: file.identifier,
-      fileFormat: file.fileFormat,
-      formatVersion: file.formatVersion,
-      encoding: file.encoding,
-      csvDelimiter: file.csvDelimiter,
-      csvRecordSeparator: file.csvRecordSeparator,
-      csvQuotingChar: file.csvQuotingChar,
-      csvHasHeader: file.csvHasHeader
+      fileFormat: pasObj.fileFormat,
+      formatVersion: pasObj.formatVersion,
+      encoding: pasObj.encoding,
+      csvDelimiter: pasObj.csvDelimiter,
+      csvRecordSeparator: pasObj.csvRecordSeparator,
+      csvQuotingChar: pasObj.csvQuotingChar,
+      csvHasHeader: pasObj.csvHasHeader
     }
 
     // Replace null/undefined metadata with defaults
@@ -439,7 +447,7 @@ class MetadataModal extends Component {
                   <AutoWidthTableButton onClick={this.clearError}>
                     <Translate content={'qvain.files.metadataModal.buttons.hideError'} />
                   </AutoWidthTableButton>
-                )
+                  )
               )}
             </div>
           </ResponseOverlay>
@@ -458,6 +466,7 @@ export const modalStyles = {
     right: '0',
     position: 'relative',
     minWidth: '32vw',
+    width: '30em',
     maxWidth: '30em',
     margin: '0.5em',
     border: 'none',

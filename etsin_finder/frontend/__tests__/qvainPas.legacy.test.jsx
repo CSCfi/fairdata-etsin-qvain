@@ -15,19 +15,15 @@ import License from '../js/components/qvain/licenses/licenses'
 import AccessType from '../js/components/qvain/licenses/accessType'
 import Actors from '../js/components/qvain/actors'
 import Files from '../js/components/qvain/files'
-import FileForm from '../js/components/qvain/files/ida/forms/fileForm'
-import DirectoryForm from '../js/components/qvain/files/ida/forms/directoryForm'
-import IDAFilePicker from '../js/components/qvain/files/ida'
+import FileForm from '../js/components/qvain/files/legacy/fileForm'
+import IDAFilePicker from '../js/components/qvain/files/legacy/idaFilePicker'
 import {
   DeleteButton
 } from '../js/components/qvain/general/buttons'
-import {
-  File,
-  Directory,
-  Project
-} from '../js/stores/view/qvain.files'
 import QvainStore, {
+  Directory,
   Actor,
+  File,
   AccessType as AccessTypeConstructor,
   License as LicenseConstructor
 } from '../js/stores/view/qvain'
@@ -43,7 +39,7 @@ Promise.config({
 
 const getStores = () => {
   QvainStore.resetQvainStore()
-  QvainStore.setLegacyFilePicker(false)
+  QvainStore.setLegacyFilePicker(true)
   return {
     Qvain: QvainStore,
     Locale: LocaleStore,
@@ -524,7 +520,7 @@ describe('Qvain.Actors', () => {
 
 
 describe('Qvain.Files', () => {
-  const render = (stores, editDirectory) => {
+  const render = stores => {
     const testfile = File({
       description: 'File',
       title: 'testfile',
@@ -542,26 +538,28 @@ describe('Qvain.Files', () => {
         csv_quoting_char: '"',
       }
     })
-    const testDirectory = Directory(
-      {
-        id: 'test2',
-        identifier: 'test-ident-2',
-        project_identifier: 'project_y',
-        directory_name: 'directory2',
-        directories: [],
-        files: []
-      },
-      undefined,
-      false,
-      false
-    )
-    stores.Qvain.Files.selectedProject = 'project_y'
-    stores.Qvain.Files.root = Project(
+    stores.Qvain.selectedProject = 'project_y'
+    stores.Qvain.hierarchy = Directory(
       {
         id: 'test1',
         identifier: 'test-ident-1',
         project_identifier: 'project_y',
-        directories: [testDirectory],
+        directory_name: 'root',
+        directories: [
+          Directory(
+            {
+              id: 'test2',
+              identifier: 'test-ident-2',
+              project_identifier: 'project_y',
+              directory_name: 'directory2',
+              directories: [],
+              files: []
+            },
+            undefined,
+            false,
+            false
+          )
+        ],
         files: [
           testfile
         ]
@@ -570,18 +568,11 @@ describe('Qvain.Files', () => {
       false,
       true
     )
-    let Form
-    if (editDirectory) {
-      stores.Qvain.Files.setInEdit(testDirectory)
-      Form = DirectoryForm
-    } else {
-      stores.Qvain.Files.setInEdit(testfile)
-      Form = FileForm
-    }
+    stores.Qvain.setInEdit(testfile)
     return mount(
       <Provider Stores={stores}>
         <ThemeProvider theme={etsinTheme}>
-          <Form />
+          <FileForm />
         </ThemeProvider>
       </Provider>
     )
@@ -592,13 +583,8 @@ describe('Qvain.Files', () => {
     stores.Qvain.setPreservationState(80)
     wrapper = render(stores)
     const inputs = wrapper.find('input').not('[type="hidden"]')
-
     expect(inputs.length).toBe(3)
     inputs.forEach(c => expect(c.props().disabled).toBe(true))
-
-    const textareas = wrapper.find('textarea').not('[type="hidden"]')
-    expect(textareas.length).toBe(1)
-    textareas.forEach(c => expect(c.props().disabled).toBe(true))
   })
 
   it('allows editing of file fields', async () => {
@@ -608,38 +594,28 @@ describe('Qvain.Files', () => {
     const inputs = wrapper.find('input').not('[type="hidden"]')
     expect(inputs.length).toBe(3)
     inputs.forEach(c => expect(c.props().disabled).toBe(false))
-
-    const textareas = wrapper.find('textarea').not('[type="hidden"]')
-    expect(textareas.length).toBe(1)
-    textareas.forEach(c => expect(c.props().disabled).toBe(false))
   })
 
-  it('prevents editing of directory fields', async () => {
-    const stores = getStores()
-    stores.Qvain.setPreservationState(80)
-    wrapper = render(stores, true)
+  it('should not render file picker for PAS datasets', () => {
+    const store = getStores()
+    store.Qvain.dataCatalog = DataCatalogIdentifiers.IDA
+    store.Qvain.setPreservationState(0)
+    store.Qvain.idaPickerOpen = true
+    wrapper = shallow(<Files Stores={store} />)
+    expect(wrapper.dive().find(IDAFilePicker).length).toBe(1)
+    wrapper.unmount()
 
-    const inputs = wrapper.find('input').not('[type="hidden"]')
-    expect(inputs.length).toBe(2)
-    inputs.forEach(c => expect(c.props().disabled).toBe(true))
+    store.Qvain.dataCatalog = DataCatalogIdentifiers.IDA
+    store.Qvain.setPreservationState(80)
+    wrapper = shallow(<Files Stores={store} />)
+    expect(wrapper.dive().find(IDAFilePicker).length).toBe(0)
+    wrapper.unmount()
 
-    const textareas = wrapper.find('textarea').not('[type="hidden"]')
-    expect(textareas.length).toBe(1)
-    textareas.forEach(c => expect(c.props().disabled).toBe(true))
-  })
-
-
-  it('allows editing of directory fields', async () => {
-    const stores = getStores()
-    stores.Qvain.setPreservationState(100)
-    wrapper = render(stores, true)
-
-    const inputs = wrapper.find('input').not('[type="hidden"]')
-    expect(inputs.length).toBe(2)
-    inputs.forEach(c => expect(c.props().disabled).toBe(false))
-
-    const textareas = wrapper.find('textarea').not('[type="hidden"]')
-    expect(textareas.length).toBe(1)
-    textareas.forEach(c => expect(c.props().disabled).toBe(false))
+    store.Qvain.dataCatalog = DataCatalogIdentifiers.PAS
+    store.Qvain.setPreservationState(0)
+    wrapper = shallow(<Files Stores={store} />)
+    expect(wrapper.dive().find(IDAFilePicker).length).toBe(0)
   })
 })
+
+

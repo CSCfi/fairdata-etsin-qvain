@@ -12,8 +12,13 @@ import {
   DataCatalogIdentifiers
 } from '../../components/qvain/utils/constants'
 import { getPath } from '../../components/qvain/utils/object'
+import Files from './qvain.files'
 
 class Qvain {
+  constructor() {
+    this.Files = new Files(this)
+  }
+
   @observable original = undefined // used if editing, otherwise undefined
 
   @observable changed = false // has dataset been changed
@@ -91,6 +96,8 @@ class Qvain {
 
     this.metadataModalFile = undefined
     this.fixDeprecatedModalOpen = false
+
+    this.Files.reset()
 
     // Reset External resources related data
     this.externalResources = []
@@ -289,6 +296,12 @@ class Qvain {
 
   // FILE PICKER STATE MANAGEMENT
 
+  @observable legacyFilePicker = localStorage.getItem('new_filepicker') !== '1'
+
+  @action setLegacyFilePicker = (value) => {
+    this.legacyFilePicker = value
+  }
+
   @observable idaPickerOpen = false
 
   @observable dataCatalog = undefined
@@ -311,7 +324,7 @@ class Qvain {
 
   @observable metadataModalFile = undefined
 
-  @observable fixDeprecatedModalOpen = undefined
+  @observable fixDeprecatedModalOpen = false
 
   @action
   setDataCatalog = selectedDataCatalog => {
@@ -335,7 +348,7 @@ class Qvain {
       // file.selected = select
       getFiles(newHier).find(f => f.identifier === file.identifier).selected = select
       if (select) {
-        const theDir = flat.find(d => d.directoryName === file.parentDirectory.directoryName)
+        const theDir = flat.find(d => d.identifier === file.parentDirectory.identifier)
         this.deselectParents(theDir, flat)
         this.selectedFiles = [...this.selectedFiles, file]
       } else {
@@ -369,7 +382,7 @@ class Qvain {
         // deselect directories and files downwards in the hierarchy, remove them from selections
         theDir.directories.forEach(d => this.deselectChildren(d))
         // deselect parents
-        const parent = flat.find(d => d.directoryName === theDir.parentDirectory.directoryName)
+        const parent = flat.find(d => d.identifier === theDir.parentDirectory.identifier)
         this.deselectParents(parent, flat)
         this.selectedDirectories = [...this.selectedDirectories, dir]
       } else {
@@ -501,6 +514,14 @@ class Qvain {
 
   @action setInEdit = selectedItem => {
     this.inEdit = selectedItem
+  }
+
+  @action toggleInEdit = selectedItem => {
+    if (this.inEdit === selectedItem) {
+      this.inEdit = null
+    } else {
+      this.inEdit = selectedItem
+    }
   }
 
   @action setMetadataModalFile = file => {
@@ -638,8 +659,7 @@ class Qvain {
               fi: 'Muu (URL)',
             },
             'other'
-          )
-          : License(undefined, LicenseUrls.CCBY4)
+          ) : License(undefined, LicenseUrls.CCBY4)
         this.otherLicenseUrl = l.license
       }
     } else {
@@ -679,9 +699,6 @@ class Qvain {
         actors.push(this.createActor(contributor, Role.CONTRIBUTOR, actors))
       )
     }
-    console.groupCollapsed('Actors to be compared DEBUG')
-    console.table(JSON.parse(JSON.stringify(actors)))
-    console.groupEnd()
     this.actors = this.mergeTheSameActors(actors)
 
     // load data catalog
@@ -736,6 +753,8 @@ class Qvain {
       }) : []
       window.qvain = this
     }
+
+    this.Files.editDataset(dataset)
 
     // external resources
     const remoteResources = researchDataset.remote_resources
@@ -823,20 +842,14 @@ class Qvain {
   // Function to compare two actors and see if they are the same actor.
   // Returns True if the actors seem the same, or False if not.
   isEqual = (a1, a2) => {
-    console.log(
-      // eslint-disable-next-line no-nested-ternary
-      `Compare: ${a1.name.en ? a1.name.en : a1.name.und ? a1.name.und : a1.name} and ${a2.name.en ? a2.name.en : a2.name.und ? a2.name.und : a2.name}`
-    )
     if (!!a1.identifier && !!a2.identifier) {
       // If a1 and a2 have identifiers.
       if (a1.identifier === a2.identifier) {
         // If the identifiers are the same.
-        console.log(true)
         return true
       }
       // If a1 and a2 have identifiers but they are not the same, then they
       // are not the same actor.
-      console.log(false)
       return false
     }
     if (!!a1.email && !!a2.email) {
@@ -845,11 +858,9 @@ class Qvain {
         // If they have emails and are type PERSON.
         if (a1.email === a2.email && a1.name === a2.name) {
           // If they have emails and are type PERSON and the emails and names are equal.
-          console.log(true)
           return true
         }
         // If they have emails and are type person but the emails or names are not equal.
-        console.log(false)
         return false
       }
       if (a1.type === EntityType.ORGANIZATION && a2.type === EntityType.ORGANIZATION) {
@@ -857,12 +868,10 @@ class Qvain {
         if (a1.email === a2.email && this.isEqualObj(a1.name, a2.name)) {
           // If they have emails and are of type ORGANIZATION and the emails
           // and name objects are equal.
-          console.log(true)
           return true
         }
         // If they have emails and are type ORGANIZATION but the emails or
         // name objects are not equal.
-        console.log(false)
         return false
       }
     }
@@ -871,12 +880,10 @@ class Qvain {
       if (a1.name === a2.name && this.isEqualObj(a1.organization, a2.organization)) {
         // if they are of type PERSON and the names and organization objects
         // are equal.
-        console.log(true)
         return true
       }
       // If they are of type PERSON but the names or organization objects
       // are not equal.
-      console.log(false)
       return false
     }
     if (a1.type === EntityType.ORGANIZATION && a2.type === EntityType.ORGANIZATION) {
@@ -887,27 +894,22 @@ class Qvain {
         if (this.isEqualObj(a1.name, a2.name) && this.isEqualObj(a1.organization, a2.organization)) {
           // If they are of type ORGANIZATION and their parent organization objects
           // are not empty and their names and parent organization objects are equal.
-          console.log(true)
           return true
         }
         // If they are of type ORGANIZATION and their parent organization objects
         // are not empty, but their names or parent organization objects are not equal.
-        console.log(false)
         return false
       }
       if (this.isEqualObj(a1.name, a2.name)) {
         // If they are of type ORGANIZATION and their parent organization objects
         // are empty and their name objects are equal.
-        console.log(true)
         return true
       }
       // If they are of type ORGANIZATION and their parent organization objects
       // are empty and their name objects are not equal.
-      console.log(false)
       return false
     }
     // If a1 and a2 don't have identifiers or emails and they are not the same entity type.
-    console.log(false)
     return false
   }
 
@@ -974,6 +976,16 @@ class Qvain {
   }
 
   @computed
+  get canRemoveFiles() {
+    return this.canSelectFiles && !this.isCumulative
+  }
+
+  @computed
+  get isCumulative() {
+    return this.cumulativeState === CumulativeStates.YES
+  }
+
+  @computed
   get readonly() {
     return this.preservationState >= 80 && this.preservationState !== 100 && this.preservationState !== 130
   }
@@ -991,6 +1003,7 @@ const Hierarchy = (h, parent, selected) => ({
 export const Directory = (dir, parent, selected, open) => ({
   ...Hierarchy(dir, parent, selected),
   open,
+  loaded: !!dir.directories,
   directoryName: dir.directory_name,
   directories: dir.directories ? dir.directories.map(d => Directory(d, dir, false, false)) : [],
   useCategory: dir.use_category || UseCategoryURLs.OUTCOME_MATERIAL,
@@ -1000,6 +1013,7 @@ export const Directory = (dir, parent, selected, open) => ({
   title: dir.title || dir.directory_name,
   existing: false,
   removed: dir.removed,
+  fileCount: dir.file_count,
 })
 
 export const File = (file, parent, selected) => ({
@@ -1095,6 +1109,6 @@ export const ExternalResource = (id, title, accessUrl, downloadUrl, useCategory)
   useCategory,
 })
 
- export const EmptyExternalResource = ExternalResource(undefined, '', '', '', '')
+export const EmptyExternalResource = ExternalResource(undefined, '', '', '', '')
 
 export default new Qvain()

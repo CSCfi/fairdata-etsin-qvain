@@ -11,12 +11,12 @@ import {
   DeleteButton,
   ButtonLabel,
   ButtonContainer
-} from '../general/buttons'
-import { EmptyExternalResource } from '../../../stores/view/qvain'
-import { Input, SelectedFilesTitle } from '../general/form'
-import { SlidingContent } from '../general/card'
+} from '../../general/buttons'
+import { EmptyExternalResource } from '../../../../stores/view/qvain'
+import { Input, SelectedFilesTitle } from '../../general/form'
+import { SlidingContent } from '../../general/card'
 import ExternalFileForm from './externalFileForm'
-import { externalResourceAccessUrlSchema } from '../utils/formValidation'
+import { externalResourceAccessUrlSchema } from '../../utils/formValidation'
 
 export class ExternalFilesBase extends Component {
   static propTypes = {
