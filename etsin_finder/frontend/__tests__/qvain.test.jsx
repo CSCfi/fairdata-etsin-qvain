@@ -409,7 +409,8 @@ describe('Qvain.ExternalFiles', () => {
     stores.Qvain.saveExternalResource(ExternalResource(
       1,
       'External Resource Title',
-      'http://en.wikipedia.org'
+      'http://en.wikipedia.org',
+      'https://en.wikipedia.org/wiki/Portal:Arts'
     ))
     externalFiles.update()
     expect(externalFiles.find(ButtonGroup).length).toBe(1)

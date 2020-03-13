@@ -234,14 +234,19 @@ const externalResourceUseCategorySchema = yup
   .string()
   .required(translate('qvain.validationMessages.externalResources.useCategory.required'))
 
-const externalResourceUrlSchema = yup
+const externalResourceAccessUrlSchema = yup
   .string()
-  .url(translate('qvain.validationMessages.externalResources.url.url'))
+  .url(translate('qvain.validationMessages.externalResources.accessUrl.validFormat'))
+
+const externalResourceDownloadUrlSchema = yup
+  .string()
+  .url(translate('qvain.validationMessages.externalResources.downloadUrl.validFormat'))
 
 const externalResourceSchema = yup.object().shape({
   title: externalResourceTitleSchema,
   useCategory: externalResourceUseCategorySchema,
-  url: externalResourceUrlSchema,
+  accessUrl: externalResourceAccessUrlSchema,
+  downloadUrl: externalResourceDownloadUrlSchema,
 })
 
 // ENTIRE ACTOR SCHEMAS
@@ -384,5 +389,6 @@ export {
   directoriesSchema,
   externalResourceSchema,
   externalResourceTitleSchema,
-  externalResourceUrlSchema,
+  externalResourceAccessUrlSchema,
+  externalResourceDownloadUrlSchema,
 }

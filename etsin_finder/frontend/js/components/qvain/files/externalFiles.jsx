@@ -16,7 +16,7 @@ import { EmptyExternalResource } from '../../../stores/view/qvain'
 import { Input, SelectedFilesTitle } from '../general/form'
 import { SlidingContent } from '../general/card'
 import ExternalFileForm from './externalFileForm'
-import { externalResourceUrlSchema } from '../utils/formValidation'
+import { externalResourceAccessUrlSchema } from '../utils/formValidation'
 
 export class ExternalFilesBase extends Component {
   static propTypes = {
@@ -36,8 +36,8 @@ export class ExternalFilesBase extends Component {
 
   verifyURL = () => {
     const resource = this.props.Stores.Qvain.externalResourceInEdit
-    externalResourceUrlSchema
-      .validate(resource.url)
+    externalResourceAccessUrlSchema
+      .validate(resource.accessUrl)
       .then(() => {
         this.props.Stores.Qvain.resetInEditResource()
       })
@@ -70,7 +70,11 @@ export class ExternalFilesBase extends Component {
           {addedExternalResources.map((addedExternalResource) => (
             <ButtonGroup tabIndex="0" key={addedExternalResource.id}>
               <ButtonLabel>
-                {addedExternalResource.title} / {addedExternalResource.url}
+                {addedExternalResource.title} / {addedExternalResource.accessUrl.length > 40 ?
+                addedExternalResource.accessUrl.substring(0, 40).concat('... ') :
+                addedExternalResource.accessUrl} / {addedExternalResource.downloadUrl.length > 40 ?
+                addedExternalResource.downloadUrl.substring(0, 40).concat('... ') :
+                addedExternalResource.downloadUrl}
               </ButtonLabel>
               <ButtonContainer>
                 <EditButton
