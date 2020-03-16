@@ -8,7 +8,7 @@
  * @license   MIT
  */
 
-import { observable, action } from 'mobx'
+import { observable, action, runInAction } from 'mobx'
 // import { observable, action, toJS } from 'mobx'
 import axios from 'axios'
 
@@ -29,12 +29,14 @@ class Auth {
   @action
   checkLogin() {
     return new Promise((resolve, reject) => {
-      this.loading = true
+      runInAction(() => {
+        this.loading = true
+      })
       axios
         .get('/api/user', {
           headers: { 'content-type': 'application/json', charset: 'utf-8' },
         })
-        .then(res => {
+        .then(action(res => {
           this.user = {
             name: res.data.user_csc_name,
             loggedIn: res.data.is_authenticated,
@@ -62,12 +64,12 @@ class Auth {
           }
           this.loading = false
           resolve(res)
-        })
-        .catch(err => {
+        }))
+        .catch(action(err => {
           this.loading = false
           console.log(err)
           reject(err)
-        })
+        }))
     })
   }
 

@@ -1,5 +1,6 @@
 """Utilities for transforming the data from Qvain Light form to METAX compatible format"""
 
+from copy import deepcopy
 import json
 from flask import session
 from base64 import urlsafe_b64encode
@@ -46,29 +47,36 @@ def alter_role_data(actor_list, role):
 
     """
     actors = []
-    actor_list_with_role = [x for x in actor_list if role in x["role"] ]
+    actor_list_with_role = [x for x in actor_list if role in x["roles"] ]
     for actor_object in actor_list_with_role:
-        actor = {}
-        actor["member_of"] = {}
-        actor["member_of"]["name"] = {}
-        if actor_object["type"] == "person":
-            actor["@type"] = "Person"
-            actor["name"] = actor_object["name"]
-            actor["member_of"] = {}
-            actor["member_of"]["name"] = actor_object["organization"]
-            actor["member_of"]["@type"] = "Organization"
-        else:
-            actor["@type"] = "Organization"
-            actor["name"] = actor_object["name"]
-            if "organization" in actor_object and actor_object["organization"] != {}:
-                actor["is_part_of"] = {}
-                actor["is_part_of"]["name"] = actor_object["organization"]
-                actor["is_part_of"]["@type"] = "Organization"
+        actor_object = deepcopy(actor_object)
+        organizations = actor_object["organizations"]
 
-        if "email" in actor_object:
-            actor["email"] = actor_object["email"]
-        if "identifier" in actor_object:
-            actor["identifier"] = actor_object["identifier"]
+        for org in organizations:
+            org["@type"] = "Organization"
+
+        # Convert organization hierarchy array [top_level, ...] to a
+        # nested structure {..., is_part_of: { top_level } }
+        organization = organizations[0]
+        for org in organizations[1:]:
+            org["is_part_of"] = organization
+            organization = org
+
+        if actor_object["type"] == "person":
+            person = actor_object["person"]
+            actor = {
+                "@type": "Person",
+                "name": person["name"]
+            }
+            if "email" in person:
+                actor["email"] = person["email"]
+            if "identifier" in person:
+                actor["identifier"] = person["identifier"]
+
+            actor["identifier"] = actor_object["person"]["identifier"]
+            actor["member_of"] = organization
+        else:
+            actor = organization
         actors.append(actor)
     return actors
 
@@ -372,13 +380,13 @@ def check_if_data_in_user_IDA_project(data):
                 identifier = file["projectIdentifier"]
                 if identifier not in user_ida_projects_ids:
                     log.warning('File projectIdentifier not in user projects.\nidentifier: {0}, user_ida_projects_ids: {1}'
-                        .format(identifier, user_ida_projects_ids))
+                                .format(identifier, user_ida_projects_ids))
                     return False
         if directories:
             for directory in directories:
                 identifier = directory["projectIdentifier"]
                 if identifier not in user_ida_projects_ids:
                     log.warning('Directory projectIdentifier not in user projects.\nidentifier: {0}, user_ida_projects_ids: {1}'
-                        .format(identifier, user_ida_projects_ids))
+                                .format(identifier, user_ida_projects_ids))
                     return False
     return True

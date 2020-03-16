@@ -1,13 +1,12 @@
-import { observable, action, computed } from 'mobx'
+import { observable, action, computed, runInAction } from 'mobx'
 import axios from 'axios'
 import { getDirectories, getFiles, deepCopy } from '../../components/qvain/utils/fileHierarchy'
+import Actors from './qvain.actors'
 import {
   AccessTypeURLs,
   LicenseUrls,
   FileAPIURLs,
   UseCategoryURLs,
-  EntityType,
-  Role,
   CumulativeStates,
   DataCatalogIdentifiers
 } from '../../components/qvain/utils/constants'
@@ -17,6 +16,7 @@ import Files from './qvain.files'
 class Qvain {
   constructor() {
     this.Files = new Files(this)
+    this.Actors = new Actors(this)
   }
 
   @observable original = undefined // used if editing, otherwise undefined
@@ -53,10 +53,6 @@ class Qvain {
 
   @observable restrictionGrounds = {}
 
-  @observable actors = []
-
-  @observable actorInEdit = EmptyActor
-
   @observable externalResourceInEdit = EmptyExternalResource
 
   @action
@@ -78,8 +74,6 @@ class Qvain {
     this.accessType = AccessType(undefined, AccessTypeURLs.OPEN)
     this.embargoExpDate = undefined
     this.restrictionGrounds = {}
-    this.actors = []
-    this.actorInEdit = EmptyActor
 
     // Reset Files/Directories related data
     this.dataCatalog = undefined
@@ -97,8 +91,6 @@ class Qvain {
     this.metadataModalFile = undefined
     this.fixDeprecatedModalOpen = false
 
-    this.Files.reset()
-
     // Reset External resources related data
     this.externalResources = []
     this.externalResourceInEdit = EmptyExternalResource
@@ -107,6 +99,8 @@ class Qvain {
 
     this.changed = false
     this.deprecated = false
+
+    this.Actors.reset()
   }
 
   @action
@@ -185,6 +179,12 @@ class Qvain {
   }
 
   @action
+  setLicenseName = name => {
+    this.license.name = name
+    this.changed = true
+  }
+
+  @action
   setAccessType = accessType => {
     this.accessType = accessType
     this.changed = true
@@ -206,50 +206,6 @@ class Qvain {
   setEmbargoExpDate = exp => {
     this.embargoExpDate = exp
     this.changed = true
-  }
-
-  @action
-  setActors = actors => {
-    this.actors = actors
-    this.changed = true
-  }
-
-  @action saveActor = actor => {
-    if (actor.uiId !== undefined) {
-      // Saving a actor that was previously added
-      const existing = this.actors.find(
-        addedActor => addedActor.uiId === actor.uiId
-      )
-      if (existing !== undefined) {
-        this.removeActor(actor)
-      }
-    } else {
-      // Adding a new actor, generate a new UI ID for them
-      actor.uiId = this.createActorUIId()
-    }
-    this.setActors([...this.actors, actor])
-  }
-
-  @action
-  removeActor = actor => {
-    const actors = this.actors.filter(p => p.uiId !== actor.uiId)
-    this.setActors(actors)
-  }
-
-  @action
-  editActor = actor => {
-    this.actorInEdit = { ...actor }
-  }
-
-  // Used to reset all actor values if the user switches actor type
-  @action
-  emptyActorInEdit = actorType => {
-    this.actorInEdit = Actor(actorType, [], '', '', '', undefined, undefined)
-  }
-
-  @computed
-  get addedActors() {
-    return this.actors
   }
 
   @action saveExternalResource = resource => {
@@ -277,11 +233,6 @@ class Qvain {
   @action
   editExternalResource = externalResource => {
     this.externalResourceInEdit = { ...externalResource }
-  }
-
-  @computed
-  get getActorInEdit() {
-    return this.actorInEdit
   }
 
   @computed
@@ -452,7 +403,9 @@ class Qvain {
 
   @action getInitialDirectories = () =>
     axios.get(FileAPIURLs.PROJECT_DIR_URL + this.selectedProject).then(res => {
-      this.hierarchy = Directory(res.data, undefined, false, false)
+      runInAction(() => {
+        this.hierarchy = Directory(res.data, undefined, false, false)
+      })
       return this.hierarchy
     })
 
@@ -672,34 +625,8 @@ class Qvain {
       : undefined
     this.restrictionGrounds = rg ? RestrictionGrounds(rg.pref_label, rg.identifier) : undefined
 
-    // Load actors
-    const actors = []
-    if ('publisher' in researchDataset) {
-      actors.push(
-        this.createActor(researchDataset.publisher, Role.PUBLISHER, actors)
-      )
-    }
-    if ('curator' in researchDataset) {
-      researchDataset.curator.forEach(curator =>
-        actors.push(this.createActor(curator, Role.CURATOR, actors))
-      )
-    }
-    if ('creator' in researchDataset) {
-      researchDataset.creator.forEach(creator =>
-        actors.push(this.createActor(creator, Role.CREATOR, actors))
-      )
-    }
-    if ('rights_holder' in researchDataset) {
-      researchDataset.rights_holder.forEach(rightsHolder =>
-        actors.push(this.createActor(rightsHolder, Role.RIGHTS_HOLDER, actors))
-      )
-    }
-    if ('contributor' in researchDataset) {
-      researchDataset.contributor.forEach(contributor =>
-        actors.push(this.createActor(contributor, Role.CONTRIBUTOR, actors))
-      )
-    }
-    this.actors = this.mergeTheSameActors(actors)
+    // load actors
+    this.Actors.editDataset(researchDataset)
 
     // load data catalog
     this.dataCatalog =
@@ -751,7 +678,6 @@ class Qvain {
         }
         return DatasetFile(f, undefined, true)
       }) : []
-      window.qvain = this
     }
 
     this.Files.editDataset(dataset)
@@ -779,163 +705,6 @@ class Qvain {
     this.changed = false
   }
 
-  // Creates a single instance of a actor, only has one role.
-  // Returns a Actor.
-  createActor = (actorJson, role, actors) => {
-    const entityType = actorJson['@type'].toLowerCase()
-    let name
-    if (entityType === EntityType.ORGANIZATION) {
-      name = actorJson.name ? actorJson.name : undefined
-    } else {
-      name = actorJson.name
-    }
-
-    let parentOrg
-    if (entityType === EntityType.ORGANIZATION) {
-      const isPartOf = actorJson.is_part_of ? actorJson.is_part_of : undefined
-      if (isPartOf) {
-        parentOrg = isPartOf.name
-      } else {
-        parentOrg = undefined
-      }
-    } else {
-      const parentOrgName = actorJson.member_of ? actorJson.member_of.name : undefined
-      if (parentOrgName) {
-        parentOrg = parentOrgName
-      } else {
-        parentOrg = undefined
-      }
-    }
-
-    return Actor(
-      entityType === EntityType.PERSON
-        ? EntityType.PERSON
-        : EntityType.ORGANIZATION,
-      [role],
-      name,
-      actorJson.email ? actorJson.email : '',
-      actorJson.identifier ? actorJson.identifier : '',
-      parentOrg,
-      this.createActorUIId(actors)
-    )
-  }
-
-  // Function that 'Merge' the actors with the same metadata (except UIid).
-  // It looks for actors with the same info but different roles and adds their
-  // roles together to get one actor with multiple roles.
-  // Returns a nw array with the merged actors.
-  mergeTheSameActors = actors => {
-    if (actors.length <= 1) return actors
-    const mergedActors = []
-    actors.forEach(actor1 => {
-      actors.forEach((actor2, index) => {
-        if (this.isEqual(actor1, actor2)) {
-          actor1.role = [...new Set([].concat(...[actor1.role, actor2.role]))]
-          delete actors[index]
-        }
-      })
-      mergedActors.push(actor1)
-    })
-    return mergedActors
-  }
-
-  // Function to compare two actors and see if they are the same actor.
-  // Returns True if the actors seem the same, or False if not.
-  isEqual = (a1, a2) => {
-    if (!!a1.identifier && !!a2.identifier) {
-      // If a1 and a2 have identifiers.
-      if (a1.identifier === a2.identifier) {
-        // If the identifiers are the same.
-        return true
-      }
-      // If a1 and a2 have identifiers but they are not the same, then they
-      // are not the same actor.
-      return false
-    }
-    if (!!a1.email && !!a2.email) {
-      // If a1 and a2 have emails.
-      if (a1.type === EntityType.PERSON && a2.type === EntityType.PERSON) {
-        // If they have emails and are type PERSON.
-        if (a1.email === a2.email && a1.name === a2.name) {
-          // If they have emails and are type PERSON and the emails and names are equal.
-          return true
-        }
-        // If they have emails and are type person but the emails or names are not equal.
-        return false
-      }
-      if (a1.type === EntityType.ORGANIZATION && a2.type === EntityType.ORGANIZATION) {
-        // If they have emails an are of type ORGANIZATION.
-        if (a1.email === a2.email && this.isEqualObj(a1.name, a2.name)) {
-          // If they have emails and are of type ORGANIZATION and the emails
-          // and name objects are equal.
-          return true
-        }
-        // If they have emails and are type ORGANIZATION but the emails or
-        // name objects are not equal.
-        return false
-      }
-    }
-    if (a1.type === EntityType.PERSON && a2.type === EntityType.PERSON) {
-      // If a1 and a2 are of type PERSON.
-      if (a1.name === a2.name && this.isEqualObj(a1.organization, a2.organization)) {
-        // if they are of type PERSON and the names and organization objects
-        // are equal.
-        return true
-      }
-      // If they are of type PERSON but the names or organization objects
-      // are not equal.
-      return false
-    }
-    if (a1.type === EntityType.ORGANIZATION && a2.type === EntityType.ORGANIZATION) {
-      // If a1 and a2 are of type ORGANIZATION.
-      if (!(a1.organization === undefined && a2.organization === undefined)) {
-        // If they are of type ORGANIZATION and their parent organizations
-        // are not empty objects.
-        if (this.isEqualObj(a1.name, a2.name) && this.isEqualObj(a1.organization, a2.organization)) {
-          // If they are of type ORGANIZATION and their parent organization objects
-          // are not empty and their names and parent organization objects are equal.
-          return true
-        }
-        // If they are of type ORGANIZATION and their parent organization objects
-        // are not empty, but their names or parent organization objects are not equal.
-        return false
-      }
-      if (this.isEqualObj(a1.name, a2.name)) {
-        // If they are of type ORGANIZATION and their parent organization objects
-        // are empty and their name objects are equal.
-        return true
-      }
-      // If they are of type ORGANIZATION and their parent organization objects
-      // are empty and their name objects are not equal.
-      return false
-    }
-    // If a1 and a2 don't have identifiers or emails and they are not the same entity type.
-    return false
-  }
-
-  isObjectEmpty = (obj) => {
-    // ECMA 5+ way to check if object is empty.
-    if (Object.keys(obj).length === 0 && obj.constructor === Object) {
-      return true
-    }
-    return false
-  }
-
-  isEqualObj = (obj1, obj2) => {
-    // Checks if the objects have the same key-value pairs.
-    if (JSON.stringify(obj1) === JSON.stringify(obj2)) {
-      return true
-    }
-    return false
-  }
-
-  // create a new UI Identifier based on existing UI IDs
-  // basically a simple number increment
-  // use the store actors by default
-  createActorUIId = (actors = this.actors) => {
-    const latestId = actors.length > 0 ? Math.max(...actors.map(p => p.uiId)) : 0
-    return latestId + 1
-  }
   // EXTERNAL FILES
 
   @observable externalResources = []
@@ -1063,18 +832,6 @@ const DatasetDirectory = directory => ({
   useCategory: directory.use_category.identifier,
   existing: true
 })
-
-export const Actor = (entityType, roles, name, email, identifier, organization, uiId) => ({
-  type: entityType,
-  role: roles,
-  name,
-  email,
-  identifier,
-  organization,
-  uiId,
-})
-
-export const EmptyActor = Actor(EntityType.PERSON, [], '', '', '', undefined, undefined)
 
 export const FieldOfScience = (name, url) => ({
   name,

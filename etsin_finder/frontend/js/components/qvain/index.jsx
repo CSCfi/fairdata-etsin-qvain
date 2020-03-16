@@ -21,14 +21,14 @@ import {
   StickySubHeader,
   StickySubHeaderResponse,
   SubHeaderText,
-  Container
+  Container,
 } from './general/card'
 import handleSubmitToBackend from './utils/handleSubmit'
 import { getResponseError } from './utils/responseError'
 import Title from './general/title'
 import SubmitResponse from './general/submitResponse'
-import Button, { InvertedButton } from '../general/button';
-import DeprecatedState from './deprecatedState';
+import Button, { InvertedButton } from '../general/button'
+import DeprecatedState from './deprecatedState'
 import PasState from './pasState'
 
 const EDIT_DATASET_URL = '/api/datasets/edit'
@@ -44,9 +44,9 @@ class Qvain extends Component {
 
   constructor(props) {
     super(props)
-    this.setFocusOnSubmitOrUpdateButton = this.setFocusOnSubmitOrUpdateButton.bind(this);
-    this.submitDatasetButton = React.createRef();
-    this.updateDatasetButton = React.createRef();
+    this.setFocusOnSubmitOrUpdateButton = this.setFocusOnSubmitOrUpdateButton.bind(this)
+    this.submitDatasetButton = React.createRef()
+    this.updateDatasetButton = React.createRef()
   }
 
   state = {
@@ -72,7 +72,7 @@ class Qvain extends Component {
   componentWillUnmount() {
     this.props.Stores.Qvain.resetQvainStore()
     this.props.Stores.Qvain.original = undefined
-    this.promises.forEach(promise => promise.cancel())
+    this.promises.forEach((promise) => promise.cancel())
   }
 
   getDataset(identifier) {
@@ -81,12 +81,12 @@ class Qvain extends Component {
     const url = `${EDIT_DATASET_URL}/${identifier}`
     const promise = axios
       .get(url)
-      .then(result => {
+      .then((result) => {
         resetQvainStore()
         editDataset(result.data)
         this.setState({ datasetLoading: false, datasetError: false, haveDataset: true })
       })
-      .catch(e => {
+      .catch((e) => {
         const status = e.response.status
 
         let errorTitle, errorDetails
@@ -131,7 +131,7 @@ class Qvain extends Component {
       this.submitDatasetButton.current.focus()
     }
     // preventDefault, since the page wants to refresh at this point
-    event.preventDefault();
+    event.preventDefault()
   }
 
   handlePublishError = err => {

@@ -1,6 +1,6 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
-import { lighten } from 'polished'
+import { lighten, opacify, desaturate } from 'polished'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faPen,
@@ -141,9 +141,12 @@ export const EditButtonStyles = styled.button`
   margin: 5px 5px 5px 5px;
   border-radius: 4px;
   border: solid 1px #cccccc;
-  &:hover {
+  &:not(:disabled):hover {
     background-color: rgba(0,187,255, 0.1);
     border-color: rgb(0, 127, 173);
+  }
+  :disabled {
+    color: ${opacify(-0.6, desaturate(0.5, '#007fad'))}
   }
 `;
 

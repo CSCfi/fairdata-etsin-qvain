@@ -7,7 +7,7 @@ import axios from 'axios'
 import { ContainerSubsectionBottom } from '../general/card'
 import { CumulativeStates } from '../utils/constants'
 import { getResponseError } from '../utils/responseError'
-import { LabelLarge, FormField, RadioInput, RadioContainer, Label, HelpField } from '../general/form'
+import { LabelLarge, FormField, RadioInput, Label, HelpField } from '../general/form'
 
 import Modal from '../../general/modal'
 import {
@@ -104,29 +104,25 @@ class CumulativeState extends Component {
       content = (
         <div>
           <FormField>
-            <RadioContainer>
-              <RadioInput
-                id="cumulativeStateNo"
-                name="cumulativeState"
-                onChange={() => setCumulativeState(0)}
-                type="radio"
-                checked={cumulativeState === 0}
-              />
-            </RadioContainer>
+            <RadioInput
+              id="cumulativeStateNo"
+              name="cumulativeState"
+              onChange={() => setCumulativeState(0)}
+              type="radio"
+              checked={cumulativeState === 0}
+            />
             <Label htmlFor="cumulativeStateNo">
               <Translate content="qvain.files.cumulativeState.radio.no" />
             </Label>
           </FormField>
           <FormField>
-            <RadioContainer>
-              <RadioInput
-                id="cumulativeStateYes"
-                name="cumulativeState"
-                onChange={() => setCumulativeState(1)}
-                type="radio"
-                checked={cumulativeState === 1}
-              />
-            </RadioContainer>
+            <RadioInput
+              id="cumulativeStateYes"
+              name="cumulativeState"
+              onChange={() => setCumulativeState(1)}
+              type="radio"
+              checked={cumulativeState === 1}
+            />
             <Label htmlFor="cumulativeStateYes">
               <Translate content="qvain.files.cumulativeState.radio.yes" />
             </Label>
