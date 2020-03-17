@@ -56,16 +56,29 @@ export const Directory = (metaxDir, args) => ({
 // PAS metadata is updated separately using an RPC call.
 export const getPASMeta = (metaxFile) => {
   const characteristics = metaxFile.file_characteristics || {}
-  // PAS metadata
-  return Object.fromEntries(Object.entries({
-    fileFormat: characteristics.file_format,
-    formatVersion: characteristics.format_version,
-    encoding: characteristics.encoding,
-    csvDelimiter: characteristics.csv_delimiter,
-    csvRecordSeparator: characteristics.csv_record_separator,
-    csvQuotingChar: characteristics.csv_quoting_char,
-    csvHasHeader: characteristics.csv_has_header,
-  }).filter((([, value]) => value !== undefined)))
+  const pasMeta = {}
+  if (characteristics.file_format !== undefined) {
+    pasMeta.fileFormat = characteristics.file_format
+  }
+  if (characteristics.format_version !== undefined) {
+    pasMeta.formatVersion = characteristics.format_version
+  }
+  if (characteristics.encoding !== undefined) {
+    pasMeta.encoding = characteristics.encoding
+  }
+  if (characteristics.csv_delimiter !== undefined) {
+    pasMeta.csvDelimiter = characteristics.csv_delimiter
+  }
+  if (characteristics.csv_record_separator !== undefined) {
+    pasMeta.csvRecordSeparator = characteristics.csv_record_separator
+  }
+  if (characteristics.csv_quoting_char !== undefined) {
+    pasMeta.csvQuotingChar = characteristics.csv_quoting_char
+  }
+  if (characteristics.csv_has_header !== undefined) {
+    pasMeta.csvHasHeader = characteristics.csv_has_header
+  }
+  return pasMeta
 }
 
 export const File = (metaxFile, args) => ({
