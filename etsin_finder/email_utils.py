@@ -32,6 +32,7 @@ def create_email_message_body(pref_id, user_email, user_subject, user_body):
 
     Returns:
         [string] -- Email message body withall arguments.
+
     """
     now = datetime.datetime.now()
 
@@ -53,6 +54,7 @@ def get_email_message_subject():
 
     Returns:
         [string] -- Default email message subject.
+
     """
     return "Message from Etsin / Viesti Etsimestä"
 
@@ -67,6 +69,7 @@ def validate_send_message_request(user_email, user_body, agent_type):
 
     Returns:
         [bool] -- Is it valid.
+
     """
     if not re.match(r"^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+\.[a-zA-Z]*$", user_email):
         log.warning("Reply-to email address not formally valid: {0}".format(user_email))
@@ -94,6 +97,7 @@ def get_email_recipient_addresses(catalog_record, agent_type_str):
 
     Returns:
         [list/None] -- Return list of recipient addresses or None if not found.
+
     """
     rd = catalog_record.get('research_dataset', {})
 
@@ -122,6 +126,7 @@ def get_email_info(catalog_record):
 
     Returns:
         [dict] -- Dict with bool values for all the agent types if they have email addresses.
+
     """
     if not catalog_record:
         return None
@@ -148,6 +153,7 @@ def get_harvest_info(catalog_record):
 
     Returns:
         [bool] -- Is the cr harvested.
+
     """
     return catalog_record.get('data_catalog.catalog_json.harvested', False)
 
@@ -160,6 +166,7 @@ def _agent_has_email_address(agent_obj):
 
     Returns:
         [bool] -- True if has emails, False if not.
+
     """
     if agent_obj:
         if isinstance(agent_obj, list) and len(agent_obj) > 0:
@@ -176,6 +183,7 @@ def get_email_list_for_actor(agents):
 
     Returns:
         [list] -- List with 1 or more email addresses.
+
     """
     emails = []
     if isinstance(agents, list) and len(agents) > 0:
