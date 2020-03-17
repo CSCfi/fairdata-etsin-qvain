@@ -114,10 +114,10 @@ const InnerForm = props => {
           <Error aria-live="assertive">
             {translations.errorInternal} (
             <a
-              href="mailto:csc@servicedesk.fi?Subject=Etsin%20Contact%20Form%20Internal%20Server%20Error"
+              href="mailto:servicedesk@csc.fi?Subject=Etsin%20Contact%20Form%20Internal%20Server%20Error"
               target="_top"
             >
-              csc@servicedesk.fi
+              servicedesk@csc.fi
             </a>
             ).
           </Error>
