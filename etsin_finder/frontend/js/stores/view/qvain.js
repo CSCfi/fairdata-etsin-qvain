@@ -296,7 +296,7 @@ class Qvain {
 
   // FILE PICKER STATE MANAGEMENT
 
-  @observable legacyFilePicker = localStorage.getItem('new_filepicker') !== '1'
+  @observable legacyFilePicker = process.env.NODE_ENV === 'production' || localStorage.getItem('new_filepicker') !== '1'
 
   @action setLegacyFilePicker = (value) => {
     this.legacyFilePicker = value
