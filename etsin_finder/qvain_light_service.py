@@ -461,6 +461,7 @@ class MetaxQvainLightAPIService(FlaskService):
                         metax_api_response.status_code,
                         json_or_empty(metax_api_response) or metax_api_response.text
                     ))
+                return json_or_empty(metax_api_response) or metax_api_response.text, metax_api_response.status_code
             else:
                 log.error("Error refreshing dataset {0} directory {1}\n{2}".format(cr_identifier, dir_identifier, e))
             return {'detail': 'Error trying to send data to metax.'}, 500
@@ -499,6 +500,7 @@ class MetaxQvainLightAPIService(FlaskService):
                         metax_api_response.status_code,
                         json_or_empty(metax_api_response) or metax_api_response.text
                     ))
+                return json_or_empty(metax_api_response) or metax_api_response.text, metax_api_response.status_code
             else:
                 log.error("Error fixing deprecated dataset {0} \n{1}".format(cr_identifier, e))
             return {'detail': 'Error trying to send data to metax.'}, 500

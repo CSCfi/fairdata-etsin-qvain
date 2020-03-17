@@ -170,7 +170,7 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
         "isEqualObj": [Function],
         "isObjectEmpty": [Function],
         "keywords": Array [],
-        "legacyFilePicker": false,
+        "legacyFilePicker": true,
         "license": Object {
           "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
           "name": undefined,
@@ -289,7 +289,7 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
         "isEqualObj": [Function],
         "isObjectEmpty": [Function],
         "keywords": Array [],
-        "legacyFilePicker": false,
+        "legacyFilePicker": true,
         "license": Object {
           "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
           "name": undefined,
@@ -408,7 +408,7 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
         "isEqualObj": [Function],
         "isObjectEmpty": [Function],
         "keywords": Array [],
-        "legacyFilePicker": false,
+        "legacyFilePicker": true,
         "license": Object {
           "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
           "name": undefined,
@@ -527,7 +527,7 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
         "isEqualObj": [Function],
         "isObjectEmpty": [Function],
         "keywords": Array [],
-        "legacyFilePicker": false,
+        "legacyFilePicker": true,
         "license": Object {
           "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
           "name": undefined,

@@ -4,12 +4,12 @@ import { inject, observer } from 'mobx-react'
 import { toJS } from 'mobx'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
-import { Input, Label, CustomSelect } from '../general/form'
-import { SaveButton, CancelButton, FileItem } from '../general/buttons'
-import ValidationError from '../general/validationError'
-import { externalResourceSchema } from '../utils/formValidation'
-import { getLocalizedOptions } from '../utils/getReferenceData'
-import { EmptyExternalResource } from '../../../stores/view/qvain'
+import { Input, Label, CustomSelect } from '../../general/form'
+import { SaveButton, CancelButton, FileItem } from '../../general/buttons'
+import ValidationError from '../../general/validationError'
+import { externalResourceSchema } from '../../utils/formValidation'
+import { getLocalizedOptions } from '../../utils/getReferenceData'
+import { EmptyExternalResource } from '../../../../stores/view/qvain'
 
 export class ExternalFileFormBase extends Component {
   static propTypes = {

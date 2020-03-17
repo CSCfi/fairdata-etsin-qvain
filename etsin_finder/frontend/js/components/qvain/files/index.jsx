@@ -6,15 +6,17 @@ import { inject, observer } from 'mobx-react'
 import { SectionTitle } from '../general/section'
 import { ContainerLight, ContainerSubsectionBottom } from '../general/card'
 import { HelpIcon } from '../general/form'
-import IDAFilePicker from './idaFilePicker'
-import ExternalFiles from './externalFiles'
+import IDAFilePicker from './ida'
+import ExternalFiles from './external/externalFiles'
 import DataCatalog from './dataCatalog'
 import CumulativeState from './cumulativeState'
 import { DataCatalogIdentifiers } from '../utils/constants'
 import Tooltip from '../general/tooltip'
 import FilesInfo from './filesInfo'
 import MetadataModal from './metadataModal'
-import SelectedFiles from './selectedFiles'
+import SelectedItems from './ida/selectedItems'
+import LegacyFilePicker from './legacy/idaFilePicker'
+import LegacySelectedFiles from './legacy/selectedFiles'
 
 class Files extends Component {
   static propTypes = {
@@ -26,13 +28,17 @@ class Files extends Component {
   }
 
   render() {
-    const { dataCatalog, isPas } = this.props.Stores.Qvain
+    const { dataCatalog, isPas, legacyFilePicker } = this.props.Stores.Qvain
     let data = null
+
+    const SelectedItemsComponent = legacyFilePicker ? LegacySelectedFiles : SelectedItems
+    const FilePickerComponent = legacyFilePicker ? LegacyFilePicker : IDAFilePicker
+
     if (isPas) {
       data = (
         <>
           <ContainerSubsectionBottom>
-            <SelectedFiles />
+            <SelectedItemsComponent />
           </ContainerSubsectionBottom>
         </>
       )
@@ -41,7 +47,7 @@ class Files extends Component {
         <>
           <CumulativeState />
           <ContainerSubsectionBottom>
-            <IDAFilePicker />
+            <FilePickerComponent />
           </ContainerSubsectionBottom>
         </>
       )

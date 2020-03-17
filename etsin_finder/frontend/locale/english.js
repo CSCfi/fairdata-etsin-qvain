@@ -13,7 +13,6 @@ const english = {
   dataset: {
     access_login: 'Login to apply for access',
     access_unavailable: 'Unavailable',
-    access_permission: 'Apply for access',
     access_denied: 'Application denied',
     access_draft: 'Application in draft state',
     access_request_sent: 'Access request sent',
@@ -689,6 +688,15 @@ const english = {
         versionCreated: 'A new dataset version has been created with identifier %(identifier)s.',
         openNewVersion: 'Open new version',
       },
+      addItemsModal: {
+        title: 'Select files from project',
+        allSelected: 'All the files and folders in the project are already in the dataset.',
+        buttons: {
+          save: 'Add files',
+          close: 'Close',
+        },
+        versionInfo: 'Adding/removing files or folders will create a new version of this dataset when the changes are published. The old version will be tagged as "Old" and the files linked to it will remain untouched.',
+      },
       refreshModal: {
         header: 'Refresh folder content',
         noncumulative: 'If new files have been added to the folder, this will add them to the dataset and create a new version of it. The changes will take effect immediately.',
@@ -779,7 +787,17 @@ const english = {
       },
       selected: {
         title: 'Selected files',
-        none: 'No files or folders selected',
+        none: 'No files or folders have been selected yet.',
+        newTag: 'New',
+        buttons: {
+          edit: 'Edit %(name)s',
+          remove: 'Remove %(name)s',
+          refresh: 'Refresh %(name)s',
+          open: 'Open %(name)s',
+          close: 'Close %(name)s',
+          select: 'Select %(name)s',
+          deselect: 'Deselect %(name)s'
+        },
         form: {
           title: {
             label: 'Title',

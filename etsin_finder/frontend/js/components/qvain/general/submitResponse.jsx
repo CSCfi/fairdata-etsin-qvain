@@ -38,8 +38,6 @@ class SubmitResponse extends Component {
   render() {
     const { response } = this.props
     const { original } = this.props.Stores.Qvain
-    console.log(response)
-    console.log(typeof response)
 
     // If the user wants to clear the submitResponse
     if (this.state.clearSubmitResponse) {

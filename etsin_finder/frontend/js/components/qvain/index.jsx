@@ -135,6 +135,9 @@ class Qvain extends Component {
   }
 
   handlePublishError = err => {
+    if (!err.response) {
+      console.error(err)
+    }
     this.setState({
       response: getResponseError(err)
     })
@@ -158,7 +161,8 @@ class Qvain extends Component {
               this.props.Stores.Qvain.editDataset(data)
               this.props.history.replace(`/qvain/dataset/${data.identifier}`)
             }
-          }).catch(this.handlePublishError)
+          })
+          .catch(this.handlePublishError)
       })
       .catch(err => {
         console.log(err.errors)
@@ -187,6 +191,7 @@ class Qvain extends Component {
           .then(res => {
             this.props.Stores.Qvain.moveSelectedToExisting()
             this.props.Stores.Qvain.setChanged(false)
+            this.props.Stores.Qvain.editDataset(res.data)
             this.setState({ response: res.data })
           })
           .catch(this.handlePublishError)

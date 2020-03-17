@@ -6,16 +6,16 @@ import { faCopy, faFolder } from '@fortawesome/free-solid-svg-icons'
 import Translate from 'react-translate-component'
 import styled, { css } from 'styled-components';
 
-import Label from '../general/label'
-import { ButtonLabel, EditButton, DeleteButton, FileItem, ButtonContainer, TableButton } from '../general/buttons'
-import { SelectedFilesTitle } from '../general/form'
+import Label from '../../general/label'
+import { ButtonLabel, EditButton, DeleteButton, FileItem, ButtonContainer, TableButton } from '../../general/buttons'
+import { SelectedFilesTitle } from '../../general/form'
 import FileForm from './fileForm'
 import DirectoryForm from './directoryForm'
-import { randomStr } from '../utils/fileHierarchy'
-import Modal from '../../general/modal'
-import { CumulativeStates } from '../utils/constants'
-import RefreshDirectoryModal from './refreshDirectoryModal';
-import FixDeprecatedModal from './fixDeprecatedModal';
+import { randomStr } from '../../utils/fileHierarchy'
+import Modal from '../../../general/modal'
+import { CumulativeStates } from '../../utils/constants'
+import RefreshDirectoryModal from '../refreshDirectoryModal';
+import FixDeprecatedModal from '../fixDeprecatedModal';
 
 
 export class SelectedFilesBase extends Component {
