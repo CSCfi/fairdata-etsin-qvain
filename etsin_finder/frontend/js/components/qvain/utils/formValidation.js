@@ -52,6 +52,8 @@ const keywordsSchema = yup
       .string()
   )
 
+const issuedDateSchema = yup.date().nullable()
+
 const otherIdentifierSchema = yup
   .string(translate('qvain.validationMessages.otherIdentifiers.string'))
   .min(10, translate('qvain.validationMessages.otherIdentifiers.min'))
@@ -360,6 +362,7 @@ export {
   qvainFormSchema,
   titleSchema,
   descriptionSchema,
+  issuedDateSchema,
   otherIdentifierSchema,
   otherIdentifiersSchema,
   keywordsSchema,

@@ -409,6 +409,12 @@ const english = {
         },
         instructions: 'Only one language selection is mandatory',
       },
+      issuedDate: {
+        title: 'Issued date',
+        infoText: 'Date of formal issuance (publication) of the resource. This value does not affect or reflect the visibility of the dataset itself.',
+        instructions: '',
+        placeholder: 'Date',
+      },
       otherIdentifiers: {
         title: 'Other Identifiers',
         infoText:

@@ -413,6 +413,12 @@ const finnish = {
         },
         instructions: 'Vain yksi kielivalinta on pakollinen',
       },
+      issuedDate: {
+        title: 'Jukaisupäivämäärä',
+        infoText: '',
+        instructions: '',
+        placeholder: 'Päivämäärä'
+      },
       otherIdentifiers: {
         title: 'Muut tunnisteet',
         infoText:

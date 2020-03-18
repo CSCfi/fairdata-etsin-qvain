@@ -35,6 +35,8 @@ class Qvain {
     fi: '',
   }
 
+  @observable issuedDate = undefined
+
   @observable otherIdentifiers = []
 
   @observable fieldOfScience = undefined
@@ -69,6 +71,7 @@ class Qvain {
       en: '',
       fi: '',
     }
+    this.issuedDate = undefined
     this.otherIdentifiers = []
     this.fieldOfScience = undefined
     this.fieldsOfScience = []
@@ -131,6 +134,12 @@ class Qvain {
     } else if (lang === 'FINNISH') {
       this.description.fi = description
     }
+    this.changed = true
+  }
+
+  @action
+  setIssuedDate = exp => {
+    this.issuedDate = exp
     this.changed = true
   }
 
@@ -607,7 +616,7 @@ class Qvain {
 
   // Dataset related
 
-  // dataset - METAX dataset JSON
+  // Dataset - METAX dataset JSON
   // perform schema transformation METAX JSON -> etsin backend / internal schema
   @action editDataset = dataset => {
     this.original = { ...dataset }
@@ -622,12 +631,15 @@ class Qvain {
     this.description.en = researchDataset.description.en ? researchDataset.description.en : ''
     this.description.fi = researchDataset.description.fi ? researchDataset.description.fi : ''
 
+    // Issued date
+    this.issuedDate = researchDataset.issued_date || undefined
+
     // Other identifiers
     this.otherIdentifiers = researchDataset.other_identifier
       ? researchDataset.other_identifier.map(oid => oid.notation)
       : []
 
-    // fields of science
+    // Fields of science
     if (researchDataset.field_of_science !== undefined) {
       researchDataset.field_of_science.forEach(element => {
         this.fieldOfScience = FieldOfScience(element.pref_label, element.identifier)
@@ -635,10 +647,10 @@ class Qvain {
       });
     }
 
-    // keywords
+    // Keywords
     this.keywords = researchDataset.keyword || []
 
-    // access type
+    // Access type
     const at = researchDataset.access_rights.access_type
       ? researchDataset.access_rights.access_type
       : undefined
@@ -646,13 +658,13 @@ class Qvain {
       ? AccessType(at.pref_label, at.identifier)
       : AccessType(undefined, AccessTypeURLs.OPEN)
 
-    // embargo date
-    const date = researchDataset.access_rights.available
+    // Embargo date
+    const embargoDate = researchDataset.access_rights.available
       ? researchDataset.access_rights.available
       : undefined
-    this.embargoExpDate = date || undefined
+    this.embargoExpDate = embargoDate || undefined
 
-    // license
+    // License
     const l = researchDataset.access_rights.license
       ? researchDataset.access_rights.license[0]
       : undefined
