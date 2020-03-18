@@ -27,9 +27,18 @@ import handleSubmitToBackend from './utils/handleSubmit'
 import { getResponseError } from './utils/responseError'
 import Title from './general/title'
 import SubmitResponse from './general/submitResponse'
-import Button, { InvertedButton } from '../general/button';
+import { Button, InvertedButton } from '../general/button'
+import Modal from '../general/modal'
 import DeprecatedState from './deprecatedState';
 import PasState from './pasState'
+
+const customStyles = {
+  content: {
+    minWidth: '20vw',
+    maxWidth: '800px',
+    padding: '3em',
+  },
+}
 
 const EDIT_DATASET_URL = '/api/datasets/edit'
 
@@ -47,6 +56,9 @@ class Qvain extends Component {
     this.setFocusOnSubmitOrUpdateButton = this.setFocusOnSubmitOrUpdateButton.bind(this);
     this.submitDatasetButton = React.createRef();
     this.updateDatasetButton = React.createRef();
+    this.showUseDoiInformation = this.showUseDoiInformation.bind(this)
+    this.closeUseDoiInformation = this.closeUseDoiInformation.bind(this)
+    this.acceptDoi = this.acceptDoi.bind(this)
   }
 
   state = {
@@ -57,6 +69,7 @@ class Qvain extends Component {
     datasetError: false,
     datasetErrorTitle: null,
     datasetErrorDetails: null,
+    useDoiModalIsOpen: false,
   }
 
   componentDidMount() {
@@ -220,6 +233,23 @@ class Qvain extends Component {
     }
   }
 
+  showUseDoiInformation() {
+    this.setState({
+      useDoiModalIsOpen: true
+    })
+  }
+
+  acceptDoi() {
+    this.closeUseDoiInformation()
+    this.handleCreate()
+  }
+
+  closeUseDoiInformation() {
+    this.setState({
+      useDoiModalIsOpen: false
+    })
+  }
+
   render() {
     const { original, readonly } = this.props.Stores.Qvain
     // Title text
@@ -263,7 +293,11 @@ class Qvain extends Component {
                   </SubmitButton>
                 )
                 : (
-                  <SubmitButton ref={this.submitDatasetButton} type="button" onClick={this.handleCreate}>
+                  <SubmitButton
+                    ref={this.submitDatasetButton}
+                    type="button"
+                    onClick={this.props.Stores.Qvain.useDoi ? this.showUseDoiInformation : this.handleCreate}
+                  >
                     <Translate content="qvain.submit" />
                   </SubmitButton>
                 )
@@ -304,6 +338,25 @@ class Qvain extends Component {
     } else {
       dataset = (
         <Form className="container">
+          <Modal
+            isOpen={this.state.useDoiModalIsOpen}
+            onRequestClose={this.closeUseDoiInformation}
+            customStyles={customStyles}
+            contentLabel="UseDoiModalInformation"
+          >
+            <Translate content="qvain.useDoiHeader" component="h2" />
+            <Translate content="qvain.useDoiContent" component="p" />
+            <Button
+              onClick={this.acceptDoi}
+            >
+              <Translate content="qvain.useDoiAffirmative" component="p" />
+            </Button>
+            <Button
+              onClick={this.closeUseDoiInformation}
+            >
+              <Translate content="qvain.useDoiNegative" component="p" />
+            </Button>
+          </Modal>
           <Description />
           <Actors />
           <RightsAndLicenses />

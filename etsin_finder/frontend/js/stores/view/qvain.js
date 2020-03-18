@@ -306,6 +306,8 @@ class Qvain {
 
   @observable dataCatalog = undefined
 
+  @observable useDoi = false
+
   @observable cumulativeState = CumulativeStates.NO
 
   @observable selectedProject = undefined
@@ -330,6 +332,12 @@ class Qvain {
   setDataCatalog = selectedDataCatalog => {
     this.dataCatalog = selectedDataCatalog
     this.changed = true
+  }
+
+  @action
+  setUseDoi = selectedUseDoiStatus => {
+    this.useDoi = selectedUseDoiStatus
+    console.log('In qvain.js: ', this.useDoi)
   }
 
   @action
