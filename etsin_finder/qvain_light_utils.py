@@ -222,7 +222,7 @@ def data_to_metax(data, metadata_provider_org, metadata_provider_user):
             "curator": alter_role_data(data["actors"], "curator"),
             "rights_holder": alter_role_data(data["actors"], "rights_holder"),
             "contributor": alter_role_data(data["actors"], "contributor"),
-            "issued": data["issued_date"],
+            "issued": data["issuedDate"],
             "other_identifier": other_identifiers_to_metax(data["identifiers"]),
             "field_of_science": _to_metax_field_of_science(data.get("fieldOfScience")),
             "keyword": data["keywords"],
@@ -310,7 +310,7 @@ def edited_data_to_metax(data, original):
         "curator": alter_role_data(data["actors"], "curator"),
         "rights_holder": alter_role_data(data["actors"], "rights_holder"),
         "contributor": alter_role_data(data["actors"], "contributor"),
-        "issued": data["issued_date"],
+        "issued": data["issuedDate"],
         "other_identifier": other_identifiers_to_metax(data["identifiers"]),
         "field_of_science": _to_metax_field_of_science(data.get("fieldOfScience")),
         "keyword": data["keywords"],
@@ -319,7 +319,6 @@ def edited_data_to_metax(data, original):
         "files": files_data_to_metax(data["files"]) if data["dataCatalog"] == "urn:nbn:fi:att:data-catalog-ida" else "",
         "directories": directories_data_to_metax(data["directories"]) if data["dataCatalog"] == "urn:nbn:fi:att:data-catalog-ida" else "",
     })
-    log.info(research.dataset)
     edited_data = {
         "research_dataset": research_dataset
     }

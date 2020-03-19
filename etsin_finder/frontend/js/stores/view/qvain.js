@@ -632,7 +632,7 @@ class Qvain {
     this.description.fi = researchDataset.description.fi ? researchDataset.description.fi : ''
 
     // Issued date
-    this.issuedDate = researchDataset.issued_date || undefined
+    this.issuedDate = researchDataset.issued || undefined
 
     // Other identifiers
     this.otherIdentifiers = researchDataset.other_identifier
