@@ -346,7 +346,6 @@ class Qvain {
   @action
   setUseDoi = selectedUseDoiStatus => {
     this.useDoi = selectedUseDoiStatus
-    console.log('In qvain.js: ', this.useDoi)
   }
 
   @action

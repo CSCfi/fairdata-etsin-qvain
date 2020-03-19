@@ -157,7 +157,7 @@ class Qvain extends Component {
   }
 
   handleCreate = e => {
-    e.preventDefault()
+    // e.preventDefault()
     this.setState({ submitted: true })
     const obj = handleSubmitToBackend(this.props.Stores.Qvain)
     qvainFormSchema
@@ -296,7 +296,7 @@ class Qvain extends Component {
                   <SubmitButton
                     ref={this.submitDatasetButton}
                     type="button"
-                    onClick={this.props.Stores.Qvain.useDoi ? this.showUseDoiInformation : this.handleCreate}
+                    onClick={this.props.Stores.Qvain.useDoi === true ? this.showUseDoiInformation : this.handleCreate}
                   >
                     <Translate content="qvain.submit" />
                   </SubmitButton>
@@ -349,12 +349,12 @@ class Qvain extends Component {
             <Button
               onClick={this.acceptDoi}
             >
-              <Translate content="qvain.useDoiAffirmative" component="p" />
+              <Translate content="qvain.useDoiAffirmative" component="span" />
             </Button>
             <Button
               onClick={this.closeUseDoiInformation}
             >
-              <Translate content="qvain.useDoiNegative" component="p" />
+              <Translate content="qvain.useDoiNegative" component="span" />
             </Button>
           </Modal>
           <Description />
