@@ -248,7 +248,7 @@ class MetaxQvainLightAPIService(FlaskService):
 
         """
         req_url = self.METAX_CREATE_DATASET
-        if use_doi == True:
+        if use_doi is True:
             req_url += '?pid_type=doi'
         headers = {'Accept': 'application/json'}
         try:
