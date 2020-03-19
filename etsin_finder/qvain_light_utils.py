@@ -222,7 +222,7 @@ def data_to_metax(data, metadata_provider_org, metadata_provider_user):
             "curator": alter_role_data(data["actors"], "curator"),
             "rights_holder": alter_role_data(data["actors"], "rights_holder"),
             "contributor": alter_role_data(data["actors"], "contributor"),
-            "issued": data["issuedDate"],
+            "issued": data["issuedDate"] if "issuedDate" in data else "",
             "other_identifier": other_identifiers_to_metax(data["identifiers"]),
             "field_of_science": _to_metax_field_of_science(data.get("fieldOfScience")),
             "keyword": data["keywords"],
