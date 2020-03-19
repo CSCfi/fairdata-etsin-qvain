@@ -326,7 +326,7 @@ const english = {
       140: 'Available'
     },
     useDoiHeader: 'Creation of a DOI',
-    useDoiContent: 'You have selected DOI as primary identifier for your dataset instead of URN. A DOI (Digital Object Identifier) will be created and stored in the DataCite Service and it cannot be removed. Are you sure you want to select DOI?',
+    useDoiContent: 'You have selected DOI as primary identifier for your dataset instead of URN. DOI requires a defined issued date. A DOI (Digital Object Identifier) will be created and stored in the DataCite Service and it cannot be removed. Are you sure you want to select DOI?',
     useDoiAffirmative: 'Yes',
     useDoiNegative: 'No',
     unsuccessfullLogin: 'Login unsuccessful.',
@@ -540,6 +540,9 @@ const english = {
         max: 'The description is too long.',
         required: 'A description is required in at least one language.',
       },
+      issuedDate: {
+        requiredIfUseDoi: 'Issued date must be defined for DOI datasets'
+      },
       otherIdentifiers: {
         string: 'Other identifiers must be string value.',
         url: 'The identifiers have to be valid URLs.',
@@ -660,7 +663,7 @@ const english = {
           "Fairdata Services need to know whether you are linking files from IDA or remote resources. You can also publish datasets without any files. In that case, please still select either one. The selection cannot be re-done, so if you are not sure whether you'll add files later, select the one you think you'll need in the future.",
         explanation:
           'Choose "IDA" if the data is stored in Fairdata IDA Service. Choose "Remote resources" if the data is in remote location.',
-        doiSelection: 'I want the dataset to have a DOI (digital object identifier) instead of a URN',
+        doiSelection: 'I want the dataset to have a DOI (digital object identifier) instead of a URN.',
         placeholder: 'Select option',
         ida: 'IDA',
         att: 'Remote resources',

@@ -212,6 +212,9 @@ const directorySchema = yup.object().shape({
 
 const directoriesSchema = yup.array().of(directorySchema)
 
+// USE DOI SCHEMA (IDA)
+const useDoiSchema = yup.boolean()
+
 // PAS METADATA VALIDATION
 
 export const fileMetadataSchema = yup.object().shape({
@@ -316,6 +319,17 @@ const actorsSchema = yup
 const qvainFormSchema = yup.object().shape({
   title: titleSchema,
   description: descriptionSchema,
+  issuedDate: yup
+    .mixed()
+    .when('useDoi', {
+      is: true,
+      then: yup
+        .date()
+        .required(translate('qvain.validationMessages.issuedDate.requiredIfUseDoi')),
+      otherwise: yup
+        .date()
+        .nullable()
+    }),
   fieldOfScience: fieldsOfScienceSchema,
   keywords: keywordsSchema,
   otherIdentifiers: otherIdentifiersSchema,
@@ -356,6 +370,7 @@ const qvainFormSchema = yup.object().shape({
   cumulativeState: cumulativeStateSchema,
   files: filesSchema,
   directories: directoriesSchema,
+  useDoi: useDoiSchema,
 })
 
 export {
@@ -390,6 +405,7 @@ export {
   directoryUseCategorySchema,
   directorySchema,
   directoriesSchema,
+  useDoiSchema,
   externalResourceSchema,
   externalResourceTitleSchema,
   externalResourceAccessUrlSchema,
