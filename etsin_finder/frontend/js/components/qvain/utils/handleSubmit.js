@@ -88,7 +88,8 @@ const handleSubmitToBackend = (values) => {
     dataCatalog: values.dataCatalog,
     cumulativeState: values.cumulativeState,
     files,
-    directories
+    directories,
+    useDoi: values.useDoi,
   }
   return obj
 }

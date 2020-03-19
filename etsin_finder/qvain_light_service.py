@@ -235,7 +235,7 @@ class MetaxQvainLightAPIService(FlaskService):
 
         return metax_api_response.json()
 
-    def create_dataset(self, data, params=None):
+    def create_dataset(self, data, params=None, use_doi=False):
         """
         Send the data from the frontend to Metax.
 
@@ -248,6 +248,8 @@ class MetaxQvainLightAPIService(FlaskService):
 
         """
         req_url = self.METAX_CREATE_DATASET
+        if use_doi == True:
+            req_url += '?pid_type=doi'
         headers = {'Accept': 'application/json'}
         try:
             metax_api_response = requests.post(req_url,
@@ -554,7 +556,7 @@ def get_datasets_for_user(user_id, limit, offset, no_pagination):
     """
     return _metax_api.get_datasets_for_user(user_id, limit, offset, no_pagination)
 
-def create_dataset(form_data, params=None):
+def create_dataset(form_data, params=None, use_doi=False):
     """
     Create dataset in Metax.
 
@@ -566,7 +568,7 @@ def create_dataset(form_data, params=None):
         [type] -- Metax response.
 
     """
-    return _metax_api.create_dataset(form_data, params)
+    return _metax_api.create_dataset(form_data, params, use_doi)
 
 def update_dataset(form_data, cr_id, last_modified, params=None):
     """

@@ -71,3 +71,4 @@ class DatasetValidationSchema(Schema):
     files = fields.List(fields.Dict())
     directories = fields.List(fields.Dict())
     remote_resources = fields.List(fields.Dict())
+    useDoi = fields.Boolean()
