@@ -20,8 +20,6 @@ class IssuedDateField extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      identifier: '',
-      validationError: null,
       focused: false,
       error: false,
       errorMessage: ''
@@ -55,25 +53,27 @@ class IssuedDateField extends React.Component {
         <Fragment>
             <DatePickerWrapper>
             <Translate
-                component={SingleDatePicker}
-                hideKeyboardShortcutsPanel
-                date={issuedDate ? moment.utc(issuedDate) : null}
-                disabled={readonly}
-                onDateChange={date => {
-                    if (date === null) {
-                        setIssuedDate(undefined)
-                    } else {
-                        setIssuedDate(date.utc().format(DateFormats.ISO8601_DATE_FORMAT))
-                    }
-                }}
-                focused={this.state.focused}
-                onFocusChange={({ focused }) => this.setState({ focused })}
-                id="issued_date_field_id"
-                showClearDate
-                isOutsideRange={() => false}
-                attributes={{ placeholder: 'qvain.description.issuedDate.placeholder' }}
-                onClose={this.validate}
-                displayFormat={DateFormats.ISO8601_DATE_FORMAT}
+              component={SingleDatePicker}
+              hideKeyboardShortcutsPanel
+              date={issuedDate ? moment.utc(issuedDate) : null}
+              disabled={readonly}
+              onDateChange={
+                date => {
+                  if (date === null) {
+                      setIssuedDate(undefined)
+                  } else {
+                      setIssuedDate(date.utc().format(DateFormats.ISO8601_DATE_FORMAT))
+                  }
+                }
+              }
+              focused={this.state.focused}
+              onFocusChange={({ focused }) => this.setState({ focused })}
+              id="issued_date_field_id"
+              showClearDate
+              isOutsideRange={() => false}
+              attributes={{ placeholder: 'qvain.description.issuedDate.placeholder' }}
+              onClose={this.validate}
+              displayFormat={DateFormats.ISO8601_DATE_FORMAT}
             />
             </DatePickerWrapper>
             {error && <ValidationError>{errorMessage}</ValidationError>}
@@ -82,17 +82,6 @@ class IssuedDateField extends React.Component {
     )
   }
 }
-
-const ButtonContainer = styled.div`
-  text-align: right;
-`
-const AddNewButton = styled(Button)`
-  margin: 0;
-  margin-top: 11px;
-`
-const PaddedWord = styled.span`
-  padding-right: 10px;
-`
 
 const DatePickerWrapper = styled.div`
   width: 100%;
