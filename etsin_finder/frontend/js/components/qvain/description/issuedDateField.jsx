@@ -70,6 +70,7 @@ class IssuedDateField extends React.Component {
                 onFocusChange={({ focused }) => this.setState({ focused })}
                 id="issued_date_field_id"
                 showClearDate
+                isOutsideRange={() => false}
                 attributes={{ placeholder: 'qvain.description.issuedDate.placeholder' }}
                 onClose={this.validate}
                 displayFormat={DateFormats.ISO8601_DATE_FORMAT}
