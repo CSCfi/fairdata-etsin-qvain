@@ -24,7 +24,7 @@ export class AskForAccess extends Component {
       })
       .catch(err => {
         console.log(err)
-        this.setState({ applicationState: 'Error' })
+        this.setState({ applicationState: 'disabled' })
       })
       .finally(() => {
         this.setState({ loading: false })
