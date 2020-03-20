@@ -158,7 +158,11 @@ class Qvain extends Component {
 
   handleCreate = e => {
     // e.preventDefault()
-    this.setState({ submitted: true })
+    this.setState({
+      submitted: true,
+      datasetError: false,
+      datasetLoading: true,
+    })
     const obj = handleSubmitToBackend(this.props.Stores.Qvain)
     qvainFormSchema
       .validate(obj, { abortEarly: false })
@@ -167,7 +171,10 @@ class Qvain extends Component {
           .post('/api/dataset', obj)
           .then(res => {
             const data = res.data
-            this.setState({ response: { ...data, is_new: true } })
+            this.setState({
+              response: { ...data, is_new: true },
+              datasetLoading: false,
+            })
             // Open the created dataset without reloading the editor
             if (data && data.identifier) {
               this.props.Stores.Qvain.resetQvainStore()
@@ -178,11 +185,19 @@ class Qvain extends Component {
           .catch(this.handlePublishError)
       })
       .catch(err => {
+        console.log('Error for event: ', e)
         console.log(err.errors)
 
         // Refreshing error header
-        this.setState({ response: null })
-        this.setState({ response: err.errors })
+        this.setState({
+          response: null
+        })
+
+        // Loading done, so set error header
+        this.setState({
+          response: err.errors,
+          datasetLoading: false,
+        })
       })
   }
 
@@ -192,8 +207,12 @@ class Qvain extends Component {
   }
 
   handleUpdate = e => {
-    e.preventDefault()
-    this.setState({ submitted: true })
+    // e.preventDefault()
+    this.setState({
+      submitted: true,
+      datasetError: false,
+      datasetLoading: true,
+    })
     const obj = handleSubmitToBackend(this.props.Stores.Qvain)
     obj.original = this.props.Stores.Qvain.original
     qvainFormSchema
@@ -205,16 +224,27 @@ class Qvain extends Component {
             this.props.Stores.Qvain.moveSelectedToExisting()
             this.props.Stores.Qvain.setChanged(false)
             this.props.Stores.Qvain.editDataset(res.data)
-            this.setState({ response: res.data })
+            this.setState({
+              response: res.data,
+              datasetLoading: false,
+            })
           })
           .catch(this.handlePublishError)
       })
       .catch(err => {
+        console.log('Error for event: ', e)
         console.log(err.errors)
 
         // Refreshing error header
-        this.setState({ response: null })
-        this.setState({ response: err.errors })
+        this.setState({
+          response: null
+        })
+
+        // Loading done, so set error header
+        this.setState({
+          response: err.errors,
+          datasetLoading: false,
+        })
       })
   }
 

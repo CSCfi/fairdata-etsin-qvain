@@ -5,7 +5,6 @@ import { SingleDatePicker } from 'react-dates';
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import moment from 'moment'
-import Button from '../../general/button'
 import Card from '../general/card'
 import ValidationError from '../general/validationError'
 import { LabelLarge } from '../general/form'
@@ -51,7 +50,7 @@ class IssuedDateField extends React.Component {
         </LabelLarge>
         <Translate component="p" content="qvain.description.issuedDate.infoText" />
         <Fragment>
-            <DatePickerWrapper>
+          <DatePickerWrapper>
             <Translate
               component={SingleDatePicker}
               hideKeyboardShortcutsPanel
@@ -60,9 +59,9 @@ class IssuedDateField extends React.Component {
               onDateChange={
                 date => {
                   if (date === null) {
-                      setIssuedDate(undefined)
+                    setIssuedDate(undefined)
                   } else {
-                      setIssuedDate(date.utc().format(DateFormats.ISO8601_DATE_FORMAT))
+                    setIssuedDate(date.utc().format(DateFormats.ISO8601_DATE_FORMAT))
                   }
                 }
               }
@@ -75,8 +74,8 @@ class IssuedDateField extends React.Component {
               onClose={this.validate}
               displayFormat={DateFormats.ISO8601_DATE_FORMAT}
             />
-            </DatePickerWrapper>
-            {error && <ValidationError>{errorMessage}</ValidationError>}
+          </DatePickerWrapper>
+          {error && <ValidationError>{errorMessage}</ValidationError>}
         </Fragment>
       </Card>
     )
