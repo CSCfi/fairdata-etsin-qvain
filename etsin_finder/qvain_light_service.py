@@ -249,7 +249,7 @@ class MetaxQvainLightAPIService(FlaskService):
         """
         req_url = self.METAX_CREATE_DATASET
         if use_doi is True:
-            req_url += '?pid_type=doi'
+            req_url += '&pid_type=doi'
         headers = {'Accept': 'application/json'}
         try:
             metax_api_response = requests.post(req_url,
