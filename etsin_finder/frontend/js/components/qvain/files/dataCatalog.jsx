@@ -93,15 +93,15 @@ class DataCatalog extends Component {
         <DoiSelectionContainer>
           <Checkbox
             id="doiSelector"
-            style={{ display: (this.state.fileOrigin === 'IDA' || dataCatalog === 'urn:nbn:fi:att:data-catalog-ida') ? 'inline-block' : 'none' }}
+            style={{ display: (this.state.fileOrigin === 'IDA' && original == undefined) ? 'inline-block' : 'none' }}
             onChange={this.handleDoiCheckboxChange}
-            disabled={(original !== undefined) && (dataCatalog === 'urn:nbn:fi:att:data-catalog-ida')}
+            disabled={(this.state.fileOrigin !== 'IDA' || original !== undefined)}
             defaultChecked={this.state.useDoi || ((original !== undefined) && (dataCatalog === 'urn:nbn:fi:att:data-catalog-ida'))}
           />
           <Label
             htmlFor="doiSelector"
             style={{
-              display: (this.state.fileOrigin === 'IDA' || dataCatalog === 'urn:nbn:fi:att:data-catalog-ida') ? 'inline-block' : 'none',
+              display: (this.state.fileOrigin === 'IDA' && original == undefined) ? 'inline-block' : 'none',
               color: ((original !== undefined) && (dataCatalog === 'urn:nbn:fi:att:data-catalog-ida')) && '#999',
             }}
           >
