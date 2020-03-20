@@ -107,6 +107,7 @@ Object {
     "en": "",
     "fi": "Title",
   },
+  "useDoi": false,
 }
 `;
 
@@ -226,6 +227,7 @@ Object {
     "en": "",
     "fi": "Title",
   },
+  "useDoi": false,
 }
 `;
 
@@ -346,6 +348,7 @@ Object {
     "en": "",
     "fi": "Title",
   },
+  "useDoi": false,
 }
 `;
 
@@ -446,6 +449,7 @@ Object {
     "en": "",
     "fi": "Title",
   },
+  "useDoi": false,
 }
 `;
 
@@ -546,5 +550,6 @@ Object {
     "en": "",
     "fi": "Title",
   },
+  "useDoi": false,
 }
 `;
