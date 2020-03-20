@@ -90,6 +90,7 @@ Object {
     },
   ],
   "identifiers": Array [],
+  "issuedDate": undefined,
   "keywords": Array [
     "keyword",
   ],
@@ -208,6 +209,7 @@ Object {
     },
   ],
   "identifiers": Array [],
+  "issuedDate": undefined,
   "keywords": Array [
     "keyword",
   ],
@@ -327,6 +329,7 @@ Object {
     },
   ],
   "identifiers": Array [],
+  "issuedDate": undefined,
   "keywords": Array [
     "keyword",
   ],
@@ -426,6 +429,7 @@ Object {
     },
   ],
   "identifiers": Array [],
+  "issuedDate": undefined,
   "keywords": Array [
     "keyword",
   ],
@@ -525,6 +529,7 @@ Object {
     },
   ],
   "identifiers": Array [],
+  "issuedDate": undefined,
   "keywords": Array [
     "keyword",
   ],
