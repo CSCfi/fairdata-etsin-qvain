@@ -145,6 +145,7 @@ class Qvain extends Component {
 
   handleCreate = e => {
     e.preventDefault()
+    this.props.Stores.Qvain.addUnsavedMultiValueFields()
     this.setState({ submitted: true })
     const obj = handleSubmitToBackend(this.props.Stores.Qvain)
     qvainFormSchema
@@ -180,6 +181,7 @@ class Qvain extends Component {
 
   handleUpdate = e => {
     e.preventDefault()
+    this.props.Stores.Qvain.addUnsavedMultiValueFields()
     this.setState({ submitted: true })
     const obj = handleSubmitToBackend(this.props.Stores.Qvain)
     obj.original = this.props.Stores.Qvain.original

@@ -39,7 +39,7 @@ class Qvain {
 
   @observable fieldOfScience = undefined
 
-  @observable fieldsOfScience = []
+  @observable fieldOfScienceArray = []
 
   @observable keywords = []
 
@@ -71,7 +71,7 @@ class Qvain {
     }
     this.otherIdentifiers = []
     this.fieldOfScience = undefined
-    this.fieldsOfScience = []
+    this.fieldOfScienceArray = []
     this.keywords = []
     this.license = License(undefined, LicenseUrls.CCBY4)
     this.otherLicenseUrl = undefined
@@ -155,9 +155,24 @@ class Qvain {
   }
 
   @action
-  setFieldsOfScience = fieldsOfScience => {
-    this.fieldsOfScience = fieldsOfScience
+  removeFieldOfScience = fieldOfScienceToRemove => {
+    this.fieldOfScienceArray = this.fieldOfScienceArray.filter(fieldOfScience => fieldOfScience.url !== fieldOfScienceToRemove.url)
     this.changed = true
+  }
+
+  @action
+  addFieldOfScience = (fieldOfScience) => {
+    // Add fieldOfScience to fieldOfScienceArray if fieldOfScience has "url" and
+    // "name" object keys, and does not exist in the array.
+    if (fieldOfScience !== undefined) {
+      if (
+        Object.keys(fieldOfScience).includes(('url', 'name')) &&
+        !this.fieldOfScienceArray.some(field => field.url === fieldOfScience.url)
+      ) {
+        this.fieldOfScienceArray.push(FieldOfScience(fieldOfScience.name, fieldOfScience.url))
+        this.changed = true
+      }
+    }
   }
 
   @action
@@ -173,9 +188,13 @@ class Qvain {
   }
 
   @action
-  removeFieldOfScience = fieldOfScienceToRemove => {
-    this.fieldsOfScience = this.fieldsOfScience.filter(fieldOfScience => fieldOfScience.url !== fieldOfScienceToRemove.url)
-    this.changed = true
+  addUnsavedMultiValueFields = () => {
+    // If multi value fields (fieldOfScience, otherIdentifier, keywords) have
+    // a value that has not been added with the ADD-button, then add them when
+    // the dataset is submitted.
+    if (this.fieldOfScience !== undefined) {
+      this.addFieldOfScience(this.fieldOfScience)
+    }
   }
 
   @action
@@ -622,8 +641,7 @@ class Qvain {
     // fields of science
     if (researchDataset.field_of_science !== undefined) {
       researchDataset.field_of_science.forEach(element => {
-        this.fieldOfScience = FieldOfScience(element.pref_label, element.identifier)
-        this.fieldsOfScience.push(this.fieldOfScience)
+        this.addFieldOfScience(FieldOfScience(element.pref_label, element.identifier))
       });
     }
 
@@ -1077,11 +1095,6 @@ export const Actor = (entityType, roles, name, email, identifier, organization, 
 export const EmptyActor = Actor(EntityType.PERSON, [], '', '', '', undefined, undefined)
 
 export const FieldOfScience = (name, url) => ({
-  name,
-  url,
-})
-
-export const FieldsOfScience = (name, url) => ({
   name,
   url,
 })
