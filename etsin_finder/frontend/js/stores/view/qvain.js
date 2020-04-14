@@ -35,6 +35,8 @@ class Qvain {
     fi: '',
   }
 
+  @observable otherIdentifier = ''
+
   @observable otherIdentifiers = []
 
   @observable fieldOfScience = undefined
@@ -69,6 +71,7 @@ class Qvain {
       en: '',
       fi: '',
     }
+    this.otherIdentifier = ''
     this.otherIdentifiers = []
     this.fieldOfScience = undefined
     this.fieldOfScienceArray = []
@@ -132,6 +135,11 @@ class Qvain {
       this.description.fi = description
     }
     this.changed = true
+  }
+
+  @action
+  setOtherIdentifier = identifier => {
+    this.otherIdentifier = identifier
   }
 
   @action
