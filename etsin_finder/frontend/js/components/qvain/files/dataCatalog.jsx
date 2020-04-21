@@ -10,7 +10,7 @@ import Card from '../general/card'
 import { dataCatalogSchema } from '../utils/formValidation'
 import ValidationError from '../general/validationError'
 import { DataCatalogIdentifiers } from '../utils/constants'
-import { Label, Checkbox, LabelLarge } from '../general/form'
+import { Checkbox, LabelLarge } from '../general/form'
 
 const options = [
   { value: DataCatalogIdentifiers.IDA, label: translate('qvain.files.dataCatalog.ida') },
@@ -91,7 +91,7 @@ class DataCatalog extends Component {
           isDisabled={(selected.length > 0) || (original !== undefined) || isPas}
         />
         {
-          (this.state.fileOrigin === 'IDA' && original === undefined) &&
+          (this.state.fileOrigin === 'IDA' && original === undefined) && (
           <DoiSelectionContainer>
             <Checkbox
               id="doiSelector"
@@ -105,6 +105,7 @@ class DataCatalog extends Component {
               <Translate content="qvain.files.dataCatalog.doiSelection" />
             </DoiLabel>
           </DoiSelectionContainer>
+          )
         }
         {errorMessage && <ValidationError>{errorMessage}</ValidationError>}
       </Card>
