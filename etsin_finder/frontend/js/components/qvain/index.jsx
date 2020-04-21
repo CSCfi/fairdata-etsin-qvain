@@ -159,6 +159,7 @@ class Qvain extends Component {
   handleCreate = e => {
     // e.preventDefault()
     this.setState({
+      response: null,
       submitted: true,
       datasetError: false,
       datasetLoading: true,
@@ -188,11 +189,6 @@ class Qvain extends Component {
         console.log('Error for event: ', e)
         console.log(err.errors)
 
-        // Refreshing error header
-        this.setState({
-          response: null
-        })
-
         // Loading done, so set error header
         this.setState({
           response: err.errors,
@@ -209,6 +205,7 @@ class Qvain extends Component {
   handleUpdate = e => {
     // e.preventDefault()
     this.setState({
+      response: null,
       submitted: true,
       datasetError: false,
       datasetLoading: true,
@@ -234,11 +231,6 @@ class Qvain extends Component {
       .catch(err => {
         console.log('Error for event: ', e)
         console.log(err.errors)
-
-        // Refreshing error header
-        this.setState({
-          response: null
-        })
 
         // Loading done, so set error header
         this.setState({
