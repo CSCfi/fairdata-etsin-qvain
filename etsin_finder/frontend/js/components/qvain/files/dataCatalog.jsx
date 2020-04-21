@@ -90,24 +90,22 @@ class DataCatalog extends Component {
           attributes={{ placeholder: 'qvain.files.dataCatalog.placeholder' }}
           isDisabled={(selected.length > 0) || (original !== undefined) || isPas}
         />
-        <DoiSelectionContainer>
-          <Checkbox
-            id="doiSelector"
-            style={{ display: (this.state.fileOrigin === 'IDA' && original === undefined) ? 'inline-block' : 'none' }}
-            onChange={this.handleDoiCheckboxChange}
-            disabled={(this.state.fileOrigin !== 'IDA' || original !== undefined)}
-            defaultChecked={this.state.useDoi || ((original !== undefined) && (dataCatalog === 'urn:nbn:fi:att:data-catalog-ida'))}
-          />
-          <Label
-            htmlFor="doiSelector"
-            style={{
-              display: (this.state.fileOrigin === 'IDA' && original === undefined) ? 'inline-block' : 'none',
-              color: ((original !== undefined) && (dataCatalog === 'urn:nbn:fi:att:data-catalog-ida')) && '#999',
-            }}
-          >
-            <Translate content="qvain.files.dataCatalog.doiSelection" />
-          </Label>
-        </DoiSelectionContainer>
+        {
+          (this.state.fileOrigin === 'IDA' && original === undefined) &&
+          <DoiSelectionContainer>
+            <Checkbox
+              id="doiSelector"
+              onChange={this.handleDoiCheckboxChange}
+              disabled={(this.state.fileOrigin !== 'IDA' || original !== undefined)}
+              defaultChecked={this.state.useDoi || ((original !== undefined) && (dataCatalog === 'urn:nbn:fi:att:data-catalog-ida'))}
+            />
+            <DoiLabel
+              htmlFor="doiSelector"
+            >
+              <Translate content="qvain.files.dataCatalog.doiSelection" />
+            </DoiLabel>
+          </DoiSelectionContainer>
+        }
         {errorMessage && <ValidationError>{errorMessage}</ValidationError>}
       </Card>
     )
@@ -116,6 +114,12 @@ class DataCatalog extends Component {
 
 const DoiSelectionContainer = styled.div`
   margin-top: 20px;
+`
+
+const DoiLabel = styled.label`
+  margin-right: auto;
+  padding-left: 4px;
+  display: inline-block;
 `
 
 export default inject('Stores')(observer(DataCatalog))
