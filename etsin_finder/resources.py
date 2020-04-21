@@ -288,7 +288,7 @@ class REMSApplyForPermission(Resource):
         log.info('rems_identifier: {0}'.format(rems_identifier))
         if not rems_identifier:
             log.warning('No rems_identifier found for resource: {0}'.format(pref_id))
-            return 'No rems_identifier found for resource', 500 
+            return 'No rems_identifier found for resource', 500
         res_get_catalogue_item = _rems_api.get_catalogue_item_for_resource(rems_identifier)
         log.debug('res_get_catalogue_item: {0}'.format(res_get_catalogue_item))
 
