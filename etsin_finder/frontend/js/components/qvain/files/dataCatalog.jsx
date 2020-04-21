@@ -104,7 +104,8 @@ class DataCatalog extends Component {
             >
               <Translate content="qvain.files.dataCatalog.doiSelection" />
             </DoiLabel>
-          </DoiSelectionContainer>)
+          </DoiSelectionContainer>
+          )
         }
         {errorMessage && <ValidationError>{errorMessage}</ValidationError>}
       </Card>
