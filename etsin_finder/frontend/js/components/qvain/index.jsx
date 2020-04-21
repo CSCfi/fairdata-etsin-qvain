@@ -35,8 +35,8 @@ import PasState from './pasState'
 const customStyles = {
   content: {
     minWidth: '20vw',
-    maxWidth: '800px',
-    padding: '3em',
+    maxWidth: '60vw',
+    padding: '2vw',
   },
 }
 
