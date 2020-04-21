@@ -317,6 +317,7 @@ const finnish = {
       50: 'Tarkastus katkesi',
       60: 'Tarkastaa taas',
       70: 'Odottaa siirtoa',
+      75: 'Metadata vahvistettu',
       80: 'Siirto aloitettu',
       90: 'Paketoi',
       100: 'Paketointi katkesi',

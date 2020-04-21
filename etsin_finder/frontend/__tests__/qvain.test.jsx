@@ -33,6 +33,7 @@ import QvainStore, {
 import LocaleStore from '../js/stores/view/language'
 import { RadioInput } from '../js/components/qvain/general/form';
 import { ListItem } from '../js/components/qvain/general/list';
+import TablePasState from '../js/components/qvain/datasets/tablePasState'
 
 const getStores = () => {
   QvainStore.setLegacyFilePicker(false)
@@ -109,6 +110,13 @@ describe('Qvain', () => {
     wrapper.setProps({ match: anotherMatch })
     expect(callCount).toBe(3)
     expect(lastCall).toBe(anotherMatch.params.identifier)
+  })
+})
+
+describe('Qvain dataset list PreservationStates', () => {
+  it('should render <TablePasState />', () => {
+    const component = shallow(<TablePasState preservationState={0} />)
+    expect(component).toMatchSnapshot()
   })
 })
 

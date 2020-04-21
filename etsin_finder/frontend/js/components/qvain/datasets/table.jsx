@@ -17,12 +17,13 @@ import {
   BodyCell,
   TableNote,
 } from '../general/table'
-import { DataCatalogIdentifiers, PreservationStates } from '../utils/constants'
+import { DataCatalogIdentifiers } from '../utils/constants'
 import Modal from '../../general/modal'
 import DatasetPagination from './pagination'
 import Label from '../general/label'
 import { TableButton, RemoveButton, DangerButton } from '../general/buttons'
 import { FormField, Input, Label as inputLabel } from '../general/form'
+import TablePasState from './tablePasState'
 
 const USER_DATASETS_URL = '/api/datasets/'
 
@@ -185,6 +186,7 @@ class DatasetTable extends Component {
     return formattedDate
   }
 
+
   render() {
     const { onPage, loading, error, errorMessage, page, count, limit, searchTerm } = this.state
     return (
@@ -257,9 +259,9 @@ class DatasetTable extends Component {
                     {dataset.deprecated && (
                       <Translate color="error" content="qvain.datasets.deprecated" component={DatasetLabel} />
                     )}
-                    {(dataset.preservation_state > 0 || dataset.data_catalog.identifier === DataCatalogIdentifiers.PAS) &&
-                      <PasLabel color={PreservationStates[dataset.preservation_state].color}>PAS</PasLabel>
-                    }
+                    {(dataset.preservation_state > 0 || dataset.data_catalog.identifier === DataCatalogIdentifiers.PAS) && (
+                      <TablePasState preservationState={dataset.preservation_state} />
+                    )}
                   </BodyCellWordWrap>
                   <BodyCell>{this.formatDatasetDateCreated(dataset.date_created)}</BodyCell>
                   <BodyCellActions>
@@ -301,11 +303,6 @@ class DatasetTable extends Component {
 }
 
 const DatasetLabel = styled(Label)`
-  margin-left: 10px;
-  text-transform: uppercase;
-`;
-
-const PasLabel = styled(Label)`
   margin-left: 10px;
   text-transform: uppercase;
 `;
