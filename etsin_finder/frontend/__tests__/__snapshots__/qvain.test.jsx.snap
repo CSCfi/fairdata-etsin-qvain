@@ -1,5 +1,48 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Qvain dataset list PreservationStates should render <TablePasState /> 1`] = `
+<Fragment>
+  <Styled(styled.div)
+    color="primary"
+  >
+    PAS
+  </Styled(styled.div)>
+  <Translate
+    component={
+      Object {
+        "$$typeof": Symbol(react.forward_ref),
+        "attrs": Array [],
+        "componentStyle": ComponentStyle {
+          "componentId": "sc-fcdeBU",
+          "isStatic": true,
+          "rules": Array [
+            "
+  margin-left: 10px;
+  font-size: 0.8em;
+  :before {
+    content: \\"(\\";
+  }
+  :after {
+    content: \\")\\";
+  }
+",
+          ],
+        },
+        "displayName": "styled.span",
+        "foldedComponentIds": Array [],
+        "render": [Function],
+        "styledComponentId": "sc-fcdeBU",
+        "target": "span",
+        "toString": [Function],
+        "warnTooManyClasses": [Function],
+        "withComponent": [Function],
+      }
+    }
+    content="qvain.pasState.0"
+  />
+</Fragment>
+`;
+
 exports[`Qvain should render correctly 1`] = `
 <ContextConsumer>
   <Component />

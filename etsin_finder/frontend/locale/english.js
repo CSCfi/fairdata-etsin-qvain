@@ -317,6 +317,7 @@ const english = {
       50: 'Validation failed',
       60: 'Revalidating',
       70: 'Waits for transfer',
+      75: 'Metadata confirmed',
       80: 'Transfer started',
       90: 'Packaging',
       100: 'Packaging failed',
