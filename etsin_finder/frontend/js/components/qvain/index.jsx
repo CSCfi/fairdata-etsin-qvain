@@ -157,7 +157,13 @@ class Qvain extends Component {
   }
 
   handleCreate = e => {
-    // e.preventDefault()
+    if (this.state.useDoiModalIsOpen) {
+      this.setState({
+        useDoiModalIsOpen: false
+      })
+    } else {
+      e.preventDefault()
+    }
     this.setState({
       response: null,
       submitted: true,
@@ -203,7 +209,7 @@ class Qvain extends Component {
   }
 
   handleUpdate = e => {
-    // e.preventDefault()
+    e.preventDefault()
     this.setState({
       response: null,
       submitted: true,
@@ -261,11 +267,12 @@ class Qvain extends Component {
     })
   }
 
+  // DOI usage accepted and will thus be used instead of URN ("yes")
   acceptDoi() {
-    this.closeUseDoiInformation()
     this.handleCreate()
   }
 
+  // User closes the dialogue without accepting DOI usage ("no" or "exit")
   closeUseDoiInformation() {
     this.setState({
       useDoiModalIsOpen: false
