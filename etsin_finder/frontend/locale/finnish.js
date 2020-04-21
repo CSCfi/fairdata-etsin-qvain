@@ -327,7 +327,7 @@ const finnish = {
       140: 'Saatavilla'
     },
     useDoiHeader: 'DOI-tunnisten luominen',
-    useDoiContent: 'Olet pyytänyt aineistollesi pysyväksi tunnisteeksi DOIn URN-tunnisteen sijaan. DOI vaatii määrittelyn julkaisupäivämäärän. DOI-tunniste rekisteröidään DataCite-palvelun tietokantaan, eikä toimintoa voi peruuttaa. Oletko varma?',
+    useDoiContent: 'Olet pyytänyt aineistollesi pysyväksi tunnisteeksi DOIn URN-tunnisteen sijaan. DOI vaatii määrittelyn julkaisupäivämäärän ja julkaisijan. DOI-tunniste rekisteröidään DataCite-palvelun tietokantaan, eikä toimintoa voi peruuttaa. Oletko varma?',
     useDoiAffirmative: 'Kyllä',
     useDoiNegative: 'Ei',
     unsuccessfullLogin: 'Kirjautuminen epäonnistui.',
@@ -598,8 +598,8 @@ const finnish = {
         },
         requiredActors: {
           atLeastOneActor: 'Aineistoon on lisättävä vähintään yksi toimija.',
-          mandatoryActors:
-            'Toimijat: Tekijä on pakollinen kenttä. Huomioi: yksittäisellä toimijalla voi olla useampi rooli.',
+          mandatoryActors: 'Toimijat: Tekijä on pakollinen kenttä. Huomioi: yksittäisellä toimijalla voi olla useampi rooli.',
+          publisherIfDOI: 'Toimijat: DOI-ainestoon on lisättävä julkaisija.',
         },
       },
       accessType: {

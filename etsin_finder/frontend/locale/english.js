@@ -327,7 +327,7 @@ const english = {
       140: 'Available'
     },
     useDoiHeader: 'Creation of a DOI',
-    useDoiContent: 'You have selected DOI as primary identifier for your dataset instead of URN. DOI requires a defined issued date. A DOI (Digital Object Identifier) will be created and stored in the DataCite Service and it cannot be removed. Are you sure you want to select DOI?',
+    useDoiContent: 'You have selected DOI as primary identifier for your dataset instead of URN. DOI requires a defined issued date and a dataset publisher. A DOI (Digital Object Identifier) will be created and stored in the DataCite Service and it cannot be removed. Are you sure you want to select DOI?',
     useDoiAffirmative: 'Yes',
     useDoiNegative: 'No',
     unsuccessfullLogin: 'Login unsuccessful.',
@@ -592,8 +592,8 @@ const english = {
         },
         requiredActors: {
           atLeastOneActor: 'You must add at least one actor to your dataset.',
-          mandatoryActors:
-            'Actors: Creator role is mandatory. Note: one actor can have multiple roles.',
+          mandatoryActors: 'Actors: Creator role is mandatory. Note: one actor can have multiple roles.',
+          publisherIfDOI: 'Actors: For DOI datasets publisher must be defined.',
         },
       },
       accessType: {
