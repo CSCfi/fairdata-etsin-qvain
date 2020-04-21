@@ -102,6 +102,8 @@ class Qvain {
 
     this.Files.reset()
 
+    this.useDoi = false
+
     // Reset External resources related data
     this.externalResources = []
     this.externalResourceInEdit = EmptyExternalResource
