@@ -72,16 +72,19 @@ export class ExternalFilesBase extends Component {
               <ButtonLabel>
                 {addedExternalResource.title }
                 {
-                  (typeof(addedExternalResource.accessUrl) !== 'undefined') ? ((' / ' +
+                  // Disable lint rule because this syntax is more readable using concatenation
+                  /* eslint-disable prefer-template */
+                  (typeof addedExternalResource.accessUrl !== 'undefined') ? ((' / ' +
                   (' / ' + addedExternalResource.accessUrl.length > 40 ?
                   addedExternalResource.accessUrl.substring(0, 40).concat('... ') :
                   addedExternalResource.accessUrl))) : null
                 }
                 {
-                  (typeof(addedExternalResource.downloadUrl) !== 'undefined') ? ((' / ' +
+                  (typeof addedExternalResource.downloadUrl !== 'undefined') ? ((' / ' +
                   (' / ' + addedExternalResource.downloadUrl.length > 40 ?
                   addedExternalResource.downloadUrl.substring(0, 40).concat('... ') :
                   addedExternalResource.downloadUrl))) : null
+                  /* eslint-enable prefer-template */
                 }
 
               </ButtonLabel>
