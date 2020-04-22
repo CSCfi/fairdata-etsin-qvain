@@ -326,6 +326,10 @@ const english = {
       130: 'Transfer failed',
       140: 'Available'
     },
+    useDoiHeader: 'Creation of a DOI',
+    useDoiContent: 'You have selected DOI as primary identifier for your dataset instead of URN. DOI requires a defined issued date and a dataset publisher. A DOI (Digital Object Identifier) will be created and stored in the DataCite Service and it cannot be removed. Are you sure you want to select DOI?',
+    useDoiAffirmative: 'Yes',
+    useDoiNegative: 'No',
     unsuccessfullLogin: 'Login unsuccessful.',
     notCSCUser1:
       'Please make sure that you have a valid CSC account. If you tried to log in with an external account (for example Haka) you might get this error if your account is not associated with CSC account. Please do the registration in',
@@ -405,6 +409,12 @@ const english = {
           placeholderFi: 'Description (Finnish)',
         },
         instructions: 'Only one language selection is mandatory',
+      },
+      issuedDate: {
+        title: 'Issued date',
+        infoText: 'Date of formal issuance (publication) of the resource. This value does not affect or reflect the visibility of the dataset itself.',
+        instructions: '',
+        placeholder: 'Date',
       },
       otherIdentifiers: {
         title: 'Other Identifiers',
@@ -531,6 +541,9 @@ const english = {
         max: 'The description is too long.',
         required: 'A description is required in at least one language.',
       },
+      issuedDate: {
+        requiredIfUseDoi: 'Issued date must be defined for DOI datasets'
+      },
       otherIdentifiers: {
         string: 'Other identifiers must be string value.',
         url: 'The identifiers have to be valid URLs.',
@@ -579,8 +592,8 @@ const english = {
         },
         requiredActors: {
           atLeastOneActor: 'You must add at least one actor to your dataset.',
-          mandatoryActors:
-            'Actors: Creator role is mandatory. Note: one actor can have multiple roles.',
+          mandatoryActors: 'Actors: Creator role is mandatory. Note: one actor can have multiple roles.',
+          publisherIfDOI: 'Actors: For DOI datasets publisher must be defined.',
         },
       },
       accessType: {
@@ -651,6 +664,7 @@ const english = {
           "Fairdata Services need to know whether you are linking files from IDA or remote resources. You can also publish datasets without any files. In that case, please still select either one. The selection cannot be re-done, so if you are not sure whether you'll add files later, select the one you think you'll need in the future.",
         explanation:
           'Choose "IDA" if the data is stored in Fairdata IDA Service. Choose "Remote resources" if the data is in remote location.',
+        doiSelection: 'I want the dataset to have a DOI (digital object identifier) instead of a URN.',
         placeholder: 'Select option',
         ida: 'IDA',
         att: 'Remote resources',

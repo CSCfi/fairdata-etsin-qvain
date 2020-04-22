@@ -52,6 +52,8 @@ const keywordsSchema = yup
       .string()
   )
 
+const issuedDateSchema = yup.date().nullable()
+
 const otherIdentifierSchema = yup
   .string(translate('qvain.validationMessages.otherIdentifiers.string'))
   .min(10, translate('qvain.validationMessages.otherIdentifiers.min'))
@@ -210,6 +212,9 @@ const directorySchema = yup.object().shape({
 
 const directoriesSchema = yup.array().of(directorySchema)
 
+// USE DOI SCHEMA (IDA)
+const useDoiSchema = yup.boolean()
+
 // PAS METADATA VALIDATION
 
 export const fileMetadataSchema = yup.object().shape({
@@ -307,6 +312,47 @@ const actorsSchema = yup
       }
       return false;
     })
+  // DOI: publisher must be found in the actor list in order to allow the dataset to be posted to the database
+  .when('useDoi', {
+    is: true,
+    then:
+    yup.array()
+    .of(
+      yup.object().shape({
+        type: actorType,
+        role: actorRolesSchema,
+        name: actorNameSchema,
+        email: actorEmailSchema,
+        identifier: actorIdentifierSchema,
+        organization: yup.mixed().when('type', {
+          is: EntityType.PERSON,
+          then: yup
+            .object()
+            .required(translate('qvain.validationMessages.actors.organization.required')),
+          otherwise: yup
+            .object()
+            .nullable(),
+        }),
+      })
+    )
+  .test(
+    'is-doi-and-contains-publisher',
+    translate('qvain.validationMessages.actors.requiredActors.publisherIfDOI'),
+    (value) => {
+      let foundPublisher = false;
+        for (let i = 0; i < value.length; i += 1) {
+          for (let j = 0; j < value[i].role.length; j += 1) {
+          if (value[i].role[j] === Role.PUBLISHER) {
+            foundPublisher = true;
+          }
+        }
+      }
+      if (foundPublisher) {
+        return true;
+      }
+      return false;
+    })
+  })
   .required(translate('qvain.validationMessages.actors.requiredActors.atLeastOneActor'))
 
 // ENTIRE FORM VALIDATION
@@ -314,6 +360,17 @@ const actorsSchema = yup
 const qvainFormSchema = yup.object().shape({
   title: titleSchema,
   description: descriptionSchema,
+  issuedDate: yup
+    .mixed()
+    .when('useDoi', {
+      is: true,
+      then: yup
+        .date()
+        .required(translate('qvain.validationMessages.issuedDate.requiredIfUseDoi')),
+      otherwise: yup
+        .date()
+        .nullable()
+    }),
   fieldOfScience: fieldsOfScienceSchema,
   keywords: keywordsSchema,
   otherIdentifiers: otherIdentifiersSchema,
@@ -354,12 +411,14 @@ const qvainFormSchema = yup.object().shape({
   cumulativeState: cumulativeStateSchema,
   files: filesSchema,
   directories: directoriesSchema,
+  useDoi: useDoiSchema,
 })
 
 export {
   qvainFormSchema,
   titleSchema,
   descriptionSchema,
+  issuedDateSchema,
   otherIdentifierSchema,
   otherIdentifiersSchema,
   keywordsSchema,
@@ -387,6 +446,7 @@ export {
   directoryUseCategorySchema,
   directorySchema,
   directoriesSchema,
+  useDoiSchema,
   externalResourceSchema,
   externalResourceTitleSchema,
   externalResourceAccessUrlSchema,
