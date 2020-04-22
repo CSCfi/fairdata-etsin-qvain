@@ -343,6 +343,11 @@ class Qvain {
   setDataCatalog = selectedDataCatalog => {
     this.dataCatalog = selectedDataCatalog
     this.changed = true
+
+    // Remove useDoi if dataCatalog is ATT
+    if (selectedDataCatalog === 'urn:nbn:fi:att:data-catalog-att') {
+      this.useDoi = false
+    }
   }
 
   @action
