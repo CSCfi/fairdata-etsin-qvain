@@ -85,6 +85,13 @@ class DataCatalog extends Component {
               errorMessage: undefined,
               fileOrigin: selection.label,
             })
+
+            // Uncheck useDoi checkbox if data catalog is ATT
+            if (selection.value === 'urn:nbn:fi:att:data-catalog-att') {
+              this.setState({
+                useDoi: false,
+              })
+            }
           }}
           onBlur={this.handleOnBlur}
           attributes={{ placeholder: 'qvain.files.dataCatalog.placeholder' }}
@@ -97,7 +104,8 @@ class DataCatalog extends Component {
               id="doiSelector"
               onChange={this.handleDoiCheckboxChange}
               disabled={(this.state.fileOrigin !== 'IDA' || original !== undefined)}
-              defaultChecked={this.state.useDoi || ((original !== undefined) && (dataCatalog === 'urn:nbn:fi:att:data-catalog-ida'))}
+              checked={this.state.useDoi}
+              // defaultChecked={this.state.useDoi || ((original !== undefined) && (dataCatalog === 'urn:nbn:fi:att:data-catalog-ida'))}
             />
             <DoiLabel
               htmlFor="doiSelector"

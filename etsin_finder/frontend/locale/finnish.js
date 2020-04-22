@@ -327,7 +327,7 @@ const finnish = {
       140: 'Saatavilla'
     },
     useDoiHeader: 'DOI-tunnisten luominen',
-    useDoiContent: 'Olet pyytänyt aineistollesi pysyväksi tunnisteeksi DOIn URN-tunnisteen sijaan. DOI vaatii määrittelyn julkaisupäivämäärän ja julkaisijan. DOI-tunniste rekisteröidään DataCite-palvelun tietokantaan, eikä toimintoa voi peruuttaa. Oletko varma?',
+    useDoiContent: 'Olet pyytänyt aineistollesi pysyväksi tunnisteeksi DOIn URN-tunnisteen sijaan. DOI vaatii, että julkaisupäivämäärä ja julkaisija on määritelty. DOI-tunniste rekisteröidään DataCite-palvelun tietokantaan, eikä toimintoa voi peruuttaa. Oletko varma?',
     useDoiAffirmative: 'Kyllä',
     useDoiNegative: 'Ei',
     unsuccessfullLogin: 'Kirjautuminen epäonnistui.',
