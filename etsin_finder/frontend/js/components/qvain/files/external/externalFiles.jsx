@@ -70,11 +70,20 @@ export class ExternalFilesBase extends Component {
           {addedExternalResources.map((addedExternalResource) => (
             <ButtonGroup tabIndex="0" key={addedExternalResource.id}>
               <ButtonLabel>
-                {addedExternalResource.title} / {addedExternalResource.accessUrl.length > 40 ?
-                addedExternalResource.accessUrl.substring(0, 40).concat('... ') :
-                addedExternalResource.accessUrl} / {addedExternalResource.downloadUrl.length > 40 ?
-                addedExternalResource.downloadUrl.substring(0, 40).concat('... ') :
-                addedExternalResource.downloadUrl}
+                {addedExternalResource.title }
+                {
+                  (typeof(addedExternalResource.accessUrl) !== 'undefined') ? ((' / ' +
+                  (' / ' + addedExternalResource.accessUrl.length > 40 ?
+                  addedExternalResource.accessUrl.substring(0, 40).concat('... ') :
+                  addedExternalResource.accessUrl))) : null
+                }
+                {
+                  (typeof(addedExternalResource.downloadUrl) !== 'undefined') ? ((' / ' +
+                  (' / ' + addedExternalResource.downloadUrl.length > 40 ?
+                  addedExternalResource.downloadUrl.substring(0, 40).concat('... ') :
+                  addedExternalResource.downloadUrl))) : null
+                }
+
               </ButtonLabel>
               <ButtonContainer>
                 <EditButton
