@@ -1,7 +1,6 @@
 import { observable, action, computed, runInAction } from 'mobx'
 import axios from 'axios'
 import { getDirectories, getFiles, deepCopy } from '../../components/qvain/utils/fileHierarchy'
-import Actors from './qvain.actors'
 import {
   AccessTypeURLs,
   LicenseUrls,
@@ -11,6 +10,7 @@ import {
   DataCatalogIdentifiers
 } from '../../components/qvain/utils/constants'
 import { getPath } from '../../components/qvain/utils/object'
+import Actors from './qvain.actors'
 import Files from './qvain.files'
 
 class Qvain {
@@ -34,6 +34,8 @@ class Qvain {
     en: '',
     fi: '',
   }
+
+  @observable issuedDate = undefined
 
   @observable otherIdentifiers = []
 
@@ -65,6 +67,7 @@ class Qvain {
       en: '',
       fi: '',
     }
+    this.issuedDate = undefined
     this.otherIdentifiers = []
     this.fieldOfScience = undefined
     this.fieldsOfScience = []
@@ -90,6 +93,8 @@ class Qvain {
 
     this.metadataModalFile = undefined
     this.fixDeprecatedModalOpen = false
+
+    this.useDoi = false
 
     // Reset External resources related data
     this.externalResources = []
@@ -125,6 +130,12 @@ class Qvain {
     } else if (lang === 'FINNISH') {
       this.description.fi = description
     }
+    this.changed = true
+  }
+
+  @action
+  setIssuedDate = exp => {
+    this.issuedDate = exp
     this.changed = true
   }
 
@@ -257,6 +268,8 @@ class Qvain {
 
   @observable dataCatalog = undefined
 
+  @observable useDoi = false
+
   @observable cumulativeState = CumulativeStates.NO
 
   @observable selectedProject = undefined
@@ -281,6 +294,16 @@ class Qvain {
   setDataCatalog = selectedDataCatalog => {
     this.dataCatalog = selectedDataCatalog
     this.changed = true
+
+    // Remove useDoi if dataCatalog is ATT
+    if (selectedDataCatalog === 'urn:nbn:fi:att:data-catalog-att') {
+      this.useDoi = false
+    }
+  }
+
+  @action
+  setUseDoi = selectedUseDoiStatus => {
+    this.useDoi = selectedUseDoiStatus
   }
 
   @action
@@ -552,7 +575,7 @@ class Qvain {
 
   // Dataset related
 
-  // dataset - METAX dataset JSON
+  // Dataset - METAX dataset JSON
   // perform schema transformation METAX JSON -> etsin backend / internal schema
   @action editDataset = dataset => {
     this.original = { ...dataset }
@@ -567,12 +590,15 @@ class Qvain {
     this.description.en = researchDataset.description.en ? researchDataset.description.en : ''
     this.description.fi = researchDataset.description.fi ? researchDataset.description.fi : ''
 
+    // Issued date
+    this.issuedDate = researchDataset.issued || undefined
+
     // Other identifiers
     this.otherIdentifiers = researchDataset.other_identifier
       ? researchDataset.other_identifier.map(oid => oid.notation)
       : []
 
-    // fields of science
+    // Fields of science
     if (researchDataset.field_of_science !== undefined) {
       researchDataset.field_of_science.forEach(element => {
         this.fieldOfScience = FieldOfScience(element.pref_label, element.identifier)
@@ -580,10 +606,10 @@ class Qvain {
       });
     }
 
-    // keywords
+    // Keywords
     this.keywords = researchDataset.keyword || []
 
-    // access type
+    // Access type
     const at = researchDataset.access_rights.access_type
       ? researchDataset.access_rights.access_type
       : undefined
@@ -591,13 +617,13 @@ class Qvain {
       ? AccessType(at.pref_label, at.identifier)
       : AccessType(undefined, AccessTypeURLs.OPEN)
 
-    // embargo date
-    const date = researchDataset.access_rights.available
+    // Embargo date
+    const embargoDate = researchDataset.access_rights.available
       ? researchDataset.access_rights.available
       : undefined
-    this.embargoExpDate = date || undefined
+    this.embargoExpDate = embargoDate || undefined
 
-    // license
+    // License
     const l = researchDataset.access_rights.license
       ? researchDataset.access_rights.license[0]
       : undefined

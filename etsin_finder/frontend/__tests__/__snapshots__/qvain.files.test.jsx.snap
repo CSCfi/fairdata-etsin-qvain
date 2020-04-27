@@ -94,6 +94,7 @@ Object {
     },
   ],
   "identifiers": Array [],
+  "issuedDate": undefined,
   "keywords": Array [
     "keyword",
   ],
@@ -110,6 +111,7 @@ Object {
     "en": "",
     "fi": "Title",
   },
+  "useDoi": false,
 }
 `;
 
@@ -216,6 +218,7 @@ Object {
     },
   ],
   "identifiers": Array [],
+  "issuedDate": undefined,
   "keywords": Array [
     "keyword",
   ],
@@ -232,6 +235,7 @@ Object {
     "en": "",
     "fi": "Title",
   },
+  "useDoi": false,
 }
 `;
 
@@ -339,6 +343,7 @@ Object {
     },
   ],
   "identifiers": Array [],
+  "issuedDate": undefined,
   "keywords": Array [
     "keyword",
   ],
@@ -355,6 +360,7 @@ Object {
     "en": "",
     "fi": "Title",
   },
+  "useDoi": false,
 }
 `;
 
@@ -442,6 +448,7 @@ Object {
     },
   ],
   "identifiers": Array [],
+  "issuedDate": undefined,
   "keywords": Array [
     "keyword",
   ],
@@ -458,6 +465,7 @@ Object {
     "en": "",
     "fi": "Title",
   },
+  "useDoi": false,
 }
 `;
 
@@ -545,6 +553,7 @@ Object {
     },
   ],
   "identifiers": Array [],
+  "issuedDate": undefined,
   "keywords": Array [
     "keyword",
   ],
@@ -561,5 +570,6 @@ Object {
     "en": "",
     "fi": "Title",
   },
+  "useDoi": false,
 }
 `;

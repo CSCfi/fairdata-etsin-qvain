@@ -28,6 +28,7 @@ exports[`Qvain.Description should render <Description /> 1`] = `
     </Tooltip>
   </styled.h2>
   <inject-DescriptionField-with-Stores />
+  <inject-IssuedDateField-with-Stores />
   <inject-OtherIdentifierField-with-Stores />
   <inject-FieldOfScienceField-with-Stores />
   <inject-KeywordsField-with-Stores />
@@ -129,6 +130,7 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
         "hierarchy": Object {},
         "idaPickerOpen": false,
         "inEdit": undefined,
+        "issuedDate": undefined,
         "keywords": Array [],
         "legacyFilePicker": true,
         "license": Object {
@@ -149,6 +151,7 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
           "en": "",
           "fi": "",
         },
+        "useDoi": false,
       },
     }
   }
@@ -250,6 +253,7 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
         "hierarchy": Object {},
         "idaPickerOpen": false,
         "inEdit": undefined,
+        "issuedDate": undefined,
         "keywords": Array [],
         "legacyFilePicker": true,
         "license": Object {
@@ -270,6 +274,7 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
           "en": "",
           "fi": "",
         },
+        "useDoi": false,
       },
     }
   }
@@ -371,6 +376,7 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
         "hierarchy": Object {},
         "idaPickerOpen": false,
         "inEdit": undefined,
+        "issuedDate": undefined,
         "keywords": Array [],
         "legacyFilePicker": true,
         "license": Object {
@@ -391,6 +397,7 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
           "en": "",
           "fi": "",
         },
+        "useDoi": false,
       },
     }
   }
@@ -492,6 +499,7 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
         "hierarchy": Object {},
         "idaPickerOpen": false,
         "inEdit": undefined,
+        "issuedDate": undefined,
         "keywords": Array [],
         "legacyFilePicker": true,
         "license": Object {
@@ -512,6 +520,7 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
           "en": "",
           "fi": "",
         },
+        "useDoi": false,
       },
     }
   }

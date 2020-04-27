@@ -318,6 +318,7 @@ const finnish = {
       50: 'Tarkastus katkesi',
       60: 'Tarkastaa taas',
       70: 'Odottaa siirtoa',
+      75: 'Metadata vahvistettu',
       80: 'Siirto aloitettu',
       90: 'Paketoi',
       100: 'Paketointi katkesi',
@@ -326,6 +327,10 @@ const finnish = {
       130: 'Siirto katkesi',
       140: 'Saatavilla'
     },
+    useDoiHeader: 'DOI-tunnisten luominen',
+    useDoiContent: 'Olet pyytänyt aineistollesi pysyväksi tunnisteeksi DOIn URN-tunnisteen sijaan. DOI vaatii, että julkaisupäivämäärä ja julkaisija on määritelty. DOI-tunniste rekisteröidään DataCite-palvelun tietokantaan, eikä toimintoa voi peruuttaa. Oletko varma?',
+    useDoiAffirmative: 'Kyllä',
+    useDoiNegative: 'Ei',
     unsuccessfullLogin: 'Kirjautuminen epäonnistui.',
     notCSCUser1:
       'Varmistakaa että teillä on voimassaoleva CSC tunnus. Jos yritit kirjautua sisään ulkoisella tunnuksella (kuten Haka) Niin saatat saada tämän virhe ilmoituksen jos titlit eivät ole linkitetty. Linkityksen voi tehdä',
@@ -410,6 +415,12 @@ const finnish = {
           placeholderEn: 'Kuvaus (Englanti)',
         },
         instructions: 'Vain yksi kielivalinta on pakollinen',
+      },
+      issuedDate: {
+        title: 'Jukaisupäivämäärä',
+        infoText: 'Lähteen muodollinen julkaisupäivämäärä. Ei vaikuta aineston näkyvyyteen.',
+        instructions: '',
+        placeholder: 'Päivämäärä'
       },
       otherIdentifiers: {
         title: 'Muut tunnisteet',
@@ -560,6 +571,9 @@ const finnish = {
         max: 'Kuvaus on liian pitkä.',
         required: 'Kuvaus on pakollinen vähintään yhdellä kielellä.',
       },
+      issuedDate: {
+        requiredIfUseDoi: 'Julkaisupäivämäärä on pakollinen kenttä jos haluat käyttää DOI -tunnistetta.'
+      },
       otherIdentifiers: {
         string: 'Tunnisteet tulisivat olla arvoltaan merkkijonoja.',
         url: 'Tunnisteet täytyy olla valideja URL:eja',
@@ -608,8 +622,8 @@ const finnish = {
         },
         requiredActors: {
           atLeastOneActor: 'Aineistoon on lisättävä vähintään yksi toimija.',
-          mandatoryActors:
-            'Toimijat: Aineistolla on oltava ainakin yksi tekijä. Huomioi: yksittäisellä toimijalla voi olla useampi rooli.',
+          mandatoryActors: 'Toimijat: Aineistolla on oltava ainakin yksi tekijä. Huomioi: yksittäisellä toimijalla voi olla useampi rooli.',
+          publisherIfDOI: 'Toimijat: DOI-ainestoon on lisättävä julkaisija.',
         },
       },
       accessType: {
@@ -680,6 +694,7 @@ const finnish = {
           'Ennenkuin pääset linkittämään tiedostoja aineistoosi, sinun tulee valita, linkitätkö tiedostoja IDAsta vai annatko ulkopuolisen palvelun URL-osoitteet, joista tiedostot löytyvät.',
         explanation:
           'Valitse "IDA", jos tiedostot on tallennettu Fairdata IDA -palveluun. Valitse "Ulkoinen lähde" jos tiedostot sijaitsevat muualla.',
+        doiSelection: 'Haluan aineistolleni DOI -tunnusteen (digital object identifier) URN - tunnusteen sijaan.',
         placeholder: 'Valitse vaihtoehto',
         ida: 'IDA',
         att: 'Ulkoinen lähde',

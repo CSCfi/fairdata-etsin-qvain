@@ -22,11 +22,11 @@ import checkDataLang, { getDataLang } from '../../../../../utils/checkDataLang'
 
 
 const customStyles = {
-    content: {
-        minWidth: '20vw',
-        maxWidth: '800px',
-        padding: '3em',
-    },
+  content: {
+    minWidth: '20vw',
+    maxWidth: '60vw',
+    padding: '2vw',
+  },
 }
 
 export default class Project extends Component {

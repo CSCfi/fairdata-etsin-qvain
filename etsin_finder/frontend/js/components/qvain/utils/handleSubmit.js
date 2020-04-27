@@ -62,6 +62,7 @@ const handleSubmitToBackend = (values) => {
   const obj = {
     title: values.title,
     description: values.description,
+    issuedDate: values.issuedDate,
     identifiers: values.otherIdentifiers,
     fieldOfScience: fieldsOfScienceToMetaxMethod(values.fieldsOfScience),
     keywords: values.keywords,
@@ -77,7 +78,8 @@ const handleSubmitToBackend = (values) => {
     dataCatalog: values.dataCatalog,
     cumulativeState: values.cumulativeState,
     files,
-    directories
+    directories,
+    useDoi: values.useDoi,
   }
   return obj
 }

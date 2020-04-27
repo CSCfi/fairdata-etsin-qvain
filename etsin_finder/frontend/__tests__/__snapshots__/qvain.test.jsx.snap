@@ -1,5 +1,48 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Qvain dataset list PreservationStates should render <TablePasState /> 1`] = `
+<Fragment>
+  <Styled(styled.div)
+    color="primary"
+  >
+    PAS
+  </Styled(styled.div)>
+  <Translate
+    component={
+      Object {
+        "$$typeof": Symbol(react.forward_ref),
+        "attrs": Array [],
+        "componentStyle": ComponentStyle {
+          "componentId": "sc-likbZx",
+          "isStatic": true,
+          "rules": Array [
+            "
+  margin-left: 10px;
+  font-size: 0.8em;
+  :before {
+    content: \\"(\\";
+  }
+  :after {
+    content: \\")\\";
+  }
+",
+          ],
+        },
+        "displayName": "styled.span",
+        "foldedComponentIds": Array [],
+        "render": [Function],
+        "styledComponentId": "sc-likbZx",
+        "target": "span",
+        "toString": [Function],
+        "warnTooManyClasses": [Function],
+        "withComponent": [Function],
+      }
+    }
+    content="qvain.pasState.0"
+  />
+</Fragment>
+`;
+
 exports[`Qvain should render correctly 1`] = `
 <ContextConsumer>
   <Component />
@@ -28,6 +71,7 @@ exports[`Qvain.Description should render <Description /> 1`] = `
     </Tooltip>
   </styled.h2>
   <inject-DescriptionField-with-Stores />
+  <inject-IssuedDateField-with-Stores />
   <inject-OtherIdentifierField-with-Stores />
   <inject-FieldOfScienceField-with-Stores />
   <inject-KeywordsField-with-Stores />
@@ -129,6 +173,7 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
         "hierarchy": Object {},
         "idaPickerOpen": false,
         "inEdit": undefined,
+        "issuedDate": undefined,
         "keywords": Array [],
         "legacyFilePicker": false,
         "license": Object {
@@ -149,6 +194,7 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
           "en": "",
           "fi": "",
         },
+        "useDoi": false,
       },
     }
   }
@@ -250,6 +296,7 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
         "hierarchy": Object {},
         "idaPickerOpen": false,
         "inEdit": undefined,
+        "issuedDate": undefined,
         "keywords": Array [],
         "legacyFilePicker": false,
         "license": Object {
@@ -270,6 +317,7 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
           "en": "",
           "fi": "",
         },
+        "useDoi": false,
       },
     }
   }
@@ -371,6 +419,7 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
         "hierarchy": Object {},
         "idaPickerOpen": false,
         "inEdit": undefined,
+        "issuedDate": undefined,
         "keywords": Array [],
         "legacyFilePicker": false,
         "license": Object {
@@ -391,6 +440,7 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
           "en": "",
           "fi": "",
         },
+        "useDoi": false,
       },
     }
   }
@@ -492,6 +542,7 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
         "hierarchy": Object {},
         "idaPickerOpen": false,
         "inEdit": undefined,
+        "issuedDate": undefined,
         "keywords": Array [],
         "legacyFilePicker": false,
         "license": Object {
@@ -512,6 +563,7 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
           "en": "",
           "fi": "",
         },
+        "useDoi": false,
       },
     }
   }

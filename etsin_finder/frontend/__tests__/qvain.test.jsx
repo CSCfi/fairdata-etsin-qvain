@@ -24,6 +24,7 @@ import QvainStore, {
   License as LicenseConstructor
 } from '../js/stores/view/qvain'
 import LocaleStore from '../js/stores/view/language'
+import TablePasState from '../js/components/qvain/datasets/tablePasState'
 
 const getStores = () => {
   QvainStore.setLegacyFilePicker(false)
@@ -100,6 +101,13 @@ describe('Qvain', () => {
     wrapper.setProps({ match: anotherMatch })
     expect(callCount).toBe(3)
     expect(lastCall).toBe(anotherMatch.params.identifier)
+  })
+})
+
+describe('Qvain dataset list PreservationStates', () => {
+  it('should render <TablePasState />', () => {
+    const component = shallow(<TablePasState preservationState={0} />)
+    expect(component).toMatchSnapshot()
   })
 })
 

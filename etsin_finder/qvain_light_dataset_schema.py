@@ -79,6 +79,7 @@ class DatasetValidationSchema(Schema):
         required=True,
         validate=lambda x: len(x['en']) + len(x['fi']) > 0
     )
+    issuedDate = fields.Str()
     identifiers = fields.List(fields.Str())
     fieldOfScience = fields.List(
         fields.Str(),
@@ -106,3 +107,4 @@ class DatasetValidationSchema(Schema):
     files = fields.List(fields.Dict())
     directories = fields.List(fields.Dict())
     remote_resources = fields.List(fields.Dict())
+    useDoi = fields.Boolean()
