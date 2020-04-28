@@ -282,9 +282,14 @@ class REMSApplyForPermission(Resource):
         cr = cr_service.get_catalog_record(cr_id, False, False)
         if cr and cr_service.is_rems_catalog_record(cr):
             pref_id = cr_service.get_catalog_record_preferred_identifier(cr)
+            rems_identifier = cr_service.get_catalog_record_REMS_identifier(cr)
 
         log.info('Get catalog item id for resource: {0}'.format(pref_id))
-        res_get_catalogue_item = _rems_api.get_catalogue_item_for_resource(pref_id)
+        log.info('rems_identifier: {0}'.format(rems_identifier))
+        if not rems_identifier:
+            log.warning('No rems_identifier found for resource: {0}'.format(pref_id))
+            return 'No rems_identifier found for resource', 500
+        res_get_catalogue_item = _rems_api.get_catalogue_item_for_resource(rems_identifier)
         log.debug('res_get_catalogue_item: {0}'.format(res_get_catalogue_item))
 
         if not res_get_catalogue_item:
