@@ -94,6 +94,8 @@ class Qvain {
     this.metadataModalFile = undefined
     this.fixDeprecatedModalOpen = false
 
+    this.Files.reset()
+
     this.useDoi = false
 
     // Reset External resources related data
