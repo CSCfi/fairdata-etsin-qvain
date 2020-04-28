@@ -28,13 +28,13 @@ class FieldOfScienceField extends React.Component {
   componentDidMount = () => {
     this.promises.push(
       getReferenceData('field_of_science')
-        .then(res => {
+        .then((res) => {
           const list = res.data.hits.hits
-          const refsEn = list.map(ref => ({
+          const refsEn = list.map((ref) => ({
             value: ref._source.uri,
             label: ref._source.label.en,
           }))
-          const refsFi = list.map(ref => ({
+          const refsFi = list.map((ref) => ({
             value: ref._source.uri,
             label: ref._source.label.fi,
           }))
@@ -45,7 +45,7 @@ class FieldOfScienceField extends React.Component {
             },
           })
         })
-        .catch(error => {
+        .catch((error) => {
           if (error.response) {
             // Error response from Metax
             console.log(error.response.data)
@@ -63,7 +63,7 @@ class FieldOfScienceField extends React.Component {
   }
 
   componentWillUnmount() {
-    this.promises.forEach(promise => promise && promise.cancel && promise.cancel())
+    this.promises.forEach((promise) => promise && promise.cancel && promise.cancel())
   }
 
   addFieldOfScience = () => {
@@ -71,7 +71,7 @@ class FieldOfScienceField extends React.Component {
     const fieldOfScience = { ...this.props.Stores.Qvain.fieldOfScience }
     if (
       Object.keys(fieldOfScience).length !== 0 &&
-      !fieldsOfScience.some(field => field.url === fieldOfScience.url)
+      !fieldsOfScience.some((field) => field.url === fieldOfScience.url)
     ) {
       setFieldsOfScience([
         ...fieldsOfScience,
@@ -80,7 +80,7 @@ class FieldOfScienceField extends React.Component {
     }
   }
 
-  removeFieldOfScience = fieldOfScienceToRemove => {
+  removeFieldOfScience = (fieldOfScienceToRemove) => {
     this.props.Stores.Qvain.removeFieldOfScience(fieldOfScienceToRemove)
   }
 
@@ -90,7 +90,7 @@ class FieldOfScienceField extends React.Component {
     const { options } = this.state
 
     const fieldOfScienceFaculty = this.props.Stores.Qvain.fieldsOfScience.map(
-      fieldOfScienceEntry => (
+      (fieldOfScienceEntry) => (
         <Label color="#007fad" margin="0 0.5em 0.5em 0" key={fieldOfScienceEntry.url}>
           <PaddedWord>{fieldOfScienceEntry.name[lang]}</PaddedWord>
           <FontAwesomeIcon

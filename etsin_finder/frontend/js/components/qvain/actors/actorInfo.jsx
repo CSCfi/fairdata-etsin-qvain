@@ -1,20 +1,14 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { inject, observer } from 'mobx-react'
 import { toJS } from 'mobx'
-import axios from 'axios';
-import styled from 'styled-components';
+import axios from 'axios'
+import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import { createFilter } from 'react-select'
 import CreatableSelect from 'react-select/lib/Creatable'
-import {
-  SaveButton,
-  CancelButton
-} from '../general/buttons'
-import {
-  Input,
-  Label,
-} from '../general/form'
+import { AddActorButton, CancelButton } from '../general/buttons'
+import { Input, Label } from '../general/form'
 import ValidationError from '../general/validationError'
 import { EntityType } from '../utils/constants'
 import { EmptyActor } from '../../../stores/view/qvain'
@@ -24,14 +18,14 @@ import {
   actorNameSchema,
   actorEmailSchema,
   actorIdentifierSchema,
-  actorOrganizationSchema
+  actorOrganizationSchema,
 } from '../utils/formValidation'
 
 export class ActorInfoBase extends Component {
   promises = []
 
   static propTypes = {
-    Stores: PropTypes.object.isRequired
+    Stores: PropTypes.object.isRequired,
   }
 
   state = {
@@ -41,42 +35,42 @@ export class ActorInfoBase extends Component {
     emailError: undefined,
     actorError: undefined,
     identifierError: undefined,
-    organizationError: undefined
+    organizationError: undefined,
   }
 
   componentDidMount = () => {
-    this.promises.push(axios.get('https://metax.fairdata.fi/es/organization_data/organization/_search?size=3000')
-      .then(res => {
-        const { lang } = this.props.Stores.Locale
-        const list = res.data.hits.hits;
-        const refs = list.map(ref => (
-          {
+    this.promises.push(
+      axios
+        .get('https://metax.fairdata.fi/es/organization_data/organization/_search?size=3000')
+        .then((res) => {
+          const { lang } = this.props.Stores.Locale
+          const list = res.data.hits.hits
+          const refs = list.map((ref) => ({
             value: ref._source.code,
             label: ref._source.label,
+          }))
+          this.setState({ orgs: refs })
+          this.setState({ orgsLang: this.getOrgOptionsWithLang(refs, lang) })
+        })
+        .catch((error) => {
+          if (error.response) {
+            // Error response from Metax
+            console.log(error.response.data)
+            console.log(error.response.status)
+            console.log(error.response.headers)
+          } else if (error.request) {
+            // No response from Metax
+            console.log(error.request)
+          } else {
+            // Something happened in setting up the request that triggered an Error
+            console.log('Error', error.message)
           }
-        ))
-        this.setState({ orgs: refs })
-        this.setState({ orgsLang: this.getOrgOptionsWithLang(refs, lang) })
-      })
-      .catch(error => {
-        if (error.response) {
-          // Error response from Metax
-          console.log(error.response.data);
-          console.log(error.response.status);
-          console.log(error.response.headers);
-        } else if (error.request) {
-          // No response from Metax
-          console.log(error.request);
-        } else {
-          // Something happened in setting up the request that triggered an Error
-          console.log('Error', error.message);
-        }
-      })
-    );
+        })
+    )
   }
 
   componentWillUnmount() {
-    this.promises.forEach(promise => promise && promise.cancel && promise.cancel())
+    this.promises.forEach((promise) => promise && promise.cancel && promise.cancel())
   }
 
   resetErrorMessages = () => {
@@ -85,7 +79,7 @@ export class ActorInfoBase extends Component {
       emailError: undefined,
       actorError: undefined,
       identifierError: undefined,
-      organizationError: undefined
+      organizationError: undefined,
     })
   }
 
@@ -93,13 +87,16 @@ export class ActorInfoBase extends Component {
     event.preventDefault()
     const { Qvain } = this.props.Stores
     const actor = toJS(Qvain.actorInEdit)
-    actorSchema.validate(actor).then(() => {
-      Qvain.saveActor(deepCopy(toJS(Qvain.actorInEdit)))
-      Qvain.editActor(EmptyActor)
-      this.resetErrorMessages()
-    }).catch(err => {
-      this.setState({ actorError: err.errors })
-    })
+    actorSchema
+      .validate(actor)
+      .then(() => {
+        Qvain.saveActor(deepCopy(toJS(Qvain.actorInEdit)))
+        Qvain.editActor(EmptyActor)
+        this.resetErrorMessages()
+      })
+      .catch((err) => {
+        this.setState({ actorError: err.errors })
+      })
   }
 
   handleCancel = (event) => {
@@ -109,40 +106,45 @@ export class ActorInfoBase extends Component {
   }
 
   handleOnBlur = (validator, value, errorSet) => {
-    validator.validate(value).then(() => errorSet(undefined)).catch(err => errorSet(err.errors))
+    validator
+      .validate(value)
+      .then(() => errorSet(undefined))
+      .catch((err) => errorSet(err.errors))
   }
 
   handleOnNameBlur = () => {
     const actor = this.props.Stores.Qvain.actorInEdit
-    this.handleOnBlur(actorNameSchema, actor.name, value => this.setState({ nameError: value }))
+    this.handleOnBlur(actorNameSchema, actor.name, (value) => this.setState({ nameError: value }))
   }
 
   handleOnEmailBlur = () => {
     const actor = this.props.Stores.Qvain.actorInEdit
-    this.handleOnBlur(actorEmailSchema, actor.email, value => this.setState({ emailError: value }))
+    this.handleOnBlur(actorEmailSchema, actor.email, (value) =>
+      this.setState({ emailError: value })
+    )
   }
 
   handleOnIdentifierBlur = () => {
     const actor = this.props.Stores.Qvain.actorInEdit
-    this.handleOnBlur(actorIdentifierSchema, actor.identifier, value => this.setState({ identifierError: value }))
+    this.handleOnBlur(actorIdentifierSchema, actor.identifier, (value) =>
+      this.setState({ identifierError: value })
+    )
   }
 
   handleOnOrganizationBlur = () => {
     const { type, organization } = this.props.Stores.Qvain.actorInEdit
-    this.handleOnBlur(
-      actorOrganizationSchema,
-      { type, organization },
-      value => this.setState({ organizationError: value })
+    this.handleOnBlur(actorOrganizationSchema, { type, organization }, (value) =>
+      this.setState({ organizationError: value })
     )
   }
 
   getOrgOptionsWithLang = (orgs, lang) => {
     // From the reference data parse the values with the current lang
     // or und.
-    const organizations = orgs.map(org => {
+    const organizations = orgs.map((org) => {
       const orgWithLang = {
         label: org.label[lang] ? org.label[lang] : org.label.und,
-        value: org.value
+        value: org.value,
       }
       return orgWithLang
     })
@@ -178,61 +180,61 @@ export class ActorInfoBase extends Component {
       emailError,
       actorError,
       identifierError,
-      organizationError
+      organizationError,
     } = this.state
     return (
       <Fragment>
         <Label htmlFor="nameField">
           <Translate content="qvain.actors.add.name.label" /> *
         </Label>
-        {actor.type === EntityType.PERSON
-          ? (
-            <Translate
-              component={Input}
-              type="text"
-              id="nameField"
-              attributes={{ placeholder: `qvain.actors.add.name.placeholder.${actor.type}` }}
-              disabled={readonly}
-              value={actor.name}
-              onChange={(event) => { actor.name = event.target.value }}
-              onBlur={this.handleOnNameBlur}
-            />
-          )
-          : (
-            <Translate
-              component={SelectOrg}
-              name="nameField"
-              isDisabled={readonly}
-              options={orgsLang}
-              inputId="nameField"
-              formatCreateLabel={inputValue => (
-                <Fragment>
-                  <Translate content="qvain.actors.add.newOrganization.label" />
-                  <span>: &rsquo;{inputValue}&rsquo;</span>
-                </Fragment>
+        {actor.type === EntityType.PERSON ? (
+          <Translate
+            component={Input}
+            type="text"
+            id="nameField"
+            attributes={{ placeholder: `qvain.actors.add.name.placeholder.${actor.type}` }}
+            disabled={readonly}
+            value={actor.name}
+            onChange={(event) => {
+              actor.name = event.target.value
+            }}
+            onBlur={this.handleOnNameBlur}
+          />
+        ) : (
+          <Translate
+            component={SelectOrg}
+            name="nameField"
+            isDisabled={readonly}
+            options={orgsLang}
+            inputId="nameField"
+            formatCreateLabel={(inputValue) => (
+              <Fragment>
+                <Translate content="qvain.actors.add.newOrganization.label" />
+                <span>: &rsquo;{inputValue}&rsquo;</span>
+              </Fragment>
               )}
-              attributes={{ placeholder: 'qvain.actors.add.organization.placeholder' }}
-              onChange={(selection) => {
-                actor.name = orgs.find(org => org.value === selection.value)
-                  ? orgs.find(org => org.value === selection.value).label
+            attributes={{ placeholder: 'qvain.actors.add.organization.placeholder' }}
+            onChange={(selection) => {
+                actor.name = orgs.find((org) => org.value === selection.value)
+                  ? orgs.find((org) => org.value === selection.value).label
                   : {
                     [lang]: selection.label,
-                    und: selection.label
+                    und: selection.label,
                   }
                 // if selection value ie the org identifier is not in the reference data, then we are adding a new org, so do not define
                 // identifier
-                if (orgs.filter(opt => opt.value === selection.value).length > 0) {
+                if (orgs.filter((opt) => opt.value === selection.value).length > 0) {
                   actor.identifier = selection.value
                 } else {
                   actor.identifier = ''
                 }
               }}
-              value={{
+            value={{
                 label: this.getOrganizationName(actor.name, lang),
-                value: actor.identifier
+                value: actor.identifier,
               }}
-              onBlur={this.handleOnNameBlur}
-            />
+            onBlur={this.handleOnNameBlur}
+          />
           )}
         {nameError && <ValidationError>{nameError}</ValidationError>}
         <Label htmlFor="emailField">
@@ -243,7 +245,9 @@ export class ActorInfoBase extends Component {
           id="emailField"
           type="email"
           attributes={{ placeholder: 'qvain.actors.add.email.placeholder' }}
-          onChange={(event) => { actor.email = event.target.value }}
+          onChange={(event) => {
+            actor.email = event.target.value
+          }}
           disabled={readonly}
           value={actor.email}
           onBlur={this.handleOnEmailBlur}
@@ -256,9 +260,11 @@ export class ActorInfoBase extends Component {
           id="identifierField"
           component={Input}
           type="text"
-          disabled={orgsLang.find(opt => opt.value === actor.identifier) || readonly}
+          disabled={orgsLang.find((opt) => opt.value === actor.identifier) || readonly}
           attributes={{ placeholder: 'qvain.actors.add.identifier.placeholder' }}
-          onChange={(event) => { actor.identifier = event.target.value }}
+          onChange={(event) => {
+            actor.identifier = event.target.value
+          }}
           value={actor.identifier}
           onBlur={this.handleOnIdentifierBlur}
         />
@@ -273,7 +279,7 @@ export class ActorInfoBase extends Component {
           isDisabled={readonly}
           options={orgsLang}
           inputId="orgField"
-          formatCreateLabel={inputValue => (
+          formatCreateLabel={(inputValue) => (
             <Fragment>
               <Translate content="qvain.actors.add.newOrganization.label" />
               <span>: &rsquo;{inputValue}&rsquo;</span>
@@ -281,17 +287,17 @@ export class ActorInfoBase extends Component {
           )}
           attributes={{ placeholder: 'qvain.actors.add.organization.placeholder' }}
           onChange={(selection) => {
-            actor.organization = orgs.find(org => org.value === selection.value)
-              ? orgs.find(org => org.value === selection.value).label
+            actor.organization = orgs.find((org) => org.value === selection.value)
+              ? orgs.find((org) => org.value === selection.value).label
               : {
                 [lang]: selection.label,
-                und: selection.label
+                und: selection.label,
               }
           }}
           onBlur={this.handleOnOrganizationBlur}
           value={{
             label: this.getOrganizationName(actor.organization, lang),
-            value: this.getOrganizationName(actor.organization, lang)
+            value: this.getOrganizationName(actor.organization, lang),
           }}
           filterOption={createFilter({ ignoreAccents: false })}
         />
@@ -305,22 +311,22 @@ export class ActorInfoBase extends Component {
         />
         <Translate
           disabled={readonly}
-          component={SaveButton}
+          component={AddActorButton}
           onClick={this.handleSaveActor}
           content="qvain.actors.add.save.label"
         />
       </Fragment>
-    );
+    )
   }
 }
 
 const ActorValidationError = styled(ValidationError)`
   margin-top: 40px;
   margin-bottom: 40px;
-`;
+`
 
 const SelectOrg = styled(CreatableSelect)`
   margin-bottom: 20px;
 `
 
-export default inject('Stores')(observer(ActorInfoBase));
+export default inject('Stores')(observer(ActorInfoBase))

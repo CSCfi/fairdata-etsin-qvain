@@ -67,7 +67,7 @@ class LangToggle extends Component {
         <div>
           <span className="sr-only">
             {translate('general.language.toggleLabel')}
-:
+            :
             {this.otherLang()}
           </span>
           {this.props.inverted ? (
