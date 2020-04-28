@@ -64,7 +64,6 @@ class DatasetTable extends Component {
   getDatasets = () => {
     this.setState({ loading: true, error: false, errorMessage: '' })
     const url = `${USER_DATASETS_URL}${this.props.Stores.Auth.user.name}?no_pagination=true`
-    console.log(url)
     return axios
       .get(url)
       .then((result) => {
@@ -138,6 +137,7 @@ class DatasetTable extends Component {
   handleChangePage = (pageNum) => () => {
     const actualNum = pageNum - 1
     this.setState((state) => ({
+      count: state.datasets.length,
       onPage: state.filtered.slice(actualNum * state.limit, actualNum * state.limit + state.limit),
       page: pageNum,
     }))
