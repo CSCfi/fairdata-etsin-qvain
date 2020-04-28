@@ -275,7 +275,7 @@ class QvainDataset(Resource):
     @log_request
     def patch(self):
         """
-        Updete existing detaset.
+        Update existing dataset.
 
         Returns:
             object -- The response from metax or if error an error message.
