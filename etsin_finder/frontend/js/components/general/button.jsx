@@ -17,7 +17,7 @@ import { opacify, darken } from 'polished'
 import checkColor from '../../styles/styledUtils'
 
 // prettier-ignore
-const Button = styled.button.attrs(props => ({
+export const Button = styled.button.attrs(props => ({
   padding: props.padding ? props.padding : '0.3em 0.6em 0.4em',
   margin: props.margin ? props.margin : '0.25em 0.25em',
 }))`

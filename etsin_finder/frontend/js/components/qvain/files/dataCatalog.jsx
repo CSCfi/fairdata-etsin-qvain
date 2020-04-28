@@ -4,12 +4,13 @@ import Select from 'react-select'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import translate from 'counterpart'
+import styled from 'styled-components'
 
 import Card from '../general/card'
 import { dataCatalogSchema } from '../utils/formValidation'
 import ValidationError from '../general/validationError'
 import { DataCatalogIdentifiers } from '../utils/constants'
-import { LabelLarge } from '../general/form'
+import { Checkbox, LabelLarge } from '../general/form'
 
 const options = [
   { value: DataCatalogIdentifiers.IDA, label: translate('qvain.files.dataCatalog.ida') },
@@ -25,8 +26,14 @@ class DataCatalog extends Component {
     Stores: PropTypes.object.isRequired,
   }
 
-  state = {
-    errorMessage: undefined,
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      errorMessage: undefined,
+      fileOrigin: undefined,
+      useDoi: false,
+    }
   }
 
   handleOnBlur = () => {
@@ -43,6 +50,14 @@ class DataCatalog extends Component {
           errorMessage: err.errors,
         })
       })
+  }
+
+  handleDoiCheckboxChange = () => {
+    const { setUseDoi } = this.props.Stores.Qvain
+    setUseDoi(!this.state.useDoi)
+    this.setState(prevState => ({
+      useDoi: !prevState.useDoi
+    }))
   }
 
   render() {
@@ -66,16 +81,54 @@ class DataCatalog extends Component {
           options={availableOptions}
           onChange={(selection) => {
             setDataCatalog(selection.value)
-            this.setState({ errorMessage: undefined })
+            this.setState({
+              errorMessage: undefined,
+              fileOrigin: selection.label,
+            })
+
+            // Uncheck useDoi checkbox if data catalog is ATT
+            if (selection.value === 'urn:nbn:fi:att:data-catalog-att') {
+              this.setState({
+                useDoi: false,
+              })
+            }
           }}
           onBlur={this.handleOnBlur}
           attributes={{ placeholder: 'qvain.files.dataCatalog.placeholder' }}
           isDisabled={(selected.length > 0) || (original !== undefined) || isPas}
         />
+        {
+          (this.state.fileOrigin === 'IDA' && original === undefined) && (
+          <DoiSelectionContainer>
+            <Checkbox
+              id="doiSelector"
+              onChange={this.handleDoiCheckboxChange}
+              disabled={(this.state.fileOrigin !== 'IDA' || original !== undefined)}
+              checked={this.state.useDoi}
+              // defaultChecked={this.state.useDoi || ((original !== undefined) && (dataCatalog === 'urn:nbn:fi:att:data-catalog-ida'))}
+            />
+            <DoiLabel
+              htmlFor="doiSelector"
+            >
+              <Translate content="qvain.files.dataCatalog.doiSelection" />
+            </DoiLabel>
+          </DoiSelectionContainer>
+          )
+        }
         {errorMessage && <ValidationError>{errorMessage}</ValidationError>}
       </Card>
     )
   }
 }
+
+const DoiSelectionContainer = styled.div`
+  margin-top: 20px;
+`
+
+const DoiLabel = styled.label`
+  margin-right: auto;
+  padding-left: 4px;
+  display: inline-block;
+`
 
 export default inject('Stores')(observer(DataCatalog))
