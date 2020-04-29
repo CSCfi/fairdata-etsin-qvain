@@ -328,9 +328,8 @@ const finnish = {
       130: 'Siirto katkesi',
       140: 'Saatavilla',
     },
-    useDoiHeader: 'DOI-tunnisten luominen',
-    useDoiContent:
-      'Olet pyytänyt aineistollesi pysyväksi tunnisteeksi DOIn URN-tunnisteen sijaan. DOI vaatii, että julkaisupäivämäärä ja julkaisija on määritelty. DOI-tunniste rekisteröidään DataCite-palvelun tietokantaan, eikä toimintoa voi peruuttaa. Oletko varma?',
+    useDoiHeader: 'DOI-tunnisteen luominen',
+    useDoiContent: 'Olet pyytänyt aineistollesi pysyväksi tunnisteeksi DOIn URN-tunnisteen sijaan. DOI vaatii, että julkaisupäivämäärä ja julkaisija on määritelty. DOI-tunniste rekisteröidään DataCite-palvelun tietokantaan, eikä toimintoa voi peruuttaa. Oletko varma?',
     useDoiAffirmative: 'Kyllä',
     useDoiNegative: 'Ei',
     unsuccessfullLogin: 'Kirjautuminen epäonnistui.',
@@ -677,8 +676,7 @@ const finnish = {
           'Ennenkuin pääset linkittämään tiedostoja aineistoosi, sinun tulee valita, linkitätkö tiedostoja IDAsta vai annatko ulkopuolisen palvelun URL-osoitteet, joista tiedostot löytyvät.',
         explanation:
           'Valitse "IDA", jos tiedostot on tallennettu Fairdata IDA -palveluun. Valitse "Ulkoinen lähde" jos tiedostot sijaitsevat muualla.',
-        doiSelection:
-          'Haluan aineistolleni DOI -tunnusteen (digital object identifier) URN - tunnusteen sijaan.',
+        doiSelection: 'Haluan aineistolleni DOI -tunnisteen (digital object identifier) URN - tunnisteen sijaan.',
         placeholder: 'Valitse vaihtoehto',
         ida: 'IDA',
         att: 'Ulkoinen lähde',
