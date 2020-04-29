@@ -78,6 +78,12 @@ class DescriptionField extends Component {
     return activeLang === 'FINNISH' ? `${stub}placeholderFi` : `${stub}placeholderEn`
   }
 
+  getTitleErrorContent = () => {
+    if (this.state.titleError) {
+
+    }
+  }
+
   render() {
     const { title, description, readonly } = this.props.Stores.Qvain
     const activeLang = this.state.active
@@ -117,7 +123,7 @@ class DescriptionField extends Component {
               attributes={{ placeholder: this.getPlaceholder('title', 'ENGLISH') }}
             />
           )}
-          <ValidationError>{this.state.titleError}</ValidationError>
+          {this.state.titleError ? <Translate component={ValidationError} content={'qvain.description.error.title'} /> : null}
           <LabelLarge htmlFor="descriptionInput">
             <Translate content="qvain.description.description.description.label" /> *
           </LabelLarge>
@@ -145,7 +151,7 @@ class DescriptionField extends Component {
               attributes={{ placeholder: this.getPlaceholder('description', this.state.active) }}
             />
           )}
-          <ValidationError>{this.state.descriptionError}</ValidationError>
+          {this.state.descriptionError ? <Translate component={ValidationError} content={'qvain.description.error.description'} /> : null}
           <Translate component="div" content="qvain.description.description.instructions" />
         </DescriptionCard>
       </React.Fragment>

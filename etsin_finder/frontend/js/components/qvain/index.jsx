@@ -352,14 +352,14 @@ class Qvain extends Component {
                   ref={this.submitDatasetButton}
                   type="button"
                   onClick={
-                      this.props.Stores.Qvain.useDoi === true
-                        ? this.showUseDoiInformation
-                        : this.handleCreate
-                    }
+                    this.props.Stores.Qvain.useDoi === true
+                      ? this.showUseDoiInformation
+                      : this.handleCreate
+                  }
                 >
                   <Translate content="qvain.submit" />
                 </SubmitButton>
-                )}
+              )}
             </ButtonContainer>
             {createLinkBack('right')}
           </StickySubHeader>

@@ -237,6 +237,9 @@ class User(Resource):
         csc_user = authentication.get_user_csc_name()
         groups = authentication.get_user_ida_groups()
         user_info['user_ida_groups'] = groups
+        is_using_rems_response = get_fairdata_rems_api_config(app.testing)
+        is_using_rems = is_using_rems_response['ENABLED']
+        user_info['is_using_rems'] = is_using_rems
         if csc_user is not None:
             user_info['user_csc_name'] = csc_user
         return user_info, 200

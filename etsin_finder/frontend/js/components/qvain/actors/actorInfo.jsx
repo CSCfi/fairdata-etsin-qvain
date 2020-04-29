@@ -39,6 +39,14 @@ export class ActorInfoBase extends Component {
   }
 
   componentDidMount = () => {
+    this.fetchOrgs()
+  }
+
+  componentWillUnmount() {
+    this.promises.forEach((promise) => promise && promise.cancel && promise.cancel())
+  }
+
+  fetchOrgs = () => {
     this.promises.push(
       axios
         .get('https://metax.fairdata.fi/es/organization_data/organization/_search?size=3000')
@@ -55,22 +63,18 @@ export class ActorInfoBase extends Component {
         .catch((error) => {
           if (error.response) {
             // Error response from Metax
-            console.log(error.response.data)
-            console.log(error.response.status)
-            console.log(error.response.headers)
+            console.error(error.response.data)
+            console.error(error.response.status)
+            console.error(error.response.headers)
           } else if (error.request) {
             // No response from Metax
-            console.log(error.request)
+            console.error(error.request)
           } else {
             // Something happened in setting up the request that triggered an Error
-            console.log('Error', error.message)
+            console.error('Error', error.message)
           }
         })
     )
-  }
-
-  componentWillUnmount() {
-    this.promises.forEach((promise) => promise && promise.cancel && promise.cancel())
   }
 
   resetErrorMessages = () => {
@@ -182,6 +186,11 @@ export class ActorInfoBase extends Component {
       identifierError,
       organizationError,
     } = this.state
+
+    if (lang) {
+      this.fetchOrgs()
+    }
+
     return (
       <Fragment>
         <Label htmlFor="nameField">

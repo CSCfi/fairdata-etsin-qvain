@@ -104,7 +104,7 @@ const finnish = {
       item: 'aineisto %(item)s',
       name: 'Nimi',
       size: 'Koko',
-      remote: 'Remote aineistot',
+      remote: 'Ulkoinen lähde',
       checksum: 'Checksum',
       id: 'ID',
       title: 'Otsikko',
@@ -298,7 +298,7 @@ const finnish = {
     submit: 'Julkaise Aineisto',
     edit: 'Päivitä Aineisto',
     consent:
-      'Käyttämällä Qvain Lightia käyttäjä hyväksyy, että hän on pyytänyt suostumusta kaikilta henkilöiltä, joiden hankilökohtaisia tietoja käyttäjä lisää kuvattaviin tietoihin, ja ilmoitti heille, miten he voivat saada tietonsa poistettua. Käyttämällä Qvain Lightia käyttäjä hyväksyy <a href="https://www.fairdata.fi/hyodyntaminen/kayttopolitiikat-ja-ehdot/">käyttöehdot</a>.',
+      'Käyttämällä Qvain Light -työkalua käyttäjä vakuuttaa, että hän on saanut suostumuksen muiden henkilöiden henkilötietojen lisäämiseen kuvailutietoihin ja ilmoittanut heille miten he voivat saada henkilötietonsa poistettua palvelusta. Käyttämällä Qvain Light-työkalua käyttäjä hyväksyy <a href="https://www.fairdata.fi/hyodyntaminen/kayttopolitiikat-ja-ehdot/">käyttöehdot</a>.',
     submitStatus: {
       success: 'Aineisto julkaistu!',
       fail: 'Jotain meni pieleen...',
@@ -330,12 +330,14 @@ const finnish = {
     },
     useDoiHeader: 'DOI-tunnisten luominen',
     useDoiContent:
-      'Olet pyytänyt aineistollesi pysyväksi tunnisteeksi DOIn URN-tunnisteen sijaan. DOI vaatii, että julkaisupäivämäärä ja julkaisija on määritelty. DOI-tunniste rekisteröidään DataCite-palvelun tietokantaan, eikä toimintoa voi peruuttaa. Oletko varma?',
+      'Olet pyytänyt aineistollesi pysyväksi tunnisteeksi DOIn URN-tunnisteen sijaan. DOI vaatii, että julkaisupäivämäärä ja julkaisija on määritelty. ' +
+      'DOI-tunniste rekisteröidään DataCite-palvelun tietokantaan, eikä toimintoa voi peruuttaa. Oletko varma?',
     useDoiAffirmative: 'Kyllä',
     useDoiNegative: 'Ei',
     unsuccessfullLogin: 'Kirjautuminen epäonnistui.',
     notCSCUser1:
-      'Varmistakaa että teillä on voimassaoleva CSC tunnus. Jos yritit kirjautua sisään ulkoisella tunnuksella (kuten Haka) Niin saatat saada tämän virhe ilmoituksen jos titlit eivät ole linkitetty. Linkityksen voi tehdä',
+      'Varmistakaa että teillä on voimassaoleva CSC tunnus. Jos yritit kirjautua sisään ulkoisella tunnuksella (kuten Haka) niin saatat saada tämän ' +
+      'virheilmoituksen, jos tilit eivät ole linkitetty. Linkityksen voi tehdä',
     notCSCUserLink: ' CSC asiakas porttaalissa',
     notCSCUser2: ' Voit rekisteröityä Hakatunuksella tai ilman.',
     notLoggedIn: 'Kirjaudu sisään CSC -tililläsi käyttääksesi Qvain-light palvelua.',
@@ -450,6 +452,10 @@ const finnish = {
         addButton: 'Lisää avainsanoja',
         help:
           'Voit lisätä useamman avainsanan erottamalla ne pilkulla (,). Aineistolla on oltava vähintään yksi avainsana.',
+      },
+      error: {
+        title: 'Otsikko on pakollinen ainakin yhdellä kielellä.',
+        description: 'Kuvaus on pakollinen ainakin yhdellä kielellä.',
       },
     },
     rightsAndLicenses: {
@@ -916,10 +922,10 @@ const finnish = {
             infoText: 'Linkki, jolla tiedoston saa ladattua suoraan omalle koneelle',
           },
           cancel: {
-            label: 'Kumoa',
+            label: 'Tyhjennä kentät',
           },
           save: {
-            label: 'Tallenna',
+            label: 'Lisää ulkoinen lähde',
           },
           add: {
             label: 'Lisää',

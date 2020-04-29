@@ -24,6 +24,7 @@ class Auth {
     loggedIn: false,
     homeOrganizationName: undefined,
     idaGroups: [],
+    isUsingRems: undefined,
   }
 
   @action
@@ -34,12 +35,13 @@ class Auth {
         .get('/api/user', {
           headers: { 'content-type': 'application/json', charset: 'utf-8' },
         })
-        .then(res => {
+        .then((res) => {
           this.user = {
             name: res.data.user_csc_name,
             loggedIn: res.data.is_authenticated,
             homeOrganizationName: res.data.home_organization_name,
             idaGroups: res.data.user_ida_groups,
+            isUsingRems: res.data.is_using_rems,
           }
           if (res.data.is_authenticated && !res.data.is_authenticated_CSC_user) {
             // The user was able to verify themself using HAKA or some other external verification,
@@ -51,7 +53,11 @@ class Auth {
             // but do not have a home organization set (sui.csc.fi) and should not be granted permission.
             this.userLogged = false
             this.cscUserLogged = false
-          } else if (res.data.is_authenticated && res.data.is_authenticated_CSC_user && res.data.home_organization_name) {
+          } else if (
+            res.data.is_authenticated &&
+            res.data.is_authenticated_CSC_user &&
+            res.data.home_organization_name
+          ) {
             // The user has a valid CSC account with a defined home organization. Login successful.
             this.userLogged = res.data.is_authenticated
             this.cscUserLogged = res.data.is_authenticated_CSC_user
@@ -63,7 +69,7 @@ class Auth {
           this.loading = false
           resolve(res)
         })
-        .catch(err => {
+        .catch((err) => {
           this.loading = false
           console.log(err)
           reject(err)
@@ -76,7 +82,7 @@ class Auth {
     return new Promise((resolve, reject) => {
       axios
         .delete('/api/session')
-        .then(res => {
+        .then((res) => {
           this.userLogged = false
           this.cscUserLogged = false
 
@@ -89,7 +95,7 @@ class Auth {
           }
           resolve(res)
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err)
           reject(err)
         })
@@ -103,7 +109,7 @@ class Auth {
       axios
         .get('/api/session')
         .then(() => resolve())
-        .catch(err => {
+        .catch((err) => {
           if (err.response.status === 401) {
             this.userLogged = false
             this.cscUserLogged = false

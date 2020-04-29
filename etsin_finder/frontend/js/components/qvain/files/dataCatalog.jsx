@@ -12,14 +12,14 @@ import ValidationError from '../general/validationError'
 import { DataCatalogIdentifiers } from '../utils/constants'
 import { Checkbox, LabelLarge } from '../general/form'
 
-const options = [
+let options = [
   { value: DataCatalogIdentifiers.IDA, label: translate('qvain.files.dataCatalog.ida') },
   { value: DataCatalogIdentifiers.ATT, label: translate('qvain.files.dataCatalog.att') }
 ]
-
-const pasOptions = [
+let pasOptions = [
   { value: DataCatalogIdentifiers.PAS, label: translate('qvain.files.dataCatalog.pas') }
 ]
+
 
 class DataCatalog extends Component {
   static propTypes = {
@@ -35,6 +35,16 @@ class DataCatalog extends Component {
       useDoi: false,
     }
   }
+
+  updateOptions = () => {
+    options = [
+      { value: DataCatalogIdentifiers.IDA, label: translate('qvain.files.dataCatalog.ida') },
+      { value: DataCatalogIdentifiers.ATT, label: translate('qvain.files.dataCatalog.att') }
+    ]
+    pasOptions = [
+      { value: DataCatalogIdentifiers.PAS, label: translate('qvain.files.dataCatalog.pas') }
+    ]
+        }
 
   handleOnBlur = () => {
     const dataCatalog = this.props.Stores.Qvain.dataCatalog
@@ -65,8 +75,13 @@ class DataCatalog extends Component {
     const { dataCatalog, setDataCatalog, selectedFiles, selectedDirectories, externalResources, original, isPas } = this.props.Stores.Qvain
     const selected = [...selectedFiles, ...selectedDirectories, ...externalResources]
 
+    if (this.props.Stores.Locale.lang) {
+      this.updateOptions()
+    }
     // PAS catalog cannot be selected by the user
     const availableOptions = isPas ? pasOptions : options
+    const catalogSelectValue = availableOptions.find(opt => opt.value === dataCatalog)
+
     return (
       <Card>
         <LabelLarge htmlFor="dataCatalogSelect">
@@ -77,7 +92,7 @@ class DataCatalog extends Component {
           component={Select}
           inputId="dataCatalogSelect"
           name="dataCatalog"
-          value={availableOptions.find(opt => opt.value === dataCatalog)}
+          value={catalogSelectValue}
           options={availableOptions}
           onChange={(selection) => {
             setDataCatalog(selection.value)
