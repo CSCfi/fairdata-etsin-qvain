@@ -205,7 +205,7 @@ class RemsAPIService(FlaskService):
         return len(self.rems_request(method, url, err_message)) > 0
 
 
-def get_application_state_for_resource(self, cr, user_id):
+def get_application_state_for_resource(cr, user_id):
     """Get the state of the users applications for resource.
 
     Arguments:
@@ -216,10 +216,11 @@ def get_application_state_for_resource(self, cr, user_id):
         [string] -- The application state or False.
 
     """
-    if not self.ENABLED:
-        return False
-
-    state = 'apply'
+    _rems_api = RemsAPIService(app, user_id)
+    if _rems_api.ENABLED:
+        state = 'apply'
+    else:
+        return 'disabled'
     if not user_id or not cr:
         log.error('Failed to get user application state')
         return False
@@ -228,7 +229,7 @@ def get_application_state_for_resource(self, cr, user_id):
     if not pref_id:
         log.error('Could not get preferred identifier.')
         return False
-    _rems_api = RemsAPIService(app, user_id)
+
     user_applications = _rems_api.get_user_applications()
     if not isinstance(user_applications, list) or not user_applications:
         log.warning('Could not get any applications belonging to user.')

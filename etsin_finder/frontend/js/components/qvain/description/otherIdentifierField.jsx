@@ -7,7 +7,6 @@ import Translate from 'react-translate-component'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import translate from 'counterpart'
-
 import Button from '../../general/button'
 import Card from '../general/card'
 import Label from '../general/label'
@@ -90,6 +89,7 @@ class OtherIdentifierField extends React.Component {
   }
 
   render() {
+    const { readonly } = this.props.Stores.Qvain
     const otherIdentifiers = toJS(
       this.props.Stores.Qvain.otherIdentifiers.map(identifier => (
         <Label color="#007fad" margin="0 0.5em 0.5em 0" key={identifier}>
@@ -108,6 +108,7 @@ class OtherIdentifierField extends React.Component {
         <Input
           type="text"
           id="otherIdentifiersInput"
+          disabled={readonly}
           value={this.state.identifier}
           onChange={this.handleInputChange}
           placeholder="http://doi.org/"
@@ -115,7 +116,7 @@ class OtherIdentifierField extends React.Component {
         />
         <ValidationError>{this.state.validationError}</ValidationError>
         <ButtonContainer>
-          <AddNewButton type="button" onClick={this.handleAddClick}>
+          <AddNewButton type="button" onClick={this.handleAddClick} disabled={readonly}>
             <Translate content="qvain.description.otherIdentifiers.addButton" />
           </AddNewButton>
         </ButtonContainer>

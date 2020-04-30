@@ -15,6 +15,8 @@ import styled from 'styled-components'
 import ReactModal from 'react-modal'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTimes } from '@fortawesome/free-solid-svg-icons'
 
 import { TransparentButton } from './button'
 
@@ -29,6 +31,7 @@ const customStyles = {
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.15)',
+    zIndex: 2,
   },
   content: {
     top: '0',
@@ -120,7 +123,7 @@ export default class Modal extends Component {
       >
         <CloseButton onClick={this.props.onRequestClose} noMargin>
           <Translate className="sr-only" content="dataset.dl.close_modal" />
-          <span aria-hidden>X</span>
+          <FontAwesomeIcon aria-hidden icon={faTimes} />
         </CloseButton>
         {this.props.children}
       </ReactModal>

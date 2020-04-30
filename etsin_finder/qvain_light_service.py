@@ -51,6 +51,7 @@ class MetaxQvainLightAPIService(FlaskService):
                                         '/{0}'
             self.METAX_CHANGE_CUMULATIVE_STATE = 'https://{0}/rpc/datasets/change_cumulative_state'.format(metax_qvain_api_config['HOST'])
             self.METAX_REFRESH_DIRECTORY_CONTENT = 'https://{0}/rpc/datasets/refresh_directory_content'.format(metax_qvain_api_config['HOST'])
+            self.METAX_FIX_DEPRECATED = 'https://{0}/rpc/datasets/fix_deprecated'.format(metax_qvain_api_config['HOST'])
             self.user = metax_qvain_api_config['USER']
             self.pw = metax_qvain_api_config['PASSWORD']
             self.verify_ssl = metax_qvain_api_config.get('VERIFY_SSL', True)
@@ -234,21 +235,25 @@ class MetaxQvainLightAPIService(FlaskService):
 
         return metax_api_response.json()
 
-    def create_dataset(self, data):
+    def create_dataset(self, data, params=None, use_doi=False):
         """
         Send the data from the frontend to Metax.
 
         Arguments:
             data {object} -- Object with the dataset data that has been validated and converted to comply with the Metax schema.
+            params {dict} -- Dictionary of key-value pairs of query parameters.
 
         Returns:
             [type] -- The response from Metax.
 
         """
         req_url = self.METAX_CREATE_DATASET
+        if use_doi is True:
+            req_url += '&pid_type=doi'
         headers = {'Accept': 'application/json'}
         try:
             metax_api_response = requests.post(req_url,
+                                               params=params,
                                                json=data,
                                                headers=headers,
                                                auth=(self.user, self.pw),
@@ -265,27 +270,31 @@ class MetaxQvainLightAPIService(FlaskService):
                 return metax_api_response.json(), metax_api_response.status_code
             else:
                 log.error("Error creating dataset\n{0}".format(e))
-                return 'Error trying to send data to metax.', 500
+            return {'Error_message': 'Error trying to send data to metax.'}, metax_api_response.status_code
 
         log.info('Created dataset with identifier: {}'.format(json.loads(metax_api_response.text).get('identifier', 'COULD-NOT-GET-IDENTIFIER')))
         return metax_api_response.json(), metax_api_response.status_code
 
-    def update_dataset(self, data, cr_id):
+    def update_dataset(self, data, cr_id, last_modified, params):
         """
         Update a dataset with the data that the user has entered in Qvain-light.
 
         Arguments:
             data {object} -- Object with the dataset data that has been validated and converted to comply with the Metax schema.
             cr_id {string} -- The identifier of the dataset.
+            last_modified {string} -- HTTP datetime string (RFC2616)
+            params {dict} -- Dictionary of key-value pairs of query parameters.
 
         Returns:
             [type] -- The response from Metax.
 
         """
         req_url = self.METAX_PATCH_DATASET.format(cr_id)
-        headers = {'Accept': 'application/json'}
+        headers = {'Accept': 'application/json', 'If-Unmodified-Since': last_modified}
+        log.debug('Request URL: {0}\nHeaders: {1}\nData: {2}'.format(req_url, headers, data))
         try:
             metax_api_response = requests.patch(req_url,
+                                                params=params,
                                                 json=data,
                                                 headers=headers,
                                                 auth=(self.user, self.pw),
@@ -307,6 +316,9 @@ class MetaxQvainLightAPIService(FlaskService):
             return 'Error trying to send data to metax.', 500
 
         log.info('Updated dataset with identifier: {}'.format(cr_id))
+        if metax_api_response.status_code == 412:
+            return 'Resource has been modified since last publish', 412
+
         return metax_api_response.json(), metax_api_response.status_code
 
     def get_dataset(self, cr_id):
@@ -451,10 +463,50 @@ class MetaxQvainLightAPIService(FlaskService):
                         metax_api_response.status_code,
                         json_or_empty(metax_api_response) or metax_api_response.text
                     ))
+                return json_or_empty(metax_api_response) or metax_api_response.text, metax_api_response.status_code
             else:
                 log.error("Error refreshing dataset {0} directory {1}\n{2}".format(cr_identifier, dir_identifier, e))
             return {'detail': 'Error trying to send data to metax.'}, 500
         log.info('Refreshed dataset {} directory {}'.format(cr_identifier, dir_identifier))
+        return (json_or_empty(metax_api_response) or metax_api_response.text), metax_api_response.status_code
+
+    def fix_deprecated_dataset(self, cr_identifier):
+        """
+        Call Metax fix_deprecated RPC.
+
+        Arguments:
+            cr_identifier {string} -- The identifier of the dataset.
+
+        Returns:
+            [type] -- Metax response.
+
+        """
+        req_url = self.METAX_FIX_DEPRECATED
+        params = {
+            "identifier": cr_identifier,
+        }
+        headers = {'Accept': 'application/json'}
+        try:
+            metax_api_response = requests.post( req_url,
+                                                headers=headers,
+                                                auth=(self.user, self.pw),
+                                                verify=self.verify_ssl,
+                                                params=params,
+                                                timeout=10)
+            metax_api_response.raise_for_status()
+        except Exception as e:
+            if isinstance(e, requests.HTTPError):
+                log.warning(
+                    "Failed to fix deprecated dataset {0}\nResponse status code: {1}\nResponse text: {2}".format(
+                        cr_identifier,
+                        metax_api_response.status_code,
+                        json_or_empty(metax_api_response) or metax_api_response.text
+                    ))
+                return json_or_empty(metax_api_response) or metax_api_response.text, metax_api_response.status_code
+            else:
+                log.error("Error fixing deprecated dataset {0} \n{1}".format(cr_identifier, e))
+            return {'detail': 'Error trying to send data to metax.'}, 500
+        log.info('Fixed deprecated dataset {}'.format(cr_identifier))
         return (json_or_empty(metax_api_response) or metax_api_response.text), metax_api_response.status_code
 
 _metax_api = MetaxQvainLightAPIService(app)
@@ -504,32 +556,35 @@ def get_datasets_for_user(user_id, limit, offset, no_pagination):
     """
     return _metax_api.get_datasets_for_user(user_id, limit, offset, no_pagination)
 
-def create_dataset(form_data):
+def create_dataset(form_data, params=None, use_doi=False):
     """
     Create dataset in Metax.
 
     Arguments:
         form_data {object} -- Object with the dataset data that has been validated and converted to comply with the Metax schema.
+        params {dict} -- Dictionary of key-value pairs of query parameters.
 
     Returns:
         [type] -- Metax response.
 
     """
-    return _metax_api.create_dataset(form_data)
+    return _metax_api.create_dataset(form_data, params, use_doi)
 
-def update_dataset(form_data, cr_id):
+def update_dataset(form_data, cr_id, last_modified, params=None):
     """
     Update dataset in Metax.
 
     Arguments:
         form_data {object} -- Object with the dataset data that has been validated and converted to comply with the Metax schema.
         cr_id {string} -- The identifier of the dataset.
+        last_modified {string} -- HTTP datetime string (RFC2616)
+        params {dict} -- Dictionary of key-value pairs of query parameters.
 
     Returns:
         [type] -- Metax response.
 
     """
-    return _metax_api.update_dataset(form_data, cr_id)
+    return _metax_api.update_dataset(form_data, cr_id, last_modified, params)
 
 def get_dataset(cr_id):
     """
@@ -585,3 +640,16 @@ def refresh_directory_content(cr_identifier, dir_identifier):
 
     """
     return _metax_api.refresh_directory_content(cr_identifier, dir_identifier)
+
+def fix_deprecated_dataset(cr_id):
+    """
+    Call Metax fix_deprecated RPC.
+
+    Arguments:
+        cr_id {string} -- The identifier of the dataset.
+
+    Returns:
+        [type] -- Metax response.
+
+    """
+    return _metax_api.fix_deprecated_dataset(cr_id)

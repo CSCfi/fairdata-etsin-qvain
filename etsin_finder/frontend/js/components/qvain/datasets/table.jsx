@@ -17,11 +17,13 @@ import {
   BodyCell,
   TableNote,
 } from '../general/table'
+import { DataCatalogIdentifiers } from '../utils/constants'
 import Modal from '../../general/modal'
 import DatasetPagination from './pagination'
 import Label from '../general/label'
 import { TableButton, RemoveButton, DangerButton } from '../general/buttons'
 import { FormField, Input, Label as inputLabel } from '../general/form'
+import TablePasState from './tablePasState'
 
 const USER_DATASETS_URL = '/api/datasets/'
 
@@ -184,6 +186,7 @@ class DatasetTable extends Component {
     return formattedDate
   }
 
+
   render() {
     const { onPage, loading, error, errorMessage, page, count, limit, searchTerm } = this.state
     return (
@@ -251,31 +254,33 @@ class DatasetTable extends Component {
                   <BodyCellWordWrap>
                     {dataset.research_dataset.title.en || dataset.research_dataset.title.fi}
                     {dataset.next_dataset_version !== undefined && (
-                      <Translate color="yellow" content="qvain.datasets.oldVersion" component={OldVersionLabel} />
+                      <Translate color="yellow" content="qvain.datasets.oldVersion" component={DatasetLabel} />
+                    )}
+                    {dataset.deprecated && (
+                      <Translate color="error" content="qvain.datasets.deprecated" component={DatasetLabel} />
+                    )}
+                    {(dataset.preservation_state > 0 || dataset.data_catalog.identifier === DataCatalogIdentifiers.PAS) && (
+                      <TablePasState preservationState={dataset.preservation_state} />
                     )}
                   </BodyCellWordWrap>
                   <BodyCell>{this.formatDatasetDateCreated(dataset.date_created)}</BodyCell>
-                  <BodyCell>
+                  <BodyCellActions>
                     <Translate
                       component={TableButton}
                       onClick={this.handleEnterEdit(dataset)}
                       content="qvain.datasets.editButton"
                     />
-                  </BodyCell>
-                  <BodyCell>
                     <Translate
                       component={TableButton}
                       onClick={() => window.open(`/dataset/${dataset.identifier}`, '_blank')}
                       content="qvain.datasets.goToEtsin"
                     />
-                  </BodyCell>
-                  <BodyCell>
                     <Translate
                       component={RemoveButton}
                       onClick={this.openRemoveModal(dataset.identifier)}
                       content="qvain.datasets.deleteButton"
                     />
-                  </BodyCell>
+                  </BodyCellActions>
                 </Row>
               ))}
           </TableBody>
@@ -297,7 +302,7 @@ class DatasetTable extends Component {
   }
 }
 
-const OldVersionLabel = styled(Label)`
+const DatasetLabel = styled(Label)`
   margin-left: 10px;
   text-transform: uppercase;
 `;
@@ -325,6 +330,15 @@ const SearchInput = styled(Input)`
 
 const BodyCellWordWrap = styled(BodyCell)`
   word-break: break-word;
+`
+
+const BodyCellActions = styled(BodyCell)`
+  display: flex;
+  flex-wrap: wrap;
+  margin: -0.1rem -0.15rem;
+  > * {
+    margin: 0.1rem 0.15rem;
+  }
 `
 
 export default withRouter(inject('Stores')(observer(DatasetTable)))

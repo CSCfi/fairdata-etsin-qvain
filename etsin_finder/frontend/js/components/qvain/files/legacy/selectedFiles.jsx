@@ -6,14 +6,16 @@ import { faCopy, faFolder } from '@fortawesome/free-solid-svg-icons'
 import Translate from 'react-translate-component'
 import styled, { css } from 'styled-components';
 
-import { ButtonLabel, EditButton, DeleteButton, FileItem, ButtonContainer, TableButton } from '../general/buttons'
-import { SelectedFilesTitle } from '../general/form'
+import Label from '../../general/label'
+import { ButtonLabel, EditButton, DeleteButton, FileItem, ButtonContainer, TableButton } from '../../general/buttons'
+import { SelectedFilesTitle } from '../../general/form'
 import FileForm from './fileForm'
 import DirectoryForm from './directoryForm'
-import { randomStr } from '../utils/fileHierarchy'
-import Modal from '../../general/modal'
-import { CumulativeStates } from '../utils/constants'
-import RefreshDirectoryModal from './refreshDirectoryModal';
+import { randomStr } from '../../utils/fileHierarchy'
+import Modal from '../../../general/modal'
+import { CumulativeStates } from '../../utils/constants'
+import RefreshDirectoryModal from '../refreshDirectoryModal';
+import FixDeprecatedModal from '../fixDeprecatedModal';
 
 
 export class SelectedFilesBase extends Component {
@@ -53,7 +55,9 @@ export class SelectedFilesBase extends Component {
     const {
       toggleSelectedFile,
       toggleSelectedDirectory,
-      cumulativeState
+      cumulativeState,
+      canSelectFiles,
+      deprecated
     } = this.props.Stores.Qvain
     const isCumulative = cumulativeState === CumulativeStates.YES
     return (
@@ -64,8 +68,9 @@ export class SelectedFilesBase extends Component {
               <FontAwesomeIcon icon={(s.directoryName ? faFolder : faCopy)} style={{ marginRight: '8px' }} />
               {s.projectIdentifier} / {s.directoryName || s.fileName}
             </FileLabel>
+            {s.removed && <Translate component={DeletedLabel} content="qvain.files.deletedLabel" color="error" />}
             <FileButtonsContainer>
-              {s.directoryName && existing && isCumulative && (
+              {s.directoryName && existing && isCumulative && canSelectFiles && !deprecated && (
                 <RefreshDirectoryButton
                   type="button"
                   disabled={this.state.refreshLoading}
@@ -74,8 +79,8 @@ export class SelectedFilesBase extends Component {
                   <Translate component={RefreshDirectoryButtonText} content="qvain.files.refreshModal.buttons.show" />
                 </RefreshDirectoryButton>
               )}
-              <EditButton aria-label="Edit" onClick={this.handleEdit(s)} />
-              { removable && (
+              {!s.removed && <EditButton aria-label="Edit" onClick={this.handleEdit(s)} />}
+              {removable && (
                 <DeleteButton
                   aria-label="Remove"
                   onClick={(event) => {
@@ -108,20 +113,33 @@ export class SelectedFilesBase extends Component {
       existingFiles,
       existingDirectories,
       inEdit,
-      cumulativeState
+      cumulativeState,
+      isPas,
+      canSelectFiles,
+      readonly
     } = this.props.Stores.Qvain
     const selected = [...selectedDirectories, ...selectedFiles]
     const existing = [...existingDirectories, ...existingFiles]
     const isCumulative = cumulativeState === CumulativeStates.YES
-    const cumulativeKey = isCumulative ? 'cumulative' : 'noncumulative'
+    let existingHelpKey
+    if (isPas) {
+      existingHelpKey = readonly ? 'pasReadonly' : 'pasEditable'
+    } else {
+      existingHelpKey = isCumulative ? 'cumulative' : 'noncumulative'
+    }
+
     return (
       <Fragment>
-        <Translate tabIndex="0" component={SelectedFilesTitle} content="qvain.files.selected.title" />
-        {selected.length === 0 && <Translate tabIndex="0" component="p" content="qvain.files.selected.none" />}
-        {this.renderFiles(selected, inEdit, false, true)}
+        {canSelectFiles && (
+          <>
+            <Translate tabIndex="0" component={SelectedFilesTitle} content="qvain.files.selected.title" />
+            {selected.length === 0 && <Translate tabIndex="0" component="p" content="qvain.files.selected.none" />}
+            {this.renderFiles(selected, inEdit, false, true)}
+          </>
+        )}
         <Translate tabIndex="0" component={SelectedFilesTitle} content="qvain.files.existing.title" />
-        <Translate tabIndex="0" content={`qvain.files.existing.help.${cumulativeKey}`} />
-        {this.renderFiles(existing, inEdit, true, !isCumulative)}
+        <Translate tabIndex="0" content={`qvain.files.existing.help.${existingHelpKey}`} />
+        {this.renderFiles(existing, inEdit, true, canSelectFiles && !isCumulative)}
         <Modal
           // Inform the user that a new dataset will be created, if both existing and selected files are present.
           isOpen={(selected.length) > 0 && (existing.length > 0) && (this.state.datasetDuplicationModalHasNotBeenShown === true) && !isCumulative}
@@ -137,6 +155,8 @@ export class SelectedFilesBase extends Component {
           directory={this.state.refreshModalDirectory}
           onClose={() => this.setRefreshModalDirectory(null)}
         />
+
+        <FixDeprecatedModal />
       </Fragment>
     )
   }
@@ -204,5 +224,11 @@ const RefreshDirectoryButtonText = styled.span`
 `
 
 const isDirectory = (inEdit) => inEdit.directoryName !== undefined
+
+const DeletedLabel = styled(Label)`
+  margin-left: 10px;
+  text-transform: uppercase;
+`;
+
 
 export default inject('Stores')(observer(SelectedFilesBase))

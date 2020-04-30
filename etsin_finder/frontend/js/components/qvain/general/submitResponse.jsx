@@ -46,8 +46,7 @@ class SubmitResponse extends Component {
     }
 
     // If a new dataset has been created successfully.
-    if (response &&
-      typeof response === 'object' &&
+    if (response && typeof response === 'object' &&
       'identifier' in response &&
       !('new_version_created' in response) &&
       response.is_new
@@ -74,8 +73,7 @@ class SubmitResponse extends Component {
     }
     // If an existing datasets metadata has successfully been updated.
     if (
-      response &&
-      typeof response === 'object' &&
+      response && typeof response === 'object' &&
       'identifier' in response &&
       !('new_version_created' in response) &&
       original !== undefined &&

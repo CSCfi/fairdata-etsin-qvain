@@ -13,6 +13,7 @@ from datetime import datetime
 import pytz
 from dateutil import parser
 
+
 ACCESS_TYPES = {
     'open': 'http://uri.suomi.fi/codelist/fairdata/access_type/code/open',
     'login': 'http://uri.suomi.fi/codelist/fairdata/access_type/code/login',
@@ -169,6 +170,28 @@ def tz_now_is_later_than_timestamp_str(timestamp_str):
     """
     datetime_obj = _parse_timestamp_string_to_tz_aware_datetime(timestamp_str)
     return datetime.now(tz=pytz.timezone('Europe/Helsinki')) >= datetime_obj
+
+def datetime_to_header(datetime_str):
+    """
+    Modifie ISO 8601 datetime format to HTTP datetime (RFC2616).
+
+    The function does also work with some other formats and without
+    tz, but it is not recommended.
+
+    Arguments:
+        datetime_str [string] -- Datetime string represented in the ISO 8601 format (ex. 2020-01-23T14:12:44+00:00)
+    Returns:
+        [string] -- Datetime string in HTTP datetime format (ex. Wed, 21 Oct 2015 07:28:00 GMT)
+
+    """
+    try:
+        assert isinstance(datetime_str, str), 'datetime_str must be of type string.'
+        datetime_obj_local = parser.parse(datetime_str)
+        datetime_obj_GMT = datetime_obj_local.astimezone(pytz.utc)
+        HTTP_datetime = datetime_obj_GMT.strftime('%a, %d %b %Y %H:%M:%S GMT')
+        return HTTP_datetime
+    except Exception:
+        return False
 
 
 def sort_array_of_obj_by_key(obj_array, obj_key, obj_nested_key=False):

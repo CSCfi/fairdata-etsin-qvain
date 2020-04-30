@@ -39,7 +39,7 @@ const ListButton = styled(Button)`
   border: 0;
   background: ${props => props.background};
   &:hover {
-    background: ${props => (props.removed ? darken(0.1, props.theme.color.error) : darken(0.1, props.background))};
+    background: ${props => (darken(0.1, props.background))};
   }
 `
 
@@ -87,7 +87,7 @@ export default class FormatSelect extends Component {
 
     this.state = {
       isOpen: false,
-      newestColor: props.newestColor ? props.newestColor : props.background,
+      frontColor: props.frontColor ? props.frontColor : props.background,
       color: props.color,
       background: props.background,
       padding: props.padding,
@@ -175,7 +175,7 @@ export default class FormatSelect extends Component {
               onClick={() => this.changeSelected(single)}
               value={single.value}
               ref={e => this.setFirstOptionRef(e, i)}
-              background={this.state.newestColor}
+              background={this.state.frontColor}
               removed={single.removed}
             >
               {this.props.options[0] === single ? (
@@ -211,7 +211,7 @@ FormatSelect.defaultProps = {
   background: 'blue',
   color: 'black',
   padding: '0.3em 0.6em',
-  newestColor: undefined,
+  frontColor: undefined,
   width: '7em',
 }
 
@@ -221,6 +221,6 @@ FormatSelect.propTypes = {
   background: PropTypes.string,
   color: PropTypes.string,
   padding: PropTypes.string,
-  newestColor: PropTypes.string,
+  frontColor: PropTypes.string,
   width: PropTypes.string,
 }

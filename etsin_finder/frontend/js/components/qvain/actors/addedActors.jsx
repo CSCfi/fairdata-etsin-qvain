@@ -51,6 +51,7 @@ export class AddedActorsBase extends Component {
 
   render() {
     const { lang } = this.props.Stores.Locale
+    const { readonly, addedActors } = this.props.Stores.Qvain
     return (
       <ContainerSubsectionBottom>
         <Translate
@@ -58,18 +59,18 @@ export class AddedActorsBase extends Component {
           component="h3"
           content="qvain.actors.added.title"
         />
-        {this.props.Stores.Qvain.addedActors.length === 0 &&
+        {addedActors.length === 0 &&
           (<Translate tabIndex="0" component="p" content="qvain.actors.added.noneAddedNotice" />)
         }
-        {this.props.Stores.Qvain.addedActors.map((addedActor) => (
+        {addedActors.map((addedActor) => (
           <ButtonGroup tabIndex="0" key={addedActor.uiId}>
             <ButtonLabel>
               <FontAwesomeIcon icon={addedActor.type === EntityType.PERSON ? faUser : faBuilding} style={{ marginRight: '8px' }} />
-              {this.getAddedActorName(addedActor.name, lang)}{addedActor.role.map(role => (`/${ translate(`qvain.actors.add.checkbox.${role}`)}`))}
+              {this.getAddedActorName(addedActor.name, lang)}{addedActor.role.map(role => (`/${translate(`qvain.actors.add.checkbox.${role}`)}`))}
             </ButtonLabel>
             <ButtonContainer>
               <EditButton aria-label="Edit" onClick={this.handleEditActor(addedActor)} />
-              <DeleteButton aria-label="Remove" onClick={this.handleRemoveActor(addedActor)} />
+              {!readonly && <DeleteButton aria-label="Remove" onClick={this.handleRemoveActor(addedActor)} />}
             </ButtonContainer>
           </ButtonGroup>
         ))}

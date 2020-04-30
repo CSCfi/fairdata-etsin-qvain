@@ -38,7 +38,7 @@ class EmbargoExpires extends Component {
   }
 
   render() {
-    const { embargoExpDate } = this.props.Stores.Qvain
+    const { embargoExpDate, setEmbargoExpDate, readonly } = this.props.Stores.Qvain
     const { error, errorMessage } = this.state
     return (
       <Fragment>
@@ -48,11 +48,12 @@ class EmbargoExpires extends Component {
             component={SingleDatePicker}
             hideKeyboardShortcutsPanel
             date={embargoExpDate ? moment.utc(embargoExpDate) : null}
+            disabled={readonly}
             onDateChange={date => {
               if (date === null) {
-                this.props.Stores.Qvain.embargoExpDate = undefined
+                setEmbargoExpDate(undefined)
               } else {
-                this.props.Stores.Qvain.embargoExpDate = date.utc().format(DateFormats.ISO8601_DATE_FORMAT)
+                setEmbargoExpDate(date.utc().format(DateFormats.ISO8601_DATE_FORMAT))
               }
             }}
             focused={this.state.focused}

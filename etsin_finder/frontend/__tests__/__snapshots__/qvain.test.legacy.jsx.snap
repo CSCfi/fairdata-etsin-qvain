@@ -1,0 +1,658 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Qvain should render correctly 1`] = `
+<ContextConsumer>
+  <Component />
+</ContextConsumer>
+`;
+
+exports[`Qvain.Actors should render correctly 1`] = `
+<div
+  className="container"
+>
+  <styled.h2>
+    <Translate
+      component="span"
+      content="qvain.actors.title"
+    />
+    <Tooltip
+      align="Right"
+      close={[Function]}
+      isOpen={false}
+      text={<ActorsInfoTooltip />}
+    >
+      <HelpIcon
+        aria-label="Actors info"
+        onClick={[Function]}
+      />
+    </Tooltip>
+  </styled.h2>
+  <styled.div>
+    <styled.div>
+      <h3>
+        <Translate
+          component="span"
+          content="qvain.actors.add.title"
+        />
+         *
+      </h3>
+      <Translate
+        component="p"
+        content="qvain.actors.add.help"
+      />
+      <inject-ActorTypeSelectBase-with-Stores />
+      <inject-SelectedActorBase-with-Stores />
+      <inject-ActorInfoBase-with-Stores />
+    </styled.div>
+    <inject-AddedActorsBase-with-Stores />
+  </styled.div>
+</div>
+`;
+
+exports[`Qvain.Description should render <Description /> 1`] = `
+<div
+  className="container"
+>
+  <styled.h2>
+    <Translate
+      component="span"
+      content="qvain.description.title"
+    />
+    <Tooltip
+      align="Right"
+      close={[Function]}
+      isOpen={false}
+      text={<DescriptionInfo />}
+    >
+      <HelpIcon
+        aria-label="Description info"
+        onClick={[Function]}
+      />
+    </Tooltip>
+  </styled.h2>
+  <inject-DescriptionField-with-Stores />
+  <inject-IssuedDateField-with-Stores />
+  <inject-OtherIdentifierField-with-Stores />
+  <inject-FieldOfScienceField-with-Stores />
+  <inject-KeywordsField-with-Stores />
+</div>
+`;
+
+exports[`Qvain.Description should render <DescriptionField /> 1`] = `
+<DescriptionField
+  Stores={
+    Object {
+      "Locale": Locale {},
+      "Qvain": Qvain {
+        "Files": Files {
+          "AddItemsView": DirectoryView {
+            "Files": [Circular],
+            "checkedState": Object {},
+            "getTopmostChecked": [Function],
+            "isOpen": [Function],
+            "openState": Object {},
+            "showAllState": Object {},
+            "showLimit": 20,
+            "showLimitMargin": 1,
+          },
+          "Qvain": [Circular],
+          "SelectedItemsView": DirectoryView {
+            "Files": [Circular],
+            "checkedState": Object {},
+            "getTopmostChecked": [Function],
+            "isOpen": [Function],
+            "openState": Object {},
+            "showAllState": Object {},
+            "showLimit": 20,
+            "showLimitMargin": 1,
+          },
+          "getExisting": [Function],
+          "getItemByPath": [Function],
+          "inEdit": undefined,
+          "loadingProject": null,
+          "refreshModalDirectory": null,
+          "root": null,
+          "selectedExistingCounter": ChildItemCounter {
+            "root": Object {
+              "count": 0,
+              "directories": Object {},
+            },
+          },
+          "selectedExistingMetadata": Object {},
+          "selectedProject": undefined,
+          "toMetax": [Function],
+        },
+        "accessType": Object {
+          "name": undefined,
+          "url": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
+        },
+        "actorInEdit": Object {
+          "email": "",
+          "identifier": "",
+          "name": "",
+          "organization": undefined,
+          "role": Array [],
+          "type": "person",
+          "uiId": undefined,
+        },
+        "actors": Array [],
+        "changed": false,
+        "createActor": [Function],
+        "createActorUIId": [Function],
+        "createExternalResourceUIId": [Function],
+        "cumulativeState": 0,
+        "dataCatalog": undefined,
+        "deprecated": false,
+        "description": Object {
+          "en": "",
+          "fi": "",
+        },
+        "deselectChildren": [Function],
+        "deselectParents": [Function],
+        "embargoExpDate": undefined,
+        "existingDirectories": Array [],
+        "existingFiles": Array [],
+        "extResFormOpen": false,
+        "externalResourceInEdit": Object {
+          "accessUrl": "",
+          "downloadUrl": "",
+          "id": undefined,
+          "title": "",
+          "useCategory": "",
+        },
+        "externalResources": Array [],
+        "fieldOfScience": undefined,
+        "fieldsOfScience": Array [],
+        "fixDeprecatedModalOpen": false,
+        "hierarchy": Object {},
+        "idaPickerOpen": false,
+        "inEdit": undefined,
+        "isEqual": [Function],
+        "isEqualObj": [Function],
+        "isObjectEmpty": [Function],
+        "issuedDate": undefined,
+        "keywords": Array [],
+        "legacyFilePicker": true,
+        "license": Object {
+          "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
+          "name": undefined,
+        },
+        "mergeArraysByIdentifier": [Function],
+        "mergeTheSameActors": [Function],
+        "metadataModalFile": undefined,
+        "original": undefined,
+        "otherIdentifiers": Array [],
+        "otherLicenseUrl": undefined,
+        "preservationState": 0,
+        "restrictionGrounds": Object {},
+        "selectedDirectories": Array [],
+        "selectedFiles": Array [],
+        "selectedProject": undefined,
+        "title": Object {
+          "en": "",
+          "fi": "",
+        },
+        "useDoi": false,
+      },
+    }
+  }
+/>
+`;
+
+exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
+<FieldOfScienceField
+  Stores={
+    Object {
+      "Locale": Locale {},
+      "Qvain": Qvain {
+        "Files": Files {
+          "AddItemsView": DirectoryView {
+            "Files": [Circular],
+            "checkedState": Object {},
+            "getTopmostChecked": [Function],
+            "isOpen": [Function],
+            "openState": Object {},
+            "showAllState": Object {},
+            "showLimit": 20,
+            "showLimitMargin": 1,
+          },
+          "Qvain": [Circular],
+          "SelectedItemsView": DirectoryView {
+            "Files": [Circular],
+            "checkedState": Object {},
+            "getTopmostChecked": [Function],
+            "isOpen": [Function],
+            "openState": Object {},
+            "showAllState": Object {},
+            "showLimit": 20,
+            "showLimitMargin": 1,
+          },
+          "getExisting": [Function],
+          "getItemByPath": [Function],
+          "inEdit": undefined,
+          "loadingProject": null,
+          "refreshModalDirectory": null,
+          "root": null,
+          "selectedExistingCounter": ChildItemCounter {
+            "root": Object {
+              "count": 0,
+              "directories": Object {},
+            },
+          },
+          "selectedExistingMetadata": Object {},
+          "selectedProject": undefined,
+          "toMetax": [Function],
+        },
+        "accessType": Object {
+          "name": undefined,
+          "url": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
+        },
+        "actorInEdit": Object {
+          "email": "",
+          "identifier": "",
+          "name": "",
+          "organization": undefined,
+          "role": Array [],
+          "type": "person",
+          "uiId": undefined,
+        },
+        "actors": Array [],
+        "changed": false,
+        "createActor": [Function],
+        "createActorUIId": [Function],
+        "createExternalResourceUIId": [Function],
+        "cumulativeState": 0,
+        "dataCatalog": undefined,
+        "deprecated": false,
+        "description": Object {
+          "en": "",
+          "fi": "",
+        },
+        "deselectChildren": [Function],
+        "deselectParents": [Function],
+        "embargoExpDate": undefined,
+        "existingDirectories": Array [],
+        "existingFiles": Array [],
+        "extResFormOpen": false,
+        "externalResourceInEdit": Object {
+          "accessUrl": "",
+          "downloadUrl": "",
+          "id": undefined,
+          "title": "",
+          "useCategory": "",
+        },
+        "externalResources": Array [],
+        "fieldOfScience": undefined,
+        "fieldsOfScience": Array [],
+        "fixDeprecatedModalOpen": false,
+        "hierarchy": Object {},
+        "idaPickerOpen": false,
+        "inEdit": undefined,
+        "isEqual": [Function],
+        "isEqualObj": [Function],
+        "isObjectEmpty": [Function],
+        "issuedDate": undefined,
+        "keywords": Array [],
+        "legacyFilePicker": true,
+        "license": Object {
+          "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
+          "name": undefined,
+        },
+        "mergeArraysByIdentifier": [Function],
+        "mergeTheSameActors": [Function],
+        "metadataModalFile": undefined,
+        "original": undefined,
+        "otherIdentifiers": Array [],
+        "otherLicenseUrl": undefined,
+        "preservationState": 0,
+        "restrictionGrounds": Object {},
+        "selectedDirectories": Array [],
+        "selectedFiles": Array [],
+        "selectedProject": undefined,
+        "title": Object {
+          "en": "",
+          "fi": "",
+        },
+        "useDoi": false,
+      },
+    }
+  }
+/>
+`;
+
+exports[`Qvain.Description should render <KeywordsField /> 1`] = `
+<KeywordsField
+  Stores={
+    Object {
+      "Locale": Locale {},
+      "Qvain": Qvain {
+        "Files": Files {
+          "AddItemsView": DirectoryView {
+            "Files": [Circular],
+            "checkedState": Object {},
+            "getTopmostChecked": [Function],
+            "isOpen": [Function],
+            "openState": Object {},
+            "showAllState": Object {},
+            "showLimit": 20,
+            "showLimitMargin": 1,
+          },
+          "Qvain": [Circular],
+          "SelectedItemsView": DirectoryView {
+            "Files": [Circular],
+            "checkedState": Object {},
+            "getTopmostChecked": [Function],
+            "isOpen": [Function],
+            "openState": Object {},
+            "showAllState": Object {},
+            "showLimit": 20,
+            "showLimitMargin": 1,
+          },
+          "getExisting": [Function],
+          "getItemByPath": [Function],
+          "inEdit": undefined,
+          "loadingProject": null,
+          "refreshModalDirectory": null,
+          "root": null,
+          "selectedExistingCounter": ChildItemCounter {
+            "root": Object {
+              "count": 0,
+              "directories": Object {},
+            },
+          },
+          "selectedExistingMetadata": Object {},
+          "selectedProject": undefined,
+          "toMetax": [Function],
+        },
+        "accessType": Object {
+          "name": undefined,
+          "url": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
+        },
+        "actorInEdit": Object {
+          "email": "",
+          "identifier": "",
+          "name": "",
+          "organization": undefined,
+          "role": Array [],
+          "type": "person",
+          "uiId": undefined,
+        },
+        "actors": Array [],
+        "changed": false,
+        "createActor": [Function],
+        "createActorUIId": [Function],
+        "createExternalResourceUIId": [Function],
+        "cumulativeState": 0,
+        "dataCatalog": undefined,
+        "deprecated": false,
+        "description": Object {
+          "en": "",
+          "fi": "",
+        },
+        "deselectChildren": [Function],
+        "deselectParents": [Function],
+        "embargoExpDate": undefined,
+        "existingDirectories": Array [],
+        "existingFiles": Array [],
+        "extResFormOpen": false,
+        "externalResourceInEdit": Object {
+          "accessUrl": "",
+          "downloadUrl": "",
+          "id": undefined,
+          "title": "",
+          "useCategory": "",
+        },
+        "externalResources": Array [],
+        "fieldOfScience": undefined,
+        "fieldsOfScience": Array [],
+        "fixDeprecatedModalOpen": false,
+        "hierarchy": Object {},
+        "idaPickerOpen": false,
+        "inEdit": undefined,
+        "isEqual": [Function],
+        "isEqualObj": [Function],
+        "isObjectEmpty": [Function],
+        "issuedDate": undefined,
+        "keywords": Array [],
+        "legacyFilePicker": true,
+        "license": Object {
+          "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
+          "name": undefined,
+        },
+        "mergeArraysByIdentifier": [Function],
+        "mergeTheSameActors": [Function],
+        "metadataModalFile": undefined,
+        "original": undefined,
+        "otherIdentifiers": Array [],
+        "otherLicenseUrl": undefined,
+        "preservationState": 0,
+        "restrictionGrounds": Object {},
+        "selectedDirectories": Array [],
+        "selectedFiles": Array [],
+        "selectedProject": undefined,
+        "title": Object {
+          "en": "",
+          "fi": "",
+        },
+        "useDoi": false,
+      },
+    }
+  }
+/>
+`;
+
+exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
+<OtherIdentifierField
+  Stores={
+    Object {
+      "Locale": Locale {},
+      "Qvain": Qvain {
+        "Files": Files {
+          "AddItemsView": DirectoryView {
+            "Files": [Circular],
+            "checkedState": Object {},
+            "getTopmostChecked": [Function],
+            "isOpen": [Function],
+            "openState": Object {},
+            "showAllState": Object {},
+            "showLimit": 20,
+            "showLimitMargin": 1,
+          },
+          "Qvain": [Circular],
+          "SelectedItemsView": DirectoryView {
+            "Files": [Circular],
+            "checkedState": Object {},
+            "getTopmostChecked": [Function],
+            "isOpen": [Function],
+            "openState": Object {},
+            "showAllState": Object {},
+            "showLimit": 20,
+            "showLimitMargin": 1,
+          },
+          "getExisting": [Function],
+          "getItemByPath": [Function],
+          "inEdit": undefined,
+          "loadingProject": null,
+          "refreshModalDirectory": null,
+          "root": null,
+          "selectedExistingCounter": ChildItemCounter {
+            "root": Object {
+              "count": 0,
+              "directories": Object {},
+            },
+          },
+          "selectedExistingMetadata": Object {},
+          "selectedProject": undefined,
+          "toMetax": [Function],
+        },
+        "accessType": Object {
+          "name": undefined,
+          "url": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
+        },
+        "actorInEdit": Object {
+          "email": "",
+          "identifier": "",
+          "name": "",
+          "organization": undefined,
+          "role": Array [],
+          "type": "person",
+          "uiId": undefined,
+        },
+        "actors": Array [],
+        "changed": false,
+        "createActor": [Function],
+        "createActorUIId": [Function],
+        "createExternalResourceUIId": [Function],
+        "cumulativeState": 0,
+        "dataCatalog": undefined,
+        "deprecated": false,
+        "description": Object {
+          "en": "",
+          "fi": "",
+        },
+        "deselectChildren": [Function],
+        "deselectParents": [Function],
+        "embargoExpDate": undefined,
+        "existingDirectories": Array [],
+        "existingFiles": Array [],
+        "extResFormOpen": false,
+        "externalResourceInEdit": Object {
+          "accessUrl": "",
+          "downloadUrl": "",
+          "id": undefined,
+          "title": "",
+          "useCategory": "",
+        },
+        "externalResources": Array [],
+        "fieldOfScience": undefined,
+        "fieldsOfScience": Array [],
+        "fixDeprecatedModalOpen": false,
+        "hierarchy": Object {},
+        "idaPickerOpen": false,
+        "inEdit": undefined,
+        "isEqual": [Function],
+        "isEqualObj": [Function],
+        "isObjectEmpty": [Function],
+        "issuedDate": undefined,
+        "keywords": Array [],
+        "legacyFilePicker": true,
+        "license": Object {
+          "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
+          "name": undefined,
+        },
+        "mergeArraysByIdentifier": [Function],
+        "mergeTheSameActors": [Function],
+        "metadataModalFile": undefined,
+        "original": undefined,
+        "otherIdentifiers": Array [],
+        "otherLicenseUrl": undefined,
+        "preservationState": 0,
+        "restrictionGrounds": Object {},
+        "selectedDirectories": Array [],
+        "selectedFiles": Array [],
+        "selectedProject": undefined,
+        "title": Object {
+          "en": "",
+          "fi": "",
+        },
+        "useDoi": false,
+      },
+    }
+  }
+/>
+`;
+
+exports[`Qvain.RightsAndLicenses should render <AccessType /> 1`] = `
+<Card>
+  <styled.label
+    htmlFor="accessTypeSelect"
+  >
+    <Translate
+      component="span"
+      content="qvain.rightsAndLicenses.accessType.title"
+    />
+  </styled.label>
+  <Translate
+    attributes={
+      Object {
+        "placeholder": "qvain.rightsAndLicenses.accessType.placeholder",
+      }
+    }
+    clearable={true}
+    component={[Function]}
+    inputId="accessTypeSelect"
+    isDisabled={false}
+    name="accessType"
+    onBlur={[Function]}
+    onChange={[Function]}
+    options={Array []}
+    value={
+      Object {
+        "label": undefined,
+        "value": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
+      }
+    }
+  />
+  <styled.p />
+</Card>
+`;
+
+exports[`Qvain.RightsAndLicenses should render <Licenses /> 1`] = `
+<Card>
+  <styled.label
+    htmlFor="licenseSelect"
+  >
+    <Translate
+      component="span"
+      content="qvain.rightsAndLicenses.license.title"
+    />
+  </styled.label>
+  <Translate
+    attributes={
+      Object {
+        "placeholder": "qvain.rightsAndLicenses.license.placeholder",
+      }
+    }
+    component={[Function]}
+    inputId="licenseSelect"
+    isClearable={true}
+    isDisabled={false}
+    name="license"
+    onBlur={[Function]}
+    onChange={[Function]}
+    options={Array []}
+    value={
+      Object {
+        "label": undefined,
+        "value": undefined,
+      }
+    }
+  />
+</Card>
+`;
+
+exports[`Qvain.RightsAndLicenses should render <RightsAndLicenses /> 1`] = `
+<div
+  className="container"
+>
+  <styled.h2>
+    <Translate
+      component="span"
+      content="qvain.rightsAndLicenses.title"
+    />
+    <Tooltip
+      align="Right"
+      close={[Function]}
+      isOpen={false}
+      text={<LicensesInfo />}
+    >
+      <HelpIcon
+        aria-label="Rights And Licenses info"
+        onClick={[Function]}
+      />
+    </Tooltip>
+  </styled.h2>
+  <inject-License-with-Stores />
+  <inject-AccessType-with-Stores />
+</div>
+`;

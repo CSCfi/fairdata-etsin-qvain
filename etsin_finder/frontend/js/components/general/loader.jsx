@@ -62,7 +62,7 @@ const Holder = styled.div`
 `
 
 /* prettier-ignore */
-const Spinner = styled.div`
+export const Spinner = styled.div`
   height: ${p => p.size};
   width: ${p => p.size};
   animation: spinner 0.8s infinite linear;

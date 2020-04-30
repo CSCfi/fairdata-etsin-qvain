@@ -13,7 +13,6 @@ const english = {
   dataset: {
     access_login: 'Login to apply for access',
     access_unavailable: 'Unavailable',
-    access_permission: 'Apply for access',
     access_denied: 'Application denied',
     access_draft: 'Application in draft state',
     access_request_sent: 'Access request sent',
@@ -119,6 +118,12 @@ const english = {
       },
     },
     events_idn: {
+      deleted_versions: {
+        title: 'Deleted Versions',
+        date: 'Delete date',
+        version: 'Version',
+        link_to_dataset: 'Link to dataset'
+      },
       events: {
         title: 'Events',
         event: 'Event',
@@ -298,6 +303,33 @@ const english = {
       editFilesSuccess: 'New dataset version has been created!',
       editMetadataSuccess: 'Dataset successfully updated!',
     },
+    pasInfo: {
+      stateInfo: 'This is a PAS dataset. The state of the dataset is "%(state)s: %(description)s".',
+      editable: 'You can edit metadata but cannot add or remove any files.',
+      readonly: 'You can view metadata but cannot make any changes.',
+    },
+    pasState: {
+      0: 'Waits for validation',
+      10: 'Proposed for digital preservation',
+      20: 'Validating',
+      30: 'Enriching failed',
+      40: 'Check metadata',
+      50: 'Validation failed',
+      60: 'Revalidating',
+      70: 'Waits for transfer',
+      75: 'Metadata confirmed',
+      80: 'Transfer started',
+      90: 'Packaging',
+      100: 'Packaging failed',
+      110: 'Transferring',
+      120: 'OK – preserved',
+      130: 'Transfer failed',
+      140: 'Available'
+    },
+    useDoiHeader: 'Creation of a DOI',
+    useDoiContent: 'You have selected DOI as primary identifier for your dataset instead of URN. DOI requires a defined issued date and a dataset publisher. A DOI (Digital Object Identifier) will be created and stored in the DataCite Service and it cannot be removed. Are you sure you want to select DOI?',
+    useDoiAffirmative: 'Yes',
+    useDoiNegative: 'No',
     unsuccessfullLogin: 'Login unsuccessful.',
     notCSCUser1:
       'Please make sure that you have a valid CSC account. If you tried to log in with an external account (for example Haka) you might get this error if your account is not associated with CSC account. Please do the registration in',
@@ -346,6 +378,7 @@ const english = {
       },
       oldVersion: 'Old',
       latestVersion: 'Latest',
+      deprecated: 'Deprecated',
       editButton: 'Edit',
       deleteButton: 'Delete',
       confirmDelete:
@@ -377,6 +410,12 @@ const english = {
         },
         instructions: 'Only one language selection is mandatory',
       },
+      issuedDate: {
+        title: 'Issued date',
+        infoText: 'Date of formal issuance (publication) of the resource. This value does not affect or reflect the visibility of the dataset itself.',
+        instructions: '',
+        placeholder: 'Date',
+      },
       otherIdentifiers: {
         title: 'Other Identifiers',
         infoText:
@@ -391,6 +430,9 @@ const english = {
         infoText:
           'Select a value from the dropdown menu. The drop down uses the classification of the Ministry of Education and Culture.',
         placeholder: 'Select option',
+        addButton: '+ Add field of science',
+        help:
+          'You can add multiple field of science.',
       },
       keywords: {
         title: 'Keywords',
@@ -409,6 +451,7 @@ const english = {
         infoText:
           'This field sets how the data in your dataset can be accessed. Whichever option is selected does not affect the visibility of the dataset description (metadata) itself; it only affects the openness of the linked data (files). If you select anything else than "Open", you must also choose a reason for the restriction (field "Restriction Grounds" will appear). If you select "Embargo", please also specify the embargo expiration date ("Embargo expiration date" field will appear).',
         placeholder: 'Select option',
+        permitInfo: 'By default the dataset owner (the original describer) can approve the applications. In addition, functionality is under development to allow chosen representatives (only or in addition to the owner) of the dataset\'s organization to make the approvals. By using the access type "Requires permission" the dataset owner agrees to these upcoming changes.'
       },
       embargoDate: {
         label: 'Embargo expiration date (yyyy-mm-dd)',
@@ -498,6 +541,9 @@ const english = {
         max: 'The description is too long.',
         required: 'A description is required in at least one language.',
       },
+      issuedDate: {
+        requiredIfUseDoi: 'Issued date must be defined for DOI datasets'
+      },
       otherIdentifiers: {
         string: 'Other identifiers must be string value.',
         url: 'The identifiers have to be valid URLs.',
@@ -546,8 +592,8 @@ const english = {
         },
         requiredActors: {
           atLeastOneActor: 'You must add at least one actor to your dataset.',
-          mandatoryActors:
-            'Actors: Creator role is mandatory. Note: one actor can have multiple roles.',
+          mandatoryActors: 'Actors: Creator role is mandatory. Note: one actor can have multiple roles.',
+          publisherIfDOI: 'Actors: For DOI datasets publisher must be defined.',
         },
       },
       accessType: {
@@ -599,9 +645,11 @@ const english = {
         useCategory: {
           required: 'Remote resource use category is required.',
         },
-        url: {
-          required: 'Remote resource URL is required.',
-          url: 'Remote resource URL needs to be of valid URL format.',
+        accessUrl: {
+          validFormat: 'Access URL needs to be of valid URL format.',
+        },
+        downloadUrl: {
+          validFormat: 'Download URL needs to be of valid URL format.',
         },
       },
     },
@@ -609,15 +657,18 @@ const english = {
       title: 'Files',
       infoTitle: 'Files info',
       infoText: 'Add text',
+      deletedLabel: 'Deleted',
       dataCatalog: {
         label: 'File origin',
         infoText:
           "Fairdata Services need to know whether you are linking files from IDA or remote resources. You can also publish datasets without any files. In that case, please still select either one. The selection cannot be re-done, so if you are not sure whether you'll add files later, select the one you think you'll need in the future.",
         explanation:
           'Choose "IDA" if the data is stored in Fairdata IDA Service. Choose "Remote resources" if the data is in remote location.',
+        doiSelection: 'I want the dataset to have a DOI (digital object identifier) instead of a URN.',
         placeholder: 'Select option',
         ida: 'IDA',
         att: 'Remote resources',
+        pas: 'PAS'
       },
       cumulativeState: {
         label: 'Cumulative dataset',
@@ -652,6 +703,15 @@ const english = {
         versionCreated: 'A new dataset version has been created with identifier %(identifier)s.',
         openNewVersion: 'Open new version',
       },
+      addItemsModal: {
+        title: 'Select files from project',
+        allSelected: 'All the files and folders in the project are already in the dataset.',
+        buttons: {
+          save: 'Add files',
+          close: 'Close',
+        },
+        versionInfo: 'Adding/removing files or folders will create a new version of this dataset when the changes are published. The old version will be tagged as "Old" and the files linked to it will remain untouched.',
+      },
       refreshModal: {
         header: 'Refresh folder content',
         noncumulative: 'If new files have been added to the folder, this will add them to the dataset and create a new version of it. The changes will take effect immediately.',
@@ -660,6 +720,18 @@ const english = {
         buttons: {
           show: 'Refresh folder content',
           ok: 'Ok',
+          cancel: 'Cancel',
+          close: 'Close',
+        }
+      },
+      fixDeprecatedModal: {
+        statusText: 'This dataset is deprecated. Some of the files in the dataset are no longer available.',
+        header: 'Fix Deprecated Dataset',
+        help: 'This will fix the dataset by removing any included files and directories that are no longer available. A new dataset version will be created. The changes will take place immediately.',
+        changes: 'You need to save your changes to the dataset first.',
+        buttons: {
+          show: 'Fix deprecated dataset',
+          ok: 'Fix dataset',
           cancel: 'Cancel',
           close: 'Close',
         }
@@ -730,7 +802,17 @@ const english = {
       },
       selected: {
         title: 'Selected files',
-        none: 'No files or folders selected',
+        none: 'No files or folders have been selected yet.',
+        newTag: 'New',
+        buttons: {
+          edit: 'Edit %(name)s',
+          remove: 'Remove %(name)s',
+          refresh: 'Refresh %(name)s',
+          open: 'Open %(name)s',
+          close: 'Close %(name)s',
+          select: 'Select %(name)s',
+          deselect: 'Deselect %(name)s'
+        },
         form: {
           title: {
             label: 'Title',
@@ -791,6 +873,8 @@ const english = {
         help: {
           noncumulative: "These are the files and folders that you have added before. If you have added a folder and the content has changed  in IDA, it's NOT automatically updated into your dataset. All new files need to be manually added. Note the Versioning Rules!",
           cumulative: "These are the files and folders that you have added before. If you have added a folder and the content has changed in IDA, it's NOT automatically updated into your dataset. All new files need to be manually added. To be able to remove files, you first need to make the dataset non-cumulative.",
+          pasEditable: 'These are the files in the dataset. You can edit file metadata but cannot add or remove files.',
+          pasReadonly: 'These are the files in the dataset. You can view file metadata but cannot make changes.',
         }
       },
       notificationNewDatasetWillBeCreated: {
@@ -801,7 +885,7 @@ const english = {
       external: {
         title: 'Remote resources (ATT)',
         infoText:
-          'Please insert Title and URL for the remote files. Qvain Light does not upload or store the files, but the URLs act as active links to the files.',
+          'Please insert Title, Use Category and URLs for the remote files. Qvain Light does not upload or store the files, but the URLs act as active links to the files. Access URL = link to the page where the link / license information is. Download URL = direct link to download the file.',
         help: 'Add link to remote files from here:',
         button: {
           label: 'Add link to remote files',
@@ -819,9 +903,15 @@ const english = {
             label: 'Use Category',
             placeholder: 'Select option',
           },
-          url: {
-            label: 'URL',
+          accessUrl: {
+            label: 'Access URL',
             placeholder: 'https://',
+            infoText: 'Page where the link to the file / license information can be found'
+          },
+          downloadUrl: {
+            label: 'Download URL',
+            placeholder: 'https://',
+            infoText: 'Direct link to start the download'
           },
           cancel: {
             label: 'Cancel',

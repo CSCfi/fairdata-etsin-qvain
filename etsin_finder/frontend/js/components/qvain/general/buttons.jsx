@@ -1,5 +1,6 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
+import { lighten } from 'polished'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faPen,
@@ -49,6 +50,11 @@ export const SaveButton = styled.button`
   &:hover {
     background-color: #3a813b;
   }
+
+  :disabled {
+    border: solid 1px ${lighten(0.25, '#49a24a')};
+    background-color: ${lighten(0.25, '#49a24a')};
+  }
 `
 
 export const DangerButton = styled.button`
@@ -67,8 +73,8 @@ export const DangerButton = styled.button`
   padding: 10px 25px;
   &:hover {
     background-color: ${props => (
-      props.disabled ? '#ddb6b6' : '#ff4c4c'
-    )};
+    props.disabled ? '#ddb6b6' : '#ff4c4c'
+  )};
   }
 `
 

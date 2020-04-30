@@ -81,6 +81,7 @@
     "babel-loader": "^8.0.6",
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.14.0",
+    "enzyme-to-json": "^3.4.4",
     "eslint": "^5.16.0",
     "eslint-config-airbnb": "^17.1.1",
     "eslint-plugin-import": "^2.18.0",
@@ -94,6 +95,9 @@
     "react-element-to-jsx-string": "^14.0.2"
   },
   "jest": {
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
+    ],
     "setupFilesAfterEnv": [
       "./__tests__/test-setup.js"
     ],
@@ -104,7 +108,8 @@
       "\\.(css|less)$": "<rootDir>/__mocks__/styleMock.js"
     },
     "testPathIgnorePatterns": [
-      "./__tests__/test-setup.js"
+      "./__tests__/test-setup.js",
+      "./__tests__/__testdata__"
     ],
     "testURL": "http://localhost"
   },
