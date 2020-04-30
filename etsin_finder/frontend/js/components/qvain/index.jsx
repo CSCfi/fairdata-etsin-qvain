@@ -177,7 +177,6 @@ class Qvain extends Component {
         axios
           .post('/api/dataset', obj)
           .then(res => {
-            console.log(res)
             const data = res.data
             this.setState({
               response: { ...data, is_new: true },
@@ -225,7 +224,6 @@ class Qvain extends Component {
         axios
           .patch('/api/dataset', obj)
           .then(res => {
-            console.log(res)
             this.props.Stores.Qvain.moveSelectedToExisting()
             this.props.Stores.Qvain.setChanged(false)
             this.props.Stores.Qvain.editDataset(res.data)
