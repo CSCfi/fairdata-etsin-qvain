@@ -270,7 +270,11 @@ class MetaxQvainLightAPIService(FlaskService):
                 return metax_api_response.json(), metax_api_response.status_code
             else:
                 log.error("Error creating dataset\n{0}".format(e))
+<<<<<<< HEAD
             return {'Error_message': 'Error trying to send data to metax.'}, metax_api_response.status_code
+=======
+                return 'Error trying to send data to metax.', 500
+>>>>>>> stable
 
         log.info('Created dataset with identifier: {}'.format(json.loads(metax_api_response.text).get('identifier', 'COULD-NOT-GET-IDENTIFIER')))
         return metax_api_response.json(), metax_api_response.status_code
@@ -316,9 +320,12 @@ class MetaxQvainLightAPIService(FlaskService):
             return 'Error trying to send data to metax.', 500
 
         log.info('Updated dataset with identifier: {}'.format(cr_id))
+<<<<<<< HEAD
         if metax_api_response.status_code == 412:
             return 'Resource has been modified since last publish', 412
 
+=======
+>>>>>>> stable
         return metax_api_response.json(), metax_api_response.status_code
 
     def get_dataset(self, cr_id):
