@@ -16,7 +16,7 @@ const finnish = {
     access_rights_description: {
       none: '',
       open: 'Kuka tahansa voi ladata datan.',
-      login: 'Käyttän pitää olla sisään kirjautunut ladatakseen datan.',
+      login: 'Käyttäjän pitää olla sisään kirjautunut ladatakseen datan.',
       embargo: 'Datan voi ladata vasta, kun embargo-pvm on ohitettu.',
       permit: 'Datan voi ladata ainoastaan hakemalla erillisen luvan lataamista varten. Luvan hakeminen vaatii kirjautumisen.',
       restricted: 'Data ei ladattavissa.'
@@ -117,6 +117,12 @@ const finnish = {
       },
     },
     events_idn: {
+      deleted_versions: {
+        title: 'Poistetut Versiot',
+        date: 'Poistumispäivämäärä',
+        version: 'Versio',
+        link_to_dataset: 'Linkki aineistoon'
+      },
       events: {
         title: 'Tapahtumat',
         event: 'Tapahtuma',
@@ -295,8 +301,35 @@ const finnish = {
       success: 'Aineisto julkaistu!',
       fail: 'Jotain meni pieleen...',
       editSuccess: 'Uusi aineisto versio luotu!',
-      editMetadataSuccess: 'Aineisto päivitys onnistui!',
+      editMetadataSuccess: 'Aineiston päivitys onnistui!',
     },
+    pasInfo: {
+      stateInfo: 'Tämä on PAS-aineisto. Aineiston tila on "%(state)s: %(description)s".',
+      editable: 'Voit muuttaa kuvauksia muttet lisätä tai poistaa tiedostoja.',
+      readonly: 'Voit katsoa kuvauksia muttet tehdä muutoksia.',
+    },
+    pasState: {
+      0: 'Odottaa tarkastusta',
+      10: 'Rikastaa',
+      20: 'Tarkastaa',
+      30: 'Rikastus katkesi',
+      40: 'Korjaa metatietoja',
+      50: 'Tarkastus katkesi',
+      60: 'Tarkastaa taas',
+      70: 'Odottaa siirtoa',
+      75: 'Metadata vahvistettu',
+      80: 'Siirto aloitettu',
+      90: 'Paketoi',
+      100: 'Paketointi katkesi',
+      110: 'Siirtää',
+      120: 'OK – säilytyksessä',
+      130: 'Siirto katkesi',
+      140: 'Saatavilla'
+    },
+    useDoiHeader: 'DOI-tunnisteen luominen',
+    useDoiContent: 'Olet pyytänyt aineistollesi pysyväksi tunnisteeksi DOIn URN-tunnisteen sijaan. DOI vaatii, että julkaisupäivämäärä ja julkaisija on määritelty. DOI-tunniste rekisteröidään DataCite-palvelun tietokantaan, eikä toimintoa voi peruuttaa. Oletko varma?',
+    useDoiAffirmative: 'Kyllä',
+    useDoiNegative: 'Ei',
     unsuccessfullLogin: 'Kirjautuminen epäonnistui.',
     notCSCUser1:
       'Varmistakaa että teillä on voimassaoleva CSC tunnus. Jos yritit kirjautua sisään ulkoisella tunnuksella (kuten Haka) Niin saatat saada tämän virhe ilmoituksen jos titlit eivät ole linkitetty. Linkityksen voi tehdä',
@@ -343,8 +376,9 @@ const finnish = {
           years: ' vuotta sitten',
         },
       },
-      oldVersion: 'Vanha',
+      oldVersion: 'Vanha versio',
       latestVersion: 'Uusin',
+      deprecated: 'Vanhentunut',
       editButton: 'Muokkaa',
       deleteButton: 'Poista',
       confirmDelete:
@@ -380,6 +414,12 @@ const finnish = {
         },
         instructions: 'Vain yksi kielivalinta on pakollinen',
       },
+      issuedDate: {
+        title: 'Jukaisupäivämäärä',
+        infoText: 'Lähteen muodollinen julkaisupäivämäärä. Ei vaikuta aineston näkyvyyteen.',
+        instructions: '',
+        placeholder: 'Päivämäärä'
+      },
       otherIdentifiers: {
         title: 'Muut tunnisteet',
         infoText:
@@ -390,10 +430,13 @@ const finnish = {
         alreadyAdded: 'Tunniste on jo lisätty',
       },
       fieldOfScience: {
-        title: 'Tutkimusala',
+        title: 'Tieteenala',
         infoText:
           'Valitse tieteenala. Alasvetovalikkosa on Opetus- ja Kulttuuriministeriön mukainen luokitus tieteenaloille.',
         placeholder: 'Valitse vaihtoehto',
+        addButton: '+ Lisää tieteenala',
+        help:
+          'Voit lisätä useita tieteenaloja.',
       },
       keywords: {
         title: 'Avainsanat',
@@ -413,6 +456,7 @@ const finnish = {
         infoText:
           'Tällä kentällä määrittelet, miten aineiston (tiedostot) saa käyttöönsä. Tämä kenttä ei vaikuta siihen, miten tämä kuvailu näkyy. Kuvailu näkyy aina automaattisesti Etsimessä julkaisun jälkeen. Jos valitset jotain muuta kuin Avoin (Open), myös syy, miksi tiedostojen latausta on rajoitettu (Restricition Grounds) on pakollinen tieto. Jos valitse "Embargo", määrittele myös embargon expiroitumisajankohta.',
         placeholder: 'Valitse vaihtoehto',
+        permitInfo: 'Aineiston omistaja (alkuperäinen kuvailun tekijä) pystyy oletuksena hyväksymään aineiston datan käyttöön liittyvät käyttölupahakemukset. Käyttölupatoimintoa kehitetään, ja jossain vaiheessa tullaan lisäämään mahdollisuus myös muiden ko. organisaation edustajien päästä, joko omistajan lisäksi tai sijaan, hyväksymään käyttölupahakemuksia. Valitsemalla pääsyoikeudeksi "Vaatii luvan hakemista" / "Requires permission" käyttäjä sitoutuu näihin muutoksiin.'
       },
       embargoDate: {
         label: 'Embargo loppumispäivämäärä (vvvv-kk-pp)',
@@ -503,6 +547,9 @@ const finnish = {
         max: 'Kuvaus on liian pitkä.',
         required: 'Kuvaus on pakollinen vähintään yhdellä kielellä.',
       },
+      issuedDate: {
+        requiredIfUseDoi: 'Julkaisupäivämäärä on pakollinen kenttä jos haluat käyttää DOI -tunnistetta.'
+      },
       otherIdentifiers: {
         string: 'Tunnisteet tulisivat olla arvoltaan merkkijonoja.',
         url: 'Tunnisteet täytyy olla valiideja URL:eja',
@@ -551,8 +598,8 @@ const finnish = {
         },
         requiredActors: {
           atLeastOneActor: 'Aineistoon on lisättävä vähintään yksi toimija.',
-          mandatoryActors:
-            'Toimijat: Tekijä on pakollinen kenttä. Huomioi: yksittäisellä toimijalla voi olla useampi rooli.',
+          mandatoryActors: 'Toimijat: Tekijä on pakollinen kenttä. Huomioi: yksittäisellä toimijalla voi olla useampi rooli.',
+          publisherIfDOI: 'Toimijat: DOI-ainestoon on lisättävä julkaisija.',
         },
       },
       accessType: {
@@ -604,9 +651,11 @@ const finnish = {
         useCategory: {
           required: 'Ulkoisen aineiston käyttökategoria on pakollinen kenttä.',
         },
-        url: {
-          required: 'Ulkoisen aineiston URL osoite on pakollinen kenttä.',
-          url: 'Ulkoisen aineiston URL osoitteen pitää olla oikeassa URL-formaatissa',
+        accessUrl: {
+          validFormat: 'Ulkoisen aineiston sivun URL pitää olla oikeassa URL-formaatissa.',
+        },
+        downloadUrl: {
+          validFormat: 'Ulkoisen aineiston latauslinkin URL pitää olla oikeassa URL-formaatissa.',
         },
       },
     },
@@ -614,15 +663,18 @@ const finnish = {
       title: 'Tiedostot',
       infoTitle: 'Tiedostot info',
       infoText: 'Lisää texti',
+      deletedLabel: 'Poistettu',
       dataCatalog: {
         label: 'Tiedoston lähde',
         infoText:
           'Ennenkuin pääset linkittämään tiedostoja aineistoosi, sinun tulee valita, linkitätkö tiedostoja IDAsta vai annatko ulkopuolisen palvelun URL-osoitteet, joista tiedostot löytyvät.',
         explanation:
           'Valitse "IDA", jos tiedostot on tallennettu Fairdata IDA -palveluun. Valitse "Ulkoinen lähde" jos tiedostot sijaitsevat muualla.',
+        doiSelection: 'Haluan aineistolleni DOI -tunnisteen (digital object identifier) URN - tunnisteen sijaan.',
         placeholder: 'Valitse vaihtoehto',
         ida: 'IDA',
         att: 'Ulkoinen lähde',
+        pas: 'PAS'
       },
       cumulativeState: {
         label: 'Kasvava aineisto',
@@ -657,6 +709,15 @@ const finnish = {
         versionCreated: 'Aineistosta on luotu uusi versio tunnisteella %(identifier)s.',
         openNewVersion: 'Avaa uusi versio',
       },
+      addItemsModal: {
+        allSelected: 'Kaikki projektin tiedostot ja hakemistot ovat jo aineistossa.',
+        title: 'Lisää tiedostoja projektista',
+        buttons: {
+          save: 'Lisää tiedostot',
+          close: 'Sulje',
+        },
+        versionInfo: 'Tiedostojen tai hakemistojen lisääminen tai poistaminen synnyttää julkaistusta aineistosta uuden version kun muutokset julkaistaan. Vanha versio pysyy muuttumattomana ja siihen lisätään "vanha"-tagi.',
+      },
       refreshModal: {
         header: 'Päivitä kansion tiedostot',
         noncumulative: 'Mikäli kansioon on lisätty uusia tiedostoja, toiminto lisää ne aineistoon ja luo siitä uuden version.',
@@ -665,6 +726,18 @@ const finnish = {
         buttons: {
           show: 'Päivitä kansion tiedostot',
           ok: 'Päivitä',
+          cancel: 'Peruuta',
+          close: 'Sulje',
+        }
+      },
+      fixDeprecatedModal: {
+        statusText: 'Aineisto on vanhentunut. Jotkin aineiston tiedostot eivät ole enää saatavilla.',
+        header: 'Korjaa vanhentunut aineisto',
+        help: 'Tämä toiminto korjaa aineiston poistamalla siitä kaikki tiedostot ja hakemistot jotka eivät ole enää saatavilla. Aineistosta tehdään uusi versio.',
+        changes: 'Aineistoon tehdyt muutokset on tallennettava ennen tätä toimintoa.',
+        buttons: {
+          show: 'Korjaa vanhentunut aineisto',
+          ok: 'Korjaa aineisto',
           cancel: 'Peruuta',
           close: 'Sulje',
         }
@@ -736,7 +809,17 @@ const finnish = {
       },
       selected: {
         title: 'Valitut tiedostot',
-        none: 'Tiedostoja tai hakemistoja ei ole valittu',
+        none: 'Tiedostoja tai hakemistoja ei ole vielä valittu.',
+        newTag: 'Uusi',
+        buttons: {
+          edit: 'Muokkaa %(name)s',
+          remove: 'Poista %(name)s',
+          refresh: 'Päivitä %(name)s',
+          open: 'Avaa %(name)s',
+          close: 'Sulje %(name)s',
+          select: 'Valitse %(name)s',
+          deselect: 'Poista valinta %(name)s'
+        },
         form: {
           title: {
             label: 'Otsikko',
@@ -764,6 +847,8 @@ const finnish = {
         help: {
           noncumulative: 'Nämä ovat sinun aiemmin valitsemia tiedostoja. Jos olet liittänyt aineistoosi hakemiston, sen sisältöä ei automaattisesti päivitetä, vaikka sen sisältö olisi muuttunut IDAssa. Jos haluat lisätä puuttuvia tiedostoja, valitse ne tiedostolistasta. HUOM! Tiedostojen lisääminen luo aineistostasi uuden version.',
           cumulative: 'Nämä ovat sinun aiemmin valitsemia tiedostoja. Jos olet liittänyt aineistoosi hakemiston, sen sisältöä ei automaattisesti päivitetä, vaikka sen sisältö olisi muuttunut IDAssa. Jos haluat lisätä puuttuvia tiedostoja, valitse ne tiedostolistasta. Voidaksesi poistaa tiedostoja aineisto on ensin muutettava ei-kumulatiiviseksi.',
+          pasEditable: 'Nämä ovat aineiston tiedostot. Voit muuttaa tiedostojen metatietoja muttet lisätä tai poistaa tiedostoja.',
+          pasReadonly: 'Nämä ovat aineiston tiedostot. Voit katsella tiedostojen metatietoja muttet tehdä muutoksia.',
         }
       },
       notificationNewDatasetWillBeCreated: {
@@ -774,7 +859,7 @@ const finnish = {
       external: {
         title: 'Ulkoiset tiedostot (ATT)',
         infoText:
-          'Määritä tiedostolle otsikko, käyttökategoria (alasvetovalikosta) sekä, kerro, mistä tiedosto löytyy. Tiedosto ei ladata Qvain Lightiin, vaan antamasi URL toimii aktiivisena linkkinä ko. tiedostoon.',
+          'Määritä tiedostolle otsikko, käyttökategoria (alasvetovalikosta) sekä, kerro, mistä tiedosto / sen lisenssitieto löytyvät (sivun URL). Voit antaa myös suoran latauslinkin, jos sellainen on. Tiedostoa ei ladata Qvain Lightiin, vaan antamasi sivun URL toimii linkkinä sivulle, jossa tiedosto sijaitsee sekä tiedoston latauslinkin kauttaja pääsee suoraan aloittamaan tiedoston lataamisen omalle koneelleen.',
         help: 'Lisää linkkejä ulkoisiin tiedostoihin:',
         button: {
           label: 'Lisää linkki ulkoiseen tiedostoon',
@@ -792,9 +877,15 @@ const finnish = {
             label: 'Käyttökategoria',
             placeholder: 'Valitse vaihtoehto',
           },
-          url: {
-            label: 'URL',
+          accessUrl: {
+            label: 'Sivun URL',
             placeholder: 'https://',
+            infoText: 'Sivu, jossa tiedoston linkki ja tiedostoon mahdollisesti liittyvä lisenssitieto sijaitsevat'
+          },
+          downloadUrl: {
+            label: 'Latauslinkki',
+            placeholder: 'https://',
+            infoText: 'Linkki, jolla tiedoston saa ladattua suoraan omalle koneelle'
           },
           cancel: {
             label: 'Kumoa',
@@ -832,3 +923,4 @@ const finnish = {
 }
 
 export default finnish
+

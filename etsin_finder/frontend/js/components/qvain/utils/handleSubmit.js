@@ -1,15 +1,18 @@
 
 const actorsToMetax = actors => {
   const parsedActor = actors.map(actor => ({
-      type: actor.type,
-      role: actor.role,
-      name: actor.name,
-      email: actor.email ? actor.email : undefined,
-      identifier: actor.identifier ? actor.identifier : undefined,
-      organization: actor.organization,
-    }))
+    type: actor.type,
+    role: actor.role,
+    name: actor.name,
+    email: actor.email ? actor.email : undefined,
+    identifier: actor.identifier ? actor.identifier : undefined,
+    organization: actor.organization,
+  }))
   return parsedActor
 }
+
+const fieldsOfScienceToMetaxMethod = fieldsOfScience => fieldsOfScience.map(fieldOfScience =>
+  fieldOfScience.url)
 
 const directoriesToMetax = (selectedDirectories, existingDirectories) => {
   const selectedDirectoryIdentifiers = selectedDirectories
@@ -47,7 +50,7 @@ const filesToMetax = (selectedFiles, existingFiles) => {
       title: file.title,
       description: file.description ? file.description : undefined,
       fileType: file.fileType ? {
-        identifier: file.fileType ? file.fileType : undefined
+        identifier: file.fileType
       } : undefined,
       useCategory: {
         identifier: file.useCategory
@@ -59,11 +62,19 @@ const filesToMetax = (selectedFiles, existingFiles) => {
 }
 
 const handleSubmitToBackend = (values) => {
+  let files, directories
+  if (values.legacyFilePicker) {
+    files = filesToMetax(values.selectedFiles, values.existingFiles)
+    directories = directoriesToMetax(values.selectedDirectories, values.existingDirectories)
+  } else {
+    ({ files, directories } = values.Files.toMetax())
+  }
   const obj = {
     title: values.title,
     description: values.description,
+    issuedDate: values.issuedDate,
     identifiers: values.otherIdentifiers,
-    fieldOfScience: values.fieldOfScience ? values.fieldOfScience.url : undefined,
+    fieldOfScience: fieldsOfScienceToMetaxMethod(values.fieldsOfScience),
     keywords: values.keywords,
     actors: actorsToMetax(values.actors),
     accessType: values.accessType ? values.accessType : undefined,
@@ -76,8 +87,9 @@ const handleSubmitToBackend = (values) => {
       values.externalResources.length > 0 ? values.externalResources : [],
     dataCatalog: values.dataCatalog,
     cumulativeState: values.cumulativeState,
-    files: filesToMetax(values.selectedFiles, values.existingFiles),
-    directories: directoriesToMetax(values.selectedDirectories, values.existingDirectories),
+    files,
+    directories,
+    useDoi: values.useDoi,
   }
   return obj
 }

@@ -24,9 +24,21 @@ import {
   Container
 } from './general/card'
 import handleSubmitToBackend from './utils/handleSubmit'
+import { getResponseError } from './utils/responseError'
 import Title from './general/title'
 import SubmitResponse from './general/submitResponse'
-import Button, { InvertedButton } from '../general/button';
+import { Button, InvertedButton } from '../general/button'
+import Modal from '../general/modal'
+import DeprecatedState from './deprecatedState';
+import PasState from './pasState'
+
+const customStyles = {
+  content: {
+    minWidth: '20vw',
+    maxWidth: '60vw',
+    padding: '2vw',
+  },
+}
 
 const EDIT_DATASET_URL = '/api/datasets/edit'
 
@@ -44,6 +56,9 @@ class Qvain extends Component {
     this.setFocusOnSubmitOrUpdateButton = this.setFocusOnSubmitOrUpdateButton.bind(this);
     this.submitDatasetButton = React.createRef();
     this.updateDatasetButton = React.createRef();
+    this.showUseDoiInformation = this.showUseDoiInformation.bind(this)
+    this.closeUseDoiInformation = this.closeUseDoiInformation.bind(this)
+    this.acceptDoi = this.acceptDoi.bind(this)
   }
 
   state = {
@@ -54,6 +69,7 @@ class Qvain extends Component {
     datasetError: false,
     datasetErrorTitle: null,
     datasetErrorDetails: null,
+    useDoiModalIsOpen: false,
   }
 
   componentDidMount() {
@@ -131,9 +147,29 @@ class Qvain extends Component {
     event.preventDefault();
   }
 
+  handlePublishError = err => {
+    if (!err.response) {
+      console.error(err)
+    }
+    this.setState({
+      response: getResponseError(err)
+    })
+  }
+
   handleCreate = e => {
-    e.preventDefault()
-    this.setState({ submitted: true })
+    if (this.state.useDoiModalIsOpen) {
+      this.setState({
+        useDoiModalIsOpen: false
+      })
+    } else {
+      e.preventDefault()
+    }
+    this.setState({
+      response: null,
+      submitted: true,
+      datasetError: false,
+      datasetLoading: true,
+    })
     const obj = handleSubmitToBackend(this.props.Stores.Qvain)
     qvainFormSchema
       .validate(obj, { abortEarly: false })
@@ -141,9 +177,11 @@ class Qvain extends Component {
         axios
           .post('/api/dataset', obj)
           .then(res => {
-            console.log(res)
             const data = res.data
-            this.setState({ response: { ...data, is_new: true } })
+            this.setState({
+              response: { ...data, is_new: true },
+              datasetLoading: false,
+            })
             // Open the created dataset without reloading the editor
             if (data && data.identifier) {
               this.props.Stores.Qvain.resetQvainStore()
@@ -151,47 +189,17 @@ class Qvain extends Component {
               this.props.history.replace(`/qvain/dataset/${data.identifier}`)
             }
           })
-          .catch(err => {
-            console.log(err)
-            // Refreshing error header
-            this.setState({ response: null })
-
-            // If user is not logged in, display logged in error
-            if (err.response.data.PermissionError) {
-              this.setState({ response: [err.response.data.PermissionError] })
-
-            // If user is logged in...
-            } else if (err.response.data) {
-              // If no IDA projects are found, display an IDA error
-              if (err.response.data.IdaError) {
-                this.setState({
-                  response: [err.response.data.IdaError]
-                })
-              } else if (err.response.data.detail) { // ...else, try to format the Metax error
-                this.setState({
-                  response: err.response.data.detail
-                })
-              // If the Metax error message formatting cannot be done, just display the entire error
-              } else {
-                this.setState({
-                  response: [err.response.data]
-                })
-              }
-
-            // If error response is empty, just display 'Error...'
-            } else {
-              this.setState({
-                response: ['Error...']
-              })
-            }
-          })
+          .catch(this.handlePublishError)
       })
       .catch(err => {
+        console.log('Error for event: ', e)
         console.log(err.errors)
 
-        // Refreshing error header
-        this.setState({ response: null })
-        this.setState({ response: err.errors })
+        // Loading done, so set error header
+        this.setState({
+          response: err.errors,
+          datasetLoading: false,
+        })
       })
   }
 
@@ -202,7 +210,12 @@ class Qvain extends Component {
 
   handleUpdate = e => {
     e.preventDefault()
-    this.setState({ submitted: true })
+    this.setState({
+      response: null,
+      submitted: true,
+      datasetError: false,
+      datasetLoading: true,
+    })
     const obj = handleSubmitToBackend(this.props.Stores.Qvain)
     obj.original = this.props.Stores.Qvain.original
     qvainFormSchema
@@ -211,49 +224,25 @@ class Qvain extends Component {
         axios
           .patch('/api/dataset', obj)
           .then(res => {
-            console.log(res)
             this.props.Stores.Qvain.moveSelectedToExisting()
             this.props.Stores.Qvain.setChanged(false)
-            this.setState({ response: res.data })
+            this.props.Stores.Qvain.editDataset(res.data)
+            this.setState({
+              response: res.data,
+              datasetLoading: false,
+            })
           })
-          .catch(err => {
-            console.log(err.response)
-            // Refreshing error header
-            this.setState({ response: null })
-
-            // If user is not logged in, display logged in error
-            if (err.response.data.PermissionError) {
-              this.setState({ response: [err.response.data.PermissionError] })
-
-            // If user is logged in...
-            } else if (err.response.data) {
-            // ...try to format the Metax error
-            if (err.response.data.detail) {
-              this.setState({
-                response: err.response.data.detail
-              })
-
-            // If the Metax error message formatting cannot be done, just display the entire error
-            } else {
-              this.setState({
-                response: [err.response.data]
-              })
-            }
-
-            // If error response is empty, just display 'Error...'
-            } else {
-              this.setState({
-                response: ['Error...']
-              })
-            }
-          })
+          .catch(this.handlePublishError)
       })
       .catch(err => {
+        console.log('Error for event: ', e)
         console.log(err.errors)
 
-        // Refreshing error header
-        this.setState({ response: null })
-        this.setState({ response: err.errors })
+        // Loading done, so set error header
+        this.setState({
+          response: err.errors,
+          datasetLoading: false,
+        })
       })
   }
 
@@ -272,7 +261,26 @@ class Qvain extends Component {
     }
   }
 
+  showUseDoiInformation() {
+    this.setState({
+      useDoiModalIsOpen: true
+    })
+  }
+
+  // DOI usage accepted and will thus be used instead of URN ("yes")
+  acceptDoi() {
+    this.handleCreate()
+  }
+
+  // User closes the dialogue without accepting DOI usage ("no" or "exit")
+  closeUseDoiInformation() {
+    this.setState({
+      useDoiModalIsOpen: false
+    })
+  }
+
   render() {
+    const { original, readonly } = this.props.Stores.Qvain
     // Title text
     let titleKey
     if (this.state.datasetLoading) {
@@ -280,7 +288,7 @@ class Qvain extends Component {
     } else if (this.state.datasetError) {
       titleKey = 'qvain.titleLoadingFailed'
     } else {
-      titleKey = this.props.Stores.Qvain.original ? 'qvain.titleEdit' : 'qvain.titleCreate'
+      titleKey = original ? 'qvain.titleEdit' : 'qvain.titleCreate'
     }
 
     // Sticky header content
@@ -307,20 +315,26 @@ class Qvain extends Component {
         <StickySubHeaderWrapper>
           <StickySubHeader>
             <ButtonContainer>
-              {this.props.Stores.Qvain.original
+              {original
                 ? (
-                  <SubmitButton ref={this.updateDatasetButton} type="button" onClick={this.handleUpdate}>
+                  <SubmitButton ref={this.updateDatasetButton} disabled={readonly} type="button" onClick={this.handleUpdate}>
                     <Translate content="qvain.edit" />
                   </SubmitButton>
                 )
                 : (
-                  <SubmitButton ref={this.submitDatasetButton} type="button" onClick={this.handleCreate}>
+                  <SubmitButton
+                    ref={this.submitDatasetButton}
+                    type="button"
+                    onClick={this.props.Stores.Qvain.useDoi === true ? this.showUseDoiInformation : this.handleCreate}
+                  >
                     <Translate content="qvain.submit" />
                   </SubmitButton>
                 )
               }
             </ButtonContainer>
           </StickySubHeader>
+          <PasState />
+          <DeprecatedState />
           {this.state.submitted ? (
             <StickySubHeaderResponse>
               <SubmitResponse response={this.state.response} />
@@ -353,6 +367,25 @@ class Qvain extends Component {
     } else {
       dataset = (
         <Form className="container">
+          <Modal
+            isOpen={this.state.useDoiModalIsOpen}
+            onRequestClose={this.closeUseDoiInformation}
+            customStyles={customStyles}
+            contentLabel="UseDoiModalInformation"
+          >
+            <Translate content="qvain.useDoiHeader" component="h2" />
+            <Translate content="qvain.useDoiContent" component="p" />
+            <Button
+              onClick={this.acceptDoi}
+            >
+              <Translate content="qvain.useDoiAffirmative" component="span" />
+            </Button>
+            <Button
+              onClick={this.closeUseDoiInformation}
+            >
+              <Translate content="qvain.useDoiNegative" component="span" />
+            </Button>
+          </Modal>
           <Description />
           <Actors />
           <RightsAndLicenses />

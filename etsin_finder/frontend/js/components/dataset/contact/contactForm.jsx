@@ -40,11 +40,7 @@ const InnerForm = props => {
     <Form onSubmit={handleSubmit}>
       <InputContainer>
         <ErrorBoundary>
-          <Label htmlFor="recipient">
-            {translations.recipient.name}
-            {' '}
-*
-          </Label>
+          <Label htmlFor="recipient">{translations.recipient.name} *</Label>
           <Select
             name="recipient"
             value={values.recipient}
@@ -60,11 +56,7 @@ const InnerForm = props => {
         </ErrorBoundary>
       </InputContainer>
       <InputContainer width="50%" paddingRight="0.5em">
-        <Label htmlFor="email">
-          {translations.email.name}
-          {' '}
-*
-        </Label>
+        <Label htmlFor="email">{translations.email.name} *</Label>
         <Input
           id="email"
           placeholder={translations.email.placeholder}
@@ -79,11 +71,7 @@ const InnerForm = props => {
         )}
       </InputContainer>
       <InputContainer width="50%" paddingLeft="0.5em">
-        <Label htmlFor="subject">
-          {translations.subject.name}
-          {' '}
-*
-        </Label>
+        <Label htmlFor="subject">{translations.subject.name} *</Label>
         <Input
           id="subject"
           placeholder={translations.subject.placeholder}
@@ -98,11 +86,7 @@ const InnerForm = props => {
         )}
       </InputContainer>
       <InputContainer>
-        <Label htmlFor="message">
-          {translations.message.name}
-          {' '}
-*
-        </Label>
+        <Label htmlFor="message">{translations.message.name} *</Label>
         <InputArea
           id="message"
           placeholder={translations.message.placeholder}
@@ -128,14 +112,12 @@ const InnerForm = props => {
         {status === 'success' && <Success aria-live="assertive">{translations.success}</Success>}
         {errors.sending === 'error 500' && (
           <Error aria-live="assertive">
-            {translations.errorInternal}
-            {' '}
-(
+            {translations.errorInternal} (
             <a
-              href="mailto:csc@servicedesk.fi?Subject=Etsin%20Contact%20Form%20Internal%20Server%20Error"
+              href="mailto:servicedesk@csc.fi?Subject=Etsin%20Contact%20Form%20Internal%20Server%20Error"
               target="_top"
             >
-              csc@servicedesk.fi
+              servicedesk@csc.fi
             </a>
             ).
           </Error>
