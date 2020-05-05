@@ -169,6 +169,7 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
         "isEqual": [Function],
         "isEqualObj": [Function],
         "isObjectEmpty": [Function],
+        "keywordString": "",
         "keywords": Array [],
         "legacyFilePicker": true,
         "license": Object {
@@ -289,6 +290,7 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
         "isEqual": [Function],
         "isEqualObj": [Function],
         "isObjectEmpty": [Function],
+        "keywordString": "",
         "keywords": Array [],
         "legacyFilePicker": true,
         "license": Object {
@@ -409,6 +411,7 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
         "isEqual": [Function],
         "isEqualObj": [Function],
         "isObjectEmpty": [Function],
+        "keywordString": "",
         "keywords": Array [],
         "legacyFilePicker": true,
         "license": Object {
@@ -529,6 +532,7 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
         "isEqual": [Function],
         "isEqualObj": [Function],
         "isObjectEmpty": [Function],
+        "keywordString": "",
         "keywords": Array [],
         "legacyFilePicker": true,
         "license": Object {

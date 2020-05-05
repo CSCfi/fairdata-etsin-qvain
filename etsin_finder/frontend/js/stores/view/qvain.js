@@ -43,6 +43,8 @@ class Qvain {
 
   @observable fieldOfScienceArray = []
 
+  @observable keywordString = ''
+
   @observable keywords = []
 
   @observable license = License(undefined, LicenseUrls.CCBY4)
@@ -75,6 +77,7 @@ class Qvain {
     this.otherIdentifiers = []
     this.fieldOfScience = undefined
     this.fieldOfScienceArray = []
+    this.keywordString = ''
     this.keywords = []
     this.license = License(undefined, LicenseUrls.CCBY4)
     this.otherLicenseUrl = undefined
@@ -184,14 +187,19 @@ class Qvain {
   }
 
   @action
-  setKeywords = keywords => {
-    this.keywords = keywords
-    this.changed = true
+  setKeyword = value => {
+    this.keywordString = value
   }
 
   @action
   removeKeyword = keyword => {
     this.keywords = this.keywords.filter(word => word !== keyword)
+    this.changed = true
+  }
+
+  @action
+  setKeywords = keywords => {
+    this.keywords = keywords
     this.changed = true
   }
 
