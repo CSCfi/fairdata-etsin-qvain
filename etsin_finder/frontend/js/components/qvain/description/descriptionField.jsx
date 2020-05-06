@@ -78,12 +78,6 @@ class DescriptionField extends Component {
     return activeLang === 'FINNISH' ? `${stub}placeholderFi` : `${stub}placeholderEn`
   }
 
-  getTitleErrorContent = () => {
-    if (this.state.titleError) {
-
-    }
-  }
-
   render() {
     const { title, description, readonly } = this.props.Stores.Qvain
     const activeLang = this.state.active
