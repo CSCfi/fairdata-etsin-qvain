@@ -2,7 +2,6 @@ import React, { Component, Fragment } from 'react'
 import { inject, observer } from 'mobx-react'
 import PropTypes from 'prop-types';
 import Translate from 'react-translate-component'
-import 'react-dates/lib/css/_datepicker.css';
 import moment from 'moment'
 import parseDate from 'moment-parseformat'
 import DatePicker, { registerLocale } from 'react-datepicker'
