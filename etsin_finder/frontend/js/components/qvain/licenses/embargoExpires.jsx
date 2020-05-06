@@ -57,7 +57,7 @@ class EmbargoExpires extends Component {
   }
 
   render() {
-    const { embargoExpDate } = this.props.Stores.Qvain
+    const { embargoExpDate, readonly } = this.props.Stores.Qvain
     const { error, errorMessage } = this.state
     return (
       <Fragment>
@@ -69,6 +69,7 @@ class EmbargoExpires extends Component {
           locale={this.props.Stores.Locale.lang}
           placeholderText={translate('qvain.rightsAndLicenses.embargoDate.placeholder')}
           dateFormat={'yyyy-MM-dd'}
+          disabled={readonly}
         />
         {error && <ValidationError>{errorMessage}</ValidationError>}
         <Translate component="p" content="qvain.rightsAndLicenses.embargoDate.help" />
@@ -76,60 +77,5 @@ class EmbargoExpires extends Component {
     );
   }
 }
-
-/*
-<DatePickerWrapper>
-<Translate
-  component={SingleDatePicker}
-  hideKeyboardShortcutsPanel
-  date={embargoExpDate ? moment.utc(embargoExpDate) : null}
-  disabled={readonly}
-  onDateChange={date => {
-    if (date === null) {
-      setEmbargoExpDate(undefined)
-    } else {
-      setEmbargoExpDate(date.utc().format(DateFormats.ISO8601_DATE_FORMAT))
-    }
-  }}
-  focused={this.state.focused}
-  onFocusChange={({ focused }) => this.setState({ focused })}
-  id="embargo_expiration_date_field_id"
-  showClearDate
-  attributes={{ placeholder: 'qvain.rightsAndLicenses.embargoDate.placeholder' }}
-  onClose={this.validate}
-  displayFormat={DateFormats.ISO8601_DATE_FORMAT}
-/>
-</DatePickerWrapper>
-
-
-const DatePickerWrapper = styled.div`
-  width: 100%;
-  font-family: inherit;
-  & .SingleDatePicker {
-    width: 100%;
-  };
-  & .SingleDatePickerInput {
-    border-radius: 3px;
-    border: 1px solid #cccccc;
-    width: 100%;
-  };
-  & .DateInput {
-    width: 100%;
-  }
-  & .DateInput_input {
-    font-weight: inherit;
-    font-size: inherit;
-    padding: 8px;
-    line-height: inherit;
-  };
-  & .DateInput_input__focused {
-    border: inherit;
-    border-radius: inherit;
-  };
-  & .SingleDatePickerInput_clearDate_svg {
-    vertical-align: inherit;
-  }
-`;
-*/
 
 export default inject('Stores')(observer(EmbargoExpires))

@@ -61,7 +61,7 @@ class IssuedDateField extends React.Component {
   }
 
   render() {
-    const { issuedDate } = this.props.Stores.Qvain
+    const { issuedDate, readonly } = this.props.Stores.Qvain
     const { error, errorMessage } = this.state
     return (
       <Card bottomContent>
@@ -76,6 +76,7 @@ class IssuedDateField extends React.Component {
           locale={this.props.Stores.Locale.lang}
           placeholderText={translate('qvain.description.issuedDate.placeholder')}
           dateFormat={'yyyy-MM-dd'}
+          disabled={readonly}
         />
         <Fragment>
           {error && <ValidationError>{errorMessage}</ValidationError>}
