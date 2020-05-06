@@ -74,7 +74,7 @@ const handleSubmitToBackend = (values) => {
     description: values.description,
     identifiers: values.otherIdentifiers,
     fieldOfScience: fieldsOfScienceToMetaxMethod(values.fieldOfScienceArray),
-    keywords: values.keywords,
+    keywords: values.keywordsArray,
     actors: actorsToMetax(values.actors),
     accessType: values.accessType ? values.accessType : undefined,
     restrictionGrounds: values.restrictionGrounds ? values.restrictionGrounds.identifier : undefined,

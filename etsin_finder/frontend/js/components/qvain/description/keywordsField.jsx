@@ -23,16 +23,15 @@ class KeywordsField extends Component {
   }
 
   handleChange = e => {
-    const { setKeyword } = this.props.Stores.Qvain
-    setKeyword(e.target.value)
-    // this.setState({ value: e.target.value })
+    const { setKeywordString } = this.props.Stores.Qvain
+    setKeywordString(e.target.value)
     this.setState({ keywordsValidationError: null })
   }
 
   handleBlur = () => {
-    const { keywords } = this.props.Stores.Qvain
+    const { keywordsArray } = this.props.Stores.Qvain
     keywordsSchema
-      .validate(keywords)
+      .validate(keywordsArray)
       .then(() => {
         this.setState({ keywordsValidationError: null })
       })
@@ -43,17 +42,8 @@ class KeywordsField extends Component {
 
   handleKeywordAdd = e => {
     e.preventDefault()
-    const { keywordString, keywords, setKeywords, setKeyword } = this.props.Stores.Qvain
-    if (keywordString.length > 0) {
-      const keywordsInString = keywordString.split(',').map(word => word.trim())
-      const noEmptyKeywords = keywordsInString.filter(kw => kw !== '')
-      const uniqKeywords = [...new Set(noEmptyKeywords)]
-      const keywordsToStore = uniqKeywords.filter(
-        word => !keywords.includes(word)
-      )
-      setKeywords([...keywords, ...keywordsToStore])
-      setKeyword('')
-    }
+    const { addKeywordToKeywordArray } = this.props.Stores.Qvain
+    addKeywordToKeywordArray()
   }
 
   handleKeywordRemove = word => {
@@ -62,8 +52,8 @@ class KeywordsField extends Component {
   }
 
   render() {
-    const { readonly, keywords, keywordString } = this.props.Stores.Qvain
-    const RenderedKeywords = keywords.map(word => (
+    const { readonly, keywordsArray, keywordString } = this.props.Stores.Qvain
+    const RenderedKeywords = keywordsArray.map(word => (
       <Label color="#007fad" margin="0 0.5em 0.5em 0" key={word}>
         <PaddedWord>{word}</PaddedWord>
         {!readonly && (

@@ -45,7 +45,7 @@ class Qvain {
 
   @observable keywordString = ''
 
-  @observable keywords = []
+  @observable keywordsArray = []
 
   @observable license = License(undefined, LicenseUrls.CCBY4)
 
@@ -78,7 +78,7 @@ class Qvain {
     this.fieldOfScience = undefined
     this.fieldOfScienceArray = []
     this.keywordString = ''
-    this.keywords = []
+    this.keywordsArray = []
     this.license = License(undefined, LicenseUrls.CCBY4)
     this.otherLicenseUrl = undefined
     this.accessType = AccessType(undefined, AccessTypeURLs.OPEN)
@@ -187,19 +187,33 @@ class Qvain {
   }
 
   @action
-  setKeyword = value => {
+  setKeywordString = value => {
     this.keywordString = value
   }
 
   @action
   removeKeyword = keyword => {
-    this.keywords = this.keywords.filter(word => word !== keyword)
+    this.keywordsArray = this.keywordsArray.filter(word => word !== keyword)
     this.changed = true
   }
 
   @action
-  setKeywords = keywords => {
-    this.keywords = keywords
+  addKeywordToKeywordArray = () => {
+    if (this.keywordString.length > 0) {
+      const keywordsInString = this.keywordString.split(',').map(word => word.trim())
+      const noEmptyKeywords = keywordsInString.filter(kw => kw !== '')
+      const uniqKeywords = [...new Set(noEmptyKeywords)]
+      const keywordsToStore = uniqKeywords.filter(
+        word => !this.keywordsArray.includes(word)
+      )
+      this.setKeywordsArray([...this.keywordsArray, ...keywordsToStore])
+      this.setKeywordString('')
+    }
+  }
+
+  @action
+  setKeywordsArray = keywords => {
+    this.keywordsArray = keywords
     this.changed = true
   }
 
@@ -210,6 +224,9 @@ class Qvain {
     // the dataset is submitted.
     if (this.fieldOfScience !== undefined) {
       this.addFieldOfScience(this.fieldOfScience)
+    }
+    if (this.keywordString !== '') {
+      this.addKeywordToKeywordArray()
     }
   }
 
@@ -662,7 +679,7 @@ class Qvain {
     }
 
     // keywords
-    this.keywords = researchDataset.keyword || []
+    this.keywordsArray = researchDataset.keyword || []
 
     // access type
     const at = researchDataset.access_rights.access_type
