@@ -224,6 +224,15 @@ def get_catalog_record_preferred_identifier(cr):
     """
     return cr.get('research_dataset', {}).get('preferred_identifier', '')
 
+def get_catalog_record_REMS_identifier(cr):
+    """
+    Get REMS identifier for a catalog record.
+
+    :param cr:
+    :return:
+    """
+    return cr.get('rems_identifier', '')
+
 
 def is_rems_catalog_record(catalog_record):
     """

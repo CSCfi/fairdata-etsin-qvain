@@ -647,7 +647,7 @@ class Qvain {
       this.license = undefined
     }
 
-    // restriction grounds
+    // Restriction grounds
     const rg = researchDataset.access_rights.restriction_grounds
       ? researchDataset.access_rights.restriction_grounds[0]
       : undefined
@@ -656,15 +656,22 @@ class Qvain {
     // load actors
     this.Actors.editDataset(researchDataset)
 
-    // load data catalog
+    // Load data catalog
     this.dataCatalog =
       dataset.data_catalog !== undefined ? dataset.data_catalog.identifier : undefined
 
-    // load preservation state
+    // Load preservation state
     this.preservationState = dataset.preservation_state
 
-    // load cumulative state
+    // Load cumulative state
     this.cumulativeState = dataset.cumulative_state
+
+    // Load DOI
+    if (researchDataset.preferred_identifier.startsWith('doi')) {
+      this.useDoi = true
+    } else {
+      this.useDoi = false
+    }
 
     // Load files
     const dsFiles = researchDataset.files
@@ -710,7 +717,7 @@ class Qvain {
 
     this.Files.editDataset(dataset)
 
-    // external resources
+    // External resources
     const remoteResources = researchDataset.remote_resources
     if (remoteResources !== undefined) {
       this.externalResources = remoteResources.map(r =>

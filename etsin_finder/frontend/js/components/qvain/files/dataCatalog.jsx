@@ -105,7 +105,6 @@ class DataCatalog extends Component {
               onChange={this.handleDoiCheckboxChange}
               disabled={(this.state.fileOrigin !== 'IDA' || original !== undefined)}
               checked={this.state.useDoi}
-              // defaultChecked={this.state.useDoi || ((original !== undefined) && (dataCatalog === 'urn:nbn:fi:att:data-catalog-ida'))}
             />
             <DoiLabel
               htmlFor="doiSelector"
