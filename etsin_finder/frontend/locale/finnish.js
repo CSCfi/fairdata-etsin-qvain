@@ -923,4 +923,3 @@ const finnish = {
 }
 
 export default finnish
-

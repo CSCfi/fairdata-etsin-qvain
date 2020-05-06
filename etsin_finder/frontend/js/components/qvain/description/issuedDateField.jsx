@@ -1,15 +1,23 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { inject, observer } from 'mobx-react'
-import { SingleDatePicker } from 'react-dates';
-import styled from 'styled-components'
 import Translate from 'react-translate-component'
+import translate from 'counterpart'
 import moment from 'moment'
+import parseDate from 'moment-parseformat'
+import DatePicker, { registerLocale } from 'react-datepicker'
+import fi from 'date-fns/locale/fi'
+import en from 'date-fns/locale/en-GB'
 import Card from '../general/card'
 import ValidationError from '../general/validationError'
 import { LabelLarge } from '../general/form'
 import { issuedDateSchema } from '../utils/formValidation';
 import DateFormats from '../utils/date'
+
+registerLocale('fi', fi)
+registerLocale('en', en)
+
+import 'react-datepicker/dist/react-datepicker.css'
 
 class IssuedDateField extends React.Component {
   static propTypes = {
@@ -40,8 +48,20 @@ class IssuedDateField extends React.Component {
     }
   }
 
+  prepareDate = (dateStr) => {
+    const date = moment(dateStr, parseDate(dateStr))
+    if (date.isValid) return date.format(DateFormats.ISO8601_DATE_FORMAT)
+    return null
+  }
+
+  handleDatePickerChange = dateStr => {
+    const { setIssuedDate } = this.props.Stores.Qvain
+    const date = this.prepareDate(dateStr)
+    setIssuedDate(date)
+  }
+
   render() {
-    const { readonly, issuedDate, setIssuedDate } = this.props.Stores.Qvain
+    const { issuedDate } = this.props.Stores.Qvain
     const { error, errorMessage } = this.state
     return (
       <Card bottomContent>
@@ -49,32 +69,15 @@ class IssuedDateField extends React.Component {
           <Translate content="qvain.description.issuedDate.title" />
         </LabelLarge>
         <Translate component="p" content="qvain.description.issuedDate.infoText" />
+        <DatePicker
+          selected={issuedDate ? new Date(issuedDate) : null}
+          onChangeRaw={(e) => this.handleDatePickerChange(e.target.value)}
+          onChange={(date) => this.handleDatePickerChange(date.getUTCDate())}
+          locale={this.props.Stores.Locale.lang}
+          placeholderText={translate('qvain.description.issuedDate.placeholder')}
+          dateFormat={'yyyy-MM-dd'}
+        />
         <Fragment>
-          <DatePickerWrapper>
-            <Translate
-              component={SingleDatePicker}
-              hideKeyboardShortcutsPanel
-              date={issuedDate ? moment.utc(issuedDate) : null}
-              disabled={readonly}
-              onDateChange={
-                date => {
-                  if (date === null) {
-                    setIssuedDate(undefined)
-                  } else {
-                    setIssuedDate(date.utc().format(DateFormats.ISO8601_DATE_FORMAT))
-                  }
-                }
-              }
-              focused={this.state.focused}
-              onFocusChange={({ focused }) => this.setState({ focused })}
-              id="issued_date_field_id"
-              showClearDate
-              isOutsideRange={() => false}
-              attributes={{ placeholder: 'qvain.description.issuedDate.placeholder' }}
-              onClose={this.validate}
-              displayFormat={DateFormats.ISO8601_DATE_FORMAT}
-            />
-          </DatePickerWrapper>
           {error && <ValidationError>{errorMessage}</ValidationError>}
         </Fragment>
       </Card>
@@ -82,33 +85,5 @@ class IssuedDateField extends React.Component {
   }
 }
 
-const DatePickerWrapper = styled.div`
-  width: 100%;
-  font-family: inherit;
-  & .SingleDatePicker {
-    width: 100%;
-  };
-  & .SingleDatePickerInput {
-    border-radius: 3px;
-    border: 1px solid #cccccc;
-    width: 100%;
-  };
-  & .DateInput {
-    width: 100%;
-  }
-  & .DateInput_input {
-    font-weight: inherit;
-    font-size: inherit;
-    padding: 8px;
-    line-height: inherit;
-  };
-  & .DateInput_input__focused {
-    border: inherit;
-    border-radius: inherit;
-  };
-  & .SingleDatePickerInput_clearDate_svg {
-    vertical-align: inherit;
-  }
-`
 
 export default inject('Stores')(observer(IssuedDateField))
