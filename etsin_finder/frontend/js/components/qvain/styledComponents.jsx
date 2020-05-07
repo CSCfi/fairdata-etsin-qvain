@@ -1,8 +1,7 @@
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { InvertedButton } from '../general/button'
-import { Container, StickySubHeader, StickySubHeaderWrapper } from './general/card'
+import { Container, StickySubHeader } from './general/card'
 
 export const STSD = styled.button`
   background: ${(p) => p.theme.color.primary};
@@ -27,8 +26,8 @@ export const SubHeaderTextContainer = styled.div`
 export const ButtonContainer = styled.div`
   text-align: center;
   padding-top: 2px;
-  min-width: 300px;
 `
+
 export const SubmitButton = styled(InvertedButton)`
   background: #fff;
   font-size: 1.2em;
@@ -37,6 +36,7 @@ export const SubmitButton = styled(InvertedButton)`
   border-color: #007fad;
   border: 1px solid;
 `
+
 export const Form = styled.form`
   margin-bottom: 20px;
 `
@@ -76,13 +76,12 @@ export const ErrorButtons = styled.div`
 export const LinkBackContainer = styled.div`
   text-align: ${(props) => props.position};
   white-space: nowrap;
-  margin-top: 8px;
-  width: 40%;
+  width: 50%;
 `
 
 export const LinkBack = styled(Link)`
-  color: black;
-  margin-left: 40px;
+  margin-left: 30px;
+  color: #007fad;
   display: flex;
   align-items: center;
   height: 100%;
@@ -92,13 +91,17 @@ export const LinkBack = styled(Link)`
 export const LinkText = styled.span`
   font-size: 18px;
   padding-left: 5px;
-  color: #007fad;
-`
-
-export const LinkBackArrow = styled(FontAwesomeIcon)`
-  margin-bottom: 0.23em;
+  padding-top: 2px;
+  line-height: 1;
 `
 
 export const CustomSubHeader = styled(StickySubHeader)`
   justify-content: flex-start;
 `
+export const customStyles = {
+  content: {
+    minWidth: '20vw',
+    maxWidth: '60vw',
+    padding: '2vw',
+  },
+}
