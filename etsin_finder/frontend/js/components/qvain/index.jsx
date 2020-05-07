@@ -21,6 +21,7 @@ import {
   ErrorButtons,
   LinkText,
   LinkBackArrow,
+  CustomSubHeader,
 } from './styledComponents'
 
 import RightsAndLicenses from './licenses'
@@ -335,7 +336,7 @@ class Qvain extends Component {
     } else {
       stickyheader = (
         <StickySubHeaderWrapper>
-          <StickySubHeader>
+          <CustomSubHeader>
             {createLinkBack('left')}
             <ButtonContainer>
               {original ? (
@@ -352,17 +353,16 @@ class Qvain extends Component {
                   ref={this.submitDatasetButton}
                   type="button"
                   onClick={
-                      this.props.Stores.Qvain.useDoi === true
-                        ? this.showUseDoiInformation
-                        : this.handleCreate
-                    }
+                    this.props.Stores.Qvain.useDoi === true
+                      ? this.showUseDoiInformation
+                      : this.handleCreate
+                  }
                 >
                   <Translate content="qvain.submit" />
                 </SubmitButton>
-                )}
+              )}
             </ButtonContainer>
-            {createLinkBack('right')}
-          </StickySubHeader>
+          </CustomSubHeader>
           <PasState />
           <DeprecatedState />
           {this.state.submitted ? (
