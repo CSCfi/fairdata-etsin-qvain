@@ -39,6 +39,8 @@ class Qvain {
 
   @observable otherIdentifiers = []
 
+  @observable otherIdentifiersValidationError = null
+
   @observable fieldOfScience = undefined
 
   @observable fieldOfScienceArray = []
@@ -75,6 +77,7 @@ class Qvain {
     }
     this.otherIdentifier = ''
     this.otherIdentifiers = []
+    this.otherIdentifiersValidationError = null
     this.fieldOfScience = undefined
     this.fieldOfScienceArray = []
     this.keywordString = ''
@@ -145,6 +148,11 @@ class Qvain {
     this.otherIdentifier = identifier
   }
 
+  // @action
+  // validateOtherIdentifier = () => {
+
+  // }
+
   @action
   addOtherIdentifier = identifier => {
     this.changed = true
@@ -157,6 +165,10 @@ class Qvain {
     this.otherIdentifiers = this.otherIdentifiers.filter(
       otherIdentifier => otherIdentifier !== identifier
     )
+  }
+
+  setOtherIdentifierValidationError = value => {
+    this.otherIdentifiersValidationError = value
   }
 
   @action

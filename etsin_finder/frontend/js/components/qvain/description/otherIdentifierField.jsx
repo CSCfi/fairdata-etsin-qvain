@@ -19,13 +19,6 @@ class OtherIdentifierField extends React.Component {
     Stores: PropTypes.object.isRequired,
   }
 
-  constructor(props) {
-    super(props)
-    this.state = {
-      validationError: null,
-    }
-  }
-
   handleInputChange = event => {
     const { value } = event.target
     const { setOtherIdentifier } = this.props.Stores.Qvain
@@ -39,7 +32,7 @@ class OtherIdentifierField extends React.Component {
 
   handleAddClick = event => {
     event.preventDefault()
-    const { otherIdentifier, otherIdentifiers, addOtherIdentifier } = this.props.Stores.Qvain
+    const { otherIdentifier, otherIdentifiers, addOtherIdentifier, setOtherIdentifierValidationError } = this.props.Stores.Qvain
     otherIdentifierSchema
       .validate(otherIdentifier)
       .then(() => {
@@ -47,13 +40,11 @@ class OtherIdentifierField extends React.Component {
           addOtherIdentifier(otherIdentifier)
           this.clearInput()
         } else {
-          this.setState({
-            validationError: translate('qvain.description.otherIdentifiers.alreadyAdded'),
-          })
+          setOtherIdentifierValidationError(translate('qvain.description.otherIdentifiers.alreadyAdded'))
         }
       })
       .catch(err => {
-        this.setState({ validationError: err.errors })
+        setOtherIdentifierValidationError(err.errors)
       })
   }
 
@@ -63,24 +54,25 @@ class OtherIdentifierField extends React.Component {
   }
 
   handleBlur = () => {
-    this.setState({ validationError: null })
+    const { setOtherIdentifierValidationError } = this.props.Stores.Qvain
+    setOtherIdentifierValidationError(null)
     this.validateOtherIdentifiers()
   }
 
   validateOtherIdentifiers = () => {
-    const { otherIdentifiers } = this.props.Stores.Qvain
+    const { otherIdentifiers, setOtherIdentifierValidationError } = this.props.Stores.Qvain
     otherIdentifiersSchema
       .validate(otherIdentifiers)
       .then(() => {
-        this.setState({ validationError: null })
+        setOtherIdentifierValidationError(null)
       })
       .catch(err => {
-        this.setState({ validationError: err.errors })
+        setOtherIdentifierValidationError(err.errors)
       })
   }
 
   render() {
-    const { readonly, otherIdentifier, otherIdentifiers } = this.props.Stores.Qvain
+    const { readonly, otherIdentifier, otherIdentifiers, otherIdentifiersValidationError } = this.props.Stores.Qvain
     const otherIdentifiersLabels = otherIdentifiers.map(identifier => (
       <Label color="primary" margin="0 0.5em 0.5em 0" key={identifier}>
         <PaddedWord>{identifier}</PaddedWord>
@@ -103,7 +95,7 @@ class OtherIdentifierField extends React.Component {
           placeholder="http://doi.org/"
           onBlur={this.handleBlur}
         />
-        {this.state.validationError && <ValidationError>{this.state.validationError}</ValidationError>}
+        {otherIdentifiersValidationError && <ValidationError>{otherIdentifiersValidationError}</ValidationError>}
         <ButtonContainer>
           <AddNewButton type="button" onClick={this.handleAddClick} disabled={readonly}>
             <Translate content="qvain.description.otherIdentifiers.addButton" />
