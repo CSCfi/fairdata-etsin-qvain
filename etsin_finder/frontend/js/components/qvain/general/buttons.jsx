@@ -117,15 +117,12 @@ export const ButtonGroup = styled.div`
 `
 
 export const FileItem = styled(ButtonGroup)`
-  ${(props) =>
-    props.active
-      ? `
+  ${props => (props.active ? `
     border-bottom: none;
     box-shadow: none;
     margin-bottom: 0px;
-  `
-      : ''}
-`
+  ` : '')}
+`;
 
 export const ButtonLabel = styled.span`
   background-color: transparent;

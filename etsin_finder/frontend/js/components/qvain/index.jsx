@@ -6,6 +6,8 @@ import { inject, observer } from 'mobx-react'
 import axios from 'axios'
 import { withRouter } from 'react-router-dom'
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+
 import {
   STSD,
   SubHeaderTextContainer,
@@ -20,7 +22,7 @@ import {
   ErrorContent,
   ErrorButtons,
   LinkText,
-  LinkBackArrow,
+  CustomSubHeader,
   customStyles,
 } from './styledComponents'
 
@@ -300,7 +302,7 @@ class Qvain extends Component {
     const createLinkBack = (position) => (
       <LinkBackContainer position={position}>
         <LinkBack to="/qvain">
-          <LinkBackArrow size="lg" icon={faChevronLeft} />
+          <FontAwesomeIcon size="lg" icon={faChevronLeft} />
           <Translate component={LinkText} display="block" content="qvain.backLink" />
         </LinkBack>
       </LinkBackContainer>
@@ -328,7 +330,7 @@ class Qvain extends Component {
     } else {
       stickyheader = (
         <StickySubHeaderWrapper>
-          <StickySubHeader>
+          <CustomSubHeader>
             {createLinkBack('left')}
             <ButtonContainer>
               {original ? (
@@ -354,8 +356,7 @@ class Qvain extends Component {
                 </SubmitButton>
               )}
             </ButtonContainer>
-            {createLinkBack('right')}
-          </StickySubHeader>
+          </CustomSubHeader>
           <PasState />
           <DeprecatedState />
           {this.state.submitted ? (
