@@ -23,7 +23,7 @@ const getOrganizationSearchUrl = parentId => {
       shortId = `organization_${match[1]}`
     }
   }
-  return `https://metax.csc.local/es/organization_data/organization/_search?size=3000&q=parent_id:"${shortId}"`
+  return `https://metax.fairdata.fi/es/organization_data/organization/_search?size=3000&q=parent_id:"${shortId}"`
 }
 
 // create a new UI Identifier based on existing UI IDs
