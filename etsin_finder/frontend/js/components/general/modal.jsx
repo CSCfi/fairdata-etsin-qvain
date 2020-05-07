@@ -49,7 +49,7 @@ const customStyles = {
   },
 }
 
-if (process.env.NODE_ENV !== 'test') ReactModal.setAppElement('#root');
+if (process.env.NODE_ENV !== 'test') ReactModal.setAppElement('#root')
 
 export default class Modal extends Component {
   static propTypes = {
@@ -73,42 +73,6 @@ export default class Modal extends Component {
     const contentStyle = { ...customStyles.content, ...props.customStyles.content }
     this.state = {
       styles: { overlay: overlayStyle, content: contentStyle },
-    }
-  }
-
-  componentDidMount() {
-    this.updateBlur()
-  }
-
-  componentDidUpdate(prevProps) {
-    if (this.props.isOpen !== prevProps.isOpen) {
-      this.updateBlur()
-    }
-  }
-
-  componentWillUnmount() {
-    this.hideBlur()
-  }
-
-  showBlur() {
-    const root = document.getElementById('root')
-    if (root) {
-      root.classList.add('blur')
-    }
-  }
-
-  hideBlur() {
-    const root = document.getElementById('root')
-    if (root) {
-      root.classList.remove('blur')
-    }
-  }
-
-  updateBlur() {
-    if (this.props.isOpen) {
-      this.showBlur()
-    } else {
-      this.hideBlur()
     }
   }
 
