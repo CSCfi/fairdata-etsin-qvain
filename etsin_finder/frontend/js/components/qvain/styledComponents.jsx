@@ -76,13 +76,13 @@ export const ErrorButtons = styled.div`
 export const LinkBackContainer = styled.div`
   text-align: ${(props) => props.position};
   white-space: nowrap;
-  width: 50%;
+  width: 47%;
 `
 
 export const LinkBack = styled(Link)`
   margin-left: 30px;
   color: #007fad;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   height: 100%;
   margin-top: 0;
