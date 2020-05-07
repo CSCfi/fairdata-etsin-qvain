@@ -8,7 +8,7 @@
  * @license   MIT
  */
 
-import { observable, action } from 'mobx'
+import { observable, action, runInAction } from 'mobx'
 // import { observable, action, toJS } from 'mobx'
 import axios from 'axios'
 
@@ -30,50 +30,56 @@ class Auth {
   @action
   checkLogin() {
     return new Promise((resolve, reject) => {
-      this.loading = true
+      runInAction(() => {
+        this.loading = true
+      })
       axios
         .get('/api/user', {
           headers: { 'content-type': 'application/json', charset: 'utf-8' },
         })
-        .then((res) => {
-          this.user = {
-            name: res.data.user_csc_name,
-            loggedIn: res.data.is_authenticated,
-            homeOrganizationName: res.data.home_organization_name,
-            idaGroups: res.data.user_ida_groups,
-            isUsingRems: res.data.is_using_rems,
-          }
-          if (res.data.is_authenticated && !res.data.is_authenticated_CSC_user) {
-            // The user was able to verify themself using HAKA or some other external verification,
-            // but do not have a valid CSC account and should not be granted permission.
-            this.userLogged = false
-            this.cscUserLogged = false
-          } else if (!res.data.home_organization_name) {
-            // The user was able to verify themself using their CSC account,
-            // but do not have a home organization set (sui.csc.fi) and should not be granted permission.
-            this.userLogged = false
-            this.cscUserLogged = false
-          } else if (
-            res.data.is_authenticated &&
-            res.data.is_authenticated_CSC_user &&
-            res.data.home_organization_name
-          ) {
-            // The user has a valid CSC account with a defined home organization. Login successful.
-            this.userLogged = res.data.is_authenticated
-            this.cscUserLogged = res.data.is_authenticated_CSC_user
-          } else {
-            // If any of the checks failed, the user should not be logged in. The variables keep their 'false' value.
-            this.userLogged = false
-            this.cscUserLogged = false
-          }
-          this.loading = false
-          resolve(res)
-        })
-        .catch((err) => {
-          this.loading = false
-          console.log(err)
-          reject(err)
-        })
+        .then(
+          action((res) => {
+            this.user = {
+              name: res.data.user_csc_name,
+              loggedIn: res.data.is_authenticated,
+              homeOrganizationName: res.data.home_organization_name,
+              idaGroups: res.data.user_ida_groups,
+              isUsingRems: res.data.is_using_rems,
+            }
+            if (res.data.is_authenticated && !res.data.is_authenticated_CSC_user) {
+              // The user was able to verify themself using HAKA or some other external verification,
+              // but do not have a valid CSC account and should not be granted permission.
+              this.userLogged = false
+              this.cscUserLogged = false
+            } else if (!res.data.home_organization_name) {
+              // The user was able to verify themself using their CSC account,
+              // but do not have a home organization set (sui.csc.fi) and should not be granted permission.
+              this.userLogged = false
+              this.cscUserLogged = false
+            } else if (
+              res.data.is_authenticated &&
+              res.data.is_authenticated_CSC_user &&
+              res.data.home_organization_name
+            ) {
+              // The user has a valid CSC account with a defined home organization. Login successful.
+              this.userLogged = res.data.is_authenticated
+              this.cscUserLogged = res.data.is_authenticated_CSC_user
+            } else {
+              // If any of the checks failed, the user should not be logged in. The variables keep their 'false' value.
+              this.userLogged = false
+              this.cscUserLogged = false
+            }
+            this.loading = false
+            resolve(res)
+          })
+        )
+        .catch(
+          action((err) => {
+            this.loading = false
+            console.log(err)
+            reject(err)
+          })
+        )
     })
   }
 

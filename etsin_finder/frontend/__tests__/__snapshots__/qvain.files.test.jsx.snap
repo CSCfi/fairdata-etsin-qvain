@@ -12,15 +12,19 @@ Object {
   },
   "actors": Array [
     Object {
-      "email": undefined,
-      "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/123456789",
-      "name": Object {
-        "en": "Org",
-        "fi": "Org",
-        "und": "Org",
-      },
-      "organization": undefined,
-      "role": Array [
+      "organizations": Array [
+        Object {
+          "email": undefined,
+          "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/123456789",
+          "name": Object {
+            "en": "Org",
+            "fi": "Org",
+            "und": "Org",
+          },
+        },
+      ],
+      "person": undefined,
+      "roles": Array [
         "creator",
       ],
       "type": "organization",
@@ -123,15 +127,19 @@ Object {
   },
   "actors": Array [
     Object {
-      "email": undefined,
-      "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/123456789",
-      "name": Object {
-        "en": "Org",
-        "fi": "Org",
-        "und": "Org",
-      },
-      "organization": undefined,
-      "role": Array [
+      "organizations": Array [
+        Object {
+          "email": undefined,
+          "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/123456789",
+          "name": Object {
+            "en": "Org",
+            "fi": "Org",
+            "und": "Org",
+          },
+        },
+      ],
+      "person": undefined,
+      "roles": Array [
         "creator",
       ],
       "type": "organization",
@@ -243,15 +251,19 @@ Object {
   },
   "actors": Array [
     Object {
-      "email": undefined,
-      "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/123456789",
-      "name": Object {
-        "en": "Org",
-        "fi": "Org",
-        "und": "Org",
-      },
-      "organization": undefined,
-      "role": Array [
+      "organizations": Array [
+        Object {
+          "email": undefined,
+          "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/123456789",
+          "name": Object {
+            "en": "Org",
+            "fi": "Org",
+            "und": "Org",
+          },
+        },
+      ],
+      "person": undefined,
+      "roles": Array [
         "creator",
       ],
       "type": "organization",
@@ -364,15 +376,19 @@ Object {
   },
   "actors": Array [
     Object {
-      "email": undefined,
-      "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/123456789",
-      "name": Object {
-        "en": "Org",
-        "fi": "Org",
-        "und": "Org",
-      },
-      "organization": undefined,
-      "role": Array [
+      "organizations": Array [
+        Object {
+          "email": undefined,
+          "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/123456789",
+          "name": Object {
+            "en": "Org",
+            "fi": "Org",
+            "und": "Org",
+          },
+        },
+      ],
+      "person": undefined,
+      "roles": Array [
         "creator",
       ],
       "type": "organization",
@@ -465,15 +481,19 @@ Object {
   },
   "actors": Array [
     Object {
-      "email": undefined,
-      "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/123456789",
-      "name": Object {
-        "en": "Org",
-        "fi": "Org",
-        "und": "Org",
-      },
-      "organization": undefined,
-      "role": Array [
+      "organizations": Array [
+        Object {
+          "email": undefined,
+          "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/123456789",
+          "name": Object {
+            "en": "Org",
+            "fi": "Org",
+            "und": "Org",
+          },
+        },
+      ],
+      "person": undefined,
+      "roles": Array [
         "creator",
       ],
       "type": "organization",

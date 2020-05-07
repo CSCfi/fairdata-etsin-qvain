@@ -6,49 +6,6 @@ exports[`Qvain should render correctly 1`] = `
 </ContextConsumer>
 `;
 
-exports[`Qvain.Actors should render correctly 1`] = `
-<div
-  className="container"
->
-  <styled.h2>
-    <Translate
-      component="span"
-      content="qvain.actors.title"
-    />
-    <Tooltip
-      align="Right"
-      close={[Function]}
-      isOpen={false}
-      text={<ActorsInfoTooltip />}
-    >
-      <HelpIcon
-        aria-label="Actors info"
-        onClick={[Function]}
-      />
-    </Tooltip>
-  </styled.h2>
-  <styled.div>
-    <styled.div>
-      <h3>
-        <Translate
-          component="span"
-          content="qvain.actors.add.title"
-        />
-         *
-      </h3>
-      <Translate
-        component="p"
-        content="qvain.actors.add.help"
-      />
-      <inject-ActorTypeSelectBase-with-Stores />
-      <inject-SelectedActorBase-with-Stores />
-      <inject-ActorInfoBase-with-Stores />
-    </styled.div>
-    <inject-AddedActorsBase-with-Stores />
-  </styled.div>
-</div>
-`;
-
 exports[`Qvain.Description should render <Description /> 1`] = `
 <div
   className="container"
@@ -84,6 +41,24 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
     Object {
       "Locale": Locale {},
       "Qvain": Qvain {
+        "Actors": Actors {
+          "Qvain": [Circular],
+          "actorInEdit": null,
+          "actors": Array [],
+          "createActor": [Function],
+          "editDataset": [Function],
+          "getDatasetOrganizations": [Function],
+          "getReferenceOrganizations": [Function],
+          "getReferenceOrganizationsForActor": [Function],
+          "isActorEqual": [Function],
+          "isEqual": [Function],
+          "isOrganizationEqual": [Function],
+          "loadingReferenceOrganizations": Object {},
+          "referenceOrganizationErrors": Object {},
+          "referenceOrganizations": Object {},
+          "reset": [Function],
+          "toBackend": [Function],
+        },
         "Files": Files {
           "AddItemsView": DirectoryView {
             "Files": [Circular],
@@ -126,19 +101,7 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
           "name": undefined,
           "url": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
         },
-        "actorInEdit": Object {
-          "email": "",
-          "identifier": "",
-          "name": "",
-          "organization": undefined,
-          "role": Array [],
-          "type": "person",
-          "uiId": undefined,
-        },
-        "actors": Array [],
         "changed": false,
-        "createActor": [Function],
-        "createActorUIId": [Function],
         "createExternalResourceUIId": [Function],
         "cumulativeState": 0,
         "dataCatalog": undefined,
@@ -167,9 +130,6 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
         "hierarchy": Object {},
         "idaPickerOpen": false,
         "inEdit": undefined,
-        "isEqual": [Function],
-        "isEqualObj": [Function],
-        "isObjectEmpty": [Function],
         "issuedDate": undefined,
         "keywords": Array [],
         "legacyFilePicker": true,
@@ -178,7 +138,6 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
           "name": undefined,
         },
         "mergeArraysByIdentifier": [Function],
-        "mergeTheSameActors": [Function],
         "metadataModalFile": undefined,
         "original": undefined,
         "otherIdentifiers": Array [],
@@ -205,6 +164,24 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
     Object {
       "Locale": Locale {},
       "Qvain": Qvain {
+        "Actors": Actors {
+          "Qvain": [Circular],
+          "actorInEdit": null,
+          "actors": Array [],
+          "createActor": [Function],
+          "editDataset": [Function],
+          "getDatasetOrganizations": [Function],
+          "getReferenceOrganizations": [Function],
+          "getReferenceOrganizationsForActor": [Function],
+          "isActorEqual": [Function],
+          "isEqual": [Function],
+          "isOrganizationEqual": [Function],
+          "loadingReferenceOrganizations": Object {},
+          "referenceOrganizationErrors": Object {},
+          "referenceOrganizations": Object {},
+          "reset": [Function],
+          "toBackend": [Function],
+        },
         "Files": Files {
           "AddItemsView": DirectoryView {
             "Files": [Circular],
@@ -247,19 +224,7 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
           "name": undefined,
           "url": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
         },
-        "actorInEdit": Object {
-          "email": "",
-          "identifier": "",
-          "name": "",
-          "organization": undefined,
-          "role": Array [],
-          "type": "person",
-          "uiId": undefined,
-        },
-        "actors": Array [],
         "changed": false,
-        "createActor": [Function],
-        "createActorUIId": [Function],
         "createExternalResourceUIId": [Function],
         "cumulativeState": 0,
         "dataCatalog": undefined,
@@ -288,9 +253,6 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
         "hierarchy": Object {},
         "idaPickerOpen": false,
         "inEdit": undefined,
-        "isEqual": [Function],
-        "isEqualObj": [Function],
-        "isObjectEmpty": [Function],
         "issuedDate": undefined,
         "keywords": Array [],
         "legacyFilePicker": true,
@@ -299,7 +261,6 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
           "name": undefined,
         },
         "mergeArraysByIdentifier": [Function],
-        "mergeTheSameActors": [Function],
         "metadataModalFile": undefined,
         "original": undefined,
         "otherIdentifiers": Array [],
@@ -326,6 +287,24 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
     Object {
       "Locale": Locale {},
       "Qvain": Qvain {
+        "Actors": Actors {
+          "Qvain": [Circular],
+          "actorInEdit": null,
+          "actors": Array [],
+          "createActor": [Function],
+          "editDataset": [Function],
+          "getDatasetOrganizations": [Function],
+          "getReferenceOrganizations": [Function],
+          "getReferenceOrganizationsForActor": [Function],
+          "isActorEqual": [Function],
+          "isEqual": [Function],
+          "isOrganizationEqual": [Function],
+          "loadingReferenceOrganizations": Object {},
+          "referenceOrganizationErrors": Object {},
+          "referenceOrganizations": Object {},
+          "reset": [Function],
+          "toBackend": [Function],
+        },
         "Files": Files {
           "AddItemsView": DirectoryView {
             "Files": [Circular],
@@ -368,19 +347,7 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
           "name": undefined,
           "url": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
         },
-        "actorInEdit": Object {
-          "email": "",
-          "identifier": "",
-          "name": "",
-          "organization": undefined,
-          "role": Array [],
-          "type": "person",
-          "uiId": undefined,
-        },
-        "actors": Array [],
         "changed": false,
-        "createActor": [Function],
-        "createActorUIId": [Function],
         "createExternalResourceUIId": [Function],
         "cumulativeState": 0,
         "dataCatalog": undefined,
@@ -409,9 +376,6 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
         "hierarchy": Object {},
         "idaPickerOpen": false,
         "inEdit": undefined,
-        "isEqual": [Function],
-        "isEqualObj": [Function],
-        "isObjectEmpty": [Function],
         "issuedDate": undefined,
         "keywords": Array [],
         "legacyFilePicker": true,
@@ -420,7 +384,6 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
           "name": undefined,
         },
         "mergeArraysByIdentifier": [Function],
-        "mergeTheSameActors": [Function],
         "metadataModalFile": undefined,
         "original": undefined,
         "otherIdentifiers": Array [],
@@ -447,6 +410,24 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
     Object {
       "Locale": Locale {},
       "Qvain": Qvain {
+        "Actors": Actors {
+          "Qvain": [Circular],
+          "actorInEdit": null,
+          "actors": Array [],
+          "createActor": [Function],
+          "editDataset": [Function],
+          "getDatasetOrganizations": [Function],
+          "getReferenceOrganizations": [Function],
+          "getReferenceOrganizationsForActor": [Function],
+          "isActorEqual": [Function],
+          "isEqual": [Function],
+          "isOrganizationEqual": [Function],
+          "loadingReferenceOrganizations": Object {},
+          "referenceOrganizationErrors": Object {},
+          "referenceOrganizations": Object {},
+          "reset": [Function],
+          "toBackend": [Function],
+        },
         "Files": Files {
           "AddItemsView": DirectoryView {
             "Files": [Circular],
@@ -489,19 +470,7 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
           "name": undefined,
           "url": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
         },
-        "actorInEdit": Object {
-          "email": "",
-          "identifier": "",
-          "name": "",
-          "organization": undefined,
-          "role": Array [],
-          "type": "person",
-          "uiId": undefined,
-        },
-        "actors": Array [],
         "changed": false,
-        "createActor": [Function],
-        "createActorUIId": [Function],
         "createExternalResourceUIId": [Function],
         "cumulativeState": 0,
         "dataCatalog": undefined,
@@ -530,9 +499,6 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
         "hierarchy": Object {},
         "idaPickerOpen": false,
         "inEdit": undefined,
-        "isEqual": [Function],
-        "isEqualObj": [Function],
-        "isObjectEmpty": [Function],
         "issuedDate": undefined,
         "keywords": Array [],
         "legacyFilePicker": true,
@@ -541,7 +507,6 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
           "name": undefined,
         },
         "mergeArraysByIdentifier": [Function],
-        "mergeTheSameActors": [Function],
         "metadataModalFile": undefined,
         "original": undefined,
         "otherIdentifiers": Array [],

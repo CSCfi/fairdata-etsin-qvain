@@ -25,8 +25,8 @@ const GlobalStyle = createGlobalStyle`
   dl, dt, dd, ol, ul, li,
   fieldset, form, label, legend,
   table, caption, tbody, tfoot, thead, tr, th, td,
-  article, aside, canvas, details, embed, 
-  figure, figcaption, footer, header, hgroup, 
+  article, aside, canvas, details, embed,
+  figure, figcaption, footer, header, hgroup,
   menu, nav, output, ruby, section, summary,
   time, mark, audio, video {
     margin: 0;
@@ -37,7 +37,7 @@ const GlobalStyle = createGlobalStyle`
     vertical-align: baseline;
   }
   /* HTML5 display-role reset for older browsers */
-  article, aside, details, figcaption, figure, 
+  article, aside, details, figcaption, figure,
   footer, header, hgroup, menu, nav, section {
     display: block;
   }
@@ -317,23 +317,29 @@ const GlobalStyle = createGlobalStyle`
     }
   }
 
-  /* modal blur */
-  .blur {
-    filter: blur(1px);
+  /* modal is open */
+  .ReactModal__Body--open {
+    /* prevent body from scrolling */
+    overflow: hidden;
+
+    /* blur modal background */
+    #root {
+      filter: blur(1px);
+    }
   }
 
   /* Visually hide element from screen, still readable for screen readers. */
   .visuallyhidden:not(:focus):not(:active) {
     position: absolute;
-  
+
     width: 1px;
     height: 1px;
     margin: -1px;
     border: 0;
     padding: 0;
-  
+
     white-space: nowrap;
-  
+
     clip-path: inset(100%);
     clip: rect(0 0 0 0);
     overflow: hidden;
