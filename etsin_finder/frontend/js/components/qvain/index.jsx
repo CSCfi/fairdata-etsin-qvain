@@ -22,6 +22,7 @@ import {
   LinkText,
   LinkBackArrow,
   CustomSubHeader,
+  customStyles,
 } from './styledComponents'
 
 import RightsAndLicenses from './licenses'
@@ -45,14 +46,6 @@ import { Button } from '../general/button'
 import Modal from '../general/modal'
 import DeprecatedState from './deprecatedState'
 import PasState from './pasState'
-
-const customStyles = {
-  content: {
-    minWidth: '20vw',
-    maxWidth: '60vw',
-    padding: '2vw',
-  },
-}
 
 const EDIT_DATASET_URL = '/api/datasets/edit'
 

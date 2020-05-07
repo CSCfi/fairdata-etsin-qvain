@@ -74,6 +74,7 @@ const finnish = {
       snglr: 'Tekijä',
     },
     curator: 'Kuraattori',
+    data_location: 'Mene haravoituun sijaintiin',
     datasetAsFile: {
       open: 'Avaa tiedostona',
       infoText:
@@ -302,7 +303,7 @@ const finnish = {
     submitStatus: {
       success: 'Aineisto julkaistu!',
       fail: 'Jotain meni pieleen...',
-      editSuccess: 'Uusi aineisto versio luotu!',
+      editFilesSuccess: 'Uusi aineistoversio luotu!',
       editMetadataSuccess: 'Aineiston päivitys onnistui!',
     },
     pasInfo: {
@@ -329,7 +330,8 @@ const finnish = {
       140: 'Saatavilla',
     },
     useDoiHeader: 'DOI-tunnisteen luominen',
-    useDoiContent: 'Olet pyytänyt aineistollesi pysyväksi tunnisteeksi DOIn URN-tunnisteen sijaan. DOI vaatii, että julkaisupäivämäärä ja julkaisija on määritelty. DOI-tunniste rekisteröidään DataCite-palvelun tietokantaan, eikä toimintoa voi peruuttaa. Oletko varma?',
+    useDoiContent:
+      'Olet pyytänyt aineistollesi pysyväksi tunnisteeksi DOIn URN-tunnisteen sijaan. DOI vaatii, että julkaisupäivämäärä ja julkaisija on määritelty. DOI-tunniste rekisteröidään DataCite-palvelun tietokantaan, eikä toimintoa voi peruuttaa. Oletko varma?',
     useDoiAffirmative: 'Kyllä',
     useDoiNegative: 'Ei',
     unsuccessfullLogin: 'Kirjautuminen epäonnistui.',
@@ -351,6 +353,11 @@ const finnish = {
     common: {
       save: 'Tallenna',
       cancel: 'Peruuta',
+    },
+    confirmClose: {
+      warning: 'Sinulla on tallentamattomia muutoksia. Perutaanko muutokset?',
+      confirm: 'Kyllä, peru muutokset',
+      cancel: 'Ei, jatka muokkausta',
     },
     datasets: {
       title: 'Aineistot',
@@ -393,10 +400,6 @@ const finnish = {
       loading: 'Lataa...',
       errorOccurred: 'Virhe tapahtui',
       tableHeader: 'Luodut aineistot',
-    },
-    general: {
-      langEnglish: 'Englanti',
-      langFinnish: 'Suomi',
     },
     description: {
       title: 'Kuvaus',
@@ -446,7 +449,7 @@ const finnish = {
         infoText:
           'Vapaat hakusanat aineistollesi. Vaikuttaa aineistosi löytymiseen Etsimen haussa. Käytä mahdollisimman tarkkoja termejä. Tässä kentässä ei ole automaattista käännöstä eri kielille.',
         placeholder: 'Esim. taloustiede',
-        addButton: 'Lisää avainsanoja',
+        addButton: '+ Lisää avainsanoja',
         help:
           'Voit lisätä useamman avainsanan erottamalla ne pilkulla (,). Aineistolla on oltava vähintään yksi avainsana.',
       },
@@ -486,12 +489,25 @@ const finnish = {
     actors: {
       title: 'Toimijat',
       infoTitle: 'Toimijat info',
+      addButton: '+ Lisää toimija',
       infoText:
         'Tutkimukseen tai aineiston tekemiseen osallistuneet henkilöt ja organisaatiot. Voit määrittää tekijät (pakollinen), Julkaisijan, Kuraattorit, Oikeuksienhaltijat sekä Muut tekijät. Valitse ensin, onko kyseessä henkilö vai organisaatio. Määritä sen jälkeen, missä roolissa ko. toimija osallistui tutkimukseen (voit valita useita), ja määritä sen jälkeen tarvittavat tiedot. Jos kyseessä on henkilö, on organisaatiotieto pakollinen tieto. Jo annettuja tietoja pääset muuttamaan klikkaamalla tallennetun toimijan kohdalla kynä -ikonia.',
+      errors: {
+        loadingReferencesFailed: 'Referenssiorganisaatioiden latauksessa tapahtui virhe.',
+      },
       add: {
         title: 'Toimijat',
+        action: {
+          create: 'Lisää toimija',
+          edit: 'Muokkaa toimijaa',
+        },
+        groups: {
+          type: 'Toimijan tyyppi',
+          roles: 'Roolit',
+          info: 'Tiedot',
+        },
         help:
-          'Tekijä (1+) rooli on pakollinen. Huomioi että yksittäisellä toimijalla voi olla useampi rooli.',
+          'Aineistolla on oltava ainakin yksi tekijä. Huomioi että yksittäisellä toimijalla voi olla useampi rooli.',
         radio: {
           person: 'Luonnollinen henkilö',
           organization: 'Organisaatio',
@@ -519,11 +535,20 @@ const finnish = {
           placeholder: 'esim. http://orcid.org',
         },
         organization: {
-          label: {
-            person: 'Organisaatio',
-            organization: 'Emo-organisaatio',
-          },
+          label: 'Organisaatio',
           placeholder: 'Esim. Helsingin yliopisto',
+          placeholderChild: '+ Lisää osasto tai yksikkö',
+          loading: 'Ladataan organisaatioita...',
+          labels: {
+            name: 'Organisaation nimi',
+            email: 'Organisaation sähköposti',
+            identifier: 'Organisaation tunniste',
+          },
+          options: {
+            create: 'Lisää uusi organisaatio',
+            dataset: 'Aineiston organisaatiot',
+            presets: 'Organisaatiot',
+          },
         },
         save: {
           label: 'Lisää toimija',
@@ -537,7 +562,7 @@ const finnish = {
       },
       added: {
         title: 'Lisätyt toimijat',
-        noneAddedNotice: 'Toimijoita ei olla lisätty',
+        noneAddedNotice: 'Toimijoita ei ole lisätty.',
       },
     },
     validationMessages: {
@@ -557,7 +582,7 @@ const finnish = {
       },
       otherIdentifiers: {
         string: 'Tunnisteet tulisivat olla arvoltaan merkkijonoja.',
-        url: 'Tunnisteet täytyy olla valiideja URL:eja',
+        url: 'Tunnisteet täytyy olla valideja URL:eja',
         max: 'Tunniste on liian pitkä.',
         min: 'Tunnisteen pitää olla vähintään 10 merkkiä pitkä.',
       },
@@ -582,12 +607,12 @@ const finnish = {
         name: {
           string: 'Nimi pitää olla arvoltaan merkkijono.',
           max: 'Nimi on liian pitkä.',
-          required: 'Nimi kenttä on pakollinen.',
+          required: 'Nimi on pakollinen kenttä.',
         },
         email: {
           string: 'Sähköposti pitää olla arvoltaan merkkijono.',
           max: 'Sähköposti on liian pikä.',
-          email: 'Lisää valiidi sähköposti.',
+          email: 'Lisää validi sähköposti.',
           nullable: '',
         },
         identifier: {
@@ -597,14 +622,14 @@ const finnish = {
         },
         organization: {
           mixed: '',
-          object: 'Valittu organisaatio tulisi olla olio.',
-          string: 'Organisaation arvo tulisi olla merkkijono.',
-          required: 'Organisaatio on pakollinen kenttä jos toimija on luonnollinen henkilö.',
+          object: 'Valitun organisaation tulee olla olio.',
+          name: 'Organisaation nimen tulee olla merkkijono.',
+          required: 'Organisaatio on pakollinen kenttä.',
         },
         requiredActors: {
           atLeastOneActor: 'Aineistoon on lisättävä vähintään yksi toimija.',
           mandatoryActors:
-            'Toimijat: Tekijä on pakollinen kenttä. Huomioi: yksittäisellä toimijalla voi olla useampi rooli.',
+            'Toimijat: Aineistolla on oltava ainakin yksi tekijä. Huomioi: yksittäisellä toimijalla voi olla useampi rooli.',
           publisherIfDOI: 'Toimijat: DOI-ainestoon on lisättävä julkaisija.',
         },
       },
@@ -676,7 +701,8 @@ const finnish = {
           'Ennenkuin pääset linkittämään tiedostoja aineistoosi, sinun tulee valita, linkitätkö tiedostoja IDAsta vai annatko ulkopuolisen palvelun URL-osoitteet, joista tiedostot löytyvät.',
         explanation:
           'Valitse "IDA", jos tiedostot on tallennettu Fairdata IDA -palveluun. Valitse "Ulkoinen lähde" jos tiedostot sijaitsevat muualla.',
-        doiSelection: 'Haluan aineistolleni DOI -tunnisteen (digital object identifier) URN - tunnisteen sijaan.',
+        doiSelection:
+          'Haluan aineistolleni DOI -tunnisteen (digital object identifier) URN - tunnisteen sijaan.',
         placeholder: 'Valitse vaihtoehto',
         ida: 'IDA',
         att: 'Ulkoinen lähde',
@@ -776,7 +802,6 @@ const finnish = {
           csvQuotingChar: 'Lainausmerkki',
           csvHasHeader: 'Sisältää otsikkorivin',
         },
-        warning: 'Sinulla on tallentamattomia muutoksia. Perutaanko muutokset?',
         errors: {
           formatVersionRequired: 'Versio puuttuu tai on epäkelpo valitulle tiedostomuodolle.',
           formatVersionNotAllowed: 'Valitulle tiedostomuodolle ei voi asettaa versiota.',
@@ -786,8 +811,6 @@ const finnish = {
           show: 'Muokkaa PAS-metadataa',
           close: 'Sulje',
           save: 'Tallenna muutokset',
-          confirmClose: 'Kyllä, peru muutokset',
-          cancelClose: 'Ei, jatka muokkausta',
           hideError: 'Jatka muokkausta',
         },
         options: {

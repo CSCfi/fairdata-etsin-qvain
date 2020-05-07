@@ -38,44 +38,39 @@ export const Label = styled.label`
   display: block;
 `
 
+export const NestedLabel = styled.label`
+  margin-right: auto;
+  display: flex;
+  align-items: center;
+  > span {
+    padding-left: 4px;
+    padding-right: 4px;
+  }
+`
+
 export const LabelLarge = styled.label`
   font-size: 1.2em;
   line-height: calc(1.5 * 1.2em);
   font-weight: 700
 `
 
-export const RadioContainer = styled.div`
-  display: inline-block;
-  position: relative;
-  flex: 0 0 auto;
-  box-sizing: border-box;
-  width: 40px;
-  height: 40px;
-  padding: 10px;
-  cursor: pointer;
-`
-
-export const RadioInput = styled.input`
-  position: absolute;
-  z-index: 1;
-`
-
 export const CheckboxStyles = styled.input`
-  display: inline-block;
-  position: relative;
-  flex: 0 0 18px;
-  box-sizing: content-box;
   width: 18px;
   height: 18px;
-  padding: 11px;
-  line-height: 0;
-  white-space: nowrap;
-  vertical-align: bottom;
-
+  margin: 4px;
+  padding: 0;
   :not(:disabled) {
     cursor: pointer;
   }
 `
+
+export const RadioInput = styled.input`
+  width: 16px;
+  height: 16px;
+  margin: 5px;
+  padding: 0;
+`
+
 
 export const Checkbox = props => <CheckboxStyles {...props} type="checkbox" />
 
