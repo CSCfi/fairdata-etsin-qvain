@@ -4,19 +4,12 @@ import PropTypes from 'prop-types';
 import Translate from 'react-translate-component'
 import moment from 'moment'
 import parseDate from 'moment-parseformat'
-import DatePicker, { registerLocale } from 'react-datepicker'
-import fi from 'date-fns/locale/fi'
-import en from 'date-fns/locale/en-GB'
+import DatePicker from 'react-datepicker'
 import translate from 'counterpart'
 import { Label } from '../general/form'
 import { embargoExpDateSchema } from '../utils/formValidation';
 import ValidationError from '../general/validationError';
 import DateFormats from '../utils/date'
-
-import 'react-datepicker/dist/react-datepicker.css'
-
-registerLocale('fi', fi)
-registerLocale('en', en)
 
 class EmbargoExpires extends Component {
   static propTypes = {

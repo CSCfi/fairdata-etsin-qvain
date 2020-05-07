@@ -5,19 +5,12 @@ import Translate from 'react-translate-component'
 import translate from 'counterpart'
 import moment from 'moment'
 import parseDate from 'moment-parseformat'
-import DatePicker, { registerLocale } from 'react-datepicker'
-import fi from 'date-fns/locale/fi'
-import en from 'date-fns/locale/en-GB'
+import DatePicker from 'react-datepicker'
 import Card from '../general/card'
 import ValidationError from '../general/validationError'
 import { LabelLarge } from '../general/form'
 import { issuedDateSchema } from '../utils/formValidation';
 import DateFormats from '../utils/date'
-
-registerLocale('fi', fi)
-registerLocale('en', en)
-
-import 'react-datepicker/dist/react-datepicker.css'
 
 class IssuedDateField extends React.Component {
   static propTypes = {
