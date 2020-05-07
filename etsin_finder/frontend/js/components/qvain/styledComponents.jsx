@@ -22,15 +22,7 @@ export const STSD = styled.button`
 export const SubHeaderTextContainer = styled.div`
   white-space: nowrap;
 `
-export const LinkBackContainer = styled.div`
-  text-align: right;
-  width: 100%;
-  white-space: nowrap;
-`
-export const LinkBack = styled(Link)`
-  color: #fff;
-  margin-right: 40px;
-`
+
 export const ButtonContainer = styled.div`
   text-align: center;
   padding-top: 2px;
@@ -48,10 +40,12 @@ export const SubmitButton = styled(InvertedButton)`
 export const Form = styled.form`
   margin-bottom: 20px;
 `
+
 export const SubmitContainer = styled(Container)`
   padding-bottom: 25px;
   margin: 15px;
 `
+
 export const ErrorContainer = styled(Container)`
   background-color: #ffebe8;
   border-bottom: 1px solid rgba(0, 0, 0, 0.3);
@@ -77,6 +71,21 @@ export const ErrorButtons = styled.div`
   > button:first-child {
     margin: 0;
   }
+`
+
+export const LinkBackContainer = styled.div`
+  text-align: ${(props) => props.position};
+  white-space: nowrap;
+  width: 50%;
+`
+
+export const LinkBack = styled(Link)`
+  margin-left: 30px;
+  color: #007fad;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  margin-top: 0;
 `
 
 export const LinkText = styled.span`
