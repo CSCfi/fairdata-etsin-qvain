@@ -13,7 +13,7 @@ exports[`Qvain dataset list PreservationStates should render <TablePasState /> 1
         "$$typeof": Symbol(react.forward_ref),
         "attrs": Array [],
         "componentStyle": ComponentStyle {
-          "componentId": "sc-kZmsYB",
+          "componentId": "sc-ePZHVD",
           "isStatic": true,
           "rules": Array [
             "
@@ -31,7 +31,7 @@ exports[`Qvain dataset list PreservationStates should render <TablePasState /> 1
         "displayName": "styled.span",
         "foldedComponentIds": Array [],
         "render": [Function],
-        "styledComponentId": "sc-kZmsYB",
+        "styledComponentId": "sc-ePZHVD",
         "target": "span",
         "toString": [Function],
         "warnTooManyClasses": [Function],
