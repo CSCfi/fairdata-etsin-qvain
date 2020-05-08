@@ -74,7 +74,7 @@ const modalStyle = {
     height: '80vh',
     maxHeight: '80vh',
     minWidth: '300px',
-    maxWidth: '600px',
+    maxWidth: '800px',
     margin: '0.5em',
     border: 'none',
     padding: '2em',

@@ -43,7 +43,7 @@ export class License extends Component {
   }
 
   componentDidMount = () => {
-    const { license } = this.props.Stores.Qvain
+    const { license, setLicenseName } = this.props.Stores.Qvain
     this.promises.push(getReferenceData('license')
       .then(res => {
         const list = res.data.hits.hits
@@ -64,10 +64,10 @@ export class License extends Component {
           },
         })
         if (license && license.identifier) {
-          license.name = {
+          setLicenseName({
             en: refsEn.find(opt => opt.value === license.identifier).label,
             fi: refsFi.find(opt => opt.value === license.identifier).label,
-          }
+          })
         }
       })
       .catch(error => {
@@ -127,7 +127,7 @@ export class License extends Component {
           options={options[lang]}
           isClearable
           onChange={onChange(options, lang, setLicense, LicenseConstructor)}
-          onBlur={() => {}}
+          onBlur={() => { }}
           attributes={{ placeholder: 'qvain.rightsAndLicenses.license.placeholder' }}
         />
         {license && license.identifier === otherOptValue && (

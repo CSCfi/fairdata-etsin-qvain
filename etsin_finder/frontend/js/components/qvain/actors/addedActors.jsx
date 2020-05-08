@@ -1,14 +1,10 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import PropTypes from 'prop-types';
 import { inject, observer } from 'mobx-react'
 import translate from 'counterpart'
 import Translate from 'react-translate-component'
-import {
-  faBuilding,
-  faUser
-} from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { ContainerSubsectionBottom } from '../general/card';
+import styled from 'styled-components'
+
 import {
   ButtonGroup,
   ButtonLabel,
@@ -16,8 +12,7 @@ import {
   DeleteButton,
   ButtonContainer
 } from '../general/buttons'
-import { EmptyActor } from '../../../stores/view/qvain'
-import { EntityType } from '../utils/constants'
+import { getActorName, ActorIcon } from './common'
 
 export class AddedActorsBase extends Component {
   static propTypes = {
@@ -26,57 +21,52 @@ export class AddedActorsBase extends Component {
 
   handleEditActor = (actor) => (event) => {
     event.preventDefault()
-    this.props.Stores.Qvain.editActor(actor)
+    this.props.Stores.Qvain.Actors.editActor(actor)
   }
 
   handleRemoveActor = (actor) => (event) => {
     event.preventDefault()
-    this.props.Stores.Qvain.removeActor(actor)
-    this.props.Stores.Qvain.editActor(EmptyActor)
-  }
-
-  getAddedActorName = (name, lang) => {
-    if (typeof name === 'object' && name !== null) {
-      if (lang in name) {
-        return name[lang]
-      }
-      if ('und' in name) {
-        return name.und
-      }
-      const langX = Object.keys(name)[0]
-      return name[langX]
-    }
-    return name
+    this.props.Stores.Qvain.Actors.removeActor(actor)
   }
 
   render() {
     const { lang } = this.props.Stores.Locale
-    const { readonly, addedActors } = this.props.Stores.Qvain
+    const { readonly } = this.props.Stores.Qvain
+    const { actors } = this.props.Stores.Qvain.Actors
     return (
-      <ContainerSubsectionBottom>
+      <>
         <Translate
           tabIndex="0"
           component="h3"
           content="qvain.actors.added.title"
         />
-        {addedActors.length === 0 &&
+        <Translate component="p" content="qvain.actors.add.help" />
+        {actors.length === 0 &&
           (<Translate tabIndex="0" component="p" content="qvain.actors.added.noneAddedNotice" />)
         }
-        {addedActors.map((addedActor) => (
-          <ButtonGroup tabIndex="0" key={addedActor.uiId}>
-            <ButtonLabel>
-              <FontAwesomeIcon icon={addedActor.type === EntityType.PERSON ? faUser : faBuilding} style={{ marginRight: '8px' }} />
-              {this.getAddedActorName(addedActor.name, lang)}{addedActor.role.map(role => (`/${translate(`qvain.actors.add.checkbox.${role}`)}`))}
-            </ButtonLabel>
+        {actors.map((addedActor) => (
+          <ButtonGroup tabIndex="0" key={addedActor.uiid}>
+            <ActorLabel>
+              <ActorIcon actor={addedActor} style={{ marginRight: '8px' }} />
+              {getActorName(addedActor, lang)}{addedActor.roles.map(role => (` / ${translate(`qvain.actors.add.checkbox.${role}`)}`))}
+            </ActorLabel>
             <ButtonContainer>
               <EditButton aria-label="Edit" onClick={this.handleEditActor(addedActor)} />
               {!readonly && <DeleteButton aria-label="Remove" onClick={this.handleRemoveActor(addedActor)} />}
             </ButtonContainer>
           </ButtonGroup>
         ))}
-      </ContainerSubsectionBottom>
+      </>
+
     );
   }
 }
+
+const ActorLabel = styled(ButtonLabel)`
+  white-space: normal;
+  overflow: hidden;
+  height: auto;
+  word-break: break-word;
+`
 
 export default inject('Stores')(observer(AddedActorsBase));

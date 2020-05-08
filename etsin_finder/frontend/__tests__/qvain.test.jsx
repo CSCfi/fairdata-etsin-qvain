@@ -1,5 +1,5 @@
 import React from 'react';
-import { shallow, mount } from 'enzyme'
+import { shallow } from 'enzyme'
 
 import Qvain from '../js/components/qvain'
 import Description from '../js/components/qvain/description'
@@ -12,27 +12,18 @@ import { License } from '../js/components/qvain/licenses/licenses'
 import { AccessType } from '../js/components/qvain/licenses/accessType'
 import RestrictionGrounds from '../js/components/qvain/licenses/resctrictionGrounds'
 import EmbargoExpires from '../js/components/qvain/licenses/embargoExpires'
-import { EntityType, Role, AccessTypeURLs, LicenseUrls } from '../js/components/qvain/utils/constants'
-import {
-  ActorsBase
-} from '../js/components/qvain/actors'
-import { ActorTypeSelectBase } from '../js/components/qvain/actors/actorTypeSelect'
-import { SelectedActorBase, ActorSelection } from '../js/components/qvain/actors/actorSelection'
-import { AddedActorsBase } from '../js/components/qvain/actors/addedActors'
+import { AccessTypeURLs, LicenseUrls } from '../js/components/qvain/utils/constants'
 import { ExternalFilesBase } from '../js/components/qvain/files/external/externalFiles'
 import {
   ButtonGroup
 } from '../js/components/qvain/general/buttons'
 import { SlidingContent } from '../js/components/qvain/general/card'
 import QvainStore, {
-  Actor,
   ExternalResource,
   AccessType as AccessTypeConstructor,
   License as LicenseConstructor
 } from '../js/stores/view/qvain'
 import LocaleStore from '../js/stores/view/language'
-import { RadioInput } from '../js/components/qvain/general/form';
-import { ListItem } from '../js/components/qvain/general/list';
 import TablePasState from '../js/components/qvain/datasets/tablePasState'
 
 const getStores = () => {
@@ -191,116 +182,6 @@ describe('Qvain.RightsAndLicenses', () => {
     stores.Qvain.setAccessType(AccessTypeConstructor(undefined, AccessTypeURLs.OPEN))
     const component = shallow(<AccessType Stores={stores} />)
     expect(component.find(EmbargoExpires).length).toBe(0)
-  })
-})
-
-describe('Qvain.Actors', () => {
-  it('should render correctly', () => {
-    const component = shallow(<ActorsBase Stores={getStores()} />)
-    expect(component).toMatchSnapshot()
-  })
-
-  it('should render person selection by default', () => {
-    const component = mount(<SelectedActorBase Stores={getStores()} />)
-    expect(component.find(ActorSelection).html().includes('Person')).toBe(true)
-    component.unmount()
-    const form = mount(<ActorTypeSelectBase Stores={getStores()} />)
-    expect(form.find('#entityPerson input').props().checked).toBe(true)
-  })
-
-  // By default person should be selected. Upon clicking the Organization radio button
-  // the checkboxes should be reset and active selection field should display
-  // 'Organization'
-  it('should change selected actor entity', () => {
-    const stores = getStores()
-    const entityRoleForm = mount(<ActorTypeSelectBase Stores={stores} />)
-    entityRoleForm.find('#personCreator').first().simulate('change', {
-      target: {
-        checked: true
-      }
-    })
-    entityRoleForm.unmount()
-    const selectedActor = mount(<SelectedActorBase Stores={stores} />)
-    expect(selectedActor.text()).toBe('Person / Creator')
-    selectedActor.unmount()
-    entityRoleForm.mount()
-    entityRoleForm.find('#entityOrg input').simulate('change')
-    entityRoleForm.find('#orgPublisher input').simulate('change', {
-      target: {
-        checked: true
-      }
-    })
-    // expect(entityRoleForm.find('#entityOrg input').checked).toBe(true)
-    entityRoleForm.unmount()
-    selectedActor.mount()
-    expect(selectedActor.text()).toBe('Organization / Publisher')
-  })
-
-  // Added actors should be listed if there are any
-  it('should list all added actors', () => {
-    const stores = getStores()
-    const addedActors = mount(<AddedActorsBase Stores={stores} />)
-    expect(addedActors.find(ButtonGroup).length).toBe(0)
-    stores.Qvain.saveActor(Actor(
-      EntityType.ORGANIZATION,
-      [Role.PUBLISHER],
-      'University of Helsinki',
-      'test@test.fi',
-      'uohIdentifier'
-    ))
-    stores.Qvain.saveActor(Actor(
-      EntityType.PERSON,
-      [Role.CREATOR],
-      'Teppo Testaaja',
-      'test@test.fi',
-      'uohIdentifier'
-    ))
-    stores.Qvain.saveActor(Actor(
-      EntityType.PERSON,
-      [Role.RIGHTS_HOLDER],
-      'Tuppo Testaaja',
-      'test@test.fi',
-      'uohIdentifier'
-    ))
-    stores.Qvain.saveActor(Actor(
-      EntityType.PERSON,
-      [Role.CONTRIBUTOR],
-      'Toppo Testaaja',
-      'test@test.fi',
-      'uohIdentifier'
-    ))
-    addedActors.update()
-    expect(addedActors.find(ButtonGroup).length).toBe(4)
-  })
-
-  // Test that <ActorTypeSelectBase> renders correctly
-  const component = shallow(<ActorTypeSelectBase Stores={getStores()} />)
-  it('ActorTypeSelect contains two <Column> elements', () => {
-    expect(component.find('Column').length).toBe(2);
-  })
-
-  it('ActorTypeSelect contains two <RadioInput> elements', () => {
-    expect(component.find(RadioInput).length).toBe(2);
-  })
-
-  it('ActorTypeSelect contains two <RadioInput> elements for Person and Org', () => {
-    expect(component.find(RadioInput).length).toBe(2);
-    expect(component.find('#entityPerson').length).toBe(1);
-    expect(component.find('#entityOrg').length).toBe(1);
-  })
-
-  it('ActorTypeSelect contains 10 <ListItem> elements with right ids', () => {
-    expect(component.find(ListItem).length).toBe(10);
-    expect(component.find('#personCreator').length).toBe(1);
-    expect(component.find('#personPublisher').length).toBe(1);
-    expect(component.find('#personCurator').length).toBe(1);
-    expect(component.find('#personRightsHolder').length).toBe(1);
-    expect(component.find('#personContributor').length).toBe(1);
-    expect(component.find('#orgCreator').length).toBe(1);
-    expect(component.find('#orgPublisher').length).toBe(1);
-    expect(component.find('#orgCurator').length).toBe(1);
-    expect(component.find('#orgRightsHolder').length).toBe(1);
-    expect(component.find('#orgContributor').length).toBe(1);
   })
 })
 
