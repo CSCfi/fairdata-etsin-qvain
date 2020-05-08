@@ -358,7 +358,10 @@ const finnish = {
     },
     datasets: {
       title: 'Aineistot',
-      search: 'Haku',
+      search: {
+        hidden: 'Haku',
+        placeholder: 'Suodata aineiston nimen mukaan',
+      },
       help: 'Muokkaa olemassa olevaa aineistoa tai luo uusi',
       createButton: 'Luo aineisto',
       tableRows: {

@@ -63,7 +63,7 @@ class DatasetTable extends Component {
     this.setState({ loading: true, error: false, errorMessage: '' })
     const url = `${USER_DATASETS_URL}${
       this.props.Stores.Auth.user.name
-    }?no_pagination=true`
+      }?no_pagination=true`
     console.log(url)
     return axios
       .get(url)
@@ -192,10 +192,10 @@ class DatasetTable extends Component {
     return (
       <Fragment>
         <SearchField>
-          <Translate className="visuallyhidden" htmlFor="datasetSearchInput" component={inputLabel} content="qvain.datasets.search" />
+          <Translate className="visuallyhidden" htmlFor="datasetSearchInput" component={inputLabel} content="qvain.datasets.search.hidden" />
           <SearchInput
             id="datasetSearchInput"
-            placeholder="Enter name of dataset"
+            placeholder={translate('qvain.datasets.search.placeholder')}
             value={searchTerm}
             onChange={(event) => {
               const searchStr = event.target.value
@@ -212,13 +212,6 @@ class DatasetTable extends Component {
             }}
           />
         </SearchField>
-        <DatasetPagination
-          id="pagnation-top"
-          page={page}
-          count={count}
-          limit={limit}
-          onChangePage={this.handleChangePage}
-        />
         <TablePadded className="table">
           <TableHeader>
             <Row>
