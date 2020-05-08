@@ -71,11 +71,11 @@ class FieldOfScienceField extends React.Component {
   }
 
   render() {
-    const { readonly, fieldOfScience, setFieldOfScience, addFieldOfScience } = this.props.Stores.Qvain
+    const { readonly, fieldOfScience, fieldOfScienceArray, setFieldOfScience, addFieldOfScience } = this.props.Stores.Qvain
     const { lang } = this.props.Stores.Locale
     const { options } = this.state
 
-    const fieldOfScienceFaculty = this.props.Stores.Qvain.fieldOfScienceArray.map(
+    const fieldOfScienceFaculty = fieldOfScienceArray.map(
       fieldOfScienceEntry => (
         <Label color="#007fad" margin="0 0.5em 0.5em 0" key={fieldOfScienceEntry.url}>
           <PaddedWord>{fieldOfScienceEntry.name[lang]}</PaddedWord>
@@ -100,6 +100,7 @@ class FieldOfScienceField extends React.Component {
           component={Select}
           attributes={{ placeholder: 'qvain.description.fieldOfScience.placeholder' }}
           isDisabled={readonly}
+          isClearable
           value={getCurrentValue(fieldOfScience, options, lang)}
           className="basic-single"
           classNamePrefix="select"

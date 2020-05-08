@@ -58,7 +58,7 @@ const otherIdentifierSchema = yup
   .url(translate('qvain.validationMessages.otherIdentifiers.url'))
   .max(1000, translate('qvain.validationMessages.otherIdentifiers.max'))
 
-const otherIdentifiersSchema = yup
+const otherIdentifiersArraySchema = yup
   .array()
   .of(otherIdentifierSchema)
   .nullable()
@@ -316,7 +316,7 @@ const qvainFormSchema = yup.object().shape({
   description: descriptionSchema,
   fieldOfScience: fieldsOfScienceSchema,
   keywords: keywordsSchema,
-  otherIdentifiers: otherIdentifiersSchema,
+  otherIdentifiers: otherIdentifiersArraySchema,
   accessType: accessTypeSchema,
   license: yup
     .mixed()
@@ -361,7 +361,7 @@ export {
   titleSchema,
   descriptionSchema,
   otherIdentifierSchema,
-  otherIdentifiersSchema,
+  otherIdentifiersArraySchema,
   keywordsSchema,
   accessTypeSchema,
   licenseSchema,

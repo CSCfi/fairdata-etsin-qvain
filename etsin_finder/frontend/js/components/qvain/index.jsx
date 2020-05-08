@@ -12,7 +12,7 @@ import styled from 'styled-components'
 import RightsAndLicenses from './licenses'
 import Description from './description'
 import Actors from './actors'
-import { qvainFormSchema } from './utils/formValidation'
+import { qvainFormSchema, otherIdentifierSchema } from './utils/formValidation'
 import Files from './files'
 import {
   QvainContainer,
@@ -21,14 +21,14 @@ import {
   StickySubHeader,
   StickySubHeaderResponse,
   SubHeaderText,
-  Container
+  Container,
 } from './general/card'
 import handleSubmitToBackend from './utils/handleSubmit'
 import { getResponseError } from './utils/responseError'
 import Title from './general/title'
 import SubmitResponse from './general/submitResponse'
-import Button, { InvertedButton } from '../general/button';
-import DeprecatedState from './deprecatedState';
+import Button, { InvertedButton } from '../general/button'
+import DeprecatedState from './deprecatedState'
 import PasState from './pasState'
 
 const EDIT_DATASET_URL = '/api/datasets/edit'
@@ -44,9 +44,9 @@ class Qvain extends Component {
 
   constructor(props) {
     super(props)
-    this.setFocusOnSubmitOrUpdateButton = this.setFocusOnSubmitOrUpdateButton.bind(this);
-    this.submitDatasetButton = React.createRef();
-    this.updateDatasetButton = React.createRef();
+    this.setFocusOnSubmitOrUpdateButton = this.setFocusOnSubmitOrUpdateButton.bind(this)
+    this.submitDatasetButton = React.createRef()
+    this.updateDatasetButton = React.createRef()
   }
 
   state = {
@@ -72,7 +72,7 @@ class Qvain extends Component {
   componentWillUnmount() {
     this.props.Stores.Qvain.resetQvainStore()
     this.props.Stores.Qvain.original = undefined
-    this.promises.forEach(promise => promise.cancel())
+    this.promises.forEach((promise) => promise.cancel())
   }
 
   getDataset(identifier) {
@@ -81,12 +81,12 @@ class Qvain extends Component {
     const url = `${EDIT_DATASET_URL}/${identifier}`
     const promise = axios
       .get(url)
-      .then(result => {
+      .then((result) => {
         resetQvainStore()
         editDataset(result.data)
         this.setState({ datasetLoading: false, datasetError: false, haveDataset: true })
       })
-      .catch(e => {
+      .catch((e) => {
         const status = e.response.status
 
         let errorTitle, errorDetails
@@ -131,47 +131,77 @@ class Qvain extends Component {
       this.submitDatasetButton.current.focus()
     }
     // preventDefault, since the page wants to refresh at this point
-    event.preventDefault();
+    event.preventDefault()
   }
 
-  handlePublishError = err => {
+  handlePublishError = (err) => {
     if (!err.response) {
       console.error(err)
     }
     this.setState({
-      response: getResponseError(err)
+      response: getResponseError(err),
     })
   }
 
-  handleCreate = e => {
-    e.preventDefault()
-    this.props.Stores.Qvain.addUnsavedMultiValueFields()
-    this.setState({ submitted: true })
-    const obj = handleSubmitToBackend(this.props.Stores.Qvain)
-    qvainFormSchema
-      .validate(obj, { abortEarly: false })
-      .then(() => {
-        axios
-          .post('/api/dataset', obj)
-          .then(res => {
-            const data = res.data
-            this.setState({ response: { ...data, is_new: true } })
-            // Open the created dataset without reloading the editor
-            if (data && data.identifier) {
-              this.props.Stores.Qvain.resetQvainStore()
-              this.props.Stores.Qvain.editDataset(data)
-              this.props.history.replace(`/qvain/dataset/${data.identifier}`)
-            }
-          })
-          .catch(this.handlePublishError)
-      })
-      .catch(err => {
-        console.log(err.errors)
-
-        // Refreshing error header
-        this.setState({ response: null })
+  checkMultiValueFields = () => {
+    const {
+      otherIdentifier,
+      otherIdentifiersArray,
+      addOtherIdentifier,
+      setOtherIdentifier,
+      setOtherIdentifierValidationError,
+    } = this.props.Stores.Qvain
+    if (otherIdentifier !== '') {
+      try {
+        otherIdentifierSchema.validateSync(otherIdentifier)
+      } catch (err) {
         this.setState({ response: err.errors })
-      })
+        setOtherIdentifierValidationError(err.errors)
+        return false
+      }
+      if (!otherIdentifiersArray.includes(otherIdentifier)) {
+        addOtherIdentifier(otherIdentifier)
+        setOtherIdentifier('')
+        this.setState({ response: null })
+        return true
+      }
+      const message = translate('qvain.description.otherIdentifiers.alreadyAdded')
+      this.setState({ response: message })
+      setOtherIdentifierValidationError(message)
+      return false
+    }
+    return true
+  }
+
+  handleCreate = (e) => {
+    e.preventDefault()
+    const { addUnsavedMultiValueFields, resetQvainStore, editDataset } = this.props.Stores.Qvain
+    this.setState({ submitted: true })
+    addUnsavedMultiValueFields()
+    if (this.checkMultiValueFields()) {
+      const obj = handleSubmitToBackend(this.props.Stores.Qvain)
+      qvainFormSchema
+        .validate(obj, { abortEarly: false })
+        .then(() => {
+          axios
+            .post('/api/dataset', obj)
+            .then((res) => {
+              const data = res.data
+              this.setState({ response: { ...data, is_new: true } })
+              // Open the created dataset without reloading the editor
+              if (data && data.identifier) {
+                resetQvainStore()
+                editDataset(data)
+                this.props.history.replace(`/qvain/dataset/${data.identifier}`)
+              }
+            })
+            .catch(this.handlePublishError)
+        })
+        .catch((err) => {
+          console.log(err.errors)
+          this.setState({ response: err.errors })
+        })
+    }
   }
 
   handleRetry = () => {
@@ -179,32 +209,38 @@ class Qvain extends Component {
     this.handleIdentifierChanged()
   }
 
-  handleUpdate = e => {
+  handleUpdate = (e) => {
     e.preventDefault()
-    this.props.Stores.Qvain.addUnsavedMultiValueFields()
+    const {
+      addUnsavedMultiValueFields,
+      original,
+      moveSelectedToExisting,
+      setChanged,
+      editDataset,
+    } = this.props.Stores.Qvain
     this.setState({ submitted: true })
-    const obj = handleSubmitToBackend(this.props.Stores.Qvain)
-    obj.original = this.props.Stores.Qvain.original
-    qvainFormSchema
-      .validate(obj, { abortEarly: false })
-      .then(() => {
-        axios
-          .patch('/api/dataset', obj)
-          .then(res => {
-            this.props.Stores.Qvain.moveSelectedToExisting()
-            this.props.Stores.Qvain.setChanged(false)
-            this.props.Stores.Qvain.editDataset(res.data)
-            this.setState({ response: res.data })
-          })
-          .catch(this.handlePublishError)
-      })
-      .catch(err => {
-        console.log(err.errors)
-
-        // Refreshing error header
-        this.setState({ response: null })
-        this.setState({ response: err.errors })
-      })
+    addUnsavedMultiValueFields()
+    if (this.checkMultiValueFields()) {
+      const obj = handleSubmitToBackend(this.props.Stores.Qvain)
+      obj.original = original
+      qvainFormSchema
+        .validate(obj, { abortEarly: false })
+        .then(() => {
+          axios
+            .patch('/api/dataset', obj)
+            .then((res) => {
+              moveSelectedToExisting()
+              setChanged(false)
+              editDataset(res.data)
+              this.setState({ response: res.data })
+            })
+            .catch(this.handlePublishError)
+        })
+        .catch((err) => {
+          console.log(err.errors)
+          this.setState({ response: err.errors })
+        })
+    }
   }
 
   handleIdentifierChanged() {
@@ -258,18 +294,24 @@ class Qvain extends Component {
         <StickySubHeaderWrapper>
           <StickySubHeader>
             <ButtonContainer>
-              {original
-                ? (
-                  <SubmitButton ref={this.updateDatasetButton} disabled={readonly} type="button" onClick={this.handleUpdate}>
-                    <Translate content="qvain.edit" />
-                  </SubmitButton>
-                )
-                : (
-                  <SubmitButton ref={this.submitDatasetButton} type="button" onClick={this.handleCreate}>
-                    <Translate content="qvain.submit" />
-                  </SubmitButton>
-                )
-              }
+              {original ? (
+                <SubmitButton
+                  ref={this.updateDatasetButton}
+                  disabled={readonly}
+                  type="button"
+                  onClick={this.handleUpdate}
+                >
+                  <Translate content="qvain.edit" />
+                </SubmitButton>
+              ) : (
+                <SubmitButton
+                  ref={this.submitDatasetButton}
+                  type="button"
+                  onClick={this.handleCreate}
+                >
+                  <Translate content="qvain.submit" />
+                </SubmitButton>
+              )}
             </ButtonContainer>
           </StickySubHeader>
           <PasState />
@@ -289,12 +331,8 @@ class Qvain extends Component {
       dataset = (
         <div className="container">
           <ErrorContainer>
-            <ErrorLabel>
-              {this.state.datasetErrorTitle}
-            </ErrorLabel>
-            <ErrorContent>
-              {this.state.datasetErrorDetails}
-            </ErrorContent>
+            <ErrorLabel>{this.state.datasetErrorTitle}</ErrorLabel>
+            <ErrorContent>{this.state.datasetErrorDetails}</ErrorContent>
             <ErrorButtons>
               <Button onClick={this.handleRetry}>Retry</Button>
             </ErrorButtons>
@@ -343,20 +381,20 @@ class Qvain extends Component {
 }
 
 const STSD = styled.button`
-    background: ${p => p.theme.color.primary};
-    color: #fafafa;
-    max-height: 0;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    border: none;
-    letter-spacing: 2px;
-    transition: 0.2s ease;
-    &:focus {
+  background: ${(p) => p.theme.color.primary};
+  color: #fafafa;
+  max-height: 0;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: none;
+  letter-spacing: 2px;
+  transition: 0.2s ease;
+  &:focus {
     text-decoration: underline;
     padding: 0.5em;
     max-height: 3em;
-    }
+  }
 `
 const SubHeaderTextContainer = styled.div`
   white-space: nowrap;
@@ -391,8 +429,8 @@ const SubmitContainer = styled(Container)`
 `
 
 const ErrorContainer = styled(Container)`
-  background-color: #FFEBE8;
-  border-bottom: 1px solid rgba(0,0,0,0.3);
+  background-color: #ffebe8;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
 `
 
 const ErrorLabel = styled.p`
@@ -413,7 +451,7 @@ const ErrorButtons = styled.div`
   margin-bottom: -2em;
   margin-top: 1em;
   > button:first-child {
-    margin: 0
+    margin: 0;
   }
 `
 

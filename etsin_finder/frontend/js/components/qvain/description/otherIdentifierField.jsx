@@ -10,7 +10,7 @@ import translate from 'counterpart'
 import Button from '../../general/button'
 import Card from '../general/card'
 import Label from '../general/label'
-import { otherIdentifiersSchema, otherIdentifierSchema } from '../utils/formValidation'
+import { otherIdentifiersArraySchema, otherIdentifierSchema } from '../utils/formValidation'
 import ValidationError from '../general/validationError'
 import { Input, LabelLarge } from '../general/form'
 
@@ -32,11 +32,11 @@ class OtherIdentifierField extends React.Component {
 
   handleAddClick = event => {
     event.preventDefault()
-    const { otherIdentifier, otherIdentifiers, addOtherIdentifier, setOtherIdentifierValidationError } = this.props.Stores.Qvain
+    const { otherIdentifier, otherIdentifiersArray, addOtherIdentifier, setOtherIdentifierValidationError } = this.props.Stores.Qvain
     otherIdentifierSchema
       .validate(otherIdentifier)
       .then(() => {
-        if (!otherIdentifiers.includes(otherIdentifier)) {
+        if (!otherIdentifiersArray.includes(otherIdentifier)) {
           addOtherIdentifier(otherIdentifier)
           this.clearInput()
         } else {
@@ -60,9 +60,9 @@ class OtherIdentifierField extends React.Component {
   }
 
   validateOtherIdentifiers = () => {
-    const { otherIdentifiers, setOtherIdentifierValidationError } = this.props.Stores.Qvain
-    otherIdentifiersSchema
-      .validate(otherIdentifiers)
+    const { otherIdentifiersArray, setOtherIdentifierValidationError } = this.props.Stores.Qvain
+    otherIdentifiersArraySchema
+      .validate(otherIdentifiersArray)
       .then(() => {
         setOtherIdentifierValidationError(null)
       })
@@ -72,8 +72,8 @@ class OtherIdentifierField extends React.Component {
   }
 
   render() {
-    const { readonly, otherIdentifier, otherIdentifiers, otherIdentifiersValidationError } = this.props.Stores.Qvain
-    const otherIdentifiersLabels = otherIdentifiers.map(identifier => (
+    const { readonly, otherIdentifier, otherIdentifiersArray, otherIdentifiersValidationError } = this.props.Stores.Qvain
+    const otherIdentifiersLabels = otherIdentifiersArray.map(identifier => (
       <Label color="primary" margin="0 0.5em 0.5em 0" key={identifier}>
         <PaddedWord>{identifier}</PaddedWord>
         <FontAwesomeIcon onClick={() => this.handleRemove(identifier)} icon={faTimes} size="xs" />

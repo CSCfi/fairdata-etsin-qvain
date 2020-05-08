@@ -37,7 +37,7 @@ class Qvain {
 
   @observable otherIdentifier = ''
 
-  @observable otherIdentifiers = []
+  @observable otherIdentifiersArray = []
 
   @observable otherIdentifiersValidationError = null
 
@@ -76,7 +76,7 @@ class Qvain {
       fi: '',
     }
     this.otherIdentifier = ''
-    this.otherIdentifiers = []
+    this.otherIdentifiersArray = []
     this.otherIdentifiersValidationError = null
     this.fieldOfScience = undefined
     this.fieldOfScienceArray = []
@@ -148,21 +148,16 @@ class Qvain {
     this.otherIdentifier = identifier
   }
 
-  // @action
-  // validateOtherIdentifier = () => {
-
-  // }
-
   @action
   addOtherIdentifier = identifier => {
     this.changed = true
-    this.otherIdentifiers = [...this.otherIdentifiers, identifier]
+    this.otherIdentifiersArray = [...this.otherIdentifiersArray, identifier]
   }
 
   @action
   removeOtherIdentifier = identifier => {
     this.changed = true
-    this.otherIdentifiers = this.otherIdentifiers.filter(
+    this.otherIdentifiersArray = this.otherIdentifiersArray.filter(
       otherIdentifier => otherIdentifier !== identifier
     )
   }
@@ -174,7 +169,6 @@ class Qvain {
   @action
   setFieldOfScience = fieldOfScience => {
     this.fieldOfScience = fieldOfScience
-    this.changed = true
   }
 
   @action
@@ -195,6 +189,7 @@ class Qvain {
         this.fieldOfScienceArray.push(FieldOfScience(fieldOfScience.name, fieldOfScience.url))
         this.changed = true
       }
+      this.setFieldOfScience(undefined)
     }
   }
 
@@ -679,7 +674,7 @@ class Qvain {
     this.description.fi = researchDataset.description.fi ? researchDataset.description.fi : ''
 
     // Other identifiers
-    this.otherIdentifiers = researchDataset.other_identifier
+    this.otherIdentifiersArray = researchDataset.other_identifier
       ? researchDataset.other_identifier.map(oid => oid.notation)
       : []
 

@@ -72,7 +72,7 @@ const handleSubmitToBackend = (values) => {
   const obj = {
     title: values.title,
     description: values.description,
-    identifiers: values.otherIdentifiers,
+    identifiers: values.otherIdentifiersArray,
     fieldOfScience: fieldsOfScienceToMetaxMethod(values.fieldOfScienceArray),
     keywords: values.keywordsArray,
     actors: actorsToMetax(values.actors),
