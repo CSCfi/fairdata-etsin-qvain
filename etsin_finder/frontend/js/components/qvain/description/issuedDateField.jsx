@@ -5,12 +5,12 @@ import Translate from 'react-translate-component'
 import translate from 'counterpart'
 import moment from 'moment'
 import parseDate from 'moment-parseformat'
-import DatePicker from 'react-datepicker'
 import Card from '../general/card'
 import ValidationError from '../general/validationError'
 import { LabelLarge } from '../general/form'
 import { issuedDateSchema } from '../utils/formValidation';
 import DateFormats from '../utils/date'
+import { DatePicker, handleDatePickerChange, getDateFormatLocale } from '../general/datepicker'
 
 class IssuedDateField extends React.Component {
   static propTypes = {
@@ -42,8 +42,14 @@ class IssuedDateField extends React.Component {
   }
 
   prepareDate = (dateStr) => {
-    const date = moment(dateStr, parseDate(dateStr))
-    if (date.isValid) return date.format(DateFormats.ISO8601_DATE_FORMAT)
+    const date = moment(dateStr, parseDate(dateStr, {
+      preferredOrder: {
+        '.': 'DMY',
+        '/': 'MDY',
+        '-': 'YMD'
+      }
+    }))
+    if (date.isValid()) return date.format(DateFormats.ISO8601_DATE_FORMAT)
     return null
   }
 
@@ -53,9 +59,13 @@ class IssuedDateField extends React.Component {
     setIssuedDate(date)
   }
 
+
   render() {
-    const { issuedDate, readonly } = this.props.Stores.Qvain
+    const { setIssuedDate, issuedDate, readonly } = this.props.Stores.Qvain
+    const { lang } = this.props.Stores.Locale
     const { error, errorMessage } = this.state
+
+
     return (
       <Card bottomContent>
         <LabelLarge htmlFor="issuedDateInput">
@@ -63,12 +73,12 @@ class IssuedDateField extends React.Component {
         </LabelLarge>
         <Translate component="p" content="qvain.description.issuedDate.infoText" />
         <DatePicker
-          selected={issuedDate ? new Date(issuedDate) : null}
-          onChangeRaw={(e) => this.handleDatePickerChange(e.target.value)}
-          onChange={(date) => this.handleDatePickerChange(date.getUTCDate())}
-          locale={this.props.Stores.Locale.lang}
+          selected={issuedDate ? new Date(issuedDate) : ''}
+          onChangeRaw={(e) => handleDatePickerChange(e.target.value, setIssuedDate)}
+          onChange={(date) => handleDatePickerChange(date.toISOString(), setIssuedDate)}
+          locale={lang}
           placeholderText={translate('qvain.description.issuedDate.placeholder')}
-          dateFormat={'yyyy-MM-dd'}
+          dateFormat={getDateFormatLocale(lang)}
           disabled={readonly}
         />
         <Fragment>
