@@ -70,19 +70,13 @@ class Sidebar extends Component {
 
   spatial(item) {
     if (
-      item.geographic_name
-      && checkNested(item, 'place_uri', 'pref_label')
-      && item.geographic_name !== checkDataLang(item.place_uri.pref_label)
+      item.geographic_name &&
+      checkNested(item, 'place_uri', 'pref_label') &&
+      item.geographic_name !== checkDataLang(item.place_uri.pref_label)
     ) {
       return (
         <ListItem key={item.geographic_name} lang={getDataLang(item.place_uri.pref_label)}>
-          {checkDataLang(item.place_uri.pref_label)}
-          {' '}
-          <span>
-(
-            {item.geographic_name}
-)
-          </span>
+          {checkDataLang(item.place_uri.pref_label)} <span>({item.geographic_name})</span>
         </ListItem>
       )
     }
@@ -95,7 +89,7 @@ class Sidebar extends Component {
   keywordsAndTheme() {
     const labels = []
     if (this.state.theme) {
-      labels.push(...this.state.theme.map(theme => checkDataLang(theme.pref_label)))
+      labels.push(...this.state.theme.map((theme) => checkDataLang(theme.pref_label)))
     }
     if (this.state.keyword) labels.push(...this.state.keyword)
     return labels.join(', ')
@@ -134,17 +128,14 @@ class Sidebar extends Component {
             <SidebarItem component="dd" trans="dataset.identifier">
               <Identifier idn={this.state.pid} />
 
-              { /* INFORMATION DISPLAYED FOR CUMULATIVE DATASETS */
-                (this.props.dataset.cumulative_state === 1) &&
-                (
+              {
+                /* INFORMATION DISPLAYED FOR CUMULATIVE DATASETS */
+                this.props.dataset.cumulative_state === 1 && (
                   <SidebarContainerForCumulativeInfo>
-                    <DatasetIsCumulativeNotificationBar
-                      directionToDisplayTooltip="Left"
-                    />
+                    <DatasetIsCumulativeNotificationBar directionToDisplayTooltip="Left" />
                   </SidebarContainerForCumulativeInfo>
                 )
               }
-
             </SidebarItem>
             <HorizontalLine aria-hidden />
             {/* FIELD OF SCIENCE */}
@@ -154,8 +145,8 @@ class Sidebar extends Component {
               fallback="Field of Science"
               hideEmpty="true"
             >
-              {this.state.field
-                && this.state.field.map(field => (
+              {this.state.field &&
+                this.state.field.map((field) => (
                   <ListItem key={field.identifier} lang={getDataLang(field.pref_label)}>
                     {checkDataLang(field.pref_label)}
                   </ListItem>
@@ -171,8 +162,8 @@ class Sidebar extends Component {
             {/* LANGUAGE */}
 
             <SidebarItem trans="dataset.language" hideEmpty="true">
-              {this.state.language
-                && this.state.language.map((languages, i) => {
+              {this.state.language &&
+                this.state.language.map((languages, i) => {
                   let language = checkDataLang(languages.title)
                   if (language === '') {
                     language = languages.title
@@ -194,8 +185,8 @@ class Sidebar extends Component {
               fallback="Spatial Coverage"
               hideEmpty="true"
             >
-              {this.state.geographic_name
-                && this.state.geographic_name.map(single => this.spatial(single))}
+              {this.state.geographic_name &&
+                this.state.geographic_name.map((single) => this.spatial(single))}
             </SidebarItem>
 
             {/* TEMPORAL COVERAGE */}
@@ -205,15 +196,16 @@ class Sidebar extends Component {
               fallback="Temporal Coverage"
               hideEmpty="true"
             >
-              {this.state.temporal
-                && this.state.temporal.map(dates => this.dateSeparator(dates.start_date, dates.end_date)
+              {this.state.temporal &&
+                this.state.temporal.map((dates) =>
+                  this.dateSeparator(dates.start_date, dates.end_date)
                 )}
             </SidebarItem>
 
             {/* LICENSE */}
             <SidebarItem trans="dataset.license" hideEmpty="true">
-              {this.state.license
-                && this.state.license.map(rights => (
+              {this.state.license &&
+                this.state.license.map((rights) => (
                   <ListItem key={rights.identifier}>
                     <License data={rights} />
                   </ListItem>
@@ -224,9 +216,9 @@ class Sidebar extends Component {
 
             {this.state.access_rights && (
               <SidebarItem trans="dataset.access_rights" hideEmpty="true">
-                {this.state.access_rights.restriction_grounds
-                && this.state.access_rights.restriction_grounds.length > 0
-                  ? this.state.access_rights.restriction_grounds.map(rg => (
+                {this.state.access_rights.restriction_grounds &&
+                  this.state.access_rights.restriction_grounds.length > 0
+                  ? this.state.access_rights.restriction_grounds.map((rg) => (
                     <ListItem key={`rg-${rg.identifier}`} lang={getDataLang(rg.pref_label)}>
                       {checkDataLang(rg.pref_label)}
                     </ListItem>
@@ -242,16 +234,15 @@ class Sidebar extends Component {
             {/* PROJECTS */}
 
             <SidebarItem trans="dataset.project.project" hideEmpty="true">
-              {this.state.isOutputOf
-                && this.state.isOutputOf.map((item) => {
+              {this.state.isOutputOf &&
+                this.state.isOutputOf.map((item) => {
                   const projectName = checkDataLang(item.name)
                   return (
                     <ListItem key={`li-${projectName}`} lang={getDataLang(item.name)}>
                       <Project project={item} />
                     </ListItem>
                   )
-                })
-              }
+                })}
             </SidebarItem>
 
             {/* PUBLISHER */}
@@ -276,8 +267,8 @@ class Sidebar extends Component {
             {/* CURATOR */}
 
             <SidebarItem trans="dataset.curator" hideEmpty="true">
-              {this.state.curator
-                && this.state.curator.map((curator) => {
+              {this.state.curator &&
+                this.state.curator.map((curator) => {
                   let curatorName = checkDataLang(curator.name)
                   if (curatorName === '') {
                     curatorName = curator.name
@@ -293,15 +284,14 @@ class Sidebar extends Component {
                       />
                     </ListItem>
                   )
-                })
-              }
+                })}
             </SidebarItem>
 
             {/* RIGHTS HOLDER */}
 
             <SidebarItem trans="dataset.rights_holder" hideEmpty="true">
-              {this.state.rightsHolder
-                && this.state.rightsHolder.map((rightsHolder) => {
+              {this.state.rightsHolder &&
+                this.state.rightsHolder.map((rightsHolder) => {
                   let rightsHolderName = checkDataLang(rightsHolder.name)
                   if (rightsHolderName === '') {
                     rightsHolderName = rightsHolder.name
@@ -323,8 +313,8 @@ class Sidebar extends Component {
             {/* INFRASTRUCTURE */}
 
             <SidebarItem trans="dataset.infrastructure" hideEmpty="true">
-              {this.state.infrastructure
-                && this.state.infrastructure.map(entity => (
+              {this.state.infrastructure &&
+                this.state.infrastructure.map((entity) => (
                   <ListItem key={entity.identifier} lang={getDataLang(entity.pref_label)}>
                     {checkDataLang(entity.pref_label)}
                   </ListItem>
@@ -364,7 +354,7 @@ const SidebarContainerForCumulativeInfo = styled.div`
 
 const HorizontalLine = styled.hr`
   border-style: solid;
-  border-color: ${props => props.theme.color.lightgray};
+  border-color: ${(props) => props.theme.color.lightgray};
   margin: 20px 0;
 `
 
