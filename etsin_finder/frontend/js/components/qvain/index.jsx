@@ -144,7 +144,8 @@ class Qvain extends Component {
       console.error(err)
     }
     this.setState({
-      response: getResponseError(err)
+      response: getResponseError(err),
+      datasetLoading: false,
     })
   }
 
