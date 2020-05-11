@@ -104,7 +104,7 @@ class MetaxAPIService(FlaskService):
                 log.warning(
                     "Failed to get catalog record {0} from Metax API\n\
                     Response status code: {1}\n\
-                    Response text: {0}"
+                    Response text: {2}"
                     .format(
                         identifier,
                         metax_api_response.status_code,
@@ -134,8 +134,8 @@ class MetaxAPIService(FlaskService):
             if isinstance(e, requests.HTTPError):
                 log.warning(
                     "Failed to get removed catalog record {0} from Metax API\n\
-                    Response status code: {0}\n\
-                    Response text: {0}".format(
+                    Response status code: {1}\n\
+                    Response text: {2}".format(
                         identifier,
                         metax_api_response.status_code,
                         json_or_empty(metax_api_response) or metax_api_response.text
@@ -223,6 +223,15 @@ def get_catalog_record_preferred_identifier(cr):
     :return:
     """
     return cr.get('research_dataset', {}).get('preferred_identifier', '')
+
+def get_catalog_record_REMS_identifier(cr):
+    """
+    Get REMS identifier for a catalog record.
+
+    :param cr:
+    :return:
+    """
+    return cr.get('rems_identifier', '')
 
 
 def is_rems_catalog_record(catalog_record):

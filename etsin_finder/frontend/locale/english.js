@@ -317,6 +317,7 @@ const english = {
       50: 'Validation failed',
       60: 'Revalidating',
       70: 'Waits for transfer',
+      75: 'Metadata confirmed',
       80: 'Transfer started',
       90: 'Packaging',
       100: 'Packaging failed',
@@ -325,6 +326,10 @@ const english = {
       130: 'Transfer failed',
       140: 'Available'
     },
+    useDoiHeader: 'Creation of a DOI',
+    useDoiContent: 'You have selected DOI as primary identifier for your dataset instead of URN. DOI requires a defined issued date and a dataset publisher. A DOI (Digital Object Identifier) will be created and stored in the DataCite Service and it cannot be removed. Are you sure you want to select DOI?',
+    useDoiAffirmative: 'Yes',
+    useDoiNegative: 'No',
     unsuccessfullLogin: 'Login unsuccessful.',
     notCSCUser1:
       'Please make sure that you have a valid CSC account. If you tried to log in with an external account (for example Haka) you might get this error if your account is not associated with CSC account. Please do the registration in',
@@ -342,8 +347,13 @@ const english = {
     },
     backLink: ' Back to datasets',
     common: {
-      cancel: 'Cancel',
       save: 'Save',
+      cancel: 'Cancel',
+    },
+    confirmClose: {
+      warning: 'You have unsaved changes. Are you sure you want to discard your changes?',
+      confirm: 'Yes, discard changes',
+      cancel: 'No, continue editing',
     },
     datasets: {
       title: 'Your Datasets',
@@ -405,6 +415,12 @@ const english = {
         },
         instructions: 'Only one language selection is mandatory',
       },
+      issuedDate: {
+        title: 'Issued date',
+        infoText: 'Date of formal issuance (publication) of the resource. This value does not affect or reflect the visibility of the dataset itself.',
+        instructions: '',
+        placeholder: 'Date',
+      },
       otherIdentifiers: {
         title: 'Other Identifiers',
         infoText:
@@ -427,7 +443,7 @@ const english = {
         title: 'Keywords',
         infoText: 'Set keywords that characterize the dataset.',
         placeholder: 'E.g. economy',
-        addButton: 'Add keywords',
+        addButton: '+ Add keywords',
         help:
           'You can add multiple keywords by separating them with a comma (,). Dataset has to have at least one keyword.',
       },
@@ -466,11 +482,24 @@ const english = {
     actors: {
       title: 'Actors',
       infoTitle: 'Actors info',
+      addButton: '+ Add new actor',
       infoText:
         'Add at least one Creator. First, select the type of actor (person or organization). Then choose the roles the actor has (you can add multiple). After that, fill in the details: organization is mandatory for a person. You can edit added actors by clicking the pen icon or remove it by clicking the X icon.',
+      errors: {
+        loadingReferencesFailed: 'Error loading reference organizations.'
+      },
       add: {
         title: 'Actors',
-        help: 'Creator (1+) role is mandatory. Notice that one actor can have multiple roles.',
+        action: {
+          create: 'Add new actor',
+          edit: 'Edit actor',
+        },
+        groups: {
+          type: 'Actor Type',
+          roles: 'Roles',
+          info: 'Actor Information'
+        },
+        help: 'Having at least one creator for the dataset is mandatory. Notice that one actor can have multiple roles.',
         radio: {
           person: 'Person',
           organization: 'Organization',
@@ -498,11 +527,20 @@ const english = {
           placeholder: 'e.g http://orcid.org',
         },
         organization: {
-          label: {
-            person: 'Organization',
-            organization: 'Parent Organization',
-          },
+          label: 'Organization',
           placeholder: 'E.g. University of Helsinki',
+          placeholderChild: '+ Add department or unit',
+          loading: 'Loading organizations...',
+          labels: {
+            name: 'Organization name',
+            email: 'Organization email',
+            identifier: 'Organization identifier',
+          },
+          options: {
+            create: 'Add new organization manually',
+            dataset: 'Organizations in dataset',
+            presets: 'Preset organizations'
+          }
         },
         save: {
           label: 'Save',
@@ -515,8 +553,8 @@ const english = {
         },
       },
       added: {
-        title: 'Added Actors',
-        noneAddedNotice: 'No actors added',
+        title: 'Actors',
+        noneAddedNotice: 'No actors have been added.',
       },
     },
     validationMessages: {
@@ -529,6 +567,9 @@ const english = {
         string: 'The description must be a string value.',
         max: 'The description is too long.',
         required: 'A description is required in at least one language.',
+      },
+      issuedDate: {
+        requiredIfUseDoi: 'Issued date must be defined for DOI datasets'
       },
       otherIdentifiers: {
         string: 'Other identifiers must be string value.',
@@ -573,13 +614,13 @@ const english = {
         organization: {
           mixed: '',
           object: 'The selected organization should be an object.',
-          string: 'The organization value must be string.',
-          required: 'Organization is required if the actor is a person.',
+          name: 'The organization name must be a string.',
+          required: 'Organization is required.',
         },
         requiredActors: {
           atLeastOneActor: 'You must add at least one actor to your dataset.',
-          mandatoryActors:
-            'Actors: Creator role is mandatory. Note: one actor can have multiple roles.',
+          mandatoryActors: 'Actors: Creator role is mandatory. Note: one actor can have multiple roles.',
+          publisherIfDOI: 'Actors: For DOI datasets publisher must be defined.',
         },
       },
       accessType: {
@@ -650,6 +691,7 @@ const english = {
           "Fairdata Services need to know whether you are linking files from IDA or remote resources. You can also publish datasets without any files. In that case, please still select either one. The selection cannot be re-done, so if you are not sure whether you'll add files later, select the one you think you'll need in the future.",
         explanation:
           'Choose "IDA" if the data is stored in Fairdata IDA Service. Choose "Remote resources" if the data is in remote location.',
+        doiSelection: 'I want the dataset to have a DOI (digital object identifier) instead of a URN.',
         placeholder: 'Select option',
         ida: 'IDA',
         att: 'Remote resources',
@@ -734,7 +776,6 @@ const english = {
           csvQuotingChar: 'Quoting character',
           csvHasHeader: 'Has header'
         },
-        warning: 'You have unsaved changes. Are you sure you want to discard your changes?',
         errors: {
           formatVersionRequired: 'Invalid or missing file format version.',
           formatVersionNotAllowed: 'File format version is not allowed for selected file format.',
@@ -744,8 +785,6 @@ const english = {
           show: 'Edit PAS metadata',
           close: 'Close',
           save: 'Save changes',
-          confirmClose: 'Yes, discard changes',
-          cancelClose: 'No, continue editing',
           hideError: 'Continue editing'
         },
         options: {
@@ -807,45 +846,12 @@ const english = {
             label: 'Description',
             placeholder: 'Description',
           },
-          directoryFiles: {
-            label: 'Files within folders',
-          },
           use: {
             label: 'Use category',
             placeholder: 'Select option',
           },
           fileType: {
             label: 'File type',
-            placeholder: 'Select option',
-          },
-          fileFormat: {
-            label: 'File format',
-            placeholder: 'Select option',
-          },
-          formatVersion: {
-            label: 'File format version',
-            placeholder: 'Select option',
-          },
-          isSequential: {
-            label: 'File is sequential',
-          },
-          csvDelimiter: {
-            label: 'Delimiter',
-            placeholder: 'Select option',
-          },
-          csvHasHeader: {
-            label: 'Has header',
-          },
-          csvRecordSeparator: {
-            label: 'Record separator',
-            placeholder: 'Select option',
-          },
-          csvQuoteChar: {
-            label: 'Quoting character',
-            placeholder: 'Quoting character, e.g. \\',
-          },
-          csvEncoding: {
-            label: 'Encoding',
             placeholder: 'Select option',
           },
           identifier: {

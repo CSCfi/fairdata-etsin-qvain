@@ -27,8 +27,9 @@ import handleSubmitToBackend from './utils/handleSubmit'
 import { getResponseError } from './utils/responseError'
 import Title from './general/title'
 import SubmitResponse from './general/submitResponse'
-import Button, { InvertedButton } from '../general/button'
-import DeprecatedState from './deprecatedState'
+import { Button, InvertedButton } from '../general/button'
+import Modal from '../general/modal'
+import DeprecatedState from './deprecatedState';
 import PasState from './pasState'
 
 const EDIT_DATASET_URL = '/api/datasets/edit'
@@ -47,6 +48,9 @@ class Qvain extends Component {
     this.setFocusOnSubmitOrUpdateButton = this.setFocusOnSubmitOrUpdateButton.bind(this)
     this.submitDatasetButton = React.createRef()
     this.updateDatasetButton = React.createRef()
+    this.showUseDoiInformation = this.showUseDoiInformation.bind(this)
+    this.closeUseDoiInformation = this.closeUseDoiInformation.bind(this)
+    this.acceptDoi = this.acceptDoi.bind(this)
   }
 
   state = {
@@ -57,6 +61,7 @@ class Qvain extends Component {
     datasetError: false,
     datasetErrorTitle: null,
     datasetErrorDetails: null,
+    useDoiModalIsOpen: false,
   }
 
   componentDidMount() {
@@ -140,6 +145,7 @@ class Qvain extends Component {
     }
     this.setState({
       response: getResponseError(err),
+      datasetLoading: false,
     })
   }
 
@@ -155,7 +161,10 @@ class Qvain extends Component {
       try {
         otherIdentifierSchema.validateSync(otherIdentifier)
       } catch (err) {
-        this.setState({ response: err.errors })
+        this.setState({
+          response: err.errors,
+          datasetLoading: false,
+        })
         setOtherIdentifierValidationError(err.errors)
         return false
       }
@@ -166,7 +175,10 @@ class Qvain extends Component {
         return true
       }
       const message = translate('qvain.description.otherIdentifiers.alreadyAdded')
-      this.setState({ response: message })
+      this.setState({
+        response: message,
+        datasetLoading: false
+      })
       setOtherIdentifierValidationError(message)
       return false
     }
@@ -174,9 +186,20 @@ class Qvain extends Component {
   }
 
   handleCreate = (e) => {
-    e.preventDefault()
+    if (this.state.useDoiModalIsOpen) {
+      this.setState({
+        useDoiModalIsOpen: false
+      })
+    } else {
+      e.preventDefault()
+    }
+    this.setState({
+      response: null,
+      submitted: true,
+      datasetError: false,
+      datasetLoading: true,
+    })
     const { addUnsavedMultiValueFields, resetQvainStore, editDataset } = this.props.Stores.Qvain
-    this.setState({ submitted: true })
     addUnsavedMultiValueFields()
     if (this.checkMultiValueFields()) {
       const obj = handleSubmitToBackend(this.props.Stores.Qvain)
@@ -187,7 +210,10 @@ class Qvain extends Component {
             .post('/api/dataset', obj)
             .then((res) => {
               const data = res.data
-              this.setState({ response: { ...data, is_new: true } })
+              this.setState({
+                response: { ...data, is_new: true },
+                datasetLoading: false,
+              })
               // Open the created dataset without reloading the editor
               if (data && data.identifier) {
                 resetQvainStore()
@@ -198,8 +224,14 @@ class Qvain extends Component {
             .catch(this.handlePublishError)
         })
         .catch((err) => {
+          console.log('Error for event: ', e)
           console.log(err.errors)
-          this.setState({ response: err.errors })
+
+          // Loading done, so set error header
+          this.setState({
+            response: err.errors,
+            datasetLoading: false,
+          })
         })
     }
   }
@@ -211,6 +243,12 @@ class Qvain extends Component {
 
   handleUpdate = (e) => {
     e.preventDefault()
+    this.setState({
+      response: null,
+      submitted: true,
+      datasetError: false,
+      datasetLoading: true,
+    })
     const {
       addUnsavedMultiValueFields,
       original,
@@ -218,7 +256,6 @@ class Qvain extends Component {
       setChanged,
       editDataset,
     } = this.props.Stores.Qvain
-    this.setState({ submitted: true })
     addUnsavedMultiValueFields()
     if (this.checkMultiValueFields()) {
       const obj = handleSubmitToBackend(this.props.Stores.Qvain)
@@ -232,13 +269,22 @@ class Qvain extends Component {
               moveSelectedToExisting()
               setChanged(false)
               editDataset(res.data)
-              this.setState({ response: res.data })
+              this.setState({
+                response: res.data,
+                datasetLoading: false,
+              })
             })
             .catch(this.handlePublishError)
         })
         .catch((err) => {
+          console.log('Error for event: ', e)
           console.log(err.errors)
-          this.setState({ response: err.errors })
+
+          // Loading done, so set error header
+          this.setState({
+            response: err.errors,
+            datasetLoading: false,
+          })
         })
     }
   }
@@ -256,6 +302,24 @@ class Qvain extends Component {
     } else {
       this.setState({ datasetLoading: false, haveDataset: true })
     }
+  }
+
+  showUseDoiInformation() {
+    this.setState({
+      useDoiModalIsOpen: true
+    })
+  }
+
+  // DOI usage accepted and will thus be used instead of URN ("yes")
+  acceptDoi() {
+    this.handleCreate()
+  }
+
+  // User closes the dialogue without accepting DOI usage ("no" or "exit")
+  closeUseDoiInformation() {
+    this.setState({
+      useDoiModalIsOpen: false
+    })
   }
 
   render() {
@@ -294,24 +358,22 @@ class Qvain extends Component {
         <StickySubHeaderWrapper>
           <StickySubHeader>
             <ButtonContainer>
-              {original ? (
-                <SubmitButton
-                  ref={this.updateDatasetButton}
-                  disabled={readonly}
-                  type="button"
-                  onClick={this.handleUpdate}
-                >
-                  <Translate content="qvain.edit" />
-                </SubmitButton>
-              ) : (
-                <SubmitButton
-                  ref={this.submitDatasetButton}
-                  type="button"
-                  onClick={this.handleCreate}
-                >
-                  <Translate content="qvain.submit" />
-                </SubmitButton>
-              )}
+              {original
+                ? (
+                  <SubmitButton ref={this.updateDatasetButton} disabled={readonly} type="button" onClick={this.handleUpdate}>
+                    <Translate content="qvain.edit" />
+                  </SubmitButton>
+                )
+                : (
+                  <SubmitButton
+                    ref={this.submitDatasetButton}
+                    type="button"
+                    onClick={this.props.Stores.Qvain.useDoi === true ? this.showUseDoiInformation : this.handleCreate}
+                  >
+                    <Translate content="qvain.submit" />
+                  </SubmitButton>
+                )
+              }
             </ButtonContainer>
           </StickySubHeader>
           <PasState />
@@ -344,6 +406,25 @@ class Qvain extends Component {
     } else {
       dataset = (
         <Form className="container">
+          <Modal
+            isOpen={this.state.useDoiModalIsOpen}
+            onRequestClose={this.closeUseDoiInformation}
+            customStyles={customStyles}
+            contentLabel="UseDoiModalInformation"
+          >
+            <Translate content="qvain.useDoiHeader" component="h2" />
+            <Translate content="qvain.useDoiContent" component="p" />
+            <Button
+              onClick={this.acceptDoi}
+            >
+              <Translate content="qvain.useDoiAffirmative" component="span" />
+            </Button>
+            <Button
+              onClick={this.closeUseDoiInformation}
+            >
+              <Translate content="qvain.useDoiNegative" component="span" />
+            </Button>
+          </Modal>
           <Description />
           <Actors />
           <RightsAndLicenses />
@@ -378,6 +459,14 @@ class Qvain extends Component {
       </QvainContainer>
     )
   }
+}
+
+const customStyles = {
+  content: {
+    minWidth: '20vw',
+    maxWidth: '60vw',
+    padding: '2vw',
+  },
 }
 
 const STSD = styled.button`

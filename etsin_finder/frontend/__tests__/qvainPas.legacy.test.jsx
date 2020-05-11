@@ -22,11 +22,11 @@ import {
 } from '../js/components/qvain/general/buttons'
 import QvainStore, {
   Directory,
-  Actor,
   File,
   AccessType as AccessTypeConstructor,
   License as LicenseConstructor
 } from '../js/stores/view/qvain'
+import { Actor } from '../js/stores/view/qvain.actors'
 import LocaleStore from '../js/stores/view/language'
 import EnvStore from '../js/stores/domain/env'
 import { AccessTypeURLs, DataCatalogIdentifiers, EntityType, Role, } from '../js/components/qvain/utils/constants'
@@ -455,69 +455,6 @@ describe('Qvain.RightsAndLicenses', () => {
     inputs.forEach(c => expect(c.props().disabled).toBe(false))
   })
 })
-
-describe('Qvain.Actors', () => {
-  const render = stores => {
-    stores.Qvain.saveActor(Actor(
-      EntityType.PERSON,
-      [Role.CREATOR],
-      'Teppo Testaaja',
-      'test@test.fi',
-      'uohIdentifier'
-    ))
-    return mount(
-      <Provider Stores={stores}>
-        <ThemeProvider theme={etsinTheme}>
-          <Actors />
-        </ThemeProvider>
-      </Provider>
-    )
-  }
-
-  it('prevents editing of actors fields', () => {
-    const stores = getStores()
-    stores.Qvain.setPreservationState(80)
-
-    wrapper = render(stores)
-    const inputs = wrapper.find('input').not('[type="hidden"]')
-
-    // Expect disabled inputs:
-    // - person/organization radio buttons
-    // - 5 + 5 role checkboxes
-    // - name, email, identifier, organization
-    expect(inputs.length).toBe(16)
-    inputs.forEach(c => expect(c.props().disabled).toBe(true))
-
-    // Button for deleting actor should not be rendered
-    expect(wrapper.find(DeleteButton).length).toBe(0)
-  })
-
-  it('allows editing of actors fields', () => {
-    const stores = getStores()
-    stores.Qvain.setPreservationState(0)
-
-    wrapper = render(stores)
-    const inputs = wrapper.find('input').not('[type="hidden"]').not('[disabled=true]')
-
-    // Expect enabled inputs:
-    // - person/organization radio buttons
-    // - 5 role checkboxes
-    // - name, email, identifier, organization
-    expect(inputs.length).toBe(11)
-    expect(wrapper.find('input#personCreator').not('[disabled=true]').length).toBe(1)
-    expect(wrapper.find('input#orgCreator').not('[disabled=true]').length).toBe(0)
-
-    // Expect same number of inputs for organization
-    wrapper.find('#entityOrg input').simulate('change')
-    expect(inputs.length).toBe(11)
-    expect(wrapper.find('input#personCreator').not('[disabled=true]').length).toBe(0)
-    expect(wrapper.find('input#orgCreator').not('[disabled=true]').length).toBe(1)
-
-    // Button for deleting actor should be rendered
-    expect(wrapper.find(DeleteButton).length)
-  })
-})
-
 
 describe('Qvain.Files', () => {
   const render = stores => {

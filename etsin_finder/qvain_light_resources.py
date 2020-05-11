@@ -245,6 +245,7 @@ class QvainDataset(Resource):
             object -- The response from metax or if error an error message.
 
         """
+        use_doi = False
         is_authd = authentication.is_authenticated()
         if not is_authd:
             return {"PermissionError": "User not logged in."}, 401
@@ -262,17 +263,19 @@ class QvainDataset(Resource):
         if data["dataCatalog"] == "urn:nbn:fi:att:data-catalog-ida":
             if not check_if_data_in_user_IDA_project(data):
                 return {"IdaError": "Error in IDA group user permission or in IDA user groups."}, 403
+        if data["useDoi"] is True:
+            use_doi = True
         metax_redy_data = data_to_metax(data, metadata_provider_org, metadata_provider_user)
         params = {
             "access_granter": get_encoded_access_granter()
         }
-        metax_response = create_dataset(metax_redy_data, params)
+        metax_response = create_dataset(metax_redy_data, params, use_doi)
         return metax_response
 
     @log_request
     def patch(self):
         """
-        Updete existing detaset.
+        Update existing dataset.
 
         Returns:
             object -- The response from metax or if error an error message.

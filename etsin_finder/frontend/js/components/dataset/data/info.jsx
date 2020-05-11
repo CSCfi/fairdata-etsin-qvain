@@ -23,8 +23,9 @@ import { TypeConcept, TypeChecksum } from '../../../utils/propTypes'
 
 const customStyles = {
   content: {
-    minWidth: '35vw',
-    padding: '3em',
+    minWidth: '20vw',
+    maxWidth: '60vw',
+    padding: '2vw',
   },
 }
 

@@ -62,6 +62,7 @@ export default class Idle extends Component {
 
   componentWillUnmount() {
     this.removeEvents()
+    clearTimeout(this.timeout)
   }
 
   setTimeout() {
@@ -89,13 +90,13 @@ export default class Idle extends Component {
   }
 
   removeEvents() {
-    this.props.events.forEach(event => {
+    this.props.events.forEach((event) => {
       window.removeEventListener(event, this.handleEvent, true)
     })
   }
 
   attachEvents() {
-    this.props.events.forEach(event => {
+    this.props.events.forEach((event) => {
       window.addEventListener(event, this.handleEvent, true)
     })
   }

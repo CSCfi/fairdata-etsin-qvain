@@ -9,6 +9,7 @@ import axios from 'axios'
 import { observable, action } from 'mobx'
 
 import Modal from '../../../general/modal'
+import ConfirmClose from '../../general/confirmClose'
 import getReferenceData from '../../utils/getReferenceData'
 import { fileMetadataSchema } from '../../utils/formValidation'
 import { getResponseError } from '../../utils/responseError'
@@ -420,19 +421,12 @@ class MetadataModal extends Component {
           <Translate content={'qvain.files.metadataModal.buttons.save'} />
         </DangerButton>
 
-        {this.state.confirmClose && (
-          <ResponseOverlay>
-            <div style={{ width: '100%' }}>
-              <Translate content={'qvain.files.metadataModal.warning'} component="p" />
-              <AutoWidthTableButton disabled={this.state.loading} onClick={this.hideConfirmClose}>
-                <Translate content={'qvain.files.metadataModal.buttons.cancelClose'} />
-              </AutoWidthTableButton>
-              <DangerButton disabled={this.state.loading} onClick={this.close}>
-                <Translate content={'qvain.files.metadataModal.buttons.confirmClose'} />
-              </DangerButton>
-            </div>
-          </ResponseOverlay>
-        )}
+        <ConfirmClose
+          show={this.state.confirmClose}
+          hideConfirm={this.hideConfirmClose}
+          closeModal={this.close}
+          disabled={this.state.loading}
+        />
 
         {(this.state.loading || this.state.response) && (
           <ResponseOverlay>

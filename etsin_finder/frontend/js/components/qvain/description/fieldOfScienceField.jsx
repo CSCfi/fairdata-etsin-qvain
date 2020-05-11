@@ -108,7 +108,7 @@ class FieldOfScienceField extends React.Component {
           onChange={onChange(options, lang, setFieldOfScience, FieldOfScience)}
         />
         <ButtonContainer>
-          <AddNewButton type="button" onClick={() => addFieldOfScience(fieldOfScience)}>
+          <AddNewButton type="button" onClick={() => addFieldOfScience(fieldOfScience)} disabled={readonly}>
             <Translate content="qvain.description.fieldOfScience.addButton" />
           </AddNewButton>
         </ButtonContainer>

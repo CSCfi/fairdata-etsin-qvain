@@ -1,17 +1,4 @@
-
-const actorsToMetax = actors => {
-  const parsedActor = actors.map(actor => ({
-    type: actor.type,
-    role: actor.role,
-    name: actor.name,
-    email: actor.email ? actor.email : undefined,
-    identifier: actor.identifier ? actor.identifier : undefined,
-    organization: actor.organization,
-  }))
-  return parsedActor
-}
-
-const fieldsOfScienceToMetaxMethod = fieldOfScienceArray => fieldOfScienceArray.map(fieldOfScience =>
+const fieldsOfScienceToMetaxMethod = fieldsOfScience => fieldsOfScience.map(fieldOfScience =>
   fieldOfScience.url)
 
 const directoriesToMetax = (selectedDirectories, existingDirectories) => {
@@ -69,13 +56,17 @@ const handleSubmitToBackend = (values) => {
   } else {
     ({ files, directories } = values.Files.toMetax())
   }
+
+  const actors = values.Actors.toBackend()
+
   const obj = {
     title: values.title,
     description: values.description,
+    issuedDate: values.issuedDate,
     identifiers: values.otherIdentifiersArray,
     fieldOfScience: fieldsOfScienceToMetaxMethod(values.fieldOfScienceArray),
     keywords: values.keywordsArray,
-    actors: actorsToMetax(values.actors),
+    actors,
     accessType: values.accessType ? values.accessType : undefined,
     restrictionGrounds: values.restrictionGrounds ? values.restrictionGrounds.identifier : undefined,
     embargoDate: values.embargoExpDate,
@@ -87,7 +78,8 @@ const handleSubmitToBackend = (values) => {
     dataCatalog: values.dataCatalog,
     cumulativeState: values.cumulativeState,
     files,
-    directories
+    directories,
+    useDoi: values.useDoi,
   }
   return obj
 }
