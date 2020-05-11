@@ -58,7 +58,6 @@ const TablePasState = ({ preservationState }) => {
       text = null
       break
   }
-  console.log(preservationState)
   return (
     <>
       <PasLabel color={PreservationStates[preservationState].color}>PAS</PasLabel>
@@ -76,10 +75,10 @@ const PasText = styled.span`
   margin-left: 10px;
   font-size: 0.8em;
   :before {
-    content: "(";
+    content: '(';
   }
   :after {
-    content: ")";
+    content: ')';
   }
 `
 
