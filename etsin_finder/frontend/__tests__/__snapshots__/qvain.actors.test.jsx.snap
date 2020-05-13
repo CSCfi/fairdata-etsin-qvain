@@ -4,7 +4,7 @@ exports[`Qvain.Actors should render correctly 1`] = `
 <div
   className="container"
 >
-  <styled.h2>
+  <title__SectionTitle>
     <Translate
       component="span"
       content="qvain.actors.title"
@@ -20,12 +20,12 @@ exports[`Qvain.Actors should render correctly 1`] = `
         onClick={[Function]}
       />
     </Tooltip>
-  </styled.h2>
+  </title__SectionTitle>
   <inject-ActorModalBase-with-Stores />
-  <styled.div>
+  <card__Container>
     <inject-AddedActorsBase-with-Stores />
-    <styled.div>
-      <Styled(styled.button)
+    <actors__ButtonContainer>
+      <actors__AddNewButton
         disabled={false}
         onClick={[Function]}
         type="button"
@@ -34,9 +34,9 @@ exports[`Qvain.Actors should render correctly 1`] = `
           component="span"
           content="qvain.actors.addButton"
         />
-      </Styled(styled.button)>
-    </styled.div>
-  </styled.div>
+      </actors__AddNewButton>
+    </actors__ButtonContainer>
+  </card__Container>
 </div>
 `;
 

@@ -1,7 +1,13 @@
 {
   "env": {
+    "development": {
+      "plugins": [
+        ["babel-plugin-styled-components"]
+      ]
+    },
     "test": {
       "plugins": [
+        ["babel-plugin-styled-components"],
         ["@babel/plugin-proposal-decorators", { "legacy": true }],
         ["@babel/plugin-proposal-class-properties", { "loose": true }],
         "@babel/plugin-syntax-dynamic-import",
@@ -14,6 +20,7 @@
     }
   },
   "plugins": [
+    ["babel-plugin-styled-components", { "displayName": false }],
     ["@babel/plugin-proposal-decorators", { "legacy": true }],
     ["@babel/plugin-proposal-class-properties", { "loose": true }],
     "@loadable/babel-plugin",
