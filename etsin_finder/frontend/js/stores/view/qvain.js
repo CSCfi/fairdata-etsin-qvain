@@ -7,7 +7,7 @@ import {
   FileAPIURLs,
   UseCategoryURLs,
   CumulativeStates,
-  DataCatalogIdentifiers
+  DataCatalogIdentifiers,
 } from '../../components/qvain/utils/constants'
 import { getPath } from '../../components/qvain/utils/object'
 import Actors from './qvain.actors'
@@ -43,6 +43,10 @@ class Qvain {
 
   @observable fieldsOfScience = []
 
+  @observable infrastructure = undefined
+
+  @observable infrastructures = []
+
   @observable keywords = []
 
   @observable license = License(undefined, LicenseUrls.CCBY4)
@@ -71,6 +75,8 @@ class Qvain {
     this.otherIdentifiers = []
     this.fieldOfScience = undefined
     this.fieldsOfScience = []
+    this.infrastructure = undefined
+    this.infrastructures = []
     this.keywords = []
     this.license = License(undefined, LicenseUrls.CCBY4)
     this.otherLicenseUrl = undefined
@@ -168,6 +174,17 @@ class Qvain {
   }
 
   @action
+  setInfrastructure = infrastructure => {
+    this.infrastructure = infrastructure
+    this.changed = true
+  }
+
+  @action setInfrastructures = infrastructures => {
+    this.infrastructures = infrastructures
+    this.changed = true
+  }
+
+  @action
   setKeywords = keywords => {
     this.keywords = keywords
     this.changed = true
@@ -181,7 +198,17 @@ class Qvain {
 
   @action
   removeFieldOfScience = fieldOfScienceToRemove => {
-    this.fieldsOfScience = this.fieldsOfScience.filter(fieldOfScience => fieldOfScience.url !== fieldOfScienceToRemove.url)
+    this.fieldsOfScience = this.fieldsOfScience.filter(
+      fieldOfScience => fieldOfScience.url !== fieldOfScienceToRemove.url
+    )
+    this.changed = true
+  }
+
+  @action
+  removeInfrastructure = infrastructureToRemove => {
+    this.infrastructures = this.infrastructures.filter(
+      infra => infra.url !== infrastructureToRemove.url
+    )
     this.changed = true
   }
 
@@ -260,9 +287,10 @@ class Qvain {
 
   // FILE PICKER STATE MANAGEMENT
 
-  @observable legacyFilePicker = process.env.NODE_ENV === 'production' || localStorage.getItem('new_filepicker') !== '1'
+  @observable legacyFilePicker =
+    process.env.NODE_ENV === 'production' || localStorage.getItem('new_filepicker') !== '1'
 
-  @action setLegacyFilePicker = (value) => {
+  @action setLegacyFilePicker = value => {
     this.legacyFilePicker = value
   }
 
@@ -373,15 +401,22 @@ class Qvain {
 
   // Move selected files and directories to existing.
   @action moveSelectedToExisting = () => {
-    this.existingDirectories = this.mergeArraysByIdentifier(this.selectedDirectories, this.existingDirectories)
+    this.existingDirectories = this.mergeArraysByIdentifier(
+      this.selectedDirectories,
+      this.existingDirectories
+    )
     this.selectedDirectories = []
     this.existingFiles = this.mergeArraysByIdentifier(this.selectedFiles, this.existingFiles)
     this.selectedFiles = []
 
     // deselect all items in hierarchy
     const newHier = deepCopy(this.hierarchy)
-    getDirectories(newHier).forEach(dir => { dir.selected = false })
-    getFiles(newHier).forEach(file => { file.selected = false })
+    getDirectories(newHier).forEach(dir => {
+      dir.selected = false
+    })
+    getFiles(newHier).forEach(file => {
+      file.selected = false
+    })
     this.hierarchy = newHier
   }
 
@@ -447,9 +482,9 @@ class Qvain {
       .get(FileAPIURLs.DIR_URL + dirId)
       .then(res => {
         const newDirs = [
-          ...rootDir.directories.map(d =>
-            (d.id === dirId
-              ? {
+          ...rootDir.directories.map(d => {
+            if (d.id === dirId) {
+              return {
                 ...d,
                 directories: res.data.directories.map(newDir =>
                   Directory(
@@ -467,8 +502,9 @@ class Qvain {
                   )
                 ),
               }
-              : d)
-          ),
+            }
+            return d
+          }),
         ]
         rootDir.directories = newDirs
         return rootDir
@@ -520,7 +556,10 @@ class Qvain {
     const flat = getFiles(this.hierarchy)
     const hierarchyFile = flat.find(f => f.identifier === file.identifier)
     if (hierarchyFile) {
-      Object.assign(hierarchyFile, File(file, hierarchyFile.parentDirectory, hierarchyFile.selected))
+      Object.assign(
+        hierarchyFile,
+        File(file, hierarchyFile.parentDirectory, hierarchyFile.selected)
+      )
     }
 
     // Update existing file if available.
@@ -602,10 +641,19 @@ class Qvain {
 
     // Fields of science
     if (researchDataset.field_of_science !== undefined) {
+      this.fieldsOfScience = []
       researchDataset.field_of_science.forEach(element => {
         this.fieldOfScience = FieldOfScience(element.pref_label, element.identifier)
         this.fieldsOfScience.push(this.fieldOfScience)
-      });
+      })
+    }
+
+    if (researchDataset.infrastructure !== undefined) {
+      this.infrastructures = []
+      researchDataset.infrastructure.forEach(element => {
+        this.infrastructure = Infrastructure(element.pref_label, element.identifier)
+        this.infrastructures.push(this.infrastructure)
+      })
     }
 
     // Keywords
@@ -635,12 +683,13 @@ class Qvain {
       } else {
         this.license = l
           ? License(
-            {
-              en: 'Other (URL)',
-              fi: 'Muu (URL)',
-            },
-            'other'
-          ) : License(undefined, LicenseUrls.CCBY4)
+              {
+                en: 'Other (URL)',
+                fi: 'Muu (URL)',
+              },
+              'other'
+            )
+          : License(undefined, LicenseUrls.CCBY4)
         this.otherLicenseUrl = l.license
       }
     } else {
@@ -691,28 +740,32 @@ class Qvain {
       if (this.selectedProject) {
         this.getInitialDirectories()
       }
-      this.existingDirectories = dsDirectories ? dsDirectories.map(d => {
-        // Removed directories don't have details
-        if (!d.details) {
-          d.details = {
-            directory_name: d.title,
-            file_path: '',
-            removed: true
-          }
-        }
-        return DatasetDirectory(d)
-      }) : []
-      this.existingFiles = dsFiles ? dsFiles.map(f => {
-        // Removed files don't have details
-        if (!f.details) {
-          f.details = {
-            file_name: f.title,
-            file_path: '',
-            removed: true
-          }
-        }
-        return DatasetFile(f, undefined, true)
-      }) : []
+      this.existingDirectories = dsDirectories
+        ? dsDirectories.map(d => {
+            // Removed directories don't have details
+            if (!d.details) {
+              d.details = {
+                directory_name: d.title,
+                file_path: '',
+                removed: true,
+              }
+            }
+            return DatasetDirectory(d)
+          })
+        : []
+      this.existingFiles = dsFiles
+        ? dsFiles.map(f => {
+            // Removed files don't have details
+            if (!f.details) {
+              f.details = {
+                file_name: f.title,
+                file_path: '',
+                removed: true,
+              }
+            }
+            return DatasetFile(f, undefined, true)
+          })
+        : []
     }
 
     this.Files.editDataset(dataset)
@@ -729,9 +782,9 @@ class Qvain {
           r.download_url ? r.download_url.identifier : undefined,
           r.use_category
             ? {
-              label: r.use_category.pref_label.en,
-              value: r.use_category.identifier,
-            }
+                label: r.use_category.pref_label.en,
+                value: r.use_category.identifier,
+              }
             : undefined
         )
       )
@@ -791,7 +844,11 @@ class Qvain {
 
   @computed
   get readonly() {
-    return this.preservationState >= 80 && this.preservationState !== 100 && this.preservationState !== 130
+    return (
+      this.preservationState >= 80 &&
+      this.preservationState !== 100 &&
+      this.preservationState !== 130
+    )
   }
 }
 
@@ -839,7 +896,7 @@ export const File = (file, parent, selected) => ({
   csvHasHeader: getPath('file_characteristics.csv_has_header', file),
   csvDelimiter: getPath('file_characteristics.csv_delimiter', file),
   csvRecordSeparator: getPath('file_characteristics.csv_record_separator', file),
-  csvQuotingChar: getPath('file_characteristics.csv_quoting_char', file)
+  csvQuotingChar: getPath('file_characteristics.csv_quoting_char', file),
 })
 
 export const DatasetFile = file => ({
@@ -856,7 +913,7 @@ export const DatasetFile = file => ({
     fileType: file.file_type,
     title: file.title,
   },
-  existing: true
+  existing: true,
 })
 
 const DatasetDirectory = directory => ({
@@ -865,7 +922,7 @@ const DatasetDirectory = directory => ({
   description: directory.description,
   title: directory.title,
   useCategory: directory.use_category.identifier,
-  existing: true
+  existing: true,
 })
 
 export const FieldOfScience = (name, url) => ({
@@ -891,6 +948,16 @@ export const License = (name, identifier) => ({
 export const RestrictionGrounds = (name, identifier) => ({
   name,
   identifier,
+})
+
+export const Infrastructure = (name, url) => ({
+  name,
+  url,
+})
+
+export const Infrastructures = (name, url) => ({
+  name,
+  url,
 })
 
 export const ExternalResource = (id, title, accessUrl, downloadUrl, useCategory) => ({

@@ -22,8 +22,9 @@ const english = {
       open: 'Anyone can access the data.',
       login: 'Users have to log in to access the data.',
       embargo: 'Data can be accessed only after the embargo has expired.',
-      permit: 'Data can be accessed only by applying for permission. You need to be logged in to be able to fill-in the application.',
-      restricted: 'Data cannot be accessed.'
+      permit:
+        'Data can be accessed only by applying for permission. You need to be logged in to be able to fill-in the application.',
+      restricted: 'Data cannot be accessed.',
     },
     access_permission: 'Ask for access',
     access_locked: 'Restricted Access',
@@ -76,7 +77,8 @@ const english = {
     data_location: 'Go to harvested location',
     datasetAsFile: {
       open: 'Open as a file',
-      infoText: 'Datacite without validation: The dataset is shown in Datacite Format but without validation; mandatory fields might be missing. Dataset does not necessarily meet all Datacite requirements.'
+      infoText:
+        'Datacite without validation: The dataset is shown in Datacite Format but without validation; mandatory fields might be missing. Dataset does not necessarily meet all Datacite requirements.',
     },
     dl: {
       root: 'root',
@@ -122,7 +124,7 @@ const english = {
         title: 'Deleted Versions',
         date: 'Delete date',
         version: 'Version',
-        link_to_dataset: 'Link to dataset'
+        link_to_dataset: 'Link to dataset',
       },
       events: {
         title: 'Events',
@@ -183,10 +185,12 @@ const english = {
       homepage: 'Homepage',
     },
     language: 'Language',
-    storedInPas: 'This dataset is stored in Fairdata\'s Digital Preservation Service (data not accessible via Etsin).',
-    pasDatasetVersionExists: 'This is a use copy of this dataset. A copy is also stored in Fairdata\'s Digital Preservation Service. ',
+    storedInPas:
+      "This dataset is stored in Fairdata's Digital Preservation Service (data not accessible via Etsin).",
+    pasDatasetVersionExists:
+      "This is a use copy of this dataset. A copy is also stored in Fairdata's Digital Preservation Service. ",
     originalDatasetVersionExists: 'There is an existing use copy of the dataset. ',
-    linkToPasDataset: 'Click here to open the Digial preservation Service\'s version',
+    linkToPasDataset: "Click here to open the Digial preservation Service's version",
     linkToOriginalDataset: 'You can open the use copy by clicking here',
     enteringPas: 'Entering PAS',
     dataInPasDatasetsCanNotBeDownloaded: 'PAS dataset data cannot be downloaded',
@@ -324,10 +328,11 @@ const english = {
       110: 'Transferring',
       120: 'OK – preserved',
       130: 'Transfer failed',
-      140: 'Available'
+      140: 'Available',
     },
     useDoiHeader: 'Creation of a DOI',
-    useDoiContent: 'You have selected DOI as primary identifier for your dataset instead of URN. DOI requires a defined issued date and a dataset publisher. A DOI (Digital Object Identifier) will be created and stored in the DataCite Service and it cannot be removed. Are you sure you want to select DOI?',
+    useDoiContent:
+      'You have selected DOI as primary identifier for your dataset instead of URN. DOI requires a defined issued date and a dataset publisher. A DOI (Digital Object Identifier) will be created and stored in the DataCite Service and it cannot be removed. Are you sure you want to select DOI?',
     useDoiAffirmative: 'Yes',
     useDoiNegative: 'No',
     unsuccessfullLogin: 'Login unsuccessful.',
@@ -354,6 +359,9 @@ const english = {
       warning: 'You have unsaved changes. Are you sure you want to discard your changes?',
       confirm: 'Yes, discard changes',
       cancel: 'No, continue editing',
+    },
+    select: {
+      placeholder: 'Select option',
     },
     datasets: {
       title: 'Your Datasets',
@@ -417,7 +425,8 @@ const english = {
       },
       issuedDate: {
         title: 'Issued date',
-        infoText: 'Date of formal issuance (publication) of the resource. This value does not affect or reflect the visibility of the dataset itself.',
+        infoText:
+          'Date of formal issuance (publication) of the resource. This value does not affect or reflect the visibility of the dataset itself.',
         instructions: '',
         placeholder: 'Date',
       },
@@ -436,8 +445,7 @@ const english = {
           'Select a value from the dropdown menu. The drop down uses the classification of the Ministry of Education and Culture.',
         placeholder: 'Select option',
         addButton: '+ Add field of science',
-        help:
-          'You can add multiple field of science.',
+        help: 'You can add multiple field of science.',
       },
       keywords: {
         title: 'Keywords',
@@ -456,7 +464,8 @@ const english = {
         infoText:
           'This field sets how the data in your dataset can be accessed. Whichever option is selected does not affect the visibility of the dataset description (metadata) itself; it only affects the openness of the linked data (files). If you select anything else than "Open", you must also choose a reason for the restriction (field "Restriction Grounds" will appear). If you select "Embargo", please also specify the embargo expiration date ("Embargo expiration date" field will appear).',
         placeholder: 'Select option',
-        permitInfo: 'By default the dataset owner (the original describer) can approve the applications. In addition, functionality is under development to allow chosen representatives (only or in addition to the owner) of the dataset\'s organization to make the approvals. By using the access type "Requires permission" the dataset owner agrees to these upcoming changes.'
+        permitInfo:
+          'By default the dataset owner (the original describer) can approve the applications. In addition, functionality is under development to allow chosen representatives (only or in addition to the owner) of the dataset\'s organization to make the approvals. By using the access type "Requires permission" the dataset owner agrees to these upcoming changes.',
       },
       embargoDate: {
         label: 'Embargo expiration date (yyyy-mm-dd)',
@@ -486,7 +495,7 @@ const english = {
       infoText:
         'Add at least one Creator. First, select the type of actor (person or organization). Then choose the roles the actor has (you can add multiple). After that, fill in the details: organization is mandatory for a person. You can edit added actors by clicking the pen icon or remove it by clicking the X icon.',
       errors: {
-        loadingReferencesFailed: 'Error loading reference organizations.'
+        loadingReferencesFailed: 'Error loading reference organizations.',
       },
       add: {
         title: 'Actors',
@@ -497,9 +506,10 @@ const english = {
         groups: {
           type: 'Actor Type',
           roles: 'Roles',
-          info: 'Actor Information'
+          info: 'Actor Information',
         },
-        help: 'Having at least one creator for the dataset is mandatory. Notice that one actor can have multiple roles.',
+        help:
+          'Having at least one creator for the dataset is mandatory. Notice that one actor can have multiple roles.',
         radio: {
           person: 'Person',
           organization: 'Organization',
@@ -539,8 +549,8 @@ const english = {
           options: {
             create: 'Add new organization manually',
             dataset: 'Organizations in dataset',
-            presets: 'Preset organizations'
-          }
+            presets: 'Preset organizations',
+          },
         },
         save: {
           label: 'Save',
@@ -569,7 +579,7 @@ const english = {
         required: 'A description is required in at least one language.',
       },
       issuedDate: {
-        requiredIfUseDoi: 'Issued date must be defined for DOI datasets'
+        requiredIfUseDoi: 'Issued date must be defined for DOI datasets',
       },
       otherIdentifiers: {
         string: 'Other identifiers must be string value.',
@@ -619,7 +629,8 @@ const english = {
         },
         requiredActors: {
           atLeastOneActor: 'You must add at least one actor to your dataset.',
-          mandatoryActors: 'Actors: Creator role is mandatory. Note: one actor can have multiple roles.',
+          mandatoryActors:
+            'Actors: Creator role is mandatory. Note: one actor can have multiple roles.',
           publisherIfDOI: 'Actors: For DOI datasets publisher must be defined.',
         },
       },
@@ -691,33 +702,42 @@ const english = {
           "Fairdata Services need to know whether you are linking files from IDA or remote resources. You can also publish datasets without any files. In that case, please still select either one. The selection cannot be re-done, so if you are not sure whether you'll add files later, select the one you think you'll need in the future.",
         explanation:
           'Choose "IDA" if the data is stored in Fairdata IDA Service. Choose "Remote resources" if the data is in remote location.',
-        doiSelection: 'I want the dataset to have a DOI (digital object identifier) instead of a URN.',
+        doiSelection:
+          'I want the dataset to have a DOI (digital object identifier) instead of a URN.',
         placeholder: 'Select option',
         ida: 'IDA',
         att: 'Remote resources',
-        pas: 'PAS'
+        pas: 'PAS',
       },
       cumulativeState: {
         label: 'Cumulative dataset',
         radio: {
-          no: 'No. (Adding files or folders will automatically create a new version of the dataset.)',
+          no:
+            'No. (Adding files or folders will automatically create a new version of the dataset.)',
           yes: 'Yes. (New files or folders will be added without a version change.)',
-          note: 'Note! Once the dataset has been submitted, changing the value from "No" to "Yes" will cause a new version of the dataset to be created. Change from "Yes" to "No" will not cause a new version.',
+          note:
+            'Note! Once the dataset has been submitted, changing the value from "No" to "Yes" will cause a new version of the dataset to be created. Change from "Yes" to "No" will not cause a new version.',
         },
         enabled: {
           state: 'This dataset has been marked as a cumulative dataset.',
-          explanation: 'It means that data is added to it regularly. If data is no longer being added to this dataset, you should turn it non-cumulative.',
+          explanation:
+            'It means that data is added to it regularly. If data is no longer being added to this dataset, you should turn it non-cumulative.',
           button: 'Turn non-cumulative',
-          note: 'Note! Once changed, turning the dataset back to cumulative will create a new version of the dataset.',
-          confirm: 'Are you sure you want to turn this dataset non-cumulative? If you later wish to change it back to cumulative, a new version will be created!',
+          note:
+            'Note! Once changed, turning the dataset back to cumulative will create a new version of the dataset.',
+          confirm:
+            'Are you sure you want to turn this dataset non-cumulative? If you later wish to change it back to cumulative, a new version will be created!',
           cancel: 'Cancel',
         },
         disabled: {
           state: 'This dataset has been marked non-cumulative.',
-          explanation: 'It means that if new data is added, a new version of the dataset will be created automatically.',
+          explanation:
+            'It means that if new data is added, a new version of the dataset will be created automatically.',
           button: 'Turn cumulative',
-          note: 'Note! Changing the dataset cumulative will create a new version of the dataset. The old version will remain non-cumulative.',
-          confirm: 'Are you sure you want to turn the dataset cumulative (you want to start regularly adding data into it)? A new version will be created and gets a new identifier. The old version stays non-cumulative.',
+          note:
+            'Note! Changing the dataset cumulative will create a new version of the dataset. The old version will remain non-cumulative.',
+          confirm:
+            'Are you sure you want to turn the dataset cumulative (you want to start regularly adding data into it)? A new version will be created and gets a new identifier. The old version stays non-cumulative.',
           cancel: 'Cancel',
         },
         modalHeader: 'Change dataset cumulation',
@@ -737,35 +757,41 @@ const english = {
           save: 'Add files',
           close: 'Close',
         },
-        versionInfo: 'Adding/removing files or folders will create a new version of this dataset when the changes are published. The old version will be tagged as "Old" and the files linked to it will remain untouched.',
+        versionInfo:
+          'Adding/removing files or folders will create a new version of this dataset when the changes are published. The old version will be tagged as "Old" and the files linked to it will remain untouched.',
       },
       refreshModal: {
         header: 'Refresh folder content',
-        noncumulative: 'If new files have been added to the folder, this will add them to the dataset and create a new version of it. The changes will take effect immediately.',
-        cumulative: 'If new files have been added to the folder, this will add them to the dataset. No new dataset version will be created. The changes will take effect immediately.',
+        noncumulative:
+          'If new files have been added to the folder, this will add them to the dataset and create a new version of it. The changes will take effect immediately.',
+        cumulative:
+          'If new files have been added to the folder, this will add them to the dataset. No new dataset version will be created. The changes will take effect immediately.',
         changes: 'You need to save your changes to the dataset first.',
         buttons: {
           show: 'Refresh folder content',
           ok: 'Ok',
           cancel: 'Cancel',
           close: 'Close',
-        }
+        },
       },
       fixDeprecatedModal: {
-        statusText: 'This dataset is deprecated. Some of the files in the dataset are no longer available.',
+        statusText:
+          'This dataset is deprecated. Some of the files in the dataset are no longer available.',
         header: 'Fix Deprecated Dataset',
-        help: 'This will fix the dataset by removing any included files and directories that are no longer available. A new dataset version will be created. The changes will take place immediately.',
+        help:
+          'This will fix the dataset by removing any included files and directories that are no longer available. A new dataset version will be created. The changes will take place immediately.',
         changes: 'You need to save your changes to the dataset first.',
         buttons: {
           show: 'Fix deprecated dataset',
           ok: 'Fix dataset',
           cancel: 'Cancel',
           close: 'Close',
-        }
+        },
       },
       metadataModal: {
         header: 'Edit PAS Metadata',
-        help: 'Saving the data will change the file metadata regardless of whether the file is in your dataset or not.',
+        help:
+          'Saving the data will change the file metadata regardless of whether the file is in your dataset or not.',
         csvOptions: 'CSV Options',
         fields: {
           fileFormat: 'File format',
@@ -774,18 +800,18 @@ const english = {
           csvDelimiter: 'Delimiter',
           csvRecordSeparator: 'Record separator',
           csvQuotingChar: 'Quoting character',
-          csvHasHeader: 'Has header'
+          csvHasHeader: 'Has header',
         },
         errors: {
           formatVersionRequired: 'Invalid or missing file format version.',
           formatVersionNotAllowed: 'File format version is not allowed for selected file format.',
-          loadingFileFormats: 'Failed to load list of allowed file formats.'
+          loadingFileFormats: 'Failed to load list of allowed file formats.',
         },
         buttons: {
           show: 'Edit PAS metadata',
           close: 'Close',
           save: 'Save changes',
-          hideError: 'Continue editing'
+          hideError: 'Continue editing',
         },
         options: {
           delimiter: {
@@ -795,20 +821,21 @@ const english = {
             comma: 'Comma ,',
             colon: 'Colon :',
             dot: 'Dot .',
-            pipe: 'Pipe |'
+            pipe: 'Pipe |',
           },
           header: {
             false: 'No',
-            true: 'Yes'
-          }
+            true: 'Yes',
+          },
         },
         placeholders: {
           noOptions: 'No options available',
           selectOption: 'Select an option',
-          csvQuotingChar: 'Type a character'
-        }
+          csvQuotingChar: 'Type a character',
+        },
       },
-      help: 'Files associated with this dataset. A dataset can only have either IDA files or remote files. File metadata will not be associated with datasets, so remember to save edits to file metadata.',
+      help:
+        'Files associated with this dataset. A dataset can only have either IDA files or remote files. File metadata will not be associated with datasets, so remember to save edits to file metadata.',
       ida: {
         title: 'Fairdata IDA files',
         infoText:
@@ -835,7 +862,7 @@ const english = {
           open: 'Open %(name)s',
           close: 'Close %(name)s',
           select: 'Select %(name)s',
-          deselect: 'Deselect %(name)s'
+          deselect: 'Deselect %(name)s',
         },
         form: {
           title: {
@@ -862,11 +889,15 @@ const english = {
       existing: {
         title: 'Previously selected files',
         help: {
-          noncumulative: "These are the files and folders that you have added before. If you have added a folder and the content has changed  in IDA, it's NOT automatically updated into your dataset. All new files need to be manually added. Note the Versioning Rules!",
-          cumulative: "These are the files and folders that you have added before. If you have added a folder and the content has changed in IDA, it's NOT automatically updated into your dataset. All new files need to be manually added. To be able to remove files, you first need to make the dataset non-cumulative.",
-          pasEditable: 'These are the files in the dataset. You can edit file metadata but cannot add or remove files.',
-          pasReadonly: 'These are the files in the dataset. You can view file metadata but cannot make changes.',
-        }
+          noncumulative:
+            "These are the files and folders that you have added before. If you have added a folder and the content has changed  in IDA, it's NOT automatically updated into your dataset. All new files need to be manually added. Note the Versioning Rules!",
+          cumulative:
+            "These are the files and folders that you have added before. If you have added a folder and the content has changed in IDA, it's NOT automatically updated into your dataset. All new files need to be manually added. To be able to remove files, you first need to make the dataset non-cumulative.",
+          pasEditable:
+            'These are the files in the dataset. You can edit file metadata but cannot add or remove files.',
+          pasReadonly:
+            'These are the files in the dataset. You can view file metadata but cannot make changes.',
+        },
       },
       notificationNewDatasetWillBeCreated: {
         header: 'Editing files and folders',
@@ -897,12 +928,12 @@ const english = {
           accessUrl: {
             label: 'Access URL',
             placeholder: 'https://',
-            infoText: 'Page where the link to the file / license information can be found'
+            infoText: 'Page where the link to the file / license information can be found',
           },
           downloadUrl: {
             label: 'Download URL',
             placeholder: 'https://',
-            infoText: 'Direct link to start the download'
+            infoText: 'Direct link to start the download',
           },
           cancel: {
             label: 'Cancel',
@@ -914,6 +945,15 @@ const english = {
             label: 'Add',
           },
         },
+      },
+    },
+    history: {
+      title: 'Related Material and History',
+      tooltip: 'Related Material and History info',
+      infrastructure: {
+        addButton: 'Add Infrastructure',
+        title: 'Add infrastructure',
+        description: 'Add services and tools that are used to produce the dataset.',
       },
     },
   },

@@ -14,6 +14,7 @@ import Description from './description'
 import Actors from './actors'
 import { qvainFormSchema } from './utils/formValidation'
 import Files from './files'
+import History from './history'
 import {
   QvainContainer,
   SubHeader,
@@ -29,7 +30,7 @@ import Title from './general/title'
 import SubmitResponse from './general/submitResponse'
 import { Button, InvertedButton } from '../general/button'
 import Modal from '../general/modal'
-import DeprecatedState from './deprecatedState';
+import DeprecatedState from './deprecatedState'
 import PasState from './pasState'
 
 const EDIT_DATASET_URL = '/api/datasets/edit'
@@ -144,14 +145,14 @@ class Qvain extends Component {
       console.error(err)
     }
     this.setState({
-      response: getResponseError(err)
+      response: getResponseError(err),
     })
   }
 
   handleCreate = e => {
     if (this.state.useDoiModalIsOpen) {
       this.setState({
-        useDoiModalIsOpen: false
+        useDoiModalIsOpen: false,
       })
     } else {
       e.preventDefault()
@@ -255,7 +256,7 @@ class Qvain extends Component {
 
   showUseDoiInformation() {
     this.setState({
-      useDoiModalIsOpen: true
+      useDoiModalIsOpen: true,
     })
   }
 
@@ -267,7 +268,7 @@ class Qvain extends Component {
   // User closes the dialogue without accepting DOI usage ("no" or "exit")
   closeUseDoiInformation() {
     this.setState({
-      useDoiModalIsOpen: false
+      useDoiModalIsOpen: false,
     })
   }
 
@@ -307,22 +308,28 @@ class Qvain extends Component {
         <StickySubHeaderWrapper>
           <StickySubHeader>
             <ButtonContainer>
-              {original
-                ? (
-                  <SubmitButton ref={this.updateDatasetButton} disabled={readonly} type="button" onClick={this.handleUpdate}>
-                    <Translate content="qvain.edit" />
-                  </SubmitButton>
-                )
-                : (
-                  <SubmitButton
-                    ref={this.submitDatasetButton}
-                    type="button"
-                    onClick={this.props.Stores.Qvain.useDoi === true ? this.showUseDoiInformation : this.handleCreate}
-                  >
-                    <Translate content="qvain.submit" />
-                  </SubmitButton>
-                )
-              }
+              {original ? (
+                <SubmitButton
+                  ref={this.updateDatasetButton}
+                  disabled={readonly}
+                  type="button"
+                  onClick={this.handleUpdate}
+                >
+                  <Translate content="qvain.edit" />
+                </SubmitButton>
+              ) : (
+                <SubmitButton
+                  ref={this.submitDatasetButton}
+                  type="button"
+                  onClick={
+                    this.props.Stores.Qvain.useDoi === true
+                      ? this.showUseDoiInformation
+                      : this.handleCreate
+                  }
+                >
+                  <Translate content="qvain.submit" />
+                </SubmitButton>
+              )}
             </ButtonContainer>
           </StickySubHeader>
           <PasState />
@@ -342,12 +349,8 @@ class Qvain extends Component {
       dataset = (
         <div className="container">
           <ErrorContainer>
-            <ErrorLabel>
-              {this.state.datasetErrorTitle}
-            </ErrorLabel>
-            <ErrorContent>
-              {this.state.datasetErrorDetails}
-            </ErrorContent>
+            <ErrorLabel>{this.state.datasetErrorTitle}</ErrorLabel>
+            <ErrorContent>{this.state.datasetErrorDetails}</ErrorContent>
             <ErrorButtons>
               <Button onClick={this.handleRetry}>Retry</Button>
             </ErrorButtons>
@@ -367,14 +370,10 @@ class Qvain extends Component {
           >
             <Translate content="qvain.useDoiHeader" component="h2" />
             <Translate content="qvain.useDoiContent" component="p" />
-            <Button
-              onClick={this.acceptDoi}
-            >
+            <Button onClick={this.acceptDoi}>
               <Translate content="qvain.useDoiAffirmative" component="span" />
             </Button>
-            <Button
-              onClick={this.closeUseDoiInformation}
-            >
+            <Button onClick={this.closeUseDoiInformation}>
               <Translate content="qvain.useDoiNegative" component="span" />
             </Button>
           </Modal>
@@ -382,6 +381,7 @@ class Qvain extends Component {
           <Actors />
           <RightsAndLicenses />
           <Files />
+          <History />
           <SubmitContainer>
             <Translate component="p" content="qvain.consent" unsafe />
           </SubmitContainer>
@@ -423,20 +423,20 @@ const customStyles = {
 }
 
 const STSD = styled.button`
-    background: ${p => p.theme.color.primary};
-    color: #fafafa;
-    max-height: 0;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    border: none;
-    letter-spacing: 2px;
-    transition: 0.2s ease;
-    &:focus {
+  background: ${(p) => p.theme.color.primary};
+  color: #fafafa;
+  max-height: 0;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: none;
+  letter-spacing: 2px;
+  transition: 0.2s ease;
+  &:focus {
     text-decoration: underline;
     padding: 0.5em;
     max-height: 3em;
-    }
+  }
 `
 const SubHeaderTextContainer = styled.div`
   white-space: nowrap;
@@ -471,8 +471,8 @@ const SubmitContainer = styled(Container)`
 `
 
 const ErrorContainer = styled(Container)`
-  background-color: #FFEBE8;
-  border-bottom: 1px solid rgba(0,0,0,0.3);
+  background-color: #ffebe8;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
 `
 
 const ErrorLabel = styled.p`
@@ -493,7 +493,7 @@ const ErrorButtons = styled.div`
   margin-bottom: -2em;
   margin-top: 1em;
   > button:first-child {
-    margin: 0
+    margin: 0;
   }
 `
 

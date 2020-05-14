@@ -40,6 +40,7 @@ log = app.logger
 
 TOTAL_ITEM_LIMIT = 1000
 
+
 def log_request(f):
     """
     Log request when used as decorator.
@@ -104,6 +105,7 @@ class ProjectFiles(Resource):
         log.warning('User is missing project or project_dir_obj is invalid\npid: {0}'.format(pid))
         return '', 404
 
+
 class FileDirectory(Resource):
     """File/directory related REST endpoints for getting a directory"""
 
@@ -134,6 +136,7 @@ class FileDirectory(Resource):
             return dir_obj, 200
         log.warning('User not authenticated or dir_obj is invalid\ndir_id: {0}'.format(dir_id))
         return '', 404
+
 
 class FileCharacteristics(Resource):
     """REST endpoint for updating file_characteristics of a file."""
@@ -229,6 +232,7 @@ class UserDatasets(Resource):
         log.warning('User not authenticated or result for user_id is invalid\nuser_id: {0}'.format(user_id))
         return '', 404
 
+
 class QvainDataset(Resource):
     """POST and PATCH request handling coming in from Qvain Light. Used for adding/editing datasets in METAX."""
 
@@ -315,13 +319,15 @@ class QvainDataset(Resource):
             log.warning('User: \"{0}\" is not the creator of the dataset. Update operation not allowed. Creator: \"{1}\"'.format(user, creator))
             return {"PermissionError": "User not authorized to to edit dataset."}, 403
 
-        metax_redy_data = edited_data_to_metax(data, original)
+        metax_ready_data = edited_data_to_metax(data, original)
         params = {
             "access_granter": get_encoded_access_granter()
         }
-        metax_response = update_dataset(metax_redy_data, cr_id, last_edit_converted, params)
+        metax_response = update_dataset(metax_ready_data, cr_id, last_edit_converted, params)
         log.debug("METAX RESPONSE: \n{0}".format(metax_response))
+
         return metax_response
+
 
 class QvainDatasetEdit(Resource):
     """Get single dataset for editing."""
