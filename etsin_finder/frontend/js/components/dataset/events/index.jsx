@@ -75,7 +75,7 @@ class Events extends Component {
   constructor(props) {
     super(props)
 
-    const versions = undefined;
+    let versions = undefined;
 
     // Error handling for dataset_version_set
     if (this.props.dataset_version_set) {
@@ -88,7 +88,6 @@ class Events extends Component {
   }
 
   componentDidMount() {
-
     // Error handling for dataset_version_set
     if (this.props.dataset_version_set) {
       this.versions(this.props.dataset_version_set)
@@ -373,6 +372,7 @@ Events.defaultProps = {
   provenance: false,
   other_identifier: false,
   preservation_dataset_origin_version_identifier: undefined,
+  dataset_version_set: undefined,
 }
 
 Events.propTypes = {
