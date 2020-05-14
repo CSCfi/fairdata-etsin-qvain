@@ -75,7 +75,7 @@ class Events extends Component {
   constructor(props) {
     super(props)
 
-    let versions = undefined;
+    let versions;
 
     // Error handling for dataset_version_set
     if (this.props.dataset_version_set) {
