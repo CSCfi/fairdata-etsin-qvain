@@ -359,6 +359,9 @@ const finnish = {
       confirm: 'Kyllä, peru muutokset',
       cancel: 'Ei, jatka muokkausta',
     },
+    select: {
+      placeholder: 'Valitse vaihtoehto',
+    },
     datasets: {
       title: 'Aineistot',
       search: 'Haku',
