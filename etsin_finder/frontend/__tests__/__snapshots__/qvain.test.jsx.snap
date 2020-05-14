@@ -16,7 +16,16 @@ exports[`Qvain dataset list PreservationStates should render <TablePasState /> 1
           "componentId": "tablePasState__PasText-sc-1w7mbwe-1",
           "isStatic": true,
           "rules": Array [
-            "margin-left:10px;font-size:0.8em;:before{content:'(';}:after{content:')';}",
+            "
+  margin-left: 10px;
+  font-size: 0.8em;
+  :before {
+    content: '(';
+  }
+  :after {
+    content: ')';
+  }
+",
           ],
         },
         "displayName": "tablePasState__PasText",
