@@ -47,10 +47,10 @@ def alter_role_data(actor_list, role):
 
     """
     actors = []
-    actor_list_with_role = [x for x in actor_list if role in x["roles"] ]
+    actor_list_with_role = [x for x in actor_list if role in x.get("roles", []) ]
     for actor_object in actor_list_with_role:
         actor_object = deepcopy(actor_object)
-        organizations = actor_object["organizations"]
+        organizations = actor_object.get("organizations", [])
 
         for org in organizations:
             org["@type"] = "Organization"
@@ -63,17 +63,16 @@ def alter_role_data(actor_list, role):
             organization = org
 
         if actor_object["type"] == "person":
-            person = actor_object["person"]
+            person = actor_object.get("person", {})
             actor = {
                 "@type": "Person",
-                "name": person["name"]
+                "name": person.get("name")
             }
             if "email" in person:
-                actor["email"] = person["email"]
+                actor["email"] = person.get("email")
             if "identifier" in person:
-                actor["identifier"] = person["identifier"]
+                actor["identifier"] = person.get("identifier")
 
-            actor["identifier"] = actor_object["person"]["identifier"]
             actor["member_of"] = organization
         else:
             actor = organization

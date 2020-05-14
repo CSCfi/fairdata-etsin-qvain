@@ -251,7 +251,7 @@ const finnish = {
     help: 'Ohjeet',
     home: 'Koti',
     organizations: 'Organisaatiot',
-    addDataset: 'Lisää aineisto',
+    addDataset: 'Lisää/muokkaa aineistoja',
   },
   results: {
     resultsFor: 'Tulokset haulle: ',
@@ -340,9 +340,9 @@ const finnish = {
     notCSCUserLink: ' CSC asiakas porttaalissa',
     notCSCUser2: ' Voit rekisteröityä Hakatunuksella tai ilman.',
     notLoggedIn: 'Kirjaudu sisään CSC -tililläsi käyttääksesi Qvain-light palvelua.',
-    titleCreate: 'Julkaise Aineisto',
-    titleEdit: 'Muokkaa Aineistoa',
-    titleLoading: 'Ladataan Aineistoa',
+    titleCreate: 'Lisää uusi aineisto',
+    titleEdit: 'Muokkaa aineistoa',
+    titleLoading: 'Ladataan aineistoa',
     titleLoadingFailed: 'Aineiston Lataus Epäonnistui',
     error: {
       permission: 'Oikeusvirhe aineiston latauksessa',
@@ -362,8 +362,9 @@ const finnish = {
     datasets: {
       title: 'Aineistot',
       search: 'Haku',
+      searchTitle: 'Hakusana ao. listan filtteröimiseksi',
       help: 'Muokkaa olemassa olevaa aineistoa tai luo uusi',
-      createButton: 'Luo aineisto',
+      createButton: 'Lisää uusi aineisto',
       tableRows: {
         id: 'ID',
         title: 'Otsikko',
@@ -398,6 +399,7 @@ const finnish = {
       reload: 'Lataa uudelleen',
       loading: 'Lataa...',
       errorOccurred: 'Virhe tapahtui',
+      tableHeader: 'Luodut aineistot',
     },
     description: {
       title: 'Kuvaus',
@@ -431,7 +433,7 @@ const finnish = {
           'Jos aineistollasi on jo tunniste (tai useita), yleensä esim. DOI, anna ne tässä. Olemassaolevien tunnisteiden lisäksi aineisto saa tallennusvaiheessa pysyvän tunnisteen, joka tulee resolvoitumaan Etsimen laskeutumissivulle.',
         instructions:
           'Metadatan tunniste luodaan automaattisesti mutta jos on jo OLEMASSA OLEVA tunniste, syötä se tähän.',
-        addButton: '+ Lisää uusi',
+        addButton: 'Lisää tunniste',
         alreadyAdded: 'Tunniste on jo lisätty',
       },
       fieldOfScience: {
@@ -439,7 +441,7 @@ const finnish = {
         infoText:
           'Valitse tieteenala. Alasvetovalikkosa on Opetus- ja Kulttuuriministeriön mukainen luokitus tieteenaloille.',
         placeholder: 'Valitse vaihtoehto',
-        addButton: '+ Lisää tieteenala',
+        addButton: 'Lisää tieteenala',
         help: 'Voit lisätä useita tieteenaloja.',
       },
       keywords: {
@@ -549,7 +551,7 @@ const finnish = {
           },
         },
         save: {
-          label: 'Tallenna',
+          label: 'Lisää toimija',
         },
         cancel: {
           label: 'Peruuta',
@@ -970,7 +972,7 @@ const finnish = {
   userAuthenticationError: {
     header: 'Kirjautuminen epäonnistui.',
     content:
-      'Tarkistathan, että sinulla on voimassaoleva CSC-tunnus (Qvaimen ja Qvain Lightin käyttö vaatii sen). Jos yritit kirjaututua jollain toisella tunnuksella (esim. Haka), sitä ei todennäköisesti ole liitetty CSC-tunnukseen. Voit rekisteröidä itsellesi CSC-tunnuksen osoitteessa https://sui.csc.fi.',
+      'Tarkistathan, että sinulla on voimassaoleva CSC-tunnus (Qvaimen ja Qvain Lightin käyttö vaatii sen). Jos yritit kirjaututua jollain toisella tunnuksella (esim. Haka), sitä ei todennäköisesti ole liitetty CSC-tunnukseen. Lisäohjeita CSC-tunnuksen rekisteröimiseksi: https://docs.csc.fi/#accounts/how-to-create-new-user-account/',
   },
   userHomeOrganizationErrror: {
     header: 'Kirjautuminen epäonnistui.',

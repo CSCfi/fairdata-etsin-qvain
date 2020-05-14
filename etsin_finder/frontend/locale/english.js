@@ -252,7 +252,7 @@ const english = {
     help: 'Help',
     home: 'Home',
     organizations: 'Organizations',
-    addDataset: 'Add dataset',
+    addDataset: 'Create/edit datasets',
   },
   results: {
     resultsFor: 'Results for query: ',
@@ -297,7 +297,7 @@ const english = {
     },
   },
   qvain: {
-    submit: 'Submit Dataset',
+    submit: 'Save and Publish',
     edit: 'Update Dataset',
     consent:
       'By using Qvain Light the user agrees that he or she has asked consent from all persons whose personal information the user will add to the descriptive data and informed them of how they can get their personal data removed. By using Qvain Light the user agrees to the <a href="https://www.fairdata.fi/hyodyntaminen/kayttopolitiikat-ja-ehdot/">Terms of Usage</a>.',
@@ -341,9 +341,9 @@ const english = {
     notCSCUserLink: ' CSC Customer Portal',
     notCSCUser2: ' You can register with or without Haka account.',
     notLoggedIn: 'Please login with your CSC account to use Qvain-light service.',
-    titleCreate: 'Publish Dataset',
-    titleEdit: 'Edit Dataset',
-    titleLoading: 'Loading Dataset',
+    titleCreate: 'Create new dataset',
+    titleEdit: 'Edit dataset',
+    titleLoading: 'Loading dataset',
     titleLoadingFailed: 'Loading dataset failed',
     error: {
       permission: 'Permission error loading dataset',
@@ -366,8 +366,9 @@ const english = {
     datasets: {
       title: 'Your Datasets',
       search: 'Search',
+      searchTitle: 'Search from the list (to filter the datasets)',
       help: 'Choose a dataset to edit or create a new dataset',
-      createButton: 'Create dataset',
+      createButton: 'Create new dataset',
       tableRows: {
         id: 'ID',
         title: 'Title',
@@ -402,6 +403,7 @@ const english = {
       reload: 'Reload',
       loading: 'Loading...',
       errorOccurred: 'An error occurred',
+      tableHeader: 'Created datasets',
     },
     description: {
       title: 'Description',
@@ -436,7 +438,7 @@ const english = {
           "If your dataset already has an identifier (usually a DOI) insert it here. The dataset still gets the permanent identifier which resolves to Etsin's Landing page.",
         instructions:
           'Identifier for the metadata will be created automatically but if there already is an EXISTING identifier please insert it here.',
-        addButton: '+ Add new',
+        addButton: 'Add identifiers',
         alreadyAdded: 'Identifier already added',
       },
       fieldOfScience: {
@@ -444,7 +446,7 @@ const english = {
         infoText:
           'Select a value from the dropdown menu. The drop down uses the classification of the Ministry of Education and Culture.',
         placeholder: 'Select option',
-        addButton: '+ Add field of science',
+        addButton: 'Add field of science',
         help: 'You can add multiple field of science.',
       },
       keywords: {
@@ -553,7 +555,7 @@ const english = {
           },
         },
         save: {
-          label: 'Save',
+          label: 'Add actor',
         },
         cancel: {
           label: 'Cancel',
@@ -971,7 +973,7 @@ const english = {
   userAuthenticationError: {
     header: 'Login unsuccessful.',
     content:
-      'Please make sure that you have a valid CSC account. If you tried to log in with an external account (for example Haka) you might get this error if your account is not associated with a CSC account. Please register a CSC account at https://sui.csc.fi. You can register with or without a Haka account.',
+      'Please make sure that you have a valid CSC account. If you tried to log in with an external account (for example Haka) you might get this error if your account is not associated with CSC account. Please see more instructions in: https://docs.csc.fi/#accounts/how-to-create-new-user-account/',
   },
   userHomeOrganizationErrror: {
     header: 'Login unsuccessful.',
