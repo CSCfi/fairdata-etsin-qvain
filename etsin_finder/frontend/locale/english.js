@@ -467,7 +467,7 @@ const english = {
           'By default the dataset owner (the original describer) can approve the applications. In addition, functionality is under development to allow chosen representatives (only or in addition to the owner) of the dataset\'s organization to make the approvals. By using the access type "Requires permission" the dataset owner agrees to these upcoming changes.',
       },
       embargoDate: {
-        label: 'Embargo expiration date (yyyy-mm-dd)',
+        label: 'Embargo expiration date',
         placeholder: 'Date',
         help: 'By default, expiration date will be indefinite if not set.',
       },
