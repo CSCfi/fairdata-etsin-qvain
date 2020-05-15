@@ -363,7 +363,8 @@ const finnish = {
       title: 'Aineistot',
       search: {
         hidden: 'Haku',
-        placeholder: 'Hakusana ao. listan filtteröimiseksi',
+        searchTitle: 'Hakusana ao. listan filtteröimiseksi',
+        placeholder: 'Suodata aineiston nimen mukaan',
       },
       help: 'Muokkaa olemassa olevaa aineistoa tai luo uusi',
       createButton: 'Lisää uusi aineisto',

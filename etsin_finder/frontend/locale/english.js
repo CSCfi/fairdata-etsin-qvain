@@ -364,7 +364,8 @@ const english = {
       title: 'Your Datasets',
       search: {
         hidden: 'Search',
-        placeholder: 'Search from the list (to filter the datasets)',
+        searchTitle: 'Search from the list (to filter the datasets)',
+        placeholder: 'Filter datasets by name',
       },
       help: 'Choose a dataset to edit or create a new dataset',
       createButton: 'Create new dataset',

@@ -229,13 +229,13 @@ class DatasetTable extends Component {
     const searchInput =
       noOfDatasets > this.minOfDataSetsForSearchTool ? (
         <>
-          <Translate component={SearchLabel} content="qvain.datasets.searchTitle" />
+          <Translate component={SearchLabel} content="qvain.datasets.search.searchTitle" />
           <SearchField>
             <Translate
               className="visuallyhidden"
               htmlFor="datasetSearchInput"
               component={inputLabel}
-              content="qvain.datasets.search"
+              content="qvain.datasets.search.hidden"
             />
             <Translate
               component={SearchInput}
