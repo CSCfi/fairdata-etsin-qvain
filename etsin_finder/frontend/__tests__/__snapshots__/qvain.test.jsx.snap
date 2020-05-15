@@ -2,36 +2,36 @@
 
 exports[`Qvain dataset list PreservationStates should render <TablePasState /> 1`] = `
 <Fragment>
-  <Styled(styled.div)
+  <tablePasState__PasLabel
     color="primary"
   >
     PAS
-  </Styled(styled.div)>
+  </tablePasState__PasLabel>
   <Translate
     component={
       Object {
         "$$typeof": Symbol(react.forward_ref),
         "attrs": Array [],
         "componentStyle": ComponentStyle {
-          "componentId": "sc-ePZHVD",
+          "componentId": "tablePasState__PasText-sc-1w7mbwe-1",
           "isStatic": true,
           "rules": Array [
             "
   margin-left: 10px;
   font-size: 0.8em;
   :before {
-    content: \\"(\\";
+    content: '(';
   }
   :after {
-    content: \\")\\";
+    content: ')';
   }
 ",
           ],
         },
-        "displayName": "styled.span",
+        "displayName": "tablePasState__PasText",
         "foldedComponentIds": Array [],
         "render": [Function],
-        "styledComponentId": "sc-ePZHVD",
+        "styledComponentId": "tablePasState__PasText-sc-1w7mbwe-1",
         "target": "span",
         "toString": [Function],
         "warnTooManyClasses": [Function],
@@ -53,7 +53,7 @@ exports[`Qvain.Description should render <Description /> 1`] = `
 <div
   className="container"
 >
-  <styled.h2>
+  <title__SectionTitle>
     <Translate
       component="span"
       content="qvain.description.title"
@@ -69,7 +69,7 @@ exports[`Qvain.Description should render <Description /> 1`] = `
         onClick={[Function]}
       />
     </Tooltip>
-  </styled.h2>
+  </title__SectionTitle>
   <inject-DescriptionField-with-Stores />
   <inject-IssuedDateField-with-Stores />
   <inject-OtherIdentifierField-with-Stores />
@@ -572,14 +572,14 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
 
 exports[`Qvain.RightsAndLicenses should render <AccessType /> 1`] = `
 <Card>
-  <styled.label
+  <form__LabelLarge
     htmlFor="accessTypeSelect"
   >
     <Translate
       component="span"
       content="qvain.rightsAndLicenses.accessType.title"
     />
-  </styled.label>
+  </form__LabelLarge>
   <Translate
     attributes={
       Object {
@@ -601,20 +601,20 @@ exports[`Qvain.RightsAndLicenses should render <AccessType /> 1`] = `
       }
     }
   />
-  <styled.p />
+  <validationError__ValidationError />
 </Card>
 `;
 
 exports[`Qvain.RightsAndLicenses should render <Licenses /> 1`] = `
 <Card>
-  <styled.label
+  <form__LabelLarge
     htmlFor="licenseSelect"
   >
     <Translate
       component="span"
       content="qvain.rightsAndLicenses.license.title"
     />
-  </styled.label>
+  </form__LabelLarge>
   <Translate
     attributes={
       Object {
@@ -643,7 +643,7 @@ exports[`Qvain.RightsAndLicenses should render <RightsAndLicenses /> 1`] = `
 <div
   className="container"
 >
-  <styled.h2>
+  <title__SectionTitle>
     <Translate
       component="span"
       content="qvain.rightsAndLicenses.title"
@@ -659,7 +659,7 @@ exports[`Qvain.RightsAndLicenses should render <RightsAndLicenses /> 1`] = `
         onClick={[Function]}
       />
     </Tooltip>
-  </styled.h2>
+  </title__SectionTitle>
   <inject-License-with-Stores />
   <inject-AccessType-with-Stores />
 </div>
