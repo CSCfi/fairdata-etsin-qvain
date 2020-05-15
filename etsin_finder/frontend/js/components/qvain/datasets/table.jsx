@@ -66,7 +66,7 @@ class DatasetTable extends Component {
     const url = `${USER_DATASETS_URL}${this.props.Stores.Auth.user.name}?no_pagination=true`
     return axios
       .get(url)
-      .then((result) => {
+      .then(result => {
         const datasets = [...result.data]
         this.setState(
           {
@@ -80,20 +80,20 @@ class DatasetTable extends Component {
           this.handleChangePage(1)
         )
       })
-      .catch((e) => {
+      .catch(e => {
         console.log(e.message)
         this.setState({ loading: false, error: true, errorMessage: 'Failed to load datasets' })
       })
   }
 
-  handleRemove = (identifier) => (event) => {
+  handleRemove = identifier => event => {
     event.preventDefault()
     axios
       .delete(`/api/dataset/${identifier}`)
       .then(() => {
-        const datasets = [...this.state.datasets.filter((d) => d.identifier !== identifier)]
+        const datasets = [...this.state.datasets.filter(d => d.identifier !== identifier)]
         this.setState(
-          (state) => ({
+          state => ({
             datasets,
             filtered: this.filterByTitle(state.searchTerm, datasets),
             removeModalOpen: false,
@@ -105,12 +105,12 @@ class DatasetTable extends Component {
           }
         )
       })
-      .catch((err) => {
+      .catch(err => {
         this.setState({ error: true, errorMessage: err.message })
       })
   }
 
-  openRemoveModal = (identifier) => () => {
+  openRemoveModal = identifier => () => {
     this.setState({
       removeModalOpen: true,
       removableDatasetIdentifier: identifier,
@@ -129,21 +129,30 @@ class DatasetTable extends Component {
     return !loading && !error && datasets.length === 0
   }
 
-  handleEnterEdit = (dataset) => () => {
+  handleEnterEdit = dataset => () => {
     this.props.Stores.Qvain.editDataset(dataset)
     this.props.history.push(`/qvain/dataset/${dataset.identifier}`)
   }
 
-  handleChangePage = (pageNum) => () => {
+  handleChangePage = pageNum => () => {
     const actualNum = pageNum - 1
-    this.setState((state) => ({
-      count: state.datasets.length,
+    this.setState(state => ({
       onPage: state.filtered.slice(actualNum * state.limit, actualNum * state.limit + state.limit),
       page: pageNum,
     }))
   }
 
-  formatDatasetDateCreated = (datasetDateCreated) => {
+  filterByTitle = (searchStr, datasets) => {
+    return searchStr.trim().length > 0
+      ? datasets.filter(ds => {
+          const titles = Object.values(ds.research_dataset.title)
+          const matches = titles.map(title => title.toLowerCase().includes(searchStr.toLowerCase())) // ignore cases
+          return matches.includes(true)
+        })
+      : datasets
+  }
+
+  formatDatasetDateCreated = datasetDateCreated => {
     const timestampCurrentTime = moment(this.state.currentTimestamp)
     const timestampDateCreated = moment(datasetDateCreated)
 
@@ -196,34 +205,18 @@ class DatasetTable extends Component {
     return formattedDate
   }
 
-  createDatasetPagination = (id) => {
-    const { page, count, limit, datasets } = this.state
-    const noOfVisibleDatasets = count || datasets.length
-    return noOfVisibleDatasets > limit ? (
-      <DatasetPagination
-        id={id}
-        page={page}
-        count={count}
-        limit={limit}
-        onChangePage={this.handleChangePage}
-      />
-    ) : null
-  }
-
-  filterByTitle(searchStr, datasets) {
-    return searchStr.trim().length > 0
-      ? datasets.filter((ds) => {
-          const titles = Object.values(ds.research_dataset.title)
-          const matches = titles.map((title) =>
-            title.toLowerCase().includes(searchStr.toLowerCase())
-          ) // ignore cases
-          return matches.includes(true)
-        })
-      : datasets
-  }
-
   render() {
-    const { onPage, loading, error, errorMessage, page, searchTerm, datasets } = this.state
+    const {
+      onPage,
+      loading,
+      error,
+      errorMessage,
+      page,
+      searchTerm,
+      datasets,
+      count,
+      limit,
+    } = this.state
 
     const noOfDatasets = datasets.length
     const searchInput =
@@ -242,17 +235,17 @@ class DatasetTable extends Component {
               id="datasetSearchInput"
               attributes={{ placeholder: 'qvain.datasets.search.placeholder' }}
               value={searchTerm}
-              onChange={(event) => {
+              onChange={event => {
                 const searchStr = event.target.value
                 this.setState(
-                  (state) => ({
+                  state => ({
                     searchTerm: searchStr,
                     // if we have a search term, look through all the titles of all the datasets and return the matching datasets
                     filtered: this.filterByTitle(searchStr, state.datasets),
                   }),
                   () => {
                     // as the callback, set count to reflect the new filtered datasets
-                    this.setState((state) => ({ count: state.filtered.length }))
+                    this.setState(state => ({ count: state.filtered.length }))
                     // reload
                     this.handleChangePage(page)()
                   }
@@ -265,8 +258,6 @@ class DatasetTable extends Component {
     return (
       <Fragment>
         {searchInput}
-        {this.createDatasetPagination('pagination-top')}
-        <Translate component={'h3'} content="qvain.datasets.tableHeader" />
         <TablePadded className="table">
           <TableHeader>
             <Row>
@@ -297,7 +288,7 @@ class DatasetTable extends Component {
               <Translate component={TableNote} content="qvain.datasets.noDatasets" />
             )}
             {!error &&
-              onPage.map((dataset) => (
+              onPage.map(dataset => (
                 <Row key={dataset.identifier} tabIndex="0">
                   <BodyCellWordWrap>
                     {dataset.research_dataset.title.en || dataset.research_dataset.title.fi}
@@ -342,7 +333,13 @@ class DatasetTable extends Component {
               ))}
           </TableBody>
         </TablePadded>
-        {this.createDatasetPagination('pagination-bottom')}
+        <DatasetPagination
+          id="pagnation-bottom"
+          page={page}
+          count={count}
+          limit={limit}
+          onChangePage={this.handleChangePage}
+        />
         <Modal
           isOpen={this.state.removeModalOpen}
           onRequestClose={this.closeRemoveModal}
@@ -374,15 +371,16 @@ const TablePadded = styled(Table)`
   margin-top: 30px;
   margin-bottom: 30px;
 `
-const SearchLabel = styled.div`
-  font-family: 'Lato', sans-serif;
-  margin-bottom: 7px;
-`
 
 const SearchField = styled(FormField)`
   vertical-align: middle;
   width: 100%;
   align-items: center;
+`
+
+const SearchLabel = styled.div`
+  font-family: 'Lato', sans-serif;
+  margin-bottom: 7px;
 `
 
 const SearchInput = styled(Input)`
