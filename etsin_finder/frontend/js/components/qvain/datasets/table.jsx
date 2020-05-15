@@ -193,9 +193,10 @@ class DatasetTable extends Component {
       <Fragment>
         <SearchField>
           <Translate className="visuallyhidden" htmlFor="datasetSearchInput" component={inputLabel} content="qvain.datasets.search.hidden" />
-          <SearchInput
+          <Translate
+            component={SearchInput}
             id="datasetSearchInput"
-            placeholder={translate('qvain.datasets.search.placeholder')}
+            attributes={{ placeholder: 'qvain.datasets.search.placeholder' }}
             value={searchTerm}
             onChange={(event) => {
               const searchStr = event.target.value
