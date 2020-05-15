@@ -3,13 +3,10 @@ import PropTypes from 'prop-types'
 import { inject, observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 import translate from 'counterpart'
-import moment from 'moment'
-import parseDate from 'moment-parseformat'
 import Card from '../general/card'
 import ValidationError from '../general/validationError'
 import { LabelLarge } from '../general/form'
 import { issuedDateSchema } from '../utils/formValidation';
-import DateFormats from '../utils/date'
 import { DatePicker, handleDatePickerChange, getDateFormatLocale } from '../general/datepicker'
 
 class IssuedDateField extends React.Component {
@@ -41,25 +38,6 @@ class IssuedDateField extends React.Component {
     }
   }
 
-  prepareDate = (dateStr) => {
-    const date = moment(dateStr, parseDate(dateStr, {
-      preferredOrder: {
-        '.': 'DMY',
-        '/': 'MDY',
-        '-': 'YMD'
-      }
-    }))
-    if (date.isValid()) return date.format(DateFormats.ISO8601_DATE_FORMAT)
-    return null
-  }
-
-  handleDatePickerChange = dateStr => {
-    const { setIssuedDate } = this.props.Stores.Qvain
-    const date = this.prepareDate(dateStr)
-    setIssuedDate(date)
-  }
-
-
   render() {
     const { setIssuedDate, issuedDate, readonly } = this.props.Stores.Qvain
     const { lang } = this.props.Stores.Locale
@@ -73,9 +51,10 @@ class IssuedDateField extends React.Component {
         </LabelLarge>
         <Translate component="p" content="qvain.description.issuedDate.infoText" />
         <DatePicker
+          strictParsing
           selected={issuedDate ? new Date(issuedDate) : ''}
-          onChangeRaw={(e) => handleDatePickerChange(e.target.value, setIssuedDate)}
-          onChange={(date) => handleDatePickerChange(date.toISOString(), setIssuedDate)}
+          onChangeRaw={(e) => e && handleDatePickerChange(e.target.value, setIssuedDate)}
+          onChange={(date) => date && handleDatePickerChange(date.toISOString(), setIssuedDate)}
           locale={lang}
           placeholderText={translate('qvain.description.issuedDate.placeholder')}
           dateFormat={getDateFormatLocale(lang)}

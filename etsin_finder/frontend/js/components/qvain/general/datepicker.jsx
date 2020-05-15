@@ -19,7 +19,7 @@ export const DatePicker = styled(ReactDatePicker)`
 export const getDateFormatLocale = (lang) => {
     const locale = {
         fi: 'dd.MM.yyyy',
-        en: 'MM-dd-yyyy'
+        en: 'MM/dd/yyyy'
     }
     return locale[lang]
 }
@@ -41,6 +41,6 @@ const prepareDate = (dateStr) => {
         })
     )
 
-    if (date.isValid) return date.format(DateFormats.ISO8601_DATE_FORMAT)
+    if (date.isValid()) return date.format(DateFormats.ISO8601_DATE_FORMAT)
     return undefined
 }

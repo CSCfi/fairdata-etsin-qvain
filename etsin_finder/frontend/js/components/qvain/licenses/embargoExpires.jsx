@@ -45,6 +45,7 @@ class EmbargoExpires extends Component {
       <Fragment>
         <Translate component={Label} content="qvain.rightsAndLicenses.embargoDate.label" />
         <DatePicker
+          strictParsing
           selected={embargoExpDate ? new Date(embargoExpDate) : null}
           onChangeRaw={(e) => e && handleDatePickerChange(e.target.value, setEmbargoExpDate)}
           onChange={(date) => date && handleDatePickerChange(date.toISOString(), setEmbargoExpDate)}
