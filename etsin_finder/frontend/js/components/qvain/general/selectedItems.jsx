@@ -13,8 +13,8 @@ class SelectedItems extends Component {
 
     return getter.map((item) => (
       <Label color="primary" margin="0 0.5em 0.5em 0" key={`selected_${item.url}`}>
-        <PaddedWord>{item.name[lang]}</PaddedWord>
-        <FontAwesomeIcon onClick={() => this.removeFieldOfScience(item)} icon={faTimes} size="xs" />
+        <PaddedWord>{item.name[lang] || item.name.und}</PaddedWord>
+        <FontAwesomeIcon onClick={() => this.props.handleClick(item)} icon={faTimes} size="xs" />
       </Label>
     ))
   }
@@ -27,6 +27,7 @@ class SelectedItems extends Component {
 SelectedItems.propTypes = {
   Stores: PropTypes.object.isRequired,
   getter: PropTypes.array.isRequired,
+  handleClick: PropTypes.func.isRequired
 }
 
 const PaddedWord = styled.span`

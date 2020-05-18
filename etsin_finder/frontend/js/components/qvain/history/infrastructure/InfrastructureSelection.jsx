@@ -11,6 +11,10 @@ class InfrastructureSelection extends Component {
     Stores: PropTypes.object.isRequired,
   }
 
+  handleSelectedItemClick = (item) => {
+    this.props.Stores.Qvain.removeInfrastructure(item)
+  }
+
   render() {
     const {
       setInfrastructure,
@@ -20,7 +24,7 @@ class InfrastructureSelection extends Component {
     } = this.props.Stores.Qvain
     return (
       <>
-        <SelectedItems getter={infrastructures} />
+        <SelectedItems getter={infrastructures} handleClick={this.handleSelectedItemClick} />
         <Select
           name="infrastructure"
           getter={infrastructure}

@@ -1,9 +1,8 @@
 import React from 'react'
 
+// add tooltip content here when it is available
 const TooltipContent = () => (
   <>
-    <h2>some stuff</h2>
-    <div>some other stuff</div>
   </>
 )
 
