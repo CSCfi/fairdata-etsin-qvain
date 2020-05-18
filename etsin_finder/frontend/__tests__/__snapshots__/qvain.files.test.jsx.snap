@@ -94,6 +94,7 @@ Object {
     },
   ],
   "identifiers": Array [],
+  "infrastructure": Array [],
   "issuedDate": undefined,
   "keywords": Array [
     "keyword",
@@ -218,6 +219,7 @@ Object {
     },
   ],
   "identifiers": Array [],
+  "infrastructure": Array [],
   "issuedDate": undefined,
   "keywords": Array [
     "keyword",
@@ -343,6 +345,7 @@ Object {
     },
   ],
   "identifiers": Array [],
+  "infrastructure": Array [],
   "issuedDate": undefined,
   "keywords": Array [
     "keyword",
@@ -448,6 +451,7 @@ Object {
     },
   ],
   "identifiers": Array [],
+  "infrastructure": Array [],
   "issuedDate": undefined,
   "keywords": Array [
     "keyword",
@@ -553,6 +557,7 @@ Object {
     },
   ],
   "identifiers": Array [],
+  "infrastructure": Array [],
   "issuedDate": undefined,
   "keywords": Array [
     "keyword",
