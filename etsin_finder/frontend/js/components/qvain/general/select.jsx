@@ -35,11 +35,11 @@ class Select extends Component {
           const list = res.data.hits.hits
           const refsEn = list.map(ref => ({
             value: ref._source.uri,
-            label: ref._source.label.en,
+            label: ref._source.label.en || ref._source.label.und,
           }))
           const refsFi = list.map(ref => ({
             value: ref._source.uri,
-            label: ref._source.label.fi,
+            label: ref._source.label.fi || ref._source.label.und,
           }))
           this.setState({
             options: {
@@ -68,7 +68,6 @@ class Select extends Component {
   componentWillUnmount() {
     this.promises.forEach(promise => promise && promise.cancel && promise.cancel())
   }
-
 
   render() {
     const { readonly } = this.props.Stores.Qvain
