@@ -640,16 +640,17 @@ class Qvain {
       : []
 
     // Fields of science
+    this.fieldsOfScience = []
     if (researchDataset.field_of_science !== undefined) {
-      this.fieldsOfScience = []
       researchDataset.field_of_science.forEach(element => {
         this.fieldOfScience = FieldOfScience(element.pref_label, element.identifier)
         this.fieldsOfScience.push(this.fieldOfScience)
       })
     }
 
+    // infrastructures
+    this.infrastructures = []
     if (researchDataset.infrastructure !== undefined) {
-      this.infrastructures = []
       researchDataset.infrastructure.forEach(element => {
         this.infrastructure = Infrastructure(element.pref_label, element.identifier)
         this.infrastructures.push(this.infrastructure)
