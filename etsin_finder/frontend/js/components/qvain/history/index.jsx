@@ -9,7 +9,7 @@ const translations = {
 }
 
 const components = {
-  TooltipContent,
+  tooltipContent: TooltipContent,
 }
 
 const fieldProps = {

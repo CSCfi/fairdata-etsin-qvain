@@ -12,19 +12,19 @@ class Field extends PureComponent {
       tooltip: PropTypes.string.isRequired,
     }).isRequired,
     components: PropTypes.exact({
-      TooltipContent: PropTypes.elementType.isRequired,
+      tooltipContent: PropTypes.elementType.isRequired,
     }).isRequired,
     children: PropTypes.object.isRequired,
   }
 
   render() {
     const { title, tooltip } = this.props.translations
-    const { TooltipContent } = this.props.components
+    const { tooltipContent } = this.props.components
     return (
       <div className="container">
         <SectionTitle>
           <Translate content={title} />
-          <QvainTooltip tooltipAriaLabel={tooltip} TooltipContent={TooltipContent} />
+          <QvainTooltip tooltipAriaLabel={tooltip} tooltipContent={tooltipContent} />
         </SectionTitle>
         <Container>{this.props.children}</Container>
       </div>

@@ -7,7 +7,7 @@ import { HelpIcon } from './form'
 class QvainTooltip extends PureComponent {
   static propTypes = {
     tooltipAriaLabel: PropTypes.string.isRequired,
-    TooltipContent: PropTypes.elementType.isRequired,
+    tooltipContent: PropTypes.elementType.isRequired,
   }
 
   state = {
@@ -15,7 +15,8 @@ class QvainTooltip extends PureComponent {
   }
 
   render() {
-    const { TooltipContent, tooltipAriaLabel } = this.props
+    const { tooltipContent, tooltipAriaLabel } = this.props
+    const TooltipContent = tooltipContent
     return (
       <Tooltip
         isOpen={this.state.tooltipOpen}
