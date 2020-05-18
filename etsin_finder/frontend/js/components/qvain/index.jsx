@@ -31,6 +31,7 @@ import Description from './description'
 import Actors from './actors'
 import { qvainFormSchema } from './utils/formValidation'
 import Files from './files'
+import History from './history'
 import {
   QvainContainer,
   SubHeader,
@@ -407,6 +408,7 @@ class Qvain extends Component {
           <Actors />
           <RightsAndLicenses />
           <Files />
+          <History />
           <SubmitContainer>
             <Translate component="p" content="qvain.consent" unsafe />
           </SubmitContainer>

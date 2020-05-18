@@ -98,6 +98,10 @@ class DatasetValidationSchema(Schema):
     accessType = fields.Dict(
         required=True
     )
+    infrastructure = fields.List(
+        fields.Dict(),
+        required=False
+    )
     embargoDate = fields.Str()
     restrictionGrounds = fields.Str()
     license = fields.Dict()

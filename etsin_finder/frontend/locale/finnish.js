@@ -359,6 +359,9 @@ const finnish = {
       confirm: 'Kyllä, peru muutokset',
       cancel: 'Ei, jatka muokkausta',
     },
+    select: {
+      placeholder: 'Valitse vaihtoehto',
+    },
     datasets: {
       title: 'Aineistot',
       search: 'Haku',
@@ -946,6 +949,30 @@ const finnish = {
             label: 'Lisää',
           },
         },
+      },
+    },
+    history: {
+      title: 'Aineistoon liittyvä materiaali ja historia',
+      tooltip: 'Aineestoon liittyvä materiaali ja historia info',
+      tooltipContent: {
+        reference: {
+          title: 'Viittaukset',
+          paragraph: 'Viittaukset muihin aineistoihin, julkaisuihin tai muihin resursseihin, jotka auttavat ymmärtämään ja käyttämään tätä tutkimusaineistoa. '
+        },
+        provience: {
+          title: 'Historiatiedot',
+          paragraph: 'Tiedot aineiston historiasta eli provenienssista.'
+        },
+        infrastructure: {
+          title: 'Infrastruktuuri',
+          paragraph: 'Palvelut tai työkalut, joita aineiston tuottamisessa on hyödynnetty.'
+        }
+      },
+      infrastructure: {
+        addButton: 'Lisää rakenne',
+        title: 'Lisää rakenne',
+        description:
+          'Voit lisätä palveluita tai rakenteita joita on käytetty aineiston laatimiseen.',
       },
     },
   },
