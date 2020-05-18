@@ -952,6 +952,20 @@ const english = {
     history: {
       title: 'Related Material and History',
       tooltip: 'Related Material and History info',
+      tooltipContent: {
+        reference: {
+          title: 'Reference',
+          paragraph: 'Refer to related datasets, publications, and other resources that are relevant in understanding this dataset. '
+        },
+        provience: {
+          title: 'Provience',
+          paragraph: 'Information about the provenience of the data.'
+        },
+        infrastructure: {
+          title: 'Infrastructure',
+          paragraph: 'Services or tools that are used to produce the dataset.'
+        }
+      },
       infrastructure: {
         addButton: 'Add Infrastructure',
         title: 'Add infrastructure',
