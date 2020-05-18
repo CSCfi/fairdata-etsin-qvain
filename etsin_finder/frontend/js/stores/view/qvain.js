@@ -955,11 +955,6 @@ export const Infrastructure = (name, url) => ({
   url,
 })
 
-export const Infrastructures = (name, url) => ({
-  name,
-  url,
-})
-
 export const ExternalResource = (id, title, accessUrl, downloadUrl, useCategory) => ({
   id,
   title,
