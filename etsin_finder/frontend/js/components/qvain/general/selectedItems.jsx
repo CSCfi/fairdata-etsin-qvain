@@ -12,7 +12,7 @@ class SelectedItems extends Component {
     const { lang } = this.props.Stores.Locale
 
     return getter.map((item) => (
-      <Label color="#007fad" margin="0 0.5em 0.5em 0" key={`selected_${item.url}`}>
+      <Label color="primary" margin="0 0.5em 0.5em 0" key={`selected_${item.url}`}>
         <PaddedWord>{item.name[lang]}</PaddedWord>
         <FontAwesomeIcon onClick={() => this.removeFieldOfScience(item)} icon={faTimes} size="xs" />
       </Label>
