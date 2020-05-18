@@ -955,7 +955,7 @@ const finnish = {
       title: 'Aineistoon liittyvä materiaali ja historia',
       tooltip: 'Aineestoon liittyvä materiaali ja historia info',
       infrastructure: {
-        addButton: 'lisää rakenne',
+        addButton: 'Lisää rakenne',
         title: 'Lisää rakenne',
         description:
           'Voit lisätä palveluita tai rakenteita joita on käytetty aineiston laatimiseen.',
