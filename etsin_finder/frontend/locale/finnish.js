@@ -469,7 +469,7 @@ const finnish = {
           'Aineiston omistaja (alkuperäinen kuvailun tekijä) pystyy oletuksena hyväksymään aineiston datan käyttöön liittyvät käyttölupahakemukset. Käyttölupatoimintoa kehitetään, ja jossain vaiheessa tullaan lisäämään mahdollisuus myös muiden ko. organisaation edustajien päästä, joko omistajan lisäksi tai sijaan, hyväksymään käyttölupahakemuksia. Valitsemalla pääsyoikeudeksi "Vaatii luvan hakemista" / "Requires permission" käyttäjä sitoutuu näihin muutoksiin.',
       },
       embargoDate: {
-        label: 'Embargo loppumispäivämäärä (vvvv-kk-pp)',
+        label: 'Embargo loppumispäivämäärä',
         placeholder: 'Päivämäärä',
         help: 'Oletuksena embargo ei lopu jollei päivämäärää aseteta.',
       },
@@ -955,7 +955,7 @@ const finnish = {
       title: 'Aineistoon liittyvä materiaali ja historia',
       tooltip: 'Aineestoon liittyvä materiaali ja historia info',
       infrastructure: {
-        addButton: 'lisää rakenne',
+        addButton: 'Lisää rakenne',
         title: 'Lisää rakenne',
         description:
           'Voit lisätä palveluita tai rakenteita joita on käytetty aineiston laatimiseen.',

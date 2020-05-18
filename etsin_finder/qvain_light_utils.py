@@ -299,8 +299,8 @@ def _to_metax_field_of_science(fieldsOfScience):
 def _to_metax_infrastructure(infrastructures):
     metax_infrastructures = []
     for element in infrastructures:
-        metax_infrasturcture_object = {'identifier': element.get("url")}
-        metax_infrastructures.append(metax_infrasturcture_object)
+        metax_infrastructure_object = {'identifier': element.get("url")}
+        metax_infrastructures.append(metax_infrastructure_object)
     return metax_infrastructures
 
 
