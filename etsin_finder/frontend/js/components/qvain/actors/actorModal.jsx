@@ -10,7 +10,7 @@ import ActorInfo from './actorInfo'
 import Modal from '../../general/modal'
 import { ActorIcon } from './common'
 import { actorSchema } from '../utils/formValidation'
-import { TableButton, SaveButton, CancelButton } from '../general/buttons'
+import { TableButton, AddActorButton, CancelButton } from '../general/buttons'
 import ConfirmClose from '../general/confirmClose'
 import ValidationError from '../general/validationError'
 
@@ -129,7 +129,7 @@ export class ActorModalBase extends Component {
           />
           <Translate
             disabled={readonly}
-            component={SaveButton}
+            component={AddActorButton}
             onClick={this.handleSaveActor}
             content="qvain.actors.add.save.label"
           />
