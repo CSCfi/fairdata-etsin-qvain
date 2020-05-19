@@ -17,7 +17,7 @@ import {
   BodyCell,
   TableNote,
 } from '../general/table'
-import { DataCatalogIdentifiers } from '../utils/constants'
+import { DataCatalogIdentifiers, DatasetUrls } from '../utils/constants'
 import Modal from '../../general/modal'
 import DatasetPagination from './pagination'
 import Label from '../general/label'
@@ -25,10 +25,10 @@ import { TableButton, RemoveButton, DangerButton } from '../general/buttons'
 import { FormField, Input, Label as inputLabel } from '../general/form'
 import TablePasState from './tablePasState'
 
-const USER_DATASETS_URL = '/api/datasets/'
-
 class DatasetTable extends Component {
   minOfDataSetsForSearchTool = 5
+
+  promises = []
 
   static propTypes = {
     history: PropTypes.object.isRequired,
@@ -61,13 +61,22 @@ class DatasetTable extends Component {
     )
   }
 
+  componentWillUnmount() {
+    this.promises.forEach((promise) => promise.cancel())
+  }
+
   getDatasets = () => {
     this.setState({ loading: true, error: false, errorMessage: '' })
-    const url = `${USER_DATASETS_URL}${this.props.Stores.Auth.user.name}?no_pagination=true`
-    return axios
+    let url
+    if (this.props.Stores.Qvain.metaxApiV2) {
+      url = `${DatasetUrls.V2_USER_DATASETS_URL}${this.props.Stores.Auth.user.name}?no_pagination=true`
+    } else {
+      url = `${DatasetUrls.USER_DATASETS_URL}${this.props.Stores.Auth.user.name}?no_pagination=true`
+    }
+    const promise = axios
       .get(url)
       .then((result) => {
-        const datasets = [...result.data]
+        const datasets = result.data.filter((dataset) => !dataset.draft_of)
         this.setState(
           {
             count: datasets.length,
@@ -84,12 +93,36 @@ class DatasetTable extends Component {
         console.log(e.message)
         this.setState({ loading: false, error: true, errorMessage: 'Failed to load datasets' })
       })
+    this.promises.push(promise)
+    return promise
+  }
+
+  handleCreateNewVersion = async (identifier) => {
+    const { metaxApiV2 } = this.props.Stores.Qvain
+    if (!metaxApiV2) {
+      console.error('Metax API V2 is required for creating a new version')
+      return
+    }
+    const promise = axios.post(DatasetUrls.V2_CREATE_NEW_VERSION, null, {
+      params: { identifier },
+    })
+    this.promises.push(promise)
+    const res = await promise
+    const newIdentifier = res.data.identifier
+    this.props.history.replace(`/qvain/dataset/${newIdentifier}`)
   }
 
   handleRemove = (identifier) => (event) => {
     event.preventDefault()
-    axios
-      .delete(`/api/dataset/${identifier}`)
+    const { metaxApiV2 } = this.props.Stores.Qvain
+
+    let url = `${DatasetUrls.DATASET_URL}/${identifier}`
+    if (metaxApiV2) {
+      url = `${DatasetUrls.V2_DATASET_URL}/${identifier}`
+    }
+
+    const promise = axios
+      .delete(url)
       .then(() => {
         const datasets = [...this.state.datasets.filter((d) => d.identifier !== identifier)]
         this.setState(
@@ -108,6 +141,8 @@ class DatasetTable extends Component {
       .catch((err) => {
         this.setState({ error: true, errorMessage: err.message })
       })
+    this.promises.push(promise)
+    return promise
   }
 
   openRemoveModal = (identifier) => () => {
@@ -130,6 +165,10 @@ class DatasetTable extends Component {
   }
 
   handleEnterEdit = (dataset) => () => {
+    if (dataset.next_draft) {
+      this.props.history.push(`/qvain/dataset/${dataset.next_draft.identifier}`)
+      return
+    }
     this.props.Stores.Qvain.editDataset(dataset)
     this.props.history.push(`/qvain/dataset/${dataset.identifier}`)
   }
@@ -206,6 +245,42 @@ class DatasetTable extends Component {
     return formattedDate
   }
 
+  formatDatasetState = (dataset) => {
+    if (dataset.state === 'published') {
+      if (dataset.next_draft) {
+        return 'qvain.datasets.state.changed'
+      }
+      return 'qvain.datasets.state.published'
+    }
+    return 'qvain.datasets.state.draft'
+  }
+
+  createDatasetPagination = (id) => {
+    const { page, count, limit, datasets } = this.state
+    const noOfVisibleDatasets = count || datasets.length
+    return noOfVisibleDatasets > limit ? (
+      <DatasetPagination
+        id={id}
+        page={page}
+        count={count}
+        limit={limit}
+        onChangePage={this.handleChangePage}
+      />
+    ) : null
+  }
+
+  filterByTitle(searchStr, datasets) {
+    return searchStr.trim().length > 0
+      ? datasets.filter((ds) => {
+          const titles = Object.values(ds.research_dataset.title)
+          const matches = titles.map((title) =>
+            title.toLowerCase().includes(searchStr.toLowerCase())
+          ) // ignore cases
+          return matches.includes(true)
+        })
+      : datasets
+  }
+
   render() {
     const {
       onPage,
@@ -218,6 +293,27 @@ class DatasetTable extends Component {
       count,
       limit,
     } = this.state
+
+    const { metaxApiV2 } = this.props.Stores.Qvain
+
+    const getGoToEtsinButton = (dataset) => {
+      let identifier = dataset.identifier
+      let goToEtsinKey = 'goToEtsin'
+      if (dataset.next_draft) {
+        identifier = dataset.next_draft.identifier
+        goToEtsinKey = 'goToEtsinDraft'
+      } else if (dataset.state === 'draft') {
+        goToEtsinKey = 'goToEtsinDraft'
+      }
+
+      return (
+        <Translate
+          component={TableButton}
+          onClick={() => window.open(`/dataset/${identifier}`, '_blank')}
+          content={`qvain.datasets.${goToEtsinKey}`}
+        />
+      )
+    }
 
     const noOfDatasets = datasets.length
     const searchInput =
@@ -263,6 +359,9 @@ class DatasetTable extends Component {
           <TableHeader>
             <Row>
               <Translate component={HeaderCell} content="qvain.datasets.tableRows.title" />
+              {metaxApiV2 && (
+                <Translate component={HeaderCell} content="qvain.datasets.tableRows.state" />
+              )}
               <Translate component={HeaderCell} content="qvain.datasets.tableRows.created" />
               <Translate component={HeaderCell} content="qvain.datasets.tableRows.actions" />
             </Row>
@@ -312,18 +411,32 @@ class DatasetTable extends Component {
                       <TablePasState preservationState={dataset.preservation_state} />
                     )}
                   </BodyCellWordWrap>
+                  {metaxApiV2 && (
+                    <BodyCell>
+                      <Translate content={this.formatDatasetState(dataset)} />
+                    </BodyCell>
+                  )}
                   <BodyCell>{this.formatDatasetDateCreated(dataset.date_created)}</BodyCell>
                   <BodyCellActions>
                     <Translate
                       component={TableButton}
                       onClick={this.handleEnterEdit(dataset)}
-                      content="qvain.datasets.editButton"
+                      content={
+                        dataset.next_draft
+                          ? 'qvain.datasets.editDraftButton'
+                          : 'qvain.datasets.editButton'
+                      }
                     />
-                    <Translate
-                      component={TableButton}
-                      onClick={() => window.open(`/dataset/${dataset.identifier}`, '_blank')}
-                      content="qvain.datasets.goToEtsin"
-                    />
+                    {getGoToEtsinButton(dataset)}
+                    {metaxApiV2 &&
+                      dataset.next_dataset_version === undefined &&
+                      dataset.state === 'published' && (
+                        <Translate
+                          component={TableButton}
+                          onClick={() => this.handleCreateNewVersion(dataset.identifier)}
+                          content="qvain.datasets.createNewVersion"
+                        />
+                      )}
                     <Translate
                       component={RemoveButton}
                       onClick={this.openRemoveModal(dataset.identifier)}
@@ -335,7 +448,7 @@ class DatasetTable extends Component {
           </TableBody>
         </TablePadded>
         <DatasetPagination
-          id="pagnation-bottom"
+          id="pagination-bottom"
           page={page}
           count={count}
           limit={limit}

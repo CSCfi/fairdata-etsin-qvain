@@ -296,12 +296,14 @@ const finnish = {
     },
   },
   qvain: {
+    saveDraft: 'Tallenna Luonnos',
     submit: 'Julkaise Aineisto',
     edit: 'Päivitä Aineisto',
     consent:
       'Käyttämällä Qvain Lightia käyttäjä hyväksyy, että hän on pyytänyt suostumusta kaikilta henkilöiltä, joiden hankilökohtaisia tietoja käyttäjä lisää kuvattaviin tietoihin, ja ilmoitti heille, miten he voivat saada tietonsa poistettua. Käyttämällä Qvain Lightia käyttäjä hyväksyy <a href="https://www.fairdata.fi/hyodyntaminen/kayttopolitiikat-ja-ehdot/">käyttöehdot</a>.',
     submitStatus: {
       success: 'Aineisto julkaistu!',
+      draftSuccess: 'Luonnos tallennettu!',
       fail: 'Jotain meni pieleen...',
       editFilesSuccess: 'Uusi aineistoversio luotu!',
       editMetadataSuccess: 'Aineiston päivitys onnistui!',
@@ -371,12 +373,19 @@ const finnish = {
       },
       help: 'Muokkaa olemassa olevaa aineistoa tai luo uusi',
       createButton: 'Lisää uusi aineisto',
+      createNewVersion: 'Luo uusi versio',
+      state: {
+        draft: 'Luonnos',
+        published: 'Julkaistu',
+        changed: 'Julkaisemattomia muutoksia',
+      },
       tableRows: {
         id: 'ID',
         title: 'Otsikko',
         version: 'Versio',
         modified: 'Muokattu',
         created: 'Luotu',
+        state: 'Tila',
         actions: 'Toiminnot',
         dateFormat: {
           moments: 'Muutama hetki sitten',
@@ -396,10 +405,12 @@ const finnish = {
       latestVersion: 'Uusin',
       deprecated: 'Vanhentunut',
       editButton: 'Muokkaa',
+      editDraftButton: 'Muokkaa luonnosta',
       deleteButton: 'Poista',
       confirmDelete:
         'Oletko varma, että haluat poistaa aineiston? Aineiston poiston jälkeen se ei enää näy Qvaimessa eikä Etsimen haku löydä sitä. Aineiston laskeutumissivua ei poisteta.',
       goToEtsin: 'Katso Etsimessä',
+      goToEtsinDraft: 'Esikatsele Etsimessä',
       openNewVersion: 'Avaa uusi versio',
       noDatasets: 'Sinulla ei ole olemassa olevia aineistoja',
       reload: 'Lataa uudelleen',
@@ -859,11 +870,15 @@ const finnish = {
       },
       selected: {
         title: 'Valitut tiedostot',
+        readonlyTitle: 'Valitut tiedostot projektista %(project)s',
         none: 'Tiedostoja tai hakemistoja ei ole vielä valittu.',
-        newTag: 'Uusi',
+        newTag: 'Lisätään',
+        removeTag: 'Poistetaan',
+        hideRemoved: 'Piilota poistettavat',
         buttons: {
           edit: 'Muokkaa %(name)s',
           remove: 'Poista %(name)s',
+          undoRemove: 'Peru %(name)s poisto',
           refresh: 'Päivitä %(name)s',
           open: 'Avaa %(name)s',
           close: 'Sulje %(name)s',

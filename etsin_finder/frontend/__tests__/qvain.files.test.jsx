@@ -1,10 +1,17 @@
 import React from 'react'
 import axios from 'axios'
 import { shallow } from 'enzyme'
+import { toJS } from 'mobx'
 
 import { getDirectories, getFiles } from '../js/components/qvain/utils/fileHierarchy'
-import QvainStore from '../js/stores/view/qvain'
+import QvainStore, { FieldOfScience } from '../js/stores/view/qvain'
 import LocaleStore from '../js/stores/view/language'
+import { sortFunc } from '../js/stores/view/qvain.files.utils'
+import {
+  itemLoaderAdd,
+  itemLoaderAny,
+  itemLoaderSelected,
+} from '../js/stores/view/qvain.files.loaders'
 
 import SelectedItemsTree from '../js/components/qvain/files/ida/selectedItemsTree'
 import SelectedItemsTreeItem from '../js/components/qvain/files/ida/selectedItemsTreeItem'
@@ -12,22 +19,58 @@ import { ShowMore } from '../js/components/qvain/files/ida/common/tree'
 import AddItemsTree from '../js/components/qvain/files/ida/addItemsTree'
 import AddItemsTreeItem from '../js/components/qvain/files/ida/addItemsTreeItem'
 
-
 import handleSubmitToBackend from '../js/components/qvain/utils/handleSubmit'
 
 import { get } from './__testdata__/qvain.files.data'
 
+global.Promise = require('bluebird')
+
+Promise.config({
+  cancellation: true,
+})
+
 jest.mock('axios')
+
+const flatten = (dir) => {
+  const flatItems = []
+  const recurse = (dir) => {
+    dir.directories.forEach((dir) => {
+      flatItems.push(dir)
+      recurse(dir)
+    })
+    dir.files.forEach((file) => {
+      flatItems.push(file)
+    })
+  }
+  recurse(dir)
+  return flatItems
+}
+
+const sorted = (items) => {
+  const copy = [...items]
+  copy.sort((a, b) => {
+    // show files last
+    if (a.type === 'file' && b.type !== 'file') {
+      return 1
+    }
+    if (a.type !== 'file' && b.type === 'file') {
+      return -1
+    }
+    return sortFunc(a.name, b.name)
+  })
+  return copy
+}
 
 // Mock responses a dataset containing IDA files. See the data file for the project structure.
 axios.get.mockImplementation(get)
 
 const stores = {
   Qvain: QvainStore,
-  Locale: LocaleStore
+  Locale: LocaleStore,
 }
 
 const datasetIdentifier = '6d2cb5f5-4867-47f7-9874-09357f2901a3'
+const emptyDatasetIdentifier = '6d2cb5f5-4867-47f7-9874-123456789'
 
 let root
 const { Qvain } = stores
@@ -35,7 +78,37 @@ const { Files } = Qvain
 const SelectedItemsTreeBase = SelectedItemsTree.wrappedComponent
 const AddItemsTreeBase = AddItemsTree.wrappedComponent
 
-const itemPaths = (items) => items.map(item => item.prop('item').path)
+const itemPaths = (items) => items.map((item) => item.prop('item').path).sort(sortFunc)
+expect.extend({
+  toBeFullyLoaded(dir) {
+    if (!dir) {
+      return {
+        message: () => 'missing directory',
+        pass: this.isNot,
+      }
+    }
+    if (dir.directChildCount === null) {
+      return {
+        message: () => 'expected directory to have been loaded',
+        pass: false,
+      }
+    }
+    const items = [...dir.directories, ...dir.files]
+    const loadedCount = items.filter((v) => v).length
+    if (loadedCount === dir.directChildCount) {
+      return {
+        message: () => 'expected directory not to have been fully loaded',
+        pass: true,
+      }
+    } else {
+      return {
+        message: () =>
+          `expected all items in directory to have been loaded, ${loadedCount} < ${dir.directChildCount}`,
+        pass: false,
+      }
+    }
+  },
+})
 
 const delayGet = () => {
   // delay mock response once until respond() is called
@@ -51,76 +124,121 @@ const delayGet = () => {
   return respond
 }
 
-beforeEach(async () => {
-  Qvain.resetQvainStore()
-  Qvain.setLegacyFilePicker(false)
-  const response = await axios.get(`/api/dataset/edit/${datasetIdentifier}`)
-  stores.Qvain.editDataset(response.data)
-  await Files.loadingProject.promise
-  expect(Files.loadingProject).toBe(null)
+const loadDataset = async () => {
+  let response
+  if (Qvain.metaxApiV2) {
+    response = await axios.get(`/api/v2/dataset/edit/${datasetIdentifier}`)
+  } else {
+    response = await axios.get(`/api/dataset/edit/${datasetIdentifier}`)
+  }
+  Qvain.Files.AddItemsView.setDefaultShowLimit(20, 20)
+  Qvain.Files.SelectedItemsView.setDefaultShowLimit(20, 20)
+  const promise = stores.Qvain.editDataset(response.data)
+  Files.SelectedItemsView.setHideRemoved(true)
+  await promise
+  expect(Files.loadingProjectInfo).not.toBe(null)
+  expect(Files.loadingMetadata).not.toBe(null)
+  expect(Files.loadingProjectRoot).not.toBe(null)
+  expect(Files.loadingProjectInfo.error).toBe(null)
+  expect(Files.loadingMetadata.error).toBe(null)
+  expect(Files.loadingProjectRoot.error).toBe(null)
 
   root = Files.root
   expect(root).toEqual(expect.anything())
-})
+}
 
+beforeEach(async () => {
+  Qvain.resetQvainStore()
+  Qvain.setMetaxApiV2(true)
+  await loadDataset()
+})
 
 describe('Qvain.Files store', () => {
   it('loads directories only when requested', async () => {
-    expect(root.directories[0].loaded).toBe(false)
-    await Files.loadDirectory(root.directories[0])
-    expect(root.directories[0].loaded).toBe(true)
-    expect(root.directories[0].directories[0].loaded).toBe(false)
-    await Files.loadDirectory(root.directories[0].directories[0])
-    expect(root.directories[0].directories[0].loaded).toBe(true)
+    const data = root.directories.find((d) => d.name === 'data')
+    expect(data).not.toBeFullyLoaded()
+    await Files.loadDirectory(data)
+    expect(data).toBeFullyLoaded()
+
+    const set1 = data.directories.find((d) => d.name === 'set1')
+    expect(set1).not.toBeFullyLoaded()
+    await Files.loadDirectory(set1)
+    expect(set1).toBeFullyLoaded()
   })
 
   it('loads all directories', async () => {
-    expect(root.directories[0].loaded).toBe(false)
-    expect(root.directories[0].loaded).toBe(false)
+    const data = root.directories.find((d) => d.name === 'data')
+    expect(data).not.toBeFullyLoaded()
     await Files.loadAllDirectories()
-    expect(root.directories[0].loaded).toBe(true)
-    expect(root.directories[0].loaded).toBe(true)
-    expect(root.directories[0].directories[0].loaded).toBe(true)
-    expect(root.directories[0].directories[1].loaded).toBe(true)
-    expect(root.directories[0].directories[0].directories[0].loaded).toBe(true)
-    expect(root.directories[0].directories[0].directories[1].loaded).toBe(true)
+    expect(data).toBeFullyLoaded()
+
+    const set1 = data.directories.find((d) => d.name === 'set1')
+    const set2 = data.directories.find((d) => d.name === 'set2')
+    expect(set1).toBeFullyLoaded()
+    expect(set2).toBeFullyLoaded()
+
+    const subset1 = set1.directories.find((d) => d.name === 'subset')
+    const subset2 = set1.directories.find((d) => d.name === 'subset2')
+    expect(subset1).toBeFullyLoaded()
+    expect(subset2).toBeFullyLoaded()
   })
 
   it('shows directory as loading while it is being fetched', async () => {
-    const dir = root.directories[0]
+    const dir = root.directories.find((d) => d.name === 'data')
     const respond = delayGet() // delay directory load
     axios.get.mockClear() // clear call counts
 
-    expect(dir.loaded).toBe(false)
+    expect(dir).not.toBeFullyLoaded()
     expect(dir.loading).toBe(false)
     const promise = Files.loadDirectory(dir)
-    expect(dir.loaded).toBe(false)
+    expect(dir).not.toBeFullyLoaded(false)
     expect(dir.loading).toBe(true)
     respond() // load directory
 
     await promise
-    expect(dir.loaded).toBe(true)
+    expect(dir).toBeFullyLoaded(true)
     expect(dir.loading).toBe(false)
 
-    // two axios calls are needed per directory load
-    expect(axios.get.mock.calls.length).toBe(2)
+    // three axios calls are needed per directory load
+    // - file counts, sorting order for items in directory
+    // - file counts for existing subdirectories
+    // - paginated items
+    expect(axios.get.mock.calls.length).toBe(3)
   })
 
   it('loads directory only once even with multiple loadDirectory calls', async () => {
-    const dir = root.directories[0]
+    const dir = root.directories.find((d) => d.name === 'data')
     const respond = delayGet() // delay directory load
     axios.get.mockClear() // clear call counts
 
     let resolveCount = 0
-    const promise = Files.loadDirectory(dir).then(() => { resolveCount += 1 })
-    const promise2 = Files.loadDirectory(dir).then(() => { resolveCount += 1 })
-    const promise3 = Files.loadDirectory(dir).then(() => { resolveCount += 1 })
+    const promise = Files.loadDirectory(dir).then(() => {
+      resolveCount += 1
+    })
+    const promise2 = Files.loadDirectory(dir).then(() => {
+      resolveCount += 1
+    })
+    const promise3 = Files.loadDirectory(dir).then(() => {
+      resolveCount += 1
+    })
     expect(resolveCount).toBe(0)
     respond() // load directory
     await Promise.all([promise, promise2, promise3])
 
     expect(resolveCount).toBe(3)
-    expect(axios.get.mock.calls.length).toBe(2)
+    expect(axios.get.mock.calls.length).toBe(3)
+  })
+
+  it('cancels promises when dataset is reset', async () => {
+    const dir = root.directories.find((d) => d.name === 'data')
+
+    Files.loadDirectory(dir)
+    Files.loadDirectory(dir)
+    Files.loadDirectory(dir)
+    Files.loadDirectory(dir)
+    expect(Qvain.Files.promiseManager.promises.length > 0).toBe(true)
+    Qvain.Files.reset()
+    expect(Qvain.Files.promiseManager.promises.length).toBe(0)
   })
 
   it('has correct file properties', async () => {
@@ -128,109 +246,93 @@ describe('Qvain.Files store', () => {
     expect(root.directories[0].parent).toBe(root)
 
     expect(root).toMatchObject({
-      selectedChildCount: 5,
       addedChildCount: 0,
       removedChildCount: 0,
       directories: { length: 2 },
-      files: { length: 0 }
+      files: { length: 0 },
     })
 
-    const moredata = root.directories[1]
+    const moredata = root.directories.find((d) => d.name === 'moredata')
     expect(moredata).toMatchObject({
-      directoryName: 'moredata',
-      selected: false,
-      selectedChildCount: 2,
+      name: 'moredata',
       files: { length: 2 },
       directories: { length: 0 },
     })
 
-    const data = root.directories[0]
+    const data = root.directories.find((d) => d.name === 'data')
     expect(data).toMatchObject({
-      directoryName: 'data',
-      selected: false,
+      name: 'data',
       fileCount: 13,
       // implicitly included parent in a dataset has 0 fileCount in Metax
       existingFileCount: 0,
-      selectedChildCount: 3,
       files: { length: 0 },
-      directories: { length: 2 }
+      directories: { length: 2 },
     })
 
-    const set1 = data.directories[0]
+    const set1 = data.directories.find((d) => d.name === 'set1')
     expect(set1).toMatchObject({
-      directoryName: 'set1',
-      selected: true,
+      name: 'set1',
       fileCount: 10,
       existingFileCount: 6,
-      selectedChildCount: 1,
       files: { length: 3 },
-      directories: { length: 2 }
+      directories: { length: 2 },
     })
-    expect(set1.files.filter(f => f.existing).length).toBe(2)
+    expect(set1.files.filter((f) => f.existing).length).toBe(2)
 
-    const set2 = data.directories[1]
+    const set2 = data.directories.find((d) => d.name === 'set2')
     expect(set2).toMatchObject({
-      directoryName: 'set2',
-      selected: false,
+      name: 'set2',
       fileCount: 3,
       existingFileCount: 0, // implicitly included parent
-      selectedChildCount: 1,
       files: { length: 3 },
-      directories: { length: 0 }
+      directories: { length: 0 },
     })
-    expect(set2.files.filter(f => f.selected).length).toBe(1)
-    expect(set2.files.filter(f => f.existing).length).toBe(1)
+    expect(set2.files.filter((f) => f.existing).length).toBe(1)
 
-    const subset = set1.directories[0]
+    const subset = set1.directories.find((d) => d.name === 'subset')
     expect(subset).toMatchObject({
-      directoryName: 'subset',
-      selected: false,
-      selectedChildCount: 1,
+      name: 'subset',
       existingFileCount: 4,
       files: { length: 5 },
-      directories: { length: 0 }
+      directories: { length: 0 },
     })
-    expect(subset.files.filter(f => f.selected).length).toBe(1)
-    expect(subset.files.filter(f => f.existing).length).toBe(4)
+    expect(subset.files.filter((f) => f.existing).length).toBe(4)
 
-    const subset2 = set1.directories[1]
+    const subset2 = set1.directories.find((d) => d.name === 'subset2')
     expect(subset2).toMatchObject({
-      directoryName: 'subset2',
-      selected: false,
-      selectedChildCount: 0,
+      name: 'subset2',
       existingFileCount: 0,
       files: { length: 2 },
-      directories: { length: 0 }
+      directories: { length: 0 },
     })
-    expect(subset2.files.filter(f => f.selected).length).toBe(0)
-    expect(subset2.files.filter(f => f.existing).length).toBe(0)
+    expect(subset2.files.filter((f) => f.existing).length).toBe(0)
     expect(Qvain.changed).toBe(false)
   })
 
   it('gets files and directories by path', async () => {
     expect(await Files.getItemByPath('/')).toBe(root)
-    expect((await Files.getItemByPath('/data')).directoryName).toBe('data')
-    expect((await Files.getItemByPath('/data/set1/subset/file1.csv')).fileName).toBe('file1.csv')
-    expect((await Files.getItemByPath('/data/set1/subset2/file2.csv')).fileName).toBe('file2.csv')
-    expect((await Files.getItemByPath('/moredata/info.csv')).fileName).toBe('info.csv')
+    expect((await Files.getItemByPath('/data')).name).toBe('data')
+    expect((await Files.getItemByPath('/data/set1/subset/file1.csv')).name).toBe('file1.csv')
+    expect((await Files.getItemByPath('/data/set1/subset2/file2.csv')).name).toBe('file2.csv')
+    expect((await Files.getItemByPath('/moredata/info.csv')).name).toBe('info.csv')
     expect(Qvain.changed).toBe(false)
   })
 
   it('has correct file metadata', async () => {
     const file = await Files.getItemByPath('/data/set1/subset/file1.csv')
     expect(file).toMatchObject({
-      fileName: 'file1.csv',
+      name: 'file1.csv',
       title: 'changed_title',
       description: 'Explicitly added file',
       useCategory: 'http://uri.suomi.fi/codelist/fairdata/use_category/code/documentation',
-      fileType: 'http://uri.suomi.fi/codelist/fairdata/file_type/code/text'
+      fileType: 'http://uri.suomi.fi/codelist/fairdata/file_type/code/text',
     })
 
     const newMeta = {
       title: 'another_title',
       description: 'New description',
       useCategory: 'http://uri.suomi.fi/codelist/fairdata/use_category/code/test',
-      fileType: 'http://uri.suomi.fi/codelist/fairdata/file_type/code/test'
+      fileType: 'http://uri.suomi.fi/codelist/fairdata/file_type/code/test',
     }
 
     Files.setInEdit(file)
@@ -240,84 +342,91 @@ describe('Qvain.Files store', () => {
   })
 
   it('removes and adds existing selected files correctly', async () => {
-    const file = await Files.getItemByPath('/data/set2/file1.csv') // existing and selected
+    const file = await Files.getItemByPath('/data/set1/file1.csv') // existing, has metadata
     expect(file).toMatchObject({
       added: false,
-      selected: true,
       removed: false,
     })
     expect(root).toMatchObject({
-      selectedChildCount: 5,
       addedChildCount: 0,
-      removedChildCount: 0
+      removedChildCount: 0,
     })
 
     Files.removeItem(file) // should remove file
     expect(file).toMatchObject({
       added: false,
-      selected: false,
       removed: true,
     })
     expect(root).toMatchObject({
-      selectedChildCount: 4,
       addedChildCount: 0,
-      removedChildCount: 1
+      removedChildCount: 1,
     })
 
     Files.addItem(file) // adding file back should undo the remove
     expect(file).toMatchObject({
-      added: false,
-      selected: true,
+      added: true,
       removed: false,
     })
     expect(root).toMatchObject({
-      selectedChildCount: 5,
-      addedChildCount: 0,
-      removedChildCount: 0
+      addedChildCount: 1,
+      removedChildCount: 0,
     })
 
     expect(Qvain.changed).toBe(true)
   })
 
   it('adds and removes new files correctly', async () => {
-    const file = await Files.getItemByPath('/data/set1/file1.csv') // existing but not selected
-    Files.removeItem(file) // file is not added or selected, should not do anything
+    const file = await Files.getItemByPath('/data/set1/file1.csv') // existing
+    Files.removeItem(file) // file should be removed
     expect(file).toMatchObject({
       added: false,
-      selected: false,
-      removed: false,
+      removed: true,
     })
     expect(root).toMatchObject({
-      selectedChildCount: 5,
       addedChildCount: 0,
-      removedChildCount: 0
+      removedChildCount: 1,
     })
 
     Files.addItem(file) // file should be added
     expect(file).toMatchObject({
       added: true,
-      selected: false,
       removed: false,
     })
     expect(root).toMatchObject({
-      selectedChildCount: 5,
       addedChildCount: 1,
-      removedChildCount: 0
+      removedChildCount: 0,
     })
 
     Files.removeItem(file) // file should no longer be added
     expect(file).toMatchObject({
       added: false,
-      selected: false,
-      removed: false,
+      removed: true,
     })
     expect(root).toMatchObject({
-      selectedChildCount: 5,
       addedChildCount: 0,
-      removedChildCount: 0
+      removedChildCount: 1,
     })
 
     expect(Qvain.changed).toBe(true)
+  })
+
+  it('loads existing files', async () => {
+    await Files.loadAllDirectories()
+    const items = flatten(Files.root)
+    expect(items.filter((item) => item.existing).length).toBe(14)
+    expect(items.filter((item) => !item.existing).length).toBe(7)
+  })
+
+  it('loads files for an empty dataset', async () => {
+    const response = await axios.get(`/api/dataset/edit/${emptyDatasetIdentifier}`)
+    stores.Qvain.editDataset(response.data)
+    Files.changeProject('project')
+    await Files.loadingProjectRoot.promise
+    await Files.loadAllDirectories()
+
+    const items = flatten(Files.root)
+    expect(items.filter((item) => item.existing).length).toBe(0)
+    expect(items.filter((item) => !item.existing).length).toBe(21)
   })
 })
 
@@ -363,95 +472,22 @@ describe('Qvain.Files.DirectoryView', () => {
     const view = Files.AddItemsView
     view.toggleChecked(subset)
     view.toggleChecked(set2File1)
-    expect(view.getTopmostChecked()).toEqual([subset, set2File1])
+    expect(sorted(view.getTopmostChecked())).toEqual([subset, set2File1])
 
     view.toggleChecked(set1)
-    expect(view.getTopmostChecked()).toEqual([set1, set2File1])
+    expect(sorted(view.getTopmostChecked())).toEqual([set1, set2File1])
 
     view.toggleChecked(data)
     expect(view.getTopmostChecked()).toEqual([data])
 
     view.toggleChecked(data)
-    expect(view.getTopmostChecked()).toEqual([set1, set2File1])
+    expect(sorted(view.getTopmostChecked())).toEqual([set1, set2File1])
 
     expect(Qvain.changed).toBe(false)
   })
 })
 
 describe('Qvain.Files tree', () => {
-  it('propagates parent selection', async () => {
-    await Files.SelectedItemsView.setAllOpen(true)
-
-    const wrapper = shallow(<SelectedItemsTreeBase Stores={stores} />).dive()
-    let items = wrapper.find(SelectedItemsTreeItem)
-
-    const data = await Files.getItemByPath('/data') // existing but not selected
-    const dataItem = items.findWhere(item => item.prop('item') === data)
-    expect(dataItem.prop('parentArgs')).toMatchObject({
-      parentChecked: false,
-      parentAdded: false,
-      parentSelected: false,
-    })
-
-    const set1 = await Files.getItemByPath('/data/set1') // selected
-    const set1Item = items.findWhere(item => item.prop('item') === set1)
-    expect(set1Item.prop('parentArgs')).toMatchObject({
-      parentChecked: false,
-      parentAdded: false,
-      parentSelected: false,
-    })
-
-    const subset = await Files.getItemByPath('/data/set1/subset') // parent selected
-    let subsetItem = items.findWhere(item => item.prop('item') === subset)
-    expect(subsetItem.prop('parentArgs')).toMatchObject({
-      parentChecked: false,
-      parentAdded: false,
-      parentSelected: true,
-    })
-
-    const subsetFile1 = await Files.getItemByPath('/data/set1/subset/file1.csv') // grandparent selected
-    let subsetFile1Item = items.findWhere(item => item.prop('item') === subsetFile1)
-    expect(subsetFile1Item.prop('parentArgs')).toMatchObject({
-      parentChecked: false,
-      parentAdded: false,
-      parentSelected: true,
-    })
-
-    // remove set1, now subitems should no longer have parentSelected
-    Files.removeItem(set1)
-    items = wrapper.find(SelectedItemsTreeItem)
-    subsetItem = items.findWhere(item => item.prop('item') === subset)
-    expect(subsetItem.prop('parentArgs')).toMatchObject({
-      parentChecked: false,
-      parentAdded: false,
-      parentSelected: false
-    })
-
-    subsetFile1Item = items.findWhere(item => item.prop('item') === subsetFile1)
-    expect(subsetFile1Item.prop('parentArgs')).toMatchObject({
-      parentChecked: false,
-      parentAdded: false,
-      parentSelected: false
-    })
-
-    // bring set1 back
-    Files.addItem(set1)
-    items = wrapper.find(SelectedItemsTreeItem)
-    subsetItem = items.findWhere(item => item.prop('item') === subset)
-    expect(subsetItem.prop('parentArgs')).toMatchObject({
-      parentChecked: false,
-      parentAdded: false,
-      parentSelected: true
-    })
-
-    subsetFile1Item = items.findWhere(item => item.prop('item') === subsetFile1)
-    expect(subsetFile1Item.prop('parentArgs')).toMatchObject({
-      parentChecked: false,
-      parentAdded: false,
-      parentSelected: true
-    })
-  })
-
   it('propagates parent addition', async () => {
     await Files.SelectedItemsView.setAllOpen(true)
 
@@ -464,35 +500,16 @@ describe('Qvain.Files tree', () => {
     Files.addItem(data) // add data (already exists but is not selected)
     expect(data.added).toBe(true)
     let items = wrapper.find(SelectedItemsTreeItem)
-    let subsetItem = items.findWhere(item => item.prop('item') === subset)
+    let subsetItem = items.findWhere((item) => item.prop('item') === subset)
     expect(subsetItem.prop('parentArgs')).toMatchObject({
       parentChecked: false,
       parentAdded: true,
-      parentSelected: true
     })
 
-    let subsetFile1Item = items.findWhere(item => item.prop('item') === subsetFile1)
+    let subsetFile1Item = items.findWhere((item) => item.prop('item') === subsetFile1)
     expect(subsetFile1Item.prop('parentArgs')).toMatchObject({
       parentChecked: false,
       parentAdded: true,
-      parentSelected: true
-    })
-
-    // remove subset
-    Files.removeItem(data)
-    items = wrapper.find(SelectedItemsTreeItem)
-    subsetItem = items.findWhere(item => item.prop('item') === subset)
-    expect(subsetItem.prop('parentArgs')).toMatchObject({
-      parentChecked: false,
-      parentAdded: false,
-      parentSelected: true
-    })
-
-    subsetFile1Item = items.findWhere(item => item.prop('item') === subsetFile1)
-    expect(subsetFile1Item.prop('parentArgs')).toMatchObject({
-      parentChecked: false,
-      parentAdded: false,
-      parentSelected: true
     })
   })
 
@@ -508,35 +525,31 @@ describe('Qvain.Files tree', () => {
     Files.SelectedItemsView.toggleChecked(data) // check data
     expect(Files.SelectedItemsView.isChecked(data)).toBe(true)
     let items = wrapper.find(SelectedItemsTreeItem)
-    let subsetItem = items.findWhere(item => item.prop('item') === subset)
+    let subsetItem = items.findWhere((item) => item.prop('item') === subset)
     expect(subsetItem.prop('parentArgs')).toMatchObject({
       parentChecked: true,
       parentAdded: false,
-      parentSelected: true
     })
 
-    let subsetFile1Item = items.findWhere(item => item.prop('item') === subsetFile1)
+    let subsetFile1Item = items.findWhere((item) => item.prop('item') === subsetFile1)
     expect(subsetFile1Item.prop('parentArgs')).toMatchObject({
       parentChecked: true,
       parentAdded: false,
-      parentSelected: true
     })
 
     Files.SelectedItemsView.toggleChecked(data) // uncheck data
     expect(Files.SelectedItemsView.isChecked(data)).toBe(false)
     items = wrapper.find(SelectedItemsTreeItem)
-    subsetItem = items.findWhere(item => item.prop('item') === subset)
+    subsetItem = items.findWhere((item) => item.prop('item') === subset)
     expect(subsetItem.prop('parentArgs')).toMatchObject({
       parentChecked: false,
       parentAdded: false,
-      parentSelected: true
     })
 
-    subsetFile1Item = items.findWhere(item => item.prop('item') === subsetFile1)
+    subsetFile1Item = items.findWhere((item) => item.prop('item') === subsetFile1)
     expect(subsetFile1Item.prop('parentArgs')).toMatchObject({
       parentChecked: false,
       parentAdded: false,
-      parentSelected: true
     })
   })
 
@@ -574,35 +587,113 @@ describe('Qvain.Files tree', () => {
   it('limits how many items are visible in a folder', async () => {
     const view = Files.SelectedItemsView
     await view.setAllOpen(true)
-    view.setShowLimit(3, 0)
+    view.setDefaultShowLimit(3, 1)
 
     const wrapper = shallow(<SelectedItemsTreeBase Stores={stores} />).dive()
 
     const subset = await Files.getItemByPath('/data/set1/subset')
     let items = wrapper.find(SelectedItemsTreeItem)
     expect(items.filter('[level=3]').length).toBe(3)
-    expect(wrapper.find(ShowMore).prop('count')).toBe(1)
+    expect(wrapper.find(ShowMore).length).toBe(1)
 
-    view.toggleShowAll(subset)
+    await view.showMore(subset)
     items = wrapper.find(SelectedItemsTreeItem)
     expect(items.filter('[level=3]').length).toBe(4)
   })
 
-  it('does not limit how many items are shown unless limit+margin is exceeded', async () => {
+  it('shows items according to assigned showlimit', async () => {
     const view = Files.SelectedItemsView
+    view.setDefaultShowLimit(4, 10)
     await view.setAllOpen(true)
-    view.setShowLimit(2, 2)
 
     const wrapper = shallow(<SelectedItemsTreeBase Stores={stores} />).dive()
     let items = wrapper.find(SelectedItemsTreeItem)
     expect(items.filter('[level=3]').length).toBe(4)
 
-    view.setShowLimit(2, 1)
+    view.setDefaultShowLimit(2, 1)
     items = wrapper.find(SelectedItemsTreeItem)
     expect(items.filter('[level=3]').length).toBe(2)
   })
-})
 
+  it('shows more items', async () => {
+    const view = Files.SelectedItemsView
+    view.setDefaultShowLimit(2, 1)
+    await view.setAllOpen(true)
+    const subset = await Files.getItemByPath('/data/set1/subset', true)
+    let wrapper = shallow(<SelectedItemsTreeBase Stores={stores} />).dive()
+
+    let items = wrapper.find(SelectedItemsTreeItem)
+    expect(items.filter('[level=3]').length).toBe(2)
+
+    await view.showMore(subset)
+    wrapper.update()
+    items = wrapper.find(SelectedItemsTreeItem)
+    expect(items.filter('[level=3]').length).toBe(3)
+
+    await view.showMore(subset)
+    wrapper.update()
+    items = wrapper.find(SelectedItemsTreeItem)
+    expect(items.filter('[level=3]').length).toBe(4)
+  })
+
+  it('removes all files and directories', async () => {
+    await Files.loadAllDirectories()
+
+    const items = flatten(Files.root)
+    items.forEach((item) => {
+      Files.removeItem(item)
+    })
+
+    await Files.AddItemsView.setAllOpen(true)
+    await Files.SelectedItemsView.setAllOpen(true)
+
+    const addWrapper = shallow(<AddItemsTreeBase Stores={stores} />).dive()
+    const addItems = addWrapper.find(AddItemsTreeItem)
+    expect(addItems.length).toBe(21)
+
+    const selectedWrapper = shallow(<SelectedItemsTreeBase Stores={stores} />).dive()
+    const selectedItems = selectedWrapper.find(SelectedItemsTreeItem)
+    expect(selectedItems.length).toBe(0)
+  })
+
+  it('shows removed files and directories', async () => {
+    await Files.loadAllDirectories()
+
+    const items = flatten(Files.root)
+    items.forEach((item) => {
+      Files.removeItem(item)
+    })
+
+    await Files.AddItemsView.setAllOpen(true)
+    await Files.SelectedItemsView.setAllOpen(true)
+
+    const addWrapper = shallow(<AddItemsTreeBase Stores={stores} />).dive()
+    const addItems = addWrapper.find(AddItemsTreeItem)
+    expect(addItems.length).toBe(21)
+
+    Files.SelectedItemsView.setHideRemoved(false)
+
+    let selectedWrapper = shallow(<SelectedItemsTreeBase Stores={stores} />).dive()
+    let selectedItems = selectedWrapper.find(SelectedItemsTreeItem)
+    expect(selectedItems.length).toBe(14)
+  })
+
+  it('adds all files and directories', async () => {
+    await Files.loadAllDirectories()
+
+    flatten(Files.root).forEach((item) => {
+      Files.addItem(item)
+    })
+
+    await Files.AddItemsView.setAllOpen(true)
+    await Files.SelectedItemsView.setAllOpen(true)
+
+    const selectedWrapper = shallow(<SelectedItemsTreeBase Stores={stores} />).dive()
+    const selectedItems = selectedWrapper.find(SelectedItemsTreeItem)
+    expect(selectedWrapper.find(ShowMore).length).toBe(0)
+    expect(selectedItems.length).toBe(21)
+  })
+})
 
 describe('Qvain.Files AddItemsTree ', () => {
   it('shows items that are unadded/unselected or have unadded children ', async () => {
@@ -611,20 +702,14 @@ describe('Qvain.Files AddItemsTree ', () => {
     const wrapper = shallow(<AddItemsTreeBase Stores={stores} />).dive()
     const items = wrapper.find(AddItemsTreeItem)
 
-    expect(itemPaths(items.filter('[level=0]'))).toEqual([
-      '/data',
-      '/moredata',
-    ])
+    expect(itemPaths(items.filter('[level=0]'))).toEqual(['/data', '/moredata'])
 
-    expect(itemPaths(items.filter('[level=1]'))).toEqual([
-      '/data/set1',
-      '/data/set2',
-    ])
+    expect(itemPaths(items.filter('[level=1]'))).toEqual(['/data/set1', '/data/set2'])
 
     expect(itemPaths(items.filter('[level=2]'))).toEqual([
+      '/data/set1/file4.csv',
       '/data/set1/subset',
       '/data/set1/subset2',
-      '/data/set1/file4.csv',
       '/data/set2/file2.csv',
       '/data/set2/file3.csv',
     ])
@@ -634,6 +719,42 @@ describe('Qvain.Files AddItemsTree ', () => {
       '/data/set1/subset2/file1.csv',
       '/data/set1/subset2/file2.csv',
     ])
+
+    expect(wrapper.find(ShowMore).length).toBe(0)
+  })
+
+  it('shows removed directory', async () => {
+    await Files.loadAllDirectories()
+    const dir = await Files.getItemByPath('/moredata')
+    Files.removeItem(dir)
+
+    await Files.AddItemsView.setAllOpen(true)
+
+    const addWrapper = shallow(<AddItemsTreeBase Stores={stores} />).dive()
+    const addItems = addWrapper.find(AddItemsTreeItem).filterWhere(i => i.prop('item') === dir)
+    expect(addItems.length).toBe(1)
+  })
+
+  it('shows removed files', async () => {
+    await Files.loadAllDirectories()
+    const file1 = await Files.getItemByPath('/moredata/info.csv')
+    Files.removeItem(file1)
+    const file2 = await Files.getItemByPath('/moredata/stuff.csv')
+    Files.removeItem(file2)
+    await Files.AddItemsView.setAllOpen(true)
+
+    const wrapper = shallow(<AddItemsTreeBase Stores={stores} />).dive()
+    const items = wrapper.find(AddItemsTreeItem)
+
+    expect(itemPaths(items.filter('[level=0]'))).toEqual(['/data', '/moredata'])
+
+    expect(itemPaths(items.filter('[level=1]'))).toEqual([
+      '/data/set1',
+      '/data/set2',
+      '/moredata/info.csv',
+      '/moredata/stuff.csv',
+    ])
+    expect(wrapper.find(ShowMore).length).toBe(0)
   })
 })
 
@@ -644,22 +765,19 @@ describe('Qvain.Files SelectedItemsTree ', () => {
     const wrapper = shallow(<SelectedItemsTreeBase Stores={stores} />).dive()
     const items = wrapper.find(SelectedItemsTreeItem)
 
-    expect(itemPaths(items.filter('[level=0]'))).toEqual([
-      '/data',
-      '/moredata',
-    ])
+    expect(itemPaths(items.filter('[level=0]'))).toEqual(['/data', '/moredata'])
 
     expect(itemPaths(items.filter('[level=1]'))).toEqual([
       '/data/set1',
       '/data/set2',
       '/moredata/info.csv',
-      '/moredata/stuff.csv'
+      '/moredata/stuff.csv',
     ])
 
     expect(itemPaths(items.filter('[level=2]'))).toEqual([
-      '/data/set1/subset',
       '/data/set1/file1.csv',
       '/data/set1/file2.csv',
+      '/data/set1/subset',
       '/data/set2/file1.csv',
     ])
 
@@ -669,30 +787,26 @@ describe('Qvain.Files SelectedItemsTree ', () => {
       '/data/set1/subset/file11.csv',
       '/data/set1/subset/file12.csv',
     ])
+
+    expect(items.map((item) => item.prop('item')).filter((item) => item.existing).length).toBe(14)
+    expect(items.map((item) => item.prop('item')).filter((item) => !item.existing).length).toBe(0)
+    expect(wrapper.find(ShowMore).length).toBe(0)
   })
 
   it('also shows added items', async () => {
+    await Files.loadAllDirectories()
+    const file = await Files.getItemByPath('/data/set1/subset2/file1.csv')
+    Files.addItem(file)
     await Files.SelectedItemsView.setAllOpen(true)
 
     const wrapper = shallow(<SelectedItemsTreeBase Stores={stores} />).dive()
     const items = wrapper.find(SelectedItemsTreeItem)
 
-    expect(itemPaths(items.filter('[level=0]'))).toEqual([
-      '/data',
-      '/moredata',
-    ])
-
-    expect(itemPaths(items.filter('[level=1]'))).toEqual([
-      '/data/set1',
-      '/data/set2',
-      '/moredata/info.csv',
-      '/moredata/stuff.csv'
-    ])
-
     expect(itemPaths(items.filter('[level=2]'))).toEqual([
-      '/data/set1/subset',
       '/data/set1/file1.csv',
       '/data/set1/file2.csv',
+      '/data/set1/subset',
+      '/data/set1/subset2',
       '/data/set2/file1.csv',
     ])
 
@@ -701,41 +815,79 @@ describe('Qvain.Files SelectedItemsTree ', () => {
       '/data/set1/subset/file10.csv',
       '/data/set1/subset/file11.csv',
       '/data/set1/subset/file12.csv',
+      '/data/set1/subset2/file1.csv',
     ])
+
+    expect(items.map((item) => item.prop('item')).filter((item) => item.existing).length).toBe(14)
+    expect(items.map((item) => item.prop('item')).filter((item) => !item.existing).length).toBe(2)
+    expect(wrapper.find(ShowMore).length).toBe(0)
   })
-})
 
+  it('adds files to a new dataset', async () => {
+    const response = await axios.get(`/api/dataset/edit/${emptyDatasetIdentifier}`)
+    stores.Qvain.editDataset(response.data)
+    Files.changeProject('project')
+    await Files.loadingProjectRoot.promise
+    await Files.loadAllDirectories()
+    await Files.SelectedItemsView.setAllOpen(true)
+    // Qvain.Files.AddItemsView.setDefaultShowLimit(1,1)
+    Files.SelectedItemsView.setDefaultShowLimit(1, 1)
 
-describe('Qvain.Files AddItemsTree ', () => {
-  it('shows items that are unadded/unselected or have unadded children ', async () => {
-    await Files.AddItemsView.setAllOpen(true)
+    const file = await Files.getItemByPath('/data/set1/subset2/file1.csv')
+    const file2 = await Files.getItemByPath('/data/set1/subset2/file2.csv')
+    Files.addItem(file)
+    Files.addItem(file2)
 
-    const wrapper = shallow(<AddItemsTreeBase Stores={stores} />).dive()
-    const items = wrapper.find(AddItemsTreeItem)
+    const wrapper = shallow(<SelectedItemsTreeBase Stores={stores} />).dive()
+    let items = wrapper.find(SelectedItemsTreeItem)
 
-    expect(itemPaths(items.filter('[level=0]'))).toEqual([
+    expect(itemPaths(items)).toEqual([
       '/data',
-      '/moredata',
-    ])
-
-    expect(itemPaths(items.filter('[level=1]'))).toEqual([
       '/data/set1',
-      '/data/set2',
-    ])
-
-    expect(itemPaths(items.filter('[level=2]'))).toEqual([
-      '/data/set1/subset',
       '/data/set1/subset2',
-      '/data/set1/file4.csv',
-      '/data/set2/file2.csv',
-      '/data/set2/file3.csv',
+      '/data/set1/subset2/file1.csv',
     ])
 
-    expect(itemPaths(items.filter('[level=3]'))).toEqual([
-      '/data/set1/subset/file13.csv',
+    expect(wrapper.find(ShowMore).length).toBe(1)
+
+    const subset2 = await Files.getItemByPath('/data/set1/subset2')
+    await Files.SelectedItemsView.showMore(subset2)
+    wrapper.update()
+    items = wrapper.find(SelectedItemsTreeItem)
+    expect(itemPaths(items)).toEqual([
+      '/data',
+      '/data/set1',
+      '/data/set1/subset2',
       '/data/set1/subset2/file1.csv',
       '/data/set1/subset2/file2.csv',
     ])
+    expect(wrapper.find(ShowMore).length).toBe(0)
+  })
+
+  it('adds directory to a new dataset', async () => {
+    const response = await axios.get(`/api/dataset/edit/${emptyDatasetIdentifier}`)
+    stores.Qvain.editDataset(response.data)
+    Files.changeProject('project')
+    await Files.loadingProjectRoot.promise
+    await Files.loadAllDirectories()
+    await Files.SelectedItemsView.setAllOpen(true)
+    Files.SelectedItemsView.setDefaultShowLimit(10, 1)
+
+    const dir = await Files.getItemByPath('/data/set1/subset2')
+    Files.addItem(dir)
+
+    const wrapper = shallow(<SelectedItemsTreeBase Stores={stores} />).dive()
+    let items = wrapper.find(SelectedItemsTreeItem)
+
+    expect(itemPaths(items)).toEqual([
+      '/data',
+      '/data/set1',
+      '/data/set1/subset2',
+      '/data/set1/subset2/file1.csv',
+      '/data/set1/subset2/file2.csv',
+    ])
+
+    expect(wrapper.find(ShowMore).length).toBe(0)
   })
 })
 
@@ -751,7 +903,6 @@ describe('Qvain.Files handleSubmit', () => {
     const dataset = handleSubmitToBackend(Qvain)
     expect(dataset).toMatchSnapshot()
   })
-
 
   it('submits data correctly after adding file', async () => {
     const file2 = await Files.getItemByPath('/data/set2/file2.csv')
@@ -774,71 +925,286 @@ describe('Qvain.Files handleSubmit', () => {
     expect(dataset).toMatchSnapshot()
   })
 
-  const loadLegacyDirectory = async (dir, parent) => {
-    const legacyDir = getDirectories(Qvain.hierarchy).find(d => d.identifier === dir.identifier)
-    await new Promise(resolve => Qvain.loadDirectory(legacyDir.id, parent, resolve))
-    return getDirectories(Qvain.hierarchy).find(d => d.identifier === dir.identifier)
-  }
-
-  it('returns the same data for both file picker versions', async () => {
-    const data = handleSubmitToBackend(Qvain)
-    Qvain.setLegacyFilePicker(true)
-    const legacyData = handleSubmitToBackend(Qvain)
-    expect(data).toEqual(legacyData)
-  })
-
-  it('adds directory the same way for both file picker versions', async () => {
-    const data = await Files.getItemByPath('/data')
-    const set2 = await Files.getItemByPath('/data/set2')
-    Files.addItem(set2)
-    const dataset = handleSubmitToBackend(Qvain)
-
-    Qvain.setLegacyFilePicker(true)
-    await loadLegacyDirectory(data, Qvain.hierarchy)
-
-    const legacySet2 = getDirectories(Qvain.hierarchy).find(d => d.identifier === set2.identifier)
-    Qvain.toggleSelectedDirectory(legacySet2, true)
-    const legacyDataset = handleSubmitToBackend(Qvain)
-    expect(dataset.directories).toEqual(expect.arrayContaining(legacyDataset.directories))
-  })
-
-  it('adds file the same way for both file picker versions', async () => {
-    const data = await Files.getItemByPath('/data')
-    const set2 = await Files.getItemByPath('/data/set2')
-    const file2 = await Files.getItemByPath('/data/set2/file2.csv')
-    Files.addItem(file2)
-    const dataset = handleSubmitToBackend(Qvain)
-
-    Qvain.setLegacyFilePicker(true)
-    const legacyData = await loadLegacyDirectory(data, Qvain.hierarchy)
-    await loadLegacyDirectory(set2, legacyData)
-    const legacyFile2 = getFiles(Qvain.hierarchy).find(f => f.identifier === file2.identifier)
-    Qvain.toggleSelectedFile(legacyFile2, true)
-    const legacyDataset = handleSubmitToBackend(Qvain)
-    expect(dataset.files).toEqual(expect.arrayContaining(legacyDataset.files))
-  })
-
-  it('removes directory the same way for both file picker versions', async () => {
-    const set1 = await Files.getItemByPath('/data/set1')
-    Files.removeItem(set1)
-    const dataset = handleSubmitToBackend(Qvain)
-
-    Qvain.setLegacyFilePicker(true)
-    const legacySet1 = Qvain.existingDirectories.find(d => d.identifier === set1.identifier)
-    Qvain.toggleSelectedDirectory(legacySet1, false)
-    const legacyDataset = handleSubmitToBackend(Qvain)
-    expect(dataset).toEqual(legacyDataset)
-  })
-
-  it('removes file the same way for both file picker versions', async () => {
+  it('removes directory when all child files are removed', async () => {
+    const moredata = await Files.getItemByPath('/moredata')
     const info = await Files.getItemByPath('/moredata/info.csv')
-    Files.removeItem(info)
-    const dataset = handleSubmitToBackend(Qvain)
+    const stuff = await Files.getItemByPath('/moredata/stuff.csv')
 
-    Qvain.setLegacyFilePicker(true)
-    const legacyInfo = Qvain.existingFiles.find(d => d.identifier === info.identifier)
-    Qvain.toggleSelectedFile(legacyInfo, false)
-    const legacyDataset = handleSubmitToBackend(Qvain)
-    expect(dataset).toEqual(legacyDataset)
+    Files.removeItem(info)
+    Files.removeItem(stuff)
+    const actions = Files.actionsToMetax()
+    expect(actions.directories).toEqual([{ identifier: moredata.identifier, exclude: true }])
+  })
+
+  it('removes directory when all child directories are removed', async () => {
+    const data = await Files.getItemByPath('/data')
+    const set1 = await Files.getItemByPath('/data/set1')
+    const set2 = await Files.getItemByPath('/data/set2')
+
+    Files.removeItem(set1)
+    Files.removeItem(set2)
+    const actions = Files.actionsToMetax()
+    expect(actions.directories).toEqual([{ identifier: data.identifier, exclude: true }])
+  })
+
+  it('removes directory', async () => {
+    const set1 = await Files.getItemByPath('/data/set1')
+
+    Files.removeItem(set1)
+    const actions = Files.actionsToMetax()
+    expect(actions.directories).toEqual([{ identifier: set1.identifier, exclude: true }])
+  })
+
+  it('removes directories and files', async () => {
+    const file1 = await Files.getItemByPath('/data/set1/file1.csv')
+    const file2 = await Files.getItemByPath('/data/set1/file2.csv')
+    const moredata = await Files.getItemByPath('/moredata')
+
+    Files.removeItem(file1)
+    Files.removeItem(file2)
+    Files.removeItem(moredata)
+    const actions = Files.actionsToMetax()
+    expect(actions.files).toEqual([
+      { identifier: file1.identifier, exclude: true },
+      { identifier: file2.identifier, exclude: true },
+    ])
+    expect(actions.directories).toEqual([
+      { identifier: moredata.identifier, exclude: true }
+    ])
+  })
+
+  it('does not remove directory when parent directory is already removed', async () => {
+    const set1 = await Files.getItemByPath('/data/set1')
+    const subset = await Files.getItemByPath('/data/set1/subset')
+
+    Files.removeItem(set1)
+    Files.removeItem(subset)
+    const actions = Files.actionsToMetax()
+    expect(actions.directories).toEqual([{ identifier: set1.identifier, exclude: true }])
+  })
+
+  it('clears child actions when parent is removed', async () => {
+    const set1 = await Files.getItemByPath('/data/set1')
+    const subset = await Files.getItemByPath('/data/set1/subset')
+    const file4 = await Files.getItemByPath('/data/set1/file4.csv')
+
+    Files.removeItem(subset)
+    Files.addItem(file4)
+    let actions = Files.actionsToMetax()
+    expect(actions.directories).toEqual([{ identifier: subset.identifier, exclude: true }])
+    expect(actions.files).toEqual([{ identifier: file4.identifier }])
+
+    Files.removeItem(set1)
+    actions = Files.actionsToMetax()
+    expect(actions.directories).toEqual([{ identifier: set1.identifier, exclude: true }])
+    expect(actions.files).toEqual([])
+  })
+
+  it('adds directory when all child directories are added', async () => {
+    const data = await Files.getItemByPath('/data')
+    const set1 = await Files.getItemByPath('/data/set1')
+    const set2 = await Files.getItemByPath('/data/set2')
+
+    Files.addItem(set1)
+    Files.addItem(set2)
+    const actions = Files.actionsToMetax()
+    expect(actions.directories).toEqual([{ identifier: data.identifier }])
+  })
+
+  it('adds directory when all nested files are added', async () => {
+    const set1 = await Files.getItemByPath('/data/set1')
+
+    Files.addItem(await Files.getItemByPath('/data/set1/file4.csv'))
+    Files.addItem(await Files.getItemByPath('/data/set1/subset2/file1.csv'))
+    Files.addItem(await Files.getItemByPath('/data/set1/subset2/file2.csv'))
+    Files.addItem(await Files.getItemByPath('/data/set1/subset/file13.csv'))
+
+    const actions = Files.actionsToMetax()
+    expect(actions.directories).toEqual([{ identifier: set1.identifier }])
+  })
+
+  it('adds directories and files', async () => {
+    const set1 = await Files.getItemByPath('/data/set1')
+    const set2file2 = await Files.getItemByPath('/data/set2/file2.csv')
+
+    Files.addItem(set1)
+    Files.addItem(set2file2)
+
+    const actions = Files.actionsToMetax()
+    expect(actions.directories).toEqual(
+      [{ identifier: set1.identifier }]
+    )
+    expect(actions.files).toEqual(
+      [{ identifier: set2file2.identifier }]
+    )
+  })
+
+  it('does not add file when its parent directory is already added', async () => {
+    const data = await Files.getItemByPath('/data')
+    const file13 = await Files.getItemByPath('/data/set1/subset/file13.csv')
+
+    Files.addItem(data)
+    Files.addItem(file13)
+
+    const actions = Files.actionsToMetax()
+    expect(actions.directories).toEqual(
+      [{ identifier: data.identifier }]
+    )
+    expect(actions.files).toEqual([])
+  })
+
+  it('clears child actions when parent is added', async () => {
+    const set1 = await Files.getItemByPath('/data/set1')
+    const subset = await Files.getItemByPath('/data/set1/subset')
+    const file4 = await Files.getItemByPath('/data/set1/file4.csv')
+
+    Files.removeItem(subset)
+    Files.addItem(file4)
+    let actions = Files.actionsToMetax()
+    expect(actions.directories).toEqual([{ identifier: subset.identifier, exclude: true }])
+    expect(actions.files).toEqual([{ identifier: file4.identifier }])
+
+    Files.addItem(set1)
+    actions = Files.actionsToMetax()
+    expect(actions.directories).toEqual([{ identifier: set1.identifier }])
+    expect(actions.files).toEqual([])
+  })
+
+  it('adds and removes directories based on actions done to nested items', async () => {
+    const set1 = await Files.getItemByPath('/data/set1')
+    const set2 = await Files.getItemByPath('/data/set2')
+
+    Files.addItem(await Files.getItemByPath('/data/set1/file4.csv'))
+    Files.addItem(await Files.getItemByPath('/data/set1/subset'))
+    Files.addItem(await Files.getItemByPath('/data/set1/subset2'))
+    Files.removeItem(await Files.getItemByPath('/data/set2/file1.csv'))
+    const actions = Files.actionsToMetax()
+    expect(actions.directories).toEqual([
+      { identifier: set1.identifier },
+      { identifier: set2.identifier, exclude: true }
+    ])
+  })
+
+  it('removes and adds nested items', async () => {
+    const data = await Files.getItemByPath('/data')
+    const set1 = await Files.getItemByPath('/data/set1')
+    const set1File2 = await Files.getItemByPath('/data/set1/file2.csv')
+    const subset = await Files.getItemByPath('/data/set1/subset')
+    const subsetFile1 = await Files.getItemByPath('/data/set1/subset/file1.csv')
+
+    Files.removeItem(data)
+    Files.addItem(set1)
+    Files.removeItem(set1File2)
+    Files.removeItem(subset)
+    Files.addItem(subsetFile1)
+//    console.log(flatten(Files.root).map(i=>`${i.path} ${i.added ? '+' : ''}${i.removed ? '-' : ''}${i.existing ? '.' : ''}`).join('\n'))
+    const actions = Files.actionsToMetax()
+//    console.log(actions)
+    expect(actions.directories).toEqual([
+      { identifier: data.identifier, exclude: true },
+      { identifier: set1.identifier },
+      { identifier: subset.identifier, exclude: true },
+    ])
+    expect(actions.files).toEqual([
+      { identifier: set1File2.identifier, exclude: true },
+      { identifier: subsetFile1.identifier },
+    ])
+  })
+})
+
+describe('Qvain.Files pagination', () => {
+  it('respects limit for any items', async () => {
+    const subset = await Files.getItemByPath('/data/set1/subset', true)
+    expect(subset.files.length + subset.directories.length).toBe(0)
+    await itemLoaderAny.loadDirectory(Files, subset, 1)
+    expect(subset.files.length + subset.directories.length).toBe(1)
+    await itemLoaderAny.loadDirectory(Files, subset, 2)
+    expect(subset.files.length + subset.directories.length).toBe(2)
+    await itemLoaderAny.loadDirectory(Files, subset, 4)
+    expect(subset.files.length + subset.directories.length).toBe(4)
+    await itemLoaderAny.loadDirectory(Files, subset, 5)
+    expect(subset.files.length + subset.directories.length).toBe(5)
+    await itemLoaderAny.loadDirectory(Files, subset, 100)
+    expect(subset.files.length + subset.directories.length).toBe(5)
+  })
+
+  it('respects limit for selected items', async () => {
+    const subset = await Files.getItemByPath('/data/set1/subset', true)
+    expect(subset.files.length + subset.directories.length).toBe(0)
+    await itemLoaderSelected.loadDirectory(Files, subset, 1)
+    expect(subset.files.length + subset.directories.length).toBe(1)
+    await itemLoaderSelected.loadDirectory(Files, subset, 2)
+    expect(subset.files.length + subset.directories.length).toBe(2)
+    await itemLoaderSelected.loadDirectory(Files, subset, 3)
+    expect(subset.files.length + subset.directories.length).toBe(3)
+    await itemLoaderSelected.loadDirectory(Files, subset, 4)
+    expect(subset.files.length + subset.directories.length).toBe(4)
+    await itemLoaderSelected.loadDirectory(Files, subset, 100)
+    expect(subset.files.length + subset.directories.length).toBe(4)
+  })
+
+  it('respects limit for new items', async () => {
+    const subset = await Files.getItemByPath('/data/set1/subset', true)
+    expect(subset.files.length + subset.directories.length).toBe(0)
+    await itemLoaderAdd.loadDirectory(Files, subset, 1)
+    expect(subset.files.length + subset.directories.length).toBe(1)
+    await itemLoaderAdd.loadDirectory(Files, subset, 2)
+    expect(subset.files.length + subset.directories.length).toBe(1)
+  })
+
+  it('respects limit for mixed items', async () => {
+    const subset = await Files.getItemByPath('/data/set1/subset', true)
+    expect(subset.files.length + subset.directories.length).toBe(0)
+    await itemLoaderAdd.loadDirectory(Files, subset, 1)
+    expect(subset.files.length + subset.directories.length).toBe(1)
+    await itemLoaderSelected.loadDirectory(Files, subset, 1)
+    expect(subset.files.length + subset.directories.length).toBe(2)
+  })
+
+  it('preserves Metax item order when loading any files', async () => {
+    const subset = await Files.getItemByPath('/data/set1/subset', true)
+    await itemLoaderAny.loadDirectory(Files, subset, 10)
+    expect(subset.files.map((item) => item.path)).toEqual([
+      '/data/set1/subset/file1.csv',
+      '/data/set1/subset/file10.csv',
+      '/data/set1/subset/file11.csv',
+      '/data/set1/subset/file12.csv',
+      '/data/set1/subset/file13.csv',
+    ])
+
+    // file1  +
+    // file10 +
+    // file11 +
+    // file12 +
+    // file13 -
+  })
+
+  it('preserves Metax item order with mixed file loads', async () => {
+    const subset = await Files.getItemByPath('/data/set1/subset', true)
+    await itemLoaderSelected.loadDirectory(Files, subset, 2)
+    await itemLoaderAdd.loadDirectory(Files, subset, 1)
+
+    expect(subset.files.map((item) => item.path)).toEqual([
+      '/data/set1/subset/file1.csv',
+      '/data/set1/subset/file12.csv',
+      '/data/set1/subset/file13.csv',
+    ])
+  })
+
+  it('does not load same file again', async () => {
+    const subset = await Files.getItemByPath('/data/set1/subset', true)
+    axios.get.mockClear()
+    await itemLoaderAny.loadDirectory(Files, subset, 3)
+    expect(axios.get.mock.calls.length).toBe(3)
+    await itemLoaderAdd.loadDirectory(Files, subset, 10000)
+    expect(axios.get.mock.calls.length).toBe(4)
+    await itemLoaderAdd.loadDirectory(Files, subset, 10000)
+    expect(axios.get.mock.calls.length).toBe(4)
+    expect(subset.files.map((item) => item.path)).toEqual([
+      '/data/set1/subset/file1.csv',
+      '/data/set1/subset/file10.csv',
+      '/data/set1/subset/file11.csv',
+      '/data/set1/subset/file13.csv',
+    ])
   })
 })

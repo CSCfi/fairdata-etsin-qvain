@@ -2,15 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import styled from 'styled-components'
-import { darken } from 'polished'
+import { tint } from 'polished'
 import { faChevronRight, faChevronDown } from '@fortawesome/free-solid-svg-icons'
 
 import Translate from 'react-translate-component'
 import { Spinner } from '../../../../general/loader'
-import etsinTheme from '../../../../../styles/theme';
 
-export const isDirectory = (item) => item.directoryName !== undefined
-export const isFile = (item) => item.fileName !== undefined
+export const isDirectory = (item) => item.type === 'directory'
+export const isFile = (item) => item.type === 'file'
 
 
 const LoaderWrapper = (props) => (
@@ -29,7 +28,7 @@ export const SmallLoader = styled(LoaderWrapper)`{
   opacity: 0.8;
 }`
 
-const IconWrapper = ({ icon, ...props }) => (
+const IconWrapper = ({ icon, color, disabledColor, disabledOpacity, ...props }) => (
   <div {...props}>
     <FontAwesomeIcon icon={icon} />
   </div>
@@ -37,10 +36,19 @@ const IconWrapper = ({ icon, ...props }) => (
 
 IconWrapper.propTypes = {
   icon: PropTypes.object.isRequired,
+  color: PropTypes.string,
+  disabledColor: PropTypes.string,
+  disabledOpacity: PropTypes.number,
   className: PropTypes.string.isRequired,
 }
 
-const ClickableIconButton = ({ icon, ...props }) => (
+IconWrapper.defaultProps = {
+  color: '',
+  disabledColor: 'gray',
+  disabledOpacity: 1
+}
+
+const ClickableIconButton = ({ icon, disabledColor, disabledOpacity, ...props }) => (
   <button type="button" {...props}>
     <FontAwesomeIcon icon={icon} />
   </button>
@@ -51,11 +59,15 @@ ClickableIconButton.propTypes = {
   className: PropTypes.string.isRequired,
   onClick: PropTypes.func,
   disabled: PropTypes.bool,
+  disabledColor: PropTypes.string,
+  disabledOpacity: PropTypes.number,
 }
 
 ClickableIconButton.defaultProps = {
   onClick: () => { },
   disabled: false,
+  disabledColor: '',
+  disabledOpacity: 1,
 }
 
 export const Icon = styled(IconWrapper)`{
@@ -68,33 +80,33 @@ export const Icon = styled(IconWrapper)`{
   position: relative;
   flex-shrink: 0;
 
-  ${props => (props.disabled ? `color: ${etsinTheme.color.gray} ` : '')}
+  ${props => (props.disabled ?
+    `color: ${props.theme.color[props.disabledColor]};` : '')}
+
+  ${props => (props.disabled && props.disabledOpacity && `opacity: ${props.disabledOpacity}`)}
 }`
 
-export const ClickableIcon = styled(ClickableIconButton)`{
+export const ClickableIcon = styled(ClickableIconButton)`
   background: none;
   border: none;
   font-size: 1.1rem;
-  color: ${props => etsinTheme.color[props.color || 'primary']};
+  color: ${props => props.theme.color[props.color || 'primary']};
   width: 1.3rem;
   height: 1.3rem;
   flex-shrink: 0;
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  &:[disabled] {
-    color: #aaa;
-  }
-  &:not([disabled]) {
-    cursor: pointer;
-  }
-  &:not([disabled]):hover {
-    color: ${props => darken(0.1, etsinTheme.color[props.color || 'primary'])};
-    transform: scale(1.15);
-  }
 
-  ${props => (props.disabled ? 'color: #888' : '')}
-}`
+  ${props => (props.disabled ? `
+    color: ${props.theme.color[props.disabledColor]};
+    opacity: ${props.disabledOpacity};
+    ` : `
+    cursor: pointer;
+    `)
+  }
+}
+`
 
 export const ToggleOpenButton = ({ item, directoryView, ...props }) => {
   const isOpen = directoryView.isOpen(item)
@@ -135,7 +147,6 @@ export const ItemCheckbox = styled.input.attrs({
   height: 1.1rem;
   margin: 0;
 }`
-ItemCheckbox.displayName = 'ItemCheckbox'
 
 // Placeholder that has the same size as an icon
 export const Checkbox = styled(CheckboxWrapper)`{
@@ -146,7 +157,6 @@ export const Checkbox = styled(CheckboxWrapper)`{
   justify-content: center;
   align-items: center;
 }`
-Checkbox.displayName = 'Checkbox'
 
 // Placeholder that has the same size as an icon
 export const NoIcon = styled.div`{
@@ -154,7 +164,6 @@ export const NoIcon = styled.div`{
   width: 1.3rem;
   height: 1.3rem;
 }`
-NoIcon.displayName = 'NoIcon'
 
 export const ItemTitle = styled.div`{
   margin-left: 4px;
@@ -162,7 +171,6 @@ export const ItemTitle = styled.div`{
   align-items: center;
   flex-grow: 1;
 }`
-ItemTitle.displayName = 'ItemTitle'
 
 export const FileCount = styled.span`{
   margin-left: 0.5em;
@@ -171,7 +179,6 @@ export const FileCount = styled.span`{
   color: #606060;
   white-space: nowrap;
 }`
-FileCount.displayName = 'FileCount'
 
 export const ItemRow = styled.li`{
   display: flex;
@@ -181,7 +188,6 @@ export const ItemRow = styled.li`{
 
   ${props => (props.disabled ? 'color: #888' : '')}
 }`
-ItemRow.displayName = 'ItemRow'
 
 export const ItemSpacer = styled.div`{
   width: ${props => props.level * 1.3}em;
@@ -189,12 +195,10 @@ export const ItemSpacer = styled.div`{
   padding: 0;
   background: #cad;
 }`
-ItemSpacer.displayName = 'ItemSpacer'
 
 export const GrowSpacer = styled.div`{
   flex-grow: 1;
 }`
-GrowSpacer.displayName = 'GrowSpacer'
 
 export const Items = styled.div`{
   display: flex;
@@ -204,28 +208,24 @@ export const Items = styled.div`{
   width: 100%;
   overflow: auto;
 }`
-Items.displayName = 'Items'
 
 export const ChildrenItem = styled.li`{
   width: 100%;
 }`
-ChildrenItem.displayName = 'ChildrenItem'
 
 export const Children = styled.ul`{
   width: 100%;
 }`
-Children.displayName = 'Children'
 
 export const Tag = styled.div`{
   font-size: 75%;
   font-weight: bold;
-  background: #cdf;
+  background: ${p => (p.color && tint(0.8, p.theme.color[p.color])) || '#cdf'};
   min-width: 20px;
-  border: 1px solid rgba(0,0,0,0.2);
+  border: 1px solid ${p => (p.color && tint(0.5, p.color && p.theme.color[p.color])) || '#bce'};
   border-radius: 4px;
   text-align: center;
   margin-left: 2px;
   padding: 1px 4px;
   text-transform: uppercase;
 }`
-Tag.displayName = 'Tag'

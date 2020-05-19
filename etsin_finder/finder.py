@@ -69,12 +69,56 @@ def add_restful_resources(app):
         QvainDatasetFixDeprecated
     )
 
+    from etsin_finder.qvain_light_rpc_v2 import (
+        QvainDatasetChangeCumulativeState as V2QvainDatasetChangeCumulativeState,
+        QvainDatasetFixDeprecated as V2QvainDatasetFixDeprecated,
+        QvainDatasetCreateNewVersion as V2QvainDatasetCreateNewVersion,
+        QvainDatasetPublishDataset as V2QvainDatasetPublishDataset,
+        QvainDatasetMergeDraft as V2QvainDatasetMergeDraft,
+        QvainDatasetCreateDraft as V2QvainDatasetCreateDraft
+    )
+
+    from etsin_finder.qvain_light_resources_v2 import (
+        QvainDatasetEdit as V2QvainDatasetEdit,
+        ProjectFiles as V2ProjectFiles,
+        FileDirectory as V2FileDirectory,
+        FileCharacteristics as V2FileCharacteristics,
+        UserDatasets as V2UserDatasets,
+        QvainDatasetDelete as V2QvainDatasetDelete,
+        QvainDataset as V2QvainDataset,
+        QvainDatasetUserMetadata as V2QvainDatasetUserMetadata,
+        QvainDatasetProjects as V2QvainDatasetProjects,
+        QvainDatasetFiles as V2QvainDatasetFiles
+    )
+
+    # Qvain light API endpoints for Metax v2
+    api.add_resource(V2ProjectFiles, '/api/v2/files/project/<string:pid>', endpoint='v2_project_files')
+    api.add_resource(V2FileDirectory, '/api/v2/files/directory/<string:dir_id>', endpoint='v2_file_directory')
+    api.add_resource(V2FileCharacteristics, '/api/v2/files/file_characteristics/<string:file_id>', endpoint='v2_file_characteristics')
+    api.add_resource(V2UserDatasets, '/api/v2/datasets/<string:user_id>', endpoint='v2_user_datasets')
+    api.add_resource(V2QvainDatasetDelete, '/api/v2/dataset/<string:cr_id>', endpoint='v2_user_datasets_delete')
+    api.add_resource(V2QvainDataset, '/api/v2/dataset', endpoint='v2_dataset')
+    api.add_resource(V2QvainDatasetEdit, '/api/v2/datasets/edit/<string:cr_id>', endpoint='v2_dataset_edit')
+    api.add_resource(V2QvainDatasetUserMetadata, '/api/v2/datasets/user_metadata/<string:cr_id>', endpoint='v2_dataset_user_metadata')
+    api.add_resource(V2QvainDatasetProjects, '/api/v2/datasets/projects/<string:cr_id>', endpoint='v2_dataset_projects')
+    api.add_resource(V2QvainDatasetFiles, '/api/v2/datasets/files/<string:cr_id>', endpoint='v2_dataset_files')
+
+    # Qvain light API RPC endpoints for Metax v2
+    api.add_resource(V2QvainDatasetChangeCumulativeState, '/api/v2/rpc/datasets/change_cumulative_state', endpoint='v2_change_cumulative_state')
+    api.add_resource(V2QvainDatasetFixDeprecated, '/api/v2/rpc/datasets/fix_deprecated', endpoint='v2_fix_deprecated')
+    api.add_resource(V2QvainDatasetCreateNewVersion, '/api/v2/rpc/datasets/create_new_version', endpoint='v2_create_new_version')
+    api.add_resource(V2QvainDatasetCreateDraft, '/api/v2/rpc/datasets/create_draft', endpoint='v2_create_draft')
+    api.add_resource(V2QvainDatasetPublishDataset, '/api/v2/rpc/datasets/publish_dataset', endpoint='v2_publish_dataset')
+    api.add_resource(V2QvainDatasetMergeDraft, '/api/v2/rpc/datasets/merge_draft', endpoint='v2_merge_draft')
+
+    # Etsin API endpoints
     api.add_resource(Dataset, '/api/dataset/<string:cr_id>')
     api.add_resource(Files, '/api/files/<string:cr_id>')
     api.add_resource(Contact, '/api/email/<string:cr_id>')
     api.add_resource(User, '/api/user')
     api.add_resource(Session, '/api/session')
     api.add_resource(Download, '/api/dl')
+
     # Qvain light API endpoints
     api.add_resource(ProjectFiles, '/api/files/project/<string:pid>')
     api.add_resource(FileDirectory, '/api/files/directory/<string:dir_id>')

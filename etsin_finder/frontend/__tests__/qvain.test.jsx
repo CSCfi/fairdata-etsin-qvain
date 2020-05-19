@@ -1,6 +1,8 @@
 import React from 'react';
 import { shallow } from 'enzyme'
 
+import '../locale/translations'
+
 import Qvain from '../js/components/qvain'
 import Description from '../js/components/qvain/description'
 import DescriptionField from '../js/components/qvain/description/descriptionField'
@@ -27,7 +29,7 @@ import LocaleStore from '../js/stores/view/language'
 import TablePasState from '../js/components/qvain/datasets/tablePasState'
 
 const getStores = () => {
-  QvainStore.setLegacyFilePicker(false)
+  QvainStore.setMetaxApiV2(true)
   return {
     Qvain: QvainStore,
     Locale: LocaleStore

@@ -17,6 +17,7 @@ import { Provider } from 'mobx-react'
 import createBrowserHistory from 'history/createBrowserHistory'
 import { syncHistoryWithStore } from 'mobx-react-router'
 
+import '../locale/translations'
 import { registerLocale } from 'react-datepicker'
 import fi from 'date-fns/locale/fi'
 import en from 'date-fns/locale/en-GB'

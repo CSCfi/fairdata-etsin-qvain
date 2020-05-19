@@ -26,6 +26,8 @@ export const SubHeaderTextContainer = styled.div`
 export const ButtonContainer = styled.div`
   text-align: center;
   padding-top: 2px;
+  margin-left: auto;
+  margin-right: auto;
 `
 
 export const SubmitButton = styled(InvertedButton)`
@@ -76,7 +78,6 @@ export const ErrorButtons = styled.div`
 export const LinkBackContainer = styled.div`
   text-align: ${(props) => props.position};
   white-space: nowrap;
-  width: 47%;
 `
 
 export const LinkBack = styled(Link)`

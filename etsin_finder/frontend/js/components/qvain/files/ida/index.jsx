@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { inject, observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 import styled from 'styled-components'
@@ -11,14 +11,15 @@ import etsinTheme from '../../../../styles/theme'
 import SelectedItems from './selectedItems'
 import AddItemsModal from './addItems'
 import FixDeprecatedModal from '../fixDeprecatedModal'
+import { Checkbox, Label } from '../../general/form'
 
 export class IDAFilePickerBase extends Component {
   state = {
-    addFilesModalOpen: false
+    addFilesModalOpen: false,
   }
 
   static propTypes = {
-    Stores: PropTypes.object.isRequired
+    Stores: PropTypes.object.isRequired,
   }
 
   open = () => {
@@ -27,7 +28,6 @@ export class IDAFilePickerBase extends Component {
     })
   }
 
-
   close = () => {
     this.setState({
       addFilesModalOpen: false,
@@ -35,20 +35,49 @@ export class IDAFilePickerBase extends Component {
   }
 
   render() {
-    const { selectedProject, root } = this.props.Stores.Qvain.Files
-    const haveItems = root && (root.addedChildCount > 0 || root.selectedChildCount > 0)
+    const { canSelectFiles } = this.props.Stores.Qvain
+    const { selectedProject, root, SelectedItemsView } = this.props.Stores.Qvain.Files
+    const haveItems =
+      root &&
+      (root.files.some((f) => f.existing) ||
+        root.directories.some((d) => d.existing) ||
+        root.addedChildCount > 0)
+    const { toggleHideRemoved, hideRemoved } = SelectedItemsView
+
+    if (!canSelectFiles && !haveItems) {
+      return <Translate component={Title} content="qvain.files.selected.none" />
+    }
 
     return (
       <>
-        <Translate component={Title} content="qvain.files.selected.title" />
-        <AddItems>
+        {canSelectFiles ? (
+          <Translate component={Title} content="qvain.files.selected.title" />
+        ) : (
           <Translate
-            component={PlusButton}
-            onClick={this.open}
-            attributes={{ 'aria-label': 'qvain.files.addItemsModal.title' }}
+            component={Title}
+            content="qvain.files.selected.readonlyTitle"
+            with={{ project: selectedProject }}
           />
-          <ProjectInfo>{haveItems ? selectedProject : <Translate content="qvain.files.selected.none" />}</ProjectInfo>
-        </AddItems>
+        )}
+        {canSelectFiles && (
+          <Controls>
+            <AddItems>
+              <Translate
+                component={PlusButton}
+                onClick={this.open}
+                attributes={{ 'aria-label': 'qvain.files.addItemsModal.title' }}
+              />
+              <ProjectInfo>
+                {haveItems ? selectedProject : <Translate content="qvain.files.selected.none" />}
+              </ProjectInfo>
+            </AddItems>
+            <HideRemovedLabel>
+              <Checkbox onChange={toggleHideRemoved} checked={hideRemoved} type="checkbox" />
+              <Translate content={'qvain.files.selected.hideRemoved'} />
+            </HideRemovedLabel>
+          </Controls>
+        )}
+
         <AddItemsModal isOpen={this.state.addFilesModalOpen} onRequestClose={this.close} />
         <SelectedItems />
         <FixDeprecatedModal />
@@ -57,23 +86,32 @@ export class IDAFilePickerBase extends Component {
   }
 }
 
-const Title = styled.h3`{
+const HideRemovedLabel = styled(Label)`
+  display: flex;
+  align-items: center;
+`
+
+const Controls = styled.div`
+  display: flex;
+  margin-bottom: 1rem;
+`
+
+const Title = styled.h3`
   margin-right: 0.5em;
   margin-bottom: 0;
-}`
+`
 
-
-const ProjectInfo = styled.div`{
+const ProjectInfo = styled.div`
   margin: 0;
   margin-left: 1em;
   padding: 0;
-}`
+`
 
-const AddItems = styled.div`{
+const AddItems = styled.div`
   display: flex;
   align-items: center;
-  margin-bottom: 1rem;
-}`
+  flex-grow: 1;
+`
 
 const PlusButtonWrapper = ({ onClick, ...props }) => (
   <button type="button" onClick={onClick} {...props}>
@@ -81,7 +119,7 @@ const PlusButtonWrapper = ({ onClick, ...props }) => (
   </button>
 )
 
-const PlusButton = styled(PlusButtonWrapper)`{
+const PlusButton = styled(PlusButtonWrapper)`
   border: 1px solid ${darken(0.1, etsinTheme.color.lightgray)};
   color: ${etsinTheme.color.darkgray};
   background: ${etsinTheme.color.lightgray};
@@ -98,11 +136,10 @@ const PlusButton = styled(PlusButtonWrapper)`{
     color: ${darken(0.1, etsinTheme.color.darkgray)};
     background: ${darken(0.1, etsinTheme.color.lightgray)};
   }
-}`
+`
 
 PlusButtonWrapper.propTypes = {
-  onClick: PropTypes.func.isRequired
+  onClick: PropTypes.func.isRequired,
 }
-
 
 export default inject('Stores')(observer(IDAFilePickerBase))

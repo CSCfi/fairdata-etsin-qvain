@@ -12,13 +12,14 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 
 export const TableButton = styled.button`
-  width: 84px;
+  min-width: 84px;
+  max-width: 6.5em;
+  flex-grow: 1;
   height: 42px;
   background-color: #fff;
   border-radius: 4px;
   border: solid 1px #4f4f4f;
   font-size: 16px;
-  font-weight: 600px;
   line-height: 1.31;
   color: #4f4f4f;
   &:hover {
@@ -92,7 +93,8 @@ export const DangerButton = styled.button`
 `
 
 export const RemoveButton = styled.button`
-  width: 84px;
+  min-width: 84px;
+  max-width: 6.5em;
   height: 42px;
   border-radius: 4px;
   border: solid 1px #cc0000;
@@ -105,6 +107,7 @@ export const RemoveButton = styled.button`
     background-color: #ffb2b2;
     border: solid 2px #cc0000;
   }
+  flex-grow: 1;
 `
 
 export const ButtonGroup = styled.div`
