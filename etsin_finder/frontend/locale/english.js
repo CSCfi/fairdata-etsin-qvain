@@ -360,10 +360,16 @@ const english = {
       confirm: 'Yes, discard changes',
       cancel: 'No, continue editing',
     },
+    select: {
+      placeholder: 'Select option',
+    },
     datasets: {
       title: 'Your Datasets',
-      search: 'Search',
-      searchTitle: 'Search from the list (to filter the datasets)',
+      search: {
+        hidden: 'Search',
+        searchTitle: 'Search from the list (to filter the datasets)',
+        placeholder: 'Filter datasets by name',
+      },
       help: 'Choose a dataset to edit or create a new dataset',
       createButton: 'Create new dataset',
       tableRows: {
@@ -467,7 +473,7 @@ const english = {
           'By default the dataset owner (the original describer) can approve the applications. In addition, functionality is under development to allow chosen representatives (only or in addition to the owner) of the dataset\'s organization to make the approvals. By using the access type "Requires permission" the dataset owner agrees to these upcoming changes.',
       },
       embargoDate: {
-        label: 'Embargo expiration date (yyyy-mm-dd)',
+        label: 'Embargo expiration date',
         placeholder: 'Date',
         help: 'By default, expiration date will be indefinite if not set.',
       },
@@ -944,6 +950,29 @@ const english = {
             label: 'Add',
           },
         },
+      },
+    },
+    history: {
+      title: 'Related Material and History',
+      tooltip: 'Related Material and History info',
+      tooltipContent: {
+        reference: {
+          title: 'Reference',
+          paragraph: 'Refer to related datasets, publications, and other resources that are relevant in understanding this dataset. '
+        },
+        provience: {
+          title: 'Provience',
+          paragraph: 'Information about the provenience of the data.'
+        },
+        infrastructure: {
+          title: 'Infrastructure',
+          paragraph: 'Services or tools that are used to produce the dataset.'
+        }
+      },
+      infrastructure: {
+        addButton: 'Add Infrastructure',
+        title: 'Add infrastructure',
+        description: 'Add services and tools that are used to produce the dataset.',
       },
     },
   },

@@ -236,7 +236,8 @@ def data_to_metax(data, metadata_provider_org, metadata_provider_user):
             "access_rights": access_rights_to_metax(data),
             "remote_resources": remote_resources_data_to_metax(data["remote_resources"]) if data["dataCatalog"] == "urn:nbn:fi:att:data-catalog-att" else "",
             "files": files_data_to_metax(data["files"]) if data["dataCatalog"] == "urn:nbn:fi:att:data-catalog-ida" else "",
-            "directories": directories_data_to_metax(data["directories"]) if data["dataCatalog"] == "urn:nbn:fi:att:data-catalog-ida" else ""
+            "directories": directories_data_to_metax(data["directories"]) if data["dataCatalog"] == "urn:nbn:fi:att:data-catalog-ida" else "",
+            "infrastructure": data.get("infrastructure")
         }
     }
     return clean_empty_keyvalues_from_dict(dataset_data)
@@ -294,6 +295,15 @@ def _to_metax_field_of_science(fieldsOfScience):
         metax_fields_of_science.append(metax_field_of_science_object)
     return metax_fields_of_science
 
+
+def _to_metax_infrastructure(infrastructures):
+    metax_infrastructures = []
+    for element in infrastructures:
+        metax_infrastructure_object = {'identifier': element.get("url")}
+        metax_infrastructures.append(metax_infrastructure_object)
+    return metax_infrastructures
+
+
 def edited_data_to_metax(data, original):
     """
     Alter the research_dataset field to contain the new changes from editing.
@@ -325,6 +335,7 @@ def edited_data_to_metax(data, original):
         "remote_resources": remote_resources_data_to_metax(data["remote_resources"]) if data["dataCatalog"] == "urn:nbn:fi:att:data-catalog-att" else "",
         "files": files_data_to_metax(data["files"]) if data["dataCatalog"] == "urn:nbn:fi:att:data-catalog-ida" else "",
         "directories": directories_data_to_metax(data["directories"]) if data["dataCatalog"] == "urn:nbn:fi:att:data-catalog-ida" else "",
+        "infrastructure": _to_metax_infrastructure(data.get("infrastructure"))
     })
     edited_data = {
         "research_dataset": research_dataset

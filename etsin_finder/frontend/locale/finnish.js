@@ -359,10 +359,16 @@ const finnish = {
       confirm: 'Kyllä, peru muutokset',
       cancel: 'Ei, jatka muokkausta',
     },
+    select: {
+      placeholder: 'Valitse vaihtoehto',
+    },
     datasets: {
       title: 'Aineistot',
-      search: 'Haku',
-      searchTitle: 'Hakusana ao. listan filtteröimiseksi',
+      search: {
+        hidden: 'Haku',
+        searchTitle: 'Hakusana ao. listan filtteröimiseksi',
+        placeholder: 'Suodata aineiston nimen mukaan',
+      },
       help: 'Muokkaa olemassa olevaa aineistoa tai luo uusi',
       createButton: 'Lisää uusi aineisto',
       tableRows: {
@@ -466,7 +472,7 @@ const finnish = {
           'Aineiston omistaja (alkuperäinen kuvailun tekijä) pystyy oletuksena hyväksymään aineiston datan käyttöön liittyvät käyttölupahakemukset. Käyttölupatoimintoa kehitetään, ja jossain vaiheessa tullaan lisäämään mahdollisuus myös muiden ko. organisaation edustajien päästä, joko omistajan lisäksi tai sijaan, hyväksymään käyttölupahakemuksia. Valitsemalla pääsyoikeudeksi "Vaatii luvan hakemista" / "Requires permission" käyttäjä sitoutuu näihin muutoksiin.',
       },
       embargoDate: {
-        label: 'Embargo loppumispäivämäärä (vvvv-kk-pp)',
+        label: 'Embargo loppumispäivämäärä',
         placeholder: 'Päivämäärä',
         help: 'Oletuksena embargo ei lopu jollei päivämäärää aseteta.',
       },
@@ -946,6 +952,30 @@ const finnish = {
             label: 'Lisää',
           },
         },
+      },
+    },
+    history: {
+      title: 'Aineistoon liittyvä materiaali ja historia',
+      tooltip: 'Aineestoon liittyvä materiaali ja historia info',
+      tooltipContent: {
+        reference: {
+          title: 'Viittaukset',
+          paragraph: 'Viittaukset muihin aineistoihin, julkaisuihin tai muihin resursseihin, jotka auttavat ymmärtämään ja käyttämään tätä tutkimusaineistoa. '
+        },
+        provience: {
+          title: 'Historiatiedot',
+          paragraph: 'Tiedot aineiston historiasta eli provenienssista.'
+        },
+        infrastructure: {
+          title: 'Infrastruktuuri',
+          paragraph: 'Palvelut tai työkalut, joita aineiston tuottamisessa on hyödynnetty.'
+        }
+      },
+      infrastructure: {
+        addButton: 'Lisää rakenne',
+        title: 'Lisää rakenne',
+        description:
+          'Voit lisätä palveluita tai rakenteita joita on käytetty aineiston laatimiseen.',
       },
     },
   },
