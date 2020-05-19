@@ -6,7 +6,7 @@ import translate from 'counterpart'
 import Card from '../general/card'
 import ValidationError from '../general/validationError'
 import { LabelLarge } from '../general/form'
-import { issuedDateSchema } from '../utils/formValidation';
+import { issuedDateSchema } from '../utils/formValidation'
 import { DatePicker, handleDatePickerChange, getDateFormatLocale } from '../general/datepicker'
 
 class IssuedDateField extends React.Component {
@@ -19,17 +19,20 @@ class IssuedDateField extends React.Component {
     this.state = {
       focused: false,
       error: false,
-      errorMessage: ''
+      errorMessage: '',
     }
   }
 
   validate = () => {
     const { issuedDate } = this.props.Stores.Qvain
-    issuedDateSchema.validate(issuedDate).then(() => {
-      this.setState({ error: false, errorMessage: '' })
-    }).catch(err => {
-      this.setState({ error: true, errorMessage: err.errors })
-    })
+    issuedDateSchema
+      .validate(issuedDate)
+      .then(() => {
+        this.setState({ error: false, errorMessage: '' })
+      })
+      .catch((err) => {
+        this.setState({ error: true, errorMessage: err.errors })
+      })
   }
 
   componentDidUpdate = (prevProps, prevState) => {
@@ -42,7 +45,6 @@ class IssuedDateField extends React.Component {
     const { setIssuedDate, issuedDate, readonly } = this.props.Stores.Qvain
     const { lang } = this.props.Stores.Locale
     const { error, errorMessage } = this.state
-
 
     return (
       <Card bottomContent>
@@ -60,13 +62,10 @@ class IssuedDateField extends React.Component {
           dateFormat={getDateFormatLocale(lang)}
           disabled={readonly}
         />
-        <Fragment>
-          {error && <ValidationError>{errorMessage}</ValidationError>}
-        </Fragment>
+        <Fragment>{error && <ValidationError>{errorMessage}</ValidationError>}</Fragment>
       </Card>
     )
   }
 }
-
 
 export default inject('Stores')(observer(IssuedDateField))
