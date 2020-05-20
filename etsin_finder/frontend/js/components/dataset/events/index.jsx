@@ -197,7 +197,6 @@ class Events extends Component {
                 </tr>
               </thead>
               <tbody>
-                
                 { // Error handling to make sure provenance is defined
                 this.props.provenance && (
 
