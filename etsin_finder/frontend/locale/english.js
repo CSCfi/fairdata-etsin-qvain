@@ -133,6 +133,8 @@ const english = {
         when: 'When',
         event_title: 'Title',
         description: 'Description',
+        deletionEvent: 'Dataset deletion',
+        deletionOfDatasetVersion: 'Deleted dataset version: ',
       },
       other_idn: 'Other identifiers',
       origin_identifier: 'Origin dataset identifier',

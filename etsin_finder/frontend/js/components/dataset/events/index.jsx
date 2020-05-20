@@ -11,6 +11,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
+import translate from 'counterpart'
 import { inject, observer } from 'mobx-react'
 import styled from 'styled-components'
 
@@ -179,7 +180,8 @@ class Events extends Component {
     console.log(this.state.versions)
     return (
       <Margin>
-        {this.checkProvenance(this.props.provenance) && (
+        { // Display events table header if provenance exists of if deleted versions exist
+          (this.checkProvenance(this.props.provenance) || this.checkDeleted()) && (
           <Margin>
             <h2>
               <Translate content="dataset.events_idn.events.title" />
@@ -195,54 +197,104 @@ class Events extends Component {
                 </tr>
               </thead>
               <tbody>
-                {this.props.provenance.map(single => (
-                  <tr key={`provenance-${checkDataLang(single.title)}`}>
-                    <td>
-                      {/* if contains both it will display to tags in one box */}
-                      {single.lifecycle_event !== undefined && (
-                        <span lang={getDataLang(single.lifecycle_event.pref_label)}>
-                          {checkDataLang(single.lifecycle_event.pref_label)}
-                        </span>
-                      )}
-                      {single.preservation_event && (
-                        <span lang={getDataLang(single.preservation_event.pref_label)}>
-                          {checkDataLang(single.preservation_event.pref_label)}
-                        </span>
-                      )}
-                    </td>
-                    <td>
-                      {/* eslint-disable react/jsx-indent */}
-                      {single.was_associated_with
-                        && single.was_associated_with.map((associate, i) => {
-                          if (associate.name) {
-                            return (
-                              <InlineUl key={`ul-${checkDataLang(associate.name)}`}>
-                                <Agent
-                                  lang={getDataLang(associate)}
-                                  key={checkDataLang(associate) || associate.name}
-                                  first={i === 0}
-                                  agent={associate}
-                                />
-                              </InlineUl>
-                            )
-                          }
-                          return ''
-                        })}
-                      {/* eslint-enable react/jsx-indent */}
-                    </td>
-                    <td>
-                      {/* some datasets have start_date and some startDate */}
-                      {single.temporal && this.printDate(single.temporal)}
-                    </td>
-                    <td>
-                      {/* some datasets have start_date and some startDate */}
-                      {single.title && checkDataLang(single.title)}
-                    </td>
-                    <td lang={getDataLang(single.description)}>
-                      {single.description && checkDataLang(single.description)}
-                    </td>
-                  </tr>
-                ))}
+                
+                { // Error handling to make sure provenance is defined
+                this.props.provenance && (
+
+                  // Displaying general events
+                  this.props.provenance.map(single => (
+                    <tr key={`provenance-${checkDataLang(single.title)}`}>
+                      <td>
+                        {/* If this contains both lifecycle and preservation events, it will display both in one box */}
+                        {single.lifecycle_event !== undefined && (
+                          <span lang={getDataLang(single.lifecycle_event.pref_label)}>
+                            {checkDataLang(single.lifecycle_event.pref_label)}
+                          </span>
+                        )}
+                        {single.preservation_event && (
+                          <span lang={getDataLang(single.preservation_event.pref_label)}>
+                            {checkDataLang(single.preservation_event.pref_label)}
+                          </span>
+                        )}
+                      </td>
+                      <td>
+                        {/* eslint-disable react/jsx-indent */}
+                        {single.was_associated_with
+                          && single.was_associated_with.map((associate, i) => {
+                            if (associate.name) {
+                              return (
+                                <InlineUl key={`ul-${checkDataLang(associate.name)}`}>
+                                  <Agent
+                                    lang={getDataLang(associate)}
+                                    key={checkDataLang(associate) || associate.name}
+                                    first={i === 0}
+                                    agent={associate}
+                                  />
+                                </InlineUl>
+                              )
+                            }
+                            return ''
+                          })}
+                        {/* eslint-enable react/jsx-indent */}
+                      </td>
+                      <td>
+                        {/* Some datasets have start_date and some startDate */}
+                        {single.temporal && this.printDate(single.temporal)}
+                      </td>
+                      <td>
+                        {/* Some datasets have start_date and some startDate */}
+                        {single.title && checkDataLang(single.title)}
+                      </td>
+                      <td lang={getDataLang(single.description)}>
+                        {single.description && checkDataLang(single.description)}
+                      </td>
+                    </tr>
+                  ))
+                )}
+
+                { // Error handling, only display a deleted event if it exists
+                this.checkDeleted() && (
+                  this.state.versions
+                  .filter(single => single.removed)
+                  .map(single => (
+                    <tr key={single.identifier}>
+                      { /* Dataset deletion as event */ }
+                      <td>
+                        {translate('dataset.events_idn.events.deletionEvent')}
+                      </td>
+                      { /* Who (none), not recorded */ }
+                      <td>
+                        -
+                      </td>
+                      { /* Date of deletion */ }
+                      <td>
+                        {dateFormat(single.dateRemoved.input)}
+                      </td>
+                      { /* Event description as header */ }
+                      <td>
+                        <Translate>
+                          <span>
+                            {translate('dataset.events_idn.events.deletionOfDatasetVersion')}
+                            {single.label}
+                          </span>
+                        </Translate>
+                      </td>
+                      { /* Link to deleted dataset */ }
+                      <td>
+                        {(
+                          <IDLink
+                            href={single.url}
+                            rel="noopener noreferrer"
+                            target="_blank"
+                          >
+                            {single.url}
+                          </IDLink>
+                        )}
+                      </td>
+                    </tr>
+                  ))
+                ) }
+
               </tbody>
             </Table>
           </Margin>

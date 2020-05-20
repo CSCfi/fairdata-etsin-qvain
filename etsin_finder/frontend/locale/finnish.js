@@ -133,6 +133,8 @@ const finnish = {
         when: 'Milloin',
         event_title: 'Otsikko',
         description: 'Kuvaus',
+        deletionEvent: 'Aineiston poistaminen',
+        deletionOfDatasetVersion: 'Poistettu aineistoversio ',
       },
       other_idn: 'Muut tunnisteet',
       origin_identifier: 'Alkuperäisen aineiston tunniste',
