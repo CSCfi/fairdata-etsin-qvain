@@ -20,9 +20,7 @@ class OrganizationValidationSchema(Schema):
     # At least one name translation is needed
     name = fields.Dict(
         required=True,
-        validate=lambda names: len(names) > 0 and
-        all(type(v) is str and
-            len(v) > 0 for v in names.values())
+        validate=lambda names: len(names) > 0 and all(type(v) is str and len(v) > 0 for v in names.values())
     )
     email = fields.Email()
     identifier = fields.Str()
