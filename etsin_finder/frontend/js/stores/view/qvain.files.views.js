@@ -114,7 +114,7 @@ export class DirectoryView {
       return true
     }
 
-    return loader.hasMore(this.Files, dir, '')
+    return loader.hasMore(dir, '')
   }
 
   @action setDefaultShowLimit = async (limit, increment) => {

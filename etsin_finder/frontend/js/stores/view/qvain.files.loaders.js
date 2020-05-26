@@ -219,7 +219,7 @@ class ItemLoader {
     }
 
 
-    if (!this.hasMore(dir, null, getCurrentCount, search)) {
+    if (!this.hasMore(dir, search)) {
       return true
     }
 
