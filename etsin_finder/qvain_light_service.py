@@ -258,7 +258,7 @@ class MetaxQvainLightAPIService(FlaskService):
                                                headers=headers,
                                                auth=(self.user, self.pw),
                                                verify=self.verify_ssl,
-                                               timeout=10)
+                                               timeout=30)
             metax_api_response.raise_for_status()
         except Exception as e:
             if isinstance(e, requests.HTTPError):
@@ -299,7 +299,7 @@ class MetaxQvainLightAPIService(FlaskService):
                                                 headers=headers,
                                                 auth=(self.user, self.pw),
                                                 verify=self.verify_ssl,
-                                                timeout=10)
+                                                timeout=30)
             metax_api_response.raise_for_status()
         except Exception as e:
             if isinstance(e, requests.HTTPError):
