@@ -1,3 +1,6 @@
+import { toJS } from 'mobx'
+
+
 const fieldsOfScienceToMetaxMethod = (fieldsOfScience) =>
   fieldsOfScience.map((fieldOfScience) => fieldOfScience.url)
 
@@ -59,6 +62,8 @@ const handleSubmitToBackend = (values) => {
 
   const actors = values.Actors.toBackend()
 
+  const spatial = values.Spatials.toBackend()
+
   const obj = {
     title: values.title,
     description: values.description,
@@ -82,6 +87,7 @@ const handleSubmitToBackend = (values) => {
     files,
     directories,
     useDoi: values.useDoi,
+    spatial
   }
   return obj
 }

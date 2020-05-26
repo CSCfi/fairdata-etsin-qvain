@@ -259,21 +259,27 @@ class QvainDataset(Resource):
             log.warning("Invalid form data: {0}".format(err.messages))
             return err.messages, 400
         try:
-            metadata_provider_org = session["samlUserdata"]["urn:oid:1.3.6.1.4.1.25178.1.2.9"][0]
-            metadata_provider_user = session["samlUserdata"]["urn:oid:1.3.6.1.4.1.16161.4.0.53"][0]
+            metadata_provider_org = session["samlUserdata"][
+                "urn:oid:1.3.6.1.4.1.25178.1.2.9"][0]
+            metadata_provider_user = session["samlUserdata"][
+                "urn:oid:1.3.6.1.4.1.16161.4.0.53"][0]
         except KeyError as err:
-            log.warning("The Metadata provider is not specified: \n{0}".format(err))
-            return {"PermissionError": "The Metadata provider is not found in login information."}, 401
+            log.warning("The Metadata provider is not specified: \n{0}"
+                        .format(err))
+            return {"PermissionError":
+                    "The Metadata provider is not found in login information."}, 401
         if data["dataCatalog"] == "urn:nbn:fi:att:data-catalog-ida":
             if not check_if_data_in_user_IDA_project(data):
-                return {"IdaError": "Error in IDA group user permission or in IDA user groups."}, 403
+                return {"IdaError":
+                        "Error in IDA group user permission or in IDA user groups."}, 403
         if data["useDoi"] is True:
             use_doi = True
-        metax_redy_data = data_to_metax(data, metadata_provider_org, metadata_provider_user)
+        metax_ready_data = data_to_metax(data, metadata_provider_org,
+                                         metadata_provider_user)
         params = {
             "access_granter": get_encoded_access_granter()
         }
-        metax_response = create_dataset(metax_redy_data, params, use_doi)
+        metax_response = create_dataset(metax_ready_data, params, use_doi)
         return metax_response
 
     @log_request

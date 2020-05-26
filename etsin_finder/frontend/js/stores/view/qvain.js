@@ -12,11 +12,13 @@ import {
 import { getPath } from '../../components/qvain/utils/object'
 import Actors from './qvain.actors'
 import Files from './qvain.files'
+import Spatials, { SpatialModel } from './qvain.spatials'
 
 class Qvain {
   constructor() {
     this.Files = new Files(this)
     this.Actors = new Actors(this)
+    this.Spatials = new Spatials(this)
   }
 
   @observable original = undefined // used if editing, otherwise undefined
@@ -34,6 +36,8 @@ class Qvain {
     en: '',
     fi: '',
   }
+
+  @observable spatials = []
 
   @observable issuedDate = undefined
 
@@ -114,6 +118,7 @@ class Qvain {
     this.deprecated = false
 
     this.Actors.reset()
+    this.spatials = []
   }
 
   @action
@@ -654,6 +659,15 @@ class Qvain {
       researchDataset.infrastructure.forEach(element => {
         this.infrastructure = Infrastructure(element.pref_label, element.identifier)
         this.infrastructures.push(this.infrastructure)
+      })
+    }
+
+    // spatials
+    this.spatials = []
+    if (researchDataset.spatial !== undefined) {
+      researchDataset.spatial.forEach(element => {
+        const spatial = SpatialModel(element)
+        this.spatials.push(spatial)
       })
     }
 

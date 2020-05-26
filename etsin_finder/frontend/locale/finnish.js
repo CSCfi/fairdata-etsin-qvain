@@ -425,7 +425,7 @@ const finnish = {
         instructions: 'Vain yksi kielivalinta on pakollinen',
       },
       issuedDate: {
-        title: 'Jukaisupäivämäärä',
+        title: 'Julkaisupäivämäärä',
         infoText: 'Lähteen muodollinen julkaisupäivämäärä. Ei vaikuta aineston näkyvyyteen.',
         instructions: '',
         placeholder: 'Päivämäärä',
@@ -969,10 +969,60 @@ const finnish = {
         }
       },
       infrastructure: {
-        addButton: 'Lisää rakenne',
-        title: 'Lisää rakenne',
+        addButton: 'Lisää infrastruktuuri',
+        title: 'Infrastruktuuri',
         description:
           'Voit lisätä palveluita tai rakenteita joita on käytetty aineiston laatimiseen.',
+      },
+    },
+    temporalAndSpatial: {
+      title: 'Ajallinen- ja maantieteellinen kattavuus',
+      tooltip: 'Ajallinen- ja maantieteellinen kattavuus info',
+      tooltipContent: {
+        spatial: {
+          title: 'Maantieteellinen kattavuus',
+          paragraph: 'Alue jonka aineisto kattaa. Esimerkiksi paikat, joissa on tehty havaintoja. '
+        },
+        temporal: {
+          title: 'Ajallinen kattavuus',
+          paragraph: 'Ajanjakso, minkä aineisto kattaa, esimerkiksi aika jolloin on tehty havaintoja.'
+        }
+      },
+      spatial: {
+        title: 'Maantieteellinen kattavuus',
+        description: 'Alue jonka aineisto kattaa. Esimerkiksi paikat, joissa on tehty havaintoja. ',
+        addButton: 'Lisää maantieteellinen kattavuus',
+        error: {
+          nameRequired: 'Nimi on pakollinen kenttä.',
+          altitudeNan: 'Korkeus täytyy olla numero'
+        },
+        modal: {
+          title: 'Lisää maantieteellinen kattavuus',
+          buttons: {
+            save: 'tallenna',
+            cancel: 'peruuta'
+          },
+          nameInput: {
+            label: 'Nimi',
+            placeholder: 'Alueen nimi'
+          },
+          altitudeInput: {
+            label: 'Korkeus',
+            placeholder: 'Alueen korkeus ilmoitettuna WGS84 -standardin mukaan'
+          },
+          addressInput: {
+            label: 'Osoite',
+            placeholder: 'Koko osoite'
+          },
+          geometryInput: {
+            label: 'Geometria',
+            placeholder: 'Geometria käyttäen WGS84 -standardin mukaista WKT formattia'
+          },
+          location: {
+            label: 'Paikka',
+            placeholder: 'Paikka'
+          }
+        }
       },
     },
   },

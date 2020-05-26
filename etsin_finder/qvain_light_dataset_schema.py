@@ -1,7 +1,7 @@
 """Validation schemas for form data coming in from Qvain Light"""
 from marshmallow import Schema, fields, validates_schema, ValidationError
 from marshmallow.validate import Length, OneOf
-import json
+
 
 class PersonValidationSchema(Schema):
     """Validation schema for person."""
@@ -13,16 +13,20 @@ class PersonValidationSchema(Schema):
     email = fields.Email()
     identifier = fields.Str()
 
+
 class OrganizationValidationSchema(Schema):
     """Validation schema for organization."""
 
     # At least one name translation is needed
     name = fields.Dict(
         required=True,
-        validate=lambda names: len(names) > 0 and all(type(v) is str and len(v) > 0 for v in names.values())
+        validate=lambda names: len(names) > 0 and
+        all(type(v) is str and
+            len(v) > 0 for v in names.values())
     )
     email = fields.Email()
     identifier = fields.Str()
+
 
 class ActorValidationSchema(Schema):
     """
@@ -58,9 +62,11 @@ class ActorValidationSchema(Schema):
                 raise ValidationError('Person is required for person actor.')
         elif data.get('type') == 'organization':
             if data.get('person'):
-                raise ValidationError('Person not allowed for organization actor.')
+                raise ValidationError(
+                    'Person not allowed for organization actor.')
         else:
             raise ValidationError('Invalid actor type.')
+
 
 class DatasetValidationSchema(Schema):
     """
@@ -101,6 +107,9 @@ class DatasetValidationSchema(Schema):
     infrastructure = fields.List(
         fields.Dict(),
         required=False
+    )
+    spatial = fields.List(
+        fields.Dict()
     )
     embargoDate = fields.Str()
     restrictionGrounds = fields.Str()

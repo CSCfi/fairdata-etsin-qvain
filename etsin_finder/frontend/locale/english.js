@@ -972,6 +972,56 @@ const english = {
         description: 'Add services and tools that are used to produce the dataset.',
       },
     },
+    temporalAndSpatial: {
+      title: 'Temporal and Spatial Coverage',
+      tooltip: 'Temporal and Spatial Coverage info',
+      tooltipContent: {
+        spatial: {
+          title: 'Spatial coverage',
+          paragraph: 'Area covered by the dataset, e.g. places of observations.  '
+        },
+        temporal: {
+          title: 'Temporal coverage',
+          paragraph: 'Time span that is covered by the dataset, e.g. period of observations. '
+        },
+      },
+      spatial: {
+        title: 'Spatial coverage',
+        description: 'Area covered by the dataset, e.g. places of observations.',
+        addButton: 'Add Spatial coverage',
+        error: {
+          nameRequired: 'Name is required',
+          altitudeNan: 'Altitude must be a number'
+        },
+        modal: {
+          title: 'Add Spatial coverage',
+          buttons: {
+            save: 'save',
+            cancel: 'cancel'
+          },
+          nameInput: {
+            label: 'Name',
+            placeholder: 'Name'
+          },
+          altitudeInput: {
+            label: 'Altitude',
+            placeholder: 'The WGS84 altitude of an spatial coverage (from local reference)'
+          },
+          addressInput: {
+            label: 'Address',
+            placeholder: 'Full address'
+          },
+          geometryInput: {
+            label: 'Geometry',
+            placeholder: 'Geometry using WKT format in WGS84 coordinate system'
+          },
+          locationInput: {
+            label: 'Location',
+            placeholder: 'Location'
+          }
+        }
+      },
+    },
   },
   slogan: 'Research data finder',
   stc: 'Skip to content',

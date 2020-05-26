@@ -379,6 +379,14 @@ const actorsSchema = yup
   })
   .required(translate('qvain.validationMessages.actors.requiredActors.atLeastOneActor'))
 
+// SPATIAL VALIDATION
+const spatialNameSchema = yup
+  .string()
+  .required(translate('qvain.temporalAndSpatial.spatial.error.nameRequired'))
+
+const spatialAltitudeSchema = yup
+  .number()
+
 // ENTIRE FORM VALIDATION
 
 const qvainFormSchema = yup.object().shape({
@@ -478,4 +486,6 @@ export {
   externalResourceTitleSchema,
   externalResourceAccessUrlSchema,
   externalResourceDownloadUrlSchema,
+  spatialNameSchema,
+  spatialAltitudeSchema
 }
