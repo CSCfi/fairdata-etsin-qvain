@@ -108,6 +108,7 @@ Object {
   "otherLicenseUrl": undefined,
   "remote_resources": Array [],
   "restrictionGrounds": undefined,
+  "spatial": Array [],
   "title": Object {
     "en": "",
     "fi": "Title",
@@ -233,6 +234,7 @@ Object {
   "otherLicenseUrl": undefined,
   "remote_resources": Array [],
   "restrictionGrounds": undefined,
+  "spatial": Array [],
   "title": Object {
     "en": "",
     "fi": "Title",
@@ -359,6 +361,7 @@ Object {
   "otherLicenseUrl": undefined,
   "remote_resources": Array [],
   "restrictionGrounds": undefined,
+  "spatial": Array [],
   "title": Object {
     "en": "",
     "fi": "Title",
@@ -465,6 +468,7 @@ Object {
   "otherLicenseUrl": undefined,
   "remote_resources": Array [],
   "restrictionGrounds": undefined,
+  "spatial": Array [],
   "title": Object {
     "en": "",
     "fi": "Title",
@@ -571,6 +575,7 @@ Object {
   "otherLicenseUrl": undefined,
   "remote_resources": Array [],
   "restrictionGrounds": undefined,
+  "spatial": Array [],
   "title": Object {
     "en": "",
     "fi": "Title",

@@ -3,7 +3,6 @@ import Translate from 'react-translate-component'
 import PropTypes from 'prop-types'
 import SectionTitle from './section/title'
 import { MinusIcon, PlusIcon } from './section/expand'
-import Container from './card'
 import QvainTooltip from './qvainTooltip'
 
 class Field extends PureComponent {

@@ -156,6 +156,7 @@ const english = {
     loading: 'Loading dataset',
     harvested: 'Harvested',
     cumulative: 'Cumulative',
+    go_to_original: 'Go to original location',
     permanent_link: 'Permanent link to this page',
     project: {
       project: 'Project',
@@ -171,7 +172,6 @@ const english = {
       homepageDescr: 'Description',
     },
     publisher: 'Publisher',
-    go_to_original: 'Go to original location',
     rights_holder: 'Rights Holder',
     spatial_coverage: 'Spatial Coverage',
     temporal_coverage: 'Temporal Coverage',
@@ -185,10 +185,8 @@ const english = {
       homepage: 'Homepage',
     },
     language: 'Language',
-    storedInPas:
-      "This dataset is stored in Fairdata's Digital Preservation Service (data not accessible via Etsin).",
-    pasDatasetVersionExists:
-      "This is a use copy of this dataset. A copy is also stored in Fairdata's Digital Preservation Service. ",
+    storedInPas: "This dataset is stored in Fairdata's Digital Preservation Service (data not accessible via Etsin).",
+    pasDatasetVersionExists: "This is a use copy of this dataset. A copy is also stored in Fairdata's Digital Preservation Service. ",
     originalDatasetVersionExists: 'There is an existing use copy of the dataset. ',
     linkToPasDataset: "Click here to open the Digial preservation Service's version",
     linkToOriginalDataset: 'You can open the use copy by clicking here',
@@ -719,7 +717,8 @@ const english = {
         radio: {
           no:
             'No. (Adding files or folders will automatically create a new version of the dataset.)',
-          yes: 'Yes. (New files or folders will be added without a version change.)',
+          yes:
+            'Yes. (New files or folders will be added without a version change.)',
           note:
             'Note! Once the dataset has been submitted, changing the value from "No" to "Yes" will cause a new version of the dataset to be created. Change from "Yes" to "No" will not cause a new version.',
         },

@@ -13,6 +13,10 @@ const finnish = {
   dataset: {
     access_login: 'Käyttöluvan hakeminen vaatii sisään kirjautumisen',
     access_unavailable: 'Ei käytettävissä',
+    access_denied: 'Hakemus evätty',
+    access_draft: 'Hakemus luonnos vaiheessa',
+    access_request_sent: 'Käyttölupaa haettu',
+    access_granted: 'Käyttölupa myönnetty',
     access_rights_description: {
       none: '',
       open: 'Kuka tahansa voi ladata datan.',
@@ -23,10 +27,6 @@ const finnish = {
       restricted: 'Data ei ladattavissa.',
     },
     access_permission: 'Hae käyttölupaa',
-    access_denied: 'Hakemus evätty',
-    access_draft: 'Hakemus luonnos vaiheessa',
-    access_request_sent: 'Käyttölupaa haettu',
-    access_granted: 'Käyttölupa myönnetty',
     access_locked: 'Rajattu käyttöoikeus',
     access_open: 'Avoin',
     access_rights: 'Saatavuus',
@@ -242,8 +242,7 @@ const finnish = {
   nav: {
     login: 'Kirjaudu',
     logout: 'Kirjaudu ulos',
-    logoutNotice:
-      'Kirjauduit ulos onnistuneesti. Sulje selain kirjautuaksesi ulos myös HAKA-palvelusta',
+    logoutNotice: 'Kirjauduit ulos onnistuneesti. Sulje selain kirjautuaksesi ulos myös HAKA-palvelusta',
     data: 'Data',
     dataset: 'Aineisto',
     datasets: 'Aineistot',
@@ -583,8 +582,7 @@ const finnish = {
         required: 'Kuvaus on pakollinen vähintään yhdellä kielellä.',
       },
       issuedDate: {
-        requiredIfUseDoi:
-          'Julkaisupäivämäärä on pakollinen kenttä jos haluat käyttää DOI -tunnistetta.',
+        requiredIfUseDoi: 'Julkaisupäivämäärä on pakollinen kenttä jos haluat käyttää DOI -tunnistetta.',
       },
       otherIdentifiers: {
         string: 'Tunnisteet tulisivat olla arvoltaan merkkijonoja.',
@@ -934,8 +932,7 @@ const finnish = {
           accessUrl: {
             label: 'Sivun URL',
             placeholder: 'https://',
-            infoText:
-              'Sivu, jossa tiedoston linkki ja tiedostoon mahdollisesti liittyvä lisenssitieto sijaitsevat',
+            infoText: 'Sivu, jossa tiedoston linkki ja tiedostoon mahdollisesti liittyvä lisenssitieto sijaitsevat',
           },
           downloadUrl: {
             label: 'Latauslinkki',
@@ -974,8 +971,7 @@ const finnish = {
       infrastructure: {
         addButton: 'Lisää infrastruktuuri',
         title: 'Infrastruktuuri',
-        description:
-          'Voit lisätä palveluita tai rakenteita joita on käytetty aineiston laatimiseen.',
+        description: 'Voit lisätä palveluita tai rakenteita joita on käytetty aineiston laatimiseen.',
       },
     },
     temporalAndSpatial: {
@@ -1021,7 +1017,7 @@ const finnish = {
             label: 'Geometria',
             placeholder: 'Geometria käyttäen WGS84 -standardin mukaista WKT formattia'
           },
-          location: {
+          locationInput: {
             label: 'Paikka',
             placeholder: 'Paikka'
           }

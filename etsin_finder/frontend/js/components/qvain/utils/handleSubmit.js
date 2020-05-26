@@ -1,6 +1,3 @@
-import { toJS } from 'mobx'
-
-
 const fieldsOfScienceToMetaxMethod = (fieldsOfScience) =>
   fieldsOfScience.map((fieldOfScience) => fieldOfScience.url)
 
