@@ -327,38 +327,55 @@ const actorsSchema = yup
       for (let i = 0; i < value.length; i += 1) {
         for (let j = 0; j < value[i].roles.length; j += 1) {
           if (value[i].roles[j] === Role.CREATOR) {
-            foundCreator = true
+            foundCreator = true;
           }
         }
       }
       if (foundCreator) {
-        return true
+        return true;
       }
-      return false
+      return false;
     })
   // DOI: publisher must be found in the actor list in order to allow the dataset to be posted to the database
   .when('useDoi', {
     is: true,
-    then: yup
-      .array()
-      .of(actorSchema)
-      .test(
-        'is-doi-and-contains-publisher',
-        translate('qvain.validationMessages.actors.requiredActors.publisherIfDOI'),
-        (value) => {
-          let foundPublisher = false;
-          for (let i = 0; i < value.length; i += 1) {
-            for (let j = 0; j < value[i].roles.length; j += 1) {
-              if (value[i].roles[j] === Role.PUBLISHER) {
-                foundPublisher = true
-              }
-            }
+    then:
+    yup.array()
+    .of(
+      yup.object().shape({
+        type: actorType,
+        role: actorRolesSchema,
+        name: personNameSchema,
+        email: personEmailSchema,
+        identifier: personIdentifierSchema,
+        organization: yup.mixed().when('type', {
+          is: EntityType.PERSON,
+          then: yup
+            .object()
+            .required(translate('qvain.validationMessages.actors.organization.required')),
+          otherwise: yup
+            .object()
+            .nullable(),
+        }),
+      })
+    )
+  .test(
+    'is-doi-and-contains-publisher',
+    translate('qvain.validationMessages.actors.requiredActors.publisherIfDOI'),
+    (value) => {
+      let foundPublisher = false;
+        for (let i = 0; i < value.length; i += 1) {
+          for (let j = 0; j < value[i].role.length; j += 1) {
+          if (value[i].role[j] === Role.PUBLISHER) {
+            foundPublisher = true;
           }
-          if (foundPublisher) {
-            return true
-          }
-          return false
-        })
+        }
+      }
+      if (foundPublisher) {
+        return true;
+      }
+      return false;
+    })
   })
   .required(translate('qvain.validationMessages.actors.requiredActors.atLeastOneActor'))
 
