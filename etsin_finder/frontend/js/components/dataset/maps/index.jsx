@@ -73,9 +73,9 @@ class Maps extends Component {
           { /* Table header */ }
           <thead>
             <tr>
-            <th className="rowIcon" scope="col"><Translate content="dataset.map.geographic_name" /></th>
-            <th className="rowIcon" scope="col"><Translate content="dataset.map.full_address" /></th>
-            <th className="rowIcon" scope="col"><Translate content="dataset.map.alt" /></th>
+              <th className="rowIcon" scope="col"><Translate content="dataset.map.geographic_name" /></th>
+              <th className="rowIcon" scope="col"><Translate content="dataset.map.full_address" /></th>
+              <th className="rowIcon" scope="col"><Translate content="dataset.map.alt" /></th>
             </tr>
           </thead>
 
@@ -91,14 +91,14 @@ class Maps extends Component {
                   }
                 </td>
                 <td>
-                { // Display if full_address exists, otherwise display '-'
+                  { // Display if full_address exists, otherwise display '-'
                   (spatial.full_address !== undefined) ?
                     (<span>{spatial.full_address}</span>) :
                     <span>-</span>
                   }
                 </td>
                 <td>
-                { // Display if alt exists, otherwise display '-'
+                  { // Display if alt exists, otherwise display '-'
                   (spatial.alt !== undefined) ?
                     (<span>{spatial.alt}</span>) :
                     <span>-</span>
@@ -106,15 +106,14 @@ class Maps extends Component {
                 </td>
               </tr>
             ))}
-            </tbody>
-          </Table>
+          </tbody>
+        </Table>
 
       { // The actual map
       this.props.spatial.map(spatial => {
-
         // Map shown only if either map coordinate(s) or map location is defined
         if (spatial.as_wkt !== undefined || spatial.place_uri !== undefined) {
-          return(
+          return (
             <MyMap
               key={`${spatial.as_wkt && spatial.as_wkt[0]}-${spatial.place_uri &&
                 spatial.place_uri.identifier}`}
@@ -149,9 +148,12 @@ class Maps extends Component {
               ) : null}
             </MyMap>
           )
+        } // Do not display map if coordinates and location is undefined
+        else {
+          return null
         }
       })}
-    </div>
+      </div>
     )
   }
 }
