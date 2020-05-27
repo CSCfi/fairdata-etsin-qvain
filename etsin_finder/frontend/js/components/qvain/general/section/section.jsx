@@ -1,11 +1,11 @@
 import React, { PureComponent } from 'react'
 import Translate from 'react-translate-component'
 import PropTypes from 'prop-types'
-import SectionTitle from './section/title'
-import { MinusIcon, PlusIcon } from './section/expand'
-import QvainTooltip from './qvainTooltip'
+import SectionTitle from './title'
+import { MinusIcon, PlusIcon } from './expand'
+import QvainTooltip from '../qvainTooltip'
 
-class Field extends PureComponent {
+class Section extends PureComponent {
   static propTypes = {
     translations: PropTypes.exact({
       title: PropTypes.string.isRequired,
@@ -48,4 +48,4 @@ class Field extends PureComponent {
     )
   }
 }
-export default Field
+export default Section

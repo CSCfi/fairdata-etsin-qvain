@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import Field from '../general/field'
+import { Section } from '../general/section'
 import TooltipContent from './TooltipContent'
 import Infrastructure from './infrastructure'
 
@@ -20,9 +20,9 @@ const fieldProps = {
 class History extends Component {
   render() {
     return (
-      <Field {...fieldProps}>
+      <Section {...fieldProps}>
         <Infrastructure />
-      </Field>
+      </Section>
     )
   }
 }
