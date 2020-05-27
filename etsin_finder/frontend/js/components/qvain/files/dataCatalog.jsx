@@ -14,12 +14,11 @@ import { Checkbox, LabelLarge } from '../general/form'
 
 let options = [
   { value: DataCatalogIdentifiers.IDA, label: translate('qvain.files.dataCatalog.ida') },
-  { value: DataCatalogIdentifiers.ATT, label: translate('qvain.files.dataCatalog.att') }
+  { value: DataCatalogIdentifiers.ATT, label: translate('qvain.files.dataCatalog.att') },
 ]
 let pasOptions = [
-  { value: DataCatalogIdentifiers.PAS, label: translate('qvain.files.dataCatalog.pas') }
+  { value: DataCatalogIdentifiers.PAS, label: translate('qvain.files.dataCatalog.pas') },
 ]
-
 
 class DataCatalog extends Component {
   static propTypes = {
@@ -39,12 +38,12 @@ class DataCatalog extends Component {
   updateOptions = () => {
     options = [
       { value: DataCatalogIdentifiers.IDA, label: translate('qvain.files.dataCatalog.ida') },
-      { value: DataCatalogIdentifiers.ATT, label: translate('qvain.files.dataCatalog.att') }
+      { value: DataCatalogIdentifiers.ATT, label: translate('qvain.files.dataCatalog.att') },
     ]
     pasOptions = [
-      { value: DataCatalogIdentifiers.PAS, label: translate('qvain.files.dataCatalog.pas') }
+      { value: DataCatalogIdentifiers.PAS, label: translate('qvain.files.dataCatalog.pas') },
     ]
-        }
+  }
 
   handleOnBlur = () => {
     const dataCatalog = this.props.Stores.Qvain.dataCatalog
@@ -55,7 +54,7 @@ class DataCatalog extends Component {
           errorMessage: undefined,
         })
       })
-      .catch(err => {
+      .catch((err) => {
         this.setState({
           errorMessage: err.errors,
         })
@@ -65,14 +64,22 @@ class DataCatalog extends Component {
   handleDoiCheckboxChange = () => {
     const { setUseDoi } = this.props.Stores.Qvain
     setUseDoi(!this.state.useDoi)
-    this.setState(prevState => ({
-      useDoi: !prevState.useDoi
+    this.setState((prevState) => ({
+      useDoi: !prevState.useDoi,
     }))
   }
 
   render() {
     const { errorMessage } = this.state
-    const { dataCatalog, setDataCatalog, selectedFiles, selectedDirectories, externalResources, original, isPas } = this.props.Stores.Qvain
+    const {
+      dataCatalog,
+      setDataCatalog,
+      selectedFiles,
+      selectedDirectories,
+      externalResources,
+      original,
+      isPas,
+    } = this.props.Stores.Qvain
     const selected = [...selectedFiles, ...selectedDirectories, ...externalResources]
 
     if (this.props.Stores.Locale.lang) {
@@ -80,7 +87,7 @@ class DataCatalog extends Component {
     }
     // PAS catalog cannot be selected by the user
     const availableOptions = isPas ? pasOptions : options
-    const catalogSelectValue = availableOptions.find(opt => opt.value === dataCatalog)
+    const catalogSelectValue = availableOptions.find((opt) => opt.value === dataCatalog)
 
     return (
       <Card>
@@ -110,25 +117,21 @@ class DataCatalog extends Component {
           }}
           onBlur={this.handleOnBlur}
           attributes={{ placeholder: 'qvain.files.dataCatalog.placeholder' }}
-          isDisabled={(selected.length > 0) || (original !== undefined) || isPas}
+          isDisabled={selected.length > 0 || original !== undefined || isPas}
         />
-        {
-          (this.state.fileOrigin === 'IDA' && original === undefined) && (
+        {this.state.fileOrigin === 'IDA' && original === undefined && (
           <DoiSelectionContainer>
             <Checkbox
               id="doiSelector"
               onChange={this.handleDoiCheckboxChange}
-              disabled={(this.state.fileOrigin !== 'IDA' || original !== undefined)}
+              disabled={this.state.fileOrigin !== 'IDA' || original !== undefined}
               checked={this.state.useDoi}
             />
-            <DoiLabel
-              htmlFor="doiSelector"
-            >
+            <DoiLabel htmlFor="doiSelector">
               <Translate content="qvain.files.dataCatalog.doiSelection" />
             </DoiLabel>
           </DoiSelectionContainer>
-          )
-        }
+        )}
         {errorMessage && <ValidationError>{errorMessage}</ValidationError>}
       </Card>
     )

@@ -36,11 +36,11 @@ export class AccessType extends Component {
       getReferenceData('access_type')
         .then((res) => {
           const list = res.data.hits.hits
-          const refsEn = list.map((ref) => ({
+          let refsEn = list.map((ref) => ({
             value: ref._source.uri,
             label: ref._source.label.en,
           }))
-          const refsFi = list.map((ref) => ({
+          let refsFi = list.map((ref) => ({
             value: ref._source.uri,
             label: ref._source.label.fi,
           }))
@@ -48,13 +48,8 @@ export class AccessType extends Component {
           const user = this.props.Stores.Auth.user
 
           if (!user.isUsingRems) {
-            // Removing one option from the list "Vaatii luvan hakemista Fairdata palvelusta".
-            // Assuming the option to be the last in the list.
-            // Other ways to do this is to check it from url or from description.
-            // Any of these ways is somewhat bad.
-            // It is recommended that this removal is done in the server not in the client.
-            refsFi.pop()
-            refsEn.pop()
+            refsFi = refsFi.filter((ref) => ref.value !== AccessTypeURLs.RESTRICTED)
+            refsEn = refsEn.filter((ref) => ref.value !== AccessTypeURLs.RESTRICTED)
           }
 
           this.setState({
