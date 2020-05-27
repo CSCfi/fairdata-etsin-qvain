@@ -109,50 +109,48 @@ class Maps extends Component {
           </tbody>
         </Table>
 
-      { // The actual map
-      this.props.spatial.map(spatial => {
-        // Map shown only if either map coordinate(s) or map location is defined
-        if (spatial.as_wkt !== undefined || spatial.place_uri !== undefined) {
-          return (
-            <MyMap
-              key={`${spatial.as_wkt && spatial.as_wkt[0]}-${spatial.place_uri &&
-                spatial.place_uri.identifier}`}
-              geometry={spatial.as_wkt}
-              place_uri={spatial.place_uri && spatial.place_uri.pref_label}
-            >
-              {/* Map popup, hidden if it contains no information */}
-              {spatial.place_uri ||
-              spatial.geographic_name ||
-              spatial.full_address ||
-              spatial.alt ? (
-                <CustomPopup>
-                  {spatial.place_uri && (
-                    <h2 lang={getDataLang(spatial.place_uri.pref_label)}>
-                      {checkDataLang(spatial.place_uri.pref_label)}
-                    </h2>
-                  )}
-                  {spatial.geographic_name && <h3>{spatial.geographic_name}</h3>}
-                  {spatial.full_address && (
-                    <p>
-                      <FontAwesomeIcon icon={faMapMarkerAlt} />
-                      <i>{spatial.full_address}</i>
-                    </p>
-                  )}
-                  {spatial.alt && (
-                    <p>
-                      <FontAwesomeIcon icon={faExpandArrowsAlt} />
-                      Altitude: {spatial.alt}
-                    </p>
-                  )}
-                </CustomPopup>
-              ) : null}
-            </MyMap>
-          )
-        } // Do not display map if coordinates and location is undefined
-        else {
+        { /* The actual map */ }
+        { this.props.spatial.map(spatial => {
+          // Map shown only if either map coordinate(s) or map location is defined
+          if (spatial.as_wkt !== undefined || spatial.place_uri !== undefined) {
+            return (
+              <MyMap
+                key={`${spatial.as_wkt && spatial.as_wkt[0]}-${spatial.place_uri &&
+                  spatial.place_uri.identifier}`}
+                geometry={spatial.as_wkt}
+                place_uri={spatial.place_uri && spatial.place_uri.pref_label}
+              >
+                {/* Map popup, hidden if it contains no information */}
+                {spatial.place_uri ||
+                spatial.geographic_name ||
+                spatial.full_address ||
+                spatial.alt ? (
+                  <CustomPopup>
+                    {spatial.place_uri && (
+                      <h2 lang={getDataLang(spatial.place_uri.pref_label)}>
+                        {checkDataLang(spatial.place_uri.pref_label)}
+                      </h2>
+                    )}
+                    {spatial.geographic_name && <h3>{spatial.geographic_name}</h3>}
+                    {spatial.full_address && (
+                      <p>
+                        <FontAwesomeIcon icon={faMapMarkerAlt} />
+                        <i>{spatial.full_address}</i>
+                      </p>
+                    )}
+                    {spatial.alt && (
+                      <p>
+                        <FontAwesomeIcon icon={faExpandArrowsAlt} />
+                        Altitude: {spatial.alt}
+                      </p>
+                    )}
+                  </CustomPopup>
+                ) : null}
+              </MyMap>
+            )
+          } // Do not display map if coordinates and location is undefined
           return null
-        }
-      })}
+        })}
       </div>
     )
   }
