@@ -1,5 +1,5 @@
 import { observable, action, runInAction } from 'mobx'
-import { itemLoaderAdd, itemLoaderSelected, itemLoaderAny } from './qvain.files.loaders'
+import { itemLoaderNew, itemLoaderExisting, itemLoaderAny } from './qvain.files.loaders'
 import { getAction } from './qvain.files.utils'
 
 export class DirectoryView {
@@ -173,7 +173,7 @@ export class AddItemsView extends DirectoryView {
     if (dir.existing && dir.removed) {
       return itemLoaderAny
     }
-    return itemLoaderAdd
+    return itemLoaderNew
   }
 
   getItems(dir, ignoreLimit) {
@@ -259,9 +259,9 @@ export class SelectedItemsView extends DirectoryView {
       if (dir.existing) {
         return itemLoaderAny
       }
-      return itemLoaderAdd
+      return itemLoaderNew
     }
-    return itemLoaderSelected
+    return itemLoaderExisting
   }
 
   getItems(dir, ignoreLimit) {

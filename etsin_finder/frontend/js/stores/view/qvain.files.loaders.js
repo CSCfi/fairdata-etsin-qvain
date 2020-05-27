@@ -335,7 +335,7 @@ class ItemLoaderAny extends ItemLoader {
   }
 }
 
-class ItemLoaderAdd extends ItemLoader {
+class ItemLoaderNew extends ItemLoader {
   fetchType = FetchType.NOT_EXISTING
 
   getOffset(dir, search = '') {
@@ -363,7 +363,7 @@ class ItemLoaderAdd extends ItemLoader {
   }
 }
 
-class ItemLoaderSelected extends ItemLoader {
+class ItemLoaderExisting extends ItemLoader {
   fetchType = FetchType.EXISTING
 
   getOffset(dir, search = '') {
@@ -392,5 +392,5 @@ class ItemLoaderSelected extends ItemLoader {
 }
 
 export const itemLoaderAny = new ItemLoaderAny()
-export const itemLoaderAdd = new ItemLoaderAdd()
-export const itemLoaderSelected = new ItemLoaderSelected()
+export const itemLoaderNew = new ItemLoaderNew()
+export const itemLoaderExisting = new ItemLoaderExisting()

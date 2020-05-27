@@ -61,7 +61,7 @@ export const useRenderTree = ({
   directoryView,
   Item, // component used for rendering a single item
   EmptyHelp = () => null, // component shown when there are no visible items
-  moreItemsLevel = 0, // extra indentation for the "Show All Items" button
+  moreItemsLevel = 0, // indentation for the "Show All Items" button to account for space taken by buttons
 }) => {
   const renderTree = () => {
     const { root, loadingProject } = Files

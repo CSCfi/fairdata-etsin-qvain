@@ -8,9 +8,9 @@ import QvainStore, { FieldOfScience } from '../js/stores/view/qvain'
 import LocaleStore from '../js/stores/view/language'
 import { sortFunc } from '../js/stores/view/qvain.files.utils'
 import {
-  itemLoaderAdd,
+  itemLoaderNew,
   itemLoaderAny,
-  itemLoaderSelected,
+  itemLoaderExisting,
 } from '../js/stores/view/qvain.files.loaders'
 
 import SelectedItemsTree from '../js/components/qvain/files/ida/selectedItemsTree'
@@ -1131,33 +1131,33 @@ describe('Qvain.Files pagination', () => {
   it('respects limit for selected items', async () => {
     const subset = await Files.getItemByPath('/data/set1/subset', true)
     expect(subset.files.length + subset.directories.length).toBe(0)
-    await itemLoaderSelected.loadDirectory(Files, subset, 1)
+    await itemLoaderExisting.loadDirectory(Files, subset, 1)
     expect(subset.files.length + subset.directories.length).toBe(1)
-    await itemLoaderSelected.loadDirectory(Files, subset, 2)
+    await itemLoaderExisting.loadDirectory(Files, subset, 2)
     expect(subset.files.length + subset.directories.length).toBe(2)
-    await itemLoaderSelected.loadDirectory(Files, subset, 3)
+    await itemLoaderExisting.loadDirectory(Files, subset, 3)
     expect(subset.files.length + subset.directories.length).toBe(3)
-    await itemLoaderSelected.loadDirectory(Files, subset, 4)
+    await itemLoaderExisting.loadDirectory(Files, subset, 4)
     expect(subset.files.length + subset.directories.length).toBe(4)
-    await itemLoaderSelected.loadDirectory(Files, subset, 100)
+    await itemLoaderExisting.loadDirectory(Files, subset, 100)
     expect(subset.files.length + subset.directories.length).toBe(4)
   })
 
   it('respects limit for new items', async () => {
     const subset = await Files.getItemByPath('/data/set1/subset', true)
     expect(subset.files.length + subset.directories.length).toBe(0)
-    await itemLoaderAdd.loadDirectory(Files, subset, 1)
+    await itemLoaderNew.loadDirectory(Files, subset, 1)
     expect(subset.files.length + subset.directories.length).toBe(1)
-    await itemLoaderAdd.loadDirectory(Files, subset, 2)
+    await itemLoaderNew.loadDirectory(Files, subset, 2)
     expect(subset.files.length + subset.directories.length).toBe(1)
   })
 
   it('respects limit for mixed items', async () => {
     const subset = await Files.getItemByPath('/data/set1/subset', true)
     expect(subset.files.length + subset.directories.length).toBe(0)
-    await itemLoaderAdd.loadDirectory(Files, subset, 1)
+    await itemLoaderNew.loadDirectory(Files, subset, 1)
     expect(subset.files.length + subset.directories.length).toBe(1)
-    await itemLoaderSelected.loadDirectory(Files, subset, 1)
+    await itemLoaderExisting.loadDirectory(Files, subset, 1)
     expect(subset.files.length + subset.directories.length).toBe(2)
   })
 
@@ -1181,8 +1181,8 @@ describe('Qvain.Files pagination', () => {
 
   it('preserves Metax item order with mixed file loads', async () => {
     const subset = await Files.getItemByPath('/data/set1/subset', true)
-    await itemLoaderSelected.loadDirectory(Files, subset, 2)
-    await itemLoaderAdd.loadDirectory(Files, subset, 1)
+    await itemLoaderExisting.loadDirectory(Files, subset, 2)
+    await itemLoaderNew.loadDirectory(Files, subset, 1)
 
     expect(subset.files.map((item) => item.path)).toEqual([
       '/data/set1/subset/file1.csv',
@@ -1196,9 +1196,9 @@ describe('Qvain.Files pagination', () => {
     axios.get.mockClear()
     await itemLoaderAny.loadDirectory(Files, subset, 3)
     expect(axios.get.mock.calls.length).toBe(3)
-    await itemLoaderAdd.loadDirectory(Files, subset, 10000)
+    await itemLoaderNew.loadDirectory(Files, subset, 10000)
     expect(axios.get.mock.calls.length).toBe(4)
-    await itemLoaderAdd.loadDirectory(Files, subset, 10000)
+    await itemLoaderNew.loadDirectory(Files, subset, 10000)
     expect(axios.get.mock.calls.length).toBe(4)
     expect(subset.files.map((item) => item.path)).toEqual([
       '/data/set1/subset/file1.csv',
