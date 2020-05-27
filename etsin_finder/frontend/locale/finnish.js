@@ -143,6 +143,11 @@ const finnish = {
         idn: 'Tunniste',
       },
     },
+    map: {
+      geographic_name: 'Maantieteellinen nimi',
+      full_address: 'Kokonainen osoite',
+      alt: 'Korkeus',
+    },
     doi: 'DOI',
     field_of_science: 'Tieteenala',
     funder: 'Rahoittaja',
