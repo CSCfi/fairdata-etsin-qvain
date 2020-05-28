@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Section } from '../general/section'
+import { Section } from '../general/section/index'
 import TooltipContent from './TooltipContent'
 import Infrastructure from './infrastructure'
 

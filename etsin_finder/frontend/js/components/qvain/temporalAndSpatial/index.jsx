@@ -1,5 +1,5 @@
 import React from 'react'
-import { Section } from '../general/section'
+import { Section } from '../general/section/index'
 import tooltipContent from './tooltipContent'
 import Spatial from './spatial'
 

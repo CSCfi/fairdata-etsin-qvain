@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-import Card from '../../general/card'
-import Brief from '../../general/brief'
+import Field from '../../general/section/field'
 import SpatialFieldContent from './SpatialFieldContent'
 
 const brief = {
@@ -11,10 +10,9 @@ const brief = {
 class Spatial extends Component {
  render() {
      return (
-       <Card>
-         <Brief {...brief} />
+       <Field brief={brief}>
          <SpatialFieldContent />
-       </Card>
+       </Field>
      )
  }
 }
