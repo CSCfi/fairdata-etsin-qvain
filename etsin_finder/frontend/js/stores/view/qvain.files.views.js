@@ -2,6 +2,7 @@ import { observable, action, runInAction } from 'mobx'
 import { itemLoaderNew, itemLoaderExisting, itemLoaderAny } from './qvain.files.loaders'
 import { getAction } from './qvain.files.utils'
 
+
 export class DirectoryView {
   // Responsible for providing lists of items (files or directories) for display.
   // - Handles per-view state of the directory hierarchy.
@@ -35,8 +36,10 @@ export class DirectoryView {
   @action open = async (dir) => {
     if (!this.openState[dir.key] && !dir.loaded) {
       const getCurrentCount = () => this.getItems(dir).length
-      if (!await this.getItemLoader(dir).loadDirectory(this.Files, dir, this.defaultShowLimit, getCurrentCount)) {
-        return false
+      if (!dir.loaded || getCurrentCount() < this.defaultShowLimit) {
+        if (!await this.getItemLoader(dir).loadDirectory(this.Files, dir, this.defaultShowLimit, getCurrentCount)) {
+          return false
+        }
       }
     }
     runInAction(() => {
@@ -186,7 +189,8 @@ export class AddItemsView extends DirectoryView {
 
     let counter = 0
     let prevIndex = -1
-    const filtered = items.filter((item, index) => {
+    const filtered = items.filter(item => {
+      const { index } = item
       if (index - prevIndex > 1 && counter >= offset) {
         return false // missing item, keep remaining ones hidden
       }
@@ -217,6 +221,7 @@ export class AddItemsView extends DirectoryView {
       counter += 1
       return true
     })
+
     if (!ignoreLimit && showLimit > 0 && filtered.length > showLimit) {
       filtered.length = showLimit
     }
@@ -264,7 +269,7 @@ export class SelectedItemsView extends DirectoryView {
     return itemLoaderExisting
   }
 
-  getItems(dir, ignoreLimit) {
+  getItems(dir, ignoreLimit = false) {
     const items = [...dir.directories, ...dir.files]
     const showLimit = this.getShowLimit(dir)
 
@@ -275,7 +280,8 @@ export class SelectedItemsView extends DirectoryView {
     let counter = 0
 
     let prevIndex = -1
-    const filtered = items.filter((item, index) => {
+    const filtered = items.filter(item => {
+      const { index } = item
       if (index - prevIndex > 1 && counter >= offset) {
         return false // missing item, keep remaining ones hidden
       }
@@ -302,7 +308,7 @@ export class SelectedItemsView extends DirectoryView {
 
       if (item.existing) {
         if (item.type === 'directory' && item.addedChildCount === 0 && item.existingFileCount === 0) {
-          //  return false // TODO: Uncomment when existingFileCount is fixed
+          return false
         }
 
         counter += 1

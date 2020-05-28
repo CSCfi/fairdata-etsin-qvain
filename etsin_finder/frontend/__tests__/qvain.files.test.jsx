@@ -263,8 +263,7 @@ describe('Qvain.Files store', () => {
     expect(data).toMatchObject({
       name: 'data',
       fileCount: 13,
-      // implicitly included parent in a dataset has 0 fileCount in Metax
-      existingFileCount: 0,
+      existingFileCount: 7,
       files: { length: 0 },
       directories: { length: 2 },
     })
@@ -283,7 +282,7 @@ describe('Qvain.Files store', () => {
     expect(set2).toMatchObject({
       name: 'set2',
       fileCount: 3,
-      existingFileCount: 0, // implicitly included parent
+      existingFileCount: 1,
       files: { length: 3 },
       directories: { length: 0 },
     })
@@ -696,13 +695,13 @@ describe('Qvain.Files tree', () => {
 })
 
 describe('Qvain.Files AddItemsTree ', () => {
-  it('shows items that are unadded/unselected or have unadded children ', async () => {
+  it('shows items that have new children ', async () => {
     await Files.AddItemsView.setAllOpen(true)
 
     const wrapper = shallow(<AddItemsTreeBase Stores={stores} />).dive()
     const items = wrapper.find(AddItemsTreeItem)
 
-    expect(itemPaths(items.filter('[level=0]'))).toEqual(['/data', '/moredata'])
+    expect(itemPaths(items.filter('[level=0]'))).toEqual(['/data'])
 
     expect(itemPaths(items.filter('[level=1]'))).toEqual(['/data/set1', '/data/set2'])
 

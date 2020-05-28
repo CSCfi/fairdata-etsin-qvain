@@ -839,7 +839,7 @@ class Qvain {
     }
 
     if (this.metaxApiV2) {
-      if (this.original && (this.original.state === 'published' || this.original.draft_of)) {
+      if (this.hasBeenPublished) {
         if (this.Files && !this.Files.projectLocked) {
           return true // for published noncumulative datasets, allow adding files only if none exist yet
         }
@@ -862,7 +862,7 @@ class Qvain {
 
   @computed
   get hasBeenPublished() {
-    return this.original && (this.original.state === 'published' || this.original.draft_of)
+    return !!(this.original && (this.original.state === 'published' || this.original.draft_of))
   }
 
   @computed

@@ -233,7 +233,8 @@ class SubmitButtons extends Component {
       if (fileActions || metadataActions) {
         // Files changed, get updated dataset
         const url = `${DatasetUrls.V2_EDIT_DATASET_URL}/${identifier}`
-        this.props.Stores.Qvain.editDataset(await axios.get(url).data)
+        const updatedResponse = await axios.get(url)
+        this.props.Stores.Qvain.editDataset(updatedResponse.data)
       } else {
         this.props.Stores.Qvain.editDataset(res.data)
       }

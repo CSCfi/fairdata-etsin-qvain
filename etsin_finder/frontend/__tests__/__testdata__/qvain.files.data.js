@@ -1094,7 +1094,7 @@ existing['/'] = {
       date_created: '2020-03-03T11:36:40+02:00',
       removed: false,
       directory_path: '/data',
-      file_count: 0,
+      file_count: 7,
       directory_modified: '2020-03-03T11:36:40.307796+02:00',
       identifier: 'e55c0a9e5e0436b58179782725832719'
     },
@@ -1111,7 +1111,7 @@ existing['/'] = {
       date_created: '2020-03-03T11:37:05+02:00',
       removed: false,
       directory_path: '/moredata',
-      file_count: 0,
+      file_count: 2,
       directory_modified: '2020-03-03T11:37:05.974225+02:00',
       identifier: '7ceb3498251f3dfdbe1bde7aa964142b'
     }
@@ -1217,7 +1217,7 @@ existing['/data'] = {
       date_created: '2020-03-03T11:37:20+02:00',
       removed: false,
       directory_path: '/data/set2',
-      file_count: 0,
+      file_count: 1,
       directory_modified: '2020-03-03T11:37:20.149650+02:00',
       identifier: '84189dbab05c39d09e01fb4aff0aee73'
     }
@@ -1529,23 +1529,6 @@ notExisting['/'] = {
       removed: false,
       service_created: 'metax'
     },
-    {
-      byte_size: 2048,
-      date_created: '2020-03-03T11:37:05+02:00',
-      directory_modified: '2020-03-03T11:37:05.974225+02:00',
-      directory_name: 'moredata',
-      directory_path: '/moredata',
-      file_count: 0,
-      id: 34,
-      identifier: '7ceb3498251f3dfdbe1bde7aa964142b',
-      parent_directory: {
-        id: 31,
-        identifier: 'cb74b1b06e79339e93b391ecf71b18ac'
-      },
-      project_identifier: 'project',
-      removed: false,
-      service_created: 'metax'
-    }
   ],
   files: []
 }

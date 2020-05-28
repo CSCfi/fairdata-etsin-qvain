@@ -80,17 +80,14 @@ const fetchFileCountsForDirectory = async (Files, dir, defaults = {}) => {
       ...defaults,
       ...cache[key]
     }
-    cache[key].index = index
+    cache[key].index = index + data.directories.length
   })
+
   return data.directories.length + data.files.length
 }
 
 const fetchFileCounts = action((Files, dir, type) => {
   const datasetIdentifier = Files.Qvain.original && Files.Qvain.original.identifier
-
-  if (!datasetIdentifier && type === FetchType.EXISTING) {
-    dir.pagination.fileCountsPromise = Promise.resolve(emptyDirectoryResponse)
-  }
 
   if (!dir.pagination.fileCountsPromise) {
     dir.pagination.fileCountsPromise = fetchFileCountsForDirectory(Files, dir)
@@ -130,6 +127,7 @@ const fetchItems = async (Files, dir, offset, limit, type) => {
   } else {
     promise = Files.cancelOnReset(ignoreNotFound(axios.get(url.href), emptyDirectoryResponse))
   }
+
   await Promise.all([promise, dir.pagination.fileCountsPromise, dir.pagination.existingFileCountsPromise])
   const resp = await promise
   const data = resp.data
@@ -138,8 +136,10 @@ const fetchItems = async (Files, dir, offset, limit, type) => {
     const key = dirKey(newDir)
     const identifierKey = dirIdentifierKey(newDir)
     let existingFileCount
-    if (type === FetchType.EXISTING || type === FetchType.NOT_EXISTING) {
-      existingFileCount = newDir.file_count // WIP: Check if this applies to NOT_EXISTING?
+    if (type === FetchType.EXISTING) {
+      existingFileCount = newDir.file_count
+    } else if (type === FetchType.NOT_EXISTING) {
+      existingFileCount = cache[key].fileCount - newDir.file_count
     } else {
       existingFileCount = 0
     }
@@ -322,7 +322,7 @@ class ItemLoaderAny extends ItemLoader {
     let offset
     let index = -1
     for (offset = 0; offset < items.length; offset += 1) {
-      if (items[offset] === undefined || items[offset].index - index > 1) {
+      if (items[offset].index - index > 1) {
         break
       }
       index = items[offset].index
@@ -346,7 +346,7 @@ class ItemLoaderNew extends ItemLoader {
     let offset = 0
     let index = -1
     for (let i = 0; i < items.length; i += 1) {
-      if (items[i] === undefined || (items[i].index - index > 1)) {
+      if (items[i].index - index > 1) {
         break
       }
       index = items[i].index
@@ -374,7 +374,7 @@ class ItemLoaderExisting extends ItemLoader {
     let offset = 0
     let index = -1
     for (let i = 0; i < items.length; i += 1) {
-      if (items[i] === undefined || (items[i].index - index > 1)) {
+      if (items[i].index - index > 1) {
         break
       }
       index = items[i].index
