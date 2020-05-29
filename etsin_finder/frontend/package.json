@@ -17,7 +17,6 @@
     "start": "webpack --progress -d --config webpack.config.js --watch --define process.env.NODE_ENV=\"'development'\"",
     "storybook": "start-storybook -p 6006",
     "test": "jest",
-    "dev": "webpack-dev-server --config webpack.dev.js --inline --define process.env.NODE_ENV=\"'development'\"",
     "watch": "npm update; webpack --progress -d --config webpack.config.js --watch  --define process.env.NODE_ENV=\"'development'\""
   },
   "dependencies": {
@@ -74,7 +73,7 @@
     "uglifyjs-webpack-plugin": "^2.2.0",
     "webpack": "^4.39.2",
     "webpack-cli": "^3.3.7",
-    "yup": "^0.28.5"
+    "yup": "^0.26.10"
   },
   "devDependencies": {
     "@storybook/addon-viewport": "^5.1.1",
@@ -96,8 +95,7 @@
     "jest": "^24.8.0",
     "jest-cli": "^24.8.0",
     "react-axe": "^3.3.0",
-    "react-element-to-jsx-string": "^14.0.2",
-    "webpack-dev-server": "^3.10.3"
+    "react-element-to-jsx-string": "^14.0.2"
   },
   "jest": {
     "snapshotSerializers": [
