@@ -8,12 +8,13 @@ export class DirectoryView {
   // - Handles per-view state of the directory hierarchy.
   // - Responsible for calling correct loader when user requests items.
 
-  @observable itemLoader = (items) => items
-
   constructor(Files) {
     this.Files = Files
     if (typeof this.getItems !== 'function') {
-      throw new TypeError('Must override filter');
+      throw new TypeError('Must override getItems');
+    }
+    if (typeof this.getItemLoader !== 'function') {
+      throw new TypeError('Must override getItemLoader');
     }
   }
 
@@ -173,7 +174,8 @@ export class DirectoryView {
 
 export class AddItemsView extends DirectoryView {
   getItemLoader(dir) {
-    if (dir.existing && dir.removed) {
+    const dirAction = getAction(dir)
+    if (dir.existing && dirAction.removed) {
       return itemLoaderAny
     }
     return itemLoaderNew
@@ -184,7 +186,6 @@ export class AddItemsView extends DirectoryView {
     const showLimit = this.getShowLimit(dir)
     const paginationKey = this.getItemLoader(dir).getPaginationKey()
     const offset = dir.pagination.offsets[paginationKey] || 0
-
     const dirAction = getAction(dir)
 
     let counter = 0
@@ -246,21 +247,8 @@ export class SelectedItemsView extends DirectoryView {
   }
 
   getItemLoader(dir) {
-    let added = false
-    let parent = dir
-
-    while (parent) {
-      if (parent.removed) {
-        break
-      }
-      if (parent.added) {
-        added = true
-        break
-      }
-      parent = parent.parent
-    }
-
-    if (added) {
+    const dirAction = getAction(dir)
+    if (dirAction.added) {
       if (dir.existing) {
         return itemLoaderAny
       }

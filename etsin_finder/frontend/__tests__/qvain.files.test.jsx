@@ -730,7 +730,7 @@ describe('Qvain.Files AddItemsTree ', () => {
     await Files.AddItemsView.setAllOpen(true)
 
     const addWrapper = shallow(<AddItemsTreeBase Stores={stores} />).dive()
-    const addItems = addWrapper.find(AddItemsTreeItem).filterWhere(i => i.prop('item') === dir)
+    const addItems = addWrapper.find(AddItemsTreeItem).filterWhere((i) => i.prop('item') === dir)
     expect(addItems.length).toBe(1)
   })
 
@@ -829,7 +829,6 @@ describe('Qvain.Files SelectedItemsTree ', () => {
     await Files.loadingProjectRoot.promise
     await Files.loadAllDirectories()
     await Files.SelectedItemsView.setAllOpen(true)
-    // Qvain.Files.AddItemsView.setDefaultShowLimit(1,1)
     Files.SelectedItemsView.setDefaultShowLimit(1, 1)
 
     const file = await Files.getItemByPath('/data/set1/subset2/file1.csv')
@@ -967,9 +966,7 @@ describe('Qvain.Files handleSubmit', () => {
       { identifier: file1.identifier, exclude: true },
       { identifier: file2.identifier, exclude: true },
     ])
-    expect(actions.directories).toEqual([
-      { identifier: moredata.identifier, exclude: true }
-    ])
+    expect(actions.directories).toEqual([{ identifier: moredata.identifier, exclude: true }])
   })
 
   it('does not remove directory when parent directory is already removed', async () => {
@@ -1030,12 +1027,8 @@ describe('Qvain.Files handleSubmit', () => {
     Files.addItem(set2file2)
 
     const actions = Files.actionsToMetax()
-    expect(actions.directories).toEqual(
-      [{ identifier: set1.identifier }]
-    )
-    expect(actions.files).toEqual(
-      [{ identifier: set2file2.identifier }]
-    )
+    expect(actions.directories).toEqual([{ identifier: set1.identifier }])
+    expect(actions.files).toEqual([{ identifier: set2file2.identifier }])
   })
 
   it('does not add file when its parent directory is already added', async () => {
@@ -1046,9 +1039,7 @@ describe('Qvain.Files handleSubmit', () => {
     Files.addItem(file13)
 
     const actions = Files.actionsToMetax()
-    expect(actions.directories).toEqual(
-      [{ identifier: data.identifier }]
-    )
+    expect(actions.directories).toEqual([{ identifier: data.identifier }])
     expect(actions.files).toEqual([])
   })
 
@@ -1080,7 +1071,7 @@ describe('Qvain.Files handleSubmit', () => {
     const actions = Files.actionsToMetax()
     expect(actions.directories).toEqual([
       { identifier: set1.identifier },
-      { identifier: set2.identifier, exclude: true }
+      { identifier: set2.identifier, exclude: true },
     ])
   })
 
@@ -1096,9 +1087,7 @@ describe('Qvain.Files handleSubmit', () => {
     Files.removeItem(set1File2)
     Files.removeItem(subset)
     Files.addItem(subsetFile1)
-//    console.log(flatten(Files.root).map(i=>`${i.path} ${i.added ? '+' : ''}${i.removed ? '-' : ''}${i.existing ? '.' : ''}`).join('\n'))
     const actions = Files.actionsToMetax()
-//    console.log(actions)
     expect(actions.directories).toEqual([
       { identifier: data.identifier, exclude: true },
       { identifier: set1.identifier },

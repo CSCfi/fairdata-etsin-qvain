@@ -329,10 +329,6 @@ class ItemLoaderAny extends ItemLoader {
     }
     return Math.max(offset, oldOffset)
   }
-
-  countNewItems() {
-    return 0
-  }
 }
 
 class ItemLoaderNew extends ItemLoader {
@@ -357,10 +353,6 @@ class ItemLoaderNew extends ItemLoader {
     }
     return Math.max(offset, oldOffset)
   }
-
-  countNewItems(items) {
-    return items.filter(item => item.removed).length
-  }
 }
 
 class ItemLoaderExisting extends ItemLoader {
@@ -384,10 +376,6 @@ class ItemLoaderExisting extends ItemLoader {
       }
     }
     return Math.max(offset, oldOffset)
-  }
-
-  countNewItems(items) {
-    return items.filter(item => item.added).length
   }
 }
 
