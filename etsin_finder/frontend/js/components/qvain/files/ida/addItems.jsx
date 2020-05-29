@@ -29,7 +29,8 @@ export function AddFilesModal(props) {
     const { isCumulative, original } = props.Stores.Qvain
     const isPublished = !!original
     const projectChosen =
-      Files.projectLocked || (Files.root && (Files.root.addedChildCount > 0 || Files.root.removedChildCount > 0))
+      Files.projectLocked ||
+      (Files.root && (Files.root.addedChildCount > 0 || Files.root.removedChildCount > 0))
     const haveNewFiles = Object.values(Files.AddItemsView.checkedState).some((item) => item)
 
     return (
@@ -103,20 +104,16 @@ const Buttons = styled.div`
 `
 
 const Header = styled.div`
-   {
-    margin-right: 1.5rem;
-    margin-top: -0.5rem;
-    margin-bottom: 0.5rem;
-    margin-left: 0rem;
-  }
+  margin-right: 1.5rem;
+  margin-top: -0.5rem;
+  margin-bottom: 0.5rem;
+  margin-left: 0rem;
 `
 
 const Title = styled.h3`
-   {
-    display: inline-block;
-    margin-right: 0.5em;
-    margin-bottom: 0;
-  }
+  display: inline-block;
+  margin-right: 0.5em;
+  margin-bottom: 0;
 `
 
 export default inject('Stores')(AddFilesModal)

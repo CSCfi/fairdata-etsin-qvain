@@ -1,5 +1,5 @@
 // Create prefixed keys from file/directory identifiers. Makes it possible to have
-// files and directories in the same array without risk of key conflicts.
+// files and directories in the same array without risk of id conflicts.
 export const dirKey = (dir) => `dir:${dir.id}`
 export const fileKey = (file) => `file:${file.id}`
 export const dirIdentifierKey = (dir) => `dir:${dir.identifier}`

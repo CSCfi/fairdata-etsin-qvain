@@ -101,6 +101,7 @@ class Qvain extends Component {
       .then((result) => {
         resetQvainStore()
 
+        // Open draft instead if it exists
         const nextDraft = result.data.next_draft && result.data.next_draft.identifier
         if (nextDraft) {
           this.props.history.replace(`/qvain/dataset/${nextDraft}`)
@@ -148,7 +149,6 @@ class Qvain extends Component {
   }
 
   setFocusOnSubmitButton(event) {
-    console.log(this.submitButtonsRef.current)
     const buttons = this.submitButtonsRef.current
     if (buttons && buttons.firstElementChild) {
       buttons.firstElementChild.focus()

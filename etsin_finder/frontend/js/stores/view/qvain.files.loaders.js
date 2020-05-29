@@ -18,7 +18,7 @@ const fetchExistingFileCountsForDirectory = async (Files, dir, datasetIdentifier
   }
 
   const url = new URL(FileAPIURLs.V2_DIR_URL + dir.identifier, document.location.origin)
-  url.searchParams.set('file_fields', 'id,file_path')
+  url.searchParams.set('file_fields', 'id')
   url.searchParams.set('directory_fields', ['id', 'file_count', 'directory_path'].join(','))
   url.searchParams.set('cr_identifier', datasetIdentifier)
   const resp = ignoreNotFound(axios.get(url.href), emptyDirectoryResponse)
@@ -53,7 +53,7 @@ const fetchExistingFileCountsForDirectory = async (Files, dir, datasetIdentifier
 
 const fetchFileCountsForDirectory = async (Files, dir, defaults = {}) => {
   const url = new URL(FileAPIURLs.V2_DIR_URL + dir.identifier, document.location.origin)
-  url.searchParams.set('file_fields', 'id,file_path')
+  url.searchParams.set('file_fields', 'id')
   url.searchParams.set('directory_fields', ['id', 'file_count', 'directory_path'].join(','))
   const resp = axios.get(url.href)
   const { data } = await Files.cancelOnReset(resp)
