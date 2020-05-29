@@ -204,7 +204,7 @@ class SubmitButtons extends Component {
     }
   }
 
-  handleCreateNewDraft = async (showSuccess = true) => {
+  handleCreateNewDraft = async (showSuccess = true, editResult = true) => {
     // Create draft based on existing published dataset
     const { original, metaxApiV2 } = this.props.Stores.Qvain
     if (original) {
@@ -230,13 +230,15 @@ class SubmitButtons extends Component {
       await this.updateFiles(identifier, fileActions, metadataActions)
       this.props.Stores.Qvain.setChanged(false)
 
-      if (fileActions || metadataActions) {
-        // Files changed, get updated dataset
-        const url = `${DatasetUrls.V2_EDIT_DATASET_URL}/${identifier}`
-        const updatedResponse = await axios.get(url)
-        this.props.Stores.Qvain.editDataset(updatedResponse.data)
-      } else {
-        this.props.Stores.Qvain.editDataset(res.data)
+      if (editResult) {
+        if (fileActions || metadataActions) {
+          // Files changed, get updated dataset
+          const url = `${DatasetUrls.V2_EDIT_DATASET_URL}/${identifier}`
+          const updatedResponse = await axios.get(url)
+          await this.props.Stores.Qvain.editDataset(updatedResponse.data)
+        } else {
+          await this.props.Stores.Qvain.editDataset(res.data)
+        }
       }
 
       this.props.history.replace(`/qvain/dataset/${identifier}`)
@@ -264,8 +266,9 @@ class SubmitButtons extends Component {
     // - publish
     // If something goes wrong while updating files,
     // the incomplete dataset wont't get published.
-    if (await this.handleCreateNewDraft(false)) {
-      await this.handlePublishDataset()
+    const identifier = await this.handleCreateNewDraft(false, false)
+    if (identifier) {
+      await this.handlePublishDataset(false, identifier)
     }
   }
 
@@ -336,7 +339,7 @@ class SubmitButtons extends Component {
 
       const editUrl = `${DatasetUrls.V2_EDIT_DATASET_URL}/${draftOf}`
       const resp = await axios.get(editUrl)
-      this.props.Stores.Qvain.editDataset(resp.data)
+      await this.props.Stores.Qvain.editDataset(resp.data)
       this.props.history.replace(`/qvain/dataset/${draftOf}`) // open the updated dataset
       this.success(resp.data)
       return draftOf
@@ -346,7 +349,7 @@ class SubmitButtons extends Component {
     }
   }
 
-  handlePublishDataset = async () => {
+  handlePublishDataset = async (saveChanges = true, overrideIdentifier = null) => {
     const { original, metaxApiV2 } = this.props.Stores.Qvain
 
     if (!metaxApiV2) {
@@ -354,7 +357,7 @@ class SubmitButtons extends Component {
       return null
     }
 
-    const identifier = original.identifier
+    const identifier = overrideIdentifier || original.identifier
     if (!original) {
       console.error('Draft needs to be saved before it can be published')
       return null
@@ -364,22 +367,25 @@ class SubmitButtons extends Component {
     const url = DatasetUrls.V2_PUBLISH_DATASET
 
     try {
-      const values = await this.getSubmitValues()
-      this.setState({ datasetLoading: true })
+      if (saveChanges) {
+        const values = await this.getSubmitValues()
+        this.setState({ datasetLoading: true })
 
-      // Save changes before publishing
-      if (!(await this.patchDataset(values))) {
-        console.error('Update failed, cancel publish')
-        return null
+        // Save changes before publishing
+        if (saveChanges && !(await this.patchDataset(values))) {
+          console.error('Update failed, cancel publish')
+          return null
+        }
       }
 
+      this.setState({ datasetLoading: true })
       await axios.post(url, null, { params: { identifier } })
 
       const publishedUrl = `${DatasetUrls.V2_EDIT_DATASET_URL}/${identifier}`
       const resp = await axios.get(publishedUrl)
 
       this.props.history.replace(`/qvain/dataset/${resp.data.identifier}`)
-      this.props.Stores.Qvain.editDataset(resp.data)
+      await this.props.Stores.Qvain.editDataset(resp.data)
       this.success(resp.data)
       return resp.data.identifier
     } catch (err) {
@@ -491,7 +497,6 @@ class SubmitButtons extends Component {
       )
 
       // draft -> published
-
       if (original.draft_of) {
         // draft of a published dataset
         submitPublished = (
