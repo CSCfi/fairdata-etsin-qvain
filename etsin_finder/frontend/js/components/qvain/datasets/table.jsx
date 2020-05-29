@@ -255,20 +255,6 @@ class DatasetTable extends Component {
     return 'qvain.datasets.state.draft'
   }
 
-  createDatasetPagination = (id) => {
-    const { page, count, limit, datasets } = this.state
-    const noOfVisibleDatasets = count || datasets.length
-    return noOfVisibleDatasets > limit ? (
-      <DatasetPagination
-        id={id}
-        page={page}
-        count={count}
-        limit={limit}
-        onChangePage={this.handleChangePage}
-      />
-    ) : null
-  }
-
   filterByTitle(searchStr, datasets) {
     return searchStr.trim().length > 0
       ? datasets.filter((ds) => {
