@@ -713,6 +713,10 @@ const english = {
       infoTitle: 'Files info',
       infoText: 'Add text',
       deletedLabel: 'Deleted',
+      error: {
+        title: 'Error loading files',
+        retry: 'Retry'
+      },
       dataCatalog: {
         label: 'File origin',
         infoText:

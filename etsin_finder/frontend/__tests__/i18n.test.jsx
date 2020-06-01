@@ -15,7 +15,9 @@ expect.extend({
           errors.push(`expected ${fullPath} to have type ${srcType}, received ${dstType} instead`)
         }
         if (srcType === 'object') {
-          recurse(src[key], dst[key], [...path, key])
+          if (dst[key]) {
+            recurse(src[key], dst[key], [...path, key])
+          }
         }
       }
     }

@@ -205,7 +205,7 @@ class SubmitButtons extends Component {
   }
 
   handleCreateNewDraft = async (showSuccess = true, editResult = true) => {
-    // Create draft based on existing published dataset
+    // Create new draft dataset
     const { original, metaxApiV2 } = this.props.Stores.Qvain
     if (original) {
       console.error('Use handleCreateNewVersion to create a draft from a published dataset')
@@ -498,14 +498,14 @@ class SubmitButtons extends Component {
 
       // draft -> published
       if (original.draft_of) {
-        // draft of a published dataset
+        // merge draft of a published dataset
         submitPublished = (
           <SubmitButton disabled={disabled} onClick={() => this.handleMergeDraft()}>
             <Translate content="qvain.submit" />
           </SubmitButton>
         )
       } else {
-        // a new draft dataset
+        // publish draft dataset
         submitPublished = (
           <SubmitButton disabled={disabled} onClick={() => this.handlePublishDataset()}>
             <Translate content="qvain.submit" />

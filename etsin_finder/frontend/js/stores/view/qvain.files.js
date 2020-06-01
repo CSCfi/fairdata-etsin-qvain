@@ -117,7 +117,9 @@ class Files {
       })
     } finally {
       runInAction(() => {
-        this.loadingProjectInfo.done = true
+        if (this.loadingProjectInfo) {
+          this.loadingProjectInfo.done = true
+        }
       })
     }
   }
@@ -194,7 +196,9 @@ class Files {
       })
     } finally {
       runInAction(() => {
-        this.loadingMetadata.done = true
+        if (this.loadingMetadata) {
+          this.loadingMetadata.done = true
+        }
       })
     }
   }
@@ -267,7 +271,9 @@ class Files {
       })
     } finally {
       runInAction(() => {
-        this.loadingProjectInfo.done = true
+        if (this.loadingProjectInfo) {
+          this.loadingProjectInfo.done = true
+        }
       })
     }
   }
@@ -578,6 +584,25 @@ class Files {
       return this.loadingMetadata.error
     }
     return null
+  }
+
+  @action
+  retry = async () => {
+    if (this.loadingProjectInfo && this.loadingProjectInfo.error) {
+      this.loadingProjectInfo = null
+    }
+    if (this.loadingProjectRoot && this.loadingProjectRoot.error) {
+      this.loadingProjectRoot = null
+    }
+    if (this.loadingMetadata && this.loadingMetadata.error) {
+      this.loadingMetadata = null
+    }
+
+    const { original } = this.Qvain
+    if (original) {
+      await Promise.all([this.loadProjectInfo(original), this.loadMetadata(original)])
+    }
+    return this.loadProjectRoot()
   }
 
   actionsToMetax() {

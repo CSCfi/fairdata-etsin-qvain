@@ -17,13 +17,10 @@ import {
   SubmitButton,
   Form,
   SubmitContainer,
-  ErrorContainer,
-  ErrorLabel,
-  ErrorContent,
-  ErrorButtons,
   LinkText,
   CustomSubHeader,
 } from './styledComponents'
+import { ErrorContainer, ErrorLabel, ErrorContent, ErrorButtons } from './general/errors'
 
 import RightsAndLicenses from './licenses'
 import Description from './description'

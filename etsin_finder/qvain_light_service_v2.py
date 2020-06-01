@@ -20,7 +20,12 @@ from etsin_finder.qvain_light_service import MetaxQvainLightAPIService as MetaxQ
 log = app.logger
 
 class MetaxQvainLightAPIService(MetaxQvainLightAPIServiceV1):
-    """Metax API Service"""
+    """
+    Metax API V2 Service
+
+    Reuses most methods from MetaxQvainLightAPIServiceV1 but with V2 URLs.
+    Only new and changed methods have to be defined here.
+    """
 
     def __init__(self, app):
         """
@@ -197,7 +202,6 @@ class MetaxQvainLightAPIService(MetaxQvainLightAPIServiceV1):
         if metax_api_response.status_code == 412:
             return 'Resource has been modified since last publish', 412
 
-        print("METAX API RESPONSE", metax_api_response.text)
         return json_or_empty(metax_api_response), metax_api_response.status_code
 
     def get_dataset_user_metadata(self, cr_id):
@@ -228,11 +232,10 @@ class MetaxQvainLightAPIService(MetaxQvainLightAPIServiceV1):
                         metax_api_response.status_code,
                         json_or_empty(metax_api_response) or metax_api_response.text
                     ))
+                return json_or_empty(metax_api_response) or metax_api_response.text, metax_api_response.status_code
             else:
                 log.error("Error getting dataset {0}\n{1}".format(cr_id, e))
             return {'Error_message': 'Error getting data from Metax.'}, metax_api_response.status_code
-        log.info("USER METADATA GET")
-        log.info(metax_api_response.text)
         return json_or_empty(metax_api_response), metax_api_response.status_code
 
     def update_dataset_user_metadata(self, cr_id, data):
@@ -274,6 +277,7 @@ class MetaxQvainLightAPIService(MetaxQvainLightAPIServiceV1):
                         metax_api_response.status_code,
                         json_or_empty(metax_api_response) or metax_api_response.text
                     ))
+                return json_or_empty(metax_api_response) or metax_api_response.text, metax_api_response.status_code
             else:
                 log.error("Error getting dataset {0}\n{1}".format(cr_id, e))
             return {'Error_message': 'Error getting data from Metax.'}, metax_api_response.status_code
@@ -307,6 +311,7 @@ class MetaxQvainLightAPIService(MetaxQvainLightAPIServiceV1):
                         metax_api_response.status_code,
                         json_or_empty(metax_api_response) or metax_api_response.text
                     ))
+                return json_or_empty(metax_api_response) or metax_api_response.text, metax_api_response.status_code
             else:
                 log.error("Error getting dataset {0} projects\n{1}".format(cr_id, e))
             return {'Error_message': 'Error getting data from Metax.'}, metax_api_response.status_code
@@ -347,16 +352,16 @@ class MetaxQvainLightAPIService(MetaxQvainLightAPIServiceV1):
         except Exception as e:
             if isinstance(e, requests.HTTPError):
                 log.warning(
-                    "Failed to fix deprecated dataset {0}\nResponse status code: {1}\nResponse text: {2}".format(
+                    "Failed to create new dataset version {0}\nResponse status code: {1}\nResponse text: {2}".format(
                         cr_identifier,
                         metax_api_response.status_code,
                         json_or_empty(metax_api_response) or metax_api_response.text
                     ))
                 return json_or_empty(metax_api_response) or metax_api_response.text, metax_api_response.status_code
             else:
-                log.error("Error fixing deprecated dataset {0} \n{1}".format(cr_identifier, e))
+                log.error("Error creating new dataset version {0} \n{1}".format(cr_identifier, e))
             return {'detail': 'Error trying to send data to metax.'}, 500
-        log.info('Fixed deprecated dataset {}'.format(cr_identifier))
+        log.info('Created new dataset version {}'.format(cr_identifier))
         return (json_or_empty(metax_api_response) or metax_api_response.text), metax_api_response.status_code
 
     def publish_dataset(self, cr_identifier):
@@ -386,21 +391,21 @@ class MetaxQvainLightAPIService(MetaxQvainLightAPIServiceV1):
         except Exception as e:
             if isinstance(e, requests.HTTPError):
                 log.warning(
-                    "Failed to fix deprecated dataset {0}\nResponse status code: {1}\nResponse text: {2}".format(
+                    "Failed to publish dataset {0}\nResponse status code: {1}\nResponse text: {2}".format(
                         cr_identifier,
                         metax_api_response.status_code,
                         json_or_empty(metax_api_response) or metax_api_response.text
                     ))
                 return json_or_empty(metax_api_response) or metax_api_response.text, metax_api_response.status_code
             else:
-                log.error("Error fixing deprecated dataset {0} \n{1}".format(cr_identifier, e))
+                log.error("Error publishing draft dataset {0} \n{1}".format(cr_identifier, e))
             return {'detail': 'Error trying to send data to metax.'}, 500
-        log.info('Fixed deprecated dataset {}'.format(cr_identifier))
+        log.info('Published draft dataset {}'.format(cr_identifier))
         return (json_or_empty(metax_api_response) or metax_api_response.text), metax_api_response.status_code
 
     def merge_draft(self, cr_identifier):
         """
-        Call Metax publish_dataset RPC to publish a draft dataset.
+        Call Metax merge_draft RPC to merge a draft to the corresponding published dataset.
 
         Arguments:
             cr_identifier {string} -- The identifier of the draft dataset.
@@ -425,21 +430,21 @@ class MetaxQvainLightAPIService(MetaxQvainLightAPIServiceV1):
         except Exception as e:
             if isinstance(e, requests.HTTPError):
                 log.warning(
-                    "Failed to fix deprecated dataset {0}\nResponse status code: {1}\nResponse text: {2}".format(
+                    "Failed to merge draft {0}\nResponse status code: {1}\nResponse text: {2}".format(
                         cr_identifier,
                         metax_api_response.status_code,
                         json_or_empty(metax_api_response) or metax_api_response.text
                     ))
                 return json_or_empty(metax_api_response) or metax_api_response.text, metax_api_response.status_code
             else:
-                log.error("Error fixing deprecated dataset {0} \n{1}".format(cr_identifier, e))
+                log.error("Errog merging draft {0} \n{1}".format(cr_identifier, e))
             return {'detail': 'Error trying to send data to metax.'}, 500
-        log.info('Fixed deprecated dataset {}'.format(cr_identifier))
+        log.info('Merged draft dataset {}'.format(cr_identifier))
         return (json_or_empty(metax_api_response) or metax_api_response.text), metax_api_response.status_code
 
     def create_draft(self, cr_identifier):
         """
-        Call Metax publish_dataset RPC to publish a draft dataset.
+        Call Metax create_draft RPC to publish a draft dataset.
 
         Arguments:
             cr_identifier {string} -- The identifier of the draft dataset.
@@ -464,16 +469,16 @@ class MetaxQvainLightAPIService(MetaxQvainLightAPIServiceV1):
         except Exception as e:
             if isinstance(e, requests.HTTPError):
                 log.warning(
-                    "Failed to fix deprecated dataset {0}\nResponse status code: {1}\nResponse text: {2}".format(
+                    "Failed create draft {0}\nResponse status code: {1}\nResponse text: {2}".format(
                         cr_identifier,
                         metax_api_response.status_code,
                         json_or_empty(metax_api_response) or metax_api_response.text
                     ))
                 return json_or_empty(metax_api_response) or metax_api_response.text, metax_api_response.status_code
             else:
-                log.error("Error fixing deprecated dataset {0} \n{1}".format(cr_identifier, e))
+                log.error("Error creating draft {0} \n{1}".format(cr_identifier, e))
             return {'detail': 'Error trying to send data to metax.'}, 500
-        log.info('Fixed deprecated dataset {}'.format(cr_identifier))
+        log.info('Create draft from dataset {}'.format(cr_identifier))
         return (json_or_empty(metax_api_response) or metax_api_response.text), metax_api_response.status_code
 
 _metax_api = MetaxQvainLightAPIService(app)

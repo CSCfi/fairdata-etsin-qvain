@@ -13,6 +13,8 @@ import AddItemsModal from './addItems'
 import FixDeprecatedModal from '../fixDeprecatedModal'
 import { Checkbox, Label } from '../../general/form'
 import Loader from '../../../general/loader'
+import { ErrorLabel, ErrorContainer, ErrorContent, ErrorButtons } from '../../general/errors'
+import { Button } from '../../../general/button'
 
 export class IDAFilePickerBase extends Component {
   state = {
@@ -36,10 +38,11 @@ export class IDAFilePickerBase extends Component {
   }
 
   render() {
-    const { canSelectFiles } = this.props.Stores.Qvain
+    const { canSelectFiles, original } = this.props.Stores.Qvain
     const {
       selectedProject,
       root,
+      retry,
       SelectedItemsView,
       isLoadingProject,
       loadingProjectError,
@@ -55,7 +58,25 @@ export class IDAFilePickerBase extends Component {
       console.error(loadingProjectError)
     }
 
-    if (loadingProjectError || (!selectedProject && isLoadingProject)) {
+    if (original && loadingProjectError) {
+      return (
+        <div className="container">
+          <ErrorContainer>
+            <ErrorLabel>
+              <Translate content="qvain.files.error.title" />
+            </ErrorLabel>
+            <ErrorContent>{String(loadingProjectError)}</ErrorContent>
+            <ErrorButtons>
+              <Button onClick={retry}>
+                <Translate content="qvain.files.error.retry" />
+              </Button>
+            </ErrorButtons>
+          </ErrorContainer>
+        </div>
+      )
+    }
+
+    if (!selectedProject && isLoadingProject) {
       return (
         <>
           <Translate component={Title} content="qvain.files.selected.title" />

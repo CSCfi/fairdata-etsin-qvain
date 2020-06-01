@@ -454,7 +454,7 @@ class QvainDatasetFiles(Resource):
     @log_request
     def post(self, cr_id):
         """
-        Get dataset for editing from Metax. Returns with an error if the logged in user does not own the requested dataset.
+        Add or remove files for dataset.
 
         Arguments:
             cr_id {str} -- Identifier of dataset.
