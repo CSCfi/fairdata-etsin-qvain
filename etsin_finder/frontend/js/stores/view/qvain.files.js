@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { observable, action, runInAction } from 'mobx'
+import { observable, action, runInAction, computed } from 'mobx'
 
 import { FileAPIURLs } from '../../components/qvain/utils/constants'
 import { Project, hasMetadata, dirIdentifierKey, fileIdentifierKey } from './qvain.files.items'
@@ -107,12 +107,17 @@ class Files {
         identifier,
         promise: load(this.selectedProject),
         error: null,
+        done: false,
       }
       await this.loadingProjectInfo.promise
     } catch (error) {
       runInAction(() => {
         this.selectedProject = undefined
         this.loadingProjectInfo.error = error
+      })
+    } finally {
+      runInAction(() => {
+        this.loadingProjectInfo.done = true
       })
     }
   }
@@ -180,11 +185,16 @@ class Files {
         identifier,
         promise: load(this.selectedProject),
         error: null,
+        done: false,
       }
       await this.loadingMetadata.promise
     } catch (error) {
       runInAction(() => {
         this.loadingMetadata.error = error
+      })
+    } finally {
+      runInAction(() => {
+        this.loadingMetadata.done = true
       })
     }
   }
@@ -247,12 +257,17 @@ class Files {
         identifier: this.selectedProject,
         promise: loadRoot(this.selectedProject),
         error: null,
+        done: false,
       }
       await this.loadingProjectRoot.promise
     } catch (error) {
       runInAction(() => {
         this.root = null
         this.loadingProjectRoot.error = error
+      })
+    } finally {
+      runInAction(() => {
+        this.loadingProjectInfo.done = true
       })
     }
   }
@@ -483,8 +498,8 @@ class Files {
       }
 
       if (item.description !== original.description ||
-          (item.useCategory && item.useCategory.identifier) !== (original.useCategory && original.useCategory.identifier) ||
-          item.title !== original.title) {
+        (item.useCategory && item.useCategory.identifier) !== (original.useCategory && original.useCategory.identifier) ||
+        item.title !== original.title) {
         return true
       }
       if (item.type === 'file' && (item.fileType && item.fileType.identifier) !== (original.fileType && original.fileType.identifier)) {
@@ -537,6 +552,32 @@ class Files {
       files,
       directories
     }
+  }
+
+  @computed get isLoadingProject() {
+    if (this.loadingProjectInfo && !this.loadingProjectInfo.done) {
+      return true
+    }
+    if (this.loadingProjectRoot && !this.loadingProjectRoot.done) {
+      return true
+    }
+    if (this.loadingMetadata && !this.loadingMetadata.done) {
+      return true
+    }
+    return false
+  }
+
+  @computed get loadingProjectError() {
+    if (this.loadingProjectInfo && this.loadingProjectInfo.error) {
+      return this.loadingProjectInfo.error
+    }
+    if (this.loadingProjectRoot && this.loadingProjectRoot.error) {
+      return this.loadingProjectRoot.error
+    }
+    if (this.loadingMetadata && this.loadingMetadata.error) {
+      return this.loadingMetadata.error
+    }
+    return null
   }
 
   actionsToMetax() {

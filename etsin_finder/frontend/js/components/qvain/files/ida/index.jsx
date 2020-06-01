@@ -12,6 +12,7 @@ import SelectedItems from './selectedItems'
 import AddItemsModal from './addItems'
 import FixDeprecatedModal from '../fixDeprecatedModal'
 import { Checkbox, Label } from '../../general/form'
+import Loader from '../../../general/loader'
 
 export class IDAFilePickerBase extends Component {
   state = {
@@ -36,13 +37,32 @@ export class IDAFilePickerBase extends Component {
 
   render() {
     const { canSelectFiles } = this.props.Stores.Qvain
-    const { selectedProject, root, SelectedItemsView } = this.props.Stores.Qvain.Files
+    const {
+      selectedProject,
+      root,
+      SelectedItemsView,
+      isLoadingProject,
+      loadingProjectError,
+    } = this.props.Stores.Qvain.Files
     const haveItems =
       root &&
       (root.files.some((f) => f.existing) ||
         root.directories.some((d) => d.existing) ||
         root.addedChildCount > 0)
     const { toggleHideRemoved, hideRemoved } = SelectedItemsView
+
+    if (loadingProjectError) {
+      console.error(loadingProjectError)
+    }
+
+    if (loadingProjectError || (!selectedProject && isLoadingProject)) {
+      return (
+        <>
+          <Translate component={Title} content="qvain.files.selected.title" />
+          <Loader active />
+        </>
+      )
+    }
 
     if (!canSelectFiles && !haveItems) {
       return <Translate component={Title} content="qvain.files.selected.none" />
