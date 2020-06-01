@@ -17,6 +17,7 @@ from etsin_finder.app_config import get_app_config
 from etsin_finder import authentication
 from etsin_finder import authorization
 from etsin_finder import cr_service
+from etsin_finder.download_metadata_service import download_metadata
 from etsin_finder.download_service import download_data
 from etsin_finder.email_utils import \
     create_email_message_body, \
@@ -93,6 +94,32 @@ class Dataset(Resource):
 
         return ret_obj, 200
 
+class DatasetMetadata(Resource):
+    """DatasetMetadata"""
+
+    def __init__(self):
+        """Init DatasetMetadata endpoint"""
+        self.parser = reqparse.RequestParser()
+        self.parser.add_argument('cr_id', type=str, required=True)
+        self.parser.add_argument('format', type=str, required=True)
+
+    @log_request
+    def get(self):
+        """Download dataset metadata
+
+        Returns:
+            obj -- Returns a Flask.Response object streaming the response from metax
+
+        """
+        args = self.parser.parse_args()
+        cr_id = args['cr_id']
+        metadata_format = args['format']
+
+        cr = cr_service.get_catalog_record(cr_id, False, False)
+        if not cr:
+            abort(400, message="Unable to get catalog record")
+
+        return download_metadata(cr_id, metadata_format)
 
 class Files(Resource):
     """File/directory related REST endpoints for frontend"""
