@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { observable, runInAction, when } from 'mobx'
 
 import QvainStore from '../js/stores/view/qvain'
 import { Directory, File } from '../js/stores/view/qvain.files.items'
@@ -22,23 +23,59 @@ describe('Qvain.Files.ItemLoaderAny', () => {
       {
         directories: [
           Directory(
-            {}, { index: 0, added: false, removed: false, existing: false, existingFileCount: 0, fileCount: 1 }
+            {},
+            {
+              index: 0,
+              added: false,
+              removed: false,
+              existing: false,
+              existingFileCount: 0,
+              fileCount: 1,
+            }
           ),
           Directory(
             {},
-            { index: 1, added: false, removed: true, existing: true, existingFileCount: 1, fileCount: 1 }
+            {
+              index: 1,
+              added: false,
+              removed: true,
+              existing: true,
+              existingFileCount: 1,
+              fileCount: 1,
+            }
           ),
           Directory(
             {},
-            { index: 2, added: false, removed: false, existing: true, existingFileCount: 1, fileCount: 2 }
+            {
+              index: 2,
+              added: false,
+              removed: false,
+              existing: true,
+              existingFileCount: 1,
+              fileCount: 2,
+            }
           ),
           Directory(
             {},
-            { index: 3, added: true, removed: false, existing: false, existingFileCount: 0, fileCount: 1 }
+            {
+              index: 3,
+              added: true,
+              removed: false,
+              existing: false,
+              existingFileCount: 0,
+              fileCount: 1,
+            }
           ),
           Directory(
             {},
-            { index: 5, added: true, removed: false, existing: false, existingFileCount: 0, fileCount: 1 }
+            {
+              index: 5,
+              added: true,
+              removed: false,
+              existing: false,
+              existingFileCount: 0,
+              fileCount: 1,
+            }
           ),
         ],
       }
@@ -46,10 +83,21 @@ describe('Qvain.Files.ItemLoaderAny', () => {
     expect(itemLoaderAny.getOffset(dir)).toBe(4)
 
     // 'load' missing directory
-    dir.directories.splice(4, 0, Directory(
-      {},
-      { index: 4, added: true, removed: false, existing: false, existingFileCount: 0, fileCount: 1 }
-    ))
+    dir.directories.splice(
+      4,
+      0,
+      Directory(
+        {},
+        {
+          index: 4,
+          added: true,
+          removed: false,
+          existing: false,
+          existingFileCount: 0,
+          fileCount: 1,
+        }
+      )
+    )
     expect(itemLoaderAny.getOffset(dir)).toBe(6)
   })
 
@@ -59,17 +107,21 @@ describe('Qvain.Files.ItemLoaderAny', () => {
       {
         directories: [
           Directory(
-            {}, { index: 0, added: false, removed: false, existing: false, existingFileCount: 0, fileCount: 1 }
+            {},
+            {
+              index: 0,
+              added: false,
+              removed: false,
+              existing: false,
+              existingFileCount: 0,
+              fileCount: 1,
+            }
           ),
         ],
         files: [
-          File(
-            {}, { index: 1, added: false, removed: false, existing: true }
-          ),
-          File(
-            {}, { index: 2, added: false, removed: false, existing: false }
-          ),
-        ]
+          File({}, { index: 1, added: false, removed: false, existing: true }),
+          File({}, { index: 2, added: false, removed: false, existing: false }),
+        ],
       }
     )
     expect(itemLoaderAny.getOffset(dir)).toBe(3)
@@ -81,15 +133,37 @@ describe('Qvain.Files.ItemLoaderAny', () => {
       {
         directories: [
           Directory(
-            {}, { index: 0, added: false, removed: false, existing: false, existingFileCount: 0, fileCount: 1 }
+            {},
+            {
+              index: 0,
+              added: false,
+              removed: false,
+              existing: false,
+              existingFileCount: 0,
+              fileCount: 1,
+            }
           ),
           Directory(
             {},
-            { index: 1, added: false, removed: true, existing: true, existingFileCount: 1, fileCount: 1 }
+            {
+              index: 1,
+              added: false,
+              removed: true,
+              existing: true,
+              existingFileCount: 1,
+              fileCount: 1,
+            }
           ),
           Directory(
             {},
-            { index: 5, added: true, removed: false, existing: false, existingFileCount: 0, fileCount: 1 }
+            {
+              index: 5,
+              added: true,
+              removed: false,
+              existing: false,
+              existingFileCount: 0,
+              fileCount: 1,
+            }
           ),
         ],
       }
@@ -108,23 +182,59 @@ describe('Qvain.Files.ItemLoaderExisting', () => {
       {
         directories: [
           Directory(
-            {}, { index: 0, added: false, removed: false, existing: false, existingFileCount: 0, fileCount: 1 }
+            {},
+            {
+              index: 0,
+              added: false,
+              removed: false,
+              existing: false,
+              existingFileCount: 0,
+              fileCount: 1,
+            }
           ),
           Directory(
             {},
-            { index: 1, added: false, removed: true, existing: true, existingFileCount: 1, fileCount: 1 }
+            {
+              index: 1,
+              added: false,
+              removed: true,
+              existing: true,
+              existingFileCount: 1,
+              fileCount: 1,
+            }
           ),
           Directory(
             {},
-            { index: 2, added: false, removed: false, existing: true, existingFileCount: 1, fileCount: 2 }
+            {
+              index: 2,
+              added: false,
+              removed: false,
+              existing: true,
+              existingFileCount: 1,
+              fileCount: 2,
+            }
           ),
           Directory(
             {},
-            { index: 3, added: true, removed: false, existing: false, existingFileCount: 0, fileCount: 1 }
+            {
+              index: 3,
+              added: true,
+              removed: false,
+              existing: false,
+              existingFileCount: 0,
+              fileCount: 1,
+            }
           ),
           Directory(
             {},
-            { index: 5, added: true, removed: false, existing: true, existingFileCount: 3, fileCount: 3 }
+            {
+              index: 5,
+              added: true,
+              removed: false,
+              existing: true,
+              existingFileCount: 3,
+              fileCount: 3,
+            }
           ),
         ],
       }
@@ -132,10 +242,21 @@ describe('Qvain.Files.ItemLoaderExisting', () => {
     expect(itemLoaderExisting.getOffset(dir)).toBe(2)
 
     // 'load' missing directory
-    dir.directories.splice(4, 0, Directory(
-      {},
-      { index: 4, added: false, removed: false, existing: false, existingFileCount: 0, fileCount: 1 }
-    ))
+    dir.directories.splice(
+      4,
+      0,
+      Directory(
+        {},
+        {
+          index: 4,
+          added: false,
+          removed: false,
+          existing: false,
+          existingFileCount: 0,
+          fileCount: 1,
+        }
+      )
+    )
     expect(itemLoaderExisting.getOffset(dir)).toBe(3)
   })
 
@@ -145,17 +266,21 @@ describe('Qvain.Files.ItemLoaderExisting', () => {
       {
         directories: [
           Directory(
-            {}, { index: 0, added: false, removed: false, existing: true, existingFileCount: 2, fileCount: 2 }
+            {},
+            {
+              index: 0,
+              added: false,
+              removed: false,
+              existing: true,
+              existingFileCount: 2,
+              fileCount: 2,
+            }
           ),
         ],
         files: [
-          File(
-            {}, { index: 1, added: false, removed: false, existing: false }
-          ),
-          File(
-            {}, { index: 2, added: false, removed: false, existing: true }
-          ),
-        ]
+          File({}, { index: 1, added: false, removed: false, existing: false }),
+          File({}, { index: 2, added: false, removed: false, existing: true }),
+        ],
       }
     )
     expect(itemLoaderExisting.getOffset(dir)).toBe(2)
@@ -169,15 +294,37 @@ describe('Qvain.Files.ItemLoaderExisting', () => {
         removed: false,
         directories: [
           Directory(
-            {}, { index: 0, added: false, removed: false, existing: true, existingFileCount: 1, fileCount: 2 }
+            {},
+            {
+              index: 0,
+              added: false,
+              removed: false,
+              existing: true,
+              existingFileCount: 1,
+              fileCount: 2,
+            }
           ),
           Directory(
             {},
-            { index: 1, added: false, removed: true, existing: true, existingFileCount: 1, fileCount: 1 }
+            {
+              index: 1,
+              added: false,
+              removed: true,
+              existing: true,
+              existingFileCount: 1,
+              fileCount: 1,
+            }
           ),
           Directory(
             {},
-            { index: 5, added: true, removed: false, existing: true, existingFileCount: 0, fileCount: 1 }
+            {
+              index: 5,
+              added: true,
+              removed: false,
+              existing: true,
+              existingFileCount: 0,
+              fileCount: 1,
+            }
           ),
         ],
       }
@@ -196,23 +343,59 @@ describe('Qvain.Files.ItemLoaderNew', () => {
       {
         directories: [
           Directory(
-            {}, { index: 0, added: false, removed: false, existing: false, existingFileCount: 0, fileCount: 1 }
+            {},
+            {
+              index: 0,
+              added: false,
+              removed: false,
+              existing: false,
+              existingFileCount: 0,
+              fileCount: 1,
+            }
           ),
           Directory(
             {},
-            { index: 1, added: false, removed: true, existing: false, existingFileCount: 0, fileCount: 1 }
+            {
+              index: 1,
+              added: false,
+              removed: true,
+              existing: false,
+              existingFileCount: 0,
+              fileCount: 1,
+            }
           ),
           Directory(
             {},
-            { index: 2, added: false, removed: false, existing: true, existingFileCount: 1, fileCount: 2 } // has new children
+            {
+              index: 2,
+              added: false,
+              removed: false,
+              existing: true,
+              existingFileCount: 1,
+              fileCount: 2,
+            } // has new children
           ),
           Directory(
             {},
-            { index: 3, added: true, removed: false, existing: true, existingFileCount: 1, fileCount: 1 } // no new children
+            {
+              index: 3,
+              added: true,
+              removed: false,
+              existing: true,
+              existingFileCount: 1,
+              fileCount: 1,
+            } // no new children
           ),
           Directory(
             {},
-            { index: 6, added: true, removed: false, existing: false, existingFileCount: 0, fileCount: 3 }
+            {
+              index: 6,
+              added: true,
+              removed: false,
+              existing: false,
+              existingFileCount: 0,
+              fileCount: 3,
+            }
           ),
         ],
       }
@@ -220,13 +403,32 @@ describe('Qvain.Files.ItemLoaderNew', () => {
     expect(itemLoaderNew.getOffset(dir)).toBe(3)
 
     // 'load' missing directory
-    dir.directories.splice(4, 0, Directory(
-      {},
-      { index: 4, added: false, removed: false, existing: false, existingFileCount: 0, fileCount: 1 }
-    ), Directory(
-      {},
-      { index: 5, added: false, removed: false, existing: true, existingFileCount: 1, fileCount: 1 }
-    ))
+    dir.directories.splice(
+      4,
+      0,
+      Directory(
+        {},
+        {
+          index: 4,
+          added: false,
+          removed: false,
+          existing: false,
+          existingFileCount: 0,
+          fileCount: 1,
+        }
+      ),
+      Directory(
+        {},
+        {
+          index: 5,
+          added: false,
+          removed: false,
+          existing: true,
+          existingFileCount: 1,
+          fileCount: 1,
+        }
+      )
+    )
     expect(itemLoaderNew.getOffset(dir)).toBe(5)
   })
 
@@ -236,17 +438,21 @@ describe('Qvain.Files.ItemLoaderNew', () => {
       {
         directories: [
           Directory(
-            {}, { index: 0, added: false, removed: false, existing: false, existingFileCount: 0, fileCount: 2 }
+            {},
+            {
+              index: 0,
+              added: false,
+              removed: false,
+              existing: false,
+              existingFileCount: 0,
+              fileCount: 2,
+            }
           ),
         ],
         files: [
-          File(
-            {}, { index: 1, added: false, removed: false, existing: false }
-          ),
-          File(
-            {}, { index: 2, added: false, removed: true, existing: true }
-          ),
-        ]
+          File({}, { index: 1, added: false, removed: false, existing: false }),
+          File({}, { index: 2, added: false, removed: true, existing: true }),
+        ],
       }
     )
     expect(itemLoaderNew.getOffset(dir)).toBe(2)
@@ -261,19 +467,47 @@ describe('Qvain.Files.ItemLoaderNew', () => {
         directories: [
           Directory(
             {},
-            { index: 0, added: false, removed: false, existing: false, existingFileCount: 0, fileCount: 2 }
+            {
+              index: 0,
+              added: false,
+              removed: false,
+              existing: false,
+              existingFileCount: 0,
+              fileCount: 2,
+            }
           ),
           Directory(
             {},
-            { index: 1, added: false, removed: true, existing: true, existingFileCount: 1, fileCount: 2 }
+            {
+              index: 1,
+              added: false,
+              removed: true,
+              existing: true,
+              existingFileCount: 1,
+              fileCount: 2,
+            }
           ),
           Directory(
             {},
-            { index: 2, added: false, removed: true, existing: true, existingFileCount: 2, fileCount: 2 }
+            {
+              index: 2,
+              added: false,
+              removed: true,
+              existing: true,
+              existingFileCount: 2,
+              fileCount: 2,
+            }
           ),
           Directory(
             {},
-            { index: 5, added: true, removed: false, existing: true, existingFileCount: 0, fileCount: 1 }
+            {
+              index: 5,
+              added: true,
+              removed: false,
+              existing: true,
+              existingFileCount: 0,
+              fileCount: 1,
+            }
           ),
         ],
       }
@@ -282,5 +516,41 @@ describe('Qvain.Files.ItemLoaderNew', () => {
     const paginationKey = itemLoaderNew.getPaginationKey('')
     dir.pagination.offsets[paginationKey] = 4
     expect(itemLoaderNew.getOffset(dir)).toBe(4)
+  })
+})
+
+
+describe('Qvain.Files.ItemLoader', () => {
+  it('waits until directory is no longer loading', async () => {
+    const dir = observable({
+      loading: true,
+    })
+    const Files = {
+      cancelOnReset: async (promise) => {
+        await promise
+      },
+    }
+
+    let resolves = 0
+    const wait = async () => {
+      await itemLoaderNew.getLoadingLock(Files, dir, () => { resolves += 1 })
+    }
+
+    wait()
+    wait()
+    wait()
+    expect(resolves).toBe(0)
+
+    runInAction(() => dir.loading = false)
+    await when(() => dir.loading)
+    expect(resolves).toBe(1)
+
+    runInAction(() => dir.loading = false)
+    await when(() => dir.loading)
+    expect(resolves).toBe(2)
+
+    runInAction(() => dir.loading = false)
+    await when(() => dir.loading)
+    expect(resolves).toBe(3)
   })
 })

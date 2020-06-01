@@ -19,7 +19,7 @@ const fetchExistingFileCountsForDirectory = async (Files, dir, datasetIdentifier
 
   const url = new URL(FileAPIURLs.V2_DIR_URL + dir.identifier, document.location.origin)
   url.searchParams.set('file_fields', 'id')
-  url.searchParams.set('directory_fields', ['id', 'file_count', 'directory_path'].join(','))
+  url.searchParams.set('directory_fields', ['id', 'file_count'].join(','))
   url.searchParams.set('cr_identifier', datasetIdentifier)
   const resp = ignoreNotFound(axios.get(url.href), emptyDirectoryResponse)
   const { data } = await Files.cancelOnReset(resp)
@@ -54,7 +54,7 @@ const fetchExistingFileCountsForDirectory = async (Files, dir, datasetIdentifier
 const fetchFileCountsForDirectory = async (Files, dir, defaults = {}) => {
   const url = new URL(FileAPIURLs.V2_DIR_URL + dir.identifier, document.location.origin)
   url.searchParams.set('file_fields', 'id')
-  url.searchParams.set('directory_fields', ['id', 'file_count', 'directory_path'].join(','))
+  url.searchParams.set('directory_fields', ['id', 'file_count'].join(','))
   const resp = axios.get(url.href)
   const { data } = await Files.cancelOnReset(resp)
 
@@ -95,6 +95,8 @@ const fetchFileCounts = action((Files, dir, type) => {
   }
 
   if (type === FetchType.ANY) {
+    // With other fetch types, the file counts are loaded when individual items are load due to use of (not_)cr_identifier,
+    // but here we need to fetch them in a separate request.
     if (!dir.pagination.existingFileCountsPromise) {
       dir.pagination.existingFileCountsPromise = fetchExistingFileCountsForDirectory(Files, dir, datasetIdentifier)
         .catch(action(() => { dir.pagination.existingFileCountsPromise = null }))
@@ -143,6 +145,8 @@ const fetchItems = async (Files, dir, offset, limit, type) => {
     } else {
       existingFileCount = 0
     }
+
+    // Use data existing in cache, check with both id and identifier
     return observable(Directory(newDir, {
       parent: dir,
       existing: type === FetchType.EXISTING,
@@ -156,6 +160,8 @@ const fetchItems = async (Files, dir, offset, limit, type) => {
   const files = data.results.files.map(newFile => {
     const key = fileKey(newFile)
     const identifierKey = fileIdentifierKey(newFile)
+
+    // Use data existing in cache, check with both id and identifier
     return observable(File(newFile, {
       parent: dir,
       existing: type === FetchType.EXISTING,
@@ -185,6 +191,9 @@ class ItemLoader {
   }
 
   hasMore(dir, search = '') {
+    if (dir.fullyLoaded) {
+      return false
+    }
     const items = [...dir.directories, ...dir.files]
     const paginationKey = this.getPaginationKey(search)
     const count = dir.pagination.counts[paginationKey]
@@ -200,33 +209,37 @@ class ItemLoader {
     return true
   }
 
+  async getLoadingLock(Files, dir, callback = null) {
+    // Wait for any existing loading for the current directory to finish, set loading to true.
+    while (dir.loading) { // loop needed to make sure only one is released at a time
+      // eslint-disable-next-line no-await-in-loop
+      await Files.cancelOnReset(when(() => !dir.loading).catch(() => { }))
+    }
+    runInAction(() => {
+      dir.loading = true
+    })
+    // call optional callback
+    if (callback) {
+      callback()
+    }
+  }
+
   async loadDirectory(Files, dir, totalLimit, getCurrentCount = null, search = '') {
-    // totalLimit: how many items we want to show
-    // currentCount: how many items are in the current view
+    // totalLimit: how many items we want to be shown in total
+    // getCurrentCount: function that returns number of items currently being shown
     // search: filter by file name or directory name (TODO)
 
     if (!Object.values(FetchType).includes(this.fetchType)) {
       throw new TypeError(`Invalid fetchType, fetchType = ${this.fetchType}`);
     }
 
-    // Wait for any existing loading for the current directory to finish.
-    if (dir.loading) {
-      await Files.cancelOnReset(when(() => !dir.loading).catch(() => { }))
-    }
-
-    if (dir.fullyLoaded) {
-      return true // everything is already loaded
-    }
-
-
-    if (!this.hasMore(dir, search)) {
-      return true
-    }
-
     try {
-      runInAction(() => {
-        dir.loading = true
-      })
+      // Keep only one active loading at a time.
+      await this.getLoadingLock(Files, dir)
+
+      if (!this.hasMore(dir, search)) {
+        return true // everything is already loaded
+      }
 
       // Offset tells how many successive items starting from item 0 have been loaded.
       const offset = this.getOffset(dir)
@@ -263,6 +276,7 @@ class ItemLoader {
       runInAction(() => {
         dir.directChildCount = directChildCount
 
+        // Ignore items that have already been loaded
         const oldDirs = new Set(dir.directories.map(d => d.identifier))
         const oldFiles = new Set(dir.files.map(f => f.identifier))
 
@@ -281,6 +295,7 @@ class ItemLoader {
         this.updatePagination(dir)
       })
     } finally {
+      // Always set loading to false before returning
       runInAction(() => {
         dir.loading = false
       })

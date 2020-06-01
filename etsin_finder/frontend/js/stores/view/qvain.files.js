@@ -38,7 +38,7 @@ class Files {
 
   @observable inEdit = undefined
 
-  cache = {}
+  cache = {} // used for storing data for items that haven't been fully loaded yet
 
   @observable originalMetadata = {}
 
