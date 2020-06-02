@@ -140,6 +140,10 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
           "selectedProject": undefined,
           "toMetax": [Function],
         },
+        "Provenances": Provenances {
+          "Qvain": [Circular],
+          "toBackend": [Function],
+        },
         "Spatials": Spatials {
           "Qvain": [Circular],
           "toBackend": [Function],
@@ -192,6 +196,7 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
         "otherIdentifiers": Array [],
         "otherLicenseUrl": undefined,
         "preservationState": 0,
+        "provenances": Array [],
         "restrictionGrounds": Object {},
         "selectedDirectories": Array [],
         "selectedFiles": Array [],
@@ -270,6 +275,10 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
           "selectedProject": undefined,
           "toMetax": [Function],
         },
+        "Provenances": Provenances {
+          "Qvain": [Circular],
+          "toBackend": [Function],
+        },
         "Spatials": Spatials {
           "Qvain": [Circular],
           "toBackend": [Function],
@@ -322,6 +331,7 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
         "otherIdentifiers": Array [],
         "otherLicenseUrl": undefined,
         "preservationState": 0,
+        "provenances": Array [],
         "restrictionGrounds": Object {},
         "selectedDirectories": Array [],
         "selectedFiles": Array [],
@@ -400,6 +410,10 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
           "selectedProject": undefined,
           "toMetax": [Function],
         },
+        "Provenances": Provenances {
+          "Qvain": [Circular],
+          "toBackend": [Function],
+        },
         "Spatials": Spatials {
           "Qvain": [Circular],
           "toBackend": [Function],
@@ -452,6 +466,7 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
         "otherIdentifiers": Array [],
         "otherLicenseUrl": undefined,
         "preservationState": 0,
+        "provenances": Array [],
         "restrictionGrounds": Object {},
         "selectedDirectories": Array [],
         "selectedFiles": Array [],
@@ -530,6 +545,10 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
           "selectedProject": undefined,
           "toMetax": [Function],
         },
+        "Provenances": Provenances {
+          "Qvain": [Circular],
+          "toBackend": [Function],
+        },
         "Spatials": Spatials {
           "Qvain": [Circular],
           "toBackend": [Function],
@@ -582,6 +601,7 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
         "otherIdentifiers": Array [],
         "otherLicenseUrl": undefined,
         "preservationState": 0,
+        "provenances": Array [],
         "restrictionGrounds": Object {},
         "selectedDirectories": Array [],
         "selectedFiles": Array [],

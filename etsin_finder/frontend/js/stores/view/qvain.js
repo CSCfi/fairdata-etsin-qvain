@@ -13,12 +13,14 @@ import { getPath } from '../../components/qvain/utils/object'
 import Actors from './qvain.actors'
 import Files from './qvain.files'
 import Spatials, { SpatialModel } from './qvain.spatials'
+import Provenances from './qvain.provenances'
 
 class Qvain {
   constructor() {
     this.Files = new Files(this)
     this.Actors = new Actors(this)
     this.Spatials = new Spatials(this)
+    this.Provenances = new Provenances(this)
   }
 
   @observable original = undefined // used if editing, otherwise undefined
@@ -38,6 +40,8 @@ class Qvain {
   }
 
   @observable spatials = []
+
+  @observable provenances = []
 
   @observable issuedDate = undefined
 
@@ -119,6 +123,7 @@ class Qvain {
 
     this.Actors.reset()
     this.spatials = []
+    this.provenances = []
   }
 
   @action
@@ -670,6 +675,9 @@ class Qvain {
         this.spatials.push(spatial)
       })
     }
+
+    // Provenances
+    // this.provenances = []
 
     // Keywords
     this.keywords = researchDataset.keyword || []

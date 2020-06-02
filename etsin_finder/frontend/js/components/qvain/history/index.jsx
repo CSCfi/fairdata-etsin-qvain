@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Section } from '../general/section/index'
 import TooltipContent from './TooltipContent'
 import Infrastructure from './infrastructure'
+import Provenance from './provenance'
 
 const translations = {
   title: 'qvain.history.title',
@@ -22,6 +23,7 @@ class History extends Component {
     return (
       <Section {...fieldProps}>
         <Infrastructure />
+        <Provenance />
       </Section>
     )
   }

@@ -295,6 +295,10 @@ const english = {
     },
   },
   qvain: {
+    general: {
+        langFi: 'Finnish',
+        langEn: 'English'
+    },
     submit: 'Save and Publish',
     edit: 'Update Dataset',
     consent:
@@ -970,9 +974,53 @@ const english = {
       },
       infrastructure: {
         addButton: 'Add Infrastructure',
-        title: 'Add infrastructure',
-        description: 'Add services and tools that are used to produce the dataset.',
+        title: 'Infrastructure',
+        description: 'Services and tools that are used to produce the dataset.',
       },
+      provenance: {
+        title: 'Provenance',
+        description: '',
+        addButton: 'Add Provenance',
+        modal: {
+          addTitle: 'Add Provenance',
+          editTitle: 'Edit Provenance',
+          buttons: {
+            addSave: 'Add Provenance',
+            editSave: 'Apply changes',
+            cancel: 'Cancel'
+          },
+          nameInput: {
+            fi: {
+              label: 'Name',
+              placeholder: 'Name (in finnish)'
+            },
+            en: {
+              label: 'Name',
+              placeholder: 'Name (in english)'
+            }
+          },
+          descriptionInput: {
+            fi: {
+              label: 'Description',
+              placeholder: 'Description (in finnish)'
+            },
+            en: {
+              label: 'Description',
+              placeholder: 'Description (in english)'
+            }
+          },
+          outcomeDescriptionInput: {
+            fi: {
+              label: 'Outcome description',
+              placeholder: 'Outcome description (in finnish)'
+            },
+            en: {
+              label: 'Outcome description',
+              placeholder: 'Outcome description (in english)'
+            }
+          }
+        }
+      }
     },
     temporalAndSpatial: {
       title: 'Temporal and Spatial Coverage',

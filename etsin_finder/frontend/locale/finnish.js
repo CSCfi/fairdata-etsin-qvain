@@ -295,6 +295,10 @@ const finnish = {
     },
   },
   qvain: {
+    general: {
+      langFi: 'Suomi',
+      langEn: 'Englanti'
+    },
     submit: 'Julkaise Aineisto',
     edit: 'Päivitä Aineisto',
     consent:
@@ -973,6 +977,50 @@ const finnish = {
         title: 'Infrastruktuuri',
         description: 'Voit lisätä palveluita tai rakenteita joita on käytetty aineiston laatimiseen.',
       },
+      provenance: {
+        title: 'Alkuperä',
+        description: '',
+        addButton: 'Lisää alkuperä',
+        modal: {
+          addTitle: 'Lisää alkuperä',
+          editTitle: 'Muokkaa alkuperää',
+          buttons: {
+            addSave: 'Lisää alkuperä',
+            editSave: 'Vahvista muutokset',
+            cancel: 'Peruuta'
+          },
+          nameInput: {
+            fi: {
+              label: 'Nimi',
+              placeholder: 'Nimi (suomeksi)'
+            },
+            en: {
+              label: 'Nimi',
+              placeholder: 'Nimi (englanniksi)'
+            }
+          },
+          descriptionInput: {
+            fi: {
+              label: 'Seloste',
+              placeholder: 'Seloste (suomeksi)'
+            },
+            en: {
+              label: 'Seloste',
+              placeholder: 'Seloste (englanniksi)'
+            }
+          },
+          outcomeDescriptionInput: {
+            fi: {
+              label: 'Seloste lopputuloksesta',
+              placeholder: 'Seloste lopputuloksesta (suomeksi)'
+            },
+            en: {
+              label: 'Seloste lopputuloksesta',
+              placeholder: 'Seloste lopputuloksesta (englanniksi)'
+            }
+          }
+        }
+      }
     },
     temporalAndSpatial: {
       title: 'Ajallinen- ja maantieteellinen kattavuus',
