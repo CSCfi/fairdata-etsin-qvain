@@ -91,7 +91,7 @@ class FormatChanger extends Component {
         newestColor={this.props.theme.color.white}
         color={this.props.theme.color.primary}
         padding="0.5em 1em"
-        width="10em"
+        width="fit-content"
         value={this.state.selected}
         onChange={this.changeFormat}
         onBlur={this.closeModal}
