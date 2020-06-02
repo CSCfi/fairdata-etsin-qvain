@@ -9,18 +9,28 @@ import SpatialButtons from './SpatialButtons'
 
 class ModalContent extends Component {
   static propTypes = {
-    Stores: PropTypes.object.isRequired
+    Stores: PropTypes.object.isRequired,
+    translationsRoot: PropTypes.string,
   }
 
-  translations = {
-      title: 'qvain.temporalAndSpatial.spatial.modal.title'
+  static defaultProps = {
+    translationsRoot: 'qvain.temporalAndSpatial.spatial',
   }
 
-  state = {
-    confirmOpen: false
+  constructor(props) {
+    super(props)
+    const { editMode } = this.props.Stores.Qvain.Spatials
+    this.translations = {
+      title: editMode
+        ? `${this.props.translationsRoot}.modal.title.edit`
+        : `${this.props.translationsRoot}.modal.title.add`,
+    }
+    this.state = {
+      confirmOpen: false,
+    }
   }
 
-  setConfirmOpen = (val) => {
+  setConfirmOpen = val => {
     this.setState({ confirmOpen: val })
   }
 
@@ -32,21 +42,23 @@ class ModalContent extends Component {
 
   render() {
     const { confirmOpen } = this.state
-      return (
-        <>
-          <Header><Translate content={this.translations.title} /></Header>
-          <Content>
-            <Form />
-            <SpatialButtons handleRequestClose={() => this.setConfirmOpen(true)} />
+    return (
+      <>
+        <Header>
+          <Translate content={this.translations.title} />
+        </Header>
+        <Content>
+          <Form />
+          <SpatialButtons handleRequestClose={() => this.setConfirmOpen(true)} />
 
-            <ConfirmClose
-              show={confirmOpen}
-              hideConfirm={() => this.setConfirmOpen(false)}
-              closeModal={this.close}
-            />
-          </Content>
-        </>
-      )
+          <ConfirmClose
+            show={confirmOpen}
+            hideConfirm={() => this.setConfirmOpen(false)}
+            closeModal={this.close}
+          />
+        </Content>
+      </>
+    )
   }
 }
 

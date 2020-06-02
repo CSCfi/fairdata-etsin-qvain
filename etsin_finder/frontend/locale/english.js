@@ -185,8 +185,10 @@ const english = {
       homepage: 'Homepage',
     },
     language: 'Language',
-    storedInPas: "This dataset is stored in Fairdata's Digital Preservation Service (data not accessible via Etsin).",
-    pasDatasetVersionExists: "This is a use copy of this dataset. A copy is also stored in Fairdata's Digital Preservation Service. ",
+    storedInPas:
+      "This dataset is stored in Fairdata's Digital Preservation Service (data not accessible via Etsin).",
+    pasDatasetVersionExists:
+      "This is a use copy of this dataset. A copy is also stored in Fairdata's Digital Preservation Service. ",
     originalDatasetVersionExists: 'There is an existing use copy of the dataset. ',
     linkToPasDataset: "Click here to open the Digial preservation Service's version",
     linkToOriginalDataset: 'You can open the use copy by clicking here',
@@ -296,8 +298,15 @@ const english = {
   },
   qvain: {
     general: {
-        langFi: 'Finnish',
-        langEn: 'English'
+      langFi: 'Finnish',
+      langEn: 'English',
+      buttons: {
+        edit: 'Edit',
+        remove: 'Remove',
+        add: 'Add',
+        save: 'Save',
+        cancel: 'Cancel',
+      },
     },
     submit: 'Save and Publish',
     edit: 'Update Dataset',
@@ -725,8 +734,7 @@ const english = {
         radio: {
           no:
             'No. (Adding files or folders will automatically create a new version of the dataset.)',
-          yes:
-            'Yes. (New files or folders will be added without a version change.)',
+          yes: 'Yes. (New files or folders will be added without a version change.)',
           note:
             'Note! Once the dataset has been submitted, changing the value from "No" to "Yes" will cause a new version of the dataset to be created. Change from "Yes" to "No" will not cause a new version.',
         },
@@ -965,16 +973,17 @@ const english = {
       tooltipContent: {
         reference: {
           title: 'Reference',
-          paragraph: 'Refer to related datasets, publications, and other resources that are relevant in understanding this dataset. '
+          paragraph:
+            'Refer to related datasets, publications, and other resources that are relevant in understanding this dataset. ',
         },
         provience: {
           title: 'Provience',
-          paragraph: 'Information about the provenience of the data.'
+          paragraph: 'Information about the provenience of the data.',
         },
         infrastructure: {
           title: 'Infrastructure',
-          paragraph: 'Services or tools that are used to produce the dataset.'
-        }
+          paragraph: 'Services or tools that are used to produce the dataset.',
+        },
       },
       infrastructure: {
         addButton: 'Add Infrastructure',
@@ -991,40 +1000,40 @@ const english = {
           buttons: {
             addSave: 'Add Provenance',
             editSave: 'Apply changes',
-            cancel: 'Cancel'
+            cancel: 'Cancel',
           },
           nameInput: {
             fi: {
               label: 'Name',
-              placeholder: 'Name (in finnish)'
+              placeholder: 'Name (in finnish)',
             },
             en: {
               label: 'Name',
-              placeholder: 'Name (in english)'
-            }
+              placeholder: 'Name (in english)',
+            },
           },
           descriptionInput: {
             fi: {
               label: 'Description',
-              placeholder: 'Description (in finnish)'
+              placeholder: 'Description (in finnish)',
             },
             en: {
               label: 'Description',
-              placeholder: 'Description (in english)'
-            }
+              placeholder: 'Description (in english)',
+            },
           },
           outcomeDescriptionInput: {
             fi: {
               label: 'Outcome description',
-              placeholder: 'Outcome description (in finnish)'
+              placeholder: 'Outcome description (in finnish)',
             },
             en: {
               label: 'Outcome description',
-              placeholder: 'Outcome description (in english)'
-            }
-          }
-        }
-      }
+              placeholder: 'Outcome description (in english)',
+            },
+          },
+        },
+      },
     },
     temporalAndSpatial: {
       title: 'Temporal and Spatial Coverage',
@@ -1032,48 +1041,53 @@ const english = {
       tooltipContent: {
         spatial: {
           title: 'Spatial coverage',
-          paragraph: 'Area covered by the dataset, e.g. places of observations.  '
+          paragraph: 'Area covered by the dataset, e.g. places of observations.  ',
         },
         temporal: {
           title: 'Temporal coverage',
-          paragraph: 'Time span that is covered by the dataset, e.g. period of observations. '
+          paragraph: 'Time span that is covered by the dataset, e.g. period of observations. ',
         },
       },
       spatial: {
         title: 'Spatial coverage',
         description: 'Area covered by the dataset, e.g. places of observations.',
-        addButton: 'Add Spatial coverage',
         error: {
           nameRequired: 'Name is required',
-          altitudeNan: 'Altitude must be a number'
+          altitudeNan: 'Altitude must be a number',
         },
         modal: {
-          title: 'Add Spatial coverage',
+          addButton: 'Add Spatial coverage',
+          title: {
+            add: 'Add Spatial coverage',
+            edit: 'Edit spatial coverage',
+          },
           buttons: {
             save: 'Save',
-            cancel: 'Cancel'
+            cancel: 'Cancel',
+            addGeometry: 'Add geometry',
+            removeGeometry: 'Remove',
           },
           nameInput: {
             label: 'Name',
-            placeholder: 'Name'
+            placeholder: 'Name',
           },
           altitudeInput: {
             label: 'Altitude',
-            placeholder: 'The WGS84 altitude of an spatial coverage (from local reference)'
+            placeholder: 'The WGS84 altitude of an spatial coverage (from local reference)',
           },
           addressInput: {
             label: 'Address',
-            placeholder: 'Full address'
+            placeholder: 'Full address',
           },
           geometryInput: {
             label: 'Geometry',
-            placeholder: 'Geometry using WKT format in WGS84 coordinate system'
+            placeholder: 'Geometry using WKT format in WGS84 coordinate system',
           },
           locationInput: {
             label: 'Location',
-            placeholder: 'Location'
-          }
-        }
+            placeholder: 'Location',
+          },
+        },
       },
     },
   },

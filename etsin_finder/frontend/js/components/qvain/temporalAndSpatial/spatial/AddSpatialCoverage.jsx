@@ -10,7 +10,12 @@ import ModalContent from './ModalContent'
 
 class AddSpatialCoverage extends Component {
     static propTypes = {
-      Stores: PropTypes.object.isRequired
+      Stores: PropTypes.object.isRequired,
+      translationsRoot: PropTypes.string
+    }
+
+    static defaultProps = {
+      translationsRoot: 'qvain.temporalAndSpatial.spatial'
     }
 
     close = () => {
@@ -23,6 +28,7 @@ class AddSpatialCoverage extends Component {
     }
 
     render() {
+        const { translationsRoot } = this.props
         const isModalOpen = !!this.props.Stores.Qvain.Spatials.spatialInEdit;
         return (
           <>
@@ -33,12 +39,12 @@ class AddSpatialCoverage extends Component {
                 contentLabel="Add spatial coverage modal"
                 customStyles={modalStyle}
               >
-                <ModalContent />
+                <ModalContent translationsRoot={translationsRoot} />
               </Modal>
             ) : null}
             <ButtonContainer>
               <AddNewButton type="button" onClick={this.open}>
-                <Translate content="qvain.temporalAndSpatial.spatial.addButton" />
+                <Translate content={`${translationsRoot}.modal.addButton`} />
               </AddNewButton>
             </ButtonContainer>
           </>

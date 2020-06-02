@@ -16,7 +16,7 @@ const Form = () => {
         </>
       </TranslationTab>
       <PeriodOfTimePicker />
-      <AddSpatialCoverage isInProvenance />
+      <AddSpatialCoverage />
     </>
 )
 }
