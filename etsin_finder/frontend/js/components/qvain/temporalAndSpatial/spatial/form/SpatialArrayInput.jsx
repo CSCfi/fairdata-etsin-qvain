@@ -49,9 +49,8 @@ class SpatialArrayInput extends Component {
         }
 
         return spatialInEdit[datum].map((item, id) => (
-          <div style={{ display: 'flex', justifyItems: 'center' }}>
+          <div key={`${item.key}-${datum}-item`} style={{ display: 'flex', justifyItems: 'center' }}>
             <Translate
-              key={`${item.key}-${datum}-item`}
               component={SpatialInputElem}
               type={type}
               id={`${datum}Field`}

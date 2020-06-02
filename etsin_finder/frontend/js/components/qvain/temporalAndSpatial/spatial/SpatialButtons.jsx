@@ -62,8 +62,6 @@ class SpatialButtons extends Component {
 }
 
 const ButtonAndErrorContainer = styled.div`
-  position: absolute;
-  bottom: 2em;
 `
 
 export default inject('Stores')(observer(SpatialButtons))

@@ -1050,8 +1050,8 @@ const english = {
         modal: {
           title: 'Add Spatial coverage',
           buttons: {
-            save: 'save',
-            cancel: 'cancel'
+            save: 'Save',
+            cancel: 'Cancel'
           },
           nameInput: {
             label: 'Name',

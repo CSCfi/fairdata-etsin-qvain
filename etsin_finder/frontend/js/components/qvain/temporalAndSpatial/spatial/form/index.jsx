@@ -32,6 +32,7 @@ const Form = () => (
     )
 
 const FormContainer = styled.div`
+  flex-grow: 1;
   padding: 0.5rem;
   margin-bottom: 0.5rem;
   border-radius: 4px;

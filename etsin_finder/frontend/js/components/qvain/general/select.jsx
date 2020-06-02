@@ -16,11 +16,13 @@ class Select extends Component {
     getter: PropTypes.object,
     setter: PropTypes.func.isRequired,
     model: PropTypes.func.isRequired,
-    name: PropTypes.string.isRequired
+    name: PropTypes.string.isRequired,
+    inModal: PropTypes.bool
   }
 
   static defaultProps = {
-    getter: undefined
+    getter: undefined,
+    inModal: false
   }
 
   state = {
@@ -71,11 +73,27 @@ class Select extends Component {
 
   render() {
     const { readonly } = this.props.Stores.Qvain
-    const { getter, setter, model, name } = this.props
+    const { getter, setter, model, name, inModal } = this.props
     const { lang } = this.props.Stores.Locale
     const { options } = this.state
 
-    return (
+    return inModal ? (
+      <Translate
+        name={name}
+        inputId={`${name}-select`}
+        component={ReactSelect}
+        attributes={{ placeholder: 'qvain.select.placeholder' }}
+        isDisabled={readonly}
+        value={getCurrentValue(getter, options, lang)}
+        className="basic-single"
+        classNamePrefix="select"
+        options={options[lang]}
+        onChange={onChange(options, lang, setter, model)}
+        menuPlacement="auto"
+        menuPosition="fixed"
+        menuShouldScrollIntoView={false}
+      />
+    ) : (
       <Translate
         name={name}
         inputId={`${name}-select`}
