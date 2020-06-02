@@ -118,6 +118,7 @@ export const ButtonGroup = styled.div`
   margin-bottom: 12px;
   overflow: overlay;
 `
+
 export const FileItem = styled(ButtonGroup)`
   ${props => (props.active ? `
     border-bottom: none;
