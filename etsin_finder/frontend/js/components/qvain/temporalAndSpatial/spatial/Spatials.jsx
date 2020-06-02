@@ -2,6 +2,7 @@ import React from 'react'
 import { inject, observer } from 'mobx-react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
+import Translate from 'react-translate-component'
 import {
     ButtonGroup,
     ButtonLabel,
@@ -18,8 +19,18 @@ const Spatials = ({ Stores }) => {
       <SpatialContainer key={spatial.uiid}>
         <Label>{spatial.name}</Label>
         <ButtonContainer>
-          <EditButton type="button" onClick={() => editSpatial(spatial.uiid)} />
-          <DeleteButton type="button" onClick={() => removeSpatial(spatial.uiid)} />
+          <Translate
+            component={EditButton}
+            type="button"
+            onClick={() => editSpatial(spatial.uiid)}
+            attributes={{ 'aria-label': 'qvain.general.buttons.edit' }}
+          />
+          <Translate
+            component={DeleteButton}
+            type="button"
+            onClick={() => removeSpatial(spatial.uiid)}
+            attribute={{ 'aria-label': 'qvain.general.buttons.remove' }}
+          />
         </ButtonContainer>
       </SpatialContainer>
     ))

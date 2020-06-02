@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 
 const SectionTitle = styled.h2`
-  display: inline-block;
   text-transform: uppercase;
   color: #007fad;
   font-weight: bold;
