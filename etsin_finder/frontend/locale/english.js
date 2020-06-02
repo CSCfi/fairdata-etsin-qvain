@@ -454,9 +454,13 @@ const english = {
         title: 'Keywords',
         infoText: 'Set keywords that characterize the dataset.',
         placeholder: 'E.g. economy',
-        addButton: '+ Add keywords',
+        addButton: 'Add keywords',
         help:
           'You can add multiple keywords by separating them with a comma (,). Dataset has to have at least one keyword.',
+      },
+      error: {
+        title: 'A title is required in at least one language.',
+        description: 'A description is required in at least one language.',
       },
     },
     rightsAndLicenses: {
@@ -494,7 +498,7 @@ const english = {
     actors: {
       title: 'Actors',
       infoTitle: 'Actors info',
-      addButton: '+ Add new actor',
+      addButton: 'Add new actor',
       infoText:
         'Add at least one Creator. First, select the type of actor (person or organization). Then choose the roles the actor has (you can add multiple). After that, fill in the details: organization is mandatory for a person. You can edit added actors by clicking the pen icon or remove it by clicking the X icon.',
       errors: {
@@ -940,10 +944,10 @@ const english = {
             infoText: 'Direct link to start the download',
           },
           cancel: {
-            label: 'Cancel',
+            label: 'Clear fields',
           },
           save: {
-            label: 'Save',
+            label: 'Add external file',
           },
           add: {
             label: 'Add',
