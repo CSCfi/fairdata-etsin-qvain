@@ -57,6 +57,12 @@ class KeywordsField extends Component {
     this.props.Stores.Qvain.removeKeyword(word)
   }
 
+  handleKeyDown = (e) => {
+    if (e.keyCode === 188 || e.keyCode === 13) {
+      this.handleKeywordAdd(e)
+    }
+  }
+
   render() {
     const { readonly } = this.props.Stores.Qvain
     const keywords = this.props.Stores.Qvain.keywords.map(word => (
@@ -85,6 +91,7 @@ class KeywordsField extends Component {
           id="keywordsInput"
           disabled={readonly}
           value={this.state.value}
+          onKeyDown={this.handleKeyDown}
           onChange={this.handleChange}
           type="text"
           attributes={{ placeholder: 'qvain.description.keywords.placeholder' }}
