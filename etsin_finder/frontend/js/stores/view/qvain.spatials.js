@@ -7,7 +7,7 @@ const Spatial = (
     altitude = 0,
     address = '',
     geometry = [],
-    location = {}) => ({
+    location = { url: '' }) => ({
         uiid,
         name,
         altitude,

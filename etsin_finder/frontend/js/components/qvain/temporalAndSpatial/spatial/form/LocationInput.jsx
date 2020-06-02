@@ -21,6 +21,7 @@ const LocationInput = ({ Stores }) => {
           setter={setLocation}
           model={Location}
           metaxIdentifier="location"
+          inModal
         />
       </>
     )
