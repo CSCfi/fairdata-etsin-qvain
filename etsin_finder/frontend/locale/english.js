@@ -143,6 +143,11 @@ const english = {
         idn: 'Identifier',
       },
     },
+    map: {
+      geographic_name: 'Geographical name',
+      full_address: 'Full address',
+      alt: 'Altitude (m)',
+    },
     doi: 'DOI',
     field_of_science: 'Field of science',
     funder: 'Funder',
