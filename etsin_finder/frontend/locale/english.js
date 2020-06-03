@@ -146,7 +146,7 @@ const english = {
     map: {
       geographic_name: 'Geographical name',
       full_address: 'Full address',
-      alt: 'Altitude',
+      alt: 'Altitude (m)',
     },
     doi: 'DOI',
     field_of_science: 'Field of science',

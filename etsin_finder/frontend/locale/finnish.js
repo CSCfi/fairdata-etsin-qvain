@@ -146,7 +146,7 @@ const finnish = {
     map: {
       geographic_name: 'Maantieteellinen nimi',
       full_address: 'Kokonainen osoite',
-      alt: 'Korkeus',
+      alt: 'Korkeus (m)',
     },
     doi: 'DOI',
     field_of_science: 'Tieteenala',
