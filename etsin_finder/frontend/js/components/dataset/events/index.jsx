@@ -76,7 +76,12 @@ class Events extends Component {
   constructor(props) {
     super(props)
 
-    const versions = this.versions(this.props.dataset_version_set)
+    let versions;
+
+    // Error handling for dataset_version_set
+    if (this.props.dataset_version_set) {
+      versions = this.versions(this.props.dataset_version_set)
+    }
 
     this.state = {
       versions,
@@ -84,7 +89,10 @@ class Events extends Component {
   }
 
   componentDidMount() {
-    this.versions(this.props.dataset_version_set)
+    // Error handling for dataset_version_set
+    if (this.props.dataset_version_set) {
+      this.versions(this.props.dataset_version_set)
+    }
 
     Tracking.newPageView(
       `Dataset: ${this.props.match.params.identifier} | Events`,
@@ -144,9 +152,13 @@ class Events extends Component {
   }
 
   checkDeleted = () => {
-    if (this.props.dataset_version_set
-      .filter(single => single.removed).length > 0) {
-      return true
+    // Error handling for dataset_version_set
+    if (this.props.dataset_version_set) {
+      if (this.props.dataset_version_set
+        .filter(single => single.removed).length > 0) {
+        return true
+      }
+      return false
     }
     return false
   }
@@ -177,7 +189,6 @@ class Events extends Component {
   }
 
   render() {
-    console.log(this.state.versions)
     return (
       <Margin>
         { // Display events table header if provenance exists of if deleted versions exist
@@ -412,6 +423,7 @@ Events.defaultProps = {
   provenance: false,
   other_identifier: false,
   preservation_dataset_origin_version_identifier: undefined,
+  dataset_version_set: undefined,
 }
 
 Events.propTypes = {
@@ -427,7 +439,7 @@ Events.propTypes = {
   provenance: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
   other_identifier: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
   preservation_dataset_origin_version_identifier: PropTypes.object,
-  dataset_version_set: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]).isRequired,
+  dataset_version_set: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
 }
 
 const InlineUl = styled.ul`
