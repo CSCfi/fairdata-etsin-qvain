@@ -1002,6 +1002,7 @@ const english = {
         modal: {
           title: 'Add Spatial coverage',
           buttons: {
+            addGeometry: 'Add Geometry',
             save: 'Save',
             cancel: 'Cancel'
           },
