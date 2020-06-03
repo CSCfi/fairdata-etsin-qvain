@@ -1,10 +1,12 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import Translate from 'react-translate-component'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons'
 
 export const IconStyles = styled(FontAwesomeIcon)`
-    color: ${props => props.theme.color.primary};
+  color: ${props => props.theme.color.primary};
   :hover {
     color: #004d79;
   }
@@ -15,14 +17,23 @@ export const NoStyleButton = styled.button`
   background-color: unset;
 `
 
-export const MinusIcon = props => (
-  <NoStyleButton {...props} type="button">
-    <IconStyles icon={faMinus} />
-  </NoStyleButton>
+export const ExpandCollapse = props => (
+  <Translate
+    component={NoStyleButton}
+    type="button"
+    {...props}
+    attributes={{
+      'aria-label': props.isExpanded ? 'general.showLess' : 'general.showMore',
+    }}
+  >
+    {props.isExpanded ? <IconStyles icon={faMinus} /> : <IconStyles icon={faPlus} />}
+  </Translate>
 )
 
-export const PlusIcon = props => (
-  <NoStyleButton {...props} type="button">
-    <IconStyles icon={faPlus} />
-  </NoStyleButton>
-  )
+ExpandCollapse.propTypes = {
+  isExpanded: PropTypes.bool,
+}
+
+ExpandCollapse.defaultProps = {
+  isExpanded: false,
+}

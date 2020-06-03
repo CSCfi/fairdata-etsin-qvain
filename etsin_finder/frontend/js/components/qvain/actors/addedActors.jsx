@@ -51,8 +51,18 @@ export class AddedActorsBase extends Component {
               {getActorName(addedActor, lang)}{addedActor.roles.map(role => (` / ${translate(`qvain.actors.add.checkbox.${role}`)}`))}
             </ActorLabel>
             <ButtonContainer>
-              <EditButton aria-label="Edit" onClick={this.handleEditActor(addedActor)} />
-              {!readonly && <DeleteButton aria-label="Remove" onClick={this.handleRemoveActor(addedActor)} />}
+              <Translate
+                component={EditButton}
+                onClick={this.handleEditActor(addedActor)}
+                attributes={{ 'aria-label': 'qvain.general.buttons.edit' }}
+              />
+              {!readonly && (
+                <Translate
+                  component={DeleteButton}
+                  onClick={this.handleRemoveActor(addedActor)}
+                  attributes={{ 'aria-label': 'qvain.general.buttons.remove' }}
+                />
+              )}
             </ButtonContainer>
           </ButtonGroup>
         ))}

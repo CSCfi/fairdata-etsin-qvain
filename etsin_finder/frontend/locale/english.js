@@ -1062,6 +1062,7 @@ const english = {
             edit: 'Edit spatial coverage',
           },
           buttons: {
+            addGeometry: 'Add Geometry',
             save: 'Save',
             cancel: 'Cancel',
             addGeometry: 'Add geometry',
