@@ -105,7 +105,7 @@ const finnish = {
       item: 'aineisto %(item)s',
       name: 'Nimi',
       size: 'Koko',
-      remote: 'Remote aineistot',
+      remote: 'Ulkoinen lähde',
       checksum: 'Checksum',
       id: 'ID',
       title: 'Otsikko',
@@ -133,6 +133,8 @@ const finnish = {
         when: 'Milloin',
         event_title: 'Otsikko',
         description: 'Kuvaus',
+        deletionEvent: 'Aineiston poistaminen',
+        deletionOfDatasetVersion: 'Poistettu aineistoversio: ',
       },
       other_idn: 'Muut tunnisteet',
       origin_identifier: 'Alkuperäisen aineiston tunniste',
@@ -142,6 +144,11 @@ const finnish = {
         name: 'Otsikko',
         idn: 'Tunniste',
       },
+    },
+    map: {
+      geographic_name: 'Maantieteellinen nimi',
+      full_address: 'Kokonainen osoite',
+      alt: 'Korkeus (m)',
     },
     doi: 'DOI',
     field_of_science: 'Tieteenala',
@@ -299,7 +306,7 @@ const finnish = {
     submit: 'Julkaise Aineisto',
     edit: 'Päivitä Aineisto',
     consent:
-      'Käyttämällä Qvain Lightia käyttäjä hyväksyy, että hän on pyytänyt suostumusta kaikilta henkilöiltä, joiden hankilökohtaisia tietoja käyttäjä lisää kuvattaviin tietoihin, ja ilmoitti heille, miten he voivat saada tietonsa poistettua. Käyttämällä Qvain Lightia käyttäjä hyväksyy <a href="https://www.fairdata.fi/hyodyntaminen/kayttopolitiikat-ja-ehdot/">käyttöehdot</a>.',
+      'Käyttämällä Qvain Light -työkalua käyttäjä vakuuttaa, että hän on saanut suostumuksen muiden henkilöiden henkilötietojen lisäämiseen kuvailutietoihin ja ilmoittanut heille miten he voivat saada henkilötietonsa poistettua palvelusta. Käyttämällä Qvain Light-työkalua käyttäjä hyväksyy <a href="https://www.fairdata.fi/hyodyntaminen/kayttopolitiikat-ja-ehdot/">käyttöehdot</a>.',
     submitStatus: {
       success: 'Aineisto julkaistu!',
       fail: 'Jotain meni pieleen...',
@@ -336,7 +343,8 @@ const finnish = {
     useDoiNegative: 'Ei',
     unsuccessfullLogin: 'Kirjautuminen epäonnistui.',
     notCSCUser1:
-      'Varmistakaa että teillä on voimassaoleva CSC tunnus. Jos yritit kirjautua sisään ulkoisella tunnuksella (kuten Haka) Niin saatat saada tämän virhe ilmoituksen jos titlit eivät ole linkitetty. Linkityksen voi tehdä',
+      'Varmistakaa että teillä on voimassaoleva CSC tunnus. Jos yritit kirjautua sisään ulkoisella tunnuksella (kuten Haka) niin saatat saada tämän ' +
+      'virheilmoituksen, jos tilit eivät ole linkitetty. Linkityksen voi tehdä',
     notCSCUserLink: ' CSC asiakas porttaalissa',
     notCSCUser2: ' Voit rekisteröityä Hakatunuksella tai ilman.',
     notLoggedIn: 'Kirjaudu sisään CSC -tililläsi käyttääksesi Qvain-light palvelua.',
@@ -455,9 +463,13 @@ const finnish = {
         infoText:
           'Vapaat hakusanat aineistollesi. Vaikuttaa aineistosi löytymiseen Etsimen haussa. Käytä mahdollisimman tarkkoja termejä. Tässä kentässä ei ole automaattista käännöstä eri kielille.',
         placeholder: 'Esim. taloustiede',
-        addButton: '+ Lisää avainsanoja',
+        addButton: 'Lisää avainsanoja',
         help:
           'Voit lisätä useamman avainsanan erottamalla ne pilkulla (,). Aineistolla on oltava vähintään yksi avainsana.',
+      },
+      error: {
+        title: 'Otsikko on pakollinen ainakin yhdellä kielellä.',
+        description: 'Kuvaus on pakollinen ainakin yhdellä kielellä.',
       },
     },
     rightsAndLicenses: {
@@ -495,7 +507,7 @@ const finnish = {
     actors: {
       title: 'Toimijat',
       infoTitle: 'Toimijat info',
-      addButton: '+ Lisää toimija',
+      addButton: 'Lisää uusi toimija',
       infoText:
         'Tutkimukseen tai aineiston tekemiseen osallistuneet henkilöt ja organisaatiot. Voit määrittää tekijät (pakollinen), Julkaisijan, Kuraattorit, Oikeuksienhaltijat sekä Muut tekijät. Valitse ensin, onko kyseessä henkilö vai organisaatio. Määritä sen jälkeen, missä roolissa ko. toimija osallistui tutkimukseen (voit valita useita), ja määritä sen jälkeen tarvittavat tiedot. Jos kyseessä on henkilö, on organisaatiotieto pakollinen tieto. Jo annettuja tietoja pääset muuttamaan klikkaamalla tallennetun toimijan kohdalla kynä -ikonia.',
       errors: {
@@ -943,10 +955,10 @@ const finnish = {
             infoText: 'Linkki, jolla tiedoston saa ladattua suoraan omalle koneelle',
           },
           cancel: {
-            label: 'Kumoa',
+            label: 'Tyhjennä kentät',
           },
           save: {
-            label: 'Tallenna',
+            label: 'Lisää ulkoinen lähde',
           },
           add: {
             label: 'Lisää',
