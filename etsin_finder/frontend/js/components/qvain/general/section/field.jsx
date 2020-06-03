@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import Card from '../card';
-import { PlusIcon, MinusIcon } from './expand'
+import { ExpandCollapse } from './expand'
 
 
 const Field = ({ brief, children }) => {
@@ -11,8 +11,8 @@ const Field = ({ brief, children }) => {
 
   return expanded ? (
     <FieldContainerExpanded>
-      <FieldHeaderExpanded>
-        <MinusIcon onClick={() => setExpanded(false)} />
+      <FieldHeaderExpanded onClick={() => setExpanded(false)}>
+        <ExpandCollapse isExpanded={expanded} />
         <Translate tabIndex="0" content={brief.title} />
       </FieldHeaderExpanded>
       <Translate component="p" content={brief.description} />
@@ -20,8 +20,8 @@ const Field = ({ brief, children }) => {
     </FieldContainerExpanded>
     ) : (
       <FieldContainerCollapsed>
-        <FieldHeaderCollapsed>
-          <PlusIcon onClick={() => setExpanded(true)} />
+        <FieldHeaderCollapsed onClick={() => setExpanded(true)}>
+          <ExpandCollapse isExpanded={expanded} />
           <Translate tabIndex="0" content={brief.title} />
         </FieldHeaderCollapsed>
       </FieldContainerCollapsed>

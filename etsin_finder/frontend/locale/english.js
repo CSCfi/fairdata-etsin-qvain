@@ -1065,7 +1065,6 @@ const english = {
             addGeometry: 'Add Geometry',
             save: 'Save',
             cancel: 'Cancel',
-            addGeometry: 'Add geometry',
             removeGeometry: 'Remove',
           },
           nameInput: {
