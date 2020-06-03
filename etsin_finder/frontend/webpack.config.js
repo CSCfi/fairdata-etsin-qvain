@@ -47,6 +47,10 @@ const config = {
       favicon: 'static/images/favicon.png',
     }),
   ],
+  devServer: {
+    hot: true,
+
+  },
   watch: false,
   watchOptions: {
     aggregateTimeout: 300,
