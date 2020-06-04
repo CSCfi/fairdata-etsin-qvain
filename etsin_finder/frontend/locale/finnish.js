@@ -1007,7 +1007,10 @@ const finnish = {
           altitudeNan: 'Korkeus täytyy olla numero',
         },
         modal: {
-          title: 'Lisää maantieteellinen kattavuus',
+          title: {
+            add: 'Lisää maantieteellinen kattavuus',
+            edit: 'Muokkaa maantieteellistä kattavuutta',
+          },
           buttons: {
             addGeometry: 'Lisää geometria',
             save: 'tallenna',
@@ -1019,7 +1022,7 @@ const finnish = {
           },
           altitudeInput: {
             label: 'Korkeus',
-            placeholder: 'Alueen korkeus ilmoitettuna WGS84 -standardin mukaan',
+            placeholder: 'Alueen korkeus ilmoitettuna WGS84 -referenssin mukaan',
           },
           addressInput: {
             label: 'Osoite',

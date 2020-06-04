@@ -12,12 +12,17 @@ class ModalContent extends Component {
     Stores: PropTypes.object.isRequired
   }
 
-  translations = {
-      title: 'qvain.temporalAndSpatial.spatial.modal.title'
-  }
-
-  state = {
-    confirmOpen: false
+  constructor(props) {
+    super(props)
+    const { editMode } = this.props.Stores.Qvain.Spatials
+    this.translations = {
+      title: editMode
+          ? 'qvain.temporalAndSpatial.spatial.modal.title.edit'
+          : 'qvain.temporalAndSpatial.spatial.modal.title.add'
+    }
+    this.state = {
+      confirmOpen: false
+    }
   }
 
   setConfirmOpen = (val) => {
