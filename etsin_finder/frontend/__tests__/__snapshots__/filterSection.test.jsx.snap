@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`FilterSection should render <FilterSection /> 1`] = `
-<filterSection__Section>
-  <filterSection__FilterCategory
+<styled.li>
+  <styled.button
     aria-expanded={false}
     onClick={[Function]}
   >
@@ -33,13 +33,12 @@ exports[`FilterSection should render <FilterSection /> 1`] = `
       rotation={null}
       size="2x"
       spin={false}
-      swapOpacity={false}
       symbol={false}
       title=""
       transform={null}
     />
-  </filterSection__FilterCategory>
-  <filterSection__FilterItems
+  </styled.button>
+  <styled.div
     aria-hidden={true}
     className=""
   >
@@ -62,6 +61,6 @@ exports[`FilterSection should render <FilterSection /> 1`] = `
     <inject-PasCheckBox-with-Stores
       aggr="data_catalog"
     />
-  </filterSection__FilterItems>
-</filterSection__Section>
+  </styled.div>
+</styled.li>
 `;
