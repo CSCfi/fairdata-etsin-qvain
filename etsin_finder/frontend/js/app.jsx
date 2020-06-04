@@ -17,13 +17,19 @@ import { Provider } from 'mobx-react'
 import createBrowserHistory from 'history/createBrowserHistory'
 import { syncHistoryWithStore } from 'mobx-react-router'
 
+import { registerLocale } from 'react-datepicker'
+import fi from 'date-fns/locale/fi'
+import en from 'date-fns/locale/en-GB'
 import Layout from './layout'
 import etsinTheme from './styles/theme'
 import GlobalStyle from './styles/globalStyles'
 import Stores from './stores'
 
-// init react-dates
-import 'react-dates/initialize';
+import 'react-datepicker/dist/react-datepicker.css'
+
+registerLocale('fi', fi)
+registerLocale('en', en)
+
 
 if (process.env.NODE_ENV === 'test') {
   console.log('We are in test')

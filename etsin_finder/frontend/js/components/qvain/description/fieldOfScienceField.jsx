@@ -28,13 +28,13 @@ class FieldOfScienceField extends React.Component {
   componentDidMount = () => {
     this.promises.push(
       getReferenceData('field_of_science')
-        .then(res => {
+        .then((res) => {
           const list = res.data.hits.hits
-          const refsEn = list.map(ref => ({
+          const refsEn = list.map((ref) => ({
             value: ref._source.uri,
             label: ref._source.label.en,
           }))
-          const refsFi = list.map(ref => ({
+          const refsFi = list.map((ref) => ({
             value: ref._source.uri,
             label: ref._source.label.fi,
           }))
@@ -45,7 +45,7 @@ class FieldOfScienceField extends React.Component {
             },
           })
         })
-        .catch(error => {
+        .catch((error) => {
           if (error.response) {
             // Error response from Metax
             console.log(error.response.data)
@@ -63,30 +63,34 @@ class FieldOfScienceField extends React.Component {
   }
 
   componentWillUnmount() {
-    this.promises.forEach(promise => promise && promise.cancel && promise.cancel())
+    this.promises.forEach((promise) => promise && promise.cancel && promise.cancel())
   }
 
-  removeFieldOfScience = fieldOfScienceToRemove => {
+  removeFieldOfScience = (fieldOfScienceToRemove) => {
     this.props.Stores.Qvain.removeFieldOfScience(fieldOfScienceToRemove)
   }
 
   render() {
-    const { readonly, fieldOfScience, fieldOfScienceArray, setFieldOfScience, addFieldOfScience } = this.props.Stores.Qvain
+    const {
+      readonly,
+      fieldOfScience,
+      fieldOfScienceArray,
+      setFieldOfScience,
+      addFieldOfScience,
+    } = this.props.Stores.Qvain
     const { lang } = this.props.Stores.Locale
     const { options } = this.state
 
-    const fieldOfScienceFaculty = fieldOfScienceArray.map(
-      fieldOfScienceEntry => (
-        <Label color="#007fad" margin="0 0.5em 0.5em 0" key={fieldOfScienceEntry.url}>
-          <PaddedWord>{fieldOfScienceEntry.name[lang]}</PaddedWord>
-          <FontAwesomeIcon
-            onClick={() => this.removeFieldOfScience(fieldOfScienceEntry)}
-            icon={faTimes}
-            size="xs"
-          />
-        </Label>
-      )
-    )
+    const fieldOfScienceFaculty = fieldOfScienceArray.map((fieldOfScienceEntry) => (
+      <Label color="#007fad" margin="0 0.5em 0.5em 0" key={fieldOfScienceEntry.url}>
+        <PaddedWord>{fieldOfScienceEntry.name[lang]}</PaddedWord>
+        <FontAwesomeIcon
+          onClick={() => this.removeFieldOfScience(fieldOfScienceEntry)}
+          icon={faTimes}
+          size="xs"
+        />
+      </Label>
+    ))
     return (
       <Card>
         <LabelLarge htmlFor="fieldOfScienceSelect">
@@ -108,7 +112,11 @@ class FieldOfScienceField extends React.Component {
           onChange={onChange(options, lang, setFieldOfScience, FieldOfScience)}
         />
         <ButtonContainer>
-          <AddNewButton type="button" onClick={() => addFieldOfScience(fieldOfScience)} disabled={readonly}>
+          <AddNewButton
+            type="button"
+            onClick={() => addFieldOfScience(fieldOfScience)}
+            disabled={readonly}
+          >
             <Translate content="qvain.description.fieldOfScience.addButton" />
           </AddNewButton>
         </ButtonContainer>

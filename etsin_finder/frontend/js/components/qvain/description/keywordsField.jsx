@@ -22,7 +22,7 @@ class KeywordsField extends Component {
     keywordsValidationError: null,
   }
 
-  handleChange = e => {
+  handleChange = (e) => {
     const { setKeywordString } = this.props.Stores.Qvain
     setKeywordString(e.target.value)
     this.setState({ keywordsValidationError: null })
@@ -35,25 +35,31 @@ class KeywordsField extends Component {
       .then(() => {
         this.setState({ keywordsValidationError: null })
       })
-      .catch(err => {
+      .catch((err) => {
         this.setState({ keywordsValidationError: err.errors })
       })
   }
 
-  handleKeywordAdd = e => {
+  handleKeywordAdd = (e) => {
     e.preventDefault()
     const { addKeywordToKeywordArray } = this.props.Stores.Qvain
     addKeywordToKeywordArray()
   }
 
-  handleKeywordRemove = word => {
+  handleKeywordRemove = (word) => {
     const { removeKeyword } = this.props.Stores.Qvain
     removeKeyword(word)
   }
 
+  handleKeyDown = (e) => {
+    if (e.keyCode === 188 || e.keyCode === 13) {
+      this.handleKeywordAdd(e)
+    }
+  }
+
   render() {
     const { readonly, keywordsArray, keywordString } = this.props.Stores.Qvain
-    const RenderedKeywords = keywordsArray.map(word => (
+    const RenderedKeywords = keywordsArray.map((word) => (
       <Label color="#007fad" margin="0 0.5em 0.5em 0" key={word}>
         <PaddedWord>{word}</PaddedWord>
         {!readonly && (

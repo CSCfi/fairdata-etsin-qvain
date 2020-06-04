@@ -1,4 +1,3 @@
-import 'react-dates/initialize';
 import React from 'react';
 import { shallow, mount } from 'enzyme'
 import { Provider } from 'mobx-react'

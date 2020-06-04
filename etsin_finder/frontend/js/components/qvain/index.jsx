@@ -4,16 +4,34 @@ import Translate from 'react-translate-component'
 import translate from 'counterpart'
 import { inject, observer } from 'mobx-react'
 import axios from 'axios'
-import { withRouter, Link } from 'react-router-dom'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { withRouter } from 'react-router-dom'
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons'
-import styled from 'styled-components'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+
+import {
+  STSD,
+  SubHeaderTextContainer,
+  LinkBackContainer,
+  LinkBack,
+  ButtonContainer,
+  SubmitButton,
+  Form,
+  SubmitContainer,
+  ErrorContainer,
+  ErrorLabel,
+  ErrorContent,
+  ErrorButtons,
+  LinkText,
+  CustomSubHeader,
+  customStyles,
+} from './styledComponents'
 
 import RightsAndLicenses from './licenses'
 import Description from './description'
 import Actors from './actors'
 import { qvainFormSchema, otherIdentifierSchema } from './utils/formValidation'
 import Files from './files'
+import History from './history'
 import {
   QvainContainer,
   SubHeader,
@@ -21,15 +39,14 @@ import {
   StickySubHeader,
   StickySubHeaderResponse,
   SubHeaderText,
-  Container,
 } from './general/card'
 import handleSubmitToBackend from './utils/handleSubmit'
 import { getResponseError } from './utils/responseError'
 import Title from './general/title'
 import SubmitResponse from './general/submitResponse'
-import { Button, InvertedButton } from '../general/button'
+import { Button } from '../general/button'
 import Modal from '../general/modal'
-import DeprecatedState from './deprecatedState';
+import DeprecatedState from './deprecatedState'
 import PasState from './pasState'
 
 const EDIT_DATASET_URL = '/api/datasets/edit'
@@ -177,7 +194,7 @@ class Qvain extends Component {
       const message = translate('qvain.description.otherIdentifiers.alreadyAdded')
       this.setState({
         response: message,
-        datasetLoading: false
+        datasetLoading: false,
       })
       setOtherIdentifierValidationError(message)
       return false
@@ -188,7 +205,7 @@ class Qvain extends Component {
   handleCreate = (e) => {
     if (this.state.useDoiModalIsOpen) {
       this.setState({
-        useDoiModalIsOpen: false
+        useDoiModalIsOpen: false,
       })
     } else {
       e.preventDefault()
@@ -306,7 +323,7 @@ class Qvain extends Component {
 
   showUseDoiInformation() {
     this.setState({
-      useDoiModalIsOpen: true
+      useDoiModalIsOpen: true,
     })
   }
 
@@ -318,7 +335,7 @@ class Qvain extends Component {
   // User closes the dialogue without accepting DOI usage ("no" or "exit")
   closeUseDoiInformation() {
     this.setState({
-      useDoiModalIsOpen: false
+      useDoiModalIsOpen: false,
     })
   }
 
@@ -333,6 +350,15 @@ class Qvain extends Component {
     } else {
       titleKey = original ? 'qvain.titleEdit' : 'qvain.titleCreate'
     }
+
+    const createLinkBack = (position) => (
+      <LinkBackContainer position={position}>
+        <LinkBack to="/qvain">
+          <FontAwesomeIcon size="lg" icon={faChevronLeft} />
+          <Translate component={LinkText} display="block" content="qvain.backLink" />
+        </LinkBack>
+      </LinkBackContainer>
+    )
 
     // Sticky header content
     let stickyheader
@@ -356,26 +382,33 @@ class Qvain extends Component {
     } else {
       stickyheader = (
         <StickySubHeaderWrapper>
-          <StickySubHeader>
+          <CustomSubHeader>
+            {createLinkBack('left')}
             <ButtonContainer>
-              {original
-                ? (
-                  <SubmitButton ref={this.updateDatasetButton} disabled={readonly} type="button" onClick={this.handleUpdate}>
-                    <Translate content="qvain.edit" />
-                  </SubmitButton>
-                )
-                : (
-                  <SubmitButton
-                    ref={this.submitDatasetButton}
-                    type="button"
-                    onClick={this.props.Stores.Qvain.useDoi === true ? this.showUseDoiInformation : this.handleCreate}
-                  >
-                    <Translate content="qvain.submit" />
-                  </SubmitButton>
-                )
-              }
+              {original ? (
+                <SubmitButton
+                  ref={this.updateDatasetButton}
+                  disabled={readonly}
+                  type="button"
+                  onClick={this.handleUpdate}
+                >
+                  <Translate content="qvain.edit" />
+                </SubmitButton>
+              ) : (
+                <SubmitButton
+                  ref={this.submitDatasetButton}
+                  type="button"
+                  onClick={
+                    this.props.Stores.Qvain.useDoi === true
+                      ? this.showUseDoiInformation
+                      : this.handleCreate
+                  }
+                >
+                  <Translate content="qvain.submit" />
+                </SubmitButton>
+              )}
             </ButtonContainer>
-          </StickySubHeader>
+          </CustomSubHeader>
           <PasState />
           <DeprecatedState />
           {this.state.submitted ? (
@@ -414,14 +447,10 @@ class Qvain extends Component {
           >
             <Translate content="qvain.useDoiHeader" component="h2" />
             <Translate content="qvain.useDoiContent" component="p" />
-            <Button
-              onClick={this.acceptDoi}
-            >
+            <Button onClick={this.acceptDoi}>
               <Translate content="qvain.useDoiAffirmative" component="span" />
             </Button>
-            <Button
-              onClick={this.closeUseDoiInformation}
-            >
+            <Button onClick={this.closeUseDoiInformation}>
               <Translate content="qvain.useDoiNegative" component="span" />
             </Button>
           </Modal>
@@ -429,6 +458,7 @@ class Qvain extends Component {
           <Actors />
           <RightsAndLicenses />
           <Files />
+          <History />
           <SubmitContainer>
             <Translate component="p" content="qvain.consent" unsafe />
           </SubmitContainer>
@@ -447,12 +477,6 @@ class Qvain extends Component {
               <Translate component={Title} content={titleKey} />
             </SubHeaderText>
           </SubHeaderTextContainer>
-          <LinkBackContainer>
-            <LinkBack to="/qvain">
-              <FontAwesomeIcon size="lg" icon={faChevronLeft} />
-              <Translate component="span" display="block" content="qvain.backLink" />
-            </LinkBack>
-          </LinkBackContainer>
         </SubHeader>
         {stickyheader}
         {dataset}
@@ -460,88 +484,5 @@ class Qvain extends Component {
     )
   }
 }
-
-const customStyles = {
-  content: {
-    minWidth: '20vw',
-    maxWidth: '60vw',
-    padding: '2vw',
-  },
-}
-
-const STSD = styled.button`
-  background: ${(p) => p.theme.color.primary};
-  color: #fafafa;
-  max-height: 0;
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  border: none;
-  letter-spacing: 2px;
-  transition: 0.2s ease;
-  &:focus {
-    text-decoration: underline;
-    padding: 0.5em;
-    max-height: 3em;
-  }
-`
-const SubHeaderTextContainer = styled.div`
-  white-space: nowrap;
-`
-const LinkBackContainer = styled.div`
-  text-align: right;
-  width: 100%;
-  white-space: nowrap;
-`
-const LinkBack = styled(Link)`
-  color: #fff;
-  margin-right: 40px;
-`
-const ButtonContainer = styled.div`
-  text-align: center;
-  padding-top: 2px;
-`
-const SubmitButton = styled(InvertedButton)`
-  background: #fff;
-  font-size: 1.2em;
-  border-radius: 25px;
-  padding: 5px 30px;
-  border-color: #007fad;
-  border: 1px solid;
-`
-const Form = styled.form`
-  margin-bottom: 20px;
-`
-const SubmitContainer = styled(Container)`
-  padding-bottom: 25px;
-  margin: 15px;
-`
-
-const ErrorContainer = styled(Container)`
-  background-color: #ffebe8;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
-`
-
-const ErrorLabel = styled.p`
-  font-weight: bold;
-  display: inline-block;
-  vertical-align: top;
-`
-
-const ErrorContent = styled.div`
-  max-width: 1140px;
-  width: 100%;
-  text-align: left;
-  display: inline-block;
-  white-space: pre-line;
-`
-
-const ErrorButtons = styled.div`
-  margin-bottom: -2em;
-  margin-top: 1em;
-  > button:first-child {
-    margin: 0;
-  }
-`
 
 export default withRouter(inject('Stores')(observer(Qvain)))

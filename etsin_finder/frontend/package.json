@@ -49,11 +49,13 @@
     "mobx-react": "^5.4.4",
     "mobx-react-router": "^4.0.7",
     "moment": "^2.24.0",
+    "moment-parseformat": "^3.0.0",
     "polished": "^3.4.1",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-clipboard-icon": "1.1.0",
     "react-copy-to-clipboard": "5.0.1",
+    "react-datepicker": "^2.14.1",
     "react-dates": "^20.2.2",
     "react-dom": "^16.8.6",
     "react-interpolate-component": "^0.12.0",
@@ -71,7 +73,7 @@
     "uglifyjs-webpack-plugin": "^2.2.0",
     "webpack": "^4.39.2",
     "webpack-cli": "^3.3.7",
-    "yup": "^0.26.10"
+    "yup": "^0.29.1"
   },
   "devDependencies": {
     "@storybook/addon-viewport": "^5.1.1",
@@ -79,6 +81,7 @@
     "axios-mock-adapter": "^1.17.0",
     "babel-eslint": "^10.0.2",
     "babel-loader": "^8.0.6",
+    "babel-plugin-styled-components": "^1.10.7",
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.14.0",
     "enzyme-to-json": "^3.4.4",
