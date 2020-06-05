@@ -1,13 +1,13 @@
 {
-/**
- * This file is part of the Etsin service
- *
- * Copyright 2017-2018 Ministry of Education and Culture, Finland
- *
- *
- * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
- * @license   MIT
- */
+  /**
+   * This file is part of the Etsin service
+   *
+   * Copyright 2017-2018 Ministry of Education and Culture, Finland
+   *
+   *
+   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
+   * @license   MIT
+   */
 }
 
 import React, { Component } from 'react'
@@ -16,6 +16,7 @@ import Translate from 'react-translate-component'
 import axios from 'axios'
 
 import ContentBox from '../general/contentBox'
+import { element } from 'prop-types'
 
 export default class KeyValues extends Component {
   constructor(props) {
@@ -28,11 +29,13 @@ export default class KeyValues extends Component {
       researchNum: 0,
       loaded: false,
       error: false,
+      environment: '',
     }
   }
 
   componentDidMount() {
     this.getValues()
+    this.checkHost()
   }
 
   getValues() {
@@ -72,6 +75,24 @@ export default class KeyValues extends Component {
       })
   }
 
+  checkHost = () => {
+    let env = ''
+
+    if (process.env.NODE_ENV === 'test') { /* test */
+      env = 'https://etsin-test.csc.fi/'
+    } else if (process.env.NODE_ENV === 'development') { /* local */
+      env = 'https://etsin-finder.local/'
+    } else if (process.env.NODE_ENV === 'production') { /* production */
+      env = 'https://etsin.fairdata.fi/'
+    } else if (process.env.NODE_ENV === 'stable') {
+      env = 'https://etsin-stable.csc.fi'
+    }
+
+    this.setState({
+      environment: env
+    })
+  }
+
   render() {
     return this.state.error ? null : (
       <aside>
@@ -79,57 +100,57 @@ export default class KeyValues extends Component {
           <Value>
             {this.state.loaded ? (
               <div>
-                <h1>{this.state.datasetsNum}</h1>
+                <h1><a href={`${this.state.environment}datasets`}>{this.state.datasetsNum}</a></h1>
                 <Translate content="home.key.dataset" fallback="aineistoa" component="p" />
               </div>
             ) : (
-              <div>
-                <H1Skeleton />
-                <PSkeleton />
-              </div>
-            )}
+                <div>
+                  <H1Skeleton />
+                  <PSkeleton />
+                </div>
+              )}
           </Value>
           <Value>
             {this.state.loaded ? (
               <div>
-                <h1>{this.state.keywordsNum}</h1>
+                <h1><a href={`${this.state.environment}datasets`}>{this.state.keywordsNum}</a></h1>
                 <Translate content="home.key.keywords" fallback="asiasanaa" component="p" />
               </div>
             ) : (
-              <div>
-                <H1Skeleton />
-                <PSkeleton />
-              </div>
-            )}
+                <div>
+                  <H1Skeleton />
+                  <PSkeleton />
+                </div>
+              )}
           </Value>
           <Value>
             {this.state.loaded ? (
               <div>
-                <h1>{this.state.fieldOfScienceNum}</h1>
+                <h1><a href={`${this.state.environment}datasets`}>{this.state.fieldOfScienceNum}</a></h1>
                 <Translate content="home.key.fos" fallback="tieteenalaa" component="p" />
               </div>
             ) : (
-              <div>
-                <H1Skeleton />
-                <PSkeleton />
-              </div>
-            )}
+                <div>
+                  <H1Skeleton />
+                  <PSkeleton />
+                </div>
+              )}
           </Value>
           <Value>
             {this.state.loaded ? (
               <div>
-                <h1>{this.state.researchNum}</h1>
+                <h1><a href={`${this.state.environment}datasets`}>{this.state.researchNum}</a></h1>
                 <Translate content="home.key.research" fallback="tutkimusprojektia" component="p" />
               </div>
             ) : (
-              <div>
-                <H1Skeleton />
-                <PSkeleton />
-              </div>
-            )}
+                <div>
+                  <H1Skeleton />
+                  <PSkeleton />
+                </div>
+              )}
           </Value>
         </CustomBox>
-      </aside>
+      </aside >
     )
   }
 }
