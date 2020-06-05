@@ -1,6 +1,8 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme'
 
+import '../locale/translations'
+
 import Qvain from '../js/components/qvain'
 import Description from '../js/components/qvain/description'
 import DescriptionField from '../js/components/qvain/description/descriptionField'
@@ -29,7 +31,7 @@ import LocaleStore from '../js/stores/view/language'
 import { DataCatalogIdentifiers, } from '../js/components/qvain/utils/constants'
 
 const getStores = () => {
-  QvainStore.setLegacyFilePicker(true)
+  QvainStore.setMetaxApiV2(false)
   return {
     Qvain: QvainStore,
     Locale: LocaleStore
@@ -274,4 +276,3 @@ describe('Qvain.Files', () => {
     expect(selectedFiles.find(FileLabel).length).toBe(0)
   })
 })
-

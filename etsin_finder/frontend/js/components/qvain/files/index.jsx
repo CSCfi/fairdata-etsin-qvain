@@ -28,11 +28,11 @@ class Files extends Component {
   }
 
   render() {
-    const { dataCatalog, isPas, legacyFilePicker } = this.props.Stores.Qvain
+    const { dataCatalog, isPas, metaxApiV2 } = this.props.Stores.Qvain
     let data = null
 
-    const SelectedItemsComponent = legacyFilePicker ? LegacySelectedFiles : SelectedItems
-    const FilePickerComponent = legacyFilePicker ? LegacyFilePicker : IDAFilePicker
+    const SelectedItemsComponent = metaxApiV2 ? SelectedItems : LegacySelectedFiles
+    const FilePickerComponent = metaxApiV2 ? IDAFilePicker : LegacyFilePicker
 
     if (isPas) {
       data = (
