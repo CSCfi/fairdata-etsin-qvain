@@ -76,7 +76,7 @@ const finnish = {
     curator: 'Kuraattori',
     data_location: 'Mene haravoituun sijaintiin',
     datasetAsFile: {
-      open: 'Avaa tiedostona',
+      open: 'Lataa aineiston metatieto',
       infoText:
         'Datacite without validation: Aineisto näytetään Datacite -formaatissa, mutta ilman pakollisten kenttien validointia. Aineisto ei sellaisenaan välttämättä täytä Dataciten vaatimuksia.',
     },
