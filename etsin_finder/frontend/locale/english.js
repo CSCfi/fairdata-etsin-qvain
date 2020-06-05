@@ -304,12 +304,14 @@ const english = {
     },
   },
   qvain: {
+    saveDraft: 'Save Draft',
     submit: 'Save and Publish',
     edit: 'Update Dataset',
     consent:
       'By using Qvain Light the user agrees that he or she has asked consent from all persons whose personal information the user will add to the descriptive data and informed them of how they can get their personal data removed. By using Qvain Light the user agrees to the <a href="https://www.fairdata.fi/hyodyntaminen/kayttopolitiikat-ja-ehdot/">Terms of Usage</a>.',
     submitStatus: {
       success: 'Dataset published!',
+      draftSuccess: 'Draft saved!',
       fail: 'Something went wrong...',
       editFilesSuccess: 'New dataset version has been created!',
       editMetadataSuccess: 'Dataset successfully updated!',
@@ -352,6 +354,7 @@ const english = {
     titleEdit: 'Edit dataset',
     titleLoading: 'Loading dataset',
     titleLoadingFailed: 'Loading dataset failed',
+
     error: {
       permission: 'Permission error loading dataset',
       missing: 'Dataset not found',
@@ -379,12 +382,19 @@ const english = {
       },
       help: 'Choose a dataset to edit or create a new dataset',
       createButton: 'Create new dataset',
+      createNewVersion: 'Create new version',
+      state: {
+        draft: 'Draft',
+        published: 'Published',
+        changed: 'Unpublished changes',
+      },
       tableRows: {
         id: 'ID',
         title: 'Title',
         version: 'Version',
         modified: 'Modified',
         created: 'Created',
+        state: 'Status',
         actions: 'Actions',
         dateFormat: {
           moments: 'A few moments ago',
@@ -404,10 +414,12 @@ const english = {
       latestVersion: 'Latest',
       deprecated: 'Deprecated',
       editButton: 'Edit',
+      editDraftButton: 'Edit draft',
       deleteButton: 'Delete',
       confirmDelete:
         'Are you sure you want to delete this dataset? Deleting the dataset will remove it from Qvain, and Etsin Search cannot find it anymore. Landing page for the dataset will NOT be removed.',
       goToEtsin: 'View in Etsin',
+      goToEtsinDraft: 'Preview in Etsin',
       openNewVersion: 'Open new version',
       noDatasets: 'You have no datasets',
       reload: 'Reload',
@@ -712,6 +724,10 @@ const english = {
       infoTitle: 'Files info',
       infoText: 'Add text',
       deletedLabel: 'Deleted',
+      error: {
+        title: 'Error loading files',
+        retry: 'Retry'
+      },
       dataCatalog: {
         label: 'File origin',
         infoText:
@@ -869,11 +885,15 @@ const english = {
       },
       selected: {
         title: 'Selected files',
+        readonlyTitle: 'Selected files from project %(project)s',
         none: 'No files or folders have been selected yet.',
-        newTag: 'New',
+        newTag: 'To be added',
+        removeTag: 'To be removed',
+        hideRemoved: 'Hide removed',
         buttons: {
           edit: 'Edit %(name)s',
           remove: 'Remove %(name)s',
+          undoRemove: 'Undo removing %(name)s',
           refresh: 'Refresh %(name)s',
           open: 'Open %(name)s',
           close: 'Close %(name)s',

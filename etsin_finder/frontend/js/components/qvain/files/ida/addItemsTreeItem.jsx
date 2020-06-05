@@ -1,12 +1,19 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from 'react'
+import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 import { faFolder, faFolderOpen, faFile } from '@fortawesome/free-solid-svg-icons'
 
 import {
-  isDirectory, ItemRow, ItemSpacer, ToggleOpenButton,
-  ItemTitle, Checkbox, Icon, NoIcon, SmallLoader
+  isDirectory,
+  ItemRow,
+  ItemSpacer,
+  ToggleOpenButton,
+  ItemTitle,
+  Checkbox,
+  Icon,
+  NoIcon,
+  SmallLoader,
 } from './common/items'
 
 const AddItemsTreeItemBase = ({ treeProps, item, level, parentArgs }) => {
@@ -14,8 +21,8 @@ const AddItemsTreeItemBase = ({ treeProps, item, level, parentArgs }) => {
   const { parentChecked } = parentArgs
   const isOpen = directoryView.isOpen(item)
   const isChecked = directoryView.isChecked(item)
-  const disabled = parentChecked || item.selected
-  const checkMark = isChecked || parentChecked || item.selected
+  const disabled = parentChecked
+  const checkMark = isChecked || parentChecked
 
   const toggle = disabled ? null : () => directoryView.toggleChecked(item)
   const toggleDirectoryOpen = (dir) => directoryView.toggleOpen(dir)
@@ -33,11 +40,11 @@ const AddItemsTreeItemBase = ({ treeProps, item, level, parentArgs }) => {
           disabled={disabled}
           onChange={toggle}
           attributes={{ 'aria-label': `qvain.files.selected.buttons.${checkAction}` }}
-          with={{ name: item.directoryName }}
+          with={{ name: item.name }}
         />
         <Icon icon={isOpen ? faFolderOpen : faFolder} />
         <ItemTitle onDoubleClick={() => toggleDirectoryOpen(item)}>
-          {item.directoryName}
+          {item.name}
           {item.loading && <SmallLoader />}
         </ItemTitle>
       </>
@@ -48,7 +55,7 @@ const AddItemsTreeItemBase = ({ treeProps, item, level, parentArgs }) => {
         <NoIcon />
         <Checkbox aria-label="select" checked={checkMark} disabled={disabled} onChange={toggle} />
         <Icon icon={faFile} />
-        <ItemTitle>{item.fileName}</ItemTitle>
+        <ItemTitle>{item.name}</ItemTitle>
       </>
     )
   }

@@ -17,19 +17,14 @@ import {
   SubmitButton,
   Form,
   SubmitContainer,
-  ErrorContainer,
-  ErrorLabel,
-  ErrorContent,
-  ErrorButtons,
   LinkText,
   CustomSubHeader,
-  customStyles,
 } from './styledComponents'
+import { ErrorContainer, ErrorLabel, ErrorContent, ErrorButtons } from './general/errors'
 
 import RightsAndLicenses from './licenses'
 import Description from './description'
 import Actors from './actors'
-import { qvainFormSchema } from './utils/formValidation'
 import Files from './files'
 import History from './history'
 import {
@@ -40,16 +35,14 @@ import {
   StickySubHeaderResponse,
   SubHeaderText,
 } from './general/card'
-import handleSubmitToBackend from './utils/handleSubmit'
 import { getResponseError } from './utils/responseError'
 import Title from './general/title'
 import SubmitResponse from './general/submitResponse'
 import { Button } from '../general/button'
-import Modal from '../general/modal'
 import DeprecatedState from './deprecatedState'
 import PasState from './pasState'
-
-const EDIT_DATASET_URL = '/api/datasets/edit'
+import SubmitButtons from './submitButtons'
+import { DatasetUrls } from './utils/constants'
 
 class Qvain extends Component {
   promises = []
@@ -62,12 +55,8 @@ class Qvain extends Component {
 
   constructor(props) {
     super(props)
-    this.setFocusOnSubmitOrUpdateButton = this.setFocusOnSubmitOrUpdateButton.bind(this)
-    this.submitDatasetButton = React.createRef()
-    this.updateDatasetButton = React.createRef()
-    this.showUseDoiInformation = this.showUseDoiInformation.bind(this)
-    this.closeUseDoiInformation = this.closeUseDoiInformation.bind(this)
-    this.acceptDoi = this.acceptDoi.bind(this)
+    this.setFocusOnSubmitOrUpdateButton = this.setFocusOnSubmitButton.bind(this)
+    this.submitButtonsRef = React.createRef()
   }
 
   state = {
@@ -78,7 +67,6 @@ class Qvain extends Component {
     datasetError: false,
     datasetErrorTitle: null,
     datasetErrorDetails: null,
-    useDoiModalIsOpen: false,
   }
 
   componentDidMount() {
@@ -99,14 +87,25 @@ class Qvain extends Component {
 
   getDataset(identifier) {
     this.setState({ datasetLoading: true, datasetError: false, response: null, submitted: false })
-    const { resetQvainStore, editDataset } = this.props.Stores.Qvain
-    const url = `${EDIT_DATASET_URL}/${identifier}`
+    const { metaxApiV2, resetQvainStore, editDataset } = this.props.Stores.Qvain
+
+    let url = `${DatasetUrls.EDIT_DATASET_URL}/${identifier}`
+    if (metaxApiV2) {
+      url = `${DatasetUrls.V2_EDIT_DATASET_URL}/${identifier}`
+    }
     const promise = axios
       .get(url)
       .then((result) => {
         resetQvainStore()
-        editDataset(result.data)
-        this.setState({ datasetLoading: false, datasetError: false, haveDataset: true })
+
+        // Open draft instead if it exists
+        const nextDraft = result.data.next_draft && result.data.next_draft.identifier
+        if (nextDraft) {
+          this.props.history.replace(`/qvain/dataset/${nextDraft}`)
+        } else {
+          editDataset(result.data)
+          this.setState({ datasetLoading: false, datasetError: false, haveDataset: true })
+        }
       })
       .catch((e) => {
         const status = e.response.status
@@ -146,114 +145,44 @@ class Qvain extends Component {
     return promise
   }
 
-  setFocusOnSubmitOrUpdateButton(event) {
-    if (this.props.Stores.Qvain.original) {
-      this.updateDatasetButton.current.focus()
-    } else {
-      this.submitDatasetButton.current.focus()
+  setFocusOnSubmitButton(event) {
+    const buttons = this.submitButtonsRef.current
+    if (buttons && buttons.firstElementChild) {
+      buttons.firstElementChild.focus()
     }
-    // preventDefault, since the page wants to refresh at this point
     event.preventDefault()
   }
 
-  handlePublishError = (err) => {
+  handleSubmitResponse = (response) => {
+    this.setState({
+      datasetLoading: false,
+      submitted: true,
+      response,
+    })
+  }
+
+  handleSubmitError = (err) => {
+    if (err.errors) {
+      // Validation error
+      this.setState({
+        submitted: true,
+        response: err.errors,
+      })
+      return
+    }
     if (!err.response) {
       console.error(err)
     }
     this.setState({
-      response: getResponseError(err),
       datasetLoading: false,
-    })
-  }
-
-  handleCreate = (e) => {
-    if (this.state.useDoiModalIsOpen) {
-      this.setState({
-        useDoiModalIsOpen: false,
-      })
-    } else {
-      e.preventDefault()
-    }
-    this.setState({
-      response: null,
       submitted: true,
-      datasetError: false,
-      datasetLoading: true,
+      response: getResponseError(err),
     })
-    const obj = handleSubmitToBackend(this.props.Stores.Qvain)
-    qvainFormSchema
-      .validate(obj, { abortEarly: false })
-      .then(() => {
-        axios
-          .post('/api/dataset', obj)
-          .then((res) => {
-            const data = res.data
-            this.setState({
-              response: { ...data, is_new: true },
-              datasetLoading: false,
-            })
-            // Open the created dataset without reloading the editor
-            if (data && data.identifier) {
-              this.props.Stores.Qvain.resetQvainStore()
-              this.props.Stores.Qvain.editDataset(data)
-              this.props.history.replace(`/qvain/dataset/${data.identifier}`)
-            }
-          })
-          .catch(this.handlePublishError)
-      })
-      .catch((err) => {
-        console.log('Error for event: ', e)
-        console.log(err.errors)
-
-        // Loading done, so set error header
-        this.setState({
-          response: err.errors,
-          datasetLoading: false,
-        })
-      })
   }
 
   handleRetry = () => {
     this.setState({ datasetLoading: false, haveDataset: true })
     this.handleIdentifierChanged()
-  }
-
-  handleUpdate = (e) => {
-    e.preventDefault()
-    this.setState({
-      response: null,
-      submitted: true,
-      datasetError: false,
-      datasetLoading: true,
-    })
-    const obj = handleSubmitToBackend(this.props.Stores.Qvain)
-    obj.original = this.props.Stores.Qvain.original
-    qvainFormSchema
-      .validate(obj, { abortEarly: false })
-      .then(() => {
-        axios
-          .patch('/api/dataset', obj)
-          .then((res) => {
-            this.props.Stores.Qvain.moveSelectedToExisting()
-            this.props.Stores.Qvain.setChanged(false)
-            this.props.Stores.Qvain.editDataset(res.data)
-            this.setState({
-              response: res.data,
-              datasetLoading: false,
-            })
-          })
-          .catch(this.handlePublishError)
-      })
-      .catch((err) => {
-        console.log('Error for event: ', e)
-        console.log(err.errors)
-
-        // Loading done, so set error header
-        this.setState({
-          response: err.errors,
-          datasetLoading: false,
-        })
-      })
   }
 
   handleIdentifierChanged() {
@@ -271,34 +200,18 @@ class Qvain extends Component {
     }
   }
 
-  showUseDoiInformation() {
-    this.setState({
-      useDoiModalIsOpen: true,
-    })
-  }
-
-  // DOI usage accepted and will thus be used instead of URN ("yes")
-  acceptDoi() {
-    this.handleCreate()
-  }
-
-  // User closes the dialogue without accepting DOI usage ("no" or "exit")
-  closeUseDoiInformation() {
-    this.setState({
-      useDoiModalIsOpen: false,
-    })
-  }
-
   render() {
-    const { original, readonly } = this.props.Stores.Qvain
+    const { original } = this.props.Stores.Qvain
     // Title text
     let titleKey
     if (this.state.datasetLoading) {
       titleKey = 'qvain.titleLoading'
     } else if (this.state.datasetError) {
       titleKey = 'qvain.titleLoadingFailed'
+    } else if (original) {
+      titleKey = 'qvain.titleEdit'
     } else {
-      titleKey = original ? 'qvain.titleEdit' : 'qvain.titleCreate'
+      titleKey = 'qvain.titleCreate'
     }
 
     const createLinkBack = (position) => (
@@ -335,28 +248,11 @@ class Qvain extends Component {
           <CustomSubHeader>
             {createLinkBack('left')}
             <ButtonContainer>
-              {original ? (
-                <SubmitButton
-                  ref={this.updateDatasetButton}
-                  disabled={readonly}
-                  type="button"
-                  onClick={this.handleUpdate}
-                >
-                  <Translate content="qvain.edit" />
-                </SubmitButton>
-              ) : (
-                <SubmitButton
-                  ref={this.submitDatasetButton}
-                  type="button"
-                  onClick={
-                    this.props.Stores.Qvain.useDoi === true
-                      ? this.showUseDoiInformation
-                      : this.handleCreate
-                  }
-                >
-                  <Translate content="qvain.submit" />
-                </SubmitButton>
-              )}
+              <SubmitButtons
+                handleSubmitError={this.handleSubmitError}
+                handleSubmitResponse={this.handleSubmitResponse}
+                submitButtonsRef={this.submitButtonsRef}
+              />
             </ButtonContainer>
           </CustomSubHeader>
           <PasState />
@@ -389,21 +285,6 @@ class Qvain extends Component {
     } else {
       dataset = (
         <Form className="container">
-          <Modal
-            isOpen={this.state.useDoiModalIsOpen}
-            onRequestClose={this.closeUseDoiInformation}
-            customStyles={customStyles}
-            contentLabel="UseDoiModalInformation"
-          >
-            <Translate content="qvain.useDoiHeader" component="h2" />
-            <Translate content="qvain.useDoiContent" component="p" />
-            <Button onClick={this.acceptDoi}>
-              <Translate content="qvain.useDoiAffirmative" component="span" />
-            </Button>
-            <Button onClick={this.closeUseDoiInformation}>
-              <Translate content="qvain.useDoiNegative" component="span" />
-            </Button>
-          </Modal>
           <Description />
           <Actors />
           <RightsAndLicenses />
@@ -412,7 +293,7 @@ class Qvain extends Component {
           <SubmitContainer>
             <Translate component="p" content="qvain.consent" unsafe />
           </SubmitContainer>
-          <STSD onClick={this.setFocusOnSubmitOrUpdateButton}>
+          <STSD onClick={this.setFocusOnSubmitButton}>
             <Translate content="stsd" />
           </STSD>
         </Form>
