@@ -16,7 +16,6 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import translate from 'counterpart'
 
-import '../../../../locale/translations'
 import { TransparentButton, InvertedButton } from '../button'
 
 class LangToggle extends Component {

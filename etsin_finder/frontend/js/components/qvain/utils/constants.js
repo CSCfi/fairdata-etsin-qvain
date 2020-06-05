@@ -10,10 +10,29 @@ export const LicenseUrls = {
   CCBY4: 'http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0',
 }
 
+export const DatasetUrls = {
+  EDIT_DATASET_URL: '/api/datasets/edit',
+  DATASET_URL: '/api/dataset',
+  USER_DATASETS_URL: '/api/datasets/',
+  V2_EDIT_DATASET_URL: '/api/v2/datasets/edit',
+  V2_DATASET_URL: '/api/v2/dataset',
+  V2_USER_DATASETS_URL: '/api/v2/datasets/',
+  V2_CREATE_NEW_VERSION: '/api/v2/rpc/datasets/create_new_version',
+  V2_CREATE_DRAFT: '/api/v2/rpc/datasets/create_draft',
+  V2_MERGE_DRAFT: '/api/v2/rpc/datasets/merge_draft',
+  V2_PUBLISH_DATASET: '/api/v2/rpc/datasets/publish_dataset',
+}
+
 export const FileAPIURLs = {
   DIR_URL: '/api/files/directory/',
   PROJECT_DIR_URL: '/api/files/project/',
-  DATASET_DIR_URL: '/api/files/'
+  DATASET_DIR_URL: '/api/files/',
+  V2_DIR_URL: '/api/v2/files/directory/',
+  V2_PROJECT_DIR_URL: '/api/v2/files/project/',
+  V2_DATASET_DIR_URL: '/api/v2/files/',
+  V2_DATASET_PROJECTS: '/api/v2/datasets/projects/',
+  V2_DATASET_FILES: '/api/v2/datasets/files/',
+  V2_DATASET_USER_METADATA: '/api/v2/datasets/user_metadata/',
 }
 
 export const UseCategoryURLs = {

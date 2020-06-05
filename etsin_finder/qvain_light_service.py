@@ -89,17 +89,19 @@ class MetaxQvainLightAPIService(FlaskService):
 
         return metax_qvain_api_response.json()
 
-    def get_directory(self, dir_identifier):
+    def get_directory(self, dir_identifier, params=None):
         """
         Get a specific directory with directory's id
 
         :param dir_identifier:
+        params {dict} -- Dictionary of key-value pairs of query parameters.
         :return:
         """
         req_url = self.METAX_GET_DIRECTORY.format(dir_identifier)
 
         try:
             metax_qvain_api_response = requests.get(req_url,
+                                                    params=params,
                                                     headers={'Accept': 'application/json'},
                                                     auth=(self.user, self.pw),
                                                     verify=self.verify_ssl,
@@ -384,9 +386,9 @@ class MetaxQvainLightAPIService(FlaskService):
                     ))
             else:
                 log.error("Error deleting dataset {0}\n{1}".format(cr_id, e))
-            return {'Error_message': 'Error trying to send data to metax.'}
+            return {'Error_message': 'Error trying to send data to metax.'}, metax_api_response.status_code
         log.info('Deleted dataset with identifier: {}'.format(cr_id))
-        return metax_api_response.status_code
+        return json_or_empty(metax_api_response), metax_api_response.status_code
 
     def change_cumulative_state(self, cr_id, cumulative_state):
         """
@@ -511,14 +513,14 @@ class MetaxQvainLightAPIService(FlaskService):
 
 _metax_api = MetaxQvainLightAPIService(app)
 
-def get_directory(dir_id):
+def get_directory(dir_id, params=None):
     """
     Get directory from metax.
 
     :param dir_id:
     :return:
     """
-    return _metax_api.get_directory(dir_id)
+    return _metax_api.get_directory(dir_id, params)
 
 def get_directory_for_project(project_id):
     """

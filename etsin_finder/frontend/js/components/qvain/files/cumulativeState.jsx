@@ -53,7 +53,7 @@ class CumulativeState extends Component {
   }
 
   handleToggleCumulativeState = () => {
-    if (!this.props.Stores.Qvain.original) { // only published datasets can be toggled with the RPC
+    if (!this.props.Stores.Qvain.hasBeenPublished) { // only published datasets can be toggled with the RPC
       return
     }
     this.setState({
@@ -78,6 +78,7 @@ class CumulativeState extends Component {
         // when a new version is created, the cumulative_state of the current version remains unchanged
         if (!data.new_version_created) {
           this.props.Stores.Qvain.setCumulativeState(newState)
+          this.props.Stores.Qvain.setChanged(false)
         }
       })
       .catch(err => {
@@ -95,11 +96,11 @@ class CumulativeState extends Component {
   }
 
   render() {
-    const { changed, cumulativeState, setCumulativeState, original } = this.props.Stores.Qvain
+    const { changed, cumulativeState, setCumulativeState, hasBeenPublished } = this.props.Stores.Qvain
     const stateKey = this.props.Stores.Qvain.cumulativeState === CumulativeStates.YES ? 'enabled' : 'disabled'
 
     let content = null
-    if (original === undefined) {
+    if (!hasBeenPublished) {
       // cumulative state can be assigned directly for new datasets
       content = (
         <div>

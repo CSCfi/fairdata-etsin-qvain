@@ -31,6 +31,8 @@ import organizationMockGet, {
 
 import { OrgSelectorBase } from '../js/components/qvain/actors/orgSelector'
 
+global.Promise = require('bluebird')
+
 // Make sure MobX store values are not mutated outside actions.
 configure({
   enforceActions: 'always',
@@ -38,7 +40,7 @@ configure({
 
 jest.mock('axios')
 
-QvainStore.setLegacyFilePicker(false)
+QvainStore.setMetaxApiV2(true)
 const stores = {
   Qvain: QvainStore,
   Locale: LocaleStore,
@@ -135,9 +137,9 @@ describe('Qvain.Actors', () => {
 describe('Qvain.Actors modal', () => {
   let helper, wrapper
 
-  beforeEach(() => {
+  beforeEach(async () => {
     axios.get.mockImplementation(organizationMockGet)
-    stores.Qvain.editDataset(dataset)
+    await stores.Qvain.editDataset(dataset)
     stores.Qvain.Actors.editActor(Actor())
 
     helper = document.createElement('div')

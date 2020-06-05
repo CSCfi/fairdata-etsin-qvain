@@ -12,14 +12,14 @@ import '../locale/translations.js'
 import etsinTheme from '../js/styles/theme'
 import MetadataModal from '../js/components/qvain/files/metadataModal'
 import QvainStore from '../js/stores/view/qvain'
-import { Project, File, Directory } from '../js/stores/view/qvain.files'
+import { Project, File, Directory } from '../js/stores/view/qvain.files.items'
 import LocaleStore from '../js/stores/view/language'
 
 jest.mock('axios')
 
 const getStores = () => {
   QvainStore.resetQvainStore()
-  QvainStore.setLegacyFilePicker(false)
+  QvainStore.setMetaxApiV2(true)
   return {
     Qvain: QvainStore,
     Locale: LocaleStore
