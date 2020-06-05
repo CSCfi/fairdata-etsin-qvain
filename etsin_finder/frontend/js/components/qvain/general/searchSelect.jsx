@@ -16,33 +16,44 @@ class Select extends Component {
     model: PropTypes.func.isRequired,
     name: PropTypes.string.isRequired,
     inModal: PropTypes.bool,
+    placeholder: PropTypes.string
   }
 
   static defaultProps = {
     getter: undefined,
     inModal: false,
+    placeholder: ''
   }
 
   state = {
-    options: { en: [], fi: [] },
+    options: undefined,
   }
 
   render() {
     const { readonly } = this.props.Stores.Qvain
-    const { getter, setter, name, model, inModal, metaxIdentifier } = this.props
+    const {
+      getter,
+      setter,
+      name,
+      model,
+      inModal,
+      metaxIdentifier,
+      placeholder
+    } = this.props
     const { options } = this.state
     const { lang } = this.props.Stores.Locale
 
     return inModal ? (
       <Translate
+        {...this.props}
         name={name}
         className="basic-single"
         classNamePrefix="select"
         inputId={`${name}-select`}
         component={ReactSelect}
-        attributes={{ placeholder: 'qvain.select.placeholder' }}
+        attributes={{ placeholder }}
         isDisabled={readonly}
-        value={getCurrentValue(getter, options, lang) || ''}
+        value={getCurrentValue(getter, options, lang)}
         onChange={onChange(options, lang, setter, model)}
         cacheOptions
         defaultOptions={[]}
@@ -64,7 +75,7 @@ class Select extends Component {
         classNamePrefix="select"
         inputId={`${name}-select`}
         component={ReactSelect}
-        attributes={{ placeholder: 'qvain.select.placeholder' }}
+        attributes={{ placeholder }}
         isDisabled={readonly}
         value={getCurrentValue(getter, options, lang) || ''}
         onChange={onChange(options, lang, setter, model)}

@@ -2,7 +2,7 @@ import axios from 'axios'
 
 export const getCurrentValue = (field, options, lang) => {
   let current
-  if (field !== undefined && options[lang] !== undefined) {
+  if (field !== undefined && (options || {})[lang] !== undefined) {
     current = options[lang].find(opt => opt.value === field.url)
   }
   if (current === undefined && field !== undefined) {

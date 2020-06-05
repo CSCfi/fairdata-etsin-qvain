@@ -1029,7 +1029,7 @@ const english = {
           },
           locationInput: {
             label: 'Location',
-            placeholder: 'Location',
+            placeholder: 'Type to search available options',
           },
         },
       },

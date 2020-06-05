@@ -581,7 +581,7 @@ exports[`Qvain.RightsAndLicenses should render <AccessType /> 1`] = `
     options={Array []}
     value={
       Object {
-        "label": undefined,
+        "label": "",
         "value": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
       }
     }
@@ -616,7 +616,7 @@ exports[`Qvain.RightsAndLicenses should render <Licenses /> 1`] = `
     options={Array []}
     value={
       Object {
-        "label": undefined,
+        "label": "",
         "value": undefined,
       }
     }

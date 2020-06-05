@@ -1030,11 +1030,11 @@ const finnish = {
           },
           geometryInput: {
             label: 'Geometria',
-            placeholder: 'Geometria käyttäen WGS84 -standardin mukaista WKT formattia',
+            placeholder: 'Geometria käyttäen WGS84 -referenssin mukaista WKT formattia',
           },
           locationInput: {
             label: 'Paikka',
-            placeholder: 'Paikka',
+            placeholder: 'Etsi paikkoja hakusanalla',
           },
         },
       },

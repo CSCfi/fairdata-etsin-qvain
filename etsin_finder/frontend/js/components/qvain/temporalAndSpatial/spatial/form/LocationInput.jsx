@@ -22,6 +22,7 @@ const LocationInput = ({ Stores }) => {
         setter={setLocation}
         model={Location}
         metaxIdentifier="location"
+        placeholder="qvain.temporalAndSpatial.spatial.modal.locationInput.placeholder"
         inModal
         search
       />
