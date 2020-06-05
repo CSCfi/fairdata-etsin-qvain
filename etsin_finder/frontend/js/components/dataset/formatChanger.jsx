@@ -17,7 +17,6 @@ import { withTheme } from 'styled-components'
 import DatasetQuery from '../../stores/view/datasetquery'
 import FormatSelect from './formatselect'
 
-
 class FormatChanger extends Component {
   constructor(props) {
     super(props)
@@ -26,32 +25,35 @@ class FormatChanger extends Component {
       formats: [],
       selected: '',
       data: DatasetQuery.results,
-      environment: '',
       url: '',
     }
   }
 
   componentDidMount() {
     this.checkFields()
-    this.checkHost()
   }
 
   checkFields = () => {
-    const data = this.state.data;
-    const rd = data.research_dataset;
-    let dataciteExists = false;
-    let fields = {};
+    const data = this.state.data
+    const rd = data.research_dataset
+    let dataciteExists = false
+    let fields = {}
 
     // Check that doi exists in one of the identifiers
-    if ((typeof data.preservation_identifier !== 'undefined' && data.preservation_identifier.includes('doi'))
-      || (typeof rd.preferred_identifier !== 'undefined' && rd.preferred_identifier.includes('doi'))) {
-      dataciteExists = true;
+    if (
+      (typeof data.preservation_identifier !== 'undefined' &&
+        data.preservation_identifier.includes('doi')) ||
+      (typeof rd.preferred_identifier !== 'undefined' && rd.preferred_identifier.includes('doi'))
+    ) {
+      dataciteExists = true
     }
 
     if (dataciteExists) {
-      fields = [{ label: 'Metax JSON', value: 'metax' },
-      { label: 'Datacite without validation', value: 'fairdata_datacite' },
-      { label: 'Datacite format', value: 'datacite' }]
+      fields = [
+        { label: 'Metax JSON', value: 'metax' },
+        { label: 'Datacite without validation', value: 'fairdata_datacite' },
+        { label: 'Datacite format', value: 'datacite' },
+      ]
     } else {
       fields = [{ label: 'Metax JSON', value: 'metax' }]
     }
@@ -61,63 +63,42 @@ class FormatChanger extends Component {
     })
   }
 
-  checkHost = () => {
-    let env = ''
-
-    if (process.env.NODE_ENV === 'test') { /* test and stable */
-      env = 'https://metax-test.csc.fi/'
-    } else if (process.env.NODE_ENV === 'development') { /* local */
-      env = 'https://metax-test.csc.fi/'
-    } else if (process.env.NODE_ENV === 'production') { /* production */
-      env = 'https://metax.fairdata.fi/'
-    }
-
-    this.setState({
-      environment: env
-    })
-  }
-
-
   changeFormat = (format) => {
-    let urlFormat = ''
-    if (format.value === 'metax') {
-      urlFormat = `${this.state.environment}rest/datasets/${this.props.idn}.json`
+    if (this.state.formats.some((field) => field.value === format.value)) {
+      this.setState(
+        {
+          selected: format,
+          url: `/api/format?cr_id=${this.props.idn}&format=${format.value}`,
+        },
+        () => {
+          this.openFormat(this.state.url)
+        }
+      )
     } else {
-      urlFormat = `${this.state.environment}rest/datasets/${this.props.idn}?dataset_format=${format.value}`
+      console.log(`Invalid value selected for dataset format: ${format.value}`)
     }
-
-    this.setState(
-      {
-        selected: format,
-        url: urlFormat,
-      },
-      () => {
-        this.openFormat(this.state.url)
-      }
-    )
   }
 
   openFormat = (url) => {
-    const win = window.open(url, '_blank');
-    win.focus();
+    const win = window.open(url, '_blank')
+    win.focus()
   }
 
   render() {
-    return (!this.state.data.removed) ? (
+    return !this.state.data.removed ? (
       <FormatSelect
         background={this.props.theme.color.primary}
         newestColor={this.props.theme.color.white}
         color={this.props.theme.color.primary}
         padding="0.5em 1em"
-        width="10em"
+        width="fit-content"
         value={this.state.selected}
         onChange={this.changeFormat}
         onBlur={this.closeModal}
         options={this.state.formats}
         notRemoved={this.state.notRemoved}
       />
-    )
-      : null
+    ) : null
   }
 }
 

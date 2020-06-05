@@ -59,7 +59,7 @@ def add_restful_resources(app):
     :return:
     """
     api = Api(app)
-    from etsin_finder.resources import REMSApplyForPermission, Contact, Dataset, User, Session, Files, Download
+    from etsin_finder.resources import REMSApplyForPermission, Contact, Dataset, DatasetMetadata, User, Session, Files, Download
     from etsin_finder.qvain_light_resources import (
         ProjectFiles, FileDirectory, FileCharacteristics, UserDatasets,
         QvainDataset, QvainDatasetEdit, QvainDatasetDelete
@@ -113,6 +113,7 @@ def add_restful_resources(app):
 
     # Etsin API endpoints
     api.add_resource(Dataset, '/api/dataset/<string:cr_id>')
+    api.add_resource(DatasetMetadata, '/api/format')
     api.add_resource(Files, '/api/files/<string:cr_id>')
     api.add_resource(Contact, '/api/email/<string:cr_id>')
     api.add_resource(User, '/api/user')
