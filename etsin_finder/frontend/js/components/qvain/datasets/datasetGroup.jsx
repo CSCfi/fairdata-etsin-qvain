@@ -40,13 +40,12 @@ class DatasetGroup extends Component {
     const moreText = showAll ? 'qvain.datasets.hideVersions' : 'qvain.datasets.moreVersions'
     const more = (
       <Row>
-        <BodyCell colSpan="5">
-          <GroupMarker position="end" />
+        <MoreButtonCell colSpan="5">
           <MoreButton onClick={() => this.setShowAll(!showAll)}>
             <MoreIcon icon={showAll ? faChevronUp : faChevronDown} />
             <Translate content={moreText} with={{ count: datasets.length - 1 }} />
           </MoreButton>
-        </BodyCell>
+        </MoreButtonCell>
       </Row>
     )
     if (showAll) {
@@ -81,18 +80,22 @@ DatasetGroup.propTypes = {
   openRemoveModal: PropTypes.func.isRequired,
 }
 
+const MoreButtonCell = styled(BodyCell)`
+  padding: 0;
+`
+
 const MoreButton = styled.button.attrs(() => ({ type: 'button' }))`
   background: none;
   border: none;
   display: flex;
   align-items: center;
   color: inherit;
-  padding: 0.125rem;
+  padding: 0.25rem 0.125rem;
   width: 100%;
 `
 
 const MoreIcon = styled(FontAwesomeIcon)`
-  margin: 0 0.5rem;
+  margin: 0 0.5rem 0 0.5rem;
 `
 
 export default observer(DatasetGroup)

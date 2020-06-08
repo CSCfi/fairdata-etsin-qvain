@@ -42,11 +42,15 @@ const getGoToEtsinButton = (dataset) => {
 function Dataset(props) {
   const { metaxApiV2 } = props.Stores.Qvain
 
+  let padding = {}
+  if (props.groupPosition !== 'start') {
+    padding = { paddingLeft: '1rem' }
+  }
+
   const { dataset, currentTimestamp } = props
   return (
     <Row key={dataset.identifier} tabIndex="0">
-      <BodyCellWordWrap>
-        {props.inGroup && <GroupMarker position={props.groupPosition} />}
+      <BodyCellWordWrap style={padding}>
         {dataset.research_dataset.title.en || dataset.research_dataset.title.fi}
         {dataset.next_dataset_version !== undefined && (
           <Translate color="yellow" content="qvain.datasets.oldVersion" component={DatasetLabel} />
@@ -100,42 +104,12 @@ Dataset.propTypes = {
   handleEnterEdit: PropTypes.func.isRequired,
   handleCreateNewVersion: PropTypes.func.isRequired,
   openRemoveModal: PropTypes.func.isRequired,
-  inGroup: PropTypes.bool,
-  groupPosition: PropTypes.string,
+  groupPosition: PropTypes.oneOf(['start', 'middle', 'end']),
 }
 
 Dataset.defaultProps = {
-  inGroup: false,
-  groupPosition: 'middle',
+  groupPosition: 'start',
 }
-
-// Vertical line showing which datasets belong to same version set
-export const GroupMarker = styled.div`
-  background: #ccc;
-  width: 4px;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  display: block;
-  position: absolute;
-  left: -0.5rem;
-  top: 0;
-
-  ${(props) =>
-    props.position === 'start' &&
-    `
-    top: 5%;
-    height: 95%;
-    border-radius: 2px 2px 0 0;
-  `}
-
-  ${(props) =>
-    props.position === 'end' &&
-    `
-    height: 95%;
-    border-radius: 0 0 2px 2px;
-  `}
-`
 
 const DatasetLabel = styled(Label)`
   margin-left: 10px;
