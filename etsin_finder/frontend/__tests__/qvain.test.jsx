@@ -188,12 +188,17 @@ describe('Qvain dataset list filtering', () => {
 
   it('filters dataset groups by title', () => {
     const groups = groupDatasetsByVersionSet(datasets)
-    expect(filterGroupsByTitle('Dataset', groups)).toEqual([[dataset], [datasets[1], datasets[2]], [dataset2]])
+    expect(filterGroupsByTitle('Dataset', groups)).toEqual([[dataset], versions, [dataset2]])
+  })
+
+  it('filters datasets by title in any language', () => {
+    expect(filterByTitle('Aineisto', datasets)).toEqual([dataset, datasets[4]])
+    expect(filterByTitle('Version', datasets)).toEqual(versions)
   })
 
   it('filters dataset groups by title in any language', () => {
-    expect(filterByTitle('Aineisto', datasets)).toEqual([dataset, datasets[4]])
-    expect(filterByTitle('Version', datasets)).toEqual(versions)
+    const groups = groupDatasetsByVersionSet(datasets)
+    expect(filterGroupsByTitle('Aineisto', groups)).toEqual([[dataset], versions])
   })
 
   it('ignores case when filtering by title', () => {
