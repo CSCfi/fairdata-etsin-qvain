@@ -35,7 +35,6 @@ export const HeaderCell = styled.th`
 export const BodyCell = styled.td`
   padding: 5px;
   vertical-align: middle;
-  position: relative;
 `;
 
 export const TableNoteStyles = styled.tr`

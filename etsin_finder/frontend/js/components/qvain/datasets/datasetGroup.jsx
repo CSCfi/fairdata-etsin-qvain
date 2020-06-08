@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons'
+import { faChevronRight, faChevronUp } from '@fortawesome/free-solid-svg-icons'
 
 import { Row, BodyCell } from '../general/table'
 import Dataset, { GroupMarker } from './dataset'
@@ -42,7 +42,7 @@ class DatasetGroup extends Component {
       <Row>
         <MoreButtonCell colSpan="5">
           <MoreButton onClick={() => this.setShowAll(!showAll)}>
-            <MoreIcon icon={showAll ? faChevronUp : faChevronDown} />
+            <MoreIcon icon={showAll ? faChevronUp : faChevronRight} />
             <Translate content={moreText} with={{ count: datasets.length - 1 }} />
           </MoreButton>
         </MoreButtonCell>
@@ -62,8 +62,7 @@ class DatasetGroup extends Component {
             handleEnterEdit={this.props.handleEnterEdit}
             handleCreateNewVersion={this.props.handleCreateNewVersion}
             openRemoveModal={this.props.openRemoveModal}
-            inGroup
-            groupPosition={index === 0 ? 'start' : 'middle'}
+            indent={index !== 0}
           />
         ))}
         {more}
