@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronRight, faChevronUp } from '@fortawesome/free-solid-svg-icons'
 
 import { Row, BodyCell } from '../general/table'
-import Dataset, { GroupMarker } from './dataset'
+import Dataset from './dataset'
 
 class DatasetGroup extends Component {
   state = {
