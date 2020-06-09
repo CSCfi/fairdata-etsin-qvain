@@ -1039,8 +1039,8 @@ const finnish = {
           },
           buttons: {
             addGeometry: 'Lisää geometria',
-            save: 'tallenna',
-            cancel: 'peruuta',
+            save: 'Tallenna',
+            cancel: 'Peruuta',
           },
           nameInput: {
             label: 'Nimi',
