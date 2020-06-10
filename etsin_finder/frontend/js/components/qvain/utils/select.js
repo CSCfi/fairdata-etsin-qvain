@@ -50,7 +50,7 @@ const parseRefResponse = res => {
   const hits = res.data.hits.hits
   const refsFi = hits.map(hit => ({
     value: hit._source.uri,
-    label: hit._source.label.fi,
+    label: hit._source.label.fi || hit._source.label.und,
   }))
   const refsEn = hits.map(hit => ({
     value: hit._source.uri,

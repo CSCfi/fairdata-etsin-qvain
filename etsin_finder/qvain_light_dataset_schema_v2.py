@@ -19,6 +19,7 @@ class DatasetValidationSchema(DatasetValidationSchemaV1):
 
     class Meta:
         """Meta options for validation."""
+
         exclude = ("files", "directories")
 
 
