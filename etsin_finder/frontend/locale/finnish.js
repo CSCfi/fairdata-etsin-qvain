@@ -1011,8 +1011,8 @@ const finnish = {
       },
     },
     temporalAndSpatial: {
-      title: 'Ajallinen- ja maantieteellinen kattavuus',
-      tooltip: 'Ajallinen- ja maantieteellinen kattavuus info',
+      title: 'Ajallinen ja maantieteellinen kattavuus',
+      tooltip: 'Ajallinen ja maantieteellinen kattavuus info',
       tooltipContent: {
         spatial: {
           title: 'Maantieteellinen kattavuus',
@@ -1056,7 +1056,7 @@ const finnish = {
           },
           geometryInput: {
             label: 'Geometria',
-            placeholder: 'Geometria käyttäen WGS84 -referenssin mukaista WKT formattia',
+            placeholder: 'Geometria WKT-muodossa WGS84 -referenssin mukaan',
           },
           locationInput: {
             label: 'Paikka',
