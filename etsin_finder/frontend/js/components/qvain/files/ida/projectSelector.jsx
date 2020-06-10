@@ -25,8 +25,7 @@ export class ProjectSelectorBase extends Component {
           group.length
         ))
         .map(projectId => ({ value: projectId, label: projectId }))
-    // ... Otherwise the dropdown will be left empty, but visible, if the user has no IDA projects.
-    } else {
+    } // ... Otherwise the dropdown will be left empty, but visible, if the user has no IDA projects.
       return undefined
     }
   }
@@ -40,15 +39,13 @@ export class ProjectSelectorBase extends Component {
 
     // If editing an existing dataset, user cannot link files from another project. - 10.6.2019
 
-    let selected = undefined
+    let selected
 
     // Error handling for the case where the user wants to publish an IDA dataset but has no IDA projects
     if (options) {
       selected = options.find(opt => opt.value === this.props.Stores.Qvain.Files.selectedProject)
     }
-    
     const { disabled } = this.props
-
     const { error } = this.props.Stores.Qvain.Files.loadingProject || {}
     const notFound = error && error.response && error.response.status === 404
     return (

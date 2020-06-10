@@ -24,10 +24,8 @@ export class ProjectSelectorBase extends Component {
           group.length
         ))
         .map(projectId => ({ value: projectId, label: projectId }))
-    // ... Otherwise the dropdown will be left empty, but visible, if the user has no IDA projects.
-    } else {
+    } // ... Otherwise the dropdown will be left empty, but visible, if the user has no IDA projects.
       return undefined
-    }
   }
 
   handleOnChange = (selectedOption) => {
@@ -52,7 +50,6 @@ export class ProjectSelectorBase extends Component {
     if (options) {
       selected = options.find(opt => opt.value === this.props.Stores.Qvain.selectedProject)
     }
-
     const { error } = this.state
     return (
       <Fragment>
