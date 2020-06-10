@@ -25,6 +25,7 @@ const LocationInput = ({ Stores }) => {
         placeholder="qvain.temporalAndSpatial.spatial.modal.locationInput.placeholder"
         inModal
         search
+        isClearable
       />
     </>
   )
