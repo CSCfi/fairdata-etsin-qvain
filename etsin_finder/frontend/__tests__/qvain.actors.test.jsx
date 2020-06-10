@@ -6,7 +6,7 @@ import ReactModal from 'react-modal'
 import { ThemeProvider } from 'styled-components'
 import { Provider } from 'mobx-react'
 import { components as selectComponents } from 'react-select'
-import CreatableSelect from 'react-select/lib/Creatable'
+import CreatableSelect from 'react-select/creatable'
 
 import '../locale/translations'
 import etsinTheme from '../js/styles/theme'
@@ -221,9 +221,11 @@ describe('Qvain.Actors modal', () => {
     wrapper.update()
     const { actorInEdit } = stores.Qvain.Actors
     expect(actorInEdit.organizations.length).toBe(2)
-    wrapper.find(OrgInfo).find(DeleteButton).not('[disabled=true]').first().simulate('click')
+    wrapper.find(OrgInfo).find(DeleteButton).not('[disabled=true]').first()
+.simulate('click')
     expect(actorInEdit.organizations.length).toBe(1)
-    wrapper.find(OrgInfo).find(DeleteButton).not('[disabled=true]').first().simulate('click')
+    wrapper.find(OrgInfo).find(DeleteButton).not('[disabled=true]').first()
+.simulate('click')
     expect(actorInEdit.organizations.length).toBe(0)
   })
 

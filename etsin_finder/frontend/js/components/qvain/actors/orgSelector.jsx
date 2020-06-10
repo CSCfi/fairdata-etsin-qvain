@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import translate from 'counterpart'
 import { createFilter, components as selectComponents } from 'react-select'
-import CreatableSelect from 'react-select/lib/Creatable'
+import CreatableSelect from 'react-select/creatable'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPen } from '@fortawesome/free-solid-svg-icons'
 
