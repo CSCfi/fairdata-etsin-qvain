@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { METAX_FAIRDATA_ROOT_URL } from './constants'
 
 export const getCurrentValue = (field, options, lang) => {
   let current
@@ -43,7 +44,7 @@ export const getOptions = async (ref, inputValue) => {
 
 const refDataApi = ref =>
   axios.create({
-    baseURL: `https://metax.csc.local/es/reference_data/${ref}/`,
+    baseURL: `${METAX_FAIRDATA_ROOT_URL}/es/reference_data/${ref}/`,
   })
 
 const parseRefResponse = res => {

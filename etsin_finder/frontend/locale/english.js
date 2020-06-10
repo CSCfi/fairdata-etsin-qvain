@@ -726,7 +726,7 @@ const english = {
       deletedLabel: 'Deleted',
       error: {
         title: 'Error loading files',
-        retry: 'Retry'
+        retry: 'Retry',
       },
       dataCatalog: {
         label: 'File origin',

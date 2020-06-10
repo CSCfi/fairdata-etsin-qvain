@@ -726,7 +726,7 @@ const finnish = {
       deletedLabel: 'Poistettu',
       error: {
         title: 'Virhe ladattaessa tiedostoja',
-        retry: 'Yritä uudelleen'
+        retry: 'Yritä uudelleen',
       },
       dataCatalog: {
         label: 'Tiedoston lähde',
