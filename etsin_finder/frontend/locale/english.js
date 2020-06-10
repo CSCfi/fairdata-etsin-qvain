@@ -1032,6 +1032,17 @@ const english = {
               placeholder: 'Outcome description (in english)',
             },
           },
+          periodOfTimeInput: {
+            label: 'Period of time',
+            startPlaceholder: 'starts',
+            endPlaceholder: 'ends',
+          },
+          locationInput: {
+            label: 'Location',
+            modal: {
+              addButton: 'Add location',
+            }
+          }
         },
       },
     },

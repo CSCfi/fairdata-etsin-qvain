@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import ProvenanceInput from './ProvenanceInput'
 import TranslationTab from './translationTab'
 import PeriodOfTimePicker from './PeriodOfTimePicker';
-import AddSpatialCoverage from '../../../temporalAndSpatial/spatial/AddSpatialCoverage';
+import LocationInput from './location'
 
 const Form = () => {
   const [language, setLanguage] = useState('fi');
@@ -16,7 +16,7 @@ const Form = () => {
         </>
       </TranslationTab>
       <PeriodOfTimePicker />
-      <AddSpatialCoverage />
+      <LocationInput />
     </>
 )
 }

@@ -1036,6 +1036,17 @@ const finnish = {
               placeholder: 'Seloste lopputuloksesta (englanniksi)',
             },
           },
+          periodOfTimeInput: {
+            label: 'Ajanjakso',
+            startPlaceholder: 'Alkaa',
+            endPlaceholder: 'Päättyy'
+          },
+          locationInput: {
+            label: 'Alueelliset tiedot',
+            modal: {
+              addButton: 'Lisää alueellinen tieto',
+            }
+          }
         },
       },
     },

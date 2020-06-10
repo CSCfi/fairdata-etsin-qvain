@@ -18,7 +18,6 @@
     "storybook": "start-storybook -p 6006",
     "dev": "webpack-dev-server --config webpack.dev.js --inline --define process.env.NODE_ENV=\"'development'\"",
     "test": "jest",
-    "dev": "webpack-dev-server --config webpack.dev.js --inline --define process.env.NODE_ENV=\"'development'\"",
     "watch": "npm update; webpack --progress -d --config webpack.config.js --watch  --define process.env.NODE_ENV=\"'development'\""
   },
   "dependencies": {
@@ -76,7 +75,6 @@
     "webpack-dev-server": "^3.10.3",
     "webpack": "^4.39.2",
     "webpack-cli": "^3.3.7",
-    "webpack-dev-server": "^3.10.3",
     "yup": "^0.26.10"
   },
   "devDependencies": {
