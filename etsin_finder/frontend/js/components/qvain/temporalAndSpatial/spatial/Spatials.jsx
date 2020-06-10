@@ -35,9 +35,7 @@ const Spatials = ({ Stores }) => {
       </SpatialContainer>
     ))
 
-    return (
-      <>{SpatialElements}</>
-    )
+    return SpatialElements
 }
 
 Spatials.propTypes = {
