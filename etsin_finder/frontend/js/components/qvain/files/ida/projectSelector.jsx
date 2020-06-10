@@ -15,12 +15,10 @@ export class ProjectSelectorBase extends Component {
     disabled: false
   }
 
-  getOptions = () => {
-    let projects
-
+  getOptions() {
     // IDA groups found, so populate the IDA project dropdown
     if (this.props.Stores.Auth.user.idaGroups) {
-      projects = this.props.Stores.Auth.user.idaGroups
+      return this.props.Stores.Auth.user.idaGroups
         .filter(group => group.includes('IDA'))
         .map(group => group.substring(
           group.indexOf(':') + 1,
@@ -29,7 +27,7 @@ export class ProjectSelectorBase extends Component {
         .map(projectId => ({ value: projectId, label: projectId }))
     // ... Otherwise the dropdown will be left empty, but visible, if the user has no IDA projects.
     } else {
-      projects = undefined
+      return undefined
     }
   }
 
