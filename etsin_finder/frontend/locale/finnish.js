@@ -161,6 +161,7 @@ const finnish = {
     harvested: 'Haravoitu',
     cumulative: 'Kumulatiivinen',
     keywords: 'Avainsanat',
+    subjectHeading: 'Asiasanat',
     license: 'Lisenssi',
     loading: 'Ladataan aineistoa',
     go_to_original: 'Siirry alkuperäiseen',

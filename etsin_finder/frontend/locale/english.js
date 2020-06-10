@@ -159,6 +159,7 @@ const english = {
     issued: 'Release date',
     modified: 'Dataset modification date',
     keywords: 'Keywords',
+    subjectHeading: 'Subject heading',
     license: 'License',
     loading: 'Loading dataset',
     harvested: 'Harvested',
