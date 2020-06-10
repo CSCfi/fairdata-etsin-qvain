@@ -28,7 +28,6 @@ export class ProjectSelectorBase extends Component {
     } // ... Otherwise the dropdown will be left empty, but visible, if the user has no IDA projects.
       return undefined
     }
-  }
 
   handleOnChange = (selectedOption) => {
     this.props.Stores.Qvain.Files.changeProject(selectedOption.value)
