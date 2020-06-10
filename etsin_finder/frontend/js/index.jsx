@@ -31,7 +31,3 @@ if (process.env.NODE_ENV === 'development') {
   // axe(React, ReactDOM, 1000)
 }
 ReactDOM.render(<App />, document.getElementById('root'))
-
-if (module.hot) {
-  module.hot.accept()
-}
