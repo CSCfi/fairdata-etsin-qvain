@@ -44,7 +44,7 @@ export class ProjectSelectorBase extends Component {
     const { original, selectedFiles, selectedDirectories } = this.props.Stores.Qvain
     const editing = original !== undefined && [...selectedFiles, ...selectedDirectories].length > 0
 
-    let selected = undefined
+    let selected
 
     // Error handling for the case where the user wants to publish an IDA dataset but has no IDA projects
     if (options) {
