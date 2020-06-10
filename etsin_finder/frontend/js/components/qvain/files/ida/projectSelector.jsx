@@ -16,8 +16,6 @@ export class ProjectSelectorBase extends Component {
   }
 
   getOptions = () => {
-    const { environment } = this.props.Stores.Env
-
     let projects
 
     if (this.props.Stores.Auth.user.idaGroups) {
@@ -29,17 +27,6 @@ export class ProjectSelectorBase extends Component {
         ))
         .map(projectId => ({ value: projectId, label: projectId }))
     }
-
-    if ((environment === 'development') && (projects === undefined)) {
-      return [
-        { value: 'project_x', label: 'project_x' },
-        { value: 'empty', label: 'test nonexistant IDA project' }
-      ]
-    }
-
-    return environment === 'test' ?
-      [...projects, { value: 'project_x', label: 'project_x' }] :
-      projects
   }
 
   handleOnChange = (selectedOption) => {
