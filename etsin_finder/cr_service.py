@@ -254,7 +254,7 @@ def is_draft(catalog_record):
     :param catalog_record:
     :return:
     """
-    if catalog_record.get('state', 'draft'):
+    if catalog_record.get('state') == 'draft':
         return True
     return False
 
