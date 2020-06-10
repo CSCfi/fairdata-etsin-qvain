@@ -29,10 +29,10 @@ export const TableButton = styled.button`
 
 export const CancelButton = styled.button`
   border-radius: 4px;
-  border: solid 1px #4f4f4f;
+  border: ${(props) => `solid 1px ${ props.theme.color.primary}` };
   font-size: 20px;
   font-weight: bold;
-  color: #4f4f4f;
+  color: ${(props) => `${ props.theme.color.primary}` };
   padding: 10px 20px;
   &:hover {
     background-color: #ccc;
@@ -41,15 +41,15 @@ export const CancelButton = styled.button`
 
 export const SaveButton = styled.button`
   border-radius: 4px;
-  border: solid 1px #49a24a;
-  background-color: #49a24a;
+  border: ${(props) => `solid 1px ${ props.theme.color.primary}` };
+  background-color: ${(props) => `${ props.theme.color.primary}` };
   font-size: 20px;
   font-weight: bold;
   color: #fff;
   margin-left: 20px;
   padding: 10px 25px;
   &:hover {
-    background-color: #3a813b;
+    background-color: ${(props => props.theme.color.primaryDark)};
   }
 
   :disabled {
