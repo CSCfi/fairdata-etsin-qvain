@@ -133,17 +133,24 @@ class Dataset extends React.Component {
     }
     Accessibility.announcePolite(translate('dataset.loading'))
     DatasetQuery.getData(identifier)
-      .then(result => {
+      .then(async result => {
         // TODO: The code below needs to be revised
         // Somewhere we need to think how 1) harvested, 2) accumulative, 3) deprecated, 4) removed, 5) ordinary
         // datasets are rendered. Maybe not here?
+
+        let hasV2Files = false
+        if (this.props.Stores.Env.metaxApiV2) {
+          await DatasetQuery.getFilesV2()
+          hasV2Files = (DatasetQuery.Files.root && DatasetQuery.Files.root.directChildCount > 0)
+        }
+
         this.setState({
           identifier: this.props.match.params.identifier,
           dataset: result.catalog_record,
           email_info: result.email_info,
           hasFiles:
             (result.catalog_record.research_dataset.directories
-              || result.catalog_record.research_dataset.files) !== undefined,
+              || result.catalog_record.research_dataset.files) !== undefined || hasV2Files,
           hasRemote: result.catalog_record.research_dataset.remote_resources !== undefined,
           harvested: result.catalog_record.data_catalog.catalog_json.harvested,
           deprecated: result.catalog_record.deprecated,
@@ -249,6 +256,7 @@ const Link = styled.a`
 `
 
 Dataset.propTypes = {
+  Stores: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
 }

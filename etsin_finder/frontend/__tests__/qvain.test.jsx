@@ -19,7 +19,8 @@ import { qvainFormSchema } from '../js/components/qvain/utils/formValidation'
 import { ExternalFilesBase } from '../js/components/qvain/files/external/externalFiles'
 import { ButtonGroup } from '../js/components/qvain/general/buttons'
 import { SlidingContent } from '../js/components/qvain/general/card'
-import QvainStore, {
+import Env from '../js/stores/domain/env'
+import QvainStoreClass, {
   ExternalResource,
   AccessType as AccessTypeConstructor,
   License as LicenseConstructor,
@@ -32,9 +33,12 @@ import {
   groupDatasetsByVersionSet,
 } from '../js/components/qvain/datasets/filter'
 
+const QvainStore = new QvainStoreClass(Env)
+
 const getStores = () => {
-  QvainStore.setMetaxApiV2(true)
+  Env.setMetaxApiV2(true)
   return {
+    Env,
     Qvain: QvainStore,
     Locale: LocaleStore,
   }

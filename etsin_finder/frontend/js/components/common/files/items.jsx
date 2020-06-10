@@ -6,7 +6,7 @@ import { tint } from 'polished'
 import { faChevronRight, faChevronDown } from '@fortawesome/free-solid-svg-icons'
 
 import Translate from 'react-translate-component'
-import { Spinner } from '../../../../general/loader'
+import { Spinner } from '../../general/loader'
 
 export const isDirectory = (item) => item.type === 'directory'
 export const isFile = (item) => item.type === 'file'
@@ -117,7 +117,7 @@ export const ToggleOpenButton = ({ item, directoryView, ...props }) => {
       icon={isOpen ? faChevronDown : faChevronRight}
       onClick={() => directoryView.toggleOpen(item)}
       attributes={{ 'aria-label': `qvain.files.selected.buttons.${action}` }}
-      with={{ name: item.directoryName }}
+      with={{ name: item.name }}
       {...props}
     />
   )
@@ -193,7 +193,7 @@ export const ItemSpacer = styled.div`{
   width: ${props => props.level * 1.3}em;
   margin: 0;
   padding: 0;
-  background: #cad;
+  flex-shrink: 0;
 }`
 
 export const GrowSpacer = styled.div`{
@@ -228,4 +228,14 @@ export const Tag = styled.div`{
   margin-left: 2px;
   padding: 1px 4px;
   text-transform: uppercase;
+  white-space: nowrap;
+}`
+
+export const PlainTag = styled.div`{
+  font-size: 90%;
+  border-radius: 4px;
+  text-align: center;
+  margin-left: 2px;
+  padding: 1px 4px;
+  white-space: nowrap;
 }`

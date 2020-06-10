@@ -3,29 +3,43 @@ import { observable, action, runInAction, when } from 'mobx'
 
 import { FileAPIURLs } from '../../components/qvain/utils/constants'
 
-import { File, Directory, dirKey, fileKey, dirIdentifierKey, fileIdentifierKey } from './qvain.files.items'
-import { ignoreNotFound, emptyDirectoryResponse } from './qvain.files.utils'
+import { File, Directory, dirKey, fileKey, dirIdentifierKey, fileIdentifierKey } from './common.files.items'
+import { ignoreNotFound, emptyDirectoryResponse, assignDefined } from './common.files.utils'
+
+// Fetch types:
+// ANY           all files
+// EXISTING      files in dataset, directories with files in dataset
+// NOT_EXISTING  files not in dataset, directories with files not in dataset
+// PUBLIC        files in dataset (only public data), not compatible with other types
 
 export const FetchType = {
   ANY: 'any',
   EXISTING: 'existing',
-  NOT_EXISTING: 'not_existing'
+  NOT_EXISTING: 'not_existing',
+  PUBLIC: 'public'
 }
 
-const fetchExistingFileCountsForDirectory = async (Files, dir, datasetIdentifier, defaults = {}) => {
+const fetchExistingChildDataForDirectory = async (Files, dir, datasetIdentifier, onlyPublic = false, defaults = {}) => {
+  // Fetch data for the existing direct children of a directory.
+  // - number of direct children for dataset
+  // - dataset file count and byte count for each subdirectory
+  // Also, when onlyPublic is enabled
+  // - index (sorting position) and id for each file and directory
+  // - use dataset file/byte count as the total count
   if (!datasetIdentifier) {
-    return 0
+    return {}
   }
 
   const url = new URL(FileAPIURLs.V2_DIR_URL + dir.identifier, document.location.origin)
   url.searchParams.set('file_fields', 'id')
-  url.searchParams.set('directory_fields', ['id', 'file_count'].join(','))
+  url.searchParams.set('directory_fields', ['id', 'file_count', 'byte_size'].join(','))
   url.searchParams.set('cr_identifier', datasetIdentifier)
+  url.searchParams.set('include_parent', true)
   const resp = ignoreNotFound(axios.get(url.href), emptyDirectoryResponse)
   const { data } = await Files.cancelOnReset(resp)
 
   const cache = Files.cache
-  data.directories.forEach((newDir) => {
+  data.directories.forEach((newDir, index) => {
     const key = dirKey(newDir)
     if (!cache[key]) {
       cache[key] = {}
@@ -36,8 +50,12 @@ const fetchExistingFileCountsForDirectory = async (Files, dir, datasetIdentifier
     }
     cache[key].existingFileCount = newDir.file_count
     cache[key].existing = true
+    if (onlyPublic) {
+      cache[key].fileCount = newDir.file_count
+      cache[key].index = index
+    }
   })
-  data.files.forEach((newFile) => {
+  data.files.forEach((newFile, index) => {
     const key = fileKey(newFile)
     if (!cache[key]) {
       cache[key] = {}
@@ -47,14 +65,38 @@ const fetchExistingFileCountsForDirectory = async (Files, dir, datasetIdentifier
       ...cache[key]
     }
     cache[key].existing = true
+    if (onlyPublic) {
+      cache[key].index = index + data.directories.length
+    }
   })
-  return data.count
+
+  const counts = {
+    existingDirectChildCount: data.directories.length + data.files.length,
+    existingByteSize: data.byte_size,
+    existingFileCount: data.file_count,
+  }
+
+  // when onlyPublic is enabled, use existing counts as the total counts as
+  // the actual totals are only available to project members
+  if (onlyPublic) {
+    counts.directChildCount = counts.existingDirectChildCount
+    counts.byteSize = counts.existingByteSize
+    counts.fileCount = counts.existingFileCount
+  }
+
+  return counts
 }
 
-const fetchFileCountsForDirectory = async (Files, dir, defaults = {}) => {
+const fetchAnyChildDataForDirectory = async (Files, dir, defaults = {}) => {
+  // Fetch data for the direct children of a directory.
+  // - number of direct children
+  // - index (sorting position) and id for each file and directory
+  // - total file count and byte count for each subdirectory
+
   const url = new URL(FileAPIURLs.V2_DIR_URL + dir.identifier, document.location.origin)
   url.searchParams.set('file_fields', 'id')
-  url.searchParams.set('directory_fields', ['id', 'file_count'].join(','))
+  url.searchParams.set('directory_fields', ['id', 'file_count', 'byte_size'].join(','))
+  url.searchParams.set('include_parent', true)
   const resp = axios.get(url.href)
   const { data } = await Files.cancelOnReset(resp)
 
@@ -69,6 +111,7 @@ const fetchFileCountsForDirectory = async (Files, dir, defaults = {}) => {
       ...cache[key]
     }
     cache[key].fileCount = newDir.file_count
+    cache[key].byteSize = newDir.byte_size
     cache[key].index = index
   })
   data.files.forEach((newFile, index) => {
@@ -83,22 +126,34 @@ const fetchFileCountsForDirectory = async (Files, dir, defaults = {}) => {
     cache[key].index = index + data.directories.length
   })
 
-  return data.directories.length + data.files.length
+  return {
+    directChildCount: data.directories.length + data.files.length,
+    byteSize: data.byte_size,
+    fileCount: data.file_count,
+  }
 }
 
-const fetchFileCounts = action((Files, dir, type) => {
-  const datasetIdentifier = Files.Qvain.original && Files.Qvain.original.identifier
+const fetchChildData = action((Files, dir, type) => {
+  const { datasetIdentifier } = Files
 
-  if (!dir.pagination.fileCountsPromise) {
-    dir.pagination.fileCountsPromise = fetchFileCountsForDirectory(Files, dir)
+  if (!dir.pagination.fileCountsPromise && type !== FetchType.PUBLIC) {
+    dir.pagination.fileCountsPromise = fetchAnyChildDataForDirectory(Files, dir)
       .catch(action((err) => { dir.pagination.fileCountsPromise = null; console.error(err) }))
+  }
+
+  if (type === FetchType.PUBLIC) {
+    // Fetch only items belonging to a dataset.
+    if (!dir.pagination.fileCountsPromise) {
+      dir.pagination.fileCountsPromise = fetchExistingChildDataForDirectory(Files, dir, datasetIdentifier, true)
+        .catch(action(() => { dir.pagination.fileCountsPromise = null }))
+    }
   }
 
   if (type === FetchType.ANY) {
     // With other fetch types, the file counts are loaded when individual items are load due to use of (not_)cr_identifier,
     // but here we need to fetch them in a separate request.
     if (!dir.pagination.existingFileCountsPromise) {
-      dir.pagination.existingFileCountsPromise = fetchExistingFileCountsForDirectory(Files, dir, datasetIdentifier)
+      dir.pagination.existingFileCountsPromise = fetchExistingChildDataForDirectory(Files, dir, datasetIdentifier, false)
         .catch(action(() => { dir.pagination.existingFileCountsPromise = null }))
     }
   }
@@ -106,15 +161,16 @@ const fetchFileCounts = action((Files, dir, type) => {
 
 
 const fetchItems = async (Files, dir, offset, limit, type) => {
-  const datasetIdentifier = Files.Qvain.original && Files.Qvain.original.identifier
+  const { datasetIdentifier } = Files
 
   const url = new URL(FileAPIURLs.V2_DIR_URL + dir.identifier, document.location.origin)
   url.searchParams.set('pagination', true)
   url.searchParams.set('offset', offset)
   url.searchParams.set('limit', limit)
+  url.searchParams.set('include_parent', true)
 
   if (datasetIdentifier) {
-    if (type === FetchType.EXISTING) {
+    if (type === FetchType.EXISTING || type === FetchType.PUBLIC) {
       url.searchParams.set('cr_identifier', datasetIdentifier)
     }
     if (type === FetchType.NOT_EXISTING) {
@@ -137,13 +193,16 @@ const fetchItems = async (Files, dir, offset, limit, type) => {
   const directories = data.results.directories.map(newDir => {
     const key = dirKey(newDir)
     const identifierKey = dirIdentifierKey(newDir)
-    let existingFileCount
-    if (type === FetchType.EXISTING) {
+    let existingFileCount, existingByteSize
+    if (type === FetchType.EXISTING || type === FetchType.PUBLIC) {
       existingFileCount = newDir.file_count
+      existingByteSize = newDir.byte_size
     } else if (type === FetchType.NOT_EXISTING) {
       existingFileCount = cache[key].fileCount - newDir.file_count
+      existingByteSize = cache[key].byteSize - newDir.byte_size
     } else {
       existingFileCount = 0
+      existingByteSize = 0
     }
 
     // Use data existing in cache, check with both id and identifier
@@ -151,9 +210,9 @@ const fetchItems = async (Files, dir, offset, limit, type) => {
       parent: dir,
       existing: type === FetchType.EXISTING,
       existingFileCount,
+      existingByteSize,
       ...cache[identifierKey],
       ...cache[key],
-      fetchType: `! ${type}`
     }))
   })
 
@@ -165,15 +224,27 @@ const fetchItems = async (Files, dir, offset, limit, type) => {
     return observable(File(newFile, {
       parent: dir,
       existing: type === FetchType.EXISTING,
+      byteSize: newFile.byte_size,
       ...cache[identifierKey],
       ...cache[key]
     }))
   })
 
+  const parent = {}
+  if (datasetIdentifier && dir.files.length === 0 && dir.directories.length === 0) {
+    if (type === FetchType.EXISTING || type === FetchType.PUBLIC) {
+      parent.existingFileCount = data.results.file_count
+    }
+    if (type === FetchType.NOT_EXISTING) {
+      parent.existingFileCount = (dir.fileCount || await dir.pagination.fileCountsPromise.fileCount) - data.results.file_count
+    }
+  }
+
   return {
     count: data.count,
     directories,
     files,
+    parent,
   }
 }
 
@@ -268,13 +339,17 @@ class ItemLoader {
         return true
       }
 
-      fetchFileCounts(Files, dir, this.fetchType)
-
+      fetchChildData(Files, dir, this.fetchType)
       const newItems = await Files.cancelOnReset(fetchItems(Files, dir, offset, limit, this.fetchType))
 
-      const directChildCount = await dir.pagination.fileCountsPromise
+      const counts = await dir.pagination.fileCountsPromise
+      const existingCounts = await dir.pagination.existingFileCountsPromise
       runInAction(() => {
-        dir.directChildCount = directChildCount
+        // Assign file counts and byte sizes
+        assignDefined(dir, counts)
+        if (existingCounts) {
+          assignDefined(dir, existingCounts)
+        }
 
         // Ignore items that have already been loaded
         const oldDirs = new Set(dir.directories.map(d => d.identifier))
@@ -394,6 +469,12 @@ class ItemLoaderExisting extends ItemLoader {
   }
 }
 
+class ItemLoaderPublic extends ItemLoaderExisting {
+  fetchType = FetchType.PUBLIC
+}
+
+
 export const itemLoaderAny = new ItemLoaderAny()
 export const itemLoaderNew = new ItemLoaderNew()
 export const itemLoaderExisting = new ItemLoaderExisting()
+export const itemLoaderPublic = new ItemLoaderPublic()

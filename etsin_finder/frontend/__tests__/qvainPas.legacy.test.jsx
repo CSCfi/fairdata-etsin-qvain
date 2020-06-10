@@ -14,23 +14,18 @@ import FieldOfScienceField from '../js/components/qvain/description/fieldOfScien
 import KeywordsField from '../js/components/qvain/description/keywordsField'
 import License from '../js/components/qvain/licenses/licenses'
 import AccessType from '../js/components/qvain/licenses/accessType'
-import Actors from '../js/components/qvain/actors'
 import Files from '../js/components/qvain/files'
 import FileForm from '../js/components/qvain/files/legacy/fileForm'
 import IDAFilePicker from '../js/components/qvain/files/legacy/idaFilePicker'
-import {
-  DeleteButton
-} from '../js/components/qvain/general/buttons'
-import QvainStore, {
+import QvainStoreClass, {
   Directory,
   File,
   AccessType as AccessTypeConstructor,
   License as LicenseConstructor
 } from '../js/stores/view/qvain'
-import { Actor } from '../js/stores/view/qvain.actors'
 import LocaleStore from '../js/stores/view/language'
 import EnvStore from '../js/stores/domain/env'
-import { AccessTypeURLs, DataCatalogIdentifiers, EntityType, Role, } from '../js/components/qvain/utils/constants'
+import { AccessTypeURLs, DataCatalogIdentifiers, } from '../js/components/qvain/utils/constants'
 
 global.Promise = require('bluebird')
 
@@ -38,9 +33,11 @@ Promise.config({
   cancellation: true
 })
 
+const QvainStore = new QvainStoreClass(EnvStore)
+
 const getStores = () => {
   QvainStore.resetQvainStore()
-  QvainStore.setMetaxApiV2(false)
+  EnvStore.setMetaxApiV2(false)
   return {
     Qvain: QvainStore,
     Locale: LocaleStore,

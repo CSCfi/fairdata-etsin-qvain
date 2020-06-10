@@ -13,6 +13,8 @@ import axios from 'axios'
 
 import access from './access'
 
+import Files from './files'
+
 const QueryFields = {
   file: [
     'file_path',
@@ -29,6 +31,10 @@ const QueryFields = {
 }
 
 class DatasetQuery {
+  constructor() {
+    this.Files = new Files()
+  }
+
   @observable results = []
 
   @observable emailInfo = []
@@ -42,7 +48,7 @@ class DatasetQuery {
     return new Promise((resolve, reject) => {
       axios
         .get(`/api/dataset/${id}`)
-        .then(res => {
+        .then(async res => {
           this.results = res.data.catalog_record
           this.emailInfo = res.data.email_info
           access.updateAccess(
@@ -60,6 +66,11 @@ class DatasetQuery {
           reject(error)
         })
     })
+  }
+
+  @action
+  getFilesV2() {
+    return this.Files.openDataset(this.results)
   }
 
   @action

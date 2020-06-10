@@ -1,21 +1,20 @@
 import React from 'react'
 import axios from 'axios'
 import { shallow } from 'enzyme'
-import { toJS } from 'mobx'
 
-import { getDirectories, getFiles } from '../js/components/qvain/utils/fileHierarchy'
-import QvainStore, { FieldOfScience } from '../js/stores/view/qvain'
+import Env from '../js/stores/domain/env'
+import QvainStoreClass from '../js/stores/view/qvain'
 import LocaleStore from '../js/stores/view/language'
-import { sortFunc } from '../js/stores/view/qvain.files.utils'
+import { sortFunc } from '../js/stores/view/common.files.utils'
 import {
   itemLoaderNew,
   itemLoaderAny,
   itemLoaderExisting,
-} from '../js/stores/view/qvain.files.loaders'
+} from '../js/stores/view/common.files.loaders'
 
+import { ShowMore } from '../js/components/common/files//tree'
 import SelectedItemsTree from '../js/components/qvain/files/ida/selectedItemsTree'
 import SelectedItemsTreeItem from '../js/components/qvain/files/ida/selectedItemsTreeItem'
-import { ShowMore } from '../js/components/qvain/files/ida/common/tree'
 import AddItemsTree from '../js/components/qvain/files/ida/addItemsTree'
 import AddItemsTreeItem from '../js/components/qvain/files/ida/addItemsTreeItem'
 
@@ -61,10 +60,12 @@ const sorted = (items) => {
   return copy
 }
 
-// Mock responses a dataset containing IDA files. See the data file for the project structure.
+// Mock responses for a dataset containing IDA files. See the data file for the project structure.
 axios.get.mockImplementation(get)
 
+const QvainStore = new QvainStoreClass(Env)
 const stores = {
+  Env,
   Qvain: QvainStore,
   Locale: LocaleStore,
 }
@@ -149,7 +150,7 @@ const loadDataset = async () => {
 
 beforeEach(async () => {
   Qvain.resetQvainStore()
-  Qvain.setMetaxApiV2(true)
+  Env.setMetaxApiV2(true)
   await loadDataset()
 })
 
@@ -891,35 +892,35 @@ describe('Qvain.Files SelectedItemsTree ', () => {
 
 describe('Qvain.Files handleSubmit', () => {
   it('submits data correctly', async () => {
-    const dataset = handleSubmitToBackend(Qvain)
+    const dataset = handleSubmitToBackend(Env, Qvain)
     expect(dataset).toMatchSnapshot()
   })
 
   it('submits data correctly after adding directory', async () => {
     const set2 = await Files.getItemByPath('/data/set2')
     Files.addItem(set2)
-    const dataset = handleSubmitToBackend(Qvain)
+    const dataset = handleSubmitToBackend(Env, Qvain)
     expect(dataset).toMatchSnapshot()
   })
 
   it('submits data correctly after adding file', async () => {
     const file2 = await Files.getItemByPath('/data/set2/file2.csv')
     Files.addItem(file2)
-    const dataset = handleSubmitToBackend(Qvain)
+    const dataset = handleSubmitToBackend(Env, Qvain)
     expect(dataset).toMatchSnapshot()
   })
 
   it('submits data correctly after removing directory', async () => {
     const set1 = await Files.getItemByPath('/data/set1')
     Files.removeItem(set1)
-    const dataset = handleSubmitToBackend(Qvain)
+    const dataset = handleSubmitToBackend(Env, Qvain)
     expect(dataset).toMatchSnapshot()
   })
 
   it('submits data correctly after removing file', async () => {
     const info = await Files.getItemByPath('/moredata/info.csv')
     Files.removeItem(info)
-    const dataset = handleSubmitToBackend(Qvain)
+    const dataset = handleSubmitToBackend(Env, Qvain)
     expect(dataset).toMatchSnapshot()
   })
 
@@ -1174,7 +1175,7 @@ describe('Qvain.Files pagination', () => {
 
     expect(subset.files.map((item) => item.path)).toEqual([
       '/data/set1/subset/file1.csv',
-      '/data/set1/subset/file12.csv',
+      '/data/set1/subset/file10.csv',
       '/data/set1/subset/file13.csv',
     ])
   })

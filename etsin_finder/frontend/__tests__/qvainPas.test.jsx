@@ -1,5 +1,5 @@
 import React from 'react';
-import { shallow, mount } from 'enzyme'
+import { mount } from 'enzyme'
 import { Provider } from 'mobx-react'
 import { ThemeProvider } from 'styled-components'
 import axios from 'axios'
@@ -14,27 +14,20 @@ import FieldOfScienceField from '../js/components/qvain/description/fieldOfScien
 import KeywordsField from '../js/components/qvain/description/keywordsField'
 import License from '../js/components/qvain/licenses/licenses'
 import AccessType from '../js/components/qvain/licenses/accessType'
-import Actors from '../js/components/qvain/actors'
-import Files from '../js/components/qvain/files'
 import FileForm from '../js/components/qvain/files/ida/forms/fileForm'
 import DirectoryForm from '../js/components/qvain/files/ida/forms/directoryForm'
-import IDAFilePicker from '../js/components/qvain/files/ida'
-import {
-  DeleteButton
-} from '../js/components/qvain/general/buttons'
 import {
   File,
   Directory,
   Project
-} from '../js/stores/view/qvain.files.items'
-import QvainStore, {
+} from '../js/stores/view/common.files.items'
+import QvainStoreClass, {
   AccessType as AccessTypeConstructor,
   License as LicenseConstructor
 } from '../js/stores/view/qvain'
-import { Actor } from '../js/stores/view/qvain.actors'
 import LocaleStore from '../js/stores/view/language'
 import EnvStore from '../js/stores/domain/env'
-import { AccessTypeURLs, DataCatalogIdentifiers, EntityType, Role, } from '../js/components/qvain/utils/constants'
+import { AccessTypeURLs, DataCatalogIdentifiers, } from '../js/components/qvain/utils/constants'
 
 global.Promise = require('bluebird')
 
@@ -42,9 +35,11 @@ Promise.config({
   cancellation: true
 })
 
+const QvainStore = new QvainStoreClass(EnvStore)
+
 const getStores = () => {
   QvainStore.resetQvainStore()
-  QvainStore.setMetaxApiV2(true)
+  EnvStore.setMetaxApiV2(true)
   return {
     Qvain: QvainStore,
     Locale: LocaleStore,

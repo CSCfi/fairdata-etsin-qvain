@@ -1,9 +1,9 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 
-import { LinkButton } from '../../../../general/button'
+import { LinkButton } from '../../general/button'
 import { Children, ChildrenItem, ItemRow, Items, ItemSpacer, isDirectory } from './items'
-import Loader from '../../../../general/loader'
+import Loader from '../../general/loader'
 
 // propagate properties from parent directories
 const getParentArgs = (directoryView, parent, parentArgs) => ({
@@ -39,7 +39,7 @@ const drawChildren = (treeProps, parent, level = 0, parentArgs = {}) => {
 
   return (
     <Children>
-      {items.map((item) => (
+      {items.map(item => (
         <Fragment key={item.key}>
           <Item treeProps={treeProps} item={item} level={level} parentArgs={newParentArgs} />
           {isDirectory(item) && directoryView.isOpen(item) && (
@@ -62,11 +62,11 @@ export const useRenderTree = ({
   Item, // component used for rendering a single item
   EmptyHelp = () => null, // component shown when there are no visible items
   moreItemsLevel = 0, // indentation for the "Show All Items" button to account for space taken by buttons
-}) => {
+}, extraProps) => {
   const renderTree = () => {
     const { root, loadingProject } = Files
     const loading = loadingProject && !loadingProject.error
-    const treeProps = { Files, Item, directoryView, moreItemsLevel, EmptyHelp }
+    const treeProps = { Files, Item, directoryView, moreItemsLevel, EmptyHelp, extraProps }
     return (
       <>
         {loading && <Loader active />}

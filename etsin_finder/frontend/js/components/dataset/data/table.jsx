@@ -14,8 +14,8 @@ import React from 'react'
 import Translate from 'react-translate-component'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { faExclamation } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faExclamation } from '@fortawesome/free-solid-svg-icons'
 
 import TableItem from './tableItem'
 

@@ -28,7 +28,8 @@ class Files extends Component {
   }
 
   render() {
-    const { dataCatalog, isPas, metaxApiV2 } = this.props.Stores.Qvain
+    const { dataCatalog, isPas } = this.props.Stores.Qvain
+    const { metaxApiV2 } = this.props.Stores.Env
     let data = null
 
     const SelectedItemsComponent = metaxApiV2 ? SelectedItems : LegacySelectedFiles

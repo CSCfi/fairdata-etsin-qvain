@@ -48,7 +48,7 @@ const filesToMetax = (selectedFiles, existingFiles) => {
   return parsedFileData
 }
 
-const handleSubmitToBackend = (values) => {
+const handleSubmitToBackend = (Env, values) => {
   const actors = values.Actors.toBackend()
 
   const spatial = values.Spatials.toBackend()
@@ -81,7 +81,7 @@ const handleSubmitToBackend = (values) => {
     obj.original = values.original
   }
 
-  if (!values.metaxApiV2) {
+  if (!Env.metaxApiV2) {
     obj.files = filesToMetax(values.selectedFiles, values.existingFiles)
     obj.directories = directoriesToMetax(values.selectedDirectories, values.existingDirectories)
   }

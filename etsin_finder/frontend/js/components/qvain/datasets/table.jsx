@@ -62,7 +62,7 @@ class DatasetTable extends Component {
 
     this.setState({ loading: true, error: false, errorMessage: '' })
     let url
-    if (this.props.Stores.Qvain.metaxApiV2) {
+    if (this.props.Stores.Env.metaxApiV2) {
       url = `${DatasetUrls.V2_USER_DATASETS_URL}${this.props.Stores.Auth.user.name}?no_pagination=true`
     } else {
       url = `${DatasetUrls.USER_DATASETS_URL}${this.props.Stores.Auth.user.name}?no_pagination=true`
@@ -95,7 +95,7 @@ class DatasetTable extends Component {
   }
 
   handleCreateNewVersion = async (identifier) => {
-    const { metaxApiV2 } = this.props.Stores.Qvain
+    const { metaxApiV2 } = this.props.Stores.Env
     if (!metaxApiV2) {
       console.error('Metax API V2 is required for creating a new version')
       return
@@ -111,7 +111,7 @@ class DatasetTable extends Component {
 
   handleRemove = (identifier) => (event) => {
     event.preventDefault()
-    const { metaxApiV2 } = this.props.Stores.Qvain
+    const { metaxApiV2 } = this.props.Stores.Env
 
     let url = `${DatasetUrls.DATASET_URL}/${identifier}`
     if (metaxApiV2) {
@@ -194,7 +194,7 @@ class DatasetTable extends Component {
       limit,
     } = this.state
 
-    const { metaxApiV2 } = this.props.Stores.Qvain
+    const { metaxApiV2 } = this.props.Stores.Env
 
     const noOfDatasets = datasets.length
     const searchInput =

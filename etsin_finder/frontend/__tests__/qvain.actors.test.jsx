@@ -19,7 +19,8 @@ import ActorModal, { ActorModalBase } from '../js/components/qvain/actors/actorM
 import OrgInfo from '../js/components/qvain/actors/orgInfo'
 import OrgForm from '../js/components/qvain/actors/orgForm'
 import { ButtonGroup, DeleteButton } from '../js/components/qvain/general/buttons'
-import QvainStore from '../js/stores/view/qvain'
+import Env from '../js/stores/domain/env'
+import QvainStoreClass from '../js/stores/view/qvain'
 import { Actor, Organization, Person, maybeReference } from '../js/stores/view/qvain.actors'
 import LocaleStore from '../js/stores/view/language'
 import organizationMockGet, {
@@ -40,8 +41,10 @@ configure({
 
 jest.mock('axios')
 
-QvainStore.setMetaxApiV2(true)
+const QvainStore = new QvainStoreClass(Env)
+Env.setMetaxApiV2(true)
 const stores = {
+  Env,
   Qvain: QvainStore,
   Locale: LocaleStore,
 }

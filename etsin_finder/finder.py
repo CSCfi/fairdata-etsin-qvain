@@ -81,7 +81,7 @@ def add_restful_resources(app):
     from etsin_finder.qvain_light_resources_v2 import (
         QvainDatasetEdit as V2QvainDatasetEdit,
         ProjectFiles as V2ProjectFiles,
-        FileDirectory as V2FileDirectory,
+        DirectoryFiles as V2DirectoryFiles,
         FileCharacteristics as V2FileCharacteristics,
         UserDatasets as V2UserDatasets,
         QvainDatasetDelete as V2QvainDatasetDelete,
@@ -93,7 +93,7 @@ def add_restful_resources(app):
 
     # Qvain light API endpoints for Metax v2
     api.add_resource(V2ProjectFiles, '/api/v2/files/project/<string:pid>', endpoint='v2_project_files')
-    api.add_resource(V2FileDirectory, '/api/v2/files/directory/<string:dir_id>', endpoint='v2_file_directory')
+    api.add_resource(V2DirectoryFiles, '/api/v2/files/directory/<string:dir_id>', endpoint='v2_directory_files')
     api.add_resource(V2FileCharacteristics, '/api/v2/files/file_characteristics/<string:file_id>', endpoint='v2_file_characteristics')
     api.add_resource(V2UserDatasets, '/api/v2/datasets/<string:user_id>', endpoint='v2_user_datasets')
     api.add_resource(V2QvainDatasetDelete, '/api/v2/dataset/<string:cr_id>', endpoint='v2_user_datasets_delete')
