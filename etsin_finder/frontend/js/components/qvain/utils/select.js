@@ -54,7 +54,7 @@ const parseRefResponse = res => {
   }))
   const refsEn = hits.map(hit => ({
     value: hit._source.uri,
-    label: hit._source.label.en,
+    label: hit._source.label.en || hit._source.label.und,
   }))
   return {
     en: refsEn,

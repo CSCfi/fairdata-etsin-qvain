@@ -49,7 +49,7 @@ export const SaveButton = styled.button`
   margin-left: 20px;
   padding: 10px 25px;
   &:hover {
-    background-color: #004d79;
+    background-color: ${(props => props.theme.color.primaryDark)};
   }
 
   :disabled {
