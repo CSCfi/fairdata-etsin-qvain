@@ -51,6 +51,8 @@ const filesToMetax = (selectedFiles, existingFiles) => {
 const handleSubmitToBackend = (values) => {
   const actors = values.Actors.toBackend()
 
+  const spatial = values.Spatials.toBackend()
+
   const obj = {
     title: values.title,
     description: values.description,
@@ -72,6 +74,7 @@ const handleSubmitToBackend = (values) => {
     dataCatalog: values.dataCatalog,
     cumulativeState: values.cumulativeState,
     useDoi: values.useDoi,
+    spatial
   }
 
   if (values.original) {
