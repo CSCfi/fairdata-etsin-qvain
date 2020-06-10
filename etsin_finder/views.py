@@ -31,7 +31,6 @@ def login():
 
     :return:
     """
-    return redirect('https://etsin-finder.local/acs/')
     auth = get_saml_auth(request)
     redirect_url = quote(request.args.get('relay', '/'))
     return redirect(auth.login(redirect_url))
@@ -109,28 +108,6 @@ def saml_attribute_consumer_service():
 
     :return:
     """
-    reset_flask_session_on_login()
-    session['samlUserdata'] = {
-        'urn:oid:1.3.6.1.4.1.8057.2.80.26': [
-            "IDA:2001036",
-            "IDA:research_project_112",
-            "IDA:string",
-            "IDA:project_x",
-            "IDA:project"
-        ],
-        'urn:oid:2.5.4.42': ["teppå"], # firstname
-        'urn:oid:2.5.4.4': ["testaaja"], # lastname
-        'urn:oid:2.5.4.3': ["teppå testaa taas"], # cn
-        "urn:oid:1.3.6.1.4.1.16161.4.0.53": ["WHEE"], # csc user id
-        "urn:oid:1.3.6.1.4.1.8057.2.80.9": ["tepon_testi"],
-        "urn:oid:1.3.6.1.4.1.25178.1.2.9": ["ylipoisto.fi"], # org id
-        "urn:oid:1.3.6.1.4.1.16161.4.0.88": ["ylipoisto"], # org
-        'urn:oid:0.9.2342.19200300.100.1.3': ["teponemail@example.com"]
-    }
-    session['samlNameId'] = "nameid"
-    session['samlSessionIndex'] = "sessionindex"
-    return redirect('https://etsin-finder.local/')
-
     reset_flask_session_on_login()
     req = prepare_flask_request_for_saml(request)
     auth = init_saml_auth(req)
