@@ -21,6 +21,6 @@ const TemporalAndSpatial = () => (
   <Field {...fieldProps}>
     <Spatial />
   </Field>
-    )
+)
 
 export default TemporalAndSpatial
