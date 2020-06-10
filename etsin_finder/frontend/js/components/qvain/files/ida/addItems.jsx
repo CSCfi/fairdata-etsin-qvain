@@ -1,15 +1,14 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from 'react'
+import PropTypes from 'prop-types'
 import { inject, Observer } from 'mobx-react'
 import Translate from 'react-translate-component'
-import styled from 'styled-components';
+import styled from 'styled-components'
 
 import ProjectSelector from './projectSelector'
 import Modal from '../../../general/modal'
 import AddItemsTree from './addItemsTree'
 import { SaveButton, CancelButton } from '../../general/buttons'
 import { HelpField } from '../../general/form'
-
 
 export function AddFilesModal(props) {
   const { isOpen, onRequestClose } = props
@@ -19,7 +18,9 @@ export function AddFilesModal(props) {
   const saveAddedItems = () => {
     const { getTopmostChecked, clearChecked } = Files.AddItemsView
     const selected = getTopmostChecked()
-    selected.forEach(item => { Files.addItem(item) })
+    selected.forEach((item) => {
+      Files.addItem(item)
+    })
     clearChecked()
     onRequestClose()
   }
@@ -27,11 +28,18 @@ export function AddFilesModal(props) {
   const render = () => {
     const { isCumulative, original } = props.Stores.Qvain
     const isPublished = !!original
-    const projectChosen = Files.root && (Files.root.addedChildCount > 0 || Files.root.selectedChildCount > 0 || Files.root.removedChildCount > 0)
-    const haveNewFiles = Object.values(Files.AddItemsView.checkedState).some(item => item)
+    const projectChosen =
+      Files.projectLocked ||
+      (Files.root && (Files.root.addedChildCount > 0 || Files.root.removedChildCount > 0))
+    const haveNewFiles = Object.values(Files.AddItemsView.checkedState).some((item) => item)
 
     return (
-      <Modal contentLabel="addItemsModal" isOpen={isOpen} customStyles={modalStyle} onRequestClose={onRequestClose}>
+      <Modal
+        contentLabel="addItemsModal"
+        isOpen={isOpen}
+        customStyles={modalStyle}
+        onRequestClose={onRequestClose}
+      >
         <Header>
           <Translate component={Title} content="qvain.files.addItemsModal.title" />
           <ProjectSelector disabled={projectChosen} />
@@ -52,15 +60,13 @@ export function AddFilesModal(props) {
     )
   }
 
-  return (
-    <Observer>{() => render()}</Observer>
-  )
+  return <Observer>{() => render()}</Observer>
 }
 
 AddFilesModal.propTypes = {
   Stores: PropTypes.object.isRequired,
   isOpen: PropTypes.bool.isRequired,
-  onRequestClose: PropTypes.func.isRequired
+  onRequestClose: PropTypes.func.isRequired,
 }
 
 const modalStyle = {
@@ -83,10 +89,9 @@ const modalStyle = {
     paddingLeft: '2em',
     paddingRight: '2em',
     display: 'flex',
-    flexDirection: 'column'
-  }
+    flexDirection: 'column',
+  },
 }
-
 
 const Buttons = styled.div`
   display: flex;
@@ -98,18 +103,17 @@ const Buttons = styled.div`
   }
 `
 
-const Header = styled.div`{
+const Header = styled.div`
   margin-right: 1.5rem;
   margin-top: -0.5rem;
   margin-bottom: 0.5rem;
   margin-left: 0rem;
-}`
+`
 
-const Title = styled.h3`{
+const Title = styled.h3`
   display: inline-block;
   margin-right: 0.5em;
   margin-bottom: 0;
-}`
-
+`
 
 export default inject('Stores')(AddFilesModal)

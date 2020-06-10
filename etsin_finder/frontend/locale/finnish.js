@@ -76,7 +76,7 @@ const finnish = {
     curator: 'Kuraattori',
     data_location: 'Mene haravoituun sijaintiin',
     datasetAsFile: {
-      open: 'Avaa tiedostona',
+      open: 'Lataa aineiston metatieto',
       infoText:
         'Datacite without validation: Aineisto näytetään Datacite -formaatissa, mutta ilman pakollisten kenttien validointia. Aineisto ei sellaisenaan välttämättä täytä Dataciten vaatimuksia.',
     },
@@ -133,6 +133,8 @@ const finnish = {
         when: 'Milloin',
         event_title: 'Otsikko',
         description: 'Kuvaus',
+        deletionEvent: 'Aineiston poistaminen',
+        deletionOfDatasetVersion: 'Poistettu aineistoversio: ',
       },
       other_idn: 'Muut tunnisteet',
       origin_identifier: 'Alkuperäisen aineiston tunniste',
@@ -142,6 +144,11 @@ const finnish = {
         name: 'Otsikko',
         idn: 'Tunniste',
       },
+    },
+    map: {
+      geographic_name: 'Maantieteellinen nimi',
+      full_address: 'Kokonainen osoite',
+      alt: 'Korkeus (m)',
     },
     doi: 'DOI',
     field_of_science: 'Tieteenala',
@@ -307,12 +314,14 @@ const finnish = {
         cancel: 'Peruuta',
       },
     },
+    saveDraft: 'Tallenna Luonnos',
     submit: 'Julkaise Aineisto',
     edit: 'Päivitä Aineisto',
     consent:
       'Käyttämällä Qvain Light -työkalua käyttäjä vakuuttaa, että hän on saanut suostumuksen muiden henkilöiden henkilötietojen lisäämiseen kuvailutietoihin ja ilmoittanut heille miten he voivat saada henkilötietonsa poistettua palvelusta. Käyttämällä Qvain Light-työkalua käyttäjä hyväksyy <a href="https://www.fairdata.fi/hyodyntaminen/kayttopolitiikat-ja-ehdot/">käyttöehdot</a>.',
     submitStatus: {
       success: 'Aineisto julkaistu!',
+      draftSuccess: 'Luonnos tallennettu!',
       fail: 'Jotain meni pieleen...',
       editFilesSuccess: 'Uusi aineistoversio luotu!',
       editMetadataSuccess: 'Aineiston päivitys onnistui!',
@@ -383,12 +392,19 @@ const finnish = {
       },
       help: 'Muokkaa olemassa olevaa aineistoa tai luo uusi',
       createButton: 'Lisää uusi aineisto',
+      createNewVersion: 'Luo uusi versio',
+      state: {
+        draft: 'Luonnos',
+        published: 'Julkaistu',
+        changed: 'Julkaisemattomia muutoksia',
+      },
       tableRows: {
         id: 'ID',
         title: 'Otsikko',
         version: 'Versio',
         modified: 'Muokattu',
         created: 'Luotu',
+        state: 'Tila',
         actions: 'Toiminnot',
         dateFormat: {
           moments: 'Muutama hetki sitten',
@@ -408,10 +424,12 @@ const finnish = {
       latestVersion: 'Uusin',
       deprecated: 'Vanhentunut',
       editButton: 'Muokkaa',
+      editDraftButton: 'Muokkaa luonnosta',
       deleteButton: 'Poista',
       confirmDelete:
         'Oletko varma, että haluat poistaa aineiston? Aineiston poiston jälkeen se ei enää näy Qvaimessa eikä Etsimen haku löydä sitä. Aineiston laskeutumissivua ei poisteta.',
       goToEtsin: 'Katso Etsimessä',
+      goToEtsinDraft: 'Esikatsele Etsimessä',
       openNewVersion: 'Avaa uusi versio',
       noDatasets: 'Sinulla ei ole olemassa olevia aineistoja',
       reload: 'Lataa uudelleen',
@@ -717,6 +735,10 @@ const finnish = {
       infoTitle: 'Tiedostot info',
       infoText: 'Lisää texti',
       deletedLabel: 'Poistettu',
+      error: {
+        title: 'Virhe ladattaessa tiedostoja',
+        retry: 'Yritä uudelleen',
+      },
       dataCatalog: {
         label: 'Tiedoston lähde',
         infoText:
@@ -875,11 +897,15 @@ const finnish = {
       },
       selected: {
         title: 'Valitut tiedostot',
+        readonlyTitle: 'Valitut tiedostot projektista %(project)s',
         none: 'Tiedostoja tai hakemistoja ei ole vielä valittu.',
-        newTag: 'Uusi',
+        newTag: 'Lisätään',
+        removeTag: 'Poistetaan',
+        hideRemoved: 'Piilota poistettavat',
         buttons: {
           edit: 'Muokkaa %(name)s',
           remove: 'Poista %(name)s',
+          undoRemove: 'Peru %(name)s poisto',
           refresh: 'Päivitä %(name)s',
           open: 'Avaa %(name)s',
           close: 'Sulje %(name)s',
@@ -1039,20 +1065,20 @@ const finnish = {
           periodOfTimeInput: {
             label: 'Ajanjakso',
             startPlaceholder: 'Alkaa',
-            endPlaceholder: 'Päättyy'
+            endPlaceholder: 'Päättyy',
           },
           locationInput: {
             label: 'Alueelliset tiedot',
             modal: {
               addButton: 'Lisää alueellinen tieto',
-            }
-          }
+            },
+          },
         },
       },
     },
     temporalAndSpatial: {
-      title: 'Ajallinen- ja maantieteellinen kattavuus',
-      tooltip: 'Ajallinen- ja maantieteellinen kattavuus info',
+      title: 'Ajallinen ja maantieteellinen kattavuus',
+      tooltip: 'Ajallinen ja maantieteellinen kattavuus info',
       tooltipContent: {
         spatial: {
           title: 'Maantieteellinen kattavuus',
@@ -1078,10 +1104,9 @@ const finnish = {
             edit: 'Muokkaa maantieteellistä kattavuutta',
           },
           buttons: {
-            save: 'tallenna',
-            cancel: 'peruuta',
             addGeometry: 'Lisää geometria',
-            removeGeometry: 'Poista',
+            save: 'Tallenna',
+            cancel: 'Peruuta',
           },
           nameInput: {
             label: 'Nimi',
@@ -1089,7 +1114,7 @@ const finnish = {
           },
           altitudeInput: {
             label: 'Korkeus',
-            placeholder: 'Alueen korkeus ilmoitettuna WGS84 -standardin mukaan',
+            placeholder: 'Alueen korkeus ilmoitettuna WGS84 -referenssin mukaan',
           },
           addressInput: {
             label: 'Osoite',
@@ -1097,11 +1122,11 @@ const finnish = {
           },
           geometryInput: {
             label: 'Geometria',
-            placeholder: 'Geometria käyttäen WGS84 -standardin mukaista WKT formattia',
+            placeholder: 'Geometria WKT-muodossa WGS84 -referenssin mukaan',
           },
           locationInput: {
             label: 'Paikka',
-            placeholder: 'Paikka',
+            placeholder: 'Etsi paikkoja hakusanalla',
           },
         },
       },

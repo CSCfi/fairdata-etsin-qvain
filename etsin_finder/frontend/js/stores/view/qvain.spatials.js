@@ -7,7 +7,7 @@ const Spatial = (
   altitude = 0,
   address = '',
   geometry = [],
-  location = { url: '' }
+  location = undefined
 ) => ({
   uiid,
   name,
@@ -55,13 +55,13 @@ class Spatials {
       this.Qvain.spatials[indexOfSpatial] = {
         ...this.spatialInEdit,
         geometry: [...this.spatialInEdit.geometry],
-        location: { ...this.spatialInEdit.location },
+        location: this.spatialInEdit.location ? { ...this.spatialInEdit.location } : undefined,
       }
     } else {
       this.Qvain.spatials.push({
         ...this.spatialInEdit,
         geometry: [...this.spatialInEdit.geometry],
-        location: { ...this.spatialInEdit.location },
+        location: this.spatialInEdit.location ? { ...this.spatialInEdit.location } : undefined,
       })
     }
   }
@@ -83,7 +83,7 @@ class Spatials {
     this.spatialInEdit = {
       ...spatial,
       geometry: [...spatial.geometry.map(geo => ({ ...geo }))],
-      location: { ...spatial.location },
+      location: spatial.location ? { ...spatial.location } : undefined,
     }
   }
 
@@ -93,7 +93,9 @@ class Spatials {
       alt: spatial.altitude,
       full_address: spatial.address,
       as_wkt: spatial.geometry.map(geo => geo.value),
-      place_uri: { identifier: spatial.location.url },
+      place_uri: spatial.location
+        ? { identifier: spatial.location.url }
+        : { identifier: undefined },
     }))
 }
 
@@ -107,8 +109,10 @@ export const SpatialModel = spatialData => ({
   name: spatialData.geographic_name,
   altitude: spatialData.alt,
   address: spatialData.full_address,
-  geometry: spatialData.as_wkt.map(geo => ({ value: geo, uiid: uuid() })),
-  location: Location(spatialData.place_uri.pref_label, spatialData.place_uri.identifier),
+  geometry: spatialData.as_wkt ? spatialData.as_wkt.map(geo => ({ value: geo, uiid: uuid() })) : [],
+  location: spatialData.place_uri
+    ? Location(spatialData.place_uri.pref_label, spatialData.place_uri.identifier)
+    : undefined,
 })
 
 export default Spatials

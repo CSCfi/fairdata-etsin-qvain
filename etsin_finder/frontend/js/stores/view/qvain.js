@@ -230,8 +230,7 @@ class Qvain {
 
   @action
   setLicenseName = name => {
-    this.license.name = name
-    this.changed = true
+    this.license.name = name // only affects license display, should not trigger this.changed
   }
 
   @action
@@ -297,11 +296,10 @@ class Qvain {
 
   // FILE PICKER STATE MANAGEMENT
 
-  @observable legacyFilePicker =
-    process.env.NODE_ENV === 'production' || localStorage.getItem('new_filepicker') !== '1'
+  @observable metaxApiV2 = process.env.NODE_ENV !== 'production' && localStorage.getItem('metax_api_v2') === '1'
 
-  @action setLegacyFilePicker = value => {
-    this.legacyFilePicker = value
+  @action setMetaxApiV2 = (value) => {
+    this.metaxApiV2 = value
   }
 
   @observable idaPickerOpen = false
@@ -628,7 +626,7 @@ class Qvain {
 
   // Dataset - METAX dataset JSON
   // perform schema transformation METAX JSON -> etsin backend / internal schema
-  @action editDataset = dataset => {
+  @action editDataset = async (dataset) => {
     this.original = { ...dataset }
     this.deprecated = dataset.deprecated
     const researchDataset = dataset.research_dataset
@@ -706,12 +704,12 @@ class Qvain {
       } else {
         this.license = l
           ? License(
-              {
-                en: 'Other (URL)',
-                fi: 'Muu (URL)',
-              },
-              'other'
-            )
+            {
+              en: 'Other (URL)',
+              fi: 'Muu (URL)',
+            },
+            'other'
+          )
           : License(undefined, LicenseUrls.CCBY4)
         this.otherLicenseUrl = l.license
       }
@@ -765,33 +763,31 @@ class Qvain {
       }
       this.existingDirectories = dsDirectories
         ? dsDirectories.map(d => {
-            // Removed directories don't have details
-            if (!d.details) {
-              d.details = {
-                directory_name: d.title,
-                file_path: '',
-                removed: true,
-              }
+          // Removed directories don't have details
+          if (!d.details) {
+            d.details = {
+              directory_name: d.title,
+              file_path: '',
+              removed: true,
             }
-            return DatasetDirectory(d)
-          })
+          }
+          return DatasetDirectory(d)
+        })
         : []
       this.existingFiles = dsFiles
         ? dsFiles.map(f => {
-            // Removed files don't have details
-            if (!f.details) {
-              f.details = {
-                file_name: f.title,
-                file_path: '',
-                removed: true,
-              }
+          // Removed files don't have details
+          if (!f.details) {
+            f.details = {
+              file_name: f.title,
+              file_path: '',
+              removed: true,
             }
-            return DatasetFile(f, undefined, true)
-          })
+          }
+          return DatasetFile(f, undefined, true)
+        })
         : []
     }
-
-    this.Files.editDataset(dataset)
 
     // External resources
     const remoteResources = researchDataset.remote_resources
@@ -805,15 +801,23 @@ class Qvain {
           r.download_url ? r.download_url.identifier : undefined,
           r.use_category
             ? {
-                label: r.use_category.pref_label.en,
-                value: r.use_category.identifier,
-              }
+              label: r.use_category.pref_label.en,
+              value: r.use_category.identifier,
+            }
             : undefined
         )
       )
       this.extResFormOpen = true
     }
+
     this.changed = false
+    if (this.metaxApiV2) {
+      await this.Files.editDataset(dataset)
+    }
+  }
+
+  @action setOriginal = (newOriginal) => {
+    this.original = newOriginal
   }
 
   // EXTERNAL FILES
@@ -852,7 +856,20 @@ class Qvain {
 
   @computed
   get canSelectFiles() {
-    return !this.isPas && !this.deprecated && !this.readonly
+    if (this.readonly || this.isPas || this.deprecated) {
+      return false
+    }
+
+    if (this.metaxApiV2) {
+      if (this.hasBeenPublished) {
+        if (this.Files && !this.Files.projectLocked) {
+          return true // for published noncumulative datasets, allow adding files only if none exist yet
+        }
+        return this.isCumulative
+      }
+    }
+
+    return true
   }
 
   @computed
@@ -863,6 +880,11 @@ class Qvain {
   @computed
   get isCumulative() {
     return this.cumulativeState === CumulativeStates.YES
+  }
+
+  @computed
+  get hasBeenPublished() {
+    return !!(this.original && (this.original.state === 'published' || this.original.draft_of))
   }
 
   @computed

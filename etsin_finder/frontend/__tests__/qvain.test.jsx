@@ -1,6 +1,8 @@
-import React from 'react';
+import React from 'react'
 import { shallow } from 'enzyme'
+import translate from 'counterpart'
 
+import '../locale/translations'
 import Qvain from '../js/components/qvain'
 import Description from '../js/components/qvain/description'
 import DescriptionField from '../js/components/qvain/description/descriptionField'
@@ -13,24 +15,23 @@ import { AccessType } from '../js/components/qvain/licenses/accessType'
 import RestrictionGrounds from '../js/components/qvain/licenses/resctrictionGrounds'
 import EmbargoExpires from '../js/components/qvain/licenses/embargoExpires'
 import { AccessTypeURLs, LicenseUrls } from '../js/components/qvain/utils/constants'
+import { qvainFormSchema } from '../js/components/qvain/utils/formValidation'
 import { ExternalFilesBase } from '../js/components/qvain/files/external/externalFiles'
-import {
-  ButtonGroup
-} from '../js/components/qvain/general/buttons'
+import { ButtonGroup } from '../js/components/qvain/general/buttons'
 import { SlidingContent } from '../js/components/qvain/general/card'
 import QvainStore, {
   ExternalResource,
   AccessType as AccessTypeConstructor,
-  License as LicenseConstructor
+  License as LicenseConstructor,
 } from '../js/stores/view/qvain'
 import LocaleStore from '../js/stores/view/language'
 import TablePasState from '../js/components/qvain/datasets/tablePasState'
 
 const getStores = () => {
-  QvainStore.setLegacyFilePicker(false)
+  QvainStore.setMetaxApiV2(true)
   return {
     Qvain: QvainStore,
-    Locale: LocaleStore
+    Locale: LocaleStore,
   }
 }
 
@@ -70,8 +71,8 @@ describe('Qvain', () => {
       ...stores,
       Qvain: {
         ...stores.Qvain,
-        original: { identifier: identifierMatch.params.identifier }
-      }
+        original: { identifier: identifierMatch.params.identifier },
+      },
     }
     shallow(<FakeQvain Stores={datasetOpenedStore} match={identifierMatch} history={{}} />)
     expect(callCount).toBe(0)
@@ -83,8 +84,8 @@ describe('Qvain', () => {
       ...stores,
       Qvain: {
         ...stores.Qvain,
-        original: { identifier: anotherMatch.params.identifier }
-      }
+        original: { identifier: anotherMatch.params.identifier },
+      },
     }
     shallow(<FakeQvain Stores={anotherDatasetOpenedStore} match={identifierMatch} history={{}} />)
     expect(callCount).toBe(1)
@@ -145,7 +146,7 @@ describe('Qvain.RightsAndLicenses', () => {
   })
   it('should render other license URL field', () => {
     const stores = getStores()
-    stores.Qvain.setLicense(LicenseConstructor({ en: 'Other (URL)', fi: 'Muu (URL)', }, 'other'))
+    stores.Qvain.setLicense(LicenseConstructor({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'other'))
     const component = shallow(<License Stores={stores} />)
     expect(component.find('#otherLicenseURL').length).toBe(1)
   })
@@ -196,13 +197,90 @@ describe('Qvain.ExternalFiles', () => {
     const stores = getStores()
     const externalFiles = shallow(<ExternalFilesBase Stores={stores} />)
     expect(externalFiles.find(ButtonGroup).length).toBe(0)
-    stores.Qvain.saveExternalResource(ExternalResource(
-      1,
-      'External Resource Title',
-      'http://en.wikipedia.org',
-      'https://en.wikipedia.org/wiki/Portal:Arts'
-    ))
+    stores.Qvain.saveExternalResource(
+      ExternalResource(
+        1,
+        'External Resource Title',
+        'http://en.wikipedia.org',
+        'https://en.wikipedia.org/wiki/Portal:Arts'
+      )
+    )
     externalFiles.update()
     expect(externalFiles.find(ButtonGroup).length).toBe(1)
+  })
+})
+
+describe('Qvain validation', () => {
+  let actors
+  let dataset
+  beforeEach(() => {
+    actors = [
+      {
+        type: 'organization',
+        roles: ['creator'],
+        organizations: [{
+          name: {
+            en: 'Test organization'
+          }
+        }]
+      },
+    ]
+    dataset = {
+      title: { en: 'title' },
+      description: { en: 'description' },
+      keywords: ['keyword'],
+      license: {
+        name: { en: 'Creative Commons Attribution 4.0 International (CC BY 4.0)' },
+        identifier: 'http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0',
+      },
+      dataCatalog: 'urn:nbn:fi:att:data-catalog-ida',
+      actors,
+      accessType: {
+        url: "http://uri.suomi.fi/codelist/fairdata/access_type/code/open"
+      }
+    }
+  })
+
+  it('should validate dataset', async () => {
+    try {
+      expect(await qvainFormSchema.validate(dataset, { abortEarly: false }))
+    } catch (e) {
+      if (e.errors) {
+        fail(e.errors)
+      } else {
+        fail(e)
+      }
+    }
+  })
+
+  it('should fail when required fields for DOI are missing', async () => {
+    dataset.useDoi = true // missing publisher role and issuedDate
+
+    try {
+      expect(await qvainFormSchema.validate(dataset, { abortEarly: false }))
+      fail('should have thrown error')
+    } catch (e) {
+      expect(e.errors.length).toBe(2)
+      expect(e.errors).toEqual(expect.arrayContaining([
+        translate('qvain.validationMessages.issuedDate.requiredIfUseDoi'),
+        translate('qvain.validationMessages.actors.requiredActors.publisherIfDOI'),
+      ]))
+    }
+  })
+
+  it('should validate dataset with DOI enabled', async () => {
+    dataset.useDoi = true
+    dataset.issuedDate = '2020-06-01'
+    actors[0].roles.push('publisher')
+
+    try {
+      expect(await qvainFormSchema.validate(dataset, { abortEarly: false }))
+    } catch (e) {
+      if (e.errors) {
+        fail(e.errors)
+      } else {
+        fail(e)
+      }
+    }
   })
 })
