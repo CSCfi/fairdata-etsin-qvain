@@ -13,6 +13,10 @@ const finnish = {
   dataset: {
     access_login: 'Käyttöluvan hakeminen vaatii sisään kirjautumisen',
     access_unavailable: 'Ei käytettävissä',
+    access_denied: 'Hakemus evätty',
+    access_draft: 'Hakemus luonnos vaiheessa',
+    access_request_sent: 'Käyttölupaa haettu',
+    access_granted: 'Käyttölupa myönnetty',
     access_rights_description: {
       none: '',
       open: 'Kuka tahansa voi ladata datan.',
@@ -23,10 +27,6 @@ const finnish = {
       restricted: 'Data ei ladattavissa.',
     },
     access_permission: 'Hae käyttölupaa',
-    access_denied: 'Hakemus evätty',
-    access_draft: 'Hakemus luonnos vaiheessa',
-    access_request_sent: 'Käyttölupaa haettu',
-    access_granted: 'Käyttölupa myönnetty',
     access_locked: 'Rajattu käyttöoikeus',
     access_open: 'Avoin',
     access_rights: 'Saatavuus',
@@ -447,7 +447,7 @@ const finnish = {
         instructions: 'Vain yksi kielivalinta on pakollinen',
       },
       issuedDate: {
-        title: 'Jukaisupäivämäärä',
+        title: 'Julkaisupäivämäärä',
         infoText: 'Lähteen muodollinen julkaisupäivämäärä. Ei vaikuta aineston näkyvyyteen.',
         instructions: '',
         placeholder: 'Päivämäärä',
@@ -726,7 +726,7 @@ const finnish = {
       deletedLabel: 'Poistettu',
       error: {
         title: 'Virhe ladattaessa tiedostoja',
-        retry: 'Yritä uudelleen'
+        retry: 'Yritä uudelleen',
       },
       dataCatalog: {
         label: 'Tiedoston lähde',
@@ -991,22 +991,78 @@ const finnish = {
       tooltipContent: {
         reference: {
           title: 'Viittaukset',
-          paragraph: 'Viittaukset muihin aineistoihin, julkaisuihin tai muihin resursseihin, jotka auttavat ymmärtämään ja käyttämään tätä tutkimusaineistoa. '
+          paragraph:
+            'Viittaukset muihin aineistoihin, julkaisuihin tai muihin resursseihin, jotka auttavat ymmärtämään ja käyttämään tätä tutkimusaineistoa. ',
         },
         provience: {
           title: 'Historiatiedot',
-          paragraph: 'Tiedot aineiston historiasta eli provenienssista.'
+          paragraph: 'Tiedot aineiston historiasta eli provenienssista.',
         },
         infrastructure: {
           title: 'Infrastruktuuri',
-          paragraph: 'Palvelut tai työkalut, joita aineiston tuottamisessa on hyödynnetty.'
-        }
+          paragraph: 'Palvelut tai työkalut, joita aineiston tuottamisessa on hyödynnetty.',
+        },
       },
       infrastructure: {
-        addButton: 'Lisää rakenne',
-        title: 'Lisää rakenne',
+        addButton: 'Lisää infrastruktuuri',
+        title: 'Infrastruktuuri',
         description:
           'Voit lisätä palveluita tai rakenteita joita on käytetty aineiston laatimiseen.',
+      },
+    },
+    temporalAndSpatial: {
+      title: 'Ajallinen ja maantieteellinen kattavuus',
+      tooltip: 'Ajallinen ja maantieteellinen kattavuus info',
+      tooltipContent: {
+        spatial: {
+          title: 'Maantieteellinen kattavuus',
+          paragraph: 'Alue jonka aineisto kattaa. Esimerkiksi paikat, joissa on tehty havaintoja. ',
+        },
+        temporal: {
+          title: 'Ajallinen kattavuus',
+          paragraph:
+            'Ajanjakso, minkä aineisto kattaa, esimerkiksi aika jolloin on tehty havaintoja.',
+        },
+      },
+      spatial: {
+        title: 'Maantieteellinen kattavuus',
+        description: 'Alue jonka aineisto kattaa. Esimerkiksi paikat, joissa on tehty havaintoja. ',
+        addButton: 'Lisää maantieteellinen kattavuus',
+        error: {
+          nameRequired: 'Nimi on pakollinen kenttä.',
+          altitudeNan: 'Korkeus täytyy olla numero',
+        },
+        modal: {
+          title: {
+            add: 'Lisää maantieteellinen kattavuus',
+            edit: 'Muokkaa maantieteellistä kattavuutta',
+          },
+          buttons: {
+            addGeometry: 'Lisää geometria',
+            save: 'Tallenna',
+            cancel: 'Peruuta',
+          },
+          nameInput: {
+            label: 'Nimi',
+            placeholder: 'Alueen nimi',
+          },
+          altitudeInput: {
+            label: 'Korkeus',
+            placeholder: 'Alueen korkeus ilmoitettuna WGS84 -referenssin mukaan',
+          },
+          addressInput: {
+            label: 'Osoite',
+            placeholder: 'Koko osoite',
+          },
+          geometryInput: {
+            label: 'Geometria',
+            placeholder: 'Geometria WKT-muodossa WGS84 -referenssin mukaan',
+          },
+          locationInput: {
+            label: 'Paikka',
+            placeholder: 'Etsi paikkoja hakusanalla',
+          },
+        },
       },
     },
   },
