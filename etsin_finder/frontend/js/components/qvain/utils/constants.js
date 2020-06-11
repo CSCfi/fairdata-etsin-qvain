@@ -6,6 +6,8 @@ export const AccessTypeURLs = {
   RESTRICTED: 'http://uri.suomi.fi/codelist/fairdata/access_type/code/restricted',
 }
 
+export const METAX_FAIRDATA_ROOT_URL = 'https://metax.fairdata.fi'
+
 export const LicenseUrls = {
   CCBY4: 'http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0',
 }
@@ -42,7 +44,7 @@ export const UseCategoryURLs = {
 export const DataCatalogIdentifiers = {
   IDA: 'urn:nbn:fi:att:data-catalog-ida',
   ATT: 'urn:nbn:fi:att:data-catalog-att',
-  PAS: 'urn:nbn:fi:att:data-catalog-pas'
+  PAS: 'urn:nbn:fi:att:data-catalog-pas',
 }
 
 export const CumulativeStates = {
@@ -65,7 +67,7 @@ export const Role = {
 }
 
 const PreservationStateColor = {
-  DEFAULT: 'primary'
+  DEFAULT: 'primary',
   // WAIT: 'primary',
   // FAIL: 'error',
   // SUCCESS: 'success'
@@ -76,90 +78,90 @@ export const PreservationStates = {
     name: 'Waits for validation',
     type: 'wait',
     who: 'other',
-    color: PreservationStateColor.DEFAULT
+    color: PreservationStateColor.DEFAULT,
   },
   10: {
     name: 'Proposed for digital preservation',
     type: 'wait',
     who: 'system',
-    color: PreservationStateColor.DEFAULT
+    color: PreservationStateColor.DEFAULT,
   },
   20: {
     name: 'Technical metadata generated',
     type: 'wait',
     who: 'system',
-    color: PreservationStateColor.DEFAULT
+    color: PreservationStateColor.DEFAULT,
   },
   30: {
     name: 'Technical metadata generation failed',
     type: 'fail',
     who: 'system',
-    color: PreservationStateColor.DEFAULT
+    color: PreservationStateColor.DEFAULT,
   },
   40: {
     name: 'Invalid metadata',
     type: 'wait',
     who: 'user',
-    color: PreservationStateColor.DEFAULT
+    color: PreservationStateColor.DEFAULT,
   },
   50: {
     name: 'Metadata validation failed',
     type: 'fail',
     who: 'user',
-    color: PreservationStateColor.DEFAULT
+    color: PreservationStateColor.DEFAULT,
   },
   60: {
     name: 'Validated metadata updated',
     type: 'wait',
     who: 'system',
-    color: PreservationStateColor.DEFAULT
+    color: PreservationStateColor.DEFAULT,
   },
   70: {
     name: 'Valid metadata',
     type: 'wait',
     who: 'other',
-    color: PreservationStateColor.DEFAULT
+    color: PreservationStateColor.DEFAULT,
   },
   80: {
     name: 'Accepted to digital preservation',
     type: 'wait',
     who: 'system',
-    color: PreservationStateColor.DEFAULT
+    color: PreservationStateColor.DEFAULT,
   },
   90: {
     name: 'In packaging service',
     type: 'wait',
     who: 'system',
-    color: PreservationStateColor.DEFAULT
+    color: PreservationStateColor.DEFAULT,
   },
   100: {
     name: 'Packaging failed',
     type: 'fail',
     who: 'system',
-    color: PreservationStateColor.DEFAULT
+    color: PreservationStateColor.DEFAULT,
   },
   110: {
     name: 'SIP sent to ingestion in digital preservation service',
     type: 'wait',
     who: 'system',
-    color: PreservationStateColor.DEFAULT
+    color: PreservationStateColor.DEFAULT,
   },
   120: {
     name: 'In digital preservation',
     type: 'success',
     who: 'system',
-    color: PreservationStateColor.DEFAULT
+    color: PreservationStateColor.DEFAULT,
   },
   130: {
     name: 'Rejected in digital preservation service',
     type: 'fail',
     who: 'system',
-    color: PreservationStateColor.DEFAULT
+    color: PreservationStateColor.DEFAULT,
   },
   140: {
     name: 'In dissemination',
     type: 'success',
     who: 'system',
-    color: PreservationStateColor.DEFAULT
-  }
+    color: PreservationStateColor.DEFAULT,
+  },
 }

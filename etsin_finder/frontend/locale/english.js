@@ -163,6 +163,7 @@ const english = {
     loading: 'Loading dataset',
     harvested: 'Harvested',
     cumulative: 'Cumulative',
+    go_to_original: 'Go to original location',
     permanent_link: 'Permanent link to this page',
     project: {
       project: 'Project',
@@ -178,7 +179,6 @@ const english = {
       homepageDescr: 'Description',
     },
     publisher: 'Publisher',
-    go_to_original: 'Go to original location',
     rights_holder: 'Rights Holder',
     spatial_coverage: 'Spatial Coverage',
     temporal_coverage: 'Temporal Coverage',
@@ -734,7 +734,7 @@ const english = {
       deletedLabel: 'Deleted',
       error: {
         title: 'Error loading files',
-        retry: 'Retry'
+        retry: 'Retry',
       },
       dataCatalog: {
         label: 'File origin',
@@ -997,21 +997,76 @@ const english = {
       tooltipContent: {
         reference: {
           title: 'Reference',
-          paragraph: 'Refer to related datasets, publications, and other resources that are relevant in understanding this dataset. '
+          paragraph:
+            'Refer to related datasets, publications, and other resources that are relevant in understanding this dataset. ',
         },
         provience: {
           title: 'Provience',
-          paragraph: 'Information about the provenience of the data.'
+          paragraph: 'Information about the provenience of the data.',
         },
         infrastructure: {
           title: 'Infrastructure',
-          paragraph: 'Services or tools that are used to produce the dataset.'
-        }
+          paragraph: 'Services or tools that are used to produce the dataset.',
+        },
       },
       infrastructure: {
         addButton: 'Add Infrastructure',
         title: 'Add infrastructure',
         description: 'Add services and tools that are used to produce the dataset.',
+      },
+    },
+    temporalAndSpatial: {
+      title: 'Temporal and Spatial Coverage',
+      tooltip: 'Temporal and Spatial Coverage info',
+      tooltipContent: {
+        spatial: {
+          title: 'Spatial coverage',
+          paragraph: 'Area covered by the dataset, e.g. places of observations.  ',
+        },
+        temporal: {
+          title: 'Temporal coverage',
+          paragraph: 'Time span that is covered by the dataset, e.g. period of observations. ',
+        },
+      },
+      spatial: {
+        title: 'Spatial coverage',
+        description: 'Area covered by the dataset, e.g. places of observations.',
+        addButton: 'Add Spatial coverage',
+        error: {
+          nameRequired: 'Name is required',
+          altitudeNan: 'Altitude must be a number',
+        },
+        modal: {
+          title: {
+            add: 'Add Spatial coverage',
+            edit: 'Edit Spatial coverage',
+          },
+          buttons: {
+            addGeometry: 'Add Geometry',
+            save: 'Save',
+            cancel: 'Cancel',
+          },
+          nameInput: {
+            label: 'Name',
+            placeholder: 'Name',
+          },
+          altitudeInput: {
+            label: 'Altitude',
+            placeholder: 'The altitude of a spatial coverage (meters from WGS84 reference)',
+          },
+          addressInput: {
+            label: 'Address',
+            placeholder: 'Full address',
+          },
+          geometryInput: {
+            label: 'Geometry',
+            placeholder: 'Geometry using WKT format in WGS84 coordinate system',
+          },
+          locationInput: {
+            label: 'Location',
+            placeholder: 'Type to search available options',
+          },
+        },
       },
     },
   },

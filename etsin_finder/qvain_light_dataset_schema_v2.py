@@ -5,10 +5,11 @@ import json
 from etsin_finder.qvain_light_dataset_schema import (
     PersonValidationSchema,
     OrganizationValidationSchema,
-    ActorValidationSchema
+    ActorValidationSchema,
+    DatasetValidationSchema as DatasetValidationSchemaV1
 )
 
-class DatasetValidationSchema(Schema):
+class DatasetValidationSchema(DatasetValidationSchemaV1):
     """
     Validation schema for the whole dataset.
 
@@ -16,46 +17,10 @@ class DatasetValidationSchema(Schema):
         Schema {library} -- Marshmallows Schema library.
     """
 
-    original = fields.Dict()
-    title = fields.Dict(
-        required=True,
-        validate=lambda x: len(x['en']) + len(x['fi']) > 0
-    )
-    description = fields.Dict(
-        required=True,
-        validate=lambda x: len(x['en']) + len(x['fi']) > 0
-    )
-    issuedDate = fields.Str()
-    identifiers = fields.List(fields.Str())
-    fieldOfScience = fields.List(
-        fields.Str(),
-        required=False
-    )
-    keywords = fields.List(
-        fields.Str(),
-        required=True,
-        validate=lambda list: len(list) > 0
-    )
-    actors = fields.List(fields.Nested(
-        ActorValidationSchema),
-        required=True,
-        validate=lambda list: len(list) > 0
-    )
-    accessType = fields.Dict(
-        required=True
-    )
-    infrastructure = fields.List(
-        fields.Dict(),
-        required=False
-    )
-    embargoDate = fields.Str()
-    restrictionGrounds = fields.Str()
-    license = fields.Dict()
-    otherLicenseUrl = fields.Str()
-    dataCatalog = fields.Str()
-    cumulativeState = fields.Int(OneOf([0, 1, 2]))
-    remote_resources = fields.List(fields.Dict())
-    useDoi = fields.Boolean()
+    class Meta:
+        """Meta options for validation."""
+
+        exclude = ("files", "directories")
 
 
 class FileActionSchema(Schema):
