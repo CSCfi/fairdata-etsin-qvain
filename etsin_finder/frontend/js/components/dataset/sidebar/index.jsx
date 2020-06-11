@@ -86,13 +86,27 @@ class Sidebar extends Component {
     return null
   }
 
-  keywordsAndTheme() {
+  keywords() {
     const labels = []
-    if (this.state.theme) {
-      labels.push(...this.state.theme.map((theme) => checkDataLang(theme.pref_label)))
-    }
     if (this.state.keyword) labels.push(...this.state.keyword)
     return labels.join(', ')
+  }
+
+  subjectHeading() {
+    const labels = []
+    if (this.state.theme) {
+    labels.push(...this.state.theme.map((theme) => (
+      <SubjectHeaderLink
+        href={theme.identifier}
+        target="_blank"
+        rel="noopener noreferrer"
+        title={theme.identifier}
+      >
+        {checkDataLang(theme.pref_label)}
+      </SubjectHeaderLink>
+      )))
+    }
+    return labels
   }
 
   render() {
@@ -156,7 +170,13 @@ class Sidebar extends Component {
             {/* KEYWORDS */}
 
             <SidebarItem component="dd" trans="dataset.keywords" hideEmpty="true">
-              {this.keywordsAndTheme()}
+              {this.keywords()}
+            </SidebarItem>
+
+            {/* SUBJECT HEADING */}
+
+            <SidebarItem component="dd" trans="dataset.subjectHeading" hideEmpty="true">
+              {this.subjectHeading()}
             </SidebarItem>
 
             {/* LANGUAGE */}
@@ -356,6 +376,10 @@ const HorizontalLine = styled.hr`
   border-style: solid;
   border-color: ${(props) => props.theme.color.lightgray};
   margin: 20px 0;
+`
+
+const SubjectHeaderLink = styled.a`
+  display: block;
 `
 
 const ListItem = styled.dd``
