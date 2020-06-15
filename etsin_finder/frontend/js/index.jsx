@@ -10,7 +10,7 @@
    */
 }
 
-require('@babel/polyfill')
+import '@babel/polyfill'
 
 import React from 'react'
 import ReactDOM from 'react-dom'
@@ -26,8 +26,14 @@ Promise.config({
 })
 
 if (process.env.NODE_ENV === 'development') {
+  // REACT-AXE: Disabled for now, since it outputs a lot of error messages to the console
+
   // eslint-disable-next-line global-require
-  const axe = require('react-axe')
-  axe(React, ReactDOM, 1000)
+  // const axe = require('react-axe')
+  // axe(React, ReactDOM, 1000)
 }
 ReactDOM.render(<App />, document.getElementById('root'))
+
+if (module.hot) {
+  module.hot.accept()
+}

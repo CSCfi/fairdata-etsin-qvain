@@ -9,11 +9,14 @@ import axios from 'axios'
 import { observable, action } from 'mobx'
 
 import Modal from '../../../general/modal'
+import ConfirmClose from '../../general/confirmClose'
 import getReferenceData from '../../utils/getReferenceData'
 import { fileMetadataSchema } from '../../utils/formValidation'
+import { getResponseError } from '../../utils/responseError'
 import { Label, HelpField, Input } from '../../general/form'
 import { DangerButton, TableButton } from '../../general/buttons'
 import Response from '../response'
+import { getPASMeta } from '../../../../stores/view/qvain.files.items'
 
 import { getOptions, getDefaultOptions, makeOption, findOption } from './options'
 import { MetadataSelect, selectStylesNarrow, labelStyle } from './select'
@@ -30,6 +33,8 @@ const patchFileCharacteristics = (identifier, data) => axios.patch(`/api/files/f
 class MetadataModal extends Component {
   @observable
   formatFetchStatus = 'loading'
+
+  promises = []
 
   static propTypes = {
     Stores: PropTypes.object.isRequired,
@@ -57,6 +62,10 @@ class MetadataModal extends Component {
   async componentDidMount() {
     this.initialize()
     await this.fetchformatVersions()
+  }
+
+  async componentWillUnmount() {
+    this.promises.forEach(promise => promise && promise.cancel && promise.cancel())
   }
 
   @action
@@ -190,7 +199,7 @@ class MetadataModal extends Component {
         loading: true
       })
 
-      const response = await patchFileCharacteristics(this.state.fileIdentifier, {
+      const patchPromise = patchFileCharacteristics(this.state.fileIdentifier, {
         file_format: this.state.fileFormat,
         format_version: this.state.formatVersion,
         encoding: this.state.encoding,
@@ -199,33 +208,23 @@ class MetadataModal extends Component {
         csv_record_separator: this.state.csvRecordSeparator,
         csv_quoting_char: this.state.csvQuotingChar
       })
+      this.promises.push(patchPromise)
+      const response = await patchPromise
 
       // Update file hierarchy with response data, close modal
-      this.props.Stores.Qvain.updateFileMetadata(response.data)
+      if (this.props.Stores.Qvain.metaxApiV2) {
+        this.props.Stores.Qvain.Files.applyPASMeta(getPASMeta(response.data))
+      } else {
+        this.props.Stores.Qvain.updateFileMetadata(response.data)
+      }
       this.setState({
         fileChanged: false
       })
       this.close()
     } catch (err) {
-      let error = ''
-      if (err.response && err.response.data && err.response.data.detail) {
-        error = err.response.data.detail
-      } else if (err.response && err.response.data) {
-        error = err.response.data
-      } else if (err.response && err.response.errorMessage) {
-        error = err.response.errorMessage
-      } else {
-        error = err.message
-      }
-      if (error.file_characteristics) {
-        error = error.file_characteristics
-      }
-      if (typeof error === 'object') {
-        error = JSON.stringify(error)
-      }
       this.setState({
         response: {
-          error
+          error: getResponseError(err)
         }
       })
     } finally {
@@ -290,20 +289,23 @@ class MetadataModal extends Component {
   }
 
   initialize() {
-    const file = this.props.Stores.Qvain.metadataModalFile || {}
+    const { Qvain } = this.props.Stores
+    const file = Qvain.metadataModalFile || {}
+    const pasObj = (!Qvain.metaxApiV2 ? file : file.pasMeta) || {}
+
     const newState = {
       response: null,
       fileChanged: false,
       confirmClose: false,
       criticalError: false,
       fileIdentifier: file.identifier,
-      fileFormat: file.fileFormat,
-      formatVersion: file.formatVersion,
-      encoding: file.encoding,
-      csvDelimiter: file.csvDelimiter,
-      csvRecordSeparator: file.csvRecordSeparator,
-      csvQuotingChar: file.csvQuotingChar,
-      csvHasHeader: file.csvHasHeader
+      fileFormat: pasObj.fileFormat,
+      formatVersion: pasObj.formatVersion,
+      encoding: pasObj.encoding,
+      csvDelimiter: pasObj.csvDelimiter,
+      csvRecordSeparator: pasObj.csvRecordSeparator,
+      csvQuotingChar: pasObj.csvQuotingChar,
+      csvHasHeader: pasObj.csvHasHeader
     }
 
     // Replace null/undefined metadata with defaults
@@ -319,7 +321,7 @@ class MetadataModal extends Component {
   }
 
   render() {
-    const { metadataModalFile } = this.props.Stores.Qvain
+    const { metadataModalFile, readonly } = this.props.Stores.Qvain
     const options = getOptions()
 
     return (
@@ -337,6 +339,7 @@ class MetadataModal extends Component {
           options={this.state.formatOptions}
           value={makeOption(this.state.fileFormat)}
           onChange={this.setFileFormat}
+          isDisabled={readonly}
           isLoading={this.state.formatVersionsMap.length === 0}
           field="fileFormat"
         />
@@ -346,6 +349,7 @@ class MetadataModal extends Component {
           options={this.getformatVersionOptions()}
           value={makeOption(this.state.formatVersion)}
           onChange={this.setFormatVersion}
+          isDisabled={readonly}
           isLoading={this.state.formatVersionsMap.length === 0}
           isSearchable={false}
           field="formatVersion"
@@ -355,6 +359,7 @@ class MetadataModal extends Component {
           inputId="pas_file_encoding"
           options={options.encoding}
           value={findOption(this.state.encoding, options.encoding)}
+          isDisabled={readonly}
           onChange={this.setEncoding}
           field="encoding"
         />
@@ -366,6 +371,7 @@ class MetadataModal extends Component {
             inputId="pas_csv_delimiter"
             options={options.delimiter}
             value={findOption(this.state.csvDelimiter, options.delimiter)}
+            isDisabled={readonly}
             onChange={this.setCsvDelimiter}
             styles={selectStylesNarrow}
             field="csvDelimiter"
@@ -375,6 +381,7 @@ class MetadataModal extends Component {
             inputId="pas_csv_record_separator"
             options={options.separator}
             value={findOption(this.state.csvRecordSeparator, options.separator)}
+            isDisabled={readonly}
             onChange={this.setCsvRecordSeparator}
             styles={selectStylesNarrow}
             field="csvRecordSeparator"
@@ -383,13 +390,14 @@ class MetadataModal extends Component {
           <Label
             htmlFor="pas_csv_quoting_char"
             style={labelStyle}
-          >{ translate('qvain.files.metadataModal.fields.csvQuotingChar') }
+          >{translate('qvain.files.metadataModal.fields.csvQuotingChar')}
             <div style={selectStylesNarrow.control()}>
               <Input
                 id="pas_csv_quoting_char"
                 placeholder={translate('qvain.files.metadataModal.placeholders.csvQuotingChar')}
                 type="text"
                 value={this.state.csvQuotingChar}
+                disabled={readonly}
                 onChange={this.handleChangeCsvQuotingChar}
               />
             </div>
@@ -399,6 +407,7 @@ class MetadataModal extends Component {
             inputId="pas_csv_has_header"
             options={options.hasHeader}
             value={findOption(this.state.csvHasHeader, options.hasHeader)}
+            isDisabled={readonly}
             onChange={this.setCsvHasHeader}
             styles={selectStylesNarrow}
             field="csvHasHeader"
@@ -408,29 +417,22 @@ class MetadataModal extends Component {
         <TableButton disabled={this.state.loading} onClick={this.requestClose}>
           <Translate content={'qvain.files.metadataModal.buttons.close'} />
         </TableButton>
-        <DangerButton disabled={this.state.loading} onClick={this.saveChanges}>
+        <DangerButton disabled={this.state.loading || readonly} onClick={this.saveChanges}>
           <Translate content={'qvain.files.metadataModal.buttons.save'} />
         </DangerButton>
 
-        { this.state.confirmClose && (
-          <ResponseOverlay>
-            <div style={{ width: '100%' }}>
-              <Translate content={'qvain.files.metadataModal.warning'} component="p" />
-              <AutoWidthTableButton disabled={this.state.loading} onClick={this.hideConfirmClose}>
-                <Translate content={'qvain.files.metadataModal.buttons.cancelClose'} />
-              </AutoWidthTableButton>
-              <DangerButton disabled={this.state.loading} onClick={this.close}>
-                <Translate content={'qvain.files.metadataModal.buttons.confirmClose'} />
-              </DangerButton>
-            </div>
-          </ResponseOverlay>
-        )}
+        <ConfirmClose
+          show={this.state.confirmClose}
+          hideConfirm={this.hideConfirmClose}
+          closeModal={this.close}
+          disabled={this.state.loading}
+        />
 
         {(this.state.loading || this.state.response) && (
           <ResponseOverlay>
             <div style={{ width: '100%' }}>
               <Response response={this.state.response} />
-              { !this.state.loading && (
+              {!this.state.loading && (
                 this.state.criticalError ? (
                   <AutoWidthTableButton onClick={this.close}>
                     <Translate content={'qvain.files.metadataModal.buttons.close'} />
@@ -439,7 +441,7 @@ class MetadataModal extends Component {
                   <AutoWidthTableButton onClick={this.clearError}>
                     <Translate content={'qvain.files.metadataModal.buttons.hideError'} />
                   </AutoWidthTableButton>
-                )
+                  )
               )}
             </div>
           </ResponseOverlay>
@@ -458,6 +460,7 @@ export const modalStyles = {
     right: '0',
     position: 'relative',
     minWidth: '32vw',
+    width: '30em',
     maxWidth: '30em',
     margin: '0.5em',
     border: 'none',

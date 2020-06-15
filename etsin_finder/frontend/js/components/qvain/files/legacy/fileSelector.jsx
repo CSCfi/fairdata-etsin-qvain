@@ -5,11 +5,11 @@ import { inject, observer } from 'mobx-react'
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFolder, faChevronRight, faChevronDown } from '@fortawesome/free-solid-svg-icons'
-import { Checkbox } from '../general/form'
+import { Checkbox } from '../../general/form'
 import {
   FileIcon,
   FilePickerFileButton
-} from '../general/buttons'
+} from '../../general/buttons'
 
 export class FileSelectorBase extends Component {
   static propTypes = {
@@ -32,7 +32,8 @@ export class FileSelectorBase extends Component {
   drawFile = (f) => {
     const {
       toggleSelectedFile,
-      setMetadataModalFile
+      setMetadataModalFile,
+      canSelectFiles
     } = this.props.Stores.Qvain
 
     return (
@@ -40,6 +41,7 @@ export class FileSelectorBase extends Component {
         <Checkbox
           checked={f.selected}
           id={`${f.id}Checkbox`}
+          disabled={!canSelectFiles}
           type="checkbox"
           onChange={() => toggleSelectedFile(
             f,
@@ -53,7 +55,7 @@ export class FileSelectorBase extends Component {
           {f.fileName}
         </label>
         <FilePickerFileButton id={`${f.identifier}-open-metadata-modal`} type="button" onClick={() => setMetadataModalFile(f)}>
-          { translate('qvain.files.metadataModal.buttons.show') }
+          {translate('qvain.files.metadataModal.buttons.show')}
         </FilePickerFileButton>
       </li>
     )
@@ -63,6 +65,7 @@ export class FileSelectorBase extends Component {
   drawHierarchy = (h, root) => {
     const {
       toggleSelectedDirectory,
+      canSelectFiles
     } = this.props.Stores.Qvain
     return (
       <li key={h.identifier} style={{ paddingLeft: '20px' }}>
@@ -77,6 +80,7 @@ export class FileSelectorBase extends Component {
         <Checkbox
           aria-label={`${h.directoryName}`}
           checked={h.selected || false}
+          disabled={!canSelectFiles}
           id={`${h.id}Checkbox`}
           type="checkbox"
           onChange={() => toggleSelectedDirectory(
@@ -85,7 +89,7 @@ export class FileSelectorBase extends Component {
           )}
         />
         <DirectoryIcon />
-        {h.directoryName}
+        {h.directoryName} ({h.original.file_count})
         <ul>
           {(h.directories && h.open) &&
             h.directories.map(dir => (this.drawHierarchy(dir, h)))

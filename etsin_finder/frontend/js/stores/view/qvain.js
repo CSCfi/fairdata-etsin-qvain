@@ -1,4 +1,4 @@
-import { observable, action, computed } from 'mobx'
+import { observable, action, computed, runInAction } from 'mobx'
 import axios from 'axios'
 import { getDirectories, getFiles, deepCopy } from '../../components/qvain/utils/fileHierarchy'
 import {
@@ -6,16 +6,26 @@ import {
   LicenseUrls,
   FileAPIURLs,
   UseCategoryURLs,
-  EntityType,
-  Role,
-  CumulativeStates
+  CumulativeStates,
+  DataCatalogIdentifiers,
 } from '../../components/qvain/utils/constants'
 import { getPath } from '../../components/qvain/utils/object'
+import Actors from './qvain.actors'
+import Files from './qvain.files'
+import Spatials, { SpatialModel } from './qvain.spatials'
 
 class Qvain {
+  constructor() {
+    this.Files = new Files(this)
+    this.Actors = new Actors(this)
+    this.Spatials = new Spatials(this)
+  }
+
   @observable original = undefined // used if editing, otherwise undefined
 
   @observable changed = false // has dataset been changed
+
+  @observable deprecated = false
 
   @observable title = {
     en: '',
@@ -27,9 +37,19 @@ class Qvain {
     fi: '',
   }
 
+  @observable spatials = []
+
+  @observable issuedDate = undefined
+
   @observable otherIdentifiers = []
 
   @observable fieldOfScience = undefined
+
+  @observable fieldsOfScience = []
+
+  @observable infrastructure = undefined
+
+  @observable infrastructures = []
 
   @observable keywords = []
 
@@ -43,10 +63,6 @@ class Qvain {
 
   @observable restrictionGrounds = {}
 
-  @observable actors = []
-
-  @observable actorInEdit = EmptyActor
-
   @observable externalResourceInEdit = EmptyExternalResource
 
   @action
@@ -59,19 +75,22 @@ class Qvain {
       en: '',
       fi: '',
     }
+    this.issuedDate = undefined
     this.otherIdentifiers = []
     this.fieldOfScience = undefined
+    this.fieldsOfScience = []
+    this.infrastructure = undefined
+    this.infrastructures = []
     this.keywords = []
     this.license = License(undefined, LicenseUrls.CCBY4)
     this.otherLicenseUrl = undefined
     this.accessType = AccessType(undefined, AccessTypeURLs.OPEN)
     this.embargoExpDate = undefined
     this.restrictionGrounds = {}
-    this.actors = []
-    this.actorInEdit = EmptyActor
 
     // Reset Files/Directories related data
     this.dataCatalog = undefined
+    this.preservationState = 0
     this.cumulativeState = CumulativeStates.NO
     this.idaPickerOpen = false
     this.selectedProject = undefined
@@ -83,13 +102,23 @@ class Qvain {
     this.inEdit = undefined
 
     this.metadataModalFile = undefined
+    this.fixDeprecatedModalOpen = false
+
+    this.Files.reset()
+
+    this.useDoi = false
 
     // Reset External resources related data
     this.externalResources = []
     this.externalResourceInEdit = EmptyExternalResource
     this.extResFormOpen = false
     this.resourceInEdit = undefined
+
     this.changed = false
+    this.deprecated = false
+
+    this.Actors.reset()
+    this.spatials = []
   }
 
   @action
@@ -118,6 +147,12 @@ class Qvain {
   }
 
   @action
+  setIssuedDate = exp => {
+    this.issuedDate = exp
+    this.changed = true
+  }
+
+  @action
   addOtherIdentifier = identifier => {
     this.changed = true
     this.otherIdentifiers = [...this.otherIdentifiers, identifier]
@@ -138,6 +173,23 @@ class Qvain {
   }
 
   @action
+  setFieldsOfScience = fieldsOfScience => {
+    this.fieldsOfScience = fieldsOfScience
+    this.changed = true
+  }
+
+  @action
+  setInfrastructure = infrastructure => {
+    this.infrastructure = infrastructure
+    this.changed = true
+  }
+
+  @action setInfrastructures = infrastructures => {
+    this.infrastructures = infrastructures
+    this.changed = true
+  }
+
+  @action
   setKeywords = keywords => {
     this.keywords = keywords
     this.changed = true
@@ -150,9 +202,30 @@ class Qvain {
   }
 
   @action
+  removeFieldOfScience = fieldOfScienceToRemove => {
+    this.fieldsOfScience = this.fieldsOfScience.filter(
+      fieldOfScience => fieldOfScience.url !== fieldOfScienceToRemove.url
+    )
+    this.changed = true
+  }
+
+  @action
+  removeInfrastructure = infrastructureToRemove => {
+    this.infrastructures = this.infrastructures.filter(
+      infra => infra.url !== infrastructureToRemove.url
+    )
+    this.changed = true
+  }
+
+  @action
   setLicense = license => {
     this.license = license
     this.changed = true
+  }
+
+  @action
+  setLicenseName = name => {
+    this.license.name = name // only affects license display, should not trigger this.changed
   }
 
   @action
@@ -174,54 +247,17 @@ class Qvain {
   }
 
   @action
-  setActors = actors => {
-    this.actors = actors
+  setEmbargoExpDate = exp => {
+    this.embargoExpDate = exp
     this.changed = true
-  }
-
-  @action saveActor = actor => {
-    if (actor.uiId !== undefined) {
-      // Saving a actor that was previously added
-      const existing = this.actors.find(
-        addedActor => addedActor.uiId === actor.uiId
-      )
-      if (existing !== undefined) {
-        this.removeActor(actor)
-      }
-    } else {
-      // Adding a new actor, generate a new UI ID for them
-      actor.uiId = this.createActorUIId()
-    }
-    this.setActors([...this.actors, actor])
-  }
-
-  @action
-  removeActor = actor => {
-    const actors = this.actors.filter(p => p.uiId !== actor.uiId)
-    this.setActors(actors)
-  }
-
-  @action
-  editActor = actor => {
-    this.actorInEdit = { ...actor }
-  }
-
-  // Used to reset all actor values if the user switches actor type
-  @action
-  emptyActorInEdit = actorType => {
-    this.actorInEdit = Actor(actorType, [], '', '', '', undefined, undefined)
-  }
-
-  @computed
-  get addedActors() {
-    return this.actors
   }
 
   @action saveExternalResource = resource => {
     const existing = this.externalResources.find(r => r.id === resource.id)
     if (existing !== undefined) {
       existing.title = resource.title
-      existing.url = resource.url
+      existing.accessUrl = resource.accessUrl
+      existing.downloadUrl = resource.downloadUrl
       existing.useCategory = resource.useCategory
     } else {
       // Create an internal identifier for the resource to help with UI interaction
@@ -229,7 +265,8 @@ class Qvain {
       const newResource = ExternalResource(
         newId,
         resource.title,
-        resource.url,
+        resource.accessUrl,
+        resource.downloadUrl,
         resource.useCategory
       )
       this.externalResources = [...this.externalResources, newResource]
@@ -240,11 +277,6 @@ class Qvain {
   @action
   editExternalResource = externalResource => {
     this.externalResourceInEdit = { ...externalResource }
-  }
-
-  @computed
-  get getActorInEdit() {
-    return this.actorInEdit
   }
 
   @computed
@@ -259,9 +291,17 @@ class Qvain {
 
   // FILE PICKER STATE MANAGEMENT
 
+  @observable metaxApiV2 = process.env.NODE_ENV !== 'production' && localStorage.getItem('metax_api_v2') === '1'
+
+  @action setMetaxApiV2 = (value) => {
+    this.metaxApiV2 = value
+  }
+
   @observable idaPickerOpen = false
 
   @observable dataCatalog = undefined
+
+  @observable useDoi = false
 
   @observable cumulativeState = CumulativeStates.NO
 
@@ -281,14 +321,28 @@ class Qvain {
 
   @observable metadataModalFile = undefined
 
+  @observable fixDeprecatedModalOpen = false
+
   @action
   setDataCatalog = selectedDataCatalog => {
     this.dataCatalog = selectedDataCatalog
+    this.changed = true
+
+    // Remove useDoi if dataCatalog is ATT
+    if (selectedDataCatalog === 'urn:nbn:fi:att:data-catalog-att') {
+      this.useDoi = false
+    }
+  }
+
+  @action
+  setUseDoi = selectedUseDoiStatus => {
+    this.useDoi = selectedUseDoiStatus
   }
 
   @action
   setCumulativeState = selectedCumulativeState => {
     this.cumulativeState = selectedCumulativeState
+    this.changed = true
   }
 
   @action toggleSelectedFile = (file, select) => {
@@ -301,7 +355,7 @@ class Qvain {
       // file.selected = select
       getFiles(newHier).find(f => f.identifier === file.identifier).selected = select
       if (select) {
-        const theDir = flat.find(d => d.directoryName === file.parentDirectory.directoryName)
+        const theDir = flat.find(d => d.identifier === file.parentDirectory.identifier)
         this.deselectParents(theDir, flat)
         this.selectedFiles = [...this.selectedFiles, file]
       } else {
@@ -335,7 +389,7 @@ class Qvain {
         // deselect directories and files downwards in the hierarchy, remove them from selections
         theDir.directories.forEach(d => this.deselectChildren(d))
         // deselect parents
-        const parent = flat.find(d => d.directoryName === theDir.parentDirectory.directoryName)
+        const parent = flat.find(d => d.identifier === theDir.parentDirectory.identifier)
         this.deselectParents(parent, flat)
         this.selectedDirectories = [...this.selectedDirectories, dir]
       } else {
@@ -350,15 +404,22 @@ class Qvain {
 
   // Move selected files and directories to existing.
   @action moveSelectedToExisting = () => {
-    this.existingDirectories = this.mergeArraysByIdentifier(this.selectedDirectories, this.existingDirectories)
+    this.existingDirectories = this.mergeArraysByIdentifier(
+      this.selectedDirectories,
+      this.existingDirectories
+    )
     this.selectedDirectories = []
     this.existingFiles = this.mergeArraysByIdentifier(this.selectedFiles, this.existingFiles)
     this.selectedFiles = []
 
     // deselect all items in hierarchy
     const newHier = deepCopy(this.hierarchy)
-    getDirectories(newHier).forEach(dir => { dir.selected = false })
-    getFiles(newHier).forEach(file => { file.selected = false })
+    getDirectories(newHier).forEach(dir => {
+      dir.selected = false
+    })
+    getFiles(newHier).forEach(file => {
+      file.selected = false
+    })
     this.hierarchy = newHier
   }
 
@@ -405,7 +466,9 @@ class Qvain {
 
   @action getInitialDirectories = () =>
     axios.get(FileAPIURLs.PROJECT_DIR_URL + this.selectedProject).then(res => {
-      this.hierarchy = Directory(res.data, undefined, false, false)
+      runInAction(() => {
+        this.hierarchy = Directory(res.data, undefined, false, false)
+      })
       return this.hierarchy
     })
 
@@ -422,28 +485,29 @@ class Qvain {
       .get(FileAPIURLs.DIR_URL + dirId)
       .then(res => {
         const newDirs = [
-          ...rootDir.directories.map(d =>
-            (d.id === dirId
-              ? {
-                  ...d,
-                  directories: res.data.directories.map(newDir =>
-                    Directory(
-                      newDir,
-                      d,
-                      this.selectedDirectories.map(sd => sd.identifier).includes(newDir.identifier),
-                      false
-                    )
-                  ),
-                  files: res.data.files.map(newFile =>
-                    File(
-                      newFile,
-                      d,
-                      this.selectedFiles.map(sf => sf.identifier).includes(newFile.identifier)
-                    )
-                  ),
-                }
-              : d)
-          ),
+          ...rootDir.directories.map(d => {
+            if (d.id === dirId) {
+              return {
+                ...d,
+                directories: res.data.directories.map(newDir =>
+                  Directory(
+                    newDir,
+                    d,
+                    this.selectedDirectories.map(sd => sd.identifier).includes(newDir.identifier),
+                    false
+                  )
+                ),
+                files: res.data.files.map(newFile =>
+                  File(
+                    newFile,
+                    d,
+                    this.selectedFiles.map(sf => sf.identifier).includes(newFile.identifier)
+                  )
+                ),
+              }
+            }
+            return d
+          }),
         ]
         rootDir.directories = newDirs
         return rootDir
@@ -469,8 +533,24 @@ class Qvain {
     this.inEdit = selectedItem
   }
 
+  @action toggleInEdit = selectedItem => {
+    if (this.inEdit === selectedItem) {
+      this.inEdit = null
+    } else {
+      this.inEdit = selectedItem
+    }
+  }
+
   @action setMetadataModalFile = file => {
     this.metadataModalFile = file
+  }
+
+  @action showFixDeprecatedModal = () => {
+    this.fixDeprecatedModalOpen = true
+  }
+
+  @action closeFixDeprecatedModal = () => {
+    this.fixDeprecatedModalOpen = false
   }
 
   @action updateFileMetadata = file => {
@@ -479,7 +559,10 @@ class Qvain {
     const flat = getFiles(this.hierarchy)
     const hierarchyFile = flat.find(f => f.identifier === file.identifier)
     if (hierarchyFile) {
-      Object.assign(hierarchyFile, File(file, hierarchyFile.parentDirectory, hierarchyFile.selected))
+      Object.assign(
+        hierarchyFile,
+        File(file, hierarchyFile.parentDirectory, hierarchyFile.selected)
+      )
     }
 
     // Update existing file if available.
@@ -536,10 +619,11 @@ class Qvain {
 
   // Dataset related
 
-  // dataset - METAX dataset JSON
+  // Dataset - METAX dataset JSON
   // perform schema transformation METAX JSON -> etsin backend / internal schema
-  @action editDataset = dataset => {
+  @action editDataset = async (dataset) => {
     this.original = { ...dataset }
+    this.deprecated = dataset.deprecated
     const researchDataset = dataset.research_dataset
 
     // Load description
@@ -550,27 +634,45 @@ class Qvain {
     this.description.en = researchDataset.description.en ? researchDataset.description.en : ''
     this.description.fi = researchDataset.description.fi ? researchDataset.description.fi : ''
 
+    // Issued date
+    this.issuedDate = researchDataset.issued || undefined
+
     // Other identifiers
     this.otherIdentifiers = researchDataset.other_identifier
       ? researchDataset.other_identifier.map(oid => oid.notation)
       : []
 
-    // field of science
+    // Fields of science
+    this.fieldsOfScience = []
     if (researchDataset.field_of_science !== undefined) {
-      const primary = researchDataset.field_of_science[0]
-      if (primary !== undefined) {
-        this.fieldOfScience = FieldOfScience(primary.pref_label, primary.identifier)
-      } else {
-        this.fieldOfScience = undefined
-      }
-    } else {
-      this.fieldOfScience = undefined
+      researchDataset.field_of_science.forEach(element => {
+        this.fieldOfScience = FieldOfScience(element.pref_label, element.identifier)
+        this.fieldsOfScience.push(this.fieldOfScience)
+      })
     }
 
-    // keywords
+    // infrastructures
+    this.infrastructures = []
+    if (researchDataset.infrastructure !== undefined) {
+      researchDataset.infrastructure.forEach(element => {
+        this.infrastructure = Infrastructure(element.pref_label, element.identifier)
+        this.infrastructures.push(this.infrastructure)
+      })
+    }
+
+    // spatials
+    this.spatials = []
+    if (researchDataset.spatial !== undefined) {
+      researchDataset.spatial.forEach(element => {
+        const spatial = SpatialModel(element)
+        this.spatials.push(spatial)
+      })
+    }
+
+    // Keywords
     this.keywords = researchDataset.keyword || []
 
-    // access type
+    // Access type
     const at = researchDataset.access_rights.access_type
       ? researchDataset.access_rights.access_type
       : undefined
@@ -578,13 +680,13 @@ class Qvain {
       ? AccessType(at.pref_label, at.identifier)
       : AccessType(undefined, AccessTypeURLs.OPEN)
 
-    // embargo date
-    const date = researchDataset.access_rights.available
+    // Embargo date
+    const embargoDate = researchDataset.access_rights.available
       ? researchDataset.access_rights.available
       : undefined
-    this.embargoExpDate = date || undefined
+    this.embargoExpDate = embargoDate || undefined
 
-    // license
+    // License
     const l = researchDataset.access_rights.license
       ? researchDataset.access_rights.license[0]
       : undefined
@@ -594,12 +696,12 @@ class Qvain {
       } else {
         this.license = l
           ? License(
-              {
-                en: 'Other (URL)',
-                fi: 'Muu (URL)',
-              },
-              'other'
-            )
+            {
+              en: 'Other (URL)',
+              fi: 'Muu (URL)',
+            },
+            'other'
+          )
           : License(undefined, LicenseUrls.CCBY4)
         this.otherLicenseUrl = l.license
       }
@@ -607,50 +709,31 @@ class Qvain {
       this.license = undefined
     }
 
-    // restriction grounds
+    // Restriction grounds
     const rg = researchDataset.access_rights.restriction_grounds
       ? researchDataset.access_rights.restriction_grounds[0]
       : undefined
     this.restrictionGrounds = rg ? RestrictionGrounds(rg.pref_label, rg.identifier) : undefined
 
-    // Load actors
-    const actors = []
-    if ('publisher' in researchDataset) {
-      actors.push(
-        this.createActor(researchDataset.publisher, Role.PUBLISHER, actors)
-      )
-    }
-    if ('curator' in researchDataset) {
-      researchDataset.curator.forEach(curator =>
-        actors.push(this.createActor(curator, Role.CURATOR, actors))
-      )
-    }
-    if ('creator' in researchDataset) {
-      researchDataset.creator.forEach(creator =>
-        actors.push(this.createActor(creator, Role.CREATOR, actors))
-      )
-    }
-    if ('rights_holder' in researchDataset) {
-      researchDataset.rights_holder.forEach(rightsHolder =>
-        actors.push(this.createActor(rightsHolder, Role.RIGHTS_HOLDER, actors))
-      )
-    }
-    if ('contributor' in researchDataset) {
-      researchDataset.contributor.forEach(contributor =>
-        actors.push(this.createActor(contributor, Role.CONTRIBUTOR, actors))
-      )
-    }
-    console.groupCollapsed('Actors to be compared DEBUG')
-    console.table(JSON.parse(JSON.stringify(actors)))
-    console.groupEnd()
-    this.actors = this.mergeTheSameActors(actors)
+    // load actors
+    this.Actors.editDataset(researchDataset)
 
-    // load data catalog
+    // Load data catalog
     this.dataCatalog =
       dataset.data_catalog !== undefined ? dataset.data_catalog.identifier : undefined
 
-    // load cumulative state
+    // Load preservation state
+    this.preservationState = dataset.preservation_state
+
+    // Load cumulative state
     this.cumulativeState = dataset.cumulative_state
+
+    // Load DOI
+    if (researchDataset.preferred_identifier.startsWith('doi')) {
+      this.useDoi = true
+    } else {
+      this.useDoi = false
+    }
 
     // Load files
     const dsFiles = researchDataset.files
@@ -658,14 +741,47 @@ class Qvain {
 
     if (dsFiles !== undefined || dsDirectories !== undefined) {
       this.idaPickerOpen = true
+      // Find out the dataset IDA project by iterating through files/directories
       const toCheck = [...(dsFiles || []), ...(dsDirectories || [])]
-      this.selectedProject = toCheck.length > 0 ? toCheck[0].details.project_identifier : undefined
-      this.getInitialDirectories()
-      this.existingDirectories = dsDirectories ? dsDirectories.map(d => DatasetDirectory(d)) : []
-      this.existingFiles = dsFiles ? dsFiles.map(f => DatasetFile(f, undefined, true)) : []
+      for (let i = 0; i < toCheck.length; i += 1) {
+        // Get project identifier from item.details
+        if (toCheck[i].details) {
+          this.selectedProject = toCheck[i].details.project_identifier
+          break
+        }
+      }
+      if (this.selectedProject) {
+        this.getInitialDirectories()
+      }
+      this.existingDirectories = dsDirectories
+        ? dsDirectories.map(d => {
+          // Removed directories don't have details
+          if (!d.details) {
+            d.details = {
+              directory_name: d.title,
+              file_path: '',
+              removed: true,
+            }
+          }
+          return DatasetDirectory(d)
+        })
+        : []
+      this.existingFiles = dsFiles
+        ? dsFiles.map(f => {
+          // Removed files don't have details
+          if (!f.details) {
+            f.details = {
+              file_name: f.title,
+              file_path: '',
+              removed: true,
+            }
+          }
+          return DatasetFile(f, undefined, true)
+        })
+        : []
     }
 
-    // external resources
+    // External resources
     const remoteResources = researchDataset.remote_resources
     if (remoteResources !== undefined) {
       this.externalResources = remoteResources.map(r =>
@@ -674,193 +790,28 @@ class Qvain {
           remoteResources.indexOf(r),
           r.title,
           r.access_url ? r.access_url.identifier : undefined,
+          r.download_url ? r.download_url.identifier : undefined,
           r.use_category
             ? {
-                label: r.use_category.pref_label.en,
-                value: r.use_category.identifier,
-              }
+              label: r.use_category.pref_label.en,
+              value: r.use_category.identifier,
+            }
             : undefined
         )
       )
       this.extResFormOpen = true
     }
+
     this.changed = false
+    if (this.metaxApiV2) {
+      await this.Files.editDataset(dataset)
+    }
   }
 
-  // Creates a single instance of a actor, only has one role.
-  // Returns a Actor.
-  createActor = (actorJson, role, actors) => {
-    const entityType = actorJson['@type'].toLowerCase()
-    let name
-    if (entityType === EntityType.ORGANIZATION) {
-      name = actorJson.name ? actorJson.name : undefined
-    } else {
-      name = actorJson.name
-    }
-
-    let parentOrg
-    if (entityType === EntityType.ORGANIZATION) {
-      const isPartOf = actorJson.is_part_of ? actorJson.is_part_of : undefined
-      if (isPartOf) {
-        parentOrg = isPartOf.name
-      } else {
-        parentOrg = undefined
-      }
-    } else {
-      const parentOrgName = actorJson.member_of ? actorJson.member_of.name : undefined
-      if (parentOrgName) {
-        parentOrg = parentOrgName
-      } else {
-        parentOrg = undefined
-      }
-    }
-
-    return Actor(
-      entityType === EntityType.PERSON
-        ? EntityType.PERSON
-        : EntityType.ORGANIZATION,
-      [role],
-      name,
-      actorJson.email ? actorJson.email : '',
-      actorJson.identifier ? actorJson.identifier : '',
-      parentOrg,
-      this.createActorUIId(actors)
-    )
+  @action setOriginal = (newOriginal) => {
+    this.original = newOriginal
   }
 
-  // Function that 'Merge' the actors with the same metadata (except UIid).
-  // It looks for actors with the same info but different roles and adds their
-  // roles together to get one actor with multiple roles.
-  // Returns a nw array with the merged actors.
-  mergeTheSameActors = actors => {
-    if (actors.length <= 1) return actors
-    const mergedActors = []
-    actors.forEach(actor1 => {
-      actors.forEach((actor2, index) => {
-        if (this.isEqual(actor1, actor2)) {
-          actor1.role = [...new Set([].concat(...[actor1.role, actor2.role]))]
-          delete actors[index]
-        }
-      })
-      mergedActors.push(actor1)
-    })
-    return mergedActors
-  }
-
-  // Function to compare two actors and see if they are the same actor.
-  // Returns True if the actors seem the same, or False if not.
-  isEqual = (a1, a2) => {
-    console.log(
-      // eslint-disable-next-line no-nested-ternary
-      `Compare: ${a1.name.en ? a1.name.en : a1.name.und ? a1.name.und : a1.name} and ${a2.name.en ? a2.name.en : a2.name.und ? a2.name.und : a2.name}`
-    )
-    if (!!a1.identifier && !!a2.identifier) {
-      // If a1 and a2 have identifiers.
-      if (a1.identifier === a2.identifier) {
-        // If the identifiers are the same.
-        console.log(true)
-        return true
-      }
-      // If a1 and a2 have identifiers but they are not the same, then they
-      // are not the same actor.
-      console.log(false)
-      return false
-    }
-    if (!!a1.email && !!a2.email) {
-      // If a1 and a2 have emails.
-      if (a1.type === EntityType.PERSON && a2.type === EntityType.PERSON) {
-        // If they have emails and are type PERSON.
-        if (a1.email === a2.email && a1.name === a2.name) {
-          // If they have emails and are type PERSON and the emails and names are equal.
-          console.log(true)
-          return true
-        }
-        // If they have emails and are type person but the emails or names are not equal.
-        console.log(false)
-        return false
-      }
-      if (a1.type === EntityType.ORGANIZATION && a2.type === EntityType.ORGANIZATION) {
-        // If they have emails an are of type ORGANIZATION.
-        if (a1.email === a2.email && this.isEqualObj(a1.name, a2.name)) {
-          // If they have emails and are of type ORGANIZATION and the emails
-          // and name objects are equal.
-          console.log(true)
-          return true
-        }
-        // If they have emails and are type ORGANIZATION but the emails or
-        // name objects are not equal.
-        console.log(false)
-        return false
-      }
-    }
-    if (a1.type === EntityType.PERSON && a2.type === EntityType.PERSON) {
-      // If a1 and a2 are of type PERSON.
-      if (a1.name === a2.name && this.isEqualObj(a1.organization, a2.organization)) {
-        // if they are of type PERSON and the names and organization objects
-        // are equal.
-        console.log(true)
-        return true
-      }
-      // If they are of type PERSON but the names or organization objects
-      // are not equal.
-      console.log(false)
-      return false
-    }
-    if (a1.type === EntityType.ORGANIZATION && a2.type === EntityType.ORGANIZATION) {
-      // If a1 and a2 are of type ORGANIZATION.
-      if (!(a1.organization === undefined && a2.organization === undefined)) {
-        // If they are of type ORGANIZATION and their parent organizations
-        // are not empty objects.
-        if (this.isEqualObj(a1.name, a2.name) && this.isEqualObj(a1.organization, a2.organization)) {
-          // If they are of type ORGANIZATION and their parent organization objects
-          // are not empty and their names and parent organization objects are equal.
-          console.log(true)
-          return true
-        }
-        // If they are of type ORGANIZATION and their parent organization objects
-        // are not empty, but their names or parent organization objects are not equal.
-        console.log(false)
-        return false
-      }
-      if (this.isEqualObj(a1.name, a2.name)) {
-        // If they are of type ORGANIZATION and their parent organization objects
-        // are empty and their name objects are equal.
-        console.log(true)
-        return true
-      }
-      // If they are of type ORGANIZATION and their parent organization objects
-      // are empty and their name objects are not equal.
-      console.log(false)
-      return false
-    }
-    // If a1 and a2 don't have identifiers or emails and they are not the same entity type.
-    console.log(false)
-    return false
-  }
-
-  isObjectEmpty = (obj) => {
-    // ECMA 5+ way to check if object is empty.
-    if (Object.keys(obj).length === 0 && obj.constructor === Object) {
-      return true
-    }
-    return false
-  }
-
-  isEqualObj = (obj1, obj2) => {
-    // Checks if the objects have the same key-value pairs.
-    if (JSON.stringify(obj1) === JSON.stringify(obj2)) {
-      return true
-    }
-    return false
-  }
-
-  // create a new UI Identifier based on existing UI IDs
-  // basically a simple number increment
-  // use the store actors by default
-  createActorUIId = (actors = this.actors) => {
-    const latestId = actors.length > 0 ? Math.max(...actors.map(p => p.uiId)) : 0
-    return latestId + 1
-  }
   // EXTERNAL FILES
 
   @observable externalResources = []
@@ -879,6 +830,63 @@ class Qvain {
   @action setResourceInEdit = id => {
     this.resourceInEdit = this.externalResources.find(r => r.id === id)
   }
+
+  // PAS
+
+  @observable preservationState = 0
+
+  @action
+  setPreservationState = state => {
+    this.preservationState = state
+    this.changed = true
+  }
+
+  @computed
+  get isPas() {
+    return this.dataCatalog === DataCatalogIdentifiers.PAS || this.preservationState > 0
+  }
+
+  @computed
+  get canSelectFiles() {
+    if (this.readonly || this.isPas || this.deprecated) {
+      return false
+    }
+
+    if (this.metaxApiV2) {
+      if (this.hasBeenPublished) {
+        if (this.Files && !this.Files.projectLocked) {
+          return true // for published noncumulative datasets, allow adding files only if none exist yet
+        }
+        return this.isCumulative
+      }
+    }
+
+    return true
+  }
+
+  @computed
+  get canRemoveFiles() {
+    return this.canSelectFiles && !this.isCumulative
+  }
+
+  @computed
+  get isCumulative() {
+    return this.cumulativeState === CumulativeStates.YES
+  }
+
+  @computed
+  get hasBeenPublished() {
+    return !!(this.original && (this.original.state === 'published' || this.original.draft_of))
+  }
+
+  @computed
+  get readonly() {
+    return (
+      this.preservationState >= 80 &&
+      this.preservationState !== 100 &&
+      this.preservationState !== 130
+    )
+  }
 }
 
 const Hierarchy = (h, parent, selected) => ({
@@ -893,6 +901,7 @@ const Hierarchy = (h, parent, selected) => ({
 export const Directory = (dir, parent, selected, open) => ({
   ...Hierarchy(dir, parent, selected),
   open,
+  loaded: !!dir.directories,
   directoryName: dir.directory_name,
   directories: dir.directories ? dir.directories.map(d => Directory(d, dir, false, false)) : [],
   useCategory: dir.use_category || UseCategoryURLs.OUTCOME_MATERIAL,
@@ -900,10 +909,12 @@ export const Directory = (dir, parent, selected, open) => ({
   files: dir.files ? dir.files.map(f => File(f, dir, false)) : [],
   description: dir.description || 'Folder',
   title: dir.title || dir.directory_name,
-  existing: false
+  existing: false,
+  removed: dir.removed,
+  fileCount: dir.file_count,
 })
 
-const File = (file, parent, selected) => ({
+export const File = (file, parent, selected) => ({
   ...Hierarchy(file, parent, selected),
   fileName: file.file_name,
   filePath: file.file_path,
@@ -913,6 +924,7 @@ const File = (file, parent, selected) => ({
   description: getPath('file_characteristics.description', file) || 'File',
   title: getPath('file_characteristics.title', file) || file.file_name,
   existing: false,
+  removed: file.removed,
 
   // PAS metadata
   fileFormat: getPath('file_characteristics.file_format', file),
@@ -921,7 +933,7 @@ const File = (file, parent, selected) => ({
   csvHasHeader: getPath('file_characteristics.csv_has_header', file),
   csvDelimiter: getPath('file_characteristics.csv_delimiter', file),
   csvRecordSeparator: getPath('file_characteristics.csv_record_separator', file),
-  csvQuotingChar: getPath('file_characteristics.csv_quoting_char', file)
+  csvQuotingChar: getPath('file_characteristics.csv_quoting_char', file),
 })
 
 export const DatasetFile = file => ({
@@ -938,7 +950,7 @@ export const DatasetFile = file => ({
     fileType: file.file_type,
     title: file.title,
   },
-  existing: true
+  existing: true,
 })
 
 const DatasetDirectory = directory => ({
@@ -947,22 +959,15 @@ const DatasetDirectory = directory => ({
   description: directory.description,
   title: directory.title,
   useCategory: directory.use_category.identifier,
-  existing: true
+  existing: true,
 })
-
-export const Actor = (entityType, roles, name, email, identifier, organization, uiId) => ({
-  type: entityType,
-  role: roles,
-  name,
-  email,
-  identifier,
-  organization,
-  uiId,
-})
-
-export const EmptyActor = Actor(EntityType.PERSON, [], '', '', '', undefined, undefined)
 
 export const FieldOfScience = (name, url) => ({
+  name,
+  url,
+})
+
+export const FieldsOfScience = (name, url) => ({
   name,
   url,
 })
@@ -982,13 +987,19 @@ export const RestrictionGrounds = (name, identifier) => ({
   identifier,
 })
 
-export const ExternalResource = (id, title, url, useCategory) => ({
+export const Infrastructure = (name, url) => ({
+  name,
+  url,
+})
+
+export const ExternalResource = (id, title, accessUrl, downloadUrl, useCategory) => ({
   id,
   title,
-  url,
+  accessUrl,
+  downloadUrl,
   useCategory,
 })
 
-export const EmptyExternalResource = ExternalResource(undefined, '', '', '')
+export const EmptyExternalResource = ExternalResource(undefined, '', '', '', '')
 
 export default new Qvain()

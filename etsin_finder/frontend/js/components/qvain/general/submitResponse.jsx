@@ -3,10 +3,10 @@ import PropTypes from 'prop-types'
 import styled, { keyframes } from 'styled-components'
 import { inject, observer } from 'mobx-react'
 import Translate from 'react-translate-component'
-import { withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom'
 
 import Loader from '../../general/loader'
-import { LinkButtonDarkGray } from '../../general/button';
+import { LinkButtonDarkGray } from '../../general/button'
 
 class SubmitResponse extends Component {
   static propTypes = {
@@ -41,25 +41,34 @@ class SubmitResponse extends Component {
 
     // If the user wants to clear the submitResponse
     if (this.state.clearSubmitResponse) {
-      this.state.clearSubmitResponse = false;
-      return null;
+      this.state.clearSubmitResponse = false
+      return null
     }
 
-    // If a new dataset has been created successfully.
-    if (response &&
+    const goToEtsin =
+      original && original.state === 'draft' ? (
+        <Translate content="qvain.datasets.goToEtsinDraft" />
+      ) : (
+        <Translate content="qvain.datasets.goToEtsin" />
+      )
+
+    // If a new dataset or draft has been created successfully.
+    if (
+      response &&
+      typeof response === 'object' &&
       'identifier' in response &&
       !('new_version_created' in response) &&
-      response.is_new
+      (response.is_new || response.is_draft)
     ) {
       const identifier = response.identifier
       return (
         <ResponseContainerSuccess>
           <ResponseContainerContent>
             <ResponseLabel success>
-              <Translate content="qvain.submitStatus.success" />
+              <Translate content={`qvain.submitStatus.${response.is_draft ? 'draftSuccess' : 'success'}`} />
             </ResponseLabel>
             <LinkToEtsin onClick={() => window.open(`/dataset/${identifier}`, '_blank')}>
-              <Translate content="qvain.datasets.goToEtsin" />
+              {goToEtsin}
             </LinkToEtsin>
             <p>Identifier: {identifier}</p>
           </ResponseContainerContent>
@@ -74,6 +83,7 @@ class SubmitResponse extends Component {
     // If an existing datasets metadata has successfully been updated.
     if (
       response &&
+      typeof response === 'object' &&
       'identifier' in response &&
       !('new_version_created' in response) &&
       original !== undefined &&
@@ -87,10 +97,16 @@ class SubmitResponse extends Component {
         <ResponseContainerSuccess>
           <ResponseContainerContent>
             <ResponseLabel success>
-              <Translate content="qvain.submitStatus.editMetadataSuccess" />
+              <Translate
+                content={
+                  response.is_draft
+                    ? 'qvain.submitStatus.draftSuccess'
+                    : 'qvain.submitStatus.editMetadataSuccess'
+                }
+              />
             </ResponseLabel>
             <LinkToEtsin onClick={() => window.open(`/dataset/${identifier}`, '_blank')}>
-              <Translate content="qvain.datasets.goToEtsin" />
+              {goToEtsin}
             </LinkToEtsin>
             <p>Identifier: {identifier}</p>
           </ResponseContainerContent>
@@ -102,9 +118,10 @@ class SubmitResponse extends Component {
         </ResponseContainerSuccess>
       )
     }
-    // If an existing datasets files or directorys have changed and the update
+    // Only in Metax V1:
+    // If an existing datasets files or directorys have changed and the update automatically
     // creates a new version of the dataset with its own identifiers.
-    if (response && 'new_version_created' in response) {
+    if (response && typeof response === 'object' && 'new_version_created' in response) {
       const identifier = response.dataset_version_set
         ? response.dataset_version_set[0].identifier
         : response.identifier
@@ -114,11 +131,13 @@ class SubmitResponse extends Component {
             <ResponseLabel success>
               <Translate content="qvain.submitStatus.editFilesSuccess" />
             </ResponseLabel>
-            <LinkToEtsin onClick={() => this.handleOpenNewVersion(response.new_version_created.identifier)}>
+            <LinkToEtsin
+              onClick={() => this.handleOpenNewVersion(response.new_version_created.identifier)}
+            >
               <Translate content="qvain.datasets.openNewVersion" />
             </LinkToEtsin>
             <LinkToEtsin onClick={() => window.open(`/dataset/${identifier}`, '_blank')}>
-              <Translate content="qvain.datasets.goToEtsin" />
+              {goToEtsin}
             </LinkToEtsin>
             <p>Identifier: {identifier}</p>
           </ResponseContainerContent>
@@ -138,7 +157,7 @@ class SubmitResponse extends Component {
             <ResponseLabel>
               <Translate content="qvain.submitStatus.fail" />
             </ResponseLabel>
-            <p>{(response.toString().replace(/,/g, '\n'))}</p>
+            <p>{response.toString().replace(/,/g, '\n')}</p>
           </ResponseContainerContent>
           <ResponseContainerCloseButtonContainer>
             <LinkButtonDarkGray type="button" onClick={this.closeSubmitResponse}>
@@ -150,7 +169,6 @@ class SubmitResponse extends Component {
     }
 
     return (
-
       <ResponseContainerLoading>
         <Loader active />
       </ResponseContainerLoading>
@@ -185,7 +203,7 @@ const ResponseContainerSuccess = styled.div`
   width: 100%;
   color: green;
   z-index: 2;
-  border-bottom: 1px solid rgba(0,0,0,0.3);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
 `
 const ResponseContainerLoading = styled.div`
   background-color: #fff;
@@ -194,7 +212,7 @@ const ResponseContainerLoading = styled.div`
   z-index: 2;
   height: 105px;
   padding-top: 30px;
-  border-bottom: 1px solid rgba(0,0,0,0.3);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
 `
 const FadeInAnimation = keyframes`
   from {
@@ -205,12 +223,12 @@ const FadeInAnimation = keyframes`
   }
 `
 const ResponseContainerError = styled.div`
-  background-color: #FFEBE8;
+  background-color: #ffebe8;
   text-align: center;
   width: 100%;
   color: red;
   z-index: 2;
-  border-bottom: 1px solid rgba(0,0,0,0.3);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
   animation-name: ${FadeInAnimation};
   animation-duration: 1.5s;
 `
@@ -225,7 +243,7 @@ const ResponseContainerContent = styled.div`
 `
 const ResponseContainerCloseButtonContainer = styled.div`
   right: 0;
-  display:inline-block;
+  display: inline-block;
   text-align: right;
   padding-top: 10px;
   padding-right: 20px;

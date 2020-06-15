@@ -1,5 +1,6 @@
-import React from 'react';
-import styled, { css } from 'styled-components';
+import React from 'react'
+import styled, { css } from 'styled-components'
+import { lighten, opacify, desaturate } from 'polished'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faPen,
@@ -7,58 +8,79 @@ import {
   faCopy,
   faLink,
   faChevronRight,
-  faChevronDown
+  faChevronDown,
 } from '@fortawesome/free-solid-svg-icons'
 
 export const TableButton = styled.button`
-  width: 84px;
+  min-width: 84px;
+  max-width: 6.5em;
+  flex-grow: 1;
   height: 42px;
   background-color: #fff;
   border-radius: 4px;
   border: solid 1px #4f4f4f;
   font-size: 16px;
-  font-weight: 600px;
   line-height: 1.31;
   color: #4f4f4f;
   &:hover {
     background-color: #ccc;
   }
-`;
+`
 
 export const CancelButton = styled.button`
   border-radius: 4px;
-  border: solid 1px #4f4f4f;
+  border: ${(props) => `solid 1px ${ props.theme.color.primary}` };
   font-size: 20px;
   font-weight: bold;
-  color: #4f4f4f;
+  color: ${(props) => `${ props.theme.color.primary}` };
   padding: 10px 20px;
   &:hover {
     background-color: #ccc;
   }
-`;
+`
 
 export const SaveButton = styled.button`
   border-radius: 4px;
-  border: solid 1px #49a24a;
-  background-color: #49a24a;
+  border: ${(props) => `solid 1px ${ props.theme.color.primary}` };
+  background-color: ${(props) => `${ props.theme.color.primary}` };
   font-size: 20px;
   font-weight: bold;
   color: #fff;
   margin-left: 20px;
   padding: 10px 25px;
   &:hover {
-    background-color: #3a813b;
+    background-color: ${(props => props.theme.color.primaryDark)};
+  }
+
+  :disabled {
+    border: solid 1px ${lighten(0.25, '#49a24a')};
+    background-color: ${lighten(0.25, '#49a24a')};
+  }
+`
+
+export const AddActorButton = styled.button`
+  border-radius: 4px;
+  border: solid 1px #007fad;
+  background-color: #007fad;
+  font-size: 20px;
+  font-weight: bold;
+  color: #fff;
+  margin-left: 20px;
+  padding: 10px 25px;
+  &:hover {
+    background-color: #004d79;
+  }
+
+  :disabled {
+    border: solid 1px ${lighten(0.25, '#007fad')};
+    background-color: ${lighten(0.25, '#007fad')};
   }
 `
 
 export const DangerButton = styled.button`
   border-radius: 4px;
-  border: 1px solid ${props => (
-    props.disabled ? '#ddb6b6' : '#ff0000'
-  )};
-  background-color: ${props => (
-    props.disabled ? '#ddb6b6' : '#ff0000'
-  )};
+  border: 1px solid ${(props) => (props.disabled ? '#ddb6b6' : '#ff0000')};
+  background-color: ${(props) => (props.disabled ? '#ddb6b6' : '#ff0000')};
   font-size: 16px;
   font-weight: 600;
   line-height: 1.31;
@@ -66,14 +88,13 @@ export const DangerButton = styled.button`
   margin-left: 20px;
   padding: 10px 25px;
   &:hover {
-    background-color: ${props => (
-      props.disabled ? '#ddb6b6' : '#ff4c4c'
-    )};
+    background-color: ${(props) => (props.disabled ? '#ddb6b6' : '#ff4c4c')};
   }
 `
 
 export const RemoveButton = styled.button`
-  width: 84px;
+  min-width: 84px;
+  max-width: 6.5em;
   height: 42px;
   border-radius: 4px;
   border: solid 1px #cc0000;
@@ -86,7 +107,8 @@ export const RemoveButton = styled.button`
     background-color: #ffb2b2;
     border: solid 2px #cc0000;
   }
-`;
+  flex-grow: 1;
+`
 
 export const ButtonGroup = styled.div`
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.13);
@@ -95,7 +117,7 @@ export const ButtonGroup = styled.div`
   background-color: #fff;
   margin-bottom: 12px;
   overflow: overlay;
-`;
+`
 
 export const FileItem = styled(ButtonGroup)`
   ${props => (props.active ? `
@@ -122,7 +144,7 @@ export const ButtonLabel = styled.span`
   float: left;
   margin: 14px;
   white-space: nowrap;
-`;
+`
 
 export const EditButtonStyles = styled.button`
   background-color: #fff;
@@ -135,11 +157,14 @@ export const EditButtonStyles = styled.button`
   margin: 5px 5px 5px 5px;
   border-radius: 4px;
   border: solid 1px #cccccc;
-  &:hover {
-    background-color: rgba(0,187,255, 0.1);
+  &:not(:disabled):hover {
+    background-color: rgba(0, 187, 255, 0.1);
     border-color: rgb(0, 127, 173);
   }
-`;
+  :disabled {
+    color: ${opacify(-0.6, desaturate(0.5, '#007fad'))};
+  }
+`
 
 export const EditButton = (props) => (
   <EditButtonStyles {...props}>
@@ -162,7 +187,7 @@ export const DeleteButtonStyles = styled.button`
     background-color: rgba(255, 52, 0, 0.1);
     border-color: rgb(173, 35, 0);
   }
-`;
+`
 
 export const DeleteButton = (props) => (
   <DeleteButtonStyles {...props}>
@@ -172,18 +197,14 @@ export const DeleteButton = (props) => (
 
 export const ButtonContainer = styled.div`
   text-align: right;
-`;
+`
 
 export const CumulativeStateButton = styled.button`
-  background-color: ${props => (
-    props.disabled ? '#7fbfd6' : '#007fad'
-  )};
+  background-color: ${(props) => (props.disabled ? '#7fbfd6' : '#007fad')};
   color: #fff;
   height: 47px;
   border-radius: 31.5px;
-  border: solid 1px ${props => (
-    props.disabled ? '#7fbfd6' : '#007fad'
-  )};
+  border: solid 1px ${(props) => (props.disabled ? '#7fbfd6' : '#007fad')};
   text-transform: none;
   font-weight: 600;
   padding-left: 27px;
@@ -198,10 +219,12 @@ export const CumulativeStateButton = styled.button`
   -webkit-appearance: none;
   overflow: hidden;
   vertical-align: middle;
-  ${props => !props.disabled && css`
-    cursor: pointer;
-  `}
-`;
+  ${(props) =>
+    !props.disabled &&
+    css`
+      cursor: pointer;
+    `}
+`
 
 export const CumulativeStateButtonText = styled.span`
   text-align: center;
@@ -211,16 +234,12 @@ export const CumulativeStateButtonText = styled.span`
 `
 
 export const FilePickerButton = styled.button`
-  background-color: ${props => (
-    props.disabled ? '#7fbfd6' : '#007fad'
-  )};
+  background-color: ${(props) => (props.disabled ? '#7fbfd6' : '#007fad')};
   color: #fff;
   width: 100%;
   height: 47px;
   border-radius: 31.5px;
-  border: solid 1px ${props => (
-    props.disabled ? '#7fbfd6' : '#007fad'
-  )};
+  border: solid 1px ${(props) => (props.disabled ? '#7fbfd6' : '#007fad')};
   text-transform: none;
   font-weight: 600;
   padding-left: 27px;
@@ -235,39 +254,37 @@ export const FilePickerButton = styled.button`
   -webkit-appearance: none;
   overflow: hidden;
   vertical-align: middle;
-  ${props => !props.disabled && css`
-    cursor: pointer;
-  `}
-`;
+  ${(props) =>
+    !props.disabled &&
+    css`
+      cursor: pointer;
+    `}
+`
 
 export const FilePickerButtonInverse = styled(FilePickerButton)`
-  color: ${props => (
-    props.disabled ? '#7fbfd6' : '#007fad'
-  )};
+  color: ${(props) => (props.disabled ? '#7fbfd6' : '#007fad')};
   background-color: #fff;
-`;
+`
 
 export const FilePickerFileButton = styled.button`
-  background-color: ${props => (
-    props.disabled ? '#7fbfd6' : '#007fad'
-  )};
+  background-color: ${(props) => (props.disabled ? '#7fbfd6' : '#007fad')};
   font-size: 0.9em;
   color: #fff;
   height: 22px;
   border-radius: 2px;
-  border: solid 1px ${props => (
-    props.disabled ? '#7fbfd6' : '#007fad'
-  )};
+  border: solid 1px ${(props) => (props.disabled ? '#7fbfd6' : '#007fad')};
   text-transform: none;
   display: inline-flex;
   position: relative;
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
-  ${props => !props.disabled && css`
-    cursor: pointer;
-  `}
-`;
+  ${(props) =>
+    !props.disabled &&
+    css`
+      cursor: pointer;
+    `}
+`
 
 export const FilePickerButtonText = styled.span`
   width: 90%;
@@ -286,7 +303,7 @@ const FileIconStyles = styled(FontAwesomeIcon)`
   height: 18px;
   font-size: 18px;
   vertical-align: top;
-`;
+`
 
 export const FileIcon = () => <FileIconStyles icon={faCopy} />
 

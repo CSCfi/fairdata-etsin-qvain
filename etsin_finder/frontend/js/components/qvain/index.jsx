@@ -4,16 +4,30 @@ import Translate from 'react-translate-component'
 import translate from 'counterpart'
 import { inject, observer } from 'mobx-react'
 import axios from 'axios'
-import { withRouter, Link } from 'react-router-dom'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { withRouter } from 'react-router-dom'
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons'
-import styled from 'styled-components'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+
+import {
+  STSD,
+  SubHeaderTextContainer,
+  LinkBackContainer,
+  LinkBack,
+  ButtonContainer,
+  SubmitButton,
+  Form,
+  SubmitContainer,
+  LinkText,
+  CustomSubHeader,
+} from './styledComponents'
+import { ErrorContainer, ErrorLabel, ErrorContent, ErrorButtons } from './general/errors'
 
 import RightsAndLicenses from './licenses'
 import Description from './description'
 import Actors from './actors'
-import { qvainFormSchema } from './utils/formValidation'
 import Files from './files'
+import TemporalAndSpatial from './temporalAndSpatial'
+import History from './history'
 import {
   QvainContainer,
   SubHeader,
@@ -21,14 +35,15 @@ import {
   StickySubHeader,
   StickySubHeaderResponse,
   SubHeaderText,
-  Container
 } from './general/card'
-import handleSubmitToBackend from './utils/handleSubmit'
+import { getResponseError } from './utils/responseError'
 import Title from './general/title'
 import SubmitResponse from './general/submitResponse'
-import Button, { InvertedButton } from '../general/button';
-
-const EDIT_DATASET_URL = '/api/datasets/edit'
+import { Button } from '../general/button'
+import DeprecatedState from './deprecatedState'
+import PasState from './pasState'
+import SubmitButtons from './submitButtons'
+import { DatasetUrls } from './utils/constants'
 
 class Qvain extends Component {
   promises = []
@@ -41,9 +56,8 @@ class Qvain extends Component {
 
   constructor(props) {
     super(props)
-    this.setFocusOnSubmitOrUpdateButton = this.setFocusOnSubmitOrUpdateButton.bind(this);
-    this.submitDatasetButton = React.createRef();
-    this.updateDatasetButton = React.createRef();
+    this.setFocusOnSubmitOrUpdateButton = this.setFocusOnSubmitButton.bind(this)
+    this.submitButtonsRef = React.createRef()
   }
 
   state = {
@@ -69,21 +83,32 @@ class Qvain extends Component {
   componentWillUnmount() {
     this.props.Stores.Qvain.resetQvainStore()
     this.props.Stores.Qvain.original = undefined
-    this.promises.forEach(promise => promise.cancel())
+    this.promises.forEach((promise) => promise.cancel())
   }
 
   getDataset(identifier) {
     this.setState({ datasetLoading: true, datasetError: false, response: null, submitted: false })
-    const { resetQvainStore, editDataset } = this.props.Stores.Qvain
-    const url = `${EDIT_DATASET_URL}/${identifier}`
+    const { metaxApiV2, resetQvainStore, editDataset } = this.props.Stores.Qvain
+
+    let url = `${DatasetUrls.EDIT_DATASET_URL}/${identifier}`
+    if (metaxApiV2) {
+      url = `${DatasetUrls.V2_EDIT_DATASET_URL}/${identifier}`
+    }
     const promise = axios
       .get(url)
-      .then(result => {
+      .then((result) => {
         resetQvainStore()
-        editDataset(result.data)
-        this.setState({ datasetLoading: false, datasetError: false, haveDataset: true })
+
+        // Open draft instead if it exists
+        const nextDraft = result.data.next_draft && result.data.next_draft.identifier
+        if (nextDraft) {
+          this.props.history.replace(`/qvain/dataset/${nextDraft}`)
+        } else {
+          editDataset(result.data)
+          this.setState({ datasetLoading: false, datasetError: false, haveDataset: true })
+        }
       })
-      .catch(e => {
+      .catch((e) => {
         const status = e.response.status
 
         let errorTitle, errorDetails
@@ -121,140 +146,44 @@ class Qvain extends Component {
     return promise
   }
 
-  setFocusOnSubmitOrUpdateButton(event) {
-    if (this.props.Stores.Qvain.original) {
-      this.updateDatasetButton.current.focus()
-    } else {
-      this.submitDatasetButton.current.focus()
+  setFocusOnSubmitButton(event) {
+    const buttons = this.submitButtonsRef.current
+    if (buttons && buttons.firstElementChild) {
+      buttons.firstElementChild.focus()
     }
-    // preventDefault, since the page wants to refresh at this point
-    event.preventDefault();
+    event.preventDefault()
   }
 
-  handleCreate = e => {
-    e.preventDefault()
-    this.setState({ submitted: true })
-    const obj = handleSubmitToBackend(this.props.Stores.Qvain)
-    console.log(JSON.stringify(obj, null, 4))
-    qvainFormSchema
-      .validate(obj, { abortEarly: false })
-      .then(val => {
-        console.log(val)
-        axios
-          .post('/api/dataset', obj)
-          .then(res => {
-            const data = res.data
-            this.setState({ response: { ...data, is_new: true } })
-            // Open the created dataset without reloading the editor
-            if (data && data.identifier) {
-              this.props.Stores.Qvain.resetQvainStore()
-              this.props.Stores.Qvain.editDataset(data)
-              this.props.history.replace(`/qvain/dataset/${data.identifier}`)
-            }
-          })
-          .catch(err => {
-            // Refreshing error header
-            this.setState({ response: null })
+  handleSubmitResponse = (response) => {
+    this.setState({
+      datasetLoading: false,
+      submitted: true,
+      response,
+    })
+  }
 
-            // If user is not logged in, display logged in error
-            if (err.response.data.PermissionError) {
-              this.setState({ response: [err.response.data.PermissionError] })
-
-            // If user is logged in...
-            } else if (err.response.data) {
-              // If no IDA projects are found, display an IDA error
-              if (err.response.data.IdaError) {
-                this.setState({
-                  response: [err.response.data.IdaError]
-                })
-              } else if (err.response.data.detail) { // ...else, try to format the Metax error
-                this.setState({
-                  response: err.response.data.detail
-                })
-              // If the Metax error message formatting cannot be done, just display the entire error
-              } else {
-                this.setState({
-                  response: [err.response.data]
-                })
-              }
-
-            // If error response is empty, just display 'Error...'
-            } else {
-              this.setState({
-                response: ['Error...']
-              })
-            }
-          })
+  handleSubmitError = (err) => {
+    if (err.errors) {
+      // Validation error
+      this.setState({
+        submitted: true,
+        response: err.errors,
       })
-      .catch(err => {
-        console.log(err.errors)
-
-        // Refreshing error header
-        this.setState({ response: null })
-        this.setState({ response: err.errors })
-      })
+      return
+    }
+    if (!err.response) {
+      console.error(err)
+    }
+    this.setState({
+      datasetLoading: false,
+      submitted: true,
+      response: getResponseError(err),
+    })
   }
 
   handleRetry = () => {
     this.setState({ datasetLoading: false, haveDataset: true })
     this.handleIdentifierChanged()
-  }
-
-  handleUpdate = e => {
-    e.preventDefault()
-    this.setState({ submitted: true })
-    const obj = handleSubmitToBackend(this.props.Stores.Qvain)
-    obj.original = this.props.Stores.Qvain.original
-    console.log(JSON.stringify(obj, null, 4))
-    qvainFormSchema
-      .validate(obj, { abortEarly: false })
-      .then(val => {
-        console.log(val)
-        axios
-          .patch('/api/dataset', obj)
-          .then(res => {
-            this.props.Stores.Qvain.moveSelectedToExisting()
-            this.props.Stores.Qvain.setChanged(false)
-            this.setState({ response: res.data })
-          })
-          .catch(err => {
-            // Refreshing error header
-            this.setState({ response: null })
-
-            // If user is not logged in, display logged in error
-            if (err.response.data.PermissionError) {
-              this.setState({ response: [err.response.data.PermissionError] })
-
-            // If user is logged in...
-            } else if (err.response.data) {
-            // ...try to format the Metax error
-            if (err.response.data.detail) {
-              this.setState({
-                response: err.response.data.detail
-              })
-
-            // If the Metax error message formatting cannot be done, just display the entire error
-            } else {
-              this.setState({
-                response: [err.response.data]
-              })
-            }
-
-            // If error response is empty, just display 'Error...'
-            } else {
-              this.setState({
-                response: ['Error...']
-              })
-            }
-          })
-      })
-      .catch(err => {
-        console.log(err.errors)
-
-        // Refreshing error header
-        this.setState({ response: null })
-        this.setState({ response: err.errors })
-      })
   }
 
   handleIdentifierChanged() {
@@ -273,15 +202,27 @@ class Qvain extends Component {
   }
 
   render() {
+    const { original } = this.props.Stores.Qvain
     // Title text
     let titleKey
     if (this.state.datasetLoading) {
       titleKey = 'qvain.titleLoading'
     } else if (this.state.datasetError) {
       titleKey = 'qvain.titleLoadingFailed'
+    } else if (original) {
+      titleKey = 'qvain.titleEdit'
     } else {
-      titleKey = this.props.Stores.Qvain.original ? 'qvain.titleEdit' : 'qvain.titleCreate'
+      titleKey = 'qvain.titleCreate'
     }
+
+    const createLinkBack = (position) => (
+      <LinkBackContainer position={position}>
+        <LinkBack to="/qvain">
+          <FontAwesomeIcon size="lg" icon={faChevronLeft} />
+          <Translate component={LinkText} display="block" content="qvain.backLink" />
+        </LinkBack>
+      </LinkBackContainer>
+    )
 
     // Sticky header content
     let stickyheader
@@ -305,22 +246,18 @@ class Qvain extends Component {
     } else {
       stickyheader = (
         <StickySubHeaderWrapper>
-          <StickySubHeader>
+          <CustomSubHeader>
+            {createLinkBack('left')}
             <ButtonContainer>
-              {this.props.Stores.Qvain.original
-                ? (
-                  <SubmitButton ref={this.updateDatasetButton} type="button" onClick={this.handleUpdate}>
-                    <Translate content="qvain.edit" />
-                  </SubmitButton>
-                )
-                : (
-                  <SubmitButton ref={this.submitDatasetButton} type="button" onClick={this.handleCreate}>
-                    <Translate content="qvain.submit" />
-                  </SubmitButton>
-                )
-              }
+              <SubmitButtons
+                handleSubmitError={this.handleSubmitError}
+                handleSubmitResponse={this.handleSubmitResponse}
+                submitButtonsRef={this.submitButtonsRef}
+              />
             </ButtonContainer>
-          </StickySubHeader>
+          </CustomSubHeader>
+          <PasState />
+          <DeprecatedState />
           {this.state.submitted ? (
             <StickySubHeaderResponse>
               <SubmitResponse response={this.state.response} />
@@ -336,12 +273,8 @@ class Qvain extends Component {
       dataset = (
         <div className="container">
           <ErrorContainer>
-            <ErrorLabel>
-              {this.state.datasetErrorTitle}
-            </ErrorLabel>
-            <ErrorContent>
-              {this.state.datasetErrorDetails}
-            </ErrorContent>
+            <ErrorLabel>{this.state.datasetErrorTitle}</ErrorLabel>
+            <ErrorContent>{this.state.datasetErrorDetails}</ErrorContent>
             <ErrorButtons>
               <Button onClick={this.handleRetry}>Retry</Button>
             </ErrorButtons>
@@ -356,11 +289,13 @@ class Qvain extends Component {
           <Description />
           <Actors />
           <RightsAndLicenses />
+          <TemporalAndSpatial />
+          <History />
           <Files />
           <SubmitContainer>
             <Translate component="p" content="qvain.consent" unsafe />
           </SubmitContainer>
-          <STSD onClick={this.setFocusOnSubmitOrUpdateButton}>
+          <STSD onClick={this.setFocusOnSubmitButton}>
             <Translate content="stsd" />
           </STSD>
         </Form>
@@ -375,12 +310,6 @@ class Qvain extends Component {
               <Translate component={Title} content={titleKey} />
             </SubHeaderText>
           </SubHeaderTextContainer>
-          <LinkBackContainer>
-            <LinkBack to="/qvain">
-              <FontAwesomeIcon size="lg" icon={faChevronLeft} />
-              <Translate component="span" display="block" content="qvain.backLink" />
-            </LinkBack>
-          </LinkBackContainer>
         </SubHeader>
         {stickyheader}
         {dataset}
@@ -388,80 +317,5 @@ class Qvain extends Component {
     )
   }
 }
-
-const STSD = styled.button`
-    background: ${p => p.theme.color.primary};
-    color: #fafafa;
-    max-height: 0;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    border: none;
-    letter-spacing: 2px;
-    transition: 0.2s ease;
-    &:focus {
-    text-decoration: underline;
-    padding: 0.5em;
-    max-height: 3em;
-    }
-`
-const SubHeaderTextContainer = styled.div`
-  white-space: nowrap;
-`
-const LinkBackContainer = styled.div`
-  text-align: right;
-  width: 100%;
-  white-space: nowrap;
-`
-const LinkBack = styled(Link)`
-  color: #fff;
-  margin-right: 40px;
-`
-const ButtonContainer = styled.div`
-  text-align: center;
-  padding-top: 2px;
-`
-const SubmitButton = styled(InvertedButton)`
-  background: #fff;
-  font-size: 1.2em;
-  border-radius: 25px;
-  padding: 5px 30px;
-  border-color: #007fad;
-  border: 1px solid;
-`
-const Form = styled.form`
-  margin-bottom: 20px;
-`
-const SubmitContainer = styled(Container)`
-  padding-bottom: 25px;
-  margin: 15px;
-`
-
-const ErrorContainer = styled(Container)`
-  background-color: #FFEBE8;
-  border-bottom: 1px solid rgba(0,0,0,0.3);
-`
-
-const ErrorLabel = styled.p`
-  font-weight: bold;
-  display: inline-block;
-  vertical-align: top;
-`
-
-const ErrorContent = styled.div`
-  max-width: 1140px;
-  width: 100%;
-  text-align: left;
-  display: inline-block;
-  white-space: pre-line;
-`
-
-const ErrorButtons = styled.div`
-  margin-bottom: -2em;
-  margin-top: 1em;
-  > button:first-child {
-    margin: 0
-  }
-`
 
 export default withRouter(inject('Stores')(observer(Qvain)))

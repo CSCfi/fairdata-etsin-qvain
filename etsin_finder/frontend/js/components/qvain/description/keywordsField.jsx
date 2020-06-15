@@ -57,11 +57,26 @@ class KeywordsField extends Component {
     this.props.Stores.Qvain.removeKeyword(word)
   }
 
+  handleKeyDown = (e) => {
+    if (e.keyCode === 188 || e.keyCode === 13) {
+      this.handleKeywordAdd(e)
+    }
+  }
+
   render() {
+    const { readonly } = this.props.Stores.Qvain
     const keywords = this.props.Stores.Qvain.keywords.map(word => (
       <Label color="#007fad" margin="0 0.5em 0.5em 0" key={word}>
         <PaddedWord>{word}</PaddedWord>
-        <FontAwesomeIcon onClick={() => this.handleKeywordRemove(word)} icon={faTimes} size="xs" />
+        {!readonly && (
+          <FontAwesomeIcon
+            className="delete-keyword"
+            size="xs"
+            icon={faTimes}
+            aria-label="remove"
+            onClick={() => this.handleKeywordRemove(word)}
+          />
+        )}
       </Label>
     ))
     return (
@@ -74,14 +89,16 @@ class KeywordsField extends Component {
         <Translate
           component={Input}
           id="keywordsInput"
+          disabled={readonly}
           value={this.state.value}
+          onKeyDown={this.handleKeyDown}
           onChange={this.handleChange}
           type="text"
           attributes={{ placeholder: 'qvain.description.keywords.placeholder' }}
         />
         <ValidationError>{this.state.keywordsValidationError}</ValidationError>
         <ButtonContainer>
-          <AddNewButton type="button" onClick={this.handleKeywordAdd}>
+          <AddNewButton type="button" onClick={this.handleKeywordAdd} disabled={readonly}>
             <Translate content="qvain.description.keywords.addButton" />
           </AddNewButton>
         </ButtonContainer>

@@ -17,6 +17,7 @@ from etsin_finder.app_config import get_app_config
 from etsin_finder import authentication
 from etsin_finder import authorization
 from etsin_finder import cr_service
+from etsin_finder.download_metadata_service import download_metadata
 from etsin_finder.download_service import download_data
 from etsin_finder.email_utils import \
     create_email_message_body, \
@@ -31,6 +32,7 @@ from etsin_finder.utils import \
     slice_array_on_limit
 from etsin_finder import rems_service
 from etsin_finder.rems_service import RemsAPIService
+from etsin_finder.app_config import get_fairdata_rems_api_config
 
 TOTAL_ITEM_LIMIT = 1000
 log = app.logger
@@ -85,13 +87,39 @@ class Dataset(Resource):
 
         ret_obj = {'catalog_record': authorization.strip_information_from_catalog_record(cr, is_authd),
                    'email_info': get_email_info(cr)}
-        if cr_service.is_rems_catalog_record(cr) and is_authd:
+        if cr_service.is_rems_catalog_record(cr) and is_authd and get_fairdata_rems_api_config(app.testing) is not None:
             state = rems_service.get_application_state_for_resource(cr, authentication.get_user_id())
             ret_obj['application_state'] = state
             ret_obj['has_permit'] = state == 'approved'
 
         return ret_obj, 200
 
+class DatasetMetadata(Resource):
+    """DatasetMetadata"""
+
+    def __init__(self):
+        """Init DatasetMetadata endpoint"""
+        self.parser = reqparse.RequestParser()
+        self.parser.add_argument('cr_id', type=str, required=True)
+        self.parser.add_argument('format', type=str, required=True)
+
+    @log_request
+    def get(self):
+        """Download dataset metadata
+
+        Returns:
+            obj -- Returns a Flask.Response object streaming the response from metax
+
+        """
+        args = self.parser.parse_args()
+        cr_id = args['cr_id']
+        metadata_format = args['format']
+
+        cr = cr_service.get_catalog_record(cr_id, False, False)
+        if not cr:
+            abort(400, message="Unable to get catalog record")
+
+        return download_metadata(cr_id, metadata_format)
 
 class Files(Resource):
     """File/directory related REST endpoints for frontend"""
@@ -236,6 +264,14 @@ class User(Resource):
         csc_user = authentication.get_user_csc_name()
         groups = authentication.get_user_ida_groups()
         user_info['user_ida_groups'] = groups
+
+        is_using_rems_response = get_fairdata_rems_api_config(app.testing)
+        is_using_rems = False
+
+        if is_using_rems_response is not None:
+            is_using_rems = is_using_rems_response.get('ENABLED', False)
+        user_info['is_using_rems'] = is_using_rems
+
         if csc_user is not None:
             user_info['user_csc_name'] = csc_user
         return user_info, 200
@@ -281,9 +317,14 @@ class REMSApplyForPermission(Resource):
         cr = cr_service.get_catalog_record(cr_id, False, False)
         if cr and cr_service.is_rems_catalog_record(cr):
             pref_id = cr_service.get_catalog_record_preferred_identifier(cr)
+            rems_identifier = cr_service.get_catalog_record_REMS_identifier(cr)
 
         log.info('Get catalog item id for resource: {0}'.format(pref_id))
-        res_get_catalogue_item = _rems_api.get_catalogue_item_for_resource(pref_id)
+        log.info('rems_identifier: {0}'.format(rems_identifier))
+        if not rems_identifier:
+            log.warning('No rems_identifier found for resource: {0}'.format(pref_id))
+            return 'No rems_identifier found for resource', 500
+        res_get_catalogue_item = _rems_api.get_catalogue_item_for_resource(rems_identifier)
         log.debug('res_get_catalogue_item: {0}'.format(res_get_catalogue_item))
 
         if not res_get_catalogue_item:

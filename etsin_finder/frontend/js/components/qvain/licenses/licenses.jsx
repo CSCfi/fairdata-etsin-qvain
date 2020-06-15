@@ -28,6 +28,8 @@ const otherOpt = locale => ({
 })
 
 export class License extends Component {
+  promises = []
+
   static propTypes = {
     Stores: PropTypes.object.isRequired,
   }
@@ -41,8 +43,8 @@ export class License extends Component {
   }
 
   componentDidMount = () => {
-    const { license } = this.props.Stores.Qvain
-    getReferenceData('license')
+    const { license, setLicenseName } = this.props.Stores.Qvain
+    this.promises.push(getReferenceData('license')
       .then(res => {
         const list = res.data.hits.hits
         const refsEn = list.map(ref => ({
@@ -53,15 +55,19 @@ export class License extends Component {
           value: ref._source.uri,
           label: ref._source.label.fi || ref._source.label.en, // use english label when finnish is not available
         }))
+        refsEn.push(otherOpt('en'))
+        refsFi.push(otherOpt('fi'))
         this.setState({
           options: {
-            en: [...refsEn, otherOpt('en')],
-            fi: [...refsFi, otherOpt('fi')],
+            en: refsEn,
+            fi: refsFi,
           },
         })
-        license.name = {
-          en: refsEn.find(opt => opt.value === license.identifier).label,
-          fi: refsFi.find(opt => opt.value === license.identifier).label,
+        if (license && license.identifier) {
+          setLicenseName({
+            en: refsEn.find(opt => opt.value === license.identifier).label,
+            fi: refsFi.find(opt => opt.value === license.identifier).label,
+          })
         }
       })
       .catch(error => {
@@ -78,6 +84,11 @@ export class License extends Component {
           console.log('Error', error.message)
         }
       })
+    )
+  }
+
+  componentWillUnmount() {
+    this.promises.forEach(promise => promise && promise.cancel && promise.cancel())
   }
 
   handleOnBlur = () => {
@@ -101,7 +112,7 @@ export class License extends Component {
   render() {
     const { options, errorMessage } = this.state
     const { lang } = this.props.Stores.Locale
-    const { license, setLicense, otherLicenseUrl } = this.props.Stores.Qvain
+    const { license, setLicense, otherLicenseUrl, readonly } = this.props.Stores.Qvain
     return (
       <Card>
         <LabelLarge htmlFor="licenseSelect">
@@ -111,14 +122,15 @@ export class License extends Component {
           component={Select}
           inputId="licenseSelect"
           name="license"
+          isDisabled={readonly}
           value={getCurrentValue(license, options, lang)}
           options={options[lang]}
           isClearable
           onChange={onChange(options, lang, setLicense, LicenseConstructor)}
-          onBlur={() => {}}
+          onBlur={() => { }}
           attributes={{ placeholder: 'qvain.rightsAndLicenses.license.placeholder' }}
         />
-        {license !== undefined && license.identifier === otherOptValue && (
+        {license && license.identifier === otherOptValue && (
           <Fragment>
             <Translate
               htmlFor="otherLicenseURL"
@@ -128,6 +140,7 @@ export class License extends Component {
             />
             <Input
               id="otherLicenseURL"
+              disabled={readonly}
               value={otherLicenseUrl}
               onChange={event => {
                 this.props.Stores.Qvain.otherLicenseUrl = event.target.value

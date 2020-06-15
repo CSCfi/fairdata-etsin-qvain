@@ -45,7 +45,7 @@ describe('AskForAccess', () => {
 
 describe('REMSButton', () => {
   it('should render REMSButton as disabled', () => {
-    const wrapper = shallow(<REMSButton applicationState="Error" loading={false} />)
+    const wrapper = shallow(<REMSButton applicationState="disabled" loading={false} />)
     console.log(wrapper.debug())
     expect(wrapper.find('#rems-button-error').prop('disabled')).toEqual(true)
   })

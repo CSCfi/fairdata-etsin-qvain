@@ -3,291 +3,84 @@ import PropTypes from 'prop-types'
 import { inject, observer } from 'mobx-react'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
-import { FormField, RadioInput, RadioContainer, Checkbox, Label, HelpField } from '../general/form'
-import { List, ListItem } from '../general/list'
-import { EntityType, Role } from '../utils/constants'
+import { RadioInput, NestedLabel } from '../general/form'
+import { EntityType } from '../utils/constants'
+import { GroupLabel } from './common'
 
 export class ActorTypeSelectBase extends Component {
   static propTypes = {
     Stores: PropTypes.object.isRequired,
   }
 
-  handleChangeRole = (actor, role) => event => {
-    if (event.target.checked === true) {
-      actor.role = [...actor.role, role]
-    } else {
-      actor.role = actor.role.filter(r => r !== role)
-    }
-  }
-
   handleChangeEntity = (actor, type) => () => {
-    actor.type = type
-    actor.role = []
-    this.props.Stores.Qvain.emptyActorInEdit(type)
-  }
-
-  checkIfActorRoleExists = role => {
-    const actor = this.props.Stores.Qvain.actorInEdit
-    if (this.props.Stores.Qvain.addedActors.map(p => p.uiId).includes(actor.uiId)) {
-      // we are editing a previously added actor, allow changing roles
-      return false
-    }
-    const actorMatchList = this.props.Stores.Qvain.addedActors.map(addedActor =>
-      addedActor.role.includes(role)
-    )
-    if (actorMatchList.includes(true)) {
-      return true
-    }
-    return false
+    const { updateActor } = this.props.Stores.Qvain.Actors
+    updateActor(actor, { type })
   }
 
   render() {
-    const actor = this.props.Stores.Qvain.actorInEdit
+    const {
+      Actors: { actorInEdit: actor },
+      readonly,
+    } = this.props.Stores.Qvain
+    const isPerson = actor.type === EntityType.PERSON
+    const isOrganization = actor.type === EntityType.ORGANIZATION
     return (
       <Fieldset>
-        <Column>
-          <FormField>
-            <RadioContainer>
+        <Translate component={GroupLabel} content="qvain.actors.add.groups.type" />
+        <List>
+          <ListItem>
+            <NestedLabel>
               <RadioInput
                 id="entityPerson"
                 name="entityType"
+                disabled={readonly}
                 onChange={this.handleChangeEntity(actor, EntityType.PERSON)}
                 type="radio"
-                checked={actor.type === EntityType.PERSON}
+                checked={isPerson}
               />
-            </RadioContainer>
-            <Label htmlFor="entityPerson">
               <Translate content="qvain.actors.add.radio.person" />
-            </Label>
-          </FormField>
-          <List>
-            <ListItem disabled={actor.type !== EntityType.PERSON}>
-              <FormField>
-                <Checkbox
-                  disabled={actor.type !== EntityType.PERSON}
-                  onChange={this.handleChangeRole(actor, Role.CREATOR)}
-                  id="personCreator"
-                  type="checkbox"
-                  value={Role.CREATOR}
-                  checked={actor.type === EntityType.PERSON && actor.role.includes(Role.CREATOR)}
-                />
-                <Label htmlFor="personCreator">
-                  <Translate content="qvain.actors.add.checkbox.creator" /> *
-                </Label>
-              </FormField>
-            </ListItem>
-            <ListItem
-              disabled={
-                actor.type !== EntityType.PERSON || this.checkIfActorRoleExists(Role.PUBLISHER)
-              }
-            >
-              <FormField>
-                <Checkbox
-                  onChange={this.handleChangeRole(actor, Role.PUBLISHER)}
-                  disabled={
-                    actor.type !== EntityType.PERSON || this.checkIfActorRoleExists(Role.PUBLISHER)
-                  }
-                  id="personPublisher"
-                  value={Role.PUBLISHER}
-                  type="checkbox"
-                  checked={actor.type === EntityType.PERSON && actor.role.includes(Role.PUBLISHER)}
-                />
-                <Label htmlFor="personPublisher">
-                  <Translate content="qvain.actors.add.checkbox.publisher" />{' '}
-                  <HelpField>(max 1)</HelpField>
-                </Label>
-              </FormField>
-            </ListItem>
-            <ListItem disabled={actor.type !== EntityType.PERSON}>
-              <FormField>
-                <Checkbox
-                  disabled={actor.type !== EntityType.PERSON}
-                  onChange={this.handleChangeRole(actor, Role.CURATOR)}
-                  id="personCurator"
-                  value={Role.CURATOR}
-                  checked={actor.type === EntityType.PERSON && actor.role.includes(Role.CURATOR)}
-                  type="checkbox"
-                />
-                <Label htmlFor="personCurator">
-                  <Translate content="qvain.actors.add.checkbox.curator" />
-                </Label>
-              </FormField>
-            </ListItem>
-            <ListItem disabled={actor.type !== EntityType.PERSON}>
-              <FormField>
-                <Checkbox
-                  disabled={actor.type !== EntityType.PERSON}
-                  onChange={this.handleChangeRole(actor, Role.RIGHTS_HOLDER)}
-                  id="personRightsHolder"
-                  type="checkbox"
-                  value={Role.RIGHTS_HOLDER}
-                  checked={
-                    actor.type === EntityType.PERSON && actor.role.includes(Role.RIGHTS_HOLDER)
-                  }
-                />
-                <Label htmlFor="personRightsHolder">
-                  <Translate content="qvain.actors.add.checkbox.rights_holder" />
-                </Label>
-              </FormField>
-            </ListItem>
-            <ListItem disabled={actor.type !== EntityType.PERSON}>
-              <FormField>
-                <Checkbox
-                  disabled={actor.type !== EntityType.PERSON}
-                  onChange={this.handleChangeRole(actor, Role.CONTRIBUTOR)}
-                  id="personContributor"
-                  type="checkbox"
-                  value={Role.CONTRIBUTOR}
-                  checked={
-                    actor.type === EntityType.PERSON && actor.role.includes(Role.CONTRIBUTOR)
-                  }
-                />
-                <Label htmlFor="personContributor">
-                  <Translate content="qvain.actors.add.checkbox.contributor" />
-                </Label>
-              </FormField>
-            </ListItem>
-          </List>
-        </Column>
-        <Column>
-          <FormField>
-            <RadioContainer>
+            </NestedLabel>
+          </ListItem>
+          <ListItem>
+            <NestedLabel>
               <RadioInput
                 id="entityOrg"
                 name="entityType"
                 type="radio"
+                disabled={readonly}
                 onChange={this.handleChangeEntity(actor, EntityType.ORGANIZATION)}
-                checked={actor.type === EntityType.ORGANIZATION}
+                checked={isOrganization}
               />
-            </RadioContainer>
-            <Label htmlFor="entityOrg">
               <Translate content="qvain.actors.add.radio.organization" />
-            </Label>
-          </FormField>
-          <List>
-            <ListItem disabled={actor.type !== EntityType.ORGANIZATION}>
-              <FormField>
-                <Checkbox
-                  id="orgCreator"
-                  type="checkbox"
-                  disabled={actor.type !== EntityType.ORGANIZATION}
-                  onChange={this.handleChangeRole(actor, Role.CREATOR)}
-                  value={Role.CREATOR}
-                  checked={
-                    actor.type === EntityType.ORGANIZATION && actor.role.includes(Role.CREATOR)
-                  }
-                />
-                <Label htmlFor="orgCreator">
-                  <Translate content="qvain.actors.add.checkbox.creator" />
-                </Label>
-              </FormField>
-            </ListItem>
-            <ListItem
-              disabled={
-                actor.type !== EntityType.ORGANIZATION ||
-                this.checkIfActorRoleExists(Role.PUBLISHER)
-              }
-            >
-              <FormField>
-                <Checkbox
-                  id="orgPublisher"
-                  type="checkbox"
-                  disabled={
-                    actor.type !== EntityType.ORGANIZATION ||
-                    this.checkIfActorRoleExists(Role.PUBLISHER)
-                  }
-                  onChange={this.handleChangeRole(actor, Role.PUBLISHER)}
-                  value={Role.PUBLISHER}
-                  checked={
-                    actor.type === EntityType.ORGANIZATION && actor.role.includes(Role.PUBLISHER)
-                  }
-                />
-                <Label htmlFor="orgPublisher">
-                  <Translate content="qvain.actors.add.checkbox.publisher" />{' '}
-                  <HelpField>(max 1)</HelpField>
-                </Label>
-              </FormField>
-            </ListItem>
-            <ListItem disabled={actor.type !== EntityType.ORGANIZATION}>
-              <FormField>
-                <Checkbox
-                  id="orgCurator"
-                  type="checkbox"
-                  disabled={actor.type !== EntityType.ORGANIZATION}
-                  onChange={this.handleChangeRole(actor, Role.CURATOR)}
-                  value={Role.CURATOR}
-                  checked={
-                    actor.type === EntityType.ORGANIZATION && actor.role.includes(Role.CURATOR)
-                  }
-                />
-                <Label htmlFor="orgCurator">
-                  <Translate content="qvain.actors.add.checkbox.curator" />
-                </Label>
-              </FormField>
-            </ListItem>
-            <ListItem disabled={actor.type !== EntityType.ORGANIZATION}>
-              <FormField>
-                <Checkbox
-                  id="orgRightsHolder"
-                  type="checkbox"
-                  disabled={actor.type !== EntityType.ORGANIZATION}
-                  onChange={this.handleChangeRole(actor, Role.RIGHTS_HOLDER)}
-                  value={Role.RIGHTS_HOLDER}
-                  checked={
-                    actor.type === EntityType.ORGANIZATION &&
-                    actor.role.includes(Role.RIGHTS_HOLDER)
-                  }
-                />
-                <Label htmlFor="orgRightsHolder">
-                  <Translate content="qvain.actors.add.checkbox.rights_holder" />
-                </Label>
-              </FormField>
-            </ListItem>
-            <ListItem disabled={actor.type !== EntityType.ORGANIZATION}>
-              <FormField>
-                <Checkbox
-                  id="orgContributor"
-                  type="checkbox"
-                  disabled={actor.type !== EntityType.ORGANIZATION}
-                  onChange={this.handleChangeRole(actor, Role.CONTRIBUTOR)}
-                  value={Role.CONTRIBUTOR}
-                  checked={
-                    actor.type === EntityType.ORGANIZATION && actor.role.includes(Role.CONTRIBUTOR)
-                  }
-                />
-                <Label htmlFor="orgContributor">
-                  <Translate content="qvain.actors.add.checkbox.contributor" />
-                </Label>
-              </FormField>
-            </ListItem>
-          </List>
-        </Column>
+            </NestedLabel>
+          </ListItem>
+        </List>
       </Fieldset>
     )
   }
 }
 
-const Column = styled.div`
-  float: left;
-  width: 50%;
+export const List = styled.ul`
+  padding: 0px;
+  margin: 0;
+  list-style-type: none;
+  display: flex;
+  margin: -0.5rem;
+  width: 100%;
 `
 
-export const ActorSelection = styled.div`
-  width: 100%;
-  border-radius: 4px;
-  padding: 5px 17px;
-  background-color: #f9f9f9;
-  margin-bottom: 20px;
+export const ListItem = styled.li`
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: no-wrap;
+  color: ${(props) => (props.disabled ? 'grey' : 'inherit')};
+  margin: 0.5rem;
 `
 
 const Fieldset = styled.fieldset`
   border: none;
 `
-
-Column.displayName = 'Column'
-Column.displayName = 'Column'
-Column.displayName = 'Column'
-Column.displayName = 'Column'
-Column.displayName = 'Column'
 
 export default inject('Stores')(observer(ActorTypeSelectBase))

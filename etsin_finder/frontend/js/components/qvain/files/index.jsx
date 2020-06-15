@@ -6,14 +6,17 @@ import { inject, observer } from 'mobx-react'
 import { SectionTitle } from '../general/section'
 import { ContainerLight, ContainerSubsectionBottom } from '../general/card'
 import { HelpIcon } from '../general/form'
-import IDAFilePicker from './idaFilePicker'
-import ExternalFiles from './externalFiles'
+import IDAFilePicker from './ida'
+import ExternalFiles from './external/externalFiles'
 import DataCatalog from './dataCatalog'
 import CumulativeState from './cumulativeState'
 import { DataCatalogIdentifiers } from '../utils/constants'
 import Tooltip from '../general/tooltip'
 import FilesInfo from './filesInfo'
 import MetadataModal from './metadataModal'
+import SelectedItems from './ida/selectedItems'
+import LegacyFilePicker from './legacy/idaFilePicker'
+import LegacySelectedFiles from './legacy/selectedFiles'
 
 class Files extends Component {
   static propTypes = {
@@ -25,19 +28,30 @@ class Files extends Component {
   }
 
   render() {
-    const { dataCatalog } = this.props.Stores.Qvain
+    const { dataCatalog, isPas, metaxApiV2 } = this.props.Stores.Qvain
     let data = null
-    if (dataCatalog === DataCatalogIdentifiers.IDA) {
+
+    const SelectedItemsComponent = metaxApiV2 ? SelectedItems : LegacySelectedFiles
+    const FilePickerComponent = metaxApiV2 ? IDAFilePicker : LegacyFilePicker
+
+    if (isPas) {
+      data = (
+        <>
+          <ContainerSubsectionBottom>
+            <SelectedItemsComponent />
+          </ContainerSubsectionBottom>
+        </>
+      )
+    } else if (dataCatalog === DataCatalogIdentifiers.IDA) {
       data = (
         <>
           <CumulativeState />
           <ContainerSubsectionBottom>
-            <IDAFilePicker />
+            <FilePickerComponent />
           </ContainerSubsectionBottom>
         </>
       )
-    }
-    if (dataCatalog === DataCatalogIdentifiers.ATT) {
+    } else if (dataCatalog === DataCatalogIdentifiers.ATT) {
       data = (
         <ContainerSubsectionBottom>
           <ExternalFiles />

@@ -1,3 +1,66 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`FilterSection should render <FilterSection /> 1`] = `ShallowWrapper {}`;
+exports[`FilterSection should render <FilterSection /> 1`] = `
+<filterSection__Section>
+  <filterSection__FilterCategory
+    aria-expanded={false}
+    onClick={[Function]}
+  >
+    Data Catalog
+    <FontAwesomeIcon
+      border={false}
+      className=""
+      fixedWidth={false}
+      flip={null}
+      icon={
+        Object {
+          "icon": Array [
+            320,
+            512,
+            Array [],
+            "f107",
+            "M143 352.3L7 216.3c-9.4-9.4-9.4-24.6 0-33.9l22.6-22.6c9.4-9.4 24.6-9.4 33.9 0l96.4 96.4 96.4-96.4c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9l-136 136c-9.2 9.4-24.4 9.4-33.8 0z",
+          ],
+          "iconName": "angle-down",
+          "prefix": "fas",
+        }
+      }
+      inverse={false}
+      listItem={false}
+      mask={null}
+      pull={null}
+      pulse={false}
+      rotation={null}
+      size="2x"
+      spin={false}
+      symbol={false}
+      title=""
+      transform={null}
+    />
+  </filterSection__FilterCategory>
+  <filterSection__FilterItems
+    aria-hidden={true}
+    className=""
+  >
+    <ul
+      aria-label="Data Catalog"
+    >
+      <FilterItem
+        aggregationName="data_catalog_en"
+        item={
+          Object {
+            "doc_count": 1,
+            "key": "Fairdata IDA datasets",
+          }
+        }
+        key="Fairdata IDA datasets"
+        tabIndex="-1"
+        term="data_catalog.en"
+      />
+    </ul>
+    <inject-PasCheckBox-with-Stores
+      aggr="data_catalog"
+    />
+  </filterSection__FilterItems>
+</filterSection__Section>
+`;

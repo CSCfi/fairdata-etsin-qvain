@@ -9,22 +9,6 @@ import Loader from '../general/loader'
 const REMSButton = props => {
   let button
   switch (props.applicationState) {
-    case 'Error':
-      button = (
-        <div aria-hidden="true" title={translate('dataset.access_unavailable')}>
-          <Button id="rems-button-error" disabled noMargin>
-            {props.loading ? (
-              <>
-                <Translate content="dataset.access_permission" />
-                <Loader color="white" active size="1.2em" />
-              </>
-            ) : (
-              <Translate content="dataset.access_permission" />
-            )}
-          </Button>
-        </div>
-      )
-      break
     case 'apply':
       button = (
         <Button id="rems-button-apply" onClick={props.onClick} noMargin>
@@ -113,6 +97,22 @@ const REMSButton = props => {
             <Translate content="dataset.access_denied" />
           )}
         </Button>
+      )
+      break
+    case 'disabled':
+      button = (
+        <div aria-hidden="true" title={translate('dataset.access_unavailable')}>
+          <Button id="rems-button-error" disabled noMargin>
+            {props.loading ? (
+              <>
+                <Translate content="dataset.access_permission" />
+                <Loader color="white" active size="1.2em" />
+              </>
+            ) : (
+              <Translate content="dataset.access_permission" />
+            )}
+          </Button>
+        </div>
       )
       break
     default:

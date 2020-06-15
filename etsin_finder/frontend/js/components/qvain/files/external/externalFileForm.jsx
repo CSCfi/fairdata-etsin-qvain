@@ -4,12 +4,12 @@ import { inject, observer } from 'mobx-react'
 import { toJS } from 'mobx'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
-import { Input, Label, CustomSelect } from '../general/form'
-import { SaveButton, CancelButton, FileItem } from '../general/buttons'
-import ValidationError from '../general/validationError'
-import { externalResourceSchema } from '../utils/formValidation'
-import { getLocalizedOptions } from '../utils/getReferenceData'
-import { EmptyExternalResource } from '../../../stores/view/qvain'
+import { Input, Label, CustomSelect } from '../../general/form'
+import { SaveButton, CancelButton, FileItem } from '../../general/buttons'
+import ValidationError from '../../general/validationError'
+import { externalResourceSchema } from '../../utils/formValidation'
+import { getLocalizedOptions } from '../../utils/getReferenceData'
+import { EmptyExternalResource } from '../../../../stores/view/qvain'
 
 export class ExternalFileFormBase extends Component {
   static propTypes = {
@@ -107,17 +107,31 @@ export class ExternalFileFormBase extends Component {
           onChange={(selection) => { externalResource.useCategory = selection }}
           attributes={{ placeholder: 'qvain.files.external.form.useCategory.placeholder' }}
         />
-        <Label htmlFor="urlInput">
-          <Translate content="qvain.files.external.form.url.label" />
+        <Label htmlFor="accessUrlInput">
+          <Translate content="qvain.files.external.form.accessUrl.label" />
+          <Translate component="p" content="qvain.files.external.form.accessUrl.infoText" />
         </Label>
         <Translate
           component={ResourceInput}
           type="text"
-          id="urlInput"
-          value={externalResource.url}
-          onChange={(event) => { externalResource.url = event.target.value }}
+          id="accessUrlInput"
+          value={externalResource.accessUrl}
+          onChange={(event) => { externalResource.accessUrl = event.target.value }}
           onBlur={this.handleOnUrlBlur}
-          attributes={{ placeholder: 'qvain.files.external.form.url.placeholder' }}
+          attributes={{ placeholder: 'qvain.files.external.form.accessUrl.placeholder' }}
+        />
+        <Label htmlFor="downloadUrlInput">
+          <Translate content="qvain.files.external.form.downloadUrl.label" />
+          <Translate component="p" content="qvain.files.external.form.downloadUrl.infoText" />
+        </Label>
+        <Translate
+          component={ResourceInput}
+          type="text"
+          id="downloadUrlInput"
+          value={externalResource.downloadUrl}
+          onChange={(event) => { externalResource.downloadUrl = event.target.value }}
+          onBlur={this.handleOnUrlBlur}
+          attributes={{ placeholder: 'qvain.files.external.form.downloadUrl.placeholder' }}
         />
         {externalResourceError && <ValidationError>{externalResourceError}</ValidationError>}
         <Translate

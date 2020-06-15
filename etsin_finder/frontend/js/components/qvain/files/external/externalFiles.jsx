@@ -11,12 +11,12 @@ import {
   DeleteButton,
   ButtonLabel,
   ButtonContainer
-} from '../general/buttons'
-import { EmptyExternalResource } from '../../../stores/view/qvain'
-import { Input, SelectedFilesTitle } from '../general/form'
-import { SlidingContent } from '../general/card'
+} from '../../general/buttons'
+import { EmptyExternalResource } from '../../../../stores/view/qvain'
+import { Input, SelectedFilesTitle } from '../../general/form'
+import { SlidingContent } from '../../general/card'
 import ExternalFileForm from './externalFileForm'
-import { externalResourceUrlSchema } from '../utils/formValidation'
+import { externalResourceAccessUrlSchema } from '../../utils/formValidation'
 
 export class ExternalFilesBase extends Component {
   static propTypes = {
@@ -36,8 +36,8 @@ export class ExternalFilesBase extends Component {
 
   verifyURL = () => {
     const resource = this.props.Stores.Qvain.externalResourceInEdit
-    externalResourceUrlSchema
-      .validate(resource.url)
+    externalResourceAccessUrlSchema
+      .validate(resource.accessUrl)
       .then(() => {
         this.props.Stores.Qvain.resetInEditResource()
       })
@@ -62,7 +62,7 @@ export class ExternalFilesBase extends Component {
     return (
       <Fragment>
         <Translate component="p" content="qvain.files.external.help" />
-        <SlidingContent open="true">
+        <SlidingContent open>
           <Translate tabIndex="0" component={SelectedFilesTitle} content="qvain.files.external.addedResources.title" />
           {addedExternalResources.length === 0 &&
             <Translate tabIndex="0" component="p" content="qvain.files.external.addedResources.none" />
@@ -70,7 +70,23 @@ export class ExternalFilesBase extends Component {
           {addedExternalResources.map((addedExternalResource) => (
             <ButtonGroup tabIndex="0" key={addedExternalResource.id}>
               <ButtonLabel>
-                {addedExternalResource.title} / {addedExternalResource.url}
+                {addedExternalResource.title }
+                {
+                  // Disable lint rule because this syntax is more readable using concatenation
+                  /* eslint-disable prefer-template */
+                  (typeof addedExternalResource.accessUrl !== 'undefined') ? ((' / ' +
+                  (' / ' + addedExternalResource.accessUrl.length > 40 ?
+                  addedExternalResource.accessUrl.substring(0, 40).concat('... ') :
+                  addedExternalResource.accessUrl))) : null
+                }
+                {
+                  (typeof addedExternalResource.downloadUrl !== 'undefined') ? ((' / ' +
+                  (' / ' + addedExternalResource.downloadUrl.length > 40 ?
+                  addedExternalResource.downloadUrl.substring(0, 40).concat('... ') :
+                  addedExternalResource.downloadUrl))) : null
+                  /* eslint-enable prefer-template */
+                }
+
               </ButtonLabel>
               <ButtonContainer>
                 <EditButton
