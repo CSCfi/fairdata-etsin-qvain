@@ -13,7 +13,6 @@
 
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import translate from 'counterpart'
 import { darken } from 'polished'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
@@ -76,6 +75,11 @@ const InfoPosition = styled.div`{
   position: absolute;
   top: 8px; 
   right: -25px;
+}
+`
+
+const Text = styled.span`{
+  padding-right: 10px;
 }
 `
 
@@ -163,7 +167,7 @@ export default class FormatSelect extends Component {
           isOpen={this.state.isOpen}
           onClick={this.toggleOpen}
         >
-          {translate('dataset.datasetAsFile.open')}
+          <Translate component={Text} content="dataset.datasetAsFile.open" />
         </Controller>
         {this.state.isOpen && this.state.isFocused && (
           this.props.options.map((single, i) => (

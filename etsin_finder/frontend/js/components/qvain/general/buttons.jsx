@@ -12,13 +12,14 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 
 export const TableButton = styled.button`
-  width: 84px;
+  min-width: 84px;
+  max-width: 6.5em;
+  flex-grow: 1;
   height: 42px;
   background-color: #fff;
   border-radius: 4px;
   border: solid 1px #4f4f4f;
   font-size: 16px;
-  font-weight: 600px;
   line-height: 1.31;
   color: #4f4f4f;
   &:hover {
@@ -28,10 +29,10 @@ export const TableButton = styled.button`
 
 export const CancelButton = styled.button`
   border-radius: 4px;
-  border: solid 1px #4f4f4f;
+  border: ${(props) => `solid 1px ${ props.theme.color.primary}` };
   font-size: 20px;
   font-weight: bold;
-  color: #4f4f4f;
+  color: ${(props) => `${ props.theme.color.primary}` };
   padding: 10px 20px;
   &:hover {
     background-color: #ccc;
@@ -40,15 +41,15 @@ export const CancelButton = styled.button`
 
 export const SaveButton = styled.button`
   border-radius: 4px;
-  border: solid 1px #49a24a;
-  background-color: #49a24a;
+  border: ${(props) => `solid 1px ${ props.theme.color.primary}` };
+  background-color: ${(props) => `${ props.theme.color.primary}` };
   font-size: 20px;
   font-weight: bold;
   color: #fff;
   margin-left: 20px;
   padding: 10px 25px;
   &:hover {
-    background-color: #3a813b;
+    background-color: ${(props => props.theme.color.primaryDark)};
   }
 
   :disabled {
@@ -92,7 +93,8 @@ export const DangerButton = styled.button`
 `
 
 export const RemoveButton = styled.button`
-  width: 84px;
+  min-width: 84px;
+  max-width: 6.5em;
   height: 42px;
   border-radius: 4px;
   border: solid 1px #cc0000;
@@ -105,6 +107,7 @@ export const RemoveButton = styled.button`
     background-color: #ffb2b2;
     border: solid 2px #cc0000;
   }
+  flex-grow: 1;
 `
 
 export const ButtonGroup = styled.div`

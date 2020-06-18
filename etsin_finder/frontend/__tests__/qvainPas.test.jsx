@@ -4,6 +4,8 @@ import { Provider } from 'mobx-react'
 import { ThemeProvider } from 'styled-components'
 import axios from 'axios'
 
+import '../locale/translations'
+
 import etsinTheme from '../js/styles/theme'
 import PasState from '../js/components/qvain/pasState'
 import DescriptionField from '../js/components/qvain/description/descriptionField'
@@ -24,7 +26,7 @@ import {
   File,
   Directory,
   Project
-} from '../js/stores/view/qvain.files'
+} from '../js/stores/view/qvain.files.items'
 import QvainStore, {
   AccessType as AccessTypeConstructor,
   License as LicenseConstructor
@@ -42,7 +44,7 @@ Promise.config({
 
 const getStores = () => {
   QvainStore.resetQvainStore()
-  QvainStore.setLegacyFilePicker(false)
+  QvainStore.setMetaxApiV2(true)
   return {
     Qvain: QvainStore,
     Locale: LocaleStore,

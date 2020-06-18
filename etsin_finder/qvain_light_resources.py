@@ -111,6 +111,13 @@ class FileDirectory(Resource):
 
     def __init__(self):
         """Setup file endpoints"""
+        self.parser = reqparse.RequestParser()
+        self.parser.add_argument('cr_identifier', type=str, action='append', required=False)
+        self.parser.add_argument('pagination', type=bool, action='append', required=False)
+        self.parser.add_argument('offset', type=str, action='append', required=False)
+        self.parser.add_argument('limit', type=str, action='append', required=False)
+        self.parser.add_argument('directory_fields', type=str, action='append', required=False)
+        self.parser.add_argument('file_fields', type=str, action='append', required=False)
 
     @log_request
     def get(self, dir_id):
@@ -120,14 +127,59 @@ class FileDirectory(Resource):
         :param dir_id:
         :return:
         """
-        dir_obj = qvain_light_service.get_directory(dir_id)
+        args = self.parser.parse_args()
+        cr_identifier = args.get('cr_identifier', None)
+        pagination = args.get('pagination', None)
+        limit = args.get('limit', None)
+        offset = args.get('offset', None)
+        directory_fields = args.get('directory_fields', None)
+        file_fields = args.get('file_fields', None)
+
+        if file_fields is None:
+            file_fields = ','.join([
+                "file_name",
+                "project_identifier",
+                "file_characteristics",
+                "id",
+                "identifier",
+                "file_path",
+                "description",
+                "use_category",
+                "title",
+                "file_type"
+            ])
+
+        if directory_fields is None:
+            directory_fields = ','.join([
+                "directory_name",
+                "project_identifier",
+                "id",
+                "identifier",
+                "directory_path",
+                "file_count",
+                "description",
+                "use_category",
+                "title"
+            ])
+
+        params = {}
+        if cr_identifier:
+            params['cr_identifier'] = cr_identifier
+        if pagination:
+            params['pagination'] = 'true'
+        if limit is not None:
+            params['limit'] = limit
+        if offset is not None:
+            params['offset'] = offset
+        if directory_fields:
+            params['directory_fields'] = directory_fields
+        if file_fields:
+            params['file_fields'] = file_fields
+
+        dir_obj = qvain_light_service.get_directory(dir_id, params)
 
         # Return data only if authenticated
         if dir_obj and authentication.is_authenticated():
-            # Sort the items
-            sort_array_of_obj_by_key(dir_obj.get('directories', []), 'directory_name')
-            sort_array_of_obj_by_key(dir_obj.get('files', []), 'file_name')
-
             # Limit the amount of items to be sent to the frontend
             if 'directories' in dir_obj:
                 dir_obj['directories'] = slice_array_on_limit(dir_obj['directories'], TOTAL_ITEM_LIMIT)
@@ -259,21 +311,27 @@ class QvainDataset(Resource):
             log.warning("Invalid form data: {0}".format(err.messages))
             return err.messages, 400
         try:
-            metadata_provider_org = session["samlUserdata"]["urn:oid:1.3.6.1.4.1.25178.1.2.9"][0]
-            metadata_provider_user = session["samlUserdata"]["urn:oid:1.3.6.1.4.1.16161.4.0.53"][0]
+            metadata_provider_org = session["samlUserdata"][
+                "urn:oid:1.3.6.1.4.1.25178.1.2.9"][0]
+            metadata_provider_user = session["samlUserdata"][
+                "urn:oid:1.3.6.1.4.1.16161.4.0.53"][0]
         except KeyError as err:
-            log.warning("The Metadata provider is not specified: \n{0}".format(err))
-            return {"PermissionError": "The Metadata provider is not found in login information."}, 401
+            log.warning("The Metadata provider is not specified: \n{0}"
+                        .format(err))
+            return {"PermissionError":
+                    "The Metadata provider is not found in login information."}, 401
         if data["dataCatalog"] == "urn:nbn:fi:att:data-catalog-ida":
             if not check_if_data_in_user_IDA_project(data):
-                return {"IdaError": "Error in IDA group user permission or in IDA user groups."}, 403
+                return {"IdaError":
+                        "Error in IDA group user permission or in IDA user groups."}, 403
         if data["useDoi"] is True:
             use_doi = True
-        metax_redy_data = data_to_metax(data, metadata_provider_org, metadata_provider_user)
+        metax_ready_data = data_to_metax(data, metadata_provider_org,
+                                         metadata_provider_user)
         params = {
             "access_granter": get_encoded_access_granter()
         }
-        metax_response = create_dataset(metax_redy_data, params, use_doi)
+        metax_response = create_dataset(metax_ready_data, params, use_doi)
         return metax_response
 
     @log_request
@@ -356,7 +414,6 @@ class QvainDatasetEdit(Resource):
             return {"PermissionError": "User is not allowed to edit the dataset."}, 403
 
         return response, status
-
 
 class QvainDatasetDelete(Resource):
     """DELETE request handling coming in from Qvain Light. Used for deleting datasets in METAX."""

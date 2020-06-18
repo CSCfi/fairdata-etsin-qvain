@@ -26,6 +26,8 @@ export const SubHeaderTextContainer = styled.div`
 export const ButtonContainer = styled.div`
   text-align: center;
   padding-top: 2px;
+  margin-left: auto;
+  margin-right: auto;
 `
 
 export const SubmitButton = styled(InvertedButton)`
@@ -46,37 +48,9 @@ export const SubmitContainer = styled(Container)`
   margin: 15px;
 `
 
-export const ErrorContainer = styled(Container)`
-  background-color: #ffebe8;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
-`
-
-export const ErrorLabel = styled.p`
-  font-weight: bold;
-  display: inline-block;
-  vertical-align: top;
-`
-
-export const ErrorContent = styled.div`
-  max-width: 1140px;
-  width: 100%;
-  text-align: left;
-  display: inline-block;
-  white-space: pre-line;
-`
-
-export const ErrorButtons = styled.div`
-  margin-bottom: -2em;
-  margin-top: 1em;
-  > button:first-child {
-    margin: 0;
-  }
-`
-
 export const LinkBackContainer = styled.div`
   text-align: ${(props) => props.position};
   white-space: nowrap;
-  width: 47%;
 `
 
 export const LinkBack = styled(Link)`

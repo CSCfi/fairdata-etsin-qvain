@@ -49,15 +49,9 @@ const filesToMetax = (selectedFiles, existingFiles) => {
 }
 
 const handleSubmitToBackend = (values) => {
-  let files, directories
-  if (values.legacyFilePicker) {
-    files = filesToMetax(values.selectedFiles, values.existingFiles)
-    directories = directoriesToMetax(values.selectedDirectories, values.existingDirectories)
-  } else {
-    ({ files, directories } = values.Files.toMetax())
-  }
-
   const actors = values.Actors.toBackend()
+
+  const spatial = values.Spatials.toBackend()
 
   const obj = {
     title: values.title,
@@ -79,10 +73,19 @@ const handleSubmitToBackend = (values) => {
     remote_resources: values.externalResources.length > 0 ? values.externalResources : [],
     dataCatalog: values.dataCatalog,
     cumulativeState: values.cumulativeState,
-    files,
-    directories,
     useDoi: values.useDoi,
+    spatial
   }
+
+  if (values.original) {
+    obj.original = values.original
+  }
+
+  if (!values.metaxApiV2) {
+    obj.files = filesToMetax(values.selectedFiles, values.existingFiles)
+    obj.directories = directoriesToMetax(values.selectedDirectories, values.existingDirectories)
+  }
+
   return obj
 }
 

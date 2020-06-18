@@ -4,6 +4,8 @@ import { Provider } from 'mobx-react'
 import { ThemeProvider } from 'styled-components'
 import axios from 'axios'
 
+import '../locale/translations'
+
 import etsinTheme from '../js/styles/theme'
 import PasState from '../js/components/qvain/pasState'
 import DescriptionField from '../js/components/qvain/description/descriptionField'
@@ -38,7 +40,7 @@ Promise.config({
 
 const getStores = () => {
   QvainStore.resetQvainStore()
-  QvainStore.setLegacyFilePicker(true)
+  QvainStore.setMetaxApiV2(false)
   return {
     Qvain: QvainStore,
     Locale: LocaleStore,
@@ -362,6 +364,7 @@ describe('Qvain.PasState', () => {
     expect(wrapper.find(PasState).text().includes('80:')).toBe(true)
     wrapper.unmount()
 
+
     stores.Qvain.dataCatalog = DataCatalogIdentifiers.PAS
     stores.Qvain.setPreservationState(0)
     wrapper = render(stores)
@@ -553,5 +556,3 @@ describe('Qvain.Files', () => {
     expect(wrapper.dive().find(IDAFilePicker).length).toBe(0)
   })
 })
-
-

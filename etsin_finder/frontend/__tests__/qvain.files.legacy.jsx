@@ -10,8 +10,10 @@ import QvainStore, { Directory } from '../js/stores/view/qvain'
 import LocaleStore from '../js/stores/view/language'
 import { DataCatalogIdentifiers } from '../js/components/qvain/utils/constants'
 
+global.Promise = require('bluebird')
+
 const getStores = () => {
-  QvainStore.setLegacyFilePicker(true)
+  QvainStore.setMetaxApiV2(false)
   return {
     Qvain: QvainStore,
     Locale: LocaleStore,

@@ -19,7 +19,7 @@ import LocaleStore from '../js/stores/view/language'
 jest.mock('axios')
 
 const getStores = () => {
-  QvainStore.setLegacyFilePicker(true)
+  QvainStore.setMetaxApiV2(false)
   return {
     Qvain: QvainStore,
     Locale: LocaleStore
