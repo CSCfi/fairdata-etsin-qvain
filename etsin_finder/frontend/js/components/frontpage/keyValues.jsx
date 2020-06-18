@@ -15,10 +15,11 @@ import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import axios from 'axios'
 
+import { inject, observer } from 'mobx-react'
+import PropTypes from 'prop-types'
 import ContentBox from '../general/contentBox'
-import { element } from 'prop-types'
 
-export default class KeyValues extends Component {
+class KeyValues extends Component {
   constructor(props) {
     super(props)
 
@@ -94,13 +95,16 @@ export default class KeyValues extends Component {
   }
 
   render() {
+    const SearchFilters = this.props.Stores.SearchFilters
     return this.state.error ? null : (
       <aside>
         <CustomBox>
           <Value>
             {this.state.loaded ? (
               <div>
-                <h1><a href={`${this.state.environment}datasets`}>{this.state.datasetsNum}</a></h1>
+                <h1>
+                  <a href={`${this.state.environment}datasets`}>{this.state.datasetsNum}</a>
+                </h1>
                 <Translate content="home.key.dataset" fallback="aineistoa" component="p" />
               </div>
             ) : (
@@ -113,7 +117,7 @@ export default class KeyValues extends Component {
           <Value>
             {this.state.loaded ? (
               <div>
-                <h1><a href={`${this.state.environment}datasets`}>{this.state.keywordsNum}</a></h1>
+                <h1><a href={`${this.state.environment}datasets`} onClick={() => SearchFilters.toggleKeyword()}>{this.state.keywordsNum}</a></h1>
                 <Translate content="home.key.keywords" fallback="asiasanaa" component="p" />
               </div>
             ) : (
@@ -126,7 +130,7 @@ export default class KeyValues extends Component {
           <Value>
             {this.state.loaded ? (
               <div>
-                <h1><a href={`${this.state.environment}datasets`}>{this.state.fieldOfScienceNum}</a></h1>
+                <h1><a href={`${this.state.environment}datasets`} onClick={() => SearchFilters.toggleFieldOfScience()}> {this.state.fieldOfScienceNum}</a></h1>
                 <Translate content="home.key.fos" fallback="tieteenalaa" component="p" />
               </div>
             ) : (
@@ -139,7 +143,7 @@ export default class KeyValues extends Component {
           <Value>
             {this.state.loaded ? (
               <div>
-                <h1><a href={`${this.state.environment}datasets`}>{this.state.researchNum}</a></h1>
+                <h1><a href={`${this.state.environment}datasets`} onClick={() => SearchFilters.toggleProject()}> {this.state.researchNum}</a></h1>
                 <Translate content="home.key.research" fallback="tutkimusprojektia" component="p" />
               </div>
             ) : (
@@ -150,10 +154,16 @@ export default class KeyValues extends Component {
               )}
           </Value>
         </CustomBox>
-      </aside >
+      </aside>
     )
   }
 }
+
+KeyValues.propTypes = {
+  Stores: PropTypes.object.isRequired,
+}
+
+export default inject('Stores')(observer(KeyValues))
 
 const CustomBox = styled(ContentBox)`
   margin-bottom: 2em;

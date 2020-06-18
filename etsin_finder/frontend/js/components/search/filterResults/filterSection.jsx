@@ -90,7 +90,7 @@ export class FilterSection extends Component {
     }
 
     this.state = {
-      open: false,
+      open: this.props.filterOpen,
       show: false,
       aggregateItems: undefined,
       displayShowButton: undefined,
@@ -142,7 +142,7 @@ export class FilterSection extends Component {
             return true
           }
         }
-        return false
+        return true
       })
     }
   }
@@ -206,8 +206,8 @@ export class FilterSection extends Component {
               </ShowHide>
             </div>
           ) : (
-            ''
-          )}
+              ''
+            )}
         </FilterItems>
       </Section>
     )
@@ -218,10 +218,11 @@ export default inject('Stores')(observer(FilterSection))
 
 FilterSection.propTypes = {
   aggregation: PropTypes.string.isRequired,
-  Stores: PropTypes.shape({
-    ElasticQuery: PropTypes.object.isRequired,
-  }).isRequired,
+  Stores: PropTypes.object.isRequired,
+  filterOpen: PropTypes.bool,
 }
+
+FilterSection.defaultProps = { filterOpen: false }
 
 const ShowHide = styled.span`
   cursor: pointer;
