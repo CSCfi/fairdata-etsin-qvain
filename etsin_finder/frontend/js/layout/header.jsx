@@ -76,6 +76,7 @@ const Positioner = styled.div`
 `
 
 const NaviCont = styled.nav`
+  margin-left: auto;
   display: none;
   justify-content: center;
   align-items: center;
@@ -83,10 +84,13 @@ const NaviCont = styled.nav`
   @media screen and (min-width: ${p => p.theme.breakpoints.lg}) {
     display: flex;
   }
+
+  @media screen and (min-width: ${p => p.theme.breakpoints.xl}) {
+    margin-right: 4em;
+  }
 `
 
 const Right = styled.nav`
-  width: 12em;
   display: flex;
   justify-content: flex-end;
   align-items: center;
