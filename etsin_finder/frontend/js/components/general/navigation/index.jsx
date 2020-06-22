@@ -15,12 +15,14 @@ import { NavLink } from 'react-router-dom'
 import Translate from 'react-translate-component'
 import translate from 'counterpart'
 import styled from 'styled-components'
+import { inject, observer } from 'mobx-react'
+import PropTypes from 'prop-types'
 import { Home, Search } from '../../../routes'
 
-import Accessibility from '../../../stores/view/accessibility'
-
-export default class Navi extends React.Component {
+class Navi extends React.Component {
   render() {
+    const Accessibility = this.props.Stores.Accessibility
+    const SearchFilters = this.props.Stores.SearchFilters
     return (
       <React.Fragment>
         <NavItem
@@ -31,6 +33,7 @@ export default class Navi extends React.Component {
           }}
           onClick={() => {
             Accessibility.announce(translate('changepage', { page: translate('nav.datasets') }))
+            SearchFilters.closeFilters()
           }}
         >
           <Translate content="nav.home" />
@@ -50,6 +53,12 @@ export default class Navi extends React.Component {
     )
   }
 }
+
+Navi.propTypes = {
+  Stores: PropTypes.object.isRequired,
+}
+
+export default inject('Stores')(observer(Navi))
 
 const NavItem = styled(NavLink)`
   margin: 0 1.5em;

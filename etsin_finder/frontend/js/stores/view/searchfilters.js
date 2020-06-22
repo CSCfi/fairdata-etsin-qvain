@@ -28,6 +28,12 @@ class SearchFilters {
     @action toggleProject = () => {
         this.projectIsOpen = !this.projectIsOpen
     }
+
+    @action closeFilters = () => {
+        this.fieldOfScienceIsOpen = false
+        this.keywordIsOpen = false
+        this.projectIsOpen = false
+    }
 }
 
 

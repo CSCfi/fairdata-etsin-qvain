@@ -15,6 +15,7 @@ import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import axios from 'axios'
 
+import { Link } from 'react-router-dom'
 import { inject, observer } from 'mobx-react'
 import PropTypes from 'prop-types'
 import ContentBox from '../general/contentBox'
@@ -30,13 +31,11 @@ class KeyValues extends Component {
       researchNum: 0,
       loaded: false,
       error: false,
-      environment: '',
     }
   }
 
   componentDidMount() {
     this.getValues()
-    this.checkHost()
   }
 
   getValues() {
@@ -76,24 +75,6 @@ class KeyValues extends Component {
       })
   }
 
-  checkHost = () => {
-    let env = ''
-
-    if (process.env.NODE_ENV === 'test') { /* test */
-      env = 'https://etsin-test.csc.fi/'
-    } else if (process.env.NODE_ENV === 'development') { /* local */
-      env = 'https://etsin-finder.local/'
-    } else if (process.env.NODE_ENV === 'production') { /* production */
-      env = 'https://etsin.fairdata.fi/'
-    } else if (process.env.NODE_ENV === 'stable') {
-      env = 'https://etsin-stable.csc.fi'
-    }
-
-    this.setState({
-      environment: env
-    })
-  }
-
   render() {
     const SearchFilters = this.props.Stores.SearchFilters
     return this.state.error ? null : (
@@ -102,12 +83,11 @@ class KeyValues extends Component {
           <Value>
             {this.state.loaded ? (
               <div>
-                <h1>
-                  <a href={`${this.state.environment}datasets`}>{this.state.datasetsNum}</a>
-                </h1>
+                <h1><Link to={'/datasets'}>{this.state.datasetsNum}</Link></h1>
                 <Translate content="home.key.dataset" fallback="aineistoa" component="p" />
               </div>
-            ) : (
+            ) :
+              (
                 <div>
                   <H1Skeleton />
                   <PSkeleton />
@@ -117,10 +97,11 @@ class KeyValues extends Component {
           <Value>
             {this.state.loaded ? (
               <div>
-                <h1><a href={`${this.state.environment}datasets`} onClick={() => SearchFilters.toggleKeyword()}>{this.state.keywordsNum}</a></h1>
+                <h1><Link to={'/datasets'} onClick={() => SearchFilters.toggleKeyword()}>{this.state.keywordsNum}</Link></h1>
                 <Translate content="home.key.keywords" fallback="asiasanaa" component="p" />
               </div>
-            ) : (
+            ) :
+              (
                 <div>
                   <H1Skeleton />
                   <PSkeleton />
@@ -130,10 +111,11 @@ class KeyValues extends Component {
           <Value>
             {this.state.loaded ? (
               <div>
-                <h1><a href={`${this.state.environment}datasets`} onClick={() => SearchFilters.toggleFieldOfScience()}> {this.state.fieldOfScienceNum}</a></h1>
+                <h1><Link to={'/datasets'} onClick={() => SearchFilters.toggleFieldOfScience()}> {this.state.fieldOfScienceNum}</Link></h1>
                 <Translate content="home.key.fos" fallback="tieteenalaa" component="p" />
               </div>
-            ) : (
+            ) :
+              (
                 <div>
                   <H1Skeleton />
                   <PSkeleton />
@@ -143,10 +125,11 @@ class KeyValues extends Component {
           <Value>
             {this.state.loaded ? (
               <div>
-                <h1><a href={`${this.state.environment}datasets`} onClick={() => SearchFilters.toggleProject()}> {this.state.researchNum}</a></h1>
+                <h1><Link to={'/datasets'} onClick={() => SearchFilters.toggleProject()}> {this.state.researchNum}</Link></h1>
                 <Translate content="home.key.research" fallback="tutkimusprojektia" component="p" />
               </div>
-            ) : (
+            ) :
+              (
                 <div>
                   <H1Skeleton />
                   <PSkeleton />

@@ -142,7 +142,7 @@ export class FilterSection extends Component {
             return true
           }
         }
-        return true
+        return false
       })
     }
   }
@@ -205,7 +205,8 @@ export class FilterSection extends Component {
                 </ShowHideBtn>
               </ShowHide>
             </div>
-          ) : (
+          ) :
+            (
               ''
             )}
         </FilterItems>
