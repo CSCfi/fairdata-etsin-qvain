@@ -266,7 +266,7 @@ def get_dataset_creator(cr_id):
     Get creator of dataset.
 
     Arguments:
-        cr_id {string} -- Identifier of datset.
+        cr_id {string} -- Identifier of dataset.
 
     Returns:
         [type] -- [description]
