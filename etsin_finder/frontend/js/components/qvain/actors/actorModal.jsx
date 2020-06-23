@@ -24,11 +24,6 @@ export class ActorModalBase extends Component {
     actorError: null,
   }
 
-  handleRequestClose = () => {
-    const { editActor } = this.props.Stores.Qvain.Actors
-    editActor(null)
-  }
-
   handleSaveActor = (event) => {
     event.preventDefault()
     const { Qvain } = this.props.Stores

@@ -237,10 +237,12 @@ def data_to_metax(data, metadata_provider_org, metadata_provider_user):
             "remote_resources": remote_resources_data_to_metax(data["remote_resources"]) if data["dataCatalog"] == "urn:nbn:fi:att:data-catalog-att" else "",
             "files": files_data_to_metax(data["files"]) if data["dataCatalog"] == "urn:nbn:fi:att:data-catalog-ida" else "",
             "directories": directories_data_to_metax(data["directories"]) if data["dataCatalog"] == "urn:nbn:fi:att:data-catalog-ida" else "",
-            "infrastructure": data.get("infrastructure")
+            "infrastructure": data.get("infrastructure"),
+            "spatial": data.get("spatial")
         }
     }
     return clean_empty_keyvalues_from_dict(dataset_data)
+
 
 def get_encoded_access_granter():
     """Add REMS metadata as base64 encoded json. Uses data from user session."""
@@ -335,7 +337,8 @@ def edited_data_to_metax(data, original):
         "remote_resources": remote_resources_data_to_metax(data["remote_resources"]) if data["dataCatalog"] == "urn:nbn:fi:att:data-catalog-att" else "",
         "files": files_data_to_metax(data["files"]) if data["dataCatalog"] == "urn:nbn:fi:att:data-catalog-ida" else "",
         "directories": directories_data_to_metax(data["directories"]) if data["dataCatalog"] == "urn:nbn:fi:att:data-catalog-ida" else "",
-        "infrastructure": _to_metax_infrastructure(data.get("infrastructure"))
+        "infrastructure": _to_metax_infrastructure(data.get("infrastructure")),
+        "spatial": data.get("spatial")
     })
     edited_data = {
         "research_dataset": research_dataset

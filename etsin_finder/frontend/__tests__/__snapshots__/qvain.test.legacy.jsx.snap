@@ -108,6 +108,10 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
           "selectedExistingMetadata": Object {},
           "selectedProject": undefined,
         },
+        "Spatials": Spatials {
+          "Qvain": [Circular],
+          "toBackend": [Function],
+        },
         "accessType": Object {
           "name": undefined,
           "url": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
@@ -160,6 +164,7 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
         "selectedDirectories": Array [],
         "selectedFiles": Array [],
         "selectedProject": undefined,
+        "spatials": Array [],
         "title": Object {
           "en": "",
           "fi": "",
@@ -244,6 +249,10 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
           "selectedExistingMetadata": Object {},
           "selectedProject": undefined,
         },
+        "Spatials": Spatials {
+          "Qvain": [Circular],
+          "toBackend": [Function],
+        },
         "accessType": Object {
           "name": undefined,
           "url": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
@@ -296,6 +305,7 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
         "selectedDirectories": Array [],
         "selectedFiles": Array [],
         "selectedProject": undefined,
+        "spatials": Array [],
         "title": Object {
           "en": "",
           "fi": "",
@@ -380,6 +390,10 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
           "selectedExistingMetadata": Object {},
           "selectedProject": undefined,
         },
+        "Spatials": Spatials {
+          "Qvain": [Circular],
+          "toBackend": [Function],
+        },
         "accessType": Object {
           "name": undefined,
           "url": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
@@ -432,6 +446,7 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
         "selectedDirectories": Array [],
         "selectedFiles": Array [],
         "selectedProject": undefined,
+        "spatials": Array [],
         "title": Object {
           "en": "",
           "fi": "",
@@ -516,6 +531,10 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
           "selectedExistingMetadata": Object {},
           "selectedProject": undefined,
         },
+        "Spatials": Spatials {
+          "Qvain": [Circular],
+          "toBackend": [Function],
+        },
         "accessType": Object {
           "name": undefined,
           "url": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
@@ -568,6 +587,7 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
         "selectedDirectories": Array [],
         "selectedFiles": Array [],
         "selectedProject": undefined,
+        "spatials": Array [],
         "title": Object {
           "en": "",
           "fi": "",
