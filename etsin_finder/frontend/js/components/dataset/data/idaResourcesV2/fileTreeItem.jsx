@@ -72,8 +72,7 @@ const FileTreeItemBase = ({ treeProps, item, level }) => {
   }
 
   const haveMetadata = hasMetadata(item)
-  const editColor = haveMetadata ? 'primary' : 'gray'
-  const disabledEditColor = haveMetadata ? 'error' : 'gray'
+  const infoColor = haveMetadata ? 'primary' : 'gray'
   const { type } = item
 
   return (
@@ -82,9 +81,9 @@ const FileTreeItemBase = ({ treeProps, item, level }) => {
         <Translate
           component={ClickableIcon}
           icon={faInfoCircle}
-          color={editColor}
+          color={infoColor}
           disabled={!allowInfo}
-          disabledColor={disabledEditColor}
+          disabledColor="gray"
           disabledOpacity={0.4}
           onClick={() => setInInfo(item)}
           attributes={{
@@ -97,7 +96,7 @@ const FileTreeItemBase = ({ treeProps, item, level }) => {
           icon={faDownload}
           color="primary"
           disabled={!allowDownload}
-          disabledColor={disabledEditColor}
+          disabledColor="gray"
           disabledOpacity={0.4}
           onClick={() => download(datasetIdentifier, item)}
           attributes={{ 'aria-label': 'dataset.dl.downloadItem' }}

@@ -71,7 +71,6 @@ function IdaResources(props) {
           category={translateLabel(getUseCategoryLabel(inInfo))}
           type={translateLabel(getFileTypeLabel(inInfo))}
           description={inInfo.description}
-          allowDownload={allowDownload}
           closeModal={() => setInInfo(null)}
           headerContent={`dataset.dl.infoHeaders.${inInfo.type}`}
           headerIcon={inInfo.type === 'directory' ? faFolder : faFile}
