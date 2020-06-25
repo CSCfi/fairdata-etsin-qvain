@@ -25,13 +25,13 @@ def create_email_message_body(pref_id, user_email, user_subject, user_body):
     """Create body for an email message to be sent.
 
     Arguments:
-        pref_id [string] -- Preferred identifier of dataset.
-        user_email [string] -- The email of the sender.
-        user_subject [string] -- Email subject.
-        user_body [string] -- Email body.
+        pref_id (str): Preferred identifier of dataset.
+        user_email (str): The email of the sender.
+        user_subject (str): Email subject.
+        user_body (str): Email body.
 
     Returns:
-        [string] -- Email message body withall arguments.
+        str: Email message body withall arguments.
 
     """
     now = datetime.datetime.now()
@@ -53,7 +53,7 @@ def get_email_message_subject():
     """Get email message subject.
 
     Returns:
-        [string] -- Default email message subject.
+        str: Default email message subject.
 
     """
     return "Message from Etsin / Viesti Etsimestä"
@@ -63,12 +63,12 @@ def validate_send_message_request(user_email, user_body, agent_type):
     """Validate request that is done to backend for sending email message.
 
     Arguments:
-        user_email [string] -- User email address.
-        user_body [string] -- Email message body.
-        agent_type [dict] -- The agent type.
+        user_email (str): User email address.
+        user_body (str): Email message body.
+        agent_type (str): The agent type.
 
     Returns:
-        [bool] -- Is it valid.
+        bool: Is it valid.
 
     """
     if not re.match(r"^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+\.[a-zA-Z]*$", user_email):
@@ -92,11 +92,11 @@ def get_email_recipient_addresses(catalog_record, agent_type_str):
     """Get email recipient addresses based on agent type.
 
     Arguments:
-        catalog_record [dict] -- The catalog record.
-        agent_type_str [string] -- Agent type as string.
+        catalog_record (dict): The catalog record.
+        agent_type_str (str): Agent type as string.
 
     Returns:
-        [list/None] -- Return list of recipient addresses or None if not found.
+        Return list of recipient addresses or None if not found.
 
     """
     rd = catalog_record.get('research_dataset', {})
@@ -122,10 +122,10 @@ def get_email_info(catalog_record):
     """Get info for frontend about which agent types have email addresses available.
 
     Arguments:
-        catalog_record [dict] -- The catalog record.
+        catalog_record (dict): The catalog record.
 
     Returns:
-        [dict] -- Dict with bool values for all the agent types if they have email addresses.
+        dict: Dict with bool values for all the agent types if they have email addresses.
 
     """
     if not catalog_record:
@@ -149,10 +149,10 @@ def get_harvest_info(catalog_record):
     Returns True if dataset was harvested from a third party source
 
     Arguments:
-        catalog_record [dict] -- The catalog record.
+        catalog_record (dict): The catalog record.
 
     Returns:
-        [bool] -- Is the cr harvested.
+        bool: Is the cr harvested.
 
     """
     return catalog_record.get('data_catalog.catalog_json.harvested', False)
@@ -162,10 +162,10 @@ def _agent_has_email_address(agent_obj):
     """Check if agent has email
 
     Arguments:
-        agent_obj [list/dict] -- The specified field from the research dataset. If publisher then dict else list
+        agent_obj (list/dict): The specified field from the research dataset. If publisher then dict else list
 
     Returns:
-        [bool] -- True if has emails, False if not.
+        bool: True if has emails, False if not.
 
     """
     if agent_obj:
@@ -179,10 +179,10 @@ def get_email_list_for_actor(agents):
     """Return the emails for the specified agents
 
     Arguments:
-        agents [list/dict] -- The specified field from the research dataset. If publisher then dict else list
+        agents (list/dict): The specified field from the research dataset. If publisher then dict else list
 
     Returns:
-        [list] -- List with 1 or more email addresses.
+        list: List with 1 or more email addresses.
 
     """
     emails = []

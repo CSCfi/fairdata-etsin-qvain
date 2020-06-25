@@ -20,11 +20,7 @@ class MetaxAPIService(FlaskService):
     """Metax API Service"""
 
     def __init__(self, app):
-        """
-        Init Metax API Service.
-
-        :param metax_api_config:
-        """
+        """Init Metax API Service."""
         super().__init__(app)
 
         metax_api_config = get_metax_api_config(app.testing)
@@ -45,14 +41,17 @@ class MetaxAPIService(FlaskService):
             log.error("Unable to initialize MetaxAPIService due to missing config")
 
     def get_directory_for_catalog_record(self, cr_identifier, dir_identifier, file_fields, directory_fields):
-        """
-        Get directory contents for a specific catalog record
+        """Get directory contents for a specific catalog record
 
-        :param cr_identifier:
-        :param dir_identifier:
-        :param file_fields:
-        :param directory_fields:
-        :return:
+        Args:
+            cr_identifier (str): Catalog record identifier.
+            dir_identifier (str): Directory identifier.
+            file_fields (str): File fields.
+            directory_fields (str): Directory fields.
+
+        Returns:
+            dict: Return the responce from Metax as dict, else None.
+
         """
         req_url = self.METAX_GET_DIRECTORY_FOR_CR_URL.format(dir_identifier, cr_identifier)
         if file_fields:
@@ -87,10 +86,14 @@ class MetaxAPIService(FlaskService):
         return metax_api_response.json()
 
     def get_catalog_record_with_file_details(self, identifier):
-        """
-        Get a catalog record with a given identifier from MetaX API.
+        """Get a catalog record with a given identifier from MetaX API.
 
-        :return: Metax catalog record as json
+        Args:
+            identifier (str): Catalog record identifier.
+
+        Returns:
+            dict: Return the responce from Metax as dict, else None.
+
         """
         try:
             metax_api_response = requests.get(self.METAX_GET_CATALOG_RECORD_WITH_FILE_DETAILS_URL.format(identifier),
@@ -116,12 +119,16 @@ class MetaxAPIService(FlaskService):
         return metax_api_response.json()
 
     def get_removed_catalog_record(self, identifier):
-        """
-        Get a catalog record with a given identifier from MetaX API
+        """Get a catalog record with a given identifier from MetaX API
 
         Should return only datasets that are removed.
 
-        :return: Metax catalog record as json
+        Args:
+            identifier (str): Catalog record identifier.
+
+        Returns:
+            dict: Return the responsce from Metax as dict, else None.
+
         """
         try:
             metax_api_response = requests.get(self.METAX_GET_REMOVED_CATALOG_RECORD_URL.format(identifier),
@@ -151,15 +158,18 @@ _metax_api = MetaxAPIService(app)
 
 
 def get_catalog_record(cr_id, check_removed_if_not_exist, refresh_cache=False):
-    """
-    Get single catalog record.
+    """Get single catalog record.
 
     If it does not exist, try checking/fetching from deleted catalog records.
 
-    :param cr_id:
-    :param check_removed_if_not_exist:
-    :param refresh_cache:
-    :return:
+    Args:
+        cr_id (str): Catalog record identifier.
+        check_removed_if_not_exist (bool): Checck if catalog record has been removed if it does not exist.
+        refresh_cache (bool, optional): Should the cache be refreshed. Defaults to False.
+
+    Returns:
+        dict: The wanted catalog record.
+
     """
     if refresh_cache:
         return app.cr_cache.update_cache(cr_id, _get_cr_from_metax(cr_id, check_removed_if_not_exist))
@@ -173,73 +183,94 @@ def get_catalog_record(cr_id, check_removed_if_not_exist, refresh_cache=False):
 
 
 def get_directory_data_for_catalog_record(cr_id, dir_id, file_fields, directory_fields):
-    """
-    Get data related to file/directory browsing view in the frontend.
+    """Get data related to file/directory browsing view in the frontend.
 
-    :param cr_id:
-    :param dir_id:
-    :param file_fields:
-    :param directory_fields:
-    :return:
+    Args:
+        cr_id (str): Catalog record identifier.
+        dir_id (str): Directory identifier.
+        file_fields (str): File fields.
+        directory_fields (str): Directory fields.
+
+    Returns:
+        dict: Return the responce from Metax as dict, else None.
+
     """
     return _metax_api.get_directory_for_catalog_record(cr_id, dir_id, file_fields, directory_fields)
 
 
 def get_catalog_record_access_type(cr):
-    """
-    Get the type of access_type of a catalog record.
+    """Get the type of access_type of a catalog record.
 
-    :param cr:
-    :return:
+    Args:
+        cr (dict): A catalog record as dict.
+
+    Returns:
+        str: Returns the Access type of the dataset. If not found then ''.
+
     """
     return cr.get('research_dataset', {}).get('access_rights', {}).get('access_type', {}).get('identifier', '')
 
 
 def get_catalog_record_embargo_available(cr):
-    """
-    Get access rights embargo available date as string for a catalog record.
+    """Get access rights embargo available date as string for a catalog record.
 
-    :param cr:
-    :return:
+    Args:
+        cr (dict): A catalog record
+
+    Returns:
+        str: The embargo available for a dataset. Id not found then ''.
+
     """
     return cr.get('research_dataset', {}).get('access_rights', {}).get('available', '')
 
 
 def get_catalog_record_data_catalog_id(cr):
-    """
-    Get identifier for a catalog record.
+    """Get identifier for a catalog record.
 
-    :param cr:
-    :return:
+    Args:
+        cr (dict): A catalog record
+
+    Returns:
+        str: Returns the datacatalog id for a dataset. If not found then ''.
+
     """
     return cr.get('data_catalog', {}).get('catalog_json', {}).get('identifier', '')
 
 
 def get_catalog_record_preferred_identifier(cr):
-    """
-    Get preferred identifier for a catalog record.
+    """Get preferred identifier for a catalog record.
 
-    :param cr:
-    :return:
+    Args:
+        cr (dict): A catalog record.
+
+    Returns:
+        str: The preferred identifier of e dataset. If not found then ''.
+
     """
     return cr.get('research_dataset', {}).get('preferred_identifier', '')
 
 def get_catalog_record_REMS_identifier(cr):
-    """
-    Get REMS identifier for a catalog record.
+    """Get REMS identifier for a catalog record.
 
-    :param cr:
-    :return:
+    Args:
+        cr (dict): A catalog record.
+
+    Returns:
+        str: Retruns the REMS identifier for a dataset. If not foyunf then ''.
+
     """
     return cr.get('rems_identifier', '')
 
 
 def is_rems_catalog_record(catalog_record):
-    """
-    Is the catalog record a rems dataset or not.
+    """Is the catalog record a rems dataset or not.
 
-    :param catalog_record:
-    :return:
+    Args:
+        catalog_record (dict): A catalog record
+
+    Returns:
+        bool: Returns True if catalog record has the 'permit' Access type. Else return False.
+
     """
     from etsin_finder.authorization import ACCESS_TYPES
     if get_catalog_record_access_type(catalog_record) == ACCESS_TYPES['permit']:
@@ -248,6 +279,16 @@ def is_rems_catalog_record(catalog_record):
 
 
 def _get_cr_from_metax(cr_id, check_removed_if_not_exist):
+    """Get removed catalog record from Metax
+
+    Args:
+        cr_id (str): Catalog record identifier.
+        check_removed_if_not_exist (bool): -
+
+    Returns:
+        dict: Return the responce from Metax as dict, else None.
+
+    """
     cr = _metax_api.get_catalog_record_with_file_details(cr_id)
     if not cr and check_removed_if_not_exist:
         cr = _metax_api.get_removed_catalog_record(cr_id)

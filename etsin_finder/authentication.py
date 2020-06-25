@@ -19,8 +19,8 @@ log = app.logger
 def not_found(field):
     """Log if field not found in session samlUserdata
 
-    Arguments:
-        field [string] -- Name of the field not found.
+    Args:
+        field (string): Name of the field that was not found in samlUserdata.
 
     """
     log.warning('User seems to be authenticated but {0} not in session object.'.format(field))
@@ -28,26 +28,26 @@ def not_found(field):
 
 
 def get_saml_auth(flask_request):
-    """Used by saml library.
+    """Get saml auth
 
-    Arguments:
-        flask_request [] -- []
+    Args:
+        flask_request (object): flask.Request
 
     Returns:
-        [] -- []
+        object: SP SAML instance.
 
     """
     return OneLogin_Saml2_Auth(prepare_flask_request_for_saml(flask_request), custom_base_path=app.config.get('SAML_PATH', None))
 
 
 def init_saml_auth(saml_prepared_flask_request):
-    """Used by saml library.
+    """Init saml auth
 
-    Arguments:
-        saml_prepared_flask_request [] -- []
+    Args:
+        saml_prepared_flask_request (object): Prepared flask request.
 
     Returns:
-        [] -- []
+        object: Initializes the SP SAML instance.
 
     """
     return OneLogin_Saml2_Auth(saml_prepared_flask_request, custom_base_path=app.config.get('SAML_PATH', None))
@@ -57,7 +57,7 @@ def is_authenticated():
     """Is user authenticated.
 
     Returns:
-        [boolean] -- True/False
+        bool: Is auth.
 
     """
     if executing_travis():
@@ -69,7 +69,7 @@ def is_authenticated_CSC_user():
     """Is the user authenticated with CSC username.
 
     Returns:
-        [boolean] -- True/False
+        bool: Is CSC user.
 
     """
     key = SAML_ATTRIBUTES['CSC_username']
@@ -79,13 +79,13 @@ def is_authenticated_CSC_user():
 
 
 def prepare_flask_request_for_saml(request):
-    """Used by saml library.
+    """Prepare Flask request for saml
 
-    Arguments:
-        request [dict] -- request
+    Args:
+        request (object): flask.Request
 
     Returns:
-        [dict] -- configs for saml
+        dict: Request data.
 
     """
     # If server is behind proxys or balancers use the HTTP_X_FORWARDED fields
@@ -122,7 +122,7 @@ def get_user_csc_name():
     """Get user csc name from saml userdata.
 
     Returns:
-        [string] -- The users CSC username.
+        string: The users CSC username.
 
     """
     if not is_authenticated() or not is_authenticated_CSC_user() or 'samlUserdata' not in session:
@@ -138,7 +138,7 @@ def get_user_haka_identifier():
     """Get user HAKA identifier from saml userdata.
 
     Returns:
-        [string] -- The users HAKA identifier.
+        string: The users HAKA identifier.
 
     """
     if not is_authenticated() or 'samlUserdata' not in session:
@@ -151,10 +151,12 @@ def get_user_haka_identifier():
 
 
 def get_user_id():
-    """Get user identifier. If CSC_username is found return that, else try to find Haka identifier.
+    """Get user identifier
+
+    If CSC_username is found return that, else try to find Haka identifier.
 
     Returns:
-        [string] -- User identifer.
+        string: User identifer.
 
     """
     csc_name = get_user_csc_name()
@@ -170,7 +172,7 @@ def get_user_email():
     """Get user email from saml userdata.
 
     Returns:
-        [string] -- The users email.
+        string: The users email.
 
     """
     if not is_authenticated() or not is_authenticated_CSC_user() or 'samlUserdata' not in session:
@@ -186,7 +188,7 @@ def get_user_lastname():
     """Get user last name from saml userdata.
 
     Returns:
-        [string] -- The users last name
+        string: The users last name.
 
     """
     if not is_authenticated() or 'samlUserdata' not in session:
@@ -202,7 +204,7 @@ def get_user_firstname():
     """Get user first name from saml userdata.
 
     Returns:
-        [string] -- The users first name
+        string: The users first name.
 
     """
     if not is_authenticated() or 'samlUserdata' not in session:
@@ -218,7 +220,7 @@ def get_user_ida_groups():
     """Get the Groups from CSC IdM for the user.
 
     Returns:
-        [list] -- List of all the IDA groups.
+        list: List of all the IDA groups, or None.
 
     """
     if not is_authenticated() or 'samlUserdata' not in session:
@@ -234,7 +236,7 @@ def get_user_home_organization_id():
     """Get the HAKA organization id from the saml userdata
 
     Returns:
-        [string] -- The id of the users home organization.
+        string: The id of the users home organization, or None.
 
     """
     if not is_authenticated() or 'samlUserdata' not in session:
@@ -250,7 +252,7 @@ def get_user_home_organization_name():
     """Get the HAKA organization name from the saml userdata
 
     Returns:
-        [string] -- The name of the users home organization.
+        string: The name of the users home organization, or None.
 
     """
     if not is_authenticated() or 'samlUserdata' not in session:

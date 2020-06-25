@@ -24,7 +24,7 @@ class DatasetMetadataService(FlaskService):
         """Initialize with necessary configs for metax
 
         Arguments:
-            app {object} -- The Flask app
+            app (object): The Flask app
 
         """
         super().__init__(app)
@@ -40,10 +40,10 @@ class DatasetMetadataService(FlaskService):
         """Create an error response for service
 
         Arguments:
-            status_code {int} -- The status code to return
+            status_code (int): The status code to return
 
         Returns:
-            obj -- Returns a Flask.Response object
+            obj: Returns a Flask.Response object
 
         """
         response = Response(status=status_code)
@@ -55,8 +55,8 @@ class DatasetMetadataService(FlaskService):
         """Stream metadata download of a dataset to frontend
 
         Arguments:
-            cr_id {string} -- Identifier of dataset
-            metadata_format {string} -- The format to download in
+            cr_id (str): Identifier of dataset
+            metadata_format (str): The format to download in
 
         Returns:
             Returns a Flask.Response object streaming the response from metax
@@ -106,14 +106,5 @@ metadata_api = DatasetMetadataService(app)
 
 
 def download_metadata(cr_id, metadata_format):
-    """Stream metadata download of a dataset to frontend
-
-    Arguments:
-        cr_id {string} -- Identifier of dataset
-        metadata_format {string} -- The format to download in
-
-    Returns:
-        Returns a Flask.Response object streaming the response from metax
-
-    """
+    """Stream metadata download of a dataset to frontend"""
     return metadata_api.download_metadata(cr_id, metadata_format)

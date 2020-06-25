@@ -61,21 +61,10 @@ log = app.logger
 TOTAL_ITEM_LIMIT = 1000
 
 def log_request(f):
-    """
-    Log request when used as decorator.
-
-    :param f:
-    :return:
-    """
+    """Log request when used as decorator"""
     @wraps(f)
     def func(*args, **kwargs):
-        """
-        Log requests.
-
-        :param args:
-        :param kwargs:
-        :return:
-        """
+        """Log requests"""
         csc_name = authentication.get_user_csc_name() if not app.testing else ''
         log.info('[{0}.{1}] {2} {3} {4} USER AGENT: {5}'.format(
             args[0].__class__.__name__,
@@ -96,11 +85,14 @@ class ProjectFiles(Resource):
 
     @log_request
     def get(self, pid):
-        """
-        Get files and directory objects for frontend.
+        """Get files and directory objects for frontend.
 
-        :param pid:
-        :return:
+        Args:
+            pid (str): Identifier.
+
+        Returns:
+            tuple: A response with the payload in the first slot and the status code in the second.
+
         """
         # Return data only if user is a member of the project
         user_ida_projects = get_user_ida_projects() or []
@@ -140,11 +132,14 @@ class FileDirectory(Resource):
 
     @log_request
     def get(self, dir_id):
-        """
-        Get files and directory objects for frontend.
+        """Get files and directory objects for frontend.
 
-        :param dir_id:
-        :return:
+        Args:
+            dir_id (str): Directory identifier.
+
+        Returns:
+            tuple: A response with the payload and the status code.
+
         """
         args = self.parser.parse_args()
         not_cr_identifier = args.get('not_cr_identifier', None)
@@ -223,14 +218,13 @@ class FileCharacteristics(Resource):
 
     @log_request
     def patch(self, file_id):
-        """
-        Update file_characteristics of a file.
+        """Update file_characteristics of a file.
 
-        Arguments:
-            file {object} -- File object as json, should contain a file_characteristics object that will be updated.
+        Args:
+            file_id (str): File identifier.
 
         Returns:
-            [type] -- Metax response.
+            Metax response.
 
         """
         if request.content_type != 'application/json':
@@ -282,11 +276,17 @@ class UserDatasets(Resource):
 
     @log_request
     def get(self, user_id):
-        """
-        Get datasets for user. Used by qvain light dataset table. If request has query parameter no_pagination=true, fetches ALL datasets for user (warning: might result in performance issue).
+        """Get datasets for user.
 
-        :param user_id:
-        :return:
+        Used by qvain light dataset table. If request has query parameter no_pagination=true,
+        fetches ALL datasets for user (warning: might result in performance issue).
+
+        Args:
+            user_id (str): User identifier.
+
+        Returns:
+            tuple: Response with user datasets if successfull.
+
         """
         args = self.parser.parse_args()
         limit = args.get('limit', None)
@@ -319,11 +319,10 @@ class QvainDataset(Resource):
 
     @log_request
     def post(self):
-        """
-        Create a dataset to Metax with the form data from the frontend.
+        """Create a dataset to Metax with the form data from the frontend.
 
         Returns:
-            object -- The response from metax or if error an error message.
+            The response from metax or if error an error message.
 
         """
         params = {}
@@ -358,11 +357,10 @@ class QvainDataset(Resource):
 
     @log_request
     def patch(self):
-        """
-        Update existing dataset.
+        """Update existing dataset.
 
         Returns:
-            object -- The response from metax or if error an error message.
+            The response from metax or if error an error message.
 
         """
         params = {}
@@ -417,14 +415,15 @@ class QvainDatasetEdit(Resource):
 
     @log_request
     def get(self, cr_id):
-        """
-        Get dataset for editing from Metax. Returns with an error if the logged in user does not own the requested dataset.
+        """Get dataset for editing from Metax
+
+        Returns with an error if the logged in user does not own the requested dataset.
 
         Arguments:
-            cr_id {str} -- Identifier of dataset.
+            cr_id (str): Catalog record identifier.
 
         Returns:
-            [type] -- Metax response.
+            Metax response.
 
         """
         print("V2 dataset_edit")
@@ -453,14 +452,13 @@ class QvainDatasetFiles(Resource):
 
     @log_request
     def post(self, cr_id):
-        """
-        Add or remove files for dataset.
+        """Add or remove files for dataset.
 
         Arguments:
-            cr_id {str} -- Identifier of dataset.
+            cr_id (str): Identifier of dataset.
 
         Returns:
-            [type] -- Metax response.
+            Metax response.
 
         """
         is_authd = authentication.is_authenticated()
@@ -500,14 +498,15 @@ class QvainDatasetProjects(Resource):
 
     @log_request
     def get(self, cr_id):
-        """
-        Get list of dataset IDA projects from Metax. Returns with an error if the logged in user does not own the requested dataset.
+        """Get list of dataset IDA projects from Metax.
+
+        Returns with an error if the logged in user does not own the requested dataset.
 
         Arguments:
-            cr_id {str} -- Identifier of dataset.
+            cr_id (str): Identifier of dataset.
 
         Returns:
-            [type] -- Metax response.
+            Metax response.
 
         """
         log.info("V2 qvain_dataset_projects")
@@ -535,14 +534,13 @@ class QvainDatasetUserMetadata(Resource):
 
     @log_request
     def get(self, cr_id):
-        """
-        Get user metadata for a dataset.
+        """Get user metadata for a dataset.
 
         Arguments:
-            cr_id {str} -- Identifier of dataset.
+            cr_id (str): Identifier of dataset.
 
         Returns:
-            [type] -- Metax response.
+            Metax response.
 
         """
         error = check_dataset_creator(cr_id)
@@ -557,11 +555,11 @@ class QvainDatasetUserMetadata(Resource):
         Update dataset file/directory metadata.
 
         Arguments:
-            cr_id {str} -- Identifier of dataset.
+            cr_id (str): Identifier of dataset.
             body {json} --
 
         Returns:
-            [type] -- Metax response.
+            Metax response.
 
         """
         try:
@@ -588,14 +586,13 @@ class QvainDatasetDelete(Resource):
 
     @log_request
     def delete(self, cr_id):
-        """
-        Delete dataset from Metax.
+        """Delete dataset from Metax.
 
-        Arguments:
-            config {object} -- Includes 'data' key that has the identifier of the dataset.
+        Args:
+            cr_id (str): Catalog record identifier.
 
         Returns:
-            [type] -- Metax response.
+            Metax response.
 
         """
         is_authd = authentication.is_authenticated()

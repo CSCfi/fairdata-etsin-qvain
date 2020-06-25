@@ -28,21 +28,10 @@ from etsin_finder.qvain_light_utils_v2 import (
 log = app.logger
 
 def log_request(f):
-    """
-    Log request when used as decorator.
-
-    :param f:
-    :return:
-    """
+    """Log request when used as decorator."""
     @wraps(f)
     def func(*args, **kwargs):
-        """
-        Log requests.
-
-        :param args:
-        :param kwargs:
-        :return:
-        """
+        """Log requests."""
         csc_name = authentication.get_user_csc_name() if not app.testing else ''
         log.info('[{0}.{1}] {2} {3} {4} USER AGENT: {5}'.format(
             args[0].__class__.__name__,
@@ -65,15 +54,14 @@ class QvainDatasetChangeCumulativeState(Resource):
 
     @log_request
     def post(self):
-        """
-        Change cumulative_state of a dataset in Metax.
+        """Change cumulative_state of a dataset in Metax.
 
         Arguments:
-            identifier {string} -- The identifier of the dataset.
-            cumulative_state {integer} -- The new cumulative state.
+            identifier (str): The identifier of the dataset.
+            cumulative_state (int): The new cumulative state.
 
         Returns:
-            [type] -- Metax response.
+            Metax response.
 
         """
         args = self.parser.parse_args()
@@ -103,16 +91,15 @@ class QvainDatasetCreateNewVersion(Resource):
 
     @log_request
     def post(self):
-        """
-        Create new dataset draft version.
+        """Create new dataset draft version.
 
         Also removes all files and directories that no longer exist from the dataset.
 
         Arguments:
-            identifier {string} -- The identifier of the dataset.
+            identifier (str): The identifier of the dataset.
 
         Returns:
-            [type] -- Metax response.
+            Metax response.
 
         """
         args = self.parser.parse_args()
@@ -134,14 +121,13 @@ class QvainDatasetCreateDraft(Resource):
 
     @log_request
     def post(self):
-        """
-        Create a draft of a published dataset.
+        """Create a draft of a published dataset.
 
         Arguments:
-            identifier {string} -- The identifier of the dataset.
+            identifier (str): The identifier of the dataset.
 
         Returns:
-            [type] -- Metax response.
+            Metax response.
 
         """
         args = self.parser.parse_args()
@@ -163,14 +149,13 @@ class QvainDatasetMergeDraft(Resource):
 
     @log_request
     def post(self):
-        """
-        Publish a draft of a published dataset.
+        """Publish a draft of a published dataset.
 
         Arguments:
-            identifier {string} -- The identifier of the dataset.
+            identifier (str): The identifier of the dataset.
 
         Returns:
-            [type] -- Metax response.
+            Metax response.
 
         """
         args = self.parser.parse_args()
@@ -192,14 +177,13 @@ class QvainDatasetPublishDataset(Resource):
 
     @log_request
     def post(self):
-        """
-        Publish a draft dataset.
+        """Publish a draft dataset.
 
         Arguments:
-            identifier {string} -- The identifier of the dataset.
+            identifier (str): The identifier of the dataset.
 
         Returns:
-            [type] -- Metax response.
+            Metax response.
 
         """
         args = self.parser.parse_args()
@@ -221,17 +205,16 @@ class QvainDatasetFixDeprecated(Resource):
 
     @log_request
     def post(self):
-        """
-        Fix deprecated dataset using Metax fix_deprecated RPC.
+        """Fix deprecated dataset using Metax fix_deprecated RPC.
 
         Removes all files and directories that no longer exist from the dataset.
         Creates a new, non-deprecated version.
 
         Arguments:
-            identifier {string} -- The identifier of the dataset.
+            identifier (str): The identifier of the dataset.
 
         Returns:
-            [type] -- Metax response.
+            Metax response.
 
         """
         args = self.parser.parse_args()

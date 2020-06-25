@@ -24,16 +24,15 @@ access_rights_to_metax = qvain_light_utils.access_rights_to_metax
 remote_resources_data_to_metax = qvain_light_utils.remote_resources_data_to_metax
 
 def data_to_metax(data, metadata_provider_org, metadata_provider_user):
-    """
-    Converts all the data from the frontend to conform to Metax schema.
+    """Converts all the data from the frontend to conform to Metax schema.
 
     Arguments:
-        data {object} -- All form data sent from the frontend.
-        metadata_provider_org {string} -- The name of the metadata providers organisation taken from authentication information.
-        metadata_provider_user {string} -- The name of the metadata provider taken from authentication information.
+        data (dict): All form data sent from the frontend.
+        metadata_provider_org (str): The name of the metadata providers organisation taken from authentication information.
+        metadata_provider_user (str): The name of the metadata provider taken from authentication information.
 
     Returns:
-        object -- Returns an object that has been validated and should conform to Metax schema and is ready to be sent to Metax.
+        dict: Returns an object that has been validated and should conform to Metax schema and is ready to be sent to Metax.
 
     """
     # Should be same as v1 in but without files and directories, so reuse the old version
@@ -46,14 +45,13 @@ get_encoded_access_granter = qvain_light_utils.get_encoded_access_granter
 get_dataset_creator = qvain_light_utils.get_dataset_creator
 
 def check_dataset_creator(cr_id):
-    """
-    Verify that user is authenticated and can edit the dataset.
+    """Verify that user is authenticated and can edit the dataset.
 
     Arguments:
-        cr_id {string} -- Identifier of datset.
+        cr_id (str): Identifier of datset.
 
     Returns:
-        error {tuple} -- Reason (message, status_code) for failed verification. Returns None if verification was successful.
+        error {tuple}: Reason (message, status_code) for failed verification. Returns None if verification was successful.
 
     """
     is_authd = is_authenticated()
@@ -69,15 +67,14 @@ def check_dataset_creator(cr_id):
 remove_deleted_datasets_from_results = qvain_light_utils.remove_deleted_datasets_from_results
 
 def edited_data_to_metax(data, original):
-    """
-    Alter the research_dataset field to contain the new changes from editing.
+    """Alter the research_dataset field to contain the new changes from editing.
 
     Arguments:
-        data {object} -- Data from frontend.
-        original {object} -- Original data that the dataset contained befor editing.
+        data (dict): Data from frontend.
+        original (dict): Original data that the dataset contained before editing.
 
     Returns:
-        [object] -- Metax ready data.
+        Metax ready data.
 
     """
     # Should be same as v1 in but without files and directories, so reuse the old version

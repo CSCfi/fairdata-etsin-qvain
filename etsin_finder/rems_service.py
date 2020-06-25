@@ -51,16 +51,16 @@ class RemsAPIService(FlaskService):
         """Genaral method for sending requests to REMS
 
         Arguments:
-            method [string] -- The http verb, GET or POST
-            url [string] -- The url for the request
-            err_message [string] -- An error message to log if something goes wrong
+            method (str): The http verb, GET or POST
+            url (str): The url for the request
+            err_message (str): An error message to log if something goes wrong
 
         Keyword Arguments:
-            json dict -- Data to be sent in a POST requests body (default: {None})
-            user_id str -- The user id if needed (default: {'RDowner@funet.fi'})
+            json (dict): Data to be sent in a POST requests body (default: {None})
+            user_id (str): The user id if needed (default: {'RDowner@funet.fi'})
 
         Returns:
-            [tuple] -- Message for the response as first argument, and status code as second.
+            tuple: Message for the response as first argument, and status code as second.
 
         """
         if not self.ENABLED:
@@ -90,7 +90,7 @@ class RemsAPIService(FlaskService):
         """Get all applications which the current user can see
 
         Returns:
-            [list] -- List of application dicts
+            list: List of application dicts
 
         """
         if not self.ENABLED:
@@ -106,10 +106,10 @@ class RemsAPIService(FlaskService):
         """Creates application in REMS
 
         Arguments:
-            id [int] -- Catalogue item id
+            id (int): Catalogue item id
 
         Returns:
-            [dict] -- Dict with info if the operation was successful
+            dict: Dict with info if the operation was successful
 
         """
         if not self.ENABLED:
@@ -128,10 +128,10 @@ class RemsAPIService(FlaskService):
         """Get catalogue item for resource from REMS
 
         Arguments:
-            resource [string] -- The preferred identifier of the resource
+            resource (str): The preferred identifier of the resource
 
         Returns:
-            [list] -- List containing dict of catalogue item
+            list: List containing dict of catalogue item
 
         """
         if not self.ENABLED:
@@ -149,10 +149,10 @@ class RemsAPIService(FlaskService):
         """Create user in REMS
 
         Arguments:
-            userdata [dict] -- Dict with name, user_id and email.
+            userdata (dict): Dict with name, user_id and email.
 
         Returns:
-            [dict] -- Information if the creation succeeded.
+            dict: Information if the creation succeeded.
 
         """
         if not self.ENABLED:
@@ -171,7 +171,7 @@ class RemsAPIService(FlaskService):
         """Get all approved catalog records.
 
         Returns:
-            [list] -- List of dicts with entitlements.
+            (list): List of dicts with entitlements.
 
         """
         if not self.ENABLED:
@@ -187,10 +187,10 @@ class RemsAPIService(FlaskService):
         """Check if user is entitled for a REMS resource.
 
         Arguments:
-            rems_resource [string] -- The resource
+            rems_resource (str): The resource
 
         Returns:
-            [boolean] -- True/False if user is entitled.
+            bool: True/False if user is entitled.
 
         """
         if not self.ENABLED:
@@ -209,11 +209,11 @@ def get_application_state_for_resource(cr, user_id):
     """Get the state of the users applications for resource.
 
     Arguments:
-        cr [dict] -- Catalog record
-        user_id [string] -- The user id
+        cr (dict): Catalog record
+        user_id (str): The user id
 
     Returns:
-        [string] -- The application state or False.
+        str: The application state or False.
 
     """
     _rems_api = RemsAPIService(app, user_id)
@@ -257,11 +257,11 @@ def get_user_rems_permission_for_catalog_record(cr_id, user_id):
     """Get info about whether user is entitled for a catalog record.
 
     Arguments:
-        cr_id [string] -- The catalog record identifier.
-        user_id [string] -- The user id.
+        cr_id (str): The catalog record identifier.
+        user_id (str): The user id.
 
     Returns:
-        [boolean] -- Returns True/False if user is entitled.
+        bool: Returns True/False if user is entitled.
 
     """
     if not user_id or not cr_id:

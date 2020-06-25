@@ -39,15 +39,14 @@ DATA_CATALOG_IDENTIFIERS = {
 }
 
 def get_log_config(log_file_path, log_lvl):
-    """
-    Function to get the logging configuration from utils.py
+    """Function to get the logging configuration from utils.py
 
     Arguments:
-        log_file_path {string} -- The log file path.
-        log_lvl {string} -- The logging level
+        log_file_path (str): The log file path.
+        log_lvl (str): The logging level
 
     Returns:
-        [dict] -- Dict containgin the logging configuration.
+        dict: Dict containgin the logging configuration.
 
     """
     if (log_file_path and log_lvl):
@@ -89,22 +88,26 @@ def executing_travis():
 
 
 def write_json_to_file(json_data, filename):
-    """
-    Write JSON data to file.
+    """Write JSON data to file.
 
-    :param json_data:
-    :param filename:
+    Args:
+        json_data (json): JSON data.
+        filename (str): Filename to write the data to.
+
     """
     with open(filename, "w") as output_file:
         json.dump(json_data, output_file)
 
 
 def json_or_empty(response):
-    """
-    Return response JSON as python dict or empty dict.
+    """Return response JSON as python dict or empty dict.
 
-    :param response:
-    :return:
+    Args:
+        response (object): flask.Response object
+
+    Returns:
+        dict: The json as dict.
+
     """
     response_json = {}
     try:
@@ -115,12 +118,15 @@ def json_or_empty(response):
 
 
 def remove_keys_recursively(obj, fields_to_remove):
-    """
-    Remove specified keys recursively from a python object (dict or list)
+    """Remove specified keys recursively from a python object (dict or list)
 
-    :param obj:
-    :param fields_to_remove:
-    :return:
+    Args:
+        obj (dict/list): from where keys need to be removed.
+        fields_to_remove (list): fields to remove
+
+    Returns:
+        dict/list: Cleaned object
+
     """
     if isinstance(obj, dict):
         obj = {
@@ -134,14 +140,14 @@ def remove_keys_recursively(obj, fields_to_remove):
 
 
 def leave_keys_in_dict(dict_obj, fields_to_leave):
-    """
-    Removes the key-values from dict_obj, for which key is NOT listed in fields_to_leave.
+    """Removes the key-values from dict_obj, for which key is NOT listed in fields_to_leave.
 
     NOTE: Is not recursive
 
-    :param dict_obj:
-    :param fields_to_leave:
-    :return:
+    Args:
+        dict_obj (dict): Dict from where key-values should be removed.
+        fields_to_leave (list): The fields to leave.
+
     """
     for key in list(dict_obj):
         if key not in fields_to_leave:
@@ -162,26 +168,28 @@ def _parse_timestamp_string_to_tz_aware_datetime(timestamp_str):
 
 
 def tz_now_is_later_than_timestamp_str(timestamp_str):
-    """
-    Is timestamp_str later in time than current time.
+    """Is timestamp_str later in time than current time.
 
-    :param timestamp_str:
-    :return:
+    Args:
+        timestamp_str (str): Time stamp.
+
+    Returns:
+        bool: True if yes, False if no
+
     """
     datetime_obj = _parse_timestamp_string_to_tz_aware_datetime(timestamp_str)
     return datetime.now(tz=pytz.timezone('Europe/Helsinki')) >= datetime_obj
 
 def datetime_to_header(datetime_str):
-    """
-    Modifie ISO 8601 datetime format to HTTP datetime (RFC2616).
+    """Modifie ISO 8601 datetime format to HTTP datetime (RFC2616).
 
     The function does also work with some other formats and without
     tz, but it is not recommended.
 
     Arguments:
-        datetime_str [string] -- Datetime string represented in the ISO 8601 format (ex. 2020-01-23T14:12:44+00:00)
+        datetime_str (str): Datetime string represented in the ISO 8601 format (ex. 2020-01-23T14:12:44+00:00)
     Returns:
-        [string] -- Datetime string in HTTP datetime format (ex. Wed, 21 Oct 2015 07:28:00 GMT)
+        str: Datetime string in HTTP datetime format (ex. Wed, 21 Oct 2015 07:28:00 GMT)
 
     """
     try:
@@ -193,14 +201,19 @@ def datetime_to_header(datetime_str):
     except Exception:
         return False
 
-
 def sort_array_of_obj_by_key(obj_array, obj_key, obj_nested_key=False):
-    """
-    Sort the objects in an array by using the value of an object key, or if needed, the value of a nested object key contained inside an object pointed to by an object key
+    """Sort array of objects
 
-    :param obj_array: Object array to be sorted
-    :obj_key: Object key based on which to sort the object array, or a pointer key to a nested object where the sorting key is located
-    :obj_nested_key: Object key based on which to sort the object array, if it is contained below the main level of the sortable object
+    Sort the objects in an array by using the value of an object key,
+    or if needed, the value of a nested object key contained inside an
+    object pointed to by an object key
+
+
+    Args:
+        obj_array (list): Object array to be sorted
+        obj_key (str): Object key based on which to sort the object array, or a pointer key to a nested object where the sorting key is located
+        obj_nested_key (bool, optional): Object key based on which to sort the object array, if it is contained below the main level of the sortable object. Defaults to False.
+
     """
     try:
         if obj_array and obj_key:
@@ -210,11 +223,15 @@ def sort_array_of_obj_by_key(obj_array, obj_key, obj_nested_key=False):
 
 
 def slice_array_on_limit(array, limit):
-    """
-    If array contains more items than the limit, return an array containing items up until the limit
+    """If array contains more items than the limit, return an array containing items up until the limit
 
-    :param array:
-    :limit: integer
+    Args:
+        array (list): List to be sliced.
+        limit (int): The limit.
+
+    Returns:
+        list: New sliced list.
+
     """
     if array and len(array) > limit:
         return array[0:limit]

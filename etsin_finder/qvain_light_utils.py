@@ -17,14 +17,13 @@ access_type["OPEN"] = "http://uri.suomi.fi/codelist/fairdata/access_type/code/op
 log = app.logger
 
 def clean_empty_keyvalues_from_dict(d):
-    """
-    Cleans all key value pairs from the object that have empty values, like [], {} and ''.
+    """Cleans all key value pairs from the object that have empty values, like [], {} and ''.
 
     Arguments:
-        d {object} -- The object to be sent to metax. (might have empty values)
+        d (dict): The object to be sent to metax. (might have empty values)
 
     Returns:
-        object  -- Object without the empty values.
+        dict: Object without the empty values.
 
     """
     if not isinstance(d, (dict, list)):
@@ -35,15 +34,14 @@ def clean_empty_keyvalues_from_dict(d):
 
 
 def alter_role_data(actor_list, role):
-    """
-    Converts the role data fom the frontend to comply with the Metax schema.
+    """Converts the role data fom the frontend to comply with the Metax schema.
 
     Arguments:
-        actor_list {list} -- A list of all the actors from the frontend.
-        role {string} -- The role, can be 'creator', 'publisher', 'curator', 'rights_holder' or 'contributor'.
+        actor_list (list): A list of all the actors from the frontend.
+        role (string): The role, can be 'creator', 'publisher', 'curator', 'rights_holder' or 'contributor'.
 
     Returns:
-        list -- List of the actors with the role in question complyant to Metax schema.
+        list: List of the actors with the role in question complyant to Metax schema.
 
     """
     actors = []
@@ -81,14 +79,13 @@ def alter_role_data(actor_list, role):
 
 
 def other_identifiers_to_metax(identifiers_list):
-    """
-    Convert other identifiers to comply with Metax schema.
+    """Convert other identifiers to comply with Metax schema.
 
     Arguments:
-        identifiers_list {list} -- List of other identifiers from frontend.
+        identifiers_list (list): List of other identifiers from frontend.
 
     Returns:
-        list -- List of other identifiers that comply to Metax schema.
+        list: List of other identifiers that comply to Metax schema.
 
     """
     other_identifiers = []
@@ -100,14 +97,13 @@ def other_identifiers_to_metax(identifiers_list):
 
 
 def access_rights_to_metax(data):
-    """
-    Cherry pick access right data from the frontend form data and make it comply with Metax schema.
+    """Cherry pick access right data from the frontend form data and make it comply with Metax schema.
 
     Arguments:
-        data {object} -- The whole object sent from the frontend.
+        data (dict): The whole object sent from the frontend.
 
     Returns:
-        object -- Object containing access right object that comply to Metax schema.
+        dict: Dictionary containing access right object that comply to Metax schema.
 
     """
     access_rights = {}
@@ -133,14 +129,13 @@ def access_rights_to_metax(data):
 
 
 def remote_resources_data_to_metax(resources):
-    """
-    Converts external resources from qvain light schema to metax schema.
+    """Converts external resources from qvain light schema to metax schema.
 
     Arguments:
-        data {object} -- External resources.
+        data (dict): External resources.
 
     Returns:
-        object -- Object containing external resources array that complies with Metax schema.
+        dict: Dictionary containing external resources array that complies with Metax schema.
 
     """
     metax_remote_resources = []
@@ -158,14 +153,13 @@ def remote_resources_data_to_metax(resources):
 
 
 def files_data_to_metax(files):
-    """
-    Create list of objects that comply to Metax schema
+    """Create list of objects that comply to Metax schema
 
     Arguments:
-        files {list} -- List containing the files from frontend (does contain ALL the data).
+        files (list): List containing the files from frontend (does contain ALL the data).
 
     Returns:
-        list -- List containing objects that conform to Metax schema.
+        list: List containing objects that conform to Metax schema.
 
     """
     metax_files = []
@@ -181,14 +175,13 @@ def files_data_to_metax(files):
 
 
 def directories_data_to_metax(files):
-    """
-    Create list of objects that comply to Metax schema
+    """Create list of objects that comply to Metax schema
 
     Arguments:
-        files {list} -- List containing the directories from frontend (does contain ALL the data).
+        files (list): List containing the directories from frontend (does contain ALL the data).
 
     Returns:
-        list -- List containing objects that conform to Metax schema.
+        list: List containing objects that conform to Metax schema.
 
     """
     metax_directories = []
@@ -203,16 +196,15 @@ def directories_data_to_metax(files):
 
 
 def data_to_metax(data, metadata_provider_org, metadata_provider_user):
-    """
-    Converts all the data from the frontend to conform to Metax schema.
+    """Converts all the data from the frontend to conform to Metax schema.
 
     Arguments:
-        data {object} -- All form data sent from the frontend.
-        metadata_provider_org {string} -- The name of the metadata providers organisation taken from authentication information.
-        metadata_provider_user {string} -- The name of the metadata provider taken from authentication information.
+        data (dict): All form data sent from the frontend.
+        metadata_provider_org (str): The name of the metadata providers organisation taken from authentication information.
+        metadata_provider_user (str): The name of the metadata provider taken from authentication information.
 
     Returns:
-        object -- Returns an object that has been validated and should conform to Metax schema and is ready to be sent to Metax.
+        dict: Returns an Dictionary that has been validated and should conform to Metax schema and is ready to be sent to Metax.
 
     """
     publisher_array = alter_role_data(data["actors"], "publisher")
@@ -262,28 +254,26 @@ def get_encoded_access_granter():
     return urlsafe_b64encode(access_granter_json.encode('utf-8'))
 
 def get_dataset_creator(cr_id):
-    """
-    Get creator of dataset.
+    """Get creator of dataset.
 
     Arguments:
-        cr_id {string} -- Identifier of datset.
+        cr_id (str): Identifier of datset.
 
     Returns:
-        [type] -- [description]
+        str: The metadata_provider_user value.
 
     """
     dataset = get_catalog_record(cr_id, False)
     return dataset['metadata_provider_user']
 
 def remove_deleted_datasets_from_results(result):
-    """
-    Remove datasets marked as removed from results.
+    """Remove datasets marked as removed from results.
 
     Arguments:
-        result {object} -- Results with all datasets.
+        result (dict): Results with all datasets.
 
     Returns:
-        [object] -- Results where removed datasets are removed.
+        dict: Results where removed datasets are removed.
 
     """
     new_results = [dataset for dataset in result['results'] if dataset['removed'] is False]
@@ -307,15 +297,14 @@ def _to_metax_infrastructure(infrastructures):
 
 
 def edited_data_to_metax(data, original):
-    """
-    Alter the research_dataset field to contain the new changes from editing.
+    """Alter the research_dataset field to contain the new changes from editing.
 
     Arguments:
-        data {object} -- Data from frontend.
-        original {object} -- Original data that the dataset contained befor editing.
+        data (dict): Data from frontend.
+        original (dict): Original data that the dataset contained before editing.
 
     Returns:
-        [object] -- Metax ready data.
+        dict: Metax ready data.
 
     """
     publisher_array = alter_role_data(data["actors"], "publisher")
@@ -346,11 +335,10 @@ def edited_data_to_metax(data, original):
     return clean_empty_keyvalues_from_dict(edited_data)
 
 def get_user_ida_projects():
-    """
-    List IDA projects for current user without the prefix.
+    """List IDA projects for current user without the prefix.
 
     Returns:
-        list(str) -- List of projects.
+        list(str): List of projects.
 
     """
     user_ida_groups = get_user_ida_groups()
@@ -366,14 +354,13 @@ def get_user_ida_projects():
 
 
 def check_if_data_in_user_IDA_project(data):
-    """
-    Check if the user creating a dataset belongs to the project that the files/folders belongs to.
+    """Check if the user creating a dataset belongs to the project that the files/folders belongs to.
 
     Arguments:
-        data {object} -- The dataset that the user is trying to create.
+        data (dict): The dataset that the user is trying to create.
 
     Returns:
-        [bool] -- True if data belongs to user, and False is not.
+        bool: True if data belongs to user, and False is not.
 
     """
     user_ida_projects = get_user_ida_groups()

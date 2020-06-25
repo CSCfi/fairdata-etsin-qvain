@@ -27,12 +27,7 @@ class OrganizationValidationSchema(Schema):
 
 
 class ActorValidationSchema(Schema):
-    """
-    Validation schema for actors.
-
-    Arguments:
-        Schema {library} -- Marshmallows Schema library.
-    """
+    """Validation schema for actors."""
 
     type = fields.Str(
         required=True,
@@ -54,7 +49,15 @@ class ActorValidationSchema(Schema):
 
     @validates_schema
     def validate_person(self, data, **kwargs):
-        """Require person if actor is a person."""
+        """Require person if actor is a person.
+
+        Args:
+            data (dict): -
+
+        Raises:
+            ValidationError: A validation error occurred.
+
+        """
         if data.get('type') == 'person':
             if not data.get('person'):
                 raise ValidationError('Person is required for person actor.')
@@ -67,12 +70,7 @@ class ActorValidationSchema(Schema):
 
 
 class DatasetValidationSchema(Schema):
-    """
-    Validation schema for the whole dataset.
-
-    Arguments:
-        Schema {library} -- Marshmallows Schema library.
-    """
+    """Validation schema for the whole dataset."""
 
     original = fields.Dict()
     title = fields.Dict(

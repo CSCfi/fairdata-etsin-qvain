@@ -31,28 +31,36 @@ class BaseCache(FlaskService):
             app.logger.error("Unable to initialize Cache due to missing config")
 
     def do_update(self, key, value, ttl):
-        """
+        """Update cache
+
         Update cache with new key and specific time-to-live.
 
-        :param key:
-        :param value:
-        :param ttl:
-        :return:
+        Args:
+            key (str): The key to update.
+            value (str): The value to update the key with.
+            ttl (int): Number of seconds until the item is expired from the cache.
+
+        Returns:
+            str: The value.
+
         """
         try:
             self.cache.set(key, value, expire=ttl)
         except Exception as e:
             from etsin_finder.finder import app
-            app.logger.debug("Insert to cache failed")
-            app.logger.debug(e)
+            app.logger.warning("Insert to cache failed")
+            app.logger.warning(e)
         return value
 
     def do_get(self, key):
-        """
-        Try to fetch entry from cache.
+        """Try to fetch entry from cache
 
-        :param key:
-        :return:
+        Args:
+            key (str): The key to fetch.
+
+        Returns:
+            str: The value for the key, or default if the key wasn’t found.
+
         """
         if self.is_testing:
             return None
@@ -72,23 +80,29 @@ class CatalogRecordCache(BaseCache):
     CACHE_ITEM_TTL = 1200
 
     def update_cache(self, cr_id, cr_json):
-        """
-        Update catalog record cache with catalog record json.
+        """Update catalog record cache with catalog record json
 
-        :param cr_id:
-        :param cr_json:
-        :return:
+        Args:
+            cr_id (str): Catalog record identifier.
+            cr_json (json): Catalog record JSON.
+
+        Returns:
+            json: Updated catalog record JSON
+
         """
         if cr_id and cr_json:
             return self.do_update(self._get_cache_key(cr_id), cr_json, self.CACHE_ITEM_TTL)
         return cr_json
 
     def get_from_cache(self, cr_id):
-        """
-        Get catalog record json from catalog record cache.
+        """Get catalog record json from catalog record cache.
 
-        :param cr_id:
-        :return:
+        Args:
+            cr_id (str): Catalog record identifier.
+
+        Returns:
+            json: Catalog record JSON
+
         """
         return self.do_get(self._get_cache_key(cr_id))
 
@@ -103,25 +117,31 @@ class RemsCache(BaseCache):
     CACHE_ITEM_TTL = 300
 
     def update_cache(self, cr_id, user_id, permission=False):
-        """
-        Update cache with user entitlement for a specific catalog record.
+        """Update cache with user entitlement for a specific catalog record.
 
-        :param cr_id:
-        :param user_id:
-        :param permission:
-        :return:
+        Args:
+            cr_id (str): Catalog record identifier.
+            user_id (str): User identifier.
+            permission (bool, optional): Does the user have permission. Defaults to False.
+
+        Returns:
+            bool: Return the permission of updated cache.
+
         """
         if cr_id and user_id:
             return self.do_update(self._get_cache_key(cr_id, user_id), permission, self.CACHE_ITEM_TTL)
         return permission
 
     def get_from_cache(self, cr_id, user_id):
-        """
-        Get entitlement for a user related to a specific catalog record from cache.
+        """Get entitlement for a user related to a specific catalog record from cache
 
-        :param cr_id:
-        :param user_id:
-        :return:
+        Args:
+            cr_id (str): Catalog record identifier.
+            user_id (str): User identifier.
+
+        Returns:
+            str: The value for the user
+
         """
         return self.do_get(self._get_cache_key(cr_id, user_id))
 
