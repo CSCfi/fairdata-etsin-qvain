@@ -18,26 +18,25 @@ class PeriodOfTimePicker extends Component {
     }
 
     handleDateChangeRaw = (e, datum) => {
-        const { changeProvenanceAttribute } = this.props.Stores.Qvain.Provenances
+        const { changeAttribute } = this.props.Stores.Qvain.Provenances
 
-        console.log(e)
         return e && handleDatePickerChange(
             e.target.value,
-            (date) => changeProvenanceAttribute(datum, date)
+            (date) => changeAttribute(datum, date)
         )
     }
 
     handleDateChange = (date, datum) => {
-        const { changeProvenanceAttribute } = this.props.Stores.Qvain.Provenances
+        const { changeAttribute } = this.props.Stores.Qvain.Provenances
 
         return date ? handleDatePickerChange(
             date.toISOString(),
-            (d) => changeProvenanceAttribute(datum, d)
+            (d) => changeAttribute(datum, d)
         ) : null;
     }
 
     render() {
-        const { startDate, endDate } = this.props.Stores.Qvain.Provenances.provenanceInEdit
+        const { startDate, endDate } = this.props.Stores.Qvain.Provenances.inEdit
         const { readonly } = this.props.Stores.Qvain
         const { lang } = this.props.Stores.Locale
 

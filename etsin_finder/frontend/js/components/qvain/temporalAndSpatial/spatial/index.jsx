@@ -1,4 +1,6 @@
-import React, { Component } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
+import { inject, observer } from 'mobx-react'
 import Field from '../../general/section/field'
 import SpatialFieldContent from './SpatialFieldContent'
 
@@ -7,14 +9,18 @@ const brief = {
     description: 'qvain.temporalAndSpatial.spatial.description',
 }
 
-class Spatial extends Component {
- render() {
+const Spatial = ({ Stores }) => {
+  const Store = Stores.Qvain
+  const { lang } = Stores.Locale
      return (
        <Field brief={brief}>
-         <SpatialFieldContent />
+         <SpatialFieldContent Store={Store} lang={lang} />
        </Field>
      )
- }
 }
 
-export default Spatial
+Spatial.propTypes = {
+  Stores: PropTypes.PropTypes.object.isRequired
+}
+
+export default inject('Stores')(observer(Spatial))

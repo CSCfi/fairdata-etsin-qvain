@@ -1,5 +1,10 @@
 import uuid from 'uuid/v4'
-import { observable, action, toJS } from 'mobx'
+import cloneDeep from 'lodash.clonedeep'
+import { toJS, observable, action } from 'mobx'
+import Spatials from './qvain.spatials'
+import RelatedResources from './qvain.relatedResources'
+import Field from './qvain.field'
+import { ActorsRef } from './qvain.actors'
 
 const Provenance = (
     uiid = uuid(),
@@ -7,84 +12,56 @@ const Provenance = (
     description = { fi: '', en: '' },
     outcomeDescription = { fi: '', en: '' },
     startDate = undefined,
-    endDate = undefined) => ({
+    endDate = undefined,
+    spatials = [], // aka location
+    outcome = undefined,
+    relatedResources = [], // aka usedEntity
+    associations = [] // aka actors, please note that actors will written only when they are going to backend
+    ) => ({
         uiid,
         name,
         description,
         outcomeDescription,
         startDate,
-        endDate
+        endDate,
+        spatials,
+        outcome,
+        relatedResources,
+        associations
     }
 )
 
-class Provenances {
+class Provenances extends Field {
     constructor(Qvain) {
-        this.Qvain = Qvain
-        this.init()
+        super(Qvain, Provenance, 'provenances', ['spatials', 'relatedResources'])
+        this.Spatials = new Spatials(this)
+        this.RelatedResources = new RelatedResources(this)
+        this.ActorsRef = new ActorsRef(Qvain.Actors)
     }
 
-    init() {
-    }
+    @observable spatials = []
 
-    @observable hasChanged
+    @observable relatedResources = []
 
-    @observable provenanceInEdit
-
-    @action setChanged = (val) => {
-        this.hasChanged = val
-    }
-
-    @action startNewProvenance = () => {
-        this.setChanged(false)
-        this.provenanceInEdit = Provenance()
-    }
-
-    @action changeProvenanceAttribute = (attribute, value) => {
-        this.setChanged(true)
-        this.provenanceInEdit[attribute] = value
-    }
-
-    @action saveProvenance = () => {
-        this.setChanged(false)
-        const editedProvenance = this.Qvain.provenences.find(p => p.uiid === this.provenanceInEdit.uiid)
-        if (editedProvenance) {
-            const indexOfProvenance = this.Qvain.provenance.indexOf(editedProvenance)
-            this.Qvain.provenences[indexOfProvenance] = {
-                ...this.provenanceInEdit,
-            }
-        } else {
-        this.Qvain.provenances.push({
-            ...this.provenanceInEdit,
-        })
-        }
-    }
-
-    @action clearProvenanceInEdit = () => {
-        this.setChanged(false)
-        this.provenanceInEdit = undefined
-    }
-
-    @action removeProvenance = (uiid) => {
-        this.Qvain.provenances = this.Qvain.provenances.filter(p => p.uiid !== uiid)
-    }
-
-    @action editProvenance = (uiid) => {
-        this.setChanged(false)
-        const provenance = this.Qvain.provenances.find(p => p.uiid === uiid)
-        this.provenanceInEdit = {
-            ...provenance,
-        }
+    @action saveAndClearSpatials = () => {
+        this.inEdit.spatials = cloneDeep(toJS(this.spatials))
+        this.spatials = []
+        this.relatedResources = []
     }
 
     toBackend = () => this.Qvain.provenances.map(p => ({
             name: p.name,
+            description: p.description,
+            outcome_description: p.outcomeDescription,
+
         }))
 }
 
-export const Location = (name, url) => ({
+export const Outcome = (name, url) => ({
     name,
-    url
+    url,
 })
+
 
 export const ProvenanceModel = (provenanceData) => ({
     uiid: uuid(),

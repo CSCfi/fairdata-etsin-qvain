@@ -365,7 +365,7 @@ const actorsSchema = yup
 // SPATIAL VALIDATION
 const spatialNameSchema = yup
   .string()
-  .required(translate('qvain.temporalAndSpatial.spatial.error.nameRequired'))
+  .required('qvain.temporalAndSpatial.spatial.error.nameRequired')
 
 const spatialAltitudeSchema = yup
   .number()

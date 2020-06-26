@@ -14,6 +14,7 @@ import Actors from './qvain.actors'
 import Files from './qvain.files'
 import Spatials, { SpatialModel } from './qvain.spatials'
 import Provenances from './qvain.provenances'
+import RelatedResources from './qvain.relatedResources'
 
 class Qvain {
   constructor() {
@@ -21,6 +22,7 @@ class Qvain {
     this.Actors = new Actors(this)
     this.Spatials = new Spatials(this)
     this.Provenances = new Provenances(this)
+    this.RelatedResources = new RelatedResources(this)
   }
 
   @observable original = undefined // used if editing, otherwise undefined
@@ -42,6 +44,8 @@ class Qvain {
   @observable spatials = []
 
   @observable provenances = []
+
+  @observable relatedResources = []
 
   @observable issuedDate = undefined
 

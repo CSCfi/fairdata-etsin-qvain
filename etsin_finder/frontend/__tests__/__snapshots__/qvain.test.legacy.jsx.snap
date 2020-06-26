@@ -110,10 +110,18 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
         },
         "Provenances": Provenances {
           "Qvain": [Circular],
+          "Spatials": Spatials {
+            "Parent": [Circular],
+            "saveEditedSpatial": [Function],
+            "saveNewSpatial": [Function],
+            "toBackend": [Function],
+          },
           "toBackend": [Function],
         },
         "Spatials": Spatials {
-          "Qvain": [Circular],
+          "Parent": [Circular],
+          "saveEditedSpatial": [Function],
+          "saveNewSpatial": [Function],
           "toBackend": [Function],
         },
         "accessType": Object {
@@ -256,10 +264,18 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
         },
         "Provenances": Provenances {
           "Qvain": [Circular],
+          "Spatials": Spatials {
+            "Parent": [Circular],
+            "saveEditedSpatial": [Function],
+            "saveNewSpatial": [Function],
+            "toBackend": [Function],
+          },
           "toBackend": [Function],
         },
         "Spatials": Spatials {
-          "Qvain": [Circular],
+          "Parent": [Circular],
+          "saveEditedSpatial": [Function],
+          "saveNewSpatial": [Function],
           "toBackend": [Function],
         },
         "accessType": Object {
@@ -402,10 +418,18 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
         },
         "Provenances": Provenances {
           "Qvain": [Circular],
+          "Spatials": Spatials {
+            "Parent": [Circular],
+            "saveEditedSpatial": [Function],
+            "saveNewSpatial": [Function],
+            "toBackend": [Function],
+          },
           "toBackend": [Function],
         },
         "Spatials": Spatials {
-          "Qvain": [Circular],
+          "Parent": [Circular],
+          "saveEditedSpatial": [Function],
+          "saveNewSpatial": [Function],
           "toBackend": [Function],
         },
         "accessType": Object {
@@ -548,10 +572,18 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
         },
         "Provenances": Provenances {
           "Qvain": [Circular],
+          "Spatials": Spatials {
+            "Parent": [Circular],
+            "saveEditedSpatial": [Function],
+            "saveNewSpatial": [Function],
+            "toBackend": [Function],
+          },
           "toBackend": [Function],
         },
         "Spatials": Spatials {
-          "Qvain": [Circular],
+          "Parent": [Circular],
+          "saveEditedSpatial": [Function],
+          "saveNewSpatial": [Function],
           "toBackend": [Function],
         },
         "accessType": Object {

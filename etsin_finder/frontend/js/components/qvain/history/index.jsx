@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Section } from '../general/section/index'
 import TooltipContent from './TooltipContent'
+import RelatedResource from './relatedResource'
 import Infrastructure from './infrastructure'
 import Provenance from './provenance'
 
@@ -22,6 +23,7 @@ class History extends Component {
   render() {
     return (
       <Section {...fieldProps}>
+        <RelatedResource />
         <Infrastructure />
         <Provenance />
       </Section>

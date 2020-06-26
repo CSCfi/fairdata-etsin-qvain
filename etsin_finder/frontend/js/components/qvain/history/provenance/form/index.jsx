@@ -1,23 +1,45 @@
-import React, { useState } from 'react'
-import ProvenanceInput from './ProvenanceInput'
-import TranslationTab from './translationTab'
-import PeriodOfTimePicker from './PeriodOfTimePicker';
-import LocationInput from './location'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { FormContainer } from '../../../general/form'
+import TabInput from '../../../general/translationTabInput'
+import TranslationTab from '../../../general/translationTab'
+import PeriodOfTimePicker from './PeriodOfTimePicker'
+import LocationInput from './locationInput'
+import ModalReferenceInput from '../../../general/modalReferenceInput'
+import { Outcome } from '../../../../../stores/view/qvain.provenances'
+import UsedEntityInput from './usedEntityInput'
 
-const Form = () => {
-  const [language, setLanguage] = useState('fi');
-  return (
-    <>
-      <TranslationTab language={language} setLanguage={(lang) => setLanguage(lang)}>
-        <>
-          <ProvenanceInput language={language} type="text" datum="name" error="" />
-          <ProvenanceInput language={language} type="text" datum="description" error="" />
-          <ProvenanceInput language={language} type="text" datum="outcomeDescription" error="" />
-        </>
-      </TranslationTab>
-      <PeriodOfTimePicker />
-      <LocationInput />
-    </>
-)
+class Form extends Component {
+  static propTypes = {
+    Store: PropTypes.object.isRequired,
+    Field: PropTypes.object.isRequired,
+    translationsRoot: PropTypes.string.isRequired
+  }
+
+  state = {
+    language: 'fi'
+  }
+
+  setLanguage = (lang) => {
+    this.setState({ language: lang })
+  }
+
+  render = () => {
+    const { language } = this.state
+
+    return (
+      <FormContainer>
+        <TranslationTab language={language} setLanguage={this.setLanguage}>
+          <TabInput {...this.props} datum="name" language={language} />
+          <TabInput {...this.props} datum="description" language={language} />
+          <TabInput {...this.props} datum="outcomeDescription" language={language} />
+        </TranslationTab>
+        <PeriodOfTimePicker />
+        <LocationInput />
+        <ModalReferenceInput {...this.props} datum="outcome" metaxIdentifier="event_outcome" model={Outcome} />
+        <UsedEntityInput />
+      </FormContainer>
+    )
+  }
 }
 export default Form

@@ -7,7 +7,10 @@ class TranslationTab extends Component {
   static propTypes = {
     language: PropTypes.string.isRequired,
     setLanguage: PropTypes.func.isRequired,
-    children: PropTypes.object.isRequired
+    children: PropTypes.oneOfType([
+      PropTypes.object,
+      PropTypes.array
+    ]).isRequired
   }
 
   translations = {
@@ -20,11 +23,11 @@ class TranslationTab extends Component {
     return (
       <React.Fragment>
         <LangButtonContainer>
-          <LangButton active={language === 'fi'} onClick={() => setLanguage('fi')}>
+          <LangButton type="button" active={language === 'fi'} onClick={() => setLanguage('fi')}>
             <Translate content={this.translations.langButtonFi} />
           </LangButton>
           <EmptyBlock width="2%" />
-          <LangButton active={language === 'en'} onClick={() => setLanguage('en')}>
+          <LangButton type="button" active={language === 'en'} onClick={() => setLanguage('en')}>
             <Translate content={this.translations.langButtonEn} />
           </LangButton>
           <EmptyBlock width="48%" />

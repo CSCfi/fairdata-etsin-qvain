@@ -46,6 +46,7 @@
     "html-webpack-plugin": "^3.2.0",
     "leaflet": "^1.5.1",
     "leaflet-geosearch": "2.7.0",
+    "lodash.clonedeep": "^4.5.0",
     "mobx": "^5.13.0",
     "mobx-react": "^5.4.4",
     "mobx-react-router": "^4.0.7",
@@ -122,7 +123,6 @@
     "printWidth": 100,
     "semi": false,
     "singleQuote": true,
-    "trailingComma": "es5",
-    "arrowParens": "avoid"
+    "trailingComma": "es5"
   }
 }

@@ -1,30 +1,35 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
-import { inject, observer } from 'mobx-react'
 import Translate from 'react-translate-component'
-import ConfirmClose from '../../general/confirmClose'
-import Form from './form'
-import SpatialButtons from './SpatialButtons'
+import ConfirmClose from './confirmClose'
+import ModalButtons from './modalButtons'
 
 class ModalContent extends Component {
   static propTypes = {
-    Stores: PropTypes.object.isRequired,
-    translationsRoot: PropTypes.string,
-  }
-
-  static defaultProps = {
-    translationsRoot: 'qvain.temporalAndSpatial.spatial',
+    Store: PropTypes.object.isRequired,
+    Field: PropTypes.object.isRequired,
+    Form: PropTypes.oneOfType([
+      PropTypes.element,
+      PropTypes.func
+    ]).isRequired,
+    handleSave: PropTypes.func.isRequired,
+    translationsRoot: PropTypes.string.isRequired,
+    language: PropTypes.string.isRequired
   }
 
   constructor(props) {
     super(props)
-    const { editMode } = this.props.Stores.Qvain.Spatials
+    const { editMode } = this.props.Field
     this.translations = {
       title: editMode
         ? `${this.props.translationsRoot}.modal.title.edit`
         : `${this.props.translationsRoot}.modal.title.add`,
-    }
+        buttons: {
+          cancel: `${this.props.translationsRoot}.modal.buttons.cancel`,
+          save: `${this.props.translationsRoot}.modal.buttons.save`,
+        },
+      }
     this.state = {
       confirmOpen: false,
     }
@@ -35,22 +40,30 @@ class ModalContent extends Component {
   }
 
   close = () => {
-    const { clearSpatialInEdit } = this.props.Stores.Qvain.Spatials
-    clearSpatialInEdit()
+    const { clearInEdit } = this.props.Field
+    clearInEdit()
     this.setConfirmOpen(false)
   }
 
   render() {
     const { confirmOpen } = this.state
+    const { Store, Field, handleSave, Form, translationsRoot, language } = this.props
+    const { readonly } = Store
+
     return (
       <>
         <Header>
           <Translate content={this.translations.title} />
         </Header>
         <Content>
-          <Form />
-          <SpatialButtons handleRequestClose={() => this.setConfirmOpen(true)} />
-
+          <Form Store={Store} Field={Field} translationsRoot={translationsRoot} language={language} />
+          <ModalButtons
+            handleRequestClose={() => this.setConfirmOpen(true)}
+            translations={this.translations}
+            readonly={readonly}
+            handleSave={() => handleSave(Field)}
+            Field={Field}
+          />
           <ConfirmClose
             show={confirmOpen}
             hideConfirm={() => this.setConfirmOpen(false)}
@@ -78,4 +91,4 @@ const Header = styled.h3`
   margin-left: 0rem;
 `
 
-export default inject('Stores')(observer(ModalContent))
+export default ModalContent

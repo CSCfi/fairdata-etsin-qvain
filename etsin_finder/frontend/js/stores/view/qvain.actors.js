@@ -7,6 +7,9 @@ import {
 } from '../../components/qvain/utils/constants'
 
 
+// helper methods
+
+
 // Organization may be a reference organizations if its identifier starts with the proper prefix.
 export const ReferenceIdentifierPrefix = 'http://uri.suomi.fi/codelist/fairdata/organization/code/'
 export const maybeReference = identifier => (
@@ -25,6 +28,44 @@ const getOrganizationSearchUrl = parentId => {
   }
   return `https://metax.fairdata.fi/es/organization_data/organization/_search?size=3000&q=parent_id:"${shortId}"`
 }
+
+const actorToBackend = actor => ({
+  type: actor.type,
+  roles: actor.roles,
+  person: actor.type === EntityType.PERSON ? {
+    name: actor.person.name,
+    email: actor.person.email || undefined,
+    identifier: actor.person.identifier || undefined
+  } : undefined,
+  organizations: actor.organizations.map(org => ({
+    name: org.name,
+    email: org.email || undefined,
+    identifier: org.identifier || undefined
+  })),
+})
+
+const isActorEqual = (org1, org2) => (
+  isEqual(org1, org2, ['uiid', 'roles'])
+)
+
+const isOrganizationEqual = (org1, org2) => (
+  isEqual(org1, org2, ['uiid', 'isReference'])
+)
+
+// Compare two objects to see if they are the same.
+// Optionally ignore specific keys (e.g. uiid).
+const isEqual = (a1, a2, ignore = []) => {
+  const isDifferent = (a, b) => {
+    if (a && b && typeof a === 'object' && typeof b === 'object') {
+      return Object.keys(a).some(key => !ignore.includes(key) && isDifferent(a[key], b[key]))
+    }
+    return a !== b
+  }
+
+  const equ = !isDifferent(a1, a2)
+  return equ
+}
+
 
 // create a new UI Identifier based on existing UI IDs
 // basically a simple number increment
@@ -349,7 +390,7 @@ class Actors {
         if (!refs) {
           return // references not loaded yet
         }
-        const match = refs.find(refOrg => this.isOrganizationEqual(org, refOrg))
+        const match = refs.find(refOrg => isOrganizationEqual(org, refOrg))
         if (match) {
           if (actor === this.actorInEdit) {
             // actorInEdit should remain a copy until it is saved
@@ -370,7 +411,7 @@ class Actors {
     this.actors.forEach(actor => {
       actor.organizations.forEach((org, index) => {
         for (const otherOrg of orgs) {
-          if (this.isOrganizationEqual(org, otherOrg)) {
+          if (isOrganizationEqual(org, otherOrg)) {
             actor.organizations[index] = otherOrg
             return
           }
@@ -392,7 +433,7 @@ class Actors {
         if (actor1 === actor2) {
           return
         }
-        if (this.isActorEqual(actor1, actor2)) {
+        if (isActorEqual(actor1, actor2)) {
           actor1.roles = [...new Set([...actor1.roles, ...actor2.roles])]
           delete actors[index]
         }
@@ -402,27 +443,6 @@ class Actors {
     this.actors.replace(mergedActors)
   }
 
-  isActorEqual = (org1, org2) => (
-    this.isEqual(org1, org2, ['uiid', 'roles'])
-  )
-
-  isOrganizationEqual = (org1, org2) => (
-    this.isEqual(org1, org2, ['uiid', 'isReference'])
-  )
-
-  // Compare two objects to see if they are the same.
-  // Optionally ignore specific keys (e.g. uiid).
-  isEqual = (a1, a2, ignore = []) => {
-    const isDifferent = (a, b) => {
-      if (a && b && typeof a === 'object' && typeof b === 'object') {
-        return Object.keys(a).some(key => !ignore.includes(key) && isDifferent(a[key], b[key]))
-      }
-      return a !== b
-    }
-
-    const equ = !isDifferent(a1, a2)
-    return equ
-  }
 
   @action
   setActors = actors => {
@@ -476,20 +496,50 @@ class Actors {
     actor.organizations = organizations
   }
 
-  toBackend = () => this.actors.map(actor => ({
-    type: actor.type,
-    roles: actor.roles,
-    person: actor.type === EntityType.PERSON ? {
-      name: actor.person.name,
-      email: actor.person.email || undefined,
-      identifier: actor.person.identifier || undefined
-    } : undefined,
-    organizations: actor.organizations.map(org => ({
-      name: org.name,
-      email: org.email || undefined,
-      identifier: org.identifier || undefined
-    })),
-  }))
+  toBackend = () => this.actors.map(actorToBackend)
+
+  @observable actorsRefs = []
+
+  @action addRef = (ref) => {
+    this.actorsRefs.push(ref)
+  }
 }
 
 export default Actors
+
+export class ActorsRef {
+  constructor(actors, actorNames) {
+    this.actorsStore = actors // instance of the actors class in Stores.Qvain for example
+    this.actorsStore.addRef(this)
+    this.setActorsRef(actorNames)
+  }
+
+  @observable actorsRef = []
+
+  @computed get actorOptions() {
+    // makes a list of actors based on the refs
+    return this.actorsRef.map(ref => ({ value: ref.uiid, label: ref.person.name || ref.organisation.name }))
+  }
+
+  @computed get toBackend() {
+    // makes a list of names to be stored to metax
+    return this.actorsRef.map(actorToBackend)
+  }
+
+  @action addActorRef = (actor) => {
+    this.actorsRef.push(actor)
+  }
+
+  @action removeActorRef = (uiid) => {
+    this.actorsRef = this.actorsRef.filter(ref => ref.uiid !== uiid)
+  }
+
+  @action setActorsRef = (actorsFromBackend) => {
+    const actorsRef = this.actorsStore.filter(actor => !!actorsFromBackend.find(afb => isEqual(afb, actorToBackend(actor))))
+    this.actorsRef = actorsRef
+  }
+
+  @action clearActorsRef = () => {
+    this.actorsRef = []
+  }
+}

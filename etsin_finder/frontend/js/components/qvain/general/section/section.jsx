@@ -14,7 +14,10 @@ class Section extends PureComponent {
     components: PropTypes.exact({
       tooltipContent: PropTypes.elementType.isRequired,
     }).isRequired,
-    children: PropTypes.object.isRequired,
+    children: PropTypes.oneOfType([
+      PropTypes.array,
+      PropTypes.element
+    ]).isRequired,
     isRequired: PropTypes.bool,
   }
 

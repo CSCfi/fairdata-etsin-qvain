@@ -1000,14 +1000,14 @@ const finnish = {
       title: 'Aineistoon liittyvä materiaali ja historia',
       tooltip: 'Aineestoon liittyvä materiaali ja historia info',
       tooltipContent: {
-        reference: {
+        relatedResource: {
           title: 'Viittaukset',
           paragraph:
-            'Viittaukset muihin aineistoihin, julkaisuihin tai muihin resursseihin, jotka auttavat ymmärtämään ja käyttämään tätä tutkimusaineistoa. ',
+            'Viittaukset muihin aineistoihin, julkaisuihin tai muihin resursseihin, jotka auttavat ymmärtämään ja käyttämään tätä tutkimusaineistoa.',
         },
-        provience: {
-          title: 'Historiatiedot',
-          paragraph: 'Tiedot aineiston historiasta eli provenienssista.',
+        provenance: {
+          title: 'Alkuperä',
+          paragraph: 'Tiedot aineiston alkuperästä eli provenienssista.',
         },
         infrastructure: {
           title: 'Infrastruktuuri',
@@ -1020,15 +1020,64 @@ const finnish = {
         description:
           'Voit lisätä palveluita tai rakenteita joita on käytetty aineiston laatimiseen.',
       },
+      relatedResource: {
+        title: 'Viittaukset toiseen resurssiin',
+        description: 'Viittaukset aineistoihin, julkaisuihin tai muihin resursseihin, jotka auttavat ymmärtämään ja käyttämään tätä tutkimusaineistoa.',
+        modal: {
+          addButton: 'Lisää viittaus toiseen resurssiin',
+          title: {
+            add: 'Lisää viittaus toiseen resurssiin',
+            edit: 'Muokkaa viittausta toiseen resurssiin'
+          },
+          buttons: {
+            save: 'Save',
+            cancel: 'Cancel'
+          },
+          nameInput: {
+            fi: {
+              label: 'Nimi',
+              placeholder: 'Nimi (suomeksi)'
+            },
+            en: {
+              label: 'Nimi',
+              placeholder: 'Nimi (englanniksi)'
+            }
+          },
+          descripionInput: {
+            fi: {
+              label: 'Kuvailu',
+              placeholder: 'Kuvailu (suomeksi)'
+            },
+            en: {
+              label: 'Kuvailu',
+              placeholder: 'Kuvailu (englanniksi)'
+            }
+          },
+          identifierInput: {
+            label: 'Tunniste',
+            placeholder: 'Tunniste'
+          },
+          relationTypeInput: {
+            label: 'Viitteen tyyppi',
+            placeholder: 'Viitteen tyyppi'
+          },
+          entityTypeInput: {
+            label: 'Resurssin tyyppi',
+            placeholder: 'Resurssin tyyppi'
+          }
+        }
+      },
       provenance: {
         title: 'Alkuperä',
         description: '',
-        addButton: 'Lisää alkuperä',
         modal: {
-          addTitle: 'Lisää alkuperä',
-          editTitle: 'Muokkaa alkuperää',
+          addButton: 'Lisää alkuperä',
+          title: {
+            add: 'Lisää alkuperä',
+            edit: 'Muokkaa alkuperää',
+          },
           buttons: {
-            addSave: 'Lisää alkuperä',
+            save: 'Lisää alkuperä',
             editSave: 'Vahvista muutokset',
             cancel: 'Peruuta',
           },
@@ -1069,10 +1118,93 @@ const finnish = {
           },
           locationInput: {
             label: 'Alueelliset tiedot',
+            error: {
+              nameRequired: 'Nimi on pakollinen kenttä.',
+              altitudeNan: 'Korkeus täytyy olla numero',
+            },
             modal: {
               addButton: 'Lisää alueellinen tieto',
+              buttons: {
+                addGeometry: 'Lisää geometria',
+                save: 'Tallenna',
+                cancel: 'Peruuta'
+              },
+              title: {
+                add: 'Lisää alueellinen tieto',
+                edit: 'Muokkaa alueellista tietoa'
+              },
+              nameInput: {
+                label: 'Nimi',
+                placeholder: 'Alueen nimi',
+              },
+              altitudeInput: {
+                label: 'Korkeus',
+                placeholder: 'Alueen korkeus ilmoitettuna WGS84 -referenssin mukaan',
+              },
+              addressInput: {
+                label: 'Osoite',
+                placeholder: 'Koko osoite',
+              },
+              geometryInput: {
+                label: 'Geometria',
+                placeholder: 'Geometria WKT-muodossa WGS84 -referenssin mukaan',
+              },
+              locationInput: {
+                label: 'Paikka',
+                placeholder: 'Etsi paikkoja hakusanalla',
+              },
             },
           },
+          outcomeInput: {
+            label: 'Lopputulos',
+            placeholder: 'Lopputulos'
+          },
+          usedEntityInput: {
+            label: 'Käytetyt kokonaisuudet',
+            modal: {
+              addButton: 'Lisää käytetty kokonaisuus',
+              buttons: {
+                save: 'Tallenna',
+                cancel: 'Peruuta'
+              },
+              title: {
+                add: 'Lisää käytetty kokonaisuus',
+                edit: 'Muokkaa kaytettyä kokonaisuutta',
+              },
+              nameInput: {
+                fi: {
+                  label: 'Nimi',
+                  placeholder: 'Nimi (suomeksi)'
+                },
+                en: {
+                  label: 'Nimi',
+                  placeholder: 'Nimi (englanniksi)'
+                }
+              },
+              descripionInput: {
+                fi: {
+                  label: 'Kuvailu',
+                  placeholder: 'Kuvailu (suomeksi)'
+                },
+                en: {
+                  label: 'Kuvailu',
+                  placeholder: 'Kuvailu (englanniksi)'
+                }
+              },
+              identifierInput: {
+                label: 'Tunniste',
+                placeholder: 'Tunniste'
+              },
+              relationTypeInput: {
+                label: 'Viitteen tyyppi',
+                placeholder: 'Viitteen tyyppi'
+              },
+              entityTypeInput: {
+                label: 'Resurssin tyyppi',
+                placeholder: 'Resurssin tyyppi'
+              }
+            },
+          }
         },
       },
     },
