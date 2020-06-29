@@ -278,6 +278,31 @@ def is_rems_catalog_record(catalog_record):
     return False
 
 
+def is_draft(catalog_record):
+    """
+    Is the catalog record a draft or not.
+
+    :param catalog_record:
+    :return:
+    """
+    if catalog_record.get('state') == 'draft':
+        return True
+    return False
+
+
+def is_catalog_record_owner(catalog_record, user_id):
+    """
+    Does user_id own catalog_record.
+
+    :param catalog_record:
+    :param user_id:
+    :return:
+    """
+    if catalog_record.get('metadata_provider_user') == user_id:
+        return True
+    return False
+
+
 def _get_cr_from_metax(cr_id, check_removed_if_not_exist):
     """Get removed catalog record from Metax
 

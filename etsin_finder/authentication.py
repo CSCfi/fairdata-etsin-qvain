@@ -131,7 +131,6 @@ def get_user_csc_name():
     csc_name = session.get('samlUserdata', {}).get(SAML_ATTRIBUTES.get('CSC_username', None), False)
 
     return csc_name[0] if csc_name else not_found('csc_name')
-    return None
 
 
 def get_user_haka_identifier():
