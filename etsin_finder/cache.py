@@ -24,7 +24,7 @@ class BaseCache(FlaskService):
         memcached_config = get_memcached_config(self.is_testing)
 
         if memcached_config:
-            self.cache = base.Client((memcached_config['HOST'], memcached_config['PORT']),
+            self.cache = base.Client((memcached_config.get('HOST'), memcached_config.get('PORT')),
                                      serializer=serde.python_memcache_serializer,
                                      deserializer=serde.python_memcache_deserializer, connect_timeout=1, timeout=1)
         elif not self.is_testing:

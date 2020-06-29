@@ -72,7 +72,7 @@ def is_authenticated_CSC_user():
         bool: Is CSC user.
 
     """
-    key = SAML_ATTRIBUTES['CSC_username']
+    key = SAML_ATTRIBUTES.get('CSC_username')
     if executing_travis():
         return False
     return True if 'samlUserdata' in session and len(session.get('samlUserdata', None)) > 0 and key in session.get('samlUserdata', None) else False

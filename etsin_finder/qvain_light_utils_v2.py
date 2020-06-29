@@ -8,7 +8,7 @@ from base64 import urlsafe_b64encode
 from etsin_finder.utils import SAML_ATTRIBUTES
 from etsin_finder.cr_service import get_catalog_record
 from etsin_finder.finder import app
-from etsin_finder.authentication import get_user_ida_groups, is_authenticated
+from etsin_finder.authentication import get_user_ida_groups, is_authenticated, get_user_csc_name
 from etsin_finder import qvain_light_utils
 
 access_type = {}
@@ -57,10 +57,10 @@ def check_dataset_creator(cr_id):
     is_authd = is_authenticated()
     if not is_authd:
         return {"PermissionError": "User not logged in."}, 401
-    user = session["samlUserdata"][SAML_ATTRIBUTES["CSC_username"]][0]
+    csc_username = get_user_csc_name()
     creator = get_dataset_creator(cr_id)
-    if user != creator:
-        log.warning('User: \"{0}\" is not the creator of the dataset. Editing not allowed.'.format(user))
+    if csc_username != creator:
+        log.warning('User: \"{0}\" is not the creator of the dataset. Editing not allowed.'.format(csc_username))
         return {"PermissionError": "User is not allowed to edit the dataset."}, 403
     return None
 
@@ -82,7 +82,7 @@ def edited_data_to_metax(data, original):
     data["directories"] = []
     dataset_data = qvain_light_utils.edited_data_to_metax(data, original)
     if "cumulativeState" in data:
-        dataset_data["cumulative_state"] = data["cumulativeState"]
+        dataset_data["cumulative_state"] = data.get("cumulativeState")
     return dataset_data
 
 

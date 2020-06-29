@@ -47,7 +47,7 @@ def log_request(f):
             args[0].__class__.__name__,
             f.__name__,
             csc_name if csc_name else 'UNAUTHENTICATED',
-            request.environ['REQUEST_METHOD'],
+            request.environ.get('REQUEST_METHOD'),
             request.path,
             request.user_agent))
         return f(*args, **kwargs)
@@ -104,8 +104,8 @@ class DatasetMetadata(Resource):
 
         """
         args = self.parser.parse_args()
-        cr_id = args['cr_id']
-        metadata_format = args['format']
+        cr_id = args.get('cr_id')
+        metadata_format = args.get('format')
 
         cr = cr_service.get_catalog_record(cr_id, False, False)
         if not cr:
@@ -135,7 +135,7 @@ class Files(Resource):
 
         """
         args = self.parser.parse_args()
-        dir_id = args['dir_id']
+        dir_id = args.get('dir_id')
         file_fields = args.get('file_fields', None)
         directory_fields = args.get('directory_fields', None)
 
@@ -149,9 +149,9 @@ class Files(Resource):
 
             # Limit the amount of items to be sent to the frontend
             if 'directories' in dir_api_obj:
-                dir_api_obj['directories'] = slice_array_on_limit(dir_api_obj['directories'], TOTAL_ITEM_LIMIT)
+                dir_api_obj['directories'] = slice_array_on_limit(dir_api_obj.get('directories'), TOTAL_ITEM_LIMIT)
             if 'files' in dir_api_obj:
-                dir_api_obj['files'] = slice_array_on_limit(dir_api_obj['files'], TOTAL_ITEM_LIMIT)
+                dir_api_obj['files'] = slice_array_on_limit(dir_api_obj.get('files'), TOTAL_ITEM_LIMIT)
 
             # Strip the items of sensitive data
             authorization.strip_dir_api_object(dir_api_obj, authentication.is_authenticated(), cr)
@@ -193,13 +193,13 @@ class Contact(Resource):
         # Check request query parameters are present
         args = self.parser.parse_args()
         # Extract user's email address to be used as reply-to address
-        user_email = args['user_email']
+        user_email = args.get('user_email')
         # Extract user's message subject to be used as part of the email body to be sent
-        user_subject = args['user_subject']
+        user_subject = args.get('user_subject')
         # Extract user's message body to be used as part of the email body to be sent
-        user_body = args['user_body']
+        user_body = args.get('user_body')
         # Extract recipient role
-        recipient_agent_role = args['agent_type']
+        recipient_agent_role = args.get('agent_type')
 
         # Validate incoming request values are all there and are valid
         if not validate_send_message_request(user_email, user_body, recipient_agent_role):
@@ -415,15 +415,15 @@ class Download(Resource):
         """
         # Check request query parameters are present
         args = self.parser.parse_args()
-        cr_id = args['cr_id']
+        cr_id = args.get('cr_id')
 
         cr = cr_service.get_catalog_record(cr_id, False, False)
         if not cr:
             abort(400, message="Unable to get catalog record")
 
         if authorization.user_is_allowed_to_download_from_ida(cr, authentication.is_authenticated()):
-            file_ids = args['file_id'] or []
-            dir_ids = args['dir_id'] or []
+            file_ids = args.get('file_id', [])
+            dir_ids = args.get('dir_id', [])
             return download_data(cr_id, file_ids, dir_ids)
         else:
             abort(403, message="Not authorized")

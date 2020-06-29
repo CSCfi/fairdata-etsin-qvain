@@ -28,28 +28,28 @@ class MetaxQvainLightAPIService(FlaskService):
 
         if metax_qvain_api_config:
 
-            self.METAX_GET_DIRECTORY_FOR_PROJECT_URL = 'https://{0}/rest/directories'.format(metax_qvain_api_config['HOST']) + \
+            self.METAX_GET_DIRECTORY_FOR_PROJECT_URL = 'https://{0}/rest/directories'.format(metax_qvain_api_config.get('HOST')) + \
                                                        '/files?project={0}&path=%2F'
-            self.METAX_GET_DIRECTORY = 'https://{0}/rest/directories'.format(metax_qvain_api_config['HOST']) + \
+            self.METAX_GET_DIRECTORY = 'https://{0}/rest/directories'.format(metax_qvain_api_config.get('HOST')) + \
                                        '/{0}/files'
-            self.METAX_GET_FILE = 'https://{0}/rest/files'.format(metax_qvain_api_config['HOST']) + \
+            self.METAX_GET_FILE = 'https://{0}/rest/files'.format(metax_qvain_api_config.get('HOST')) + \
                                   '/{0}'
-            self.METAX_GET_DATASET = 'https://{0}/rest/datasets'.format(metax_qvain_api_config['HOST'], ) + \
+            self.METAX_GET_DATASET = 'https://{0}/rest/datasets'.format(metax_qvain_api_config.get('HOST'), ) + \
                                      '/{0}?file_details'
-            self.METAX_GET_DATASETS_FOR_USER = 'https://{0}/rest/datasets'.format(metax_qvain_api_config['HOST']) + \
+            self.METAX_GET_DATASETS_FOR_USER = 'https://{0}/rest/datasets'.format(metax_qvain_api_config.get('HOST')) + \
                                                '?metadata_provider_user={0}&file_details&ordering=-date_created'
-            self.METAX_GET_ALL_DATASETS_FOR_USER = 'https://{0}/rest/datasets'.format(metax_qvain_api_config['HOST']) + \
+            self.METAX_GET_ALL_DATASETS_FOR_USER = 'https://{0}/rest/datasets'.format(metax_qvain_api_config.get('HOST')) + \
                 '?metadata_provider_user={0}&file_details&ordering=-date_created&no_pagination=true'
-            self.METAX_CREATE_DATASET = 'https://{0}/rest/datasets?file_details'.format(metax_qvain_api_config['HOST'])
-            self.METAX_PATCH_DATASET = 'https://{0}/rest/datasets'.format(metax_qvain_api_config['HOST'], ) + \
+            self.METAX_CREATE_DATASET = 'https://{0}/rest/datasets?file_details'.format(metax_qvain_api_config.get('HOST'))
+            self.METAX_PATCH_DATASET = 'https://{0}/rest/datasets'.format(metax_qvain_api_config.get('HOST'), ) + \
                                        '/{0}?file_details'
-            self.METAX_DELETE_DATASET = 'https://{0}/rest/datasets'.format(metax_qvain_api_config['HOST'], ) + \
+            self.METAX_DELETE_DATASET = 'https://{0}/rest/datasets'.format(metax_qvain_api_config.get('HOST'), ) + \
                                         '/{0}'
-            self.METAX_CHANGE_CUMULATIVE_STATE = 'https://{0}/rpc/datasets/change_cumulative_state'.format(metax_qvain_api_config['HOST'])
-            self.METAX_REFRESH_DIRECTORY_CONTENT = 'https://{0}/rpc/datasets/refresh_directory_content'.format(metax_qvain_api_config['HOST'])
-            self.METAX_FIX_DEPRECATED = 'https://{0}/rpc/datasets/fix_deprecated'.format(metax_qvain_api_config['HOST'])
-            self.user = metax_qvain_api_config['USER']
-            self.pw = metax_qvain_api_config['PASSWORD']
+            self.METAX_CHANGE_CUMULATIVE_STATE = 'https://{0}/rpc/datasets/change_cumulative_state'.format(metax_qvain_api_config.get('HOST'))
+            self.METAX_REFRESH_DIRECTORY_CONTENT = 'https://{0}/rpc/datasets/refresh_directory_content'.format(metax_qvain_api_config.get('HOST'))
+            self.METAX_FIX_DEPRECATED = 'https://{0}/rpc/datasets/fix_deprecated'.format(metax_qvain_api_config.get('HOST'))
+            self.user = metax_qvain_api_config.get('USER')
+            self.pw = metax_qvain_api_config.get('PASSWORD')
             self.verify_ssl = metax_qvain_api_config.get('VERIFY_SSL', True)
         elif not self.is_testing:
             log.error("Unable to initialize MetaxAPIService due to missing config")

@@ -75,11 +75,11 @@ class DatasetValidationSchema(Schema):
     original = fields.Dict()
     title = fields.Dict(
         required=True,
-        validate=lambda x: len(x['en']) + len(x['fi']) > 0
+        validate=lambda x: len(x.get('en', [])) + len(x.get('fi', [])) > 0
     )
     description = fields.Dict(
         required=True,
-        validate=lambda x: len(x['en']) + len(x['fi']) > 0
+        validate=lambda x: len(x.get('en', [])) + len(x.get('fi', [])) > 0
     )
     issuedDate = fields.Str()
     identifiers = fields.List(fields.Str())

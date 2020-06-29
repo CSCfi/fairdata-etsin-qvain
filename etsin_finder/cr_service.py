@@ -26,16 +26,16 @@ class MetaxAPIService(FlaskService):
         metax_api_config = get_metax_api_config(app.testing)
 
         if metax_api_config:
-            METAX_GET_CATALOG_RECORD_URL = 'https://{0}/rest/datasets'.format(metax_api_config['HOST']) + \
+            METAX_GET_CATALOG_RECORD_URL = 'https://{0}/rest/datasets'.format(metax_api_config.get('HOST')) + \
                                            '/{0}?expand_relation=data_catalog'
 
             self.METAX_GET_CATALOG_RECORD_WITH_FILE_DETAILS_URL = METAX_GET_CATALOG_RECORD_URL + '&file_details'
             self.METAX_GET_REMOVED_CATALOG_RECORD_URL = METAX_GET_CATALOG_RECORD_URL + '&removed=true'
-            self.METAX_GET_DIRECTORY_FOR_CR_URL = 'https://{0}/rest/directories'.format(metax_api_config['HOST']) + \
+            self.METAX_GET_DIRECTORY_FOR_CR_URL = 'https://{0}/rest/directories'.format(metax_api_config.get('HOST')) + \
                                                   '/{0}/files?cr_identifier={1}'
 
-            self.user = metax_api_config['USER']
-            self.pw = metax_api_config['PASSWORD']
+            self.user = metax_api_config.get('USER')
+            self.pw = metax_api_config.get('PASSWORD')
             self.verify_ssl = metax_api_config.get('VERIFY_SSL', True)
         elif not self.is_testing:
             log.error("Unable to initialize MetaxAPIService due to missing config")
@@ -273,7 +273,7 @@ def is_rems_catalog_record(catalog_record):
 
     """
     from etsin_finder.authorization import ACCESS_TYPES
-    if get_catalog_record_access_type(catalog_record) == ACCESS_TYPES['permit']:
+    if get_catalog_record_access_type(catalog_record) == ACCESS_TYPES.get('permit'):
         return True
     return False
 

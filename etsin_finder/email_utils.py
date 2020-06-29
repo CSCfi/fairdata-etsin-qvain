@@ -75,9 +75,7 @@ def validate_send_message_request(user_email, user_body, agent_type):
         log.warning("Reply-to email address not formally valid: {0}".format(user_email))
         return False
 
-    try:
-        AgentType[agent_type]
-    except KeyError:
+    if not AgentType.get(agent_type):
         log.warning("Unrecognized agent type")
         return False
 

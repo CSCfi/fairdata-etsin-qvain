@@ -51,9 +51,9 @@ def logout():
     name_id = None
     session_index = None
     if 'samlNameId' in session:
-        name_id = session['samlNameId']
+        name_id = session.get('samlNameId')
     if 'samlSessionIndex' in session:
-        session_index = session['samlSessionIndex']
+        session_index = session.get('samlSessionIndex')
     log.debug("LOGOUT request to /slo")
     # Clear the flask session here because the idp doesnt seem to call the sls route.
     session.clear()
@@ -78,7 +78,7 @@ def frontend_app(path):
 def _render_index_template(saml_errors=[], slo_success=False):
     is_auth = is_authenticated()
     if is_auth:
-        saml_attributes = session['samlUserdata'].items()
+        saml_attributes = session.get('samlUserdata').items()
         log.debug("SAML attributes: {0}".format(saml_attributes))
 
     return render_template('index.html')
@@ -116,8 +116,8 @@ def saml_attribute_consumer_service():
         session['samlSessionIndex'] = auth.get_session_index()
         self_url = OneLogin_Saml2_Utils.get_self_url(req)
         log.debug("SESSION: {0}".format(session))
-        if 'RelayState' in request.form and self_url != request.form['RelayState']:
-            return redirect(auth.redirect_to(request.form['RelayState']))
+        if 'RelayState' in request.form and self_url != request.form.get('RelayState'):
+            return redirect(auth.redirect_to(request.form.get('RelayState')))
 
     return _render_index_template(saml_errors=errors)
 

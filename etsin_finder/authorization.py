@@ -56,7 +56,7 @@ def user_is_allowed_to_download_from_ida(catalog_record, is_authd):
     """
     # TODO: After testing with this is done and after test datas have proper ida data catalog identifiers, remove
     # TODO: 'not app.debug and' from below
-    if not app.debug and get_catalog_record_data_catalog_id(catalog_record) != DATA_CATALOG_IDENTIFIERS['ida']:
+    if not app.debug and get_catalog_record_data_catalog_id(catalog_record) != DATA_CATALOG_IDENTIFIERS.get('ida'):
         return False
 
     access_type_id = get_catalog_record_access_type(catalog_record)

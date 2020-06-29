@@ -31,7 +31,7 @@ class DatasetMetadataService(FlaskService):
         metax_api_config = get_metax_api_config(app.testing)
 
         if metax_api_config:
-            self.HOST = 'https://{0}'.format(metax_api_config['HOST'])
+            self.HOST = 'https://{0}'.format(metax_api_config.get('HOST'))
         elif not self.is_testing:
             log.error('Unable to initialize DatasetMetadataService due to missing config')
 
@@ -93,11 +93,11 @@ class DatasetMetadataService(FlaskService):
                                 status=metax_response.status_code)
 
             if 'Content-Type' in metax_response.headers:
-                response.headers['Content-Type'] = metax_response.headers['Content-Type']
+                response.headers['Content-Type'] = metax_response.headers.get('Content-Type')
             if 'Content-Disposition' in metax_response.headers:
-                response.headers['Content-Disposition'] = metax_response.headers['Content-Disposition']
+                response.headers['Content-Disposition'] = metax_response.headers.get('Content-Disposition')
             if 'Content-Length' in metax_response.headers:
-                response.headers['Content-Length'] = metax_response.headers['Content-Length']
+                response.headers['Content-Length'] = metax_response.headers.get('Content-Length')
 
             log.debug('Download URL: {0} Responded with HTTP status {1}'.format(url, response.status_code))
             return response

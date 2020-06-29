@@ -37,7 +37,7 @@ def log_request(f):
             args[0].__class__.__name__,
             f.__name__,
             csc_name if csc_name else 'UNAUTHENTICATED',
-            request.environ['REQUEST_METHOD'],
+            request.environ.get('REQUEST_METHOD'),
             request.path,
             request.user_agent))
         return f(*args, **kwargs)
@@ -65,17 +65,17 @@ class QvainDatasetChangeCumulativeState(Resource):
 
         """
         args = self.parser.parse_args()
-        cr_id = args['identifier']
-        cumulative_state = args['cumulative_state']
+        cr_id = args.get('identifier')
+        cumulative_state = args.get('cumulative_state')
         is_authd = authentication.is_authenticated()
         if not is_authd:
             return {"PermissionError": "User not logged in."}, 401
 
         # only creator of the dataset is allowed to modify it
-        user = session["samlUserdata"][SAML_ATTRIBUTES["CSC_username"]][0]
+        csc_username = authentication.get_user_csc_name()
         creator = get_dataset_creator(cr_id)
-        if user != creator:
-            log.warning('User: \"{0}\" is not the creator of the dataset. Changing cumulative state not allowed. Creator: \"{1}\"'.format(user, creator))
+        if csc_username != creator:
+            log.warning('User: \"{0}\" is not the creator of the dataset. Changing cumulative state not allowed. Creator: \"{1}\"'.format(csc_username, creator))
             return {"PermissionError": "User not authorized to change cumulative state of dataset."}, 403
         metax_response = change_cumulative_state(cr_id, cumulative_state)
         return metax_response
@@ -103,7 +103,7 @@ class QvainDatasetCreateNewVersion(Resource):
 
         """
         args = self.parser.parse_args()
-        cr_id = args['identifier']
+        cr_id = args.get('identifier')
         err = check_dataset_creator(cr_id)
         if err is not None:
             return err
@@ -131,7 +131,7 @@ class QvainDatasetCreateDraft(Resource):
 
         """
         args = self.parser.parse_args()
-        cr_id = args['identifier']
+        cr_id = args.get('identifier')
         err = check_dataset_creator(cr_id)
         if err is not None:
             return err
@@ -159,7 +159,7 @@ class QvainDatasetMergeDraft(Resource):
 
         """
         args = self.parser.parse_args()
-        cr_id = args['identifier']
+        cr_id = args.get('identifier')
         err = check_dataset_creator(cr_id)
         if err is not None:
             return err
@@ -187,7 +187,7 @@ class QvainDatasetPublishDataset(Resource):
 
         """
         args = self.parser.parse_args()
-        cr_id = args['identifier']
+        cr_id = args.get('identifier')
         err = check_dataset_creator(cr_id)
         if err is not None:
             return err
@@ -218,16 +218,16 @@ class QvainDatasetFixDeprecated(Resource):
 
         """
         args = self.parser.parse_args()
-        cr_id = args['identifier']
+        cr_id = args.get('identifier')
         is_authd = authentication.is_authenticated()
         if not is_authd:
             return {"PermissionError": "User not logged in."}, 401
 
         # only creator of the dataset is allowed to modify it
-        user = session["samlUserdata"][SAML_ATTRIBUTES["CSC_username"]][0]
+        csc_username = authentication.get_user_csc_name()
         creator = get_dataset_creator(cr_id)
-        if user != creator:
-            log.warning('User: \"{0}\" is not the creator of the dataset. Fixing deprecated dataset not allowed. Creator: \"{1}\"'.format(user, creator))
+        if csc_username != creator:
+            log.warning('User: \"{0}\" is not the creator of the dataset. Fixing deprecated dataset not allowed. Creator: \"{1}\"'.format(csc_username, creator))
             return {"PermissionError": "User not authorized to fix deprecated dataset."}, 403
         metax_response = fix_deprecated_dataset(cr_id)
         return metax_response

@@ -33,9 +33,9 @@ class DownloadAPIService(FlaskService):
 
         if dl_api_config:
             self.API_BASE_URL = 'https://{0}:{1}/secure/api/v1/dataset'.format(
-                dl_api_config['HOST'], dl_api_config['PORT']) + '/{0}'
-            self.USER = dl_api_config['USER']
-            self.PASSWORD = dl_api_config['PASSWORD']
+                dl_api_config.get('HOST'), dl_api_config.get('PORT')) + '/{0}'
+            self.USER = dl_api_config.get('USER')
+            self.PASSWORD = dl_api_config.get('PASSWORD')
         elif not self.is_testing:
             log.error('Unable to initialize DownloadAPIService due to missing config')
 
@@ -77,11 +77,11 @@ class DownloadAPIService(FlaskService):
                                 status=dl_api_response.status_code)
 
             if 'Content-Type' in dl_api_response.headers:
-                response.headers['Content-Type'] = dl_api_response.headers['Content-Type']
+                response.headers['Content-Type'] = dl_api_response.headers.get('Content-Type')
             if 'Content-Disposition' in dl_api_response.headers:
-                response.headers['Content-Disposition'] = dl_api_response.headers['Content-Disposition']
+                response.headers['Content-Disposition'] = dl_api_response.headers.get('Content-Disposition')
             if 'Content-Length' in dl_api_response.headers:
-                response.headers['Content-Length'] = dl_api_response.headers['Content-Length']
+                response.headers['Content-Length'] = dl_api_response.headers.get('Content-Length')
 
             log.debug('Download URL: {0} Responded with HTTP status {1}'.format(url, dl_api_response.status_code))
             return response

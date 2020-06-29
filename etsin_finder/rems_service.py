@@ -237,7 +237,7 @@ def get_application_state_for_resource(cr, user_id):
     log.info('Got {0} applications for the user.'.format(len(user_applications)))
 
     # Sort applications to get the newest first
-    user_applications.sort(reverse=True, key=lambda x: datetime.strptime(x['application/last-activity'], '%Y-%m-%dT%H:%M:%S.%fZ'))
+    user_applications.sort(reverse=True, key=lambda x: datetime.strptime(x.get('application/last-activity'), '%Y-%m-%dT%H:%M:%S.%fZ'))
 
     for application in user_applications:
         resources = application.get('application/resources')
