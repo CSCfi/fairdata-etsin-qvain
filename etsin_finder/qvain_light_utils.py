@@ -150,8 +150,8 @@ def remote_resources_data_to_metax(resources):
         metax_remote_resources_object["access_url"] = {}
         metax_remote_resources_object["download_url"] = {}
         metax_remote_resources_object["title"] = resource["title"]
-        metax_remote_resources_object["access_url"]["identifier"] = resource["accessUrl"]
-        metax_remote_resources_object["download_url"]["identifier"] = resource["downloadUrl"]
+        metax_remote_resources_object["access_url"]["identifier"] = resource["accessUrl"] if "accessUrl" in resource else ""
+        metax_remote_resources_object["download_url"]["identifier"] = resource["downloadUrl"] if "downloadUrl" in resource else ""
         metax_remote_resources_object["use_category"]["identifier"] = resource["useCategory"]["value"]
         metax_remote_resources.append(metax_remote_resources_object)
     return metax_remote_resources
@@ -266,7 +266,7 @@ def get_dataset_creator(cr_id):
     Get creator of dataset.
 
     Arguments:
-        cr_id {string} -- Identifier of datset.
+        cr_id {string} -- Identifier of dataset.
 
     Returns:
         [type] -- [description]
