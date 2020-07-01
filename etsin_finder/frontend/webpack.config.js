@@ -1,4 +1,5 @@
 require('@babel/polyfill')
+const env = require('dotenv').config()
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
@@ -45,6 +46,8 @@ const config = {
       filename: 'index.html',
       template: 'static/index.template.ejs',
       favicon: 'static/images/favicon.png',
+      MATOMO_URL: env.parsed ? env.parsed.MATOMO_URL : undefined,
+      MATOMO_SITE_ID: env.parsed ? env.parsed.MATOMO_SITE_ID : undefined,
     }),
   ],
   watch: false,

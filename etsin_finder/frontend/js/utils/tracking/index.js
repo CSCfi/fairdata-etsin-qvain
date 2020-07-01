@@ -9,7 +9,9 @@ class Tracking {
     if (this.isActive()) {
       _paq.push(['setCustomUrl', location])
       _paq.push(['setDocumentTitle', title])
+      _paq.push(['disableCookies'])
       _paq.push(['trackPageView'])
+      _paq.push(['enableLinkTracking'])
     }
   }
 
