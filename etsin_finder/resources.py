@@ -80,6 +80,10 @@ class Dataset(Resource):
         if not cr:
             abort(400, message="Unable to get catalog record from Metax")
 
+        user_id = authentication.get_user_id()
+        if cr_service.is_draft(cr) and not cr_service.is_catalog_record_owner(cr, user_id):
+            abort(404)
+
         # Sort data items
         sort_array_of_obj_by_key(cr.get('research_dataset', {}).get('remote_resources', []), 'title')
         sort_array_of_obj_by_key(cr.get('research_dataset', {}).get('directories', []), 'details', 'directory_name')
@@ -88,7 +92,7 @@ class Dataset(Resource):
         ret_obj = {'catalog_record': authorization.strip_information_from_catalog_record(cr, is_authd),
                    'email_info': get_email_info(cr)}
         if cr_service.is_rems_catalog_record(cr) and is_authd and get_fairdata_rems_api_config(app.testing) is not None:
-            state = rems_service.get_application_state_for_resource(cr, authentication.get_user_id())
+            state = rems_service.get_application_state_for_resource(cr, user_id)
             ret_obj['application_state'] = state
             ret_obj['has_permit'] = state == 'approved'
 
@@ -119,6 +123,10 @@ class DatasetMetadata(Resource):
         if not cr:
             abort(400, message="Unable to get catalog record")
 
+        user_id = authentication.get_user_id()
+        if cr_service.is_draft(cr) and not cr_service.is_catalog_record_owner(cr, user_id):
+            abort(404)
+
         return download_metadata(cr_id, metadata_format)
 
 class Files(Resource):
@@ -146,6 +154,10 @@ class Files(Resource):
 
         cr = cr_service.get_catalog_record(cr_id, False, False)
         dir_api_obj = cr_service.get_directory_data_for_catalog_record(cr_id, dir_id, file_fields, directory_fields)
+
+        user_id = authentication.get_user_id()
+        if cr_service.is_draft(cr) and not cr_service.is_catalog_record_owner(cr, user_id):
+            abort(404)
 
         if cr and dir_api_obj:
             # Sort the items
@@ -208,6 +220,10 @@ class Contact(Resource):
 
         # Get the full catalog record from Metax
         cr = cr_service.get_catalog_record(cr_id, False, False)
+
+        user_id = authentication.get_user_id()
+        if cr_service.is_draft(cr) and not cr_service.is_catalog_record_owner(cr, user_id):
+            abort(404)
 
         # Ensure dataset is not harvested
         harvested = get_harvest_info(cr)

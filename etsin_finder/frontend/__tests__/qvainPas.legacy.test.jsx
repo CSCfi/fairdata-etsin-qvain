@@ -346,7 +346,7 @@ afterEach(() => {
 
 describe('Qvain.PasState', () => {
   const render = stores => {
-    stores.Qvain.setKeywords(['key', 'word'])
+    stores.Qvain.setKeywordsArray(['key', 'word'])
     return mount(
       <Provider Stores={stores}>
         <ThemeProvider theme={etsinTheme}>
@@ -376,7 +376,7 @@ describe('Qvain.PasState', () => {
 
 describe('Qvain.Description', () => {
   const render = stores => {
-    stores.Qvain.setKeywords(['key', 'word'])
+    stores.Qvain.setKeywordsArray(['key', 'word'])
     return mount(
       <Provider Stores={stores}>
         <ThemeProvider theme={etsinTheme}>
