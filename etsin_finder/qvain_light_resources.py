@@ -23,8 +23,8 @@ from etsin_finder.finder import app
 from etsin_finder.utils import \
     sort_array_of_obj_by_key, \
     slice_array_on_limit, \
-    datetime_to_header, \
-    SAML_ATTRIBUTES
+    datetime_to_header
+from etsin_finder.constants import SAML_ATTRIBUTES, DATA_CATALOG_IDENTIFIERS
 from etsin_finder.qvain_light_dataset_schema import DatasetValidationSchema
 from etsin_finder.qvain_light_utils import data_to_metax, \
     get_dataset_creator, \
@@ -320,7 +320,7 @@ class QvainDataset(Resource):
                         .format(err))
             return {"PermissionError":
                     "The Metadata provider is not found in login information."}, 401
-        if data["dataCatalog"] == "urn:nbn:fi:att:data-catalog-ida":
+        if data["dataCatalog"] == DATA_CATALOG_IDENTIFIERS.get('ida'):
             if not check_if_data_in_user_IDA_project(data):
                 return {"IdaError":
                         "Error in IDA group user permission or in IDA user groups."}, 403
