@@ -15,6 +15,13 @@ class Tracking {
     }
   }
 
+  trackEvent(category, action, location) {
+    if (!this.isActive()) return
+
+    _paq.push(['setCustomUrl', location])
+    _paq.push(['trackEvent', category, action])
+  }
+
   newSearch(keyword, category, resultsAmount) {
     if (this.isActive()) {
       _paq.push(['trackSiteSearch', keyword, false, resultsAmount])
