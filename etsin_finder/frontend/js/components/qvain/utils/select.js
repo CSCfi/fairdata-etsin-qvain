@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { METAX_FAIRDATA_ROOT_URL } from './constants'
+import { METAX_FAIRDATA_ROOT_URL } from '../../../utils/constants'
 
 export const getCurrentValue = (field, options, lang) => {
   let current

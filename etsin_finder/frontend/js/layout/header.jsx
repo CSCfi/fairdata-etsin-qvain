@@ -18,6 +18,7 @@ import EtsinLogo from '../components/general/header/etsinLogo'
 import Settings from '../components/general/navigation/settings'
 import Navi from '../components/general/navigation/index'
 import MobileNavi from '../components/general/navigation/mobileNavi'
+import { FAIRDATA_WEBSITE_URL } from '../utils/constants'
 
 export default class Header extends Component {
   state = {
@@ -40,8 +41,8 @@ export default class Header extends Component {
 
   render() {
     const helpUrl = this.state.lang === 'fi'
-        ? 'https://www.fairdata.fi/etsin/'
-        : 'https://www.fairdata.fi/en/etsin/'
+        ? FAIRDATA_WEBSITE_URL.FI
+        : FAIRDATA_WEBSITE_URL.EN
     return (
       <HeaderBar>
         <Positioner className="container">

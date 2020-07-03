@@ -1,6 +1,8 @@
 import axios from 'axios';
 
-const getReferenceData = (referenceData) => axios.get(`https://metax.fairdata.fi/es/reference_data/${referenceData}/_search?size=1000`)
+import { METAX_FAIRDATA_ROOT_URL } from '../../../utils/constants'
+
+const getReferenceData = (referenceData) => axios.get(`${METAX_FAIRDATA_ROOT_URL}/es/reference_data/${referenceData}/_search?size=1000`)
 
 export default getReferenceData;
 
