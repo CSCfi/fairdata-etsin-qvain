@@ -125,7 +125,7 @@ const SearchInner = styled.div`
     font-size: 1em;
     letter-spacing: 1px;
     &::placeholder {
-      color: ${props => props.theme.color.medgray};
+      color: ${props => props.theme.color.dark};
       font-style: italic;
     }
   }
