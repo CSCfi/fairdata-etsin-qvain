@@ -6,6 +6,7 @@ import IssuedDateField from './issuedDateField'
 import OtherIdentifierField from './otherIdentifierField'
 import FieldOfScienceField from './fieldOfScienceField'
 import KeywordsField from './keywordsField'
+import SubjectHeadingsField from './subjectHeadingsField'
 import { SectionTitle } from '../general/section'
 import Tooltip from '../general/tooltip'
 import { HelpIcon } from '../general/form'
@@ -36,6 +37,7 @@ const Description = () => {
         <OtherIdentifierField />
         <FieldOfScienceField />
         <KeywordsField />
+        <SubjectHeadingsField />
       </React.Fragment>
     </div>
   )
