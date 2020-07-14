@@ -106,7 +106,7 @@ export default class License extends Component {
               noMargin
               noPadding
             >
-              <FontAwesomeIcon icon={faInfoCircle} />
+              <FontAwesomeIcon icon={faInfoCircle} title="Additional information" />
             </LinkButton>
           </PopUp>
         )}

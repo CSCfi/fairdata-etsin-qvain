@@ -65,6 +65,7 @@ export default class SearchBar extends Component {
               <CustomFontAwesomeIcon
                 onClick={this.handleSubmit}
                 icon={faSearch}
+                title="Search"
                 size="2x"
                 transform="shrink-4"
               />

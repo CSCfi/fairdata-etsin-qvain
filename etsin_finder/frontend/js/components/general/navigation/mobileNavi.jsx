@@ -29,7 +29,7 @@ export default class MobileNavi extends React.Component {
   render() {
     return (
       <MobileItems>
-        <DropdownMenu transparent buttonContent={<FontAwesomeIcon icon={faBars} size="lg" />} transparentButton>
+        <DropdownMenu transparent buttonContent={<FontAwesomeIcon title="Menu" icon={faBars} size="lg" />} transparentButton>
           <NavItem
             exact
             to="/"
@@ -48,7 +48,7 @@ export default class MobileNavi extends React.Component {
             <Translate content="nav.datasets" />
           </NavItem>
         </DropdownMenu>
-        <DropdownMenu transparent buttonContent={<FontAwesomeIcon icon={faCog} size="lg" />} transparentButton>
+        <DropdownMenu transparent buttonContent={<FontAwesomeIcon title="Settings" icon={faCog} size="lg" />} transparentButton>
           <CustomContainer>
             <DatasetCont>
               <TextContainer> <Translate content="nav.addDataset" /> </TextContainer>

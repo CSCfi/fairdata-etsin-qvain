@@ -79,7 +79,7 @@ class AccessRights extends Component {
   restricted() {
     return (
       <div>
-        <FontAwesomeIcon icon={faLock} />
+        <FontAwesomeIcon icon={faLock} title="Closed lock" />
         <AccessLabel lang={getDataLang(this.state.title)}>
           {checkDataLang(this.state.title)}
         </AccessLabel>
@@ -90,7 +90,7 @@ class AccessRights extends Component {
   openAccess() {
     return (
       <div>
-        <FontAwesomeIcon icon={faLockOpen} />
+        <FontAwesomeIcon icon={faLockOpen} title="Lock open" />
         <AccessLabel lang={getDataLang(this.state.title)}>
           {checkDataLang(this.state.title)}
         </AccessLabel>
@@ -135,7 +135,7 @@ class AccessRights extends Component {
               {accessRightsBool(this.props.access_rights) ? this.openAccess() : this.restricted()}
               {this.state.description && (
                 <div>
-                  <FontAwesomeIcon icon={faInfoCircle} />
+                  <FontAwesomeIcon icon={faInfoCircle} title="Additional information" />
                   <AccessLabel lang={getDataLang(this.state.description)}>
                     {checkDataLang(this.state.description)}
                   </AccessLabel>
@@ -143,7 +143,7 @@ class AccessRights extends Component {
               )}
               {this.state.url && (
                 <div>
-                  <FontAwesomeIcon icon={faGlobe} />
+                  <FontAwesomeIcon icon={faGlobe} title="Access to data" />
                   <AccessUrl
                     href={this.state.url.identifier}
                     title={this.state.url.identifier}
@@ -156,7 +156,7 @@ class AccessRights extends Component {
               {this.state.restriction_grounds &&
                 this.state.restriction_grounds.map(rg => (
                   <div key={`div-rg-${rg.identifier}`}>
-                    <FontAwesomeIcon key={`fai-rg-${rg.identifier}`} icon={faExclamationTriangle} />
+                    <FontAwesomeIcon key={`fai-rg-${rg.identifier}`} icon={faExclamationTriangle} title="Restricted" />
                     <AccessLabel key={`al-rg-${rg.identifier}`} lang={getDataLang(rg.pref_label)}>
                       {checkDataLang(rg.pref_label)}
                     </AccessLabel>
