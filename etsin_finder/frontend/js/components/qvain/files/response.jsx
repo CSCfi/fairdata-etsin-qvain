@@ -94,7 +94,7 @@ const ResponseContainerError = styled.div`
   background-color: #FFEBE8;
   text-align: center;
   width: 100%;
-  color: red;
+  color: ${(props) => props.theme.colo.redText};
   z-index: 2;
   border-bottom: 1px solid rgba(0,0,0,0.3);
   position: relative;

@@ -11,6 +11,7 @@ import { dataCatalogSchema } from '../utils/formValidation'
 import ValidationError from '../general/validationError'
 import { DataCatalogIdentifiers } from '../utils/constants'
 import { Checkbox, LabelLarge } from '../general/form'
+import etsinTheme from '../../../styles/theme'
 
 let options = [
   { value: DataCatalogIdentifiers.IDA, label: translate('qvain.files.dataCatalog.ida') },
@@ -115,6 +116,7 @@ class DataCatalog extends Component {
               })
             }
           }}
+          styles={{ placeholder: () => ({ color: etsinTheme.color.gray }) }}
           onBlur={this.handleOnBlur}
           attributes={{ placeholder: 'qvain.files.dataCatalog.placeholder' }}
           isDisabled={selected.length > 0 || original !== undefined || isPas}

@@ -15,6 +15,7 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 
+import { darken } from 'polished'
 import checkColor from '../../styles/styledUtils'
 import { TransparentButton } from './button'
 
@@ -89,6 +90,12 @@ const Bar = styled.div`
   position: ${p => p.position};
   top: 0;
   left: 0;
+  a {
+    color: #00284f;
+    &:hover {
+      color: ${darken(0.1, '#00284f')};
+    }
+  }
 `
 
 const NoticeText = styled.h3`

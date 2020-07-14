@@ -122,6 +122,7 @@ const Marker = styled.div`
 `
 
 const DatasetLabel = styled(Label)`
+  color: ${props => props.color === 'yellow' ? props.theme.color.dark : 'white'}
   margin-left: 10px;
   text-transform: uppercase;
 `

@@ -85,7 +85,7 @@ export class ProjectSelectorBase extends Component {
 }
 
 const ErrorMessage = styled.p`
-  color: red;
+  color: ${(props) => props.theme.color.redText};
 `;
 
 export const ProjectSelect = styled(Select)`

@@ -5,6 +5,7 @@ import Translate from 'react-translate-component'
 import { inject, observer } from 'mobx-react'
 import { onChange, getCurrentValue } from '../utils/select'
 import getReferenceData from '../utils/getReferenceData'
+import etsinTheme from '../../../styles/theme'
 
 class Select extends Component {
   promises = []
@@ -93,6 +94,7 @@ class Select extends Component {
         onChange={onChange(options, lang, setter, model)}
         menuPlacement="auto"
         menuPosition="fixed"
+        styles={{ placeholder: () => ({ color: etsinTheme.color.gray }) }}
         menuShouldScrollIntoView={false}
       />
     ) : (
@@ -106,6 +108,7 @@ class Select extends Component {
         className="basic-single"
         classNamePrefix="select"
         options={options[lang]}
+        styles={{ placeholder: () => ({ color: etsinTheme.color.gray }) }}
         onChange={onChange(options, lang, setter, model)}
       />
     )
