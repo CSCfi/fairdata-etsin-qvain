@@ -10,7 +10,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import {
   STSD,
-  SubHeaderTextContainer,
   LinkBackContainer,
   LinkBack,
   ButtonContainer,
@@ -305,11 +304,9 @@ class Qvain extends Component {
     return (
       <QvainContainer>
         <SubHeader>
-          <SubHeaderTextContainer>
-            <SubHeaderText>
-              <Translate component={Title} content={titleKey} />
-            </SubHeaderText>
-          </SubHeaderTextContainer>
+          <SubHeaderText>
+            <Translate component={Title} content={titleKey} />
+          </SubHeaderText>
         </SubHeader>
         {stickyheader}
         {dataset}
