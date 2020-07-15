@@ -369,10 +369,16 @@ def check_if_data_in_user_IDA_project(data):
         data {object} -- The dataset that the user is trying to create.
 
     Returns:
-        [bool] -- True if data belongs to user, and False is not.
+        [bool] -- True if data belongs to user OR if there is no user data. False if user_ida_projects data exists but does not belong to user.
 
     """
     user_ida_projects = get_user_ida_groups()
+
+    # If user_ida_projects do not exist, there cannot be any data permission violations, so return True in this case
+    if user_ida_projects is None:
+        return True
+
+    # Check IDA project permissions, if user_ida_projects exist
     try:
         user_ida_projects_ids = [project.split(":")[1] for project in user_ida_projects]
     except IndexError as e:
@@ -382,8 +388,6 @@ def check_if_data_in_user_IDA_project(data):
         log.warning('Could not get user IDA groups.')
         return False
     log.debug('User IDA groups: {0}'.format(user_ida_projects_ids))
-    # Add the test project 'project_x' for local development.
-    user_ida_projects_ids.append("project_x")
     if "files" or "directories" in data:
         files = data["files"] if "files" in data else []
         directories = data["directories"] if "directories" in data else []
