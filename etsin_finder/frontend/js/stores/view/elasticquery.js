@@ -462,7 +462,7 @@ class ElasticQuery {
             const aggr = `data_catalog_${currentLang}`
             const bucketLengths = res.data.aggregations[aggr].buckets.map(bucket => bucket.doc_count)
             const totalHits = bucketLengths.reduce((partialSum, a) => (partialSum + a), 0)
-            Tracking.newSearch(currentSearch, false, res.data.hits.hits.length)
+            if (!initial) Tracking.newSearch(currentSearch, false, res.data.hits.hits.length)
             this.results = {
               hits: res.data.hits.hits,
               total: totalHits,

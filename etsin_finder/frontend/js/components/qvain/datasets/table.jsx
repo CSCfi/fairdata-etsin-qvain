@@ -14,6 +14,7 @@ import { TableButton, DangerButton } from '../general/buttons'
 import { FormField, Input, Label as inputLabel } from '../general/form'
 import DatasetGroup from './datasetGroup'
 import { filterGroupsByTitle, groupDatasetsByVersionSet } from './filter'
+import Tracking from '../../../utils/tracking'
 
 class DatasetTable extends Component {
   minOfDataSetsForSearchTool = 5
@@ -22,6 +23,9 @@ class DatasetTable extends Component {
 
   static propTypes = {
     history: PropTypes.object.isRequired,
+    location: PropTypes.shape({
+      pathname: PropTypes.string,
+    }).isRequired,
     Stores: PropTypes.object.isRequired,
   }
 
@@ -122,6 +126,7 @@ class DatasetTable extends Component {
       .delete(url)
       .then(() => {
         const datasets = [...this.state.datasets.filter((d) => d.identifier !== identifier)]
+        Tracking.trackEvent('Dataset', ' Removed', this.props.location.pathname)
         this.setState(
           (state) => ({
             datasets,

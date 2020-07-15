@@ -16,3 +16,4 @@ package-lock.json
 etsin_finder/frontend/jsconfig.json
 etsin_finder/frontend/build/
 *.vscode
+.env

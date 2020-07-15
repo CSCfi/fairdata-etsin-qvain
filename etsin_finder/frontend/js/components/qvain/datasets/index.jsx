@@ -16,11 +16,19 @@ import {
   SaveButton
 } from '../general/buttons'
 import Title from '../general/title';
+import Tracking from '../../../utils/tracking'
 
 class Datasets extends Component {
   static propTypes = {
     history: PropTypes.object.isRequired,
+    location: PropTypes.shape({
+      pathname: PropTypes.string,
+    }).isRequired,
     Stores: PropTypes.object.isRequired
+  }
+
+  componentDidMount() {
+    Tracking.newPageView('Qvain View Datasets', this.props.location.pathname)
   }
 
   render() {
