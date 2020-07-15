@@ -43,7 +43,7 @@ import { Button } from '../general/button'
 import DeprecatedState from './deprecatedState'
 import PasState from './pasState'
 import SubmitButtons from './submitButtons'
-import { DatasetUrls } from './utils/constants'
+import { DATASET_URLS } from '../../utils/constants'
 import Tracking from '../../utils/tracking'
 
 class Qvain extends Component {
@@ -100,9 +100,9 @@ class Qvain extends Component {
     this.setState({ datasetLoading: true, datasetError: false, response: null, submitted: false })
     const { metaxApiV2, resetQvainStore, editDataset } = this.props.Stores.Qvain
 
-    let url = `${DatasetUrls.EDIT_DATASET_URL}/${identifier}`
+    let url = `${DATASET_URLS.EDIT_DATASET_URL}/${identifier}`
     if (metaxApiV2) {
-      url = `${DatasetUrls.V2_EDIT_DATASET_URL}/${identifier}`
+      url = `${DATASET_URLS.V2_EDIT_DATASET_URL}/${identifier}`
     }
     const promise = axios
       .get(url)

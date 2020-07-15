@@ -12,6 +12,7 @@ import requests
 from etsin_finder.finder import app
 from etsin_finder.app_config import get_metax_api_config
 from etsin_finder.utils import json_or_empty, FlaskService
+from etsin_finder.constants import ACCESS_TYPES
 
 log = app.logger
 
@@ -241,7 +242,6 @@ def is_rems_catalog_record(catalog_record):
     :param catalog_record:
     :return:
     """
-    from etsin_finder.authorization import ACCESS_TYPES
     if get_catalog_record_access_type(catalog_record) == ACCESS_TYPES['permit']:
         return True
     return False
