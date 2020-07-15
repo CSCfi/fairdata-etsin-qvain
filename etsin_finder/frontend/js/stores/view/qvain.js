@@ -55,6 +55,10 @@ class Qvain {
 
   @observable keywordsArray = []
 
+  @observable subjectHeadingValue = null
+
+  @observable subjectHeadingsArray = []
+
   @observable infrastructure = undefined
 
   @observable infrastructures = []
@@ -89,6 +93,8 @@ class Qvain {
     this.fieldOfScienceArray = []
     this.keywordString = ''
     this.keywordsArray = []
+    this.subjectHeadingValue = null
+    this.subjectHeadingsArray = []
     this.infrastructure = undefined
     this.infrastructures = []
     this.license = License(undefined, LicenseUrls.CCBY4)
@@ -239,6 +245,38 @@ class Qvain {
   @action
   setKeywordsArray = (keywords) => {
     this.keywordsArray = keywords
+    this.changed = true
+  }
+
+  @action
+  setSubjectHeadingValue = value => {
+    this.subjectHeadingValue = SubjectHeading(value.label, value.value, value.locale)
+  }
+
+  @action
+  resetSubjectHeading = () => {
+    this.subjectHeadingValue = null
+  }
+
+  @action
+  removeSubjectHeading = url => {
+    this.subjectHeadingsArray = this.subjectHeadingsArray.filter(value => value.url !== url)
+    this.changed = true
+  }
+
+  @action
+  addToSubjectHeadingsArray = () => {
+    if (this.subjectHeadingValue.label) {
+      if (this.subjectHeadingsArray.filter(value => value.url === this.subjectHeadingValue.url).length === 0) {
+        this.setSubjectHeadingsArray([...this.subjectHeadingsArray, this.subjectHeadingValue])
+      }
+      this.resetSubjectHeading()
+    }
+  }
+
+  @action
+  setSubjectHeadingsArray = (subjectHeadings) => {
+    this.subjectHeadingsArray = subjectHeadings
     this.changed = true
   }
 
@@ -729,6 +767,14 @@ class Qvain {
     // Keywords
     this.keywordsArray = researchDataset.keyword || []
 
+    // SubjectHeadings/Themes
+    if (researchDataset.theme !== undefined) {
+      researchDataset.theme.forEach(element => {
+        this.subjectHeadingValue = SubjectHeading(element.pref_label.en, element.identifier, element.pref_label)
+        this.addToSubjectHeadingsArray()
+      })
+    }
+
     // Access type
     const at = researchDataset.access_rights.access_type
       ? researchDataset.access_rights.access_type
@@ -1022,6 +1068,12 @@ const DatasetDirectory = (directory) => ({
 export const FieldOfScience = (name, url) => ({
   name,
   url,
+})
+
+export const SubjectHeading = (label, url, locale) => ({
+  label,
+  url,
+  locale
 })
 
 export const AccessType = (name, url) => ({

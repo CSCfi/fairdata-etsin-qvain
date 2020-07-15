@@ -4,11 +4,14 @@ import { inject, observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 import AsyncSelect from 'react-select/async'
 import Select from 'react-select'
-import axios from 'axios'
 import styled from 'styled-components'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTimes } from '@fortawesome/free-solid-svg-icons'
 
 import Card from '../general/card'
+import Label from '../general/label'
 import { LabelLarge } from '../general/form'
+import { getReferenceDataAsync } from '../utils/getReferenceData'
 
 const langOptions = [
   // TODO: Check witch all languages should be supported, the index contains .e.g. und,
@@ -40,48 +43,53 @@ class SubjectHeadingsField extends Component {
     }
   }
 
-  promiseOptions = inputValue =>
-    new Promise(resolve => {
-      axios
-        // TODO: Use constants consistently PR #428
-        .get(
-          `https://metax-test.csc.fi/es/reference_data/keyword/_search?size=100&filter_path=hits.hits._source&q=label.${this.state.lang}:${inputValue}*`
-        )
-        .then(res => {
-          console.log(res)
-          const hits = res.data.hits.hits
-          const options = hits.map(hit => {
-            const option = {
-              label: hit._source.label[this.state.lang],
-              value: hit._source.uri,
-            }
-            return option
-          })
-          resolve(options)
-        })
-        .catch(err => {
-          console.log(err)
-        })
-    })
-
-  onLangChange = value => {
-    this.setState({ lang: value.label })
+  handleChange = (newValue, actionMeta) => {
+    const { setSubjectHeadingValue, addToSubjectHeadingsArray } = this.props.Stores.Qvain
+    setSubjectHeadingValue(newValue)
+    addToSubjectHeadingsArray()
+    console.group('Value Changed')
+    console.log(newValue)
+    console.log(`action: ${actionMeta.action}`)
+    console.groupEnd()
   }
 
   render() {
+    const { readonly, subjectHeadingsArray, removeSubjectHeading, subjectHeadingValue } = this.props.Stores.Qvain
+    const { currentLang } = this.props.Stores.Locale
+
+    const RenderedSubjectHeadings = subjectHeadingsArray.map(value => {
+      const { locale, url } = value
+      return (
+        <Label color="#007fad" margin="0 0.5em 0.5em 0" key={url}>
+          <PaddedWord>{locale[currentLang]}</PaddedWord>
+          {!readonly && (
+            <FontAwesomeIcon
+              className="delete-keyword"
+              size="xs"
+              icon={faTimes}
+              aria-label="remove"
+              onClick={() => removeSubjectHeading(url)}
+            />
+          )}
+        </Label>
+      )
+    })
+
     return (
       <Card>
         <LabelLarge htmlFor="subjectHeadings">
           <Translate content="qvain.description.subjectHeadings.title" />
         </LabelLarge>
         <Translate component="p" content="qvain.description.subjectHeadings.help" />
+        {RenderedSubjectHeadings}
         <SelectRow>
           {/* TODO: Get the language to change when the user changes the lang */}
           <LangSelect
-            defaultValue={langOptions.filter(obj => obj.label === this.state.lang)}
+            defaultValue={langOptions.filter(obj => obj.label === currentLang)}
             options={langOptions}
             width="10%"
-            onChange={this.onLangChange}
+            onChange={value => this.setState({ lang: value.label })}
+            isSearchable={false}
           />
           {/* TODO: The cacheOption can cause issued if you search one word, change
           language and search the same, then it does not change the search results
@@ -89,7 +97,10 @@ class SubjectHeadingsField extends Component {
           <Translate
             component={WordSelect}
             // cacheOptions
-            loadOptions={this.promiseOptions}
+            onChange={this.handleChange}
+            value={subjectHeadingValue}
+            // onInputChange={this.handleInputChange}
+            loadOptions={value => getReferenceDataAsync(value, this.state.lang)}
             attributes={{ placeholder: 'qvain.description.subjectHeadings.placeholder' }}
             width="90%"
             inputId="subjectHeadings"
@@ -102,6 +113,9 @@ class SubjectHeadingsField extends Component {
 
 const SelectRow = styled.div`
   display: flex;
+`
+const PaddedWord = styled.span`
+  padding-right: 10px;
 `
 const LangSelect = styled(Select)`
   width: ${props => props.width};
