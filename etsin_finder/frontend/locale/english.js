@@ -232,6 +232,12 @@ const english = {
     language: {
       toggleLabel: 'Toggle language',
     },
+    cookies: {
+      accept: 'Accept all cookies',
+      settings: 'Cookie settings',
+      infoText: 'By using Fairdata’s services you agree to our Cookies Use. We use cookies to improve your experience and make our services work better.',
+      linkText: 'View the Fairdata Privacy Policy.',
+    }
   },
   home: {
     title: 'Search datasets',

@@ -1,5 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
+import Translate from 'react-translate-component'
+
 import Button from '../components/general/button'
 
 
@@ -13,14 +15,16 @@ const CookiesNotification = () => {
     <Notification visible={isVisible()}>
       <div className="container row no-gutters">
         <div className="col-12 col-lg-7">
-          <p>
-            By using Fairdata’s services you agree to our Cookies Use. We use cookies to improve your experience and make our services work better.<br />
-            <a href="#">View the Fairdata Privacy Policy.</a>
-          </p>
+          <Translate component="p" content="general.cookies.infoText" />
+          <a href="#"><Translate content="general.cookies.linkText" /></a>
         </div>
         <Actions className="col-12 col-lg-5">
-          <Button>Cookie Settings</Button>
-          <Button onClick={handleAcceptCookies}>Accept all cookies</Button>
+          <Button>
+            <Translate content="general.cookies.settings" />
+          </Button>
+          <Button onClick={handleAcceptCookies}>
+            <Translate content="general.cookies.accept" />
+          </Button>
         </Actions>
       </div>
     </Notification>

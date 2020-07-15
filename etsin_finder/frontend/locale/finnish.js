@@ -230,6 +230,12 @@ const finnish = {
     language: {
       toggleLabel: 'Vaihda kieltä',
     },
+    cookies: {
+      accept: 'Hyväksy evästeet',
+      settings: 'Evästeasetukset',
+      infoText: 'Finnish info text here.',
+      linkText: 'Lue Fairdata-palvelujen tietosuojasta.',
+    }
   },
   home: {
     title: 'Etsi aineistoa',
