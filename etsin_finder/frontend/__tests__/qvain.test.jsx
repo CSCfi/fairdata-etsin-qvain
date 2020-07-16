@@ -14,7 +14,7 @@ import { License } from '../js/components/qvain/licenses/licenses'
 import { AccessType } from '../js/components/qvain/licenses/accessType'
 import RestrictionGrounds from '../js/components/qvain/licenses/resctrictionGrounds'
 import EmbargoExpires from '../js/components/qvain/licenses/embargoExpires'
-import { AccessTypeURLs, LicenseUrls } from '../js/components/qvain/utils/constants'
+import { ACCESS_TYPE_URL, LICENSE_URL } from '../js/utils/constants'
 import { qvainFormSchema } from '../js/components/qvain/utils/formValidation'
 import { ExternalFilesBase } from '../js/components/qvain/files/external/externalFiles'
 import { ButtonGroup } from '../js/components/qvain/general/buttons'
@@ -223,7 +223,7 @@ describe('Qvain.RightsAndLicenses', () => {
   })
   it('should NOT render other license URL field', () => {
     const stores = getStores()
-    stores.Qvain.setLicense(LicenseConstructor(undefined, LicenseUrls.CCBY4))
+    stores.Qvain.setLicense(LicenseConstructor(undefined, LICENSE_URL.CCBY4))
     const component = shallow(<License Stores={stores} />)
     expect(component.find('#otherLicenseURL').length).toBe(0)
   })
@@ -233,25 +233,25 @@ describe('Qvain.RightsAndLicenses', () => {
   })
   it('should render <RestrictionGrounds />', () => {
     const stores = getStores()
-    stores.Qvain.setAccessType(AccessTypeConstructor(undefined, AccessTypeURLs.EMBARGO))
+    stores.Qvain.setAccessType(AccessTypeConstructor(undefined, ACCESS_TYPE_URL.EMBARGO))
     const component = shallow(<AccessType Stores={stores} />)
     expect(component.find(RestrictionGrounds).length).toBe(1)
   })
   it('should NOT render <RestrictionGrounds />', () => {
     const stores = getStores()
-    stores.Qvain.setAccessType(AccessTypeConstructor(undefined, AccessTypeURLs.OPEN))
+    stores.Qvain.setAccessType(AccessTypeConstructor(undefined, ACCESS_TYPE_URL.OPEN))
     const component = shallow(<AccessType Stores={stores} />)
     expect(component.find(RestrictionGrounds).length).toBe(0)
   })
   it('should render <EmbargoExpires />', () => {
     const stores = getStores()
-    stores.Qvain.setAccessType(AccessTypeConstructor(undefined, AccessTypeURLs.EMBARGO))
+    stores.Qvain.setAccessType(AccessTypeConstructor(undefined, ACCESS_TYPE_URL.EMBARGO))
     const component = shallow(<AccessType Stores={stores} />)
     expect(component.find(EmbargoExpires).length).toBe(1)
   })
   it('should NOT render <EmbargoExpires />', () => {
     const stores = getStores()
-    stores.Qvain.setAccessType(AccessTypeConstructor(undefined, AccessTypeURLs.OPEN))
+    stores.Qvain.setAccessType(AccessTypeConstructor(undefined, ACCESS_TYPE_URL.OPEN))
     const component = shallow(<AccessType Stores={stores} />)
     expect(component.find(EmbargoExpires).length).toBe(0)
   })

@@ -23,8 +23,8 @@ from etsin_finder.finder import app
 from etsin_finder.utils import \
     sort_array_of_obj_by_key, \
     slice_array_on_limit, \
-    datetime_to_header, \
-    SAML_ATTRIBUTES
+    datetime_to_header
+from etsin_finder.constants import SAML_ATTRIBUTES
 from etsin_finder.qvain_light_dataset_schema_v2 import (
     DatasetValidationSchema,
     FileActionsValidationSchema,

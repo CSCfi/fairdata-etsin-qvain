@@ -11,13 +11,14 @@
 import { observable, action } from 'mobx'
 
 import auth from '../domain/auth'
+import { ACCESS_TYPE_URL } from '../../utils/constants'
 
 export const accessTypes = {
-  open: 'http://uri.suomi.fi/codelist/fairdata/access_type/code/open',
-  login: 'http://uri.suomi.fi/codelist/fairdata/access_type/code/login',
-  embargo: 'http://uri.suomi.fi/codelist/fairdata/access_type/code/embargo',
-  permit: 'http://uri.suomi.fi/codelist/fairdata/access_type/code/permit',
-  restricted: 'http://uri.suomi.fi/codelist/fairdata/access_type/code/restricted',
+  open: ACCESS_TYPE_URL.OPEN,
+  login: ACCESS_TYPE_URL.LOGIN,
+  embargo: ACCESS_TYPE_URL.EMBARGO,
+  permit: ACCESS_TYPE_URL.PERMIT,
+  restricted: ACCESS_TYPE_URL.RESTRICTED,
 }
 
 class Access {

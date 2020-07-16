@@ -13,7 +13,7 @@ import FileForm from './fileForm'
 import DirectoryForm from './directoryForm'
 import { randomStr } from '../../utils/fileHierarchy'
 import Modal from '../../../general/modal'
-import { CumulativeStates } from '../../utils/constants'
+import { CUMULATIVE_STATE } from '../../../../utils/constants'
 import RefreshDirectoryModal from '../refreshDirectoryModal';
 import FixDeprecatedModal from '../fixDeprecatedModal';
 
@@ -59,7 +59,7 @@ export class SelectedFilesBase extends Component {
       canSelectFiles,
       deprecated
     } = this.props.Stores.Qvain
-    const isCumulative = cumulativeState === CumulativeStates.YES
+    const isCumulative = cumulativeState === CUMULATIVE_STATE.YES
     return (
       selected.map(s => (
         <Fragment key={`${s.id}-${randomStr()}`}>
@@ -120,7 +120,7 @@ export class SelectedFilesBase extends Component {
     } = this.props.Stores.Qvain
     const selected = [...selectedDirectories, ...selectedFiles]
     const existing = [...existingDirectories, ...existingFiles]
-    const isCumulative = cumulativeState === CumulativeStates.YES
+    const isCumulative = cumulativeState === CUMULATIVE_STATE.YES
     let existingHelpKey
     if (isPas) {
       existingHelpKey = readonly ? 'pasReadonly' : 'pasEditable'

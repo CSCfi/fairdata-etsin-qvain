@@ -5,14 +5,10 @@ import json
 from flask import session
 from base64 import urlsafe_b64encode
 
-from etsin_finder.utils import SAML_ATTRIBUTES
+from etsin_finder.constants import SAML_ATTRIBUTES, DATA_CATALOG_IDENTIFIERS, ACCESS_TYPES
 from etsin_finder.cr_service import get_catalog_record
 from etsin_finder.finder import app
 from etsin_finder.authentication import get_user_ida_groups
-
-access_type = {}
-access_type["EMBARGO"] = "http://uri.suomi.fi/codelist/fairdata/access_type/code/embargo"
-access_type["OPEN"] = "http://uri.suomi.fi/codelist/fairdata/access_type/code/open"
 
 log = app.logger
 
@@ -124,10 +120,10 @@ def access_rights_to_metax(data):
     if "accessType" in data:
         access_rights["access_type"] = {}
         access_rights["access_type"]["identifier"] = data["accessType"]["url"]
-        if data["accessType"]["url"] != access_type["OPEN"]:
+        if data["accessType"]["url"] != ACCESS_TYPES.get('open'):
             access_rights["restriction_grounds"] = []
             access_rights["restriction_grounds"].append({"identifier": data["restrictionGrounds"]})
-        if data["accessType"]["url"] == access_type["EMBARGO"] and "embargoDate" in data:
+        if data["accessType"]["url"] == ACCESS_TYPES.get('embargo') and "embargoDate" in data:
             access_rights["available"] = data["embargoDate"]
     return access_rights
 

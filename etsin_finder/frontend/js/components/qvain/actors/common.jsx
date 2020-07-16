@@ -9,11 +9,11 @@ import {
 import styled from 'styled-components'
 
 import { Input } from '../general/form'
-import { EntityType } from '../utils/constants'
+import { ENTITY_TYPE } from '../../../utils/constants'
 import ValidationError from '../general/validationError'
 
 export const ActorIcon = observer(({ actor, ...props }) => (
-  <FontAwesomeIcon icon={actor.type === EntityType.PERSON ? faUser : faBuilding} {...props} />
+  <FontAwesomeIcon icon={actor.type === ENTITY_TYPE.PERSON ? faUser : faBuilding} {...props} />
 ))
 ActorIcon.propTypes = {
   actor: PropTypes.object.isRequired,
@@ -57,7 +57,7 @@ export const getOrganizationArrayName = (orgs, lang) => {
 }
 
 export const getActorName = (actor, lang) => {
-  if (actor.type === EntityType.PERSON) {
+  if (actor.type === ENTITY_TYPE.PERSON) {
     return actor.person.name || ''
   }
   return getOrganizationArrayName(actor.organizations, lang)

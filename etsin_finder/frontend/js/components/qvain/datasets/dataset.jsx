@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import { Row, BodyCell } from '../general/table'
-import { DataCatalogIdentifiers } from '../utils/constants'
+import { DATA_CATALOG_IDENTIFIER } from '../../../utils/constants'
 import Label from '../general/label'
 import { TableButton, RemoveButton } from '../general/buttons'
 import TablePasState from './tablePasState'
@@ -60,7 +60,7 @@ function Dataset(props) {
           <Translate color="error" content="qvain.datasets.deprecated" component={DatasetLabel} />
         )}
         {(dataset.preservation_state > 0 ||
-          dataset.data_catalog.identifier === DataCatalogIdentifiers.PAS) && (
+          dataset.data_catalog.identifier === DATA_CATALOG_IDENTIFIER.PAS) && (
           <TablePasState preservationState={dataset.preservation_state} />
         )}
       </BodyCellWordWrap>

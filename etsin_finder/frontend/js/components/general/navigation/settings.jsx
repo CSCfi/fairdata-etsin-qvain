@@ -20,6 +20,7 @@ import Login from './loginButton'
 import { Link } from '../button'
 import LangToggle from './langToggle'
 import DropdownMenu from './dropdownMenu'
+import { QVAIN_URL } from '../../../utils/constants'
 
 export default class Settings extends Component {
   render() {
@@ -41,7 +42,7 @@ export default class Settings extends Component {
                 <Link
                   width="100%"
                   margin="0.4em 0em 0.4em 0.4em"
-                  href="https://qvain.fairdata.fi"
+                  href={QVAIN_URL}
                   rel="noopener noreferrer"
                   target="_blank"
                 >Qvain
