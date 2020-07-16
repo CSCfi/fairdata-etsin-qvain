@@ -311,10 +311,11 @@ class QvainDataset(Resource):
             log.warning("Invalid form data: {0}".format(err.messages))
             return err.messages, 400
 
+        saml_user_data = session.get('samlUserdata', {})
         saml_haka_org_id = SAML_ATTRIBUTES.get('haka_org_id')
-        saml_csc_username = SAML_ATTRIBUTES.get('CSC_username')
-        metadata_provider_org = session.get(saml_haka_org_id, [])[0]
-        metadata_provider_user = session.get(saml_csc_username, [])[0]
+        saml_csc_username_id = SAML_ATTRIBUTES.get('CSC_username')
+        metadata_provider_org = saml_user_data.get(saml_haka_org_id, [])[0]
+        metadata_provider_user = saml_user_data.get(saml_csc_username_id, [])[0]
 
         if not metadata_provider_org or not metadata_provider_user:
             log.warning("The Metadata provider is not specified\n")
