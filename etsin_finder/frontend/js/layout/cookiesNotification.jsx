@@ -1,34 +1,58 @@
-import React from 'react'
+import React, { Component } from 'react'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
+import counterpart from 'counterpart'
 
 import Button from '../components/general/button'
 
 
-const CookiesNotification = () => {
-  const handleAcceptCookies = () =>
-    console.log('Cookies accepted')
+class CookiesNotification extends Component {
+  state = {
+    visible: !localStorage.getItem('cookiesAccepted'),
+  }
 
-  const isVisible = () => true
+  componentDidMount() {
+    counterpart.onLocaleChange(this.onLanguageChange)
+  }
 
-  return (
-    <Notification visible={isVisible()}>
-      <div className="container row no-gutters">
-        <div className="col-12 col-lg-7">
-          <Translate component="p" content="general.cookies.infoText" />
-          <a href="#"><Translate content="general.cookies.linkText" /></a>
+  componentWillUnmount() {
+    counterpart.offLocaleChange(this.onLanguageChange)
+  }
+
+  onLanguageChange = () => {
+    this.setState({
+      lang: counterpart.getLocale(),
+    })
+  }
+
+  getPrivacyUrl() {
+    return this.state.lang === 'en'
+      ? 'https://www.fairdata.fi/en/contracts-and-privacy/'
+      : 'https://www.fairdata.fi/sopimukset/'
+  }
+
+  handleAcceptCookies = () => {
+    localStorage.setItem('cookiesAccepted', true)
+    this.setState({ visible: false })
+  }
+
+  render() {
+    return (
+      <Notification visible={this.state.visible}>
+        <div className="container row no-gutters">
+          <div className="col-12 col-md-9">
+            <Translate component="p" content="general.cookies.infoText" />
+            <a href={this.getPrivacyUrl()} target="_blank" rel="noopener noreferrer"><Translate content="general.cookies.link" /></a>
+          </div>
+          <Actions className="col-12 col-md-3">
+            <Button onClick={this.handleAcceptCookies}>
+              <Translate content="general.cookies.accept" />
+            </Button>
+          </Actions>
         </div>
-        <Actions className="col-12 col-lg-5">
-          <Button>
-            <Translate content="general.cookies.settings" />
-          </Button>
-          <Button onClick={handleAcceptCookies}>
-            <Translate content="general.cookies.accept" />
-          </Button>
-        </Actions>
-      </div>
-    </Notification>
-  )
+      </Notification>
+    )
+  }
 }
 
 const Notification = styled.div`
