@@ -273,7 +273,6 @@ def is_rems_catalog_record(catalog_record):
         bool: Returns True if catalog record has the 'permit' Access type. Else return False.
 
     """
-    from etsin_finder.authorization import ACCESS_TYPES
     if get_catalog_record_access_type(catalog_record) == ACCESS_TYPES.get('permit'):
         return True
     return False
