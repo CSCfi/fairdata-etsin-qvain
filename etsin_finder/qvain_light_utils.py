@@ -5,14 +5,10 @@ import json
 from flask import session
 from base64 import urlsafe_b64encode
 
-from etsin_finder.utils import SAML_ATTRIBUTES, DATA_CATALOG_IDENTIFIERS
+from etsin_finder.constants import SAML_ATTRIBUTES, DATA_CATALOG_IDENTIFIERS, ACCESS_TYPES
 from etsin_finder.cr_service import get_catalog_record
 from etsin_finder.finder import app
 from etsin_finder.authentication import get_user_ida_groups, get_user_csc_name, get_user_email, get_user_firstname, get_user_lastname
-
-ACCESS_TYPE = {}
-ACCESS_TYPE["EMBARGO"] = "http://uri.suomi.fi/codelist/fairdata/access_type/code/embargo"
-ACCESS_TYPE["OPEN"] = "http://uri.suomi.fi/codelist/fairdata/access_type/code/open"
 
 log = app.logger
 
@@ -125,10 +121,10 @@ def access_rights_to_metax(data):
     if access_type:
         access_rights["access_type"] = {}
         access_rights["access_type"]["identifier"] = access_type_url
-        if access_type_url != ACCESS_TYPE.get("OPEN"):
+        if data["accessType"]["url"] != ACCESS_TYPES.get('open'):
             access_rights["restriction_grounds"] = []
             access_rights["restriction_grounds"].append({"identifier": data.get("restrictionGrounds")})
-        if access_type_url == ACCESS_TYPE.get("EMBARGO") and "embargoDate" in data:
+        if data["accessType"]["url"] == ACCESS_TYPES.get('embargo') and "embargoDate" in data:
             access_rights["available"] = data.get("embargoDate")
     return access_rights
 
@@ -365,6 +361,12 @@ def check_if_data_in_user_IDA_project(data):
 
     """
     user_ida_projects = get_user_ida_groups()
+
+    # If user_ida_projects do not exist, there cannot be any data permission violations, so return True in this case
+    if user_ida_projects is None:
+        return True
+
+    # Check IDA project permissions, if user_ida_projects exist
     try:
         user_ida_projects_ids = [project.split(":")[1] for project in user_ida_projects]
     except IndexError as e:
@@ -374,8 +376,6 @@ def check_if_data_in_user_IDA_project(data):
         log.warning('Could not get user IDA groups.')
         return False
     log.debug('User IDA groups: {0}'.format(user_ida_projects_ids))
-    # Add the test project 'project_x' for local development.
-    user_ida_projects_ids.append("project_x")
     if "files" or "directories" in data:
         files = data.get("files") if "files" in data else []
         directories = data.get("directories") if "directories" in data else []

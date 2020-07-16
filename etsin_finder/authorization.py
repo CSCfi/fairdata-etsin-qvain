@@ -14,8 +14,8 @@ from etsin_finder.cr_service import \
     get_catalog_record_embargo_available
 from etsin_finder.finder import app
 from etsin_finder import rems_service
-from etsin_finder.utils import tz_now_is_later_than_timestamp_str, remove_keys_recursively, leave_keys_in_dict, \
-    ACCESS_TYPES, DATA_CATALOG_IDENTIFIERS
+from etsin_finder.utils import tz_now_is_later_than_timestamp_str, remove_keys_recursively, leave_keys_in_dict
+from etsin_finder.constants import ACCESS_TYPES, DATA_CATALOG_IDENTIFIERS
 
 log = app.logger
 

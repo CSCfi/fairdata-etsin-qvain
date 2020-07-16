@@ -17,7 +17,7 @@ from etsin_finder import authentication
 from etsin_finder.qvain_light_service import change_cumulative_state, refresh_directory_content, fix_deprecated_dataset
 from etsin_finder.finder import app
 from etsin_finder.qvain_light_utils import get_dataset_creator
-from etsin_finder.utils import SAML_ATTRIBUTES
+from etsin_finder.constants import SAML_ATTRIBUTES
 
 log = app.logger
 

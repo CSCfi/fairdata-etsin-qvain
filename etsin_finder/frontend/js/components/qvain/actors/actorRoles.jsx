@@ -4,7 +4,7 @@ import { inject, observer } from 'mobx-react'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import { FormField, Checkbox, Label, HelpField } from '../general/form'
-import { Role } from '../utils/constants'
+import { ROLE } from '../../../utils/constants'
 import { GroupLabel } from './common'
 
 export const List = styled.ul`
@@ -72,11 +72,11 @@ export class ActorRolesBase extends Component {
             <FormField>
               <Checkbox
                 disabled={readonly}
-                onChange={this.handleChangeRole(actor, Role.CREATOR)}
+                onChange={this.handleChangeRole(actor, ROLE.CREATOR)}
                 id="roleCreator"
                 type="checkbox"
-                value={Role.CREATOR}
-                checked={actor.roles.includes(Role.CREATOR)}
+                value={ROLE.CREATOR}
+                checked={actor.roles.includes(ROLE.CREATOR)}
               />
               <Label htmlFor="roleCreator">
                 <Translate content="qvain.actors.add.checkbox.creator" />{' '}
@@ -84,15 +84,15 @@ export class ActorRolesBase extends Component {
               </Label>
             </FormField>
           </ListItem>
-          <ListItem disabled={readonly || this.checkIfActorRoleExists(Role.PUBLISHER)}>
+          <ListItem disabled={readonly || this.checkIfActorRoleExists(ROLE.PUBLISHER)}>
             <FormField>
               <Checkbox
-                onChange={this.handleChangeRole(actor, Role.PUBLISHER)}
-                disabled={this.checkIfActorRoleExists(Role.PUBLISHER) || readonly}
+                onChange={this.handleChangeRole(actor, ROLE.PUBLISHER)}
+                disabled={this.checkIfActorRoleExists(ROLE.PUBLISHER) || readonly}
                 id="rolePublisher"
-                value={Role.PUBLISHER}
+                value={ROLE.PUBLISHER}
                 type="checkbox"
-                checked={actor.roles.includes(Role.PUBLISHER)}
+                checked={actor.roles.includes(ROLE.PUBLISHER)}
               />
               <Label htmlFor="rolePublisher">
                 <Translate content="qvain.actors.add.checkbox.publisher" />{' '}
@@ -104,10 +104,10 @@ export class ActorRolesBase extends Component {
             <FormField>
               <Checkbox
                 disabled={readonly}
-                onChange={this.handleChangeRole(actor, Role.CURATOR)}
+                onChange={this.handleChangeRole(actor, ROLE.CURATOR)}
                 id="roleCurator"
-                value={Role.CURATOR}
-                checked={actor.roles.includes(Role.CURATOR)}
+                value={ROLE.CURATOR}
+                checked={actor.roles.includes(ROLE.CURATOR)}
                 type="checkbox"
               />
               <Label htmlFor="roleCurator">
@@ -119,11 +119,11 @@ export class ActorRolesBase extends Component {
             <FormField>
               <Checkbox
                 disabled={readonly}
-                onChange={this.handleChangeRole(actor, Role.RIGHTS_HOLDER)}
+                onChange={this.handleChangeRole(actor, ROLE.RIGHTS_HOLDER)}
                 id="roleRightsHolder"
                 type="checkbox"
-                value={Role.RIGHTS_HOLDER}
-                checked={actor.roles.includes(Role.RIGHTS_HOLDER)}
+                value={ROLE.RIGHTS_HOLDER}
+                checked={actor.roles.includes(ROLE.RIGHTS_HOLDER)}
               />
               <Label htmlFor="roleRightsHolder">
                 <Translate content="qvain.actors.add.checkbox.rights_holder" />
@@ -134,11 +134,11 @@ export class ActorRolesBase extends Component {
             <FormField>
               <Checkbox
                 disabled={readonly}
-                onChange={this.handleChangeRole(actor, Role.CONTRIBUTOR)}
+                onChange={this.handleChangeRole(actor, ROLE.CONTRIBUTOR)}
                 id="roleContributor"
                 type="checkbox"
-                value={Role.CONTRIBUTOR}
-                checked={actor.roles.includes(Role.CONTRIBUTOR)}
+                value={ROLE.CONTRIBUTOR}
+                checked={actor.roles.includes(ROLE.CONTRIBUTOR)}
               />
               <Label htmlFor="roleContributor">
                 <Translate content="qvain.actors.add.checkbox.contributor" />

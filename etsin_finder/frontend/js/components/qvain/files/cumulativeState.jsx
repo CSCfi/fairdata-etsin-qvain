@@ -5,7 +5,7 @@ import Translate from 'react-translate-component'
 import axios from 'axios'
 
 import { ContainerSubsectionBottom } from '../general/card'
-import { CumulativeStates } from '../utils/constants'
+import { CUMULATIVE_STATE } from '../../../utils/constants'
 import { getResponseError } from '../utils/responseError'
 import { LabelLarge, FormField, RadioInput, Label, HelpField } from '../general/form'
 
@@ -62,7 +62,7 @@ class CumulativeState extends Component {
     })
 
     const currentState = this.props.Stores.Qvain.cumulativeState
-    const newState = currentState === CumulativeStates.YES ? CumulativeStates.CLOSED : CumulativeStates.YES
+    const newState = currentState === CUMULATIVE_STATE.YES ? CUMULATIVE_STATE.CLOSED : CUMULATIVE_STATE.YES
     const obj = {
       identifier: this.props.Stores.Qvain.original.identifier,
       cumulative_state: newState
@@ -97,7 +97,7 @@ class CumulativeState extends Component {
 
   render() {
     const { changed, cumulativeState, setCumulativeState, hasBeenPublished } = this.props.Stores.Qvain
-    const stateKey = this.props.Stores.Qvain.cumulativeState === CumulativeStates.YES ? 'enabled' : 'disabled'
+    const stateKey = this.props.Stores.Qvain.cumulativeState === CUMULATIVE_STATE.YES ? 'enabled' : 'disabled'
 
     let content = null
     if (!hasBeenPublished) {

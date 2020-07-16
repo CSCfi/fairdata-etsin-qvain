@@ -5,15 +5,11 @@ import json
 from flask import session
 from base64 import urlsafe_b64encode
 
-from etsin_finder.utils import SAML_ATTRIBUTES
+from etsin_finder.constants import SAML_ATTRIBUTES
 from etsin_finder.cr_service import get_catalog_record
 from etsin_finder.finder import app
 from etsin_finder.authentication import get_user_ida_groups, is_authenticated, get_user_csc_name
 from etsin_finder import qvain_light_utils
-
-access_type = {}
-access_type["EMBARGO"] = "http://uri.suomi.fi/codelist/fairdata/access_type/code/embargo"
-access_type["OPEN"] = "http://uri.suomi.fi/codelist/fairdata/access_type/code/open"
 
 log = app.logger
 

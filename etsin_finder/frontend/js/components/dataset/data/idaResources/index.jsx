@@ -11,6 +11,7 @@ import Table from '../table'
 import Breadcrumbs from '../breadcrumbs'
 import access from '../../../../stores/view/access'
 import Accessibility from '../../../../stores/view/accessibility'
+import { DATA_CATALOG_IDENTIFIER } from '../../../../utils/constants'
 
 export default class IdaResources extends Component {
   constructor(props) {
@@ -44,7 +45,7 @@ export default class IdaResources extends Component {
 
   componentDidMount() {
     // If this is a PAS dataset, dowload should be disabled
-    if (this.props.dataset.data_catalog.catalog_json.identifier === 'urn:nbn:fi:att:data-catalog-pas') {
+    if (this.props.dataset.data_catalog.catalog_json.identifier === DATA_CATALOG_IDENTIFIER.PAS) {
       this.setState({
         allowDownload: false
       })

@@ -19,7 +19,7 @@ from etsin_finder.qvain_light_service_v2 import (
 )
 from etsin_finder.finder import app
 from etsin_finder.qvain_light_utils import get_dataset_creator
-from etsin_finder.utils import SAML_ATTRIBUTES
+from etsin_finder.constants import SAML_ATTRIBUTES
 
 from etsin_finder.qvain_light_utils_v2 import (
     check_dataset_creator

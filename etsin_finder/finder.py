@@ -143,10 +143,6 @@ def add_restful_resources(app):
     api.add_resource(QvainDatasetFixDeprecated, '/api/rpc/datasets/fix_deprecated')
     # REMS API endpoints
     api.add_resource(REMSApplyForPermission, '/api/rems/<string:cr_id>')
-    # api.add_resource(REMSCreateUser, '/api/users/create')
-    # api.add_resource(REMSGetEntitlements, '/api/entitlements')
-    # api.add_resource(REMSGetApplications, '/api/applications/<string:application_id>')
-    # api.add_resource(REMSCreateNewApplication, '/api/applications/create')
 
 
 app = create_app()
