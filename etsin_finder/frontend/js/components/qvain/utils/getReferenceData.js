@@ -27,9 +27,8 @@ export const getLocalizedOptions = field =>
 export const getReferenceDataAsync = (inputValue, lang) =>
   new Promise((resolve, reject) => {
     axios
-      // TODO: Use constants consistently PR #428
       .get(
-        `https://metax-test.csc.fi/es/reference_data/keyword/_search?size=100&filter_path=hits.hits._source&q=label.${lang}:${inputValue}*`
+        `${METAX_FAIRDATA_ROOT_URL}/es/reference_data/keyword/_search?size=100&filter_path=hits.hits._source&q=label.${lang}:${inputValue}*`
       )
       .then(res => {
         const data = res.data

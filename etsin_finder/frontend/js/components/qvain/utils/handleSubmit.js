@@ -1,54 +1,57 @@
-const fieldsOfScienceToMetaxMethod = (fieldsOfScience) =>
-  fieldsOfScience.map((fieldOfScience) => fieldOfScience.url)
+const fieldsOfScienceToMetaxMethod = fieldsOfScience =>
+  fieldsOfScience.map(fieldOfScience => fieldOfScience.url)
+
+const subjectHeadingsToMetaxTheme = subjectHeadingsArray =>
+  subjectHeadingsArray.map(subject => ({ identifier: subject.url }))
 
 const directoriesToMetax = (selectedDirectories, existingDirectories) => {
   const selectedDirectoryIdentifiers = selectedDirectories
-    ? selectedDirectories.map((sd) => sd.identifier)
+    ? selectedDirectories.map(sd => sd.identifier)
     : []
   const notOverwrittenExistingDirectories = existingDirectories
-    ? existingDirectories.filter((ed) => !selectedDirectoryIdentifiers.includes(ed.identifier))
+    ? existingDirectories.filter(ed => !selectedDirectoryIdentifiers.includes(ed.identifier))
     : []
   const directories = [...selectedDirectories, ...notOverwrittenExistingDirectories]
   const parsedDirectoryData = directories
-    ? directories.map((dir) => ({
-      identifier: dir.identifier,
-      title: dir.title,
-      description: dir.description ? dir.description : undefined,
-      useCategory: {
-        identifier: dir.useCategory,
-      },
-      projectIdentifier: dir.projectIdentifier ? dir.projectIdentifier : undefined,
-    }))
+    ? directories.map(dir => ({
+        identifier: dir.identifier,
+        title: dir.title,
+        description: dir.description ? dir.description : undefined,
+        useCategory: {
+          identifier: dir.useCategory,
+        },
+        projectIdentifier: dir.projectIdentifier ? dir.projectIdentifier : undefined,
+      }))
     : []
   return parsedDirectoryData
 }
 
 const filesToMetax = (selectedFiles, existingFiles) => {
-  const selectedFileIdentifiers = selectedFiles ? selectedFiles.map((sf) => sf.identifier) : []
+  const selectedFileIdentifiers = selectedFiles ? selectedFiles.map(sf => sf.identifier) : []
   const notOverwrittenExistingFiles = existingFiles
-    ? existingFiles.filter((ef) => !selectedFileIdentifiers.includes(ef.identifier))
+    ? existingFiles.filter(ef => !selectedFileIdentifiers.includes(ef.identifier))
     : []
   const files = [...selectedFiles, ...notOverwrittenExistingFiles]
   const parsedFileData = files
-    ? files.map((file) => ({
-      identifier: file.identifier,
-      title: file.title,
-      description: file.description ? file.description : undefined,
-      fileType: file.fileType
-        ? {
-          identifier: file.fileType,
-        }
-        : undefined,
-      useCategory: {
-        identifier: file.useCategory,
-      },
-      projectIdentifier: file.projectIdentifier ? file.projectIdentifier : undefined,
-    }))
+    ? files.map(file => ({
+        identifier: file.identifier,
+        title: file.title,
+        description: file.description ? file.description : undefined,
+        fileType: file.fileType
+          ? {
+              identifier: file.fileType,
+            }
+          : undefined,
+        useCategory: {
+          identifier: file.useCategory,
+        },
+        projectIdentifier: file.projectIdentifier ? file.projectIdentifier : undefined,
+      }))
     : []
   return parsedFileData
 }
 
-const handleSubmitToBackend = (values) => {
+const handleSubmitToBackend = values => {
   const actors = values.Actors.toBackend()
 
   const spatial = values.Spatials.toBackend()
@@ -60,6 +63,7 @@ const handleSubmitToBackend = (values) => {
     identifiers: values.otherIdentifiersArray,
     fieldOfScience: fieldsOfScienceToMetaxMethod(values.fieldOfScienceArray),
     keywords: values.keywordsArray,
+    theme: subjectHeadingsToMetaxTheme(values.subjectHeadingsArray),
     actors,
     infrastructure: values.infrastructures,
     accessType: values.accessType ? values.accessType : undefined,
@@ -74,7 +78,7 @@ const handleSubmitToBackend = (values) => {
     dataCatalog: values.dataCatalog,
     cumulativeState: values.cumulativeState,
     useDoi: values.useDoi,
-    spatial
+    spatial,
   }
 
   if (values.original) {

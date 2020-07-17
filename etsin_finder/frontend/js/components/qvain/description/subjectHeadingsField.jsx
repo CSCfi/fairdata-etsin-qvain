@@ -12,23 +12,7 @@ import Card from '../general/card'
 import Label from '../general/label'
 import { LabelLarge } from '../general/form'
 import { getReferenceDataAsync } from '../utils/getReferenceData'
-
-const langOptions = [
-  // TODO: Check witch all languages should be supported, the index contains .e.g. und,
-  // TODO: Move to constants file
-  {
-    label: 'en',
-    value: 'en',
-  },
-  {
-    label: 'fi',
-    value: 'fi',
-  },
-  {
-    label: 'sv',
-    value: 'sv',
-  },
-]
+import { LANG_OPTIONS } from '../../../utils/constants'
 
 class SubjectHeadingsField extends Component {
   static propTypes = {
@@ -54,7 +38,12 @@ class SubjectHeadingsField extends Component {
   }
 
   render() {
-    const { readonly, subjectHeadingsArray, removeSubjectHeading, subjectHeadingValue } = this.props.Stores.Qvain
+    const {
+      readonly,
+      subjectHeadingsArray,
+      removeSubjectHeading,
+      subjectHeadingValue,
+    } = this.props.Stores.Qvain
     const { currentLang } = this.props.Stores.Locale
 
     const RenderedSubjectHeadings = subjectHeadingsArray.map(value => {
@@ -85,8 +74,8 @@ class SubjectHeadingsField extends Component {
         <SelectRow>
           {/* TODO: Get the language to change when the user changes the lang */}
           <LangSelect
-            defaultValue={langOptions.filter(obj => obj.label === currentLang)}
-            options={langOptions}
+            defaultValue={LANG_OPTIONS.filter(obj => obj.label === currentLang)}
+            options={LANG_OPTIONS}
             width="10%"
             onChange={value => this.setState({ lang: value.label })}
             isSearchable={false}

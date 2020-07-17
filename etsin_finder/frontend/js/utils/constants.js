@@ -22,7 +22,7 @@ export const METAX_FAIRDATA_ROOT_URL = 'https://metax.fairdata.fi'
 
 export const FAIRDATA_WEBSITE_URL = {
   FI: 'https://www.fairdata.fi/etsin/',
-  EN: 'https://www.fairdata.fi/en/etsin/'
+  EN: 'https://www.fairdata.fi/en/etsin/',
 }
 
 export const LICENSE_URL = {
@@ -178,3 +178,18 @@ export const PRESERVATION_STATE = {
     color: PRESERVATION_STATE_COLOR.DEFAULT,
   },
 }
+
+export const LANG_OPTIONS = [
+  {
+    label: 'en',
+    value: 'en',
+  },
+  {
+    label: 'fi',
+    value: 'fi',
+  },
+  {
+    label: 'sv',
+    value: 'sv',
+  },
+]

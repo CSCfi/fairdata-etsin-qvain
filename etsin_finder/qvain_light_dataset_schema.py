@@ -68,6 +68,13 @@ class ActorValidationSchema(Schema):
         else:
             raise ValidationError('Invalid actor type.')
 
+class ThemeValidationSchema(Schema):
+    """Validation schema for theme."""
+    identifier = fields.URL(
+        required=True,
+        validate=Length(min=1)
+    )
+
 
 class DatasetValidationSchema(Schema):
     """Validation schema for the whole dataset."""
@@ -91,6 +98,10 @@ class DatasetValidationSchema(Schema):
         fields.Str(),
         required=True,
         validate=lambda list: len(list) > 0
+    )
+    theme = fields.List(fields.Nested(
+        ThemeValidationSchema),
+        required=False,
     )
     actors = fields.List(fields.Nested(
         ActorValidationSchema),
