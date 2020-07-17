@@ -14,7 +14,10 @@ export default class Citation extends Component {
       creators: Data.research_dataset.creator && Data.research_dataset.creator,
       contributors: Data.research_dataset.contributor && Data.research_dataset.contributor,
       publisher: Data.research_dataset.publisher && Data.research_dataset.publisher.name,
-      release_date: Data.research_dataset.modified,
+
+      // This is the issued date of the source material, as defined in Qvain Light/Heavy
+      date_issued: Data.research_dataset.issued,
+
       title: Data.research_dataset.title,
       pid: Data.research_dataset.preferred_identifier,
       citation: Data.research_dataset.bibliographic_citation,
@@ -55,13 +58,13 @@ export default class Citation extends Component {
     )
     cit.push(checkDataLang(this.state.title))
     cit.push(checkDataLang(this.state.publisher))
-    cit.push(checkDataLang(this.state.release_date))
+    cit.push(checkDataLang(this.state.date_issued))
     cit.push(checkDataLang(this.state.pid))
     return (
       <Fragment>
         <span>{cit.filter(element => element).join(', ')}</span>
-        { !this.state.release_date &&
-          <TextMuted><Translate content="dataset.citationNoReleaseDate" /></TextMuted> }
+        { !this.state.date_issued &&
+          <TextMuted><Translate content="dataset.citationNoDateIssued" /></TextMuted> }
       </Fragment>
     )
   }

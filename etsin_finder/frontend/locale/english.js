@@ -33,7 +33,7 @@ const english = {
     catalog_publisher: 'Catalog publisher',
     citation: 'Citation / Reference',
     citation_formats: 'Show more citation formats',
-    citationNoReleaseDate: 'Publishing date not defined',
+    citationNoDateIssued: 'Issued date not defined',
     contact: {
       access: 'Contact the curator on issues related to dataset access',
       contact: 'Contact',
