@@ -2,13 +2,13 @@ import { observable, action, computed, runInAction } from 'mobx'
 import axios from 'axios'
 import { getDirectories, getFiles, deepCopy } from '../../components/qvain/utils/fileHierarchy'
 import {
-  AccessTypeURLs,
-  LicenseUrls,
-  FileAPIURLs,
-  UseCategoryURLs,
-  CumulativeStates,
-  DataCatalogIdentifiers,
-} from '../../components/qvain/utils/constants'
+  ACCESS_TYPE_URL,
+  LICENSE_URL,
+  FILE_API_URLS,
+  USE_CATEGORY_URL,
+  CUMULATIVE_STATE,
+  DATA_CATALOG_IDENTIFIER,
+} from '../../utils/constants'
 import { getPath } from '../../components/qvain/utils/object'
 import Actors from './qvain.actors'
 import Files from './qvain.files'
@@ -63,11 +63,11 @@ class Qvain {
 
   @observable infrastructures = []
 
-  @observable license = License(undefined, LicenseUrls.CCBY4)
+  @observable license = License(undefined, LICENSE_URL.CCBY4)
 
   @observable otherLicenseUrl = undefined
 
-  @observable accessType = AccessType(undefined, AccessTypeURLs.OPEN)
+  @observable accessType = AccessType(undefined, ACCESS_TYPE_URL.OPEN)
 
   @observable embargoExpDate = undefined
 
@@ -97,16 +97,16 @@ class Qvain {
     this.subjectHeadingsArray = []
     this.infrastructure = undefined
     this.infrastructures = []
-    this.license = License(undefined, LicenseUrls.CCBY4)
+    this.license = License(undefined, LICENSE_URL.CCBY4)
     this.otherLicenseUrl = undefined
-    this.accessType = AccessType(undefined, AccessTypeURLs.OPEN)
+    this.accessType = AccessType(undefined, ACCESS_TYPE_URL.OPEN)
     this.embargoExpDate = undefined
     this.restrictionGrounds = {}
 
     // Reset Files/Directories related data
     this.dataCatalog = undefined
     this.preservationState = 0
-    this.cumulativeState = CumulativeStates.NO
+    this.cumulativeState = CUMULATIVE_STATE.NO
     this.idaPickerOpen = false
     this.selectedProject = undefined
     this.selectedFiles = []
@@ -397,7 +397,7 @@ class Qvain {
 
   @observable useDoi = false
 
-  @observable cumulativeState = CumulativeStates.NO
+  @observable cumulativeState = CUMULATIVE_STATE.NO
 
   @observable selectedProject = undefined
 
@@ -423,7 +423,7 @@ class Qvain {
     this.changed = true
 
     // Remove useDoi if dataCatalog is ATT
-    if (selectedDataCatalog === 'urn:nbn:fi:att:data-catalog-att') {
+    if (selectedDataCatalog === DATA_CATALOG_IDENTIFIER.ATT) {
       this.useDoi = false
     }
   }
@@ -561,7 +561,7 @@ class Qvain {
   }
 
   @action getInitialDirectories = () =>
-    axios.get(FileAPIURLs.PROJECT_DIR_URL + this.selectedProject).then((res) => {
+    axios.get(FILE_API_URLS.PROJECT_DIR_URL + this.selectedProject).then((res) => {
       runInAction(() => {
         this.hierarchy = Directory(res.data, undefined, false, false)
       })
@@ -578,7 +578,7 @@ class Qvain {
 
   @action loadDirectory = (dirId, rootDir, callback) => {
     const req = axios
-      .get(FileAPIURLs.DIR_URL + dirId)
+      .get(FILE_API_URLS.DIR_URL + dirId)
       .then((res) => {
         const newDirs = [
           ...rootDir.directories.map((d) => {
@@ -781,7 +781,7 @@ class Qvain {
       : undefined
     this.accessType = at
       ? AccessType(at.pref_label, at.identifier)
-      : AccessType(undefined, AccessTypeURLs.OPEN)
+      : AccessType(undefined, ACCESS_TYPE_URL.OPEN)
 
     // Embargo date
     const embargoDate = researchDataset.access_rights.available
@@ -795,7 +795,7 @@ class Qvain {
       : undefined
     if (l !== undefined) {
       if (l.identifier !== undefined) {
-        this.license = l ? License(l.title, l.identifier) : License(undefined, LicenseUrls.CCBY4)
+        this.license = l ? License(l.title, l.identifier) : License(undefined, LICENSE_URL.CCBY4)
       } else {
         this.license = l
           ? License(
@@ -805,7 +805,7 @@ class Qvain {
             },
             'other'
           )
-          : License(undefined, LicenseUrls.CCBY4)
+          : License(undefined, LICENSE_URL.CCBY4)
         this.otherLicenseUrl = l.license
       }
     } else {
@@ -946,7 +946,7 @@ class Qvain {
 
   @computed
   get isPas() {
-    return this.dataCatalog === DataCatalogIdentifiers.PAS || this.preservationState > 0
+    return this.dataCatalog === DATA_CATALOG_IDENTIFIER.PAS || this.preservationState > 0
   }
 
   @computed
@@ -974,7 +974,7 @@ class Qvain {
 
   @computed
   get isCumulative() {
-    return this.cumulativeState === CumulativeStates.YES
+    return this.cumulativeState === CUMULATIVE_STATE.YES
   }
 
   @computed
@@ -1007,7 +1007,7 @@ export const Directory = (dir, parent, selected, open) => ({
   loaded: !!dir.directories,
   directoryName: dir.directory_name,
   directories: dir.directories ? dir.directories.map((d) => Directory(d, dir, false, false)) : [],
-  useCategory: dir.use_category || UseCategoryURLs.OUTCOME_MATERIAL,
+  useCategory: dir.use_category || USE_CATEGORY_URL.OUTCOME_MATERIAL,
   fileType: dir.file_type,
   files: dir.files ? dir.files.map((f) => File(f, dir, false)) : [],
   description: dir.description || 'Folder',
@@ -1022,7 +1022,7 @@ export const File = (file, parent, selected) => ({
   fileName: file.file_name,
   filePath: file.file_path,
   useCategory:
-    getPath('file_characteristics.use_category', file) || UseCategoryURLs.OUTCOME_MATERIAL,
+    getPath('file_characteristics.use_category', file) || USE_CATEGORY_URL.OUTCOME_MATERIAL,
   fileType: getPath('file_characteristics.file_type', file),
   description: getPath('file_characteristics.description', file) || 'File',
   title: getPath('file_characteristics.title', file) || file.file_name,

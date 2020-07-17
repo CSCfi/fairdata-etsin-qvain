@@ -13,15 +13,25 @@ from etsin_finder.utils import executing_travis
 
 
 def _get_app_config_from_file():
+    """Get app config from file
+
+    Returns:
+        object: Python object containing the app configs
+
+    """
     with open('/home/etsin-user/app_config') as app_config_file:
         return yaml.load(app_config_file, Loader=yaml.FullLoader)
 
 
 def get_app_config(is_testing):
-    """
-    Get app config.
+    """Get app config.
 
-    :return:
+    Args:
+        is_testing (bool): Testing.
+
+    Returns:
+        function: function to get app config.
+
     """
     if executing_travis():
         return _get_app_config_for_travis()
@@ -31,6 +41,12 @@ def get_app_config(is_testing):
 
 
 def _get_test_app_config():
+    """Get test app config
+
+    Returns:
+        dict: app config.
+
+    """
     return {
         'TESTING': True,
         'APP_LOG_LEVEL': 'DEBUG',
@@ -54,6 +70,12 @@ def _get_test_app_config():
 
 
 def _get_app_config_for_travis():
+    """Get app config for travis
+
+    Returns:
+        dict: app config.
+
+    """
     return {
         'TESTING': True,
         'APP_LOG_LEVEL': 'DEBUG',
@@ -64,10 +86,14 @@ def _get_app_config_for_travis():
 
 
 def get_memcached_config(is_testing):
-    """
-    Get memcached config.
+    """Get memcached config.
 
-    :return:
+    Args:
+        is_testing (bool): Testing.
+
+    Returns:
+        dict: Dict with memcache configs or None.
+
     """
     if executing_travis() or is_testing:
         return None
@@ -83,10 +109,14 @@ def get_memcached_config(is_testing):
 
 
 def get_download_api_config(is_testing):
-    """
-    Get download API config.
+    """Get download API config.
 
-    :return:
+    Args:
+        is_testing (bool): Testing.
+
+    Returns:
+        dict: Download api config or None
+
     """
     if executing_travis() or is_testing:
         return None
@@ -102,10 +132,14 @@ def get_download_api_config(is_testing):
 
 
 def get_fairdata_rems_api_config(is_testing):
-    """
-    Get Fairdata Rems API config.
+    """Get Fairdata Rems API config.
 
-    :return:
+    Args:
+        is_testing (bool): Testing.
+
+    Returns:
+        dict: REMS api config or None.
+
     """
     if executing_travis() or is_testing:
         return None
@@ -121,10 +155,14 @@ def get_fairdata_rems_api_config(is_testing):
 
 
 def get_metax_api_config(is_testing):
-    """
-    Get Metax API config.
+    """Get Metax API config.
 
-    :return:
+    Args:
+        is_testing (bool): Testing.
+
+    Returns:
+        dict: Metax api configuration or None.
+
     """
     if executing_travis() or is_testing:
         return None
@@ -140,10 +178,14 @@ def get_metax_api_config(is_testing):
     return metax_api_conf
 
 def get_metax_qvain_api_config(is_testing):
-    """
-    Get Metax API config for Qvain-Light.
+    """Get Metax API config for Qvain-Light.
 
-    :return:
+    Args:
+        is_testing (bool): Testing.
+
+    Returns:
+        dict: Metax api config for Qvain Light, or None.
+
     """
     if executing_travis() or is_testing:
         return None

@@ -32,6 +32,7 @@ import checkDataLang, { getDataLang } from '../../utils/checkDataLang'
 import checkNested from '../../utils/checkNested'
 import dateFormat from '../../utils/dateFormat'
 import Tracking from '../../utils/tracking'
+import { ACCESS_TYPE_URL, DATA_CATALOG_IDENTIFIER } from '../../utils/constants'
 
 const ReactMarkdown = require('react-markdown')
 
@@ -99,7 +100,7 @@ class Description extends Component {
               />
             )}
             {(this.props.dataset.data_catalog.catalog_json.identifier ===
-              'urn:nbn:fi:att:data-catalog-pas' ||
+              DATA_CATALOG_IDENTIFIER.PAS ||
               this.props.dataset.preservation_state === 80) && (
               <FairdataPasDatasetIcon
                 preservation_state={this.props.dataset.preservation_state}
@@ -128,8 +129,7 @@ class Description extends Component {
                   emails={this.props.emails}
                   // TEMPORARY: rems check won't be needed in contact later.
                   isRems={
-                    this.props.dataset.research_dataset.access_rights.access_type.identifier ===
-                    'http://uri.suomi.fi/codelist/fairdata/access_type/code/permit'
+                    this.props.dataset.research_dataset.access_rights.access_type.identifier === ACCESS_TYPE_URL.PERMIT
                   }
                 />
               )}
@@ -140,7 +140,7 @@ class Description extends Component {
         <section>
           <div>
             {
-              (this.props.dataset.data_catalog.catalog_json.identifier === 'urn:nbn:fi:att:data-catalog-pas') &&
+              (this.props.dataset.data_catalog.catalog_json.identifier === DATA_CATALOG_IDENTIFIER.PAS) &&
               (
                 <PasInfo>
                   <Translate content="dataset.storedInPas" />

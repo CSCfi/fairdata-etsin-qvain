@@ -1,7 +1,9 @@
 import axios from 'axios'
 
+import { METAX_FAIRDATA_ROOT_URL } from '../../../utils/constants'
+
 const getReferenceData = referenceData =>
-  axios.get(`https://metax.fairdata.fi/es/reference_data/${referenceData}/_search?size=1000`)
+  axios.get(`${METAX_FAIRDATA_ROOT_URL}/es/reference_data/${referenceData}/_search?size=1000`)
 
 export default getReferenceData
 
@@ -43,7 +45,7 @@ export const getReferenceDataAsync = (inputValue, lang) =>
           const option = {
             label: hit._source.label[lang],
             value: hit._source.uri,
-            locale: hit._source.label
+            locale: hit._source.label,
           }
           return option
         })

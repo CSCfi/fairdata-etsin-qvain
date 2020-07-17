@@ -28,64 +28,59 @@ class MetaxQvainLightAPIService(MetaxQvainLightAPIServiceV1):
     """
 
     def __init__(self, app):
-        """
-        Init Metax API Service.
-
-        :param metax_api_config:
-        """
+        """Init Metax API Service."""
         super().__init__(app)
 
         metax_qvain_api_config = get_metax_qvain_api_config(app.testing)
 
         if metax_qvain_api_config:
 
-            self.METAX_GET_DIRECTORY_FOR_PROJECT_URL = 'https://{0}/rest/v2/directories'.format(metax_qvain_api_config['HOST']) + \
+            self.METAX_GET_DIRECTORY_FOR_PROJECT_URL = 'https://{0}/rest/v2/directories'.format(metax_qvain_api_config.get('HOST')) + \
                                                        '/files?project={0}&path=%2F&include_parent'
-            self.METAX_GET_DIRECTORY = 'https://{0}/rest/v2/directories'.format(metax_qvain_api_config['HOST']) + \
+            self.METAX_GET_DIRECTORY = 'https://{0}/rest/v2/directories'.format(metax_qvain_api_config.get('HOST')) + \
                                        '/{0}/files'
-            self.METAX_GET_FILE = 'https://{0}/rest/v2/files'.format(metax_qvain_api_config['HOST']) + \
+            self.METAX_GET_FILE = 'https://{0}/rest/v2/files'.format(metax_qvain_api_config.get('HOST')) + \
                                   '/{0}'
-            self.METAX_UPDATE_DATASET_FILES = 'https://{0}/rest/v2/datasets'.format(metax_qvain_api_config['HOST'], ) + \
+            self.METAX_UPDATE_DATASET_FILES = 'https://{0}/rest/v2/datasets'.format(metax_qvain_api_config.get('HOST'), ) + \
                 '/{0}/files'
-            self.METAX_GET_DATASET = 'https://{0}/rest/v2/datasets'.format(metax_qvain_api_config['HOST'], ) + \
+            self.METAX_GET_DATASET = 'https://{0}/rest/v2/datasets'.format(metax_qvain_api_config.get('HOST'), ) + \
                                      '/{0}'
-            self.METAX_GET_DATASET_USER_METADATA = 'https://{0}/rest/v2/datasets'.format(metax_qvain_api_config['HOST'], ) + \
+            self.METAX_GET_DATASET_USER_METADATA = 'https://{0}/rest/v2/datasets'.format(metax_qvain_api_config.get('HOST'), ) + \
                 '/{0}/files/user_metadata'
             self.METAX_PUT_DATASET_USER_METADATA = self.METAX_GET_DATASET_USER_METADATA
-            self.METAX_GET_DATASET_PROJECTS = 'https://{0}/rest/v2/datasets'.format(metax_qvain_api_config['HOST'], ) + \
+            self.METAX_GET_DATASET_PROJECTS = 'https://{0}/rest/v2/datasets'.format(metax_qvain_api_config.get('HOST'), ) + \
                 '/{0}/projects'
-            self.METAX_GET_DATASETS_FOR_USER = 'https://{0}/rest/v2/datasets'.format(metax_qvain_api_config['HOST']) + \
+            self.METAX_GET_DATASETS_FOR_USER = 'https://{0}/rest/v2/datasets'.format(metax_qvain_api_config.get('HOST')) + \
                                                '?metadata_provider_user={0}&ordering=-date_created'
-            self.METAX_GET_ALL_DATASETS_FOR_USER = 'https://{0}/rest/v2/datasets'.format(metax_qvain_api_config['HOST']) + \
+            self.METAX_GET_ALL_DATASETS_FOR_USER = 'https://{0}/rest/v2/datasets'.format(metax_qvain_api_config.get('HOST')) + \
                 '?metadata_provider_user={0}&ordering=-date_created&no_pagination=true'
-            self.METAX_CREATE_DATASET = 'https://{0}/rest/v2/datasets'.format(metax_qvain_api_config['HOST'])
-            self.METAX_PATCH_DATASET = 'https://{0}/rest/v2/datasets'.format(metax_qvain_api_config['HOST'], ) + \
+            self.METAX_CREATE_DATASET = 'https://{0}/rest/v2/datasets'.format(metax_qvain_api_config.get('HOST'))
+            self.METAX_PATCH_DATASET = 'https://{0}/rest/v2/datasets'.format(metax_qvain_api_config.get('HOST'), ) + \
                                        '/{0}'
-            self.METAX_DELETE_DATASET = 'https://{0}/rest/v2/datasets'.format(metax_qvain_api_config['HOST'], ) + \
+            self.METAX_DELETE_DATASET = 'https://{0}/rest/v2/datasets'.format(metax_qvain_api_config.get('HOST'), ) + \
                                         '/{0}'
-            self.METAX_CHANGE_CUMULATIVE_STATE = 'https://{0}/rpc/v2/datasets/change_cumulative_state'.format(metax_qvain_api_config['HOST'])
+            self.METAX_CHANGE_CUMULATIVE_STATE = 'https://{0}/rpc/v2/datasets/change_cumulative_state'.format(metax_qvain_api_config.get('HOST'))
             self.METAX_REFRESH_DIRECTORY_CONTENT = None
-            self.METAX_FIX_DEPRECATED = 'https://{0}/rpc/v2/datasets/fix_deprecated'.format(metax_qvain_api_config['HOST'])
-            self.METAX_CREATE_NEW_VERSION = 'https://{0}/rpc/v2/datasets/create_new_version'.format(metax_qvain_api_config['HOST'])
-            self.METAX_PUBLISH_DATASET = 'https://{0}/rpc/v2/datasets/publish_dataset'.format(metax_qvain_api_config['HOST'])
-            self.METAX_MERGE_DRAFT = 'https://{0}/rpc/v2/datasets/merge_draft'.format(metax_qvain_api_config['HOST'])
-            self.METAX_CREATE_DRAFT = 'https://{0}/rpc/v2/datasets/create_draft'.format(metax_qvain_api_config['HOST'])
-            self.user = metax_qvain_api_config['USER']
-            self.pw = metax_qvain_api_config['PASSWORD']
+            self.METAX_FIX_DEPRECATED = 'https://{0}/rpc/v2/datasets/fix_deprecated'.format(metax_qvain_api_config.get('HOST'))
+            self.METAX_CREATE_NEW_VERSION = 'https://{0}/rpc/v2/datasets/create_new_version'.format(metax_qvain_api_config.get('HOST'))
+            self.METAX_PUBLISH_DATASET = 'https://{0}/rpc/v2/datasets/publish_dataset'.format(metax_qvain_api_config.get('HOST'))
+            self.METAX_MERGE_DRAFT = 'https://{0}/rpc/v2/datasets/merge_draft'.format(metax_qvain_api_config.get('HOST'))
+            self.METAX_CREATE_DRAFT = 'https://{0}/rpc/v2/datasets/create_draft'.format(metax_qvain_api_config.get('HOST'))
+            self.user = metax_qvain_api_config.get('USER')
+            self.pw = metax_qvain_api_config.get('PASSWORD')
             self.verify_ssl = metax_qvain_api_config.get('VERIFY_SSL', True)
         elif not self.is_testing:
             log.error("Unable to initialize MetaxAPIService due to missing config")
 
     def create_dataset(self, data, params=None):
-        """
-        Send the data from the frontend to Metax.
+        """Send the data from the frontend to Metax.
 
         Arguments:
-            data {object} -- Object with the dataset data that has been validated and converted to comply with the Metax schema.
-            params {dict} -- Dictionary of key-value pairs of query parameters.
+            data (object): Object with the dataset data that has been validated and converted to comply with the Metax schema.
+            params (dict): Dictionary of key-value pairs of query parameters.
 
         Returns:
-            [type] -- The response from Metax.
+            The response from Metax.
 
         """
         req_url = self.METAX_CREATE_DATASET
@@ -115,17 +110,16 @@ class MetaxQvainLightAPIService(MetaxQvainLightAPIServiceV1):
         return metax_api_response.json(), metax_api_response.status_code
 
     def update_dataset(self, data, cr_id, last_modified, params):
-        """
-        Update a dataset with the data that the user has entered in Qvain-light.
+        """Update a dataset with the data that the user has entered in Qvain-light.
 
         Arguments:
-            data {object} -- Object with the dataset data that has been validated and converted to comply with the Metax schema.
-            cr_id {string} -- The identifier of the dataset.
-            last_modified {string} -- HTTP datetime string (RFC2616)
-            params {dict} -- Dictionary of key-value pairs of query parameters.
+            data (object): Object with the dataset data that has been validated and converted to comply with the Metax schema.
+            cr_id (str): The identifier of the dataset.
+            last_modified (str): HTTP datetime string (RFC2616)
+            params (dict): Dictionary of key-value pairs of query parameters.
 
         Returns:
-            [type] -- The response from Metax.
+            The response from Metax.
 
         """
         req_url = self.METAX_PATCH_DATASET.format(cr_id)
@@ -161,17 +155,16 @@ class MetaxQvainLightAPIService(MetaxQvainLightAPIServiceV1):
         return metax_api_response.json(), metax_api_response.status_code
 
     def update_dataset_files(self, cr_id, data, params=None):
-        """
-        Add or remove files in a dataset.
+        """Add or remove files in a dataset.
 
         Arguments:
-            data {object} -- Object with lists of directory/file addition and removal actions.
-            cr_id {string} -- The identifier of the dataset.
-            params {dict} -- Dictionary of key-value pairs of query parameters.
+            data (object): Object with lists of directory/file addition and removal actions.
+            cr_id (str): The identifier of the dataset.
+            params (dict): Dictionary of key-value pairs of query parameters.
                 Use e.g. "allowed_projects=project_x,project_y" to prevent user from accessing files that are not in their projects.
 
         Returns:
-            [type] -- The response from Metax.
+            The response from Metax.
 
         """
         req_url = self.METAX_UPDATE_DATASET_FILES.format(cr_id)
@@ -205,14 +198,13 @@ class MetaxQvainLightAPIService(MetaxQvainLightAPIServiceV1):
         return json_or_empty(metax_api_response), metax_api_response.status_code
 
     def get_dataset_user_metadata(self, cr_id):
-        """
-        Get user-defined file metadata for dataset from Metax.
+        """Get user-defined file metadata for dataset from Metax.
 
         Arguments:
-            cr_id {string} -- The identifier of the dataset.
+            cr_id (str): The identifier of the dataset.
 
         Returns:
-            [type] -- Metax response.
+            Metax response.
 
         """
         req_url = self.METAX_GET_DATASET_USER_METADATA.format(cr_id)
@@ -239,8 +231,7 @@ class MetaxQvainLightAPIService(MetaxQvainLightAPIServiceV1):
         return json_or_empty(metax_api_response), metax_api_response.status_code
 
     def update_dataset_user_metadata(self, cr_id, data):
-        """
-        Update user-defined file metadata for dataset from Metax.
+        """Update user-defined file metadata for dataset from Metax.
 
         The data directory should contain arrays of dictionaries containing metadata in the following format:
         data = {
@@ -251,11 +242,11 @@ class MetaxQvainLightAPIService(MetaxQvainLightAPIServiceV1):
         To remove metadata, set delete = true for a directory or file.
 
         Arguments:
-            cr_id {string} -- The identifier of the dataset.
-            data -- Dictionary of file/directory metadata updates,
+            cr_id (str): The identifier of the dataset.
+            data (dict): Dictionary of file/directory metadata updates,
 
         Returns:
-            [type] -- Metax response.
+            Metax response.
 
         """
         req_url = self.METAX_PUT_DATASET_USER_METADATA.format(cr_id)
@@ -284,14 +275,13 @@ class MetaxQvainLightAPIService(MetaxQvainLightAPIServiceV1):
         return json_or_empty(metax_api_response), metax_api_response.status_code
 
     def get_dataset_projects(self, cr_id):
-        """
-        Get dataset projects from Metax.
+        """Get dataset projects from Metax.
 
         Arguments:
-            cr_id {string} -- The identifier of the dataset.
+            cr_id (str): The identifier of the dataset.
 
         Returns:
-            [type] -- Metax response.
+            Metax response.
 
         """
         req_url = self.METAX_GET_DATASET_PROJECTS.format(cr_id)
@@ -326,14 +316,13 @@ class MetaxQvainLightAPIService(MetaxQvainLightAPIServiceV1):
         return "API removed", 403
 
     def create_new_version(self, cr_identifier):
-        """
-        Call Metax create_new_version RPC.
+        """Call Metax create_new_version RPC.
 
         Arguments:
-            cr_identifier {string} -- The identifier of the dataset.
+            cr_identifier (str): The identifier of the dataset.
 
         Returns:
-            [type] -- Metax response.
+            Metax response.
 
         """
         req_url = self.METAX_CREATE_NEW_VERSION
@@ -365,14 +354,13 @@ class MetaxQvainLightAPIService(MetaxQvainLightAPIServiceV1):
         return (json_or_empty(metax_api_response) or metax_api_response.text), metax_api_response.status_code
 
     def publish_dataset(self, cr_identifier):
-        """
-        Call Metax publish_dataset RPC to publish a draft dataset.
+        """Call Metax publish_dataset RPC to publish a draft dataset.
 
         Arguments:
-            cr_identifier {string} -- The identifier of the draft dataset.
+            cr_identifier (str): The identifier of the draft dataset.
 
         Returns:
-            [type] -- Metax response.
+            Metax response.
 
         """
         req_url = self.METAX_PUBLISH_DATASET
@@ -404,14 +392,13 @@ class MetaxQvainLightAPIService(MetaxQvainLightAPIServiceV1):
         return (json_or_empty(metax_api_response) or metax_api_response.text), metax_api_response.status_code
 
     def merge_draft(self, cr_identifier):
-        """
-        Call Metax merge_draft RPC to merge a draft to the corresponding published dataset.
+        """Call Metax merge_draft RPC to merge a draft to the corresponding published dataset.
 
         Arguments:
-            cr_identifier {string} -- The identifier of the draft dataset.
+            cr_identifier (str): The identifier of the draft dataset.
 
         Returns:
-            [type] -- Metax response.
+            Metax response.
 
         """
         req_url = self.METAX_MERGE_DRAFT
@@ -443,14 +430,13 @@ class MetaxQvainLightAPIService(MetaxQvainLightAPIServiceV1):
         return (json_or_empty(metax_api_response) or metax_api_response.text), metax_api_response.status_code
 
     def create_draft(self, cr_identifier):
-        """
-        Call Metax create_draft RPC to publish a draft dataset.
+        """Call Metax create_draft RPC to publish a draft dataset.
 
         Arguments:
-            cr_identifier {string} -- The identifier of the draft dataset.
+            cr_identifier (str): The identifier of the draft dataset.
 
         Returns:
-            [type] -- Metax response.
+            Metax response.
 
         """
         req_url = self.METAX_CREATE_DRAFT

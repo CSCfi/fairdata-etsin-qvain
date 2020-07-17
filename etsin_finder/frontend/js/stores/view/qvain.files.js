@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { observable, action, runInAction, computed } from 'mobx'
 
-import { FileAPIURLs } from '../../components/qvain/utils/constants'
+import { FILE_API_URLS } from '../../utils/constants'
 import { Project, hasMetadata, dirIdentifierKey, fileIdentifierKey } from './qvain.files.items'
 import { PromiseManager, ChildItemCounter, getAction } from './qvain.files.utils'
 import { itemLoaderAny, FetchType } from './qvain.files.loaders'
@@ -91,7 +91,7 @@ class Files {
     }
 
     const load = async () => {
-      const { data } = await axios.get(FileAPIURLs.V2_DATASET_PROJECTS + identifier)
+      const { data } = await axios.get(FILE_API_URLS.V2_DATASET_PROJECTS + identifier)
       runInAction(() => {
         if (data.length > 0) {
           this.selectedProject = data[0]
@@ -137,7 +137,7 @@ class Files {
     }
 
     const load = async () => {
-      const { data } = await axios.get(FileAPIURLs.V2_DATASET_USER_METADATA + identifier)
+      const { data } = await axios.get(FILE_API_URLS.V2_DATASET_USER_METADATA + identifier)
       runInAction(() => {
         // Load metadata for files and directories selected in the dataset.
         const dsFiles = data.files || []
@@ -243,7 +243,7 @@ class Files {
     }
 
     const fetchRootIdentifier = async (projectIdentifier) => {
-      const { data } = await axios.get(FileAPIURLs.V2_PROJECT_DIR_URL + projectIdentifier)
+      const { data } = await axios.get(FILE_API_URLS.V2_PROJECT_DIR_URL + projectIdentifier)
       return data.identifier
     }
 

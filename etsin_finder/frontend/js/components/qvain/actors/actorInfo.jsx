@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { inject, observer } from 'mobx-react'
 import Translate from 'react-translate-component'
-import { EntityType } from '../utils/constants'
+import { ENTITY_TYPE } from '../../../utils/constants'
 
 import PersonInfo from './personForm'
 import OrgInfo from './orgInfo'
@@ -15,7 +15,7 @@ export const ActorInfoBase = (props) => {
   return (
     <>
       <Translate component={GroupLabel} content="qvain.actors.add.groups.info" />
-      {actor.type === EntityType.PERSON && <PersonInfo />}
+      {actor.type === ENTITY_TYPE.PERSON && <PersonInfo />}
       <OrgInfo />
     </>
   )
