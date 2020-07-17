@@ -1,4 +1,7 @@
 import React, { Component, Fragment } from 'react'
+import styled from 'styled-components'
+import Translate from 'react-translate-component'
+
 import DatasetQuery from '../../../../stores/view/datasetquery'
 import checkDataLang from '../../../../utils/checkDataLang'
 import checkNested from '../../../../utils/checkNested'
@@ -51,22 +54,26 @@ export default class Citation extends Component {
       })
     )
     cit.push(checkDataLang(this.state.title))
-    if (this.state.publisher) {
-      cit.push(checkDataLang(this.state.publisher))
-    }
+    cit.push(checkDataLang(this.state.publisher))
     cit.push(checkDataLang(this.state.release_date))
     cit.push(checkDataLang(this.state.pid))
-    return cit.join(', ')
-  }
-
-  render() {
-    if (this.state.citation) {
-      return <Fragment>{this.state.citation}</Fragment>
-    }
     return (
       <Fragment>
-        <span>{this.createCitation()}</span>
+        <span>{cit.filter(element => element).join(', ')}</span>
+        { !this.state.release_date &&
+          <TextMuted><Translate content="dataset.citationNoReleaseDate" /></TextMuted> }
       </Fragment>
     )
   }
+
+  render() {
+    if (this.state.citation) return this.state.citation
+    return this.createCitation()
+  }
 }
+
+const TextMuted = styled.div`
+  color: ${props => props.theme.color.gray};
+  font-size: .9rem;
+  margin-top: .3rem;
+`
