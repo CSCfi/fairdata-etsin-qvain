@@ -485,6 +485,13 @@ const english = {
         addButton: 'Add field of science',
         help: 'You can add multiple field of science.',
       },
+      datasetLanguage: {
+        title: 'Dataset language',
+        infoText: 'Select languages used in the dataset.',
+        placeholder: 'Select language',
+        addButton: 'Add language',
+        help: 'You can add multiple languages.'
+      },
       keywords: {
         title: 'Keywords',
         infoText: 'Set keywords that characterize the dataset.',

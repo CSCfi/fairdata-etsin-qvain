@@ -483,6 +483,13 @@ const finnish = {
         addButton: 'Lisää tieteenala',
         help: 'Voit lisätä useita tieteenaloja.',
       },
+      datasetLanguage: {
+        title: 'Aineiston kieli',
+        infoText: 'Valitse aineistossa käytetyt kielet.',
+        placeholder: 'Valitse kielet',
+        addButton: 'Lisää kieli',
+        help: 'Voit lisätä useita kieliä.'
+      },
       keywords: {
         title: 'Avainsanat',
         infoText:
