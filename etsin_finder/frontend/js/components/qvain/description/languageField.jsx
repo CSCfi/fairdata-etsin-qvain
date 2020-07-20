@@ -39,7 +39,7 @@ class LanguageField extends Component {
           const { hits } = resp.data.hits
           const en = hits.map((ref) => ({
             value: ref._source.uri,
-            label: ref._source.label.en,
+            label: ref._source.label.en || ref._source.label.und,
           }))
           const fi = hits.map((ref) => ({
             value: ref._source.uri,
