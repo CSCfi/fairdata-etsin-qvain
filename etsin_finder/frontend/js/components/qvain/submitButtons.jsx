@@ -128,7 +128,6 @@ class SubmitButtons extends Component {
     }
 
     const obj = handleSubmitToBackend(this.props.Stores.Qvain)
-    console.log(obj)
 
     obj.original = original
 

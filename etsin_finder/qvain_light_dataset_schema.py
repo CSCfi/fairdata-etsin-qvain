@@ -70,6 +70,7 @@ class ActorValidationSchema(Schema):
 
 class ThemeValidationSchema(Schema):
     """Validation schema for theme."""
+
     identifier = fields.URL(
         required=True,
         validate=Length(min=1)

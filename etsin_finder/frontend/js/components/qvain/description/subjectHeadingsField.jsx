@@ -27,14 +27,10 @@ class SubjectHeadingsField extends Component {
     }
   }
 
-  handleChange = (newValue, actionMeta) => {
+  handleChange = newValue => {
     const { setSubjectHeadingValue, addToSubjectHeadingsArray } = this.props.Stores.Qvain
     setSubjectHeadingValue(newValue)
     addToSubjectHeadingsArray()
-    console.group('Value Changed')
-    console.log(newValue)
-    console.log(`action: ${actionMeta.action}`)
-    console.groupEnd()
   }
 
   render() {
@@ -88,7 +84,6 @@ class SubjectHeadingsField extends Component {
             // cacheOptions
             onChange={this.handleChange}
             value={subjectHeadingValue}
-            // onInputChange={this.handleInputChange}
             loadOptions={value => getReferenceDataAsync(value, this.state.lang)}
             attributes={{ placeholder: 'qvain.description.subjectHeadings.placeholder' }}
             width="90%"

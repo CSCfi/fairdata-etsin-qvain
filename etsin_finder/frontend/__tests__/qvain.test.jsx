@@ -9,6 +9,7 @@ import DescriptionField from '../js/components/qvain/description/descriptionFiel
 import OtherIdentifierField from '../js/components/qvain/description/otherIdentifierField'
 import FieldOfScienceField from '../js/components/qvain/description/fieldOfScienceField'
 import KeywordsField from '../js/components/qvain/description/keywordsField'
+import SubjectHeadingsField from '../js/components/qvain/description/subjectHeadingsField'
 import RightsAndLicenses from '../js/components/qvain/licenses'
 import { License } from '../js/components/qvain/licenses/licenses'
 import { AccessType } from '../js/components/qvain/licenses/accessType'
@@ -138,6 +139,10 @@ describe('Qvain.Description', () => {
     const component = shallow(<KeywordsField Stores={getStores()} />)
     expect(component).toMatchSnapshot()
   })
+  it('should render <SubjectHeadingsField />', () => {
+    const component = shallow(<SubjectHeadingsField Stores={getStores()} />)
+    expect(component).toMatchSnapshot()
+  })
 })
 
 describe('Qvain dataset list filtering', () => {
@@ -202,7 +207,12 @@ describe('Qvain dataset list filtering', () => {
   })
 
   it('ignores case when filtering by title', () => {
-    expect(filterByTitle('dataset', datasets)).toEqual([dataset, datasets[1], datasets[2], dataset2])
+    expect(filterByTitle('dataset', datasets)).toEqual([
+      dataset,
+      datasets[1],
+      datasets[2],
+      dataset2,
+    ])
   })
 })
 

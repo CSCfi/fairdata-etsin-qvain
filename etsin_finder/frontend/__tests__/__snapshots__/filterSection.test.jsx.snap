@@ -33,7 +33,6 @@ exports[`FilterSection should render <FilterSection /> 1`] = `
       rotation={null}
       size="2x"
       spin={false}
-      swapOpacity={false}
       symbol={false}
       title=""
       transform={null}
