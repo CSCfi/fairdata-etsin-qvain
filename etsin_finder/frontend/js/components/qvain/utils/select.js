@@ -52,11 +52,11 @@ const parseRefResponse = res => {
   const refsFi = hits.map(hit => ({
     value: hit._source.uri,
     label: hit._source.label.fi || hit._source.label.und,
-  }))
+  })).sort((a, b) => a.label.localeCompare(b.label))
   const refsEn = hits.map(hit => ({
     value: hit._source.uri,
     label: hit._source.label.en || hit._source.label.und,
-  }))
+  })).sort((a, b) => a.label.localeCompare(b.label))
   return {
     en: refsEn,
     fi: refsFi,
