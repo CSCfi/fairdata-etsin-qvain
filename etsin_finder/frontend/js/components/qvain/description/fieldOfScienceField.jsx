@@ -4,9 +4,8 @@ import { inject, observer } from 'mobx-react'
 import Select from 'react-select'
 import Translate from 'react-translate-component'
 import styled from 'styled-components'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTimes } from '@fortawesome/free-solid-svg-icons'
-import Label from '../general/label'
+
+import AddedValue from '../general/addedValue'
 import Button from '../../general/button'
 import getReferenceData from '../utils/getReferenceData'
 import Card from '../general/card'
@@ -28,13 +27,13 @@ class FieldOfScienceField extends React.Component {
   componentDidMount = () => {
     this.promises.push(
       getReferenceData('field_of_science')
-        .then((res) => {
+        .then(res => {
           const list = res.data.hits.hits
-          const refsEn = list.map((ref) => ({
+          const refsEn = list.map(ref => ({
             value: ref._source.uri,
             label: ref._source.label.en,
           }))
-          const refsFi = list.map((ref) => ({
+          const refsFi = list.map(ref => ({
             value: ref._source.uri,
             label: ref._source.label.fi,
           }))
@@ -45,7 +44,7 @@ class FieldOfScienceField extends React.Component {
             },
           })
         })
-        .catch((error) => {
+        .catch(error => {
           if (error.response) {
             // Error response from Metax
             console.log(error.response.data)
@@ -63,10 +62,10 @@ class FieldOfScienceField extends React.Component {
   }
 
   componentWillUnmount() {
-    this.promises.forEach((promise) => promise && promise.cancel && promise.cancel())
+    this.promises.forEach(promise => promise && promise.cancel && promise.cancel())
   }
 
-  removeFieldOfScience = (fieldOfScienceToRemove) => {
+  removeFieldOfScience = fieldOfScienceToRemove => {
     this.props.Stores.Qvain.removeFieldOfScience(fieldOfScienceToRemove)
   }
 
@@ -81,16 +80,18 @@ class FieldOfScienceField extends React.Component {
     const { lang } = this.props.Stores.Locale
     const { options } = this.state
 
-    const fieldOfScienceFaculty = fieldOfScienceArray.map((fieldOfScienceEntry) => (
-      <Label color="#007fad" margin="0 0.5em 0.5em 0" key={fieldOfScienceEntry.url}>
-        <PaddedWord>{fieldOfScienceEntry.name[lang]}</PaddedWord>
-        <FontAwesomeIcon
-          onClick={() => this.removeFieldOfScience(fieldOfScienceEntry)}
-          icon={faTimes}
-          size="xs"
+    const fieldOfScienceFaculty = fieldOfScienceArray.map(fieldOfScienceEntry => {
+      const { url, name } = fieldOfScienceEntry
+      return (
+        <AddedValue
+          key={url}
+          readonly={readonly}
+          id={url}
+          text={name[lang]}
+          remove={this.removeFieldOfScience}
         />
-      </Label>
-    ))
+      )
+    })
     return (
       <Card>
         <LabelLarge htmlFor="fieldOfScienceSelect">
@@ -125,9 +126,6 @@ class FieldOfScienceField extends React.Component {
   }
 }
 
-const PaddedWord = styled.span`
-  padding-right: 10px;
-`
 const ButtonContainer = styled.div`
   text-align: right;
 `

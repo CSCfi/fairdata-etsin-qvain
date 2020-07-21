@@ -370,6 +370,7 @@ const english = {
     common: {
       save: 'Save',
       cancel: 'Cancel',
+      remove: 'Remove'
     },
     confirmClose: {
       warning: 'You have unsaved changes. Are you sure you want to discard your changes?',

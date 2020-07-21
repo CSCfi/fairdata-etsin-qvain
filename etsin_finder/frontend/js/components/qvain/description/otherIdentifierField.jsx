@@ -3,12 +3,11 @@ import PropTypes from 'prop-types'
 import { inject, observer } from 'mobx-react'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import translate from 'counterpart'
+
 import Button from '../../general/button'
 import Card from '../general/card'
-import Label from '../general/label'
+import AddedValue from '../general/addedValue'
 import { otherIdentifiersArraySchema, otherIdentifierSchema } from '../utils/formValidation'
 import ValidationError from '../general/validationError'
 import { Input, LabelLarge } from '../general/form'
@@ -31,7 +30,12 @@ class OtherIdentifierField extends React.Component {
 
   handleAddClick = event => {
     event.preventDefault()
-    const { otherIdentifier, otherIdentifiersArray, addOtherIdentifier, setOtherIdentifierValidationError } = this.props.Stores.Qvain
+    const {
+      otherIdentifier,
+      otherIdentifiersArray,
+      addOtherIdentifier,
+      setOtherIdentifierValidationError,
+    } = this.props.Stores.Qvain
     otherIdentifierSchema
       .validate(otherIdentifier)
       .then(() => {
@@ -39,7 +43,9 @@ class OtherIdentifierField extends React.Component {
           addOtherIdentifier(otherIdentifier)
           this.clearInput()
         } else {
-          setOtherIdentifierValidationError(translate('qvain.description.otherIdentifiers.alreadyAdded'))
+          setOtherIdentifierValidationError(
+            translate('qvain.description.otherIdentifiers.alreadyAdded')
+          )
         }
       })
       .catch(err => {
@@ -71,12 +77,20 @@ class OtherIdentifierField extends React.Component {
   }
 
   render() {
-    const { readonly, otherIdentifier, otherIdentifiersArray, otherIdentifiersValidationError } = this.props.Stores.Qvain
+    const {
+      readonly,
+      otherIdentifier,
+      otherIdentifiersArray,
+      otherIdentifiersValidationError,
+    } = this.props.Stores.Qvain
     const otherIdentifiersLabels = otherIdentifiersArray.map(identifier => (
-      <Label color="primary" margin="0 0.5em 0.5em 0" key={identifier}>
-        <PaddedWord>{identifier}</PaddedWord>
-        <FontAwesomeIcon onClick={() => this.handleRemove(identifier)} icon={faTimes} size="xs" />
-      </Label>
+      <AddedValue
+        key={identifier}
+        readonly={readonly}
+        id={identifier}
+        text={identifier}
+        remove={this.handleRemove}
+      />
     ))
     return (
       <Card bottomContent>
@@ -94,7 +108,9 @@ class OtherIdentifierField extends React.Component {
           placeholder="http://doi.org/"
           onBlur={this.handleBlur}
         />
-        {otherIdentifiersValidationError && <ValidationError>{otherIdentifiersValidationError}</ValidationError>}
+        {otherIdentifiersValidationError && (
+          <ValidationError>{otherIdentifiersValidationError}</ValidationError>
+        )}
         <ButtonContainer>
           <AddNewButton type="button" onClick={this.handleAddClick} disabled={readonly}>
             <Translate content="qvain.description.otherIdentifiers.addButton" />
@@ -111,9 +127,6 @@ const ButtonContainer = styled.div`
 const AddNewButton = styled(Button)`
   margin: 0;
   margin-top: 11px;
-`
-const PaddedWord = styled.span`
-  padding-right: 10px;
 `
 
 export default inject('Stores')(observer(OtherIdentifierField))

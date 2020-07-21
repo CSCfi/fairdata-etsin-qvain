@@ -1,14 +1,16 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import Translate from 'react-translate-component'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 
 const AddedValue = ({ readonly, id, text, remove }) => (
-  <Container tabIndex="0">
-    <span>{text}</span>
+  <Container aria-labelledby={id} tabIndex="0">
+    <span id={id}>{text}</span>
     {!readonly && (
-      <RemoveButton onClick={() => remove(id)} aria-label="remove">
+      <RemoveButton onClick={() => remove(id)}>
+        <Translate content="qvain.common.remove" component={HiddenText} />
         <FontAwesomeIcon className="delete-keyword" size="xs" icon={faTimes} />
       </RemoveButton>
     )}
@@ -30,6 +32,14 @@ const RemoveButton = styled.button`
   color: inherit;
   background-color: inherit;
   padding-left: 10px;
+`
+const HiddenText = styled.span`
+  position: absolute;
+  left: -10000px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
 `
 
 AddedValue.propTypes = {

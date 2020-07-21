@@ -3,11 +3,9 @@ import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import { inject, observer } from 'mobx-react'
 import styled from 'styled-components'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTimes } from '@fortawesome/free-solid-svg-icons'
 
 import Card from '../general/card'
-import Label from '../general/label'
+import AddedValue from '../general/addedValue'
 import Button from '../../general/button'
 import { keywordsSchema } from '../utils/formValidation'
 import ValidationError from '../general/validationError'
@@ -22,7 +20,7 @@ class KeywordsField extends Component {
     keywordsValidationError: null,
   }
 
-  handleChange = (e) => {
+  handleChange = e => {
     const { setKeywordString } = this.props.Stores.Qvain
     setKeywordString(e.target.value)
     this.setState({ keywordsValidationError: null })
@@ -35,23 +33,23 @@ class KeywordsField extends Component {
       .then(() => {
         this.setState({ keywordsValidationError: null })
       })
-      .catch((err) => {
+      .catch(err => {
         this.setState({ keywordsValidationError: err.errors })
       })
   }
 
-  handleKeywordAdd = (e) => {
+  handleKeywordAdd = e => {
     e.preventDefault()
     const { addKeywordToKeywordArray } = this.props.Stores.Qvain
     addKeywordToKeywordArray()
   }
 
-  handleKeywordRemove = (word) => {
+  handleKeywordRemove = word => {
     const { removeKeyword } = this.props.Stores.Qvain
     removeKeyword(word)
   }
 
-  handleKeyDown = (e) => {
+  handleKeyDown = e => {
     if (e.keyCode === 188 || e.keyCode === 13) {
       this.handleKeywordAdd(e)
     }
@@ -59,19 +57,14 @@ class KeywordsField extends Component {
 
   render() {
     const { readonly, keywordsArray, keywordString } = this.props.Stores.Qvain
-    const RenderedKeywords = keywordsArray.map((word) => (
-      <Label color="#007fad" margin="0 0.5em 0.5em 0" key={word}>
-        <PaddedWord>{word}</PaddedWord>
-        {!readonly && (
-          <FontAwesomeIcon
-            className="delete-keyword"
-            size="xs"
-            icon={faTimes}
-            aria-label="remove"
-            onClick={() => this.handleKeywordRemove(word)}
-          />
-        )}
-      </Label>
+    const RenderedKeywords = keywordsArray.map(word => (
+      <AddedValue
+        key={word}
+        readonly={readonly}
+        id={word}
+        text={word}
+        remove={this.handleKeywordRemove}
+      />
     ))
     return (
       <Card>
@@ -108,10 +101,6 @@ const Input = styled.input`
   color: #808080;
   margin-bottom: 20px;
 `
-const PaddedWord = styled.span`
-  padding-right: 10px;
-`
-
 const ButtonContainer = styled.div`
   text-align: right;
 `

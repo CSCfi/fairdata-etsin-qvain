@@ -369,6 +369,7 @@ const finnish = {
     common: {
       save: 'Tallenna',
       cancel: 'Peruuta',
+      remove: 'Poista'
     },
     confirmClose: {
       warning: 'Sinulla on tallentamattomia muutoksia. Perutaanko muutokset?',
