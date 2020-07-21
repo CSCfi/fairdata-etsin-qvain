@@ -233,8 +233,9 @@ class Qvain {
 
   @action
   addDatasetLanguage = (language) => {
-    if (!language) return
-    this.datasetLanguageArray.push(DatasetLanguage(language.name, language.url))
+    if (!language || !('name' in language) || !('url' in language)) return
+    const oldDatasetLanguages = this.datasetLanguageArray.filter(item => item.url !== language.url)
+    this.datasetLanguageArray = oldDatasetLanguages.concat([(DatasetLanguage(language.name, language.url))])
     this.setDatasetLanguage(undefined)
     this.changed = true
   }
@@ -741,7 +742,7 @@ class Qvain {
     this.datasetLanguage = []
     if (researchDataset.language !== undefined) {
       researchDataset.language.forEach(element => {
-        this.addDatasetLanguage(DatasetLanguage(element))
+        this.addDatasetLanguage(DatasetLanguage(element.title, element.identifier))
       })
     }
 
