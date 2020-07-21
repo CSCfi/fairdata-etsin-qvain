@@ -35,16 +35,17 @@ class DatasetQuery {
     this.Files = new Files()
   }
 
-  @observable results = []
+  @observable results = null
 
-  @observable emailInfo = []
+  @observable emailInfo = null
 
   @observable directories = []
 
   @observable error = false
 
   @action
-  getData(id) {
+  getData(id, useV2) {
+    const url = useV2 ? `/api/v2/dataset/${id}` : `/api/dataset/${id}`
     return new Promise((resolve, reject) => {
       axios
         .get(`/api/dataset/${id}`)
@@ -56,8 +57,9 @@ class DatasetQuery {
             res.data.has_permit ? res.data.has_permit : false,
             res.data.application_state ? res.data.application_state : undefined
           )
+
           resolve(res.data)
-        })
+        }))
         .catch(error => {
           this.error = error
           this.results = []
