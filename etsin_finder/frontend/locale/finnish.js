@@ -33,6 +33,7 @@ const finnish = {
     catalog_publisher: 'Katalogin julkaisija',
     citation: 'Sitaatti / Lähdeviite',
     citation_formats: 'Näytä lisää sitaattiehdotuksia',
+    citationNoDateIssued: 'Julkaisupäivämäärää ei määritelty',
     contact: {
       access: 'Aineiston käyttöoikeuteen liittyvissä kyselyissä ota yhteyttä kuraattoriin.',
       contact: 'Ota yhteyttä',
