@@ -1,15 +1,15 @@
-import React, { Component } from 'react'
+import React from 'react'
 
 import PropTypes from 'prop-types'
 import { inject, observer } from 'mobx-react'
 import Translate from 'react-translate-component'
+import translate from 'counterpart'
 import styled from 'styled-components'
-import Select from 'react-select'
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
+import Select from '../general/searchSelect'
 
-import getReferenceData from '../utils/getReferenceData'
-import { onChange, getCurrentValue } from '../utils/select'
 import { DatasetLanguage } from '../../../stores/view/qvain'
 
 import Label from '../general/label'
@@ -18,105 +18,60 @@ import Card from '../general/card'
 import { LabelLarge } from '../general/form'
 
 
-class LanguageField extends Component {
-  promises = []
+const LanguageField = ({ Stores }) => {
+  const { lang } = Stores.Locale
+  const { readonly, datasetLanguage, datasetLanguageArray, setDatasetLanguage, removeDatasetLanguage, addDatasetLanguage } = Stores.Qvain
 
-  static propTypes = {
-    Stores: PropTypes.object.isRequired,
-  }
+  datasetLanguageArray.forEach(e => console.log(e.url, e.name))
+  const addedLanguages = datasetLanguageArray.map((selectedLanguage) => (
+    <Label color="#007fad" margin="0 0.5em 0.5em 0" key={selectedLanguage.url}>
+      <PaddedWord>{selectedLanguage.name[lang] || selectedLanguage.name.und }</PaddedWord>
+      <FontAwesomeIcon
+        onClick={() => removeDatasetLanguage(selectedLanguage)}
+        icon={faTimes}
+        size="xs"
+      />
+    </Label>
+  ))
 
-  state = {
-    options: {
-      fi: [],
-      en: [],
-    },
-  }
-
-  componentDidMount() {
-    this.promises.push(
-      getReferenceData('language')
-        .then(resp => {
-          const { hits } = resp.data.hits
-          const en = hits.map((ref) => ({
-            value: ref._source.uri,
-            label: ref._source.label.en || ref._source.label.und,
-          }))
-          const fi = hits.map((ref) => ({
-            value: ref._source.uri,
-            label: ref._source.label.fi || ref._source.label.und,
-          }))
-          this.setState({ options: { en, fi } })
-        })
-        .catch(error => {
-          if (error.response) {
-            // Error response from Metax
-            console.log(error.response.data)
-            console.log(error.response.status)
-            console.log(error.response.headers)
-          } else if (error.request) {
-            // No response from Metax
-            console.log(error.request)
-          } else {
-            // Something happened in setting up the request that triggered an Error
-            console.log('Error', error.message)
+  return (
+    <Card>
+      <LabelLarge htmlFor="datasetLanguage">
+        <Translate content="qvain.description.datasetLanguage.title" />
+      </LabelLarge>
+      <Translate component="p" content="qvain.description.datasetLanguage.help" />
+      { addedLanguages }
+      <Select
+        name="dataset-language"
+        id="datasetLanguage"
+        getter={datasetLanguage}
+        setter={setDatasetLanguage}
+        model={DatasetLanguage}
+        noOptionsMessage={({ inputValue }) => {
+          if (inputValue) {
+            return translate('qvain.description.datasetLanguage.noResults')
           }
-        })
-    )
-  }
+          return translate('qvain.description.datasetLanguage.placeholder')
+        }}
+        metaxIdentifier="language"
+        placeholder="qvain.description.datasetLanguage.placeholder"
+        search
+        isClearable
+      />
+      <AddLanguageContainer>
+        <Button
+          onClick={() => addDatasetLanguage(datasetLanguage)}
+          disabled={readonly}
+        >
+          <Translate content="qvain.description.datasetLanguage.addButton" />
+        </Button>
+      </AddLanguageContainer>
+    </Card>
+  )
+}
 
-  componentWillUnmount() {
-    this.promises.forEach((promise) => promise && promise.cancel && promise.cancel())
-  }
-
-  renderSelectedLanguages() {
-    const { lang } = this.props.Stores.Locale
-    const { datasetLanguageArray, removeDatasetLanguage } = this.props.Stores.Qvain
-    return datasetLanguageArray.map((selectedLanguage) => (
-      <Label color="#007fad" margin="0 0.5em 0.5em 0" key={selectedLanguage.url}>
-        <PaddedWord>{selectedLanguage.name[lang]}</PaddedWord>
-        <FontAwesomeIcon
-          onClick={() => removeDatasetLanguage(selectedLanguage)}
-          icon={faTimes}
-          size="xs"
-        />
-      </Label>
-    ))
-  }
-
-  render() {
-    const { lang } = this.props.Stores.Locale
-    const { options } = this.state
-    const { readonly, datasetLanguage, setDatasetLanguage, addDatasetLanguage } = this.props.Stores.Qvain
-    return (
-      <Card>
-        <LabelLarge htmlFor="datasetLanguage">
-          <Translate content="qvain.description.datasetLanguage.title" />
-        </LabelLarge>
-        <Translate component="p" content="qvain.description.datasetLanguage.help" />
-        { this.renderSelectedLanguages() }
-        <Translate
-          name="dataset-language"
-          inputId="datasetLanguage"
-          component={Select}
-          attributes={{ placeholder: 'qvain.description.datasetLanguage.placeholder' }}
-          options={options[lang]}
-          isDisabled={readonly}
-          value={getCurrentValue(datasetLanguage, options, lang)}
-          onChange={onChange(options, lang, setDatasetLanguage, DatasetLanguage)}
-          isSearchable
-          isClearable
-        />
-        <AddLanguageContainer>
-          <Button
-            onClick={() => addDatasetLanguage(datasetLanguage)}
-            disabled={readonly}
-          >
-            <Translate content="qvain.description.datasetLanguage.addButton" />
-          </Button>
-        </AddLanguageContainer>
-      </Card>
-    )
-  }
+LanguageField.propTypes = {
+  Stores: PropTypes.object.isRequired,
 }
 
 const PaddedWord = styled.span`
