@@ -5,11 +5,9 @@ import Translate from 'react-translate-component'
 import AsyncSelect from 'react-select/async'
 import Select from 'react-select'
 import styled from 'styled-components'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTimes } from '@fortawesome/free-solid-svg-icons'
 
 import Card from '../general/card'
-import Label from '../general/label'
+import AddedValue from '../general/addedValue'
 import { LabelLarge } from '../general/form'
 import { getReferenceDataAsync } from '../utils/getReferenceData'
 import { LANG_OPTIONS } from '../../../utils/constants'
@@ -45,18 +43,13 @@ class SubjectHeadingsField extends Component {
     const RenderedSubjectHeadings = subjectHeadingsArray.map(value => {
       const { locale, url } = value
       return (
-        <Label color="#007fad" margin="0 0.5em 0.5em 0" key={url}>
-          <PaddedWord>{locale[currentLang]}</PaddedWord>
-          {!readonly && (
-            <FontAwesomeIcon
-              className="delete-keyword"
-              size="xs"
-              icon={faTimes}
-              aria-label="remove"
-              onClick={() => removeSubjectHeading(url)}
-            />
-          )}
-        </Label>
+        <AddedValue
+          readonly={readonly}
+          key={url}
+          id={url}
+          text={locale[currentLang]}
+          remove={removeSubjectHeading}
+        />
       )
     })
 
@@ -71,6 +64,7 @@ class SubjectHeadingsField extends Component {
           {/* TODO: Get the language to change when the user changes the lang */}
           <LangSelect
             defaultValue={LANG_OPTIONS.filter(obj => obj.label === currentLang)}
+            aria-label="Subject heading language select"
             options={LANG_OPTIONS}
             width="10%"
             onChange={value => this.setState({ lang: value.label })}
@@ -97,9 +91,6 @@ class SubjectHeadingsField extends Component {
 
 const SelectRow = styled.div`
   display: flex;
-`
-const PaddedWord = styled.span`
-  padding-right: 10px;
 `
 const LangSelect = styled(Select)`
   width: ${props => props.width};
