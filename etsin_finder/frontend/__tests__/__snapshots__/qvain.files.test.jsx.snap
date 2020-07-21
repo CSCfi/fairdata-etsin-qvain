@@ -32,6 +32,7 @@ Object {
   ],
   "cumulativeState": 0,
   "dataCatalog": "urn:nbn:fi:att:data-catalog-ida",
+  "datasetLanguage": Array [],
   "description": Object {
     "en": "",
     "fi": "Description",
@@ -183,6 +184,7 @@ Object {
   ],
   "cumulativeState": 0,
   "dataCatalog": "urn:nbn:fi:att:data-catalog-ida",
+  "datasetLanguage": Array [],
   "description": Object {
     "en": "",
     "fi": "Description",
@@ -334,6 +336,7 @@ Object {
   ],
   "cumulativeState": 0,
   "dataCatalog": "urn:nbn:fi:att:data-catalog-ida",
+  "datasetLanguage": Array [],
   "description": Object {
     "en": "",
     "fi": "Description",
@@ -485,6 +488,7 @@ Object {
   ],
   "cumulativeState": 0,
   "dataCatalog": "urn:nbn:fi:att:data-catalog-ida",
+  "datasetLanguage": Array [],
   "description": Object {
     "en": "",
     "fi": "Description",
@@ -636,6 +640,7 @@ Object {
   ],
   "cumulativeState": 0,
   "dataCatalog": "urn:nbn:fi:att:data-catalog-ida",
+  "datasetLanguage": Array [],
   "description": Object {
     "en": "",
     "fi": "Description",
