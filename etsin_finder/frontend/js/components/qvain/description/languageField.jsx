@@ -22,7 +22,6 @@ const LanguageField = ({ Stores }) => {
   const { lang } = Stores.Locale
   const { readonly, datasetLanguage, datasetLanguageArray, setDatasetLanguage, removeDatasetLanguage, addDatasetLanguage } = Stores.Qvain
 
-  datasetLanguageArray.forEach(e => console.log(e.url, e.name))
   const addedLanguages = datasetLanguageArray.map((selectedLanguage) => (
     <Label color="#007fad" margin="0 0.5em 0.5em 0" key={selectedLanguage.url}>
       <PaddedWord>{selectedLanguage.name[lang] || selectedLanguage.name.und }</PaddedWord>
