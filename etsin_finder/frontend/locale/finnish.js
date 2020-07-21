@@ -486,7 +486,8 @@ const finnish = {
       datasetLanguage: {
         title: 'Aineiston kieli',
         infoText: 'Valitse aineistossa käytetyt kielet.',
-        placeholder: 'Valitse kielet',
+        placeholder: 'Hae kieliä kirjoittamalla',
+        noResults: 'Ei hakutuloksia',
         addButton: 'Lisää kieli',
         help: 'Voit lisätä useita kieliä.'
       },

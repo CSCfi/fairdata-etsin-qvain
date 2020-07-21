@@ -488,7 +488,8 @@ const english = {
       datasetLanguage: {
         title: 'Dataset language',
         infoText: 'Select languages used in the dataset.',
-        placeholder: 'Select language',
+        placeholder: 'Type to search language',
+        noResults: 'No languages found',
         addButton: 'Add language',
         help: 'You can add multiple languages.'
       },
