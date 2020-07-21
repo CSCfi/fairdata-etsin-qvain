@@ -20,9 +20,8 @@ import Translate from 'react-translate-component'
 import { inject, observer } from 'mobx-react'
 import { NavLink } from 'react-router-dom'
 
+import { opacify } from 'polished'
 import axios from 'axios'
-import DatasetQuery from '../../stores/view/datasetquery'
-import Accessibility from '../../stores/view/accessibility'
 import Sidebar from './sidebar'
 import Content from './content'
 import ErrorPage from '../errorpage'
@@ -42,11 +41,10 @@ class Dataset extends React.Component {
     super(props)
 
     this.state = {
-      dataset: DatasetQuery.results,
-      email_info: DatasetQuery.email_info,
       error: false,
       identifier: props.match.params.identifier,
-      versionInfo: {}
+      versionInfo: {},
+      loaded: false
     }
 
     this.query = this.query.bind(this)
@@ -55,7 +53,7 @@ class Dataset extends React.Component {
 
 
   componentDidMount() {
-    Accessibility.resetFocus()
+    this.props.Stores.Accessibility.resetFocus()
     this.query()
   }
 
@@ -66,7 +64,7 @@ class Dataset extends React.Component {
     let retval = {};
     let urlText = '';
     let latestDate = '';
-    const currentDate = new Date(this.state.dataset.date_created);
+    const currentDate = new Date(data.date_created);
     let ID = '';
     let linkToOtherVersion = '';
 
@@ -122,6 +120,7 @@ class Dataset extends React.Component {
   }
 
   query(customId) {
+    const { Accessibility, DatasetQuery } = this.props.Stores
     let identifier = this.props.match.params.identifier
     if (customId !== undefined) {
       identifier = customId
@@ -132,22 +131,12 @@ class Dataset extends React.Component {
       return
     }
     Accessibility.announcePolite(translate('dataset.loading'))
-    DatasetQuery.getData(identifier)
+
+    // TODO: Etsin Filepicker v2 update will move the metaxApiV2 variable to Stores.Env
+    const useV2 = this.props.Stores.Qvain.metaxApiV2
+    DatasetQuery.getData(identifier, useV2)
       .then(result => {
-        // TODO: The code below needs to be revised
-        // Somewhere we need to think how 1) harvested, 2) accumulative, 3) deprecated, 4) removed, 5) ordinary
-        // datasets are rendered. Maybe not here?
         this.setState({
-          identifier: this.props.match.params.identifier,
-          dataset: result.catalog_record,
-          email_info: result.email_info,
-          hasFiles:
-            (result.catalog_record.research_dataset.directories
-              || result.catalog_record.research_dataset.files) !== undefined,
-          hasRemote: result.catalog_record.research_dataset.remote_resources !== undefined,
-          harvested: result.catalog_record.data_catalog.catalog_json.harvested,
-          deprecated: result.catalog_record.deprecated,
-          removed: result.catalog_record.removed,
           loaded: true,
         })
         this.getAllVersions(result.catalog_record)
@@ -174,12 +163,39 @@ class Dataset extends React.Component {
   }
 
   render() {
+    const { Accessibility, DatasetQuery } = this.props.Stores
+
     // CASE 1: Houston, we have a problem
     if (this.state.error !== false) {
       return <ErrorPage error={{ type: 'notfound' }} />
     }
+
+    const isDraft = DatasetQuery.results && DatasetQuery.results.state === 'draft'
+    let draftInfoText = null
+    if (isDraft) {
+      draftInfoText = DatasetQuery.results.draft_of ? 'dataset.draftInfo.changes' : 'dataset.draftInfo.draft'
+    }
+
+    if (!this.state.loaded || !DatasetQuery.results) {
+      return (
+        <LoadingSplash>
+          <Loader active />
+        </LoadingSplash>
+      )
+    }
+
+    const dataset = DatasetQuery.results
+    const cumulative = DatasetQuery.cumulative_state === 1
+    const emailInfo = DatasetQuery.emailInfo
+    const hasFiles = (dataset.research_dataset.directories
+        || dataset.research_dataset.files) !== undefined
+    const hasRemote = dataset.research_dataset.remote_resources !== undefined
+    const harvested = dataset.data_catalog.catalog_json.harvested
+    const deprecated = dataset.deprecated
+    const removed = dataset.removed
+
     // CASE 2: Business as usual
-    return this.state.loaded ? (
+    return (
       <div>
         <article className="container regular-row">
           <div className="row">
@@ -210,30 +226,32 @@ class Dataset extends React.Component {
             </div>
           </div>
           <div className="row">
+            {draftInfoText && (
+              <div className="col-12">
+                <Translate component={DraftInfo} content={draftInfoText} />
+              </div>
+              )
+            }
             <Content
               identifier={this.state.identifier}
-              dataset={this.state.dataset}
-              harvested={this.state.harvested}
-              cumulative={this.state.cumulative}
-              hasFiles={this.state.hasFiles}
-              hasRemote={this.state.hasRemote}
-              isDeprecated={this.state.deprecated}
-              isRemoved={this.state.removed}
-              emails={this.state.email_info}
+              dataset={dataset}
+              harvested={harvested}
+              cumulative={cumulative}
+              hasFiles={hasFiles}
+              hasRemote={hasRemote}
+              isDeprecated={deprecated}
+              isRemoved={removed}
+              emails={emailInfo}
             />
             <div className="col-lg-4">
               <ErrorBoundary>
-                <Sidebar dataset={this.state.dataset} />
+                <Sidebar dataset={dataset} />
               </ErrorBoundary>
             </div>
           </div>
         </article>
       </div>
-    ) : (
-      <LoadingSplash>
-        <Loader active />
-      </LoadingSplash>
-      )
+    )
   }
 }
 
@@ -248,9 +266,20 @@ const Link = styled.a`
   font-size: 0.9em;
 `
 
+const DraftInfo = styled.div`
+  background-color: ${p => p.theme.color.primaryLight};
+  text-align: center;
+  color: ${p => p.theme.color.primaryDark};
+  border: 1px solid ${p => opacify(-0.5, p.theme.color.primary)};
+  padding: 0.5rem;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+`
+
 Dataset.propTypes = {
   history: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
+  Stores: PropTypes.object.isRequired,
 }
 
 export default inject('Stores')(observer(Dataset))

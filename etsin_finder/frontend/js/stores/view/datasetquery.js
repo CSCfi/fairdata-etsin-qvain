@@ -29,20 +29,22 @@ const QueryFields = {
 }
 
 class DatasetQuery {
-  @observable results = []
+  @observable results = null
 
-  @observable emailInfo = []
+  @observable emailInfo = null
 
   @observable directories = []
 
   @observable error = false
 
   @action
-  getData(id) {
+  getData(id, useV2) {
+    const url = useV2 ? `/api/v2/dataset/${id}` : `/api/dataset/${id}`
     return new Promise((resolve, reject) => {
       axios
-        .get(`/api/dataset/${id}`)
-        .then(res => {
+        .get(url)
+        .then(action(async res => {
+          this.draftOf = null
           this.results = res.data.catalog_record
           this.emailInfo = res.data.email_info
           access.updateAccess(
@@ -50,8 +52,9 @@ class DatasetQuery {
             res.data.has_permit ? res.data.has_permit : false,
             res.data.application_state ? res.data.application_state : undefined
           )
+
           resolve(res.data)
-        })
+        }))
         .catch(error => {
           this.error = error
           this.results = []
