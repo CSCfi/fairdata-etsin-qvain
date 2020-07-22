@@ -13,6 +13,7 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
+import counterpart from 'counterpart'
 import axios from 'axios'
 
 import { Link } from 'react-router-dom'
@@ -31,11 +32,18 @@ class KeyValues extends Component {
       researchNum: 0,
       loaded: false,
       error: false,
+      lang: this.props.Stores.Locale.currentLang,
     }
   }
 
   componentDidMount() {
     this.getValues()
+    counterpart.onLocaleChange(this.localeChanged)
+  }
+
+
+  componentWillUnmount() {
+    counterpart.offLocaleChange(this.localeChanged)
   }
 
   getValues() {
@@ -75,6 +83,12 @@ class KeyValues extends Component {
       })
   }
 
+  localeChanged = () => {
+    this.setState({
+      lang: this.props.Stores.Locale.currentLang === 'fi' ? 'en' : 'fi'
+    })
+  }
+
   render() {
     const SearchFilters = this.props.Stores.SearchFilters
     return this.state.error ? null : (
@@ -83,7 +97,14 @@ class KeyValues extends Component {
           <Value>
             {this.state.loaded ? (
               <div>
-                <h1><Link to={'/datasets'}>{this.state.datasetsNum}</Link></h1>
+                <h1>
+                  <FiltersLink
+                    to={'/datasets'}
+                    title={counterpart('home.tooltip.datasets', { locale: this.state.lang })}
+                  >
+                    {this.state.datasetsNum}
+                  </FiltersLink>
+                </h1>
                 <Translate content="home.key.dataset" fallback="aineistoa" component="p" />
               </div>
             ) :
@@ -97,7 +118,15 @@ class KeyValues extends Component {
           <Value>
             {this.state.loaded ? (
               <div>
-                <h1><Link to={'/datasets'} onClick={() => SearchFilters.toggleKeyword()}>{this.state.keywordsNum}</Link></h1>
+                <h1>
+                  <FiltersLink
+                    to={'/datasets'}
+                    title={counterpart('home.tooltip.keywords', { locale: this.state.lang })}
+                    onClick={() => SearchFilters.toggleKeyword()}
+                  >
+                    {this.state.keywordsNum}
+                  </FiltersLink>
+                </h1>
                 <Translate content="home.key.keywords" fallback="asiasanaa" component="p" />
               </div>
             ) :
@@ -111,7 +140,15 @@ class KeyValues extends Component {
           <Value>
             {this.state.loaded ? (
               <div>
-                <h1><Link to={'/datasets'} onClick={() => SearchFilters.toggleFieldOfScience()}> {this.state.fieldOfScienceNum}</Link></h1>
+                <h1>
+                  <FiltersLink
+                    to={'/datasets'}
+                    title={counterpart('home.tooltip.fos', { locale: this.state.lang })}
+                    onClick={() => SearchFilters.toggleFieldOfScience()}
+                  >
+                    {this.state.fieldOfScienceNum}
+                  </FiltersLink>
+                </h1>
                 <Translate content="home.key.fos" fallback="tieteenalaa" component="p" />
               </div>
             ) :
@@ -125,7 +162,15 @@ class KeyValues extends Component {
           <Value>
             {this.state.loaded ? (
               <div>
-                <h1><Link to={'/datasets'} onClick={() => SearchFilters.toggleProject()}> {this.state.researchNum}</Link></h1>
+                <h1>
+                  <FiltersLink
+                    to={'/datasets'}
+                    title={counterpart('home.tooltip.research', { locale: this.state.lang })}
+                    onClick={() => SearchFilters.toggleProject()}
+                  >
+                    {this.state.researchNum}
+                  </FiltersLink>
+                </h1>
                 <Translate content="home.key.research" fallback="tutkimusprojektia" component="p" />
               </div>
             ) :
@@ -201,5 +246,13 @@ const Value = styled.div`
     &:nth-of-type(3) {
       display: initial;
     }
+  }
+`
+
+const FiltersLink = styled(Link)`
+  font-size: 0.975em;
+  &:active {
+    transition: 0.1s ease;
+    box-shadow: 0px 2px 5px -2px rgba(0,0,0,0.7) inset;
   }
 `

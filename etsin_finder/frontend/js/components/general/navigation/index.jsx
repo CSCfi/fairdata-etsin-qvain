@@ -22,7 +22,6 @@ import { Home, Search } from '../../../routes'
 class Navi extends React.Component {
   render() {
     const Accessibility = this.props.Stores.Accessibility
-    const SearchFilters = this.props.Stores.SearchFilters
     return (
       <React.Fragment>
         <NavItem
@@ -33,7 +32,6 @@ class Navi extends React.Component {
           }}
           onClick={() => {
             Accessibility.announce(translate('changepage', { page: translate('nav.datasets') }))
-            SearchFilters.closeFilters()
           }}
         >
           <Translate content="nav.home" />

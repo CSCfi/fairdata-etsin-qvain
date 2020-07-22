@@ -103,6 +103,11 @@ export class FilterSection extends Component {
     this.checkActive()
   }
 
+  componentWillUnmount() {
+    const SearchFilters = this.props.Stores.SearchFilters
+    SearchFilters.closeFilters()
+  }
+
   toggleFilter = () => {
     this.setState(state => ({
       open: !state.open,
