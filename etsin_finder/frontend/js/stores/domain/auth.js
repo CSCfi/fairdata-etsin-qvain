@@ -21,10 +21,25 @@ class Auth {
 
   @observable user = {
     name: undefined,
+    firsName: undefined,
+    lastName: undefined,
     loggedIn: false,
     homeOrganizationName: undefined,
     idaGroups: [],
     isUsingRems: undefined,
+  }
+
+  @action
+  resetUser = () => {
+    this.user = {
+      name: undefined,
+      firsName: undefined,
+      lastName: undefined,
+      loggedIn: false,
+      homeOrganizationName: undefined,
+      idaGroups: [],
+      isUsingRems: undefined,
+    }
   }
 
   @action
@@ -38,9 +53,11 @@ class Auth {
           headers: { 'content-type': 'application/json', charset: 'utf-8' },
         })
         .then(
-          action((res) => {
+          action(res => {
             this.user = {
               name: res.data.user_csc_name,
+              firstName: res.data.first_name,
+              lastName: res.data.last_name,
               loggedIn: res.data.is_authenticated,
               homeOrganizationName: res.data.home_organization_name,
               idaGroups: res.data.user_ida_groups,
@@ -74,7 +91,7 @@ class Auth {
           })
         )
         .catch(
-          action((err) => {
+          action(err => {
             this.loading = false
             console.log(err)
             reject(err)
@@ -88,20 +105,15 @@ class Auth {
     return new Promise((resolve, reject) => {
       axios
         .delete('/api/session')
-        .then((res) => {
+        .then(res => {
           this.userLogged = false
           this.cscUserLogged = false
 
           // Since the user will be logged out, all user.* variables should be reset to default values.
-          this.user = {
-            name: undefined,
-            loggedIn: false,
-            homeOrganizationName: undefined,
-            idaGroups: [],
-          }
+          this.resetUser()
           resolve(res)
         })
-        .catch((err) => {
+        .catch(err => {
           console.log(err)
           reject(err)
         })
@@ -115,11 +127,11 @@ class Auth {
       axios
         .get('/api/session')
         .then(() => resolve())
-        .catch((err) => {
+        .catch(err => {
           if (err.response.status === 401) {
             this.userLogged = false
             this.cscUserLogged = false
-            this.user = { name: undefined }
+            this.resetUser()
           }
           return reject(err)
         })
