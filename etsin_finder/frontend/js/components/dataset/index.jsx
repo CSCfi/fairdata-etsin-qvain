@@ -150,7 +150,7 @@ class Dataset extends React.Component {
           email_info: result.email_info,
           hasFiles:
             (result.catalog_record.research_dataset.directories
-              || result.catalog_record.research_dataset.files) !== undefined || hasV2Files,
+              || result.catalog_record.research_dataset.files) !== undefined || hasV2Files || false,
           hasRemote: result.catalog_record.research_dataset.remote_resources !== undefined,
           harvested: result.catalog_record.data_catalog.catalog_json.harvested,
           deprecated: result.catalog_record.deprecated,

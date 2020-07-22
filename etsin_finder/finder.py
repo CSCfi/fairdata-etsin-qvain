@@ -22,10 +22,11 @@ from etsin_finder.utils import executing_travis, get_log_config
 
 
 def create_app():
-    """
-    Create Flask app.
+    """Careate flask app
 
-    :return:
+    Returns:
+        objetc: The flask.Flask app instance object.
+
     """
     is_testing = bool(os.environ.get('TESTING', False))
     app = Flask(__name__, template_folder="./frontend/build")
@@ -42,6 +43,14 @@ def create_app():
 
 
 def _setup_app_logging(app):
+    """Setup app logging
+
+    Load the logging configurations for the flask app.
+
+    Args:
+        app (object): flask.Flask object instance.
+
+    """
     log_file_path = app.config.get('APP_LOG_PATH', None)
     log_lvl = app.config.get('APP_LOG_LEVEL', 'INFO')
     config = get_log_config(log_file_path, log_lvl)
@@ -52,11 +61,11 @@ def _setup_app_logging(app):
 
 
 def add_restful_resources(app):
-    """
-    Set Flask Restful API endpoints
+    """Set Flask Restful API endpoints
 
-    :param app:
-    :return:
+    Args:
+        app (object): flask.Flask object instance.
+
     """
     api = Api(app)
     from etsin_finder.resources import REMSApplyForPermission, Contact, Dataset, DatasetMetadata, User, Session, Files, Download
@@ -134,10 +143,6 @@ def add_restful_resources(app):
     api.add_resource(QvainDatasetFixDeprecated, '/api/rpc/datasets/fix_deprecated')
     # REMS API endpoints
     api.add_resource(REMSApplyForPermission, '/api/rems/<string:cr_id>')
-    # api.add_resource(REMSCreateUser, '/api/users/create')
-    # api.add_resource(REMSGetEntitlements, '/api/entitlements')
-    # api.add_resource(REMSGetApplications, '/api/applications/<string:application_id>')
-    # api.add_resource(REMSCreateNewApplication, '/api/applications/create')
 
 
 app = create_app()

@@ -1,7 +1,7 @@
 import { observable, action } from 'mobx'
 import axios from 'axios'
 
-import { FileAPIURLs } from '../../components/qvain/utils/constants'
+import { FILE_API_URLS } from '../../utils/constants'
 import { hasMetadata, dirIdentifierKey, fileIdentifierKey } from './common.files.items'
 import { PromiseManager, getAction } from './common.files.utils'
 import { itemLoaderAny, FetchType } from './common.files.loaders'
@@ -31,7 +31,7 @@ class Files extends FilesBase {
   @action loadDirectory = async (dir) => itemLoaderAny.loadDirectory(this, dir, 100)
 
   fetchRootIdentifier = async (projectIdentifier) => {
-    const { data } = await axios.get(FileAPIURLs.V2_PROJECT_DIR_URL + projectIdentifier)
+    const { data } = await axios.get(FILE_API_URLS.V2_PROJECT_DIR_URL + projectIdentifier)
     return data.identifier
   }
 

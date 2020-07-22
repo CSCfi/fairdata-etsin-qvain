@@ -17,32 +17,21 @@ from etsin_finder import authentication
 from etsin_finder.qvain_light_service import change_cumulative_state, refresh_directory_content, fix_deprecated_dataset
 from etsin_finder.finder import app
 from etsin_finder.qvain_light_utils import get_dataset_creator
-from etsin_finder.utils import SAML_ATTRIBUTES
+from etsin_finder.constants import SAML_ATTRIBUTES
 
 log = app.logger
 
 def log_request(f):
-    """
-    Log request when used as decorator.
-
-    :param f:
-    :return:
-    """
+    """Log request when used as decorator."""
     @wraps(f)
     def func(*args, **kwargs):
-        """
-        Log requests.
-
-        :param args:
-        :param kwargs:
-        :return:
-        """
+        """Log requests."""
         csc_name = authentication.get_user_csc_name() if not app.testing else ''
         log.info('[{0}.{1}] {2} {3} {4} USER AGENT: {5}'.format(
             args[0].__class__.__name__,
             f.__name__,
             csc_name if csc_name else 'UNAUTHENTICATED',
-            request.environ['REQUEST_METHOD'],
+            request.environ.get('REQUEST_METHOD'),
             request.path,
             request.user_agent))
         return f(*args, **kwargs)
@@ -59,29 +48,28 @@ class QvainDatasetChangeCumulativeState(Resource):
 
     @log_request
     def post(self):
-        """
-        Change cumulative_state of a dataset in Metax.
+        """Change cumulative_state of a dataset in Metax.
 
         Arguments:
-            identifier {string} -- The identifier of the dataset.
-            cumulative_state {integer} -- The new cumulative state.
+            identifier (string): The identifier of the dataset.
+            cumulative_state (int): The new cumulative state.
 
         Returns:
-            [type] -- Metax response.
+            Metax response.
 
         """
         args = self.parser.parse_args()
-        cr_id = args['identifier']
-        cumulative_state = args['cumulative_state']
+        cr_id = args.get('identifier')
+        cumulative_state = args.get('cumulative_state')
         is_authd = authentication.is_authenticated()
         if not is_authd:
             return {"PermissionError": "User not logged in."}, 401
 
         # only creator of the dataset is allowed to modify it
-        user = session["samlUserdata"][SAML_ATTRIBUTES["CSC_username"]][0]
+        csc_username = authentication.get_user_csc_name()
         creator = get_dataset_creator(cr_id)
-        if user != creator:
-            log.warning('User: \"{0}\" is not the creator of the dataset. Changing cumulative state not allowed. Creator: \"{1}\"'.format(user, creator))
+        if csc_username != creator:
+            log.warning('User: \"{0}\" is not the creator of the dataset. Changing cumulative state not allowed. Creator: \"{1}\"'.format(csc_username, creator))
             return {"PermissionError": "User not authorized to change cumulative state of dataset."}, 403
         metax_response = change_cumulative_state(cr_id, cumulative_state)
         return metax_response
@@ -97,29 +85,30 @@ class QvainDatasetRefreshDirectoryContent(Resource):
 
     @log_request
     def post(self):
-        """
-        Refresh contents of a directory in a dataset. May create a new dataset version.
+        """Refresh contents of a directory in a dataset.
+
+        May create a new dataset version.
 
         Arguments:
-            cr_identifier {string} -- The identifier of the dataset.
-            dir_identifier {string} -- The identifier of the directory.
+            cr_identifier (str): The identifier of the dataset.
+            dir_identifier (str): The identifier of the directory.
 
         Returns:
-            [type] -- Metax response.
+            Metax response.
 
         """
         args = self.parser.parse_args()
-        cr_identifier = args['cr_identifier']
-        dir_identifier = args['dir_identifier']
+        cr_identifier = args.get('cr_identifier')
+        dir_identifier = args.get('dir_identifier')
         is_authd = authentication.is_authenticated()
         if not is_authd:
             return {"PermissionError": "User not logged in."}, 401
 
         # only creator of the dataset is allowed to modify it
-        user = session["samlUserdata"][SAML_ATTRIBUTES["CSC_username"]][0]
+        csc_username = authentication.get_user_csc_name()
         creator = get_dataset_creator(cr_identifier)
-        if user != creator:
-            log.warning('User: \"{0}\" is not the creator of the dataset. Refreshing directory is not allowed. Creator: \"{1}\"'.format(user, creator))
+        if csc_username != creator:
+            log.warning('User: \"{0}\" is not the creator of the dataset. Refreshing directory is not allowed. Creator: \"{1}\"'.format(csc_username, creator))
             return {"PermissionError": "User not authorized to refresh directory in dataset."}, 403
         metax_response = refresh_directory_content(cr_identifier, dir_identifier)
         return metax_response
@@ -135,30 +124,29 @@ class QvainDatasetFixDeprecated(Resource):
 
     @log_request
     def post(self):
-        """
-        Fix deprecated dataset using Metax fix_deprecated RPC.
+        """Fix deprecated dataset using Metax fix_deprecated RPC.
 
         Removes all files and directories that no longer exist from the dataset.
         Creates a new, non-deprecated version.
 
         Arguments:
-            identifier {string} -- The identifier of the dataset.
+            identifier (str): The identifier of the dataset.
 
         Returns:
-            [type] -- Metax response.
+            Metax response.
 
         """
         args = self.parser.parse_args()
-        cr_id = args['identifier']
+        cr_id = args.get('identifier')
         is_authd = authentication.is_authenticated()
         if not is_authd:
             return {"PermissionError": "User not logged in."}, 401
 
         # only creator of the dataset is allowed to modify it
-        user = session["samlUserdata"][SAML_ATTRIBUTES["CSC_username"]][0]
+        csc_username = authentication.get_user_csc_name()
         creator = get_dataset_creator(cr_id)
-        if user != creator:
-            log.warning('User: \"{0}\" is not the creator of the dataset. Fixing deprecated dataset not allowed. Creator: \"{1}\"'.format(user, creator))
+        if csc_username != creator:
+            log.warning('User: \"{0}\" is not the creator of the dataset. Fixing deprecated dataset not allowed. Creator: \"{1}\"'.format(csc_username, creator))
             return {"PermissionError": "User not authorized to fix deprecated dataset."}, 403
         metax_response = fix_deprecated_dataset(cr_id)
         return metax_response

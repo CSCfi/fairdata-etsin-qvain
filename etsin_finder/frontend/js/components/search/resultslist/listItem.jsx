@@ -20,6 +20,7 @@ import ErrorBoundary from '../../general/errorBoundary'
 import AccessRights from '../../dataset/accessRights'
 import FairdataPasDatasetIcon from '../../dataset/fairdataPasDatasetIcon'
 import ContentBox from '../../general/contentBox'
+import { DATA_CATALOG_IDENTIFIER } from '../../../utils/constants'
 
 export default class ListItem extends Component {
   shortDescription(string) {
@@ -53,7 +54,7 @@ export default class ListItem extends Component {
                   <WrapperDivRight>
                     {
                       (
-                        (this.props.item.data_catalog_identifier === 'urn:nbn:fi:att:data-catalog-pas')
+                        (this.props.item.data_catalog_identifier === DATA_CATALOG_IDENTIFIER.PAS)
                         ||
                         (this.props.item.preservation_state === 80)
                       )

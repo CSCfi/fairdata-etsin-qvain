@@ -10,7 +10,7 @@ import CreatableSelect from 'react-select/creatable'
 
 import '../locale/translations'
 import etsinTheme from '../js/styles/theme'
-import { EntityType, Role } from '../js/components/qvain/utils/constants'
+import { ENTITY_TYPE, ROLE } from '../js/utils/constants'
 import { ActorsBase } from '../js/components/qvain/actors'
 import { ActorTypeSelectBase } from '../js/components/qvain/actors/actorTypeSelect'
 import ActorRoles from '../js/components/qvain/actors/actorRoles'
@@ -65,8 +65,8 @@ describe('Qvain.Actors', () => {
     expect(addedActors.find(ButtonGroup).length).toBe(0)
     stores.Qvain.Actors.saveActor(
       Actor({
-        type: EntityType.ORGANIZATION,
-        roles: [Role.PUBLISHER],
+        type: ENTITY_TYPE.ORGANIZATION,
+        roles: [ROLE.PUBLISHER],
         organizations: [
           Organization({
             name: {
@@ -78,8 +78,8 @@ describe('Qvain.Actors', () => {
     )
     stores.Qvain.Actors.saveActor(
       Actor({
-        type: EntityType.PERSON,
-        roles: [Role.CREATOR],
+        type: ENTITY_TYPE.PERSON,
+        roles: [ROLE.CREATOR],
         person: Person({
           name: 'Teppo Testaaja',
           email: 'teppo@test.fi',
@@ -95,8 +95,8 @@ describe('Qvain.Actors', () => {
     )
     stores.Qvain.Actors.saveActor(
       Actor({
-        type: EntityType.PERSON,
-        roles: [Role.RIGHTS_HOLDER],
+        type: ENTITY_TYPE.PERSON,
+        roles: [ROLE.RIGHTS_HOLDER],
         person: Person({
           name: 'Tuppo Testaaja',
           email: 'tuppo@test.fi',
@@ -112,8 +112,8 @@ describe('Qvain.Actors', () => {
     )
     stores.Qvain.Actors.saveActor(
       Actor({
-        type: EntityType.PERSON,
-        roles: [Role.CONTRIBUTOR],
+        type: ENTITY_TYPE.PERSON,
+        roles: [ROLE.CONTRIBUTOR],
         person: Person({
           name: 'Toppo Testaaja',
           email: 'toppo@test.fi',
@@ -171,7 +171,7 @@ describe('Qvain.Actors modal', () => {
   it('renders person selection by default', () => {
     expect(wrapper.find('input#entityPerson').props().checked).toBe(true)
     const { actorInEdit } = stores.Qvain.Actors
-    expect(actorInEdit.type).toBe(EntityType.PERSON)
+    expect(actorInEdit.type).toBe(ENTITY_TYPE.PERSON)
   })
 
   it('changes actor type', () => {
@@ -185,7 +185,7 @@ describe('Qvain.Actors modal', () => {
         },
       })
     const { actorInEdit } = stores.Qvain.Actors
-    expect(actorInEdit.type).toBe(EntityType.ORGANIZATION)
+    expect(actorInEdit.type).toBe(ENTITY_TYPE.ORGANIZATION)
   })
 
   it('adds role', () => {
@@ -470,7 +470,7 @@ describe('Qvain.Actors modal', () => {
 
   it('prevents editing person', () => {
     const { editActor, actors } = stores.Qvain.Actors
-    editActor(actors.find((actor) => actor.type === EntityType.PERSON))
+    editActor(actors.find((actor) => actor.type === ENTITY_TYPE.PERSON))
     stores.Qvain.setPreservationState(80)
     wrapper.update()
     const inputs = wrapper.find('input').not('[type="hidden"]')
@@ -494,7 +494,7 @@ describe('Qvain.Actors modal', () => {
 
   it('prevents editing organization', () => {
     const { editActor, actors } = stores.Qvain.Actors
-    editActor(actors.find((actor) => actor.type === EntityType.ORGANIZATION))
+    editActor(actors.find((actor) => actor.type === ENTITY_TYPE.ORGANIZATION))
     stores.Qvain.setPreservationState(80)
     wrapper.update()
     const inputs = wrapper.find('input').not('[type="hidden"]')
@@ -761,7 +761,7 @@ describe('Qvain.Actors store', () => {
 
     const aalto = stores.Qvain.Actors.actors.find(
       (actor) =>
-        actor.type === EntityType.ORGANIZATION &&
+        actor.type === ENTITY_TYPE.ORGANIZATION &&
         actor.organizations[0].name.en === 'Aalto University'
     )
     expect(aalto.roles.slice().sort()).toEqual(['creator', 'curator'])
@@ -852,8 +852,8 @@ describe('Qvain.Actors store', () => {
     axios.get.mockImplementation(organizationMockGet)
     await fetchReferenceOrganizations()
     const actor = Actor({
-      type: EntityType.ORGANIZATION,
-      roles: [Role.PUBLISHER],
+      type: ENTITY_TYPE.ORGANIZATION,
+      roles: [ROLE.PUBLISHER],
       organizations: [
         Organization({
           name: {

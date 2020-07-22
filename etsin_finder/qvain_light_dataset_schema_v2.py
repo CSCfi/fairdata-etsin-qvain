@@ -10,12 +10,7 @@ from etsin_finder.qvain_light_dataset_schema import (
 )
 
 class DatasetValidationSchema(DatasetValidationSchemaV1):
-    """
-    Validation schema for the whole dataset.
-
-    Arguments:
-        Schema {library} -- Marshmallows Schema library.
-    """
+    """Validation schema for the whole dataset."""
 
     class Meta:
         """Meta options for validation."""
@@ -56,12 +51,7 @@ class DirectoryMetadataSchema(Schema):
     delete = fields.Boolean()
 
 class UserMetadataValidationSchema(Schema):
-    """
-    Validation schema for dataset-specific file and directory metadata changes.
-
-    Arguments:
-        Schema {library} -- Marshmallows Schema library.
-    """
+    """Validation schema for dataset-specific file and directory metadata changes."""
 
     files = fields.List(fields.Nested(FileMetadataSchema))
     directories = fields.List(fields.Nested(DirectoryMetadataSchema))

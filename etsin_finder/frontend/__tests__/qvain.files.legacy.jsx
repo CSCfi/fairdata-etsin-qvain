@@ -9,7 +9,7 @@ import { DeleteButton } from '../js/components/qvain/general/buttons'
 import Env from '../js/stores/domain/env'
 import QvainStoreClass, { Directory } from '../js/stores/view/qvain'
 import LocaleStore from '../js/stores/view/language'
-import { DataCatalogIdentifiers } from '../js/components/qvain/utils/constants'
+import { DATA_CATALOG_IDENTIFIER } from '../js/utils/constants'
 
 global.Promise = require('bluebird')
 const QvainStore = new QvainStoreClass(Env)
@@ -26,7 +26,7 @@ const getStores = () => {
 describe('Qvain.Files', () => {
   it('should render file picker', () => {
     const store = getStores()
-    store.Qvain.dataCatalog = DataCatalogIdentifiers.IDA
+    store.Qvain.dataCatalog = DATA_CATALOG_IDENTIFIER.IDA
     store.Qvain.idaPickerOpen = true
     const component = shallow(<Files Stores={store} />)
     expect(component.dive().find(IDAFilePicker).length).toBe(1)

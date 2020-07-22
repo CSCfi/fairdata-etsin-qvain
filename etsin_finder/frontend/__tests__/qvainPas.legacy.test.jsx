@@ -25,7 +25,7 @@ import QvainStoreClass, {
 } from '../js/stores/view/qvain'
 import LocaleStore from '../js/stores/view/language'
 import EnvStore from '../js/stores/domain/env'
-import { AccessTypeURLs, DataCatalogIdentifiers, } from '../js/components/qvain/utils/constants'
+import { ACCESS_TYPE_URL, DATA_CATALOG_IDENTIFIER } from '../js/utils/constants'
 
 global.Promise = require('bluebird')
 
@@ -343,7 +343,7 @@ afterEach(() => {
 
 describe('Qvain.PasState', () => {
   const render = stores => {
-    stores.Qvain.setKeywords(['key', 'word'])
+    stores.Qvain.setKeywordsArray(['key', 'word'])
     return mount(
       <Provider Stores={stores}>
         <ThemeProvider theme={etsinTheme}>
@@ -355,14 +355,14 @@ describe('Qvain.PasState', () => {
 
   it('shows pas state', () => {
     const stores = getStores()
-    stores.Qvain.dataCatalog = DataCatalogIdentifiers.IDA
+    stores.Qvain.dataCatalog = DATA_CATALOG_IDENTIFIER.IDA
     stores.Qvain.setPreservationState(80)
     wrapper = render(stores)
     expect(wrapper.find(PasState).text().includes('80:')).toBe(true)
     wrapper.unmount()
 
 
-    stores.Qvain.dataCatalog = DataCatalogIdentifiers.PAS
+    stores.Qvain.dataCatalog = DATA_CATALOG_IDENTIFIER.PAS
     stores.Qvain.setPreservationState(0)
     wrapper = render(stores)
     expect(wrapper.find(PasState).text().includes('80:')).toBe(false)
@@ -373,7 +373,7 @@ describe('Qvain.PasState', () => {
 
 describe('Qvain.Description', () => {
   const render = stores => {
-    stores.Qvain.setKeywords(['key', 'word'])
+    stores.Qvain.setKeywordsArray(['key', 'word'])
     return mount(
       <Provider Stores={stores}>
         <ThemeProvider theme={etsinTheme}>
@@ -419,7 +419,7 @@ describe('Qvain.Description', () => {
 describe('Qvain.RightsAndLicenses', () => {
   const render = stores => {
     stores.Qvain.setLicense(LicenseConstructor({ en: 'Other (URL)', fi: 'Muu (URL)', }, 'other'))
-    stores.Qvain.setAccessType(AccessTypeConstructor(undefined, AccessTypeURLs.EMBARGO))
+    stores.Qvain.setAccessType(AccessTypeConstructor(undefined, ACCESS_TYPE_URL.EMBARGO))
     return mount(
       <Provider Stores={stores}>
         <>
@@ -534,20 +534,20 @@ describe('Qvain.Files', () => {
 
   it('should not render file picker for PAS datasets', () => {
     const store = getStores()
-    store.Qvain.dataCatalog = DataCatalogIdentifiers.IDA
+    store.Qvain.dataCatalog = DATA_CATALOG_IDENTIFIER.IDA
     store.Qvain.setPreservationState(0)
     store.Qvain.idaPickerOpen = true
     wrapper = shallow(<Files Stores={store} />)
     expect(wrapper.dive().find(IDAFilePicker).length).toBe(1)
     wrapper.unmount()
 
-    store.Qvain.dataCatalog = DataCatalogIdentifiers.IDA
+    store.Qvain.dataCatalog = DATA_CATALOG_IDENTIFIER.IDA
     store.Qvain.setPreservationState(80)
     wrapper = shallow(<Files Stores={store} />)
     expect(wrapper.dive().find(IDAFilePicker).length).toBe(0)
     wrapper.unmount()
 
-    store.Qvain.dataCatalog = DataCatalogIdentifiers.PAS
+    store.Qvain.dataCatalog = DATA_CATALOG_IDENTIFIER.PAS
     store.Qvain.setPreservationState(0)
     wrapper = shallow(<Files Stores={store} />)
     expect(wrapper.dive().find(IDAFilePicker).length).toBe(0)

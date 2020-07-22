@@ -4,7 +4,7 @@ import { inject, observer } from 'mobx-react'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import { RadioInput, NestedLabel } from '../general/form'
-import { EntityType } from '../utils/constants'
+import { ENTITY_TYPE } from '../../../utils/constants'
 import { GroupLabel } from './common'
 
 export class ActorTypeSelectBase extends Component {
@@ -22,8 +22,8 @@ export class ActorTypeSelectBase extends Component {
       Actors: { actorInEdit: actor },
       readonly,
     } = this.props.Stores.Qvain
-    const isPerson = actor.type === EntityType.PERSON
-    const isOrganization = actor.type === EntityType.ORGANIZATION
+    const isPerson = actor.type === ENTITY_TYPE.PERSON
+    const isOrganization = actor.type === ENTITY_TYPE.ORGANIZATION
     return (
       <Fieldset>
         <Translate component={GroupLabel} content="qvain.actors.add.groups.type" />
@@ -34,7 +34,7 @@ export class ActorTypeSelectBase extends Component {
                 id="entityPerson"
                 name="entityType"
                 disabled={readonly}
-                onChange={this.handleChangeEntity(actor, EntityType.PERSON)}
+                onChange={this.handleChangeEntity(actor, ENTITY_TYPE.PERSON)}
                 type="radio"
                 checked={isPerson}
               />
@@ -48,7 +48,7 @@ export class ActorTypeSelectBase extends Component {
                 name="entityType"
                 type="radio"
                 disabled={readonly}
-                onChange={this.handleChangeEntity(actor, EntityType.ORGANIZATION)}
+                onChange={this.handleChangeEntity(actor, ENTITY_TYPE.ORGANIZATION)}
                 checked={isOrganization}
               />
               <Translate content="qvain.actors.add.radio.organization" />

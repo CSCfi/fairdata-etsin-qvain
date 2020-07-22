@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { observable, action, runInAction, computed } from 'mobx'
 
-import { FileAPIURLs } from '../../components/qvain/utils/constants'
+import { FILE_API_URLS } from '../../utils/constants'
 import { Project, dirIdentifierKey, fileIdentifierKey } from './common.files.items'
 import { PromiseManager } from './common.files.utils'
 import { itemLoaderPublic } from './common.files.loaders'
@@ -69,7 +69,7 @@ class Files {
     }
 
     const load = async () => {
-      const { data } = await axios.get(FileAPIURLs.V2_DATASET_PROJECTS + identifier)
+      const { data } = await axios.get(FILE_API_URLS.V2_DATASET_PROJECTS + identifier)
       runInAction(() => {
         if (data.length > 0) {
           this.selectedProject = data[0]
@@ -115,7 +115,7 @@ class Files {
     }
 
     const load = async () => {
-      const { data } = await axios.get(FileAPIURLs.V2_DATASET_USER_METADATA + identifier)
+      const { data } = await axios.get(FILE_API_URLS.V2_DATASET_USER_METADATA + identifier)
       runInAction(() => {
         // Load metadata for files and directories selected in the dataset.
         const dsFiles = data.files || []
@@ -213,7 +213,7 @@ class Files {
   fetchRootIdentifier = async (projectIdentifier) => {
     // Public access to projects is only through published datasets.
     // To access user projects, overload this and remove cr_identifier from the request.
-    const { data } = await axios.get(FileAPIURLs.V2_PROJECT_DIR_URL + projectIdentifier, {
+    const { data } = await axios.get(FILE_API_URLS.V2_PROJECT_DIR_URL + projectIdentifier, {
       params: {
         cr_identifier: this.datasetIdentifier
       }

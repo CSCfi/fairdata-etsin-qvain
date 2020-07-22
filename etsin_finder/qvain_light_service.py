@@ -21,49 +21,48 @@ class MetaxQvainLightAPIService(FlaskService):
     """Metax API Service"""
 
     def __init__(self, app):
-        """
-        Init Metax API Service.
-
-        :param metax_api_config:
-        """
+        """Init Metax API Service."""
         super().__init__(app)
 
         metax_qvain_api_config = get_metax_qvain_api_config(app.testing)
 
         if metax_qvain_api_config:
 
-            self.METAX_GET_DIRECTORY_FOR_PROJECT_URL = 'https://{0}/rest/directories'.format(metax_qvain_api_config['HOST']) + \
+            self.METAX_GET_DIRECTORY_FOR_PROJECT_URL = 'https://{0}/rest/directories'.format(metax_qvain_api_config.get('HOST')) + \
                                                        '/files?project={0}&path=%2F'
-            self.METAX_GET_DIRECTORY = 'https://{0}/rest/directories'.format(metax_qvain_api_config['HOST']) + \
+            self.METAX_GET_DIRECTORY = 'https://{0}/rest/directories'.format(metax_qvain_api_config.get('HOST')) + \
                                        '/{0}/files'
-            self.METAX_GET_FILE = 'https://{0}/rest/files'.format(metax_qvain_api_config['HOST']) + \
+            self.METAX_GET_FILE = 'https://{0}/rest/files'.format(metax_qvain_api_config.get('HOST')) + \
                                   '/{0}'
-            self.METAX_GET_DATASET = 'https://{0}/rest/datasets'.format(metax_qvain_api_config['HOST'], ) + \
+            self.METAX_GET_DATASET = 'https://{0}/rest/datasets'.format(metax_qvain_api_config.get('HOST'), ) + \
                                      '/{0}?file_details'
-            self.METAX_GET_DATASETS_FOR_USER = 'https://{0}/rest/datasets'.format(metax_qvain_api_config['HOST']) + \
+            self.METAX_GET_DATASETS_FOR_USER = 'https://{0}/rest/datasets'.format(metax_qvain_api_config.get('HOST')) + \
                                                '?metadata_provider_user={0}&file_details&ordering=-date_created'
-            self.METAX_GET_ALL_DATASETS_FOR_USER = 'https://{0}/rest/datasets'.format(metax_qvain_api_config['HOST']) + \
+            self.METAX_GET_ALL_DATASETS_FOR_USER = 'https://{0}/rest/datasets'.format(metax_qvain_api_config.get('HOST')) + \
                 '?metadata_provider_user={0}&file_details&ordering=-date_created&no_pagination=true'
-            self.METAX_CREATE_DATASET = 'https://{0}/rest/datasets?file_details'.format(metax_qvain_api_config['HOST'])
-            self.METAX_PATCH_DATASET = 'https://{0}/rest/datasets'.format(metax_qvain_api_config['HOST'], ) + \
+            self.METAX_CREATE_DATASET = 'https://{0}/rest/datasets?file_details'.format(metax_qvain_api_config.get('HOST'))
+            self.METAX_PATCH_DATASET = 'https://{0}/rest/datasets'.format(metax_qvain_api_config.get('HOST'), ) + \
                                        '/{0}?file_details'
-            self.METAX_DELETE_DATASET = 'https://{0}/rest/datasets'.format(metax_qvain_api_config['HOST'], ) + \
+            self.METAX_DELETE_DATASET = 'https://{0}/rest/datasets'.format(metax_qvain_api_config.get('HOST'), ) + \
                                         '/{0}'
-            self.METAX_CHANGE_CUMULATIVE_STATE = 'https://{0}/rpc/datasets/change_cumulative_state'.format(metax_qvain_api_config['HOST'])
-            self.METAX_REFRESH_DIRECTORY_CONTENT = 'https://{0}/rpc/datasets/refresh_directory_content'.format(metax_qvain_api_config['HOST'])
-            self.METAX_FIX_DEPRECATED = 'https://{0}/rpc/datasets/fix_deprecated'.format(metax_qvain_api_config['HOST'])
-            self.user = metax_qvain_api_config['USER']
-            self.pw = metax_qvain_api_config['PASSWORD']
+            self.METAX_CHANGE_CUMULATIVE_STATE = 'https://{0}/rpc/datasets/change_cumulative_state'.format(metax_qvain_api_config.get('HOST'))
+            self.METAX_REFRESH_DIRECTORY_CONTENT = 'https://{0}/rpc/datasets/refresh_directory_content'.format(metax_qvain_api_config.get('HOST'))
+            self.METAX_FIX_DEPRECATED = 'https://{0}/rpc/datasets/fix_deprecated'.format(metax_qvain_api_config.get('HOST'))
+            self.user = metax_qvain_api_config.get('USER')
+            self.pw = metax_qvain_api_config.get('PASSWORD')
             self.verify_ssl = metax_qvain_api_config.get('VERIFY_SSL', True)
         elif not self.is_testing:
             log.error("Unable to initialize MetaxAPIService due to missing config")
 
     def get_directory_for_project(self, project_identifier, params=None):
-        """
-        Get directory contents for a specific project
+        """Get directory contents for a specific project
 
-        :param project_identifier:
-        :return:
+        Args:
+            project_identifier (str): Project identifier.
+
+        Returns:
+            Metax response
+
         """
         req_url = self.METAX_GET_DIRECTORY_FOR_PROJECT_URL.format(project_identifier)
 
@@ -91,12 +90,15 @@ class MetaxQvainLightAPIService(FlaskService):
         return metax_qvain_api_response.json()
 
     def get_directory(self, dir_identifier, params=None):
-        """
-        Get a specific directory with directory's id
+        """Get a specific directory with directory's id
 
-        :param dir_identifier:
-        params {dict} -- Dictionary of key-value pairs of query parameters.
-        :return:
+        Args:
+            dir_identifier (str): Directory identifier.
+            params (dict, optional): Query parameters. Defaults to None.
+
+        Returns:
+            Metax response
+
         """
         req_url = self.METAX_GET_DIRECTORY.format(dir_identifier)
 
@@ -124,11 +126,14 @@ class MetaxQvainLightAPIService(FlaskService):
         return metax_qvain_api_response.json()
 
     def get_file(self, file_identifier):
-        """
-        Get a specific file with file's id
+        """Get a specific file with file's id
 
-        :param file_identifier:
-        :return:
+        Args:
+            file_identifier (str): File identifier.
+
+        Returns:
+            Metax response
+
         """
         req_url = self.METAX_GET_FILE.format(file_identifier)
 
@@ -155,20 +160,19 @@ class MetaxQvainLightAPIService(FlaskService):
         return metax_qvain_api_response.json()
 
     def patch_file(self, file_identifier, data):
-        """
-        Patch metadata for a file with given data.
+        """Patch metadata for a file with given data.
 
         Useful for updating file_characteristics. Can be also used to change other fields
         such as identifier, so be careful when passing user input to avoid data corruption.
 
         Arguments:
-            file_identifier {data} -- The identifier of the file.
-            data {dict} -- Dictionary of fields that will be replaced in file metadata, other fields directly under the file will be
+            file_identifier (str): The identifier of the file.
+            data (dict): Dictionary of fields that will be replaced in file metadata, other fields directly under the file will be
                 preserved. For example, data = { 'file_characteristics': { 'csv_has_header': True } } would enable
                 file_characteristics.csv_has_header and remove any other fields nested under file_characteristics.
 
         Returns:
-            [type] -- The response from Metax.
+            The response from Metax.
 
         """
         req_url = self.METAX_GET_FILE.format(file_identifier)
@@ -197,11 +201,19 @@ class MetaxQvainLightAPIService(FlaskService):
         return metax_qvain_api_response.json()
 
     def get_datasets_for_user(self, user_id, limit, offset, no_pagination):
-        """
-        Get datasets created by the specified user. Uses pagination, so offset and limit are used as well.
+        """Get datasets created by the specified user.
 
-        :param user_id:
-        :return datasets:
+        Uses pagination, so offset and limit are used as well.
+
+        Args:
+            user_id (str): User identifier.
+            limit (list): The limit of returned datasets.
+            offset (list): The offset for pagination.
+            no_pagination (bool): To use pagination or not.
+
+        Returns:
+            Metax response.
+
         """
         req_url = self.METAX_GET_DATASETS_FOR_USER.format(user_id)
         if (no_pagination):
@@ -239,15 +251,14 @@ class MetaxQvainLightAPIService(FlaskService):
         return metax_api_response.json()
 
     def create_dataset(self, data, params=None, use_doi=False):
-        """
-        Send the data from the frontend to Metax.
+        """Send the data from the frontend to Metax.
 
         Arguments:
-            data {object} -- Object with the dataset data that has been validated and converted to comply with the Metax schema.
-            params {dict} -- Dictionary of key-value pairs of query parameters.
+            data (object): Object with the dataset data that has been validated and converted to comply with the Metax schema.
+            params (dict): Dictionary of key-value pairs of query parameters.
 
         Returns:
-            [type] -- The response from Metax.
+            The response from Metax.
 
         """
         req_url = self.METAX_CREATE_DATASET
@@ -279,17 +290,16 @@ class MetaxQvainLightAPIService(FlaskService):
         return metax_api_response.json(), metax_api_response.status_code
 
     def update_dataset(self, data, cr_id, last_modified, params):
-        """
-        Update a dataset with the data that the user has entered in Qvain-light.
+        """Update a dataset with the data that the user has entered in Qvain-light.
 
         Arguments:
-            data {object} -- Object with the dataset data that has been validated and converted to comply with the Metax schema.
-            cr_id {string} -- The identifier of the dataset.
-            last_modified {string} -- HTTP datetime string (RFC2616)
-            params {dict} -- Dictionary of key-value pairs of query parameters.
+            data (object): Object with the dataset data that has been validated and converted to comply with the Metax schema.
+            cr_id (str): The identifier of the dataset.
+            last_modified (str): HTTP datetime string (RFC2616)
+            params (dict): Dictionary of key-value pairs of query parameters.
 
         Returns:
-            [type] -- The response from Metax.
+            The response from Metax.
 
         """
         req_url = self.METAX_PATCH_DATASET.format(cr_id)
@@ -325,14 +335,13 @@ class MetaxQvainLightAPIService(FlaskService):
         return metax_api_response.json(), metax_api_response.status_code
 
     def get_dataset(self, cr_id):
-        """
-        Get dataset.
+        """Get dataset.
 
         Arguments:
-            cr_id {string} -- The identifier of the dataset.
+            cr_id (str): The identifier of the dataset.
 
         Returns:
-            [type] -- Metax response.
+            Metax response.
 
         """
         req_url = self.METAX_GET_DATASET.format(cr_id)
@@ -358,14 +367,13 @@ class MetaxQvainLightAPIService(FlaskService):
         return json_or_empty(metax_api_response), metax_api_response.status_code
 
     def delete_dataset(self, cr_id):
-        """
-        Delete dataset from Metax.
+        """Delete dataset from Metax.
 
         Arguments:
-            cr_id {string} -- The identifier of the dataset.
+            cr_id (str): The identifier of the dataset.
 
         Returns:
-            [type] -- Metax response.
+            Metax response.
 
         """
         req_url = self.METAX_DELETE_DATASET.format(cr_id)
@@ -392,15 +400,14 @@ class MetaxQvainLightAPIService(FlaskService):
         return json_or_empty(metax_api_response), metax_api_response.status_code
 
     def change_cumulative_state(self, cr_id, cumulative_state):
-        """
-        Call Metax change_cumulative_state RPC.
+        """Call Metax change_cumulative_state RPC.
 
         Arguments:
-            cr_id {string} -- The identifier of the dataset.
-            cumulative_state {integer} -- New cumulative state.
+            cr_id (str): The identifier of the dataset.
+            cumulative_state (int): New cumulative state.
 
         Returns:
-            [type] -- Metax response.
+            Metax response.
 
         """
         req_url = self.METAX_CHANGE_CUMULATIVE_STATE
@@ -432,15 +439,14 @@ class MetaxQvainLightAPIService(FlaskService):
         return (json_or_empty(metax_api_response) or metax_api_response.text), metax_api_response.status_code
 
     def refresh_directory_content(self, cr_identifier, dir_identifier):
-        """
-        Call Metax refresh_directory_content RPC.
+        """Call Metax refresh_directory_content RPC.
 
         Arguments:
-            cr_identifier {string} -- The identifier of the dataset.
-            dir_identifier {integer} -- The identifier of the directory.
+            cr_identifier (str): The identifier of the dataset.
+            dir_identifier (int): The identifier of the directory.
 
         Returns:
-            [type] -- Metax response.
+            Metax response.
 
         """
         req_url = self.METAX_REFRESH_DIRECTORY_CONTENT
@@ -474,14 +480,13 @@ class MetaxQvainLightAPIService(FlaskService):
         return (json_or_empty(metax_api_response) or metax_api_response.text), metax_api_response.status_code
 
     def fix_deprecated_dataset(self, cr_identifier):
-        """
-        Call Metax fix_deprecated RPC.
+        """Call Metax fix_deprecated RPC.
 
         Arguments:
-            cr_identifier {string} -- The identifier of the dataset.
+            cr_identifier (str): The identifier of the dataset.
 
         Returns:
-            [type] -- Metax response.
+            Metax response.
 
         """
         req_url = self.METAX_FIX_DEPRECATED
@@ -515,144 +520,50 @@ class MetaxQvainLightAPIService(FlaskService):
 _metax_api = MetaxQvainLightAPIService(app)
 
 def get_directory(dir_id, params=None):
-    """
-    Get directory from metax.
-
-    :param dir_id:
-    :return:
-    """
+    """Public function to get a specific directory with directory's id"""
     return _metax_api.get_directory(dir_id, params)
 
 def get_directory_for_project(project_id, params=None):
-    """
-    Get project root file directory from metax.
-
-    :param project_id:
-    :return:
-    """
+    """Public function to get directory contents for a specific project"""
     return _metax_api.get_directory_for_project(project_id, params)
 
 def get_file(file_identifier):
-    """
-    Get a specific file with file's id
-
-    :param file_identifier:
-    :return:
-    """
+    """Public function to get a specific file with file's id"""
     return _metax_api.get_file(file_identifier)
 
 def patch_file(file_identifier, data):
-    """
-    Patch a specific file with file's id
-
-    :param file_identifier:
-    :return:
-    """
+    """Public function to patch metadata for a file with given data."""
     return _metax_api.patch_file(file_identifier, data)
 
 def get_datasets_for_user(user_id, limit, offset, no_pagination):
-    """
-    Get datasets for user
-
-    :param user_id, limit:
-    :return:
-    """
+    """Public function to get datasets created by the specified user."""
     return _metax_api.get_datasets_for_user(user_id, limit, offset, no_pagination)
 
 def create_dataset(form_data, params=None, use_doi=False):
-    """
-    Create dataset in Metax.
-
-    Arguments:
-        form_data {object} -- Object with the dataset data that has been validated and converted to comply with the Metax schema.
-        params {dict} -- Dictionary of key-value pairs of query parameters.
-
-    Returns:
-        [type] -- Metax response.
-
-    """
+    """Public function to Send the data from the frontend to Metax."""
     return _metax_api.create_dataset(form_data, params, use_doi)
 
 def update_dataset(form_data, cr_id, last_modified, params=None):
-    """
-    Update dataset in Metax.
-
-    Arguments:
-        form_data {object} -- Object with the dataset data that has been validated and converted to comply with the Metax schema.
-        cr_id {string} -- The identifier of the dataset.
-        last_modified {string} -- HTTP datetime string (RFC2616)
-        params {dict} -- Dictionary of key-value pairs of query parameters.
-
-    Returns:
-        [type] -- Metax response.
-
-    """
+    """Public function to Update a dataset with the data that the user has entered in Qvain-light."""
     return _metax_api.update_dataset(form_data, cr_id, last_modified, params)
 
 def get_dataset(cr_id):
-    """
-    Get dataset for editing from Metax.
-
-    Arguments:
-        cr_id {string} -- The identifier of the dataset.
-
-    Returns:
-        [type] -- Metax response.
-
-    """
+    """Public function to get dataset"""
     return _metax_api.get_dataset(cr_id)
 
 
 def delete_dataset(cr_id):
-    """
-    Delete dataset from Metax.
-
-    Arguments:
-        cr_id {string} -- The identifier of the dataset.
-
-    Returns:
-        [type] -- Metax response.
-
-    """
+    """Public function to delete dataset from Metax."""
     return _metax_api.delete_dataset(cr_id)
 
 def change_cumulative_state(cr_id, cumulative_state):
-    """
-    Change cumulative_state of a dataset in Metax.
-
-    Arguments:
-        cr_id {string} -- The identifier of the dataset.
-        cumulative_state {integer} -- The new cumulative state.
-
-    Returns:
-        [type] -- Metax response.
-
-    """
+    """Public function to change cumulative_state of a dataset in Metax."""
     return _metax_api.change_cumulative_state(cr_id, cumulative_state)
 
 def refresh_directory_content(cr_identifier, dir_identifier):
-    """
-    Call Metax refresh_directory_content RPC.
-
-    Arguments:
-        cr_identifier {string} -- The identifier of the dataset.
-        dir_identifier {string} -- The identifier of the directory.
-
-    Returns:
-        [type] -- Metax response.
-
-    """
+    """Public function to call Metax refresh_directory_content RPC."""
     return _metax_api.refresh_directory_content(cr_identifier, dir_identifier)
 
 def fix_deprecated_dataset(cr_id):
-    """
-    Call Metax fix_deprecated RPC.
-
-    Arguments:
-        cr_id {string} -- The identifier of the dataset.
-
-    Returns:
-        [type] -- Metax response.
-
-    """
+    """Public function to call Metax fix_deprecated RPC."""
     return _metax_api.fix_deprecated_dataset(cr_id)

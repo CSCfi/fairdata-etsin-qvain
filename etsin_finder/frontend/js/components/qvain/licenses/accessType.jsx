@@ -13,8 +13,8 @@ import ValidationError from '../general/validationError'
 import EmbargoExpires from './embargoExpires'
 import { onChange, getCurrentValue } from '../utils/select'
 import { AccessType as AccessTypeConstructor } from '../../../stores/view/qvain'
-import { AccessTypeURLs } from '../utils/constants'
 import { LabelLarge, HelpField } from '../general/form'
+import { ACCESS_TYPE_URL } from '../../../utils/constants'
 
 export class AccessType extends Component {
   promises = []
@@ -48,8 +48,8 @@ export class AccessType extends Component {
           const user = this.props.Stores.Auth.user
 
           if (!user.isUsingRems) {
-            refsFi = refsFi.filter((ref) => ref.value !== AccessTypeURLs.RESTRICTED)
-            refsEn = refsEn.filter((ref) => ref.value !== AccessTypeURLs.RESTRICTED)
+            refsFi = refsFi.filter((ref) => ref.value !== ACCESS_TYPE_URL.RESTRICTED)
+            refsEn = refsEn.filter((ref) => ref.value !== ACCESS_TYPE_URL.RESTRICTED)
           }
 
           this.setState({
@@ -105,10 +105,7 @@ export class AccessType extends Component {
     const { accessType, readonly } = this.props.Stores.Qvain
 
     let permitInfo = null
-    if (
-      accessType &&
-      accessType.url === 'http://uri.suomi.fi/codelist/fairdata/access_type/code/permit'
-    ) {
+    if (accessType && accessType.url === ACCESS_TYPE_URL.PERMIT) {
       permitInfo = (
         <PermitHelp>
           <Translate
@@ -142,10 +139,10 @@ export class AccessType extends Component {
         />
         {permitInfo}
         <ValidationError>{this.state.accessTypeValidationError}</ValidationError>
-        {accessType !== undefined && accessType.url === AccessTypeURLs.EMBARGO && (
+        {accessType !== undefined && accessType.url === ACCESS_TYPE_URL.EMBARGO && (
           <EmbargoExpires />
         )}
-        {accessType.url !== AccessTypeURLs.OPEN ? <RestrictionGrounds /> : null}
+        {accessType.url !== ACCESS_TYPE_URL.OPEN ? <RestrictionGrounds /> : null}
       </Card>
     )
   }

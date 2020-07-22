@@ -33,6 +33,7 @@ const finnish = {
     catalog_publisher: 'Katalogin julkaisija',
     citation: 'Sitaatti / Lähdeviite',
     citation_formats: 'Näytä lisää sitaattiehdotuksia',
+    citationNoDateIssued: 'Julkaisupäivämäärää ei määritelty',
     contact: {
       access: 'Aineiston käyttöoikeuteen liittyvissä kyselyissä ota yhteyttä kuraattoriin.',
       contact: 'Ota yhteyttä',
@@ -250,6 +251,11 @@ const finnish = {
     language: {
       toggleLabel: 'Vaihda kieltä',
     },
+    cookies: {
+      accept: 'Hyväksy evästeet',
+      infoText: 'Käyttämällä Fairdata-palveluja hyväksyt evästiden käytön. Käytämme evästeitä palvelun kehittömiseen ja käyttökokemuksen parantamiseen.',
+      link: 'Fairdata-palvelujen tietosuoja.',
+    }
   },
   home: {
     title: 'Etsi aineistoa',

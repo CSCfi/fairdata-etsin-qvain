@@ -1,10 +1,7 @@
 import axios from 'axios'
 import { observable, action, runInAction, computed } from 'mobx'
 
-import {
-  EntityType,
-  Role
-} from '../../components/qvain/utils/constants'
+import { METAX_FAIRDATA_ROOT_URL, ENTITY_TYPE, ROLE } from '../../utils/constants'
 
 
 // Organization may be a reference organizations if its identifier starts with the proper prefix.
@@ -23,7 +20,7 @@ const getOrganizationSearchUrl = parentId => {
       shortId = `organization_${match[1]}`
     }
   }
-  return `https://metax.fairdata.fi/es/organization_data/organization/_search?size=3000&q=parent_id:"${shortId}"`
+  return `${METAX_FAIRDATA_ROOT_URL}/es/organization_data/organization/_search?size=3000&q=parent_id:"${shortId}"`
 }
 
 // create a new UI Identifier based on existing UI IDs
@@ -41,7 +38,7 @@ export const createOrgUIID = () => {
   return orgUIIDCounter
 }
 
-export const Actor = ({ type = EntityType.PERSON, person = Person(), organizations = [], roles = [], uiid = createActorUIID() } = {}) => ({
+export const Actor = ({ type = ENTITY_TYPE.PERSON, person = Person(), organizations = [], roles = [], uiid = createActorUIID() } = {}) => ({
   type,
   roles,
   person,
@@ -224,27 +221,27 @@ class Actors {
     const actors = []
     if ('publisher' in researchDataset) {
       actors.push(
-        this.createActor(researchDataset.publisher, Role.PUBLISHER, actors)
+        this.createActor(researchDataset.publisher, ROLE.PUBLISHER, actors)
       )
     }
     if ('curator' in researchDataset) {
       researchDataset.curator.forEach(curator =>
-        actors.push(this.createActor(curator, Role.CURATOR, actors))
+        actors.push(this.createActor(curator, ROLE.CURATOR, actors))
       )
     }
     if ('creator' in researchDataset) {
       researchDataset.creator.forEach(creator =>
-        actors.push(this.createActor(creator, Role.CREATOR, actors))
+        actors.push(this.createActor(creator, ROLE.CREATOR, actors))
       )
     }
     if ('rights_holder' in researchDataset) {
       researchDataset.rights_holder.forEach(rightsHolder =>
-        actors.push(this.createActor(rightsHolder, Role.RIGHTS_HOLDER, actors))
+        actors.push(this.createActor(rightsHolder, ROLE.RIGHTS_HOLDER, actors))
       )
     }
     if ('contributor' in researchDataset) {
       researchDataset.contributor.forEach(contributor =>
-        actors.push(this.createActor(contributor, Role.CONTRIBUTOR, actors))
+        actors.push(this.createActor(contributor, ROLE.CONTRIBUTOR, actors))
       )
     }
     this.actors.replace(actors)
@@ -278,7 +275,7 @@ class Actors {
 
     let organizations
     let person = Person()
-    if (entityType === EntityType.PERSON) {
+    if (entityType === ENTITY_TYPE.PERSON) {
       person = Person({
         name: actorJson.name,
         email: actorJson.email,
@@ -287,7 +284,7 @@ class Actors {
       organizations = flattenOrganizations(actorJson.member_of)
     }
 
-    if (entityType === EntityType.ORGANIZATION) {
+    if (entityType === ENTITY_TYPE.ORGANIZATION) {
       organizations = flattenOrganizations(actorJson)
     }
 
@@ -480,7 +477,7 @@ class Actors {
   toBackend = () => this.actors.map(actor => ({
     type: actor.type,
     roles: actor.roles,
-    person: actor.type === EntityType.PERSON ? {
+    person: actor.type === ENTITY_TYPE.PERSON ? {
       name: actor.person.name,
       email: actor.person.email || undefined,
       identifier: actor.person.identifier || undefined

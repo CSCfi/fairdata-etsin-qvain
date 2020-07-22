@@ -14,18 +14,23 @@ from etsin_finder.cr_service import \
     get_catalog_record_embargo_available
 from etsin_finder.finder import app
 from etsin_finder import rems_service
-from etsin_finder.utils import tz_now_is_later_than_timestamp_str, remove_keys_recursively, leave_keys_in_dict, \
-    ACCESS_TYPES, DATA_CATALOG_IDENTIFIERS
+from etsin_finder.utils import tz_now_is_later_than_timestamp_str, remove_keys_recursively, leave_keys_in_dict
+from etsin_finder.constants import ACCESS_TYPES, DATA_CATALOG_IDENTIFIERS
 
 log = app.logger
 
 
 def user_has_rems_permission_for_catalog_record(cr_id):
-    """
-    Use Fairdata REMS API to check whether user has 'entitlement' for the specified catalog record
+    """Does user have REMS permission for cr
 
-    :param catalog_record:
-    :return:
+    Use Fairdata REMS API to check whether user has 'entitlement' for the specified catalog record.
+
+    Args:
+        cr_id (str): Catalog record identifier.
+
+    Returns:
+        bool: True if user is entitled, False if not.
+
     """
     if not is_authenticated():
         return False
@@ -36,18 +41,22 @@ def user_has_rems_permission_for_catalog_record(cr_id):
 
 
 def user_is_allowed_to_download_from_ida(catalog_record, is_authd):
-    """
-    Based on catalog record's research_dataset.access_rights.access_type,
+    """Is user allowed to download from Ida
 
+    Based on catalog record's research_dataset.access_rights.access_type,
     decide whether user is allowed to download from Fairdata download service
 
-    :param catalog_record:
-    :param is_authd: Is the user authenticated
-    :return:
+    Args:
+        catalog_record (str): Catalog record identifier.
+        is_authd (bool): Is the user authenticated.
+
+    Returns:
+        bool: True if user is allowed to download, False if not.
+
     """
     # TODO: After testing with this is done and after test datas have proper ida data catalog identifiers, remove
     # TODO: 'not app.debug and' from below
-    if not app.debug and get_catalog_record_data_catalog_id(catalog_record) != DATA_CATALOG_IDENTIFIERS['ida']:
+    if not app.debug and get_catalog_record_data_catalog_id(catalog_record) != DATA_CATALOG_IDENTIFIERS.get('ida'):
         return False
 
     access_type_id = get_catalog_record_access_type(catalog_record)
@@ -70,15 +79,19 @@ def user_is_allowed_to_download_from_ida(catalog_record, is_authd):
 
 
 def strip_dir_api_object(dir_api_obj, is_authd, catalog_record):
-    """
-    Based on catalog record's research_dataset.access_rights.access_type,
+    """Strip directory api object
 
+    Based on catalog record's research_dataset.access_rights.access_type,
     decide whether to strip dir_api_obj partially or not.
 
-    :param dir_api_obj:
-    :param is_authd: Is the user authenticated
-    :param catalog_record: Catalog record, to which the dir_api_obj is bound
-    :return: dir_api_obj after possible modifications
+    Args:
+        dir_api_obj (dict): Directory api object.
+        is_authd (bool): Is the user authenticated.
+        catalog_record (str): Catalog record identifier.
+
+    Returns:
+        dict: dir_api_obj after possible modifications.
+
     """
     access_type_id = get_catalog_record_access_type(catalog_record)
     if not access_type_id:
@@ -102,15 +115,19 @@ def strip_dir_api_object(dir_api_obj, is_authd, catalog_record):
 
 
 def strip_information_from_catalog_record(catalog_record, is_authd):
-    """
-    Based on catalog record's research_dataset.access_rights.access_type,
+    """Strip Information from catalog record
 
+    Based on catalog record's research_dataset.access_rights.access_type,
     decide whether to strip ida-related file and directory data partially or not. In any case, strip sensitive
     information.
 
-    :param catalog_record:
-    :param is_authd: Is the user authenticated
-    :return: catalog_record after possible modifications
+    Args:
+        catalog_record (str): Catalog record identifier.
+        is_authd (bool): Is the user authenticated.
+
+    Returns:
+        dict: Catalog_record after possible modifications
+
     """
     catalog_record = _strip_sensitive_information_from_catalog_record(catalog_record)
     access_type_id = get_catalog_record_access_type(catalog_record)
@@ -135,11 +152,14 @@ def strip_information_from_catalog_record(catalog_record, is_authd):
 
 
 def _embargo_time_passed(catalog_record):
-    """
-    Check whether embargo time has been passed.
+    """Check whether embargo time has been passed.
 
-    :param catalog_record:
-    :return:
+    Args:
+        catalog_record (str): Catalog record identifier.
+
+    Returns:
+        bool: True if the current time has passed the embargo time, False if not.
+
     """
     try:
         access_rights_available = get_catalog_record_embargo_available(catalog_record)
@@ -152,34 +172,52 @@ def _embargo_time_passed(catalog_record):
 
 
 def _strip_sensitive_information_from_catalog_record(catalog_record):
-    """
-    This method should strip catalog record of any confidential/private information not supposed to be sent to frontend
+    """Strip sensitive information from catalog record
 
-    :param catalog_record:
-    :return:
+    This method strips the catalog record of any confidential/private information not supposed to be sent to frontend.
+
+    Args:
+        catalog_record (dict): Catalog record.
+
+    Returns:
+        dict: [description]
+
     """
     return remove_keys_recursively(catalog_record, ['email', 'telephone', 'phone'])
 
 
 def _strip_catalog_record_ida_data_partially(catalog_record):
+    """Strip catalog record Ida data partially
+
+    Args:
+        catalog_record (dict): Catalog record.
+
+    """
     _strip_catalog_record_files(catalog_record)
     _strip_catalog_record_directories(catalog_record)
 
 
 def _strip_directory_api_obj_partially(dir_api_obj):
+    """Strip directory api object partially
+
+    Args:
+        dir_api_obj (dict): Directory api object.
+
+    """
     _strip_dir_api_obj_files(dir_api_obj)
     _strip_dir_api_obj_directories(dir_api_obj)
 
 
 def _strip_catalog_record_files(catalog_record):
-    """
-    Keys to leave:
+    """Strip catalog record files
 
+    Keys to leave:
     'use_category', 'file_type', 'identifier', 'details.file_name', 'details.file_path', 'details.byte_size,
     details.identifier'
 
-    :param catalog_record:
-    :return:
+    Args:
+        catalog_record (dict): Catalog record.
+
     """
     file_keys_to_leave = set(['use_category', 'file_type', 'identifier', 'details'])
     details_keys_to_leave = set(['file_name', 'file_path', 'byte_size', 'identifier'])
@@ -192,14 +230,15 @@ def _strip_catalog_record_files(catalog_record):
 
 
 def _strip_catalog_record_directories(catalog_record):
-    """
-    Keys to leave:
+    """Strip catalog record directories
 
+    Keys to leave:
     'identifier', 'use_category', 'details.byte_size', 'details.directory_name', 'details.directory_path',
     'details.byte_size', 'details.file_count'
 
-    :param catalog_record:
-    :return:
+    Args:
+        catalog_record (dict): Catalog record
+
     """
     dir_keys_to_leave = set(['identifier', 'use_category', 'details'])
     details_keys_to_leave = set(['directory_name', 'directory_path', 'byte_size', 'file_count', 'identifier'])
@@ -212,11 +251,13 @@ def _strip_catalog_record_directories(catalog_record):
 
 
 def _strip_dir_api_obj_files(dir_api_obj):
-    """
+    """Strip directory api object files
+
     Keys to leave: 'identifier', 'file_name', 'file_path', 'byte_size'
 
-    :param dir_api_obj:
-    :return:
+    Args:
+        dir_api_obj (dict): Directory api object
+
     """
     file_keys_to_leave = set(['identifier', 'file_name', 'file_path', 'byte_size'])
     for file in dir_api_obj.get('files', []):
@@ -224,11 +265,11 @@ def _strip_dir_api_obj_files(dir_api_obj):
 
 
 def _strip_dir_api_obj_directories(dir_api_obj):
-    """
-    Keys to leave: 'identifier', 'directory_name', 'directory_path', 'byte_size', 'file_count'
+    """Strip directory api object directories
 
-    :param dir_api_obj:
-    :return:
+    Args:
+        dir_api_obj (dict): Directory api object
+
     """
     dir_keys_to_leave = set(['identifier', 'directory_name', 'directory_path', 'byte_size', 'file_count'])
     for dir in dir_api_obj.get('directories', []):

@@ -33,6 +33,7 @@ const english = {
     catalog_publisher: 'Catalog publisher',
     citation: 'Citation / Reference',
     citation_formats: 'Show more citation formats',
+    citationNoDateIssued: 'Issued date not defined',
     contact: {
       access: 'Contact the curator on issues related to dataset access',
       contact: 'Contact',
@@ -252,6 +253,11 @@ const english = {
     language: {
       toggleLabel: 'Toggle language',
     },
+    cookies: {
+      accept: 'Accept all cookies',
+      infoText: 'By using Fairdata’s services you agree to our Cookies Use. We use cookies to improve your experience and make our services work better.',
+      link: 'View the Fairdata Privacy Policy.',
+    }
   },
   home: {
     title: 'Search datasets',
