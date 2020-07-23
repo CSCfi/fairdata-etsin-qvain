@@ -446,6 +446,10 @@ const finnish = {
       infoTitle: 'Kuvaus info',
       infoText:
         'Anna aineistolle kuvaava ja yksilöivä nimi. Kirjoita myös kuvaus mahdollisimman tarkasti. Kerro miten aineisto on syntynyt, mihin tarkoitukseen, miten se rakentuu ja miten sitä on käsitelty. Kerro myös sisällöstä, mahdollisista puutteista ja rajauksista.',
+      fieldHelpTexts: {
+        requiredForAll: 'Pakollinen kenttä kaikille aineistoille',
+        requiredToPublish: 'Pakollinen kenttä julkaistaville aineistoille',
+      },
       description: {
         langEn: 'ENGLANTI',
         langFi: 'SUOMI',

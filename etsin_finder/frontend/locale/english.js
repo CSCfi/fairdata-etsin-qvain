@@ -447,6 +447,10 @@ const english = {
       infoTitle: 'Description info',
       infoText:
         'Give a descriptive title for your dataset. Also, write the description as detailed as you possibly can; explain how the dataset was created, how it is structured, and how it has been handled. Describe also the content.',
+      fieldHelpTexts: {
+        requiredForAll: 'Required for all datasets',
+        requiredToPublish: 'Required to save and publish',
+      },
       description: {
         langEn: 'ENGLISH',
         langFi: 'FINNISH',
