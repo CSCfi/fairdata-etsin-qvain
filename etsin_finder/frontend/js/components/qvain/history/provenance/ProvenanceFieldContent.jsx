@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Observer } from 'mobx-react'
 import FieldList from '../../general/fieldList'
 import FieldListAdd from '../../general/fieldListAdd'
 import handleSave from './handleSave'
@@ -10,12 +11,20 @@ const ProvenanceFieldContent = ({ Store, lang }) => {
   const translationsRoot = 'qvain.history.provenance'
   return (
     <>
-      <FieldList Store={Store} Field={Field} fieldIdentifier="provenances" lang={lang} />
+      <Observer>{() => (
+        <FieldList
+          Field={Field}
+          lang={lang}
+          translationsRoot={translationsRoot}
+          elements={Store.provenances}
+        />
+      )}
+      </Observer>
       <FieldListAdd
         Store={Store}
         Field={Field}
         translationsRoot={translationsRoot}
-        handleSave={handleSave}
+        handleSave={() => handleSave(Field)}
         Form={Form}
       />
     </>

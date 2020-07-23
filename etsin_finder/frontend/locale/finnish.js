@@ -1019,10 +1019,12 @@ const finnish = {
         title: 'Infrastruktuuri',
         description:
           'Voit lisätä palveluita tai rakenteita joita on käytetty aineiston laatimiseen.',
+        noItems: 'Infrastruktuureja ei ole lisätty.'
       },
       relatedResource: {
         title: 'Viittaukset toiseen resurssiin',
         description: 'Viittaukset aineistoihin, julkaisuihin tai muihin resursseihin, jotka auttavat ymmärtämään ja käyttämään tätä tutkimusaineistoa.',
+        noItems: 'Viittauksia toisiin resursseihin ei ole lisätty.',
         modal: {
           addButton: 'Lisää viittaus toiseen resurssiin',
           title: {
@@ -1069,7 +1071,8 @@ const finnish = {
       },
       provenance: {
         title: 'Alkuperä',
-        description: '',
+        description: 'Tapahtuma tai toiminta, jonka kohteena oli tämä aineisto.',
+        noItems: 'Alkuperätietoja ei ole lisätty.',
         modal: {
           addButton: 'Lisää alkuperä',
           title: {
@@ -1118,6 +1121,7 @@ const finnish = {
           },
           locationInput: {
             label: 'Alueelliset tiedot',
+            noItems: 'Alueellisia tietoja ei ole lisätty.',
             error: {
               nameRequired: 'Nimi on pakollinen kenttä.',
               altitudeNan: 'Korkeus täytyy olla numero',
@@ -1161,6 +1165,7 @@ const finnish = {
           },
           usedEntityInput: {
             label: 'Käytetyt kokonaisuudet',
+            noItems: 'Ei lisättyjä käytettyjä kokonaisuuksia.',
             modal: {
               addButton: 'Lisää käytetty kokonaisuus',
               buttons: {
@@ -1204,6 +1209,15 @@ const finnish = {
                 placeholder: 'Resurssin tyyppi'
               }
             },
+          },
+          actorsInput: {
+            label: 'Liittyi toimijaan',
+            addButton: 'Liitä toimija',
+            createButton: 'Luo uusi toimija'
+          },
+          lifecycleInput: {
+            label: 'Elinkaaritapahtuma',
+            placeholder: 'Elinkaaritapahtuma'
           }
         },
       },
@@ -1225,6 +1239,7 @@ const finnish = {
       spatial: {
         title: 'Maantieteellinen kattavuus',
         description: 'Alue jonka aineisto kattaa. Esimerkiksi paikat, joissa on tehty havaintoja. ',
+        noItems: 'Maantieteellistä kattavuutta ei ole lisätty.',
         error: {
           nameRequired: 'Nimi on pakollinen kenttä.',
           altitudeNan: 'Korkeus täytyy olla numero',

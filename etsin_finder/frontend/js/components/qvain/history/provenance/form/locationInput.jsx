@@ -19,9 +19,15 @@ const Location = ({ Stores }) => {
   return (
     <>
       <Translate component={Label} content={translations.label} htmlFor="location-input" />
-      <FieldList Store={Store} Field={Store.Spatials} fieldIdentifier="spatials" lang={lang} />
+      <FieldList Store={Store} Field={Store.Spatials} fieldIdentifier="spatials" lang={lang} translationsRoot={translationsRoot} elements={Store.inEdit.spatials} />
       <div id="locationInput">
-        <FieldListAdd Store={Store} Field={Store.Spatials} Form={Form} translationsRoot={translationsRoot} handleSave={handleSave} />
+        <FieldListAdd
+          Store={Store}
+          Field={Store.Spatials}
+          Form={Form}
+          translationsRoot={translationsRoot}
+          handleSave={() => handleSave(Store.Spatials)}
+        />
       </div>
     </>
   )

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { observable, action, runInAction, computed } from 'mobx'
+import { observable, action, runInAction, computed, toJS } from 'mobx'
 
 import {
   EntityType,
@@ -443,6 +443,7 @@ class Actors {
     this.actors.replace(mergedActors)
   }
 
+  setSelectedActor
 
   @action
   setActors = actors => {
@@ -503,6 +504,14 @@ class Actors {
   @action addRef = (ref) => {
     this.actorsRefs.push(ref)
   }
+
+  @computed get actorOptions() {
+    return this.actors.map(ref => ({
+      value: ref.uiid,
+      label: ref.person.name || ref.organizations[0].name,
+      roles: ref.roles
+    }))
+  }
 }
 
 export default Actors
@@ -514,12 +523,18 @@ export class ActorsRef {
     this.setActorsRef(actorNames)
   }
 
-  @observable actorsRef = []
+  @observable actorsRef = {}
 
   @computed get actorOptions() {
     // makes a list of actors based on the refs
-    return this.actorsRef.map(ref => ({ value: ref.uiid, label: ref.person.name || ref.organisation.name }))
+    return Object.values(this.actorsRef).map(ref => ({
+      value: ref.uiid,
+      label: ref.person.name || ref.organizations[0].name,
+      roles: ref.roles
+    }))
   }
+
+  save = () => this.actorsRef
 
   @computed get toBackend() {
     // makes a list of names to be stored to metax
@@ -527,19 +542,28 @@ export class ActorsRef {
   }
 
   @action addActorRef = (actor) => {
-    this.actorsRef.push(actor)
+    this.actorsRef = { ...this.actorsRef, [actor.uiid]: actor }
+    console.log(toJS(this.actorsRef))
+  }
+
+  @action addActorWithId = (id) => {
+    const actor = this.actorsStore.actors.find(a => a.uiid === id)
+    if (actor) this.addActorRef(actor)
   }
 
   @action removeActorRef = (uiid) => {
-    this.actorsRef = this.actorsRef.filter(ref => ref.uiid !== uiid)
+    console.log('removing actorsRef', uiid)
+    delete this.actorsRef[uiid]
+    console.log(toJS(this.actorsRef))
   }
 
   @action setActorsRef = (actorsFromBackend) => {
-    const actorsRef = this.actorsStore.filter(actor => !!actorsFromBackend.find(afb => isEqual(afb, actorToBackend(actor))))
+    if (!actorsFromBackend) return
+    const actorsRef = this.actorsStore.actors.filter(actor => !!actorsFromBackend.find(afb => isEqual(afb, actorToBackend(actor))))
     this.actorsRef = actorsRef
   }
 
   @action clearActorsRef = () => {
-    this.actorsRef = []
+    this.actorsRef = {}
   }
 }

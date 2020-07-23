@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import { Observer } from 'mobx-react'
+import { toJS } from 'mobx'
 import {
     ButtonGroup,
     ButtonLabel,
@@ -11,13 +12,20 @@ import {
     ButtonContainer
 } from './buttons'
 
-const FieldList = ({ Store, Field, fieldIdentifier, lang }) => {
+const FieldList = ({ Field, lang, translationsRoot, elements }) => {
   const { remove, edit } = Field
+
+  console.log('elements', toJS(elements))
+
+  if (!elements.length) {
+    return <Translate component="div" content={`${translationsRoot}.noItems`} />
+  }
+
 
   const Elements = (
     <Observer>
       {() => (
-    Store[fieldIdentifier].map(item => (
+    elements.map(item => (
       <FieldListContainer key={item.uiid}>
         <Label>{item.name[lang] || item.name.und || item.name}</Label>
         <ButtonContainer>
@@ -43,10 +51,14 @@ const FieldList = ({ Store, Field, fieldIdentifier, lang }) => {
 }
 
 FieldList.propTypes = {
-    Store: PropTypes.object.isRequired,
     Field: PropTypes.object.isRequired,
-    fieldIdentifier: PropTypes.string.isRequired,
-    lang: PropTypes.string.isRequired
+    lang: PropTypes.string.isRequired,
+    translationsRoot: PropTypes.string.isRequired,
+    elements: PropTypes.array
+}
+
+FieldList.defaultProps = {
+  inEdit: false
 }
 
 const FieldListContainer = styled(ButtonGroup)`

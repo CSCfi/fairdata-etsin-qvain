@@ -1,4 +1,4 @@
-import { observable, action, computed, runInAction } from 'mobx'
+import { observable, action, computed, runInAction, toJS } from 'mobx'
 import axios from 'axios'
 import { getDirectories, getFiles, deepCopy } from '../../components/qvain/utils/fileHierarchy'
 import {
@@ -128,6 +128,21 @@ class Qvain {
     this.Actors.reset()
     this.spatials = []
     this.provenances = []
+  }
+
+  @action
+  addToField = (fieldName, item) => {
+    this[fieldName] = [...this[fieldName], item]
+  }
+
+  @action
+  editItemInField = (fieldName, index, item) => {
+    this[fieldName][index] = item
+  }
+
+  @action
+  removeItemInField = (fieldName, uiid) => {
+    this[fieldName] = [...this[fieldName].filter(item => item.uiid !== uiid)]
   }
 
   @action

@@ -6,8 +6,10 @@ import TranslationTab from '../../../general/translationTab'
 import PeriodOfTimePicker from './PeriodOfTimePicker'
 import LocationInput from './locationInput'
 import ModalReferenceInput from '../../../general/modalReferenceInput'
-import { Outcome } from '../../../../../stores/view/qvain.provenances'
+import { Outcome, Lifecycle } from '../../../../../stores/view/qvain.provenances'
+import Separator from '../../../general/modalSeparator'
 import UsedEntityInput from './usedEntityInput'
+import ActorsInput from './actorsInput'
 
 class Form extends Component {
   static propTypes = {
@@ -34,12 +36,31 @@ class Form extends Component {
           <TabInput {...this.props} datum="description" language={language} />
           <TabInput {...this.props} datum="outcomeDescription" language={language} />
         </TranslationTab>
+        <Separator />
         <PeriodOfTimePicker />
         <LocationInput />
-        <ModalReferenceInput {...this.props} datum="outcome" metaxIdentifier="event_outcome" model={Outcome} />
+        <Separator />
+        <ModalReferenceInput
+          {...this.props}
+          datum="outcome"
+          metaxIdentifier="event_outcome"
+          model={Outcome}
+        />
+        <Separator />
         <UsedEntityInput />
+        <Separator />
+        <ActorsInput {...this.props} datum="actors" language={language} />
+        <Separator />
+        <ModalReferenceInput
+          {...this.props}
+          datum="lifecycle"
+          metaxIdentifier="lifecycle_event"
+          model={Lifecycle}
+        />
       </FormContainer>
     )
   }
 }
+
+
 export default Form

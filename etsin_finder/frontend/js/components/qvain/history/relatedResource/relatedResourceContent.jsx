@@ -13,7 +13,12 @@ const RelatedResourceContent = ({ Stores }) => {
     const Field = Store.RelatedResources
     return (
       <>
-        <FieldList Store={Store} Field={Field} fieldIdentifier="relatedResources" lang={lang} />
+        <FieldList
+          Field={Field}
+          lang={lang}
+          translationsRoot={translationsRoot}
+          elements={Store.relatedResources}
+        />
         <FieldListAdd
           translationsRoot={translationsRoot}
           Store={Store}

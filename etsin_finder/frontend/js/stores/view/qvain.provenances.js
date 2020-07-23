@@ -16,7 +16,8 @@ const Provenance = (
     spatials = [], // aka location
     outcome = undefined,
     relatedResources = [], // aka usedEntity
-    associations = [] // aka actors, please note that actors will written only when they are going to backend
+    associations = [], // actors
+    lifecycle = undefined
     ) => ({
         uiid,
         name,
@@ -27,27 +28,38 @@ const Provenance = (
         spatials,
         outcome,
         relatedResources,
-        associations
+        associations,
+        lifecycle
     }
 )
 
 class Provenances extends Field {
     constructor(Qvain) {
-        super(Qvain, Provenance, 'provenances', ['spatials', 'relatedResources'])
+        super(Qvain, Provenance, 'provenances', ['associations'])
         this.Spatials = new Spatials(this)
         this.RelatedResources = new RelatedResources(this)
-        this.ActorsRef = new ActorsRef(Qvain.Actors)
+        this.ActorsRef = new ActorsRef(Qvain.Actors, this)
     }
 
     @observable spatials = []
 
     @observable relatedResources = []
 
+    @observable selectedActor = undefined
+
     @action saveAndClearSpatials = () => {
         this.inEdit.spatials = cloneDeep(toJS(this.spatials))
         this.spatials = []
         this.relatedResources = []
+        this.selectedActor = undefined
     }
+
+    @action create = () => {
+        this.setChanged(false)
+        this.editMode = false
+        this.inEdit = this.Template()
+        this.inEdit.associations = new ActorsRef(this.Parent.Actors)
+      }
 
     toBackend = () => this.Qvain.provenances.map(p => ({
             name: p.name,
@@ -62,6 +74,10 @@ export const Outcome = (name, url) => ({
     url,
 })
 
+export const Lifecycle = (name, url) => ({
+    name,
+    url,
+})
 
 export const ProvenanceModel = (provenanceData) => ({
     uiid: uuid(),

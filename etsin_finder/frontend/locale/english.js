@@ -1016,6 +1016,7 @@ const english = {
         title: 'Reference to a related resource',
         description:
           'Refer to related datasets, publications, and other resources that are relevant in understanding this dataset. ',
+        noItems: 'No references to a related resources have been added.',
         modal: {
           addButton: 'Add reference to a related resource',
           title: {
@@ -1064,10 +1065,12 @@ const english = {
         addButton: 'Add Infrastructure',
         title: 'Infrastructure',
         description: 'Services and tools that are used to produce the dataset.',
+        noItems: 'No infrastuctures have been added.'
       },
       provenance: {
         title: 'Provenance',
-        description: '',
+        description: 'An action or event that the dataset was the subject of.',
+        noItems: 'No provenances have been added.',
         modal: {
           title: {
             add: 'Add Provenance',
@@ -1116,6 +1119,7 @@ const english = {
           },
           locationInput: {
             label: 'Location',
+            noItems: 'No locations have been added.',
             error: {
               nameRequired: 'Name is required',
               altitudeNan: 'Altitude must be a number',
@@ -1159,6 +1163,7 @@ const english = {
           },
           usedEntityInput: {
             label: 'Used entities',
+            noItems: 'No used entities have been added.',
             modal: {
               addButton: 'Add used entity',
               buttons: {
@@ -1203,6 +1208,15 @@ const english = {
               }
             },
           },
+          actorsInput: {
+            label: 'Was associated with',
+            addButton: 'Add existing actor',
+            createButton: 'Create new actor'
+          },
+          lifecycleInput: {
+            label: 'Lifecycle event',
+            placeholder: 'Lifecycle event'
+          },
         },
       },
     },
@@ -1222,6 +1236,7 @@ const english = {
       spatial: {
         title: 'Spatial coverage',
         description: 'Area covered by the dataset, e.g. places of observations.',
+        noItems: 'Spatial coverage not have been added.',
         error: {
           nameRequired: 'Name is required',
           altitudeNan: 'Altitude must be a number',
