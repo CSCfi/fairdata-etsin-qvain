@@ -739,7 +739,8 @@ class Qvain {
     }
 
     // Languages of dataset
-    this.datasetLanguage = []
+    this.datasetLanguage = undefined
+    this.datasetLanguageArray = []
     if (researchDataset.language !== undefined) {
       researchDataset.language.forEach(element => {
         this.addDatasetLanguage(DatasetLanguage(element.title, element.identifier))
