@@ -33,6 +33,7 @@ class Files {
   @observable originalMetadata = {}
 
   @action reset() {
+    this.datasetIdentifier = null
     this.root = null
     this.selectedProject = undefined
     this.refreshModalDirectory = null
@@ -185,8 +186,8 @@ class Files {
   }
 
   @action openDataset = async (dataset) => {
-    this.datasetIdentifier = dataset.identifier
     this.reset()
+    this.datasetIdentifier = dataset.identifier
     await Promise.all([this.loadProjectInfo(), this.loadMetadata()])
     return this.loadProjectRoot()
   }
