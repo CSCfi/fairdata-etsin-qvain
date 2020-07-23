@@ -416,6 +416,7 @@ const finnish = {
           years: ' vuotta sitten',
         },
       },
+      moreActions: 'Lisää',
       moreVersions: {
         one: 'Näytä 1 versio lisää',
         other: 'Näytä %(count)s versiota lisää',
@@ -427,10 +428,23 @@ const finnish = {
       editButton: 'Muokkaa',
       editDraftButton: 'Muokkaa luonnosta',
       deleteButton: 'Poista',
-      confirmDelete: {
-        text: 'Oletko varma, että haluat poistaa aineiston? Aineiston poiston jälkeen se ei enää näy Qvaimessa eikä Etsimen haku löydä sitä. Aineiston laskeutumissivua ei poisteta.',
-        ok: 'Poista',
-        cancel: 'Peruuta',
+      revertButton: 'Poista muutokset',
+      remove: {
+        confirm: {
+          published: {
+            text: 'Haluatko varmasti poistaa aineiston? Aineiston poiston jälkeen se ei enää näy Qvaimessa eikä Etsimen haku löydä sitä. Aineiston laskeutumissivua ei poisteta.',
+            ok: 'Poista',
+          },
+          draft: {
+            text: 'Haluatko varmasti poistaa luonnoksen? Luonnos poistetaan pysyvästi.',
+            ok: 'Poista',
+          },
+          changes: {
+            text: 'Haluatko varmasti poistaa aineistoon tehdyt julkaisemattomat muutokset?',
+            ok: 'Poista muutokset',
+          },
+          cancel: 'Peruuta'
+        }
       },
       goToEtsin: 'Katso Etsimessä',
       goToEtsinDraft: 'Esikatsele Etsimessä',
