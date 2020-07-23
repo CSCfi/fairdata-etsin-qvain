@@ -11,6 +11,7 @@ import { dataCatalogSchema } from '../utils/formValidation'
 import ValidationError from '../general/validationError'
 import { DATA_CATALOG_IDENTIFIER } from '../../../utils/constants'
 import { Checkbox, LabelLarge } from '../general/form'
+import Tooltip from '../../general/tooltipHover'
 
 let options = [
   { value: DATA_CATALOG_IDENTIFIER.IDA, label: translate('qvain.files.dataCatalog.ida') },
@@ -32,8 +33,20 @@ class DataCatalog extends Component {
       errorMessage: undefined,
       fileOrigin: undefined,
       useDoi: false,
+      locale: translate.getLocale(),
     }
   }
+
+  componentDidMount() {
+    translate.onLocaleChange(this.localeChanged)
+  }
+
+  componentWillUnmount() {
+    translate.offLocaleChange(this.localeChanged)
+  }
+
+  localeChanged = () =>
+    this.setState({ locale: translate.getLocale() })
 
   updateOptions = () => {
     options = [
@@ -70,7 +83,7 @@ class DataCatalog extends Component {
   }
 
   render() {
-    const { errorMessage } = this.state
+    const { errorMessage, locale } = this.state
     const {
       dataCatalog,
       setDataCatalog,
@@ -92,7 +105,12 @@ class DataCatalog extends Component {
     return (
       <Card>
         <LabelLarge htmlFor="dataCatalogSelect">
-          <Translate content="qvain.files.dataCatalog.label" /> *
+          <Tooltip
+            title={translate('qvain.description.fieldHelpTexts.requiredToPublish', { locale })}
+            position="right"
+          >
+            <Translate content="qvain.files.dataCatalog.label" /> *
+          </Tooltip>
         </LabelLarge>
         <Translate component="p" content="qvain.files.dataCatalog.explanation" />
         <Translate

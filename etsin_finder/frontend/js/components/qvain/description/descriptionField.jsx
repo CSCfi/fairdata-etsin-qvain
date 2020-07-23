@@ -1,11 +1,17 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+
 import { inject, observer } from 'mobx-react'
+import counterpart from 'counterpart'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
+
 import { titleSchema, descriptionSchema } from '../utils/formValidation'
+
 import ValidationError from '../general/validationError'
+import Tooltip from '../../general/tooltipHover'
 import { Input, Textarea, LabelLarge } from '../general/form'
+
 
 class DescriptionField extends Component {
   static propTypes = {
@@ -13,20 +19,32 @@ class DescriptionField extends Component {
   }
 
   state = {
-    active: 'FINNISH',
+    descriptionLanguage: 'FINNISH',
     titleError: null,
     descriptionError: null,
+    uiLanguage: counterpart.getLocale(),
   }
+
+  componentDidMount() {
+    counterpart.onLocaleChange(this.localeChanged)
+  }
+
+  componentWillUnmount() {
+    counterpart.offLocaleChange(this.localeChanged)
+  }
+
+  localeChanged = () =>
+    this.setState({ uiLanguage: counterpart.getLocale() })
 
   handleTitleChange = e => {
     const title = e.target.value
-    this.props.Stores.Qvain.setTitle(title, this.state.active)
+    this.props.Stores.Qvain.setTitle(title, this.state.descriptionLanguage)
     this.setState({ titleError: null })
   }
 
   handleDescriptionChange = e => {
     const description = e.target.value
-    this.props.Stores.Qvain.setDescription(description, this.state.active)
+    this.props.Stores.Qvain.setDescription(description, this.state.descriptionLanguage)
     this.setState({ descriptionError: null })
   }
 
@@ -55,9 +73,9 @@ class DescriptionField extends Component {
   handleLanguageButtonClicks = (e) => {
     e.preventDefault()
     /* eslint-disable no-unused-expressions */
-    this.state.active === 'FINNISH'
-      ? this.setState({ active: 'ENGLISH' })
-      : this.setState({ active: 'FINNISH' })
+    this.state.descriptionLanguage === 'FINNISH'
+      ? this.setState({ descriptionLanguage: 'ENGLISH' })
+      : this.setState({ descriptionLanguage: 'FINNISH' })
   }
 
   getLangButton = (activeLang, buttonLang) => (
@@ -79,20 +97,25 @@ class DescriptionField extends Component {
 
   render() {
     const { title, description, readonly } = this.props.Stores.Qvain
-    const activeLang = this.state.active
+    const { descriptionLanguage, uiLanguage } = this.state
     return (
       <React.Fragment>
         <LangButtonContainer>
-          {this.getLangButton(this.state.active, 'FINNISH')}
+          {this.getLangButton(descriptionLanguage, 'FINNISH')}
           <EmptyBlock width="2%" />
-          {this.getLangButton(this.state.active, 'ENGLISH')}
+          {this.getLangButton(descriptionLanguage, 'ENGLISH')}
           <EmptyBlock width="48%" />
         </LangButtonContainer>
         <DescriptionCard>
           <LabelLarge htmlFor="titleInput">
-            <Translate content="qvain.description.description.title.label" /> *
+            <Tooltip
+              title={counterpart('qvain.description.fieldHelpTexts.requiredForAll', { locale: uiLanguage })}
+              position="right"
+            >
+              <Translate content="qvain.description.description.title.label" /> *
+            </Tooltip>
           </LabelLarge>
-          {activeLang === 'FINNISH' && (
+          {descriptionLanguage === 'FINNISH' && (
             <Translate
               component={Input}
               type="text"
@@ -104,7 +127,7 @@ class DescriptionField extends Component {
               attributes={{ placeholder: this.getPlaceholder('title', 'FINNISH') }}
             />
           )}
-          {activeLang === 'ENGLISH' && (
+          {descriptionLanguage === 'ENGLISH' && (
             <Translate
               component={Input}
               type="text"
@@ -118,9 +141,14 @@ class DescriptionField extends Component {
           )}
           {this.state.titleError ? <Translate component={ValidationError} content={'qvain.description.error.title'} /> : null}
           <LabelLarge htmlFor="descriptionInput">
-            <Translate content="qvain.description.description.description.label" /> *
+            <Tooltip
+              title={counterpart('qvain.description.fieldHelpTexts.requiredForAll', { locale: uiLanguage })}
+              position="right"
+            >
+              <Translate content="qvain.description.description.description.label" /> *
+            </Tooltip>
           </LabelLarge>
-          {activeLang === 'FINNISH' && (
+          {descriptionLanguage === 'FINNISH' && (
             <Translate
               component={Textarea}
               id="descriptionInput"
@@ -129,10 +157,10 @@ class DescriptionField extends Component {
               value={description.fi}
               onChange={this.handleDescriptionChange}
               onBlur={this.handleDescriptionBlur}
-              attributes={{ placeholder: this.getPlaceholder('description', this.state.active) }}
+              attributes={{ placeholder: this.getPlaceholder('description', descriptionLanguage) }}
             />
           )}
-          {activeLang === 'ENGLISH' && (
+          {descriptionLanguage === 'ENGLISH' && (
             <Translate
               component={Textarea}
               id="descriptionInput"
@@ -141,7 +169,7 @@ class DescriptionField extends Component {
               value={description.en}
               onChange={this.handleDescriptionChange}
               onBlur={this.handleDescriptionBlur}
-              attributes={{ placeholder: this.getPlaceholder('description', this.state.active) }}
+              attributes={{ placeholder: this.getPlaceholder('description', descriptionLanguage) }}
             />
           )}
           {this.state.descriptionError ? <Translate component={ValidationError} content={'qvain.description.error.description'} /> : null}
