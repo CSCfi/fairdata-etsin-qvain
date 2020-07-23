@@ -60,7 +60,7 @@ const SelectedItemsTreeItemBase = ({ treeProps, item, level, parentArgs }) => {
     item.added ||
     item.existing ||
     hasAddedChildren ||
-    (parentAdded && (isFile(item) || item.existingFileCount === item.fileCount))
+    parentAdded
   if (isRemoved) {
     canEdit = false
   }
