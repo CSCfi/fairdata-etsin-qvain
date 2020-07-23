@@ -1017,6 +1017,9 @@ const english = {
         description:
           'Refer to related datasets, publications, and other resources that are relevant in understanding this dataset. ',
         noItems: 'No references to a related resources have been added.',
+        error: {
+          nameRequired: 'Name is required in at least one language.'
+        },
         modal: {
           addButton: 'Add reference to a related resource',
           title: {
@@ -1071,6 +1074,9 @@ const english = {
         title: 'Provenance',
         description: 'An action or event that the dataset was the subject of.',
         noItems: 'No provenances have been added.',
+        error: {
+          nameRequired: 'Name required at least in one language.'
+        },
         modal: {
           title: {
             add: 'Add Provenance',
@@ -1236,7 +1242,7 @@ const english = {
       spatial: {
         title: 'Spatial coverage',
         description: 'Area covered by the dataset, e.g. places of observations.',
-        noItems: 'Spatial coverage not have been added.',
+        noItems: 'No spatial coverage have been added.',
         error: {
           nameRequired: 'Name is required',
           altitudeNan: 'Altitude must be a number',

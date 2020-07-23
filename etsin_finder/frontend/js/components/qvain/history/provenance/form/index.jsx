@@ -32,7 +32,7 @@ class Form extends Component {
     return (
       <FormContainer>
         <TranslationTab language={language} setLanguage={this.setLanguage}>
-          <TabInput {...this.props} datum="name" language={language} />
+          <TabInput {...this.props} datum="name" language={language} isRequired />
           <TabInput {...this.props} datum="description" language={language} />
           <TabInput {...this.props} datum="outcomeDescription" language={language} />
         </TranslationTab>

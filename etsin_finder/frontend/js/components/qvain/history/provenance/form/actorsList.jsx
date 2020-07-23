@@ -10,14 +10,14 @@ import {
   ButtonContainer
 } from '../../../general/buttons'
 
-const ActorsList = ({ Stores, associations, items, language }) => {
+const ActorsList = ({ Stores, actors, items, language }) => {
   const { readonly } = Stores.Qvain
 
   const handleRemoveActor = (actor) => {
-    associations.removeActorRef(actor.value)
+    actors.removeActorRef(actor.value)
   }
 
-  const associationItems = items.map((actor) => {
+  const actorItems = items.map((actor) => {
     const actorName = actor.label[language] || actor.label
     const rolesStr = actor.roles.map(role => ` / ${translate(`qvain.actors.add.checkbox.${role}`)}`)
     const name = `${actorName} ${rolesStr}`
@@ -45,7 +45,7 @@ const ActorsList = ({ Stores, associations, items, language }) => {
       {items.length === 0 &&
         (<Translate tabIndex="0" component="p" content="qvain.actors.added.noneAddedNotice" />)
       }
-      {associationItems}
+      {actorItems}
     </>
   )
 }
@@ -59,9 +59,14 @@ const ActorLabel = styled(ButtonLabel)`
 
 ActorsList.propTypes = {
   Stores: PropTypes.object.isRequired,
-  associations: PropTypes.object.isRequired,
-  items: PropTypes.array.isRequired,
+  actors: PropTypes.object,
+  items: PropTypes.array,
   language: PropTypes.string.isRequired
+}
+
+ActorsList.defaultProps = {
+  items: [],
+  actors: {}
 }
 
 export default ActorsList

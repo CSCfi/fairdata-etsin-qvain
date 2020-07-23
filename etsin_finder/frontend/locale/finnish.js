@@ -1025,6 +1025,9 @@ const finnish = {
         title: 'Viittaukset toiseen resurssiin',
         description: 'Viittaukset aineistoihin, julkaisuihin tai muihin resursseihin, jotka auttavat ymmärtämään ja käyttämään tätä tutkimusaineistoa.',
         noItems: 'Viittauksia toisiin resursseihin ei ole lisätty.',
+        error: {
+          nameRequired: 'Nimi kenttä on pakollinen ainakin yhdellä kielellä.'
+        },
         modal: {
           addButton: 'Lisää viittaus toiseen resurssiin',
           title: {
@@ -1073,6 +1076,9 @@ const finnish = {
         title: 'Alkuperä',
         description: 'Tapahtuma tai toiminta, jonka kohteena oli tämä aineisto.',
         noItems: 'Alkuperätietoja ei ole lisätty.',
+        error: {
+          nameRequired: 'Nimi vaaditaan vähintään yhdellä kielellä.'
+        },
         modal: {
           addButton: 'Lisää alkuperä',
           title: {

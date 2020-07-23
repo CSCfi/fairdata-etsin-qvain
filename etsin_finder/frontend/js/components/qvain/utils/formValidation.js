@@ -370,6 +370,34 @@ const spatialNameSchema = yup
 const spatialAltitudeSchema = yup
   .number()
 
+// RELATED RESOURCE
+const relatedResourceNameSchema = yup.object().shape({
+  fi: yup.mixed().when('en', {
+    is: val => val.length > 0,
+    then: yup
+    .string('qvain.history.relatedResource.error.nameRequired'),
+    otherwise: yup
+    .string('qvain.history.relatedResource.error.nameRequired')
+      .required('qvain.history.relatedResource.error.nameRequired'),
+  }),
+  en: yup
+    .string('qvain.history.relatedResource.error.nameRequired')
+})
+
+// PROVENANCE
+const provenanceNameSchema = yup.object().shape({
+  fi: yup.mixed().when('en', {
+    is: val => val.length > 0,
+    then: yup
+    .string('qvain.history.provenance.error.nameRequired'),
+    otherwise: yup
+    .string('qvain.history.provenance.error.nameRequired')
+      .required('qvain.history.provenance.error.nameRequired'),
+  }),
+  en: yup
+    .string('qvain.history.provenance.error.nameRequired')
+})
+
 // ENTIRE FORM VALIDATION
 
 const qvainFormSchema = yup.object().shape({
@@ -470,5 +498,7 @@ export {
   externalResourceAccessUrlSchema,
   externalResourceDownloadUrlSchema,
   spatialNameSchema,
-  spatialAltitudeSchema
+  spatialAltitudeSchema,
+  relatedResourceNameSchema,
+  provenanceNameSchema
 }

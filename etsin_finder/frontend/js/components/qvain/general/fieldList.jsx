@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import { Observer } from 'mobx-react'
-import { toJS } from 'mobx'
 import {
     ButtonGroup,
     ButtonLabel,
@@ -14,8 +13,6 @@ import {
 
 const FieldList = ({ Field, lang, translationsRoot, elements }) => {
   const { remove, edit } = Field
-
-  console.log('elements', toJS(elements))
 
   if (!elements.length) {
     return <Translate component="div" content={`${translationsRoot}.noItems`} />

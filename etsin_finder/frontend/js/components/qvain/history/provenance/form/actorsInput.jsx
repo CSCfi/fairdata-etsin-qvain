@@ -33,7 +33,7 @@ const ActorsInput = ({ Stores, language }) => {
       {() => (
         <>
           <Translate component={Label} content="qvain.history.provenance.modal.actorsInput.label" htmlFor="actors-input" />
-          <ActorsList language={language} Stores={Stores} associations={Provenances.inEdit.associations} items={Provenances.inEdit.associations.actorOptions} />
+          <ActorsList language={language} Stores={Stores} actors={Provenances.inEdit.actors} items={(Provenances.inEdit.actors || {}).actorOptions} />
           <Translate
             component={ReactSelect}
             inputId="actors-select"
@@ -51,7 +51,7 @@ const ActorsInput = ({ Stores, language }) => {
               component={Button}
               content="qvain.history.provenance.modal.actorsInput.addButton"
               onClick={() => {
-              Provenances.inEdit.associations.addActorWithId(Provenances.inEdit.selectedActor.value)
+              Provenances.inEdit.actors.addActorWithId(Provenances.inEdit.selectedActor.value)
               setSelectedActor('selectedActor', undefined)
             }}
             />

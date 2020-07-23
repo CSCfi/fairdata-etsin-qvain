@@ -534,16 +534,15 @@ export class ActorsRef {
     }))
   }
 
-  save = () => this.actorsRef
+  save = () => this.toBackend
 
   @computed get toBackend() {
     // makes a list of names to be stored to metax
-    return this.actorsRef.map(actorToBackend)
+    return Object.values(this.actorsRef).map(actorToBackend)
   }
 
   @action addActorRef = (actor) => {
     this.actorsRef = { ...this.actorsRef, [actor.uiid]: actor }
-    console.log(toJS(this.actorsRef))
   }
 
   @action addActorWithId = (id) => {
@@ -554,13 +553,12 @@ export class ActorsRef {
   @action removeActorRef = (uiid) => {
     console.log('removing actorsRef', uiid)
     delete this.actorsRef[uiid]
-    console.log(toJS(this.actorsRef))
   }
 
   @action setActorsRef = (actorsFromBackend) => {
     if (!actorsFromBackend) return
-    const actorsRef = this.actorsStore.actors.filter(actor => !!actorsFromBackend.find(afb => isEqual(afb, actorToBackend(actor))))
-    this.actorsRef = actorsRef
+    const actorsRefArray = this.actorsStore.actors.filter(actor => !!actorsFromBackend.find(afb => isEqual(afb, actorToBackend(actor))))
+    this.actorsRef = actorsRefArray.reduce((obj, ref) => { obj[ref.uiid] = ref; return obj }, {})
   }
 
   @action clearActorsRef = () => {

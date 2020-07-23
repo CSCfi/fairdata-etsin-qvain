@@ -24,7 +24,7 @@ setLanguage = (lang) => {
 render = () => (
   <FormContainer>
     <TranslationTab language={this.state.language} setLanguage={this.setLanguage}>
-      <TabInput {...this.props} datum="name" language={this.state.language} />
+      <TabInput {...this.props} datum="name" language={this.state.language} isRequired />
       <TabInput {...this.props} datum="description" language={this.state.language} />
     </TranslationTab>
     <ModalInput {...this.props} datum="identifier" />

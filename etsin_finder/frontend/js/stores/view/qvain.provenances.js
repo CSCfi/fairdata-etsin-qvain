@@ -35,7 +35,7 @@ const Provenance = (
 
 class Provenances extends Field {
     constructor(Qvain) {
-        super(Qvain, Provenance, 'provenances', ['associations'])
+        super(Qvain, Provenance, 'provenances', [{ dataIdentifier: 'associations', refIdentifier: 'actors', Prototype: ActorsRef, Origin: Qvain.Actors }])
         this.Spatials = new Spatials(this)
         this.RelatedResources = new RelatedResources(this)
         this.ActorsRef = new ActorsRef(Qvain.Actors, this)
@@ -58,7 +58,7 @@ class Provenances extends Field {
         this.setChanged(false)
         this.editMode = false
         this.inEdit = this.Template()
-        this.inEdit.associations = new ActorsRef(this.Parent.Actors)
+        this.inEdit.actors = new ActorsRef(this.Parent.Actors)
       }
 
     toBackend = () => this.Qvain.provenances.map(p => ({

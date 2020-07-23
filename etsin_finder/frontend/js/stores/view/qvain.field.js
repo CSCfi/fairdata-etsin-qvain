@@ -50,11 +50,22 @@ class Field {
     }
   }
 
+  saveRefs = () => {
+    this.references.forEach(ref => {
+      this.inEdit[ref.dataIdentifier] = this.inEdit[ref.refIdentifier].save()
+      delete this.inEdit[ref.refIdentifier]
+    })
+  }
+
+  loadRefs = () => {
+    this.references.forEach(ref => {
+      this.inEdit[ref.refIdentifier] = new ref.Prototype(ref.Origin, this.inEdit[ref.dataIdentifier])
+    })
+  }
+
   saveEdited = (edited) => {
     if (edited) {
-      this.references.forEach(ref => {
-        this.inEdit[ref] = this.inEdit[ref].save()
-      })
+      this.saveRefs()
 
       if (this.isParentRoot()) {
         const indexOfItem = this.Parent[this.fieldName].indexOf(edited)
@@ -70,9 +81,8 @@ class Field {
 
   saveNew = () => {
     this.validationError = ''
-    this.references.forEach(ref => {
-      this.inEdit[ref] = this.inEdit[ref].save()
-    })
+    this.saveRefs()
+
     if (this.isParentRoot()) {
       this.Parent.addToField(this.fieldName, cloneDeep(toJS(this.inEdit)))
     } else {
@@ -103,9 +113,11 @@ class Field {
     this.editMode = true
     const item = this.isParentRoot()
       ? this.Parent[this.fieldName].find((s) => s.uiid === uiid)
-      : this.Parent.inEdit[this.fieldName].find((s) => s.uiid === uiid);
+      : this.Parent.inEdit[this.fieldName].find((s) => s.uiid === uiid)
 
     this.inEdit = cloneDeep(toJS(item))
+
+    this.loadRefs()
   }
 
   @action setValidationError = (error) => {
