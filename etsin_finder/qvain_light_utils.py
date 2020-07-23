@@ -225,6 +225,7 @@ def data_to_metax(data, metadata_provider_org, metadata_provider_user):
             "issued": data.get("issuedDate") if "issuedDate" in data else "",
             "other_identifier": other_identifiers_to_metax(data.get("identifiers")),
             "field_of_science": _to_metax_field_of_science(data.get("fieldOfScience")),
+            "language": _to_metax_field_of_science(data.get("datasetLanguage")),
             "keyword": data.get("keywords"),
             "access_rights": access_rights_to_metax(data),
             "remote_resources": remote_resources_data_to_metax(data.get("remote_resources")) if data.get("dataCatalog") == DATA_CATALOG_IDENTIFIERS.get('att') else "",
@@ -285,6 +286,9 @@ def _to_metax_field_of_science(fieldOfScienceArray):
     return metax_fields_of_science
 
 
+def _to_metax_dataset_language(datasetLanguageArray):
+    return [{'identifier': language} for language in datasetLanguageArray]
+
 def _to_metax_infrastructure(infrastructures):
     metax_infrastructures = []
     for element in infrastructures:
@@ -318,6 +322,7 @@ def edited_data_to_metax(data, original):
         "issued": data.get("issuedDate") if "issuedDate" in data else "",
         "other_identifier": other_identifiers_to_metax(data.get("identifiers")),
         "field_of_science": _to_metax_field_of_science(data.get("fieldOfScience")),
+        "language": _to_metax_dataset_language(data.get("datasetLanguage")),
         "keyword": data.get("keywords"),
         "access_rights": access_rights_to_metax(data),
         "remote_resources": remote_resources_data_to_metax(data.get("remote_resources")) if data["dataCatalog"] == DATA_CATALOG_IDENTIFIERS.get('att') else "",
