@@ -8,6 +8,7 @@ import Description from '../js/components/qvain/description'
 import DescriptionField from '../js/components/qvain/description/descriptionField'
 import OtherIdentifierField from '../js/components/qvain/description/otherIdentifierField'
 import FieldOfScienceField from '../js/components/qvain/description/fieldOfScienceField'
+import LanguageField from '../js/components/qvain/description/languageField'
 import KeywordsField from '../js/components/qvain/description/keywordsField'
 import RightsAndLicenses from '../js/components/qvain/licenses'
 import { License } from '../js/components/qvain/licenses/licenses'
@@ -132,6 +133,10 @@ describe('Qvain.Description', () => {
   })
   it('should render <FieldOfScienceField />', () => {
     const component = shallow(<FieldOfScienceField Stores={getStores()} />)
+    expect(component).toMatchSnapshot()
+  })
+  it('should render <LanguageField />', () => {
+    const component = shallow(<LanguageField Stores={getStores()} />)
     expect(component).toMatchSnapshot()
   })
   it('should render <KeywordsField />', () => {

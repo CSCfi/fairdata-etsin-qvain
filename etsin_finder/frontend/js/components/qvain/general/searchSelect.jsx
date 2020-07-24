@@ -43,53 +43,35 @@ class Select extends Component {
     const { options } = this.state
     const { lang } = this.props.Stores.Locale
 
+    const props = {
+      ...this.props,
+      className: 'basic-single',
+      classNamePrefix: 'select',
+      inputId: `${name}-select`,
+      component: ReactSelect,
+      attributes: { placeholder },
+      isDisabled: readonly,
+      value: getCurrentValue(getter, options, lang),
+      onChange: onChange(options, lang, setter, model),
+      cacheOptions: true,
+      defaultOptions: [],
+      loadOptions: (inputValue =>
+        new Promise(async res => {
+          const opts = await getOptions(metaxIdentifier, inputValue)
+          this.setState({ options: opts })
+          res(opts[lang])
+        })
+      ),
+    }
+
     return inModal ? (
       <Translate
-        {...this.props}
-        name={name}
-        className="basic-single"
-        classNamePrefix="select"
-        inputId={`${name}-select`}
-        component={ReactSelect}
-        attributes={{ placeholder }}
-        isDisabled={readonly}
-        value={getCurrentValue(getter, options, lang)}
-        onChange={onChange(options, lang, setter, model)}
-        cacheOptions
-        defaultOptions={[]}
-        loadOptions={inputValue =>
-          new Promise(async res => {
-            const opts = await getOptions(metaxIdentifier, inputValue)
-            this.setState({ options: opts })
-            res(opts[lang])
-          })
-        }
+        {...props}
         menuPlacement="auto"
         menuPosition="fixed"
         menuShouldScrollIntoView={false}
       />
-    ) : (
-      <Translate
-        name={name}
-        className="basic-single"
-        classNamePrefix="select"
-        inputId={`${name}-select`}
-        component={ReactSelect}
-        attributes={{ placeholder }}
-        isDisabled={readonly}
-        value={getCurrentValue(getter, options, lang) || ''}
-        onChange={onChange(options, lang, setter, model)}
-        cacheOptions
-        defaultOptions={[]}
-        loadOptions={inputValue =>
-          new Promise(async res => {
-            const opts = await getOptions(metaxIdentifier, inputValue)
-            this.setState({ options: opts })
-            res(opts[lang])
-          })
-        }
-      />
-    )
+    ) : <Translate {...props} />
   }
 }
 

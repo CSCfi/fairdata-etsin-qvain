@@ -51,6 +51,10 @@ class Qvain {
 
   @observable fieldOfScienceArray = []
 
+  @observable datasetLanguage = undefined
+
+  @observable datasetLanguageArray = []
+
   @observable keywordString = ''
 
   @observable keywordsArray = []
@@ -87,6 +91,8 @@ class Qvain {
     this.otherIdentifiersValidationError = null
     this.fieldOfScience = undefined
     this.fieldOfScienceArray = []
+    this.datasetLanguage = undefined
+    this.datasetLanguageArray = []
     this.keywordString = ''
     this.keywordsArray = []
     this.infrastructure = undefined
@@ -214,6 +220,27 @@ class Qvain {
   }
 
   @action
+  setDatasetLanguage = (language) => {
+    this.datasetLanguage = language
+  }
+
+  @action
+  removeDatasetLanguage = (languageToRemove) => {
+    const languagesToRemain = this.datasetLanguageArray.filter(language => language.url !== languageToRemove.url)
+    this.datasetLanguageArray = languagesToRemain
+    this.changed = true
+  }
+
+  @action
+  addDatasetLanguage = (language) => {
+    if (!language || !('name' in language) || !('url' in language)) return
+    const oldDatasetLanguages = this.datasetLanguageArray.filter(item => item.url !== language.url)
+    this.datasetLanguageArray = oldDatasetLanguages.concat([(DatasetLanguage(language.name, language.url))])
+    this.setDatasetLanguage(undefined)
+    this.changed = true
+  }
+
+  @action
   setKeywordString = (value) => {
     this.keywordString = value
   }
@@ -267,6 +294,9 @@ class Qvain {
     // the dataset is submitted.
     if (this.fieldOfScience !== undefined) {
       this.addFieldOfScience(this.fieldOfScience)
+    }
+    if (this.datasetLanguage !== undefined) {
+      this.addDatasetLanguage(this.datasetLanguage)
     }
     if (this.keywordString !== '') {
       this.addKeywordToKeywordArray()
@@ -708,6 +738,15 @@ class Qvain {
       })
     }
 
+    // Languages of dataset
+    this.datasetLanguage = undefined
+    this.datasetLanguageArray = []
+    if (researchDataset.language !== undefined) {
+      researchDataset.language.forEach(element => {
+        this.addDatasetLanguage(DatasetLanguage(element.title, element.identifier))
+      })
+    }
+
     // infrastructures
     this.infrastructures = []
     if (researchDataset.infrastructure !== undefined) {
@@ -1020,6 +1059,11 @@ const DatasetDirectory = (directory) => ({
 })
 
 export const FieldOfScience = (name, url) => ({
+  name,
+  url,
+})
+
+export const DatasetLanguage = (name, url) => ({
   name,
   url,
 })

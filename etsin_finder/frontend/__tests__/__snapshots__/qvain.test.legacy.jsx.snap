@@ -31,6 +31,7 @@ exports[`Qvain.Description should render <Description /> 1`] = `
   <inject-IssuedDateField-with-Stores />
   <inject-OtherIdentifierField-with-Stores />
   <inject-FieldOfScienceField-with-Stores />
+  <inject-LanguageField-with-Stores />
   <inject-KeywordsField-with-Stores />
 </div>
 `;
@@ -120,6 +121,8 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
         "createExternalResourceUIId": [Function],
         "cumulativeState": 0,
         "dataCatalog": undefined,
+        "datasetLanguage": undefined,
+        "datasetLanguageArray": Array [],
         "deprecated": false,
         "description": Object {
           "en": "",
@@ -265,6 +268,8 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
         "createExternalResourceUIId": [Function],
         "cumulativeState": 0,
         "dataCatalog": undefined,
+        "datasetLanguage": undefined,
+        "datasetLanguageArray": Array [],
         "deprecated": false,
         "description": Object {
           "en": "",
@@ -410,6 +415,8 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
         "createExternalResourceUIId": [Function],
         "cumulativeState": 0,
         "dataCatalog": undefined,
+        "datasetLanguage": undefined,
+        "datasetLanguageArray": Array [],
         "deprecated": false,
         "description": Object {
           "en": "",
@@ -555,6 +562,8 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
         "createExternalResourceUIId": [Function],
         "cumulativeState": 0,
         "dataCatalog": undefined,
+        "datasetLanguage": undefined,
+        "datasetLanguageArray": Array [],
         "deprecated": false,
         "description": Object {
           "en": "",
