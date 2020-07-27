@@ -63,6 +63,18 @@ class Qvain {
 
   @observable infrastructures = []
 
+  // Project, remove this
+  @observable projectTitle = {
+    en: '',
+    fi: '',
+  }
+
+  @observable projectIdentifier = ''
+
+  @observable projectFundingIdentifier = ''
+
+  @observable projectFunderType = undefined
+
   @observable license = License(undefined, LICENSE_URL.CCBY4)
 
   @observable otherLicenseUrl = undefined
@@ -97,6 +109,13 @@ class Qvain {
     this.keywordsArray = []
     this.infrastructure = undefined
     this.infrastructures = []
+    this.projectFunderType = undefined
+    this.projectTitle = {
+      en: '',
+      fi: '',
+    }
+    this.projectIdentifier = ''
+    this.projectFundingIdentifier = ''
     this.license = License(undefined, LICENSE_URL.CCBY4)
     this.otherLicenseUrl = undefined
     this.accessType = AccessType(undefined, ACCESS_TYPE_URL.OPEN)
@@ -285,6 +304,27 @@ class Qvain {
     this.infrastructures = this.infrastructures.filter(
       (infra) => infra.url !== infrastructureToRemove.url
     )
+  }
+
+  // PROJECT, REMOVE THIS
+  @action setProjectFunderType = funderType => {
+    this.projectFunderType = funderType
+    this.changed = true
+  }
+
+  @action setProjectTitle = (lang, title) => {
+    this.projectTitle[lang] = title
+    this.changed = true
+  }
+
+  @action setProjectIdentifier = identifier => {
+    this.projectIdentifier = identifier
+    this.changed = true
+  }
+
+  @action setProjectFundingIdentifier = fundingIdentifier => {
+    this.projectFundingIdentifier = fundingIdentifier
+    this.changed = true
   }
 
   @action
@@ -1086,6 +1126,11 @@ export const RestrictionGrounds = (name, identifier) => ({
 export const Infrastructure = (name, url) => ({
   name,
   url,
+})
+
+export const ProjectFunderType = (name, identifier) => ({
+  name,
+  identifier,
 })
 
 export const ExternalResource = (id, title, accessUrl, downloadUrl, useCategory) => ({
