@@ -1030,6 +1030,47 @@ const english = {
         description: 'Add services and tools that are used to produce the dataset.',
       },
     },
+    project: {
+      title: 'Producer Project',
+      description: 'A project in which the dataset was created',
+      tooltipContent: {
+        title: 'Producer Project',
+        paragraph: 'A project in which the dataset was created',
+      },
+      project: {
+        title: 'Add project',
+        addButton: 'Add project',
+        description: 'A project in which the dataset was created',
+      },
+      inputs: {
+        title: {
+          label: 'Add title for project',
+          description: 'Name of the project, at least one language is required.'
+        },
+        titleEn: {
+          placeholder: 'Title (English)',
+        },
+        titleFi: {
+          placeholder: 'Title (Finnish)',
+        },
+        identifier: {
+          label: 'Identifier',
+          description: 'Recommended best practice is to identify the resource by means of a string conforming to a formal identification system. An unambiguous reference to the resource within a given context.',
+          placeholder: 'Add identifier',
+        },
+        fundingIdentifier: {
+          label: 'Project funding identifier',
+          description: 'Unique identifier for the project that is being used by the project funder',
+          placeholder: 'Add project funding identifier',
+        },
+        funderType: {
+          label: 'Funder type',
+          placeholder: 'Select funder type',
+          addButton: 'Add funder type',
+          noOptions: 'Funder type not found',
+        }
+      }
+    },
     temporalAndSpatial: {
       title: 'Temporal and Spatial Coverage',
       tooltip: 'Temporal and Spatial Coverage info',
