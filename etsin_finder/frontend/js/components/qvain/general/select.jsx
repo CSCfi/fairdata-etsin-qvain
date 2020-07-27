@@ -2,7 +2,9 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import ReactSelect from 'react-select'
 import Translate from 'react-translate-component'
+import counterpart from 'counterpart'
 import { inject, observer } from 'mobx-react'
+
 import { onChange, getCurrentValue } from '../utils/select'
 import getReferenceData from '../utils/getReferenceData'
 
@@ -17,11 +19,15 @@ class Select extends Component {
     model: PropTypes.func.isRequired,
     name: PropTypes.string.isRequired,
     inModal: PropTypes.bool,
+    placeholder: PropTypes.string,
+    noOptionsMessage: PropTypes.string,
   }
 
   static defaultProps = {
     getter: undefined,
     inModal: false,
+    placeholder: 'qvain.select.placeholder',
+    noOptionsMessage: null,
   }
 
   state = {
@@ -75,40 +81,39 @@ class Select extends Component {
 
   render() {
     const { readonly } = this.props.Stores.Qvain
-    const { getter, setter, model, name, inModal } = this.props
+    const { getter, setter, model, name, inModal, placeholder, noOptionsMessage } = this.props
     const { options } = this.state
     const { lang } = this.props.Stores.Locale
 
+    const selectProps = {
+      name,
+      inputId: `${name}-select`,
+      component: ReactSelect,
+      attributes: { placeholder },
+      isDisabled: readonly,
+      value: getCurrentValue(getter, options, lang),
+      className: 'basic-single',
+      classNamePrefix: 'select',
+      defaultOptions: [],
+      options: options[lang],
+      onChange: onChange(options, lang, setter, model),
+    }
+
+    if (noOptionsMessage) {
+      selectProps.noOptionsMessage = ({ inputValue }) => {
+        if (inputValue) return counterpart(noOptionsMessage)
+        return counterpart(placeholder)
+      }
+    }
+
     return inModal ? (
       <Translate
-        name={name}
-        inputId={`${name}-select`}
-        component={ReactSelect}
-        attributes={{ placeholder: 'qvain.select.placeholder' }}
-        isDisabled={readonly}
-        value={getCurrentValue(getter, options, lang)}
-        className="basic-single"
-        classNamePrefix="select"
-        options={options[lang]}
-        onChange={onChange(options, lang, setter, model)}
+        {...selectProps}
         menuPlacement="auto"
         menuPosition="fixed"
         menuShouldScrollIntoView={false}
       />
-    ) : (
-      <Translate
-        name={name}
-        inputId={`${name}-select`}
-        component={ReactSelect}
-        attributes={{ placeholder: 'qvain.select.placeholder' }}
-        isDisabled={readonly}
-        value={getCurrentValue(getter, options, lang)}
-        className="basic-single"
-        classNamePrefix="select"
-        options={options[lang]}
-        onChange={onChange(options, lang, setter, model)}
-      />
-    )
+    ) : <Translate {...selectProps} />
   }
 }
 
