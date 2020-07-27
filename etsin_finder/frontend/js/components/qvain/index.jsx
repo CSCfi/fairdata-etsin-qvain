@@ -28,6 +28,7 @@ import Actors from './actors'
 import Files from './files'
 import TemporalAndSpatial from './temporalAndSpatial'
 import History from './history'
+import Project from './project'
 import {
   QvainContainer,
   SubHeader,
@@ -305,6 +306,7 @@ class Qvain extends Component {
           <RightsAndLicenses />
           <TemporalAndSpatial />
           <History />
+          <Project />
           <Files />
           <SubmitContainer>
             <Translate component="p" content="qvain.consent" unsafe />
