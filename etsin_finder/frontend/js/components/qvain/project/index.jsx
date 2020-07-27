@@ -22,65 +22,71 @@ const fieldProps = {
   }
 }
 
-const Project = ({ Stores }) => (
+const Project = () => (
   <Field {...fieldProps}>
     <Card>
       <Translate component="h3" content="qvain.project.title" />
       <Translate component="p" content="qvain.project.description" />
-      <ProjectForm stores={Stores} />
+      <ProjectForm />
     </Card>
   </Field>
 )
 
 
-Project.propTypes = {
-  Stores: PropTypes.object.isRequired,
+const ProjectFormCompoent = ({ Stores }) => {
+  const { Qvain } = Stores
+  return (
+    <>
+      <LabelLarge htmlFor="titleEn">
+        <Translate content="qvain.project.inputs.title.label" />
+      </LabelLarge>
+      <Translate component="p" content="qvain.project.inputs.title.description" />
+      <Translate
+        component={Input}
+        value={Qvain.projectTitle.en}
+        onChange={(event) => Qvain.setProjectTitle('en', event.target.value)}
+        attributes={{ placeholder: 'qvain.project.inputs.titleEn.placeholder' }}
+        id="titleEn"
+      />
+      <Translate
+        component={Input}
+        value={Qvain.projectTitle.fi}
+        onChange={(event) => Qvain.setProjectTitle('fi', event.target.value)}
+        attributes={{ placeholder: 'qvain.project.inputs.titleFi.placeholder' }}
+        id="titleFi"
+      />
+      <LabelLarge htmlFor="identifier">
+        <Translate content="qvain.project.inputs.identifier.label" />
+      </LabelLarge>
+      <Translate component="p" content="qvain.project.inputs.identifier.description" />
+      <Translate
+        component={Input}
+        value={Qvain.projectIdentifier}
+        onChange={(event) => Qvain.setProjectIdentifier(event.target.value)}
+        attributes={{ placeholder: 'qvain.project.inputs.identifier.placeholder' }}
+        id="identifier"
+      />
+      <LabelLarge htmlFor="fundingIdentifier">
+        <Translate content="qvain.project.inputs.fundingIdentifier.label" />
+      </LabelLarge>
+      <Translate component="p" content="qvain.project.inputs.fundingIdentifier.description" />
+      <Translate
+        component={Input}
+        value={Qvain.projectFundingIdentifier}
+        onChange={(event) => Qvain.setProjectFundingIdentifier(event.target.value)}
+        attributes={{ placeholder: 'qvain.project.inputs.fundingIdentifier.placeholder' }}
+        id="fundingIdentifier"
+      />
+      <LabelLarge htmlFor="funderType">
+        <Translate content="qvain.project.inputs.funderType.label" />
+      </LabelLarge>
+      <FunderTypeSelect stores={Qvain} />
+    </>
+  )
 }
 
-const ProjectForm = ({ stores }) => (
-  <>
-    <LabelLarge htmlFor="titleEn">
-      <Translate content="qvain.project.inputs.title.label" />
-    </LabelLarge>
-    <Translate component="p" content="qvain.project.inputs.title.description" />
-    <Translate
-      component={Input}
-      attributes={{ placeholder: 'qvain.project.inputs.titleEn.placeholder' }}
-      id="titleEn"
-    />
-    <Translate
-      component={Input}
-      attributes={{ placeholder: 'qvain.project.inputs.titleFi.placeholder' }}
-      id="titleFi"
-    />
-    <LabelLarge htmlFor="identifier">
-      <Translate content="qvain.project.inputs.identifier.label" />
-    </LabelLarge>
-    <Translate component="p" content="qvain.project.inputs.identifier.description" />
-    <Translate
-      component={Input}
-      attributes={{ placeholder: 'qvain.project.inputs.identifier.placeholder' }}
-      id="identifier"
-    />
-    <LabelLarge htmlFor="fundingIdentifier">
-      <Translate content="qvain.project.inputs.fundingIdentifier.label" />
-    </LabelLarge>
-    <Translate component="p" content="qvain.project.inputs.fundingIdentifier.description" />
-    <Translate
-      component={Input}
-      attributes={{ placeholder: 'qvain.project.inputs.fundingIdentifier.placeholder' }}
-      id="fundingIdentifier"
-    />
-    <LabelLarge htmlFor="funderType">
-      <Translate content="qvain.project.inputs.funderType.label" />
-    </LabelLarge>
-    <FunderTypeSelect stores={stores} />
-  </>
-)
-
-
-ProjectForm.propTypes = {
-  stores: PropTypes.object.isRequired,
+ProjectFormCompoent.propTypes = {
+  Stores: PropTypes.object.isRequired,
 }
 
 
@@ -103,4 +109,6 @@ FunderTypeSelect.propTypes = {
   stores: PropTypes.object.isRequired,
 }
 
-export default inject('Stores')(observer(Project))
+const ProjectForm = inject('Stores')(observer(ProjectFormCompoent))
+
+export default Project
