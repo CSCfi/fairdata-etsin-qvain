@@ -23,8 +23,7 @@ const fieldProps = {
   }
 }
 
-const FundingOrganization = ({ Stores }) => {
-
+const FundingOrganization = ({ Stores, onChange, formData }) => {
   const renderSelectedOrganizations = () => null
 
   return (
@@ -40,6 +39,8 @@ const FundingOrganization = ({ Stores }) => {
 
 FundingOrganization.propTypes = {
   Stores: PropTypes.object.isRequired,
+  onChange: PropTypes.func.isRequired,
+  formData: PropTypes.object.isRequired,
 }
 
 const OrganizationField = ({ Stores }) => {

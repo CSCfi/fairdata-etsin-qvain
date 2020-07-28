@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-
 import Translate from 'react-translate-component'
 import { inject, observer } from 'mobx-react'
+import { toJS } from 'mobx';
 import styled from 'styled-components'
 
 import { Project as ProjectObject } from '../../../stores/view/qvain'
@@ -39,22 +39,27 @@ const INITIAL_STATE = {
 }
 
 class Project extends Component {
-  state = { ...INITIAL_STATE }
+  state = {
+    projectForm: { ...INITIAL_STATE.projectForm },
+    organizationForm: { ...INITIAL_STATE.organizationForm },
+  }
 
   static propTypes = {
     Stores: PropTypes.object.isRequired,
   }
 
-  onChange = (field, value) => {
+  onProjectFormChange = (field, value) => {
     const { projectForm } = this.state
     projectForm[field] = value
     this.setState({ projectForm })
   }
 
+  onOrganizationChange = () => null
+
   handleAddProject = event => {
     event.preventDefault()
     const { titleEn, titleFi, identifier, fundingIdentifier, funderType } = this.state.projectForm
-    projectDetailsSchema.validate({ titleEn, titleFi, identifier, fundingIdentifier, funderType } , { abortEarly: false })
+    projectDetailsSchema.validate({ titleEn, titleFi, identifier, fundingIdentifier, funderType }, { abortEarly: false })
       .then(() => {
         const title = { en: titleEn, fi: titleFi }
         const project = ProjectObject(title, identifier, fundingIdentifier, funderType, [])
@@ -72,10 +77,25 @@ class Project extends Component {
       })
   }
 
-  resetForm() {
-    this.setState({ ...INITIAL_STATE })
+  editProject = identifier => {
+    const project = toJS(this.props.Stores.Qvain.projects.find(proj => proj.identifier === identifier))
+    if (!project) return
+
+    const { projectForm } = this.state
+    projectForm.titleEn = project.title.en || ''
+    projectForm.titleFi = project.title.fi || ''
+    delete project.title
+
+    const updatedFormData = { ...projectForm, ...project, errors: [] }
+    this.setState({ projectForm: updatedFormData })
   }
 
+  resetForm = () => {
+    this.setState({
+      projectForm: { ...INITIAL_STATE.projectForm },
+      organizationForm: { ...INITIAL_STATE.organizationForm },
+    })
+  }
 
   render() {
     const { projectForm, organizationForm } = this.state
@@ -84,9 +104,9 @@ class Project extends Component {
         <Card>
           <Translate component="h3" content="qvain.project.title" />
           <Translate component="p" content="qvain.project.description" />
-          <AddedProjects />
-          <ProjectForm onChange={this.onChange} formData={projectForm} />
-          <FundingOrganization onChange={this.onChange} formData={organizationForm} />
+          <AddedProjects editProject={this.editProject} />
+          <ProjectForm onChange={this.onProjectFormChange} formData={projectForm} />
+          <FundingOrganization onChange={this.onOrganizationChange} formData={organizationForm} />
           <Actions>
             <Translate
               component={SaveButton}
@@ -100,18 +120,24 @@ class Project extends Component {
   }
 }
 
-const AddedProjectsComponent = ({ Stores }) => {
+const AddedProjectsComponent = ({ Stores, editProject }) => {
   // TODO: Implement edit project
   // TODO: Figure out how to display title with translations
   const { lang } = Stores.Locale
   const { removeProject, projects } = Stores.Qvain
+
+  const handleEdit = (identifier, event) => {
+    event.preventDefault()
+    editProject(identifier)
+  }
+
   return (
     <>
       {projects.map(project => (
         <ButtonGroup tabIndex="0" key={project.identifier}>
           <ButtonLabel>{project.title.en}</ButtonLabel>
           <ButtonContainer>
-            <EditButton aria-label="Edit" />
+            <EditButton aria-label="Edit" onClick={(event) => handleEdit(project.identifier, event)} />
             <DeleteButton aria-label="Remove" onClick={() => removeProject(project.identifier)} />
           </ButtonContainer>
         </ButtonGroup>
@@ -122,12 +148,16 @@ const AddedProjectsComponent = ({ Stores }) => {
 
 AddedProjectsComponent.propTypes = {
   Stores: PropTypes.object.isRequired,
+  editProject: PropTypes.func.isRequired,
 }
 
 const AddedProjects = inject('Stores')(observer(AddedProjectsComponent))
 
 const Actions = styled.div`
   margin-top: 1.5rem;
+  button {
+    margin: 0;
+  }
 `
 
 export default inject('Stores')(observer(Project))
