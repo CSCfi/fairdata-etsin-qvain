@@ -62,32 +62,22 @@ const ProjectForm = ({ onChange, formData }) => (
       htmlFor="funderType"
       title="qvain.project.inputs.funderType.label"
     />
-    <FunderTypeSelect onChange={onChange} value={formData.funderType} />
+    <Select
+      name="funder-type"
+      getter={formData.funderType}
+      setter={(newValue) => onChange('funderType', newValue) }
+      model={ProjectFunderType}
+      metaxIdentifier="funder_type"
+      placeholder="qvain.project.inputs.funderType.placeholder"
+      noOptionsMessage="qvain.project.inputs.funderType.noOptions"
+    />
     <ErrorMessages errors={formData.errors.funderType} />
   </>
 )
 
-
 ProjectForm.propTypes = {
   onChange: PropTypes.func.isRequired,
   formData: PropTypes.object.isRequired,
-}
-
-const FunderTypeSelect = ({ value, onChange }) => (
-  <Select
-    name="funder-type"
-    getter={value}
-    setter={(newValue) => onChange('funderType', newValue) }
-    model={ProjectFunderType}
-    metaxIdentifier="funder_type"
-    placeholder="qvain.project.inputs.funderType.placeholder"
-    noOptionsMessage="qvain.project.inputs.funderType.noOptions"
-  />
-)
-
-FunderTypeSelect.propTypes = {
-  onChange: PropTypes.func.isRequired,
-  value: PropTypes.object.isRequired,
 }
 
 const ProjectLabel = ({ htmlFor, title, description }) => (
