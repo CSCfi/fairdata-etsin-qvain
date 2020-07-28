@@ -73,7 +73,14 @@ class DatasetValidationSchema(Schema):
     Arguments:
         Schema {library} -- Marshmallows Schema library.
     """
-
+    relation = fields.List(
+        fields.Dict(),
+        required=False
+    )
+    provenance = fields.List(
+        fields.Dict(),
+        required=False
+    )
     original = fields.Dict()
     title = fields.Dict(
         required=True,

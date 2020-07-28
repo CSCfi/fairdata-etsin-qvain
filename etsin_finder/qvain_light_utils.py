@@ -34,7 +34,7 @@ def clean_empty_keyvalues_from_dict(d):
     return {k: v for k, v in ((k, clean_empty_keyvalues_from_dict(v)) for k, v in d.items()) if v}
 
 
-def alter_role_data(actor_list, role):
+def alter_role_data(actor_list=[], role="all"):
     """
     Converts the role data fom the frontend to comply with the Metax schema.
 
@@ -47,7 +47,11 @@ def alter_role_data(actor_list, role):
 
     """
     actors = []
-    actor_list_with_role = [x for x in actor_list if role in x.get("roles", []) ]
+    if role == "all":
+        actor_list_with_role = actor_list
+    else:
+        actor_list_with_role = [x for x in actor_list if role in x.get("roles", []) ]
+
     for actor_object in actor_list_with_role:
         actor_object = deepcopy(actor_object)
         organizations = actor_object.get("organizations", [])
@@ -216,6 +220,13 @@ def data_to_metax(data, metadata_provider_org, metadata_provider_user):
 
     """
     publisher_array = alter_role_data(data["actors"], "publisher")
+
+    provenances = data.get("provenance", [])
+    for provenance in provenances:
+        was_associated_with = provenance.get("was_associated_with")
+        altered_association = alter_role_data(was_associated_with)
+        provenance["was_associated_with"] = altered_association
+
     dataset_data = {
         "metadata_provider_org": metadata_provider_org,
         "metadata_provider_user": metadata_provider_user,
@@ -238,7 +249,9 @@ def data_to_metax(data, metadata_provider_org, metadata_provider_user):
             "files": files_data_to_metax(data["files"]) if data["dataCatalog"] == "urn:nbn:fi:att:data-catalog-ida" else "",
             "directories": directories_data_to_metax(data["directories"]) if data["dataCatalog"] == "urn:nbn:fi:att:data-catalog-ida" else "",
             "infrastructure": data.get("infrastructure"),
-            "spatial": data.get("spatial")
+            "spatial": data.get("spatial"),
+            "relation": data.get("relation"),
+            "provenance": provenances
         }
     }
     return clean_empty_keyvalues_from_dict(dataset_data)
@@ -320,7 +333,13 @@ def edited_data_to_metax(data, original):
     """
     publisher_array = alter_role_data(data["actors"], "publisher")
     research_dataset = original["research_dataset"]
-    log.info(research_dataset)
+
+    provenances = data.get("provenance", [])
+    for provenance in provenances:
+        was_associated_with = provenance.get("was_associated_with")
+        altered_association = alter_role_data(was_associated_with)
+        provenance["was_associated_with"] = altered_association
+
     research_dataset.update({
         "title": data["title"],
         "description": data["description"],
@@ -338,8 +357,11 @@ def edited_data_to_metax(data, original):
         "files": files_data_to_metax(data["files"]) if data["dataCatalog"] == "urn:nbn:fi:att:data-catalog-ida" else "",
         "directories": directories_data_to_metax(data["directories"]) if data["dataCatalog"] == "urn:nbn:fi:att:data-catalog-ida" else "",
         "infrastructure": _to_metax_infrastructure(data.get("infrastructure")),
-        "spatial": data.get("spatial")
+        "spatial": data.get("spatial"),
+        "relation": data.get("relation"),
+        "provenance": provenances
     })
+    log.info(research_dataset)
     edited_data = {
         "research_dataset": research_dataset
     }

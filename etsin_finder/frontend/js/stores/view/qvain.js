@@ -1,4 +1,4 @@
-import { observable, action, computed, runInAction, toJS } from 'mobx'
+import { observable, action, computed, runInAction } from 'mobx'
 import axios from 'axios'
 import { getDirectories, getFiles, deepCopy } from '../../components/qvain/utils/fileHierarchy'
 import {
@@ -13,8 +13,8 @@ import { getPath } from '../../components/qvain/utils/object'
 import Actors from './qvain.actors'
 import Files from './qvain.files'
 import Spatials, { SpatialModel } from './qvain.spatials'
-import Provenances from './qvain.provenances'
-import RelatedResources from './qvain.relatedResources'
+import Provenances, { ProvenanceModel } from './qvain.provenances'
+import RelatedResources, { RelatedResourceModel } from './qvain.relatedResources'
 
 class Qvain {
   constructor() {
@@ -694,7 +694,23 @@ class Qvain {
     }
 
     // Provenances
-    // this.provenances = []
+    this.provenances = []
+    if (researchDataset.provenance !== undefined) {
+      researchDataset.provenance.forEach((p) => {
+        console.log(p)
+        const prov = ProvenanceModel(p)
+        this.provenances.push(prov)
+      })
+    }
+
+    // Related Resources
+    this.relatedResources = []
+    if (researchDataset.relation !== undefined) {
+      researchDataset.relation.forEach((rr) => {
+        const rResource = RelatedResourceModel(rr)
+        this.relatedResources.push(rResource)
+      })
+    }
 
     // Keywords
     this.keywords = researchDataset.keyword || []

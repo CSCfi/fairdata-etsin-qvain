@@ -53,6 +53,10 @@ const handleSubmitToBackend = (values) => {
 
   const spatial = values.Spatials.toBackend()
 
+  const relation = values.RelatedResources.toBackend()
+
+  const provenance = values.Provenances.toBackend()
+
   const obj = {
     title: values.title,
     description: values.description,
@@ -74,7 +78,9 @@ const handleSubmitToBackend = (values) => {
     dataCatalog: values.dataCatalog,
     cumulativeState: values.cumulativeState,
     useDoi: values.useDoi,
-    spatial
+    spatial,
+    relation,
+    provenance
   }
 
   if (values.original) {
