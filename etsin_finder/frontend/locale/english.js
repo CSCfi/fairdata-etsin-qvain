@@ -1033,6 +1033,7 @@ const english = {
     project: {
       title: 'Producer Project',
       description: 'A project in which the dataset was created',
+      addButton: 'Add project',
       tooltipContent: {
         title: 'Producer Project',
         paragraph: 'A project in which the dataset was created',
@@ -1041,6 +1042,10 @@ const english = {
         title: 'Add project',
         addButton: 'Add project',
         description: 'A project in which the dataset was created',
+      },
+      organization: {
+        title: 'Organization',
+        description: 'The Organization(s) who is/are participating to the project'
       },
       inputs: {
         title: {
