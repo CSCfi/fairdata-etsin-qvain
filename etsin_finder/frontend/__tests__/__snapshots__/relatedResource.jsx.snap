@@ -1,14 +1,14 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`RelatedResource it renders 1`] = `
-<Fragment>
-  <Field
-    brief={
-      Object {
-        "description": "qvain.history.relatedMaterial.brief.description",
-        "title": "qvain.history.relatedMaterial.brief.title",
-      }
+<Field
+  brief={
+    Object {
+      "description": "qvain.history.relatedResource.description",
+      "title": "qvain.history.relatedResource.title",
     }
-  />
-</Fragment>
+  }
+>
+  <inject-RelatedResourceContent-with-Stores />
+</Field>
 `;
