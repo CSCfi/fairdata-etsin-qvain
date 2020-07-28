@@ -56,7 +56,22 @@ class DatasetTable extends Component {
   }
 
   componentWillUnmount() {
-    this.promises.forEach((promise) => promise.cancel())
+    this.promises.forEach(promise => promise.cancel())
+  }
+
+  attachDrafts = (datasets, drafts) => {
+    // Assign draft dataset to next_draft field of original dataset, so all fields
+    // of the draft are available from the original dataset instead of just identifiers.
+    const datasetsById = {}
+    datasets.forEach(dataset => {
+      datasetsById[dataset.identifier] = dataset
+    })
+    drafts.forEach(draft => {
+      const dataset = datasetsById[draft.draft_of.identifier]
+      if (dataset && dataset.next_draft && dataset.next_draft.identifier === draft.identifier) {
+        Object.assign(dataset.next_draft, draft)
+      }
+    })
   }
 
   getDatasets = () => {
@@ -73,8 +88,10 @@ class DatasetTable extends Component {
     }
     const promise = axios
       .get(url)
-      .then((result) => {
-        const datasets = result.data.filter((dataset) => !dataset.draft_of)
+      .then(result => {
+        const datasets = result.data.filter(dataset => !dataset.draft_of)
+        const datasetDrafts = result.data.filter(dataset => dataset.draft_of)
+        this.attachDrafts(datasets, datasetDrafts)
         const datasetGroups = groupDatasetsByVersionSet(datasets)
 
         this.setState(
