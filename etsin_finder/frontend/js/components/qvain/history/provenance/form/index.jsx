@@ -3,23 +3,23 @@ import PropTypes from 'prop-types'
 import { FormContainer } from '../../../general/form'
 import TabInput from '../../../general/translationTabInput'
 import TranslationTab from '../../../general/translationTab'
-import PeriodOfTimePicker from './PeriodOfTimePicker'
 import LocationInput from './locationInput'
 import ModalReferenceInput from '../../../general/modalReferenceInput'
 import { Outcome, Lifecycle } from '../../../../../stores/view/qvain.provenances'
 import Separator from '../../../general/modalSeparator'
 import UsedEntityInput from './usedEntityInput'
 import ActorsInput from './actorsInput'
+import DurationPicker from '../../../general/durationpicker'
 
 class Form extends Component {
   static propTypes = {
     Store: PropTypes.object.isRequired,
     Field: PropTypes.object.isRequired,
-    translationsRoot: PropTypes.string.isRequired
+    translationsRoot: PropTypes.string.isRequired,
   }
 
   state = {
-    language: 'fi'
+    language: 'fi',
   }
 
   setLanguage = (lang) => {
@@ -37,7 +37,7 @@ class Form extends Component {
           <TabInput {...this.props} datum="outcomeDescription" language={language} />
         </TranslationTab>
         <Separator />
-        <PeriodOfTimePicker />
+        <DurationPicker {...this.props} datum="periodOfTime" language={language} />
         <LocationInput />
         <Separator />
         <ModalReferenceInput
@@ -61,6 +61,5 @@ class Form extends Component {
     )
   }
 }
-
 
 export default Form

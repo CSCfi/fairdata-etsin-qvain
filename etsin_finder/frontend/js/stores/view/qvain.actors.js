@@ -1,21 +1,18 @@
 import axios from 'axios'
-import { observable, action, runInAction, computed, toJS } from 'mobx'
+import { observable, action, runInAction, computed } from 'mobx'
 
 import { METAX_FAIRDATA_ROOT_URL, ENTITY_TYPE, ROLE } from '../../utils/constants'
 
-
 // helper methods
-
 
 // Organization may be a reference organizations if its identifier starts with the proper prefix.
 export const ReferenceIdentifierPrefix = 'http://uri.suomi.fi/codelist/fairdata/organization/code/'
-export const maybeReference = identifier => (
+export const maybeReference = (identifier) =>
   (identifier && identifier.startsWith(ReferenceIdentifierPrefix)) || false
-)
 
 const codeRegExp = RegExp('http://uri.suomi.fi/codelist/fairdata/organization/code/(.*)')
 
-const getOrganizationSearchUrl = parentId => {
+const getOrganizationSearchUrl = (parentId) => {
   let shortId = ''
   if (parentId) {
     const match = codeRegExp.exec(parentId)
@@ -26,35 +23,34 @@ const getOrganizationSearchUrl = parentId => {
   return `${METAX_FAIRDATA_ROOT_URL}/es/organization_data/organization/_search?size=3000&q=parent_id:"${shortId}"`
 }
 
-const actorToBackend = actor => ({
+const actorToBackend = (actor) => ({
   type: actor.type,
   roles: actor.roles,
-  person: actor.type === EntityType.PERSON ? {
-    name: actor.person.name,
-    email: actor.person.email || undefined,
-    identifier: actor.person.identifier || undefined
-  } : undefined,
-  organizations: actor.organizations.map(org => ({
+  person:
+    actor.type === ENTITY_TYPE.PERSON
+      ? {
+          name: actor.person.name,
+          email: actor.person.email || undefined,
+          identifier: actor.person.identifier || undefined,
+        }
+      : undefined,
+  organizations: actor.organizations.map((org) => ({
     name: org.name,
     email: org.email || undefined,
-    identifier: org.identifier || undefined
+    identifier: org.identifier || undefined,
   })),
 })
 
-const isActorEqual = (org1, org2) => (
-  isEqual(org1, org2, ['uiid', 'roles'])
-)
+const isActorEqual = (org1, org2) => isEqual(org1, org2, ['uiid', 'roles'])
 
-const isOrganizationEqual = (org1, org2) => (
-  isEqual(org1, org2, ['uiid', 'isReference'])
-)
+const isOrganizationEqual = (org1, org2) => isEqual(org1, org2, ['uiid', 'isReference'])
 
 // Compare two objects to see if they are the same.
 // Optionally ignore specific keys (e.g. uiid).
 const isEqual = (a1, a2, ignore = []) => {
   const isDifferent = (a, b) => {
     if (a && b && typeof a === 'object' && typeof b === 'object') {
-      return Object.keys(a).some(key => !ignore.includes(key) && isDifferent(a[key], b[key]))
+      return Object.keys(a).some((key) => !ignore.includes(key) && isDifferent(a[key], b[key]))
     }
     return a !== b
   }
@@ -62,7 +58,6 @@ const isEqual = (a1, a2, ignore = []) => {
   const equ = !isDifferent(a1, a2)
   return equ
 }
-
 
 // create a new UI Identifier based on existing UI IDs
 // basically a simple number increment
@@ -79,26 +74,38 @@ export const createOrgUIID = () => {
   return orgUIIDCounter
 }
 
-export const Actor = ({ type = ENTITY_TYPE.PERSON, person = Person(), organizations = [], roles = [], uiid = createActorUIID() } = {}) => ({
+export const Actor = ({
+  type = ENTITY_TYPE.PERSON,
+  person = Person(),
+  organizations = [],
+  roles = [],
+  uiid = createActorUIID(),
+} = {}) => ({
   type,
   roles,
   person,
   organizations, // array with top level organization first
-  uiid
+  uiid,
 })
 
 export const Person = ({ name = '', email = '', identifier = '' } = {}) => ({
   name,
   email,
-  identifier
+  identifier,
 })
 
-export const Organization = ({ name = '', email = '', identifier = '', isReference = false, uiid = createOrgUIID() } = {}) => ({
+export const Organization = ({
+  name = '',
+  email = '',
+  identifier = '',
+  isReference = false,
+  uiid = createOrgUIID(),
+} = {}) => ({
   name,
   email,
   identifier, // Organization URI
   isReference,
-  uiid
+  uiid,
 })
 
 class Actors {
@@ -159,10 +166,10 @@ class Actors {
     const parentUIID = (parent && parent.uiid) || null
     const keys = {}
     const uniqueDatasetOrgs = []
-    this.actors.forEach(actor => {
+    this.actors.forEach((actor) => {
       const orgs = [...actor.organizations]
       if (parentUIID) {
-        const orgIndex = orgs.findIndex(org => org.uiid === parentUIID)
+        const orgIndex = orgs.findIndex((org) => org.uiid === parentUIID)
         if (orgIndex < 0) {
           return
         }
@@ -170,7 +177,7 @@ class Actors {
       }
       for (let numParts = 0; numParts < orgs.length; numParts += 1) {
         const parts = orgs.slice(0, numParts + 1)
-        const key = parts.map(org => org.uiid).join('-')
+        const key = parts.map((org) => org.uiid).join('-')
         if (!keys[key]) {
           uniqueDatasetOrgs.push(parts)
         }
@@ -231,11 +238,13 @@ class Actors {
 
         runInAction(() => {
           this.loadingReferenceOrganizations[parentId] = null
-          this.referenceOrganizations[parentId] = orgs.map(org => Organization({
-            name: org._source.label,
-            identifier: org._source.uri,
-            isReference: true
-          }))
+          this.referenceOrganizations[parentId] = orgs.map((org) =>
+            Organization({
+              name: org._source.label,
+              identifier: org._source.uri,
+              isReference: true,
+            })
+          )
           delete this.referenceOrganizationErrors[parentId]
         })
         this.mergeActorsOrganizationsWithReferences()
@@ -260,27 +269,25 @@ class Actors {
     // Load actors
     const actors = []
     if ('publisher' in researchDataset) {
-      actors.push(
-        this.createActor(researchDataset.publisher, ROLE.PUBLISHER, actors)
-      )
+      actors.push(this.createActor(researchDataset.publisher, ROLE.PUBLISHER, actors))
     }
     if ('curator' in researchDataset) {
-      researchDataset.curator.forEach(curator =>
+      researchDataset.curator.forEach((curator) =>
         actors.push(this.createActor(curator, ROLE.CURATOR, actors))
       )
     }
     if ('creator' in researchDataset) {
-      researchDataset.creator.forEach(creator =>
+      researchDataset.creator.forEach((creator) =>
         actors.push(this.createActor(creator, ROLE.CREATOR, actors))
       )
     }
     if ('rights_holder' in researchDataset) {
-      researchDataset.rights_holder.forEach(rightsHolder =>
+      researchDataset.rights_holder.forEach((rightsHolder) =>
         actors.push(this.createActor(rightsHolder, ROLE.RIGHTS_HOLDER, actors))
       )
     }
     if ('contributor' in researchDataset) {
-      researchDataset.contributor.forEach(contributor =>
+      researchDataset.contributor.forEach((contributor) =>
         actors.push(this.createActor(contributor, ROLE.CONTRIBUTOR, actors))
       )
     }
@@ -303,11 +310,13 @@ class Actors {
       const orgs = []
       let currentOrg = org
       while (currentOrg) {
-        orgs.unshift(Organization({
-          name: currentOrg.name,
-          identifier: currentOrg.identifier,
-          isReference: null // null here means we aren't sure yet
-        }))
+        orgs.unshift(
+          Organization({
+            name: currentOrg.name,
+            identifier: currentOrg.identifier,
+            isReference: null, // null here means we aren't sure yet
+          })
+        )
         currentOrg = currentOrg.is_part_of
       }
       return orgs
@@ -339,7 +348,7 @@ class Actors {
 
   @action updateSavedActorOrganizations = (actor) => {
     const existingOrganizations = [].concat(
-      ...this.actors.map(act => act.organizations),
+      ...this.actors.map((act) => act.organizations),
       ...Object.values(this.referenceOrganizations)
     )
 
@@ -362,7 +371,7 @@ class Actors {
     if (this.actorInEdit) {
       actors.push(this.actorInEdit)
     }
-    actors.forEach(actor => {
+    actors.forEach((actor) => {
       actor.organizations.forEach((org, index) => {
         if (org.isReference !== null) {
           return
@@ -387,7 +396,7 @@ class Actors {
         if (!refs) {
           return // references not loaded yet
         }
-        const match = refs.find(refOrg => isOrganizationEqual(org, refOrg))
+        const match = refs.find((refOrg) => isOrganizationEqual(org, refOrg))
         if (match) {
           if (actor === this.actorInEdit) {
             // actorInEdit should remain a copy until it is saved
@@ -405,7 +414,7 @@ class Actors {
   // Merges actors' organizations with identical properties.
   @action mergeTheSameActorOrganizations = () => {
     const orgs = []
-    this.actors.forEach(actor => {
+    this.actors.forEach((actor) => {
       actor.organizations.forEach((org, index) => {
         for (const otherOrg of orgs) {
           if (isOrganizationEqual(org, otherOrg)) {
@@ -425,7 +434,7 @@ class Actors {
   @action mergeTheSameActors = () => {
     const actors = this.actors
     const mergedActors = []
-    actors.forEach(actor1 => {
+    actors.forEach((actor1) => {
       actors.forEach((actor2, index) => {
         if (actor1 === actor2) {
           return
@@ -443,16 +452,14 @@ class Actors {
   setSelectedActor
 
   @action
-  setActors = actors => {
+  setActors = (actors) => {
     this.actors.replace(actors)
     this.Qvain.setChanged(true)
   }
 
-  @action saveActor = actor => {
+  @action saveActor = (actor) => {
     // Saving an actor that was previously added?
-    const existing = this.actors.find(
-      addedActor => addedActor.uiid === actor.uiid
-    )
+    const existing = this.actors.find((addedActor) => addedActor.uiid === actor.uiid)
 
     if (existing) {
       // Update existing actor
@@ -468,8 +475,8 @@ class Actors {
   }
 
   @action
-  removeActor = actor => {
-    const actors = this.actors.filter(p => p.uiid !== actor.uiid)
+  removeActor = (actor) => {
+    const actors = this.actors.filter((p) => p.uiid !== actor.uiid)
     this.setActors(actors)
     this.Qvain.setChanged(true)
   }
@@ -480,7 +487,7 @@ class Actors {
   }
 
   @action
-  editActor = actor => {
+  editActor = (actor) => {
     this.actorInEdit = JSON.parse(JSON.stringify(actor)) // clone actor
   }
 
@@ -494,20 +501,38 @@ class Actors {
     actor.organizations = organizations
   }
 
-  toBackend = () => this.actors.map(actor => ({
-    type: actor.type,
-    roles: actor.roles,
-    person: actor.type === ENTITY_TYPE.PERSON ? {
-      name: actor.person.name,
-      email: actor.person.email || undefined,
-      identifier: actor.person.identifier || undefined
-    } : undefined,
-    organizations: actor.organizations.map(org => ({
-      name: org.name,
-      email: org.email || undefined,
-      identifier: org.identifier || undefined
-    })),
-  }))
+  toBackend = () =>
+    this.actors.map((actor) => ({
+      type: actor.type,
+      roles: actor.roles,
+      person:
+        actor.type === ENTITY_TYPE.PERSON
+          ? {
+              name: actor.person.name,
+              email: actor.person.email || undefined,
+              identifier: actor.person.identifier || undefined,
+            }
+          : undefined,
+      organizations: actor.organizations.map((org) => ({
+        name: org.name,
+        email: org.email || undefined,
+        identifier: org.identifier || undefined,
+      })),
+    }))
+
+  @observable actorsRefs = []
+
+  @action addRef = (ref) => {
+    this.actorsRefs.push(ref)
+  }
+
+  @computed get actorOptions() {
+    return this.actors.map((ref) => ({
+      value: ref.uiid,
+      label: ref.person.name || ref.organizations[0].name,
+      roles: ref.roles,
+    }))
+  }
 }
 
 export default Actors
@@ -523,10 +548,10 @@ export class ActorsRef {
 
   @computed get actorOptions() {
     // makes a list of actors based on the refs
-    return Object.values(this.actorsRef).map(ref => ({
+    return Object.values(this.actorsRef).map((ref) => ({
       value: ref.uiid,
       label: ref.person.name || ref.organizations[0].name,
-      roles: ref.roles
+      roles: ref.roles,
     }))
   }
 
@@ -542,7 +567,7 @@ export class ActorsRef {
   }
 
   @action addActorWithId = (id) => {
-    const actor = this.actorsStore.actors.find(a => a.uiid === id)
+    const actor = this.actorsStore.actors.find((a) => a.uiid === id)
     if (actor) this.addActorRef(actor)
   }
 
@@ -553,8 +578,13 @@ export class ActorsRef {
 
   @action setActorsRef = (actorsFromBackend) => {
     if (!actorsFromBackend) return
-    const actorsRefArray = this.actorsStore.actors.filter(actor => !!actorsFromBackend.find(afb => isEqual(afb, actorToBackend(actor))))
-    this.actorsRef = actorsRefArray.reduce((obj, ref) => { obj[ref.uiid] = ref; return obj }, {})
+    const actorsRefArray = this.actorsStore.actors.filter(
+      (actor) => !!actorsFromBackend.find((afb) => isEqual(afb, actorToBackend(actor)))
+    )
+    this.actorsRef = actorsRefArray.reduce((obj, ref) => {
+      obj[ref.uiid] = ref
+      return obj
+    }, {})
   }
 
   @action clearActorsRef = () => {

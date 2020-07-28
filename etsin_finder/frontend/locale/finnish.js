@@ -1071,7 +1071,7 @@ const finnish = {
               placeholder: 'Nimi (englanniksi)'
             }
           },
-          descripionInput: {
+          descriptionInput: {
             fi: {
               label: 'Kuvailu',
               placeholder: 'Kuvailu (suomeksi)'
@@ -1215,7 +1215,7 @@ const finnish = {
                   placeholder: 'Nimi (englanniksi)'
                 }
               },
-              descripionInput: {
+              descriptionInput: {
                 fi: {
                   label: 'Kuvailu',
                   placeholder: 'Kuvailu (suomeksi)'

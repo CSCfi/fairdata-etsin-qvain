@@ -19,7 +19,14 @@ const Location = ({ Stores }) => {
   return (
     <>
       <Translate component={Label} content={translations.label} htmlFor="location-input" />
-      <FieldList Store={Store} Field={Store.Spatials} fieldIdentifier="spatials" lang={lang} translationsRoot={translationsRoot} elements={Store.inEdit.spatials} />
+      <FieldList
+        Store={Store}
+        Field={Store.Spatials}
+        fieldIdentifier="spatials"
+        lang={lang}
+        translationsRoot={translationsRoot}
+        elements={Store.inEdit.spatials}
+      />
       <div id="locationInput">
         <FieldListAdd
           Store={Store}

@@ -3,22 +3,25 @@ import styled from 'styled-components'
 import { inject, observer } from 'mobx-react'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
-import { Label } from '../../../general/form'
-import { DatePicker, handleDatePickerChange, getDateFormatLocale } from '../../../general/datepicker'
+import { Label } from './form'
+import { DatePicker, handleDatePickerChange, getDateFormatLocale } from './datepicker'
 
-class PeriodOfTimePicker extends Component {
+class DurationPicker extends Component {
     static propTypes = {
-        Stores: PropTypes.object.isRequired
+        Stores: PropTypes.object.isRequired,
+        Field: PropTypes.object.isRequired,
+        translationsRoot: PropTypes.string.isRequired,
+        datum: PropTypes.string.isRequired
     }
 
     translations = {
-      label: 'qvain.history.provenance.modal.periodOfTimeInput.label',
-      startPlaceholder: 'qvain.history.provenance.modal.periodOfTimeInput.startPlaceholder',
-      endPlaceholder: 'qvain.history.provenance.modal.periodOfTimeInput.endPlaceholder',
+      label: `${this.props.translationsRoot}.modal.${this.props.datum}Input.label`,
+      startPlaceholder: `${this.props.translationsRoot}.modal.${this.props.datum}Input.startPlaceholder`,
+      endPlaceholder: `${this.props.translationsRoot}.modal.${this.props.datum}Input.endPlaceholder`,
     }
 
     handleDateChangeRaw = (e, datum) => {
-        const { changeAttribute } = this.props.Stores.Qvain.Provenances
+        const { changeAttribute } = this.props.Field
 
         return e && handleDatePickerChange(
             e.target.value,
@@ -27,7 +30,7 @@ class PeriodOfTimePicker extends Component {
     }
 
     handleDateChange = (date, datum) => {
-        const { changeAttribute } = this.props.Stores.Qvain.Provenances
+        const { changeAttribute } = this.props.Field
 
         return date ? handleDatePickerChange(
             date.toISOString(),
@@ -36,7 +39,7 @@ class PeriodOfTimePicker extends Component {
     }
 
     render() {
-        const { startDate, endDate } = this.props.Stores.Qvain.Provenances.inEdit
+        const { startDate, endDate } = this.props.Field.inEdit
         const { readonly } = this.props.Stores.Qvain
         const { lang } = this.props.Stores.Locale
 
@@ -96,4 +99,4 @@ const DatePickerStartWrapper = styled.span`
   margin-right: 15px;
 `
 
-export default inject('Stores')(observer(PeriodOfTimePicker))
+export default inject('Stores')(observer(DurationPicker))
