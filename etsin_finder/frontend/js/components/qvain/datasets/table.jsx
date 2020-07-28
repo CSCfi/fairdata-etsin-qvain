@@ -40,7 +40,7 @@ class DatasetTable extends Component {
     error: false, // error notification status
     errorMessage: '', // error notification itself
     removeModalDataset: undefined, // used to send the delete request to backend to target the correct dataset
-    removeModalOnlyChanges: false,
+    removeModalOnlyChanges: false, // if true, delete only unpublished changes, not the entire dataset
     searchTerm: '', // used to narrow down content
     currentTimestamp: new Date(), // Only need to set this once, when the page is loaded,
   }
@@ -113,7 +113,7 @@ class DatasetTable extends Component {
   }
 
   postRemoveUpdate = (dataset, onlyChanges) => {
-    // update list after dataset removal
+    // update dataset list after dataset removal
     let datasets = [...this.state.datasets]
     const identifier = dataset.identifier
     if (onlyChanges) {
