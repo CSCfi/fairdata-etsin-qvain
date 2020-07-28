@@ -26,6 +26,7 @@ describe('Qvain.RemoveModal', () => {
   const onClose = jest.fn()
 
   beforeEach(() => {
+    axios.delete.mockReset()
     stores = getStores()
     wrapper = shallow(
       <RemoveModalBase
@@ -42,8 +43,6 @@ describe('Qvain.RemoveModal', () => {
   })
 
   it('deletes dataset', async () => {
-    axios.delete.mockReset()
-
     wrapper.setProps({
       dataset: {
         identifier: 1,
@@ -57,8 +56,6 @@ describe('Qvain.RemoveModal', () => {
   })
 
   it('deletes unpublished changes', async () => {
-    axios.delete.mockReset()
-
     wrapper.setProps({
       dataset: {
         identifier: 1,
@@ -74,9 +71,20 @@ describe('Qvain.RemoveModal', () => {
     expect(axios.delete.mock.calls).toEqual([['/api/v2/dataset/2']])
   })
 
-  it('deletes unpublished changes before deleting dataset', async () => {
-    axios.delete.mockReset()
+  it('has no changes to delete', async () => {
+    wrapper.setProps({
+      dataset: {
+        identifier: 1,
+      },
+      onlyChanges: true,
+    })
+    wrapper.update()
+    wrapper.find('#confirm-remove-dataset').simulate('click')
+    await Promise.resolve()
+    expect(axios.delete.mock.calls).toEqual([])
+  })
 
+  it('deletes unpublished changes before deleting dataset', async () => {
     wrapper.setProps({
       dataset: {
         identifier: 1,
