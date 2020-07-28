@@ -264,6 +264,24 @@ export const fileMetadataSchema = yup.object().shape({
 })
 
 
+// PROJECT VALIDATION
+const projectDetailsSchema = yup.object().shape({
+  titleFi: yup.mixed().when('titleEn', {
+    is: val => val.length > 0,
+    then: yup
+      .string(translate('qvain.project.inputs.title.validation.string')),
+    otherwise: yup
+      .string(translate('qvain.project.inputs.title.validation.string'))
+      .required(translate('qvain.project.inputs.title.validation.required')),
+  }),
+  titleEn: yup
+    .string(translate('qvain.project.inputs.title.validation.string')),
+  identifier: yup.string().required(translate('qvain.project.inputs.identifier.validation')),
+  fundingIdentifier: yup.string().required(translate('qvain.project.inputs.fundingIdentifier.validation')),
+  funderType: yup.object().required(translate('qvain.project.inputs.funderType.validation')),
+})
+
+
 // EXTERNAL RESOURCES VALIDATION
 
 const externalResourceTitleSchema = yup
@@ -475,5 +493,6 @@ export {
   externalResourceAccessUrlSchema,
   externalResourceDownloadUrlSchema,
   spatialNameSchema,
-  spatialAltitudeSchema
+  spatialAltitudeSchema,
+  projectDetailsSchema
 }

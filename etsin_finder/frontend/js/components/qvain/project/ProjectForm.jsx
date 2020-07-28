@@ -6,6 +6,7 @@ import Translate from 'react-translate-component'
 import { ProjectFunderType } from '../../../stores/view/qvain'
 import { LabelLarge, Input } from '../general/form'
 import Select from '../general/select'
+import ValidationError from '../general/validationError'
 
 
 const ProjectForm = ({ onChange, formData }) => (
@@ -22,6 +23,7 @@ const ProjectForm = ({ onChange, formData }) => (
       attributes={{ placeholder: 'qvain.project.inputs.titleEn.placeholder' }}
       id="titleEn"
     />
+    <ErrorMessages errors={formData.errors.titleEn} />
     <Translate
       component={Input}
       value={formData.titleFi}
@@ -29,6 +31,7 @@ const ProjectForm = ({ onChange, formData }) => (
       attributes={{ placeholder: 'qvain.project.inputs.titleFi.placeholder' }}
       id="titleFi"
     />
+    <ErrorMessages errors={formData.errors.titleFi} />
     <ProjectLabel
       htmlFor="identifier"
       title="qvain.project.inputs.identifier.label"
@@ -41,6 +44,7 @@ const ProjectForm = ({ onChange, formData }) => (
       attributes={{ placeholder: 'qvain.project.inputs.identifier.placeholder' }}
       id="identifier"
     />
+    <ErrorMessages errors={formData.errors.identifier} />
     <ProjectLabel
       htmlFor="fundingIdentifier"
       title="qvain.project.inputs.fundingIdentifier.label"
@@ -53,11 +57,13 @@ const ProjectForm = ({ onChange, formData }) => (
       attributes={{ placeholder: 'qvain.project.inputs.fundingIdentifier.placeholder' }}
       id="fundingIdentifier"
     />
+    <ErrorMessages errors={formData.errors.fundingIdentifier} />
     <ProjectLabel
       htmlFor="funderType"
       title="qvain.project.inputs.funderType.label"
     />
     <FunderTypeSelect onChange={onChange} value={formData.funderType} />
+    <ErrorMessages errors={formData.errors.funderType} />
   </>
 )
 
@@ -102,6 +108,23 @@ ProjectLabel.propTypes = {
 
 ProjectLabel.defaultProps = {
   description: null,
+}
+
+const ErrorMessages = ({ errors }) => {
+  if (!errors.length) return null
+  return (
+    <ValidationError>
+      { errors.map(error => error) }
+    </ValidationError>
+  )
+}
+
+ErrorMessages.propTypes = {
+  errors: PropTypes.array,
+}
+
+ErrorMessages.defaultProps = {
+  errors: []
 }
 
 export default ProjectForm

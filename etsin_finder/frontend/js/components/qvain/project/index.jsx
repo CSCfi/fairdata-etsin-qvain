@@ -6,11 +6,12 @@ import { inject, observer } from 'mobx-react'
 import styled from 'styled-components'
 
 import { Project as ProjectObject } from '../../../stores/view/qvain'
+import { projectDetailsSchema } from '../utils/formValidation'
 
 import Field from '../general/field'
 import Card from '../general/card'
-import Button from '../../general/button'
-import { ButtonGroup, ButtonLabel, EditButton, ButtonContainer, DeleteButton } from '../general/buttons'
+import { ButtonGroup, ButtonLabel, EditButton, ButtonContainer, DeleteButton, SaveButton } from '../general/buttons'
+
 import TooltipContent from './TooltipContent'
 import ProjectForm from './ProjectForm'
 import FundingOrganization from './FundingOrganization'
@@ -32,6 +33,7 @@ const INITIAL_STATE = {
     identifier: '',
     fundingIdentifier: '',
     funderType: undefined,
+    errors: [],
   },
   organizationForm: {},
 }
@@ -49,12 +51,25 @@ class Project extends Component {
     this.setState({ projectForm })
   }
 
-  handleAddProject = () => {
+  handleAddProject = event => {
+    event.preventDefault()
     const { titleEn, titleFi, identifier, fundingIdentifier, funderType } = this.state.projectForm
-    const title = { en: titleEn, fi: titleFi }
-    const project = ProjectObject(title, identifier, fundingIdentifier, funderType, [])
-    this.props.Stores.Qvain.setProject(project)
-    this.resetForm()
+    projectDetailsSchema.validate({ titleEn, titleFi, identifier, fundingIdentifier, funderType } , { abortEarly: false })
+      .then(() => {
+        const title = { en: titleEn, fi: titleFi }
+        const project = ProjectObject(title, identifier, fundingIdentifier, funderType, [])
+        this.props.Stores.Qvain.setProject(project)
+        this.resetForm()
+      })
+      .catch((validationErrors) => {
+        const { projectForm } = this.state
+        projectForm.errors = []
+        validationErrors.inner.forEach(error => {
+          const { errors, path } = error
+          projectForm.errors[path] = errors
+        })
+        this.setState({ projectForm })
+      })
   }
 
   resetForm() {
@@ -72,11 +87,13 @@ class Project extends Component {
           <AddedProjects />
           <ProjectForm onChange={this.onChange} formData={projectForm} />
           <FundingOrganization onChange={this.onChange} formData={organizationForm} />
-          <AddLanguageContainer>
-            <Button onClick={this.handleAddProject}>
-              <Translate content="qvain.project.addButton" />
-            </Button>
-          </AddLanguageContainer>
+          <Actions>
+            <Translate
+              component={SaveButton}
+              onClick={this.handleAddProject}
+              content="qvain.project.addButton"
+            />
+          </Actions>
         </Card>
       </Field>
     )
@@ -109,13 +126,8 @@ AddedProjectsComponent.propTypes = {
 
 const AddedProjects = inject('Stores')(observer(AddedProjectsComponent))
 
-const PaddedWord = styled.span`
-  padding-right: 10px;
-`
-
-const AddLanguageContainer = styled.div`
-  text-align: right;
-  padding-top: 1rem;
+const Actions = styled.div`
+  margin-top: 1.5rem;
 `
 
 export default inject('Stores')(observer(Project))

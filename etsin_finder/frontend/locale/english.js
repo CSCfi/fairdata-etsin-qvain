@@ -1050,7 +1050,11 @@ const english = {
       inputs: {
         title: {
           label: 'Add title for project',
-          description: 'Name of the project, at least one language is required.'
+          description: 'Name of the project, at least one language is required.',
+          validation: {
+            required: 'At least one language is required.',
+            string: 'The title must be a string value.',
+          },
         },
         titleEn: {
           placeholder: 'Title (English)',
@@ -1062,17 +1066,20 @@ const english = {
           label: 'Identifier',
           description: 'Recommended best practice is to identify the resource by means of a string conforming to a formal identification system. An unambiguous reference to the resource within a given context.',
           placeholder: 'Add identifier',
+          validation: 'An identifier is required.',
         },
         fundingIdentifier: {
           label: 'Project funding identifier',
           description: 'Unique identifier for the project that is being used by the project funder',
           placeholder: 'Add project funding identifier',
+          validation: 'A funding identifier is required.',
         },
         funderType: {
           label: 'Funder type',
           placeholder: 'Select funder type',
           addButton: 'Add funder type',
           noOptions: 'Funder type not found',
+          validation: 'A funder type is required.',
         }
       }
     },
