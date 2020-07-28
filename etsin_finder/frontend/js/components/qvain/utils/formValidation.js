@@ -1,6 +1,11 @@
 import * as yup from 'yup'
 import translate from 'counterpart'
-import { AccessTypeURLs, EntityType, Role, CumulativeStates } from './constants'
+import {
+  ACCESS_TYPE_URL,
+  ENTITY_TYPE, ROLE,
+  CUMULATIVE_STATE,
+  DATA_CATALOG_IDENTIFIER
+} from '../../../utils/constants'
 
 // DATASET DESCRIPTION VALIDATION
 
@@ -60,7 +65,7 @@ const otherIdentifierSchema = yup
   .url(translate('qvain.validationMessages.otherIdentifiers.url'))
   .max(1000, translate('qvain.validationMessages.otherIdentifiers.max'))
 
-const otherIdentifiersSchema = yup
+const otherIdentifiersArraySchema = yup
   .array()
   .of(otherIdentifierSchema)
   .nullable()
@@ -106,7 +111,7 @@ const restrictionGroundsSchema = yup
 
 const actorType = yup
   .mixed()
-  .oneOf([EntityType.PERSON, EntityType.ORGANIZATION], translate('qvain.validationMessages.actors.type.oneOf'))
+  .oneOf([ENTITY_TYPE.PERSON, ENTITY_TYPE.ORGANIZATION], translate('qvain.validationMessages.actors.type.oneOf'))
   .required(translate('qvain.validationMessages.actors.type.required'))
 
 const actorRolesSchema = yup
@@ -115,7 +120,7 @@ const actorRolesSchema = yup
     yup
       .mixed()
       .oneOf(
-        [Role.CREATOR, Role.CURATOR, Role.PUBLISHER, Role.RIGHTS_HOLDER, Role.CONTRIBUTOR],
+        [ROLE.CREATOR, ROLE.CURATOR, ROLE.PUBLISHER, ROLE.RIGHTS_HOLDER, ROLE.CONTRIBUTOR],
         translate('qvain.validationMessages.actors.roles.oneOf')
       )
   )
@@ -172,12 +177,12 @@ const actorOrganizationSchema = yup.object().shape({
   type: yup
     .mixed()
     .oneOf(
-      [EntityType.PERSON, EntityType.ORGANIZATION],
+      [ENTITY_TYPE.PERSON, ENTITY_TYPE.ORGANIZATION],
       translate('qvain.validationMessages.actors.type.oneOf')
     )
     .required(translate('qvain.validationMessages.actors.type.required')),
   organization: yup.mixed().when('type', {
-    is: EntityType.PERSON,
+    is: ENTITY_TYPE.PERSON,
     then: yup
       .object()
       .required(translate('qvain.validationMessages.actors.organization.required')),
@@ -199,7 +204,7 @@ const dataCatalogSchema = yup
 // CUMULATIVE STATE
 const cumulativeStateSchema = yup
   .mixed()
-  .oneOf([CumulativeStates.NO, CumulativeStates.YES, CumulativeStates.CLOSED])
+  .oneOf([CUMULATIVE_STATE.NO, CUMULATIVE_STATE.YES, CUMULATIVE_STATE.CLOSED])
 
 // FILE AND DIRECTORY (IDA RESOURCES) VALIDATION
 
@@ -302,7 +307,7 @@ const actorSchema = yup.object().shape({
   type: actorType,
   roles: actorRolesSchema,
   person: yup.object().when('type', {
-    is: EntityType.PERSON,
+    is: ENTITY_TYPE.PERSON,
     then: personSchema.required(),
     otherwise: yup.object().nullable(),
   }),
@@ -326,7 +331,7 @@ const actorsSchema = yup
       let foundCreator = false;
       for (let i = 0; i < value.length; i += 1) {
         for (let j = 0; j < value[i].roles.length; j += 1) {
-          if (value[i].roles[j] === Role.CREATOR) {
+          if (value[i].roles[j] === ROLE.CREATOR) {
             foundCreator = true;
           }
         }
@@ -349,7 +354,7 @@ const actorsSchema = yup
             let foundPublisher = false;
             for (let i = 0; i < value.length; i += 1) {
               for (let j = 0; j < value[i].roles.length; j += 1) {
-                if (value[i].roles[j] === Role.PUBLISHER) {
+                if (value[i].roles[j] === ROLE.PUBLISHER) {
                   foundPublisher = true;
                 }
               }
@@ -416,12 +421,12 @@ const qvainFormSchema = yup.object().shape({
     }),
   fieldOfScience: fieldsOfScienceSchema,
   keywords: keywordsSchema,
-  otherIdentifiers: otherIdentifiersSchema,
+  otherIdentifiers: otherIdentifiersArraySchema,
   accessType: accessTypeSchema,
   license: yup
     .mixed()
     .when('dataCatalog', {
-      is: 'urn:nbn:fi:att:data-catalog-ida',
+      is: DATA_CATALOG_IDENTIFIER.IDA,
       then: yup.object().shape({
         name: yup.object().nullable(),
         identifier: yup.string()
@@ -446,7 +451,7 @@ const qvainFormSchema = yup.object().shape({
     })
     .nullable(),
   restrictionGrounds: yup.mixed().when('accessType.url', {
-    is: url => url !== AccessTypeURLs.OPEN,
+    is: url => url !== ACCESS_TYPE_URL.OPEN,
     then: restrictionGroundsSchema,
   }),
   actors: actorsSchema,
@@ -463,7 +468,7 @@ export {
   descriptionSchema,
   issuedDateSchema,
   otherIdentifierSchema,
-  otherIdentifiersSchema,
+  otherIdentifiersArraySchema,
   keywordsSchema,
   accessTypeSchema,
   licenseSchema,

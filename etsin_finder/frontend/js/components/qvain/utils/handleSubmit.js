@@ -1,6 +1,9 @@
 const fieldsOfScienceToMetaxMethod = (fieldsOfScience) =>
   fieldsOfScience.map((fieldOfScience) => fieldOfScience.url)
 
+const datasetLanguageToMetax = datasetLanguage =>
+  datasetLanguage.map(language => language.url)
+
 const directoriesToMetax = (selectedDirectories, existingDirectories) => {
   const selectedDirectoryIdentifiers = selectedDirectories
     ? selectedDirectories.map((sd) => sd.identifier)
@@ -61,9 +64,10 @@ const handleSubmitToBackend = (values) => {
     title: values.title,
     description: values.description,
     issuedDate: values.issuedDate,
-    identifiers: values.otherIdentifiers,
-    fieldOfScience: fieldsOfScienceToMetaxMethod(values.fieldsOfScience),
-    keywords: values.keywords,
+    identifiers: values.otherIdentifiersArray,
+    fieldOfScience: fieldsOfScienceToMetaxMethod(values.fieldOfScienceArray),
+    datasetLanguage: datasetLanguageToMetax(values.datasetLanguageArray),
+    keywords: values.keywordsArray,
     actors,
     infrastructure: values.infrastructures,
     accessType: values.accessType ? values.accessType : undefined,

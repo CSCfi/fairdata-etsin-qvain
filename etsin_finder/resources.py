@@ -38,27 +38,16 @@ TOTAL_ITEM_LIMIT = 1000
 log = app.logger
 
 def log_request(f):
-    """
-    Log request when used as decorator.
-
-    :param f:
-    :return:
-    """
+    """Log request when used as decorator."""
     @wraps(f)
     def func(*args, **kwargs):
-        """
-        Log requests.
-
-        :param args:
-        :param kwargs:
-        :return:
-        """
+        """Log requests"""
         csc_name = authentication.get_user_csc_name() if not app.testing else ''
         log.info('[{0}.{1}] {2} {3} {4} USER AGENT: {5}'.format(
             args[0].__class__.__name__,
             f.__name__,
             csc_name if csc_name else 'UNAUTHENTICATED',
-            request.environ['REQUEST_METHOD'],
+            request.environ.get('REQUEST_METHOD'),
             request.path,
             request.user_agent))
         return f(*args, **kwargs)
@@ -69,16 +58,23 @@ class Dataset(Resource):
 
     @log_request
     def get(self, cr_id):
-        """
-        Get dataset from metax and strip it from having sensitive information
+        """Get dataset from metax and strip it from having sensitive information
 
-        :param cr_id: id to use to fetch the record from metax
-        :return:
+        Args:
+            cr_id (str): Catalog record identifier.
+
+        Returns:
+            tuple: catalog record and a status code.
+
         """
         is_authd = authentication.is_authenticated()
         cr = cr_service.get_catalog_record(cr_id, True, True)
         if not cr:
             abort(400, message="Unable to get catalog record from Metax")
+
+        user_id = authentication.get_user_id()
+        if cr_service.is_draft(cr) and not cr_service.is_catalog_record_owner(cr, user_id):
+            abort(404)
 
         # Sort data items
         sort_array_of_obj_by_key(cr.get('research_dataset', {}).get('remote_resources', []), 'title')
@@ -88,7 +84,7 @@ class Dataset(Resource):
         ret_obj = {'catalog_record': authorization.strip_information_from_catalog_record(cr, is_authd),
                    'email_info': get_email_info(cr)}
         if cr_service.is_rems_catalog_record(cr) and is_authd and get_fairdata_rems_api_config(app.testing) is not None:
-            state = rems_service.get_application_state_for_resource(cr, authentication.get_user_id())
+            state = rems_service.get_application_state_for_resource(cr, user_id)
             ret_obj['application_state'] = state
             ret_obj['has_permit'] = state == 'approved'
 
@@ -108,16 +104,20 @@ class DatasetMetadata(Resource):
         """Download dataset metadata
 
         Returns:
-            obj -- Returns a Flask.Response object streaming the response from metax
+            obj: Returns a Flask.Response object streaming the response from metax
 
         """
         args = self.parser.parse_args()
-        cr_id = args['cr_id']
-        metadata_format = args['format']
+        cr_id = args.get('cr_id')
+        metadata_format = args.get('format')
 
         cr = cr_service.get_catalog_record(cr_id, False, False)
         if not cr:
             abort(400, message="Unable to get catalog record")
+
+        user_id = authentication.get_user_id()
+        if cr_service.is_draft(cr) and not cr_service.is_catalog_record_owner(cr, user_id):
+            abort(404)
 
         return download_metadata(cr_id, metadata_format)
 
@@ -133,19 +133,26 @@ class Files(Resource):
 
     @log_request
     def get(self, cr_id):
-        """
-        Get files and directory objects for frontend.
+        """Get files and directory objects for frontend.
 
-        :param cr_id:
-        :return:
+        Args:
+            cr_id (str): Catalog record identifier.
+
+        Returns:
+            tuple: Payload and status code.
+
         """
         args = self.parser.parse_args()
-        dir_id = args['dir_id']
+        dir_id = args.get('dir_id')
         file_fields = args.get('file_fields', None)
         directory_fields = args.get('directory_fields', None)
 
         cr = cr_service.get_catalog_record(cr_id, False, False)
         dir_api_obj = cr_service.get_directory_data_for_catalog_record(cr_id, dir_id, file_fields, directory_fields)
+
+        user_id = authentication.get_user_id()
+        if cr_service.is_draft(cr) and not cr_service.is_catalog_record_owner(cr, user_id):
+            abort(404)
 
         if cr and dir_api_obj:
             # Sort the items
@@ -154,9 +161,9 @@ class Files(Resource):
 
             # Limit the amount of items to be sent to the frontend
             if 'directories' in dir_api_obj:
-                dir_api_obj['directories'] = slice_array_on_limit(dir_api_obj['directories'], TOTAL_ITEM_LIMIT)
+                dir_api_obj['directories'] = slice_array_on_limit(dir_api_obj.get('directories'), TOTAL_ITEM_LIMIT)
             if 'files' in dir_api_obj:
-                dir_api_obj['files'] = slice_array_on_limit(dir_api_obj['files'], TOTAL_ITEM_LIMIT)
+                dir_api_obj['files'] = slice_array_on_limit(dir_api_obj.get('files'), TOTAL_ITEM_LIMIT)
 
             # Strip the items of sensitive data
             authorization.strip_dir_api_object(dir_api_obj, authentication.is_authenticated(), cr)
@@ -176,15 +183,21 @@ class Contact(Resource):
 
     @log_request
     def post(self, cr_id):
-        """
-        Send email.
+        """Send email.
 
         This route expects a json with three key-values: user_email, user_subject and user_body.
         Having these three this method will send an email message to recipients
         defined in the catalog record in question
 
-        :param cr_id: id to use to fetch the record from metax
-        :return: 200 if success
+        Args:
+            cr_id (str): Catalog record identifier
+
+        Raises:
+            Exception: Email sending failed.
+
+        Returns:
+            tuple: Payload and status code. If success, empty payload, else, an error message.
+
         """
         # if not request.is_json or not request.json:
         #     abort(400, message="Request is not json")
@@ -192,13 +205,13 @@ class Contact(Resource):
         # Check request query parameters are present
         args = self.parser.parse_args()
         # Extract user's email address to be used as reply-to address
-        user_email = args['user_email']
+        user_email = args.get('user_email')
         # Extract user's message subject to be used as part of the email body to be sent
-        user_subject = args['user_subject']
+        user_subject = args.get('user_subject')
         # Extract user's message body to be used as part of the email body to be sent
-        user_body = args['user_body']
+        user_body = args.get('user_body')
         # Extract recipient role
-        recipient_agent_role = args['agent_type']
+        recipient_agent_role = args.get('agent_type')
 
         # Validate incoming request values are all there and are valid
         if not validate_send_message_request(user_email, user_body, recipient_agent_role):
@@ -208,6 +221,10 @@ class Contact(Resource):
 
         # Get the full catalog record from Metax
         cr = cr_service.get_catalog_record(cr_id, False, False)
+
+        user_id = authentication.get_user_id()
+        if cr_service.is_draft(cr) and not cr_service.is_catalog_record_owner(cr, user_id):
+            abort(404)
 
         # Ensure dataset is not harvested
         harvested = get_harvest_info(cr)
@@ -251,10 +268,11 @@ class User(Resource):
 
     @log_request
     def get(self):
-        """
-        Get (logged-in) user info.
+        """Get (logged-in) user info.
 
-        :return:
+        Returns:
+            tuple: User info and status code.
+
         """
         user_info = {
             'is_authenticated': authentication.is_authenticated(),
@@ -285,11 +303,10 @@ class REMSApplyForPermission(Resource):
         """Apply for permission to REMS resource.
 
         Arguments:
-            Resource [class] -- Flask_restfull parent class
-            cr_id [string] -- Catalog record identifier
+            cr_id (str): Catalog record identifier
 
         Returns:
-            [int] -- The id of the application
+            tuple: The id of the application and status code.
 
         """
         # Create user
@@ -371,10 +388,11 @@ class Session(Resource):
 
     @log_request
     def get(self):
-        """
-        Renew Flask session, used by frontend.
+        """Renew Flask session, used by frontend.
 
-        :return:
+        Returns:
+            tuple: Empty payload and status code.
+
         """
         if authentication.is_authenticated():
             session.modified = True
@@ -383,10 +401,11 @@ class Session(Resource):
 
     @log_request
     def delete(self):
-        """
-        Delete Flask session, used by frontend.
+        """Delete Flask session, used by frontend.
 
-        :return:
+        Returns:
+            tuple: bool and status code
+
         """
         authentication.reset_flask_session_on_logout()
         return not authentication.is_authenticated(), 200
@@ -404,22 +423,23 @@ class Download(Resource):
 
     @log_request
     def get(self):
-        """
-        Download data REST endpoint for frontend.
+        """Download data REST endpoint for frontend.
 
-        :return:
+        Returns:
+            If success, stream the download content to the frontend.
+
         """
         # Check request query parameters are present
         args = self.parser.parse_args()
-        cr_id = args['cr_id']
+        cr_id = args.get('cr_id')
 
         cr = cr_service.get_catalog_record(cr_id, False, False)
         if not cr:
             abort(400, message="Unable to get catalog record")
 
         if authorization.user_is_allowed_to_download_from_ida(cr, authentication.is_authenticated()):
-            file_ids = args['file_id'] or []
-            dir_ids = args['dir_id'] or []
+            file_ids = args.get('file_id', [])
+            dir_ids = args.get('dir_id', [])
             return download_data(cr_id, file_ids, dir_ids)
         else:
             abort(403, message="Not authorized")

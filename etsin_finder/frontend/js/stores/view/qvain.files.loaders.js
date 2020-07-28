@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { observable, action, runInAction, when } from 'mobx'
 
-import { FileAPIURLs } from '../../components/qvain/utils/constants'
+import { FILE_API_URLS } from '../../utils/constants'
 
 import { File, Directory, dirKey, fileKey, dirIdentifierKey, fileIdentifierKey } from './qvain.files.items'
 import { ignoreNotFound, emptyDirectoryResponse } from './qvain.files.utils'
@@ -17,7 +17,7 @@ const fetchExistingFileCountsForDirectory = async (Files, dir, datasetIdentifier
     return 0
   }
 
-  const url = new URL(FileAPIURLs.V2_DIR_URL + dir.identifier, document.location.origin)
+  const url = new URL(FILE_API_URLS.V2_DIR_URL + dir.identifier, document.location.origin)
   url.searchParams.set('file_fields', 'id')
   url.searchParams.set('directory_fields', ['id', 'file_count'].join(','))
   url.searchParams.set('cr_identifier', datasetIdentifier)
@@ -52,7 +52,7 @@ const fetchExistingFileCountsForDirectory = async (Files, dir, datasetIdentifier
 }
 
 const fetchFileCountsForDirectory = async (Files, dir, defaults = {}) => {
-  const url = new URL(FileAPIURLs.V2_DIR_URL + dir.identifier, document.location.origin)
+  const url = new URL(FILE_API_URLS.V2_DIR_URL + dir.identifier, document.location.origin)
   url.searchParams.set('file_fields', 'id')
   url.searchParams.set('directory_fields', ['id', 'file_count'].join(','))
   const resp = axios.get(url.href)
@@ -108,7 +108,7 @@ const fetchFileCounts = action((Files, dir, type) => {
 const fetchItems = async (Files, dir, offset, limit, type) => {
   const datasetIdentifier = Files.Qvain.original && Files.Qvain.original.identifier
 
-  const url = new URL(FileAPIURLs.V2_DIR_URL + dir.identifier, document.location.origin)
+  const url = new URL(FILE_API_URLS.V2_DIR_URL + dir.identifier, document.location.origin)
   url.searchParams.set('pagination', true)
   url.searchParams.set('offset', offset)
   url.searchParams.set('limit', limit)

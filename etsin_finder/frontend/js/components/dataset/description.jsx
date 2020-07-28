@@ -32,6 +32,7 @@ import checkDataLang, { getDataLang } from '../../utils/checkDataLang'
 import checkNested from '../../utils/checkNested'
 import dateFormat from '../../utils/dateFormat'
 import Tracking from '../../utils/tracking'
+import { ACCESS_TYPE_URL, DATA_CATALOG_IDENTIFIER } from '../../utils/constants'
 
 const ReactMarkdown = require('react-markdown')
 
@@ -84,21 +85,22 @@ class Description extends Component {
   }
 
   render() {
+    const versions = this.props.dataset.dataset_version_set
+    const datasetIdentifier = this.props.dataset.identifier
+    const isVersion = versions && versions.length > 0 && versions.some(version => version.identifier === datasetIdentifier)
+
     return (
       <div className="dsContent">
         <Labels>
           <Flex>
-            {this.props.dataset.data_catalog.catalog_json.dataset_versioning &&
-              this.props.dataset.dataset_version_set &&
-              this.props.dataset.dataset_version_set[0] &&
-              this.props.dataset.dataset_version_set.length > 1 && (
-                <VersionChanger
-                  versionSet={this.props.dataset.dataset_version_set}
-                  idn={this.props.dataset.identifier}
-                />
-              )}
+            {this.props.dataset.data_catalog.catalog_json.dataset_versioning && isVersion && (
+              <VersionChanger
+                versionSet={versions}
+                idn={datasetIdentifier}
+              />
+            )}
             {(this.props.dataset.data_catalog.catalog_json.identifier ===
-              'urn:nbn:fi:att:data-catalog-pas' ||
+              DATA_CATALOG_IDENTIFIER.PAS ||
               this.props.dataset.preservation_state === 80) && (
               <FairdataPasDatasetIcon
                 preservation_state={this.props.dataset.preservation_state}
@@ -123,23 +125,22 @@ class Description extends Component {
             <ErrorBoundary>
               {this.checkEmails(this.props.emails) && !this.props.harvested && (
                 <Contact
-                  datasetID={this.props.dataset.identifier}
+                  datasetID={datasetIdentifier}
                   emails={this.props.emails}
                   // TEMPORARY: rems check won't be needed in contact later.
                   isRems={
-                    this.props.dataset.research_dataset.access_rights.access_type.identifier ===
-                    'http://uri.suomi.fi/codelist/fairdata/access_type/code/permit'
+                    this.props.dataset.research_dataset.access_rights.access_type.identifier === ACCESS_TYPE_URL.PERMIT
                   }
                 />
               )}
             </ErrorBoundary>
-            <AskForAccess cr_id={this.props.dataset.identifier} />
+            <AskForAccess cr_id={datasetIdentifier} />
           </Flex>
         </Labels>
         <section>
           <div>
             {
-              (this.props.dataset.data_catalog.catalog_json.identifier === 'urn:nbn:fi:att:data-catalog-pas') &&
+              (this.props.dataset.data_catalog.catalog_json.identifier === DATA_CATALOG_IDENTIFIER.PAS) &&
               (
                 <PasInfo>
                   <Translate content="dataset.storedInPas" />

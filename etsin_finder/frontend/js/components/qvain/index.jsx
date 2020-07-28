@@ -43,15 +43,25 @@ import { Button } from '../general/button'
 import DeprecatedState from './deprecatedState'
 import PasState from './pasState'
 import SubmitButtons from './submitButtons'
-import { DatasetUrls } from './utils/constants'
+import { DATASET_URLS } from '../../utils/constants'
+import Tracking from '../../utils/tracking'
 
 class Qvain extends Component {
   promises = []
 
   static propTypes = {
     Stores: PropTypes.object.isRequired,
+    location: PropTypes.shape({
+      pathname: PropTypes.string,
+    }),
     match: PropTypes.object.isRequired,
     history: PropTypes.object.isRequired,
+  }
+
+  static defaultProps = {
+    location: {
+      pathname: '/qvain/dataset'
+    }
   }
 
   constructor(props) {
@@ -90,9 +100,9 @@ class Qvain extends Component {
     this.setState({ datasetLoading: true, datasetError: false, response: null, submitted: false })
     const { metaxApiV2, resetQvainStore, editDataset } = this.props.Stores.Qvain
 
-    let url = `${DatasetUrls.EDIT_DATASET_URL}/${identifier}`
+    let url = `${DATASET_URLS.EDIT_DATASET_URL}/${identifier}`
     if (metaxApiV2) {
-      url = `${DatasetUrls.V2_EDIT_DATASET_URL}/${identifier}`
+      url = `${DATASET_URLS.V2_EDIT_DATASET_URL}/${identifier}`
     }
     const promise = axios
       .get(url)
@@ -192,6 +202,10 @@ class Qvain extends Component {
     }
     const identifier = this.props.match.params.identifier
     const { original } = this.props.Stores.Qvain
+    Tracking.newPageView(
+        !original ? 'Qvain Create Dataset' : 'Qvain Edit Dataset',
+        this.props.location.pathname
+    )
 
     // Test if we need to load a dataset or do we use the one currently in store
     if (identifier && !(original && original.identifier === identifier)) {

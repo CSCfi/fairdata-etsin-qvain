@@ -26,10 +26,11 @@ log = app.logger
 
 @app.route('/sso')
 def login():
-    """
-    Endpoint which frontend should call when wanting to perform a login.
+    """Endpoint which frontend should call when wanting to perform a login.
 
-    :return:
+    Returns:
+        Redirect the login.
+
     """
     return redirect('https://etsin-finder.local/acs/')
     auth = get_saml_auth(request)
@@ -39,20 +40,21 @@ def login():
 
 @app.route('/slo')
 def logout():
-    """
-    Endpoint which frontend should call when wanting to perform a logout.
+    """Endpoint which frontend should call when wanting to perform a logout.
 
     Currently not working since Fairdata authentication service does not support SLO.
 
-    :return:
+    Returns:
+        Redirect the logout.
+
     """
     auth = get_saml_auth(request)
     name_id = None
     session_index = None
     if 'samlNameId' in session:
-        name_id = session['samlNameId']
+        name_id = session.get('samlNameId')
     if 'samlSessionIndex' in session:
-        session_index = session['samlSessionIndex']
+        session_index = session.get('samlSessionIndex')
     log.debug("LOGOUT request to /slo")
     # Clear the flask session here because the idp doesnt seem to call the sls route.
     session.clear()
@@ -62,11 +64,14 @@ def logout():
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def frontend_app(path):
-    """
-    All other requests to the app should be routed via here. Renders the base file for the frontend app.
+    """All other requests to the app should be routed via here. Renders the base file for the frontend app.
 
-    :param path:
-    :return:
+    Args:
+        path (str): path
+
+    Returns:
+        Render the frontend.
+
     """
     return _render_index_template()
 
@@ -74,7 +79,7 @@ def frontend_app(path):
 def _render_index_template(saml_errors=[], slo_success=False):
     is_auth = is_authenticated()
     if is_auth:
-        saml_attributes = session['samlUserdata'].items()
+        saml_attributes = session.get('samlUserdata').items()
         log.debug("SAML attributes: {0}".format(saml_attributes))
 
     return render_template('index.html')
@@ -84,11 +89,7 @@ def _render_index_template(saml_errors=[], slo_success=False):
 
 @app.route('/saml_metadata/')
 def saml_metadata():
-    """
-    Optional. Prints out the public saml metadata for the service.
-
-    :return:
-    """
+    """Optional. Prints out the public saml metadata for the service."""
     auth = get_saml_auth(request)
     settings = auth.get_settings()
     metadata = settings.get_sp_metadata()
@@ -104,11 +105,7 @@ def saml_metadata():
 
 @app.route('/acs/', methods=['GET', 'POST'])
 def saml_attribute_consumer_service():
-    """
-    The endpoint which is used by the saml library on auth.login call
-
-    :return:
-    """
+    """The endpoint which is used by the saml library on auth.login call"""
     reset_flask_session_on_login()
     session['samlUserdata'] = {
         'urn:oid:1.3.6.1.4.1.8057.2.80.26': [
@@ -142,19 +139,15 @@ def saml_attribute_consumer_service():
         session['samlSessionIndex'] = auth.get_session_index()
         self_url = OneLogin_Saml2_Utils.get_self_url(req)
         log.debug("SESSION: {0}".format(session))
-        if 'RelayState' in request.form and self_url != request.form['RelayState']:
-            return redirect(auth.redirect_to(request.form['RelayState']))
+        if 'RelayState' in request.form and self_url != request.form.get('RelayState'):
+            return redirect(auth.redirect_to(request.form.get('RelayState')))
 
     return _render_index_template(saml_errors=errors)
 
 
 @app.route('/sls/', methods=['GET', 'POST'])
 def saml_single_logout_service():
-    """
-    The endpoint which is used by the saml library on auth.logout call
-
-    :return:
-    """
+    """The endpoint which is used by the saml library on auth.logout call"""
     auth = get_saml_auth(request)
     slo_success = False
     url = auth.process_slo(delete_session_cb=lambda: session.clear())

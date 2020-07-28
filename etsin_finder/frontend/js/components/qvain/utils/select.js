@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { METAX_FAIRDATA_ROOT_URL } from '../../../utils/constants'
 
 export const getCurrentValue = (field, options, lang) => {
   let current
@@ -43,7 +44,7 @@ export const getOptions = async (ref, inputValue) => {
 
 const refDataApi = ref =>
   axios.create({
-    baseURL: `https://metax.csc.local/es/reference_data/${ref}/`,
+    baseURL: `${METAX_FAIRDATA_ROOT_URL}/es/reference_data/${ref}/`,
   })
 
 const parseRefResponse = res => {
@@ -51,11 +52,11 @@ const parseRefResponse = res => {
   const refsFi = hits.map(hit => ({
     value: hit._source.uri,
     label: hit._source.label.fi || hit._source.label.und,
-  }))
+  })).sort((a, b) => a.label.localeCompare(b.label))
   const refsEn = hits.map(hit => ({
     value: hit._source.uri,
     label: hit._source.label.en || hit._source.label.und,
-  }))
+  })).sort((a, b) => a.label.localeCompare(b.label))
   return {
     en: refsEn,
     fi: refsFi,

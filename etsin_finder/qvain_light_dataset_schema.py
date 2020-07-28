@@ -27,12 +27,7 @@ class OrganizationValidationSchema(Schema):
 
 
 class ActorValidationSchema(Schema):
-    """
-    Validation schema for actors.
-
-    Arguments:
-        Schema {library} -- Marshmallows Schema library.
-    """
+    """Validation schema for actors."""
 
     type = fields.Str(
         required=True,
@@ -54,7 +49,15 @@ class ActorValidationSchema(Schema):
 
     @validates_schema
     def validate_person(self, data, **kwargs):
-        """Require person if actor is a person."""
+        """Require person if actor is a person.
+
+        Args:
+            data (dict): -
+
+        Raises:
+            ValidationError: A validation error occurred.
+
+        """
         if data.get('type') == 'person':
             if not data.get('person'):
                 raise ValidationError('Person is required for person actor.')
@@ -84,15 +87,19 @@ class DatasetValidationSchema(Schema):
     original = fields.Dict()
     title = fields.Dict(
         required=True,
-        validate=lambda x: len(x['en']) + len(x['fi']) > 0
+        validate=lambda x: len(x.get('en', [])) + len(x.get('fi', [])) > 0
     )
     description = fields.Dict(
         required=True,
-        validate=lambda x: len(x['en']) + len(x['fi']) > 0
+        validate=lambda x: len(x.get('en', [])) + len(x.get('fi', [])) > 0
     )
     issuedDate = fields.Str()
     identifiers = fields.List(fields.Str())
     fieldOfScience = fields.List(
+        fields.Str(),
+        required=False
+    )
+    datasetLanguage = fields.List(
         fields.Str(),
         required=False
     )

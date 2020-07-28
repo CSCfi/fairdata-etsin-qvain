@@ -10,7 +10,7 @@ import IDAFilePicker from './ida'
 import ExternalFiles from './external/externalFiles'
 import DataCatalog from './dataCatalog'
 import CumulativeState from './cumulativeState'
-import { DataCatalogIdentifiers } from '../utils/constants'
+import { DATA_CATALOG_IDENTIFIER } from '../../../utils/constants'
 import Tooltip from '../general/tooltip'
 import FilesInfo from './filesInfo'
 import MetadataModal from './metadataModal'
@@ -42,7 +42,7 @@ class Files extends Component {
           </ContainerSubsectionBottom>
         </>
       )
-    } else if (dataCatalog === DataCatalogIdentifiers.IDA) {
+    } else if (dataCatalog === DATA_CATALOG_IDENTIFIER.IDA) {
       data = (
         <>
           <CumulativeState />
@@ -51,7 +51,7 @@ class Files extends Component {
           </ContainerSubsectionBottom>
         </>
       )
-    } else if (dataCatalog === DataCatalogIdentifiers.ATT) {
+    } else if (dataCatalog === DATA_CATALOG_IDENTIFIER.ATT) {
       data = (
         <ContainerSubsectionBottom>
           <ExternalFiles />

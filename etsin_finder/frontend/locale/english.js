@@ -33,6 +33,7 @@ const english = {
     catalog_publisher: 'Catalog publisher',
     citation: 'Citation / Reference',
     citation_formats: 'Show more citation formats',
+    citationNoDateIssued: 'Issued date not defined',
     contact: {
       access: 'Contact the curator on issues related to dataset access',
       contact: 'Contact',
@@ -159,6 +160,7 @@ const english = {
     issued: 'Release date',
     modified: 'Dataset modification date',
     keywords: 'Keywords',
+    subjectHeading: 'Subject heading',
     license: 'License',
     loading: 'Loading dataset',
     harvested: 'Harvested',
@@ -231,6 +233,11 @@ const english = {
     language: {
       toggleLabel: 'Toggle language',
     },
+    cookies: {
+      accept: 'Accept all cookies',
+      infoText: 'By using Fairdata’s services you agree to our Cookies Use. We use cookies to improve your experience and make our services work better.',
+      link: 'View the Fairdata Privacy Policy.',
+    }
   },
   home: {
     title: 'Search datasets',
@@ -421,14 +428,22 @@ const english = {
           years: ' years ago',
         },
       },
+      moreVersions: {
+        one: 'Show 1 more version',
+        other: 'Show %(count)s more versions',
+      },
+      hideVersions: 'Hide old versions',
       oldVersion: 'Old',
       latestVersion: 'Latest',
       deprecated: 'Deprecated',
       editButton: 'Edit',
       editDraftButton: 'Edit draft',
       deleteButton: 'Delete',
-      confirmDelete:
-        'Are you sure you want to delete this dataset? Deleting the dataset will remove it from Qvain, and Etsin Search cannot find it anymore. Landing page for the dataset will NOT be removed.',
+      confirmDelete: {
+        text: 'Are you sure you want to delete this dataset? Deleting the dataset will remove it from Qvain, and Etsin Search cannot find it anymore. Landing page for the dataset will NOT be removed.',
+        ok: 'Delete',
+        cancel: 'Cancel',
+      },
       goToEtsin: 'View in Etsin',
       goToEtsinDraft: 'Preview in Etsin',
       openNewVersion: 'Open new version',
@@ -481,6 +496,14 @@ const english = {
         placeholder: 'Select option',
         addButton: 'Add field of science',
         help: 'You can add multiple field of science.',
+      },
+      datasetLanguage: {
+        title: 'Dataset language',
+        infoText: 'Select languages used in the dataset.',
+        placeholder: 'Type to search language',
+        noResults: 'No languages found',
+        addButton: 'Add language',
+        help: 'You can add multiple languages.'
       },
       keywords: {
         title: 'Keywords',

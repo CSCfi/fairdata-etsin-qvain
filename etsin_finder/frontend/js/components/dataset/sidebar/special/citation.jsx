@@ -1,4 +1,7 @@
 import React, { Component, Fragment } from 'react'
+import styled from 'styled-components'
+import Translate from 'react-translate-component'
+
 import DatasetQuery from '../../../../stores/view/datasetquery'
 import checkDataLang from '../../../../utils/checkDataLang'
 import checkNested from '../../../../utils/checkNested'
@@ -11,7 +14,10 @@ export default class Citation extends Component {
       creators: Data.research_dataset.creator && Data.research_dataset.creator,
       contributors: Data.research_dataset.contributor && Data.research_dataset.contributor,
       publisher: Data.research_dataset.publisher && Data.research_dataset.publisher.name,
-      release_date: Data.research_dataset.modified,
+
+      // This is the issued date of the source material, as defined in Qvain Light/Heavy
+      date_issued: Data.research_dataset.issued,
+
       title: Data.research_dataset.title,
       pid: Data.research_dataset.preferred_identifier,
       citation: Data.research_dataset.bibliographic_citation,
@@ -51,22 +57,26 @@ export default class Citation extends Component {
       })
     )
     cit.push(checkDataLang(this.state.title))
-    if (this.state.publisher) {
-      cit.push(checkDataLang(this.state.publisher))
-    }
-    cit.push(checkDataLang(this.state.release_date))
+    cit.push(checkDataLang(this.state.publisher))
+    cit.push(checkDataLang(this.state.date_issued))
     cit.push(checkDataLang(this.state.pid))
-    return cit.join(', ')
-  }
-
-  render() {
-    if (this.state.citation) {
-      return <Fragment>{this.state.citation}</Fragment>
-    }
     return (
       <Fragment>
-        <span>{this.createCitation()}</span>
+        <span>{cit.filter(element => element).join(', ')}</span>
+        { !this.state.date_issued &&
+          <TextMuted><Translate content="dataset.citationNoDateIssued" /></TextMuted> }
       </Fragment>
     )
   }
+
+  render() {
+    if (this.state.citation) return this.state.citation
+    return this.createCitation()
+  }
 }
+
+const TextMuted = styled.div`
+  color: ${props => props.theme.color.gray};
+  font-size: .9rem;
+  margin-top: .3rem;
+`

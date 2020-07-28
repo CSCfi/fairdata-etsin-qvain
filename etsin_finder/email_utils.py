@@ -6,32 +6,26 @@
 # :license: MIT
 
 """Email sending related utils"""
-from etsin_finder.finder import app
 import datetime
 import re
 from enum import Enum
 
-log = app.logger
+from etsin_finder.finder import app
+from etsin_finder.constants import AGENT_TYPE
 
-AgentType = {
-    'CREATOR': 'CREATOR',
-    'PUBLISHER': 'PUBLISHER',
-    'CONTRIBUTOR': 'CONTRIBUTOR',
-    'RIGHTS_HOLDER': 'RIGHTS_HOLDER',
-    'CURATOR': 'CURATOR'
-}
+log = app.logger
 
 def create_email_message_body(pref_id, user_email, user_subject, user_body):
     """Create body for an email message to be sent.
 
     Arguments:
-        pref_id [string] -- Preferred identifier of dataset.
-        user_email [string] -- The email of the sender.
-        user_subject [string] -- Email subject.
-        user_body [string] -- Email body.
+        pref_id (str): Preferred identifier of dataset.
+        user_email (str): The email of the sender.
+        user_subject (str): Email subject.
+        user_body (str): Email body.
 
     Returns:
-        [string] -- Email message body withall arguments.
+        str: Email message body withall arguments.
 
     """
     now = datetime.datetime.now()
@@ -53,7 +47,7 @@ def get_email_message_subject():
     """Get email message subject.
 
     Returns:
-        [string] -- Default email message subject.
+        str: Default email message subject.
 
     """
     return "Message from Etsin / Viesti Etsimestä"
@@ -63,21 +57,19 @@ def validate_send_message_request(user_email, user_body, agent_type):
     """Validate request that is done to backend for sending email message.
 
     Arguments:
-        user_email [string] -- User email address.
-        user_body [string] -- Email message body.
-        agent_type [dict] -- The agent type.
+        user_email (str): User email address.
+        user_body (str): Email message body.
+        agent_type (str): The agent type.
 
     Returns:
-        [bool] -- Is it valid.
+        bool: Is it valid.
 
     """
     if not re.match(r"^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+\.[a-zA-Z]*$", user_email):
         log.warning("Reply-to email address not formally valid: {0}".format(user_email))
         return False
 
-    try:
-        AgentType[agent_type]
-    except KeyError:
+    if not AGENT_TYPE.get(agent_type):
         log.warning("Unrecognized agent type")
         return False
 
@@ -92,26 +84,26 @@ def get_email_recipient_addresses(catalog_record, agent_type_str):
     """Get email recipient addresses based on agent type.
 
     Arguments:
-        catalog_record [dict] -- The catalog record.
-        agent_type_str [string] -- Agent type as string.
+        catalog_record (dict): The catalog record.
+        agent_type_str (str): Agent type as string.
 
     Returns:
-        [list/None] -- Return list of recipient addresses or None if not found.
+        Return list of recipient addresses or None if not found.
 
     """
     rd = catalog_record.get('research_dataset', {})
 
-    agent_type = AgentType.get(agent_type_str)
+    agent_type = AGENT_TYPE.get(agent_type_str)
 
-    if agent_type == AgentType.get('CREATOR') and rd.get('creator', [{}])[0].get('email', False):
+    if agent_type == AGENT_TYPE.get('CREATOR') and rd.get('creator', [{}])[0].get('email', False):
         return get_email_list_for_actor(rd.get('creator'))
-    if agent_type == AgentType.get('PUBLISHER') and rd.get('publisher', [{}]).get('email', False):
+    if agent_type == AGENT_TYPE.get('PUBLISHER') and rd.get('publisher', [{}]).get('email', False):
         return get_email_list_for_actor(rd.get('publisher'))
-    if agent_type == AgentType.get('CONTRIBUTOR') and rd.get('contributor', [{}])[0].get('email', False):
+    if agent_type == AGENT_TYPE.get('CONTRIBUTOR') and rd.get('contributor', [{}])[0].get('email', False):
         return get_email_list_for_actor(rd.get('contributor'))
-    if agent_type == AgentType.get('RIGHTS_HOLDER') and rd.get('rights_holder', [{}])[0].get('email', False):
+    if agent_type == AGENT_TYPE.get('RIGHTS_HOLDER') and rd.get('rights_holder', [{}])[0].get('email', False):
         return get_email_list_for_actor(rd.get('rights_holder'))
-    if agent_type == AgentType.get('CURATOR') and rd.get('curator', [{}])[0].get('email', False):
+    if agent_type == AGENT_TYPE.get('CURATOR') and rd.get('curator', [{}])[0].get('email', False):
         return get_email_list_for_actor(rd.get('curator'))
 
     log.error("No email addresses found with given agent type {0}".format(agent_type_str))
@@ -122,10 +114,10 @@ def get_email_info(catalog_record):
     """Get info for frontend about which agent types have email addresses available.
 
     Arguments:
-        catalog_record [dict] -- The catalog record.
+        catalog_record (dict): The catalog record.
 
     Returns:
-        [dict] -- Dict with bool values for all the agent types if they have email addresses.
+        dict: Dict with bool values for all the agent types if they have email addresses.
 
     """
     if not catalog_record:
@@ -134,11 +126,11 @@ def get_email_info(catalog_record):
     ret_obj = {}
     rd = catalog_record.get('research_dataset', None)
 
-    ret_obj.update({AgentType.get('CREATOR'): _agent_has_email_address(rd.get('creator', None))})
-    ret_obj.update({AgentType.get('PUBLISHER'): _agent_has_email_address(rd.get('publisher', None))})
-    ret_obj.update({AgentType.get('CONTRIBUTOR'): _agent_has_email_address(rd.get('contributor', None))})
-    ret_obj.update({AgentType.get('RIGHTS_HOLDER'): _agent_has_email_address(rd.get('rights_holder', None))})
-    ret_obj.update({AgentType.get('CURATOR'): _agent_has_email_address(rd.get('curator', None))})
+    ret_obj.update({AGENT_TYPE.get('CREATOR'): _agent_has_email_address(rd.get('creator', None))})
+    ret_obj.update({AGENT_TYPE.get('PUBLISHER'): _agent_has_email_address(rd.get('publisher', None))})
+    ret_obj.update({AGENT_TYPE.get('CONTRIBUTOR'): _agent_has_email_address(rd.get('contributor', None))})
+    ret_obj.update({AGENT_TYPE.get('RIGHTS_HOLDER'): _agent_has_email_address(rd.get('rights_holder', None))})
+    ret_obj.update({AGENT_TYPE.get('CURATOR'): _agent_has_email_address(rd.get('curator', None))})
 
     return ret_obj
 
@@ -149,10 +141,10 @@ def get_harvest_info(catalog_record):
     Returns True if dataset was harvested from a third party source
 
     Arguments:
-        catalog_record [dict] -- The catalog record.
+        catalog_record (dict): The catalog record.
 
     Returns:
-        [bool] -- Is the cr harvested.
+        bool: Is the cr harvested.
 
     """
     return catalog_record.get('data_catalog.catalog_json.harvested', False)
@@ -162,10 +154,10 @@ def _agent_has_email_address(agent_obj):
     """Check if agent has email
 
     Arguments:
-        agent_obj [list/dict] -- The specified field from the research dataset. If publisher then dict else list
+        agent_obj (list/dict): The specified field from the research dataset. If publisher then dict else list
 
     Returns:
-        [bool] -- True if has emails, False if not.
+        bool: True if has emails, False if not.
 
     """
     if agent_obj:
@@ -179,10 +171,10 @@ def get_email_list_for_actor(agents):
     """Return the emails for the specified agents
 
     Arguments:
-        agents [list/dict] -- The specified field from the research dataset. If publisher then dict else list
+        agents (list/dict): The specified field from the research dataset. If publisher then dict else list
 
     Returns:
-        [list] -- List with 1 or more email addresses.
+        list: List with 1 or more email addresses.
 
     """
     emails = []

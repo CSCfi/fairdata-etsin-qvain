@@ -33,6 +33,7 @@ const finnish = {
     catalog_publisher: 'Katalogin julkaisija',
     citation: 'Sitaatti / Lähdeviite',
     citation_formats: 'Näytä lisää sitaattiehdotuksia',
+    citationNoDateIssued: 'Julkaisupäivämäärää ei määritelty',
     contact: {
       access: 'Aineiston käyttöoikeuteen liittyvissä kyselyissä ota yhteyttä kuraattoriin.',
       contact: 'Ota yhteyttä',
@@ -161,6 +162,7 @@ const finnish = {
     harvested: 'Haravoitu',
     cumulative: 'Kumulatiivinen',
     keywords: 'Avainsanat',
+    subjectHeading: 'Asiasanat',
     license: 'Lisenssi',
     loading: 'Ladataan aineistoa',
     go_to_original: 'Siirry alkuperäiseen',
@@ -229,6 +231,11 @@ const finnish = {
     language: {
       toggleLabel: 'Vaihda kieltä',
     },
+    cookies: {
+      accept: 'Hyväksy evästeet',
+      infoText: 'Käyttämällä Fairdata-palveluja hyväksyt evästiden käytön. Käytämme evästeitä palvelun kehittömiseen ja käyttökokemuksen parantamiseen.',
+      link: 'Fairdata-palvelujen tietosuoja.',
+    }
   },
   home: {
     title: 'Etsi aineistoa',
@@ -420,14 +427,22 @@ const finnish = {
           years: ' vuotta sitten',
         },
       },
+      moreVersions: {
+        one: 'Näytä 1 versio lisää',
+        other: 'Näytä %(count)s versiota lisää',
+      },
+      hideVersions: 'Piilota vanhat versiot',
       oldVersion: 'Vanha versio',
       latestVersion: 'Uusin',
       deprecated: 'Vanhentunut',
       editButton: 'Muokkaa',
       editDraftButton: 'Muokkaa luonnosta',
       deleteButton: 'Poista',
-      confirmDelete:
-        'Oletko varma, että haluat poistaa aineiston? Aineiston poiston jälkeen se ei enää näy Qvaimessa eikä Etsimen haku löydä sitä. Aineiston laskeutumissivua ei poisteta.',
+      confirmDelete: {
+        text: 'Oletko varma, että haluat poistaa aineiston? Aineiston poiston jälkeen se ei enää näy Qvaimessa eikä Etsimen haku löydä sitä. Aineiston laskeutumissivua ei poisteta.',
+        ok: 'Poista',
+        cancel: 'Peruuta',
+      },
       goToEtsin: 'Katso Etsimessä',
       goToEtsinDraft: 'Esikatsele Etsimessä',
       openNewVersion: 'Avaa uusi versio',
@@ -479,6 +494,14 @@ const finnish = {
         placeholder: 'Valitse vaihtoehto',
         addButton: 'Lisää tieteenala',
         help: 'Voit lisätä useita tieteenaloja.',
+      },
+      datasetLanguage: {
+        title: 'Aineiston kieli',
+        infoText: 'Valitse aineistossa käytetyt kielet.',
+        placeholder: 'Hae kieliä kirjoittamalla',
+        noResults: 'Ei hakutuloksia',
+        addButton: 'Lisää kieli',
+        help: 'Voit lisätä useita kieliä.'
       },
       keywords: {
         title: 'Avainsanat',

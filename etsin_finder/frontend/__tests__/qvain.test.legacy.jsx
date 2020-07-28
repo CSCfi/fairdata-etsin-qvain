@@ -14,7 +14,7 @@ import { License } from '../js/components/qvain/licenses/licenses'
 import { AccessType } from '../js/components/qvain/licenses/accessType'
 import RestrictionGrounds from '../js/components/qvain/licenses/resctrictionGrounds'
 import EmbargoExpires from '../js/components/qvain/licenses/embargoExpires'
-import { AccessTypeURLs, LicenseUrls } from '../js/components/qvain/utils/constants'
+import { ACCESS_TYPE_URL, LICENSE_URL, DATA_CATALOG_IDENTIFIER } from '../js/utils/constants'
 import Files from '../js/components/qvain/files'
 import IDAFilePicker, { IDAFilePickerBase } from '../js/components/qvain/files/legacy/idaFilePicker'
 import FileSelector, { FileSelectorBase } from '../js/components/qvain/files/legacy/fileSelector'
@@ -28,7 +28,6 @@ import QvainStore, {
   License as LicenseConstructor
 } from '../js/stores/view/qvain'
 import LocaleStore from '../js/stores/view/language'
-import { DataCatalogIdentifiers, } from '../js/components/qvain/utils/constants'
 
 const getStores = () => {
   QvainStore.setMetaxApiV2(false)
@@ -148,7 +147,7 @@ describe('Qvain.RightsAndLicenses', () => {
   })
   it('should NOT render other license URL field', () => {
     const stores = getStores()
-    stores.Qvain.setLicense(LicenseConstructor(undefined, LicenseUrls.CCBY4))
+    stores.Qvain.setLicense(LicenseConstructor(undefined, LICENSE_URL.CCBY4))
     const component = shallow(<License Stores={stores} />)
     expect(component.find('#otherLicenseURL').length).toBe(0)
   })
@@ -158,25 +157,25 @@ describe('Qvain.RightsAndLicenses', () => {
   })
   it('should render <RestrictionGrounds />', () => {
     const stores = getStores()
-    stores.Qvain.setAccessType(AccessTypeConstructor(undefined, AccessTypeURLs.EMBARGO))
+    stores.Qvain.setAccessType(AccessTypeConstructor(undefined, ACCESS_TYPE_URL.EMBARGO))
     const component = shallow(<AccessType Stores={stores} />)
     expect(component.find(RestrictionGrounds).length).toBe(1)
   })
   it('should NOT render <RestrictionGrounds />', () => {
     const stores = getStores()
-    stores.Qvain.setAccessType(AccessTypeConstructor(undefined, AccessTypeURLs.OPEN))
+    stores.Qvain.setAccessType(AccessTypeConstructor(undefined, ACCESS_TYPE_URL.OPEN))
     const component = shallow(<AccessType Stores={stores} />)
     expect(component.find(RestrictionGrounds).length).toBe(0)
   })
   it('should render <EmbargoExpires />', () => {
     const stores = getStores()
-    stores.Qvain.setAccessType(AccessTypeConstructor(undefined, AccessTypeURLs.EMBARGO))
+    stores.Qvain.setAccessType(AccessTypeConstructor(undefined, ACCESS_TYPE_URL.EMBARGO))
     const component = shallow(<AccessType Stores={stores} />)
     expect(component.find(EmbargoExpires).length).toBe(1)
   })
   it('should NOT render <EmbargoExpires />', () => {
     const stores = getStores()
-    stores.Qvain.setAccessType(AccessTypeConstructor(undefined, AccessTypeURLs.OPEN))
+    stores.Qvain.setAccessType(AccessTypeConstructor(undefined, ACCESS_TYPE_URL.OPEN))
     const component = shallow(<AccessType Stores={stores} />)
     expect(component.find(EmbargoExpires).length).toBe(0)
   })
@@ -185,7 +184,7 @@ describe('Qvain.RightsAndLicenses', () => {
 describe('Qvain.Files', () => {
   it('should render file picker', () => {
     const store = getStores()
-    store.Qvain.dataCatalog = DataCatalogIdentifiers.IDA
+    store.Qvain.dataCatalog = DATA_CATALOG_IDENTIFIER.IDA
     store.Qvain.idaPickerOpen = true
     const component = shallow(<Files Stores={store} />)
     expect(component.dive().find(IDAFilePicker).length).toBe(1)
