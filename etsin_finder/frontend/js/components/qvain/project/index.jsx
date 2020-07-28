@@ -1,18 +1,21 @@
-import React from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+
 import Translate from 'react-translate-component'
 import { inject, observer } from 'mobx-react'
+import styled from 'styled-components'
 
-import { ProjectFunderType } from '../../../stores/view/qvain'
+import { Project as ProjectObject } from '../../../stores/view/qvain'
 
-import Select from '../general/select'
 import Field from '../general/field'
 import Card from '../general/card'
-import { LabelLarge, Input } from '../general/form'
-
+import Button from '../../general/button'
+import { ButtonGroup, ButtonLabel, EditButton, ButtonContainer, DeleteButton } from '../general/buttons'
 import TooltipContent from './TooltipContent'
+import ProjectForm from './ProjectForm'
+import FundingOrganization from './FundingOrganization'
 
-const fieldProps = {
+const FIELD_PROPS = {
   translations: {
     title: 'qvain.project.title',
     tooltip: 'qvain.project.description',
@@ -22,93 +25,97 @@ const fieldProps = {
   }
 }
 
-const Project = () => (
-  <Field {...fieldProps}>
-    <Card>
-      <Translate component="h3" content="qvain.project.title" />
-      <Translate component="p" content="qvain.project.description" />
-      <ProjectForm />
-    </Card>
-  </Field>
-)
+const INITIAL_STATE = {
+  projectForm: {
+    titleEn: '',
+    titleFi: '',
+    identifier: '',
+    fundingIdentifier: '',
+    funderType: undefined,
+  },
+  organizationForm: {},
+}
+
+class Project extends Component {
+  state = { ...INITIAL_STATE }
+
+  static propTypes = {
+    Stores: PropTypes.object.isRequired,
+  }
+
+  onChange = (field, value) => {
+    const { projectForm } = this.state
+    projectForm[field] = value
+    this.setState({ projectForm })
+  }
+
+  handleAddProject = () => {
+    const { titleEn, titleFi, identifier, fundingIdentifier, funderType } = this.state.projectForm
+    const title = { en: titleEn, fi: titleFi }
+    const project = ProjectObject(title, identifier, fundingIdentifier, funderType, [])
+    this.props.Stores.Qvain.setProject(project)
+    this.resetForm()
+  }
+
+  resetForm() {
+    this.setState({ ...INITIAL_STATE })
+  }
 
 
-const ProjectFormCompoent = ({ Stores }) => {
-  const { Qvain } = Stores
+  render() {
+    const { projectForm, organizationForm } = this.state
+    return (
+      <Field {...FIELD_PROPS}>
+        <Card>
+          <Translate component="h3" content="qvain.project.title" />
+          <Translate component="p" content="qvain.project.description" />
+          <AddedProjects />
+          <ProjectForm onChange={this.onChange} formData={projectForm} />
+          <FundingOrganization onChange={this.onChange} formData={organizationForm} />
+          <AddLanguageContainer>
+            <Button onClick={this.handleAddProject}>
+              <Translate content="qvain.project.addButton" />
+            </Button>
+          </AddLanguageContainer>
+        </Card>
+      </Field>
+    )
+  }
+}
+
+const AddedProjectsComponent = ({ Stores }) => {
+  // TODO: Implement edit project
+  // TODO: Figure out how to display title with translations
+  const { lang } = Stores.Locale
+  const { removeProject, projects } = Stores.Qvain
   return (
     <>
-      <LabelLarge htmlFor="titleEn">
-        <Translate content="qvain.project.inputs.title.label" />
-      </LabelLarge>
-      <Translate component="p" content="qvain.project.inputs.title.description" />
-      <Translate
-        component={Input}
-        value={Qvain.projectTitle.en}
-        onChange={(event) => Qvain.setProjectTitle('en', event.target.value)}
-        attributes={{ placeholder: 'qvain.project.inputs.titleEn.placeholder' }}
-        id="titleEn"
-      />
-      <Translate
-        component={Input}
-        value={Qvain.projectTitle.fi}
-        onChange={(event) => Qvain.setProjectTitle('fi', event.target.value)}
-        attributes={{ placeholder: 'qvain.project.inputs.titleFi.placeholder' }}
-        id="titleFi"
-      />
-      <LabelLarge htmlFor="identifier">
-        <Translate content="qvain.project.inputs.identifier.label" />
-      </LabelLarge>
-      <Translate component="p" content="qvain.project.inputs.identifier.description" />
-      <Translate
-        component={Input}
-        value={Qvain.projectIdentifier}
-        onChange={(event) => Qvain.setProjectIdentifier(event.target.value)}
-        attributes={{ placeholder: 'qvain.project.inputs.identifier.placeholder' }}
-        id="identifier"
-      />
-      <LabelLarge htmlFor="fundingIdentifier">
-        <Translate content="qvain.project.inputs.fundingIdentifier.label" />
-      </LabelLarge>
-      <Translate component="p" content="qvain.project.inputs.fundingIdentifier.description" />
-      <Translate
-        component={Input}
-        value={Qvain.projectFundingIdentifier}
-        onChange={(event) => Qvain.setProjectFundingIdentifier(event.target.value)}
-        attributes={{ placeholder: 'qvain.project.inputs.fundingIdentifier.placeholder' }}
-        id="fundingIdentifier"
-      />
-      <LabelLarge htmlFor="funderType">
-        <Translate content="qvain.project.inputs.funderType.label" />
-      </LabelLarge>
-      <FunderTypeSelect stores={Qvain} />
+      {projects.map(project => (
+        <ButtonGroup tabIndex="0" key={project.identifier}>
+          <ButtonLabel>{project.title.en}</ButtonLabel>
+          <ButtonContainer>
+            <EditButton aria-label="Edit" />
+            <DeleteButton aria-label="Remove" onClick={() => removeProject(project.identifier)} />
+          </ButtonContainer>
+        </ButtonGroup>
+      ))}
     </>
   )
 }
 
-ProjectFormCompoent.propTypes = {
+AddedProjectsComponent.propTypes = {
   Stores: PropTypes.object.isRequired,
 }
 
+const AddedProjects = inject('Stores')(observer(AddedProjectsComponent))
 
-const FunderTypeSelect = ({ stores }) => {
-  const { projectFunderType, setProjectFunderType } = stores
-  return (
-    <Select
-      name="funder-type"
-      getter={projectFunderType}
-      setter={setProjectFunderType}
-      model={ProjectFunderType}
-      metaxIdentifier="funder_type"
-      placeholder="qvain.project.inputs.funderType.placeholder"
-      noOptionsMessage="qvain.project.inputs.funderType.noOptions"
-    />
-  )
-}
+const PaddedWord = styled.span`
+  padding-right: 10px;
+`
 
-FunderTypeSelect.propTypes = {
-  stores: PropTypes.object.isRequired,
-}
+const AddLanguageContainer = styled.div`
+  text-align: right;
+  padding-top: 1rem;
+`
 
-const ProjectForm = inject('Stores')(observer(ProjectFormCompoent))
-
-export default Project
+export default inject('Stores')(observer(Project))
