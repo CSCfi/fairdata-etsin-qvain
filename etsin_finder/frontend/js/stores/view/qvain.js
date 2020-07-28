@@ -63,17 +63,7 @@ class Qvain {
 
   @observable infrastructures = []
 
-  // Project, remove this
-  @observable projectTitle = {
-    en: '',
-    fi: '',
-  }
-
-  @observable projectIdentifier = ''
-
-  @observable projectFundingIdentifier = ''
-
-  @observable projectFunderType = undefined
+  @observable projects = []
 
   @observable license = License(undefined, LICENSE_URL.CCBY4)
 
@@ -109,13 +99,7 @@ class Qvain {
     this.keywordsArray = []
     this.infrastructure = undefined
     this.infrastructures = []
-    this.projectFunderType = undefined
-    this.projectTitle = {
-      en: '',
-      fi: '',
-    }
-    this.projectIdentifier = ''
-    this.projectFundingIdentifier = ''
+    this.projects = []
     this.license = License(undefined, LICENSE_URL.CCBY4)
     this.otherLicenseUrl = undefined
     this.accessType = AccessType(undefined, ACCESS_TYPE_URL.OPEN)
@@ -307,23 +291,22 @@ class Qvain {
   }
 
   // PROJECT, REMOVE THIS
-  @action setProjectFunderType = funderType => {
-    this.projectFunderType = funderType
+  // Add or Update
+  @action setProject = project => {
+    // TODO: Change this
+    const { identifier } = project
+    const existingProject = this.projects.find(proj => proj.identifier === identifier)
+    if (existingProject) {
+      const updatedProject = { ...existingProject, ...project }
+      this.projects = this.projects
+        .filter(proj => proj.identifier !== existingProject.identifier)
+        .concat([updatedProject])
+    } else this.projects = this.projects.concat([project])
     this.changed = true
   }
 
-  @action setProjectTitle = (lang, title) => {
-    this.projectTitle[lang] = title
-    this.changed = true
-  }
-
-  @action setProjectIdentifier = identifier => {
-    this.projectIdentifier = identifier
-    this.changed = true
-  }
-
-  @action setProjectFundingIdentifier = fundingIdentifier => {
-    this.projectFundingIdentifier = fundingIdentifier
+  @action removeProject = identifier => {
+    this.projects = this.projects.filter(project => project.identifier !== identifier)
     this.changed = true
   }
 
@@ -1128,7 +1111,22 @@ export const Infrastructure = (name, url) => ({
   url,
 })
 
-export const ProjectFunderType = (name, identifier) => ({
+export const Project = (
+  title, // {en, fi}
+  identifier,
+  fundingIdentifier,
+  funderType, // ProjectFunderType
+  organization, // Array<Organization>
+) => ({
+  title, identifier, fundingIdentifier, funderType, organization
+})
+
+export const ProjectFunderType = (name, url) => ({
+  name,
+  url,
+})
+
+export const Organization = (name, identifier) => ({
   name,
   identifier,
 })
