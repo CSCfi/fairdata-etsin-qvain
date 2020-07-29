@@ -33,9 +33,9 @@ class Field extends PureComponent {
     const { isExpanded } = this.state
     return (
       <div className="container">
-        <SectionTitle onClick={() => this.setState({ isExpanded: !isExpanded })}>
+        <SectionTitle>
           {isRequired ? null : <ExpandCollapse type="button" isExpanded={isExpanded} />}
-          <Translate content={title} />
+          <Translate content={title} onClick={() => this.setState({ isExpanded: !isExpanded })} />
           <QvainTooltip tooltipAriaLabel={tooltip} tooltipContent={tooltipContent} />
         </SectionTitle>
         {isRequired || isExpanded ? this.props.children : null}
