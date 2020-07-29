@@ -51,6 +51,12 @@ const filesToMetax = (selectedFiles, existingFiles) => {
   return parsedFileData
 }
 
+const projectsToMetax = projects => projects.map(project => {
+  const funderType = { identifier: project.funderType.url }
+  delete project.uuid
+  return { ...project, funderType }
+})
+
 const handleSubmitToBackend = (values) => {
   const actors = values.Actors.toBackend()
 
@@ -78,7 +84,8 @@ const handleSubmitToBackend = (values) => {
     dataCatalog: values.dataCatalog,
     cumulativeState: values.cumulativeState,
     useDoi: values.useDoi,
-    spatial
+    projects: projectsToMetax(values.projects),
+    spatial,
   }
 
   if (values.original) {
