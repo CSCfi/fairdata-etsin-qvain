@@ -545,7 +545,6 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
         },
         "mergeArraysByIdentifier": [Function],
         "metadataModalFile": undefined,
-        "metaxApiV2": true,
         "original": undefined,
         "otherIdentifier": "",
         "otherIdentifiersArray": Array [],
@@ -569,11 +568,22 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
 />
 `;
 
-
 exports[`Qvain.Description should render <LanguageField /> 1`] = `
 <LanguageField
   Stores={
     Object {
+      "Env": Env {
+        "environment": "test",
+        "history": RouterStore {
+          "go": [Function],
+          "goBack": [Function],
+          "goForward": [Function],
+          "history": null,
+          "push": [Function],
+          "replace": [Function],
+        },
+        "metaxApiV2": true,
+      },
       "Locale": Locale {},
       "Qvain": Qvain {
         "Actors": Actors {
@@ -591,8 +601,19 @@ exports[`Qvain.Description should render <LanguageField /> 1`] = `
           "loadingReferenceOrganizations": Object {},
           "referenceOrganizationErrors": Object {},
           "referenceOrganizations": Object {},
-          "reset": [Function],
           "toBackend": [Function],
+        },
+        "Env": Env {
+          "environment": "test",
+          "history": RouterStore {
+            "go": [Function],
+            "goBack": [Function],
+            "goForward": [Function],
+            "history": null,
+            "push": [Function],
+            "replace": [Function],
+          },
+          "metaxApiV2": true,
         },
         "Files": Files {
           "AddItemsView": AddItemsView {
@@ -619,9 +640,10 @@ exports[`Qvain.Description should render <LanguageField /> 1`] = `
           },
           "cache": Object {},
           "cancelOnReset": [Function],
+          "datasetIdentifier": null,
+          "fetchRootIdentifier": [Function],
           "getItemByPath": [Function],
           "inEdit": undefined,
-          "initialPagination": 10,
           "loadingMetadata": null,
           "loadingProjectInfo": null,
           "loadingProjectRoot": null,
@@ -634,13 +656,6 @@ exports[`Qvain.Description should render <LanguageField /> 1`] = `
           },
           "refreshModalDirectory": null,
           "root": null,
-          "selectedExistingCounter": ChildItemCounter {
-            "root": Object {
-              "count": 0,
-              "directories": Object {},
-            },
-          },
-          "selectedExistingMetadata": Object {},
           "selectedProject": undefined,
         },
         "Spatials": Spatials {
