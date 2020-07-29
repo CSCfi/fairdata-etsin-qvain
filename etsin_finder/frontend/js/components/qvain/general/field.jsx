@@ -31,6 +31,7 @@ class Field extends PureComponent {
     const { tooltipContent } = this.props.components
     const { isRequired } = this.props
     const { isExpanded } = this.state
+
     return (
       <div className="container">
         <SectionTitle>
