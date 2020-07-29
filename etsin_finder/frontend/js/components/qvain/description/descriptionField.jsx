@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { inject, observer } from 'mobx-react'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
-import '../../../../locale/translations'
 import { titleSchema, descriptionSchema } from '../utils/formValidation'
 import ValidationError from '../general/validationError'
 import { Input, Textarea, LabelLarge } from '../general/form'
@@ -117,7 +116,7 @@ class DescriptionField extends Component {
               attributes={{ placeholder: this.getPlaceholder('title', 'ENGLISH') }}
             />
           )}
-          <ValidationError>{this.state.titleError}</ValidationError>
+          {this.state.titleError ? <Translate component={ValidationError} content={'qvain.description.error.title'} /> : null}
           <LabelLarge htmlFor="descriptionInput">
             <Translate content="qvain.description.description.description.label" /> *
           </LabelLarge>
@@ -145,7 +144,7 @@ class DescriptionField extends Component {
               attributes={{ placeholder: this.getPlaceholder('description', this.state.active) }}
             />
           )}
-          <ValidationError>{this.state.descriptionError}</ValidationError>
+          {this.state.descriptionError ? <Translate component={ValidationError} content={'qvain.description.error.description'} /> : null}
           <Translate component="div" content="qvain.description.description.instructions" />
         </DescriptionCard>
       </React.Fragment>

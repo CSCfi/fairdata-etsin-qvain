@@ -1,303 +1,28 @@
 import axios from 'axios'
-import { observable, action, runInAction, when } from 'mobx'
+import { observable, action, runInAction, computed } from 'mobx'
 
-import { FileAPIURLs, UseCategoryURLs } from '../../components/qvain/utils/constants'
-
-// Create prefixed keys from file/directory identifiers. Makes it possible to have
-// files and directories in the same array without risk of key conflicts.
-const dirKey = (dir) => `dir:${dir.identifier}`
-const fileKey = (file) => `file:${file.identifier}`
-const dirKeyRegExp = new RegExp('^dir:')
-const fileKeyRegExp = new RegExp('^file:')
-const isDirKey = (key) => dirKeyRegExp.test(key)
-const isFileKey = (key) => fileKeyRegExp.test(key)
-
-// Sorting helper for natural sorting of file/directory names.
-const sortOpts = { numeric: true, sensitivity: 'base' }
-const sortFunc = (a, b) => a.localeCompare(b, undefined, sortOpts)
-
-// properties common to directories and files
-const Item = (metaxItem) => ({
-  identifier: metaxItem.identifier,
-  key: null,
-  projectIdentifier: metaxItem.project_identifier,
-  title: metaxItem.title,
-  description: metaxItem.description,
-  useCategory: metaxItem.use_category && metaxItem.use_category.identifier,
-  parent: null,
-  path: null,
-
-  added: false,
-  selected: false,
-  removed: false,
-  existing: false,
-  error: false,
-})
-
-export const Directory = (metaxDir, args) => ({
-  ...Item(metaxDir),
-  key: dirKey(metaxDir),
-  title: metaxDir.directory_name,
-  directoryName: metaxDir.directory_name,
-  path: metaxDir.directory_path,
-  fileCount: metaxDir.file_count,
-  existingFileCount: 0,
-  addedChildCount: 0,
-  removedChildCount: 0,
-  selectedChildCount: 0,
-  loaded: false,
-  loading: false,
-  type: 'directory',
-  directories: [],
-  files: [],
-  ...args,
-})
-
-// PAS metadata is updated separately using an RPC call.
-export const getPASMeta = (metaxFile) => {
-  const characteristics = metaxFile.file_characteristics || {}
-  const pasMeta = {}
-  if (characteristics.file_format !== undefined) {
-    pasMeta.fileFormat = characteristics.file_format
-  }
-  if (characteristics.format_version !== undefined) {
-    pasMeta.formatVersion = characteristics.format_version
-  }
-  if (characteristics.encoding !== undefined) {
-    pasMeta.encoding = characteristics.encoding
-  }
-  if (characteristics.csv_delimiter !== undefined) {
-    pasMeta.csvDelimiter = characteristics.csv_delimiter
-  }
-  if (characteristics.csv_record_separator !== undefined) {
-    pasMeta.csvRecordSeparator = characteristics.csv_record_separator
-  }
-  if (characteristics.csv_quoting_char !== undefined) {
-    pasMeta.csvQuotingChar = characteristics.csv_quoting_char
-  }
-  if (characteristics.csv_has_header !== undefined) {
-    pasMeta.csvHasHeader = characteristics.csv_has_header
-  }
-  return pasMeta
-}
-
-export const File = (metaxFile, args) => ({
-  ...Item(metaxFile),
-  key: fileKey(metaxFile),
-  title: metaxFile.file_name,
-  fileName: metaxFile.file_name,
-  path: metaxFile.file_path,
-  type: 'file',
-  pasMeta: getPASMeta(metaxFile),
-  ...args
-})
-
-// Project root, similar to a directory but cannot be added/removed or opened/closed.
-export const Project = (projectIdentifier, identifier, args) => ({
-  projectIdentifier,
-  identifier,
-  directories: [],
-  files: [],
-  loading: false,
-  type: 'project',
-  addedChildCount: 0,
-  removedChildCount: 0,
-  selectedChildCount: 0,
-  ...args
-})
-
-class DirectoryView {
-  // Handles per-view state of the directory hierarchy. Responsible for state:
-  // - Is a directory open?
-  // - Has an item been checked (=selected in the view)?
-  // - Are all items in directory shown, or only items up to showLimit?
-
-  constructor(Files) {
-    this.Files = Files
-  }
-
-  @action reset() {
-    this.openState = {}
-    this.showAllState = {}
-    this.checkedState = {}
-    this.showLimit = 20
-    this.showLimitMargin = 1
-  }
-
-  // Opening/closing directories
-
-  @observable openState = {}
-
-  isOpen = (dir) => (
-    !!(this.openState[dir.key] || dir.type === 'project')
-  )
-
-  @action open = async (dir) => {
-    if (!this.openState[dir.key] && !dir.loaded) {
-      if (!await this.Files.loadDirectory(dir)) {
-        return false
-      }
-    }
-    runInAction(() => {
-      this.openState[dir.key] = true
-    })
-    return true
-  }
-
-  @action close = (dir) => {
-    this.openState[dir.key] = false
-  }
-
-  @action toggleOpen = async (dir) => {
-    if (!this.openState[dir.key]) {
-      await this.open(dir)
-    } else {
-      this.close(dir)
-    }
-  }
-
-  @action setAllOpen = async (newState) => {
-    const setChildrenOpen = async (dir) => (
-      Promise.all(dir.directories.map(async d => {
-        if (d.type === 'directory') {
-          if (newState) {
-            if (!await this.open(d)) {
-              return false
-            }
-          } else {
-            this.close(d)
-          }
-        }
-        return setChildrenOpen(d)
-      }))
-    )
-    await setChildrenOpen(this.Files.root)
-  }
-
-  // Show only up to showLimit items, or all items?
-
-  @observable showAllState = {}
-
-  @observable showLimit = 20 // how many items to show
-
-  @observable showLimitMargin = 1
-
-  isShowAll(dir) {
-    return !!this.showAllState[dir.key]
-  }
-
-  @action toggleShowAll = async (dir) => {
-    this.showAllState[dir.key] = !this.showAllState[dir.key]
-  }
-
-  @action setShowLimit = async (limit, margin) => {
-    this.showLimit = limit
-    this.showLimitMargin = margin || 0
-  }
-
-  // Selecting items
-
-  @observable checkedState = {}
-
-  isChecked(item) {
-    return !!this.checkedState[item.key]
-  }
-
-  getTopmostChecked = () => {
-    // Recurse through file hierarchy and return checked items.
-    // Recursion stops when a checked item is encountered.
-    // All children (including checked ones) of a checked directory are ignored.
-    const checked = []
-    const recurse = (parent) => {
-      if (parent.files) {
-        parent.files.forEach(file => {
-          if (this.isChecked(file)) {
-            checked.push(file)
-          }
-        })
-      }
-
-      if (parent.directories) {
-        parent.directories.forEach(dir => {
-          if (this.isChecked(dir)) {
-            checked.push(dir)
-          } else {
-            recurse(dir)
-          }
-        })
-      }
-    }
-    recurse(this.Files.root)
-    return checked
-  }
-
-  @action toggleChecked = (item) => {
-    this.checkedState[item.key] = !this.checkedState[item.key]
-  }
-
-  @action clearChecked = () => {
-    this.checkedState = {}
-  }
-}
-
-const ignoreNotFound = async (func, defaultResponse) => {
-  // Return defaultResponse instead of throwing a 404 error.
-  try {
-    return await func()
-  } catch (err) {
-    if (err.response && err.response.status === 404) {
-      return defaultResponse
-    }
-    throw err
-  }
-}
-
-class ChildItemCounter {
-  // Helper class for counting child items based on paths without
-  // having to load the entire directory hierarchy.
-  @observable root = { directories: {}, count: 0 }
-
-  @action inc(path) {
-    // add child
-    const parts = path.split('/')
-    let dir = this.root
-    dir.count += 1
-    for (let i = 1; i < parts.length - 1; i += 1) {
-      const part = parts[i]
-      if (!dir.directories[part]) {
-        dir.directories[part] = { directories: {}, count: 0 }
-      }
-      dir = dir.directories[part]
-      dir.count += 1
-    }
-  }
-
-  count(path) {
-    // count children
-    const parts = path.split('/')
-    let dir = this.root
-    for (let i = 1; i < parts.length; i += 1) {
-      const part = parts[i]
-      dir = dir.directories[part]
-      if (!dir) {
-        return 0
-      }
-    }
-    return dir.count
-  }
-}
+import { FILE_API_URLS } from '../../utils/constants'
+import { Project, hasMetadata, dirIdentifierKey, fileIdentifierKey } from './qvain.files.items'
+import { PromiseManager, ChildItemCounter, getAction } from './qvain.files.utils'
+import { itemLoaderAny, FetchType } from './qvain.files.loaders'
+import { AddItemsView, SelectedItemsView } from './qvain.files.views'
 
 class Files {
   constructor(Qvain) {
     this.Qvain = Qvain
-    this.SelectedItemsView = new DirectoryView(this)
-    this.AddItemsView = new DirectoryView(this)
+    this.SelectedItemsView = new SelectedItemsView(this)
+    this.AddItemsView = new AddItemsView(this)
+    this.promiseManager = new PromiseManager()
     this.reset()
   }
+
+  @observable initialPagination = 10
 
   @observable root = null
 
   @observable selectedProject = undefined
+
+  @observable projectLocked = false // prevent changing saved project
 
   @observable selectedExistingMetadata = {}
 
@@ -305,9 +30,19 @@ class Files {
 
   @observable refreshModalDirectory = undefined
 
-  @observable loadingProject = null
+  @observable loadingProjectInfo = null
+
+  @observable loadingProjectRoot = null
+
+  @observable loadingMetadata = null
 
   @observable inEdit = undefined
+
+  cache = {} // used for storing data for items that haven't been fully loaded yet
+
+  @observable originalMetadata = {}
+
+  cancelOnReset = (promise) => (this.promiseManager.add(promise))
 
   @action reset = () => {
     this.root = null
@@ -318,86 +53,160 @@ class Files {
     this.AddItemsView.reset()
     this.refreshModalDirectory = null
     this.inEdit = undefined
+    this.cache = {}
+    this.originalMetadata = {}
+    this.projectLocked = false
+
+    if (this.loadingProjectInfo && this.loadingProjectInfo.promise) {
+      this.loadingProjectInfo.promise.cancel()
+    }
+    this.loadingProjectInfo = null
+
+    if (this.loadingMetadata && this.loadingMetadata.promise) {
+      this.loadingMetadata.promise.cancel()
+    }
+    this.loadingMetadata = null
+
+    if (this.loadingProjectRoot && this.loadingProjectRoot.promise) {
+      this.loadingProjectRoot.promise.cancel()
+    }
+    this.loadingProjectRoot = null
+    this.promiseManager.reset()
   }
 
   @action setRefreshModalDirectory = (identifier) => {
     this.refreshModalDirectory = identifier
   }
 
-  @action editDataset = dataset => {
-    this.reset()
-    const researchDataset = dataset.research_dataset
+  @action loadProjectInfo = async (dataset) => {
+    const identifier = dataset.identifier
 
-    // Load metadata for files and directories selected in the dataset.
-    const dsFiles = researchDataset.files || []
-    const dsDirectories = researchDataset.directories || []
-    if (dsFiles.length > 0 || dsDirectories.length > 0) {
-      const items = [...dsFiles, ...dsDirectories]
-      this.selectedProject = items.length > 0 ? items[0].details.project_identifier : undefined
+    const alreadyLoading = this.loadingProjectInfo && this.loadingProjectInfo.identifier === this.identifier
+    if (alreadyLoading) {
+      return
+    }
 
-      dsFiles.forEach(file => {
-        this.selectedExistingMetadata[fileKey(file)] = {
-          identifier: file.identifier,
-          title: file.title,
-          description: file.description,
-          useCategory: file.use_category && file.use_category.identifier,
-          fileType: file.file_type && file.file_type.identifier,
-        }
-        if (file.details) {
-          this.selectedExistingCounter.inc(file.details.file_path)
-          this.selectedExistingMetadata[fileKey(file)].projectIdentifier = file.details.project_identifier
-        }
-      })
+    if (this.loadingProjectInfo && this.loadingProjectInfo.promise && !this.loadingProjectInfo.error) {
+      this.loadingProjectInfo.promise.cancel()
+    }
 
-      dsDirectories.forEach(dir => {
-        this.selectedExistingMetadata[dirKey(dir)] = {
-          identifier: dir.identifier,
-          title: dir.title,
-          description: dir.description,
-          useCategory: dir.use_category && dir.use_category.identifier
-        }
-        if (dir.details) {
-          this.selectedExistingCounter.inc(dir.details.directory_path)
-          this.selectedExistingMetadata[dirKey(dir)].projectIdentifier = dir.details.project_identifier
+    const load = async () => {
+      const { data } = await axios.get(FILE_API_URLS.V2_DATASET_PROJECTS + identifier)
+      runInAction(() => {
+        if (data.length > 0) {
+          this.selectedProject = data[0]
+          this.projectLocked = true
+        } else {
+          this.selectedProject = undefined
         }
       })
     }
-    return this.loadProject()
+
+    try {
+      this.loadingProjectInfo = {
+        identifier,
+        promise: load(this.selectedProject),
+        error: null,
+        done: false,
+      }
+      await this.loadingProjectInfo.promise
+    } catch (error) {
+      runInAction(() => {
+        this.selectedProject = undefined
+        this.loadingProjectInfo.error = error
+      })
+    } finally {
+      runInAction(() => {
+        if (this.loadingProjectInfo) {
+          this.loadingProjectInfo.done = true
+        }
+      })
+    }
   }
 
-  @action joinChildItems = (parent, metaxData, existingMap) => {
-    // Join data for files/directories from multiple sources:
-    // - metaxData: Files/directories contained by a directory.
-    // - existingMap: Files/directories that exist in the dataset.
-    // - this.selectedExistingMetadata: Selected files/directories and their metadata saved with a dataset.
+  @action loadMetadata = async (dataset) => {
+    const identifier = dataset.identifier
 
-    // sort items by name using natural ordering
-    const dirs = metaxData.directories.sort((a, b) => sortFunc(a.directory_name, b.directory_name))
-    const files = metaxData.files.sort((a, b) => sortFunc(a.file_name, b.file_name))
+    const alreadyLoading = this.loadingMetadata && this.loadingMetadata.identifier === this.identifier
+    if (alreadyLoading) {
+      return
+    }
 
-    // add dirs
-    parent.directories.splice(0, 0, ...dirs.map(newDir => {
-      const key = dirKey(newDir)
-      return observable(Directory(newDir, {
-        parent,
-        selected: !!this.selectedExistingMetadata[key],
-        existing: !!existingMap[key],
-        existingFileCount: (existingMap[key] || {}).file_count || 0,
-        selectedChildCount: this.selectedExistingCounter.count(newDir.directory_path),
-        ...this.selectedExistingMetadata[key]
-      }))
-    }))
+    if (this.loadingMetadata && this.loadingMetadata.promise && !this.loadingMetadata.error) {
+      this.loadingMetadata.promise.cancel()
+    }
 
-    // add files
-    parent.files.splice(0, 0, ...files.map(newFile => {
-      const key = fileKey(newFile)
-      return observable(File(newFile, {
-        parent,
-        selected: !!this.selectedExistingMetadata[key],
-        existing: !!existingMap[key],
-        ...this.selectedExistingMetadata[key]
-      }))
-    }))
+    const load = async () => {
+      const { data } = await axios.get(FILE_API_URLS.V2_DATASET_USER_METADATA + identifier)
+      runInAction(() => {
+        // Load metadata for files and directories selected in the dataset.
+        const dsFiles = data.files || []
+        const dsDirectories = data.directories || []
+        if (dsFiles.length > 0 || dsDirectories.length > 0) {
+          const items = [...dsFiles, ...dsDirectories]
+          items.forEach((v, i) => { v.details = { id: i } })
+
+          dsFiles.forEach(file => {
+            file.id = file.details.id
+            const key = fileIdentifierKey(file)
+            this.originalMetadata[key] = {
+              identifier: file.identifier,
+              title: file.title,
+              description: file.description,
+              useCategory: file.use_category && file.use_category.identifier,
+              fileType: file.file_type && file.file_type.identifier,
+              existing: true,
+              type: 'file',
+            }
+            this.cache[key] = {
+              ...this.originalMetadata[key],
+            }
+          })
+
+          dsDirectories.forEach(dir => {
+            dir.id = dir.details.id
+            const key = dirIdentifierKey(dir)
+            this.originalMetadata[key] = {
+              identifier: dir.identifier,
+              title: dir.title,
+              description: dir.description,
+              useCategory: dir.use_category && dir.use_category.identifier,
+              existing: true,
+              type: 'directory',
+            }
+            this.cache[key] = {
+              ...this.originalMetadata[key],
+            }
+          })
+        }
+      })
+    }
+
+    try {
+      this.loadingMetadata = {
+        identifier,
+        promise: load(this.selectedProject),
+        error: null,
+        done: false,
+      }
+      await this.loadingMetadata.promise
+    } catch (error) {
+      runInAction(() => {
+        this.loadingMetadata.error = error
+      })
+    } finally {
+      runInAction(() => {
+        if (this.loadingMetadata) {
+          this.loadingMetadata.done = true
+        }
+      })
+    }
+  }
+
+  @action editDataset = async (dataset) => {
+    this.reset()
+    await Promise.all([this.loadProjectInfo(dataset), this.loadMetadata(dataset)])
+    return this.loadProjectRoot()
   }
 
   @action loadAllDirectories = async () => {
@@ -410,106 +219,62 @@ class Files {
     await loadChildren(this.root)
   }
 
-  @action loadDirectory = async (dir) => {
-    // Get directory data from Metax.
-    // - data contains items in the directory { files: [...], directories: [...] }
-    // - existingMap contains items in the published dataset { [identifier]: item }
-    // For optimization, uses parallel requests.
-    if (dir.loading || dir.loaded) {
-      await when(() => !dir.loading)
-      return dir.loaded
-    }
-    dir.loading = true
-    const identifier = dir.identifier
-    const resp = axios.get(FileAPIURLs.DIR_URL + identifier)
-    const existingMap = ignoreNotFound(() => this.getExisting(dir, identifier), {})
-    this.joinChildItems(dir, (await resp).data, await existingMap)
-
-    runInAction(() => {
-      dir.loading = false
-      dir.loaded = true
-    })
-    return true
-  }
+  @action loadDirectory = async (dir) => itemLoaderAny.loadDirectory(this, dir, 100)
 
   @action changeProject = projectId => {
     this.selectedProject = projectId
     this.AddItemsView.reset()
     this.SelectedItemsView.reset()
-    return this.loadProject()
+    this.promiseManager.reset()
+    return this.loadProjectRoot()
   }
 
-  getExisting = async (dir, directoryIdentifier) => {
-    const { original } = this.Qvain
-
-    // If the parent directory doesn't exist in the published dataset, the children won't exist either
-    if (dir && dir.type === 'directory' && !dir.existing) {
-      return {}
-    }
-
-    const existingMap = {}
-    if (original && Object.values(this.selectedExistingMetadata).length > 0) {
-      const { data: existing } = await axios.get(`${FileAPIURLs.DATASET_DIR_URL}${original.identifier}?dir_id=${directoryIdentifier}`)
-      existing.files.forEach(item => { existingMap[fileKey(item)] = item })
-      existing.directories.forEach(item => { existingMap[dirKey(item)] = item })
-    }
-    return existingMap
-  }
-
-  @action loadProject = async () => {
-    const alreadyLoading = this.loadingProject && this.loadingProject.identifier === this.selectedProject
+  @action loadProjectRoot = async () => {
+    const alreadyLoading = this.loadingProjectRoot && this.loadingProjectRoot.identifier === this.selectedProject
     if (alreadyLoading || (this.root && this.root.projectIdentifier === this.selectedProject)) {
       return
     }
-
     this.root = null
     if (!this.selectedProject) {
       return
     }
-    if (this.loadingProject && !this.loadingProject.error) {
-      this.loadingProject.promise.cancel()
+    if (this.loadingProjectRoot && !this.loadingProjectRoot.error) {
+      this.loadingProjectRoot.promise.cancel()
     }
 
-    const fetchRoot = async (projectIdentifier) => {
-      const { data } = await axios.get(FileAPIURLs.PROJECT_DIR_URL + projectIdentifier)
-      const firstItem = [].concat(data.directories, data.files)[0]
-      if (!firstItem) {
-        return null // Project has no files or directories
-      }
+    const fetchRootIdentifier = async (projectIdentifier) => {
+      const { data } = await axios.get(FILE_API_URLS.V2_PROJECT_DIR_URL + projectIdentifier)
+      return data.identifier
+    }
 
-      const rootIdentifier = firstItem.parent_directory.identifier
-      const root = observable(Project(projectIdentifier, rootIdentifier, {
-        selectedChildCount: this.selectedExistingCounter.count('')
-      }))
-      const existingMap = await this.getExisting(null, rootIdentifier)
-      this.joinChildItems(root, data, existingMap)
-
-      return root
+    const loadRoot = async (projectIdentifier) => {
+      const rootIdentifier = await fetchRootIdentifier(projectIdentifier)
+      const root = observable(Project(projectIdentifier, rootIdentifier))
+      await this.loadDirectory(root)
+      runInAction(() => {
+        this.root = root
+      })
     }
 
     try {
-      this.loadingProject = {
+      this.loadingProjectRoot = {
         identifier: this.selectedProject,
-        promise: fetchRoot(this.selectedProject),
+        promise: loadRoot(this.selectedProject),
         error: null,
+        done: false,
       }
-      const root = await this.loadingProject.promise
-      runInAction(() => {
-        this.root = root
-        this.loadingProject = null
-      })
+      await this.loadingProjectRoot.promise
     } catch (error) {
       runInAction(() => {
-        this.loadingProject.error = error
+        this.root = null
+        this.loadingProjectRoot.error = error
       })
-    }
-  }
-
-  @action updateSelectedChildCount(item, inc) {
-    let { parent } = item
-    while (parent) {
-      parent.selectedChildCount += inc
-      parent = parent.parent
+    } finally {
+      runInAction(() => {
+        if (this.loadingProjectInfo) {
+          this.loadingProjectInfo.done = true
+        }
+      })
     }
   }
 
@@ -529,7 +294,7 @@ class Files {
     }
   }
 
-  getItemByPath = async (path) => {
+  getItemByPath = async (path, skipFinalLoad) => {
     // Get file or directory by path. Loads all parent directories in the path
     // automatically if needed. Useful for tests.
     const parts = path.split('/')
@@ -543,13 +308,15 @@ class Files {
     let prevDir = dir
     for (let i = 1; i < parts.length; i += 1) {
       const part = parts[i]
-      dir = dir.directories.find(d => d.directoryName === part)
+      dir = dir.directories.find(d => d.name === part)
       if (dir && !dir.loaded) {
-        // eslint-disable-next-line no-await-in-loop
-        await this.loadDirectory(dir)
+        if (i < parts.length - 1 || !skipFinalLoad) {
+          // eslint-disable-next-line no-await-in-loop
+          await this.loadDirectory(dir)
+        }
       }
       if (!dir) {
-        const file = prevDir.files.find(f => f.fileName === part)
+        const file = prevDir.files.find(f => f.name === part)
         return file
       }
       prevDir = dir
@@ -558,36 +325,122 @@ class Files {
   }
 
   @action addItem(item) {
-    if (item.added || item.selected) {
+    // All children will be implicitly added, clear their added/removed state
+    if (item.type === 'directory') {
+      this.clearChildActions(item)
+    }
+
+    if (item.added) {
       return
     }
+
     if (item.removed) {
       this.updateRemovedChildCount(item, -1)
-      this.updateSelectedChildCount(item, 1)
-      item.selected = true
       item.removed = false
-    } else {
+    }
+
+    const parentAction = getAction(item.parent)
+
+    // If all children of a directory are added, add the directory instead
+    if (item.parent.type !== 'project') {
+      const fetchType = item.parent.removed ? FetchType.ANY : FetchType.NOT_EXISTING
+      const count = item.parent.pagination.counts[fetchType]
+      const offset = item.parent.pagination.offsets[fetchType]
+      if (count !== null && offset >= count) {
+        item.added = true
+        const fileCond = (i) => i.added || (i.existing && !i.removed && !parentAction.removed)
+        const dirCond = (i) => i.added || (i.existing && !i.removed && !parentAction.removed && i.existingFileCount >= i.fileCount)
+        const siblingsAdded = item.parent.files.every(fileCond) && item.parent.directories.every(dirCond)
+        item.added = false
+        if (siblingsAdded) {
+          this.addItem(item.parent)
+          return
+        }
+      }
+    }
+
+    if (!parentAction.added) {
       item.added = true
       this.updateAddedChildCount(item, 1)
     }
+
     this.Qvain.setChanged(true)
   }
 
   @action removeItem(item) {
-    if (!item.added && !item.selected) {
+    // All children will be implicitly removed, clear their added/removed state
+    if (item.type === 'directory') {
+      this.clearChildActions(item)
+    }
+
+    if (item.removed) {
       return
     }
     if (item.added) {
       this.updateAddedChildCount(item, -1)
       item.added = false
-      item.selected = false
-    } else if (item.selected) {
+    }
+
+    const parentAction = getAction(item.parent)
+
+    // If all children of a directory are removed, remove the directory instead
+    if (item.parent.type !== 'project') {
+      const fetchType = item.parent.added ? FetchType.ANY : FetchType.EXISTING
+      const count = item.parent.pagination.counts[fetchType]
+      const offset = item.parent.pagination.offsets[fetchType]
+      if (count !== null && offset >= count) {
+        item.removed = true
+        const cond = (i) => i.removed || (!i.existing && !i.added && !parentAction.added)
+        const siblingsRemoved = item.parent.files.every(cond) && item.parent.directories.every(cond)
+        item.removed = false
+        if (siblingsRemoved) {
+          this.removeItem(item.parent)
+          return
+        }
+      }
+    }
+
+    if (!parentAction.removed) {
       this.updateRemovedChildCount(item, 1)
-      this.updateSelectedChildCount(item, -1)
-      item.selected = false
       item.removed = true
     }
+
     this.Qvain.setChanged(true)
+  }
+
+  @action clearChildActions(dir) {
+    if (dir.addedChildCount === 0 && dir.removedChildCount === 0) {
+      return
+    }
+
+    const clear = action((child) => {
+      if (child.added) {
+        this.updateAddedChildCount(child, -1)
+        child.added = false
+      }
+      if (child.removed) {
+        this.updateRemovedChildCount(child, -1)
+        child.removed = false
+      }
+    })
+
+    dir.files.forEach(clear)
+    dir.directories.forEach(clear)
+    dir.directories.forEach(d => this.clearChildActions(d))
+  }
+
+  @action undoAction(item) {
+    const clear = action((child) => {
+      if (child.added) {
+        this.updateAddedChildCount(child, -1)
+        child.added = false
+      }
+      if (child.removed) {
+        this.updateRemovedChildCount(child, -1)
+        child.removed = false
+      }
+    })
+    clear(item)
   }
 
   @action applyInEdit = values => {
@@ -595,20 +448,8 @@ class Files {
     this.inEdit.description = values.description
     this.inEdit.useCategory = values.useCategory
 
-    let hasMetadata = false
-    const inEdit = this.inEdit
-    if (inEdit.type === 'file') {
+    if (this.inEdit.type === 'file') {
       this.inEdit.fileType = values.fileType
-      if (inEdit.description || inEdit.useCategory || inEdit.fileType || inEdit.title !== inEdit.fileName) {
-        hasMetadata = true
-      }
-    } else if (inEdit.type === 'directory') {
-      if (inEdit.description || inEdit.useCategory || inEdit.title !== inEdit.directoryName) {
-        hasMetadata = true
-      }
-    }
-    if (hasMetadata) {
-      this.addItem(inEdit)
     }
     this.inEdit = undefined
     this.Qvain.setChanged(true)
@@ -631,80 +472,161 @@ class Files {
     this.Qvain.setMetadataModalFile(null)
   }
 
-  toMetax = () => {
+  metadataToMetax = () => {
+    // Returns changed Metadata
+
     const directoryToMetax = (dir) => ({
       identifier: dir.identifier,
-      title: dir.title,
-      description: dir.description ? dir.description : 'Folder',
-      useCategory: {
-        identifier: dir.useCategory || UseCategoryURLs.OUTCOME_MATERIAL
-      },
-      projectIdentifier: dir.projectIdentifier ? dir.projectIdentifier : undefined
+      title: dir.title || undefined,
+      description: dir.description || undefined,
+      use_category: (dir.useCategory && {
+        identifier: dir.useCategory
+      }) || undefined,
     })
 
     const fileToMetax = (file) => ({
       identifier: file.identifier,
-      title: file.title,
-      description: file.description ? file.description : 'File',
-      fileType: (file.fileType && {
+      title: file.title || undefined,
+      description: file.description || undefined,
+      file_type: (file.fileType && {
         identifier: file.fileType,
       }) || undefined,
-      useCategory: {
-        identifier: file.useCategory || UseCategoryURLs.OUTCOME_MATERIAL
-      },
-      projectIdentifier: file.projectIdentifier ? file.projectIdentifier : undefined
+      use_category: (file.useCategory && {
+        identifier: file.useCategory
+      }) || undefined,
     })
 
-    const files = {}
-    const directories = {}
+    const metadataHasChanged = (item) => {
+      const key = (item.type === 'file' && fileIdentifierKey(item)) || (item.type === 'directory' && dirIdentifierKey(item))
+      const original = this.originalMetadata[key]
+      if (!original) {
+        return true
+      }
 
-    // add original selection data
-    Object.entries(this.selectedExistingMetadata).forEach(([key, item]) => {
-      const itemCopy = {
-        ...item,
-        useCategory: item.useCategory && { identifier: item.useCategory }
+      if (item.description !== original.description ||
+        (item.useCategory && item.useCategory.identifier) !== (original.useCategory && original.useCategory.identifier) ||
+        item.title !== original.title) {
+        return true
       }
-      if (item.fileType) {
-        itemCopy.fileType = { identifier: item.fileType }
+      if (item.type === 'file' && (item.fileType && item.fileType.identifier) !== (original.fileType && original.fileType.identifier)) {
+        return true
       }
-      delete itemCopy.details
-      if (isDirKey(key)) {
-        directories[item.identifier] = itemCopy
-      } else if (isFileKey(key)) {
-        files[item.identifier] = itemCopy
-      }
-    })
+      return false
+    }
+
+    const files = []
+    const directories = []
 
     // add updated selection data
     const recurse = (parent) => {
-      if (parent.files) {
-        parent.files.forEach(file => {
-          if (file.selected || file.added) {
-            files[file.identifier] = fileToMetax(file)
-          } else if (file.removed) {
-            delete files[file.identifier]
+      parent.files.forEach(file => {
+        if (file.removed) {
+          return
+        }
+        const key = fileIdentifierKey(file)
+        if (hasMetadata(file)) {
+          if (metadataHasChanged(file)) {
+            files.push(fileToMetax(file))
           }
-        })
-      }
+        } else if (this.originalMetadata[key]) {
+          files.push({ identifier: file.identifier, delete: true }) // remove metadata
+        }
+      })
 
-      if (parent.directories) {
-        parent.directories.forEach(dir => {
-          if (dir.selected || dir.added) {
-            directories[dir.identifier] = directoryToMetax(dir)
-          } else if (dir.removed) {
-            delete directories[dir.identifier]
+      parent.directories.forEach(dir => {
+        if (dir.removed) {
+          return
+        }
+        const key = dirIdentifierKey(dir)
+        if (hasMetadata(dir)) {
+          if (metadataHasChanged(dir)) {
+            directories.push(directoryToMetax(dir))
           }
+        } else if (this.originalMetadata[key]) {
+          directories.push({ identifier: dir.identifier, delete: true }) // remove metadata
+        }
+        if (dir.addedChildCount > 0 || dir.fileCount > 0) {
           recurse(dir)
-        })
-      }
+        }
+      })
     }
     if (this.root) {
       recurse(this.root)
     }
+
     return {
-      files: Object.values(files),
-      directories: Object.values(directories)
+      files,
+      directories
     }
+  }
+
+  @computed get isLoadingProject() {
+    if (this.loadingProjectInfo && !this.loadingProjectInfo.done) {
+      return true
+    }
+    if (this.loadingProjectRoot && !this.loadingProjectRoot.done) {
+      return true
+    }
+    if (this.loadingMetadata && !this.loadingMetadata.done) {
+      return true
+    }
+    return false
+  }
+
+  @computed get loadingProjectError() {
+    if (this.loadingProjectInfo && this.loadingProjectInfo.error) {
+      return this.loadingProjectInfo.error
+    }
+    if (this.loadingProjectRoot && this.loadingProjectRoot.error) {
+      return this.loadingProjectRoot.error
+    }
+    if (this.loadingMetadata && this.loadingMetadata.error) {
+      return this.loadingMetadata.error
+    }
+    return null
+  }
+
+  @action
+  retry = async () => {
+    if (this.loadingProjectInfo && this.loadingProjectInfo.error) {
+      this.loadingProjectInfo = null
+    }
+    if (this.loadingProjectRoot && this.loadingProjectRoot.error) {
+      this.loadingProjectRoot = null
+    }
+    if (this.loadingMetadata && this.loadingMetadata.error) {
+      this.loadingMetadata = null
+    }
+
+    const { original } = this.Qvain
+    if (original) {
+      await Promise.all([this.loadProjectInfo(original), this.loadMetadata(original)])
+    }
+    return this.loadProjectRoot()
+  }
+
+  actionsToMetax() {
+    // Return addition/removal actions
+
+    const actions = { directories: [], files: [] }
+    const recurse = (item) => {
+      const actionGroup = item.type === 'file' ? actions.files : actions.directories
+      if (item.added) {
+        actionGroup.push({ identifier: item.identifier })
+      }
+      if (item.removed) {
+        actionGroup.push({ identifier: item.identifier, exclude: true })
+      }
+      if (item.type !== 'file') {
+        item.files.forEach(f => recurse(f))
+        item.directories.forEach(d => recurse(d))
+      }
+    }
+    if (this.root) {
+      this.root.directories.forEach(d => recurse(d))
+      this.root.files.forEach(f => recurse(f))
+    }
+    return actions
   }
 }
 

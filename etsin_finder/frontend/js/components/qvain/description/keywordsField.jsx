@@ -19,47 +19,47 @@ class KeywordsField extends Component {
   }
 
   state = {
-    value: '',
     keywordsValidationError: null,
   }
 
-  handleChange = e => {
-    this.setState({ value: e.target.value })
+  handleChange = (e) => {
+    const { setKeywordString } = this.props.Stores.Qvain
+    setKeywordString(e.target.value)
     this.setState({ keywordsValidationError: null })
   }
 
   handleBlur = () => {
+    const { keywordsArray } = this.props.Stores.Qvain
     keywordsSchema
-      .validate(this.props.Stores.Qvain.keywords)
+      .validate(keywordsArray)
       .then(() => {
         this.setState({ keywordsValidationError: null })
       })
-      .catch(err => {
+      .catch((err) => {
         this.setState({ keywordsValidationError: err.errors })
       })
   }
 
-  handleKeywordAdd = e => {
+  handleKeywordAdd = (e) => {
     e.preventDefault()
-    if (this.state.value.length > 0) {
-      const keywords = this.state.value.split(',').map(word => word.trim())
-      const noEmptyKeywords = keywords.filter(kw => kw !== '')
-      const uniqKeywords = [...new Set(noEmptyKeywords)]
-      const keywordsToStore = uniqKeywords.filter(
-        word => !this.props.Stores.Qvain.keywords.includes(word)
-      )
-      this.props.Stores.Qvain.setKeywords([...this.props.Stores.Qvain.keywords, ...keywordsToStore])
-      this.setState({ value: '' })
+    const { addKeywordToKeywordArray } = this.props.Stores.Qvain
+    addKeywordToKeywordArray()
+  }
+
+  handleKeywordRemove = (word) => {
+    const { removeKeyword } = this.props.Stores.Qvain
+    removeKeyword(word)
+  }
+
+  handleKeyDown = (e) => {
+    if (e.keyCode === 188 || e.keyCode === 13) {
+      this.handleKeywordAdd(e)
     }
   }
 
-  handleKeywordRemove = word => {
-    this.props.Stores.Qvain.removeKeyword(word)
-  }
-
   render() {
-    const { readonly } = this.props.Stores.Qvain
-    const keywords = this.props.Stores.Qvain.keywords.map(word => (
+    const { readonly, keywordsArray, keywordString } = this.props.Stores.Qvain
+    const RenderedKeywords = keywordsArray.map((word) => (
       <Label color="#007fad" margin="0 0.5em 0.5em 0" key={word}>
         <PaddedWord>{word}</PaddedWord>
         {!readonly && (
@@ -79,12 +79,12 @@ class KeywordsField extends Component {
           <Translate content="qvain.description.keywords.title" /> *
         </LabelLarge>
         <Translate component="p" content="qvain.description.keywords.help" />
-        {keywords}
+        {RenderedKeywords}
         <Translate
           component={Input}
           id="keywordsInput"
           disabled={readonly}
-          value={this.state.value}
+          value={keywordString}
           onChange={this.handleChange}
           type="text"
           attributes={{ placeholder: 'qvain.description.keywords.placeholder' }}

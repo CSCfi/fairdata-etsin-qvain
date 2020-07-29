@@ -1,13 +1,13 @@
 {
-/**
- * This file is part of the Etsin service
- *
- * Copyright 2017-2018 Ministry of Education and Culture, Finland
- *
- *
- * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
- * @license   MIT
- */
+  /**
+   * This file is part of the Etsin service
+   *
+   * Copyright 2017-2018 Ministry of Education and Culture, Finland
+   *
+   *
+   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
+   * @license   MIT
+   */
 }
 
 import styled from 'styled-components'
@@ -20,6 +20,7 @@ import checkColor from '../../styles/styledUtils'
 export const Button = styled.button.attrs(props => ({
   padding: props.padding ? props.padding : '0.3em 0.6em 0.4em',
   margin: props.margin ? props.margin : '0.25em 0.25em',
+  type: 'button'
 }))`
   cursor: pointer;
   width: ${props => (props.width ? props.width : '')};
@@ -70,27 +71,27 @@ export const InvertedButton = styled(Button)`
   }
 `
 
-export const TransparentButton = styled(Button).attrs(props => ({
+export const TransparentButton = styled(Button).attrs((props) => ({
   margin: props.margin ? props.margin : '0.1em',
 }))`
-  margin: ${props => (props.noMargin ? 0 : props.margin)};
+  margin: ${(props) => (props.noMargin ? 0 : props.margin)};
   border-color: transparent;
   background-color: transparent;
-  color: ${props => (props.color ? checkColor(props.color) : props.theme.color.darkgray)};
+  color: ${(props) => (props.color ? checkColor(props.color) : props.theme.color.darkgray)};
   &:hover {
     border-color: transparent;
     background-color: transparent;
-    color: ${p => darken(0.1, p.color ? checkColor(p.color) : p.theme.color.primary)};
+    color: ${(p) => darken(0.1, p.color ? checkColor(p.color) : p.theme.color.primary)};
     text-decoration: underline;
   }
   &:focus {
     outline: none;
     box-shadow: none;
     text-decoration: underline;
-    color: ${props => props.theme.color.primary};
+    color: ${(props) => props.theme.color.primary};
   }
   &:disabled {
-    color: ${props => props.theme.color.gray};
+    color: ${(props) => props.theme.color.gray};
     background-color: transparent;
   }
 `
@@ -98,18 +99,18 @@ export const TransparentButton = styled(Button).attrs(props => ({
 export const LinkButton = styled(TransparentButton)`
   margin: 0;
   padding: 0;
-  color: ${props => (props.color ? checkColor(props.color) : props.theme.color.primary)};
+  color: ${(props) => (props.color ? checkColor(props.color) : props.theme.color.primary)};
   &:hover {
-    color: ${p => darken(0.1, p.color ? checkColor(p.color) : p.theme.color.primary)};
+    color: ${(p) => darken(0.1, p.color ? checkColor(p.color) : p.theme.color.primary)};
   }
 `
 
 export const LinkButtonDarkGray = styled(TransparentButton)`
   margin: 0;
   padding: 0;
-  color: rgb(110, 110, 110)
+  color: rgb(110, 110, 110);
   &:hover {
-    color: ${p => darken(0.1, p.color ? checkColor(p.color) : p.theme.color.primary)};
+    color: ${(p) => darken(0.1, p.color ? checkColor(p.color) : p.theme.color.primary)};
   }
 `
 
@@ -176,10 +177,10 @@ export const TransparentLink = styled(InvertedLink)`
   margin: 0;
   border: none;
   background-color: transparent;
-  color: ${props => (props.color ? checkColor(props.color) : props.theme.color.primary)};
+  color: ${(props) => (props.color ? checkColor(props.color) : props.theme.color.primary)};
   &:hover {
     background-color: transparent;
-    color: ${p => darken(0.1, p.color ? checkColor(p.color) : p.theme.color.primary)};
+    color: ${(p) => darken(0.1, p.color ? checkColor(p.color) : p.theme.color.primary)};
     text-decoration: underline;
   }
   &:focus {
@@ -187,7 +188,7 @@ export const TransparentLink = styled(InvertedLink)`
     box-shadow: none;
     text-decoration: underline;
     background-color: transparent;
-    color: ${props => props.theme.color.primary};
+    color: ${(props) => props.theme.color.primary};
   }
 `
 

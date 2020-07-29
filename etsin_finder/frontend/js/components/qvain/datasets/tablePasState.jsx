@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
 
-import { PreservationStates } from '../utils/constants'
+import { PRESERVATION_STATE } from '../../../utils/constants'
 import Label from '../general/label'
 
 const TablePasState = ({ preservationState }) => {
@@ -58,10 +58,9 @@ const TablePasState = ({ preservationState }) => {
       text = null
       break
   }
-  console.log(preservationState)
   return (
     <>
-      <PasLabel color={PreservationStates[preservationState].color}>PAS</PasLabel>
+      <PasLabel color={PRESERVATION_STATE[preservationState].color}>PAS</PasLabel>
       {text}
     </>
   )
@@ -76,10 +75,10 @@ const PasText = styled.span`
   margin-left: 10px;
   font-size: 0.8em;
   :before {
-    content: "(";
+    content: '(';
   }
   :after {
-    content: ")";
+    content: ')';
   }
 `
 

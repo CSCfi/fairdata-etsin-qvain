@@ -62,7 +62,7 @@ export class ExternalFilesBase extends Component {
     return (
       <Fragment>
         <Translate component="p" content="qvain.files.external.help" />
-        <SlidingContent open="true">
+        <SlidingContent open>
           <Translate tabIndex="0" component={SelectedFilesTitle} content="qvain.files.external.addedResources.title" />
           {addedExternalResources.length === 0 &&
             <Translate tabIndex="0" component="p" content="qvain.files.external.addedResources.none" />

@@ -7,6 +7,7 @@ import axios from 'axios'
 
 import Button from '../general/button'
 import REMSButton from './REMSButton'
+import { REMS_URL } from '../../utils/constants'
 
 export class AskForAccess extends Component {
   state = {
@@ -20,7 +21,7 @@ export class AskForAccess extends Component {
       .get(`/api/rems/${this.props.cr_id}`)
       .then(res => {
         console.log(res)
-        window.open(`https://vm1446.kaj.pouta.csc.fi/application/${res.data}`, '_blank')
+        window.open(`${REMS_URL}/application/${res.data}`, '_blank')
       })
       .catch(err => {
         console.log(err)
