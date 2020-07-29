@@ -1,8 +1,10 @@
 import React from 'react'
 import { inject, observer } from 'mobx-react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import Translate from 'react-translate-component'
+import { tint } from 'polished'
+
 import { Row, BodyCell } from '../general/table'
 import { DATA_CATALOG_IDENTIFIER } from '../../../utils/constants'
 import Label from '../general/label'
@@ -10,7 +12,7 @@ import { TableButton, RemoveButton } from '../general/buttons'
 import TablePasState from './tablePasState'
 import formatAge from './formatAge'
 
-const datasetStateTranslation = (dataset) => {
+const datasetStateTranslation = dataset => {
   if (dataset.state === 'published') {
     if (dataset.next_draft) {
       return 'qvain.datasets.state.changed'
@@ -20,7 +22,7 @@ const datasetStateTranslation = (dataset) => {
   return 'qvain.datasets.state.draft'
 }
 
-const getGoToEtsinButton = (dataset) => {
+const getGoToEtsinButton = dataset => {
   let identifier = dataset.identifier
   let goToEtsinKey = 'goToEtsin'
   if (dataset.next_draft) {
@@ -48,8 +50,9 @@ function Dataset(props) {
   }
 
   const { dataset, currentTimestamp } = props
+
   return (
-    <Row key={dataset.identifier} tabIndex="0">
+    <DatasetRow key={dataset.identifier} tabIndex="0" highlight={props.highlight}>
       <BodyCellWordWrap style={titleCellStyle}>
         {props.indent && <Marker />}
         {dataset.research_dataset.title.en || dataset.research_dataset.title.fi}
@@ -94,7 +97,7 @@ function Dataset(props) {
           content="qvain.datasets.deleteButton"
         />
       </BodyCellActions>
-    </Row>
+    </DatasetRow>
   )
 }
 
@@ -106,11 +109,24 @@ Dataset.propTypes = {
   handleCreateNewVersion: PropTypes.func.isRequired,
   openRemoveModal: PropTypes.func.isRequired,
   indent: PropTypes.bool,
+  highlight: PropTypes.bool,
 }
 
 Dataset.defaultProps = {
-  indent: false
+  indent: false,
+  highlight: false,
 }
+
+const DatasetRow = styled(Row)`
+  ${props =>
+    props.highlight &&
+    `
+      background: ${tint(0.7, props.theme.color.success)};
+      &:hover {
+        background: ${tint(0.8, props.theme.color.success)};
+      }
+    `}
+`
 
 const Marker = styled.div`
   position: absolute;

@@ -6,6 +6,7 @@ import { withRouter } from 'react-router-dom'
 import axios from 'axios'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
+
 import { Table, TableHeader, Row, HeaderCell, TableBody, TableNote } from '../general/table'
 import { DATASET_URLS } from '../../../utils/constants'
 import Modal from '../../general/modal'
@@ -47,19 +48,48 @@ class DatasetTable extends Component {
   }
 
   componentDidMount() {
-    this.getDatasets()
+    const { publishedDataset } = this.props.Stores.QvainDatasets
+    this.getDatasets().then(() => this.showDataset(publishedDataset))
     // once we get login info, reload
     reaction(
       () => this.props.Stores.Auth.user.name,
-      () => this.getDatasets()
+      () => this.getDatasets().then(() => this.showDataset(publishedDataset))
     )
   }
 
   componentWillUnmount() {
-    this.promises.forEach((promise) => promise.cancel())
+    const { setPublishedDataset } = this.props.Stores.QvainDatasets
+    setPublishedDataset(null)
+    this.promises.forEach(promise => promise.cancel())
   }
 
-  getDatasets = () => {
+  showDataset = identifier => {
+    // move dataset to beginning of list
+    const index = this.state.filteredGroups.findIndex(group =>
+      group.some(dataset => dataset.identifier === identifier)
+    )
+    if (index > 0) {
+      this.setState(
+        state => {
+          const datasets = [...state.datasets]
+          const dataset = datasets.splice(index, 1)[0]
+          datasets.unshift(dataset)
+          const datasetGroups = groupDatasetsByVersionSet(datasets)
+          return {
+            datasets,
+            datasetGroups,
+            filteredGroups: datasetGroups,
+          }
+        },
+        () => {
+          // and refresh
+          this.handleChangePage(this.state.page)()
+        }
+      )
+    }
+  }
+
+  getDatasets = async () => {
     if (!this.props.Stores.Auth.user.name) {
       return null
     }
@@ -73,8 +103,8 @@ class DatasetTable extends Component {
     }
     const promise = axios
       .get(url)
-      .then((result) => {
-        const datasets = result.data.filter((dataset) => !dataset.draft_of)
+      .then(result => {
+        const datasets = result.data.filter(dataset => !dataset.draft_of)
         const datasetGroups = groupDatasetsByVersionSet(datasets)
 
         this.setState(
@@ -90,7 +120,7 @@ class DatasetTable extends Component {
           this.handleChangePage(1)
         )
       })
-      .catch((e) => {
+      .catch(e => {
         console.log(e.message)
         this.setState({ loading: false, error: true, errorMessage: 'Failed to load datasets' })
       })
@@ -98,7 +128,7 @@ class DatasetTable extends Component {
     return promise
   }
 
-  handleCreateNewVersion = async (identifier) => {
+  handleCreateNewVersion = async identifier => {
     const { metaxApiV2 } = this.props.Stores.Qvain
     if (!metaxApiV2) {
       console.error('Metax API V2 is required for creating a new version')
@@ -113,7 +143,7 @@ class DatasetTable extends Component {
     this.props.history.replace(`/qvain/dataset/${newIdentifier}`)
   }
 
-  handleRemove = (identifier) => (event) => {
+  handleRemove = identifier => event => {
     event.preventDefault()
     const { metaxApiV2 } = this.props.Stores.Qvain
 
@@ -125,10 +155,10 @@ class DatasetTable extends Component {
     const promise = axios
       .delete(url)
       .then(() => {
-        const datasets = [...this.state.datasets.filter((d) => d.identifier !== identifier)]
+        const datasets = [...this.state.datasets.filter(d => d.identifier !== identifier)]
         Tracking.trackEvent('Dataset', ' Removed', this.props.location.pathname)
         this.setState(
-          (state) => ({
+          state => ({
             datasets,
             filteredGroups: filterGroupsByTitle(state.searchTerm, state.datasetGroups),
             removeModalOpen: false,
@@ -140,14 +170,14 @@ class DatasetTable extends Component {
           }
         )
       })
-      .catch((err) => {
+      .catch(err => {
         this.setState({ error: true, errorMessage: err.message })
       })
     this.promises.push(promise)
     return promise
   }
 
-  openRemoveModal = (identifier) => () => {
+  openRemoveModal = identifier => () => {
     this.setState({
       removeModalOpen: true,
       removableDatasetIdentifier: identifier,
@@ -166,7 +196,7 @@ class DatasetTable extends Component {
     return !loading && !error && datasets.length === 0
   }
 
-  handleEnterEdit = (dataset) => () => {
+  handleEnterEdit = dataset => () => {
     if (dataset.next_draft) {
       this.props.history.push(`/qvain/dataset/${dataset.next_draft.identifier}`)
       return
@@ -175,9 +205,9 @@ class DatasetTable extends Component {
     this.props.history.push(`/qvain/dataset/${dataset.identifier}`)
   }
 
-  handleChangePage = (pageNum) => () => {
+  handleChangePage = pageNum => () => {
     const actualNum = pageNum - 1
-    this.setState((state) => ({
+    this.setState(state => ({
       onPage: state.filteredGroups.slice(
         actualNum * state.limit,
         actualNum * state.limit + state.limit
@@ -200,6 +230,7 @@ class DatasetTable extends Component {
     } = this.state
 
     const { metaxApiV2 } = this.props.Stores.Qvain
+    const { publishedDataset } = this.props.Stores.QvainDatasets
 
     const noOfDatasets = datasets.length
     const searchInput =
@@ -218,17 +249,17 @@ class DatasetTable extends Component {
               id="datasetSearchInput"
               attributes={{ placeholder: 'qvain.datasets.search.placeholder' }}
               value={searchTerm}
-              onChange={(event) => {
+              onChange={event => {
                 const searchStr = event.target.value
                 this.setState(
-                  (state) => ({
+                  state => ({
                     searchTerm: searchStr,
                     // if we have a search term, look through all the titles of all the datasets and return the matching datasets
                     filteredGroups: filterGroupsByTitle(searchStr, state.datasetGroups),
                   }),
                   () => {
                     // as the callback, set count to reflect the new filtered datasets
-                    this.setState((state) => ({ count: state.filteredGroups.length }))
+                    this.setState(state => ({ count: state.filteredGroups.length }))
                     // reload
                     this.handleChangePage(page)()
                   }
@@ -274,7 +305,7 @@ class DatasetTable extends Component {
               <Translate component={TableNote} content="qvain.datasets.noDatasets" />
             )}
             {!error &&
-              onPage.map((group) => (
+              onPage.map(group => (
                 <DatasetGroup
                   datasets={group}
                   key={group[0].identifier}
@@ -283,6 +314,7 @@ class DatasetTable extends Component {
                   handleEnterEdit={this.handleEnterEdit}
                   handleCreateNewVersion={this.handleCreateNewVersion}
                   openRemoveModal={this.openRemoveModal}
+                  highlight={publishedDataset}
                 />
               ))}
           </TableBody>

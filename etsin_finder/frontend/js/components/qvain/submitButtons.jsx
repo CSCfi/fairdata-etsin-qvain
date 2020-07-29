@@ -28,6 +28,14 @@ class SubmitButtons extends Component {
     useDoiModalIsOpen: false,
   }
 
+  goToDatasets = identifier => {
+    // go to datasets view and highlight published dataset
+    const { history } = this.props
+    const { setPublishedDataset } = this.props.Stores.QvainDatasets
+    setPublishedDataset(identifier)
+    history.push('/qvain')
+  }
+
   checkOtherIdentifiersV1 = () => {
     const {
       otherIdentifier,
@@ -58,13 +66,13 @@ class SubmitButtons extends Component {
     return true
   }
 
-  handleCreatePublishedV1 = (e) => {
+  handleCreatePublishedV1 = e => {
     if (this.state.useDoiModalIsOpen) {
       this.closeUseDoiInformation()
     }
 
-    const { Stores, history, handleSubmitError } = this.props
-    const { metaxApiV2, addUnsavedMultiValueFields, resetQvainStore, editDataset } = Stores.Qvain
+    const { Stores, handleSubmitError } = this.props
+    const { metaxApiV2, addUnsavedMultiValueFields } = Stores.Qvain
 
     if (metaxApiV2) {
       console.error('Wrong Metax API version for function')
@@ -84,21 +92,18 @@ class SubmitButtons extends Component {
       .then(() =>
         axios
           .post(DATASET_URLS.DATASET_URL, obj)
-          .then((res) => {
+          .then(res => {
             const data = res.data
 
-            // Open the created dataset without reloading the editor
             if (data && data.identifier) {
-              resetQvainStore()
-              editDataset(data)
-              history.replace(`/qvain/dataset/${data.identifier}`)
+              this.goToDatasets(data.identifier)
             }
 
             this.success({ ...data, is_new: true })
           })
           .catch(handleSubmitError)
       )
-      .catch((err) => {
+      .catch(err => {
         console.error('Error for event: ', e)
         console.error(err.errors)
 
@@ -107,7 +112,11 @@ class SubmitButtons extends Component {
   }
 
   handleUpdateV1 = async () => {
-    const { original, metaxApiV2, addUnsavedMultiValueFields, moveSelectedToExisting, setChanged, editDataset } = this.props.Stores.Qvain
+    const {
+      original,
+      metaxApiV2,
+      addUnsavedMultiValueFields,
+    } = this.props.Stores.Qvain
     const datasetUrl = metaxApiV2 ? DATASET_URLS.V2_DATASET_URL : DATASET_URLS.DATASET_URL
 
     if (metaxApiV2) {
@@ -130,16 +139,14 @@ class SubmitButtons extends Component {
       .then(() =>
         axios
           .patch(datasetUrl, obj)
-          .then(async (res) => {
-            moveSelectedToExisting()
-            setChanged(false)
-            editDataset(res.data)
+          .then(async res => {
             this.success(res.data)
+            this.goToDatasets(res.data.identifier)
             return true
           })
           .catch(this.failure)
       )
-      .catch((err) => {
+      .catch(err => {
         console.error(err)
         console.error(err.errors)
 
@@ -161,7 +168,8 @@ class SubmitButtons extends Component {
       canSelectFiles,
       canRemoveFiles,
       addUnsavedMultiValueFields,
-      Files } = this.props.Stores.Qvain
+      Files,
+    } = this.props.Stores.Qvain
 
     addUnsavedMultiValueFields()
     if (otherIdentifier !== '') {
@@ -199,7 +207,7 @@ class SubmitButtons extends Component {
 
       const filesChanged = fileActions.files.length > 0 || fileActions.directories.length > 0
       const filesRemoved =
-        fileActions.files.some((v) => v.exclude) || fileActions.directories.some((v) => v.exclude)
+        fileActions.files.some(v => v.exclude) || fileActions.directories.some(v => v.exclude)
 
       if (original && (original.state === 'published' || original.draft_of)) {
         if (filesRemoved && !canRemoveFiles) {
@@ -233,7 +241,7 @@ class SubmitButtons extends Component {
     }
   }
 
-  patchDataset = async (values) => {
+  patchDataset = async values => {
     const datasetUrl = DATASET_URLS.V2_DATASET_URL
     const { dataset, fileActions, metadataActions } = values
 
@@ -271,6 +279,9 @@ class SubmitButtons extends Component {
 
       const data = { ...dataset, is_draft: dataset.state === 'draft' }
       this.success(data)
+
+      this.goToDatasets(original.identifier)
+
       return original.identifier
     } catch (error) {
       this.failure(error)
@@ -388,8 +399,8 @@ class SubmitButtons extends Component {
   }
 
   handleMergeDraft = async () => {
-    const { Stores, history } = this.props
-    const { original, metaxApiV2, editDataset } = Stores.Qvain
+    const { Stores } = this.props
+    const { original, metaxApiV2 } = Stores.Qvain
 
     if (!metaxApiV2) {
       console.error('Metax API V2 is required for publishing drafts')
@@ -416,8 +427,8 @@ class SubmitButtons extends Component {
 
       const editUrl = `${DATASET_URLS.V2_EDIT_DATASET_URL}/${draftOf}`
       const resp = await axios.get(editUrl)
-      await editDataset(resp.data)
-      history.replace(`/qvain/dataset/${draftOf}`) // open the updated dataset
+
+      this.goToDatasets(draftOf)
       this.success(resp.data)
       return draftOf
     } catch (error) {
@@ -464,7 +475,9 @@ class SubmitButtons extends Component {
 
       await editDataset(resp.data)
       history.replace(`/qvain/dataset/${resp.data.identifier}`)
+
       this.success(resp.data)
+      this.goToDatasets(resp.data.identifier)
       return resp.data.identifier
     } catch (err) {
       this.failure(err)
@@ -490,14 +503,14 @@ class SubmitButtons extends Component {
     })
   }
 
-  failure = (error) => {
+  failure = error => {
     this.props.handleSubmitError(error)
     this.setState({
       datasetLoading: false,
     })
   }
 
-  success = (data) => {
+  success = data => {
     this.props.handleSubmitResponse(data)
     this.setState({
       datasetLoading: false,
@@ -534,11 +547,7 @@ class SubmitButtons extends Component {
               ref={this.submitDatasetButton}
               disabled={disabled}
               type="button"
-              onClick={
-                useDoi === true
-                  ? this.showUseDoiInformation
-                  : this.handleCreatePublishedV1
-              }
+              onClick={useDoi === true ? this.showUseDoiInformation : this.handleCreatePublishedV1}
             >
               <Translate content="qvain.submit" />
             </SubmitButton>
