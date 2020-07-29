@@ -74,6 +74,31 @@ def alter_role_data(actor_list, role):
     return actors
 
 
+def alter_projects_to_metax(projects):
+    """
+    Convert project objects from frontend to comply with the Metax schema.
+
+    Arguments:
+        project (list<dict>): List of project objects, containing organization and other fields
+
+    Returns:
+        list<dict>: List of project objects in Metax schema
+    """
+    output = []
+    for project in projects:
+        metax_project = {
+            "name": project.get("title"),
+            "identifier": project.get("identifier"),
+            "has_funder_identifier": project.get("fundingIdentifier"),
+            "has_funding_agency": project.get("fundingAgency"),
+            "funder_type": project.get("funderType"),
+            "source_organization": [{'identifier': 'http://uri.suomi.fi/codelist/fairdata/organization/code/10076', 'name': {'fi': 'Aalto yliopisto', 'und': 'Aalto yliopisto', 'en': 'Aalto University', 'sv': 'Aalto universitetet'}, '@type': 'Organization'}]
+        }
+        # TODO: Format organization from form data
+        output.append(metax_project)
+    return output
+
+
 def other_identifiers_to_metax(identifiers_list):
     """Convert other identifiers to comply with Metax schema.
 
@@ -232,7 +257,8 @@ def data_to_metax(data, metadata_provider_org, metadata_provider_user):
             "files": files_data_to_metax(data.get("files")) if data.get("dataCatalog") == DATA_CATALOG_IDENTIFIERS.get('ida') else "",
             "directories": directories_data_to_metax(data.get("directories")) if data.get("dataCatalog") == DATA_CATALOG_IDENTIFIERS.get('ida') else "",
             "infrastructure": data.get("infrastructure"),
-            "spatial": data.get("spatial")
+            "spatial": data.get("spatial"),
+            "is_output_of": alter_projects_to_metax(data.get("projects"))
         }
     }
     return clean_empty_keyvalues_from_dict(dataset_data)
@@ -329,7 +355,8 @@ def edited_data_to_metax(data, original):
         "files": files_data_to_metax(data.get("files")) if data.get("dataCatalog") == DATA_CATALOG_IDENTIFIERS.get('ida') else "",
         "directories": directories_data_to_metax(data.get("directories")) if data.get("dataCatalog") == DATA_CATALOG_IDENTIFIERS.get('ida') else "",
         "infrastructure": _to_metax_infrastructure(data.get("infrastructure")),
-        "spatial": data.get("spatial")
+        "spatial": data.get("spatial"),
+        "is_output_of": alter_projects_to_metax(data.get("projects"))
     })
     edited_data = {
         "research_dataset": research_dataset

@@ -14,6 +14,9 @@ class PersonValidationSchema(Schema):
     identifier = fields.Str()
 
 
+class FunderTypeSchema(Schema):
+    identifier = fields.Str()
+
 class OrganizationValidationSchema(Schema):
     """Validation schema for organization."""
 
@@ -68,6 +71,17 @@ class ActorValidationSchema(Schema):
         else:
             raise ValidationError('Invalid actor type.')
 
+class ProjectValidationSchema(Schema):
+    """Validation schema for projects."""
+    title = fields.Dict(
+        required=True,
+        validate=lambda x: x.get('en') or x.get('fi')
+    )
+    identifier = fields.Str(required=False)
+    fundingIdentifier = fields.Str(required=False)
+    funderType = fields.Nested(FunderTypeSchema, required=False)
+    # organization = fields.Nested(OrganizationValidationSchema, required=False)
+
 
 class DatasetValidationSchema(Schema):
     """Validation schema for the whole dataset."""
@@ -121,3 +135,7 @@ class DatasetValidationSchema(Schema):
     directories = fields.List(fields.Dict())
     remote_resources = fields.List(fields.Dict())
     useDoi = fields.Boolean()
+    projects = fields.List(
+        fields.Nested(ProjectValidationSchema),
+        required=False
+    )
