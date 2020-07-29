@@ -1,5 +1,6 @@
 import { observable, action, computed, runInAction } from 'mobx'
 import axios from 'axios'
+import uuid from 'uuid/v4'
 import { getDirectories, getFiles, deepCopy } from '../../components/qvain/utils/fileHierarchy'
 import {
   ACCESS_TYPE_URL,
@@ -293,20 +294,19 @@ class Qvain {
   // PROJECT, REMOVE THIS
   // Add or Update
   @action setProject = project => {
-    // TODO: Change this
-    const { identifier } = project
-    const existingProject = this.projects.find(proj => proj.identifier === identifier)
+    const projectUuid = project.uuid
+    const existingProject = this.projects.find(proj => proj.projectUuid === projectUuid)
     if (existingProject) {
       const updatedProject = { ...existingProject, ...project }
       this.projects = this.projects
-        .filter(proj => proj.identifier !== existingProject.identifier)
+        .filter(proj => proj.projectUuid !== existingProject.projectUuid)
         .concat([updatedProject])
     } else this.projects = this.projects.concat([project])
     this.changed = true
   }
 
-  @action removeProject = identifier => {
-    this.projects = this.projects.filter(project => project.identifier !== identifier)
+  @action removeProject = projectUuid => {
+    this.projects = this.projects.filter(project => project.uuid !== projectUuid)
     this.changed = true
   }
 
@@ -900,6 +900,17 @@ class Qvain {
         : []
     }
 
+    // Projects
+    const projects = researchDataset.is_output_of
+    if (projects !== undefined) {
+      this.projects = projects.map(project => {
+        const { name, identifier } = project
+        const params = [name, identifier, project.has_funder_identifier]
+        if (project.funder_type) params.push(ProjectFunderType(project.funder_type.pref_label, project.funder_type.identifier))
+        return Project(...params)
+      })
+    }
+
     // External resources
     const remoteResources = researchDataset.remote_resources
     if (remoteResources !== undefined) {
@@ -1118,7 +1129,7 @@ export const Project = (
   funderType, // ProjectFunderType
   organization, // Array<Organization>
 ) => ({
-  title, identifier, fundingIdentifier, funderType, organization
+  uuid: uuid(), title, identifier, fundingIdentifier, funderType
 })
 
 export const ProjectFunderType = (name, url) => ({

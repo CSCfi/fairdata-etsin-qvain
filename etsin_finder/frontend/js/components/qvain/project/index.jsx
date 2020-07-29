@@ -27,6 +27,7 @@ const FIELD_PROPS = {
 }
 
 const INITIAL_STATE = {
+  projectInEdit: false,
   projectForm: {
     titleEn: '',
     titleFi: '',
@@ -77,8 +78,8 @@ class Project extends Component {
       })
   }
 
-  editProject = identifier => {
-    const project = toJS(this.props.Stores.Qvain.projects.find(proj => proj.identifier === identifier))
+  editProject = uuid => {
+    const project = toJS(this.props.Stores.Qvain.projects.find(proj => proj.uuid === uuid))
     if (!project) return
 
     const { projectForm } = this.state
@@ -87,18 +88,19 @@ class Project extends Component {
     delete project.title
 
     const updatedFormData = { ...projectForm, ...project, errors: [] }
-    this.setState({ projectForm: updatedFormData })
+    this.setState({ projectForm: updatedFormData, projectInEdit: true })
   }
 
   resetForm = () => {
     this.setState({
       projectForm: { ...INITIAL_STATE.projectForm },
       organizationForm: { ...INITIAL_STATE.organizationForm },
+      projectInEdit: false,
     })
   }
 
   render() {
-    const { projectForm, organizationForm } = this.state
+    const { projectForm, organizationForm, projectInEdit } = this.state
     return (
       <Field {...FIELD_PROPS}>
         <Card>
@@ -111,7 +113,7 @@ class Project extends Component {
             <Translate
               component={SaveButton}
               onClick={this.handleAddProject}
-              content="qvain.project.addButton"
+              content={projectInEdit ? 'qvain.project.editButton' : 'qvain.project.addButton'}
             />
           </Actions>
         </Card>
@@ -121,8 +123,6 @@ class Project extends Component {
 }
 
 const AddedProjectsComponent = ({ Stores, editProject }) => {
-  // TODO: Implement edit project
-  // TODO: Figure out how to display title with translations
   const { lang } = Stores.Locale
   const { removeProject, projects } = Stores.Qvain
 
@@ -131,14 +131,20 @@ const AddedProjectsComponent = ({ Stores, editProject }) => {
     editProject(identifier)
   }
 
+  const renderProjectTitle = project => {
+    const { fi, en } = project.title
+    if (lang === 'fi' && fi) return [fi, en].filter(title => title).join(', ')
+    return [en, fi].filter(title => title).join(', ')
+  }
+
   return (
     <>
       {projects.map(project => (
-        <ButtonGroup tabIndex="0" key={project.identifier}>
-          <ButtonLabel>{project.title.en}</ButtonLabel>
+        <ButtonGroup tabIndex="0" key={project.uuid}>
+          <ButtonLabel>{renderProjectTitle(project)}</ButtonLabel>
           <ButtonContainer>
-            <EditButton aria-label="Edit" onClick={(event) => handleEdit(project.identifier, event)} />
-            <DeleteButton aria-label="Remove" onClick={() => removeProject(project.identifier)} />
+            <EditButton aria-label="Edit" onClick={(event) => handleEdit(project.uuid, event)} />
+            <DeleteButton aria-label="Remove" onClick={() => removeProject(project.uuid)} />
           </ButtonContainer>
         </ButtonGroup>
       ))}
