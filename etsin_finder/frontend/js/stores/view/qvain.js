@@ -15,12 +15,15 @@ import Files from './qvain.files'
 import Spatials, { SpatialModel } from './qvain.spatials'
 import Provenances, { ProvenanceModel } from './qvain.provenances'
 import RelatedResources, { RelatedResourceModel } from './qvain.relatedResources'
+import Temporals, { TemporalModel } from './qvain.temporals'
 
 class Qvain {
   constructor() {
     this.Files = new Files(this)
     this.Actors = new Actors(this)
     this.Spatials = new Spatials(this)
+    this.Temporals = new Temporals(this)
+    this.Temporals.create()
     this.Provenances = new Provenances(this)
     this.RelatedResources = new RelatedResources(this)
   }
@@ -42,6 +45,8 @@ class Qvain {
   }
 
   @observable spatials = []
+
+  @observable temporals = []
 
   @observable provenances = []
 

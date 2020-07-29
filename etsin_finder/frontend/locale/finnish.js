@@ -1306,7 +1306,19 @@ const finnish = {
           },
         },
       },
-    },
+      temporal: {
+        title: 'Ajallinen kattavuus',
+        description: 'Ajanjakso, minkä aineisto kattaa, esimerkiksi aika jolloin on tehty havaintoja.',
+        addButton: 'Lisää ajallinen kattavuus',
+        modal: {
+          durationInput: {
+            label: 'Ajanjakso',
+            startPlaceholder: 'alkaa',
+            endPlaceholder: 'loppuu'
+          },
+        },
+      },
+  },
   },
   slogan: 'Tutkimustenhaku palvelu',
   stc: 'Siirry sivun pääsisältöön',
