@@ -10,7 +10,7 @@ import { projectDetailsSchema } from '../utils/formValidation'
 
 import Field from '../general/field'
 import Card from '../general/card'
-import { ButtonGroup, ButtonLabel, EditButton, ButtonContainer, DeleteButton, SaveButton } from '../general/buttons'
+import { ButtonGroup, ButtonLabel, EditButton, ButtonContainer, CancelButton, DeleteButton, SaveButton } from '../general/buttons'
 
 import TooltipContent from './TooltipContent'
 import ProjectForm from './ProjectForm'
@@ -29,6 +29,7 @@ const FIELD_PROPS = {
 const INITIAL_STATE = {
   projectInEdit: false,
   projectForm: {
+    id: null,
     titleEn: '',
     titleFi: '',
     identifier: '',
@@ -59,11 +60,11 @@ class Project extends Component {
 
   handleAddProject = event => {
     event.preventDefault()
-    const { titleEn, titleFi, identifier, fundingIdentifier, funderType } = this.state.projectForm
+    const { id, titleEn, titleFi, identifier, fundingIdentifier, funderType } = this.state.projectForm
     projectDetailsSchema.validate({ titleEn, titleFi, identifier, fundingIdentifier, funderType }, { abortEarly: false })
       .then(() => {
         const title = { en: titleEn, fi: titleFi }
-        const project = ProjectObject(title, identifier, fundingIdentifier, funderType, [])
+        const project = ProjectObject(id, title, identifier, fundingIdentifier, funderType, [])
         this.props.Stores.Qvain.setProject(project)
         this.resetForm()
       })
@@ -78,8 +79,9 @@ class Project extends Component {
       })
   }
 
-  editProject = uuid => {
-    const project = toJS(this.props.Stores.Qvain.projects.find(proj => proj.uuid === uuid))
+  editProject = (id, event) => {
+    if (event) event.preventDefault()
+    const project = toJS(this.props.Stores.Qvain.projects.find(proj => proj.id === id))
     if (!project) return
 
     const { projectForm } = this.state
@@ -91,7 +93,14 @@ class Project extends Component {
     this.setState({ projectForm: updatedFormData, projectInEdit: true })
   }
 
-  resetForm = () => {
+  removeProject = (id, event) => {
+    if (event) event.preventDefault()
+    this.resetForm()
+    this.props.Stores.Qvain.removeProject(id)
+  }
+
+  resetForm = event => {
+    if (event) event.preventDefault()
     this.setState({
       projectForm: { ...INITIAL_STATE.projectForm },
       organizationForm: { ...INITIAL_STATE.organizationForm },
@@ -106,10 +115,15 @@ class Project extends Component {
         <Card>
           <Translate component="h3" content="qvain.project.title" />
           <Translate component="p" content="qvain.project.description" />
-          <AddedProjects editProject={this.editProject} />
+          <AddedProjects editProject={this.editProject} removeProject={this.removeProject} />
           <ProjectForm onChange={this.onProjectFormChange} formData={projectForm} />
           <FundingOrganization onChange={this.onOrganizationChange} formData={organizationForm} />
           <Actions>
+            <Translate
+              component={CancelButton}
+              onClick={this.resetForm}
+              content="qvain.files.external.form.cancel.label"
+            />
             <Translate
               component={SaveButton}
               onClick={this.handleAddProject}
@@ -122,14 +136,9 @@ class Project extends Component {
   }
 }
 
-const AddedProjectsComponent = ({ Stores, editProject }) => {
+const AddedProjectsComponent = ({ Stores, editProject, removeProject }) => {
   const { lang } = Stores.Locale
-  const { removeProject, projects } = Stores.Qvain
-
-  const handleEdit = (identifier, event) => {
-    event.preventDefault()
-    editProject(identifier)
-  }
+  const { projects } = Stores.Qvain
 
   const renderProjectTitle = project => {
     const { fi, en } = project.title
@@ -140,11 +149,11 @@ const AddedProjectsComponent = ({ Stores, editProject }) => {
   return (
     <>
       {projects.map(project => (
-        <ButtonGroup tabIndex="0" key={project.uuid}>
+        <ButtonGroup tabIndex="0" key={project.id}>
           <ButtonLabel>{renderProjectTitle(project)}</ButtonLabel>
           <ButtonContainer>
-            <EditButton aria-label="Edit" onClick={(event) => handleEdit(project.uuid, event)} />
-            <DeleteButton aria-label="Remove" onClick={() => removeProject(project.uuid)} />
+            <EditButton aria-label="Edit" onClick={(event) => editProject(project.id, event)} />
+            <DeleteButton aria-label="Remove" onClick={(event) => removeProject(project.id, event)} />
           </ButtonContainer>
         </ButtonGroup>
       ))}
@@ -155,6 +164,7 @@ const AddedProjectsComponent = ({ Stores, editProject }) => {
 AddedProjectsComponent.propTypes = {
   Stores: PropTypes.object.isRequired,
   editProject: PropTypes.func.isRequired,
+  removeProject: PropTypes.func.isRequired,
 }
 
 const AddedProjects = inject('Stores')(observer(AddedProjectsComponent))
@@ -162,7 +172,7 @@ const AddedProjects = inject('Stores')(observer(AddedProjectsComponent))
 const Actions = styled.div`
   margin-top: 1.5rem;
   button {
-    margin: 0;
+    margin-right: .5rem;
   }
 `
 

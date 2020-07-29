@@ -53,7 +53,7 @@ const filesToMetax = (selectedFiles, existingFiles) => {
 
 const projectsToMetax = projects => projects.map(project => {
   const funderType = { identifier: project.funderType.url }
-  delete project.uuid
+  delete project.id
   return { ...project, funderType }
 })
 

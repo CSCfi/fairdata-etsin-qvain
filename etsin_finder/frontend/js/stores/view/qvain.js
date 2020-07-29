@@ -294,19 +294,19 @@ class Qvain {
   // PROJECT, REMOVE THIS
   // Add or Update
   @action setProject = project => {
-    const projectUuid = project.uuid
-    const existingProject = this.projects.find(proj => proj.projectUuid === projectUuid)
+    const { id } = project
+    const existingProject = this.projects.find(proj => proj.id === id)
     if (existingProject) {
       const updatedProject = { ...existingProject, ...project }
       this.projects = this.projects
-        .filter(proj => proj.projectUuid !== existingProject.projectUuid)
+        .filter(proj => proj.id !== existingProject.id)
         .concat([updatedProject])
     } else this.projects = this.projects.concat([project])
     this.changed = true
   }
 
-  @action removeProject = projectUuid => {
-    this.projects = this.projects.filter(project => project.uuid !== projectUuid)
+  @action removeProject = id => {
+    this.projects = this.projects.filter(project => project.id !== id)
     this.changed = true
   }
 
@@ -905,7 +905,7 @@ class Qvain {
     if (projects !== undefined) {
       this.projects = projects.map(project => {
         const { name, identifier } = project
-        const params = [name, identifier, project.has_funder_identifier]
+        const params = [uuid(), name, identifier, project.has_funder_identifier]
         if (project.funder_type) params.push(ProjectFunderType(project.funder_type.pref_label, project.funder_type.identifier))
         return Project(...params)
       })
@@ -1123,13 +1123,18 @@ export const Infrastructure = (name, url) => ({
 })
 
 export const Project = (
+  id,
   title, // {en, fi}
   identifier,
   fundingIdentifier,
   funderType, // ProjectFunderType
   organization, // Array<Organization>
 ) => ({
-  uuid: uuid(), title, identifier, fundingIdentifier, funderType
+  id,
+  title,
+  identifier,
+  fundingIdentifier,
+  funderType
 })
 
 export const ProjectFunderType = (name, url) => ({
