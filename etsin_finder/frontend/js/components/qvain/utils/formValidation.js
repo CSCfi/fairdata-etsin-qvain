@@ -265,22 +265,32 @@ export const fileMetadataSchema = yup.object().shape({
 
 
 // PROJECT VALIDATION
-const projectDetailsSchema = yup.object().shape({
-  titleFi: yup.mixed().when('titleEn', {
-    is: val => Boolean(val),
-    then: yup
+const projectSchema = yup.object().shape({
+  details: yup.object().shape({
+    titleFi: yup.mixed().when('titleEn', {
+      is: val => Boolean(val),
+      then: yup
+        .string(translate('qvain.project.inputs.title.validation.string')),
+      otherwise: yup
+        .string(translate('qvain.project.inputs.title.validation.string'))
+        .required(translate('qvain.project.inputs.title.validation.required')),
+    }),
+    titleEn: yup
       .string(translate('qvain.project.inputs.title.validation.string')),
-    otherwise: yup
-      .string(translate('qvain.project.inputs.title.validation.string'))
-      .required(translate('qvain.project.inputs.title.validation.required')),
+    identifier: yup.string(),
+    fundingIdentifier: yup.string(),
+    funderType: yup.object(),
   }),
-  titleEn: yup
-    .string(translate('qvain.project.inputs.title.validation.string')),
-  identifier: yup.string(),
-  fundingIdentifier: yup.string(),
-  funderType: yup.object(),
+  organizations: yup.array()
+    .min(1, translate('qvain.project.inputs.organization.validation'))
+    .of(
+      yup.object().shape({
+        organization: yup.string(),
+        department: yup.string(),
+        subDepartment: yup.string(),
+      })
+    ),
 })
-
 
 // EXTERNAL RESOURCES VALIDATION
 
@@ -494,5 +504,5 @@ export {
   externalResourceDownloadUrlSchema,
   spatialNameSchema,
   spatialAltitudeSchema,
-  projectDetailsSchema
+  projectSchema
 }
