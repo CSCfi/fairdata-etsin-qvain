@@ -65,13 +65,7 @@ export class Dropdown extends Component {
   render() {
     const ButtonComponent = this.props.buttonComponent
     return (
-      <div
-        style={{
-          position: 'relative',
-          flexGrow: 1,
-        }}
-        onBlur={this.onBlur}
-      >
+      <DropdownContainer onBlur={this.onBlur}>
         <div style={{ display: 'flex' }}>
           <ButtonComponent
             role="button"
@@ -86,10 +80,14 @@ export class Dropdown extends Component {
         <Content ref={this.content} open={this.state.open} tabIndex="-1">
           {this.props.children}
         </Content>
-      </div>
+      </DropdownContainer>
     )
   }
 }
+
+const DropdownContainer = styled.div`
+  position: relative;
+`
 
 const CustomButton = styled(Button)`
   position: relative;
