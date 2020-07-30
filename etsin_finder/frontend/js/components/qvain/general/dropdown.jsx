@@ -26,6 +26,45 @@ export class Dropdown extends Component {
       open: false,
     }
     this.content = React.createRef()
+    this.container = React.createRef()
+    this.listenersAdded = false
+  }
+
+  componentDidUpdate() {
+    if (this.state.open) {
+      this.addListeners()
+    } else {
+      this.removeListeners()
+    }
+  }
+
+  updatePosition = () => {
+    if (!this.content.current || !this.container.current) {
+      return
+    }
+    const list = this.content.current
+    const containerRect = this.container.current.getBoundingClientRect()
+
+    let listHeight = list.offsetHeight
+    if (listHeight === 0) {
+      // If the list has display: none, it doesn't have a height.
+      // Temporarily make list displayed but hidden so the height can be computed.
+      const oldVisibility = list.style.visibility
+      const oldDisplay = list.style.display
+      list.style.visibility = 'hidden'
+      list.style.display = 'block'
+      listHeight = list.offsetHeight
+      list.style.display = oldDisplay
+      list.style.visibility = oldVisibility
+    }
+
+    // move dropdown above button if it doesn't fit below
+    if (containerRect.bottom + listHeight < window.innerHeight) {
+      list.style.top = `${containerRect.bottom}px`
+    } else {
+      list.style.top = `${containerRect.top - listHeight}px`
+    }
+    list.style.left = `${containerRect.left}px`
   }
 
   onBlur = e => {
@@ -44,6 +83,7 @@ export class Dropdown extends Component {
       },
       () => {
         this.content.current.focus()
+        this.updatePosition()
       }
     )
   }
@@ -62,10 +102,28 @@ export class Dropdown extends Component {
     }
   }
 
+  addListeners() {
+    if (this.listenersAdded) {
+      return
+    }
+    window.addEventListener('scroll', this.updatePosition)
+    window.addEventListener('resize', this.updatePosition)
+    this.listenersAdded = true
+  }
+
+  removeListeners() {
+    if (!this.listenersAdded) {
+      return
+    }
+    window.removeEventListener('scroll', this.updatePosition)
+    window.removeEventListener('resize', this.updatePosition)
+    this.listenersAdded = false
+  }
+
   render() {
     const ButtonComponent = this.props.buttonComponent
     return (
-      <DropdownContainer onBlur={this.onBlur}>
+      <DropdownContainer ref={this.container} onBlur={this.onBlur}>
         <div style={{ display: 'flex' }}>
           <ButtonComponent
             role="button"
@@ -101,8 +159,7 @@ const Icon = styled(FontAwesomeIcon)`
 `
 
 const Content = styled.ul`
-  height: ${p => (p.open ? 'auto' : 0)};
-  position: absolute;
+  position: fixed;
   overflow: hidden;
   display: ${p => (p.open ? '' : 'none')};
   right: 0;
@@ -155,7 +212,9 @@ export const DropdownItemButton = styled.button`
   padding: 0.5rem 1rem;
   text-align: left;
 
-  ${p => p.danger && `
+  ${p =>
+    p.danger &&
+    `
     color: #cc0000;
     &:hover,
     &:focus {
