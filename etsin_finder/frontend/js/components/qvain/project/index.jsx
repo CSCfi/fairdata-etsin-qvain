@@ -6,7 +6,7 @@ import { toJS } from 'mobx';
 import styled from 'styled-components'
 
 import { Project as ProjectObject } from '../../../stores/view/qvain'
-import { projectDetailsSchema } from '../utils/formValidation'
+import { projectSchema } from '../utils/formValidation'
 
 import Field from '../general/field'
 import Card from '../general/card'
@@ -28,22 +28,25 @@ const FIELD_PROPS = {
 
 const INITIAL_STATE = {
   projectInEdit: false,
-  projectForm: {
+  details: {
     id: null,
     titleEn: '',
     titleFi: '',
     identifier: '',
     fundingIdentifier: '',
     funderType: undefined,
+    errors: {},
+  },
+  organizations: {
+    projectOrganizations: [],
     errors: [],
   },
-  organizationForm: {},
 }
 
 class Project extends Component {
   state = {
-    projectForm: { ...INITIAL_STATE.projectForm },
-    organizationForm: { ...INITIAL_STATE.organizationForm },
+    details: { ...INITIAL_STATE.details },
+    organizations: { ...INITIAL_STATE.organizations },
   }
 
   static propTypes = {
@@ -51,31 +54,52 @@ class Project extends Component {
   }
 
   onProjectFormChange = (field, value) => {
-    const { projectForm } = this.state
-    projectForm[field] = value
-    this.setState({ projectForm })
+    const { details } = this.state
+    details[field] = value
+    this.setState({ details })
   }
 
-  onOrganizationChange = () => null
+  onAddOrganization = organization => {
+    const { organizations } = this.state
+    const newProjectOrganizations = organizations.projectOrganizations.concat([organization])
+    this.setState({
+      organizations: { ...organizations, projectOrganizations: newProjectOrganizations }
+    })
+  }
+
+  onRemoveOrganization = id => {
+    const { organizations } = this.state
+    const updatedProjectOrganizations = organizations.projectOrganizations
+      .filter(organization => organization.id !== id)
+    this.setState({
+      organizations: { ...organizations, projectOrganizations: updatedProjectOrganizations }
+    })
+  }
 
   handleAddProject = event => {
     event.preventDefault()
-    const { id, titleEn, titleFi, identifier, fundingIdentifier, funderType } = this.state.projectForm
-    projectDetailsSchema.validate({ titleEn, titleFi, identifier, fundingIdentifier, funderType }, { abortEarly: false })
+    const { details, organizations } = this.state
+
+    projectSchema.validate({ details, organizations: organizations.projectOrganizations }, { abortEarly: false })
       .then(() => {
+        const { id, titleEn, titleFi, identifier, fundingIdentifier, funderType } = details
         const title = { en: titleEn, fi: titleFi }
         const project = ProjectObject(id, title, identifier, fundingIdentifier, funderType, [])
         this.props.Stores.Qvain.setProject(project)
         this.resetForm()
       })
-      .catch((validationErrors) => {
-        const { projectForm } = this.state
-        projectForm.errors = []
+      .catch(validationErrors => {
+        const parsedErrors = { details: {}, organizations: {} }
         validationErrors.inner.forEach(error => {
           const { errors, path } = error
-          projectForm.errors[path] = errors
+          const paths = path.split('.')
+          if (paths.length === 1) parsedErrors[paths[0]] = errors
+          else parsedErrors[paths[0]][paths[1]] = errors
         })
-        this.setState({ projectForm })
+        this.setState({
+          details: { ...details, errors: parsedErrors.details },
+          organizations: { ...organizations, errors: parsedErrors.organizations },
+        })
       })
   }
 
@@ -104,14 +128,14 @@ class Project extends Component {
   resetForm = event => {
     if (event) event.preventDefault()
     this.setState({
-      projectForm: { ...INITIAL_STATE.projectForm },
-      organizationForm: { ...INITIAL_STATE.organizationForm },
+      details: { ...INITIAL_STATE.details },
+      organizations: { ...INITIAL_STATE.organizations },
       projectInEdit: false,
     })
   }
 
   render() {
-    const { projectForm, organizationForm, projectInEdit } = this.state
+    const { details, organizations, projectInEdit } = this.state
     const { readonly } = this.props.Stores.Qvain
     return (
       <Field {...FIELD_PROPS}>
@@ -119,8 +143,12 @@ class Project extends Component {
           <Translate component="h3" content="qvain.project.title" />
           <Translate component="p" content="qvain.project.description" />
           <AddedProjects editProject={this.editProject} removeProject={this.removeProject} />
-          <ProjectForm onChange={this.onProjectFormChange} formData={projectForm} readonly={readonly} />
-          <FundingOrganization onChange={this.onOrganizationChange} formData={organizationForm} />
+          <ProjectForm onChange={this.onProjectFormChange} formData={details} readonly={readonly} />
+          <FundingOrganization
+            onAddOrganization={this.onAddOrganization}
+            onRemoveOrganization={this.onRemoveOrganization}
+            organizations={organizations}
+          />
           <Actions>
             <Translate
               component={CancelButton}
