@@ -1034,6 +1034,7 @@ const english = {
       title: 'Producer Project',
       description: 'A project in which the dataset was created',
       addButton: 'Add project',
+      editButton: 'Edit project',
       tooltipContent: {
         title: 'Producer Project',
         paragraph: 'A project in which the dataset was created',
@@ -1066,20 +1067,25 @@ const english = {
           label: 'Identifier',
           description: 'Recommended best practice is to identify the resource by means of a string conforming to a formal identification system. An unambiguous reference to the resource within a given context.',
           placeholder: 'Add identifier',
-          validation: 'An identifier is required.',
         },
         fundingIdentifier: {
           label: 'Project funding identifier',
           description: 'Unique identifier for the project that is being used by the project funder',
           placeholder: 'Add project funding identifier',
-          validation: 'A funding identifier is required.',
         },
         funderType: {
           label: 'Funder type',
           placeholder: 'Select funder type',
           addButton: 'Add funder type',
           noOptions: 'Funder type not found',
-          validation: 'A funder type is required.',
+        },
+        organization: {
+          placeholder: {
+            organization: 'Select an organization',
+            department: 'Select a department',
+          },
+          addButton: 'Add organization',
+          validation: 'At least one producer organization is required'
         }
       }
     },
