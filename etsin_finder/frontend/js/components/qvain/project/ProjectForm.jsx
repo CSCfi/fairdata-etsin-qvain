@@ -6,8 +6,7 @@ import Translate from 'react-translate-component'
 import { ProjectFunderType } from '../../../stores/view/qvain'
 import { LabelLarge, Input } from '../general/form'
 import Select from '../general/select'
-import ValidationError from '../general/validationError'
-
+import { ErrorMessages } from './utils'
 
 const ProjectForm = ({ onChange, formData, readonly }) => (
   <>
@@ -107,23 +106,6 @@ ProjectLabel.propTypes = {
 
 ProjectLabel.defaultProps = {
   description: null,
-}
-
-const ErrorMessages = ({ errors }) => {
-  if (!errors.length) return null
-  return (
-    <ValidationError>
-      { errors.map(error => error) }
-    </ValidationError>
-  )
-}
-
-ErrorMessages.propTypes = {
-  errors: PropTypes.array,
-}
-
-ErrorMessages.defaultProps = {
-  errors: []
 }
 
 export default ProjectForm
