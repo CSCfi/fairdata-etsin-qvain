@@ -878,9 +878,9 @@ const english = {
         },
       },
       metadataModal: {
-        header: 'Edit PAS Metadata',
+        header: 'Digital Preservation metadata',
         help:
-          'Saving the data will change the file metadata regardless of whether the file is in your dataset or not.',
+          'Saving the changes will update the file metadata regardless of whether the file is in your dataset or not.',
         csvOptions: 'CSV Options',
         fields: {
           fileFormat: 'File format',
@@ -897,7 +897,7 @@ const english = {
           loadingFileFormats: 'Failed to load list of allowed file formats.',
         },
         buttons: {
-          show: 'Edit PAS metadata',
+          show: 'Edit Digital Preservation metadata',
           close: 'Close',
           save: 'Save changes',
           hideError: 'Continue editing',
@@ -957,6 +957,9 @@ const english = {
           select: 'Select %(name)s',
           deselect: 'Deselect %(name)s',
         },
+        addUserMetadata: 'Add metadata',
+        editUserMetadata: 'Edit metadata',
+        deleteUserMetadata: 'Remove metadata',
         form: {
           title: {
             label: 'Title',

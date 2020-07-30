@@ -958,6 +958,9 @@ const finnish = {
           select: 'Valitse %(name)s',
           deselect: 'Poista valinta %(name)s',
         },
+        addUserMetadata: 'Lisää metadataa',
+        editUserMetadata: 'Muokkaa metadataa',
+        deleteUserMetadata: 'Poista metadata',
         form: {
           title: {
             label: 'Otsikko',

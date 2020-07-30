@@ -207,6 +207,16 @@ class Files extends FilesBase {
     }
   }
 
+  @action clearMetadata = (item) => {
+    item.title = item.name
+    item.description = undefined
+    item.useCategory = undefined
+    if (item.type === 'file') {
+      item.fileType = undefined
+    }
+    this.Qvain.setChanged(true)
+  }
+
   @action applyPASMeta = values => {
     Object.assign(this.Qvain.metadataModalFile.pasMeta, values)
     this.Qvain.setMetadataModalFile(null)

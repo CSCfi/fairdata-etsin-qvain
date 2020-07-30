@@ -206,7 +206,7 @@ class MetadataModal extends Component {
         loading: true,
       })
 
-      const patchPromise = this.patchFileCharacteristics(this.state.fileIdentifier, {
+      const characteristics = {
         file_format: this.state.fileFormat,
         format_version: this.state.formatVersion,
         encoding: this.state.encoding,
@@ -214,7 +214,16 @@ class MetadataModal extends Component {
         csv_delimiter: this.state.csvDelimiter,
         csv_record_separator: this.state.csvRecordSeparator,
         csv_quoting_char: this.state.csvQuotingChar,
-      })
+      }
+
+      if (!this.isCsv()) {
+        characteristics.csv_has_header = undefined
+        characteristics.csv_delimiter = undefined
+        characteristics.csv_record_separator = undefined
+        characteristics.csv_quoting_char = undefined
+      }
+
+      const patchPromise = this.patchFileCharacteristics(this.state.fileIdentifier, characteristics)
       this.promises.push(patchPromise)
       const response = await patchPromise
 
@@ -249,6 +258,10 @@ class MetadataModal extends Component {
         await this.fetchformatVersions()
       }
     }
+  }
+
+  isCsv() {
+    return this.state.fileFormat === 'text/csv'
   }
 
   async fetchformatVersions() {
@@ -375,64 +388,70 @@ class MetadataModal extends Component {
           field="encoding"
         />
 
-        <Translate
-          content="qvain.files.metadataModal.csvOptions"
-          component="h3"
-          style={{ marginBottom: 0, marginTop: '0.3rem' }}
-        />
+        {this.isCsv() && (
+          <CsvOptions>
+            <Translate
+              content="qvain.files.metadataModal.csvOptions"
+              component="h3"
+              style={{ marginBottom: 0, marginTop: '0.3rem' }}
+            />
 
-        <div style={{ display: 'flex', flexWrap: 'wrap', maxWidth: '26em' }}>
-          <MetadataSelect
-            inputId="pas_csv_delimiter"
-            options={options.delimiter}
-            value={findOption(this.state.csvDelimiter, options.delimiter)}
-            isDisabled={readonly}
-            onChange={this.setCsvDelimiter}
-            styles={selectStylesNarrow}
-            field="csvDelimiter"
-          />
+            <div style={{ display: 'flex', flexWrap: 'wrap', maxWidth: '26em' }}>
+              <MetadataSelect
+                inputId="pas_csv_delimiter"
+                options={options.delimiter}
+                value={findOption(this.state.csvDelimiter, options.delimiter)}
+                isDisabled={readonly}
+                onChange={this.setCsvDelimiter}
+                styles={selectStylesNarrow}
+                field="csvDelimiter"
+              />
 
-          <MetadataSelect
-            inputId="pas_csv_record_separator"
-            options={options.separator}
-            value={findOption(this.state.csvRecordSeparator, options.separator)}
-            isDisabled={readonly}
-            onChange={this.setCsvRecordSeparator}
-            styles={selectStylesNarrow}
-            field="csvRecordSeparator"
-          />
+              <MetadataSelect
+                inputId="pas_csv_record_separator"
+                options={options.separator}
+                value={findOption(this.state.csvRecordSeparator, options.separator)}
+                isDisabled={readonly}
+                onChange={this.setCsvRecordSeparator}
+                styles={selectStylesNarrow}
+                field="csvRecordSeparator"
+              />
 
-          <Label htmlFor="pas_csv_quoting_char" style={labelStyle}>
-            {translate('qvain.files.metadataModal.fields.csvQuotingChar')}
-            <div style={selectStylesNarrow.control()}>
-              <Input
-                id="pas_csv_quoting_char"
-                placeholder={translate('qvain.files.metadataModal.placeholders.csvQuotingChar')}
-                type="text"
-                value={this.state.csvQuotingChar}
-                disabled={readonly}
-                onChange={this.handleChangeCsvQuotingChar}
+              <Label htmlFor="pas_csv_quoting_char" style={labelStyle}>
+                {translate('qvain.files.metadataModal.fields.csvQuotingChar')}
+                <div style={selectStylesNarrow.control()}>
+                  <Input
+                    id="pas_csv_quoting_char"
+                    placeholder={translate('qvain.files.metadataModal.placeholders.csvQuotingChar')}
+                    type="text"
+                    value={this.state.csvQuotingChar}
+                    disabled={readonly}
+                    onChange={this.handleChangeCsvQuotingChar}
+                  />
+                </div>
+              </Label>
+
+              <MetadataSelect
+                inputId="pas_csv_has_header"
+                options={options.hasHeader}
+                value={findOption(this.state.csvHasHeader, options.hasHeader)}
+                isDisabled={readonly}
+                onChange={this.setCsvHasHeader}
+                styles={selectStylesNarrow}
+                field="csvHasHeader"
               />
             </div>
-          </Label>
+          </CsvOptions>
+        )}
 
-          <MetadataSelect
-            inputId="pas_csv_has_header"
-            options={options.hasHeader}
-            value={findOption(this.state.csvHasHeader, options.hasHeader)}
-            isDisabled={readonly}
-            onChange={this.setCsvHasHeader}
-            styles={selectStylesNarrow}
-            field="csvHasHeader"
-          />
-        </div>
-
-        <TableButton disabled={this.state.loading} onClick={this.requestClose}>
-          <Translate content={'qvain.files.metadataModal.buttons.close'} />
-        </TableButton>
-        <DangerButton disabled={this.state.loading || readonly} onClick={this.saveChanges}>
-          <Translate content={'qvain.files.metadataModal.buttons.save'} />
-        </DangerButton>
+        <Buttons>
+          <TableButton disabled={this.state.loading} onClick={this.requestClose}>
+            <Translate content={'qvain.files.metadataModal.buttons.close'} />
+          </TableButton>
+          <DangerButton disabled={this.state.loading || readonly} onClick={this.saveChanges}>
+            <Translate content={'qvain.files.metadataModal.buttons.save'} />
+          </DangerButton>
+        </Buttons>
 
         <ConfirmClose
           show={this.state.confirmClose}
@@ -463,6 +482,13 @@ class MetadataModal extends Component {
   }
 }
 
+const Buttons = styled.div`
+  margin-top: 1rem;
+`
+
+const CsvOptions = styled.div`
+  margin-bottom: -1rem;
+`
 export const modalStyles = {
   content: {
     top: '0',
