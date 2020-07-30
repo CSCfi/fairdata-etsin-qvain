@@ -80,6 +80,7 @@ class Project extends Component {
   }
 
   editProject = (id, event) => {
+    if (this.props.Stores.Qvain.readonly) return
     if (event) event.preventDefault()
     const project = toJS(this.props.Stores.Qvain.projects.find(proj => proj.id === id))
     if (!project) return
@@ -94,6 +95,7 @@ class Project extends Component {
   }
 
   removeProject = (id, event) => {
+    if (this.props.Stores.Qvain.readonly) return
     if (event) event.preventDefault()
     this.resetForm()
     this.props.Stores.Qvain.removeProject(id)
@@ -110,13 +112,14 @@ class Project extends Component {
 
   render() {
     const { projectForm, organizationForm, projectInEdit } = this.state
+    const { readonly } = this.props.Stores.Qvain
     return (
       <Field {...FIELD_PROPS}>
         <Card>
           <Translate component="h3" content="qvain.project.title" />
           <Translate component="p" content="qvain.project.description" />
           <AddedProjects editProject={this.editProject} removeProject={this.removeProject} />
-          <ProjectForm onChange={this.onProjectFormChange} formData={projectForm} />
+          <ProjectForm onChange={this.onProjectFormChange} formData={projectForm} readonly={readonly} />
           <FundingOrganization onChange={this.onOrganizationChange} formData={organizationForm} />
           <Actions>
             <Translate
@@ -138,7 +141,7 @@ class Project extends Component {
 
 const AddedProjectsComponent = ({ Stores, editProject, removeProject }) => {
   const { lang } = Stores.Locale
-  const { projects } = Stores.Qvain
+  const { projects, readonly } = Stores.Qvain
 
   const renderProjectTitle = project => {
     const { fi, en } = project.title
@@ -151,10 +154,10 @@ const AddedProjectsComponent = ({ Stores, editProject, removeProject }) => {
       {projects.map(project => (
         <ButtonGroup tabIndex="0" key={project.id}>
           <ButtonLabel>{renderProjectTitle(project)}</ButtonLabel>
-          <ButtonContainer>
+          <ProjectActions disabled={readonly}>
             <EditButton aria-label="Edit" onClick={(event) => editProject(project.id, event)} />
             <DeleteButton aria-label="Remove" onClick={(event) => removeProject(project.id, event)} />
-          </ButtonContainer>
+          </ProjectActions>
         </ButtonGroup>
       ))}
     </>
@@ -175,5 +178,19 @@ const Actions = styled.div`
     margin-right: .5rem;
   }
 `
+
+const ProjectActions = styled(ButtonContainer)`
+  ${({ disabled }) => {
+    if (disabled) {
+      return `
+        button {
+          opacity: .7;
+          cursor: not-allowed;
+        }
+      `
+    }
+    return null
+  }
+}`
 
 export default inject('Stores')(observer(Project))

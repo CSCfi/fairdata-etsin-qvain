@@ -9,7 +9,7 @@ import Select from '../general/select'
 import ValidationError from '../general/validationError'
 
 
-const ProjectForm = ({ onChange, formData }) => (
+const ProjectForm = ({ onChange, formData, readonly }) => (
   <>
     <ProjectLabel
       htmlFor="titleEn"
@@ -21,6 +21,7 @@ const ProjectForm = ({ onChange, formData }) => (
       value={formData.titleEn}
       onChange={event => onChange(event.target.id, event.target.value)}
       attributes={{ placeholder: 'qvain.project.inputs.titleEn.placeholder' }}
+      disabled={readonly}
       id="titleEn"
     />
     <ErrorMessages errors={formData.errors.titleEn} />
@@ -29,6 +30,7 @@ const ProjectForm = ({ onChange, formData }) => (
       value={formData.titleFi}
       onChange={event => onChange(event.target.id, event.target.value)}
       attributes={{ placeholder: 'qvain.project.inputs.titleFi.placeholder' }}
+      disabled={readonly}
       id="titleFi"
     />
     <ErrorMessages errors={formData.errors.titleFi} />
@@ -42,6 +44,7 @@ const ProjectForm = ({ onChange, formData }) => (
       value={formData.identifier}
       onChange={event => onChange(event.target.id, event.target.value)}
       attributes={{ placeholder: 'qvain.project.inputs.identifier.placeholder' }}
+      disabled={readonly}
       id="identifier"
     />
     <ErrorMessages errors={formData.errors.identifier} />
@@ -54,6 +57,7 @@ const ProjectForm = ({ onChange, formData }) => (
       component={Input}
       value={formData.fundingIdentifier}
       onChange={event => onChange(event.target.id, event.target.value)}
+      disabled={readonly}
       attributes={{ placeholder: 'qvain.project.inputs.fundingIdentifier.placeholder' }}
       id="fundingIdentifier"
     />
@@ -78,6 +82,11 @@ const ProjectForm = ({ onChange, formData }) => (
 ProjectForm.propTypes = {
   onChange: PropTypes.func.isRequired,
   formData: PropTypes.object.isRequired,
+  readonly: PropTypes.bool,
+}
+
+ProjectForm.defaultProps = {
+  readonly: false,
 }
 
 const ProjectLabel = ({ htmlFor, title, description }) => (
