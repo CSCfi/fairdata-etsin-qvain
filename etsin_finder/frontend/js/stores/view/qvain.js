@@ -14,6 +14,7 @@ import { getPath } from '../../components/qvain/utils/object'
 import Actors from './qvain.actors'
 import Files from './qvain.files'
 import Spatials, { SpatialModel } from './qvain.spatials'
+import { parseOrganization } from '../../components/qvain/project/utils'
 
 class Qvain {
   constructor() {
@@ -907,6 +908,13 @@ class Qvain {
         const { name, identifier } = project
         const params = [uuid(), name, identifier, project.has_funder_identifier]
         if (project.funder_type) params.push(ProjectFunderType(project.funder_type.pref_label, project.funder_type.identifier))
+        // Organizations
+        const organizations = project.source_organization.map(organization => {
+          const parsedOrganizations = parseOrganization(organization)
+          parsedOrganizations.reverse()
+          return Organization(uuid(), ...parsedOrganizations)
+        })
+        params.push(organizations)
         return Project(...params)
       })
     }
@@ -1128,13 +1136,11 @@ export const Project = (
   identifier,
   fundingIdentifier,
   funderType, // ProjectFunderType
-  organization, // Array<Organization>
+  organizations, // Array<Organization>
 ) => ({
-  id,
-  title,
-  identifier,
-  fundingIdentifier,
-  funderType
+  id: id || uuid(),
+  details: { title, identifier, fundingIdentifier, funderType },
+  organizations
 })
 
 export const ProjectFunderType = (name, url) => ({
@@ -1143,9 +1149,9 @@ export const ProjectFunderType = (name, url) => ({
 })
 
 export const Organization = (id, organization, department) => ({
-  id,
-  organization, // {uri, name: {fi, en, und}}
-  department, // {uri, name: {fi, en, und}}
+  id: id || uuid(),
+  organization, // {identifier, name: {fi, en, und}}
+  department, // {identifier, name: {fi, en, und}}
 })
 
 export const ExternalResource = (id, title, accessUrl, downloadUrl, useCategory) => ({
