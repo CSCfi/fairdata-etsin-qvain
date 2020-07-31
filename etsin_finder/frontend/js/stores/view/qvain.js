@@ -13,6 +13,7 @@ import { getPath } from '../../components/qvain/utils/object'
 import Actors from './qvain.actors'
 import Files from './qvain.files'
 import Spatials, { SpatialModel } from './qvain.spatials'
+import uniqueByKey from '../../utils/uniqueByKey'
 
 class Qvain {
   constructor() {
@@ -276,7 +277,7 @@ class Qvain {
   }
 
   @action setInfrastructures = (infrastructures) => {
-    this.infrastructures = infrastructures
+    this.infrastructures = uniqueByKey(infrastructures, 'url')
     this.changed = true
   }
 
@@ -300,6 +301,10 @@ class Qvain {
     }
     if (this.keywordString !== '') {
       this.addKeywordToKeywordArray()
+    }
+    if (this.infrastructure) {
+      this.setInfrastructures([...this.infrastructures, this.infrastructure])
+      this.setInfrastructure(undefined)
     }
   }
 
@@ -726,11 +731,13 @@ class Qvain {
     this.issuedDate = researchDataset.issued || undefined
 
     // Other identifiers
+    this.otherIdentifier = ''
     this.otherIdentifiersArray = researchDataset.other_identifier
       ? researchDataset.other_identifier.map((oid) => oid.notation)
       : []
 
     // Fields of science
+    this.fieldOfScience = undefined
     this.fieldsOfScience = []
     if (researchDataset.field_of_science !== undefined) {
       researchDataset.field_of_science.forEach((element) => {
@@ -748,11 +755,12 @@ class Qvain {
     }
 
     // infrastructures
+    this.infrastructure = undefined
     this.infrastructures = []
     if (researchDataset.infrastructure !== undefined) {
       researchDataset.infrastructure.forEach((element) => {
-        this.infrastructure = Infrastructure(element.pref_label, element.identifier)
-        this.infrastructures.push(this.infrastructure)
+        const infrastructure = Infrastructure(element.pref_label, element.identifier)
+        this.infrastructures.push(infrastructure)
       })
     }
 
