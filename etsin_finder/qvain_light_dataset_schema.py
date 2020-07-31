@@ -71,8 +71,9 @@ class ActorValidationSchema(Schema):
         else:
             raise ValidationError('Invalid actor type.')
 
-class ProjectValidationSchema(Schema):
-    """Validation schema for projects."""
+
+class ProjectDetailsValidationSchema(Schema):
+    """ Validation schema for project details. """
     title = fields.Dict(
         required=True,
         validate=lambda x: x.get('en') or x.get('fi')
@@ -80,7 +81,20 @@ class ProjectValidationSchema(Schema):
     identifier = fields.Str(required=False)
     fundingIdentifier = fields.Str(required=False)
     funderType = fields.Nested(FunderTypeSchema, required=False)
-    # organization = fields.Nested(OrganizationValidationSchema, required=False)
+
+
+class ProjectOrganizationSchema(Schema):
+    """ Validation schema for project organizations. """
+    organization = fields.Nested(OrganizationValidationSchema, required=True)
+    department = fields.Nested(OrganizationValidationSchema)
+
+
+class ProjectValidationSchema(Schema):
+    """Validation schema for projects."""
+    details = fields.Nested(ProjectDetailsValidationSchema, required=True)
+    organizations = fields.List(
+        fields.Nested(ProjectOrganizationSchema), required=True
+    )
 
 
 class DatasetValidationSchema(Schema):

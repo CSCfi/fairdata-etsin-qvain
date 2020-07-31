@@ -1,3 +1,5 @@
+import { toJS } from 'mobx'
+
 const fieldsOfScienceToMetaxMethod = (fieldsOfScience) =>
   fieldsOfScience.map((fieldOfScience) => fieldOfScience.url)
 
@@ -52,9 +54,24 @@ const filesToMetax = (selectedFiles, existingFiles) => {
 }
 
 const projectsToMetax = projects => projects.map(project => {
-  const funderType = { identifier: project.funderType.url }
+  const projectObject = toJS(project)
+  const { details } = projectObject
+  const funderType = { identifier: details.funderType.url }
+  details.funderType = funderType
+
+  const organizations = projectObject.organizations.map(organization => {
+    delete organization.id
+    const organizationToBackend = {}
+    for (const key in organization) {
+      if (Object.prototype.hasOwnProperty.call(organization, key)) {
+        const { name, identifier } = organization[key]
+        organizationToBackend[key] = { name, identifier }
+      }
+    }
+    return organizationToBackend
+  })
   delete project.id
-  return { ...project, funderType }
+  return { details, organizations }
 })
 
 const handleSubmitToBackend = (values) => {
