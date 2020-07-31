@@ -21,12 +21,13 @@ import Env from '../domain/env'
 const fields = [
   'title.*^5',
   'description.*^3',
+  'organization_name*^3',
+  'keyword^2',
   'creator.name.*',
   'contributor.name.*',
   'publisher.name.*',
   'rights_holder.name.*',
   'curator.name.*',
-  'keyword^2',
   'access_rights.license.title.*',
   'access_rights.access_type.pref_label.*',
   'theme.pref_label.*',
@@ -147,35 +148,24 @@ class ElasticQuery {
     data_catalog_fi: {
       terms: {
         field: 'data_catalog.fi',
-        exclude: '.*Fairdata PAS-aineistot.*'
       },
     },
     data_catalog_en: {
       terms: {
         field: 'data_catalog.en',
-        exclude: '.*Fairdata PAS datasets.*'
       },
     },
   }
 
   @action
+  setIncludePasDatasets = value => {
+    this.includePasDatasets = value
+    this.queryES(false)
+  }
+
+  @action
   toggleIncludePasDatasets = () => {
-    // If includePasDatasets conditional is true then remove the 'exclude' from the
-    // data_catalog aggregations.
     this.includePasDatasets = !this.includePasDatasets
-    if (this.includePasDatasets) {
-      this.aggregations.data_catalog_en.terms = { field: 'data_catalog.en' }
-      this.aggregations.data_catalog_fi.terms = { field: 'data_catalog.fi' }
-    } else {
-      this.aggregations.data_catalog_en.terms = {
-        field: 'data_catalog.en',
-        exclude: '.*Fairdata PAS datasets.*'
-      }
-      this.aggregations.data_catalog_fi.terms = {
-        field: 'data_catalog.fi',
-        exclude: '.*Fairdata PAS-aineistot.*'
-      }
-    }
     this.queryES(false)
   }
 
@@ -262,15 +252,18 @@ class ElasticQuery {
         return this.updateUrl()
       }
     }
+
     const urlParams = UrlParse.searchParams(Env.history.location.search)
+
     if (query) {
       this.updateSearch(decodeURIComponent(query), false)
     }
-    if (urlParams) {
-      if (urlParams.sort) {
+
+    if (typeof urlParams === 'object' && urlParams !== null) {
+      if ('sort' in urlParams) {
         this.updateSorting(urlParams.sort, false)
       }
-      if (urlParams.keys && urlParams.terms) {
+      if ('keys' in urlParams && 'terms' in urlParams && urlParams.keys && urlParams.terms) {
         if (this.filter.length === 0) {
           const keys = urlParams.keys.split(',')
           const terms = urlParams.terms.split(',')
@@ -279,8 +272,15 @@ class ElasticQuery {
           }
         }
       }
-      if (urlParams.p) {
+      if ('p' in urlParams && urlParams.p) {
         this.updatePageNum(urlParams.p, false)
+      }
+      if ('pas' in urlParams && urlParams.pas) {
+        if (urlParams.pas === 'true') {
+          this.setIncludePasDatasets(true)
+        } else if (urlParams.pas === 'false') {
+          this.setIncludePasDatasets(false)
+        }
       }
     }
     return true
@@ -299,6 +299,7 @@ class ElasticQuery {
     })
     urlParams.p = this.pageNum
     urlParams.sort = this.sorting
+    urlParams.pas = this.includePasDatasets
     Env.history.replace({ pathname: path, search: UrlParse.makeSearchParams(urlParams) })
     return { path, search: UrlParse.makeSearchParams(urlParams) }
   }
@@ -360,6 +361,13 @@ class ElasticQuery {
                 },
               },
             ],
+            must_not: [
+              {
+                  term: {
+                      'data_catalog.en': this.includePasDatasets ? '' : 'Fairdata PAS datasets'
+                  }
+              }
+          ]
           },
         }
       } else {
@@ -370,6 +378,13 @@ class ElasticQuery {
                 match_all: {},
               },
             ],
+            must_not: [
+              {
+                  term: {
+                      'data_catalog.en': this.includePasDatasets ? '' : 'Fairdata PAS datasets'
+                  }
+              }
+          ]
           },
         }
       }
@@ -400,7 +415,6 @@ class ElasticQuery {
       const currentSorting = this.sorting
 
       // TODO: check cache for saved results
-
       axios
         .post('/es/metax/dataset/_search', {
           size: this.perPage,
@@ -445,11 +459,10 @@ class ElasticQuery {
           } else {
             // track queries, categories, and hits
             // category tracking turned off because filter contains a lot of different fields
-            console.log(res.data)
             const aggr = `data_catalog_${currentLang}`
             const bucketLengths = res.data.aggregations[aggr].buckets.map(bucket => bucket.doc_count)
             const totalHits = bucketLengths.reduce((partialSum, a) => (partialSum + a), 0)
-            Tracking.newSearch(currentSearch, false, res.data.hits.hits.length)
+            if (!initial) Tracking.newSearch(currentSearch, false, res.data.hits.hits.length)
             this.results = {
               hits: res.data.hits.hits,
               total: totalHits,

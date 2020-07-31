@@ -1,35 +1,29 @@
-import React from 'react';
+import React from 'react'
 import { shallow, mount } from 'enzyme'
 
 import Files from '../js/components/qvain/files'
 import IDAFilePicker, { IDAFilePickerBase } from '../js/components/qvain/files/legacy/idaFilePicker'
 import FileSelector, { FileSelectorBase } from '../js/components/qvain/files/legacy/fileSelector'
 import { SelectedFilesBase, FileLabel } from '../js/components/qvain/files/legacy/selectedFiles'
-import { ExternalFilesBase } from '../js/components/qvain/files/external/externalFiles'
-import {
-  ButtonGroup,
-  DeleteButton
-} from '../js/components/qvain/general/buttons'
-import { SlidingContent } from '../js/components/qvain/general/card'
-import QvainStore, {
-  Directory,
-  ExternalResource
-} from '../js/stores/view/qvain'
+import { DeleteButton } from '../js/components/qvain/general/buttons'
+import QvainStore, { Directory } from '../js/stores/view/qvain'
 import LocaleStore from '../js/stores/view/language'
-import { DataCatalogIdentifiers, } from '../js/components/qvain/utils/constants'
+import { DATA_CATALOG_IDENTIFIER } from '../js/utils/constants'
+
+global.Promise = require('bluebird')
 
 const getStores = () => {
-  QvainStore.setLegacyFilePicker(true)
+  QvainStore.setMetaxApiV2(false)
   return {
     Qvain: QvainStore,
-    Locale: LocaleStore
+    Locale: LocaleStore,
   }
 }
 
 describe('Qvain.Files', () => {
   it('should render file picker', () => {
     const store = getStores()
-    store.Qvain.dataCatalog = DataCatalogIdentifiers.IDA
+    store.Qvain.dataCatalog = DATA_CATALOG_IDENTIFIER.IDA
     store.Qvain.idaPickerOpen = true
     const component = shallow(<Files Stores={store} />)
     expect(component.dive().find(IDAFilePicker).length).toBe(1)
@@ -37,9 +31,12 @@ describe('Qvain.Files', () => {
 
   it('should open file selector upon selecting file picker', () => {
     const component = shallow(<IDAFilePickerBase Stores={getStores()} />)
-    component.children().last().simulate('click', {
-      preventDefault: () => console.log('preventDefault')
-    })
+    component
+      .children()
+      .last()
+      .simulate('click', {
+        preventDefault: () => console.log('preventDefault'),
+      })
     expect(component.find(FileSelector).length).toBe(1)
   })
 
@@ -61,14 +58,14 @@ describe('Qvain.Files', () => {
               project_identifier: 'project_y',
               directory_name: 'directory2',
               directories: [],
-              files: []
+              files: [],
             },
             undefined,
             false,
             false
-          )
+          ),
         ],
-        files: []
+        files: [],
       },
       undefined,
       false,
@@ -101,10 +98,10 @@ describe('Qvain.Files', () => {
             project_identifier: 'project_y',
             directory_name: 'directory2',
             directories: [],
-            files: []
-          }
+            files: [],
+          },
         ],
-        files: []
+        files: [],
       },
       undefined,
       false,
@@ -115,8 +112,13 @@ describe('Qvain.Files', () => {
     fileSelector.unmount()
     // mount the SelectedFiles component
     const selectedFiles = shallow(<SelectedFilesBase Stores={stores} />)
-    expect(selectedFiles.find(FileLabel).last().text()).toBe('<FontAwesomeIcon />project_y / directory2')
-    selectedFiles.find(DeleteButton).last().simulate('click', { preventDefault: () => { } })
+    expect(selectedFiles.find(FileLabel).last().text()).toBe(
+      '<FontAwesomeIcon />project_y / directory2'
+    )
+    selectedFiles
+      .find(DeleteButton)
+      .last()
+      .simulate('click', { preventDefault: () => {} })
     expect(selectedFiles.find(FileLabel).length).toBe(0)
   })
 })

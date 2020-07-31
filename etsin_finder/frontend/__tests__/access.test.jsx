@@ -1,7 +1,7 @@
 import axios from 'axios'
 import Access from '../js/stores/view/access'
 import auth from '../js/stores/domain/auth'
-import { AccessTypeURLs } from '../js/components/qvain/utils/constants'
+import { ACCESS_TYPE_URL } from '../js/utils/constants'
 
 // Replaces getting from metax test:
 // axios.get('https://metax-test.csc.fi/rest/datasets/13').then(response => {
@@ -85,7 +85,7 @@ describe('Access Store', () => {
   describe('Update for open access', () => {
     it('Should start update process', done => {
       const open = accessRights
-      open.access_type.identifier = AccessTypeURLs.OPEN
+      open.access_type.identifier = ACCESS_TYPE_URL.OPEN
       Access.updateAccess(open)
       done()
     })
@@ -112,7 +112,7 @@ describe('Access Store', () => {
         const d = new Date()
         d.setFullYear(d.getFullYear() - 1)
         embargoed.available = d.toISOString()
-        embargoed.access_type.identifier = AccessTypeURLs.EMBARGO
+        embargoed.access_type.identifier = ACCESS_TYPE_URL.EMBARGO
         Access.updateAccess(embargoed)
         done()
       })
@@ -138,7 +138,7 @@ describe('Access Store', () => {
         const d = new Date()
         d.setFullYear(d.getFullYear() + 1)
         embargoed.available = d.toISOString()
-        embargoed.access_type.identifier = AccessTypeURLs.EMBARGO
+        embargoed.access_type.identifier = ACCESS_TYPE_URL.EMBARGO
         Access.updateAccess(embargoed)
         done()
       })
@@ -162,7 +162,7 @@ describe('Access Store', () => {
   describe('Update for restricted access', () => {
     it('Should start update process', done => {
       const restricted = accessRights
-      restricted.access_type.identifier = AccessTypeURLs.RESTRICTED
+      restricted.access_type.identifier = ACCESS_TYPE_URL.RESTRICTED
       Access.updateAccess(restricted)
       done()
     })
@@ -185,7 +185,7 @@ describe('Access Store', () => {
   describe('Update for permit access', () => {
     it('Should start update process', done => {
       const restricted_fairdata = accessRights
-      restricted_fairdata.access_type.identifier = AccessTypeURLs.PERMIT
+      restricted_fairdata.access_type.identifier = ACCESS_TYPE_URL.PERMIT
       Access.updateAccess(restricted_fairdata)
       done()
     })
@@ -210,7 +210,7 @@ describe('Access Store', () => {
       it('Should start update process', done => {
         auth.userLogged = false
         const restricted_registration = accessRights
-        restricted_registration.access_type.identifier = AccessTypeURLs.LOGIN
+        restricted_registration.access_type.identifier = ACCESS_TYPE_URL.LOGIN
         Access.updateAccess(restricted_registration)
         done()
       })
@@ -234,7 +234,7 @@ describe('Access Store', () => {
       it('Should start update process', done => {
         auth.userLogged = true
         const restricted_registration = accessRights
-        restricted_registration.access_type.identifier = AccessTypeURLs.LOGIN
+        restricted_registration.access_type.identifier = ACCESS_TYPE_URL.LOGIN
         Access.updateAccess(restricted_registration)
         done()
       })

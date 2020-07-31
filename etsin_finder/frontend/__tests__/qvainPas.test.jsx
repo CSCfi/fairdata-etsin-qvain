@@ -1,9 +1,10 @@
-import 'react-dates/initialize';
 import React from 'react';
 import { shallow, mount } from 'enzyme'
 import { Provider } from 'mobx-react'
 import { ThemeProvider } from 'styled-components'
 import axios from 'axios'
+
+import '../locale/translations'
 
 import etsinTheme from '../js/styles/theme'
 import PasState from '../js/components/qvain/pasState'
@@ -25,15 +26,15 @@ import {
   File,
   Directory,
   Project
-} from '../js/stores/view/qvain.files'
+} from '../js/stores/view/qvain.files.items'
 import QvainStore, {
-  Actor,
   AccessType as AccessTypeConstructor,
   License as LicenseConstructor
 } from '../js/stores/view/qvain'
+import { Actor } from '../js/stores/view/qvain.actors'
 import LocaleStore from '../js/stores/view/language'
 import EnvStore from '../js/stores/domain/env'
-import { AccessTypeURLs, DataCatalogIdentifiers, EntityType, Role, } from '../js/components/qvain/utils/constants'
+import { ACCESS_TYPE_URL, DATA_CATALOG_IDENTIFIER } from '../js/utils/constants'
 
 global.Promise = require('bluebird')
 
@@ -43,7 +44,7 @@ Promise.config({
 
 const getStores = () => {
   QvainStore.resetQvainStore()
-  QvainStore.setLegacyFilePicker(false)
+  QvainStore.setMetaxApiV2(true)
   return {
     Qvain: QvainStore,
     Locale: LocaleStore,
@@ -349,7 +350,7 @@ afterEach(() => {
 
 describe('Qvain.PasState', () => {
   const render = stores => {
-    stores.Qvain.setKeywords(['key', 'word'])
+    stores.Qvain.setKeywordsArray(['key', 'word'])
     return mount(
       <Provider Stores={stores}>
         <ThemeProvider theme={etsinTheme}>
@@ -361,13 +362,13 @@ describe('Qvain.PasState', () => {
 
   it('shows pas state', () => {
     const stores = getStores()
-    stores.Qvain.dataCatalog = DataCatalogIdentifiers.IDA
+    stores.Qvain.dataCatalog = DATA_CATALOG_IDENTIFIER.IDA
     stores.Qvain.setPreservationState(80)
     wrapper = render(stores)
     expect(wrapper.find(PasState).text().includes('80:')).toBe(true)
     wrapper.unmount()
 
-    stores.Qvain.dataCatalog = DataCatalogIdentifiers.PAS
+    stores.Qvain.dataCatalog = DATA_CATALOG_IDENTIFIER.PAS
     stores.Qvain.setPreservationState(0)
     wrapper = render(stores)
     expect(wrapper.find(PasState).text().includes('80:')).toBe(false)
@@ -378,7 +379,7 @@ describe('Qvain.PasState', () => {
 
 describe('Qvain.Description', () => {
   const render = stores => {
-    stores.Qvain.setKeywords(['key', 'word'])
+    stores.Qvain.setKeywordsArray(['key', 'word'])
     return mount(
       <Provider Stores={stores}>
         <ThemeProvider theme={etsinTheme}>
@@ -424,7 +425,7 @@ describe('Qvain.Description', () => {
 describe('Qvain.RightsAndLicenses', () => {
   const render = stores => {
     stores.Qvain.setLicense(LicenseConstructor({ en: 'Other (URL)', fi: 'Muu (URL)', }, 'other'))
-    stores.Qvain.setAccessType(AccessTypeConstructor(undefined, AccessTypeURLs.EMBARGO))
+    stores.Qvain.setAccessType(AccessTypeConstructor(undefined, ACCESS_TYPE_URL.EMBARGO))
     return mount(
       <Provider Stores={stores}>
         <>
@@ -457,68 +458,6 @@ describe('Qvain.RightsAndLicenses', () => {
     // Expect inputs: license, license url, access type, restriction grounds, embargo expires
     expect(inputs.length).toBe(5)
     inputs.forEach(c => expect(c.props().disabled).toBe(false))
-  })
-})
-
-describe('Qvain.Actors', () => {
-  const render = stores => {
-    stores.Qvain.saveActor(Actor(
-      EntityType.PERSON,
-      [Role.CREATOR],
-      'Teppo Testaaja',
-      'test@test.fi',
-      'uohIdentifier'
-    ))
-    return mount(
-      <Provider Stores={stores}>
-        <ThemeProvider theme={etsinTheme}>
-          <Actors />
-        </ThemeProvider>
-      </Provider>
-    )
-  }
-
-  it('prevents editing of actors fields', () => {
-    const stores = getStores()
-    stores.Qvain.setPreservationState(80)
-
-    wrapper = render(stores)
-    const inputs = wrapper.find('input').not('[type="hidden"]')
-
-    // Expect disabled inputs:
-    // - person/organization radio buttons
-    // - 5 + 5 role checkboxes
-    // - name, email, identifier, organization
-    expect(inputs.length).toBe(16)
-    inputs.forEach(c => expect(c.props().disabled).toBe(true))
-
-    // Button for deleting actor should not be rendered
-    expect(wrapper.find(DeleteButton).length).toBe(0)
-  })
-
-  it('allows editing of actors fields', () => {
-    const stores = getStores()
-    stores.Qvain.setPreservationState(0)
-
-    wrapper = render(stores)
-    const inputs = wrapper.find('input').not('[type="hidden"]').not('[disabled=true]')
-
-    // Expect enabled inputs:
-    // - person/organization radio buttons
-    // - 5 role checkboxes
-    // - name, email, identifier, organization
-    expect(inputs.length).toBe(11)
-    expect(wrapper.find('input#personCreator').not('[disabled=true]').length).toBe(1)
-    expect(wrapper.find('input#orgCreator').not('[disabled=true]').length).toBe(0)
-
-    // Expect same number of inputs for organization
-    wrapper.find('#entityOrg input').simulate('change')
-    expect(inputs.length).toBe(11)
-    expect(wrapper.find('input#personCreator').not('[disabled=true]').length).toBe(0)
-    expect(wrapper.find('input#orgCreator').not('[disabled=true]').length).toBe(1)
-
-    // Button for deleting actor should be rendered
-    expect(wrapper.find(DeleteButton).length)
   })
 })
 

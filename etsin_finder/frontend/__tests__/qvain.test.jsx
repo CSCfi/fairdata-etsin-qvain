@@ -1,45 +1,43 @@
-import React from 'react';
-import { shallow, mount } from 'enzyme'
+import React from 'react'
+import { shallow } from 'enzyme'
+import translate from 'counterpart'
 
+import '../locale/translations'
 import Qvain from '../js/components/qvain'
 import Description from '../js/components/qvain/description'
 import DescriptionField from '../js/components/qvain/description/descriptionField'
 import OtherIdentifierField from '../js/components/qvain/description/otherIdentifierField'
 import FieldOfScienceField from '../js/components/qvain/description/fieldOfScienceField'
+import LanguageField from '../js/components/qvain/description/languageField'
 import KeywordsField from '../js/components/qvain/description/keywordsField'
 import RightsAndLicenses from '../js/components/qvain/licenses'
 import { License } from '../js/components/qvain/licenses/licenses'
 import { AccessType } from '../js/components/qvain/licenses/accessType'
 import RestrictionGrounds from '../js/components/qvain/licenses/resctrictionGrounds'
 import EmbargoExpires from '../js/components/qvain/licenses/embargoExpires'
-import { EntityType, Role, AccessTypeURLs, LicenseUrls } from '../js/components/qvain/utils/constants'
-import {
-  ActorsBase
-} from '../js/components/qvain/actors'
-import { ActorTypeSelectBase } from '../js/components/qvain/actors/actorTypeSelect'
-import { SelectedActorBase, ActorSelection } from '../js/components/qvain/actors/actorSelection'
-import { AddedActorsBase } from '../js/components/qvain/actors/addedActors'
+import { ACCESS_TYPE_URL, LICENSE_URL } from '../js/utils/constants'
+import { qvainFormSchema } from '../js/components/qvain/utils/formValidation'
 import { ExternalFilesBase } from '../js/components/qvain/files/external/externalFiles'
-import {
-  ButtonGroup
-} from '../js/components/qvain/general/buttons'
+import { ButtonGroup } from '../js/components/qvain/general/buttons'
 import { SlidingContent } from '../js/components/qvain/general/card'
 import QvainStore, {
-  Actor,
   ExternalResource,
   AccessType as AccessTypeConstructor,
-  License as LicenseConstructor
+  License as LicenseConstructor,
 } from '../js/stores/view/qvain'
 import LocaleStore from '../js/stores/view/language'
-import { RadioInput } from '../js/components/qvain/general/form';
-import { ListItem } from '../js/components/qvain/general/list';
 import TablePasState from '../js/components/qvain/datasets/tablePasState'
+import {
+  filterByTitle,
+  filterGroupsByTitle,
+  groupDatasetsByVersionSet,
+} from '../js/components/qvain/datasets/filter'
 
 const getStores = () => {
-  QvainStore.setLegacyFilePicker(false)
+  QvainStore.setMetaxApiV2(true)
   return {
     Qvain: QvainStore,
-    Locale: LocaleStore
+    Locale: LocaleStore,
   }
 }
 
@@ -79,8 +77,8 @@ describe('Qvain', () => {
       ...stores,
       Qvain: {
         ...stores.Qvain,
-        original: { identifier: identifierMatch.params.identifier }
-      }
+        original: { identifier: identifierMatch.params.identifier },
+      },
     }
     shallow(<FakeQvain Stores={datasetOpenedStore} match={identifierMatch} history={{}} />)
     expect(callCount).toBe(0)
@@ -92,8 +90,8 @@ describe('Qvain', () => {
       ...stores,
       Qvain: {
         ...stores.Qvain,
-        original: { identifier: anotherMatch.params.identifier }
-      }
+        original: { identifier: anotherMatch.params.identifier },
+      },
     }
     shallow(<FakeQvain Stores={anotherDatasetOpenedStore} match={identifierMatch} history={{}} />)
     expect(callCount).toBe(1)
@@ -137,9 +135,79 @@ describe('Qvain.Description', () => {
     const component = shallow(<FieldOfScienceField Stores={getStores()} />)
     expect(component).toMatchSnapshot()
   })
+  it('should render <LanguageField />', () => {
+    const component = shallow(<LanguageField Stores={getStores()} />)
+    expect(component).toMatchSnapshot()
+  })
   it('should render <KeywordsField />', () => {
     const component = shallow(<KeywordsField Stores={getStores()} />)
     expect(component).toMatchSnapshot()
+  })
+})
+
+describe('Qvain dataset list filtering', () => {
+  const datasets = [
+    {
+      identifier: '1',
+      research_dataset: {
+        title: { en: 'Dataset', fi: 'Aineisto' },
+      },
+    },
+    {
+      identifier: '2',
+      research_dataset: {
+        title: { en: 'Version 1 of Dataset Versions' },
+      },
+      dataset_version_set: [{ identifier: '2' }, { identifier: '3' }, { identifier: '4' }],
+    },
+    {
+      identifier: '3',
+      research_dataset: {
+        title: { en: 'Version 2, Dataset' },
+      },
+      dataset_version_set: [{ identifier: '2' }, { identifier: '3' }, { identifier: '4' }],
+    },
+    {
+      identifier: '5',
+      research_dataset: {
+        title: { en: 'Another Dataset' },
+      },
+    },
+    {
+      identifier: '4',
+      research_dataset: {
+        title: { en: 'Version 3', fi: 'Aineiston versio 3' },
+      },
+      dataset_version_set: [{ identifier: '2' }, { identifier: '3' }, { identifier: '4' }],
+    },
+  ]
+
+  const dataset = datasets[0]
+  const versions = [datasets[1], datasets[2], datasets[4]]
+  const dataset2 = datasets[3]
+
+  it('groups datasets by version set', () => {
+    const groups = groupDatasetsByVersionSet(datasets)
+    expect(groups).toEqual([[dataset], versions, [dataset2]])
+  })
+
+  it('filters dataset groups by title', () => {
+    const groups = groupDatasetsByVersionSet(datasets)
+    expect(filterGroupsByTitle('Dataset', groups)).toEqual([[dataset], versions, [dataset2]])
+  })
+
+  it('filters datasets by title in any language', () => {
+    expect(filterByTitle('Aineisto', datasets)).toEqual([dataset, datasets[4]])
+    expect(filterByTitle('Version', datasets)).toEqual(versions)
+  })
+
+  it('filters dataset groups by title in any language', () => {
+    const groups = groupDatasetsByVersionSet(datasets)
+    expect(filterGroupsByTitle('Aineisto', groups)).toEqual([[dataset], versions])
+  })
+
+  it('ignores case when filtering by title', () => {
+    expect(filterByTitle('dataset', datasets)).toEqual([dataset, datasets[1], datasets[2], dataset2])
   })
 })
 
@@ -154,13 +222,13 @@ describe('Qvain.RightsAndLicenses', () => {
   })
   it('should render other license URL field', () => {
     const stores = getStores()
-    stores.Qvain.setLicense(LicenseConstructor({ en: 'Other (URL)', fi: 'Muu (URL)', }, 'other'))
+    stores.Qvain.setLicense(LicenseConstructor({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'other'))
     const component = shallow(<License Stores={stores} />)
     expect(component.find('#otherLicenseURL').length).toBe(1)
   })
   it('should NOT render other license URL field', () => {
     const stores = getStores()
-    stores.Qvain.setLicense(LicenseConstructor(undefined, LicenseUrls.CCBY4))
+    stores.Qvain.setLicense(LicenseConstructor(undefined, LICENSE_URL.CCBY4))
     const component = shallow(<License Stores={stores} />)
     expect(component.find('#otherLicenseURL').length).toBe(0)
   })
@@ -170,137 +238,27 @@ describe('Qvain.RightsAndLicenses', () => {
   })
   it('should render <RestrictionGrounds />', () => {
     const stores = getStores()
-    stores.Qvain.setAccessType(AccessTypeConstructor(undefined, AccessTypeURLs.EMBARGO))
+    stores.Qvain.setAccessType(AccessTypeConstructor(undefined, ACCESS_TYPE_URL.EMBARGO))
     const component = shallow(<AccessType Stores={stores} />)
     expect(component.find(RestrictionGrounds).length).toBe(1)
   })
   it('should NOT render <RestrictionGrounds />', () => {
     const stores = getStores()
-    stores.Qvain.setAccessType(AccessTypeConstructor(undefined, AccessTypeURLs.OPEN))
+    stores.Qvain.setAccessType(AccessTypeConstructor(undefined, ACCESS_TYPE_URL.OPEN))
     const component = shallow(<AccessType Stores={stores} />)
     expect(component.find(RestrictionGrounds).length).toBe(0)
   })
   it('should render <EmbargoExpires />', () => {
     const stores = getStores()
-    stores.Qvain.setAccessType(AccessTypeConstructor(undefined, AccessTypeURLs.EMBARGO))
+    stores.Qvain.setAccessType(AccessTypeConstructor(undefined, ACCESS_TYPE_URL.EMBARGO))
     const component = shallow(<AccessType Stores={stores} />)
     expect(component.find(EmbargoExpires).length).toBe(1)
   })
   it('should NOT render <EmbargoExpires />', () => {
     const stores = getStores()
-    stores.Qvain.setAccessType(AccessTypeConstructor(undefined, AccessTypeURLs.OPEN))
+    stores.Qvain.setAccessType(AccessTypeConstructor(undefined, ACCESS_TYPE_URL.OPEN))
     const component = shallow(<AccessType Stores={stores} />)
     expect(component.find(EmbargoExpires).length).toBe(0)
-  })
-})
-
-describe('Qvain.Actors', () => {
-  it('should render correctly', () => {
-    const component = shallow(<ActorsBase Stores={getStores()} />)
-    expect(component).toMatchSnapshot()
-  })
-
-  it('should render person selection by default', () => {
-    const component = mount(<SelectedActorBase Stores={getStores()} />)
-    expect(component.find(ActorSelection).html().includes('Person')).toBe(true)
-    component.unmount()
-    const form = mount(<ActorTypeSelectBase Stores={getStores()} />)
-    expect(form.find('#entityPerson input').props().checked).toBe(true)
-  })
-
-  // By default person should be selected. Upon clicking the Organization radio button
-  // the checkboxes should be reset and active selection field should display
-  // 'Organization'
-  it('should change selected actor entity', () => {
-    const stores = getStores()
-    const entityRoleForm = mount(<ActorTypeSelectBase Stores={stores} />)
-    entityRoleForm.find('#personCreator').first().simulate('change', {
-      target: {
-        checked: true
-      }
-    })
-    entityRoleForm.unmount()
-    const selectedActor = mount(<SelectedActorBase Stores={stores} />)
-    expect(selectedActor.text()).toBe('Person / Creator')
-    selectedActor.unmount()
-    entityRoleForm.mount()
-    entityRoleForm.find('#entityOrg input').simulate('change')
-    entityRoleForm.find('#orgPublisher input').simulate('change', {
-      target: {
-        checked: true
-      }
-    })
-    // expect(entityRoleForm.find('#entityOrg input').checked).toBe(true)
-    entityRoleForm.unmount()
-    selectedActor.mount()
-    expect(selectedActor.text()).toBe('Organization / Publisher')
-  })
-
-  // Added actors should be listed if there are any
-  it('should list all added actors', () => {
-    const stores = getStores()
-    const addedActors = mount(<AddedActorsBase Stores={stores} />)
-    expect(addedActors.find(ButtonGroup).length).toBe(0)
-    stores.Qvain.saveActor(Actor(
-      EntityType.ORGANIZATION,
-      [Role.PUBLISHER],
-      'University of Helsinki',
-      'test@test.fi',
-      'uohIdentifier'
-    ))
-    stores.Qvain.saveActor(Actor(
-      EntityType.PERSON,
-      [Role.CREATOR],
-      'Teppo Testaaja',
-      'test@test.fi',
-      'uohIdentifier'
-    ))
-    stores.Qvain.saveActor(Actor(
-      EntityType.PERSON,
-      [Role.RIGHTS_HOLDER],
-      'Tuppo Testaaja',
-      'test@test.fi',
-      'uohIdentifier'
-    ))
-    stores.Qvain.saveActor(Actor(
-      EntityType.PERSON,
-      [Role.CONTRIBUTOR],
-      'Toppo Testaaja',
-      'test@test.fi',
-      'uohIdentifier'
-    ))
-    addedActors.update()
-    expect(addedActors.find(ButtonGroup).length).toBe(4)
-  })
-
-  // Test that <ActorTypeSelectBase> renders correctly
-  const component = shallow(<ActorTypeSelectBase Stores={getStores()} />)
-  it('ActorTypeSelect contains two <Column> elements', () => {
-    expect(component.find('Column').length).toBe(2);
-  })
-
-  it('ActorTypeSelect contains two <RadioInput> elements', () => {
-    expect(component.find(RadioInput).length).toBe(2);
-  })
-
-  it('ActorTypeSelect contains two <RadioInput> elements for Person and Org', () => {
-    expect(component.find(RadioInput).length).toBe(2);
-    expect(component.find('#entityPerson').length).toBe(1);
-    expect(component.find('#entityOrg').length).toBe(1);
-  })
-
-  it('ActorTypeSelect contains 10 <ListItem> elements with right ids', () => {
-    expect(component.find(ListItem).length).toBe(10);
-    expect(component.find('#personCreator').length).toBe(1);
-    expect(component.find('#personPublisher').length).toBe(1);
-    expect(component.find('#personCurator').length).toBe(1);
-    expect(component.find('#personRightsHolder').length).toBe(1);
-    expect(component.find('#personContributor').length).toBe(1);
-    expect(component.find('#orgCreator').length).toBe(1);
-    expect(component.find('#orgPublisher').length).toBe(1);
-    expect(component.find('#orgCurator').length).toBe(1);
-    expect(component.find('#orgRightsHolder').length).toBe(1);
-    expect(component.find('#orgContributor').length).toBe(1);
   })
 })
 
@@ -315,13 +273,94 @@ describe('Qvain.ExternalFiles', () => {
     const stores = getStores()
     const externalFiles = shallow(<ExternalFilesBase Stores={stores} />)
     expect(externalFiles.find(ButtonGroup).length).toBe(0)
-    stores.Qvain.saveExternalResource(ExternalResource(
-      1,
-      'External Resource Title',
-      'http://en.wikipedia.org',
-      'https://en.wikipedia.org/wiki/Portal:Arts'
-    ))
+    stores.Qvain.saveExternalResource(
+      ExternalResource(
+        1,
+        'External Resource Title',
+        'http://en.wikipedia.org',
+        'https://en.wikipedia.org/wiki/Portal:Arts'
+      )
+    )
     externalFiles.update()
     expect(externalFiles.find(ButtonGroup).length).toBe(1)
+  })
+})
+
+describe('Qvain validation', () => {
+  let actors
+  let dataset
+  beforeEach(() => {
+    actors = [
+      {
+        type: 'organization',
+        roles: ['creator'],
+        organizations: [
+          {
+            name: {
+              en: 'Test organization',
+            },
+          },
+        ],
+      },
+    ]
+    dataset = {
+      title: { en: 'title' },
+      description: { en: 'description' },
+      keywords: ['keyword'],
+      license: {
+        name: { en: 'Creative Commons Attribution 4.0 International (CC BY 4.0)' },
+        identifier: 'http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0',
+      },
+      dataCatalog: 'urn:nbn:fi:att:data-catalog-ida',
+      actors,
+      accessType: {
+        url: 'http://uri.suomi.fi/codelist/fairdata/access_type/code/open',
+      },
+    }
+  })
+
+  it('should validate dataset', async () => {
+    try {
+      expect(await qvainFormSchema.validate(dataset, { abortEarly: false }))
+    } catch (e) {
+      if (e.errors) {
+        fail(e.errors)
+      } else {
+        fail(e)
+      }
+    }
+  })
+
+  it('should fail when required fields for DOI are missing', async () => {
+    dataset.useDoi = true // missing publisher role and issuedDate
+
+    try {
+      expect(await qvainFormSchema.validate(dataset, { abortEarly: false }))
+      fail('should have thrown error')
+    } catch (e) {
+      expect(e.errors.length).toBe(2)
+      expect(e.errors).toEqual(
+        expect.arrayContaining([
+          translate('qvain.validationMessages.issuedDate.requiredIfUseDoi'),
+          translate('qvain.validationMessages.actors.requiredActors.publisherIfDOI'),
+        ])
+      )
+    }
+  })
+
+  it('should validate dataset with DOI enabled', async () => {
+    dataset.useDoi = true
+    dataset.issuedDate = '2020-06-01'
+    actors[0].roles.push('publisher')
+
+    try {
+      expect(await qvainFormSchema.validate(dataset, { abortEarly: false }))
+    } catch (e) {
+      if (e.errors) {
+        fail(e.errors)
+      } else {
+        fail(e)
+      }
+    }
   })
 })

@@ -6,51 +6,47 @@ import { withRouter } from 'react-router-dom'
 import axios from 'axios'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
-import translate from 'counterpart'
-import moment from 'moment';
-import {
-  Table,
-  TableHeader,
-  Row,
-  HeaderCell,
-  TableBody,
-  BodyCell,
-  TableNote,
-} from '../general/table'
-import { DataCatalogIdentifiers } from '../utils/constants'
+import { Table, TableHeader, Row, HeaderCell, TableBody, TableNote } from '../general/table'
+import { DATASET_URLS } from '../../../utils/constants'
 import Modal from '../../general/modal'
 import DatasetPagination from './pagination'
-import Label from '../general/label'
-import { TableButton, RemoveButton, DangerButton } from '../general/buttons'
+import { TableButton, DangerButton } from '../general/buttons'
 import { FormField, Input, Label as inputLabel } from '../general/form'
-import TablePasState from './tablePasState'
-
-const USER_DATASETS_URL = '/api/datasets/'
+import DatasetGroup from './datasetGroup'
+import { filterGroupsByTitle, groupDatasetsByVersionSet } from './filter'
+import Tracking from '../../../utils/tracking'
 
 class DatasetTable extends Component {
+  minOfDataSetsForSearchTool = 5
+
+  promises = []
+
   static propTypes = {
     history: PropTypes.object.isRequired,
+    location: PropTypes.shape({
+      pathname: PropTypes.string,
+    }).isRequired,
     Stores: PropTypes.object.isRequired,
   }
 
   state = {
     datasets: [], // all datasets from METAX
-    filtered: [], // narrowed datasets based on searchTerm
+    datasetGroups: [], // datasets grouped by version set
+    filteredGroups: [], // narrowed datasets based on searchTerm
     count: 0, // how many there are, used to calculate page count
     limit: 20, // how many on one page, used to slice filtered into onPage content
     onPage: [], // what we see on the page
     page: 1, // current page
-    loading: false, // used to display loading notification in the table
+    loading: true, // used to display loading notification in the table
     error: false, // error notification status
     errorMessage: '', // error notification itself
     removeModalOpen: false, // delete/remove modal state
     removableDatasetIdentifier: undefined, // used to send the delete request to backend to target the correct dataset
     searchTerm: '', // used to narrow down content
-    currentTimestamp: undefined // Only need to set this once, when the page is loaded
+    currentTimestamp: new Date(), // Only need to set this once, when the page is loaded,
   }
 
   componentDidMount() {
-    this.state.currentTimestamp = new Date();
     this.getDatasets()
     // once we get login info, reload
     reaction(
@@ -59,61 +55,109 @@ class DatasetTable extends Component {
     )
   }
 
+  componentWillUnmount() {
+    this.promises.forEach((promise) => promise.cancel())
+  }
+
   getDatasets = () => {
+    if (!this.props.Stores.Auth.user.name) {
+      return null
+    }
+
     this.setState({ loading: true, error: false, errorMessage: '' })
-    const url = `${USER_DATASETS_URL}${
-      this.props.Stores.Auth.user.name
-    }?no_pagination=true`
-    console.log(url)
-    return axios
+    let url
+    if (this.props.Stores.Qvain.metaxApiV2) {
+      url = `${DATASET_URLS.V2_USER_DATASETS_URL}${this.props.Stores.Auth.user.name}?no_pagination=true`
+    } else {
+      url = `${DATASET_URLS.USER_DATASETS_URL}${this.props.Stores.Auth.user.name}?no_pagination=true`
+    }
+    const promise = axios
       .get(url)
-      .then(result => {
-        const datasets = [...result.data]
-        this.setState({
-          count: datasets.length,
-          datasets,
-          filtered: datasets,
-          loading: false,
-          error: false,
-          errorMessage: undefined
-        }, this.handleChangePage(1))
+      .then((result) => {
+        const datasets = result.data.filter((dataset) => !dataset.draft_of)
+        const datasetGroups = groupDatasetsByVersionSet(datasets)
+
+        this.setState(
+          {
+            count: datasets.length,
+            datasets,
+            datasetGroups,
+            filteredGroups: datasetGroups,
+            loading: false,
+            error: false,
+            errorMessage: undefined,
+          },
+          this.handleChangePage(1)
+        )
       })
-      .catch(e => {
+      .catch((e) => {
         console.log(e.message)
         this.setState({ loading: false, error: true, errorMessage: 'Failed to load datasets' })
       })
+    this.promises.push(promise)
+    return promise
   }
 
-  handleRemove = identifier => event => {
+  handleCreateNewVersion = async (identifier) => {
+    const { metaxApiV2 } = this.props.Stores.Qvain
+    if (!metaxApiV2) {
+      console.error('Metax API V2 is required for creating a new version')
+      return
+    }
+    const promise = axios.post(DATASET_URLS.V2_CREATE_NEW_VERSION, null, {
+      params: { identifier },
+    })
+    this.promises.push(promise)
+    const res = await promise
+    const newIdentifier = res.data.identifier
+    this.props.history.replace(`/qvain/dataset/${newIdentifier}`)
+  }
+
+  handleRemove = (identifier) => (event) => {
     event.preventDefault()
-    axios
-      .delete(`/api/dataset/${identifier}`)
+    const { metaxApiV2 } = this.props.Stores.Qvain
+
+    let url = `${DATASET_URLS.DATASET_URL}/${identifier}`
+    if (metaxApiV2) {
+      url = `${DATASET_URLS.V2_DATASET_URL}/${identifier}`
+    }
+
+    const promise = axios
+      .delete(url)
       .then(() => {
-        const datasets = [...this.state.datasets.filter(d => d.identifier !== identifier)]
-        this.setState(state => ({
-          datasets,
-          filtered: this.filterByTitle(state.searchTerm, datasets),
-          removeModalOpen: false,
-          removableDatasetIdentifier: undefined
-        }), () => {
-          // and refresh
-          this.handleChangePage(this.state.page)()
-        })
+        const datasets = [...this.state.datasets.filter((d) => d.identifier !== identifier)]
+        Tracking.trackEvent('Dataset', ' Removed', this.props.location.pathname)
+        this.setState(
+          (state) => ({
+            datasets,
+            filteredGroups: filterGroupsByTitle(state.searchTerm, state.datasetGroups),
+            removeModalOpen: false,
+            removableDatasetIdentifier: undefined,
+          }),
+          () => {
+            // and refresh
+            this.handleChangePage(this.state.page)()
+          }
+        )
       })
-      .catch(err => { this.setState({ error: true, errorMessage: err.message }) })
+      .catch((err) => {
+        this.setState({ error: true, errorMessage: err.message })
+      })
+    this.promises.push(promise)
+    return promise
   }
 
   openRemoveModal = (identifier) => () => {
     this.setState({
       removeModalOpen: true,
-      removableDatasetIdentifier: identifier
+      removableDatasetIdentifier: identifier,
     })
   }
 
   closeRemoveModal = () => {
     this.setState({
       removeModalOpen: false,
-      removableDatasetIdentifier: undefined
+      removableDatasetIdentifier: undefined,
     })
   }
 
@@ -122,107 +166,88 @@ class DatasetTable extends Component {
     return !loading && !error && datasets.length === 0
   }
 
-  handleEnterEdit = dataset => () => {
+  handleEnterEdit = (dataset) => () => {
+    if (dataset.next_draft) {
+      this.props.history.push(`/qvain/dataset/${dataset.next_draft.identifier}`)
+      return
+    }
     this.props.Stores.Qvain.editDataset(dataset)
     this.props.history.push(`/qvain/dataset/${dataset.identifier}`)
   }
 
-  handleChangePage = pageNum => () => {
+  handleChangePage = (pageNum) => () => {
     const actualNum = pageNum - 1
     this.setState((state) => ({
-      onPage: state.filtered.slice(actualNum * state.limit, (actualNum * state.limit) + state.limit),
-      page: pageNum
+      onPage: state.filteredGroups.slice(
+        actualNum * state.limit,
+        actualNum * state.limit + state.limit
+      ),
+      page: pageNum,
     }))
   }
 
-  filterByTitle = (searchStr, datasets) => (
-    searchStr.trim().length > 0 ? datasets.filter(ds => {
-      const titles = Object.values(ds.research_dataset.title)
-      const matches = titles.map(title => title.toLowerCase().includes(searchStr.toLowerCase())) // ignore cases
-      return matches.includes(true)
-    }) : datasets
-  )
-
-  formatDatasetDateCreated = (datasetDateCreated) => {
-    const timestampCurrentTime = moment(this.state.currentTimestamp)
-    const timestampDateCreated = moment(datasetDateCreated)
-
-    const secondsSinceCreation = timestampCurrentTime.diff(timestampDateCreated, 'seconds')
-
-    let formattedDate
-
-    // Time intervals retrieved from Moment.js documentation
-    // For instance, 45 seconds is not exactly a minute, but roughly a minute, and can be displayed as one.
-    if (secondsSinceCreation < 45) {
-      formattedDate = translate('qvain.datasets.tableRows.dateFormat.moments')
-    } else if (secondsSinceCreation < 90) {
-      formattedDate = translate('qvain.datasets.tableRows.dateFormat.oneMinute')
-    } else if (secondsSinceCreation < 3700) {
-      formattedDate = `${timestampCurrentTime.diff(timestampDateCreated, 'minutes')} ${translate('qvain.datasets.tableRows.dateFormat.minutes')}`
-    } else if (secondsSinceCreation < 5400) {
-      formattedDate = translate('qvain.datasets.tableRows.dateFormat.oneHour')
-    } else if (secondsSinceCreation < 79200) {
-      formattedDate = `${timestampCurrentTime.diff(timestampDateCreated, 'hours')} ${translate('qvain.datasets.tableRows.dateFormat.hours')}`
-    } else if (secondsSinceCreation < 129600) {
-      formattedDate = translate('qvain.datasets.tableRows.dateFormat.oneDay')
-    } else if (secondsSinceCreation < 2160000) {
-      formattedDate = `${timestampCurrentTime.diff(timestampDateCreated, 'days')} ${translate('qvain.datasets.tableRows.dateFormat.days')}`
-    } else {
-      // More than a month ago, compare by months
-      const monthsSinceCreation = timestampCurrentTime.diff(timestampDateCreated, 'months')
-
-      if (monthsSinceCreation >= 1) {
-        formattedDate = translate('qvain.datasets.tableRows.dateFormat.oneMonth')
-      } else if (monthsSinceCreation >= 10) {
-        formattedDate = `${monthsSinceCreation} ${translate('qvain.datasets.tableRows.dateFormat.months')}`
-      } else if (monthsSinceCreation >= 18) {
-        formattedDate = translate('qvain.datasets.tableRows.dateFormat.oneYear')
-      } else {
-        // Years (in plural), compare by years
-        formattedDate = `${timestampCurrentTime.diff(timestampDateCreated, 'years')} ${translate('qvain.datasets.tableRows.dateFormat.years')}`
-      }
-    }
-
-    return formattedDate
-  }
-
-
   render() {
-    const { onPage, loading, error, errorMessage, page, count, limit, searchTerm } = this.state
+    const {
+      onPage,
+      loading,
+      error,
+      errorMessage,
+      page,
+      searchTerm,
+      datasets,
+      count,
+      limit,
+    } = this.state
+
+    const { metaxApiV2 } = this.props.Stores.Qvain
+
+    const noOfDatasets = datasets.length
+    const searchInput =
+      noOfDatasets > this.minOfDataSetsForSearchTool ? (
+        <>
+          <Translate component={SearchLabel} content="qvain.datasets.search.searchTitle" />
+          <SearchField>
+            <Translate
+              className="visuallyhidden"
+              htmlFor="datasetSearchInput"
+              component={inputLabel}
+              content="qvain.datasets.search.hidden"
+            />
+            <Translate
+              component={SearchInput}
+              id="datasetSearchInput"
+              attributes={{ placeholder: 'qvain.datasets.search.placeholder' }}
+              value={searchTerm}
+              onChange={(event) => {
+                const searchStr = event.target.value
+                this.setState(
+                  (state) => ({
+                    searchTerm: searchStr,
+                    // if we have a search term, look through all the titles of all the datasets and return the matching datasets
+                    filteredGroups: filterGroupsByTitle(searchStr, state.datasetGroups),
+                  }),
+                  () => {
+                    // as the callback, set count to reflect the new filtered datasets
+                    this.setState((state) => ({ count: state.filteredGroups.length }))
+                    // reload
+                    this.handleChangePage(page)()
+                  }
+                )
+              }}
+            />
+          </SearchField>
+        </>
+      ) : null
     return (
       <Fragment>
-        <SearchField>
-          <Translate className="visuallyhidden" htmlFor="datasetSearchInput" component={inputLabel} content="qvain.datasets.search" />
-          <SearchInput
-            id="datasetSearchInput"
-            placeholder="Enter name of dataset"
-            value={searchTerm}
-            onChange={(event) => {
-              const searchStr = event.target.value
-              this.setState((state) => ({
-                searchTerm: searchStr,
-                // if we have a search term, look through all the titles of all the datasets and return the matching datasets
-                filtered: this.filterByTitle(searchStr, state.datasets)
-              }), () => {
-                // as the callback, set count to reflect the new filtered datasets
-                this.setState((state) => ({ count: state.filtered.length }))
-                // reload
-                this.handleChangePage(page)()
-              })
-            }}
-          />
-        </SearchField>
-        <DatasetPagination
-          id="pagnation-top"
-          page={page}
-          count={count}
-          limit={limit}
-          onChangePage={this.handleChangePage}
-        />
+        {searchInput}
         <TablePadded className="table">
           <TableHeader>
             <Row>
               <Translate component={HeaderCell} content="qvain.datasets.tableRows.title" />
+              {metaxApiV2 && (
+                <Translate component={HeaderCell} content="qvain.datasets.tableRows.state" />
+              )}
               <Translate component={HeaderCell} content="qvain.datasets.tableRows.created" />
               <Translate component={HeaderCell} content="qvain.datasets.tableRows.actions" />
             </Row>
@@ -249,63 +274,43 @@ class DatasetTable extends Component {
               <Translate component={TableNote} content="qvain.datasets.noDatasets" />
             )}
             {!error &&
-              onPage.map(dataset => (
-                <Row key={dataset.identifier} tabIndex="0">
-                  <BodyCellWordWrap>
-                    {dataset.research_dataset.title.en || dataset.research_dataset.title.fi}
-                    {dataset.next_dataset_version !== undefined && (
-                      <Translate color="yellow" content="qvain.datasets.oldVersion" component={DatasetLabel} />
-                    )}
-                    {dataset.deprecated && (
-                      <Translate color="error" content="qvain.datasets.deprecated" component={DatasetLabel} />
-                    )}
-                    {(dataset.preservation_state > 0 || dataset.data_catalog.identifier === DataCatalogIdentifiers.PAS) && (
-                      <TablePasState preservationState={dataset.preservation_state} />
-                    )}
-                  </BodyCellWordWrap>
-                  <BodyCell>{this.formatDatasetDateCreated(dataset.date_created)}</BodyCell>
-                  <BodyCellActions>
-                    <Translate
-                      component={TableButton}
-                      onClick={this.handleEnterEdit(dataset)}
-                      content="qvain.datasets.editButton"
-                    />
-                    <Translate
-                      component={TableButton}
-                      onClick={() => window.open(`/dataset/${dataset.identifier}`, '_blank')}
-                      content="qvain.datasets.goToEtsin"
-                    />
-                    <Translate
-                      component={RemoveButton}
-                      onClick={this.openRemoveModal(dataset.identifier)}
-                      content="qvain.datasets.deleteButton"
-                    />
-                  </BodyCellActions>
-                </Row>
+              onPage.map((group) => (
+                <DatasetGroup
+                  datasets={group}
+                  key={group[0].identifier}
+                  dataset={group[0]}
+                  currentTimestamp={this.state.currentTimestamp}
+                  handleEnterEdit={this.handleEnterEdit}
+                  handleCreateNewVersion={this.handleCreateNewVersion}
+                  openRemoveModal={this.openRemoveModal}
+                />
               ))}
           </TableBody>
         </TablePadded>
         <DatasetPagination
-          id="pagnation-bottom"
+          id="pagination-bottom"
           page={page}
           count={count}
           limit={limit}
           onChangePage={this.handleChangePage}
         />
-        <Modal isOpen={this.state.removeModalOpen} onRequestClose={this.closeRemoveModal} contentLabel="removeDatasetModal">
-          <Translate component="p" content="qvain.datasets.confirmDelete" />
-          <TableButton onClick={this.closeRemoveModal}>Cancel</TableButton>
-          <DangerButton onClick={this.handleRemove(this.state.removableDatasetIdentifier)}>Remove</DangerButton>
+        <Modal
+          isOpen={this.state.removeModalOpen}
+          onRequestClose={this.closeRemoveModal}
+          contentLabel="removeDatasetModal"
+        >
+          <Translate component="p" content="qvain.datasets.confirmDelete.text" />
+          <TableButton onClick={this.closeRemoveModal}>
+            <Translate content="qvain.datasets.confirmDelete.cancel" />
+          </TableButton>
+          <DangerButton onClick={this.handleRemove(this.state.removableDatasetIdentifier)}>
+            <Translate content="qvain.datasets.confirmDelete.ok" />
+          </DangerButton>
         </Modal>
       </Fragment>
     )
   }
 }
-
-const DatasetLabel = styled(Label)`
-  margin-left: 10px;
-  text-transform: uppercase;
-`;
 
 const ErrorMessage = styled.span`
   margin-left: 10px;
@@ -324,21 +329,13 @@ const SearchField = styled(FormField)`
   align-items: center;
 `
 
-const SearchInput = styled(Input)`
-  margin-bottom: inherit;
-`;
-
-const BodyCellWordWrap = styled(BodyCell)`
-  word-break: break-word;
+const SearchLabel = styled.div`
+  font-family: 'Lato', sans-serif;
+  margin-bottom: 7px;
 `
 
-const BodyCellActions = styled(BodyCell)`
-  display: flex;
-  flex-wrap: wrap;
-  margin: -0.1rem -0.15rem;
-  > * {
-    margin: 0.1rem 0.15rem;
-  }
+const SearchInput = styled(Input)`
+  margin-bottom: inherit;
 `
 
 export default withRouter(inject('Stores')(observer(DatasetTable)))

@@ -5,9 +5,9 @@ import Translate from 'react-translate-component'
 import axios from 'axios'
 
 import { ContainerSubsectionBottom } from '../general/card'
-import { CumulativeStates } from '../utils/constants'
+import { CUMULATIVE_STATE } from '../../../utils/constants'
 import { getResponseError } from '../utils/responseError'
-import { LabelLarge, FormField, RadioInput, RadioContainer, Label, HelpField } from '../general/form'
+import { LabelLarge, FormField, RadioInput, Label, HelpField } from '../general/form'
 
 import Modal from '../../general/modal'
 import {
@@ -53,7 +53,7 @@ class CumulativeState extends Component {
   }
 
   handleToggleCumulativeState = () => {
-    if (!this.props.Stores.Qvain.original) { // only published datasets can be toggled with the RPC
+    if (!this.props.Stores.Qvain.hasBeenPublished) { // only published datasets can be toggled with the RPC
       return
     }
     this.setState({
@@ -62,7 +62,7 @@ class CumulativeState extends Component {
     })
 
     const currentState = this.props.Stores.Qvain.cumulativeState
-    const newState = currentState === CumulativeStates.YES ? CumulativeStates.CLOSED : CumulativeStates.YES
+    const newState = currentState === CUMULATIVE_STATE.YES ? CUMULATIVE_STATE.CLOSED : CUMULATIVE_STATE.YES
     const obj = {
       identifier: this.props.Stores.Qvain.original.identifier,
       cumulative_state: newState
@@ -78,6 +78,7 @@ class CumulativeState extends Component {
         // when a new version is created, the cumulative_state of the current version remains unchanged
         if (!data.new_version_created) {
           this.props.Stores.Qvain.setCumulativeState(newState)
+          this.props.Stores.Qvain.setChanged(false)
         }
       })
       .catch(err => {
@@ -95,38 +96,34 @@ class CumulativeState extends Component {
   }
 
   render() {
-    const { changed, cumulativeState, setCumulativeState, original } = this.props.Stores.Qvain
-    const stateKey = this.props.Stores.Qvain.cumulativeState === CumulativeStates.YES ? 'enabled' : 'disabled'
+    const { changed, cumulativeState, setCumulativeState, hasBeenPublished } = this.props.Stores.Qvain
+    const stateKey = this.props.Stores.Qvain.cumulativeState === CUMULATIVE_STATE.YES ? 'enabled' : 'disabled'
 
     let content = null
-    if (original === undefined) {
+    if (!hasBeenPublished) {
       // cumulative state can be assigned directly for new datasets
       content = (
         <div>
           <FormField>
-            <RadioContainer>
-              <RadioInput
-                id="cumulativeStateNo"
-                name="cumulativeState"
-                onChange={() => setCumulativeState(0)}
-                type="radio"
-                checked={cumulativeState === 0}
-              />
-            </RadioContainer>
+            <RadioInput
+              id="cumulativeStateNo"
+              name="cumulativeState"
+              onChange={() => setCumulativeState(0)}
+              type="radio"
+              checked={cumulativeState === 0}
+            />
             <Label htmlFor="cumulativeStateNo">
               <Translate content="qvain.files.cumulativeState.radio.no" />
             </Label>
           </FormField>
           <FormField>
-            <RadioContainer>
-              <RadioInput
-                id="cumulativeStateYes"
-                name="cumulativeState"
-                onChange={() => setCumulativeState(1)}
-                type="radio"
-                checked={cumulativeState === 1}
-              />
-            </RadioContainer>
+            <RadioInput
+              id="cumulativeStateYes"
+              name="cumulativeState"
+              onChange={() => setCumulativeState(1)}
+              type="radio"
+              checked={cumulativeState === 1}
+            />
             <Label htmlFor="cumulativeStateYes">
               <Translate content="qvain.files.cumulativeState.radio.yes" />
             </Label>

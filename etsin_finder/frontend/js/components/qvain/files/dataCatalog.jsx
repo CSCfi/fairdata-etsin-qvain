@@ -9,16 +9,15 @@ import styled from 'styled-components'
 import Card from '../general/card'
 import { dataCatalogSchema } from '../utils/formValidation'
 import ValidationError from '../general/validationError'
-import { DataCatalogIdentifiers } from '../utils/constants'
+import { DATA_CATALOG_IDENTIFIER } from '../../../utils/constants'
 import { Checkbox, LabelLarge } from '../general/form'
 
-const options = [
-  { value: DataCatalogIdentifiers.IDA, label: translate('qvain.files.dataCatalog.ida') },
-  { value: DataCatalogIdentifiers.ATT, label: translate('qvain.files.dataCatalog.att') }
+let options = [
+  { value: DATA_CATALOG_IDENTIFIER.IDA, label: translate('qvain.files.dataCatalog.ida') },
+  { value: DATA_CATALOG_IDENTIFIER.ATT, label: translate('qvain.files.dataCatalog.att') },
 ]
-
-const pasOptions = [
-  { value: DataCatalogIdentifiers.PAS, label: translate('qvain.files.dataCatalog.pas') }
+let pasOptions = [
+  { value: DATA_CATALOG_IDENTIFIER.PAS, label: translate('qvain.files.dataCatalog.pas') },
 ]
 
 class DataCatalog extends Component {
@@ -36,6 +35,16 @@ class DataCatalog extends Component {
     }
   }
 
+  updateOptions = () => {
+    options = [
+      { value: DATA_CATALOG_IDENTIFIER.IDA, label: translate('qvain.files.dataCatalog.ida') },
+      { value: DATA_CATALOG_IDENTIFIER.ATT, label: translate('qvain.files.dataCatalog.att') },
+    ]
+    pasOptions = [
+      { value: DATA_CATALOG_IDENTIFIER.PAS, label: translate('qvain.files.dataCatalog.pas') },
+    ]
+  }
+
   handleOnBlur = () => {
     const dataCatalog = this.props.Stores.Qvain.dataCatalog
     dataCatalogSchema
@@ -45,7 +54,7 @@ class DataCatalog extends Component {
           errorMessage: undefined,
         })
       })
-      .catch(err => {
+      .catch((err) => {
         this.setState({
           errorMessage: err.errors,
         })
@@ -55,18 +64,31 @@ class DataCatalog extends Component {
   handleDoiCheckboxChange = () => {
     const { setUseDoi } = this.props.Stores.Qvain
     setUseDoi(!this.state.useDoi)
-    this.setState(prevState => ({
-      useDoi: !prevState.useDoi
+    this.setState((prevState) => ({
+      useDoi: !prevState.useDoi,
     }))
   }
 
   render() {
     const { errorMessage } = this.state
-    const { dataCatalog, setDataCatalog, selectedFiles, selectedDirectories, externalResources, original, isPas } = this.props.Stores.Qvain
+    const {
+      dataCatalog,
+      setDataCatalog,
+      selectedFiles,
+      selectedDirectories,
+      externalResources,
+      original,
+      isPas,
+    } = this.props.Stores.Qvain
     const selected = [...selectedFiles, ...selectedDirectories, ...externalResources]
 
+    if (this.props.Stores.Locale.lang) {
+      this.updateOptions()
+    }
     // PAS catalog cannot be selected by the user
     const availableOptions = isPas ? pasOptions : options
+    const catalogSelectValue = availableOptions.find((opt) => opt.value === dataCatalog)
+
     return (
       <Card>
         <LabelLarge htmlFor="dataCatalogSelect">
@@ -77,7 +99,7 @@ class DataCatalog extends Component {
           component={Select}
           inputId="dataCatalogSelect"
           name="dataCatalog"
-          value={availableOptions.find(opt => opt.value === dataCatalog)}
+          value={catalogSelectValue}
           options={availableOptions}
           onChange={(selection) => {
             setDataCatalog(selection.value)
@@ -87,7 +109,7 @@ class DataCatalog extends Component {
             })
 
             // Uncheck useDoi checkbox if data catalog is ATT
-            if (selection.value === 'urn:nbn:fi:att:data-catalog-att') {
+            if (selection.value === DATA_CATALOG_IDENTIFIER.ATT) {
               this.setState({
                 useDoi: false,
               })
@@ -95,25 +117,21 @@ class DataCatalog extends Component {
           }}
           onBlur={this.handleOnBlur}
           attributes={{ placeholder: 'qvain.files.dataCatalog.placeholder' }}
-          isDisabled={(selected.length > 0) || (original !== undefined) || isPas}
+          isDisabled={selected.length > 0 || original !== undefined || isPas}
         />
-        {
-          (this.state.fileOrigin === 'IDA' && original === undefined) && (
+        {this.state.fileOrigin === 'IDA' && original === undefined && (
           <DoiSelectionContainer>
             <Checkbox
               id="doiSelector"
               onChange={this.handleDoiCheckboxChange}
-              disabled={(this.state.fileOrigin !== 'IDA' || original !== undefined)}
+              disabled={this.state.fileOrigin !== 'IDA' || original !== undefined}
               checked={this.state.useDoi}
             />
-            <DoiLabel
-              htmlFor="doiSelector"
-            >
+            <DoiLabel htmlFor="doiSelector">
               <Translate content="qvain.files.dataCatalog.doiSelection" />
             </DoiLabel>
           </DoiSelectionContainer>
-          )
-        }
+        )}
         {errorMessage && <ValidationError>{errorMessage}</ValidationError>}
       </Card>
     )

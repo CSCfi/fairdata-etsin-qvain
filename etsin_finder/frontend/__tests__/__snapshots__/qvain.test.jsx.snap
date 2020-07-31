@@ -2,36 +2,36 @@
 
 exports[`Qvain dataset list PreservationStates should render <TablePasState /> 1`] = `
 <Fragment>
-  <Styled(styled.div)
+  <tablePasState__PasLabel
     color="primary"
   >
     PAS
-  </Styled(styled.div)>
+  </tablePasState__PasLabel>
   <Translate
     component={
       Object {
         "$$typeof": Symbol(react.forward_ref),
         "attrs": Array [],
         "componentStyle": ComponentStyle {
-          "componentId": "sc-RcBXQ",
+          "componentId": "tablePasState__PasText-sc-1w7mbwe-1",
           "isStatic": true,
           "rules": Array [
             "
   margin-left: 10px;
   font-size: 0.8em;
   :before {
-    content: \\"(\\";
+    content: '(';
   }
   :after {
-    content: \\")\\";
+    content: ')';
   }
 ",
           ],
         },
-        "displayName": "styled.span",
+        "displayName": "tablePasState__PasText",
         "foldedComponentIds": Array [],
         "render": [Function],
-        "styledComponentId": "sc-RcBXQ",
+        "styledComponentId": "tablePasState__PasText-sc-1w7mbwe-1",
         "target": "span",
         "toString": [Function],
         "warnTooManyClasses": [Function],
@@ -49,54 +49,11 @@ exports[`Qvain should render correctly 1`] = `
 </ContextConsumer>
 `;
 
-exports[`Qvain.Actors should render correctly 1`] = `
-<div
-  className="container"
->
-  <styled.h2>
-    <Translate
-      component="span"
-      content="qvain.actors.title"
-    />
-    <Tooltip
-      align="Right"
-      close={[Function]}
-      isOpen={false}
-      text={<ActorsInfoTooltip />}
-    >
-      <HelpIcon
-        aria-label="Actors info"
-        onClick={[Function]}
-      />
-    </Tooltip>
-  </styled.h2>
-  <styled.div>
-    <styled.div>
-      <h3>
-        <Translate
-          component="span"
-          content="qvain.actors.add.title"
-        />
-         *
-      </h3>
-      <Translate
-        component="p"
-        content="qvain.actors.add.help"
-      />
-      <inject-ActorTypeSelectBase-with-Stores />
-      <inject-SelectedActorBase-with-Stores />
-      <inject-ActorInfoBase-with-Stores />
-    </styled.div>
-    <inject-AddedActorsBase-with-Stores />
-  </styled.div>
-</div>
-`;
-
 exports[`Qvain.Description should render <Description /> 1`] = `
 <div
   className="container"
 >
-  <styled.h2>
+  <title__SectionTitle>
     <Translate
       component="span"
       content="qvain.description.title"
@@ -112,11 +69,12 @@ exports[`Qvain.Description should render <Description /> 1`] = `
         onClick={[Function]}
       />
     </Tooltip>
-  </styled.h2>
+  </title__SectionTitle>
   <inject-DescriptionField-with-Stores />
   <inject-IssuedDateField-with-Stores />
   <inject-OtherIdentifierField-with-Stores />
   <inject-FieldOfScienceField-with-Stores />
+  <inject-LanguageField-with-Stores />
   <inject-KeywordsField-with-Stores />
 </div>
 `;
@@ -127,32 +85,62 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
     Object {
       "Locale": Locale {},
       "Qvain": Qvain {
+        "Actors": Actors {
+          "Qvain": [Circular],
+          "actorInEdit": null,
+          "actors": Array [],
+          "createActor": [Function],
+          "editDataset": [Function],
+          "getDatasetOrganizations": [Function],
+          "getReferenceOrganizations": [Function],
+          "getReferenceOrganizationsForActor": [Function],
+          "isActorEqual": [Function],
+          "isEqual": [Function],
+          "isOrganizationEqual": [Function],
+          "loadingReferenceOrganizations": Object {},
+          "referenceOrganizationErrors": Object {},
+          "referenceOrganizations": Object {},
+          "reset": [Function],
+          "toBackend": [Function],
+        },
         "Files": Files {
-          "AddItemsView": DirectoryView {
+          "AddItemsView": AddItemsView {
             "Files": [Circular],
             "checkedState": Object {},
+            "defaultShowLimit": 20,
             "getTopmostChecked": [Function],
             "isOpen": [Function],
             "openState": Object {},
-            "showAllState": Object {},
-            "showLimit": 20,
-            "showLimitMargin": 1,
+            "showLimitIncrement": 20,
+            "showLimitState": Object {},
           },
           "Qvain": [Circular],
-          "SelectedItemsView": DirectoryView {
+          "SelectedItemsView": SelectedItemsView {
             "Files": [Circular],
             "checkedState": Object {},
+            "defaultShowLimit": 20,
             "getTopmostChecked": [Function],
+            "hideRemoved": false,
             "isOpen": [Function],
             "openState": Object {},
-            "showAllState": Object {},
-            "showLimit": 20,
-            "showLimitMargin": 1,
+            "showLimitIncrement": 20,
+            "showLimitState": Object {},
           },
-          "getExisting": [Function],
+          "cache": Object {},
+          "cancelOnReset": [Function],
           "getItemByPath": [Function],
           "inEdit": undefined,
-          "loadingProject": null,
+          "initialPagination": 10,
+          "loadingMetadata": null,
+          "loadingProjectInfo": null,
+          "loadingProjectRoot": null,
+          "metadataToMetax": [Function],
+          "originalMetadata": Object {},
+          "projectLocked": false,
+          "promiseManager": PromiseManager {
+            "add": [Function],
+            "promises": Array [],
+          },
           "refreshModalDirectory": null,
           "root": null,
           "selectedExistingCounter": ChildItemCounter {
@@ -163,28 +151,21 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
           },
           "selectedExistingMetadata": Object {},
           "selectedProject": undefined,
-          "toMetax": [Function],
+        },
+        "Spatials": Spatials {
+          "Qvain": [Circular],
+          "toBackend": [Function],
         },
         "accessType": Object {
           "name": undefined,
           "url": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
         },
-        "actorInEdit": Object {
-          "email": "",
-          "identifier": "",
-          "name": "",
-          "organization": undefined,
-          "role": Array [],
-          "type": "person",
-          "uiId": undefined,
-        },
-        "actors": Array [],
         "changed": false,
-        "createActor": [Function],
-        "createActorUIId": [Function],
         "createExternalResourceUIId": [Function],
         "cumulativeState": 0,
         "dataCatalog": undefined,
+        "datasetLanguage": undefined,
+        "datasetLanguageArray": Array [],
         "deprecated": false,
         "description": Object {
           "en": "",
@@ -205,32 +186,35 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
         },
         "externalResources": Array [],
         "fieldOfScience": undefined,
-        "fieldsOfScience": Array [],
+        "fieldOfScienceArray": Array [],
         "fixDeprecatedModalOpen": false,
         "hierarchy": Object {},
         "idaPickerOpen": false,
         "inEdit": undefined,
-        "isEqual": [Function],
-        "isEqualObj": [Function],
-        "isObjectEmpty": [Function],
+        "infrastructure": undefined,
+        "infrastructures": Array [],
         "issuedDate": undefined,
-        "keywords": Array [],
-        "legacyFilePicker": false,
+        "keywordString": "",
+        "keywordsArray": Array [],
         "license": Object {
           "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
           "name": undefined,
         },
         "mergeArraysByIdentifier": [Function],
-        "mergeTheSameActors": [Function],
         "metadataModalFile": undefined,
+        "metaxApiV2": true,
         "original": undefined,
-        "otherIdentifiers": Array [],
+        "otherIdentifier": "",
+        "otherIdentifiersArray": Array [],
+        "otherIdentifiersValidationError": null,
         "otherLicenseUrl": undefined,
         "preservationState": 0,
         "restrictionGrounds": Object {},
         "selectedDirectories": Array [],
         "selectedFiles": Array [],
         "selectedProject": undefined,
+        "setOtherIdentifierValidationError": [Function],
+        "spatials": Array [],
         "title": Object {
           "en": "",
           "fi": "",
@@ -248,32 +232,62 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
     Object {
       "Locale": Locale {},
       "Qvain": Qvain {
+        "Actors": Actors {
+          "Qvain": [Circular],
+          "actorInEdit": null,
+          "actors": Array [],
+          "createActor": [Function],
+          "editDataset": [Function],
+          "getDatasetOrganizations": [Function],
+          "getReferenceOrganizations": [Function],
+          "getReferenceOrganizationsForActor": [Function],
+          "isActorEqual": [Function],
+          "isEqual": [Function],
+          "isOrganizationEqual": [Function],
+          "loadingReferenceOrganizations": Object {},
+          "referenceOrganizationErrors": Object {},
+          "referenceOrganizations": Object {},
+          "reset": [Function],
+          "toBackend": [Function],
+        },
         "Files": Files {
-          "AddItemsView": DirectoryView {
+          "AddItemsView": AddItemsView {
             "Files": [Circular],
             "checkedState": Object {},
+            "defaultShowLimit": 20,
             "getTopmostChecked": [Function],
             "isOpen": [Function],
             "openState": Object {},
-            "showAllState": Object {},
-            "showLimit": 20,
-            "showLimitMargin": 1,
+            "showLimitIncrement": 20,
+            "showLimitState": Object {},
           },
           "Qvain": [Circular],
-          "SelectedItemsView": DirectoryView {
+          "SelectedItemsView": SelectedItemsView {
             "Files": [Circular],
             "checkedState": Object {},
+            "defaultShowLimit": 20,
             "getTopmostChecked": [Function],
+            "hideRemoved": false,
             "isOpen": [Function],
             "openState": Object {},
-            "showAllState": Object {},
-            "showLimit": 20,
-            "showLimitMargin": 1,
+            "showLimitIncrement": 20,
+            "showLimitState": Object {},
           },
-          "getExisting": [Function],
+          "cache": Object {},
+          "cancelOnReset": [Function],
           "getItemByPath": [Function],
           "inEdit": undefined,
-          "loadingProject": null,
+          "initialPagination": 10,
+          "loadingMetadata": null,
+          "loadingProjectInfo": null,
+          "loadingProjectRoot": null,
+          "metadataToMetax": [Function],
+          "originalMetadata": Object {},
+          "projectLocked": false,
+          "promiseManager": PromiseManager {
+            "add": [Function],
+            "promises": Array [],
+          },
           "refreshModalDirectory": null,
           "root": null,
           "selectedExistingCounter": ChildItemCounter {
@@ -284,28 +298,21 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
           },
           "selectedExistingMetadata": Object {},
           "selectedProject": undefined,
-          "toMetax": [Function],
+        },
+        "Spatials": Spatials {
+          "Qvain": [Circular],
+          "toBackend": [Function],
         },
         "accessType": Object {
           "name": undefined,
           "url": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
         },
-        "actorInEdit": Object {
-          "email": "",
-          "identifier": "",
-          "name": "",
-          "organization": undefined,
-          "role": Array [],
-          "type": "person",
-          "uiId": undefined,
-        },
-        "actors": Array [],
         "changed": false,
-        "createActor": [Function],
-        "createActorUIId": [Function],
         "createExternalResourceUIId": [Function],
         "cumulativeState": 0,
         "dataCatalog": undefined,
+        "datasetLanguage": undefined,
+        "datasetLanguageArray": Array [],
         "deprecated": false,
         "description": Object {
           "en": "",
@@ -326,32 +333,35 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
         },
         "externalResources": Array [],
         "fieldOfScience": undefined,
-        "fieldsOfScience": Array [],
+        "fieldOfScienceArray": Array [],
         "fixDeprecatedModalOpen": false,
         "hierarchy": Object {},
         "idaPickerOpen": false,
         "inEdit": undefined,
-        "isEqual": [Function],
-        "isEqualObj": [Function],
-        "isObjectEmpty": [Function],
+        "infrastructure": undefined,
+        "infrastructures": Array [],
         "issuedDate": undefined,
-        "keywords": Array [],
-        "legacyFilePicker": false,
+        "keywordString": "",
+        "keywordsArray": Array [],
         "license": Object {
           "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
           "name": undefined,
         },
         "mergeArraysByIdentifier": [Function],
-        "mergeTheSameActors": [Function],
         "metadataModalFile": undefined,
+        "metaxApiV2": true,
         "original": undefined,
-        "otherIdentifiers": Array [],
+        "otherIdentifier": "",
+        "otherIdentifiersArray": Array [],
+        "otherIdentifiersValidationError": null,
         "otherLicenseUrl": undefined,
         "preservationState": 0,
         "restrictionGrounds": Object {},
         "selectedDirectories": Array [],
         "selectedFiles": Array [],
         "selectedProject": undefined,
+        "setOtherIdentifierValidationError": [Function],
+        "spatials": Array [],
         "title": Object {
           "en": "",
           "fi": "",
@@ -369,32 +379,62 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
     Object {
       "Locale": Locale {},
       "Qvain": Qvain {
+        "Actors": Actors {
+          "Qvain": [Circular],
+          "actorInEdit": null,
+          "actors": Array [],
+          "createActor": [Function],
+          "editDataset": [Function],
+          "getDatasetOrganizations": [Function],
+          "getReferenceOrganizations": [Function],
+          "getReferenceOrganizationsForActor": [Function],
+          "isActorEqual": [Function],
+          "isEqual": [Function],
+          "isOrganizationEqual": [Function],
+          "loadingReferenceOrganizations": Object {},
+          "referenceOrganizationErrors": Object {},
+          "referenceOrganizations": Object {},
+          "reset": [Function],
+          "toBackend": [Function],
+        },
         "Files": Files {
-          "AddItemsView": DirectoryView {
+          "AddItemsView": AddItemsView {
             "Files": [Circular],
             "checkedState": Object {},
+            "defaultShowLimit": 20,
             "getTopmostChecked": [Function],
             "isOpen": [Function],
             "openState": Object {},
-            "showAllState": Object {},
-            "showLimit": 20,
-            "showLimitMargin": 1,
+            "showLimitIncrement": 20,
+            "showLimitState": Object {},
           },
           "Qvain": [Circular],
-          "SelectedItemsView": DirectoryView {
+          "SelectedItemsView": SelectedItemsView {
             "Files": [Circular],
             "checkedState": Object {},
+            "defaultShowLimit": 20,
             "getTopmostChecked": [Function],
+            "hideRemoved": false,
             "isOpen": [Function],
             "openState": Object {},
-            "showAllState": Object {},
-            "showLimit": 20,
-            "showLimitMargin": 1,
+            "showLimitIncrement": 20,
+            "showLimitState": Object {},
           },
-          "getExisting": [Function],
+          "cache": Object {},
+          "cancelOnReset": [Function],
           "getItemByPath": [Function],
           "inEdit": undefined,
-          "loadingProject": null,
+          "initialPagination": 10,
+          "loadingMetadata": null,
+          "loadingProjectInfo": null,
+          "loadingProjectRoot": null,
+          "metadataToMetax": [Function],
+          "originalMetadata": Object {},
+          "projectLocked": false,
+          "promiseManager": PromiseManager {
+            "add": [Function],
+            "promises": Array [],
+          },
           "refreshModalDirectory": null,
           "root": null,
           "selectedExistingCounter": ChildItemCounter {
@@ -405,28 +445,21 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
           },
           "selectedExistingMetadata": Object {},
           "selectedProject": undefined,
-          "toMetax": [Function],
+        },
+        "Spatials": Spatials {
+          "Qvain": [Circular],
+          "toBackend": [Function],
         },
         "accessType": Object {
           "name": undefined,
           "url": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
         },
-        "actorInEdit": Object {
-          "email": "",
-          "identifier": "",
-          "name": "",
-          "organization": undefined,
-          "role": Array [],
-          "type": "person",
-          "uiId": undefined,
-        },
-        "actors": Array [],
         "changed": false,
-        "createActor": [Function],
-        "createActorUIId": [Function],
         "createExternalResourceUIId": [Function],
         "cumulativeState": 0,
         "dataCatalog": undefined,
+        "datasetLanguage": undefined,
+        "datasetLanguageArray": Array [],
         "deprecated": false,
         "description": Object {
           "en": "",
@@ -447,32 +480,183 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
         },
         "externalResources": Array [],
         "fieldOfScience": undefined,
-        "fieldsOfScience": Array [],
+        "fieldOfScienceArray": Array [],
         "fixDeprecatedModalOpen": false,
         "hierarchy": Object {},
         "idaPickerOpen": false,
         "inEdit": undefined,
-        "isEqual": [Function],
-        "isEqualObj": [Function],
-        "isObjectEmpty": [Function],
+        "infrastructure": undefined,
+        "infrastructures": Array [],
         "issuedDate": undefined,
-        "keywords": Array [],
-        "legacyFilePicker": false,
+        "keywordString": "",
+        "keywordsArray": Array [],
         "license": Object {
           "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
           "name": undefined,
         },
         "mergeArraysByIdentifier": [Function],
-        "mergeTheSameActors": [Function],
         "metadataModalFile": undefined,
+        "metaxApiV2": true,
         "original": undefined,
-        "otherIdentifiers": Array [],
+        "otherIdentifier": "",
+        "otherIdentifiersArray": Array [],
+        "otherIdentifiersValidationError": null,
         "otherLicenseUrl": undefined,
         "preservationState": 0,
         "restrictionGrounds": Object {},
         "selectedDirectories": Array [],
         "selectedFiles": Array [],
         "selectedProject": undefined,
+        "setOtherIdentifierValidationError": [Function],
+        "spatials": Array [],
+        "title": Object {
+          "en": "",
+          "fi": "",
+        },
+        "useDoi": false,
+      },
+    }
+  }
+/>
+`;
+
+
+exports[`Qvain.Description should render <LanguageField /> 1`] = `
+<LanguageField
+  Stores={
+    Object {
+      "Locale": Locale {},
+      "Qvain": Qvain {
+        "Actors": Actors {
+          "Qvain": [Circular],
+          "actorInEdit": null,
+          "actors": Array [],
+          "createActor": [Function],
+          "editDataset": [Function],
+          "getDatasetOrganizations": [Function],
+          "getReferenceOrganizations": [Function],
+          "getReferenceOrganizationsForActor": [Function],
+          "isActorEqual": [Function],
+          "isEqual": [Function],
+          "isOrganizationEqual": [Function],
+          "loadingReferenceOrganizations": Object {},
+          "referenceOrganizationErrors": Object {},
+          "referenceOrganizations": Object {},
+          "reset": [Function],
+          "toBackend": [Function],
+        },
+        "Files": Files {
+          "AddItemsView": AddItemsView {
+            "Files": [Circular],
+            "checkedState": Object {},
+            "defaultShowLimit": 20,
+            "getTopmostChecked": [Function],
+            "isOpen": [Function],
+            "openState": Object {},
+            "showLimitIncrement": 20,
+            "showLimitState": Object {},
+          },
+          "Qvain": [Circular],
+          "SelectedItemsView": SelectedItemsView {
+            "Files": [Circular],
+            "checkedState": Object {},
+            "defaultShowLimit": 20,
+            "getTopmostChecked": [Function],
+            "hideRemoved": false,
+            "isOpen": [Function],
+            "openState": Object {},
+            "showLimitIncrement": 20,
+            "showLimitState": Object {},
+          },
+          "cache": Object {},
+          "cancelOnReset": [Function],
+          "getItemByPath": [Function],
+          "inEdit": undefined,
+          "initialPagination": 10,
+          "loadingMetadata": null,
+          "loadingProjectInfo": null,
+          "loadingProjectRoot": null,
+          "metadataToMetax": [Function],
+          "originalMetadata": Object {},
+          "projectLocked": false,
+          "promiseManager": PromiseManager {
+            "add": [Function],
+            "promises": Array [],
+          },
+          "refreshModalDirectory": null,
+          "root": null,
+          "selectedExistingCounter": ChildItemCounter {
+            "root": Object {
+              "count": 0,
+              "directories": Object {},
+            },
+          },
+          "selectedExistingMetadata": Object {},
+          "selectedProject": undefined,
+        },
+        "Spatials": Spatials {
+          "Qvain": [Circular],
+          "toBackend": [Function],
+        },
+        "accessType": Object {
+          "name": undefined,
+          "url": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
+        },
+        "changed": false,
+        "createExternalResourceUIId": [Function],
+        "cumulativeState": 0,
+        "dataCatalog": undefined,
+        "datasetLanguage": undefined,
+        "datasetLanguageArray": Array [],
+        "deprecated": false,
+        "description": Object {
+          "en": "",
+          "fi": "",
+        },
+        "deselectChildren": [Function],
+        "deselectParents": [Function],
+        "embargoExpDate": undefined,
+        "existingDirectories": Array [],
+        "existingFiles": Array [],
+        "extResFormOpen": false,
+        "externalResourceInEdit": Object {
+          "accessUrl": "",
+          "downloadUrl": "",
+          "id": undefined,
+          "title": "",
+          "useCategory": "",
+        },
+        "externalResources": Array [],
+        "fieldOfScience": undefined,
+        "fieldOfScienceArray": Array [],
+        "fixDeprecatedModalOpen": false,
+        "hierarchy": Object {},
+        "idaPickerOpen": false,
+        "inEdit": undefined,
+        "infrastructure": undefined,
+        "infrastructures": Array [],
+        "issuedDate": undefined,
+        "keywordString": "",
+        "keywordsArray": Array [],
+        "license": Object {
+          "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
+          "name": undefined,
+        },
+        "mergeArraysByIdentifier": [Function],
+        "metadataModalFile": undefined,
+        "metaxApiV2": true,
+        "original": undefined,
+        "otherIdentifier": "",
+        "otherIdentifiersArray": Array [],
+        "otherIdentifiersValidationError": null,
+        "otherLicenseUrl": undefined,
+        "preservationState": 0,
+        "restrictionGrounds": Object {},
+        "selectedDirectories": Array [],
+        "selectedFiles": Array [],
+        "selectedProject": undefined,
+        "setOtherIdentifierValidationError": [Function],
+        "spatials": Array [],
         "title": Object {
           "en": "",
           "fi": "",
@@ -490,32 +674,62 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
     Object {
       "Locale": Locale {},
       "Qvain": Qvain {
+        "Actors": Actors {
+          "Qvain": [Circular],
+          "actorInEdit": null,
+          "actors": Array [],
+          "createActor": [Function],
+          "editDataset": [Function],
+          "getDatasetOrganizations": [Function],
+          "getReferenceOrganizations": [Function],
+          "getReferenceOrganizationsForActor": [Function],
+          "isActorEqual": [Function],
+          "isEqual": [Function],
+          "isOrganizationEqual": [Function],
+          "loadingReferenceOrganizations": Object {},
+          "referenceOrganizationErrors": Object {},
+          "referenceOrganizations": Object {},
+          "reset": [Function],
+          "toBackend": [Function],
+        },
         "Files": Files {
-          "AddItemsView": DirectoryView {
+          "AddItemsView": AddItemsView {
             "Files": [Circular],
             "checkedState": Object {},
+            "defaultShowLimit": 20,
             "getTopmostChecked": [Function],
             "isOpen": [Function],
             "openState": Object {},
-            "showAllState": Object {},
-            "showLimit": 20,
-            "showLimitMargin": 1,
+            "showLimitIncrement": 20,
+            "showLimitState": Object {},
           },
           "Qvain": [Circular],
-          "SelectedItemsView": DirectoryView {
+          "SelectedItemsView": SelectedItemsView {
             "Files": [Circular],
             "checkedState": Object {},
+            "defaultShowLimit": 20,
             "getTopmostChecked": [Function],
+            "hideRemoved": false,
             "isOpen": [Function],
             "openState": Object {},
-            "showAllState": Object {},
-            "showLimit": 20,
-            "showLimitMargin": 1,
+            "showLimitIncrement": 20,
+            "showLimitState": Object {},
           },
-          "getExisting": [Function],
+          "cache": Object {},
+          "cancelOnReset": [Function],
           "getItemByPath": [Function],
           "inEdit": undefined,
-          "loadingProject": null,
+          "initialPagination": 10,
+          "loadingMetadata": null,
+          "loadingProjectInfo": null,
+          "loadingProjectRoot": null,
+          "metadataToMetax": [Function],
+          "originalMetadata": Object {},
+          "projectLocked": false,
+          "promiseManager": PromiseManager {
+            "add": [Function],
+            "promises": Array [],
+          },
           "refreshModalDirectory": null,
           "root": null,
           "selectedExistingCounter": ChildItemCounter {
@@ -526,28 +740,21 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
           },
           "selectedExistingMetadata": Object {},
           "selectedProject": undefined,
-          "toMetax": [Function],
+        },
+        "Spatials": Spatials {
+          "Qvain": [Circular],
+          "toBackend": [Function],
         },
         "accessType": Object {
           "name": undefined,
           "url": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
         },
-        "actorInEdit": Object {
-          "email": "",
-          "identifier": "",
-          "name": "",
-          "organization": undefined,
-          "role": Array [],
-          "type": "person",
-          "uiId": undefined,
-        },
-        "actors": Array [],
         "changed": false,
-        "createActor": [Function],
-        "createActorUIId": [Function],
         "createExternalResourceUIId": [Function],
         "cumulativeState": 0,
         "dataCatalog": undefined,
+        "datasetLanguage": undefined,
+        "datasetLanguageArray": Array [],
         "deprecated": false,
         "description": Object {
           "en": "",
@@ -568,32 +775,35 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
         },
         "externalResources": Array [],
         "fieldOfScience": undefined,
-        "fieldsOfScience": Array [],
+        "fieldOfScienceArray": Array [],
         "fixDeprecatedModalOpen": false,
         "hierarchy": Object {},
         "idaPickerOpen": false,
         "inEdit": undefined,
-        "isEqual": [Function],
-        "isEqualObj": [Function],
-        "isObjectEmpty": [Function],
+        "infrastructure": undefined,
+        "infrastructures": Array [],
         "issuedDate": undefined,
-        "keywords": Array [],
-        "legacyFilePicker": false,
+        "keywordString": "",
+        "keywordsArray": Array [],
         "license": Object {
           "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
           "name": undefined,
         },
         "mergeArraysByIdentifier": [Function],
-        "mergeTheSameActors": [Function],
         "metadataModalFile": undefined,
+        "metaxApiV2": true,
         "original": undefined,
-        "otherIdentifiers": Array [],
+        "otherIdentifier": "",
+        "otherIdentifiersArray": Array [],
+        "otherIdentifiersValidationError": null,
         "otherLicenseUrl": undefined,
         "preservationState": 0,
         "restrictionGrounds": Object {},
         "selectedDirectories": Array [],
         "selectedFiles": Array [],
         "selectedProject": undefined,
+        "setOtherIdentifierValidationError": [Function],
+        "spatials": Array [],
         "title": Object {
           "en": "",
           "fi": "",
@@ -607,14 +817,14 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
 
 exports[`Qvain.RightsAndLicenses should render <AccessType /> 1`] = `
 <Card>
-  <styled.label
+  <form__LabelLarge
     htmlFor="accessTypeSelect"
   >
     <Translate
       component="span"
       content="qvain.rightsAndLicenses.accessType.title"
     />
-  </styled.label>
+  </form__LabelLarge>
   <Translate
     attributes={
       Object {
@@ -636,20 +846,20 @@ exports[`Qvain.RightsAndLicenses should render <AccessType /> 1`] = `
       }
     }
   />
-  <styled.p />
+  <validationError__ValidationError />
 </Card>
 `;
 
 exports[`Qvain.RightsAndLicenses should render <Licenses /> 1`] = `
 <Card>
-  <styled.label
+  <form__LabelLarge
     htmlFor="licenseSelect"
   >
     <Translate
       component="span"
       content="qvain.rightsAndLicenses.license.title"
     />
-  </styled.label>
+  </form__LabelLarge>
   <Translate
     attributes={
       Object {
@@ -678,7 +888,7 @@ exports[`Qvain.RightsAndLicenses should render <RightsAndLicenses /> 1`] = `
 <div
   className="container"
 >
-  <styled.h2>
+  <title__SectionTitle>
     <Translate
       component="span"
       content="qvain.rightsAndLicenses.title"
@@ -694,7 +904,7 @@ exports[`Qvain.RightsAndLicenses should render <RightsAndLicenses /> 1`] = `
         onClick={[Function]}
       />
     </Tooltip>
-  </styled.h2>
+  </title__SectionTitle>
   <inject-License-with-Stores />
   <inject-AccessType-with-Stores />
 </div>

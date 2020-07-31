@@ -9,13 +9,14 @@ import axios from 'axios'
 import { observable, action } from 'mobx'
 
 import Modal from '../../../general/modal'
+import ConfirmClose from '../../general/confirmClose'
 import getReferenceData from '../../utils/getReferenceData'
 import { fileMetadataSchema } from '../../utils/formValidation'
 import { getResponseError } from '../../utils/responseError'
 import { Label, HelpField, Input } from '../../general/form'
 import { DangerButton, TableButton } from '../../general/buttons'
 import Response from '../response'
-import { getPASMeta } from '../../../../stores/view/qvain.files'
+import { getPASMeta } from '../../../../stores/view/qvain.files.items'
 
 import { getOptions, getDefaultOptions, makeOption, findOption } from './options'
 import { MetadataSelect, selectStylesNarrow, labelStyle } from './select'
@@ -211,10 +212,10 @@ class MetadataModal extends Component {
       const response = await patchPromise
 
       // Update file hierarchy with response data, close modal
-      if (this.props.Stores.Qvain.legacyFilePicker) {
-        this.props.Stores.Qvain.updateFileMetadata(response.data)
-      } else {
+      if (this.props.Stores.Qvain.metaxApiV2) {
         this.props.Stores.Qvain.Files.applyPASMeta(getPASMeta(response.data))
+      } else {
+        this.props.Stores.Qvain.updateFileMetadata(response.data)
       }
       this.setState({
         fileChanged: false
@@ -290,7 +291,7 @@ class MetadataModal extends Component {
   initialize() {
     const { Qvain } = this.props.Stores
     const file = Qvain.metadataModalFile || {}
-    const pasObj = (Qvain.legacyFilePicker ? file : file.pasMeta) || {}
+    const pasObj = (!Qvain.metaxApiV2 ? file : file.pasMeta) || {}
 
     const newState = {
       response: null,
@@ -420,19 +421,12 @@ class MetadataModal extends Component {
           <Translate content={'qvain.files.metadataModal.buttons.save'} />
         </DangerButton>
 
-        {this.state.confirmClose && (
-          <ResponseOverlay>
-            <div style={{ width: '100%' }}>
-              <Translate content={'qvain.files.metadataModal.warning'} component="p" />
-              <AutoWidthTableButton disabled={this.state.loading} onClick={this.hideConfirmClose}>
-                <Translate content={'qvain.files.metadataModal.buttons.cancelClose'} />
-              </AutoWidthTableButton>
-              <DangerButton disabled={this.state.loading} onClick={this.close}>
-                <Translate content={'qvain.files.metadataModal.buttons.confirmClose'} />
-              </DangerButton>
-            </div>
-          </ResponseOverlay>
-        )}
+        <ConfirmClose
+          show={this.state.confirmClose}
+          hideConfirm={this.hideConfirmClose}
+          closeModal={this.close}
+          disabled={this.state.loading}
+        />
 
         {(this.state.loading || this.state.response) && (
           <ResponseOverlay>

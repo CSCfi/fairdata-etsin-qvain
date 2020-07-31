@@ -5,74 +5,79 @@ import Select from 'react-select'
 import Translate from 'react-translate-component'
 import styled from 'styled-components'
 
-import getReferenceData from '../utils/getReferenceData';
-import Card from '../general/card';
-import RestrictionGrounds from './resctrictionGrounds';
-import { accessTypeSchema } from '../utils/formValidation';
-import ValidationError from '../general/validationError';
+import getReferenceData from '../utils/getReferenceData'
+import Card from '../general/card'
+import RestrictionGrounds from './resctrictionGrounds'
+import { accessTypeSchema } from '../utils/formValidation'
+import ValidationError from '../general/validationError'
 import EmbargoExpires from './embargoExpires'
 import { onChange, getCurrentValue } from '../utils/select'
 import { AccessType as AccessTypeConstructor } from '../../../stores/view/qvain'
-import { AccessTypeURLs } from '../utils/constants'
 import { LabelLarge, HelpField } from '../general/form'
+import { ACCESS_TYPE_URL } from '../../../utils/constants'
 
 export class AccessType extends Component {
   promises = []
 
   static propTypes = {
-    Stores: PropTypes.object.isRequired
+    Stores: PropTypes.object.isRequired,
   }
 
   state = {
     options: {
       en: [],
-      fi: []
+      fi: [],
     },
-    accessTypeValidationError: null
+    accessTypeValidationError: null,
   }
 
   componentDidMount = () => {
-    this.promises.push(getReferenceData('access_type')
-      .then(res => {
-        const list = res.data.hits.hits;
-        const refsEn = list.map(ref => (
-          {
+    this.promises.push(
+      getReferenceData('access_type')
+        .then((res) => {
+          const list = res.data.hits.hits
+          let refsEn = list.map((ref) => ({
             value: ref._source.uri,
             label: ref._source.label.en,
-          }
-        ))
-        const refsFi = list.map(ref => (
-          {
+          }))
+          let refsFi = list.map((ref) => ({
             value: ref._source.uri,
             label: ref._source.label.fi,
+          }))
+
+          const user = this.props.Stores.Auth.user
+
+          if (!user.isUsingRems) {
+            refsFi = refsFi.filter((ref) => ref.value !== ACCESS_TYPE_URL.RESTRICTED)
+            refsEn = refsEn.filter((ref) => ref.value !== ACCESS_TYPE_URL.RESTRICTED)
           }
-        ))
-        this.setState({
-          options: {
-            en: refsEn,
-            fi: refsFi
+
+          this.setState({
+            options: {
+              en: refsEn,
+              fi: refsFi,
+            },
+          })
+        })
+        .catch((error) => {
+          if (error.response) {
+            // Error response from Metax
+            console.log(error.response.data)
+            console.log(error.response.status)
+            console.log(error.response.headers)
+          } else if (error.request) {
+            // No response from Metax
+            console.log(error.request)
+          } else {
+            // Something happened in setting up the request that triggered an Error
+            console.log('Error', error.message)
           }
         })
-      })
-      .catch(error => {
-        if (error.response) {
-          // Error response from Metax
-          console.log(error.response.data);
-          console.log(error.response.status);
-          console.log(error.response.headers);
-        } else if (error.request) {
-          // No response from Metax
-          console.log(error.request);
-        } else {
-          // Something happened in setting up the request that triggered an Error
-          console.log('Error', error.message);
-        }
-      })
-    );
+    )
   }
 
   componentWillUnmount() {
-    this.promises.forEach(promise => promise && promise.cancel && promise.cancel())
+    this.promises.forEach((promise) => promise && promise.cancel && promise.cancel())
   }
 
   handleChange = (selection) => {
@@ -84,7 +89,8 @@ export class AccessType extends Component {
   }
 
   handleBlur = () => {
-    accessTypeSchema.validate(this.props.Stores.Qvain.accessType)
+    accessTypeSchema
+      .validate(this.props.Stores.Qvain.accessType)
       .then(() => {
         this.setState({ accessTypeValidationError: null })
       })
@@ -99,10 +105,13 @@ export class AccessType extends Component {
     const { accessType, readonly } = this.props.Stores.Qvain
 
     let permitInfo = null
-    if (accessType && accessType.url === 'http://uri.suomi.fi/codelist/fairdata/access_type/code/permit') {
+    if (accessType && accessType.url === ACCESS_TYPE_URL.PERMIT) {
       permitInfo = (
         <PermitHelp>
-          <Translate component={HelpField} content="qvain.rightsAndLicenses.accessType.permitInfo" />
+          <Translate
+            component={HelpField}
+            content="qvain.rightsAndLicenses.accessType.permitInfo"
+          />
         </PermitHelp>
       )
     }
@@ -125,14 +134,15 @@ export class AccessType extends Component {
           onChange={this.handleChange}
           onBlur={this.handleBlur}
           attributes={{
-            placeholder: 'qvain.rightsAndLicenses.accessType.placeholder'
+            placeholder: 'qvain.rightsAndLicenses.accessType.placeholder',
           }}
         />
-        { permitInfo }
+        {permitInfo}
         <ValidationError>{this.state.accessTypeValidationError}</ValidationError>
-        {(accessType !== undefined && accessType.url === AccessTypeURLs.EMBARGO) && (<EmbargoExpires />)}
-        {accessType.url !== AccessTypeURLs.OPEN
-          ? <RestrictionGrounds /> : null}
+        {accessType !== undefined && accessType.url === ACCESS_TYPE_URL.EMBARGO && (
+          <EmbargoExpires />
+        )}
+        {accessType.url !== ACCESS_TYPE_URL.OPEN ? <RestrictionGrounds /> : null}
       </Card>
     )
   }

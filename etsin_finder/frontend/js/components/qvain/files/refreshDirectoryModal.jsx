@@ -6,7 +6,7 @@ import axios from 'axios'
 
 import Modal from '../../general/modal'
 import Response from './response'
-import { CumulativeStates } from '../utils/constants'
+import { CUMULATIVE_STATE } from '../../../utils/constants'
 import { getResponseError } from '../utils/responseError'
 import { DangerButton, TableButton } from '../general/buttons'
 
@@ -74,7 +74,7 @@ class RefreshDirectoryModal extends Component {
 
   render() {
     const { changed, cumulativeState } = this.props.Stores.Qvain
-    const isCumulative = cumulativeState === CumulativeStates.YES
+    const isCumulative = cumulativeState === CUMULATIVE_STATE.YES
     const cumulativeKey = isCumulative ? 'cumulative' : 'noncumulative'
     return (
       <Modal
