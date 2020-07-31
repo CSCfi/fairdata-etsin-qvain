@@ -79,22 +79,45 @@ def alter_projects_to_metax(projects):
     Convert project objects from frontend to comply with the Metax schema.
 
     Arguments:
-        project (list<dict>): List of project objects, containing organization and other fields
+        project (list<dict>): List of project objects, containing details and organizations
 
     Returns:
         list<dict>: List of project objects in Metax schema
     """
     output = []
     for project in projects:
+        details = project.get("details", {})
         metax_project = {
-            "name": project.get("title"),
-            "identifier": project.get("identifier"),
-            "has_funder_identifier": project.get("fundingIdentifier"),
-            "has_funding_agency": project.get("fundingAgency"),
-            "funder_type": project.get("funderType"),
-            "source_organization": [{'identifier': 'http://uri.suomi.fi/codelist/fairdata/organization/code/10076', 'name': {'fi': 'Aalto yliopisto', 'und': 'Aalto yliopisto', 'en': 'Aalto University', 'sv': 'Aalto universitetet'}, '@type': 'Organization'}]
+            "name": details.get("title"),
+            "identifier": details.get("identifier"),
+            "has_funder_identifier": details.get("fundingIdentifier"),
+            "has_funding_agency": details.get("fundingAgency"),
+            "funder_type": details.get("funderType"),
+            "source_organization": []
         }
-        # TODO: Format organization from form data
+
+        # TODO: DRY
+        for organization in project.get("organizations", []):
+            organizationToAdd = {}
+            topLevelOrganization = {
+                "@type": "Organization",
+                "identifier": organization["organization"].get("identifier"),
+                "name": organization["organization"].get("name")
+            }
+            if "department" in organization:
+                organizationToAdd.update({
+                    "@type": "Organization",
+                    "identifier": organization["department"].get("identifier"),
+                    "name": organization["department"].get("name"),
+                    "is_part_of": topLevelOrganization
+                })
+            if "subDepartment" in organization:
+                pass
+
+            if not organizationToAdd:
+                organizationToAdd = topLevelOrganization
+            metax_project["source_organization"].append(organizationToAdd)
+
         output.append(metax_project)
     return output
 
