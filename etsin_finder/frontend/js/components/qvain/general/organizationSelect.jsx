@@ -41,6 +41,17 @@ class OrganizationSelect extends Component {
     this.fetchOptions()
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props.value.organization || !nextProps.value.organization) return
+    const { organization } = nextProps.value
+    this.fetchAllOptions(organization.value)
+  }
+
+  fetchAllOptions = async (parentId) => {
+    await this.fetchOptions()
+    await this.fetchOptions(parentId)
+  }
+
   fetchOptions = async (parentId) => {
     const url = getOrganizationSearchUrl(parentId)
     const response = await axios.get(url)

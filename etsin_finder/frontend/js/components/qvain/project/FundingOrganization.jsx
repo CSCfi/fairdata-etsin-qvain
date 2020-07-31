@@ -41,15 +41,43 @@ class FundingOrganization extends Component {
     this.setState({ formData: { ...formData, ...value } })
   }
 
+  onEdit = id => {
+    const organizationToEdit = this.props.organizations.projectOrganizations
+      .find(org => org.id === id)
+    if (!organizationToEdit) return
+    const { organization, department } = organizationToEdit
+    this.setState({
+      formData: {
+        organization: { ...this.organizationToSelectValue(organization) },
+        department: { ...this.organizationToSelectValue(department) }
+      }
+    })
+  }
+
+  onRemove = id => {
+    this.resetForm()
+    this.props.onRemoveOrganization(id)
+  }
+
   resetForm = () => {
     this.setState({ formData: { ...INITIAL_STATE.formData } })
+  }
+
+  organizationToSelectValue = organization => {
+    if (!organization) return null
+    const { lang } = this.props.Stores.Locale
+    return {
+      value: organization.identifier || null,
+      label: organization.name[lang] || organization.name.und,
+      name: { ...organization.name }
+    }
   }
 
   addOrganization = () => {
     const { organization, department } = this.state.formData
     // TODO: Validate
-    const params = [uuid(), { uri: organization.uri, name: organization.name }]
-    if (department) params.push({ uri: department.uri, name: department.name })
+    const params = [uuid(), { identifier: organization.value, name: organization.name }]
+    if (department) params.push({ identifier: department.value, name: department.name })
     const organizationToAdd = Organization(...params)
     this.props.onAddOrganization(organizationToAdd)
     this.resetForm()
@@ -66,7 +94,8 @@ class FundingOrganization extends Component {
         <Translate component="p" content="qvain.project.organization.description" />
         <AddedOrganizations
           organizations={projectOrganizations}
-          onRemove={this.props.onRemoveOrganization}
+          onRemove={this.onRemove}
+          onEdit={this.onEdit}
           lang={lang}
         />
         <OrganizationSelect
@@ -87,16 +116,16 @@ class FundingOrganization extends Component {
 }
 
 
-const AddedOrganizations = ({ organizations, onRemove, lang }) => (
+const AddedOrganizations = ({ organizations = [], onRemove, onEdit, lang }) => (
   organizations.map(organization => (
-    <Label color="#007fad" margin="0 0.5em 0.5em 0" key={organization.id}>
-      <PaddedWord>{organization.organization.name[lang] || organization.name.und }</PaddedWord>
+    <OrganizationLabel color="#007fad" margin="0 0.5em 0.5em 0" key={organization.id}>
+      <PaddedWord onClick={() => onEdit(organization.id)}>{organization.organization.name[lang] || organization.name.und }</PaddedWord>
       <FontAwesomeIcon
         onClick={() => onRemove(organization.id)}
         icon={faTimes}
         size="xs"
       />
-    </Label>
+    </OrganizationLabel>
   ))
 )
 
@@ -104,8 +133,13 @@ const AddOrganizationContainer = styled.div`
   text-align: right;
   padding-top: 1rem;
 `
+
 const PaddedWord = styled.span`
   padding-right: 10px;
+`
+
+const OrganizationLabel = styled(Label)`
+  cursor: pointer;
 `
 
 export default inject('Stores')(observer(FundingOrganization))
