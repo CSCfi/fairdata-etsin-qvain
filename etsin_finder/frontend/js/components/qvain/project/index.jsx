@@ -28,8 +28,8 @@ const FIELD_PROPS = {
 
 const INITIAL_STATE = {
   projectInEdit: false,
+  id: null,
   details: {
-    id: null,
     titleEn: '',
     titleFi: '',
     identifier: '',
@@ -45,6 +45,8 @@ const INITIAL_STATE = {
 
 class Project extends Component {
   state = {
+    id: null,
+    projectInEdit: false,
     details: { ...INITIAL_STATE.details },
     organizations: { ...INITIAL_STATE.organizations },
   }
@@ -78,17 +80,20 @@ class Project extends Component {
 
   handleAddProject = event => {
     event.preventDefault()
-    const { details, organizations } = this.state
+    const { id, details, organizations } = this.state
 
+    // Clear this spaghetti
     projectSchema.validate({ details, organizations: organizations.projectOrganizations }, { abortEarly: false })
       .then(() => {
-        const { id, titleEn, titleFi, identifier, fundingIdentifier, funderType } = details
+        const { titleEn, titleFi, identifier, fundingIdentifier, funderType } = details
+        const { projectOrganizations } = organizations
         const title = { en: titleEn, fi: titleFi }
-        const project = ProjectObject(id, title, identifier, fundingIdentifier, funderType, [])
+        const project = ProjectObject(id, title, identifier, fundingIdentifier, funderType, projectOrganizations)
         this.props.Stores.Qvain.setProject(project)
         this.resetForm()
       })
       .catch(validationErrors => {
+        // Clear this spaghetti
         const parsedErrors = { details: {}, organizations: {} }
         validationErrors.inner.forEach(error => {
           const { errors, path } = error
@@ -109,13 +114,18 @@ class Project extends Component {
     const project = toJS(this.props.Stores.Qvain.projects.find(proj => proj.id === id))
     if (!project) return
 
-    const { projectForm } = this.state
-    projectForm.titleEn = project.title.en || ''
-    projectForm.titleFi = project.title.fi || ''
-    delete project.title
+    const { details, organizations } = project
 
-    const updatedFormData = { ...projectForm, ...project, errors: [] }
-    this.setState({ projectForm: updatedFormData, projectInEdit: true })
+    details.titleEn = details.title.en
+    details.titleFi = details.title.fi
+    delete details.title
+
+    this.setState({
+      id,
+      details: { ...INITIAL_STATE.details, ...details },
+      organizations: { ...INITIAL_STATE.organizations, projectOrganizations: [...organizations] },
+      projectInEdit: true,
+    })
   }
 
   removeProject = (id, event) => {
@@ -171,8 +181,8 @@ const AddedProjectsComponent = ({ Stores, editProject, removeProject }) => {
   const { lang } = Stores.Locale
   const { projects, readonly } = Stores.Qvain
 
-  const renderProjectTitle = project => {
-    const { fi, en } = project.title
+  const renderProjectTitle = details => {
+    const { fi, en } = details.title
     if (lang === 'fi' && fi) return [fi, en].filter(title => title).join(', ')
     return [en, fi].filter(title => title).join(', ')
   }
@@ -181,7 +191,7 @@ const AddedProjectsComponent = ({ Stores, editProject, removeProject }) => {
     <>
       {projects.map(project => (
         <ButtonGroup tabIndex="0" key={project.id}>
-          <ButtonLabel>{renderProjectTitle(project)}</ButtonLabel>
+          <ButtonLabel>{renderProjectTitle(project.details)}</ButtonLabel>
           <ProjectActions disabled={readonly}>
             <EditButton aria-label="Edit" onClick={(event) => editProject(project.id, event)} />
             <DeleteButton aria-label="Remove" onClick={(event) => removeProject(project.id, event)} />
