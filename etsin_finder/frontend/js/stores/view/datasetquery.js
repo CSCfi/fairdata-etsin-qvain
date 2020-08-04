@@ -69,7 +69,7 @@ class DatasetQuery {
   }
 
   @action
-  getFilesV2() {
+  fetchAndStoreFilesV2() {
     return this.Files.openDataset(this.results)
   }
 

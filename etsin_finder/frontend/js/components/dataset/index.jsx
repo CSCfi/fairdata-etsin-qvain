@@ -140,7 +140,7 @@ class Dataset extends React.Component {
 
         let hasV2Files = false
         if (this.props.Stores.Env.metaxApiV2) {
-          await DatasetQuery.getFilesV2()
+          await DatasetQuery.fetchAndStoreFilesV2()
           hasV2Files = (DatasetQuery.Files.root && DatasetQuery.Files.root.directChildCount > 0)
         }
 

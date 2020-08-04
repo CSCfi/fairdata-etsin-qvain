@@ -40,6 +40,21 @@ function IdaResources(props) {
 
   const translateLabel = label => label && (label[lang] || label.und)
 
+  const infoProps = inInfo && {
+    open: true,
+    name: inInfo.name,
+    id: inInfo.identifier,
+    checksum: inInfo.checksum,
+    title: inInfo.title,
+    size: sizeParse(inInfo.existingByteSize || inInfo.byteSize),
+    category: translateLabel(getUseCategoryLabel(inInfo)),
+    type: translateLabel(getFileTypeLabel(inInfo)),
+    description: inInfo.description,
+    headerContent: `dataset.dl.infoHeaders.${inInfo.type}`,
+    headerIcon: inInfo.type === 'directory' ? faFolder : faFile,
+    closeModal: () => setInInfo(null),
+  }
+
   return (
     <>
       <Header>
@@ -60,22 +75,7 @@ function IdaResources(props) {
       </Header>
 
       <Tree allowDownload={allowDownload} allowInfo={allowInfo} />
-      {inInfo && (
-        <Info
-          open
-          name={inInfo.name}
-          id={inInfo.identifier}
-          checksum={inInfo.checksum}
-          title={inInfo.title}
-          size={sizeParse(inInfo.existingByteSize || inInfo.byteSize)}
-          category={translateLabel(getUseCategoryLabel(inInfo))}
-          type={translateLabel(getFileTypeLabel(inInfo))}
-          description={inInfo.description}
-          closeModal={() => setInInfo(null)}
-          headerContent={`dataset.dl.infoHeaders.${inInfo.type}`}
-          headerIcon={inInfo.type === 'directory' ? faFolder : faFile}
-        />
-      )}
+      {inInfo && <Info {...infoProps} />}
     </>
   )
 }

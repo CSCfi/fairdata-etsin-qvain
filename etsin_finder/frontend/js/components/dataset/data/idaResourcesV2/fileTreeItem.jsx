@@ -75,33 +75,41 @@ const FileTreeItemBase = ({ treeProps, item, level }) => {
   const infoColor = haveMetadata ? 'primary' : 'gray'
   const { type } = item
 
+  const infoButton = (
+    <Translate
+      component={ClickableIcon}
+      icon={faInfoCircle}
+      color={infoColor}
+      disabled={!allowInfo}
+      disabledColor="gray"
+      disabledOpacity={0.4}
+      onClick={() => setInInfo(item)}
+      attributes={{
+        'aria-label': `dataset.dl.infoModalButton.${type}.${haveMetadata ? 'custom' : 'general'}`,
+      }}
+      with={{ name }}
+    />
+  )
+
+  const downloadButton = (
+    <Translate
+      component={ClickableIcon}
+      icon={faDownload}
+      color="primary"
+      disabled={!allowDownload}
+      disabledColor="gray"
+      disabledOpacity={0.4}
+      onClick={() => download(datasetIdentifier, item)}
+      attributes={{ 'aria-label': 'dataset.dl.downloadItem' }}
+      with={{ name }}
+    />
+  )
+
   return (
     <ItemRow style={{ flexWrap: 'wrap' }}>
       <Group>
-        <Translate
-          component={ClickableIcon}
-          icon={faInfoCircle}
-          color={infoColor}
-          disabled={!allowInfo}
-          disabledColor="gray"
-          disabledOpacity={0.4}
-          onClick={() => setInInfo(item)}
-          attributes={{
-            'aria-label': `dataset.dl.infoModalButton.${type}.${haveMetadata ? 'custom' : 'general'}`,
-          }}
-          with={{ name }}
-        />
-        <Translate
-          component={ClickableIcon}
-          icon={faDownload}
-          color="primary"
-          disabled={!allowDownload}
-          disabledColor="gray"
-          disabledOpacity={0.4}
-          onClick={() => download(datasetIdentifier, item)}
-          attributes={{ 'aria-label': 'dataset.dl.downloadItem' }}
-          with={{ name }}
-        />
+        {infoButton}
+        {downloadButton}
         <ItemSpacer level={level + 0.5} />
         {content}
       </Group>

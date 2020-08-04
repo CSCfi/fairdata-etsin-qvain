@@ -65,7 +65,8 @@ class Files {
       return
     }
 
-    if (this.loadingProjectInfo && this.loadingProjectInfo.promise && !this.loadingProjectInfo.error) {
+    const loadingAnotherProject = this.loadingProjectInfo && this.loadingProjectInfo.promise && !this.loadingProjectInfo.error
+    if (loadingAnotherProject) {
       this.loadingProjectInfo.promise.cancel()
     }
 
