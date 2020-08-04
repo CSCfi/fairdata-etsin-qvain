@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { inject, Observer } from 'mobx-react'
 
 import FileTreeItem from './fileTreeItem'
-import { useRenderTree } from '../../../common/files/tree'
+import { useRenderTree } from '../../../general/files/tree'
 
 export function FileTree(props) {
   const { Files } = props.Stores.DatasetQuery

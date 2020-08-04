@@ -24,7 +24,7 @@ import {
   Icon,
   ClickableIcon,
   NoIcon,
-} from '../../../common/files/items'
+} from '../../../general/files/items'
 
 const download = (datasetIdentifier, item) => {
   const handle = window.open(

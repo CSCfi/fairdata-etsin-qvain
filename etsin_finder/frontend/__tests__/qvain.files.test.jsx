@@ -12,7 +12,7 @@ import {
   itemLoaderExisting,
 } from '../js/stores/view/common.files.loaders'
 
-import { ShowMore } from '../js/components/common/files//tree'
+import { ShowMore } from '../js/components/general/files/tree'
 import SelectedItemsTree from '../js/components/qvain/files/ida/selectedItemsTree'
 import SelectedItemsTreeItem from '../js/components/qvain/files/ida/selectedItemsTreeItem'
 import AddItemsTree from '../js/components/qvain/files/ida/addItemsTree'

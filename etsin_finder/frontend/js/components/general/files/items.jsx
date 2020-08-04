@@ -6,7 +6,7 @@ import { tint } from 'polished'
 import { faChevronRight, faChevronDown } from '@fortawesome/free-solid-svg-icons'
 
 import Translate from 'react-translate-component'
-import { Spinner } from '../../general/loader'
+import { Spinner } from '../loader'
 
 export const isDirectory = (item) => item.type === 'directory'
 export const isFile = (item) => item.type === 'file'

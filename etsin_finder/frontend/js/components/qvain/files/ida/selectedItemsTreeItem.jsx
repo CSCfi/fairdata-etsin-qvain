@@ -28,7 +28,7 @@ import {
   Icon,
   ClickableIcon,
   NoIcon,
-} from '../../../common/files/items'
+} from '../../../general/files/items'
 
 const SelectedItemsTreeItemBase = ({ treeProps, item, level, parentArgs }) => {
   const { Files, directoryView } = treeProps

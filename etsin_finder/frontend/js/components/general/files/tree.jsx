@@ -1,9 +1,9 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 
-import { LinkButton } from '../../general/button'
+import { LinkButton } from '../button'
 import { Children, ChildrenItem, ItemRow, Items, ItemSpacer, isDirectory } from './items'
-import Loader from '../../general/loader'
+import Loader from '../loader'
 
 // propagate properties from parent directories
 const getParentArgs = (directoryView, parent, parentArgs) => ({
