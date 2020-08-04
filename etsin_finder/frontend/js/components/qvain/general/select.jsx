@@ -94,6 +94,7 @@ class Select extends Component {
         menuPlacement="auto"
         menuPosition="fixed"
         menuShouldScrollIntoView={false}
+        isClearable
       />
     ) : (
       <Translate
@@ -107,6 +108,7 @@ class Select extends Component {
         classNamePrefix="select"
         options={options[lang]}
         onChange={onChange(options, lang, setter, model)}
+        isClearable
       />
     )
   }
