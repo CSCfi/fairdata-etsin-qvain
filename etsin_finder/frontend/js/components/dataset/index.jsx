@@ -142,7 +142,6 @@ class Dataset extends React.Component {
     DatasetQuery.getData(identifier)
       .then(async result => {
         await DatasetQuery.fetchAndStoreFiles() // needed for API V2
-
         this.setState({
           loaded: true,
         })

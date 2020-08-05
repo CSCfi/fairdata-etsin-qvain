@@ -45,7 +45,7 @@ class DatasetQuery {
   @observable error = false
 
   @action
-  getData(id) {
+  getData(id, useV2) {
     const { metaxApiV2 } = this.Env
     const url = metaxApiV2 ? `/api/v2/dataset/${id}` : `/api/dataset/${id}`
     return new Promise((resolve, reject) => {
@@ -59,6 +59,7 @@ class DatasetQuery {
             res.data.has_permit ? res.data.has_permit : false,
             res.data.application_state ? res.data.application_state : undefined
           )
+
           resolve(res.data)
         })
         .catch(error => {
