@@ -16,7 +16,8 @@ import Spatials, { SpatialModel } from './qvain.spatials'
 import uniqueByKey from '../../utils/uniqueByKey'
 
 class Qvain {
-  constructor() {
+  constructor(Env) {
+    this.Env = Env
     this.Files = new Files(this)
     this.Actors = new Actors(this)
     this.Spatials = new Spatials(this)
@@ -381,12 +382,6 @@ class Qvain {
   }
 
   // FILE PICKER STATE MANAGEMENT
-
-  @observable metaxApiV2 = process.env.NODE_ENV !== 'production' && localStorage.getItem('metax_api_v2') === '1'
-
-  @action setMetaxApiV2 = (value) => {
-    this.metaxApiV2 = value
-  }
 
   @observable idaPickerOpen = false
 
@@ -907,8 +902,8 @@ class Qvain {
     }
 
     this.changed = false
-    if (this.metaxApiV2) {
-      await this.Files.editDataset(dataset)
+    if (this.Env.metaxApiV2) {
+      await this.Files.openDataset(dataset)
     }
   }
 
@@ -956,7 +951,7 @@ class Qvain {
       return false
     }
 
-    if (this.metaxApiV2) {
+    if (this.Env.metaxApiV2) {
       if (this.hasBeenPublished) {
         if (this.Files && !this.Files.projectLocked) {
           return true // for published noncumulative datasets, allow adding files only if none exist yet
@@ -1106,4 +1101,4 @@ export const ExternalResource = (id, title, accessUrl, downloadUrl, useCategory)
 
 export const EmptyExternalResource = ExternalResource(undefined, '', '', '', '')
 
-export default new Qvain()
+export default Qvain

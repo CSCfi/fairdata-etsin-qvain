@@ -22,16 +22,19 @@ import { SelectedFilesBase, FileLabel } from '../js/components/qvain/files/legac
 import {
   DeleteButton
 } from '../js/components/qvain/general/buttons'
-import QvainStore, {
+import Env from '../js/stores/domain/env'
+import QvainStoreClass, {
   Directory,
   AccessType as AccessTypeConstructor,
   License as LicenseConstructor
 } from '../js/stores/view/qvain'
 import LocaleStore from '../js/stores/view/language'
 
+const QvainStore = new QvainStoreClass(Env)
 const getStores = () => {
-  QvainStore.setMetaxApiV2(false)
+  Env.setMetaxApiV2(false)
   return {
+    Env,
     Qvain: QvainStore,
     Locale: LocaleStore
   }

@@ -14,7 +14,7 @@ import {
   Icon,
   NoIcon,
   SmallLoader,
-} from './common/items'
+} from '../../../general/files/items'
 
 const AddItemsTreeItemBase = ({ treeProps, item, level, parentArgs }) => {
   const { directoryView } = treeProps
