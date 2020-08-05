@@ -438,8 +438,10 @@ class Download(Resource):
             abort(400, message="Unable to get catalog record")
 
         if authorization.user_is_allowed_to_download_from_ida(cr, authentication.is_authenticated()):
-            file_ids = args.get('file_id', [])
-            dir_ids = args.get('dir_id', [])
+            # Retrieving file_id and dir_id from IDA, if empty, use empty value
+            log.info(args)
+            file_ids = args['file_id'] or []
+            dir_ids = args['dir_id'] or []
             return download_data(cr_id, file_ids, dir_ids)
         else:
             abort(403, message="Not authorized")
