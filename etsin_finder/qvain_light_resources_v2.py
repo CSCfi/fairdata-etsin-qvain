@@ -127,7 +127,7 @@ class FileCharacteristics(Resource):
 
 
 class QvainDatasets(Resource):
-    """POST and PATCH request handling coming in from Qvain Light. Used for adding/editing datasets in METAX."""
+    """Listing and creating Metax datasets for logged in user in Qvain Light."""
 
     def __init__(self):
         """Setup required utils for dataset metadata handling"""
