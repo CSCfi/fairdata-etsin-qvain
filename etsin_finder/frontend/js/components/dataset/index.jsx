@@ -29,7 +29,6 @@ import ErrorBoundary from '../general/errorBoundary'
 import NoticeBar from '../general/noticeBar'
 import Loader from '../general/loader'
 
-
 const BackButton = styled(NavLink)`
   color: ${props => props.theme.color.primary};
   padding: 0;
@@ -44,13 +43,12 @@ class Dataset extends React.Component {
       error: false,
       identifier: props.match.params.identifier,
       versionInfo: {},
-      loaded: false
+      loaded: false,
     }
 
     this.query = this.query.bind(this)
     this.goBack = this.goBack.bind(this)
   }
-
 
   componentDidMount() {
     this.props.Stores.Accessibility.resetFocus()
@@ -59,14 +57,14 @@ class Dataset extends React.Component {
 
   async getAllVersions(data) {
     const datasetVersionSet = data.dataset_version_set
-    let stateInfo = '';
+    let stateInfo = ''
 
-    let retval = {};
-    let urlText = '';
-    let latestDate = '';
-    const currentDate = new Date(data.date_created);
-    let ID = '';
-    let linkToOtherVersion = '';
+    let retval = {}
+    let urlText = ''
+    let latestDate = ''
+    const currentDate = new Date(data.date_created)
+    let ID = ''
+    let linkToOtherVersion = ''
 
     if (data.removed) {
       stateInfo = 'tombstone.removedInfo'
@@ -74,21 +72,28 @@ class Dataset extends React.Component {
       stateInfo = 'tombstone.deprecatedInfo'
     }
 
-    const promises = [];
+    const promises = []
 
-    if (typeof datasetVersionSet !== 'undefined') { // If there are more than 1 version
+    if (typeof datasetVersionSet !== 'undefined') {
+      // If there are more than 1 version
       for (const k of datasetVersionSet.keys()) {
-        const versionUrl = `/api/dataset/${datasetVersionSet[k].identifier}`;
+        const versionUrl = `/api/dataset/${datasetVersionSet[k].identifier}`
         promises.push(axios.get(versionUrl))
       }
 
       retval = await axios.all(promises) // will fetch all dataset versions
 
-     latestDate = new Date(Math.max.apply(null, retval // Date of the latest existing version
-      .filter(version => !version.data.catalog_record.removed && !version.data.catalog_record.deprecated)
-      .map((version) =>
-        new Date(version.data.catalog_record.date_created)
-      )));
+      latestDate = new Date(
+        Math.max.apply(
+          null,
+          retval // Date of the latest existing version
+            .filter(
+              version =>
+                !version.data.catalog_record.removed && !version.data.catalog_record.deprecated
+            )
+            .map(version => new Date(version.data.catalog_record.date_created))
+        )
+      )
 
       if (latestDate.getTime() > currentDate.getTime()) {
         urlText = 'tombstone.urlToNew'
@@ -100,18 +105,20 @@ class Dataset extends React.Component {
 
       for (const k of datasetVersionSet.keys()) {
         if (new Date(datasetVersionSet[k].date_created).getTime() === latestDate.getTime()) {
-          ID = datasetVersionSet[k].identifier;
+          ID = datasetVersionSet[k].identifier
           break
         }
       }
     }
 
-    this.setState({ versionInfo: {
-      stateInfo,
-      urlText,
-      ID,
-      linkToOtherVersion
-    } })
+    this.setState({
+      versionInfo: {
+        stateInfo,
+        urlText,
+        ID,
+        linkToOtherVersion,
+      },
+    })
   }
 
   // goes back to previous page, which might be outside
@@ -132,26 +139,11 @@ class Dataset extends React.Component {
     }
     Accessibility.announcePolite(translate('dataset.loading'))
 
-    const useV2 = this.props.Stores.Env.metaxApiV2
-    DatasetQuery.getData(identifier, useV2)
+    DatasetQuery.getData(identifier)
       .then(async result => {
-        let hasV2Files = false
-        if (this.props.Stores.Env.metaxApiV2) {
-          await DatasetQuery.fetchAndStoreFilesV2()
-          hasV2Files = (DatasetQuery.Files.root && DatasetQuery.Files.root.directChildCount > 0)
-        }
+        await DatasetQuery.fetchAndStoreFiles() // needed for API V2
 
         this.setState({
-          identifier: this.props.match.params.identifier,
-          dataset: result.catalog_record,
-          email_info: result.email_info,
-          hasFiles:
-            (result.catalog_record.research_dataset.directories
-              || result.catalog_record.research_dataset.files) !== undefined || hasV2Files || false,
-          hasRemote: result.catalog_record.research_dataset.remote_resources !== undefined,
-          harvested: result.catalog_record.data_catalog.catalog_json.harvested,
-          deprecated: result.catalog_record.deprecated,
-          removed: result.catalog_record.removed,
           loaded: true,
         })
         this.getAllVersions(result.catalog_record)
@@ -161,7 +153,6 @@ class Dataset extends React.Component {
         this.setState({ error })
       })
   }
-
 
   // eslint-disable-next-line camelcase
   UNSAFE_componentWillReceiveProps(newProps) {
@@ -178,7 +169,8 @@ class Dataset extends React.Component {
   }
 
   render() {
-    const { Accessibility, DatasetQuery } = this.props.Stores
+    const { Accessibility, DatasetQuery, Env } = this.props.Stores
+    const { metaxApiV2 } = Env
 
     // CASE 1: Houston, we have a problem
     if (this.state.error !== false) {
@@ -188,7 +180,9 @@ class Dataset extends React.Component {
     const isDraft = DatasetQuery.results && DatasetQuery.results.state === 'draft'
     let draftInfoText = null
     if (isDraft) {
-      draftInfoText = DatasetQuery.results.draft_of ? 'dataset.draftInfo.changes' : 'dataset.draftInfo.draft'
+      draftInfoText = DatasetQuery.results.draft_of
+        ? 'dataset.draftInfo.changes'
+        : 'dataset.draftInfo.draft'
     }
 
     if (!this.state.loaded || !DatasetQuery.results) {
@@ -202,8 +196,12 @@ class Dataset extends React.Component {
     const dataset = DatasetQuery.results
     const cumulative = DatasetQuery.cumulative_state === 1
     const emailInfo = DatasetQuery.emailInfo
-    const hasFiles = (dataset.research_dataset.directories
-        || dataset.research_dataset.files) !== undefined
+    const hasV2Files =
+      metaxApiV2 && DatasetQuery.Files.root && DatasetQuery.Files.root.directChildCount > 0
+    const hasFiles =
+      (dataset.research_dataset.directories || dataset.research_dataset.files) !== undefined ||
+      hasV2Files ||
+      false
     const hasRemote = dataset.research_dataset.remote_resources !== undefined
     const harvested = dataset.data_catalog.catalog_json.harvested
     const deprecated = dataset.deprecated
@@ -216,15 +214,21 @@ class Dataset extends React.Component {
           <div className="row">
             <div className="col-12">
               <div>
-              {(this.state.removed || this.state.deprecated) && (
-                <NoticeBar bg="error">
-                  <Translate content={this.state.versionInfo.stateInfo} /><br />
-                  <Translate content={this.state.versionInfo.urlText} />
-                  <Link href={this.state.versionInfo.ID} target="_blank" rel="noopener noreferrer" content={'tombstone.link'}>
-                    <Translate content={this.state.versionInfo.linkToOtherVersion} />
-                  </Link>
-                </NoticeBar>
-              )}
+                {(this.state.removed || this.state.deprecated) && (
+                  <NoticeBar bg="error">
+                    <Translate content={this.state.versionInfo.stateInfo} />
+                    <br />
+                    <Translate content={this.state.versionInfo.urlText} />
+                    <Link
+                      href={this.state.versionInfo.ID}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      content={'tombstone.link'}
+                    >
+                      <Translate content={this.state.versionInfo.linkToOtherVersion} />
+                    </Link>
+                  </NoticeBar>
+                )}
               </div>
               <BackButton
                 exact
@@ -245,8 +249,7 @@ class Dataset extends React.Component {
               <div className="col-12">
                 <Translate component={DraftInfo} content={draftInfoText} />
               </div>
-              )
-            }
+            )}
             <Content
               identifier={this.state.identifier}
               dataset={dataset}

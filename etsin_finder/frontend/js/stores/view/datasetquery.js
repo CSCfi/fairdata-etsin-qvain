@@ -31,8 +31,9 @@ const QueryFields = {
 }
 
 class DatasetQuery {
-  constructor() {
+  constructor(Env) {
     this.Files = new Files()
+    this.Env = Env
   }
 
   @observable results = null
@@ -44,11 +45,12 @@ class DatasetQuery {
   @observable error = false
 
   @action
-  getData(id, useV2) {
-    const url = useV2 ? `/api/v2/dataset/${id}` : `/api/dataset/${id}`
+  getData(id) {
+    const { metaxApiV2 } = this.Env
+    const url = metaxApiV2 ? `/api/v2/dataset/${id}` : `/api/dataset/${id}`
     return new Promise((resolve, reject) => {
       axios
-        .get(`/api/dataset/${id}`)
+        .get(url)
         .then(async res => {
           this.results = res.data.catalog_record
           this.emailInfo = res.data.email_info
@@ -57,9 +59,8 @@ class DatasetQuery {
             res.data.has_permit ? res.data.has_permit : false,
             res.data.application_state ? res.data.application_state : undefined
           )
-
           resolve(res.data)
-        }))
+        })
         .catch(error => {
           this.error = error
           this.results = []
@@ -71,8 +72,12 @@ class DatasetQuery {
   }
 
   @action
-  fetchAndStoreFilesV2() {
-    return this.Files.openDataset(this.results)
+  async fetchAndStoreFiles() {
+    const { metaxApiV2 } = this.Env
+    if (metaxApiV2) {
+      return this.Files.openDataset(this.results)
+    }
+    return null
   }
 
   @action
@@ -96,4 +101,4 @@ class DatasetQuery {
   }
 }
 
-export default new DatasetQuery()
+export default DatasetQuery
