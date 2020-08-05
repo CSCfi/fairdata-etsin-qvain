@@ -26,7 +26,7 @@ const Stores = {
   DatasetQuery,
   Accessibility,
   Map,
-  Qvain,
+  Qvain: new Qvain(Env),
   Access,
 }
 

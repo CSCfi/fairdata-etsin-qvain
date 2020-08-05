@@ -8,13 +8,19 @@
  * @license   MIT
  */
 
-import { observable } from 'mobx'
+import { action, observable } from 'mobx'
 import { RouterStore } from 'mobx-react-router'
 
 const routingStore = new RouterStore()
 
 class Env {
   @observable environment = process.env.NODE_ENV
+
+  @observable metaxApiV2 = process.env.NODE_ENV !== 'production' && localStorage.getItem('metax_api_v2') === '1'
+
+  @action setMetaxApiV2 = (value) => {
+    this.metaxApiV2 = value
+  }
 
   history = routingStore
 }

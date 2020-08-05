@@ -34,6 +34,7 @@ from etsin_finder.qvain_light_utils_v2 import (
     data_to_metax,
     get_dataset_creator,
     check_dataset_creator,
+    can_access_dataset,
     remove_deleted_datasets_from_results,
     edited_data_to_metax,
     get_encoded_access_granter,
@@ -82,6 +83,8 @@ class ProjectFiles(Resource):
 
     def __init__(self):
         """Setup file endpoints"""
+        self.parser = reqparse.RequestParser()
+        self.parser.add_argument('cr_identifier', type=str, required=False)
 
     @log_request
     def get(self, pid):
@@ -94,10 +97,24 @@ class ProjectFiles(Resource):
             tuple: A response with the payload in the first slot and the status code in the second.
 
         """
-        # Return data only if user is a member of the project
+        params = {}
+        args = self.parser.parse_args()
+        cr_identifier = args.get('cr_identifier', None)
+
+        # Unauthenticated users can only access files belonging to a published dataset
+        if cr_identifier:
+            if not can_access_dataset(cr_identifier):
+                return '', 404
+            params['cr_identifier'] = cr_identifier
+        else:
+            if not authentication.is_authenticated():
+                return 'The cr_identifier parameter is required if user is not authenticated', 400
+
+        # Return data if user is a member of the project, or if user can view cr_identifier
         user_ida_projects = get_user_ida_projects() or []
-        if pid in user_ida_projects:
-            project_dir_obj = get_directory_for_project(pid)
+
+        if cr_identifier or pid in user_ida_projects:
+            project_dir_obj = get_directory_for_project(pid, params)
         else:
             project_dir_obj = None
 
@@ -116,17 +133,18 @@ class ProjectFiles(Resource):
         log.warning('User is missing project or project_dir_obj is invalid\npid: {0}'.format(pid))
         return '', 404
 
-class FileDirectory(Resource):
+class DirectoryFiles(Resource):
     """File/directory related REST endpoints for getting a directory"""
 
     def __init__(self):
         """Setup file endpoints"""
         self.parser = reqparse.RequestParser()
-        self.parser.add_argument('not_cr_identifier', type=str, action='append', required=False)
-        self.parser.add_argument('cr_identifier', type=str, action='append', required=False)
-        self.parser.add_argument('pagination', type=bool, action='append', required=False)
-        self.parser.add_argument('offset', type=str, action='append', required=False)
-        self.parser.add_argument('limit', type=str, action='append', required=False)
+        self.parser.add_argument('not_cr_identifier', type=str, required=False)
+        self.parser.add_argument('cr_identifier', type=str, required=False)
+        self.parser.add_argument('pagination', type=bool, required=False)
+        self.parser.add_argument('include_parent', type=bool, required=False)
+        self.parser.add_argument('offset', type=str, required=False)
+        self.parser.add_argument('limit', type=str, required=False)
         self.parser.add_argument('directory_fields', type=str, action='append', required=False)
         self.parser.add_argument('file_fields', type=str, action='append', required=False)
 
@@ -142,6 +160,7 @@ class FileDirectory(Resource):
 
         """
         args = self.parser.parse_args()
+        include_parent = args.get('include_parent', None)
         not_cr_identifier = args.get('not_cr_identifier', None)
         cr_identifier = args.get('cr_identifier', None)
         pagination = args.get('pagination', None)
@@ -161,7 +180,10 @@ class FileDirectory(Resource):
                 "description",
                 "use_category",
                 "title",
-                "file_type"
+                "file_type",
+                "byte_size",
+                "checksum_value",
+                "checksum_algorithm"
             ])
 
         if directory_fields is None:
@@ -174,13 +196,18 @@ class FileDirectory(Resource):
                 "file_count",
                 "description",
                 "use_category",
-                "title"
+                "title",
+                "byte_size"
             ])
 
         if cr_identifier is not None and not_cr_identifier is not None:
-            return 'Parameters cr_identifier and not_cr_identifier are exclusive', 403
+            return 'Parameters cr_identifier and not_cr_identifier are exclusive', 400
 
-        params = {}
+        params = {
+            'include_parent': 'true' # include parent so we can check the parent directory project_identifier
+        }
+        if include_parent:
+            params['include_parent'] = 'true'
         if cr_identifier:
             params['cr_identifier'] = cr_identifier
         if not_cr_identifier:
@@ -196,17 +223,33 @@ class FileDirectory(Resource):
         if file_fields:
             params['file_fields'] = file_fields
 
+        # Unauthenticated users can only access files belonging to a published dataset
+        if cr_identifier:
+            if not can_access_dataset(cr_identifier):
+                return '', 404
+        else:
+            if not authentication.is_authenticated():
+                return 'The cr_identifier parameter is required if user is not authenticated', 400
+
         dir_obj = get_directory(dir_id, params)
 
-        # Return data only if authenticated
-        if dir_obj and authentication.is_authenticated():
+        if dir_obj:
+            if not cr_identifier:
+                # Return data only if user has access to project
+                user_ida_projects = get_user_ida_projects() or []
+                project_identifier = dir_obj.get('project_identifier') or dir_obj.get('results', {}).get('project_identifier')
+                if project_identifier not in user_ida_projects:
+                    log.warning('Directory not in user projects: {0}'.format(dir_id))
+                    return '', 404
+
             # Limit the amount of items to be sent to the frontend
             if 'directories' in dir_obj:
                 dir_obj['directories'] = slice_array_on_limit(dir_obj.get('directories', []), TOTAL_ITEM_LIMIT)
             if 'files' in dir_obj:
                 dir_obj['files'] = slice_array_on_limit(dir_obj.get('files', []), TOTAL_ITEM_LIMIT)
+
             return dir_obj, 200
-        log.warning('User not authenticated or dir_obj is invalid\ndir_id: {0}'.format(dir_id))
+        log.warning('Error: dir_obj is invalid\ndir_id: {0}'.format(dir_id))
         return '', 404
 
 class FileCharacteristics(Resource):
@@ -514,17 +557,9 @@ class QvainDatasetProjects(Resource):
             Metax response.
 
         """
-        log.info("V2 qvain_dataset_projects")
-
-        is_authd = authentication.is_authenticated()
-        if not is_authd:
-            return {"PermissionError": "User not logged in."}, 401
-        csc_username = authentication.get_user_csc_name()
-
-        creator = get_dataset_creator(cr_id)
-        if csc_username != creator:
-            log.warning('User: \"{0}\" is not the creator of the dataset.'.format(csc_username))
-            return {"PermissionError": "User is not the owner of the dataset."}, 403
+        # Unauthenticated users can only access files belonging to a published dataset
+        if not can_access_dataset(cr_id):
+            return '', 404
 
         metax_response = get_dataset_projects(cr_id)
         return metax_response
@@ -548,9 +583,9 @@ class QvainDatasetUserMetadata(Resource):
             Metax response.
 
         """
-        error = check_dataset_creator(cr_id)
-        if error is not None:
-            return error
+        # Unauthenticated users can only access files belonging to a published dataset
+        if not can_access_dataset(cr_id):
+            return '', 404
 
         metax_response = get_dataset_user_metadata(cr_id)
         return metax_response
