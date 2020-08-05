@@ -85,7 +85,7 @@ const english = {
       draft: 'This dataset is a draft. Only the creator of the dataset can view it.',
       changes: 'This is a preview of unpublished changes to a dataset.  Only the creator of the dataset can view it.',
     },
-    draftIdentifierInfo: 'Identifier will be generated when the dataset is published.',
+    draftIdentifierInfo: 'Dataset identifier will be generated when the dataset is published.',
     dl: {
       root: 'root',
       breadcrumbs: 'Breadcrumbs',
