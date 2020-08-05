@@ -60,6 +60,8 @@ def check_dataset_creator(cr_id):
         return {"PermissionError": "User is not allowed to edit the dataset."}, 403
     return None
 
+can_access_dataset = qvain_light_utils.can_access_dataset
+
 remove_deleted_datasets_from_results = qvain_light_utils.remove_deleted_datasets_from_results
 
 def edited_data_to_metax(data, original):

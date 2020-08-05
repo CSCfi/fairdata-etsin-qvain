@@ -1,6 +1,6 @@
 import { observable, action, runInAction } from 'mobx'
-import { itemLoaderNew, itemLoaderExisting, itemLoaderAny } from './qvain.files.loaders'
-import { getAction } from './qvain.files.utils'
+import { itemLoaderNew, itemLoaderExisting, itemLoaderAny, itemLoaderPublic } from './common.files.loaders'
+import { getAction } from './common.files.utils'
 
 
 export class DirectoryView {
@@ -97,6 +97,7 @@ export class DirectoryView {
     const newLimit = this.getShowLimit(dir) + this.showLimitIncrement
     const getCurrentCount = () => this.getItems(dir).length
     const success = await this.getItemLoader(dir).loadDirectory(this.Files, dir, newLimit, getCurrentCount)
+
     runInAction(() => {
       this.showLimitState[dir.key] = Math.max(this.showLimitState[dir.key] || this.defaultShowLimit, newLimit)
     })
@@ -299,6 +300,41 @@ export class SelectedItemsView extends DirectoryView {
           return false
         }
 
+        counter += 1
+        return true
+      }
+      return false
+    })
+
+    if (!ignoreLimit && showLimit > 0 && filtered.length > showLimit) {
+      filtered.length = showLimit
+    }
+    return filtered
+  }
+}
+
+
+export class PublicItemsView extends DirectoryView {
+  getItemLoader() {
+    return itemLoaderPublic
+  }
+
+  getItems(dir, ignoreLimit = false) {
+    const items = [...dir.directories, ...dir.files]
+    const showLimit = this.getShowLimit(dir)
+
+    const paginationKey = this.getItemLoader(dir).getPaginationKey()
+    const offset = dir.pagination.offsets[paginationKey] || 0
+    let counter = 0
+
+    let prevIndex = -1
+    const filtered = items.filter(item => {
+      const { index } = item
+      if (index - prevIndex > 1 && counter >= offset) {
+        return false // missing item, keep remaining ones hidden
+      }
+      prevIndex = index
+      if (item.existing) {
         counter += 1
         return true
       }
