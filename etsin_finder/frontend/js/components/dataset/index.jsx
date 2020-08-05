@@ -132,8 +132,7 @@ class Dataset extends React.Component {
     }
     Accessibility.announcePolite(translate('dataset.loading'))
 
-    // TODO: Etsin Filepicker v2 update will move the metaxApiV2 variable to Stores.Env
-    const useV2 = this.props.Stores.Qvain.metaxApiV2
+    const useV2 = this.props.Stores.Env.metaxApiV2
     DatasetQuery.getData(identifier, useV2)
       .then(result => {
         this.setState({
