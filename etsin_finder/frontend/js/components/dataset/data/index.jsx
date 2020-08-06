@@ -12,13 +12,15 @@
 
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { inject, observer } from 'mobx-react'
 
 import Tracking from '../../../utils/tracking'
 import Accessibility from '../../../stores/view/accessibility'
 import ExternalResources from './externalResources'
 import IdaResources from './idaResources'
+import IdaResourcesV2 from './idaResourcesV2'
 
-export default class Data extends Component {
+class Data extends Component {
   componentDidMount() {
     Tracking.newPageView(
       `Dataset: ${this.props.match.params.identifier} | Data`,
@@ -28,13 +30,12 @@ export default class Data extends Component {
   }
 
   render() {
+    const { metaxApiV2 } = this.props.Stores.Env
+
     return (
       <div>
-        {this.props.hasFiles && (
-          <IdaResources
-            dataset={this.props.dataset}
-          />
-        )}
+        {metaxApiV2 && <IdaResourcesV2 dataset={this.props.dataset} />}
+        {!metaxApiV2 && this.props.hasFiles && <IdaResources dataset={this.props.dataset} />}
         {this.props.hasRemote && <ExternalResources />}
       </div>
     )
@@ -42,6 +43,7 @@ export default class Data extends Component {
 }
 
 Data.propTypes = {
+  Stores: PropTypes.object.isRequired,
   dataset: PropTypes.object.isRequired,
   location: PropTypes.shape({
     pathname: PropTypes.string,
@@ -54,3 +56,5 @@ Data.propTypes = {
   hasFiles: PropTypes.bool.isRequired,
   hasRemote: PropTypes.bool.isRequired,
 }
+
+export default inject('Stores')(observer(Data))

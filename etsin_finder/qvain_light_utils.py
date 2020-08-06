@@ -6,7 +6,11 @@ from flask import session
 from base64 import urlsafe_b64encode
 
 from etsin_finder.constants import SAML_ATTRIBUTES, DATA_CATALOG_IDENTIFIERS, ACCESS_TYPES
-from etsin_finder.cr_service import get_catalog_record
+from etsin_finder.cr_service import (
+    get_catalog_record,
+    is_draft,
+    is_catalog_record_owner
+)
 from etsin_finder.finder import app
 from etsin_finder.authentication import get_user_ida_groups, get_user_csc_name, get_user_email, get_user_firstname, get_user_lastname
 
@@ -231,7 +235,7 @@ def data_to_metax(data, metadata_provider_org, metadata_provider_user):
             "remote_resources": remote_resources_data_to_metax(data.get("remote_resources")) if data.get("dataCatalog") == DATA_CATALOG_IDENTIFIERS.get('att') else "",
             "files": files_data_to_metax(data.get("files")) if data.get("dataCatalog") == DATA_CATALOG_IDENTIFIERS.get('ida') else "",
             "directories": directories_data_to_metax(data.get("directories")) if data.get("dataCatalog") == DATA_CATALOG_IDENTIFIERS.get('ida') else "",
-            "infrastructure": data.get("infrastructure"),
+            "infrastructure": _to_metax_infrastructure(data.get("infrastructure")),
             "spatial": data.get("spatial")
         }
     }
@@ -263,6 +267,23 @@ def get_dataset_creator(cr_id):
     """
     dataset = get_catalog_record(cr_id, False)
     return dataset.get('metadata_provider_user')
+
+def can_access_dataset(cr_id):
+    """
+    If dataset is a draft, only the owner can access it.
+
+    Arguments:
+        cr_id {string} -- Identifier of datset.
+
+    Returns:
+        [type] -- [description]
+
+    """
+    cr = get_catalog_record(cr_id, False)
+    user_id = session.get("samlUserdata", {}).get(SAML_ATTRIBUTES["CSC_username"], [''])[0]
+    if is_draft(cr) and not is_catalog_record_owner(cr, user_id):
+        return False
+    return True
 
 def remove_deleted_datasets_from_results(result):
     """Remove datasets marked as removed from results.
