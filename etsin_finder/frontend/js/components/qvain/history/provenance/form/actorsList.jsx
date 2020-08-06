@@ -19,8 +19,8 @@ const ActorsList = ({ Stores, actors, items, language }) => {
 
   const actorItems = items.map((actor) => {
     const actorName = actor.label[language] || actor.label
-    const rolesStr = actor.roles.map(role => ` / ${translate(`qvain.actors.add.checkbox.${role}`)}`)
-    const name = `${actorName} ${rolesStr}`
+    const rolesStr = actor.roles.map(role => `${translate(`qvain.actors.add.checkbox.${role}`)}`)
+    const name = `${actorName} / ${rolesStr.join(' / ')}`
     return (
       <ButtonGroup tabIndex="0" key={actor.value}>
         <ActorLabel>
@@ -43,7 +43,7 @@ const ActorsList = ({ Stores, actors, items, language }) => {
   return (
     <>
       {items.length === 0 &&
-        (<Translate tabIndex="0" component="p" content="qvain.actors.added.noneAddedNotice" />)
+        (null)
       }
       {actorItems}
     </>

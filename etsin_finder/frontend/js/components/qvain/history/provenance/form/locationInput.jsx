@@ -26,6 +26,7 @@ const Location = ({ Stores }) => {
         lang={lang}
         translationsRoot={translationsRoot}
         elements={Store.inEdit.spatials}
+        disableNoItemsText
       />
       <div id="locationInput">
         <FieldListAdd
@@ -33,7 +34,8 @@ const Location = ({ Stores }) => {
           Field={Store.Spatials}
           Form={Form}
           translationsRoot={translationsRoot}
-          handleSave={() => handleSave(Store.Spatials)}
+          handleSave={() => handleSave(Store.Spatials, translationsRoot)}
+          position="left"
         />
       </div>
     </>

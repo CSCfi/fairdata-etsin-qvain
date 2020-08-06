@@ -9,7 +9,7 @@ import axios from 'axios'
 import { observable, action } from 'mobx'
 
 import Modal from '../../../general/modal'
-import ConfirmClose from '../../general/confirmClose'
+import { ConfirmClose } from '../../general/confirmClose'
 import getReferenceData from '../../utils/getReferenceData'
 import { fileMetadataSchema } from '../../utils/formValidation'
 import { getResponseError } from '../../utils/responseError'
@@ -423,8 +423,8 @@ class MetadataModal extends Component {
 
         <ConfirmClose
           show={this.state.confirmClose}
-          hideConfirm={this.hideConfirmClose}
-          closeModal={this.close}
+          onCancel={this.hideConfirmClose}
+          onConfirm={this.close}
           disabled={this.state.loading}
         />
 

@@ -5,20 +5,21 @@ import Spatials, { SpatialModel } from './qvain.spatials'
 import RelatedResources, { RelatedResourceModel } from './qvain.relatedResources'
 import Field from './qvain.field'
 import { ActorsRef } from './qvain.actors'
+import { ROLE } from '../../utils/constants'
 
-const Provenance = (
+const Provenance = ({
     uiid = uuid(),
-    name = { fi: '', en: '' },
-    description = { fi: '', en: '' },
-    outcomeDescription = { fi: '', en: '' },
+    name = { fi: '', en: '', und: '' },
+    description = { fi: '', en: '', und: '' },
+    outcomeDescription = { fi: '', en: '', und: '' },
     startDate = undefined,
     endDate = undefined,
     spatials = [], // aka location
     outcome = undefined,
     relatedResources = [], // aka usedEntity
-    associations = [], // actors
+    associations = undefined,
     lifecycle = undefined
-    ) => ({
+}) => ({
         uiid,
         name,
         description,
@@ -39,16 +40,10 @@ class Provenances extends Field {
             Qvain,
             Provenance,
             'provenances',
-            [{
-                dataIdentifier: 'associations',
-                refIdentifier: 'actors',
-                Prototype: ActorsRef,
-                Origin: Qvain.Actors
-            }]
+            ['associations']
         )
         this.Spatials = new Spatials(this)
         this.RelatedResources = new RelatedResources(this)
-        this.ActorsRef = new ActorsRef(Qvain.Actors, this)
     }
 
     @observable spatials = []
@@ -67,22 +62,21 @@ class Provenances extends Field {
     @action create = () => {
         this.setChanged(false)
         this.editMode = false
-        this.inEdit = this.Template()
-        this.inEdit.actors = new ActorsRef(this.Parent.Actors)
+        this.inEdit = new Provenance({ associations: new ActorsRef({ actors: this.Parent.Actors }) })
       }
 
     toBackend = () => this.Parent.provenances.map(p => ({
             title: p.name,
             description: p.description,
             outcome_description: p.outcomeDescription,
-            temporal: {
+            temporal: p.startDate || p.endDate ? {
                 start_date: new Date(p.startDate).toISOString(),
-                end_date: new Date(p.endDate).toISOString()
-            }, // TODO: move this conversion to Temporal when it's implemented
+                end_date: new Date(p.endDate).toISOString(),
+            } : undefined, // TODO: move this conversion to Temporal when it's implemented
             spatial: this.Spatials.toBackend(),
             event_outcome: { identifier: (p.outcome || {}).url },
             used_entity: this.RelatedResources.toBackend(),
-            was_associated_with: p.associations,
+            was_associated_with: p.associations.toBackend,
             lifecycle_event: { identifier: (p.lifecycle || {}).url }
         }))
 }
@@ -97,22 +91,32 @@ export const Lifecycle = (name, url) => ({
     url,
 })
 
-export const ProvenanceModel = (provenanceData) => ({
+export const ProvenanceModel = (Parent, provenanceData) => ({
     uiid: uuid(),
-    name: provenanceData.title,
-    description: provenanceData.description,
-    outcomeDescription: provenanceData.outcome_description,
-    startDate: provenanceData.temporal.start_date,
-    endDate: provenanceData.temporal.end_date,
+    name: parseTranslationField(provenanceData.title),
+    description: parseTranslationField(provenanceData.description),
+    outcomeDescription: parseTranslationField(provenanceData.outcome_description),
+    startDate: (provenanceData.temporal || {}).start_date,
+    endDate: (provenanceData.temporal || {}).end_date,
     spatials: (provenanceData.spatial || []).map(s => SpatialModel(s)),
     outcome: provenanceData.event_outcome
         ? Outcome(provenanceData.event_outcome.pref_label, provenanceData.event_outcome.identifier)
         : undefined,
     relatedResources: (provenanceData.used_entity || []).map(ue => RelatedResourceModel(ue)),
-    associations: provenanceData.was_associated_with,
+    associations: new ActorsRef({ actors: Parent.Actors, actorsFromBackend: provenanceData.was_associated_with, roles: [ROLE.PROVENANCE] }),
     lifecycle: provenanceData.lifecycle_event
         ? Lifecycle(provenanceData.lifecycle_event.pref_label, provenanceData.lifecycle.identifier)
         : undefined
 })
+
+const parseTranslationField = (value) => {
+    if (!value) return { fi: '', en: '', und: '' }
+    if (!value.fi) value.fi = ''
+    if (!value.en) value.en = ''
+    if (!value.und) {
+        value.und = value.fi || value.en || ''
+    }
+    return value
+}
 
 export default Provenances

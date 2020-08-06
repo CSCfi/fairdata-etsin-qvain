@@ -311,6 +311,18 @@ const finnish = {
   },
   qvain: {
     general: {
+      looseActors: {
+        warning: 'Osan toimijoiden rooliksi on merkattu vain Provenienssi, mutta ne eivät ole kiinnitetty yhteenkään provenienssiin. Aineiston tallentamisen yhteydessä nämä toimijat häviävät. Tallennuksen yhteydessä seuraavat tiedot poistetaan:',
+        question: 'Haluatko jatkaa aineiston tallentamista?',
+        cancel: 'Ei, jatka muokkausta',
+        confirm: 'Kyllä, jatka tallentamista',
+      },
+      looseProvenances: {
+        warning: 'Toimija, jota olet poistamassa on kiinnitettynä seuraaviin proveniensseihin:',
+        question: 'Toimija poistetaan myös edellä mainituista proveniensseista. Haluatko silti jatkaa?',
+        confirm: 'Kyllä, poista toimija ja sen viitteet',
+        cancel: 'Ei, peru toimijan poistaminen'
+      },
       langFi: 'Suomi',
       langEn: 'Englanti',
       buttons: {
@@ -581,6 +593,7 @@ const finnish = {
           curator: 'Kuraattori',
           rights_holder: 'Oikeuksienhaltija',
           contributor: 'Muu tekijä',
+          provenance: 'Provenienssi'
         },
         name: {
           placeholder: {
@@ -664,7 +677,7 @@ const finnish = {
         roles: {
           mixed: '',
           oneOf:
-            'Roolin kuuluisi olla "Tekijä", "Julkasija", "Kuraattori", "Oikeuksienhaltija" tai "Muut tekijät".',
+            'Roolin kuuluisi olla "Tekijä", "Julkasija", "Kuraattori", "Oikeuksienhaltija", "Muut tekijät" tai "Provenienssi.',
           required: 'Tekijän rooli on pakollinen.',
         },
         name: {
@@ -1029,8 +1042,8 @@ const finnish = {
             'Viittaukset muihin aineistoihin, julkaisuihin tai muihin resursseihin, jotka auttavat ymmärtämään ja käyttämään tätä tutkimusaineistoa.',
         },
         provenance: {
-          title: 'Alkuperä',
-          paragraph: 'Tiedot aineiston alkuperästä eli provenienssista.',
+          title: 'Historiatiedot (provenienssi)',
+          paragraph: 'Tiedot aineiston historiatiedoista eli provenienssista.',
         },
         infrastructure: {
           title: 'Infrastruktuuri',
@@ -1058,8 +1071,9 @@ const finnish = {
             edit: 'Muokkaa viittausta toiseen resurssiin'
           },
           buttons: {
-            save: 'Save',
-            cancel: 'Cancel'
+            save: 'Tallenna',
+            editSave: 'Vahvista muutokset',
+            cancel: 'Peruuta'
           },
           nameInput: {
             fi: {
@@ -1096,20 +1110,20 @@ const finnish = {
         }
       },
       provenance: {
-        title: 'Alkuperä',
+        title: 'Historiatiedot (provenienssi)',
         description: 'Tapahtuma tai toiminta, jonka kohteena oli tämä aineisto.',
-        noItems: 'Alkuperätietoja ei ole lisätty.',
+        noItems: 'Historiatietoja ei ole lisätty.',
         error: {
           nameRequired: 'Nimi vaaditaan vähintään yhdellä kielellä.'
         },
         modal: {
-          addButton: 'Lisää alkuperä',
+          addButton: 'Lisää historiatieto',
           title: {
-            add: 'Lisää alkuperä',
-            edit: 'Muokkaa alkuperää',
+            add: 'Lisää historiatieto',
+            edit: 'Muokkaa historiatietoa',
           },
           buttons: {
-            save: 'Lisää alkuperä',
+            save: 'Lisää historiatieto',
             editSave: 'Vahvista muutokset',
             cancel: 'Peruuta',
           },
@@ -1282,6 +1296,7 @@ const finnish = {
           buttons: {
             addGeometry: 'Lisää geometria',
             save: 'Tallenna',
+            editSave: 'Vahvista muutokset',
             cancel: 'Peruuta',
           },
           nameInput: {

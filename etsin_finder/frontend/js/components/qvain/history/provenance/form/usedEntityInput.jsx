@@ -27,6 +27,7 @@ const Location = ({ Stores }) => {
         lang={lang}
         translationsRoot={translationsRoot}
         elements={Store.inEdit.relatedResources}
+        disableNoItemsText
       />
       <div id="used-entity-input">
         <FieldListAdd
@@ -35,6 +36,7 @@ const Location = ({ Stores }) => {
           Form={Form}
           translationsRoot={translationsRoot}
           handleSave={() => handleSave(Field)}
+          position="left"
         />
       </div>
     </>

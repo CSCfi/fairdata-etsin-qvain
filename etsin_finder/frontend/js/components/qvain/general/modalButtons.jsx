@@ -23,7 +23,7 @@ const ModalButtons = ({ Field, handleRequestClose, translations, readonly, handl
             disabled={readonly}
             component={SaveButton}
             onClick={handleSave}
-            content={translations.buttons.save}
+            content={Field.editMode ? translations.buttons.editSave : translations.buttons.save}
           />
         )}
       </Observer>

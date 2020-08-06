@@ -19,7 +19,7 @@ const SpatialFieldContent = ({ Store, lang }) => (
       Store={Store}
       Field={Store.Spatials}
       translationsRoot={translationsRoot}
-      handleSave={handleSave}
+      handleSave={() => handleSave(Store.Spatials, translationsRoot)}
       Form={Form}
     />
   </>

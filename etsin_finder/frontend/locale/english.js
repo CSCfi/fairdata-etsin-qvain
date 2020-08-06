@@ -312,6 +312,18 @@ const english = {
   },
   qvain: {
     general: {
+      looseActors: {
+        warning: 'Some of the actors\' role is marked as provenance but they are not attached in any of existing provenances. Saving the dataset will remove these orphaned actors. Following actors will be removed:',
+        question: 'Do you still want to save the dataset?',
+        confirm: 'Yes, remove the actors and save',
+        cancel: 'No, continue editing'
+      },
+      looseProvenances: {
+        warning: 'You are about to remove actor that is linked to the following provenances:',
+        question: 'Removing actor will remove it from these provenances. Do you want to proceed?',
+        confirm: 'Yes, remove actor from provenances',
+        cancel: "No, don't remove actor"
+      },
       langFi: 'Finnish',
       langEn: 'English',
       buttons: {
@@ -582,6 +594,7 @@ const english = {
           curator: 'Curator',
           rights_holder: 'Rights holder',
           contributor: 'Contributor',
+          provenance: 'Provenance'
         },
         name: {
           placeholder: {
@@ -664,7 +677,7 @@ const english = {
         roles: {
           mixed: '',
           oneOf:
-            'Roles must be one of "Creator", "Publisher", "Curator", "Rights holder" or "Contributor".',
+            'Roles must be one of "Creator", "Publisher", "Curator", "Rights holder", "Contributor" or "Provenance.',
           required: 'You must specify the role of the actor. The creator role is mandatory.',
         },
         name: {
@@ -1050,27 +1063,28 @@ const english = {
             edit: 'Edit reference to a related resource'
           },
           buttons: {
-            save: 'Save',
+            save: 'Save related resource',
+            editSave: 'Apply changes',
             cancel: 'Cancel'
           },
           nameInput: {
             fi: {
               label: 'Name',
-              placeholder: 'Name (in finnish)'
+              placeholder: 'Name (in Finnish)'
             },
             en: {
               label: 'Name',
-              placeholder: 'Name (in english)'
+              placeholder: 'Name (in English)'
             }
           },
           descriptionInput: {
             fi: {
               label: 'Description',
-              placeholder: 'Description (in finnish)'
+              placeholder: 'Description (in Finnish)'
             },
             en: {
               label: 'Description',
-              placeholder: 'Description (in english)'
+              placeholder: 'Description (in English)'
             }
           },
           identifierInput: {
@@ -1114,31 +1128,31 @@ const english = {
           nameInput: {
             fi: {
               label: 'Name',
-              placeholder: 'Name (in finnish)',
+              placeholder: 'Name (in Finnish)',
             },
             en: {
               label: 'Name',
-              placeholder: 'Name (in english)',
+              placeholder: 'Name (in English)',
             },
           },
           descriptionInput: {
             fi: {
               label: 'Description',
-              placeholder: 'Description (in finnish)',
+              placeholder: 'Description (in Finnish)',
             },
             en: {
               label: 'Description',
-              placeholder: 'Description (in english)',
+              placeholder: 'Description (in English)',
             },
           },
           outcomeDescriptionInput: {
             fi: {
               label: 'Outcome description',
-              placeholder: 'Outcome description (in finnish)',
+              placeholder: 'Outcome description (in Finnish)',
             },
             en: {
               label: 'Outcome description',
-              placeholder: 'Outcome description (in english)',
+              placeholder: 'Outcome description (in English)',
             },
           },
           periodOfTimeInput: {
@@ -1206,21 +1220,21 @@ const english = {
               nameInput: {
                 fi: {
                   label: 'Name',
-                  placeholder: 'Name (in finnish)'
+                  placeholder: 'Name (in Finnish)'
                 },
                 en: {
                   label: 'Name',
-                  placeholder: 'Name (in english)'
+                  placeholder: 'Name (in English)'
                 }
               },
               descriptionInput: {
                 fi: {
                   label: 'Description',
-                  placeholder: 'Description (in finnish)'
+                  placeholder: 'Description (in Finnish)'
                 },
                 en: {
                   label: 'Description',
-                  placeholder: 'Description (in english)'
+                  placeholder: 'Description (in English)'
                 }
               },
               identifierInput: {
@@ -1279,6 +1293,7 @@ const english = {
           buttons: {
             addGeometry: 'Add Geometry',
             save: 'Save',
+            editSave: 'Apply changes',
             cancel: 'Cancel',
           },
           nameInput: {

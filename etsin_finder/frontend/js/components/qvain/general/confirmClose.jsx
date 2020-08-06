@@ -4,42 +4,65 @@ import Translate from 'react-translate-component'
 import styled from 'styled-components'
 
 import {
-  TableButton,
+  DangerCancelButton,
   DangerButton
 } from './buttons'
 
-// Show confirmation overlay for closing a modal with unsaved changes.
-const ConfirmClose = ({ show, disabled, hideConfirm, closeModal }) => {
+export const ConfirmDialog = ({ show, disabled, onConfirm, onCancel, content }) => {
   if (!show) {
     return null
   }
   return (
     <ResponseOverlay>
-      <Translate content={'qvain.confirmClose.warning'} component="p" />
+      {content.warning}
+      <div style={{ margin: 10 }} />
       <Buttons>
-        <HideButton disabled={disabled} onClick={hideConfirm}>
-          <Translate content={'qvain.confirmClose.cancel'} />
-        </HideButton>
-        <DangerButton disabled={disabled} onClick={closeModal}>
-          <Translate content={'qvain.confirmClose.confirm'} />
-        </DangerButton>
+        <DangerCancelButton disabled={disabled} onClick={onCancel}>
+          {content.cancel}
+        </DangerCancelButton>
+        <DangerButton disabled={disabled} onClick={onConfirm}>{content.confirm}</DangerButton>
       </Buttons>
     </ResponseOverlay>
   )
 }
 
+ConfirmDialog.propTypes = {
+  show: PropTypes.bool.isRequired,
+  onCancel: PropTypes.func.isRequired,
+  onConfirm: PropTypes.func.isRequired,
+  disabled: PropTypes.bool,
+  content: PropTypes.exact({
+    warning: PropTypes.node,
+    confirm: PropTypes.node,
+    cancel: PropTypes.node
+  }).isRequired
+}
+
+ConfirmDialog.defaultProps = {
+  disabled: false,
+}
+
+
+// Show confirmation overlay for closing a modal with unsaved changes.
+export const ConfirmClose = (props) => {
+  const content = {
+    warning: <Translate content={'qvain.confirmClose.warning'} component="p" />,
+    confirm: <Translate content={'qvain.confirmClose.confirm'} />,
+    cancel: <Translate content={'qvain.confirmClose.cancel'} />
+  }
+  return <ConfirmDialog {...props} content={content} />
+}
+
 ConfirmClose.propTypes = {
   show: PropTypes.bool.isRequired,
-  hideConfirm: PropTypes.func.isRequired,
-  closeModal: PropTypes.func.isRequired,
+  onCancel: PropTypes.func.isRequired,
+  onConfirm: PropTypes.func.isRequired,
   disabled: PropTypes.bool
 }
 
 ConfirmClose.defaultProps = {
   disabled: false,
 }
-
-export default ConfirmClose
 
 
 const Buttons = styled.div`
@@ -51,11 +74,6 @@ const Buttons = styled.div`
     padding: 0.75rem 0.25rem;
   }
 `
-
-const HideButton = styled(TableButton)`
-  width: auto;
-  height: auto;
-`;
 
 const ResponseOverlay = styled.div`
   display: flex;

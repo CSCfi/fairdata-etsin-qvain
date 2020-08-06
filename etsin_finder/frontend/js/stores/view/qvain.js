@@ -8,6 +8,7 @@ import {
   USE_CATEGORY_URL,
   CUMULATIVE_STATE,
   DATA_CATALOG_IDENTIFIER,
+  ROLE
 } from '../../utils/constants'
 import { getPath } from '../../components/qvain/utils/object'
 import Actors from './qvain.actors'
@@ -146,12 +147,14 @@ class Qvain {
   }
 
   @action
-  addToField = (fieldName, item) => {
+  addToField = (fieldName, item, refs = {}) => {
+    Object.keys(refs).forEach(key => { item[key] = refs[key] })
     this[fieldName] = [...this[fieldName], item]
   }
 
   @action
-  editItemInField = (fieldName, index, item) => {
+  editItemInField = (fieldName, index, item, refs = {}) => {
+    Object.keys(refs).forEach(key => { item[key] = refs[key] })
     this[fieldName][index] = item
   }
 
@@ -432,6 +435,12 @@ class Qvain {
   @observable metadataModalFile = undefined
 
   @observable fixDeprecatedModalOpen = false
+
+  @observable promptLooseActors = undefined
+
+  @observable promptLooseProvenances = undefined
+
+  @observable provenancesWithNonExistingActors = []
 
   @action
   setDataCatalog = (selectedDataCatalog) => {
@@ -734,6 +743,8 @@ class Qvain {
   // Dataset - METAX dataset JSON
   // perform schema transformation METAX JSON -> etsin backend / internal schema
   @action editDataset = async (dataset) => {
+    this.orphanActors = []
+    this.provenancesWithNonExistingActors = []
     this.original = { ...dataset }
     this.deprecated = dataset.deprecated
     const researchDataset = dataset.research_dataset
@@ -786,16 +797,6 @@ class Qvain {
       researchDataset.spatial.forEach(element => {
         const spatial = SpatialModel(element)
         this.spatials.push(spatial)
-      })
-    }
-
-    // Provenances
-    this.provenances = []
-    if (researchDataset.provenance !== undefined) {
-      researchDataset.provenance.forEach((p) => {
-        console.log(p)
-        const prov = ProvenanceModel(p)
-        this.provenances.push(prov)
       })
     }
 
@@ -856,6 +857,15 @@ class Qvain {
 
     // load actors
     this.Actors.editDataset(researchDataset)
+
+    // Provenances
+    this.provenances = []
+    if (researchDataset.provenance !== undefined) {
+      researchDataset.provenance.forEach((p) => {
+        const prov = ProvenanceModel(this, p)
+        this.provenances.push(prov)
+      })
+    }
 
     // Load data catalog
     this.dataCatalog =
@@ -1026,7 +1036,49 @@ class Qvain {
       this.preservationState !== 130
     )
   }
+
+  @action checkProvenanceActors = () => {
+    const provenanceActors = [...new Set(this.provenances.map(prov => Object.values(prov.associations.actorsRef)).flat())].flat()
+    const actorsWithOnlyProvenanceTag = this.Actors.actors.filter(actor => actor.roles.includes(ROLE.PROVENANCE) && actor.roles.length === 1)
+
+    const orphanActors = actorsWithOnlyProvenanceTag.filter(actor => !provenanceActors.includes(actor))
+    if (!orphanActors.length) return Promise.resolve(true)
+    this.orphanActors = orphanActors
+
+    return this.createLooseActorPromise()
+  }
+
+  @action checkActorFromRefs = (actor) => {
+    const provenancesWithActorRefsToBeRemoved = this.provenances.filter(p => p.associations.actorsRef[actor.uiid])
+    if (!provenancesWithActorRefsToBeRemoved.length) return Promise.resolve(true)
+    this.provenancesWithNonExistingActors = provenancesWithActorRefsToBeRemoved
+    return this.createLooseProvenancePromise()
+  }
+
+  @action removeActorFromRefs = (actor) => {
+    this.provenances.forEach(p => p.associations.removeActorRef(actor.uiid))
+  }
+
+    // these two are self-removing-resolve-functions
+    // You can call this.promptLooseActors(true/false)
+    // and it will resolve promise and then delete resolver from this.promptLooseActors.
+    // useful when the User confirm needed from dialog. Otherwise removing this.promptLooseActors should
+    // be removed in every .then/ after await.
+    createLooseActorPromise = () => new Promise(res => {
+        this.promptLooseActors = (resolve) => {
+        this.promptLooseActors = undefined
+        res(resolve)
+      }
+    })
+
+    createLooseProvenancePromise = () => new Promise(res => {
+      this.promptLooseProvenances = (resolve) => {
+      this.promptLooseProvenances = undefined
+      res(resolve)
+    }
+  })
 }
+
 
 const Hierarchy = (h, parent, selected) => ({
   original: h,
