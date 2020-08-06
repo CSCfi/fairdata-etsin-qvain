@@ -300,6 +300,7 @@ describe('Qvain.ExternalFiles', () => {
 describe('Qvain DOI selection', () => {
   let Qvain
   let Stores
+  const DoiSelectionBase = DoiSelection.wrappedComponent
   beforeEach(() => {
     Stores = getStores()
     Qvain = Stores.Qvain
@@ -309,27 +310,22 @@ describe('Qvain DOI selection', () => {
   it('should not render DOI selector for ATT catalog', () => {
     const { setDataCatalog } = Qvain
     setDataCatalog(DATA_CATALOG_IDENTIFIER.ATT)
-    const DoiSelectionBase = DoiSelection.wrappedComponent
     const component = shallow(<DoiSelectionBase Stores={Stores} />)
     expect(component.type()).toBe(null)
   })
-
 
   it('should not render DOI selector for PAS catalog', () => {
     const { setDataCatalog } = Qvain
     setDataCatalog(DATA_CATALOG_IDENTIFIER.PAS)
-    const DoiSelectionBase = DoiSelection.wrappedComponent
     const component = shallow(<DoiSelectionBase Stores={Stores} />)
     expect(component.type()).toBe(null)
   })
-
 
   it('renders DOI selector for new dataset with IDA catalog', () => {
     const { setDataCatalog } = Qvain
     Qvain.resetQvainStore()
     setDataCatalog(DATA_CATALOG_IDENTIFIER.IDA)
 
-    const DoiSelectionBase = DoiSelection.wrappedComponent
     const component = shallow(<DoiSelectionBase Stores={Stores} />)
     const checkbox = component.find(Checkbox)
     expect(checkbox.prop('checked')).toBe(false)
@@ -343,7 +339,6 @@ describe('Qvain DOI selection', () => {
       state: 'published',
     })
 
-    const DoiSelectionBase = DoiSelection.wrappedComponent
     const component = shallow(<DoiSelectionBase Stores={Stores} />)
     expect(component.type()).toBe(null)
   })
@@ -356,7 +351,6 @@ describe('Qvain DOI selection', () => {
       state: 'draft',
     })
 
-    const DoiSelectionBase = DoiSelection.wrappedComponent
     const component = shallow(<DoiSelectionBase Stores={Stores} />)
     const checkbox = component.find(Checkbox)
     expect(checkbox.prop('checked')).toBe(false)
@@ -369,25 +363,12 @@ describe('Qvain DOI selection', () => {
     setOriginal({
       state: 'draft',
       draft_of: {
-        identifier: 'some_identifier'
-      }
+        identifier: 'some_identifier',
+      },
     })
 
-    const DoiSelectionBase = DoiSelection.wrappedComponent
     const component = shallow(<DoiSelectionBase Stores={Stores} />)
     expect(component.type()).toBe(null)
-  })
-
-  it('checks the checkbox when useDoi is enabled', () => {
-    const { setDataCatalog, setUseDoi } = Qvain
-    Qvain.resetQvainStore()
-    setDataCatalog(DATA_CATALOG_IDENTIFIER.IDA)
-    setUseDoi(true)
-
-    const DoiSelectionBase = DoiSelection.wrappedComponent
-    const component = shallow(<DoiSelectionBase Stores={Stores} />)
-    const checkbox = component.find(Checkbox)
-    expect(checkbox.prop('checked')).toBe(true)
   })
 
   it('checks the checkbox', () => {
@@ -396,7 +377,6 @@ describe('Qvain DOI selection', () => {
     setDataCatalog(DATA_CATALOG_IDENTIFIER.IDA)
     setUseDoi(true)
 
-    const DoiSelectionBase = DoiSelection.wrappedComponent
     const component = shallow(<DoiSelectionBase Stores={Stores} />)
     const checkbox = component.find(Checkbox)
     expect(checkbox.prop('checked')).toBe(true)
