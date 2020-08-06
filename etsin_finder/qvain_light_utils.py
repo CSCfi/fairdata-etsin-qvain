@@ -29,8 +29,8 @@ def clean_empty_keyvalues_from_dict(d):
     if not isinstance(d, (dict, list)):
         return d
     if isinstance(d, list):
-        return [v for v in (clean_empty_keyvalues_from_dict(v) for v in d) if v]
-    return {k: v for k, v in ((k, clean_empty_keyvalues_from_dict(v)) for k, v in d.items()) if v}
+        return [v for v in (clean_empty_keyvalues_from_dict(v) for v in d) if v or v is False]
+    return {k: v for k, v in ((k, clean_empty_keyvalues_from_dict(v)) for k, v in d.items()) if v or v is False}
 
 
 def alter_role_data(actor_list, role):
@@ -353,7 +353,8 @@ def edited_data_to_metax(data, original):
         "spatial": data.get("spatial")
     })
     edited_data = {
-        "research_dataset": research_dataset
+        "research_dataset": research_dataset,
+        "use_doi_for_published": data.get("useDoi")
     }
     return clean_empty_keyvalues_from_dict(edited_data)
 

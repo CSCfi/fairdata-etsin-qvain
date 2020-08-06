@@ -4,13 +4,13 @@ import Select from 'react-select'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import translate from 'counterpart'
-import styled from 'styled-components'
 
 import Card from '../general/card'
 import { dataCatalogSchema } from '../utils/formValidation'
 import ValidationError from '../general/validationError'
 import { DATA_CATALOG_IDENTIFIER } from '../../../utils/constants'
-import { Checkbox, LabelLarge } from '../general/form'
+import { LabelLarge } from '../general/form'
+import DoiSelection from './doiSelection'
 
 let options = [
   { value: DATA_CATALOG_IDENTIFIER.IDA, label: translate('qvain.files.dataCatalog.ida') },
@@ -30,8 +30,6 @@ class DataCatalog extends Component {
 
     this.state = {
       errorMessage: undefined,
-      fileOrigin: undefined,
-      useDoi: false,
     }
   }
 
@@ -54,19 +52,16 @@ class DataCatalog extends Component {
           errorMessage: undefined,
         })
       })
-      .catch((err) => {
+      .catch(err => {
         this.setState({
           errorMessage: err.errors,
         })
       })
   }
 
-  handleDoiCheckboxChange = () => {
+  handleDoiCheckboxChange = event => {
     const { setUseDoi } = this.props.Stores.Qvain
-    setUseDoi(!this.state.useDoi)
-    this.setState((prevState) => ({
-      useDoi: !prevState.useDoi,
-    }))
+    setUseDoi(event.target.checked)
   }
 
   render() {
@@ -79,6 +74,7 @@ class DataCatalog extends Component {
       externalResources,
       original,
       isPas,
+      setUseDoi,
     } = this.props.Stores.Qvain
     const selected = [...selectedFiles, ...selectedDirectories, ...externalResources]
 
@@ -87,8 +83,7 @@ class DataCatalog extends Component {
     }
     // PAS catalog cannot be selected by the user
     const availableOptions = isPas ? pasOptions : options
-    const catalogSelectValue = availableOptions.find((opt) => opt.value === dataCatalog)
-
+    const catalogSelectValue = availableOptions.find(opt => opt.value === dataCatalog)
     return (
       <Card>
         <LabelLarge htmlFor="dataCatalogSelect">
@@ -101,51 +96,27 @@ class DataCatalog extends Component {
           name="dataCatalog"
           value={catalogSelectValue}
           options={availableOptions}
-          onChange={(selection) => {
+          onChange={selection => {
             setDataCatalog(selection.value)
             this.setState({
               errorMessage: undefined,
-              fileOrigin: selection.label,
             })
 
             // Uncheck useDoi checkbox if data catalog is ATT
             if (selection.value === DATA_CATALOG_IDENTIFIER.ATT) {
-              this.setState({
-                useDoi: false,
-              })
+              setUseDoi(false)
             }
           }}
           onBlur={this.handleOnBlur}
           attributes={{ placeholder: 'qvain.files.dataCatalog.placeholder' }}
           isDisabled={selected.length > 0 || original !== undefined || isPas}
         />
-        {this.state.fileOrigin === 'IDA' && original === undefined && (
-          <DoiSelectionContainer>
-            <Checkbox
-              id="doiSelector"
-              onChange={this.handleDoiCheckboxChange}
-              disabled={this.state.fileOrigin !== 'IDA' || original !== undefined}
-              checked={this.state.useDoi}
-            />
-            <DoiLabel htmlFor="doiSelector">
-              <Translate content="qvain.files.dataCatalog.doiSelection" />
-            </DoiLabel>
-          </DoiSelectionContainer>
-        )}
+        <DoiSelection />
+
         {errorMessage && <ValidationError>{errorMessage}</ValidationError>}
       </Card>
     )
   }
 }
-
-const DoiSelectionContainer = styled.div`
-  margin-top: 20px;
-`
-
-const DoiLabel = styled.label`
-  margin-right: auto;
-  padding-left: 4px;
-  display: inline-block;
-`
 
 export default inject('Stores')(observer(DataCatalog))
