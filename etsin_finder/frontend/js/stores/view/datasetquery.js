@@ -45,7 +45,7 @@ class DatasetQuery {
   @observable error = false
 
   @action
-  getData(id, useV2) {
+  getData(id) {
     const { metaxApiV2 } = this.Env
     const url = metaxApiV2 ? `/api/v2/dataset/${id}` : `/api/dataset/${id}`
     return new Promise((resolve, reject) => {

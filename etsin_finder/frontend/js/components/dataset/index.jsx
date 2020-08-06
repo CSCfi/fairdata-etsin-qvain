@@ -297,7 +297,6 @@ Dataset.propTypes = {
   Stores: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
-  Stores: PropTypes.object.isRequired,
 }
 
 export default inject('Stores')(observer(Dataset))
