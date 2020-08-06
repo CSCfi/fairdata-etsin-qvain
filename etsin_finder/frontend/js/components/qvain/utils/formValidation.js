@@ -73,24 +73,47 @@ const otherIdentifiersArraySchema = yup
 // LICENSE AND ACCESS VALIDATION
 
 // you have to provide the license object and the otherLicenseUrl
+// const licenseSchema = yup.object().shape({
+//   name: yup.object().nullable(),
+//   identifier: yup.string().required(),
+//   otherLicenseUrl: yup
+//     .mixed()
+//     .when('identifier', {
+//       is: 'other',
+//       then: yup
+//         .string(translate('qvain.validationMessages.license.otherUrl.string'))
+//         .url(translate('qvain.validationMessages.license.otherUrl.url'))
+//         .required(translate('qvain.validationMessages.license.otherUrl.required')),
+//       otherwise: yup
+//         .string()
+//         .url()
+//         .nullable(),
+//     })
+//     .nullable(),
+// })
 const licenseSchema = yup.object().shape({
   name: yup.object().nullable(),
   identifier: yup.string().required(),
-  otherLicenseUrl: yup
-    .mixed()
-    .when('identifier', {
-      is: 'other',
-      then: yup
-        .string(translate('qvain.validationMessages.license.otherUrl.string'))
-        .url(translate('qvain.validationMessages.license.otherUrl.url'))
-        .required(translate('qvain.validationMessages.license.otherUrl.required')),
-      otherwise: yup
-        .string()
-        .url()
-        .nullable(),
-    })
-    .nullable(),
+  // otherLicenseUrl: yup
+  //   .mixed()
+  //   .when('identifier', {
+  //     is: 'other',
+  //     then: yup
+  //       .string(translate('qvain.validationMessages.license.otherUrl.string'))
+  //       .url(translate('qvain.validationMessages.license.otherUrl.url'))
+  //       .required(translate('qvain.validationMessages.license.otherUrl.required')),
+  //     otherwise: yup
+  //       .string()
+  //       .url()
+  //       .nullable(),
+  //   })
+  //   .nullable(),
 })
+
+const licenseArraySchema = yup
+    .array()
+    .of(licenseSchema)
+    .nullable()
 
 const accessTypeSchema = yup.object().shape({
   name: yup.string(),
@@ -399,29 +422,23 @@ const qvainFormSchema = yup.object().shape({
     .mixed()
     .when('dataCatalog', {
       is: DATA_CATALOG_IDENTIFIER.IDA,
-      then: yup.object().shape({
-        name: yup.object().nullable(),
-        identifier: yup.string()
-      }).required(translate('qvain.validationMessages.license.requiredIfIDA')),
-      otherwise: yup.object().shape({
-        name: yup.object().nullable(),
-        identifier: yup.string()
-      }),
+      then: licenseArraySchema.required(translate('qvain.validationMessages.license.requiredIfIDA')),
+      otherwise: licenseArraySchema
     }),
-  otherLicenseUrl: yup
-    .mixed()
-    .when('license.identifier', {
-      is: 'other',
-      then: yup
-        .string(translate('qvain.validationMessages.license.otherUrl.string'))
-        .url(translate('qvain.validationMessages.license.otherUrl.url'))
-        .required(translate('qvain.validationMessages.license.otherUrl.required')),
-      otherwise: yup
-        .string()
-        .url()
-        .nullable(),
-    })
-    .nullable(),
+  // otherLicenseUrl: yup
+  //   .mixed()
+  //   .when('license.identifier', {
+  //     is: 'other',
+  //     then: yup
+  //       .string(translate('qvain.validationMessages.license.otherUrl.string'))
+  //       .url(translate('qvain.validationMessages.license.otherUrl.url'))
+  //       .required(translate('qvain.validationMessages.license.otherUrl.required')),
+  //     otherwise: yup
+  //       .string()
+  //       .url()
+  //       .nullable(),
+  //   })
+  //   .nullable(),
   restrictionGrounds: yup.mixed().when('accessType.url', {
     is: url => url !== ACCESS_TYPE_URL.OPEN,
     then: restrictionGroundsSchema,
