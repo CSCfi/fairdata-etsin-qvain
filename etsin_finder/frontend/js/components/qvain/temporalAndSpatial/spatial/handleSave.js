@@ -1,8 +1,8 @@
 import { spatialNameSchema, spatialAltitudeSchema } from '../../utils/formValidation'
 
-export default async (Field) => {
+export default async (Field, translationsRoot) => {
   const { inEdit, save, clearInEdit, setValidationError } = Field
-  const altNanError = 'qvain.temporalAndspatial.spatial.error.altitudeNan'
+  const altNanError = `${translationsRoot}.error.altitudeNan`
   try {
     await spatialNameSchema.validate(inEdit.name)
   } catch (e) {

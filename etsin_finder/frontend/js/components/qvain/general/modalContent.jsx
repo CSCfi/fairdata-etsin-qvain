@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
-import ConfirmClose from './confirmClose'
+import { ConfirmClose } from './confirmClose'
 import ModalButtons from './modalButtons'
 
 class ModalContent extends Component {
@@ -28,6 +28,7 @@ class ModalContent extends Component {
         buttons: {
           cancel: `${this.props.translationsRoot}.modal.buttons.cancel`,
           save: `${this.props.translationsRoot}.modal.buttons.save`,
+          editSave: `${this.props.translationsRoot}.modal.buttons.editSave`,
         },
       }
     this.state = {
@@ -66,8 +67,8 @@ class ModalContent extends Component {
           />
           <ConfirmClose
             show={confirmOpen}
-            hideConfirm={() => this.setConfirmOpen(false)}
-            closeModal={this.close}
+            onCancel={() => this.setConfirmOpen(false)}
+            onConfirm={this.close}
           />
         </Content>
       </>

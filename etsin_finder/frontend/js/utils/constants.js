@@ -77,6 +77,7 @@ export const ROLE = {
   CURATOR: 'curator',
   RIGHTS_HOLDER: 'rights_holder',
   CONTRIBUTOR: 'contributor',
+  PROVENANCE: 'provenance'
 }
 
 const PRESERVATION_STATE_COLOR = {

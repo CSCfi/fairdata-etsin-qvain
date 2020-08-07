@@ -38,7 +38,7 @@ const TranslationTabInput = ({ language, datum, Field, handleBlur, type, error, 
           autoFocus
           attributes={{ placeholder: translations.placeholder }}
           disabled={readonly}
-          value={inEdit[datum][language]}
+          value={(inEdit[datum] || {})[language]}
           onChange={handleChange}
           onBlur={handleBlur}
         />

@@ -145,6 +145,22 @@ export class ActorRolesBase extends Component {
               </Label>
             </FormField>
           </ListItem>
+          {actor.roles.includes(ROLE.PROVENANCE) && (
+          <ListItem disabled={readonly}>
+            <FormField>
+              <Checkbox
+                disabled
+                id="roleProvenance"
+                type="checkbox"
+                value={ROLE.PROVENANCE}
+                checked
+              />
+              <Label htmlFor="roleProvenance">
+                <Translate content="qvain.actors.add.checkbox.provenance" />
+              </Label>
+            </FormField>
+          </ListItem>
+          )}
         </List>
       </Fieldset>
     )

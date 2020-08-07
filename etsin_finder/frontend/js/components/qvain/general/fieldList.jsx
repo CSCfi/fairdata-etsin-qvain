@@ -11,10 +11,11 @@ import {
     ButtonContainer
 } from './buttons'
 
-const FieldList = ({ Field, lang, translationsRoot, elements }) => {
+const FieldList = ({ Field, lang, translationsRoot, elements, disableNoItemsText }) => {
   const { remove, edit } = Field
 
   if (!elements.length) {
+    if (disableNoItemsText) return null
     return <Translate component="div" content={`${translationsRoot}.noItems`} />
   }
 
@@ -51,11 +52,14 @@ FieldList.propTypes = {
     Field: PropTypes.object.isRequired,
     lang: PropTypes.string.isRequired,
     translationsRoot: PropTypes.string.isRequired,
-    elements: PropTypes.array
+    elements: PropTypes.array,
+    disableNoItemsText: PropTypes.bool
 }
 
 FieldList.defaultProps = {
-  inEdit: false
+  inEdit: false,
+  elements: [],
+  disableNoItemsText: false
 }
 
 const FieldListContainer = styled(ButtonGroup)`
