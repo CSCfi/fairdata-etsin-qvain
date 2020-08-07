@@ -3,14 +3,22 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import { Observer } from 'mobx-react'
-import uuid from 'uuid/v4'
+import { v4 as uuidv4 } from 'uuid'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import { Input, Label } from '../../../general/form'
 import ValidationError from '../../../general/validationError'
 import Button from '../../../../general/button'
 
-const ModalArrayInput = ({ datum, handleBlur, type, Field, error, translationsRoot, isRequired }) => {
+const ModalArrayInput = ({
+  datum,
+  handleBlur,
+  type,
+  Field,
+  error,
+  translationsRoot,
+  isRequired,
+}) => {
   const { changeAttribute, readonly } = Field
 
   const translations = {
@@ -25,35 +33,41 @@ const ModalArrayInput = ({ datum, handleBlur, type, Field, error, translationsRo
       changeAttribute(datum, arr)
     }
 
-    const onRemoveClick = id => {
+    const onRemoveClick = (id) => {
       const arr = [...Field.inEdit[datum]]
       arr.splice(id, 1)
       changeAttribute(datum, arr)
     }
 
     return (
-      <Observer>{() => Field.inEdit[datum].map((item, id) => (
-        <div key={`${item.key}-${datum}-item`} style={{ display: 'flex', alignItems: 'center' }}>
-          <Translate
-            component={ArrayInputElem}
-            type={type}
-            id={`${datum}Field`}
-            autoFocus
-            attributes={{ placeholder: translations.placeholder }}
-            disabled={readonly}
-            value={item.value || ''}
-            onChange={event => onChange(event, id)}
-            onBlur={() => handleBlur()}
-          />
-          <Translate
-            component={RemoveButton}
-            onClick={() => onRemoveClick(id)}
-            attributes={{ 'aria-label': 'qvain.general.buttons.remove' }}
-          >
-            <FontAwesomeIcon icon={faTimes} />
-          </Translate>
-        </div>
-      ))}
+      <Observer>
+        {() =>
+          Field.inEdit[datum].map((item, id) => (
+            <div
+              key={`${item.key}-${datum}-item`}
+              style={{ display: 'flex', alignItems: 'center' }}
+            >
+              <Translate
+                component={ArrayInputElem}
+                type={type}
+                id={`${datum}Field`}
+                autoFocus
+                attributes={{ placeholder: translations.placeholder }}
+                disabled={readonly}
+                value={item.value || ''}
+                onChange={(event) => onChange(event, id)}
+                onBlur={() => handleBlur()}
+              />
+              <Translate
+                component={RemoveButton}
+                onClick={() => onRemoveClick(id)}
+                attributes={{ 'aria-label': 'qvain.general.buttons.remove' }}
+              >
+                <FontAwesomeIcon icon={faTimes} />
+              </Translate>
+            </div>
+          ))
+        }
       </Observer>
     )
   }
@@ -66,11 +80,12 @@ const ModalArrayInput = ({ datum, handleBlur, type, Field, error, translationsRo
       {renderInputs()}
       <Observer>
         {() => (
-          <Button onClick={() => {
-            const arr = [...Field.inEdit[datum]]
-            arr.push({ key: uuid(), value: '' })
-            changeAttribute(datum, arr)
-          }}
+          <Button
+            onClick={() => {
+              const arr = [...Field.inEdit[datum]]
+              arr.push({ key: uuidv4(), value: '' })
+              changeAttribute(datum, arr)
+            }}
           >
             <Translate content={`${translationsRoot}.modal.buttons.addGeometry`} />
           </Button>

@@ -17,13 +17,13 @@ class Select extends Component {
     model: PropTypes.func.isRequired,
     name: PropTypes.string.isRequired,
     inModal: PropTypes.bool,
-    isClearable: PropTypes.bool
+    isClearable: PropTypes.bool,
   }
 
   static defaultProps = {
     getter: undefined,
     inModal: false,
-    isClearable: false
+    isClearable: false,
   }
 
   state = {
@@ -39,16 +39,16 @@ class Select extends Component {
   }
 
   componentWillUnmount() {
-    this.promises.forEach(promise => promise && promise.cancel && promise.cancel())
+    this.promises.forEach((promise) => promise && promise.cancel && promise.cancel())
   }
 
-  resolveRefData = res => {
+  resolveRefData = (res) => {
     const list = res.data.hits.hits
-    const refsEn = list.map(ref => ({
+    const refsEn = list.map((ref) => ({
       value: ref._source.uri,
       label: ref._source.label.en || ref._source.label.und,
     }))
-    const refsFi = list.map(ref => ({
+    const refsFi = list.map((ref) => ({
       value: ref._source.uri,
       label: ref._source.label.fi || ref._source.label.und,
     }))
@@ -60,7 +60,7 @@ class Select extends Component {
     })
   }
 
-  rejectRefData = error => {
+  rejectRefData = (error) => {
     if (error.response) {
       // Error response from Metax
       console.log(error.response.data)
@@ -96,7 +96,7 @@ class Select extends Component {
         menuPlacement="auto"
         menuPosition="fixed"
         menuShouldScrollIntoView={false}
-        isClearable={isClearable}
+        isClearable
       />
     ) : (
       <Translate
@@ -110,7 +110,7 @@ class Select extends Component {
         classNamePrefix="select"
         options={options[lang]}
         onChange={onChange(options, lang, setter, model)}
-        isClearable={isClearable}
+        isClearable
       />
     )
   }

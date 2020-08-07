@@ -54,7 +54,7 @@ class MetaxQvainLightAPIService(FlaskService):
         elif not self.is_testing:
             log.error("Unable to initialize MetaxAPIService due to missing config")
 
-    def get_directory_for_project(self, project_identifier):
+    def get_directory_for_project(self, project_identifier, params=None):
         """Get directory contents for a specific project
 
         Args:
@@ -69,6 +69,7 @@ class MetaxQvainLightAPIService(FlaskService):
         try:
             metax_qvain_api_response = requests.get(req_url,
                                                     headers={'Accept': 'application/json'},
+                                                    params=params,
                                                     auth=(self.user, self.pw),
                                                     verify=self.verify_ssl,
                                                     timeout=10)
@@ -522,9 +523,9 @@ def get_directory(dir_id, params=None):
     """Public function to get a specific directory with directory's id"""
     return _metax_api.get_directory(dir_id, params)
 
-def get_directory_for_project(project_id):
+def get_directory_for_project(project_id, params=None):
     """Public function to get directory contents for a specific project"""
-    return _metax_api.get_directory_for_project(project_id)
+    return _metax_api.get_directory_for_project(project_id, params)
 
 def get_file(file_identifier):
     """Public function to get a specific file with file's id"""

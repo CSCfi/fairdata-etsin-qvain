@@ -8,7 +8,7 @@ import {
   USE_CATEGORY_URL,
   CUMULATIVE_STATE,
   DATA_CATALOG_IDENTIFIER,
-  ROLE
+  ROLE,
 } from '../../utils/constants'
 import { getPath } from '../../components/qvain/utils/object'
 import Actors from './qvain.actors'
@@ -16,9 +16,11 @@ import Files from './qvain.files'
 import Spatials, { SpatialModel } from './qvain.spatials'
 import Provenances, { ProvenanceModel } from './qvain.provenances'
 import RelatedResources, { RelatedResourceModel } from './qvain.relatedResources'
+import uniqueByKey from '../../utils/uniqueByKey'
 
 class Qvain {
-  constructor() {
+  constructor(Env) {
+    this.Env = Env
     this.Files = new Files(this)
     this.Actors = new Actors(this)
     this.Spatials = new Spatials(this)
@@ -148,19 +150,23 @@ class Qvain {
 
   @action
   addToField = (fieldName, item, refs = {}) => {
-    Object.keys(refs).forEach(key => { item[key] = refs[key] })
+    Object.keys(refs).forEach((key) => {
+      item[key] = refs[key]
+    })
     this[fieldName] = [...this[fieldName], item]
   }
 
   @action
   editItemInField = (fieldName, index, item, refs = {}) => {
-    Object.keys(refs).forEach(key => { item[key] = refs[key] })
+    Object.keys(refs).forEach((key) => {
+      item[key] = refs[key]
+    })
     this[fieldName][index] = item
   }
 
   @action
   removeItemInField = (fieldName, uiid) => {
-    this[fieldName] = [...this[fieldName].filter(item => item.uiid !== uiid)]
+    this[fieldName] = [...this[fieldName].filter((item) => item.uiid !== uiid)]
   }
 
   @action
@@ -253,7 +259,9 @@ class Qvain {
 
   @action
   removeDatasetLanguage = (languageToRemove) => {
-    const languagesToRemain = this.datasetLanguageArray.filter(language => language.url !== languageToRemove.url)
+    const languagesToRemain = this.datasetLanguageArray.filter(
+      (language) => language.url !== languageToRemove.url
+    )
     this.datasetLanguageArray = languagesToRemain
     this.changed = true
   }
@@ -261,8 +269,12 @@ class Qvain {
   @action
   addDatasetLanguage = (language) => {
     if (!language || !('name' in language) || !('url' in language)) return
-    const oldDatasetLanguages = this.datasetLanguageArray.filter(item => item.url !== language.url)
-    this.datasetLanguageArray = oldDatasetLanguages.concat([(DatasetLanguage(language.name, language.url))])
+    const oldDatasetLanguages = this.datasetLanguageArray.filter(
+      (item) => item.url !== language.url
+    )
+    this.datasetLanguageArray = oldDatasetLanguages.concat([
+      DatasetLanguage(language.name, language.url),
+    ])
     this.setDatasetLanguage(undefined)
     this.changed = true
   }
@@ -303,7 +315,7 @@ class Qvain {
   }
 
   @action setInfrastructures = (infrastructures) => {
-    this.infrastructures = infrastructures
+    this.infrastructures = uniqueByKey(infrastructures, 'url')
     this.changed = true
   }
 
@@ -328,6 +340,10 @@ class Qvain {
     if (this.keywordString !== '') {
       this.addKeywordToKeywordArray()
     }
+    if (this.infrastructure) {
+      this.setInfrastructures([...this.infrastructures, this.infrastructure])
+      this.setInfrastructure(undefined)
+    }
   }
 
   @action
@@ -337,7 +353,7 @@ class Qvain {
   }
 
   @action
-  setLicenseName = name => {
+  setLicenseName = (name) => {
     this.license.name = name // only affects license display, should not trigger this.changed
   }
 
@@ -403,12 +419,6 @@ class Qvain {
   }
 
   // FILE PICKER STATE MANAGEMENT
-
-  @observable metaxApiV2 = process.env.NODE_ENV !== 'production' && localStorage.getItem('metax_api_v2') === '1'
-
-  @action setMetaxApiV2 = (value) => {
-    this.metaxApiV2 = value
-  }
 
   @observable idaPickerOpen = false
 
@@ -761,11 +771,13 @@ class Qvain {
     this.issuedDate = researchDataset.issued || undefined
 
     // Other identifiers
+    this.otherIdentifier = ''
     this.otherIdentifiersArray = researchDataset.other_identifier
       ? researchDataset.other_identifier.map((oid) => oid.notation)
       : []
 
     // Fields of science
+    this.fieldOfScience = undefined
     this.fieldsOfScience = []
     if (researchDataset.field_of_science !== undefined) {
       researchDataset.field_of_science.forEach((element) => {
@@ -777,24 +789,25 @@ class Qvain {
     this.datasetLanguage = undefined
     this.datasetLanguageArray = []
     if (researchDataset.language !== undefined) {
-      researchDataset.language.forEach(element => {
+      researchDataset.language.forEach((element) => {
         this.addDatasetLanguage(DatasetLanguage(element.title, element.identifier))
       })
     }
 
     // infrastructures
+    this.infrastructure = undefined
     this.infrastructures = []
     if (researchDataset.infrastructure !== undefined) {
       researchDataset.infrastructure.forEach((element) => {
-        this.infrastructure = Infrastructure(element.pref_label, element.identifier)
-        this.infrastructures.push(this.infrastructure)
+        const infrastructure = Infrastructure(element.pref_label, element.identifier)
+        this.infrastructures.push(infrastructure)
       })
     }
 
     // spatials
     this.spatials = []
     if (researchDataset.spatial !== undefined) {
-      researchDataset.spatial.forEach(element => {
+      researchDataset.spatial.forEach((element) => {
         const spatial = SpatialModel(element)
         this.spatials.push(spatial)
       })
@@ -836,12 +849,12 @@ class Qvain {
       } else {
         this.license = l
           ? License(
-            {
-              en: 'Other (URL)',
-              fi: 'Muu (URL)',
-            },
-            'other'
-          )
+              {
+                en: 'Other (URL)',
+                fi: 'Muu (URL)',
+              },
+              'other'
+            )
           : License(undefined, LICENSE_URL.CCBY4)
         this.otherLicenseUrl = l.license
       }
@@ -903,30 +916,30 @@ class Qvain {
         this.getInitialDirectories()
       }
       this.existingDirectories = dsDirectories
-        ? dsDirectories.map(d => {
-          // Removed directories don't have details
-          if (!d.details) {
-            d.details = {
-              directory_name: d.title,
-              file_path: '',
-              removed: true,
+        ? dsDirectories.map((d) => {
+            // Removed directories don't have details
+            if (!d.details) {
+              d.details = {
+                directory_name: d.title,
+                file_path: '',
+                removed: true,
+              }
             }
-          }
-          return DatasetDirectory(d)
-        })
+            return DatasetDirectory(d)
+          })
         : []
       this.existingFiles = dsFiles
-        ? dsFiles.map(f => {
-          // Removed files don't have details
-          if (!f.details) {
-            f.details = {
-              file_name: f.title,
-              file_path: '',
-              removed: true,
+        ? dsFiles.map((f) => {
+            // Removed files don't have details
+            if (!f.details) {
+              f.details = {
+                file_name: f.title,
+                file_path: '',
+                removed: true,
+              }
             }
-          }
-          return DatasetFile(f, undefined, true)
-        })
+            return DatasetFile(f, undefined, true)
+          })
         : []
     }
 
@@ -942,9 +955,9 @@ class Qvain {
           r.download_url ? r.download_url.identifier : undefined,
           r.use_category
             ? {
-              label: r.use_category.pref_label.en,
-              value: r.use_category.identifier,
-            }
+                label: r.use_category.pref_label.en,
+                value: r.use_category.identifier,
+              }
             : undefined
         )
       )
@@ -952,8 +965,8 @@ class Qvain {
     }
 
     this.changed = false
-    if (this.metaxApiV2) {
-      await this.Files.editDataset(dataset)
+    if (this.Env.metaxApiV2) {
+      await this.Files.openDataset(dataset)
     }
   }
 
@@ -1001,7 +1014,7 @@ class Qvain {
       return false
     }
 
-    if (this.metaxApiV2) {
+    if (this.Env.metaxApiV2) {
       if (this.hasBeenPublished) {
         if (this.Files && !this.Files.projectLocked) {
           return true // for published noncumulative datasets, allow adding files only if none exist yet
@@ -1038,10 +1051,16 @@ class Qvain {
   }
 
   @action checkProvenanceActors = () => {
-    const provenanceActors = [...new Set(this.provenances.map(prov => Object.values(prov.associations.actorsRef)).flat())].flat()
-    const actorsWithOnlyProvenanceTag = this.Actors.actors.filter(actor => actor.roles.includes(ROLE.PROVENANCE) && actor.roles.length === 1)
+    const provenanceActors = [
+      ...new Set(this.provenances.map((prov) => Object.values(prov.associations.actorsRef)).flat()),
+    ].flat()
+    const actorsWithOnlyProvenanceTag = this.Actors.actors.filter(
+      (actor) => actor.roles.includes(ROLE.PROVENANCE) && actor.roles.length === 1
+    )
 
-    const orphanActors = actorsWithOnlyProvenanceTag.filter(actor => !provenanceActors.includes(actor))
+    const orphanActors = actorsWithOnlyProvenanceTag.filter(
+      (actor) => !provenanceActors.includes(actor)
+    )
     if (!orphanActors.length) return Promise.resolve(true)
     this.orphanActors = orphanActors
 
@@ -1049,36 +1068,39 @@ class Qvain {
   }
 
   @action checkActorFromRefs = (actor) => {
-    const provenancesWithActorRefsToBeRemoved = this.provenances.filter(p => p.associations.actorsRef[actor.uiid])
+    const provenancesWithActorRefsToBeRemoved = this.provenances.filter(
+      (p) => p.associations.actorsRef[actor.uiid]
+    )
     if (!provenancesWithActorRefsToBeRemoved.length) return Promise.resolve(true)
     this.provenancesWithNonExistingActors = provenancesWithActorRefsToBeRemoved
     return this.createLooseProvenancePromise()
   }
 
   @action removeActorFromRefs = (actor) => {
-    this.provenances.forEach(p => p.associations.removeActorRef(actor.uiid))
+    this.provenances.forEach((p) => p.associations.removeActorRef(actor.uiid))
   }
 
-    // these two are self-removing-resolve-functions
-    // You can call this.promptLooseActors(true/false)
-    // and it will resolve promise and then delete resolver from this.promptLooseActors.
-    // useful when the User confirm needed from dialog. Otherwise removing this.promptLooseActors should
-    // be removed in every .then/ after await.
-    createLooseActorPromise = () => new Promise(res => {
-        this.promptLooseActors = (resolve) => {
+  // these two are self-removing-resolve-functions
+  // You can call this.promptLooseActors(true/false)
+  // and it will resolve promise and then delete resolver from this.promptLooseActors.
+  // useful when the User confirm needed from dialog. Otherwise removing this.promptLooseActors should
+  // be removed in every .then/ after await.
+  createLooseActorPromise = () =>
+    new Promise((res) => {
+      this.promptLooseActors = (resolve) => {
         this.promptLooseActors = undefined
         res(resolve)
       }
     })
 
-    createLooseProvenancePromise = () => new Promise(res => {
+  createLooseProvenancePromise = () =>
+    new Promise((res) => {
       this.promptLooseProvenances = (resolve) => {
-      this.promptLooseProvenances = undefined
-      res(resolve)
-    }
-  })
+        this.promptLooseProvenances = undefined
+        res(resolve)
+      }
+    })
 }
-
 
 const Hierarchy = (h, parent, selected) => ({
   original: h,
@@ -1193,4 +1215,4 @@ export const ExternalResource = (id, title, accessUrl, downloadUrl, useCategory)
 
 export const EmptyExternalResource = ExternalResource(undefined, '', '', '', '')
 
-export default new Qvain()
+export default Qvain

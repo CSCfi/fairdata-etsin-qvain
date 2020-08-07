@@ -16,7 +16,7 @@ import { getResponseError } from '../../utils/responseError'
 import { Label, HelpField, Input } from '../../general/form'
 import { DangerButton, TableButton } from '../../general/buttons'
 import Response from '../response'
-import { getPASMeta } from '../../../../stores/view/qvain.files.items'
+import { getPASMeta } from '../../../../stores/view/common.files.items'
 
 import { getOptions, getDefaultOptions, makeOption, findOption } from './options'
 import { MetadataSelect, selectStylesNarrow, labelStyle } from './select'
@@ -212,7 +212,7 @@ class MetadataModal extends Component {
       const response = await patchPromise
 
       // Update file hierarchy with response data, close modal
-      if (this.props.Stores.Qvain.metaxApiV2) {
+      if (this.props.Stores.Env.metaxApiV2) {
         this.props.Stores.Qvain.Files.applyPASMeta(getPASMeta(response.data))
       } else {
         this.props.Stores.Qvain.updateFileMetadata(response.data)
@@ -289,9 +289,9 @@ class MetadataModal extends Component {
   }
 
   initialize() {
-    const { Qvain } = this.props.Stores
+    const { Qvain, Env } = this.props.Stores
     const file = Qvain.metadataModalFile || {}
-    const pasObj = (!Qvain.metaxApiV2 ? file : file.pasMeta) || {}
+    const pasObj = (!Env.metaxApiV2 ? file : file.pasMeta) || {}
 
     const newState = {
       response: null,

@@ -19,7 +19,6 @@ import SkipToContent from '../components/general/skipToContent'
 import Header from './header'
 import Footer from './footer'
 import Content from './content'
-import CookiesNotification from './cookiesNotification'
 
 export default class Layout extends Component {
   constructor(props) {
@@ -40,7 +39,6 @@ export default class Layout extends Component {
         <SkipToContent callback={this.focusContent} />
         <Header />
         <Content contentRef={this.content} />
-        <CookiesNotification />
         <Footer />
       </ErrorBoundary>
     )

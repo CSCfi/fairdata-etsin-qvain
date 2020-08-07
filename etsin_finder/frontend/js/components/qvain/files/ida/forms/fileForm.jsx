@@ -36,7 +36,7 @@ class FileForm extends Component {
     fileTypesFi: [],
     useCategoriesEn: [],
     useCategoriesFi: [],
-    title: this.inEdit.title,
+    title: this.inEdit.title || this.inEdit.name,
     description: this.inEdit.description,
     useCategory: undefined,
     fileType: undefined,
