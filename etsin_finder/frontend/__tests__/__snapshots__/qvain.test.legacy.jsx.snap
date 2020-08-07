@@ -66,6 +66,7 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
           "onSuccessfulCreationCallbacks": Array [],
           "referenceOrganizationErrors": Object {},
           "referenceOrganizations": Object {},
+          "setSelectedActor": undefined,
           "toBackend": [Function],
         },
         "Env": Env {
@@ -296,6 +297,7 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
           "onSuccessfulCreationCallbacks": Array [],
           "referenceOrganizationErrors": Object {},
           "referenceOrganizations": Object {},
+          "setSelectedActor": undefined,
           "toBackend": [Function],
         },
         "Env": Env {
@@ -526,6 +528,7 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
           "onSuccessfulCreationCallbacks": Array [],
           "referenceOrganizationErrors": Object {},
           "referenceOrganizations": Object {},
+          "setSelectedActor": undefined,
           "toBackend": [Function],
         },
         "Env": Env {
@@ -756,6 +759,7 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
           "onSuccessfulCreationCallbacks": Array [],
           "referenceOrganizationErrors": Object {},
           "referenceOrganizations": Object {},
+          "setSelectedActor": undefined,
           "toBackend": [Function],
         },
         "Env": Env {

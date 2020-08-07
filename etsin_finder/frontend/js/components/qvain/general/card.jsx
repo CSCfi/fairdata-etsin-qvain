@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import styled, { keyframes } from 'styled-components'
 
 // eslint-disable-next-line
-const Card = ({ children, bottomContent }) => <Container bottomContent={bottomContent}>{children}</Container>
+const Card = ({ children, bottomContent, className }) => <Container bottomContent={bottomContent} className={className}>{children}</Container>
 
 export const Container = styled.div`
   padding-left: 45px;
@@ -61,7 +61,7 @@ export const StickySubHeaderWrapper = styled.div`
 export const StickySubHeader = styled.div`
   height: 50px;
   background-color: rgb(231,233,237);
-  font-color: #4F4F4F;
+  color: #4F4F4F;
   display: flex;
   width: 100%;
   justify-content: center;
@@ -69,7 +69,7 @@ export const StickySubHeader = styled.div`
 `
 
 export const StickySubHeaderResponse = styled.div`
-  font-color: #4F4F4F;
+  color: #4F4F4F;
   display: flex;
   width: 100%;
   justify-content: center;
@@ -124,8 +124,13 @@ export const SlidingContent = styled.div`
   )}
 `;
 
-Card.prototype = {
-  children: PropTypes.element.isRequired
+Card.propTypes = {
+  children: PropTypes.element.isRequired,
+  className: PropTypes.string
+}
+
+Card.defaultProps = {
+  className: undefined
 }
 
 export default Card;

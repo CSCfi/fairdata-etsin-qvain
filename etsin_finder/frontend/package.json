@@ -121,6 +121,7 @@
   },
   "prettier": {
     "function-paren-newline": false,
+    "arrowParens": "avoid",
     "printWidth": 100,
     "semi": false,
     "singleQuote": true,

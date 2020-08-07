@@ -32,7 +32,6 @@ export const ExpandCollapse = props => (
 
 ExpandCollapse.propTypes = {
   isExpanded: PropTypes.bool,
-  onClick: PropTypes.func.isRequired
 }
 
 ExpandCollapse.defaultProps = {
