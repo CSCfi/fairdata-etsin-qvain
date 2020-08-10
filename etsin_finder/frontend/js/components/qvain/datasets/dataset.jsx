@@ -42,7 +42,7 @@ const getGoToEtsinButton = dataset => {
 }
 
 function Dataset(props) {
-  const { metaxApiV2 } = props.Stores.Qvain
+  const { metaxApiV2 } = props.Stores.Env
 
   let titleCellStyle = null
   if (props.indent) {

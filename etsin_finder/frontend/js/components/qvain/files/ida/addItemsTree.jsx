@@ -4,7 +4,7 @@ import { inject, Observer } from 'mobx-react'
 import { autorun } from 'mobx'
 import Translate from 'react-translate-component'
 
-import { useRenderTree } from './common/tree'
+import { useRenderTree } from '../../../general/files/tree'
 import AddItemsTreeItem from './addItemsTreeItem'
 
 const EmptyHelp = () => (

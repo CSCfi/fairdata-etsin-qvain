@@ -91,7 +91,6 @@ export const emptyDirectoryResponse = {
   }
 }
 
-
 export const getAction = (parent) => {
   let added = false
   let removed = false
@@ -110,5 +109,13 @@ export const getAction = (parent) => {
   return {
     added,
     removed
+  }
+}
+
+export const assignDefined = (obj, values) => {
+  for (const key in values) {
+    if (values[key] != null) {
+      obj[key] = values[key]
+    }
   }
 }

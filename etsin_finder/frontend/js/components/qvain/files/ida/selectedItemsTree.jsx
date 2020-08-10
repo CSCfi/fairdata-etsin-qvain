@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { inject, Observer } from 'mobx-react'
 
 import SelectedItemsTreeItem from './selectedItemsTreeItem'
-import { useRenderTree } from './common/tree'
+import { useRenderTree } from '../../../general/files/tree'
 
 export function SelectedItemsTree(props) {
   const { Files } = props.Stores.Qvain
@@ -26,7 +26,7 @@ export function SelectedItemsTree(props) {
     Files,
     Item: SelectedItemsTreeItem,
     directoryView: SelectedItemsView,
-    moreItemsLevel: 5,
+    moreItemsLevel: 4.5,
   })
 
   return <Observer>{renderTree}</Observer>
