@@ -4,16 +4,20 @@ import axios from 'axios'
 
 import '../locale/translations.js'
 import RemoveModal from '../js/components/qvain/datasets/removeModal'
-import QvainStore from '../js/stores/view/qvain'
+import QvainStoreClass from '../js/stores/view/qvain'
 import LocaleStore from '../js/stores/view/language'
+import EnvStore from '../js/stores/domain/env'
 
 jest.mock('axios')
 
+const QvainStore = new QvainStoreClass(EnvStore)
+
 const getStores = () => {
   QvainStore.resetQvainStore()
-  QvainStore.setMetaxApiV2(true)
+  EnvStore.setMetaxApiV2(true)
   return {
     Qvain: QvainStore,
+    Env: EnvStore,
     Locale: LocaleStore,
   }
 }

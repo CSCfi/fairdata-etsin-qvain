@@ -29,7 +29,7 @@ class RemoveModal extends Component {
 
   handleRemove = async () => {
     const { dataset, onlyChanges, postRemoveUpdate, location, onClose, Stores } = this.props
-    const { metaxApiV2 } = Stores.Qvain
+    const { metaxApiV2 } = Stores.Env
     if (onlyChanges && !dataset.next_draft) {
       return // no unpublished changes
     }
