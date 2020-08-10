@@ -98,7 +98,8 @@ class Qvain extends Component {
 
   getDataset(identifier) {
     this.setState({ datasetLoading: true, datasetError: false, response: null, submitted: false })
-    const { metaxApiV2, resetQvainStore, editDataset } = this.props.Stores.Qvain
+    const { resetQvainStore, editDataset } = this.props.Stores.Qvain
+    const { metaxApiV2 } = this.props.Stores.Env
 
     let url = `${DATASET_URLS.EDIT_DATASET_URL}/${identifier}`
     if (metaxApiV2) {

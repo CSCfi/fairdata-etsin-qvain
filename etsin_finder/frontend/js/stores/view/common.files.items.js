@@ -10,12 +10,13 @@ export const fileIdentifierKey = (file) => `file:${file.identifier}`
 const Item = (metaxItem) => ({
   identifier: metaxItem.identifier,
   key: null,
-  title: metaxItem.title,
+  title: metaxItem.title || '',
   description: metaxItem.description,
   useCategory: metaxItem.use_category && metaxItem.use_category.identifier,
   parent: null,
   path: null,
   index: null, // sorting index of item
+  byteSize: 0,
 
   added: false,
   removed: false,
@@ -27,9 +28,9 @@ export const Directory = (metaxDir, args) => ({
   ...Item(metaxDir),
   key: dirKey(metaxDir),
   name: metaxDir.directory_name, // actual directory name
-  title: metaxDir.directory_name,
   path: metaxDir.directory_path,
   fileCount: metaxDir.file_count,
+  existingByteSize: 0,
   existingFileCount: 0,
   addedChildCount: 0,
   removedChildCount: 0,
@@ -81,8 +82,8 @@ export const File = (metaxFile, args) => ({
   ...Item(metaxFile),
   key: fileKey(metaxFile),
   name: metaxFile.file_name, // actual filename
-  title: metaxFile.file_name,
   path: metaxFile.file_path,
+  checksum: metaxFile.checksum,
   type: 'file',
   pasMeta: getPASMeta(metaxFile),
   ...args
@@ -109,7 +110,7 @@ export const Project = (projectIdentifier, identifier, args) => ({
 })
 
 export const hasMetadata = (item) => {
-  if (item.description || item.useCategory || item.title !== item.name) {
+  if (item.description || item.useCategory || (item.title && item.title !== item.name)) {
     return true
   }
   if (item.type === 'file' && item.fileType) {

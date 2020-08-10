@@ -61,7 +61,7 @@ const getActionItem = action => {
 }
 
 function Dataset(props) {
-  const { metaxApiV2 } = props.Stores.Qvain
+  const { metaxApiV2 } = props.Stores.Env
 
   const getActions = () => {
     const { dataset } = props

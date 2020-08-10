@@ -474,7 +474,9 @@ export const project = {
   ],
   files: [],
   identifier: 'cb74b1b06e79339e93b391ecf71b18ac', // contained in the Metax response when include_parent is enabled
-  id: 31
+  id: 31,
+  file_count: 15,
+  byte_size: 15360
 }
 
 
@@ -517,7 +519,10 @@ directories['/'] = {
       service_created: 'metax'
     }
   ],
-  files: []
+  files: [],
+  id: 31,
+  file_count: 15,
+  byte_size: 15360
 }
 
 directories['/moredata'] = {
@@ -1116,7 +1121,9 @@ existing['/'] = {
       identifier: '7ceb3498251f3dfdbe1bde7aa964142b'
     }
   ],
-  files: []
+  files: [],
+  file_count: 9,
+  byte_size: 9216,
 }
 
 existing['/moredata'] = {
@@ -1182,7 +1189,7 @@ existing['/moredata'] = {
       id: 150,
       removed: false
     }
-  ]
+  ],
 }
 
 existing['/data'] = {
@@ -1205,7 +1212,7 @@ existing['/data'] = {
       identifier: '11f69846228a375baf7ef919c04629c6'
     },
     {
-      byte_size: 0,
+      byte_size: 1024,
       project_identifier: 'project',
       id: 35,
       directory_name: 'set2',
@@ -1222,7 +1229,7 @@ existing['/data'] = {
       identifier: '84189dbab05c39d09e01fb4aff0aee73'
     }
   ],
-  files: []
+  files: [],
 }
 
 existing['/data/set1'] = {
@@ -1306,7 +1313,7 @@ existing['/data/set1'] = {
       id: 152,
       removed: false
     }
-  ]
+  ],
 }
 
 existing['/data/set2/'] = {
@@ -1342,7 +1349,7 @@ existing['/data/set2/'] = {
       id: 153,
       removed: false
     }
-  ]
+  ],
 }
 
 existing['/data/set1/subset'] = {
@@ -1386,8 +1393,8 @@ existing['/data/set1/subset'] = {
       file_modified: '2017-09-27T15:38:18.700000+03:00',
       service_created: 'metax',
       user_created: 'string',
-      file_name: 'file12.csv',
-      date_created: '2020-03-03T11:38:43+02:00',
+      file_name: 'file10.csv',
+      date_created: '2020-03-03T11:38:40+02:00',
       checksum: {
         value: 'string',
         algorithm: 'md5',
@@ -1396,8 +1403,8 @@ existing['/data/set1/subset'] = {
       byte_size: 1024,
       open_access: true,
       file_uploaded: '2017-09-27T15:38:18.700000+03:00',
-      file_path: '/data/set1/subset/file12.csv',
-      identifier: 'c590c004-5d32-11ea-b9f7-94e6f76907f8',
+      file_path: '/data/set1/subset/file10.csv',
+      identifier: 'c3cdcb5e-5d32-11ea-b9f7-94e6f76907f8',
       project_identifier: 'project',
       file_frozen: '2017-09-27T15:38:18.700000+03:00',
       file_storage: {
@@ -1405,7 +1412,7 @@ existing['/data/set1/subset'] = {
         id: 1
       },
       file_format: 'string',
-      id: 158,
+      id: 156,
       removed: false
     },
     {
@@ -1446,8 +1453,8 @@ existing['/data/set1/subset'] = {
       file_modified: '2017-09-27T15:38:18.700000+03:00',
       service_created: 'metax',
       user_created: 'string',
-      file_name: 'file10.csv',
-      date_created: '2020-03-03T11:38:40+02:00',
+      file_name: 'file12.csv',
+      date_created: '2020-03-03T11:38:43+02:00',
       checksum: {
         value: 'string',
         algorithm: 'md5',
@@ -1456,8 +1463,8 @@ existing['/data/set1/subset'] = {
       byte_size: 1024,
       open_access: true,
       file_uploaded: '2017-09-27T15:38:18.700000+03:00',
-      file_path: '/data/set1/subset/file10.csv',
-      identifier: 'c3cdcb5e-5d32-11ea-b9f7-94e6f76907f8',
+      file_path: '/data/set1/subset/file12.csv',
+      identifier: 'c590c004-5d32-11ea-b9f7-94e6f76907f8',
       project_identifier: 'project',
       file_frozen: '2017-09-27T15:38:18.700000+03:00',
       file_storage: {
@@ -1465,9 +1472,9 @@ existing['/data/set1/subset'] = {
         id: 1
       },
       file_format: 'string',
-      id: 156,
+      id: 158,
       removed: false
-    }
+    },
   ]
 }
 
@@ -1530,7 +1537,9 @@ notExisting['/'] = {
       service_created: 'metax'
     },
   ],
-  files: []
+  files: [],
+  file_count: 6,
+  byte_size: 13312
 }
 
 notExisting['/data'] = {
@@ -1654,6 +1663,36 @@ notExisting['/data/set2/'] = {
         checked: '2017-09-27T12:38:18.701000Z',
         value: 'string'
       },
+      date_created: '2020-03-03T11:37:21+02:00',
+      file_format: 'string',
+      file_frozen: '2017-09-27T15:38:18.700000+03:00',
+      file_modified: '2017-09-27T15:38:18.700000+03:00',
+      file_name: 'file2.csv',
+      file_path: '/data/set2/file2.csv',
+      file_storage: {
+        id: 1,
+        identifier: 'pid:urn:storageidentifier1'
+      },
+      file_uploaded: '2017-09-27T15:38:18.700000+03:00',
+      id: 154,
+      identifier: '94d0ca7c-5d32-11ea-b9f7-94e6f76907f8',
+      open_access: true,
+      parent_directory: {
+        id: 35,
+        identifier: '84189dbab05c39d09e01fb4aff0aee73'
+      },
+      project_identifier: 'project',
+      removed: false,
+      service_created: 'metax',
+      user_created: 'string'
+    },
+    {
+      byte_size: 1024,
+      checksum: {
+        algorithm: 'md5',
+        checked: '2017-09-27T12:38:18.701000Z',
+        value: 'string'
+      },
       date_created: '2020-03-03T11:37:22+02:00',
       file_format: 'string',
       file_frozen: '2017-09-27T15:38:18.700000+03:00',
@@ -1677,36 +1716,6 @@ notExisting['/data/set2/'] = {
       service_created: 'metax',
       user_created: 'string'
     },
-    {
-      byte_size: 1024,
-      checksum: {
-        algorithm: 'md5',
-        checked: '2017-09-27T12:38:18.701000Z',
-        value: 'string'
-      },
-      date_created: '2020-03-03T11:37:21+02:00',
-      file_format: 'string',
-      file_frozen: '2017-09-27T15:38:18.700000+03:00',
-      file_modified: '2017-09-27T15:38:18.700000+03:00',
-      file_name: 'file2.csv',
-      file_path: '/data/set2/file2.csv',
-      file_storage: {
-        id: 1,
-        identifier: 'pid:urn:storageidentifier1'
-      },
-      file_uploaded: '2017-09-27T15:38:18.700000+03:00',
-      id: 154,
-      identifier: '94d0ca7c-5d32-11ea-b9f7-94e6f76907f8',
-      open_access: true,
-      parent_directory: {
-        id: 35,
-        identifier: '84189dbab05c39d09e01fb4aff0aee73'
-      },
-      project_identifier: 'project',
-      removed: false,
-      service_created: 'metax',
-      user_created: 'string'
-    }
   ]
 }
 
@@ -1869,8 +1878,9 @@ const paginate = (data, offset, limit) => {
   return {
     count: data.directories.length + data.files.length,
     results: {
+      ...data,
       directories,
-      files
+      files,
     }
   }
 }
