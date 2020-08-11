@@ -8,13 +8,12 @@ import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import { Table, TableHeader, Row, HeaderCell, TableBody, TableNote } from '../general/table'
 import urls from '../utils/urls'
-import Modal from '../../general/modal'
+import RemoveModal from './removeModal'
 import DatasetPagination from './pagination'
-import { TableButton, DangerButton } from '../general/buttons'
+import { TableButton } from '../general/buttons'
 import { FormField, Input, Label as inputLabel } from '../general/form'
 import DatasetGroup from './datasetGroup'
 import { filterGroupsByTitle, groupDatasetsByVersionSet } from './filter'
-import Tracking from '../../../utils/tracking'
 
 class DatasetTable extends Component {
   minOfDataSetsForSearchTool = 5
@@ -40,8 +39,8 @@ class DatasetTable extends Component {
     loading: true, // used to display loading notification in the table
     error: false, // error notification status
     errorMessage: '', // error notification itself
-    removeModalOpen: false, // delete/remove modal state
-    removableDatasetIdentifier: undefined, // used to send the delete request to backend to target the correct dataset
+    removeModalDataset: undefined, // used to send the delete request to backend to target the correct dataset
+    removeModalOnlyChanges: false, // if true, delete only unpublished changes, not the entire dataset
     searchTerm: '', // used to narrow down content
     currentTimestamp: new Date(), // Only need to set this once, when the page is loaded,
   }
@@ -108,7 +107,7 @@ class DatasetTable extends Component {
         )
       })
       .catch(e => {
-        console.log(e.message)
+        console.error(e.message)
         this.setState({ loading: false, error: true, errorMessage: 'Failed to load datasets' })
       })
     this.promises.push(promise)
@@ -130,51 +129,40 @@ class DatasetTable extends Component {
     this.props.history.replace(`/qvain/dataset/${newIdentifier}`)
   }
 
-  handleRemove = identifier => event => {
-    event.preventDefault()
-    const { metaxApiV2 } = this.props.Stores.Env
-
-    let url = urls.v1.dataset(identifier)
-    if (metaxApiV2) {
-      url = urls.v2.dataset(identifier)
+  postRemoveUpdate = (dataset, onlyChanges) => {
+    // update dataset list after dataset removal
+    let datasets = [...this.state.datasets]
+    const identifier = dataset.identifier
+    if (onlyChanges) {
+      const datasetIndex = datasets.findIndex(d => d.identifier === identifier)
+      if (datasetIndex >= 0) {
+        const datasetCopy = { ...datasets[datasetIndex] }
+        delete datasetCopy.next_draft
+        datasets[datasetIndex] = datasetCopy
+      }
+    } else {
+      datasets = datasets.filter(d => d.identifier !== identifier)
     }
-
-    const promise = axios
-      .delete(url)
-      .then(() => {
-        const datasets = [...this.state.datasets.filter(d => d.identifier !== identifier)]
-        Tracking.trackEvent('Dataset', ' Removed', this.props.location.pathname)
-        this.setState(
-          state => ({
-            datasets,
-            filteredGroups: filterGroupsByTitle(state.searchTerm, state.datasetGroups),
-            removeModalOpen: false,
-            removableDatasetIdentifier: undefined,
-          }),
-          () => {
-            // and refresh
-            this.handleChangePage(this.state.page)()
-          }
-        )
-      })
-      .catch(err => {
-        this.setState({ error: true, errorMessage: err.message })
-      })
-    this.promises.push(promise)
-    return promise
+    const datasetGroups = groupDatasetsByVersionSet(datasets)
+    this.setState(state => ({
+      datasets,
+      datasetGroups,
+      filteredGroups: filterGroupsByTitle(state.searchTerm, datasetGroups),
+    }))
+    this.handleChangePage(this.state.page)()
   }
 
-  openRemoveModal = identifier => () => {
+  openRemoveModal = (dataset, onlyChanges) => () => {
     this.setState({
-      removeModalOpen: true,
-      removableDatasetIdentifier: identifier,
+      removeModalDataset: dataset,
+      removeModalOnlyChanges: onlyChanges,
     })
   }
 
   closeRemoveModal = () => {
     this.setState({
-      removeModalOpen: false,
-      removableDatasetIdentifier: undefined,
+      removeModalDataset: null,
+      removeModalOnlyChanges: null,
     })
   }
 
@@ -295,7 +283,6 @@ class DatasetTable extends Component {
                 <DatasetGroup
                   datasets={group}
                   key={group[0].identifier}
-                  dataset={group[0]}
                   currentTimestamp={this.state.currentTimestamp}
                   handleEnterEdit={this.handleEnterEdit}
                   handleCreateNewVersion={this.handleCreateNewVersion}
@@ -311,19 +298,12 @@ class DatasetTable extends Component {
           limit={limit}
           onChangePage={this.handleChangePage}
         />
-        <Modal
-          isOpen={this.state.removeModalOpen}
-          onRequestClose={this.closeRemoveModal}
-          contentLabel="removeDatasetModal"
-        >
-          <Translate component="p" content="qvain.datasets.confirmDelete.text" />
-          <TableButton onClick={this.closeRemoveModal}>
-            <Translate content="qvain.datasets.confirmDelete.cancel" />
-          </TableButton>
-          <DangerButton onClick={this.handleRemove(this.state.removableDatasetIdentifier)}>
-            <Translate content="qvain.datasets.confirmDelete.ok" />
-          </DangerButton>
-        </Modal>
+        <RemoveModal
+          dataset={this.state.removeModalDataset}
+          onlyChanges={this.state.removeModalOnlyChanges}
+          onClose={this.closeRemoveModal}
+          postRemoveUpdate={this.postRemoveUpdate}
+        />
       </Fragment>
     )
   }
