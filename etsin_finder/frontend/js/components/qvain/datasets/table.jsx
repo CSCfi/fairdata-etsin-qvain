@@ -64,9 +64,7 @@ class DatasetTable extends Component {
 
   showDataset = identifier => {
     // move dataset to beginning of list
-    const index = this.state.filteredGroups.findIndex(group =>
-      group.some(dataset => dataset.identifier === identifier)
-    )
+    const index = this.state.datasets.findIndex(dataset => dataset.identifier === identifier)
     if (index > 0) {
       this.setState(
         state => {
