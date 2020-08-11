@@ -42,6 +42,14 @@ const getGoToEtsinButton = dataset => {
   )
 }
 
+const getTitle = (dataset) => {
+  let researchDataset = dataset.research_dataset
+  if (dataset.next_draft && dataset.next_draft.research_dataset && dataset.next_draft.research_dataset.title) {
+    researchDataset = dataset.next_draft.research_dataset
+  }
+  return researchDataset.title.en || researchDataset.title.fi
+}
+
 const getActionButton = action => {
   const { text, handler, danger } = action
   const ButtonComponent = danger ? RemoveButton : TableButton
@@ -105,7 +113,7 @@ function Dataset(props) {
     <DatasetRow key={dataset.identifier} tabIndex="0" highlight={props.highlight}>
       <BodyCellWordWrap style={titleCellStyle}>
         {props.indent && <Marker />}
-        {dataset.research_dataset.title.en || dataset.research_dataset.title.fi}
+        {getTitle(dataset)}
         {dataset.next_dataset_version !== undefined && (
           <Translate color="yellow" content="qvain.datasets.oldVersion" component={DatasetLabel} />
         )}
