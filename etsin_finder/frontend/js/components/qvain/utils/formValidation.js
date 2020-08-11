@@ -265,6 +265,14 @@ export const fileMetadataSchema = yup.object().shape({
 
 
 // PROJECT VALIDATION
+const organizationSelectSchema = yup.object().shape({
+  identifier: yup.string().required(translate('qvain.organizationSelect.validation.identifier')),
+  name: yup.object().shape({
+    und: yup.string().required(translate('qvain.organizationSelect.validation.name')),
+  }),
+  email: yup.string().email(translate('qvain.organizationSelect.validation.email'))
+})
+
 const projectSchema = yup.object().shape({
   details: yup.object().shape({
     titleFi: yup.mixed().when('titleEn', {
@@ -504,5 +512,6 @@ export {
   externalResourceDownloadUrlSchema,
   spatialNameSchema,
   spatialAltitudeSchema,
-  projectSchema
+  projectSchema,
+  organizationSelectSchema
 }
