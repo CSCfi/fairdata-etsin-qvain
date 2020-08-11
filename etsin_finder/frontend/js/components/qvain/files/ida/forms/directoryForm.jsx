@@ -28,7 +28,7 @@ export class DirectoryFormBase extends Component {
   }
 
   state = {
-    title: this.inEdit.title,
+    title: this.inEdit.title || this.inEdit.name,
     description: this.inEdit.description,
     useCategoriesEn: [],
     useCategoriesFi: [],

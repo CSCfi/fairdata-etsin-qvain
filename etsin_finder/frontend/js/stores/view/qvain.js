@@ -1,21 +1,20 @@
 import { observable, action, computed, runInAction } from 'mobx'
 import axios from 'axios'
 import { getDirectories, getFiles, deepCopy } from '../../components/qvain/utils/fileHierarchy'
+import urls from '../../components/qvain/utils/urls'
 import {
-  ACCESS_TYPE_URL,
-  LICENSE_URL,
-  FILE_API_URLS,
-  USE_CATEGORY_URL,
-  CUMULATIVE_STATE,
-  DATA_CATALOG_IDENTIFIER,
+  ACCESS_TYPE_URL, CUMULATIVE_STATE,
+  DATA_CATALOG_IDENTIFIER, LICENSE_URL, USE_CATEGORY_URL
 } from '../../utils/constants'
 import { getPath } from '../../components/qvain/utils/object'
 import Actors from './qvain.actors'
 import Files from './qvain.files'
 import Spatials, { SpatialModel } from './qvain.spatials'
+import uniqueByKey from '../../utils/uniqueByKey'
 
 class Qvain {
-  constructor() {
+  constructor(Env) {
+    this.Env = Env
     this.Files = new Files(this)
     this.Actors = new Actors(this)
     this.Spatials = new Spatials(this)
@@ -276,7 +275,7 @@ class Qvain {
   }
 
   @action setInfrastructures = (infrastructures) => {
-    this.infrastructures = infrastructures
+    this.infrastructures = uniqueByKey(infrastructures, 'url')
     this.changed = true
   }
 
@@ -300,6 +299,10 @@ class Qvain {
     }
     if (this.keywordString !== '') {
       this.addKeywordToKeywordArray()
+    }
+    if (this.infrastructure) {
+      this.setInfrastructures([...this.infrastructures, this.infrastructure])
+      this.setInfrastructure(undefined)
     }
   }
 
@@ -376,12 +379,6 @@ class Qvain {
   }
 
   // FILE PICKER STATE MANAGEMENT
-
-  @observable metaxApiV2 = process.env.NODE_ENV !== 'production' && localStorage.getItem('metax_api_v2') === '1'
-
-  @action setMetaxApiV2 = (value) => {
-    this.metaxApiV2 = value
-  }
 
   @observable idaPickerOpen = false
 
@@ -553,7 +550,7 @@ class Qvain {
   }
 
   @action getInitialDirectories = () =>
-    axios.get(FILE_API_URLS.PROJECT_DIR_URL + this.selectedProject).then((res) => {
+    axios.get(urls.v1.projectFiles(this.selectedProject)).then(res => {
       runInAction(() => {
         this.hierarchy = Directory(res.data, undefined, false, false)
       })
@@ -570,8 +567,8 @@ class Qvain {
 
   @action loadDirectory = (dirId, rootDir, callback) => {
     const req = axios
-      .get(FILE_API_URLS.DIR_URL + dirId)
-      .then((res) => {
+      .get(urls.v1.directoryFiles(dirId))
+      .then(res => {
         const newDirs = [
           ...rootDir.directories.map((d) => {
             if (d.id === dirId) {
@@ -726,11 +723,13 @@ class Qvain {
     this.issuedDate = researchDataset.issued || undefined
 
     // Other identifiers
+    this.otherIdentifier = ''
     this.otherIdentifiersArray = researchDataset.other_identifier
       ? researchDataset.other_identifier.map((oid) => oid.notation)
       : []
 
     // Fields of science
+    this.fieldOfScience = undefined
     this.fieldsOfScience = []
     if (researchDataset.field_of_science !== undefined) {
       researchDataset.field_of_science.forEach((element) => {
@@ -748,11 +747,12 @@ class Qvain {
     }
 
     // infrastructures
+    this.infrastructure = undefined
     this.infrastructures = []
     if (researchDataset.infrastructure !== undefined) {
       researchDataset.infrastructure.forEach((element) => {
-        this.infrastructure = Infrastructure(element.pref_label, element.identifier)
-        this.infrastructures.push(this.infrastructure)
+        const infrastructure = Infrastructure(element.pref_label, element.identifier)
+        this.infrastructures.push(infrastructure)
       })
     }
 
@@ -899,8 +899,8 @@ class Qvain {
     }
 
     this.changed = false
-    if (this.metaxApiV2) {
-      await this.Files.editDataset(dataset)
+    if (this.Env.metaxApiV2) {
+      await this.Files.openDataset(dataset)
     }
   }
 
@@ -948,7 +948,7 @@ class Qvain {
       return false
     }
 
-    if (this.metaxApiV2) {
+    if (this.Env.metaxApiV2) {
       if (this.hasBeenPublished) {
         if (this.Files && !this.Files.projectLocked) {
           return true // for published noncumulative datasets, allow adding files only if none exist yet
@@ -1098,4 +1098,4 @@ export const ExternalResource = (id, title, accessUrl, downloadUrl, useCategory)
 
 export const EmptyExternalResource = ExternalResource(undefined, '', '', '', '')
 
-export default new Qvain()
+export default Qvain

@@ -40,6 +40,18 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
 <DescriptionField
   Stores={
     Object {
+      "Env": Env {
+        "environment": "test",
+        "history": RouterStore {
+          "go": [Function],
+          "goBack": [Function],
+          "goForward": [Function],
+          "history": null,
+          "push": [Function],
+          "replace": [Function],
+        },
+        "metaxApiV2": false,
+      },
       "Locale": Locale {},
       "Qvain": Qvain {
         "Actors": Actors {
@@ -57,8 +69,19 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
           "loadingReferenceOrganizations": Object {},
           "referenceOrganizationErrors": Object {},
           "referenceOrganizations": Object {},
-          "reset": [Function],
           "toBackend": [Function],
+        },
+        "Env": Env {
+          "environment": "test",
+          "history": RouterStore {
+            "go": [Function],
+            "goBack": [Function],
+            "goForward": [Function],
+            "history": null,
+            "push": [Function],
+            "replace": [Function],
+          },
+          "metaxApiV2": false,
         },
         "Files": Files {
           "AddItemsView": AddItemsView {
@@ -85,9 +108,10 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
           },
           "cache": Object {},
           "cancelOnReset": [Function],
+          "datasetIdentifier": null,
+          "fetchRootIdentifier": [Function],
           "getItemByPath": [Function],
           "inEdit": undefined,
-          "initialPagination": 10,
           "loadingMetadata": null,
           "loadingProjectInfo": null,
           "loadingProjectRoot": null,
@@ -100,13 +124,6 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
           },
           "refreshModalDirectory": null,
           "root": null,
-          "selectedExistingCounter": ChildItemCounter {
-            "root": Object {
-              "count": 0,
-              "directories": Object {},
-            },
-          },
-          "selectedExistingMetadata": Object {},
           "selectedProject": undefined,
         },
         "Spatials": Spatials {
@@ -159,7 +176,6 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
         },
         "mergeArraysByIdentifier": [Function],
         "metadataModalFile": undefined,
-        "metaxApiV2": false,
         "original": undefined,
         "otherIdentifier": "",
         "otherIdentifiersArray": Array [],
@@ -187,6 +203,18 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
 <FieldOfScienceField
   Stores={
     Object {
+      "Env": Env {
+        "environment": "test",
+        "history": RouterStore {
+          "go": [Function],
+          "goBack": [Function],
+          "goForward": [Function],
+          "history": null,
+          "push": [Function],
+          "replace": [Function],
+        },
+        "metaxApiV2": false,
+      },
       "Locale": Locale {},
       "Qvain": Qvain {
         "Actors": Actors {
@@ -204,8 +232,19 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
           "loadingReferenceOrganizations": Object {},
           "referenceOrganizationErrors": Object {},
           "referenceOrganizations": Object {},
-          "reset": [Function],
           "toBackend": [Function],
+        },
+        "Env": Env {
+          "environment": "test",
+          "history": RouterStore {
+            "go": [Function],
+            "goBack": [Function],
+            "goForward": [Function],
+            "history": null,
+            "push": [Function],
+            "replace": [Function],
+          },
+          "metaxApiV2": false,
         },
         "Files": Files {
           "AddItemsView": AddItemsView {
@@ -232,9 +271,10 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
           },
           "cache": Object {},
           "cancelOnReset": [Function],
+          "datasetIdentifier": null,
+          "fetchRootIdentifier": [Function],
           "getItemByPath": [Function],
           "inEdit": undefined,
-          "initialPagination": 10,
           "loadingMetadata": null,
           "loadingProjectInfo": null,
           "loadingProjectRoot": null,
@@ -247,13 +287,6 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
           },
           "refreshModalDirectory": null,
           "root": null,
-          "selectedExistingCounter": ChildItemCounter {
-            "root": Object {
-              "count": 0,
-              "directories": Object {},
-            },
-          },
-          "selectedExistingMetadata": Object {},
           "selectedProject": undefined,
         },
         "Spatials": Spatials {
@@ -306,7 +339,6 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
         },
         "mergeArraysByIdentifier": [Function],
         "metadataModalFile": undefined,
-        "metaxApiV2": false,
         "original": undefined,
         "otherIdentifier": "",
         "otherIdentifiersArray": Array [],
@@ -334,6 +366,18 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
 <KeywordsField
   Stores={
     Object {
+      "Env": Env {
+        "environment": "test",
+        "history": RouterStore {
+          "go": [Function],
+          "goBack": [Function],
+          "goForward": [Function],
+          "history": null,
+          "push": [Function],
+          "replace": [Function],
+        },
+        "metaxApiV2": false,
+      },
       "Locale": Locale {},
       "Qvain": Qvain {
         "Actors": Actors {
@@ -351,8 +395,19 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
           "loadingReferenceOrganizations": Object {},
           "referenceOrganizationErrors": Object {},
           "referenceOrganizations": Object {},
-          "reset": [Function],
           "toBackend": [Function],
+        },
+        "Env": Env {
+          "environment": "test",
+          "history": RouterStore {
+            "go": [Function],
+            "goBack": [Function],
+            "goForward": [Function],
+            "history": null,
+            "push": [Function],
+            "replace": [Function],
+          },
+          "metaxApiV2": false,
         },
         "Files": Files {
           "AddItemsView": AddItemsView {
@@ -379,9 +434,10 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
           },
           "cache": Object {},
           "cancelOnReset": [Function],
+          "datasetIdentifier": null,
+          "fetchRootIdentifier": [Function],
           "getItemByPath": [Function],
           "inEdit": undefined,
-          "initialPagination": 10,
           "loadingMetadata": null,
           "loadingProjectInfo": null,
           "loadingProjectRoot": null,
@@ -394,13 +450,6 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
           },
           "refreshModalDirectory": null,
           "root": null,
-          "selectedExistingCounter": ChildItemCounter {
-            "root": Object {
-              "count": 0,
-              "directories": Object {},
-            },
-          },
-          "selectedExistingMetadata": Object {},
           "selectedProject": undefined,
         },
         "Spatials": Spatials {
@@ -453,7 +502,6 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
         },
         "mergeArraysByIdentifier": [Function],
         "metadataModalFile": undefined,
-        "metaxApiV2": false,
         "original": undefined,
         "otherIdentifier": "",
         "otherIdentifiersArray": Array [],
@@ -481,6 +529,18 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
 <OtherIdentifierField
   Stores={
     Object {
+      "Env": Env {
+        "environment": "test",
+        "history": RouterStore {
+          "go": [Function],
+          "goBack": [Function],
+          "goForward": [Function],
+          "history": null,
+          "push": [Function],
+          "replace": [Function],
+        },
+        "metaxApiV2": false,
+      },
       "Locale": Locale {},
       "Qvain": Qvain {
         "Actors": Actors {
@@ -498,8 +558,19 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
           "loadingReferenceOrganizations": Object {},
           "referenceOrganizationErrors": Object {},
           "referenceOrganizations": Object {},
-          "reset": [Function],
           "toBackend": [Function],
+        },
+        "Env": Env {
+          "environment": "test",
+          "history": RouterStore {
+            "go": [Function],
+            "goBack": [Function],
+            "goForward": [Function],
+            "history": null,
+            "push": [Function],
+            "replace": [Function],
+          },
+          "metaxApiV2": false,
         },
         "Files": Files {
           "AddItemsView": AddItemsView {
@@ -526,9 +597,10 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
           },
           "cache": Object {},
           "cancelOnReset": [Function],
+          "datasetIdentifier": null,
+          "fetchRootIdentifier": [Function],
           "getItemByPath": [Function],
           "inEdit": undefined,
-          "initialPagination": 10,
           "loadingMetadata": null,
           "loadingProjectInfo": null,
           "loadingProjectRoot": null,
@@ -541,13 +613,6 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
           },
           "refreshModalDirectory": null,
           "root": null,
-          "selectedExistingCounter": ChildItemCounter {
-            "root": Object {
-              "count": 0,
-              "directories": Object {},
-            },
-          },
-          "selectedExistingMetadata": Object {},
           "selectedProject": undefined,
         },
         "Spatials": Spatials {
@@ -600,7 +665,6 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
         },
         "mergeArraysByIdentifier": [Function],
         "metadataModalFile": undefined,
-        "metaxApiV2": false,
         "original": undefined,
         "otherIdentifier": "",
         "otherIdentifiersArray": Array [],
