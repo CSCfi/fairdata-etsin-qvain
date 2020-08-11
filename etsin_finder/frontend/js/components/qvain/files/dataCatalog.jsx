@@ -11,6 +11,7 @@ import { dataCatalogSchema } from '../utils/formValidation'
 import ValidationError from '../general/validationError'
 import { DATA_CATALOG_IDENTIFIER } from '../../../utils/constants'
 import { Checkbox, LabelLarge } from '../general/form'
+import Tooltip from '../../general/tooltipHover'
 
 let options = [
   { value: DATA_CATALOG_IDENTIFIER.IDA, label: translate('qvain.files.dataCatalog.ida') },
@@ -81,10 +82,9 @@ class DataCatalog extends Component {
       isPas,
     } = this.props.Stores.Qvain
     const selected = [...selectedFiles, ...selectedDirectories, ...externalResources]
+    const { lang } = this.props.Stores.Locale
 
-    if (this.props.Stores.Locale.lang) {
-      this.updateOptions()
-    }
+    if (lang) this.updateOptions()
     // PAS catalog cannot be selected by the user
     const availableOptions = isPas ? pasOptions : options
     const catalogSelectValue = availableOptions.find((opt) => opt.value === dataCatalog)
@@ -92,7 +92,12 @@ class DataCatalog extends Component {
     return (
       <Card>
         <LabelLarge htmlFor="dataCatalogSelect">
-          <Translate content="qvain.files.dataCatalog.label" /> *
+          <Tooltip
+            title={translate('qvain.description.fieldHelpTexts.requiredToPublish', { locale: lang })}
+            position="right"
+          >
+            <Translate content="qvain.files.dataCatalog.label" /> *
+          </Tooltip>
         </LabelLarge>
         <Translate component="p" content="qvain.files.dataCatalog.explanation" />
         <Translate
