@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types';
 import { inject, observer } from 'mobx-react'
-import translate from 'counterpart'
 import Translate from 'react-translate-component'
 import styled from 'styled-components'
 import counterpart from 'counterpart'
