@@ -81,6 +81,11 @@ const english = {
       infoText:
         'Datacite without validation: The dataset is shown in Datacite Format but without validation; mandatory fields might be missing. Dataset does not necessarily meet all Datacite requirements.',
     },
+    draftInfo: {
+      draft: 'This dataset is a draft. Only the creator of the dataset can view it.',
+      changes: 'This is a preview of unpublished changes to a dataset.  Only the creator of the dataset can view it.',
+    },
+    draftIdentifierInfo: 'Dataset identifier will be generated when the dataset is published.',
     dl: {
       root: 'root',
       breadcrumbs: 'Breadcrumbs',

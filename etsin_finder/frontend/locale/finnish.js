@@ -81,6 +81,11 @@ const finnish = {
       infoText:
         'Datacite without validation: Aineisto näytetään Datacite -formaatissa, mutta ilman pakollisten kenttien validointia. Aineisto ei sellaisenaan välttämättä täytä Dataciten vaatimuksia.',
     },
+    draftInfo: {
+      draft: 'Tämä aineisto on luonnos ja näkyy ainoastaan aineiston luojalle.',
+      changes: 'Tämä on esikatselu julkaisemattomista muutoksista aineistoon ja näkyy ainoastaan aineiston luojalle.',
+    },
+    draftIdentifierInfo: 'Tunniste luodaan aineiston julkaisun yhteydessä.',
     dl: {
       root: 'juuri',
       breadcrumbs: 'Leivänmurut',
