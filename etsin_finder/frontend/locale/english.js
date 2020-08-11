@@ -494,7 +494,7 @@ const english = {
       issuedDate: {
         title: 'Issued date',
         infoText:
-          'Date of formal issuance (publication) of the resource. This value does not affect or reflect the visibility of the dataset itself.',
+          'Date of formal issuance (publication) of the resource. This value does not affect or reflect the visibility of the dataset itself. If this is left empty, current date is used as default value.',
         instructions: '',
         placeholder: 'Date',
       },

@@ -492,7 +492,7 @@ const finnish = {
       },
       issuedDate: {
         title: 'Julkaisupäivämäärä',
-        infoText: 'Lähteen muodollinen julkaisupäivämäärä. Ei vaikuta aineston näkyvyyteen.',
+        infoText: 'Lähteen muodollinen julkaisupäivämäärä. Ei vaikuta aineston näkyvyyteen. Jos kenttä jätetään tyhjäksi, käytetään nykyistä päivämäärää.',
         instructions: '',
         placeholder: 'Päivämäärä',
       },
