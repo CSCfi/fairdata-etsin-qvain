@@ -40,6 +40,14 @@ class SubmitButtons extends Component {
     }
   }
 
+  goToDatasets = identifier => {
+    // go to datasets view and highlight published dataset
+    const { history } = this.props
+    const { setPublishedDataset } = this.props.Stores.QvainDatasets
+    setPublishedDataset(identifier)
+    history.push('/qvain')
+  }
+
   checkOtherIdentifiersV1 = () => {
     const {
       otherIdentifier,
@@ -75,8 +83,8 @@ class SubmitButtons extends Component {
       this.closeUseDoiInformation()
     }
 
-    const { Stores, history, handleSubmitError } = this.props
-    const { addUnsavedMultiValueFields, resetQvainStore, editDataset } = Stores.Qvain
+    const { Stores, handleSubmitError } = this.props
+    const { addUnsavedMultiValueFields } = Stores.Qvain
     const { metaxApiV2 } = Stores.Env
 
     if (metaxApiV2) {
@@ -100,11 +108,8 @@ class SubmitButtons extends Component {
           .then(res => {
             const data = res.data
 
-            // Open the created dataset without reloading the editor
             if (data && data.identifier) {
-              resetQvainStore()
-              editDataset(data)
-              history.replace(`/qvain/dataset/${data.identifier}`)
+              this.goToDatasets(data.identifier)
             }
 
             this.success({ ...data, is_new: true })
@@ -149,6 +154,7 @@ class SubmitButtons extends Component {
             setChanged(false)
             editDataset(res.data)
             this.success(res.data)
+            this.goToDatasets(res.data.identifier)
             return true
           })
           .catch(this.failure)
@@ -164,7 +170,13 @@ class SubmitButtons extends Component {
 
   getSubmitValues = async () => {
     // Validate dataset and transform dataset metadata, file actions and metadata changes into format required by the backend.
-    const { original, canSelectFiles, canRemoveFiles, Files, addUnsavedMultiValueFields } = this.props.Stores.Qvain
+    const {
+      original,
+      canSelectFiles,
+      canRemoveFiles,
+      addUnsavedMultiValueFields,
+      Files,
+    } = this.props.Stores.Qvain
     const { metaxApiV2 } = this.props.Stores.Env
 
     addUnsavedMultiValueFields()
@@ -258,6 +270,11 @@ class SubmitButtons extends Component {
 
       const data = { ...dataset, is_draft: dataset.state === 'draft' }
       this.success(data)
+
+      if (dataset.state === 'published') {
+        this.goToDatasets(original.identifier)
+      }
+
       return original.identifier
     } catch (error) {
       this.failure(error)
@@ -384,8 +401,8 @@ class SubmitButtons extends Component {
   }
 
   handleMergeDraft = async () => {
-    const { Stores, history } = this.props
-    const { original, editDataset } = Stores.Qvain
+    const { Stores } = this.props
+    const { original } = Stores.Qvain
     const { metaxApiV2 } = Stores.Env
 
     if (!metaxApiV2) {
@@ -413,8 +430,8 @@ class SubmitButtons extends Component {
 
       const editUrl = urls.v2.dataset(draftOf)
       const resp = await axios.get(editUrl)
-      await editDataset(resp.data)
-      history.replace(`/qvain/dataset/${draftOf}`) // open the updated dataset
+
+      this.goToDatasets(draftOf)
       this.success(resp.data)
       return draftOf
     } catch (error) {
@@ -462,7 +479,9 @@ class SubmitButtons extends Component {
 
       await editDataset(resp.data)
       history.replace(`/qvain/dataset/${resp.data.identifier}`)
+
       this.success(resp.data)
+      this.goToDatasets(resp.data.identifier)
       return resp.data.identifier
     } catch (err) {
       this.failure(err)
@@ -529,11 +548,7 @@ class SubmitButtons extends Component {
               ref={this.submitDatasetButton}
               disabled={disabled}
               type="button"
-              onClick={
-                useDoi === true
-                  ? this.showUseDoiInformation
-                  : this.handleCreatePublishedV1
-              }
+              onClick={useDoi === true ? this.showUseDoiInformation : this.handleCreatePublishedV1}
             >
               <Translate content="qvain.submit" />
             </SubmitButton>

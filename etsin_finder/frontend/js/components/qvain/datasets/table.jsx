@@ -6,6 +6,7 @@ import { withRouter } from 'react-router-dom'
 import axios from 'axios'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
+
 import { Table, TableHeader, Row, HeaderCell, TableBody, TableNote } from '../general/table'
 import urls from '../utils/urls'
 import RemoveModal from './removeModal'
@@ -46,19 +47,61 @@ class DatasetTable extends Component {
   }
 
   componentDidMount() {
-    this.getDatasets()
+    const { publishedDataset } = this.props.Stores.QvainDatasets
+    this.getDatasets().then(() => this.showDataset(publishedDataset))
     // once we get login info, reload
     reaction(
       () => this.props.Stores.Auth.user.name,
-      () => this.getDatasets()
+      () => this.getDatasets().then(() => this.showDataset(publishedDataset))
     )
   }
 
   componentWillUnmount() {
+    const { setPublishedDataset } = this.props.Stores.QvainDatasets
+    setPublishedDataset(null)
     this.promises.forEach(promise => promise.cancel())
   }
 
-  getDatasets = () => {
+  attachDrafts = (datasets, drafts) => {
+    // Assign draft dataset to next_draft field of original dataset, so all fields
+    // of the draft are available from the original dataset instead of just identifiers.
+    const datasetsById = {}
+    datasets.forEach(dataset => {
+      datasetsById[dataset.identifier] = dataset
+    })
+    drafts.forEach(draft => {
+      const dataset = datasetsById[draft.draft_of.identifier]
+      if (dataset && dataset.next_draft && dataset.next_draft.identifier === draft.identifier) {
+        Object.assign(dataset.next_draft, draft)
+      }
+    })
+  }
+
+  showDataset = identifier => {
+    // move dataset to beginning of list
+    const index = this.state.datasets.findIndex(dataset => dataset.identifier === identifier)
+    if (index > 0) {
+      this.setState(
+        state => {
+          const datasets = [...state.datasets]
+          const dataset = datasets.splice(index, 1)[0]
+          datasets.unshift(dataset)
+          const datasetGroups = groupDatasetsByVersionSet(datasets)
+          return {
+            datasets,
+            datasetGroups,
+            filteredGroups: datasetGroups,
+          }
+        },
+        () => {
+          // and refresh
+          this.handleChangePage(this.state.page)()
+        }
+      )
+    }
+  }
+
+  getDatasets = async () => {
     if (!this.props.Stores.Auth.user.name) {
       return null
     }
@@ -74,6 +117,8 @@ class DatasetTable extends Component {
       .get(url, { params: { no_pagination: true } })
       .then(result => {
         const datasets = result.data.filter(dataset => !dataset.draft_of)
+        const datasetDrafts = result.data.filter(dataset => dataset.draft_of)
+        this.attachDrafts(datasets, datasetDrafts)
         const datasetGroups = groupDatasetsByVersionSet(datasets)
 
         this.setState(
@@ -188,6 +233,7 @@ class DatasetTable extends Component {
     } = this.state
 
     const { metaxApiV2 } = this.props.Stores.Env
+    const { publishedDataset } = this.props.Stores.QvainDatasets
 
     const noOfDatasets = datasets.length
     const searchInput =
@@ -270,6 +316,7 @@ class DatasetTable extends Component {
                   handleEnterEdit={this.handleEnterEdit}
                   handleCreateNewVersion={this.handleCreateNewVersion}
                   openRemoveModal={this.openRemoveModal}
+                  highlight={publishedDataset}
                 />
               ))}
           </TableBody>

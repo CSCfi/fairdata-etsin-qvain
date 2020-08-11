@@ -4,6 +4,8 @@ import styled, { keyframes } from 'styled-components'
 import { inject, observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 import { withRouter } from 'react-router-dom'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTimes } from '@fortawesome/free-solid-svg-icons'
 
 import Loader from '../../general/loader'
 import { LinkButtonDarkGray } from '../../general/button'
@@ -86,7 +88,7 @@ class SubmitResponse extends Component {
           </ResponseContainerContent>
           <ResponseContainerCloseButtonContainer>
             <LinkButtonDarkGray type="button" onClick={this.closeSubmitResponse}>
-              x
+              <FontAwesomeIcon icon={faTimes} aria-hidden />
             </LinkButtonDarkGray>
           </ResponseContainerCloseButtonContainer>
         </ResponseContainerSuccess>
@@ -124,7 +126,7 @@ class SubmitResponse extends Component {
           </ResponseContainerContent>
           <ResponseContainerCloseButtonContainer>
             <LinkButtonDarkGray type="button" onClick={this.closeSubmitResponse}>
-              x
+              <FontAwesomeIcon icon={faTimes} aria-hidden />
             </LinkButtonDarkGray>
           </ResponseContainerCloseButtonContainer>
         </ResponseContainerSuccess>
@@ -155,7 +157,7 @@ class SubmitResponse extends Component {
           </ResponseContainerContent>
           <ResponseContainerCloseButtonContainer>
             <LinkButtonDarkGray type="button" onClick={this.closeSubmitResponse}>
-              x
+              <FontAwesomeIcon icon={faTimes} aria-hidden />
             </LinkButtonDarkGray>
           </ResponseContainerCloseButtonContainer>
         </ResponseContainerSuccess>
@@ -173,7 +175,7 @@ class SubmitResponse extends Component {
           </ResponseContainerContent>
           <ResponseContainerCloseButtonContainer>
             <LinkButtonDarkGray type="button" onClick={this.closeSubmitResponse}>
-              x
+              <FontAwesomeIcon icon={faTimes} aria-hidden />
             </LinkButtonDarkGray>
           </ResponseContainerCloseButtonContainer>
         </ResponseContainerError>
