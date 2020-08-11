@@ -3,6 +3,7 @@ import { inject, observer } from 'mobx-react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
+import { tint } from 'polished'
 
 import { Row, BodyCell } from '../general/table'
 import { DATA_CATALOG_IDENTIFIER } from '../../../utils/constants'
@@ -39,6 +40,14 @@ const getGoToEtsinButton = dataset => {
       content={`qvain.datasets.${goToEtsinKey}`}
     />
   )
+}
+
+const getTitle = (dataset) => {
+  let researchDataset = dataset.research_dataset
+  if (dataset.next_draft && dataset.next_draft.research_dataset && dataset.next_draft.research_dataset.title) {
+    researchDataset = dataset.next_draft.research_dataset
+  }
+  return researchDataset.title.en || researchDataset.title.fi
 }
 
 const getActionButton = action => {
@@ -101,10 +110,10 @@ function Dataset(props) {
   const { dataset, currentTimestamp } = props
   const actions = getActions()
   return (
-    <Row key={dataset.identifier} tabIndex="0">
+    <DatasetRow key={dataset.identifier} tabIndex="0" highlight={props.highlight}>
       <BodyCellWordWrap style={titleCellStyle}>
         {props.indent && <Marker />}
-        {dataset.research_dataset.title.en || dataset.research_dataset.title.fi}
+        {getTitle(dataset)}
         {dataset.next_dataset_version !== undefined && (
           <Translate color="yellow" content="qvain.datasets.oldVersion" component={DatasetLabel} />
         )}
@@ -139,7 +148,7 @@ function Dataset(props) {
           </Dropdown>
         )}
       </BodyCellActions>
-    </Row>
+    </DatasetRow>
   )
 }
 
@@ -151,11 +160,24 @@ Dataset.propTypes = {
   handleCreateNewVersion: PropTypes.func.isRequired,
   openRemoveModal: PropTypes.func.isRequired,
   indent: PropTypes.bool,
+  highlight: PropTypes.bool,
 }
 
 Dataset.defaultProps = {
   indent: false,
+  highlight: false,
 }
+
+const DatasetRow = styled(Row)`
+  ${props =>
+    props.highlight &&
+    `
+      background: ${tint(0.7, props.theme.color.success)};
+      &:hover {
+        background: ${tint(0.8, props.theme.color.success)};
+      }
+    `}
+`
 
 const Marker = styled.div`
   position: absolute;
