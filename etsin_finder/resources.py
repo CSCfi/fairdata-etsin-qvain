@@ -17,6 +17,7 @@ from etsin_finder.app_config import get_app_config
 from etsin_finder import authentication
 from etsin_finder import authorization
 from etsin_finder import cr_service
+from etsin_finder import cr_service_v2
 from etsin_finder.download_metadata_service import download_metadata
 from etsin_finder.download_service import download_data
 from etsin_finder.email_utils import \
@@ -75,10 +76,49 @@ class Dataset(Resource):
         if not cr:
             abort(400, message="Unable to get catalog record from Metax")
 
+        # The draft_of field should not exist in Metax v1 but may be present due to a Metax bug
+        if 'draft_of' in cr:
+            del cr['draft_of']
+
         # Sort data items
         sort_array_of_obj_by_key(cr.get('research_dataset', {}).get('remote_resources', []), 'title')
         sort_array_of_obj_by_key(cr.get('research_dataset', {}).get('directories', []), 'details', 'directory_name')
         sort_array_of_obj_by_key(cr.get('research_dataset', {}).get('files', []), 'details', 'file_name')
+
+        ret_obj = {'catalog_record': authorization.strip_information_from_catalog_record(cr, is_authd),
+                   'email_info': get_email_info(cr)}
+        if cr_service.is_rems_catalog_record(cr) and is_authd and get_fairdata_rems_api_config(app.testing) is not None:
+            user_id = authentication.get_user_id()
+            state = rems_service.get_application_state_for_resource(cr, user_id)
+            ret_obj['application_state'] = state
+            ret_obj['has_permit'] = state == 'approved'
+
+        return ret_obj, 200
+
+class V2Dataset(Resource):
+    """Metax API v2 dataset related REST endpoints for frontend"""
+
+    @log_request
+    def get(self, cr_id):
+        """Get dataset from metax and strip it from having sensitive information
+
+        Args:
+            cr_id (str): Catalog record identifier.
+
+        Returns:
+            tuple: catalog record and a status code.
+
+        """
+        if not authorization.user_can_view_dataset(cr_id):
+            abort(404)
+
+        is_authd = authentication.is_authenticated()
+        cr = cr_service_v2.get_catalog_record(cr_id, True, True)
+        if not cr:
+            abort(400, message="Unable to get catalog record from Metax")
+
+        # Sort data items
+        sort_array_of_obj_by_key(cr.get('research_dataset', {}).get('remote_resources', []), 'title')
 
         ret_obj = {'catalog_record': authorization.strip_information_from_catalog_record(cr, is_authd),
                    'email_info': get_email_info(cr)}

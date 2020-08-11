@@ -1,35 +1,20 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
+import PropTypes from 'prop-types'
+import { inject, observer } from 'mobx-react'
 
-import DatasetQuery from '../../../../stores/view/datasetquery'
 import checkDataLang from '../../../../utils/checkDataLang'
 import checkNested from '../../../../utils/checkNested'
 
-export default class Citation extends Component {
-  constructor(props) {
-    super(props)
-    const Data = DatasetQuery.results
-    this.state = {
-      creators: Data.research_dataset.creator && Data.research_dataset.creator,
-      contributors: Data.research_dataset.contributor && Data.research_dataset.contributor,
-      publisher: Data.research_dataset.publisher && Data.research_dataset.publisher.name,
-
-      // This is the issued date of the source material, as defined in Qvain Light/Heavy
-      date_issued: Data.research_dataset.issued,
-
-      title: Data.research_dataset.title,
-      pid: Data.research_dataset.preferred_identifier,
-      citation: Data.research_dataset.bibliographic_citation,
-    }
-  }
-
+class Citation extends Component {
   getAgents() {
-    const creators = this.state.creators && this.state.creators.slice()
-    const contributors = this.state.contributors && this.state.contributors.slice()
+    const researchDataset = this.props.Stores.DatasetQuery.results.research_dataset
+    const creators = researchDataset.creator && researchDataset.creator.slice()
+    const contributors = researchDataset.contributor && researchDataset.contributor.slice()
     const agents = []
     for (let i = 0; i < 3; i += 1) {
-      if (creators && creators[i] && creators[i].name !== this.state.publisher) {
+      if (creators && creators[i] && creators[i].name !== researchDataset.publisher) {
         agents.push({ name: creators[i].name })
       } else if (contributors && contributors[i - creators.length]) {
         const agent = {}
@@ -47,6 +32,9 @@ export default class Citation extends Component {
   }
 
   createCitation() {
+    const dataset = this.props.Stores.DatasetQuery.results
+    const researchDataset = dataset.research_dataset
+
     const cit = []
     cit.push(
       this.getAgents().map(agent => {
@@ -56,27 +44,44 @@ export default class Citation extends Component {
         return currentAgent
       })
     )
-    cit.push(checkDataLang(this.state.title))
-    cit.push(checkDataLang(this.state.publisher))
-    cit.push(checkDataLang(this.state.date_issued))
-    cit.push(checkDataLang(this.state.pid))
+    cit.push(checkDataLang(researchDataset.title))
+    cit.push(checkDataLang(researchDataset.publisher && researchDataset.publisher.name))
+    cit.push(checkDataLang(researchDataset.issued))
+    if (dataset.draft_of) {
+      cit.push(dataset.draft_of.preferred_identifier)
+    } else if (dataset.state !== 'draft') {
+      cit.push(researchDataset.preferred_identifier)
+    }
     return (
-      <Fragment>
+      <>
         <span>{cit.filter(element => element).join(', ')}</span>
-        { !this.state.date_issued &&
-          <TextMuted><Translate content="dataset.citationNoDateIssued" /></TextMuted> }
-      </Fragment>
+        {!researchDataset.issued && (
+          <TextMuted>
+            <Translate content="dataset.citationNoDateIssued" />
+          </TextMuted>
+        )}
+      </>
     )
   }
 
   render() {
-    if (this.state.citation) return this.state.citation
+    const researchDataset = this.props.Stores.DatasetQuery.results.research_dataset
+    const citation = researchDataset.bibliographic_citation
+    if (citation) {
+      return citation
+    }
     return this.createCitation()
   }
 }
 
+Citation.propTypes = {
+  Stores: PropTypes.object.isRequired,
+}
+
 const TextMuted = styled.div`
   color: ${props => props.theme.color.gray};
-  font-size: .9rem;
-  margin-top: .3rem;
+  font-size: 0.9rem;
+  margin-top: 0.3rem;
 `
+
+export default inject('Stores')(observer(Citation))
