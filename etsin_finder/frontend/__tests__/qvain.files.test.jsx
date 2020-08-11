@@ -11,6 +11,7 @@ import {
   itemLoaderAny,
   itemLoaderExisting,
 } from '../js/stores/view/common.files.loaders'
+import urls from '../js/components/qvain/utils/urls'
 
 import { ShowMore } from '../js/components/general/files/tree'
 import SelectedItemsTree from '../js/components/qvain/files/ida/selectedItemsTree'
@@ -127,10 +128,10 @@ const delayGet = () => {
 
 const loadDataset = async () => {
   let response
-  if (Qvain.metaxApiV2) {
-    response = await axios.get(`/api/v2/dataset/edit/${datasetIdentifier}`)
+  if (Env.metaxApiV2) {
+    response = await axios.get(urls.v2.dataset(datasetIdentifier))
   } else {
-    response = await axios.get(`/api/dataset/edit/${datasetIdentifier}`)
+    response = await axios.get(urls.v1.dataset(datasetIdentifier))
   }
   Qvain.Files.AddItemsView.setDefaultShowLimit(20, 20)
   Qvain.Files.SelectedItemsView.setDefaultShowLimit(20, 20)
@@ -418,7 +419,7 @@ describe('Qvain.Files store', () => {
   })
 
   it('loads files for an empty dataset', async () => {
-    const response = await axios.get(`/api/dataset/edit/${emptyDatasetIdentifier}`)
+    const response = await axios.get(urls.v2.dataset(emptyDatasetIdentifier))
     stores.Qvain.editDataset(response.data)
     Files.changeProject('project')
     await Files.loadingProjectRoot.promise
@@ -824,7 +825,7 @@ describe('Qvain.Files SelectedItemsTree ', () => {
   })
 
   it('adds files to a new dataset', async () => {
-    const response = await axios.get(`/api/dataset/edit/${emptyDatasetIdentifier}`)
+    const response = await axios.get(urls.v2.dataset(emptyDatasetIdentifier))
     stores.Qvain.editDataset(response.data)
     Files.changeProject('project')
     await Files.loadingProjectRoot.promise
@@ -864,7 +865,7 @@ describe('Qvain.Files SelectedItemsTree ', () => {
   })
 
   it('adds directory to a new dataset', async () => {
-    const response = await axios.get(`/api/dataset/edit/${emptyDatasetIdentifier}`)
+    const response = await axios.get(urls.v2.dataset(emptyDatasetIdentifier))
     stores.Qvain.editDataset(response.data)
     Files.changeProject('project')
     await Files.loadingProjectRoot.promise
