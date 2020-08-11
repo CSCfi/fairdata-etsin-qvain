@@ -6,15 +6,18 @@ import IDAFilePicker, { IDAFilePickerBase } from '../js/components/qvain/files/l
 import FileSelector, { FileSelectorBase } from '../js/components/qvain/files/legacy/fileSelector'
 import { SelectedFilesBase, FileLabel } from '../js/components/qvain/files/legacy/selectedFiles'
 import { DeleteButton } from '../js/components/qvain/general/buttons'
-import QvainStore, { Directory } from '../js/stores/view/qvain'
+import Env from '../js/stores/domain/env'
+import QvainStoreClass, { Directory } from '../js/stores/view/qvain'
 import LocaleStore from '../js/stores/view/language'
 import { DATA_CATALOG_IDENTIFIER } from '../js/utils/constants'
 
 global.Promise = require('bluebird')
+const QvainStore = new QvainStoreClass(Env)
 
 const getStores = () => {
-  QvainStore.setMetaxApiV2(false)
+  Env.setMetaxApiV2(false)
   return {
+    Env,
     Qvain: QvainStore,
     Locale: LocaleStore,
   }

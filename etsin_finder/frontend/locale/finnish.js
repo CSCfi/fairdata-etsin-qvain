@@ -81,6 +81,11 @@ const finnish = {
       infoText:
         'Datacite without validation: Aineisto näytetään Datacite -formaatissa, mutta ilman pakollisten kenttien validointia. Aineisto ei sellaisenaan välttämättä täytä Dataciten vaatimuksia.',
     },
+    draftInfo: {
+      draft: 'Tämä aineisto on luonnos ja näkyy ainoastaan aineiston luojalle.',
+      changes: 'Tämä on esikatselu julkaisemattomista muutoksista aineistoon ja näkyy ainoastaan aineiston luojalle.',
+    },
+    draftIdentifierInfo: 'Tunniste luodaan aineiston julkaisun yhteydessä.',
     dl: {
       root: 'juuri',
       breadcrumbs: 'Leivänmurut',
@@ -89,12 +94,18 @@ const finnish = {
       download: 'Lataa',
       downloadFailed: 'Lataus epäonnistui',
       downloadAll: 'Lataa kaikki',
+      downloadItem: 'Lataa %(name)s',
       downloading: 'Ladataan...',
       fileAmount: '%(amount)s objektia',
       close_modal: 'Sulje info',
+      customMetadata: 'Metatiedot',
       info_header: 'Tiedoston muut tiedot',
       loading: 'Ladataan kansiota',
       loaded: 'Kansio latautunut',
+      fileCount: {
+        one: '1 tiedosto',
+        other: '%(count)s tiedostoa'
+      },
       file_types: {
         both: 'tiedostot ja kansiot',
         directory: 'Kansio',
@@ -103,6 +114,20 @@ const finnish = {
       files: 'Tiedostot',
       info: 'Tietoja',
       info_about: 'aineistosta: %(file)s',
+      infoHeaders: {
+        file: 'Tiedoston tiedot',
+        directory: 'Kansion tiedot',
+      },
+      infoModalButton: {
+        directory: {
+          general: 'Kansion %(name)s tiedot',
+          custom: 'Kansion %(name)s tiedot ja metatiedot',
+        },
+        file: {
+          general: 'Tiedoston %(name)s tiedot',
+          custom: 'Tiedoston %(name)s tiedot ja metatiedot',
+        },
+      },
       item: 'aineisto %(item)s',
       name: 'Nimi',
       size: 'Koko',

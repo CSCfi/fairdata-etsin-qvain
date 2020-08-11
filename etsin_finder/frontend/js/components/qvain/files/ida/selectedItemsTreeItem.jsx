@@ -14,7 +14,7 @@ import Translate from 'react-translate-component'
 
 import FileForm from './forms/fileForm'
 import DirectoryForm from './forms/directoryForm'
-import { hasMetadata } from '../../../../stores/view/qvain.files.items'
+import { hasMetadata } from '../../../../stores/view/common.files.items'
 
 import {
   isDirectory,
@@ -28,7 +28,7 @@ import {
   Icon,
   ClickableIcon,
   NoIcon,
-} from './common/items'
+} from '../../../general/files/items'
 
 const SelectedItemsTreeItemBase = ({ treeProps, item, level, parentArgs }) => {
   const { Files, directoryView } = treeProps
@@ -60,7 +60,7 @@ const SelectedItemsTreeItemBase = ({ treeProps, item, level, parentArgs }) => {
     item.added ||
     item.existing ||
     hasAddedChildren ||
-    (parentAdded && (isFile(item) || item.existingFileCount === item.fileCount))
+    parentAdded
   if (isRemoved) {
     canEdit = false
   }
@@ -163,8 +163,7 @@ const SelectedItemsTreeItemBase = ({ treeProps, item, level, parentArgs }) => {
         ) : (
           <NoIcon />
         )}
-        <NoIcon />
-        <ItemSpacer level={level} />
+        <ItemSpacer level={level + 0.5} />
         {content}
       </ItemRow>
       <li>{edit}</li>

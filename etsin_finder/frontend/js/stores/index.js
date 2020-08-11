@@ -23,10 +23,10 @@ const Stores = {
   Auth,
   Locale,
   ElasticQuery,
-  DatasetQuery,
+  DatasetQuery: new DatasetQuery(Env),
   Accessibility,
   Map,
-  Qvain,
+  Qvain: new Qvain(Env),
   Access,
 }
 

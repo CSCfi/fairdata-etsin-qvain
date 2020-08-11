@@ -81,6 +81,11 @@ const english = {
       infoText:
         'Datacite without validation: The dataset is shown in Datacite Format but without validation; mandatory fields might be missing. Dataset does not necessarily meet all Datacite requirements.',
     },
+    draftInfo: {
+      draft: 'This dataset is a draft. Only the creator of the dataset can view it.',
+      changes: 'This is a preview of unpublished changes to a dataset.  Only the creator of the dataset can view it.',
+    },
+    draftIdentifierInfo: 'Dataset identifier will be generated when the dataset is published.',
     dl: {
       root: 'root',
       breadcrumbs: 'Breadcrumbs',
@@ -90,11 +95,17 @@ const english = {
       downloadFailed: 'Download failed',
       downloadAll: 'Download all',
       downloading: 'Downloading...',
+      downloadItem: 'Download %(name)s',
       fileAmount: '%(amount)s objects',
       close_modal: 'Close info modal',
+      customMetadata: 'Metadata',
       info_header: 'Other info related to file',
       loading: 'Loading folder',
       loaded: 'Folder loaded',
+      fileCount: {
+        one: '1 file',
+        other: '%(count)s files'
+      },
       file_types: {
         both: 'files and folders',
         directory: 'Folder',
@@ -103,6 +114,20 @@ const english = {
       files: 'Files',
       info: 'Info',
       info_about: 'about object: %(file)s',
+      infoHeaders: {
+        file: 'File information',
+        directory: 'Folder information',
+      },
+      infoModalButton: {
+        directory: {
+          general: 'Folder %(name)s information',
+          custom: 'Folder %(name)s information and metadata',
+        },
+        file: {
+          general: 'File %(name)s information',
+          custom: 'File %(name)s information and metadata',
+        },
+      },
       item: 'item %(item)s',
       name: 'Name',
       size: 'Size',

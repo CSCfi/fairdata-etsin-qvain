@@ -210,6 +210,7 @@ class Actors {
     return this.loadingReferenceOrganizations[parentId]
   }
 
+  @action
   reset = () => {
     this.actors.clear()
     this.actorInEdit = null

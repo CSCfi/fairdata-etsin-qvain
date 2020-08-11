@@ -4,9 +4,14 @@ from copy import deepcopy
 import json
 from flask import session
 from base64 import urlsafe_b64encode
+from datetime import date
 
 from etsin_finder.constants import SAML_ATTRIBUTES, DATA_CATALOG_IDENTIFIERS, ACCESS_TYPES
-from etsin_finder.cr_service import get_catalog_record
+from etsin_finder.cr_service import (
+    get_catalog_record,
+    is_draft,
+    is_catalog_record_owner
+)
 from etsin_finder.finder import app
 from etsin_finder.authentication import get_user_ida_groups, get_user_csc_name, get_user_email, get_user_firstname, get_user_lastname
 
@@ -222,7 +227,7 @@ def data_to_metax(data, metadata_provider_org, metadata_provider_user):
             "curator": alter_role_data(data.get("actors"), "curator"),
             "rights_holder": alter_role_data(data.get("actors"), "rights_holder"),
             "contributor": alter_role_data(data.get("actors"), "contributor"),
-            "issued": data.get("issuedDate") if "issuedDate" in data else "",
+            "issued": data.get("issuedDate", date.today().strftime("%Y-%m-%d")),
             "other_identifier": other_identifiers_to_metax(data.get("identifiers")),
             "field_of_science": _to_metax_field_of_science(data.get("fieldOfScience")),
             "language": _to_metax_field_of_science(data.get("datasetLanguage")),
@@ -231,7 +236,7 @@ def data_to_metax(data, metadata_provider_org, metadata_provider_user):
             "remote_resources": remote_resources_data_to_metax(data.get("remote_resources")) if data.get("dataCatalog") == DATA_CATALOG_IDENTIFIERS.get('att') else "",
             "files": files_data_to_metax(data.get("files")) if data.get("dataCatalog") == DATA_CATALOG_IDENTIFIERS.get('ida') else "",
             "directories": directories_data_to_metax(data.get("directories")) if data.get("dataCatalog") == DATA_CATALOG_IDENTIFIERS.get('ida') else "",
-            "infrastructure": data.get("infrastructure"),
+            "infrastructure": _to_metax_infrastructure(data.get("infrastructure")),
             "spatial": data.get("spatial")
         }
     }
@@ -319,7 +324,7 @@ def edited_data_to_metax(data, original):
         "curator": alter_role_data(data.get("actors"), "curator"),
         "rights_holder": alter_role_data(data.get("actors"), "rights_holder"),
         "contributor": alter_role_data(data.get("actors"), "contributor"),
-        "issued": data.get("issuedDate") if "issuedDate" in data else "",
+        "issued": data.get("issuedDate", date.today().strftime("%Y-%m-%d")),
         "other_identifier": other_identifiers_to_metax(data.get("identifiers")),
         "field_of_science": _to_metax_field_of_science(data.get("fieldOfScience")),
         "language": _to_metax_dataset_language(data.get("datasetLanguage")),

@@ -11,16 +11,19 @@ import translate from 'counterpart'
 import '../locale/translations.js'
 import etsinTheme from '../js/styles/theme'
 import MetadataModal from '../js/components/qvain/files/metadataModal'
-import QvainStore from '../js/stores/view/qvain'
-import { Project, File, Directory } from '../js/stores/view/qvain.files.items'
+import Env from '../js/stores/domain/env'
+import QvainStoreClass from '../js/stores/view/qvain'
+import { Project, File, Directory } from '../js/stores/view/common.files.items'
 import LocaleStore from '../js/stores/view/language'
 
 jest.mock('axios')
 
+const QvainStore = new QvainStoreClass(Env)
 const getStores = () => {
+  Env.setMetaxApiV2(true)
   QvainStore.resetQvainStore()
-  QvainStore.setMetaxApiV2(true)
   return {
+    Env,
     Qvain: QvainStore,
     Locale: LocaleStore
   }
