@@ -4,6 +4,7 @@ import { inject, observer } from 'mobx-react'
 import translate from 'counterpart'
 import Translate from 'react-translate-component'
 import styled from 'styled-components'
+import counterpart from 'counterpart'
 
 import {
   ButtonGroup,
@@ -13,6 +14,8 @@ import {
   ButtonContainer
 } from '../general/buttons'
 import { getActorName, ActorIcon } from './common'
+import Tooltip from '../../general/tooltipHover'
+import { LabelLarge } from '../general/form'
 
 export class AddedActorsBase extends Component {
   static propTypes = {
@@ -35,11 +38,14 @@ export class AddedActorsBase extends Component {
     const { actors } = this.props.Stores.Qvain.Actors
     return (
       <>
-        <Translate
-          tabIndex="0"
-          component="h3"
-          content="qvain.actors.added.title"
-        />
+        <LabelLarge tabIndex="0">
+          <Tooltip
+            title={counterpart('qvain.description.fieldHelpTexts.requiredToPublish', { locale: lang })}
+            position="right"
+          >
+            <Translate content="qvain.actors.added.title" /> *
+          </Tooltip>
+        </LabelLarge>
         <Translate component="p" content="qvain.actors.add.help" />
         {actors.length === 0 &&
           (<Translate tabIndex="0" component="p" content="qvain.actors.added.noneAddedNotice" />)
