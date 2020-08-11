@@ -68,7 +68,11 @@ def add_restful_resources(app):
 
     """
     api = Api(app)
-    from etsin_finder.resources import REMSApplyForPermission, Contact, Dataset, DatasetMetadata, User, Session, Files, Download
+    from etsin_finder.resources import (
+        REMSApplyForPermission, Contact, Dataset, V2Dataset,
+        DatasetMetadata, User,
+        Session, Files, Download
+    )
     from etsin_finder.qvain_light_resources import (
         ProjectFiles, DirectoryFiles, FileCharacteristics,
         QvainDatasets, QvainDataset
@@ -118,6 +122,9 @@ def add_restful_resources(app):
     api.add_resource(V2QvainDatasetCreateDraft, '/api/v2/rpc/datasets/create_draft', endpoint='v2_create_draft')
     api.add_resource(V2QvainDatasetPublishDataset, '/api/v2/rpc/datasets/publish_dataset', endpoint='v2_publish_dataset')
     api.add_resource(V2QvainDatasetMergeDraft, '/api/v2/rpc/datasets/merge_draft', endpoint='v2_merge_draft')
+
+    # Etsin API endpoint for Metax v2 dataset, needed for draft_of
+    api.add_resource(V2Dataset, '/api/v2/dataset/<string:cr_id>', endpoint='v2_etsin_dataset')
 
     # Etsin API endpoints
     api.add_resource(Dataset, '/api/dataset/<string:cr_id>')

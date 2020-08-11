@@ -54,7 +54,7 @@ class IssuedDateField extends React.Component {
         <Translate component="p" content="qvain.description.issuedDate.infoText" />
         <DatePicker
           strictParsing
-          selected={issuedDate ? new Date(issuedDate) : ''}
+          selected={issuedDate ? new Date(issuedDate) : new Date()}
           onChangeRaw={(e) => e && handleDatePickerChange(e.target.value, setIssuedDate)}
           onChange={(date) => date && handleDatePickerChange(date.toISOString(), setIssuedDate)}
           locale={lang}
