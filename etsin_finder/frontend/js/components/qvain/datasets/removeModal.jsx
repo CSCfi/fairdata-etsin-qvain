@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom'
 import axios from 'axios'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
-import { DATASET_URLS } from '../../../utils/constants'
+import urls from '../utils/urls'
 import Modal from '../../general/modal'
 import { TableButton, DangerButton } from '../general/buttons'
 import { getResponseError } from '../utils/responseError'
@@ -40,18 +40,18 @@ class RemoveModal extends Component {
 
       // Delete unpublished changes first
       if (dataset.next_draft) {
-        let draftUrl = `${DATASET_URLS.DATASET_URL}/${dataset.next_draft.identifier}`
+        let draftUrl = urls.v1.dataset(dataset.next_draft.identifier)
         if (metaxApiV2) {
-          draftUrl = `${DATASET_URLS.V2_DATASET_URL}/${dataset.next_draft.identifier}`
+          draftUrl = urls.v2.dataset(dataset.next_draft.identifier)
         }
         await axios.delete(draftUrl)
       }
 
       // Delete the actual dataset
       if (!onlyChanges) {
-        let url = `${DATASET_URLS.DATASET_URL}/${identifier}`
+        let url = urls.v1.dataset(identifier)
         if (metaxApiV2) {
-          url = `${DATASET_URLS.V2_DATASET_URL}/${identifier}`
+          url = urls.v2.dataset(identifier)
         }
         await axios.delete(url)
         Tracking.trackEvent('Dataset', ' Removed', location.pathname)

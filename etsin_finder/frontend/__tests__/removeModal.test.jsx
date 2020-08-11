@@ -56,7 +56,7 @@ describe('Qvain.RemoveModal', () => {
     wrapper.update()
     wrapper.find('#confirm-remove-dataset').simulate('click')
     await Promise.resolve()
-    expect(axios.delete.mock.calls).toEqual([['/api/v2/dataset/1']])
+    expect(axios.delete.mock.calls).toEqual([['/api/v2/qvain/datasets/1']])
   })
 
   it('deletes unpublished changes', async () => {
@@ -72,7 +72,7 @@ describe('Qvain.RemoveModal', () => {
     wrapper.update()
     wrapper.find('#confirm-remove-dataset').simulate('click')
     await Promise.resolve()
-    expect(axios.delete.mock.calls).toEqual([['/api/v2/dataset/2']])
+    expect(axios.delete.mock.calls).toEqual([['/api/v2/qvain/datasets/2']])
   })
 
   it('has no changes to delete', async () => {
@@ -101,6 +101,6 @@ describe('Qvain.RemoveModal', () => {
     wrapper.update()
     wrapper.find('#confirm-remove-dataset').simulate('click')
     await Promise.resolve()
-    expect(axios.delete.mock.calls).toEqual([['/api/v2/dataset/2'], ['/api/v2/dataset/1']])
+    expect(axios.delete.mock.calls).toEqual([['/api/v2/qvain/datasets/2'], ['/api/v2/qvain/datasets/1']])
   })
 })

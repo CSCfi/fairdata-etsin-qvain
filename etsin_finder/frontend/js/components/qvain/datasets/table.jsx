@@ -7,7 +7,7 @@ import axios from 'axios'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import { Table, TableHeader, Row, HeaderCell, TableBody, TableNote } from '../general/table'
-import { DATASET_URLS } from '../../../utils/constants'
+import urls from '../utils/urls'
 import RemoveModal from './removeModal'
 import DatasetPagination from './pagination'
 import { TableButton } from '../general/buttons'
@@ -66,12 +66,12 @@ class DatasetTable extends Component {
     this.setState({ loading: true, error: false, errorMessage: '' })
     let url
     if (this.props.Stores.Env.metaxApiV2) {
-      url = `${DATASET_URLS.V2_USER_DATASETS_URL}${this.props.Stores.Auth.user.name}?no_pagination=true`
+      url = urls.v2.datasets()
     } else {
-      url = `${DATASET_URLS.USER_DATASETS_URL}${this.props.Stores.Auth.user.name}?no_pagination=true`
+      url = urls.v1.datasets()
     }
     const promise = axios
-      .get(url)
+      .get(url, { params: { no_pagination: true } })
       .then(result => {
         const datasets = result.data.filter(dataset => !dataset.draft_of)
         const datasetGroups = groupDatasetsByVersionSet(datasets)
@@ -90,7 +90,7 @@ class DatasetTable extends Component {
         )
       })
       .catch(e => {
-        console.log(e.message)
+        console.error(e.message)
         this.setState({ loading: false, error: true, errorMessage: 'Failed to load datasets' })
       })
     this.promises.push(promise)
@@ -103,7 +103,7 @@ class DatasetTable extends Component {
       console.error('Metax API V2 is required for creating a new version')
       return
     }
-    const promise = axios.post(DATASET_URLS.V2_CREATE_NEW_VERSION, null, {
+    const promise = axios.post(urls.v2.rpc.createNewVersion(), null, {
       params: { identifier },
     })
     this.promises.push(promise)
