@@ -33,20 +33,8 @@ class DataCatalog extends Component {
       errorMessage: undefined,
       fileOrigin: undefined,
       useDoi: false,
-      locale: translate.getLocale(),
     }
   }
-
-  componentDidMount() {
-    translate.onLocaleChange(this.localeChanged)
-  }
-
-  componentWillUnmount() {
-    translate.offLocaleChange(this.localeChanged)
-  }
-
-  localeChanged = () =>
-    this.setState({ locale: translate.getLocale() })
 
   updateOptions = () => {
     options = [
@@ -83,7 +71,7 @@ class DataCatalog extends Component {
   }
 
   render() {
-    const { errorMessage, locale } = this.state
+    const { errorMessage } = this.state
     const {
       dataCatalog,
       setDataCatalog,
@@ -94,10 +82,9 @@ class DataCatalog extends Component {
       isPas,
     } = this.props.Stores.Qvain
     const selected = [...selectedFiles, ...selectedDirectories, ...externalResources]
+    const { lang } = this.props.Stores.Locale
 
-    if (this.props.Stores.Locale.lang) {
-      this.updateOptions()
-    }
+    if (lang) this.updateOptions()
     // PAS catalog cannot be selected by the user
     const availableOptions = isPas ? pasOptions : options
     const catalogSelectValue = availableOptions.find((opt) => opt.value === dataCatalog)
@@ -106,7 +93,7 @@ class DataCatalog extends Component {
       <Card>
         <LabelLarge htmlFor="dataCatalogSelect">
           <Tooltip
-            title={translate('qvain.description.fieldHelpTexts.requiredToPublish', { locale })}
+            title={translate('qvain.description.fieldHelpTexts.requiredToPublish', { locale: lang })}
             position="right"
           >
             <Translate content="qvain.files.dataCatalog.label" /> *

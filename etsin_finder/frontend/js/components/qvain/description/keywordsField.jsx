@@ -22,21 +22,6 @@ class KeywordsField extends Component {
 
   state = {
     keywordsValidationError: null,
-    locale: counterpart.getLocale(),
-  }
-
-  componentDidMount() {
-    counterpart.onLocaleChange(this.localeChanged)
-  }
-
-  componentWillUnmount() {
-    counterpart.offLocaleChange(this.localeChanged)
-  }
-
-  localeChanged = () => {
-    this.setState({
-      locale: counterpart.getLocale(),
-    })
   }
 
   handleChange = (e) => {
@@ -76,7 +61,7 @@ class KeywordsField extends Component {
 
   render() {
     const { readonly, keywordsArray, keywordString } = this.props.Stores.Qvain
-    const { locale } = this.state
+    const { lang } = this.props.Stores.Locale
     const RenderedKeywords = keywordsArray.map((word) => (
       <Label color="#007fad" margin="0 0.5em 0.5em 0" key={word}>
         <PaddedWord>{word}</PaddedWord>
@@ -95,7 +80,7 @@ class KeywordsField extends Component {
       <Card>
         <LabelLarge htmlFor="keywordsInput">
           <Tooltip
-            title={counterpart('qvain.description.fieldHelpTexts.requiredToPublish', { locale })}
+            title={counterpart('qvain.description.fieldHelpTexts.requiredToPublish', { locale: lang })}
             position="right"
           >
             <Translate content="qvain.description.keywords.title" /> *
