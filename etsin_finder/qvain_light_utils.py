@@ -267,6 +267,8 @@ def get_dataset_creator(cr_id):
 
     """
     dataset = get_catalog_record(cr_id, False)
+    if not dataset:
+        return None
     return dataset.get('metadata_provider_user')
 
 def remove_deleted_datasets_from_results(result):

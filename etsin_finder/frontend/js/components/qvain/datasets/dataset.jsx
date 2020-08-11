@@ -3,14 +3,16 @@ import { inject, observer } from 'mobx-react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
+
 import { Row, BodyCell } from '../general/table'
 import { DATA_CATALOG_IDENTIFIER } from '../../../utils/constants'
 import Label from '../general/label'
 import { TableButton, RemoveButton } from '../general/buttons'
 import TablePasState from './tablePasState'
 import formatAge from './formatAge'
+import { Dropdown, DropdownItem } from '../general/dropdown'
 
-const datasetStateTranslation = (dataset) => {
+const datasetStateTranslation = dataset => {
   if (dataset.state === 'published') {
     if (dataset.next_draft) {
       return 'qvain.datasets.state.changed'
@@ -20,7 +22,7 @@ const datasetStateTranslation = (dataset) => {
   return 'qvain.datasets.state.draft'
 }
 
-const getGoToEtsinButton = (dataset) => {
+const getGoToEtsinButton = dataset => {
   let identifier = dataset.identifier
   let goToEtsinKey = 'goToEtsin'
   if (dataset.next_draft) {
@@ -39,8 +41,57 @@ const getGoToEtsinButton = (dataset) => {
   )
 }
 
+const getActionButton = action => {
+  const { text, handler, danger } = action
+  const ButtonComponent = danger ? RemoveButton : TableButton
+  return (
+    <ButtonComponent key={text} onClick={handler}>
+      <Translate content={text} />
+    </ButtonComponent>
+  )
+}
+
+const getActionItem = action => {
+  const { text, handler, danger } = action
+  return (
+    <DropdownItem key={text} onClick={handler} danger={danger} color="error">
+      <Translate content={text} />
+    </DropdownItem>
+  )
+}
+
 function Dataset(props) {
   const { metaxApiV2 } = props.Stores.Env
+
+  const getActions = () => {
+    const { dataset } = props
+    const actions = []
+
+    if (
+      metaxApiV2 &&
+      !dataset.next_draft &&
+      dataset.next_dataset_version === undefined &&
+      dataset.state === 'published'
+    ) {
+      actions.push({
+        text: 'qvain.datasets.createNewVersion',
+        handler: () => props.handleCreateNewVersion(dataset.identifier),
+      })
+    }
+    if (metaxApiV2 && dataset.next_draft) {
+      actions.push({
+        text: 'qvain.datasets.revertButton',
+        danger: true,
+        handler: props.openRemoveModal(dataset, true),
+      })
+    }
+    actions.push({
+      text: 'qvain.datasets.deleteButton',
+      danger: true,
+      handler: props.openRemoveModal(dataset),
+    })
+    return actions
+  }
 
   let titleCellStyle = null
   if (props.indent) {
@@ -48,6 +99,7 @@ function Dataset(props) {
   }
 
   const { dataset, currentTimestamp } = props
+  const actions = getActions()
   return (
     <Row key={dataset.identifier} tabIndex="0">
       <BodyCellWordWrap style={titleCellStyle}>
@@ -79,20 +131,13 @@ function Dataset(props) {
           }
         />
         {getGoToEtsinButton(dataset)}
-        {metaxApiV2 &&
-          dataset.next_dataset_version === undefined &&
-          dataset.state === 'published' && (
-            <Translate
-              component={TableButton}
-              onClick={() => props.handleCreateNewVersion(dataset.identifier)}
-              content="qvain.datasets.createNewVersion"
-            />
-          )}
-        <Translate
-          component={RemoveButton}
-          onClick={props.openRemoveModal(dataset.identifier)}
-          content="qvain.datasets.deleteButton"
-        />
+        {actions.length === 1 ? (
+          getActionButton(actions[0])
+        ) : (
+          <Dropdown buttonContent="qvain.datasets.moreActions" buttonComponent={DropdownButton}>
+            {actions.map(action => getActionItem(action))}
+          </Dropdown>
+        )}
       </BodyCellActions>
     </Row>
   )
@@ -109,7 +154,7 @@ Dataset.propTypes = {
 }
 
 Dataset.defaultProps = {
-  indent: false
+  indent: false,
 }
 
 const Marker = styled.div`
@@ -136,7 +181,17 @@ const BodyCellActions = styled(BodyCell)`
   margin: -0.1rem -0.15rem;
   > * {
     margin: 0.1rem 0.15rem;
+    flex: 1 0 5.5em;
+    max-width: none;
   }
+`
+
+const DropdownButton = styled(TableButton)`
+  max-width: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem;
 `
 
 export default inject('Stores')(observer(Dataset))
