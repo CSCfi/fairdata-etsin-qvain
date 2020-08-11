@@ -83,8 +83,8 @@ class SubmitButtons extends Component {
       this.closeUseDoiInformation()
     }
 
-    const { Stores, history, handleSubmitError } = this.props
-    const { addUnsavedMultiValueFields, resetQvainStore, editDataset } = Stores.Qvain
+    const { Stores, handleSubmitError } = this.props
+    const { addUnsavedMultiValueFields } = Stores.Qvain
     const { metaxApiV2 } = Stores.Env
 
     if (metaxApiV2) {
@@ -171,11 +171,6 @@ class SubmitButtons extends Component {
   getSubmitValues = async () => {
     // Validate dataset and transform dataset metadata, file actions and metadata changes into format required by the backend.
     const {
-      otherIdentifier,
-      otherIdentifiersArray,
-      addOtherIdentifier,
-      setOtherIdentifier,
-      setOtherIdentifierValidationError,
       original,
       canSelectFiles,
       canRemoveFiles,
@@ -404,8 +399,8 @@ class SubmitButtons extends Component {
   }
 
   handleMergeDraft = async () => {
-    const { Stores, history } = this.props
-    const { original, editDataset } = Stores.Qvain
+    const { Stores } = this.props
+    const { original } = Stores.Qvain
     const { metaxApiV2 } = Stores.Env
 
     if (!metaxApiV2) {
