@@ -16,6 +16,7 @@ import PropTypes from 'prop-types'
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Translate from 'react-translate-component'
+import { tint } from 'polished'
 
 import Button from '../../general/button'
 
@@ -125,17 +126,22 @@ export class Dropdown extends Component {
     return (
       <DropdownContainer ref={this.container} onBlur={this.onBlur}>
         <div style={{ display: 'flex' }}>
-          <ButtonComponent
+          <Translate
             role="button"
+            component={ButtonComponent}
             open={this.state.open}
             aria-pressed={this.state.open}
+            with={this.props.with}
             onClick={this.onClick}
+            {...this.props.buttonProps}
           >
-            <Translate content={this.props.buttonContent} />
+            {this.props.buttonContent && (
+              <Translate content={this.props.buttonContent} with={this.props.with} />
+            )}
             {this.props.icon && <Icon icon={this.props.icon} />}
-          </ButtonComponent>
+          </Translate>
         </div>
-        <Content ref={this.content} open={this.state.open} tabIndex="-1">
+        <Content ref={this.content} open={this.state.open} onClick={this.close} tabIndex="-1">
           {this.props.children}
         </Content>
       </DropdownContainer>
@@ -180,14 +186,19 @@ const Content = styled.ul`
 
 Dropdown.propTypes = {
   children: PropTypes.node.isRequired,
-  buttonContent: PropTypes.node.isRequired,
+  buttonContent: PropTypes.node,
+  with: PropTypes.object,
   buttonComponent: PropTypes.object,
+  buttonProps: PropTypes.object,
   icon: PropTypes.object,
 }
 
 Dropdown.defaultProps = {
   icon: faCaretDown,
+  buttonContent: '',
+  with: undefined,
   buttonComponent: CustomButton,
+  buttonProps: {},
 }
 
 export const DropdownItem = ({ children, ...props }) => (
@@ -200,14 +211,17 @@ DropdownItem.propTypes = {
   children: PropTypes.node.isRequired,
 }
 
-export const DropdownItemButton = styled.button`
+export const DropdownItemButton = styled.button.attrs({ type: 'button' })`
   width: 100%;
   border: none;
   border-bottom: 1px solid rgba(0, 0, 0, 0.4);
   background: none;
-  &:hover,
-  &:focus {
-    background: ${p => p.theme.color.lightgray};
+  color: ${p => (p.disabled ? p.theme.color.gray : p.theme.color.dark)};
+  :not(:disabled) {
+    :hover,
+    :focus {
+      background: ${p => p.theme.color.lightgray};
+    }
   }
   padding: 0.5rem 1rem;
   text-align: left;
@@ -215,10 +229,11 @@ export const DropdownItemButton = styled.button`
   ${p =>
     p.danger &&
     `
-    color: #cc0000;
-    &:hover,
-    &:focus {
-      background: #ffb2b2;
+    color: ${p.disabled ? tint(0.65, '#cc0000') : '#cc0000'};
+    :not(:disabled) {
+      :hover, :focus {
+        background: #ffb2b2;
+      }
     }
   `};
 `

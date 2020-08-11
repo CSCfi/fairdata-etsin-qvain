@@ -35,20 +35,36 @@ class FileMetadataSchema(Schema):
     """Validation schema for file metadata changes."""
 
     identifier = fields.Str(required=True)
-    title = fields.Str(required=True)
-    description = fields.Str(required=True)
-    use_category = fields.Dict(required=True)
+    title = fields.Str()
+    description = fields.Str()
+    use_category = fields.Dict()
     file_type = fields.Dict()
     delete = fields.Boolean()
+
+    @validates_schema
+    def require_if_check_required(self, data, **kwargs):
+        """Require fields only if not deleting metadata"""
+        if not data.get('delete'):
+            for field in ['title', 'description', 'use_category']:
+                if data.get(field) is None:
+                    raise ValidationError('Missing required field', field_name=field)
 
 class DirectoryMetadataSchema(Schema):
     """Validation schema for directory metadata changes."""
 
     identifier = fields.Str(required=True)
-    title = fields.Str(required=True)
+    title = fields.Str()
     description = fields.Str()
-    use_category = fields.Dict(required=True)
+    use_category = fields.Dict()
     delete = fields.Boolean()
+
+    @validates_schema
+    def require_if_check_required(self, data, **kwargs):
+        """Require fields only if not deleting metadata"""
+        if not data.get('delete'):
+            for field in ['title', 'use_category']:
+                if data.get(field) is None:
+                    raise ValidationError('Missing required field', field_name=field)
 
 class UserMetadataValidationSchema(Schema):
     """Validation schema for dataset-specific file and directory metadata changes."""
