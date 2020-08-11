@@ -26,6 +26,16 @@ class SubmitResponse extends Component {
     this.closeSubmitResponse = this.closeSubmitResponse.bind(this)
   }
 
+  getPreferredIdentifier() {
+    const { response } = this.props
+    let identifier
+    if (response.state === 'published') {
+      identifier = response.research_dataset && response.research_dataset.preferred_identifier
+    }
+    identifier = identifier || response.identifier
+    return identifier
+  }
+
   handleOpenNewVersion = identifier => {
     this.props.history.push(`/qvain/dataset/${identifier}`)
     this.closeSubmitResponse()
@@ -74,7 +84,7 @@ class SubmitResponse extends Component {
             <LinkToEtsin onClick={() => window.open(`/dataset/${identifier}`, '_blank')}>
               {goToEtsin}
             </LinkToEtsin>
-            <p>Identifier: {identifier}</p>
+            <p>Identifier: {this.getPreferredIdentifier()}</p>
           </ResponseContainerContent>
           <ResponseContainerCloseButtonContainer>
             <LinkButtonDarkGray type="button" onClick={this.closeSubmitResponse}>
@@ -112,7 +122,7 @@ class SubmitResponse extends Component {
             <LinkToEtsin onClick={() => window.open(`/dataset/${identifier}`, '_blank')}>
               {goToEtsin}
             </LinkToEtsin>
-            <p>Identifier: {identifier}</p>
+            <p>Identifier: {this.getPreferredIdentifier()}</p>
           </ResponseContainerContent>
           <ResponseContainerCloseButtonContainer>
             <LinkButtonDarkGray type="button" onClick={this.closeSubmitResponse}>

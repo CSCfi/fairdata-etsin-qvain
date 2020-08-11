@@ -76,6 +76,7 @@ class Qvain {
 
   @action
   resetQvainStore = () => {
+    this.original = undefined
     this.title = {
       en: '',
       fi: '',
@@ -825,7 +826,7 @@ class Qvain {
     this.cumulativeState = dataset.cumulative_state
 
     // Load DOI
-    if (researchDataset.preferred_identifier.startsWith('doi')) {
+    if (researchDataset.preferred_identifier.startsWith('doi') || dataset.use_doi_for_published) {
       this.useDoi = true
     } else {
       this.useDoi = false
