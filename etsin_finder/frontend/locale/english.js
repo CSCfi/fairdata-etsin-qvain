@@ -380,6 +380,24 @@ const english = {
     select: {
       placeholder: 'Select option',
     },
+    organizationSelect: {
+      label: {
+        addNew: 'Add organization manually',
+        name: 'Organization name',
+        email: 'Organization email',
+        identifier: 'Organization identifier',
+      },
+      placeholder: {
+        name: 'Name',
+        email: 'Email',
+        identifier: 'e.g http://orcid.org',
+      },
+      validation: {
+        name: 'A name is required',
+        email: 'A valid email address is required',
+        identifier: 'An identifier is required',
+      }
+    },
     datasets: {
       title: 'Your Datasets',
       search: {
@@ -1045,7 +1063,7 @@ const english = {
         description: 'A project in which the dataset was created',
       },
       organization: {
-        title: 'Organization',
+        title: 'Organization *',
         description: 'The Organization(s) who is/are participating to the project'
       },
       inputs: {
