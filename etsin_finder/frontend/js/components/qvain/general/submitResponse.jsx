@@ -4,6 +4,8 @@ import styled, { keyframes } from 'styled-components'
 import { inject, observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 import { withRouter } from 'react-router-dom'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTimes } from '@fortawesome/free-solid-svg-icons'
 
 import Loader from '../../general/loader'
 import { LinkButtonDarkGray } from '../../general/button'
@@ -24,7 +26,7 @@ class SubmitResponse extends Component {
     this.closeSubmitResponse = this.closeSubmitResponse.bind(this)
   }
 
-  handleOpenNewVersion = (identifier) => {
+  handleOpenNewVersion = identifier => {
     this.props.history.push(`/qvain/dataset/${identifier}`)
     this.closeSubmitResponse()
   }
@@ -65,7 +67,9 @@ class SubmitResponse extends Component {
         <ResponseContainerSuccess>
           <ResponseContainerContent>
             <ResponseLabel success>
-              <Translate content={`qvain.submitStatus.${response.is_draft ? 'draftSuccess' : 'success'}`} />
+              <Translate
+                content={`qvain.submitStatus.${response.is_draft ? 'draftSuccess' : 'success'}`}
+              />
             </ResponseLabel>
             <LinkToEtsin onClick={() => window.open(`/dataset/${identifier}`, '_blank')}>
               {goToEtsin}
@@ -74,7 +78,7 @@ class SubmitResponse extends Component {
           </ResponseContainerContent>
           <ResponseContainerCloseButtonContainer>
             <LinkButtonDarkGray type="button" onClick={this.closeSubmitResponse}>
-              x
+              <FontAwesomeIcon icon={faTimes} aria-hidden />
             </LinkButtonDarkGray>
           </ResponseContainerCloseButtonContainer>
         </ResponseContainerSuccess>
@@ -112,7 +116,7 @@ class SubmitResponse extends Component {
           </ResponseContainerContent>
           <ResponseContainerCloseButtonContainer>
             <LinkButtonDarkGray type="button" onClick={this.closeSubmitResponse}>
-              x
+              <FontAwesomeIcon icon={faTimes} aria-hidden />
             </LinkButtonDarkGray>
           </ResponseContainerCloseButtonContainer>
         </ResponseContainerSuccess>
@@ -143,7 +147,7 @@ class SubmitResponse extends Component {
           </ResponseContainerContent>
           <ResponseContainerCloseButtonContainer>
             <LinkButtonDarkGray type="button" onClick={this.closeSubmitResponse}>
-              x
+              <FontAwesomeIcon icon={faTimes} aria-hidden />
             </LinkButtonDarkGray>
           </ResponseContainerCloseButtonContainer>
         </ResponseContainerSuccess>
@@ -161,7 +165,7 @@ class SubmitResponse extends Component {
           </ResponseContainerContent>
           <ResponseContainerCloseButtonContainer>
             <LinkButtonDarkGray type="button" onClick={this.closeSubmitResponse}>
-              x
+              <FontAwesomeIcon icon={faTimes} aria-hidden />
             </LinkButtonDarkGray>
           </ResponseContainerCloseButtonContainer>
         </ResponseContainerError>

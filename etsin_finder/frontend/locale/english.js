@@ -486,6 +486,10 @@ const english = {
       infoTitle: 'Description info',
       infoText:
         'Give a descriptive title for your dataset. Also, write the description as detailed as you possibly can; explain how the dataset was created, how it is structured, and how it has been handled. Describe also the content.',
+      fieldHelpTexts: {
+        requiredForAll: 'Required for all datasets',
+        requiredToPublish: 'Required to save and publish',
+      },
       description: {
         langEn: 'ENGLISH',
         langFi: 'FINNISH',
@@ -504,7 +508,7 @@ const english = {
       issuedDate: {
         title: 'Issued date',
         infoText:
-          'Date of formal issuance (publication) of the resource. This value does not affect or reflect the visibility of the dataset itself.',
+          'Date of formal issuance (publication) of the resource. This value does not affect or reflect the visibility of the dataset itself. If this is left empty, current date is used as default value.',
         instructions: '',
         placeholder: 'Date',
       },

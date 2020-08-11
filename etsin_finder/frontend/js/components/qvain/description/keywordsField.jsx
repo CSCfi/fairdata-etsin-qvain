@@ -5,7 +5,9 @@ import { inject, observer } from 'mobx-react'
 import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
+import counterpart from 'counterpart'
 
+import Tooltip from '../../general/tooltipHover'
 import Card from '../general/card'
 import Label from '../general/label'
 import Button from '../../general/button'
@@ -59,6 +61,7 @@ class KeywordsField extends Component {
 
   render() {
     const { readonly, keywordsArray, keywordString } = this.props.Stores.Qvain
+    const { lang } = this.props.Stores.Locale
     const RenderedKeywords = keywordsArray.map((word) => (
       <Label color="#007fad" margin="0 0.5em 0.5em 0" key={word}>
         <PaddedWord>{word}</PaddedWord>
@@ -76,7 +79,12 @@ class KeywordsField extends Component {
     return (
       <Card>
         <LabelLarge htmlFor="keywordsInput">
-          <Translate content="qvain.description.keywords.title" /> *
+          <Tooltip
+            title={counterpart('qvain.description.fieldHelpTexts.requiredToPublish', { locale: lang })}
+            position="right"
+          >
+            <Translate content="qvain.description.keywords.title" /> *
+          </Tooltip>
         </LabelLarge>
         <Translate component="p" content="qvain.description.keywords.help" />
         {RenderedKeywords}

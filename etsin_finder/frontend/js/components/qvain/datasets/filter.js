@@ -1,9 +1,9 @@
 const filterFunc = (searchStr, dataset) => {
-  const titles = Object.values(dataset.research_dataset.title)
+  const titles = Object.values(dataset.research_dataset.title || [])
   const matches = titles.map((title) =>
     title.toLowerCase().includes(searchStr.toLowerCase())
   ) // ignore cases
-  return matches.includes(true)
+  return matches.includes(true) || (dataset.next_draft && dataset.next_draft.research_dataset && filterFunc(searchStr, dataset.next_draft))
 }
 
 export const filterGroupsByTitle = (searchStr, groups) => {
