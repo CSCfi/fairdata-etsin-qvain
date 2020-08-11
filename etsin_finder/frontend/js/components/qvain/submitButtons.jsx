@@ -271,7 +271,9 @@ class SubmitButtons extends Component {
       const data = { ...dataset, is_draft: dataset.state === 'draft' }
       this.success(data)
 
-      this.goToDatasets(original.identifier)
+      if (dataset.state === 'published') {
+        this.goToDatasets(original.identifier)
+      }
 
       return original.identifier
     } catch (error) {
