@@ -14,12 +14,14 @@ import Button from '../../general/button'
 import Label from '../general/label'
 
 import { Organization } from '../../../stores/view/qvain'
+import { organizationSelectSchema } from '../utils/formValidation'
 
 
 const INITIAL_STATE = {
   formData: {
     organization: undefined,
     department: undefined,
+    subDepartment: undefined,
     errors: {},
   },
 }
@@ -41,15 +43,35 @@ class FundingOrganization extends Component {
     this.setState({ formData: { ...formData, ...value } })
   }
 
+  onBlur = field => {
+    const { formData } = this.state
+    const { name, value, email } = formData[field]
+    organizationSelectSchema.validate({ name, identifier: value, email }, { abortEarly: false })
+      .then(() => {
+        const updatedFormData = { ...formData[field], errors: [] }
+        this.setState({ formData: { ...formData, [field]: updatedFormData } })
+      })
+      .catch(validationErrors => {
+        const errors = {}
+        validationErrors.inner.forEach(error => {
+          const path = error.path.split('.')
+          errors[path[0]] = error.errors
+        })
+        const updatedFormData = { ...formData[field], errors }
+        this.setState({ formData: { ...formData, [field]: updatedFormData } })
+      })
+  }
+
   onEdit = id => {
     const organizationToEdit = this.props.organizations.projectOrganizations
       .find(org => org.id === id)
     if (!organizationToEdit) return
-    const { organization, department } = organizationToEdit
+    const { organization, department, subDepartment } = organizationToEdit
     this.setState({
       formData: {
         organization: { ...this.organizationToSelectValue(organization) },
-        department: { ...this.organizationToSelectValue(department) }
+        department: { ...this.organizationToSelectValue(department) },
+        subDepartment: { ...this.organizationToSelectValue(subDepartment) }
       }
     })
   }
@@ -74,10 +96,11 @@ class FundingOrganization extends Component {
   }
 
   addOrganization = () => {
-    const { organization, department } = this.state.formData
-    // TODO: Validate
+    const { organization, department, subDepartment } = this.state.formData
     const params = [uuid(), { identifier: organization.value, name: organization.name }]
     if (department) params.push({ identifier: department.value, name: department.name })
+    if (subDepartment) params.push({ identifier: subDepartment.value, name: subDepartment.name })
+    if (!allOrganizationsAreValid(params)) return
     const organizationToAdd = Organization(...params)
     this.props.onAddOrganization(organizationToAdd)
     this.resetForm()
@@ -100,6 +123,7 @@ class FundingOrganization extends Component {
         />
         <OrganizationSelect
           onChange={this.onChange}
+          onBlur={this.onBlur}
           value={formData}
           name="organization"
           inputId="organization"
@@ -119,7 +143,7 @@ class FundingOrganization extends Component {
 const AddedOrganizations = ({ organizations = [], onRemove, onEdit, lang }) => (
   organizations.map(organization => (
     <OrganizationLabel color="#007fad" margin="0 0.5em 0.5em 0" key={organization.id}>
-      <PaddedWord onClick={() => onEdit(organization.id)}>{organization.organization.name[lang] || organization.name.und }</PaddedWord>
+      <PaddedWord onClick={() => onEdit(organization.id)}>{organization.organization.name[lang] || organization.organization.name.und }</PaddedWord>
       <FontAwesomeIcon
         onClick={() => onRemove(organization.id)}
         icon={faTimes}
@@ -128,6 +152,14 @@ const AddedOrganizations = ({ organizations = [], onRemove, onEdit, lang }) => (
     </OrganizationLabel>
   ))
 )
+
+function allOrganizationsAreValid(organizations) {
+  return (
+    organizations
+      .filter(organization => typeof organization === 'object')
+      .every(organization => organizationSelectSchema.isValidSync({ ...organization }))
+  )
+}
 
 const AddOrganizationContainer = styled.div`
   text-align: right;
