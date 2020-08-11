@@ -74,8 +74,8 @@ def add_restful_resources(app):
         Session, Files, Download
     )
     from etsin_finder.qvain_light_resources import (
-        ProjectFiles, FileDirectory, FileCharacteristics, UserDatasets,
-        QvainDataset, QvainDatasetEdit, QvainDatasetDelete
+        ProjectFiles, DirectoryFiles, FileCharacteristics,
+        QvainDatasets, QvainDataset
     )
     from etsin_finder.qvain_light_rpc import (
         QvainDatasetChangeCumulativeState, QvainDatasetRefreshDirectoryContent,
@@ -84,7 +84,6 @@ def add_restful_resources(app):
 
     from etsin_finder.qvain_light_rpc_v2 import (
         QvainDatasetChangeCumulativeState as V2QvainDatasetChangeCumulativeState,
-        QvainDatasetFixDeprecated as V2QvainDatasetFixDeprecated,
         QvainDatasetCreateNewVersion as V2QvainDatasetCreateNewVersion,
         QvainDatasetPublishDataset as V2QvainDatasetPublishDataset,
         QvainDatasetMergeDraft as V2QvainDatasetMergeDraft,
@@ -92,33 +91,33 @@ def add_restful_resources(app):
     )
 
     from etsin_finder.qvain_light_resources_v2 import (
-        QvainDatasetEdit as V2QvainDatasetEdit,
-        ProjectFiles as V2ProjectFiles,
-        DirectoryFiles as V2DirectoryFiles,
-        FileCharacteristics as V2FileCharacteristics,
-        UserDatasets as V2UserDatasets,
-        QvainDatasetDelete as V2QvainDatasetDelete,
         QvainDataset as V2QvainDataset,
-        QvainDatasetUserMetadata as V2QvainDatasetUserMetadata,
-        QvainDatasetProjects as V2QvainDatasetProjects,
-        QvainDatasetFiles as V2QvainDatasetFiles
+        QvainDatasets as V2QvainDatasets,
+        QvainDatasetFiles as V2QvainDatasetFiles,
+        FileCharacteristics as V2FileCharacteristics,
     )
 
+    from etsin_finder.common_resources_v2 import (
+        ProjectFiles as V2ProjectFiles,
+        DirectoryFiles as V2DirectoryFiles,
+        DatasetUserMetadata as V2DatasetUserMetadata,
+        DatasetProjects as V2DatasetProjects,
+    )
+
+    # Common Qvain Light and Etsin endpoints for Metax v2
+    api.add_resource(V2DatasetUserMetadata, '/api/v2/common/datasets/<string:cr_id>/user_metadata', endpoint='v2_dataset_user_metadata')
+    api.add_resource(V2DatasetProjects, '/api/v2/common/datasets/<string:cr_id>/projects', endpoint='v2_dataset_projects')
+    api.add_resource(V2ProjectFiles, '/api/v2/common/projects/<string:pid>/files', endpoint='v2_project_files')
+    api.add_resource(V2DirectoryFiles, '/api/v2/common/directories/<string:dir_id>/files', endpoint='v2_directory_files')
+
     # Qvain light API endpoints for Metax v2
-    api.add_resource(V2ProjectFiles, '/api/v2/files/project/<string:pid>', endpoint='v2_project_files')
-    api.add_resource(V2DirectoryFiles, '/api/v2/files/directory/<string:dir_id>', endpoint='v2_directory_files')
-    api.add_resource(V2FileCharacteristics, '/api/v2/files/file_characteristics/<string:file_id>', endpoint='v2_file_characteristics')
-    api.add_resource(V2UserDatasets, '/api/v2/datasets/<string:user_id>', endpoint='v2_user_datasets')
-    api.add_resource(V2QvainDatasetDelete, '/api/v2/dataset/<string:cr_id>', endpoint='v2_user_datasets_delete')
-    api.add_resource(V2QvainDataset, '/api/v2/dataset', endpoint='v2_dataset')
-    api.add_resource(V2QvainDatasetEdit, '/api/v2/datasets/edit/<string:cr_id>', endpoint='v2_dataset_edit')
-    api.add_resource(V2QvainDatasetUserMetadata, '/api/v2/datasets/user_metadata/<string:cr_id>', endpoint='v2_dataset_user_metadata')
-    api.add_resource(V2QvainDatasetProjects, '/api/v2/datasets/projects/<string:cr_id>', endpoint='v2_dataset_projects')
-    api.add_resource(V2QvainDatasetFiles, '/api/v2/datasets/files/<string:cr_id>', endpoint='v2_dataset_files')
+    api.add_resource(V2FileCharacteristics, '/api/v2/qvain/files/<string:file_id>/file_characteristics', endpoint='v2_file_characteristics')
+    api.add_resource(V2QvainDatasets, '/api/v2/qvain/datasets', endpoint='v2_datasets')
+    api.add_resource(V2QvainDataset, '/api/v2/qvain/datasets/<string:cr_id>', endpoint='v2_dataset_edit')
+    api.add_resource(V2QvainDatasetFiles, '/api/v2/qvain/datasets/<string:cr_id>/files', endpoint='v2_dataset_files')
 
     # Qvain light API RPC endpoints for Metax v2
     api.add_resource(V2QvainDatasetChangeCumulativeState, '/api/v2/rpc/datasets/change_cumulative_state', endpoint='v2_change_cumulative_state')
-    api.add_resource(V2QvainDatasetFixDeprecated, '/api/v2/rpc/datasets/fix_deprecated', endpoint='v2_fix_deprecated')
     api.add_resource(V2QvainDatasetCreateNewVersion, '/api/v2/rpc/datasets/create_new_version', endpoint='v2_create_new_version')
     api.add_resource(V2QvainDatasetCreateDraft, '/api/v2/rpc/datasets/create_draft', endpoint='v2_create_draft')
     api.add_resource(V2QvainDatasetPublishDataset, '/api/v2/rpc/datasets/publish_dataset', endpoint='v2_publish_dataset')
@@ -137,13 +136,11 @@ def add_restful_resources(app):
     api.add_resource(Download, '/api/dl')
 
     # Qvain light API endpoints
-    api.add_resource(ProjectFiles, '/api/files/project/<string:pid>')
-    api.add_resource(FileDirectory, '/api/files/directory/<string:dir_id>')
-    api.add_resource(FileCharacteristics, '/api/files/file_characteristics/<string:file_id>')
-    api.add_resource(UserDatasets, '/api/datasets/<string:user_id>')
-    api.add_resource(QvainDatasetDelete, '/api/dataset/<string:cr_id>')
-    api.add_resource(QvainDataset, '/api/dataset')
-    api.add_resource(QvainDatasetEdit, '/api/datasets/edit/<string:cr_id>')
+    api.add_resource(ProjectFiles, '/api/qvain/projects/<string:pid>/files')
+    api.add_resource(DirectoryFiles, '/api/qvain/directories/<string:dir_id>/files')
+    api.add_resource(FileCharacteristics, '/api/qvain/files/<string:file_id>/file_characteristics')
+    api.add_resource(QvainDatasets, '/api/qvain/datasets')
+    api.add_resource(QvainDataset, '/api/qvain/datasets/<string:cr_id>')
     # Qvain light API RPC endpoints
     api.add_resource(QvainDatasetChangeCumulativeState, '/api/rpc/datasets/change_cumulative_state')
     api.add_resource(QvainDatasetRefreshDirectoryContent, '/api/rpc/datasets/refresh_directory_content')
