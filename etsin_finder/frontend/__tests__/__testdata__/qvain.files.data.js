@@ -1851,13 +1851,12 @@ const directoriesByIdentifier = byIdentifier(directories)
 const existingByIdentifier = byIdentifier(existing)
 const notExistingByIdentifier = byIdentifier(notExisting)
 
-const reEdit = RegExp('^/api(/v2)?/datasets?/edit/(.*)')
-const reDatasetProjects = RegExp('^/api/v2/datasets/projects/(.*)')
-const reUserMetadata = RegExp('^/api/v2/datasets/user_metadata/(.*)')
-const reProject = RegExp('^/api(/v2)?/files/project/(.*)')
-const reDirectories = RegExp('^/api/v2/files/directory/(.*)')
-const reExisting = RegExp('^/api/v2/files/(.*)')
-//const reExisting = RegExp('^/api/v2/files/(.*)\\?dir_id=(.*)')
+const reEdit = RegExp('^/api(/v2)?/qvain/datasets/(.*)')
+const reDatasetProjects = RegExp('^/api/v2/common/datasets/(.*)/projects')
+const reUserMetadata = RegExp('^/api/v2/common/datasets/(.*)/user_metadata')
+const reProject = RegExp('^/api(/v2)?/common/projects/(.*)/files')
+const reDirectories = RegExp('^/api/v2/common/directories/(.*)/files')
+
 
 const paginate = (data, offset, limit) => {
   let remaining = limit

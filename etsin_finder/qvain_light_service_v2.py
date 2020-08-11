@@ -35,21 +35,14 @@ class MetaxQvainLightAPIService(MetaxQvainLightAPIServiceV1):
 
         if metax_qvain_api_config:
 
-            self.METAX_GET_DIRECTORY_FOR_PROJECT_URL = 'https://{0}/rest/v2/directories'.format(metax_qvain_api_config.get('HOST')) + \
-                                                       '/files?project={0}&path=%2F&include_parent'
-            self.METAX_GET_DIRECTORY = 'https://{0}/rest/v2/directories'.format(metax_qvain_api_config.get('HOST')) + \
-                                       '/{0}/files'
-            self.METAX_GET_FILE = 'https://{0}/rest/v2/files'.format(metax_qvain_api_config.get('HOST')) + \
+            self.METAX_GET_DIRECTORY_FOR_PROJECT_URL = None
+            self.METAX_GET_DIRECTORY = None
+            self.METAX_GET_FILE = 'https://{0}/rest/v2/files'.format(metax_qvain_api_config['HOST']) + \
                                   '/{0}'
             self.METAX_UPDATE_DATASET_FILES = 'https://{0}/rest/v2/datasets'.format(metax_qvain_api_config.get('HOST'), ) + \
                 '/{0}/files'
             self.METAX_GET_DATASET = 'https://{0}/rest/v2/datasets'.format(metax_qvain_api_config.get('HOST'), ) + \
                                      '/{0}'
-            self.METAX_GET_DATASET_USER_METADATA = 'https://{0}/rest/v2/datasets'.format(metax_qvain_api_config.get('HOST'), ) + \
-                '/{0}/files/user_metadata'
-            self.METAX_PUT_DATASET_USER_METADATA = self.METAX_GET_DATASET_USER_METADATA
-            self.METAX_GET_DATASET_PROJECTS = 'https://{0}/rest/v2/datasets'.format(metax_qvain_api_config.get('HOST'), ) + \
-                '/{0}/projects'
             self.METAX_GET_DATASETS_FOR_USER = 'https://{0}/rest/v2/datasets'.format(metax_qvain_api_config.get('HOST')) + \
                                                '?metadata_provider_user={0}&ordering=-date_created'
             self.METAX_GET_ALL_DATASETS_FOR_USER = 'https://{0}/rest/v2/datasets'.format(metax_qvain_api_config.get('HOST')) + \
@@ -195,116 +188,6 @@ class MetaxQvainLightAPIService(MetaxQvainLightAPIServiceV1):
         if metax_api_response.status_code == 412:
             return 'Resource has been modified since last publish', 412
 
-        return json_or_empty(metax_api_response), metax_api_response.status_code
-
-    def get_dataset_user_metadata(self, cr_id):
-        """Get user-defined file metadata for dataset from Metax.
-
-        Arguments:
-            cr_id (str): The identifier of the dataset.
-
-        Returns:
-            Metax response.
-
-        """
-        req_url = self.METAX_GET_DATASET_USER_METADATA.format(cr_id)
-        headers = {'Accept': 'application/json'}
-        try:
-            metax_api_response = requests.get(req_url,
-                                              headers=headers,
-                                              auth=(self.user, self.pw),
-                                              verify=self.verify_ssl,
-                                              timeout=10)
-            metax_api_response.raise_for_status()
-        except Exception as e:
-            if isinstance(e, requests.HTTPError):
-                log.warning(
-                    "Failed to get user metadata for dataset {0}\nResponse status code: {1}\nResponse text: {2}".format(
-                        cr_id,
-                        metax_api_response.status_code,
-                        json_or_empty(metax_api_response) or metax_api_response.text
-                    ))
-                return json_or_empty(metax_api_response) or metax_api_response.text, metax_api_response.status_code
-            else:
-                log.error("Error getting dataset {0}\n{1}".format(cr_id, e))
-            return {'Error_message': 'Error getting data from Metax.'}, metax_api_response.status_code
-        return json_or_empty(metax_api_response), metax_api_response.status_code
-
-    def update_dataset_user_metadata(self, cr_id, data):
-        """Update user-defined file metadata for dataset from Metax.
-
-        The data directory should contain arrays of dictionaries containing metadata in the following format:
-        data = {
-            directories: [{ identifier: x, ...metadata }, ...],
-            files: [...]
-        }
-        The existing user metadata in the listed directories and files will be replaced with the new values.
-        To remove metadata, set delete = true for a directory or file.
-
-        Arguments:
-            cr_id (str): The identifier of the dataset.
-            data (dict): Dictionary of file/directory metadata updates,
-
-        Returns:
-            Metax response.
-
-        """
-        req_url = self.METAX_PUT_DATASET_USER_METADATA.format(cr_id)
-        headers = {'Accept': 'application/json'}
-
-        try:
-            metax_api_response = requests.put(req_url,
-                                              headers=headers,
-                                              json=data,
-                                              auth=(self.user, self.pw),
-                                              verify=self.verify_ssl,
-                                              timeout=10)
-            metax_api_response.raise_for_status()
-        except Exception as e:
-            if isinstance(e, requests.HTTPError):
-                log.warning(
-                    "Failed to get dataset {0} user metadata\nResponse status code: {1}\nResponse text: {2}".format(
-                        cr_id,
-                        metax_api_response.status_code,
-                        json_or_empty(metax_api_response) or metax_api_response.text
-                    ))
-                return json_or_empty(metax_api_response) or metax_api_response.text, metax_api_response.status_code
-            else:
-                log.error("Error getting dataset {0}\n{1}".format(cr_id, e))
-            return {'Error_message': 'Error getting data from Metax.'}, metax_api_response.status_code
-        return json_or_empty(metax_api_response), metax_api_response.status_code
-
-    def get_dataset_projects(self, cr_id):
-        """Get dataset projects from Metax.
-
-        Arguments:
-            cr_id (str): The identifier of the dataset.
-
-        Returns:
-            Metax response.
-
-        """
-        req_url = self.METAX_GET_DATASET_PROJECTS.format(cr_id)
-        headers = {'Accept': 'application/json'}
-        try:
-            metax_api_response = requests.get(req_url,
-                                              headers=headers,
-                                              auth=(self.user, self.pw),
-                                              verify=self.verify_ssl,
-                                              timeout=10)
-            metax_api_response.raise_for_status()
-        except Exception as e:
-            if isinstance(e, requests.HTTPError):
-                log.warning(
-                    "Failed to get dataset {0}\nResponse status code: {1}\nResponse text: {2}".format(
-                        cr_id,
-                        metax_api_response.status_code,
-                        json_or_empty(metax_api_response) or metax_api_response.text
-                    ))
-                return json_or_empty(metax_api_response) or metax_api_response.text, metax_api_response.status_code
-            else:
-                log.error("Error getting dataset {0} projects\n{1}".format(cr_id, e))
-            return {'Error_message': 'Error getting data from Metax.'}, metax_api_response.status_code
         return json_or_empty(metax_api_response), metax_api_response.status_code
 
     def refresh_directory_content(self, cr_identifier, dir_identifier):
@@ -469,8 +352,6 @@ class MetaxQvainLightAPIService(MetaxQvainLightAPIServiceV1):
 
 _metax_api = MetaxQvainLightAPIService(app)
 
-get_directory = _metax_api.get_directory
-get_directory_for_project = _metax_api.get_directory_for_project
 get_file = _metax_api.get_file
 patch_file = _metax_api.patch_file
 get_datasets_for_user = _metax_api.get_datasets_for_user
@@ -478,9 +359,6 @@ create_dataset = _metax_api.create_dataset
 update_dataset = _metax_api.update_dataset
 update_dataset_files = _metax_api.update_dataset_files
 get_dataset = _metax_api.get_dataset
-get_dataset_user_metadata = _metax_api.get_dataset_user_metadata
-update_dataset_user_metadata = _metax_api.update_dataset_user_metadata
-get_dataset_projects = _metax_api.get_dataset_projects
 delete_dataset = _metax_api.delete_dataset
 change_cumulative_state = _metax_api.change_cumulative_state
 fix_deprecated_dataset = _metax_api.fix_deprecated_dataset

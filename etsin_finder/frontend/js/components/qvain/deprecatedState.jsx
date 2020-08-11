@@ -51,6 +51,8 @@ const FixDeprecatedButton = styled(TableButton)`
   width: auto;
   padding-left: 1rem;
   padding-right: 1rem;
+  flex-grow: 0;
+  max-width: none;
 `
 
 export default inject('Stores')(observer(DeprecatedState))
