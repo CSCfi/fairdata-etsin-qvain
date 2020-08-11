@@ -14,6 +14,7 @@ const ProjectForm = ({ onChange, formData, readonly }) => (
       htmlFor="titleEn"
       title="qvain.project.inputs.title.label"
       description="qvain.project.inputs.title.description"
+      required
     />
     <Translate
       component={Input}
@@ -88,10 +89,10 @@ ProjectForm.defaultProps = {
   readonly: false,
 }
 
-const ProjectLabel = ({ htmlFor, title, description }) => (
+const ProjectLabel = ({ htmlFor, title, description, required }) => (
   <>
     <LabelLarge htmlFor={htmlFor}>
-      <Translate content={title} />
+      <Translate content={title} /> { required && '*' }
     </LabelLarge>
     { description &&
       <Translate component="p" content={description} /> }
@@ -102,10 +103,12 @@ ProjectLabel.propTypes = {
   htmlFor: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   description: PropTypes.string,
+  required: PropTypes.bool,
 }
 
 ProjectLabel.defaultProps = {
   description: null,
+  required: false,
 }
 
 export default ProjectForm
