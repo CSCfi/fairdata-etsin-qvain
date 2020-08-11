@@ -25,6 +25,12 @@ export const TableButton = styled.button`
   &:hover {
     background-color: #ccc;
   }
+
+  :disabled {
+    color: ${lighten(0.2, '#4f4f4f')}
+    border: solid 1px ${lighten(0.1, '#ccc')};
+    background-color: ${lighten(0.1, '#ccc')};
+  }
 `
 
 export const CancelButton = styled.button`

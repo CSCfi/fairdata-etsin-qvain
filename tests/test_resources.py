@@ -24,10 +24,10 @@ class TestDatasetResources(BaseTest):
         :return:
         """
         r = unauthd_client.get('/api/dataset/nonexisting')
-        assert r.status_code == 400
+        assert r.status_code == 404
 
         r = authd_client.get('/api/dataset/nonexisting')
-        assert r.status_code == 400
+        assert r.status_code == 404
 
     def test_open_dataset_unauthd_get(self, unauthd_client, open_catalog_record):
         """

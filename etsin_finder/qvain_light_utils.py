@@ -4,6 +4,7 @@ from copy import deepcopy
 import json
 from flask import session
 from base64 import urlsafe_b64encode
+from datetime import date
 
 from etsin_finder.constants import SAML_ATTRIBUTES, DATA_CATALOG_IDENTIFIERS, ACCESS_TYPES
 from etsin_finder.cr_service import (
@@ -226,7 +227,7 @@ def data_to_metax(data, metadata_provider_org, metadata_provider_user):
             "curator": alter_role_data(data.get("actors"), "curator"),
             "rights_holder": alter_role_data(data.get("actors"), "rights_holder"),
             "contributor": alter_role_data(data.get("actors"), "contributor"),
-            "issued": data.get("issuedDate") if "issuedDate" in data else "",
+            "issued": data.get("issuedDate", date.today().strftime("%Y-%m-%d")),
             "other_identifier": other_identifiers_to_metax(data.get("identifiers")),
             "field_of_science": _to_metax_field_of_science(data.get("fieldOfScience")),
             "language": _to_metax_field_of_science(data.get("datasetLanguage")),
@@ -266,24 +267,9 @@ def get_dataset_creator(cr_id):
 
     """
     dataset = get_catalog_record(cr_id, False)
+    if not dataset:
+        return None
     return dataset.get('metadata_provider_user')
-
-def can_access_dataset(cr_id):
-    """
-    If dataset is a draft, only the owner can access it.
-
-    Arguments:
-        cr_id {string} -- Identifier of datset.
-
-    Returns:
-        [type] -- [description]
-
-    """
-    cr = get_catalog_record(cr_id, False)
-    user_id = session.get("samlUserdata", {}).get(SAML_ATTRIBUTES["CSC_username"], [''])[0]
-    if is_draft(cr) and not is_catalog_record_owner(cr, user_id):
-        return False
-    return True
 
 def remove_deleted_datasets_from_results(result):
     """Remove datasets marked as removed from results.
@@ -340,7 +326,7 @@ def edited_data_to_metax(data, original):
         "curator": alter_role_data(data.get("actors"), "curator"),
         "rights_holder": alter_role_data(data.get("actors"), "rights_holder"),
         "contributor": alter_role_data(data.get("actors"), "contributor"),
-        "issued": data.get("issuedDate") if "issuedDate" in data else "",
+        "issued": data.get("issuedDate", date.today().strftime("%Y-%m-%d")),
         "other_identifier": other_identifiers_to_metax(data.get("identifiers")),
         "field_of_science": _to_metax_field_of_science(data.get("fieldOfScience")),
         "language": _to_metax_dataset_language(data.get("datasetLanguage")),

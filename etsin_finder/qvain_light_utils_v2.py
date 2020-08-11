@@ -44,7 +44,7 @@ def check_dataset_creator(cr_id):
     """Verify that user is authenticated and can edit the dataset.
 
     Arguments:
-        cr_id (str): Identifier of datset.
+        cr_id (str): Identifier of dataset.
 
     Returns:
         error {tuple}: Reason (message, status_code) for failed verification. Returns None if verification was successful.
@@ -59,8 +59,6 @@ def check_dataset_creator(cr_id):
         log.warning('User: \"{0}\" is not the creator of the dataset. Editing not allowed.'.format(csc_username))
         return {"PermissionError": "User is not allowed to edit the dataset."}, 403
     return None
-
-can_access_dataset = qvain_light_utils.can_access_dataset
 
 remove_deleted_datasets_from_results = qvain_light_utils.remove_deleted_datasets_from_results
 
