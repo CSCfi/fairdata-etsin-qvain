@@ -3,6 +3,7 @@ import { inject, observer } from 'mobx-react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
+import { tint } from 'polished'
 
 import { Row, BodyCell } from '../general/table'
 import { DATA_CATALOG_IDENTIFIER } from '../../../utils/constants'
@@ -109,7 +110,7 @@ function Dataset(props) {
   const { dataset, currentTimestamp } = props
   const actions = getActions()
   return (
-    <Row key={dataset.identifier} tabIndex="0">
+    <DatasetRow key={dataset.identifier} tabIndex="0" highlight={props.highlight}>
       <BodyCellWordWrap style={titleCellStyle}>
         {props.indent && <Marker />}
         {getTitle(dataset)}
@@ -147,7 +148,7 @@ function Dataset(props) {
           </Dropdown>
         )}
       </BodyCellActions>
-    </Row>
+    </DatasetRow>
   )
 }
 
@@ -159,11 +160,24 @@ Dataset.propTypes = {
   handleCreateNewVersion: PropTypes.func.isRequired,
   openRemoveModal: PropTypes.func.isRequired,
   indent: PropTypes.bool,
+  highlight: PropTypes.bool,
 }
 
 Dataset.defaultProps = {
   indent: false,
+  highlight: false,
 }
+
+const DatasetRow = styled(Row)`
+  ${props =>
+    props.highlight &&
+    `
+      background: ${tint(0.7, props.theme.color.success)};
+      &:hover {
+        background: ${tint(0.8, props.theme.color.success)};
+      }
+    `}
+`
 
 const Marker = styled.div`
   position: absolute;
