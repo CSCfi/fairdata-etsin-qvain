@@ -442,6 +442,7 @@ const english = {
           years: ' years ago',
         },
       },
+      moreActions: 'More',
       moreVersions: {
         one: 'Show 1 more version',
         other: 'Show %(count)s more versions',
@@ -453,10 +454,23 @@ const english = {
       editButton: 'Edit',
       editDraftButton: 'Edit draft',
       deleteButton: 'Delete',
-      confirmDelete: {
-        text: 'Are you sure you want to delete this dataset? Deleting the dataset will remove it from Qvain, and Etsin Search cannot find it anymore. Landing page for the dataset will NOT be removed.',
-        ok: 'Delete',
-        cancel: 'Cancel',
+      revertButton: 'Revert changes',
+      remove: {
+        confirm: {
+          published: {
+            text: 'Are you sure you want to delete this dataset? Deleting the dataset will remove it from Qvain, and Etsin Search cannot find it anymore. Landing page for the dataset will NOT be removed.',
+            ok: 'Delete',
+          },
+          draft: {
+            text: 'Are you sure you want to delete this draft? The draft will be removed permanently.',
+            ok: 'Delete',
+          },
+          changes: {
+            text: 'Are you sure you want to revert all unpublished changes made to this dataset?',
+            ok: 'Revert',
+          },
+          cancel: 'Cancel'
+        }
       },
       goToEtsin: 'View in Etsin',
       goToEtsinDraft: 'Preview in Etsin',
