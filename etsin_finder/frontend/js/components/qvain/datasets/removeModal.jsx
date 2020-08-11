@@ -21,7 +21,7 @@ class RemoveModal extends Component {
     if (onlyChanges && dataset.next_draft) {
       return 'changes'
     }
-    if (dataset.is_draft) {
+    if (dataset.state === 'draft') {
       return 'draft'
     }
     return 'published'
