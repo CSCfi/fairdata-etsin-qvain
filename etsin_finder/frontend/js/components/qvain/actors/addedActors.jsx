@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types';
 import { inject, observer } from 'mobx-react'
+import translate from 'counterpart'
 import Translate from 'react-translate-component'
 import styled from 'styled-components'
-import counterpart from 'counterpart'
 
 import {
   ButtonGroup,
@@ -37,9 +37,9 @@ export class AddedActorsBase extends Component {
     const { actors } = this.props.Stores.Qvain.Actors
     return (
       <>
-        <LabelLarge tabIndex="0">
+        <LabelLarge htmlFor="addedActors">
           <Tooltip
-            title={counterpart('qvain.description.fieldHelpTexts.requiredToPublish', { locale: lang })}
+            title={translate('qvain.description.fieldHelpTexts.requiredToPublish')}
             position="right"
           >
             <Translate content="qvain.actors.added.title" /> *
@@ -50,10 +50,14 @@ export class AddedActorsBase extends Component {
           (<Translate tabIndex="0" component="p" content="qvain.actors.added.noneAddedNotice" />)
         }
         {actors.map((addedActor) => (
-          <ButtonGroup tabIndex="0" key={addedActor.uiid}>
+          <ButtonGroup
+            id="addedActors"
+            tabIndex="0"
+            key={addedActor.uiid}
+          >
             <ActorLabel>
               <ActorIcon actor={addedActor} style={{ marginRight: '8px' }} />
-              {getActorName(addedActor, lang)}{addedActor.roles.map(role => (` / ${counterpart(`qvain.actors.add.checkbox.${role}`)}`))}
+              {getActorName(addedActor, lang)}{addedActor.roles.map(role => (` / ${translate(`qvain.actors.add.checkbox.${role}`)}`))}
             </ActorLabel>
             <ButtonContainer>
               <Translate
