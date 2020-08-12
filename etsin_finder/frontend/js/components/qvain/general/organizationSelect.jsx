@@ -11,6 +11,7 @@ import { inject, observer } from 'mobx-react'
 import { getOrganizationSearchUrl } from '../../../stores/view/qvain.actors'
 import { Input, Label } from './form'
 import ValidationError from './validationError'
+import { DeleteButton } from './buttons'
 
 
 class OrganizationSelect extends Component {
@@ -74,7 +75,16 @@ class OrganizationSelect extends Component {
   }
 
   onOrganizationChange = value => {
+    if (!value) {
+      return this.props.onChange({
+        organization: null,
+        department: null,
+        subDepartment: null,
+      })
+    }
     const { formIsOpen } = value
+    const { organization } = this.props.value
+    const formIsOpenFromProps = organization ? organization.formIsOpen : false
     const updatedFormData = { organization: value }
 
     if (formIsOpen) this.clearOptions()
@@ -83,10 +93,22 @@ class OrganizationSelect extends Component {
       updatedFormData.department = null
       updatedFormData.subDepartment = null
     }
-    this.props.onChange(updatedFormData)
+    // TODO: Clean this, if user changes from add manually to
+    // select from list --> dep and sub dep needs to be cleared.
+    if (formIsOpen && !formIsOpenFromProps) {
+      updatedFormData.department = null
+      updatedFormData.subDepartment = null
+    }
+    return this.props.onChange(updatedFormData)
   }
 
   onDepartmentChange = value => {
+    if (!value) {
+      return this.props.onChange({
+        department: null,
+        subDepartment: null,
+      })
+    }
     const { organization } = this.props.value
     const { formIsOpen } = value
 
@@ -96,7 +118,7 @@ class OrganizationSelect extends Component {
       this.fetchOptions(organization.value, value.value)
       updatedFormData.subDepartment = null
     }
-    this.props.onChange(updatedFormData)
+    return this.props.onChange(updatedFormData)
   }
 
   onSubdepartmentChange = value => {
@@ -109,7 +131,7 @@ class OrganizationSelect extends Component {
     const { options } = this.state
 
     return (
-      <>
+      <SelectContainer>
         <Select
           onChange={this.onOrganizationChange}
           onBlur={() => this.props.onBlur('organization')}
@@ -119,6 +141,7 @@ class OrganizationSelect extends Component {
           options={options.organization[lang] || []}
           placeholder={placeholder.organization}
           creatable={creatable}
+          allowReset={value.organization && !value.department}
         />
         <Department>
           { value.organization && (
@@ -131,6 +154,7 @@ class OrganizationSelect extends Component {
               options={options.department ? options.department[lang] : []}
               placeholder={placeholder.department}
               creatable={creatable}
+              allowReset={value.department && !value.subDepartment}
             />
           )}
           <Department>
@@ -144,16 +168,22 @@ class OrganizationSelect extends Component {
                 options={options.subDepartment ? options.subDepartment[lang] : []}
                 placeholder={placeholder.department}
                 creatable={creatable}
+                allowReset={Boolean(value.subDepartment)}
               />
             )}
           </Department>
         </Department>
-      </>
+      </SelectContainer>
     )
   }
 }
 
 const CreatableSelectComponent = props => {
+  /**
+   * Open form if add manually is selected. This function gets triggered
+   * only from select option change.
+   * @param {Object} option
+   */
   const onChange = option => {
     if (option.value === 'create') {
       props.onChange({
@@ -165,6 +195,8 @@ const CreatableSelectComponent = props => {
       })
     } else props.onChange({ ...option, formIsOpen: false })
   }
+
+  const onReset = () => props.onChange(null)
 
   const onFormChange = event => {
     const { name, value } = event.target
@@ -200,7 +232,11 @@ const CreatableSelectComponent = props => {
     }]
   }
 
-  const formIsOpen = () => props.value && props.value.formIsOpen
+  const formIsOpen = () => (
+    props.value
+      ? props.value.formIsOpen
+      : false
+    )
 
   const renderForm = () => {
     if (!formIsOpen()) return null
@@ -249,26 +285,40 @@ const CreatableSelectComponent = props => {
     )
   }
 
-  const { name, inputId, value, placeholder } = props
+  const { name, inputId, value, placeholder, allowReset } = props
   const { readonly } = props.Stores.Qvain
   return (
-    <>
-      <Translate
-        component={ReactSelect}
-        name={name}
-        inputId={inputId}
-        isDisabled={readonly}
-        onChange={onChange}
-        value={value}
-        className="basic-single"
-        classNamePrefix="select"
-        options={getOptions()}
-        attributes={{ placeholder }}
-      />
-      { renderForm() }
-    </>
+    <div className="row no-gutters">
+      <div className="col-11">
+        <Translate
+          component={StyledSelect}
+          name={name}
+          inputId={inputId}
+          isDisabled={readonly}
+          onChange={onChange}
+          value={value}
+          className="basic-single"
+          classNamePrefix="select"
+          options={getOptions()}
+          attributes={{ placeholder }}
+        />
+        { renderForm() }
+      </div>
+      <div className="col-1">
+        { allowReset
+          ? (
+            <DeleteButton
+              type="button"
+              onClick={onReset}
+              style={{ margin: '0 0 0 .5rem', width: 38, height: 38 }}
+            />
+          ) : null }
+      </div>
+    </div>
   )
 }
+
+const StyledSelect = styled(ReactSelect)`flex-grow: 1;`
 
 CreatableSelectComponent.propTypes = {
   Stores: PropTypes.object.isRequired,
@@ -280,6 +330,7 @@ CreatableSelectComponent.propTypes = {
   name: PropTypes.string.isRequired,
   inputId: PropTypes.string.isRequired,
   creatable: PropTypes.bool,
+  allowReset: PropTypes.bool,
 }
 
 CreatableSelectComponent.defaultProps = {
@@ -287,6 +338,7 @@ CreatableSelectComponent.defaultProps = {
   placeholder: null,
   creatable: true,
   value: undefined,
+  allowReset: false,
 }
 
 const Select = inject('Stores')(observer(CreatableSelectComponent))
@@ -331,6 +383,8 @@ function getOption(hit, language) {
     }
   }
 }
+
+const SelectContainer = styled.div`padding-left: 1.5rem;`
 
 const Department = styled.div`
   margin-left: 1rem;
