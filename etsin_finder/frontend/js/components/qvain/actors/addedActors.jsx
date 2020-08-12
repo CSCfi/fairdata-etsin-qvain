@@ -37,7 +37,7 @@ export class AddedActorsBase extends Component {
     const { actors } = this.props.Stores.Qvain.Actors
     return (
       <>
-        <LabelLarge htmlFor="addedActors">
+        <LabelLarge>
           <Tooltip
             title={translate('qvain.description.fieldHelpTexts.requiredToPublish')}
             position="right"
@@ -51,7 +51,6 @@ export class AddedActorsBase extends Component {
         }
         {actors.map((addedActor) => (
           <ButtonGroup
-            id="addedActors"
             tabIndex="0"
             key={addedActor.uiid}
           >
