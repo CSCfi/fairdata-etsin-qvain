@@ -63,14 +63,13 @@ const projectsToMetax = projects => projects.map(project => {
     delete organization.id
     const organizationToBackend = {}
     for (const key in organization) {
-      if (Object.prototype.hasOwnProperty.call(organization, key)) {
-        const { name, identifier } = organization[key]
-        organizationToBackend[key] = { name, identifier }
+      if (Object.prototype.hasOwnProperty.call(organization, key) && organization[key]) {
+        const { name, identifier, email } = organization[key]
+        organizationToBackend[key] = { name, identifier, email }
       }
     }
     return organizationToBackend
   })
-  delete project.id
   return { details, organizations }
 })
 
