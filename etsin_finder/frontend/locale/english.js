@@ -1103,6 +1103,7 @@ const english = {
             department: 'Select a department',
           },
           addButton: 'Add organization',
+          editButton: 'Edit organization',
           validation: 'At least one producer organization is required'
         }
       }

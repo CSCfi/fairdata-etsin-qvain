@@ -63,7 +63,8 @@ class Project extends Component {
 
   onAddOrganization = organization => {
     const { organizations } = this.state
-    const newProjectOrganizations = organizations.projectOrganizations.concat([organization])
+    const oldProjectOrganizations = organizations.projectOrganizations.filter(org => org.id !== organization.id)
+    const newProjectOrganizations = oldProjectOrganizations.concat([organization])
     this.setState({
       organizations: { ...organizations, projectOrganizations: newProjectOrganizations }
     })
