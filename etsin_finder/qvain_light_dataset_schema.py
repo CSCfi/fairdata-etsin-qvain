@@ -71,7 +71,7 @@ class ActorValidationSchema(Schema):
 class LicenseValidationSchema(Schema):
     """Validation schema for licenses."""
 
-    identifier = fields.Str()
+    identifier = fields.URL()
     name = fields.Dict()
 
 class DatasetValidationSchema(Schema):
@@ -119,7 +119,6 @@ class DatasetValidationSchema(Schema):
     embargoDate = fields.Str()
     restrictionGrounds = fields.Str()
     license = fields.List(fields.Nested(LicenseValidationSchema))
-    # otherLicenseUrl = fields.Str()
     dataCatalog = fields.Str()
     cumulativeState = fields.Int(OneOf([0, 1, 2]))
     files = fields.List(fields.Dict())

@@ -423,10 +423,12 @@ describe('Qvain.RightsAndLicenses', () => {
     stores.Qvain.setAccessType(AccessTypeConstructor(undefined, ACCESS_TYPE_URL.EMBARGO))
     return mount(
       <Provider Stores={stores}>
-        <>
-          <License />
-          <AccessType />
-        </>
+        <ThemeProvider theme={etsinTheme}>
+          <>
+            <License />
+            <AccessType />
+          </>
+        </ThemeProvider>
       </Provider>
     )
   }

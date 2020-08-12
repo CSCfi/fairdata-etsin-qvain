@@ -324,11 +324,6 @@ class Qvain {
   }
 
   @action
-  setLicenseArray = licenses => {
-    this.licenseArray = licenses
-  }
-
-  @action
   addLicense = license => {
     if (license !== undefined) {
       if (
@@ -354,7 +349,7 @@ class Qvain {
   @action
   removeLicense = license => {
     this.licenseArray = this.licenseArray.filter(
-      l => l.url !== license.url
+      l => l.identifier !== license.identifier
     )
     this.changed = true
   }
@@ -824,39 +819,19 @@ class Qvain {
       : undefined
     this.embargoExpDate = embargoDate || undefined
 
-    // License
-    // const l = researchDataset.access_rights.license
-    //   ? researchDataset.access_rights.license[0]
-    //   : undefined
-    // if (l !== undefined) {
-    //   if (l.identifier !== undefined) {
-    //     this.license = l ? License(l.title, l.identifier) : License(undefined, LICENSE_URL.CCBY4)
-    //   } else {
-    //     this.license = l
-    //       ? License(
-    //         {
-    //           en: 'Other (URL)',
-    //           fi: 'Muu (URL)',
-    //         },
-    //         'other'
-    //       )
-    //       : License(undefined, LICENSE_URL.CCBY4)
-    //     this.otherLicenseUrl = l.license
-    //   }
-    // } else {
-    //   this.license = undefined
-    // }
+    // Licenses
     const l = researchDataset.access_rights.license
       ? researchDataset.access_rights.license
       : undefined
     if (l !== undefined) {
+      this.license = undefined
       this.licenseArray = l.map(license => {
         if (license.identifier !== undefined) {
           return License(license.title, license.identifier)
         }
         const name = {
-          en: `Other (URL): ${license.licence}`,
-          fi: `Muu (URL): ${license.licence}`,
+          en: `Other (URL): ${license.license}`,
+          fi: `Muu (URL): ${license.license}`,
         }
         return License(name, license.license)
       })

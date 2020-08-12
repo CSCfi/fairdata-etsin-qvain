@@ -49,7 +49,6 @@ export class License extends Component {
       getReferenceData('license')
         .then(res => {
           const list = res.data.hits.hits
-          console.log(list);
           const refsEn = list.map(ref => ({
             value: ref._source.uri,
             label: ref._source.label.en,
@@ -115,12 +114,6 @@ export class License extends Component {
         })
       })
   }
-
-  // handleChange = newValue => {
-  //   const { setLicense, addLicense } = this.props.Stores.Qvain
-  //   setLicense(newValue)
-  //   addLicense()
-  // }
 
   render() {
     const { options, errorMessage } = this.state

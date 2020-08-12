@@ -72,7 +72,6 @@ const handleSubmitToBackend = (Env, values) => {
       : undefined,
     embargoDate: values.embargoExpDate,
     license: values.licenseArray ? values.licenseArray : undefined,
-    // otherLicenseUrl: values.otherLicenseUrl,
     // Send no values if empty instead of empty values.
     remote_resources: values.externalResources.length > 0 ? values.externalResources : [],
     dataCatalog: values.dataCatalog,

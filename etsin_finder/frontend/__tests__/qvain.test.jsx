@@ -311,10 +311,12 @@ describe('Qvain validation', () => {
       title: { en: 'title' },
       description: { en: 'description' },
       keywords: ['keyword'],
-      license: {
-        name: { en: 'Creative Commons Attribution 4.0 International (CC BY 4.0)' },
-        identifier: 'http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0',
-      },
+      license: [
+        {
+          name: { en: 'Creative Commons Attribution 4.0 International (CC BY 4.0)' },
+          identifier: 'http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0',
+        }
+      ],
       dataCatalog: 'urn:nbn:fi:att:data-catalog-ida',
       actors,
       accessType: {
