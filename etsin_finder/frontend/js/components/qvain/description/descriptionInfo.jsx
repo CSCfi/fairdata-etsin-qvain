@@ -11,7 +11,7 @@ const DescriptionInfo = () => (
     <Translate component="p" content="qvain.description.fieldOfScience.infoText" />
     <Translate component="h3" content="qvain.description.keywords.title" />
     <Translate component="p" content="qvain.description.keywords.infoText" />
-    <Translate component="p" content="qvain.description.subjectHeadings.title" />
+    <Translate component="h3" content="qvain.description.subjectHeadings.title" />
     <Translate component="p" content="qvain.description.subjectHeadings.infoText" />
   </>
 )
