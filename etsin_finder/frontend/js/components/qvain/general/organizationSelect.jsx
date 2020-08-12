@@ -59,11 +59,11 @@ class OrganizationSelect extends Component {
     await this.fetchOptions(parentId, departmentParentId)
   }
 
-  clearOptions = () => {
+  clearOptions = all => {
     const { options } = this.state
-    this.setState({
-      options: { ...options, department: {}, subDepartment: {} }
-    })
+    const updatedOptions = { ...options, subDepartment: {} }
+    if (all) updatedOptions.department = {}
+    this.setState({ options: updatedOptions })
   }
 
   fetchOptions = async (parentId, departmentParentId) => {
@@ -87,7 +87,7 @@ class OrganizationSelect extends Component {
     const formIsOpenFromProps = organization ? organization.formIsOpen : false
     const updatedFormData = { organization: value }
 
-    if (formIsOpen) this.clearOptions()
+    if (formIsOpen) this.clearOptions(true)
     else {
       this.fetchOptions(value.value)
       updatedFormData.department = null
@@ -113,7 +113,7 @@ class OrganizationSelect extends Component {
     const { formIsOpen } = value
 
     const updatedFormData = { department: value }
-    if (formIsOpen) this.clearOptions()
+    if (formIsOpen) this.clearOptions(false)
     else {
       this.fetchOptions(organization.value, value.value)
       updatedFormData.subDepartment = null
