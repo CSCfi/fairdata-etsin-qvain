@@ -4,6 +4,9 @@ const fieldsOfScienceToMetaxMethod = fieldsOfScience =>
 const subjectHeadingsToMetaxTheme = subjectHeadingsArray =>
   subjectHeadingsArray.map(subject => ({ identifier: subject.url }))
 
+const datasetLanguageToMetax = datasetLanguage =>
+  datasetLanguage.map(language => language.url)
+
 const directoriesToMetax = (selectedDirectories, existingDirectories) => {
   const selectedDirectoryIdentifiers = selectedDirectories
     ? selectedDirectories.map(sd => sd.identifier)
@@ -51,7 +54,7 @@ const filesToMetax = (selectedFiles, existingFiles) => {
   return parsedFileData
 }
 
-const handleSubmitToBackend = values => {
+const handleSubmitToBackend = (Env, values) => {
   const actors = values.Actors.toBackend()
 
   const spatial = values.Spatials.toBackend()
@@ -62,6 +65,7 @@ const handleSubmitToBackend = values => {
     issuedDate: values.issuedDate,
     identifiers: values.otherIdentifiersArray,
     fieldOfScience: fieldsOfScienceToMetaxMethod(values.fieldOfScienceArray),
+    datasetLanguage: datasetLanguageToMetax(values.datasetLanguageArray),
     keywords: values.keywordsArray,
     theme: subjectHeadingsToMetaxTheme(values.subjectHeadingsArray),
     actors,
@@ -85,7 +89,7 @@ const handleSubmitToBackend = values => {
     obj.original = values.original
   }
 
-  if (!values.metaxApiV2) {
+  if (!Env.metaxApiV2) {
     obj.files = filesToMetax(values.selectedFiles, values.existingFiles)
     obj.directories = directoriesToMetax(values.selectedDirectories, values.existingDirectories)
   }

@@ -1,8 +1,8 @@
-import uuid from 'uuid/v4'
+import { v4 as uuidv4 } from 'uuid';
 import { observable, action } from 'mobx'
 
 const Spatial = (
-  uiid = uuid(),
+  uiid = uuidv4(),
   name = '',
   altitude = 0,
   address = '',
@@ -103,12 +103,12 @@ export const Location = (name, url) => ({
 })
 
 export const SpatialModel = spatialData => ({
-  uiid: uuid(),
+  uiid: uuidv4(),
   name: spatialData.geographic_name,
   altitude: spatialData.alt,
   address: spatialData.full_address,
   geometry: spatialData.as_wkt
-    ? spatialData.as_wkt.map(geo => ({ value: geo, uiid: uuid() }))
+    ? spatialData.as_wkt.map(geo => ({ value: geo, uiid: uuidv4() }))
     : [],
   location: spatialData.place_uri ? Location(spatialData.place_uri.pref_label, spatialData.place_uri.identifier) : undefined,
 })

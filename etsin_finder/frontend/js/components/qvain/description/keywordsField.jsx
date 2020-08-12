@@ -4,6 +4,7 @@ import Translate from 'react-translate-component'
 import { inject, observer } from 'mobx-react'
 import styled from 'styled-components'
 
+import Tooltip from '../../general/tooltipHover'
 import Card from '../general/card'
 import AddedValue from '../general/addedValue'
 import Button from '../../general/button'
@@ -69,7 +70,12 @@ class KeywordsField extends Component {
     return (
       <Card>
         <LabelLarge htmlFor="keywordsInput">
-          <Translate content="qvain.description.keywords.title" /> *
+          <Tooltip
+            title={counterpart('qvain.description.fieldHelpTexts.requiredToPublish', { locale: lang })}
+            position="right"
+          >
+            <Translate content="qvain.description.keywords.title" /> *
+          </Tooltip>
         </LabelLarge>
         <Translate component="p" content="qvain.description.keywords.help" />
         {RenderedKeywords}

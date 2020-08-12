@@ -8,6 +8,7 @@ import Description from '../js/components/qvain/description'
 import DescriptionField from '../js/components/qvain/description/descriptionField'
 import OtherIdentifierField from '../js/components/qvain/description/otherIdentifierField'
 import FieldOfScienceField from '../js/components/qvain/description/fieldOfScienceField'
+import LanguageField from '../js/components/qvain/description/languageField'
 import KeywordsField from '../js/components/qvain/description/keywordsField'
 import SubjectHeadingsField from '../js/components/qvain/description/subjectHeadingsField'
 import RightsAndLicenses from '../js/components/qvain/licenses'
@@ -15,12 +16,15 @@ import { License } from '../js/components/qvain/licenses/licenses'
 import { AccessType } from '../js/components/qvain/licenses/accessType'
 import RestrictionGrounds from '../js/components/qvain/licenses/resctrictionGrounds'
 import EmbargoExpires from '../js/components/qvain/licenses/embargoExpires'
-import { ACCESS_TYPE_URL, LICENSE_URL } from '../js/utils/constants'
+import { ACCESS_TYPE_URL, LICENSE_URL, DATA_CATALOG_IDENTIFIER } from '../js/utils/constants'
 import { qvainFormSchema } from '../js/components/qvain/utils/formValidation'
 import { ExternalFilesBase } from '../js/components/qvain/files/external/externalFiles'
+import DoiSelection from '../js/components/qvain/files/doiSelection'
 import { ButtonGroup } from '../js/components/qvain/general/buttons'
+import { Checkbox } from '../js/components/qvain/general/form'
 import { SlidingContent } from '../js/components/qvain/general/card'
-import QvainStore, {
+import Env from '../js/stores/domain/env'
+import QvainStoreClass, {
   ExternalResource,
   AccessType as AccessTypeConstructor,
   License as LicenseConstructor,
@@ -33,9 +37,12 @@ import {
   groupDatasetsByVersionSet,
 } from '../js/components/qvain/datasets/filter'
 
+const QvainStore = new QvainStoreClass(Env)
+
 const getStores = () => {
-  QvainStore.setMetaxApiV2(true)
+  Env.setMetaxApiV2(true)
   return {
+    Env,
     Qvain: QvainStore,
     Locale: LocaleStore,
   }
@@ -133,6 +140,10 @@ describe('Qvain.Description', () => {
   })
   it('should render <FieldOfScienceField />', () => {
     const component = shallow(<FieldOfScienceField Stores={getStores()} />)
+    expect(component).toMatchSnapshot()
+  })
+  it('should render <LanguageField />', () => {
+    const component = shallow(<LanguageField Stores={getStores()} />)
     expect(component).toMatchSnapshot()
   })
   it('should render <KeywordsField />', () => {
@@ -288,6 +299,92 @@ describe('Qvain.ExternalFiles', () => {
     )
     externalFiles.update()
     expect(externalFiles.find(ButtonGroup).length).toBe(1)
+  })
+})
+
+describe('Qvain DOI selection', () => {
+  let Qvain
+  let Stores
+  const DoiSelectionBase = DoiSelection.wrappedComponent
+  beforeEach(() => {
+    Stores = getStores()
+    Qvain = Stores.Qvain
+    Qvain.resetQvainStore()
+  })
+
+  it('should not render DOI selector for ATT catalog', () => {
+    const { setDataCatalog } = Qvain
+    setDataCatalog(DATA_CATALOG_IDENTIFIER.ATT)
+    const component = shallow(<DoiSelectionBase Stores={Stores} />)
+    expect(component.type()).toBe(null)
+  })
+
+  it('should not render DOI selector for PAS catalog', () => {
+    const { setDataCatalog } = Qvain
+    setDataCatalog(DATA_CATALOG_IDENTIFIER.PAS)
+    const component = shallow(<DoiSelectionBase Stores={Stores} />)
+    expect(component.type()).toBe(null)
+  })
+
+  it('renders DOI selector for new dataset with IDA catalog', () => {
+    const { setDataCatalog } = Qvain
+    Qvain.resetQvainStore()
+    setDataCatalog(DATA_CATALOG_IDENTIFIER.IDA)
+
+    const component = shallow(<DoiSelectionBase Stores={Stores} />)
+    const checkbox = component.find(Checkbox)
+    expect(checkbox.prop('checked')).toBe(false)
+  })
+
+  it('should not render DOI selector for published dataset', () => {
+    const { setDataCatalog, setOriginal } = Qvain
+    Qvain.resetQvainStore()
+    setDataCatalog(DATA_CATALOG_IDENTIFIER.IDA)
+    setOriginal({
+      state: 'published',
+    })
+
+    const component = shallow(<DoiSelectionBase Stores={Stores} />)
+    expect(component.type()).toBe(null)
+  })
+
+  it('renders DOI selector for new draft', () => {
+    const { setDataCatalog, setOriginal } = Qvain
+    Qvain.resetQvainStore()
+    setDataCatalog(DATA_CATALOG_IDENTIFIER.IDA)
+    setOriginal({
+      state: 'draft',
+    })
+
+    const component = shallow(<DoiSelectionBase Stores={Stores} />)
+    const checkbox = component.find(Checkbox)
+    expect(checkbox.prop('checked')).toBe(false)
+  })
+
+  it('should not render DOI selector for draft of published dataset', () => {
+    const { setDataCatalog, setOriginal } = Qvain
+    Qvain.resetQvainStore()
+    setDataCatalog(DATA_CATALOG_IDENTIFIER.IDA)
+    setOriginal({
+      state: 'draft',
+      draft_of: {
+        identifier: 'some_identifier',
+      },
+    })
+
+    const component = shallow(<DoiSelectionBase Stores={Stores} />)
+    expect(component.type()).toBe(null)
+  })
+
+  it('checks the checkbox', () => {
+    const { setDataCatalog, setUseDoi } = Qvain
+    Qvain.resetQvainStore()
+    setDataCatalog(DATA_CATALOG_IDENTIFIER.IDA)
+    setUseDoi(true)
+
+    const component = shallow(<DoiSelectionBase Stores={Stores} />)
+    const checkbox = component.find(Checkbox)
+    expect(checkbox.prop('checked')).toBe(true)
   })
 })
 

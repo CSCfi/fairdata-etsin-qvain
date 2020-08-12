@@ -5,6 +5,7 @@ import DescriptionField from './descriptionField'
 import IssuedDateField from './issuedDateField'
 import OtherIdentifierField from './otherIdentifierField'
 import FieldOfScienceField from './fieldOfScienceField'
+import LanguageField from './languageField'
 import KeywordsField from './keywordsField'
 import SubjectHeadingsField from './subjectHeadingsField'
 import { SectionTitle } from '../general/section'
@@ -36,6 +37,7 @@ const Description = () => {
         <IssuedDateField />
         <OtherIdentifierField />
         <FieldOfScienceField />
+        <LanguageField />
         <KeywordsField />
         <SubjectHeadingsField />
       </React.Fragment>

@@ -95,6 +95,10 @@ class DatasetValidationSchema(Schema):
         fields.Str(),
         required=False
     )
+    datasetLanguage = fields.List(
+        fields.Str(),
+        required=False
+    )
     keywords = fields.List(
         fields.Str(),
         required=True,

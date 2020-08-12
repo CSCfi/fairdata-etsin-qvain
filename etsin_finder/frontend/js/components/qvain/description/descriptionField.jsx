@@ -1,11 +1,17 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+
 import { inject, observer } from 'mobx-react'
+import counterpart from 'counterpart'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
+
 import { titleSchema, descriptionSchema } from '../utils/formValidation'
+
 import ValidationError from '../general/validationError'
+import Tooltip from '../../general/tooltipHover'
 import { Input, Textarea, LabelLarge } from '../general/form'
+
 
 class DescriptionField extends Component {
   static propTypes = {
@@ -78,6 +84,7 @@ class DescriptionField extends Component {
   }
 
   render() {
+    const { lang } = this.props.Stores.Locale
     const { title, description, readonly } = this.props.Stores.Qvain
     const activeLang = this.state.active
     return (
@@ -90,7 +97,12 @@ class DescriptionField extends Component {
         </LangButtonContainer>
         <DescriptionCard>
           <LabelLarge htmlFor="titleInput">
-            <Translate content="qvain.description.description.title.label" /> *
+            <Tooltip
+              title={counterpart('qvain.description.fieldHelpTexts.requiredForAll', { locale: lang })}
+              position="right"
+            >
+              <Translate content="qvain.description.description.title.label" /> *
+            </Tooltip>
           </LabelLarge>
           {activeLang === 'FINNISH' && (
             <Translate
@@ -118,7 +130,12 @@ class DescriptionField extends Component {
           )}
           {this.state.titleError ? <Translate component={ValidationError} content={'qvain.description.error.title'} /> : null}
           <LabelLarge htmlFor="descriptionInput">
-            <Translate content="qvain.description.description.description.label" /> *
+            <Tooltip
+              title={counterpart('qvain.description.fieldHelpTexts.requiredForAll', { locale: lang })}
+              position="right"
+            >
+              <Translate content="qvain.description.description.description.label" /> *
+            </Tooltip>
           </LabelLarge>
           {activeLang === 'FINNISH' && (
             <Translate

@@ -1,22 +1,176 @@
-import axios from 'axios'
 import { observable, runInAction, when } from 'mobx'
 
-import QvainStore from '../js/stores/view/qvain'
-import { Directory, File } from '../js/stores/view/qvain.files.items'
+import { Directory, File } from '../js/stores/view/common.files.items'
 import {
   itemLoaderNew,
   itemLoaderAny,
   itemLoaderExisting,
-} from '../js/stores/view/qvain.files.loaders'
+  itemLoaderPublic,
+} from '../js/stores/view/common.files.loaders'
 
-const stores = {
-  Qvain: QvainStore,
-}
 
-const { Qvain } = stores
-const { Files } = Qvain
+describe('common.files.ItemLoaderPublic', () => {
+  it('counts existing directories until a nonloaded one is encountered', async () => {
+    const dir = Directory(
+      {},
+      {
+        directories: [
+          Directory(
+            {},
+            {
+              index: 0,
+              added: false,
+              removed: false,
+              existing: false,
+              existingFileCount: 0,
+              fileCount: 1,
+            }
+          ),
+          Directory(
+            {},
+            {
+              index: 1,
+              added: false,
+              removed: true,
+              existing: true,
+              existingFileCount: 1,
+              fileCount: 1,
+            }
+          ),
+          Directory(
+            {},
+            {
+              index: 2,
+              added: false,
+              removed: false,
+              existing: true,
+              existingFileCount: 1,
+              fileCount: 2,
+            }
+          ),
+          Directory(
+            {},
+            {
+              index: 3,
+              added: true,
+              removed: false,
+              existing: false,
+              existingFileCount: 0,
+              fileCount: 1,
+            }
+          ),
+          Directory(
+            {},
+            {
+              index: 5,
+              added: true,
+              removed: false,
+              existing: true,
+              existingFileCount: 3,
+              fileCount: 3,
+            }
+          ),
+        ],
+      }
+    )
+    expect(itemLoaderPublic.getOffset(dir)).toBe(2)
 
-describe('Qvain.Files.ItemLoaderAny', () => {
+    // 'load' missing directory
+    dir.directories.splice(
+      4,
+      0,
+      Directory(
+        {},
+        {
+          index: 4,
+          added: false,
+          removed: false,
+          existing: false,
+          existingFileCount: 0,
+          fileCount: 1,
+        }
+      )
+    )
+    expect(itemLoaderPublic.getOffset(dir)).toBe(3)
+  })
+
+  it('counts files', async () => {
+    const dir = Directory(
+      {},
+      {
+        directories: [
+          Directory(
+            {},
+            {
+              index: 0,
+              added: false,
+              removed: false,
+              existing: true,
+              existingFileCount: 2,
+              fileCount: 2,
+            }
+          ),
+        ],
+        files: [
+          File({}, { index: 1, added: false, removed: false, existing: false }),
+          File({}, { index: 2, added: false, removed: false, existing: true }),
+        ],
+      }
+    )
+    expect(itemLoaderPublic.getOffset(dir)).toBe(2)
+  })
+
+  it('uses cached offset', async () => {
+    const dir = Directory(
+      {},
+      {
+        added: false,
+        removed: false,
+        directories: [
+          Directory(
+            {},
+            {
+              index: 0,
+              added: false,
+              removed: false,
+              existing: true,
+              existingFileCount: 1,
+              fileCount: 2,
+            }
+          ),
+          Directory(
+            {},
+            {
+              index: 1,
+              added: false,
+              removed: true,
+              existing: true,
+              existingFileCount: 1,
+              fileCount: 1,
+            }
+          ),
+          Directory(
+            {},
+            {
+              index: 5,
+              added: true,
+              removed: false,
+              existing: true,
+              existingFileCount: 0,
+              fileCount: 1,
+            }
+          ),
+        ],
+      }
+    )
+    expect(itemLoaderPublic.getOffset(dir)).toBe(2)
+    const paginationKey = itemLoaderPublic.getPaginationKey('')
+    dir.pagination.offsets[paginationKey] = 4
+    expect(itemLoaderPublic.getOffset(dir)).toBe(4)
+  })
+})
+
+describe('common.files.ItemLoaderAny', () => {
   it('counts all directories until a nonloaded one is encountered', async () => {
     const dir = Directory(
       {},
@@ -175,7 +329,7 @@ describe('Qvain.Files.ItemLoaderAny', () => {
   })
 })
 
-describe('Qvain.Files.ItemLoaderExisting', () => {
+describe('common.files.ItemLoaderExisting', () => {
   it('counts existing directories until a nonloaded one is encountered', async () => {
     const dir = Directory(
       {},
@@ -336,7 +490,7 @@ describe('Qvain.Files.ItemLoaderExisting', () => {
   })
 })
 
-describe('Qvain.Files.ItemLoaderNew', () => {
+describe('common.files.ItemLoaderNew', () => {
   it('counts new directories until a nonloaded one is encountered', async () => {
     const dir = Directory(
       {},
@@ -520,7 +674,7 @@ describe('Qvain.Files.ItemLoaderNew', () => {
 })
 
 
-describe('Qvain.Files.ItemLoader', () => {
+describe('common.files.ItemLoader', () => {
   it('waits until directory is no longer loading', async () => {
     const dir = observable({
       loading: true,

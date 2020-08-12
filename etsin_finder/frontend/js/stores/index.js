@@ -16,6 +16,7 @@ import DatasetQuery from './view/datasetquery'
 import Accessibility from './view/accessibility'
 import Map from './view/map'
 import Qvain from './view/qvain'
+import QvainDatasets from './view/qvain.datasets'
 import Access from './view/access'
 
 const Stores = {
@@ -23,10 +24,11 @@ const Stores = {
   Auth,
   Locale,
   ElasticQuery,
-  DatasetQuery,
+  DatasetQuery: new DatasetQuery(Env),
   Accessibility,
   Map,
-  Qvain,
+  Qvain: new Qvain(Env),
+  QvainDatasets,
   Access,
 }
 
