@@ -53,7 +53,7 @@ export class AddedActorsBase extends Component {
           <ButtonGroup tabIndex="0" key={addedActor.uiid}>
             <ActorLabel>
               <ActorIcon actor={addedActor} style={{ marginRight: '8px' }} />
-              {getActorName(addedActor, lang)}{addedActor.roles.map(role => (` / ${translate(`qvain.actors.add.checkbox.${role}`)}`))}
+              {getActorName(addedActor, lang)}{addedActor.roles.map(role => (` / ${counterpart(`qvain.actors.add.checkbox.${role}`)}`))}
             </ActorLabel>
             <ButtonContainer>
               <Translate
