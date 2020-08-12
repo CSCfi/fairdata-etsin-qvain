@@ -293,7 +293,7 @@ describe('Qvain.MetadataModal', () => {
 
   it('disables metadata editing in readonly state', async () => {
     // Open modal, wait until versions have been fetched
-    wrapper.find('button#test_file4-open-metadata-modal').simulate('click')
+    wrapper.find('button#test_file2-open-metadata-modal').simulate('click')
     const instance = wrapper.find(MetadataModal).instance().wrappedInstance
     await when(() => instance.formatFetchStatus !== 'loading')
 

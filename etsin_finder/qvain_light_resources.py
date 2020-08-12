@@ -98,7 +98,7 @@ class ProjectFiles(Resource):
         return '', 404
 
 
-class FileDirectory(Resource):
+class DirectoryFiles(Resource):
     """File/directory related REST endpoints for getting a directory"""
 
     def __init__(self):
@@ -240,19 +240,23 @@ class FileCharacteristics(Resource):
         return qvain_light_service.patch_file(file_id, data)
 
 
-class UserDatasets(Resource):
-    """Get user's datasets from the METAX dataset REST API"""
+class QvainDatasets(Resource):
+    """Listing and creating Metax datasets for logged in user in Qvain Light."""
 
     def __init__(self):
-        """Setup file endpoints"""
+        """Setup required utils for dataset metadata handling"""
+        self.validationSchema = DatasetValidationSchema()
+
+        # Datasets listing parameters
         self.parser = reqparse.RequestParser()
-        self.parser.add_argument('limit', type=str, action='append', required=False)
-        self.parser.add_argument('offset', type=str, action='append', required=False)
-        self.parser.add_argument('no_pagination', type=bool, action='append', required=False)
+        self.parser.add_argument('limit', type=str, required=False)
+        self.parser.add_argument('offset', type=str, required=False)
+        self.parser.add_argument('no_pagination', type=bool, required=False)
 
     @log_request
-    def get(self, user_id):
-        """Get datasets for user.
+    def get(self):
+        """
+        Get datasets for current user. Used by qvain light dataset table. If request has query parameter no_pagination=true, fetches ALL datasets for user (warning: might result in performance issue).
 
         Used by qvain light dataset table. If request has query parameter no_pagination=true,
         fetches ALL datasets for user (warning: might result in performance issue).
@@ -264,14 +268,22 @@ class UserDatasets(Resource):
             tuple: Response with user datasets if successfull.
 
         """
+        # Return data only if authenticated
+        is_authd = authentication.is_authenticated()
+        if not is_authd:
+            return {"PermissionError": "User not logged in."}, 401
+
+        user_id = authentication.get_user_csc_name()
+        if not user_id:
+            return {"PermissionError": "Missing user id."}, 401
+
         args = self.parser.parse_args()
         limit = args.get('limit', None)
         offset = args.get('offset', None)
         no_pagination = args.get('no_pagination', None)
 
         result = qvain_light_service.get_datasets_for_user(user_id, limit, offset, no_pagination)
-        # Return data only if authenticated
-        if result and authentication.is_authenticated():
+        if result:
             # Limit the amount of items to be sent to the frontend
             if 'results' in result:
                 # Remove the datasets that have the metax property 'removed': True
@@ -283,14 +295,6 @@ class UserDatasets(Resource):
             return result, 200
         log.warning('User not authenticated or result for user_id is invalid\nuser_id: {0}'.format(user_id))
         return '', 404
-
-
-class QvainDataset(Resource):
-    """POST and PATCH request handling coming in from Qvain Light. Used for adding/editing datasets in METAX."""
-
-    def __init__(self):
-        """Setup required utils for dataset metadata handling"""
-        self.validationSchema = DatasetValidationSchema()
 
     @log_request
     def post(self):
@@ -334,8 +338,41 @@ class QvainDataset(Resource):
         metax_response = create_dataset(metax_ready_data, params, use_doi)
         return metax_response
 
+
+class QvainDataset(Resource):
+    """Single Qvain dataset."""
+
+    def __init__(self):
+        """Setup required utils for dataset metadata handling"""
+        self.validationSchema = DatasetValidationSchema()
+
     @log_request
-    def patch(self):
+    def get(self, cr_id):
+        """
+        Get dataset for editing from Metax. Returns with an error if the logged in user does not own the requested dataset.
+
+        Arguments:
+            cr_id {str} -- Identifier of dataset.
+
+        Returns:
+            [type] -- Metax response.
+
+        """
+        is_authd = authentication.is_authenticated()
+        if not is_authd:
+            return {"PermissionError": "User not logged in."}, 401
+        user = authentication.get_user_csc_name()
+        response, status = get_dataset(cr_id)
+        if status != 200:
+            return response, status
+        if user != response.get('metadata_provider_user'):
+            log.warning('User: \"{0}\" is not the creator of the dataset. Editing not allowed.'.format(user))
+            return {"PermissionError": "User is not allowed to edit the dataset."}, 403
+
+        return response, status
+
+    @log_request
+    def patch(self, cr_id):
         """Update existing dataset.
 
         Returns:
@@ -351,8 +388,13 @@ class QvainDataset(Resource):
             log.warning("Invalid form data: {0}".format(err.messages))
             return err.messages, 400
 
-        original = data.get("original", {})
-        cr_id = original.get("identifier")
+        if not data.get("original"):
+            return {"Error": "Missing original dataset."}, 400
+
+        original_cr_id = data["original"].get("identifier")
+        if cr_id != original_cr_id:
+            return {"Error": "Changing dataset identifier is not allowed."}, 400
+        original = data["original"]
 
         # If date_modified not present, then the dataset has not been modified
         # after it was created, use date_created instead
@@ -378,56 +420,23 @@ class QvainDataset(Resource):
             return {"PermissionError": "User not authorized to to edit dataset."}, 403
 
         metax_ready_data = edited_data_to_metax(data, original)
-        params = {
-            "access_granter": get_encoded_access_granter()
-        }
+
+        params = {}
+        params["access_granter"] = get_encoded_access_granter()
         metax_response = update_dataset(metax_ready_data, cr_id, last_edit_converted, params)
         log.debug("METAX RESPONSE: \n{0}".format(metax_response))
-
         return metax_response
-
-
-class QvainDatasetEdit(Resource):
-    """Get single dataset for editing."""
-
-    @log_request
-    def get(self, cr_id):
-        """Get dataset for editing from Metax
-
-        Returns with an error if the logged in user does not own the requested dataset.
-
-        Arguments:
-            cr_id (str): Catalog record identifier.
-
-        Returns:
-            Metax response.
-
-        """
-        is_authd = authentication.is_authenticated()
-        if not is_authd:
-            return {"PermissionError": "User not logged in."}, 401
-        csc_username = authentication.get_user_csc_name()
-        response, status = get_dataset(cr_id)
-        if status != 200:
-            return response, status
-        if csc_username != response.get('metadata_provider_user'):
-            log.warning('User: \"{0}\" is not the creator of the dataset. Editing not allowed.'.format(csc_username))
-            return {"PermissionError": "User is not allowed to edit the dataset."}, 403
-
-        return response, status
-
-class QvainDatasetDelete(Resource):
-    """DELETE request handling coming in from Qvain Light. Used for deleting datasets in METAX."""
 
     @log_request
     def delete(self, cr_id):
-        """Delete dataset from Metax.
+        """
+        Delete dataset from Metax.
 
-        Args:
-            cr_id (str): Catalog record identifier.
+        Arguments:
+            config {object} -- Includes 'data' key that has the identifier of the dataset.
 
         Returns:
-            Metax response.
+            [type] -- Metax response.
 
         """
         is_authd = authentication.is_authenticated()
@@ -435,10 +444,10 @@ class QvainDatasetDelete(Resource):
             return {"PermissionError": "User not logged in."}, 401
 
         # only creator of the dataset is allowed to delete it
-        csc_username = authentication.get_user_csc_name()
+        user = authentication.get_user_csc_name()
         creator = get_dataset_creator(cr_id)
-        if csc_username != creator:
-            log.warning('User: \"{0}\" is not the creator of the dataset. Delete operation not allowed. Creator: \"{1}\"'.format(csc_username, creator))
+        if user != creator:
+            log.warning('User: \"{0}\" is not the creator of the dataset. Delete operation not allowed. Creator: \"{1}\"'.format(user, creator))
             return {"PermissionError": "User not authorized to to delete dataset."}, 403
 
         metax_response = delete_dataset(cr_id)

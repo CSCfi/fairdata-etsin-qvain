@@ -1,13 +1,10 @@
 import { observable, action, computed, runInAction } from 'mobx'
 import axios from 'axios'
 import { getDirectories, getFiles, deepCopy } from '../../components/qvain/utils/fileHierarchy'
+import urls from '../../components/qvain/utils/urls'
 import {
-  ACCESS_TYPE_URL,
-  LICENSE_URL,
-  FILE_API_URLS,
-  USE_CATEGORY_URL,
-  CUMULATIVE_STATE,
-  DATA_CATALOG_IDENTIFIER,
+  ACCESS_TYPE_URL, CUMULATIVE_STATE,
+  DATA_CATALOG_IDENTIFIER, LICENSE_URL, USE_CATEGORY_URL
 } from '../../utils/constants'
 import { getPath } from '../../components/qvain/utils/object'
 import Actors from './qvain.actors'
@@ -81,6 +78,7 @@ class Qvain {
 
   @action
   resetQvainStore = () => {
+    this.original = undefined
     this.title = {
       en: '',
       fi: '',
@@ -587,7 +585,7 @@ class Qvain {
   }
 
   @action getInitialDirectories = () =>
-    axios.get(FILE_API_URLS.PROJECT_DIR_URL + this.selectedProject).then((res) => {
+    axios.get(urls.v1.projectFiles(this.selectedProject)).then(res => {
       runInAction(() => {
         this.hierarchy = Directory(res.data, undefined, false, false)
       })
@@ -604,8 +602,8 @@ class Qvain {
 
   @action loadDirectory = (dirId, rootDir, callback) => {
     const req = axios
-      .get(FILE_API_URLS.DIR_URL + dirId)
-      .then((res) => {
+      .get(urls.v1.directoryFiles(dirId))
+      .then(res => {
         const newDirs = [
           ...rootDir.directories.map((d) => {
             if (d.id === dirId) {
@@ -860,7 +858,7 @@ class Qvain {
     this.cumulativeState = dataset.cumulative_state
 
     // Load DOI
-    if (researchDataset.preferred_identifier.startsWith('doi')) {
+    if (researchDataset.preferred_identifier.startsWith('doi') || dataset.use_doi_for_published) {
       this.useDoi = true
     } else {
       this.useDoi = false
