@@ -61,7 +61,11 @@ describe('Qvain.Actors', () => {
   })
 
   it('should list all added actors', () => {
-    const addedActors = mount(<AddedActorsBase Stores={stores} />)
+    const addedActors = mount(
+      <ThemeProvider theme={etsinTheme}>
+        <AddedActorsBase Stores={stores} />
+      </ThemeProvider>
+    )
     expect(addedActors.find(ButtonGroup).length).toBe(0)
     stores.Qvain.Actors.saveActor(
       Actor({

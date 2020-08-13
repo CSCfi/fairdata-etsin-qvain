@@ -243,6 +243,61 @@ describe('Qvain.RightsAndLicenses', () => {
     const component = shallow(<License Stores={stores} />)
     expect(component.find('#otherLicenseURL').length).toBe(0)
   })
+  it('should render one added license, Other (URL)', () => {
+    const stores = getStores()
+    stores.Qvain.licenseArray = []
+    stores.Qvain.setLicense(LicenseConstructor({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'other'))
+    stores.Qvain.otherLicenseUrl = 'https://test.url'
+    stores.Qvain.addLicense(stores.Qvain.license)
+    const component = shallow(<License Stores={stores} />)
+    expect(component.find('licenses__LabelTemp').length).toBe(1)
+  })
+  it('should render one added license, CCBY4', () => {
+    const stores = getStores()
+    stores.Qvain.licenseArray = []
+    stores.Qvain.setLicense(LicenseConstructor({ en: 'Creative Commons Attribution 4.0 International (CC BY 4.0)' }, LICENSE_URL.CCBY4))
+    stores.Qvain.addLicense(stores.Qvain.license)
+    const component = shallow(<License Stores={stores} />)
+    expect(component.find('licenses__LabelTemp').length).toBe(1)
+  })
+  it('should render three added licenses, Other (URL) x 2 + CCBY4', () => {
+    const stores = getStores()
+    stores.Qvain.licenseArray = []
+    // Add first other license
+    stores.Qvain.setLicense(LicenseConstructor({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'other'))
+    stores.Qvain.otherLicenseUrl = 'https://test.url'
+    stores.Qvain.addLicense(stores.Qvain.license)
+    // Add second other license
+    stores.Qvain.setLicense(LicenseConstructor({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'other'))
+    stores.Qvain.otherLicenseUrl = 'https://test2.url'
+    stores.Qvain.addLicense(stores.Qvain.license)
+    // Add CCBY4 license
+    stores.Qvain.setLicense(LicenseConstructor({ en: 'Creative Commons Attribution 4.0 International (CC BY 4.0)' }, LICENSE_URL.CCBY4))
+    stores.Qvain.addLicense(stores.Qvain.license)
+    const component = shallow(<License Stores={stores} />)
+    expect(component.find('licenses__LabelTemp').length).toBe(3)
+  })
+  it('should render three added licenses when the user tries to add 4 (one duplicate)', () => {
+    const stores = getStores()
+    stores.Qvain.licenseArray = []
+    // Add first other license
+    stores.Qvain.setLicense(LicenseConstructor({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'other'))
+    stores.Qvain.otherLicenseUrl = 'https://test.url'
+    stores.Qvain.addLicense(stores.Qvain.license)
+    // Add second other license
+    stores.Qvain.setLicense(LicenseConstructor({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'other'))
+    stores.Qvain.otherLicenseUrl = 'https://test2.url'
+    stores.Qvain.addLicense(stores.Qvain.license)
+    // Add CCBY4 license
+    stores.Qvain.setLicense(LicenseConstructor({ en: 'Creative Commons Attribution 4.0 International (CC BY 4.0)' }, LICENSE_URL.CCBY4))
+    stores.Qvain.addLicense(stores.Qvain.license)
+    const component = shallow(<License Stores={stores} />)
+    // Add second other license again, SHOULD NOT ADDED
+    stores.Qvain.setLicense(LicenseConstructor({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'other'))
+    stores.Qvain.otherLicenseUrl = 'https://test2.url'
+    stores.Qvain.addLicense(stores.Qvain.license)
+    expect(component.find('licenses__LabelTemp').length).toBe(3)
+  })
   it('should render <AccessType />', () => {
     const component = shallow(<AccessType Stores={getStores()} />)
     expect(component).toMatchSnapshot()
@@ -404,10 +459,12 @@ describe('Qvain validation', () => {
       title: { en: 'title' },
       description: { en: 'description' },
       keywords: ['keyword'],
-      license: {
-        name: { en: 'Creative Commons Attribution 4.0 International (CC BY 4.0)' },
-        identifier: 'http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0',
-      },
+      license: [
+        {
+          name: { en: 'Creative Commons Attribution 4.0 International (CC BY 4.0)' },
+          identifier: 'http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0',
+        }
+      ],
       dataCatalog: 'urn:nbn:fi:att:data-catalog-ida',
       actors,
       accessType: {
