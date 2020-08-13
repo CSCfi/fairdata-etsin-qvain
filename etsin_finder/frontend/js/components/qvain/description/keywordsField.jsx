@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import { inject, observer } from 'mobx-react'
 import styled from 'styled-components'
+import counterpart from 'counterpart'
 
 import Tooltip from '../../general/tooltipHover'
 import Card from '../general/card'
@@ -58,6 +59,7 @@ class KeywordsField extends Component {
 
   render() {
     const { readonly, keywordsArray, keywordString } = this.props.Stores.Qvain
+    const { lang } = this.props.Stores.Locale
     const RenderedKeywords = keywordsArray.map(word => (
       <AddedValue
         key={word}
