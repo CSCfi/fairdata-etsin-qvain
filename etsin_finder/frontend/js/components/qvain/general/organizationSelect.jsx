@@ -57,8 +57,9 @@ class OrganizationSelect extends Component {
    * Fetch top level organization options when component is mounted.
    */
   async componentDidMount() {
+    const { options } = this.state
     const organization = await resolveOptions()
-    this.setState({ options: { organization } })
+    this.setState({ options: { ...options, organization } })
   }
 
   // TODO: Causes double fetch when value changed from select
@@ -75,10 +76,10 @@ class OrganizationSelect extends Component {
    * options will be cleared.
    */
   clearOptions = all => {
-    const { options } = this.state
-    const updatedOptions = { ...options, subDepartment: {} }
-    if (all) updatedOptions.department = {}
-    this.setState({ options: updatedOptions })
+    const { organization, department } = this.state.options
+    const options = { ...organization, ...department, subDepartment: {} }
+    if (all) options.department = {}
+    this.setState({ options })
   }
 
   /**
@@ -92,37 +93,35 @@ class OrganizationSelect extends Component {
   fetchOptions = async (organization = {}, department = {}) => {
     if (isEmptyObject(organization) && isEmptyObject(department)) return
     const oldOptions = this.state.options
-    const options = { ...oldOptions }
-    if (organization.value && !organization.formIsOpen) {
-      options.department = await resolveOptions(organization.value)
+    const options = {
+      organization: { ...oldOptions.organization },
+      department: { ...oldOptions.department },
+      subDepartment: { ...oldOptions.subDepartment }
     }
-    if (department.value && !department.formIsOpen) {
-      options.subDepartment = await resolveOptions(department.value)
-    }
+    options.department = organization.value && !organization.formIsOpen
+      ? await resolveOptions(organization.value)
+      : {}
+    options.subDepartment = department.value && !department.formIsOpen
+     ? await resolveOptions(department.value)
+     : {}
     this.setState({ options })
   }
 
-  // TODO: Clear this
-  onOrganizationChange = value => {
-    if (!value) {
-      return this.props.onChange({
-        organization: null,
-        department: null,
-        subDepartment: null,
-      })
-    }
-    const { formIsOpen } = value
-    const { organization } = this.props.value
-    const formIsOpenFromProps = organization ? organization.formIsOpen : false
-    const updatedFormData = { organization: value }
+  onOrganizationChange = selectedValue => {
+    if (!selectedValue) return this.props.onChange({ organization: null, department: null, subDepartment: null })
+
+    const { formIsOpen } = selectedValue
+    const { value } = this.props
+    const formIsOpenFromProps = value.organization ? value.organization.formIsOpen : false
+    const updatedFormData = { ...value, organization: selectedValue }
 
     if (formIsOpen) this.clearOptions(true)
     else {
-      this.fetchOptions(value)
       updatedFormData.department = null
       updatedFormData.subDepartment = null
     }
-    // TODO: Clean this, if user changes from add manually to
+
+    // If user changes from add manually to
     // select from list --> dep and sub dep needs to be cleared.
     if (formIsOpen && !formIsOpenFromProps) {
       updatedFormData.department = null
@@ -131,27 +130,24 @@ class OrganizationSelect extends Component {
     return this.props.onChange(updatedFormData)
   }
 
-  // TODO: Clear this
-  onDepartmentChange = value => {
-    if (!value) {
-      return this.props.onChange({
-        department: null,
-        subDepartment: null,
-      })
+  onDepartmentChange = selectedValue => {
+    const { value } = this.props
+    if (!selectedValue) {
+      return this.props.onChange({ ...value, department: null, subDepartment: null })
     }
-    const { organization } = this.props.value
-    const { formIsOpen } = value
+    const { formIsOpen } = selectedValue
 
-    const updatedFormData = { department: value }
+    const updatedFormData = { ...value, department: selectedValue }
     if (formIsOpen) this.clearOptions(false)
-    else {
-      this.fetchOptions(organization, value)
-      updatedFormData.subDepartment = null
-    }
+    else updatedFormData.subDepartment = null
+
     return this.props.onChange(updatedFormData)
   }
 
-  onSubdepartmentChange = value => this.props.onChange({ subDepartment: value })
+  onSubdepartmentChange = subDepartment => {
+    const { value } = this.props
+    this.props.onChange({ ...value, subDepartment })
+  }
 
   render() {
     const { lang } = this.props.Stores.Locale

@@ -38,7 +38,8 @@ const INITIAL_STATE = {
     errors: {},
   },
   organizations: {
-    projectOrganizations: [],
+    addedOrganizations: [],
+    formData: {}, // {organization: {value, name, ...}, department, subDepartment}
     errors: [],
   },
 }
@@ -61,21 +62,26 @@ class Project extends Component {
     this.setState({ details })
   }
 
+  onOrganizationFormChange = value => {
+    const { organizations } = this.state
+    this.setState({ organizations: { ...organizations, formData: value } })
+  }
+
   onAddOrganization = organization => {
     const { organizations } = this.state
-    const oldProjectOrganizations = organizations.projectOrganizations.filter(org => org.id !== organization.id)
+    const oldProjectOrganizations = organizations.addedOrganizations.filter(org => org.id !== organization.id)
     const newProjectOrganizations = oldProjectOrganizations.concat([organization])
     this.setState({
-      organizations: { ...organizations, projectOrganizations: newProjectOrganizations }
+      organizations: { ...organizations, addedOrganizations: newProjectOrganizations, formData: {} }
     })
   }
 
   onRemoveOrganization = id => {
     const { organizations } = this.state
-    const updatedProjectOrganizations = organizations.projectOrganizations
+    const updatedProjectOrganizations = organizations.addedOrganizations
       .filter(organization => organization.id !== id)
     this.setState({
-      organizations: { ...organizations, projectOrganizations: updatedProjectOrganizations }
+      organizations: { ...organizations, addedOrganizations: updatedProjectOrganizations, formData: {} }
     })
   }
 
@@ -83,18 +89,16 @@ class Project extends Component {
     event.preventDefault()
     const { id, details, organizations } = this.state
 
-    // Clear this spaghetti
-    projectSchema.validate({ details, organizations: organizations.projectOrganizations }, { abortEarly: false })
+    projectSchema.validate({ details, organizations: organizations.addedOrganizations }, { abortEarly: false })
       .then(() => {
         const { titleEn, titleFi, identifier, fundingIdentifier, funderType } = details
-        const { projectOrganizations } = organizations
+        const { addedOrganizations } = organizations
         const title = { en: titleEn, fi: titleFi }
-        const project = ProjectObject(id, title, identifier, fundingIdentifier, funderType, projectOrganizations)
+        const project = ProjectObject(id, title, identifier, fundingIdentifier, funderType, addedOrganizations)
         this.props.Stores.Qvain.setProject(project)
         this.resetForm()
       })
       .catch(validationErrors => {
-        // Clear this spaghetti
         const parsedErrors = { details: {}, organizations: {} }
         validationErrors.inner.forEach(error => {
           const { errors, path } = error
@@ -124,7 +128,7 @@ class Project extends Component {
     this.setState({
       id,
       details: { ...INITIAL_STATE.details, ...details },
-      organizations: { ...INITIAL_STATE.organizations, projectOrganizations: [...organizations] },
+      organizations: { ...INITIAL_STATE.organizations, addedOrganizations: [...organizations] },
       projectInEdit: true,
     })
   }
@@ -156,6 +160,7 @@ class Project extends Component {
           <AddedProjects editProject={this.editProject} removeProject={this.removeProject} />
           <ProjectForm onChange={this.onProjectFormChange} formData={details} readonly={readonly} />
           <FundingOrganization
+            onChange={this.onOrganizationFormChange}
             onAddOrganization={this.onAddOrganization}
             onRemoveOrganization={this.onRemoveOrganization}
             organizations={organizations}

@@ -18,39 +18,14 @@ import { organizationSelectSchema } from '../utils/formValidation'
 import { getOrganizationSearchUrl } from '../../../stores/view/qvain.actors'
 
 
-const INITIAL_STATE = {
-  formData: {
-    organization: undefined,
-    department: undefined,
-    subDepartment: undefined,
-    errors: {},
-  },
-}
-
-class FundingOrganization extends Component {
-  static propTypes = {
-    Stores: PropTypes.object.isRequired,
-    onAddOrganization: PropTypes.func.isRequired,
-    onRemoveOrganization: PropTypes.func.isRequired,
-    organizations: PropTypes.object.isRequired,
-  }
-
-  state = {
-    formData: { ...INITIAL_STATE.formData }
-  }
-
-  onChange = value => {
-    const { formData } = this.state
-    this.setState({ formData: { ...formData, ...value } })
-  }
-
-  onBlur = field => {
-    const { formData } = this.state
+const FundingOrganization = props => {
+  const onBlur = field => {
+    const { formData } = props.organizations
     const { name, value, email } = formData[field]
     organizationSelectSchema.validate({ name, identifier: value, email }, { abortEarly: false })
       .then(() => {
         const updatedFormData = { ...formData[field], errors: [] }
-        this.setState({ formData: { ...formData, [field]: updatedFormData } })
+        props.onChange({ ...formData, [field]: updatedFormData })
       })
       .catch(validationErrors => {
         const errors = {}
@@ -59,39 +34,30 @@ class FundingOrganization extends Component {
           errors[path[0]] = error.errors
         })
         const updatedFormData = { ...formData[field], errors }
-        this.setState({ formData: { ...formData, [field]: updatedFormData } })
+        props.onChange({ ...formData, [field]: updatedFormData })
       })
   }
 
-  onEdit = async id => {
-    const organizationToEdit = this.props.organizations.projectOrganizations
+  const onEdit = async id => {
+    const organizationToEdit = props.organizations.addedOrganizations
       .find(org => org.id === id)
     if (!organizationToEdit) return
     const { organization, department, subDepartment } = organizationToEdit
-    const departmentValue = await this.organizationToSelectValue(department, organization ? organization.identifier : null)
-    const subDepartmentValue = await this.organizationToSelectValue(subDepartment, department ? department.identifier : null)
-    this.setState({
-      formData: {
-        organization: { ...await this.organizationToSelectValue(organization) },
-        department: departmentValue ? { ...departmentValue } : undefined,
-        subDepartment: subDepartmentValue ? { ...subDepartmentValue } : undefined,
-        id,
-      }
+    const departmentValue = await organizationToSelectValue(department, organization ? organization.identifier : null)
+    const subDepartmentValue = await organizationToSelectValue(subDepartment, department ? department.identifier : null)
+    props.onChange({
+      organization: { ...await organizationToSelectValue(organization) },
+      department: departmentValue ? { ...departmentValue } : undefined,
+      subDepartment: subDepartmentValue ? { ...subDepartmentValue } : undefined,
+      id,
     })
   }
 
-  onRemove = id => {
-    this.resetForm()
-    this.props.onRemoveOrganization(id)
-  }
+  const onRemove = id => props.onRemoveOrganization(id)
 
-  resetForm = () => {
-    this.setState({ formData: { ...INITIAL_STATE.formData } })
-  }
-
-  organizationToSelectValue = async (organization, parentId) => {
+  const organizationToSelectValue = async (organization, parentId) => {
     if (!organization) return undefined
-    const { lang } = this.props.Stores.Locale
+    const { lang } = props.Stores.Locale
     const { identifier, name, email } = organization
     const isCustomOrg = await isCustomOrganization(identifier, parentId)
     return {
@@ -103,50 +69,54 @@ class FundingOrganization extends Component {
     }
   }
 
-  addOrganization = () => {
-    const { organization, department, subDepartment, id } = this.state.formData
+  const addOrganization = () => {
+    const { organization, department, subDepartment, id } = props.organizations.formData
     const params = [id, { identifier: organization.value, name: organization.name, email: organization.email }]
     if (department) params.push({ identifier: department.value, name: department.name, email: department.email })
     if (subDepartment) params.push({ identifier: subDepartment.value, name: subDepartment.name, email: subDepartment.email })
     if (!allOrganizationsAreValid(params)) return
     const organizationToAdd = Organization(...params)
-    this.props.onAddOrganization(organizationToAdd)
-    this.resetForm()
+    props.onAddOrganization(organizationToAdd)
   }
 
-  render() {
-    const { formData } = this.state
-    const { errors, projectOrganizations } = this.props.organizations
-    const { lang } = this.props.Stores.Locale
-    return (
-      <Card>
-        <Translate component="h3" content="qvain.project.organization.title" />
-        <Translate component="p" content="qvain.project.organization.description" />
-        <AddedOrganizations
-          organizations={projectOrganizations}
-          onRemove={this.onRemove}
-          onEdit={this.onEdit}
-          lang={lang}
-        />
-        <OrganizationSelect
-          onChange={this.onChange}
-          onBlur={this.onBlur}
-          value={formData}
-          name="organization"
-          inputId="organization"
-        />
-        <ErrorMessages errors={errors} />
-        <AddOrganizationContainer>
-          <Button onClick={this.addOrganization}>
-            <Translate content={formData.id
-              ? 'qvain.project.inputs.organization.editButton'
-              : 'qvain.project.inputs.organization.addButton'}
-            />
-          </Button>
-        </AddOrganizationContainer>
-      </Card>
-    )
-  }
+  const { errors, addedOrganizations, formData } = props.organizations
+  const { lang } = props.Stores.Locale
+  return (
+    <Card>
+      <Translate component="h3" content="qvain.project.organization.title" />
+      <Translate component="p" content="qvain.project.organization.description" />
+      <AddedOrganizations
+        organizations={addedOrganizations}
+        onRemove={onRemove}
+        onEdit={onEdit}
+        lang={lang}
+      />
+      <OrganizationSelect
+        onChange={props.onChange}
+        onBlur={onBlur}
+        value={formData}
+        name="organization"
+        inputId="organization"
+      />
+      <ErrorMessages errors={errors} />
+      <AddOrganizationContainer>
+        <Button onClick={addOrganization}>
+          <Translate content={formData.id
+            ? 'qvain.project.inputs.organization.editButton'
+            : 'qvain.project.inputs.organization.addButton'}
+          />
+        </Button>
+      </AddOrganizationContainer>
+    </Card>
+  )
+}
+
+FundingOrganization.propTypes = {
+  Stores: PropTypes.object.isRequired,
+  onChange: PropTypes.func.isRequired,
+  onAddOrganization: PropTypes.func.isRequired,
+  onRemoveOrganization: PropTypes.func.isRequired,
+  organizations: PropTypes.object.isRequired, // {addedOrganizations, formData}
 }
 
 
