@@ -174,13 +174,14 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
           "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
           "name": undefined,
         },
+        "licenseArray": Array [],
         "mergeArraysByIdentifier": [Function],
         "metadataModalFile": undefined,
         "original": undefined,
         "otherIdentifier": "",
         "otherIdentifiersArray": Array [],
         "otherIdentifiersValidationError": null,
-        "otherLicenseUrl": undefined,
+        "otherLicenseUrl": "",
         "preservationState": 0,
         "restrictionGrounds": Object {},
         "selectedDirectories": Array [],
@@ -337,13 +338,14 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
           "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
           "name": undefined,
         },
+        "licenseArray": Array [],
         "mergeArraysByIdentifier": [Function],
         "metadataModalFile": undefined,
         "original": undefined,
         "otherIdentifier": "",
         "otherIdentifiersArray": Array [],
         "otherIdentifiersValidationError": null,
-        "otherLicenseUrl": undefined,
+        "otherLicenseUrl": "",
         "preservationState": 0,
         "restrictionGrounds": Object {},
         "selectedDirectories": Array [],
@@ -500,13 +502,14 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
           "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
           "name": undefined,
         },
+        "licenseArray": Array [],
         "mergeArraysByIdentifier": [Function],
         "metadataModalFile": undefined,
         "original": undefined,
         "otherIdentifier": "",
         "otherIdentifiersArray": Array [],
         "otherIdentifiersValidationError": null,
-        "otherLicenseUrl": undefined,
+        "otherLicenseUrl": "",
         "preservationState": 0,
         "restrictionGrounds": Object {},
         "selectedDirectories": Array [],
@@ -663,13 +666,14 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
           "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
           "name": undefined,
         },
+        "licenseArray": Array [],
         "mergeArraysByIdentifier": [Function],
         "metadataModalFile": undefined,
         "original": undefined,
         "otherIdentifier": "",
         "otherIdentifiersArray": Array [],
         "otherIdentifiersValidationError": null,
-        "otherLicenseUrl": undefined,
+        "otherLicenseUrl": "",
         "preservationState": 0,
         "restrictionGrounds": Object {},
         "selectedDirectories": Array [],
@@ -734,6 +738,10 @@ exports[`Qvain.RightsAndLicenses should render <Licenses /> 1`] = `
     />
   </form__LabelLarge>
   <Translate
+    component="p"
+    content="qvain.rightsAndLicenses.license.infoText"
+  />
+  <Translate
     attributes={
       Object {
         "placeholder": "qvain.rightsAndLicenses.license.placeholder",
@@ -746,7 +754,6 @@ exports[`Qvain.RightsAndLicenses should render <Licenses /> 1`] = `
     name="license"
     onBlur={[Function]}
     onChange={[Function]}
-    options={Array []}
     value={
       Object {
         "label": undefined,
@@ -754,6 +761,18 @@ exports[`Qvain.RightsAndLicenses should render <Licenses /> 1`] = `
       }
     }
   />
+  <licenses__ButtonContainer>
+    <licenses__AddNewButton
+      disabled={false}
+      onClick={[Function]}
+      type="button"
+    >
+      <Translate
+        component="span"
+        content="qvain.rightsAndLicenses.license.addButton"
+      />
+    </licenses__AddNewButton>
+  </licenses__ButtonContainer>
 </Card>
 `;
 
