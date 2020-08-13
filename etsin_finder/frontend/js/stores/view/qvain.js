@@ -1148,10 +1148,11 @@ export const ProjectFunderType = (name, url) => ({
   url,
 })
 
-export const Organization = (id, organization, department) => ({
+export const Organization = (id, organization, department, subDepartment) => ({
   id: id || uuid(),
   organization, // {identifier, name: {fi, en, und}}
   department, // {identifier, name: {fi, en, und}}
+  subDepartment, // {identifier, name: {fi, en, und}}
 })
 
 export const ExternalResource = (id, title, accessUrl, downloadUrl, useCategory) => ({

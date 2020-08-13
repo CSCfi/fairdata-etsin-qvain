@@ -98,16 +98,16 @@ class FundingOrganization extends Component {
       value: identifier || '',
       label: name[lang] || name.und,
       name: { ...name },
-      email: email || '',
+      email,
       formIsOpen: isCustomOrg,
     }
   }
 
   addOrganization = () => {
     const { organization, department, subDepartment, id } = this.state.formData
-    const params = [id, { identifier: organization.value, name: organization.name }]
-    if (department) params.push({ identifier: department.value, name: department.name })
-    if (subDepartment) params.push({ identifier: subDepartment.value, name: subDepartment.name })
+    const params = [id, { identifier: organization.value, name: organization.name, email: organization.email }]
+    if (department) params.push({ identifier: department.value, name: department.name, email: department.email })
+    if (subDepartment) params.push({ identifier: subDepartment.value, name: subDepartment.name, email: subDepartment.email })
     if (!allOrganizationsAreValid(params)) return
     const organizationToAdd = Organization(...params)
     this.props.onAddOrganization(organizationToAdd)

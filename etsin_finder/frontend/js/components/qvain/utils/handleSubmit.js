@@ -59,15 +59,11 @@ const projectsToMetax = projects => projects.map(project => {
   const funderType = { identifier: details.funderType.url }
   details.funderType = funderType
 
-  const organizations = projectObject.organizations.map(organization => {
-    delete organization.id
-    const organizationToBackend = {}
-    for (const key in organization) {
-      if (Object.prototype.hasOwnProperty.call(organization, key) && organization[key]) {
-        const { name, identifier, email } = organization[key]
-        organizationToBackend[key] = { name, identifier, email }
-      }
-    }
+  const organizations = projectObject.organizations.map(fullOrganization => {
+    const { organization, department, subDepartment } = fullOrganization
+    const organizationToBackend = [{ ...organization }]
+    if (department) organizationToBackend.push({ ...department })
+    if (subDepartment) organizationToBackend.push({ ...subDepartment })
     return organizationToBackend
   })
   return { details, organizations }

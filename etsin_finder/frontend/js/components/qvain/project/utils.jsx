@@ -23,8 +23,8 @@ ErrorMessages.defaultProps = {
 
 export function parseOrganization(organization) {
   const out = []
-  const { name, identifier } = organization
-  out.push({ name, identifier })
+  const { name, identifier, email } = organization
+  out.push({ name, identifier, email })
   if ('is_part_of' in organization) {
     out.push(...parseOrganization(organization.is_part_of))
   }
