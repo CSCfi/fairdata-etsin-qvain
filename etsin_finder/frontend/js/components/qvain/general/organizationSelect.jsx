@@ -13,7 +13,15 @@ import { Input, Label } from './form'
 import ValidationError from './validationError'
 import { DeleteButton } from './buttons'
 
-
+/**
+ * A reusable organization select component.
+ * An organization can be nested up to three levels: organization,
+ * department, sub department. On all levels user can add value also
+ * manually by filling a form.
+ *
+ * The component does not store the value of selects, state contains only
+ * values of select options.
+ */
 class OrganizationSelect extends Component {
   static propTypes = {
     Stores: PropTypes.object.isRequired,
@@ -45,20 +53,27 @@ class OrganizationSelect extends Component {
     }
   }
 
-  componentDidMount() {
-    this.fetchOptions()
+  /**
+   * Fetch top level organization options when component is mounted.
+   */
+  async componentDidMount() {
+    const organization = await resolveOptions()
+    this.setState({ options: { organization } })
   }
 
+  // TODO: Causes double fetch when value changed from select
   componentWillReceiveProps(nextProps) {
-    if (this.props.value.organization || !nextProps.value.organization) return
     const { organization, department } = nextProps.value
-    this.fetchOptions(organization.value || null, department ? department.value : null)
+    this.fetchOptions(organization || {}, department || {})
   }
 
-  fetchAllOptions = async (parentId, departmentParentId) => {
-    await this.fetchOptions(parentId, departmentParentId)
-  }
-
+  /**
+   * Clear department and sub department options.
+   * Sub department options will be always cleared.
+   *
+   * @param {*} all If all is true, also department
+   * options will be cleared.
+   */
   clearOptions = all => {
     const { options } = this.state
     const updatedOptions = { ...options, subDepartment: {} }
@@ -66,14 +81,28 @@ class OrganizationSelect extends Component {
     this.setState({ options: updatedOptions })
   }
 
-  fetchOptions = async (parentId, departmentParentId) => {
-    const organization = await resolveOptions()
-    const department = parentId ? await resolveOptions(parentId) : undefined
-    const subDepartment = parentId && departmentParentId ? await resolveOptions(departmentParentId) : undefined
-    const options = { organization, department, subDepartment }
+  /**
+   * Used to fetch options for department and sub department selects.
+   * Top level organization options are fetched only, when component is mounted,
+   * and should not be cleared.
+   *
+   * @param {*} organization Current value of organization select
+   * @param {*} department Current value of department select
+   */
+  fetchOptions = async (organization = {}, department = {}) => {
+    if (isEmptyObject(organization) && isEmptyObject(department)) return
+    const oldOptions = this.state.options
+    const options = { ...oldOptions }
+    if (organization.value && !organization.formIsOpen) {
+      options.department = await resolveOptions(organization.value)
+    }
+    if (department.value && !department.formIsOpen) {
+      options.subDepartment = await resolveOptions(department.value)
+    }
     this.setState({ options })
   }
 
+  // TODO: Clear this
   onOrganizationChange = value => {
     if (!value) {
       return this.props.onChange({
@@ -89,7 +118,7 @@ class OrganizationSelect extends Component {
 
     if (formIsOpen) this.clearOptions(true)
     else {
-      this.fetchOptions(value.value)
+      this.fetchOptions(value)
       updatedFormData.department = null
       updatedFormData.subDepartment = null
     }
@@ -102,6 +131,7 @@ class OrganizationSelect extends Component {
     return this.props.onChange(updatedFormData)
   }
 
+  // TODO: Clear this
   onDepartmentChange = value => {
     if (!value) {
       return this.props.onChange({
@@ -115,15 +145,13 @@ class OrganizationSelect extends Component {
     const updatedFormData = { department: value }
     if (formIsOpen) this.clearOptions(false)
     else {
-      this.fetchOptions(organization.value, value.value)
+      this.fetchOptions(organization, value)
       updatedFormData.subDepartment = null
     }
     return this.props.onChange(updatedFormData)
   }
 
-  onSubdepartmentChange = value => {
-    this.props.onChange({ subDepartment: value })
-  }
+  onSubdepartmentChange = value => this.props.onChange({ subDepartment: value })
 
   render() {
     const { lang } = this.props.Stores.Locale
@@ -178,11 +206,15 @@ class OrganizationSelect extends Component {
   }
 }
 
+/**
+ * Internally used select component with form for adding organization manually.
+ * This is a stateless component.
+ */
 const CreatableSelectComponent = props => {
   /**
-   * Open form if add manually is selected. This function gets triggered
-   * only from select option change.
-   * @param {Object} option
+   * Open form if add manually is selected.
+   *
+   * @param {Object} option Selected option
    */
   const onChange = option => {
     if (option.value === 'create') {
@@ -220,6 +252,10 @@ const CreatableSelectComponent = props => {
     props.onChange(payload)
   }
 
+  /**
+   * Add option for adding organization manually
+   * if props has creatable set to true.
+   */
   const getOptions = () => {
     const { creatable, placeholder, options } = props
     if (!creatable) return options
@@ -232,6 +268,10 @@ const CreatableSelectComponent = props => {
     }]
   }
 
+  /**
+   * Select option will have an additional form is open property
+   * if organization for should be visible.
+   */
   const formIsOpen = () => (
     props.value
       ? props.value.formIsOpen
@@ -382,6 +422,10 @@ function getOption(hit, language) {
       und: hit._source.label.und,
     }
   }
+}
+
+function isEmptyObject(obj = {}) {
+  return Object.getOwnPropertyNames(obj).length === 0
 }
 
 const SelectContainer = styled.div`padding-left: 1.5rem;`
