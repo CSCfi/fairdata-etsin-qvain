@@ -68,7 +68,9 @@ class Qvain {
 
   @observable license = License(undefined, LICENSE_URL.CCBY4)
 
-  @observable otherLicenseUrl = undefined
+  @observable otherLicenseUrl = ''
+
+  @observable licenseArray = []
 
   @observable accessType = AccessType(undefined, ACCESS_TYPE_URL.OPEN)
 
@@ -104,7 +106,8 @@ class Qvain {
     this.infrastructure = undefined
     this.infrastructures = []
     this.license = License(undefined, LICENSE_URL.CCBY4)
-    this.otherLicenseUrl = undefined
+    this.otherLicenseUrl = ''
+    this.licenseArray = []
     this.accessType = AccessType(undefined, ACCESS_TYPE_URL.OPEN)
     this.embargoExpDate = undefined
     this.restrictionGrounds = {}
@@ -354,6 +357,37 @@ class Qvain {
   @action
   setLicenseName = name => {
     this.license.name = name // only affects license display, should not trigger this.changed
+  }
+
+  @action
+  addLicense = license => {
+    if (license !== undefined) {
+      if (
+        Object.keys(license).includes(('identifier', 'name')) &&
+        !this.licenseArray.some(l => l.identifier === license.identifier || l.identifier === this.otherLicenseUrl)
+      ) {
+        if (license.identifier === 'other') {
+          const newLicenseName = {
+            en: `${license.name.en}: ${this.otherLicenseUrl}`,
+            fi: `${license.name.fi}: ${this.otherLicenseUrl}`
+          }
+          this.licenseArray.push(License(newLicenseName, this.otherLicenseUrl))
+          this.otherLicenseUrl = ''
+        } else {
+          this.licenseArray.push(License(license.name, license.identifier))
+        }
+        this.changed = true
+      }
+      this.license = undefined
+    }
+  }
+
+  @action
+  removeLicense = license => {
+    this.licenseArray = this.licenseArray.filter(
+      l => l.identifier !== license.identifier
+    )
+    this.changed = true
   }
 
   @action
@@ -829,27 +863,25 @@ class Qvain {
       : undefined
     this.embargoExpDate = embargoDate || undefined
 
-    // License
+    // Licenses
     const l = researchDataset.access_rights.license
-      ? researchDataset.access_rights.license[0]
+      ? researchDataset.access_rights.license
       : undefined
     if (l !== undefined) {
-      if (l.identifier !== undefined) {
-        this.license = l ? License(l.title, l.identifier) : License(undefined, LICENSE_URL.CCBY4)
-      } else {
-        this.license = l
-          ? License(
-            {
-              en: 'Other (URL)',
-              fi: 'Muu (URL)',
-            },
-            'other'
-          )
-          : License(undefined, LICENSE_URL.CCBY4)
-        this.otherLicenseUrl = l.license
-      }
+      this.license = undefined
+      this.licenseArray = l.map(license => {
+        if (license.identifier !== undefined) {
+          return License(license.title, license.identifier)
+        }
+        const name = {
+          en: `Other (URL): ${license.license}`,
+          fi: `Muu (URL): ${license.license}`,
+        }
+        return License(name, license.license)
+      })
     } else {
       this.license = undefined
+      this.licenseArray = []
     }
 
     // Restriction grounds
