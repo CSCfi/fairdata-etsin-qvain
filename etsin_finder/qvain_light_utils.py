@@ -96,28 +96,15 @@ def alter_projects_to_metax(projects):
             "source_organization": []
         }
 
-        # TODO: DRY
-        for organization in project.get("organizations", []):
-            organizationToAdd = {}
-            topLevelOrganization = {
-                "@type": "Organization",
-                "identifier": organization["organization"].get("identifier"),
-                "name": organization["organization"].get("name")
-            }
-            if "department" in organization:
-                organizationToAdd.update({
-                    "@type": "Organization",
-                    "identifier": organization["department"].get("identifier"),
-                    "name": organization["department"].get("name"),
-                    "is_part_of": topLevelOrganization
-                })
-            if "subDepartment" in organization:
-                pass
-
-            if not organizationToAdd:
-                organizationToAdd = topLevelOrganization
-            metax_project["source_organization"].append(organizationToAdd)
-
+        projectOrganizations = project.get("organizations", [])
+        for organization in projectOrganizations:
+            converted = organization[0]
+            converted["@type"] = "Organization"
+            for sub_organization in organization[1:]:
+                sub_organization["is_part_of"] = converted
+                sub_organization["@type"] = "Organization"
+                converted = sub_organization
+            metax_project["source_organization"].append(converted)
         output.append(metax_project)
     return output
 

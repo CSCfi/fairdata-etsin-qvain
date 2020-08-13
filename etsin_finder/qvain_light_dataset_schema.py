@@ -93,7 +93,11 @@ class ProjectValidationSchema(Schema):
     """Validation schema for projects."""
     details = fields.Nested(ProjectDetailsValidationSchema, required=True)
     organizations = fields.List(
-        fields.Nested(ProjectOrganizationSchema), required=True
+        fields.List(
+            fields.Nested(OrganizationValidationSchema)
+        ),
+        required=True,
+        validate=Length(min=1)
     )
 
 
