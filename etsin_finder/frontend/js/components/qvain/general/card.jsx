@@ -3,7 +3,9 @@ import PropTypes from 'prop-types'
 import styled, { keyframes } from 'styled-components'
 
 // eslint-disable-next-line
-const Card = ({ children, bottomContent }) => <Container bottomContent={bottomContent}>{children}</Container>
+const Card = ({ children, bottomContent }) => (
+  <Container bottomContent={bottomContent}>{children}</Container>
+)
 
 export const Container = styled.div`
   padding-left: 45px;
@@ -30,14 +32,14 @@ export const ContainerSubsection = styled.div`
 `
 
 export const ContainerSubsectionBottom = styled.div`
-padding: 25px 45px 56px 45px;
-border-top: 0px;
-border-left: 1px solid #cccccc;
-border-right: 1px solid #cccccc;
-border-bottom: 1px solid #cccccc;
-min-height: 150px;
-background-color: #fff;
-overflow: visible;
+  padding: 25px 45px 56px 45px;
+  border-top: 0px;
+  border-left: 1px solid #cccccc;
+  border-right: 1px solid #cccccc;
+  border-bottom: 1px solid #cccccc;
+  min-height: 150px;
+  background-color: #fff;
+  overflow: visible;
 `
 
 export const QvainContainer = styled.div`
@@ -52,6 +54,12 @@ export const SubHeader = styled.div`
   align-items: center;
 `
 
+export const Paragraph = styled.p`
+  :last-child {
+    margin-bottom: 0;
+  }
+`
+
 export const StickySubHeaderWrapper = styled.div`
   top: 0;
   position: sticky;
@@ -60,16 +68,16 @@ export const StickySubHeaderWrapper = styled.div`
 
 export const StickySubHeader = styled.div`
   height: 50px;
-  background-color: rgb(231,233,237);
-  font-color: #4F4F4F;
+  background-color: rgb(231, 233, 237);
+  font-color: #4f4f4f;
   display: flex;
   width: 100%;
   justify-content: center;
-  border-bottom: 1px solid rgba(0,0,0,0.3);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
 `
 
 export const StickySubHeaderResponse = styled.div`
-  font-color: #4F4F4F;
+  font-color: #4f4f4f;
   display: flex;
   width: 100%;
   justify-content: center;
@@ -92,7 +100,7 @@ export const FileContainer = styled(Container)`
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.13);
   margin-bottom: 69px;
   margin-top: 0px;
-`;
+`
 
 const slide = keyframes`
   from {
@@ -104,28 +112,19 @@ const slide = keyframes`
     transform: translate(0, 0);
     opacity: 1;
   }
-`;
+`
 
 export const SlidingContent = styled.div`
   padding-top: 20px;
   position: relative;
   flex: auto;
   width: 100%;
-  animation: ${slide} .2s ease-in;
-  ${props => (
-    props.open ?
-      `
-      display: inline-block;
-      `
-      :
-      `
-      display: none;
-      `
-  )}
-`;
+  animation: ${slide} 0.2s ease-in;
+  ${props => (props.open ? 'display: inline-block;' : 'display: none;')}
+`
 
 Card.prototype = {
-  children: PropTypes.element.isRequired
+  children: PropTypes.element.isRequired,
 }
 
-export default Card;
+export default Card

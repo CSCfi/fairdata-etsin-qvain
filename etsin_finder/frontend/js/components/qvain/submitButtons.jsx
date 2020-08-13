@@ -125,7 +125,13 @@ class SubmitButtons extends Component {
   }
 
   handleUpdateV1 = async () => {
-    const { original, addUnsavedMultiValueFields, moveSelectedToExisting, setChanged, editDataset } = this.props.Stores.Qvain
+    const {
+      original,
+      addUnsavedMultiValueFields,
+      moveSelectedToExisting,
+      setChanged,
+      editDataset,
+    } = this.props.Stores.Qvain
     const { metaxApiV2 } = this.props.Stores.Env
     const datasetUrl = urls.v1.dataset(original.identifier)
 
@@ -175,6 +181,8 @@ class SubmitButtons extends Component {
       canSelectFiles,
       canRemoveFiles,
       addUnsavedMultiValueFields,
+      cumulativeState,
+      newCumulativeState,
       Files,
     } = this.props.Stores.Qvain
     const { metaxApiV2 } = this.props.Stores.Env
@@ -220,6 +228,10 @@ class SubmitButtons extends Component {
       if (metadataActions.files.length > 0 || metadataActions.directories.length > 0) {
         values.metadataActions = metadataActions
       }
+
+      if (newCumulativeState && newCumulativeState !== cumulativeState) {
+        values.newCumulativeState = newCumulativeState
+      }
     }
 
     return values
@@ -234,16 +246,26 @@ class SubmitButtons extends Component {
     }
   }
 
+  updateCumulativeState = (identifier, state) =>
+    axios.post(urls.v2.rpc.changeCumulativeState(), { identifier, cumulative_state: state })
+
   patchDataset = async values => {
-    const { dataset, fileActions, metadataActions } = values
+    const { dataset, fileActions, metadataActions, newCumulativeState } = values
     const { identifier } = dataset.original
     const datasetUrl = urls.v2.dataset(identifier)
     this.setLoading(true)
     const resp = await axios.patch(datasetUrl, dataset)
     await this.updateFiles(identifier, fileActions, metadataActions)
+
+    const cumulativeStateChanged =
+      newCumulativeState && dataset.cumulativeState !== newCumulativeState
+    if (cumulativeStateChanged) {
+      await this.updateCumulativeState(identifier, newCumulativeState)
+    }
+
     this.props.Stores.Qvain.setChanged(false)
 
-    if (fileActions || metadataActions) {
+    if (fileActions || metadataActions || cumulativeStateChanged) {
       // Dataset changed after patch, return updated dataset
       const { data } = await axios.get(datasetUrl)
       return data
