@@ -580,6 +580,7 @@ const english = {
           label: 'URL address',
           help: 'Specify URL address for license',
         },
+        addButton: 'Add license'
       },
     },
     actors: {

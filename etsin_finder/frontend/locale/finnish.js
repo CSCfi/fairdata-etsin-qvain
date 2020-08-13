@@ -579,6 +579,7 @@ const finnish = {
           label: 'URL',
           help: 'Anna osoite lisenssille.',
         },
+        addButton: 'Lisää lisenssi'
       },
     },
     actors: {
