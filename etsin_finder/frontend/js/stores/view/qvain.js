@@ -74,6 +74,28 @@ class Qvain {
 
   @observable externalResourceInEdit = EmptyExternalResource
 
+  // Missing fields array
+  @observable missingFieldsList = {
+    title: true,
+    description: true,
+    atLeastOneKeyword: true,
+    creator: true,
+    fileOrigin: true,
+    publisherAndDatasetIsDoi: false,
+  }
+
+  // Missing fields parameters (for drafts and published datasets)
+  @observable datasetHasSetTitle = false
+  @observable datasetHasSetDescription = false
+
+  // Missing fields parameters (for published datasets only)
+  @observable datasetHasSetAtLeastOneKeyword = false
+  @observable datasetHasSetCreator = false
+  @observable datasetHasSetFileOrigin = false
+
+  // Missing fields parameters (for published DOI datasets only)
+  @observable datasetHasSetPublisherAndIsDoi = false
+
   @action
   resetQvainStore = () => {
     this.original = undefined
@@ -134,6 +156,15 @@ class Qvain {
 
     this.Actors.reset()
     this.spatials = []
+
+    this.datasetHasSetTitle = false
+    this.datasetHasSetDescription = false
+
+    this.datasetHasSetAtLeastOneKeyword = false
+    this.datasetHasSetCreator = false
+    this.datasetHasSetFileOrigin = false
+
+    this.datasetHasSetPublisherAndIsDoi = false
   }
 
   @action
@@ -148,6 +179,9 @@ class Qvain {
     } else if (lang === 'FINNISH') {
       this.title.fi = title
     }
+    console.log(this.missingFieldsList)
+    console.log(this.missingFieldsList.name)
+    this.missingFieldsList = true
     this.changed = true
   }
 
@@ -158,6 +192,7 @@ class Qvain {
     } else if (lang === 'FINNISH') {
       this.description.fi = description
     }
+    this.datasetHasSetDescription = true
     this.changed = true
   }
 
@@ -267,6 +302,10 @@ class Qvain {
   setKeywordsArray = (keywords) => {
     this.keywordsArray = keywords
     this.changed = true
+    console.log('Length of keywordsArray is ' + this.keywordsArray.length)
+    if (false) {
+      this.datasetHasSetAtLeastOneKeyword = true
+    }
   }
 
   @action
@@ -406,6 +445,11 @@ class Qvain {
   @observable metadataModalFile = undefined
 
   @observable fixDeprecatedModalOpen = false
+
+  @action
+  updateMissingFieldsArray = () => {
+
+  }
 
   @action
   setDataCatalog = (selectedDataCatalog) => {

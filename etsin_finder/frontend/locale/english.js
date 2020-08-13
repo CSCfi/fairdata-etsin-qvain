@@ -338,6 +338,7 @@ const english = {
   qvain: {
     saveDraft: 'Save Draft',
     submit: 'Save and Publish',
+    missingFields: 'Publishing requires the following fields:',
     edit: 'Update Dataset',
     consent:
       'By using Qvain Light the user agrees that he or she has asked consent from all persons whose personal information the user will add to the descriptive data and informed them of how they can get their personal data removed. By using Qvain Light the user agrees to the <a href="https://www.fairdata.fi/hyodyntaminen/kayttopolitiikat-ja-ehdot/">Terms of Usage</a>.',
