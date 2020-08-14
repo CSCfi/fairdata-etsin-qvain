@@ -497,8 +497,6 @@ class SubmitButtons extends Component {
   }
 
   buildMissingFieldsListForDisplay = () => {
-    console.log('In subbmitButtons.jsx')
-    console.log(this.props.Stores.Qvain.missingFieldsListGeneral)
     return translate('qvain.missingFields')
       + // General fields
       (this.props.Stores.Qvain.missingFieldsListGeneral.filter(
@@ -580,14 +578,19 @@ class SubmitButtons extends Component {
               </SubmitButton>
             )
           ) : (
-            <SubmitButton
-              ref={this.submitDatasetButton}
-              disabled={disabledDueToReadOnly || disabledDueToMissingFieldsNonDraft}
-              type="button"
-              onClick={useDoi === true ? this.showUseDoiInformation : this.handleCreatePublishedV1}
+            <Tooltip
+              title={this.buildMissingFieldsListForDisplay()}
+              position="bottom"
             >
-              <Translate content="qvain.submit" />
-            </SubmitButton>
+              <SubmitButton
+                ref={this.submitDatasetButton}
+                disabled={disabledDueToReadOnly || disabledDueToMissingFieldsNonDraft}
+                type="button"
+                onClick={useDoi === true ? this.showUseDoiInformation : this.handleCreatePublishedV1}
+              >
+                <Translate content="qvain.submit" />
+              </SubmitButton>
+            </Tooltip>
           )}
           {doiModal}
         </div>
