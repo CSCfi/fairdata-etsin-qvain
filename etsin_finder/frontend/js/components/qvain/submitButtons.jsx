@@ -541,8 +541,12 @@ class SubmitButtons extends Component {
           {original ? (
             disabledDueToMissingFieldsNonDraft ? (
               <Tooltip
-              title={translate('qvain.missingFields')}
-              position="top"
+                title={
+                  translate('qvain.missingFields') + 
+                  ' ' +
+                  Stores.Qvain.missingFieldsList
+                }
+                position="bottom"
             >
               <SubmitButton
                 ref={this.updateDatasetButton}
