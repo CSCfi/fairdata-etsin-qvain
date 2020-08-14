@@ -73,15 +73,17 @@ class Actors {
   // Missing fields array (actors), used for preventing publishing
   // Related to missingFieldsListGeneral in ./qvain.js
   @observable missingFieldsListActors = [
-    { // Creator [0]
+    { // Actor [0]
       fieldName: 'creator',
       valueIsMissing: true,
     },
-    { // Creator [1]: Only relevant if dataset is DOI
+    { // Actor [1]: Only relevant if dataset is DOI
       fieldName: 'publisher',
-      valueIsMissing: true,
+      valueIsMissing: false,
     },
   ]
+
+  @observable stillMissingActorFields = true
 
   // Reference organizations by parent
   @observable referenceOrganizations = {}
@@ -94,6 +96,18 @@ class Actors {
     this.referenceOrganizations = {}
     this.loadingReferenceOrganizations = {}
     this.referenceOrganizationErrors = {}
+  }
+
+  @action
+  checkMissingFieldsActors = () => {
+    for (var i = 0; i < this.missingFieldsListActors.length; i += 1) {
+      console.log('loop 2')
+      if (this.missingFieldsListActors[i].valueIsMissing) {
+        console.log(' 2 and there is still some things...')
+        break;
+      }
+      this.stillMissingActorFields = false
+    }
   }
 
   getReferenceOrganizations = (parent) => {
@@ -232,7 +246,12 @@ class Actors {
         fieldName: 'creator',
         valueIsMissing: true,
       },
+      {
+        fieldName: 'publisher',
+        valueIsMissing: false,
+      },
     ]
+    this.stillMissingActorFields = true
   }
 
   editDataset = (researchDataset) => {
@@ -242,6 +261,8 @@ class Actors {
       actors.push(
         this.createActor(researchDataset.publisher, ROLE.PUBLISHER, actors)
       )
+      // Publisher is not missing
+      this.missingFieldsListActors[1].valueIsMissing = false
     }
     if ('curator' in researchDataset) {
       researchDataset.curator.forEach(curator =>
@@ -252,6 +273,8 @@ class Actors {
       researchDataset.creator.forEach(creator =>
         actors.push(this.createActor(creator, ROLE.CREATOR, actors))
       )
+      // Creator is not missing
+      this.missingFieldsListActors[0].valueIsMissing = false
     }
     if ('rights_holder' in researchDataset) {
       researchDataset.rights_holder.forEach(rightsHolder =>
@@ -308,6 +331,10 @@ class Actors {
     }
 
     const roles = [role]
+
+    console.log('lets check what the role is...')
+    console.log(roles)
+
     return Actor({
       type: entityType,
       person,

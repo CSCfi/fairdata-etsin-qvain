@@ -500,12 +500,12 @@ class SubmitButtons extends Component {
     console.log('In subbmitButtons.jsx')
     console.log(this.props.Stores.Qvain.missingFieldsListGeneral)
     return translate('qvain.missingFields')
-      +
+      + // General fields
       (this.props.Stores.Qvain.missingFieldsListGeneral.filter(
         element => element.valueIsMissing === true).map(filteredField => (
         "\n" + filteredField.fieldName
       )))
-      +
+      + // Actor fields
       (this.props.Stores.Qvain.Actors.missingFieldsListActors.filter(
         element => element.valueIsMissing === true).map(filteredField => (
         "\n" + filteredField.fieldName
@@ -539,8 +539,8 @@ class SubmitButtons extends Component {
     const { original, readonly, useDoi } = Stores.Qvain
     const { metaxApiV2 } = Stores.Env
     const disabledDueToReadOnly = readonly || this.state.datasetLoading
-    let disabledDueToMissingFieldsDraft = false
-    let disabledDueToMissingFieldsNonDraft = true
+    let disabledDueToMissingFieldsDraft = Stores.Qvain.stillMissingGeneralFields// && Stores.Qvain.Actors.stillMissingActorFields
+    let disabledDueToMissingFieldsNonDraft = Stores.Qvain.stillMissingGeneralFields// && Stores.Qvain.Actors.stillMissingActorFields
     const doiModal = (
       <DoiModal
         isOpen={this.state.useDoiModalIsOpen}
