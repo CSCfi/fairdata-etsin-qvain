@@ -496,6 +496,13 @@ class SubmitButtons extends Component {
     })
   }
 
+  buildMissingFieldsListForDisplay = () => {
+    return translate('qvain.missingFields') + (this.props.Stores.Qvain.missingFieldsList.filter(
+      element => element.valueIsMissing === true).map(filteredField => (
+      filteredField.fieldName + "\n"
+    )))
+  }
+
   // DOI usage accepted and will thus be used instead of URN ("yes")
   acceptDoi = () => {
     this.handleCreatePublishedV1()
@@ -542,9 +549,7 @@ class SubmitButtons extends Component {
             disabledDueToMissingFieldsNonDraft ? (
               <Tooltip
                 title={
-                  translate('qvain.missingFields') + 
-                  ' ' +
-                  Stores.Qvain.missingFieldsList
+                  this.buildMissingFieldsListForDisplay()
                 }
                 position="bottom"
             >

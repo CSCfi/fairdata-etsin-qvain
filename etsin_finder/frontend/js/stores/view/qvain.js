@@ -77,14 +77,32 @@ class Qvain {
   @observable externalResourceInEdit = EmptyExternalResource
 
   // Missing fields array
-  @observable missingFieldsList = {
-    title: true,
-    description: true,
-    atLeastOneKeyword: true,
-    creator: true,
-    fileOrigin: true,
-    publisherAndDatasetIsDoi: false,
-  }
+  @observable missingFieldsList = [
+    {
+      fieldName: 'title',
+      valueIsMissing: true,
+    },
+    {
+      fieldName: 'description',
+      valueIsMissing: true,
+    },
+    {
+      fieldName: 'atLeastOneKeyword',
+      valueIsMissing: true,
+    },
+    {
+      fieldName: 'creator',
+      valueIsMissing: true,
+    },
+    {
+      fieldName: 'fileOrigin',
+      valueIsMissing: true,
+    },
+    {
+      fieldName: 'publisherAndDatasetIsDoi',
+      valueIsMissing: false,
+    },
+  ]
 
   // Missing fields parameters (for drafts and published datasets)
   @observable datasetHasSetTitle = false
@@ -182,10 +200,15 @@ class Qvain {
     } else if (lang === 'FINNISH') {
       this.title.fi = title
     }
-    console.log(this.missingFieldsList)
-    console.log(this.missingFieldsList.name)
-    this.missingFieldsList = true
     this.changed = true
+
+    if (title != '' && title != undefined) {
+      console.log(title)
+      console.log(this.missingFieldsList.title)
+      this.missingFieldsList.title = false
+      console.log(this.missingFieldsList)
+      console.log(this.missingFieldsList.title)
+    }
   }
 
   @action
