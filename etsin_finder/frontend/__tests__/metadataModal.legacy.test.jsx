@@ -241,8 +241,8 @@ describe('Qvain.MetadataModal', () => {
     instance.setCsvHasHeader({ value: false })
     expect(instance.state.csvHasHeader).toBe(false)
 
-    // Mock the patch RPC used by save
-    axios.patch.mockImplementationOnce((url, data) => ({
+    // Mock the put request used by save
+    axios.put.mockImplementationOnce((url, data) => ({
       data: {
         ...testFile,
         file_characteristics: {
@@ -267,8 +267,8 @@ describe('Qvain.MetadataModal', () => {
     instance.setFormatVersion({ value: '1.6' })
     expect(instance.state.formatVersion).toBe('1.6')
 
-    // Mock the patch RPC used by save
-    axios.patch.mockImplementationOnce((url, data) => ({
+    // Mock the put request used by save
+    axios.put.mockImplementationOnce((url, data) => ({
       data: {
         ...testFile4,
         file_characteristics: {

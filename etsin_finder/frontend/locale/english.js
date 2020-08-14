@@ -909,10 +909,18 @@ const english = {
           loadingFileFormats: 'Failed to load list of allowed file formats.',
         },
         buttons: {
+          add: 'Add Digital Preservation metadata',
           show: 'Edit Digital Preservation metadata',
+          delete: 'Remove Digital Preservation metadata',
           close: 'Close',
           save: 'Save changes',
           hideError: 'Continue editing',
+        },
+        clear: {
+          header: 'Remove Digital Preservation metadata',
+          help: 'Are you sure you want to remove Digital Preservation metadata for file %(file)s? The change will take place immediately.',
+          cancel: 'Cancel',
+          confirm: 'Remove',
         },
         options: {
           delimiter: {

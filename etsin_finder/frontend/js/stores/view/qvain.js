@@ -120,6 +120,7 @@ class Qvain {
     this.inEdit = undefined
 
     this.metadataModalFile = undefined
+    this.clearMetadataModalFile = undefined
     this.fixDeprecatedModalOpen = false
 
     this.Files.reset()
@@ -439,6 +440,8 @@ class Qvain {
 
   @observable metadataModalFile = undefined
 
+  @observable clearMetadataModalFile = undefined
+
   @observable fixDeprecatedModalOpen = false
 
   @action
@@ -659,6 +662,10 @@ class Qvain {
     } else {
       this.inEdit = selectedItem
     }
+  }
+
+  @action setClearMetadataModalFile = (file) => {
+    this.clearMetadataModalFile = file
   }
 
   @action setMetadataModalFile = (file) => {

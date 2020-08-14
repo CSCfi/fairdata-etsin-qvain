@@ -218,8 +218,13 @@ class Files extends FilesBase {
   }
 
   @action applyPASMeta = values => {
-    Object.assign(this.Qvain.metadataModalFile.pasMeta, values)
+    this.Qvain.metadataModalFile.pasMeta = values
     this.Qvain.setMetadataModalFile(null)
+  }
+
+  @action applyClearPASMeta = (values) => {
+    this.Qvain.clearMetadataModalFile.pasMeta = values
+    this.Qvain.setClearMetadataModalFile(null)
   }
 
   metadataToMetax = () => {

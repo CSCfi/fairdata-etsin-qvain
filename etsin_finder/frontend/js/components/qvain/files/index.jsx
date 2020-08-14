@@ -14,6 +14,7 @@ import { DATA_CATALOG_IDENTIFIER } from '../../../utils/constants'
 import Tooltip from '../general/tooltip'
 import FilesInfo from './filesInfo'
 import MetadataModal from './metadataModal'
+import ClearMetadataModal from './metadataModal/clearMetadataModal'
 import SelectedItems from './ida/selectedItems'
 import LegacyFilePicker from './legacy/idaFilePicker'
 import LegacySelectedFiles from './legacy/selectedFiles'
@@ -86,6 +87,7 @@ class Files extends Component {
         <DataCatalog />
         {data}
         <MetadataModal />
+        <ClearMetadataModal />
       </ContainerLight>
     )
   }

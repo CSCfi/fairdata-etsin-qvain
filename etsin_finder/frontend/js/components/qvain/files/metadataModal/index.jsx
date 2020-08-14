@@ -87,7 +87,7 @@ class MetadataModal extends Component {
     } else {
       url = urls.v1.fileCharacteristics(identifier)
     }
-    return axios.patch(url, data, {
+    return axios.put(url, data, {
       headers: {
         'Content-Type': 'application/json',
       },
@@ -238,6 +238,7 @@ class MetadataModal extends Component {
       })
       this.close()
     } catch (err) {
+      console.error(err)
       this.setState({
         response: {
           error: getResponseError(err),
