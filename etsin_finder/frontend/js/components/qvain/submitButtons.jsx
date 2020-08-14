@@ -497,10 +497,19 @@ class SubmitButtons extends Component {
   }
 
   buildMissingFieldsListForDisplay = () => {
-    return translate('qvain.missingFields') + (this.props.Stores.Qvain.missingFieldsList.filter(
-      element => element.valueIsMissing === true).map(filteredField => (
-      filteredField.fieldName + "\n"
-    )))
+    console.log('In subbmitButtons.jsx')
+    console.log(this.props.Stores.Qvain.missingFieldsListGeneral)
+    return translate('qvain.missingFields')
+      +
+      (this.props.Stores.Qvain.missingFieldsListGeneral.filter(
+        element => element.valueIsMissing === true).map(filteredField => (
+        "\n" + filteredField.fieldName
+      )))
+      +
+      (this.props.Stores.Qvain.Actors.missingFieldsListActors.filter(
+        element => element.valueIsMissing === true).map(filteredField => (
+        "\n" + filteredField.fieldName
+      )))
   }
 
   // DOI usage accepted and will thus be used instead of URN ("yes")
@@ -548,19 +557,17 @@ class SubmitButtons extends Component {
           {original ? (
             disabledDueToMissingFieldsNonDraft ? (
               <Tooltip
-                title={
-                  this.buildMissingFieldsListForDisplay()
-                }
+                title={this.buildMissingFieldsListForDisplay()}
                 position="bottom"
-            >
-              <SubmitButton
-                ref={this.updateDatasetButton}
-                disabled
-                type="button"
-                onClick={this.handleUpdateV1}
               >
-                <Translate content="qvain.edit" />
-              </SubmitButton>
+                <SubmitButton
+                  ref={this.updateDatasetButton}
+                  disabled
+                  type="button"
+                  onClick={this.handleUpdateV1}
+                >
+                  <Translate content="qvain.edit" />
+                </SubmitButton>
               </Tooltip>
             ) : (
               <SubmitButton

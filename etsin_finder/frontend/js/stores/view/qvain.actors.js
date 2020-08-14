@@ -70,6 +70,19 @@ class Actors {
 
   @observable actorInEdit
 
+  // Missing fields array (actors), used for preventing publishing
+  // Related to missingFieldsListGeneral in ./qvain.js
+  @observable missingFieldsListActors = [
+    { // Creator [0]
+      fieldName: 'creator',
+      valueIsMissing: true,
+    },
+    { // Creator [1]: Only relevant if dataset is DOI
+      fieldName: 'publisher',
+      valueIsMissing: true,
+    },
+  ]
+
   // Reference organizations by parent
   @observable referenceOrganizations = {}
 
@@ -214,6 +227,12 @@ class Actors {
   reset = () => {
     this.actors.clear()
     this.actorInEdit = null
+    this.missingFieldsListActors = [
+      {
+        fieldName: 'creator',
+        valueIsMissing: true,
+      },
+    ]
   }
 
   editDataset = (researchDataset) => {

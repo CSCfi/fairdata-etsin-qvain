@@ -76,45 +76,26 @@ class Qvain {
 
   @observable externalResourceInEdit = EmptyExternalResource
 
-  // Missing fields array
-  @observable missingFieldsList = [
-    {
+  // Missing fields array (general), used for preventing publishing
+  // Related to missingFieldsListActors in ./qvain.actors.js
+  @observable missingFieldsListGeneral = [
+    { // [0]
       fieldName: 'title',
       valueIsMissing: true,
     },
-    {
+    { // [1]
       fieldName: 'description',
       valueIsMissing: true,
     },
-    {
+    { // [2]
       fieldName: 'atLeastOneKeyword',
       valueIsMissing: true,
     },
-    {
-      fieldName: 'creator',
-      valueIsMissing: true,
-    },
-    {
+    { // [3]
       fieldName: 'fileOrigin',
       valueIsMissing: true,
     },
-    {
-      fieldName: 'publisherAndDatasetIsDoi',
-      valueIsMissing: false,
-    },
   ]
-
-  // Missing fields parameters (for drafts and published datasets)
-  @observable datasetHasSetTitle = false
-  @observable datasetHasSetDescription = false
-
-  // Missing fields parameters (for published datasets only)
-  @observable datasetHasSetAtLeastOneKeyword = false
-  @observable datasetHasSetCreator = false
-  @observable datasetHasSetFileOrigin = false
-
-  // Missing fields parameters (for published DOI datasets only)
-  @observable datasetHasSetPublisherAndIsDoi = false
 
   @action
   resetQvainStore = () => {
@@ -178,14 +159,25 @@ class Qvain {
     this.Actors.reset()
     this.spatials = []
 
-    this.datasetHasSetTitle = false
-    this.datasetHasSetDescription = false
-
-    this.datasetHasSetAtLeastOneKeyword = false
-    this.datasetHasSetCreator = false
-    this.datasetHasSetFileOrigin = false
-
-    this.datasetHasSetPublisherAndIsDoi = false
+    // Missing fields array
+    this.missingFieldsList = [
+      { // [0]
+        fieldName: 'title',
+        valueIsMissing: true,
+      },
+      { // [1]
+        fieldName: 'description',
+        valueIsMissing: true,
+      },
+      { // [2]
+        fieldName: 'atLeastOneKeyword',
+        valueIsMissing: true,
+      },
+      { // [3]
+        fieldName: 'fileOrigin',
+        valueIsMissing: true,
+      },
+    ]
   }
 
   @action
@@ -202,12 +194,12 @@ class Qvain {
     }
     this.changed = true
 
+    // Missing field [0]: Title is set and thus no longer missing
     if (title != '' && title != undefined) {
-      console.log(title)
-      console.log(this.missingFieldsList.title)
-      this.missingFieldsList.title = false
-      console.log(this.missingFieldsList)
-      console.log(this.missingFieldsList.title)
+      this.missingFieldsList[0].valueIsMissing = false
+    // ... but if not, title is empty, and should prevent publishing
+    } else {
+      this.missingFieldsList[0].valueIsMissing = true
     }
   }
 
@@ -218,8 +210,16 @@ class Qvain {
     } else if (lang === 'FINNISH') {
       this.description.fi = description
     }
-    this.datasetHasSetDescription = true
+
     this.changed = true
+
+    // Missing field [1]: Description is set and should no longer prevent publishing
+    if (description != '' && description != undefined) {
+      this.missingFieldsList[1].valueIsMissing = false
+    // ... but if undefined, it should prevent publshing
+    } else {
+      this.missingFieldsList[1].valueIsMissing = true
+    }
   }
 
   @action
@@ -328,9 +328,13 @@ class Qvain {
   setKeywordsArray = (keywords) => {
     this.keywordsArray = keywords
     this.changed = true
-    console.log('Length of keywordsArray is ' + this.keywordsArray.length)
-    if (false) {
-      this.datasetHasSetAtLeastOneKeyword = true
+
+    // Missing field [2]: At least one keyword is set and thus keywords is no longer empty
+    if (this.keywordsArray.length > 0) {
+      this.missingFieldsList[2].valueIsMissing = false
+    // ... but if no keywords exist, it should prevent publshing
+    } else {
+      this.missingFieldsList[2].valueIsMissing = true
     }
   }
 
@@ -516,6 +520,14 @@ class Qvain {
     // Remove useDoi if dataCatalog is ATT
     if (selectedDataCatalog === DATA_CATALOG_IDENTIFIER.ATT) {
       this.useDoi = false
+    }
+
+    // Missing field [3]: dataCatalog is set and should no longer prevent publishing
+    if (selectedDataCatalog != undefined) {
+      this.missingFieldsList[4].valueIsMissing = false
+    // ... but if undefined, it should prevent publshing
+    } else {
+      this.missingFieldsList[4].valueIsMissing = true
     }
   }
 
