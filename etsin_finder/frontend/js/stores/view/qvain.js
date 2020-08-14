@@ -212,7 +212,7 @@ class Qvain {
     this.changed = true
 
     // Missing field [0]: Title is set and thus no longer missing
-    if (title != '' && title != undefined) {
+    if (title !== '' && title !== undefined) {
       this.missingFieldsListGeneral[0].valueIsMissing = false
       this.checkMissingFieldsGeneral()
     // ... but if not, title is empty, and should prevent publishing
@@ -232,7 +232,7 @@ class Qvain {
     this.changed = true
 
     // Missing field [1]: Description is set and should no longer prevent publishing
-    if (description != '' && description != undefined) {
+    if (description !== '' && description !== undefined) {
       this.missingFieldsListGeneral[1].valueIsMissing = false
       this.checkMissingFieldsGeneral()
     // ... but if undefined, it should prevent publshing
@@ -543,7 +543,7 @@ class Qvain {
     }
 
     // Missing field [3]: dataCatalog is set and should no longer prevent publishing
-    if (selectedDataCatalog != undefined) {
+    if (selectedDataCatalog !== undefined) {
       this.missingFieldsListGeneral[3].valueIsMissing = false
       this.checkMissingFieldsGeneral()
     // ... but if undefined, it should prevent publshing

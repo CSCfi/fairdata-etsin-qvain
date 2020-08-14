@@ -100,7 +100,7 @@ class Actors {
 
   @action
   checkMissingFieldsActors = () => {
-    for (var i = 0; i < this.missingFieldsListActors.length; i += 1) {
+    for (let i = 0; i < this.missingFieldsListActors.length; i += 1) {
       console.log('loop 2')
       if (this.missingFieldsListActors[i].valueIsMissing) {
         console.log(' 2 and there is still some things...')
