@@ -45,6 +45,8 @@ import PasState from './pasState'
 import SubmitButtons from './submitButtons'
 import { DATASET_URLS } from '../../utils/constants'
 import Tracking from '../../utils/tracking'
+import { ConfirmDialog } from './general/confirmClose'
+import Modal from '../general/modal'
 
 class Qvain extends Component {
   promises = []
@@ -217,7 +219,8 @@ class Qvain extends Component {
   }
 
   render() {
-    const { original } = this.props.Stores.Qvain
+    const { original, promptLooseActors, promptLooseProvenances, orphanActors, provenancesWithNonExistingActors } = this.props.Stores.Qvain
+    const { lang } = this.props.Stores.Locale
     // Title text
     let titleKey
     if (this.state.datasetLoading) {
@@ -228,6 +231,47 @@ class Qvain extends Component {
       titleKey = 'qvain.titleEdit'
     } else {
       titleKey = 'qvain.titleCreate'
+    }
+
+    const confirmLooseActorsDialogProps = {
+      show: !!promptLooseActors,
+      onCancel: () => promptLooseActors(false),
+      onConfirm: () => promptLooseActors(true),
+      content: {
+        warning: (
+          <>
+            <Translate content={'qvain.general.looseActors.warning'} component="p" />
+            <div>{(orphanActors || []).map(actor => {
+              const actorName = (actor.person || {}).name || actor.organizations[0].name[lang]
+              const rolesStr = actor.roles.map(role => `${translate(`qvain.actors.add.checkbox.${role}`)}`)
+              return `${actorName} / ${rolesStr.join(' / ')}`
+            })}
+            </div>
+            <div style={{ margin: 10 }} />
+            <Translate content={'qvain.general.looseActors.question'} style={{ fontWeight: 600 }} />
+          </>
+          ),
+        confirm: <Translate content={'qvain.general.looseActors.confirm'} />,
+        cancel: <Translate content={'qvain.general.looseActors.cancel'} />
+      }
+    }
+
+    const confirmLooseProvenanceDialogProps = {
+      show: !!promptLooseProvenances,
+      onCancel: () => promptLooseProvenances(false),
+      onConfirm: () => promptLooseProvenances(true),
+      content: {
+        warning: (
+          <>
+            <Translate content={'qvain.general.looseProvenances.warning'} component="p" />
+            <div>{provenancesWithNonExistingActors.map(p => p.name[lang] || p.name.und)}</div>
+            <div style={{ margin: 10 }} />
+            <Translate content={'qvain.general.looseProvenances.question'} style={{ fontWeight: 600 }} />
+          </>
+          ),
+        confirm: <Translate content={'qvain.general.looseProvenances.confirm'} />,
+        cancel: <Translate content={'qvain.general.looseProvenances.cancel'} />
+      }
     }
 
     const createLinkBack = (position) => (
@@ -328,9 +372,53 @@ class Qvain extends Component {
         </SubHeader>
         {stickyheader}
         {dataset}
+        {confirmLooseActorsDialogProps.show && (
+        <Modal
+          isOpen
+          contentLabel={'Warning'}
+          customStyles={modalStyle}
+        >
+          <ConfirmDialog {...confirmLooseActorsDialogProps} />
+        </Modal>
+        )}
+        {confirmLooseProvenanceDialogProps.show && (
+        <Modal
+          isOpen
+          contentLabel={'Warning'}
+          customStyles={modalStyle}
+        >
+
+          <ConfirmDialog {...confirmLooseProvenanceDialogProps} />
+        </Modal>
+        )}
+
       </QvainContainer>
     )
   }
+}
+
+const modalStyle = {
+  content: {
+    top: '0',
+    bottom: '0',
+    left: '0',
+    right: '0',
+    position: 'relative',
+    minHeight: '65vh',
+    maxHeight: '95vh',
+    minWidth: '300px',
+    maxWidth: '600px',
+    margin: '0.5em',
+    border: 'none',
+    padding: '2em',
+    boxShadow: '0px 6px 12px -3px rgba(0, 0, 0, 0.15)',
+    overflow: 'hidden',
+    paddingLeft: '2em',
+    paddingRight: '2em',
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
+  },
 }
 
 export default withRouter(inject('Stores')(observer(Qvain)))
