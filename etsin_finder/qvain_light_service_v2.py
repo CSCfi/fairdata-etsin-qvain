@@ -15,6 +15,7 @@ import json
 from etsin_finder.finder import app
 from etsin_finder.app_config import get_metax_qvain_api_config
 from etsin_finder.utils import json_or_empty, FlaskService
+from etsin_finder.request_utils import make_request
 from etsin_finder.qvain_light_service import MetaxQvainLightAPIService as MetaxQvainLightAPIServiceV1
 
 log = app.logger
@@ -77,30 +78,20 @@ class MetaxQvainLightAPIService(MetaxQvainLightAPIServiceV1):
 
         """
         req_url = self.METAX_CREATE_DATASET
-        headers = {'Accept': 'application/json'}
-        try:
-            metax_api_response = requests.post(req_url,
-                                               params=params,
-                                               json=data,
-                                               headers=headers,
-                                               auth=(self.user, self.pw),
-                                               verify=self.verify_ssl,
-                                               timeout=10)
-            metax_api_response.raise_for_status()
-        except Exception as e:
-            if isinstance(e, requests.HTTPError):
-                log.warning(
-                    "Failed to create dataset.\nResponse status code: {0}\nResponse text: {1}".format(
-                        metax_api_response.status_code,
-                        json_or_empty(metax_api_response) or metax_api_response.text
-                    ))
-                return metax_api_response.json(), metax_api_response.status_code
-            else:
-                log.error("Error creating dataset\n{0}".format(e))
-            return {'Error_message': 'Error trying to send data to metax.'}, metax_api_response.status_code
+        args = self._get_args(timeout=30)
+        resp, status, success = make_request(requests.post,
+                                             req_url,
+                                             params=params,
+                                             json=data,
+                                             **args
+                                             )
 
-        log.info('Created dataset with identifier: {}'.format(json.loads(metax_api_response.text).get('identifier', 'COULD-NOT-GET-IDENTIFIER')))
-        return metax_api_response.json(), metax_api_response.status_code
+        if not success:
+            log.warning("Failed to create dataset")
+            return resp, status
+
+        log.info('Created dataset with identifier: {}'.format(resp.json().get('identifier', 'COULD-NOT-GET-IDENTIFIER')))
+        return resp
 
     def update_dataset(self, data, cr_id, last_modified, params):
         """Update a dataset with the data that the user has entered in Qvain-light.
@@ -116,36 +107,25 @@ class MetaxQvainLightAPIService(MetaxQvainLightAPIServiceV1):
 
         """
         req_url = self.METAX_PATCH_DATASET.format(cr_id)
-        headers = {'Accept': 'application/json', 'If-Unmodified-Since': last_modified}
+        headers = {'Accept':  'application/json', 'If-Unmodified-Since': last_modified}
         log.debug('Request URL: PATCH {0}\nHeaders: {1}\nData: {2}'.format(req_url, headers, json.dumps(data, indent=2)))
-        try:
-            metax_api_response = requests.patch(req_url,
-                                                params=params,
-                                                json=data,
-                                                headers=headers,
-                                                auth=(self.user, self.pw),
-                                                verify=self.verify_ssl,
-                                                timeout=10)
-            metax_api_response.raise_for_status()
-        except Exception as e:
-            if isinstance(e, requests.HTTPError):
-                log.warning(
-                    "Failed to update dataset {0}.\nResponse status code: {1}\nResponse text: {2}".format(
-                        cr_id,
-                        metax_api_response.status_code,
-                        json_or_empty(metax_api_response) or metax_api_response.text
-                    ))
-                return metax_api_response.json(), metax_api_response.status_code
-            else:
-                log.error("Error updating dataset {0}\n{1}"
-                          .format(cr_id, e))
-            return 'Error trying to send data to metax.', 500
 
-        log.info('Updated dataset with identifier: {}'.format(cr_id))
-        if metax_api_response.status_code == 412:
+        args = self._get_args(timeout=30)
+        resp, status, success = make_request(requests.patch,
+                                             req_url,
+                                             params=params,
+                                             json=data,
+                                             **args)
+
+        if not success:
+            log.warning("Failed to update dataset {}: {}".format(cr_id, resp), status)
+            return resp, status
+
+        if status == 412:
             return 'Resource has been modified since last publish', 412
 
-        return metax_api_response.json(), metax_api_response.status_code
+        log.info('Updated dataset with identifier: {}'.format(cr_id))
+        return resp, status
 
     def update_dataset_files(self, cr_id, data, params=None):
         """Add or remove files in a dataset.
@@ -162,33 +142,24 @@ class MetaxQvainLightAPIService(MetaxQvainLightAPIServiceV1):
         """
         req_url = self.METAX_UPDATE_DATASET_FILES.format(cr_id)
         log.debug('Request URL: {0}\nData: {1}'.format(req_url, data))
-        try:
-            metax_api_response = requests.post(req_url,
-                                               params=params,
-                                               json=data,
-                                               auth=(self.user, self.pw),
-                                               verify=self.verify_ssl,
-                                               timeout=10)
-            metax_api_response.raise_for_status()
-        except Exception as e:
-            if isinstance(e, requests.HTTPError):
-                log.warning(
-                    "Failed to update dataset {0}.\nResponse status code: {1}\nResponse text: {2}".format(
-                        cr_id,
-                        metax_api_response.status_code,
-                        json_or_empty(metax_api_response) or metax_api_response.text
-                    ))
-                return metax_api_response.json(), metax_api_response.status_code
-            else:
-                log.error("Error updating dataset {0}\n{1}"
-                          .format(cr_id, e))
-            return 'Error trying to send data to metax.', 500
 
-        log.info('Updated dataset with identifier: {}'.format(cr_id))
-        if metax_api_response.status_code == 412:
+        args = self._get_args(timeout=30)
+        resp, status, success = make_request(requests.post,
+                                             req_url,
+                                             params=params,
+                                             json=data,
+                                             **args
+                                             )
+
+        if not success:
+            log.warning("Failed to update dataset {}".format(cr_id))
+            return resp, status
+
+        if status == 412:
             return 'Resource has been modified since last publish', 412
 
-        return json_or_empty(metax_api_response), metax_api_response.status_code
+        log.info('Updated dataset with identifier: {}'.format(cr_id))
+        return resp, status
 
     def refresh_directory_content(self, cr_identifier, dir_identifier):
         """No longer necessary, use update_dataset_files instead."""
@@ -212,29 +183,19 @@ class MetaxQvainLightAPIService(MetaxQvainLightAPIServiceV1):
         params = {
             "identifier": cr_identifier,
         }
-        headers = {'Accept': 'application/json'}
-        try:
-            metax_api_response = requests.post( req_url,
-                                                headers=headers,
-                                                auth=(self.user, self.pw),
-                                                verify=self.verify_ssl,
-                                                params=params,
-                                                timeout=10)
-            metax_api_response.raise_for_status()
-        except Exception as e:
-            if isinstance(e, requests.HTTPError):
-                log.warning(
-                    "Failed to create new dataset version {0}\nResponse status code: {1}\nResponse text: {2}".format(
-                        cr_identifier,
-                        metax_api_response.status_code,
-                        json_or_empty(metax_api_response) or metax_api_response.text
-                    ))
-                return json_or_empty(metax_api_response) or metax_api_response.text, metax_api_response.status_code
-            else:
-                log.error("Error creating new dataset version {0} \n{1}".format(cr_identifier, e))
-            return {'detail': 'Error trying to send data to metax.'}, 500
-        log.info('Created new dataset version {}'.format(cr_identifier))
-        return (json_or_empty(metax_api_response) or metax_api_response.text), metax_api_response.status_code
+        args = self._get_args(timeout=30)
+        resp, status, success = make_request(requests.post,
+                                             req_url,
+                                             params=params,
+                                             **args
+                                             )
+
+        if not success:
+            log.warning("Failed to create new version of dataset {}".format(cr_identifier))
+            return resp, status
+
+        log.info('Created new version of dataset {}'.format(cr_identifier))
+        return resp, status
 
     def publish_dataset(self, cr_identifier):
         """Call Metax publish_dataset RPC to publish a draft dataset.
@@ -250,29 +211,18 @@ class MetaxQvainLightAPIService(MetaxQvainLightAPIServiceV1):
         params = {
             "identifier": cr_identifier,
         }
-        headers = {'Accept': 'application/json'}
-        try:
-            metax_api_response = requests.post( req_url,
-                                                headers=headers,
-                                                auth=(self.user, self.pw),
-                                                verify=self.verify_ssl,
-                                                params=params,
-                                                timeout=10)
-            metax_api_response.raise_for_status()
-        except Exception as e:
-            if isinstance(e, requests.HTTPError):
-                log.warning(
-                    "Failed to publish dataset {0}\nResponse status code: {1}\nResponse text: {2}".format(
-                        cr_identifier,
-                        metax_api_response.status_code,
-                        json_or_empty(metax_api_response) or metax_api_response.text
-                    ))
-                return json_or_empty(metax_api_response) or metax_api_response.text, metax_api_response.status_code
-            else:
-                log.error("Error publishing draft dataset {0} \n{1}".format(cr_identifier, e))
-            return {'detail': 'Error trying to send data to metax.'}, 500
-        log.info('Published draft dataset {}'.format(cr_identifier))
-        return (json_or_empty(metax_api_response) or metax_api_response.text), metax_api_response.status_code
+        args = self._get_args(timeout=30)
+        resp, status, success = make_request(requests.post,
+                                             req_url,
+                                             params=params,
+                                             **args)
+
+        if not success:
+            log.warning("Failed to publish dataset {}".format(cr_identifier))
+            return resp, status
+
+        log.info('Published dataset {}'.format(cr_identifier))
+        return resp, status
 
     def merge_draft(self, cr_identifier):
         """Call Metax merge_draft RPC to merge a draft to the corresponding published dataset.
@@ -288,35 +238,25 @@ class MetaxQvainLightAPIService(MetaxQvainLightAPIServiceV1):
         params = {
             "identifier": cr_identifier,
         }
-        headers = {'Accept': 'application/json'}
-        try:
-            metax_api_response = requests.post( req_url,
-                                                headers=headers,
-                                                auth=(self.user, self.pw),
-                                                verify=self.verify_ssl,
-                                                params=params,
-                                                timeout=10)
-            metax_api_response.raise_for_status()
-        except Exception as e:
-            if isinstance(e, requests.HTTPError):
-                log.warning(
-                    "Failed to merge draft {0}\nResponse status code: {1}\nResponse text: {2}".format(
-                        cr_identifier,
-                        metax_api_response.status_code,
-                        json_or_empty(metax_api_response) or metax_api_response.text
-                    ))
-                return json_or_empty(metax_api_response) or metax_api_response.text, metax_api_response.status_code
-            else:
-                log.error("Errog merging draft {0} \n{1}".format(cr_identifier, e))
-            return {'detail': 'Error trying to send data to metax.'}, 500
-        log.info('Merged draft dataset {}'.format(cr_identifier))
-        return (json_or_empty(metax_api_response) or metax_api_response.text), metax_api_response.status_code
+        args = self._get_args(timeout=30)
+        resp, status, success = make_request(requests.post,
+                                             req_url,
+                                             params=params,
+                                             **args
+                                             )
+
+        if not success:
+            log.warning("Failed to merge draft {}".format(cr_identifier))
+            return resp, status
+
+        log.info('Merged draft {}'.format(cr_identifier))
+        return resp, status
 
     def create_draft(self, cr_identifier):
-        """Call Metax create_draft RPC to publish a draft dataset.
+        """Call Metax create_draft RPC to create a draft of an existing dataset.
 
         Arguments:
-            cr_identifier (str): The identifier of the draft dataset.
+            cr_identifier (str): The identifier of the existing dataset.
 
         Returns:
             Metax response.
@@ -326,29 +266,19 @@ class MetaxQvainLightAPIService(MetaxQvainLightAPIServiceV1):
         params = {
             "identifier": cr_identifier,
         }
-        headers = {'Accept': 'application/json'}
-        try:
-            metax_api_response = requests.post( req_url,
-                                                headers=headers,
-                                                auth=(self.user, self.pw),
-                                                verify=self.verify_ssl,
-                                                params=params,
-                                                timeout=10)
-            metax_api_response.raise_for_status()
-        except Exception as e:
-            if isinstance(e, requests.HTTPError):
-                log.warning(
-                    "Failed create draft {0}\nResponse status code: {1}\nResponse text: {2}".format(
-                        cr_identifier,
-                        metax_api_response.status_code,
-                        json_or_empty(metax_api_response) or metax_api_response.text
-                    ))
-                return json_or_empty(metax_api_response) or metax_api_response.text, metax_api_response.status_code
-            else:
-                log.error("Error creating draft {0} \n{1}".format(cr_identifier, e))
-            return {'detail': 'Error trying to send data to metax.'}, 500
-        log.info('Create draft from dataset {}'.format(cr_identifier))
-        return (json_or_empty(metax_api_response) or metax_api_response.text), metax_api_response.status_code
+        args = self._get_args(timeout=30)
+        resp, status, success = make_request(requests.post,
+                                             req_url,
+                                             params=params,
+                                             **args
+                                             )
+
+        if not success:
+            log.warning("Failed to create draft of dataset {}".format(cr_identifier))
+            return resp, status
+
+        log.info('Created draft of {}'.format(cr_identifier))
+        return resp, status
 
 _metax_api = MetaxQvainLightAPIService(app)
 

@@ -13,6 +13,7 @@ from etsin_finder.finder import app
 from etsin_finder.app_config import get_metax_api_config
 from etsin_finder.utils import json_or_empty, FlaskService
 from etsin_finder.constants import ACCESS_TYPES
+from etsin_finder.request_utils import make_request
 
 log = app.logger
 
@@ -48,30 +49,16 @@ class MetaxAPIService(FlaskService):
             dict: Return the responce from Metax as dict, else None.
 
         """
-        try:
-            metax_api_response = requests.get(self.METAX_GET_CATALOG_RECORD_URL.format(identifier),
-                                              headers={'Accept': 'application/json'},
-                                              auth=(self.user, self.pw),
-                                              verify=self.verify_ssl,
-                                              timeout=3)
-            metax_api_response.raise_for_status()
-        except Exception as e:
-            if isinstance(e, requests.HTTPError):
-                log.warning(
-                    "Failed to get catalog record {0} from Metax API\n\
-                    Response status code: {1}\n\
-                    Response text: {2}"
-                    .format(
-                        identifier,
-                        metax_api_response.status_code,
-                        json_or_empty(metax_api_response) or metax_api_response.text)
-                )
-            else:
-                log.error("Failed to get catalog record {0} from Metax API\n{1}".format(identifier, e))
+        resp, _, success = make_request(requests.get,
+                                        self.METAX_GET_CATALOG_RECORD_URL.format(identifier),
+                                        headers={'Accept': 'application/json'},
+                                        auth=(self.user, self.pw),
+                                        verify=self.verify_ssl,
+                                        timeout=3)
+        if not success:
+            log.warning("Failed to get catalog record {0} from Metax API".format(identifier))
             return None
-        print(self.METAX_GET_CATALOG_RECORD_URL.format(identifier))
-        print(metax_api_response.json().get('draft_of', 'NOT EXISTING'))
-        return metax_api_response.json()
+        return resp
 
     def get_removed_catalog_record(self, identifier):
         """Get a catalog record with a given identifier from MetaX API
@@ -85,28 +72,16 @@ class MetaxAPIService(FlaskService):
             dict: Return the responsce from Metax as dict, else None.
 
         """
-        try:
-            metax_api_response = requests.get(self.METAX_GET_REMOVED_CATALOG_RECORD_URL.format(identifier),
-                                              headers={'Accept': 'application/json'},
-                                              auth=(self.user, self.pw),
-                                              verify=self.verify_ssl,
-                                              timeout=3)
-            metax_api_response.raise_for_status()
-        except Exception as e:
-            if isinstance(e, requests.HTTPError):
-                log.warning(
-                    "Failed to get removed catalog record {0} from Metax API\n\
-                    Response status code: {1}\n\
-                    Response text: {2}".format(
-                        identifier,
-                        metax_api_response.status_code,
-                        json_or_empty(metax_api_response) or metax_api_response.text
-                    ))
-            else:
-                log.error("Failed to get removed catalog record {0} from Metax API\n{1}".format(identifier, e))
+        resp, _, success = make_request(requests.get,
+                                        self.METAX_GET_REMOVED_CATALOG_RECORD_URL.format(identifier),
+                                        headers={'Accept': 'application/json'},
+                                        auth=(self.user, self.pw),
+                                        verify=self.verify_ssl,
+                                        timeout=3)
+        if not success:
+            log.warning("Failed to get removed catalog record {0} from Metax API".format(identifier))
             return None
-
-        return metax_api_response.json()
+        return resp
 
 
 _metax_api = MetaxAPIService(app)
