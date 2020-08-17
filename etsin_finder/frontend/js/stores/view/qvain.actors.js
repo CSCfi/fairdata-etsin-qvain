@@ -75,11 +75,13 @@ class Actors {
   @observable missingFieldsListActors = [
     { // Actor [0]
       fieldName: 'creator',
-      valueIsRequiredAndIsMissing: true,
+      valueIsMissing: true,
+      valueIsRequired: true,
     },
     { // Actor [1]: Only relevant if dataset is DOI
       fieldName: 'publisher',
-      valueIsRequiredAndIsMissing: false,
+      valueIsMissing: true,
+      valueIsRequired: false,
     },
   ]
 
@@ -102,7 +104,13 @@ class Actors {
   checkMissingFieldsActors = () => {
     for (let i = 0; i < this.missingFieldsListActors.length; i += 1) {
       console.log('loop 2')
-      if (this.missingFieldsListActors[i].valueIsRequiredAndIsMissing) {
+      if (this.missingFieldsListActors[i].valueIsMissing) {
+        console.log(this.missingFieldsListActors[i].fieldName)
+        console.log(this.Qvain.useDoi)
+        if ((this.missingFieldsListActors[i].fieldName === 'publisher') && (this.useDoi === true)) {
+          console.log('Publisher is missing and use_doi is true')
+          break;
+        }
         console.log(' 2 and there is still some things...')
         break;
       }
@@ -244,11 +252,13 @@ class Actors {
     this.missingFieldsListActors = [
       {
         fieldName: 'creator',
-        valueIsRequiredAndIsMissing: true,
+        valueIsMissing: true,
+        valueIsRequired: true,
       },
       {
         fieldName: 'publisher',
-        valueIsRequiredAndIsMissing: false,
+        valueIsMissing: true,
+        valueIsRequired: false,
       },
     ]
     this.stillMissingActorFields = true
@@ -262,7 +272,7 @@ class Actors {
         this.createActor(researchDataset.publisher, ROLE.PUBLISHER, actors)
       )
       // Publisher is not missing
-      this.missingFieldsListActors[1].valueIsRequiredAndIsMissing = false
+      this.missingFieldsListActors[1].valueIsMissing = false
     }
     if ('curator' in researchDataset) {
       researchDataset.curator.forEach(curator =>
@@ -274,7 +284,7 @@ class Actors {
         actors.push(this.createActor(creator, ROLE.CREATOR, actors))
       )
       // Creator is not missing
-      this.missingFieldsListActors[0].valueIsRequiredAndIsMissing = false
+      this.missingFieldsListActors[0].valueIsMissing = false
     }
     if ('rights_holder' in researchDataset) {
       researchDataset.rights_holder.forEach(rightsHolder =>

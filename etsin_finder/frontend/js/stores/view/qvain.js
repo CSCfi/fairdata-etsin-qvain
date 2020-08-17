@@ -81,19 +81,23 @@ class Qvain {
   @observable missingFieldsListGeneral = [
     { // [0]
       fieldName: 'title',
-      valueIsRequiredAndIsMissing: true,
+      valueIsMissing: true,
+      valueIsRequired: true,
     },
     { // [1]
       fieldName: 'description',
-      valueIsRequiredAndIsMissing: true,
+      valueIsMissing: true,
+      valueIsRequired: true,
     },
     { // [2]
       fieldName: 'atLeastOneKeyword',
-      valueIsRequiredAndIsMissing: true,
+      valueIsMissing: true,
+      valueIsRequired: true,
     },
     { // [3]
       fieldName: 'fileOrigin',
-      valueIsRequiredAndIsMissing: true,
+      valueIsMissing: true,
+      valueIsRequired: true,
     },
   ]
 
@@ -165,19 +169,19 @@ class Qvain {
     this.missingFieldsListGeneral = [
       { // [0]
         fieldName: 'title',
-        valueIsRequiredAndIsMissing: true,
+        valueIsMissing: true,
       },
       { // [1]
         fieldName: 'description',
-        valueIsRequiredAndIsMissing: true,
+        valueIsMissing: true,
       },
       { // [2]
         fieldName: 'atLeastOneKeyword',
-        valueIsRequiredAndIsMissing: true,
+        valueIsMissing: true,
       },
       { // [3]
         fieldName: 'fileOrigin',
-        valueIsRequiredAndIsMissing: true,
+        valueIsMissing: true,
       },
     ]
 
@@ -188,7 +192,7 @@ class Qvain {
   checkMissingFieldsGeneral = () => {
     let foundAtLeastOneMissingField = false
     for (let i = 0; i < this.missingFieldsListGeneral.length; i += 1) {
-      if (this.missingFieldsListGeneral[i].valueIsRequiredAndIsMissing === true) {
+      if (this.missingFieldsListGeneral[i].valueIsMissing === true) {
         foundAtLeastOneMissingField = true
       }
     }
@@ -213,11 +217,11 @@ class Qvain {
 
     // Missing field [0]: Title is set and thus no longer missing
     if (title !== '' && title !== undefined) {
-      this.missingFieldsListGeneral[0].valueIsRequiredAndIsMissing = false
+      this.missingFieldsListGeneral[0].valueIsMissing = false
       this.checkMissingFieldsGeneral()
     // ... but if not, title is empty, and should prevent publishing
     } else {
-      this.missingFieldsListGeneral[0].valueIsRequiredAndIsMissing = true
+      this.missingFieldsListGeneral[0].valueIsMissing = true
     }
   }
 
@@ -233,11 +237,11 @@ class Qvain {
 
     // Missing field [1]: Description is set and should no longer prevent publishing
     if (description !== '' && description !== undefined) {
-      this.missingFieldsListGeneral[1].valueIsRequiredAndIsMissing = false
+      this.missingFieldsListGeneral[1].valueIsMissing = false
       this.checkMissingFieldsGeneral()
     // ... but if undefined, it should prevent publshing
     } else {
-      this.missingFieldsListGeneral[1].valueIsRequiredAndIsMissing = true
+      this.missingFieldsListGeneral[1].valueIsMissing = true
     }
   }
 
@@ -350,11 +354,11 @@ class Qvain {
 
     // Missing field [2]: At least one keyword is set and thus keywords is no longer empty
     if (this.keywordsArray.length > 0) {
-      this.missingFieldsListGeneral[2].valueIsRequiredAndIsMissing = false
+      this.missingFieldsListGeneral[2].valueIsMissing = false
       this.checkMissingFieldsGeneral()
     // ... but if no keywords exist, it should prevent publshing
     } else {
-      this.missingFieldsListGeneral[2].valueIsRequiredAndIsMissing = true
+      this.missingFieldsListGeneral[2].valueIsMissing = true
     }
   }
 
@@ -528,11 +532,6 @@ class Qvain {
   @observable fixDeprecatedModalOpen = false
 
   @action
-  updateMissingFieldsArray = () => {
-
-  }
-
-  @action
   setDataCatalog = (selectedDataCatalog) => {
     this.dataCatalog = selectedDataCatalog
     this.changed = true
@@ -540,21 +539,35 @@ class Qvain {
     // Remove useDoi if dataCatalog is ATT
     if (selectedDataCatalog === DATA_CATALOG_IDENTIFIER.ATT) {
       this.useDoi = false
+
+      // Dataset is not IDA (and thus cannot be DOI) -> publisher does not have to be defined (actors [1] = publisher) 
+      this.Actors.missingFieldsListActors[1].valueIsRequired = false
     }
 
-    // Missing field [3]: dataCatalog is set and should no longer prevent publishing
+    // Missing field general [3]: dataCatalog is set and should no longer prevent publishing
     if (selectedDataCatalog !== undefined) {
-      this.missingFieldsListGeneral[3].valueIsRequiredAndIsMissing = false
+      this.missingFieldsListGeneral[3].valueIsMissing = false
       this.checkMissingFieldsGeneral()
     // ... but if undefined, it should prevent publshing
     } else {
-      this.missingFieldsListGeneral[3].valueIsRequiredAndIsMissing = true
+      this.missingFieldsListGeneral[3].valueIsMissing = true
     }
   }
 
   @action
   setUseDoi = (selectedUseDoiStatus) => {
     this.useDoi = selectedUseDoiStatus
+
+    if (selectedUseDoiStatus === true) {
+      // If use_doi is checked, publisher must be defined ([1] = publisher) 
+      this.Actors.missingFieldsListActors[1].valueIsRequired = true
+
+      // Also, check if there is a defined publisher in actors
+      this.Actors.checkMissingFieldsActors()
+    } else {
+      // ... otherwise, make sure publisher does not have to be defined
+      this.Actors.missingFieldsListActors[1].valueIsRequired = false
+    }
   }
 
   @action
@@ -960,8 +973,14 @@ class Qvain {
     // Load DOI
     if (researchDataset.preferred_identifier.startsWith('doi') || dataset.use_doi_for_published) {
       this.useDoi = true
+
+      // A publisher has to be defined if dataset is DOI
+      this.Actors.missingFieldsListActors[1].valueIsRequired = true
     } else {
       this.useDoi = false
+
+      // A publisher does not have to be defined if dataset is not DOI
+      this.Actors.missingFieldsListActors[1].valueIsRequired = false
     }
 
     // Load files
