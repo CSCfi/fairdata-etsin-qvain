@@ -564,6 +564,7 @@ class SubmitButtons extends Component {
           {original ? (
             disabledDueToMissingFieldsNonDraft ? (
               <Tooltip
+                typeOfTooltip="publishing"
                 title={this.buildMissingFieldsListForDisplay()}
                 position="bottom"
               >

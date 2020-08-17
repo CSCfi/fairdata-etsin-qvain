@@ -15,12 +15,23 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 
 const TooltipHover = props => {
-  const { position, children, ...restProps } = props
-  return (
-    <Tip position={position.toLowerCase()} {...restProps} aria-hidden="true">
-      {children}
-    </Tip>
-  )
+  const { position, children, typeOfTooltip, ...restProps } = props
+
+  // Tooltip style for publishing (and saving drafts)
+  if (typeOfTooltip === 'publishing') {
+    return (
+      <TipForPublishing position={position.toLowerCase()} {...restProps} aria-hidden="true">
+        {children}
+      </TipForPublishing>
+    )
+  // Tooltip style for required fields
+  } else {
+    return (
+      <TipForRequiredFields position={position.toLowerCase()} {...restProps} aria-hidden="true">
+        {children}
+      </TipForRequiredFields>
+    )
+  }
 }
 
 TooltipHover.defaultProps = {
@@ -87,7 +98,46 @@ function getTipPosition(position) {
   }
 }
 
-const Tip = styled.div.attrs(props => ({
+const TipForPublishing  = styled.div.attrs(props => ({
+  bg: props.theme.color.darkgray,
+  fg: props.theme.color.white,
+}))`
+  display: inline-block;
+  position: relative;
+  color: inherit;
+  background-color: transparent;
+  &:before {
+    font-size: 0.8em;
+    transition: all 0.3s ease;
+    opacity: 0;
+    content: "${props => props.title}";
+    padding: 0.1em 0.7em;
+    position: absolute;
+    ${props => getContainerPosition(props.position)}
+    white-space: nowrap;
+    color: ${props => props.fg};
+    background-color: ${props => props.bg};
+    border-radius: 5px;
+  }
+  &:after {
+    transition: all 0.3s ease;
+    opacity: 0;
+    position: absolute;
+    ${props => getTipPosition(props.position)}
+    content: ' ';
+    border: 6px solid transparent;
+    border-${props => props.position}-color: ${props => props.bg};
+  }
+  &:hover {
+    &:before,
+    &:after {
+      opacity: 1;
+    }
+  }
+`
+
+
+const TipForRequiredFields = styled.div.attrs(props => ({
   bg: props.theme.color.darkgray,
   fg: props.theme.color.white,
 }))`
