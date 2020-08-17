@@ -204,17 +204,11 @@ class Qvain {
   }
 
   checkMissingFieldsGeneral = () => {
-    let foundAtLeastOneMissingField = false
     for (let i = 0; i < this.missingFieldsListGeneral.length; i += 1) {
       if ((this.missingFieldsListGeneral[i].valueIsMissing === true) && (this.missingFieldsListGeneral[i].valueIsRequired)) {
         this.stillMissingGeneralFields = true
         break
       }
-    }
-    if (foundAtLeastOneMissingField === true) {
-      console.log('STILL MISSING')
-      
-    } else {
       this.stillMissingGeneralFields = false
     }
   }
@@ -236,11 +230,12 @@ class Qvain {
     // Missing field [0]: Title is set and thus no longer missing
     if (title !== '' && title !== undefined) {
       this.missingFieldsListGeneral[0].valueIsMissing = false
-      this.checkMissingFieldsGeneral()
     // ... but if not, title is empty, and should prevent publishing
     } else {
       this.missingFieldsListGeneral[0].valueIsMissing = true
     }
+    // Update missing status
+    this.checkMissingFieldsGeneral()
   }
 
   @action
@@ -256,11 +251,12 @@ class Qvain {
     // Missing field [1]: Description is set and should no longer prevent publishing
     if (description !== '' && description !== undefined) {
       this.missingFieldsListGeneral[1].valueIsMissing = false
-      this.checkMissingFieldsGeneral()
     // ... but if undefined, it should prevent publshing
     } else {
       this.missingFieldsListGeneral[1].valueIsMissing = true
     }
+    // Update missing status
+    this.checkMissingFieldsGeneral()
   }
 
   @action
@@ -373,11 +369,12 @@ class Qvain {
     // Missing field [2]: At least one keyword is set and thus keywords is no longer empty
     if (this.keywordsArray.length > 0) {
       this.missingFieldsListGeneral[2].valueIsMissing = false
-      this.checkMissingFieldsGeneral()
     // ... but if no keywords exist, it should prevent publshing
     } else {
       this.missingFieldsListGeneral[2].valueIsMissing = true
     }
+    // Update missing status
+    this.checkMissingFieldsGeneral()
   }
 
   @action
@@ -438,7 +435,7 @@ class Qvain {
       this.missingFieldsListGeneral[3].valueIsMissing = true
     }
 
-    // Check publishing status
+    // Update missing status
     this.checkMissingFieldsGeneral()
   }
 
@@ -577,7 +574,7 @@ class Qvain {
       this.Actors.missingFieldsListActors[1].valueIsRequired = false
 
       // Also, license does not have to be defined
-      this.missingFieldsListGeneral[3].valueIsRequired = true
+      this.missingFieldsListGeneral[3].valueIsRequired = false
 
     // If data catalog is IDA, license [3] must be set
     } else if (selectedDataCatalog === DATA_CATALOG_IDENTIFIER.IDA) {
@@ -587,11 +584,13 @@ class Qvain {
     // Missing field general [4]: dataCatalog is set and should no longer prevent publishing
     if (selectedDataCatalog !== undefined) {
       this.missingFieldsListGeneral[4].valueIsMissing = false
-      this.checkMissingFieldsGeneral()
     // ... but if undefined, it should prevent publshing
     } else {
       this.missingFieldsListGeneral[4].valueIsMissing = true
     }
+
+    // Update missing status
+    this.checkMissingFieldsGeneral()
   }
 
   @action

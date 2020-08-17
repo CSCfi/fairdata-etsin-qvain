@@ -105,9 +105,8 @@ class Actors {
       if ((this.missingFieldsListActors[i].valueIsMissing) && (this.missingFieldsListActors[i].valueIsRequired)) {
         this.stillMissingActorFields = true
         break
-      } else {
-        this.stillMissingActorFields = false
       }
+      this.stillMissingActorFields = false
     }
   }
 
