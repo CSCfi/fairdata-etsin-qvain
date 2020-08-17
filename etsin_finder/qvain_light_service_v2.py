@@ -86,7 +86,7 @@ class MetaxQvainLightAPIService(MetaxQvainLightAPIServiceV1):
                                              )
 
         if success:
-            log.info('Created dataset with identifier: {}'.format(resp.json().get('identifier', 'COULD-NOT-GET-IDENTIFIER')))
+            log.info('Created dataset with identifier: {}'.format(resp.get('identifier', 'COULD-NOT-GET-IDENTIFIER')))
         else:
             log.warning("Failed to create dataset")
 
@@ -116,9 +116,8 @@ class MetaxQvainLightAPIService(MetaxQvainLightAPIServiceV1):
                                              json=data,
                                              **args)
 
-
         if status == 412:
-            return 'Resource has been modified since last publish', staatus
+            return 'Resource has been modified since last publish', status
 
         if success:
             log.info('Updated dataset with identifier: {}'.format(cr_id))
