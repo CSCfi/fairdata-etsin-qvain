@@ -81,6 +81,7 @@ class DatasetValidationSchema(Schema):
     Arguments:
         Schema {library} -- Marshmallows Schema library.
     """
+
     relation = fields.List(
         fields.Dict(),
         required=False
