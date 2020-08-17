@@ -206,7 +206,7 @@ class Qvain {
   checkMissingFieldsGeneral = () => {
     let foundAtLeastOneMissingField = false
     for (let i = 0; i < this.missingFieldsListGeneral.length; i += 1) {
-      if (this.missingFieldsListGeneral[i].valueIsMissing === true) && (this.missingFieldsListGeneral[i].valueIsRequired) {
+      if ((this.missingFieldsListGeneral[i].valueIsMissing === true) && (this.missingFieldsListGeneral[i].valueIsRequired)) {
         this.stillMissingGeneralFields = true
         break
       }
