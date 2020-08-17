@@ -31,6 +31,7 @@ exports[`Qvain.Description should render <Description /> 1`] = `
   <inject-IssuedDateField-with-Stores />
   <inject-OtherIdentifierField-with-Stores />
   <inject-FieldOfScienceField-with-Stores />
+  <inject-LanguageField-with-Stores />
   <inject-KeywordsField-with-Stores />
 </div>
 `;
@@ -39,6 +40,18 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
 <DescriptionField
   Stores={
     Object {
+      "Env": Env {
+        "environment": "test",
+        "history": RouterStore {
+          "go": [Function],
+          "goBack": [Function],
+          "goForward": [Function],
+          "history": null,
+          "push": [Function],
+          "replace": [Function],
+        },
+        "metaxApiV2": false,
+      },
       "Locale": Locale {},
       "Qvain": Qvain {
         "Actors": Actors {
@@ -56,8 +69,19 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
           "loadingReferenceOrganizations": Object {},
           "referenceOrganizationErrors": Object {},
           "referenceOrganizations": Object {},
-          "reset": [Function],
           "toBackend": [Function],
+        },
+        "Env": Env {
+          "environment": "test",
+          "history": RouterStore {
+            "go": [Function],
+            "goBack": [Function],
+            "goForward": [Function],
+            "history": null,
+            "push": [Function],
+            "replace": [Function],
+          },
+          "metaxApiV2": false,
         },
         "Files": Files {
           "AddItemsView": AddItemsView {
@@ -84,9 +108,10 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
           },
           "cache": Object {},
           "cancelOnReset": [Function],
+          "datasetIdentifier": null,
+          "fetchRootIdentifier": [Function],
           "getItemByPath": [Function],
           "inEdit": undefined,
-          "initialPagination": 10,
           "loadingMetadata": null,
           "loadingProjectInfo": null,
           "loadingProjectRoot": null,
@@ -99,13 +124,6 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
           },
           "refreshModalDirectory": null,
           "root": null,
-          "selectedExistingCounter": ChildItemCounter {
-            "root": Object {
-              "count": 0,
-              "directories": Object {},
-            },
-          },
-          "selectedExistingMetadata": Object {},
           "selectedProject": undefined,
         },
         "Spatials": Spatials {
@@ -120,6 +138,8 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
         "createExternalResourceUIId": [Function],
         "cumulativeState": 0,
         "dataCatalog": undefined,
+        "datasetLanguage": undefined,
+        "datasetLanguageArray": Array [],
         "deprecated": false,
         "description": Object {
           "en": "",
@@ -154,14 +174,14 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
           "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
           "name": undefined,
         },
+        "licenseArray": Array [],
         "mergeArraysByIdentifier": [Function],
         "metadataModalFile": undefined,
-        "metaxApiV2": false,
         "original": undefined,
         "otherIdentifier": "",
         "otherIdentifiersArray": Array [],
         "otherIdentifiersValidationError": null,
-        "otherLicenseUrl": undefined,
+        "otherLicenseUrl": "",
         "preservationState": 0,
         "restrictionGrounds": Object {},
         "selectedDirectories": Array [],
@@ -184,6 +204,18 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
 <FieldOfScienceField
   Stores={
     Object {
+      "Env": Env {
+        "environment": "test",
+        "history": RouterStore {
+          "go": [Function],
+          "goBack": [Function],
+          "goForward": [Function],
+          "history": null,
+          "push": [Function],
+          "replace": [Function],
+        },
+        "metaxApiV2": false,
+      },
       "Locale": Locale {},
       "Qvain": Qvain {
         "Actors": Actors {
@@ -201,8 +233,19 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
           "loadingReferenceOrganizations": Object {},
           "referenceOrganizationErrors": Object {},
           "referenceOrganizations": Object {},
-          "reset": [Function],
           "toBackend": [Function],
+        },
+        "Env": Env {
+          "environment": "test",
+          "history": RouterStore {
+            "go": [Function],
+            "goBack": [Function],
+            "goForward": [Function],
+            "history": null,
+            "push": [Function],
+            "replace": [Function],
+          },
+          "metaxApiV2": false,
         },
         "Files": Files {
           "AddItemsView": AddItemsView {
@@ -229,9 +272,10 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
           },
           "cache": Object {},
           "cancelOnReset": [Function],
+          "datasetIdentifier": null,
+          "fetchRootIdentifier": [Function],
           "getItemByPath": [Function],
           "inEdit": undefined,
-          "initialPagination": 10,
           "loadingMetadata": null,
           "loadingProjectInfo": null,
           "loadingProjectRoot": null,
@@ -244,13 +288,6 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
           },
           "refreshModalDirectory": null,
           "root": null,
-          "selectedExistingCounter": ChildItemCounter {
-            "root": Object {
-              "count": 0,
-              "directories": Object {},
-            },
-          },
-          "selectedExistingMetadata": Object {},
           "selectedProject": undefined,
         },
         "Spatials": Spatials {
@@ -265,6 +302,8 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
         "createExternalResourceUIId": [Function],
         "cumulativeState": 0,
         "dataCatalog": undefined,
+        "datasetLanguage": undefined,
+        "datasetLanguageArray": Array [],
         "deprecated": false,
         "description": Object {
           "en": "",
@@ -299,14 +338,14 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
           "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
           "name": undefined,
         },
+        "licenseArray": Array [],
         "mergeArraysByIdentifier": [Function],
         "metadataModalFile": undefined,
-        "metaxApiV2": false,
         "original": undefined,
         "otherIdentifier": "",
         "otherIdentifiersArray": Array [],
         "otherIdentifiersValidationError": null,
-        "otherLicenseUrl": undefined,
+        "otherLicenseUrl": "",
         "preservationState": 0,
         "restrictionGrounds": Object {},
         "selectedDirectories": Array [],
@@ -329,6 +368,18 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
 <KeywordsField
   Stores={
     Object {
+      "Env": Env {
+        "environment": "test",
+        "history": RouterStore {
+          "go": [Function],
+          "goBack": [Function],
+          "goForward": [Function],
+          "history": null,
+          "push": [Function],
+          "replace": [Function],
+        },
+        "metaxApiV2": false,
+      },
       "Locale": Locale {},
       "Qvain": Qvain {
         "Actors": Actors {
@@ -346,8 +397,19 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
           "loadingReferenceOrganizations": Object {},
           "referenceOrganizationErrors": Object {},
           "referenceOrganizations": Object {},
-          "reset": [Function],
           "toBackend": [Function],
+        },
+        "Env": Env {
+          "environment": "test",
+          "history": RouterStore {
+            "go": [Function],
+            "goBack": [Function],
+            "goForward": [Function],
+            "history": null,
+            "push": [Function],
+            "replace": [Function],
+          },
+          "metaxApiV2": false,
         },
         "Files": Files {
           "AddItemsView": AddItemsView {
@@ -374,9 +436,10 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
           },
           "cache": Object {},
           "cancelOnReset": [Function],
+          "datasetIdentifier": null,
+          "fetchRootIdentifier": [Function],
           "getItemByPath": [Function],
           "inEdit": undefined,
-          "initialPagination": 10,
           "loadingMetadata": null,
           "loadingProjectInfo": null,
           "loadingProjectRoot": null,
@@ -389,13 +452,6 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
           },
           "refreshModalDirectory": null,
           "root": null,
-          "selectedExistingCounter": ChildItemCounter {
-            "root": Object {
-              "count": 0,
-              "directories": Object {},
-            },
-          },
-          "selectedExistingMetadata": Object {},
           "selectedProject": undefined,
         },
         "Spatials": Spatials {
@@ -410,6 +466,8 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
         "createExternalResourceUIId": [Function],
         "cumulativeState": 0,
         "dataCatalog": undefined,
+        "datasetLanguage": undefined,
+        "datasetLanguageArray": Array [],
         "deprecated": false,
         "description": Object {
           "en": "",
@@ -444,14 +502,14 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
           "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
           "name": undefined,
         },
+        "licenseArray": Array [],
         "mergeArraysByIdentifier": [Function],
         "metadataModalFile": undefined,
-        "metaxApiV2": false,
         "original": undefined,
         "otherIdentifier": "",
         "otherIdentifiersArray": Array [],
         "otherIdentifiersValidationError": null,
-        "otherLicenseUrl": undefined,
+        "otherLicenseUrl": "",
         "preservationState": 0,
         "restrictionGrounds": Object {},
         "selectedDirectories": Array [],
@@ -474,6 +532,18 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
 <OtherIdentifierField
   Stores={
     Object {
+      "Env": Env {
+        "environment": "test",
+        "history": RouterStore {
+          "go": [Function],
+          "goBack": [Function],
+          "goForward": [Function],
+          "history": null,
+          "push": [Function],
+          "replace": [Function],
+        },
+        "metaxApiV2": false,
+      },
       "Locale": Locale {},
       "Qvain": Qvain {
         "Actors": Actors {
@@ -491,8 +561,19 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
           "loadingReferenceOrganizations": Object {},
           "referenceOrganizationErrors": Object {},
           "referenceOrganizations": Object {},
-          "reset": [Function],
           "toBackend": [Function],
+        },
+        "Env": Env {
+          "environment": "test",
+          "history": RouterStore {
+            "go": [Function],
+            "goBack": [Function],
+            "goForward": [Function],
+            "history": null,
+            "push": [Function],
+            "replace": [Function],
+          },
+          "metaxApiV2": false,
         },
         "Files": Files {
           "AddItemsView": AddItemsView {
@@ -519,9 +600,10 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
           },
           "cache": Object {},
           "cancelOnReset": [Function],
+          "datasetIdentifier": null,
+          "fetchRootIdentifier": [Function],
           "getItemByPath": [Function],
           "inEdit": undefined,
-          "initialPagination": 10,
           "loadingMetadata": null,
           "loadingProjectInfo": null,
           "loadingProjectRoot": null,
@@ -534,13 +616,6 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
           },
           "refreshModalDirectory": null,
           "root": null,
-          "selectedExistingCounter": ChildItemCounter {
-            "root": Object {
-              "count": 0,
-              "directories": Object {},
-            },
-          },
-          "selectedExistingMetadata": Object {},
           "selectedProject": undefined,
         },
         "Spatials": Spatials {
@@ -555,6 +630,8 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
         "createExternalResourceUIId": [Function],
         "cumulativeState": 0,
         "dataCatalog": undefined,
+        "datasetLanguage": undefined,
+        "datasetLanguageArray": Array [],
         "deprecated": false,
         "description": Object {
           "en": "",
@@ -589,14 +666,14 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
           "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
           "name": undefined,
         },
+        "licenseArray": Array [],
         "mergeArraysByIdentifier": [Function],
         "metadataModalFile": undefined,
-        "metaxApiV2": false,
         "original": undefined,
         "otherIdentifier": "",
         "otherIdentifiersArray": Array [],
         "otherIdentifiersValidationError": null,
-        "otherLicenseUrl": undefined,
+        "otherLicenseUrl": "",
         "preservationState": 0,
         "restrictionGrounds": Object {},
         "selectedDirectories": Array [],
@@ -661,6 +738,10 @@ exports[`Qvain.RightsAndLicenses should render <Licenses /> 1`] = `
     />
   </form__LabelLarge>
   <Translate
+    component="p"
+    content="qvain.rightsAndLicenses.license.infoText"
+  />
+  <Translate
     attributes={
       Object {
         "placeholder": "qvain.rightsAndLicenses.license.placeholder",
@@ -673,7 +754,6 @@ exports[`Qvain.RightsAndLicenses should render <Licenses /> 1`] = `
     name="license"
     onBlur={[Function]}
     onChange={[Function]}
-    options={Array []}
     value={
       Object {
         "label": undefined,
@@ -681,6 +761,18 @@ exports[`Qvain.RightsAndLicenses should render <Licenses /> 1`] = `
       }
     }
   />
+  <licenses__ButtonContainer>
+    <licenses__AddNewButton
+      disabled={false}
+      onClick={[Function]}
+      type="button"
+    >
+      <Translate
+        component="span"
+        content="qvain.rightsAndLicenses.license.addButton"
+      />
+    </licenses__AddNewButton>
+  </licenses__ButtonContainer>
 </Card>
 `;
 

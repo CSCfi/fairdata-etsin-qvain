@@ -3,10 +3,7 @@ import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import styled from 'styled-components'
 
-import {
-  TableButton,
-  DangerButton
-} from './buttons'
+import { TableButton, DangerButton } from './buttons'
 
 // Show confirmation overlay for closing a modal with unsaved changes.
 const ConfirmClose = ({ show, disabled, hideConfirm, closeModal }) => {
@@ -17,12 +14,18 @@ const ConfirmClose = ({ show, disabled, hideConfirm, closeModal }) => {
     <ResponseOverlay>
       <Translate content={'qvain.confirmClose.warning'} component="p" />
       <Buttons>
-        <HideButton disabled={disabled} onClick={hideConfirm}>
-          <Translate content={'qvain.confirmClose.cancel'} />
-        </HideButton>
-        <DangerButton disabled={disabled} onClick={closeModal}>
-          <Translate content={'qvain.confirmClose.confirm'} />
-        </DangerButton>
+        <Translate
+          content={'qvain.confirmClose.cancel'}
+          component={HideButton}
+          disabled={disabled}
+          onClick={hideConfirm}
+        />
+        <Translate
+          content={'qvain.confirmClose.confirm'}
+          component={ConfirmCloseButton}
+          disabled={disabled}
+          onClick={closeModal}
+        />
       </Buttons>
     </ResponseOverlay>
   )
@@ -32,7 +35,7 @@ ConfirmClose.propTypes = {
   show: PropTypes.bool.isRequired,
   hideConfirm: PropTypes.func.isRequired,
   closeModal: PropTypes.func.isRequired,
-  disabled: PropTypes.bool
+  disabled: PropTypes.bool,
 }
 
 ConfirmClose.defaultProps = {
@@ -41,27 +44,41 @@ ConfirmClose.defaultProps = {
 
 export default ConfirmClose
 
-
 const Buttons = styled.div`
-  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   text-align: center;
-  margin: -0.25rem;
-  & * {
-    margin: 0.25rem;
-    padding: 0.75rem 0.25rem;
-  }
+  margin: 0 -1.5rem;
+  padding: 0 1rem;
 `
 
 const HideButton = styled(TableButton)`
-  width: auto;
   height: auto;
-`;
+  min-width: none;
+  max-width: none;
+  flex-grow: 0;
+  text-align: center;
+  padding: 0.75rem 0.75rem;
+  margin: 0.25rem;
+  flex-grow: 1;
+`
+
+const ConfirmCloseButton = styled(DangerButton)`
+  height: auto;
+  min-width: none;
+  max-width: none;
+  flex-grow: 0;
+  padding: 0.75rem 0.75rem;
+  margin: 0.25rem;
+  flex-grow: 1;
+`
 
 const ResponseOverlay = styled.div`
   display: flex;
   flex-direction: column;
   position: absolute;
-  background: rgba(255,255,255,0.95);
+  background: rgba(255, 255, 255, 0.95);
   width: 100%;
   top: 0;
   left: 0;

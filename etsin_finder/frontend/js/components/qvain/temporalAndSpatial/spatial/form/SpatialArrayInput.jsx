@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import { inject, observer } from 'mobx-react'
-import uuid from 'uuid/v4'
+import { v4 as uuidv4 } from 'uuid';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import { Input, Label } from '../../../general/form'
@@ -81,7 +81,7 @@ class SpatialArrayInput extends Component {
 
     const addGeometry = () => {
       const arr = [...spatialInEdit[datum]]
-      arr.push({ key: uuid(), value: '' })
+      arr.push({ key: uuidv4(), value: '' })
       changeSpatialAttribute(datum, arr)
     }
 

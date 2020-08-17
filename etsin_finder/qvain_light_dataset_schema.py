@@ -68,6 +68,11 @@ class ActorValidationSchema(Schema):
         else:
             raise ValidationError('Invalid actor type.')
 
+class LicenseValidationSchema(Schema):
+    """Validation schema for licenses."""
+
+    identifier = fields.URL()
+    name = fields.Dict()
 
 class DatasetValidationSchema(Schema):
     """Validation schema for the whole dataset."""
@@ -84,6 +89,10 @@ class DatasetValidationSchema(Schema):
     issuedDate = fields.Str()
     identifiers = fields.List(fields.Str())
     fieldOfScience = fields.List(
+        fields.Str(),
+        required=False
+    )
+    datasetLanguage = fields.List(
         fields.Str(),
         required=False
     )
@@ -109,8 +118,7 @@ class DatasetValidationSchema(Schema):
     )
     embargoDate = fields.Str()
     restrictionGrounds = fields.Str()
-    license = fields.Dict()
-    otherLicenseUrl = fields.Str()
+    license = fields.List(fields.Nested(LicenseValidationSchema))
     dataCatalog = fields.Str()
     cumulativeState = fields.Int(OneOf([0, 1, 2]))
     files = fields.List(fields.Dict())

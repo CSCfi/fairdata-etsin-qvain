@@ -15,6 +15,7 @@ import { Checkbox, Label } from '../../general/form'
 import Loader from '../../../general/loader'
 import { ErrorLabel, ErrorContainer, ErrorContent, ErrorButtons } from '../../general/errors'
 import { Button } from '../../../general/button'
+import FormModal from './forms/formModal'
 
 export class IDAFilePickerBase extends Component {
   state = {
@@ -122,6 +123,7 @@ export class IDAFilePickerBase extends Component {
         <AddItemsModal isOpen={this.state.addFilesModalOpen} onRequestClose={this.close} />
         <SelectedItems />
         <FixDeprecatedModal />
+        <FormModal />
       </>
     )
   }

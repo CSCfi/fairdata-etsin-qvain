@@ -8,6 +8,7 @@ import ValidationError from '../general/validationError'
 import { LabelLarge } from '../general/form'
 import { issuedDateSchema } from '../utils/formValidation'
 import { DatePicker, handleDatePickerChange, getDateFormatLocale } from '../general/datepicker'
+import Tooltip from '../../general/tooltipHover'
 
 class IssuedDateField extends React.Component {
   static propTypes = {
@@ -49,12 +50,17 @@ class IssuedDateField extends React.Component {
     return (
       <Card bottomContent>
         <LabelLarge htmlFor="issuedDateInput">
-          <Translate content="qvain.description.issuedDate.title" />
+          <Tooltip
+            title={translate('qvain.description.fieldHelpTexts.requiredToPublish', { locale: lang })}
+            position="right"
+          >
+            <Translate content="qvain.description.issuedDate.title" /> *
+          </Tooltip>
         </LabelLarge>
         <Translate component="p" content="qvain.description.issuedDate.infoText" />
         <DatePicker
           strictParsing
-          selected={issuedDate ? new Date(issuedDate) : ''}
+          selected={issuedDate ? new Date(issuedDate) : new Date()}
           onChangeRaw={(e) => e && handleDatePickerChange(e.target.value, setIssuedDate)}
           onChange={(date) => date && handleDatePickerChange(date.toISOString(), setIssuedDate)}
           locale={lang}

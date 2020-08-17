@@ -81,6 +81,11 @@ const finnish = {
       infoText:
         'Datacite without validation: Aineisto näytetään Datacite -formaatissa, mutta ilman pakollisten kenttien validointia. Aineisto ei sellaisenaan välttämättä täytä Dataciten vaatimuksia.',
     },
+    draftInfo: {
+      draft: 'Tämä aineisto on luonnos ja näkyy ainoastaan aineiston luojalle.',
+      changes: 'Tämä on esikatselu julkaisemattomista muutoksista aineistoon ja näkyy ainoastaan aineiston luojalle.',
+    },
+    draftIdentifierInfo: 'Tunniste luodaan aineiston julkaisun yhteydessä.',
     dl: {
       root: 'juuri',
       breadcrumbs: 'Leivänmurut',
@@ -89,12 +94,18 @@ const finnish = {
       download: 'Lataa',
       downloadFailed: 'Lataus epäonnistui',
       downloadAll: 'Lataa kaikki',
+      downloadItem: 'Lataa %(name)s',
       downloading: 'Ladataan...',
       fileAmount: '%(amount)s objektia',
       close_modal: 'Sulje info',
+      customMetadata: 'Metatiedot',
       info_header: 'Tiedoston muut tiedot',
       loading: 'Ladataan kansiota',
       loaded: 'Kansio latautunut',
+      fileCount: {
+        one: '1 tiedosto',
+        other: '%(count)s tiedostoa'
+      },
       file_types: {
         both: 'tiedostot ja kansiot',
         directory: 'Kansio',
@@ -103,6 +114,20 @@ const finnish = {
       files: 'Tiedostot',
       info: 'Tietoja',
       info_about: 'aineistosta: %(file)s',
+      infoHeaders: {
+        file: 'Tiedoston tiedot',
+        directory: 'Kansion tiedot',
+      },
+      infoModalButton: {
+        directory: {
+          general: 'Kansion %(name)s tiedot',
+          custom: 'Kansion %(name)s tiedot ja metatiedot',
+        },
+        file: {
+          general: 'Tiedoston %(name)s tiedot',
+          custom: 'Tiedoston %(name)s tiedot ja metatiedot',
+        },
+      },
       item: 'aineisto %(item)s',
       name: 'Nimi',
       size: 'Koko',
@@ -416,6 +441,7 @@ const finnish = {
           years: ' vuotta sitten',
         },
       },
+      moreActions: 'Lisää',
       moreVersions: {
         one: 'Näytä 1 versio lisää',
         other: 'Näytä %(count)s versiota lisää',
@@ -427,10 +453,23 @@ const finnish = {
       editButton: 'Muokkaa',
       editDraftButton: 'Muokkaa luonnosta',
       deleteButton: 'Poista',
-      confirmDelete: {
-        text: 'Oletko varma, että haluat poistaa aineiston? Aineiston poiston jälkeen se ei enää näy Qvaimessa eikä Etsimen haku löydä sitä. Aineiston laskeutumissivua ei poisteta.',
-        ok: 'Poista',
-        cancel: 'Peruuta',
+      revertButton: 'Poista muutokset',
+      remove: {
+        confirm: {
+          published: {
+            text: 'Haluatko varmasti poistaa aineiston? Aineiston poiston jälkeen se ei enää näy Qvaimessa eikä Etsimen haku löydä sitä. Aineiston laskeutumissivua ei poisteta.',
+            ok: 'Poista',
+          },
+          draft: {
+            text: 'Haluatko varmasti poistaa luonnoksen? Luonnos poistetaan pysyvästi.',
+            ok: 'Poista',
+          },
+          changes: {
+            text: 'Haluatko varmasti poistaa aineistoon tehdyt julkaisemattomat muutokset?',
+            ok: 'Poista muutokset',
+          },
+          cancel: 'Peruuta'
+        }
       },
       goToEtsin: 'Katso Etsimessä',
       goToEtsinDraft: 'Esikatsele Etsimessä',
@@ -446,6 +485,10 @@ const finnish = {
       infoTitle: 'Kuvaus info',
       infoText:
         'Anna aineistolle kuvaava ja yksilöivä nimi. Kirjoita myös kuvaus mahdollisimman tarkasti. Kerro miten aineisto on syntynyt, mihin tarkoitukseen, miten se rakentuu ja miten sitä on käsitelty. Kerro myös sisällöstä, mahdollisista puutteista ja rajauksista.',
+      fieldHelpTexts: {
+        requiredForAll: 'Pakollinen kenttä kaikille aineistoille',
+        requiredToPublish: 'Pakollinen kenttä julkaistaville aineistoille',
+      },
       description: {
         langEn: 'ENGLANTI',
         langFi: 'SUOMI',
@@ -463,7 +506,7 @@ const finnish = {
       },
       issuedDate: {
         title: 'Julkaisupäivämäärä',
-        infoText: 'Lähteen muodollinen julkaisupäivämäärä. Ei vaikuta aineston näkyvyyteen.',
+        infoText: 'Lähteen muodollinen julkaisupäivämäärä. Ei vaikuta aineston näkyvyyteen. Jos kenttä jätetään tyhjäksi, käytetään nykyistä päivämäärää.',
         instructions: '',
         placeholder: 'Päivämäärä',
       },
@@ -483,6 +526,14 @@ const finnish = {
         placeholder: 'Valitse vaihtoehto',
         addButton: 'Lisää tieteenala',
         help: 'Voit lisätä useita tieteenaloja.',
+      },
+      datasetLanguage: {
+        title: 'Aineiston kieli',
+        infoText: 'Valitse aineistossa käytetyt kielet.',
+        placeholder: 'Hae kieliä kirjoittamalla',
+        noResults: 'Ei hakutuloksia',
+        addButton: 'Lisää kieli',
+        help: 'Voit lisätä useita kieliä.'
       },
       keywords: {
         title: 'Avainsanat',
@@ -528,6 +579,7 @@ const finnish = {
           label: 'URL',
           help: 'Anna osoite lisenssille.',
         },
+        addButton: 'Lisää lisenssi'
       },
     },
     actors: {
@@ -750,7 +802,9 @@ const finnish = {
         explanation:
           'Valitse "IDA", jos tiedostot on tallennettu Fairdata IDA -palveluun. Valitse "Ulkoinen lähde" jos tiedostot sijaitsevat muualla.',
         doiSelection:
-          'Haluan aineistolleni DOI -tunnisteen (digital object identifier) URN - tunnisteen sijaan.',
+          'Haluan aineistolleni DOI-tunnisteen (digital object identifier) URN-tunnisteen sijaan.',
+        doiSelectedHelp:
+          'Aineistolle luodaan julkaisun yhteydessä DOI-tunniste, joka rekisteröidään DataCite-palvelun tietokantaan, eikä toimintoa voi peruuttaa.',
         placeholder: 'Valitse vaihtoehto',
         ida: 'IDA',
         att: 'Ulkoinen lähde',
@@ -916,6 +970,9 @@ const finnish = {
           select: 'Valitse %(name)s',
           deselect: 'Poista valinta %(name)s',
         },
+        addUserMetadata: 'Lisää metadataa',
+        editUserMetadata: 'Muokkaa metadataa',
+        deleteUserMetadata: 'Poista metadata',
         form: {
           title: {
             label: 'Otsikko',

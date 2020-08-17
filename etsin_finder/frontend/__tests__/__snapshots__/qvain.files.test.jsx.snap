@@ -32,6 +32,7 @@ Object {
   ],
   "cumulativeState": 0,
   "dataCatalog": "urn:nbn:fi:att:data-catalog-ida",
+  "datasetLanguage": Array [],
   "description": Object {
     "en": "",
     "fi": "Description",
@@ -44,12 +45,14 @@ Object {
   "keywords": Array [
     "keyword",
   ],
-  "license": Object {
-    "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
-    "name": Object {
-      "en": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
+  "license": Array [
+    Object {
+      "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
+      "name": Object {
+        "en": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
+      },
     },
-  },
+  ],
   "original": Object {
     "cumulative_state": 0,
     "data_catalog": Object {
@@ -139,7 +142,6 @@ Object {
     "service_created": "qvain",
     "service_modified": "qvain",
   },
-  "otherLicenseUrl": undefined,
   "remote_resources": Array [],
   "restrictionGrounds": undefined,
   "spatial": Array [],
@@ -183,6 +185,7 @@ Object {
   ],
   "cumulativeState": 0,
   "dataCatalog": "urn:nbn:fi:att:data-catalog-ida",
+  "datasetLanguage": Array [],
   "description": Object {
     "en": "",
     "fi": "Description",
@@ -195,12 +198,14 @@ Object {
   "keywords": Array [
     "keyword",
   ],
-  "license": Object {
-    "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
-    "name": Object {
-      "en": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
+  "license": Array [
+    Object {
+      "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
+      "name": Object {
+        "en": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
+      },
     },
-  },
+  ],
   "original": Object {
     "cumulative_state": 0,
     "data_catalog": Object {
@@ -290,7 +295,6 @@ Object {
     "service_created": "qvain",
     "service_modified": "qvain",
   },
-  "otherLicenseUrl": undefined,
   "remote_resources": Array [],
   "restrictionGrounds": undefined,
   "spatial": Array [],
@@ -334,6 +338,7 @@ Object {
   ],
   "cumulativeState": 0,
   "dataCatalog": "urn:nbn:fi:att:data-catalog-ida",
+  "datasetLanguage": Array [],
   "description": Object {
     "en": "",
     "fi": "Description",
@@ -346,12 +351,14 @@ Object {
   "keywords": Array [
     "keyword",
   ],
-  "license": Object {
-    "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
-    "name": Object {
-      "en": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
+  "license": Array [
+    Object {
+      "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
+      "name": Object {
+        "en": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
+      },
     },
-  },
+  ],
   "original": Object {
     "cumulative_state": 0,
     "data_catalog": Object {
@@ -441,7 +448,6 @@ Object {
     "service_created": "qvain",
     "service_modified": "qvain",
   },
-  "otherLicenseUrl": undefined,
   "remote_resources": Array [],
   "restrictionGrounds": undefined,
   "spatial": Array [],
@@ -485,6 +491,7 @@ Object {
   ],
   "cumulativeState": 0,
   "dataCatalog": "urn:nbn:fi:att:data-catalog-ida",
+  "datasetLanguage": Array [],
   "description": Object {
     "en": "",
     "fi": "Description",
@@ -497,12 +504,14 @@ Object {
   "keywords": Array [
     "keyword",
   ],
-  "license": Object {
-    "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
-    "name": Object {
-      "en": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
+  "license": Array [
+    Object {
+      "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
+      "name": Object {
+        "en": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
+      },
     },
-  },
+  ],
   "original": Object {
     "cumulative_state": 0,
     "data_catalog": Object {
@@ -592,7 +601,6 @@ Object {
     "service_created": "qvain",
     "service_modified": "qvain",
   },
-  "otherLicenseUrl": undefined,
   "remote_resources": Array [],
   "restrictionGrounds": undefined,
   "spatial": Array [],
@@ -636,6 +644,7 @@ Object {
   ],
   "cumulativeState": 0,
   "dataCatalog": "urn:nbn:fi:att:data-catalog-ida",
+  "datasetLanguage": Array [],
   "description": Object {
     "en": "",
     "fi": "Description",
@@ -648,12 +657,14 @@ Object {
   "keywords": Array [
     "keyword",
   ],
-  "license": Object {
-    "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
-    "name": Object {
-      "en": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
+  "license": Array [
+    Object {
+      "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
+      "name": Object {
+        "en": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
+      },
     },
-  },
+  ],
   "original": Object {
     "cumulative_state": 0,
     "data_catalog": Object {
@@ -743,7 +754,6 @@ Object {
     "service_created": "qvain",
     "service_modified": "qvain",
   },
-  "otherLicenseUrl": undefined,
   "remote_resources": Array [],
   "restrictionGrounds": undefined,
   "spatial": Array [],

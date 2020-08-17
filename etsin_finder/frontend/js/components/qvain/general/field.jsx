@@ -31,11 +31,14 @@ class Field extends PureComponent {
     const { tooltipContent } = this.props.components
     const { isRequired } = this.props
     const { isExpanded } = this.state
+
+    const handleClick = () => this.setState({ isExpanded: !isExpanded })
+
     return (
       <div className="container">
-        <SectionTitle onClick={() => this.setState({ isExpanded: !isExpanded })}>
-          {isRequired ? null : <ExpandCollapse type="button" isExpanded={isExpanded} />}
-          <Translate content={title} />
+        <SectionTitle>
+          {isRequired ? null : <ExpandCollapse type="button" isExpanded={isExpanded} onClick={handleClick} />}
+          <Translate content={title} onClick={handleClick} />
           <QvainTooltip tooltipAriaLabel={tooltip} tooltipContent={tooltipContent} />
         </SectionTitle>
         {isRequired || isExpanded ? this.props.children : null}

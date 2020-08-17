@@ -13,16 +13,17 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
+import { inject, observer } from 'mobx-react'
 
-import DatasetQuery from '../../../../stores/view/datasetquery'
 import TableHeader from '../tableHeader'
 import Table from '../table'
 
-export default class ExternalResources extends Component {
+class ExternalResources extends Component {
   constructor(props) {
     super(props)
     let results
     // this is only for testing and storybook
+    const { DatasetQuery } = props.Stores
     if (!props.testData) {
       results = DatasetQuery.results
     } else {
@@ -96,4 +97,7 @@ ExternalResources.defaultProps = {
 
 ExternalResources.propTypes = {
   testData: PropTypes.object,
+  Stores: PropTypes.object.isRequired,
 }
+
+export default inject('Stores')(observer(ExternalResources))
