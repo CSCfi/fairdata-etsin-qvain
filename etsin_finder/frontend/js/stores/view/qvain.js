@@ -11,6 +11,7 @@ import Actors from './qvain.actors'
 import Files from './qvain.files'
 import Spatials, { SpatialModel } from './qvain.spatials'
 import uniqueByKey from '../../utils/uniqueByKey'
+import moment from 'moment'
 
 class Qvain {
   constructor(Env) {
@@ -38,7 +39,7 @@ class Qvain {
 
   @observable spatials = []
 
-  @observable issuedDate = undefined
+  @observable issuedDate = moment().format('YYYY-MM-DD')
 
   @observable otherIdentifier = ''
 
@@ -114,7 +115,7 @@ class Qvain {
       en: '',
       fi: '',
     }
-    this.issuedDate = undefined
+    this.issuedDate = moment().format('YYYY-MM-DD')
     this.otherIdentifier = ''
     this.otherIdentifiersArray = []
     this.otherIdentifiersValidationError = null
