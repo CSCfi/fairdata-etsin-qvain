@@ -558,16 +558,20 @@ class Qvain {
   setUseDoi = (selectedUseDoiStatus) => {
     this.useDoi = selectedUseDoiStatus
 
+    console.log(this.Actors.missingFieldsListActors)
+
+    console.log(this.Actors.missingFieldsListActors[1].valueIsRequired)
+
     if (selectedUseDoiStatus === true) {
       // If use_doi is checked, publisher must be defined ([1] = publisher) 
       this.Actors.missingFieldsListActors[1].valueIsRequired = true
-
-      // Also, check if there is a defined publisher in actors
-      this.Actors.checkMissingFieldsActors()
     } else {
       // ... otherwise, make sure publisher does not have to be defined
       this.Actors.missingFieldsListActors[1].valueIsRequired = false
     }
+
+    // Finally, check if there is a defined publisher in actors
+    this.Actors.checkMissingFieldsActors()
   }
 
   @action

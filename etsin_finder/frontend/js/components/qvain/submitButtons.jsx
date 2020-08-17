@@ -537,8 +537,17 @@ class SubmitButtons extends Component {
     const { original, readonly, useDoi } = Stores.Qvain
     const { metaxApiV2 } = Stores.Env
     const disabledDueToReadOnly = readonly || this.state.datasetLoading
-    let disabledDueToMissingFieldsDraft = Stores.Qvain.stillMissingGeneralFields// && Stores.Qvain.Actors.stillMissingActorFields
-    let disabledDueToMissingFieldsNonDraft = Stores.Qvain.stillMissingGeneralFields// && Stores.Qvain.Actors.stillMissingActorFields
+
+    // All required draft fields must be set in order to create draft
+    // let disabledDueToMissingFieldsDraft = Stores.Qvain.stillMissingGeneralFieldsDraft
+
+    // All required fields must be set in order to publish
+    let disabledDueToMissingFieldsNonDraft = Stores.Qvain.stillMissingGeneralFields || Stores.Qvain.Actors.stillMissingActorFields
+
+    console.log('General fields still missing: ', Stores.Qvain.stillMissingGeneralFields)
+
+    console.log('Actors still missing: ', Stores.Qvain.Actors.stillMissingActorFields)
+
     const doiModal = (
       <DoiModal
         isOpen={this.state.useDoiModalIsOpen}

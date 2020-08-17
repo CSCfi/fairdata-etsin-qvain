@@ -104,16 +104,12 @@ class Actors {
   checkMissingFieldsActors = () => {
     for (let i = 0; i < this.missingFieldsListActors.length; i += 1) {
       console.log('loop 2')
-      if (this.missingFieldsListActors[i].valueIsMissing) {
-        console.log(this.missingFieldsListActors[i].fieldName)
-        console.log(this.Qvain.useDoi)
-        if ((this.missingFieldsListActors[i].fieldName === 'publisher') && (this.useDoi === true)) {
-          console.log('Publisher is missing and use_doi is true')
-          break;
-        }
-        console.log(' 2 and there is still some things...')
+      if ((this.missingFieldsListActors[i].valueIsMissing) && (this.missingFieldsListActors[i].valueIsRequired)) {
+        console.log(this.missingFieldsListActors[i].fieldName, ' is required and missing...')
+        this.stillMissingActorFields = true
         break;
       }
+      console.log('finally we have the actors...')
       this.stillMissingActorFields = false
     }
   }
@@ -484,6 +480,40 @@ class Actors {
     this.Qvain.setChanged(true)
   }
 
+  // Function for looping through the entire actors list and setting the correct status for each
+  updateMissingFieldsActorsStatus() {
+    let creatorFound = false
+    let publisherFound = false
+
+    this.actors.forEach((actor) => {
+      actor.roles.forEach((roles) => {
+        // Creator is found and thus no longer missing
+        if (roles === 'creator') {
+          console.log('There is a creator!')
+          this.missingFieldsListActors[0].valueIsMissing = false
+          creatorFound = true
+        // Publisher is found and thus no longer missing
+        } else if (roles === 'publisher') {
+          console.log('There is a publisher!')
+          this.missingFieldsListActors[1].valueIsMissing = false
+          publisherFound = true
+        }
+      })
+    })
+
+    // Creator was not found and thus missing
+    if (creatorFound === false) {
+      console.log('There is no creator...')
+      this.missingFieldsListActors[0].valueIsMissing = true
+    }
+    // Publisher was not found and thus missing
+    if (publisherFound === false) {
+      console.log('There is no publisher...')
+      this.missingFieldsListActors[1].valueIsMissing = true
+    }
+
+  }
+
   @action saveActor = actor => {
     // Saving an actor that was previously added?
     const existing = this.actors.find(
@@ -501,6 +531,12 @@ class Actors {
     // Update changed organizations
     this.updateSavedActorOrganizations(actor)
     this.Qvain.setChanged(true)
+
+    // Update the missing field status of actors
+    this.updateMissingFieldsActorsStatus()
+
+    // Check if all required actors are set for publishing
+    this.checkMissingFieldsActors()
   }
 
   @action
@@ -508,6 +544,18 @@ class Actors {
     const actors = this.actors.filter(p => p.uiid !== actor.uiid)
     this.setActors(actors)
     this.Qvain.setChanged(true)
+
+    actor.roles.forEach((roles) => {
+      console.log(roles)
+    })
+
+    console.log(this.actors)
+
+    // Update the missing field status of actors
+    this.updateMissingFieldsActorsStatus()
+
+    // Check if all required actors are set for publishing
+    this.checkMissingFieldsActors()
   }
 
   @action
