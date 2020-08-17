@@ -9,7 +9,6 @@
 
 import requests
 from flask import jsonify
-
 import json
 
 from etsin_finder.finder import app
@@ -86,12 +85,12 @@ class MetaxQvainLightAPIService(MetaxQvainLightAPIServiceV1):
                                              **args
                                              )
 
-        if not success:
+        if success:
+            log.info('Created dataset with identifier: {}'.format(resp.json().get('identifier', 'COULD-NOT-GET-IDENTIFIER')))
+        else:
             log.warning("Failed to create dataset")
-            return resp, status
 
-        log.info('Created dataset with identifier: {}'.format(resp.json().get('identifier', 'COULD-NOT-GET-IDENTIFIER')))
-        return resp
+        return resp, status
 
     def update_dataset(self, data, cr_id, last_modified, params):
         """Update a dataset with the data that the user has entered in Qvain-light.
@@ -190,11 +189,10 @@ class MetaxQvainLightAPIService(MetaxQvainLightAPIServiceV1):
                                              **args
                                              )
 
-        if not success:
+        if success:
+            log.info('Created new version of dataset {}'.format(cr_identifier))
+        else:
             log.warning("Failed to create new version of dataset {}".format(cr_identifier))
-            return resp, status
-
-        log.info('Created new version of dataset {}'.format(cr_identifier))
         return resp, status
 
     def publish_dataset(self, cr_identifier):
@@ -217,11 +215,11 @@ class MetaxQvainLightAPIService(MetaxQvainLightAPIServiceV1):
                                              params=params,
                                              **args)
 
-        if not success:
+        if success:
+            log.info("Published dataset {}".format(cr_identifier))
+        else:
             log.warning("Failed to publish dataset {}".format(cr_identifier))
-            return resp, status
 
-        log.info('Published dataset {}'.format(cr_identifier))
         return resp, status
 
     def merge_draft(self, cr_identifier):
@@ -245,11 +243,10 @@ class MetaxQvainLightAPIService(MetaxQvainLightAPIServiceV1):
                                              **args
                                              )
 
-        if not success:
+        if success:
+            log.info("Merged draft {}".format(cr_identifier))
+        else:
             log.warning("Failed to merge draft {}".format(cr_identifier))
-            return resp, status
-
-        log.info('Merged draft {}'.format(cr_identifier))
         return resp, status
 
     def create_draft(self, cr_identifier):
@@ -273,11 +270,10 @@ class MetaxQvainLightAPIService(MetaxQvainLightAPIServiceV1):
                                              **args
                                              )
 
-        if not success:
+        if success:
+            log.info("Created draft of {}".format(cr_identifier))
+        else:
             log.warning("Failed to create draft of dataset {}".format(cr_identifier))
-            return resp, status
-
-        log.info('Created draft of {}'.format(cr_identifier))
         return resp, status
 
 _metax_api = MetaxQvainLightAPIService(app)

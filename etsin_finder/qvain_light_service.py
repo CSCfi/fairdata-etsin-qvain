@@ -50,10 +50,6 @@ class MetaxQvainLightAPIService(FlaskService):
             self.user = metax_qvain_api_config.get('USER')
             self.pw = metax_qvain_api_config.get('PASSWORD')
             self.verify_ssl = metax_qvain_api_config.get('VERIFY_SSL', True)
-
-            self.default_args = {
-                'headers': {'Accept': 'application/json', 'Content-Type': 'application/json'},
-            }
         elif not self.is_testing:
             log.error("Unable to initialize MetaxAPIService due to missing config")
 
@@ -148,12 +144,11 @@ class MetaxQvainLightAPIService(FlaskService):
 
         resp, code, success = make_request(requests.patch,
                                            req_url,
-                                           data=json.dumps(data),
+                                           json=data,
                                            **self._get_args()
                                            )
         if not success:
             log.warning("Failed to patch file {}".format(file_identifier))
-            return resp, code
         return resp, code
 
     def get_datasets_for_user(self, user_id, limit, offset, no_pagination):
@@ -210,11 +205,10 @@ class MetaxQvainLightAPIService(FlaskService):
                                              json=data,
                                              **args
                                              )
-        if not success:
+        if success:
+            log.info('Created dataset with identifier: {}'.format(resp.get('identifier', 'COULD-NOT-GET-IDENTIFIER')))
+        else:
             log.error('Failed to create dataset')
-            return resp, status
-
-        log.info('Created dataset with identifier: {}'.format(resp.get('identifier', 'COULD-NOT-GET-IDENTIFIER')))
         return resp, status
 
     def update_dataset(self, data, cr_id, last_modified, params):
@@ -245,13 +239,13 @@ class MetaxQvainLightAPIService(FlaskService):
                                              **args
                                              )
         if status == 412:
-            return 'Resource has been modified since last publish', 412
+            return 'Resource has been modified since last publish', status
 
-        if not success:
+        if success:
+            log.info('Updated dataset with identifier: {}'.format(cr_id))
+        else:
             log.error('Failed to update dataset {}'.format(cr_id))
-            return resp, status
 
-        log.info('Updated dataset with identifier: {}'.format(cr_id))
         return resp, status
 
     def get_dataset(self, cr_id):
@@ -286,11 +280,10 @@ class MetaxQvainLightAPIService(FlaskService):
         resp, status, success = make_request(requests.delete,
                                              req_url,
                                              **self._get_args())
-        if not success:
+        if success:
+            log.info('Deleted dataset with identifier: {}'.format(cr_id))
+        else:
             log.warning('Failed to delete dataset {}'.format(cr_id))
-            return resp, status
-
-        log.info('Deleted dataset with identifier: {}'.format(cr_id))
         return resp, status
 
     def change_cumulative_state(self, cr_id, cumulative_state):
@@ -314,10 +307,10 @@ class MetaxQvainLightAPIService(FlaskService):
                                              params=params,
                                              **self._get_args()
                                              )
-        if not success:
+        if success:
+            log.info('Changed cumulative state of dataset {} to {}'.format(cr_id, cumulative_state))
+        else:
             log.warning('Failed to change cumulative_state of dataset {} to {}'.format(cr_id, cumulative_state))
-            return resp, status
-        log.info('Changed cumulative state of dataset {} to {}'.format(cr_id, cumulative_state))
         return resp, status
 
     def refresh_directory_content(self, cr_identifier, dir_identifier):
@@ -341,10 +334,10 @@ class MetaxQvainLightAPIService(FlaskService):
                                              params=params,
                                              **self._get_args()
                                              )
-        if not success:
+        if success:
+            log.info('Refreshed content of directory {} in dataset {}'.format(dir_identifier, cr_identifier))
+        else:
             log.warning('Failed to refresh content directory {} in dataset {}'.format(dir_identifier, cr_identifier))
-            return resp, status
-        log.info('Refreshed content of directory {} in dataset {}'.format(dir_identifier, cr_identifier))
         return resp, status
 
     def fix_deprecated_dataset(self, cr_identifier):
@@ -366,10 +359,10 @@ class MetaxQvainLightAPIService(FlaskService):
                                              params=params,
                                              **self._get_args()
                                              )
-        if not success:
+        if success:
+            log.info('Fixed deprecated dataset {}'.format(cr_identifier))
+        else:
             log.warning('Failed to fix deprecated dataset {}'.format(cr_identifier))
-            return resp, status
-        log.info('Fixed deprecated dataset {}'.format(cr_identifier))
         return resp, status
 
 _metax_api = MetaxQvainLightAPIService(app)
