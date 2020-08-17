@@ -106,7 +106,7 @@ class MetaxQvainLightAPIService(MetaxQvainLightAPIServiceV1):
 
         """
         req_url = self.METAX_PATCH_DATASET.format(cr_id)
-        headers = {'Accept':  'application/json', 'If-Unmodified-Since': last_modified}
+        headers = {'Accept': 'application/json', 'If-Unmodified-Since': last_modified}
         log.debug('Request URL: PATCH {0}\nHeaders: {1}\nData: {2}'.format(req_url, headers, json.dumps(data, indent=2)))
 
         args = self._get_args(timeout=30)
@@ -116,14 +116,14 @@ class MetaxQvainLightAPIService(MetaxQvainLightAPIServiceV1):
                                              json=data,
                                              **args)
 
-        if not success:
-            log.warning("Failed to update dataset {}: {}".format(cr_id, resp), status)
-            return resp, status
 
         if status == 412:
-            return 'Resource has been modified since last publish', 412
+            return 'Resource has been modified since last publish', staatus
 
-        log.info('Updated dataset with identifier: {}'.format(cr_id))
+        if success:
+            log.info('Updated dataset with identifier: {}'.format(cr_id))
+        else:
+            log.warning("Failed to update dataset {}".format(cr_id), status)
         return resp, status
 
     def update_dataset_files(self, cr_id, data, params=None):

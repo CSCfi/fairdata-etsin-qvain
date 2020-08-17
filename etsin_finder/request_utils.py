@@ -23,7 +23,7 @@ def make_request(request_func, *args, **kwargs):
       *args, **kwargs: Arguments that will be passed to request_func
 
     Returns (as tuple):
-      body (json|str): The response body as json (if possible) or text
+      body (dict|str): The response body as parsed json (if possible) or text
       status (int): Response HTTP status code
       success (bool): True if no exceptions occurred
 
