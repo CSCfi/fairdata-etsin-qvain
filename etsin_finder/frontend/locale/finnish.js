@@ -507,7 +507,7 @@ const finnish = {
       },
       issuedDate: {
         title: 'Julkaisupäivämäärä',
-        infoText: 'Lähteen muodollinen julkaisupäivämäärä. Ei vaikuta aineston näkyvyyteen. Jos kenttä jätetään tyhjäksi, käytetään nykyistä päivämäärää.',
+        infoText: 'Lähteen muodollinen julkaisupäivämäärä. Ei vaikuta aineston näkyvyyteen. Jos kenttää ei määritellä erikseen, käytetään nykyistä päivämäärää.',
         instructions: '',
         placeholder: 'Päivämäärä',
       },
@@ -803,7 +803,7 @@ const finnish = {
         explanation:
           'Valitse "IDA", jos tiedostot on tallennettu Fairdata IDA -palveluun. Valitse "Ulkoinen lähde" jos tiedostot sijaitsevat muualla.',
         doiSelection:
-          'Haluan aineistolleni DOI-tunnisteen (digital object identifier) URN-tunnisteen sijaan.',
+          'Haluan aineistolleni DOI-tunnisteen (digital object identifier) URN-tunnisteen sijaan (DOI-ainestoon on lisättävä julkaisija).',
         doiSelectedHelp:
           'Aineistolle luodaan julkaisun yhteydessä DOI-tunniste, joka rekisteröidään DataCite-palvelun tietokantaan, eikä toimintoa voi peruuttaa.',
         placeholder: 'Valitse vaihtoehto',

@@ -509,7 +509,7 @@ const english = {
       issuedDate: {
         title: 'Issued date',
         infoText:
-          'Date of formal issuance (publication) of the resource. This value does not affect or reflect the visibility of the dataset itself. If this is left empty, current date is used as default value.',
+          'Date of formal issuance (publication) of the resource. This value does not affect or reflect the visibility of the dataset itself. If the date is not manually selected, the current date will be used.',
         instructions: '',
         placeholder: 'Date',
       },
@@ -803,7 +803,7 @@ const english = {
         explanation:
           'Choose "IDA" if the data is stored in Fairdata IDA Service. Choose "Remote resources" if the data is in remote location.',
         doiSelection:
-          'I want the dataset to have a DOI (digital object identifier) instead of a URN.',
+          'I want the dataset to have a DOI (digital object identifier) instead of a URN (for DOI datasets, a dataset publisher must be defined).',
         doiSelectedHelp:
           'When the dataset is published, a DOI will be created and stored in the DataCite Service. This operation cannot be undone.',
         placeholder: 'Select option',
