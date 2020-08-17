@@ -374,6 +374,7 @@ const spatialNameSchema = yup
 
 const spatialAltitudeSchema = yup
   .number()
+  .typeError('qvain.temporalAndSpatial.spatial.error.altitudeNan')
 
 // RELATED RESOURCE
 const relatedResourceNameSchema = yup.object().shape({

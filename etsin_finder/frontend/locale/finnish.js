@@ -1305,7 +1305,7 @@ const finnish = {
         noItems: 'Maantieteellistä kattavuutta ei ole lisätty.',
         error: {
           nameRequired: 'Nimi on pakollinen kenttä.',
-          altitudeNan: 'Korkeus täytyy olla numero',
+          altitudeNan: 'Korkeuden täytyy olla numero',
         },
         modal: {
           addButton: 'Lisää maantieteellinen kattavuus',

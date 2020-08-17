@@ -1177,8 +1177,8 @@ const english = {
           },
           periodOfTimeInput: {
             label: 'Period of time',
-            startPlaceholder: 'starts',
-            endPlaceholder: 'ends',
+            startPlaceholder: 'Start date',
+            endPlaceholder: 'End date',
           },
           locationInput: {
             label: 'Location',
