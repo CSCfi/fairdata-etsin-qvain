@@ -19,7 +19,6 @@ import Settings from '../components/general/navigation/settings'
 import Navi from '../components/general/navigation/index'
 import MobileNavi from '../components/general/navigation/mobileNavi'
 import { FAIRDATA_WEBSITE_URL } from '../utils/constants'
-import LoggedInUser from '../components/general/loggedInUser'
 
 export default class Header extends Component {
   state = {
@@ -46,7 +45,6 @@ export default class Header extends Component {
       <HeaderBar>
         <Positioner className="container">
           <EtsinLogo />
-          <LoggedInUser />
           <NaviCont aria-label="primary">
             <Navi />
           </NaviCont>

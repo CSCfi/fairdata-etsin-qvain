@@ -12,6 +12,7 @@ const LoggedInUser = ({ Stores }) => {
   const User = (
     <UserWrapper>
       <UserIcon icon={faUser} />
+      {' '}
       <Name>
         {firstName} {lastName}
       </Name>
@@ -20,12 +21,14 @@ const LoggedInUser = ({ Stores }) => {
   return userLogged ? User : null
 }
 
-const UserWrapper = styled.div``
+const UserWrapper = styled.span`
+  padding: 5px;
+`
 const UserIcon = styled(FontAwesomeIcon)`
-  color: ${p => p.theme.color.primary};
+  color: ${p => p.theme.color.white};
 `
 const Name = styled.span`
-  color: ${p => p.theme.color.primary};
+  color: ${p => p.theme.color.white};
 `
 
 LoggedInUser.propTypes = {

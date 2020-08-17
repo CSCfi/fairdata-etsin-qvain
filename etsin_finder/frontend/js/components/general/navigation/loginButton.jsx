@@ -21,6 +21,7 @@ import Stores from '../../../stores'
 import Button from '../button'
 import Loader from '../loader'
 import NoticeBar from '../noticeBar'
+import LoggedInUser from '../loggedInUser'
 
 class Login extends Component {
   static propTypes = {
@@ -103,6 +104,7 @@ class Login extends Component {
         width={this.props.width}
       >
         <Translate content="nav.logout" />
+        <LoggedInUser />
       </LoginButton>
     )
   }
@@ -115,6 +117,12 @@ const Cont = styled.div`
 
 const LoginButton = styled(Button)`
   white-space: nowrap;
+
+  @media only screen and (max-width: 1200px) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 315px;
+  }
 `
 
 const LoaderCont = styled.div`
