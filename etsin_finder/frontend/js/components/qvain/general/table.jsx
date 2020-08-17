@@ -1,10 +1,10 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import React from 'react'
+import PropTypes from 'prop-types'
+import styled from 'styled-components'
 
 export const Table = styled.table`
   width: 100%;
-`;
+`
 
 export const TableHeader = styled.thead`
   border-bottom: 1px solid black;
@@ -12,7 +12,7 @@ export const TableHeader = styled.thead`
   padding-bottom: 10px;
   padding-left: 10px;
   padding-right: 10px;
-`;
+`
 
 export const TableBody = styled.tbody`
   padding-top: 10px;
@@ -22,20 +22,20 @@ export const TableBody = styled.tbody`
   & > ${Row}:hover {
     ${props => (props.striped ? 'background-color: #e5e5e5;' : '')}
   }
-`;
+`
 
 export const Row = styled.tr`
   padding: inherit;
-`;
+`
 
 export const HeaderCell = styled.th`
   padding: inherit;
-`;
+`
 
 export const BodyCell = styled.td`
   padding: 5px;
   vertical-align: middle;
-`;
+`
 
 export const TableNoteStyles = styled.tr`
   &:hover {
@@ -43,7 +43,7 @@ export const TableNoteStyles = styled.tr`
   }
 `
 
-export const TableNote = (props) => (
+export const TableNote = props => (
   <TableNoteStyles {...props}>
     <BodyCell>{props.children}</BodyCell>
   </TableNoteStyles>
@@ -51,14 +51,11 @@ export const TableNote = (props) => (
 
 TableNote.propTypes = {
   children: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.object
-  ])
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+  ]),
 }
 
 TableNote.defaultProps = {
-  children: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.object
-  ])
+  children: null,
 }

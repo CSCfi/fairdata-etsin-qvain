@@ -14,7 +14,8 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import { withTheme } from 'styled-components'
-import DatasetQuery from '../../stores/view/datasetquery'
+import { inject, observer } from 'mobx-react'
+
 import FormatSelect from './formatselect'
 
 class FormatChanger extends Component {
@@ -24,7 +25,6 @@ class FormatChanger extends Component {
     this.state = {
       formats: [],
       selected: '',
-      data: DatasetQuery.results,
       url: '',
     }
   }
@@ -34,7 +34,8 @@ class FormatChanger extends Component {
   }
 
   checkFields = () => {
-    const data = this.state.data
+    const { DatasetQuery } = this.props.Stores
+    const data = DatasetQuery.results
     const rd = data.research_dataset
     let dataciteExists = false
     let fields = {}
@@ -63,8 +64,8 @@ class FormatChanger extends Component {
     })
   }
 
-  changeFormat = (format) => {
-    if (this.state.formats.some((field) => field.value === format.value)) {
+  changeFormat = format => {
+    if (this.state.formats.some(field => field.value === format.value)) {
       this.setState(
         {
           selected: format,
@@ -79,13 +80,15 @@ class FormatChanger extends Component {
     }
   }
 
-  openFormat = (url) => {
+  openFormat = url => {
     const win = window.open(url, '_blank')
     win.focus()
   }
 
   render() {
-    return !this.state.data.removed ? (
+    const { DatasetQuery } = this.props.Stores
+    const data = DatasetQuery.results
+    return !data.removed ? (
       <FormatSelect
         background={this.props.theme.color.primary}
         newestColor={this.props.theme.color.white}
@@ -105,6 +108,7 @@ class FormatChanger extends Component {
 FormatChanger.propTypes = {
   idn: PropTypes.string.isRequired,
   theme: PropTypes.object.isRequired,
+  Stores: PropTypes.object.isRequired,
 }
 
-export default withRouter(withTheme(FormatChanger))
+export default withRouter(withTheme(inject('Stores')(observer(FormatChanger))))

@@ -20,11 +20,13 @@ export class DirectoryFormBase extends Component {
 
   static propTypes = {
     Stores: PropTypes.object.isRequired,
-    className: PropTypes.string
+    className: PropTypes.string,
+    setChanged: PropTypes.func.isRequired,
+    requestClose: PropTypes.func.isRequired,
   }
 
   static defaultProps = {
-    className: ''
+    className: '',
   }
 
   state = {
@@ -55,7 +57,12 @@ export class DirectoryFormBase extends Component {
 
   handleCancel = event => {
     event.preventDefault()
-    this.props.Stores.Qvain.Files.setInEdit(undefined)
+    this.props.requestClose()
+  }
+
+  updateValues = values => {
+    this.setState(values)
+    this.props.setChanged(true)
   }
 
   handleChangeUse = selectedOption => {
@@ -63,6 +70,7 @@ export class DirectoryFormBase extends Component {
       useCategory: selectedOption,
       useCategoryError: undefined,
     })
+    this.props.setChanged(true)
   }
 
   handleSave = event => {
@@ -94,7 +102,10 @@ export class DirectoryFormBase extends Component {
   }
 
   handleOnBlur = (validator, value, errorSet) => {
-    validator.validate(value).then(() => errorSet(undefined)).catch(err => errorSet(err.errors))
+    validator
+      .validate(value)
+      .then(() => errorSet(undefined))
+      .catch(err => errorSet(err.errors))
   }
 
   handleTitleBlur = () => {
@@ -130,7 +141,7 @@ export class DirectoryFormBase extends Component {
     const { readonly } = this.props.Stores.Qvain
     const { titleError, descriptionError, directoryError, useCategoryError } = this.state
     return (
-      <FileContainer className={this.props.className}>
+      <DirectoryContainer className={this.props.className}>
         <Label>
           <Translate content="qvain.files.selected.form.title.label" /> *
         </Label>
@@ -139,7 +150,7 @@ export class DirectoryFormBase extends Component {
           value={this.state.title}
           disabled={readonly}
           onChange={event =>
-            this.setState({
+            this.updateValues({
               title: event.target.value,
             })
           }
@@ -154,7 +165,11 @@ export class DirectoryFormBase extends Component {
           component={Textarea}
           value={this.state.description}
           disabled={readonly}
-          onChange={event => this.setState({ description: event.target.value })}
+          onChange={event =>
+            this.updateValues({
+              description: event.target.value,
+            })
+          }
           onBlur={this.handleDescriptionBlur}
           attributes={{ placeholder: 'qvain.files.selected.form.description.placeholder' }}
         />
@@ -188,10 +203,17 @@ export class DirectoryFormBase extends Component {
           />
           <Translate component={SaveButton} onClick={this.handleSave} content="qvain.common.save" />
         </Buttons>
-      </FileContainer>
+      </DirectoryContainer>
     )
   }
 }
+
+const DirectoryContainer = styled(Container)`
+  border: none;
+  padding: 0;
+  margin: 0;
+  box-shadow: none;
+`
 
 const Buttons = styled.div`
   display: flex;
@@ -205,12 +227,5 @@ const Buttons = styled.div`
 
 const getUseCategory = (directory, translations) =>
   translations.find(opt => opt.value === directory.useCategory)
-
-const FileContainer = styled(Container)`
-  padding: 35px 24px;
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.13);
-  margin-bottom: 69px;
-  margin-top: 0px;
-`
 
 export default inject('Stores')(observer(DirectoryFormBase))

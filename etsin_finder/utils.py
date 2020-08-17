@@ -93,6 +93,21 @@ def json_or_empty(response):
     return response_json
 
 
+def json_or_text(response):
+    """
+    Return response JSON as python object, or text if no JSON is present.
+
+    :param response:
+    :return:
+    """
+    response_json = {}
+    try:
+        response_json = response.json()
+    except Exception:
+        response.text
+    return response_json
+
+
 def remove_keys_recursively(obj, fields_to_remove):
     """Remove specified keys recursively from a python object (dict or list)
 

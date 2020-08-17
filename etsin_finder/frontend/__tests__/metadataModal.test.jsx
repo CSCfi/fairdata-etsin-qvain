@@ -272,7 +272,7 @@ describe('Qvain.MetadataModal', () => {
     const { Files } = stores.Qvain
 
     // Open modal, wait until versions have been fetched
-    stores.Qvain.setMetadataModalFile(await Files.getItemByPath('/test/test4.pdf'))
+    stores.Qvain.setMetadataModalFile(await Files.getItemByPath('/test/test2.csv'))
     wrapper.update()
     const instance = wrapper.find(MetadataModal).instance().wrappedInstance
     await when(() => instance.formatFetchStatus !== 'loading')
@@ -292,5 +292,26 @@ describe('Qvain.MetadataModal', () => {
     expect(disabled.length).toBe(7)
     expect(wrapper.find(MetadataModal).find('button').not('[disabled=true]').length).toBe(2)
     expect(wrapper.find(MetadataModal).find('button').find('[disabled=true]').length).toBe(1)
+  })
+
+  it('hides csv options for non-csv files', async () => {
+    const { Files } = stores.Qvain
+
+    // Open modal, wait until versions have been fetched
+    stores.Qvain.setMetadataModalFile(await Files.getItemByPath('/test/test2.csv'))
+    wrapper.update()
+    const instance = wrapper.find(MetadataModal).instance().wrappedInstance
+    await when(() => instance.formatFetchStatus !== 'loading')
+
+    // All inputs and buttons should be enabled
+    let enabled = wrapper.find(MetadataModal).find('input').not('[type="hidden"]').not('[disabled=true]')
+    expect(enabled.length).toBe(7)
+
+    stores.Qvain.setMetadataModalFile(await Files.getItemByPath('/test/test4.pdf'))
+    wrapper.update()
+
+    // All inputs and buttons should be enabled
+    enabled = wrapper.find(MetadataModal).find('input').not('[type="hidden"]').not('[disabled=true]')
+    expect(enabled.length).toBe(3)
   })
 })

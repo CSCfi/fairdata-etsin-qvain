@@ -9,7 +9,7 @@ import translate from 'counterpart'
 
 import { qvainFormSchema, otherIdentifierSchema } from './utils/formValidation'
 import handleSubmitToBackend from './utils/handleSubmit'
-import { DATASET_URLS, FILE_API_URLS } from '../../utils/constants'
+import urls from './utils/urls'
 import { InvertedButton } from '../general/button'
 import DoiModal from './doiModal'
 
@@ -38,6 +38,14 @@ class SubmitButtons extends Component {
     if (this.state.datasetLoading !== value) {
       this.setState({ datasetLoading: value })
     }
+  }
+
+  goToDatasets = identifier => {
+    // go to datasets view and highlight published dataset
+    const { history } = this.props
+    const { setPublishedDataset } = this.props.Stores.QvainDatasets
+    setPublishedDataset(identifier)
+    history.push('/qvain')
   }
 
   checkOtherIdentifiersV1 = () => {
@@ -75,8 +83,8 @@ class SubmitButtons extends Component {
       this.closeUseDoiInformation()
     }
 
-    const { Stores, history, handleSubmitError } = this.props
-    const { addUnsavedMultiValueFields, resetQvainStore, editDataset } = Stores.Qvain
+    const { Stores, handleSubmitError } = this.props
+    const { addUnsavedMultiValueFields } = Stores.Qvain
     const { metaxApiV2 } = Stores.Env
 
     if (metaxApiV2) {
@@ -96,15 +104,12 @@ class SubmitButtons extends Component {
       .validate(obj, { abortEarly: false })
       .then(() =>
         axios
-          .post(DATASET_URLS.DATASET_URL, obj)
+          .post(urls.v1.datasets(), obj)
           .then(res => {
             const data = res.data
 
-            // Open the created dataset without reloading the editor
             if (data && data.identifier) {
-              resetQvainStore()
-              editDataset(data)
-              history.replace(`/qvain/dataset/${data.identifier}`)
+              this.goToDatasets(data.identifier)
             }
 
             this.success({ ...data, is_new: true })
@@ -128,7 +133,7 @@ class SubmitButtons extends Component {
       editDataset,
     } = this.props.Stores.Qvain
     const { metaxApiV2 } = this.props.Stores.Env
-    const datasetUrl = metaxApiV2 ? DATASET_URLS.V2_DATASET_URL : DATASET_URLS.DATASET_URL
+    const datasetUrl = urls.v1.dataset(original.identifier)
 
     if (metaxApiV2) {
       console.error('Wrong Metax API version for function')
@@ -155,6 +160,7 @@ class SubmitButtons extends Component {
             setChanged(false)
             editDataset(res.data)
             this.success(res.data)
+            this.goToDatasets(res.data.identifier)
             return true
           })
           .catch(this.failure)
@@ -170,8 +176,19 @@ class SubmitButtons extends Component {
 
   getSubmitValues = async () => {
     // Validate dataset and transform dataset metadata, file actions and metadata changes into format required by the backend.
-    const { original, canSelectFiles, canRemoveFiles, Files } = this.props.Stores.Qvain
+    const {
+      original,
+      canSelectFiles,
+      canRemoveFiles,
+      addUnsavedMultiValueFields,
+      Files,
+    } = this.props.Stores.Qvain
     const { metaxApiV2 } = this.props.Stores.Env
+
+    addUnsavedMultiValueFields()
+    if (!this.checkOtherIdentifiersV1()) {
+      return false
+    }
 
     const obj = handleSubmitToBackend(this.props.Stores.Env, this.props.Stores.Qvain)
     await qvainFormSchema.validate(obj, { abortEarly: false })
@@ -223,27 +240,25 @@ class SubmitButtons extends Component {
 
   updateFiles = async (identifier, fileActions, metadataActions) => {
     if (fileActions) {
-      await axios.post(`${FILE_API_URLS.V2_DATASET_FILES}${identifier}`, fileActions)
+      await axios.post(urls.v2.datasetFiles(identifier), fileActions)
     }
     if (metadataActions) {
-      await axios.put(`${FILE_API_URLS.V2_DATASET_USER_METADATA}${identifier}`, metadataActions)
+      await axios.put(urls.v2.datasetUserMetadata(identifier), metadataActions)
     }
   }
 
   patchDataset = async values => {
-    const datasetUrl = DATASET_URLS.V2_DATASET_URL
     const { dataset, fileActions, metadataActions } = values
     const { identifier } = dataset.original
+    const datasetUrl = urls.v2.dataset(identifier)
     this.setLoading(true)
-
     const resp = await axios.patch(datasetUrl, dataset)
     await this.updateFiles(identifier, fileActions, metadataActions)
     this.props.Stores.Qvain.setChanged(false)
 
     if (fileActions || metadataActions) {
       // Dataset changed after patch, return updated dataset
-      const url = `${DATASET_URLS.V2_EDIT_DATASET_URL}/${identifier}`
-      const { data } = await axios.get(url)
+      const { data } = await axios.get(datasetUrl)
       return data
     }
     return resp.data
@@ -268,6 +283,11 @@ class SubmitButtons extends Component {
 
       const data = { ...dataset, is_draft: dataset.state === 'draft' }
       this.success(data)
+
+      if (dataset.state === 'published') {
+        this.goToDatasets(original.identifier)
+      }
+
       return original.identifier
     } catch (error) {
       this.failure(error)
@@ -290,7 +310,6 @@ class SubmitButtons extends Component {
       return null
     }
 
-    const datasetUrl = DATASET_URLS.V2_DATASET_URL
     try {
       const { dataset, fileActions, metadataActions } = await this.getSubmitValues()
       if (!dataset) {
@@ -298,7 +317,8 @@ class SubmitButtons extends Component {
       }
       this.setLoading(true)
 
-      const res = await axios.post(datasetUrl, dataset, { params: { draft: true } })
+      const datasetsUrl = urls.v2.datasets()
+      const res = await axios.post(datasetsUrl, dataset, { params: { draft: true } })
       const identifier = res.data.identifier
       await this.updateFiles(identifier, fileActions, metadataActions)
       setChanged(false)
@@ -306,7 +326,7 @@ class SubmitButtons extends Component {
       if (editResult) {
         if (fileActions || metadataActions) {
           // Files changed, get updated dataset
-          const url = `${DATASET_URLS.V2_EDIT_DATASET_URL}/${identifier}`
+          const url = urls.v2.dataset(identifier)
           const updatedResponse = await axios.get(url)
           await editDataset(updatedResponse.data)
         } else {
@@ -371,11 +391,11 @@ class SubmitButtons extends Component {
     try {
       const values = await this.getSubmitValues()
       this.setLoading(true)
-      const res = await axios.post(DATASET_URLS.V2_CREATE_DRAFT, null, { params: { identifier } })
+      const res = await axios.post(urls.v2.rpc.createDraft(), null, { params: { identifier } })
       const newIdentifier = res.data.identifier
 
       // Fetch the created draft to make sure identifiers, modification date etc. are correct when updating
-      const draftUrl = `${DATASET_URLS.V2_EDIT_DATASET_URL}/${newIdentifier}`
+      const draftUrl = urls.v2.dataset(newIdentifier)
       const draftResponse = await axios.get(draftUrl)
       const draft = draftResponse.data
       values.dataset.original = draft
@@ -394,8 +414,8 @@ class SubmitButtons extends Component {
   }
 
   handleMergeDraft = async () => {
-    const { Stores, history } = this.props
-    const { original, editDataset } = Stores.Qvain
+    const { Stores } = this.props
+    const { original } = Stores.Qvain
     const { metaxApiV2 } = Stores.Env
 
     if (!metaxApiV2) {
@@ -418,13 +438,13 @@ class SubmitButtons extends Component {
       await this.patchDataset(values)
 
       // Merge changes to original dataset, delete draft
-      const url = DATASET_URLS.V2_MERGE_DRAFT
+      const url = urls.v2.rpc.mergeDraft()
       await axios.post(url, null, { params: { identifier } })
 
-      const editUrl = `${DATASET_URLS.V2_EDIT_DATASET_URL}/${draftOf}`
+      const editUrl = urls.v2.dataset(draftOf)
       const resp = await axios.get(editUrl)
-      await editDataset(resp.data)
-      history.replace(`/qvain/dataset/${draftOf}`) // open the updated dataset
+
+      this.goToDatasets(draftOf)
       this.success(resp.data)
       return draftOf
     } catch (error) {
@@ -450,7 +470,7 @@ class SubmitButtons extends Component {
     }
 
     // Publishes an unpublished draft dataset
-    const url = DATASET_URLS.V2_PUBLISH_DATASET
+    const url = urls.v2.rpc.publishDataset()
 
     try {
       if (saveChanges) {
@@ -467,12 +487,14 @@ class SubmitButtons extends Component {
       this.setLoading(true)
       await axios.post(url, null, { params: { identifier } })
 
-      const publishedUrl = `${DATASET_URLS.V2_EDIT_DATASET_URL}/${identifier}`
+      const publishedUrl = urls.v2.dataset(identifier)
       const resp = await axios.get(publishedUrl)
 
       await editDataset(resp.data)
       history.replace(`/qvain/dataset/${resp.data.identifier}`)
+
       this.success(resp.data)
+      this.goToDatasets(resp.data.identifier)
       return resp.data.identifier
     } catch (err) {
       this.failure(err)

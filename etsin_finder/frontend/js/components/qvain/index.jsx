@@ -43,7 +43,7 @@ import { Button } from '../general/button'
 import DeprecatedState from './deprecatedState'
 import PasState from './pasState'
 import SubmitButtons from './submitButtons'
-import { DATASET_URLS } from '../../utils/constants'
+import urls from './utils/urls'
 import Tracking from '../../utils/tracking'
 import { ConfirmDialog } from './general/confirmClose'
 import Modal from '../general/modal'
@@ -103,9 +103,9 @@ class Qvain extends Component {
     const { resetQvainStore, editDataset } = this.props.Stores.Qvain
     const { metaxApiV2 } = this.props.Stores.Env
 
-    let url = `${DATASET_URLS.EDIT_DATASET_URL}/${identifier}`
+    let url = urls.v1.dataset(identifier)
     if (metaxApiV2) {
-      url = `${DATASET_URLS.V2_EDIT_DATASET_URL}/${identifier}`
+      url = urls.v2.dataset(identifier)
     }
     const promise = axios
       .get(url)

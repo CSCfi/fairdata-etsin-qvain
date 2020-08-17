@@ -1,10 +1,10 @@
 import { observable, action, computed, runInAction } from 'mobx'
 import axios from 'axios'
 import { getDirectories, getFiles, deepCopy } from '../../components/qvain/utils/fileHierarchy'
+import urls from '../../components/qvain/utils/urls'
 import {
   ACCESS_TYPE_URL,
   LICENSE_URL,
-  FILE_API_URLS,
   USE_CATEGORY_URL,
   CUMULATIVE_STATE,
   DATA_CATALOG_IDENTIFIER,
@@ -76,7 +76,9 @@ class Qvain {
 
   @observable license = License(undefined, LICENSE_URL.CCBY4)
 
-  @observable otherLicenseUrl = undefined
+  @observable otherLicenseUrl = ''
+
+  @observable licenseArray = []
 
   @observable accessType = AccessType(undefined, ACCESS_TYPE_URL.OPEN)
 
@@ -88,6 +90,7 @@ class Qvain {
 
   @action
   resetQvainStore = () => {
+    this.original = undefined
     this.title = {
       en: '',
       fi: '',
@@ -109,7 +112,8 @@ class Qvain {
     this.infrastructure = undefined
     this.infrastructures = []
     this.license = License(undefined, LICENSE_URL.CCBY4)
-    this.otherLicenseUrl = undefined
+    this.otherLicenseUrl = ''
+    this.licenseArray = []
     this.accessType = AccessType(undefined, ACCESS_TYPE_URL.OPEN)
     this.embargoExpDate = undefined
     this.restrictionGrounds = {}
@@ -358,6 +362,37 @@ class Qvain {
   }
 
   @action
+  addLicense = license => {
+    if (license !== undefined) {
+      if (
+        Object.keys(license).includes(('identifier', 'name')) &&
+        !this.licenseArray.some(l => l.identifier === license.identifier || l.identifier === this.otherLicenseUrl)
+      ) {
+        if (license.identifier === 'other') {
+          const newLicenseName = {
+            en: `${license.name.en}: ${this.otherLicenseUrl}`,
+            fi: `${license.name.fi}: ${this.otherLicenseUrl}`
+          }
+          this.licenseArray.push(License(newLicenseName, this.otherLicenseUrl))
+          this.otherLicenseUrl = ''
+        } else {
+          this.licenseArray.push(License(license.name, license.identifier))
+        }
+        this.changed = true
+      }
+      this.license = undefined
+    }
+  }
+
+  @action
+  removeLicense = license => {
+    this.licenseArray = this.licenseArray.filter(
+      l => l.identifier !== license.identifier
+    )
+    this.changed = true
+  }
+
+  @action
   setAccessType = (accessType) => {
     this.accessType = accessType
     this.changed = true
@@ -596,7 +631,7 @@ class Qvain {
   }
 
   @action getInitialDirectories = () =>
-    axios.get(FILE_API_URLS.PROJECT_DIR_URL + this.selectedProject).then((res) => {
+    axios.get(urls.v1.projectFiles(this.selectedProject)).then(res => {
       runInAction(() => {
         this.hierarchy = Directory(res.data, undefined, false, false)
       })
@@ -613,8 +648,8 @@ class Qvain {
 
   @action loadDirectory = (dirId, rootDir, callback) => {
     const req = axios
-      .get(FILE_API_URLS.DIR_URL + dirId)
-      .then((res) => {
+      .get(urls.v1.directoryFiles(dirId))
+      .then(res => {
         const newDirs = [
           ...rootDir.directories.map((d) => {
             if (d.id === dirId) {
@@ -839,27 +874,25 @@ class Qvain {
       : undefined
     this.embargoExpDate = embargoDate || undefined
 
-    // License
+    // Licenses
     const l = researchDataset.access_rights.license
-      ? researchDataset.access_rights.license[0]
+      ? researchDataset.access_rights.license
       : undefined
     if (l !== undefined) {
-      if (l.identifier !== undefined) {
-        this.license = l ? License(l.title, l.identifier) : License(undefined, LICENSE_URL.CCBY4)
-      } else {
-        this.license = l
-          ? License(
-              {
-                en: 'Other (URL)',
-                fi: 'Muu (URL)',
-              },
-              'other'
-            )
-          : License(undefined, LICENSE_URL.CCBY4)
-        this.otherLicenseUrl = l.license
-      }
+      this.license = undefined
+      this.licenseArray = l.map(license => {
+        if (license.identifier !== undefined) {
+          return License(license.title, license.identifier)
+        }
+        const name = {
+          en: `Other (URL): ${license.license}`,
+          fi: `Muu (URL): ${license.license}`,
+        }
+        return License(name, license.license)
+      })
     } else {
       this.license = undefined
+      this.licenseArray = []
     }
 
     // Restriction grounds
@@ -891,7 +924,7 @@ class Qvain {
     this.cumulativeState = dataset.cumulative_state
 
     // Load DOI
-    if (researchDataset.preferred_identifier.startsWith('doi')) {
+    if (researchDataset.preferred_identifier.startsWith('doi') || dataset.use_doi_for_published) {
       this.useDoi = true
     } else {
       this.useDoi = false

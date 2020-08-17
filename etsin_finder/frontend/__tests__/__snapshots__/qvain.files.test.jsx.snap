@@ -45,12 +45,14 @@ Object {
   "keywords": Array [
     "keyword",
   ],
-  "license": Object {
-    "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
-    "name": Object {
-      "en": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
+  "license": Array [
+    Object {
+      "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
+      "name": Object {
+        "en": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
+      },
     },
-  },
+  ],
   "original": Object {
     "cumulative_state": 0,
     "data_catalog": Object {
@@ -127,109 +129,6 @@ Object {
       "description": Object {
         "fi": "Description",
       },
-      "directories": Array [
-        Object {
-          "description": "Folder",
-          "details": Object {
-            "id": 4,
-          },
-          "id": 4,
-          "identifier": "11f69846228a375baf7ef919c04629c6",
-          "title": "set1",
-          "use_category": Object {
-            "identifier": "http://uri.suomi.fi/codelist/fairdata/use_category/code/outcome",
-            "in_scheme": "http://uri.suomi.fi/codelist/fairdata/use_category",
-            "pref_label": Object {
-              "en": "Outcome material",
-              "fi": "Tulosaineisto",
-              "und": "Tulosaineisto",
-            },
-          },
-        },
-      ],
-      "files": Array [
-        Object {
-          "description": "File",
-          "details": Object {
-            "id": 0,
-          },
-          "id": 0,
-          "identifier": "8d66b5bc-5d32-11ea-b9f7-94e6f76907f8",
-          "title": "info.csv",
-          "use_category": Object {
-            "identifier": "http://uri.suomi.fi/codelist/fairdata/use_category/code/outcome",
-            "in_scheme": "http://uri.suomi.fi/codelist/fairdata/use_category",
-            "pref_label": Object {
-              "en": "Outcome material",
-              "fi": "Tulosaineisto",
-              "und": "Tulosaineisto",
-            },
-          },
-        },
-        Object {
-          "description": "File",
-          "details": Object {
-            "id": 1,
-          },
-          "id": 1,
-          "identifier": "8b8ae8bc-5d32-11ea-b9f7-94e6f76907f8",
-          "title": "stuff.csv",
-          "use_category": Object {
-            "identifier": "http://uri.suomi.fi/codelist/fairdata/use_category/code/outcome",
-            "in_scheme": "http://uri.suomi.fi/codelist/fairdata/use_category",
-            "pref_label": Object {
-              "en": "Outcome material",
-              "fi": "Tulosaineisto",
-              "und": "Tulosaineisto",
-            },
-          },
-        },
-        Object {
-          "description": "File",
-          "details": Object {
-            "id": 2,
-          },
-          "id": 2,
-          "identifier": "94044e70-5d32-11ea-b9f7-94e6f76907f8",
-          "title": "file1.csv",
-          "use_category": Object {
-            "identifier": "http://uri.suomi.fi/codelist/fairdata/use_category/code/outcome",
-            "in_scheme": "http://uri.suomi.fi/codelist/fairdata/use_category",
-            "pref_label": Object {
-              "en": "Outcome material",
-              "fi": "Tulosaineisto",
-              "und": "Tulosaineisto",
-            },
-          },
-        },
-        Object {
-          "description": "Explicitly added file",
-          "details": Object {
-            "id": 3,
-          },
-          "file_type": Object {
-            "identifier": "http://uri.suomi.fi/codelist/fairdata/file_type/code/text",
-            "in_scheme": "http://uri.suomi.fi/codelist/fairdata/file_type",
-            "pref_label": Object {
-              "en": "Text",
-              "fi": "Teksti",
-              "und": "Teksti",
-            },
-          },
-          "id": 3,
-          "identifier": "c8535f22-5d32-11ea-b9f7-94e6f76907f8",
-          "title": "changed_title",
-          "use_category": Object {
-            "identifier": "http://uri.suomi.fi/codelist/fairdata/use_category/code/documentation",
-            "in_scheme": "http://uri.suomi.fi/codelist/fairdata/use_category",
-            "pref_label": Object {
-              "en": "Documentation",
-              "fi": "Dokumentaatio",
-              "und": "Dokumentaatio",
-            },
-          },
-        },
-      ],
       "keyword": Array [
         "keyword",
       ],
@@ -302,12 +201,14 @@ Object {
   "keywords": Array [
     "keyword",
   ],
-  "license": Object {
-    "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
-    "name": Object {
-      "en": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
+  "license": Array [
+    Object {
+      "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
+      "name": Object {
+        "en": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
+      },
     },
-  },
+  ],
   "original": Object {
     "cumulative_state": 0,
     "data_catalog": Object {
@@ -384,109 +285,6 @@ Object {
       "description": Object {
         "fi": "Description",
       },
-      "directories": Array [
-        Object {
-          "description": "Folder",
-          "details": Object {
-            "id": 4,
-          },
-          "id": 4,
-          "identifier": "11f69846228a375baf7ef919c04629c6",
-          "title": "set1",
-          "use_category": Object {
-            "identifier": "http://uri.suomi.fi/codelist/fairdata/use_category/code/outcome",
-            "in_scheme": "http://uri.suomi.fi/codelist/fairdata/use_category",
-            "pref_label": Object {
-              "en": "Outcome material",
-              "fi": "Tulosaineisto",
-              "und": "Tulosaineisto",
-            },
-          },
-        },
-      ],
-      "files": Array [
-        Object {
-          "description": "File",
-          "details": Object {
-            "id": 0,
-          },
-          "id": 0,
-          "identifier": "8d66b5bc-5d32-11ea-b9f7-94e6f76907f8",
-          "title": "info.csv",
-          "use_category": Object {
-            "identifier": "http://uri.suomi.fi/codelist/fairdata/use_category/code/outcome",
-            "in_scheme": "http://uri.suomi.fi/codelist/fairdata/use_category",
-            "pref_label": Object {
-              "en": "Outcome material",
-              "fi": "Tulosaineisto",
-              "und": "Tulosaineisto",
-            },
-          },
-        },
-        Object {
-          "description": "File",
-          "details": Object {
-            "id": 1,
-          },
-          "id": 1,
-          "identifier": "8b8ae8bc-5d32-11ea-b9f7-94e6f76907f8",
-          "title": "stuff.csv",
-          "use_category": Object {
-            "identifier": "http://uri.suomi.fi/codelist/fairdata/use_category/code/outcome",
-            "in_scheme": "http://uri.suomi.fi/codelist/fairdata/use_category",
-            "pref_label": Object {
-              "en": "Outcome material",
-              "fi": "Tulosaineisto",
-              "und": "Tulosaineisto",
-            },
-          },
-        },
-        Object {
-          "description": "File",
-          "details": Object {
-            "id": 2,
-          },
-          "id": 2,
-          "identifier": "94044e70-5d32-11ea-b9f7-94e6f76907f8",
-          "title": "file1.csv",
-          "use_category": Object {
-            "identifier": "http://uri.suomi.fi/codelist/fairdata/use_category/code/outcome",
-            "in_scheme": "http://uri.suomi.fi/codelist/fairdata/use_category",
-            "pref_label": Object {
-              "en": "Outcome material",
-              "fi": "Tulosaineisto",
-              "und": "Tulosaineisto",
-            },
-          },
-        },
-        Object {
-          "description": "Explicitly added file",
-          "details": Object {
-            "id": 3,
-          },
-          "file_type": Object {
-            "identifier": "http://uri.suomi.fi/codelist/fairdata/file_type/code/text",
-            "in_scheme": "http://uri.suomi.fi/codelist/fairdata/file_type",
-            "pref_label": Object {
-              "en": "Text",
-              "fi": "Teksti",
-              "und": "Teksti",
-            },
-          },
-          "id": 3,
-          "identifier": "c8535f22-5d32-11ea-b9f7-94e6f76907f8",
-          "title": "changed_title",
-          "use_category": Object {
-            "identifier": "http://uri.suomi.fi/codelist/fairdata/use_category/code/documentation",
-            "in_scheme": "http://uri.suomi.fi/codelist/fairdata/use_category",
-            "pref_label": Object {
-              "en": "Documentation",
-              "fi": "Dokumentaatio",
-              "und": "Dokumentaatio",
-            },
-          },
-        },
-      ],
       "keyword": Array [
         "keyword",
       ],
@@ -559,12 +357,14 @@ Object {
   "keywords": Array [
     "keyword",
   ],
-  "license": Object {
-    "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
-    "name": Object {
-      "en": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
+  "license": Array [
+    Object {
+      "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
+      "name": Object {
+        "en": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
+      },
     },
-  },
+  ],
   "original": Object {
     "cumulative_state": 0,
     "data_catalog": Object {
@@ -641,109 +441,6 @@ Object {
       "description": Object {
         "fi": "Description",
       },
-      "directories": Array [
-        Object {
-          "description": "Folder",
-          "details": Object {
-            "id": 4,
-          },
-          "id": 4,
-          "identifier": "11f69846228a375baf7ef919c04629c6",
-          "title": "set1",
-          "use_category": Object {
-            "identifier": "http://uri.suomi.fi/codelist/fairdata/use_category/code/outcome",
-            "in_scheme": "http://uri.suomi.fi/codelist/fairdata/use_category",
-            "pref_label": Object {
-              "en": "Outcome material",
-              "fi": "Tulosaineisto",
-              "und": "Tulosaineisto",
-            },
-          },
-        },
-      ],
-      "files": Array [
-        Object {
-          "description": "File",
-          "details": Object {
-            "id": 0,
-          },
-          "id": 0,
-          "identifier": "8d66b5bc-5d32-11ea-b9f7-94e6f76907f8",
-          "title": "info.csv",
-          "use_category": Object {
-            "identifier": "http://uri.suomi.fi/codelist/fairdata/use_category/code/outcome",
-            "in_scheme": "http://uri.suomi.fi/codelist/fairdata/use_category",
-            "pref_label": Object {
-              "en": "Outcome material",
-              "fi": "Tulosaineisto",
-              "und": "Tulosaineisto",
-            },
-          },
-        },
-        Object {
-          "description": "File",
-          "details": Object {
-            "id": 1,
-          },
-          "id": 1,
-          "identifier": "8b8ae8bc-5d32-11ea-b9f7-94e6f76907f8",
-          "title": "stuff.csv",
-          "use_category": Object {
-            "identifier": "http://uri.suomi.fi/codelist/fairdata/use_category/code/outcome",
-            "in_scheme": "http://uri.suomi.fi/codelist/fairdata/use_category",
-            "pref_label": Object {
-              "en": "Outcome material",
-              "fi": "Tulosaineisto",
-              "und": "Tulosaineisto",
-            },
-          },
-        },
-        Object {
-          "description": "File",
-          "details": Object {
-            "id": 2,
-          },
-          "id": 2,
-          "identifier": "94044e70-5d32-11ea-b9f7-94e6f76907f8",
-          "title": "file1.csv",
-          "use_category": Object {
-            "identifier": "http://uri.suomi.fi/codelist/fairdata/use_category/code/outcome",
-            "in_scheme": "http://uri.suomi.fi/codelist/fairdata/use_category",
-            "pref_label": Object {
-              "en": "Outcome material",
-              "fi": "Tulosaineisto",
-              "und": "Tulosaineisto",
-            },
-          },
-        },
-        Object {
-          "description": "Explicitly added file",
-          "details": Object {
-            "id": 3,
-          },
-          "file_type": Object {
-            "identifier": "http://uri.suomi.fi/codelist/fairdata/file_type/code/text",
-            "in_scheme": "http://uri.suomi.fi/codelist/fairdata/file_type",
-            "pref_label": Object {
-              "en": "Text",
-              "fi": "Teksti",
-              "und": "Teksti",
-            },
-          },
-          "id": 3,
-          "identifier": "c8535f22-5d32-11ea-b9f7-94e6f76907f8",
-          "title": "changed_title",
-          "use_category": Object {
-            "identifier": "http://uri.suomi.fi/codelist/fairdata/use_category/code/documentation",
-            "in_scheme": "http://uri.suomi.fi/codelist/fairdata/use_category",
-            "pref_label": Object {
-              "en": "Documentation",
-              "fi": "Dokumentaatio",
-              "und": "Dokumentaatio",
-            },
-          },
-        },
-      ],
       "keyword": Array [
         "keyword",
       ],
@@ -816,12 +513,14 @@ Object {
   "keywords": Array [
     "keyword",
   ],
-  "license": Object {
-    "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
-    "name": Object {
-      "en": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
+  "license": Array [
+    Object {
+      "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
+      "name": Object {
+        "en": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
+      },
     },
-  },
+  ],
   "original": Object {
     "cumulative_state": 0,
     "data_catalog": Object {
@@ -898,109 +597,6 @@ Object {
       "description": Object {
         "fi": "Description",
       },
-      "directories": Array [
-        Object {
-          "description": "Folder",
-          "details": Object {
-            "id": 4,
-          },
-          "id": 4,
-          "identifier": "11f69846228a375baf7ef919c04629c6",
-          "title": "set1",
-          "use_category": Object {
-            "identifier": "http://uri.suomi.fi/codelist/fairdata/use_category/code/outcome",
-            "in_scheme": "http://uri.suomi.fi/codelist/fairdata/use_category",
-            "pref_label": Object {
-              "en": "Outcome material",
-              "fi": "Tulosaineisto",
-              "und": "Tulosaineisto",
-            },
-          },
-        },
-      ],
-      "files": Array [
-        Object {
-          "description": "File",
-          "details": Object {
-            "id": 0,
-          },
-          "id": 0,
-          "identifier": "8d66b5bc-5d32-11ea-b9f7-94e6f76907f8",
-          "title": "info.csv",
-          "use_category": Object {
-            "identifier": "http://uri.suomi.fi/codelist/fairdata/use_category/code/outcome",
-            "in_scheme": "http://uri.suomi.fi/codelist/fairdata/use_category",
-            "pref_label": Object {
-              "en": "Outcome material",
-              "fi": "Tulosaineisto",
-              "und": "Tulosaineisto",
-            },
-          },
-        },
-        Object {
-          "description": "File",
-          "details": Object {
-            "id": 1,
-          },
-          "id": 1,
-          "identifier": "8b8ae8bc-5d32-11ea-b9f7-94e6f76907f8",
-          "title": "stuff.csv",
-          "use_category": Object {
-            "identifier": "http://uri.suomi.fi/codelist/fairdata/use_category/code/outcome",
-            "in_scheme": "http://uri.suomi.fi/codelist/fairdata/use_category",
-            "pref_label": Object {
-              "en": "Outcome material",
-              "fi": "Tulosaineisto",
-              "und": "Tulosaineisto",
-            },
-          },
-        },
-        Object {
-          "description": "File",
-          "details": Object {
-            "id": 2,
-          },
-          "id": 2,
-          "identifier": "94044e70-5d32-11ea-b9f7-94e6f76907f8",
-          "title": "file1.csv",
-          "use_category": Object {
-            "identifier": "http://uri.suomi.fi/codelist/fairdata/use_category/code/outcome",
-            "in_scheme": "http://uri.suomi.fi/codelist/fairdata/use_category",
-            "pref_label": Object {
-              "en": "Outcome material",
-              "fi": "Tulosaineisto",
-              "und": "Tulosaineisto",
-            },
-          },
-        },
-        Object {
-          "description": "Explicitly added file",
-          "details": Object {
-            "id": 3,
-          },
-          "file_type": Object {
-            "identifier": "http://uri.suomi.fi/codelist/fairdata/file_type/code/text",
-            "in_scheme": "http://uri.suomi.fi/codelist/fairdata/file_type",
-            "pref_label": Object {
-              "en": "Text",
-              "fi": "Teksti",
-              "und": "Teksti",
-            },
-          },
-          "id": 3,
-          "identifier": "c8535f22-5d32-11ea-b9f7-94e6f76907f8",
-          "title": "changed_title",
-          "use_category": Object {
-            "identifier": "http://uri.suomi.fi/codelist/fairdata/use_category/code/documentation",
-            "in_scheme": "http://uri.suomi.fi/codelist/fairdata/use_category",
-            "pref_label": Object {
-              "en": "Documentation",
-              "fi": "Dokumentaatio",
-              "und": "Dokumentaatio",
-            },
-          },
-        },
-      ],
       "keyword": Array [
         "keyword",
       ],
@@ -1073,12 +669,14 @@ Object {
   "keywords": Array [
     "keyword",
   ],
-  "license": Object {
-    "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
-    "name": Object {
-      "en": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
+  "license": Array [
+    Object {
+      "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
+      "name": Object {
+        "en": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
+      },
     },
-  },
+  ],
   "original": Object {
     "cumulative_state": 0,
     "data_catalog": Object {
@@ -1155,109 +753,6 @@ Object {
       "description": Object {
         "fi": "Description",
       },
-      "directories": Array [
-        Object {
-          "description": "Folder",
-          "details": Object {
-            "id": 4,
-          },
-          "id": 4,
-          "identifier": "11f69846228a375baf7ef919c04629c6",
-          "title": "set1",
-          "use_category": Object {
-            "identifier": "http://uri.suomi.fi/codelist/fairdata/use_category/code/outcome",
-            "in_scheme": "http://uri.suomi.fi/codelist/fairdata/use_category",
-            "pref_label": Object {
-              "en": "Outcome material",
-              "fi": "Tulosaineisto",
-              "und": "Tulosaineisto",
-            },
-          },
-        },
-      ],
-      "files": Array [
-        Object {
-          "description": "File",
-          "details": Object {
-            "id": 0,
-          },
-          "id": 0,
-          "identifier": "8d66b5bc-5d32-11ea-b9f7-94e6f76907f8",
-          "title": "info.csv",
-          "use_category": Object {
-            "identifier": "http://uri.suomi.fi/codelist/fairdata/use_category/code/outcome",
-            "in_scheme": "http://uri.suomi.fi/codelist/fairdata/use_category",
-            "pref_label": Object {
-              "en": "Outcome material",
-              "fi": "Tulosaineisto",
-              "und": "Tulosaineisto",
-            },
-          },
-        },
-        Object {
-          "description": "File",
-          "details": Object {
-            "id": 1,
-          },
-          "id": 1,
-          "identifier": "8b8ae8bc-5d32-11ea-b9f7-94e6f76907f8",
-          "title": "stuff.csv",
-          "use_category": Object {
-            "identifier": "http://uri.suomi.fi/codelist/fairdata/use_category/code/outcome",
-            "in_scheme": "http://uri.suomi.fi/codelist/fairdata/use_category",
-            "pref_label": Object {
-              "en": "Outcome material",
-              "fi": "Tulosaineisto",
-              "und": "Tulosaineisto",
-            },
-          },
-        },
-        Object {
-          "description": "File",
-          "details": Object {
-            "id": 2,
-          },
-          "id": 2,
-          "identifier": "94044e70-5d32-11ea-b9f7-94e6f76907f8",
-          "title": "file1.csv",
-          "use_category": Object {
-            "identifier": "http://uri.suomi.fi/codelist/fairdata/use_category/code/outcome",
-            "in_scheme": "http://uri.suomi.fi/codelist/fairdata/use_category",
-            "pref_label": Object {
-              "en": "Outcome material",
-              "fi": "Tulosaineisto",
-              "und": "Tulosaineisto",
-            },
-          },
-        },
-        Object {
-          "description": "Explicitly added file",
-          "details": Object {
-            "id": 3,
-          },
-          "file_type": Object {
-            "identifier": "http://uri.suomi.fi/codelist/fairdata/file_type/code/text",
-            "in_scheme": "http://uri.suomi.fi/codelist/fairdata/file_type",
-            "pref_label": Object {
-              "en": "Text",
-              "fi": "Teksti",
-              "und": "Teksti",
-            },
-          },
-          "id": 3,
-          "identifier": "c8535f22-5d32-11ea-b9f7-94e6f76907f8",
-          "title": "changed_title",
-          "use_category": Object {
-            "identifier": "http://uri.suomi.fi/codelist/fairdata/use_category/code/documentation",
-            "in_scheme": "http://uri.suomi.fi/codelist/fairdata/use_category",
-            "pref_label": Object {
-              "en": "Documentation",
-              "fi": "Dokumentaatio",
-              "und": "Dokumentaatio",
-            },
-          },
-        },
-      ],
       "keyword": Array [
         "keyword",
       ],

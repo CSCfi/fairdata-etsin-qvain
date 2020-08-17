@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { observable, action, runInAction, when } from 'mobx'
 
-import { FILE_API_URLS } from '../../utils/constants'
+import urls from '../../components/qvain/utils/urls'
 
 import { File, Directory, dirKey, fileKey, dirIdentifierKey, fileIdentifierKey } from './common.files.items'
 import { ignoreNotFound, emptyDirectoryResponse, assignDefined } from './common.files.utils'
@@ -30,7 +30,7 @@ const fetchExistingChildDataForDirectory = async (Files, dir, datasetIdentifier,
     return {}
   }
 
-  const url = new URL(FILE_API_URLS.V2_DIR_URL + dir.identifier, document.location.origin)
+  const url = new URL(urls.v2.directoryFiles(dir.identifier), document.location.origin)
   url.searchParams.set('file_fields', 'id')
   url.searchParams.set('directory_fields', ['id', 'file_count', 'byte_size'].join(','))
   url.searchParams.set('cr_identifier', datasetIdentifier)
@@ -93,7 +93,7 @@ const fetchAnyChildDataForDirectory = async (Files, dir, defaults = {}) => {
   // - index (sorting position) and id for each file and directory
   // - total file count and byte count for each subdirectory
 
-  const url = new URL(FILE_API_URLS.V2_DIR_URL + dir.identifier, document.location.origin)
+  const url = new URL(urls.v2.directoryFiles(dir.identifier), document.location.origin)
   url.searchParams.set('file_fields', 'id')
   url.searchParams.set('directory_fields', ['id', 'file_count', 'byte_size'].join(','))
   url.searchParams.set('include_parent', true)
@@ -163,7 +163,7 @@ const fetchChildData = action((Files, dir, type) => {
 const fetchItems = async (Files, dir, offset, limit, type) => {
   const { datasetIdentifier } = Files
 
-  const url = new URL(FILE_API_URLS.V2_DIR_URL + dir.identifier, document.location.origin)
+  const url = new URL(urls.v2.directoryFiles(dir.identifier), document.location.origin)
   url.searchParams.set('pagination', true)
   url.searchParams.set('offset', offset)
   url.searchParams.set('limit', limit)
