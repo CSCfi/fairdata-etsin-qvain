@@ -188,7 +188,7 @@ class Qvain {
   checkMissingFieldsGeneral = () => {
     let foundAtLeastOneMissingField = false
     for (let i = 0; i < this.missingFieldsListGeneral.length; i += 1) {
-      if (this.missingFieldsListGeneral[i].valueIsMissing === true) {
+      if (this.missingFieldsListGeneral[i].valueIsRequiredAndIsMissing === true) {
         foundAtLeastOneMissingField = true
       }
     }
@@ -213,11 +213,11 @@ class Qvain {
 
     // Missing field [0]: Title is set and thus no longer missing
     if (title !== '' && title !== undefined) {
-      this.missingFieldsListGeneral[0].valueIsMissing = false
+      this.missingFieldsListGeneral[0].valueIsRequiredAndIsMissing = false
       this.checkMissingFieldsGeneral()
     // ... but if not, title is empty, and should prevent publishing
     } else {
-      this.missingFieldsListGeneral[0].valueIsMissing = true
+      this.missingFieldsListGeneral[0].valueIsRequiredAndIsMissing = true
     }
   }
 
@@ -233,11 +233,11 @@ class Qvain {
 
     // Missing field [1]: Description is set and should no longer prevent publishing
     if (description !== '' && description !== undefined) {
-      this.missingFieldsListGeneral[1].valueIsMissing = false
+      this.missingFieldsListGeneral[1].valueIsRequiredAndIsMissing = false
       this.checkMissingFieldsGeneral()
     // ... but if undefined, it should prevent publshing
     } else {
-      this.missingFieldsListGeneral[1].valueIsMissing = true
+      this.missingFieldsListGeneral[1].valueIsRequiredAndIsMissing = true
     }
   }
 
@@ -350,11 +350,11 @@ class Qvain {
 
     // Missing field [2]: At least one keyword is set and thus keywords is no longer empty
     if (this.keywordsArray.length > 0) {
-      this.missingFieldsListGeneral[2].valueIsMissing = false
+      this.missingFieldsListGeneral[2].valueIsRequiredAndIsMissing = false
       this.checkMissingFieldsGeneral()
     // ... but if no keywords exist, it should prevent publshing
     } else {
-      this.missingFieldsListGeneral[2].valueIsMissing = true
+      this.missingFieldsListGeneral[2].valueIsRequiredAndIsMissing = true
     }
   }
 
@@ -544,11 +544,11 @@ class Qvain {
 
     // Missing field [3]: dataCatalog is set and should no longer prevent publishing
     if (selectedDataCatalog !== undefined) {
-      this.missingFieldsListGeneral[3].valueIsMissing = false
+      this.missingFieldsListGeneral[3].valueIsRequiredAndIsMissing = false
       this.checkMissingFieldsGeneral()
     // ... but if undefined, it should prevent publshing
     } else {
-      this.missingFieldsListGeneral[3].valueIsMissing = true
+      this.missingFieldsListGeneral[3].valueIsRequiredAndIsMissing = true
     }
   }
 
