@@ -8,7 +8,6 @@
 """RPC API endpoints, meant to be used by Qvain Light form"""
 
 from functools import wraps
-import inspect
 from flask import request, session
 from flask_restful import abort, reqparse, Resource
 

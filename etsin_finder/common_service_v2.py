@@ -137,7 +137,7 @@ class MetaxCommonAPIService(FlaskService):
                                              verify=self.verify_ssl,
                                              timeout=10)
         if not success:
-            log.warning("Failed to get user metadta for dataset {}".format(cr_id))
+            log.warning("Failed to get user metadata for dataset {}".format(cr_id))
         return resp, status
 
     def update_dataset_user_metadata(self, cr_id, data):

@@ -8,7 +8,6 @@
 """RESTful API endpoints, meant to be used by Qvain Light form"""
 
 from functools import wraps
-import inspect
 from marshmallow import ValidationError
 from flask import request, session
 from flask_mail import Message

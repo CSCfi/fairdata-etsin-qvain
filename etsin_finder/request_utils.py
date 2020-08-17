@@ -5,18 +5,9 @@
 # :author: CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
 # :license: MIT
 
-"""Various utils"""
+"""Utils for making requests"""
 
-import json
-import os
-from datetime import datetime
-import pytz
-from dateutil import parser
-from functools import wraps
-import inspect
 import requests
-from flask_restful import abort
-from flask import Response
 
 from etsin_finder.finder import app
 from etsin_finder.utils import json_or_text
