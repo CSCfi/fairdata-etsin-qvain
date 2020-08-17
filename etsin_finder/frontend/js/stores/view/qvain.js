@@ -96,6 +96,11 @@ class Qvain {
       valueIsRequired: true,
     },
     { // [3]
+      fieldName: 'atLeastOneLicense',
+      valueIsMissing: true,
+      valueIsRequired: false,
+    },
+    { // [4]
       fieldName: 'fileOrigin',
       valueIsMissing: true,
       valueIsRequired: true,
@@ -171,33 +176,45 @@ class Qvain {
       { // [0]
         fieldName: 'title',
         valueIsMissing: true,
+        valueIsRequired: true,
       },
       { // [1]
         fieldName: 'description',
         valueIsMissing: true,
+        valueIsRequired: true,
       },
       { // [2]
         fieldName: 'atLeastOneKeyword',
         valueIsMissing: true,
+        valueIsRequired: true,
       },
-      { // [3]
+      { // [3] 
+        fieldName: 'atLeastOneLicense',
+        valueIsMissing: true,
+        valueIsRequired: false,
+      },
+      { // [4]
         fieldName: 'fileOrigin',
         valueIsMissing: true,
+        valueIsRequired: true,
       },
     ]
 
     this.stillMissingGeneralFields = true
   }
 
-  @action
   checkMissingFieldsGeneral = () => {
     let foundAtLeastOneMissingField = false
     for (let i = 0; i < this.missingFieldsListGeneral.length; i += 1) {
-      if (this.missingFieldsListGeneral[i].valueIsMissing === true) {
-        foundAtLeastOneMissingField = true
+      if (this.missingFieldsListGeneral[i].valueIsMissing === true) && (this.missingFieldsListGeneral[i].valueIsRequired) {
+        this.stillMissingGeneralFields = true
+        break
       }
     }
-    if (foundAtLeastOneMissingField === false) {
+    if (foundAtLeastOneMissingField === true) {
+      console.log('STILL MISSING')
+      
+    } else {
       this.stillMissingGeneralFields = false
     }
   }
@@ -412,6 +429,19 @@ class Qvain {
     this.license.name = name // only affects license display, should not trigger this.changed
   }
 
+  // Check if at least one license have been defined
+  checkIfAtLeastOneLicenseExists = (licenseArray) => {
+    console.log('licenseArray is: ', licenseArray.length)
+    if (licenseArray.length > 0) {
+      this.missingFieldsListGeneral[3].valueIsMissing = false
+    } else {
+      this.missingFieldsListGeneral[3].valueIsMissing = true
+    }
+
+    // Check publishing status
+    this.checkMissingFieldsGeneral()
+  }
+
   @action
   addLicense = license => {
     if (license !== undefined) {
@@ -433,6 +463,7 @@ class Qvain {
       }
       this.license = undefined
     }
+    this.checkIfAtLeastOneLicenseExists(this.licenseArray)
   }
 
   @action
@@ -441,6 +472,7 @@ class Qvain {
       l => l.identifier !== license.identifier
     )
     this.changed = true
+    this.checkIfAtLeastOneLicenseExists(this.licenseArray)
   }
 
   @action
@@ -543,15 +575,22 @@ class Qvain {
 
       // Dataset is not IDA (and thus cannot be DOI) -> publisher does not have to be defined (actors [1] = publisher) 
       this.Actors.missingFieldsListActors[1].valueIsRequired = false
+
+      // Also, license does not have to be defined
+      this.missingFieldsListGeneral[3].valueIsRequired = true
+
+    // If data catalog is IDA, license [3] must be set
+    } else if (selectedDataCatalog === DATA_CATALOG_IDENTIFIER.IDA) {
+      this.missingFieldsListGeneral[3].valueIsRequired = true
     }
 
-    // Missing field general [3]: dataCatalog is set and should no longer prevent publishing
+    // Missing field general [4]: dataCatalog is set and should no longer prevent publishing
     if (selectedDataCatalog !== undefined) {
-      this.missingFieldsListGeneral[3].valueIsMissing = false
+      this.missingFieldsListGeneral[4].valueIsMissing = false
       this.checkMissingFieldsGeneral()
     // ... but if undefined, it should prevent publshing
     } else {
-      this.missingFieldsListGeneral[3].valueIsMissing = true
+      this.missingFieldsListGeneral[4].valueIsMissing = true
     }
   }
 
@@ -951,9 +990,15 @@ class Qvain {
         }
         return License(name, license.license)
       })
+
+      // License is not missing
+      this.missingFieldsListGeneral[3].valueIsMissing = false
     } else {
       this.license = undefined
       this.licenseArray = []
+
+      // License is missing
+      this.missingFieldsListGeneral[3].valueIsMissing = false
     }
 
     // Restriction grounds

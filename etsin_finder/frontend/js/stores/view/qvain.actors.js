@@ -100,17 +100,14 @@ class Actors {
     this.referenceOrganizationErrors = {}
   }
 
-  @action
   checkMissingFieldsActors = () => {
     for (let i = 0; i < this.missingFieldsListActors.length; i += 1) {
-      console.log('loop 2')
       if ((this.missingFieldsListActors[i].valueIsMissing) && (this.missingFieldsListActors[i].valueIsRequired)) {
-        console.log(this.missingFieldsListActors[i].fieldName, ' is required and missing...')
         this.stillMissingActorFields = true
-        break;
+        break
+      } else {
+        this.stillMissingActorFields = false
       }
-      console.log('finally we have the actors...')
-      this.stillMissingActorFields = false
     }
   }
 
