@@ -81,19 +81,19 @@ class Qvain {
   @observable missingFieldsListGeneral = [
     { // [0]
       fieldName: 'title',
-      valueIsMissing: true,
+      valueIsRequiredAndIsMissing: true,
     },
     { // [1]
       fieldName: 'description',
-      valueIsMissing: true,
+      valueIsRequiredAndIsMissing: true,
     },
     { // [2]
       fieldName: 'atLeastOneKeyword',
-      valueIsMissing: true,
+      valueIsRequiredAndIsMissing: true,
     },
     { // [3]
       fieldName: 'fileOrigin',
-      valueIsMissing: true,
+      valueIsRequiredAndIsMissing: true,
     },
   ]
 
@@ -165,19 +165,19 @@ class Qvain {
     this.missingFieldsListGeneral = [
       { // [0]
         fieldName: 'title',
-        valueIsMissing: true,
+        valueIsRequiredAndIsMissing: true,
       },
       { // [1]
         fieldName: 'description',
-        valueIsMissing: true,
+        valueIsRequiredAndIsMissing: true,
       },
       { // [2]
         fieldName: 'atLeastOneKeyword',
-        valueIsMissing: true,
+        valueIsRequiredAndIsMissing: true,
       },
       { // [3]
         fieldName: 'fileOrigin',
-        valueIsMissing: true,
+        valueIsRequiredAndIsMissing: true,
       },
     ]
 

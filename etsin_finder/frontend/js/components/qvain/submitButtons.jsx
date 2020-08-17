@@ -500,12 +500,12 @@ class SubmitButtons extends Component {
     return translate('qvain.missingFields')
       + // General fields
       (this.props.Stores.Qvain.missingFieldsListGeneral.filter(
-        element => element.valueIsMissing === true).map(filteredField => (
+        element => element.valueIsRequiredAndIsMissing === true).map(filteredField => (
         "\n" + filteredField.fieldName
       )))
       + // Actor fields
       (this.props.Stores.Qvain.Actors.missingFieldsListActors.filter(
-        element => element.valueIsMissing === true).map(filteredField => (
+        element => element.valueIsRequiredAndIsMissing === true).map(filteredField => (
         "\n" + filteredField.fieldName
       )))
   }
