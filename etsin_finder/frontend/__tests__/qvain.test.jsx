@@ -15,12 +15,15 @@ import { License } from '../js/components/qvain/licenses/licenses'
 import { AccessType } from '../js/components/qvain/licenses/accessType'
 import RestrictionGrounds from '../js/components/qvain/licenses/resctrictionGrounds'
 import EmbargoExpires from '../js/components/qvain/licenses/embargoExpires'
-import { ACCESS_TYPE_URL, LICENSE_URL } from '../js/utils/constants'
+import { ACCESS_TYPE_URL, LICENSE_URL, DATA_CATALOG_IDENTIFIER } from '../js/utils/constants'
 import { qvainFormSchema } from '../js/components/qvain/utils/formValidation'
 import { ExternalFilesBase } from '../js/components/qvain/files/external/externalFiles'
+import DoiSelection from '../js/components/qvain/files/doiSelection'
 import { ButtonGroup } from '../js/components/qvain/general/buttons'
+import { Checkbox } from '../js/components/qvain/general/form'
 import { SlidingContent } from '../js/components/qvain/general/card'
-import QvainStore, {
+import Env from '../js/stores/domain/env'
+import QvainStoreClass, {
   ExternalResource,
   AccessType as AccessTypeConstructor,
   License as LicenseConstructor,
@@ -33,9 +36,12 @@ import {
   groupDatasetsByVersionSet,
 } from '../js/components/qvain/datasets/filter'
 
+const QvainStore = new QvainStoreClass(Env)
+
 const getStores = () => {
-  QvainStore.setMetaxApiV2(true)
+  Env.setMetaxApiV2(true)
   return {
+    Env,
     Qvain: QvainStore,
     Locale: LocaleStore,
   }
@@ -207,7 +213,12 @@ describe('Qvain dataset list filtering', () => {
   })
 
   it('ignores case when filtering by title', () => {
-    expect(filterByTitle('dataset', datasets)).toEqual([dataset, datasets[1], datasets[2], dataset2])
+    expect(filterByTitle('dataset', datasets)).toEqual([
+      dataset,
+      datasets[1],
+      datasets[2],
+      dataset2,
+    ])
   })
 })
 
@@ -231,6 +242,61 @@ describe('Qvain.RightsAndLicenses', () => {
     stores.Qvain.setLicense(LicenseConstructor(undefined, LICENSE_URL.CCBY4))
     const component = shallow(<License Stores={stores} />)
     expect(component.find('#otherLicenseURL').length).toBe(0)
+  })
+  it('should render one added license, Other (URL)', () => {
+    const stores = getStores()
+    stores.Qvain.licenseArray = []
+    stores.Qvain.setLicense(LicenseConstructor({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'other'))
+    stores.Qvain.otherLicenseUrl = 'https://test.url'
+    stores.Qvain.addLicense(stores.Qvain.license)
+    const component = shallow(<License Stores={stores} />)
+    expect(component.find('licenses__LabelTemp').length).toBe(1)
+  })
+  it('should render one added license, CCBY4', () => {
+    const stores = getStores()
+    stores.Qvain.licenseArray = []
+    stores.Qvain.setLicense(LicenseConstructor({ en: 'Creative Commons Attribution 4.0 International (CC BY 4.0)' }, LICENSE_URL.CCBY4))
+    stores.Qvain.addLicense(stores.Qvain.license)
+    const component = shallow(<License Stores={stores} />)
+    expect(component.find('licenses__LabelTemp').length).toBe(1)
+  })
+  it('should render three added licenses, Other (URL) x 2 + CCBY4', () => {
+    const stores = getStores()
+    stores.Qvain.licenseArray = []
+    // Add first other license
+    stores.Qvain.setLicense(LicenseConstructor({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'other'))
+    stores.Qvain.otherLicenseUrl = 'https://test.url'
+    stores.Qvain.addLicense(stores.Qvain.license)
+    // Add second other license
+    stores.Qvain.setLicense(LicenseConstructor({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'other'))
+    stores.Qvain.otherLicenseUrl = 'https://test2.url'
+    stores.Qvain.addLicense(stores.Qvain.license)
+    // Add CCBY4 license
+    stores.Qvain.setLicense(LicenseConstructor({ en: 'Creative Commons Attribution 4.0 International (CC BY 4.0)' }, LICENSE_URL.CCBY4))
+    stores.Qvain.addLicense(stores.Qvain.license)
+    const component = shallow(<License Stores={stores} />)
+    expect(component.find('licenses__LabelTemp').length).toBe(3)
+  })
+  it('should render three added licenses when the user tries to add 4 (one duplicate)', () => {
+    const stores = getStores()
+    stores.Qvain.licenseArray = []
+    // Add first other license
+    stores.Qvain.setLicense(LicenseConstructor({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'other'))
+    stores.Qvain.otherLicenseUrl = 'https://test.url'
+    stores.Qvain.addLicense(stores.Qvain.license)
+    // Add second other license
+    stores.Qvain.setLicense(LicenseConstructor({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'other'))
+    stores.Qvain.otherLicenseUrl = 'https://test2.url'
+    stores.Qvain.addLicense(stores.Qvain.license)
+    // Add CCBY4 license
+    stores.Qvain.setLicense(LicenseConstructor({ en: 'Creative Commons Attribution 4.0 International (CC BY 4.0)' }, LICENSE_URL.CCBY4))
+    stores.Qvain.addLicense(stores.Qvain.license)
+    const component = shallow(<License Stores={stores} />)
+    // Add second other license again, SHOULD NOT ADDED
+    stores.Qvain.setLicense(LicenseConstructor({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'other'))
+    stores.Qvain.otherLicenseUrl = 'https://test2.url'
+    stores.Qvain.addLicense(stores.Qvain.license)
+    expect(component.find('licenses__LabelTemp').length).toBe(3)
   })
   it('should render <AccessType />', () => {
     const component = shallow(<AccessType Stores={getStores()} />)
@@ -286,6 +352,92 @@ describe('Qvain.ExternalFiles', () => {
   })
 })
 
+describe('Qvain DOI selection', () => {
+  let Qvain
+  let Stores
+  const DoiSelectionBase = DoiSelection.wrappedComponent
+  beforeEach(() => {
+    Stores = getStores()
+    Qvain = Stores.Qvain
+    Qvain.resetQvainStore()
+  })
+
+  it('should not render DOI selector for ATT catalog', () => {
+    const { setDataCatalog } = Qvain
+    setDataCatalog(DATA_CATALOG_IDENTIFIER.ATT)
+    const component = shallow(<DoiSelectionBase Stores={Stores} />)
+    expect(component.type()).toBe(null)
+  })
+
+  it('should not render DOI selector for PAS catalog', () => {
+    const { setDataCatalog } = Qvain
+    setDataCatalog(DATA_CATALOG_IDENTIFIER.PAS)
+    const component = shallow(<DoiSelectionBase Stores={Stores} />)
+    expect(component.type()).toBe(null)
+  })
+
+  it('renders DOI selector for new dataset with IDA catalog', () => {
+    const { setDataCatalog } = Qvain
+    Qvain.resetQvainStore()
+    setDataCatalog(DATA_CATALOG_IDENTIFIER.IDA)
+
+    const component = shallow(<DoiSelectionBase Stores={Stores} />)
+    const checkbox = component.find(Checkbox)
+    expect(checkbox.prop('checked')).toBe(false)
+  })
+
+  it('should not render DOI selector for published dataset', () => {
+    const { setDataCatalog, setOriginal } = Qvain
+    Qvain.resetQvainStore()
+    setDataCatalog(DATA_CATALOG_IDENTIFIER.IDA)
+    setOriginal({
+      state: 'published',
+    })
+
+    const component = shallow(<DoiSelectionBase Stores={Stores} />)
+    expect(component.type()).toBe(null)
+  })
+
+  it('renders DOI selector for new draft', () => {
+    const { setDataCatalog, setOriginal } = Qvain
+    Qvain.resetQvainStore()
+    setDataCatalog(DATA_CATALOG_IDENTIFIER.IDA)
+    setOriginal({
+      state: 'draft',
+    })
+
+    const component = shallow(<DoiSelectionBase Stores={Stores} />)
+    const checkbox = component.find(Checkbox)
+    expect(checkbox.prop('checked')).toBe(false)
+  })
+
+  it('should not render DOI selector for draft of published dataset', () => {
+    const { setDataCatalog, setOriginal } = Qvain
+    Qvain.resetQvainStore()
+    setDataCatalog(DATA_CATALOG_IDENTIFIER.IDA)
+    setOriginal({
+      state: 'draft',
+      draft_of: {
+        identifier: 'some_identifier',
+      },
+    })
+
+    const component = shallow(<DoiSelectionBase Stores={Stores} />)
+    expect(component.type()).toBe(null)
+  })
+
+  it('checks the checkbox', () => {
+    const { setDataCatalog, setUseDoi } = Qvain
+    Qvain.resetQvainStore()
+    setDataCatalog(DATA_CATALOG_IDENTIFIER.IDA)
+    setUseDoi(true)
+
+    const component = shallow(<DoiSelectionBase Stores={Stores} />)
+    const checkbox = component.find(Checkbox)
+    expect(checkbox.prop('checked')).toBe(true)
+  })
+})
+
 describe('Qvain validation', () => {
   let actors
   let dataset
@@ -307,10 +459,12 @@ describe('Qvain validation', () => {
       title: { en: 'title' },
       description: { en: 'description' },
       keywords: ['keyword'],
-      license: {
-        name: { en: 'Creative Commons Attribution 4.0 International (CC BY 4.0)' },
-        identifier: 'http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0',
-      },
+      license: [
+        {
+          name: { en: 'Creative Commons Attribution 4.0 International (CC BY 4.0)' },
+          identifier: 'http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0',
+        }
+      ],
       dataCatalog: 'urn:nbn:fi:att:data-catalog-ida',
       actors,
       accessType: {

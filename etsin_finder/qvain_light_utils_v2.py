@@ -44,7 +44,7 @@ def check_dataset_creator(cr_id):
     """Verify that user is authenticated and can edit the dataset.
 
     Arguments:
-        cr_id (str): Identifier of datset.
+        cr_id (str): Identifier of dataset.
 
     Returns:
         error {tuple}: Reason (message, status_code) for failed verification. Returns None if verification was successful.

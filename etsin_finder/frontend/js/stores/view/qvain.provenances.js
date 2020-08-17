@@ -1,4 +1,4 @@
-import uuid from 'uuid/v4'
+import { v4 as uuidv4 } from 'uuid'
 import cloneDeep from 'lodash.clonedeep'
 import { toJS, observable, action } from 'mobx'
 import Spatials, { SpatialModel } from './qvain.spatials'
@@ -8,7 +8,7 @@ import { ActorsRef } from './qvain.actors'
 import { ROLE } from '../../utils/constants'
 
 const Provenance = ({
-    uiid = uuid(),
+    uiid = uuidv4(),
     name = { fi: '', en: '', und: '' },
     description = { fi: '', en: '', und: '' },
     outcomeDescription = { fi: '', en: '', und: '' },
@@ -92,7 +92,7 @@ export const Lifecycle = (name, url) => ({
 })
 
 export const ProvenanceModel = (Parent, provenanceData) => ({
-    uiid: uuid(),
+    uiid: uuidv4(),
     name: parseTranslationField(provenanceData.title),
     description: parseTranslationField(provenanceData.description),
     outcomeDescription: parseTranslationField(provenanceData.outcome_description),

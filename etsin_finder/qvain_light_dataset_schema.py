@@ -68,6 +68,11 @@ class ActorValidationSchema(Schema):
         else:
             raise ValidationError('Invalid actor type.')
 
+class LicenseValidationSchema(Schema):
+    """Validation schema for licenses."""
+
+    identifier = fields.URL()
+    name = fields.Dict()
 
 class DatasetValidationSchema(Schema):
     """
@@ -76,6 +81,7 @@ class DatasetValidationSchema(Schema):
     Arguments:
         Schema {library} -- Marshmallows Schema library.
     """
+
     relation = fields.List(
         fields.Dict(),
         required=False
@@ -125,8 +131,7 @@ class DatasetValidationSchema(Schema):
     )
     embargoDate = fields.Str()
     restrictionGrounds = fields.Str()
-    license = fields.Dict()
-    otherLicenseUrl = fields.Str()
+    license = fields.List(fields.Nested(LicenseValidationSchema))
     dataCatalog = fields.Str()
     cumulativeState = fields.Int(OneOf([0, 1, 2]))
     files = fields.List(fields.Dict())

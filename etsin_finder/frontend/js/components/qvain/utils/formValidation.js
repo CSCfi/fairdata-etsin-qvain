@@ -92,6 +92,19 @@ const licenseSchema = yup.object().shape({
     .nullable(),
 })
 
+const licenseArrayObject = yup.object().shape({
+  name: yup.object().required(),
+  identifier: yup
+    .string(translate('qvain.validationMessages.license.otherUrl.string'))
+    .url(translate('qvain.validationMessages.license.otherUrl.url'))
+    .required(translate('qvain.validationMessages.license.otherUrl.required'))
+})
+
+const licenseArraySchema = yup
+    .array()
+    .of(licenseArrayObject)
+    .nullable()
+
 const accessTypeSchema = yup.object().shape({
   name: yup.string(),
   url: yup
@@ -374,6 +387,7 @@ const spatialNameSchema = yup
 
 const spatialAltitudeSchema = yup
   .number()
+  .typeError('qvain.temporalAndSpatial.spatial.error.altitudeNan')
 
 // RELATED RESOURCE
 const relatedResourceNameSchema = yup.object().shape({
@@ -427,29 +441,9 @@ const qvainFormSchema = yup.object().shape({
     .mixed()
     .when('dataCatalog', {
       is: DATA_CATALOG_IDENTIFIER.IDA,
-      then: yup.object().shape({
-        name: yup.object().nullable(),
-        identifier: yup.string()
-      }).required(translate('qvain.validationMessages.license.requiredIfIDA')),
-      otherwise: yup.object().shape({
-        name: yup.object().nullable(),
-        identifier: yup.string()
-      }),
+      then: licenseArraySchema.required(translate('qvain.validationMessages.license.requiredIfIDA')),
+      otherwise: licenseArraySchema
     }),
-  otherLicenseUrl: yup
-    .mixed()
-    .when('license.identifier', {
-      is: 'other',
-      then: yup
-        .string(translate('qvain.validationMessages.license.otherUrl.string'))
-        .url(translate('qvain.validationMessages.license.otherUrl.url'))
-        .required(translate('qvain.validationMessages.license.otherUrl.required')),
-      otherwise: yup
-        .string()
-        .url()
-        .nullable(),
-    })
-    .nullable(),
   restrictionGrounds: yup.mixed().when('accessType.url', {
     is: url => url !== ACCESS_TYPE_URL.OPEN,
     then: restrictionGroundsSchema,

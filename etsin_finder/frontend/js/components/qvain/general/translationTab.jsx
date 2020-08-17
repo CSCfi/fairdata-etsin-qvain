@@ -4,6 +4,11 @@ import styled from 'styled-components'
 import Translate from 'react-translate-component'
 
 class TranslationTab extends Component {
+  translations = {
+    langButtonFi: 'qvain.general.langFi',
+    langButtonEn: 'qvain.general.langEn'
+  }
+
   static propTypes = {
     language: PropTypes.string.isRequired,
     setLanguage: PropTypes.func.isRequired,
@@ -11,11 +16,6 @@ class TranslationTab extends Component {
       PropTypes.object,
       PropTypes.array
     ]).isRequired
-  }
-
-  translations = {
-    langButtonFi: 'qvain.general.langFi',
-    langButtonEn: 'qvain.general.langEn'
   }
 
   render() {

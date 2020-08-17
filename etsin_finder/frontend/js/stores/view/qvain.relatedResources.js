@@ -1,9 +1,9 @@
 // import { observables } from 'mobx'
-import uuid from 'uuid/v4'
+import { v4 as uuidv4 } from 'uuid'
 import Field from './qvain.field'
 
 const RelatedResource = (
-  uiid = uuid(),
+  uiid = uuidv4(),
   name = { fi: '', en: '', und: '' },
   description = { fi: '', en: '', und: '' },
   identifier = undefined,
@@ -34,7 +34,7 @@ export const RelationType = (label, url) => ({
 })
 
 export const RelatedResourceModel = (rr) => ({
-  uiid: uuid(),
+  uiid: uuidv4(),
   name: rr.entity.title,
   description: rr.entity.description,
   identifier: rr.entity.identifier,

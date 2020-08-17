@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import translate from 'counterpart'
-
 import PropTypes from 'prop-types'
+import { inject, observer } from 'mobx-react'
 
-import DatasetQuery from '../../../../stores/view/datasetquery'
 import createTree from '../../../../utils/createTree'
 import TableHeader from '../tableHeader'
 import Table from '../table'
@@ -13,9 +12,10 @@ import access from '../../../../stores/view/access'
 import Accessibility from '../../../../stores/view/accessibility'
 import { DATA_CATALOG_IDENTIFIER } from '../../../../utils/constants'
 
-export default class IdaResources extends Component {
+class IdaResources extends Component {
   constructor(props) {
     super(props)
+    const { DatasetQuery } = this.props.Stores
     const results = DatasetQuery.results
     const files = results.research_dataset.files
     const folders = results.research_dataset.directories
@@ -47,7 +47,7 @@ export default class IdaResources extends Component {
     // If this is a PAS dataset, dowload should be disabled
     if (this.props.dataset.data_catalog.catalog_json.identifier === DATA_CATALOG_IDENTIFIER.PAS) {
       this.setState({
-        allowDownload: false
+        allowDownload: false,
       })
     }
   }
@@ -193,6 +193,7 @@ export default class IdaResources extends Component {
   }
 
   query(id, newPath, newIDs) {
+    const { DatasetQuery } = this.props.Stores
     Accessibility.announcePolite(translate('dataset.dl.loading'))
     DatasetQuery.getFolderData(id, this.state.results.identifier)
       .then(res => {
@@ -279,4 +280,7 @@ const DataTable = styled.div`
 
 IdaResources.propTypes = {
   dataset: PropTypes.object.isRequired,
+  Stores: PropTypes.object.isRequired,
 }
+
+export default inject('Stores')(observer(IdaResources))

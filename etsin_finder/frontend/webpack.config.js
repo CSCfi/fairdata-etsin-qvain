@@ -50,10 +50,6 @@ const config = {
       MATOMO_SITE_ID: env.parsed ? env.parsed.MATOMO_SITE_ID : undefined,
     }),
   ],
-  devServer: {
-    hot: true,
-
-  },
   watch: false,
   watchOptions: {
     aggregateTimeout: 300,

@@ -4,9 +4,14 @@ from copy import deepcopy
 import json
 from flask import session
 from base64 import urlsafe_b64encode
+from datetime import date
 
 from etsin_finder.constants import SAML_ATTRIBUTES, DATA_CATALOG_IDENTIFIERS, ACCESS_TYPES
-from etsin_finder.cr_service import get_catalog_record
+from etsin_finder.cr_service import (
+    get_catalog_record,
+    is_draft,
+    is_catalog_record_owner
+)
 from etsin_finder.finder import app
 from etsin_finder.authentication import get_user_ida_groups, get_user_csc_name, get_user_email, get_user_firstname, get_user_lastname
 
@@ -25,8 +30,8 @@ def clean_empty_keyvalues_from_dict(d):
     if not isinstance(d, (dict, list)):
         return d
     if isinstance(d, list):
-        return [v for v in (clean_empty_keyvalues_from_dict(v) for v in d) if v]
-    return {k: v for k, v in ((k, clean_empty_keyvalues_from_dict(v)) for k, v in d.items()) if v}
+        return [v for v in (clean_empty_keyvalues_from_dict(v) for v in d) if v or v is False]
+    return {k: v for k, v in ((k, clean_empty_keyvalues_from_dict(v)) for k, v in d.items()) if v or v is False}
 
 
 def alter_role_data(actor_list=[], role="all"):
@@ -107,17 +112,18 @@ def access_rights_to_metax(data):
 
     """
     access_rights = {}
-    license = data.get('license', {})
-    license_id = license.get('identifier')
-    if license:
-        access_rights["license"] = []
-        if license_id and license_id != 'other':
+    access_rights["license"] = []
+    license = data.get('license', [])
+    for l in license:
+        license_id = l.get('identifier')
+        license_name_en = l.get('name', {}).get('en')
+        if license_id and not license_name_en.startswith('Other (URL)'):
             license_object = {}
             license_object["identifier"] = license_id
             access_rights["license"].append(license_object)
-        elif "otherLicenseUrl" in data:
+        elif license_id and license_name_en.startswith('Other (URL)'):
             license_object = {}
-            license_object["license"] = data.get("otherLicenseUrl")
+            license_object["license"] = license_id
             access_rights["license"].append(license_object)
 
     access_type = data.get('accessType', {})
@@ -233,7 +239,7 @@ def data_to_metax(data, metadata_provider_org, metadata_provider_user):
             "curator": alter_role_data(data.get("actors"), "curator"),
             "rights_holder": alter_role_data(data.get("actors"), "rights_holder"),
             "contributor": alter_role_data(data.get("actors"), "contributor"),
-            "issued": data.get("issuedDate") if "issuedDate" in data else "",
+            "issued": data.get("issuedDate", date.today().strftime("%Y-%m-%d")),
             "other_identifier": other_identifiers_to_metax(data.get("identifiers")),
             "field_of_science": _to_metax_field_of_science(data.get("fieldOfScience")),
             "language": _to_metax_field_of_science(data.get("datasetLanguage")),
@@ -242,10 +248,10 @@ def data_to_metax(data, metadata_provider_org, metadata_provider_user):
             "remote_resources": remote_resources_data_to_metax(data.get("remote_resources")) if data.get("dataCatalog") == DATA_CATALOG_IDENTIFIERS.get('att') else "",
             "files": files_data_to_metax(data.get("files")) if data.get("dataCatalog") == DATA_CATALOG_IDENTIFIERS.get('ida') else "",
             "directories": directories_data_to_metax(data.get("directories")) if data.get("dataCatalog") == DATA_CATALOG_IDENTIFIERS.get('ida') else "",
-            "infrastructure": data.get("infrastructure"),
-            "spatial": data.get("spatial"),
             "relation": data.get("relation"),
-            "provenance": provenances
+            "provenance": provenances,
+            "infrastructure": _to_metax_infrastructure(data.get("infrastructure")),
+            "spatial": data.get("spatial")
         }
     }
     return clean_empty_keyvalues_from_dict(dataset_data)
@@ -275,6 +281,8 @@ def get_dataset_creator(cr_id):
 
     """
     dataset = get_catalog_record(cr_id, False)
+    if not dataset:
+        return None
     return dataset.get('metadata_provider_user')
 
 def remove_deleted_datasets_from_results(result):
@@ -338,7 +346,7 @@ def edited_data_to_metax(data, original):
         "curator": alter_role_data(data.get("actors"), "curator"),
         "rights_holder": alter_role_data(data.get("actors"), "rights_holder"),
         "contributor": alter_role_data(data.get("actors"), "contributor"),
-        "issued": data.get("issuedDate") if "issuedDate" in data else "",
+        "issued": data.get("issuedDate", date.today().strftime("%Y-%m-%d")),
         "other_identifier": other_identifiers_to_metax(data.get("identifiers")),
         "field_of_science": _to_metax_field_of_science(data.get("fieldOfScience")),
         "language": _to_metax_dataset_language(data.get("datasetLanguage")),
@@ -354,7 +362,8 @@ def edited_data_to_metax(data, original):
     })
     log.info(research_dataset)
     edited_data = {
-        "research_dataset": research_dataset
+        "research_dataset": research_dataset,
+        "use_doi_for_published": data.get("useDoi")
     }
     return clean_empty_keyvalues_from_dict(edited_data)
 

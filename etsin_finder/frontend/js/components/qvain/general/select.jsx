@@ -17,13 +17,11 @@ class Select extends Component {
     model: PropTypes.func.isRequired,
     name: PropTypes.string.isRequired,
     inModal: PropTypes.bool,
-    isClearable: PropTypes.bool
   }
 
   static defaultProps = {
     getter: undefined,
     inModal: false,
-    isClearable: false
   }
 
   state = {
@@ -77,7 +75,7 @@ class Select extends Component {
 
   render() {
     const { readonly } = this.props.Stores.Qvain
-    const { getter, setter, model, name, inModal, isClearable } = this.props
+    const { getter, setter, model, name, inModal } = this.props
     const { options } = this.state
     const { lang } = this.props.Stores.Locale
 
@@ -96,7 +94,7 @@ class Select extends Component {
         menuPlacement="auto"
         menuPosition="fixed"
         menuShouldScrollIntoView={false}
-        isClearable={isClearable}
+        isClearable
       />
     ) : (
       <Translate
@@ -110,7 +108,7 @@ class Select extends Component {
         classNamePrefix="select"
         options={options[lang]}
         onChange={onChange(options, lang, setter, model)}
-        isClearable={isClearable}
+        isClearable
       />
     )
   }
