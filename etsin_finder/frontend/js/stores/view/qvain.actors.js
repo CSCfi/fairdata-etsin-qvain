@@ -339,9 +339,6 @@ class Actors {
 
     const roles = [role]
 
-    console.log('lets check what the role is...')
-    console.log(roles)
-
     return Actor({
       type: entityType,
       person,
