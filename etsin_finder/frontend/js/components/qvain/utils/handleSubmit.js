@@ -56,6 +56,8 @@ const handleSubmitToBackend = (Env, values) => {
 
   const spatial = values.Spatials.toBackend()
 
+  const temporal = values.Temporals.toBackend()
+
   const relation = values.RelatedResources.toBackend()
 
   const provenance = values.Provenances.toBackend()
@@ -82,6 +84,7 @@ const handleSubmitToBackend = (Env, values) => {
     cumulativeState: values.cumulativeState,
     useDoi: values.useDoi,
     spatial,
+    temporal,
     relation,
     provenance
   }

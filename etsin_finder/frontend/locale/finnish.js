@@ -1374,11 +1374,15 @@ const finnish = {
         title: 'Ajallinen kattavuus',
         description: 'Ajanjakso, minkä aineisto kattaa, esimerkiksi aika jolloin on tehty havaintoja.',
         addButton: 'Lisää ajallinen kattavuus',
+        error: {
+          startDateMissing: 'Alkamisajankohta puuttuu.',
+          endDateMissing: 'Loppuajankohta puuttuu.'
+        },
         modal: {
           durationInput: {
             label: 'Ajanjakso',
-            startPlaceholder: 'alkaa',
-            endPlaceholder: 'loppuu'
+            startPlaceholder: 'Alkamisajankohta',
+            endPlaceholder: 'Loppuajankohta'
           },
         },
       },
@@ -1397,7 +1401,7 @@ const finnish = {
   userAuthenticationError: {
     header: 'Kirjautuminen epäonnistui.',
     content:
-      'Tarkistathan, että sinulla on voimassaoleva CSC-tunnus (Qvaimen ja Qvain Lightin käyttö vaatii sen). Jos yritit kirjaututua jollain toisella tunnuksella (esim. Haka), sitä ei todennäköisesti ole liitetty CSC-tunnukseen. Lisäohjeita CSC-tunnuksen rekisteröimiseksi: https://docs.csc.fi/#accounts/how-to-create-new-user-account/',
+    'Tarkistathan, että sinulla on voimassaoleva CSC-tunnus (Qvaimen ja Qvain Lightin käyttö vaatii sen). Jos yritit kirjaututua jollain toisella tunnuksella (esim. Haka), sitä ei todennäköisesti ole liitetty CSC-tunnukseen. Lisäohjeita CSC-tunnuksen rekisteröimiseksi: https://docs.csc.fi/#accounts/how-to-create-new-user-account/',
   },
   userHomeOrganizationErrror: {
     header: 'Kirjautuminen epäonnistui.',

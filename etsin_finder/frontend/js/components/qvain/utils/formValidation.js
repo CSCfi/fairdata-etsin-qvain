@@ -389,6 +389,18 @@ const spatialAltitudeSchema = yup
   .number()
   .typeError('qvain.temporalAndSpatial.spatial.error.altitudeNan')
 
+// TEMPORAL VALIDATION
+const temporalDateSchema = yup
+  .object()
+  .shape({
+  startDate: yup
+      .date()
+      .required('qvain.temporalAndSpatial.temporal.error.startDateMissing'),
+  endDate: yup
+      .date()
+      .required('qvain.temporalAndSpatial.temporal.error.endDateMissing')
+})
+
 // RELATED RESOURCE
 const relatedResourceNameSchema = yup.object().shape({
   fi: yup.mixed().when('en', {
@@ -499,5 +511,6 @@ export {
   spatialNameSchema,
   spatialAltitudeSchema,
   relatedResourceNameSchema,
-  provenanceNameSchema
+  provenanceNameSchema,
+  temporalDateSchema
 }

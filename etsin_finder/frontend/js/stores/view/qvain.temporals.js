@@ -1,9 +1,9 @@
-import uuid from 'uuid/v4'
+import { v4 as uuidv4 } from 'uuid'
 import { computed, action } from 'mobx'
 import Field from './qvain.field'
 
 const Temporal = (
-  uiid = uuid(),
+  uiid = uuidv4(),
   startDate = undefined,
   endDate = undefined
 ) => ({
@@ -31,13 +31,13 @@ class Temporals extends Field {
 
   toBackend = () =>
     this.Parent.temporals.map((temporal) => ({
-      start_date: temporal.startDate,
-      end_date: temporal.endDate
+      start_date: new Date(temporal.startDate).toISOString(),
+      end_date: new Date(temporal.endDate).toISOString()
     }))
 }
 
-export const SpatialModel = (data) => ({
-  uiid: uuid(),
+export const TemporalModel = (data) => ({
+  uiid: uuidv4(),
   startDate: data.start_date,
   endDate: data.end_date
 })
