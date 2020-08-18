@@ -1131,6 +1131,7 @@ class Qvain {
   }
 
   // Check if the dataset has all required fields set and can be published
+  @action
   updateMissingFieldsStatusGeneralForLoadedDataset() {
     // Missing field [0]: Title is set -> should no longer prevent publishing
     if ((this.title.en !== '' && this.title.en !== undefined) || (this.title.fi !== '' && this.title.fi !== undefined)) {

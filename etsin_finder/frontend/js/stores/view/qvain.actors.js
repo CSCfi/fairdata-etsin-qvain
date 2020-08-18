@@ -257,6 +257,7 @@ class Actors {
     this.stillMissingActorFields = true
   }
 
+  @action
   editDataset = (researchDataset) => {
     // Load actors
     const actors = []
