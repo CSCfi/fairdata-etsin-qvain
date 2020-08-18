@@ -1137,10 +1137,12 @@ export const Project = (
   fundingIdentifier,
   funderType, // ProjectFunderType
   organizations, // Array<Organization>
+  fundingAgencies, // Array<FundingAgency>
 ) => ({
   id: id || uuid(),
   details: { title, identifier, fundingIdentifier, funderType },
-  organizations
+  organizations,
+  fundingAgencies,
 })
 
 export const ProjectFunderType = (name, url) => ({
@@ -1153,6 +1155,20 @@ export const Organization = (id, organization, department, subDepartment) => ({
   organization, // {identifier, name: {fi, en, und}}
   department, // {identifier, name: {fi, en, und}}
   subDepartment, // {identifier, name: {fi, en, und}}
+})
+
+export const FundingAgency = (id, organization, contributorTypes) => ({
+  id: id || uuid(),
+  organization, // <Organization>
+  contributorTypes, // Array<ContributorType>
+})
+
+export const ContributorType = (id, identifier, label, definition, inScheme) => ({
+  id: id || uuid(),
+  identifier,
+  label, // {en, fi}
+  definition, // {en, fi}
+  inScheme,
 })
 
 export const ExternalResource = (id, title, accessUrl, downloadUrl, useCategory) => ({

@@ -273,6 +273,16 @@ const organizationSelectSchema = yup.object().shape({
   email: yup.string().email(translate('qvain.organizationSelect.validation.email'))
 })
 
+const fundingAgencySchema = yup.object().shape({
+  identifier: yup.string()
+    .required(translate('qvain.project.inputs.fundingAgency.contributorType.identifier.valdiation')),
+  labelFi: yup.string(),
+  labelEn: yup.string(),
+  definitionFi: yup.string(),
+  definitionEn: yup.string(),
+  inScheme: yup.string(),
+})
+
 const projectSchema = yup.object().shape({
   details: yup.object().shape({
     titleFi: yup.mixed().when('titleEn', {
@@ -513,5 +523,6 @@ export {
   spatialNameSchema,
   spatialAltitudeSchema,
   projectSchema,
-  organizationSelectSchema
+  organizationSelectSchema,
+  fundingAgencySchema
 }
