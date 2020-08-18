@@ -76,10 +76,10 @@ class OrganizationSelect extends Component {
    * options will be cleared.
    */
   clearOptions = all => {
-    const { organization, department } = this.state.options
-    const options = { ...organization, ...department, subDepartment: {} }
-    if (all) options.department = {}
-    this.setState({ options })
+    const { options } = this.state
+    const updatedOptions = { ...options, subDepartment: {} }
+    if (all) updatedOptions.department = {}
+    this.setState({ options: updatedOptions })
   }
 
   /**
