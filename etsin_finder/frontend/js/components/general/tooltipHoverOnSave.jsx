@@ -32,40 +32,38 @@ const TooltipHoverOnSave = ({ isOpen, Stores, children, shouldBeDisplayed, typeO
       <Wrapper ref={wrapperTooltipCardRef}>
         <TooltipDownV2>
           <TooltipArrowDown />
-          {typeOfTooltip === "draft" ? (
+          {typeOfTooltip === 'draft' ? (
             <TooltipTextBold>
-            {translate('qvain.missingFieldsGeneralDraft.infoTitle')}
-            <TooltipText>
-              { // General fields (only title)
-                (Stores.Qvain.missingFieldsListGeneral.slice(0, 1).filter(
-                  element => (element.valueIsMissing === true) && (element.valueIsRequired === true)).map(filteredField => (
-                    `- ${translate(formatStringToTranslate('qvain.missingFieldsGeneral.', filteredField))} \n`
-                )))
-              }
-            </TooltipText>
+              {translate('qvain.missingFieldsGeneralDraft.infoTitle')}
+              <TooltipText>
+                { // General fields (only title)
+                  (Stores.Qvain.missingFieldsListGeneral.slice(0, 1).filter(
+                    element => (element.valueIsMissing === true) && (element.valueIsRequired === true)).map(filteredField => (
+                      `- ${translate(formatStringToTranslate('qvain.missingFieldsGeneral.', filteredField))} \n`
+                  )))
+                }
+              </TooltipText>
             </TooltipTextBold>
-          ) :(
+          ) : (
             <TooltipTextBold>
-            {translate('qvain.missingFieldsGeneral.infoTitle')}
-            <TooltipText>
-              { // General fields
-                (Stores.Qvain.missingFieldsListGeneral.filter(
-                  element => (element.valueIsMissing === true) && (element.valueIsRequired === true)).map(filteredField => (
-                    `- ${translate(formatStringToTranslate('qvain.missingFieldsGeneral.', filteredField))} \n`
-                )))
-              }
-              { // Actor fields
-                (Stores.Qvain.Actors.missingFieldsListActors.filter(
-                  element => (element.valueIsMissing === true) && (element.valueIsRequired === true)).map(filteredField => (
-                    `- ${translate(formatStringToTranslate('qvain.missingFieldsActors.', filteredField))} \n`
-                )))
-              }
-            </TooltipText>
+              {translate('qvain.missingFieldsGeneral.infoTitle')}
+              <TooltipText>
+                { // General fields
+                  (Stores.Qvain.missingFieldsListGeneral.filter(
+                    element => (element.valueIsMissing === true) && (element.valueIsRequired === true)).map(filteredField => (
+                      `- ${translate(formatStringToTranslate('qvain.missingFieldsGeneral.', filteredField))} \n`
+                  )))
+                }
+                { // Actor fields
+                  (Stores.Qvain.Actors.missingFieldsListActors.filter(
+                    element => (element.valueIsMissing === true) && (element.valueIsRequired === true)).map(filteredField => (
+                      `- ${translate(formatStringToTranslate('qvain.missingFieldsActors.', filteredField))} \n`
+                  )))
+                }
+              </TooltipText>
             </TooltipTextBold>
           )
         }
-
-          
         </TooltipDownV2>
       </Wrapper>
     </>

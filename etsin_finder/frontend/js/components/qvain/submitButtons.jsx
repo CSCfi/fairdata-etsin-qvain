@@ -668,7 +668,7 @@ class SubmitButtons extends Component {
             >
               <Translate content="qvain.saveDraft" />
             </SubmitButton>
-        </WrapperDivForHovering>
+          </WrapperDivForHovering>
         </TooltipHoverOnSave>
       )
 
@@ -725,23 +725,23 @@ class SubmitButtons extends Component {
       // published -> draft
       submitDraft = (
         <TooltipHoverOnSave
-        shouldBeDisplayed={disabledDueToMissingFieldsDraft}
-        isOpen={this.state.draftTooltipOpen}
-        Stores={this.props.Stores}
-        typeOfTooltip="draft"
-      >
-        <WrapperDivForHovering
-          onMouseEnter={() => this.setState({ draftTooltipOpen: true })}
-          onMouseLeave={() => this.setState({ draftTooltipOpen: false })}
+          shouldBeDisplayed={disabledDueToMissingFieldsDraft}
+          isOpen={this.state.draftTooltipOpen}
+          Stores={this.props.Stores}
+          typeOfTooltip="draft"
         >
-        <SubmitButton
-          disabled={disabledDueToReadOnly || disabledDueToMissingFieldsDraft}
-          onClick={() => this.handleSaveAsDraft()}
-        >
-          <Translate content="qvain.saveDraft" />
-        </SubmitButton>
-        </WrapperDivForHovering>
-          </TooltipHoverOnSave>
+          <WrapperDivForHovering
+            onMouseEnter={() => this.setState({ draftTooltipOpen: true })}
+            onMouseLeave={() => this.setState({ draftTooltipOpen: false })}
+          >
+            <SubmitButton
+              disabled={disabledDueToReadOnly || disabledDueToMissingFieldsDraft}
+              onClick={() => this.handleSaveAsDraft()}
+            >
+              <Translate content="qvain.saveDraft" />
+            </SubmitButton>
+          </WrapperDivForHovering>
+        </TooltipHoverOnSave>
       )
 
       // published -> published
