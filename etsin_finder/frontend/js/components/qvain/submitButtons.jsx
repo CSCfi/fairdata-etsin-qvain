@@ -12,7 +12,7 @@ import handleSubmitToBackend from './utils/handleSubmit'
 import urls from './utils/urls'
 import { InvertedButton } from '../general/button'
 import DoiModal from './doiModal'
-import Tooltip from '../general/tooltipHover'
+import TooltipHoverOnSave from '../general/tooltipHoverOnSave'
 
 class SubmitButtons extends Component {
   promises = []
@@ -28,6 +28,7 @@ class SubmitButtons extends Component {
   state = {
     useDoiModalIsOpen: false,
     datasetLoading: false,
+    tooltipOpen: false,
   }
 
   componentWillUnmount() {
@@ -497,16 +498,16 @@ class SubmitButtons extends Component {
   }
 
   buildMissingFieldsListForDisplay = () => {
-    return translate('qvain.missingFields')
-      + // General fields
+    return
+      // General fields
       (this.props.Stores.Qvain.missingFieldsListGeneral.filter(
         element => (element.valueIsMissing === true) && (element.valueIsRequired === true)).map(filteredField => (
-        "\n" + filteredField.fieldName
+        "\n -" + filteredField.fieldName
       )))
       + // Actor fields
       (this.props.Stores.Qvain.Actors.missingFieldsListActors.filter(
         element => (element.valueIsMissing === true) && (element.valueIsRequired === true)).map(filteredField => (
-        "\n" + filteredField.fieldName
+        "\n \n-" + filteredField.fieldName
       )))
   }
 
@@ -555,7 +556,6 @@ class SubmitButtons extends Component {
         onRequestClose={this.closeUseDoiInformation}
       />
     )
-
     // Metax API v1
     if (!metaxApiV2) {
       return (
@@ -563,11 +563,21 @@ class SubmitButtons extends Component {
         <div ref={submitButtonsRef}>
           {original ? (
             disabledDueToMissingFieldsNonDraft ? (
-              <Tooltip
-                typeOfTooltip="publishing"
-                title={this.buildMissingFieldsListForDisplay()}
-                position="bottom"
+              <TooltipHoverOnSave
+                isOpen={this.state.tooltipOpen}
+                Stores={this.props.Stores}
               >
+                <div 
+                  onMouseEnter	={() =>
+                    this.setState({
+                      tooltipOpen: true,
+                    })
+                  }
+                  onMouseLeave	={() =>
+                    this.setState({
+                      tooltipOpen: false,
+                    })
+                }>
                 <SubmitButton
                   ref={this.updateDatasetButton}
                   disabled
@@ -576,31 +586,84 @@ class SubmitButtons extends Component {
                 >
                   <Translate content="qvain.edit" />
                 </SubmitButton>
-              </Tooltip>
+                </div>
+              </TooltipHoverOnSave>
             ) : (
+              <TooltipHoverOnSave
+              isOpen={this.state.tooltipOpen}
+              Stores={this.props.Stores}
+            >
+                              <div 
+                  onMouseEnter	={() =>
+                    this.setState({
+                      tooltipOpen: true,
+                    })
+                  }
+                  onMouseLeave	={() =>
+                    this.setState({
+                      tooltipOpen: false,
+                    })
+                }>
               <SubmitButton
                 ref={this.updateDatasetButton}
                 disabled={disabledDueToReadOnly}
+                pointer-events="auto"
                 type="button"
                 onClick={this.handleUpdateV1}
+                onMouseEnter	={() =>
+                  this.setState({
+                    tooltipOpen: true,
+                  })
+                }
+                onMouseLeave	={() =>
+                  this.setState({
+                    tooltipOpen: false,
+                  })
+                }
               >
                 <Translate content="qvain.edit" />
               </SubmitButton>
+              </div>
+              </TooltipHoverOnSave>
             )
           ) : (
-            <Tooltip
-              title={this.buildMissingFieldsListForDisplay()}
-              position="bottom"
+            <TooltipHoverOnSave
+              isOpen={this.state.tooltipOpen}
+              Stores={this.props.Stores}
             >
-              <SubmitButton
-                ref={this.submitDatasetButton}
-                disabled={disabledDueToReadOnly || disabledDueToMissingFieldsNonDraft}
-                type="button"
-                onClick={useDoi === true ? this.showUseDoiInformation : this.handleCreatePublishedV1}
-              >
-                <Translate content="qvain.submit" />
-              </SubmitButton>
-            </Tooltip>
+                <div 
+                  onMouseEnter	={() =>
+                    this.setState({
+                      tooltipOpen: true,
+                    })
+                  }
+                  onMouseLeave	={() =>
+                    this.setState({
+                      tooltipOpen: false,
+                    })
+                }>
+                <SubmitButton
+                  ref={this.submitDatasetButton}
+                  disabled={disabledDueToReadOnly || disabledDueToMissingFieldsNonDraft}
+                  pointer-events="auto"
+                  type="button"
+                  onClick={useDoi === true ? this.showUseDoiInformation : this.handleCreatePublishedV1}
+                  onMouseEnter	={() =>
+                    this.setState({
+                      tooltipOpen: true,
+                    })
+                  }
+                  onMouseLeave	={() =>
+                    this.setState({
+                      tooltipOpen: false,
+                    })
+                  }
+                  
+                >
+                  <Translate content="qvain.submit" />
+                </SubmitButton>
+              </div>
+              </TooltipHoverOnSave>
           )}
           {doiModal}
         </div>
