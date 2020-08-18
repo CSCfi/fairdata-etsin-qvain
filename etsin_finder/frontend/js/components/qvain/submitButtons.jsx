@@ -542,59 +542,34 @@ class SubmitButtons extends Component {
         onRequestClose={this.closeUseDoiInformation}
       />
     )
-    // Metax API v1
+    // Metax API v1 start
     if (!metaxApiV2) {
       return (
-        // Existing published dataset -> update published dataset
         <div ref={submitButtonsRef}>
           {original ? (
-            // Dataset has missing required fields
-            disabledDueToMissingFieldsNonDraft ? (
-              <TooltipHoverOnSave
-                shouldBeDisplayed={disabledDueToMissingFieldsNonDraft}
-                isOpen={this.state.tooltipOpen}
-                Stores={this.props.Stores}
+            // Metax API v1, alternative 1: Editing existing dataset
+            <TooltipHoverOnSave
+              shouldBeDisplayed={disabledDueToMissingFieldsNonDraft}
+              isOpen={this.state.tooltipOpen}
+              Stores={this.props.Stores}
+            >
+              { /* Wrapper div for showing the tooltip, since disabled elements cannot have mouseEvents */}
+              <div
+                onMouseEnter={() => this.setState({ tooltipOpen: true })}
+                onMouseLeave={() => this.setState({ tooltipOpen: false })}
               >
-                { /* Wrapper div for showing the tooltip, since disabled elements cannot have mouseEvents */}
-                <div
-                  onMouseEnter={() => this.setState({ tooltipOpen: true })}
-                  onMouseLeave={() => this.setState({ tooltipOpen: false })}
+                <SubmitButton
+                  ref={this.updateDatasetButton}
+                  disabled={disabledDueToReadOnly || disabledDueToMissingFieldsNonDraft}
+                  type="button"
+                  onClick={this.handleUpdateV1}
                 >
-                  <SubmitButton
-                    ref={this.updateDatasetButton}
-                    disabled
-                    type="button"
-                    onClick={this.handleUpdateV1}
-                  >
-                    <Translate content="qvain.edit" />
-                  </SubmitButton>
-                </div>
-              </TooltipHoverOnSave>
-            ) : (
-              // Dataset has no missing required fields
-              <TooltipHoverOnSave
-                shouldBeDisplayed={disabledDueToMissingFieldsNonDraft}
-                isOpen={this.state.tooltipOpen}
-                Stores={this.props.Stores}
-              >
-                <div
-                  onMouseEnter={() => this.setState({ tooltipOpen: true })}
-                  onMouseLeave={() => this.setState({ tooltipOpen: false })}
-                >
-                  <SubmitButton
-                    ref={this.updateDatasetButton}
-                    disabled={disabledDueToReadOnly}
-                    pointer-events="auto"
-                    type="button"
-                    onClick={this.handleUpdateV1}
-                  >
-                    <Translate content="qvain.edit" />
-                  </SubmitButton>
-                </div>
-              </TooltipHoverOnSave>
-            )
-          // Existing dataset, has missing required fields
+                  <Translate content="qvain.edit" />
+                </SubmitButton>
+              </div>
+            </TooltipHoverOnSave>
           ) : (
+            // Metax API v1, alternative 2: Editing new dataset
             <TooltipHoverOnSave
               shouldBeDisplayed={disabledDueToMissingFieldsNonDraft}
               isOpen={this.state.tooltipOpen}
@@ -619,7 +594,7 @@ class SubmitButtons extends Component {
           {doiModal}
         </div>
       )
-    }
+    } // Metax API v1 end
 
     let submitDraft = null
     let submitPublished = null
