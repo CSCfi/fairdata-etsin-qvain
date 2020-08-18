@@ -218,7 +218,7 @@ class Qvain {
     }
   }
 
-  // Check if title is set, which draft requires to be set
+  // Check if required draft fields are set
   checkMissingFieldsGeneralDraft = () => {
     if ((this.missingFieldsListGeneral[0].valueIsMissing === true) && (this.missingFieldsListGeneral[0].valueIsRequired)) {
       this.stillMissingGeneralFieldsDraft = true
@@ -250,6 +250,7 @@ class Qvain {
     }
     // Update missing status
     this.checkMissingFieldsGeneral()
+    this.checkMissingFieldsGeneralDraft()
   }
 
   @action
@@ -1170,6 +1171,7 @@ class Qvain {
 
     // Finally, check the general status
     this.checkMissingFieldsGeneral()
+    this.checkMissingFieldsGeneralDraft()
   }
 
   @action setOriginal = (newOriginal) => {

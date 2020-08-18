@@ -345,6 +345,9 @@ const finnish = {
       atLeastOneLicense: 'Lisenssi (väh. 1)',
       fileOrigin: 'Tiedoston lähde',
     },
+    missingFieldsGeneralDraft: {
+      infoTitle: 'Luonnoksen tallentaminen vaatii seuraavat kentät',
+    },
     missingFieldsActors: {
       infoTitle: 'Ja toimijat',
       creator: 'Tekijä',

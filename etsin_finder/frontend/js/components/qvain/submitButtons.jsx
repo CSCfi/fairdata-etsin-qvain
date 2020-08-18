@@ -28,7 +28,8 @@ class SubmitButtons extends Component {
   state = {
     useDoiModalIsOpen: false,
     datasetLoading: false,
-    tooltipOpen: false,
+    publishTooltipOpen: false,
+    draftTooltipOpen: false,
   }
 
   componentWillUnmount() {
@@ -547,16 +548,16 @@ class SubmitButtons extends Component {
       return (
         <div ref={submitButtonsRef}>
           {original ? (
-            // Metax API v1, alternative 1: Editing existing dataset
+            // Metax API v1, alternative 1: Existing dataset
             <TooltipHoverOnSave
               shouldBeDisplayed={disabledDueToMissingFieldsNonDraft}
-              isOpen={this.state.tooltipOpen}
+              isOpen={this.state.publishTooltipOpen}
               Stores={this.props.Stores}
             >
               { /* Wrapper div for showing the tooltip, since disabled elements cannot have mouseEvents */}
-              <div
-                onMouseEnter={() => this.setState({ tooltipOpen: true })}
-                onMouseLeave={() => this.setState({ tooltipOpen: false })}
+              <WrapperDivForHovering
+                onMouseEnter={() => this.setState({ publishTooltipOpen: true })}
+                onMouseLeave={() => this.setState({ publishTooltipOpen: false })}
               >
                 <SubmitButton
                   ref={this.updateDatasetButton}
@@ -566,29 +567,28 @@ class SubmitButtons extends Component {
                 >
                   <Translate content="qvain.edit" />
                 </SubmitButton>
-              </div>
+              </WrapperDivForHovering>
             </TooltipHoverOnSave>
           ) : (
-            // Metax API v1, alternative 2: Editing new dataset
+            // Metax API v1, alternative 2: New dataset
             <TooltipHoverOnSave
               shouldBeDisplayed={disabledDueToMissingFieldsNonDraft}
-              isOpen={this.state.tooltipOpen}
+              isOpen={this.state.publishTooltipOpen}
               Stores={this.props.Stores}
             >
-              <div
-                onMouseEnter={() => this.setState({ tooltipOpen: true })}
-                onMouseLeave={() => this.setState({ tooltipOpen: false })}
+              <WrapperDivForHovering
+                onMouseEnter={() => this.setState({ publishTooltipOpen: true })}
+                onMouseLeave={() => this.setState({ publishTooltipOpen: false })}
               >
                 <SubmitButton
                   ref={this.submitDatasetButton}
                   disabled={disabledDueToReadOnly || disabledDueToMissingFieldsNonDraft}
-                  pointer-events="auto"
                   type="button"
                   onClick={useDoi === true ? this.showUseDoiInformation : this.handleCreatePublishedV1}
                 >
                   <Translate content="qvain.submit" />
                 </SubmitButton>
-              </div>
+              </WrapperDivForHovering>
             </TooltipHoverOnSave>
           )}
           {doiModal}
@@ -596,94 +596,183 @@ class SubmitButtons extends Component {
       )
     } // Metax API v1 end
 
+    // Metax API v2 start
+
     let submitDraft = null
     let submitPublished = null
 
+    // Metax v2, alternative 1: New dataset
     if (!original) {
       // new -> draft
       submitDraft = (
-        <SubmitButton
-          disabled={disabledDueToReadOnly || disabledDueToMissingFieldsDraft}
-          onClick={() => this.handleCreateNewDraft()}
+        <TooltipHoverOnSave
+          shouldBeDisplayed={disabledDueToMissingFieldsDraft}
+          isOpen={this.state.draftTooltipOpen}
+          Stores={this.props.Stores}
+          typeOfTooltip="draft"
         >
-          <Translate content="qvain.saveDraft" />
-        </SubmitButton>
+          <WrapperDivForHovering
+            onMouseEnter={() => this.setState({ draftTooltipOpen: true })}
+            onMouseLeave={() => this.setState({ draftTooltipOpen: false })}
+          >
+            <SubmitButton
+              disabled={disabledDueToReadOnly || disabledDueToMissingFieldsDraft}
+              onClick={() => this.handleCreateNewDraft()}
+            >
+              <Translate content="qvain.saveDraft" />
+            </SubmitButton>
+          </WrapperDivForHovering>
+        </TooltipHoverOnSave>
       )
 
       // new -> published
       submitPublished = (
-        <SubmitButton
-          disabled={disabledDueToReadOnly || disabledDueToMissingFieldsNonDraft}
-          onClick={() => this.handleCreateNewDraftAndPublish()}
+        <TooltipHoverOnSave
+          shouldBeDisplayed={disabledDueToMissingFieldsNonDraft}
+          isOpen={this.state.publishTooltipOpen}
+          Stores={this.props.Stores}
+          typeOfTooltip="publish"
         >
-          <Translate content="qvain.submit" />
-        </SubmitButton>
+          <WrapperDivForHovering
+            onMouseEnter={() => this.setState({ publishTooltipOpen: true })}
+            onMouseLeave={() => this.setState({ publishTooltipOpen: false })}
+          >
+            <SubmitButton
+              disabled={disabledDueToReadOnly || disabledDueToMissingFieldsNonDraft}
+              onClick={() => this.handleCreateNewDraftAndPublish()}
+            >
+              <Translate content="qvain.submit" />
+            </SubmitButton>
+          </WrapperDivForHovering>
+        </TooltipHoverOnSave>
       )
     }
 
+    // Metax v2, alternative 2: Update an existing draft
     if (original && original.state === 'draft') {
       // draft -> draft
       submitDraft = (
-        <SubmitButton
-          disabled={disabledDueToReadOnly || disabledDueToMissingFieldsDraft}
-          onClick={() => this.handleUpdate()}
+        <TooltipHoverOnSave
+          shouldBeDisplayed={disabledDueToMissingFieldsDraft}
+          isOpen={this.state.draftTooltipOpen}
+          Stores={this.props.Stores}
+          typeOfTooltip="draft"
         >
-          <Translate content="qvain.saveDraft" />
-        </SubmitButton>
+          <WrapperDivForHovering
+            onMouseEnter={() => this.setState({ draftTooltipOpen: true })}
+            onMouseLeave={() => this.setState({ draftTooltipOpen: false })}
+          >
+            <SubmitButton
+              disabled={disabledDueToReadOnly || disabledDueToMissingFieldsDraft}
+              onClick={() => this.handleUpdate()}
+            >
+              <Translate content="qvain.saveDraft" />
+            </SubmitButton>
+        </WrapperDivForHovering>
+        </TooltipHoverOnSave>
       )
 
       // draft -> published
       if (original.draft_of) {
         // merge draft of a published dataset
         submitPublished = (
-          <SubmitButton
-            disabled={disabledDueToReadOnly || disabledDueToMissingFieldsNonDraft}
-            onClick={() => this.handleMergeDraft()}
+          <TooltipHoverOnSave
+            shouldBeDisplayed={disabledDueToMissingFieldsNonDraft}
+            isOpen={this.state.publishTooltipOpen}
+            Stores={this.props.Stores}
+            typeOfTooltip="publish"
           >
-            <Translate content="qvain.submit" />
-          </SubmitButton>
+            <WrapperDivForHovering
+              onMouseEnter={() => this.setState({ publishTooltipOpen: true })}
+              onMouseLeave={() => this.setState({ publishTooltipOpen: false })}
+            >
+              <SubmitButton
+                disabled={disabledDueToReadOnly || disabledDueToMissingFieldsNonDraft}
+                onClick={() => this.handleMergeDraft()}
+              >
+                <Translate content="qvain.submit" />
+              </SubmitButton>
+            </WrapperDivForHovering>
+          </TooltipHoverOnSave>
         )
       } else {
         // publish draft dataset
         submitPublished = (
-          <SubmitButton
-            disabled={disabledDueToReadOnly || disabledDueToMissingFieldsNonDraft}
-            onClick={() => this.handlePublishDataset()}
+          <TooltipHoverOnSave
+            shouldBeDisplayed={disabledDueToMissingFieldsNonDraft}
+            isOpen={this.state.publishTooltipOpen}
+            Stores={this.props.Stores}
+            typeOfTooltip="publish"
           >
-            <Translate content="qvain.submit" />
-          </SubmitButton>
+            <WrapperDivForHovering
+              onMouseEnter={() => this.setState({ publishTooltipOpen: true })}
+              onMouseLeave={() => this.setState({ publishTooltipOpen: false })}
+            >
+              <SubmitButton
+                disabled={disabledDueToReadOnly || disabledDueToMissingFieldsNonDraft}
+                onClick={() => this.handlePublishDataset()}
+              >
+                <Translate content="qvain.submit" />
+              </SubmitButton>
+            </WrapperDivForHovering>
+          </TooltipHoverOnSave>
         )
       }
     }
 
+    // Metax v2, alternative 3: Update an existing dataset
     if (original && original.state !== 'draft') {
       // published -> draft
       submitDraft = (
+        <TooltipHoverOnSave
+        shouldBeDisplayed={disabledDueToMissingFieldsDraft}
+        isOpen={this.state.draftTooltipOpen}
+        Stores={this.props.Stores}
+        typeOfTooltip="draft"
+      >
+        <WrapperDivForHovering
+          onMouseEnter={() => this.setState({ draftTooltipOpen: true })}
+          onMouseLeave={() => this.setState({ draftTooltipOpen: false })}
+        >
         <SubmitButton
           disabled={disabledDueToReadOnly || disabledDueToMissingFieldsDraft}
           onClick={() => this.handleSaveAsDraft()}
         >
           <Translate content="qvain.saveDraft" />
         </SubmitButton>
+        </WrapperDivForHovering>
+          </TooltipHoverOnSave>
       )
 
       // published -> published
       submitPublished = (
-        <SubmitButton
-          disabled={disabledDueToReadOnly || disabledDueToMissingFieldsNonDraft}
-          onClick={() => this.handleUpdate()}
+        <TooltipHoverOnSave
+          shouldBeDisplayed={disabledDueToMissingFieldsNonDraft}
+          isOpen={this.state.publishTooltipOpen}
+          Stores={this.props.Stores}
+          typeOfTooltip="publish"
         >
-          <Translate content="qvain.submit" />
-        </SubmitButton>
+          <WrapperDivForHovering
+            onMouseEnter={() => this.setState({ publishTooltipOpen: true })}
+            onMouseLeave={() => this.setState({ publishTooltipOpen: false })}
+          >
+            <SubmitButton
+              disabled={disabledDueToReadOnly || disabledDueToMissingFieldsNonDraft}
+              onClick={() => this.handleUpdate()}
+            >
+              <Translate content="qvain.submit" />
+            </SubmitButton>
+          </WrapperDivForHovering>
+        </TooltipHoverOnSave>
       )
     }
 
     return (
-      <div ref={submitButtonsRef}>
+      <SubmitDivV2 ref={submitButtonsRef}>
         {submitDraft}
         {submitPublished}
         {doiModal}
-      </div>
+      </SubmitDivV2>
     )
   }
 }
@@ -695,6 +784,13 @@ const SubmitButton = styled(InvertedButton)`
   padding: 5px 30px;
   border-color: #007fad;
   border: 1px solid;
+`
+// Used for displaying the v2 buttons (save as draft & publish) on the same row
+const SubmitDivV2 = styled.div`
+`
+
+const WrapperDivForHovering = styled.div`
+  display:inline-block;
 `
 
 export default withRouter(inject('Stores')(observer(SubmitButtons)))

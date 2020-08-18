@@ -15,7 +15,7 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import translate from 'counterpart'
 
-const TooltipHoverOnSave = ({ isOpen, Stores, children, shouldBeDisplayed }) => {
+const TooltipHoverOnSave = ({ isOpen, Stores, children, shouldBeDisplayed, typeOfTooltip }) => {
   const wrapperTooltipButtonRef = useRef(null)
   const wrapperTooltipCardRef = useRef(null)
 
@@ -30,9 +30,22 @@ const TooltipHoverOnSave = ({ isOpen, Stores, children, shouldBeDisplayed }) => 
         {children}
       </span>
       <Wrapper ref={wrapperTooltipCardRef}>
-        <TooltipDown>
+        <TooltipDownV2>
           <TooltipArrowDown />
-          <TooltipTextBold>
+          {typeOfTooltip === "draft" ? (
+            <TooltipTextBold>
+            {translate('qvain.missingFieldsGeneralDraft.infoTitle')}
+            <TooltipText>
+              { // General fields (only title)
+                (Stores.Qvain.missingFieldsListGeneral.slice(0, 1).filter(
+                  element => (element.valueIsMissing === true) && (element.valueIsRequired === true)).map(filteredField => (
+                    `- ${translate(formatStringToTranslate('qvain.missingFieldsGeneral.', filteredField))} \n`
+                )))
+              }
+            </TooltipText>
+            </TooltipTextBold>
+          ) :(
+            <TooltipTextBold>
             {translate('qvain.missingFieldsGeneral.infoTitle')}
             <TooltipText>
               { // General fields
@@ -48,8 +61,12 @@ const TooltipHoverOnSave = ({ isOpen, Stores, children, shouldBeDisplayed }) => 
                 )))
               }
             </TooltipText>
-          </TooltipTextBold>
-        </TooltipDown>
+            </TooltipTextBold>
+          )
+        }
+
+          
+        </TooltipDownV2>
       </Wrapper>
     </>
   )
@@ -84,6 +101,24 @@ const TooltipDown = styled.div`
   margin-top: -5px;
   left: -160px;
   top: 0px;
+`
+
+const TooltipDownV2 = styled.div`
+  z-index: 10;
+  text-align: left;
+  text-align: start;
+  text-transform: none;
+  white-space: normal;
+  word-break: normal;
+  word-spacing: normal;
+  word-wrap: normal;
+  position: absolute;
+  color: ${props => props.theme.color.white}
+  border-radius: 5px;
+  display: inline-block;
+  margin-top: -5px;
+  left: -15em;
+  top: 30px;
 `
 
 const TooltipArrowDown = styled.div`

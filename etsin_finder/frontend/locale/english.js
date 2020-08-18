@@ -346,6 +346,9 @@ const english = {
       atLeastOneLicense: 'License (at least 1)',
       fileOrigin: 'File origin',
     },
+    missingFieldsGeneralDraft: {
+      infoTitle: 'Saving as draft requires the following fields',
+    },
     missingFieldsActors: {
       infoTitle: 'And actors:',
       creator: 'Creator',
