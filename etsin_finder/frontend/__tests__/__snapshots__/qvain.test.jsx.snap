@@ -429,6 +429,7 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
           "Qvain": [Circular],
           "actorInEdit": null,
           "actors": Array [],
+          "checkMissingFieldsActors": [Function],
           "createActor": [Function],
           "editDataset": [Function],
           "getDatasetOrganizations": [Function],
@@ -438,8 +439,21 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
           "isEqual": [Function],
           "isOrganizationEqual": [Function],
           "loadingReferenceOrganizations": Object {},
+          "missingFieldsListActors": Array [
+            Object {
+              "fieldName": "creator",
+              "valueIsMissing": true,
+              "valueIsRequired": true,
+            },
+            Object {
+              "fieldName": "publisher",
+              "valueIsMissing": true,
+              "valueIsRequired": false,
+            },
+          ],
           "referenceOrganizationErrors": Object {},
           "referenceOrganizations": Object {},
+          "stillMissingActorFields": true,
           "toBackend": [Function],
         },
         "Env": Env {
@@ -506,6 +520,9 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
           "url": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
         },
         "changed": false,
+        "checkMissingFieldsGeneral": [Function],
+        "checkIfAtLeastOneLicenseExists": [Function],
+        "checkMissingFieldsGeneralDraft": [Function],
         "createExternalResourceUIId": [Function],
         "cumulativeState": 0,
         "dataCatalog": undefined,
@@ -538,7 +555,7 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
         "inEdit": undefined,
         "infrastructure": undefined,
         "infrastructures": Array [],
-        "issuedDate": undefined,
+        "issuedDate": "2020-08-18",
         "keywordString": "",
         "keywordsArray": Array [],
         "license": Object {
@@ -548,6 +565,33 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
         "licenseArray": Array [],
         "mergeArraysByIdentifier": [Function],
         "metadataModalFile": undefined,
+        "missingFieldsListGeneral": Array [
+          Object {
+            "fieldName": "title",
+              "valueIsMissing": true,
+              "valueIsRequired": true,
+          },
+          Object {
+            "fieldName": "description",
+            "valueIsMissing": true,
+            "valueIsRequired": true,
+          },
+          Object {
+            "fieldName": "atLeastOneKeyword",
+            "valueIsMissing": true,
+            "valueIsRequired": true,
+          },
+          Object {
+            "fieldName": "atLeastOneLicense",
+            "valueIsMissing": true,
+            "valueIsRequired": false,
+          },
+          Object {
+            "fieldName": "fileOrigin",
+            "valueIsMissing": true,
+            "valueIsRequired": true,
+          },
+        ],
         "original": undefined,
         "otherIdentifier": "",
         "otherIdentifiersArray": Array [],
@@ -560,6 +604,8 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
         "selectedProject": undefined,
         "setOtherIdentifierValidationError": [Function],
         "spatials": Array [],
+        "stillMissingGeneralFields": true,
+        "stillMissingGeneralFieldsDraft": true,
         "title": Object {
           "en": "",
           "fi": "",
