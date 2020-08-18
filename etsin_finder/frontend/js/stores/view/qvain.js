@@ -1,5 +1,7 @@
 import { observable, action, computed, runInAction } from 'mobx'
 import axios from 'axios'
+import moment from 'moment'
+
 import { getDirectories, getFiles, deepCopy } from '../../components/qvain/utils/fileHierarchy'
 import urls from '../../components/qvain/utils/urls'
 import {
@@ -11,7 +13,6 @@ import Actors from './qvain.actors'
 import Files from './qvain.files'
 import Spatials, { SpatialModel } from './qvain.spatials'
 import uniqueByKey from '../../utils/uniqueByKey'
-import moment from 'moment'
 
 class Qvain {
   constructor(Env) {
@@ -188,7 +189,7 @@ class Qvain {
         valueIsMissing: true,
         valueIsRequired: true,
       },
-      { // [3] 
+      { // [3]
         fieldName: 'atLeastOneLicense',
         valueIsMissing: true,
         valueIsRequired: false,
@@ -570,7 +571,7 @@ class Qvain {
     if (selectedDataCatalog === DATA_CATALOG_IDENTIFIER.ATT) {
       this.useDoi = false
 
-      // Dataset is not IDA (and thus cannot be DOI) -> publisher does not have to be defined (actors [1] = publisher) 
+      // Dataset is not IDA (and thus cannot be DOI) -> publisher does not have to be defined (actors [1] = publisher)
       this.Actors.missingFieldsListActors[1].valueIsRequired = false
 
       // Also, license does not have to be defined
@@ -602,7 +603,7 @@ class Qvain {
     console.log(this.Actors.missingFieldsListActors[1].valueIsRequired)
 
     if (selectedUseDoiStatus === true) {
-      // If use_doi is checked, publisher must be defined ([1] = publisher) 
+      // If use_doi is checked, publisher must be defined ([1] = publisher)
       this.Actors.missingFieldsListActors[1].valueIsRequired = true
     } else {
       // ... otherwise, make sure publisher does not have to be defined

@@ -17,9 +17,9 @@ import PropTypes from 'prop-types'
 const TooltipHover = props => {
   const { position, children, ...restProps } = props
   return (
-      <Tip position={position.toLowerCase()} {...restProps} aria-hidden="true">
-        {children}
-      </Tip>
+    <Tip position={position.toLowerCase()} {...restProps} aria-hidden="true">
+      {children}
+    </Tip>
   )
 }
 
@@ -87,7 +87,7 @@ function getTipPosition(position) {
   }
 }
 
-const Tip  = styled.div.attrs(props => ({
+const Tip = styled.div.attrs(props => ({
   bg: props.theme.color.darkgray,
   fg: props.theme.color.white,
 }))`

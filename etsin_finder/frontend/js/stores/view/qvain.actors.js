@@ -507,7 +507,6 @@ class Actors {
       console.log('There is no publisher...')
       this.missingFieldsListActors[1].valueIsMissing = true
     }
-
   }
 
   @action saveActor = actor => {

@@ -543,7 +543,7 @@ class SubmitButtons extends Component {
     // let disabledDueToMissingFieldsDraft = Stores.Qvain.stillMissingGeneralFieldsDraft
 
     // All required fields must be set in order to publish
-    let disabledDueToMissingFieldsNonDraft = Stores.Qvain.stillMissingGeneralFields || Stores.Qvain.Actors.stillMissingActorFields
+    const disabledDueToMissingFieldsNonDraft = Stores.Qvain.stillMissingGeneralFields || Stores.Qvain.Actors.stillMissingActorFields
 
     console.log('General fields still missing: ', Stores.Qvain.stillMissingGeneralFields)
 
@@ -568,34 +568,34 @@ class SubmitButtons extends Component {
                 isOpen={this.state.tooltipOpen}
                 Stores={this.props.Stores}
               >
-                <div 
-                  onMouseEnter	={() =>
+                <div
+                  onMouseEnter={() =>
                     this.setState({
                       tooltipOpen: true,
                     })
                   }
-                  onMouseLeave	={() =>
+                  onMouseLeave={() =>
                     this.setState({
                       tooltipOpen: false,
                     })
-                }>
-                <SubmitButton
-                  ref={this.updateDatasetButton}
-                  disabled
-                  type="button"
-                  onClick={this.handleUpdateV1}
-                >
+                  }>
+                  <SubmitButton
+                    ref={this.updateDatasetButton}
+                    disabled
+                    type="button"
+                    onClick={this.handleUpdateV1}
+                  >
                   <Translate content="qvain.edit" />
                 </SubmitButton>
                 </div>
               </TooltipHoverOnSave>
             ) : (
               <TooltipHoverOnSave
-              shouldBeDisplayed={disabledDueToMissingFieldsNonDraft}
-              isOpen={this.state.tooltipOpen}
-              Stores={this.props.Stores}
-            >
-                              <div 
+                shouldBeDisplayed={disabledDueToMissingFieldsNonDraft}
+                isOpen={this.state.tooltipOpen}
+                Stores={this.props.Stores}
+              >
+                <div 
                   onMouseEnter	={() =>
                     this.setState({
                       tooltipOpen: true,
@@ -612,12 +612,12 @@ class SubmitButtons extends Component {
                 pointer-events="auto"
                 type="button"
                 onClick={this.handleUpdateV1}
-                onMouseEnter	={() =>
+                onMouseEnter={() =>
                   this.setState({
                     tooltipOpen: true,
                   })
                 }
-                onMouseLeave	={() =>
+                onMouseLeave={() =>
                   this.setState({
                     tooltipOpen: false,
                   })
@@ -651,7 +651,7 @@ class SubmitButtons extends Component {
                   pointer-events="auto"
                   type="button"
                   onClick={useDoi === true ? this.showUseDoiInformation : this.handleCreatePublishedV1}
-                  onMouseEnter	={() =>
+                  onMouseEnter={() =>
                     this.setState({
                       tooltipOpen: true,
                     })
@@ -661,7 +661,6 @@ class SubmitButtons extends Component {
                       tooltipOpen: false,
                     })
                   }
-                  
                 >
                   <Translate content="qvain.submit" />
                 </SubmitButton>
