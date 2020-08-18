@@ -361,6 +361,10 @@ class Qvain {
   removeKeyword = (keyword) => {
     this.keywordsArray = this.keywordsArray.filter((word) => word !== keyword)
     this.changed = true
+
+    // Update missing status
+    this.checkIfAtLeastOneKeywordExists()
+    this.checkMissingFieldsGeneral()
   }
 
   @action
@@ -380,6 +384,12 @@ class Qvain {
     this.keywordsArray = keywords
     this.changed = true
 
+    // Update missing status
+    this.checkIfAtLeastOneKeywordExists()
+    this.checkMissingFieldsGeneral()
+  }
+
+  checkIfAtLeastOneKeywordExists() {
     // Missing field [2]: At least one keyword is set and thus keywords is no longer empty
     if (this.keywordsArray.length > 0) {
       this.missingFieldsListGeneral[2].valueIsMissing = false
@@ -387,8 +397,6 @@ class Qvain {
     } else {
       this.missingFieldsListGeneral[2].valueIsMissing = true
     }
-    // Update missing status
-    this.checkMissingFieldsGeneral()
   }
 
   @action
@@ -440,17 +448,15 @@ class Qvain {
     this.license.name = name // only affects license display, should not trigger this.changed
   }
 
-  // Check if at least one license have been defined
-  checkIfAtLeastOneLicenseExists = (licenseArray) => {
-    console.log('licenseArray is: ', licenseArray.length)
-    if (licenseArray.length > 0) {
+  checkIfAtLeastOneLicenseExists = () => {
+    console.log(this.licenseArray)
+    if (this.licenseArray.length > 0) {
       this.missingFieldsListGeneral[3].valueIsMissing = false
+      console.log('There are no licenses it wasnt set')
     } else {
       this.missingFieldsListGeneral[3].valueIsMissing = true
+      console.log('There are  licenses it was set')
     }
-
-    // Update missing status
-    this.checkMissingFieldsGeneral()
   }
 
   @action
@@ -474,7 +480,10 @@ class Qvain {
       }
       this.license = undefined
     }
-    this.checkIfAtLeastOneLicenseExists(this.licenseArray)
+
+    // Update missing status
+    this.checkIfAtLeastOneLicenseExists()
+    this.checkMissingFieldsGeneral()
   }
 
   @action
@@ -483,7 +492,10 @@ class Qvain {
       l => l.identifier !== license.identifier
     )
     this.changed = true
-    this.checkIfAtLeastOneLicenseExists(this.licenseArray)
+
+    // Update missing status
+    this.checkIfAtLeastOneLicenseExists()
+    this.checkMissingFieldsGeneral()
   }
 
   @action
@@ -1150,6 +1162,10 @@ class Qvain {
     if (this.selectedFiles !== undefined || this.selectedDirectories !== undefined || this.externalResources !== undefined) {
       console.log('File origin is not missing')
       this.missingFieldsListGeneral[4].valueIsMissing = false
+      if (this.selectedFiles || this.selectedDirectories) {
+        console.log('license must be set')
+        this.missingFieldsListGeneral[3].valueIsRequired = true
+      }
     }
 
     // Finally, check the general status
