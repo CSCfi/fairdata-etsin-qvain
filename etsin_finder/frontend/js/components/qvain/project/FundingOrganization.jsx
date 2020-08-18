@@ -5,17 +5,15 @@ import { inject, observer } from 'mobx-react'
 import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
-import axios from 'axios'
 
 import Card from '../general/card'
 import OrganizationSelect from '../general/organizationSelect'
-import { ErrorMessages } from './utils'
+import { ErrorMessages, validate, validateSync, isEmptyObject, organizationToSelectValue } from './utils'
 import Button from '../../general/button'
 import Label from '../general/label'
 
 import { Organization } from '../../../stores/view/qvain'
 import { organizationSelectSchema } from '../utils/formValidation'
-import { getOrganizationSearchUrl } from '../../../stores/view/qvain.actors'
 
 
 const FundingOrganization = props => {
@@ -29,7 +27,7 @@ const FundingOrganization = props => {
   const onBlur = async field => {
     const { formData } = props.organizations
     const { name, value, email } = formData[field]
-    const errors = await validate({ name, identifier: value, email })
+    const errors = await validate(organizationSelectSchema, { name, identifier: value, email })
     props.onChange({ ...formData, [field]: { ...formData[field], errors } })
   }
 
@@ -40,11 +38,12 @@ const FundingOrganization = props => {
     const organizationToEdit = props.organizations.addedOrganizations
       .find(org => org.id === id)
     if (!organizationToEdit) return
+    const { lang } = props.Stores.Locale
     const { organization, department, subDepartment } = organizationToEdit
-    const departmentValue = await organizationToSelectValue(department, organization ? organization.identifier : null)
-    const subDepartmentValue = await organizationToSelectValue(subDepartment, department ? department.identifier : null)
+    const departmentValue = await organizationToSelectValue(department, lang, organization ? organization.identifier : null)
+    const subDepartmentValue = await organizationToSelectValue(subDepartment, lang, department ? department.identifier : null)
     props.onChange({
-      organization: { ...await organizationToSelectValue(organization) },
+      organization: { ...await organizationToSelectValue(organization, lang) },
       department: departmentValue ? { ...departmentValue } : undefined,
       subDepartment: subDepartmentValue ? { ...subDepartmentValue } : undefined,
       id,
@@ -53,28 +52,6 @@ const FundingOrganization = props => {
 
   const onRemove = id => props.onRemoveOrganization(id)
 
-  /**
-   * Convert already added and valid organization to value for select.
-   * Note: We need to check if value is manually added or selected from
-   * reference data. If manually added, we need to display the form.
-   *
-   * @param {Object} organization Organization to convert
-   * @param {String || null} parentId Parent id for organization,
-   * used to check if organization is manually added
-   */
-  const organizationToSelectValue = async (organization, parentId) => {
-    if (!organization) return undefined
-    const { lang } = props.Stores.Locale
-    const { identifier, name, email } = organization
-    const isCustomOrg = await isCustomOrganization(identifier, parentId)
-    return {
-      value: identifier || '',
-      label: name[lang] || name.und,
-      name: { ...name },
-      email,
-      formIsOpen: isCustomOrg,
-    }
-  }
 
   /**
    * Validate all organization levels and set errors.
@@ -85,7 +62,7 @@ const FundingOrganization = props => {
     const { formData } = props.organizations
     for (const [key, value] of Object.entries(organizations)) {
       if (value) {
-        const errors = validateSync(value)
+        const errors = validateSync(organizationSelectSchema, value)
         formData[key].errors = errors
         if (!isEmptyObject(errors)) valid = false
       }
@@ -99,11 +76,15 @@ const FundingOrganization = props => {
    * create an organization object and call parent on add organization.
    */
   const addOrganization = () => {
-    const { organization, department, subDepartment, id } = props.organizations.formData
+    const { formData } = props.organizations
+    const organization = selectValueToSchema(formData.organization)
+    const department = selectValueToSchema(formData.department)
+    const subDepartment = selectValueToSchema(formData.subDepartment)
     if (!validateAll({ organization, department, subDepartment })) return
-    const params = [id, { identifier: organization.value, name: organization.name, email: organization.email }]
-    if (department) params.push({ identifier: department.value, name: department.name, email: department.email })
-    if (subDepartment) params.push({ identifier: subDepartment.value, name: subDepartment.name, email: subDepartment.email })
+    const { id } = props.organizations.formData
+    const params = [id, organization]
+    if (department) params.push(department)
+    if (subDepartment) params.push(subDepartment)
     const organizationToAdd = Organization(...params)
     props.onAddOrganization(organizationToAdd)
   }
@@ -162,62 +143,10 @@ const AddedOrganizations = ({ organizations = [], onRemove, onEdit, lang }) => (
   ))
 )
 
-/**
- * Check if given identifier can be found from reference data.
- * If not, the organization is likely manually entered.
- *
- * @param {String} identifier
- * @param {String} parentId parent organization identifier
- */
-async function isCustomOrganization(identifier, parentId) {
-  if (!identifier) return false
-  const url = getOrganizationSearchUrl(parentId)
-  const response = await axios.get(url)
-  if (response.status !== 200) return null
-  const { hits } = response.data.hits
-  return hits.every(hit => hit._source.uri !== identifier)
-}
-
-/**
- * Validate an organization async. Returns validation errors,
- * if valid an empty array will be returned.
- */
-async function validate(organization) {
-  try {
-    await organizationSelectSchema.validate(organization, { abortEarly: false })
-    return []
-  } catch (validationErrors) {
-    return parseValidationErrors(validationErrors)
-  }
-}
-
-/**
- * Validate an organization in sync. Returns validation errors,
- * if valid an empty array will be returned.
- */
-function validateSync(organization) {
-  try {
-    organizationSelectSchema.validateSync(organization, { abortEarly: false })
-    return []
-  } catch (validationErrors) {
-    return parseValidationErrors(validationErrors)
-  }
-}
-
-/**
- * Parse yup validation errors to object like {field: [errors]}
- */
-function parseValidationErrors(validationErrors) {
-  const errors = {}
-  validationErrors.inner.forEach(error => {
-    const path = error.path.split('.')
-    errors[path[0]] = error.errors
-  })
-  return errors
-}
-
-function isEmptyObject(obj = {}) {
-  return Object.getOwnPropertyNames(obj).length === 0
+function selectValueToSchema(organization) {
+  if (!organization) return null
+  const { name, email, value } = organization
+  return { name: { ...name }, email, identifier: value }
 }
 
 const AddOrganizationContainer = styled.div`

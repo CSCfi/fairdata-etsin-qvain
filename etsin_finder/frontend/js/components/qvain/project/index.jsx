@@ -15,6 +15,8 @@ import { ButtonGroup, ButtonLabel, EditButton, ButtonContainer, CancelButton, De
 import TooltipContent from './TooltipContent'
 import ProjectForm from './ProjectForm'
 import FundingOrganization from './FundingOrganization'
+import FundingAgency from './FundingAgency'
+import { Expand } from './utils'
 
 const FIELD_PROPS = {
   translations: {
@@ -42,6 +44,17 @@ const INITIAL_STATE = {
     formData: {}, // {organization: {value, name, ...}, department, subDepartment}
     errors: [],
   },
+  fundingAgency: {
+    formData: {
+      id: null,
+      organization: {}, // {organization: {value, name, ...}, department, subDepartment, errors}
+      contributorTypeForm: {
+        errors: {},
+      }, // Identifier, label fi en, definiton fi en, inscheme, errors
+      contributorTypes: [], // array of contributor types
+    },
+    addedFundingAgencies: [],
+  },
 }
 
 class Project extends Component {
@@ -50,6 +63,7 @@ class Project extends Component {
     projectInEdit: false,
     details: { ...INITIAL_STATE.details },
     organizations: { ...INITIAL_STATE.organizations },
+    fundingAgency: { ...INITIAL_STATE.fundingAgency },
   }
 
   static propTypes = {
@@ -82,6 +96,34 @@ class Project extends Component {
       .filter(organization => organization.id !== id)
     this.setState({
       organizations: { ...organizations, addedOrganizations: updatedProjectOrganizations, formData: {} }
+    })
+  }
+
+  onFundingAgencyChange = value => {
+    const { fundingAgency } = this.state
+    this.setState({ fundingAgency: { ...fundingAgency, formData: value } })
+  }
+
+  onAddFundingAgency = newFundingAgency => {
+    const { fundingAgency } = this.state
+    const oldFundingAgencies = fundingAgency.addedFundingAgencies
+      .filter(agency => agency.id !== newFundingAgency.id)
+    const addedFundingAgencies = oldFundingAgencies.concat([newFundingAgency])
+    this.setState({ fundingAgency: {
+      addedFundingAgencies,
+      formData: { ...INITIAL_STATE.fundingAgency.formData }
+    } })
+  }
+
+  onRemoveFundingAgency = id => {
+    const { fundingAgency } = this.state
+    const addedFundingAgencies = fundingAgency.addedFundingAgencies
+      .filter(agency => agency.id !== id)
+    this.setState({
+      fundingAgency: {
+        ...fundingAgency,
+        addedFundingAgencies,
+      }
     })
   }
 
@@ -146,11 +188,12 @@ class Project extends Component {
       details: { ...INITIAL_STATE.details },
       organizations: { ...INITIAL_STATE.organizations },
       projectInEdit: false,
+      fundingAgency: { ...INITIAL_STATE.fundingAgency },
     })
   }
 
   render() {
-    const { details, organizations, projectInEdit } = this.state
+    const { details, organizations, projectInEdit, fundingAgency } = this.state
     const { readonly } = this.props.Stores.Qvain
     return (
       <Field {...FIELD_PROPS}>
@@ -165,6 +208,16 @@ class Project extends Component {
             onRemoveOrganization={this.onRemoveOrganization}
             organizations={organizations}
           />
+          <Expand
+            title={<Translate component="h3" content="qvain.project.fundingAgency.title" />}
+          >
+            <FundingAgency
+              onChange={this.onFundingAgencyChange}
+              onAdd={this.onAddFundingAgency}
+              onRemove={this.onRemoveFundingAgency}
+              value={fundingAgency}
+            />
+          </Expand>
           <Actions>
             <Translate
               component={CancelButton}
