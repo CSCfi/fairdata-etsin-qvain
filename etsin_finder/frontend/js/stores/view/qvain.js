@@ -351,6 +351,9 @@ class Qvain {
       this.setInfrastructures([...this.infrastructures, this.infrastructure])
       this.setInfrastructure(undefined)
     }
+    if ((this.Temporals.inEdit || {}).startDate && (this.Temporals.inEdit || {}).endDate) {
+      this.Temporals.save()
+    }
   }
 
   @action
