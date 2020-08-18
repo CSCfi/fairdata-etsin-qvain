@@ -564,6 +564,7 @@ class SubmitButtons extends Component {
           {original ? (
             disabledDueToMissingFieldsNonDraft ? (
               <TooltipHoverOnSave
+                shouldBeDisplayed={disabledDueToMissingFieldsNonDraft}
                 isOpen={this.state.tooltipOpen}
                 Stores={this.props.Stores}
               >
@@ -590,6 +591,7 @@ class SubmitButtons extends Component {
               </TooltipHoverOnSave>
             ) : (
               <TooltipHoverOnSave
+              shouldBeDisplayed={disabledDueToMissingFieldsNonDraft}
               isOpen={this.state.tooltipOpen}
               Stores={this.props.Stores}
             >
@@ -628,6 +630,7 @@ class SubmitButtons extends Component {
             )
           ) : (
             <TooltipHoverOnSave
+              shouldBeDisplayed={disabledDueToMissingFieldsNonDraft}
               isOpen={this.state.tooltipOpen}
               Stores={this.props.Stores}
             >

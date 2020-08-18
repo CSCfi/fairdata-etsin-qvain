@@ -15,7 +15,7 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import translate from 'counterpart'
 
-const TooltipHoverOnSave = ({ isOpen, Stores, children }) => {
+const TooltipHoverOnSave = ({ isOpen, Stores, children, shouldBeDisplayed }) => {
   const wrapperTooltipButtonRef = useRef(null)
   const wrapperTooltipCardRef = useRef(null)
 
@@ -48,7 +48,7 @@ const TooltipHoverOnSave = ({ isOpen, Stores, children }) => {
           </Wrapper>
         </>
       )
-  return isOpen ? tooltip : children
+  return (isOpen && shouldBeDisplayed) ? tooltip : children
 }
 
 TooltipHoverOnSave.propTypes = {
