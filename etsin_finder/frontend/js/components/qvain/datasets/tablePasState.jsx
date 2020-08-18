@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
 
-import { PreservationStates } from '../utils/constants'
+import { PRESERVATION_STATE } from '../../../utils/constants'
 import Label from '../general/label'
 
 const TablePasState = ({ preservationState }) => {
@@ -60,7 +60,7 @@ const TablePasState = ({ preservationState }) => {
   }
   return (
     <>
-      <PasLabel color={PreservationStates[preservationState].color}>PAS</PasLabel>
+      <PasLabel color={PRESERVATION_STATE[preservationState].color}>PAS</PasLabel>
       {text}
     </>
   )

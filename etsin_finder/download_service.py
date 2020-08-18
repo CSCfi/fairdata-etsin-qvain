@@ -21,10 +21,11 @@ class DownloadAPIService(FlaskService):
     """Download API Service"""
 
     def __init__(self, app):
-        """
-        Setup Download API Service.
+        """Setup Download API Service.
 
-        :param dl_api_config:
+        Args:
+            app (object): flask.Flask object instance.
+
         """
         super().__init__(app)
 
@@ -32,20 +33,23 @@ class DownloadAPIService(FlaskService):
 
         if dl_api_config:
             self.API_BASE_URL = 'https://{0}:{1}/secure/api/v1/dataset'.format(
-                dl_api_config['HOST'], dl_api_config['PORT']) + '/{0}'
-            self.USER = dl_api_config['USER']
-            self.PASSWORD = dl_api_config['PASSWORD']
+                dl_api_config.get('HOST'), dl_api_config.get('PORT')) + '/{0}'
+            self.USER = dl_api_config.get('USER')
+            self.PASSWORD = dl_api_config.get('PASSWORD')
         elif not self.is_testing:
             log.error('Unable to initialize DownloadAPIService due to missing config')
 
     def download(self, cr_id, file_ids, dir_ids):
-        """
-        Download files from Download API.
+        """Download files from Download API.
 
-        :param cr_id:
-        :param file_ids:
-        :param dir_ids:
-        :return:
+        Args:
+            cr_id (string): Catalog record identifier.
+            file_ids (list): File identifiers.
+            dir_ids (list): Directory identifiers.
+
+        Returns:
+            flask.Response: If success, stream the download to the frontend, else, return an unsuccessfull response.
+
         """
         if self.is_testing:
             return self._get_error_response(200)
@@ -73,23 +77,45 @@ class DownloadAPIService(FlaskService):
                                 status=dl_api_response.status_code)
 
             if 'Content-Type' in dl_api_response.headers:
-                response.headers['Content-Type'] = dl_api_response.headers['Content-Type']
+                response.headers['Content-Type'] = dl_api_response.headers.get('Content-Type')
             if 'Content-Disposition' in dl_api_response.headers:
-                response.headers['Content-Disposition'] = dl_api_response.headers['Content-Disposition']
+                response.headers['Content-Disposition'] = dl_api_response.headers.get('Content-Disposition')
             if 'Content-Length' in dl_api_response.headers:
-                response.headers['Content-Length'] = dl_api_response.headers['Content-Length']
+                response.headers['Content-Length'] = dl_api_response.headers.get('Content-Length')
 
             log.debug('Download URL: {0} Responded with HTTP status {1}'.format(url, dl_api_response.status_code))
             return response
 
     @staticmethod
     def _get_error_response(status_code):
+        """Create an error response
+
+        Args:
+            status_code (int): The status code returned from the response.
+
+        Returns:
+            flask.Response: A flask Response object with the correct error.
+
+        """
         response = Response(status=status_code)
         response.headers['Content-Type'] = 'application/octet-stream'
         response.headers['Content-Disposition'] = 'attachment; filename="error"'
         return response
 
     def _create_url(self, cr_id, file_ids, dir_ids):
+        """Create url
+
+        Create a formatted url form the arguments to use with download.
+
+        Args:
+            cr_id (str): The catalog record identifier.
+            file_ids (list): List with the file identifiers.
+            dir_ids (list): List with the directory identifiers.
+
+        Returns:
+            str: Returns a formatted url.
+
+        """
         url = self.API_BASE_URL.format(cr_id)
         if file_ids or dir_ids:
             params = ''
@@ -107,12 +133,5 @@ _dl_api = DownloadAPIService(app)
 
 
 def download_data(cr_id, file_ids, dir_ids):
-    """
-    Public method for downloading data from Download API.
-
-    :param cr_id:
-    :param file_ids:
-    :param dir_ids:
-    :return:
-    """
+    """Public method for downloading data from Download API."""
     return _dl_api.download(cr_id, file_ids, dir_ids)

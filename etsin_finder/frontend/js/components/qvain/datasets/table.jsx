@@ -7,7 +7,7 @@ import axios from 'axios'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import { Table, TableHeader, Row, HeaderCell, TableBody, TableNote } from '../general/table'
-import { DatasetUrls } from '../utils/constants'
+import { DATASET_URLS } from '../../../utils/constants'
 import Modal from '../../general/modal'
 import DatasetPagination from './pagination'
 import { TableButton, DangerButton } from '../general/buttons'
@@ -15,6 +15,7 @@ import { FormField, Input, Label as inputLabel } from '../general/form'
 import DatasetGroup from './datasetGroup'
 import { filterGroupsByTitle, groupDatasetsByVersionSet } from './filter'
 import etsinTheme from '../../../styles/theme'
+import Tracking from '../../../utils/tracking'
 
 class DatasetTable extends Component {
   minOfDataSetsForSearchTool = 5
@@ -23,6 +24,9 @@ class DatasetTable extends Component {
 
   static propTypes = {
     history: PropTypes.object.isRequired,
+    location: PropTypes.shape({
+      pathname: PropTypes.string,
+    }).isRequired,
     Stores: PropTypes.object.isRequired,
   }
 
@@ -64,9 +68,9 @@ class DatasetTable extends Component {
     this.setState({ loading: true, error: false, errorMessage: '' })
     let url
     if (this.props.Stores.Qvain.metaxApiV2) {
-      url = `${DatasetUrls.V2_USER_DATASETS_URL}${this.props.Stores.Auth.user.name}?no_pagination=true`
+      url = `${DATASET_URLS.V2_USER_DATASETS_URL}${this.props.Stores.Auth.user.name}?no_pagination=true`
     } else {
-      url = `${DatasetUrls.USER_DATASETS_URL}${this.props.Stores.Auth.user.name}?no_pagination=true`
+      url = `${DATASET_URLS.USER_DATASETS_URL}${this.props.Stores.Auth.user.name}?no_pagination=true`
     }
     const promise = axios
       .get(url)
@@ -101,7 +105,7 @@ class DatasetTable extends Component {
       console.error('Metax API V2 is required for creating a new version')
       return
     }
-    const promise = axios.post(DatasetUrls.V2_CREATE_NEW_VERSION, null, {
+    const promise = axios.post(DATASET_URLS.V2_CREATE_NEW_VERSION, null, {
       params: { identifier },
     })
     this.promises.push(promise)
@@ -114,15 +118,16 @@ class DatasetTable extends Component {
     event.preventDefault()
     const { metaxApiV2 } = this.props.Stores.Qvain
 
-    let url = `${DatasetUrls.DATASET_URL}/${identifier}`
+    let url = `${DATASET_URLS.DATASET_URL}/${identifier}`
     if (metaxApiV2) {
-      url = `${DatasetUrls.V2_DATASET_URL}/${identifier}`
+      url = `${DATASET_URLS.V2_DATASET_URL}/${identifier}`
     }
 
     const promise = axios
       .delete(url)
       .then(() => {
         const datasets = [...this.state.datasets.filter((d) => d.identifier !== identifier)]
+        Tracking.trackEvent('Dataset', ' Removed', this.props.location.pathname)
         this.setState(
           (state) => ({
             datasets,

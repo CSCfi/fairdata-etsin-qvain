@@ -15,31 +15,18 @@ export class ProjectSelectorBase extends Component {
     disabled: false
   }
 
-  getOptions = () => {
-    const { environment } = this.props.Stores.Env
-
-    let projects
-
+  getOptions() {
+    // IDA groups found, so populate the IDA project dropdown
     if (this.props.Stores.Auth.user.idaGroups) {
-      projects = this.props.Stores.Auth.user.idaGroups
+      return this.props.Stores.Auth.user.idaGroups
         .filter(group => group.includes('IDA'))
         .map(group => group.substring(
           group.indexOf(':') + 1,
           group.length
         ))
         .map(projectId => ({ value: projectId, label: projectId }))
-    }
-
-    if ((environment === 'development') && (projects === undefined)) {
-      return [
-        { value: 'project_x', label: 'project_x' },
-        { value: 'empty', label: 'test nonexistant IDA project' }
-      ]
-    }
-
-    return environment === 'test' ?
-      [...projects, { value: 'project_x', label: 'project_x' }] :
-      projects
+    } // ... Otherwise the dropdown will be left empty, but visible, if the user has no IDA projects.
+      return undefined
   }
 
   handleOnChange = (selectedOption) => {
@@ -48,10 +35,16 @@ export class ProjectSelectorBase extends Component {
 
   render() {
     const options = this.getOptions()
-    // if editing an existing dataset, user cannot link files from another project. - 10.6.2019
-    const selected = options.find(opt => opt.value === this.props.Stores.Qvain.Files.selectedProject)
-    const { disabled } = this.props
 
+    // If editing an existing dataset, user cannot link files from another project. - 10.6.2019
+
+    let selected
+
+    // Error handling for the case where the user wants to publish an IDA dataset but has no IDA projects
+    if (options) {
+      selected = options.find(opt => opt.value === this.props.Stores.Qvain.Files.selectedProject)
+    }
+    const { disabled } = this.props
     const { error } = this.props.Stores.Qvain.Files.loadingProject || {}
     const notFound = error && error.response && error.response.status === 404
     return (

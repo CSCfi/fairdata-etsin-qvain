@@ -28,15 +28,13 @@ import checkNested from '../../utils/checkNested'
 import checkDataLang, { getDataLang } from '../../utils/checkDataLang'
 import Button from '../general/button'
 import Modal from '../general/modal'
-import { accessTypes } from '../../stores/view/access'
+import { ACCESS_TYPE_URL } from '../../utils/constants'
 
 export const accessRightsBool = accessRights => {
-  const openValue = 'http://uri.suomi.fi/codelist/fairdata/access_type/code/open'
-
   if (accessRights !== undefined && accessRights !== null) {
     // check access_type
     if (checkNested(accessRights, 'access_type')) {
-      if (accessRights.access_type.identifier === openValue) {
+      if (accessRights.access_type.identifier === ACCESS_TYPE_URL.OPEN) {
         return true
       }
     }
@@ -57,8 +55,8 @@ class AccessRights extends Component {
         title = props.access_rights.access_type.pref_label
       }
       identifier = props.access_rights.access_type.identifier
-      id = Object.keys(accessTypes).find(key => accessTypes[key] === identifier)
-      description = translate(`dataset.access_rights_description.${id !== undefined ? id : ''}`)
+      id = Object.keys(ACCESS_TYPE_URL).find(key => ACCESS_TYPE_URL[key] === identifier)
+      description = translate(`dataset.access_rights_description.${id !== undefined ? id.toLowerCase() : ''}`)
       url = props.access_rights.access_url
     }
     this.state = {

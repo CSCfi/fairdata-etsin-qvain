@@ -33,6 +33,7 @@ const english = {
     catalog_publisher: 'Catalog publisher',
     citation: 'Citation / Reference',
     citation_formats: 'Show more citation formats',
+    citationNoDateIssued: 'Issued date not defined',
     contact: {
       access: 'Contact the curator on issues related to dataset access',
       contact: 'Contact',
@@ -232,6 +233,11 @@ const english = {
     language: {
       toggleLabel: 'Toggle language',
     },
+    cookies: {
+      accept: 'Accept all cookies',
+      infoText: 'By using Fairdata’s services you agree to our Cookies Use. We use cookies to improve your experience and make our services work better.',
+      link: 'View the Fairdata Privacy Policy.',
+    }
   },
   home: {
     title: 'Search datasets',
@@ -479,6 +485,14 @@ const english = {
         placeholder: 'Select option',
         addButton: 'Add field of science',
         help: 'You can add multiple field of science.',
+      },
+      datasetLanguage: {
+        title: 'Dataset language',
+        infoText: 'Select languages used in the dataset.',
+        placeholder: 'Type to search language',
+        noResults: 'No languages found',
+        addButton: 'Add language',
+        help: 'You can add multiple languages.'
       },
       keywords: {
         title: 'Keywords',

@@ -9,16 +9,16 @@ import styled from 'styled-components'
 import Card from '../general/card'
 import { dataCatalogSchema } from '../utils/formValidation'
 import ValidationError from '../general/validationError'
-import { DataCatalogIdentifiers } from '../utils/constants'
+import { DATA_CATALOG_IDENTIFIER } from '../../../utils/constants'
 import { Checkbox, LabelLarge } from '../general/form'
 import etsinTheme from '../../../styles/theme'
 
 let options = [
-  { value: DataCatalogIdentifiers.IDA, label: translate('qvain.files.dataCatalog.ida') },
-  { value: DataCatalogIdentifiers.ATT, label: translate('qvain.files.dataCatalog.att') },
+  { value: DATA_CATALOG_IDENTIFIER.IDA, label: translate('qvain.files.dataCatalog.ida') },
+  { value: DATA_CATALOG_IDENTIFIER.ATT, label: translate('qvain.files.dataCatalog.att') },
 ]
 let pasOptions = [
-  { value: DataCatalogIdentifiers.PAS, label: translate('qvain.files.dataCatalog.pas') },
+  { value: DATA_CATALOG_IDENTIFIER.PAS, label: translate('qvain.files.dataCatalog.pas') },
 ]
 
 class DataCatalog extends Component {
@@ -38,11 +38,11 @@ class DataCatalog extends Component {
 
   updateOptions = () => {
     options = [
-      { value: DataCatalogIdentifiers.IDA, label: translate('qvain.files.dataCatalog.ida') },
-      { value: DataCatalogIdentifiers.ATT, label: translate('qvain.files.dataCatalog.att') },
+      { value: DATA_CATALOG_IDENTIFIER.IDA, label: translate('qvain.files.dataCatalog.ida') },
+      { value: DATA_CATALOG_IDENTIFIER.ATT, label: translate('qvain.files.dataCatalog.att') },
     ]
     pasOptions = [
-      { value: DataCatalogIdentifiers.PAS, label: translate('qvain.files.dataCatalog.pas') },
+      { value: DATA_CATALOG_IDENTIFIER.PAS, label: translate('qvain.files.dataCatalog.pas') },
     ]
   }
 
@@ -110,7 +110,7 @@ class DataCatalog extends Component {
             })
 
             // Uncheck useDoi checkbox if data catalog is ATT
-            if (selection.value === 'urn:nbn:fi:att:data-catalog-att') {
+            if (selection.value === DATA_CATALOG_IDENTIFIER.ATT) {
               this.setState({
                 useDoi: false,
               })

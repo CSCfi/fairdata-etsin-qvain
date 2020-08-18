@@ -24,6 +24,7 @@ import DropdownMenu from './dropdownMenu'
 import LangToggle from './langToggle'
 import Login from './loginButton'
 import { Link } from '../button'
+import { QVAIN_URL } from '../../../utils/constants'
 
 export default class MobileNavi extends React.Component {
   render() {
@@ -56,7 +57,7 @@ export default class MobileNavi extends React.Component {
                 <Link
                   width="100%"
                   margin="0em 0em 0.6em 0em"
-                  href="https://qvain.fairdata.fi"
+                  href={QVAIN_URL}
                   rel="noopener noreferrer"
                   target="_blank"
                 >

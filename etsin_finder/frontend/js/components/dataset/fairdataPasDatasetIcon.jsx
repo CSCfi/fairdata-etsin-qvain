@@ -16,11 +16,13 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 
+import { DATA_CATALOG_IDENTIFIER } from '../../utils/constants'
+
 const FairdataPasDatasetIcon = (props) => {
     if (
       (`${props.preservation_state}` > 0)
       &&
-      (`${props.data_catalog_identifier}` !== 'urn:nbn:fi:att:data-catalog-pas')
+      (`${props.data_catalog_identifier}` !== DATA_CATALOG_IDENTIFIER.PAS)
     ) {
       return (
         <FairdataPasIconContainerEnteringPas>

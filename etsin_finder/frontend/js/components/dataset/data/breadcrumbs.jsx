@@ -21,6 +21,7 @@ import { faHome } from '@fortawesome/free-solid-svg-icons'
 import { TransparentButton } from '../../general/button'
 import DatasetIsCumulativeNotificationBar from '../../general/datasetIsCumulativeNotificationBar'
 import FairdataPasDatasetIcon from '../fairdataPasDatasetIcon';
+import { DATA_CATALOG_IDENTIFIER } from '../../../utils/constants'
 
 export default class Breadcrumbs extends Component {
   slicePath(props) {
@@ -55,7 +56,7 @@ export default class Breadcrumbs extends Component {
               )
           }
           {
-            (this.props.dataset.data_catalog.catalog_json.identifier === 'urn:nbn:fi:att:data-catalog-pas') &&
+            (this.props.dataset.data_catalog.catalog_json.identifier === DATA_CATALOG_IDENTIFIER.PAS) &&
               (
                 <BreadcrumbsPasContainer>
                   <PasInfo>
