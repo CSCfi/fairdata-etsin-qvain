@@ -497,20 +497,6 @@ class SubmitButtons extends Component {
     })
   }
 
-  buildMissingFieldsListForDisplay = () => {
-    return
-      // General fields
-      (this.props.Stores.Qvain.missingFieldsListGeneral.filter(
-        element => (element.valueIsMissing === true) && (element.valueIsRequired === true)).map(filteredField => (
-        "\n -" + filteredField.fieldName
-      )))
-      + // Actor fields
-      (this.props.Stores.Qvain.Actors.missingFieldsListActors.filter(
-        element => (element.valueIsMissing === true) && (element.valueIsRequired === true)).map(filteredField => (
-        "\n \n-" + filteredField.fieldName
-      )))
-  }
-
   // DOI usage accepted and will thus be used instead of URN ("yes")
   acceptDoi = () => {
     this.handleCreatePublishedV1()
@@ -568,25 +554,19 @@ class SubmitButtons extends Component {
                 isOpen={this.state.tooltipOpen}
                 Stores={this.props.Stores}
               >
+                { /* Wrapper div for showing the tooltip, since disabled elements cannot have mouseEvents */}
                 <div
-                  onMouseEnter={() =>
-                    this.setState({
-                      tooltipOpen: true,
-                    })
-                  }
-                  onMouseLeave={() =>
-                    this.setState({
-                      tooltipOpen: false,
-                    })
-                  }>
+                  onMouseEnter	={() => this.setState({tooltipOpen: true})}
+                  onMouseLeave	={() => this.setState({tooltipOpen: false})
+                }>
                   <SubmitButton
                     ref={this.updateDatasetButton}
                     disabled
                     type="button"
                     onClick={this.handleUpdateV1}
                   >
-                  <Translate content="qvain.edit" />
-                </SubmitButton>
+                    <Translate content="qvain.edit" />
+                  </SubmitButton>
                 </div>
               </TooltipHoverOnSave>
             ) : (
@@ -595,37 +575,21 @@ class SubmitButtons extends Component {
                 isOpen={this.state.tooltipOpen}
                 Stores={this.props.Stores}
               >
-                <div 
-                  onMouseEnter	={() =>
-                    this.setState({
-                      tooltipOpen: true,
-                    })
-                  }
-                  onMouseLeave	={() =>
-                    this.setState({
-                      tooltipOpen: false,
-                    })
+                { /* Wrapper div for showing the tooltip, since disabled elements cannot have mouseEvents */}
+                <div
+                  onMouseEnter	={() => this.setState({tooltipOpen: true})}
+                  onMouseLeave	={() => this.setState({tooltipOpen: false})
                 }>
-              <SubmitButton
-                ref={this.updateDatasetButton}
-                disabled={disabledDueToReadOnly}
-                pointer-events="auto"
-                type="button"
-                onClick={this.handleUpdateV1}
-                onMouseEnter={() =>
-                  this.setState({
-                    tooltipOpen: true,
-                  })
-                }
-                onMouseLeave={() =>
-                  this.setState({
-                    tooltipOpen: false,
-                  })
-                }
-              >
-                <Translate content="qvain.edit" />
-              </SubmitButton>
-              </div>
+                  <SubmitButton
+                    ref={this.updateDatasetButton}
+                    disabled={disabledDueToReadOnly}
+                    pointer-events="auto"
+                    type="button"
+                    onClick={this.handleUpdateV1}
+                  >
+                    <Translate content="qvain.edit" />
+                  </SubmitButton>
+                </div>
               </TooltipHoverOnSave>
             )
           ) : (
@@ -634,38 +598,22 @@ class SubmitButtons extends Component {
               isOpen={this.state.tooltipOpen}
               Stores={this.props.Stores}
             >
-                <div 
-                  onMouseEnter	={() =>
-                    this.setState({
-                      tooltipOpen: true,
-                    })
-                  }
-                  onMouseLeave	={() =>
-                    this.setState({
-                      tooltipOpen: false,
-                    })
-                }>
+              { /* Wrapper div for showing the tooltip, since disabled elements cannot have mouseEvents */}
+              <div
+                onMouseEnter	={() => this.setState({tooltipOpen: true})}
+                onMouseLeave	={() => this.setState({tooltipOpen: false})
+              }>
                 <SubmitButton
                   ref={this.submitDatasetButton}
                   disabled={disabledDueToReadOnly || disabledDueToMissingFieldsNonDraft}
                   pointer-events="auto"
                   type="button"
                   onClick={useDoi === true ? this.showUseDoiInformation : this.handleCreatePublishedV1}
-                  onMouseEnter={() =>
-                    this.setState({
-                      tooltipOpen: true,
-                    })
-                  }
-                  onMouseLeave	={() =>
-                    this.setState({
-                      tooltipOpen: false,
-                    })
-                  }
                 >
                   <Translate content="qvain.submit" />
                 </SubmitButton>
               </div>
-              </TooltipHoverOnSave>
+            </TooltipHoverOnSave>
           )}
           {doiModal}
         </div>
