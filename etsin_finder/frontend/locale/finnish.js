@@ -337,7 +337,19 @@ const finnish = {
   qvain: {
     saveDraft: 'Tallenna Luonnos',
     submit: 'Julkaise Aineisto',
-    missingFields: 'Julkaiseminen vaatii seuraavat kentät:',
+    missingFieldsGeneral: {
+      infoTitle: 'Julkaiseminen vaatii seuraavat kentät',
+      title: 'Otsikko',
+      description: 'Kuvaus',
+      atLeastOneKeyword: 'Avainsanat (väh. 1)',
+      atLeastOneLicense: 'Lisenssi (väh. 1)',
+      fileOrigin: 'Tiedoston lähde',
+    },
+    missingFieldsActors: {
+      infoTitle: 'Ja toimijat',
+      creator: 'Tekijä',
+      publisher: 'Julkaisija',
+    },
     edit: 'Päivitä Aineisto',
     consent:
       'Käyttämällä Qvain Light -työkalua käyttäjä vakuuttaa, että hän on saanut suostumuksen muiden henkilöiden henkilötietojen lisäämiseen kuvailutietoihin ja ilmoittanut heille miten he voivat saada henkilötietonsa poistettua palvelusta. Käyttämällä Qvain Light-työkalua käyttäjä hyväksyy <a href="https://www.fairdata.fi/hyodyntaminen/kayttopolitiikat-ja-ehdot/">käyttöehdot</a>.',
