@@ -83,6 +83,8 @@ const Wrapper = styled.span`
   position: relative;
 `
 
+/* 
+To do: CSS magic
 const TooltipDown = styled.div`
   z-index: 10;
   text-align: left;
@@ -99,7 +101,7 @@ const TooltipDown = styled.div`
   margin-top: -5px;
   left: -160px;
   top: 0px;
-`
+` */
 
 const TooltipDownV2 = styled.div`
   z-index: 10;

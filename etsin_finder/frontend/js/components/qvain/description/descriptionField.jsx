@@ -6,9 +6,6 @@ import counterpart from 'counterpart'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
 
-import { titleSchema, descriptionSchema } from '../utils/formValidation'
-
-import ValidationError from '../general/validationError'
 import Tooltip from '../../general/tooltipHover'
 import { Input, Textarea, LabelLarge } from '../general/form'
 
@@ -20,42 +17,16 @@ class DescriptionField extends Component {
 
   state = {
     active: 'FINNISH',
-    titleError: null,
-    descriptionError: null,
   }
 
   handleTitleChange = e => {
     const title = e.target.value
     this.props.Stores.Qvain.setTitle(title, this.state.active)
-    this.setState({ titleError: null })
   }
 
   handleDescriptionChange = e => {
     const description = e.target.value
     this.props.Stores.Qvain.setDescription(description, this.state.active)
-    this.setState({ descriptionError: null })
-  }
-
-  handleTitleBlur = () => {
-    titleSchema
-      .validate(this.props.Stores.Qvain.title)
-      .then(() => {
-        this.setState({ titleError: null })
-      })
-      .catch(err => {
-        this.setState({ titleError: err.errors })
-      })
-  }
-
-  handleDescriptionBlur = () => {
-    descriptionSchema
-      .validate(this.props.Stores.Qvain.description)
-      .then(() => {
-        this.setState({ descriptionError: null })
-      })
-      .catch(err => {
-        this.setState({ descriptionError: err.errors })
-      })
   }
 
   handleLanguageButtonClicks = (e) => {
@@ -128,7 +99,6 @@ class DescriptionField extends Component {
               attributes={{ placeholder: this.getPlaceholder('title', 'ENGLISH') }}
             />
           )}
-          {this.state.titleError ? <Translate component={ValidationError} content={'qvain.description.error.title'} /> : null}
           <LabelLarge htmlFor="descriptionInput">
             <Tooltip
               title={counterpart('qvain.description.fieldHelpTexts.requiredForAll', { locale: lang })}
@@ -161,7 +131,6 @@ class DescriptionField extends Component {
               attributes={{ placeholder: this.getPlaceholder('description', this.state.active) }}
             />
           )}
-          {this.state.descriptionError ? <Translate component={ValidationError} content={'qvain.description.error.description'} /> : null}
           <Translate component="div" content="qvain.description.description.instructions" />
         </DescriptionCard>
       </React.Fragment>

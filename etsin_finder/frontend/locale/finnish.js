@@ -560,10 +560,6 @@ const finnish = {
         help:
           'Voit lisätä useamman avainsanan erottamalla ne pilkulla (,). Aineistolla on oltava vähintään yksi avainsana.',
       },
-      error: {
-        title: 'Otsikko on pakollinen ainakin yhdellä kielellä.',
-        description: 'Kuvaus on pakollinen ainakin yhdellä kielellä.',
-      },
     },
     rightsAndLicenses: {
       title: 'Oikeudet ja lisenssit',

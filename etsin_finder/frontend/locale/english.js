@@ -561,10 +561,6 @@ const english = {
         help:
           'You can add multiple keywords by separating them with a comma (,). Dataset has to have at least one keyword.',
       },
-      error: {
-        title: 'A title is required in at least one language.',
-        description: 'A description is required in at least one language.',
-      },
     },
     rightsAndLicenses: {
       title: 'Rights And Licenses',
