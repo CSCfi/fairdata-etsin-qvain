@@ -229,7 +229,7 @@ class SubmitButtons extends Component {
         values.metadataActions = metadataActions
       }
 
-      if (newCumulativeState && newCumulativeState !== cumulativeState) {
+      if (newCumulativeState !== undefined && newCumulativeState !== cumulativeState) {
         values.newCumulativeState = newCumulativeState
       }
     }
@@ -258,7 +258,7 @@ class SubmitButtons extends Component {
     await this.updateFiles(identifier, fileActions, metadataActions)
 
     const cumulativeStateChanged =
-      newCumulativeState && dataset.cumulativeState !== newCumulativeState
+      newCumulativeState !== undefined && dataset.cumulativeState !== newCumulativeState
     if (cumulativeStateChanged) {
       await this.updateCumulativeState(identifier, newCumulativeState)
     }
