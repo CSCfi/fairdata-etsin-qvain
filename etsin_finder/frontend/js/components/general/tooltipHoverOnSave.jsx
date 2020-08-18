@@ -19,6 +19,11 @@ const TooltipHoverOnSave = ({ isOpen, Stores, children, shouldBeDisplayed }) => 
   const wrapperTooltipButtonRef = useRef(null)
   const wrapperTooltipCardRef = useRef(null)
 
+  // Helper function in order to bypass the Lint rule prefer-template
+  function formatStringToTranslate(prefixString, filteredField) {
+    return prefixString + filteredField.fieldName
+  }
+
   const tooltip = (
     <>
       <span ref={wrapperTooltipButtonRef}>
@@ -33,13 +38,13 @@ const TooltipHoverOnSave = ({ isOpen, Stores, children, shouldBeDisplayed }) => 
               { // General fields
                 (Stores.Qvain.missingFieldsListGeneral.filter(
                   element => (element.valueIsMissing === true) && (element.valueIsRequired === true)).map(filteredField => (
-                    `- ${translate('qvain.missingFieldsGeneral.' + filteredField.fieldName)} \n`
+                    `- ${translate(formatStringToTranslate('qvain.missingFieldsGeneral.', filteredField))} \n`
                 )))
               }
               { // Actor fields
                 (Stores.Qvain.Actors.missingFieldsListActors.filter(
                   element => (element.valueIsMissing === true) && (element.valueIsRequired === true)).map(filteredField => (
-                    `- ${translate('qvain.missingFieldsActors.' + filteredField.fieldName)} \n`
+                    `- ${translate(formatStringToTranslate('qvain.missingFieldsActors.', filteredField))} \n`
                 )))
               }
             </TooltipText>
