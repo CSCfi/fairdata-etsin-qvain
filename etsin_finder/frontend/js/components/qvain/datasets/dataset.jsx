@@ -189,7 +189,10 @@ const Marker = styled.div`
 `
 
 const DatasetLabel = styled(Label)`
-  color: ${props => props.color === 'yellow' ? props.theme.color.dark : 'white'}
+  color: ${({ props }) => {
+    if (props.color === 'yellow') return props.theme.color.dark
+    return 'white'
+  }};
   margin-left: 10px;
   text-transform: uppercase;
 `

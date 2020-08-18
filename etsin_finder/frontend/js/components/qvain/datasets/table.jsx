@@ -16,7 +16,6 @@ import { FormField, Input, Label as inputLabel } from '../general/form'
 import DatasetGroup from './datasetGroup'
 import { filterGroupsByTitle, groupDatasetsByVersionSet } from './filter'
 import etsinTheme from '../../../styles/theme'
-import Tracking from '../../../utils/tracking'
 
 class DatasetTable extends Component {
   minOfDataSetsForSearchTool = 5
