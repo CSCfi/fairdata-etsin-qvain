@@ -100,6 +100,7 @@ class Actors {
     this.referenceOrganizationErrors = {}
   }
 
+  @action
   checkMissingFieldsActors = () => {
     for (let i = 0; i < this.missingFieldsListActors.length; i += 1) {
       if ((this.missingFieldsListActors[i].valueIsMissing) && (this.missingFieldsListActors[i].valueIsRequired)) {
@@ -264,7 +265,6 @@ class Actors {
         this.createActor(researchDataset.publisher, ROLE.PUBLISHER, actors)
       )
       // Publisher is not missing
-      console.log('Publisher is not missing')
       this.missingFieldsListActors[1].valueIsMissing = false
     }
     if ('curator' in researchDataset) {
@@ -277,7 +277,6 @@ class Actors {
         actors.push(this.createActor(creator, ROLE.CREATOR, actors))
       )
       // Creator is not missing
-      console.log('Creator is not missing')
       this.missingFieldsListActors[0].valueIsMissing = false
     }
     if ('rights_holder' in researchDataset) {
@@ -482,7 +481,8 @@ class Actors {
   }
 
   // Function for looping through the entire actors list and setting the correct status for each
-  updateMissingFieldsActorsStatus() {
+  @action
+  updateMissingFieldsActorsStatus = () => {
     let creatorFound = false
     let publisherFound = false
 
@@ -490,12 +490,10 @@ class Actors {
       actor.roles.forEach((roles) => {
         // Creator is found and thus no longer missing
         if (roles === 'creator') {
-          console.log('There is a creator!')
           this.missingFieldsListActors[0].valueIsMissing = false
           creatorFound = true
         // Publisher is found and thus no longer missing
         } else if (roles === 'publisher') {
-          console.log('There is a publisher!')
           this.missingFieldsListActors[1].valueIsMissing = false
           publisherFound = true
         }
@@ -504,12 +502,10 @@ class Actors {
 
     // Creator was not found and thus missing
     if (creatorFound === false) {
-      console.log('There is no creator...')
       this.missingFieldsListActors[0].valueIsMissing = true
     }
     // Publisher was not found and thus missing
     if (publisherFound === false) {
-      console.log('There is no publisher...')
       this.missingFieldsListActors[1].valueIsMissing = true
     }
   }

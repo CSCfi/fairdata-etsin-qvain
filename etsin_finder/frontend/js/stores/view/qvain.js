@@ -208,6 +208,7 @@ class Qvain {
   }
 
   // Check all required fields for publishing dataset
+  @action
   checkMissingFieldsGeneral = () => {
     for (let i = 0; i < this.missingFieldsListGeneral.length; i += 1) {
       if ((this.missingFieldsListGeneral[i].valueIsMissing === true) && (this.missingFieldsListGeneral[i].valueIsRequired)) {
@@ -219,6 +220,7 @@ class Qvain {
   }
 
   // Check if required draft fields are set
+  @action
   checkMissingFieldsGeneralDraft = () => {
     if ((this.missingFieldsListGeneral[0].valueIsMissing === true) && (this.missingFieldsListGeneral[0].valueIsRequired)) {
       this.stillMissingGeneralFieldsDraft = true
@@ -390,7 +392,8 @@ class Qvain {
     this.checkMissingFieldsGeneral()
   }
 
-  checkIfAtLeastOneKeywordExists() {
+  @action
+  checkIfAtLeastOneKeywordExists = () => {
     // Missing field [2]: At least one keyword is set and thus keywords is no longer empty
     if (this.keywordsArray.length > 0) {
       this.missingFieldsListGeneral[2].valueIsMissing = false
@@ -449,14 +452,12 @@ class Qvain {
     this.license.name = name // only affects license display, should not trigger this.changed
   }
 
+  @action
   checkIfAtLeastOneLicenseExists = () => {
-    console.log(this.licenseArray)
     if (this.licenseArray.length > 0) {
       this.missingFieldsListGeneral[3].valueIsMissing = false
-      console.log('There are no licenses it wasnt set')
     } else {
       this.missingFieldsListGeneral[3].valueIsMissing = true
-      console.log('There are  licenses it was set')
     }
   }
 
@@ -623,10 +624,6 @@ class Qvain {
   @action
   setUseDoi = (selectedUseDoiStatus) => {
     this.useDoi = selectedUseDoiStatus
-
-    console.log(this.Actors.missingFieldsListActors)
-
-    console.log(this.Actors.missingFieldsListActors[1].valueIsRequired)
 
     if (selectedUseDoiStatus === true) {
       // If use_doi is checked, publisher must be defined ([1] = publisher)
@@ -1137,34 +1134,29 @@ class Qvain {
   updateMissingFieldsStatusGeneralForLoadedDataset() {
     // Missing field [0]: Title is set -> should no longer prevent publishing
     if ((this.title.en !== '' && this.title.en !== undefined) || (this.title.fi !== '' && this.title.fi !== undefined)) {
-      console.log('Title is not missing')
       this.missingFieldsListGeneral[0].valueIsMissing = false
     }
 
     // Missing field [1]: Description is set -> should no longer prevent publishing
     if ((this.description.en !== '' && this.description.en !== undefined) || (this.description.fi !== '' && this.description.fi !== undefined)) {
-      console.log('Description is not missing')
       this.missingFieldsListGeneral[1].valueIsMissing = false
     }
 
     // Missing field [2]: There is at least one keyword -> should no longer prevent publishing
     if (this.keywordsArray.length > 0) {
-      console.log('Keywords is not missing')
       this.missingFieldsListGeneral[2].valueIsMissing = false
     }
 
     // Missing field [3]: There is at least one license -> should no longer prevent publishing (if required)
     if (this.licenseArray.length > 0) {
-      console.log('License is not missing')
       this.missingFieldsListGeneral[3].valueIsMissing = false
     }
 
     // Missing field [4]: File origin is set (either IDA or remote resources) -> should no longer prevent publishing
     if (this.selectedFiles !== undefined || this.selectedDirectories !== undefined || this.externalResources !== undefined) {
-      console.log('File origin is not missing')
       this.missingFieldsListGeneral[4].valueIsMissing = false
+      // If IDA, license must be set
       if (this.selectedFiles || this.selectedDirectories) {
-        console.log('license must be set')
         this.missingFieldsListGeneral[3].valueIsRequired = true
       }
     }

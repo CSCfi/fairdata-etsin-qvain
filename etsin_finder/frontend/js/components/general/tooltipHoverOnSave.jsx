@@ -83,7 +83,7 @@ const Wrapper = styled.span`
   position: relative;
 `
 
-/* 
+/*
 To do: CSS magic
 const TooltipDown = styled.div`
   z-index: 10;
