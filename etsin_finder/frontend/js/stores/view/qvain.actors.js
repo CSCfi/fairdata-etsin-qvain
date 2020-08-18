@@ -264,6 +264,7 @@ class Actors {
         this.createActor(researchDataset.publisher, ROLE.PUBLISHER, actors)
       )
       // Publisher is not missing
+      console.log('Publisher is not missing')
       this.missingFieldsListActors[1].valueIsMissing = false
     }
     if ('curator' in researchDataset) {
@@ -276,6 +277,7 @@ class Actors {
         actors.push(this.createActor(creator, ROLE.CREATOR, actors))
       )
       // Creator is not missing
+      console.log('Creator is not missing')
       this.missingFieldsListActors[0].valueIsMissing = false
     }
     if ('rights_holder' in researchDataset) {
@@ -292,6 +294,9 @@ class Actors {
     this.mergeTheSameActors()
     this.mergeTheSameActorOrganizations()
     this.mergeActorsOrganizationsWithReferences()
+
+    // Update actor status
+    this.checkMissingFieldsActors()
   }
 
   @observable actors = []

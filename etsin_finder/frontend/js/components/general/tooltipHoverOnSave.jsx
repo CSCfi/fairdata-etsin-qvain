@@ -33,13 +33,13 @@ const TooltipHoverOnSave = ({ isOpen, Stores, children, shouldBeDisplayed }) => 
               { // General fields
                 (Stores.Qvain.missingFieldsListGeneral.filter(
                   element => (element.valueIsMissing === true) && (element.valueIsRequired === true)).map(filteredField => (
-                    `- ${translate('qvain.missingFieldsGeneral.')} ${filteredField.fieldName} \n`
+                    `- ${translate('qvain.missingFieldsGeneral.' + filteredField.fieldName)} \n`
                 )))
               }
               { // Actor fields
                 (Stores.Qvain.Actors.missingFieldsListActors.filter(
                   element => (element.valueIsMissing === true) && (element.valueIsRequired === true)).map(filteredField => (
-                    `- ${translate('qvain.missingFieldsActors.')} ${filteredField.fieldName} \n`
+                    `- ${translate('qvain.missingFieldsActors.' + filteredField.fieldName)} \n`
                 )))
               }
             </TooltipText>

@@ -110,6 +110,8 @@ class Qvain {
 
   @observable stillMissingGeneralFields = true
 
+  @observable stillMissingGeneralFieldsDraft = true
+
   @action
   resetQvainStore = () => {
     this.original = undefined
@@ -202,8 +204,10 @@ class Qvain {
     ]
 
     this.stillMissingGeneralFields = true
+    this.stillMissingGeneralFieldsDraft = true
   }
 
+  // Check all required fields for publishing dataset
   checkMissingFieldsGeneral = () => {
     for (let i = 0; i < this.missingFieldsListGeneral.length; i += 1) {
       if ((this.missingFieldsListGeneral[i].valueIsMissing === true) && (this.missingFieldsListGeneral[i].valueIsRequired)) {
@@ -211,6 +215,15 @@ class Qvain {
         break
       }
       this.stillMissingGeneralFields = false
+    }
+  }
+
+  // Check if title is set, which draft requires to be set
+  checkMissingFieldsGeneralDraft = () => {
+    if ((this.missingFieldsListGeneral[0].valueIsMissing === true) && (this.missingFieldsListGeneral[0].valueIsRequired)) {
+      this.stillMissingGeneralFieldsDraft = true
+    } else {
+      this.stillMissingGeneralFieldsDraft = false
     }
   }
 
@@ -1104,6 +1117,43 @@ class Qvain {
     if (this.Env.metaxApiV2) {
       await this.Files.openDataset(dataset)
     }
+    this.updateMissingFieldsStatusGeneralForLoadedDataset()
+  }
+
+  // Check if the dataset has all required fields set and can be published
+  updateMissingFieldsStatusGeneralForLoadedDataset() {
+    // Missing field [0]: Title is set -> should no longer prevent publishing
+    if ((this.title.en !== '' && this.title.en !== undefined) || (this.title.fi !== '' && this.title.fi !== undefined)) {
+      console.log('Title is not missing')
+      this.missingFieldsListGeneral[0].valueIsMissing = false
+    }
+
+    // Missing field [1]: Description is set -> should no longer prevent publishing
+    if ((this.description.en !== '' && this.description.en !== undefined) || (this.description.fi !== '' && this.description.fi !== undefined)) {
+      console.log('Description is not missing')
+      this.missingFieldsListGeneral[1].valueIsMissing = false
+    }
+
+    // Missing field [2]: There is at least one keyword -> should no longer prevent publishing
+    if (this.keywordsArray.length > 0) {
+      console.log('Keywords is not missing')
+      this.missingFieldsListGeneral[2].valueIsMissing = false
+    }
+
+    // Missing field [3]: There is at least one license -> should no longer prevent publishing (if required)
+    if (this.licenseArray.length > 0) {
+      console.log('License is not missing')
+      this.missingFieldsListGeneral[3].valueIsMissing = false
+    }
+
+    // Missing field [4]: File origin is set (either IDA or remote resources) -> should no longer prevent publishing
+    if (this.selectedFiles !== undefined || this.selectedDirectories !== undefined || this.externalResources !== undefined) {
+      console.log('File origin is not missing')
+      this.missingFieldsListGeneral[4].valueIsMissing = false
+    }
+
+    // Finally, check the general status
+    this.checkMissingFieldsGeneral()
   }
 
   @action setOriginal = (newOriginal) => {

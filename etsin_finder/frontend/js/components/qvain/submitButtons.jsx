@@ -526,7 +526,7 @@ class SubmitButtons extends Component {
     const disabledDueToReadOnly = readonly || this.state.datasetLoading
 
     // All required draft fields must be set in order to create draft
-    // let disabledDueToMissingFieldsDraft = Stores.Qvain.stillMissingGeneralFieldsDraft
+    const disabledDueToMissingFieldsDraft = Stores.Qvain.stillMissingGeneralFieldsDraft
 
     // All required fields must be set in order to publish
     const disabledDueToMissingFieldsNonDraft = Stores.Qvain.stillMissingGeneralFields || Stores.Qvain.Actors.stillMissingActorFields
@@ -548,6 +548,7 @@ class SubmitButtons extends Component {
         // Existing published dataset -> update published dataset
         <div ref={submitButtonsRef}>
           {original ? (
+            // Dataset has missing required fields
             disabledDueToMissingFieldsNonDraft ? (
               <TooltipHoverOnSave
                 shouldBeDisplayed={disabledDueToMissingFieldsNonDraft}
@@ -556,9 +557,9 @@ class SubmitButtons extends Component {
               >
                 { /* Wrapper div for showing the tooltip, since disabled elements cannot have mouseEvents */}
                 <div
-                  onMouseEnter	={() => this.setState({tooltipOpen: true})}
-                  onMouseLeave	={() => this.setState({tooltipOpen: false})
-                }>
+                  onMouseEnter={() => this.setState({ tooltipOpen: true })}
+                  onMouseLeave={() => this.setState({ tooltipOpen: false })}
+                >
                   <SubmitButton
                     ref={this.updateDatasetButton}
                     disabled
@@ -570,16 +571,16 @@ class SubmitButtons extends Component {
                 </div>
               </TooltipHoverOnSave>
             ) : (
+              // Dataset has no missing required fields
               <TooltipHoverOnSave
                 shouldBeDisplayed={disabledDueToMissingFieldsNonDraft}
                 isOpen={this.state.tooltipOpen}
                 Stores={this.props.Stores}
               >
-                { /* Wrapper div for showing the tooltip, since disabled elements cannot have mouseEvents */}
                 <div
-                  onMouseEnter	={() => this.setState({tooltipOpen: true})}
-                  onMouseLeave	={() => this.setState({tooltipOpen: false})
-                }>
+                  onMouseEnter={() => this.setState({ tooltipOpen: true })}
+                  onMouseLeave={() => this.setState({ tooltipOpen: false })}
+                >
                   <SubmitButton
                     ref={this.updateDatasetButton}
                     disabled={disabledDueToReadOnly}
@@ -592,17 +593,17 @@ class SubmitButtons extends Component {
                 </div>
               </TooltipHoverOnSave>
             )
+          // Existing dataset, has missing required fields
           ) : (
             <TooltipHoverOnSave
               shouldBeDisplayed={disabledDueToMissingFieldsNonDraft}
               isOpen={this.state.tooltipOpen}
               Stores={this.props.Stores}
             >
-              { /* Wrapper div for showing the tooltip, since disabled elements cannot have mouseEvents */}
               <div
-                onMouseEnter	={() => this.setState({tooltipOpen: true})}
-                onMouseLeave	={() => this.setState({tooltipOpen: false})
-              }>
+                onMouseEnter={() => this.setState({ tooltipOpen: true })}
+                onMouseLeave={() => this.setState({ tooltipOpen: false })}
+              >
                 <SubmitButton
                   ref={this.submitDatasetButton}
                   disabled={disabledDueToReadOnly || disabledDueToMissingFieldsNonDraft}
