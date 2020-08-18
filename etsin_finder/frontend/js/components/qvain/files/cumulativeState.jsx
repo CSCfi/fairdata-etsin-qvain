@@ -7,6 +7,7 @@ import axios from 'axios'
 import { ContainerSubsectionBottom } from '../general/card'
 import { CUMULATIVE_STATE } from '../../../utils/constants'
 import { getResponseError } from '../utils/responseError'
+import urls from '../utils/urls'
 import { LabelLarge, FormField, RadioInput, Label, HelpField } from '../general/form'
 
 import Modal from '../../general/modal'
@@ -67,7 +68,13 @@ class CumulativeState extends Component {
       identifier: this.props.Stores.Qvain.original.identifier,
       cumulative_state: newState
     }
-    axios.post('/api/rpc/datasets/change_cumulative_state', obj)
+    let url
+    if (this.props.Stores.Env.metaxApiV2) {
+      url = urls.v2.rpc.changeCumulativeState()
+    } else {
+      url = urls.v1.rpc.changeCumulativeState()
+    }
+    axios.post(url, obj)
       .then(response => {
         const data = response.data || {}
         this.setState({

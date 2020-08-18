@@ -14,7 +14,7 @@ class DatasetGroup extends Component {
     showAll: false,
   }
 
-  setShowAll = (value) => {
+  setShowAll = value => {
     this.setState({ showAll: value })
   }
 
@@ -29,6 +29,7 @@ class DatasetGroup extends Component {
           handleEnterEdit={this.props.handleEnterEdit}
           handleCreateNewVersion={this.props.handleCreateNewVersion}
           openRemoveModal={this.props.openRemoveModal}
+          highlight={datasets[0].identifier === this.props.highlight}
         />
       )
     }
@@ -63,6 +64,7 @@ class DatasetGroup extends Component {
             handleCreateNewVersion={this.props.handleCreateNewVersion}
             openRemoveModal={this.props.openRemoveModal}
             indent={index !== 0}
+            highlight={dataset.identifier === this.props.highlight}
           />
         ))}
         {more}
@@ -77,6 +79,11 @@ DatasetGroup.propTypes = {
   handleEnterEdit: PropTypes.func.isRequired,
   handleCreateNewVersion: PropTypes.func.isRequired,
   openRemoveModal: PropTypes.func.isRequired,
+  highlight: PropTypes.string,
+}
+
+DatasetGroup.defaultProps = {
+  highlight: null,
 }
 
 const MoreButtonCell = styled(BodyCell)`

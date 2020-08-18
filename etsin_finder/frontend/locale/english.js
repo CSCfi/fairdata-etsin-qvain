@@ -81,6 +81,11 @@ const english = {
       infoText:
         'Datacite without validation: The dataset is shown in Datacite Format but without validation; mandatory fields might be missing. Dataset does not necessarily meet all Datacite requirements.',
     },
+    draftInfo: {
+      draft: 'This dataset is a draft. Only the creator of the dataset can view it.',
+      changes: 'This is a preview of unpublished changes to a dataset.  Only the creator of the dataset can view it.',
+    },
+    draftIdentifierInfo: 'Dataset identifier will be generated when the dataset is published.',
     dl: {
       root: 'root',
       breadcrumbs: 'Breadcrumbs',
@@ -90,11 +95,17 @@ const english = {
       downloadFailed: 'Download failed',
       downloadAll: 'Download all',
       downloading: 'Downloading...',
+      downloadItem: 'Download %(name)s',
       fileAmount: '%(amount)s objects',
       close_modal: 'Close info modal',
+      customMetadata: 'Metadata',
       info_header: 'Other info related to file',
       loading: 'Loading folder',
       loaded: 'Folder loaded',
+      fileCount: {
+        one: '1 file',
+        other: '%(count)s files'
+      },
       file_types: {
         both: 'files and folders',
         directory: 'Folder',
@@ -103,6 +114,20 @@ const english = {
       files: 'Files',
       info: 'Info',
       info_about: 'about object: %(file)s',
+      infoHeaders: {
+        file: 'File information',
+        directory: 'Folder information',
+      },
+      infoModalButton: {
+        directory: {
+          general: 'Folder %(name)s information',
+          custom: 'Folder %(name)s information and metadata',
+        },
+        file: {
+          general: 'File %(name)s information',
+          custom: 'File %(name)s information and metadata',
+        },
+      },
       item: 'item %(item)s',
       name: 'Name',
       size: 'Size',
@@ -417,6 +442,7 @@ const english = {
           years: ' years ago',
         },
       },
+      moreActions: 'More',
       moreVersions: {
         one: 'Show 1 more version',
         other: 'Show %(count)s more versions',
@@ -428,10 +454,23 @@ const english = {
       editButton: 'Edit',
       editDraftButton: 'Edit draft',
       deleteButton: 'Delete',
-      confirmDelete: {
-        text: 'Are you sure you want to delete this dataset? Deleting the dataset will remove it from Qvain, and Etsin Search cannot find it anymore. Landing page for the dataset will NOT be removed.',
-        ok: 'Delete',
-        cancel: 'Cancel',
+      revertButton: 'Revert changes',
+      remove: {
+        confirm: {
+          published: {
+            text: 'Are you sure you want to delete this dataset? Deleting the dataset will remove it from Qvain, and Etsin Search cannot find it anymore. Landing page for the dataset will NOT be removed.',
+            ok: 'Delete',
+          },
+          draft: {
+            text: 'Are you sure you want to delete this draft? The draft will be removed permanently.',
+            ok: 'Delete',
+          },
+          changes: {
+            text: 'Are you sure you want to revert all unpublished changes made to this dataset?',
+            ok: 'Revert',
+          },
+          cancel: 'Cancel'
+        }
       },
       goToEtsin: 'View in Etsin',
       goToEtsinDraft: 'Preview in Etsin',
@@ -447,6 +486,10 @@ const english = {
       infoTitle: 'Description info',
       infoText:
         'Give a descriptive title for your dataset. Also, write the description as detailed as you possibly can; explain how the dataset was created, how it is structured, and how it has been handled. Describe also the content.',
+      fieldHelpTexts: {
+        requiredForAll: 'Required for all datasets',
+        requiredToPublish: 'Required to save and publish',
+      },
       description: {
         langEn: 'ENGLISH',
         langFi: 'FINNISH',
@@ -465,7 +508,7 @@ const english = {
       issuedDate: {
         title: 'Issued date',
         infoText:
-          'Date of formal issuance (publication) of the resource. This value does not affect or reflect the visibility of the dataset itself.',
+          'Date of formal issuance (publication) of the resource. This value does not affect or reflect the visibility of the dataset itself. If this is left empty, current date is used as default value.',
         instructions: '',
         placeholder: 'Date',
       },
@@ -537,6 +580,7 @@ const english = {
           label: 'URL address',
           help: 'Specify URL address for license',
         },
+        addButton: 'Add license'
       },
     },
     actors: {
@@ -759,6 +803,8 @@ const english = {
           'Choose "IDA" if the data is stored in Fairdata IDA Service. Choose "Remote resources" if the data is in remote location.',
         doiSelection:
           'I want the dataset to have a DOI (digital object identifier) instead of a URN.',
+        doiSelectedHelp:
+          'When the dataset is published, a DOI will be created and stored in the DataCite Service. This operation cannot be undone.',
         placeholder: 'Select option',
         ida: 'IDA',
         att: 'Remote resources',
@@ -844,9 +890,9 @@ const english = {
         },
       },
       metadataModal: {
-        header: 'Edit PAS Metadata',
+        header: 'Digital Preservation metadata',
         help:
-          'Saving the data will change the file metadata regardless of whether the file is in your dataset or not.',
+          'Saving the changes will update the file metadata regardless of whether the file is in your dataset or not.',
         csvOptions: 'CSV Options',
         fields: {
           fileFormat: 'File format',
@@ -863,7 +909,7 @@ const english = {
           loadingFileFormats: 'Failed to load list of allowed file formats.',
         },
         buttons: {
-          show: 'Edit PAS metadata',
+          show: 'Edit Digital Preservation metadata',
           close: 'Close',
           save: 'Save changes',
           hideError: 'Continue editing',
@@ -923,6 +969,9 @@ const english = {
           select: 'Select %(name)s',
           deselect: 'Deselect %(name)s',
         },
+        addUserMetadata: 'Add metadata',
+        editUserMetadata: 'Edit metadata',
+        deleteUserMetadata: 'Remove metadata',
         form: {
           title: {
             label: 'Title',

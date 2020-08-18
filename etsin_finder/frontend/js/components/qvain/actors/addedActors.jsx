@@ -13,6 +13,8 @@ import {
   ButtonContainer
 } from '../general/buttons'
 import { getActorName, ActorIcon } from './common'
+import Tooltip from '../../general/tooltipHover'
+import { LabelLarge } from '../general/form'
 
 export class AddedActorsBase extends Component {
   static propTypes = {
@@ -35,17 +37,23 @@ export class AddedActorsBase extends Component {
     const { actors } = this.props.Stores.Qvain.Actors
     return (
       <>
-        <Translate
-          tabIndex="0"
-          component="h3"
-          content="qvain.actors.added.title"
-        />
+        <LabelLarge>
+          <Tooltip
+            title={translate('qvain.description.fieldHelpTexts.requiredToPublish')}
+            position="right"
+          >
+            <Translate content="qvain.actors.added.title" /> *
+          </Tooltip>
+        </LabelLarge>
         <Translate component="p" content="qvain.actors.add.help" />
         {actors.length === 0 &&
           (<Translate tabIndex="0" component="p" content="qvain.actors.added.noneAddedNotice" />)
         }
         {actors.map((addedActor) => (
-          <ButtonGroup tabIndex="0" key={addedActor.uiid}>
+          <ButtonGroup
+            tabIndex="0"
+            key={addedActor.uiid}
+          >
             <ActorLabel>
               <ActorIcon actor={addedActor} style={{ marginRight: '8px' }} />
               {getActorName(addedActor, lang)}{addedActor.roles.map(role => (` / ${translate(`qvain.actors.add.checkbox.${role}`)}`))}

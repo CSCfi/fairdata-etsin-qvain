@@ -14,6 +14,8 @@ import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTimes } from '@fortawesome/free-solid-svg-icons'
 
 import { darken } from 'polished'
 import checkColor from '../../styles/styledUtils'
@@ -27,6 +29,8 @@ export default class NoticeBar extends React.Component {
     position: PropTypes.string,
     z: PropTypes.string,
     duration: PropTypes.number,
+    className: PropTypes.string,
+    onClose: PropTypes.func
   }
 
   static defaultProps = {
@@ -35,6 +39,8 @@ export default class NoticeBar extends React.Component {
     position: 'relative',
     z: '0',
     duration: 0,
+    className: '',
+    onClose: null
   }
 
   state = {
@@ -53,9 +59,15 @@ export default class NoticeBar extends React.Component {
     this.setState({
       open: false,
     })
+    if (this.props.onClose) {
+      this.props.onClose()
+    }
   }
 
   render() {
+    if (!this.state.open) {
+      return null
+    }
     return (
       <Bar
         z={this.props.z}
@@ -63,12 +75,13 @@ export default class NoticeBar extends React.Component {
         bg={this.props.bg}
         color={this.props.color}
         open={this.state.open}
+        className={this.props.className}
       >
         <NoticeText>{this.props.children}</NoticeText>
         {!this.props.duration && (
           <CloseButton onClick={this.close} role="button" aria-pressed={!this.state.open}>
             <Translate content="general.notice.SRhide" className="sr-only" />
-            X
+            <FontAwesomeIcon icon={faTimes} aria-hidden />
           </CloseButton>
         )}
       </Bar>
@@ -79,10 +92,10 @@ export default class NoticeBar extends React.Component {
 const Bar = styled.div`
   width: 100%;
   z-index: ${p => p.z};
-  max-height: ${p => (p.open ? '4em' : '0em')};
   background-color: ${props => checkColor(props.bg)};
-  ${p => p.border
-    && `border: 2px solid ${p.border_color ? checkColor(p.border_color) : 'black'};`} display: flex;
+  ${p =>
+    p.border &&
+    `border: 2px solid ${p.border_color ? checkColor(p.border_color) : 'black'};`} display: flex;
   color: ${props => checkColor(props.color)};
   justify-content: center;
   align-items: center;
@@ -96,17 +109,18 @@ const Bar = styled.div`
       color: ${darken(0.1, '#00284f')};
     }
   }
+  display: flex;
+  margin-bottom: 0.5rem;
 `
 
 const NoticeText = styled.h3`
-  padding: 0.5em 1em;
+  padding: 0.25em 0 0.25em 0.5em;
   margin-bottom: 0;
   text-align: center;
+  flex-grow: 1;
 `
 
 const CloseButton = styled(TransparentButton)`
-  position: absolute;
-  right: 1em;
   color: white;
   &:hover {
     text-decoration: none;

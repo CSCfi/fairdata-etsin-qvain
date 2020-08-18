@@ -96,6 +96,7 @@ class Select extends Component {
         menuPosition="fixed"
         styles={{ placeholder: () => ({ color: etsinTheme.color.gray }) }}
         menuShouldScrollIntoView={false}
+        isClearable
       />
     ) : (
       <Translate
@@ -110,6 +111,7 @@ class Select extends Component {
         options={options[lang]}
         styles={{ placeholder: () => ({ color: etsinTheme.color.gray }) }}
         onChange={onChange(options, lang, setter, model)}
+        isClearable
       />
     )
   }
