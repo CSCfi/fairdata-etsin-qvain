@@ -16,26 +16,11 @@ from etsin_finder.app_config import get_app_config
 from etsin_finder import authentication
 from etsin_finder.qvain_light_service import change_cumulative_state, refresh_directory_content, fix_deprecated_dataset
 from etsin_finder.finder import app
-from etsin_finder.qvain_light_utils import get_dataset_creator
+from etsin_finder.qvain_light_utils import get_dataset_creator, check_dataset_creator
 from etsin_finder.constants import SAML_ATTRIBUTES
+from etsin_finder.log_utils import log_request
 
 log = app.logger
-
-def log_request(f):
-    """Log request when used as decorator."""
-    @wraps(f)
-    def func(*args, **kwargs):
-        """Log requests."""
-        csc_name = authentication.get_user_csc_name() if not app.testing else ''
-        log.info('[{0}.{1}] {2} {3} {4} USER AGENT: {5}'.format(
-            args[0].__class__.__name__,
-            f.__name__,
-            csc_name if csc_name else 'UNAUTHENTICATED',
-            request.environ.get('REQUEST_METHOD'),
-            request.path,
-            request.user_agent))
-        return f(*args, **kwargs)
-    return func
 
 class QvainDatasetChangeCumulativeState(Resource):
     """Metax RPC for changing cumulative_state of a dataset."""
@@ -61,16 +46,11 @@ class QvainDatasetChangeCumulativeState(Resource):
         args = self.parser.parse_args()
         cr_id = args.get('identifier')
         cumulative_state = args.get('cumulative_state')
-        is_authd = authentication.is_authenticated()
-        if not is_authd:
-            return {"PermissionError": "User not logged in."}, 401
 
-        # only creator of the dataset is allowed to modify it
-        csc_username = authentication.get_user_csc_name()
-        creator = get_dataset_creator(cr_id)
-        if csc_username != creator:
-            log.warning('User: \"{0}\" is not the creator of the dataset. Changing cumulative state not allowed. Creator: \"{1}\"'.format(csc_username, creator))
-            return {"PermissionError": "User not authorized to change cumulative state of dataset."}, 403
+        error = check_dataset_creator(cr_id)
+        if error is not None:
+            return error
+
         metax_response = change_cumulative_state(cr_id, cumulative_state)
         return metax_response
 
@@ -100,16 +80,11 @@ class QvainDatasetRefreshDirectoryContent(Resource):
         args = self.parser.parse_args()
         cr_identifier = args.get('cr_identifier')
         dir_identifier = args.get('dir_identifier')
-        is_authd = authentication.is_authenticated()
-        if not is_authd:
-            return {"PermissionError": "User not logged in."}, 401
 
-        # only creator of the dataset is allowed to modify it
-        csc_username = authentication.get_user_csc_name()
-        creator = get_dataset_creator(cr_identifier)
-        if csc_username != creator:
-            log.warning('User: \"{0}\" is not the creator of the dataset. Refreshing directory is not allowed. Creator: \"{1}\"'.format(csc_username, creator))
-            return {"PermissionError": "User not authorized to refresh directory in dataset."}, 403
+        error = check_dataset_creator(cr_identifier)
+        if error is not None:
+            return error
+
         metax_response = refresh_directory_content(cr_identifier, dir_identifier)
         return metax_response
 
@@ -138,15 +113,10 @@ class QvainDatasetFixDeprecated(Resource):
         """
         args = self.parser.parse_args()
         cr_id = args.get('identifier')
-        is_authd = authentication.is_authenticated()
-        if not is_authd:
-            return {"PermissionError": "User not logged in."}, 401
 
-        # only creator of the dataset is allowed to modify it
-        csc_username = authentication.get_user_csc_name()
-        creator = get_dataset_creator(cr_id)
-        if csc_username != creator:
-            log.warning('User: \"{0}\" is not the creator of the dataset. Fixing deprecated dataset not allowed. Creator: \"{1}\"'.format(csc_username, creator))
-            return {"PermissionError": "User not authorized to fix deprecated dataset."}, 403
+        error = check_dataset_creator(cr_id)
+        if error is not None:
+            return error
+
         metax_response = fix_deprecated_dataset(cr_id)
         return metax_response

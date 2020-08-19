@@ -11,7 +11,7 @@ import requests
 
 from etsin_finder.finder import app
 from etsin_finder.app_config import get_metax_api_config
-from etsin_finder.utils import json_or_empty, FlaskService
+from etsin_finder.utils import json_or_empty, FlaskService, format_url
 from etsin_finder.constants import ACCESS_TYPES
 
 log = app.logger
@@ -49,7 +49,8 @@ class MetaxAPIService(FlaskService):
 
         """
         try:
-            metax_api_response = requests.get(self.METAX_GET_CATALOG_RECORD_URL.format(identifier),
+            url = format_url(self.METAX_GET_CATALOG_RECORD_URL, identifier)
+            metax_api_response = requests.get(url,
                                               headers={'Accept': 'application/json'},
                                               auth=(self.user, self.pw),
                                               verify=self.verify_ssl,
@@ -86,7 +87,8 @@ class MetaxAPIService(FlaskService):
 
         """
         try:
-            metax_api_response = requests.get(self.METAX_GET_REMOVED_CATALOG_RECORD_URL.format(identifier),
+            url = format_url(self.METAX_GET_REMOVED_CATALOG_RECORD_URL, identifier)
+            metax_api_response = requests.get(url,
                                               headers={'Accept': 'application/json'},
                                               auth=(self.user, self.pw),
                                               verify=self.verify_ssl,

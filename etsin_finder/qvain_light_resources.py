@@ -26,37 +26,23 @@ from etsin_finder.utils import \
     datetime_to_header
 from etsin_finder.constants import SAML_ATTRIBUTES, DATA_CATALOG_IDENTIFIERS
 from etsin_finder.qvain_light_dataset_schema import DatasetValidationSchema
-from etsin_finder.qvain_light_utils import data_to_metax, \
-    get_dataset_creator, \
-    remove_deleted_datasets_from_results, \
-    edited_data_to_metax, \
-    check_if_data_in_user_IDA_project, \
-    get_encoded_access_granter, \
-    get_user_ida_projects
-
+from etsin_finder.qvain_light_utils import (
+    data_to_metax,
+    get_dataset_creator,
+    remove_deleted_datasets_from_results,
+    edited_data_to_metax,
+    check_if_data_in_user_IDA_project,
+    get_encoded_access_granter,
+    get_user_ida_projects,
+    check_dataset_creator,
+    check_authentication,
+)
+from etsin_finder.log_utils import log_request
 from etsin_finder.qvain_light_service import create_dataset, update_dataset, get_dataset, delete_dataset
 
 log = app.logger
 
 TOTAL_ITEM_LIMIT = 1000
-
-
-def log_request(f):
-    """Log request when used as decorator"""
-    @wraps(f)
-    def func(*args, **kwargs):
-        """Log requests"""
-        csc_name = authentication.get_user_csc_name() if not app.testing else ''
-        log.info('[{0}.{1}] {2} {3} {4} USER AGENT: {5}'.format(
-            args[0].__class__.__name__,
-            f.__name__,
-            csc_name if csc_name else 'UNAUTHENTICATED',
-            request.environ.get('REQUEST_METHOD'),
-            request.path,
-            request.user_agent))
-        return f(*args, **kwargs)
-    return func
-
 
 class ProjectFiles(Resource):
     """File/directory related REST endpoints for getting project directory"""
@@ -130,6 +116,9 @@ class DirectoryFiles(Resource):
         directory_fields = args.get('directory_fields', None)
         file_fields = args.get('file_fields', None)
 
+        if not authentication.is_authenticated():
+            return 'User is not authenticated', 403
+
         if file_fields is None:
             file_fields = ','.join([
                 "file_name",
@@ -157,7 +146,9 @@ class DirectoryFiles(Resource):
                 "title"
             ])
 
-        params = {}
+        params = {
+            'include_parent': 'true' # always include parent so we can check the parent directory project_identifier
+        }
         if cr_identifier:
             params['cr_identifier'] = cr_identifier
         if pagination:
@@ -173,6 +164,13 @@ class DirectoryFiles(Resource):
 
         dir_obj = qvain_light_service.get_directory(dir_id, params)
 
+        # Return data only if user has access to project
+        user_ida_projects = get_user_ida_projects() or []
+        project_identifier = dir_obj.get('project_identifier') or dir_obj.get('results', {}).get('project_identifier')
+        if project_identifier not in user_ida_projects:
+            log.warning('Directory not in user projects: {0}'.format(dir_id))
+            return '', 404
+
         # Return data only if authenticated
         if dir_obj and authentication.is_authenticated():
             # Limit the amount of items to be sent to the frontend
@@ -181,7 +179,7 @@ class DirectoryFiles(Resource):
             if 'files' in dir_obj:
                 dir_obj['files'] = slice_array_on_limit(dir_obj.get('files', []), TOTAL_ITEM_LIMIT)
             return dir_obj, 200
-        log.warning('User not authenticated or dir_obj is invalid\ndir_id: {0}'.format(dir_id))
+        log.warning('The dir_obj is invalid\ndir_id: {0}'.format(dir_id))
         return '', 404
 
 
@@ -269,19 +267,16 @@ class QvainDatasets(Resource):
 
         """
         # Return data only if authenticated
-        is_authd = authentication.is_authenticated()
-        if not is_authd:
-            return {"PermissionError": "User not logged in."}, 401
-
-        user_id = authentication.get_user_csc_name()
-        if not user_id:
-            return {"PermissionError": "Missing user id."}, 401
+        error = check_authentication()
+        if error is not None:
+            return error
 
         args = self.parser.parse_args()
         limit = args.get('limit', None)
         offset = args.get('offset', None)
         no_pagination = args.get('no_pagination', None)
 
+        user_id = authentication.get_user_csc_name()
         result = qvain_light_service.get_datasets_for_user(user_id, limit, offset, no_pagination)
         if result:
             # Limit the amount of items to be sent to the frontend
@@ -305,20 +300,19 @@ class QvainDatasets(Resource):
 
         """
         use_doi = False
-        is_authd = authentication.is_authenticated()
-        if not is_authd:
-            return {"PermissionError": "User not logged in."}, 401
+        # Return data only if authenticated
+        error = check_authentication()
+        if error is not None:
+            return error
+
         try:
             data = self.validationSchema.loads(request.data)
         except ValidationError as err:
             log.warning("Invalid form data: {0}".format(err.messages))
             return err.messages, 400
 
-        saml_user_data = session.get('samlUserdata', {})
-        saml_haka_org_id = SAML_ATTRIBUTES.get('haka_org_id')
-        saml_csc_username_id = SAML_ATTRIBUTES.get('CSC_username')
-        metadata_provider_org = saml_user_data.get(saml_haka_org_id, [])[0]
-        metadata_provider_user = saml_user_data.get(saml_csc_username_id, [])[0]
+        metadata_provider_org = authentication.get_user_home_organization_id()
+        metadata_provider_user = authentication.get_user_csc_name()
 
         if not metadata_provider_org or not metadata_provider_user:
             log.warning("The Metadata provider is not specified\n")
@@ -358,17 +352,11 @@ class QvainDataset(Resource):
             [type] -- Metax response.
 
         """
-        is_authd = authentication.is_authenticated()
-        if not is_authd:
-            return {"PermissionError": "User not logged in."}, 401
-        user = authentication.get_user_csc_name()
-        response, status = get_dataset(cr_id)
-        if status != 200:
-            return response, status
-        if user != response.get('metadata_provider_user'):
-            log.warning('User: \"{0}\" is not the creator of the dataset. Editing not allowed.'.format(user))
-            return {"PermissionError": "User is not allowed to edit the dataset."}, 403
+        error = check_dataset_creator(cr_id)
+        if error is not None:
+            return error
 
+        response, status = get_dataset(cr_id)
         return response, status
 
     @log_request
@@ -379,9 +367,10 @@ class QvainDataset(Resource):
             The response from metax or if error an error message.
 
         """
-        is_authd = authentication.is_authenticated()
-        if not is_authd:
-            return {"PermissionError": "User not logged in."}, 401
+        error = check_dataset_creator(cr_id)
+        if error is not None:
+            return error
+
         try:
             data = self.validationSchema.loads(request.data)
         except ValidationError as err:
@@ -412,13 +401,6 @@ class QvainDataset(Resource):
 
         del data["original"]
 
-        # Only creator of the dataset is allowed to update it
-        csc_username = authentication.get_user_csc_name()
-        creator = get_dataset_creator(cr_id)
-        if csc_username != creator:
-            log.warning('User: \"{0}\" is not the creator of the dataset. Update operation not allowed. Creator: \"{1}\"'.format(csc_username, creator))
-            return {"PermissionError": "User not authorized to to edit dataset."}, 403
-
         metax_ready_data = edited_data_to_metax(data, original)
 
         params = {}
@@ -439,16 +421,9 @@ class QvainDataset(Resource):
             [type] -- Metax response.
 
         """
-        is_authd = authentication.is_authenticated()
-        if not is_authd:
-            return {"PermissionError": "User not logged in."}, 401
-
-        # only creator of the dataset is allowed to delete it
-        user = authentication.get_user_csc_name()
-        creator = get_dataset_creator(cr_id)
-        if user != creator:
-            log.warning('User: \"{0}\" is not the creator of the dataset. Delete operation not allowed. Creator: \"{1}\"'.format(user, creator))
-            return {"PermissionError": "User not authorized to to delete dataset."}, 403
+        error = check_dataset_creator(cr_id)
+        if error is not None:
+            return error
 
         metax_response = delete_dataset(cr_id)
         return metax_response

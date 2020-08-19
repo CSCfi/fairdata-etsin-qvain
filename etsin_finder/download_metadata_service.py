@@ -12,7 +12,7 @@ import requests
 
 from etsin_finder.app_config import get_metax_api_config
 from etsin_finder.finder import app
-from etsin_finder.utils import json_or_empty, FlaskService
+from etsin_finder.utils import json_or_empty, FlaskService, format_url
 
 log = app.logger
 
@@ -66,9 +66,9 @@ class DatasetMetadataService(FlaskService):
             return self._get_error_response(200)
 
         if metadata_format == 'metax':
-            url = self.HOST + '/rest/datasets/' + cr_id + '.json'
+            url = format_url(self.HOST + '/rest/datasets/{}.json', cr_id)
         else:
-            url = self.HOST + '/rest/datasets/' + cr_id + '?dataset_format=' + metadata_format
+            url = format_url(self.HOST + '/rest/datasets/{}?dataset_format={}', cr_id, metadata_format)
 
         log.info('Request dataset metadata from: {0}'.format(url))
 

@@ -14,7 +14,7 @@ from etsin_finder.cr_service import (
     get_catalog_record_access_type,
     get_catalog_record_data_catalog_id,
     get_catalog_record_embargo_available,
-    is_draft,
+    is_published,
     is_catalog_record_owner
 )
 
@@ -41,10 +41,14 @@ def user_can_view_dataset(cr_id):
     if cr is None:
         return False
 
+    if is_published(cr):
+        return True
+
+    # non-public dataset is available only for the owner
     user_id = get_user_id()
-    if is_draft(cr) and not is_catalog_record_owner(cr, user_id):
-        return False
-    return True
+    if is_catalog_record_owner(cr, user_id):
+        return True
+    return False
 
 
 def user_has_rems_permission_for_catalog_record(cr_id):
