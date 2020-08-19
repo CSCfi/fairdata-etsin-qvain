@@ -125,3 +125,56 @@ class DatasetValidationSchema(Schema):
     directories = fields.List(fields.Dict())
     remote_resources = fields.List(fields.Dict())
     useDoi = fields.Boolean()
+
+
+class DatasetValidationSchemaForDraft(Schema):
+    """Validation schema for the whole dataset."""
+
+    original = fields.Dict()
+    title = fields.Dict(
+        required=True,
+        validate=lambda x: len(x.get('en', [])) + len(x.get('fi', [])) > 0
+    )
+    description = fields.Dict(
+        required=True,
+        validate=lambda x: len(x.get('en', [])) + len(x.get('fi', [])) >= 0
+    )
+    issuedDate = fields.Str()
+    identifiers = fields.List(fields.Str())
+    fieldOfScience = fields.List(
+        fields.Str(),
+        required=False
+    )
+    datasetLanguage = fields.List(
+        fields.Str(),
+        required=False
+    )
+    keywords = fields.List(
+        fields.Str(),
+        required=True,
+        validate=lambda list: len(list) >= 0
+    )
+    actors = fields.List(fields.Nested(
+        ActorValidationSchema),
+        required=True,
+        validate=lambda list: len(list) >= 0
+    )
+    accessType = fields.Dict(
+        required=True
+    )
+    infrastructure = fields.List(
+        fields.Dict(),
+        required=False
+    )
+    spatial = fields.List(
+        fields.Dict()
+    )
+    embargoDate = fields.Str()
+    restrictionGrounds = fields.Str()
+    license = fields.List(fields.Nested(LicenseValidationSchema))
+    dataCatalog = fields.Str()
+    cumulativeState = fields.Int(OneOf([0, 1, 2]))
+    files = fields.List(fields.Dict())
+    directories = fields.List(fields.Dict())
+    remote_resources = fields.List(fields.Dict())
+    useDoi = fields.Boolean()

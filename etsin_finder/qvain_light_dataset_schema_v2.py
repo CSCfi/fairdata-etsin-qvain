@@ -6,11 +6,20 @@ from etsin_finder.qvain_light_dataset_schema import (
     PersonValidationSchema,
     OrganizationValidationSchema,
     ActorValidationSchema,
-    DatasetValidationSchema as DatasetValidationSchemaV1
+    DatasetValidationSchema as DatasetValidationSchemaV1,
+    DatasetValidationSchemaForDraft as DatasetValidationSchemaForDraftV1
 )
 
 class DatasetValidationSchema(DatasetValidationSchemaV1):
     """Validation schema for the whole dataset."""
+
+    class Meta:
+        """Meta options for validation."""
+
+        exclude = ("files", "directories")
+
+class DatasetValidationSchemaForDraft(DatasetValidationSchemaForDraftV1):
+    """Validation schema for the whole dataset when in draft format."""
 
     class Meta:
         """Meta options for validation."""

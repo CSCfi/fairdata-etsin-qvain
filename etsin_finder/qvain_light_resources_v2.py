@@ -27,6 +27,7 @@ from etsin_finder.utils import \
 from etsin_finder.constants import SAML_ATTRIBUTES
 from etsin_finder.qvain_light_dataset_schema_v2 import (
     DatasetValidationSchema,
+    DatasetValidationSchemaForDraft,
     FileActionsValidationSchema,
     UserMetadataValidationSchema
 )
@@ -132,6 +133,7 @@ class QvainDatasets(Resource):
     def __init__(self):
         """Setup required utils for dataset metadata handling"""
         self.validationSchema = DatasetValidationSchema()
+        self.validationSchemaForDraft = DatasetValidationSchemaForDraft()
         self.parser = reqparse.RequestParser()
         self.parser.add_argument('draft', type=bool, required=False)
 
@@ -201,7 +203,12 @@ class QvainDatasets(Resource):
         if not is_authd:
             return {"PermissionError": "User not logged in."}, 401
         try:
-            data = self.validationSchema.loads(request.data)
+            if draft:
+                log.info('checking draft')
+                data = self.validationSchemaForDraft.loads(request.data)
+            if not draft:
+                log.info('checking non-draft')
+                data = self.validationSchema.loads(request.data)
         except ValidationError as err:
             log.warning("Invalid form data: {0}".format(err.messages))
             return err.messages, 400
@@ -270,7 +277,10 @@ class QvainDataset(Resource):
         if not is_authd:
             return {"PermissionError": "User not logged in."}, 401
         try:
-            data = self.validationSchema.loads(request.data)
+            if draft:
+                data = self.validationSchemaForDraft.loads(request.data)
+            if not draft:
+                data = self.validationSchema.loads(request.data)
         except ValidationError as err:
             log.warning("Invalid form data: {0}".format(err.messages))
             return err.messages, 400
