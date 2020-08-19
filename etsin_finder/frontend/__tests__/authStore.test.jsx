@@ -17,10 +17,18 @@ const mockUser = {
 }
 
 describe('Auth Store', () => {
+  // catch logged errors instead of printing
+  let errorSpy
+
   beforeEach(() => {
+    errorSpy = jest.spyOn(console, 'error').mockReturnValue()
     mock.reset()
     mock.onGet('/api/user').reply(200, mockUser)
     Auth.reset()
+  })
+
+  afterEach(() => {
+    errorSpy.mockRestore()
   })
 
   it('Should be logged in', async () => {
@@ -56,13 +64,10 @@ describe('Auth Store', () => {
     mock.onDelete('/api/session').reply(401)
     await Auth.checkLogin()
     expect(Auth.userLogged).toBe(true)
-    // catch logged errors instead of printing
-    const spy = jest.spyOn(console, 'error').mockReturnValue()
     try {
       await Auth.logout()
     } catch {}
-    expect(spy.mock.calls.length).toBe(1)
-    spy.mockRestore()
+    expect(errorSpy.mock.calls.length).toBe(1)
     expect(Auth.userLogged).toBe(true)
   })
   it('Login renewal error should clear login', async () => {
