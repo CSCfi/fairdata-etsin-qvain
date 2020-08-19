@@ -30,7 +30,6 @@ class SubmitButtons extends Component {
     datasetLoading: false,
     publishTooltipOpen: false,
     draftTooltipOpen: false,
-    saveDraftButtonClicked: false,
   }
 
   componentWillUnmount() {
@@ -145,7 +144,6 @@ class SubmitButtons extends Component {
 
     const obj = handleSubmitToBackend(this.props.Stores.Env, this.props.Stores.Qvain)
     obj.original = original
-
     this.setLoading(true)
 
     return qvainFormSchema
@@ -272,9 +270,6 @@ class SubmitButtons extends Component {
     const { original, editDataset } = this.props.Stores.Qvain
     const { metaxApiV2 } = this.props.Stores.Env
 
-    // Save & publish clicked
-    this.setState({ saveDraftButtonClicked: false })
-
     if (!metaxApiV2) {
       console.error('Use handleUpdateV1 with API V1')
       return null
@@ -305,9 +300,6 @@ class SubmitButtons extends Component {
     const { history } = this.props
     const { original, setChanged, editDataset } = this.props.Stores.Qvain
     const { metaxApiV2 } = this.props.Stores.Env
-
-    // Save as draft clicked
-    this.setState({ saveDraftButtonClicked: true })
 
     if (original) {
       console.error('Use handleCreateNewVersion to create a draft from a published dataset')
@@ -387,9 +379,6 @@ class SubmitButtons extends Component {
     const { original, editDataset } = Stores.Qvain
     const { metaxApiV2 } = Stores.Env
 
-    // Save as draft clicked
-    this.setState({ saveDraftButtonClicked: true })
-
     if (!original || original.state !== 'published') {
       console.error('Expected a published dataset')
       return null
@@ -431,9 +420,6 @@ class SubmitButtons extends Component {
     const { original } = Stores.Qvain
     const { metaxApiV2 } = Stores.Env
 
-    // Save as draft clicked
-    this.setState({ saveDraftButtonClicked: true })
-
     if (!metaxApiV2) {
       console.error('Metax API V2 is required for publishing drafts')
       return null
@@ -473,9 +459,6 @@ class SubmitButtons extends Component {
     const { Stores, history } = this.props
     const { original, editDataset } = Stores.Qvain
     const { metaxApiV2 } = Stores.Env
-
-    // Save and publish clicked
-    this.setState({ saveDraftButtonClicked: false })
 
     if (!metaxApiV2) {
       console.error('Metax API V2 is required for publishing drafts')
