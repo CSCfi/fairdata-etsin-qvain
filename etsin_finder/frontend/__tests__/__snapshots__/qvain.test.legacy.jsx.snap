@@ -179,7 +179,7 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
         "inEdit": undefined,
         "infrastructure": undefined,
         "infrastructures": Array [],
-        "issuedDate": "2020-08-18",
+        "issuedDate": "2020-08-19",
         "keywordString": "",
         "keywordsArray": Array [],
         "license": Object {
@@ -384,7 +384,7 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
         "inEdit": undefined,
         "infrastructure": undefined,
         "infrastructures": Array [],
-        "issuedDate": "2020-08-18",
+        "issuedDate": "2020-08-19",
         "keywordString": "",
         "keywordsArray": Array [],
         "license": Object {
@@ -589,7 +589,7 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
         "inEdit": undefined,
         "infrastructure": undefined,
         "infrastructures": Array [],
-        "issuedDate": "2020-08-18",
+        "issuedDate": "2020-08-19",
         "keywordString": "",
         "keywordsArray": Array [],
         "license": Object {
@@ -794,7 +794,7 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
         "inEdit": undefined,
         "infrastructure": undefined,
         "infrastructures": Array [],
-        "issuedDate": "2020-08-18",
+        "issuedDate": "2020-08-19",
         "keywordString": "",
         "keywordsArray": Array [],
         "license": Object {

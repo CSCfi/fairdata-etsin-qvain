@@ -16,7 +16,7 @@ import { AccessType } from '../js/components/qvain/licenses/accessType'
 import RestrictionGrounds from '../js/components/qvain/licenses/resctrictionGrounds'
 import EmbargoExpires from '../js/components/qvain/licenses/embargoExpires'
 import { ACCESS_TYPE_URL, LICENSE_URL, DATA_CATALOG_IDENTIFIER } from '../js/utils/constants'
-import { qvainFormSchema } from '../js/components/qvain/utils/formValidation'
+import { qvainFormSchema, qvainFormSchemaDraft } from '../js/components/qvain/utils/formValidation'
 import { ExternalFilesBase } from '../js/components/qvain/files/external/externalFiles'
 import DoiSelection from '../js/components/qvain/files/doiSelection'
 import { ButtonGroup } from '../js/components/qvain/general/buttons'
@@ -476,6 +476,18 @@ describe('Qvain validation', () => {
   it('should validate dataset', async () => {
     try {
       expect(await qvainFormSchema.validate(dataset, { abortEarly: false }))
+    } catch (e) {
+      if (e.errors) {
+        fail(e.errors)
+      } else {
+        fail(e)
+      }
+    }
+  })
+
+  it('should validate draft dataset', async () => {
+    try {
+      expect(await qvainFormSchemaDraft.validate(dataset, { abortEarly: false }))
     } catch (e) {
       if (e.errors) {
         fail(e.errors)
