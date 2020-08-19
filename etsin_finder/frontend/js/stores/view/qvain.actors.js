@@ -616,7 +616,6 @@ export class ActorsRef {
 
   @action removeActorRef = (uiid) => {
     if (this.actorsRef[uiid]) delete this.actorsRef[uiid]
-    console.log(Object.keys(this.actorsRef))
   }
 
   @action clearActorsRef = () => {

@@ -83,7 +83,7 @@ const ActorsInput = ({ Stores, language }) => {
       />
       <ButtonContainer>
         <Translate
-          component={Button}
+          component={AddButton}
           content="qvain.history.provenance.modal.actorsInput.addButton"
           onClick={() => {
             if (!Provenances.inEdit.selectedActor) return
@@ -108,6 +108,10 @@ CustomOption.propTypes = {
   children: PropTypes.node.isRequired,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
 }
+
+const AddButton = styled(Button)`
+  margin-left: 0px;
+`
 
 const EditIcon = styled(FontAwesomeIcon).attrs({
   icon: faPen,

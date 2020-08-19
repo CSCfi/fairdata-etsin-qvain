@@ -16,61 +16,61 @@ const FieldListAdd = ({
   Form,
   language,
   contentLabel,
-  position
+  position,
 }) => {
-    const [confirm, setConfirm] = useState(false)
+  const [confirm, setConfirm] = useState(false)
 
-    const close = () => {
-      const { clearInEdit } = Field
-      setConfirm(false)
-      clearInEdit();
-    }
+  const close = () => {
+    const { clearInEdit } = Field
+    setConfirm(false)
+    clearInEdit()
+  }
 
-    const confirmClose = () => {
-      const { hasChanged } = Field
-      if (hasChanged) setConfirm(true)
-      else close()
-    }
+  const confirmClose = () => {
+    const { hasChanged } = Field
+    if (hasChanged) setConfirm(true)
+    else close()
+  }
 
-    const open = () => {
-      const { create } = Field
-      create()
-    }
+  const open = () => {
+    const { create } = Field
+    create()
+  }
 
-    return (
-      <>
-        <Observer>
-          {() => (Field.inEdit ? (
-            <Modal
-              isOpen
-              onRequestClose={confirmClose}
-              contentLabel={contentLabel}
-              customStyles={modalStyle}
-            >
-              <ModalContent
-                translationsRoot={translationsRoot}
-                Store={Store}
-                Field={Field}
-                handleSave={handleSave}
-                Form={Form}
-                language={language}
-              />
-              <ConfirmClose
-                show={confirm}
-                onCancel={() => setConfirm(false)}
-                onConfirm={close}
-              />
-            </Modal>
-      ) : null)
-        }
-        </Observer>
-        <ButtonContainer position={position}>
-          <AddNewButton type="button" onClick={open}>
-            <Translate content={`${translationsRoot}.modal.${Field.editMode ? 'edit' : 'add'}Button`} />
-          </AddNewButton>
-        </ButtonContainer>
-      </>
-    )
+  return (
+    <>
+      <Observer>
+        {() => {
+          if (Field.inEdit) {
+            return (
+              <Modal
+                isOpen
+                onRequestClose={confirmClose}
+                contentLabel={contentLabel}
+                customStyles={modalStyle}
+              >
+                <ModalContent
+                  translationsRoot={translationsRoot}
+                  Store={Store}
+                  Field={Field}
+                  handleSave={handleSave}
+                  Form={Form}
+                  language={language}
+                />
+                <ConfirmClose show={confirm} onCancel={() => setConfirm(false)} onConfirm={close} />
+              </Modal>
+            )
+          }
+          return null
+        }}
+      </Observer>
+      <ButtonContainer position={position}>
+        <AddNewButton type="button" onClick={open}>
+          <Translate content={`${translationsRoot}.modal.addButton`} />
+        </AddNewButton>
+      </ButtonContainer>
+    </>
+  )
 }
 
 FieldListAdd.propTypes = {
@@ -78,28 +78,25 @@ FieldListAdd.propTypes = {
   Field: PropTypes.object.isRequired,
   translationsRoot: PropTypes.string.isRequired,
   handleSave: PropTypes.func.isRequired,
-  Form: PropTypes.oneOfType([
-    PropTypes.element,
-    PropTypes.func
-  ]).isRequired,
+  Form: PropTypes.oneOfType([PropTypes.element, PropTypes.func]).isRequired,
   language: PropTypes.string,
   contentLabel: PropTypes.string,
-  position: PropTypes.string
+  position: PropTypes.string,
 }
 
 FieldListAdd.defaultProps = {
   language: '',
   contentLabel: '',
-  position: 'right'
+  position: 'right',
 }
 
-
 const ButtonContainer = styled.div`
-  text-align: ${(props) => props.position};
+  text-align: ${props => props.position};
 `
 const AddNewButton = styled(Button)`
   margin: 0;
-  margin-top: 11px;
+  margin-top: 0.2em;
+  margin-bottom: 0.4em;
 `
 
 const modalStyle = {

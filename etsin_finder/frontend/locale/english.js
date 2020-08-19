@@ -1225,6 +1225,7 @@ const english = {
               buttons: {
                 addGeometry: 'Add Geometry',
                 save: 'Save',
+                editSave: 'Update',
                 cancel: 'Cancel',
               },
               nameInput: {
@@ -1260,6 +1261,7 @@ const english = {
               addButton: 'Add used entity',
               buttons: {
                 save: 'Save',
+                editSave: 'Update',
                 cancel: 'Cancel'
               },
               title: {

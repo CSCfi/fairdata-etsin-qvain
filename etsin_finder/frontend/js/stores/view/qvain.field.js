@@ -53,8 +53,8 @@ class Field {
   saveEdited = (edited) => {
     this.validationError = ''
 
-    const refs = this.detachRefs(this.inEdit)
     if (edited) {
+      const refs = this.detachRefs(this.inEdit)
       if (this.isParentRoot()) {
         const indexOfItem = this.Parent[this.fieldName].indexOf(edited)
         this.Parent.editItemInField(this.fieldName, indexOfItem, cloneDeep(toJS(this.inEdit)), refs)
@@ -74,7 +74,7 @@ class Field {
     if (this.isParentRoot()) {
       this.Parent.addToField(this.fieldName, cloneDeep(toJS(this.inEdit)), refs)
     } else {
-      const index = this.Parent.inEdit[this.fieldName].length()
+      const index = this.Parent.inEdit[this.fieldName].length
       this.Parent.inEdit[this.fieldName] = [...this.Parent.inEdit[this.fieldName], cloneDeep(toJS(this.inEdit))]
       this.attachRefs(refs, this.Parent.inEdit[this.fieldName][index])
     }
@@ -100,7 +100,7 @@ class Field {
     const refs = {}
     this.references.forEach(ref => {
       refs[ref] = item[ref]
-      delete item[ref]
+      item[ref] = undefined
     })
     return refs
   }
