@@ -274,6 +274,8 @@ class QvainDataset(Resource):
 
         """
         is_authd = authentication.is_authenticated()
+        args = self.parser.parse_args()
+        draft = args.get('draft')
         if not is_authd:
             return {"PermissionError": "User not logged in."}, 401
         try:
