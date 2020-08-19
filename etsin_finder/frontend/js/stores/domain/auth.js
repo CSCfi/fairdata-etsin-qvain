@@ -28,6 +28,25 @@ class Auth {
   }
 
   @action
+  resetUser = () => {
+    this.user = {
+      name: undefined,
+      loggedIn: false,
+      homeOrganizationName: undefined,
+      idaGroups: [],
+      isUsingRems: undefined,
+    }
+  }
+
+  @action
+  reset = () => {
+    this.resetUser()
+    this.userLogged = false
+    this.cscUserLogged = false
+    this.loading = false
+  }
+
+  @action
   checkLogin() {
     return new Promise((resolve, reject) => {
       runInAction(() => {
@@ -102,7 +121,7 @@ class Auth {
           resolve(res)
         })
         .catch((err) => {
-          console.log(err)
+          console.error(err)
           reject(err)
         })
     })
@@ -117,9 +136,7 @@ class Auth {
         .then(() => resolve())
         .catch((err) => {
           if (err.response.status === 401) {
-            this.userLogged = false
-            this.cscUserLogged = false
-            this.user = { name: undefined }
+            this.reset()
           }
           return reject(err)
         })
