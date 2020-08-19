@@ -9,7 +9,6 @@
  */
 
 import { observable, action, runInAction } from 'mobx'
-// import { observable, action, toJS } from 'mobx'
 import axios from 'axios'
 
 class Auth {
