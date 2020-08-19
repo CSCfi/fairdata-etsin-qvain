@@ -192,9 +192,9 @@ class SubmitButtons extends Component {
     if (buttonClicked === 'saveAsDraft') {
       console.log('We will evaluate a draft')
       await qvainFormSchemaDraft.validate(obj, { abortEarly: false })
-    
+
     // Validate according to normal dataset schema
-    } else {
+    } else if (buttonClicked === 'saveAndPublish') {
       console.log('We will evaluate a publish')
       await qvainFormSchema.validate(obj, { abortEarly: false })
     }
@@ -263,7 +263,7 @@ class SubmitButtons extends Component {
     return resp.data
   }
 
-  handleUpdate = async () => {
+  handleUpdate = async (buttonClicked) => {
     // Update existing dataset with the current metadata, add files and file metadata.
     // Return the dataset identifier if successful, otherwise null.
 
@@ -275,7 +275,7 @@ class SubmitButtons extends Component {
       return null
     }
     try {
-      const values = await this.getSubmitValues('saveAndPublish')
+      const values = await this.getSubmitValues(buttonClicked)
 
       this.setLoading(true)
       const dataset = await this.patchDataset(values)
@@ -296,6 +296,8 @@ class SubmitButtons extends Component {
   }
 
   handleCreateNewDraft = async (showSuccess = true, editResult = true) => {
+    console.log('in handleCreateNewDraftAndPublish')
+    
     // Create new draft dataset
     const { history } = this.props
     const { original, setChanged, editDataset } = this.props.Stores.Qvain
@@ -351,6 +353,8 @@ class SubmitButtons extends Component {
   }
 
   handleCreateNewDraftAndPublish = async () => {
+    console.log('in handleCreateNewDraftAndPublish')
+
     // Instead of publishing directly, create a draft first.
     // The steps are:
     // - save dataset as draft
@@ -374,6 +378,8 @@ class SubmitButtons extends Component {
   }
 
   handleSaveAsDraft = async () => {
+    console.log('in handleSaveAsDraft')
+
     // Create draft of a published dataset, save current changes to the draft
     const { Stores, history } = this.props
     const { original, editDataset } = Stores.Qvain
@@ -416,6 +422,8 @@ class SubmitButtons extends Component {
   }
 
   handleMergeDraft = async () => {
+    console.log('in handleMergeDraft')
+
     const { Stores } = this.props
     const { original } = Stores.Qvain
     const { metaxApiV2 } = Stores.Env
@@ -456,6 +464,7 @@ class SubmitButtons extends Component {
   }
 
   handlePublishDataset = async (saveChanges = true, overrideIdentifier = null) => {
+    console.log('in handlePublishDataset')
     const { Stores, history } = this.props
     const { original, editDataset } = Stores.Qvain
     const { metaxApiV2 } = Stores.Env
@@ -672,7 +681,7 @@ class SubmitButtons extends Component {
           >
             <SubmitButton
               disabled={disabledDueToReadOnly || disabledDueToMissingFieldsDraft}
-              onClick={() => this.handleUpdate()}
+              onClick={() => this.handleUpdate('saveAsDraft')}
             >
               <Translate content="qvain.saveDraft" />
             </SubmitButton>
@@ -766,7 +775,7 @@ class SubmitButtons extends Component {
           >
             <SubmitButton
               disabled={disabledDueToReadOnly || disabledDueToMissingFieldsNonDraft}
-              onClick={() => this.handleUpdate()}
+              onClick={() => this.handleUpdate('saveAndPublish')}
             >
               <Translate content="qvain.submit" />
             </SubmitButton>
