@@ -338,15 +338,15 @@ const finnish = {
     saveDraft: 'Tallenna Luonnos',
     submit: 'Julkaise Aineisto',
     missingFieldsGeneral: {
-      infoTitle: 'Julkaiseminen vaatii seuraavat kentät',
+      infoTitle: 'Vaatii seuraavat kentät:',
       title: 'Otsikko',
       description: 'Kuvaus',
-      atLeastOneKeyword: 'Avainsanat (väh. 1)',
-      atLeastOneLicense: 'Lisenssi (väh. 1)',
+      atLeastOneKeyword: 'Avainsanat',
+      atLeastOneLicense: 'Lisenssi',
       fileOrigin: 'Tiedoston lähde',
     },
     missingFieldsGeneralDraft: {
-      infoTitle: 'Luonnoksen tallentaminen vaatii seuraavat kentät',
+      infoTitle: 'Vaatii seuraavat kentät:',
     },
     missingFieldsActors: {
       infoTitle: 'Ja toimijat',

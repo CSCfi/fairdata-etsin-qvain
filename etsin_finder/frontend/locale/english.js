@@ -339,15 +339,15 @@ const english = {
     saveDraft: 'Save Draft',
     submit: 'Save and Publish',
     missingFieldsGeneral: {
-      infoTitle: 'Publishing requires the following fields',
+      infoTitle: 'Requires the following fields:',
       title: 'Title',
       description: 'Description',
-      atLeastOneKeyword: 'Keyword (at least 1)',
-      atLeastOneLicense: 'License (at least 1)',
+      atLeastOneKeyword: 'Keywords',
+      atLeastOneLicense: 'License',
       fileOrigin: 'File origin',
     },
     missingFieldsGeneralDraft: {
-      infoTitle: 'Saving as draft requires the following fields',
+      infoTitle: 'Requires the following fields:',
     },
     missingFieldsActors: {
       infoTitle: 'And actors:',

@@ -7,7 +7,7 @@ import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import translate from 'counterpart'
 
-import { qvainFormSchema, otherIdentifierSchema } from './utils/formValidation'
+import { qvainFormSchema, qvainFormSchemaDraft, otherIdentifierSchema } from './utils/formValidation'
 import handleSubmitToBackend from './utils/handleSubmit'
 import urls from './utils/urls'
 import { InvertedButton } from '../general/button'
@@ -30,6 +30,7 @@ class SubmitButtons extends Component {
     datasetLoading: false,
     publishTooltipOpen: false,
     draftTooltipOpen: false,
+    saveDraftButtonClicked: false,
   }
 
   componentWillUnmount() {
@@ -171,7 +172,7 @@ class SubmitButtons extends Component {
       })
   }
 
-  getSubmitValues = async () => {
+  getSubmitValues = async (buttonClicked) => {
     // Validate dataset and transform dataset metadata, file actions and metadata changes into format required by the backend.
     const {
       original,
@@ -188,7 +189,17 @@ class SubmitButtons extends Component {
     }
 
     const obj = handleSubmitToBackend(this.props.Stores.Env, this.props.Stores.Qvain)
-    await qvainFormSchema.validate(obj, { abortEarly: false })
+
+    // Validate according to draft schema
+    if (buttonClicked === 'saveAsDraft') {
+      console.log('We will evaluate a draft')
+      await qvainFormSchemaDraft.validate(obj, { abortEarly: false })
+    
+    // Validate according to normal dataset schema
+    } else {
+      console.log('We will evaluate a publish')
+      await qvainFormSchema.validate(obj, { abortEarly: false })
+    }
 
     const values = {
       dataset: obj,
@@ -260,12 +271,16 @@ class SubmitButtons extends Component {
 
     const { original, editDataset } = this.props.Stores.Qvain
     const { metaxApiV2 } = this.props.Stores.Env
+
+    // Save & publish clicked
+    this.setState({ saveDraftButtonClicked: false })
+
     if (!metaxApiV2) {
       console.error('Use handleUpdateV1 with API V1')
       return null
     }
     try {
-      const values = await this.getSubmitValues()
+      const values = await this.getSubmitValues('saveAndPublish')
 
       this.setLoading(true)
       const dataset = await this.patchDataset(values)
@@ -290,6 +305,10 @@ class SubmitButtons extends Component {
     const { history } = this.props
     const { original, setChanged, editDataset } = this.props.Stores.Qvain
     const { metaxApiV2 } = this.props.Stores.Env
+
+    // Save as draft clicked
+    this.setState({ saveDraftButtonClicked: true })
+
     if (original) {
       console.error('Use handleCreateNewVersion to create a draft from a published dataset')
       return null
@@ -301,7 +320,7 @@ class SubmitButtons extends Component {
     }
 
     try {
-      const { dataset, fileActions, metadataActions } = await this.getSubmitValues()
+      const { dataset, fileActions, metadataActions } = await this.getSubmitValues('saveAsDraft')
       if (!dataset) {
         return null
       }
@@ -367,6 +386,10 @@ class SubmitButtons extends Component {
     const { Stores, history } = this.props
     const { original, editDataset } = Stores.Qvain
     const { metaxApiV2 } = Stores.Env
+
+    // Save as draft clicked
+    this.setState({ saveDraftButtonClicked: true })
+
     if (!original || original.state !== 'published') {
       console.error('Expected a published dataset')
       return null
@@ -379,7 +402,7 @@ class SubmitButtons extends Component {
     }
 
     try {
-      const values = await this.getSubmitValues()
+      const values = await this.getSubmitValues('saveAsDraft')
       this.setLoading(true)
       const res = await axios.post(urls.v2.rpc.createDraft(), null, { params: { identifier } })
       const newIdentifier = res.data.identifier
@@ -408,6 +431,9 @@ class SubmitButtons extends Component {
     const { original } = Stores.Qvain
     const { metaxApiV2 } = Stores.Env
 
+    // Save as draft clicked
+    this.setState({ saveDraftButtonClicked: true })
+
     if (!metaxApiV2) {
       console.error('Metax API V2 is required for publishing drafts')
       return null
@@ -421,7 +447,7 @@ class SubmitButtons extends Component {
     }
 
     try {
-      const values = await this.getSubmitValues()
+      const values = await this.getSubmitValues('saveAsDraft')
       this.setLoading(true)
 
       // Save changes to draft before merging
@@ -448,6 +474,9 @@ class SubmitButtons extends Component {
     const { original, editDataset } = Stores.Qvain
     const { metaxApiV2 } = Stores.Env
 
+    // Save and publish clicked
+    this.setState({ saveDraftButtonClicked: false })
+
     if (!metaxApiV2) {
       console.error('Metax API V2 is required for publishing drafts')
       return null
@@ -464,7 +493,7 @@ class SubmitButtons extends Component {
 
     try {
       if (saveChanges) {
-        const values = await this.getSubmitValues()
+        const values = await this.getSubmitValues('saveAndPublish')
         this.setLoading(true)
 
         // Save changes before publishing
@@ -531,10 +560,6 @@ class SubmitButtons extends Component {
 
     // All required fields must be set in order to publish
     const disabledDueToMissingFieldsNonDraft = Stores.Qvain.stillMissingGeneralFields || Stores.Qvain.Actors.stillMissingActorFields
-
-    console.log('General fields still missing: ', Stores.Qvain.stillMissingGeneralFields)
-
-    console.log('Actors still missing: ', Stores.Qvain.Actors.stillMissingActorFields)
 
     const doiModal = (
       <DoiModal
