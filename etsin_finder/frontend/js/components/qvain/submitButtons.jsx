@@ -297,7 +297,6 @@ class SubmitButtons extends Component {
 
   handleCreateNewDraft = async (showSuccess = true, editResult = true) => {
     console.log('in handleCreateNewDraftAndPublish')
-    
     // Create new draft dataset
     const { history } = this.props
     const { original, setChanged, editDataset } = this.props.Stores.Qvain
