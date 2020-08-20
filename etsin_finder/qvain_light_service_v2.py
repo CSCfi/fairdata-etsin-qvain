@@ -8,13 +8,12 @@
 """Used for performing operations related to Metax for Qvain Light"""
 
 import requests
-from flask import jsonify
 
 import json
 
 from etsin_finder.finder import app
 from etsin_finder.app_config import get_metax_qvain_api_config
-from etsin_finder.utils import json_or_empty, FlaskService, format_url
+from etsin_finder.utils import json_or_empty, format_url
 from etsin_finder.qvain_light_service import MetaxQvainLightAPIService as MetaxQvainLightAPIServiceV1
 
 log = app.logger

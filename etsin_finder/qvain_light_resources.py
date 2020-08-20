@@ -7,28 +7,21 @@
 
 """RESTful API endpoints, meant to be used by Qvain Light form"""
 
-from functools import wraps
-import inspect
 from marshmallow import ValidationError
-from flask import request, session
-from flask_mail import Message
-from flask_restful import abort, reqparse, Resource
+from flask import request
+from flask_restful import reqparse, Resource
 
-from etsin_finder.app_config import get_app_config
 from etsin_finder import authentication
-from etsin_finder import authorization
-from etsin_finder import cr_service
 from etsin_finder import qvain_light_service
 from etsin_finder.finder import app
 from etsin_finder.utils import \
     sort_array_of_obj_by_key, \
     slice_array_on_limit, \
     datetime_to_header
-from etsin_finder.constants import SAML_ATTRIBUTES, DATA_CATALOG_IDENTIFIERS
+from etsin_finder.constants import DATA_CATALOG_IDENTIFIERS
 from etsin_finder.qvain_light_dataset_schema import DatasetValidationSchema
 from etsin_finder.qvain_light_utils import (
     data_to_metax,
-    get_dataset_creator,
     remove_deleted_datasets_from_results,
     edited_data_to_metax,
     check_if_data_in_user_IDA_project,

@@ -7,17 +7,11 @@
 
 """RPC API endpoints, meant to be used by Qvain Light form"""
 
-from functools import wraps
-import inspect
-from flask import request, session
-from flask_restful import abort, reqparse, Resource
+from flask_restful import reqparse, Resource
 
-from etsin_finder.app_config import get_app_config
-from etsin_finder import authentication
 from etsin_finder.qvain_light_service import change_cumulative_state, refresh_directory_content, fix_deprecated_dataset
 from etsin_finder.finder import app
-from etsin_finder.qvain_light_utils import get_dataset_creator, check_dataset_creator
-from etsin_finder.constants import SAML_ATTRIBUTES
+from etsin_finder.qvain_light_utils import check_dataset_creator
 from etsin_finder.log_utils import log_request
 
 log = app.logger

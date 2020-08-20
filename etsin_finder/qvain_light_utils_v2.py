@@ -1,14 +1,6 @@
 """Utilities for transforming the data from Qvain Light form to METAX compatible format"""
 
-from copy import deepcopy
-import json
-from flask import session
-from base64 import urlsafe_b64encode
-
-from etsin_finder.constants import SAML_ATTRIBUTES
-from etsin_finder.cr_service import get_catalog_record
 from etsin_finder.finder import app
-from etsin_finder.authentication import get_user_ida_groups, is_authenticated, get_user_csc_name
 from etsin_finder import qvain_light_utils
 
 log = app.logger

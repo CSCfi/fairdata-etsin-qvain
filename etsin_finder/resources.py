@@ -7,9 +7,7 @@
 
 """RESTful API endpoints, meant to be used by the frontend"""
 
-from functools import wraps
-import logging
-from flask import request, session
+from flask import session
 from flask_mail import Message
 from flask_restful import abort, reqparse, Resource
 

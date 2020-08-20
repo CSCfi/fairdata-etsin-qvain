@@ -8,7 +8,6 @@
 """Used for performing operations related to Metax for Qvain Light"""
 
 import requests
-from flask import jsonify
 
 from etsin_finder.finder import app
 from etsin_finder.app_config import get_metax_qvain_api_config

@@ -104,7 +104,6 @@ def prepare_flask_request_for_saml(request):
         # "lowercase_urlencoding": "",
         # "request_uri": "",
         # "query_string": ""
-
     }
 
 
