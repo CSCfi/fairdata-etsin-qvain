@@ -164,8 +164,7 @@ class DirectoryFiles(Resource):
             log.warning('Directory not in user projects: {0}'.format(dir_id))
             return '', 404
 
-        # Return data only if authenticated
-        if dir_obj and authentication.is_authenticated():
+        if dir_obj:
             # Limit the amount of items to be sent to the frontend
             if 'directories' in dir_obj:
                 dir_obj['directories'] = slice_array_on_limit(dir_obj.get('directories', []), TOTAL_ITEM_LIMIT)
