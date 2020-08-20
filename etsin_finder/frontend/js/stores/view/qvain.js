@@ -40,7 +40,7 @@ class Qvain {
 
   @observable spatials = []
 
-  @observable issuedDate = moment().format('YYYY-MM-DD')
+  @observable issuedDate = undefined
 
   @observable otherIdentifier = ''
 
@@ -123,7 +123,7 @@ class Qvain {
       en: '',
       fi: '',
     }
-    this.issuedDate = moment().format('YYYY-MM-DD')
+    this.issuedDate = undefined
     this.otherIdentifier = ''
     this.otherIdentifiersArray = []
     this.otherIdentifiersValidationError = null
@@ -253,6 +253,11 @@ class Qvain {
     // Update missing status
     this.checkMissingFieldsGeneral()
     this.checkMissingFieldsGeneralDraft()
+
+    // If this is a new dataset/draft and date is not yet defined, set date to today's date
+    if (this.issuedDate === undefined && this.original === undefined) {
+      this.issuedDate = moment().format('YYYY-MM-DD')
+    }
   }
 
   @action
