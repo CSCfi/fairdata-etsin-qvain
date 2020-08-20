@@ -32,7 +32,7 @@ TooltipHover.propTypes = {
     PropTypes.element,
     PropTypes.array
   ]).isRequired,
-  position: PropTypes.oneOf(['top', 'right', 'bottom']),
+  position: PropTypes.oneOf(['top', 'right']),
 }
 
 export default TooltipHover
@@ -43,12 +43,6 @@ function getContainerPosition(position) {
       return (
         'transform: translate(-50%, -6px);' +
         'bottom: 100%;' +
-        'left: 50%;'
-        )
-    case 'bottom':
-      return (
-        'transform: translate(-50%, -6px);' +
-        'bottom: -75%;' +
         'left: 50%;'
         )
     case 'right':
@@ -67,12 +61,6 @@ function getTipPosition(position) {
     case 'top':
       return (
         'bottom: 100%;' +
-        'left: 50%;' +
-        'transform: translate(-50%, 6px);'
-      )
-    case 'bottom':
-      return (
-        'bottom: 0%;' +
         'left: 50%;' +
         'transform: translate(-50%, 6px);'
       )
