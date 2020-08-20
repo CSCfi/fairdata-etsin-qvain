@@ -190,7 +190,6 @@ class SubmitButtons extends Component {
 
     // Validate according to draft schema
     if (buttonClicked === 'saveAsDraft') {
-      console.log('We will evaluate a draft')
       await qvainFormSchemaDraft.validate(obj, { abortEarly: false })
 
     // Validate according to normal dataset schema
@@ -246,12 +245,22 @@ class SubmitButtons extends Component {
     }
   }
 
-  patchDataset = async values => {
+  patchDataset = async (values, buttonClicked) => {
     const { dataset, fileActions, metadataActions } = values
     const { identifier } = dataset.original
     const datasetUrl = urls.v2.dataset(identifier)
     this.setLoading(true)
-    const resp = await axios.patch(datasetUrl, dataset)
+
+    // Separate patch dataset action for when draft is clicked and when publish is clicked (separate backend validation)
+    let saveAsDraftClicked = false
+
+    if (buttonClicked === 'saveAsDraft') {
+      saveAsDraftClicked = true
+    } else if (buttonClicked = 'saveAndPublish') {
+      saveAsDraftClicked = false
+    }
+
+    const resp = await axios.patch(datasetUrl, dataset, { params: { draft: saveAsDraftClicked } })
     await this.updateFiles(identifier, fileActions, metadataActions)
     this.props.Stores.Qvain.setChanged(false)
 
@@ -267,6 +276,9 @@ class SubmitButtons extends Component {
     // Update existing dataset with the current metadata, add files and file metadata.
     // Return the dataset identifier if successful, otherwise null.
 
+    console.log('asdsadas')
+    console.log(buttonClicked)
+
     const { original, editDataset } = this.props.Stores.Qvain
     const { metaxApiV2 } = this.props.Stores.Env
 
@@ -276,9 +288,12 @@ class SubmitButtons extends Component {
     }
     try {
       const values = await this.getSubmitValues(buttonClicked)
+      console.log('we are in handleUpdate...')
 
       this.setLoading(true)
-      const dataset = await this.patchDataset(values)
+      console.log(values)
+      const dataset = await this.patchDataset(values, buttonClicked)
+      console.log('we are in handleUpdate...still....')
       await editDataset(dataset)
 
       const data = { ...dataset, is_draft: dataset.state === 'draft' }
@@ -377,8 +392,6 @@ class SubmitButtons extends Component {
   }
 
   handleSaveAsDraft = async () => {
-    console.log('in handleSaveAsDraft')
-
     // Create draft of a published dataset, save current changes to the draft
     const { Stores, history } = this.props
     const { original, editDataset } = Stores.Qvain
@@ -408,7 +421,7 @@ class SubmitButtons extends Component {
       values.dataset.original = draft
 
       // Update created draft
-      const dataset = await this.patchDataset(values)
+      const dataset = await this.patchDataset(values, 'saveAsDraft')
       await editDataset(dataset)
       history.replace(`/qvain/dataset/${dataset.identifier}`)
       const data = { ...dataset, is_draft: true }
@@ -444,7 +457,7 @@ class SubmitButtons extends Component {
       this.setLoading(true)
 
       // Save changes to draft before merging
-      await this.patchDataset(values)
+      await this.patchDataset(values, 'saveAsDraft')
 
       // Merge changes to original dataset, delete draft
       const url = urls.v2.rpc.mergeDraft()
@@ -488,7 +501,7 @@ class SubmitButtons extends Component {
         this.setLoading(true)
 
         // Save changes before publishing
-        if (saveChanges && !(await this.patchDataset(values))) {
+        if (saveChanges && !(await this.patchDataset(values, 'saveAndPublish'))) {
           console.error('Update failed, cancel publish')
           return null
         }

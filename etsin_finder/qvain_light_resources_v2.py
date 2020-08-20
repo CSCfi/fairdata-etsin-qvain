@@ -195,19 +195,17 @@ class QvainDatasets(Resource):
         """
         params = {}
         args = self.parser.parse_args()
-        draft = args.get('draft')
-        if draft:
+        save_as_draft_clicked = args.get('draft')
+        if save_as_draft_clicked:
             params['draft'] = 'true'
 
         is_authd = authentication.is_authenticated()
         if not is_authd:
             return {"PermissionError": "User not logged in."}, 401
         try:
-            if draft:
-                log.info('checking draft')
+            if save_as_draft_clicked:
                 data = self.validationSchemaForDraft.loads(request.data)
-            if not draft:
-                log.info('checking non-draft')
+            if not save_as_draft_clicked:
                 data = self.validationSchema.loads(request.data)
         except ValidationError as err:
             log.warning("Invalid form data: {0}".format(err.messages))
@@ -239,6 +237,9 @@ class QvainDataset(Resource):
     def __init__(self):
         """Setup required utils for dataset metadata handling"""
         self.validationSchema = DatasetValidationSchema()
+        self.validationSchemaForDraft = DatasetValidationSchemaForDraft()
+        self.parser = reqparse.RequestParser()
+        self.parser.add_argument('draft', type=bool, required=False)
 
     @log_request
     def get(self, cr_id):
@@ -275,13 +276,13 @@ class QvainDataset(Resource):
         """
         is_authd = authentication.is_authenticated()
         args = self.parser.parse_args()
-        draft = args.get('draft')
+        save_as_draft_clicked = args.get('draft')
         if not is_authd:
             return {"PermissionError": "User not logged in."}, 401
         try:
-            if draft:
+            if save_as_draft_clicked:
                 data = self.validationSchemaForDraft.loads(request.data)
-            if not draft:
+            if not save_as_draft_clicked:
                 data = self.validationSchema.loads(request.data)
         except ValidationError as err:
             log.warning("Invalid form data: {0}".format(err.messages))
