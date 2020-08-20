@@ -5,7 +5,7 @@
 # :author: CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
 # :license: MIT
 
-"""URL converters"""
+"""URL variable converters"""
 
 from werkzeug.routing import BaseConverter
 
