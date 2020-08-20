@@ -32,6 +32,9 @@ class DatasetMetadataService(FlaskService):
 
         if metax_api_config:
             self.HOST = 'https://{0}'.format(metax_api_config.get('HOST'))
+            self.user = metax_api_config.get('USER')
+            self.password = metax_api_config.get('PASSWORD')
+            self.verify_ssl = metax_api_config.get('VERIFY_SSL', True)
         elif not self.is_testing:
             log.error('Unable to initialize DatasetMetadataService due to missing config')
 
@@ -73,7 +76,11 @@ class DatasetMetadataService(FlaskService):
         log.info('Request dataset metadata from: {0}'.format(url))
 
         try:
-            metax_response = requests.get(url, stream=True, timeout=15)
+            metax_response = requests.get(url,
+                                          stream=True,
+                                          timeout=15,
+                                          verify=self.verify_ssl,
+                                          auth=(self.user, self.password))
             metax_response.raise_for_status()
         except requests.Timeout as t:
             log.error('Attempt to download dataset metadata timed out\n{0}'.format(t))
