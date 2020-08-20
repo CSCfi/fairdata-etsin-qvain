@@ -342,7 +342,7 @@ const finnish = {
       title: 'Otsikko',
       description: 'Kuvaus',
       atLeastOneKeyword: 'Avainsanat',
-      atLeastOneLicense: 'Lisenssi',
+      atLeastOneLicense: 'Lisenssi (IDA-aineistolle)',
       fileOrigin: 'Tiedoston lähde',
     },
     missingFieldsGeneralDraft: {

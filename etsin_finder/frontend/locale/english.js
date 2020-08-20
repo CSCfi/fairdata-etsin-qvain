@@ -343,7 +343,7 @@ const english = {
       title: 'Title',
       description: 'Description',
       atLeastOneKeyword: 'Keywords',
-      atLeastOneLicense: 'License',
+      atLeastOneLicense: 'License (for IDA datasets)',
       fileOrigin: 'File origin',
     },
     missingFieldsGeneralDraft: {
