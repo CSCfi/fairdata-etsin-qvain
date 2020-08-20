@@ -10,7 +10,7 @@ import Form from '../../../temporalAndSpatial/spatial/form'
 
 const translationsRoot = 'qvain.history.provenance.modal.locationInput'
 const translations = {
-    label: `${translationsRoot}.label`,
+  label: `${translationsRoot}.label`,
 }
 
 const Location = ({ Stores }) => {
@@ -28,22 +28,20 @@ const Location = ({ Stores }) => {
         elements={Store.inEdit.spatials}
         disableNoItemsText
       />
-      <div id="locationInput">
-        <FieldListAdd
-          Store={Store}
-          Field={Store.Spatials}
-          Form={Form}
-          translationsRoot={translationsRoot}
-          handleSave={() => handleSave(Store.Spatials, translationsRoot)}
-          position="left"
-        />
-      </div>
+      <FieldListAdd
+        Store={Store}
+        Field={Store.Spatials}
+        Form={Form}
+        translationsRoot={translationsRoot}
+        handleSave={() => handleSave(Store.Spatials, translationsRoot)}
+        position="left"
+      />
     </>
   )
 }
 
 Location.propTypes = {
-  Stores: PropTypes.object.isRequired
+  Stores: PropTypes.object.isRequired,
 }
 
 export default inject('Stores')(observer(Location))

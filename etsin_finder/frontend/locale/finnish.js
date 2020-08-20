@@ -1221,8 +1221,9 @@ const finnish = {
             modal: {
               addButton: 'Lisää alueellinen tieto',
               buttons: {
-                addGeometry: 'Lisää geometria',
+                addGeometry: 'Lisää alueellinen tieto',
                 save: 'Tallenna',
+                editSave: 'Päivitä',
                 cancel: 'Peruuta'
               },
               title: {
@@ -1262,11 +1263,12 @@ const finnish = {
               addButton: 'Lisää käytetty kokonaisuus',
               buttons: {
                 save: 'Tallenna',
+                editSave: 'Päivitä',
                 cancel: 'Peruuta'
               },
               title: {
                 add: 'Lisää käytetty kokonaisuus',
-                edit: 'Muokkaa kaytettyä kokonaisuutta',
+                edit: 'Muokkaa käytettyä kokonaisuutta',
               },
               nameInput: {
                 fi: {

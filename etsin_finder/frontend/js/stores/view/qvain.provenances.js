@@ -105,7 +105,7 @@ export const ProvenanceModel = (Parent, provenanceData) => ({
     relatedResources: (provenanceData.used_entity || []).map(ue => RelatedResourceModel(ue)),
     associations: new ActorsRef({ actors: Parent.Actors, actorsFromBackend: provenanceData.was_associated_with, roles: [ROLE.PROVENANCE] }),
     lifecycle: provenanceData.lifecycle_event
-        ? Lifecycle(provenanceData.lifecycle_event.pref_label, provenanceData.lifecycle.identifier)
+        ? Lifecycle(provenanceData.lifecycle_event.pref_label, provenanceData.lifecycle_event.identifier)
         : undefined
 })
 
