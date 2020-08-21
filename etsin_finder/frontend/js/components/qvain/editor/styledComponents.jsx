@@ -1,10 +1,10 @@
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
-import { InvertedButton } from '../general/button'
-import { Container, StickySubHeader } from './general/card'
+import { InvertedButton } from '../../general/button'
+import { Container, StickySubHeader } from '../general/card'
 
 export const STSD = styled.button`
-  background: ${(p) => p.theme.color.primary};
+  background: ${p => p.theme.color.primary};
   color: #fafafa;
   max-height: 0;
   width: 100%;
@@ -49,7 +49,7 @@ export const SubmitContainer = styled(Container)`
 `
 
 export const LinkBackContainer = styled.div`
-  text-align: ${(props) => props.position};
+  text-align: ${props => props.position};
   white-space: nowrap;
 `
 
