@@ -83,7 +83,8 @@ const english = {
     },
     draftInfo: {
       draft: 'This dataset is a draft. Only the creator of the dataset can view it.',
-      changes: 'This is a preview of unpublished changes to a dataset.  Only the creator of the dataset can view it.',
+      changes:
+        'This is a preview of unpublished changes to a dataset.  Only the creator of the dataset can view it.',
     },
     draftIdentifierInfo: 'Dataset identifier will be generated when the dataset is published.',
     dl: {
@@ -104,7 +105,7 @@ const english = {
       loaded: 'Folder loaded',
       fileCount: {
         one: '1 file',
-        other: '%(count)s files'
+        other: '%(count)s files',
       },
       file_types: {
         both: 'files and folders',
@@ -260,9 +261,10 @@ const english = {
     },
     cookies: {
       accept: 'Accept all cookies',
-      infoText: 'By using Fairdata’s services you agree to our Cookies Use. We use cookies to improve your experience and make our services work better.',
+      infoText:
+        'By using Fairdata’s services you agree to our Cookies Use. We use cookies to improve your experience and make our services work better.',
       link: 'View the Fairdata Privacy Policy.',
-    }
+    },
   },
   home: {
     title: 'Search datasets',
@@ -338,16 +340,17 @@ const english = {
   qvain: {
     general: {
       looseActors: {
-        warning: 'Some of the actors\' role is marked as provenance but they are not attached in any of existing provenances. Saving the dataset will remove these orphaned actors. Following actors will be removed:',
+        warning:
+          "Some of the actors' role is marked as provenance but they are not attached in any of existing provenances. Saving the dataset will remove these orphaned actors. Following actors will be removed:",
         question: 'Do you still want to save the dataset?',
         confirm: 'Yes, remove the actors and save',
-        cancel: 'No, continue editing'
+        cancel: 'No, continue editing',
       },
       looseProvenances: {
         warning: 'You are about to remove actor that is linked to the following provenances:',
         question: 'Removing actor will remove it from these provenances. Do you want to proceed?',
         confirm: 'Yes, remove actor from provenances',
-        cancel: "No, don't remove actor"
+        cancel: "No, don't remove actor",
       },
       langFi: 'Finnish',
       langEn: 'English',
@@ -481,19 +484,21 @@ const english = {
       remove: {
         confirm: {
           published: {
-            text: 'Are you sure you want to delete this dataset? Deleting the dataset will remove it from Qvain, and Etsin Search cannot find it anymore. Landing page for the dataset will NOT be removed.',
+            text:
+              'Are you sure you want to delete this dataset? Deleting the dataset will remove it from Qvain, and Etsin Search cannot find it anymore. Landing page for the dataset will NOT be removed.',
             ok: 'Delete',
           },
           draft: {
-            text: 'Are you sure you want to delete this draft? The draft will be removed permanently.',
+            text:
+              'Are you sure you want to delete this draft? The draft will be removed permanently.',
             ok: 'Delete',
           },
           changes: {
             text: 'Are you sure you want to revert all unpublished changes made to this dataset?',
             ok: 'Revert',
           },
-          cancel: 'Cancel'
-        }
+          cancel: 'Cancel',
+        },
       },
       goToEtsin: 'View in Etsin',
       goToEtsinDraft: 'Preview in Etsin',
@@ -558,7 +563,7 @@ const english = {
         placeholder: 'Type to search language',
         noResults: 'No languages found',
         addButton: 'Add language',
-        help: 'You can add multiple languages.'
+        help: 'You can add multiple languages.',
       },
       keywords: {
         title: 'Keywords',
@@ -603,7 +608,7 @@ const english = {
           label: 'URL address',
           help: 'Specify URL address for license',
         },
-        addButton: 'Add license'
+        addButton: 'Add license',
       },
     },
     actors: {
@@ -638,7 +643,7 @@ const english = {
           curator: 'Curator',
           rights_holder: 'Rights holder',
           contributor: 'Contributor',
-          provenance: 'Provenance'
+          provenance: 'Provenance',
         },
         name: {
           placeholder: {
@@ -1103,65 +1108,67 @@ const english = {
           'Refer to related datasets, publications, and other resources that are relevant in understanding this dataset. ',
         noItems: 'No references to a related resources have been added.',
         error: {
-          nameRequired: 'Name is required in at least one language.'
+          nameRequired: 'Name is required in at least one language.',
         },
         modal: {
           addButton: 'Add reference to a related resource',
           title: {
             add: 'Add reference to a related resource',
-            edit: 'Edit reference to a related resource'
+            edit: 'Edit reference to a related resource',
           },
           buttons: {
             save: 'Save related resource',
             editSave: 'Apply changes',
-            cancel: 'Cancel'
+            cancel: 'Cancel',
           },
           nameInput: {
             fi: {
               label: 'Name',
-              placeholder: 'Name (in Finnish)'
+              placeholder: 'Name (in Finnish)',
             },
             en: {
               label: 'Name',
-              placeholder: 'Name (in English)'
-            }
+              placeholder: 'Name (in English)',
+            },
           },
           descriptionInput: {
             fi: {
               label: 'Description',
-              placeholder: 'Description (in Finnish)'
+              placeholder: 'Description (in Finnish)',
             },
             en: {
               label: 'Description',
-              placeholder: 'Description (in English)'
-            }
+              placeholder: 'Description (in English)',
+            },
           },
           identifierInput: {
             label: 'Identifier',
-            placeholder: 'Identifier'
+            placeholder: 'Identifier',
           },
           relationTypeInput: {
             label: 'Relation type',
-            placeholder: 'Relation type'
+            placeholder: 'Relation type',
           },
           entityTypeInput: {
             label: 'Entity type',
-            placeholder: 'Entity type'
-          }
-        }
+            placeholder: 'Entity type',
+          },
+        },
       },
       infrastructure: {
         addButton: 'Add Infrastructure',
         title: 'Infrastructure',
         description: 'Services and tools that are used to produce the dataset.',
-        noItems: 'No infrastuctures have been added.'
+        noItems: 'No infrastuctures have been added.',
       },
       provenance: {
         title: 'Provenance',
         description: 'An action or event that the dataset was the subject of.',
         noItems: 'No provenances have been added.',
         error: {
-          nameRequired: 'Name required at least in one language.'
+          nameRequired: 'Name required at least in one language.',
+          startDateMissing: 'Start date missing',
+          endDateMissing: 'End date missing',
         },
         modal: {
           title: {
@@ -1220,7 +1227,7 @@ const english = {
               addButton: 'Add location',
               title: {
                 add: 'Add location',
-                edit: 'Edit location'
+                edit: 'Edit location',
               },
               buttons: {
                 addGeometry: 'Add Geometry',
@@ -1252,7 +1259,7 @@ const english = {
           },
           outcomeInput: {
             label: 'Outcome',
-            placeholder: 'Outcome'
+            placeholder: 'Outcome',
           },
           usedEntityInput: {
             label: 'Used entities',
@@ -1262,7 +1269,7 @@ const english = {
               buttons: {
                 save: 'Save',
                 editSave: 'Update',
-                cancel: 'Cancel'
+                cancel: 'Cancel',
               },
               title: {
                 add: 'Add used entity',
@@ -1271,45 +1278,45 @@ const english = {
               nameInput: {
                 fi: {
                   label: 'Name',
-                  placeholder: 'Name (in Finnish)'
+                  placeholder: 'Name (in Finnish)',
                 },
                 en: {
                   label: 'Name',
-                  placeholder: 'Name (in English)'
-                }
+                  placeholder: 'Name (in English)',
+                },
               },
               descriptionInput: {
                 fi: {
                   label: 'Description',
-                  placeholder: 'Description (in Finnish)'
+                  placeholder: 'Description (in Finnish)',
                 },
                 en: {
                   label: 'Description',
-                  placeholder: 'Description (in English)'
-                }
+                  placeholder: 'Description (in English)',
+                },
               },
               identifierInput: {
                 label: 'Identifier',
-                placeholder: 'Identifier'
+                placeholder: 'Identifier',
               },
               relationTypeInput: {
                 label: 'Relation type',
-                placeholder: 'Relation type'
+                placeholder: 'Relation type',
               },
               entityTypeInput: {
                 label: 'Entity type',
-                placeholder: 'Entity type'
-              }
+                placeholder: 'Entity type',
+              },
             },
           },
           actorsInput: {
             label: 'Was associated with',
             addButton: 'Add existing actor',
-            createButton: 'Create new actor'
+            createButton: 'Create new actor',
           },
           lifecycleInput: {
             label: 'Lifecycle event',
-            placeholder: 'Lifecycle event'
+            placeholder: 'Lifecycle event',
           },
         },
       },

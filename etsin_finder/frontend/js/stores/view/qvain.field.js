@@ -18,7 +18,7 @@ class Field {
 
   @observable validationError
 
-  @action setChanged = (val) => {
+  @action setChanged = val => {
     this.hasChanged = val
   }
 
@@ -37,20 +37,22 @@ class Field {
     this.setChanged(false)
     this.editMode = false
 
-    Object.keys(toJS(this.inEdit)).forEach((key) => {
-      if (this.inEdit[key] && (this.inEdit[key].fi || this.inEdit[key].en)) this.inEdit[key].und = this.inEdit[key].fi || this.inEdit[key].en
+    Object.keys(toJS(this.inEdit)).forEach(key => {
+      if (this.inEdit[key] && (this.inEdit[key].fi || this.inEdit[key].en)) {
+        this.inEdit[key].und = this.inEdit[key].fi || this.inEdit[key].en
+      }
     })
 
     const edited = this.isParentRoot()
-      ? this.Parent[this.fieldName].find((s) => s.uiid === this.inEdit.uiid)
-      : this.Parent.inEdit[this.fieldName].find((s) => s.uiid === this.inEdit.uiid)
+      ? this.Parent[this.fieldName].find(s => s.uiid === this.inEdit.uiid)
+      : this.Parent.inEdit[this.fieldName].find(s => s.uiid === this.inEdit.uiid)
 
     if (!this.saveEdited(edited)) {
       this.saveNew()
     }
   }
 
-  saveEdited = (edited) => {
+  saveEdited = edited => {
     this.validationError = ''
 
     if (edited) {
@@ -75,7 +77,10 @@ class Field {
       this.Parent.addToField(this.fieldName, cloneDeep(toJS(this.inEdit)), refs)
     } else {
       const index = this.Parent.inEdit[this.fieldName].length
-      this.Parent.inEdit[this.fieldName] = [...this.Parent.inEdit[this.fieldName], cloneDeep(toJS(this.inEdit))]
+      this.Parent.inEdit[this.fieldName] = [
+        ...this.Parent.inEdit[this.fieldName],
+        cloneDeep(toJS(this.inEdit)),
+      ]
       this.attachRefs(refs, this.Parent.inEdit[this.fieldName][index])
     }
   }
@@ -87,16 +92,40 @@ class Field {
     this.inEdit = undefined
   }
 
-  @action remove = (uiid) => {
+  @action remove = uiid => {
     if (this.isParentRoot()) {
       this.Parent.removeItemInField(this.fieldName, uiid)
-    } else this.Parent.inEdit[this.fieldName] = this.Parent.inEdit[this.fieldName].filter((item) => item.uiid !== uiid)
+    } else {
+      this.Parent.inEdit[this.fieldName] = this.Parent.inEdit[this.fieldName].filter(
+        item => item.uiid !== uiid
+      )
+    }
   }
 
-  isParentRoot = () =>
-     !this.Parent.inEdit // only root doesn't have inEdit object
+  @action edit = uiid => {
+    this.validationError = ''
+    this.setChanged(false)
+    this.editMode = true
+    const item = this.isParentRoot()
+      ? this.Parent[this.fieldName].find(s => s.uiid === uiid)
+      : this.Parent.inEdit[this.fieldName].find(s => s.uiid === uiid)
 
-  detachRefs = (item) => {
+    const clonedRefs = this.cloneRefs(item)
+    const refs = this.detachRefs(item)
+
+    this.inEdit = cloneDeep(toJS(item))
+
+    this.attachRefs(clonedRefs, this.inEdit)
+    this.attachRefs(refs, item)
+  }
+
+  @action setValidationError = error => {
+    this.validationError = error
+  }
+
+  isParentRoot = () => !this.Parent.inEdit // only root doesn't have inEdit object
+
+  detachRefs = item => {
     const refs = {}
     this.references.forEach(ref => {
       refs[ref] = item[ref]
@@ -111,23 +140,12 @@ class Field {
     })
   }
 
-  @action edit = (uiid) => {
-    this.validationError = ''
-    this.setChanged(false)
-    this.editMode = true
-    const item = this.isParentRoot()
-      ? this.Parent[this.fieldName].find((s) => s.uiid === uiid)
-      : this.Parent.inEdit[this.fieldName].find((s) => s.uiid === uiid)
-
-    const refs = this.detachRefs(item)
-
-    this.inEdit = cloneDeep(toJS(item))
-
-    this.attachRefs(refs, this.inEdit)
-  }
-
-  @action setValidationError = (error) => {
-    this.validationError = error
+  cloneRefs = item => {
+    const refs = {}
+    this.references.forEach(ref => {
+      refs[ref] = item[ref].clone()
+    })
+    return refs
   }
 }
 

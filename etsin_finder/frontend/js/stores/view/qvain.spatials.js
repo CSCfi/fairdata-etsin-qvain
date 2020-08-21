@@ -22,16 +22,15 @@ class Spatials extends Field {
     super(Parent, Spatial, 'spatials')
   }
 
-  toBackend = () =>
-    this.Parent.spatials.map((spatial) => ({
-      geographic_name: spatial.name,
-      alt: spatial.altitude,
-      full_address: spatial.address,
-      as_wkt: spatial.geometry.map((geo) => geo.value),
-      place_uri: spatial.location
-        ? { identifier: spatial.location.url }
-        : { identifier: undefined },
-    }))
+  spatialToBackend = spatial => ({
+    geographic_name: spatial.name,
+    alt: spatial.altitude,
+    full_address: spatial.address,
+    as_wkt: spatial.geometry.map(geo => geo.value),
+    place_uri: spatial.location ? { identifier: spatial.location.url } : { identifier: undefined },
+  })
+
+  toBackend = () => this.Parent.spatials.map(this.spatialToBackend)
 }
 
 export const Location = (name, url) => ({
@@ -39,13 +38,13 @@ export const Location = (name, url) => ({
   url,
 })
 
-export const SpatialModel = (spatialData) => ({
+export const SpatialModel = spatialData => ({
   uiid: uuidv4(),
   name: spatialData.geographic_name,
   altitude: spatialData.alt,
   address: spatialData.full_address,
   geometry: spatialData.as_wkt
-    ? spatialData.as_wkt.map((geo) => ({ value: geo, uiid: uuidv4() }))
+    ? spatialData.as_wkt.map(geo => ({ value: geo, uiid: uuidv4() }))
     : [],
   location: spatialData.place_uri
     ? Location(spatialData.place_uri.pref_label, spatialData.place_uri.identifier)
