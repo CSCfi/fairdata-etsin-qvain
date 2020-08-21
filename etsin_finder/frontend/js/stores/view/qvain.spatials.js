@@ -64,6 +64,7 @@ class Spatials {
         location: this.spatialInEdit.location ? { ...this.spatialInEdit.location } : undefined,
       })
     }
+    this.Qvain.setChanged(true)
   }
 
   @action clearSpatialInEdit = () => {
@@ -74,6 +75,7 @@ class Spatials {
 
   @action removeSpatial = uiid => {
     this.Qvain.spatials = this.Qvain.spatials.filter(spatial => spatial.uiid !== uiid)
+    this.Qvain.setChanged(true)
   }
 
   @action editSpatial = uiid => {

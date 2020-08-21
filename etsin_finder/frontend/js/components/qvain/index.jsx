@@ -2,11 +2,13 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import translate from 'counterpart'
+import { autorun } from 'mobx'
 import { inject, observer } from 'mobx-react'
 import axios from 'axios'
 import { withRouter } from 'react-router-dom'
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { Prompt } from 'react-router'
 
 import {
   STSD,
@@ -46,8 +48,16 @@ import SubmitButtons from './submitButtons'
 import urls from './utils/urls'
 import Tracking from '../../utils/tracking'
 
+// Event handler to prevent page reload
+const confirmReload = e => {
+  e.preventDefault()
+  e.returnValue = ''
+}
+
 class Qvain extends Component {
   promises = []
+
+  disposeConfirmReload = null
 
   static propTypes = {
     Stores: PropTypes.object.isRequired,
@@ -60,8 +70,8 @@ class Qvain extends Component {
 
   static defaultProps = {
     location: {
-      pathname: '/qvain/dataset'
-    }
+      pathname: '/qvain/dataset',
+    },
   }
 
   constructor(props) {
@@ -82,6 +92,17 @@ class Qvain extends Component {
 
   componentDidMount() {
     this.handleIdentifierChanged()
+    // setInterval(() => this.props.Stores.Qvain.setChanged(false), 100)
+
+    // Prevent reload when there are unsaved changes
+    this.disposeConfirmReload = autorun(() => {
+      const { changed } = this.props.Stores.Qvain
+      if (changed) {
+        window.addEventListener('beforeunload', confirmReload)
+      } else {
+        window.removeEventListener('beforeunload', confirmReload)
+      }
+    })
   }
 
   componentDidUpdate(prevProps) {
@@ -93,7 +114,10 @@ class Qvain extends Component {
   componentWillUnmount() {
     this.props.Stores.Qvain.resetQvainStore()
     this.props.Stores.Qvain.original = undefined
-    this.promises.forEach((promise) => promise.cancel())
+    this.promises.forEach(promise => promise.cancel())
+    if (this.disposeConfirmReload) {
+      this.disposeConfirmReload()
+    }
   }
 
   getDataset(identifier) {
@@ -217,7 +241,7 @@ class Qvain extends Component {
   }
 
   render() {
-    const { original } = this.props.Stores.Qvain
+    const { original, changed } = this.props.Stores.Qvain
     // Title text
     let titleKey
     if (this.state.datasetLoading) {
@@ -328,6 +352,11 @@ class Qvain extends Component {
         </SubHeader>
         {stickyheader}
         {dataset}
+        <Translate
+          component={Prompt}
+          when={changed}
+          attributes={{ message: 'qvain.unsavedChanges' }}
+        />
       </QvainContainer>
     )
   }
