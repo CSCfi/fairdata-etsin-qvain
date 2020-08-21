@@ -6,7 +6,6 @@ import Translate from 'react-translate-component'
 import Modal from '../../general/modal'
 import Button from '../../general/button'
 import ModalContent from './modalContent'
-import { ConfirmClose } from './confirmClose'
 
 const FieldListAdd = ({
   Store,
