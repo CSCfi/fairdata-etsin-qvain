@@ -1320,7 +1320,9 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
 `;
 
 exports[`Qvain.RightsAndLicenses should render <AccessType /> 1`] = `
-<Card>
+<Card
+  bottomContent={false}
+>
   <form__LabelLarge
     htmlFor="accessTypeSelect"
   >
@@ -1355,7 +1357,9 @@ exports[`Qvain.RightsAndLicenses should render <AccessType /> 1`] = `
 `;
 
 exports[`Qvain.RightsAndLicenses should render <Licenses /> 1`] = `
-<Card>
+<Card
+  bottomContent={false}
+>
   <form__LabelLarge
     htmlFor="licenseSelect"
   >
