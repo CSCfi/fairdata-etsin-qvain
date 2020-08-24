@@ -10,13 +10,12 @@
 import requests
 from flask_restful import abort
 from functools import wraps
-import json
 import inspect
 
 
 from etsin_finder.finder import app
 from etsin_finder.app_config import get_metax_qvain_api_config
-from etsin_finder.utils import json_or_text, FlaskService
+from etsin_finder.utils import json_or_text, FlaskService, format_url
 
 log = app.logger
 
@@ -125,7 +124,7 @@ class MetaxCommonAPIService(FlaskService):
             [type] -- Metax response.
 
         """
-        req_url = self.METAX_GET_DIRECTORY.format(dir_identifier)
+        req_url = format_url(self.METAX_GET_DIRECTORY, dir_identifier)
         return requests.get(req_url,
                             params=params,
                             headers={'Accept': 'application/json'},
@@ -146,7 +145,7 @@ class MetaxCommonAPIService(FlaskService):
             [type] -- Metax response.
 
         """
-        req_url = self.METAX_GET_DIRECTORY_FOR_PROJECT_URL.format(project_identifier)
+        req_url = format_url(self.METAX_GET_DIRECTORY_FOR_PROJECT_URL, project_identifier)
         return requests.get(req_url,
                             headers={'Accept': 'application/json'},
                             params=params,
@@ -166,7 +165,7 @@ class MetaxCommonAPIService(FlaskService):
             [type] -- Metax response.
 
         """
-        req_url = self.METAX_GET_DATASET_PROJECTS.format(cr_id)
+        req_url = format_url(self.METAX_GET_DATASET_PROJECTS, cr_id)
         headers = {'Accept': 'application/json'}
         return requests.get(req_url,
                             headers=headers,
@@ -186,7 +185,7 @@ class MetaxCommonAPIService(FlaskService):
             [type] -- Metax response.
 
         """
-        req_url = self.METAX_GET_DATASET_USER_METADATA.format(cr_id)
+        req_url = format_url(self.METAX_GET_DATASET_USER_METADATA, cr_id)
         headers = {'Accept': 'application/json'}
         return requests.get(req_url,
                             headers=headers,
@@ -215,7 +214,7 @@ class MetaxCommonAPIService(FlaskService):
             [type] -- Metax response.
 
         """
-        req_url = self.METAX_PUT_DATASET_USER_METADATA.format(cr_id)
+        req_url = format_url(self.METAX_PUT_DATASET_USER_METADATA, cr_id)
         headers = {'Accept': 'application/json'}
 
         return requests.put(req_url,

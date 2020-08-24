@@ -1,11 +1,6 @@
 """Validation schemas for form data coming in from Qvain Light"""
 from marshmallow import Schema, fields, validates_schema, ValidationError
-from marshmallow.validate import Length, OneOf
-import json
 from etsin_finder.qvain_light_dataset_schema import (
-    PersonValidationSchema,
-    OrganizationValidationSchema,
-    ActorValidationSchema,
     DatasetValidationSchema as DatasetValidationSchemaV1
 )
 

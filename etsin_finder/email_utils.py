@@ -8,7 +8,6 @@
 """Email sending related utils"""
 import datetime
 import re
-from enum import Enum
 
 from etsin_finder.finder import app
 from etsin_finder.constants import AGENT_TYPE
