@@ -280,6 +280,12 @@ const english = {
       fos: 'fields of science',
       research: 'projects',
     },
+    tooltip: {
+      datasets: 'View datasets in Search -page',
+      keywords: 'View keywords in Search -page',
+      fos: 'View fields of science in Search -page',
+      research: 'View projects in Search -page',
+    },
     includePas: 'Include Fairdata PAS datasets',
   },
   nav: {

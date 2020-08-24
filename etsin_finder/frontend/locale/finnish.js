@@ -278,6 +278,12 @@ const finnish = {
       fos: 'tieteenalaa',
       research: 'tutkimusprojektia',
     },
+    tooltip: {
+      datasets: 'Tarkastele aineistoja hakusivulla',
+      keywords: 'Tarkastele asiasanoja hakusivulla',
+      fos: 'Tarkastele tieteenaloja hakusivulla',
+      research: 'Tarkastele projekteja hakusivulla',
+    },
     includePas: 'Ota mukaan Fairdata PAS -datasetit',
   },
   nav: {
