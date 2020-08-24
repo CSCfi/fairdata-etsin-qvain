@@ -125,7 +125,13 @@ class SubmitButtons extends Component {
   }
 
   handleUpdateV1 = async () => {
-    const { original, addUnsavedMultiValueFields, moveSelectedToExisting, setChanged, editDataset } = this.props.Stores.Qvain
+    const {
+      original,
+      addUnsavedMultiValueFields,
+      moveSelectedToExisting,
+      setChanged,
+      editDataset,
+    } = this.props.Stores.Qvain
     const { metaxApiV2 } = this.props.Stores.Env
     const datasetUrl = urls.v1.dataset(original.identifier)
 
@@ -223,6 +229,13 @@ class SubmitButtons extends Component {
     }
 
     return values
+  }
+
+  submit = async submitFunction => {
+    const { Stores } = this.props
+    const isProvenanceActorsOk = await Stores.Qvain.checkProvenanceActors()
+    if (!isProvenanceActorsOk) return
+    submitFunction()
   }
 
   updateFiles = async (identifier, fileActions, metadataActions) => {
@@ -539,7 +552,7 @@ class SubmitButtons extends Component {
               ref={this.updateDatasetButton}
               disabled={disabled}
               type="button"
-              onClick={this.handleUpdateV1}
+              onClick={() => this.submit(this.handleUpdateV1)}
             >
               <Translate content="qvain.edit" />
             </SubmitButton>
@@ -548,7 +561,11 @@ class SubmitButtons extends Component {
               ref={this.submitDatasetButton}
               disabled={disabled}
               type="button"
-              onClick={useDoi === true ? this.showUseDoiInformation : this.handleCreatePublishedV1}
+              onClick={
+                useDoi === true
+                  ? this.showUseDoiInformation
+                  : () => this.submit(this.handleCreatePublishedV1)
+              }
             >
               <Translate content="qvain.submit" />
             </SubmitButton>
@@ -564,14 +581,17 @@ class SubmitButtons extends Component {
     if (!original) {
       // new -> draft
       submitDraft = (
-        <SubmitButton disabled={disabled} onClick={() => this.handleCreateNewDraft()}>
+        <SubmitButton disabled={disabled} onClick={() => this.submit(this.handleCreateNewDraft)}>
           <Translate content="qvain.saveDraft" />
         </SubmitButton>
       )
 
       // new -> published
       submitPublished = (
-        <SubmitButton disabled={disabled} onClick={() => this.handleCreateNewDraftAndPublish()}>
+        <SubmitButton
+          disabled={disabled}
+          onClick={() => this.submit(this.handleCreateNewDraftAndPublish)}
+        >
           <Translate content="qvain.submit" />
         </SubmitButton>
       )
@@ -580,7 +600,7 @@ class SubmitButtons extends Component {
     if (original && original.state === 'draft') {
       // draft -> draft
       submitDraft = (
-        <SubmitButton disabled={disabled} onClick={() => this.handleUpdate()}>
+        <SubmitButton disabled={disabled} onClick={() => this.submit(this.handleUpdate)}>
           <Translate content="qvain.saveDraft" />
         </SubmitButton>
       )
@@ -589,14 +609,14 @@ class SubmitButtons extends Component {
       if (original.draft_of) {
         // merge draft of a published dataset
         submitPublished = (
-          <SubmitButton disabled={disabled} onClick={() => this.handleMergeDraft()}>
+          <SubmitButton disabled={disabled} onClick={() => this.submit(this.handleMergeDraft)}>
             <Translate content="qvain.submit" />
           </SubmitButton>
         )
       } else {
         // publish draft dataset
         submitPublished = (
-          <SubmitButton disabled={disabled} onClick={() => this.handlePublishDataset()}>
+          <SubmitButton disabled={disabled} onClick={() => this.submit(this.handlePublishDataset)}>
             <Translate content="qvain.submit" />
           </SubmitButton>
         )
@@ -606,14 +626,14 @@ class SubmitButtons extends Component {
     if (original && original.state !== 'draft') {
       // published -> draft
       submitDraft = (
-        <SubmitButton disabled={disabled} onClick={() => this.handleSaveAsDraft()}>
+        <SubmitButton disabled={disabled} onClick={() => this.submit(this.handleSaveAsDraft)}>
           <Translate content="qvain.saveDraft" />
         </SubmitButton>
       )
 
       // published -> published
       submitPublished = (
-        <SubmitButton disabled={disabled} onClick={() => this.handleUpdate()}>
+        <SubmitButton disabled={disabled} onClick={() => this.submit(this.handleUpdate)}>
           <Translate content="qvain.submit" />
         </SubmitButton>
       )

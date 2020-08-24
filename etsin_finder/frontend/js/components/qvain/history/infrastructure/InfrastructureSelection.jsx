@@ -24,7 +24,7 @@ class InfrastructureSelection extends Component {
     } = this.props.Stores.Qvain
     return (
       <>
-        <SelectedItems getter={infrastructures} handleClick={this.handleSelectedItemClick} />
+        <SelectedItems getter={infrastructures} handleClick={this.handleSelectedItemClick} noItems="qvain.history.infrastructure.noItems" />
         <Select
           name="infrastructure"
           getter={infrastructure}

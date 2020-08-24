@@ -11,7 +11,7 @@ import Modal from '../../general/modal'
 import { ActorIcon } from './common'
 import { actorSchema } from '../utils/formValidation'
 import { TableButton, AddActorButton, CancelButton } from '../general/buttons'
-import ConfirmClose from '../general/confirmClose'
+import { ConfirmClose } from '../general/confirmClose'
 import ValidationError from '../general/validationError'
 
 export class ActorModalBase extends Component {
@@ -43,7 +43,7 @@ export class ActorModalBase extends Component {
 
   close = () => {
     this.setState({ confirmClose: false })
-    this.props.Stores.Qvain.Actors.editActor(null)
+    this.props.Stores.Qvain.Actors.cancelActor()
   }
 
   handleRequestClose = (hasChanged) => {
@@ -132,8 +132,8 @@ export class ActorModalBase extends Component {
 
         <ConfirmClose
           show={this.state.confirmClose}
-          hideConfirm={this.hideConfirmClose}
-          closeModal={this.close}
+          onCancel={this.hideConfirmClose}
+          onConfirm={this.close}
         />
       </Modal>
     )
