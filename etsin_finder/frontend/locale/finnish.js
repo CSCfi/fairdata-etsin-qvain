@@ -83,7 +83,8 @@ const finnish = {
     },
     draftInfo: {
       draft: 'Tämä aineisto on luonnos ja näkyy ainoastaan aineiston luojalle.',
-      changes: 'Tämä on esikatselu julkaisemattomista muutoksista aineistoon ja näkyy ainoastaan aineiston luojalle.',
+      changes:
+        'Tämä on esikatselu julkaisemattomista muutoksista aineistoon ja näkyy ainoastaan aineiston luojalle.',
     },
     draftIdentifierInfo: 'Tunniste luodaan aineiston julkaisun yhteydessä.',
     dl: {
@@ -104,7 +105,7 @@ const finnish = {
       loaded: 'Kansio latautunut',
       fileCount: {
         one: '1 tiedosto',
-        other: '%(count)s tiedostoa'
+        other: '%(count)s tiedostoa',
       },
       file_types: {
         both: 'tiedostot ja kansiot',
@@ -258,9 +259,10 @@ const finnish = {
     },
     cookies: {
       accept: 'Hyväksy evästeet',
-      infoText: 'Käyttämällä Fairdata-palveluja hyväksyt evästiden käytön. Käytämme evästeitä palvelun kehittömiseen ja käyttökokemuksen parantamiseen.',
+      infoText:
+        'Käyttämällä Fairdata-palveluja hyväksyt evästiden käytön. Käytämme evästeitä palvelun kehittömiseen ja käyttökokemuksen parantamiseen.',
       link: 'Fairdata-palvelujen tietosuoja.',
-    }
+    },
   },
   home: {
     title: 'Etsi aineistoa',
@@ -275,6 +277,12 @@ const finnish = {
       keywords: 'asiasanaa',
       fos: 'tieteenalaa',
       research: 'tutkimusprojektia',
+    },
+    tooltip: {
+      datasets: 'Tarkastele aineistoja hakusivulla',
+      keywords: 'Tarkastele asiasanoja hakusivulla',
+      fos: 'Tarkastele tieteenaloja hakusivulla',
+      research: 'Tarkastele projekteja hakusivulla',
     },
     includePas: 'Ota mukaan Fairdata PAS -datasetit',
   },
@@ -337,16 +345,18 @@ const finnish = {
   qvain: {
     general: {
       looseActors: {
-        warning: 'Osan toimijoiden rooliksi on merkattu vain Provenienssi, mutta ne eivät ole kiinnitetty yhteenkään provenienssiin. Aineiston tallentamisen yhteydessä nämä toimijat häviävät. Tallennuksen yhteydessä seuraavat tiedot poistetaan:',
+        warning:
+          'Osan toimijoiden rooliksi on merkattu vain Provenienssi, mutta ne eivät ole kiinnitetty yhteenkään provenienssiin. Aineiston tallentamisen yhteydessä nämä toimijat häviävät. Tallennuksen yhteydessä seuraavat tiedot poistetaan:',
         question: 'Haluatko jatkaa aineiston tallentamista?',
         cancel: 'Ei, jatka muokkausta',
         confirm: 'Kyllä, jatka tallentamista',
       },
       looseProvenances: {
         warning: 'Toimija, jota olet poistamassa on kiinnitettynä seuraaviin proveniensseihin:',
-        question: 'Toimija poistetaan myös edellä mainituista proveniensseista. Haluatko silti jatkaa?',
+        question:
+          'Toimija poistetaan myös edellä mainituista proveniensseista. Haluatko silti jatkaa?',
         confirm: 'Kyllä, poista toimija ja sen viitteet',
-        cancel: 'Ei, peru toimijan poistaminen'
+        cancel: 'Ei, peru toimijan poistaminen',
       },
       langFi: 'Suomi',
       langEn: 'Englanti',
@@ -480,7 +490,8 @@ const finnish = {
       remove: {
         confirm: {
           published: {
-            text: 'Haluatko varmasti poistaa aineiston? Aineiston poiston jälkeen se ei enää näy Qvaimessa eikä Etsimen haku löydä sitä. Aineiston laskeutumissivua ei poisteta.',
+            text:
+              'Haluatko varmasti poistaa aineiston? Aineiston poiston jälkeen se ei enää näy Qvaimessa eikä Etsimen haku löydä sitä. Aineiston laskeutumissivua ei poisteta.',
             ok: 'Poista',
           },
           draft: {
@@ -491,8 +502,8 @@ const finnish = {
             text: 'Haluatko varmasti poistaa aineistoon tehdyt julkaisemattomat muutokset?',
             ok: 'Poista muutokset',
           },
-          cancel: 'Peruuta'
-        }
+          cancel: 'Peruuta',
+        },
       },
       goToEtsin: 'Katso Etsimessä',
       goToEtsinDraft: 'Esikatsele Etsimessä',
@@ -529,7 +540,8 @@ const finnish = {
       },
       issuedDate: {
         title: 'Julkaisupäivämäärä',
-        infoText: 'Lähteen muodollinen julkaisupäivämäärä. Ei vaikuta aineston näkyvyyteen. Jos kenttä jätetään tyhjäksi, käytetään nykyistä päivämäärää.',
+        infoText:
+          'Lähteen muodollinen julkaisupäivämäärä. Ei vaikuta aineston näkyvyyteen. Jos kenttä jätetään tyhjäksi, käytetään nykyistä päivämäärää.',
         instructions: '',
         placeholder: 'Päivämäärä',
       },
@@ -556,7 +568,7 @@ const finnish = {
         placeholder: 'Hae kieliä kirjoittamalla',
         noResults: 'Ei hakutuloksia',
         addButton: 'Lisää kieli',
-        help: 'Voit lisätä useita kieliä.'
+        help: 'Voit lisätä useita kieliä.',
       },
       keywords: {
         title: 'Avainsanat',
@@ -602,7 +614,7 @@ const finnish = {
           label: 'URL',
           help: 'Anna osoite lisenssille.',
         },
-        addButton: 'Lisää lisenssi'
+        addButton: 'Lisää lisenssi',
       },
     },
     actors: {
@@ -637,7 +649,7 @@ const finnish = {
           curator: 'Kuraattori',
           rights_holder: 'Oikeuksienhaltija',
           contributor: 'Muu tekijä',
-          provenance: 'Provenienssi'
+          provenance: 'Provenienssi',
         },
         name: {
           placeholder: {
@@ -863,12 +875,42 @@ const finnish = {
           note:
             'Huom! Jos muutat tavallisen aineiston kasvavaksi aineistoksi, siitä tehdään automaattisesti uusi versio. Vanha versio jää tavalliseksi, ja uudesta tulee kasvava aineisto.',
           confirm:
-            'Oletko varma, että haluat tehdä aineistosta kasvavan? Muutos aiheuttaa uuden version syntymisen ja uu. Uudella versiolla on aina uusi tunniste.',
+            'Oletko varma, että haluat tehdä aineistosta kasvavan? Muutos aiheuttaa uuden version syntymisen ja uudella versiolla on aina uusi tunniste.',
           cancel: 'Peruuta',
         },
         modalHeader: 'Muuta aineiston kasvavuutta',
         closeButton: 'Sulje',
         changes: 'Aineistoon tehdyt muutokset on tallennettava ennen tämän asetuksen muuttamista.',
+      },
+      cumulativeStateV2: {
+        label: 'Kasvava aineisto',
+        radio: {
+          no:
+            'Ei. (Uusien tiedostojen tai kansioiden julkaistuun aineistoon vaatii, että aineistosta tehdään uusi versio.)',
+          yes:
+            'Kyllä. (Tiedostoja tai kansioita tullaan lisäämään aineistoon. Lisäys onnistuu ilman uuden version luomista.)',
+          note:
+            'Huom! Julkaistua aineistoa ei voi muuttaa kasvavaksi ilman, että siitä tehdään uusi versio. Kasvavan aineiston muuttaminen ei-kasvavaksi on sen sijaan sallittua.',
+        },
+        enabled: {
+          state: 'Tämä aineisto on merkitty kasvavaksi.',
+          explanation:
+            'Kasvavaan aineistoon lisätään dataa säännöllisesti. Jos aineistoon ei enää lisätä dataa, se kannattaa muuttaa ei-kasvavaksi.',
+          button: 'Muuta ei-kasvavaksi',
+          note:
+            'Huom! Jos muutat kasvavan aineiston ei-kasvavaksi, et voi enää muuttaa sitä takaisin kasvavaksi luomatta uutta versiota.',
+        },
+        disabled: {
+          state: 'Aineisto on julkaistu tavallisena, ei-kasvavana aineistona.',
+          explanation:
+            'Aineistoon ei voi lisätä tiedostoja tai hakemistoja luomatta siitä uutta versiota.',
+          note:
+            'Jos haluat muuttaa aineiston kasvavaksi, siitä on ensin luotava uusi versio.',
+        },
+        stateChanged: {
+          note: 'Uusi tila tulee voimaan kun aineisto tallennetaan.',
+          button: 'Peru muutos',
+        },
       },
       responses: {
         fail: 'Jotain meni pieleen...',
@@ -1104,66 +1146,69 @@ const finnish = {
         title: 'Infrastruktuuri',
         description:
           'Voit lisätä palveluita tai rakenteita joita on käytetty aineiston laatimiseen.',
-        noItems: 'Infrastruktuureja ei ole lisätty.'
+        noItems: 'Infrastruktuureja ei ole lisätty.',
       },
       relatedResource: {
         title: 'Viittaukset toiseen resurssiin',
-        description: 'Viittaukset aineistoihin, julkaisuihin tai muihin resursseihin, jotka auttavat ymmärtämään ja käyttämään tätä tutkimusaineistoa.',
+        description:
+          'Viittaukset aineistoihin, julkaisuihin tai muihin resursseihin, jotka auttavat ymmärtämään ja käyttämään tätä tutkimusaineistoa.',
         noItems: 'Viittauksia toisiin resursseihin ei ole lisätty.',
         error: {
-          nameRequired: 'Nimi kenttä on pakollinen ainakin yhdellä kielellä.'
+          nameRequired: 'Nimi kenttä on pakollinen ainakin yhdellä kielellä.',
         },
         modal: {
           addButton: 'Lisää viittaus toiseen resurssiin',
           title: {
             add: 'Lisää viittaus toiseen resurssiin',
-            edit: 'Muokkaa viittausta toiseen resurssiin'
+            edit: 'Muokkaa viittausta toiseen resurssiin',
           },
           buttons: {
             save: 'Tallenna',
             editSave: 'Vahvista muutokset',
-            cancel: 'Peruuta'
+            cancel: 'Peruuta',
           },
           nameInput: {
             fi: {
               label: 'Nimi',
-              placeholder: 'Nimi (suomeksi)'
+              placeholder: 'Nimi (suomeksi)',
             },
             en: {
               label: 'Nimi',
-              placeholder: 'Nimi (englanniksi)'
-            }
+              placeholder: 'Nimi (englanniksi)',
+            },
           },
           descriptionInput: {
             fi: {
               label: 'Kuvailu',
-              placeholder: 'Kuvailu (suomeksi)'
+              placeholder: 'Kuvailu (suomeksi)',
             },
             en: {
               label: 'Kuvailu',
-              placeholder: 'Kuvailu (englanniksi)'
-            }
+              placeholder: 'Kuvailu (englanniksi)',
+            },
           },
           identifierInput: {
             label: 'Tunniste',
-            placeholder: 'Tunniste'
+            placeholder: 'Tunniste',
           },
           relationTypeInput: {
             label: 'Viitteen tyyppi',
-            placeholder: 'Viitteen tyyppi'
+            placeholder: 'Viitteen tyyppi',
           },
           entityTypeInput: {
             label: 'Resurssin tyyppi',
-            placeholder: 'Resurssin tyyppi'
-          }
-        }
+            placeholder: 'Resurssin tyyppi',
+          },
+        },
       },
       provenance: {
         title: 'Historiatiedot (provenienssi)',
         description: 'Tapahtuma tai toiminta, jonka kohteena oli tämä aineisto.',
         noItems: 'Historiatietoja ei ole lisätty.',
         error: {
-          nameRequired: 'Nimi vaaditaan vähintään yhdellä kielellä.'
+          nameRequired: 'Nimi vaaditaan vähintään yhdellä kielellä.',
+          startDateMissing: 'Alkamispäivämäärä puuttuu',
+          endDateMissing: 'Loppumispäivämäärä puuttuu',
         },
         modal: {
           addButton: 'Lisää historiatieto',
@@ -1224,11 +1269,11 @@ const finnish = {
                 addGeometry: 'Lisää alueellinen tieto',
                 save: 'Tallenna',
                 editSave: 'Päivitä',
-                cancel: 'Peruuta'
+                cancel: 'Peruuta',
               },
               title: {
                 add: 'Lisää alueellinen tieto',
-                edit: 'Muokkaa alueellista tietoa'
+                edit: 'Muokkaa alueellista tietoa',
               },
               nameInput: {
                 label: 'Nimi',
@@ -1254,7 +1299,7 @@ const finnish = {
           },
           outcomeInput: {
             label: 'Lopputulos',
-            placeholder: 'Lopputulos'
+            placeholder: 'Lopputulos',
           },
           usedEntityInput: {
             label: 'Käytetyt kokonaisuudet',
@@ -1264,7 +1309,7 @@ const finnish = {
               buttons: {
                 save: 'Tallenna',
                 editSave: 'Päivitä',
-                cancel: 'Peruuta'
+                cancel: 'Peruuta',
               },
               title: {
                 add: 'Lisää käytetty kokonaisuus',
@@ -1273,46 +1318,46 @@ const finnish = {
               nameInput: {
                 fi: {
                   label: 'Nimi',
-                  placeholder: 'Nimi (suomeksi)'
+                  placeholder: 'Nimi (suomeksi)',
                 },
                 en: {
                   label: 'Nimi',
-                  placeholder: 'Nimi (englanniksi)'
-                }
+                  placeholder: 'Nimi (englanniksi)',
+                },
               },
               descriptionInput: {
                 fi: {
                   label: 'Kuvailu',
-                  placeholder: 'Kuvailu (suomeksi)'
+                  placeholder: 'Kuvailu (suomeksi)',
                 },
                 en: {
                   label: 'Kuvailu',
-                  placeholder: 'Kuvailu (englanniksi)'
-                }
+                  placeholder: 'Kuvailu (englanniksi)',
+                },
               },
               identifierInput: {
                 label: 'Tunniste',
-                placeholder: 'Tunniste'
+                placeholder: 'Tunniste',
               },
               relationTypeInput: {
                 label: 'Viitteen tyyppi',
-                placeholder: 'Viitteen tyyppi'
+                placeholder: 'Viitteen tyyppi',
               },
               entityTypeInput: {
                 label: 'Resurssin tyyppi',
-                placeholder: 'Resurssin tyyppi'
-              }
+                placeholder: 'Resurssin tyyppi',
+              },
             },
           },
           actorsInput: {
             label: 'Liittyi toimijaan',
             addButton: 'Liitä toimija',
-            createButton: 'Luo uusi toimija'
+            createButton: 'Luo uusi toimija',
           },
           lifecycleInput: {
             label: 'Elinkaaritapahtuma',
-            placeholder: 'Elinkaaritapahtuma'
-          }
+            placeholder: 'Elinkaaritapahtuma',
+          },
         },
       },
     },

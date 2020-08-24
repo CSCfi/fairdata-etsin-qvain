@@ -6,13 +6,13 @@ import Translate from 'react-translate-component'
 import Modal from '../../general/modal'
 import Button from '../../general/button'
 import ModalContent from './modalContent'
-import { ConfirmClose } from './confirmClose'
 
 const FieldListAdd = ({
   Store,
   Field,
   translationsRoot,
   handleSave,
+  formProps,
   Form,
   language,
   contentLabel,
@@ -37,6 +37,10 @@ const FieldListAdd = ({
     create()
   }
 
+  const confirmCancel = () => {
+    setConfirm(false)
+  }
+
   return (
     <>
       <Observer>
@@ -55,9 +59,13 @@ const FieldListAdd = ({
                   Field={Field}
                   handleSave={handleSave}
                   Form={Form}
+                  formProps={formProps}
                   language={language}
+                  confirm={confirm}
+                  requestClose={confirmClose}
+                  onConfirmCancel={confirmCancel}
+                  onConfirm={close}
                 />
-                <ConfirmClose show={confirm} onCancel={() => setConfirm(false)} onConfirm={close} />
               </Modal>
             )
           }
@@ -79,6 +87,7 @@ FieldListAdd.propTypes = {
   translationsRoot: PropTypes.string.isRequired,
   handleSave: PropTypes.func.isRequired,
   Form: PropTypes.oneOfType([PropTypes.element, PropTypes.func]).isRequired,
+  formProps: PropTypes.object,
   language: PropTypes.string,
   contentLabel: PropTypes.string,
   position: PropTypes.string,
@@ -88,6 +97,7 @@ FieldListAdd.defaultProps = {
   language: '',
   contentLabel: '',
   position: 'right',
+  formProps: {},
 }
 
 const ButtonContainer = styled.div`

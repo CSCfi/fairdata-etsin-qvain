@@ -9,13 +9,15 @@ class ModalContent extends Component {
   static propTypes = {
     Store: PropTypes.object.isRequired,
     Field: PropTypes.object.isRequired,
-    Form: PropTypes.oneOfType([
-      PropTypes.element,
-      PropTypes.func
-    ]).isRequired,
+    Form: PropTypes.oneOfType([PropTypes.element, PropTypes.func]).isRequired,
+    formProps: PropTypes.object.isRequired,
     handleSave: PropTypes.func.isRequired,
     translationsRoot: PropTypes.string.isRequired,
-    language: PropTypes.string.isRequired
+    language: PropTypes.string.isRequired,
+    onConfirmCancel: PropTypes.func.isRequired,
+    onConfirm: PropTypes.func.isRequired,
+    confirm: PropTypes.bool.isRequired,
+    requestClose: PropTypes.func.isRequired,
   }
 
   constructor(props) {
@@ -25,30 +27,28 @@ class ModalContent extends Component {
       title: editMode
         ? `${this.props.translationsRoot}.modal.title.edit`
         : `${this.props.translationsRoot}.modal.title.add`,
-        buttons: {
-          cancel: `${this.props.translationsRoot}.modal.buttons.cancel`,
-          save: `${this.props.translationsRoot}.modal.buttons.save`,
-          editSave: `${this.props.translationsRoot}.modal.buttons.editSave`,
-        },
-      }
-    this.state = {
-      confirmOpen: false,
+      buttons: {
+        cancel: `${this.props.translationsRoot}.modal.buttons.cancel`,
+        save: `${this.props.translationsRoot}.modal.buttons.save`,
+        editSave: `${this.props.translationsRoot}.modal.buttons.editSave`,
+      },
     }
   }
 
-  setConfirmOpen = val => {
-    this.setState({ confirmOpen: val })
-  }
-
-  close = () => {
-    const { clearInEdit } = this.props.Field
-    clearInEdit()
-    this.setConfirmOpen(false)
-  }
-
   render() {
-    const { confirmOpen } = this.state
-    const { Store, Field, handleSave, Form, translationsRoot, language } = this.props
+    const {
+      Store,
+      Field,
+      handleSave,
+      Form,
+      translationsRoot,
+      language,
+      formProps,
+      confirm,
+      onConfirmCancel,
+      onConfirm,
+      requestClose,
+    } = this.props
     const { readonly } = Store
 
     return (
@@ -57,19 +57,21 @@ class ModalContent extends Component {
           <Translate content={this.translations.title} />
         </Header>
         <Content>
-          <Form Store={Store} Field={Field} translationsRoot={translationsRoot} language={language} />
+          <Form
+            Store={Store}
+            Field={Field}
+            translationsRoot={translationsRoot}
+            language={language}
+            {...formProps}
+          />
           <ModalButtons
-            handleRequestClose={() => this.setConfirmOpen(true)}
+            handleRequestClose={requestClose}
             translations={this.translations}
             readonly={readonly}
             handleSave={() => handleSave(Field)}
             Field={Field}
           />
-          <ConfirmClose
-            show={confirmOpen}
-            onCancel={() => this.setConfirmOpen(false)}
-            onConfirm={this.close}
-          />
+          <ConfirmClose show={confirm} onCancel={onConfirmCancel} onConfirm={onConfirm} />
         </Content>
       </>
     )

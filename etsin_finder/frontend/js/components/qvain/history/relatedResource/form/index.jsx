@@ -11,26 +11,43 @@ class Form extends Component {
   static propTypes = {
     Field: PropTypes.object.isRequired,
     translationsRoot: PropTypes.string.isRequired,
+    hideRelationType: PropTypes.bool,
+  }
+
+  static defaultProps = {
+    hideRelationType: false,
   }
 
   state = {
-    language: 'fi'
+    language: 'fi',
   }
 
-setLanguage = (lang) => {
+  setLanguage = lang => {
     this.setState({ language: lang })
-}
+  }
 
-render = () => (
-  <FormContainer>
-    <TranslationTab language={this.state.language} setLanguage={this.setLanguage}>
-      <TabInput {...this.props} datum="name" language={this.state.language} isRequired />
-      <TabInput {...this.props} datum="description" language={this.state.language} />
-    </TranslationTab>
-    <ModalInput {...this.props} datum="identifier" />
-    <ModalReferenceInput {...this.props} datum="relationType" metaxIdentifier="relation_type" model={RelationType} />
-    <ModalReferenceInput {...this.props} datum="entityType" metaxIdentifier="resource_type" model={RelationType} />
-  </FormContainer>
+  render = () => (
+    <FormContainer>
+      <TranslationTab language={this.state.language} setLanguage={this.setLanguage}>
+        <TabInput {...this.props} datum="name" language={this.state.language} isRequired />
+        <TabInput {...this.props} datum="description" language={this.state.language} />
+      </TranslationTab>
+      <ModalInput {...this.props} datum="identifier" />
+      {!this.props.hideRelationType && (
+        <ModalReferenceInput
+          {...this.props}
+          datum="relationType"
+          metaxIdentifier="relation_type"
+          model={RelationType}
+        />
+      )}
+      <ModalReferenceInput
+        {...this.props}
+        datum="entityType"
+        metaxIdentifier="resource_type"
+        model={RelationType}
+      />
+    </FormContainer>
   )
 }
 

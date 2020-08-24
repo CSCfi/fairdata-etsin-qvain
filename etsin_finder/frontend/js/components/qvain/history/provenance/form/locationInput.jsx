@@ -28,14 +28,16 @@ const Location = ({ Stores }) => {
         elements={Store.inEdit.spatials}
         disableNoItemsText
       />
-      <FieldListAdd
-        Store={Store}
-        Field={Store.Spatials}
-        Form={Form}
-        translationsRoot={translationsRoot}
-        handleSave={() => handleSave(Store.Spatials, translationsRoot)}
-        position="left"
-      />
+      {!Store.inEdit.spatials.length && (
+        <FieldListAdd
+          Store={Store}
+          Field={Store.Spatials}
+          Form={Form}
+          translationsRoot={translationsRoot}
+          handleSave={() => handleSave(Store.Spatials, translationsRoot)}
+          position="left"
+        />
+      )}
     </>
   )
 }
