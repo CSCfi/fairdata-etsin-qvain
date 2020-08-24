@@ -124,14 +124,15 @@ export const SlidingContent = styled.div`
   ${props => (props.open ? 'display: inline-block;' : 'display: none;')}
 `
 
-
 Card.propTypes = {
   children: PropTypes.node.isRequired,
   className: PropTypes.string,
+  bottomContent: PropTypes.bool,
 }
 
 Card.defaultProps = {
   className: undefined,
+  bottomContent: false,
 }
 
 export default Card
