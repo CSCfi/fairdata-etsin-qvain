@@ -1,23 +1,27 @@
 {
-/**
- * This file is part of the Etsin service
- *
- * Copyright 2017-2018 Ministry of Education and Culture, Finland
- *
- *
- * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
- * @license   MIT
- */
+  /**
+   * This file is part of the Etsin service
+   *
+   * Copyright 2017-2018 Ministry of Education and Culture, Finland
+   *
+   *
+   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
+   * @license   MIT
+   */
 }
 
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
+import counterpart from 'counterpart'
 import axios from 'axios'
 
+import { Link } from 'react-router-dom'
+import { inject, observer } from 'mobx-react'
+import PropTypes from 'prop-types'
 import ContentBox from '../general/contentBox'
 
-export default class KeyValues extends Component {
+class KeyValues extends Component {
   constructor(props) {
     super(props)
 
@@ -28,11 +32,18 @@ export default class KeyValues extends Component {
       researchNum: 0,
       loaded: false,
       error: false,
+      lang: this.props.Stores.Locale.currentLang,
     }
   }
 
   componentDidMount() {
     this.getValues()
+    counterpart.onLocaleChange(this.localeChanged)
+  }
+
+
+  componentWillUnmount() {
+    counterpart.offLocaleChange(this.localeChanged)
   }
 
   getValues() {
@@ -72,67 +83,115 @@ export default class KeyValues extends Component {
       })
   }
 
+  localeChanged = () => {
+    this.setState({
+      lang: this.props.Stores.Locale.currentLang === 'fi' ? 'en' : 'fi'
+    })
+  }
+
   render() {
+    const SearchFilters = this.props.Stores.SearchFilters
     return this.state.error ? null : (
       <aside>
         <CustomBox>
           <Value>
             {this.state.loaded ? (
               <div>
-                <h1>{this.state.datasetsNum}</h1>
+                <h1>
+                  <FiltersLink
+                    to={'/datasets'}
+                    title={counterpart('home.tooltip.datasets', { locale: this.state.lang })}
+                  >
+                    {this.state.datasetsNum}
+                  </FiltersLink>
+                </h1>
                 <Translate content="home.key.dataset" fallback="aineistoa" component="p" />
               </div>
-            ) : (
-              <div>
-                <H1Skeleton />
-                <PSkeleton />
-              </div>
-            )}
+            ) :
+              (
+                <div>
+                  <H1Skeleton />
+                  <PSkeleton />
+                </div>
+              )}
           </Value>
           <Value>
             {this.state.loaded ? (
               <div>
-                <h1>{this.state.keywordsNum}</h1>
+                <h1>
+                  <FiltersLink
+                    to={'/datasets'}
+                    title={counterpart('home.tooltip.keywords', { locale: this.state.lang })}
+                    onClick={() => SearchFilters.toggleKeyword()}
+                  >
+                    {this.state.keywordsNum}
+                  </FiltersLink>
+                </h1>
                 <Translate content="home.key.keywords" fallback="asiasanaa" component="p" />
               </div>
-            ) : (
-              <div>
-                <H1Skeleton />
-                <PSkeleton />
-              </div>
-            )}
+            ) :
+              (
+                <div>
+                  <H1Skeleton />
+                  <PSkeleton />
+                </div>
+              )}
           </Value>
           <Value>
             {this.state.loaded ? (
               <div>
-                <h1>{this.state.fieldOfScienceNum}</h1>
+                <h1>
+                  <FiltersLink
+                    to={'/datasets'}
+                    title={counterpart('home.tooltip.fos', { locale: this.state.lang })}
+                    onClick={() => SearchFilters.toggleFieldOfScience()}
+                  >
+                    {this.state.fieldOfScienceNum}
+                  </FiltersLink>
+                </h1>
                 <Translate content="home.key.fos" fallback="tieteenalaa" component="p" />
               </div>
-            ) : (
-              <div>
-                <H1Skeleton />
-                <PSkeleton />
-              </div>
-            )}
+            ) :
+              (
+                <div>
+                  <H1Skeleton />
+                  <PSkeleton />
+                </div>
+              )}
           </Value>
           <Value>
             {this.state.loaded ? (
               <div>
-                <h1>{this.state.researchNum}</h1>
+                <h1>
+                  <FiltersLink
+                    to={'/datasets'}
+                    title={counterpart('home.tooltip.research', { locale: this.state.lang })}
+                    onClick={() => SearchFilters.toggleProject()}
+                  >
+                    {this.state.researchNum}
+                  </FiltersLink>
+                </h1>
                 <Translate content="home.key.research" fallback="tutkimusprojektia" component="p" />
               </div>
-            ) : (
-              <div>
-                <H1Skeleton />
-                <PSkeleton />
-              </div>
-            )}
+            ) :
+              (
+                <div>
+                  <H1Skeleton />
+                  <PSkeleton />
+                </div>
+              )}
           </Value>
         </CustomBox>
       </aside>
     )
   }
 }
+
+KeyValues.propTypes = {
+  Stores: PropTypes.object.isRequired,
+}
+
+export default inject('Stores')(observer(KeyValues))
 
 const CustomBox = styled(ContentBox)`
   margin-bottom: 2em;
@@ -187,5 +246,13 @@ const Value = styled.div`
     &:nth-of-type(3) {
       display: initial;
     }
+  }
+`
+
+const FiltersLink = styled(Link)`
+  font-size: 0.975em;
+  &:active {
+    transition: 0.1s ease;
+    box-shadow: 0px 2px 5px -2px rgba(0,0,0,0.7) inset;
   }
 `

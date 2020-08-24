@@ -1,5 +1,5 @@
 import React from 'react'
-import Field from '../general/field'
+import { Section } from '../general/section/index'
 import tooltipContent from './tooltipContent'
 import Spatial from './spatial'
 
@@ -18,9 +18,9 @@ const translations = {
   }
 
 const TemporalAndSpatial = () => (
-  <Field {...fieldProps}>
+  <Section {...fieldProps}>
     <Spatial />
-  </Field>
-)
+  </Section>
+    )
 
 export default TemporalAndSpatial
