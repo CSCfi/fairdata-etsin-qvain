@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import Translate from 'react-translate-component'
 import translate from 'counterpart'
 import { inject, observer } from 'mobx-react'
 import axios from 'axios'
@@ -10,10 +9,11 @@ import { QvainContainer } from './general/card'
 import { getResponseError } from './utils/responseError'
 import urls from './utils/urls'
 import Tracking from '../../utils/tracking'
-import ConfirmModal from './editor/confirmDialog'
+import LooseActorDialog from './editor/looseActorDialog'
 import Header from './editor/header'
 import StickyHeader from './editor/stickyHeader'
 import Dataset from './editor/dataset'
+import LooseProvenanceDialog from './editor/looseProvenanceDialog'
 
 class Qvain extends Component {
   promises = []
@@ -183,61 +183,6 @@ class Qvain extends Component {
     return { datasetLoading, datasetError }
   }
 
-  getLooseActorsDialogProps = () => {
-    const { orphanActors, promptLooseActors } = this.props.Stores.Qvain
-    const { lang } = this.props.Stores.Locale
-    return {
-      show: !!promptLooseActors,
-      onCancel: () => promptLooseActors(false),
-      onConfirm: () => promptLooseActors(true),
-      content: {
-        warning: (
-          <>
-            <Translate content={'qvain.general.looseActors.warning'} component="p" />
-            <div>
-              {(orphanActors || []).map(actor => {
-                const actorName = (actor.person || {}).name || actor.organizations[0].name[lang]
-                const rolesStr = actor.roles.map(
-                  role => `${translate(`qvain.actors.add.checkbox.${role}`)}`
-                )
-                return `${actorName} / ${rolesStr.join(' / ')}`
-              })}
-            </div>
-            <div style={{ margin: 10 }} />
-            <Translate content={'qvain.general.looseActors.question'} style={{ fontWeight: 600 }} />
-          </>
-        ),
-        confirm: <Translate content={'qvain.general.looseActors.confirm'} />,
-        cancel: <Translate content={'qvain.general.looseActors.cancel'} />,
-      },
-    }
-  }
-
-  getLooseProvenanceDialogProps = () => {
-    const { promptLooseProvenances, provenancesWithNonExistingActors } = this.props.Stores.Qvain
-    const { lang } = this.props.Stores.Locale
-    return {
-      show: !!promptLooseProvenances,
-      onCancel: () => promptLooseProvenances(false),
-      onConfirm: () => promptLooseProvenances(true),
-      content: {
-        warning: (
-          <>
-            <Translate content={'qvain.general.looseProvenances.warning'} component="p" />
-            <div>{provenancesWithNonExistingActors.map(p => p.name[lang] || p.name.und)}</div>
-            <div style={{ margin: 10 }} />
-            <Translate
-              content={'qvain.general.looseProvenances.question'}
-              style={{ fontWeight: 600 }}
-            />
-          </>
-        ),
-        confirm: <Translate content={'qvain.general.looseProvenances.confirm'} />,
-        cancel: <Translate content={'qvain.general.looseProvenances.cancel'} />,
-      },
-    }
-  }
-
   getStickyHeaderProps = () => {
     const { datasetLoading, datasetError, submitted, response } = this.state
     return {
@@ -277,8 +222,8 @@ class Qvain extends Component {
         <Header {...this.getHeaderProps()} />
         <StickyHeader {...this.getStickyHeaderProps()} />
         <Dataset {...this.getDatasetProps()} />
-        <ConfirmModal {...this.getLooseActorsDialogProps()} />
-        <ConfirmModal {...this.getLooseProvenanceDialogProps()} />
+        <LooseActorDialog />
+        <LooseProvenanceDialog />
       </QvainContainer>
     )
   }

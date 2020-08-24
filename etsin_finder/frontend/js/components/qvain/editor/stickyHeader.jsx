@@ -3,9 +3,9 @@ import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import DeprecatedState from '../deprecatedState'
-import PasState from '../pasState'
-import SubmitButtons from '../submitButtons'
+import DeprecatedState from './deprecatedState'
+import PasState from './pasState'
+import SubmitButtons from './submitButtons'
 import { StickySubHeaderWrapper, StickySubHeader, StickySubHeaderResponse } from '../general/card'
 import SubmitResponse from '../general/submitResponse'
 import {
@@ -15,7 +15,7 @@ import {
   LinkBackContainer,
   LinkBack,
   LinkText,
-} from './styledComponents'
+} from './editor.styled'
 
 const StickyHeader = ({
   datasetError,

@@ -4,7 +4,7 @@ import { observer, inject } from 'mobx-react'
 import PropTypes from 'prop-types'
 import Title from '../general/title'
 import { SubHeader, SubHeaderText } from '../general/card'
-import { SubHeaderTextContainer } from './styledComponents'
+import { SubHeaderTextContainer } from './editor.styled'
 
 const Header = ({ Stores, datasetLoading, datasetError }) => {
   const getTitleKey = () => {

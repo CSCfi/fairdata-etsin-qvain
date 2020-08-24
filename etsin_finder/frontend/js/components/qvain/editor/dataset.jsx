@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 
-import { STSD, Form, SubmitContainer } from './styledComponents'
+import { STSD, Form, SubmitContainer } from './editor.styled'
 import { ErrorContainer, ErrorLabel, ErrorContent, ErrorButtons } from '../general/errors'
 import { Button } from '../../general/button'
 

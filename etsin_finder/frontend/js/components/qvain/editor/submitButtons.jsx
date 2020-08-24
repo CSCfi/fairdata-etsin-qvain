@@ -7,10 +7,10 @@ import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import translate from 'counterpart'
 
-import { qvainFormSchema, otherIdentifierSchema } from './utils/formValidation'
-import handleSubmitToBackend from './utils/handleSubmit'
-import urls from './utils/urls'
-import { InvertedButton } from '../general/button'
+import { qvainFormSchema, otherIdentifierSchema } from '../utils/formValidation'
+import handleSubmitToBackend from '../utils/handleSubmit'
+import urls from '../utils/urls'
+import { InvertedButton } from '../../general/button'
 import DoiModal from './doiModal'
 
 class SubmitButtons extends Component {

@@ -3,10 +3,10 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { inject, observer } from 'mobx-react'
 import Translate from 'react-translate-component'
-import { TableButton } from './general/buttons'
+import { TableButton } from '../general/buttons'
 
 // If we have a deprecated dataset, show information and button for fixing it.
-const DeprecatedState = (props) => {
+const DeprecatedState = props => {
   const { deprecated, showFixDeprecatedModal } = props.Stores.Qvain
   if (!deprecated) {
     return null
@@ -28,12 +28,12 @@ DeprecatedState.propTypes = {
 }
 
 const DeprecationInfoText = styled.div`
-  background-color: ${ props => props.theme.color.error};
+  background-color: ${props => props.theme.color.error};
   text-align: center;
   width: 100%;
   color: white;
   z-index: 2;
-  border-bottom: 1px solid rgba(0,0,0,0.3);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
   position: relative;
   min-width: 300px;
   padding: 0.5rem;
