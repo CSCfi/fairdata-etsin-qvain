@@ -21,15 +21,17 @@ function DoiSelection(props) {
   }
   return (
     <DoiSelectionContainer>
-      <Checkbox
-        id="doiSelector"
-        onChange={handleDoiCheckboxChange}
-        disabled={original !== undefined && !isNewDraft}
-        checked={useDoi}
-      />
-      <DoiLabel htmlFor="doiSelector">
-        <Translate content="qvain.files.dataCatalog.doiSelection" />
-      </DoiLabel>
+      <CheckBoxRow>
+        <DoiCheckbox
+          id="doiSelector"
+          onChange={handleDoiCheckboxChange}
+          disabled={original !== undefined && !isNewDraft}
+          checked={useDoi}
+        />
+        <DoiLabel htmlFor="doiSelector">
+          <Translate content="qvain.files.dataCatalog.doiSelection" />
+        </DoiLabel>
+      </CheckBoxRow>
       {useDoi && (
         <Translate component={DoiHelpField} content="qvain.files.dataCatalog.doiSelectedHelp" />
       )}
@@ -41,9 +43,18 @@ DoiSelection.propTypes = {
   Stores: PropTypes.object.isRequired,
 }
 
+export const DoiCheckbox = styled(Checkbox)`
+  flex-shrink: 0;
+`
+
 const DoiHelpField = styled(HelpField)`
   display: block;
   margin-top: 0.5rem;
+`
+
+const CheckBoxRow = styled.div`
+  display: flex;
+  align-items: center;
 `
 
 const DoiSelectionContainer = styled.div`

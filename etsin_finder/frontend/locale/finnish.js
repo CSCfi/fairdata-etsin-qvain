@@ -869,12 +869,42 @@ const finnish = {
           note:
             'Huom! Jos muutat tavallisen aineiston kasvavaksi aineistoksi, siitä tehdään automaattisesti uusi versio. Vanha versio jää tavalliseksi, ja uudesta tulee kasvava aineisto.',
           confirm:
-            'Oletko varma, että haluat tehdä aineistosta kasvavan? Muutos aiheuttaa uuden version syntymisen ja uu. Uudella versiolla on aina uusi tunniste.',
+            'Oletko varma, että haluat tehdä aineistosta kasvavan? Muutos aiheuttaa uuden version syntymisen ja uudella versiolla on aina uusi tunniste.',
           cancel: 'Peruuta',
         },
         modalHeader: 'Muuta aineiston kasvavuutta',
         closeButton: 'Sulje',
         changes: 'Aineistoon tehdyt muutokset on tallennettava ennen tämän asetuksen muuttamista.',
+      },
+      cumulativeStateV2: {
+        label: 'Kasvava aineisto',
+        radio: {
+          no:
+            'Ei. (Uusien tiedostojen tai kansioiden julkaistuun aineistoon vaatii, että aineistosta tehdään uusi versio.)',
+          yes:
+            'Kyllä. (Tiedostoja tai kansioita tullaan lisäämään aineistoon. Lisäys onnistuu ilman uuden version luomista.)',
+          note:
+            'Huom! Julkaistua aineistoa ei voi muuttaa kasvavaksi ilman, että siitä tehdään uusi versio. Kasvavan aineiston muuttaminen ei-kasvavaksi on sen sijaan sallittua.',
+        },
+        enabled: {
+          state: 'Tämä aineisto on merkitty kasvavaksi.',
+          explanation:
+            'Kasvavaan aineistoon lisätään dataa säännöllisesti. Jos aineistoon ei enää lisätä dataa, se kannattaa muuttaa ei-kasvavaksi.',
+          button: 'Muuta ei-kasvavaksi',
+          note:
+            'Huom! Jos muutat kasvavan aineiston ei-kasvavaksi, et voi enää muuttaa sitä takaisin kasvavaksi luomatta uutta versiota.',
+        },
+        disabled: {
+          state: 'Aineisto on julkaistu tavallisena, ei-kasvavana aineistona.',
+          explanation:
+            'Aineistoon ei voi lisätä tiedostoja tai hakemistoja luomatta siitä uutta versiota.',
+          note:
+            'Jos haluat muuttaa aineiston kasvavaksi, siitä on ensin luotava uusi versio.',
+        },
+        stateChanged: {
+          note: 'Uusi tila tulee voimaan kun aineisto tallennetaan.',
+          button: 'Peru muutos',
+        },
       },
       responses: {
         fail: 'Jotain meni pieleen...',

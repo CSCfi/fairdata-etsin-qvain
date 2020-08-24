@@ -874,6 +874,35 @@ const english = {
         closeButton: 'Close',
         changes: 'You need to save your changes to the dataset before you can change this setting.',
       },
+      cumulativeStateV2: {
+        label: 'Cumulative dataset',
+        radio: {
+          no:
+            'No. (Adding files or folders to a published dataset requires you to create a new version of the dataset.)',
+          yes: 'Yes. (New files or folders will be added without a version change.)',
+          note:
+            'Note! Once the dataset has been published, it cannot be turned cumulative without creating a new version of the dataset.',
+        },
+        enabled: {
+          state: 'This dataset has been marked as a cumulative dataset.',
+          explanation:
+            'It means that data is added to it regularly. If data is no longer being added to this dataset, you should turn it non-cumulative.',
+          button: 'Turn non-cumulative',
+          note:
+            'Note! Once changed, you need to create a new version of the dataset to turn it back to cumulative.',
+        },
+        disabled: {
+          state: 'This dataset has been marked non-cumulative.',
+          explanation:
+            'Adding files or folders to a published dataset requires you to create a new version of the dataset.',
+          note:
+            'Changing the dataset cumulative requires creating a new version of the dataset.',
+        },
+        stateChanged: {
+          note: 'The new state will be applied once you save the dataset.',
+          button: 'Cancel change',
+        },
+      },
       responses: {
         fail: 'Something went wrong...',
         changeComplete: 'Action complete.',

@@ -51,7 +51,8 @@ export const NestedLabel = styled.label`
 export const LabelLarge = styled.label`
   font-size: 1.2em;
   line-height: calc(1.5 * 1.2em);
-  font-weight: 700
+  font-weight: 700;
+  display: block;
 `
 
 export const CheckboxStyles = styled.input`
@@ -75,7 +76,7 @@ export const RadioInput = styled.input`
 export const Checkbox = props => <CheckboxStyles {...props} type="checkbox" />
 
 export const HelpField = styled.span`
-  font-weight: 200;
+  font-weight: 300;
   font-family: 'Lato', sans-serif;
 `
 

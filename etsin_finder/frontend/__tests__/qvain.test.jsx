@@ -18,9 +18,8 @@ import EmbargoExpires from '../js/components/qvain/licenses/embargoExpires'
 import { ACCESS_TYPE_URL, LICENSE_URL, DATA_CATALOG_IDENTIFIER } from '../js/utils/constants'
 import { qvainFormSchema } from '../js/components/qvain/utils/formValidation'
 import { ExternalFilesBase } from '../js/components/qvain/files/external/externalFiles'
-import DoiSelection from '../js/components/qvain/files/doiSelection'
+import DoiSelection, { DoiCheckbox } from '../js/components/qvain/files/doiSelection'
 import { ButtonGroup } from '../js/components/qvain/general/buttons'
-import { Checkbox } from '../js/components/qvain/general/form'
 import { SlidingContent } from '../js/components/qvain/general/card'
 import Env from '../js/stores/domain/env'
 import QvainStoreClass, {
@@ -255,7 +254,12 @@ describe('Qvain.RightsAndLicenses', () => {
   it('should render one added license, CCBY4', () => {
     const stores = getStores()
     stores.Qvain.licenseArray = []
-    stores.Qvain.setLicense(LicenseConstructor({ en: 'Creative Commons Attribution 4.0 International (CC BY 4.0)' }, LICENSE_URL.CCBY4))
+    stores.Qvain.setLicense(
+      LicenseConstructor(
+        { en: 'Creative Commons Attribution 4.0 International (CC BY 4.0)' },
+        LICENSE_URL.CCBY4
+      )
+    )
     stores.Qvain.addLicense(stores.Qvain.license)
     const component = shallow(<License Stores={stores} />)
     expect(component.find('licenses__LabelTemp').length).toBe(1)
@@ -272,7 +276,12 @@ describe('Qvain.RightsAndLicenses', () => {
     stores.Qvain.otherLicenseUrl = 'https://test2.url'
     stores.Qvain.addLicense(stores.Qvain.license)
     // Add CCBY4 license
-    stores.Qvain.setLicense(LicenseConstructor({ en: 'Creative Commons Attribution 4.0 International (CC BY 4.0)' }, LICENSE_URL.CCBY4))
+    stores.Qvain.setLicense(
+      LicenseConstructor(
+        { en: 'Creative Commons Attribution 4.0 International (CC BY 4.0)' },
+        LICENSE_URL.CCBY4
+      )
+    )
     stores.Qvain.addLicense(stores.Qvain.license)
     const component = shallow(<License Stores={stores} />)
     expect(component.find('licenses__LabelTemp').length).toBe(3)
@@ -289,7 +298,12 @@ describe('Qvain.RightsAndLicenses', () => {
     stores.Qvain.otherLicenseUrl = 'https://test2.url'
     stores.Qvain.addLicense(stores.Qvain.license)
     // Add CCBY4 license
-    stores.Qvain.setLicense(LicenseConstructor({ en: 'Creative Commons Attribution 4.0 International (CC BY 4.0)' }, LICENSE_URL.CCBY4))
+    stores.Qvain.setLicense(
+      LicenseConstructor(
+        { en: 'Creative Commons Attribution 4.0 International (CC BY 4.0)' },
+        LICENSE_URL.CCBY4
+      )
+    )
     stores.Qvain.addLicense(stores.Qvain.license)
     const component = shallow(<License Stores={stores} />)
     // Add second other license again, SHOULD NOT ADDED
@@ -382,7 +396,7 @@ describe('Qvain DOI selection', () => {
     setDataCatalog(DATA_CATALOG_IDENTIFIER.IDA)
 
     const component = shallow(<DoiSelectionBase Stores={Stores} />)
-    const checkbox = component.find(Checkbox)
+    const checkbox = component.find(DoiCheckbox)
     expect(checkbox.prop('checked')).toBe(false)
   })
 
@@ -407,7 +421,7 @@ describe('Qvain DOI selection', () => {
     })
 
     const component = shallow(<DoiSelectionBase Stores={Stores} />)
-    const checkbox = component.find(Checkbox)
+    const checkbox = component.find(DoiCheckbox)
     expect(checkbox.prop('checked')).toBe(false)
   })
 
@@ -433,7 +447,7 @@ describe('Qvain DOI selection', () => {
     setUseDoi(true)
 
     const component = shallow(<DoiSelectionBase Stores={Stores} />)
-    const checkbox = component.find(Checkbox)
+    const checkbox = component.find(DoiCheckbox)
     expect(checkbox.prop('checked')).toBe(true)
   })
 })
@@ -463,7 +477,7 @@ describe('Qvain validation', () => {
         {
           name: { en: 'Creative Commons Attribution 4.0 International (CC BY 4.0)' },
           identifier: 'http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0',
-        }
+        },
       ],
       dataCatalog: 'urn:nbn:fi:att:data-catalog-ida',
       actors,

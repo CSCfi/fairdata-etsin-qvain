@@ -122,6 +122,7 @@ class Qvain {
     this.dataCatalog = undefined
     this.preservationState = 0
     this.cumulativeState = CUMULATIVE_STATE.NO
+    this.newCumulativeState = this.cumulativeState
     this.idaPickerOpen = false
     this.selectedProject = undefined
     this.selectedFiles = []
@@ -461,6 +462,9 @@ class Qvain {
 
   @observable cumulativeState = CUMULATIVE_STATE.NO
 
+  // Used for updating cumulative state separately from rest of dataset in v2
+  @observable newCumulativeState = CUMULATIVE_STATE.NO
+
   @observable selectedProject = undefined
 
   @observable selectedFiles = []
@@ -504,6 +508,12 @@ class Qvain {
   @action
   setCumulativeState = selectedCumulativeState => {
     this.cumulativeState = selectedCumulativeState
+    this.changed = true
+  }
+
+  @action
+  setNewCumulativeState = (selectedCumulativeState) => {
+    this.newCumulativeState = selectedCumulativeState
     this.changed = true
   }
 
@@ -918,9 +928,10 @@ class Qvain {
 
     // Load cumulative state
     this.cumulativeState = dataset.cumulative_state
+    this.newCumulativeState = this.cumulativeState
 
     // Load DOI
-    if (researchDataset.preferred_identifier.startsWith('doi') || dataset.use_doi_for_published) {
+    if ((researchDataset.preferred_identifier && researchDataset.preferred_identifier.startsWith('doi')) || dataset.use_doi_for_published) {
       this.useDoi = true
     } else {
       this.useDoi = false
@@ -1057,12 +1068,12 @@ class Qvain {
 
   @computed
   get canRemoveFiles() {
-    return this.canSelectFiles && !this.isCumulative
+    return this.canSelectFiles && (!this.hasBeenPublished || !this.isCumulative)
   }
 
   @computed
   get isCumulative() {
-    return this.cumulativeState === CUMULATIVE_STATE.YES
+    return this.cumulativeState === CUMULATIVE_STATE.YES && this.hasBeenPublished
   }
 
   @computed
