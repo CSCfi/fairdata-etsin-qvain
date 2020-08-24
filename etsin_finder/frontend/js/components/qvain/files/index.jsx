@@ -10,6 +10,7 @@ import IDAFilePicker from './ida'
 import ExternalFiles from './external/externalFiles'
 import DataCatalog from './dataCatalog'
 import CumulativeState from './cumulativeState'
+import CumulativeStateV2 from './cumulativeStateV2'
 import { DATA_CATALOG_IDENTIFIER } from '../../../utils/constants'
 import Tooltip from '../general/tooltip'
 import FilesInfo from './filesInfo'
@@ -46,7 +47,7 @@ class Files extends Component {
     } else if (dataCatalog === DATA_CATALOG_IDENTIFIER.IDA) {
       data = (
         <>
-          <CumulativeState />
+          { metaxApiV2 ? <CumulativeStateV2 /> : <CumulativeState /> }
           <ContainerSubsectionBottom>
             <FilePickerComponent />
           </ContainerSubsectionBottom>

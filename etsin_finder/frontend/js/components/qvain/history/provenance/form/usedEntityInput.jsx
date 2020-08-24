@@ -10,7 +10,7 @@ import Form from '../../relatedResource/form'
 
 const translationsRoot = 'qvain.history.provenance.modal.usedEntityInput'
 const translations = {
-    label: `${translationsRoot}.label`,
+  label: `${translationsRoot}.label`,
 }
 
 const Location = ({ Stores }) => {
@@ -34,6 +34,7 @@ const Location = ({ Stores }) => {
           Store={Store}
           Field={Field}
           Form={Form}
+          formProps={{ hideRelationType: true }}
           translationsRoot={translationsRoot}
           handleSave={() => handleSave(Field)}
           position="left"
@@ -44,7 +45,7 @@ const Location = ({ Stores }) => {
 }
 
 Location.propTypes = {
-  Stores: PropTypes.object.isRequired
+  Stores: PropTypes.object.isRequired,
 }
 
 export default inject('Stores')(observer(Location))

@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled, { keyframes } from 'styled-components'
 
-// eslint-disable-next-line
 const Card = ({ children, bottomContent, className }) => (
   <Container bottomContent={bottomContent} className={className}>
     {children}
@@ -54,6 +53,12 @@ export const SubHeader = styled.div`
   color: white;
   display: flex;
   align-items: center;
+`
+
+export const Paragraph = styled.p`
+  :last-child {
+    margin-bottom: 0;
+  }
 `
 
 export const StickySubHeaderWrapper = styled.div`
@@ -122,10 +127,12 @@ export const SlidingContent = styled.div`
 Card.propTypes = {
   children: PropTypes.node.isRequired,
   className: PropTypes.string,
+  bottomContent: PropTypes.bool,
 }
 
 Card.defaultProps = {
   className: undefined,
+  bottomContent: false,
 }
 
 export default Card
