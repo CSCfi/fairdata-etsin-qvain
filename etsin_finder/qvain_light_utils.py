@@ -34,7 +34,7 @@ def clean_empty_keyvalues_from_dict(d):
     return {k: v for k, v in ((k, clean_empty_keyvalues_from_dict(v)) for k, v in d.items()) if v or v is False}
 
 
-def alter_role_data(actor_list, role):
+def alter_role_data(actor_list=[], role="all"):
     """Converts the role data fom the frontend to comply with the Metax schema.
 
     Arguments:
@@ -46,7 +46,11 @@ def alter_role_data(actor_list, role):
 
     """
     actors = []
-    actor_list_with_role = [x for x in actor_list if role in x.get("roles", []) ]
+    if role == "all":
+        actor_list_with_role = actor_list
+    else:
+        actor_list_with_role = [x for x in actor_list if role in x.get("roles", []) ]
+
     for actor_object in actor_list_with_role:
         actor_object = deepcopy(actor_object)
         organizations = actor_object.get("organizations", [])
@@ -214,7 +218,14 @@ def data_to_metax(data, metadata_provider_org, metadata_provider_user):
         dict: Returns an Dictionary that has been validated and should conform to Metax schema and is ready to be sent to Metax.
 
     """
-    publisher_array = alter_role_data(data.get("actors"), "publisher")
+    publisher_array = alter_role_data(data["actors"], "publisher")
+
+    provenances = data.get("provenance", [])
+    for provenance in provenances:
+        was_associated_with = provenance.get("was_associated_with")
+        altered_association = alter_role_data(was_associated_with)
+        provenance["was_associated_with"] = altered_association
+
     dataset_data = {
         "metadata_provider_org": metadata_provider_org,
         "metadata_provider_user": metadata_provider_user,
@@ -237,6 +248,8 @@ def data_to_metax(data, metadata_provider_org, metadata_provider_user):
             "remote_resources": remote_resources_data_to_metax(data.get("remote_resources")) if data.get("dataCatalog") == DATA_CATALOG_IDENTIFIERS.get('att') else "",
             "files": files_data_to_metax(data.get("files")) if data.get("dataCatalog") == DATA_CATALOG_IDENTIFIERS.get('ida') else "",
             "directories": directories_data_to_metax(data.get("directories")) if data.get("dataCatalog") == DATA_CATALOG_IDENTIFIERS.get('ida') else "",
+            "relation": data.get("relation"),
+            "provenance": provenances,
             "infrastructure": _to_metax_infrastructure(data.get("infrastructure")),
             "spatial": data.get("spatial")
         }
@@ -316,9 +329,15 @@ def edited_data_to_metax(data, original):
         dict: Metax ready data.
 
     """
-    publisher_array = alter_role_data(data.get("actors"), "publisher")
-    research_dataset = original.get("research_dataset")
-    log.info(research_dataset)
+    publisher_array = alter_role_data(data["actors"], "publisher")
+    research_dataset = original["research_dataset"]
+
+    provenances = data.get("provenance", [])
+    for provenance in provenances:
+        was_associated_with = provenance.get("was_associated_with")
+        altered_association = alter_role_data(was_associated_with)
+        provenance["was_associated_with"] = altered_association
+
     research_dataset.update({
         "title": data.get("title"),
         "description": data.get("description"),
@@ -337,8 +356,11 @@ def edited_data_to_metax(data, original):
         "files": files_data_to_metax(data.get("files")) if data.get("dataCatalog") == DATA_CATALOG_IDENTIFIERS.get('ida') else "",
         "directories": directories_data_to_metax(data.get("directories")) if data.get("dataCatalog") == DATA_CATALOG_IDENTIFIERS.get('ida') else "",
         "infrastructure": _to_metax_infrastructure(data.get("infrastructure")),
-        "spatial": data.get("spatial")
+        "spatial": data.get("spatial"),
+        "relation": data.get("relation"),
+        "provenance": provenances
     })
+    log.info(research_dataset)
     edited_data = {
         "research_dataset": research_dataset,
         "use_doi_for_published": data.get("useDoi")
