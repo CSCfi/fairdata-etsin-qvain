@@ -119,15 +119,13 @@ export const ProvenanceModel = (Parent, provenanceData) => ({
     : undefined,
 })
 
-export const UsedEntityModel = ue => {
-  return {
-    uiid: uuidv4(),
-    name: fillUndefinedMultiLangProp(ue.title),
-    description: fillUndefinedMultiLangProp(ue.description),
-    identifier: ue.identifier,
-    entityType: ue.type ? RelationType(ue.type.pref_label, ue.type.identifier) : undefined,
-  }
-}
+export const UsedEntityModel = ue => ({
+  uiid: uuidv4(),
+  name: fillUndefinedMultiLangProp(ue.title),
+  description: fillUndefinedMultiLangProp(ue.description),
+  identifier: ue.identifier,
+  entityType: ue.type ? RelationType(ue.type.pref_label, ue.type.identifier) : undefined,
+})
 
 const parseTranslationField = value => {
   if (!value) return { fi: '', en: '', und: '' }
