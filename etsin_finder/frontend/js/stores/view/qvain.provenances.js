@@ -120,7 +120,6 @@ export const ProvenanceModel = (Parent, provenanceData) => ({
 })
 
 export const UsedEntityModel = ue => {
-  console.log(ue)
   return {
     uiid: uuidv4(),
     name: fillUndefinedMultiLangProp(ue.title),

@@ -904,7 +904,6 @@ class Qvain {
     this.provenances = []
     if (researchDataset.provenance !== undefined) {
       researchDataset.provenance.forEach(p => {
-        console.log('provenance', p)
         const prov = ProvenanceModel(this, p)
         this.provenances.push(prov)
       })
