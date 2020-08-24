@@ -261,7 +261,7 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
           "inEdit": Object {
             "endDate": undefined,
             "startDate": undefined,
-            "uiid": "c80823d2-d0c1-48bb-8af9-5a83fc67a15d",
+            "uiid": "87270616-82d1-4c97-b2d4-91cd9664e720",
           },
           "isParentRoot": [Function],
           "readonly": false,
@@ -532,7 +532,7 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
           "inEdit": Object {
             "endDate": undefined,
             "startDate": undefined,
-            "uiid": "c80823d2-d0c1-48bb-8af9-5a83fc67a15d",
+            "uiid": "87270616-82d1-4c97-b2d4-91cd9664e720",
           },
           "isParentRoot": [Function],
           "readonly": false,
@@ -803,7 +803,7 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
           "inEdit": Object {
             "endDate": undefined,
             "startDate": undefined,
-            "uiid": "c80823d2-d0c1-48bb-8af9-5a83fc67a15d",
+            "uiid": "87270616-82d1-4c97-b2d4-91cd9664e720",
           },
           "isParentRoot": [Function],
           "readonly": false,
@@ -1074,7 +1074,7 @@ exports[`Qvain.Description should render <LanguageField /> 1`] = `
           "inEdit": Object {
             "endDate": undefined,
             "startDate": undefined,
-            "uiid": "c80823d2-d0c1-48bb-8af9-5a83fc67a15d",
+            "uiid": "87270616-82d1-4c97-b2d4-91cd9664e720",
           },
           "isParentRoot": [Function],
           "readonly": false,
@@ -1345,7 +1345,7 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
           "inEdit": Object {
             "endDate": undefined,
             "startDate": undefined,
-            "uiid": "c80823d2-d0c1-48bb-8af9-5a83fc67a15d",
+            "uiid": "87270616-82d1-4c97-b2d4-91cd9664e720",
           },
           "isParentRoot": [Function],
           "readonly": false,
