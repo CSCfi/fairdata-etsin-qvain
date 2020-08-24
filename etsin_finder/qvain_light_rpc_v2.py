@@ -7,41 +7,20 @@
 
 """RPC API endpoints, meant to be used by Qvain Light form"""
 
-from functools import wraps
-import inspect
-from flask import request, session
-from flask_restful import abort, reqparse, Resource
+from flask_restful import reqparse, Resource
 
-from etsin_finder.app_config import get_app_config
-from etsin_finder import authentication
 from etsin_finder.qvain_light_service_v2 import (
-    change_cumulative_state, fix_deprecated_dataset, create_new_version, publish_dataset, merge_draft, create_draft
+    change_cumulative_state,
+    create_new_version,
+    publish_dataset,
+    merge_draft,
+    create_draft
 )
 from etsin_finder.finder import app
-from etsin_finder.qvain_light_utils import get_dataset_creator
-from etsin_finder.constants import SAML_ATTRIBUTES
-
-from etsin_finder.qvain_light_utils_v2 import (
-    check_dataset_creator
-)
+from etsin_finder.log_utils import log_request
+from etsin_finder.qvain_light_utils_v2 import check_dataset_creator
 
 log = app.logger
-
-def log_request(f):
-    """Log request when used as decorator."""
-    @wraps(f)
-    def func(*args, **kwargs):
-        """Log requests."""
-        csc_name = authentication.get_user_csc_name() if not app.testing else ''
-        log.info('[{0}.{1}] {2} {3} {4} USER AGENT: {5}'.format(
-            args[0].__class__.__name__,
-            f.__name__,
-            csc_name if csc_name else 'UNAUTHENTICATED',
-            request.environ.get('REQUEST_METHOD'),
-            request.path,
-            request.user_agent))
-        return f(*args, **kwargs)
-    return func
 
 class QvainDatasetChangeCumulativeState(Resource):
     """Metax RPC for changing cumulative_state of a dataset."""
@@ -67,16 +46,9 @@ class QvainDatasetChangeCumulativeState(Resource):
         args = self.parser.parse_args()
         cr_id = args.get('identifier')
         cumulative_state = args.get('cumulative_state')
-        is_authd = authentication.is_authenticated()
-        if not is_authd:
-            return {"PermissionError": "User not logged in."}, 401
-
-        # only creator of the dataset is allowed to modify it
-        csc_username = authentication.get_user_csc_name()
-        creator = get_dataset_creator(cr_id)
-        if csc_username != creator:
-            log.warning('User: \"{0}\" is not the creator of the dataset. Changing cumulative state not allowed. Creator: \"{1}\"'.format(csc_username, creator))
-            return {"PermissionError": "User not authorized to change cumulative state of dataset."}, 403
+        error = check_dataset_creator(cr_id)
+        if error is not None:
+            return error
         metax_response = change_cumulative_state(cr_id, cumulative_state)
         return metax_response
 

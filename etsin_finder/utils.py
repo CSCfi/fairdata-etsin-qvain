@@ -12,7 +12,7 @@ import os
 from datetime import datetime
 import pytz
 from dateutil import parser
-
+from urllib import parse
 
 def get_log_config(log_file_path, log_lvl):
     """Function to get the logging configuration from utils.py
@@ -56,7 +56,6 @@ def get_log_config(log_file_path, log_lvl):
         }
         return CONFIG
     return False
-
 
 def executing_travis():
     """Returns True whenever code is being executed by travis"""
@@ -227,6 +226,23 @@ def slice_array_on_limit(array, limit):
     if array and len(array) > limit:
         return array[0:limit]
     return array
+
+
+def format_url(url, *args):
+    """Helper for formatting URLs.
+
+    Converts the arguments to strings and performs percent encoding on them before using them in url.format().
+
+    Args:
+        url (str): URL as formatting string in the style accepted by str.format().
+        *args: Arguments for str.format().
+
+    Returns:
+        (str): Formatted URL.
+
+    """
+    quoted_args = [parse.quote(str(arg), safe='') for arg in args]
+    return url.format(*quoted_args)
 
 
 class FlaskService:

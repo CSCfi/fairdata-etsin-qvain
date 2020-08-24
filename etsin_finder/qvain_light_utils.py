@@ -2,18 +2,18 @@
 
 from copy import deepcopy
 import json
-from flask import session
 from base64 import urlsafe_b64encode
 from datetime import date
 
-from etsin_finder.constants import SAML_ATTRIBUTES, DATA_CATALOG_IDENTIFIERS, ACCESS_TYPES
+from etsin_finder.constants import DATA_CATALOG_IDENTIFIERS, ACCESS_TYPES
 from etsin_finder.cr_service import (
     get_catalog_record,
-    is_draft,
-    is_catalog_record_owner
 )
 from etsin_finder.finder import app
-from etsin_finder.authentication import get_user_ida_groups, get_user_csc_name, get_user_email, get_user_firstname, get_user_lastname
+from etsin_finder.authentication import (
+    get_user_ida_groups, get_user_csc_name, get_user_email, get_user_firstname, get_user_lastname,
+    is_authenticated
+)
 
 log = app.logger
 
@@ -284,6 +284,45 @@ def get_dataset_creator(cr_id):
     if not dataset:
         return None
     return dataset.get('metadata_provider_user')
+
+
+def check_authentication():
+    """Verify that current user is authenticated and has a CSC user name.
+
+    Returns:
+        error {tuple}: Reason (message, status_code) for failed verification. Returns None if verification was successful.
+
+    """
+    is_authd = is_authenticated()
+    if not is_authd:
+        return {"PermissionError": "User not logged in."}, 401
+
+    csc_username = get_user_csc_name()
+    if not csc_username:
+        return {"PermissionError": "Missing user CSC identifier."}, 401
+
+    return None
+
+def check_dataset_creator(cr_id):
+    """Verify that current user is authenticated and can edit the dataset.
+
+    Arguments:
+        cr_id (str): Identifier of dataset.
+
+    Returns:
+        error {tuple}: Reason (message, status_code) for failed verification. Returns None if verification was successful.
+
+    """
+    error = check_authentication()
+    if error:
+        return error
+
+    csc_username = get_user_csc_name()
+    creator = get_dataset_creator(cr_id)
+    if csc_username != creator:
+        log.warning('User: \"{0}\" is not the creator of the dataset. Editing not allowed.'.format(csc_username))
+        return {"PermissionError": "User is not allowed to edit the dataset."}, 403
+    return None
 
 def remove_deleted_datasets_from_results(result):
     """Remove datasets marked as removed from results.
