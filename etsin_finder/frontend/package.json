@@ -16,7 +16,6 @@
     "lint": "eslint js --ext .jsx,.js",
     "start": "webpack --progress -d --config webpack.config.js --watch --define process.env.NODE_ENV=\"'development'\"",
     "storybook": "start-storybook -p 6006",
-    "dev": "webpack-dev-server --config webpack.dev.js --inline --define process.env.NODE_ENV=\"'development'\"",
     "test": "jest",
     "watch": "npm update; webpack --progress -d --config webpack.config.js --watch  --define process.env.NODE_ENV=\"'development'\""
   },
@@ -99,8 +98,7 @@
     "jest": "^24.8.0",
     "jest-cli": "^24.8.0",
     "react-axe": "^3.3.0",
-    "react-element-to-jsx-string": "^14.0.2",
-    "webpack-dev-server": "^3.11.0"
+    "react-element-to-jsx-string": "^14.0.2"
   },
   "jest": {
     "snapshotSerializers": [
