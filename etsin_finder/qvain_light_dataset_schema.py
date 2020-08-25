@@ -129,6 +129,10 @@ class DatasetValidationSchema(Schema):
     spatial = fields.List(
         fields.Dict()
     )
+    temporal = fields.List(
+        fields.Dict(),
+        required=False
+    )
     embargoDate = fields.Str()
     restrictionGrounds = fields.Str()
     license = fields.List(fields.Nested(LicenseValidationSchema))

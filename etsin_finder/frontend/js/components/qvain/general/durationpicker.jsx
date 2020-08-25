@@ -17,25 +17,19 @@ class DurationPicker extends Component {
     Stores: PropTypes.object.isRequired,
     Field: PropTypes.object.isRequired,
     translationsRoot: PropTypes.string.isRequired,
-    datum: PropTypes.string.isRequired
+    datum: PropTypes.string.isRequired,
   }
 
   handleDateChangeRaw = (e, datum) => {
     const { changeAttribute } = this.props.Field
 
-    return e && handleDatePickerChange(
-      e.target.value,
-      (date) => changeAttribute(datum, date)
-    )
+    return e && handleDatePickerChange(e.target.value, date => changeAttribute(datum, date))
   }
 
   handleDateChange = (date, datum) => {
     const { changeAttribute } = this.props.Field
 
-    return date ? handleDatePickerChange(
-      date.toISOString(),
-      (d) => changeAttribute(datum, d)
-    ) : null;
+    return date ? handleDatePickerChange(date.toISOString(), d => changeAttribute(datum, d)) : null
   }
 
   render() {
@@ -48,42 +42,46 @@ class DurationPicker extends Component {
         <Label htmlFor="period-of-time-input" style={{ width: '100%', marginBottom: 5 }}>
           <Translate content={this.translations.label} />
         </Label>
-        <div id="period-of-time-input">
-          <DatePickerStartWrapper>
-            <Translate
-              id="startTimeInput"
-              component={DatePicker}
-              selectsStart
-              maxDate={endDate && new Date(endDate)}
-              startDate={startDate && new Date(startDate)}
-              endDate={endDate && new Date(endDate)}
-              strictParsing
-              selected={startDate ? new Date(startDate) : ''}
-              onChangeRaw={(e) => this.handleDateChangeRaw(e, 'startDate')}
-              onChange={(date) => this.handleDateChange(date, 'startDate')}
-              locale={lang}
-              attributes={{ placeholderText: this.translations.startPlaceholder }}
-              dateFormat={getDateFormatLocale(lang)}
-              disabled={readonly}
-            />
-          </DatePickerStartWrapper>
+        <DatePickerStartWrapper>
           <Translate
-            id="endTimeInput"
+            id="startTimeInput"
             component={DatePicker}
-            selectsEnd
-            minDate={startDate && new Date(startDate)}
+            selectsStart
+            maxDate={endDate && new Date(endDate)}
             startDate={startDate && new Date(startDate)}
             endDate={endDate && new Date(endDate)}
             strictParsing
-            selected={endDate ? new Date(endDate) : ''}
-            onChangeRaw={(e) => this.handleDateChangeRaw(e, 'endDate')}
-            onChange={(date) => this.handleDateChange(date, 'endDate')}
+            selected={startDate ? new Date(startDate) : ''}
+            onChangeRaw={e => this.handleDateChangeRaw(e, 'startDate')}
+            onChange={date => this.handleDateChange(date, 'startDate')}
             locale={lang}
-            attributes={{ placeholderText: this.translations.endPlaceholder }}
+            attributes={{
+              placeholderText: this.translations.startPlaceholder,
+              ariaLabel: this.translations.startPlaceholder,
+            }}
             dateFormat={getDateFormatLocale(lang)}
             disabled={readonly}
           />
-        </div>
+        </DatePickerStartWrapper>
+        <Translate
+          id="endTimeInput"
+          component={DatePicker}
+          selectsEnd
+          minDate={startDate && new Date(startDate)}
+          startDate={startDate && new Date(startDate)}
+          endDate={endDate && new Date(endDate)}
+          strictParsing
+          selected={endDate ? new Date(endDate) : ''}
+          onChangeRaw={e => this.handleDateChangeRaw(e, 'endDate')}
+          onChange={date => this.handleDateChange(date, 'endDate')}
+          locale={lang}
+          attributes={{
+            placeholderText: this.translations.endPlaceholder,
+            ariaLabel: this.translations.endPlaceholder,
+          }}
+          dateFormat={getDateFormatLocale(lang)}
+          disabled={readonly}
+        />
       </DatePickerContainer>
     )
   }
@@ -96,7 +94,7 @@ const DatePickerContainer = styled.div`
 `
 
 const DatePickerStartWrapper = styled.span`
-  margin-right: 15px;
+  margin-right: 0.5em;
 `
 
 export default inject('Stores')(observer(DurationPicker))

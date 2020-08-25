@@ -147,6 +147,7 @@ Object {
   "remote_resources": Array [],
   "restrictionGrounds": undefined,
   "spatial": Array [],
+  "temporal": Array [],
   "title": Object {
     "en": "",
     "fi": "Title",
@@ -302,6 +303,7 @@ Object {
   "remote_resources": Array [],
   "restrictionGrounds": undefined,
   "spatial": Array [],
+  "temporal": Array [],
   "title": Object {
     "en": "",
     "fi": "Title",
@@ -457,6 +459,7 @@ Object {
   "remote_resources": Array [],
   "restrictionGrounds": undefined,
   "spatial": Array [],
+  "temporal": Array [],
   "title": Object {
     "en": "",
     "fi": "Title",
@@ -612,6 +615,7 @@ Object {
   "remote_resources": Array [],
   "restrictionGrounds": undefined,
   "spatial": Array [],
+  "temporal": Array [],
   "title": Object {
     "en": "",
     "fi": "Title",
@@ -767,6 +771,7 @@ Object {
   "remote_resources": Array [],
   "restrictionGrounds": undefined,
   "spatial": Array [],
+  "temporal": Array [],
   "title": Object {
     "en": "",
     "fi": "Title",

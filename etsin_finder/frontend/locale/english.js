@@ -1421,7 +1421,23 @@ const english = {
           },
         },
       },
-    },
+      temporal: {
+        title: 'Temporal coverage',
+        description: 'Time span that is covered by the dataset, e.g. period of observations. ',
+        addButton: 'Add temporal coverage',
+        error: {
+          startDateMissing: 'Start date is missing.',
+          endDateMissing: 'End date is missing'
+        },
+        modal: {
+          durationInput: {
+            label: 'Period of time',
+            startPlaceholder: 'Start date',
+            endPlaceholder: 'End date'
+          }
+        }
+      },
+  },
   },
   slogan: 'Research data finder',
   stc: 'Skip to content',

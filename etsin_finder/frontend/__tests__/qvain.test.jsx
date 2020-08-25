@@ -35,6 +35,14 @@ import {
   groupDatasetsByVersionSet,
 } from '../js/components/qvain/datasets/filter'
 
+jest.mock('uuid', original => {
+  let id = 0
+  return {
+    ...original,
+    v4: () => id++,
+  }
+})
+
 const QvainStore = new QvainStoreClass(Env)
 
 const getStores = () => {

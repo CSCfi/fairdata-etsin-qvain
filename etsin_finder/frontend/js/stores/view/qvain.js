@@ -16,6 +16,7 @@ import Files from './qvain.files'
 import Spatials, { SpatialModel } from './qvain.spatials'
 import Provenances, { ProvenanceModel } from './qvain.provenances'
 import RelatedResources, { RelatedResourceModel } from './qvain.relatedResources'
+import Temporals, { TemporalModel } from './qvain.temporals'
 import uniqueByKey from '../../utils/uniqueByKey'
 
 class Qvain {
@@ -24,6 +25,8 @@ class Qvain {
     this.Files = new Files(this)
     this.Actors = new Actors(this)
     this.Spatials = new Spatials(this)
+    this.Temporals = new Temporals(this)
+    this.Temporals.create()
     this.Provenances = new Provenances(this)
     this.RelatedResources = new RelatedResources(this)
   }
@@ -45,6 +48,8 @@ class Qvain {
   }
 
   @observable spatials = []
+
+  @observable temporals = []
 
   @observable provenances = []
 
@@ -131,6 +136,7 @@ class Qvain {
     this.existingDirectories = []
     this.hierarchy = {}
     this.inEdit = undefined
+    this.temporals = []
 
     this.metadataModalFile = undefined
     this.clearMetadataModalFile = undefined
@@ -354,6 +360,9 @@ class Qvain {
       this.setInfrastructures([...this.infrastructures, this.infrastructure])
       this.setInfrastructure(undefined)
     }
+    if ((this.Temporals.inEdit || {}).startDate && (this.Temporals.inEdit || {}).endDate) {
+      this.Temporals.save()
+    }
   }
 
   @action
@@ -521,7 +530,7 @@ class Qvain {
   }
 
   @action
-  setNewCumulativeState = (selectedCumulativeState) => {
+  setNewCumulativeState = selectedCumulativeState => {
     this.newCumulativeState = selectedCumulativeState
     this.changed = true
   }
@@ -867,6 +876,15 @@ class Qvain {
       })
     }
 
+    // temporals
+    this.temporals = []
+    if (researchDataset.temporal !== undefined) {
+      researchDataset.temporal.forEach(element => {
+        const temporal = TemporalModel(element)
+        this.temporals.push(temporal)
+      })
+    }
+
     // Related Resources
     this.relatedResources = []
     if (researchDataset.relation !== undefined) {
@@ -944,7 +962,11 @@ class Qvain {
     this.newCumulativeState = this.cumulativeState
 
     // Load DOI
-    if ((researchDataset.preferred_identifier && researchDataset.preferred_identifier.startsWith('doi')) || dataset.use_doi_for_published) {
+    if (
+      (researchDataset.preferred_identifier &&
+        researchDataset.preferred_identifier.startsWith('doi')) ||
+      dataset.use_doi_for_published
+    ) {
       this.useDoi = true
     } else {
       this.useDoi = false
