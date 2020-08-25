@@ -371,6 +371,7 @@ const finnish = {
     saveDraft: 'Tallenna Luonnos',
     submit: 'Julkaise Aineisto',
     edit: 'Päivitä Aineisto',
+    unsavedChanges: 'Sinulla on tallentamattomia muutoksia. Oletko varma että haluat poistua sivulta?',
     consent:
       'Käyttämällä Qvain Light -työkalua käyttäjä vakuuttaa, että hän on saanut suostumuksen muiden henkilöiden henkilötietojen lisäämiseen kuvailutietoihin ja ilmoittanut heille miten he voivat saada henkilötietonsa poistettua palvelusta. Käyttämällä Qvain Light-työkalua käyttäjä hyväksyy <a href="https://www.fairdata.fi/hyodyntaminen/kayttopolitiikat-ja-ehdot/">käyttöehdot</a>.',
     submitStatus: {
@@ -392,7 +393,8 @@ const finnish = {
       30: 'Rikastus katkesi',
       40: 'Korjaa metatietoja',
       50: 'Tarkastus katkesi',
-      60: 'Tarkastaa taas',
+      60: 'Metatieto päivitetty',
+      65: 'Tarkastetaan metatietoja',
       70: 'Odottaa siirtoa',
       75: 'Metadata vahvistettu',
       80: 'Siirto aloitettu',

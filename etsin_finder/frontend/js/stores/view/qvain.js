@@ -209,6 +209,7 @@ class Qvain {
   @action
   setOtherIdentifier = identifier => {
     this.otherIdentifier = identifier
+    this.changed = true
   }
 
   @action
@@ -232,6 +233,7 @@ class Qvain {
   @action
   setFieldOfScience = fieldOfScience => {
     this.fieldOfScience = fieldOfScience
+    this.changed = true
   }
 
   @action
@@ -261,6 +263,7 @@ class Qvain {
   @action
   setDatasetLanguage = language => {
     this.datasetLanguage = language
+    this.changed = true
   }
 
   @action
@@ -286,6 +289,7 @@ class Qvain {
   @action
   setKeywordString = value => {
     this.keywordString = value
+    this.changed = true
   }
 
   @action
@@ -303,6 +307,7 @@ class Qvain {
       const keywordsToStore = uniqKeywords.filter(word => !this.keywordsArray.includes(word))
       this.setKeywordsArray([...this.keywordsArray, ...keywordsToStore])
       this.setKeywordString('')
+      this.changed = true
     }
   }
 
@@ -328,6 +333,7 @@ class Qvain {
     this.infrastructures = this.infrastructures.filter(
       infra => infra.url !== infrastructureToRemove.url
     )
+    this.changed = true
   }
 
   @action
@@ -1034,6 +1040,7 @@ class Qvain {
 
   @action removeExternalResource = id => {
     this.externalResources = this.externalResources.filter(r => r.id !== id)
+    this.changed = true
   }
 
   @action setResourceInEdit = id => {
