@@ -9,14 +9,14 @@ import CreatableSelect from 'react-select/creatable'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPen } from '@fortawesome/free-solid-svg-icons'
 
-import { DeleteButton } from '../general/buttons'
-import ValidationError from '../general/validationError'
-import { getOrganizationName } from './common'
+import { DeleteButton } from '../../../general/buttons'
+import ValidationError from '../../../general/validationError'
+import { getOrganizationName } from '../../common'
 
 const getOrgOptionsWithLang = (orgs, lang) => {
   // From the reference data parse the values with the current lang
   // or und.
-  const options = orgs.map((org) => {
+  const options = orgs.map(org => {
     const orgWithLang = {
       label: getOrganizationName(org, lang),
       type: 'organization',
@@ -30,8 +30,8 @@ const getOrgOptionsWithLang = (orgs, lang) => {
 const getDatasetOrgOptionsWithLang = (orgArrays, lang) => {
   // From the reference data parse the values with the current lang
   // or und.
-  const options = orgArrays.map((orgs) => {
-    const name = orgs.map((org) => getOrganizationName(org, lang)).join(', ')
+  const options = orgArrays.map(orgs => {
+    const name = orgs.map(org => getOrganizationName(org, lang)).join(', ')
     const orgWithLang = {
       label: name,
       type: 'multiple',
@@ -103,7 +103,7 @@ export class OrgSelectorBase extends Component {
     components.Option = CustomOption
 
     if (isEditable) {
-      components.Control = (props) => (
+      components.Control = props => (
         <selectComponents.Control
           {...props}
           style={{ cursor: 'pointer', alignItems: 'stretch' }}
@@ -115,7 +115,7 @@ export class OrgSelectorBase extends Component {
     return components
   }
 
-  handleSelection = (selection) => {
+  handleSelection = selection => {
     if (selection.type === 'create') {
       this.props.createOrganization('')
     } else if (selection.type === 'organization') {
@@ -157,7 +157,7 @@ export class OrgSelectorBase extends Component {
 
     const identifier = (organization || {}).identifier
     let selectedOption =
-      (identifier && referenceOptions.find((opt) => opt.value.identifier === identifier)) || null
+      (identifier && referenceOptions.find(opt => opt.value.identifier === identifier)) || null
     if (organization && !selectedOption) {
       selectedOption = { value: '', label: getOrganizationName(organization, lang) }
     }
@@ -166,7 +166,7 @@ export class OrgSelectorBase extends Component {
     const deleteButtonStyle = isLast ? null : { visibility: 'hidden' }
 
     const styles = {
-      option: (style) => ({
+      option: style => ({
         ...style,
         display: 'flex',
         alignItems: 'center',
@@ -184,7 +184,7 @@ export class OrgSelectorBase extends Component {
             styles={styles}
             inputId="orgField"
             components={this.getComponents(selectedOption)}
-            formatCreateLabel={(inputValue) => (
+            formatCreateLabel={inputValue => (
               <>
                 <Translate content="qvain.actors.add.newOrganization.label" />
                 <span>: &rsquo;{inputValue}&rsquo;</span>
@@ -219,7 +219,7 @@ export class OrgSelectorBase extends Component {
 const EditIcon = styled(FontAwesomeIcon).attrs(() => ({
   icon: faPen,
 }))`
-  color: ${(props) => props.theme.color[props.color || 'primary']};
+  color: ${props => props.theme.color[props.color || 'primary']};
   margin: 0 0.5rem;
   margin-left: auto;
 `

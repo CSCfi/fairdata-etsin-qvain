@@ -1,21 +1,19 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { inject, observer } from 'mobx-react'
-import styled from 'styled-components';
+import styled from 'styled-components'
 import Translate from 'react-translate-component'
-import {
-  Label,
-} from '../general/form'
+import { Label } from '../../../general/form'
 import {
   personNameSchema,
   personEmailSchema,
   personIdentifierSchema,
-} from '../utils/formValidation'
-import { ActorInput, ActorError } from './common'
+} from '../../../utils/formValidation'
+import { ActorInput, ActorError } from '../../common'
 
 export class PersonFormBase extends Component {
   static propTypes = {
-    Stores: PropTypes.object.isRequired
+    Stores: PropTypes.object.isRequired,
   }
 
   state = {
@@ -33,37 +31,45 @@ export class PersonFormBase extends Component {
   }
 
   handleOnBlur = (validator, value, errorSet) => {
-    validator.validate(value).then(() => errorSet(undefined)).catch(err => errorSet(err.errors))
+    validator
+      .validate(value)
+      .then(() => errorSet(undefined))
+      .catch(err => errorSet(err.errors))
   }
 
   handleOnNameBlur = () => {
     const actor = this.props.Stores.Qvain.Actors.actorInEdit
-    this.handleOnBlur(personNameSchema, actor.person.name, value => this.setState({ nameError: value }))
+    this.handleOnBlur(personNameSchema, actor.person.name, value =>
+      this.setState({ nameError: value })
+    )
   }
 
   handleOnEmailBlur = () => {
     const actor = this.props.Stores.Qvain.Actors.actorInEdit
-    this.handleOnBlur(personEmailSchema, actor.person.email, value => this.setState({ emailError: value }))
+    this.handleOnBlur(personEmailSchema, actor.person.email, value =>
+      this.setState({ emailError: value })
+    )
   }
 
   handleOnIdentifierBlur = () => {
     const actor = this.props.Stores.Qvain.Actors.actorInEdit
-    this.handleOnBlur(personIdentifierSchema, actor.person.identifier, value => this.setState({ identifierError: value }))
+    this.handleOnBlur(personIdentifierSchema, actor.person.identifier, value =>
+      this.setState({ identifierError: value })
+    )
   }
 
-  handleUpdateActor = (values) => {
+  handleUpdateActor = values => {
     const { actorInEdit, updateActor } = this.props.Stores.Qvain.Actors
     const person = { ...actorInEdit.person, ...values }
     updateActor(actorInEdit, { person })
   }
 
   render() {
-    const { Actors: { actorInEdit: actor }, readonly } = this.props.Stores.Qvain
     const {
-      nameError,
-      emailError,
-      identifierError,
-    } = this.state
+      Actors: { actorInEdit: actor },
+      readonly,
+    } = this.props.Stores.Qvain
+    const { nameError, emailError, identifierError } = this.state
 
     return (
       <Fragment>
@@ -79,7 +85,7 @@ export class PersonFormBase extends Component {
               attributes={{ placeholder: `qvain.actors.add.name.placeholder.${actor.type}` }}
               disabled={readonly}
               value={actor.person.name}
-              onChange={(event) => this.handleUpdateActor({ name: event.target.value })}
+              onChange={event => this.handleUpdateActor({ name: event.target.value })}
               onBlur={this.handleOnNameBlur}
             />
             {nameError && <ActorError>{nameError}</ActorError>}
@@ -93,7 +99,7 @@ export class PersonFormBase extends Component {
               id="personEmailField"
               type="email"
               attributes={{ placeholder: 'qvain.actors.add.email.placeholder' }}
-              onChange={(event) => this.handleUpdateActor({ email: event.target.value })}
+              onChange={event => this.handleUpdateActor({ email: event.target.value })}
               disabled={readonly}
               value={actor.person.email}
               onBlur={this.handleOnEmailBlur}
@@ -110,13 +116,13 @@ export class PersonFormBase extends Component {
           type="text"
           disabled={readonly}
           attributes={{ placeholder: 'qvain.actors.add.identifier.placeholder' }}
-          onChange={(event) => this.handleUpdateActor({ identifier: event.target.value })}
+          onChange={event => this.handleUpdateActor({ identifier: event.target.value })}
           value={actor.person.identifier}
           onBlur={this.handleOnIdentifierBlur}
         />
         {identifierError && <ActorError>{identifierError}</ActorError>}
       </Fragment>
-    );
+    )
   }
 }
 
@@ -126,5 +132,4 @@ const Fields = styled.div`
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
 `
 
-
-export default inject('Stores')(observer(PersonFormBase));
+export default inject('Stores')(observer(PersonFormBase))

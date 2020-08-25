@@ -58,10 +58,15 @@ const Dataset = ({
 Dataset.propTypes = {
   datasetError: PropTypes.bool.isRequired,
   haveDataset: PropTypes.bool.isRequired,
-  datasetErrorTitle: PropTypes.node.isRequired,
-  datasetErrorDetails: PropTypes.node.isRequired,
+  datasetErrorTitle: PropTypes.node,
+  datasetErrorDetails: PropTypes.node,
   handleRetry: PropTypes.func.isRequired,
   setFocusOnSubmitButton: PropTypes.func.isRequired,
+}
+
+Dataset.defaultProps = {
+  datasetErrorTitle: null,
+  datasetErrorDetails: null,
 }
 
 export default Dataset
