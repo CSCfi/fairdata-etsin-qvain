@@ -38,6 +38,7 @@ const PasInfoText = styled.div`
   border-bottom: 1px solid rgba(0,0,0,0.3);
   position: relative;
   min-width: 300px;
+  padding: 0.25em;
 `
 
 export default inject('Stores')(observer(PasState))

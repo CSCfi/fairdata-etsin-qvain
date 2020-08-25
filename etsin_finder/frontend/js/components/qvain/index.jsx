@@ -1,22 +1,33 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import translate from 'counterpart'
+import { autorun } from 'mobx'
 import { inject, observer } from 'mobx-react'
 import axios from 'axios'
 import { withRouter } from 'react-router-dom'
+import { Prompt } from 'react-router'
+import Translate from 'react-translate-component'
 
 import { QvainContainer } from './general/card'
 import { getResponseError } from './utils/responseError'
 import urls from './utils/urls'
 import Tracking from '../../utils/tracking'
-import LooseActorDialog from './editor/looseActorDialog'
 import Header from './editor/header'
 import StickyHeader from './editor/stickyHeader'
 import Dataset from './editor/dataset'
+import LooseActorDialog from './editor/looseActorDialog'
 import LooseProvenanceDialog from './editor/looseProvenanceDialog'
+
+// Event handler to prevent page reload
+const confirmReload = e => {
+  e.preventDefault()
+  e.returnValue = ''
+}
 
 class Qvain extends Component {
   promises = []
+
+  disposeConfirmReload = null
 
   static propTypes = {
     Stores: PropTypes.object.isRequired,
@@ -51,6 +62,17 @@ class Qvain extends Component {
 
   componentDidMount() {
     this.handleIdentifierChanged()
+    // setInterval(() => this.props.Stores.Qvain.setChanged(false), 100)
+
+    // Prevent reload when there are unsaved changes
+    this.disposeConfirmReload = autorun(() => {
+      const { changed } = this.props.Stores.Qvain
+      if (changed) {
+        window.addEventListener('beforeunload', confirmReload)
+      } else {
+        window.removeEventListener('beforeunload', confirmReload)
+      }
+    })
   }
 
   componentDidUpdate(prevProps) {
@@ -63,6 +85,9 @@ class Qvain extends Component {
     this.props.Stores.Qvain.resetQvainStore()
     this.props.Stores.Qvain.original = undefined
     this.promises.forEach(promise => promise.cancel())
+    if (this.disposeConfirmReload) {
+      this.disposeConfirmReload()
+    }
   }
 
   getDataset(identifier) {
@@ -216,7 +241,7 @@ class Qvain extends Component {
   }
 
   render() {
-    // Title text
+    const { changed } = this.props.Stores.Qvain
     return (
       <QvainContainer>
         <Header {...this.getHeaderProps()} />
@@ -224,6 +249,11 @@ class Qvain extends Component {
         <Dataset {...this.getDatasetProps()} />
         <LooseActorDialog />
         <LooseProvenanceDialog />
+        <Translate
+          component={Prompt}
+          when={changed}
+          attributes={{ message: 'qvain.unsavedChanges' }}
+        />
       </QvainContainer>
     )
   }

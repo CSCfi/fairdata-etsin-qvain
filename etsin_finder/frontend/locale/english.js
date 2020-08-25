@@ -371,6 +371,7 @@ const english = {
     saveDraft: 'Save Draft',
     submit: 'Save and Publish',
     edit: 'Update Dataset',
+    unsavedChanges: 'Leaving the editor will discard your unsaved changes. Are you sure you want to leave the editor?',
     consent:
       'By using Qvain Light the user agrees that he or she has asked consent from all persons whose personal information the user will add to the descriptive data and informed them of how they can get their personal data removed. By using Qvain Light the user agrees to the <a href="https://www.fairdata.fi/hyodyntaminen/kayttopolitiikat-ja-ehdot/">Terms of Usage</a>.',
     submitStatus: {
@@ -392,7 +393,8 @@ const english = {
       30: 'Enriching failed',
       40: 'Check metadata',
       50: 'Validation failed',
-      60: 'Revalidating',
+      60: 'Metadata updated',
+      65: 'Validating metadata',
       70: 'Waits for transfer',
       75: 'Metadata confirmed',
       80: 'Transfer started',
@@ -973,10 +975,18 @@ const english = {
           loadingFileFormats: 'Failed to load list of allowed file formats.',
         },
         buttons: {
+          add: 'Add Digital Preservation metadata',
           show: 'Edit Digital Preservation metadata',
+          delete: 'Remove Digital Preservation metadata',
           close: 'Close',
           save: 'Save changes',
           hideError: 'Continue editing',
+        },
+        clear: {
+          header: 'Remove Digital Preservation metadata',
+          help: 'Are you sure you want to remove Digital Preservation metadata for file %(file)s? The change will take place immediately.',
+          cancel: 'Cancel',
+          confirm: 'Remove',
         },
         options: {
           delimiter: {
