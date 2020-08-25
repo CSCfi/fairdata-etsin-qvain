@@ -1,16 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
-import {
-  faPen,
-  faTimes,
-  faFolder,
-  faFolderOpen,
-  faFile,
-} from '@fortawesome/free-solid-svg-icons'
+import { faPen, faTimes, faFolder, faFolderOpen, faFile } from '@fortawesome/free-solid-svg-icons'
 import Translate from 'react-translate-component'
 
-import { hasMetadata } from '../../../../stores/view/common.files.items'
+import { hasMetadata, hasPASMetadata } from '../../../../stores/view/common.files.items'
 import { Dropdown, DropdownItem } from '../../general/dropdown'
 
 import {
@@ -37,6 +31,10 @@ const SelectedItemsTreeItemBase = ({ treeProps, item, level, parentArgs }) => {
     Files.Qvain.setMetadataModalFile(item)
   }
 
+  const showClearPasModal = () => {
+    Files.Qvain.setClearMetadataModalFile(item)
+  }
+
   const handleClickRemove = removedItem => {
     if (removedItem.added && !canRemoveFiles) {
       Files.undoAction(removedItem)
@@ -57,11 +55,7 @@ const SelectedItemsTreeItemBase = ({ treeProps, item, level, parentArgs }) => {
   let content = null
   const canRemove = (canRemoveFiles && (!isRemoved || hasAddedChildren)) || item.added
   const canUndoRemove = canRemoveFiles && item.existing && item.removed
-  let canEdit =
-    item.added ||
-    item.existing ||
-    hasAddedChildren ||
-    parentAdded
+  let canEdit = item.added || item.existing || hasAddedChildren || parentAdded
   if (isRemoved) {
     canEdit = false
   }
@@ -101,6 +95,7 @@ const SelectedItemsTreeItemBase = ({ treeProps, item, level, parentArgs }) => {
   }
 
   const itemHasMetadata = hasMetadata(item)
+  const itemHasPASMetadata = hasPASMetadata(item)
   const editColor = itemHasMetadata ? 'primary' : 'gray'
   let disabledEditColor = itemHasMetadata ? 'error' : 'gray'
   if (readonly) {
@@ -139,11 +134,20 @@ const SelectedItemsTreeItemBase = ({ treeProps, item, level, parentArgs }) => {
         disabled={!itemHasMetadata}
       />
       {isFile(item) && (
-        <Translate
-          component={DropdownItem}
-          content="qvain.files.metadataModal.buttons.show"
-          onClick={showPasModal}
-        />
+        <>
+          <Translate
+            component={DropdownItem}
+            content={`qvain.files.metadataModal.buttons.${itemHasPASMetadata ? 'show' : 'add'}`}
+            onClick={showPasModal}
+          />
+          <Translate
+            component={DropdownItem}
+            content="qvain.files.metadataModal.buttons.delete"
+            onClick={showClearPasModal}
+            danger
+            disabled={!itemHasPASMetadata}
+          />
+        </>
       )}
     </Dropdown>
   )

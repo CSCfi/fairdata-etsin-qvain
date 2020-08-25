@@ -55,8 +55,7 @@ class FileCharacteristics(Resource):
         """Setup arguments"""
         self.parser = reqparse.RequestParser()
 
-    @log_request
-    def patch(self, file_id):
+    def _update_characteristics(self, file_id, replace=False):
         """Update file_characteristics of a file.
 
         Args:
@@ -94,6 +93,11 @@ class FileCharacteristics(Resource):
                 if key not in allowed_fields:
                     return "Changing field {} is not allowed".format(key), 400
 
+        if replace:
+            for key in allowed_fields:
+                if key in characteristics:
+                    del characteristics[key]
+
         # Update file_characteristics with new values
         characteristics.update(new_characteristics)
         data = {
@@ -101,6 +105,16 @@ class FileCharacteristics(Resource):
         }
 
         return patch_file(file_id, data)
+
+    @log_request
+    def put(self, file_id):
+        """Replace file_characteristics with supplied values."""
+        return self._update_characteristics(file_id, replace=True)
+
+    @log_request
+    def patch(self, file_id):
+        """Update file_characteristics with supplied values."""
+        return self._update_characteristics(file_id)
 
 
 class QvainDatasets(Resource):

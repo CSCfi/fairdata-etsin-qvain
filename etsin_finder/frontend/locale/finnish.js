@@ -978,10 +978,18 @@ const finnish = {
           loadingFileFormats: 'Tiedostomuotolistan hakeminen epäonnistui.',
         },
         buttons: {
+          add: 'Lisää PAS-metadata',
           show: 'Muokkaa PAS-metadataa',
+          delete: 'Poista PAS-metadata',
           close: 'Sulje',
           save: 'Tallenna muutokset',
           hideError: 'Jatka muokkausta',
+        },
+        clear: {
+          header: 'Poista PAS-metadata',
+          help: 'Haluatko poistaa PAS-metadatan tiedostosta %(file)s? Muutos tulee voimaan välittömästi.',
+          cancel: 'Peruuta',
+          confirm: 'Poista',
         },
         options: {
           delimiter: {
