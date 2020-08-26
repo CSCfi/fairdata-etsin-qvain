@@ -118,3 +118,20 @@ export const hasMetadata = (item) => {
   }
   return false
 }
+
+export const hasPASMetadata = (file) => {
+  const pasMeta = file.pasMeta
+  if (file.type !== 'file' || !pasMeta) {
+    return false
+  }
+  if (pasMeta.description ||
+    pasMeta.formatVersion ||
+    pasMeta.encoding !== 'UTF-8' ||
+    pasMeta.csvDelimiter ||
+    pasMeta.csvRecordSeparator ||
+    pasMeta.csvQuotingChar ||
+    pasMeta.csvHasHeader) {
+    return true
+  }
+  return false
+}

@@ -2,11 +2,13 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import translate from 'counterpart'
+import { autorun } from 'mobx'
 import { inject, observer } from 'mobx-react'
 import axios from 'axios'
 import { withRouter } from 'react-router-dom'
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { Prompt } from 'react-router'
 
 import {
   STSD,
@@ -44,9 +46,19 @@ import PasState from './pasState'
 import SubmitButtons from './submitButtons'
 import urls from './utils/urls'
 import Tracking from '../../utils/tracking'
+import { ConfirmDialog } from './general/confirmClose'
+import Modal from '../general/modal'
+
+// Event handler to prevent page reload
+const confirmReload = e => {
+  e.preventDefault()
+  e.returnValue = ''
+}
 
 class Qvain extends Component {
   promises = []
+
+  disposeConfirmReload = null
 
   static propTypes = {
     Stores: PropTypes.object.isRequired,
@@ -59,8 +71,8 @@ class Qvain extends Component {
 
   static defaultProps = {
     location: {
-      pathname: '/qvain/dataset'
-    }
+      pathname: '/qvain/dataset',
+    },
   }
 
   constructor(props) {
@@ -81,6 +93,17 @@ class Qvain extends Component {
 
   componentDidMount() {
     this.handleIdentifierChanged()
+    // setInterval(() => this.props.Stores.Qvain.setChanged(false), 100)
+
+    // Prevent reload when there are unsaved changes
+    this.disposeConfirmReload = autorun(() => {
+      const { changed } = this.props.Stores.Qvain
+      if (changed) {
+        window.addEventListener('beforeunload', confirmReload)
+      } else {
+        window.removeEventListener('beforeunload', confirmReload)
+      }
+    })
   }
 
   componentDidUpdate(prevProps) {
@@ -92,7 +115,10 @@ class Qvain extends Component {
   componentWillUnmount() {
     this.props.Stores.Qvain.resetQvainStore()
     this.props.Stores.Qvain.original = undefined
-    this.promises.forEach((promise) => promise.cancel())
+    this.promises.forEach(promise => promise.cancel())
+    if (this.disposeConfirmReload) {
+      this.disposeConfirmReload()
+    }
   }
 
   getDataset(identifier) {
@@ -216,7 +242,8 @@ class Qvain extends Component {
   }
 
   render() {
-    const { original } = this.props.Stores.Qvain
+    const { original, changed, promptLooseActors, promptLooseProvenances, orphanActors, provenancesWithNonExistingActors } = this.props.Stores.Qvain
+    const { lang } = this.props.Stores.Locale
     // Title text
     let titleKey
     if (this.state.datasetLoading) {
@@ -227,6 +254,47 @@ class Qvain extends Component {
       titleKey = 'qvain.titleEdit'
     } else {
       titleKey = 'qvain.titleCreate'
+    }
+
+    const confirmLooseActorsDialogProps = {
+      show: !!promptLooseActors,
+      onCancel: () => promptLooseActors(false),
+      onConfirm: () => promptLooseActors(true),
+      content: {
+        warning: (
+          <>
+            <Translate content={'qvain.general.looseActors.warning'} component="p" />
+            <div>{(orphanActors || []).map(actor => {
+              const actorName = (actor.person || {}).name || actor.organizations[0].name[lang]
+              const rolesStr = actor.roles.map(role => `${translate(`qvain.actors.add.checkbox.${role}`)}`)
+              return `${actorName} / ${rolesStr.join(' / ')}`
+            })}
+            </div>
+            <div style={{ margin: 10 }} />
+            <Translate content={'qvain.general.looseActors.question'} style={{ fontWeight: 600 }} />
+          </>
+          ),
+        confirm: <Translate content={'qvain.general.looseActors.confirm'} />,
+        cancel: <Translate content={'qvain.general.looseActors.cancel'} />
+      }
+    }
+
+    const confirmLooseProvenanceDialogProps = {
+      show: !!promptLooseProvenances,
+      onCancel: () => promptLooseProvenances(false),
+      onConfirm: () => promptLooseProvenances(true),
+      content: {
+        warning: (
+          <>
+            <Translate content={'qvain.general.looseProvenances.warning'} component="p" />
+            <div>{provenancesWithNonExistingActors.map(p => p.name[lang] || p.name.und)}</div>
+            <div style={{ margin: 10 }} />
+            <Translate content={'qvain.general.looseProvenances.question'} style={{ fontWeight: 600 }} />
+          </>
+          ),
+        confirm: <Translate content={'qvain.general.looseProvenances.confirm'} />,
+        cancel: <Translate content={'qvain.general.looseProvenances.cancel'} />
+      }
     }
 
     const createLinkBack = (position) => (
@@ -325,9 +393,58 @@ class Qvain extends Component {
         </SubHeader>
         {stickyheader}
         {dataset}
+        {confirmLooseActorsDialogProps.show && (
+        <Modal
+          isOpen
+          contentLabel={'Warning'}
+          customStyles={modalStyle}
+        >
+          <ConfirmDialog {...confirmLooseActorsDialogProps} />
+        </Modal>
+        )}
+        {confirmLooseProvenanceDialogProps.show && (
+        <Modal
+          isOpen
+          contentLabel={'Warning'}
+          customStyles={modalStyle}
+        >
+
+          <ConfirmDialog {...confirmLooseProvenanceDialogProps} />
+        </Modal>
+        )}
+
+        <Translate
+          component={Prompt}
+          when={changed}
+          attributes={{ message: 'qvain.unsavedChanges' }}
+        />
       </QvainContainer>
     )
   }
+}
+
+const modalStyle = {
+  content: {
+    top: '0',
+    bottom: '0',
+    left: '0',
+    right: '0',
+    position: 'relative',
+    minHeight: '65vh',
+    maxHeight: '95vh',
+    minWidth: '300px',
+    maxWidth: '600px',
+    margin: '0.5em',
+    border: 'none',
+    padding: '2em',
+    boxShadow: '0px 6px 12px -3px rgba(0, 0, 0, 0.15)',
+    overflow: 'hidden',
+    paddingLeft: '2em',
+    paddingRight: '2em',
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
+  },
 }
 
 export default withRouter(inject('Stores')(observer(Qvain)))

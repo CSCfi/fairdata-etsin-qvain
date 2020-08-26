@@ -213,7 +213,7 @@ class Dataset extends React.Component {
           <div className="row">
             <div className="col-12">
               <div>
-                {(this.state.removed || this.state.deprecated) && (
+                {(removed || deprecated) && (
                   <NoticeBar bg="error">
                     <Translate content={this.state.versionInfo.stateInfo} />
                     <br />

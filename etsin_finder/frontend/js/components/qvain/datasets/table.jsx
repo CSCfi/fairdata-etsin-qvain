@@ -117,8 +117,9 @@ class DatasetTable extends Component {
     const promise = axios
       .get(url, { params: { no_pagination: true } })
       .then(result => {
-        const datasets = result.data.filter(dataset => !dataset.draft_of)
-        const datasetDrafts = result.data.filter(dataset => dataset.draft_of)
+        const data = result.data || []
+        const datasets = data.filter(dataset => !dataset.draft_of)
+        const datasetDrafts = data.filter(dataset => dataset.draft_of)
         this.attachDrafts(datasets, datasetDrafts)
         const datasetGroups = groupDatasetsByVersionSet(datasets)
 
