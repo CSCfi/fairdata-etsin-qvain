@@ -42,7 +42,6 @@ export const fillUndefinedMultiLangProp = (prop = {}) => {
 }
 
 export const RelatedResourceModel = rr => {
-  console.log(rr)
   return {
     uiid: uuidv4(),
     name: fillUndefinedMultiLangProp(rr.entity.title),

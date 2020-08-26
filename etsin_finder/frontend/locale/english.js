@@ -438,6 +438,7 @@ const english = {
     },
     select: {
       placeholder: 'Select option',
+      searchPlaceholder: 'Type to search for options',
     },
     datasets: {
       title: 'Your Datasets',
@@ -563,7 +564,7 @@ const english = {
           'Select a value from the dropdown menu. The drop down uses the classification of the Ministry of Education and Culture.',
         placeholder: 'Select option',
         addButton: 'Add field of science',
-        help: 'You can add multiple field of science.',
+        help: 'You can add multiple fields of science.',
       },
       datasetLanguage: {
         title: 'Dataset language',
@@ -610,7 +611,7 @@ const english = {
       license: {
         title: 'License',
         infoText:
-          'License is an essential part of the dataset description. The license describes how the dataset can be used. As a default, the recommended CC BY 4.0 license is selected, but you can change it if needed. If you want to add a URL to an existing license page, please select "Other (URL)" and then insert the URL.',
+          'License is an essential part of the dataset description. The license describes how the dataset can be used. As a default, the recommended CC BY 4.0 license is selected, but you can change it if needed. If you want to add a URL to an existing license page, please type the URL and select "Other (URL)" option.',
         placeholder: 'Select option',
         other: {
           label: 'URL address',
@@ -1356,7 +1357,7 @@ const english = {
           },
           actorsInput: {
             label: 'Was associated with',
-            addButton: 'Add existing actor',
+            placeholder: 'Add associated actor',
             createButton: 'Create new actor',
           },
           lifecycleInput: {
