@@ -13,7 +13,6 @@ from datetime import datetime
 import pytz
 from dateutil import parser
 from urllib import parse
-
 def get_log_config(log_file_path, log_lvl):
     """Function to get the logging configuration from utils.py
 
@@ -103,7 +102,7 @@ def json_or_text(response):
     try:
         response_json = response.json()
     except Exception:
-        response.text
+        return response.text
     return response_json
 
 
