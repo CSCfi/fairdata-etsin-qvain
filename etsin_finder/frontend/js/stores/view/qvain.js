@@ -17,7 +17,6 @@ import Spatials, { SpatialModel } from './qvain.spatials'
 import Provenances, { ProvenanceModel } from './qvain.provenances'
 import RelatedResources, { RelatedResourceModel } from './qvain.relatedResources'
 import Temporals, { TemporalModel } from './qvain.temporals'
-import uniqueByKey from '../../utils/uniqueByKey'
 
 class Qvain {
   constructor(Env) {
@@ -262,17 +261,11 @@ class Qvain {
     this.changed = true
   }
 
-  @action setInfrastructures = infrastructures => {
-    this.infrastructureArray = uniqueByKey(infrastructures, 'url')
-    this.changed = true
-  }
-
   @action
-  setInfrastructureArray = (array) => {
+  setInfrastructureArray = array => {
     this.infrastructureArray = array
     this.changed = true
   }
-
 
   @action
   removeInfrastructure = infrastructureToRemove => {
