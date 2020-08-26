@@ -18,20 +18,6 @@ import { organizationSelectSchema } from '../utils/formValidation'
 
 const FundingOrganization = props => {
   /**
-   * Validate one field of organization select form, when adding
-   * an organization manually.
-   * TODO: Consider refactoring this to organization select component?
-   *
-   * @param {Object} field
-   */
-  const onBlur = async field => {
-    const { formData } = props.organizations
-    const { name, value, email } = formData[field]
-    const errors = await validate(organizationSelectSchema, { name, identifier: value, email })
-    props.onChange({ ...formData, [field]: { ...formData[field], errors } })
-  }
-
-  /**
    * Put already added organization to form data for organization select.
    */
   const onEdit = async id => {
@@ -103,7 +89,6 @@ const FundingOrganization = props => {
       />
       <OrganizationSelect
         onChange={props.onChange}
-        onBlur={onBlur}
         value={formData}
         name="organization"
         inputId="organization"

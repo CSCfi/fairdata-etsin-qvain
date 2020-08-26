@@ -9,9 +9,11 @@ import styled from 'styled-components'
 import { inject, observer } from 'mobx-react'
 
 import { getOrganizationSearchUrl } from '../../../stores/view/qvain.actors'
+import { organizationSelectSchema } from '../utils/formValidation'
 import { Input, Label } from './form'
 import ValidationError from './validationError'
 import { DeleteButton } from './buttons'
+import { validate } from '../project/utils'
 
 /**
  * A reusable organization select component.
@@ -26,7 +28,6 @@ class OrganizationSelect extends Component {
   static propTypes = {
     Stores: PropTypes.object.isRequired,
     onChange: PropTypes.func.isRequired,
-    onBlur: PropTypes.func.isRequired,
     value: PropTypes.object,
     name: PropTypes.string.isRequired,
     inputId: PropTypes.string.isRequired,
@@ -149,6 +150,16 @@ class OrganizationSelect extends Component {
     this.props.onChange({ ...value, subDepartment })
   }
 
+  /**
+   * Validate form when organization is added manually.
+   */
+  onBlur = async field => {
+    const formData = this.props.value
+    const { name, value, email } = formData[field]
+    const errors = await validate(organizationSelectSchema, { name, identifier: value, email })
+    this.props.onChange({ ...formData, [field]: { ...formData[field], errors } })
+  }
+
   render() {
     const { lang } = this.props.Stores.Locale
     const { name, inputId, value, placeholder, creatable } = this.props
@@ -158,7 +169,7 @@ class OrganizationSelect extends Component {
       <SelectContainer>
         <Select
           onChange={this.onOrganizationChange}
-          onBlur={() => this.props.onBlur('organization')}
+          onBlur={() => this.onBlur('organization')}
           name={name}
           inputId={inputId}
           value={value.organization}
@@ -171,7 +182,7 @@ class OrganizationSelect extends Component {
           { value.organization && (
             <Select
               onChange={this.onDepartmentChange}
-              onBlur={() => this.props.onBlur('department')}
+              onBlur={() => this.onBlur('department')}
               name={name}
               inputId={inputId}
               value={value.department}
@@ -185,7 +196,7 @@ class OrganizationSelect extends Component {
             { value.department && (
               <Select
                 onChange={this.onSubdepartmentChange}
-                onBlur={() => this.props.onBlur('subDepartment')}
+                onBlur={() => this.onBlur('subDepartment')}
                 name={name}
                 inputId={inputId}
                 value={value.subDepartment}
