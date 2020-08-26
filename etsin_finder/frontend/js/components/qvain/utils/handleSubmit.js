@@ -1,4 +1,4 @@
-const fieldsOfScienceToMetaxMethod = (fieldsOfScience) =>
+const fieldsOfScienceToMetax = (fieldsOfScience) =>
   fieldsOfScience.map((fieldOfScience) => fieldOfScience.url)
 
 const datasetLanguageToMetax = datasetLanguage =>
@@ -67,11 +67,11 @@ const handleSubmitToBackend = (Env, values) => {
     description: values.description,
     issuedDate: values.issuedDate,
     identifiers: values.otherIdentifiersArray,
-    fieldOfScience: fieldsOfScienceToMetaxMethod(values.fieldOfScienceArray),
+    fieldOfScience: fieldsOfScienceToMetax(values.fieldOfScienceArray),
     datasetLanguage: datasetLanguageToMetax(values.datasetLanguageArray),
     keywords: values.keywordsArray,
     actors,
-    infrastructure: values.infrastructures,
+    infrastructure: values.infrastructureArray,
     accessType: values.accessType ? values.accessType : undefined,
     restrictionGrounds: values.restrictionGrounds
       ? values.restrictionGrounds.identifier

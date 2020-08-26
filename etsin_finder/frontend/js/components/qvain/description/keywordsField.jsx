@@ -94,6 +94,7 @@ class KeywordsField extends Component {
           disabled={readonly}
           value={keywordString}
           onChange={this.handleChange}
+          onKeyDown={this.handleKeyDown}
           type="text"
           attributes={{ placeholder: 'qvain.description.keywords.placeholder' }}
         />

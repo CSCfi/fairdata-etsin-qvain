@@ -2,7 +2,7 @@ import React from 'react'
 import { shallow, mount } from 'enzyme'
 
 import '../locale/translations'
-
+import etsinTheme from '../js/styles/theme'
 import Qvain from '../js/components/qvain'
 import Description from '../js/components/qvain/description'
 import DescriptionField from '../js/components/qvain/description/descriptionField'
@@ -12,7 +12,7 @@ import KeywordsField from '../js/components/qvain/description/keywordsField'
 import RightsAndLicenses from '../js/components/qvain/licenses'
 import { License } from '../js/components/qvain/licenses/licenses'
 import { AccessType } from '../js/components/qvain/licenses/accessType'
-import RestrictionGrounds from '../js/components/qvain/licenses/resctrictionGrounds'
+import RestrictionGrounds from '../js/components/qvain/licenses/restrictionGrounds'
 import EmbargoExpires from '../js/components/qvain/licenses/embargoExpires'
 import { ACCESS_TYPE_URL, LICENSE_URL, DATA_CATALOG_IDENTIFIER } from '../js/utils/constants'
 import Files from '../js/components/qvain/files'
@@ -144,23 +144,13 @@ describe('Qvain.RightsAndLicenses', () => {
     expect(component).toMatchSnapshot()
   })
   it('should render <Licenses />', () => {
-    const component = shallow(<License Stores={getStores()} />)
+    const stores = getStores()
+    const component = shallow(<License Stores={stores} theme={etsinTheme} />)
     expect(component).toMatchSnapshot()
   })
-  it('should render other license URL field', () => {
-    const stores = getStores()
-    stores.Qvain.setLicense(LicenseConstructor({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'other'))
-    const component = shallow(<License Stores={stores} />)
-    expect(component.find('#otherLicenseURL').length).toBe(1)
-  })
-  it('should NOT render other license URL field', () => {
-    const stores = getStores()
-    stores.Qvain.setLicense(LicenseConstructor(undefined, LICENSE_URL.CCBY4))
-    const component = shallow(<License Stores={stores} />)
-    expect(component.find('#otherLicenseURL').length).toBe(0)
-  })
   it('should render <AccessType />', () => {
-    const component = shallow(<AccessType Stores={getStores()} />)
+    const stores = getStores()
+    const component = shallow(<AccessType Stores={stores} />)
     expect(component).toMatchSnapshot()
   })
   it('should render <RestrictionGrounds />', () => {
