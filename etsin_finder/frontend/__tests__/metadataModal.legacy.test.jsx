@@ -11,16 +11,19 @@ import '../locale/translations.js'
 import etsinTheme from '../js/styles/theme'
 import FileSelector from '../js/components/qvain/files/legacy/fileSelector'
 import MetadataModal from '../js/components/qvain/files/metadataModal'
-import QvainStore, {
+import Env from '../js/stores/domain/env'
+import QvainStoreClass, {
   DatasetFile, Directory
 } from '../js/stores/view/qvain'
 import LocaleStore from '../js/stores/view/language'
 
 jest.mock('axios')
 
+const QvainStore = new QvainStoreClass(Env)
 const getStores = () => {
-  QvainStore.setMetaxApiV2(false)
+  Env.setMetaxApiV2(false)
   return {
+    Env,
     Qvain: QvainStore,
     Locale: LocaleStore
   }
@@ -238,8 +241,8 @@ describe('Qvain.MetadataModal', () => {
     instance.setCsvHasHeader({ value: false })
     expect(instance.state.csvHasHeader).toBe(false)
 
-    // Mock the patch RPC used by save
-    axios.patch.mockImplementationOnce((url, data) => ({
+    // Mock the put request used by save
+    axios.put.mockImplementationOnce((url, data) => ({
       data: {
         ...testFile,
         file_characteristics: {
@@ -264,8 +267,8 @@ describe('Qvain.MetadataModal', () => {
     instance.setFormatVersion({ value: '1.6' })
     expect(instance.state.formatVersion).toBe('1.6')
 
-    // Mock the patch RPC used by save
-    axios.patch.mockImplementationOnce((url, data) => ({
+    // Mock the put request used by save
+    axios.put.mockImplementationOnce((url, data) => ({
       data: {
         ...testFile4,
         file_characteristics: {
@@ -290,7 +293,7 @@ describe('Qvain.MetadataModal', () => {
 
   it('disables metadata editing in readonly state', async () => {
     // Open modal, wait until versions have been fetched
-    wrapper.find('button#test_file4-open-metadata-modal').simulate('click')
+    wrapper.find('button#test_file2-open-metadata-modal').simulate('click')
     const instance = wrapper.find(MetadataModal).instance().wrappedInstance
     await when(() => instance.formatFetchStatus !== 'loading')
 

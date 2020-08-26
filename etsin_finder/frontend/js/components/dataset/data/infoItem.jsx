@@ -14,7 +14,8 @@ const InfoItem = props => (
 )
 
 const InfoCell = styled.td`
-  word-break: break-all;
+  word-break: normal;
+  overflow-wrap: anywhere;
 `
 
 InfoItem.defaultProps = {

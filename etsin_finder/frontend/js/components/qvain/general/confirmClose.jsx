@@ -3,65 +3,79 @@ import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import styled from 'styled-components'
 
-import {
-  TableButton,
-  DangerButton
-} from './buttons'
+import { DangerCancelButton, DangerButton } from './buttons'
 
-// Show confirmation overlay for closing a modal with unsaved changes.
-const ConfirmClose = ({ show, disabled, hideConfirm, closeModal }) => {
+export const ConfirmDialog = ({ show, disabled, onConfirm, onCancel, content }) => {
   if (!show) {
     return null
   }
   return (
     <ResponseOverlay>
-      <Translate content={'qvain.confirmClose.warning'} component="p" />
+      {content.warning}
+      <div style={{ margin: 10 }} />
       <Buttons>
-        <HideButton disabled={disabled} onClick={hideConfirm}>
-          <Translate content={'qvain.confirmClose.cancel'} />
-        </HideButton>
-        <DangerButton disabled={disabled} onClick={closeModal}>
-          <Translate content={'qvain.confirmClose.confirm'} />
+        <DangerCancelButton disabled={disabled} onClick={onCancel}>
+          {content.cancel}
+        </DangerCancelButton>
+        <DangerButton disabled={disabled} onClick={onConfirm}>
+          {content.confirm}
         </DangerButton>
       </Buttons>
     </ResponseOverlay>
   )
 }
 
+ConfirmDialog.propTypes = {
+  show: PropTypes.bool.isRequired,
+  onCancel: PropTypes.func.isRequired,
+  onConfirm: PropTypes.func.isRequired,
+  disabled: PropTypes.bool,
+  content: PropTypes.exact({
+    warning: PropTypes.node,
+    confirm: PropTypes.node,
+    cancel: PropTypes.node,
+  }).isRequired,
+}
+
+ConfirmDialog.defaultProps = {
+  disabled: false,
+}
+
+// Show confirmation overlay for closing a modal with unsaved changes.
+export const ConfirmClose = props => {
+  const content = {
+    warning: <Translate content={'qvain.confirmClose.warning'} component="p" />,
+    confirm: <Translate content={'qvain.confirmClose.confirm'} />,
+    cancel: <Translate content={'qvain.confirmClose.cancel'} />,
+  }
+  return <ConfirmDialog {...props} content={content} />
+}
+
 ConfirmClose.propTypes = {
   show: PropTypes.bool.isRequired,
-  hideConfirm: PropTypes.func.isRequired,
-  closeModal: PropTypes.func.isRequired,
-  disabled: PropTypes.bool
+  onCancel: PropTypes.func.isRequired,
+  onConfirm: PropTypes.func.isRequired,
+  disabled: PropTypes.bool,
 }
 
 ConfirmClose.defaultProps = {
   disabled: false,
 }
 
-export default ConfirmClose
-
-
 const Buttons = styled.div`
-  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   text-align: center;
-  margin: -0.25rem;
-  & * {
-    margin: 0.25rem;
-    padding: 0.75rem 0.25rem;
-  }
+  margin: 0 -1.5rem;
+  padding: 0 1rem;
 `
-
-const HideButton = styled(TableButton)`
-  width: auto;
-  height: auto;
-`;
 
 const ResponseOverlay = styled.div`
   display: flex;
   flex-direction: column;
   position: absolute;
-  background: rgba(255,255,255,0.95);
+  background: rgba(255, 255, 255, 0.95);
   width: 100%;
   top: 0;
   left: 0;

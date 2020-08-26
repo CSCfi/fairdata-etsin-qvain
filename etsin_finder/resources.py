@@ -7,9 +7,7 @@
 
 """RESTful API endpoints, meant to be used by the frontend"""
 
-from functools import wraps
-import logging
-from flask import request, session
+from flask import session
 from flask_mail import Message
 from flask_restful import abort, reqparse, Resource
 
@@ -17,6 +15,7 @@ from etsin_finder.app_config import get_app_config
 from etsin_finder import authentication
 from etsin_finder import authorization
 from etsin_finder import cr_service
+from etsin_finder import cr_service_v2
 from etsin_finder.download_metadata_service import download_metadata
 from etsin_finder.download_service import download_data
 from etsin_finder.email_utils import \
@@ -30,28 +29,13 @@ from etsin_finder.finder import app
 from etsin_finder.utils import \
     sort_array_of_obj_by_key, \
     slice_array_on_limit
+from etsin_finder.log_utils import log_request
 from etsin_finder import rems_service
 from etsin_finder.rems_service import RemsAPIService
 from etsin_finder.app_config import get_fairdata_rems_api_config
 
 TOTAL_ITEM_LIMIT = 1000
 log = app.logger
-
-def log_request(f):
-    """Log request when used as decorator."""
-    @wraps(f)
-    def func(*args, **kwargs):
-        """Log requests"""
-        csc_name = authentication.get_user_csc_name() if not app.testing else ''
-        log.info('[{0}.{1}] {2} {3} {4} USER AGENT: {5}'.format(
-            args[0].__class__.__name__,
-            f.__name__,
-            csc_name if csc_name else 'UNAUTHENTICATED',
-            request.environ.get('REQUEST_METHOD'),
-            request.path,
-            request.user_agent))
-        return f(*args, **kwargs)
-    return func
 
 class Dataset(Resource):
     """Dataset related REST endpoints for frontend"""
@@ -67,14 +51,17 @@ class Dataset(Resource):
             tuple: catalog record and a status code.
 
         """
+        if not authorization.user_can_view_dataset(cr_id):
+            abort(404)
+
         is_authd = authentication.is_authenticated()
         cr = cr_service.get_catalog_record(cr_id, True, True)
         if not cr:
             abort(400, message="Unable to get catalog record from Metax")
 
-        user_id = authentication.get_user_id()
-        if cr_service.is_draft(cr) and not cr_service.is_catalog_record_owner(cr, user_id):
-            abort(404)
+        # The draft_of field should not exist in Metax v1 but may be present due to a Metax bug
+        if 'draft_of' in cr:
+            del cr['draft_of']
 
         # Sort data items
         sort_array_of_obj_by_key(cr.get('research_dataset', {}).get('remote_resources', []), 'title')
@@ -84,6 +71,42 @@ class Dataset(Resource):
         ret_obj = {'catalog_record': authorization.strip_information_from_catalog_record(cr, is_authd),
                    'email_info': get_email_info(cr)}
         if cr_service.is_rems_catalog_record(cr) and is_authd and get_fairdata_rems_api_config(app.testing) is not None:
+            user_id = authentication.get_user_id()
+            state = rems_service.get_application_state_for_resource(cr, user_id)
+            ret_obj['application_state'] = state
+            ret_obj['has_permit'] = state == 'approved'
+
+        return ret_obj, 200
+
+class V2Dataset(Resource):
+    """Metax API v2 dataset related REST endpoints for frontend"""
+
+    @log_request
+    def get(self, cr_id):
+        """Get dataset from metax and strip it from having sensitive information
+
+        Args:
+            cr_id (str): Catalog record identifier.
+
+        Returns:
+            tuple: catalog record and a status code.
+
+        """
+        if not authorization.user_can_view_dataset(cr_id):
+            abort(404)
+
+        is_authd = authentication.is_authenticated()
+        cr = cr_service_v2.get_catalog_record(cr_id, True, True)
+        if not cr:
+            abort(400, message="Unable to get catalog record from Metax")
+
+        # Sort data items
+        sort_array_of_obj_by_key(cr.get('research_dataset', {}).get('remote_resources', []), 'title')
+
+        ret_obj = {'catalog_record': authorization.strip_information_from_catalog_record(cr, is_authd),
+                   'email_info': get_email_info(cr)}
+        if cr_service.is_rems_catalog_record(cr) and is_authd and get_fairdata_rems_api_config(app.testing) is not None:
+            user_id = authentication.get_user_id()
             state = rems_service.get_application_state_for_resource(cr, user_id)
             ret_obj['application_state'] = state
             ret_obj['has_permit'] = state == 'approved'
@@ -115,8 +138,7 @@ class DatasetMetadata(Resource):
         if not cr:
             abort(400, message="Unable to get catalog record")
 
-        user_id = authentication.get_user_id()
-        if cr_service.is_draft(cr) and not cr_service.is_catalog_record_owner(cr, user_id):
+        if not authorization.user_can_view_dataset(cr_id):
             abort(404)
 
         return download_metadata(cr_id, metadata_format)
@@ -147,12 +169,11 @@ class Files(Resource):
         file_fields = args.get('file_fields', None)
         directory_fields = args.get('directory_fields', None)
 
+        if not authorization.user_can_view_dataset(cr_id):
+            abort(404)
+
         cr = cr_service.get_catalog_record(cr_id, False, False)
         dir_api_obj = cr_service.get_directory_data_for_catalog_record(cr_id, dir_id, file_fields, directory_fields)
-
-        user_id = authentication.get_user_id()
-        if cr_service.is_draft(cr) and not cr_service.is_catalog_record_owner(cr, user_id):
-            abort(404)
 
         if cr and dir_api_obj:
             # Sort the items
@@ -219,12 +240,11 @@ class Contact(Resource):
             log.warning(message)
             abort(400, message=message)
 
+        if not authorization.user_can_view_dataset(cr_id):
+            abort(404)
+
         # Get the full catalog record from Metax
         cr = cr_service.get_catalog_record(cr_id, False, False)
-
-        user_id = authentication.get_user_id()
-        if cr_service.is_draft(cr) and not cr_service.is_catalog_record_owner(cr, user_id):
-            abort(404)
 
         # Ensure dataset is not harvested
         harvested = get_harvest_info(cr)
@@ -315,7 +335,7 @@ class REMSApplyForPermission(Resource):
         lastname = authentication.get_user_lastname()
         email = authentication.get_user_email()
 
-        if not user_id and not firstname and not lastname and not email:
+        if not (user_id and (firstname or lastname) and email):
             return 'Unauthorized request', 401
         _rems_api = RemsAPIService(app, user_id)
         userdata = {
@@ -432,14 +452,18 @@ class Download(Resource):
         # Check request query parameters are present
         args = self.parser.parse_args()
         cr_id = args.get('cr_id')
+        if not authorization.user_can_view_dataset(cr_id):
+            abort(404)
 
         cr = cr_service.get_catalog_record(cr_id, False, False)
         if not cr:
             abort(400, message="Unable to get catalog record")
 
         if authorization.user_is_allowed_to_download_from_ida(cr, authentication.is_authenticated()):
-            file_ids = args.get('file_id', [])
-            dir_ids = args.get('dir_id', [])
+            # Retrieving file_id and dir_id from IDA, if empty, use empty list as value
+            log.info(args)
+            file_ids = args.get('file_id') or []
+            dir_ids = args.get('dir_id') or []
             return download_data(cr_id, file_ids, dir_ids)
         else:
             abort(403, message="Not authorized")

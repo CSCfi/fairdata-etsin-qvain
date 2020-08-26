@@ -29,33 +29,6 @@ export const LICENSE_URL = {
   CCBY4: 'http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0',
 }
 
-// Qvain Light
-
-export const DATASET_URLS = {
-  EDIT_DATASET_URL: '/api/datasets/edit',
-  DATASET_URL: '/api/dataset',
-  USER_DATASETS_URL: '/api/datasets/',
-  V2_EDIT_DATASET_URL: '/api/v2/datasets/edit',
-  V2_DATASET_URL: '/api/v2/dataset',
-  V2_USER_DATASETS_URL: '/api/v2/datasets/',
-  V2_CREATE_NEW_VERSION: '/api/v2/rpc/datasets/create_new_version',
-  V2_CREATE_DRAFT: '/api/v2/rpc/datasets/create_draft',
-  V2_MERGE_DRAFT: '/api/v2/rpc/datasets/merge_draft',
-  V2_PUBLISH_DATASET: '/api/v2/rpc/datasets/publish_dataset',
-}
-
-export const FILE_API_URLS = {
-  DIR_URL: '/api/files/directory/',
-  PROJECT_DIR_URL: '/api/files/project/',
-  DATASET_DIR_URL: '/api/files/',
-  V2_DIR_URL: '/api/v2/files/directory/',
-  V2_PROJECT_DIR_URL: '/api/v2/files/project/',
-  V2_DATASET_DIR_URL: '/api/v2/files/',
-  V2_DATASET_PROJECTS: '/api/v2/datasets/projects/',
-  V2_DATASET_FILES: '/api/v2/datasets/files/',
-  V2_DATASET_USER_METADATA: '/api/v2/datasets/user_metadata/',
-}
-
 export const USE_CATEGORY_URL = {
   OUTCOME_MATERIAL: 'http://uri.suomi.fi/codelist/fairdata/use_category/code/outcome',
 }
@@ -77,6 +50,7 @@ export const ROLE = {
   CURATOR: 'curator',
   RIGHTS_HOLDER: 'rights_holder',
   CONTRIBUTOR: 'contributor',
+  PROVENANCE: 'provenance'
 }
 
 const PRESERVATION_STATE_COLOR = {
@@ -129,8 +103,20 @@ export const PRESERVATION_STATE = {
     who: 'system',
     color: PRESERVATION_STATE_COLOR.DEFAULT,
   },
+  65: {
+    name: 'Metadata is being validated',
+    type: 'wait',
+    who: 'system',
+    color: PRESERVATION_STATE_COLOR.DEFAULT,
+  },
   70: {
     name: 'Valid metadata',
+    type: 'wait',
+    who: 'other',
+    color: PRESERVATION_STATE_COLOR.DEFAULT,
+  },
+  75: {
+    name: 'Metadata confirmed',
     type: 'wait',
     who: 'other',
     color: PRESERVATION_STATE_COLOR.DEFAULT,

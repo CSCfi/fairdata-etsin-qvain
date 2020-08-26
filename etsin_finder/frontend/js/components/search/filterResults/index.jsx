@@ -11,10 +11,11 @@
 }
 
 import React, { Component } from 'react'
-import { withRouter } from 'react-router-dom'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
 
+import { inject, observer } from 'mobx-react'
+import PropTypes from 'prop-types'
 import FilterSection from './filterSection'
 
 const FilterContainer = styled.ul`
@@ -29,6 +30,7 @@ const FilterContainer = styled.ul`
 
 class FilterResults extends Component {
   render() {
+    const SearchFilters = this.props.Stores.SearchFilters
     return (
       <FilterContainer aria-labelledby="filterlabel">
         <span id="filterlabel" className="sr-only" aria-hidden>
@@ -37,10 +39,10 @@ class FilterResults extends Component {
         <FilterSection aggregation="access_type" />
         <FilterSection aggregation="organization" />
         <FilterSection aggregation="creator" />
-        <FilterSection aggregation="field_of_science" />
-        <FilterSection aggregation="keyword" />
+        <FilterSection aggregation="field_of_science" filterOpen={SearchFilters.fieldOfScienceIsOpen} />
+        <FilterSection aggregation="keyword" filterOpen={SearchFilters.keywordIsOpen} />
         <FilterSection aggregation="infrastructure" />
-        <FilterSection aggregation="project" />
+        <FilterSection aggregation="project" filterOpen={SearchFilters.projectIsOpen} />
         <FilterSection aggregation="file_type" />
         <FilterSection aggregation="data_catalog" />
       </FilterContainer>
@@ -48,4 +50,8 @@ class FilterResults extends Component {
   }
 }
 
-export default withRouter(FilterResults)
+export default inject('Stores')(observer(FilterResults))
+
+FilterResults.propTypes = {
+  Stores: PropTypes.object.isRequired,
+}
