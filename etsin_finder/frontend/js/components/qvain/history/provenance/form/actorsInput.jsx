@@ -25,9 +25,7 @@ const ActorsInput = ({ Stores, language }) => {
       label: translate('qvain.history.provenance.modal.actorsInput.createButton'),
     },
     ...Actors.actorOptions
-      .filter(option => {
-        return !selectedOptionIds.includes(option.value)
-      })
+      .filter(option => !selectedOptionIds.includes(option.value))
       .map(option => {
         const actorName = option.label[language] || option.label
         const rolesStr = option.roles.map(
