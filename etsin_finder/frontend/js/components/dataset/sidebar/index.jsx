@@ -62,6 +62,7 @@ class Sidebar extends Component {
       labels.push(
         ...researchDataset.theme.map(theme => (
           <SubjectHeaderLink
+            key={theme.identifier}
             href={theme.identifier}
             target="_blank"
             rel="noopener noreferrer"
