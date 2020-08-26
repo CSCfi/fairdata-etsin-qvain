@@ -8,12 +8,11 @@
 """Used for performing operations related to Metax for Qvain Light"""
 
 import requests
-from flask import jsonify
 import json
 
 from etsin_finder.finder import app
 from etsin_finder.app_config import get_metax_qvain_api_config
-from etsin_finder.utils import json_or_empty, FlaskService
+from etsin_finder.utils import json_or_empty, format_url
 from etsin_finder.request_utils import make_request
 from etsin_finder.qvain_light_service import MetaxQvainLightAPIService as MetaxQvainLightAPIServiceV1
 
@@ -105,7 +104,7 @@ class MetaxQvainLightAPIService(MetaxQvainLightAPIServiceV1):
             The response from Metax.
 
         """
-        req_url = self.METAX_PATCH_DATASET.format(cr_id)
+        req_url = format_url(self.METAX_PATCH_DATASET, cr_id)
         headers = {'Accept': 'application/json', 'If-Unmodified-Since': last_modified}
         log.debug('Request URL: PATCH {0}\nHeaders: {1}\nData: {2}'.format(req_url, headers, json.dumps(data, indent=2)))
 
@@ -138,7 +137,7 @@ class MetaxQvainLightAPIService(MetaxQvainLightAPIServiceV1):
             The response from Metax.
 
         """
-        req_url = self.METAX_UPDATE_DATASET_FILES.format(cr_id)
+        req_url = format_url(self.METAX_UPDATE_DATASET_FILES, cr_id)
         log.debug('Request URL: {0}\nData: {1}'.format(req_url, data))
 
         args = self._get_args(timeout=30)

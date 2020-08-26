@@ -8,11 +8,10 @@
 """Used for performing operations related to Metax for Etsin and Qvain Light"""
 
 import requests
-import json
 
 from etsin_finder.finder import app
 from etsin_finder.app_config import get_metax_qvain_api_config
-from etsin_finder.utils import json_or_text, FlaskService
+from etsin_finder.utils import json_or_text, FlaskService, format_url
 from etsin_finder.request_utils import make_request
 
 log = app.logger
@@ -59,7 +58,7 @@ class MetaxCommonAPIService(FlaskService):
             [type] -- Metax response.
 
         """
-        req_url = self.METAX_GET_DIRECTORY.format(dir_identifier)
+        req_url = format_url(self.METAX_GET_DIRECTORY, dir_identifier)
         resp, status, success = make_request(requests.get,
                                              req_url,
                                              params=params,
@@ -84,7 +83,7 @@ class MetaxCommonAPIService(FlaskService):
             [type] -- Metax response.
 
         """
-        req_url = self.METAX_GET_DIRECTORY_FOR_PROJECT_URL.format(project_identifier)
+        req_url = format_url(self.METAX_GET_DIRECTORY_FOR_PROJECT_URL, project_identifier)
         resp, status, success = make_request(requests.get,
                                              req_url,
                                              headers={'Accept': 'application/json'},
@@ -107,7 +106,7 @@ class MetaxCommonAPIService(FlaskService):
             [type] -- Metax response.
 
         """
-        req_url = self.METAX_GET_DATASET_PROJECTS.format(cr_id)
+        req_url = format_url(self.METAX_GET_DATASET_PROJECTS, cr_id)
         resp, status, success = make_request(requests.get,
                                              req_url,
                                              headers={'Accept': 'application/json'},
@@ -129,7 +128,7 @@ class MetaxCommonAPIService(FlaskService):
             [type] -- Metax response.
 
         """
-        req_url = self.METAX_GET_DATASET_USER_METADATA.format(cr_id)
+        req_url = format_url(self.METAX_GET_DATASET_USER_METADATA, cr_id)
         resp, status, success = make_request(requests.get,
                                              req_url,
                                              headers={'Accept': 'application/json'},
@@ -160,7 +159,7 @@ class MetaxCommonAPIService(FlaskService):
             [type] -- Metax response.
 
         """
-        req_url = self.METAX_PUT_DATASET_USER_METADATA.format(cr_id)
+        req_url = format_url(self.METAX_PUT_DATASET_USER_METADATA, cr_id)
         headers = {'Accept': 'application/json'}
 
         resp, status, success = make_request(requests.put,

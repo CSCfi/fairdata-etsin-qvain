@@ -11,7 +11,7 @@ import requests
 
 from etsin_finder.finder import app
 from etsin_finder.app_config import get_metax_qvain_api_config
-from etsin_finder.utils import json_or_empty, FlaskService
+from etsin_finder.utils import json_or_empty, FlaskService, format_url
 from etsin_finder.request_utils import make_request
 
 log = app.logger
@@ -72,7 +72,7 @@ class MetaxQvainLightAPIService(FlaskService):
             Metax response
 
         """
-        req_url = self.METAX_GET_DIRECTORY_FOR_PROJECT_URL.format(project_identifier)
+        req_url = format_url(self.METAX_GET_DIRECTORY_FOR_PROJECT_URL, project_identifier)
         resp, _, success = make_request(requests.get,
                                         req_url,
                                         params=params,
@@ -94,7 +94,7 @@ class MetaxQvainLightAPIService(FlaskService):
             Metax response
 
         """
-        req_url = self.METAX_GET_DIRECTORY.format(dir_identifier)
+        req_url = format_url(self.METAX_GET_DIRECTORY, dir_identifier)
         resp, _, success = make_request(requests.get,
                                         req_url,
                                         params=params,
@@ -114,7 +114,7 @@ class MetaxQvainLightAPIService(FlaskService):
             Metax response
 
         """
-        req_url = self.METAX_GET_FILE.format(file_identifier)
+        req_url = format_url(self.METAX_GET_FILE, file_identifier)
         resp, _, success = make_request(requests.get,
                                         req_url,
                                         **self._get_args()
@@ -140,7 +140,7 @@ class MetaxQvainLightAPIService(FlaskService):
             The response from Metax.
 
         """
-        req_url = self.METAX_GET_FILE.format(file_identifier)
+        req_url = format_url(self.METAX_GET_FILE, file_identifier)
 
         resp, code, success = make_request(requests.patch,
                                            req_url,
@@ -166,14 +166,15 @@ class MetaxQvainLightAPIService(FlaskService):
             Metax response.
 
         """
-        req_url = self.METAX_GET_DATASETS_FOR_USER.format(user_id)
+        req_url = format_url(self.METAX_GET_DATASETS_FOR_USER, user_id)
         if (no_pagination):
-            req_url = self.METAX_GET_ALL_DATASETS_FOR_USER.format(user_id)
+            req_url = format_url(self.METAX_GET_ALL_DATASETS_FOR_USER, user_id)
 
+        params = {}
         if (limit):
-            req_url = req_url + "&limit={0}".format(limit[0])
+            params['limit'] = limit
         if (offset):
-            req_url = req_url + "&offset={}".format(offset[0])
+            params['offset'] = offset
 
         resp, _, success = make_request(requests.get,
                                         req_url,
@@ -195,9 +196,11 @@ class MetaxQvainLightAPIService(FlaskService):
             The response from Metax.
 
         """
+        if params is None:
+            params = {}
         req_url = self.METAX_CREATE_DATASET
         if use_doi is True:
-            req_url += '&pid_type=doi'
+            params['pid_type'] = 'doi'
         args = self._get_args(timeout=30)
         resp, status, success = make_request(requests.post,
                                              req_url,
@@ -224,7 +227,7 @@ class MetaxQvainLightAPIService(FlaskService):
             The response from Metax.
 
         """
-        req_url = self.METAX_PATCH_DATASET.format(cr_id)
+        req_url = format_url(self.METAX_PATCH_DATASET, cr_id)
         headers = {'Accept': 'application/json', 'If-Unmodified-Since': last_modified}
         log.debug('Request URL: {0}\nHeaders: {1}\nData: {2}'.format(req_url, headers, data))
 
@@ -258,7 +261,7 @@ class MetaxQvainLightAPIService(FlaskService):
             Metax response.
 
         """
-        req_url = self.METAX_GET_DATASET.format(cr_id)
+        req_url = format_url(self.METAX_GET_DATASET, cr_id)
         resp, status, success = make_request(requests.get,
                                              req_url,
                                              **self._get_args())
@@ -276,7 +279,7 @@ class MetaxQvainLightAPIService(FlaskService):
             Metax response.
 
         """
-        req_url = self.METAX_DELETE_DATASET.format(cr_id)
+        req_url = format_url(self.METAX_DELETE_DATASET, cr_id)
         resp, status, success = make_request(requests.delete,
                                              req_url,
                                              **self._get_args())

@@ -7,34 +7,21 @@
 
 """RESTful API endpoints, meant to be used by Etsin and Qvain Light"""
 
-from functools import wraps
 from marshmallow import ValidationError
-from flask import request, session
-from flask_mail import Message
-from flask_restful import abort, reqparse, Resource
-import json
+from flask import request
+from flask_restful import reqparse, Resource
 
-from etsin_finder.app_config import get_app_config
 from etsin_finder import authentication
 from etsin_finder import authorization
-from etsin_finder import cr_service
 from etsin_finder.finder import app
 from etsin_finder.utils import \
     sort_array_of_obj_by_key, \
-    slice_array_on_limit, \
-    datetime_to_header
+    slice_array_on_limit
 from etsin_finder.qvain_light_dataset_schema_v2 import (
-    DatasetValidationSchema,
-    FileActionsValidationSchema,
     UserMetadataValidationSchema
 )
 from etsin_finder.qvain_light_utils_v2 import (
-    data_to_metax,
-    get_dataset_creator,
     check_dataset_creator,
-    remove_deleted_datasets_from_results,
-    edited_data_to_metax,
-    get_encoded_access_granter,
     get_user_ida_projects
 )
 
@@ -46,37 +33,11 @@ from etsin_finder.common_service_v2 import (
     update_dataset_user_metadata,
 )
 
+from etsin_finder.log_utils import log_request
+
 log = app.logger
 
 TOTAL_ITEM_LIMIT = 1000
-
-def log_request(f):
-    """
-    Log request when used as decorator.
-
-    :param f:
-    :return:
-    """
-    @wraps(f)
-    def func(*args, **kwargs):
-        """
-        Log requests.
-
-        :param args:
-        :param kwargs:
-        :return:
-        """
-        csc_name = authentication.get_user_csc_name() if not app.testing else ''
-        log.info('[{0}.{1}] {2} {3} {4} USER AGENT: {5}'.format(
-            args[0].__class__.__name__,
-            f.__name__,
-            csc_name if csc_name else 'UNAUTHENTICATED',
-            request.environ['REQUEST_METHOD'],
-            request.path,
-            request.user_agent))
-        return f(*args, **kwargs)
-    return func
-
 
 class ProjectFiles(Resource):
     """File/directory related REST endpoints for getting project directory"""
@@ -89,11 +50,16 @@ class ProjectFiles(Resource):
     @log_request
     def get(self, pid):
         """
-        Get files and directory objects for frontend.
+        Get dataset projects from Metax.
 
-        :param pid:
-        :return:
+        Arguments:
+            pid {string} -- The identifier of the project.
+
+        Returns:
+            [type] -- Metax response.
+
         """
+        # If cr_identifier is set, retrieve only project files that belong to dataset
         params = {}
         args = self.parser.parse_args()
         cr_identifier = args.get('cr_identifier', None)
@@ -157,7 +123,6 @@ class DirectoryFiles(Resource):
         :return:
         """
         args = self.parser.parse_args()
-        include_parent = args.get('include_parent', None)
         not_cr_identifier = args.get('not_cr_identifier', None)
         cr_identifier = args.get('cr_identifier', None)
         pagination = args.get('pagination', None)
@@ -165,6 +130,14 @@ class DirectoryFiles(Resource):
         offset = args.get('offset', None)
         directory_fields = args.get('directory_fields', None)
         file_fields = args.get('file_fields', None)
+
+        # Unauthenticated users can only access files belonging to a published dataset
+        if cr_identifier:
+            if not authorization.user_can_view_dataset(cr_identifier):
+                return '', 404
+        else:
+            if not authentication.is_authenticated():
+                return 'The cr_identifier parameter is required if user is not authenticated', 400
 
         if file_fields is None:
             file_fields = ','.join([
@@ -201,10 +174,8 @@ class DirectoryFiles(Resource):
             return 'Parameters cr_identifier and not_cr_identifier are exclusive', 400
 
         params = {
-            'include_parent': 'true' # include parent so we can check the parent directory project_identifier
+            'include_parent': 'true' # always include parent so we can check the parent directory project_identifier
         }
-        if include_parent:
-            params['include_parent'] = 'true'
         if cr_identifier:
             params['cr_identifier'] = cr_identifier
         if not_cr_identifier:
@@ -219,14 +190,6 @@ class DirectoryFiles(Resource):
             params['directory_fields'] = directory_fields
         if file_fields:
             params['file_fields'] = file_fields
-
-        # Unauthenticated users can only access files belonging to a published dataset
-        if cr_identifier:
-            if not authorization.user_can_view_dataset(cr_identifier):
-                return '', 404
-        else:
-            if not authentication.is_authenticated():
-                return 'The cr_identifier parameter is required if user is not authenticated', 400
 
         resp, status = get_directory(dir_id, params)
         if status != 200:
@@ -309,7 +272,7 @@ class DatasetUserMetadata(Resource):
 
         Arguments:
             cr_id {str} -- Identifier of dataset.
-            body {json} --
+            body {json} -- Metadata updates.
 
         Returns:
             [type] -- Metax response.
