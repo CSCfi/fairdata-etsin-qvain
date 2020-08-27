@@ -83,10 +83,24 @@ class ProjectDetailsValidationSchema(Schema):
     funderType = fields.Nested(FunderTypeSchema, required=False)
 
 
-class ProjectOrganizationSchema(Schema):
-    """ Validation schema for project organizations. """
-    organization = fields.Nested(OrganizationValidationSchema, required=True)
-    department = fields.Nested(OrganizationValidationSchema)
+class ContributorTypeValidationSchema(Schema):
+    identifier = fields.Str(required=True)
+    label = fields.Dict(
+        required=False,
+        validate=lambda x: x.get('en') or x.get('fi')
+    )
+    definition = fields.Dict(
+        required=False,
+        validate=lambda x: x.get('en') or x.get('fi')
+    )
+    inSheme = fields.Str(required=False)
+
+
+class FundingAgencyValidationSchema(Schema):
+    organization = fields.List(fields.Nested(OrganizationValidationSchema))
+    contributorTypes = fields.List(
+        fields.Nested(ContributorTypeValidationSchema)
+    )
 
 
 class ProjectValidationSchema(Schema):
@@ -98,6 +112,10 @@ class ProjectValidationSchema(Schema):
         ),
         required=True,
         validate=Length(min=1)
+    )
+    fundingAgencies = fields.List(
+        fields.Nested(FundingAgencyValidationSchema),
+        required=False
     )
 
 

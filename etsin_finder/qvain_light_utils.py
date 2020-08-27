@@ -74,6 +74,32 @@ def alter_role_data(actor_list, role):
     return actors
 
 
+def organization_array_to_object(organizations):
+    converted = organizations[0]
+    converted["@type"] = "Organization"
+    for sub_organization in organizations[1:]:
+        sub_organization["is_part_of"] = converted
+        sub_organization["@type"] = "Organization"
+        converted = sub_organization
+    return converted
+
+def funding_agency_to_object(funding_agency):
+    converted = organization_array_to_object(funding_agency["organization"])
+    if funding_agency.get("contributorTypes", []):
+        converted["contributor_type"] = [contributor_type_to_metax_concept(contributor_type)
+                                         for contributor_type in funding_agency.get("contributorTypes")]
+    log.debug(converted)
+    return converted
+
+def contributor_type_to_metax_concept(contributor_type):
+    return {
+        "identifier": contributor_type.get("identifier"),
+        "pref_label": contributor_type.get("label"),
+        "definition": contributor_type.get("definition"),
+        "in_scheme": contributor_type.get("inScheme")
+    }
+
+
 def alter_projects_to_metax(projects):
     """
     Convert project objects from frontend to comply with the Metax schema.
@@ -91,20 +117,12 @@ def alter_projects_to_metax(projects):
             "name": details.get("title"),
             "identifier": details.get("identifier"),
             "has_funder_identifier": details.get("fundingIdentifier"),
-            "has_funding_agency": details.get("fundingAgency"),
             "funder_type": details.get("funderType"),
-            "source_organization": []
+            "source_organization": [organization_array_to_object(organization)
+                                    for organization in project.get("organizations", [])],
+            "has_funding_agency": [funding_agency_to_object(funding_agency)
+                                   for funding_agency in project.get("fundingAgencies", [])]
         }
-
-        projectOrganizations = project.get("organizations", [])
-        for organization in projectOrganizations:
-            converted = organization[0]
-            converted["@type"] = "Organization"
-            for sub_organization in organization[1:]:
-                sub_organization["is_part_of"] = converted
-                sub_organization["@type"] = "Organization"
-                converted = sub_organization
-            metax_project["source_organization"].append(converted)
         output.append(metax_project)
     return output
 
