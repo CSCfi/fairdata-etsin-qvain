@@ -119,6 +119,38 @@ async function isCustomOrganization(identifier, parentId) {
   return hits.every(hit => hit._source.uri !== identifier)
 }
 
+/**
+ * Convert organization select value to comfort schema
+ */
+export function organizationSelectValueToSchema(organization) {
+  if (!organization) return null
+  const { name, email, value } = organization
+  return { name: { ...name }, email, identifier: value }
+}
+
+
+/**
+ * Convert reference data results to options for select component.
+ * Returns an object with { en: [...options], fi:[...options] }
+ */
+export function referenceDataToOptions(hits) {
+  return {
+    en: hits.map(hit => getOption(hit, 'en')),
+    fi: hits.map(hit => getOption(hit, 'fi')),
+  }
+}
+
+function getOption(hit, language) {
+  return {
+    value: hit._source.uri,
+    label: hit._source.label[language] || hit._source.label.und,
+    name: {
+      en: hit._source.label.en || hit._source.label.und,
+      fi: hit._source.label.fi || hit._source.label.und,
+      und: hit._source.label.und,
+    }
+  }
+}
 
 export class Expand extends Component {
   static propTypes = {

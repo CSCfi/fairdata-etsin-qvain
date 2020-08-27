@@ -8,7 +8,7 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons'
 
 import Card from '../general/card'
 import OrganizationSelect from '../general/organizationSelect'
-import { ErrorMessages, validate, validateSync, isEmptyObject, organizationToSelectValue } from './utils'
+import { ErrorMessages, organizationSelectValueToSchema, validateSync, isEmptyObject, organizationToSelectValue } from './utils'
 import Button from '../../general/button'
 import Label from '../general/label'
 
@@ -63,9 +63,9 @@ const FundingOrganization = props => {
    */
   const addOrganization = () => {
     const { formData } = props.organizations
-    const organization = selectValueToSchema(formData.organization)
-    const department = selectValueToSchema(formData.department)
-    const subDepartment = selectValueToSchema(formData.subDepartment)
+    const organization = organizationSelectValueToSchema(formData.organization)
+    const department = organizationSelectValueToSchema(formData.department)
+    const subDepartment = organizationSelectValueToSchema(formData.subDepartment)
     if (!validateAll({ organization, department, subDepartment })) return
     const { id } = props.organizations.formData
     const params = [id, organization]
@@ -127,12 +127,6 @@ const AddedOrganizations = ({ organizations = [], onRemove, onEdit, lang }) => (
     </OrganizationLabel>
   ))
 )
-
-function selectValueToSchema(organization) {
-  if (!organization) return null
-  const { name, email, value } = organization
-  return { name: { ...name }, email, identifier: value }
-}
 
 const AddOrganizationContainer = styled.div`
   text-align: right;
