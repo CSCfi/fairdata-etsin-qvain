@@ -292,7 +292,6 @@ class Qvain {
     )
   }
 
-  // PROJECT, REMOVE THIS
   // Add or Update
   @action setProject = project => {
     const { id } = project
@@ -1142,7 +1141,7 @@ export const Project = (
   id: id || uuid(),
   details: { title, identifier, fundingIdentifier, funderType },
   organizations,
-  fundingAgencies,
+  fundingAgencies: fundingAgencies || [],
 })
 
 export const ProjectFunderType = (name, url) => ({
@@ -1160,7 +1159,7 @@ export const Organization = (id, organization, department, subDepartment) => ({
 export const FundingAgency = (id, organization, contributorTypes) => ({
   id: id || uuid(),
   organization, // <Organization>
-  contributorTypes, // Array<ContributorType>
+  contributorTypes: contributorTypes || [], // Array<ContributorType>
 })
 
 export const ContributorType = (id, identifier, label, definition, inScheme) => ({

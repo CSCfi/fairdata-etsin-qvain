@@ -275,7 +275,7 @@ const organizationSelectSchema = yup.object().shape({
 
 const fundingAgencySchema = yup.object().shape({
   identifier: yup.string()
-    .required(translate('qvain.project.inputs.fundingAgency.contributorType.identifier.valdiation')),
+    .required(translate('qvain.project.inputs.fundingAgency.contributorType.identifier.validation')),
   labelFi: yup.string(),
   labelEn: yup.string(),
   definitionFi: yup.string(),
@@ -300,14 +300,8 @@ const projectSchema = yup.object().shape({
     funderType: yup.object(),
   }),
   organizations: yup.array()
-    .min(1, translate('qvain.project.inputs.organization.validation'))
-    .of(
-      yup.object().shape({
-        organization: yup.string(),
-        department: yup.string(),
-        subDepartment: yup.string(),
-      })
-    ),
+    .min(1, translate('qvain.project.inputs.organization.validation')),
+  fundingAgencies: yup.array().min(0),
 })
 
 // EXTERNAL RESOURCES VALIDATION
