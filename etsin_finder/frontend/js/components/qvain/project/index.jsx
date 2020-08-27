@@ -44,7 +44,7 @@ const INITIAL_STATE = {
     formData: {}, // {organization: {value, name, ...}, department, subDepartment}
     errors: [],
   },
-  fundingAgency: {
+  fundingAgencies: {
     formData: {
       id: null,
       organization: {}, // {organization: {value, name, ...}, department, subDepartment, errors}
@@ -63,7 +63,7 @@ class Project extends Component {
     projectInEdit: false,
     details: { ...INITIAL_STATE.details },
     organizations: { ...INITIAL_STATE.organizations },
-    fundingAgency: { ...INITIAL_STATE.fundingAgency },
+    fundingAgencies: { ...INITIAL_STATE.fundingAgencies },
   }
 
   static propTypes = {
@@ -100,28 +100,28 @@ class Project extends Component {
   }
 
   onFundingAgencyChange = value => {
-    const { fundingAgency } = this.state
-    this.setState({ fundingAgency: { ...fundingAgency, formData: value } })
+    const { fundingAgencies } = this.state
+    this.setState({ fundingAgencies: { ...fundingAgencies, formData: value } })
   }
 
   onAddFundingAgency = newFundingAgency => {
-    const { fundingAgency } = this.state
-    const oldFundingAgencies = fundingAgency.addedFundingAgencies
+    const { fundingAgencies } = this.state
+    const oldFundingAgencies = fundingAgencies.addedFundingAgencies
       .filter(agency => agency.id !== newFundingAgency.id)
     const addedFundingAgencies = oldFundingAgencies.concat([newFundingAgency])
-    this.setState({ fundingAgency: {
+    this.setState({ fundingAgencies: {
       addedFundingAgencies,
-      formData: { ...INITIAL_STATE.fundingAgency.formData }
+      formData: { ...INITIAL_STATE.fundingAgencies.formData }
     } })
   }
 
   onRemoveFundingAgency = id => {
-    const { fundingAgency } = this.state
-    const addedFundingAgencies = fundingAgency.addedFundingAgencies
+    const { fundingAgencies } = this.state
+    const addedFundingAgencies = fundingAgencies.addedFundingAgencies
       .filter(agency => agency.id !== id)
     this.setState({
-      fundingAgency: {
-        ...fundingAgency,
+      fundingAgencies: {
+        ...fundingAgencies,
         addedFundingAgencies,
       }
     })
@@ -129,19 +129,21 @@ class Project extends Component {
 
   handleAddProject = event => {
     event.preventDefault()
-    const { id, details, organizations } = this.state
+    const { id, details, organizations, fundingAgencies } = this.state
 
-    projectSchema.validate({ details, organizations: organizations.addedOrganizations }, { abortEarly: false })
+    // If organizations or funding agencies are present in the state,
+    // we assume that those are validated already. We validate only the amount of added objects.
+    projectSchema.validate({ details, organizations: organizations.addedOrganizations, fundingAgencies: fundingAgencies.addedFundingAgencies }, { abortEarly: false })
       .then(() => {
         const { titleEn, titleFi, identifier, fundingIdentifier, funderType } = details
-        const { addedOrganizations } = organizations
         const title = { en: titleEn, fi: titleFi }
-        const project = ProjectObject(id, title, identifier, fundingIdentifier, funderType, addedOrganizations)
+        const project = ProjectObject(id, title, identifier, fundingIdentifier, funderType,
+          organizations.addedOrganizations, fundingAgencies.addedFundingAgencies)
         this.props.Stores.Qvain.setProject(project)
         this.resetForm()
       })
       .catch(validationErrors => {
-        const parsedErrors = { details: {}, organizations: {} }
+        const parsedErrors = { details: {}, organizations: {}, fundingAgencies: {} }
         validationErrors.inner.forEach(error => {
           const { errors, path } = error
           const paths = path.split('.')
@@ -151,6 +153,7 @@ class Project extends Component {
         this.setState({
           details: { ...details, errors: parsedErrors.details },
           organizations: { ...organizations, errors: parsedErrors.organizations },
+          fundingAgencies: { ...fundingAgencies, errors: parsedErrors.fundingAgencies },
         })
       })
   }
@@ -188,12 +191,12 @@ class Project extends Component {
       details: { ...INITIAL_STATE.details },
       organizations: { ...INITIAL_STATE.organizations },
       projectInEdit: false,
-      fundingAgency: { ...INITIAL_STATE.fundingAgency },
+      fundingAgencies: { ...INITIAL_STATE.fundingAgencies },
     })
   }
 
   render() {
-    const { details, organizations, projectInEdit, fundingAgency } = this.state
+    const { details, organizations, projectInEdit, fundingAgencies } = this.state
     const { readonly } = this.props.Stores.Qvain
     return (
       <Field {...FIELD_PROPS}>
@@ -215,7 +218,7 @@ class Project extends Component {
               onChange={this.onFundingAgencyChange}
               onAdd={this.onAddFundingAgency}
               onRemove={this.onRemoveFundingAgency}
-              value={fundingAgency}
+              value={fundingAgencies}
             />
           </Expand>
           <Actions>
