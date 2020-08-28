@@ -842,6 +842,8 @@ class Qvain {
     this.keywordsArray = researchDataset.keyword || []
 
     // SubjectHeadings/Themes
+    this.subjectHeadingValue = null
+    this.subjectHeadingsArray = []
     if (researchDataset.theme !== undefined) {
       researchDataset.theme.forEach(element => {
         this.subjectHeadingValue = SubjectHeading(element.pref_label.en, element.identifier, element.pref_label)
