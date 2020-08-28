@@ -340,12 +340,9 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
         "selectedProject": undefined,
         "setOtherIdentifierValidationError": [Function],
         "spatials": Array [],
-<<<<<<< HEAD
         "subjectHeadingValue": null,
         "subjectHeadingsArray": Array [],
-=======
         "temporals": Array [],
->>>>>>> ac20e829e288d17fc7def4b975e76da3bd7bc7b0
         "title": Object {
           "en": "",
           "fi": "",
@@ -617,12 +614,9 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
         "selectedProject": undefined,
         "setOtherIdentifierValidationError": [Function],
         "spatials": Array [],
-<<<<<<< HEAD
         "subjectHeadingValue": null,
         "subjectHeadingsArray": Array [],
-=======
         "temporals": Array [],
->>>>>>> ac20e829e288d17fc7def4b975e76da3bd7bc7b0
         "title": Object {
           "en": "",
           "fi": "",
@@ -894,12 +888,9 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
         "selectedProject": undefined,
         "setOtherIdentifierValidationError": [Function],
         "spatials": Array [],
-<<<<<<< HEAD
         "subjectHeadingValue": null,
         "subjectHeadingsArray": Array [],
-=======
         "temporals": Array [],
->>>>>>> ac20e829e288d17fc7def4b975e76da3bd7bc7b0
         "title": Object {
           "en": "",
           "fi": "",
@@ -1171,12 +1162,9 @@ exports[`Qvain.Description should render <LanguageField /> 1`] = `
         "selectedProject": undefined,
         "setOtherIdentifierValidationError": [Function],
         "spatials": Array [],
-<<<<<<< HEAD
         "subjectHeadingValue": null,
         "subjectHeadingsArray": Array [],
-=======
         "temporals": Array [],
->>>>>>> ac20e829e288d17fc7def4b975e76da3bd7bc7b0
         "title": Object {
           "en": "",
           "fi": "",
@@ -1448,7 +1436,6 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
         "selectedProject": undefined,
         "setOtherIdentifierValidationError": [Function],
         "spatials": Array [],
-<<<<<<< HEAD
         "subjectHeadingValue": null,
         "subjectHeadingsArray": Array [],
         "title": Object {
@@ -1617,9 +1604,7 @@ exports[`Qvain.Description should render <SubjectHeadingsField /> 1`] = `
         "spatials": Array [],
         "subjectHeadingValue": null,
         "subjectHeadingsArray": Array [],
-=======
         "temporals": Array [],
->>>>>>> ac20e829e288d17fc7def4b975e76da3bd7bc7b0
         "title": Object {
           "en": "",
           "fi": "",
