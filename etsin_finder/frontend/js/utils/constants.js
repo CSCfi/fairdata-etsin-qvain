@@ -50,6 +50,7 @@ export const ROLE = {
   CURATOR: 'curator',
   RIGHTS_HOLDER: 'rights_holder',
   CONTRIBUTOR: 'contributor',
+  PROVENANCE: 'provenance'
 }
 
 const PRESERVATION_STATE_COLOR = {
@@ -102,8 +103,20 @@ export const PRESERVATION_STATE = {
     who: 'system',
     color: PRESERVATION_STATE_COLOR.DEFAULT,
   },
+  65: {
+    name: 'Metadata is being validated',
+    type: 'wait',
+    who: 'system',
+    color: PRESERVATION_STATE_COLOR.DEFAULT,
+  },
   70: {
     name: 'Valid metadata',
+    type: 'wait',
+    who: 'other',
+    color: PRESERVATION_STATE_COLOR.DEFAULT,
+  },
+  75: {
+    name: 'Metadata confirmed',
     type: 'wait',
     who: 'other',
     color: PRESERVATION_STATE_COLOR.DEFAULT,

@@ -61,7 +61,11 @@ describe('Qvain.Actors', () => {
   })
 
   it('should list all added actors', () => {
-    const addedActors = mount(<AddedActorsBase Stores={stores} />)
+    const addedActors = mount(
+      <ThemeProvider theme={etsinTheme}>
+        <AddedActorsBase Stores={stores} />
+      </ThemeProvider>
+    )
     expect(addedActors.find(ButtonGroup).length).toBe(0)
     stores.Qvain.Actors.saveActor(
       Actor({
@@ -224,11 +228,9 @@ describe('Qvain.Actors modal', () => {
     wrapper.update()
     const { actorInEdit } = stores.Qvain.Actors
     expect(actorInEdit.organizations.length).toBe(2)
-    wrapper.find(OrgInfo).find(DeleteButton).not('[disabled=true]').first()
-.simulate('click')
+    wrapper.find(OrgInfo).find(DeleteButton).not('[disabled=true]').first().simulate('click')
     expect(actorInEdit.organizations.length).toBe(1)
-    wrapper.find(OrgInfo).find(DeleteButton).not('[disabled=true]').first()
-.simulate('click')
+    wrapper.find(OrgInfo).find(DeleteButton).not('[disabled=true]').first().simulate('click')
     expect(actorInEdit.organizations.length).toBe(0)
   })
 
@@ -886,7 +888,7 @@ describe('Qvain.Actors store', () => {
     const { removeActor, actors } = stores.Qvain.Actors
     const first = actors[0]
     const second = actors[1]
-    removeActor(first)
+    await removeActor(first)
     expect(actors[0]).toBe(second)
   })
 

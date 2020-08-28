@@ -12,13 +12,15 @@ import { LabelLarge, FormField, RadioInput, Label, HelpField } from '../general/
 
 import Modal from '../../general/modal'
 import {
-  TableButton, DangerButton,
-  CumulativeStateButton,
+  TableButton,
+  DangerButton,
+  // CumulativeStateButton,
   CumulativeStateButtonText,
 } from '../general/buttons'
 
-import Response from './response'
+import { Button as CumulativeStateButton } from '../../general/button'
 
+import Response from './response'
 
 class CumulativeState extends Component {
   static propTypes = {
@@ -43,30 +45,32 @@ class CumulativeState extends Component {
     }
     this.setState({
       modalOpen: false,
-      response: null
+      response: null,
     })
   }
 
   clearResponse = () => {
     this.setState({
-      response: null
+      response: null,
     })
   }
 
   handleToggleCumulativeState = () => {
-    if (!this.props.Stores.Qvain.hasBeenPublished) { // only published datasets can be toggled with the RPC
+    if (!this.props.Stores.Qvain.hasBeenPublished) {
+      // only published datasets can be toggled with the RPC
       return
     }
     this.setState({
       response: null,
-      loading: true
+      loading: true,
     })
 
     const currentState = this.props.Stores.Qvain.cumulativeState
-    const newState = currentState === CUMULATIVE_STATE.YES ? CUMULATIVE_STATE.CLOSED : CUMULATIVE_STATE.YES
+    const newState =
+      currentState === CUMULATIVE_STATE.YES ? CUMULATIVE_STATE.CLOSED : CUMULATIVE_STATE.YES
     const obj = {
       identifier: this.props.Stores.Qvain.original.identifier,
-      cumulative_state: newState
+      cumulative_state: newState,
     }
     let url
     if (this.props.Stores.Env.metaxApiV2) {
@@ -74,13 +78,14 @@ class CumulativeState extends Component {
     } else {
       url = urls.v1.rpc.changeCumulativeState()
     }
-    axios.post(url, obj)
+    axios
+      .post(url, obj)
       .then(response => {
         const data = response.data || {}
         this.setState({
           response: {
-            new_version_created: data.new_version_created
-          }
+            new_version_created: data.new_version_created,
+          },
         })
         // when a new version is created, the cumulative_state of the current version remains unchanged
         if (!data.new_version_created) {
@@ -91,20 +96,26 @@ class CumulativeState extends Component {
       .catch(err => {
         this.setState({
           response: {
-            error: getResponseError(err)
-          }
+            error: getResponseError(err),
+          },
         })
       })
       .finally(() => {
         this.setState({
-          loading: false
+          loading: false,
         })
       })
   }
 
   render() {
-    const { changed, cumulativeState, setCumulativeState, hasBeenPublished } = this.props.Stores.Qvain
-    const stateKey = this.props.Stores.Qvain.cumulativeState === CUMULATIVE_STATE.YES ? 'enabled' : 'disabled'
+    const {
+      changed,
+      cumulativeState,
+      setCumulativeState,
+      hasBeenPublished,
+    } = this.props.Stores.Qvain
+    const stateKey =
+      this.props.Stores.Qvain.cumulativeState === CUMULATIVE_STATE.YES ? 'enabled' : 'disabled'
 
     let content = null
     if (!hasBeenPublished) {
@@ -143,16 +154,24 @@ class CumulativeState extends Component {
       )
     } else {
       // existing datasets need to use the RPC for changing cumulative state
-      const note = changed ? 'qvain.files.cumulativeState.changes' : `qvain.files.cumulativeState.${stateKey}.note`
+      const note = changed
+        ? 'qvain.files.cumulativeState.changes'
+        : `qvain.files.cumulativeState.${stateKey}.note`
       content = (
         <div>
           <p>
-            <Translate component="strong" content={`qvain.files.cumulativeState.${stateKey}.state`} />{' '}
+            <Translate
+              component="strong"
+              content={`qvain.files.cumulativeState.${stateKey}.state`}
+            />{' '}
             <Translate content={`qvain.files.cumulativeState.${stateKey}.explanation`} />
           </p>
           <p>
             <CumulativeStateButton disabled={changed} type="button" onClick={this.openModal}>
-              <Translate component={CumulativeStateButtonText} content={`qvain.files.cumulativeState.${stateKey}.button`} />
+              <Translate
+                component={CumulativeStateButtonText}
+                content={`qvain.files.cumulativeState.${stateKey}.button`}
+              />
             </CumulativeStateButton>
           </p>
           <HelpField>
@@ -192,7 +211,11 @@ class CumulativeState extends Component {
           <Translate content="qvain.files.cumulativeState.label" />
         </LabelLarge>
         {content}
-        <Modal isOpen={this.state.modalOpen} onRequestClose={this.closeModal} contentLabel="changeCumulativeStateModal">
+        <Modal
+          isOpen={this.state.modalOpen}
+          onRequestClose={this.closeModal}
+          contentLabel="changeCumulativeStateModal"
+        >
           <Translate component="h3" content="qvain.files.cumulativeState.modalHeader" />
           {modalContent}
         </Modal>

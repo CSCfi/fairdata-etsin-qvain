@@ -3,12 +3,10 @@ import PropTypes from 'prop-types'
 import { inject, observer } from 'mobx-react'
 import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {
-  faFile,
-} from '@fortawesome/free-solid-svg-icons'
+import { faFile } from '@fortawesome/free-solid-svg-icons'
 
 import Modal from '../../../../general/modal'
-import ConfirmClose from '../../../general/confirmClose'
+import { ConfirmClose } from '../../../general/confirmClose'
 import { TableButton } from '../../../general/buttons'
 import FileForm from './fileForm'
 import DirectoryForm from './directoryForm'
@@ -92,8 +90,8 @@ class FormModal extends Component {
         )}
         <ConfirmClose
           show={this.state.confirmClose}
-          hideConfirm={this.hideConfirmClose}
-          closeModal={this.close}
+          onCancel={this.hideConfirmClose}
+          onConfirm={this.close}
           disabled={this.state.loading}
         />
       </Modal>

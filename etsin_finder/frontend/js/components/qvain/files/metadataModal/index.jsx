@@ -9,7 +9,7 @@ import axios from 'axios'
 import { observable, action } from 'mobx'
 
 import Modal from '../../../general/modal'
-import ConfirmClose from '../../general/confirmClose'
+import { ConfirmClose } from '../../general/confirmClose'
 import getReferenceData from '../../utils/getReferenceData'
 import { fileMetadataSchema } from '../../utils/formValidation'
 import { getResponseError } from '../../utils/responseError'
@@ -87,7 +87,7 @@ class MetadataModal extends Component {
     } else {
       url = urls.v1.fileCharacteristics(identifier)
     }
-    return axios.patch(url, data, {
+    return axios.put(url, data, {
       headers: {
         'Content-Type': 'application/json',
       },
@@ -238,6 +238,7 @@ class MetadataModal extends Component {
       })
       this.close()
     } catch (err) {
+      console.error(err)
       this.setState({
         response: {
           error: getResponseError(err),
@@ -455,8 +456,8 @@ class MetadataModal extends Component {
 
         <ConfirmClose
           show={this.state.confirmClose}
-          hideConfirm={this.hideConfirmClose}
-          closeModal={this.close}
+          onCancel={this.hideConfirmClose}
+          onConfirm={this.close}
           disabled={this.state.loading}
         />
 

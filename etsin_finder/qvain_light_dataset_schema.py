@@ -85,8 +85,21 @@ class LicenseValidationSchema(Schema):
 
 
 class DatasetValidationSchema(Schema):
-    """Validation schema for the whole dataset."""
+    """
+    Validation schema for the whole dataset.
 
+    Arguments:
+        Schema {library} -- Marshmallows Schema library.
+    """
+
+    relation = fields.List(
+        fields.Dict(),
+        required=False
+    )
+    provenance = fields.List(
+        fields.Dict(),
+        required=False
+    )
     original = fields.Dict()
     title = fields.Dict(
         required=True,
@@ -129,6 +142,10 @@ class DatasetValidationSchema(Schema):
     )
     spatial = fields.List(
         fields.Dict()
+    )
+    temporal = fields.List(
+        fields.Dict(),
+        required=False
     )
     embargoDate = fields.Str()
     restrictionGrounds = fields.Str()

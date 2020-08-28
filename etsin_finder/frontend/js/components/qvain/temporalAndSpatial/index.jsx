@@ -1,7 +1,8 @@
 import React from 'react'
-import Field from '../general/field'
+import { Section } from '../general/section/index'
 import tooltipContent from './tooltipContent'
 import Spatial from './spatial'
+import Temporal from './temporal'
 
 const translations = {
     title: 'qvain.temporalAndSpatial.title',
@@ -18,9 +19,10 @@ const translations = {
   }
 
 const TemporalAndSpatial = () => (
-  <Field {...fieldProps}>
+  <Section {...fieldProps}>
     <Spatial />
-  </Field>
-)
+    <Temporal />
+  </Section>
+    )
 
 export default TemporalAndSpatial

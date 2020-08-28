@@ -7,21 +7,20 @@
 
 """Functionalities related to authorization and what users are allowed to see."""
 
-from flask import session
 from etsin_finder.authentication import get_user_id, is_authenticated
 from etsin_finder import cr_service
 from etsin_finder.cr_service import (
     get_catalog_record_access_type,
     get_catalog_record_data_catalog_id,
     get_catalog_record_embargo_available,
-    is_draft,
+    is_published,
     is_catalog_record_owner
 )
 
 from etsin_finder.finder import app
 from etsin_finder import rems_service
 from etsin_finder.utils import tz_now_is_later_than_timestamp_str, remove_keys_recursively, leave_keys_in_dict
-from etsin_finder.constants import ACCESS_TYPES, DATA_CATALOG_IDENTIFIERS, SAML_ATTRIBUTES
+from etsin_finder.constants import ACCESS_TYPES, DATA_CATALOG_IDENTIFIERS
 
 log = app.logger
 
@@ -41,10 +40,14 @@ def user_can_view_dataset(cr_id):
     if cr is None:
         return False
 
+    if is_published(cr):
+        return True
+
+    # non-public dataset is available only for the owner
     user_id = get_user_id()
-    if is_draft(cr) and not is_catalog_record_owner(cr, user_id):
-        return False
-    return True
+    if is_catalog_record_owner(cr, user_id):
+        return True
+    return False
 
 
 def user_has_rems_permission_for_catalog_record(cr_id):
