@@ -112,14 +112,14 @@ def _contributor_type_to_metax_concept(contributor_type):
 
 
 def alter_projects_to_metax(projects):
-    """
-    Convert project objects from frontend to comply with the Metax schema.
+    """Convert project objects from frontend to comply with the Metax schema.
 
     Arguments:
         project (list<dict>): List of project objects, containing details and organizations
 
     Returns:
         list<dict>: List of project objects in Metax schema
+
     """
     output = []
     for project in projects:
