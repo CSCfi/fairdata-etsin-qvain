@@ -1,7 +1,7 @@
 import { observable, action, computed, runInAction } from 'mobx'
 import axios from 'axios'
-import uuid from 'uuid/v4'
 import moment from 'moment'
+import { v4 as uuid } from 'uuid'
 import { getDirectories, getFiles, deepCopy } from '../../components/qvain/utils/fileHierarchy'
 import urls from '../../components/qvain/utils/urls'
 import {

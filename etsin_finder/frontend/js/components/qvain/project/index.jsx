@@ -8,7 +8,7 @@ import styled from 'styled-components'
 import { Project as ProjectObject } from '../../../stores/view/qvain'
 import { projectSchema } from '../utils/formValidation'
 
-import Field from '../general/field'
+import { Section } from '../general/section'
 import Card from '../general/card'
 import { ButtonGroup, ButtonLabel, EditButton, ButtonContainer, CancelButton, DeleteButton, SaveButton } from '../general/buttons'
 
@@ -200,7 +200,7 @@ class Project extends Component {
     const { details, organizations, projectInEdit, fundingAgencies } = this.state
     const { readonly } = this.props.Stores.Qvain
     return (
-      <Field {...FIELD_PROPS}>
+      <Section {...FIELD_PROPS}>
         <Card>
           <Translate component="h3" content="qvain.project.title" />
           <Translate component="p" content="qvain.project.description" />
@@ -235,7 +235,7 @@ class Project extends Component {
             />
           </Actions>
         </Card>
-      </Field>
+      </Section>
     )
   }
 }
