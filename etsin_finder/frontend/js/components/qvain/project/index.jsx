@@ -133,7 +133,10 @@ class Project extends Component {
 
     // If organizations or funding agencies are present in the state,
     // we assume that those are validated already. We validate only the amount of added objects.
-    projectSchema.validate({ details, organizations: organizations.addedOrganizations, fundingAgencies: fundingAgencies.addedFundingAgencies }, { abortEarly: false })
+    projectSchema.validate(
+      { details, organizations: organizations.addedOrganizations, fundingAgencies: fundingAgencies.addedFundingAgencies },
+      { abortEarly: false }
+    )
       .then(() => {
         const { titleEn, titleFi, identifier, fundingIdentifier, funderType } = details
         const title = { en: titleEn, fi: titleFi }

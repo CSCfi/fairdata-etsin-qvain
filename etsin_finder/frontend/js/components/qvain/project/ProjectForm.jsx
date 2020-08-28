@@ -69,7 +69,7 @@ const ProjectForm = ({ onChange, formData, readonly }) => (
     <Select
       name="funder-type"
       getter={formData.funderType}
-      setter={(newValue) => onChange('funderType', newValue) }
+      setter={(newValue) => onChange('funderType', newValue)}
       model={ProjectFunderType}
       metaxIdentifier="funder_type"
       placeholder="qvain.project.inputs.funderType.placeholder"

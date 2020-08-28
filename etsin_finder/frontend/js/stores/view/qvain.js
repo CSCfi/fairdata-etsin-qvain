@@ -1068,11 +1068,11 @@ class Qvain {
             const parsedOrganizations = parseOrganization(agency)
             parsedOrganizations.reverse()
             const organization = Organization(uuid(), ...parsedOrganizations)
-            const contributorTypes = agency.contributor_type.map(contributorType => {
-              return ContributorType(uuid(), contributorType.identifier,
+            const contributorTypes = agency.contributor_type.map(contributorType => (
+              ContributorType(uuid(), contributorType.identifier,
                 contributorType.pref_label, contributorType.definition,
                 contributorType.in_scheme)
-            })
+            ))
             return FundingAgency(uuid(), organization, contributorTypes)
           })
           params.push(fundingAgencies)

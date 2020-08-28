@@ -32,7 +32,6 @@ class OrganizationSelect extends Component {
     name: PropTypes.string.isRequired,
     inputId: PropTypes.string.isRequired,
     placeholder: PropTypes.object,
-    noOptionsMessage: PropTypes.string,
     creatable: PropTypes.bool,
   }
 
@@ -42,7 +41,6 @@ class OrganizationSelect extends Component {
       department: 'qvain.select.placeholder',
     },
     creatable: true,
-    noOptionsMessage: null,
     value: undefined,
   }
 
@@ -227,46 +225,47 @@ class OrganizationSelect extends Component {
  * Internally used select component with form for adding organization manually.
  * This is a stateless component.
  */
-const CreatableSelectComponent = props => {
+const CreatableSelectComponent = ({ Stores, onChange, onBlur, value, options, placeholder, name, inputId, creatable, allowReset }) => {
   /**
    * Open form if add manually is selected.
    *
    * @param {Object} option Selected option
    */
-  const onChange = option => {
+  const onSelectChange = option => {
     if (option.value === 'create') {
-      props.onChange({
+      onChange({
         value: '',
         name: { und: '' },
         label: t('qvain.organizationSelect.label.addNew'),
         email: '',
         formIsOpen: true,
       })
-    } else props.onChange({ ...option, formIsOpen: false })
+    } else onChange({ ...option, formIsOpen: false })
   }
 
-  const onReset = () => props.onChange(null)
+  const onReset = () => onChange(null)
 
   const onFormChange = event => {
-    const { name, value } = event.target
-    const payload = { ...props.value } || { label: undefined, name: undefined, value: undefined }
-    switch (name) {
+    const newValue = event.target.value
+    const newName = event.target.name
+    const payload = { ...value } || { label: undefined, name: undefined, value: undefined }
+    switch (newName) {
       case 'name': {
-        payload.name = { und: value }
-        payload.label = value
+        payload.name = { und: newValue }
+        payload.label = newValue
         break
       }
       case 'email': {
-        payload.email = value
+        payload.email = newValue
         break
       }
       case 'identifier': {
-        payload.value = value
+        payload.value = newValue
         break
       }
       default: break
     }
-    props.onChange(payload)
+    onChange(payload)
   }
 
   /**
@@ -274,7 +273,6 @@ const CreatableSelectComponent = props => {
    * if props has creatable set to true.
    */
   const getOptions = () => {
-    const { creatable, placeholder, options } = props
     if (!creatable) return options
     return [{
       label: t('qvain.organizationSelect.label.addNew'),
@@ -290,14 +288,13 @@ const CreatableSelectComponent = props => {
    * if organization for should be visible.
    */
   const formIsOpen = () => (
-    props.value
-      ? props.value.formIsOpen
+    value
+      ? value.formIsOpen
       : false
     )
 
   const renderForm = () => {
     if (!formIsOpen()) return null
-    const { value, onBlur } = props
     const errors = value.errors || {}
     return (
       <AddOptionContainer>
@@ -342,8 +339,7 @@ const CreatableSelectComponent = props => {
     )
   }
 
-  const { name, inputId, value, placeholder, allowReset } = props
-  const { readonly } = props.Stores.Qvain
+  const { readonly } = Stores.Qvain
   return (
     <div className="row no-gutters">
       <div className="col-11">
@@ -352,7 +348,7 @@ const CreatableSelectComponent = props => {
           name={name}
           inputId={inputId}
           isDisabled={readonly}
-          onChange={onChange}
+          onChange={onSelectChange}
           value={value}
           className="basic-single"
           classNamePrefix="select"
