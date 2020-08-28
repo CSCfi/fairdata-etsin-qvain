@@ -759,18 +759,20 @@ export default {
         },
       }]
     },
-    rights_holder: {
-      name: { und: 'Helsingin yliopisto' },
-      '@type': 'Organization',
-      email: 'info@csc.fi',
-      telephone: ['+358501231235'],
-      identifier: 'http://uri.suomi.fi/codelist/fairdata/organization/code/01901',
-      is_part_of: {
-        name: { und: 'Aalto yliopisto' },
+    rights_holder: [
+      {
+        name: { und: 'Helsingin yliopisto' },
         '@type': 'Organization',
-        identifier: 'http://uri.suomi.fi/codelist/fairdata/organization/code/10076',
-      },
-    },
+        email: 'info@csc.fi',
+        telephone: ['+358501231235'],
+        identifier: 'http://uri.suomi.fi/codelist/fairdata/organization/code/01901',
+        is_part_of: {
+          name: { und: 'Aalto yliopisto' },
+          '@type': 'Organization',
+          identifier: 'http://uri.suomi.fi/codelist/fairdata/organization/code/10076',
+        },
+      }
+    ],
     version_notes: ['This version contains changes to x and y.'],
     infrastructure: [
       {

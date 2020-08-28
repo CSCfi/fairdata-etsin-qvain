@@ -97,6 +97,7 @@ class Select extends Component {
       defaultOptions: [],
       options: options[lang],
       onChange: onChange(options, lang, setter, model),
+      isClearable: true,
     }
 
     if (noOptionsMessage) {

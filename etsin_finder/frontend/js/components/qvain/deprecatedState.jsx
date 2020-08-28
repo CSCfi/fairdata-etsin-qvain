@@ -36,7 +36,7 @@ const DeprecationInfoText = styled.div`
   border-bottom: 1px solid rgba(0,0,0,0.3);
   position: relative;
   min-width: 300px;
-  padding: 0.5rem;
+  padding: 0.25em;
 `
 
 const ButtonContainer = styled.div`
@@ -51,6 +51,8 @@ const FixDeprecatedButton = styled(TableButton)`
   width: auto;
   padding-left: 1rem;
   padding-right: 1rem;
+  flex-grow: 0;
+  max-width: none;
 `
 
 export default inject('Stores')(observer(DeprecatedState))

@@ -81,6 +81,12 @@ const english = {
       infoText:
         'Datacite without validation: The dataset is shown in Datacite Format but without validation; mandatory fields might be missing. Dataset does not necessarily meet all Datacite requirements.',
     },
+    draftInfo: {
+      draft: 'This dataset is a draft. Only the creator of the dataset can view it.',
+      changes:
+        'This is a preview of unpublished changes to a dataset.  Only the creator of the dataset can view it.',
+    },
+    draftIdentifierInfo: 'Dataset identifier will be generated when the dataset is published.',
     dl: {
       root: 'root',
       breadcrumbs: 'Breadcrumbs',
@@ -90,11 +96,17 @@ const english = {
       downloadFailed: 'Download failed',
       downloadAll: 'Download all',
       downloading: 'Downloading...',
+      downloadItem: 'Download %(name)s',
       fileAmount: '%(amount)s objects',
       close_modal: 'Close info modal',
+      customMetadata: 'Metadata',
       info_header: 'Other info related to file',
       loading: 'Loading folder',
       loaded: 'Folder loaded',
+      fileCount: {
+        one: '1 file',
+        other: '%(count)s files',
+      },
       file_types: {
         both: 'files and folders',
         directory: 'Folder',
@@ -103,6 +115,20 @@ const english = {
       files: 'Files',
       info: 'Info',
       info_about: 'about object: %(file)s',
+      infoHeaders: {
+        file: 'File information',
+        directory: 'Folder information',
+      },
+      infoModalButton: {
+        directory: {
+          general: 'Folder %(name)s information',
+          custom: 'Folder %(name)s information and metadata',
+        },
+        file: {
+          general: 'File %(name)s information',
+          custom: 'File %(name)s information and metadata',
+        },
+      },
       item: 'item %(item)s',
       name: 'Name',
       size: 'Size',
@@ -235,9 +261,10 @@ const english = {
     },
     cookies: {
       accept: 'Accept all cookies',
-      infoText: 'By using Fairdata’s services you agree to our Cookies Use. We use cookies to improve your experience and make our services work better.',
+      infoText:
+        'By using Fairdata’s services you agree to our Cookies Use. We use cookies to improve your experience and make our services work better.',
       link: 'View the Fairdata Privacy Policy.',
-    }
+    },
   },
   home: {
     title: 'Search datasets',
@@ -252,6 +279,12 @@ const english = {
       keywords: 'keywords',
       fos: 'fields of science',
       research: 'projects',
+    },
+    tooltip: {
+      datasets: 'View datasets in Search -page',
+      keywords: 'View keywords in Search -page',
+      fos: 'View fields of science in Search -page',
+      research: 'View projects in Search -page',
     },
     includePas: 'Include Fairdata PAS datasets',
   },
@@ -311,9 +344,34 @@ const english = {
     },
   },
   qvain: {
+    general: {
+      looseActors: {
+        warning:
+          "Some of the actors' role is marked as provenance but they are not attached in any of existing provenances. Saving the dataset will remove these orphaned actors. Following actors will be removed:",
+        question: 'Do you still want to save the dataset?',
+        confirm: 'Yes, remove the actors and save',
+        cancel: 'No, continue editing',
+      },
+      looseProvenances: {
+        warning: 'You are about to remove actor that is linked to the following provenances:',
+        question: 'Removing actor will remove it from these provenances. Do you want to proceed?',
+        confirm: 'Yes, remove actor from provenances',
+        cancel: "No, don't remove actor",
+      },
+      langFi: 'Finnish',
+      langEn: 'English',
+      buttons: {
+        edit: 'Edit',
+        remove: 'Remove',
+        add: 'Add',
+        save: 'Save',
+        cancel: 'Cancel',
+      },
+    },
     saveDraft: 'Save Draft',
     submit: 'Save and Publish',
     edit: 'Update Dataset',
+    unsavedChanges: 'Leaving the editor will discard your unsaved changes. Are you sure you want to leave the editor?',
     consent:
       'By using Qvain Light the user agrees that he or she has asked consent from all persons whose personal information the user will add to the descriptive data and informed them of how they can get their personal data removed. By using Qvain Light the user agrees to the <a href="https://www.fairdata.fi/hyodyntaminen/kayttopolitiikat-ja-ehdot/">Terms of Usage</a>.',
     submitStatus: {
@@ -335,7 +393,8 @@ const english = {
       30: 'Enriching failed',
       40: 'Check metadata',
       50: 'Validation failed',
-      60: 'Revalidating',
+      60: 'Metadata updated',
+      65: 'Validating metadata',
       70: 'Waits for transfer',
       75: 'Metadata confirmed',
       80: 'Transfer started',
@@ -435,6 +494,7 @@ const english = {
           years: ' years ago',
         },
       },
+      moreActions: 'More',
       moreVersions: {
         one: 'Show 1 more version',
         other: 'Show %(count)s more versions',
@@ -446,10 +506,25 @@ const english = {
       editButton: 'Edit',
       editDraftButton: 'Edit draft',
       deleteButton: 'Delete',
-      confirmDelete: {
-        text: 'Are you sure you want to delete this dataset? Deleting the dataset will remove it from Qvain, and Etsin Search cannot find it anymore. Landing page for the dataset will NOT be removed.',
-        ok: 'Delete',
-        cancel: 'Cancel',
+      revertButton: 'Revert changes',
+      remove: {
+        confirm: {
+          published: {
+            text:
+              'Are you sure you want to delete this dataset? Deleting the dataset will remove it from Qvain, and Etsin Search cannot find it anymore. Landing page for the dataset will NOT be removed.',
+            ok: 'Delete',
+          },
+          draft: {
+            text:
+              'Are you sure you want to delete this draft? The draft will be removed permanently.',
+            ok: 'Delete',
+          },
+          changes: {
+            text: 'Are you sure you want to revert all unpublished changes made to this dataset?',
+            ok: 'Revert',
+          },
+          cancel: 'Cancel',
+        },
       },
       goToEtsin: 'View in Etsin',
       goToEtsinDraft: 'Preview in Etsin',
@@ -465,6 +540,10 @@ const english = {
       infoTitle: 'Description info',
       infoText:
         'Give a descriptive title for your dataset. Also, write the description as detailed as you possibly can; explain how the dataset was created, how it is structured, and how it has been handled. Describe also the content.',
+      fieldHelpTexts: {
+        requiredForAll: 'Required for all datasets',
+        requiredToPublish: 'Required to save and publish',
+      },
       description: {
         langEn: 'ENGLISH',
         langFi: 'FINNISH',
@@ -483,7 +562,7 @@ const english = {
       issuedDate: {
         title: 'Issued date',
         infoText:
-          'Date of formal issuance (publication) of the resource. This value does not affect or reflect the visibility of the dataset itself.',
+          'Date of formal issuance (publication) of the resource. This value does not affect or reflect the visibility of the dataset itself. If this is left empty, current date is used as default value.',
         instructions: '',
         placeholder: 'Date',
       },
@@ -510,7 +589,7 @@ const english = {
         placeholder: 'Type to search language',
         noResults: 'No languages found',
         addButton: 'Add language',
-        help: 'You can add multiple languages.'
+        help: 'You can add multiple languages.',
       },
       keywords: {
         title: 'Keywords',
@@ -555,6 +634,7 @@ const english = {
           label: 'URL address',
           help: 'Specify URL address for license',
         },
+        addButton: 'Add license',
       },
     },
     actors: {
@@ -589,6 +669,7 @@ const english = {
           curator: 'Curator',
           rights_holder: 'Rights holder',
           contributor: 'Contributor',
+          provenance: 'Provenance',
         },
         name: {
           placeholder: {
@@ -671,7 +752,7 @@ const english = {
         roles: {
           mixed: '',
           oneOf:
-            'Roles must be one of "Creator", "Publisher", "Curator", "Rights holder" or "Contributor".',
+            'Roles must be one of "Creator", "Publisher", "Curator", "Rights holder", "Contributor" or "Provenance.',
           required: 'You must specify the role of the actor. The creator role is mandatory.',
         },
         name: {
@@ -777,6 +858,8 @@ const english = {
           'Choose "IDA" if the data is stored in Fairdata IDA Service. Choose "Remote resources" if the data is in remote location.',
         doiSelection:
           'I want the dataset to have a DOI (digital object identifier) instead of a URN.',
+        doiSelectedHelp:
+          'When the dataset is published, a DOI will be created and stored in the DataCite Service. This operation cannot be undone.',
         placeholder: 'Select option',
         ida: 'IDA',
         att: 'Remote resources',
@@ -816,6 +899,35 @@ const english = {
         modalHeader: 'Change dataset cumulation',
         closeButton: 'Close',
         changes: 'You need to save your changes to the dataset before you can change this setting.',
+      },
+      cumulativeStateV2: {
+        label: 'Cumulative dataset',
+        radio: {
+          no:
+            'No. (Adding files or folders to a published dataset requires you to create a new version of the dataset.)',
+          yes: 'Yes. (New files or folders will be added without a version change.)',
+          note:
+            'Note! Once the dataset has been published, it cannot be turned cumulative without creating a new version of the dataset.',
+        },
+        enabled: {
+          state: 'This dataset has been marked as a cumulative dataset.',
+          explanation:
+            'It means that data is added to it regularly. If data is no longer being added to this dataset, you should turn it non-cumulative.',
+          button: 'Turn non-cumulative',
+          note:
+            'Note! Once changed, you need to create a new version of the dataset to turn it back to cumulative.',
+        },
+        disabled: {
+          state: 'This dataset has been marked non-cumulative.',
+          explanation:
+            'Adding files or folders to a published dataset requires you to create a new version of the dataset.',
+          note:
+            'Changing the dataset cumulative requires creating a new version of the dataset.',
+        },
+        stateChanged: {
+          note: 'The new state will be applied once you save the dataset.',
+          button: 'Cancel change',
+        },
       },
       responses: {
         fail: 'Something went wrong...',
@@ -862,9 +974,9 @@ const english = {
         },
       },
       metadataModal: {
-        header: 'Edit PAS Metadata',
+        header: 'Digital Preservation metadata',
         help:
-          'Saving the data will change the file metadata regardless of whether the file is in your dataset or not.',
+          'Saving the changes will update the file metadata regardless of whether the file is in your dataset or not.',
         csvOptions: 'CSV Options',
         fields: {
           fileFormat: 'File format',
@@ -881,10 +993,18 @@ const english = {
           loadingFileFormats: 'Failed to load list of allowed file formats.',
         },
         buttons: {
-          show: 'Edit PAS metadata',
+          add: 'Add Digital Preservation metadata',
+          show: 'Edit Digital Preservation metadata',
+          delete: 'Remove Digital Preservation metadata',
           close: 'Close',
           save: 'Save changes',
           hideError: 'Continue editing',
+        },
+        clear: {
+          header: 'Remove Digital Preservation metadata',
+          help: 'Are you sure you want to remove Digital Preservation metadata for file %(file)s? The change will take place immediately.',
+          cancel: 'Cancel',
+          confirm: 'Remove',
         },
         options: {
           delimiter: {
@@ -941,6 +1061,9 @@ const english = {
           select: 'Select %(name)s',
           deselect: 'Deselect %(name)s',
         },
+        addUserMetadata: 'Add metadata',
+        editUserMetadata: 'Edit metadata',
+        deleteUserMetadata: 'Remove metadata',
         form: {
           title: {
             label: 'Title',
@@ -1028,24 +1151,237 @@ const english = {
       title: 'Related Material and History',
       tooltip: 'Related Material and History info',
       tooltipContent: {
-        reference: {
-          title: 'Reference',
+        relatedResource: {
+          title: 'Reference to a related resource',
           paragraph:
             'Refer to related datasets, publications, and other resources that are relevant in understanding this dataset. ',
         },
-        provience: {
-          title: 'Provience',
-          paragraph: 'Information about the provenience of the data.',
+        provenance: {
+          title: 'Provenance',
+          paragraph: 'Information about the provenance of the data.',
         },
         infrastructure: {
           title: 'Infrastructure',
           paragraph: 'Services or tools that are used to produce the dataset.',
         },
       },
+      relatedResource: {
+        title: 'Reference to a related resource',
+        description:
+          'Refer to related datasets, publications, and other resources that are relevant in understanding this dataset. ',
+        noItems: 'No references to a related resources have been added.',
+        error: {
+          nameRequired: 'Name is required in at least one language.',
+        },
+        modal: {
+          addButton: 'Add reference to a related resource',
+          title: {
+            add: 'Add reference to a related resource',
+            edit: 'Edit reference to a related resource',
+          },
+          buttons: {
+            save: 'Save related resource',
+            editSave: 'Apply changes',
+            cancel: 'Cancel',
+          },
+          nameInput: {
+            fi: {
+              label: 'Name',
+              placeholder: 'Name (in Finnish)',
+            },
+            en: {
+              label: 'Name',
+              placeholder: 'Name (in English)',
+            },
+          },
+          descriptionInput: {
+            fi: {
+              label: 'Description',
+              placeholder: 'Description (in Finnish)',
+            },
+            en: {
+              label: 'Description',
+              placeholder: 'Description (in English)',
+            },
+          },
+          identifierInput: {
+            label: 'Identifier',
+            placeholder: 'Identifier',
+          },
+          relationTypeInput: {
+            label: 'Relation type',
+            placeholder: 'Relation type',
+          },
+          entityTypeInput: {
+            label: 'Entity type',
+            placeholder: 'Entity type',
+          },
+        },
+      },
       infrastructure: {
         addButton: 'Add Infrastructure',
-        title: 'Add infrastructure',
-        description: 'Add services and tools that are used to produce the dataset.',
+        title: 'Infrastructure',
+        description: 'Services and tools that are used to produce the dataset.',
+        noItems: 'No infrastuctures have been added.',
+      },
+      provenance: {
+        title: 'Provenance',
+        description: 'An action or event that the dataset was the subject of.',
+        noItems: 'No provenances have been added.',
+        error: {
+          nameRequired: 'Name required at least in one language.',
+          startDateMissing: 'Start date missing',
+          endDateMissing: 'End date missing',
+        },
+        modal: {
+          title: {
+            add: 'Add Provenance',
+            edit: 'Edit Provenance',
+          },
+          addButton: 'Add Provenance',
+          buttons: {
+            save: 'Add Provenance',
+            editSave: 'Apply changes',
+            cancel: 'Cancel',
+          },
+          nameInput: {
+            fi: {
+              label: 'Name',
+              placeholder: 'Name (in Finnish)',
+            },
+            en: {
+              label: 'Name',
+              placeholder: 'Name (in English)',
+            },
+          },
+          descriptionInput: {
+            fi: {
+              label: 'Description',
+              placeholder: 'Description (in Finnish)',
+            },
+            en: {
+              label: 'Description',
+              placeholder: 'Description (in English)',
+            },
+          },
+          outcomeDescriptionInput: {
+            fi: {
+              label: 'Outcome description',
+              placeholder: 'Outcome description (in Finnish)',
+            },
+            en: {
+              label: 'Outcome description',
+              placeholder: 'Outcome description (in English)',
+            },
+          },
+          periodOfTimeInput: {
+            label: 'Period of time',
+            startPlaceholder: 'Start date',
+            endPlaceholder: 'End date',
+          },
+          locationInput: {
+            label: 'Location',
+            noItems: 'No locations have been added.',
+            error: {
+              nameRequired: 'Name is required',
+              altitudeNan: 'Altitude must be a number',
+            },
+            modal: {
+              addButton: 'Add location',
+              title: {
+                add: 'Add location',
+                edit: 'Edit location',
+              },
+              buttons: {
+                addGeometry: 'Add Geometry',
+                save: 'Save',
+                editSave: 'Update',
+                cancel: 'Cancel',
+              },
+              nameInput: {
+                label: 'Name',
+                placeholder: 'Name',
+              },
+              altitudeInput: {
+                label: 'Altitude',
+                placeholder: 'The altitude of a spatial coverage (meters from WGS84 reference)',
+              },
+              addressInput: {
+                label: 'Address',
+                placeholder: 'Full address',
+              },
+              geometryInput: {
+                label: 'Geometry',
+                placeholder: 'Geometry using WKT format in WGS84 coordinate system',
+              },
+              locationInput: {
+                label: 'Location',
+                placeholder: 'Type to search available options',
+              },
+            },
+          },
+          outcomeInput: {
+            label: 'Outcome',
+            placeholder: 'Outcome',
+          },
+          usedEntityInput: {
+            label: 'Used entities',
+            noItems: 'No used entities have been added.',
+            modal: {
+              addButton: 'Add used entity',
+              buttons: {
+                save: 'Save',
+                editSave: 'Update',
+                cancel: 'Cancel',
+              },
+              title: {
+                add: 'Add used entity',
+                edit: 'Edit used entity',
+              },
+              nameInput: {
+                fi: {
+                  label: 'Name',
+                  placeholder: 'Name (in Finnish)',
+                },
+                en: {
+                  label: 'Name',
+                  placeholder: 'Name (in English)',
+                },
+              },
+              descriptionInput: {
+                fi: {
+                  label: 'Description',
+                  placeholder: 'Description (in Finnish)',
+                },
+                en: {
+                  label: 'Description',
+                  placeholder: 'Description (in English)',
+                },
+              },
+              identifierInput: {
+                label: 'Identifier',
+                placeholder: 'Identifier',
+              },
+              relationTypeInput: {
+                label: 'Relation type',
+                placeholder: 'Relation type',
+              },
+              entityTypeInput: {
+                label: 'Entity type',
+                placeholder: 'Entity type',
+              },
+            },
+          },
+          actorsInput: {
+            label: 'Was associated with',
+            addButton: 'Add existing actor',
+            createButton: 'Create new actor',
+          },
+          lifecycleInput: {
+            label: 'Lifecycle event',
+            placeholder: 'Lifecycle event',
+          },
+        },
       },
     },
     project: {
@@ -1163,19 +1499,21 @@ const english = {
       spatial: {
         title: 'Spatial coverage',
         description: 'Area covered by the dataset, e.g. places of observations.',
-        addButton: 'Add Spatial coverage',
+        noItems: 'No spatial coverage have been added.',
         error: {
           nameRequired: 'Name is required',
           altitudeNan: 'Altitude must be a number',
         },
         modal: {
+          addButton: 'Add Spatial coverage',
           title: {
             add: 'Add Spatial coverage',
-            edit: 'Edit Spatial coverage',
+            edit: 'Edit spatial coverage',
           },
           buttons: {
             addGeometry: 'Add Geometry',
             save: 'Save',
+            editSave: 'Apply changes',
             cancel: 'Cancel',
           },
           nameInput: {
@@ -1200,7 +1538,23 @@ const english = {
           },
         },
       },
-    },
+      temporal: {
+        title: 'Temporal coverage',
+        description: 'Time span that is covered by the dataset, e.g. period of observations. ',
+        addButton: 'Add temporal coverage',
+        error: {
+          startDateMissing: 'Start date is missing.',
+          endDateMissing: 'End date is missing'
+        },
+        modal: {
+          durationInput: {
+            label: 'Period of time',
+            startPlaceholder: 'Start date',
+            endPlaceholder: 'End date'
+          }
+        }
+      },
+  },
   },
   slogan: 'Research data finder',
   stc: 'Skip to content',

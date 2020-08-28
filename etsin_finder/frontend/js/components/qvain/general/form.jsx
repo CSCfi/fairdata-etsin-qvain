@@ -51,7 +51,8 @@ export const NestedLabel = styled.label`
 export const LabelLarge = styled.label`
   font-size: 1.2em;
   line-height: calc(1.5 * 1.2em);
-  font-weight: 700
+  font-weight: 700;
+  display: block;
 `
 
 export const CheckboxStyles = styled.input`
@@ -75,7 +76,7 @@ export const RadioInput = styled.input`
 export const Checkbox = props => <CheckboxStyles {...props} type="checkbox" />
 
 export const HelpField = styled.span`
-  font-weight: 200;
+  font-weight: 300;
   font-family: 'Lato', sans-serif;
 `
 
@@ -102,4 +103,13 @@ export const SelectedFilesTitle = styled.label`
   color: #4f4f4f;
   margin-bottom: 8px;
   text-transform: uppercase;
+`
+
+export const FormContainer = styled.div`
+  flex-grow: 1;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  border-radius: 4px;
+  overflow-y: auto;
+  max-height: 85%;
 `

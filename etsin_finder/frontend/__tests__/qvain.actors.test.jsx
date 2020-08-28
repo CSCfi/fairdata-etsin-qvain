@@ -19,7 +19,8 @@ import ActorModal, { ActorModalBase } from '../js/components/qvain/actors/actorM
 import OrgInfo from '../js/components/qvain/actors/orgInfo'
 import OrgForm from '../js/components/qvain/actors/orgForm'
 import { ButtonGroup, DeleteButton } from '../js/components/qvain/general/buttons'
-import QvainStore from '../js/stores/view/qvain'
+import Env from '../js/stores/domain/env'
+import QvainStoreClass from '../js/stores/view/qvain'
 import { Actor, Organization, Person, maybeReference } from '../js/stores/view/qvain.actors'
 import LocaleStore from '../js/stores/view/language'
 import organizationMockGet, {
@@ -40,8 +41,10 @@ configure({
 
 jest.mock('axios')
 
-QvainStore.setMetaxApiV2(true)
+const QvainStore = new QvainStoreClass(Env)
+Env.setMetaxApiV2(true)
 const stores = {
+  Env,
   Qvain: QvainStore,
   Locale: LocaleStore,
 }
@@ -58,7 +61,11 @@ describe('Qvain.Actors', () => {
   })
 
   it('should list all added actors', () => {
-    const addedActors = mount(<AddedActorsBase Stores={stores} />)
+    const addedActors = mount(
+      <ThemeProvider theme={etsinTheme}>
+        <AddedActorsBase Stores={stores} />
+      </ThemeProvider>
+    )
     expect(addedActors.find(ButtonGroup).length).toBe(0)
     stores.Qvain.Actors.saveActor(
       Actor({
@@ -221,11 +228,9 @@ describe('Qvain.Actors modal', () => {
     wrapper.update()
     const { actorInEdit } = stores.Qvain.Actors
     expect(actorInEdit.organizations.length).toBe(2)
-    wrapper.find(OrgInfo).find(DeleteButton).not('[disabled=true]').first()
-.simulate('click')
+    wrapper.find(OrgInfo).find(DeleteButton).not('[disabled=true]').first().simulate('click')
     expect(actorInEdit.organizations.length).toBe(1)
-    wrapper.find(OrgInfo).find(DeleteButton).not('[disabled=true]').first()
-.simulate('click')
+    wrapper.find(OrgInfo).find(DeleteButton).not('[disabled=true]').first().simulate('click')
     expect(actorInEdit.organizations.length).toBe(0)
   })
 
@@ -883,7 +888,7 @@ describe('Qvain.Actors store', () => {
     const { removeActor, actors } = stores.Qvain.Actors
     const first = actors[0]
     const second = actors[1]
-    removeActor(first)
+    await removeActor(first)
     expect(actors[0]).toBe(second)
   })
 

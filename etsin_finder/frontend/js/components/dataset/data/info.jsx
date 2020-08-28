@@ -23,9 +23,9 @@ import { TypeConcept, TypeChecksum } from '../../../utils/propTypes'
 
 const customStyles = {
   content: {
-    minWidth: '20vw',
-    maxWidth: '60vw',
-    padding: '2vw',
+    minWidth: '16rem',
+    maxWidth: '80vw',
+    padding: '1rem',
   },
 }
 
@@ -43,6 +43,7 @@ const Info = ({
   accessUrl,
   downloadUrl,
   allowDownload,
+  headerContent,
 }) => (
   <Modal
     isOpen={open}
@@ -51,27 +52,31 @@ const Info = ({
     contentLabel="Object info"
   >
     <ModalLayout>
-      <Translate className="sr-only" content="dataset.dl.info_header" />
+      {headerContent ? (
+        <Translate component="h2" content={headerContent} />
+      ) : (
+        <Translate className="sr-only" content="dataset.dl.info_header" />
+      )}
       <InfoTable>
         <tbody>
           {name && <InfoItem translation="dataset.dl.name" content={name} />}
           {id && <InfoItem translation="dataset.dl.id" content={id} />}
-          {title && <InfoItem translation="dataset.dl.title" content={title} />}
-          {type && type !== 'dir' && (
-            <InfoItem
-              translation="dataset.dl.type"
-              content={checkDataLang(type.pref_label)}
-              lang={getDataLang(type.pref_label)}
-            />
-          )}
           {size && <InfoItem translation="dataset.dl.size" content={size} />}
-          {category && <InfoItem translation="dataset.dl.category" content={category} />}
           {checksum && (checksum.checksum_value || checksum.value) && (
             <InfoItem
               translation="dataset.dl.checksum"
               content={checksum.checksum_value ? checksum.checksum_value : checksum.value}
             />
           )}
+          {type && type !== 'dir' && (
+            <InfoItem
+              translation="dataset.dl.type"
+              content={checkDataLang(type.pref_label) || type}
+              lang={getDataLang(type.pref_label)}
+            />
+          )}
+          {title && <InfoItem translation="dataset.dl.title" content={title} />}
+          {category && <InfoItem translation="dataset.dl.category" content={category} />}
         </tbody>
       </InfoTable>
     </ModalLayout>
@@ -152,6 +157,7 @@ Info.defaultProps = {
   downloadUrl: null,
   checksum: null,
   size: null,
+  headerContent: '',
 }
 
 Info.propTypes = {
@@ -168,4 +174,5 @@ Info.propTypes = {
   accessUrl: PropTypes.object,
   downloadUrl: PropTypes.object,
   checksum: TypeChecksum,
+  headerContent: PropTypes.string,
 }

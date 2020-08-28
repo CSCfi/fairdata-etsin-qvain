@@ -9,10 +9,11 @@
 
 from flask import Response, stream_with_context
 import requests
+from urllib import parse
 
 from etsin_finder.app_config import get_download_api_config
 from etsin_finder.finder import app
-from etsin_finder.utils import json_or_empty, FlaskService
+from etsin_finder.utils import FlaskService, format_url
 
 log = app.logger
 
@@ -116,14 +117,15 @@ class DownloadAPIService(FlaskService):
             str: Returns a formatted url.
 
         """
-        url = self.API_BASE_URL.format(cr_id)
+        url = format_url(self.API_BASE_URL, cr_id)
         if file_ids or dir_ids:
-            params = ''
-            for file_id in file_ids:
-                params += '&file={0}'.format(file_id) if params else 'file={0}'.format(file_id)
-            for dir_id in dir_ids:
-                params += '&dir={0}'.format(dir_id) if params else 'dir={0}'.format(dir_id)
-            url += '?' + params
+            params = {}
+            if file_ids:
+                params['file'] = file_ids
+            if dir_ids:
+                params['dir'] = dir
+            params_str = parse.urlencode(params, doseq=True, quote_via=parse.quote, safe='')
+            url += '?' + params_str
 
         log.debug('Download service URL to be requested: ' + url)
         return url

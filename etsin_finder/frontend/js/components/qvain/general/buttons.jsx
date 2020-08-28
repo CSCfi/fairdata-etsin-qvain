@@ -25,6 +25,12 @@ export const TableButton = styled.button`
   &:hover {
     background-color: #ccc;
   }
+
+  :disabled {
+    color: ${lighten(0.2, '#4f4f4f')}
+    border: solid 1px ${lighten(0.1, '#ccc')};
+    background-color: ${lighten(0.1, '#ccc')};
+  }
 `
 
 export const CancelButton = styled.button`
@@ -89,6 +95,21 @@ export const DangerButton = styled.button`
   padding: 10px 25px;
   &:hover {
     background-color: ${(props) => (props.disabled ? '#ddb6b6' : '#ff4c4c')};
+  }
+`
+
+export const DangerCancelButton = styled.button`
+  min-width: 84px;
+  max-width: 16.5em;
+  background-color: #fff;
+  border-radius: 4px;
+  border: solid 1px #4f4f4f;
+  font-size: 16px;
+  line-height: 1.31;
+  padding: 0.75rem 0.25rem;
+  color: #4f4f4f;
+  &:hover {
+    background-color: #ccc;
   }
 `
 
