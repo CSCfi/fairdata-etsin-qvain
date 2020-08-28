@@ -63,10 +63,13 @@ class OrganizationSelect extends Component {
     this.setState({ options: { ...options, organization } })
   }
 
-  // TODO: Causes double fetch when value changed from select
-  componentWillReceiveProps(nextProps) {
-    const { organization, department } = nextProps.value
-    this.fetchOptions(organization || {}, department || {})
+  componentDidUpdate(prevProps) {
+    const didOrganizationChnage = this.didValueChange('organization', prevProps)
+    const didDepartmentChnage = this.didValueChange('department', prevProps)
+    if (didOrganizationChnage || didDepartmentChnage) {
+      const { organization, department } = this.props.value
+      this.fetchOptions(didOrganizationChnage ? organization || {} : {}, didDepartmentChnage ? department || {} : {})
+    }
   }
 
   /**
@@ -99,9 +102,9 @@ class OrganizationSelect extends Component {
       department: { ...oldOptions.department },
       subDepartment: { ...oldOptions.subDepartment }
     }
-    options.department = organization.value && !organization.formIsOpen
-      ? await resolveOptions(organization.value)
-      : {}
+    if (organization.value && !organization.formIsOpen) {
+      options.department = await resolveOptions(organization.value)
+    }
     options.subDepartment = department.value && !department.formIsOpen
      ? await resolveOptions(department.value)
      : {}
@@ -158,6 +161,12 @@ class OrganizationSelect extends Component {
     const { name, value, email } = formData[field]
     const errors = await validate(organizationSelectSchema, { name, identifier: value, email })
     this.props.onChange({ ...formData, [field]: { ...formData[field], errors } })
+  }
+
+  didValueChange = (key, prevProps) => {
+    const prev = (prevProps.value && prevProps.value[key]) ? prevProps.value[key].value : undefined
+    const current = (this.props.value && this.props.value[key]) ? this.props.value[key].value : undefined
+    return prev !== current
   }
 
   render() {
