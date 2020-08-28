@@ -8,12 +8,11 @@
 """Used for performing operations related to Metax for Qvain Light"""
 
 import requests
-from flask import jsonify
 
 from etsin_finder.finder import app
 from etsin_finder.app_config import get_metax_qvain_api_config
-from etsin_finder.utils import json_or_empty, FlaskService
-import json
+from etsin_finder.utils import json_or_empty, FlaskService, format_url
+from etsin_finder.request_utils import make_request
 
 log = app.logger
 
@@ -54,6 +53,15 @@ class MetaxQvainLightAPIService(FlaskService):
         elif not self.is_testing:
             log.error("Unable to initialize MetaxAPIService due to missing config")
 
+    def _get_args(self, **kwargs):
+        """Get default args for request, allow overriding with kwargs."""
+        args = dict(headers={'Accept': 'application/json', 'Content-Type': 'application/json'},
+                    auth=(self.user, self.pw),
+                    verify=self.verify_ssl,
+                    timeout=10)
+        args.update(kwargs)
+        return args
+
     def get_directory_for_project(self, project_identifier, params=None):
         """Get directory contents for a specific project
 
@@ -64,30 +72,16 @@ class MetaxQvainLightAPIService(FlaskService):
             Metax response
 
         """
-        req_url = self.METAX_GET_DIRECTORY_FOR_PROJECT_URL.format(project_identifier)
-
-        try:
-            metax_qvain_api_response = requests.get(req_url,
-                                                    headers={'Accept': 'application/json'},
-                                                    params=params,
-                                                    auth=(self.user, self.pw),
-                                                    verify=self.verify_ssl,
-                                                    timeout=10)
-            metax_qvain_api_response.raise_for_status()
-        except Exception as e:
-            if isinstance(e, requests.HTTPError):
-                log.warning(
-                    "Failed to get data for project \"{0}\" from Metax API\nResponse status code: {1}\nResponse text: {2}".format(
-                        project_identifier,
-                        metax_qvain_api_response.status_code,
-                        json_or_empty(metax_qvain_api_response) or metax_qvain_api_response.text
-                    ))
-            else:
-                log.error("Failed to get data for project \"{0}\" from Metax API\n{1}".
-                          format(project_identifier, e))
+        req_url = format_url(self.METAX_GET_DIRECTORY_FOR_PROJECT_URL, project_identifier)
+        resp, _, success = make_request(requests.get,
+                                        req_url,
+                                        params=params,
+                                        **self._get_args()
+                                        )
+        if not success:
+            log.warning("Failed to get directory contents for project {}".format(project_identifier))
             return None
-
-        return metax_qvain_api_response.json()
+        return resp
 
     def get_directory(self, dir_identifier, params=None):
         """Get a specific directory with directory's id
@@ -100,30 +94,15 @@ class MetaxQvainLightAPIService(FlaskService):
             Metax response
 
         """
-        req_url = self.METAX_GET_DIRECTORY.format(dir_identifier)
-
-        try:
-            metax_qvain_api_response = requests.get(req_url,
-                                                    params=params,
-                                                    headers={'Accept': 'application/json'},
-                                                    auth=(self.user, self.pw),
-                                                    verify=self.verify_ssl,
-                                                    timeout=10)
-            metax_qvain_api_response.raise_for_status()
-        except Exception as e:
-            if isinstance(e, requests.HTTPError):
-                log.warning(
-                    "Failed to get data for directory \"{0}\" from Metax API\nResponse status code: {1}\nResponse text: {2}".format(
-                        dir_identifier,
-                        metax_qvain_api_response.status_code,
-                        json_or_empty(metax_qvain_api_response) or metax_qvain_api_response.text
-                    ))
-            else:
-                log.error("Failed to get data for directory \"{0}\" from Metax API\n{1}".
-                          format(dir_identifier, e))
+        req_url = format_url(self.METAX_GET_DIRECTORY, dir_identifier)
+        resp, _, success = make_request(requests.get,
+                                        req_url,
+                                        params=params,
+                                        **self._get_args())
+        if not success:
+            log.warning("Failed to get directory {}".format(dir_identifier))
             return None
-
-        return metax_qvain_api_response.json()
+        return resp
 
     def get_file(self, file_identifier):
         """Get a specific file with file's id
@@ -135,29 +114,15 @@ class MetaxQvainLightAPIService(FlaskService):
             Metax response
 
         """
-        req_url = self.METAX_GET_FILE.format(file_identifier)
-
-        try:
-            metax_qvain_api_response = requests.get(req_url,
-                                                    headers={'Accept': 'application/json'},
-                                                    auth=(self.user, self.pw),
-                                                    verify=self.verify_ssl,
-                                                    timeout=10)
-            metax_qvain_api_response.raise_for_status()
-        except Exception as e:
-            if isinstance(e, requests.HTTPError):
-                log.warning(
-                    "Failed to get data for file \"{0}\" from Metax API\nResponse status code: {1}\nResponse text: {2}".format(
-                        file_identifier,
-                        metax_qvain_api_response.status_code,
-                        json_or_empty(metax_qvain_api_response) or metax_qvain_api_response.text
-                    ))
-            else:
-                log.error("Failed to get data for file \"{0}\" from Metax API\n{1}".
-                          format(file_identifier, e))
+        req_url = format_url(self.METAX_GET_FILE, file_identifier)
+        resp, _, success = make_request(requests.get,
+                                        req_url,
+                                        **self._get_args()
+                                        )
+        if not success:
+            log.warning("Failed to get file {}".format(file_identifier))
             return None
-
-        return metax_qvain_api_response.json()
+        return resp
 
     def patch_file(self, file_identifier, data):
         """Patch metadata for a file with given data.
@@ -175,30 +140,16 @@ class MetaxQvainLightAPIService(FlaskService):
             The response from Metax.
 
         """
-        req_url = self.METAX_GET_FILE.format(file_identifier)
+        req_url = format_url(self.METAX_GET_FILE, file_identifier)
 
-        try:
-            metax_qvain_api_response = requests.patch(req_url,
-                                                      headers={'Accept': 'application/json', 'Content-Type': 'application/json'},
-                                                      data=json.dumps(data),
-                                                      auth=(self.user, self.pw),
-                                                      verify=self.verify_ssl,
-                                                      timeout=10)
-            metax_qvain_api_response.raise_for_status()
-        except Exception as e:
-            if isinstance(e, requests.HTTPError):
-                log.warning(
-                    "Failed to patch file \"{0}\" from Metax API\nResponse status code: {1}\nResponse text: {2}".format(
-                        file_identifier,
-                        metax_qvain_api_response.status_code,
-                        json_or_empty(metax_qvain_api_response) or metax_qvain_api_response.text
-                    ))
-            else:
-                log.error("Failed to patch file \"{0}\" from Metax API\n{1}".
-                          format(file_identifier, e))
-            return (json_or_empty(metax_qvain_api_response) or metax_qvain_api_response.text), metax_qvain_api_response.status_code
-
-        return metax_qvain_api_response.json()
+        resp, code, success = make_request(requests.patch,
+                                           req_url,
+                                           json=data,
+                                           **self._get_args()
+                                           )
+        if not success:
+            log.warning("Failed to patch file {}".format(file_identifier))
+        return resp, code
 
     def get_datasets_for_user(self, user_id, limit, offset, no_pagination):
         """Get datasets created by the specified user.
@@ -215,40 +166,24 @@ class MetaxQvainLightAPIService(FlaskService):
             Metax response.
 
         """
-        req_url = self.METAX_GET_DATASETS_FOR_USER.format(user_id)
+        req_url = format_url(self.METAX_GET_DATASETS_FOR_USER, user_id)
         if (no_pagination):
-            req_url = self.METAX_GET_ALL_DATASETS_FOR_USER.format(user_id)
+            req_url = format_url(self.METAX_GET_ALL_DATASETS_FOR_USER, user_id)
 
+        params = {}
         if (limit):
-            req_url = req_url + "&limit={0}".format(limit[0])
+            params['limit'] = limit
         if (offset):
-            req_url = req_url + "&offset={}".format(offset[0])
+            params['offset'] = offset
 
-        try:
-            metax_api_response = requests.get(req_url,
-                                              headers={'Accept': 'application/json'},
-                                              auth=(self.user, self.pw),
-                                              verify=self.verify_ssl,
-                                              timeout=10)
-            metax_api_response.raise_for_status()
-        except Exception as e:
-            if isinstance(e, requests.HTTPError):
-                log.warning(
-                    "Failed to get datasets for user \"{0}\" from Metax API\nResponse status code: {1}\nResponse text: {2}".format(
-                        user_id,
-                        metax_api_response.status_code,
-                        json_or_empty(metax_api_response) or metax_api_response.text
-                    ))
-            else:
-                log.error("Failed to get datasets for user \"{0}\" from Metax API \n{1}".
-                          format(user_id, e))
-            return None
-
-        if (len(metax_api_response.json()) == 0):
+        resp, _, success = make_request(requests.get,
+                                        req_url,
+                                        **self._get_args()
+                                        )
+        if not success or len(resp) == 0:
             log.info('No datasets found.')
             return 'no datasets'
-
-        return metax_api_response.json()
+        return resp
 
     def create_dataset(self, data, params=None, use_doi=False):
         """Send the data from the frontend to Metax.
@@ -261,33 +196,23 @@ class MetaxQvainLightAPIService(FlaskService):
             The response from Metax.
 
         """
+        if params is None:
+            params = {}
         req_url = self.METAX_CREATE_DATASET
         if use_doi is True:
-            req_url += '&pid_type=doi'
-        headers = {'Accept': 'application/json'}
-        try:
-            metax_api_response = requests.post(req_url,
-                                               params=params,
-                                               json=data,
-                                               headers=headers,
-                                               auth=(self.user, self.pw),
-                                               verify=self.verify_ssl,
-                                               timeout=30)
-            metax_api_response.raise_for_status()
-        except Exception as e:
-            if isinstance(e, requests.HTTPError):
-                log.warning(
-                    "Failed to create dataset.\nResponse status code: {0}\nResponse text: {1}".format(
-                        metax_api_response.status_code,
-                        json_or_empty(metax_api_response) or metax_api_response.text
-                    ))
-                return metax_api_response.json(), metax_api_response.status_code
-            else:
-                log.error("Error creating dataset\n{0}".format(e))
-            return {'Error_message': 'Error trying to send data to metax.'}, metax_api_response.status_code
-
-        log.info('Created dataset with identifier: {}'.format(json.loads(metax_api_response.text).get('identifier', 'COULD-NOT-GET-IDENTIFIER')))
-        return metax_api_response.json(), metax_api_response.status_code
+            params['pid_type'] = 'doi'
+        args = self._get_args(timeout=30)
+        resp, status, success = make_request(requests.post,
+                                             req_url,
+                                             params=params,
+                                             json=data,
+                                             **args
+                                             )
+        if success:
+            log.info('Created dataset with identifier: {}'.format(resp.get('identifier', 'COULD-NOT-GET-IDENTIFIER')))
+        else:
+            log.error('Failed to create dataset')
+        return resp, status
 
     def update_dataset(self, data, cr_id, last_modified, params):
         """Update a dataset with the data that the user has entered in Qvain-light.
@@ -302,37 +227,29 @@ class MetaxQvainLightAPIService(FlaskService):
             The response from Metax.
 
         """
-        req_url = self.METAX_PATCH_DATASET.format(cr_id)
+        req_url = format_url(self.METAX_PATCH_DATASET, cr_id)
         headers = {'Accept': 'application/json', 'If-Unmodified-Since': last_modified}
         log.debug('Request URL: {0}\nHeaders: {1}\nData: {2}'.format(req_url, headers, data))
-        try:
-            metax_api_response = requests.patch(req_url,
-                                                params=params,
-                                                json=data,
-                                                headers=headers,
-                                                auth=(self.user, self.pw),
-                                                verify=self.verify_ssl,
-                                                timeout=30)
-            metax_api_response.raise_for_status()
-        except Exception as e:
-            if isinstance(e, requests.HTTPError):
-                log.warning(
-                    "Failed to update dataset {0}.\nResponse status code: {1}\nResponse text: {2}".format(
-                        cr_id,
-                        metax_api_response.status_code,
-                        json_or_empty(metax_api_response) or metax_api_response.text
-                    ))
-                return metax_api_response.json(), metax_api_response.status_code
-            else:
-                log.error("Error updating dataset {0}\n{1}"
-                          .format(cr_id, e))
-            return 'Error trying to send data to metax.', 500
 
-        log.info('Updated dataset with identifier: {}'.format(cr_id))
-        if metax_api_response.status_code == 412:
-            return 'Resource has been modified since last publish', 412
+        args = self._get_args(
+            timeout=30,
+            headers={'Accept': 'application/json', 'If-Unmodified-Since': last_modified}
+        )
+        resp, status, success = make_request(requests.patch,
+                                             req_url,
+                                             params=params,
+                                             json=data,
+                                             **args
+                                             )
+        if status == 412:
+            return 'Resource has been modified since last publish', status
 
-        return metax_api_response.json(), metax_api_response.status_code
+        if success:
+            log.info('Updated dataset with identifier: {}'.format(cr_id))
+        else:
+            log.error('Failed to update dataset {}'.format(cr_id))
+
+        return resp, status
 
     def get_dataset(self, cr_id):
         """Get dataset.
@@ -344,27 +261,13 @@ class MetaxQvainLightAPIService(FlaskService):
             Metax response.
 
         """
-        req_url = self.METAX_GET_DATASET.format(cr_id)
-        headers = {'Accept': 'application/json'}
-        try:
-            metax_api_response = requests.get(req_url,
-                                              headers=headers,
-                                              auth=(self.user, self.pw),
-                                              verify=self.verify_ssl,
-                                              timeout=10)
-            metax_api_response.raise_for_status()
-        except Exception as e:
-            if isinstance(e, requests.HTTPError):
-                log.warning(
-                    "Failed to get dataset {0}\nResponse status code: {1}\nResponse text: {2}".format(
-                        cr_id,
-                        metax_api_response.status_code,
-                        json_or_empty(metax_api_response) or metax_api_response.text
-                    ))
-            else:
-                log.error("Error getting dataset {0}\n{1}".format(cr_id, e))
-            return {'Error_message': 'Error getting data from Metax.'}, metax_api_response.status_code
-        return json_or_empty(metax_api_response), metax_api_response.status_code
+        req_url = format_url(self.METAX_GET_DATASET, cr_id)
+        resp, status, success = make_request(requests.get,
+                                             req_url,
+                                             **self._get_args())
+        if not success:
+            log.warning('Failed to get dataset {}'.format(cr_id))
+        return resp, status
 
     def delete_dataset(self, cr_id):
         """Delete dataset from Metax.
@@ -376,28 +279,15 @@ class MetaxQvainLightAPIService(FlaskService):
             Metax response.
 
         """
-        req_url = self.METAX_DELETE_DATASET.format(cr_id)
-        headers = {'Accept': 'application/json'}
-        try:
-            metax_api_response = requests.delete(req_url,
-                                                 headers=headers,
-                                                 auth=(self.user, self.pw),
-                                                 verify=self.verify_ssl,
-                                                 timeout=10)
-            metax_api_response.raise_for_status()
-        except Exception as e:
-            if isinstance(e, requests.HTTPError):
-                log.warning(
-                    "Failed to delete dataset {0}\nResponse status code: {1}\nResponse text: {2}".format(
-                        cr_id,
-                        metax_api_response.status_code,
-                        json_or_empty(metax_api_response) or metax_api_response.text
-                    ))
-            else:
-                log.error("Error deleting dataset {0}\n{1}".format(cr_id, e))
-            return {'Error_message': 'Error trying to send data to metax.'}, metax_api_response.status_code
-        log.info('Deleted dataset with identifier: {}'.format(cr_id))
-        return json_or_empty(metax_api_response), metax_api_response.status_code
+        req_url = format_url(self.METAX_DELETE_DATASET, cr_id)
+        resp, status, success = make_request(requests.delete,
+                                             req_url,
+                                             **self._get_args())
+        if success:
+            log.info('Deleted dataset with identifier: {}'.format(cr_id))
+        else:
+            log.warning('Failed to delete dataset {}'.format(cr_id))
+        return resp, status
 
     def change_cumulative_state(self, cr_id, cumulative_state):
         """Call Metax change_cumulative_state RPC.
@@ -415,28 +305,16 @@ class MetaxQvainLightAPIService(FlaskService):
             "identifier": cr_id,
             "cumulative_state": cumulative_state
         }
-        headers = {'Accept': 'application/json'}
-        try:
-            metax_api_response = requests.post( req_url,
-                                                headers=headers,
-                                                auth=(self.user, self.pw),
-                                                verify=self.verify_ssl,
-                                                params=params,
-                                                timeout=10)
-            metax_api_response.raise_for_status()
-        except Exception as e:
-            if isinstance(e, requests.HTTPError):
-                log.warning(
-                    "Failed to change cumulative state of dataset {0}\nResponse status code: {1}\nResponse text: {2}".format(
-                        cr_id,
-                        metax_api_response.status_code,
-                        json_or_empty(metax_api_response) or metax_api_response.text
-                    ))
-            else:
-                log.error("Error changing cumulative state of dataset {0}\n{1}".format(cr_id, e))
-            return {'detail': 'Error trying to send data to metax.'}, 500
-        log.info('Changed cumulative state of dataset {} to {}'.format(cr_id, cumulative_state))
-        return (json_or_empty(metax_api_response) or metax_api_response.text), metax_api_response.status_code
+        resp, status, success = make_request(requests.post,
+                                             req_url,
+                                             params=params,
+                                             **self._get_args()
+                                             )
+        if success:
+            log.info('Changed cumulative state of dataset {} to {}'.format(cr_id, cumulative_state))
+        else:
+            log.warning('Failed to change cumulative_state of dataset {} to {}'.format(cr_id, cumulative_state))
+        return resp, status
 
     def refresh_directory_content(self, cr_identifier, dir_identifier):
         """Call Metax refresh_directory_content RPC.
@@ -454,30 +332,16 @@ class MetaxQvainLightAPIService(FlaskService):
             "cr_identifier": cr_identifier,
             "dir_identifier": dir_identifier
         }
-        headers = {'Accept': 'application/json'}
-        try:
-            metax_api_response = requests.post( req_url,
-                                                headers=headers,
-                                                auth=(self.user, self.pw),
-                                                verify=self.verify_ssl,
-                                                params=params,
-                                                timeout=10)
-            metax_api_response.raise_for_status()
-        except Exception as e:
-            if isinstance(e, requests.HTTPError):
-                log.warning(
-                    "Failed to refresh dataset {0} directory {1}\nResponse status code: {2}\nResponse text: {3}".format(
-                        cr_identifier,
-                        dir_identifier,
-                        metax_api_response.status_code,
-                        json_or_empty(metax_api_response) or metax_api_response.text
-                    ))
-                return json_or_empty(metax_api_response) or metax_api_response.text, metax_api_response.status_code
-            else:
-                log.error("Error refreshing dataset {0} directory {1}\n{2}".format(cr_identifier, dir_identifier, e))
-            return {'detail': 'Error trying to send data to metax.'}, 500
-        log.info('Refreshed dataset {} directory {}'.format(cr_identifier, dir_identifier))
-        return (json_or_empty(metax_api_response) or metax_api_response.text), metax_api_response.status_code
+        resp, status, success = make_request(requests.post,
+                                             req_url,
+                                             params=params,
+                                             **self._get_args()
+                                             )
+        if success:
+            log.info('Refreshed content of directory {} in dataset {}'.format(dir_identifier, cr_identifier))
+        else:
+            log.warning('Failed to refresh content directory {} in dataset {}'.format(dir_identifier, cr_identifier))
+        return resp, status
 
     def fix_deprecated_dataset(self, cr_identifier):
         """Call Metax fix_deprecated RPC.
@@ -493,29 +357,16 @@ class MetaxQvainLightAPIService(FlaskService):
         params = {
             "identifier": cr_identifier,
         }
-        headers = {'Accept': 'application/json'}
-        try:
-            metax_api_response = requests.post( req_url,
-                                                headers=headers,
-                                                auth=(self.user, self.pw),
-                                                verify=self.verify_ssl,
-                                                params=params,
-                                                timeout=10)
-            metax_api_response.raise_for_status()
-        except Exception as e:
-            if isinstance(e, requests.HTTPError):
-                log.warning(
-                    "Failed to fix deprecated dataset {0}\nResponse status code: {1}\nResponse text: {2}".format(
-                        cr_identifier,
-                        metax_api_response.status_code,
-                        json_or_empty(metax_api_response) or metax_api_response.text
-                    ))
-                return json_or_empty(metax_api_response) or metax_api_response.text, metax_api_response.status_code
-            else:
-                log.error("Error fixing deprecated dataset {0} \n{1}".format(cr_identifier, e))
-            return {'detail': 'Error trying to send data to metax.'}, 500
-        log.info('Fixed deprecated dataset {}'.format(cr_identifier))
-        return (json_or_empty(metax_api_response) or metax_api_response.text), metax_api_response.status_code
+        resp, status, success = make_request(requests.post,
+                                             req_url,
+                                             params=params,
+                                             **self._get_args()
+                                             )
+        if success:
+            log.info('Fixed deprecated dataset {}'.format(cr_identifier))
+        else:
+            log.warning('Failed to fix deprecated dataset {}'.format(cr_identifier))
+        return resp, status
 
 _metax_api = MetaxQvainLightAPIService(app)
 

@@ -84,7 +84,7 @@ class SubmitButtons extends Component {
     }
 
     const { Stores, handleSubmitError } = this.props
-    const { addUnsavedMultiValueFields } = Stores.Qvain
+    const { addUnsavedMultiValueFields, setChanged } = Stores.Qvain
     const { metaxApiV2 } = Stores.Env
 
     if (metaxApiV2) {
@@ -106,12 +106,11 @@ class SubmitButtons extends Component {
         axios
           .post(urls.v1.datasets(), obj)
           .then(res => {
+            setChanged(false)
             const data = res.data
-
             if (data && data.identifier) {
               this.goToDatasets(data.identifier)
             }
-
             this.success({ ...data, is_new: true })
           })
           .catch(handleSubmitError)
@@ -125,7 +124,13 @@ class SubmitButtons extends Component {
   }
 
   handleUpdateV1 = async () => {
-    const { original, addUnsavedMultiValueFields, moveSelectedToExisting, setChanged, editDataset } = this.props.Stores.Qvain
+    const {
+      original,
+      addUnsavedMultiValueFields,
+      moveSelectedToExisting,
+      setChanged,
+      editDataset,
+    } = this.props.Stores.Qvain
     const { metaxApiV2 } = this.props.Stores.Env
     const datasetUrl = urls.v1.dataset(original.identifier)
 
@@ -175,6 +180,8 @@ class SubmitButtons extends Component {
       canSelectFiles,
       canRemoveFiles,
       addUnsavedMultiValueFields,
+      cumulativeState,
+      newCumulativeState,
       Files,
     } = this.props.Stores.Qvain
     const { metaxApiV2 } = this.props.Stores.Env
@@ -220,9 +227,20 @@ class SubmitButtons extends Component {
       if (metadataActions.files.length > 0 || metadataActions.directories.length > 0) {
         values.metadataActions = metadataActions
       }
+
+      if (newCumulativeState !== undefined && newCumulativeState !== cumulativeState) {
+        values.newCumulativeState = newCumulativeState
+      }
     }
 
     return values
+  }
+
+  submit = async submitFunction => {
+    const { Stores } = this.props
+    const isProvenanceActorsOk = await Stores.Qvain.checkProvenanceActors()
+    if (!isProvenanceActorsOk) return
+    submitFunction()
   }
 
   updateFiles = async (identifier, fileActions, metadataActions) => {
@@ -234,16 +252,26 @@ class SubmitButtons extends Component {
     }
   }
 
+  updateCumulativeState = (identifier, state) =>
+    axios.post(urls.v2.rpc.changeCumulativeState(), { identifier, cumulative_state: state })
+
   patchDataset = async values => {
-    const { dataset, fileActions, metadataActions } = values
+    const { dataset, fileActions, metadataActions, newCumulativeState } = values
     const { identifier } = dataset.original
     const datasetUrl = urls.v2.dataset(identifier)
     this.setLoading(true)
     const resp = await axios.patch(datasetUrl, dataset)
     await this.updateFiles(identifier, fileActions, metadataActions)
+
+    const cumulativeStateChanged =
+      newCumulativeState !== undefined && dataset.cumulativeState !== newCumulativeState
+    if (cumulativeStateChanged) {
+      await this.updateCumulativeState(identifier, newCumulativeState)
+    }
+
     this.props.Stores.Qvain.setChanged(false)
 
-    if (fileActions || metadataActions) {
+    if (fileActions || metadataActions || cumulativeStateChanged) {
       // Dataset changed after patch, return updated dataset
       const { data } = await axios.get(datasetUrl)
       return data
@@ -539,7 +567,7 @@ class SubmitButtons extends Component {
               ref={this.updateDatasetButton}
               disabled={disabled}
               type="button"
-              onClick={this.handleUpdateV1}
+              onClick={() => this.submit(this.handleUpdateV1)}
             >
               <Translate content="qvain.edit" />
             </SubmitButton>
@@ -548,7 +576,11 @@ class SubmitButtons extends Component {
               ref={this.submitDatasetButton}
               disabled={disabled}
               type="button"
-              onClick={useDoi === true ? this.showUseDoiInformation : this.handleCreatePublishedV1}
+              onClick={
+                useDoi === true
+                  ? this.showUseDoiInformation
+                  : () => this.submit(this.handleCreatePublishedV1)
+              }
             >
               <Translate content="qvain.submit" />
             </SubmitButton>
@@ -564,14 +596,17 @@ class SubmitButtons extends Component {
     if (!original) {
       // new -> draft
       submitDraft = (
-        <SubmitButton disabled={disabled} onClick={() => this.handleCreateNewDraft()}>
+        <SubmitButton disabled={disabled} onClick={() => this.submit(this.handleCreateNewDraft)}>
           <Translate content="qvain.saveDraft" />
         </SubmitButton>
       )
 
       // new -> published
       submitPublished = (
-        <SubmitButton disabled={disabled} onClick={() => this.handleCreateNewDraftAndPublish()}>
+        <SubmitButton
+          disabled={disabled}
+          onClick={() => this.submit(this.handleCreateNewDraftAndPublish)}
+        >
           <Translate content="qvain.submit" />
         </SubmitButton>
       )
@@ -580,7 +615,7 @@ class SubmitButtons extends Component {
     if (original && original.state === 'draft') {
       // draft -> draft
       submitDraft = (
-        <SubmitButton disabled={disabled} onClick={() => this.handleUpdate()}>
+        <SubmitButton disabled={disabled} onClick={() => this.submit(this.handleUpdate)}>
           <Translate content="qvain.saveDraft" />
         </SubmitButton>
       )
@@ -589,14 +624,14 @@ class SubmitButtons extends Component {
       if (original.draft_of) {
         // merge draft of a published dataset
         submitPublished = (
-          <SubmitButton disabled={disabled} onClick={() => this.handleMergeDraft()}>
+          <SubmitButton disabled={disabled} onClick={() => this.submit(this.handleMergeDraft)}>
             <Translate content="qvain.submit" />
           </SubmitButton>
         )
       } else {
         // publish draft dataset
         submitPublished = (
-          <SubmitButton disabled={disabled} onClick={() => this.handlePublishDataset()}>
+          <SubmitButton disabled={disabled} onClick={() => this.submit(this.handlePublishDataset)}>
             <Translate content="qvain.submit" />
           </SubmitButton>
         )
@@ -606,14 +641,14 @@ class SubmitButtons extends Component {
     if (original && original.state !== 'draft') {
       // published -> draft
       submitDraft = (
-        <SubmitButton disabled={disabled} onClick={() => this.handleSaveAsDraft()}>
+        <SubmitButton disabled={disabled} onClick={() => this.submit(this.handleSaveAsDraft)}>
           <Translate content="qvain.saveDraft" />
         </SubmitButton>
       )
 
       // published -> published
       submitPublished = (
-        <SubmitButton disabled={disabled} onClick={() => this.handleUpdate()}>
+        <SubmitButton disabled={disabled} onClick={() => this.submit(this.handleUpdate)}>
           <Translate content="qvain.submit" />
         </SubmitButton>
       )

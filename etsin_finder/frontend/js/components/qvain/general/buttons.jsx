@@ -98,6 +98,21 @@ export const DangerButton = styled.button`
   }
 `
 
+export const DangerCancelButton = styled.button`
+  min-width: 84px;
+  max-width: 16.5em;
+  background-color: #fff;
+  border-radius: 4px;
+  border: solid 1px #4f4f4f;
+  font-size: 16px;
+  line-height: 1.31;
+  padding: 0.75rem 0.25rem;
+  color: #4f4f4f;
+  &:hover {
+    background-color: #ccc;
+  }
+`
+
 export const RemoveButton = styled.button`
   min-width: 84px;
   max-width: 6.5em;

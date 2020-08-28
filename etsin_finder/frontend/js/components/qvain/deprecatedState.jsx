@@ -36,7 +36,7 @@ const DeprecationInfoText = styled.div`
   border-bottom: 1px solid rgba(0,0,0,0.3);
   position: relative;
   min-width: 300px;
-  padding: 0.5rem;
+  padding: 0.25em;
 `
 
 const ButtonContainer = styled.div`
