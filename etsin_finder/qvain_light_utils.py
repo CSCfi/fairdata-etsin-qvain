@@ -83,7 +83,7 @@ def alter_role_data(actor_list=[], role="all"):
     return actors
 
 
-def organization_array_to_object(organizations):
+def _organization_array_to_object(organizations):
     converted = organizations[0]
     converted["@type"] = "Organization"
     for sub_organization in organizations[1:]:
@@ -92,15 +92,17 @@ def organization_array_to_object(organizations):
         converted = sub_organization
     return converted
 
-def funding_agency_to_object(funding_agency):
-    converted = organization_array_to_object(funding_agency["organization"])
+
+def _funding_agency_to_object(funding_agency):
+    converted = _organization_array_to_object(funding_agency["organization"])
     if funding_agency.get("contributorTypes", []):
-        converted["contributor_type"] = [contributor_type_to_metax_concept(contributor_type)
+        converted["contributor_type"] = [_contributor_type_to_metax_concept(contributor_type)
                                          for contributor_type in funding_agency.get("contributorTypes")]
     log.debug(converted)
     return converted
 
-def contributor_type_to_metax_concept(contributor_type):
+
+def _contributor_type_to_metax_concept(contributor_type):
     return {
         "identifier": contributor_type.get("identifier"),
         "pref_label": contributor_type.get("label"),
@@ -127,9 +129,9 @@ def alter_projects_to_metax(projects):
             "identifier": details.get("identifier"),
             "has_funder_identifier": details.get("fundingIdentifier"),
             "funder_type": details.get("funderType"),
-            "source_organization": [organization_array_to_object(organization)
+            "source_organization": [_organization_array_to_object(organization)
                                     for organization in project.get("organizations", [])],
-            "has_funding_agency": [funding_agency_to_object(funding_agency)
+            "has_funding_agency": [_funding_agency_to_object(funding_agency)
                                    for funding_agency in project.get("fundingAgencies", [])]
         }
         output.append(metax_project)
@@ -301,8 +303,6 @@ def data_to_metax(data, metadata_provider_org, metadata_provider_user):
             "remote_resources": remote_resources_data_to_metax(data.get("remote_resources")) if data.get("dataCatalog") == DATA_CATALOG_IDENTIFIERS.get('att') else "",
             "files": files_data_to_metax(data.get("files")) if data.get("dataCatalog") == DATA_CATALOG_IDENTIFIERS.get('ida') else "",
             "directories": directories_data_to_metax(data.get("directories")) if data.get("dataCatalog") == DATA_CATALOG_IDENTIFIERS.get('ida') else "",
-            "infrastructure": data.get("infrastructure"),
-            "spatial": data.get("spatial"),
             "is_output_of": alter_projects_to_metax(data.get("projects")),
             "relation": data.get("relation"),
             "provenance": provenances,

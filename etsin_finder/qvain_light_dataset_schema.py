@@ -14,9 +14,6 @@ class PersonValidationSchema(Schema):
     identifier = fields.Str()
 
 
-class FunderTypeSchema(Schema):
-    identifier = fields.Str()
-
 class OrganizationValidationSchema(Schema):
     """Validation schema for organization."""
 
@@ -78,17 +75,20 @@ class LicenseValidationSchema(Schema):
     name = fields.Dict()
 
 class ProjectDetailsValidationSchema(Schema):
-    """ Validation schema for project details. """
+    """Validation schema for project details."""
+
     title = fields.Dict(
         required=True,
         validate=lambda x: x.get('en') or x.get('fi')
     )
     identifier = fields.Str(required=False)
     fundingIdentifier = fields.Str(required=False)
-    funderType = fields.Nested(FunderTypeSchema, required=False)
+    funderType = fields.Str(required=False)
 
 
 class ContributorTypeValidationSchema(Schema):
+    """Validation schema for project funding agency contributor type."""
+
     identifier = fields.Str(required=True)
     label = fields.Dict(
         required=False,
@@ -102,6 +102,8 @@ class ContributorTypeValidationSchema(Schema):
 
 
 class FundingAgencyValidationSchema(Schema):
+    """Validation schema for project funding agency"""
+
     organization = fields.List(fields.Nested(OrganizationValidationSchema))
     contributorTypes = fields.List(
         fields.Nested(ContributorTypeValidationSchema)
@@ -110,6 +112,7 @@ class FundingAgencyValidationSchema(Schema):
 
 class ProjectValidationSchema(Schema):
     """Validation schema for projects."""
+
     details = fields.Nested(ProjectDetailsValidationSchema, required=True)
     organizations = fields.List(
         fields.List(
