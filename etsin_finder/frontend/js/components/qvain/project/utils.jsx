@@ -148,7 +148,8 @@ function getOption(hit, language) {
       en: hit._source.label.en || hit._source.label.und,
       fi: hit._source.label.fi || hit._source.label.und,
       und: hit._source.label.und,
-    }
+    },
+    inScheme: hit._source.scheme,
   }
 }
 

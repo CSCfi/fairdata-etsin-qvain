@@ -74,7 +74,7 @@ const projectsToMetax = projects => projects.map(project => {
     const { organization } = agency
     const contributorTypes = agency.contributorTypes.map(contributorType => {
       const { identifier, label, definition, inScheme } = contributorType
-      return { identifier: identifier.value, label, definition, inScheme }
+      return { identifier, label, definition, inScheme }
     })
     return { organization: organizationToArray(organization), contributorTypes }
   })

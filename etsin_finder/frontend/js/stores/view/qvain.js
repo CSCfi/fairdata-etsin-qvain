@@ -914,6 +914,22 @@ class Qvain {
           return Organization(uuid(), ...parsedOrganizations)
         })
         params.push(organizations)
+
+        // Funding agencies
+        if (project.has_funding_agency) {
+          const fundingAgencies = project.has_funding_agency.map(agency => {
+            const parsedOrganizations = parseOrganization(agency)
+            parsedOrganizations.reverse()
+            const organization = Organization(uuid(), ...parsedOrganizations)
+            const contributorTypes = agency.contributor_type.map(contributorType => {
+              return ContributorType(uuid(), contributorType.identifier,
+                contributorType.pref_label, contributorType.definition,
+                contributorType.in_scheme)
+            })
+            return FundingAgency(uuid(), organization, contributorTypes)
+          })
+          params.push(fundingAgencies)
+        }
         return Project(...params)
       })
     }

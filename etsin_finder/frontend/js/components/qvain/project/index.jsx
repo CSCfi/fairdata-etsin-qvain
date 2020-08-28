@@ -164,7 +164,7 @@ class Project extends Component {
     const project = toJS(this.props.Stores.Qvain.projects.find(proj => proj.id === id))
     if (!project) return
 
-    const { details, organizations } = project
+    const { details, organizations, fundingAgencies } = project
 
     details.titleEn = details.title.en
     details.titleFi = details.title.fi
@@ -174,6 +174,7 @@ class Project extends Component {
       id,
       details: { ...INITIAL_STATE.details, ...details },
       organizations: { ...INITIAL_STATE.organizations, addedOrganizations: [...organizations] },
+      fundingAgencies: { ...INITIAL_STATE.fundingAgencies, addedFundingAgencies: [...fundingAgencies] },
       projectInEdit: true,
     })
   }

@@ -93,7 +93,7 @@ class ContributorTypeValidationSchema(Schema):
         required=False,
         validate=lambda x: x.get('en') or x.get('fi')
     )
-    inSheme = fields.Str(required=False)
+    inScheme = fields.Str(required=False)
 
 
 class FundingAgencyValidationSchema(Schema):
