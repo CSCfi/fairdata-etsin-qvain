@@ -84,7 +84,7 @@ class SubmitButtons extends Component {
     }
 
     const { Stores, handleSubmitError } = this.props
-    const { addUnsavedMultiValueFields } = Stores.Qvain
+    const { addUnsavedMultiValueFields, setChanged } = Stores.Qvain
     const { metaxApiV2 } = Stores.Env
 
     if (metaxApiV2) {
@@ -106,12 +106,11 @@ class SubmitButtons extends Component {
         axios
           .post(urls.v1.datasets(), obj)
           .then(res => {
+            setChanged(false)
             const data = res.data
-
             if (data && data.identifier) {
               this.goToDatasets(data.identifier)
             }
-
             this.success({ ...data, is_new: true })
           })
           .catch(handleSubmitError)
