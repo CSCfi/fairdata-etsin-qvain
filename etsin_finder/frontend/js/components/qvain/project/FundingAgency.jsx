@@ -309,7 +309,8 @@ class ContributorTypeFormComponent extends Component {
           inputId="identifier"
           isDisabled={readonly}
           onChange={this.onSelectChange}
-          value={formData.identifier}
+          onBlur={this.onBlur}
+          value={formData.identifier === undefined ? null : formData.identifier}
           className="basic-single"
           classNamePrefix="select"
           options={options[lang]}

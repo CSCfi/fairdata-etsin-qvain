@@ -266,7 +266,7 @@ export const fileMetadataSchema = yup.object().shape({
 
 // PROJECT VALIDATION
 const organizationSelectSchema = yup.object().shape({
-  identifier: yup.string().required(translate('qvain.organizationSelect.validation.identifier')),
+  identifier: yup.string(),
   name: yup.object().shape({
     und: yup.string().required(translate('qvain.organizationSelect.validation.name')),
   }),

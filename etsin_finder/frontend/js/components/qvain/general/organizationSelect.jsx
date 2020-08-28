@@ -104,7 +104,8 @@ class OrganizationSelect extends Component {
     }
     if (organization.value && !organization.formIsOpen) {
       options.department = await resolveOptions(organization.value)
-    }
+    } else if (organization.formIsOpen) options.department = {}
+
     options.subDepartment = department.value && !department.formIsOpen
      ? await resolveOptions(department.value)
      : {}
@@ -181,7 +182,7 @@ class OrganizationSelect extends Component {
           onBlur={() => this.onBlur('organization')}
           name={name}
           inputId={inputId}
-          value={value.organization}
+          value={value.organization === undefined ? null : value.organization}
           options={options.organization[lang] || []}
           placeholder={placeholder.organization}
           creatable={creatable}
@@ -194,7 +195,7 @@ class OrganizationSelect extends Component {
               onBlur={() => this.onBlur('department')}
               name={name}
               inputId={inputId}
-              value={value.department}
+              value={value.department === undefined ? null : value.department}
               options={options.department ? options.department[lang] : []}
               placeholder={placeholder.department}
               creatable={creatable}
@@ -208,7 +209,7 @@ class OrganizationSelect extends Component {
                 onBlur={() => this.onBlur('subDepartment')}
                 name={name}
                 inputId={inputId}
-                value={value.subDepartment}
+                value={value.subDepartment === undefined ? null : value.subDepartment}
                 options={options.subDepartment ? options.subDepartment[lang] : []}
                 placeholder={placeholder.department}
                 creatable={creatable}
