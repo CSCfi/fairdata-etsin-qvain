@@ -13,6 +13,8 @@ import axios from 'axios'
 
 import access from './access'
 
+import Files from './files'
+
 const QueryFields = {
   file: [
     'file_path',
@@ -29,9 +31,14 @@ const QueryFields = {
 }
 
 class DatasetQuery {
-  @observable results = []
+  constructor(Env) {
+    this.Files = new Files()
+    this.Env = Env
+  }
 
-  @observable emailInfo = []
+  @observable results = null
+
+  @observable emailInfo = null
 
   @observable directories = []
 
@@ -39,10 +46,12 @@ class DatasetQuery {
 
   @action
   getData(id) {
+    const { metaxApiV2 } = this.Env
+    const url = metaxApiV2 ? `/api/v2/dataset/${id}` : `/api/dataset/${id}`
     return new Promise((resolve, reject) => {
       axios
-        .get(`/api/dataset/${id}`)
-        .then(res => {
+        .get(url)
+        .then(async res => {
           this.results = res.data.catalog_record
           this.emailInfo = res.data.email_info
           access.updateAccess(
@@ -50,6 +59,7 @@ class DatasetQuery {
             res.data.has_permit ? res.data.has_permit : false,
             res.data.application_state ? res.data.application_state : undefined
           )
+
           resolve(res.data)
         })
         .catch(error => {
@@ -60,6 +70,15 @@ class DatasetQuery {
           reject(error)
         })
     })
+  }
+
+  @action
+  async fetchAndStoreFiles() {
+    const { metaxApiV2 } = this.Env
+    if (metaxApiV2) {
+      return this.Files.openDataset(this.results)
+    }
+    return null
   }
 
   @action
@@ -83,4 +102,4 @@ class DatasetQuery {
   }
 }
 
-export default new DatasetQuery()
+export default DatasetQuery

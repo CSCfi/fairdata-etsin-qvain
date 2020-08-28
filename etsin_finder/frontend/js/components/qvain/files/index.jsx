@@ -10,10 +10,12 @@ import IDAFilePicker from './ida'
 import ExternalFiles from './external/externalFiles'
 import DataCatalog from './dataCatalog'
 import CumulativeState from './cumulativeState'
+import CumulativeStateV2 from './cumulativeStateV2'
 import { DATA_CATALOG_IDENTIFIER } from '../../../utils/constants'
 import Tooltip from '../general/tooltip'
 import FilesInfo from './filesInfo'
 import MetadataModal from './metadataModal'
+import ClearMetadataModal from './metadataModal/clearMetadataModal'
 import SelectedItems from './ida/selectedItems'
 import LegacyFilePicker from './legacy/idaFilePicker'
 import LegacySelectedFiles from './legacy/selectedFiles'
@@ -28,7 +30,8 @@ class Files extends Component {
   }
 
   render() {
-    const { dataCatalog, isPas, metaxApiV2 } = this.props.Stores.Qvain
+    const { dataCatalog, isPas } = this.props.Stores.Qvain
+    const { metaxApiV2 } = this.props.Stores.Env
     let data = null
 
     const SelectedItemsComponent = metaxApiV2 ? SelectedItems : LegacySelectedFiles
@@ -45,7 +48,7 @@ class Files extends Component {
     } else if (dataCatalog === DATA_CATALOG_IDENTIFIER.IDA) {
       data = (
         <>
-          <CumulativeState />
+          { metaxApiV2 ? <CumulativeStateV2 /> : <CumulativeState /> }
           <ContainerSubsectionBottom>
             <FilePickerComponent />
           </ContainerSubsectionBottom>
@@ -85,6 +88,7 @@ class Files extends Component {
         <DataCatalog />
         {data}
         <MetadataModal />
+        <ClearMetadataModal />
       </ContainerLight>
     )
   }

@@ -51,10 +51,16 @@ const filesToMetax = (selectedFiles, existingFiles) => {
   return parsedFileData
 }
 
-const handleSubmitToBackend = (values) => {
+const handleSubmitToBackend = (Env, values) => {
   const actors = values.Actors.toBackend()
 
   const spatial = values.Spatials.toBackend()
+
+  const temporal = values.Temporals.toBackend()
+
+  const relation = values.RelatedResources.toBackend()
+
+  const provenance = values.Provenances.toBackend()
 
   const obj = {
     title: values.title,
@@ -71,21 +77,23 @@ const handleSubmitToBackend = (values) => {
       ? values.restrictionGrounds.identifier
       : undefined,
     embargoDate: values.embargoExpDate,
-    license: values.license ? values.license : undefined,
-    otherLicenseUrl: values.otherLicenseUrl,
+    license: values.licenseArray ? values.licenseArray : undefined,
     // Send no values if empty instead of empty values.
     remote_resources: values.externalResources.length > 0 ? values.externalResources : [],
     dataCatalog: values.dataCatalog,
     cumulativeState: values.cumulativeState,
     useDoi: values.useDoi,
-    spatial
+    spatial,
+    temporal,
+    relation,
+    provenance
   }
 
   if (values.original) {
     obj.original = values.original
   }
 
-  if (!values.metaxApiV2) {
+  if (!Env.metaxApiV2) {
     obj.files = filesToMetax(values.selectedFiles, values.existingFiles)
     obj.directories = directoriesToMetax(values.selectedDirectories, values.existingDirectories)
   }
