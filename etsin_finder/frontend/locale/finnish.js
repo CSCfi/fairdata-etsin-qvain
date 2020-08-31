@@ -439,6 +439,23 @@ const finnish = {
     select: {
       placeholder: 'Valitse vaihtoehto',
     },
+    organizationSelect: {
+      label: {
+        addNew: 'Lisää organisaatio käsin',
+        name: 'Organisaation nimi',
+        email: 'Organisaation sähköposti',
+        identifier: 'Organisaation yksilöivä tunniste',
+      },
+      placeholder: {
+        name: 'Nimi',
+        email: 'Sähköposti',
+        identifier: 'esim. http://orcid.org',
+      },
+      validation: {
+        name: 'Nimi täytyy täyttää',
+        email: 'Sähköpostiosoite ei kelpaa',
+      }
+    },
     datasets: {
       title: 'Aineistot',
       search: {
@@ -617,6 +634,92 @@ const finnish = {
           help: 'Anna osoite lisenssille.',
         },
         addButton: 'Lisää lisenssi',
+      },
+    },
+    project: {
+      title: 'Projekti',
+      description: 'Projekti jonka tuotoksena aineisto on luotu',
+      addButton: 'Lisää',
+      editButton: 'Muokkaa',
+      tooltipContent: {
+        title: 'Projekti',
+        paragraph: 'Projekti jonka tuotoksena aineisto on luotu',
+      },
+      project: {
+        title: 'Lisää projekti',
+        addButton: 'Lisää',
+        description: 'Projekti jonka tuotoksena aineisto on luotu',
+      },
+      organization: {
+        title: 'Organisaatio *',
+        description: 'Organisaatio(t), jotka ovat olleet osallisena projektissa'
+      },
+      fundingAgency: {
+        title: 'Funding agency'
+      },
+      inputs: {
+        title: {
+          label: 'Lisää projektin otsikko',
+          description: 'Projektin nimi, lisää vähintään yksi kieli.',
+          validation: {
+            required: 'Lisää vähintään yksi kieli',
+            string: 'Nimen täytyy olla merkkijono.',
+          },
+        },
+        titleEn: {
+          placeholder: 'Nimi (engalnti)',
+        },
+        titleFi: {
+          placeholder: 'Nimi (Suomi)',
+        },
+        identifier: {
+          label: 'Yksilöivä tunniste',
+          description: 'Recommended best practice is to identify the resource by means of a string conforming to a formal identification system. An unambiguous reference to the resource within a given context.',
+          placeholder: 'Tunniste',
+        },
+        fundingIdentifier: {
+          label: 'Project funding identifier',
+          description: 'Unique identifier for the project that is being used by the project funder',
+          placeholder: 'Add project funding identifier',
+        },
+        funderType: {
+          label: 'Funder type',
+          placeholder: 'Select funder type',
+          addButton: 'Add funder type',
+          noOptions: 'Funder type not found',
+        },
+        organization: {
+          placeholder: {
+            organization: 'Valitse organisaatio',
+            department: 'Valitse osasto',
+          },
+          addButton: 'Lisää organisaatio',
+          editButton: 'Muokkaa organisaatiota',
+          validation: 'At least one producer organization is required'
+        },
+        fundingAgency: {
+          contributorType: {
+            title: 'Contributor type',
+            description: 'Contributor type of the Organization. Based on the subset of the DataCite reference data',
+            organization: {
+              label: 'Select organization',
+            },
+            identifier: {
+              label: 'Identifier',
+              validation: 'Identifier is required',
+            },
+            definition: {
+              label: 'Definition',
+              description: 'A statement or formal explanation of the meaning of a concept.',
+              placeholderEn: 'Definition (English)',
+              placeholderFi: 'Definition (Finnish)',
+            },
+            addButton: 'Add contributor type',
+            editButton: 'Edit contributor type',
+          },
+          addButton: 'Add agency',
+          editButton: 'Edit agency',
+        },
       },
     },
     actors: {

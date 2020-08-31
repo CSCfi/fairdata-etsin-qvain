@@ -454,7 +454,6 @@ const english = {
       validation: {
         name: 'A name is required',
         email: 'A valid email address is required',
-        identifier: 'An identifier is required',
       }
     },
     datasets: {
@@ -1447,33 +1446,20 @@ const english = {
         },
         fundingAgency: {
           contributorType: {
-            title: 'Contributor type',
+            title: 'Contributor',
             description: 'Contributor type of the Organization. Based on the subset of the DataCite reference data',
             organization: {
               label: 'Select organization',
             },
             identifier: {
-              label: 'Identifier',
-              description: 'This is the IRI identifier for the concept ',
-              placeholder: 'IRI identifier',
+              label: 'Contributor type',
               validation: 'Identifier is required',
-            },
-            label: {
-              label: 'Preferred label',
-              description: 'The preferred lexical label for a resource, in a given language. A resource has no more than one value of skos:prefLabel per language tag, and no more than one value of skos:prefLabel without language tag. The range of skos:prefLabel is the class of RDF plain literals. skos:prefLabel, skos:altLabel and skos:hiddenLabel are pairwise disjoint properties.',
-              placeholderEn: 'Preferred label (English)',
-              placeholderFi: 'Preferred label (Finnish)',
             },
             definition: {
               label: 'Definition',
               description: 'A statement or formal explanation of the meaning of a concept.',
               placeholderEn: 'Definition (English)',
               placeholderFi: 'Definition (Finnish)',
-            },
-            inScheme: {
-              label: 'In scheme',
-              description: 'Relates a resource (for example a concept) to a concept scheme in which it is included.',
-              placeholder: 'In scheme',
             },
             addButton: 'Add contributor type',
             editButton: 'Edit contributor type',

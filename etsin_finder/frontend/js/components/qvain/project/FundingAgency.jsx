@@ -314,7 +314,6 @@ class ContributorTypeFormComponent extends Component {
           className="basic-single"
           classNamePrefix="select"
           options={options[lang]}
-          attributes={{ placeholder: 'qvain.project.inputs.fundingAgency.contributorType.identifier.placeholder' }}
         />
         <ErrorMessages errors={formData.errors.identifier} />
         <LabelLarge htmlFor="definitionEn">
