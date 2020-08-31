@@ -93,7 +93,7 @@ export const SubHeaderText = styled.div`
   line-height: 0.81;
   letter-spacing: normal;
   color: #ffffff;
-  margin-left: 47px;
+  padding: .5rem 1rem .5rem 2rem
 `
 
 export const FileContainer = styled(Container)`

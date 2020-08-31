@@ -44,7 +44,7 @@ export default class Breadcrumbs extends Component {
             <TransparentButton onClick={() => this.props.changeFolder()}>
               <Translate className="sr-only" content="dataset.dl.file_types.directory" />
               <Translate className="sr-only" content="dataset.dl.root" />
-              <FontAwesomeIcon icon={faHome} />
+              <FontAwesomeIcon icon={faHome} title="Home" />
             </TransparentButton>
           </Path>
           {

@@ -17,6 +17,7 @@ import Translate from 'react-translate-component'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 
+import { darken } from 'polished'
 import checkColor from '../../styles/styledUtils'
 import { TransparentButton } from './button'
 
@@ -102,6 +103,12 @@ const Bar = styled.div`
   position: ${p => p.position};
   top: 0;
   left: 0;
+  a {
+    color: #00284f;
+    &:hover {
+      color: ${darken(0.1, '#00284f')};
+    }
+  }
   display: flex;
   margin-bottom: 0.5rem;
 `
