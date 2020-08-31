@@ -72,7 +72,6 @@ export const RadioInput = styled.input`
   padding: 0;
 `
 
-
 export const Checkbox = props => <CheckboxStyles {...props} type="checkbox" />
 
 export const HelpField = styled.span`

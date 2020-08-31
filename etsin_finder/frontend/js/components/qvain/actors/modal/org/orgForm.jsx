@@ -11,6 +11,12 @@ import {
   organizationIdentifierSchema,
 } from '../../../utils/formValidation'
 
+const schemas = {
+  name: organizationNameSchema,
+  email: organizationEmailSchema,
+  identifier: organizationIdentifierSchema,
+}
+
 export class OrgFormBase extends Component {
   static propTypes = {
     Stores: PropTypes.object.isRequired,
@@ -31,32 +37,15 @@ export class OrgFormBase extends Component {
     })
   }
 
-  handleOnBlur = (validator, value, errorSet) => {
+  handleOnBlur = (propTag, lang = undefined) => {
+    const organization = this.props.organization
+    const value = lang ? organization[propTag][lang] : organization[propTag]
+    const validator = schemas[propTag]
+    const onError = err => this.setState({ [`${propTag}Error`]: err })
     validator
       .validate(value)
-      .then(() => errorSet(undefined))
-      .catch(err => errorSet(err.errors))
-  }
-
-  handleOnNameBlur = lang => {
-    const organization = this.props.organization
-    this.handleOnBlur(organizationNameSchema, organization.name[lang], value =>
-      this.setState({ nameError: value })
-    )
-  }
-
-  handleOnEmailBlur = () => {
-    const organization = this.props.organization
-    this.handleOnBlur(organizationEmailSchema, organization.email, value =>
-      this.setState({ emailError: value })
-    )
-  }
-
-  handleOnIdentifierBlur = () => {
-    const organization = this.props.organization
-    this.handleOnBlur(organizationIdentifierSchema, organization.identifier, value =>
-      this.setState({ identifierError: value })
-    )
+      .then(() => onError(undefined))
+      .catch(err => onError(err.errors))
   }
 
   handleUpdateName = (name, lang) => {
@@ -118,7 +107,7 @@ export class OrgFormBase extends Component {
           disabled={readonly}
           value={organization.name[lang] || ''}
           onChange={event => this.handleUpdateName(event.target.value, lang)}
-          onBlur={() => this.handleOnNameBlur(lang)}
+          onBlur={() => this.handleOnBlur('name', lang)}
         />
         {nameError && <ActorError>{nameError}</ActorError>}
 
@@ -133,7 +122,7 @@ export class OrgFormBase extends Component {
           disabled={readonly}
           value={organization.email}
           onChange={event => this.handleUpdateEmail(event.target.value)}
-          onBlur={() => this.handleOnEmailBlur()}
+          onBlur={() => this.handleOnBlur('email')}
         />
         {emailError && <ActorError>{emailError}</ActorError>}
 
@@ -148,7 +137,7 @@ export class OrgFormBase extends Component {
           attributes={{ placeholder: 'qvain.actors.add.identifier.placeholder' }}
           onChange={event => this.handleUpdateIdentifier(event.target.value)}
           value={organization.identifier}
-          onBlur={this.handleOnIdentifierBlur}
+          onBlur={() => this.handleOnBlur('identifier')}
         />
         {identifierError && <ActorError>{identifierError}</ActorError>}
       </FormContainer>

@@ -4,7 +4,7 @@ import ActorModal from './modal'
 import { Section } from '../general/section'
 import ActorsField from './field'
 
-const ActorsBase = () => {
+export const ActorsBase = () => {
   const translations = {
     title: 'qvain.actors.title',
     tooltip: 'qvain.actors.infoTitle',

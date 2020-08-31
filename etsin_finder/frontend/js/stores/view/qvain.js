@@ -187,22 +187,20 @@ class Qvain {
   }
 
   @action
+  setLangValue = (prop, value, lang) => {
+    this[prop][lang] = value
+    this.changed = true
+  }
+
+  @action
   setTitle = (title, lang) => {
-    if (lang === 'ENGLISH') {
-      this.title.en = title
-    } else if (lang === 'FINNISH') {
-      this.title.fi = title
-    }
+    this.title[lang] = title
     this.changed = true
   }
 
   @action
   setDescription = (description, lang) => {
-    if (lang === 'ENGLISH') {
-      this.description.en = description
-    } else if (lang === 'FINNISH') {
-      this.description.fi = description
-    }
+    this.description[lang] = description
     this.changed = true
   }
 

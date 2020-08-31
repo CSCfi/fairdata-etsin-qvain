@@ -16,7 +16,7 @@ const RoleCheckbox = ({ Stores, role, help, disabled }) => {
     updateActor(actor, { roles })
   }
 
-  const id = `role${role}`
+  const id = `role-${role}`
   const helpField = help && <HelpField>{help}</HelpField>
   const label = `qvain.actors.add.checkbox.${role}`
   return (

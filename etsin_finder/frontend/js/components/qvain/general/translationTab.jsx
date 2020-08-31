@@ -1,41 +1,35 @@
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
 
-class TranslationTab extends Component {
-  translations = {
+const TranslationTab = ({ language, setLanguage, children }) => {
+  const translations = {
     langButtonFi: 'qvain.general.langFi',
-    langButtonEn: 'qvain.general.langEn'
+    langButtonEn: 'qvain.general.langEn',
   }
 
-  static propTypes = {
-    language: PropTypes.string.isRequired,
-    setLanguage: PropTypes.func.isRequired,
-    children: PropTypes.oneOfType([
-      PropTypes.object,
-      PropTypes.array
-    ]).isRequired
-  }
+  return (
+    <React.Fragment>
+      <LangButtonContainer>
+        <LangButton type="button" active={language === 'fi'} onClick={() => setLanguage('fi')}>
+          <Translate content={translations.langButtonFi} />
+        </LangButton>
+        <EmptyBlock width="2%" />
+        <LangButton type="button" active={language === 'en'} onClick={() => setLanguage('en')}>
+          <Translate content={translations.langButtonEn} />
+        </LangButton>
+        <EmptyBlock width="48%" />
+      </LangButtonContainer>
+      <ContentCard>{children}</ContentCard>
+    </React.Fragment>
+  )
+}
 
-  render() {
-    const { language, setLanguage, children } = this.props;
-    return (
-      <React.Fragment>
-        <LangButtonContainer>
-          <LangButton type="button" active={language === 'fi'} onClick={() => setLanguage('fi')}>
-            <Translate content={this.translations.langButtonFi} />
-          </LangButton>
-          <EmptyBlock width="2%" />
-          <LangButton type="button" active={language === 'en'} onClick={() => setLanguage('en')}>
-            <Translate content={this.translations.langButtonEn} />
-          </LangButton>
-          <EmptyBlock width="48%" />
-        </LangButtonContainer>
-        <ContentCard>{children}</ContentCard>
-      </React.Fragment>
-    )
-  }
+TranslationTab.propTypes = {
+  language: PropTypes.string.isRequired,
+  setLanguage: PropTypes.func.isRequired,
+  children: PropTypes.oneOfType([PropTypes.object, PropTypes.array]).isRequired,
 }
 
 const ContentCard = styled.div`

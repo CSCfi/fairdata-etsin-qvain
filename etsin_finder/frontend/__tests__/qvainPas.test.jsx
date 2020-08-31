@@ -7,7 +7,7 @@ import axios from 'axios'
 import '../locale/translations'
 
 import etsinTheme from '../js/styles/theme'
-import PasState from '../js/components/qvain/pasState'
+import PasState from '../js/components/qvain/editor/pasState'
 import DescriptionField from '../js/components/qvain/description/descriptionField'
 import OtherIdentifierField from '../js/components/qvain/description/otherIdentifierField'
 import FieldOfScienceField from '../js/components/qvain/description/fieldOfScienceField'
@@ -16,11 +16,7 @@ import License from '../js/components/qvain/licenses/licenses'
 import AccessType from '../js/components/qvain/licenses/accessType'
 import FileForm from '../js/components/qvain/files/ida/forms/fileForm'
 import DirectoryForm from '../js/components/qvain/files/ida/forms/directoryForm'
-import {
-  File,
-  Directory,
-  Project
-} from '../js/stores/view/common.files.items'
+import { File, Directory, Project } from '../js/stores/view/common.files.items'
 import QvainStoreClass, {
   AccessType as AccessTypeConstructor,
   License as LicenseConstructor,

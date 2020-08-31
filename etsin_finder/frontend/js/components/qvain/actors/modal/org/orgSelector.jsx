@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { inject, observer } from 'mobx-react'
 import styled from 'styled-components'
@@ -42,7 +42,7 @@ const getDatasetOrgOptionsWithLang = (orgArrays, lang) => {
   return options
 }
 
-const getOptionsWithLang = (Actors, datasetOptions, referenceOptions, lang) => [
+const getOptionsWithLang = (datasetOptions, referenceOptions, lang) => [
   {
     label: translate('qvain.actors.add.organization.options.create', { locale: lang }),
     value: 'create',
@@ -58,43 +58,93 @@ const getOptionsWithLang = (Actors, datasetOptions, referenceOptions, lang) => [
   },
 ]
 
-export class OrgSelectorBase extends Component {
-  static propTypes = {
-    Stores: PropTypes.object.isRequired,
-    organization: PropTypes.object,
-    organizations: PropTypes.array.isRequired,
-    datasetOrganizations: PropTypes.array,
-    referenceOrganizations: PropTypes.array,
-    setOrganization: PropTypes.func.isRequired,
-    setMultipleOrganizations: PropTypes.func.isRequired,
-    createOrganization: PropTypes.func.isRequired,
-    removeOrganization: PropTypes.func.isRequired,
-    toggleEdit: PropTypes.func.isRequired,
-    level: PropTypes.number.isRequired,
+const propTypes = {
+  Stores: PropTypes.object.isRequired,
+  organization: PropTypes.object,
+  organizations: PropTypes.array.isRequired,
+  datasetOrganizations: PropTypes.array,
+  referenceOrganizations: PropTypes.array,
+  setOrganization: PropTypes.func.isRequired,
+  setMultipleOrganizations: PropTypes.func.isRequired,
+  createOrganization: PropTypes.func.isRequired,
+  removeOrganization: PropTypes.func.isRequired,
+  toggleEdit: PropTypes.func.isRequired,
+  level: PropTypes.number.isRequired,
+}
+
+const defaultProps = {
+  organization: null,
+  referenceOrganizations: null,
+  datasetOrganizations: null,
+}
+
+export const OrgSelectorBase = ({
+  Stores,
+  organization,
+  organizations,
+  datasetOrganizations,
+  referenceOrganizations,
+  setOrganization,
+  setMultipleOrganizations,
+  createOrganization,
+  removeOrganization,
+  toggleEdit,
+  level,
+}) => {
+  const { readonly } = Stores.Qvain
+  const { lang } = Stores.Locale
+
+  const isReference = organization && organization.isReference
+  const isEditable = organization && organization.isReference === false && !isNew
+  const isNew = level >= organizations.length
+  const hideDropdown = !isNew
+
+  let referenceOptions = []
+  let datasetOptions = []
+
+  let placeholderKey = 'loading'
+  if (referenceOrganizations) {
+    referenceOptions = getOrgOptionsWithLang(referenceOrganizations, lang)
+    placeholderKey = level === 0 ? 'placeholder' : 'placeholderChild'
   }
 
-  static defaultProps = {
-    organization: null,
-    referenceOrganizations: null,
-    datasetOrganizations: null,
+  let selectedOption =
+    (identifier && referenceOptions.find(opt => opt.value.identifier === identifier)) || null
+  if (organization && !selectedOption) {
+    selectedOption = { value: '', label: getOrganizationName(organization, lang) }
   }
 
-  getComponents(selectedOption) {
-    const { organization, organizations } = this.props
-    const isReference = organization && organization.isReference
-    const isEditable = organization && organization.isReference === false && !isNew
-    const isNew = this.props.level >= organizations.length
+  if (datasetOrganizations) {
+    datasetOptions = getDatasetOrgOptionsWithLang(datasetOrganizations, lang)
+  }
 
-    const hideDropdown = !isNew
+  const options = getOptionsWithLang(datasetOptions, referenceOptions, lang)
+
+  const identifier = (organization || {}).identifier
+
+  const isLast = level === organizations.length - 1
+  const deleteButtonStyle = isLast ? null : { visibility: 'hidden' }
+
+  const styles = {
+    option: style => ({
+      ...style,
+      display: 'flex',
+      alignItems: 'center',
+    }),
+  }
+
+  const getComponents = () => {
     const components = {
       Placeholder: ValuePlaceholder,
       SingleValue: Value,
       ValueContainer,
     }
+
     if (hideDropdown) {
       components.Input = () => null
       components.IndicatorsContainer = () => null
     }
+
     if (!isReference && selectedOption && selectedOption.label === '') {
       components.SingleValue = ValuePlaceholder
       selectedOption.label = translate('qvain.actors.add.organization.label')
@@ -107,7 +157,7 @@ export class OrgSelectorBase extends Component {
         <selectComponents.Control
           {...props}
           style={{ cursor: 'pointer', alignItems: 'stretch' }}
-          innerProps={{ onMouseDown: this.props.toggleEdit, style: { cursor: 'pointer' } }}
+          innerProps={{ onMouseDown: toggleEdit, style: { cursor: 'pointer' } }}
         />
       )
       components.IndicatorsContainer = () => <EditIcon />
@@ -115,105 +165,60 @@ export class OrgSelectorBase extends Component {
     return components
   }
 
-  handleSelection = selection => {
-    if (selection.type === 'create') {
-      this.props.createOrganization('')
-    } else if (selection.type === 'organization') {
-      this.props.setOrganization(selection.value)
-    } else if (selection.type === 'multiple') {
-      this.props.setMultipleOrganizations(selection.value)
+  const handleSelection = selection => {
+    switch (selection.type) {
+      case 'create':
+        return createOrganization('')
+      case 'organization':
+        return setOrganization(selection.value)
+      case 'multiple':
+        return setMultipleOrganizations(selection.value)
+      default:
+        return null
     }
   }
 
-  render() {
-    const { readonly } = this.props.Stores.Qvain
-    const { lang } = this.props.Stores.Locale
-    const {
-      organization,
-      organizations,
-      level,
-      datasetOrganizations,
-      referenceOrganizations,
-    } = this.props
-
-    let referenceOptions = []
-    let datasetOptions = []
-
-    let placeholderKey = 'loading'
-    if (referenceOrganizations) {
-      referenceOptions = getOrgOptionsWithLang(referenceOrganizations, lang)
-      placeholderKey = level === 0 ? 'placeholder' : 'placeholderChild'
-    }
-
-    if (datasetOrganizations) {
-      datasetOptions = getDatasetOrgOptionsWithLang(datasetOrganizations, lang)
-    }
-    const options = getOptionsWithLang(
-      this.props.Stores.Qvain.Actors,
-      datasetOptions,
-      referenceOptions,
-      lang
-    )
-
-    const identifier = (organization || {}).identifier
-    let selectedOption =
-      (identifier && referenceOptions.find(opt => opt.value.identifier === identifier)) || null
-    if (organization && !selectedOption) {
-      selectedOption = { value: '', label: getOrganizationName(organization, lang) }
-    }
-
-    const isLast = this.props.level === organizations.length - 1
-    const deleteButtonStyle = isLast ? null : { visibility: 'hidden' }
-
-    const styles = {
-      option: style => ({
-        ...style,
-        display: 'flex',
-        alignItems: 'center',
-      }),
-    }
-    const organizationError = null
-    return (
-      <>
-        <OrganizationLevel>
-          <Translate
-            component={SelectOrg}
-            name="orgField"
-            isDisabled={readonly}
-            options={options}
-            styles={styles}
-            inputId="orgField"
-            components={this.getComponents(selectedOption)}
-            formatCreateLabel={inputValue => (
-              <>
-                <Translate content="qvain.actors.add.newOrganization.label" />
-                <span>: &rsquo;{inputValue}&rsquo;</span>
-                <EditIcon color="gray" />
-              </>
-            )}
-            menuPlacement="auto"
-            menuPosition="fixed"
-            menuShouldScrollIntoView={false}
-            attributes={{ placeholder: `qvain.actors.add.organization.${placeholderKey}` }}
-            onCreateOption={this.props.createOrganization}
-            onChange={(selection, s) => this.handleSelection(selection, s)}
-            value={selectedOption}
-            filterOption={createFilter({ ignoreAccents: false })}
-          />
-
-          {!readonly && (
-            <DeleteButton
-              type="button"
-              disabled={!isLast}
-              style={deleteButtonStyle}
-              onClick={this.props.removeOrganization}
-            />
+  const organizationError = null
+  return (
+    <>
+      <OrganizationLevel>
+        <Translate
+          component={SelectOrg}
+          name="orgField"
+          isDisabled={readonly}
+          options={options}
+          styles={styles}
+          inputId="orgField"
+          components={getComponents()}
+          formatCreateLabel={inputValue => (
+            <>
+              <Translate content="qvain.actors.add.newOrganization.label" />
+              <span>: &rsquo;{inputValue}&rsquo;</span>
+              <EditIcon color="gray" />
+            </>
           )}
-        </OrganizationLevel>
-        {organizationError && <ValidationError>{organizationError}</ValidationError>}
-      </>
-    )
-  }
+          menuPlacement="auto"
+          menuPosition="fixed"
+          menuShouldScrollIntoView={false}
+          attributes={{ placeholder: `qvain.actors.add.organization.${placeholderKey}` }}
+          onCreateOption={createOrganization}
+          onChange={(selection, s) => handleSelection(selection, s)}
+          value={selectedOption}
+          filterOption={createFilter({ ignoreAccents: false })}
+        />
+
+        {!readonly && (
+          <DeleteButton
+            type="button"
+            disabled={!isLast}
+            style={deleteButtonStyle}
+            onClick={removeOrganization}
+          />
+        )}
+      </OrganizationLevel>
+      {organizationError && <ValidationError>{organizationError}</ValidationError>}
+    </>
+  )
 }
 
 const EditIcon = styled(FontAwesomeIcon).attrs(() => ({
@@ -298,5 +303,8 @@ const SelectOrg = styled(CreatableSelect)`
   flex-grow: 1;
   margin-bottom: 0.5rem;
 `
+
+OrgSelectorBase.propTypes = propTypes
+OrgSelectorBase.defaultProps = defaultProps
 
 export default inject('Stores')(observer(OrgSelectorBase))

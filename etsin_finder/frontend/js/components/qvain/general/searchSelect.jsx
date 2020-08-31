@@ -16,13 +16,13 @@ class Select extends Component {
     model: PropTypes.func.isRequired,
     name: PropTypes.string.isRequired,
     inModal: PropTypes.bool,
-    placeholder: PropTypes.string
+    placeholder: PropTypes.string,
   }
 
   static defaultProps = {
     getter: undefined,
     inModal: false,
-    placeholder: ''
+    placeholder: '',
   }
 
   state = {
@@ -31,15 +31,7 @@ class Select extends Component {
 
   render() {
     const { readonly } = this.props.Stores.Qvain
-    const {
-      getter,
-      setter,
-      name,
-      model,
-      inModal,
-      metaxIdentifier,
-      placeholder
-    } = this.props
+    const { getter, setter, name, model, inModal, metaxIdentifier, placeholder } = this.props
     const { options } = this.state
     const { lang } = this.props.Stores.Locale
 
@@ -55,13 +47,12 @@ class Select extends Component {
       onChange: onChange(options, lang, setter, model),
       cacheOptions: true,
       defaultOptions: [],
-      loadOptions: (inputValue =>
+      loadOptions: inputValue =>
         new Promise(async res => {
           const opts = await getOptions(metaxIdentifier, inputValue)
           this.setState({ options: opts })
           res(opts[lang])
-        })
-      ),
+        }),
     }
 
     return inModal ? (
@@ -71,7 +62,9 @@ class Select extends Component {
         menuPosition="fixed"
         menuShouldScrollIntoView={false}
       />
-    ) : <Translate {...props} />
+    ) : (
+      <Translate {...props} />
+    )
   }
 }
 

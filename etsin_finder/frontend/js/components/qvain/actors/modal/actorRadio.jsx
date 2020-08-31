@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import styled from 'styled-components'
+import { observer, inject } from 'mobx-react'
 import { RadioInput, NestedLabel } from '../../general/form'
 
 const propTypes = {
@@ -9,13 +10,15 @@ const propTypes = {
   role: PropTypes.string.isRequired,
 }
 
-function ActorRadio({
+const ActorRadio = ({
   Stores: {
-    Qvain: { readonly },
-    Actors: { actorInEdit: actor, updateActor },
+    Qvain: {
+      readonly,
+      Actors: { actorInEdit: actor, updateActor },
+    },
   },
   role,
-}) {
+}) => {
   const checked = role === actor.type
 
   const handleChangeEntity = type => () => {
@@ -26,7 +29,7 @@ function ActorRadio({
     <ListItem>
       <NestedLabel>
         <RadioInput
-          id={`entity${role}`}
+          id={`entity-${role}`}
           name="entityType"
           type="radio"
           disabled={readonly}
@@ -51,4 +54,4 @@ export const ListItem = styled.li`
 
 ActorRadio.propTypes = propTypes
 
-export default ActorRadio
+export default inject('Stores')(observer(ActorRadio))

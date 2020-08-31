@@ -1,6 +1,6 @@
-import styled from 'styled-components';
+import styled from 'styled-components'
 
-import checkColor from '../../../styles/styledUtils';
+import checkColor from '../../../styles/styledUtils'
 
 const Label = styled.div`
   padding: 0.3em 0.6em 0.4em;

@@ -17,14 +17,20 @@ import Button from '../../general/button'
 import Card from '../general/card'
 import { LabelLarge } from '../general/form'
 
-
 const LanguageField = ({ Stores }) => {
   const { lang } = Stores.Locale
-  const { readonly, datasetLanguage, datasetLanguageArray, setDatasetLanguage, removeDatasetLanguage, addDatasetLanguage } = Stores.Qvain
+  const {
+    readonly,
+    datasetLanguage,
+    datasetLanguageArray,
+    setDatasetLanguage,
+    removeDatasetLanguage,
+    addDatasetLanguage,
+  } = Stores.Qvain
 
-  const addedLanguages = datasetLanguageArray.map((selectedLanguage) => (
+  const addedLanguages = datasetLanguageArray.map(selectedLanguage => (
     <Label color="#007fad" margin="0 0.5em 0.5em 0" key={selectedLanguage.url}>
-      <PaddedWord>{selectedLanguage.name[lang] || selectedLanguage.name.und }</PaddedWord>
+      <PaddedWord>{selectedLanguage.name[lang] || selectedLanguage.name.und}</PaddedWord>
       <FontAwesomeIcon
         onClick={() => removeDatasetLanguage(selectedLanguage)}
         icon={faTimes}
@@ -39,7 +45,7 @@ const LanguageField = ({ Stores }) => {
         <Translate content="qvain.description.datasetLanguage.title" />
       </LabelLarge>
       <Translate component="p" content="qvain.description.datasetLanguage.help" />
-      { addedLanguages }
+      {addedLanguages}
       <Select
         name="dataset-language"
         id="datasetLanguage"
@@ -58,10 +64,7 @@ const LanguageField = ({ Stores }) => {
         isClearable
       />
       <AddLanguageContainer>
-        <Button
-          onClick={() => addDatasetLanguage(datasetLanguage)}
-          disabled={readonly}
-        >
+        <Button onClick={() => addDatasetLanguage(datasetLanguage)} disabled={readonly}>
           <Translate content="qvain.description.datasetLanguage.addButton" />
         </Button>
       </AddLanguageContainer>

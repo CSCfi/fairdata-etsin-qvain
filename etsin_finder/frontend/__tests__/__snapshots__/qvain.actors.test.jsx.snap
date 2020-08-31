@@ -1,43 +1,23 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Qvain.Actors should render correctly 1`] = `
-<div
-  className="container"
+<Section
+  components={
+    Object {
+      "tooltipContent": [Function],
+    }
+  }
+  isRequired={true}
+  translations={
+    Object {
+      "title": "qvain.actors.title",
+      "tooltip": "qvain.actors.infoTitle",
+    }
+  }
 >
-  <title__SectionTitle>
-    <Translate
-      component="span"
-      content="qvain.actors.title"
-    />
-    <Tooltip
-      align="Right"
-      close={[Function]}
-      isOpen={false}
-      text={<ActorsInfoTooltip />}
-    >
-      <HelpIcon
-        aria-label="Actors info"
-        onClick={[Function]}
-      />
-    </Tooltip>
-  </title__SectionTitle>
   <inject-ActorModalBase-with-Stores />
-  <card__Container>
-    <inject-AddedActorsBase-with-Stores />
-    <actors__ButtonContainer>
-      <actors__AddNewButton
-        disabled={false}
-        onClick={[Function]}
-        type="button"
-      >
-        <Translate
-          component="span"
-          content="qvain.actors.addButton"
-        />
-      </actors__AddNewButton>
-    </actors__ButtonContainer>
-  </card__Container>
-</div>
+  <inject-ActorsField-with-Stores />
+</Section>
 `;
 
 exports[`Qvain.Actors store converts dataset for backend 1`] = `

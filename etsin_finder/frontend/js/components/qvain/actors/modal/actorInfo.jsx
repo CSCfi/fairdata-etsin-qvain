@@ -4,7 +4,7 @@ import { inject, observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 import { ENTITY_TYPE } from '../../../../utils/constants'
 
-import PersonInfo from './org/personForm'
+import PersonInfo from './person/personForm'
 import OrgInfo from './org/orgInfo'
 import { GroupLabel } from '../common'
 

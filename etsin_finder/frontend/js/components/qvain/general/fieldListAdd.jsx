@@ -17,6 +17,7 @@ const FieldListAdd = ({
   language,
   contentLabel,
   position,
+  hideButton,
 }) => {
   const [confirm, setConfirm] = useState(false)
 
@@ -72,11 +73,13 @@ const FieldListAdd = ({
           return null
         }}
       </Observer>
-      <ButtonContainer position={position}>
-        <AddNewButton type="button" onClick={open}>
-          <Translate content={`${translationsRoot}.modal.addButton`} />
-        </AddNewButton>
-      </ButtonContainer>
+      {!hideButton && (
+        <ButtonContainer position={position}>
+          <AddNewButton type="button" onClick={open}>
+            <Translate content={`${translationsRoot}.modal.addButton`} />
+          </AddNewButton>
+        </ButtonContainer>
+      )}
     </>
   )
 }
@@ -84,6 +87,7 @@ const FieldListAdd = ({
 FieldListAdd.propTypes = {
   Store: PropTypes.object.isRequired,
   Field: PropTypes.object.isRequired,
+  hideButton: PropTypes.bool,
   translationsRoot: PropTypes.string.isRequired,
   handleSave: PropTypes.func.isRequired,
   Form: PropTypes.oneOfType([PropTypes.element, PropTypes.func]).isRequired,
@@ -98,6 +102,7 @@ FieldListAdd.defaultProps = {
   contentLabel: '',
   position: 'right',
   formProps: {},
+  hideButton: false,
 }
 
 const ButtonContainer = styled.div`
