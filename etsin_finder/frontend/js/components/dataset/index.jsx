@@ -97,10 +97,10 @@ class Dataset extends React.Component {
 
       if (latestDate.getTime() > currentDate.getTime()) {
         urlText = 'tombstone.urlToNew'
-        linkToOtherVersion = 'tombstone.link'
+        linkToOtherVersion = 'tombstone.linkTextToNew'
       } else if (latestDate.getTime() < currentDate.getTime()) {
         urlText = 'tombstone.urlToOld'
-        linkToOtherVersion = 'tombstone.link'
+        linkToOtherVersion = 'tombstone.linkTextToOld'
       }
 
       for (const k of datasetVersionSet.keys()) {

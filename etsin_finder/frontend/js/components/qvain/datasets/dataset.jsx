@@ -193,6 +193,10 @@ const Marker = styled.div`
 `
 
 const DatasetLabel = styled(Label)`
+  color: ${({ color, theme }) => {
+    if (color === 'yellow') return theme.color.dark
+    return 'white'
+  }};
   margin-left: 10px;
   text-transform: uppercase;
 `

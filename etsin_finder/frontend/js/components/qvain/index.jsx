@@ -12,7 +12,6 @@ import { Prompt } from 'react-router'
 
 import {
   STSD,
-  SubHeaderTextContainer,
   LinkBackContainer,
   LinkBack,
   ButtonContainer,
@@ -301,7 +300,7 @@ class Qvain extends Component {
     const createLinkBack = (position) => (
       <LinkBackContainer position={position}>
         <LinkBack to="/qvain">
-          <FontAwesomeIcon size="lg" icon={faChevronLeft} />
+          <FontAwesomeIcon size="lg" icon={faChevronLeft} title="Back" />
           <Translate component={LinkText} display="block" content="qvain.backLink" />
         </LinkBack>
       </LinkBackContainer>
@@ -388,11 +387,9 @@ class Qvain extends Component {
     return (
       <QvainContainer>
         <SubHeader>
-          <SubHeaderTextContainer>
-            <SubHeaderText>
-              <Translate component={Title} content={titleKey} />
-            </SubHeaderText>
-          </SubHeaderTextContainer>
+          <SubHeaderText>
+            <Translate component={Title} content={titleKey} />
+          </SubHeaderText>
         </SubHeader>
         {stickyheader}
         {dataset}
