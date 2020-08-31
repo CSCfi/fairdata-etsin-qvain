@@ -138,7 +138,7 @@ const FundingAgencyForm = props => {
         lang={lang}
       />
       <LabelLarge htmlFor="organization">
-        <Translate content="qvain.project.inputs.fundingAgency.contributorType.organization.label" />
+        <Translate content="qvain.project.inputs.fundingAgency.contributorType.organization.label" /> *
       </LabelLarge>
       <OrganizationSelect
         onChange={onOrganizationChange}
@@ -263,7 +263,8 @@ class ContributorTypeFormComponent extends Component {
 
   onAddType = async () => {
     const { formData, onChange, onAdd } = this.props
-    const errors = await validate(fundingAgencySchema, { ...formData, identifier: formData.identifier.value })
+    const identifier = formData.identifier ? formData.identifier.value : null
+    const errors = await validate(fundingAgencySchema, { ...formData, identifier })
     if (!isEmptyObject(errors)) onChange({ ...formData, errors })
     else onAdd()
   }
@@ -305,7 +306,7 @@ class ContributorTypeFormComponent extends Component {
           lang={lang}
         />
         <LabelLarge htmlFor="identifier">
-          <Translate content="qvain.project.inputs.fundingAgency.contributorType.identifier.label" />
+          <Translate content="qvain.project.inputs.fundingAgency.contributorType.identifier.label" /> *
         </LabelLarge>
         <Translate
           component={StyledSelect}

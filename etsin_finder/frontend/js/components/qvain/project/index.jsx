@@ -156,7 +156,7 @@ class Project extends Component {
         })
         this.setState({
           details: { ...details, errors: parsedErrors.details },
-          organizations: { ...organizations, errors: parsedErrors.organizations },
+          organizations: { ...organizations, formData: { ...organizations.formData, errors: parsedErrors.organizations } },
           fundingAgencies: { ...fundingAgencies, errors: parsedErrors.fundingAgencies },
         })
       })

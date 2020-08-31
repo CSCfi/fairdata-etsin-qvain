@@ -285,7 +285,7 @@ const organizationObjectSchema = yup.object().shape({
 })
 
 const fundingAgencySchema = yup.object().shape({
-  identifier: yup.string()
+  identifier: yup.string().nullable()
     .required(translate('qvain.project.inputs.fundingAgency.contributorType.identifier.validation')),
   labelFi: yup.string(),
   labelEn: yup.string(),
