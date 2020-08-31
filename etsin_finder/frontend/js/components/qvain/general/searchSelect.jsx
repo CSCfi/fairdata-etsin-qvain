@@ -4,6 +4,7 @@ import ReactSelect from 'react-select/async'
 import Translate from 'react-translate-component'
 import { inject, observer } from 'mobx-react'
 import { getOptions, getCurrentValue, onChange } from '../utils/select'
+import etsinTheme from '../../../styles/theme'
 
 class Select extends Component {
   promises = []
@@ -55,6 +56,7 @@ class Select extends Component {
       onChange: onChange(options, lang, setter, model),
       cacheOptions: true,
       defaultOptions: [],
+      styles: { placeholder: () => ({ color: etsinTheme.color.gray }) },
       loadOptions: (inputValue =>
         new Promise(async res => {
           const opts = await getOptions(metaxIdentifier, inputValue)

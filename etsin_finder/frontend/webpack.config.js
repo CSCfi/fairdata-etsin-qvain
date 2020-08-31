@@ -1,27 +1,18 @@
 require('@babel/polyfill')
+const env = require('dotenv').config()
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 
 const config = {
-  entry: './js/index.jsx',
+  entry: [path.join(__dirname, '/js/index.jsx')],
   output: {
     // path of output
-    path: path.resolve(__dirname, '/build'),
+    path: path.join(__dirname, '/build'),
     // publicPath is used in dynamic chunk loading
-    publicPath: '/',
-    filename: 'bundle.[hash].js',
+    publicPath: '/build/',
+    filename: 'bundle.[chunkhash].js',
     chunkFilename: '[name].[chunkhash].js',
-  },
-  devtool: 'source-map',
-  devServer: {
-    publicPath: '/',
-    contentBase: './static',
-    public: 'etsin-finder.local',
-    hot: true,
-    historyApiFallback: true,
-    clientLogLevel: 'silent',
-    port: 8080
   },
   resolve: {
     extensions: ['.js', '.jsx'],
@@ -55,12 +46,14 @@ const config = {
       filename: 'index.html',
       template: 'static/index.template.ejs',
       favicon: 'static/images/favicon.png',
+      MATOMO_URL: env.parsed ? env.parsed.MATOMO_URL : undefined,
+      MATOMO_SITE_ID: env.parsed ? env.parsed.MATOMO_SITE_ID : undefined,
     }),
   ],
-  watch: true,
+  watch: false,
   watchOptions: {
     aggregateTimeout: 300,
-    poll: 1500,
+    poll: 1000,
     ignored: /node_modules/,
   },
 }
