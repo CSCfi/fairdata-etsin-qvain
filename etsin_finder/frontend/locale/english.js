@@ -611,7 +611,7 @@ const english = {
       license: {
         title: 'License',
         infoText:
-          'License is an essential part of the dataset description. The license describes how the dataset can be used. As a default, the recommended CC BY 4.0 license is selected, but you can change it if needed. If you want to add a URL to an existing license page, please type the URL and select "Other (URL)" option.',
+          'License is an essential part of the dataset description. The license describes how the dataset can be used. As a default, the recommended CC BY 4.0 license is selected, but you can change it if needed. If you want to add a URL to an existing license page, please type the URL and select the "Other (URL)" option.',
         placeholder: 'Select option',
         other: {
           label: 'URL address',
