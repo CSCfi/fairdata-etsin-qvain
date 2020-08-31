@@ -1459,9 +1459,10 @@ const finnish = {
   tombstone: {
     removedInfo: 'Aineisto on poistettu',
     deprecatedInfo: 'Aineisto on vanhentunut',
-    urlToNew: 'Aineistosta on olemassa uudempi, julkaistu versio. Saat sen avattua ',
-    urlToOld: 'Aineistosta on olemassa vanhempi, julkaistu versio. Saat sen avattua ',
-    link: 'tästä',
+    urlToNew: 'Aineistosta on olemassa uudempi, julkaistu versio.',
+    urlToOld: 'Aineistosta on olemassa vanhempi, julkaistu versio.',
+    linkTextToNew: 'Saat avattua uuden version tästä.',
+    linkTextToOld: 'Saat avattua version tästä.',
   },
   userAuthenticationError: {
     header: 'Kirjautuminen epäonnistui.',

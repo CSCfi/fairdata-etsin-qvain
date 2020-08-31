@@ -10,6 +10,7 @@ import { dataCatalogSchema } from '../utils/formValidation'
 import ValidationError from '../general/validationError'
 import { DATA_CATALOG_IDENTIFIER } from '../../../utils/constants'
 import { LabelLarge } from '../general/form'
+import etsinTheme from '../../../styles/theme'
 import DoiSelection from './doiSelection'
 import Tooltip from '../../general/tooltipHover'
 
@@ -112,6 +113,7 @@ class DataCatalog extends Component {
               setUseDoi(false)
             }
           }}
+          styles={{ placeholder: () => ({ color: etsinTheme.color.gray }) }}
           onBlur={this.handleOnBlur}
           attributes={{ placeholder: 'qvain.files.dataCatalog.placeholder' }}
           isDisabled={selected.length > 0 || original !== undefined || isPas}

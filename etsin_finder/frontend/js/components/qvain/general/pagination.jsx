@@ -29,7 +29,7 @@ export const PaginationItem = styled.span.attrs(() => ({
     line-height: ${props => props.size};
   }
   &[disabled] {
-    color: grey;
+    color: ${(props) => props.theme.color.darkgray};
   }
 `
 

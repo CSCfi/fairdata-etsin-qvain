@@ -233,14 +233,14 @@ const FadeInAnimation = keyframes`
     color: #FFEBE8;
   }
   to {
-    color: red;
+    color: ${(props) => props.theme.color.redText};
   }
 `
 const ResponseContainerError = styled.div`
   background-color: #ffebe8;
   text-align: center;
   width: 100%;
-  color: red;
+  color: ${(props) => props.theme.color.redText};
   z-index: 2;
   border-bottom: 1px solid rgba(0, 0, 0, 0.3);
   animation-name: ${FadeInAnimation};

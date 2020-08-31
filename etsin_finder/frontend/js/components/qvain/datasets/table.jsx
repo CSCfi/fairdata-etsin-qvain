@@ -15,6 +15,7 @@ import { TableButton } from '../general/buttons'
 import { FormField, Input, Label as inputLabel } from '../general/form'
 import DatasetGroup from './datasetGroup'
 import { filterGroupsByTitle, groupDatasetsByVersionSet } from './filter'
+import etsinTheme from '../../../styles/theme'
 
 class DatasetTable extends Component {
   minOfDataSetsForSearchTool = 5
@@ -291,7 +292,7 @@ class DatasetTable extends Component {
             {loading && <Translate component={TableNote} content="qvain.datasets.loading" />}
             {error && (
               <Fragment>
-                <TableNote style={{ color: 'red' }}>
+                <TableNote style={{ color: etsinTheme.color.redText }}>
                   <Translate content="qvain.datasets.errorOccurred" />:
                   <ErrorMessage>{errorMessage}</ErrorMessage>
                 </TableNote>
@@ -341,6 +342,7 @@ class DatasetTable extends Component {
 }
 
 const ErrorMessage = styled.span`
+  color: ${(props) => props.theme.color.redText};
   margin-left: 10px;
 `
 

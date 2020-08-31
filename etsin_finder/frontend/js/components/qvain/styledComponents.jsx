@@ -1,4 +1,6 @@
 import styled from 'styled-components'
+import { darken } from 'polished'
+
 import { Link } from 'react-router-dom'
 import { InvertedButton } from '../general/button'
 import { Container, StickySubHeader } from './general/card'
@@ -63,13 +65,18 @@ export const LinkBack = styled(Link)`
 `
 
 export const LinkText = styled.span`
+  color: ${(props) => props.theme.color.linkColor};
   font-size: 18px;
   padding-left: 5px;
   padding-top: 2px;
   line-height: 1;
+  &:hover {
+    color: ${(props) => darken(0.1, props.theme.color.linkColor)};
+  }
 `
 
 export const CustomSubHeader = styled(StickySubHeader)`
+  background-color: ${(props) => props.theme.color.superlightgray};
   justify-content: flex-start;
 `
 export const customStyles = {

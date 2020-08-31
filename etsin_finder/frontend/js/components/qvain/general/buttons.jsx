@@ -85,8 +85,8 @@ export const AddActorButton = styled.button`
 
 export const DangerButton = styled.button`
   border-radius: 4px;
-  border: 1px solid ${(props) => (props.disabled ? '#ddb6b6' : '#ff0000')};
-  background-color: ${(props) => (props.disabled ? '#ddb6b6' : '#ff0000')};
+  border: 1px solid ${(props) => (props.disabled ? '#ddb6b6' : '#db0000')};
+  background-color: ${(props) => (props.disabled ? '#ddb6b6' : '#db0000')};
   font-size: 16px;
   font-weight: 600;
   line-height: 1.31;
