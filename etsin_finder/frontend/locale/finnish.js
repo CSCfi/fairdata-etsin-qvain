@@ -655,7 +655,7 @@ const finnish = {
         description: 'Organisaatio(t), jotka ovat olleet osallisena projektissa'
       },
       fundingAgency: {
-        title: 'Funding agency'
+        title: 'Rahoittajaorganisaatio'
       },
       inputs: {
         title: {
@@ -667,7 +667,7 @@ const finnish = {
           },
         },
         titleEn: {
-          placeholder: 'Nimi (engalnti)',
+          placeholder: 'Nimi (Engalnti)',
         },
         titleFi: {
           placeholder: 'Nimi (Suomi)',
@@ -678,15 +678,15 @@ const finnish = {
           placeholder: 'Tunniste',
         },
         fundingIdentifier: {
-          label: 'Project funding identifier',
-          description: 'Unique identifier for the project that is being used by the project funder',
-          placeholder: 'Add project funding identifier',
+          label: 'Rahoitustunniste',
+          description: 'Projektin uniikki rahoitustunniste',
+          placeholder: 'Tunniste',
         },
         funderType: {
-          label: 'Funder type',
-          placeholder: 'Select funder type',
-          addButton: 'Add funder type',
-          noOptions: 'Funder type not found',
+          label: 'Rahoitustyyppi',
+          placeholder: 'Valitse rahoitustyyppi',
+          addButton: 'Lisää rahoitustyyppi',
+          noOptions: 'Rahoitustyyppiä ei löytynyt',
         },
         organization: {
           placeholder: {
@@ -695,30 +695,31 @@ const finnish = {
           },
           addButton: 'Lisää organisaatio',
           editButton: 'Muokkaa organisaatiota',
-          validation: 'At least one producer organization is required'
+          validation: 'Vähintään yksi organisaatio tarvitaan'
         },
         fundingAgency: {
           contributorType: {
-            title: 'Contributor type',
-            description: 'Contributor type of the Organization. Based on the subset of the DataCite reference data',
+            title: 'Organisation rooli',
+            description: 'Valitse organisaation rooli projektin avustajana.',
             organization: {
-              label: 'Select organization',
+              label: 'Valitse organisaatio',
+              validation: 'Organisaatio tarvitaan',
             },
             identifier: {
-              label: 'Identifier',
-              validation: 'Identifier is required',
+              label: 'Rooli',
+              validation: 'Valitse rooli',
             },
             definition: {
-              label: 'Definition',
-              description: 'A statement or formal explanation of the meaning of a concept.',
-              placeholderEn: 'Definition (English)',
-              placeholderFi: 'Definition (Finnish)',
+              label: 'Selite',
+              description: 'Lisäselite organisaation roolille',
+              placeholderEn: 'Selite (Englanti)',
+              placeholderFi: 'Selite (Suomi)',
             },
-            addButton: 'Add contributor type',
-            editButton: 'Edit contributor type',
+            addButton: 'Lisää rooli',
+            editButton: 'Muokkaa roolia',
           },
-          addButton: 'Add agency',
-          editButton: 'Edit agency',
+          addButton: 'Lisää avustaja',
+          editButton: 'Muokkaa avustajaa',
         },
       },
     },

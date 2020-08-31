@@ -51,6 +51,7 @@ const INITIAL_STATE = {
       contributorTypeForm: {
         errors: {},
       }, // Identifier, label fi en, definiton fi en, inscheme, errors
+      errors: {},
       contributorTypes: [], // array of contributor types
     },
     addedFundingAgencies: [],

@@ -278,6 +278,12 @@ const organizationSelectSchema = yup.object().shape({
   email: yup.string().email(translate('qvain.organizationSelect.validation.email'))
 })
 
+const organizationObjectSchema = yup.object().shape({
+  organization: organizationSelectSchema.nullable().required(translate('qvain.organizationSelect.validation.name')),
+  department: organizationSelectSchema.nullable(),
+  subDepartment: organizationSelectSchema.nullable(),
+})
+
 const fundingAgencySchema = yup.object().shape({
   identifier: yup.string()
     .required(translate('qvain.project.inputs.fundingAgency.contributorType.identifier.validation')),
@@ -539,4 +545,5 @@ export {
   provenanceStartDateSchema,
   provenanceEndDateSchema,
   temporalDateSchema,
+  organizationObjectSchema,
 }

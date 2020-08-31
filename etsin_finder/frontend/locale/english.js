@@ -1450,6 +1450,7 @@ const english = {
             description: 'Contributor type of the Organization. Based on the subset of the DataCite reference data',
             organization: {
               label: 'Select organization',
+              validation: 'A valid organization is required'
             },
             identifier: {
               label: 'Contributor type',

@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import ReactSelect from 'react-select'
 import axios from 'axios'
+import t from 'counterpart'
 
 import Card from '../general/card'
 import OrganizationSelect from '../general/organizationSelect'
@@ -15,7 +16,7 @@ import Label from '../general/label'
 import { ErrorMessages, organizationSelectValueToSchema, validateSync, validate,
   isEmptyObject, organizationToSelectValue, Expand, referenceDataToOptions } from './utils'
 import { LabelLarge, Input } from '../general/form'
-import { fundingAgencySchema, organizationSelectSchema } from '../utils/formValidation'
+import { fundingAgencySchema, organizationObjectSchema } from '../utils/formValidation'
 import { FundingAgency, ContributorType, Organization } from '../../../stores/view/qvain'
 import { METAX_FAIRDATA_ROOT_URL } from '../../../utils/constants'
 
@@ -23,7 +24,7 @@ import { METAX_FAIRDATA_ROOT_URL } from '../../../utils/constants'
 const FundingAgencyForm = props => {
   const onOrganizationChange = value => {
     const { formData } = props.value
-    props.onChange({ ...formData, organization: value })
+    props.onChange({ ...formData, organization: value, errors: [] })
   }
 
   const onContributorTypeChange = contributorTypeForm => {
@@ -87,20 +88,22 @@ const FundingAgencyForm = props => {
   }
 
   /**
-   *
+   * Validate full organization value. That is at least top level organization
+   * must be defined. This does not validate subfields, validates only that no
+   * empty organizations are added.
    */
   const validateAll = organizations => {
-    let valid = true
     const { formData } = props.value
-    for (const [key, value] of Object.entries(organizations)) {
-      if (value) {
-        const errors = validateSync(organizationSelectSchema, value)
-        formData.organization[key].errors = errors
-        if (!isEmptyObject(errors)) valid = false
-      }
+    const { errors } = formData
+    const validationErrors = validateSync(organizationObjectSchema, organizations)
+    if (!isEmptyObject(validationErrors)) {
+      props.onChange({
+        ...formData,
+        errors: { ...errors, organization: [t('qvain.project.inputs.fundingAgency.contributorType.organization.validation')] }
+      })
+      return false
     }
-    props.onChange(formData)
-    return valid
+    return true
   }
 
   /**
@@ -143,6 +146,7 @@ const FundingAgencyForm = props => {
         name="organization"
         inputId="organization"
       />
+      <ErrorMessages errors={formData.errors.organization} />
       <Expand
         title={<Translate component="h3" content="qvain.project.inputs.fundingAgency.contributorType.title" />}
       >
@@ -304,7 +308,7 @@ class ContributorTypeFormComponent extends Component {
           <Translate content="qvain.project.inputs.fundingAgency.contributorType.identifier.label" />
         </LabelLarge>
         <Translate
-          component={ReactSelect}
+          component={StyledSelect}
           name="identifier"
           inputId="identifier"
           isDisabled={readonly}
@@ -392,6 +396,10 @@ const AgencyLabel = styled(Label)`
 
 const PaddedWord = styled.span`
   padding-right: 10px;
+`
+
+const StyledSelect = styled(ReactSelect)`
+  margin-bottom: 1rem;
 `
 
 export default inject('Stores')(observer(FundingAgencyForm))

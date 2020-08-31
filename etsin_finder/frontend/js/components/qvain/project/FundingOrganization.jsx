@@ -5,6 +5,7 @@ import { inject, observer } from 'mobx-react'
 import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
+import t from 'counterpart'
 
 import Card from '../general/card'
 import OrganizationSelect from '../general/organizationSelect'
@@ -13,7 +14,7 @@ import Button from '../../general/button'
 import Label from '../general/label'
 
 import { Organization } from '../../../stores/view/qvain'
-import { organizationSelectSchema } from '../utils/formValidation'
+import { organizationObjectSchema } from '../utils/formValidation'
 
 
 const FundingOrganization = props => {
@@ -36,25 +37,27 @@ const FundingOrganization = props => {
     })
   }
 
+  const onOrganizationChange = value => props.onChange({ ...value, errors: [] })
+
   const onRemove = id => props.onRemoveOrganization(id)
 
-
   /**
-   * Validate all organization levels and set errors.
-   * @param {Object} organizations Value from organization select
+   * Validate full organization value. That is at least top level organization
+   * must be defined. This does not validate subfields, validates only that no
+   * empty organizations are added.
+   * @param {Object} organizations Full value from organization select
    */
   const validateAll = organizations => {
-    let valid = true
     const { formData } = props.organizations
-    for (const [key, value] of Object.entries(organizations)) {
-      if (value) {
-        const errors = validateSync(organizationSelectSchema, value)
-        formData[key].errors = errors
-        if (!isEmptyObject(errors)) valid = false
-      }
+    const validationErrors = validateSync(organizationObjectSchema, organizations)
+
+    if (!isEmptyObject(validationErrors)) {
+      props.onChange({
+        ...formData, errors: [t('qvain.project.inputs.fundingAgency.contributorType.organization.validation')]
+      })
+      return false
     }
-    props.onChange(formData)
-    return valid
+    return true
   }
 
   /**
@@ -75,7 +78,7 @@ const FundingOrganization = props => {
     props.onAddOrganization(organizationToAdd)
   }
 
-  const { errors, addedOrganizations, formData } = props.organizations
+  const { addedOrganizations, formData } = props.organizations
   const { lang } = props.Stores.Locale
   return (
     <Card>
@@ -88,12 +91,12 @@ const FundingOrganization = props => {
         lang={lang}
       />
       <OrganizationSelect
-        onChange={props.onChange}
+        onChange={onOrganizationChange}
         value={formData}
         name="organization"
         inputId="organization"
       />
-      <ErrorMessages errors={errors} />
+      <ErrorMessages errors={formData.errors} />
       <AddOrganizationContainer>
         <Button onClick={addOrganization}>
           <Translate content={formData.id
