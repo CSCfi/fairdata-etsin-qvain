@@ -83,7 +83,10 @@ class ProjectDetailsValidationSchema(Schema):
     )
     identifier = fields.Str(required=False)
     fundingIdentifier = fields.Str(required=False)
-    funderType = fields.Str(required=False)
+    funderType = fields.Dict(
+        required=False,
+        validate=lambda value: bool(value.get('identifier'))
+    )
 
 
 class ContributorTypeValidationSchema(Schema):
