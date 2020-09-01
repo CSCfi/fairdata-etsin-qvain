@@ -5,31 +5,23 @@ import Select from '../../general/searchSelect'
 
 import { Infrastructure } from '../../../../stores/view/qvain'
 
-const InfrastructureSelection = ({Stores}) => {
-
-  const handleSelectedItemClick = item => {
-    Stores.Qvain.removeInfrastructure(item)
-  }
-
-  render() {
-    const { infrastructureArray, setInfrastructureArray } = Stores.Qvain
-    return (
-      <Select
-        name="infrastructure"
-        getter={infrastructureArray}
-        setter={setInfrastructureArray}
-        isMulti
-        isClearable={false}
-        model={Infrastructure}
-        metaxIdentifier="research_infra"
-      />
-    )
-  }
+const InfrastructureSelection = ({ Stores }) => {
+  const { infrastructureArray, setInfrastructureArray } = Stores.Qvain
+  return (
+    <Select
+      name="infrastructure"
+      getter={infrastructureArray}
+      setter={setInfrastructureArray}
+      isMulti
+      isClearable={false}
+      model={Infrastructure}
+      metaxIdentifier="research_infra"
+    />
+  )
 }
 
 InfrastructureSelection.propTypes = {
   Stores: PropTypes.object.isRequired,
 }
-
 
 export default inject('Stores')(observer(InfrastructureSelection))

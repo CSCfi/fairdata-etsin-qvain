@@ -258,15 +258,10 @@ const CustomOption = ({ children, ...props }) => {
     edit = lastItem.isReference === false
   }
   return (
-    <>
-      <selectComponents.Option
-        {...props}
-        style={{ display: 'flex', justifyContent: 'space-between' }}
-      >
-        {children}
-        {(create || edit) && <EditIcon color="gray" />}
-      </selectComponents.Option>
-    </>
+    <selectComponents.Option {...props}>
+      {children}
+      {(create || edit) && <EditIcon color="gray" />}
+    </selectComponents.Option>
   )
 }
 
