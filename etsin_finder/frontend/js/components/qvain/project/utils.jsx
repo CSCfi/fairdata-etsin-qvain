@@ -104,7 +104,7 @@ export async function organizationToSelectValue(organization, lang, parentId) {
     value: identifier || '',
     label: name[lang] || name.und,
     name: { ...name },
-    email,
+    email: email || '',
     formIsOpen: isCustomOrg,
   }
 }
@@ -123,8 +123,8 @@ async function isCustomOrganization(identifier, name, parentId) {
   const response = await axios.get(url)
   if (response.status !== 200) return null
   const { hits } = response.data.hits
-  return hits.every(hit => (
-    hit._source.uri !== identifier ||
+  return !hits.some(hit => (
+    hit._source.uri === identifier ||
     hit._source.label.und === nameToComparer
   ))
 }
