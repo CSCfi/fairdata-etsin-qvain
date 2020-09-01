@@ -143,6 +143,7 @@ class Qvain {
     this.fixDeprecatedModalOpen = false
 
     this.Files.reset()
+    this.Temporals.create()
 
     this.useDoi = false
 
@@ -158,6 +159,7 @@ class Qvain {
     this.Actors.reset()
     this.spatials = []
     this.provenances = []
+    this.temporals = []
   }
 
   @action

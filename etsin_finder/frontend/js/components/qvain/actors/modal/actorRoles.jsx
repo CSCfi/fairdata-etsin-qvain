@@ -36,7 +36,7 @@ export const ActorRolesBase = ({ Stores }) => {
         <RoleCheckbox role={ROLE.CURATOR} />
         <RoleCheckbox role={ROLE.RIGHTS_HOLDER} />
         <RoleCheckbox role={ROLE.CONTRIBUTOR} />
-        {actor.roles.includes(ROLE.PROVENANCE) && <RoleCheckbox role={ROLE.PROVENANCE} />}
+        {actor.roles.includes(ROLE.PROVENANCE) && <RoleCheckbox role={ROLE.PROVENANCE} disabled />}
       </List>
     </Fieldset>
   )
