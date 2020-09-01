@@ -65,6 +65,7 @@ export default class SearchBar extends Component {
               <CustomFontAwesomeIcon
                 onClick={this.handleSubmit}
                 icon={faSearch}
+                title="Search"
                 size="2x"
                 transform="shrink-4"
               />
@@ -125,7 +126,7 @@ const SearchInner = styled.div`
     font-size: 1em;
     letter-spacing: 1px;
     &::placeholder {
-      color: ${props => props.theme.color.medgray};
+      color: ${props => props.theme.color.dark};
       font-style: italic;
     }
   }

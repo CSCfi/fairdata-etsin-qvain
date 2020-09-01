@@ -7,6 +7,7 @@ import { inject, observer } from 'mobx-react'
 
 import { onChange, getCurrentValue } from '../utils/select'
 import getReferenceData from '../utils/getReferenceData'
+import etsinTheme from '../../../styles/theme'
 
 class Select extends Component {
   promises = []
@@ -112,6 +113,7 @@ class Select extends Component {
         {...selectProps}
         menuPlacement="auto"
         menuPosition="fixed"
+        styles={{ placeholder: () => ({ color: etsinTheme.color.gray }) }}
         menuShouldScrollIntoView={false}
       />
     ) : <Translate {...selectProps} />
