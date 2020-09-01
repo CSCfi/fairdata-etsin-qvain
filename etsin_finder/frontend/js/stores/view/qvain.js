@@ -18,7 +18,6 @@ import Spatials, { SpatialModel } from './qvain.spatials'
 import Provenances, { ProvenanceModel } from './qvain.provenances'
 import RelatedResources, { RelatedResourceModel } from './qvain.relatedResources'
 import Temporals, { TemporalModel } from './qvain.temporals'
-import uniqueByKey from '../../utils/uniqueByKey'
 
 class Qvain {
   constructor(Env) {
@@ -64,11 +63,7 @@ class Qvain {
 
   @observable otherIdentifiersValidationError = null
 
-  @observable fieldOfScience = undefined
-
   @observable fieldOfScienceArray = []
-
-  @observable datasetLanguage = undefined
 
   @observable datasetLanguageArray = []
 
@@ -76,21 +71,15 @@ class Qvain {
 
   @observable keywordsArray = []
 
-  @observable infrastructure = undefined
+  @observable infrastructureArray = []
 
-  @observable infrastructures = []
-
-  @observable license = License(undefined, LICENSE_URL.CCBY4)
-
-  @observable otherLicenseUrl = ''
-
-  @observable licenseArray = []
+  @observable licenseArray = [License(undefined, LICENSE_URL.CCBY4)]
 
   @observable accessType = AccessType(undefined, ACCESS_TYPE_URL.OPEN)
 
   @observable embargoExpDate = undefined
 
-  @observable restrictionGrounds = {}
+  @observable restrictionGrounds = undefined
 
   @observable externalResourceInEdit = EmptyExternalResource
 
@@ -109,20 +98,15 @@ class Qvain {
     this.otherIdentifier = ''
     this.otherIdentifiersArray = []
     this.otherIdentifiersValidationError = null
-    this.fieldOfScience = undefined
     this.fieldOfScienceArray = []
-    this.datasetLanguage = undefined
     this.datasetLanguageArray = []
     this.keywordString = ''
     this.keywordsArray = []
-    this.infrastructure = undefined
-    this.infrastructures = []
-    this.license = License(undefined, LICENSE_URL.CCBY4)
-    this.otherLicenseUrl = ''
-    this.licenseArray = []
+    this.infrastructureArray = []
+    this.licenseArray = [License(undefined, LICENSE_URL.CCBY4)]
     this.accessType = AccessType(undefined, ACCESS_TYPE_URL.OPEN)
     this.embargoExpDate = undefined
-    this.restrictionGrounds = {}
+    this.restrictionGrounds = undefined
 
     // Reset Files/Directories related data
     this.dataCatalog = undefined
@@ -243,63 +227,17 @@ class Qvain {
   }
 
   @action
-  setFieldOfScience = fieldOfScience => {
-    this.fieldOfScience = fieldOfScience
-    this.changed = true
+  setFieldOfScienceArray = (array) => {
+    this.fieldOfScienceArray = array
   }
 
   @action
-  removeFieldOfScience = fieldOfScienceToRemove => {
-    this.fieldOfScienceArray = this.fieldOfScienceArray.filter(
-      fieldOfScience => fieldOfScience.url !== fieldOfScienceToRemove.url
-    )
-    this.changed = true
+  setDatasetLanguageArray = (array) => {
+    this.datasetLanguageArray = array
   }
 
   @action
-  addFieldOfScience = fieldOfScience => {
-    // Add fieldOfScience to fieldOfScienceArray if fieldOfScience has "url" and
-    // "name" object keys, and does not exist in the array.
-    if (fieldOfScience !== undefined) {
-      if (
-        Object.keys(fieldOfScience).includes(('url', 'name')) &&
-        !this.fieldOfScienceArray.some(field => field.url === fieldOfScience.url)
-      ) {
-        this.fieldOfScienceArray.push(FieldOfScience(fieldOfScience.name, fieldOfScience.url))
-        this.changed = true
-      }
-      this.setFieldOfScience(undefined)
-    }
-  }
-
-  @action
-  setDatasetLanguage = language => {
-    this.datasetLanguage = language
-    this.changed = true
-  }
-
-  @action
-  removeDatasetLanguage = languageToRemove => {
-    const languagesToRemain = this.datasetLanguageArray.filter(
-      language => language.url !== languageToRemove.url
-    )
-    this.datasetLanguageArray = languagesToRemain
-    this.changed = true
-  }
-
-  @action
-  addDatasetLanguage = language => {
-    if (!language || !('name' in language) || !('url' in language)) return
-    const oldDatasetLanguages = this.datasetLanguageArray.filter(item => item.url !== language.url)
-    this.datasetLanguageArray = oldDatasetLanguages.concat([
-      DatasetLanguage(language.name, language.url),
-    ])
-    this.setDatasetLanguage(undefined)
-    this.changed = true
-  }
-
-  @action
-  setKeywordString = value => {
+  setKeywordString = (value) => {
     this.keywordString = value
     this.changed = true
   }
@@ -330,13 +268,8 @@ class Qvain {
   }
 
   @action
-  setInfrastructure = infrastructure => {
-    this.infrastructure = infrastructure
-    this.changed = true
-  }
-
-  @action setInfrastructures = infrastructures => {
-    this.infrastructures = uniqueByKey(infrastructures, 'url')
+  setInfrastructureArray = array => {
+    this.infrastructureArray = array
     this.changed = true
   }
 
@@ -353,18 +286,8 @@ class Qvain {
     // If multi value fields (fieldOfScience, otherIdentifier, keywords) have
     // a value that has not been added with the ADD-button, then add them when
     // the dataset is submitted.
-    if (this.fieldOfScience !== undefined) {
-      this.addFieldOfScience(this.fieldOfScience)
-    }
-    if (this.datasetLanguage !== undefined) {
-      this.addDatasetLanguage(this.datasetLanguage)
-    }
     if (this.keywordString !== '') {
       this.addKeywordToKeywordArray()
-    }
-    if (this.infrastructure) {
-      this.setInfrastructures([...this.infrastructures, this.infrastructure])
-      this.setInfrastructure(undefined)
     }
     if ((this.Temporals.inEdit || {}).startDate && (this.Temporals.inEdit || {}).endDate) {
       this.Temporals.save()
@@ -372,49 +295,13 @@ class Qvain {
   }
 
   @action
-  setLicense = license => {
-    this.license = license
+  setLicenseArray = (keywords) => {
+    this.licenseArray = keywords
     this.changed = true
   }
 
   @action
-  setLicenseName = name => {
-    this.license.name = name // only affects license display, should not trigger this.changed
-  }
-
-  @action
-  addLicense = license => {
-    if (license !== undefined) {
-      if (
-        Object.keys(license).includes(('identifier', 'name')) &&
-        !this.licenseArray.some(
-          l => l.identifier === license.identifier || l.identifier === this.otherLicenseUrl
-        )
-      ) {
-        if (license.identifier === 'other') {
-          const newLicenseName = {
-            en: `${license.name.en}: ${this.otherLicenseUrl}`,
-            fi: `${license.name.fi}: ${this.otherLicenseUrl}`,
-          }
-          this.licenseArray.push(License(newLicenseName, this.otherLicenseUrl))
-          this.otherLicenseUrl = ''
-        } else {
-          this.licenseArray.push(License(license.name, license.identifier))
-        }
-        this.changed = true
-      }
-      this.license = undefined
-    }
-  }
-
-  @action
-  removeLicense = license => {
-    this.licenseArray = this.licenseArray.filter(l => l.identifier !== license.identifier)
-    this.changed = true
-  }
-
-  @action
-  setAccessType = accessType => {
+  setAccessType = (accessType) => {
     this.accessType = accessType
     this.changed = true
   }
@@ -427,7 +314,7 @@ class Qvain {
 
   @action
   removeRestrictionGrounds = () => {
-    this.restrictionGrounds = {}
+    this.restrictionGrounds = undefined
     this.changed = true
   }
 
@@ -846,31 +733,28 @@ class Qvain {
       : []
 
     // Fields of science
-    this.fieldOfScience = undefined
-    this.fieldsOfScience = []
+    this.fieldOfScienceArray = []
     if (researchDataset.field_of_science !== undefined) {
-      researchDataset.field_of_science.forEach(element => {
-        this.addFieldOfScience(FieldOfScience(element.pref_label, element.identifier))
-      })
+      this.fieldOfScienceArray = researchDataset.field_of_science.map((element) =>
+        FieldOfScience(element.pref_label, element.identifier)
+      )
     }
 
     // Languages of dataset
     this.datasetLanguage = undefined
     this.datasetLanguageArray = []
     if (researchDataset.language !== undefined) {
-      researchDataset.language.forEach(element => {
-        this.addDatasetLanguage(DatasetLanguage(element.title, element.identifier))
-      })
+      this.datasetLanguageArray = researchDataset.language.map(element =>
+        DatasetLanguage(element.title, element.identifier)
+      )
     }
 
     // infrastructures
-    this.infrastructure = undefined
-    this.infrastructures = []
+    this.infrastructureArray = []
     if (researchDataset.infrastructure !== undefined) {
-      researchDataset.infrastructure.forEach(element => {
-        const infrastructure = Infrastructure(element.pref_label, element.identifier)
-        this.infrastructures.push(infrastructure)
-      })
+      this.infrastructureArray = researchDataset.infrastructure.map((element) =>
+        Infrastructure(element.pref_label, element.identifier)
+      )
     }
 
     // spatials
@@ -998,29 +882,29 @@ class Qvain {
       }
       this.existingDirectories = dsDirectories
         ? dsDirectories.map(d => {
-            // Removed directories don't have details
-            if (!d.details) {
-              d.details = {
-                directory_name: d.title,
-                file_path: '',
-                removed: true,
-              }
+          // Removed directories don't have details
+          if (!d.details) {
+            d.details = {
+              directory_name: d.title,
+              file_path: '',
+              removed: true,
             }
-            return DatasetDirectory(d)
-          })
+          }
+          return DatasetDirectory(d)
+        })
         : []
       this.existingFiles = dsFiles
         ? dsFiles.map(f => {
-            // Removed files don't have details
-            if (!f.details) {
-              f.details = {
-                file_name: f.title,
-                file_path: '',
-                removed: true,
-              }
+          // Removed files don't have details
+          if (!f.details) {
+            f.details = {
+              file_name: f.title,
+              file_path: '',
+              removed: true,
             }
-            return DatasetFile(f, undefined, true)
-          })
+          }
+          return DatasetFile(f, undefined, true)
+        })
         : []
     }
 
@@ -1036,9 +920,9 @@ class Qvain {
           r.download_url ? r.download_url.identifier : undefined,
           r.use_category
             ? {
-                label: r.use_category.pref_label.en,
-                value: r.use_category.identifier,
-              }
+              label: r.use_category.pref_label.en,
+              value: r.use_category.identifier,
+            }
             : undefined
         )
       )
