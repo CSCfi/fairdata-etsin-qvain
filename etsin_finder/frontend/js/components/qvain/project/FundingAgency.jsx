@@ -60,6 +60,7 @@ const FundingAgencyForm = props => {
 
   /**
    * Convert organization to select value for organization select
+   * and call onChnage from props to update form.
    */
   const onEdit = async id => {
     const { addedFundingAgencies } = props.value
@@ -208,6 +209,9 @@ AddedAgencies.defaultProps = {
   agencies: [],
 }
 
+/**
+ * Form to add contributor types. This is a subfield of funding agency field.
+ */
 class ContributorTypeFormComponent extends Component {
   static propTypes = {
     Stores: PropTypes.object.isRequired,
@@ -232,6 +236,9 @@ class ContributorTypeFormComponent extends Component {
     this.fetchOptions()
   }
 
+  /**
+   * Fetch options for role field.
+   */
   fetchOptions = async () => {
     const response = await axios.get(`${METAX_FAIRDATA_ROOT_URL}/es/reference_data/contributor_type/_search?pretty=true&size=100`)
     if (response.status !== 200) return
@@ -239,6 +246,7 @@ class ContributorTypeFormComponent extends Component {
     this.setState({ options, loading: false })
   }
 
+  /** Validate form */
   onBlur = async () => {
     const { formData, onChange } = this.props
     const errors = await validate(fundingAgencySchema, { ...formData })
@@ -251,6 +259,7 @@ class ContributorTypeFormComponent extends Component {
     onChange({ ...formData, [name]: value })
   }
 
+  /** Map form properties from select value to form data. */
   onSelectChange = selectValue => {
     const { value, label, name, inScheme } = selectValue
     const { formData, onChange } = this.props
@@ -278,6 +287,7 @@ class ContributorTypeFormComponent extends Component {
       .find(contributorType => contributorType.id === id)
     if (!contributorTypeToEdit) return
     const { definition, label, inScheme } = contributorTypeToEdit
+    // Find correct select value based on contributor type identifier
     const identifier = this.state.options[lang].find(option => option.value === contributorTypeToEdit.identifier)
     onChange({
       id,

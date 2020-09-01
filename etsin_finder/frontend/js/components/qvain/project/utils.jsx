@@ -27,6 +27,12 @@ ErrorMessages.defaultProps = {
   errors: []
 }
 
+/**
+ * Convert organization object from Metax to array.
+ * Top level organization is last item in the array.
+ *
+ * @param {Object} organization Organization object from Metax
+ */
 export function parseOrganization(organization) {
   const out = []
   const { name, identifier, email } = organization
@@ -153,6 +159,10 @@ function getOption(hit, language) {
   }
 }
 
+/**
+ * Simple expand/collapse element, without any tooltip hassle.
+ * TODO: Consider refactoring to a general component outside project scope.
+ */
 export class Expand extends Component {
   static propTypes = {
     open: PropTypes.bool,

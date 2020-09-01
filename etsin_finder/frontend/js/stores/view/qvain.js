@@ -1346,7 +1346,7 @@ export const Infrastructure = (name, url) => ({
 
 export const Project = (
   id,
-  title, // {en, fi}
+  title,
   identifier,
   fundingIdentifier,
   funderType, // ProjectFunderType
@@ -1366,22 +1366,22 @@ export const ProjectFunderType = (name, url) => ({
 
 export const Organization = (id, organization, department, subDepartment) => ({
   id: id || uuid(),
-  organization, // {identifier, name: {fi, en, und}}
-  department, // {identifier, name: {fi, en, und}}
-  subDepartment, // {identifier, name: {fi, en, und}}
+  organization,
+  department,
+  subDepartment,
 })
 
 export const FundingAgency = (id, organization, contributorTypes) => ({
   id: id || uuid(),
-  organization, // <Organization>
+  organization,
   contributorTypes: contributorTypes || [], // Array<ContributorType>
 })
 
 export const ContributorType = (id, identifier, label, definition, inScheme) => ({
   id: id || uuid(),
   identifier,
-  label, // {en, fi}
-  definition, // {en, fi}
+  label,
+  definition,
   inScheme,
 })
 

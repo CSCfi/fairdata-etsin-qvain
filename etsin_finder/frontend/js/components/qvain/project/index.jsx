@@ -39,20 +39,14 @@ const INITIAL_STATE = {
     funderType: undefined,
     errors: {},
   },
-  organizations: {
-    addedOrganizations: [],
-    formData: {}, // {organization: {value, name, ...}, department, subDepartment}
-    errors: [],
-  },
+  organizations: { addedOrganizations: [], formData: {}, errors: [] },
   fundingAgencies: {
     formData: {
       id: null,
-      organization: {}, // {organization: {value, name, ...}, department, subDepartment, errors}
-      contributorTypeForm: {
-        errors: {},
-      }, // Identifier, label fi en, definiton fi en, inscheme, errors
+      organization: {},
+      contributorTypeForm: { errors: {} },
       errors: {},
-      contributorTypes: [], // array of contributor types
+      contributorTypes: [],
     },
     addedFundingAgencies: [],
   },

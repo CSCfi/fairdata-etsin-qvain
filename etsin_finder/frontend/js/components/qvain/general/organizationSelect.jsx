@@ -61,6 +61,12 @@ class OrganizationSelect extends Component {
     this.setState({ options: { ...options, organization } })
   }
 
+  /**
+   * Fetch new select values for different levels of organization select, if values
+   * changed from previous props.
+   *
+   * @param {Object} prevProps Previous props
+   */
   componentDidUpdate(prevProps) {
     const didOrganizationChnage = this.didValueChange('organization', prevProps)
     const didDepartmentChnage = this.didValueChange('department', prevProps)
@@ -86,8 +92,8 @@ class OrganizationSelect extends Component {
 
   /**
    * Used to fetch options for department and sub department selects.
-   * Top level organization options are fetched only, when component is mounted,
-   * and should not be cleared.
+   * Top level organization options are fetched only once, when component,
+   * is mounted and should not be cleared.
    *
    * @param {*} organization Current value of organization select
    * @param {*} department Current value of department select
@@ -110,6 +116,12 @@ class OrganizationSelect extends Component {
     this.setState({ options })
   }
 
+  /**
+   * Update organization from top level organization select.
+   * This method handles also updating the department and
+   * subdepartment select values. If form is not open, clear
+   * department and subdepartment values always when organization changes.
+   */
   onOrganizationChange = selectedValue => {
     if (!selectedValue) return this.props.onChange({ organization: null, department: null, subDepartment: null })
 
@@ -133,6 +145,10 @@ class OrganizationSelect extends Component {
     return this.props.onChange(updatedFormData)
   }
 
+  /**
+   * Update department value. If form is is not open, clear the
+   * subdepartment value.
+   */
   onDepartmentChange = selectedValue => {
     const { value } = this.props
     if (!selectedValue) {
@@ -162,6 +178,11 @@ class OrganizationSelect extends Component {
     this.props.onChange({ ...formData, [field]: { ...formData[field], errors } })
   }
 
+  /**
+   * Return true if value of given key is changed from current props.
+   * @param {String} key one of: ["organization", "department", "subdepartment"]
+   * @param {Object} prevProps Previous props
+   */
   didValueChange = (key, prevProps) => {
     const prev = (prevProps.value && prevProps.value[key]) ? prevProps.value[key].value : undefined
     const current = (this.props.value && this.props.value[key]) ? this.props.value[key].value : undefined
@@ -245,6 +266,9 @@ const CreatableSelectComponent = ({ Stores, onChange, onBlur, value, options, pl
 
   const onReset = () => onChange(null)
 
+  /**
+   * Craft payload for onChange, based on organization form.
+   */
   const onFormChange = event => {
     const newValue = event.target.value
     const newName = event.target.name
