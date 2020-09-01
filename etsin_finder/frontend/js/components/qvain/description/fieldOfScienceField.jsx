@@ -13,6 +13,7 @@ import Card from '../general/card'
 import { FieldOfScience } from '../../../stores/view/qvain'
 import { onChange, getCurrentValue } from '../utils/select'
 import { LabelLarge } from '../general/form'
+import etsinTheme from '../../../styles/theme'
 
 class FieldOfScienceField extends React.Component {
   promises = []
@@ -104,6 +105,7 @@ class FieldOfScienceField extends React.Component {
           component={Select}
           attributes={{ placeholder: 'qvain.description.fieldOfScience.placeholder' }}
           isDisabled={readonly}
+          styles={{ placeholder: () => ({ color: etsinTheme.color.gray }) }}
           isClearable
           value={getCurrentValue(fieldOfScience, options, lang)}
           className="basic-single"

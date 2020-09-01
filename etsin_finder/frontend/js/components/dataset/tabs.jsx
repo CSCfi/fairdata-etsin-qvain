@@ -138,7 +138,7 @@ const EtsinTabs = styled.ul`
     }
     &:not(.active) {
       background-color: transparent;
-      color: ${props => props.theme.color.medgray};
+      color: ${props => props.theme.color.darkgray};
       &:hover {
         background-color: ${props => props.theme.color.primary};
         color: white;

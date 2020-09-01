@@ -1,5 +1,6 @@
 import { observable, action, computed, runInAction } from 'mobx'
 import axios from 'axios'
+import moment from 'moment'
 import { getDirectories, getFiles, deepCopy } from '../../components/qvain/utils/fileHierarchy'
 import urls from '../../components/qvain/utils/urls'
 import {
@@ -198,6 +199,11 @@ class Qvain {
   setTitle = (title, lang) => {
     this.title[lang] = title
     this.changed = true
+
+    // If this is a new dataset/draft and date is not yet defined, set date to today's date
+    if (this.issuedDate === undefined && this.original === undefined) {
+      this.issuedDate = moment().format('YYYY-MM-DD')
+    }
   }
 
   @action

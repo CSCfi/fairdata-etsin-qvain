@@ -149,7 +149,7 @@ class TableItem extends Component {
             <React.Fragment>
               <InvertedButton
                 thin
-                color={this.props.theme.color.gray}
+                color={this.props.theme.color.darkgray}
                 disabled={!this.props.allowInfo}
                 onClick={this.openModal}
               >
@@ -208,6 +208,7 @@ class TableItem extends Component {
                     ? this.props.item.remote.download_url.description
                     : this.props.item.remote.access_url.description
                 )}
+                color={this.props.theme.color.primaryDark}
               >
                 <Translate
                   content={
@@ -344,7 +345,8 @@ TableItem.propTypes = {
   theme: PropTypes.shape({
     color: PropTypes.shape({
       primary: PropTypes.string.isRequired,
-      gray: PropTypes.string.isRequired,
+      primaryDark: PropTypes.string.isRequired,
+      darkgray: PropTypes.string.isRequired,
     }),
   }).isRequired,
   fields: PropTypes.shape({

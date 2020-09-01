@@ -16,6 +16,7 @@ import { darken } from 'polished'
 import PropTypes from 'prop-types'
 
 import Button from '../general/button'
+import etsinTheme from '../../styles/theme'
 
 const SelectContainer = styled.div`
   width: ${props => props.width};
@@ -142,7 +143,7 @@ export default class VersionSelect extends Component {
 
   selectColor = (selected) => {
     let color;
-    if (selected.label.includes('Old') && !selected.removed) {
+    if (selected.old && !selected.removed) {
       color = this.state.background
     } else if (selected.removed) {
       color = this.props.error
@@ -153,20 +154,19 @@ export default class VersionSelect extends Component {
   }
 
   render() {
+    const { selected } = this.state
     return (
       <SelectContainer width={this.props.width} onFocus={this.onFocus} onBlur={this.onBlur}>
         <Controller
           noMargin
-          color={this.props.color}
+          color={selected.old && !selected.removed ? etsinTheme.color.dark : this.props.color}
           padding={this.props.padding}
-          background={
-            this.selectColor(this.state.selected)
-          }
+          background={this.selectColor(selected)}
           isOpen={this.state.isOpen}
           onClick={this.toggleOpen}
         >
           <span className="sr-only">Version selector (with current version) </span>
-          {this.state.selected.label}
+          {selected.label}
         </Controller>
         {this.state.isOpen && this.state.isFocused && (
           <List width={this.props.width} background={this.props.background}>
@@ -174,7 +174,7 @@ export default class VersionSelect extends Component {
               .map((single, i) => (
                 <ListItem
                   noMargin
-                  color={this.props.color}
+                  color={single.old ? etsinTheme.color.dark : this.props.color}
                   padding={this.props.padding}
                   key={single.value}
                   onClick={() => this.changeSelected(single)}
