@@ -185,6 +185,7 @@ const LangButtonContainer = styled.div`
   flex-direction: row;
 `
 const LangButton = styled.button`
+  flex-grow: 1;
   padding: 5px 20px;
   background-color: #fff;
   border: 1px solid ${props => (props.active ? '#007fad' : '#cccccc')};
