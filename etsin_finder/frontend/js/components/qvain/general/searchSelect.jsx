@@ -11,6 +11,7 @@ import {
   getOptionValue,
   sortOptions,
 } from '../utils/select'
+import etsinTheme from '../../../styles/theme'
 
 class Select extends Component {
   promises = []
@@ -59,6 +60,7 @@ class Select extends Component {
       onChange: isMulti ? onChangeMulti(setter) : onChange(setter),
       cacheOptions: true,
       defaultOptions: [],
+      styles: { placeholder: () => ({ color: etsinTheme.color.gray }) },
       getOptionLabel: getOptionLabel(model, lang),
       getOptionValue: getOptionValue(model),
       loadOptions: async inputValue => {

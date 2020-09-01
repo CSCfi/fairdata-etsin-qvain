@@ -30,12 +30,12 @@ class VersionChanger extends Component {
 
   versionLabels = set => set
     .map((single, i) => {
-      const old = i > 0 ? translate('dataset.version.old') : ''
-
+      const old = i > 0
       return {
-        label: `${translate('dataset.version.number', { number: set.length - i })} ${old}`,
+        label: `${translate('dataset.version.number', { number: set.length - i })} ${old ? translate('dataset.version.old') : ''}`,
         value: single.identifier,
         removed: single.removed,
+        old,
       }
     })
 

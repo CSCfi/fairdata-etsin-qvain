@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 
 export const ValidationError = styled.p`
-  color: red;
+  color: ${(props) => props.theme.color.redText};
   :empty {
     display: none;
   }

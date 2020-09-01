@@ -14,6 +14,7 @@ import {
   autoSortOptions,
 } from '../utils/select'
 import getReferenceData from '../utils/getReferenceData'
+import etsinTheme from '../../../styles/theme'
 
 class Select extends Component {
   promises = []
@@ -100,6 +101,7 @@ class Select extends Component {
       isMulti,
       getOptionLabel: getOptionLabel(model, lang),
       getOptionValue: getOptionValue(model),
+      styles: { placeholder: () => ({ color: etsinTheme.color.gray }) },
     }
 
     if (inModal) {
