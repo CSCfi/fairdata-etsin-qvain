@@ -49,7 +49,7 @@ class Select extends Component {
       cacheOptions: true,
       defaultOptions: [],
       styles: { placeholder: () => ({ color: etsinTheme.color.gray }) },
-      loadOptions: (inputValue =>
+      loadOptions: inputValue =>
         new Promise(async res => {
           const opts = await getOptions(metaxIdentifier, inputValue)
           this.setState({ options: opts })

@@ -29,7 +29,7 @@ const StickyHeader = ({
   const createLinkBack = position => (
     <LinkBackContainer position={position}>
       <LinkBack to="/qvain">
-        <FontAwesomeIcon size="lg" icon={faChevronLeft} />
+        <FontAwesomeIcon size="lg" icon={faChevronLeft} title="Back" />
         <Translate component={LinkText} display="block" content="qvain.backLink" />
       </LinkBack>
     </LinkBackContainer>
