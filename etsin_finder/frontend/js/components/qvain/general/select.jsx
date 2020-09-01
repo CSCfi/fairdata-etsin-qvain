@@ -2,10 +2,17 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import ReactSelect from 'react-select'
 import Translate from 'react-translate-component'
-import counterpart from 'counterpart'
 import { inject, observer } from 'mobx-react'
 
-import { onChange, getCurrentValue } from '../utils/select'
+import {
+  onChange,
+  onChangeMulti,
+  getCurrentOption,
+  getOptionLabel,
+  getOptionValue,
+  sortOptions,
+  autoSortOptions,
+} from '../utils/select'
 import getReferenceData from '../utils/getReferenceData'
 import etsinTheme from '../../../styles/theme'
 
@@ -15,24 +22,24 @@ class Select extends Component {
   static propTypes = {
     Stores: PropTypes.object.isRequired,
     metaxIdentifier: PropTypes.string.isRequired,
-    getter: PropTypes.object,
+    getter: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
     setter: PropTypes.func.isRequired,
     model: PropTypes.func.isRequired,
     name: PropTypes.string.isRequired,
     inModal: PropTypes.bool,
-    placeholder: PropTypes.string,
-    noOptionsMessage: PropTypes.string,
+    isClearable: PropTypes.bool,
+    isMulti: PropTypes.bool,
   }
 
   static defaultProps = {
     getter: undefined,
     inModal: false,
-    placeholder: 'qvain.select.placeholder',
-    noOptionsMessage: null,
+    isClearable: true,
+    isMulti: false,
   }
 
   state = {
-    options: { en: [], fi: [] },
+    options: [],
   }
 
   componentDidMount = () => {
@@ -49,20 +56,14 @@ class Select extends Component {
 
   resolveRefData = res => {
     const list = res.data.hits.hits
-    const refsEn = list.map(ref => ({
-      value: ref._source.uri,
-      label: ref._source.label.en || ref._source.label.und,
-    }))
-    const refsFi = list.map(ref => ({
-      value: ref._source.uri,
-      label: ref._source.label.fi || ref._source.label.und,
-    }))
+    const { model } = this.props
+    const options = list.map(ref => model(ref._source.label, ref._source.uri))
+    const { lang } = this.props.Stores.Locale
+    sortOptions(model, lang, options)
     this.setState({
-      options: {
-        en: refsEn,
-        fi: refsFi,
-      },
+      options,
     })
+    autoSortOptions(this, this.props.Stores.Locale, model)
   }
 
   rejectRefData = error => {
@@ -82,41 +83,38 @@ class Select extends Component {
 
   render() {
     const { readonly } = this.props.Stores.Qvain
-    const { getter, setter, model, name, inModal, placeholder, noOptionsMessage } = this.props
+    const { getter, setter, model, name, inModal, isClearable, isMulti } = this.props
     const { options } = this.state
     const { lang } = this.props.Stores.Locale
 
-    const selectProps = {
-      name,
+    const props = {
+      ...this.props,
       inputId: `${name}-select`,
       component: ReactSelect,
-      attributes: { placeholder },
+      attributes: { placeholder: 'qvain.select.placeholder' },
       isDisabled: readonly,
-      value: getCurrentValue(getter, options, lang),
-      className: 'basic-single',
+      value: getCurrentOption(model, options, getter),
       classNamePrefix: 'select',
-      defaultOptions: [],
-      options: options[lang],
-      onChange: onChange(options, lang, setter, model),
-      isClearable: true,
+      options,
+      onChange: isMulti ? onChangeMulti(setter) : onChange(setter),
+      isClearable,
+      isMulti,
+      getOptionLabel: getOptionLabel(model, lang),
+      getOptionValue: getOptionValue(model),
+      styles: { placeholder: () => ({ color: etsinTheme.color.gray }) },
     }
 
-    if (noOptionsMessage) {
-      selectProps.noOptionsMessage = ({ inputValue }) => {
-        if (inputValue) return counterpart(noOptionsMessage)
-        return counterpart(placeholder)
-      }
+    if (inModal) {
+      props.menuPlacement = 'auto'
+      props.menuPosition = 'fixed'
+      props.menuShouldScrollIntoView = false
     }
 
-    return inModal ? (
-      <Translate
-        {...selectProps}
-        menuPlacement="auto"
-        menuPosition="fixed"
-        styles={{ placeholder: () => ({ color: etsinTheme.color.gray }) }}
-        menuShouldScrollIntoView={false}
-      />
-    ) : <Translate {...selectProps} />
+    if (!(props.attributes && props.attributes.placeholder)) {
+      props.attributes = { ...props.attributes, placeholder: 'qvain.select.placeholder' }
+    }
+
+    return <Translate component={ReactSelect} {...props} />
   }
 }
 

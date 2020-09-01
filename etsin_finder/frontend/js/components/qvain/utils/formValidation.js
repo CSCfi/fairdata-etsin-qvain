@@ -70,20 +70,14 @@ const licenseSchema = yup.object().shape({
   name: yup.object().nullable(),
   identifier: yup.string().required(),
   otherLicenseUrl: yup
-    .mixed()
-    .when('identifier', {
-      is: 'other',
-      then: yup
-        .string(translate('qvain.validationMessages.license.otherUrl.string'))
-        .url(translate('qvain.validationMessages.license.otherUrl.url'))
-        .required(translate('qvain.validationMessages.license.otherUrl.required')),
-      otherwise: yup.string().url().nullable(),
-    })
+    .string(translate('qvain.validationMessages.license.otherUrl.string'))
+    .url(translate('qvain.validationMessages.license.otherUrl.url'))
+    .required(translate('qvain.validationMessages.license.otherUrl.required'))
     .nullable(),
 })
 
 const licenseArrayObject = yup.object().shape({
-  name: yup.object().required(),
+  name: yup.object().nullable(),
   identifier: yup
     .string(translate('qvain.validationMessages.license.otherUrl.string'))
     .url(translate('qvain.validationMessages.license.otherUrl.url'))

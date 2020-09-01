@@ -41,20 +41,17 @@ export const fillUndefinedMultiLangProp = (prop = {}) => {
   return prop
 }
 
-export const RelatedResourceModel = rr => {
-  console.log(rr)
-  return {
-    uiid: uuidv4(),
-    name: fillUndefinedMultiLangProp(rr.entity.title),
-    description: fillUndefinedMultiLangProp(rr.entity.description),
-    identifier: rr.entity.identifier,
-    relationType: rr.relation_type
-      ? RelationType(rr.relation_type.pref_label, rr.relation_type.identifier)
+export const RelatedResourceModel = rr => ({
+  uiid: uuidv4(),
+  name: fillUndefinedMultiLangProp(rr.entity.title),
+  description: fillUndefinedMultiLangProp(rr.entity.description),
+  identifier: rr.entity.identifier,
+  relationType: rr.relation_type
+    ? RelationType(rr.relation_type.pref_label, rr.relation_type.identifier)
+    : undefined,
+  entityType:
+    rr.entity && rr.entity.type
+      ? RelationType(rr.entity.type.pref_label, rr.entity.type.identifier)
       : undefined,
-    entityType:
-      rr.entity && rr.entity.type
-        ? RelationType(rr.entity.type.pref_label, rr.entity.type.identifier)
-        : undefined,
-  }
-}
+})
 export default RelatedResources

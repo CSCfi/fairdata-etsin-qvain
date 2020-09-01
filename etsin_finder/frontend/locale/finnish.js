@@ -438,6 +438,7 @@ const finnish = {
     },
     select: {
       placeholder: 'Valitse vaihtoehto',
+      searchPlaceholder: 'Hae vaihtoehtoja kirjoittamalla',
     },
     organizationSelect: {
       label: {
@@ -627,7 +628,7 @@ const finnish = {
       license: {
         title: 'Lisenssi',
         infoText:
-          'Lisenssi on tärkeä osa aineiston kuvailua. Lisenssillä määrittelet, miten aineistoa voi käyttää. Oletuksena on valittuna suositeltu CC BY 4.0. Jos haluat alasvetovalikosta valinnan sijaan määrittää lisenssin URL -osoitteen itse, valitse alasvetovalikosta "Muu (URL)", minkä jälkeen pääset kirjoittamaan URL-osoitteen.',
+          'Lisenssi on tärkeä osa aineiston kuvailua. Lisenssillä määrittelet, miten aineistoa voi käyttää. Oletuksena on valittuna suositeltu CC BY 4.0. Jos haluat alasvetovalikosta valinnan sijaan määrittää lisenssin URL -osoitteen itse, kirjoita lisenssin URL ja valitse alasvetovalikon alusta "Muu (URL)".',
         placeholder: 'Valitse vaihtoehto',
         other: {
           label: 'URL',
@@ -1465,7 +1466,7 @@ const finnish = {
           },
           actorsInput: {
             label: 'Liittyi toimijaan',
-            addButton: 'Liitä toimija',
+            placeholder: 'Liitä toimija',
             createButton: 'Luo uusi toimija',
           },
           lifecycleInput: {

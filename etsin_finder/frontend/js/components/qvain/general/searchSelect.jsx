@@ -3,7 +3,14 @@ import PropTypes from 'prop-types'
 import ReactSelect from 'react-select/async'
 import Translate from 'react-translate-component'
 import { inject, observer } from 'mobx-react'
-import { getOptions, getCurrentValue, onChange } from '../utils/select'
+import {
+  onChange,
+  onChangeMulti,
+  getOptions,
+  getOptionLabel,
+  getOptionValue,
+  sortOptions,
+} from '../utils/select'
 import etsinTheme from '../../../styles/theme'
 
 class Select extends Component {
@@ -12,22 +19,20 @@ class Select extends Component {
   static propTypes = {
     Stores: PropTypes.object.isRequired,
     metaxIdentifier: PropTypes.string.isRequired,
-    getter: PropTypes.object,
+    getter: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
     setter: PropTypes.func.isRequired,
     model: PropTypes.func.isRequired,
     name: PropTypes.string.isRequired,
     inModal: PropTypes.bool,
-    placeholder: PropTypes.string
+    placeholder: PropTypes.string,
+    isMulti: PropTypes.bool,
   }
 
   static defaultProps = {
     getter: undefined,
     inModal: false,
-    placeholder: ''
-  }
-
-  state = {
-    options: undefined,
+    placeholder: 'qvain.select.searchPlaceholder',
+    isMulti: false,
   }
 
   render() {
@@ -39,31 +44,30 @@ class Select extends Component {
       model,
       inModal,
       metaxIdentifier,
-      placeholder
+      placeholder,
+      isMulti,
     } = this.props
-    const { options } = this.state
     const { lang } = this.props.Stores.Locale
 
     const props = {
       ...this.props,
-      className: 'basic-single',
       classNamePrefix: 'select',
       inputId: `${name}-select`,
       component: ReactSelect,
       attributes: { placeholder },
       isDisabled: readonly,
-      value: getCurrentValue(getter, options, lang),
-      onChange: onChange(options, lang, setter, model),
+      value: getter,
+      onChange: isMulti ? onChangeMulti(setter) : onChange(setter),
       cacheOptions: true,
       defaultOptions: [],
       styles: { placeholder: () => ({ color: etsinTheme.color.gray }) },
-      loadOptions: (inputValue =>
-        new Promise(async res => {
-          const opts = await getOptions(metaxIdentifier, inputValue)
-          this.setState({ options: opts })
-          res(opts[lang])
-        })
-      ),
+      getOptionLabel: getOptionLabel(model, lang),
+      getOptionValue: getOptionValue(model),
+      loadOptions: async inputValue => {
+        const opts = await getOptions(model, metaxIdentifier, inputValue)
+        sortOptions(model, lang, opts)
+        return opts
+      },
     }
 
     return inModal ? (
@@ -73,7 +77,9 @@ class Select extends Component {
         menuPosition="fixed"
         menuShouldScrollIntoView={false}
       />
-    ) : <Translate {...props} />
+    ) : (
+      <Translate {...props} />
+    )
   }
 }
 
