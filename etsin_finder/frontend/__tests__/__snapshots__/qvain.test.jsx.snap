@@ -291,13 +291,86 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
             "transforms": Array [],
             "type": "mixed",
           },
+          "isParentRoot": [Function],
+          "readonly": false,
+          "references": Array [],
+          "saveEdited": [Function],
+          "saveNew": [Function],
+          "toBackend": [Function],
+          "validationError": undefined,
         },
-        "tests": Array [],
-        "transforms": Array [
-          [Function],
+        "accessType": Object {
+          "name": undefined,
+          "url": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
+        },
+        "changed": false,
+        "clearMetadataModalFile": undefined,
+        "createExternalResourceUIId": [Function],
+        "createLooseActorPromise": [Function],
+        "createLooseProvenancePromise": [Function],
+        "cumulativeState": 0,
+        "dataCatalog": undefined,
+        "datasetLanguageArray": Array [],
+        "deprecated": false,
+        "description": Object {
+          "en": "",
+          "fi": "",
+        },
+        "deselectChildren": [Function],
+        "deselectParents": [Function],
+        "embargoExpDate": undefined,
+        "existingDirectories": Array [],
+        "existingFiles": Array [],
+        "extResFormOpen": false,
+        "externalResourceInEdit": Object {
+          "accessUrl": "",
+          "downloadUrl": "",
+          "id": undefined,
+          "title": "",
+          "useCategory": "",
+        },
+        "externalResources": Array [],
+        "fieldOfScienceArray": Array [],
+        "fixDeprecatedModalOpen": false,
+        "hierarchy": Object {},
+        "idaPickerOpen": false,
+        "inEdit": undefined,
+        "infrastructureArray": Array [],
+        "issuedDate": undefined,
+        "keywordString": "",
+        "keywordsArray": Array [],
+        "licenseArray": Array [
+          Object {
+            "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
+            "name": undefined,
+          },
         ],
-        "type": "object",
-      }
+        "mergeArraysByIdentifier": [Function],
+        "metadataModalFile": undefined,
+        "newCumulativeState": 0,
+        "original": undefined,
+        "otherIdentifier": "",
+        "otherIdentifiersArray": Array [],
+        "otherIdentifiersValidationError": null,
+        "preservationState": 0,
+        "promptLooseActors": undefined,
+        "promptLooseProvenances": undefined,
+        "provenances": Array [],
+        "provenancesWithNonExistingActors": Array [],
+        "relatedResources": Array [],
+        "restrictionGrounds": undefined,
+        "selectedDirectories": Array [],
+        "selectedFiles": Array [],
+        "selectedProject": undefined,
+        "setOtherIdentifierValidationError": [Function],
+        "spatials": Array [],
+        "temporals": Array [],
+        "title": Object {
+          "en": "",
+          "fi": "",
+        },
+        "useDoi": false,
+      },
     }
   />
   <Translate
@@ -504,7 +577,6 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
         "createLooseProvenancePromise": [Function],
         "cumulativeState": 0,
         "dataCatalog": undefined,
-        "datasetLanguage": undefined,
         "datasetLanguageArray": Array [],
         "deprecated": false,
         "description": Object {
@@ -525,22 +597,21 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
           "useCategory": "",
         },
         "externalResources": Array [],
-        "fieldOfScience": undefined,
         "fieldOfScienceArray": Array [],
         "fixDeprecatedModalOpen": false,
         "hierarchy": Object {},
         "idaPickerOpen": false,
         "inEdit": undefined,
-        "infrastructure": undefined,
-        "infrastructures": Array [],
+        "infrastructureArray": Array [],
         "issuedDate": undefined,
         "keywordString": "",
         "keywordsArray": Array [],
-        "license": Object {
-          "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
-          "name": undefined,
-        },
-        "licenseArray": Array [],
+        "licenseArray": Array [
+          Object {
+            "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
+            "name": undefined,
+          },
+        ],
         "mergeArraysByIdentifier": [Function],
         "metadataModalFile": undefined,
         "newCumulativeState": 0,
@@ -548,14 +619,13 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
         "otherIdentifier": "",
         "otherIdentifiersArray": Array [],
         "otherIdentifiersValidationError": null,
-        "otherLicenseUrl": "",
         "preservationState": 0,
         "promptLooseActors": undefined,
         "promptLooseProvenances": undefined,
         "provenances": Array [],
         "provenancesWithNonExistingActors": Array [],
         "relatedResources": Array [],
-        "restrictionGrounds": Object {},
+        "restrictionGrounds": undefined,
         "selectedDirectories": Array [],
         "selectedFiles": Array [],
         "selectedProject": undefined,
@@ -770,7 +840,6 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
         "createLooseProvenancePromise": [Function],
         "cumulativeState": 0,
         "dataCatalog": undefined,
-        "datasetLanguage": undefined,
         "datasetLanguageArray": Array [],
         "deprecated": false,
         "description": Object {
@@ -791,22 +860,21 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
           "useCategory": "",
         },
         "externalResources": Array [],
-        "fieldOfScience": undefined,
         "fieldOfScienceArray": Array [],
         "fixDeprecatedModalOpen": false,
         "hierarchy": Object {},
         "idaPickerOpen": false,
         "inEdit": undefined,
-        "infrastructure": undefined,
-        "infrastructures": Array [],
+        "infrastructureArray": Array [],
         "issuedDate": undefined,
         "keywordString": "",
         "keywordsArray": Array [],
-        "license": Object {
-          "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
-          "name": undefined,
-        },
-        "licenseArray": Array [],
+        "licenseArray": Array [
+          Object {
+            "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
+            "name": undefined,
+          },
+        ],
         "mergeArraysByIdentifier": [Function],
         "metadataModalFile": undefined,
         "newCumulativeState": 0,
@@ -814,14 +882,13 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
         "otherIdentifier": "",
         "otherIdentifiersArray": Array [],
         "otherIdentifiersValidationError": null,
-        "otherLicenseUrl": "",
         "preservationState": 0,
         "promptLooseActors": undefined,
         "promptLooseProvenances": undefined,
         "provenances": Array [],
         "provenancesWithNonExistingActors": Array [],
         "relatedResources": Array [],
-        "restrictionGrounds": Object {},
+        "restrictionGrounds": undefined,
         "selectedDirectories": Array [],
         "selectedFiles": Array [],
         "selectedProject": undefined,
@@ -1036,7 +1103,6 @@ exports[`Qvain.Description should render <LanguageField /> 1`] = `
         "createLooseProvenancePromise": [Function],
         "cumulativeState": 0,
         "dataCatalog": undefined,
-        "datasetLanguage": undefined,
         "datasetLanguageArray": Array [],
         "deprecated": false,
         "description": Object {
@@ -1057,22 +1123,21 @@ exports[`Qvain.Description should render <LanguageField /> 1`] = `
           "useCategory": "",
         },
         "externalResources": Array [],
-        "fieldOfScience": undefined,
         "fieldOfScienceArray": Array [],
         "fixDeprecatedModalOpen": false,
         "hierarchy": Object {},
         "idaPickerOpen": false,
         "inEdit": undefined,
-        "infrastructure": undefined,
-        "infrastructures": Array [],
+        "infrastructureArray": Array [],
         "issuedDate": undefined,
         "keywordString": "",
         "keywordsArray": Array [],
-        "license": Object {
-          "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
-          "name": undefined,
-        },
-        "licenseArray": Array [],
+        "licenseArray": Array [
+          Object {
+            "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
+            "name": undefined,
+          },
+        ],
         "mergeArraysByIdentifier": [Function],
         "metadataModalFile": undefined,
         "newCumulativeState": 0,
@@ -1080,14 +1145,13 @@ exports[`Qvain.Description should render <LanguageField /> 1`] = `
         "otherIdentifier": "",
         "otherIdentifiersArray": Array [],
         "otherIdentifiersValidationError": null,
-        "otherLicenseUrl": "",
         "preservationState": 0,
         "promptLooseActors": undefined,
         "promptLooseProvenances": undefined,
         "provenances": Array [],
         "provenancesWithNonExistingActors": Array [],
         "relatedResources": Array [],
-        "restrictionGrounds": Object {},
+        "restrictionGrounds": undefined,
         "selectedDirectories": Array [],
         "selectedFiles": Array [],
         "selectedProject": undefined,
@@ -1302,7 +1366,6 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
         "createLooseProvenancePromise": [Function],
         "cumulativeState": 0,
         "dataCatalog": undefined,
-        "datasetLanguage": undefined,
         "datasetLanguageArray": Array [],
         "deprecated": false,
         "description": Object {
@@ -1323,22 +1386,21 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
           "useCategory": "",
         },
         "externalResources": Array [],
-        "fieldOfScience": undefined,
         "fieldOfScienceArray": Array [],
         "fixDeprecatedModalOpen": false,
         "hierarchy": Object {},
         "idaPickerOpen": false,
         "inEdit": undefined,
-        "infrastructure": undefined,
-        "infrastructures": Array [],
+        "infrastructureArray": Array [],
         "issuedDate": undefined,
         "keywordString": "",
         "keywordsArray": Array [],
-        "license": Object {
-          "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
-          "name": undefined,
-        },
-        "licenseArray": Array [],
+        "licenseArray": Array [
+          Object {
+            "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
+            "name": undefined,
+          },
+        ],
         "mergeArraysByIdentifier": [Function],
         "metadataModalFile": undefined,
         "newCumulativeState": 0,
@@ -1346,14 +1408,13 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
         "otherIdentifier": "",
         "otherIdentifiersArray": Array [],
         "otherIdentifiersValidationError": null,
-        "otherLicenseUrl": "",
         "preservationState": 0,
         "promptLooseActors": undefined,
         "promptLooseProvenances": undefined,
         "provenances": Array [],
         "provenancesWithNonExistingActors": Array [],
         "relatedResources": Array [],
-        "restrictionGrounds": Object {},
+        "restrictionGrounds": undefined,
         "selectedDirectories": Array [],
         "selectedFiles": Array [],
         "selectedProject": undefined,
@@ -1391,6 +1452,8 @@ exports[`Qvain.RightsAndLicenses should render <AccessType /> 1`] = `
     }
     clearable={true}
     component={[Function]}
+    getOptionLabel={[Function]}
+    getOptionValue={[Function]}
     inputId="accessTypeSelect"
     isDisabled={false}
     name="accessType"
@@ -1399,8 +1462,8 @@ exports[`Qvain.RightsAndLicenses should render <AccessType /> 1`] = `
     options={Array []}
     value={
       Object {
-        "label": undefined,
-        "value": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
+        "name": undefined,
+        "url": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
       }
     }
   />
@@ -1431,31 +1494,35 @@ exports[`Qvain.RightsAndLicenses should render <Licenses /> 1`] = `
       }
     }
     component={[Function]}
+    createOptionPosition="first"
+    getNewOptionData={[Function]}
+    getOptionLabel={[Function]}
+    getOptionValue={[Function]}
     inputId="licenseSelect"
-    isClearable={true}
+    isClearable={false}
     isDisabled={false}
+    isMulti={true}
     name="license"
-    onBlur={[Function]}
     onChange={[Function]}
-    value={
+    options={Array []}
+    styles={
       Object {
-        "label": undefined,
-        "value": undefined,
+        "multiValue": [Function],
+        "multiValueLabel": [Function],
       }
     }
+    value={
+      Array [
+        Object {
+          "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
+          "name": undefined,
+        },
+      ]
+    }
   />
-  <licenses__ButtonContainer>
-    <licenses__AddNewButton
-      disabled={false}
-      onClick={[Function]}
-      type="button"
-    >
-      <Translate
-        component="span"
-        content="qvain.rightsAndLicenses.license.addButton"
-      />
-    </licenses__AddNewButton>
-  </licenses__ButtonContainer>
+  <ValidationErrors
+    errors={Array []}
+  />
 </Card>
 `;
 
@@ -1480,7 +1547,7 @@ exports[`Qvain.RightsAndLicenses should render <RightsAndLicenses /> 1`] = `
       />
     </Tooltip>
   </title__SectionTitle>
-  <inject-License-with-Stores />
+  <WithTheme(inject-License-with-Stores) />
   <inject-AccessType-with-Stores />
 </div>
 `;

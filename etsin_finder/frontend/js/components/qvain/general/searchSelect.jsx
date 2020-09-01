@@ -1,73 +1,84 @@
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import ReactSelect from 'react-select/async'
 import Translate from 'react-translate-component'
 import { inject, observer } from 'mobx-react'
-import { getOptions, getCurrentValue, onChange } from '../utils/select'
+import {
+  onChange,
+  onChangeMulti,
+  getOptions,
+  getOptionLabel,
+  getOptionValue,
+  sortOptions,
+} from '../utils/select'
 import etsinTheme from '../../../styles/theme'
 
-class Select extends Component {
-  promises = []
+const Select = props => {
+  const {
+    Stores,
+    metaxIdentifier,
+    getter,
+    setter,
+    model,
+    name,
+    inModal,
+    placeholder,
+    isMulti,
+  } = props
+  const { readonly } = Stores.Qvain
+  const { lang } = Stores.Locale
 
-  static propTypes = {
-    Stores: PropTypes.object.isRequired,
-    metaxIdentifier: PropTypes.string.isRequired,
-    getter: PropTypes.object,
-    setter: PropTypes.func.isRequired,
-    model: PropTypes.func.isRequired,
-    name: PropTypes.string.isRequired,
-    inModal: PropTypes.bool,
-    placeholder: PropTypes.string,
+  const _props = {
+    ...props,
+    className: 'basic-single',
+    classNamePrefix: 'select',
+    inputId: `${name}-select`,
+    component: ReactSelect,
+    attributes: { placeholder },
+    isDisabled: readonly,
+    value: getter,
+    onChange: isMulti ? onChangeMulti(setter) : onChange(setter),
+    cacheOptions: true,
+    defaultOptions: [],
+    styles: { placeholder: () => ({ color: etsinTheme.color.gray }) },
+    getOptionLabel: getOptionLabel(model, lang),
+    getOptionValue: getOptionValue(model),
+    loadOptions: async inputValue => {
+      const opts = await getOptions(model, metaxIdentifier, inputValue)
+      sortOptions(model, lang, opts)
+      return opts
+    },
   }
 
-  static defaultProps = {
-    getter: undefined,
-    inModal: false,
-    placeholder: '',
-  }
+  return inModal ? (
+    <Translate
+      {..._props}
+      menuPlacement="auto"
+      menuPosition="fixed"
+      menuShouldScrollIntoView={false}
+    />
+  ) : (
+    <Translate {..._props} />
+  )
+}
 
-  state = {
-    options: undefined,
-  }
+Select.propTypes = {
+  Stores: PropTypes.object.isRequired,
+  metaxIdentifier: PropTypes.string.isRequired,
+  getter: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+  setter: PropTypes.func.isRequired,
+  model: PropTypes.func.isRequired,
+  name: PropTypes.string.isRequired,
+  inModal: PropTypes.bool,
+  placeholder: PropTypes.string,
+  isMulti: PropTypes.bool,
+}
 
-  render() {
-    const { readonly } = this.props.Stores.Qvain
-    const { getter, setter, name, model, inModal, metaxIdentifier, placeholder } = this.props
-    const { options } = this.state
-    const { lang } = this.props.Stores.Locale
-
-    const props = {
-      ...this.props,
-      className: 'basic-single',
-      classNamePrefix: 'select',
-      inputId: `${name}-select`,
-      component: ReactSelect,
-      attributes: { placeholder },
-      isDisabled: readonly,
-      value: getCurrentValue(getter, options, lang),
-      onChange: onChange(options, lang, setter, model),
-      cacheOptions: true,
-      defaultOptions: [],
-      styles: { placeholder: () => ({ color: etsinTheme.color.gray }) },
-      loadOptions: inputValue =>
-        new Promise(async res => {
-          const opts = await getOptions(metaxIdentifier, inputValue)
-          this.setState({ options: opts })
-          res(opts[lang])
-        }),
-    }
-
-    return inModal ? (
-      <Translate
-        {...props}
-        menuPlacement="auto"
-        menuPosition="fixed"
-        menuShouldScrollIntoView={false}
-      />
-    ) : (
-      <Translate {...props} />
-    )
-  }
+Select.defaultProps = {
+  getter: undefined,
+  inModal: false,
+  placeholder: 'qvain.select.searchPlaceholder',
+  isMulti: false,
 }
 
 export default inject('Stores')(observer(Select))

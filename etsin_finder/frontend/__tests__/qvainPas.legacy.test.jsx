@@ -411,8 +411,10 @@ describe('Qvain.Description', () => {
 
 describe('Qvain.RightsAndLicenses', () => {
   const render = stores => {
-    stores.Qvain.setLicense(LicenseConstructor({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'other'))
-    stores.Qvain.setAccessType(AccessTypeConstructor(undefined, ACCESS_TYPE_URL.EMBARGO))
+    stores.Qvain.setLicenseArray([
+      LicenseConstructor({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'other'),
+    ])
+    stores.Qvain.setAccessType(AccessTypeConstructor({ en: 'Embargo' }, ACCESS_TYPE_URL.EMBARGO))
     return mount(
       <Provider Stores={stores}>
         <ThemeProvider theme={etsinTheme}>
@@ -432,8 +434,8 @@ describe('Qvain.RightsAndLicenses', () => {
     wrapper = render(stores)
     const inputs = wrapper.find('input').not('[type="hidden"]')
 
-    // Expect inputs: license, license url, access type, restriction grounds, embargo expires
-    expect(inputs.length).toBe(5)
+    // Expect inputs: license, access type, restriction grounds, embargo expires
+    expect(inputs.length).toBe(4)
     inputs.forEach(c => expect(c.props().disabled).toBe(true))
   })
 
@@ -444,8 +446,8 @@ describe('Qvain.RightsAndLicenses', () => {
     wrapper = render(stores)
     const inputs = wrapper.find('input').not('[type="hidden"]')
 
-    // Expect inputs: license, license url, access type, restriction grounds, embargo expires
-    expect(inputs.length).toBe(5)
+    // Expect inputs: license, access type, restriction grounds, embargo expires
+    expect(inputs.length).toBe(4)
     inputs.forEach(c => expect(c.props().disabled).toBe(false))
   })
 })
