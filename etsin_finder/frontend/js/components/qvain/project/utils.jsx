@@ -99,7 +99,7 @@ export function isEmptyObject(obj = {}) {
 export async function organizationToSelectValue(organization, lang, parentId) {
   if (!organization) return undefined
   const { identifier, name, email } = organization
-  const isCustomOrg = await isCustomOrganization(identifier, parentId)
+  const isCustomOrg = await isCustomOrganization(identifier, name, parentId)
   return {
     value: identifier || '',
     label: name[lang] || name.und,
@@ -114,15 +114,19 @@ export async function organizationToSelectValue(organization, lang, parentId) {
  * If not, the organization is likely manually entered.
  *
  * @param {String} identifier
+ * @param {Object} name
  * @param {String} parentId parent organization identifier
  */
-async function isCustomOrganization(identifier, parentId) {
-  if (!identifier) return false
+async function isCustomOrganization(identifier, name, parentId) {
   const url = getOrganizationSearchUrl(parentId)
+  const nameToComparer = 'und' in name ? name.und : null
   const response = await axios.get(url)
   if (response.status !== 200) return null
   const { hits } = response.data.hits
-  return hits.every(hit => hit._source.uri !== identifier)
+  return hits.every(hit => (
+    hit._source.uri !== identifier ||
+    hit._source.label.und === nameToComparer
+  ))
 }
 
 /**

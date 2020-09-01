@@ -54,6 +54,9 @@ const filesToMetax = (selectedFiles, existingFiles) => {
 }
 
 const organizationToArray = fullOrganization => {
+  for (const [key, value] of Object.entries(fullOrganization)) {
+    if (value && !value.email) delete fullOrganization[key].email
+  }
   const { organization, department, subDepartment } = fullOrganization
   const output = [{ ...organization }]
   if (department) output.push({ ...department })
