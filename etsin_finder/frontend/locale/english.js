@@ -1446,15 +1446,15 @@ const english = {
         },
         fundingAgency: {
           contributorType: {
-            title: 'Contributor',
+            title: 'Contributor type',
             description: 'Contributor type of the Organization. Based on the subset of the DataCite reference data',
             organization: {
               label: 'Select organization',
               validation: 'A valid organization is required'
             },
             identifier: {
-              label: 'Contributor type',
-              validation: 'Identifier is required',
+              label: 'Contributor role',
+              validation: 'Contributor role is required',
             },
             definition: {
               label: 'Definition',

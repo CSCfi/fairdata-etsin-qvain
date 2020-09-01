@@ -82,6 +82,7 @@ const FundingAgencyForm = props => {
         department,
         subDepartment
       },
+      errors: {},
       contributorTypeForm: { errors: {} },
       contributorTypes,
     })
