@@ -82,7 +82,7 @@ StickyHeader.propTypes = {
   datasetError: PropTypes.bool.isRequired,
   datasetLoading: PropTypes.bool.isRequired,
   submitted: PropTypes.bool.isRequired,
-  response: PropTypes.node,
+  response: PropTypes.oneOfType([PropTypes.string, PropTypes.object, PropTypes.array]),
   handleSubmitError: PropTypes.func.isRequired,
   handleSubmitResponse: PropTypes.func.isRequired,
   submitButtonsRef: PropTypes.object.isRequired,
