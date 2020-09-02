@@ -939,7 +939,12 @@ class Qvain {
       this.projects = projects.map(project => {
         const { name, identifier } = project
         const params = [uuid(), name, identifier, project.has_funder_identifier]
+
+        // We need to push null if no funder type found.
+        // Consider refactoring params array to object to prevent this
         if (project.funder_type) params.push(ProjectFunderType(project.funder_type.pref_label, project.funder_type.identifier))
+        else params.push(null)
+
         // Organizations
         const organizations = project.source_organization.map(organization => {
           const parsedOrganizations = parseOrganization(organization)
@@ -962,7 +967,8 @@ class Qvain {
             return FundingAgency(uuid(), organization, contributorTypes)
           })
           params.push(fundingAgencies)
-        }
+        } else params.push(null)
+
         return Project(...params)
       })
     }
