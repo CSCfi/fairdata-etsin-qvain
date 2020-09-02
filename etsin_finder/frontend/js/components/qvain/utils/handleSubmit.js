@@ -67,7 +67,9 @@ const organizationToArray = fullOrganization => {
 const projectsToMetax = projects => projects.map(project => {
   const projectObject = toJS(project)
   const { details } = projectObject
-  const funderType = { identifier: details.funderType.url }
+  const funderType = {
+    identifier: details.funderType ? details.funderType.url : null
+  }
   details.funderType = funderType
 
   const organizations = projectObject.organizations

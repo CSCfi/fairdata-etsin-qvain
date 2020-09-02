@@ -36,7 +36,7 @@ const INITIAL_STATE = {
     titleFi: '',
     identifier: '',
     fundingIdentifier: '',
-    funderType: undefined,
+    funderType: null,
     errors: {},
   },
   organizations: { addedOrganizations: [], formData: {}, errors: [] },
@@ -187,6 +187,7 @@ class Project extends Component {
   resetForm = event => {
     if (event) event.preventDefault()
     this.setState({
+      id: INITIAL_STATE.id,
       details: { ...INITIAL_STATE.details },
       organizations: { ...INITIAL_STATE.organizations },
       projectInEdit: false,

@@ -302,7 +302,7 @@ const projectSchema = yup.object().shape({
       .string(translate('qvain.project.inputs.title.validation.string')),
     identifier: yup.string(),
     fundingIdentifier: yup.string(),
-    funderType: yup.object(),
+    funderType: yup.object().nullable(),
   }),
   organizations: yup.array()
     .min(1, translate('qvain.project.inputs.organization.validation')),
