@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import Translate from 'react-translate-component'
+import t from 'counterpart'
 
 import { ProjectFunderType } from '../../../stores/view/qvain'
 import { LabelLarge, Input } from '../general/form'
@@ -73,7 +74,7 @@ const ProjectForm = ({ onChange, formData, readonly }) => (
       model={ProjectFunderType}
       metaxIdentifier="funder_type"
       placeholder="qvain.project.inputs.funderType.placeholder"
-      noOptionsMessage="qvain.project.inputs.funderType.noOptions"
+      noOptionsMessage={() => t('qvain.project.inputs.funderType.noOptions')}
     />
     <ErrorMessages errors={formData.errors.funderType} />
   </>
