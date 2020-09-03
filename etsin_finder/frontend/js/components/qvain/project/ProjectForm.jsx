@@ -19,7 +19,7 @@ const ProjectForm = ({ onChange, formData, readonly }) => (
     />
     <Translate
       component={Input}
-      value={formData.titleEn}
+      value={formData.titleEn || ''}
       onChange={event => onChange(event.target.id, event.target.value)}
       attributes={{ placeholder: 'qvain.project.inputs.titleEn.placeholder' }}
       disabled={readonly}
@@ -28,7 +28,7 @@ const ProjectForm = ({ onChange, formData, readonly }) => (
     <ErrorMessages errors={formData.errors.titleEn} />
     <Translate
       component={Input}
-      value={formData.titleFi}
+      value={formData.titleFi || ''}
       onChange={event => onChange(event.target.id, event.target.value)}
       attributes={{ placeholder: 'qvain.project.inputs.titleFi.placeholder' }}
       disabled={readonly}
@@ -42,7 +42,7 @@ const ProjectForm = ({ onChange, formData, readonly }) => (
     />
     <Translate
       component={Input}
-      value={formData.identifier}
+      value={formData.identifier || ''}
       onChange={event => onChange(event.target.id, event.target.value)}
       attributes={{ placeholder: 'qvain.project.inputs.identifier.placeholder' }}
       disabled={readonly}
@@ -56,7 +56,7 @@ const ProjectForm = ({ onChange, formData, readonly }) => (
     />
     <Translate
       component={Input}
-      value={formData.fundingIdentifier}
+      value={formData.fundingIdentifier || ''}
       onChange={event => onChange(event.target.id, event.target.value)}
       disabled={readonly}
       attributes={{ placeholder: 'qvain.project.inputs.fundingIdentifier.placeholder' }}
@@ -69,7 +69,7 @@ const ProjectForm = ({ onChange, formData, readonly }) => (
     />
     <Select
       name="funder-type"
-      getter={formData.funderType}
+      getter={formData.funderType || null}
       setter={(newValue) => onChange('funderType', newValue)}
       model={ProjectFunderType}
       metaxIdentifier="funder_type"
