@@ -700,7 +700,7 @@ const finnish = {
         },
         fundingAgency: {
           contributorType: {
-            title: 'Organisation rooli',
+            title: 'Organisaation rooli',
             description: 'Valitse organisaation rooli projektin avustajana.',
             organization: {
               label: 'Valitse organisaatio',
