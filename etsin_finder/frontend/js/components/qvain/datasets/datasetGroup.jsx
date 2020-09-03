@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { observer } from 'mobx-react'
+import { Observer } from 'mobx-react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
@@ -50,21 +50,25 @@ const DatasetGroup = ({
   }
 
   return (
-    <>
-      {visibleDatasets.map((dataset, index) => (
-        <Dataset
-          key={dataset.identifier}
-          dataset={dataset}
-          currentTimestamp={currentTimestamp}
-          handleEnterEdit={handleEnterEdit}
-          handleCreateNewVersion={handleCreateNewVersion}
-          openRemoveModal={openRemoveModal}
-          indent={index !== 0}
-          highlight={dataset.identifier === highlight}
-        />
-      ))}
-      {more}
-    </>
+    <Observer>
+      {() => (
+        <>
+          {visibleDatasets.map((dataset, index) => (
+            <Dataset
+              key={dataset.identifier}
+              dataset={dataset}
+              currentTimestamp={currentTimestamp}
+              handleEnterEdit={handleEnterEdit}
+              handleCreateNewVersion={handleCreateNewVersion}
+              openRemoveModal={openRemoveModal}
+              indent={index !== 0}
+              highlight={dataset.identifier === highlight}
+            />
+          ))}
+          {more}
+        </>
+      )}
+    </Observer>
   )
 }
 
@@ -99,4 +103,4 @@ const MoreIcon = styled(FontAwesomeIcon)`
   margin: 0 0.5rem 0 0.5rem;
 `
 
-export default observer(DatasetGroup)
+export default DatasetGroup
