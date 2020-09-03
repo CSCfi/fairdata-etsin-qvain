@@ -9,6 +9,7 @@ import styled from 'styled-components'
 
 import { getOrganizationSearchUrl } from '../../../stores/view/qvain.actors'
 import ValidationError from '../general/validationError'
+import { METAX_FAIRDATA_ROOT_URL } from '../../../utils/constants'
 
 export const ErrorMessages = ({ errors }) => {
   if (!errors.length) return null
@@ -138,6 +139,14 @@ export function organizationSelectValueToSchema(organization) {
   return { name: { ...name }, email, identifier: value }
 }
 
+/**
+ * Fetch and parse options from Metax to select values
+ */
+export async function resolveOptions(referenceDataType) {
+  const response = await axios.get(`${METAX_FAIRDATA_ROOT_URL}/es/reference_data/${referenceDataType}/_search?pretty=true&size=100`)
+  if (response.status !== 200) return {}
+  return referenceDataToOptions(response.data.hits.hits)
+}
 
 /**
  * Convert reference data results to options for select component.

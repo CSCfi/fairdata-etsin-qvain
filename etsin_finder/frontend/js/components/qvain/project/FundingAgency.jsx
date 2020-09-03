@@ -6,7 +6,6 @@ import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import ReactSelect from 'react-select'
-import axios from 'axios'
 import t from 'counterpart'
 
 import Card from '../general/card'
@@ -14,11 +13,10 @@ import OrganizationSelect from '../general/organizationSelect'
 import Button from '../../general/button'
 import Label from '../general/label'
 import { ErrorMessages, organizationSelectValueToSchema, validateSync, validate,
-  isEmptyObject, organizationToSelectValue, Expand, referenceDataToOptions } from './utils'
+  isEmptyObject, organizationToSelectValue, Expand, resolveOptions } from './utils'
 import { LabelLarge, Input } from '../general/form'
 import { fundingAgencySchema, organizationObjectSchema } from '../utils/formValidation'
 import { FundingAgency, ContributorType, Organization } from '../../../stores/view/qvain'
-import { METAX_FAIRDATA_ROOT_URL } from '../../../utils/constants'
 
 
 const FundingAgencyForm = props => {
@@ -240,9 +238,7 @@ class ContributorTypeFormComponent extends Component {
    * Fetch options for role field.
    */
   fetchOptions = async () => {
-    const response = await axios.get(`${METAX_FAIRDATA_ROOT_URL}/es/reference_data/contributor_type/_search?pretty=true&size=100`)
-    if (response.status !== 200) return
-    const options = referenceDataToOptions(response.data.hits.hits)
+    const options = await resolveOptions('contributor_type')
     this.setState({ options, loading: false })
   }
 
