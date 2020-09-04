@@ -2,7 +2,6 @@ import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
-import { Observer } from 'mobx-react'
 import { ButtonGroup, ButtonLabel, EditButton, DeleteButton, ButtonContainer } from './buttons'
 
 const FieldList = ({ Field, lang, translationsRoot, elements, disableNoItemsText }) => {
@@ -12,32 +11,25 @@ const FieldList = ({ Field, lang, translationsRoot, elements, disableNoItemsText
     if (disableNoItemsText) return null
     return <Translate component="div" content={`${translationsRoot}.noItems`} />
   }
-
-  const Elements = (
-    <Observer>
-      {() =>
-        elements.map(item => (
-          <FieldListContainer key={item.uiid}>
-            <Label>{item.name[lang] || item.name.und || item.name}</Label>
-            <ButtonContainer>
-              <Translate
-                component={EditButton}
-                type="button"
-                onClick={() => edit(item.uiid)}
-                attributes={{ 'aria-label': 'qvain.general.buttons.edit' }}
-              />
-              <Translate
-                component={DeleteButton}
-                type="button"
-                onClick={() => remove(item.uiid)}
-                attribute={{ 'aria-label': 'qvain.general.buttons.remove' }}
-              />
-            </ButtonContainer>
-          </FieldListContainer>
-        ))
-      }
-    </Observer>
-  )
+  const Elements = elements.map(item => (
+    <FieldListContainer key={item.uiid}>
+      <Label>{item.name[lang] || item.name.und || item.name}</Label>
+      <ButtonContainer>
+        <Translate
+          component={EditButton}
+          type="button"
+          onClick={() => edit(item.uiid)}
+          attributes={{ 'aria-label': 'qvain.general.buttons.edit' }}
+        />
+        <Translate
+          component={DeleteButton}
+          type="button"
+          onClick={() => remove(item.uiid)}
+          attribute={{ 'aria-label': 'qvain.general.buttons.remove' }}
+        />
+      </ButtonContainer>
+    </FieldListContainer>
+  ))
   return Elements
 }
 

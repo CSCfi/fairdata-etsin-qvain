@@ -1,3 +1,5 @@
+import { toJS } from 'mobx'
+
 const fieldsOfScienceToMetax = (fieldsOfScience) =>
   fieldsOfScience.map((fieldOfScience) => fieldOfScience.url)
 
@@ -51,6 +53,38 @@ const filesToMetax = (selectedFiles, existingFiles) => {
   return parsedFileData
 }
 
+const organizationToArray = fullOrganization => {
+  for (const [key, value] of Object.entries(fullOrganization)) {
+    if (value && !value.email) delete fullOrganization[key].email
+  }
+  const { organization, department, subDepartment } = fullOrganization
+  const output = [{ ...organization }]
+  if (department) output.push({ ...department })
+  if (subDepartment) output.push({ ...subDepartment })
+  return output
+}
+
+const projectsToMetax = projects => projects.map(project => {
+  const projectObject = toJS(project)
+  const { details } = projectObject
+  if (details.funderType && details.funderType.url) {
+    details.funderType = { identifier: details.funderType.url }
+  } else delete details.funderType
+
+  const organizations = projectObject.organizations
+    .map(fullOrganization => organizationToArray(fullOrganization))
+
+  const fundingAgencies = projectObject.fundingAgencies.map(agency => {
+    const { organization } = agency
+    const contributorTypes = agency.contributorTypes.map(contributorType => {
+      const { identifier, label, definition, inScheme } = contributorType
+      return { identifier, label, definition, inScheme }
+    })
+    return { organization: organizationToArray(organization), contributorTypes }
+  })
+  return { details, organizations, fundingAgencies }
+})
+
 const handleSubmitToBackend = (Env, values) => {
   const actors = values.Actors.toBackend()
 
@@ -83,6 +117,7 @@ const handleSubmitToBackend = (Env, values) => {
     dataCatalog: values.dataCatalog,
     cumulativeState: values.cumulativeState,
     useDoi: values.useDoi,
+    projects: projectsToMetax(values.projects),
     spatial,
     temporal,
     relation,

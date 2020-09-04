@@ -1,6 +1,7 @@
 import { observable, action, computed, runInAction } from 'mobx'
 import axios from 'axios'
 import moment from 'moment'
+import { v4 as uuid } from 'uuid'
 import { getDirectories, getFiles, deepCopy } from '../../components/qvain/utils/fileHierarchy'
 import urls from '../../components/qvain/utils/urls'
 import {
@@ -15,6 +16,7 @@ import { getPath } from '../../components/qvain/utils/object'
 import Actors from './qvain.actors'
 import Files from './qvain.files'
 import Spatials, { SpatialModel } from './qvain.spatials'
+import { parseOrganization } from '../../components/qvain/project/utils'
 import Provenances, { ProvenanceModel } from './qvain.provenances'
 import RelatedResources, { RelatedResourceModel } from './qvain.relatedResources'
 import Temporals, { TemporalModel } from './qvain.temporals'
@@ -73,6 +75,8 @@ class Qvain {
 
   @observable infrastructureArray = []
 
+  @observable projects = []
+
   @observable licenseArray = [License(undefined, LICENSE_URL.CCBY4)]
 
   @observable accessType = AccessType(undefined, ACCESS_TYPE_URL.OPEN)
@@ -102,6 +106,9 @@ class Qvain {
     this.datasetLanguageArray = []
     this.keywordString = ''
     this.keywordsArray = []
+    this.projects = []
+    this.license = License(undefined, LICENSE_URL.CCBY4)
+    this.otherLicenseUrl = ''
     this.infrastructureArray = []
     this.licenseArray = [License(undefined, LICENSE_URL.CCBY4)]
     this.accessType = AccessType(undefined, ACCESS_TYPE_URL.OPEN)
@@ -278,6 +285,24 @@ class Qvain {
     this.infrastructures = this.infrastructures.filter(
       infra => infra.url !== infrastructureToRemove.url
     )
+    this.changed = true
+  }
+
+  // Add or Update
+  @action setProject = project => {
+    const { id } = project
+    const existingProject = this.projects.find(proj => proj.id === id)
+    if (existingProject) {
+      const updatedProject = { ...existingProject, ...project }
+      this.projects = this.projects
+        .filter(proj => proj.id !== existingProject.id)
+        .concat([updatedProject])
+    } else this.projects = this.projects.concat([project])
+    this.changed = true
+  }
+
+  @action removeProject = id => {
+    this.projects = this.projects.filter(project => project.id !== id)
     this.changed = true
   }
 
@@ -908,6 +933,46 @@ class Qvain {
         : []
     }
 
+    // Projects
+    const projects = researchDataset.is_output_of
+    if (projects !== undefined) {
+      this.projects = projects.map(project => {
+        const { name, identifier } = project
+        const params = [uuid(), name, identifier, project.has_funder_identifier]
+
+        // We need to push null if no funder type found.
+        // Consider refactoring params array to object to prevent this
+        if (project.funder_type) params.push(ProjectFunderType(project.funder_type.pref_label, project.funder_type.identifier))
+        else params.push(null)
+
+        // Organizations
+        const organizations = project.source_organization.map(organization => {
+          const parsedOrganizations = parseOrganization(organization)
+          parsedOrganizations.reverse()
+          return Organization(uuid(), ...parsedOrganizations)
+        })
+        params.push(organizations)
+
+        // Funding agencies
+        if (project.has_funding_agency) {
+          const fundingAgencies = project.has_funding_agency.map(agency => {
+            const parsedOrganizations = parseOrganization(agency)
+            parsedOrganizations.reverse()
+            const organization = Organization(uuid(), ...parsedOrganizations)
+            const contributorTypes = agency.contributor_type.map(contributorType => (
+              ContributorType(uuid(), contributorType.identifier,
+                contributorType.pref_label, contributorType.definition,
+                contributorType.in_scheme)
+            ))
+            return FundingAgency(uuid(), organization, contributorTypes)
+          })
+          params.push(fundingAgencies)
+        } else params.push(null)
+
+        return Project(...params)
+      })
+    }
+
     // External resources
     const remoteResources = researchDataset.remote_resources
     if (remoteResources !== undefined) {
@@ -1169,6 +1234,47 @@ export const RestrictionGrounds = (name, identifier) => ({
 export const Infrastructure = (name, url) => ({
   name,
   url,
+})
+
+export const Project = (
+  id,
+  title,
+  identifier,
+  fundingIdentifier,
+  funderType, // ProjectFunderType
+  organizations, // Array<Organization>
+  fundingAgencies, // Array<FundingAgency>
+) => ({
+  id: id || uuid(),
+  details: { title, identifier, fundingIdentifier, funderType },
+  organizations,
+  fundingAgencies: fundingAgencies || [],
+})
+
+export const ProjectFunderType = (name, url) => ({
+  name,
+  url,
+})
+
+export const Organization = (id, organization, department, subDepartment) => ({
+  id: id || uuid(),
+  organization,
+  department,
+  subDepartment,
+})
+
+export const FundingAgency = (id, organization, contributorTypes) => ({
+  id: id || uuid(),
+  organization,
+  contributorTypes: contributorTypes || [], // Array<ContributorType>
+})
+
+export const ContributorType = (id, identifier, label, definition, inScheme) => ({
+  id: id || uuid(),
+  identifier,
+  label,
+  definition,
+  inScheme,
 })
 
 export const ExternalResource = (id, title, accessUrl, downloadUrl, useCategory) => ({
