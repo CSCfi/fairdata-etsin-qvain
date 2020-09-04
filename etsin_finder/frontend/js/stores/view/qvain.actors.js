@@ -55,7 +55,7 @@ export const maybeReference = identifier =>
 
 const codeRegExp = RegExp('http://uri.suomi.fi/codelist/fairdata/organization/code/(.*)')
 
-const getOrganizationSearchUrl = parentId => {
+export const getOrganizationSearchUrl = parentId => {
   let shortId = ''
   if (parentId) {
     const match = codeRegExp.exec(parentId)

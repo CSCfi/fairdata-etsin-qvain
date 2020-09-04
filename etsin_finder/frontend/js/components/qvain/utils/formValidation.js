@@ -262,6 +262,53 @@ export const fileMetadataSchema = yup.object().shape({
   csvQuotingChar: yup.string().required(),
 })
 
+
+// PROJECT VALIDATION
+const organizationSelectSchema = yup.object().shape({
+  identifier: yup.string(),
+  name: yup.object().shape({
+    und: yup.string().required(translate('qvain.organizationSelect.validation.name')),
+  }),
+  email: yup.string().email(translate('qvain.organizationSelect.validation.email'))
+})
+
+const organizationObjectSchema = yup.object().shape({
+  organization: organizationSelectSchema.nullable().required(translate('qvain.organizationSelect.validation.name')),
+  department: organizationSelectSchema.nullable(),
+  subDepartment: organizationSelectSchema.nullable(),
+})
+
+const fundingAgencySchema = yup.object().shape({
+  identifier: yup.string().nullable()
+    .required(translate('qvain.project.inputs.fundingAgency.contributorType.identifier.validation')),
+  labelFi: yup.string(),
+  labelEn: yup.string(),
+  definitionFi: yup.string(),
+  definitionEn: yup.string(),
+  inScheme: yup.string(),
+})
+
+const projectSchema = yup.object().shape({
+  details: yup.object().shape({
+    titleFi: yup.mixed().when('titleEn', {
+      is: val => Boolean(val),
+      then: yup
+        .string(translate('qvain.project.inputs.title.validation.string')),
+      otherwise: yup
+        .string(translate('qvain.project.inputs.title.validation.string'))
+        .required(translate('qvain.project.inputs.title.validation.required')),
+    }),
+    titleEn: yup
+      .string(translate('qvain.project.inputs.title.validation.string')),
+    identifier: yup.string(),
+    fundingIdentifier: yup.string(),
+    funderType: yup.object().nullable(),
+  }),
+  organizations: yup.array()
+    .min(1, translate('qvain.project.inputs.organization.validation')),
+  fundingAgencies: yup.array().min(0),
+})
+
 // EXTERNAL RESOURCES VALIDATION
 
 const externalResourceTitleSchema = yup
@@ -484,9 +531,13 @@ export {
   externalResourceDownloadUrlSchema,
   spatialNameSchema,
   spatialAltitudeSchema,
+  projectSchema,
+  organizationSelectSchema,
+  fundingAgencySchema,
   relatedResourceNameSchema,
   provenanceNameSchema,
   provenanceStartDateSchema,
   provenanceEndDateSchema,
   temporalDateSchema,
+  organizationObjectSchema,
 }
