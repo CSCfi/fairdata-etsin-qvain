@@ -73,50 +73,51 @@ const getActionItem = action => {
   )
 }
 
-function Dataset(props) {
-  const { metaxApiV2 } = props.Stores.Env
-
-  const getActions = () => {
-    const { dataset } = props
-    const actions = []
-
-    if (
-      metaxApiV2 &&
-      !dataset.next_draft &&
-      dataset.next_dataset_version === undefined &&
-      dataset.state === 'published'
-    ) {
-      actions.push({
-        text: 'qvain.datasets.createNewVersion',
-        handler: () => props.handleCreateNewVersion(dataset.identifier),
-      })
-    }
-    if (metaxApiV2 && dataset.next_draft) {
-      actions.push({
-        text: 'qvain.datasets.revertButton',
-        danger: true,
-        handler: props.openRemoveModal(dataset, true),
-      })
-    }
+function Dataset({
+  Stores,
+  dataset,
+  currentTimestamp,
+  handleCreateNewVersion,
+  handleEnterEdit,
+  openRemoveModal,
+  indent,
+  highlight,
+}) {
+  const { metaxApiV2 } = Stores.Env
+  const actions = []
+  if (
+    metaxApiV2 &&
+    !dataset.next_draft &&
+    dataset.next_dataset_version === undefined &&
+    dataset.state === 'published'
+  ) {
     actions.push({
-      text: 'qvain.datasets.deleteButton',
-      danger: true,
-      handler: props.openRemoveModal(dataset),
+      text: 'qvain.datasets.createNewVersion',
+      handler: () => handleCreateNewVersion(dataset.identifier),
     })
-    return actions
   }
+  if (metaxApiV2 && dataset.next_draft) {
+    actions.push({
+      text: 'qvain.datasets.revertButton',
+      danger: true,
+      handler: openRemoveModal(dataset, true),
+    })
+  }
+  actions.push({
+    text: 'qvain.datasets.deleteButton',
+    danger: true,
+    handler: openRemoveModal(dataset),
+  })
 
   let titleCellStyle = null
-  if (props.indent) {
+  if (indent) {
     titleCellStyle = { paddingLeft: '1rem', position: 'relative' }
   }
 
-  const { dataset, currentTimestamp } = props
-  const actions = getActions()
   return (
-    <DatasetRow key={dataset.identifier} tabIndex="0" highlight={props.highlight}>
+    <DatasetRow key={dataset.identifier} tabIndex="0" highlight={highlight}>
       <BodyCellWordWrap style={titleCellStyle}>
-        {props.indent && <Marker />}
+        {indent && <Marker />}
         {getTitle(dataset)}
         {dataset.next_dataset_version !== undefined && (
           <Translate color="yellow" content="qvain.datasets.oldVersion" component={DatasetLabel} />
@@ -138,7 +139,7 @@ function Dataset(props) {
       <BodyCellActions>
         <Translate
           component={TableButton}
-          onClick={props.handleEnterEdit(dataset)}
+          onClick={handleEnterEdit(dataset)}
           content={
             dataset.next_draft ? 'qvain.datasets.editDraftButton' : 'qvain.datasets.editButton'
           }

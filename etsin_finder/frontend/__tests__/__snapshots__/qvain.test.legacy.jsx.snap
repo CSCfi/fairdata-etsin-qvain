@@ -27,7 +27,7 @@ exports[`Qvain.Description should render <Description /> 1`] = `
       />
     </Tooltip>
   </title__SectionTitle>
-  <inject-DescriptionField-with-Stores />
+  <DescriptionField />
   <inject-IssuedDateField-with-Stores />
   <inject-OtherIdentifierField-with-Stores />
   <inject-FieldOfScienceField-with-Stores />
@@ -37,273 +37,231 @@ exports[`Qvain.Description should render <Description /> 1`] = `
 `;
 
 exports[`Qvain.Description should render <DescriptionField /> 1`] = `
-<DescriptionField
-  Stores={
-    Object {
-      "Env": Env {
-        "environment": "test",
-        "history": RouterStore {
-          "go": [Function],
-          "goBack": [Function],
-          "goForward": [Function],
-          "history": null,
-          "push": [Function],
-          "replace": [Function],
+<TranslationTab
+  language="fi"
+  setLanguage={[Function]}
+>
+  <inject-DescriptionFieldInput-with-Stores
+    activeLang="fi"
+    propName="title"
+    schema={
+      ObjectSchema {
+        "_blacklist": RefSet {
+          "list": Set {},
+          "refs": Map {},
         },
-        "metaxApiV2": false,
-      },
-      "Locale": Locale {
-        "currentLang": "en",
-        "languages": Array [
+        "_conditions": Array [],
+        "_defaultDefault": [Function],
+        "_deps": Array [],
+        "_excludedEdges": Array [],
+        "_exclusive": Object {},
+        "_mutate": undefined,
+        "_nodes": Array [
           "en",
           "fi",
         ],
-      },
-      "Qvain": Qvain {
-        "Actors": Actors {
-          "Qvain": [Circular],
-          "actorInEdit": null,
-          "actors": Array [],
-          "editDataset": [Function],
-          "getDatasetOrganizations": [Function],
-          "getReferenceOrganizations": [Function],
-          "getReferenceOrganizationsForActor": [Function],
-          "loadingReferenceOrganizations": Object {},
-          "onSuccessfulCreationCallbacks": Array [],
-          "referenceOrganizationErrors": Object {},
-          "referenceOrganizations": Object {},
-          "setSelectedActor": undefined,
-          "toBackend": [Function],
+        "_options": Object {
+          "abortEarly": true,
+          "recursive": true,
         },
-        "Env": Env {
-          "environment": "test",
-          "history": RouterStore {
-            "go": [Function],
-            "goBack": [Function],
-            "goForward": [Function],
-            "history": null,
-            "push": [Function],
-            "replace": [Function],
+        "_type": "object",
+        "_typeError": [Function],
+        "_whitelist": RefSet {
+          "list": Set {},
+          "refs": Map {},
+        },
+        "fields": Object {
+          "en": StringSchema {
+            "_blacklist": RefSet {
+              "list": Set {},
+              "refs": Map {},
+            },
+            "_conditions": Array [],
+            "_deps": Array [],
+            "_exclusive": Object {
+              "max": true,
+            },
+            "_mutate": undefined,
+            "_options": Object {
+              "abortEarly": true,
+              "recursive": true,
+            },
+            "_type": "string",
+            "_typeError": [Function],
+            "_whitelist": RefSet {
+              "list": Set {},
+              "refs": Map {},
+            },
+            "tests": Array [
+              [Function],
+            ],
+            "transforms": Array [
+              [Function],
+            ],
+            "type": "string",
           },
-          "metaxApiV2": false,
-        },
-        "Files": Files {
-          "AddItemsView": AddItemsView {
-            "Files": [Circular],
-            "checkedState": Object {},
-            "defaultShowLimit": 20,
-            "getTopmostChecked": [Function],
-            "isOpen": [Function],
-            "openState": Object {},
-            "showLimitIncrement": 20,
-            "showLimitState": Object {},
+          "fi": SchemaType {
+            "_blacklist": RefSet {
+              "list": Set {},
+              "refs": Map {},
+            },
+            "_conditions": Array [
+              Condition {
+                "fn": [Function],
+                "refs": Array [
+                  Reference {
+                    "getter": [Function],
+                    "isContext": false,
+                    "isSibling": true,
+                    "isValue": false,
+                    "key": "en",
+                    "map": undefined,
+                    "path": "en",
+                  },
+                ],
+              },
+            ],
+            "_deps": Array [
+              "en",
+            ],
+            "_exclusive": Object {},
+            "_mutate": undefined,
+            "_options": Object {
+              "abortEarly": true,
+              "recursive": true,
+            },
+            "_type": "mixed",
+            "_typeError": [Function],
+            "_whitelist": RefSet {
+              "list": Set {},
+              "refs": Map {},
+            },
+            "tests": Array [],
+            "transforms": Array [],
+            "type": "mixed",
           },
-          "Qvain": [Circular],
-          "SelectedItemsView": SelectedItemsView {
-            "Files": [Circular],
-            "checkedState": Object {},
-            "defaultShowLimit": 20,
-            "getTopmostChecked": [Function],
-            "hideRemoved": false,
-            "isOpen": [Function],
-            "openState": Object {},
-            "showLimitIncrement": 20,
-            "showLimitState": Object {},
-          },
-          "cache": Object {},
-          "cancelOnReset": [Function],
-          "datasetIdentifier": null,
-          "fetchRootIdentifier": [Function],
-          "getItemByPath": [Function],
-          "inEdit": undefined,
-          "loadingMetadata": null,
-          "loadingProjectInfo": null,
-          "loadingProjectRoot": null,
-          "metadataToMetax": [Function],
-          "originalMetadata": Object {},
-          "projectLocked": false,
-          "promiseManager": PromiseManager {
-            "add": [Function],
-            "promises": Array [],
-          },
-          "refreshModalDirectory": null,
-          "root": null,
-          "selectedProject": undefined,
         },
-        "Provenances": Provenances {
-          "Parent": [Circular],
-          "RelatedResources": RelatedResources {
-            "Parent": [Circular],
-            "Template": [Function],
-            "attachRefs": [Function],
-            "cloneRefs": [Function],
-            "detachRefs": [Function],
-            "fieldName": "relatedResources",
-            "isParentRoot": [Function],
-            "readonly": false,
-            "references": Array [],
-            "relatedResourceToBackend": [Function],
-            "saveEdited": [Function],
-            "saveNew": [Function],
-            "toBackend": [Function],
-          },
-          "Spatials": Spatials {
-            "Parent": [Circular],
-            "Template": [Function],
-            "attachRefs": [Function],
-            "cloneRefs": [Function],
-            "detachRefs": [Function],
-            "fieldName": "spatials",
-            "isParentRoot": [Function],
-            "readonly": false,
-            "references": Array [],
-            "saveEdited": [Function],
-            "saveNew": [Function],
-            "spatialToBackend": [Function],
-            "toBackend": [Function],
-          },
-          "Template": [Function],
-          "attachRefs": [Function],
-          "cloneRefs": [Function],
-          "detachRefs": [Function],
-          "fieldName": "provenances",
-          "isParentRoot": [Function],
-          "readonly": false,
-          "references": Array [
-            "associations",
-          ],
-          "saveEdited": [Function],
-          "saveNew": [Function],
-          "toBackend": [Function],
-        },
-        "RelatedResources": RelatedResources {
-          "Parent": [Circular],
-          "Template": [Function],
-          "attachRefs": [Function],
-          "cloneRefs": [Function],
-          "detachRefs": [Function],
-          "fieldName": "relatedResources",
-          "isParentRoot": [Function],
-          "readonly": false,
-          "references": Array [],
-          "relatedResourceToBackend": [Function],
-          "saveEdited": [Function],
-          "saveNew": [Function],
-          "toBackend": [Function],
-        },
-        "Spatials": Spatials {
-          "Parent": [Circular],
-          "Template": [Function],
-          "attachRefs": [Function],
-          "cloneRefs": [Function],
-          "detachRefs": [Function],
-          "fieldName": "spatials",
-          "isParentRoot": [Function],
-          "readonly": false,
-          "references": Array [],
-          "saveEdited": [Function],
-          "saveNew": [Function],
-          "spatialToBackend": [Function],
-          "toBackend": [Function],
-        },
-        "Temporals": Temporals {
-          "Parent": [Circular],
-          "Template": [Function],
-          "attachRefs": [Function],
-          "cloneRefs": [Function],
-          "detachRefs": [Function],
-          "editMode": false,
-          "fieldName": "temporals",
-          "hasChanged": false,
-          "inEdit": Object {
-            "endDate": undefined,
-            "startDate": undefined,
-            "uiid": 0,
-          },
-          "isParentRoot": [Function],
-          "readonly": false,
-          "references": Array [],
-          "saveEdited": [Function],
-          "saveNew": [Function],
-          "toBackend": [Function],
-          "validationError": undefined,
-        },
-        "accessType": Object {
-          "name": undefined,
-          "url": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
-        },
-        "changed": false,
-        "clearMetadataModalFile": undefined,
-        "createExternalResourceUIId": [Function],
-        "createLooseActorPromise": [Function],
-        "createLooseProvenancePromise": [Function],
-        "cumulativeState": 0,
-        "dataCatalog": undefined,
-        "datasetLanguageArray": Array [],
-        "deprecated": false,
-        "description": Object {
-          "en": "",
-          "fi": "",
-        },
-        "deselectChildren": [Function],
-        "deselectParents": [Function],
-        "embargoExpDate": undefined,
-        "existingDirectories": Array [],
-        "existingFiles": Array [],
-        "extResFormOpen": false,
-        "externalResourceInEdit": Object {
-          "accessUrl": "",
-          "downloadUrl": "",
-          "id": undefined,
-          "title": "",
-          "useCategory": "",
-        },
-        "externalResources": Array [],
-        "fieldOfScienceArray": Array [],
-        "fixDeprecatedModalOpen": false,
-        "hierarchy": Object {},
-        "idaPickerOpen": false,
-        "inEdit": undefined,
-        "infrastructureArray": Array [],
-        "issuedDate": undefined,
-        "keywordString": "",
-        "keywordsArray": Array [],
-        "licenseArray": Array [
-          Object {
-            "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
-            "name": undefined,
-          },
+        "tests": Array [],
+        "transforms": Array [
+          [Function],
         ],
-        "mergeArraysByIdentifier": [Function],
-        "metadataModalFile": undefined,
-        "newCumulativeState": 0,
-        "original": undefined,
-        "otherIdentifier": "",
-        "otherIdentifiersArray": Array [],
-        "otherIdentifiersValidationError": null,
-        "preservationState": 0,
-        "projects": Array [],
-        "promptLooseActors": undefined,
-        "promptLooseProvenances": undefined,
-        "provenances": Array [],
-        "provenancesWithNonExistingActors": Array [],
-        "relatedResources": Array [],
-        "restrictionGrounds": undefined,
-        "selectedDirectories": Array [],
-        "selectedFiles": Array [],
-        "selectedProject": undefined,
-        "setOtherIdentifierValidationError": [Function],
-        "spatials": Array [],
-        "temporals": Array [],
-        "title": Object {
-          "en": "",
-          "fi": "",
-        },
-        "useDoi": false,
-      },
+        "type": "object",
+      }
     }
-  }
-/>
+  />
+  <inject-DescriptionFieldTextField-with-Stores
+    activeLang="fi"
+    propName="description"
+    schema={
+      ObjectSchema {
+        "_blacklist": RefSet {
+          "list": Set {},
+          "refs": Map {},
+        },
+        "_conditions": Array [],
+        "_defaultDefault": [Function],
+        "_deps": Array [],
+        "_excludedEdges": Array [],
+        "_exclusive": Object {},
+        "_mutate": undefined,
+        "_nodes": Array [
+          "en",
+          "fi",
+        ],
+        "_options": Object {
+          "abortEarly": true,
+          "recursive": true,
+        },
+        "_type": "object",
+        "_typeError": [Function],
+        "_whitelist": RefSet {
+          "list": Set {},
+          "refs": Map {},
+        },
+        "fields": Object {
+          "en": StringSchema {
+            "_blacklist": RefSet {
+              "list": Set {},
+              "refs": Map {},
+            },
+            "_conditions": Array [],
+            "_deps": Array [],
+            "_exclusive": Object {
+              "max": true,
+            },
+            "_mutate": undefined,
+            "_options": Object {
+              "abortEarly": true,
+              "recursive": true,
+            },
+            "_type": "string",
+            "_typeError": [Function],
+            "_whitelist": RefSet {
+              "list": Set {},
+              "refs": Map {},
+            },
+            "tests": Array [
+              [Function],
+            ],
+            "transforms": Array [
+              [Function],
+            ],
+            "type": "string",
+          },
+          "fi": SchemaType {
+            "_blacklist": RefSet {
+              "list": Set {},
+              "refs": Map {},
+            },
+            "_conditions": Array [
+              Condition {
+                "fn": [Function],
+                "refs": Array [
+                  Reference {
+                    "getter": [Function],
+                    "isContext": false,
+                    "isSibling": true,
+                    "isValue": false,
+                    "key": "en",
+                    "map": undefined,
+                    "path": "en",
+                  },
+                ],
+              },
+            ],
+            "_deps": Array [
+              "en",
+            ],
+            "_exclusive": Object {},
+            "_mutate": undefined,
+            "_options": Object {
+              "abortEarly": true,
+              "recursive": true,
+            },
+            "_type": "mixed",
+            "_typeError": [Function],
+            "_whitelist": RefSet {
+              "list": Set {},
+              "refs": Map {},
+            },
+            "tests": Array [],
+            "transforms": Array [],
+            "type": "mixed",
+          },
+        },
+        "tests": Array [],
+        "transforms": Array [
+          [Function],
+        ],
+        "type": "object",
+      }
+    }
+  />
+  <Translate
+    component="div"
+    content="qvain.description.description.instructions"
+  />
+</TranslationTab>
 `;
 
 exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
@@ -322,13 +280,7 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
         },
         "metaxApiV2": false,
       },
-      "Locale": Locale {
-        "currentLang": "en",
-        "languages": Array [
-          "en",
-          "fi",
-        ],
-      },
+      "Locale": Locale {},
       "Qvain": Qvain {
         "Actors": Actors {
           "Qvain": [Circular],
@@ -592,13 +544,7 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
         },
         "metaxApiV2": false,
       },
-      "Locale": Locale {
-        "currentLang": "en",
-        "languages": Array [
-          "en",
-          "fi",
-        ],
-      },
+      "Locale": Locale {},
       "Qvain": Qvain {
         "Actors": Actors {
           "Qvain": [Circular],
@@ -862,13 +808,7 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
         },
         "metaxApiV2": false,
       },
-      "Locale": Locale {
-        "currentLang": "en",
-        "languages": Array [
-          "en",
-          "fi",
-        ],
-      },
+      "Locale": Locale {},
       "Qvain": Qvain {
         "Actors": Actors {
           "Qvain": [Circular],

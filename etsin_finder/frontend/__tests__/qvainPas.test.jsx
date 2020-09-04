@@ -7,7 +7,7 @@ import axios from 'axios'
 import '../locale/translations'
 
 import etsinTheme from '../js/styles/theme'
-import PasState from '../js/components/qvain/pasState'
+import PasState from '../js/components/qvain/editor/pasState'
 import DescriptionField from '../js/components/qvain/description/descriptionField'
 import OtherIdentifierField from '../js/components/qvain/description/otherIdentifierField'
 import FieldOfScienceField from '../js/components/qvain/description/fieldOfScienceField'

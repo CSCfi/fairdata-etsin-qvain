@@ -135,6 +135,7 @@ class Qvain {
     this.fixDeprecatedModalOpen = false
 
     this.Files.reset()
+    this.Temporals.create()
 
     this.useDoi = false
 
@@ -150,6 +151,7 @@ class Qvain {
     this.Actors.reset()
     this.spatials = []
     this.provenances = []
+    this.temporals = []
   }
 
   @action
@@ -179,12 +181,14 @@ class Qvain {
   }
 
   @action
+  setLangValue = (prop, value, lang) => {
+    this[prop][lang] = value
+    this.changed = true
+  }
+
+  @action
   setTitle = (title, lang) => {
-    if (lang === 'ENGLISH') {
-      this.title.en = title
-    } else if (lang === 'FINNISH') {
-      this.title.fi = title
-    }
+    this.title[lang] = title
     this.changed = true
 
     // If this is a new dataset/draft and date is not yet defined, set date to today's date
@@ -195,11 +199,7 @@ class Qvain {
 
   @action
   setDescription = (description, lang) => {
-    if (lang === 'ENGLISH') {
-      this.description.en = description
-    } else if (lang === 'FINNISH') {
-      this.description.fi = description
-    }
+    this.description[lang] = description
     this.changed = true
   }
 

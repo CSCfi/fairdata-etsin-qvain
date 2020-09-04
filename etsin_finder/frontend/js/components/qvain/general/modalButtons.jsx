@@ -29,21 +29,20 @@ const ModalButtons = ({ Field, handleRequestClose, translations, readonly, handl
       </Observer>
     </div>
   </ButtonAndErrorContainer>
-  )
+)
 
 ModalButtons.propTypes = {
   Field: PropTypes.object.isRequired,
   handleSave: PropTypes.func.isRequired,
   handleRequestClose: PropTypes.func.isRequired,
   translations: PropTypes.object.isRequired,
-  readonly: PropTypes.bool
+  readonly: PropTypes.bool,
 }
 
 ModalButtons.defaultProps = {
-  readonly: undefined
+  readonly: undefined,
 }
 
-const ButtonAndErrorContainer = styled.div`
-`
+const ButtonAndErrorContainer = styled.div``
 
 export default ModalButtons
