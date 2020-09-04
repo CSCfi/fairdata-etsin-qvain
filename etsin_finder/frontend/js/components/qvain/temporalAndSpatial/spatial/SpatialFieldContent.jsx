@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { observer } from 'mobx-react'
 import FieldList from '../../general/fieldList'
 import FieldListAdd from '../../general/fieldListAdd'
 import handleSave from './handleSave'
@@ -30,4 +31,4 @@ SpatialFieldContent.propTypes = {
   lang: PropTypes.string.isRequired,
 }
 
-export default SpatialFieldContent
+export default observer(SpatialFieldContent)
