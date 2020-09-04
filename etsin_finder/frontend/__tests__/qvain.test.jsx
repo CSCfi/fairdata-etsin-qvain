@@ -6,7 +6,7 @@ import CreatableSelect from 'react-select/creatable'
 
 import etsinTheme from '../js/styles/theme'
 import '../locale/translations'
-import Qvain from '../js/components/qvain'
+import Qvain from '../js/components/qvain/main'
 import Select from '../js/components/qvain/general/select'
 import Description from '../js/components/qvain/description'
 import DescriptionField from '../js/components/qvain/description/descriptionField'

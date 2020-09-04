@@ -3,7 +3,7 @@ import { shallow, mount } from 'enzyme'
 
 import '../locale/translations'
 import etsinTheme from '../js/styles/theme'
-import Qvain from '../js/components/qvain'
+import Qvain from '../js/components/qvain/main'
 import Description from '../js/components/qvain/description'
 import DescriptionField from '../js/components/qvain/description/descriptionField'
 import OtherIdentifierField from '../js/components/qvain/description/otherIdentifierField'
