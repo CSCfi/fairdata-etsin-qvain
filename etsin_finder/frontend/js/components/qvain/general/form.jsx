@@ -16,7 +16,8 @@ export const Input = styled.input`
   border: solid 1px #cccccc;
   padding: 8px;
   color: #000;
-  margin-bottom: 20px;
+  margin-bottom: 1.25rem;
+  display: block;
 `
 
 export const Textarea = styled.textarea`
@@ -25,11 +26,12 @@ export const Textarea = styled.textarea`
   border: solid 1px #cccccc;
   padding: 8px;
   color: #000;
-  margin-bottom: 20px;
+  margin-bottom: 1.25rem;
+  display: block;
 `
 
 export const CustomSelect = styled(Select)`
-  margin-bottom: 20px;
+  margin-bottom: 1.25rem;
 `
 
 export const Label = styled.label`
@@ -70,6 +72,8 @@ export const RadioInput = styled.input`
   height: 16px;
   margin: 5px;
   padding: 0;
+  flex-shrink: 0;
+  flex-grow: 0;
 `
 
 export const Checkbox = props => <CheckboxStyles {...props} type="checkbox" />
