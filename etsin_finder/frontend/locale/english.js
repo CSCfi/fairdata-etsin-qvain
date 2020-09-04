@@ -345,6 +345,7 @@ const english = {
   },
   qvain: {
     general: {
+      brief: 'Research Dataset Metadata Tool',
       looseActors: {
         warning:
           "Some of the actors' role is marked as provenance but they are not attached in any of existing provenances. Saving the dataset will remove these orphaned actors. Following actors will be removed:",
@@ -371,7 +372,8 @@ const english = {
     saveDraft: 'Save Draft',
     submit: 'Save and Publish',
     edit: 'Update Dataset',
-    unsavedChanges: 'Leaving the editor will discard your unsaved changes. Are you sure you want to leave the editor?',
+    unsavedChanges:
+      'Leaving the editor will discard your unsaved changes. Are you sure you want to leave the editor?',
     consent:
       'By using Qvain Light the user agrees that he or she has asked consent from all persons whose personal information the user will add to the descriptive data and informed them of how they can get their personal data removed. By using Qvain Light the user agrees to the <a href="https://www.fairdata.fi/hyodyntaminen/kayttopolitiikat-ja-ehdot/">Terms of Usage</a>.',
     submitStatus: {
@@ -904,8 +906,7 @@ const english = {
           state: 'This dataset has been marked non-cumulative.',
           explanation:
             'Adding files or folders to a published dataset requires you to create a new version of the dataset.',
-          note:
-            'Changing the dataset cumulative requires creating a new version of the dataset.',
+          note: 'Changing the dataset cumulative requires creating a new version of the dataset.',
         },
         stateChanged: {
           note: 'The new state will be applied once you save the dataset.',
@@ -985,7 +986,8 @@ const english = {
         },
         clear: {
           header: 'Remove Digital Preservation metadata',
-          help: 'Are you sure you want to remove Digital Preservation metadata for file %(file)s? The change will take place immediately.',
+          help:
+            'Are you sure you want to remove Digital Preservation metadata for file %(file)s? The change will take place immediately.',
           cancel: 'Cancel',
           confirm: 'Remove',
         },
@@ -1428,17 +1430,17 @@ const english = {
         addButton: 'Add temporal coverage',
         error: {
           startDateMissing: 'Start date is missing.',
-          endDateMissing: 'End date is missing'
+          endDateMissing: 'End date is missing',
         },
         modal: {
           durationInput: {
             label: 'Period of time',
             startPlaceholder: 'Start date',
-            endPlaceholder: 'End date'
-          }
-        }
+            endPlaceholder: 'End date',
+          },
+        },
       },
-  },
+    },
   },
   slogan: 'Research data finder',
   stc: 'Skip to content',

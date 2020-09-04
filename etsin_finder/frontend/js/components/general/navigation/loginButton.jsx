@@ -28,11 +28,13 @@ class Login extends Component {
     margin: PropTypes.string,
     width: PropTypes.string,
     isLoggedInKey: PropTypes.string,
+    fontSize: PropTypes.string,
   }
 
   static defaultProps = {
     margin: '0 0 0 0.4em',
     width: undefined,
+    fontSize: 'inherit',
     isLoggedInKey: 'userLogged',
   }
 
@@ -53,10 +55,14 @@ class Login extends Component {
   }
 
   redirect = location => {
-    this.setState({
-      loading: true,
-    })
-    window.location = `/sso?relay=${location.pathname}`
+    this.setState(
+      {
+        loading: true,
+      },
+      () => {
+        window.location = `/sso?relay=${location.pathname}`
+      }
+    )
   }
 
   render() {
@@ -69,10 +75,9 @@ class Login extends Component {
             </LoaderCont>
             <LoginButton
               width={this.props.width}
+              fontSize={this.props.fontSize}
               margin="0"
-              onClick={() => {
-                this.redirect(this.props.location)
-              }}
+              onClick={() => this.redirect(this.props.location)}
             >
               <LoginText visible={!this.state.loading}>
                 <Translate content="nav.login" />
@@ -115,6 +120,7 @@ const Cont = styled.div`
 
 const LoginButton = styled(Button)`
   white-space: nowrap;
+  font-size: ${p => p.fontSize};
 `
 
 const LoaderCont = styled.div`

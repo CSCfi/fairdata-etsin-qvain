@@ -11,26 +11,28 @@
 }
 
 import React, { Component } from 'react'
-import { Route, Switch } from 'react-router-dom'
+import { Route, Switch, Redirect } from 'react-router-dom'
+import { observer, inject } from 'mobx-react'
 import PropTypes from 'prop-types'
-
+import Auth from '../stores/domain/auth'
 import { Home, Search, Dataset, Qvain, QvainDatasets } from '../routes'
 import ErrorPage from '../components/errorpage'
-import Auth from '../stores/domain/auth'
-import Env from '../stores/domain/env'
-import QvainLogin from '../components/qvain/qvainLogin'
+import QvainLogin from '../components/qvain/main/qvainLogin'
+import QvainLandingPage from '../components/qvain/landingPage'
 
 // import { Home, Search, Dataset, Qvain, QvainDatasets } from '../routes'
 // import ErrorPage from '../components/errorpage'
 // import Auth from '../stores/domain/auth'
 // import Env from '../stores/domain/env'
 // import QvainLogin from '../components/qvain/qvainLogin'
-export default class Content extends Component {
+class Content extends Component {
   static propTypes = {
+    Stores: PropTypes.object.isRequired,
     contentRef: PropTypes.object.isRequired,
   }
 
   render() {
+    const { Auth: StoresAuth } = this.props.Stores
     return (
       <main className="content">
         <span ref={this.props.contentRef} tabIndex="-1" />
@@ -40,13 +42,18 @@ export default class Content extends Component {
           <Route path="/dataset/:identifier" render={props => <Dataset {...props} />} />
           <Route path="/qvain/dataset/:identifier" render={renderIfLoggedIn(renderQvain)} />
           <Route path="/qvain/dataset" render={renderIfLoggedIn(renderQvain)} />
-          <Route path="/qvain" render={renderIfLoggedIn(renderQvainDatasets)} />
+          <Route path="/qvain/list" render={renderIfLoggedIn(renderQvainDatasets)} />
+          <Route path="/qvain">
+            {StoresAuth.cscUserLogged ? <Redirect to="qvain/list" /> : <QvainLandingPage />}
+          </Route>
           <Route render={() => <ErrorPage error={{ type: 'error' }} />} />
         </Switch>
       </main>
     )
   }
 }
+
+export default inject('Stores')(observer(Content))
 
 // Restrict access to Qvain Light
 // Since I couldn't get Private Routes to work, here's a workaround
@@ -56,7 +63,7 @@ const renderQvainDatasets = props => <QvainDatasets {...props} />
 
 const renderIfLoggedIn = renderFunc => props => {
   // Rendered components (login button view and the actual component we want to render)
-  const login = <QvainLogin redirectPath={props.location.pathname} />
+  const login = <QvainLogin redirectPath={props.location.pathName} />
   const actual = renderFunc(props)
 
   // render the actual if logged in
@@ -70,9 +77,10 @@ const renderIfLoggedIn = renderFunc => props => {
       }
       return actual
     })
+    window.location = `/sso?relay=${props.location.pathname}`
     return login
   }
   return actual
 }
 
-const allowAccess = () => Auth.cscUserLogged || Env.environment === 'development'
+const allowAccess = () => Auth.cscUserLogged
