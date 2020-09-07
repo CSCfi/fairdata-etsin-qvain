@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { observable, action, runInAction, computed, toJS } from 'mobx'
+import { observable, action, runInAction, computed } from 'mobx'
 
 import { METAX_FAIRDATA_ROOT_URL, ENTITY_TYPE, ROLE } from '../../utils/constants'
 
@@ -535,13 +535,11 @@ class Actors {
     }))
 
   @computed get actorOptions() {
-    return this.actors.map(ref => {
-      return {
-        value: ref.uiid,
-        label: ref.person.name || ref.organizations.map(org => org.name),
-        roles: ref.roles,
-      }
-    })
+    return this.actors.map(ref => ({
+      value: ref.uiid,
+      label: ref.person.name || ref.organizations.map(org => org.name),
+      roles: ref.roles,
+    }))
   }
 }
 
