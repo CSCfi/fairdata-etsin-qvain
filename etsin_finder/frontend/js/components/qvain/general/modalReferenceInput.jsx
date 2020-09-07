@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
-import { Observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import SearchSelect from './searchSelect'
 import Select from './select'
 import { Label } from './form'
@@ -13,6 +13,7 @@ const ModalReferenceInput = ({
   model,
   metaxIdentifier,
   search,
+  isRequired,
 }) => {
   const setValue = value => Field.changeAttribute(datum, value)
   const translations = {
@@ -55,8 +56,9 @@ const ModalReferenceInput = ({
     <>
       <Label htmlFor={`${datum}-input`}>
         <Translate content={translations.label} />
+        {isRequired && ' *'}
       </Label>
-      <Observer>{() => select}</Observer>
+      {select}
     </>
   )
 }
@@ -68,10 +70,12 @@ ModalReferenceInput.propTypes = {
   model: PropTypes.func.isRequired,
   metaxIdentifier: PropTypes.string.isRequired,
   search: PropTypes.bool,
+  isRequired: PropTypes.bool,
 }
 
 ModalReferenceInput.defaultProps = {
   search: false,
+  isRequired: false,
 }
 
-export default ModalReferenceInput
+export default observer(ModalReferenceInput)
