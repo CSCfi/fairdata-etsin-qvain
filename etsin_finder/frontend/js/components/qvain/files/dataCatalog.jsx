@@ -89,7 +89,9 @@ class DataCatalog extends Component {
       <Card>
         <LabelLarge htmlFor="dataCatalogSelect">
           <Tooltip
-            title={translate('qvain.description.fieldHelpTexts.requiredToPublish', { locale: lang })}
+            title={translate('qvain.description.fieldHelpTexts.requiredToPublish', {
+              locale: lang,
+            })}
             position="right"
           >
             <Translate content="qvain.files.dataCatalog.label" /> *

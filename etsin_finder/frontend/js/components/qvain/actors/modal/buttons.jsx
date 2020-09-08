@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 
-import { AddActorButton, CancelButton } from '../../general/buttons'
+import { SaveButton, CancelButton } from '../../general/buttons'
 
 const Buttons = ({ handleRequestClose, handleSaveActor, readonly }) => (
   <div style={{ marginTop: 'auto' }}>
@@ -14,7 +14,7 @@ const Buttons = ({ handleRequestClose, handleSaveActor, readonly }) => (
     />
     <Translate
       disabled={readonly}
-      component={AddActorButton}
+      component={SaveButton}
       type="button"
       onClick={handleSaveActor}
       content="qvain.actors.add.save.label"

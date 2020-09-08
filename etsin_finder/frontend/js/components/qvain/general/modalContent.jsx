@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
-import { ConfirmClose } from './confirmClose'
+import { ConfirmClose } from './modal/confirmClose'
 import ModalButtons from './modalButtons'
 
 const ModalContent = ({

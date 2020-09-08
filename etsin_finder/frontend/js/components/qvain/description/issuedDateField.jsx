@@ -7,7 +7,11 @@ import Card from '../general/card'
 import ValidationError from '../general/validationError'
 import { LabelLarge } from '../general/form'
 import { issuedDateSchema } from '../utils/formValidation'
-import { DatePicker, handleDatePickerChange, getDateFormatLocale } from '../general/datepicker'
+import {
+  DatePicker,
+  handleDatePickerChange,
+  getDateFormatLocale,
+} from '../general/input/datepicker'
 import Tooltip from '../../general/tooltipHover'
 
 class IssuedDateField extends React.Component {

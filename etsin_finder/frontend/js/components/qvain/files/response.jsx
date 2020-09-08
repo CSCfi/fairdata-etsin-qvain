@@ -2,17 +2,16 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
-import { withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom'
 
 import Loader from '../../general/loader'
 import { TableButton } from '../general/buttons'
 
-
 // Shows success/fail based on a RPC request response. If the response prop is null, shows a loader.
-const Response = (props) => {
+const Response = props => {
   const { response, history, requestClose } = props
 
-  const handleOpenNewVersion = (identifier) => {
+  const handleOpenNewVersion = identifier => {
     history.push(`/qvain/dataset/${identifier}`)
     requestClose()
   }
@@ -25,7 +24,7 @@ const Response = (props) => {
           <ResponseLabel>
             <Translate content="qvain.files.responses.fail" />
           </ResponseLabel>
-          <p>{(response.error.toString().replace(/,/g, '\n'))}</p>
+          <p>{response.error.toString().replace(/,/g, '\n')}</p>
         </ResponseContainerContent>
       </ResponseContainerError>
     )
@@ -41,9 +40,13 @@ const Response = (props) => {
           <ResponseLabel success>
             <Translate content="qvain.files.responses.changeComplete" />
           </ResponseLabel>
-          { newIdentifier && (
+          {newIdentifier && (
             <>
-              <Translate component="p" content="qvain.files.responses.versionCreated" with={{ identifier: newIdentifier }} />
+              <Translate
+                component="p"
+                content="qvain.files.responses.versionCreated"
+                with={{ identifier: newIdentifier }}
+              />
               <NewVersionButton onClick={() => handleOpenNewVersion(newIdentifier)}>
                 <Translate content={'qvain.files.responses.openNewVersion'} />
               </NewVersionButton>
@@ -85,18 +88,18 @@ const ResponseContainerSuccess = styled.div`
   width: 100%;
   color: green;
   z-index: 2;
-  border-bottom: 1px solid rgba(0,0,0,0.3);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
   position: relative;
   margin-bottom: 0.5em;
   min-width: 300px;
 `
 const ResponseContainerError = styled.div`
-  background-color: #FFEBE8;
+  background-color: #ffebe8;
   text-align: center;
   width: 100%;
-  color: ${(props) => props.theme.colo.redText};
+  color: ${props => props.theme.colo.redText};
   z-index: 2;
-  border-bottom: 1px solid rgba(0,0,0,0.3);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
   position: relative;
   margin-bottom: 0.5em;
   min-width: 300px;

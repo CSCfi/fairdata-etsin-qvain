@@ -9,7 +9,7 @@ import { Outcome, Lifecycle } from '../../../../../stores/view/qvain.provenances
 import Separator from '../../../general/modalSeparator'
 import UsedEntityInput from './usedEntityInput'
 import ActorsInput from './actorsInput'
-import DurationPicker from '../../../general/durationpicker'
+import DurationPicker from '../../../general/input/durationpicker'
 
 const Form = props => {
   const [language, setLanguage] = useState('fi')

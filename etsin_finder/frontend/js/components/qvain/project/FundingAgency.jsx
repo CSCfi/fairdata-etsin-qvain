@@ -12,12 +12,19 @@ import Card from '../general/card'
 import OrganizationSelect from '../general/organizationSelect'
 import Button from '../../general/button'
 import Label from '../general/label'
-import { ErrorMessages, organizationSelectValueToSchema, validateSync, validate,
-  isEmptyObject, organizationToSelectValue, Expand, resolveOptions } from './utils'
+import {
+  ErrorMessages,
+  organizationSelectValueToSchema,
+  validateSync,
+  validate,
+  isEmptyObject,
+  organizationToSelectValue,
+  Expand,
+  resolveOptions,
+} from './utils'
 import { LabelLarge, Input } from '../general/form'
 import { fundingAgencySchema, organizationObjectSchema } from '../utils/formValidation'
 import { FundingAgency, ContributorType, Organization } from '../../../stores/view/qvain'
-
 
 const FundingAgencyForm = props => {
   const onOrganizationChange = value => {
@@ -36,7 +43,14 @@ const FundingAgencyForm = props => {
    */
   const onAddContributorType = () => {
     const { formData } = props.value
-    const { id, identifier, definitionEn, definitionFi, label, inScheme } = formData.contributorTypeForm
+    const {
+      id,
+      identifier,
+      definitionEn,
+      definitionFi,
+      label,
+      inScheme,
+    } = formData.contributorTypeForm
     const definition = { en: definitionEn, fi: definitionFi }
     const contributorType = ContributorType(id, identifier.value, label, definition, inScheme)
     const contributorTypes = formData.contributorTypes
@@ -45,14 +59,13 @@ const FundingAgencyForm = props => {
     props.onChange({
       ...formData,
       contributorTypeForm: { errors: {} },
-      contributorTypes
+      contributorTypes,
     })
   }
 
   const onRemoveContributorType = id => {
     const { formData } = props.value
-    const contributorTypes = formData.contributorTypes
-      .filter(type => type.id !== id)
+    const contributorTypes = formData.contributorTypes.filter(type => type.id !== id)
     props.onChange({ ...formData, contributorTypeForm: { errors: {} }, contributorTypes })
   }
 
@@ -67,19 +80,23 @@ const FundingAgencyForm = props => {
     if (!agencyToEdit) return
     const { organization, contributorTypes } = agencyToEdit
     const department = await organizationToSelectValue(
-      organization.department, lang,
-      organization.organization ? organization.organization.identifier : null, lang
+      organization.department,
+      lang,
+      organization.organization ? organization.organization.identifier : null,
+      lang
     )
     const subDepartment = await organizationToSelectValue(
-      organization.subDepartment, lang,
-      organization.department ? organization.department.identifier : null, lang
+      organization.subDepartment,
+      lang,
+      organization.department ? organization.department.identifier : null,
+      lang
     )
     props.onChange({
       id,
       organization: {
         organization: await organizationToSelectValue(organization.organization, lang),
         department,
-        subDepartment
+        subDepartment,
       },
       errors: {},
       contributorTypeForm: { errors: {} },
@@ -99,7 +116,12 @@ const FundingAgencyForm = props => {
     if (!isEmptyObject(validationErrors)) {
       props.onChange({
         ...formData,
-        errors: { ...errors, organization: [t('qvain.project.inputs.fundingAgency.contributorType.organization.validation')] }
+        errors: {
+          ...errors,
+          organization: [
+            t('qvain.project.inputs.fundingAgency.contributorType.organization.validation'),
+          ],
+        },
       })
       return false
     }
@@ -138,7 +160,8 @@ const FundingAgencyForm = props => {
         lang={lang}
       />
       <LabelLarge htmlFor="organization">
-        <Translate content="qvain.project.inputs.fundingAgency.contributorType.organization.label" /> *
+        <Translate content="qvain.project.inputs.fundingAgency.contributorType.organization.label" />{' '}
+        *
       </LabelLarge>
       <OrganizationSelect
         onChange={onOrganizationChange}
@@ -148,7 +171,12 @@ const FundingAgencyForm = props => {
       />
       <ErrorMessages errors={formData.errors.organization} />
       <Expand
-        title={<Translate component="h3" content="qvain.project.inputs.fundingAgency.contributorType.title" />}
+        title={
+          <Translate
+            component="h3"
+            content="qvain.project.inputs.fundingAgency.contributorType.title"
+          />
+        }
       >
         <ContributorTypeForm
           formData={formData.contributorTypeForm}
@@ -161,9 +189,12 @@ const FundingAgencyForm = props => {
       </Expand>
       <AddAgencyContainer>
         <Button onClick={onAddAgency}>
-          <Translate content={formData.id
-            ? 'qvain.project.inputs.fundingAgency.editButton'
-            : 'qvain.project.inputs.fundingAgency.addButton'}
+          <Translate
+            content={
+              formData.id
+                ? 'qvain.project.inputs.fundingAgency.editButton'
+                : 'qvain.project.inputs.fundingAgency.addButton'
+            }
           />
         </Button>
       </AddAgencyContainer>
@@ -181,18 +212,14 @@ FundingAgencyForm.propTypes = {
 
 const AddedAgencies = ({ agencies, onRemove, onEdit, lang }) => (
   <div>
-    { agencies.map(agency => (
+    {agencies.map(agency => (
       <AgencyLabel color="#007fad" margin="0 0.5em 0.5em 0" key={agency.id}>
         <PaddedWord onClick={() => onEdit(agency.id)}>
-          {agency.organization.organization.name[lang] || agency.organization.organization.name.und }
+          {agency.organization.organization.name[lang] || agency.organization.organization.name.und}
         </PaddedWord>
-        <FontAwesomeIcon
-          onClick={() => onRemove(agency.id)}
-          icon={faTimes}
-          size="xs"
-        />
+        <FontAwesomeIcon onClick={() => onRemove(agency.id)} icon={faTimes} size="xs" />
       </AgencyLabel>
-    )) }
+    ))}
   </div>
 )
 
@@ -227,7 +254,7 @@ class ContributorTypeFormComponent extends Component {
 
   state = {
     loading: true,
-    options: {}
+    options: {},
   }
 
   componentDidMount() {
@@ -263,7 +290,7 @@ class ContributorTypeFormComponent extends Component {
       ...formData,
       identifier: { value, label },
       label: name,
-      inScheme
+      inScheme,
     })
   }
 
@@ -279,12 +306,15 @@ class ContributorTypeFormComponent extends Component {
     const { contributorTypes, onChange } = this.props
     const { lang } = this.props.Stores.Locale
 
-    const contributorTypeToEdit = contributorTypes
-      .find(contributorType => contributorType.id === id)
+    const contributorTypeToEdit = contributorTypes.find(
+      contributorType => contributorType.id === id
+    )
     if (!contributorTypeToEdit) return
     const { definition, label, inScheme } = contributorTypeToEdit
     // Find correct select value based on contributor type identifier
-    const identifier = this.state.options[lang].find(option => option.value === contributorTypeToEdit.identifier)
+    const identifier = this.state.options[lang].find(
+      option => option.value === contributorTypeToEdit.identifier
+    )
     onChange({
       id,
       identifier: { label: identifier.label, value: identifier.value },
@@ -305,7 +335,10 @@ class ContributorTypeFormComponent extends Component {
 
     return (
       <Card>
-        <Translate component="p" content="qvain.project.inputs.fundingAgency.contributorType.description" />
+        <Translate
+          component="p"
+          content="qvain.project.inputs.fundingAgency.contributorType.description"
+        />
         <AddedContributorTypes
           contributorTypes={contributorTypes}
           onEdit={this.onEditType}
@@ -313,7 +346,8 @@ class ContributorTypeFormComponent extends Component {
           lang={lang}
         />
         <LabelLarge htmlFor="identifier">
-          <Translate content="qvain.project.inputs.fundingAgency.contributorType.identifier.label" /> *
+          <Translate content="qvain.project.inputs.fundingAgency.contributorType.identifier.label" />{' '}
+          *
         </LabelLarge>
         <Translate
           component={StyledSelect}
@@ -331,13 +365,19 @@ class ContributorTypeFormComponent extends Component {
         <LabelLarge htmlFor="definitionEn">
           <Translate content="qvain.project.inputs.fundingAgency.contributorType.definition.label" />
         </LabelLarge>
-        <Translate component="p" content="qvain.project.inputs.fundingAgency.contributorType.definition.description" />
+        <Translate
+          component="p"
+          content="qvain.project.inputs.fundingAgency.contributorType.definition.description"
+        />
         <Translate
           component={Input}
           value={formData.definitionEn || ''}
           onChange={this.onFieldChange}
           onBlur={this.onBlur}
-          attributes={{ placeholder: 'qvain.project.inputs.fundingAgency.contributorType.definition.placeholderEn' }}
+          attributes={{
+            placeholder:
+              'qvain.project.inputs.fundingAgency.contributorType.definition.placeholderEn',
+          }}
           disabled={readonly}
           name="definitionEn"
           id="definitionEn"
@@ -347,16 +387,22 @@ class ContributorTypeFormComponent extends Component {
           value={formData.definitionFi || ''}
           onChange={this.onFieldChange}
           onBlur={this.onBlur}
-          attributes={{ placeholder: 'qvain.project.inputs.fundingAgency.contributorType.definition.placeholderFi' }}
+          attributes={{
+            placeholder:
+              'qvain.project.inputs.fundingAgency.contributorType.definition.placeholderFi',
+          }}
           disabled={readonly}
           name="definitionFi"
           id="definitionFi"
         />
         <AddAgencyContainer>
           <Button onClick={this.onAddType}>
-            <Translate content={formData.id
-              ? 'qvain.project.inputs.fundingAgency.contributorType.editButton'
-              : 'qvain.project.inputs.fundingAgency.contributorType.addButton'}
+            <Translate
+              content={
+                formData.id
+                  ? 'qvain.project.inputs.fundingAgency.contributorType.editButton'
+                  : 'qvain.project.inputs.fundingAgency.contributorType.addButton'
+              }
             />
           </Button>
         </AddAgencyContainer>
@@ -369,19 +415,16 @@ const ContributorTypeForm = inject('Stores')(observer(ContributorTypeFormCompone
 
 const AddedContributorTypes = ({ contributorTypes = [], onRemove, onEdit, lang }) => (
   <div>
-    { contributorTypes.map(contributorType => (
+    {contributorTypes.map(contributorType => (
       <AgencyLabel color="#007fad" margin="0 0.5em 0.5em 0" key={contributorType.id}>
-        <PaddedWord onClick={() => onEdit(contributorType.id)}>{contributorType.label[lang] }</PaddedWord>
-        <FontAwesomeIcon
-          onClick={() => onRemove(contributorType.id)}
-          icon={faTimes}
-          size="xs"
-        />
+        <PaddedWord onClick={() => onEdit(contributorType.id)}>
+          {contributorType.label[lang]}
+        </PaddedWord>
+        <FontAwesomeIcon onClick={() => onRemove(contributorType.id)} icon={faTimes} size="xs" />
       </AgencyLabel>
-     )) }
+    ))}
   </div>
 )
-
 
 AddedContributorTypes.propTypes = {
   contributorTypes: PropTypes.array,

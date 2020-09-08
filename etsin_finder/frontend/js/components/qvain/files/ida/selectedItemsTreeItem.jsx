@@ -5,7 +5,7 @@ import { faPen, faTimes, faFolder, faFolderOpen, faFile } from '@fortawesome/fre
 import Translate from 'react-translate-component'
 
 import { hasMetadata, hasPASMetadata } from '../../../../stores/view/common.files.items'
-import { Dropdown, DropdownItem } from '../../general/dropdown'
+import { Dropdown, DropdownItem } from '../../general/input/dropdown'
 
 import {
   isDirectory,

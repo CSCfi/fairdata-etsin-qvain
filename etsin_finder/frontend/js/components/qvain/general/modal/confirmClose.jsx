@@ -1,9 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
-import styled from 'styled-components'
 
-import { DangerCancelButton, DangerButton } from './buttons'
+import { DangerCancelButton, DangerButton, ConfirmButtonContainer } from '../buttons'
+import { ResponseOverlay } from './modalOverlay'
 
 export const ConfirmDialog = ({ show, disabled, onConfirm, onCancel, content }) => {
   if (!show) {
@@ -13,14 +13,14 @@ export const ConfirmDialog = ({ show, disabled, onConfirm, onCancel, content }) 
     <ResponseOverlay>
       {content.warning}
       <div style={{ margin: 10 }} />
-      <Buttons>
+      <ConfirmButtonContainer>
         <DangerCancelButton disabled={disabled} onClick={onCancel}>
           {content.cancel}
         </DangerCancelButton>
         <DangerButton disabled={disabled} onClick={onConfirm}>
           {content.confirm}
         </DangerButton>
-      </Buttons>
+      </ConfirmButtonContainer>
     </ResponseOverlay>
   )
 }
@@ -61,27 +61,3 @@ ConfirmClose.propTypes = {
 ConfirmClose.defaultProps = {
   disabled: false,
 }
-
-const Buttons = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  text-align: center;
-  margin: 0 -1.5rem;
-  padding: 0 1rem;
-`
-
-const ResponseOverlay = styled.div`
-  display: flex;
-  flex-direction: column;
-  position: absolute;
-  background: rgba(255, 255, 255, 0.95);
-  width: 100%;
-  top: 0;
-  left: 0;
-  height: 100%;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  padding: 2em;
-`

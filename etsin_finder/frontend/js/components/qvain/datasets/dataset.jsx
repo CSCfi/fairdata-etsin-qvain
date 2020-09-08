@@ -11,7 +11,7 @@ import Label from '../general/label'
 import { TableButton, RemoveButton } from '../general/buttons'
 import TablePasState from './tablePasState'
 import formatAge from './formatAge'
-import { Dropdown, DropdownItem } from '../general/dropdown'
+import { Dropdown, DropdownItem } from '../general/input/dropdown'
 
 const datasetStateTranslation = dataset => {
   if (dataset.state === 'published') {

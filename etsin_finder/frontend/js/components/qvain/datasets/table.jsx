@@ -342,7 +342,7 @@ class DatasetTable extends Component {
 }
 
 const ErrorMessage = styled.span`
-  color: ${(props) => props.theme.color.redText};
+  color: ${props => props.theme.color.redText};
   margin-left: 10px;
 `
 
