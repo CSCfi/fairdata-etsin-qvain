@@ -34,7 +34,7 @@ const Form = props => {
       <Separator />
       <UsedEntityInput />
       <Separator />
-      <ActorsInput {...props} datum="actors" language={language} />
+      <ActorsInput {...props} datum="actors" />
       <Separator />
       <ModalReferenceInput
         {...props}

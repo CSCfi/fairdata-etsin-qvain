@@ -23,7 +23,7 @@ const RoleCheckbox = ({ Stores, role, help, disabled }) => {
     <ListItem disabled={readonly || disabled}>
       <FormField>
         <Checkbox
-          disabled={readonly}
+          disabled={readonly || disabled}
           onChange={handleChangeRole}
           id={id}
           type="checkbox"
