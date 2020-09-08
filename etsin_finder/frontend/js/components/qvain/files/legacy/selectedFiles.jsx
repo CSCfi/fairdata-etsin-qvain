@@ -198,30 +198,24 @@ const isInEdit = (inEdit, identifier, existing) =>
   inEdit !== undefined && inEdit.identifier === identifier && existing === inEdit.existing
 
 const SelectedFilesItem = styled(FileItem)`
-   {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    padding-left: 8px;
-  }
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  padding-left: 8px;
 `
 
 const FileButtonsContainer = styled(ButtonContainer)`
-   {
-    display: flex;
-    align-items: center;
-    margin-left: auto;
-  }
+  display: flex;
+  align-items: center;
+  margin-left: auto;
 `
 
 export const FileLabel = styled(ButtonLabel)`
-   {
-    margin-top: 0;
-    margin-bottom: 0;
-    margin-left: 0;
-    flex-shrink: 0;
-  }
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-left: 0;
+  flex-shrink: 0;
 `
 
 const RefreshDirectoryButton = styled.button`

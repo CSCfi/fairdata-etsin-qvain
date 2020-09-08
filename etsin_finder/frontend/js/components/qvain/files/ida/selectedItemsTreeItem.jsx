@@ -52,7 +52,6 @@ const SelectedItemsTreeItemBase = ({ treeProps, item, level, parentArgs }) => {
   const isRemoved =
     (item.removed || (parentRemoved && !item.added)) && !hasAddedChildren && item.existing
 
-  let content = null
   const canRemove = (canRemoveFiles && (!isRemoved || hasAddedChildren)) || item.added
   const canUndoRemove = canRemoveFiles && item.existing && item.removed
   let canEdit = item.added || item.existing || hasAddedChildren || parentAdded
@@ -68,9 +67,9 @@ const SelectedItemsTreeItemBase = ({ treeProps, item, level, parentArgs }) => {
   )
   const name = item.name
 
-  if (isDirectory(item)) {
+  const getDirectoryContent = () => {
     const isOpen = directoryView.isOpen(item)
-    content = (
+    return (
       <>
         <ToggleOpenButton item={item} directoryView={directoryView} />
         <Icon icon={isOpen ? faFolderOpen : faFolder} />
@@ -82,17 +81,19 @@ const SelectedItemsTreeItemBase = ({ treeProps, item, level, parentArgs }) => {
         {removedTag}
       </>
     )
-  } else {
-    content = (
-      <>
-        <NoIcon />
-        <Icon icon={faFile} />
-        <ItemTitle>{name}</ItemTitle>
-        {newTag}
-        {removedTag}
-      </>
-    )
   }
+
+  const getFileContent = () => (
+    <>
+      <NoIcon />
+      <Icon icon={faFile} />
+      <ItemTitle>{name}</ItemTitle>
+      {newTag}
+      {removedTag}
+    </>
+  )
+
+  const content = isDirectory(item) ? getDirectoryContent() : getFileContent()
 
   const itemHasMetadata = hasMetadata(item)
   const itemHasPASMetadata = hasPASMetadata(item)

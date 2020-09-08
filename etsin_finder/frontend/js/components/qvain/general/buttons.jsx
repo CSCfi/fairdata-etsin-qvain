@@ -27,7 +27,7 @@ export const TableButton = styled.button`
   }
 
   :disabled {
-    color: ${lighten(0.2, '#4f4f4f')}
+    color: ${lighten(0.2, '#4f4f4f')};
     border: solid 1px ${lighten(0.1, '#ccc')};
     background-color: ${lighten(0.1, '#ccc')};
   }
@@ -35,10 +35,10 @@ export const TableButton = styled.button`
 
 export const CancelButton = styled.button`
   border-radius: 4px;
-  border: ${(props) => `solid 1px ${ props.theme.color.primary}` };
+  border: ${props => `solid 1px ${props.theme.color.primary}`};
   font-size: 20px;
   font-weight: bold;
-  color: ${(props) => `${ props.theme.color.primary}` };
+  color: ${props => `${props.theme.color.primary}`};
   padding: 10px 20px;
   &:hover {
     background-color: #ccc;
@@ -47,15 +47,15 @@ export const CancelButton = styled.button`
 
 export const SaveButton = styled.button`
   border-radius: 4px;
-  border: ${(props) => `solid 1px ${ props.theme.color.primary}` };
-  background-color: ${(props) => `${ props.theme.color.primary}` };
+  border: ${props => `solid 1px ${props.theme.color.primary}`};
+  background-color: ${props => `${props.theme.color.primary}`};
   font-size: 20px;
   font-weight: bold;
   color: #fff;
   margin-left: 20px;
   padding: 10px 25px;
   &:hover {
-    background-color: ${(props => props.theme.color.primaryDark)};
+    background-color: ${props => props.theme.color.primaryDark};
   }
 
   :disabled {
@@ -85,8 +85,8 @@ export const AddActorButton = styled.button`
 
 export const DangerButton = styled.button`
   border-radius: 4px;
-  border: 1px solid ${(props) => (props.disabled ? '#ddb6b6' : '#db0000')};
-  background-color: ${(props) => (props.disabled ? '#ddb6b6' : '#db0000')};
+  border: 1px solid ${props => (props.disabled ? '#ddb6b6' : '#db0000')};
+  background-color: ${props => (props.disabled ? '#ddb6b6' : '#db0000')};
   font-size: 16px;
   font-weight: 600;
   line-height: 1.31;
@@ -94,7 +94,7 @@ export const DangerButton = styled.button`
   margin-left: 20px;
   padding: 10px 25px;
   &:hover {
-    background-color: ${(props) => (props.disabled ? '#ddb6b6' : '#ff4c4c')};
+    background-color: ${props => (props.disabled ? '#ddb6b6' : '#ff4c4c')};
   }
 `
 
@@ -141,12 +141,17 @@ export const ButtonGroup = styled.div`
 `
 
 export const FileItem = styled(ButtonGroup)`
-  ${props => (props.active ? `
+  ${props => {
+    if (props.active) {
+      return `
     border-bottom: none;
     box-shadow: none;
     margin-bottom: 0px;
-  ` : '')}
-`;
+  `
+    }
+    return ''
+  }}
+`
 
 export const ButtonLabel = styled.span`
   background-color: transparent;
@@ -187,7 +192,7 @@ export const EditButtonStyles = styled.button`
   }
 `
 
-export const EditButton = (props) => (
+export const EditButton = props => (
   <EditButtonStyles {...props}>
     <FontAwesomeIcon size="lg" icon={faPen} />
   </EditButtonStyles>
@@ -210,7 +215,7 @@ export const DeleteButtonStyles = styled.button`
   }
 `
 
-export const DeleteButton = (props) => (
+export const DeleteButton = props => (
   <DeleteButtonStyles {...props}>
     <FontAwesomeIcon size="lg" icon={faTimes} />
   </DeleteButtonStyles>
@@ -221,11 +226,11 @@ export const ButtonContainer = styled.div`
 `
 
 export const CumulativeStateButton = styled.button`
-  background-color: ${(props) => (props.disabled ? '#7fbfd6' : '#007fad')};
+  background-color: ${props => (props.disabled ? '#7fbfd6' : '#007fad')};
   color: #fff;
   height: 47px;
   border-radius: 31.5px;
-  border: solid 1px ${(props) => (props.disabled ? '#7fbfd6' : '#007fad')};
+  border: solid 1px ${props => (props.disabled ? '#7fbfd6' : '#007fad')};
   text-transform: none;
   font-weight: 600;
   padding-left: 27px;
@@ -240,7 +245,7 @@ export const CumulativeStateButton = styled.button`
   -webkit-appearance: none;
   overflow: hidden;
   vertical-align: middle;
-  ${(props) =>
+  ${props =>
     !props.disabled &&
     css`
       cursor: pointer;
@@ -255,12 +260,12 @@ export const CumulativeStateButtonText = styled.span`
 `
 
 export const FilePickerButton = styled.button`
-  background-color: ${(props) => (props.disabled ? '#7fbfd6' : '#007fad')};
+  background-color: ${props => (props.disabled ? '#7fbfd6' : '#007fad')};
   color: #fff;
   width: 100%;
   height: 47px;
   border-radius: 31.5px;
-  border: solid 1px ${(props) => (props.disabled ? '#7fbfd6' : '#007fad')};
+  border: solid 1px ${props => (props.disabled ? '#7fbfd6' : '#007fad')};
   text-transform: none;
   font-weight: 600;
   padding-left: 27px;
@@ -275,7 +280,7 @@ export const FilePickerButton = styled.button`
   -webkit-appearance: none;
   overflow: hidden;
   vertical-align: middle;
-  ${(props) =>
+  ${props =>
     !props.disabled &&
     css`
       cursor: pointer;
@@ -283,24 +288,24 @@ export const FilePickerButton = styled.button`
 `
 
 export const FilePickerButtonInverse = styled(FilePickerButton)`
-  color: ${(props) => (props.disabled ? '#7fbfd6' : '#007fad')};
+  color: ${props => (props.disabled ? '#7fbfd6' : '#007fad')};
   background-color: #fff;
 `
 
 export const FilePickerFileButton = styled.button`
-  background-color: ${(props) => (props.disabled ? '#7fbfd6' : '#007fad')};
+  background-color: ${props => (props.disabled ? '#7fbfd6' : '#007fad')};
   font-size: 0.9em;
   color: #fff;
   height: 22px;
   border-radius: 2px;
-  border: solid 1px ${(props) => (props.disabled ? '#7fbfd6' : '#007fad')};
+  border: solid 1px ${props => (props.disabled ? '#7fbfd6' : '#007fad')};
   text-transform: none;
   display: inline-flex;
   position: relative;
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
-  ${(props) =>
+  ${props =>
     !props.disabled &&
     css`
       cursor: pointer;

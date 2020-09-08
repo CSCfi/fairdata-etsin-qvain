@@ -13,33 +13,38 @@ import { otherIdentifiersArraySchema, otherIdentifierSchema } from '../utils/for
 import ValidationError from '../general/validationError'
 import { Input, LabelLarge } from '../general/form'
 
-class OtherIdentifierField extends React.Component {
-  static propTypes = {
-    Stores: PropTypes.object.isRequired,
-  }
+const OtherIdentifierField = ({ Stores }) => {
+  const {
+    readonly,
+    removeOtherIdentifier,
+    setOtherIdentifier,
+    otherIdentifier,
+    otherIdentifiersArray,
+    addOtherIdentifier,
+    otherIdentifiersValidationError,
+    setOtherIdentifierValidationError,
+  } = Stores.Qvain
 
-  handleInputChange = event => {
+  const handleInputChange = event => {
     const { value } = event.target
-    const { setOtherIdentifier } = this.props.Stores.Qvain
     setOtherIdentifier(value)
   }
 
-  clearInput = () => {
-    const { setOtherIdentifier } = this.props.Stores.Qvain
+  const clearInput = () => {
     setOtherIdentifier('')
   }
 
-  handleAddClick = event => {
-    event.preventDefault()
-    const { otherIdentifier, otherIdentifiersArray, addOtherIdentifier, setOtherIdentifierValidationError } = this.props.Stores.Qvain
+  const handleAddClick = () => {
     otherIdentifierSchema
       .validate(otherIdentifier)
       .then(() => {
         if (!otherIdentifiersArray.includes(otherIdentifier)) {
           addOtherIdentifier(otherIdentifier)
-          this.clearInput()
+          clearInput()
         } else {
-          setOtherIdentifierValidationError(translate('qvain.description.otherIdentifiers.alreadyAdded'))
+          setOtherIdentifierValidationError(
+            translate('qvain.description.otherIdentifiers.alreadyAdded')
+          )
         }
       })
       .catch(err => {
@@ -47,19 +52,16 @@ class OtherIdentifierField extends React.Component {
       })
   }
 
-  handleRemove = identifier => {
-    const { removeOtherIdentifier } = this.props.Stores.Qvain
+  const handleRemove = identifier => {
     removeOtherIdentifier(identifier)
   }
 
-  handleBlur = () => {
-    const { setOtherIdentifierValidationError } = this.props.Stores.Qvain
+  const handleBlur = () => {
     setOtherIdentifierValidationError(null)
-    this.validateOtherIdentifiers()
+    validateOtherIdentifiers()
   }
 
-  validateOtherIdentifiers = () => {
-    const { otherIdentifiersArray, setOtherIdentifierValidationError } = this.props.Stores.Qvain
+  const validateOtherIdentifiers = () => {
     otherIdentifiersArraySchema
       .validate(otherIdentifiersArray)
       .then(() => {
@@ -70,39 +72,43 @@ class OtherIdentifierField extends React.Component {
       })
   }
 
-  render() {
-    const { readonly, otherIdentifier, otherIdentifiersArray, otherIdentifiersValidationError } = this.props.Stores.Qvain
-    const otherIdentifiersLabels = otherIdentifiersArray.map(identifier => (
-      <Label color="primary" margin="0 0.5em 0.5em 0" key={identifier}>
-        <PaddedWord>{identifier}</PaddedWord>
-        <FontAwesomeIcon onClick={() => this.handleRemove(identifier)} icon={faTimes} size="xs" />
-      </Label>
-    ))
-    return (
-      <Card bottomContent>
-        <LabelLarge htmlFor="otherIdentifiersInput">
-          <Translate content="qvain.description.otherIdentifiers.title" />
-        </LabelLarge>
-        <Translate component="p" content="qvain.description.otherIdentifiers.instructions" />
-        {otherIdentifiersLabels}
-        <Input
-          type="text"
-          id="otherIdentifiersInput"
-          disabled={readonly}
-          value={otherIdentifier}
-          onChange={this.handleInputChange}
-          placeholder="http://doi.org/"
-          onBlur={this.handleBlur}
-        />
-        {otherIdentifiersValidationError && <ValidationError>{otherIdentifiersValidationError}</ValidationError>}
-        <ButtonContainer>
-          <AddNewButton type="button" onClick={this.handleAddClick} disabled={readonly}>
-            <Translate content="qvain.description.otherIdentifiers.addButton" />
-          </AddNewButton>
-        </ButtonContainer>
-      </Card>
-    )
-  }
+  const otherIdentifiersLabels = otherIdentifiersArray.map(identifier => (
+    <Label color="primary" margin="0 0.5em 0.5em 0" key={identifier}>
+      <PaddedWord>{identifier}</PaddedWord>
+      <FontAwesomeIcon onClick={() => handleRemove(identifier)} icon={faTimes} size="xs" />
+    </Label>
+  ))
+
+  return (
+    <Card bottomContent>
+      <LabelLarge htmlFor="otherIdentifiersInput">
+        <Translate content="qvain.description.otherIdentifiers.title" />
+      </LabelLarge>
+      <Translate component="p" content="qvain.description.otherIdentifiers.instructions" />
+      {otherIdentifiersLabels}
+      <Input
+        type="text"
+        id="otherIdentifiersInput"
+        disabled={readonly}
+        value={otherIdentifier}
+        onChange={handleInputChange}
+        placeholder="http://doi.org/"
+        onBlur={handleBlur}
+      />
+      {otherIdentifiersValidationError && (
+        <ValidationError>{otherIdentifiersValidationError}</ValidationError>
+      )}
+      <ButtonContainer>
+        <AddNewButton type="button" onClick={handleAddClick} disabled={readonly}>
+          <Translate content="qvain.description.otherIdentifiers.addButton" />
+        </AddNewButton>
+      </ButtonContainer>
+    </Card>
+  )
+}
+
+OtherIdentifierField.propTypes = {
+  Stores: PropTypes.object.isRequired,
 }
 
 const ButtonContainer = styled.div`

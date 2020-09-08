@@ -1,36 +1,31 @@
-import React, { PureComponent } from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import translate from 'counterpart'
 import Tooltip from './tooltip'
 import { HelpIcon } from './form'
 
-class QvainTooltip extends PureComponent {
-  static propTypes = {
-    tooltipAriaLabel: PropTypes.string.isRequired,
-    tooltipContent: PropTypes.elementType.isRequired,
-  }
+const QvainTooltip = ({ tooltipAriaLabel, tooltipContent }) => {
+  const [tooltipOpen, setTooltipOpen] = useState(false)
+  const TooltipContent = tooltipContent
 
-  state = {
-    tooltipOpen: false,
-  }
+  return (
+    <Tooltip
+      isOpen={tooltipOpen}
+      close={() => setTooltipOpen(!tooltipOpen)}
+      align="Right"
+      text={<TooltipContent />}
+    >
+      <HelpIcon
+        aria-label={translate(tooltipAriaLabel)}
+        onClick={() => setTooltipOpen(!tooltipOpen)}
+      />
+    </Tooltip>
+  )
+}
 
-  render() {
-    const { tooltipContent, tooltipAriaLabel } = this.props
-    const TooltipContent = tooltipContent
-    return (
-      <Tooltip
-        isOpen={this.state.tooltipOpen}
-        close={() => this.setState((prevState) => ({ tooltipOpen: !prevState.tooltipOpen }))}
-        align="Right"
-        text={<TooltipContent />}
-      >
-        <HelpIcon
-          aria-label={translate(tooltipAriaLabel)}
-          onClick={() => this.setState((prevState) => ({ tooltipOpen: !prevState.tooltipOpen }))}
-        />
-      </Tooltip>
-    )
-  }
+QvainTooltip.propTypes = {
+  tooltipAriaLabel: PropTypes.string.isRequired,
+  tooltipContent: PropTypes.elementType.isRequired,
 }
 
 export default QvainTooltip
