@@ -1,13 +1,12 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import translate from 'counterpart'
-import ReactSelect, { components } from 'react-select'
+import { components } from 'react-select'
 import CreatableSelect from 'react-select/creatable'
 
 import etsinTheme from '../js/styles/theme'
 import '../locale/translations'
 import Qvain from '../js/components/qvain'
-import Select from '../js/components/qvain/general/select'
 import Description from '../js/components/qvain/description'
 import DescriptionField from '../js/components/qvain/description/descriptionField'
 import OtherIdentifierField from '../js/components/qvain/description/otherIdentifierField'
@@ -27,7 +26,7 @@ import { ButtonGroup } from '../js/components/qvain/general/buttons'
 import {
   ValidationErrors,
   ValidationErrorItem,
-} from '../js/components/qvain/general/validationError'
+} from '../js/components/qvain/general/errors/validationError'
 import { SlidingContent } from '../js/components/qvain/general/card'
 import Env from '../js/stores/domain/env'
 import QvainStoreClass, {
