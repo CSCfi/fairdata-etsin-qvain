@@ -5,9 +5,9 @@ import Translate from 'react-translate-component'
 import styled from 'styled-components'
 
 import { SaveButton, CancelButton } from '../../../general/buttons'
-import { Label, Input, Textarea, CustomSelect } from '../../../general/form'
+import { Label, Input, Textarea, CustomSelect } from '../../../general/modal/form'
 import { Container } from '../../../general/card'
-import ValidationError from '../../../general/validationError'
+import ValidationError from '../../../general/errors/validationError'
 import { getLocalizedOptions } from '../../../utils/getReferenceData'
 import {
   fileSchema,

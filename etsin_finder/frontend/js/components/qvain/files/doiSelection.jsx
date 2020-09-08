@@ -5,7 +5,7 @@ import Translate from 'react-translate-component'
 import styled from 'styled-components'
 
 import { DATA_CATALOG_IDENTIFIER } from '../../../utils/constants'
-import { Checkbox, HelpField } from '../general/form'
+import { Checkbox, HelpField } from '../general/modal/form'
 
 function DoiSelection(props) {
   const { dataCatalog, original, useDoi, setUseDoi } = props.Stores.Qvain

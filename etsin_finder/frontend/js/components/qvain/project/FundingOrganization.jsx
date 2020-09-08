@@ -8,7 +8,7 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import t from 'counterpart'
 
 import Card from '../general/card'
-import OrganizationSelect from '../general/organizationSelect'
+import OrganizationSelect from '../general/input/organizationSelect'
 import {
   ErrorMessages,
   organizationSelectValueToSchema,
@@ -17,7 +17,7 @@ import {
   organizationToSelectValue,
 } from './utils'
 import Button from '../../general/button'
-import Label from '../general/label'
+import Label from '../general/card/label'
 
 import { Organization } from '../../../stores/view/qvain'
 import { organizationObjectSchema } from '../utils/formValidation'

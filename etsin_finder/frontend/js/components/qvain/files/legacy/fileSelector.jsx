@@ -6,7 +6,7 @@ import { inject, observer } from 'mobx-react'
 import styled, { css } from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFolder, faChevronRight, faChevronDown } from '@fortawesome/free-solid-svg-icons'
-import { Checkbox } from '../../general/form'
+import { Checkbox } from '../../general/modal/form'
 import { FileIcon } from '../../general/buttons'
 
 export class FileSelectorBase extends Component {

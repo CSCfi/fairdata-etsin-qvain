@@ -3,8 +3,8 @@ import PropTypes from 'prop-types'
 import { Observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 import styled from 'styled-components'
-import { SaveButton, CancelButton } from './buttons'
-import ValidationError from './validationError'
+import { SaveButton, CancelButton } from '../buttons'
+import ValidationError from '../errors/validationError'
 
 const ModalButtons = ({ Field, handleRequestClose, translations, readonly, handleSave }) => (
   <ButtonAndErrorContainer>

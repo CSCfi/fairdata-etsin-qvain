@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
-import { ButtonGroup, ButtonLabel, EditButton, DeleteButton, ButtonContainer } from './buttons'
+import { ButtonGroup, ButtonLabel, EditButton, DeleteButton, ButtonContainer } from '../buttons'
 
 const FieldList = ({ Field, lang, translationsRoot, elements, disableNoItemsText }) => {
   const { remove, edit } = Field

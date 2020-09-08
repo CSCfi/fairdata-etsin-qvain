@@ -14,7 +14,7 @@ import {
   SubHeaderText,
 } from '../general/card'
 import { SaveButton } from '../general/buttons'
-import Title from '../general/title'
+import Title from '../general/card/title'
 import Tracking from '../../../utils/tracking'
 import NoticeBar from '../../general/noticeBar'
 

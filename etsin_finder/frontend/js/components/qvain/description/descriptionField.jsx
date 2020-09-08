@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import Translate from 'react-translate-component'
 
 import { titleSchema, descriptionSchema } from '../utils/formValidation'
-import TranslationsTab from '../general/translationTab'
+import TranslationsTab from '../general/input/translationTab'
 import DescriptionFieldInput from './descriptionFieldInput'
 import DescriptionFieldTextField from './descriptionFieldTextField'
 

@@ -8,9 +8,9 @@ import {
   handleDatePickerChange,
   getDateFormatLocale,
 } from '../general/input/datepicker'
-import { Label } from '../general/form'
+import { Label } from '../general/modal/form'
 import { embargoExpDateSchema } from '../utils/formValidation'
-import ValidationError from '../general/validationError'
+import ValidationError from '../general/errors/validationError'
 
 class EmbargoExpires extends Component {
   static propTypes = {

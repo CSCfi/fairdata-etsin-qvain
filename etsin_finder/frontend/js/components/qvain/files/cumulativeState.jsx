@@ -9,7 +9,7 @@ import { ContainerSubsectionBottom } from '../general/card'
 import { CUMULATIVE_STATE } from '../../../utils/constants'
 import { getResponseError } from '../utils/responseError'
 import urls from '../utils/urls'
-import { LabelLarge, FormField, RadioInput, Label, HelpField } from '../general/form'
+import { LabelLarge, FormField, RadioInput, Label, HelpField } from '../general/modal/form'
 
 import Modal from '../../general/modal'
 import { TableButton, DangerButton } from '../general/buttons'

@@ -9,9 +9,9 @@ import ReactSelect from 'react-select'
 import t from 'counterpart'
 
 import Card from '../general/card'
-import OrganizationSelect from '../general/organizationSelect'
+import OrganizationSelect from '../general/input/organizationSelect'
 import Button from '../../general/button'
-import Label from '../general/label'
+import Label from '../general/card/label'
 import {
   ErrorMessages,
   organizationSelectValueToSchema,
@@ -22,7 +22,7 @@ import {
   Expand,
   resolveOptions,
 } from './utils'
-import { LabelLarge, Input } from '../general/form'
+import { LabelLarge, Input } from '../general/modal/form'
 import { fundingAgencySchema, organizationObjectSchema } from '../utils/formValidation'
 import { FundingAgency, ContributorType, Organization } from '../../../stores/view/qvain'
 

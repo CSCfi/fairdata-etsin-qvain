@@ -8,7 +8,7 @@ import ProjectSelector from './projectSelector'
 import Modal from '../../../general/modal'
 import AddItemsTree from './addItemsTree'
 import { SaveButton, CancelButton } from '../../general/buttons'
-import { HelpField } from '../../general/form'
+import { HelpField } from '../../general/modal/form'
 
 export function AddFilesModal(props) {
   const { isOpen, onRequestClose } = props

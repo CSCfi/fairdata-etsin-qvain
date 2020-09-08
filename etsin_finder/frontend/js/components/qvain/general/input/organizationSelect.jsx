@@ -8,12 +8,12 @@ import styled from 'styled-components'
 
 import { inject, observer } from 'mobx-react'
 
-import { getOrganizationSearchUrl } from '../../../stores/view/qvain.actors'
-import { organizationSelectSchema } from '../utils/formValidation'
-import { Input, Label } from './form'
-import ValidationError from './validationError'
-import { DeleteButton } from './buttons'
-import { validate } from '../project/utils'
+import { getOrganizationSearchUrl } from '../../../../stores/view/qvain.actors'
+import { organizationSelectSchema } from '../../utils/formValidation'
+import { Input, Label } from '../modal/form'
+import ValidationError from '../errors/validationError'
+import { DeleteButton } from '../buttons'
+import { validate } from '../../project/utils'
 
 /**
  * A reusable organization select component.

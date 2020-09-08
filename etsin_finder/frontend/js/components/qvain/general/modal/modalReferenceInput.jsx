@@ -2,8 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import { Observer } from 'mobx-react'
-import SearchSelect from './searchSelect'
-import Select from './select'
+import SearchSelect from '../input/searchSelect'
+import Select from '../input/select'
 import { Label } from './form'
 
 const ModalReferenceInput = ({

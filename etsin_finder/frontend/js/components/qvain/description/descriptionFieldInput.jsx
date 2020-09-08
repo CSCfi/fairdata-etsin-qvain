@@ -4,9 +4,9 @@ import { inject, observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 import translate from 'counterpart'
 
-import { Input, LabelLarge } from '../general/form'
+import { Input, LabelLarge } from '../general/modal/form'
 import Tooltip from '../../general/tooltipHover'
-import ValidationError from '../general/validationError'
+import ValidationError from '../general/errors/validationError'
 
 class DescriptionFieldInput extends Component {
   static propTypes = {

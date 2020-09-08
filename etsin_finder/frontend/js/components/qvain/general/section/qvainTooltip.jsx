@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import translate from 'counterpart'
 import Tooltip from './tooltip'
-import { HelpIcon } from './form'
+import { HelpIcon } from '../modal/form'
 
 const QvainTooltip = ({ tooltipAriaLabel, tooltipContent }) => {
   const [tooltipOpen, setTooltipOpen] = useState(false)

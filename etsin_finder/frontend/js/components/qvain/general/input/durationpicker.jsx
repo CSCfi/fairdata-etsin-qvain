@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { inject, observer } from 'mobx-react'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
-import { Label } from '../form'
+import { Label } from '../modal/form'
 import { DatePicker, handleDatePickerChange, getDateFormatLocale } from './datepicker'
 
 const DurationPicker = ({ Stores, Field, translationsRoot, datum }) => {

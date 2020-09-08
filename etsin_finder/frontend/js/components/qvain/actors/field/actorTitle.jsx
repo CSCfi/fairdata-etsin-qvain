@@ -3,7 +3,7 @@ import translate from 'counterpart'
 import Translate from 'react-translate-component'
 
 import Tooltip from '../../../general/tooltipHover'
-import { LabelLarge } from '../../general/form'
+import { LabelLarge } from '../../general/modal/form'
 
 const ActorTitle = () => (
   <LabelLarge>

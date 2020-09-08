@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
-import ValidationError from '../../general/validationError'
+import ValidationError from '../../general/errors/validationError'
 
 const ActorErrors = ({ actorError, loadingFailed }) => (
   <>

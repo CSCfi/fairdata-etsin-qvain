@@ -6,8 +6,8 @@ import { observer } from 'mobx-react'
 import { v4 as uuidv4 } from 'uuid'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
-import { Input, Label } from '../../../general/form'
-import ValidationError from '../../../general/validationError'
+import { Input, Label } from '../../../general/modal/form'
+import ValidationError from '../../../general/errors/validationError'
 import Button from '../../../../general/button'
 
 const ModalArrayInput = ({

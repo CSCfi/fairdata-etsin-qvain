@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import TranslationTab from '../../../general/translationTab'
-import TabInput from '../../../general/translationTabInputModal'
-import { FormContainer } from '../../../general/form'
-import ModalInput from '../../../general/modalInput'
-import ModalReferenceInput from '../../../general/modalReferenceInput'
+import TranslationTab from '../../../general/input/translationTab'
+import TabInput from '../../../general/input/translationTabInputModal'
+import { FormContainer } from '../../../general/modal/form'
+import ModalInput from '../../../general/modal/modalInput'
+import ModalReferenceInput from '../../../general/modal/modalReferenceInput'
 import { RelationType } from '../../../../../stores/view/qvain.relatedResources'
 
 const Form = props => {

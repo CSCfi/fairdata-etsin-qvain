@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import { Observer } from 'mobx-react'
 import { Input, Label } from './form'
-import ValidationError from './validationError'
+import ValidationError from '../errors/validationError'
 
 const ModalInput = ({ Field, translationsRoot, datum, handleBlur, type, error, isRequired }) => {
   const { changeAttribute, readonly } = Field

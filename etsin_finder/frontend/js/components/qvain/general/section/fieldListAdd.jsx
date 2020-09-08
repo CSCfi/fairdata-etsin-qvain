@@ -3,9 +3,9 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import { Observer } from 'mobx-react'
 import Translate from 'react-translate-component'
-import Modal from '../../general/modal'
-import Button from '../../general/button'
-import ModalContent from './modalContent'
+import Modal from '../../../general/modal'
+import Button from '../../../general/button'
+import ModalContent from '../modal/modalContent'
 
 const FieldListAdd = ({
   Store,
