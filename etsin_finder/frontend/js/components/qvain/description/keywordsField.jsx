@@ -10,10 +10,10 @@ import counterpart from 'counterpart'
 import Tooltip from '../../general/tooltipHover'
 import Card from '../general/card'
 import Label from '../general/label'
-import Button from '../../general/button'
 import { keywordsSchema } from '../utils/formValidation'
 import ValidationError from '../general/validationError'
-import { LabelLarge } from '../general/form'
+import { LabelLarge, Input } from '../general/form'
+import { ButtonContainer, AddNewButton } from '../general/addButton'
 
 class KeywordsField extends Component {
   static propTypes = {
@@ -111,24 +111,8 @@ class KeywordsField extends Component {
   }
 }
 
-const Input = styled.input`
-  width: 100%;
-  border-radius: 3px;
-  border: 1px solid #cccccc;
-  padding: 8px;
-  color: #808080;
-  margin-bottom: 20px;
-`
 const PaddedWord = styled.span`
   padding-right: 10px;
-`
-
-const ButtonContainer = styled.div`
-  text-align: right;
-`
-const AddNewButton = styled(Button)`
-  margin: 0;
-  margin-top: 11px;
 `
 
 export default inject('Stores')(observer(KeywordsField))

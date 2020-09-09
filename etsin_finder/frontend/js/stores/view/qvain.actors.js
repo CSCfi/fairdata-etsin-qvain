@@ -537,7 +537,7 @@ class Actors {
   @computed get actorOptions() {
     return this.actors.map(ref => ({
       value: ref.uiid,
-      label: ref.person.name || ref.organizations[0].name,
+      label: ref.person.name || ref.organizations.map(org => org.name),
       roles: ref.roles,
     }))
   }
@@ -588,7 +588,7 @@ export class ActorsRef {
     // makes a list of actors based on the refs
     return Object.values(this.actorsRef).map(ref => ({
       value: ref.uiid,
-      label: ref.person.name || ref.organizations[0].name,
+      label: ref.person.name || ref.organizations.map(org => org.name),
       roles: ref.roles,
     }))
   }

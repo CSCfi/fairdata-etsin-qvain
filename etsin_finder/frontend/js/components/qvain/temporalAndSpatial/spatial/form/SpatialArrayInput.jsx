@@ -68,7 +68,7 @@ const ModalArrayInput = ({
         <Translate content={translations.label} /> {isRequired ? '*' : ''}
       </Label>
       {renderInputs()}
-      <Button
+      <AddButton
         onClick={() => {
           const arr = [...Field.inEdit[datum]]
           arr.push({ key: uuidv4(), value: '' })
@@ -76,7 +76,7 @@ const ModalArrayInput = ({
         }}
       >
         <Translate content={`${translationsRoot}.modal.buttons.addGeometry`} />
-      </Button>
+      </AddButton>
       {error && <ArrayInputError>{error}</ArrayInputError>}
     </ModalArrayInputWrapper>
   )
@@ -100,6 +100,10 @@ ModalArrayInput.defaultProps = {
 
 const ModalArrayInputWrapper = styled.div`
   margin-bottom: 8px;
+`
+
+const AddButton = styled(Button)`
+  margin-left: 0;
 `
 
 const RemoveButton = styled(Button)`
