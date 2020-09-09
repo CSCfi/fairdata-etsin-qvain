@@ -48,9 +48,9 @@ AddButton.defaultProps = {
 export default inject('Stores')(observer(AddButton))
 
 export const ButtonContainer = styled.div`
+  margin-top: 1.25rem;
   text-align: right;
 `
 export const AddNewButton = styled(Button)`
   margin: 0;
-  margin-top: 11px;
 `

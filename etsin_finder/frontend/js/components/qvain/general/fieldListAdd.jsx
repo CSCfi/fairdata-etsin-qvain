@@ -107,6 +107,8 @@ FieldListAdd.defaultProps = {
 
 const ButtonContainer = styled.div`
   text-align: ${props => props.position};
+  margin-top: 1.25rem;
+  margin-bottom: 0;
 `
 const AddNewButton = styled(Button)`
   margin: 0;
