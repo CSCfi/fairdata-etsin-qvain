@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import translate from 'counterpart'
 import { ButtonGroup, ButtonLabel, DeleteButton, ButtonContainer } from '../../../general/buttons'
+import parseActorLabel from '../../../utils/actor'
 
 const ActorsList = ({ Stores, actors, items, language }) => {
   const { readonly } = Stores.Qvain
@@ -13,7 +14,7 @@ const ActorsList = ({ Stores, actors, items, language }) => {
   }
 
   const actorItems = items.map(actor => {
-    const actorName = actor.label[language] || actor.label
+    const actorName = parseActorLabel(actor, language)
     const rolesStr = actor.roles.map(role => `${translate(`qvain.actors.add.checkbox.${role}`)}`)
     const name = `${actorName} / ${rolesStr.join(' / ')}`
     return (

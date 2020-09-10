@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { inject, observer } from 'mobx-react'
 import PropTypes from 'prop-types'
@@ -6,63 +6,48 @@ import Translate from 'react-translate-component'
 import { Label } from './form'
 import { DatePicker, handleDatePickerChange, getDateFormatLocale } from './datepicker'
 
-class DurationPicker extends Component {
-  translations = {
-    label: `${this.props.translationsRoot}.modal.${this.props.datum}Input.label`,
-    startPlaceholder: `${this.props.translationsRoot}.modal.${this.props.datum}Input.startPlaceholder`,
-    endPlaceholder: `${this.props.translationsRoot}.modal.${this.props.datum}Input.endPlaceholder`,
+const DurationPicker = ({ Stores, Field, translationsRoot, datum }) => {
+  const translations = {
+    label: `${translationsRoot}.modal.${datum}Input.label`,
+    startPlaceholder: `${translationsRoot}.modal.${datum}Input.startPlaceholder`,
+    endPlaceholder: `${translationsRoot}.modal.${datum}Input.endPlaceholder`,
   }
+  const { startDate, endDate } = Field.inEdit
+  const { changeAttribute } = Field
+  const { readonly } = Stores.Qvain
+  const { lang } = Stores.Locale
 
-  static propTypes = {
-    Stores: PropTypes.object.isRequired,
-    Field: PropTypes.object.isRequired,
-    translationsRoot: PropTypes.string.isRequired,
-    datum: PropTypes.string.isRequired,
-  }
+  const handleDateChangeRaw = (e, propName) =>
+    e && handleDatePickerChange(e.target.value, date => changeAttribute(propName, date))
 
-  handleDateChangeRaw = (e, datum) => {
-    const { changeAttribute } = this.props.Field
+  const handleDateChange = (date, propName) =>
+    date && handleDatePickerChange(date.toISOString(), d => changeAttribute(propName, d))
 
-    return e && handleDatePickerChange(e.target.value, date => changeAttribute(datum, date))
-  }
-
-  handleDateChange = (date, datum) => {
-    const { changeAttribute } = this.props.Field
-
-    return date ? handleDatePickerChange(date.toISOString(), d => changeAttribute(datum, d)) : null
-  }
-
-  render() {
-    const { startDate, endDate } = this.props.Field.inEdit
-    const { readonly } = this.props.Stores.Qvain
-    const { lang } = this.props.Stores.Locale
-
-    return (
+  return (
+    <>
+      <Label htmlFor="period-of-time-input" style={{ width: '100%', marginBottom: 5 }}>
+        <Translate content={translations.label} />
+      </Label>
       <DatePickerContainer>
-        <Label htmlFor="period-of-time-input" style={{ width: '100%', marginBottom: 5 }}>
-          <Translate content={this.translations.label} />
-        </Label>
-        <DatePickerStartWrapper>
-          <Translate
-            id="startTimeInput"
-            component={DatePicker}
-            selectsStart
-            maxDate={endDate && new Date(endDate)}
-            startDate={startDate && new Date(startDate)}
-            endDate={endDate && new Date(endDate)}
-            strictParsing
-            selected={startDate ? new Date(startDate) : ''}
-            onChangeRaw={e => this.handleDateChangeRaw(e, 'startDate')}
-            onChange={date => this.handleDateChange(date, 'startDate')}
-            locale={lang}
-            attributes={{
-              placeholderText: this.translations.startPlaceholder,
-              ariaLabel: this.translations.startPlaceholder,
-            }}
-            dateFormat={getDateFormatLocale(lang)}
-            disabled={readonly}
-          />
-        </DatePickerStartWrapper>
+        <Translate
+          id="startTimeInput"
+          component={DatePicker}
+          selectsStart
+          maxDate={endDate && new Date(endDate)}
+          startDate={startDate && new Date(startDate)}
+          endDate={endDate && new Date(endDate)}
+          strictParsing
+          selected={startDate ? new Date(startDate) : ''}
+          onChangeRaw={e => handleDateChangeRaw(e, 'startDate')}
+          onChange={date => handleDateChange(date, 'startDate')}
+          locale={lang}
+          attributes={{
+            placeholderText: translations.startPlaceholder,
+            ariaLabel: translations.startPlaceholder,
+          }}
+          dateFormat={getDateFormatLocale(lang)}
+          disabled={readonly}
+        />
         <Translate
           id="endTimeInput"
           component={DatePicker}
@@ -72,29 +57,41 @@ class DurationPicker extends Component {
           endDate={endDate && new Date(endDate)}
           strictParsing
           selected={endDate ? new Date(endDate) : ''}
-          onChangeRaw={e => this.handleDateChangeRaw(e, 'endDate')}
-          onChange={date => this.handleDateChange(date, 'endDate')}
+          onChangeRaw={e => handleDateChangeRaw(e, 'endDate')}
+          onChange={date => handleDateChange(date, 'endDate')}
           locale={lang}
           attributes={{
-            placeholderText: this.translations.endPlaceholder,
-            ariaLabel: this.translations.endPlaceholder,
+            placeholderText: translations.endPlaceholder,
+            ariaLabel: translations.endPlaceholder,
           }}
           dateFormat={getDateFormatLocale(lang)}
           disabled={readonly}
         />
       </DatePickerContainer>
-    )
-  }
+    </>
+  )
+}
+
+DurationPicker.propTypes = {
+  Stores: PropTypes.object.isRequired,
+  Field: PropTypes.object.isRequired,
+  translationsRoot: PropTypes.string.isRequired,
+  datum: PropTypes.string.isRequired,
 }
 
 const DatePickerContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
-`
+  margin: -0.25em -0.25em calc(-0.25em + 1.25em) -0.25em;
 
-const DatePickerStartWrapper = styled.span`
-  margin-right: 0.5em;
+  & > * {
+    margin: 0.25em;
+  }
+
+  input[type='text'] {
+    margin: 0;
+  }
 `
 
 export default inject('Stores')(observer(DurationPicker))

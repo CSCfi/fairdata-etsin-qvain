@@ -83,6 +83,61 @@ def alter_role_data(actor_list=[], role="all"):
     return actors
 
 
+def _organization_array_to_object(organizations):
+    converted = organizations[0]
+    converted["@type"] = "Organization"
+    for sub_organization in organizations[1:]:
+        sub_organization["is_part_of"] = converted
+        sub_organization["@type"] = "Organization"
+        converted = sub_organization
+    return converted
+
+
+def _funding_agency_to_object(funding_agency):
+    converted = _organization_array_to_object(funding_agency["organization"])
+    if funding_agency.get("contributorTypes", []):
+        converted["contributor_type"] = [_contributor_type_to_metax_concept(contributor_type)
+                                         for contributor_type in funding_agency.get("contributorTypes")]
+    log.debug(converted)
+    return converted
+
+
+def _contributor_type_to_metax_concept(contributor_type):
+    return {
+        "identifier": contributor_type.get("identifier"),
+        "pref_label": contributor_type.get("label"),
+        "definition": contributor_type.get("definition"),
+        "in_scheme": contributor_type.get("inScheme")
+    }
+
+
+def alter_projects_to_metax(projects):
+    """Convert project objects from frontend to comply with the Metax schema.
+
+    Arguments:
+        project (list<dict>): List of project objects, containing details and organizations
+
+    Returns:
+        list<dict>: List of project objects in Metax schema
+
+    """
+    output = []
+    for project in projects:
+        details = project.get("details", {})
+        metax_project = {
+            "name": details.get("title"),
+            "identifier": details.get("identifier"),
+            "has_funder_identifier": details.get("fundingIdentifier"),
+            "funder_type": details.get("funderType"),
+            "source_organization": [_organization_array_to_object(organization)
+                                    for organization in project.get("organizations", [])],
+            "has_funding_agency": [_funding_agency_to_object(funding_agency)
+                                   for funding_agency in project.get("fundingAgencies", [])]
+        }
+        output.append(metax_project)
+    return output
+
+
 def other_identifiers_to_metax(identifiers_list):
     """Convert other identifiers to comply with Metax schema.
 
@@ -116,7 +171,7 @@ def access_rights_to_metax(data):
     license = data.get('license', [])
     for l in license:
         license_id = l.get('identifier')
-        license_name_en = l.get('name', {}).get('en')
+        license_name_en = l.get('name', {}).get('en') or ''
         if license_id and not license_name_en.startswith('Other (URL)'):
             license_object = {}
             license_object["identifier"] = license_id
@@ -249,6 +304,7 @@ def data_to_metax(data, metadata_provider_org, metadata_provider_user):
             "remote_resources": remote_resources_data_to_metax(data.get("remote_resources")) if data.get("dataCatalog") == DATA_CATALOG_IDENTIFIERS.get('att') else "",
             "files": files_data_to_metax(data.get("files")) if data.get("dataCatalog") == DATA_CATALOG_IDENTIFIERS.get('ida') else "",
             "directories": directories_data_to_metax(data.get("directories")) if data.get("dataCatalog") == DATA_CATALOG_IDENTIFIERS.get('ida') else "",
+            "is_output_of": alter_projects_to_metax(data.get("projects")),
             "relation": data.get("relation"),
             "provenance": provenances,
             "infrastructure": _to_metax_infrastructure(data.get("infrastructure")),
@@ -399,6 +455,7 @@ def edited_data_to_metax(data, original):
         "directories": directories_data_to_metax(data.get("directories")) if data.get("dataCatalog") == DATA_CATALOG_IDENTIFIERS.get('ida') else "",
         "infrastructure": _to_metax_infrastructure(data.get("infrastructure")),
         "spatial": data.get("spatial"),
+        "is_output_of": alter_projects_to_metax(data.get("projects")),
         "relation": data.get("relation"),
         "provenance": provenances,
         "temporal": data.get("temporal")

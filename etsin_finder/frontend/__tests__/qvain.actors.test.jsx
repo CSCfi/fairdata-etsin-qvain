@@ -12,12 +12,12 @@ import '../locale/translations'
 import etsinTheme from '../js/styles/theme'
 import { ENTITY_TYPE, ROLE } from '../js/utils/constants'
 import { ActorsBase } from '../js/components/qvain/actors'
-import { ActorTypeSelectBase } from '../js/components/qvain/actors/actorTypeSelect'
-import ActorRoles from '../js/components/qvain/actors/actorRoles'
-import { AddedActorsBase } from '../js/components/qvain/actors/addedActors'
-import ActorModal, { ActorModalBase } from '../js/components/qvain/actors/actorModal'
-import OrgInfo from '../js/components/qvain/actors/orgInfo'
-import OrgForm from '../js/components/qvain/actors/orgForm'
+import { ActorTypeSelectBase } from '../js/components/qvain/actors/modal/actorTypeSelect'
+import ActorRoles from '../js/components/qvain/actors/modal/actorRoles'
+import AddedActors from '../js/components/qvain/actors/field/addedActors'
+import ActorModal, { ActorModalBase } from '../js/components/qvain/actors/modal'
+import OrgInfo from '../js/components/qvain/actors/modal/org/orgInfo'
+import OrgForm from '../js/components/qvain/actors/modal/org/orgForm'
 import { ButtonGroup, DeleteButton } from '../js/components/qvain/general/buttons'
 import Env from '../js/stores/domain/env'
 import QvainStoreClass from '../js/stores/view/qvain'
@@ -29,8 +29,6 @@ import organizationMockGet, {
   AaltoDepartmentOfMediaIdentifier,
   NotReallyReferenceIdentifier,
 } from './__testdata__/qvain.actors.data'
-
-import { OrgSelectorBase } from '../js/components/qvain/actors/orgSelector'
 
 global.Promise = require('bluebird')
 
@@ -62,9 +60,11 @@ describe('Qvain.Actors', () => {
 
   it('should list all added actors', () => {
     const addedActors = mount(
-      <ThemeProvider theme={etsinTheme}>
-        <AddedActorsBase Stores={stores} />
-      </ThemeProvider>
+      <Provider Stores={stores}>
+        <ThemeProvider theme={etsinTheme}>
+          <AddedActors />
+        </ThemeProvider>
+      </Provider>
     )
     expect(addedActors.find(ButtonGroup).length).toBe(0)
     stores.Qvain.Actors.saveActor(
@@ -173,7 +173,7 @@ describe('Qvain.Actors modal', () => {
   })
 
   it('renders person selection by default', () => {
-    expect(wrapper.find('input#entityPerson').props().checked).toBe(true)
+    expect(wrapper.find('input#entity-person').props().checked).toBe(true)
     const { actorInEdit } = stores.Qvain.Actors
     expect(actorInEdit.type).toBe(ENTITY_TYPE.PERSON)
   })
@@ -181,7 +181,7 @@ describe('Qvain.Actors modal', () => {
   it('changes actor type', () => {
     wrapper
       .find(ActorTypeSelectBase)
-      .find('#entityOrg')
+      .find('#entity-organization')
       .first()
       .simulate('change', {
         target: {
@@ -195,7 +195,7 @@ describe('Qvain.Actors modal', () => {
   it('adds role', () => {
     wrapper
       .find(ActorRoles)
-      .find('#roleCreator')
+      .find('#role-creator')
       .first()
       .simulate('change', {
         target: {
@@ -207,12 +207,12 @@ describe('Qvain.Actors modal', () => {
 
   it('removes role', () => {
     const { actors, editActor } = stores.Qvain.Actors
-    editActor(actors.find((actor) => actor.person.name === 'Teppo Testihenkilö'))
+    editActor(actors.find(actor => actor.person.name === 'Teppo Testihenkilö'))
     const { actorInEdit } = stores.Qvain.Actors
     expect(actorInEdit.roles.slice().sort()).toEqual(['contributor', 'creator', 'rights_holder'])
     wrapper
       .find(ActorRoles)
-      .find('#roleCreator')
+      .find('#role-creator')
       .first()
       .simulate('change', {
         target: {
@@ -224,7 +224,7 @@ describe('Qvain.Actors modal', () => {
 
   it('removes organization levels one at a time', () => {
     const { actors, editActor } = stores.Qvain.Actors
-    editActor(actors.find((actor) => actor.organizations.length === 2))
+    editActor(actors.find(actor => actor.organizations.length === 2))
     wrapper.update()
     const { actorInEdit } = stores.Qvain.Actors
     expect(actorInEdit.organizations.length).toBe(2)
@@ -236,12 +236,12 @@ describe('Qvain.Actors modal', () => {
 
   it('adds new organization when "add organization manually" is clicked in menu', () => {
     const { actors, editActor, setActorOrganizations } = stores.Qvain.Actors
-    editActor(actors.find((actor) => actor.organizations.length === 2))
+    editActor(actors.find(actor => actor.organizations.length === 2))
     const { actorInEdit } = stores.Qvain.Actors
     setActorOrganizations(actorInEdit, [])
 
     // Simulate down arrow on input to show menu.
-    const selectInput = wrapper.find(OrgInfo).find(OrgSelectorBase).find(selectComponents.Input)
+    const selectInput = wrapper.find(OrgInfo).find('OrgSelectorBase').find(selectComponents.Input)
     selectInput.simulate('keydown', { key: 'ArrowDown', code: 40 })
 
     const opts = wrapper.find(selectComponents.Option).find({ data: { type: 'create' } })
@@ -254,41 +254,40 @@ describe('Qvain.Actors modal', () => {
 
   it('shows dataset organizations in menu', () => {
     const { actors, editActor, setActorOrganizations } = stores.Qvain.Actors
-    editActor(actors.find((actor) => actor.organizations.length === 2))
+    editActor(actors.find(actor => actor.organizations.length === 2))
     const { actorInEdit } = stores.Qvain.Actors
     setActorOrganizations(actorInEdit, [])
 
     // Simulate down arrow on input to show menu.
-    const selectInput = wrapper.find(OrgInfo).find(OrgSelectorBase).find(selectComponents.Input)
+    const selectInput = wrapper.find(OrgInfo).find('OrgSelectorBase').find(selectComponents.Input)
     selectInput.simulate('keydown', { key: 'ArrowDown', code: 40 })
-
-    const opts = wrapper.find(selectComponents.Option).map((option) => option.prop('data'))
+    const opts = wrapper.find(selectComponents.Option).map(option => option.prop('data'))
 
     const { allOrganizationsFlat } = stores.Qvain.Actors
 
-    const datasetOpts = opts.filter((opt) => opt.type === 'multiple')
+    const datasetOpts = opts.filter(opt => opt.type === 'multiple')
     expect(datasetOpts).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           value: expect.arrayContaining([
-            allOrganizationsFlat.find((org) => org.name.en === 'Aalto University'),
+            allOrganizationsFlat.find(org => org.name.en === 'Aalto University'),
           ]),
         }),
         expect.objectContaining({
           value: expect.arrayContaining([
-            allOrganizationsFlat.find((org) => org.name.en === 'Aalto University'),
-            allOrganizationsFlat.find((org) => org.name.en === 'Department of Media'),
+            allOrganizationsFlat.find(org => org.name.en === 'Aalto University'),
+            allOrganizationsFlat.find(org => org.name.en === 'Department of Media'),
           ]),
         }),
         expect.objectContaining({
           value: expect.arrayContaining([
-            allOrganizationsFlat.find((org) => org.name.en === 'Not Really a Reference Org'),
+            allOrganizationsFlat.find(org => org.name.en === 'Not Really a Reference Org'),
           ]),
         }),
         expect.objectContaining({
           value: expect.arrayContaining([
-            allOrganizationsFlat.find((org) => org.name.en === 'Not Really a Reference Org'),
-            allOrganizationsFlat.find((org) => org.name.en === 'Manual Org'),
+            allOrganizationsFlat.find(org => org.name.en === 'Not Really a Reference Org'),
+            allOrganizationsFlat.find(org => org.name.en === 'Manual Org'),
           ]),
         }),
       ])
@@ -297,27 +296,25 @@ describe('Qvain.Actors modal', () => {
 
   it('shows reference organizations in menu', () => {
     const { actors, editActor, setActorOrganizations } = stores.Qvain.Actors
-    editActor(actors.find((actor) => actor.organizations.length === 2))
+    editActor(actors.find(actor => actor.organizations.length === 2))
     const { actorInEdit } = stores.Qvain.Actors
     setActorOrganizations(actorInEdit, [])
 
     // Simulate down arrow on input to show menu.
-    const selectInput = wrapper.find(OrgInfo).find(OrgSelectorBase).find(selectComponents.Input)
+    const selectInput = wrapper.find(OrgInfo).find('OrgSelectorBase').find(selectComponents.Input)
     selectInput.simulate('keydown', { key: 'ArrowDown', code: 40 })
 
-    const opts = wrapper.find(selectComponents.Option).map((option) => option.prop('data'))
+    const opts = wrapper.find(selectComponents.Option).map(option => option.prop('data'))
 
     const { allOrganizationsFlat } = stores.Qvain.Actors
-    const referenceOpts = opts.filter((opt) => opt.type === 'organization')
+    const referenceOpts = opts.filter(opt => opt.type === 'organization')
     expect(referenceOpts).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          value: allOrganizationsFlat.find((org) => org.name.en === 'Aalto University'),
+          value: allOrganizationsFlat.find(org => org.name.en === 'Aalto University'),
         }),
         expect.objectContaining({
-          value: allOrganizationsFlat.find(
-            (org) => org.name.en === 'University of Eastern Finland'
-          ),
+          value: allOrganizationsFlat.find(org => org.name.en === 'University of Eastern Finland'),
         }),
       ])
     )
@@ -326,18 +323,18 @@ describe('Qvain.Actors modal', () => {
 
   it('adds organization when clicked', () => {
     const { actors, editActor, setActorOrganizations } = stores.Qvain.Actors
-    editActor(actors.find((actor) => actor.organizations.length === 2))
+    editActor(actors.find(actor => actor.organizations.length === 2))
     const { actorInEdit } = stores.Qvain.Actors
     setActorOrganizations(actorInEdit, [])
     expect(actorInEdit.organizations).toEqual([])
 
     // Simulate down arrow on input to show menu.
-    const selectInput = wrapper.find(OrgInfo).find(OrgSelectorBase).find(selectComponents.Input)
+    const selectInput = wrapper.find(OrgInfo).find('OrgSelectorBase').find(selectComponents.Input)
     selectInput.simulate('keydown', { key: 'ArrowDown', code: 40 })
 
     const { allOrganizationsFlat } = stores.Qvain.Actors
 
-    const aalto = allOrganizationsFlat.find((org) => org.name.en === 'Aalto University')
+    const aalto = allOrganizationsFlat.find(org => org.name.en === 'Aalto University')
     const aaltoOpt = wrapper.find(selectComponents.Option).find({ data: { value: aalto } })
     aaltoOpt.simulate('click')
     expect(actorInEdit.organizations).toEqual([aalto])
@@ -347,16 +344,16 @@ describe('Qvain.Actors modal', () => {
   it('adds child organization when clicked', () => {
     const { actors, editActor, setActorOrganizations } = stores.Qvain.Actors
     const { allOrganizationsFlat } = stores.Qvain.Actors
-    const aalto = allOrganizationsFlat.find((org) => org.name.en === 'Aalto University')
-    const department = allOrganizationsFlat.find((org) => org.name.en === 'Department of Media')
+    const aalto = allOrganizationsFlat.find(org => org.name.en === 'Aalto University')
+    const department = allOrganizationsFlat.find(org => org.name.en === 'Department of Media')
 
-    editActor(actors.find((actor) => actor.organizations.length === 2))
+    editActor(actors.find(actor => actor.organizations.length === 2))
     const { actorInEdit } = stores.Qvain.Actors
     setActorOrganizations(actorInEdit, [aalto])
     expect(actorInEdit.organizations).toEqual([aalto])
 
     // Simulate down arrow on input to show menu.
-    const selectInput = wrapper.find(OrgInfo).find(OrgSelectorBase).find(selectComponents.Input)
+    const selectInput = wrapper.find(OrgInfo).find('OrgSelectorBase').find(selectComponents.Input)
     selectInput.simulate('keydown', { key: 'ArrowDown', code: 40 })
 
     const departmentOpt = wrapper
@@ -370,15 +367,15 @@ describe('Qvain.Actors modal', () => {
   it('adds entire organization hierarchy at once', () => {
     const { actors, editActor, setActorOrganizations } = stores.Qvain.Actors
     const { allOrganizationsFlat } = stores.Qvain.Actors
-    const aalto = allOrganizationsFlat.find((org) => org.name.en === 'Aalto University')
-    const department = allOrganizationsFlat.find((org) => org.name.en === 'Department of Media')
+    const aalto = allOrganizationsFlat.find(org => org.name.en === 'Aalto University')
+    const department = allOrganizationsFlat.find(org => org.name.en === 'Department of Media')
 
-    editActor(actors.find((actor) => actor.organizations.length === 2))
+    editActor(actors.find(actor => actor.organizations.length === 2))
     const { actorInEdit } = stores.Qvain.Actors
     setActorOrganizations(actorInEdit, [])
 
     // Simulate down arrow on input to show menu.
-    const selectInput = wrapper.find(OrgInfo).find(OrgSelectorBase).find(selectComponents.Input)
+    const selectInput = wrapper.find(OrgInfo).find('OrgSelectorBase').find(selectComponents.Input)
     selectInput.simulate('keydown', { key: 'ArrowDown', code: 40 })
 
     const departmentOpt = wrapper
@@ -391,7 +388,7 @@ describe('Qvain.Actors modal', () => {
   it('edits manually added organization', async () => {
     const { actors, editActor, setActorOrganizations } = stores.Qvain.Actors
 
-    editActor(actors.find((actor) => actor.organizations.length === 2))
+    editActor(actors.find(actor => actor.organizations.length === 2))
     const { actorInEdit } = stores.Qvain.Actors
     setActorOrganizations(actorInEdit, [
       Organization({
@@ -424,7 +421,7 @@ describe('Qvain.Actors modal', () => {
   it('edits organization name in the already existing language based on priority', async () => {
     const { actors, editActor, setActorOrganizations } = stores.Qvain.Actors
 
-    editActor(actors.find((actor) => actor.organizations.length === 2))
+    editActor(actors.find(actor => actor.organizations.length === 2))
     const { actorInEdit } = stores.Qvain.Actors
     setActorOrganizations(actorInEdit, [
       Organization({
@@ -449,7 +446,7 @@ describe('Qvain.Actors modal', () => {
   it('adds language to organization name if none exist', async () => {
     const { actors, editActor, setActorOrganizations } = stores.Qvain.Actors
 
-    editActor(actors.find((actor) => actor.organizations.length === 2))
+    editActor(actors.find(actor => actor.organizations.length === 2))
     const { actorInEdit } = stores.Qvain.Actors
     setActorOrganizations(actorInEdit, [
       Organization({
@@ -472,7 +469,7 @@ describe('Qvain.Actors modal', () => {
 
   it('prevents editing person', () => {
     const { editActor, actors } = stores.Qvain.Actors
-    editActor(actors.find((actor) => actor.type === ENTITY_TYPE.PERSON))
+    editActor(actors.find(actor => actor.type === ENTITY_TYPE.PERSON))
     stores.Qvain.setPreservationState(80)
     wrapper.update()
     const inputs = wrapper.find('input').not('[type="hidden"]')
@@ -482,12 +479,12 @@ describe('Qvain.Actors modal', () => {
     // - 5 role checkboxes
     // - name, email, identifier
     expect(inputs.length).toBe(11)
-    inputs.forEach((c) => expect(c.props().disabled).toBe(true))
+    inputs.forEach(c => expect(c.props().disabled).toBe(true))
 
     // Organization selection should be disabled
     const selects = wrapper.find(CreatableSelect)
     expect(selects.length).toBeGreaterThan(0)
-    selects.forEach((c) => expect(c.props().isDisabled).toBe(true))
+    selects.forEach(c => expect(c.props().isDisabled).toBe(true))
 
     // 2 close buttons
     const enabledButtons = wrapper.find('button').not('[type="hidden"]').not('[disabled=true]')
@@ -496,7 +493,7 @@ describe('Qvain.Actors modal', () => {
 
   it('prevents editing organization', () => {
     const { editActor, actors } = stores.Qvain.Actors
-    editActor(actors.find((actor) => actor.type === ENTITY_TYPE.ORGANIZATION))
+    editActor(actors.find(actor => actor.type === ENTITY_TYPE.ORGANIZATION))
     stores.Qvain.setPreservationState(80)
     wrapper.update()
     const inputs = wrapper.find('input').not('[type="hidden"]')
@@ -505,12 +502,12 @@ describe('Qvain.Actors modal', () => {
     // - person/organization radio buttons
     // - 5 role checkboxes
     expect(inputs.length).toBe(8)
-    inputs.forEach((c) => expect(c.props().disabled).toBe(true))
+    inputs.forEach(c => expect(c.props().disabled).toBe(true))
 
     // Organization selection should be disabled
     const selects = wrapper.find(CreatableSelect)
     expect(selects.length).toBeGreaterThan(0)
-    selects.forEach((c) => expect(c.props().isDisabled).toBe(true))
+    selects.forEach(c => expect(c.props().isDisabled).toBe(true))
 
     // 2 close buttons
     const enabledButtons = wrapper.find('button').not('[type="hidden"]').not('[disabled=true]')
@@ -597,7 +594,7 @@ describe('Qvain.Actors reference organizations', () => {
     expect(actorInEdit.organizations[0].isReference).toBe(true)
 
     // Should be a copy of the reference organization.
-    const aalto = referenceOrganizations[''].find((org) => org.identifier === AaltoIdentifier)
+    const aalto = referenceOrganizations[''].find(org => org.identifier === AaltoIdentifier)
     expect(actorInEdit.organizations[0]).toEqual(aalto)
     expect(actorInEdit.organizations[0]).not.toBe(aalto)
   })
@@ -658,8 +655,8 @@ describe('Qvain.Actors reference organizations', () => {
 
     // References haven't been fetched yet, so we only know that some
     // organizations definitely aren't reference organizations.
-    actors.forEach((actor) => {
-      actor.organizations.forEach((org) => {
+    actors.forEach(actor => {
+      actor.organizations.forEach(org => {
         if (maybeReference(org.identifier)) {
           expect(org.isReference).toBe(null) // maybe reference
         } else {
@@ -671,8 +668,8 @@ describe('Qvain.Actors reference organizations', () => {
     await fetchAllDatasetReferenceOrganizations()
 
     // Now isReference is known for all organizations.
-    actors.forEach((actor) => {
-      actor.organizations.forEach((org) => {
+    actors.forEach(actor => {
+      actor.organizations.forEach(org => {
         if (org.identifier === NotReallyReferenceIdentifier) {
           expect(org.isReference).toBe(false)
         } else {
@@ -686,7 +683,7 @@ describe('Qvain.Actors reference organizations', () => {
     axios.get.mockImplementation(organizationMockGet)
     const { fetchReferenceOrganizations, getReferenceOrganizationsForActor } = stores.Qvain.Actors
     const orgs = await fetchReferenceOrganizations()
-    const aalto = orgs.find((org) => org.identifier === AaltoIdentifier)
+    const aalto = orgs.find(org => org.identifier === AaltoIdentifier)
     const childOrgs = await fetchReferenceOrganizations(aalto)
 
     const actor = Actor({
@@ -707,7 +704,7 @@ describe('Qvain.Actors reference organizations', () => {
     const { fetchReferenceOrganizations, getReferenceOrganizationsForActor } = stores.Qvain.Actors
     axios.get.mockImplementationOnce(organizationMockGet)
     const orgs = await fetchReferenceOrganizations()
-    const aalto = orgs.find((org) => org.identifier === AaltoIdentifier)
+    const aalto = orgs.find(org => org.identifier === AaltoIdentifier)
     axios.get.mockImplementationOnce(organizationMockGet)
     const childOrgs = await fetchReferenceOrganizations(aalto)
 
@@ -729,7 +726,7 @@ describe('Qvain.Actors reference organizations', () => {
     const { fetchReferenceOrganizations, getReferenceOrganizationsForActor } = stores.Qvain.Actors
     axios.get.mockImplementationOnce(organizationMockGet)
     const orgs = await fetchReferenceOrganizations()
-    const someOrg = orgs.find((org) => org.name.en === 'Some Organization')
+    const someOrg = orgs.find(org => org.name.en === 'Some Organization')
 
     const actor = Actor({
       roles: ['creator'],
@@ -751,18 +748,18 @@ describe('Qvain.Actors store', () => {
     stores.Qvain.editDataset(dataset)
 
     const asdasd = stores.Qvain.Actors.actors.find(
-      (actor) => actor.person && actor.person.name === 'Asdasd J. Qwerty'
+      actor => actor.person && actor.person.name === 'Asdasd J. Qwerty'
     )
     expect(asdasd.roles.slice().sort()).toEqual(['creator', 'publisher'])
     expect(asdasd.person.email).toEqual('asdasd@test.com')
 
     const teppo = stores.Qvain.Actors.actors.find(
-      (actor) => actor.person && actor.person.name === 'Teppo Testihenkilö'
+      actor => actor.person && actor.person.name === 'Teppo Testihenkilö'
     )
     expect(teppo.roles.slice().sort()).toEqual(['contributor', 'creator', 'rights_holder'])
 
     const aalto = stores.Qvain.Actors.actors.find(
-      (actor) =>
+      actor =>
         actor.type === ENTITY_TYPE.ORGANIZATION &&
         actor.organizations[0].name.en === 'Aalto University'
     )
@@ -776,11 +773,11 @@ describe('Qvain.Actors store', () => {
   it('merges identical actor organizations', async () => {
     stores.Qvain.editDataset(dataset)
     const { actors } = stores.Qvain.Actors
-    const aalto = actors.find((actor) => actor.organizations[0].name.en === 'Aalto University')
+    const aalto = actors.find(actor => actor.organizations[0].name.en === 'Aalto University')
     const aaltoUIID = aalto.organizations[0].uiid
     let count = 0
-    actors.forEach((actor) =>
-      actor.organizations.forEach((org) => {
+    actors.forEach(actor =>
+      actor.organizations.forEach(org => {
         if (org.name.en === 'Aalto University') {
           expect(org.uiid).toBe(aaltoUIID)
           count += 1
@@ -798,11 +795,11 @@ describe('Qvain.Actors store', () => {
 
     axios.get.mockImplementationOnce(organizationMockGet)
     await stores.Qvain.Actors.fetchReferenceOrganizations()
-    const aalto = referenceOrganizations[''].find((org) => org.name.en === 'Aalto University')
+    const aalto = referenceOrganizations[''].find(org => org.name.en === 'Aalto University')
     const aaltoUIID = aalto.uiid
     let count = 0
-    actors.forEach((actor) =>
-      actor.organizations.forEach((org) => {
+    actors.forEach(actor =>
+      actor.organizations.forEach(org => {
         if (org.name.en === 'Aalto University') {
           expect(org.uiid).toBe(aaltoUIID)
           count += 1
@@ -820,18 +817,18 @@ describe('Qvain.Actors store', () => {
 
     axios.get.mockImplementationOnce(organizationMockGet)
     await stores.Qvain.Actors.fetchReferenceOrganizations()
-    const aalto = referenceOrganizations[''].find((org) => org.name.en === 'Aalto University')
+    const aalto = referenceOrganizations[''].find(org => org.name.en === 'Aalto University')
 
     let count = 0
     axios.get.mockImplementationOnce(organizationMockGet)
     await stores.Qvain.Actors.fetchReferenceOrganizations(aalto)
     const department = referenceOrganizations[AaltoIdentifier].find(
-      (org) => org.name.en === 'Department of Media'
+      org => org.name.en === 'Department of Media'
     )
     const departmentUIID = department.uiid
 
-    actors.forEach((actor) =>
-      actor.organizations.forEach((org) => {
+    actors.forEach(actor =>
+      actor.organizations.forEach(org => {
         if (org.name.en === 'Department of Media') {
           expect(org.uiid).toBe(departmentUIID)
           count += 1
@@ -1006,7 +1003,7 @@ describe('Qvain.Actors store', () => {
     const { getDatasetOrganizations } = stores.Qvain.Actors
     const datasetOrganizations = getDatasetOrganizations(null)
     const aalto = datasetOrganizations.find(
-      (orgs) => orgs.length === 1 && orgs[0].identifier === AaltoIdentifier
+      orgs => orgs.length === 1 && orgs[0].identifier === AaltoIdentifier
     )[0]
 
     const childDatasetOrganizations = getDatasetOrganizations(aalto)

@@ -2,16 +2,15 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import { inject, observer } from 'mobx-react'
-import styled from 'styled-components'
 import counterpart from 'counterpart'
 
 import Tooltip from '../../general/tooltipHover'
 import Card from '../general/card'
 import AddedValue from '../general/addedValue'
-import Button from '../../general/button'
 import { keywordsSchema } from '../utils/formValidation'
 import ValidationError from '../general/validationError'
-import { LabelLarge } from '../general/form'
+import { LabelLarge, Input } from '../general/form'
+import { ButtonContainer, AddNewButton } from '../general/addButton'
 
 class KeywordsField extends Component {
   static propTypes = {
@@ -66,14 +65,16 @@ class KeywordsField extends Component {
         readonly={readonly}
         id={word}
         text={word}
-        remove={this.handleKeywordRemove}
+        remove={() => this.handleKeywordRemove(word)}
       />
     ))
     return (
       <Card>
         <LabelLarge htmlFor="keywordsInput">
           <Tooltip
-            title={counterpart('qvain.description.fieldHelpTexts.requiredToPublish', { locale: lang })}
+            title={counterpart('qvain.description.fieldHelpTexts.requiredToPublish', {
+              locale: lang,
+            })}
             position="right"
           >
             <Translate content="qvain.description.keywords.title" /> *
@@ -87,6 +88,7 @@ class KeywordsField extends Component {
           disabled={readonly}
           value={keywordString}
           onChange={this.handleChange}
+          onKeyDown={this.handleKeyDown}
           type="text"
           attributes={{ placeholder: 'qvain.description.keywords.placeholder' }}
         />
@@ -100,21 +102,5 @@ class KeywordsField extends Component {
     )
   }
 }
-
-const Input = styled.input`
-  width: 100%;
-  border-radius: 3px;
-  border: 1px solid #cccccc;
-  padding: 8px;
-  color: #808080;
-  margin-bottom: 20px;
-`
-const ButtonContainer = styled.div`
-  text-align: right;
-`
-const AddNewButton = styled(Button)`
-  margin: 0;
-  margin-top: 11px;
-`
 
 export default inject('Stores')(observer(KeywordsField))

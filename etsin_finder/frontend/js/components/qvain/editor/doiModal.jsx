@@ -2,8 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 
-import Modal from '../general/modal'
-import { Button } from '../general/button'
+import Modal from '../../general/modal'
+import { Button } from '../../general/button'
 
 const DoiModal = props => (
   <Modal

@@ -29,38 +29,43 @@ class Files extends Component {
     tooltipOpen: false,
   }
 
-  render() {
+  getData = () => {
     const { dataCatalog, isPas } = this.props.Stores.Qvain
     const { metaxApiV2 } = this.props.Stores.Env
-    let data = null
 
     const SelectedItemsComponent = metaxApiV2 ? SelectedItems : LegacySelectedFiles
     const FilePickerComponent = metaxApiV2 ? IDAFilePicker : LegacyFilePicker
 
     if (isPas) {
-      data = (
+      return (
         <>
           <ContainerSubsectionBottom>
             <SelectedItemsComponent />
           </ContainerSubsectionBottom>
         </>
       )
-    } else if (dataCatalog === DATA_CATALOG_IDENTIFIER.IDA) {
-      data = (
+    }
+    if (dataCatalog === DATA_CATALOG_IDENTIFIER.IDA) {
+      return (
         <>
-          { metaxApiV2 ? <CumulativeStateV2 /> : <CumulativeState /> }
+          {metaxApiV2 ? <CumulativeStateV2 /> : <CumulativeState />}
           <ContainerSubsectionBottom>
             <FilePickerComponent />
           </ContainerSubsectionBottom>
         </>
       )
-    } else if (dataCatalog === DATA_CATALOG_IDENTIFIER.ATT) {
-      data = (
+    }
+    if (dataCatalog === DATA_CATALOG_IDENTIFIER.ATT) {
+      return (
         <ContainerSubsectionBottom>
           <ExternalFiles />
         </ContainerSubsectionBottom>
       )
     }
+    return null
+  }
+
+  render() {
     return (
       <ContainerLight className="container">
         <SectionTitle>
@@ -86,7 +91,7 @@ class Files extends Component {
           </Tooltip>
         </SectionTitle>
         <DataCatalog />
-        {data}
+        {this.getData()}
         <MetadataModal />
         <ClearMetadataModal />
       </ContainerLight>
