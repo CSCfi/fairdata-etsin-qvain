@@ -6,23 +6,32 @@ import { Observer } from 'mobx-react'
 import { Input, Label } from './form'
 import ValidationError from './validationError'
 
-
-const TranslationTabInput = ({ language, datum, Field, handleBlur, type, error, isRequired, translationsRoot }) => {
+const TranslationTabInput = ({
+  language,
+  datum,
+  Field,
+  handleBlur,
+  type,
+  error,
+  isRequired,
+  translationsRoot,
+}) => {
   const { changeAttribute, inEdit, readonly } = Field
 
-  const handleChange = (event) => {
-      const newData = { ...inEdit[datum], [language]: event.target.value }
-      changeAttribute(datum, newData)
-    }
+  const handleChange = event => {
+    const newData = { ...inEdit[datum], [language]: event.target.value }
+    changeAttribute(datum, newData)
+  }
 
   const translations = language
-  ? {
-    label: `${translationsRoot}.modal.${datum}Input.${language}.label`,
-    placeholder: `${translationsRoot}.modal.${datum}Input.${language}.placeholder`
-  } : {
-    label: `${translationsRoot}.modal.${datum}Input.label`,
-    placeholder: `${translationsRoot}.modal.${datum}Input.placeholder`
-  }
+    ? {
+        label: `${translationsRoot}.modal.${datum}Input.${language}.label`,
+        placeholder: `${translationsRoot}.modal.${datum}Input.${language}.placeholder`,
+      }
+    : {
+        label: `${translationsRoot}.modal.${datum}Input.label`,
+        placeholder: `${translationsRoot}.modal.${datum}Input.placeholder`,
+      }
   const id = `${datum}Field`
 
   return (
@@ -30,19 +39,20 @@ const TranslationTabInput = ({ language, datum, Field, handleBlur, type, error, 
       <Label htmlFor={id}>
         <Translate content={translations.label} /> {isRequired ? '*' : ''}
       </Label>
-      <Observer>{() => (
-        <Translate
-          component={TranslationTabInputElem}
-          type={type}
-          id={id}
-          autoFocus
-          attributes={{ placeholder: translations.placeholder }}
-          disabled={readonly}
-          value={(inEdit[datum] || {})[language]}
-          onChange={handleChange}
-          onBlur={handleBlur}
-        />
-      )}
+      <Observer>
+        {() => (
+          <Translate
+            component={TranslationTabInputElem}
+            type={type}
+            id={id}
+            autoFocus
+            attributes={{ placeholder: translations.placeholder }}
+            disabled={readonly}
+            value={(inEdit[datum] || {})[language]}
+            onChange={handleChange}
+            onBlur={handleBlur}
+          />
+        )}
       </Observer>
       {error && <TranslationTabError>{error}</TranslationTabError>}
     </>
@@ -64,7 +74,7 @@ TranslationTabInput.defaultProps = {
   isRequired: false,
   handleBlur: () => {},
   error: '',
-  type: 'text'
+  type: 'text',
 }
 
 export const TranslationTabError = styled(ValidationError)`
@@ -72,10 +82,10 @@ export const TranslationTabError = styled(ValidationError)`
 `
 
 export const TranslationTabInputElem = styled(Input)`
-    margin-bottom: 0.75rem;
-    + ${TranslationTabError} {
-      margin-top: -0.5rem;
-    }
-  `
+  margin-bottom: 0.75rem;
+  + ${TranslationTabError} {
+    margin-top: -0.5rem;
+  }
+`
 
 export default TranslationTabInput

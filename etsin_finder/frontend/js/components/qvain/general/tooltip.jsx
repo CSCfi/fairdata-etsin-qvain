@@ -5,6 +5,7 @@ import styled from 'styled-components'
 const Tooltip = ({ isOpen, close, align, text, children }) => {
   const wrapperTooltipButtonRef = useRef(null)
   const wrapperTooltipCardRef = useRef(null)
+
   const handleClickOutside = event => {
     if (wrapperTooltipCardRef.current) {
       // If the tooltip card is clicked, tooltip should not be closed. Otherwise, close.
@@ -26,9 +27,7 @@ const Tooltip = ({ isOpen, close, align, text, children }) => {
     case 'Right':
       tooltip = (
         <>
-          <span ref={wrapperTooltipButtonRef}>
-            {children}
-          </span>
+          <span ref={wrapperTooltipButtonRef}>{children}</span>
           <Wrapper ref={wrapperTooltipCardRef}>
             <TooltipRight>
               <TooltipArrowRight />
@@ -41,9 +40,7 @@ const Tooltip = ({ isOpen, close, align, text, children }) => {
     case 'Left':
       tooltip = (
         <>
-          <span ref={wrapperTooltipButtonRef}>
-            {children}
-          </span>
+          <span ref={wrapperTooltipButtonRef}>{children}</span>
           <Wrapper ref={wrapperTooltipCardRef}>
             <TooltipLeft>
               <TooltipText>{text}</TooltipText>
@@ -56,9 +53,7 @@ const Tooltip = ({ isOpen, close, align, text, children }) => {
     case 'Down':
       tooltip = (
         <>
-          <span ref={wrapperTooltipButtonRef}>
-            {children}
-          </span>
+          <span ref={wrapperTooltipButtonRef}>{children}</span>
           <Wrapper ref={wrapperTooltipCardRef}>
             <TooltipDown>
               <TooltipArrowDown />
@@ -71,9 +66,7 @@ const Tooltip = ({ isOpen, close, align, text, children }) => {
     case 'Up':
       tooltip = (
         <>
-          <span ref={wrapperTooltipButtonRef}>
-            {children}
-          </span>
+          <span ref={wrapperTooltipButtonRef}>{children}</span>
           <Wrapper ref={wrapperTooltipCardRef}>
             <TooltipUp>
               <TooltipText>{text}</TooltipText>
@@ -86,9 +79,7 @@ const Tooltip = ({ isOpen, close, align, text, children }) => {
     default:
       tooltip = (
         <>
-          <span ref={wrapperTooltipButtonRef}>
-            {children}
-          </span>
+          <span ref={wrapperTooltipButtonRef}>{children}</span>
           <Wrapper ref={wrapperTooltipCardRef}>
             <TooltipDown>
               <TooltipText>{text}</TooltipText>

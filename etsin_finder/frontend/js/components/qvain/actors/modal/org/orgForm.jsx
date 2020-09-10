@@ -3,21 +3,25 @@ import PropTypes from 'prop-types'
 import { inject, observer } from 'mobx-react'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
-import {
-  Label,
-} from '../general/form'
-import { ActorInput, ActorError } from './common'
+import { Label } from '../../../general/form'
+import { ActorInput, ActorError } from '../../common'
 import {
   organizationNameSchema,
   organizationEmailSchema,
   organizationIdentifierSchema,
-} from '../utils/formValidation'
+} from '../../../utils/formValidation'
+
+const schemas = {
+  name: organizationNameSchema,
+  email: organizationEmailSchema,
+  identifier: organizationIdentifierSchema,
+}
 
 export class OrgFormBase extends Component {
   static propTypes = {
     Stores: PropTypes.object.isRequired,
     organization: PropTypes.object.isRequired,
-    updateOrganization: PropTypes.func.isRequired
+    updateOrganization: PropTypes.func.isRequired,
   }
 
   state = {
@@ -33,34 +37,26 @@ export class OrgFormBase extends Component {
     })
   }
 
-  handleOnBlur = (validator, value, errorSet) => {
-    validator.validate(value).then(() => errorSet(undefined)).catch(err => errorSet(err.errors))
-  }
-
-  handleOnNameBlur = (lang) => {
+  handleOnBlur = (propTag, lang = undefined) => {
     const organization = this.props.organization
-    this.handleOnBlur(organizationNameSchema, organization.name[lang], value => this.setState({ nameError: value }))
-  }
-
-  handleOnEmailBlur = () => {
-    const organization = this.props.organization
-    this.handleOnBlur(organizationEmailSchema, organization.email, value => this.setState({ emailError: value }))
-  }
-
-  handleOnIdentifierBlur = () => {
-    const organization = this.props.organization
-    this.handleOnBlur(organizationIdentifierSchema, organization.identifier, value => this.setState({ identifierError: value }))
+    const value = lang ? organization[propTag][lang] : organization[propTag]
+    const validator = schemas[propTag]
+    const onError = err => this.setState({ [`${propTag}Error`]: err })
+    validator
+      .validate(value)
+      .then(() => onError(undefined))
+      .catch(err => onError(err.errors))
   }
 
   handleUpdateName = (name, lang) => {
     this.props.updateOrganization({ name: { ...this.props.organization.name, [lang]: name } })
   }
 
-  handleUpdateEmail = (email) => {
+  handleUpdateEmail = email => {
     this.props.updateOrganization({ email })
   }
 
-  handleUpdateIdentifier = (identifier) => {
+  handleUpdateIdentifier = identifier => {
     this.props.updateOrganization({ identifier })
   }
 
@@ -92,11 +88,7 @@ export class OrgFormBase extends Component {
 
   render() {
     const { readonly } = this.props.Stores.Qvain
-    const {
-      nameError,
-      emailError,
-      identifierError,
-    } = this.state
+    const { nameError, emailError, identifierError } = this.state
     const { organization } = this.props
 
     const lang = this.getNameLang()
@@ -114,8 +106,8 @@ export class OrgFormBase extends Component {
           attributes={{ placeholder: 'qvain.actors.add.name.placeholder.organization' }}
           disabled={readonly}
           value={organization.name[lang] || ''}
-          onChange={(event) => this.handleUpdateName(event.target.value, lang)}
-          onBlur={() => this.handleOnNameBlur(lang)}
+          onChange={event => this.handleUpdateName(event.target.value, lang)}
+          onBlur={() => this.handleOnBlur('name', lang)}
         />
         {nameError && <ActorError>{nameError}</ActorError>}
 
@@ -129,8 +121,8 @@ export class OrgFormBase extends Component {
           attributes={{ placeholder: 'qvain.actors.add.email.placeholder' }}
           disabled={readonly}
           value={organization.email}
-          onChange={(event) => this.handleUpdateEmail(event.target.value)}
-          onBlur={() => this.handleOnEmailBlur()}
+          onChange={event => this.handleUpdateEmail(event.target.value)}
+          onBlur={() => this.handleOnBlur('email')}
         />
         {emailError && <ActorError>{emailError}</ActorError>}
 
@@ -143,13 +135,13 @@ export class OrgFormBase extends Component {
           type="text"
           disabled={readonly}
           attributes={{ placeholder: 'qvain.actors.add.identifier.placeholder' }}
-          onChange={(event) => this.handleUpdateIdentifier(event.target.value)}
+          onChange={event => this.handleUpdateIdentifier(event.target.value)}
           value={organization.identifier}
-          onBlur={this.handleOnIdentifierBlur}
+          onBlur={() => this.handleOnBlur('identifier')}
         />
         {identifierError && <ActorError>{identifierError}</ActorError>}
       </FormContainer>
-    );
+    )
   }
 }
 
@@ -160,4 +152,4 @@ const FormContainer = styled.div`
   border-radius: 4px;
 `
 
-export default inject('Stores')(observer(OrgFormBase));
+export default inject('Stores')(observer(OrgFormBase))

@@ -1,14 +1,14 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { inject, observer } from 'mobx-react'
-import styled from 'styled-components';
+import styled from 'styled-components'
 import Translate from 'react-translate-component'
-import { Label } from '../general/form'
-import ValidationError from '../general/validationError'
-import { Organization } from '../../../stores/view/qvain.actors'
+import { Label } from '../../../general/form'
+import ValidationError from '../../../general/validationError'
+import { Organization } from '../../../../../stores/view/qvain.actors'
 import OrgSelector from './orgSelector'
 import OrgForm from './orgForm'
-import { getOrganizationName } from './common'
+import { getOrganizationName } from '../../common'
 
 const sortOpts = { numeric: true, sensitivity: 'base' }
 const sortFunc = (a, b) => a.localeCompare(b, undefined, sortOpts)
@@ -38,7 +38,7 @@ const sortOrgArrays = (orgArrays, lang) => {
 
 export class OrgInfoBase extends Component {
   static propTypes = {
-    Stores: PropTypes.object.isRequired
+    Stores: PropTypes.object.isRequired,
   }
 
   state = {
@@ -58,7 +58,7 @@ export class OrgInfoBase extends Component {
     const {
       actorInEdit,
       fetchReferenceOrganizations,
-      fetchAllDatasetReferenceOrganizations
+      fetchAllDatasetReferenceOrganizations,
     } = this.props.Stores.Qvain.Actors
 
     if (actorInEdit && actorInEdit.organizations) {
@@ -69,15 +69,18 @@ export class OrgInfoBase extends Component {
 
   resetErrorMessages = () => {
     this.setState({
-      organizationError: undefined
+      organizationError: undefined,
     })
   }
 
   handleOnBlur = (validator, value, errorSet) => {
-    validator.validate(value).then(() => errorSet(undefined)).catch(err => errorSet(err.errors))
+    validator
+      .validate(value)
+      .then(() => errorSet(undefined))
+      .catch(err => errorSet(err.errors))
   }
 
-  getOrganization = (index) => {
+  getOrganization = index => {
     const { actorInEdit } = this.props.Stores.Qvain.Actors
     if (index >= actorInEdit.organizations.length) {
       return null
@@ -87,7 +90,10 @@ export class OrgInfoBase extends Component {
 
   setOrganization = (index, org) => {
     const { actorInEdit, setActorOrganizations } = this.props.Stores.Qvain.Actors
-    if (actorInEdit.organizations.length <= index || actorInEdit.organizations[index].uiid !== org.uiid) {
+    if (
+      actorInEdit.organizations.length <= index ||
+      actorInEdit.organizations[index].uiid !== org.uiid
+    ) {
       const orgs = [...actorInEdit.organizations]
       orgs.length = index
       orgs.push(JSON.parse(JSON.stringify(org)))
@@ -109,10 +115,10 @@ export class OrgInfoBase extends Component {
     const { lang } = this.props.Stores.Locale
     const org = Organization({
       name: {
-        [lang]: name
+        [lang]: name,
       },
       identifier: undefined,
-      isReference: false
+      isReference: false,
     })
     this.setOrganization(index, org)
     this.toggleEdit(index)
@@ -123,7 +129,7 @@ export class OrgInfoBase extends Component {
     updateOrganization(org, values)
   }
 
-  removeOrganization = (index) => {
+  removeOrganization = index => {
     const { actorInEdit, setActorOrganizations } = this.props.Stores.Qvain.Actors
     const orgs = [...actorInEdit.organizations]
     if (orgs.splice(index).length > 0) {
@@ -132,12 +138,12 @@ export class OrgInfoBase extends Component {
     this.toggleEdit(-1)
   }
 
-  getReferences = (index) => {
+  getReferences = index => {
     const { getReferenceOrganizationsForActor, actorInEdit } = this.props.Stores.Qvain.Actors
     return getReferenceOrganizationsForActor(actorInEdit, index)
   }
 
-  toggleEdit = (index) => {
+  toggleEdit = index => {
     if (this.state.editIndex === index) {
       this.setState({ editIndex: -1 })
     } else {
@@ -146,11 +152,11 @@ export class OrgInfoBase extends Component {
   }
 
   render() {
-    const { Actors: { getDatasetOrganizations, actorInEdit: actor } } = this.props.Stores.Qvain
-    const { lang } = this.props.Stores.Locale
     const {
-      organizationError
-    } = this.state
+      Actors: { getDatasetOrganizations, actorInEdit: actor },
+    } = this.props.Stores.Qvain
+    const { lang } = this.props.Stores.Locale
+    const { organizationError } = this.state
 
     let padded = actor.organizations
     if (actor.organizations.length < 3) {
@@ -164,11 +170,17 @@ export class OrgInfoBase extends Component {
           {' *'}
         </Label>
         {padded.map((organization, index) => (
-          <OrgContainer index={index} key={`${(organization && organization.uiid)}` || `new-${index}`}>
+          <OrgContainer
+            index={index}
+            key={`${organization && organization.uiid}` || `new-${index}`}
+          >
             <OrgSelector
               organization={organization}
               organizations={actor.organizations}
-              datasetOrganizations={sortOrgArrays(getDatasetOrganizations(index > 0 ? actor.organizations[index - 1] : null), lang)}
+              datasetOrganizations={sortOrgArrays(
+                getDatasetOrganizations(index > 0 ? actor.organizations[index - 1] : null),
+                lang
+              )}
               referenceOrganizations={this.getReferences(index)}
               setOrganization={org => this.setOrganization(index, org)}
               setMultipleOrganizations={newOrgs => this.setMultipleOrganizations(index, newOrgs)}
@@ -176,24 +188,26 @@ export class OrgInfoBase extends Component {
               removeOrganization={() => this.removeOrganization(index)}
               toggleEdit={() => this.toggleEdit(index)}
               level={index}
-              key={`${(organization && organization.uiid)}` || `new-${index}`}
+              key={`${organization && organization.uiid}` || `new-${index}`}
             />
-            {this.state.editIndex === index && organization && organization.isReference === false && (
-              <OrgForm
-                organization={organization}
-                updateOrganization={(values) => this.updateOrganization(organization, values)}
-              />
-            )}
+            {this.state.editIndex === index &&
+              organization &&
+              organization.isReference === false && (
+                <OrgForm
+                  organization={organization}
+                  updateOrganization={values => this.updateOrganization(organization, values)}
+                />
+              )}
           </OrgContainer>
         ))}
         {organizationError && <ValidationError>{organizationError}</ValidationError>}
       </>
-    );
+    )
   }
 }
 
 const OrgContainer = styled.div`
-  padding-left: ${(props) => `${props.index * 20}px`};
+  padding-left: ${props => `${props.index * 20}px`};
 `
 
-export default inject('Stores')(observer(OrgInfoBase));
+export default inject('Stores')(observer(OrgInfoBase))

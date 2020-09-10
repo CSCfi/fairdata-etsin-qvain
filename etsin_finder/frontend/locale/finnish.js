@@ -438,6 +438,24 @@ const finnish = {
     },
     select: {
       placeholder: 'Valitse vaihtoehto',
+      searchPlaceholder: 'Hae vaihtoehtoja kirjoittamalla',
+    },
+    organizationSelect: {
+      label: {
+        addNew: 'Lisää organisaatio käsin',
+        name: 'Organisaation nimi',
+        email: 'Organisaation sähköposti',
+        identifier: 'Organisaation yksilöivä tunniste',
+      },
+      placeholder: {
+        name: 'Nimi',
+        email: 'Sähköposti',
+        identifier: 'esim. http://orcid.org',
+      },
+      validation: {
+        name: 'Nimi täytyy täyttää',
+        email: 'Sähköpostiosoite ei kelpaa',
+      }
     },
     datasets: {
       title: 'Aineistot',
@@ -610,13 +628,100 @@ const finnish = {
       license: {
         title: 'Lisenssi',
         infoText:
-          'Lisenssi on tärkeä osa aineiston kuvailua. Lisenssillä määrittelet, miten aineistoa voi käyttää. Oletuksena on valittuna suositeltu CC BY 4.0. Jos haluat alasvetovalikosta valinnan sijaan määrittää lisenssin URL -osoitteen itse, valitse alasvetovalikosta "Muu (URL)", minkä jälkeen pääset kirjoittamaan URL-osoitteen.',
+          'Lisenssi on tärkeä osa aineiston kuvailua. Lisenssillä määrittelet, miten aineistoa voi käyttää. Oletuksena on valittuna suositeltu CC BY 4.0. Jos haluat alasvetovalikosta valinnan sijaan määrittää lisenssin URL -osoitteen itse, kirjoita lisenssin URL ja valitse alasvetovalikon alusta "Muu (URL)".',
         placeholder: 'Valitse vaihtoehto',
         other: {
           label: 'URL',
           help: 'Anna osoite lisenssille.',
         },
         addButton: 'Lisää lisenssi',
+      },
+    },
+    project: {
+      title: 'Projekti',
+      description: 'Projekti jonka tuotoksena aineisto on luotu',
+      addButton: 'Lisää',
+      editButton: 'Muokkaa',
+      tooltipContent: {
+        title: 'Projekti',
+        paragraph: 'Projekti jonka tuotoksena aineisto on luotu',
+      },
+      project: {
+        title: 'Lisää projekti',
+        addButton: 'Lisää',
+        description: 'Projekti jonka tuotoksena aineisto on luotu',
+      },
+      organization: {
+        title: 'Organisaatio *',
+        description: 'Organisaatio(t), jotka ovat olleet osallisena projektissa'
+      },
+      fundingAgency: {
+        title: 'Rahoittajaorganisaatio'
+      },
+      inputs: {
+        title: {
+          label: 'Lisää projektin otsikko',
+          description: 'Projektin nimi, lisää vähintään yksi kieli.',
+          validation: {
+            required: 'Lisää vähintään yksi kieli',
+            string: 'Nimen täytyy olla merkkijono.',
+          },
+        },
+        titleEn: {
+          placeholder: 'Nimi (Engalnti)',
+        },
+        titleFi: {
+          placeholder: 'Nimi (Suomi)',
+        },
+        identifier: {
+          label: 'Yksilöivä tunniste',
+          description: 'Yksiselitteinen viittaus resurssiin tietyssä kontekstissa. On suositeltavaa käyttää virallisen tunnistamisjärjestelmän mukaisesta tunnistetta.',
+          placeholder: 'Tunniste',
+        },
+        fundingIdentifier: {
+          label: 'Rahoitustunniste',
+          description: 'Projektin uniikki rahoitustunniste',
+          placeholder: 'Tunniste',
+        },
+        funderType: {
+          label: 'Rahoitustyyppi',
+          placeholder: 'Valitse rahoitustyyppi',
+          addButton: 'Lisää rahoitustyyppi',
+          noOptions: 'Rahoitustyyppiä ei löytynyt',
+        },
+        organization: {
+          placeholder: {
+            organization: 'Valitse organisaatio',
+            department: 'Valitse osasto',
+          },
+          addButton: 'Lisää organisaatio',
+          editButton: 'Muokkaa organisaatiota',
+          validation: 'Vähintään yksi organisaatio tarvitaan'
+        },
+        fundingAgency: {
+          contributorType: {
+            title: 'Organisaation rooli',
+            description: 'Valitse organisaation rooli projektin avustajana.',
+            organization: {
+              label: 'Valitse organisaatio',
+              validation: 'Organisaatio tarvitaan',
+            },
+            identifier: {
+              label: 'Rooli',
+              validation: 'Valitse rooli',
+            },
+            definition: {
+              label: 'Selite',
+              description: 'Lisäselite organisaation roolille',
+              placeholderEn: 'Selite (Englanti)',
+              placeholderFi: 'Selite (Suomi)',
+            },
+            addButton: 'Lisää rooli',
+            editButton: 'Muokkaa roolia',
+          },
+          addButton: 'Lisää avustaja',
+          editButton: 'Muokkaa avustajaa',
+        },
       },
     },
     actors: {
@@ -1361,7 +1466,7 @@ const finnish = {
           },
           actorsInput: {
             label: 'Liittyi toimijaan',
-            addButton: 'Liitä toimija',
+            placeholder: 'Liitä toimija',
             createButton: 'Luo uusi toimija',
           },
           lifecycleInput: {

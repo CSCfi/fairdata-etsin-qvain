@@ -1,53 +1,22 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import Translate from 'react-translate-component'
 import translate from 'counterpart'
 import { autorun } from 'mobx'
 import { inject, observer } from 'mobx-react'
 import axios from 'axios'
 import { withRouter } from 'react-router-dom'
-import { faChevronLeft } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Prompt } from 'react-router'
+import Translate from 'react-translate-component'
 
-import {
-  STSD,
-  LinkBackContainer,
-  LinkBack,
-  ButtonContainer,
-  SubmitButton,
-  Form,
-  SubmitContainer,
-  LinkText,
-  CustomSubHeader,
-} from './styledComponents'
-import { ErrorContainer, ErrorLabel, ErrorContent, ErrorButtons } from './general/errors'
-
-import RightsAndLicenses from './licenses'
-import Description from './description'
-import Actors from './actors'
-import Files from './files'
-import TemporalAndSpatial from './temporalAndSpatial'
-import History from './history'
-import {
-  QvainContainer,
-  SubHeader,
-  StickySubHeaderWrapper,
-  StickySubHeader,
-  StickySubHeaderResponse,
-  SubHeaderText,
-} from './general/card'
+import { QvainContainer } from './general/card'
 import { getResponseError } from './utils/responseError'
-import Title from './general/title'
-import SubmitResponse from './general/submitResponse'
-import { Button } from '../general/button'
-import DeprecatedState from './deprecatedState'
-import PasState from './pasState'
-import SubmitButtons from './submitButtons'
 import urls from './utils/urls'
 import Tracking from '../../utils/tracking'
-import { ConfirmDialog } from './general/confirmClose'
-import Modal from '../general/modal'
+import Header from './editor/header'
+import StickyHeader from './editor/stickyHeader'
+import Dataset from './editor/dataset'
+import LooseActorDialog from './editor/looseActorDialog'
+import LooseProvenanceDialog from './editor/looseProvenanceDialog'
 
 // Event handler to prevent page reload
 const confirmReload = e => {
@@ -132,7 +101,7 @@ class Qvain extends Component {
     }
     const promise = axios
       .get(url)
-      .then((result) => {
+      .then(result => {
         resetQvainStore()
 
         // Open draft instead if it exists
@@ -144,7 +113,7 @@ class Qvain extends Component {
           this.setState({ datasetLoading: false, datasetError: false, haveDataset: true })
         }
       })
-      .catch((e) => {
+      .catch(e => {
         const status = e.response.status
 
         let errorTitle, errorDetails
@@ -190,7 +159,7 @@ class Qvain extends Component {
     event.preventDefault()
   }
 
-  handleSubmitResponse = (response) => {
+  handleSubmitResponse = response => {
     this.setState({
       datasetLoading: false,
       submitted: true,
@@ -198,7 +167,7 @@ class Qvain extends Component {
     })
   }
 
-  handleSubmitError = (err) => {
+  handleSubmitError = err => {
     if (err.errors) {
       // Validation error
       this.setState({
@@ -222,6 +191,36 @@ class Qvain extends Component {
     this.handleIdentifierChanged()
   }
 
+  getDatasetProps = () => {
+    const { datasetError, haveDataset, datasetErrorDetails, datasetErrorTitle } = this.state
+    return {
+      datasetError,
+      haveDataset,
+      datasetErrorDetails,
+      datasetErrorTitle,
+      handleRetry: this.handleRetry,
+      setFocusOnSubmitButton: this.setFocusOnSubmitButton,
+    }
+  }
+
+  getHeaderProps = () => {
+    const { datasetLoading, datasetError } = this.state
+    return { datasetLoading, datasetError }
+  }
+
+  getStickyHeaderProps = () => {
+    const { datasetLoading, datasetError, submitted, response } = this.state
+    return {
+      datasetLoading,
+      datasetError,
+      submitted,
+      response,
+      handleSubmitError: this.handleSubmitError,
+      handleSubmitResponse: this.handleSubmitResponse,
+      submitButtonsRef: this.submitButtonsRef,
+    }
+  }
+
   handleIdentifierChanged() {
     if (this.datasetLoading) {
       return
@@ -229,8 +228,8 @@ class Qvain extends Component {
     const identifier = this.props.match.params.identifier
     const { original } = this.props.Stores.Qvain
     Tracking.newPageView(
-        !original ? 'Qvain Create Dataset' : 'Qvain Edit Dataset',
-        this.props.location.pathname
+      !original ? 'Qvain Create Dataset' : 'Qvain Edit Dataset',
+      this.props.location.pathname
     )
 
     // Test if we need to load a dataset or do we use the one currently in store
@@ -242,177 +241,14 @@ class Qvain extends Component {
   }
 
   render() {
-    const { original, changed, promptLooseActors, promptLooseProvenances, orphanActors, provenancesWithNonExistingActors } = this.props.Stores.Qvain
-    const { lang } = this.props.Stores.Locale
-    // Title text
-    let titleKey
-    if (this.state.datasetLoading) {
-      titleKey = 'qvain.titleLoading'
-    } else if (this.state.datasetError) {
-      titleKey = 'qvain.titleLoadingFailed'
-    } else if (original) {
-      titleKey = 'qvain.titleEdit'
-    } else {
-      titleKey = 'qvain.titleCreate'
-    }
-
-    const confirmLooseActorsDialogProps = {
-      show: !!promptLooseActors,
-      onCancel: () => promptLooseActors(false),
-      onConfirm: () => promptLooseActors(true),
-      content: {
-        warning: (
-          <>
-            <Translate content={'qvain.general.looseActors.warning'} component="p" />
-            <div>{(orphanActors || []).map(actor => {
-              const actorName = (actor.person || {}).name || actor.organizations[0].name[lang]
-              const rolesStr = actor.roles.map(role => `${translate(`qvain.actors.add.checkbox.${role}`)}`)
-              return `${actorName} / ${rolesStr.join(' / ')}`
-            })}
-            </div>
-            <div style={{ margin: 10 }} />
-            <Translate content={'qvain.general.looseActors.question'} style={{ fontWeight: 600 }} />
-          </>
-          ),
-        confirm: <Translate content={'qvain.general.looseActors.confirm'} />,
-        cancel: <Translate content={'qvain.general.looseActors.cancel'} />
-      }
-    }
-
-    const confirmLooseProvenanceDialogProps = {
-      show: !!promptLooseProvenances,
-      onCancel: () => promptLooseProvenances(false),
-      onConfirm: () => promptLooseProvenances(true),
-      content: {
-        warning: (
-          <>
-            <Translate content={'qvain.general.looseProvenances.warning'} component="p" />
-            <div>{provenancesWithNonExistingActors.map(p => p.name[lang] || p.name.und)}</div>
-            <div style={{ margin: 10 }} />
-            <Translate content={'qvain.general.looseProvenances.question'} style={{ fontWeight: 600 }} />
-          </>
-          ),
-        confirm: <Translate content={'qvain.general.looseProvenances.confirm'} />,
-        cancel: <Translate content={'qvain.general.looseProvenances.cancel'} />
-      }
-    }
-
-    const createLinkBack = (position) => (
-      <LinkBackContainer position={position}>
-        <LinkBack to="/qvain">
-          <FontAwesomeIcon size="lg" icon={faChevronLeft} title="Back" />
-          <Translate component={LinkText} display="block" content="qvain.backLink" />
-        </LinkBack>
-      </LinkBackContainer>
-    )
-
-    // Sticky header content
-    let stickyheader
-    if (this.state.datasetError) {
-      stickyheader = null
-    } else if (this.state.datasetLoading) {
-      stickyheader = (
-        <StickySubHeaderWrapper>
-          <StickySubHeader>
-            <ButtonContainer>
-              <SubmitButton disabled>
-                <Translate content="qvain.titleLoading" />
-              </SubmitButton>
-            </ButtonContainer>
-          </StickySubHeader>
-          <StickySubHeaderResponse>
-            <SubmitResponse response={null} />
-          </StickySubHeaderResponse>
-        </StickySubHeaderWrapper>
-      )
-    } else {
-      stickyheader = (
-        <StickySubHeaderWrapper>
-          <CustomSubHeader>
-            {createLinkBack('left')}
-            <ButtonContainer>
-              <SubmitButtons
-                handleSubmitError={this.handleSubmitError}
-                handleSubmitResponse={this.handleSubmitResponse}
-                submitButtonsRef={this.submitButtonsRef}
-              />
-            </ButtonContainer>
-          </CustomSubHeader>
-          <PasState />
-          <DeprecatedState />
-          {this.state.submitted ? (
-            <StickySubHeaderResponse>
-              <SubmitResponse response={this.state.response} />
-            </StickySubHeaderResponse>
-          ) : null}
-        </StickySubHeaderWrapper>
-      )
-    }
-
-    // Dataset form
-    let dataset
-    if (this.state.datasetError) {
-      dataset = (
-        <div className="container">
-          <ErrorContainer>
-            <ErrorLabel>{this.state.datasetErrorTitle}</ErrorLabel>
-            <ErrorContent>{this.state.datasetErrorDetails}</ErrorContent>
-            <ErrorButtons>
-              <Button onClick={this.handleRetry}>Retry</Button>
-            </ErrorButtons>
-          </ErrorContainer>
-        </div>
-      )
-    } else if (!this.state.haveDataset) {
-      dataset = null
-    } else {
-      dataset = (
-        <Form className="container">
-          <Description />
-          <Actors />
-          <RightsAndLicenses />
-          <TemporalAndSpatial />
-          <History />
-          <Files />
-          <SubmitContainer>
-            <Translate component="p" content="qvain.consent" unsafe />
-          </SubmitContainer>
-          <STSD onClick={this.setFocusOnSubmitButton}>
-            <Translate content="stsd" />
-          </STSD>
-        </Form>
-      )
-    }
-
+    const { changed } = this.props.Stores.Qvain
     return (
       <QvainContainer>
-        <SubHeader>
-          <SubHeaderText>
-            <Translate component={Title} content={titleKey} />
-          </SubHeaderText>
-        </SubHeader>
-        {stickyheader}
-        {dataset}
-        {confirmLooseActorsDialogProps.show && (
-        <Modal
-          isOpen
-          contentLabel={'Warning'}
-          customStyles={modalStyle}
-        >
-          <ConfirmDialog {...confirmLooseActorsDialogProps} />
-        </Modal>
-        )}
-        {confirmLooseProvenanceDialogProps.show && (
-        <Modal
-          isOpen
-          contentLabel={'Warning'}
-          customStyles={modalStyle}
-        >
-
-          <ConfirmDialog {...confirmLooseProvenanceDialogProps} />
-        </Modal>
-        )}
-
+        <Header {...this.getHeaderProps()} />
+        <StickyHeader {...this.getStickyHeaderProps()} />
+        <Dataset {...this.getDatasetProps()} />
+        <LooseActorDialog />
+        <LooseProvenanceDialog />
         <Translate
           component={Prompt}
           when={changed}
@@ -421,30 +257,6 @@ class Qvain extends Component {
       </QvainContainer>
     )
   }
-}
-
-const modalStyle = {
-  content: {
-    top: '0',
-    bottom: '0',
-    left: '0',
-    right: '0',
-    position: 'relative',
-    minHeight: '65vh',
-    maxHeight: '95vh',
-    minWidth: '300px',
-    maxWidth: '600px',
-    margin: '0.5em',
-    border: 'none',
-    padding: '2em',
-    boxShadow: '0px 6px 12px -3px rgba(0, 0, 0, 0.15)',
-    overflow: 'hidden',
-    paddingLeft: '2em',
-    paddingRight: '2em',
-    display: 'flex',
-    flexDirection: 'column',
-    width: '100%',
-  },
 }
 
 export default withRouter(inject('Stores')(observer(Qvain)))

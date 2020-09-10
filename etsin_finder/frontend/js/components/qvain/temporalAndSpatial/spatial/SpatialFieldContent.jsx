@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import FieldList from '../../general/fieldList'
 import FieldListAdd from '../../general/fieldListAdd'
 import handleSave from './handleSave'
@@ -10,11 +10,12 @@ const translationsRoot = 'qvain.temporalAndSpatial.spatial'
 
 const SpatialFieldContent = ({ Store, lang }) => (
   <>
-    <Observer>
-      {
-        () => <FieldList Field={Store.Spatials} lang={lang} elements={Store.spatials} translationsRoot={translationsRoot} />
-      }
-    </Observer>
+    <FieldList
+      Field={Store.Spatials}
+      lang={lang}
+      elements={Store.spatials}
+      translationsRoot={translationsRoot}
+    />
     <FieldListAdd
       Store={Store}
       Field={Store.Spatials}
@@ -27,7 +28,7 @@ const SpatialFieldContent = ({ Store, lang }) => (
 
 SpatialFieldContent.propTypes = {
   Store: PropTypes.object.isRequired,
-  lang: PropTypes.string.isRequired
+  lang: PropTypes.string.isRequired,
 }
 
-export default SpatialFieldContent
+export default observer(SpatialFieldContent)

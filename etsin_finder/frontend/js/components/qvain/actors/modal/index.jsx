@@ -7,12 +7,13 @@ import styled from 'styled-components'
 import ActorTypeSelect from './actorTypeSelect'
 import ActorRoles from './actorRoles'
 import ActorInfo from './actorInfo'
-import Modal from '../../general/modal'
-import { ActorIcon } from './common'
-import { actorSchema } from '../utils/formValidation'
-import { TableButton, AddActorButton, CancelButton } from '../general/buttons'
-import { ConfirmClose } from '../general/confirmClose'
-import ValidationError from '../general/validationError'
+import Modal from '../../../general/modal'
+import { ActorIcon } from '../common'
+import { actorSchema } from '../../utils/formValidation'
+import { ConfirmClose } from '../../general/confirmClose'
+import ActorErrors from './actorErrors'
+import Buttons from './buttons'
+import { TableButton } from '../../general/buttons'
 
 export class ActorModalBase extends Component {
   static propTypes = {
@@ -24,8 +25,7 @@ export class ActorModalBase extends Component {
     actorError: null,
   }
 
-  handleSaveActor = (event) => {
-    event.preventDefault()
+  handleSaveActor = () => {
     const { Qvain } = this.props.Stores
     const { actorInEdit, editActor, saveActor } = Qvain.Actors
 
@@ -36,7 +36,7 @@ export class ActorModalBase extends Component {
         editActor(null)
         this.setState({ actorError: null })
       })
-      .catch((err) => {
+      .catch(err => {
         this.setState({ actorError: err.errors })
       })
   }
@@ -46,7 +46,7 @@ export class ActorModalBase extends Component {
     this.props.Stores.Qvain.Actors.cancelActor()
   }
 
-  handleRequestClose = (hasChanged) => {
+  handleRequestClose = hasChanged => {
     if (hasChanged) {
       this.setState({ confirmClose: true })
     } else {
@@ -58,28 +58,18 @@ export class ActorModalBase extends Component {
     this.setState({ confirmClose: false })
   }
 
-  hasChanged = (originalActor) => {
+  hasChanged = originalActor => {
     const { actorInEdit } = this.props.Stores.Qvain.Actors
-    if (!originalActor) {
-      if (Object.values(actorInEdit.person.name).some((val) => val.length > 0)) {
-        return true
-      }
-      if (actorInEdit.person.email.length > 0) {
-        return true
-      }
-      if (actorInEdit.person.identifier.length > 0) {
-        return true
-      }
-      if (actorInEdit.roles.length > 0) {
-        return true
-      }
-      if (actorInEdit.organizations.length > 0) {
-        return true
-      }
-    } else {
+    if (originalActor) {
       return JSON.stringify(originalActor) !== JSON.stringify(actorInEdit)
     }
-    return false
+    return (
+      Object.values(actorInEdit.person.name).some(val => val.length > 0) ||
+      actorInEdit.person.email.length ||
+      actorInEdit.person.identifier.length ||
+      actorInEdit.roles.length ||
+      actorInEdit.organizations.length
+    )
   }
 
   render() {
@@ -89,14 +79,16 @@ export class ActorModalBase extends Component {
       return null
     }
     const loadingFailed = Object.values(referenceOrganizationErrors).length > 0
-    const originalActor = actors.find((actor) => actor.uiid === actorInEdit.uiid)
+    const originalActor = actors.find(actor => actor.uiid === actorInEdit.uiid)
     const hasChanged = this.hasChanged(originalActor)
     const isNew = !originalActor
     const action = isNew ? 'create' : 'edit'
+    const requestClose = () => this.handleRequestClose(hasChanged)
+
     return (
       <Modal
         isOpen
-        onRequestClose={() => this.handleRequestClose(hasChanged)}
+        onRequestClose={requestClose}
         contentLabel="fixDeprecatedModal"
         customStyles={modalStyle}
       >
@@ -109,26 +101,12 @@ export class ActorModalBase extends Component {
           <ActorRoles />
           <ActorInfo />
         </Content>
-        {this.state.actorError && <ValidationError>{this.state.actorError}</ValidationError>}
-        {loadingFailed && (
-          <Translate
-            component={ValidationError}
-            content={'qvain.actors.errors.loadingReferencesFailed'}
-          />
-        )}
-        <div style={{ marginTop: 'auto' }}>
-          <Translate
-            component={CancelButton}
-            onClick={() => this.handleRequestClose(hasChanged)}
-            content="qvain.actors.add.cancel.label"
-          />
-          <Translate
-            disabled={readonly}
-            component={AddActorButton}
-            onClick={this.handleSaveActor}
-            content="qvain.actors.add.save.label"
-          />
-        </div>
+        <ActorErrors actorError={this.state.actorError} loadingFailed={loadingFailed} />
+        <Buttons
+          handleRequestClose={requestClose}
+          handleSaveActor={this.handleSaveActor}
+          readonly={readonly}
+        />
 
         <ConfirmClose
           show={this.state.confirmClose}

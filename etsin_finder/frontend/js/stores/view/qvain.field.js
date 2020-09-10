@@ -26,6 +26,7 @@ class Field {
     this.setChanged(false)
     this.editMode = false
     this.inEdit = this.Template()
+    this.validationError = undefined
   }
 
   @action changeAttribute = (attribute, value) => {

@@ -51,10 +51,10 @@ export default class Content extends Component {
 // Restrict access to Qvain Light
 // Since I couldn't get Private Routes to work, here's a workaround
 
-const renderQvain = (props) => <Qvain {...props} />
-const renderQvainDatasets = (props) => <QvainDatasets {...props} />
+const renderQvain = props => <Qvain {...props} />
+const renderQvainDatasets = props => <QvainDatasets {...props} />
 
-const renderIfLoggedIn = (renderFunc) => (props) => {
+const renderIfLoggedIn = renderFunc => props => {
   // Rendered components (login button view and the actual component we want to render)
   const login = <QvainLogin redirectPath={props.location.pathname} />
   const actual = renderFunc(props)
