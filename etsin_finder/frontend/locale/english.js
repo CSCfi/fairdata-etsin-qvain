@@ -371,7 +371,8 @@ const english = {
     saveDraft: 'Save Draft',
     submit: 'Save and Publish',
     edit: 'Update Dataset',
-    unsavedChanges: 'Leaving the editor will discard your unsaved changes. Are you sure you want to leave the editor?',
+    unsavedChanges:
+      'Leaving the editor will discard your unsaved changes. Are you sure you want to leave the editor?',
     consent:
       'By using Qvain Light the user agrees that he or she has asked consent from all persons whose personal information the user will add to the descriptive data and informed them of how they can get their personal data removed. By using Qvain Light the user agrees to the <a href="https://www.fairdata.fi/hyodyntaminen/kayttopolitiikat-ja-ehdot/">Terms of Usage</a>.',
     submitStatus: {
@@ -456,7 +457,7 @@ const english = {
       validation: {
         name: 'A name is required',
         email: 'A valid email address is required',
-      }
+      },
     },
     datasets: {
       title: 'Your Datasets',
@@ -929,8 +930,7 @@ const english = {
           state: 'This dataset has been marked non-cumulative.',
           explanation:
             'Adding files or folders to a published dataset requires you to create a new version of the dataset.',
-          note:
-            'Changing the dataset cumulative requires creating a new version of the dataset.',
+          note: 'Changing the dataset cumulative requires creating a new version of the dataset.',
         },
         stateChanged: {
           note: 'The new state will be applied once you save the dataset.',
@@ -1010,7 +1010,8 @@ const english = {
         },
         clear: {
           header: 'Remove Digital Preservation metadata',
-          help: 'Are you sure you want to remove Digital Preservation metadata for file %(file)s? The change will take place immediately.',
+          help:
+            'Are you sure you want to remove Digital Preservation metadata for file %(file)s? The change will take place immediately.',
           cancel: 'Cancel',
           confirm: 'Remove',
         },
@@ -1180,6 +1181,7 @@ const english = {
         noItems: 'No references to a related resources have been added.',
         error: {
           nameRequired: 'Name is required in at least one language.',
+          typeRequired: 'Relation type is required.',
         },
         modal: {
           addButton: 'Add reference to a related resource',
@@ -1408,10 +1410,10 @@ const english = {
       },
       organization: {
         title: 'Organization *',
-        description: 'The Organization(s) who is/are participating to the project'
+        description: 'The Organization(s) who is/are participating to the project',
       },
       fundingAgency: {
-        title: 'Funding agency'
+        title: 'Funding agency',
       },
       inputs: {
         title: {
@@ -1430,7 +1432,8 @@ const english = {
         },
         identifier: {
           label: 'Identifier',
-          description: 'Recommended best practice is to identify the resource by means of a string conforming to a formal identification system. An unambiguous reference to the resource within a given context.',
+          description:
+            'Recommended best practice is to identify the resource by means of a string conforming to a formal identification system. An unambiguous reference to the resource within a given context.',
           placeholder: 'Add identifier',
         },
         fundingIdentifier: {
@@ -1451,15 +1454,16 @@ const english = {
           },
           addButton: 'Add organization',
           editButton: 'Edit organization',
-          validation: 'At least one producer organization is required'
+          validation: 'At least one producer organization is required',
         },
         fundingAgency: {
           contributorType: {
             title: 'Contributor type',
-            description: 'Contributor type of the Organization. Based on the subset of the DataCite reference data',
+            description:
+              'Contributor type of the Organization. Based on the subset of the DataCite reference data',
             organization: {
               label: 'Select organization',
-              validation: 'A valid organization is required'
+              validation: 'A valid organization is required',
             },
             identifier: {
               label: 'Contributor role',
@@ -1540,17 +1544,17 @@ const english = {
         addButton: 'Add temporal coverage',
         error: {
           startDateMissing: 'Start date is missing.',
-          endDateMissing: 'End date is missing'
+          endDateMissing: 'End date is missing',
         },
         modal: {
           durationInput: {
             label: 'Period of time',
             startPlaceholder: 'Start date',
-            endPlaceholder: 'End date'
-          }
-        }
+            endPlaceholder: 'End date',
+          },
+        },
       },
-  },
+    },
   },
   slogan: 'Research data finder',
   stc: 'Skip to content',
