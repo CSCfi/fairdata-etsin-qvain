@@ -27,6 +27,8 @@ class Content extends Component {
 
   render() {
     const { Auth } = this.props.Stores
+    if (Auth.initializing) return null
+
     return (
       <main className="content">
         <span ref={this.props.contentRef} tabIndex="-1" />
@@ -36,7 +38,6 @@ class Content extends Component {
           <Route path="/dataset/:identifier" render={props => <Dataset {...props} />} />
           <Route path="/qvain/dataset/:identifier" render={renderIfLoggedIn(renderQvain, Auth)} />
           <Route path="/qvain/dataset" render={renderIfLoggedIn(renderQvain, Auth)} />
-          <Route path="/qvain/list" render={renderIfLoggedIn(renderQvainDatasets, Auth)} />
           <Route
             path="/qvain"
             render={renderIfLoggedIn(renderQvainDatasets, Auth, renderQvainLandingPage)}
@@ -57,21 +58,7 @@ const renderQvain = props => <Qvain {...props} />
 const renderQvainDatasets = props => <QvainDatasets {...props} />
 const renderQvainLandingPage = props => <QvainLandingPage {...props} />
 
-const waitLoading = (renderFunc, Auth) => {
-  if (Auth.loading) {
-    setTimeout(() => waitLoading(renderFunc, Auth), 100)
-  } else {
-    checkLogin(renderFunc, Auth)
-  }
-}
-
-const renderIfLoggedIn = (renderFunc, Auth, redirect) => {
-  if (Auth.loading) {
-    return waitLoading(renderFunc, Auth, redirect)
-  }
-  return checkLogin(renderFunc, Auth, redirect)
-}
-const checkLogin = (renderFunc, Auth, redirect) => props => {
+const renderIfLoggedIn = (renderFunc, Auth, redirect) => props => {
   // Rendered components (login button view and the actual component we want to render)
   const login = redirect ? redirect(props) : <QvainLogin redirectPath={props.location.pathname} />
   const actual = renderFunc(props)
@@ -83,12 +70,12 @@ const checkLogin = (renderFunc, Auth, redirect) => props => {
   if (!allowAccess(Auth)) {
     Auth.checkLogin().then(() => {
       if (!allowAccess(Auth)) {
-        window.location = `/sso?relay=${props.location.pathname}`
+        // window.location = `/sso?relay=${props.location.pathname}`
         return login
       }
       return actual
     })
-    window.location = `/sso?relay=${props.location.pathname}`
+    // window.location = `/sso?relay=${props.location.pathname}`
     return login
   }
   return actual
