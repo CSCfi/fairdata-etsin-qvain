@@ -40,7 +40,7 @@ class Content extends Component {
           <Route path="/qvain/dataset" render={renderIfLoggedIn(renderQvain)} />
           <Route path="/qvain/list" render={renderIfLoggedIn(renderQvainDatasets)} />
           <Route path="/qvain">
-            {StoresAuth.cscUserLogged ? <Redirect to="qvain/list" /> : <QvainLandingPage />}
+            {StoresAuth.cscUserLogged ? <Redirect to="/qvain/list" /> : <QvainLandingPage />}
           </Route>
           <Route render={() => <ErrorPage error={{ type: 'error' }} />} />
         </Switch>
