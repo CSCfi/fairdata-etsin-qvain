@@ -11,11 +11,13 @@ import { Label } from '../../../general/form'
 import ActorsList from './actorsList'
 import { Actor } from '../../../../../stores/view/qvain.actors'
 import { ROLE } from '../../../../../utils/constants'
+import parseActorLabel from '../../../utils/actor'
 
-const ActorsInput = ({ Stores, language }) => {
+const ActorsInput = ({ Stores }) => {
   const { Actors, Provenances } = Stores.Qvain
   const selectedOptions = (Provenances.inEdit.associations || {}).actorOptions || []
   const selectedOptionIds = selectedOptions.map(option => option.value)
+  const { lang: language } = Stores.Locale
 
   const CreateOption = { Option: CustomOption }
 
@@ -27,10 +29,10 @@ const ActorsInput = ({ Stores, language }) => {
     ...Actors.actorOptions
       .filter(option => !selectedOptionIds.includes(option.value))
       .map(option => {
-        const actorName = option.label[language] || option.label
         const rolesStr = option.roles.map(
           role => `${translate(`qvain.actors.add.checkbox.${role}`)}`
         )
+        const actorName = parseActorLabel(option, language)
         const name = `${actorName} / ${rolesStr.join(' / ')}`
 
         return {
@@ -124,7 +126,6 @@ const EditIcon = styled(FontAwesomeIcon).attrs({
 
 ActorsInput.propTypes = {
   Stores: PropTypes.object.isRequired,
-  language: PropTypes.string.isRequired,
 }
 
 export default inject('Stores')(observer(ActorsInput))
