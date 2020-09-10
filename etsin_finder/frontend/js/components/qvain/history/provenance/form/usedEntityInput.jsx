@@ -36,7 +36,7 @@ const Location = ({ Stores }) => {
           Form={Form}
           formProps={{ hideRelationType: true }}
           translationsRoot={translationsRoot}
-          handleSave={() => handleSave(Field)}
+          handleSave={() => handleSave(Field, { noRelationType: true })}
           position="left"
         />
       </div>

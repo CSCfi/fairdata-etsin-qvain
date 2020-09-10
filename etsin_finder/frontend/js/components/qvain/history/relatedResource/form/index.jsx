@@ -6,6 +6,7 @@ import { FormContainer } from '../../../general/form'
 import ModalInput from '../../../general/modalInput'
 import ModalReferenceInput from '../../../general/modalReferenceInput'
 import { RelationType } from '../../../../../stores/view/qvain.relatedResources'
+import ModalSeparator from '../../../general/modalSeparator'
 
 const Form = props => {
   const [language, setLanguage] = useState('fi')
@@ -17,20 +18,22 @@ const Form = props => {
         <TabInput {...props} datum="description" language={language} />
       </TranslationTab>
       <ModalInput {...props} datum="identifier" />
-      {!props.hideRelationType && (
-        <ModalReferenceInput
-          {...props}
-          datum="relationType"
-          metaxIdentifier="relation_type"
-          model={RelationType}
-        />
-      )}
       <ModalReferenceInput
         {...props}
         datum="entityType"
         metaxIdentifier="resource_type"
         model={RelationType}
       />
+      <ModalSeparator />
+      {!props.hideRelationType && (
+        <ModalReferenceInput
+          {...props}
+          datum="relationType"
+          metaxIdentifier="relation_type"
+          model={RelationType}
+          isRequired
+        />
+      )}
     </FormContainer>
   )
 }
