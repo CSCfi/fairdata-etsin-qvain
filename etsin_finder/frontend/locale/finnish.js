@@ -371,7 +371,8 @@ const finnish = {
     saveDraft: 'Tallenna Luonnos',
     submit: 'Julkaise Aineisto',
     edit: 'Päivitä Aineisto',
-    unsavedChanges: 'Sinulla on tallentamattomia muutoksia. Oletko varma että haluat poistua sivulta?',
+    unsavedChanges:
+      'Sinulla on tallentamattomia muutoksia. Oletko varma että haluat poistua sivulta?',
     consent:
       'Käyttämällä Qvain Light -työkalua käyttäjä vakuuttaa, että hän on saanut suostumuksen muiden henkilöiden henkilötietojen lisäämiseen kuvailutietoihin ja ilmoittanut heille miten he voivat saada henkilötietonsa poistettua palvelusta. Käyttämällä Qvain Light-työkalua käyttäjä hyväksyy <a href="https://www.fairdata.fi/hyodyntaminen/kayttopolitiikat-ja-ehdot/">käyttöehdot</a>.',
     submitStatus: {
@@ -455,7 +456,7 @@ const finnish = {
       validation: {
         name: 'Nimi täytyy täyttää',
         email: 'Sähköpostiosoite ei kelpaa',
-      }
+      },
     },
     datasets: {
       title: 'Aineistot',
@@ -653,10 +654,10 @@ const finnish = {
       },
       organization: {
         title: 'Organisaatio *',
-        description: 'Organisaatio(t), jotka ovat olleet osallisena projektissa'
+        description: 'Organisaatio(t), jotka ovat olleet osallisena projektissa',
       },
       fundingAgency: {
-        title: 'Rahoittajaorganisaatio'
+        title: 'Rahoittajaorganisaatio',
       },
       inputs: {
         title: {
@@ -675,7 +676,8 @@ const finnish = {
         },
         identifier: {
           label: 'Yksilöivä tunniste',
-          description: 'Yksiselitteinen viittaus resurssiin tietyssä kontekstissa. On suositeltavaa käyttää virallisen tunnistamisjärjestelmän mukaisesta tunnistetta.',
+          description:
+            'Yksiselitteinen viittaus resurssiin tietyssä kontekstissa. On suositeltavaa käyttää virallisen tunnistamisjärjestelmän mukaisesta tunnistetta.',
           placeholder: 'Tunniste',
         },
         fundingIdentifier: {
@@ -696,7 +698,7 @@ const finnish = {
           },
           addButton: 'Lisää organisaatio',
           editButton: 'Muokkaa organisaatiota',
-          validation: 'Vähintään yksi organisaatio tarvitaan'
+          validation: 'Vähintään yksi organisaatio tarvitaan',
         },
         fundingAgency: {
           contributorType: {
@@ -1011,8 +1013,7 @@ const finnish = {
           state: 'Aineisto on julkaistu tavallisena, ei-kasvavana aineistona.',
           explanation:
             'Aineistoon ei voi lisätä tiedostoja tai hakemistoja luomatta siitä uutta versiota.',
-          note:
-            'Jos haluat muuttaa aineiston kasvavaksi, siitä on ensin luotava uusi versio.',
+          note: 'Jos haluat muuttaa aineiston kasvavaksi, siitä on ensin luotava uusi versio.',
         },
         stateChanged: {
           note: 'Uusi tila tulee voimaan kun aineisto tallennetaan.',
@@ -1092,7 +1093,8 @@ const finnish = {
         },
         clear: {
           header: 'Poista PAS-metadata',
-          help: 'Haluatko poistaa PAS-metadatan tiedostosta %(file)s? Muutos tulee voimaan välittömästi.',
+          help:
+            'Haluatko poistaa PAS-metadatan tiedostosta %(file)s? Muutos tulee voimaan välittömästi.',
           cancel: 'Peruuta',
           confirm: 'Poista',
         },
@@ -1270,6 +1272,7 @@ const finnish = {
         noItems: 'Viittauksia toisiin resursseihin ei ole lisätty.',
         error: {
           nameRequired: 'Nimi kenttä on pakollinen ainakin yhdellä kielellä.',
+          typeRequired: 'Viitteen tyyppi on pakollinen kenttä.',
         },
         modal: {
           addButton: 'Lisää viittaus toiseen resurssiin',
@@ -1534,21 +1537,22 @@ const finnish = {
       },
       temporal: {
         title: 'Ajallinen kattavuus',
-        description: 'Ajanjakso, minkä aineisto kattaa, esimerkiksi aika jolloin on tehty havaintoja.',
+        description:
+          'Ajanjakso, minkä aineisto kattaa, esimerkiksi aika jolloin on tehty havaintoja.',
         addButton: 'Lisää ajallinen kattavuus',
         error: {
           startDateMissing: 'Alkamisajankohta puuttuu.',
-          endDateMissing: 'Loppuajankohta puuttuu.'
+          endDateMissing: 'Loppuajankohta puuttuu.',
         },
         modal: {
           durationInput: {
             label: 'Ajanjakso',
             startPlaceholder: 'Alkamisajankohta',
-            endPlaceholder: 'Loppuajankohta'
+            endPlaceholder: 'Loppuajankohta',
           },
         },
       },
-  },
+    },
   },
   slogan: 'Tutkimustenhaku palvelu',
   stc: 'Siirry sivun pääsisältöön',
@@ -1564,7 +1568,7 @@ const finnish = {
   userAuthenticationError: {
     header: 'Kirjautuminen epäonnistui.',
     content:
-    'Tarkistathan, että sinulla on voimassaoleva CSC-tunnus (Qvaimen ja Qvain Lightin käyttö vaatii sen). Jos yritit kirjaututua jollain toisella tunnuksella (esim. Haka), sitä ei todennäköisesti ole liitetty CSC-tunnukseen. Lisäohjeita CSC-tunnuksen rekisteröimiseksi: https://docs.csc.fi/#accounts/how-to-create-new-user-account/',
+      'Tarkistathan, että sinulla on voimassaoleva CSC-tunnus (Qvaimen ja Qvain Lightin käyttö vaatii sen). Jos yritit kirjaututua jollain toisella tunnuksella (esim. Haka), sitä ei todennäköisesti ole liitetty CSC-tunnukseen. Lisäohjeita CSC-tunnuksen rekisteröimiseksi: https://docs.csc.fi/#accounts/how-to-create-new-user-account/',
   },
   userHomeOrganizationErrror: {
     header: 'Kirjautuminen epäonnistui.',
