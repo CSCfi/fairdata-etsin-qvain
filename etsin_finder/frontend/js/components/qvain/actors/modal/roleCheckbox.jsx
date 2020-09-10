@@ -17,13 +17,13 @@ const RoleCheckbox = ({ Stores, role, help, disabled }) => {
   }
 
   const id = `role-${role}`
-  const helpField = help && <HelpField>{help}</HelpField>
+  const helpField = help && <RoleHelpField>{help}</RoleHelpField>
   const label = `qvain.actors.add.checkbox.${role}`
   return (
     <ListItem disabled={readonly || disabled}>
       <FormField>
         <Checkbox
-          disabled={readonly}
+          disabled={readonly || disabled}
           onChange={handleChangeRole}
           id={id}
           type="checkbox"
@@ -50,6 +50,10 @@ RoleCheckbox.defaultProps = {
   help: null,
   disabled: null,
 }
+
+const RoleHelpField = styled(HelpField)`
+  margin-left: 0.5em;
+`
 
 export const ListItem = styled.li`
   height: 40px;

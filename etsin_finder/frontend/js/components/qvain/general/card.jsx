@@ -68,7 +68,6 @@ export const StickySubHeaderWrapper = styled.div`
 `
 
 export const StickySubHeader = styled.div`
-  height: 50px;
   background-color: rgb(231, 233, 237);
   color: #4f4f4f;
   display: flex;

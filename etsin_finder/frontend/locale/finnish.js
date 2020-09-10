@@ -457,7 +457,7 @@ const finnish = {
       validation: {
         name: 'Nimi täytyy täyttää',
         email: 'Sähköpostiosoite ei kelpaa',
-      }
+      },
     },
     datasets: {
       title: 'Aineistot',
@@ -655,10 +655,10 @@ const finnish = {
       },
       organization: {
         title: 'Organisaatio *',
-        description: 'Organisaatio(t), jotka ovat olleet osallisena projektissa'
+        description: 'Organisaatio(t), jotka ovat olleet osallisena projektissa',
       },
       fundingAgency: {
-        title: 'Rahoittajaorganisaatio'
+        title: 'Rahoittajaorganisaatio',
       },
       inputs: {
         title: {
@@ -677,7 +677,8 @@ const finnish = {
         },
         identifier: {
           label: 'Yksilöivä tunniste',
-          description: 'Yksiselitteinen viittaus resurssiin tietyssä kontekstissa. On suositeltavaa käyttää virallisen tunnistamisjärjestelmän mukaisesta tunnistetta.',
+          description:
+            'Yksiselitteinen viittaus resurssiin tietyssä kontekstissa. On suositeltavaa käyttää virallisen tunnistamisjärjestelmän mukaisesta tunnistetta.',
           placeholder: 'Tunniste',
         },
         fundingIdentifier: {
@@ -698,7 +699,7 @@ const finnish = {
           },
           addButton: 'Lisää organisaatio',
           editButton: 'Muokkaa organisaatiota',
-          validation: 'Vähintään yksi organisaatio tarvitaan'
+          validation: 'Vähintään yksi organisaatio tarvitaan',
         },
         fundingAgency: {
           contributorType: {
@@ -1272,6 +1273,7 @@ const finnish = {
         noItems: 'Viittauksia toisiin resursseihin ei ole lisätty.',
         error: {
           nameRequired: 'Nimi kenttä on pakollinen ainakin yhdellä kielellä.',
+          typeRequired: 'Viitteen tyyppi on pakollinen kenttä.',
         },
         modal: {
           addButton: 'Lisää viittaus toiseen resurssiin',

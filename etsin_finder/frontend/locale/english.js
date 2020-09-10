@@ -457,7 +457,7 @@ const english = {
       validation: {
         name: 'A name is required',
         email: 'A valid email address is required',
-      }
+      },
     },
     datasets: {
       title: 'Your Datasets',
@@ -1174,6 +1174,7 @@ const english = {
         noItems: 'No references to a related resources have been added.',
         error: {
           nameRequired: 'Name is required in at least one language.',
+          typeRequired: 'Relation type is required.',
         },
         modal: {
           addButton: 'Add reference to a related resource',
@@ -1402,10 +1403,10 @@ const english = {
       },
       organization: {
         title: 'Organization *',
-        description: 'The Organization(s) who is/are participating to the project'
+        description: 'The Organization(s) who is/are participating to the project',
       },
       fundingAgency: {
-        title: 'Funding agency'
+        title: 'Funding agency',
       },
       inputs: {
         title: {
@@ -1424,7 +1425,8 @@ const english = {
         },
         identifier: {
           label: 'Identifier',
-          description: 'Recommended best practice is to identify the resource by means of a string conforming to a formal identification system. An unambiguous reference to the resource within a given context.',
+          description:
+            'Recommended best practice is to identify the resource by means of a string conforming to a formal identification system. An unambiguous reference to the resource within a given context.',
           placeholder: 'Add identifier',
         },
         fundingIdentifier: {
@@ -1445,15 +1447,16 @@ const english = {
           },
           addButton: 'Add organization',
           editButton: 'Edit organization',
-          validation: 'At least one producer organization is required'
+          validation: 'At least one producer organization is required',
         },
         fundingAgency: {
           contributorType: {
             title: 'Contributor type',
-            description: 'Contributor type of the Organization. Based on the subset of the DataCite reference data',
+            description:
+              'Contributor type of the Organization. Based on the subset of the DataCite reference data',
             organization: {
               label: 'Select organization',
-              validation: 'A valid organization is required'
+              validation: 'A valid organization is required',
             },
             identifier: {
               label: 'Contributor role',
