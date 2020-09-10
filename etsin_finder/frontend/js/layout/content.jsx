@@ -20,11 +20,6 @@ import ErrorPage from '../components/errorpage'
 import QvainLogin from '../components/qvain/main/qvainLogin'
 import QvainLandingPage from '../components/qvain/landingPage'
 
-// import { Home, Search, Dataset, Qvain, QvainDatasets } from '../routes'
-// import ErrorPage from '../components/errorpage'
-// import Auth from '../stores/domain/auth'
-// import Env from '../stores/domain/env'
-// import QvainLogin from '../components/qvain/qvainLogin'
 class Content extends Component {
   static propTypes = {
     Stores: PropTypes.object.isRequired,
@@ -33,6 +28,7 @@ class Content extends Component {
 
   render() {
     const { Auth: StoresAuth } = this.props.Stores
+    if (StoresAuth.loading) return null
     return (
       <main className="content">
         <span ref={this.props.contentRef} tabIndex="-1" />

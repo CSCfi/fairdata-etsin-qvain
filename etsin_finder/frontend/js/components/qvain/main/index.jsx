@@ -40,7 +40,7 @@ class Qvain extends Component {
 
   static defaultProps = {
     location: {
-      pathname: '/qvain/dataset',
+      pathname: '/qvain/list',
     },
   }
 
