@@ -42,12 +42,13 @@ class SubjectHeadingsField extends Component {
 
     const RenderedSubjectHeadings = subjectHeadingsArray.map(value => {
       const { locale, url } = value
+      const lang = locale[currentLang] ? currentLang : 'und'
       return (
         <AddedValue
           readonly={readonly}
           key={url}
           id={url}
-          text={locale[currentLang]}
+          text={locale[lang]}
           remove={removeSubjectHeading}
         />
       )
@@ -61,7 +62,6 @@ class SubjectHeadingsField extends Component {
         <Translate component="p" content="qvain.description.subjectHeadings.help" />
         {RenderedSubjectHeadings}
         <SelectRow>
-          {/* TODO: Get the language to change when the user changes the lang */}
           <LangSelect
             defaultValue={LANG_OPTIONS.filter(obj => obj.label === currentLang)}
             aria-label="Subject heading language select"
@@ -70,12 +70,8 @@ class SubjectHeadingsField extends Component {
             onChange={value => this.setState({ lang: value.label })}
             isSearchable={false}
           />
-          {/* TODO: The cacheOption can cause issued if you search one word, change
-          language and search the same, then it does not change the search results
-          because it is cached */}
           <Translate
             component={WordSelect}
-            // cacheOptions
             onChange={this.handleChange}
             value={subjectHeadingValue}
             loadOptions={value => getReferenceDataAsync(value, this.state.lang)}
