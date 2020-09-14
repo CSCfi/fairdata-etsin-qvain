@@ -77,11 +77,10 @@ class Login extends Component {
             </LoaderCont>
             <LogoutButton
               width={this.props.width}
-              fontSize={this.props.fontSize}
               margin="0"
               onClick={() => this.redirect(this.props.location)}
             >
-              <LoginText visible={!this.state.loading}>
+              <LoginText visible={!this.state.loading} fontSize={this.props.fontSize}>
                 <Translate content="nav.login" />
               </LoginText>
             </LogoutButton>
@@ -136,6 +135,7 @@ const LoaderCont = styled.div`
 `
 const LoginText = styled.span`
   visibility: ${p => (p.visible ? 'initial' : 'hidden')};
+  font-size: ${p => p.fontSize};
 `
 
 export default withRouter(inject('Stores')(observer(Login)))
