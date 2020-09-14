@@ -32,16 +32,10 @@ class Qvain extends Component {
   static propTypes = {
     Stores: PropTypes.object.isRequired,
     location: PropTypes.shape({
-      pathname: PropTypes.string,
-    }),
+      pathname: PropTypes.string.isRequired,
+    }).isRequired,
     match: PropTypes.object.isRequired,
     history: PropTypes.object.isRequired,
-  }
-
-  static defaultProps = {
-    location: {
-      pathname: '/qvain/list',
-    },
   }
 
   constructor(props) {

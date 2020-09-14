@@ -70,12 +70,10 @@ const renderIfLoggedIn = (renderFunc, Auth, redirect) => props => {
   if (!allowAccess(Auth)) {
     Auth.checkLogin().then(() => {
       if (!allowAccess(Auth)) {
-        // window.location = `/sso?relay=${props.location.pathname}`
         return login
       }
       return actual
     })
-    // window.location = `/sso?relay=${props.location.pathname}`
     return login
   }
   return actual
