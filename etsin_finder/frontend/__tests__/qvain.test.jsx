@@ -1,13 +1,12 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import translate from 'counterpart'
-import ReactSelect, { components } from 'react-select'
+import { components } from 'react-select'
 import CreatableSelect from 'react-select/creatable'
 
 import etsinTheme from '../js/styles/theme'
 import '../locale/translations'
-import Qvain from '../js/components/qvain'
-import Select from '../js/components/qvain/general/select'
+import Qvain from '../js/components/qvain/main'
 import Description from '../js/components/qvain/description'
 import DescriptionField from '../js/components/qvain/description/descriptionField'
 import OtherIdentifierField from '../js/components/qvain/description/otherIdentifierField'
@@ -88,7 +87,9 @@ describe('Qvain', () => {
     }
 
     // Create empty dataset, getDataset should not be called
-    shallow(<FakeQvain Stores={stores} match={emptyMatch} history={{}} />)
+    shallow(
+      <FakeQvain Stores={stores} match={emptyMatch} history={{}} location={{ pathname: '/' }} />
+    )
     expect(callCount).toBe(0)
     expect(lastCall).toBe(undefined)
 
@@ -101,7 +102,14 @@ describe('Qvain', () => {
         original: { identifier: identifierMatch.params.identifier },
       },
     }
-    shallow(<FakeQvain Stores={datasetOpenedStore} match={identifierMatch} history={{}} />)
+    shallow(
+      <FakeQvain
+        Stores={datasetOpenedStore}
+        match={identifierMatch}
+        history={{}}
+        location={{ pathname: '/' }}
+      />
+    )
     expect(callCount).toBe(0)
     expect(lastCall).toBe(undefined)
 
@@ -114,13 +122,27 @@ describe('Qvain', () => {
         original: { identifier: anotherMatch.params.identifier },
       },
     }
-    shallow(<FakeQvain Stores={anotherDatasetOpenedStore} match={identifierMatch} history={{}} />)
+    shallow(
+      <FakeQvain
+        Stores={anotherDatasetOpenedStore}
+        match={identifierMatch}
+        history={{}}
+        location={{ pathname: '/' }}
+      />
+    )
     expect(callCount).toBe(1)
     expect(lastCall).toBe(identifierMatch.params.identifier)
 
     // Edit existing dataset, getDataset should be called
     lastCall = undefined
-    const wrapper = shallow(<FakeQvain Stores={stores} match={identifierMatch} history={{}} />)
+    const wrapper = shallow(
+      <FakeQvain
+        Stores={stores}
+        match={identifierMatch}
+        history={{}}
+        location={{ pathname: '/' }}
+      />
+    )
     expect(callCount).toBe(2)
     expect(lastCall).toBe(identifierMatch.params.identifier)
 
