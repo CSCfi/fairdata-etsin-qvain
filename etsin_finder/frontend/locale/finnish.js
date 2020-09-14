@@ -344,6 +344,7 @@ const finnish = {
   },
   qvain: {
     general: {
+      brief: 'Tutkimusaineiston metatietotyökalu',
       looseActors: {
         warning:
           'Osan toimijoiden rooliksi on merkattu vain Provenienssi, mutta ne eivät ole kiinnitetty yhteenkään provenienssiin. Aineiston tallentamisen yhteydessä nämä toimijat häviävät. Tallennuksen yhteydessä seuraavat tiedot poistetaan:',
