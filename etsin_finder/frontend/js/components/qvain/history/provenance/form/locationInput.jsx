@@ -25,7 +25,6 @@ const Location = ({ Stores }) => {
         fieldIdentifier="spatials"
         lang={lang}
         translationsRoot={translationsRoot}
-        elements={Store.inEdit.spatials}
         disableNoItemsText
       />
       <FieldListAdd

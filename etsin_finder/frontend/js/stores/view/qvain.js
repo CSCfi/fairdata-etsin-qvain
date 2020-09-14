@@ -15,11 +15,11 @@ import {
 import { getPath } from '../../components/qvain/utils/object'
 import Actors from './qvain.actors'
 import Files from './qvain.files'
-import Spatials, { SpatialModel } from './qvain.spatials'
+import Spatials from './qvain.spatials'
 import { parseOrganization } from '../../components/qvain/project/utils'
-import Provenances, { ProvenanceModel } from './qvain.provenances'
-import RelatedResources, { RelatedResourceModel } from './qvain.relatedResources'
-import Temporals, { TemporalModel } from './qvain.temporals'
+import Provenances from './qvain.provenances'
+import RelatedResources from './qvain.relatedResources'
+import Temporals from './qvain.temporals'
 
 class Qvain {
   constructor(Env) {
@@ -48,14 +48,6 @@ class Qvain {
     en: '',
     fi: '',
   }
-
-  @observable spatials = []
-
-  @observable temporals = []
-
-  @observable provenances = []
-
-  @observable relatedResources = []
 
   @observable issuedDate = undefined
 
@@ -149,9 +141,6 @@ class Qvain {
     this.deprecated = false
 
     this.Actors.reset()
-    this.spatials = []
-    this.provenances = []
-    this.temporals = []
   }
 
   @action
@@ -234,17 +223,17 @@ class Qvain {
   }
 
   @action
-  setFieldOfScienceArray = (array) => {
+  setFieldOfScienceArray = array => {
     this.fieldOfScienceArray = array
   }
 
   @action
-  setDatasetLanguageArray = (array) => {
+  setDatasetLanguageArray = array => {
     this.datasetLanguageArray = array
   }
 
   @action
-  setKeywordString = (value) => {
+  setKeywordString = value => {
     this.keywordString = value
     this.changed = true
   }
@@ -320,13 +309,13 @@ class Qvain {
   }
 
   @action
-  setLicenseArray = (keywords) => {
+  setLicenseArray = keywords => {
     this.licenseArray = keywords
     this.changed = true
   }
 
   @action
-  setAccessType = (accessType) => {
+  setAccessType = accessType => {
     this.accessType = accessType
     this.changed = true
   }
@@ -760,7 +749,7 @@ class Qvain {
     // Fields of science
     this.fieldOfScienceArray = []
     if (researchDataset.field_of_science !== undefined) {
-      this.fieldOfScienceArray = researchDataset.field_of_science.map((element) =>
+      this.fieldOfScienceArray = researchDataset.field_of_science.map(element =>
         FieldOfScience(element.pref_label, element.identifier)
       )
     }
@@ -777,37 +766,22 @@ class Qvain {
     // infrastructures
     this.infrastructureArray = []
     if (researchDataset.infrastructure !== undefined) {
-      this.infrastructureArray = researchDataset.infrastructure.map((element) =>
+      this.infrastructureArray = researchDataset.infrastructure.map(element =>
         Infrastructure(element.pref_label, element.identifier)
       )
     }
 
     // spatials
-    this.spatials = []
-    if (researchDataset.spatial !== undefined) {
-      researchDataset.spatial.forEach(element => {
-        const spatial = SpatialModel(element)
-        this.spatials.push(spatial)
-      })
-    }
+    this.Spatials.fromBackend(researchDataset.spatial)
 
     // temporals
-    this.temporals = []
-    if (researchDataset.temporal !== undefined) {
-      researchDataset.temporal.forEach(element => {
-        const temporal = TemporalModel(element)
-        this.temporals.push(temporal)
-      })
-    }
+    this.Temporals.fromBackend(researchDataset.temporal)
 
     // Related Resources
-    this.relatedResources = []
-    if (researchDataset.relation !== undefined) {
-      researchDataset.relation.forEach(rr => {
-        const rResource = RelatedResourceModel(rr)
-        this.relatedResources.push(rResource)
-      })
-    }
+    this.RelatedResources.fromBackend(researchDataset.relation)
+
+    // Provenances
+    this.Provenances.fromBackend(researchDataset.provenance, this)
 
     // Keywords
     this.keywordsArray = researchDataset.keyword || []
@@ -856,15 +830,6 @@ class Qvain {
     // load actors
     this.Actors.editDataset(researchDataset)
 
-    // Provenances
-    this.provenances = []
-    if (researchDataset.provenance !== undefined) {
-      researchDataset.provenance.forEach(p => {
-        const prov = ProvenanceModel(this, p)
-        this.provenances.push(prov)
-      })
-    }
-
     // Load data catalog
     this.dataCatalog =
       dataset.data_catalog !== undefined ? dataset.data_catalog.identifier : undefined
@@ -907,29 +872,29 @@ class Qvain {
       }
       this.existingDirectories = dsDirectories
         ? dsDirectories.map(d => {
-          // Removed directories don't have details
-          if (!d.details) {
-            d.details = {
-              directory_name: d.title,
-              file_path: '',
-              removed: true,
+            // Removed directories don't have details
+            if (!d.details) {
+              d.details = {
+                directory_name: d.title,
+                file_path: '',
+                removed: true,
+              }
             }
-          }
-          return DatasetDirectory(d)
-        })
+            return DatasetDirectory(d)
+          })
         : []
       this.existingFiles = dsFiles
         ? dsFiles.map(f => {
-          // Removed files don't have details
-          if (!f.details) {
-            f.details = {
-              file_name: f.title,
-              file_path: '',
-              removed: true,
+            // Removed files don't have details
+            if (!f.details) {
+              f.details = {
+                file_name: f.title,
+                file_path: '',
+                removed: true,
+              }
             }
-          }
-          return DatasetFile(f, undefined, true)
-        })
+            return DatasetFile(f, undefined, true)
+          })
         : []
     }
 
@@ -942,8 +907,11 @@ class Qvain {
 
         // We need to push null if no funder type found.
         // Consider refactoring params array to object to prevent this
-        if (project.funder_type) params.push(ProjectFunderType(project.funder_type.pref_label, project.funder_type.identifier))
-        else params.push(null)
+        if (project.funder_type) {
+          params.push(
+            ProjectFunderType(project.funder_type.pref_label, project.funder_type.identifier)
+          )
+        } else params.push(null)
 
         // Organizations
         const organizations = project.source_organization.map(organization => {
@@ -959,11 +927,15 @@ class Qvain {
             const parsedOrganizations = parseOrganization(agency)
             parsedOrganizations.reverse()
             const organization = Organization(uuid(), ...parsedOrganizations)
-            const contributorTypes = agency.contributor_type.map(contributorType => (
-              ContributorType(uuid(), contributorType.identifier,
-                contributorType.pref_label, contributorType.definition,
-                contributorType.in_scheme)
-            ))
+            const contributorTypes = agency.contributor_type.map(contributorType =>
+              ContributorType(
+                uuid(),
+                contributorType.identifier,
+                contributorType.pref_label,
+                contributorType.definition,
+                contributorType.in_scheme
+              )
+            )
             return FundingAgency(uuid(), organization, contributorTypes)
           })
           params.push(fundingAgencies)
@@ -985,9 +957,9 @@ class Qvain {
           r.download_url ? r.download_url.identifier : undefined,
           r.use_category
             ? {
-              label: r.use_category.pref_label.en,
-              value: r.use_category.identifier,
-            }
+                label: r.use_category.pref_label.en,
+                value: r.use_category.identifier,
+              }
             : undefined
         )
       )
@@ -1083,7 +1055,9 @@ class Qvain {
 
   @action checkProvenanceActors = () => {
     const provenanceActors = [
-      ...new Set(this.provenances.map(prov => Object.values(prov.associations.actorsRef)).flat()),
+      ...new Set(
+        this.Provenances.storage.map(prov => Object.values(prov.associations.actorsRef)).flat()
+      ),
     ].flat()
     const actorsWithOnlyProvenanceTag = this.Actors.actors.filter(
       actor => actor.roles.includes(ROLE.PROVENANCE) && actor.roles.length === 1
@@ -1099,7 +1073,7 @@ class Qvain {
   }
 
   @action checkActorFromRefs = actor => {
-    const provenancesWithActorRefsToBeRemoved = this.provenances.filter(
+    const provenancesWithActorRefsToBeRemoved = this.Provenances.storage.filter(
       p => p.associations.actorsRef[actor.uiid]
     )
     if (!provenancesWithActorRefsToBeRemoved.length) return Promise.resolve(true)
@@ -1108,7 +1082,7 @@ class Qvain {
   }
 
   @action removeActorFromRefs = actor => {
-    this.provenances.forEach(p => p.associations.removeActorRef(actor.uiid))
+    this.Provenances.storage.forEach(p => p.associations.removeActorRef(actor.uiid))
   }
 
   // these two are self-removing-resolve-functions
@@ -1243,7 +1217,7 @@ export const Project = (
   fundingIdentifier,
   funderType, // ProjectFunderType
   organizations, // Array<Organization>
-  fundingAgencies, // Array<FundingAgency>
+  fundingAgencies // Array<FundingAgency>
 ) => ({
   id: id || uuid(),
   details: { title, identifier, fundingIdentifier, funderType },

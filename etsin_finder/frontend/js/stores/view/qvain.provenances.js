@@ -38,14 +38,11 @@ const Provenance = ({
 
 class Provenances extends Field {
   constructor(Qvain) {
-    super(Qvain, Provenance, 'provenances', ['associations'])
+    super(Provenance, ProvenanceModel, 'provenances', Qvain.readonly, ['associations'])
     this.Spatials = new Spatials(this)
     this.RelatedResources = new RelatedResources(this)
+    this.Qvain = Qvain
   }
-
-  @observable spatials = []
-
-  @observable relatedResources = []
 
   @observable selectedActor = undefined
 
@@ -59,11 +56,11 @@ class Provenances extends Field {
   @action create = () => {
     this.setChanged(false)
     this.editMode = false
-    this.inEdit = new Provenance({ associations: new ActorsRef({ actors: this.Parent.Actors }) })
+    this.inEdit = new Provenance({ associations: new ActorsRef({ actors: this.Qvain.Actors }) })
   }
 
   toBackend = () =>
-    this.Parent.provenances.map(p => ({
+    this.storage.map(p => ({
       title: p.name,
       description: p.description,
       outcome_description: p.outcomeDescription,
@@ -94,7 +91,7 @@ export const Lifecycle = (name, url) => ({
   url,
 })
 
-export const ProvenanceModel = (Parent, provenanceData) => ({
+export const ProvenanceModel = (provenanceData, Qvain) => ({
   uiid: uuidv4(),
   name: parseTranslationField(provenanceData.title),
   description: parseTranslationField(provenanceData.description),
@@ -107,7 +104,7 @@ export const ProvenanceModel = (Parent, provenanceData) => ({
     : undefined,
   relatedResources: (provenanceData.used_entity || []).map(ue => UsedEntityModel(ue)),
   associations: new ActorsRef({
-    actors: Parent.Actors,
+    actors: Qvain.Actors,
     actorsFromBackend: provenanceData.was_associated_with,
     roles: [ROLE.PROVENANCE],
   }),

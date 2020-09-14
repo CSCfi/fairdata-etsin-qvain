@@ -26,7 +26,6 @@ const Location = ({ Stores }) => {
         fieldIdentifier="relatedResources"
         lang={lang}
         translationsRoot={translationsRoot}
-        elements={Store.inEdit.relatedResources}
         disableNoItemsText
       />
       <div id="used-entity-input">

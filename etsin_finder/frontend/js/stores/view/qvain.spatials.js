@@ -19,7 +19,7 @@ const Spatial = (
 
 class Spatials extends Field {
   constructor(Parent) {
-    super(Parent, Spatial, 'spatials')
+    super(Spatial, SpatialModel, 'spatials', Parent.readonly)
   }
 
   spatialToBackend = spatial => ({
@@ -30,7 +30,7 @@ class Spatials extends Field {
     place_uri: spatial.location ? { identifier: spatial.location.url } : { identifier: undefined },
   })
 
-  toBackend = () => this.Parent.spatials.map(this.spatialToBackend)
+  toBackend = () => this.storage.map(this.spatialToBackend)
 }
 
 export const Location = (name, url) => ({

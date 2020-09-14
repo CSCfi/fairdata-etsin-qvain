@@ -13,7 +13,7 @@ const RelatedResource = (
 
 class RelatedResources extends Field {
   constructor(Parent) {
-    super(Parent, RelatedResource, 'relatedResources')
+    super(RelatedResource, RelatedResourceModel, 'relatedResources', Parent.readonly)
   }
 
   relatedResourceToBackend = rr => ({
@@ -26,7 +26,7 @@ class RelatedResources extends Field {
     relation_type: { identifier: (rr.relationType || {}).url },
   })
 
-  toBackend = () => this.Parent.relatedResources.map(this.relatedResourceToBackend)
+  toBackend = () => this.storage.map(this.relatedResourceToBackend)
 }
 
 export const RelationType = (label, url) => ({

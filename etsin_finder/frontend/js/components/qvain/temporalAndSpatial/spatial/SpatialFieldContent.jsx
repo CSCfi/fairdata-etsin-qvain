@@ -10,12 +10,7 @@ const translationsRoot = 'qvain.temporalAndSpatial.spatial'
 
 const SpatialFieldContent = ({ Store, lang }) => (
   <>
-    <FieldList
-      Field={Store.Spatials}
-      lang={lang}
-      elements={Store.spatials}
-      translationsRoot={translationsRoot}
-    />
+    <FieldList Field={Store.Spatials} lang={lang} translationsRoot={translationsRoot} />
     <FieldListAdd
       Store={Store}
       Field={Store.Spatials}
