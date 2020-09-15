@@ -144,27 +144,6 @@ class Qvain {
   }
 
   @action
-  addToField = (fieldName, item, refs = {}) => {
-    Object.keys(refs).forEach(key => {
-      item[key] = refs[key]
-    })
-    this[fieldName] = [...this[fieldName], item]
-  }
-
-  @action
-  editItemInField = (fieldName, index, item, refs = {}) => {
-    Object.keys(refs).forEach(key => {
-      item[key] = refs[key]
-    })
-    this[fieldName][index] = item
-  }
-
-  @action
-  removeItemInField = (fieldName, uiid) => {
-    this[fieldName] = [...this[fieldName].filter(item => item.uiid !== uiid)]
-  }
-
-  @action
   setChanged = changed => {
     this.changed = changed
   }

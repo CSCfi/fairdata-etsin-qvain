@@ -34,7 +34,7 @@ const Location = ({ Stores }) => {
         translationsRoot={translationsRoot}
         handleSave={() => handleSave(Store.Spatials, translationsRoot)}
         position="left"
-        hideButton={!!Store.inEdit.spatials.length}
+        hideButton={!!Store.Spatials.storage.length}
       />
     </>
   )
