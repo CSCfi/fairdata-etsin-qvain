@@ -18,6 +18,8 @@ class Auth {
 
   @observable loading = false
 
+  @observable initializing = true
+
   @observable user = {
     name: undefined,
     firsName: undefined,
@@ -94,6 +96,7 @@ class Auth {
               this.cscUserLogged = false
             }
             this.loading = false
+            this.initializing = false
             resolve(res)
           })
         )
@@ -120,7 +123,7 @@ class Auth {
           this.resetUser()
           resolve(res)
         })
-        .catch((err) => {
+        .catch(err => {
           console.error(err)
           reject(err)
         })

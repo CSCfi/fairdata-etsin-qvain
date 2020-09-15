@@ -30,11 +30,13 @@ class Login extends Component {
     margin: PropTypes.string,
     width: PropTypes.string,
     isLoggedInKey: PropTypes.string,
+    fontSize: PropTypes.string,
   }
 
   static defaultProps = {
     margin: '0 0 0 0.4em',
     width: undefined,
+    fontSize: 'inherit',
     isLoggedInKey: 'userLogged',
   }
 
@@ -55,10 +57,14 @@ class Login extends Component {
   }
 
   redirect = location => {
-    this.setState({
-      loading: true,
-    })
-    window.location = `/sso?relay=${location.pathname}`
+    this.setState(
+      {
+        loading: true,
+      },
+      () => {
+        window.location = `/sso?relay=${location.pathname}`
+      }
+    )
   }
 
   render() {
@@ -72,11 +78,9 @@ class Login extends Component {
             <LogoutButton
               width={this.props.width}
               margin="0"
-              onClick={() => {
-                this.redirect(this.props.location)
-              }}
+              onClick={() => this.redirect(this.props.location)}
             >
-              <LoginText visible={!this.state.loading}>
+              <LoginText visible={!this.state.loading} fontSize={this.props.fontSize}>
                 <Translate content="nav.login" />
               </LoginText>
             </LogoutButton>
@@ -131,6 +135,7 @@ const LoaderCont = styled.div`
 `
 const LoginText = styled.span`
   visibility: ${p => (p.visible ? 'initial' : 'hidden')};
+  font-size: ${p => p.fontSize};
 `
 
 export default withRouter(inject('Stores')(observer(Login)))

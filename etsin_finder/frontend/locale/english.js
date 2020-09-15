@@ -345,6 +345,7 @@ const english = {
   },
   qvain: {
     general: {
+      brief: 'Research Dataset Metadata Tool',
       looseActors: {
         warning:
           "Some of the actors' role is marked as provenance but they are not attached in any of existing provenances. Saving the dataset will remove these orphaned actors. Following actors will be removed:",
