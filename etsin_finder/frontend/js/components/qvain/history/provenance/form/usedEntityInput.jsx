@@ -16,14 +16,17 @@ const translations = {
 const Location = ({ Stores }) => {
   const Store = Stores.Qvain.Provenances
   const { lang } = Stores.Locale
-  const Field = Store.RelatedResources
+  const Field = Store.inEdit.usedEntities
+
+  if (!Field) return null
+
   return (
     <>
       <Translate component={Label} content={translations.label} htmlFor="used-entity-input" />
       <FieldList
         Store={Store}
         Field={Field}
-        fieldIdentifier="relatedResources"
+        fieldIdentifier="usedEntities"
         lang={lang}
         translationsRoot={translationsRoot}
         disableNoItemsText

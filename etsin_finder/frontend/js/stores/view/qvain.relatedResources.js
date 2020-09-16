@@ -12,8 +12,9 @@ const RelatedResource = (
 ) => ({ uiid, name, description, identifier, relationType, entityType })
 
 class RelatedResources extends Field {
-  constructor(Parent) {
-    super(RelatedResource, RelatedResourceModel, 'relatedResources', Parent.readonly)
+  constructor(Qvain) {
+    super(RelatedResource, RelatedResourceModel, 'relatedResources', Qvain.readonly)
+    this.Qvain = Qvain
   }
 
   relatedResourceToBackend = rr => ({
@@ -29,18 +30,6 @@ class RelatedResources extends Field {
   toBackend = () => this.storage.map(this.relatedResourceToBackend)
 }
 
-export const RelationType = (label, url) => ({
-  label,
-  url,
-})
-
-export const fillUndefinedMultiLangProp = (prop = {}) => {
-  if (prop.fi === undefined) prop.fi = ''
-  if (prop.en === undefined) prop.en = ''
-  if (prop.und === undefined) prop.und = ''
-  return prop
-}
-
 export const RelatedResourceModel = rr => ({
   uiid: uuidv4(),
   name: fillUndefinedMultiLangProp(rr.entity.title),
@@ -54,4 +43,17 @@ export const RelatedResourceModel = rr => ({
       ? RelationType(rr.entity.type.pref_label, rr.entity.type.identifier)
       : undefined,
 })
+
+export const RelationType = (label, url) => ({
+  label,
+  url,
+})
+
+export const fillUndefinedMultiLangProp = (prop = {}) => {
+  if (prop.fi === undefined) prop.fi = ''
+  if (prop.en === undefined) prop.en = ''
+  if (prop.und === undefined) prop.und = ''
+  return prop
+}
+
 export default RelatedResources

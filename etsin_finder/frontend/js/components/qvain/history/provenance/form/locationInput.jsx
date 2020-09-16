@@ -15,13 +15,17 @@ const translations = {
 
 const Location = ({ Stores }) => {
   const Store = Stores.Qvain.Provenances
+  const Field = Store.inEdit.spatials
   const { lang } = Stores.Locale
+
+  if (!Field) return null
+
   return (
     <>
       <Translate component={Label} content={translations.label} htmlFor="location-input" />
       <FieldList
         Store={Store}
-        Field={Store.Spatials}
+        Field={Field}
         fieldIdentifier="spatials"
         lang={lang}
         translationsRoot={translationsRoot}
@@ -29,12 +33,12 @@ const Location = ({ Stores }) => {
       />
       <FieldListAdd
         Store={Store}
-        Field={Store.Spatials}
+        Field={Field}
         Form={Form}
         translationsRoot={translationsRoot}
-        handleSave={() => handleSave(Store.Spatials, translationsRoot)}
+        handleSave={() => handleSave(Field, translationsRoot)}
         position="left"
-        hideButton={!!Store.Spatials.storage.length}
+        hideButton={!!Field.storage.length}
       />
     </>
   )
