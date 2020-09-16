@@ -37,7 +37,8 @@ class SubmitResponse extends Component {
   }
 
   handleOpenNewVersion = identifier => {
-    this.props.history.push(`/qvain/dataset/${identifier}`)
+    const { getQvainUrl } = this.props.Stores.Env
+    this.props.history.push(getQvainUrl(`/dataset/${identifier}`))
     this.closeSubmitResponse()
   }
 
@@ -50,6 +51,7 @@ class SubmitResponse extends Component {
   render() {
     const { response } = this.props
     const { original } = this.props.Stores.Qvain
+    const { getEtsinUrl } = this.props.Stores.Env
 
     // If the user wants to clear the submitResponse
     if (this.state.clearSubmitResponse) {
@@ -81,7 +83,9 @@ class SubmitResponse extends Component {
                 content={`qvain.submitStatus.${response.is_draft ? 'draftSuccess' : 'success'}`}
               />
             </ResponseLabel>
-            <LinkToEtsin onClick={() => window.open(`/dataset/${identifier}`, '_blank')}>
+            <LinkToEtsin
+              onClick={() => window.open(getEtsinUrl(`/dataset/${identifier}`), '_blank')}
+            >
               {goToEtsin}
             </LinkToEtsin>
             <p>Identifier: {this.getPreferredIdentifier()}</p>
@@ -119,7 +123,9 @@ class SubmitResponse extends Component {
                 }
               />
             </ResponseLabel>
-            <LinkToEtsin onClick={() => window.open(`/dataset/${identifier}`, '_blank')}>
+            <LinkToEtsin
+              onClick={() => window.open(getEtsinUrl(`/dataset/${identifier}`), '_blank')}
+            >
               {goToEtsin}
             </LinkToEtsin>
             <p>Identifier: {this.getPreferredIdentifier()}</p>
@@ -233,14 +239,14 @@ const FadeInAnimation = keyframes`
     color: #FFEBE8;
   }
   to {
-    color: ${(props) => props.theme.color.redText};
+    color: ${props => props.theme.color.redText};
   }
 `
 const ResponseContainerError = styled.div`
   background-color: #ffebe8;
   text-align: center;
   width: 100%;
-  color: ${(props) => props.theme.color.redText};
+  color: ${props => props.theme.color.redText};
   z-index: 2;
   border-bottom: 1px solid rgba(0, 0, 0, 0.3);
   animation-name: ${FadeInAnimation};

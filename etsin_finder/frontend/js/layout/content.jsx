@@ -11,7 +11,7 @@
 }
 
 import React, { Component } from 'react'
-import { Route, Switch } from 'react-router-dom'
+import { Route, Switch, Redirect } from 'react-router-dom'
 import { observer, inject } from 'mobx-react'
 import PropTypes from 'prop-types'
 import { Home, Search, Dataset, Qvain, QvainDatasets } from '../routes'
@@ -26,20 +26,35 @@ class Content extends Component {
   }
 
   render() {
-    const { Auth } = this.props.Stores
+    const { Auth, Env } = this.props.Stores
     if (Auth.initializing) return null
+
+    const { isQvain, separateQvain, getQvainUrl } = Env
+    const qvainPath = path => {
+      if (isQvain) {
+        return path
+      }
+      return `/qvain${path}`
+    }
 
     return (
       <main className="content">
         <span ref={this.props.contentRef} tabIndex="-1" />
         <Switch>
-          <Route exact path="/" render={props => <Home {...props} />} />
-          <Route exact path="/datasets/:query?" render={props => <Search {...props} />} />
-          <Route path="/dataset/:identifier" render={props => <Dataset {...props} />} />
-          <Route path="/qvain/dataset/:identifier" render={renderIfLoggedIn(renderQvain, Auth)} />
-          <Route path="/qvain/dataset" render={renderIfLoggedIn(renderQvain, Auth)} />
+          {separateQvain && <Route path="/qvain" render={redirectToQvain(isQvain, getQvainUrl)} />}
+          {!isQvain && [
+            <Route exact path="/" key="home" component={Home} />,
+            <Route exact path="/datasets/:query?" key="search" component={Search} />,
+            <Route path="/dataset/:identifier" key="dataset" component={Dataset} />,
+          ]}
           <Route
-            path="/qvain"
+            path={qvainPath('/dataset/:identifier')}
+            render={renderIfLoggedIn(renderQvain, Auth)}
+          />
+          <Route exact path={qvainPath('/dataset')} render={renderIfLoggedIn(renderQvain, Auth)} />
+          <Route
+            exact
+            path={qvainPath('')}
             render={renderIfLoggedIn(renderQvainDatasets, Auth, renderQvainLandingPage)}
           />
           <Route render={() => <ErrorPage error={{ type: 'error' }} />} />
@@ -50,6 +65,19 @@ class Content extends Component {
 }
 
 export default inject('Stores')(observer(Content))
+
+const redirectToQvain = (isQvain, getQvainUrl) => props => {
+  // redirect /qvain to the new qvain app url
+  const path = props.location.pathname.replace(/^\/qvain/, '')
+  if (isQvain) {
+    // already in qvain, just remove /qvain from path
+    return <Redirect to={path} />
+  }
+  // not in qvain, redirect to qvain domain
+  const url = getQvainUrl(path)
+  window.location.replace(url)
+  return ''
+}
 
 // Restrict access to Qvain Light
 // Since I couldn't get Private Routes to work, here's a workaround

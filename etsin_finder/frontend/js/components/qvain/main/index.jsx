@@ -87,7 +87,7 @@ class Qvain extends Component {
   getDataset(identifier) {
     this.setState({ datasetLoading: true, datasetError: false, response: null, submitted: false })
     const { resetQvainStore, editDataset } = this.props.Stores.Qvain
-    const { metaxApiV2 } = this.props.Stores.Env
+    const { metaxApiV2, getQvainUrl } = this.props.Stores.Env
 
     let url = urls.v1.dataset(identifier)
     if (metaxApiV2) {
@@ -101,7 +101,7 @@ class Qvain extends Component {
         // Open draft instead if it exists
         const nextDraft = result.data.next_draft && result.data.next_draft.identifier
         if (nextDraft) {
-          this.props.history.replace(`/qvain/dataset/${nextDraft}`)
+          this.props.history.replace(getQvainUrl(`/dataset/${nextDraft}`))
         } else {
           editDataset(result.data)
           this.setState({ datasetLoading: false, datasetError: false, haveDataset: true })
