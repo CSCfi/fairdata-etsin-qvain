@@ -1,4 +1,3 @@
-// import { observables } from 'mobx'
 import { v4 as uuidv4 } from 'uuid'
 import Field from './qvain.field'
 
@@ -23,7 +22,7 @@ class UsedEntities extends Field {
     title: ue.name,
     description: ue.description,
     identifier: ue.identifier || '',
-    type: ue.entityType ? { identifier: (ue.entityType.url || {}).url } : undefined,
+    type: ue.entityType ? { identifier: (ue.entityType || {}).url } : undefined,
   })
 
   toBackend = () => this.storage.map(this.usedEntityToBackend)

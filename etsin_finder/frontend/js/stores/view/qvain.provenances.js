@@ -13,7 +13,7 @@ const Provenance = ({
   outcomeDescription = { fi: '', en: '', und: '' },
   startDate = undefined,
   endDate = undefined,
-  spatials = [], // aka location
+  spatials, // aka location
   outcome = undefined,
   usedEntities,
   associations = undefined,
