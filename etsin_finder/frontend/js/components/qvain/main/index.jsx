@@ -8,15 +8,15 @@ import { withRouter } from 'react-router-dom'
 import { Prompt } from 'react-router'
 import Translate from 'react-translate-component'
 
-import { QvainContainer } from './general/card'
-import { getResponseError } from './utils/responseError'
-import urls from './utils/urls'
-import Tracking from '../../utils/tracking'
-import Header from './editor/header'
-import StickyHeader from './editor/stickyHeader'
-import Dataset from './editor/dataset'
-import LooseActorDialog from './editor/looseActorDialog'
-import LooseProvenanceDialog from './editor/looseProvenanceDialog'
+import { QvainContainer } from '../general/card'
+import { getResponseError } from '../utils/responseError'
+import urls from '../utils/urls'
+import Tracking from '../../../utils/tracking'
+import Header from '../editor/header'
+import StickyHeader from '../editor/stickyHeader'
+import Dataset from '../editor/dataset'
+import LooseActorDialog from '../editor/looseActorDialog'
+import LooseProvenanceDialog from '../editor/looseProvenanceDialog'
 
 // Event handler to prevent page reload
 const confirmReload = e => {
@@ -32,16 +32,10 @@ class Qvain extends Component {
   static propTypes = {
     Stores: PropTypes.object.isRequired,
     location: PropTypes.shape({
-      pathname: PropTypes.string,
-    }),
+      pathname: PropTypes.string.isRequired,
+    }).isRequired,
     match: PropTypes.object.isRequired,
     history: PropTypes.object.isRequired,
-  }
-
-  static defaultProps = {
-    location: {
-      pathname: '/qvain/dataset',
-    },
   }
 
   constructor(props) {
@@ -93,7 +87,7 @@ class Qvain extends Component {
   getDataset(identifier) {
     this.setState({ datasetLoading: true, datasetError: false, response: null, submitted: false })
     const { resetQvainStore, editDataset } = this.props.Stores.Qvain
-    const { metaxApiV2 } = this.props.Stores.Env
+    const { metaxApiV2, getQvainUrl } = this.props.Stores.Env
 
     let url = urls.v1.dataset(identifier)
     if (metaxApiV2) {
@@ -107,7 +101,7 @@ class Qvain extends Component {
         // Open draft instead if it exists
         const nextDraft = result.data.next_draft && result.data.next_draft.identifier
         if (nextDraft) {
-          this.props.history.replace(`/qvain/dataset/${nextDraft}`)
+          this.props.history.replace(getQvainUrl(`/dataset/${nextDraft}`))
         } else {
           editDataset(result.data)
           this.setState({ datasetLoading: false, datasetError: false, haveDataset: true })

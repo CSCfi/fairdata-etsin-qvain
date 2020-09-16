@@ -40,9 +40,7 @@ export default class Header extends Component {
   }
 
   render() {
-    const helpUrl = this.state.lang === 'fi'
-        ? FAIRDATA_WEBSITE_URL.FI
-        : FAIRDATA_WEBSITE_URL.EN
+    const helpUrl = this.state.lang === 'fi' ? FAIRDATA_WEBSITE_URL.FI : FAIRDATA_WEBSITE_URL.EN
     return (
       <HeaderBar>
         <Positioner className="container">

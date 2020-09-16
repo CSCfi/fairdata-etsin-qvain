@@ -6,12 +6,12 @@ import Translate from 'react-translate-component'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import translate from 'counterpart'
-import Button from '../../general/button'
 import Card from '../general/card'
 import Label from '../general/card/label'
 import { otherIdentifiersArraySchema, otherIdentifierSchema } from '../utils/formValidation'
 import ValidationError from '../general/errors/validationError'
 import { Input, LabelLarge } from '../general/modal/form'
+import { ButtonContainer, AddNewButton } from '../general/buttons'
 
 const OtherIdentifierField = ({ Stores }) => {
   const {
@@ -111,13 +111,6 @@ OtherIdentifierField.propTypes = {
   Stores: PropTypes.object.isRequired,
 }
 
-const ButtonContainer = styled.div`
-  text-align: right;
-`
-const AddNewButton = styled(Button)`
-  margin: 0;
-  margin-top: 11px;
-`
 const PaddedWord = styled.span`
   padding-right: 10px;
 `

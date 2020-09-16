@@ -145,7 +145,7 @@ class DatasetTable extends Component {
   }
 
   handleCreateNewVersion = async identifier => {
-    const { metaxApiV2 } = this.props.Stores.Env
+    const { metaxApiV2, getQvainUrl } = this.props.Stores.Env
     if (!metaxApiV2) {
       console.error('Metax API V2 is required for creating a new version')
       return
@@ -156,7 +156,7 @@ class DatasetTable extends Component {
     this.promises.push(promise)
     const res = await promise
     const newIdentifier = res.data.identifier
-    this.props.history.replace(`/qvain/dataset/${newIdentifier}`)
+    this.props.history.push(getQvainUrl(`/dataset/${newIdentifier}`))
   }
 
   postRemoveUpdate = (dataset, onlyChanges) => {
@@ -202,12 +202,13 @@ class DatasetTable extends Component {
   }
 
   handleEnterEdit = dataset => () => {
+    const { getQvainUrl } = this.props.Stores.Env
     if (dataset.next_draft) {
-      this.props.history.push(`/qvain/dataset/${dataset.next_draft.identifier}`)
+      this.props.history.push(getQvainUrl(`/dataset/${dataset.next_draft.identifier}`))
       return
     }
     this.props.Stores.Qvain.editDataset(dataset)
-    this.props.history.push(`/qvain/dataset/${dataset.identifier}`)
+    this.props.history.push(getQvainUrl(`/dataset/${dataset.identifier}`))
   }
 
   handleChangePage = pageNum => () => {

@@ -27,12 +27,8 @@ class DataCatalog extends Component {
     Stores: PropTypes.object.isRequired,
   }
 
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      errorMessage: undefined,
-    }
+  state = {
+    errorMessage: undefined,
   }
 
   updateOptions = () => {

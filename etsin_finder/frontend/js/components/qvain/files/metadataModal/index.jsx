@@ -5,7 +5,6 @@ import PropTypes from 'prop-types'
 import { inject, observer } from 'mobx-react'
 import styled from 'styled-components'
 import axios from 'axios'
-
 import { observable, action } from 'mobx'
 
 import Modal from '../../../general/modal'
