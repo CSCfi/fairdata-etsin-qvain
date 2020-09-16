@@ -22,7 +22,7 @@ import Button from '../button'
 import Loader from '../loader'
 import NoticeBar from '../noticeBar'
 import LoggedInUser from '../loggedInUser'
-import DropdownMenu from './dropdownMenu'
+import { Dropdown, DropdownItem } from '../dropdown'
 
 class Login extends Component {
   static propTypes = {
@@ -101,19 +101,27 @@ class Login extends Component {
         </React.Fragment>
       )
     }
+    {
+      /* <Translate content="nav.logout" /> */
+    }
     return (
-      <DropdownMenu transparent={false} buttonContent={<LoggedInUser />}>
-        <LogoutButton
-          color="primary"
-          onClick={this.logout}
-          margin={this.props.margin}
-          width={this.props.width}
-        >
+      <Dropdown buttonComponent={LogoutButton} buttonContent={<LoggedInUser />}>
+        <DropdownItem onClick={this.logout}>
           <Translate content="nav.logout" />
-        </LogoutButton>
-      </DropdownMenu>
+        </DropdownItem>
+      </Dropdown>
     )
   }
+  // <DropdownMenu transparent={false} buttonContent={<LoggedInUser />}>
+  //   <LogoutButton
+  //     color="primary"
+  //     onClick={this.logout}
+  //     margin={this.props.margin}
+  //     width={this.props.width}
+  //   >
+  //     <Translate content="nav.logout" />
+  //   </LogoutButton>
+  // </DropdownMenu>
 }
 const Cont = styled.div`
   width: ${p => (p.width ? p.width : '')};
@@ -122,7 +130,7 @@ const Cont = styled.div`
 `
 
 const LogoutButton = styled(Button)`
-  margin: 1em auto;
+  margin: 0 auto;
   width: fit-content;
 `
 
