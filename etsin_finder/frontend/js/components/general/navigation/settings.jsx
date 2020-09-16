@@ -14,16 +14,18 @@ import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 import Translate from 'react-translate-component'
 import styled from 'styled-components'
-import { NavLink } from 'react-router-dom'
+import { inject, observer } from 'mobx-react'
 
 import Login from './loginButton'
 import { Link } from '../button'
 import LangToggle from './langToggle'
 import DropdownMenu from './dropdownMenu'
 import { QVAIN_URL } from '../../../utils/constants'
+import MaybeNavLink from './maybeNavLink'
 
-export default class Settings extends Component {
+class Settings extends Component {
   render() {
+    const { Env } = this.props.Stores
     return (
       <React.Fragment>
         <Positioner>
@@ -45,16 +47,14 @@ export default class Settings extends Component {
                   href={QVAIN_URL}
                   rel="noopener noreferrer"
                   target="_blank"
-                >Qvain
+                >
+                  Qvain
                 </Link>
               </Row>
               <Row>
-                <QvainNavLink
-                  width="100%"
-                  margin="0.4em 0em 0.4em 0.4em"
-                  to="/qvain"
-                >Qvain Light
-                </QvainNavLink>
+                <MaybeNavLink width="100%" margin="0.4em 0em 0.4em 0.4em" to={Env.getQvainUrl('')}>
+                  Qvain Light
+                </MaybeNavLink>
               </Row>
             </CustomContainer>
           </DropdownMenu>
@@ -66,6 +66,11 @@ export default class Settings extends Component {
   }
 }
 
+Settings.propTypes = {
+  Stores: PropTypes.object.isRequired,
+}
+
+export default inject('Stores')(observer(Settings))
 
 Settings.defaultProps = {
   helpUrl: undefined,
@@ -89,8 +94,6 @@ const CustomContainer = styled.div`
   max-width: 400px;
   width: 100%;
 `
-
-const QvainNavLink = Link.withComponent(NavLink)
 
 const Row = styled.div`
   display: inline-flex;

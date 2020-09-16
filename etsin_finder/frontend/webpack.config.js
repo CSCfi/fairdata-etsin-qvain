@@ -1,6 +1,7 @@
 require('@babel/polyfill')
 const env = require('dotenv').config()
 const path = require('path')
+const DotenvPlugin = require('dotenv-webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 
@@ -49,6 +50,7 @@ const config = {
       MATOMO_URL: env.parsed ? env.parsed.MATOMO_URL : undefined,
       MATOMO_SITE_ID: env.parsed ? env.parsed.MATOMO_SITE_ID : undefined,
     }),
+    new DotenvPlugin(),
   ],
   watch: false,
   watchOptions: {

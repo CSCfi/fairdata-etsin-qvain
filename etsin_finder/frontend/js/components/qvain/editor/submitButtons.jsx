@@ -314,7 +314,7 @@ class SubmitButtons extends Component {
     // Create new draft dataset
     const { history } = this.props
     const { original, setChanged, editDataset } = this.props.Stores.Qvain
-    const { metaxApiV2 } = this.props.Stores.Env
+    const { metaxApiV2, getQvainUrl } = this.props.Stores.Env
     if (original) {
       console.error('Use handleCreateNewVersion to create a draft from a published dataset')
       return null
@@ -347,7 +347,7 @@ class SubmitButtons extends Component {
         } else {
           await editDataset(res.data)
         }
-        history.replace(`/qvain/dataset/${identifier}`)
+        history.replace(getQvainUrl(`/dataset/${identifier}`))
       }
 
       if (showSuccess) {
@@ -374,6 +374,7 @@ class SubmitButtons extends Component {
     // If something goes wrong while updating files,
     // the incomplete dataset wont't get published.
     let identifier
+    const { getQvainUrl } = this.props.Stores.Env
     try {
       identifier = await this.handleCreateNewDraft(false, false)
       if (identifier) {
@@ -381,7 +382,7 @@ class SubmitButtons extends Component {
       }
     } catch (error) {
       if (identifier) {
-        this.props.history.replace(`/qvain/dataset/${identifier}`)
+        this.props.history.replace(getQvainUrl(`/dataset/${identifier}`))
       }
       this.failure(error)
     }
@@ -391,7 +392,7 @@ class SubmitButtons extends Component {
     // Create draft of a published dataset, save current changes to the draft
     const { Stores, history } = this.props
     const { original, editDataset } = Stores.Qvain
-    const { metaxApiV2 } = Stores.Env
+    const { metaxApiV2, getQvainUrl } = Stores.Env
     if (!original || original.state !== 'published') {
       console.error('Expected a published dataset')
       return null
@@ -418,7 +419,7 @@ class SubmitButtons extends Component {
       // Update created draft
       const dataset = await this.patchDataset(values)
       await editDataset(dataset)
-      history.replace(`/qvain/dataset/${dataset.identifier}`)
+      history.replace(getQvainUrl(`/dataset/${dataset.identifier}`))
       const data = { ...dataset, is_draft: true }
       this.success(data)
       return newIdentifier
@@ -471,7 +472,7 @@ class SubmitButtons extends Component {
   handlePublishDataset = async (saveChanges = true, overrideIdentifier = null) => {
     const { Stores, history } = this.props
     const { original, editDataset } = Stores.Qvain
-    const { metaxApiV2 } = Stores.Env
+    const { metaxApiV2, getQvainUrl } = Stores.Env
 
     if (!metaxApiV2) {
       console.error('Metax API V2 is required for publishing drafts')
@@ -506,7 +507,7 @@ class SubmitButtons extends Component {
       const resp = await axios.get(publishedUrl)
 
       await editDataset(resp.data)
-      history.replace(`/qvain/dataset/${resp.data.identifier}`)
+      history.replace(getQvainUrl(`/dataset/${resp.data.identifier}`))
 
       this.success(resp.data)
       this.goToDatasets(resp.data.identifier)
