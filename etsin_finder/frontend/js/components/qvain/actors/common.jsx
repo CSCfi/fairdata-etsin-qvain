@@ -2,15 +2,12 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {
-  faBuilding,
-  faUser
-} from '@fortawesome/free-solid-svg-icons'
+import { faBuilding, faUser } from '@fortawesome/free-solid-svg-icons'
 import styled from 'styled-components'
 
-import { Input } from '../general/form'
+import { Input } from '../general/modal/form'
 import { ENTITY_TYPE } from '../../../utils/constants'
-import ValidationError from '../general/validationError'
+import ValidationError from '../general/errors/validationError'
 
 export const ActorIcon = observer(({ actor, ...props }) => (
   <FontAwesomeIcon icon={actor.type === ENTITY_TYPE.PERSON ? faUser : faBuilding} {...props} />
@@ -39,7 +36,7 @@ export const getOrganizationName = (org, lang) => {
 }
 
 export const getOrganizationArrayName = (orgs, lang) => {
-  const orgNames = orgs.map((org) => {
+  const orgNames = orgs.map(org => {
     const name = org.name
     if (typeof name === 'object' && name !== null) {
       if (lang in name) {

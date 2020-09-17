@@ -4,9 +4,9 @@ import { inject, observer } from 'mobx-react'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import { SaveButton, CancelButton } from '../../general/buttons'
-import { Label, CustomSelect, Input, Textarea } from '../../general/form'
+import { Label, CustomSelect, Input, Textarea } from '../../general/modal/form'
 import { Container } from '../../general/card'
-import ValidationError from '../../general/validationError'
+import ValidationError from '../../general/errors/validationError'
 import { getLocalizedOptions } from '../../utils/getReferenceData'
 import {
   directorySchema,
@@ -41,7 +41,7 @@ export class DirectoryFormBase extends Component {
 
   componentDidMount = () => {
     const { inEdit } = this.props.Stores.Qvain
-    getLocalizedOptions('use_category').then((translations) => {
+    getLocalizedOptions('use_category').then(translations => {
       this.setState((state, props) => ({
         useCategoriesEn: translations.en,
         useCategoriesFi: translations.fi,
@@ -53,19 +53,19 @@ export class DirectoryFormBase extends Component {
     })
   }
 
-  handleCancel = (event) => {
+  handleCancel = event => {
     event.preventDefault()
     this.props.Stores.Qvain.setInEdit(undefined)
   }
 
-  handleChangeUse = (selectedOption) => {
+  handleChangeUse = selectedOption => {
     this.setState({
       useCategory: selectedOption,
       useCategoryError: undefined,
     })
   }
 
-  handleSave = (event) => {
+  handleSave = event => {
     event.preventDefault()
     const { title, description, useCategory } = this.state
     const validationObj = {
@@ -89,7 +89,7 @@ export class DirectoryFormBase extends Component {
         )
         this.props.Stores.Qvain.setInEdit(undefined) // close form after saving
       })
-      .catch((err) => {
+      .catch(err => {
         this.setState({
           directoryError: err.errors,
         })
@@ -100,17 +100,17 @@ export class DirectoryFormBase extends Component {
     validator
       .validate(value)
       .then(() => errorSet(undefined))
-      .catch((err) => errorSet(err.errors))
+      .catch(err => errorSet(err.errors))
   }
 
   handleTitleBlur = () => {
-    this.handleOnBlur(directoryTitleSchema, this.state.title, (value) =>
+    this.handleOnBlur(directoryTitleSchema, this.state.title, value =>
       this.setState({ titleError: value })
     )
   }
 
   handleDescriptionBlur = () => {
-    this.handleOnBlur(directoryDescriptionSchema, this.state.description, (value) =>
+    this.handleOnBlur(directoryDescriptionSchema, this.state.description, value =>
       this.setState({ descriptionError: value })
     )
   }
@@ -125,7 +125,7 @@ export class DirectoryFormBase extends Component {
           directoryError: undefined,
         })
       })
-      .catch((err) => {
+      .catch(err => {
         this.setState({
           useCategoryError: err.errors,
         })
@@ -143,7 +143,7 @@ export class DirectoryFormBase extends Component {
           <Translate
             component={Input}
             value={this.state.title}
-            onChange={(event) =>
+            onChange={event =>
               this.setState({
                 title: event.target.value,
               })
@@ -158,7 +158,7 @@ export class DirectoryFormBase extends Component {
           <Translate
             component={Textarea}
             value={this.state.description}
-            onChange={(event) => this.setState({ description: event.target.value })}
+            onChange={event => this.setState({ description: event.target.value })}
             onBlur={this.handleDescriptionBlur}
             attributes={{ placeholder: 'qvain.files.selected.form.description.placeholder' }}
           />
@@ -209,7 +209,7 @@ const Buttons = styled.div`
 `
 
 const getUseCategory = (directory, translations) =>
-  translations.find((opt) => opt.value === directory.useCategory)
+  translations.find(opt => opt.value === directory.useCategory)
 
 const FileContainer = styled(Container)`
   padding: 35px 24px;

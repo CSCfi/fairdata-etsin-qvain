@@ -18,7 +18,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Translate from 'react-translate-component'
 import { tint } from 'polished'
 
-import Button from '../../general/button'
+import Button from '../../../general/button'
 
 export class Dropdown extends Component {
   constructor(props) {

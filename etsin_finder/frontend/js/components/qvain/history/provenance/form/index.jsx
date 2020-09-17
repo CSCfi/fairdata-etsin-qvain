@@ -1,15 +1,15 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { FormContainer } from '../../../general/form'
-import TabInput from '../../../general/translationTabInputModal'
-import TranslationTab from '../../../general/translationTab'
+import { FormContainer } from '../../../general/modal/form'
+import TabInput from '../../../general/input/translationTabInputModal'
+import TranslationTab from '../../../general/input/translationTab'
 import LocationInput from './locationInput'
-import ModalReferenceInput from '../../../general/modalReferenceInput'
+import ModalReferenceInput from '../../../general/modal/modalReferenceInput'
 import { Outcome, Lifecycle } from '../../../../../stores/view/qvain.provenances'
-import Separator from '../../../general/modalSeparator'
+import Separator from '../../../general/modal/modalSeparator'
 import UsedEntityInput from './usedEntityInput'
 import ActorsInput from './actorsInput'
-import DurationPicker from '../../../general/durationpicker'
+import DurationPicker from '../../../general/input/durationpicker'
 
 const Form = props => {
   const [language, setLanguage] = useState('fi')

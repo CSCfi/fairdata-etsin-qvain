@@ -9,7 +9,7 @@ import getReferenceData from '../utils/getReferenceData'
 import Card from '../general/card'
 import RestrictionGrounds from './restrictionGrounds'
 import { accessTypeSchema } from '../utils/formValidation'
-import ValidationError from '../general/validationError'
+import ValidationError from '../general/errors/validationError'
 import EmbargoExpires from './embargoExpires'
 import {
   onChange,
@@ -20,7 +20,7 @@ import {
   autoSortOptions,
 } from '../utils/select'
 import { AccessType as AccessTypeConstructor } from '../../../stores/view/qvain'
-import { LabelLarge, HelpField } from '../general/form'
+import { LabelLarge, HelpField } from '../general/modal/form'
 import { ACCESS_TYPE_URL } from '../../../utils/constants'
 
 export class AccessType extends Component {

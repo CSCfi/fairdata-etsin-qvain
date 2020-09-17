@@ -2,7 +2,7 @@ import React from 'react'
 import Translate from 'react-translate-component'
 import { observer, inject } from 'mobx-react'
 import PropTypes from 'prop-types'
-import Title from '../general/title'
+import Title from '../general/card/title'
 import { SubHeader, SubHeaderText } from '../general/card'
 import { SubHeaderTextContainer } from './editor.styled'
 

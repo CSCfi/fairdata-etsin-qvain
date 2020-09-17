@@ -7,9 +7,9 @@ import translate from 'counterpart'
 
 import Card from '../general/card'
 import { dataCatalogSchema } from '../utils/formValidation'
-import ValidationError from '../general/validationError'
+import ValidationError from '../general/errors/validationError'
 import { DATA_CATALOG_IDENTIFIER } from '../../../utils/constants'
-import { LabelLarge } from '../general/form'
+import { LabelLarge } from '../general/modal/form'
 import etsinTheme from '../../../styles/theme'
 import DoiSelection from './doiSelection'
 import Tooltip from '../../general/tooltipHover'
@@ -27,12 +27,8 @@ class DataCatalog extends Component {
     Stores: PropTypes.object.isRequired,
   }
 
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      errorMessage: undefined,
-    }
+  state = {
+    errorMessage: undefined,
   }
 
   updateOptions = () => {
@@ -89,7 +85,9 @@ class DataCatalog extends Component {
       <Card>
         <LabelLarge htmlFor="dataCatalogSelect">
           <Tooltip
-            title={translate('qvain.description.fieldHelpTexts.requiredToPublish', { locale: lang })}
+            title={translate('qvain.description.fieldHelpTexts.requiredToPublish', {
+              locale: lang,
+            })}
             position="right"
           >
             <Translate content="qvain.files.dataCatalog.label" /> *

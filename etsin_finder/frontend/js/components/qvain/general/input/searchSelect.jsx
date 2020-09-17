@@ -10,8 +10,8 @@ import {
   getOptionLabel,
   getOptionValue,
   sortOptions,
-} from '../utils/select'
-import etsinTheme from '../../../styles/theme'
+} from '../../utils/select'
+import etsinTheme from '../../../../styles/theme'
 
 const Select = props => {
   const {

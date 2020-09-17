@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { inject, observer } from 'mobx-react'
-import Select from '../../general/searchSelect'
+import Select from '../../general/input/searchSelect'
 
 import { Infrastructure } from '../../../../stores/view/qvain'
 

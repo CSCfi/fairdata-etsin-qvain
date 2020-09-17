@@ -1,31 +1,17 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import ModalInput from '../../../general/modalInput'
+import ModalInput from '../../../general/modal/modalInput'
 import SpatialArrayInput from './SpatialArrayInput'
-import ModalReferenceInput from '../../../general/modalReferenceInput'
+import ModalReferenceInput from '../../../general/modal/modalReferenceInput'
 import { Location } from '../../../../../stores/view/qvain.spatials'
-import { FormContainer } from '../../../general/form'
+import { FormContainer } from '../../../general/modal/form'
 
-const Form = (props) => (
+const Form = props => (
   <FormContainer>
-    <ModalInput
-      {...props}
-      datum="name"
-      isRequired
-    />
-    <ModalInput
-      {...props}
-      datum="altitude"
-    />
-    <ModalInput
-      {...props}
-      datum="address"
-    />
-    <SpatialArrayInput
-      {...props}
-      datum="geometry"
-      type="text"
-    />
+    <ModalInput {...props} datum="name" isRequired />
+    <ModalInput {...props} datum="altitude" />
+    <ModalInput {...props} datum="address" />
+    <SpatialArrayInput {...props} datum="geometry" type="text" />
     <ModalReferenceInput
       {...props}
       datum="location"
@@ -39,7 +25,7 @@ const Form = (props) => (
 Form.propTypes = {
   Store: PropTypes.object.isRequired,
   Field: PropTypes.object.isRequired,
-  translationsRoot: PropTypes.string.isRequired
-};
+  translationsRoot: PropTypes.string.isRequired,
+}
 
 export default Form

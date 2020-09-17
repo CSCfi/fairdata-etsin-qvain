@@ -13,7 +13,7 @@ import {
   ButtonContainer,
 } from '../../general/buttons'
 import { EmptyExternalResource } from '../../../../stores/view/qvain'
-import { Input, SelectedFilesTitle } from '../../general/form'
+import { Input, SelectedFilesTitle } from '../../general/modal/form'
 import { SlidingContent } from '../../general/card'
 import ExternalFileForm from './externalFileForm'
 import { externalResourceAccessUrlSchema } from '../../utils/formValidation'

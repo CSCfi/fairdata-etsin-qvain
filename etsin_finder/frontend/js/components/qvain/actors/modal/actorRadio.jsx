@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import styled from 'styled-components'
 import { observer, inject } from 'mobx-react'
-import { RadioInput, NestedLabel } from '../../general/form'
+import { RadioInput, NestedLabel } from '../../general/modal/form'
 
 const propTypes = {
   Stores: PropTypes.object.isRequired,

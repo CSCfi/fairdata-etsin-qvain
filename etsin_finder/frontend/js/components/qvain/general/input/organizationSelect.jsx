@@ -8,12 +8,12 @@ import styled from 'styled-components'
 
 import { inject, observer } from 'mobx-react'
 
-import { getOrganizationSearchUrl } from '../../../stores/view/qvain.actors'
-import { organizationSelectSchema } from '../utils/formValidation'
-import { Input, Label } from './form'
-import ValidationError from './validationError'
-import { DeleteButton } from './buttons'
-import { validate } from '../project/utils'
+import { getOrganizationSearchUrl } from '../../../../stores/view/qvain.actors'
+import { organizationSelectSchema } from '../../utils/formValidation'
+import { Input, Label } from '../modal/form'
+import ValidationError from '../errors/validationError'
+import { DeleteButton } from '../buttons'
+import { validate } from '../../project/utils'
 
 /**
  * A reusable organization select component.
@@ -49,7 +49,7 @@ class OrganizationSelect extends Component {
       organization: {},
       department: {},
       subDepartment: {},
-    }
+    },
   }
 
   /**
@@ -72,7 +72,10 @@ class OrganizationSelect extends Component {
     const didDepartmentChnage = this.didValueChange('department', prevProps)
     if (didOrganizationChnage || didDepartmentChnage) {
       const { organization, department } = this.props.value
-      this.fetchOptions(didOrganizationChnage ? organization || {} : {}, didDepartmentChnage ? department || {} : {})
+      this.fetchOptions(
+        didOrganizationChnage ? organization || {} : {},
+        didDepartmentChnage ? department || {} : {}
+      )
     }
   }
 
@@ -104,15 +107,14 @@ class OrganizationSelect extends Component {
     const options = {
       organization: { ...oldOptions.organization },
       department: { ...oldOptions.department },
-      subDepartment: { ...oldOptions.subDepartment }
+      subDepartment: { ...oldOptions.subDepartment },
     }
     if (organization.value && !organization.formIsOpen) {
       options.department = await resolveOptions(organization.value)
     } else if (organization.formIsOpen) options.department = {}
 
-    options.subDepartment = department.value && !department.formIsOpen
-     ? await resolveOptions(department.value)
-     : {}
+    options.subDepartment =
+      department.value && !department.formIsOpen ? await resolveOptions(department.value) : {}
     this.setState({ options })
   }
 
@@ -123,7 +125,9 @@ class OrganizationSelect extends Component {
    * department and subdepartment values always when organization changes.
    */
   onOrganizationChange = selectedValue => {
-    if (!selectedValue) return this.props.onChange({ organization: null, department: null, subDepartment: null })
+    if (!selectedValue) {
+      return this.props.onChange({ organization: null, department: null, subDepartment: null })
+    }
 
     const { formIsOpen } = selectedValue
     const { value } = this.props
@@ -184,8 +188,9 @@ class OrganizationSelect extends Component {
    * @param {Object} prevProps Previous props
    */
   didValueChange = (key, prevProps) => {
-    const prev = (prevProps.value && prevProps.value[key]) ? prevProps.value[key].value : undefined
-    const current = (this.props.value && this.props.value[key]) ? this.props.value[key].value : undefined
+    const prev = prevProps.value && prevProps.value[key] ? prevProps.value[key].value : undefined
+    const current =
+      this.props.value && this.props.value[key] ? this.props.value[key].value : undefined
     return prev !== current
   }
 
@@ -208,7 +213,7 @@ class OrganizationSelect extends Component {
           allowReset={value.organization && !value.department}
         />
         <Department>
-          { value.organization && (
+          {value.organization && (
             <Select
               onChange={this.onDepartmentChange}
               onBlur={() => this.onBlur('department')}
@@ -222,7 +227,7 @@ class OrganizationSelect extends Component {
             />
           )}
           <Department>
-            { value.department && (
+            {value.department && (
               <Select
                 onChange={this.onSubdepartmentChange}
                 onBlur={() => this.onBlur('subDepartment')}
@@ -246,7 +251,18 @@ class OrganizationSelect extends Component {
  * Internally used select component with form for adding organization manually.
  * This is a stateless component.
  */
-const CreatableSelectComponent = ({ Stores, onChange, onBlur, value, options, placeholder, name, inputId, creatable, allowReset }) => {
+const CreatableSelectComponent = ({
+  Stores,
+  onChange,
+  onBlur,
+  value,
+  options,
+  placeholder,
+  name,
+  inputId,
+  creatable,
+  allowReset,
+}) => {
   /**
    * Open form if add manually is selected.
    *
@@ -287,7 +303,8 @@ const CreatableSelectComponent = ({ Stores, onChange, onBlur, value, options, pl
         payload.value = newValue
         break
       }
-      default: break
+      default:
+        break
     }
     onChange(payload)
   }
@@ -298,24 +315,23 @@ const CreatableSelectComponent = ({ Stores, onChange, onBlur, value, options, pl
    */
   const getOptions = () => {
     if (!creatable) return options
-    return [{
-      label: t('qvain.organizationSelect.label.addNew'),
-      options: [{ value: 'create', label: t('qvain.organizationSelect.label.addNew') }],
-    }, {
-      label: t(placeholder),
-      options
-    }]
+    return [
+      {
+        label: t('qvain.organizationSelect.label.addNew'),
+        options: [{ value: 'create', label: t('qvain.organizationSelect.label.addNew') }],
+      },
+      {
+        label: t(placeholder),
+        options,
+      },
+    ]
   }
 
   /**
    * Select option will have an additional form is open property
    * if organization for should be visible.
    */
-  const formIsOpen = () => (
-    value
-      ? value.formIsOpen
-      : false
-    )
+  const formIsOpen = () => (value ? value.formIsOpen : false)
 
   const renderForm = () => {
     if (!formIsOpen()) return null
@@ -379,23 +395,24 @@ const CreatableSelectComponent = ({ Stores, onChange, onBlur, value, options, pl
           options={getOptions()}
           attributes={{ placeholder }}
         />
-        { renderForm() }
+        {renderForm()}
       </div>
       <div className="col-1">
-        { allowReset
-          ? (
-            <DeleteButton
-              type="button"
-              onClick={onReset}
-              style={{ margin: '0 0 0 .5rem', width: 38, height: 38 }}
-            />
-          ) : null }
+        {allowReset ? (
+          <DeleteButton
+            type="button"
+            onClick={onReset}
+            style={{ margin: '0 0 0 .5rem', width: 38, height: 38 }}
+          />
+        ) : null}
       </div>
     </div>
   )
 }
 
-const StyledSelect = styled(ReactSelect)`flex-grow: 1;`
+const StyledSelect = styled(ReactSelect)`
+  flex-grow: 1;
+`
 
 CreatableSelectComponent.propTypes = {
   Stores: PropTypes.object.isRequired,
@@ -422,17 +439,12 @@ const Select = inject('Stores')(observer(CreatableSelectComponent))
 
 const ErrorMessage = ({ errors }) => {
   if (!errors || !errors.length) return null
-  return (
-    <ValidationError>
-      { errors.map(error => error) }
-    </ValidationError>
-  )
+  return <ValidationError>{errors.map(error => error)}</ValidationError>
 }
 
 ErrorMessage.propTypes = {
   errors: PropTypes.array.isRequired,
 }
-
 
 async function resolveOptions(parentId) {
   const url = getOrganizationSearchUrl(parentId)
@@ -457,7 +469,7 @@ function getOption(hit, language) {
       en: hit._source.label.en || hit._source.label.und,
       fi: hit._source.label.fi || hit._source.label.und,
       und: hit._source.label.und,
-    }
+    },
   }
 }
 
@@ -465,32 +477,34 @@ function isEmptyObject(obj = {}) {
   return Object.getOwnPropertyNames(obj).length === 0
 }
 
-const SelectContainer = styled.div`padding-left: 1.5rem;`
+const SelectContainer = styled.div`
+  padding-left: 1.5rem;
+`
 
 const Department = styled.div`
   margin-left: 1rem;
-  margin-top: .5rem;
+  margin-top: 0.5rem;
 `
 
 const AddOptionContainer = styled.div`
-  margin-top: .5rem;
+  margin-top: 0.5rem;
   margin-bottom: 1rem;
   border: 1px solid #ccc;
   border-radius: 4px;
-  padding: .5rem;
+  padding: 0.5rem;
 
   input {
-    margin: 0 0 .25rem 0;
+    margin: 0 0 0.25rem 0;
   }
 
   p {
     margin-bottom: 0;
-    margin-left: .4rem;
-    font-size: .9rem;
+    margin-left: 0.4rem;
+    font-size: 0.9rem;
   }
 
   label {
-    margin-top: .15rem;
+    margin-top: 0.15rem;
     padding: 0;
   }
 `

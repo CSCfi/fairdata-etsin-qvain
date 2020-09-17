@@ -4,9 +4,9 @@ import { inject, observer } from 'mobx-react'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import { SaveButton, CancelButton } from '../../../general/buttons'
-import { Label, CustomSelect, Input, Textarea } from '../../../general/form'
+import { Label, CustomSelect, Input, Textarea } from '../../../general/modal/form'
 import { Container } from '../../../general/card'
-import ValidationError from '../../../general/validationError'
+import ValidationError from '../../../general/errors/validationError'
 import { getLocalizedOptions } from '../../../utils/getReferenceData'
 import {
   directorySchema,

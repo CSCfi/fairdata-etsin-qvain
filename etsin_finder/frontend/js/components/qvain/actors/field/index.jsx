@@ -6,7 +6,7 @@ import AddedActors from './addedActors'
 import ActorTitle from './actorTitle'
 import { Container } from '../../general/card'
 import { Actor } from '../../../../stores/view/qvain.actors'
-import { ButtonContainer, AddNewButton } from '../../general/addButton'
+import { ButtonContainer, AddNewButton } from '../../general/buttons'
 
 const ActorsField = ({ Stores }) => {
   const { editActor } = Stores.Qvain.Actors

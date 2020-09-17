@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import ReactDatePicker from 'react-datepicker'
 import moment from 'moment'
 import parseDate from 'moment-parseformat'
-import DateFormats from '../utils/date'
+import DateFormats from '../../utils/date'
 
 // Modified DatePicker that allows overriding some functions by passing them in props.
 // Return true from the overriding function to also call the original function.
