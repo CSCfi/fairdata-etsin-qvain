@@ -14,46 +14,10 @@ from onelogin.saml2.auth import OneLogin_Saml2_Auth
 from etsin_finder.finder import app
 from etsin_finder.utils import executing_travis
 from etsin_finder.constants import SAML_ATTRIBUTES
-from etsin_finder.authentication_sso import get_sso_session_details
+from etsin_finder.authentication_fairdata_sso import get_sso_session_details, is_authenticated_through_fairdata_sso
+from etsin_finder.authentication_direct_proxy import not_found, get_saml_auth, init_saml_auth, is_authenticated_without_fairdata_sso
 
 log = app.logger
-
-def not_found(field):
-    """Log if field not found in session samlUserdata
-
-    Args:
-        field (string): Name of the field that was not found in samlUserdata.
-
-    """
-    log.warning('User seems to be authenticated but {0} not in session object.'.format(field))
-    log.debug('Saml userdata:\n{0}'.format(session.get('samlUserdata', None)))
-
-
-def get_saml_auth(flask_request):
-    """Get saml auth
-
-    Args:
-        flask_request (object): flask.Request
-
-    Returns:
-        object: SP SAML instance.
-
-    """
-    return OneLogin_Saml2_Auth(prepare_flask_request_for_saml(flask_request), custom_base_path=app.config.get('SAML_PATH', None))
-
-
-def init_saml_auth(saml_prepared_flask_request):
-    """Init saml auth
-
-    Args:
-        saml_prepared_flask_request (object): Prepared flask request.
-
-    Returns:
-        object: Initializes the SP SAML instance.
-
-    """
-    return OneLogin_Saml2_Auth(saml_prepared_flask_request, custom_base_path=app.config.get('SAML_PATH', None))
-
 
 def is_authenticated():
     """Is user authenticated. Separate check for old proxy and new Fairdata SSO
@@ -65,37 +29,12 @@ def is_authenticated():
     if executing_travis():
         return False
 
-    if is_authenticated_through_proxy():
-        log.info('Authenticated through proxy')
+    if is_authenticated_without_fairdata_sso():
         return True
     if is_authenticated_through_fairdata_sso():
-        log.info('Authenticated through SSO')
         return True
 
     return False
-
-def is_authenticated_through_proxy():
-    """Is user authenticated through the old proxy solution
-
-    Returns:
-        bool: Is auth.
-
-    """
-    if ('samlUserdata' in session and len(session.get('samlUserdata', None)) > 0):
-        return True
-    return False
-
-def is_authenticated_through_fairdata_sso():
-    """Is user authenticated through the new Fairdata single-sign on login
-
-    Returns:
-        bool: Is auth.
-
-    """
-    if request.cookies.getlist('fd_test_csc_fi_fd_sso_username'):
-        return True
-    return False
-
 
 def is_authenticated_CSC_user():
     """Is the user authenticated with CSC username.
@@ -116,42 +55,6 @@ def is_authenticated_CSC_user():
         return True
     return False
 
-def prepare_flask_request_for_saml(request):
-    """Prepare Flask request for saml
-
-    Args:
-        request (object): flask.Request
-
-    Returns:
-        dict: Request data.
-
-    """
-    # If server is behind proxys or balancers use the HTTP_X_FORWARDED fields
-    url_data = urlparse(request.url)
-    # If in local development environment this will redirect the saml login right.
-    if request.host == 'localhost':
-        request.host = '30.30.30.30'
-    return {
-        'https': 'on' if request.scheme == 'https' else 'off',
-        'http_host': request.host,
-        'server_port': url_data.port,
-        'script_name': request.path,
-        'get_data': request.args.copy(),
-        'post_data': request.form.copy()
-    }
-
-
-def reset_flask_session_on_login():
-    """Reset Flask session on login"""
-    session.clear()
-    session.permanent = True
-
-
-def reset_flask_session_on_logout():
-    """Reset Flask session on logout"""
-    session.clear()
-
-
 def get_user_csc_name():
     """Get user csc name from saml userdata.
 
@@ -163,7 +66,7 @@ def get_user_csc_name():
         return None
 
     # Old authentication
-    if is_authenticated_through_proxy() and 'samlUserdata' in session:
+    if is_authenticated_without_fairdata_sso() and 'samlUserdata' in session:
         csc_name = session.get('samlUserdata', {}).get(SAML_ATTRIBUTES.get('CSC_username', None), False)
         if csc_name:
             return csc_name[0]
@@ -247,7 +150,7 @@ def get_user_firstname():
     if not is_authenticated():
         return None
 
-    if is_authenticated_through_proxy and 'samlUserdata' in session:
+    if is_authenticated_without_fairdata_sso and 'samlUserdata' in session:
         first_name = session.get('samlUserdata', {}).get(SAML_ATTRIBUTES.get('first_name', None), False)
         return first_name[0] if first_name else not_found('first_name')
 
@@ -282,13 +185,13 @@ def get_user_home_organization_id():
         return None
 
     # Authenicated through the old proxy
-    if is_authenticated_through_proxy() and 'samlUserdata' in session:
+    if is_authenticated_without_fairdata_sso() and 'samlUserdata' in session:
         home_organization = session.get('samlUserdata', {}).get(SAML_ATTRIBUTES.get('haka_org_id', None), False)
         return home_organization[0] if home_organization else not_found('home_organization')
 
     # Authenticated through Fairdata SSO
     if is_authenticated_through_fairdata_sso:
-        log.info(request.cookies.getlist)
+        # log.info(request.cookies.getlist)
         # Todo update!
         # return request.cookies.getlist('fd_test_csc_fi_fd_sso_<home_organization_id>')
         return 'Placeholder'
@@ -301,19 +204,19 @@ def get_user_home_organization_name():
         string: The name of the users home organization, or None.
 
     """
-    log.info('get_user_home_organization_name')
+    # log.info('get_user_home_organization_name')
     if not is_authenticated():
-        log.info('Unfortunately, the user was not authorized.')
+        # log.info('Unfortunately, the user was not authorized.')
         return None
 
     # Authenicated through the old proxy
-    if is_authenticated_through_proxy() and 'samlUserdata' in session:
+    if is_authenticated_without_fairdata_sso() and 'samlUserdata' in session:
         home_organization_id = session.get('samlUserdata', {}).get(SAML_ATTRIBUTES.get('haka_org_name', None), False)
         return home_organization_id[0] if home_organization_id else not_found('home_organization_id')
 
     # Authenticated through Fairdata SSO
     if is_authenticated_through_fairdata_sso():
-        log.info(request.cookies.getlist)
+        # log.info(request.cookies.getlist)
         # Todo update!
         # return request.cookies.getlist('fd_test_csc_fi_fd_sso_<home_organization>')
         return 'placeholder'
