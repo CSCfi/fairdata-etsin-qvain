@@ -3,7 +3,7 @@ import { lighten } from 'polished'
 
 import Button from '../../../general/button'
 
-export const TableButton = styled.button`
+export const TableButton = styled(Button)`
   min-width: 84px;
   max-width: 6.5em;
   flex-grow: 1;
@@ -17,15 +17,10 @@ export const TableButton = styled.button`
   &:hover {
     background-color: #ccc;
   }
-
-  :disabled {
-    color: ${props => lighten(0.2, props.theme.color.dark)};
-    border: solid 1px ${lighten(0.1, '#ccc')};
-    background-color: ${lighten(0.1, '#ccc')};
-  }
 `
 
-export const CancelButton = styled.button`
+export const CancelButton = styled(Button)`
+  background-color: ${props => props.theme.color.lightgray};
   border-radius: 4px;
   border: ${props => `solid 1px ${props.theme.color.primary}`};
   font-size: 20px;
@@ -37,7 +32,7 @@ export const CancelButton = styled.button`
   }
 `
 
-export const SaveButton = styled.button`
+export const SaveButton = styled(Button)`
   border-radius: 4px;
   border: ${props => `solid 1px ${props.theme.color.primary}`};
   background-color: ${props => `${props.theme.color.primary}`};
@@ -49,14 +44,9 @@ export const SaveButton = styled.button`
   &:hover {
     background-color: ${props => props.theme.color.primaryDark};
   }
-
-  :disabled {
-    border: solid 1px ${props => lighten(0.25, props.theme.color.primary)};
-    background-color: ${props => lighten(0.25, props.theme.color.primary)};
-  }
 `
 
-export const DangerButton = styled.button`
+export const DangerButton = styled(Button)`
   border-radius: 4px;
   border: 1px solid ${props => (props.disabled ? '#ddb6b6' : '#db0000')};
   background-color: ${props => (props.disabled ? '#ddb6b6' : '#db0000')};
@@ -71,7 +61,7 @@ export const DangerButton = styled.button`
   }
 `
 
-export const DangerCancelButton = styled.button`
+export const DangerCancelButton = styled(Button)`
   min-width: 84px;
   max-width: 16.5em;
   background-color: #fff;
@@ -86,7 +76,7 @@ export const DangerCancelButton = styled.button`
   }
 `
 
-export const RemoveButton = styled.button`
+export const RemoveButton = styled(Button)`
   min-width: 84px;
   max-width: 6.5em;
   height: 42px;

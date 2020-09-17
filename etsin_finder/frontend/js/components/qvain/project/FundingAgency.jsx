@@ -188,7 +188,7 @@ const FundingAgencyForm = props => {
         />
       </Expand>
       <AddAgencyContainer>
-        <Button onClick={onAddAgency}>
+        <Button onClick={onAddAgency} disabled={readonly}>
           <Translate
             content={
               formData.id
@@ -396,7 +396,7 @@ class ContributorTypeFormComponent extends Component {
           id="definitionFi"
         />
         <AddAgencyContainer>
-          <Button onClick={this.onAddType}>
+          <Button onClick={this.onAddType} disabled={readonly}>
             <Translate
               content={
                 formData.id

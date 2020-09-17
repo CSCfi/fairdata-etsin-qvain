@@ -93,6 +93,7 @@ const FundingOrganization = props => {
 
   const { addedOrganizations, formData } = props.organizations
   const { lang } = props.Stores.Locale
+  const { readonly } = props.Stores.Qvain
   return (
     <Card>
       <Translate component="h3" content="qvain.project.organization.title" />
@@ -102,6 +103,7 @@ const FundingOrganization = props => {
         onRemove={onRemove}
         onEdit={onEdit}
         lang={lang}
+        readonly={readonly}
       />
       <OrganizationSelect
         onChange={onOrganizationChange}
@@ -111,7 +113,7 @@ const FundingOrganization = props => {
       />
       <ErrorMessages errors={formData.errors} />
       <AddOrganizationContainer>
-        <Button onClick={addOrganization}>
+        <Button disabled={readonly} onClick={addOrganization}>
           <Translate
             content={
               formData.id
@@ -133,13 +135,15 @@ FundingOrganization.propTypes = {
   organizations: PropTypes.object.isRequired, // {addedOrganizations, formData}
 }
 
-const AddedOrganizations = ({ organizations = [], onRemove, onEdit, lang }) =>
+const AddedOrganizations = ({ organizations = [], onRemove, onEdit, lang, readonly }) =>
   organizations.map(organization => (
     <OrganizationLabel color="#007fad" margin="0 0.5em 0.5em 0" key={organization.id}>
       <PaddedWord onClick={() => onEdit(organization.id)}>
         {organization.organization.name[lang] || organization.organization.name.und}
       </PaddedWord>
-      <FontAwesomeIcon onClick={() => onRemove(organization.id)} icon={faTimes} size="xs" />
+      {!readonly && (
+        <FontAwesomeIcon onClick={() => onRemove(organization.id)} icon={faTimes} size="xs" />
+      )}
     </OrganizationLabel>
   ))
 
