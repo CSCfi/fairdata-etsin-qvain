@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { inject, observer } from 'mobx-react'
 import Translate from 'react-translate-component'
-import Label from './label'
+import Label from '../card/label'
 
 const SelectedItems = ({ Stores, getter, handleClick, noItems }) => {
   const { lang } = Stores.Locale

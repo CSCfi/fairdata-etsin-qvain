@@ -26,7 +26,7 @@ import { ButtonGroup } from '../js/components/qvain/general/buttons'
 import {
   ValidationErrors,
   ValidationErrorItem,
-} from '../js/components/qvain/general/validationError'
+} from '../js/components/qvain/general/errors/validationError'
 import { SlidingContent } from '../js/components/qvain/general/card'
 import Env from '../js/stores/domain/env'
 import QvainStoreClass, {

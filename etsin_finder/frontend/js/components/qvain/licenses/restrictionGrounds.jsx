@@ -5,9 +5,9 @@ import { inject, observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 
 import { RestrictionGrounds as RestrictionGroundsConstructor } from '../../../stores/view/qvain'
-import Select from '../general/select'
+import Select from '../general/input/select'
 import { restrictionGroundsSchema } from '../utils/formValidation'
-import ValidationError from '../general/validationError'
+import ValidationError from '../general/errors/validationError'
 
 class RestrictionGrounds extends Component {
   static propTypes = {

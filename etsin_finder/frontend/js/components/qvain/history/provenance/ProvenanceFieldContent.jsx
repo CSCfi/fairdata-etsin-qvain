@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
-import FieldList from '../../general/fieldList'
-import FieldListAdd from '../../general/fieldListAdd'
+import FieldList from '../../general/section/fieldList'
+import FieldListAdd from '../../general/section/fieldListAdd'
 import handleSave from './handleSave'
 import Form from './form'
 

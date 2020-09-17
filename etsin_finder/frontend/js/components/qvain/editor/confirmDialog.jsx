@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { ConfirmDialog } from '../general/confirmClose'
+import { ConfirmDialog } from '../general/modal/confirmClose'
 import Modal from '../../general/modal'
 
 const ConfirmModal = props => {

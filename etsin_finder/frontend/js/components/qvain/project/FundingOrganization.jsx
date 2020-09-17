@@ -8,29 +8,41 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import t from 'counterpart'
 
 import Card from '../general/card'
-import OrganizationSelect from '../general/organizationSelect'
-import { ErrorMessages, organizationSelectValueToSchema, validateSync, isEmptyObject, organizationToSelectValue } from './utils'
+import OrganizationSelect from '../general/input/organizationSelect'
+import {
+  ErrorMessages,
+  organizationSelectValueToSchema,
+  validateSync,
+  isEmptyObject,
+  organizationToSelectValue,
+} from './utils'
 import Button from '../../general/button'
-import Label from '../general/label'
+import Label from '../general/card/label'
 
 import { Organization } from '../../../stores/view/qvain'
 import { organizationObjectSchema } from '../utils/formValidation'
-
 
 const FundingOrganization = props => {
   /**
    * Put already added organization to form data for organization select.
    */
   const onEdit = async id => {
-    const organizationToEdit = props.organizations.addedOrganizations
-      .find(org => org.id === id)
+    const organizationToEdit = props.organizations.addedOrganizations.find(org => org.id === id)
     if (!organizationToEdit) return
     const { lang } = props.Stores.Locale
     const { organization, department, subDepartment } = organizationToEdit
-    const departmentValue = await organizationToSelectValue(department, lang, organization ? organization.identifier : null)
-    const subDepartmentValue = await organizationToSelectValue(subDepartment, lang, department ? department.identifier : null)
+    const departmentValue = await organizationToSelectValue(
+      department,
+      lang,
+      organization ? organization.identifier : null
+    )
+    const subDepartmentValue = await organizationToSelectValue(
+      subDepartment,
+      lang,
+      department ? department.identifier : null
+    )
     props.onChange({
-      organization: { ...await organizationToSelectValue(organization, lang) },
+      organization: { ...(await organizationToSelectValue(organization, lang)) },
       department: departmentValue ? { ...departmentValue } : undefined,
       subDepartment: subDepartmentValue ? { ...subDepartmentValue } : undefined,
       id,
@@ -53,7 +65,8 @@ const FundingOrganization = props => {
 
     if (!isEmptyObject(validationErrors)) {
       props.onChange({
-        ...formData, errors: [t('qvain.project.inputs.fundingAgency.contributorType.organization.validation')]
+        ...formData,
+        errors: [t('qvain.project.inputs.fundingAgency.contributorType.organization.validation')],
       })
       return false
     }
@@ -99,9 +112,12 @@ const FundingOrganization = props => {
       <ErrorMessages errors={formData.errors} />
       <AddOrganizationContainer>
         <Button onClick={addOrganization}>
-          <Translate content={formData.id
-            ? 'qvain.project.inputs.organization.editButton'
-            : 'qvain.project.inputs.organization.addButton'}
+          <Translate
+            content={
+              formData.id
+                ? 'qvain.project.inputs.organization.editButton'
+                : 'qvain.project.inputs.organization.addButton'
+            }
           />
         </Button>
       </AddOrganizationContainer>
@@ -117,19 +133,15 @@ FundingOrganization.propTypes = {
   organizations: PropTypes.object.isRequired, // {addedOrganizations, formData}
 }
 
-
-const AddedOrganizations = ({ organizations = [], onRemove, onEdit, lang }) => (
+const AddedOrganizations = ({ organizations = [], onRemove, onEdit, lang }) =>
   organizations.map(organization => (
     <OrganizationLabel color="#007fad" margin="0 0.5em 0.5em 0" key={organization.id}>
-      <PaddedWord onClick={() => onEdit(organization.id)}>{organization.organization.name[lang] || organization.organization.name.und }</PaddedWord>
-      <FontAwesomeIcon
-        onClick={() => onRemove(organization.id)}
-        icon={faTimes}
-        size="xs"
-      />
+      <PaddedWord onClick={() => onEdit(organization.id)}>
+        {organization.organization.name[lang] || organization.organization.name.und}
+      </PaddedWord>
+      <FontAwesomeIcon onClick={() => onRemove(organization.id)} icon={faTimes} size="xs" />
     </OrganizationLabel>
   ))
-)
 
 const AddOrganizationContainer = styled.div`
   text-align: right;

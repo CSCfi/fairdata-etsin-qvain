@@ -5,13 +5,13 @@ import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import { tint } from 'polished'
 
-import { Row, BodyCell } from '../general/table'
+import { Row, BodyCell } from '../general/card/table'
 import { DATA_CATALOG_IDENTIFIER } from '../../../utils/constants'
-import Label from '../general/label'
+import Label from '../general/card/label'
 import { TableButton, RemoveButton } from '../general/buttons'
 import TablePasState from './tablePasState'
 import formatAge from './formatAge'
-import { Dropdown, DropdownItem } from '../general/dropdown'
+import { Dropdown, DropdownItem } from '../general/input/dropdown'
 
 const datasetStateTranslation = dataset => {
   if (dataset.state === 'published') {

@@ -10,7 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPen } from '@fortawesome/free-solid-svg-icons'
 
 import { DeleteButton } from '../../../general/buttons'
-import ValidationError from '../../../general/validationError'
+import ValidationError from '../../../general/errors/validationError'
 import { getOrganizationName } from '../../common'
 
 const getOrgOptionsWithLang = (orgs, lang) => {

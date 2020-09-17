@@ -7,12 +7,12 @@ import axios from 'axios'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
 
-import { Table, TableHeader, Row, HeaderCell, TableBody, TableNote } from '../general/table'
+import { Table, TableHeader, Row, HeaderCell, TableBody, TableNote } from '../general/card/table'
 import urls from '../utils/urls'
 import RemoveModal from './removeModal'
 import DatasetPagination from './pagination'
 import { TableButton } from '../general/buttons'
-import { FormField, Input, Label as inputLabel } from '../general/form'
+import { FormField, Input, Label as inputLabel } from '../general/modal/form'
 import DatasetGroup from './datasetGroup'
 import { filterGroupsByTitle, groupDatasetsByVersionSet } from './filter'
 import etsinTheme from '../../../styles/theme'
@@ -343,7 +343,7 @@ class DatasetTable extends Component {
 }
 
 const ErrorMessage = styled.span`
-  color: ${(props) => props.theme.color.redText};
+  color: ${props => props.theme.color.redText};
   margin-left: 10px;
 `
 
