@@ -12,17 +12,19 @@ from flask import make_response, render_template, redirect, request, session
 from onelogin.saml2.utils import OneLogin_Saml2_Utils
 
 from etsin_finder.authentication import \
+    is_authenticated
+from etsin_finder.authentication_direct_proxy import \
     get_saml_auth, \
-    is_authenticated, \
-    is_authenticated_through_proxy, \
-    is_authenticated_through_fairdata_sso, \
+    is_authenticated_without_fairdata_sso, \
     init_saml_auth, \
     prepare_flask_request_for_saml, \
-    reset_flask_session_on_login
+        reset_flask_session_on_login
+from etsin_finder.authentication_fairdata_sso import \
+    is_authenticated_through_fairdata_sso, \
+    convert_sso_data_to_saml_format
 from etsin_finder.finder import app
 
 log = app.logger
-
 
 # REACT APP RELATED
 
@@ -78,7 +80,7 @@ def frontend_app(path):
 
 
 def _render_index_template(saml_errors=[], slo_success=False):
-    """Load saml attributes if logged in through old proxy
+    """Load saml attributes if logged in through old proxy, and log values
 
     Args:
         saml_errors (list): List of SAML errors
@@ -90,11 +92,12 @@ def _render_index_template(saml_errors=[], slo_success=False):
     """
     is_auth = is_authenticated()
     if is_auth:
-        if is_authenticated_through_proxy():
+        saml_attributes = {}
+        if is_authenticated_without_fairdata_sso():
             saml_attributes = session.get('samlUserdata').items()
-            log.debug("SAML attributes: {0}".format(saml_attributes))
-        # if is_authenticated_through_fairdata_sso():
-            # ...
+        if is_authenticated_through_fairdata_sso():
+            saml_attributes = convert_sso_data_to_saml_format()
+        log.info(saml_attributes)
     return render_template('index.html')
 
 

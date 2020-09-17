@@ -13,6 +13,7 @@ from flask_restful import abort, reqparse, Resource
 
 from etsin_finder.app_config import get_app_config
 from etsin_finder import authentication
+from etsin_finder import authentication_direct_proxy
 from etsin_finder import authorization
 from etsin_finder import cr_service
 from etsin_finder import cr_service_v2
@@ -433,7 +434,7 @@ class Session(Resource):
             tuple: bool and status code
 
         """
-        authentication.reset_flask_session_on_logout()
+        authentication_direct_proxy.reset_flask_session_on_logout()
         return not authentication.is_authenticated(), 200
 
 
