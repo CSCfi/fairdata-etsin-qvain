@@ -14,6 +14,7 @@ from onelogin.saml2.auth import OneLogin_Saml2_Auth
 from etsin_finder.finder import app
 from etsin_finder.utils import executing_travis
 from etsin_finder.constants import SAML_ATTRIBUTES
+from etsin_finder.authentication_sso import get_sso_session_details
 
 log = app.logger
 
@@ -103,12 +104,11 @@ def is_authenticated_CSC_user():
         bool: Is CSC user.
 
     """
-    key = SAML_ATTRIBUTES.get('CSC_username')
     if executing_travis():
         return False
 
     # Old authentication (proxy)
-    if 'samlUserdata' in session and len(session.get('samlUserdata', None)) > 0 and key in session.get('samlUserdata', None):
+    if 'samlUserdata' in session and len(session.get('samlUserdata', None)) > 0 and SAML_ATTRIBUTES.get('CSC_username') in session.get('samlUserdata', None):
         return True
 
     # Fairdata SSO authentication
@@ -138,9 +138,6 @@ def prepare_flask_request_for_saml(request):
         'script_name': request.path,
         'get_data': request.args.copy(),
         'post_data': request.form.copy()
-        # "lowercase_urlencoding": "",
-        # "request_uri": "",
-        # "query_string": ""
     }
 
 
@@ -247,12 +244,16 @@ def get_user_firstname():
         string: The users first name.
 
     """
-    if not is_authenticated() or 'samlUserdata' not in session:
+    if not is_authenticated():
         return None
 
-    first_name = session.get('samlUserdata', {}).get(SAML_ATTRIBUTES.get('first_name', None), False)
+    if is_authenticated_through_proxy and 'samlUserdata' in session:
+        first_name = session.get('samlUserdata', {}).get(SAML_ATTRIBUTES.get('first_name', None), False)
+        return first_name[0] if first_name else not_found('first_name')
 
-    return first_name[0] if first_name else not_found('first_name')
+    if is_authenticated_through_fairdata_sso:
+        log.info('AAAasd')
+        get_sso_session_details()
 
 
 def get_user_ida_groups():
