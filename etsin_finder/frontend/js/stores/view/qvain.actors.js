@@ -16,6 +16,7 @@ const createActor = (actorJson, roles) => {
       orgs.unshift(
         Organization({
           name: currentOrg.name,
+          email: currentOrg.email,
           identifier: currentOrg.identifier,
           isReference: null, // null here means we aren't sure yet
         })

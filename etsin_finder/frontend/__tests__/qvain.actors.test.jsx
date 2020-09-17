@@ -294,6 +294,12 @@ describe('Qvain.Actors modal', () => {
     )
   })
 
+  it('loads email address for manually added organization', () => {
+    const { allOrganizationsFlat } = stores.Qvain.Actors
+    const org = allOrganizationsFlat.find(org => org.name.en === 'Manual Org')
+    expect(org.email).toBe('manual@notreference.com')
+  })
+
   it('shows reference organizations in menu', () => {
     const { actors, editActor, setActorOrganizations } = stores.Qvain.Actors
     editActor(actors.find(actor => actor.organizations.length === 2))
