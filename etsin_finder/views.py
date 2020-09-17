@@ -18,7 +18,7 @@ from etsin_finder.authentication_direct_proxy import \
     is_authenticated_without_fairdata_sso, \
     init_saml_auth, \
     prepare_flask_request_for_saml, \
-        reset_flask_session_on_login
+    reset_flask_session_on_login
 from etsin_finder.authentication_fairdata_sso import \
     is_authenticated_through_fairdata_sso, \
     convert_sso_data_to_saml_format
