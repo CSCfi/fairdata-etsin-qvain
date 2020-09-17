@@ -78,7 +78,7 @@ def frontend_app(path):
 
 
 def _render_index_template(saml_errors=[], slo_success=False):
-    """ Load saml attributes if logged in through old proxy
+    """Load saml attributes if logged in through old proxy
 
     Args:
         saml_errors (list): List of SAML errors

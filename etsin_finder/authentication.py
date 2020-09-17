@@ -110,7 +110,7 @@ def is_authenticated_CSC_user():
     # Old authentication (proxy)
     if 'samlUserdata' in session and len(session.get('samlUserdata', None)) > 0 and key in session.get('samlUserdata', None):
         return True
-    
+
     # Fairdata SSO authentication
     if request.cookies.getlist('fd_test_csc_fi_fd_sso_username'):
         return True
@@ -309,7 +309,7 @@ def get_user_home_organization_name():
     if is_authenticated_through_proxy() and 'samlUserdata' in session:
         home_organization_id = session.get('samlUserdata', {}).get(SAML_ATTRIBUTES.get('haka_org_name', None), False)
         return home_organization_id[0] if home_organization_id else not_found('home_organization_id')
-    
+
     # Authenticated through Fairdata SSO
     if is_authenticated_through_fairdata_sso():
         log.info(request.cookies.getlist)
