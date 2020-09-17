@@ -64,6 +64,7 @@ class Auth {
         })
         .then(
           action(res => {
+            console.log(res.data)
             this.user = {
               name: res.data.user_csc_name,
               firstName: res.data.first_name,
