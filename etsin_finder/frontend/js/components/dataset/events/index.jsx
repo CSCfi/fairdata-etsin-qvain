@@ -167,7 +167,7 @@ class Events extends Component {
     let url = ''
 
     if (process.env.NODE_ENV === 'test') { /* test and stable */
-      url = `https://etsin-test.fairdata.fi/dataset/${identifier}`
+      url = `https://etsin.fd-test.csc.fi/dataset/${identifier}`
     } else if (process.env.NODE_ENV === 'development') { /* local */
       url = `https://etsin-finder.local/dataset/${identifier}`
     } else if (process.env.NODE_ENV === 'production') { /* production */
