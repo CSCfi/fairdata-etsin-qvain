@@ -26,7 +26,7 @@ from etsin_finder.qvain_light_utils import (
     edited_data_to_metax,
     check_if_data_in_user_IDA_project,
     get_encoded_access_granter,
-    get_user_ida_projects,
+    parse_user_idm_groups,
     check_dataset_creator,
     check_authentication,
 )
@@ -64,7 +64,7 @@ class ProjectFiles(Resource):
 
         """
         # Return data only if user is a member of the project
-        user_ida_projects = get_user_ida_projects() or []
+        user_ida_projects = parse_user_idm_groups() or []
         if pid in user_ida_projects:
             project_dir_obj = qvain_light_service.get_directory_for_project(pid)
         else:
@@ -173,7 +173,7 @@ class DirectoryFiles(Resource):
         dir_obj = qvain_light_service.get_directory(dir_id, params)
 
         # Return data only if user has access to project
-        user_ida_projects = get_user_ida_projects() or []
+        user_ida_projects = parse_user_idm_groups() or []
         project_identifier = dir_obj.get('project_identifier') or dir_obj.get('results', {}).get('project_identifier')
         if project_identifier not in user_ida_projects:
             log.warning('Directory not in user projects: {0}'.format(dir_id))
@@ -212,7 +212,7 @@ class FileCharacteristics(Resource):
 
         file_obj = get_file(file_id)
         project_identifier = file_obj.get('project_identifier')
-        user_ida_projects = get_user_ida_projects() or []
+        user_ida_projects = parse_user_idm_groups() or []
 
         if project_identifier not in user_ida_projects:
             log.warning('User not authenticated or does not have access to " \
