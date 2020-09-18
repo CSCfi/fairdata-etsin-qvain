@@ -56,4 +56,4 @@ def edited_data_to_metax(data, original):
     return dataset_data
 
 
-get_user_ida_projects = qvain_light_utils.get_user_ida_projects
+parse_user_idm_groups = qvain_light_utils.parse_user_idm_groups

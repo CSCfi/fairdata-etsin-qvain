@@ -22,7 +22,7 @@ from etsin_finder.qvain_light_dataset_schema_v2 import (
 )
 from etsin_finder.qvain_light_utils_v2 import (
     check_dataset_creator,
-    get_user_ida_projects
+    parse_user_idm_groups
 )
 
 from etsin_finder.common_service_v2 import (
@@ -74,7 +74,7 @@ class ProjectFiles(Resource):
                 return 'The cr_identifier parameter is required if user is not authenticated', 400
 
         # Return data if user is a member of the project, or if user can view cr_identifier
-        user_ida_projects = get_user_ida_projects() or []
+        user_ida_projects = parse_user_idm_groups() or []
 
         if cr_identifier or pid in user_ida_projects:
             resp, status = get_directory_for_project(pid, params)
@@ -199,7 +199,7 @@ class DirectoryFiles(Resource):
         if dir_obj:
             if not cr_identifier:
                 # Return data only if user has access to project
-                user_ida_projects = get_user_ida_projects() or []
+                user_ida_projects = parse_user_idm_groups() or []
                 project_identifier = dir_obj.get('project_identifier') or dir_obj.get('results', {}).get('project_identifier')
                 if project_identifier not in user_ida_projects:
                     log.warning('Directory not in user projects: {0}'.format(dir_id))

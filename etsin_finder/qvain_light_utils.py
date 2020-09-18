@@ -465,7 +465,7 @@ def edited_data_to_metax(data, original):
     }
     return clean_empty_keyvalues_from_dict(edited_data)
 
-def get_user_ida_projects():
+def parse_user_idm_groups():
     """List IDA projects for current user without the prefix.
 
     Returns:
