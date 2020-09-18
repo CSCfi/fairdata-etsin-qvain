@@ -14,10 +14,19 @@ from onelogin.saml2.auth import OneLogin_Saml2_Auth
 from etsin_finder.finder import app
 from etsin_finder.utils import executing_travis
 from etsin_finder.constants import SAML_ATTRIBUTES
-from etsin_finder.authentication_fairdata_sso import get_sso_session_details, is_authenticated_through_fairdata_sso
-from etsin_finder.authentication_direct_proxy import not_found, get_saml_auth, init_saml_auth, is_authenticated_without_fairdata_sso
+from etsin_finder.authentication_fairdata_sso import get_fairdata_sso_session_details, is_authenticated_through_fairdata_sso
+from etsin_finder.authentication_direct_proxy import get_saml_auth, init_saml_auth, is_authenticated_through_direct_proxy
 
 log = app.logger
+
+def not_found(field):
+    """Log if field not found in session samlUserdata or SSO data
+
+    Args:
+        field (string): Name of the field that was not found in either the samlUserdata or in SSO data
+
+    """
+    log.warning('User seems to be authenticated but {0} not found.'.format(field))
 
 def is_authenticated():
     """Is user authenticated. Separate check for old proxy and new Fairdata SSO
@@ -29,7 +38,7 @@ def is_authenticated():
     if executing_travis():
         return False
 
-    if is_authenticated_without_fairdata_sso():
+    if is_authenticated_through_direct_proxy():
         return True
     if is_authenticated_through_fairdata_sso():
         return True
@@ -46,13 +55,16 @@ def is_authenticated_CSC_user():
     if executing_travis():
         return False
 
-    # Old authentication (proxy)
-    if 'samlUserdata' in session and len(session.get('samlUserdata', None)) > 0 and SAML_ATTRIBUTES.get('CSC_username') in session.get('samlUserdata', None):
-        return True
+    # Authenticated through direct proxy
+    if is_authenticated_through_direct_proxy():
+        if 'samlUserdata' in session and len(session.get('samlUserdata', None)) > 0 and SAML_ATTRIBUTES.get('CSC_username') in session.get('samlUserdata', None):
+            return True
 
-    # Fairdata SSO authentication
-    if request.cookies.getlist('fd_test_csc_fi_fd_sso_username'):
-        return True
+    # Authenticated through Fairdata SSO
+    if is_authenticated_through_fairdata_sso():
+        # ToDo: account for test/stable/demo
+        if request.cookies.getlist('fd_test_csc_fi_fd_sso_username'):
+            return True
     return False
 
 def get_user_csc_name():
@@ -65,32 +77,18 @@ def get_user_csc_name():
     if not is_authenticated() or not is_authenticated_CSC_user():
         return None
 
-    # Old authentication
-    if is_authenticated_without_fairdata_sso() and 'samlUserdata' in session:
+    # Authenticated through direct proxy
+    if is_authenticated_through_direct_proxy():
         csc_name = session.get('samlUserdata', {}).get(SAML_ATTRIBUTES.get('CSC_username', None), False)
         if csc_name:
             return csc_name[0]
 
     # Authentication through Fairdata SSO proxy
     if is_authenticated_through_fairdata_sso():
+        # ToDo: account for test/stable/demo
         return request.cookies.getlist('fd_test_csc_fi_fd_sso_username')
 
     return not_found('csc_name')
-
-def get_user_haka_identifier():
-    """Get user HAKA identifier from saml userdata.
-
-    Returns:
-        string: The users HAKA identifier.
-
-    """
-    if not is_authenticated() or 'samlUserdata' not in session:
-        return None
-
-    haka_id = session.get('samlUserdata', {}).get(SAML_ATTRIBUTES.get('haka_id', None), False)
-
-    return haka_id[0] if haka_id else not_found('haka_id')
-
 
 def get_user_id():
     """Get user identifier
@@ -117,14 +115,42 @@ def get_user_email():
         string: The users email.
 
     """
-    if not is_authenticated() or not is_authenticated_CSC_user() or 'samlUserdata' not in session:
+    if not is_authenticated() or not is_authenticated_CSC_user():
         return None
 
-    csc_email = session.get('samlUserdata', {}).get(SAML_ATTRIBUTES.get('email', None), False)
+    # Authenticated through direct proxy
+    if is_authenticated_through_direct_proxy():
+        csc_email = session.get('samlUserdata', {}).get(SAML_ATTRIBUTES.get('email', None), False)
+        return csc_email[0] if csc_email else not_found('csc_email')
 
-    return csc_email[0] if csc_email else not_found('csc_email')
+    # Authenticated through Fairdata SSO
+    if is_authenticated_through_fairdata_sso():
+        session_data = get_fairdata_sso_session_details()
+        user_email = session_data.get('authenticated_user').get('email')
+        return user_email
 
+    return not_found('csc_email')
 
+def get_user_firstname():
+    """Get user first name from saml userdata.
+
+    Returns:
+        string: The users first name.
+
+    """
+    if not is_authenticated():
+        return None
+
+    # Authenticated through direct proxy
+    if is_authenticated_through_direct_proxy():
+        first_name = session.get('samlUserdata', {}).get(SAML_ATTRIBUTES.get('first_name', None), False)
+        return first_name[0] if first_name else not_found('first_name')
+
+    # Authenticated through Fairdata SSO
+    if is_authenticated_through_fairdata_sso:
+        log.info('AAAasd')
+        get_fairdata_sso_session_details()
+ 
 def get_user_lastname():
     """Get user last name from saml userdata.
 
@@ -139,26 +165,6 @@ def get_user_lastname():
 
     return lastname[0] if lastname else not_found('lastname')
 
-
-def get_user_firstname():
-    """Get user first name from saml userdata.
-
-    Returns:
-        string: The users first name.
-
-    """
-    if not is_authenticated():
-        return None
-
-    if is_authenticated_without_fairdata_sso and 'samlUserdata' in session:
-        first_name = session.get('samlUserdata', {}).get(SAML_ATTRIBUTES.get('first_name', None), False)
-        return first_name[0] if first_name else not_found('first_name')
-
-    if is_authenticated_through_fairdata_sso:
-        log.info('AAAasd')
-        get_sso_session_details()
-
-
 def get_user_ida_groups():
     """Get the Groups from CSC IdM for the user.
 
@@ -166,13 +172,22 @@ def get_user_ida_groups():
         list: List of all the IDA groups, or None.
 
     """
-    if not is_authenticated() or 'samlUserdata' not in session:
+    if not is_authenticated():
+        log.info('User not authorized -> no user ida groups retrieved')
         return None
 
-    groups = session.get('samlUserdata', {}).get(SAML_ATTRIBUTES.get('idm_groups', None), False)
+    # Authenticated through direct proxy
+    if is_authenticated_through_direct_proxy():
+        groups = session.get('samlUserdata', {}).get(SAML_ATTRIBUTES.get('idm_groups', None), False)
+        return [group for group in groups if group.startswith('IDA')] if groups else not_found('groups')
 
-    return [group for group in groups if group.startswith('IDA')] if groups else not_found('groups')
+    # Authenticated through Fairdata SSO
+    if is_authenticated_through_fairdata_sso():
+        session_data = get_fairdata_sso_session_details()
+        user_ida_groups = session_data.get('services').get('IDA').get('projects')
+        return user_ida_groups
 
+    return not_found('groups')
 
 def get_user_home_organization_id():
     """Get the HAKA organization id from the saml userdata
@@ -182,20 +197,21 @@ def get_user_home_organization_id():
 
     """
     if not is_authenticated():
+        log.info('User not authorized -> no home organization id retrieved')
         return None
 
-    # Authenicated through the old proxy
-    if is_authenticated_without_fairdata_sso() and 'samlUserdata' in session:
+    # Authenicated through direct proxy
+    if is_authenticated_through_direct_proxy():
         home_organization = session.get('samlUserdata', {}).get(SAML_ATTRIBUTES.get('haka_org_id', None), False)
-        return home_organization[0] if home_organization else not_found('home_organization')
+        return home_organization[0] if home_organization else not_found('home_organization_id')
 
     # Authenticated through Fairdata SSO
-    if is_authenticated_through_fairdata_sso:
-        # log.info(request.cookies.getlist)
-        # Todo update!
-        # return request.cookies.getlist('fd_test_csc_fi_fd_sso_<home_organization_id>')
-        return 'Placeholder'
+    if is_authenticated_through_fairdata_sso():
+        session_data = get_fairdata_sso_session_details()
+        user_home_organization_id = session_data.get('authenticated_user').get('organization').get('id')
+        return user_home_organization_id
 
+    return not_found('home_organization_id')
 
 def get_user_home_organization_name():
     """Get the HAKA organization name from the saml userdata
@@ -204,21 +220,33 @@ def get_user_home_organization_name():
         string: The name of the users home organization, or None.
 
     """
-    # log.info('get_user_home_organization_name')
     if not is_authenticated():
-        # log.info('Unfortunately, the user was not authorized.')
+        log.info('User not authorized -> no home organization name retrieved')
         return None
 
-    # Authenicated through the old proxy
-    if is_authenticated_without_fairdata_sso() and 'samlUserdata' in session:
+    # Authenicated through direct proxy
+    if is_authenticated_through_direct_proxy():
         home_organization_id = session.get('samlUserdata', {}).get(SAML_ATTRIBUTES.get('haka_org_name', None), False)
-        return home_organization_id[0] if home_organization_id else not_found('home_organization_id')
+        return home_organization_id[0] if home_organization_id else not_found('home_organization')
 
     # Authenticated through Fairdata SSO
     if is_authenticated_through_fairdata_sso():
-        # log.info(request.cookies.getlist)
-        # Todo update!
-        # return request.cookies.getlist('fd_test_csc_fi_fd_sso_<home_organization>')
-        return 'placeholder'
+        session_data = get_fairdata_sso_session_details()
+        user_home_organization_name = session_data.get('authenticated_user').get('organization').get('name')
+        return user_home_organization_name
 
-    return None
+    return not_found('home_organization')
+
+def get_user_haka_identifier():
+    """Get user HAKA identifier from saml userdata.
+
+    Returns:
+        string: The users HAKA identifier.
+
+    """
+    if not is_authenticated() or 'samlUserdata' not in session:
+        return None
+
+    haka_id = session.get('samlUserdata', {}).get(SAML_ATTRIBUTES.get('haka_id', None), False)
+
+    return haka_id[0] if haka_id else not_found('haka_id')
