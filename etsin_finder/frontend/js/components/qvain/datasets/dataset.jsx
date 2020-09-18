@@ -5,13 +5,13 @@ import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import { tint } from 'polished'
 
-import { Row, BodyCell } from '../general/table'
+import { Row, BodyCell } from '../general/card/table'
 import { DATA_CATALOG_IDENTIFIER } from '../../../utils/constants'
-import Label from '../general/label'
+import Label from '../general/card/label'
 import { TableButton, RemoveButton } from '../general/buttons'
 import TablePasState from './tablePasState'
 import formatAge from './formatAge'
-import { Dropdown, DropdownItem } from '../general/dropdown'
+import { Dropdown, DropdownItem } from '../general/input/dropdown'
 
 const datasetStateTranslation = dataset => {
   if (dataset.state === 'published') {
@@ -23,7 +23,7 @@ const datasetStateTranslation = dataset => {
   return 'qvain.datasets.state.draft'
 }
 
-const getGoToEtsinButton = dataset => {
+const getGoToEtsinButton = (dataset, getEtsinUrl) => {
   let identifier = dataset.identifier
   let goToEtsinKey = 'goToEtsin'
   if (dataset.next_draft) {
@@ -36,7 +36,7 @@ const getGoToEtsinButton = dataset => {
   return (
     <Translate
       component={TableButton}
-      onClick={() => window.open(`/dataset/${identifier}`, '_blank')}
+      onClick={() => window.open(getEtsinUrl(`/dataset/${identifier}`), '_blank')}
       content={`qvain.datasets.${goToEtsinKey}`}
     />
   )
@@ -83,7 +83,7 @@ function Dataset({
   indent,
   highlight,
 }) {
-  const { metaxApiV2 } = Stores.Env
+  const { metaxApiV2, getEtsinUrl } = Stores.Env
   const actions = []
   if (
     metaxApiV2 &&
@@ -144,7 +144,7 @@ function Dataset({
             dataset.next_draft ? 'qvain.datasets.editDraftButton' : 'qvain.datasets.editButton'
           }
         />
-        {getGoToEtsinButton(dataset)}
+        {getGoToEtsinButton(dataset, getEtsinUrl)}
         {actions.length === 1 ? (
           getActionButton(actions[0])
         ) : (

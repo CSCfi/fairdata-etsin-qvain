@@ -1,5 +1,12 @@
 import styled from 'styled-components'
-import { Container } from './card'
+import { Container } from '../card'
+
+export {
+  ValidationError,
+  ValidationErrorItem,
+  ValidationErrorList,
+  ValidationErrors,
+} from './validationError'
 
 export const ErrorContainer = styled(Container)`
   background-color: #ffebe8;

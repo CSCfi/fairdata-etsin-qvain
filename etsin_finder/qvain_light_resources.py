@@ -13,7 +13,7 @@ from flask_restful import reqparse, Resource
 
 from etsin_finder import authentication
 from etsin_finder import qvain_light_service
-from etsin_finder.finder import app
+from etsin_finder.app import app, log
 from etsin_finder.utils import \
     sort_array_of_obj_by_key, \
     slice_array_on_limit, \
@@ -33,9 +33,9 @@ from etsin_finder.qvain_light_utils import (
 from etsin_finder.log_utils import log_request
 from etsin_finder.qvain_light_service import create_dataset, update_dataset, get_dataset, delete_dataset
 
-log = app.logger
 
 TOTAL_ITEM_LIMIT = 1000
+
 
 class ProjectFiles(Resource):
     """File/directory related REST endpoints for getting project directory"""

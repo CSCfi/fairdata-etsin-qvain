@@ -7,7 +7,7 @@ import CreatableSelect from 'react-select/creatable'
 
 import getReferenceData from '../utils/getReferenceData'
 import Card from '../general/card'
-import { LabelLarge } from '../general/form'
+import { LabelLarge } from '../general/modal/form'
 import { License as LicenseConstructor } from '../../../stores/view/qvain'
 import { licenseSchema } from '../utils/formValidation'
 import {
@@ -18,7 +18,7 @@ import {
   sortOptions,
   autoSortOptions,
 } from '../utils/select'
-import { ValidationErrors } from '../general/validationError'
+import { ValidationErrors } from '../general/errors/validationError'
 
 export class License extends Component {
   promises = []

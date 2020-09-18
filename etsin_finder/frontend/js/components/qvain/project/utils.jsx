@@ -8,16 +8,12 @@ import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons'
 import styled from 'styled-components'
 
 import { getOrganizationSearchUrl } from '../../../stores/view/qvain.actors'
-import ValidationError from '../general/validationError'
+import ValidationError from '../general/errors/validationError'
 import { METAX_FAIRDATA_ROOT_URL } from '../../../utils/constants'
 
 export const ErrorMessages = ({ errors }) => {
   if (!errors.length) return null
-  return (
-    <ValidationError>
-      { errors.map(error => error) }
-    </ValidationError>
-  )
+  return <ValidationError>{errors.map(error => error)}</ValidationError>
 }
 
 ErrorMessages.propTypes = {
@@ -25,7 +21,7 @@ ErrorMessages.propTypes = {
 }
 
 ErrorMessages.defaultProps = {
-  errors: []
+  errors: [],
 }
 
 /**
@@ -86,7 +82,6 @@ export function isEmptyObject(obj = {}) {
   return Object.getOwnPropertyNames(obj).length === 0
 }
 
-
 /**
  * Convert already added and valid organization to value for select.
  * Note: We need to check if value is manually added or selected from
@@ -124,10 +119,9 @@ async function isCustomOrganization(identifier, name, parentId) {
   const response = await axios.get(url)
   if (response.status !== 200) return null
   const { hits } = response.data.hits
-  return !hits.some(hit => (
-    hit._source.uri === identifier ||
-    hit._source.label.und === nameToComparer
-  ))
+  return !hits.some(
+    hit => hit._source.uri === identifier || hit._source.label.und === nameToComparer
+  )
 }
 
 /**
@@ -143,7 +137,9 @@ export function organizationSelectValueToSchema(organization) {
  * Fetch and parse options from Metax to select values
  */
 export async function resolveOptions(referenceDataType) {
-  const response = await axios.get(`${METAX_FAIRDATA_ROOT_URL}/es/reference_data/${referenceDataType}/_search?pretty=true&size=100`)
+  const response = await axios.get(
+    `${METAX_FAIRDATA_ROOT_URL}/es/reference_data/${referenceDataType}/_search?pretty=true&size=100`
+  )
   if (response.status !== 200) return {}
   return referenceDataToOptions(response.data.hits.hits)
 }
@@ -202,9 +198,9 @@ export class Expand extends Component {
           >
             {open ? <IconStyles icon={faMinus} /> : <IconStyles icon={faPlus} />}
           </Translate>
-          { title }
+          {title}
         </Title>
-        { open ? children : null }
+        {open ? children : null}
       </Container>
     )
   }
@@ -217,7 +213,9 @@ const Container = styled.div`
 const Title = styled.div`
   display: flex;
   cursor: pointer;
-  h3 { margin: 0; }
+  h3 {
+    margin: 0;
+  }
 `
 
 const IconStyles = styled(FontAwesomeIcon)`

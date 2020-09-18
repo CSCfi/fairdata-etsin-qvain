@@ -9,10 +9,9 @@
 import datetime
 import re
 
-from etsin_finder.finder import app
+from etsin_finder.app import app, log
 from etsin_finder.constants import AGENT_TYPE
 
-log = app.logger
 
 def create_email_message_body(pref_id, user_email, user_subject, user_body):
     """Create body for an email message to be sent.

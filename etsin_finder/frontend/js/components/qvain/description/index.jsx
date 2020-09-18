@@ -8,8 +8,8 @@ import FieldOfScienceField from './fieldOfScienceField'
 import LanguageField from './languageField'
 import KeywordsField from './keywordsField'
 import { SectionTitle } from '../general/section'
-import Tooltip from '../general/tooltip'
-import { HelpIcon } from '../general/form'
+import Tooltip from '../general/section/tooltip'
+import { HelpIcon } from '../general/modal/form'
 import DescriptionInfo from './descriptionInfo'
 
 const Description = () => {

@@ -47,9 +47,9 @@ class BaseCache(FlaskService):
         try:
             self.cache.set(key, value, expire=ttl)
         except Exception as e:
-            from etsin_finder.finder import app
-            app.logger.warning("Insert to cache failed")
-            app.logger.warning(e)
+            from etsin_finder.app import log
+            log.warning("Insert to cache failed")
+            log.warning(e)
         return value
 
     def do_get(self, key):
@@ -68,9 +68,9 @@ class BaseCache(FlaskService):
         try:
             return self.cache.get(key, None)
         except Exception as e:
-            from etsin_finder.finder import app
-            app.logger.debug("Get from cache failed")
-            app.logger.debug(e)
+            from etsin_finder.app import log
+            log.debug("Get from cache failed")
+            log.debug(e)
         return None
 
 

@@ -12,9 +12,9 @@ import {
   getOptionValue,
   sortOptions,
   autoSortOptions,
-} from '../utils/select'
-import getReferenceData from '../utils/getReferenceData'
-import etsinTheme from '../../../styles/theme'
+} from '../../utils/select'
+import getReferenceData from '../../utils/getReferenceData'
+import etsinTheme from '../../../../styles/theme'
 
 class Select extends Component {
   promises = []

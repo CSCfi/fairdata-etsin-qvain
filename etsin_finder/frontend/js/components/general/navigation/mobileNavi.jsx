@@ -12,6 +12,7 @@
 
 import PropTypes from 'prop-types'
 import React from 'react'
+import { inject, observer } from 'mobx-react'
 import { NavLink } from 'react-router-dom'
 import Translate from 'react-translate-component'
 import translate from 'counterpart'
@@ -25,9 +26,11 @@ import LangToggle from './langToggle'
 import Login from './loginButton'
 import { Link } from '../button'
 import { QVAIN_URL } from '../../../utils/constants'
+import MaybeNavLink from './maybeNavLink'
 
-export default class MobileNavi extends React.Component {
+class MobileNavi extends React.Component {
   render() {
+    const { Env } = this.props.Stores
     return (
       <MobileItems>
         <DropdownMenu transparent buttonContent={<FontAwesomeIcon title="Menu" icon={faBars} size="lg" />} transparentButton>
@@ -63,13 +66,13 @@ export default class MobileNavi extends React.Component {
                 >
                   Qvain
                 </Link>
-                <QvainNavLink
+                <MaybeNavLink
                   width="50%"
                   margin="0em 0em 0.6em 0em"
-                  to="/qvain"
+                  to={Env.getQvainUrl('')}
                 >
                   Qvain Light
-                </QvainNavLink>
+                </MaybeNavLink>
               </Row>
             </DatasetCont>
             <Row>
@@ -93,6 +96,12 @@ export default class MobileNavi extends React.Component {
     )
   }
 }
+
+MobileNavi.propTypes = {
+  Stores: PropTypes.object.isRequired,
+}
+
+export default inject('Stores')(observer(MobileNavi))
 
 MobileNavi.defaultProps = {
   helpUrl: undefined,
@@ -155,8 +164,6 @@ const NavItem = styled(NavLink)`
     color: ${p => p.theme.color.primary};
   }
 `
-
-const QvainNavLink = Link.withComponent(NavLink)
 
 const CustomContainer = styled.div`
   margin: 0 auto;

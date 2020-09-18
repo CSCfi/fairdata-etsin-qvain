@@ -5,8 +5,8 @@ import Translate from 'react-translate-component'
 import t from 'counterpart'
 
 import { ProjectFunderType } from '../../../stores/view/qvain'
-import { LabelLarge, Input } from '../general/form'
-import Select from '../general/select'
+import { LabelLarge, Input } from '../general/modal/form'
+import Select from '../general/input/select'
 import { ErrorMessages } from './utils'
 
 const ProjectForm = ({ onChange, formData, readonly }) => (
@@ -63,14 +63,11 @@ const ProjectForm = ({ onChange, formData, readonly }) => (
       id="fundingIdentifier"
     />
     <ErrorMessages errors={formData.errors.fundingIdentifier} />
-    <ProjectLabel
-      htmlFor="funderType"
-      title="qvain.project.inputs.funderType.label"
-    />
+    <ProjectLabel htmlFor="funderType" title="qvain.project.inputs.funderType.label" />
     <Select
       name="funder-type"
       getter={formData.funderType || null}
-      setter={(newValue) => onChange('funderType', newValue)}
+      setter={newValue => onChange('funderType', newValue)}
       model={ProjectFunderType}
       metaxIdentifier="funder_type"
       placeholder="qvain.project.inputs.funderType.placeholder"
@@ -93,10 +90,9 @@ ProjectForm.defaultProps = {
 const ProjectLabel = ({ htmlFor, title, description, required }) => (
   <>
     <LabelLarge htmlFor={htmlFor}>
-      <Translate content={title} /> { required && '*' }
+      <Translate content={title} /> {required && '*'}
     </LabelLarge>
-    { description &&
-      <Translate component="p" content={description} /> }
+    {description && <Translate component="p" content={description} />}
   </>
 )
 

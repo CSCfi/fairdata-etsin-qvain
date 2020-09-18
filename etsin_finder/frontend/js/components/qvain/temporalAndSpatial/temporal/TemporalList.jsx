@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
-import Label from '../../general/label'
+import Label from '../../general/card/label'
 
 const TemporalList = ({ temporals, lang, remove }) => (
   <>

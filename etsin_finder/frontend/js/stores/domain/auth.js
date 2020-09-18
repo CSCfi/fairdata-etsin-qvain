@@ -60,6 +60,7 @@ class Auth {
       axios
         .get('/api/user', {
           headers: { 'content-type': 'application/json', charset: 'utf-8' },
+          withCredentials: true
         })
         .then(
           action(res => {

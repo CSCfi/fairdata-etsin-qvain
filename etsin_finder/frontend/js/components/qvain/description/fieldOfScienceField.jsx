@@ -3,10 +3,10 @@ import PropTypes from 'prop-types'
 import { inject, observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 
-import Select from '../general/select'
+import Select from '../general/input/select'
 import Card from '../general/card'
 import { FieldOfScience } from '../../../stores/view/qvain'
-import { LabelLarge } from '../general/form'
+import { LabelLarge } from '../general/modal/form'
 
 class FieldOfScienceField extends React.Component {
   static propTypes = {

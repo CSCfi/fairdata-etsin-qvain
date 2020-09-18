@@ -6,7 +6,7 @@ import Translate from 'react-translate-component'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronRight, faChevronUp } from '@fortawesome/free-solid-svg-icons'
 
-import { Row, BodyCell } from '../general/table'
+import { Row, BodyCell } from '../general/card/table'
 import Dataset from './dataset'
 
 const DatasetGroup = ({

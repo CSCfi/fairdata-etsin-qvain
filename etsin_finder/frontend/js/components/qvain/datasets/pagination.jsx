@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
-import { PaginationItem, PaginationButton, PaginationContainer } from '../general/pagination'
+import { PaginationItem, PaginationButton, PaginationContainer } from '../editor/pagination'
 
 const DatasetPagination = ({ id, page, count, limit, onChangePage }) => {
   const pageCount = Math.ceil(count / limit)

@@ -11,12 +11,16 @@ from requests import request, HTTPError
 from flask import session
 from datetime import datetime
 
-from etsin_finder.cr_service import get_catalog_record_preferred_identifier, get_catalog_record, is_rems_catalog_record
+from etsin_finder.cr_service import (
+    get_catalog_record_preferred_identifier,
+    get_catalog_record,
+    is_rems_catalog_record
+)
 from etsin_finder.app_config import get_fairdata_rems_api_config
 from etsin_finder.utils import json_or_empty, FlaskService, format_url
-from etsin_finder.finder import app
+from etsin_finder.app import app, log
 
-log = app.logger
+
 class RemsAPIService(FlaskService):
     """Rems Service"""
 

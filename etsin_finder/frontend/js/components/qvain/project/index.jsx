@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import { inject, observer } from 'mobx-react'
-import { toJS } from 'mobx';
+import { toJS } from 'mobx'
 import styled from 'styled-components'
 
 import { Project as ProjectObject } from '../../../stores/view/qvain'
@@ -10,7 +10,15 @@ import { projectSchema } from '../utils/formValidation'
 
 import { Section } from '../general/section'
 import Card from '../general/card'
-import { ButtonGroup, ButtonLabel, EditButton, ButtonContainer, CancelButton, DeleteButton, SaveButton } from '../general/buttons'
+import {
+  ButtonGroup,
+  ButtonLabel,
+  EditButton,
+  ButtonContainer,
+  CancelButton,
+  DeleteButton,
+  SaveButton,
+} from '../general/buttons'
 
 import TooltipContent from './TooltipContent'
 import ProjectForm from './ProjectForm'
@@ -25,7 +33,7 @@ const FIELD_PROPS = {
   },
   components: {
     tooltipContent: TooltipContent,
-  }
+  },
 }
 
 const INITIAL_STATE = {
@@ -78,19 +86,30 @@ class Project extends Component {
 
   onAddOrganization = organization => {
     const { organizations } = this.state
-    const oldProjectOrganizations = organizations.addedOrganizations.filter(org => org.id !== organization.id)
+    const oldProjectOrganizations = organizations.addedOrganizations.filter(
+      org => org.id !== organization.id
+    )
     const newProjectOrganizations = oldProjectOrganizations.concat([organization])
     this.setState({
-      organizations: { ...organizations, addedOrganizations: newProjectOrganizations, formData: {} }
+      organizations: {
+        ...organizations,
+        addedOrganizations: newProjectOrganizations,
+        formData: {},
+      },
     })
   }
 
   onRemoveOrganization = id => {
     const { organizations } = this.state
-    const updatedProjectOrganizations = organizations.addedOrganizations
-      .filter(organization => organization.id !== id)
+    const updatedProjectOrganizations = organizations.addedOrganizations.filter(
+      organization => organization.id !== id
+    )
     this.setState({
-      organizations: { ...organizations, addedOrganizations: updatedProjectOrganizations, formData: {} }
+      organizations: {
+        ...organizations,
+        addedOrganizations: updatedProjectOrganizations,
+        formData: {},
+      },
     })
   }
 
@@ -101,24 +120,28 @@ class Project extends Component {
 
   onAddFundingAgency = newFundingAgency => {
     const { fundingAgencies } = this.state
-    const oldFundingAgencies = fundingAgencies.addedFundingAgencies
-      .filter(agency => agency.id !== newFundingAgency.id)
+    const oldFundingAgencies = fundingAgencies.addedFundingAgencies.filter(
+      agency => agency.id !== newFundingAgency.id
+    )
     const addedFundingAgencies = oldFundingAgencies.concat([newFundingAgency])
-    this.setState({ fundingAgencies: {
-      addedFundingAgencies,
-      formData: { ...INITIAL_STATE.fundingAgencies.formData }
-    } })
+    this.setState({
+      fundingAgencies: {
+        addedFundingAgencies,
+        formData: { ...INITIAL_STATE.fundingAgencies.formData },
+      },
+    })
   }
 
   onRemoveFundingAgency = id => {
     const { fundingAgencies } = this.state
-    const addedFundingAgencies = fundingAgencies.addedFundingAgencies
-      .filter(agency => agency.id !== id)
+    const addedFundingAgencies = fundingAgencies.addedFundingAgencies.filter(
+      agency => agency.id !== id
+    )
     this.setState({
       fundingAgencies: {
         ...fundingAgencies,
         addedFundingAgencies,
-      }
+      },
     })
   }
 
@@ -128,15 +151,27 @@ class Project extends Component {
 
     // If organizations or funding agencies are present in the state,
     // we assume that those are validated already. We validate only the amount of added objects.
-    projectSchema.validate(
-      { details, organizations: organizations.addedOrganizations, fundingAgencies: fundingAgencies.addedFundingAgencies },
-      { abortEarly: false }
-    )
+    projectSchema
+      .validate(
+        {
+          details,
+          organizations: organizations.addedOrganizations,
+          fundingAgencies: fundingAgencies.addedFundingAgencies,
+        },
+        { abortEarly: false }
+      )
       .then(() => {
         const { titleEn, titleFi, identifier, fundingIdentifier, funderType } = details
         const title = { en: titleEn, fi: titleFi }
-        const project = ProjectObject(id, title, identifier, fundingIdentifier, funderType,
-          organizations.addedOrganizations, fundingAgencies.addedFundingAgencies)
+        const project = ProjectObject(
+          id,
+          title,
+          identifier,
+          fundingIdentifier,
+          funderType,
+          organizations.addedOrganizations,
+          fundingAgencies.addedFundingAgencies
+        )
         this.props.Stores.Qvain.setProject(project)
         this.resetForm()
       })
@@ -150,7 +185,10 @@ class Project extends Component {
         })
         this.setState({
           details: { ...details, errors: parsedErrors.details },
-          organizations: { ...organizations, formData: { ...organizations.formData, errors: parsedErrors.organizations } },
+          organizations: {
+            ...organizations,
+            formData: { ...organizations.formData, errors: parsedErrors.organizations },
+          },
           fundingAgencies: { ...fundingAgencies, errors: parsedErrors.fundingAgencies },
         })
       })
@@ -172,7 +210,10 @@ class Project extends Component {
       id,
       details: { ...INITIAL_STATE.details, ...details },
       organizations: { ...INITIAL_STATE.organizations, addedOrganizations: [...organizations] },
-      fundingAgencies: { ...INITIAL_STATE.fundingAgencies, addedFundingAgencies: [...fundingAgencies] },
+      fundingAgencies: {
+        ...INITIAL_STATE.fundingAgencies,
+        addedFundingAgencies: [...fundingAgencies],
+      },
       projectInEdit: true,
     })
   }
@@ -211,9 +252,7 @@ class Project extends Component {
             onRemoveOrganization={this.onRemoveOrganization}
             organizations={organizations}
           />
-          <Expand
-            title={<Translate component="h3" content="qvain.project.fundingAgency.title" />}
-          >
+          <Expand title={<Translate component="h3" content="qvain.project.fundingAgency.title" />}>
             <FundingAgency
               onChange={this.onFundingAgencyChange}
               onAdd={this.onAddFundingAgency}
@@ -255,8 +294,8 @@ const AddedProjectsComponent = ({ Stores, editProject, removeProject }) => {
         <ButtonGroup tabIndex="0" key={project.id}>
           <ButtonLabel>{renderProjectTitle(project.details)}</ButtonLabel>
           <ProjectActions disabled={readonly}>
-            <EditButton aria-label="Edit" onClick={(event) => editProject(project.id, event)} />
-            <DeleteButton aria-label="Remove" onClick={(event) => removeProject(project.id, event)} />
+            <EditButton aria-label="Edit" onClick={event => editProject(project.id, event)} />
+            <DeleteButton aria-label="Remove" onClick={event => removeProject(project.id, event)} />
           </ProjectActions>
         </ButtonGroup>
       ))}
@@ -275,7 +314,7 @@ const AddedProjects = inject('Stores')(observer(AddedProjectsComponent))
 const Actions = styled.div`
   margin-top: 1.5rem;
   button {
-    margin-right: .5rem;
+    margin-right: 0.5rem;
   }
 `
 
@@ -290,7 +329,7 @@ const ProjectActions = styled(ButtonContainer)`
       `
     }
     return null
-  }
-}`
+  }}
+`
 
 export default inject('Stores')(observer(Project))

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { inject, observer } from 'mobx-react'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
-import { FormField, Checkbox, Label, HelpField } from '../../general/form'
+import { FormField, Checkbox, Label, HelpField } from '../../general/modal/form'
 
 const RoleCheckbox = ({ Stores, role, help, disabled }) => {
   const { readonly } = Stores.Qvain

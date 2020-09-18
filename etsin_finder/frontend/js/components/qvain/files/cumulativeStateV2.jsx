@@ -6,7 +6,7 @@ import styled from 'styled-components'
 
 import { Paragraph, ContainerSubsectionBottom } from '../general/card'
 import { CUMULATIVE_STATE } from '../../../utils/constants'
-import { LabelLarge, FormField, RadioInput, Label, HelpField } from '../general/form'
+import { LabelLarge, FormField, RadioInput, Label, HelpField } from '../general/modal/form'
 import { Button } from '../../general/button'
 
 const CumulativeState = ({ Stores }) => {

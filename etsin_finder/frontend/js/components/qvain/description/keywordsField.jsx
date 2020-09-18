@@ -9,11 +9,11 @@ import counterpart from 'counterpart'
 
 import Tooltip from '../../general/tooltipHover'
 import Card from '../general/card'
-import Label from '../general/label'
+import Label from '../general/card/label'
+import ValidationError from '../general/errors/validationError'
+import { LabelLarge, Input } from '../general/modal/form'
 import { keywordsSchema } from '../utils/formValidation'
-import ValidationError from '../general/validationError'
-import { LabelLarge, Input } from '../general/form'
-import { ButtonContainer, AddNewButton } from '../general/addButton'
+import { ButtonContainer, AddNewButton } from '../general/buttons'
 
 class KeywordsField extends Component {
   static propTypes = {

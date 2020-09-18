@@ -6,7 +6,7 @@ import { faCopy, faFolder } from '@fortawesome/free-solid-svg-icons'
 import Translate from 'react-translate-component'
 import styled, { css } from 'styled-components'
 
-import Label from '../../general/label'
+import Label from '../../general/card/label'
 import {
   ButtonLabel,
   EditButton,
@@ -15,7 +15,7 @@ import {
   ButtonContainer,
   TableButton,
 } from '../../general/buttons'
-import { SelectedFilesTitle } from '../../general/form'
+import { SelectedFilesTitle } from '../../general/modal/form'
 import FileForm from './fileForm'
 import DirectoryForm from './directoryForm'
 import { randomStr } from '../../utils/fileHierarchy'

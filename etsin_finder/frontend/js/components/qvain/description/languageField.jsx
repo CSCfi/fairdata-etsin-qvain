@@ -5,10 +5,10 @@ import { inject, observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 import translate from 'counterpart'
 
-import Select from '../general/searchSelect'
+import Select from '../general/input/searchSelect'
 import { DatasetLanguage } from '../../../stores/view/qvain'
 import Card from '../general/card'
-import { LabelLarge } from '../general/form'
+import { LabelLarge } from '../general/modal/form'
 
 const LanguageField = ({ Stores }) => {
   const { datasetLanguageArray, setDatasetLanguageArray } = Stores.Qvain

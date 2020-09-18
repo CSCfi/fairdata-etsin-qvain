@@ -7,7 +7,7 @@ import DeprecatedState from './deprecatedState'
 import PasState from './pasState'
 import SubmitButtons from './submitButtons'
 import { StickySubHeaderWrapper, StickySubHeader, StickySubHeaderResponse } from '../general/card'
-import SubmitResponse from '../general/submitResponse'
+import SubmitResponse from './submitResponse'
 import {
   ButtonContainer,
   SubmitButton,

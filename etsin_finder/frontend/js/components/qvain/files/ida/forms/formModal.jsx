@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFile } from '@fortawesome/free-solid-svg-icons'
 
 import Modal from '../../../../general/modal'
-import { ConfirmClose } from '../../../general/confirmClose'
+import { ConfirmClose } from '../../../general/modal/confirmClose'
 import { TableButton } from '../../../general/buttons'
 import FileForm from './fileForm'
 import DirectoryForm from './directoryForm'

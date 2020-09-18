@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { inject, observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 
-import { Label } from '../../../general/form'
+import { Label } from '../../../general/modal/form'
 import { ActorInput, ActorError } from '../../common'
 
 class PersonInput extends Component {

@@ -9,10 +9,9 @@
 
 import requests
 
-from etsin_finder.finder import app
+from etsin_finder.app import log
 from etsin_finder.utils import json_or_text
 
-log = app.logger
 
 def make_request(request_func, *args, **kwargs):
     """

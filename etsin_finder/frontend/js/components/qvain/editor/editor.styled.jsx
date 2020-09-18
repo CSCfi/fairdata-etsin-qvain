@@ -65,18 +65,18 @@ export const LinkBack = styled(Link)`
 `
 
 export const LinkText = styled.span`
-  color: ${(props) => props.theme.color.linkColor};
+  color: ${props => props.theme.color.linkColor};
   font-size: 18px;
   padding-left: 5px;
   padding-top: 2px;
   line-height: 1;
   &:hover {
-    color: ${(props) => darken(0.1, props.theme.color.linkColor)};
+    color: ${props => darken(0.1, props.theme.color.linkColor)};
   }
 `
 
 export const CustomSubHeader = styled(StickySubHeader)`
-  background-color: ${(props) => props.theme.color.superlightgray};
+  background-color: ${props => props.theme.color.superlightgray};
   justify-content: flex-start;
 `
 export const customStyles = {

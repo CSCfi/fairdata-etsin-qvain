@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import { observer } from 'mobx-react'
-import { ButtonGroup, ButtonLabel, EditButton, DeleteButton, ButtonContainer } from './buttons'
+import { ButtonGroup, ButtonLabel, EditButton, DeleteButton, ButtonContainer } from '../buttons'
 
 const FieldList = ({ Field, lang, translationsRoot, disableNoItemsText }) => {
   const { remove, edit, storage } = Field

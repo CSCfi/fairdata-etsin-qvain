@@ -7,11 +7,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import translate from 'counterpart'
 import Card from '../general/card'
-import Label from '../general/label'
+import Label from '../general/card/label'
 import { otherIdentifiersArraySchema, otherIdentifierSchema } from '../utils/formValidation'
-import ValidationError from '../general/validationError'
-import { Input, LabelLarge } from '../general/form'
-import { ButtonContainer, AddNewButton } from '../general/addButton'
+import ValidationError from '../general/errors/validationError'
+import { Input, LabelLarge } from '../general/modal/form'
+import { ButtonContainer, AddNewButton } from '../general/buttons'
 
 const OtherIdentifierField = ({ Stores }) => {
   const {
