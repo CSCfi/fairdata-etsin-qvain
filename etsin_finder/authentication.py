@@ -185,9 +185,10 @@ def get_user_fullname():
     return not_found('home_organization_id')
 
 def get_user_ida_projects():
-    """
-    For proxy login: get IDA projects from IDM groups
-    For Fairdata SSO login: get IDA projects directly from SSO cookies
+    """Get user IDA projects in two different ways
+
+    1) For proxy login: get IDA projects from IDM groups
+    2) For Fairdata SSO login: get IDA projects directly from SSO cookies
 
     Returns:
         list: List of all the IDA groups, or None.

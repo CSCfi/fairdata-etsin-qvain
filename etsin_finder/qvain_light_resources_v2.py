@@ -28,7 +28,7 @@ from etsin_finder.qvain_light_utils_v2 import (
     remove_deleted_datasets_from_results,
     edited_data_to_metax,
     get_encoded_access_granter,
-    get_user_ida_projects
+    parse_user_idm_groups
 )
 
 from etsin_finder.qvain_light_service_v2 import (
@@ -70,7 +70,7 @@ class FileCharacteristics(Resource):
 
         file_obj = get_file(file_id)
         project_identifier = file_obj.get('project_identifier')
-        user_ida_projects = get_user_ida_projects() or []
+        user_ida_projects = parse_user_idm_groups() or []
 
         if project_identifier not in user_ida_projects:
             log.warning('User not authenticated or does not have access to project {0} for file {1}'.format(project_identifier, file_id))
@@ -336,7 +336,7 @@ class QvainDatasetFiles(Resource):
             log.warning("Invalid form data: {0}".format(err.messages))
             return err.messages, 400
 
-        ida_projects = get_user_ida_projects()
+        ida_projects = parse_user_idm_groups()
         if ida_projects is None:
             return {"IdaError": "Error in IDA group user permission or in IDA user groups."}, 403
 
