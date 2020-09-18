@@ -258,6 +258,7 @@ class FileForm extends Component {
               component={SaveButton}
               onClick={this.handleSave}
               content="qvain.common.save"
+              disabled={readonly}
             />
             <Translate
               component={EditMetadataButton}

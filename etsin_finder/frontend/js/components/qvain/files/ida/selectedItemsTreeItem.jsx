@@ -126,13 +126,14 @@ const SelectedItemsTreeItemBase = ({ treeProps, item, level, parentArgs }) => {
         component={DropdownItem}
         content={`qvain.files.selected.${itemHasMetadata ? 'editUserMetadata' : 'addUserMetadata'}`}
         onClick={() => toggleInEdit(item)}
+        disabled={readonly && !itemHasMetadata}
       />
       <Translate
         component={DropdownItem}
         content="qvain.files.selected.deleteUserMetadata"
         onClick={() => clearMetadata(item)}
         danger
-        disabled={!itemHasMetadata}
+        disabled={readonly || !itemHasMetadata}
       />
       {isFile(item) && (
         <>
@@ -146,7 +147,7 @@ const SelectedItemsTreeItemBase = ({ treeProps, item, level, parentArgs }) => {
             content="qvain.files.metadataModal.buttons.delete"
             onClick={showClearPasModal}
             danger
-            disabled={!itemHasPASMetadata}
+            disabled={readonly || !itemHasPASMetadata}
           />
         </>
       )}

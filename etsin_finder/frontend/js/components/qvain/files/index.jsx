@@ -19,6 +19,7 @@ import ClearMetadataModal from './metadataModal/clearMetadataModal'
 import SelectedItems from './ida/selectedItems'
 import LegacyFilePicker from './legacy/idaFilePicker'
 import LegacySelectedFiles from './legacy/selectedFiles'
+import FormModal from './ida/forms/formModal'
 
 class Files extends Component {
   static propTypes = {
@@ -39,6 +40,7 @@ class Files extends Component {
     if (isPas) {
       return (
         <>
+          {metaxApiV2 && <FormModal />}
           <ContainerSubsectionBottom>
             <SelectedItemsComponent />
           </ContainerSubsectionBottom>
