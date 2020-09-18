@@ -31,7 +31,14 @@ from etsin_finder.qvain_light_utils import (
     check_authentication,
 )
 from etsin_finder.log_utils import log_request
-from etsin_finder.qvain_light_service import create_dataset, update_dataset, get_dataset, delete_dataset
+from etsin_finder.qvain_light_service import (
+    create_dataset,
+    update_dataset,
+    get_dataset,
+    delete_dataset,
+    get_file,
+    patch_file
+)
 
 
 TOTAL_ITEM_LIMIT = 1000
@@ -51,7 +58,8 @@ class ProjectFiles(Resource):
             pid (str): Identifier.
 
         Returns:
-            tuple: A response with the payload in the first slot and the status code in the second.
+            tuple: A response with the payload in the first
+            slot and the status code in the second.
 
         """
         # Return data only if user is a member of the project
@@ -63,14 +71,20 @@ class ProjectFiles(Resource):
 
         if project_dir_obj:
             # Sort the items
-            sort_array_of_obj_by_key(project_dir_obj.get('directories', []), 'directory_name')
-            sort_array_of_obj_by_key(project_dir_obj.get('files', []), 'file_name')
+            sort_array_of_obj_by_key(project_dir_obj.get('directories', []),
+                                     'directory_name')
+            sort_array_of_obj_by_key(project_dir_obj.get('files', []),
+                                     'file_name')
 
             # Limit the amount of items to be sent to the frontend
             if 'directories' in project_dir_obj:
-                project_dir_obj['directories'] = slice_array_on_limit(project_dir_obj.get('directories', []), TOTAL_ITEM_LIMIT)
+                project_dir_obj['directories'] = slice_array_on_limit(
+                    project_dir_obj.get('directories', []),
+                    TOTAL_ITEM_LIMIT)
             if 'files' in project_dir_obj:
-                project_dir_obj['files'] = slice_array_on_limit(project_dir_obj.get('files', []), TOTAL_ITEM_LIMIT)
+                project_dir_obj['files'] = slice_array_on_limit(
+                    project_dir_obj.get('files', []),
+                    TOTAL_ITEM_LIMIT)
 
             return project_dir_obj, 200
         log.warning('User is missing project or project_dir_obj is invalid\npid: {0}'.format(pid))
@@ -140,7 +154,7 @@ class DirectoryFiles(Resource):
             ])
 
         params = {
-            'include_parent': 'true' # always include parent so we can check the parent directory project_identifier
+            'include_parent': 'true'  # always include parent so we can check the parent directory project_identifier
         }
         if cr_identifier:
             params['cr_identifier'] = cr_identifier
@@ -182,8 +196,7 @@ class FileCharacteristics(Resource):
         """Setup arguments"""
         self.parser = reqparse.RequestParser()
 
-    @log_request
-    def patch(self, file_id):
+    def _update_characteristics(self, file_id, replace=False):
         """Update file_characteristics of a file.
 
         Args:
@@ -196,13 +209,15 @@ class FileCharacteristics(Resource):
         if request.content_type != 'application/json':
             return 'Expected content-type application/json', 403
 
-        file_obj = qvain_light_service.get_file(file_id)
+        file_obj = get_file(file_id)
         project_identifier = file_obj.get('project_identifier')
         user_ida_projects = get_user_ida_projects() or []
 
         if project_identifier not in user_ida_projects:
-            log.warning('User not authenticated or does not have access to project {0} for file {1}'.format(project_identifier, file_id))
-            return 'Project missing from user or user is not authenticated', 403
+            log.warning('User not authenticated or does not have access to " \
+                "project {0} for file {1}'.format(project_identifier, file_id))
+            return 'Project missing from user or user " \
+                "is not authenticated', 403
 
         try:
             new_characteristics = request.json
@@ -214,12 +229,18 @@ class FileCharacteristics(Resource):
         # Make sure that only fields specified here are changed
         allowed_fields = {
             "file_format", "format_version", "encoding",
-            "csv_delimiter", "csv_record_separator", "csv_quoting_char", "csv_has_header"
+            "csv_delimiter", "csv_record_separator",
+            "csv_quoting_char", "csv_has_header"
         }
         for key, value in new_characteristics.items():
-            if (key not in characteristics) or (characteristics.get(key) != value):
+            if (key not in characteristics) or (characteristics[key] != value):
                 if key not in allowed_fields:
                     return "Changing field {} is not allowed".format(key), 400
+
+        if replace:
+            for key in allowed_fields:
+                if key in characteristics:
+                    del characteristics[key]
 
         # Update file_characteristics with new values
         characteristics.update(new_characteristics)
@@ -227,7 +248,17 @@ class FileCharacteristics(Resource):
             'file_characteristics': characteristics
         }
 
-        return qvain_light_service.patch_file(file_id, data)
+        return patch_file(file_id, data)
+
+    @log_request
+    def put(self, file_id):
+        """Replace file_characteristics with supplied values."""
+        return self._update_characteristics(file_id, replace=True)
+
+    @log_request
+    def patch(self, file_id):
+        """Update file_characteristics with supplied values."""
+        return self._update_characteristics(file_id)
 
 
 class QvainDatasets(Resource):
