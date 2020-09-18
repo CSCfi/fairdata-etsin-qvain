@@ -759,9 +759,6 @@ class Qvain {
     // Related Resources
     this.RelatedResources.fromBackend(researchDataset.relation)
 
-    // Provenances
-    this.Provenances.fromBackend(researchDataset.provenance, this)
-
     // Keywords
     this.keywordsArray = researchDataset.keyword || []
 
@@ -808,6 +805,10 @@ class Qvain {
 
     // load actors
     this.Actors.editDataset(researchDataset)
+
+    // Provenances
+    // cannot be called before actors
+    this.Provenances.fromBackend(researchDataset.provenance, this)
 
     // Load data catalog
     this.dataCatalog =
