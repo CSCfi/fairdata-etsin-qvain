@@ -303,6 +303,7 @@ class User(Resource):
         csc_user = authentication.get_user_csc_name()
         first_name = authentication.get_user_firstname()
         last_name = authentication.get_user_lastname()
+        full_name = authentication.get_user_fullname()
         groups = authentication.get_user_ida_groups()
         user_info['user_ida_groups'] = groups
 
@@ -318,6 +319,8 @@ class User(Resource):
         if first_name and last_name:
             user_info['first_name'] = first_name
             user_info['last_name'] = last_name
+        if full_name:
+            user_info['full_name'] = full_name
 
         return user_info, 200
 

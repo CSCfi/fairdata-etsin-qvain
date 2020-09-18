@@ -69,6 +69,7 @@ class Auth {
               name: res.data.user_csc_name,
               firstName: res.data.first_name,
               lastName: res.data.last_name,
+              fullName: res.data.full_name,
               loggedIn: res.data.is_authenticated,
               homeOrganizationName: res.data.home_organization_name,
               idaGroups: res.data.user_ida_groups,

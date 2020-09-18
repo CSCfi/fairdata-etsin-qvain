@@ -109,7 +109,7 @@ def get_user_id():
 
 
 def get_user_email():
-    """Get user email from saml userdata.
+    """Get user email from SAML userdata.
 
     Returns:
         string: The users email.
@@ -132,7 +132,7 @@ def get_user_email():
     return not_found('csc_email')
 
 def get_user_firstname():
-    """Get user first name from saml userdata.
+    """Get user first name from SAML userdata.
 
     Returns:
         string: The users first name.
@@ -144,26 +144,45 @@ def get_user_firstname():
     # Authenticated through direct proxy
     if is_authenticated_through_direct_proxy():
         first_name = session.get('samlUserdata', {}).get(SAML_ATTRIBUTES.get('first_name', None), False)
-        return first_name[0] if first_name else not_found('first_name')
+        if first_name:
+            return first_name[0]
 
-    # Authenticated through Fairdata SSO
-    if is_authenticated_through_fairdata_sso:
-        log.info('AAAasd')
-        get_fairdata_sso_session_details()
+    return not_found('firstname')
 
 def get_user_lastname():
-    """Get user last name from saml userdata.
+    """Get user last name from SAML userdata.
 
     Returns:
         string: The users last name.
 
     """
-    if not is_authenticated() or 'samlUserdata' not in session:
+    if not is_authenticated():
         return None
 
-    lastname = session.get('samlUserdata', {}).get(SAML_ATTRIBUTES.get('last_name', None), False)
+    # Authenticated through direct proxy
+    if is_authenticated_through_direct_proxy():
+        lastname = session.get('samlUserdata', {}).get(SAML_ATTRIBUTES.get('last_name', None), False)
+        if last_name:
+            return lastname[0]
+    return not_found('lastname')
 
-    return lastname[0] if lastname else not_found('lastname')
+def get_user_fullname():
+    """Get user full name from Fairdata SSO
+
+    Returns:
+        string: The users full name.
+
+    """
+    if not is_authenticated():
+        return None
+
+    # Authenticated through Fairdata SSO
+    if is_authenticated_through_fairdata_sso():
+        session_data = get_fairdata_sso_session_details()
+        user_full_name = session_data.get('authenticated_user').get('name')
+        return user_full_name
+
+    return not_found('home_organization_id')
 
 def get_user_ida_groups():
     """Get the Groups from CSC IdM for the user.
