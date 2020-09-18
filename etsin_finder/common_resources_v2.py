@@ -13,7 +13,7 @@ from flask_restful import reqparse, Resource
 
 from etsin_finder import authentication
 from etsin_finder import authorization
-from etsin_finder.app import app
+from etsin_finder.app import log
 from etsin_finder.utils import \
     sort_array_of_obj_by_key, \
     slice_array_on_limit
@@ -35,9 +35,9 @@ from etsin_finder.common_service_v2 import (
 
 from etsin_finder.log_utils import log_request
 
-log = app.logger
 
 TOTAL_ITEM_LIMIT = 1000
+
 
 class ProjectFiles(Resource):
     """File/directory related REST endpoints for getting project directory"""

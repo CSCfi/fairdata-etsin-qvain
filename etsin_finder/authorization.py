@@ -17,12 +17,10 @@ from etsin_finder.cr_service import (
     is_catalog_record_owner
 )
 
-from etsin_finder.app import app
+from etsin_finder.app import app, log
 from etsin_finder import rems_service
 from etsin_finder.utils import tz_now_is_later_than_timestamp_str, remove_keys_recursively, leave_keys_in_dict
 from etsin_finder.constants import ACCESS_TYPES, DATA_CATALOG_IDENTIFIERS
-
-log = app.logger
 
 
 def user_can_view_dataset(cr_id):
