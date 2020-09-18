@@ -15,13 +15,13 @@ from etsin_finder.authentication import \
     is_authenticated
 from etsin_finder.authentication_direct_proxy import \
     get_saml_auth, \
-    is_authenticated_without_fairdata_sso, \
+    is_authenticated_through_direct_proxy, \
     init_saml_auth, \
     prepare_flask_request_for_saml, \
     reset_flask_session_on_login
 from etsin_finder.authentication_fairdata_sso import \
     is_authenticated_through_fairdata_sso, \
-    convert_sso_data_to_saml_format
+    log_sso_values
 from etsin_finder.finder import app
 
 log = app.logger
@@ -92,12 +92,10 @@ def _render_index_template(saml_errors=[], slo_success=False):
     """
     is_auth = is_authenticated()
     if is_auth:
-        saml_attributes = {}
-        if is_authenticated_without_fairdata_sso():
-            saml_attributes = session.get('samlUserdata').items()
+        if is_authenticated_through_direct_proxy():
+            log.info(session.get('samlUserdata').items())
         if is_authenticated_through_fairdata_sso():
-            saml_attributes = convert_sso_data_to_saml_format()
-        log.info(saml_attributes)
+            log_sso_values()
     return render_template('index.html')
 
 

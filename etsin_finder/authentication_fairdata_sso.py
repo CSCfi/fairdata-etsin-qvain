@@ -15,11 +15,16 @@ from etsin_finder.finder import app
 
 log = app.logger
 
-def get_sso_session_details():
-    """Get sso details for the session"""
+def get_fairdata_sso_session_details():
+    """Get sso details for the session
+    
+    Returns
+        session_data(list): Converted list of details found in Fairdata SSO session data
+    """
+    # To do: account for test/stable/demo
     session_data_string = request.cookies.getlist('fd_test_csc_fi_fd_sso_session')
     session_data = json.loads(base64.b64decode(session_data_string[0]))
-    log.info(session_data)
+    return session_data
 
 def is_authenticated_through_fairdata_sso():
     """Is user authenticated through the new Fairdata single-sign on login
@@ -32,25 +37,7 @@ def is_authenticated_through_fairdata_sso():
         return True
     return False
 
-def convert_sso_data_to_saml_format():
-    """Convert details from SSO login to SAML attributes
-
-    Returns:
-        list: ...
-
-    """
-    session_data_string = request.cookies.getlist('fd_test_csc_fi_fd_sso_session')
-    session_data = json.loads(base64.b64decode(session_data_string[0]))
-    log.info(session_data)
-
-    # ToDo: retrieve for each field in authentication.py
-    object_to_return = {
-        'urn:oid:0.9.2342.19200300.100.1.3': [session_data.get('authenticated_user').get('email')],
-        'urn:oid:1.3.6.1.4.1.16161.4.0.53': [session_data.get('authenticated_user').get('id')],
-        'urn:oid:1.3.6.1.4.1.16161.4.0.88': [session_data.get('authenticated_user').get('organization').get('name')],
-        'urn:oid:1.3.6.1.4.1.25178.1.2.9': [session_data.get('authenticated_user').get('organization').get('id')],
-        'urn:oid:1.3.6.1.4.1.8057.2.80.26': ['_platform01:_projectName'],
-        'urn:oid:2.5.4.4': ['first'],
-        'urn:oid:2.5.4.42': ['last']
-    }
-    return object_to_return
+def log_sso_values():
+    """Log SSO values for the Fairdata session"""
+    log.info(request.cookies)
+    log.info(get_fairdata_sso_session_details())
