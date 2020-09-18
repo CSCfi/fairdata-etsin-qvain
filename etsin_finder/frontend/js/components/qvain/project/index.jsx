@@ -195,7 +195,6 @@ class Project extends Component {
   }
 
   editProject = (id, event) => {
-    if (this.props.Stores.Qvain.readonly) return
     if (event) event.preventDefault()
     const project = toJS(this.props.Stores.Qvain.projects.find(proj => proj.id === id))
     if (!project) return
@@ -270,6 +269,7 @@ class Project extends Component {
               component={SaveButton}
               onClick={this.handleAddProject}
               content={projectInEdit ? 'qvain.project.editButton' : 'qvain.project.addButton'}
+              disabled={readonly}
             />
           </Actions>
         </Card>
@@ -288,19 +288,17 @@ const AddedProjectsComponent = ({ Stores, editProject, removeProject }) => {
     return [en, fi].filter(title => title).join(', ')
   }
 
-  return (
-    <>
-      {projects.map(project => (
-        <ButtonGroup tabIndex="0" key={project.id}>
-          <ButtonLabel>{renderProjectTitle(project.details)}</ButtonLabel>
-          <ProjectActions disabled={readonly}>
-            <EditButton aria-label="Edit" onClick={event => editProject(project.id, event)} />
-            <DeleteButton aria-label="Remove" onClick={event => removeProject(project.id, event)} />
-          </ProjectActions>
-        </ButtonGroup>
-      ))}
-    </>
-  )
+  return projects.map(project => (
+    <ButtonGroup tabIndex="0" key={project.id}>
+      <ButtonLabel>{renderProjectTitle(project.details)}</ButtonLabel>
+      <ProjectActions>
+        <EditButton aria-label="Edit" onClick={event => editProject(project.id, event)} />
+        {!readonly && (
+          <DeleteButton aria-label="Remove" onClick={event => removeProject(project.id, event)} />
+        )}
+      </ProjectActions>
+    </ButtonGroup>
+  ))
 }
 
 AddedProjectsComponent.propTypes = {
@@ -318,18 +316,6 @@ const Actions = styled.div`
   }
 `
 
-const ProjectActions = styled(ButtonContainer)`
-  ${({ disabled }) => {
-    if (disabled) {
-      return `
-        button {
-          opacity: .7;
-          cursor: not-allowed;
-        }
-      `
-    }
-    return null
-  }}
-`
+const ProjectActions = styled(ButtonContainer)``
 
 export default inject('Stores')(observer(Project))

@@ -253,7 +253,12 @@ class FileForm extends Component {
             onClick={this.handleCancel}
             content="qvain.common.cancel"
           />
-          <Translate component={SaveButton} onClick={this.handleSave} content="qvain.common.save" />
+          <Translate
+            component={SaveButton}
+            disabled={readonly}
+            onClick={this.handleSave}
+            content="qvain.common.save"
+          />
         </Buttons>
       </FileContainer>
     )
