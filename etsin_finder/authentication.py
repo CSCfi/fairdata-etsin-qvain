@@ -68,7 +68,7 @@ def is_authenticated_CSC_user():
     return False
 
 def get_user_csc_name():
-    """Get user csc name from saml userdata.
+    """Get user csc name from SAML userdata or Fairdata SSO
 
     Returns:
         string: The users CSC username.
@@ -86,7 +86,7 @@ def get_user_csc_name():
     # Authentication through Fairdata SSO proxy
     if is_authenticated_through_fairdata_sso():
         # ToDo: account for test/stable/demo
-        return request.cookies.getlist('fd_test_csc_fi_fd_sso_username')
+        return request.cookies.getlist('fd_test_csc_fi_fd_sso_username')[0]
 
     return not_found('csc_name')
 
