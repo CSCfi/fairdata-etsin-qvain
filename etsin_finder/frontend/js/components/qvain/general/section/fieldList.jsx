@@ -2,10 +2,11 @@ import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
+import { observer } from 'mobx-react'
 import { ButtonGroup, ButtonLabel, EditButton, DeleteButton, ButtonContainer } from '../buttons'
 
 const FieldList = ({ Field, lang, translationsRoot, elements, disableNoItemsText }) => {
-  const { remove, edit } = Field
+  const { remove, edit, readonly } = Field
 
   if (!elements.length) {
     if (disableNoItemsText) return null
@@ -21,12 +22,14 @@ const FieldList = ({ Field, lang, translationsRoot, elements, disableNoItemsText
           onClick={() => edit(item.uiid)}
           attributes={{ 'aria-label': 'qvain.general.buttons.edit' }}
         />
-        <Translate
-          component={DeleteButton}
-          type="button"
-          onClick={() => remove(item.uiid)}
-          attribute={{ 'aria-label': 'qvain.general.buttons.remove' }}
-        />
+        {!readonly && (
+          <Translate
+            component={DeleteButton}
+            type="button"
+            onClick={() => remove(item.uiid)}
+            attribute={{ 'aria-label': 'qvain.general.buttons.remove' }}
+          />
+        )}
       </ButtonContainer>
     </FieldListContainer>
   ))
@@ -60,4 +63,4 @@ const Label = styled(ButtonLabel)`
   word-break: break-word;
 `
 
-export default FieldList
+export default observer(FieldList)

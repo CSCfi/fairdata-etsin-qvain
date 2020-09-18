@@ -5,22 +5,22 @@ import Field from '../../general/section/field'
 import SpatialFieldContent from './SpatialFieldContent'
 
 const brief = {
-    title: 'qvain.temporalAndSpatial.spatial.title',
-    description: 'qvain.temporalAndSpatial.spatial.description',
+  title: 'qvain.temporalAndSpatial.spatial.title',
+  description: 'qvain.temporalAndSpatial.spatial.description',
 }
 
 const Spatial = ({ Stores }) => {
   const Store = Stores.Qvain
   const { lang } = Stores.Locale
-     return (
-       <Field brief={brief}>
-         <SpatialFieldContent Store={Store} lang={lang} />
-       </Field>
-     )
+  return (
+    <Field brief={brief}>
+      <SpatialFieldContent Store={Store} lang={lang} />
+    </Field>
+  )
 }
 
 Spatial.propTypes = {
-  Stores: PropTypes.PropTypes.object.isRequired
+  Stores: PropTypes.PropTypes.object.isRequired,
 }
 
 export default inject('Stores')(observer(Spatial))

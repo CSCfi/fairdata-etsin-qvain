@@ -8,7 +8,7 @@ import { DATA_CATALOG_IDENTIFIER } from '../../../utils/constants'
 import { Checkbox, HelpField } from '../general/modal/form'
 
 function DoiSelection(props) {
-  const { dataCatalog, original, useDoi, setUseDoi } = props.Stores.Qvain
+  const { dataCatalog, original, useDoi, setUseDoi, readonly } = props.Stores.Qvain
   const isNewDraft = original && original.state === 'draft' && !original.draft_of
   const canSelectDoi = (!original || isNewDraft) && dataCatalog === DATA_CATALOG_IDENTIFIER.IDA
 
@@ -26,7 +26,7 @@ function DoiSelection(props) {
         <DoiCheckbox
           id="doiSelector"
           onChange={handleDoiCheckboxChange}
-          disabled={original !== undefined && !isNewDraft}
+          disabled={readonly || (original !== undefined && !isNewDraft)}
           checked={useDoi}
         />
         <DoiLabel htmlFor="doiSelector">

@@ -133,6 +133,7 @@ export class DirectoryFormBase extends Component {
   }
 
   render() {
+    const { readonly } = this.props.Stores.Qvain
     const { titleError, descriptionError, directoryError, useCategoryError } = this.state
     return (
       <Fragment>
@@ -143,6 +144,7 @@ export class DirectoryFormBase extends Component {
           <Translate
             component={Input}
             value={this.state.title}
+            disabled={readonly}
             onChange={event =>
               this.setState({
                 title: event.target.value,
@@ -157,6 +159,7 @@ export class DirectoryFormBase extends Component {
           </Label>
           <Translate
             component={Textarea}
+            disabled={readonly}
             value={this.state.description}
             onChange={event => this.setState({ description: event.target.value })}
             onBlur={this.handleDescriptionBlur}
@@ -168,6 +171,7 @@ export class DirectoryFormBase extends Component {
           </Label>
           <Translate
             component={CustomSelect}
+            disabled={readonly}
             value={this.state.useCategory}
             options={
               this.props.Stores.Locale.lang === 'en'
@@ -188,6 +192,7 @@ export class DirectoryFormBase extends Component {
             />
             <Translate
               component={SaveButton}
+              disabled={readonly}
               onClick={this.handleSave}
               content="qvain.common.save"
             />

@@ -1,4 +1,4 @@
-import { observable, action, toJS } from 'mobx'
+import { observable, computed, action, toJS } from 'mobx'
 import cloneDeep from 'lodash.clonedeep'
 
 class Field {
@@ -6,8 +6,12 @@ class Field {
     this.Parent = Parent
     this.Template = Template
     this.fieldName = fieldName
-    this.readonly = Parent.readonly
     this.references = references
+  }
+
+  @computed
+  get readonly() {
+    return this.Parent.readonly
   }
 
   @observable hasChanged

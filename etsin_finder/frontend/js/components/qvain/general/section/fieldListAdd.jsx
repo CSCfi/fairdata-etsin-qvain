@@ -74,11 +74,15 @@ const FieldListAdd = ({
         }}
       </Observer>
       {!hideButton && (
-        <ButtonContainer position={position}>
-          <AddNewButton type="button" onClick={open}>
-            <Translate content={`${translationsRoot}.modal.addButton`} />
-          </AddNewButton>
-        </ButtonContainer>
+        <Observer>
+          {() => (
+            <ButtonContainer position={position}>
+              <AddNewButton type="button" onClick={open} disabled={Field.readonly}>
+                <Translate content={`${translationsRoot}.modal.addButton`} />
+              </AddNewButton>
+            </ButtonContainer>
+          )}
+        </Observer>
       )}
     </>
   )
@@ -107,8 +111,11 @@ FieldListAdd.defaultProps = {
 
 const ButtonContainer = styled.div`
   text-align: ${props => props.position};
-  margin-top: 1.25rem;
+  margin-top: 0.25rem;
   margin-bottom: 0;
+  > button {
+    margin: 0;
+  }
 `
 const AddNewButton = styled(Button)`
   margin: 0;

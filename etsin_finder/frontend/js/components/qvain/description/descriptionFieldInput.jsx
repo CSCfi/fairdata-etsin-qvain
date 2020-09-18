@@ -46,7 +46,7 @@ class DescriptionFieldInput extends Component {
     return lang === 'fi' ? `${stub}placeholderFi` : `${stub}placeholderEn`
   }
 
-  render = () => {
+  render() {
     const { propName, activeLang } = this.props
     const { readonly } = this.props.Stores.Qvain
     const value = this.props.Stores.Qvain[propName] || {}
