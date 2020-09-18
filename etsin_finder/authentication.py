@@ -150,7 +150,7 @@ def get_user_firstname():
     if is_authenticated_through_fairdata_sso:
         log.info('AAAasd')
         get_fairdata_sso_session_details()
- 
+
 def get_user_lastname():
     """Get user last name from saml userdata.
 

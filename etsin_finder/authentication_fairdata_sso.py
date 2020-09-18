@@ -17,9 +17,10 @@ log = app.logger
 
 def get_fairdata_sso_session_details():
     """Get sso details for the session
-    
+
     Returns
         session_data(list): Converted list of details found in Fairdata SSO session data
+
     """
     # To do: account for test/stable/demo
     session_data_string = request.cookies.getlist('fd_test_csc_fi_fd_sso_session')
