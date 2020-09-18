@@ -7,7 +7,7 @@ import { Input, Label } from './form'
 import ValidationError from '../errors/validationError'
 
 const ModalInput = ({ Field, translationsRoot, datum, handleBlur, type, error, isRequired }) => {
-  const { changeAttribute, readonly } = Field
+  const { changeAttribute } = Field
   const translations = {
     label: `${translationsRoot}.modal.${datum}Input.label`,
     placeholder: `${translationsRoot}.modal.${datum}Input.placeholder`,
@@ -26,7 +26,7 @@ const ModalInput = ({ Field, translationsRoot, datum, handleBlur, type, error, i
             id={`${datum}Field`}
             autoFocus
             attributes={{ placeholder: translations.placeholder }}
-            disabled={readonly}
+            disabled={Field.readonly}
             value={Field.inEdit[datum] || ''}
             onChange={event => changeAttribute(datum, event.target.value)}
             onBlur={() => handleBlur()}

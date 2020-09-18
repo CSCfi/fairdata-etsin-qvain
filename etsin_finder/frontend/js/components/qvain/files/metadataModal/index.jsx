@@ -525,6 +525,7 @@ const ResponseOverlay = styled.div`
 
 export const AutoWidthTableButton = styled(TableButton)`
   width: auto;
+  max-width: none;
 `
 
 export default inject('Stores')(observer(MetadataModal))
