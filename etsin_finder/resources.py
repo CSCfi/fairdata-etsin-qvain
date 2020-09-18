@@ -304,8 +304,8 @@ class User(Resource):
         first_name = authentication.get_user_firstname()
         last_name = authentication.get_user_lastname()
         full_name = authentication.get_user_fullname()
-        groups = authentication.get_user_ida_groups()
-        user_info['user_ida_groups'] = groups
+        groups = authentication.get_user_ida_projects()
+        user_info['user_ida_projects'] = groups
 
         is_using_rems_response = get_fairdata_rems_api_config(app.testing)
         is_using_rems = False

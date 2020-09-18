@@ -26,7 +26,7 @@ class Auth {
     lastName: undefined,
     loggedIn: false,
     homeOrganizationName: undefined,
-    idaGroups: [],
+    idaProjects: [],
     isUsingRems: undefined,
   }
 
@@ -38,7 +38,7 @@ class Auth {
       lastName: undefined,
       loggedIn: false,
       homeOrganizationName: undefined,
-      idaGroups: [],
+      idaProjects: [],
       isUsingRems: undefined,
     }
   }
@@ -72,7 +72,7 @@ class Auth {
               fullName: res.data.full_name,
               loggedIn: res.data.is_authenticated,
               homeOrganizationName: res.data.home_organization_name,
-              idaGroups: res.data.user_ida_groups,
+              idaProjects: res.data.user_ida_projects,
               isUsingRems: res.data.is_using_rems,
             }
 

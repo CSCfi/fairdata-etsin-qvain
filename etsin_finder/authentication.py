@@ -162,7 +162,7 @@ def get_user_lastname():
     # Authenticated through direct proxy
     if is_authenticated_through_direct_proxy():
         lastname = session.get('samlUserdata', {}).get(SAML_ATTRIBUTES.get('last_name', None), False)
-        if last_name:
+        if lastname:
             return lastname[0]
     return not_found('lastname')
 
@@ -184,8 +184,10 @@ def get_user_fullname():
 
     return not_found('home_organization_id')
 
-def get_user_ida_groups():
-    """Get the Groups from CSC IdM for the user.
+def get_user_ida_projects():
+    """
+    For proxy login: get IDA projects from IDM groups
+    For Fairdata SSO login: get IDA projects directly from SSO cookies
 
     Returns:
         list: List of all the IDA groups, or None.
@@ -198,15 +200,15 @@ def get_user_ida_groups():
     # Authenticated through direct proxy
     if is_authenticated_through_direct_proxy():
         groups = session.get('samlUserdata', {}).get(SAML_ATTRIBUTES.get('idm_groups', None), False)
-        return [group for group in groups if group.startswith('IDA')] if groups else not_found('groups')
+        return [group for group in groups if group.startswith('IDA')] if groups else not_found('ida_projects')
 
     # Authenticated through Fairdata SSO
     if is_authenticated_through_fairdata_sso():
         session_data = get_fairdata_sso_session_details()
-        user_ida_groups = session_data.get('services').get('IDA').get('projects')
-        return user_ida_groups
+        user_ida_projects = session_data.get('services').get('IDA').get('projects')
+        return user_ida_projects
 
-    return not_found('groups')
+    return not_found('ida_projects')
 
 def get_user_home_organization_id():
     """Get the HAKA organization id from the saml userdata

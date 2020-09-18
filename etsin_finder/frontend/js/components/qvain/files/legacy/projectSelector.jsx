@@ -15,9 +15,9 @@ export class ProjectSelectorBase extends Component {
   }
 
   getOptions() {
-    // IDA groups found, so populate the IDA project dropdown
-    if (this.props.Stores.Auth.user.idaGroups) {
-      return this.props.Stores.Auth.user.idaGroups
+    // IDA projects found, so populate the IDA project dropdown
+    if (this.props.Stores.Auth.user.idaProjects) {
+      return this.props.Stores.Auth.user.idaProjects
         .filter(group => group.includes('IDA'))
         .map(group => group.substring(
           group.indexOf(':') + 1,

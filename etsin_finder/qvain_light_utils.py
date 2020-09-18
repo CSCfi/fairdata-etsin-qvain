@@ -11,7 +11,7 @@ from etsin_finder.cr_service import (
 )
 from etsin_finder.finder import app
 from etsin_finder.authentication import (
-    get_user_ida_groups, get_user_csc_name, get_user_email, get_user_firstname, get_user_lastname,
+    get_user_ida_projects, get_user_csc_name, get_user_email, get_user_firstname, get_user_lastname,
     is_authenticated
 )
 
@@ -472,13 +472,13 @@ def get_user_ida_projects():
         list(str): List of projects.
 
     """
-    user_ida_groups = get_user_ida_groups()
-    if user_ida_groups is None:
+    user_ida_projects = get_user_ida_projects()
+    if user_ida_projects is None:
         log.error('Could not get user IDA projects.\n')
         return None
 
     try:
-        return [project.split(":")[1] for project in user_ida_groups]
+        return [project.split(":")[1] for project in user_ida_projects]
     except IndexError as e:
         log.error('Index error while parsing user IDA projects:\n{0}'.format(e))
         return None
@@ -494,7 +494,7 @@ def check_if_data_in_user_IDA_project(data):
         bool: True if data belongs to user, and False is not.
 
     """
-    user_ida_projects = get_user_ida_groups()
+    user_ida_projects = get_user_ida_projects()
 
     # If user_ida_projects do not exist, there cannot be any data permission violations, so return True in this case
     if user_ida_projects is None:
