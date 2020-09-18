@@ -14,11 +14,8 @@ from etsin_finder.qvain_light_service import (
     refresh_directory_content,
     fix_deprecated_dataset
 )
-from etsin_finder.app import app
 from etsin_finder.qvain_light_utils import check_dataset_creator
 from etsin_finder.log_utils import log_request
-
-log = app.logger
 
 
 class QvainDatasetChangeCumulativeState(Resource):

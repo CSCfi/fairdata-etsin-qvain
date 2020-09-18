@@ -18,9 +18,7 @@ from etsin_finder.cr_service import (
 )
 from etsin_finder.app_config import get_fairdata_rems_api_config
 from etsin_finder.utils import json_or_empty, FlaskService, format_url
-from etsin_finder.app import app
-
-log = app.logger
+from etsin_finder.app import app, log
 
 
 class RemsAPIService(FlaskService):
