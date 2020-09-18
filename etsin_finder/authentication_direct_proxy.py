@@ -17,17 +17,6 @@ from etsin_finder.constants import SAML_ATTRIBUTES
 
 log = app.logger
 
-def not_found(field):
-    """Log if field not found in session samlUserdata
-
-    Args:
-        field (string): Name of the field that was not found in samlUserdata.
-
-    """
-    log.warning('User seems to be authenticated but {0} not in session object.'.format(field))
-    log.debug('Saml userdata:\n{0}'.format(session.get('samlUserdata', None)))
-
-
 def get_saml_auth(flask_request):
     """Get saml auth
 
@@ -53,7 +42,7 @@ def init_saml_auth(saml_prepared_flask_request):
     """
     return OneLogin_Saml2_Auth(saml_prepared_flask_request, custom_base_path=app.config.get('SAML_PATH', None))
 
-def is_authenticated_without_fairdata_sso():
+def is_authenticated_through_direct_proxy():
     """Is user authenticated through the old proxy solution
 
     Returns:
