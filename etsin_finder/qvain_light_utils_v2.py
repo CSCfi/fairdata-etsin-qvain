@@ -1,6 +1,6 @@
 """Utilities for transforming the data from Qvain Light form to METAX compatible format"""
 
-from etsin_finder.finder import app
+from etsin_finder.app import app
 from etsin_finder import qvain_light_utils
 
 log = app.logger

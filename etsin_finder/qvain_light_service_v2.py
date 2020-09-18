@@ -10,13 +10,16 @@
 import requests
 import json
 
-from etsin_finder.finder import app
+from etsin_finder.app import app
 from etsin_finder.app_config import get_metax_qvain_api_config
-from etsin_finder.utils import json_or_empty, format_url
+from etsin_finder.utils import format_url
 from etsin_finder.request_utils import make_request
-from etsin_finder.qvain_light_service import MetaxQvainLightAPIService as MetaxQvainLightAPIServiceV1
+from etsin_finder.qvain_light_service import (
+    MetaxQvainLightAPIService as MetaxQvainLightAPIServiceV1
+)
 
 log = app.logger
+
 
 class MetaxQvainLightAPIService(MetaxQvainLightAPIServiceV1):
     """

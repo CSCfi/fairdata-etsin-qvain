@@ -9,7 +9,7 @@
 import datetime
 import re
 
-from etsin_finder.finder import app
+from etsin_finder.app import app
 from etsin_finder.constants import AGENT_TYPE
 
 log = app.logger
