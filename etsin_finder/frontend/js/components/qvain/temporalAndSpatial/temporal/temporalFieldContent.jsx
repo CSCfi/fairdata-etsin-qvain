@@ -23,8 +23,8 @@ const TemporalFieldContent = ({ Store, lang }) => {
         {() => (
           <TemporalList
             lang={lang}
-            temporals={Store.temporals}
-            remove={uiid => Store.removeItemInField('temporals', uiid)}
+            temporals={Field.storage}
+            remove={uiid => Field.removeTemporal(uiid)}
             readonly={Field.readonly}
           />
         )}

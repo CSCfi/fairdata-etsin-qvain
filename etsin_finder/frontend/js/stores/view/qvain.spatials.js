@@ -18,9 +18,13 @@ const Spatial = (
 })
 
 class Spatials extends Field {
-  constructor(Parent) {
-    super(Parent, Spatial, 'spatials')
+  constructor(Qvain, spatials = []) {
+    super(Qvain, Spatial, SpatialModel, 'spatials')
+    this.Qvain = Qvain
+    this.fromBackend(spatials, Qvain)
   }
+
+  clone = () => this
 
   spatialToBackend = spatial => ({
     geographic_name: spatial.name,
@@ -30,7 +34,7 @@ class Spatials extends Field {
     place_uri: spatial.location ? { identifier: spatial.location.url } : { identifier: undefined },
   })
 
-  toBackend = () => this.Parent.spatials.map(this.spatialToBackend)
+  toBackend = () => this.storage.map(this.spatialToBackend)
 }
 
 export const Location = (name, url) => ({
