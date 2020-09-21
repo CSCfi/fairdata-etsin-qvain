@@ -12,7 +12,9 @@ from flask import request
 from flask_restful import reqparse, Resource
 
 from etsin_finder import authentication
-from etsin_finder.app import app, log
+from etsin_finder.app import app
+from etsin_finder.log import log
+
 from etsin_finder.utils import (
     slice_array_on_limit,
     datetime_to_header

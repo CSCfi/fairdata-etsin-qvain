@@ -8,8 +8,8 @@
 """Utils for making requests"""
 
 import requests
+from etsin_finder.log import log
 
-from etsin_finder.app import log
 from etsin_finder.utils import json_or_text
 
 

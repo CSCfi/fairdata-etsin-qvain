@@ -6,7 +6,9 @@ Moved here to avoid having finder.app dependency in utils.py.
 from functools import wraps
 from flask import request
 
-from etsin_finder.app import app, log
+from etsin_finder.app import app
+from etsin_finder.log import log
+
 from etsin_finder import authentication
 
 

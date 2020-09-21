@@ -55,4 +55,3 @@ def _setup_app_logging(app):
 
 
 app = create_app()
-log = app.logger
