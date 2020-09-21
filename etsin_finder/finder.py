@@ -101,7 +101,6 @@ def add_restful_resources(app):
 
 
 add_restful_resources(app)
-app = app
 import etsin_finder.views
 
 if __name__ == "__main__":
