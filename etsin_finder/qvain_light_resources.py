@@ -13,7 +13,9 @@ from flask_restful import reqparse, Resource
 
 from etsin_finder import authentication
 from etsin_finder import qvain_light_service
-from etsin_finder.app import app, log
+from etsin_finder.app import app
+from etsin_finder.log import log
+
 from etsin_finder.utils import \
     sort_array_of_obj_by_key, \
     slice_array_on_limit, \

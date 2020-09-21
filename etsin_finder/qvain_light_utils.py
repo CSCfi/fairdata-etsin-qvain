@@ -9,7 +9,7 @@ from etsin_finder.constants import DATA_CATALOG_IDENTIFIERS, ACCESS_TYPES
 from etsin_finder.cr_service import (
     get_catalog_record,
 )
-from etsin_finder.app import log
+from etsin_finder.log import log
 from etsin_finder.authentication import (
     get_user_ida_groups,
     get_user_csc_name,

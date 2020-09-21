@@ -17,7 +17,8 @@ from etsin_finder.authentication import \
     init_saml_auth, \
     prepare_flask_request_for_saml, \
     reset_flask_session_on_login
-from etsin_finder.app import app, log
+from etsin_finder.app import app
+from etsin_finder.log import log
 
 
 # REACT APP RELATED

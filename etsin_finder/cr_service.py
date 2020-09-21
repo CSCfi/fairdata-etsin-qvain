@@ -9,7 +9,9 @@
 
 import requests
 
-from etsin_finder.app import app, log
+from etsin_finder.app import app
+from etsin_finder.log import log
+
 from etsin_finder.app_config import get_metax_api_config
 from etsin_finder.utils import json_or_empty, FlaskService, format_url
 from etsin_finder.constants import ACCESS_TYPES
