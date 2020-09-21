@@ -101,9 +101,6 @@ class Login extends Component {
         </React.Fragment>
       )
     }
-    {
-      /* <Translate content="nav.logout" /> */
-    }
     return (
       <Dropdown buttonComponent={LogoutButton} buttonContent={<LoggedInUser />}>
         <DropdownItem onClick={this.logout}>
@@ -112,16 +109,6 @@ class Login extends Component {
       </Dropdown>
     )
   }
-  // <DropdownMenu transparent={false} buttonContent={<LoggedInUser />}>
-  //   <LogoutButton
-  //     color="primary"
-  //     onClick={this.logout}
-  //     margin={this.props.margin}
-  //     width={this.props.width}
-  //   >
-  //     <Translate content="nav.logout" />
-  //   </LogoutButton>
-  // </DropdownMenu>
 }
 const Cont = styled.div`
   width: ${p => (p.width ? p.width : '')};
