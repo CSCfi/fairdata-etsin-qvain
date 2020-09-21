@@ -25,7 +25,9 @@ from etsin_finder.email_utils import \
     get_email_recipient_addresses, \
     get_harvest_info, \
     validate_send_message_request
-from etsin_finder.app import app, log
+from etsin_finder.app import app
+from etsin_finder.log import log
+
 from etsin_finder.utils import \
     sort_array_of_obj_by_key, \
     slice_array_on_limit
