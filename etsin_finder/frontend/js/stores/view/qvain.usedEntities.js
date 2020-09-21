@@ -11,7 +11,7 @@ const UsedEntity = (
 
 class UsedEntities extends Field {
   constructor(Qvain, usedEntities = []) {
-    super(UsedEntity, UsedEntityModel, 'usedEntities', Qvain.readonly)
+    super(Qvain, UsedEntity, UsedEntityModel, 'usedEntities')
     this.Qvain = Qvain
     this.fromBackend(usedEntities, Qvain)
   }

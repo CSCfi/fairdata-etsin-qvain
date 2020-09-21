@@ -14,7 +14,7 @@ import { ROLE } from '../../../../../utils/constants'
 import parseActorLabel from '../../../utils/actor'
 
 const ActorsInput = ({ Stores }) => {
-  const { Actors, Provenances } = Stores.Qvain
+  const { Actors, Provenances, readonly } = Stores.Qvain
   const selectedOptions = (Provenances.inEdit.associations || {}).actorOptions || []
   const selectedOptionIds = selectedOptions.map(option => option.value)
   const { lang: language } = Stores.Locale
@@ -99,6 +99,7 @@ const ActorsInput = ({ Stores }) => {
         menuPosition="fixed"
         menuShouldScrollIntoView={false}
         isClearable
+        isDisabled={readonly}
         onChange={handleSelect}
       />
     </>

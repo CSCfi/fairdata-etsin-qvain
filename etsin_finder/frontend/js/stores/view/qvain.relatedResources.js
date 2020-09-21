@@ -13,7 +13,7 @@ const RelatedResource = (
 
 class RelatedResources extends Field {
   constructor(Qvain) {
-    super(RelatedResource, RelatedResourceModel, 'relatedResources', Qvain.readonly)
+    super(Qvain, RelatedResource, RelatedResourceModel, 'relatedResources')
     this.Qvain = Qvain
   }
 

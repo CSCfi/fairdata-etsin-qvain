@@ -34,7 +34,7 @@ const Provenance = ({
 
 class Provenances extends Field {
   constructor(Qvain) {
-    super(Provenance, ProvenanceModel, 'provenances', Qvain.readonly, [
+    super(Qvain, Provenance, ProvenanceModel, 'provenances', [
       'associations',
       'usedEntities',
       'spatials',

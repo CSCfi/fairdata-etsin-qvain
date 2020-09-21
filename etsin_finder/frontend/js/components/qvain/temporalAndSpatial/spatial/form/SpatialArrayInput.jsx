@@ -44,7 +44,6 @@ const ModalArrayInput = ({
         <Translate
           component={ArrayInputElem}
           type={type}
-          id={`${datum}Field`}
           autoFocus
           attributes={{ placeholder: translations.placeholder }}
           disabled={readonly}
@@ -56,6 +55,7 @@ const ModalArrayInput = ({
           component={RemoveButton}
           onClick={() => onRemoveClick(id)}
           attributes={{ 'aria-label': 'qvain.general.buttons.remove' }}
+          disabled={Field.readonly}
         >
           <FontAwesomeIcon icon={faTimes} />
         </Translate>
@@ -64,7 +64,7 @@ const ModalArrayInput = ({
 
   return (
     <ModalArrayInputWrapper>
-      <Label htmlFor={`${datum}Field`}>
+      <Label>
         <Translate content={translations.label} /> {isRequired ? '*' : ''}
       </Label>
       {renderInputs()}
@@ -74,6 +74,7 @@ const ModalArrayInput = ({
           arr.push({ key: uuidv4(), value: '' })
           changeAttribute(datum, arr)
         }}
+        disabled={Field.readonly}
       >
         <Translate content={`${translationsRoot}.modal.buttons.addGeometry`} />
       </AddButton>

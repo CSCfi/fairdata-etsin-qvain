@@ -6,7 +6,7 @@ import { observer } from 'mobx-react'
 import { ButtonGroup, ButtonLabel, EditButton, DeleteButton, ButtonContainer } from '../buttons'
 
 const FieldList = ({ Field, lang, translationsRoot, disableNoItemsText }) => {
-  const { remove, edit, storage } = Field
+  const { remove, edit, storage, readonly } = Field
 
   if (!storage.length) {
     if (disableNoItemsText) return null
@@ -22,12 +22,14 @@ const FieldList = ({ Field, lang, translationsRoot, disableNoItemsText }) => {
           onClick={() => edit(item.uiid)}
           attributes={{ 'aria-label': 'qvain.general.buttons.edit' }}
         />
-        <Translate
-          component={DeleteButton}
-          type="button"
-          onClick={() => remove(item.uiid)}
-          attribute={{ 'aria-label': 'qvain.general.buttons.remove' }}
-        />
+        {!readonly && (
+          <Translate
+            component={DeleteButton}
+            type="button"
+            onClick={() => remove(item.uiid)}
+            attribute={{ 'aria-label': 'qvain.general.buttons.remove' }}
+          />
+        )}
       </ButtonContainer>
     </FieldListContainer>
   ))

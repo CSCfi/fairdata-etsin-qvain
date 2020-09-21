@@ -1,13 +1,18 @@
-import { observable, action, toJS } from 'mobx'
+import { observable, computed, action, toJS } from 'mobx'
 import cloneDeep from 'lodash.clonedeep'
 
 class Field {
-  constructor(Template, Model, fieldName, readonly = false, references = []) {
+  constructor(Parent, Template, Model, fieldName, references = []) {
     this.Template = Template
     this.Model = Model
     this.fieldName = fieldName
-    this.readonly = readonly
     this.references = references
+    this.Parent = Parent
+  }
+
+  @computed
+  get readonly() {
+    return this.Parent.readonly
   }
 
   @observable storage = []

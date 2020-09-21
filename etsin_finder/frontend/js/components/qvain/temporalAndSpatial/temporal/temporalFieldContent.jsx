@@ -25,6 +25,7 @@ const TemporalFieldContent = ({ Store, lang }) => {
             lang={lang}
             temporals={Field.storage}
             remove={uiid => Field.removeTemporal(uiid)}
+            readonly={Field.readonly}
           />
         )}
       </Observer>
@@ -35,15 +36,20 @@ const TemporalFieldContent = ({ Store, lang }) => {
         datum="duration"
       />
       <Observer>
-        {() => <Translate component={ValidationError} content={Field.validationError} />}
+        {() => (
+          <>
+            <Translate component={ValidationError} content={Field.validationError} />
+            <ButtonContainer>
+              <Translate
+                component={AddNewButton}
+                content={`${translationsRoot}.addButton`}
+                onClick={handleClick}
+                disabled={Field.readonly}
+              />
+            </ButtonContainer>
+          </>
+        )}
       </Observer>
-      <ButtonContainer>
-        <Translate
-          component={AddNewButton}
-          content={`${translationsRoot}.addButton`}
-          onClick={handleClick}
-        />
-      </ButtonContainer>
     </>
   )
 }

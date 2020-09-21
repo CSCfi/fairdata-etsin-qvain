@@ -19,7 +19,7 @@ const Spatial = (
 
 class Spatials extends Field {
   constructor(Qvain, spatials = []) {
-    super(Spatial, SpatialModel, 'spatials', Qvain.readonly)
+    super(Qvain, Spatial, SpatialModel, 'spatials')
     this.Qvain = Qvain
     this.fromBackend(spatials, Qvain)
   }

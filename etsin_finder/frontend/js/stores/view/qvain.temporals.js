@@ -10,7 +10,7 @@ const Temporal = (uiid = uuidv4(), startDate = undefined, endDate = undefined) =
 
 class Temporals extends Field {
   constructor(Parent) {
-    super(Temporal, TemporalModel, 'temporals', Parent.readonly)
+    super(Parent, Temporal, TemporalModel, 'temporals')
   }
 
   @computed get renderable() {
