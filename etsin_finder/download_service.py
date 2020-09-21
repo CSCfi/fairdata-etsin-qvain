@@ -12,10 +12,10 @@ import requests
 from urllib import parse
 
 from etsin_finder.app_config import get_download_api_config
-from etsin_finder.finder import app
-from etsin_finder.utils import FlaskService, format_url
+from etsin_finder.app import app
+from etsin_finder.log import log
 
-log = app.logger
+from etsin_finder.utils import FlaskService, format_url
 
 
 class DownloadAPIService(FlaskService):
