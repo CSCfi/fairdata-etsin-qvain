@@ -92,7 +92,7 @@ class Access {
         open: false,
         allowDataRemote: true,
         allowDataIda: true,
-        allowDataIdaInfoButton: false,
+        allowDataIdaInfoButton: true,
         allowDataIdaDownloadButton: false,
         showREMSbutton: false,
         applicationState: null,
