@@ -146,6 +146,10 @@ def get_user_firstname():
         if first_name:
             return first_name[0]
 
+    # Authenticated through Fairdata SSO
+    if is_authenticated_through_fairdata_sso():
+        return None
+
     return not_found('firstname')
 
 def get_user_lastname():
@@ -163,6 +167,11 @@ def get_user_lastname():
         lastname = session.get('samlUserdata', {}).get(SAML_ATTRIBUTES.get('last_name', None), False)
         if lastname:
             return lastname[0]
+
+    # Authenticated through Fairdata SSO
+    if is_authenticated_through_fairdata_sso():
+        return None
+
     return not_found('lastname')
 
 def get_user_fullname():
@@ -173,6 +182,10 @@ def get_user_fullname():
 
     """
     if not is_authenticated():
+        return None
+
+    # Authenticated through direct proxy
+    if is_authenticated_through_direct_proxy():
         return None
 
     # Authenticated through Fairdata SSO
@@ -204,7 +217,7 @@ def get_user_ida_projects():
 
         # Parse the projects (conversion from IdM group syntax)
         try:
-            return [idaProjects.split(":")[1] for project in idaProjects]
+            return [project.split(":")[1] for project in idaProjects]
         except IndexError as e:
             log.error('Index error while parsing user IDA projects:\n{0}'.format(e))
             return None
@@ -230,8 +243,9 @@ def get_user_home_organization_id():
 
     # Authenicated through direct proxy
     if is_authenticated_through_direct_proxy():
-        home_organization = session.get('samlUserdata', {}).get(SAML_ATTRIBUTES.get('haka_org_id', None), False)
-        return home_organization[0] if home_organization else not_found('home_organization_id')
+        home_organization_id = session.get('samlUserdata', {}).get(SAML_ATTRIBUTES.get('haka_org_id', None), False)
+        if home_organization_id:
+            return home_organization_id[0]
 
     # Authenticated through Fairdata SSO
     if is_authenticated_through_fairdata_sso():
@@ -254,8 +268,9 @@ def get_user_home_organization_name():
 
     # Authenicated through direct proxy
     if is_authenticated_through_direct_proxy():
-        home_organization_id = session.get('samlUserdata', {}).get(SAML_ATTRIBUTES.get('haka_org_name', None), False)
-        return home_organization_id[0] if home_organization_id else not_found('home_organization')
+        home_organization_name = session.get('samlUserdata', {}).get(SAML_ATTRIBUTES.get('haka_org_name', None), False)
+        if home_organization_name:
+            return home_organization_name[0]
 
     # Authenticated through Fairdata SSO
     if is_authenticated_through_fairdata_sso():
