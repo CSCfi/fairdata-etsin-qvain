@@ -338,7 +338,7 @@ class QvainDatasetFiles(Resource):
             log.warning("Invalid form data: {0}".format(err.messages))
             return err.messages, 400
 
-        ida_projects = parse_user_idm_groups_for_direct_proxy_logins()
+        ida_projects = get_user_ida_projects()
         if ida_projects is None:
             return {"IdaError": "Error in IDA group user permission or in IDA user groups."}, 403
 
