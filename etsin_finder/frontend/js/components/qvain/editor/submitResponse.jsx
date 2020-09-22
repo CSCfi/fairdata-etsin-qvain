@@ -58,13 +58,12 @@ class SubmitResponse extends Component {
       this.state.clearSubmitResponse = false
       return null
     }
-
-    const goToEtsin =
-      original && original.state === 'draft' ? (
-        <Translate content="qvain.datasets.goToEtsinDraft" />
-      ) : (
-        <Translate content="qvain.datasets.goToEtsin" />
-      )
+    let goToEtsin = <Translate content="qvain.datasets.goToEtsin" />
+    let goToEtsinQuery = ''
+    if (original && original.state === 'draft') {
+      goToEtsin = <Translate content="qvain.datasets.goToEtsinDraft" />
+      goToEtsinQuery = '?preview=1'
+    }
 
     // If a new dataset or draft has been created successfully.
     if (
@@ -84,7 +83,9 @@ class SubmitResponse extends Component {
               />
             </ResponseLabel>
             <LinkToEtsin
-              onClick={() => window.open(getEtsinUrl(`/dataset/${identifier}`), '_blank')}
+              onClick={() =>
+                window.open(getEtsinUrl(`/dataset/${identifier}${goToEtsinQuery}`), '_blank')
+              }
             >
               {goToEtsin}
             </LinkToEtsin>
@@ -124,7 +125,9 @@ class SubmitResponse extends Component {
               />
             </ResponseLabel>
             <LinkToEtsin
-              onClick={() => window.open(getEtsinUrl(`/dataset/${identifier}`), '_blank')}
+              onClick={() =>
+                window.open(getEtsinUrl(`/dataset/${identifier}${goToEtsinQuery}`), '_blank')
+              }
             >
               {goToEtsin}
             </LinkToEtsin>
@@ -156,7 +159,11 @@ class SubmitResponse extends Component {
             >
               <Translate content="qvain.datasets.openNewVersion" />
             </LinkToEtsin>
-            <LinkToEtsin onClick={() => window.open(`/dataset/${identifier}`, '_blank')}>
+            <LinkToEtsin
+              onClick={() =>
+                window.open(getEtsinUrl(`/dataset/${identifier}${goToEtsinQuery}`), '_blank')
+              }
+            >
               {goToEtsin}
             </LinkToEtsin>
             <p>Identifier: {identifier}</p>

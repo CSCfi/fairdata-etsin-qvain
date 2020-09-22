@@ -31,6 +31,7 @@ class Login extends Component {
     width: PropTypes.string,
     isLoggedInKey: PropTypes.string,
     fontSize: PropTypes.string,
+    borderColor: PropTypes.string,
   }
 
   static defaultProps = {
@@ -38,6 +39,7 @@ class Login extends Component {
     width: undefined,
     fontSize: 'inherit',
     isLoggedInKey: 'userLogged',
+    borderColor: '',
   }
 
   state = {
@@ -57,12 +59,13 @@ class Login extends Component {
   }
 
   redirect = location => {
+    const query = location.search
     this.setState(
       {
         loading: true,
       },
       () => {
-        window.location = `/sso?relay=${location.pathname}`
+        window.location = `/sso?relay=${location.pathname}${encodeURIComponent(query)}`
       }
     )
   }
@@ -79,6 +82,7 @@ class Login extends Component {
               width={this.props.width}
               margin="0"
               onClick={() => this.redirect(this.props.location)}
+              borderColor={this.props.borderColor}
             >
               <LoginText visible={!this.state.loading} fontSize={this.props.fontSize}>
                 <Translate content="nav.login" />
@@ -106,8 +110,9 @@ class Login extends Component {
         <LogoutButton
           color="primary"
           onClick={this.logout}
-          margin={this.props.margin}
           width={this.props.width}
+          margin="0.5rem auto"
+          borderColor={this.props.borderColor}
         >
           <Translate content="nav.logout" />
         </LogoutButton>
@@ -122,8 +127,15 @@ const Cont = styled.div`
 `
 
 const LogoutButton = styled(Button)`
-  margin: 1em auto;
   width: fit-content;
+  ${props =>
+    props.borderColor &&
+    `
+  border-color: ${props.theme.color[props.borderColor]};
+  :hover {
+    border-color: ${props.theme.color[props.borderColor]};
+  }
+  `}
 `
 
 const LoaderCont = styled.div`

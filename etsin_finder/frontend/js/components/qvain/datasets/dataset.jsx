@@ -36,7 +36,7 @@ const getGoToEtsinButton = (dataset, getEtsinUrl) => {
   return (
     <Translate
       component={TableButton}
-      onClick={() => window.open(getEtsinUrl(`/dataset/${identifier}`), '_blank')}
+      onClick={() => window.open(getEtsinUrl(`/dataset/${identifier}?preview=1`), '_blank')}
       content={`qvain.datasets.${goToEtsinKey}`}
     />
   )
