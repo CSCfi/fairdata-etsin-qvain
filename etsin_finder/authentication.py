@@ -14,9 +14,16 @@ from etsin_finder.app import app
 from etsin_finder.log import log
 from etsin_finder.utils import executing_travis
 from etsin_finder.constants import SAML_ATTRIBUTES
-from etsin_finder.authentication_fairdata_sso import get_fairdata_sso_session_details, is_authenticated_through_fairdata_sso
-from etsin_finder.authentication_direct_proxy import get_saml_auth, init_saml_auth, is_authenticated_through_direct_proxy
-
+from etsin_finder.authentication_fairdata_sso import (
+    get_fairdata_sso_session_details,
+    is_authenticated_through_fairdata_sso,
+    get_sso_environment_prefix
+)
+from etsin_finder.authentication_direct_proxy import (
+    get_saml_auth,
+    init_saml_auth,
+    is_authenticated_through_direct_proxy
+)
 
 def not_found(field):
     """Log if field not found in session samlUserdata or SSO data
@@ -61,8 +68,8 @@ def is_authenticated_CSC_user():
 
     # Authenticated through Fairdata SSO
     if is_authenticated_through_fairdata_sso():
-        # ToDo: account for test/stable/demo
-        if request.cookies.getlist('fd_test_csc_fi_fd_sso_username'):
+        environment_id_and_username = get_sso_environment_prefix() + '_fd_sso_username'
+        if request.cookies.getlist(environment_id_and_username):
             return True
     return False
 
@@ -84,8 +91,9 @@ def get_user_csc_name():
 
     # Authentication through Fairdata SSO proxy
     if is_authenticated_through_fairdata_sso():
-        # ToDo: account for test/stable/demo
-        return request.cookies.getlist('fd_test_csc_fi_fd_sso_username')[0]
+        environment_id_and_username = get_sso_environment_prefix() + '_fd_sso_username'
+        log.info(environment_id_and_username)
+        return request.cookies.getlist(environment_id_and_username)[0]
 
     return not_found('csc_name')
 
