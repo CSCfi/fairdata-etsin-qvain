@@ -10,10 +10,8 @@
 import base64
 import json
 from flask import session, request
-
-from etsin_finder.finder import app
-
-log = app.logger
+from etsin_finder.app import app
+from etsin_finder.log import log
 
 def get_fairdata_sso_session_details():
     """Get sso details for the session
