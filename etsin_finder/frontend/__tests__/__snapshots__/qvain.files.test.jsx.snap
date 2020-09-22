@@ -10,28 +10,9 @@ Object {
     },
     "url": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
   },
-  "actors": Array [
-    Object {
-      "organizations": Array [
-        Object {
-          "email": undefined,
-          "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/123456789",
-          "name": Object {
-            "en": "Org",
-            "fi": "Org",
-            "und": "Org",
-          },
-        },
-      ],
-      "person": undefined,
-      "roles": Array [
-        "creator",
-      ],
-      "type": "organization",
-    },
-  ],
+  "actors": Array [],
   "cumulativeState": 0,
-  "dataCatalog": "urn:nbn:fi:att:data-catalog-ida",
+  "dataCatalog": undefined,
   "datasetLanguage": Array [],
   "description": Object {
     "en": "",
