@@ -468,25 +468,6 @@ def edited_data_to_metax(data, original):
     }
     return clean_empty_keyvalues_from_dict(edited_data)
 
-#def parse_user_idm_groups_for_direct_proxy_logins():
-#    """List IDA projects for current user without the prefix.
-#    This is relevant only for when authenticating through the old direct proxy
-#
-#    Returns:
-#        list(str): List of projects.
-#
-#    """
-#    user_ida_projects = get_user_ida_projects()
-#    if user_ida_projects is None:
-#        log.error('Could not get user IDA projects.\n')
-#        return None
-#
-#    try:
-#        return [project.split(":")[1] for project in user_ida_projects]
-#    except IndexError as e:
-#        log.error('Index error while parsing user IDA projects:\n{0}'.format(e))
-#       return None
-
 def check_if_data_in_user_IDA_project(data):
     """Check if the user creating a dataset belongs to the project that the files/folders belongs to.
 
