@@ -3,6 +3,8 @@ import styled from 'styled-components'
 import Button from '../../../general/button'
 
 export const TableButton = styled(Button)`
+  padding: 0;
+  margin: 0;
   min-width: 84px;
   max-width: 6.5em;
   flex-grow: 1;
