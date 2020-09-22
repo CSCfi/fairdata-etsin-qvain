@@ -225,7 +225,8 @@ def get_user_ida_projects():
 
         # Parse the projects (conversion from IdM group syntax)
         try:
-            return [project.split(":")[1] for project in idaProjects]
+            if (idaProjects):
+                return [project.split(":")[1] for project in idaProjects]
         except IndexError as e:
             log.error('Index error while parsing user IDA projects:\n{0}'.format(e))
             return None
