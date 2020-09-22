@@ -19,6 +19,7 @@ def get_sso_environment_prefix():
 
     Returns
         session_data (string): String that defines what the SSO environment is
+
     """
     environment_string = get_app_config(app.testing).get('SSO_PREFIX')
     return environment_string
