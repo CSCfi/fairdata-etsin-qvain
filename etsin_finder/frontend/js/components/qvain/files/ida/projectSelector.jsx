@@ -15,8 +15,6 @@ export const ProjectSelectorBase = ({ Stores, disabled }) => {
     // IDA projects found, so populate the IDA project dropdown
     if (idaProjects) {
       return idaProjects
-        .filter(project => project.includes('IDA'))
-        .map(project => project.substring(project.indexOf(':') + 1, project.length))
         .map(projectId => ({ value: projectId, label: projectId }))
     } // ... Otherwise the dropdown will be left empty, but visible, if the user has no IDA projects.
     return undefined
