@@ -11,73 +11,37 @@
 }
 
 import PropTypes from 'prop-types'
-import React, { Component } from 'react'
+import React from 'react'
 import Translate from 'react-translate-component'
 import styled from 'styled-components'
-import { inject, observer } from 'mobx-react'
 
 import Login from './loginButton'
 import { Link } from '../button'
 import LangToggle from './langToggle'
-import DropdownMenu from './dropdownMenu'
-import { QVAIN_URL } from '../../../utils/constants'
-import MaybeNavLink from './maybeNavLink'
 
-class Settings extends Component {
-  render() {
-    const { Env } = this.props.Stores
-    return (
-      <React.Fragment>
-        <Positioner>
-          <Link
-            margin="0em 1em 0em 0em"
-            width="max-content"
-            href={this.props.helpUrl}
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            <Translate content="nav.help" />
-          </Link>
-          <DropdownMenu transparent={false} buttonContent={<Translate content="nav.addDataset" />}>
-            <CustomContainer>
-              <Row>
-                <Link
-                  width="100%"
-                  margin="0.4em 0em 0.4em 0.4em"
-                  href={QVAIN_URL}
-                  rel="noopener noreferrer"
-                  target="_blank"
-                >
-                  Qvain
-                </Link>
-              </Row>
-              <Row>
-                <MaybeNavLink width="100%" margin="0.4em 0em 0.4em 0.4em" to={Env.getQvainUrl('')}>
-                  Qvain Light
-                </MaybeNavLink>
-              </Row>
-            </CustomContainer>
-          </DropdownMenu>
-          <LangToggle margin="0em 0em 0em 0em" />
-          <Login />
-        </Positioner>
-      </React.Fragment>
-    )
-  }
-}
+const Settings = props => (
+  <React.Fragment>
+    <Positioner>
+      <Link width="max-content" href={props.helpUrl} rel="noopener noreferrer" target="_blank">
+        <Translate content="nav.help" />
+      </Link>
+      {props.children}
+      <LangToggle />
+      <Login />
+    </Positioner>
+  </React.Fragment>
+)
 
-Settings.propTypes = {
-  Stores: PropTypes.object.isRequired,
-}
-
-export default inject('Stores')(observer(Settings))
+export default Settings
 
 Settings.defaultProps = {
   helpUrl: undefined,
+  children: null,
 }
 
 Settings.propTypes = {
   helpUrl: PropTypes.string,
+  children: PropTypes.node,
 }
 
 const Positioner = styled.div`
@@ -86,16 +50,4 @@ const Positioner = styled.div`
   @media screen and (min-width: ${p => p.theme.breakpoints.lg}) {
     display: flex;
   }
-`
-
-const CustomContainer = styled.div`
-  margin: 0 auto;
-  padding: 1em 1.3em;
-  max-width: 400px;
-  width: 100%;
-`
-
-const Row = styled.div`
-  display: inline-flex;
-  width: 100%;
 `

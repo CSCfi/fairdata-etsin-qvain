@@ -345,6 +345,11 @@ const finnish = {
     },
   },
   qvain: {
+    nav: {
+      home: 'Koti',
+      createDataset: 'Luo aineisto',
+      editDataset: 'Muokkaa aineistoa',
+    },
     general: {
       brief: 'Tutkimusaineiston metatietotyökalu',
       looseActors: {

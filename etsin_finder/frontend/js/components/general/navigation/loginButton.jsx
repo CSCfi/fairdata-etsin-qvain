@@ -22,7 +22,7 @@ import Button from '../button'
 import Loader from '../loader'
 import NoticeBar from '../noticeBar'
 import LoggedInUser from '../loggedInUser'
-import DropdownMenu from './dropdownMenu'
+import { Dropdown, DropdownItem } from '../dropdown'
 
 class Login extends Component {
   static propTypes = {
@@ -106,17 +106,11 @@ class Login extends Component {
       )
     }
     return (
-      <DropdownMenu transparent={false} buttonContent={<LoggedInUser />}>
-        <LogoutButton
-          color="primary"
-          onClick={this.logout}
-          width={this.props.width}
-          margin="0.5rem auto"
-          borderColor={this.props.borderColor}
-        >
+      <Dropdown buttonComponent={LogoutButton} buttonContent={<LoggedInUser />}>
+        <DropdownItem onClick={this.logout}>
           <Translate content="nav.logout" />
-        </LogoutButton>
-      </DropdownMenu>
+        </DropdownItem>
+      </Dropdown>
     )
   }
 }
