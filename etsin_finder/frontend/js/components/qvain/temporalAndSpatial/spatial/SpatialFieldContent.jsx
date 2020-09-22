@@ -1,13 +1,34 @@
 import React from 'react'
-import AddSpatialCoverage from './AddSpatialCoverage'
-import Spatials from './Spatials'
+import PropTypes from 'prop-types'
+import { observer } from 'mobx-react'
+import FieldList from '../../general/section/fieldList'
+import FieldListAdd from '../../general/section/fieldListAdd'
+import handleSave from './handleSave'
+import Form from './form'
 
-const SpatialFieldContent = () => (
+const translationsRoot = 'qvain.temporalAndSpatial.spatial'
+
+const SpatialFieldContent = ({ Store, lang }) => (
   <>
-    <Spatials />
-    <AddSpatialCoverage />
+    <FieldList
+      Field={Store.Spatials}
+      lang={lang}
+      elements={Store.spatials}
+      translationsRoot={translationsRoot}
+    />
+    <FieldListAdd
+      Store={Store}
+      Field={Store.Spatials}
+      translationsRoot={translationsRoot}
+      handleSave={() => handleSave(Store.Spatials, translationsRoot)}
+      Form={Form}
+    />
   </>
 )
 
+SpatialFieldContent.propTypes = {
+  Store: PropTypes.object.isRequired,
+  lang: PropTypes.string.isRequired,
+}
 
-export default SpatialFieldContent
+export default observer(SpatialFieldContent)

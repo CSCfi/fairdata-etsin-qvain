@@ -109,7 +109,7 @@ const IdnLink = styled(Link)`
 `
 
 const Prefix = styled.div`
-  background-color: ${props => props.theme.color.dark};
+  background-color: #4f4f4f;
   color: white;
   font-weight: 700;
   border-top-left-radius: 0.3em;

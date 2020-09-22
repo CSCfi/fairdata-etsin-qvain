@@ -70,7 +70,7 @@ exports[`Qvain.Description should render <Description /> 1`] = `
       />
     </Tooltip>
   </title__SectionTitle>
-  <inject-DescriptionField-with-Stores />
+  <DescriptionField />
   <inject-IssuedDateField-with-Stores />
   <inject-OtherIdentifierField-with-Stores />
   <inject-FieldOfScienceField-with-Stores />
@@ -80,208 +80,231 @@ exports[`Qvain.Description should render <Description /> 1`] = `
 `;
 
 exports[`Qvain.Description should render <DescriptionField /> 1`] = `
-<DescriptionField
-  Stores={
-    Object {
-      "Env": Env {
-        "environment": "test",
-        "history": RouterStore {
-          "go": [Function],
-          "goBack": [Function],
-          "goForward": [Function],
-          "history": null,
-          "push": [Function],
-          "replace": [Function],
+<TranslationTab
+  language="fi"
+  setLanguage={[Function]}
+>
+  <inject-DescriptionFieldInput-with-Stores
+    activeLang="fi"
+    propName="title"
+    schema={
+      ObjectSchema {
+        "_blacklist": RefSet {
+          "list": Set {},
+          "refs": Map {},
         },
-        "metaxApiV2": true,
-      },
-      "Locale": Locale {},
-      "Qvain": Qvain {
-        "Actors": Actors {
-          "Qvain": [Circular],
-          "actorInEdit": null,
-          "actors": Array [],
-          "createActor": [Function],
-          "getDatasetOrganizations": [Function],
-          "getReferenceOrganizations": [Function],
-          "getReferenceOrganizationsForActor": [Function],
-          "isActorEqual": [Function],
-          "isEqual": [Function],
-          "isOrganizationEqual": [Function],
-          "loadingReferenceOrganizations": Object {},
-          "missingFieldsListActors": Array [
-            Object {
-              "fieldName": "creator",
-              "valueIsMissing": true,
-              "valueIsRequired": true,
-            },
-            Object {
-              "fieldName": "publisher",
-              "valueIsMissing": true,
-              "valueIsRequired": false,
-            },
-          ],
-          "referenceOrganizationErrors": Object {},
-          "referenceOrganizations": Object {},
-          "stillMissingActorFields": true,
-          "toBackend": [Function],
-        },
-        "Env": Env {
-          "environment": "test",
-          "history": RouterStore {
-            "go": [Function],
-            "goBack": [Function],
-            "goForward": [Function],
-            "history": null,
-            "push": [Function],
-            "replace": [Function],
-          },
-          "metaxApiV2": true,
-        },
-        "Files": Files {
-          "AddItemsView": AddItemsView {
-            "Files": [Circular],
-            "checkedState": Object {},
-            "defaultShowLimit": 20,
-            "getTopmostChecked": [Function],
-            "isOpen": [Function],
-            "openState": Object {},
-            "showLimitIncrement": 20,
-            "showLimitState": Object {},
-          },
-          "Qvain": [Circular],
-          "SelectedItemsView": SelectedItemsView {
-            "Files": [Circular],
-            "checkedState": Object {},
-            "defaultShowLimit": 20,
-            "getTopmostChecked": [Function],
-            "hideRemoved": false,
-            "isOpen": [Function],
-            "openState": Object {},
-            "showLimitIncrement": 20,
-            "showLimitState": Object {},
-          },
-          "cache": Object {},
-          "cancelOnReset": [Function],
-          "datasetIdentifier": null,
-          "fetchRootIdentifier": [Function],
-          "getItemByPath": [Function],
-          "inEdit": undefined,
-          "loadingMetadata": null,
-          "loadingProjectInfo": null,
-          "loadingProjectRoot": null,
-          "metadataToMetax": [Function],
-          "originalMetadata": Object {},
-          "projectLocked": false,
-          "promiseManager": PromiseManager {
-            "add": [Function],
-            "promises": Array [],
-          },
-          "refreshModalDirectory": null,
-          "root": null,
-          "selectedProject": undefined,
-        },
-        "Spatials": Spatials {
-          "Qvain": [Circular],
-          "toBackend": [Function],
-        },
-        "accessType": Object {
-          "name": undefined,
-          "url": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
-        },
-        "changed": false,
-        "createExternalResourceUIId": [Function],
-        "cumulativeState": 0,
-        "dataCatalog": undefined,
-        "datasetLanguage": undefined,
-        "datasetLanguageArray": Array [],
-        "deprecated": false,
-        "description": Object {
-          "en": "",
-          "fi": "",
-        },
-        "deselectChildren": [Function],
-        "deselectParents": [Function],
-        "embargoExpDate": undefined,
-        "existingDirectories": Array [],
-        "existingFiles": Array [],
-        "extResFormOpen": false,
-        "externalResourceInEdit": Object {
-          "accessUrl": "",
-          "downloadUrl": "",
-          "id": undefined,
-          "title": "",
-          "useCategory": "",
-        },
-        "externalResources": Array [],
-        "fieldOfScience": undefined,
-        "fieldOfScienceArray": Array [],
-        "fixDeprecatedModalOpen": false,
-        "hierarchy": Object {},
-        "idaPickerOpen": false,
-        "inEdit": undefined,
-        "infrastructure": undefined,
-        "infrastructures": Array [],
-        "issuedDate": undefined,
-        "keywordString": "",
-        "keywordsArray": Array [],
-        "license": Object {
-          "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
-          "name": undefined,
-        },
-        "licenseArray": Array [],
-        "mergeArraysByIdentifier": [Function],
-        "metadataModalFile": undefined,
-        "missingFieldsListGeneral": Array [
-          Object {
-            "fieldName": "title",
-            "valueIsMissing": true,
-            "valueIsRequired": true,
-          },
-          Object {
-            "fieldName": "description",
-            "valueIsMissing": true,
-            "valueIsRequired": true,
-          },
-          Object {
-            "fieldName": "atLeastOneKeyword",
-            "valueIsMissing": true,
-            "valueIsRequired": true,
-          },
-          Object {
-            "fieldName": "atLeastOneLicense",
-            "valueIsMissing": true,
-            "valueIsRequired": false,
-          },
-          Object {
-            "fieldName": "fileOrigin",
-            "valueIsMissing": true,
-            "valueIsRequired": true,
-          },
+        "_conditions": Array [],
+        "_defaultDefault": [Function],
+        "_deps": Array [],
+        "_excludedEdges": Array [],
+        "_exclusive": Object {},
+        "_mutate": undefined,
+        "_nodes": Array [
+          "en",
+          "fi",
         ],
-        "original": undefined,
-        "otherIdentifier": "",
-        "otherIdentifiersArray": Array [],
-        "otherIdentifiersValidationError": null,
-        "otherLicenseUrl": "",
-        "preservationState": 0,
-        "restrictionGrounds": Object {},
-        "selectedDirectories": Array [],
-        "selectedFiles": Array [],
-        "selectedProject": undefined,
-        "setOtherIdentifierValidationError": [Function],
-        "spatials": Array [],
-        "stillMissingGeneralFields": true,
-        "stillMissingGeneralFieldsDraft": true,
-        "title": Object {
-          "en": "",
-          "fi": "",
+        "_options": Object {
+          "abortEarly": true,
+          "recursive": true,
         },
-        "useDoi": false,
-      },
+        "_type": "object",
+        "_typeError": [Function],
+        "_whitelist": RefSet {
+          "list": Set {},
+          "refs": Map {},
+        },
+        "fields": Object {
+          "en": StringSchema {
+            "_blacklist": RefSet {
+              "list": Set {},
+              "refs": Map {},
+            },
+            "_conditions": Array [],
+            "_deps": Array [],
+            "_exclusive": Object {
+              "max": true,
+            },
+            "_mutate": undefined,
+            "_options": Object {
+              "abortEarly": true,
+              "recursive": true,
+            },
+            "_type": "string",
+            "_typeError": [Function],
+            "_whitelist": RefSet {
+              "list": Set {},
+              "refs": Map {},
+            },
+            "tests": Array [
+              [Function],
+            ],
+            "transforms": Array [
+              [Function],
+            ],
+            "type": "string",
+          },
+          "fi": SchemaType {
+            "_blacklist": RefSet {
+              "list": Set {},
+              "refs": Map {},
+            },
+            "_conditions": Array [
+              Condition {
+                "fn": [Function],
+                "refs": Array [
+                  Reference {
+                    "getter": [Function],
+                    "isContext": false,
+                    "isSibling": true,
+                    "isValue": false,
+                    "key": "en",
+                    "map": undefined,
+                    "path": "en",
+                  },
+                ],
+              },
+            ],
+            "_deps": Array [
+              "en",
+            ],
+            "_exclusive": Object {},
+            "_mutate": undefined,
+            "_options": Object {
+              "abortEarly": true,
+              "recursive": true,
+            },
+            "_type": "mixed",
+            "_typeError": [Function],
+            "_whitelist": RefSet {
+              "list": Set {},
+              "refs": Map {},
+            },
+            "tests": Array [],
+            "transforms": Array [],
+            "type": "mixed",
+          },
+        },
+        "tests": Array [],
+        "transforms": Array [
+          [Function],
+        ],
+        "type": "object",
+      }
     }
-  }
-/>
+  />
+  <inject-DescriptionFieldTextField-with-Stores
+    activeLang="fi"
+    propName="description"
+    schema={
+      ObjectSchema {
+        "_blacklist": RefSet {
+          "list": Set {},
+          "refs": Map {},
+        },
+        "_conditions": Array [],
+        "_defaultDefault": [Function],
+        "_deps": Array [],
+        "_excludedEdges": Array [],
+        "_exclusive": Object {},
+        "_mutate": undefined,
+        "_nodes": Array [
+          "en",
+          "fi",
+        ],
+        "_options": Object {
+          "abortEarly": true,
+          "recursive": true,
+        },
+        "_type": "object",
+        "_typeError": [Function],
+        "_whitelist": RefSet {
+          "list": Set {},
+          "refs": Map {},
+        },
+        "fields": Object {
+          "en": StringSchema {
+            "_blacklist": RefSet {
+              "list": Set {},
+              "refs": Map {},
+            },
+            "_conditions": Array [],
+            "_deps": Array [],
+            "_exclusive": Object {
+              "max": true,
+            },
+            "_mutate": undefined,
+            "_options": Object {
+              "abortEarly": true,
+              "recursive": true,
+            },
+            "_type": "string",
+            "_typeError": [Function],
+            "_whitelist": RefSet {
+              "list": Set {},
+              "refs": Map {},
+            },
+            "tests": Array [
+              [Function],
+            ],
+            "transforms": Array [
+              [Function],
+            ],
+            "type": "string",
+          },
+          "fi": SchemaType {
+            "_blacklist": RefSet {
+              "list": Set {},
+              "refs": Map {},
+            },
+            "_conditions": Array [
+              Condition {
+                "fn": [Function],
+                "refs": Array [
+                  Reference {
+                    "getter": [Function],
+                    "isContext": false,
+                    "isSibling": true,
+                    "isValue": false,
+                    "key": "en",
+                    "map": undefined,
+                    "path": "en",
+                  },
+                ],
+              },
+            ],
+            "_deps": Array [
+              "en",
+            ],
+            "_exclusive": Object {},
+            "_mutate": undefined,
+            "_options": Object {
+              "abortEarly": true,
+              "recursive": true,
+            },
+            "_type": "mixed",
+            "_typeError": [Function],
+            "_whitelist": RefSet {
+              "list": Set {},
+              "refs": Map {},
+            },
+            "tests": Array [],
+            "transforms": Array [],
+            "type": "mixed",
+          },
+        },
+        "tests": Array [],
+        "transforms": Array [
+          [Function],
+        ],
+        "type": "object",
+      }
+    }
+  />
+  <Translate
+    component="div"
+    content="qvain.description.description.instructions"
+  />
+</TranslationTab>
 `;
 
 exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
@@ -289,7 +312,10 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
   Stores={
     Object {
       "Env": Env {
+        "app": undefined,
         "environment": "test",
+        "getEtsinUrl": [Function],
+        "getQvainUrl": [Function],
         "history": RouterStore {
           "go": [Function],
           "goBack": [Function],
@@ -299,6 +325,7 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
           "replace": [Function],
         },
         "metaxApiV2": true,
+        "separateQvain": false,
       },
       "Locale": Locale {},
       "Qvain": Qvain {
@@ -306,33 +333,22 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
           "Qvain": [Circular],
           "actorInEdit": null,
           "actors": Array [],
-          "createActor": [Function],
+          "editDataset": [Function],
           "getDatasetOrganizations": [Function],
           "getReferenceOrganizations": [Function],
           "getReferenceOrganizationsForActor": [Function],
-          "isActorEqual": [Function],
-          "isEqual": [Function],
-          "isOrganizationEqual": [Function],
           "loadingReferenceOrganizations": Object {},
-          "missingFieldsListActors": Array [
-            Object {
-              "fieldName": "creator",
-              "valueIsMissing": true,
-              "valueIsRequired": true,
-            },
-            Object {
-              "fieldName": "publisher",
-              "valueIsMissing": true,
-              "valueIsRequired": false,
-            },
-          ],
+          "onSuccessfulCreationCallbacks": Array [],
           "referenceOrganizationErrors": Object {},
           "referenceOrganizations": Object {},
-          "stillMissingActorFields": true,
+          "setSelectedActor": undefined,
           "toBackend": [Function],
         },
         "Env": Env {
+          "app": undefined,
           "environment": "test",
+          "getEtsinUrl": [Function],
+          "getQvainUrl": [Function],
           "history": RouterStore {
             "go": [Function],
             "goBack": [Function],
@@ -342,6 +358,7 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
             "replace": [Function],
           },
           "metaxApiV2": true,
+          "separateQvain": false,
         },
         "Files": Files {
           "AddItemsView": AddItemsView {
@@ -386,19 +403,109 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
           "root": null,
           "selectedProject": undefined,
         },
-        "Spatials": Spatials {
-          "Qvain": [Circular],
+        "Provenances": Provenances {
+          "Parent": [Circular],
+          "RelatedResources": RelatedResources {
+            "Parent": [Circular],
+            "Template": [Function],
+            "attachRefs": [Function],
+            "cloneRefs": [Function],
+            "detachRefs": [Function],
+            "fieldName": "relatedResources",
+            "isParentRoot": [Function],
+            "references": Array [],
+            "relatedResourceToBackend": [Function],
+            "saveEdited": [Function],
+            "saveNew": [Function],
+            "toBackend": [Function],
+          },
+          "Spatials": Spatials {
+            "Parent": [Circular],
+            "Template": [Function],
+            "attachRefs": [Function],
+            "cloneRefs": [Function],
+            "detachRefs": [Function],
+            "fieldName": "spatials",
+            "isParentRoot": [Function],
+            "references": Array [],
+            "saveEdited": [Function],
+            "saveNew": [Function],
+            "spatialToBackend": [Function],
+            "toBackend": [Function],
+          },
+          "Template": [Function],
+          "attachRefs": [Function],
+          "cloneRefs": [Function],
+          "detachRefs": [Function],
+          "fieldName": "provenances",
+          "isParentRoot": [Function],
+          "references": Array [
+            "associations",
+          ],
+          "saveEdited": [Function],
+          "saveNew": [Function],
           "toBackend": [Function],
+        },
+        "RelatedResources": RelatedResources {
+          "Parent": [Circular],
+          "Template": [Function],
+          "attachRefs": [Function],
+          "cloneRefs": [Function],
+          "detachRefs": [Function],
+          "fieldName": "relatedResources",
+          "isParentRoot": [Function],
+          "references": Array [],
+          "relatedResourceToBackend": [Function],
+          "saveEdited": [Function],
+          "saveNew": [Function],
+          "toBackend": [Function],
+        },
+        "Spatials": Spatials {
+          "Parent": [Circular],
+          "Template": [Function],
+          "attachRefs": [Function],
+          "cloneRefs": [Function],
+          "detachRefs": [Function],
+          "fieldName": "spatials",
+          "isParentRoot": [Function],
+          "references": Array [],
+          "saveEdited": [Function],
+          "saveNew": [Function],
+          "spatialToBackend": [Function],
+          "toBackend": [Function],
+        },
+        "Temporals": Temporals {
+          "Parent": [Circular],
+          "Template": [Function],
+          "attachRefs": [Function],
+          "cloneRefs": [Function],
+          "detachRefs": [Function],
+          "editMode": false,
+          "fieldName": "temporals",
+          "hasChanged": false,
+          "inEdit": Object {
+            "endDate": undefined,
+            "startDate": undefined,
+            "uiid": 0,
+          },
+          "isParentRoot": [Function],
+          "references": Array [],
+          "saveEdited": [Function],
+          "saveNew": [Function],
+          "toBackend": [Function],
+          "validationError": undefined,
         },
         "accessType": Object {
           "name": undefined,
           "url": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
         },
         "changed": false,
+        "clearMetadataModalFile": undefined,
         "createExternalResourceUIId": [Function],
+        "createLooseActorPromise": [Function],
+        "createLooseProvenancePromise": [Function],
         "cumulativeState": 0,
         "dataCatalog": undefined,
-        "datasetLanguage": undefined,
         "datasetLanguageArray": Array [],
         "deprecated": false,
         "description": Object {
@@ -419,65 +526,42 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
           "useCategory": "",
         },
         "externalResources": Array [],
-        "fieldOfScience": undefined,
         "fieldOfScienceArray": Array [],
         "fixDeprecatedModalOpen": false,
         "hierarchy": Object {},
         "idaPickerOpen": false,
         "inEdit": undefined,
-        "infrastructure": undefined,
-        "infrastructures": Array [],
+        "infrastructureArray": Array [],
         "issuedDate": undefined,
         "keywordString": "",
         "keywordsArray": Array [],
-        "license": Object {
-          "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
-          "name": undefined,
-        },
-        "licenseArray": Array [],
-        "mergeArraysByIdentifier": [Function],
-        "metadataModalFile": undefined,
-        "missingFieldsListGeneral": Array [
+        "licenseArray": Array [
           Object {
-            "fieldName": "title",
-            "valueIsMissing": true,
-            "valueIsRequired": true,
-          },
-          Object {
-            "fieldName": "description",
-            "valueIsMissing": true,
-            "valueIsRequired": true,
-          },
-          Object {
-            "fieldName": "atLeastOneKeyword",
-            "valueIsMissing": true,
-            "valueIsRequired": true,
-          },
-          Object {
-            "fieldName": "atLeastOneLicense",
-            "valueIsMissing": true,
-            "valueIsRequired": false,
-          },
-          Object {
-            "fieldName": "fileOrigin",
-            "valueIsMissing": true,
-            "valueIsRequired": true,
+            "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
+            "name": undefined,
           },
         ],
+        "mergeArraysByIdentifier": [Function],
+        "metadataModalFile": undefined,
+        "newCumulativeState": 0,
         "original": undefined,
         "otherIdentifier": "",
         "otherIdentifiersArray": Array [],
         "otherIdentifiersValidationError": null,
-        "otherLicenseUrl": "",
         "preservationState": 0,
-        "restrictionGrounds": Object {},
+        "projects": Array [],
+        "promptLooseActors": undefined,
+        "promptLooseProvenances": undefined,
+        "provenances": Array [],
+        "provenancesWithNonExistingActors": Array [],
+        "relatedResources": Array [],
+        "restrictionGrounds": undefined,
         "selectedDirectories": Array [],
         "selectedFiles": Array [],
         "selectedProject": undefined,
         "setOtherIdentifierValidationError": [Function],
         "spatials": Array [],
-        "stillMissingGeneralFields": true,
-        "stillMissingGeneralFieldsDraft": true,
+        "temporals": Array [],
         "title": Object {
           "en": "",
           "fi": "",
@@ -494,7 +578,10 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
   Stores={
     Object {
       "Env": Env {
+        "app": undefined,
         "environment": "test",
+        "getEtsinUrl": [Function],
+        "getQvainUrl": [Function],
         "history": RouterStore {
           "go": [Function],
           "goBack": [Function],
@@ -504,6 +591,7 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
           "replace": [Function],
         },
         "metaxApiV2": true,
+        "separateQvain": false,
       },
       "Locale": Locale {},
       "Qvain": Qvain {
@@ -511,33 +599,22 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
           "Qvain": [Circular],
           "actorInEdit": null,
           "actors": Array [],
-          "createActor": [Function],
+          "editDataset": [Function],
           "getDatasetOrganizations": [Function],
           "getReferenceOrganizations": [Function],
           "getReferenceOrganizationsForActor": [Function],
-          "isActorEqual": [Function],
-          "isEqual": [Function],
-          "isOrganizationEqual": [Function],
           "loadingReferenceOrganizations": Object {},
-          "missingFieldsListActors": Array [
-            Object {
-              "fieldName": "creator",
-              "valueIsMissing": true,
-              "valueIsRequired": true,
-            },
-            Object {
-              "fieldName": "publisher",
-              "valueIsMissing": true,
-              "valueIsRequired": false,
-            },
-          ],
+          "onSuccessfulCreationCallbacks": Array [],
           "referenceOrganizationErrors": Object {},
           "referenceOrganizations": Object {},
-          "stillMissingActorFields": true,
+          "setSelectedActor": undefined,
           "toBackend": [Function],
         },
         "Env": Env {
+          "app": undefined,
           "environment": "test",
+          "getEtsinUrl": [Function],
+          "getQvainUrl": [Function],
           "history": RouterStore {
             "go": [Function],
             "goBack": [Function],
@@ -547,6 +624,7 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
             "replace": [Function],
           },
           "metaxApiV2": true,
+          "separateQvain": false,
         },
         "Files": Files {
           "AddItemsView": AddItemsView {
@@ -591,19 +669,109 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
           "root": null,
           "selectedProject": undefined,
         },
-        "Spatials": Spatials {
-          "Qvain": [Circular],
+        "Provenances": Provenances {
+          "Parent": [Circular],
+          "RelatedResources": RelatedResources {
+            "Parent": [Circular],
+            "Template": [Function],
+            "attachRefs": [Function],
+            "cloneRefs": [Function],
+            "detachRefs": [Function],
+            "fieldName": "relatedResources",
+            "isParentRoot": [Function],
+            "references": Array [],
+            "relatedResourceToBackend": [Function],
+            "saveEdited": [Function],
+            "saveNew": [Function],
+            "toBackend": [Function],
+          },
+          "Spatials": Spatials {
+            "Parent": [Circular],
+            "Template": [Function],
+            "attachRefs": [Function],
+            "cloneRefs": [Function],
+            "detachRefs": [Function],
+            "fieldName": "spatials",
+            "isParentRoot": [Function],
+            "references": Array [],
+            "saveEdited": [Function],
+            "saveNew": [Function],
+            "spatialToBackend": [Function],
+            "toBackend": [Function],
+          },
+          "Template": [Function],
+          "attachRefs": [Function],
+          "cloneRefs": [Function],
+          "detachRefs": [Function],
+          "fieldName": "provenances",
+          "isParentRoot": [Function],
+          "references": Array [
+            "associations",
+          ],
+          "saveEdited": [Function],
+          "saveNew": [Function],
           "toBackend": [Function],
+        },
+        "RelatedResources": RelatedResources {
+          "Parent": [Circular],
+          "Template": [Function],
+          "attachRefs": [Function],
+          "cloneRefs": [Function],
+          "detachRefs": [Function],
+          "fieldName": "relatedResources",
+          "isParentRoot": [Function],
+          "references": Array [],
+          "relatedResourceToBackend": [Function],
+          "saveEdited": [Function],
+          "saveNew": [Function],
+          "toBackend": [Function],
+        },
+        "Spatials": Spatials {
+          "Parent": [Circular],
+          "Template": [Function],
+          "attachRefs": [Function],
+          "cloneRefs": [Function],
+          "detachRefs": [Function],
+          "fieldName": "spatials",
+          "isParentRoot": [Function],
+          "references": Array [],
+          "saveEdited": [Function],
+          "saveNew": [Function],
+          "spatialToBackend": [Function],
+          "toBackend": [Function],
+        },
+        "Temporals": Temporals {
+          "Parent": [Circular],
+          "Template": [Function],
+          "attachRefs": [Function],
+          "cloneRefs": [Function],
+          "detachRefs": [Function],
+          "editMode": false,
+          "fieldName": "temporals",
+          "hasChanged": false,
+          "inEdit": Object {
+            "endDate": undefined,
+            "startDate": undefined,
+            "uiid": 0,
+          },
+          "isParentRoot": [Function],
+          "references": Array [],
+          "saveEdited": [Function],
+          "saveNew": [Function],
+          "toBackend": [Function],
+          "validationError": undefined,
         },
         "accessType": Object {
           "name": undefined,
           "url": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
         },
         "changed": false,
+        "clearMetadataModalFile": undefined,
         "createExternalResourceUIId": [Function],
+        "createLooseActorPromise": [Function],
+        "createLooseProvenancePromise": [Function],
         "cumulativeState": 0,
         "dataCatalog": undefined,
-        "datasetLanguage": undefined,
         "datasetLanguageArray": Array [],
         "deprecated": false,
         "description": Object {
@@ -624,65 +792,42 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
           "useCategory": "",
         },
         "externalResources": Array [],
-        "fieldOfScience": undefined,
         "fieldOfScienceArray": Array [],
         "fixDeprecatedModalOpen": false,
         "hierarchy": Object {},
         "idaPickerOpen": false,
         "inEdit": undefined,
-        "infrastructure": undefined,
-        "infrastructures": Array [],
+        "infrastructureArray": Array [],
         "issuedDate": undefined,
         "keywordString": "",
         "keywordsArray": Array [],
-        "license": Object {
-          "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
-          "name": undefined,
-        },
-        "licenseArray": Array [],
-        "mergeArraysByIdentifier": [Function],
-        "metadataModalFile": undefined,
-        "missingFieldsListGeneral": Array [
+        "licenseArray": Array [
           Object {
-            "fieldName": "title",
-            "valueIsMissing": true,
-            "valueIsRequired": true,
-          },
-          Object {
-            "fieldName": "description",
-            "valueIsMissing": true,
-            "valueIsRequired": true,
-          },
-          Object {
-            "fieldName": "atLeastOneKeyword",
-            "valueIsMissing": true,
-            "valueIsRequired": true,
-          },
-          Object {
-            "fieldName": "atLeastOneLicense",
-            "valueIsMissing": true,
-            "valueIsRequired": false,
-          },
-          Object {
-            "fieldName": "fileOrigin",
-            "valueIsMissing": true,
-            "valueIsRequired": true,
+            "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
+            "name": undefined,
           },
         ],
+        "mergeArraysByIdentifier": [Function],
+        "metadataModalFile": undefined,
+        "newCumulativeState": 0,
         "original": undefined,
         "otherIdentifier": "",
         "otherIdentifiersArray": Array [],
         "otherIdentifiersValidationError": null,
-        "otherLicenseUrl": "",
         "preservationState": 0,
-        "restrictionGrounds": Object {},
+        "projects": Array [],
+        "promptLooseActors": undefined,
+        "promptLooseProvenances": undefined,
+        "provenances": Array [],
+        "provenancesWithNonExistingActors": Array [],
+        "relatedResources": Array [],
+        "restrictionGrounds": undefined,
         "selectedDirectories": Array [],
         "selectedFiles": Array [],
         "selectedProject": undefined,
         "setOtherIdentifierValidationError": [Function],
         "spatials": Array [],
-        "stillMissingGeneralFields": true,
-        "stillMissingGeneralFieldsDraft": true,
+        "temporals": Array [],
         "title": Object {
           "en": "",
           "fi": "",
@@ -699,7 +844,10 @@ exports[`Qvain.Description should render <LanguageField /> 1`] = `
   Stores={
     Object {
       "Env": Env {
+        "app": undefined,
         "environment": "test",
+        "getEtsinUrl": [Function],
+        "getQvainUrl": [Function],
         "history": RouterStore {
           "go": [Function],
           "goBack": [Function],
@@ -709,6 +857,7 @@ exports[`Qvain.Description should render <LanguageField /> 1`] = `
           "replace": [Function],
         },
         "metaxApiV2": true,
+        "separateQvain": false,
       },
       "Locale": Locale {},
       "Qvain": Qvain {
@@ -716,33 +865,22 @@ exports[`Qvain.Description should render <LanguageField /> 1`] = `
           "Qvain": [Circular],
           "actorInEdit": null,
           "actors": Array [],
-          "createActor": [Function],
+          "editDataset": [Function],
           "getDatasetOrganizations": [Function],
           "getReferenceOrganizations": [Function],
           "getReferenceOrganizationsForActor": [Function],
-          "isActorEqual": [Function],
-          "isEqual": [Function],
-          "isOrganizationEqual": [Function],
           "loadingReferenceOrganizations": Object {},
-          "missingFieldsListActors": Array [
-            Object {
-              "fieldName": "creator",
-              "valueIsMissing": true,
-              "valueIsRequired": true,
-            },
-            Object {
-              "fieldName": "publisher",
-              "valueIsMissing": true,
-              "valueIsRequired": false,
-            },
-          ],
+          "onSuccessfulCreationCallbacks": Array [],
           "referenceOrganizationErrors": Object {},
           "referenceOrganizations": Object {},
-          "stillMissingActorFields": true,
+          "setSelectedActor": undefined,
           "toBackend": [Function],
         },
         "Env": Env {
+          "app": undefined,
           "environment": "test",
+          "getEtsinUrl": [Function],
+          "getQvainUrl": [Function],
           "history": RouterStore {
             "go": [Function],
             "goBack": [Function],
@@ -752,6 +890,7 @@ exports[`Qvain.Description should render <LanguageField /> 1`] = `
             "replace": [Function],
           },
           "metaxApiV2": true,
+          "separateQvain": false,
         },
         "Files": Files {
           "AddItemsView": AddItemsView {
@@ -796,19 +935,109 @@ exports[`Qvain.Description should render <LanguageField /> 1`] = `
           "root": null,
           "selectedProject": undefined,
         },
-        "Spatials": Spatials {
-          "Qvain": [Circular],
+        "Provenances": Provenances {
+          "Parent": [Circular],
+          "RelatedResources": RelatedResources {
+            "Parent": [Circular],
+            "Template": [Function],
+            "attachRefs": [Function],
+            "cloneRefs": [Function],
+            "detachRefs": [Function],
+            "fieldName": "relatedResources",
+            "isParentRoot": [Function],
+            "references": Array [],
+            "relatedResourceToBackend": [Function],
+            "saveEdited": [Function],
+            "saveNew": [Function],
+            "toBackend": [Function],
+          },
+          "Spatials": Spatials {
+            "Parent": [Circular],
+            "Template": [Function],
+            "attachRefs": [Function],
+            "cloneRefs": [Function],
+            "detachRefs": [Function],
+            "fieldName": "spatials",
+            "isParentRoot": [Function],
+            "references": Array [],
+            "saveEdited": [Function],
+            "saveNew": [Function],
+            "spatialToBackend": [Function],
+            "toBackend": [Function],
+          },
+          "Template": [Function],
+          "attachRefs": [Function],
+          "cloneRefs": [Function],
+          "detachRefs": [Function],
+          "fieldName": "provenances",
+          "isParentRoot": [Function],
+          "references": Array [
+            "associations",
+          ],
+          "saveEdited": [Function],
+          "saveNew": [Function],
           "toBackend": [Function],
+        },
+        "RelatedResources": RelatedResources {
+          "Parent": [Circular],
+          "Template": [Function],
+          "attachRefs": [Function],
+          "cloneRefs": [Function],
+          "detachRefs": [Function],
+          "fieldName": "relatedResources",
+          "isParentRoot": [Function],
+          "references": Array [],
+          "relatedResourceToBackend": [Function],
+          "saveEdited": [Function],
+          "saveNew": [Function],
+          "toBackend": [Function],
+        },
+        "Spatials": Spatials {
+          "Parent": [Circular],
+          "Template": [Function],
+          "attachRefs": [Function],
+          "cloneRefs": [Function],
+          "detachRefs": [Function],
+          "fieldName": "spatials",
+          "isParentRoot": [Function],
+          "references": Array [],
+          "saveEdited": [Function],
+          "saveNew": [Function],
+          "spatialToBackend": [Function],
+          "toBackend": [Function],
+        },
+        "Temporals": Temporals {
+          "Parent": [Circular],
+          "Template": [Function],
+          "attachRefs": [Function],
+          "cloneRefs": [Function],
+          "detachRefs": [Function],
+          "editMode": false,
+          "fieldName": "temporals",
+          "hasChanged": false,
+          "inEdit": Object {
+            "endDate": undefined,
+            "startDate": undefined,
+            "uiid": 0,
+          },
+          "isParentRoot": [Function],
+          "references": Array [],
+          "saveEdited": [Function],
+          "saveNew": [Function],
+          "toBackend": [Function],
+          "validationError": undefined,
         },
         "accessType": Object {
           "name": undefined,
           "url": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
         },
         "changed": false,
+        "clearMetadataModalFile": undefined,
         "createExternalResourceUIId": [Function],
+        "createLooseActorPromise": [Function],
+        "createLooseProvenancePromise": [Function],
         "cumulativeState": 0,
         "dataCatalog": undefined,
-        "datasetLanguage": undefined,
         "datasetLanguageArray": Array [],
         "deprecated": false,
         "description": Object {
@@ -829,65 +1058,42 @@ exports[`Qvain.Description should render <LanguageField /> 1`] = `
           "useCategory": "",
         },
         "externalResources": Array [],
-        "fieldOfScience": undefined,
         "fieldOfScienceArray": Array [],
         "fixDeprecatedModalOpen": false,
         "hierarchy": Object {},
         "idaPickerOpen": false,
         "inEdit": undefined,
-        "infrastructure": undefined,
-        "infrastructures": Array [],
+        "infrastructureArray": Array [],
         "issuedDate": undefined,
         "keywordString": "",
         "keywordsArray": Array [],
-        "license": Object {
-          "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
-          "name": undefined,
-        },
-        "licenseArray": Array [],
-        "mergeArraysByIdentifier": [Function],
-        "metadataModalFile": undefined,
-        "missingFieldsListGeneral": Array [
+        "licenseArray": Array [
           Object {
-            "fieldName": "title",
-            "valueIsMissing": true,
-            "valueIsRequired": true,
-          },
-          Object {
-            "fieldName": "description",
-            "valueIsMissing": true,
-            "valueIsRequired": true,
-          },
-          Object {
-            "fieldName": "atLeastOneKeyword",
-            "valueIsMissing": true,
-            "valueIsRequired": true,
-          },
-          Object {
-            "fieldName": "atLeastOneLicense",
-            "valueIsMissing": true,
-            "valueIsRequired": false,
-          },
-          Object {
-            "fieldName": "fileOrigin",
-            "valueIsMissing": true,
-            "valueIsRequired": true,
+            "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
+            "name": undefined,
           },
         ],
+        "mergeArraysByIdentifier": [Function],
+        "metadataModalFile": undefined,
+        "newCumulativeState": 0,
         "original": undefined,
         "otherIdentifier": "",
         "otherIdentifiersArray": Array [],
         "otherIdentifiersValidationError": null,
-        "otherLicenseUrl": "",
         "preservationState": 0,
-        "restrictionGrounds": Object {},
+        "projects": Array [],
+        "promptLooseActors": undefined,
+        "promptLooseProvenances": undefined,
+        "provenances": Array [],
+        "provenancesWithNonExistingActors": Array [],
+        "relatedResources": Array [],
+        "restrictionGrounds": undefined,
         "selectedDirectories": Array [],
         "selectedFiles": Array [],
         "selectedProject": undefined,
         "setOtherIdentifierValidationError": [Function],
         "spatials": Array [],
-        "stillMissingGeneralFields": true,
-        "stillMissingGeneralFieldsDraft": true,
+        "temporals": Array [],
         "title": Object {
           "en": "",
           "fi": "",
@@ -904,7 +1110,10 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
   Stores={
     Object {
       "Env": Env {
+        "app": undefined,
         "environment": "test",
+        "getEtsinUrl": [Function],
+        "getQvainUrl": [Function],
         "history": RouterStore {
           "go": [Function],
           "goBack": [Function],
@@ -914,6 +1123,7 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
           "replace": [Function],
         },
         "metaxApiV2": true,
+        "separateQvain": false,
       },
       "Locale": Locale {},
       "Qvain": Qvain {
@@ -921,33 +1131,22 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
           "Qvain": [Circular],
           "actorInEdit": null,
           "actors": Array [],
-          "createActor": [Function],
+          "editDataset": [Function],
           "getDatasetOrganizations": [Function],
           "getReferenceOrganizations": [Function],
           "getReferenceOrganizationsForActor": [Function],
-          "isActorEqual": [Function],
-          "isEqual": [Function],
-          "isOrganizationEqual": [Function],
           "loadingReferenceOrganizations": Object {},
-          "missingFieldsListActors": Array [
-            Object {
-              "fieldName": "creator",
-              "valueIsMissing": true,
-              "valueIsRequired": true,
-            },
-            Object {
-              "fieldName": "publisher",
-              "valueIsMissing": true,
-              "valueIsRequired": false,
-            },
-          ],
+          "onSuccessfulCreationCallbacks": Array [],
           "referenceOrganizationErrors": Object {},
           "referenceOrganizations": Object {},
-          "stillMissingActorFields": true,
+          "setSelectedActor": undefined,
           "toBackend": [Function],
         },
         "Env": Env {
+          "app": undefined,
           "environment": "test",
+          "getEtsinUrl": [Function],
+          "getQvainUrl": [Function],
           "history": RouterStore {
             "go": [Function],
             "goBack": [Function],
@@ -957,6 +1156,7 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
             "replace": [Function],
           },
           "metaxApiV2": true,
+          "separateQvain": false,
         },
         "Files": Files {
           "AddItemsView": AddItemsView {
@@ -1001,19 +1201,109 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
           "root": null,
           "selectedProject": undefined,
         },
-        "Spatials": Spatials {
-          "Qvain": [Circular],
+        "Provenances": Provenances {
+          "Parent": [Circular],
+          "RelatedResources": RelatedResources {
+            "Parent": [Circular],
+            "Template": [Function],
+            "attachRefs": [Function],
+            "cloneRefs": [Function],
+            "detachRefs": [Function],
+            "fieldName": "relatedResources",
+            "isParentRoot": [Function],
+            "references": Array [],
+            "relatedResourceToBackend": [Function],
+            "saveEdited": [Function],
+            "saveNew": [Function],
+            "toBackend": [Function],
+          },
+          "Spatials": Spatials {
+            "Parent": [Circular],
+            "Template": [Function],
+            "attachRefs": [Function],
+            "cloneRefs": [Function],
+            "detachRefs": [Function],
+            "fieldName": "spatials",
+            "isParentRoot": [Function],
+            "references": Array [],
+            "saveEdited": [Function],
+            "saveNew": [Function],
+            "spatialToBackend": [Function],
+            "toBackend": [Function],
+          },
+          "Template": [Function],
+          "attachRefs": [Function],
+          "cloneRefs": [Function],
+          "detachRefs": [Function],
+          "fieldName": "provenances",
+          "isParentRoot": [Function],
+          "references": Array [
+            "associations",
+          ],
+          "saveEdited": [Function],
+          "saveNew": [Function],
           "toBackend": [Function],
+        },
+        "RelatedResources": RelatedResources {
+          "Parent": [Circular],
+          "Template": [Function],
+          "attachRefs": [Function],
+          "cloneRefs": [Function],
+          "detachRefs": [Function],
+          "fieldName": "relatedResources",
+          "isParentRoot": [Function],
+          "references": Array [],
+          "relatedResourceToBackend": [Function],
+          "saveEdited": [Function],
+          "saveNew": [Function],
+          "toBackend": [Function],
+        },
+        "Spatials": Spatials {
+          "Parent": [Circular],
+          "Template": [Function],
+          "attachRefs": [Function],
+          "cloneRefs": [Function],
+          "detachRefs": [Function],
+          "fieldName": "spatials",
+          "isParentRoot": [Function],
+          "references": Array [],
+          "saveEdited": [Function],
+          "saveNew": [Function],
+          "spatialToBackend": [Function],
+          "toBackend": [Function],
+        },
+        "Temporals": Temporals {
+          "Parent": [Circular],
+          "Template": [Function],
+          "attachRefs": [Function],
+          "cloneRefs": [Function],
+          "detachRefs": [Function],
+          "editMode": false,
+          "fieldName": "temporals",
+          "hasChanged": false,
+          "inEdit": Object {
+            "endDate": undefined,
+            "startDate": undefined,
+            "uiid": 0,
+          },
+          "isParentRoot": [Function],
+          "references": Array [],
+          "saveEdited": [Function],
+          "saveNew": [Function],
+          "toBackend": [Function],
+          "validationError": undefined,
         },
         "accessType": Object {
           "name": undefined,
           "url": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
         },
         "changed": false,
+        "clearMetadataModalFile": undefined,
         "createExternalResourceUIId": [Function],
+        "createLooseActorPromise": [Function],
+        "createLooseProvenancePromise": [Function],
         "cumulativeState": 0,
         "dataCatalog": undefined,
-        "datasetLanguage": undefined,
         "datasetLanguageArray": Array [],
         "deprecated": false,
         "description": Object {
@@ -1034,65 +1324,42 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
           "useCategory": "",
         },
         "externalResources": Array [],
-        "fieldOfScience": undefined,
         "fieldOfScienceArray": Array [],
         "fixDeprecatedModalOpen": false,
         "hierarchy": Object {},
         "idaPickerOpen": false,
         "inEdit": undefined,
-        "infrastructure": undefined,
-        "infrastructures": Array [],
+        "infrastructureArray": Array [],
         "issuedDate": undefined,
         "keywordString": "",
         "keywordsArray": Array [],
-        "license": Object {
-          "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
-          "name": undefined,
-        },
-        "licenseArray": Array [],
-        "mergeArraysByIdentifier": [Function],
-        "metadataModalFile": undefined,
-        "missingFieldsListGeneral": Array [
+        "licenseArray": Array [
           Object {
-            "fieldName": "title",
-            "valueIsMissing": true,
-            "valueIsRequired": true,
-          },
-          Object {
-            "fieldName": "description",
-            "valueIsMissing": true,
-            "valueIsRequired": true,
-          },
-          Object {
-            "fieldName": "atLeastOneKeyword",
-            "valueIsMissing": true,
-            "valueIsRequired": true,
-          },
-          Object {
-            "fieldName": "atLeastOneLicense",
-            "valueIsMissing": true,
-            "valueIsRequired": false,
-          },
-          Object {
-            "fieldName": "fileOrigin",
-            "valueIsMissing": true,
-            "valueIsRequired": true,
+            "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
+            "name": undefined,
           },
         ],
+        "mergeArraysByIdentifier": [Function],
+        "metadataModalFile": undefined,
+        "newCumulativeState": 0,
         "original": undefined,
         "otherIdentifier": "",
         "otherIdentifiersArray": Array [],
         "otherIdentifiersValidationError": null,
-        "otherLicenseUrl": "",
         "preservationState": 0,
-        "restrictionGrounds": Object {},
+        "projects": Array [],
+        "promptLooseActors": undefined,
+        "promptLooseProvenances": undefined,
+        "provenances": Array [],
+        "provenancesWithNonExistingActors": Array [],
+        "relatedResources": Array [],
+        "restrictionGrounds": undefined,
         "selectedDirectories": Array [],
         "selectedFiles": Array [],
         "selectedProject": undefined,
         "setOtherIdentifierValidationError": [Function],
         "spatials": Array [],
-        "stillMissingGeneralFields": true,
-        "stillMissingGeneralFieldsDraft": true,
+        "temporals": Array [],
         "title": Object {
           "en": "",
           "fi": "",
@@ -1105,7 +1372,9 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
 `;
 
 exports[`Qvain.RightsAndLicenses should render <AccessType /> 1`] = `
-<Card>
+<Card
+  bottomContent={false}
+>
   <form__LabelLarge
     htmlFor="accessTypeSelect"
   >
@@ -1122,6 +1391,8 @@ exports[`Qvain.RightsAndLicenses should render <AccessType /> 1`] = `
     }
     clearable={true}
     component={[Function]}
+    getOptionLabel={[Function]}
+    getOptionValue={[Function]}
     inputId="accessTypeSelect"
     isDisabled={false}
     name="accessType"
@@ -1130,8 +1401,8 @@ exports[`Qvain.RightsAndLicenses should render <AccessType /> 1`] = `
     options={Array []}
     value={
       Object {
-        "label": undefined,
-        "value": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
+        "name": undefined,
+        "url": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
       }
     }
   />
@@ -1140,7 +1411,9 @@ exports[`Qvain.RightsAndLicenses should render <AccessType /> 1`] = `
 `;
 
 exports[`Qvain.RightsAndLicenses should render <Licenses /> 1`] = `
-<Card>
+<Card
+  bottomContent={false}
+>
   <form__LabelLarge
     htmlFor="licenseSelect"
   >
@@ -1160,31 +1433,35 @@ exports[`Qvain.RightsAndLicenses should render <Licenses /> 1`] = `
       }
     }
     component={[Function]}
+    createOptionPosition="first"
+    getNewOptionData={[Function]}
+    getOptionLabel={[Function]}
+    getOptionValue={[Function]}
     inputId="licenseSelect"
-    isClearable={true}
+    isClearable={false}
     isDisabled={false}
+    isMulti={true}
     name="license"
-    onBlur={[Function]}
     onChange={[Function]}
-    value={
+    options={Array []}
+    styles={
       Object {
-        "label": undefined,
-        "value": undefined,
+        "multiValue": [Function],
+        "multiValueLabel": [Function],
       }
     }
+    value={
+      Array [
+        Object {
+          "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
+          "name": undefined,
+        },
+      ]
+    }
   />
-  <licenses__ButtonContainer>
-    <licenses__AddNewButton
-      disabled={false}
-      onClick={[Function]}
-      type="button"
-    >
-      <Translate
-        component="span"
-        content="qvain.rightsAndLicenses.license.addButton"
-      />
-    </licenses__AddNewButton>
-  </licenses__ButtonContainer>
+  <ValidationErrors
+    errors={Array []}
+  />
 </Card>
 `;
 
@@ -1209,7 +1486,7 @@ exports[`Qvain.RightsAndLicenses should render <RightsAndLicenses /> 1`] = `
       />
     </Tooltip>
   </title__SectionTitle>
-  <inject-License-with-Stores />
+  <WithTheme(inject-License-with-Stores) />
   <inject-AccessType-with-Stores />
 </div>
 `;

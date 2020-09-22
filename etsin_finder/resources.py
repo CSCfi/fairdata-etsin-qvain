@@ -7,9 +7,7 @@
 
 """RESTful API endpoints, meant to be used by the frontend"""
 
-from functools import wraps
-import logging
-from flask import request, session
+from flask import session
 from flask_mail import Message
 from flask_restful import abort, reqparse, Resource
 
@@ -27,32 +25,19 @@ from etsin_finder.email_utils import \
     get_email_recipient_addresses, \
     get_harvest_info, \
     validate_send_message_request
-from etsin_finder.finder import app
+from etsin_finder.app import app
+from etsin_finder.log import log
+
 from etsin_finder.utils import \
     sort_array_of_obj_by_key, \
     slice_array_on_limit
+from etsin_finder.log_utils import log_request
 from etsin_finder import rems_service
 from etsin_finder.rems_service import RemsAPIService
 from etsin_finder.app_config import get_fairdata_rems_api_config
 
 TOTAL_ITEM_LIMIT = 1000
-log = app.logger
 
-def log_request(f):
-    """Log request when used as decorator."""
-    @wraps(f)
-    def func(*args, **kwargs):
-        """Log requests"""
-        csc_name = authentication.get_user_csc_name() if not app.testing else ''
-        log.info('[{0}.{1}] {2} {3} {4} USER AGENT: {5}'.format(
-            args[0].__class__.__name__,
-            f.__name__,
-            csc_name if csc_name else 'UNAUTHENTICATED',
-            request.environ.get('REQUEST_METHOD'),
-            request.path,
-            request.user_agent))
-        return f(*args, **kwargs)
-    return func
 
 class Dataset(Resource):
     """Dataset related REST endpoints for frontend"""
@@ -317,6 +302,8 @@ class User(Resource):
             'home_organization_id': authentication.get_user_home_organization_id(),
             'home_organization_name': authentication.get_user_home_organization_name()}
         csc_user = authentication.get_user_csc_name()
+        first_name = authentication.get_user_firstname()
+        last_name = authentication.get_user_lastname()
         groups = authentication.get_user_ida_groups()
         user_info['user_ida_groups'] = groups
 
@@ -329,6 +316,10 @@ class User(Resource):
 
         if csc_user is not None:
             user_info['user_csc_name'] = csc_user
+        if first_name and last_name:
+            user_info['first_name'] = first_name
+            user_info['last_name'] = last_name
+
         return user_info, 200
 
 
@@ -352,7 +343,7 @@ class REMSApplyForPermission(Resource):
         lastname = authentication.get_user_lastname()
         email = authentication.get_user_email()
 
-        if not user_id and not firstname and not lastname and not email:
+        if not (user_id and (firstname or lastname) and email):
             return 'Unauthorized request', 401
         _rems_api = RemsAPIService(app, user_id)
         userdata = {
@@ -469,6 +460,8 @@ class Download(Resource):
         # Check request query parameters are present
         args = self.parser.parse_args()
         cr_id = args.get('cr_id')
+        if not authorization.user_can_view_dataset(cr_id):
+            abort(404)
 
         cr = cr_service.get_catalog_record(cr_id, False, False)
         if not cr:

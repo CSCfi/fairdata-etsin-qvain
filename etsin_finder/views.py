@@ -6,7 +6,7 @@
 # :license: MIT
 
 """Used for routing traffic from Flask to frontend. Additionally handles authentication related routes."""
-from urllib.parse import quote
+from urllib.parse import quote, unquote
 
 from flask import make_response, render_template, redirect, request, session
 from onelogin.saml2.utils import OneLogin_Saml2_Utils
@@ -17,9 +17,8 @@ from etsin_finder.authentication import \
     init_saml_auth, \
     prepare_flask_request_for_saml, \
     reset_flask_session_on_login
-from etsin_finder.finder import app
-
-log = app.logger
+from etsin_finder.app import app
+from etsin_finder.log import log
 
 
 # REACT APP RELATED
@@ -117,7 +116,7 @@ def saml_attribute_consumer_service():
         self_url = OneLogin_Saml2_Utils.get_self_url(req)
         log.debug("SESSION: {0}".format(session))
         if 'RelayState' in request.form and self_url != request.form.get('RelayState'):
-            return redirect(auth.redirect_to(request.form.get('RelayState')))
+            return redirect(auth.redirect_to(unquote(request.form.get('RelayState'))))
 
     return _render_index_template(saml_errors=errors)
 

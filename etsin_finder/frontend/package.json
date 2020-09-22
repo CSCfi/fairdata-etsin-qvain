@@ -47,6 +47,7 @@
     "html-webpack-plugin": "^3.2.0",
     "leaflet": "^1.5.1",
     "leaflet-geosearch": "2.7.0",
+    "lodash.clonedeep": "^4.5.0",
     "mobx": "^5.13.0",
     "mobx-react": "^5.4.4",
     "mobx-react-router": "^4.0.7",
@@ -84,6 +85,7 @@
     "babel-eslint": "^10.0.2",
     "babel-loader": "^8.0.6",
     "babel-plugin-styled-components": "^1.10.7",
+    "dotenv-webpack": "^2.0.0",
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.14.0",
     "enzyme-to-json": "^3.4.4",
@@ -120,10 +122,10 @@
   },
   "prettier": {
     "function-paren-newline": false,
+    "arrowParens": "avoid",
     "printWidth": 100,
     "semi": false,
     "singleQuote": true,
-    "trailingComma": "es5",
-    "arrowParens": "avoid"
+    "trailingComma": "es5"
   }
 }

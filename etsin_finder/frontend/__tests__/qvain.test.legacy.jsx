@@ -1,9 +1,9 @@
-import React from 'react';
+import React from 'react'
 import { shallow, mount } from 'enzyme'
 
 import '../locale/translations'
-
-import Qvain from '../js/components/qvain'
+import etsinTheme from '../js/styles/theme'
+import Qvain from '../js/components/qvain/main'
 import Description from '../js/components/qvain/description'
 import DescriptionField from '../js/components/qvain/description/descriptionField'
 import OtherIdentifierField from '../js/components/qvain/description/otherIdentifierField'
@@ -12,23 +12,28 @@ import KeywordsField from '../js/components/qvain/description/keywordsField'
 import RightsAndLicenses from '../js/components/qvain/licenses'
 import { License } from '../js/components/qvain/licenses/licenses'
 import { AccessType } from '../js/components/qvain/licenses/accessType'
-import RestrictionGrounds from '../js/components/qvain/licenses/resctrictionGrounds'
+import RestrictionGrounds from '../js/components/qvain/licenses/restrictionGrounds'
 import EmbargoExpires from '../js/components/qvain/licenses/embargoExpires'
 import { ACCESS_TYPE_URL, LICENSE_URL, DATA_CATALOG_IDENTIFIER } from '../js/utils/constants'
 import Files from '../js/components/qvain/files'
 import IDAFilePicker, { IDAFilePickerBase } from '../js/components/qvain/files/legacy/idaFilePicker'
 import FileSelector, { FileSelectorBase } from '../js/components/qvain/files/legacy/fileSelector'
 import { SelectedFilesBase, FileLabel } from '../js/components/qvain/files/legacy/selectedFiles'
-import {
-  DeleteButton
-} from '../js/components/qvain/general/buttons'
+import { DeleteButton } from '../js/components/qvain/general/buttons'
 import Env from '../js/stores/domain/env'
 import QvainStoreClass, {
   Directory,
   AccessType as AccessTypeConstructor,
-  License as LicenseConstructor
+  License as LicenseConstructor,
 } from '../js/stores/view/qvain'
 import LocaleStore from '../js/stores/view/language'
+
+jest.mock('uuid', () => {
+  let id = 0
+  return {
+    v4: () => id++,
+  }
+})
 
 const QvainStore = new QvainStoreClass(Env)
 const getStores = () => {
@@ -36,7 +41,7 @@ const getStores = () => {
   return {
     Env,
     Qvain: QvainStore,
-    Locale: LocaleStore
+    Locale: LocaleStore,
   }
 }
 
@@ -66,7 +71,9 @@ describe('Qvain', () => {
     }
 
     // Create empty dataset, getDataset should not be called
-    shallow(<FakeQvain Stores={stores} match={emptyMatch} history={{}} />)
+    shallow(
+      <FakeQvain Stores={stores} match={emptyMatch} history={{}} location={{ pathname: '/' }} />
+    )
     expect(callCount).toBe(0)
     expect(lastCall).toBe(undefined)
 
@@ -76,10 +83,17 @@ describe('Qvain', () => {
       ...stores,
       Qvain: {
         ...stores.Qvain,
-        original: { identifier: identifierMatch.params.identifier }
-      }
+        original: { identifier: identifierMatch.params.identifier },
+      },
     }
-    shallow(<FakeQvain Stores={datasetOpenedStore} match={identifierMatch} history={{}} />)
+    shallow(
+      <FakeQvain
+        Stores={datasetOpenedStore}
+        match={identifierMatch}
+        history={{}}
+        location={{ pathname: '/' }}
+      />
+    )
     expect(callCount).toBe(0)
     expect(lastCall).toBe(undefined)
 
@@ -89,16 +103,30 @@ describe('Qvain', () => {
       ...stores,
       Qvain: {
         ...stores.Qvain,
-        original: { identifier: anotherMatch.params.identifier }
-      }
+        original: { identifier: anotherMatch.params.identifier },
+      },
     }
-    shallow(<FakeQvain Stores={anotherDatasetOpenedStore} match={identifierMatch} history={{}} />)
+    shallow(
+      <FakeQvain
+        Stores={anotherDatasetOpenedStore}
+        match={identifierMatch}
+        history={{}}
+        location={{ pathname: '/' }}
+      />
+    )
     expect(callCount).toBe(1)
     expect(lastCall).toBe(identifierMatch.params.identifier)
 
     // Edit existing dataset, getDataset should be called
     lastCall = undefined
-    const wrapper = shallow(<FakeQvain Stores={stores} match={identifierMatch} history={{}} />)
+    const wrapper = shallow(
+      <FakeQvain
+        Stores={stores}
+        match={identifierMatch}
+        history={{}}
+        location={{ pathname: '/' }}
+      />
+    )
     expect(callCount).toBe(2)
     expect(lastCall).toBe(identifierMatch.params.identifier)
 
@@ -139,23 +167,13 @@ describe('Qvain.RightsAndLicenses', () => {
     expect(component).toMatchSnapshot()
   })
   it('should render <Licenses />', () => {
-    const component = shallow(<License Stores={getStores()} />)
+    const stores = getStores()
+    const component = shallow(<License Stores={stores} theme={etsinTheme} />)
     expect(component).toMatchSnapshot()
   })
-  it('should render other license URL field', () => {
-    const stores = getStores()
-    stores.Qvain.setLicense(LicenseConstructor({ en: 'Other (URL)', fi: 'Muu (URL)', }, 'other'))
-    const component = shallow(<License Stores={stores} />)
-    expect(component.find('#otherLicenseURL').length).toBe(1)
-  })
-  it('should NOT render other license URL field', () => {
-    const stores = getStores()
-    stores.Qvain.setLicense(LicenseConstructor(undefined, LICENSE_URL.CCBY4))
-    const component = shallow(<License Stores={stores} />)
-    expect(component.find('#otherLicenseURL').length).toBe(0)
-  })
   it('should render <AccessType />', () => {
-    const component = shallow(<AccessType Stores={getStores()} />)
+    const stores = getStores()
+    const component = shallow(<AccessType Stores={stores} />)
     expect(component).toMatchSnapshot()
   })
   it('should render <RestrictionGrounds />', () => {
@@ -195,9 +213,12 @@ describe('Qvain.Files', () => {
 
   it('should open file selector upon selecting file picker', () => {
     const component = shallow(<IDAFilePickerBase Stores={getStores()} />)
-    component.children().last().simulate('click', {
-      preventDefault: () => console.log('preventDefault')
-    })
+    component
+      .children()
+      .last()
+      .simulate('click', {
+        preventDefault: () => console.log('preventDefault'),
+      })
     expect(component.find(FileSelector).length).toBe(1)
   })
 
@@ -219,14 +240,14 @@ describe('Qvain.Files', () => {
               project_identifier: 'project_y',
               directory_name: 'directory2',
               directories: [],
-              files: []
+              files: [],
             },
             undefined,
             false,
             false
-          )
+          ),
         ],
-        files: []
+        files: [],
       },
       undefined,
       false,
@@ -259,10 +280,10 @@ describe('Qvain.Files', () => {
             project_identifier: 'project_y',
             directory_name: 'directory2',
             directories: [],
-            files: []
-          }
+            files: [],
+          },
         ],
-        files: []
+        files: [],
       },
       undefined,
       false,
@@ -273,8 +294,13 @@ describe('Qvain.Files', () => {
     fileSelector.unmount()
     // mount the SelectedFiles component
     const selectedFiles = shallow(<SelectedFilesBase Stores={stores} />)
-    expect(selectedFiles.find(FileLabel).last().text()).toBe('<FontAwesomeIcon />project_y / directory2')
-    selectedFiles.find(DeleteButton).last().simulate('click', { preventDefault: () => { } })
+    expect(selectedFiles.find(FileLabel).last().text()).toBe(
+      '<FontAwesomeIcon />project_y / directory2'
+    )
+    selectedFiles
+      .find(DeleteButton)
+      .last()
+      .simulate('click', { preventDefault: () => {} })
     expect(selectedFiles.find(FileLabel).length).toBe(0)
   })
 })

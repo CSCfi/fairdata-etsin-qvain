@@ -2,20 +2,23 @@
 
 from copy import deepcopy
 import json
-from flask import session
 from base64 import urlsafe_b64encode
 from datetime import date
 
-from etsin_finder.constants import SAML_ATTRIBUTES, DATA_CATALOG_IDENTIFIERS, ACCESS_TYPES
+from etsin_finder.constants import DATA_CATALOG_IDENTIFIERS, ACCESS_TYPES
 from etsin_finder.cr_service import (
     get_catalog_record,
-    is_draft,
-    is_catalog_record_owner
 )
-from etsin_finder.finder import app
-from etsin_finder.authentication import get_user_ida_groups, get_user_csc_name, get_user_email, get_user_firstname, get_user_lastname
+from etsin_finder.log import log
+from etsin_finder.authentication import (
+    get_user_ida_groups,
+    get_user_csc_name,
+    get_user_email,
+    get_user_firstname,
+    get_user_lastname,
+    is_authenticated
+)
 
-log = app.logger
 
 def clean_empty_keyvalues_from_dict(d):
     """Cleans all key value pairs from the object that have empty values, like [], {} and ''.
@@ -34,7 +37,7 @@ def clean_empty_keyvalues_from_dict(d):
     return {k: v for k, v in ((k, clean_empty_keyvalues_from_dict(v)) for k, v in d.items()) if v or v is False}
 
 
-def alter_role_data(actor_list, role):
+def alter_role_data(actor_list=[], role="all"):
     """Converts the role data fom the frontend to comply with the Metax schema.
 
     Arguments:
@@ -46,7 +49,11 @@ def alter_role_data(actor_list, role):
 
     """
     actors = []
-    actor_list_with_role = [x for x in actor_list if role in x.get("roles", []) ]
+    if role == "all":
+        actor_list_with_role = actor_list
+    else:
+        actor_list_with_role = [x for x in actor_list if role in x.get("roles", []) ]
+
     for actor_object in actor_list_with_role:
         actor_object = deepcopy(actor_object)
         organizations = actor_object.get("organizations", [])
@@ -77,6 +84,61 @@ def alter_role_data(actor_list, role):
             actor = organization
         actors.append(actor)
     return actors
+
+
+def _organization_array_to_object(organizations):
+    converted = organizations[0]
+    converted["@type"] = "Organization"
+    for sub_organization in organizations[1:]:
+        sub_organization["is_part_of"] = converted
+        sub_organization["@type"] = "Organization"
+        converted = sub_organization
+    return converted
+
+
+def _funding_agency_to_object(funding_agency):
+    converted = _organization_array_to_object(funding_agency["organization"])
+    if funding_agency.get("contributorTypes", []):
+        converted["contributor_type"] = [_contributor_type_to_metax_concept(contributor_type)
+                                         for contributor_type in funding_agency.get("contributorTypes")]
+    log.debug(converted)
+    return converted
+
+
+def _contributor_type_to_metax_concept(contributor_type):
+    return {
+        "identifier": contributor_type.get("identifier"),
+        "pref_label": contributor_type.get("label"),
+        "definition": contributor_type.get("definition"),
+        "in_scheme": contributor_type.get("inScheme")
+    }
+
+
+def alter_projects_to_metax(projects):
+    """Convert project objects from frontend to comply with the Metax schema.
+
+    Arguments:
+        project (list<dict>): List of project objects, containing details and organizations
+
+    Returns:
+        list<dict>: List of project objects in Metax schema
+
+    """
+    output = []
+    for project in projects:
+        details = project.get("details", {})
+        metax_project = {
+            "name": details.get("title"),
+            "identifier": details.get("identifier"),
+            "has_funder_identifier": details.get("fundingIdentifier"),
+            "funder_type": details.get("funderType"),
+            "source_organization": [_organization_array_to_object(organization)
+                                    for organization in project.get("organizations", [])],
+            "has_funding_agency": [_funding_agency_to_object(funding_agency)
+                                   for funding_agency in project.get("fundingAgencies", [])]
+        }
+        output.append(metax_project)
+    return output
 
 
 def other_identifiers_to_metax(identifiers_list):
@@ -112,7 +174,7 @@ def access_rights_to_metax(data):
     license = data.get('license', [])
     for l in license:
         license_id = l.get('identifier')
-        license_name_en = l.get('name', {}).get('en')
+        license_name_en = l.get('name', {}).get('en') or ''
         if license_id and not license_name_en.startswith('Other (URL)'):
             license_object = {}
             license_object["identifier"] = license_id
@@ -214,7 +276,14 @@ def data_to_metax(data, metadata_provider_org, metadata_provider_user):
         dict: Returns an Dictionary that has been validated and should conform to Metax schema and is ready to be sent to Metax.
 
     """
-    publisher_array = alter_role_data(data.get("actors"), "publisher")
+    publisher_array = alter_role_data(data["actors"], "publisher")
+
+    provenances = data.get("provenance", [])
+    for provenance in provenances:
+        was_associated_with = provenance.get("was_associated_with")
+        altered_association = alter_role_data(was_associated_with)
+        provenance["was_associated_with"] = altered_association
+
     dataset_data = {
         "metadata_provider_org": metadata_provider_org,
         "metadata_provider_user": metadata_provider_user,
@@ -237,8 +306,12 @@ def data_to_metax(data, metadata_provider_org, metadata_provider_user):
             "remote_resources": remote_resources_data_to_metax(data.get("remote_resources")) if data.get("dataCatalog") == DATA_CATALOG_IDENTIFIERS.get('att') else "",
             "files": files_data_to_metax(data.get("files")) if data.get("dataCatalog") == DATA_CATALOG_IDENTIFIERS.get('ida') else "",
             "directories": directories_data_to_metax(data.get("directories")) if data.get("dataCatalog") == DATA_CATALOG_IDENTIFIERS.get('ida') else "",
+            "is_output_of": alter_projects_to_metax(data.get("projects")),
+            "relation": data.get("relation"),
+            "provenance": provenances,
             "infrastructure": _to_metax_infrastructure(data.get("infrastructure")),
-            "spatial": data.get("spatial")
+            "spatial": data.get("spatial"),
+            "temporal": data.get("temporal")
         }
     }
     return clean_empty_keyvalues_from_dict(dataset_data)
@@ -271,6 +344,45 @@ def get_dataset_creator(cr_id):
     if not dataset:
         return None
     return dataset.get('metadata_provider_user')
+
+
+def check_authentication():
+    """Verify that current user is authenticated and has a CSC user name.
+
+    Returns:
+        error {tuple}: Reason (message, status_code) for failed verification. Returns None if verification was successful.
+
+    """
+    is_authd = is_authenticated()
+    if not is_authd:
+        return {"PermissionError": "User not logged in."}, 401
+
+    csc_username = get_user_csc_name()
+    if not csc_username:
+        return {"PermissionError": "Missing user CSC identifier."}, 401
+
+    return None
+
+def check_dataset_creator(cr_id):
+    """Verify that current user is authenticated and can edit the dataset.
+
+    Arguments:
+        cr_id (str): Identifier of dataset.
+
+    Returns:
+        error {tuple}: Reason (message, status_code) for failed verification. Returns None if verification was successful.
+
+    """
+    error = check_authentication()
+    if error:
+        return error
+
+    csc_username = get_user_csc_name()
+    creator = get_dataset_creator(cr_id)
+    if csc_username != creator:
+        log.warning('User: \"{0}\" is not the creator of the dataset. Editing not allowed.'.format(csc_username))
+        return {"PermissionError": "User is not allowed to edit the dataset."}, 403
+    return None
 
 def remove_deleted_datasets_from_results(result):
     """Remove datasets marked as removed from results.
@@ -316,9 +428,15 @@ def edited_data_to_metax(data, original):
         dict: Metax ready data.
 
     """
-    publisher_array = alter_role_data(data.get("actors"), "publisher")
-    research_dataset = original.get("research_dataset")
-    log.info(research_dataset)
+    publisher_array = alter_role_data(data["actors"], "publisher")
+    research_dataset = original["research_dataset"]
+
+    provenances = data.get("provenance", [])
+    for provenance in provenances:
+        was_associated_with = provenance.get("was_associated_with")
+        altered_association = alter_role_data(was_associated_with)
+        provenance["was_associated_with"] = altered_association
+
     research_dataset.update({
         "title": data.get("title"),
         "description": data.get("description"),
@@ -337,8 +455,13 @@ def edited_data_to_metax(data, original):
         "files": files_data_to_metax(data.get("files")) if data.get("dataCatalog") == DATA_CATALOG_IDENTIFIERS.get('ida') else "",
         "directories": directories_data_to_metax(data.get("directories")) if data.get("dataCatalog") == DATA_CATALOG_IDENTIFIERS.get('ida') else "",
         "infrastructure": _to_metax_infrastructure(data.get("infrastructure")),
-        "spatial": data.get("spatial")
+        "spatial": data.get("spatial"),
+        "is_output_of": alter_projects_to_metax(data.get("projects")),
+        "relation": data.get("relation"),
+        "provenance": provenances,
+        "temporal": data.get("temporal")
     })
+    log.info(research_dataset)
     edited_data = {
         "research_dataset": research_dataset,
         "use_doi_for_published": data.get("useDoi")

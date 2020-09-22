@@ -18,6 +18,7 @@ import Map from './view/map'
 import Qvain from './view/qvain'
 import QvainDatasets from './view/qvain.datasets'
 import Access from './view/access'
+import SearchFilters from './view/searchfilters'
 
 const Stores = {
   Env,
@@ -30,6 +31,7 @@ const Stores = {
   Qvain: new Qvain(Env),
   QvainDatasets,
   Access,
+  SearchFilters,
 }
 
 export default Stores

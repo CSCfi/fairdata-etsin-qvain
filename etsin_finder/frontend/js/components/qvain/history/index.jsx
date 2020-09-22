@@ -1,7 +1,9 @@
-import React, { Component } from 'react'
-import Field from '../general/field'
+import React from 'react'
+import { Section } from '../general/section/index'
 import TooltipContent from './TooltipContent'
+import RelatedResource from './relatedResource'
 import Infrastructure from './infrastructure'
+import Provenance from './provenance'
 
 const translations = {
   title: 'qvain.history.title',
@@ -17,14 +19,12 @@ const fieldProps = {
   components,
 }
 
-class History extends Component {
-  render() {
-    return (
-      <Field {...fieldProps}>
-        <Infrastructure />
-      </Field>
-    )
-  }
-}
+const History = () => (
+  <Section {...fieldProps}>
+    <RelatedResource />
+    <Infrastructure />
+    <Provenance />
+  </Section>
+)
 
 export default History

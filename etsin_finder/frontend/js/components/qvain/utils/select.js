@@ -1,45 +1,80 @@
 import axios from 'axios'
+import { autorun } from 'mobx'
+import { disposeOnUnmount } from 'mobx-react'
+
 import { METAX_FAIRDATA_ROOT_URL } from '../../../utils/constants'
 
-export const getCurrentValue = (field, options, lang) => {
-  let current
-  if (field !== undefined && (options || {})[lang] !== undefined) {
-    current = options[lang].find(opt => opt.value === field.url)
+// If label is missing from selected option, use one from the options if available.
+// Allows having default options without have hardcoded labels.
+export const getCurrentOption = (model, options, getter) => {
+  if (Array.isArray(getter)) {
+    return getter.map(value => getSingleOption(model, options, value))
   }
-  if (current === undefined && field !== undefined) {
-    let label
-    if (field.name !== undefined) {
-      label = field.name[lang] || Object.values(field.name)[0]
-    } else {
-      label = undefined
-    }
-    current = {
-      value: field.url,
-      label,
-    }
-  }
-  return current
+  return getSingleOption(model, options, getter)
 }
 
-export const onChange = (options, lang, callback, constructFunc) => selection => {
-  if (selection !== null) {
-    const name = {}
-    name[lang] = selection.label
-    const otherLocales = Object.keys(options).filter(o => o !== lang)
-    if (otherLocales.length > 0) {
-      name[otherLocales[0]] = options[otherLocales[0]].find(o => o.value === selection.value).label
+const getSingleOption = (model, options, value) => {
+  if (!value) {
+    return value
+  }
+  const [labelKey, urlKey] = Object.keys(model())
+  if (value[labelKey]) {
+    return value
+  }
+  if (value[urlKey]) {
+    const url = value[urlKey]
+    const selected = options.find(opt => opt[urlKey] === url)
+    if (selected) {
+      return selected
     }
-    callback(constructFunc(name, selection.value))
+  }
+  return value
+}
+
+// Call setter for single item
+export const onChange = (callback) => selection => {
+  if (selection !== null) {
+    callback(selection)
   } else {
     callback(undefined)
   }
 }
 
-export const getOptions = async (ref, inputValue) => {
+// Call setter for array
+export const onChangeMulti = (callback) => selection => {
+  if (!selection) {
+    callback([])
+    return
+  }
+  callback(selection)
+}
+
+// Get label for option, assumes that first key of model corresponds to label
+export const getOptionLabel = (model, lang) => {
+  const [labelKey, urlKey] = Object.keys(model())
+  return opt => {
+    if (!opt) {
+      return undefined
+    }
+    if (opt[labelKey]) {
+      return opt[labelKey][lang] || opt[labelKey].und || Object.values(opt[labelKey])[0]
+    }
+    return opt[urlKey]
+  }
+}
+
+// Get label for option, assumes that second key of model corresponds to url
+export const getOptionValue = (model) => {
+  const urlKey = Object.keys(model())[1]
+  return opt => opt[urlKey]
+}
+
+// Fetch options for a given search string
+export const getOptions = async (model, ref, inputValue) => {
   if (!inputValue) return []
   const api = refDataApi(ref)
   const response = await api.get(`_search?size=100&q=*${inputValue}*`)
-  return parseRefResponse(response)
+  return parseRefResponse(response, model)
 }
 
 const refDataApi = ref =>
@@ -47,18 +82,31 @@ const refDataApi = ref =>
     baseURL: `${METAX_FAIRDATA_ROOT_URL}/es/reference_data/${ref}/`,
   })
 
-const parseRefResponse = res => {
+const parseRefResponse = (res, model) => {
   const hits = res.data.hits.hits
-  const refsFi = hits.map(hit => ({
-    value: hit._source.uri,
-    label: hit._source.label.fi || hit._source.label.und,
-  })).sort((a, b) => a.label.localeCompare(b.label))
-  const refsEn = hits.map(hit => ({
-    value: hit._source.uri,
-    label: hit._source.label.en || hit._source.label.und,
-  })).sort((a, b) => a.label.localeCompare(b.label))
-  return {
-    en: refsEn,
-    fi: refsFi,
-  }
+  return hits.map(hit => model(hit._source.label, hit._source.uri))
+}
+
+// Sort options array in-place according to lang
+export const sortOptions = async (model, lang, options) => {
+  const labelKey = Object.keys(model())[0]
+  const collator = new Intl.Collator(lang, { numeric: true, sensitivity: 'base' })
+  options.sort((a, b) => collator.compare(a[labelKey][lang], b[labelKey][lang]))
+}
+
+// Sort state.options automatically on language change, disposes in componentWillUnmount
+export const autoSortOptions = (componentInstance, Locale, model) => {
+  disposeOnUnmount(
+    componentInstance,
+    autorun(() => {
+      const { lang } = Locale
+      componentInstance.setState(state => {
+        const opts = [...state.options]
+        sortOptions(model, lang, opts)
+        return {
+          options: opts,
+        }
+      })
+    })
+  )
 }

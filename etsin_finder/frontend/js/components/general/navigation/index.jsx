@@ -15,41 +15,45 @@ import { NavLink } from 'react-router-dom'
 import Translate from 'react-translate-component'
 import translate from 'counterpart'
 import styled from 'styled-components'
-import { Home, Search } from '../../../routes'
+import { inject, observer } from 'mobx-react'
+import PropTypes from 'prop-types'
 
-import Accessibility from '../../../stores/view/accessibility'
-
-export default class Navi extends React.Component {
+class Navi extends React.Component {
   render() {
-    return (
-      <React.Fragment>
-        <NavItem
-          exact
-          to="/"
-          onPointerOver={() => {
-            Home.preload()
-          }}
-          onClick={() => {
-            Accessibility.announce(translate('changepage', { page: translate('nav.datasets') }))
-          }}
-        >
-          <Translate content="nav.home" />
-        </NavItem>
-        <NavItem
-          to="/datasets"
-          onPointerOver={() => {
-            Search.preload()
-          }}
-          onClick={() => {
-            Accessibility.announce(translate('changepage', { page: translate('nav.datasets') }))
-          }}
-        >
-          <Translate content="nav.datasets" />
-        </NavItem>
-      </React.Fragment>
-    )
+    const Accessibility = this.props.Stores.Accessibility
+    return this.props.routes.map(route => (
+      <NavItem
+        key={route.path}
+        exact={route.exact}
+        to={route.path}
+        onPointerOver={() => {
+          if (route.loadableComponent) {
+            route.loadableComponent.preload()
+          }
+        }}
+        onClick={() => {
+          Accessibility.announce(translate('changepage', { page: translate(route.label) }))
+        }}
+      >
+        <Translate content={route.label} />
+      </NavItem>
+    ))
   }
 }
+
+Navi.propTypes = {
+  Stores: PropTypes.object.isRequired,
+  routes: PropTypes.arrayOf(
+    PropTypes.shape({
+      loadableComponent: PropTypes.elementType,
+      label: PropTypes.string.isRequired,
+      path: PropTypes.string.isRequired,
+      exact: PropTypes.bool,
+    })
+  ).isRequired,
+}
+
+export default inject('Stores')(observer(Navi))
 
 const NavItem = styled(NavLink)`
   margin: 0 1.5em;

@@ -5,18 +5,21 @@ import PropTypes from 'prop-types'
 import { inject, observer } from 'mobx-react'
 import { SectionTitle } from '../general/section'
 import { ContainerLight, ContainerSubsectionBottom } from '../general/card'
-import { HelpIcon } from '../general/form'
+import { HelpIcon } from '../general/modal/form'
 import IDAFilePicker from './ida'
 import ExternalFiles from './external/externalFiles'
 import DataCatalog from './dataCatalog'
 import CumulativeState from './cumulativeState'
+import CumulativeStateV2 from './cumulativeStateV2'
 import { DATA_CATALOG_IDENTIFIER } from '../../../utils/constants'
-import Tooltip from '../general/tooltip'
+import Tooltip from '../general/section/tooltip'
 import FilesInfo from './filesInfo'
 import MetadataModal from './metadataModal'
+import ClearMetadataModal from './metadataModal/clearMetadataModal'
 import SelectedItems from './ida/selectedItems'
 import LegacyFilePicker from './legacy/idaFilePicker'
 import LegacySelectedFiles from './legacy/selectedFiles'
+import FormModal from './ida/forms/formModal'
 
 class Files extends Component {
   static propTypes = {
@@ -27,38 +30,44 @@ class Files extends Component {
     tooltipOpen: false,
   }
 
-  render() {
+  getData = () => {
     const { dataCatalog, isPas } = this.props.Stores.Qvain
     const { metaxApiV2 } = this.props.Stores.Env
-    let data = null
 
     const SelectedItemsComponent = metaxApiV2 ? SelectedItems : LegacySelectedFiles
     const FilePickerComponent = metaxApiV2 ? IDAFilePicker : LegacyFilePicker
 
     if (isPas) {
-      data = (
+      return (
         <>
+          {metaxApiV2 && <FormModal />}
           <ContainerSubsectionBottom>
             <SelectedItemsComponent />
           </ContainerSubsectionBottom>
         </>
       )
-    } else if (dataCatalog === DATA_CATALOG_IDENTIFIER.IDA) {
-      data = (
+    }
+    if (dataCatalog === DATA_CATALOG_IDENTIFIER.IDA) {
+      return (
         <>
-          <CumulativeState />
+          {metaxApiV2 ? <CumulativeStateV2 /> : <CumulativeState />}
           <ContainerSubsectionBottom>
             <FilePickerComponent />
           </ContainerSubsectionBottom>
         </>
       )
-    } else if (dataCatalog === DATA_CATALOG_IDENTIFIER.ATT) {
-      data = (
+    }
+    if (dataCatalog === DATA_CATALOG_IDENTIFIER.ATT) {
+      return (
         <ContainerSubsectionBottom>
           <ExternalFiles />
         </ContainerSubsectionBottom>
       )
     }
+    return null
+  }
+
+  render() {
     return (
       <ContainerLight className="container">
         <SectionTitle>
@@ -84,8 +93,9 @@ class Files extends Component {
           </Tooltip>
         </SectionTitle>
         <DataCatalog />
-        {data}
+        {this.getData()}
         <MetadataModal />
+        <ClearMetadataModal />
       </ContainerLight>
     )
   }

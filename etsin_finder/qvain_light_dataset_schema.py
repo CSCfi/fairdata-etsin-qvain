@@ -68,15 +68,85 @@ class ActorValidationSchema(Schema):
         else:
             raise ValidationError('Invalid actor type.')
 
+
 class LicenseValidationSchema(Schema):
     """Validation schema for licenses."""
 
     identifier = fields.URL()
     name = fields.Dict()
 
-class DatasetValidationSchema(Schema):
-    """Validation schema for the whole dataset."""
+class ProjectDetailsValidationSchema(Schema):
+    """Validation schema for project details."""
 
+    title = fields.Dict(
+        required=True,
+        validate=lambda x: x.get('en') or x.get('fi')
+    )
+    identifier = fields.Str(required=False)
+    fundingIdentifier = fields.Str(required=False)
+    funderType = fields.Dict(
+        required=False,
+        validate=lambda value: bool(value.get('identifier'))
+    )
+
+
+class ContributorTypeValidationSchema(Schema):
+    """Validation schema for project funding agency contributor type."""
+
+    identifier = fields.Str(required=True)
+    label = fields.Dict(
+        required=False,
+        validate=lambda x: x.get('en') or x.get('fi')
+    )
+    definition = fields.Dict(
+        required=False,
+        validate=lambda x: x.get('en') or x.get('fi')
+    )
+    inScheme = fields.Str(required=False)
+
+
+class FundingAgencyValidationSchema(Schema):
+    """Validation schema for project funding agency"""
+
+    organization = fields.List(fields.Nested(OrganizationValidationSchema))
+    contributorTypes = fields.List(
+        fields.Nested(ContributorTypeValidationSchema)
+    )
+
+
+class ProjectValidationSchema(Schema):
+    """Validation schema for projects."""
+
+    details = fields.Nested(ProjectDetailsValidationSchema, required=True)
+    organizations = fields.List(
+        fields.List(
+            fields.Nested(OrganizationValidationSchema)
+        ),
+        required=True,
+        validate=Length(min=1)
+    )
+    fundingAgencies = fields.List(
+        fields.Nested(FundingAgencyValidationSchema),
+        required=False
+    )
+
+
+class DatasetValidationSchema(Schema):
+    """
+    Validation schema for the whole dataset.
+
+    Arguments:
+        Schema {library} -- Marshmallows Schema library.
+    """
+
+    relation = fields.List(
+        fields.Dict(),
+        required=False
+    )
+    provenance = fields.List(
+        fields.Dict(),
+        required=False
+    )
     original = fields.Dict()
     title = fields.Dict(
         required=True,
@@ -115,6 +185,10 @@ class DatasetValidationSchema(Schema):
     )
     spatial = fields.List(
         fields.Dict()
+    )
+    temporal = fields.List(
+        fields.Dict(),
+        required=False
     )
     embargoDate = fields.Str()
     restrictionGrounds = fields.Str()
@@ -178,3 +252,7 @@ class DatasetValidationSchemaForDraft(Schema):
     directories = fields.List(fields.Dict())
     remote_resources = fields.List(fields.Dict())
     useDoi = fields.Boolean()
+    projects = fields.List(
+        fields.Nested(ProjectValidationSchema),
+        required=False
+    )

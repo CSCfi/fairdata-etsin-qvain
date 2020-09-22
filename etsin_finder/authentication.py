@@ -11,11 +11,11 @@ from urllib.parse import urlparse
 from flask import session
 from onelogin.saml2.auth import OneLogin_Saml2_Auth
 
-from etsin_finder.finder import app
+from etsin_finder.app import app
+from etsin_finder.log import log
 from etsin_finder.utils import executing_travis
 from etsin_finder.constants import SAML_ATTRIBUTES
 
-log = app.logger
 
 def not_found(field):
     """Log if field not found in session samlUserdata
@@ -104,7 +104,6 @@ def prepare_flask_request_for_saml(request):
         # "lowercase_urlencoding": "",
         # "request_uri": "",
         # "query_string": ""
-
     }
 
 
@@ -147,7 +146,6 @@ def get_user_haka_identifier():
     haka_id = session.get('samlUserdata', {}).get(SAML_ATTRIBUTES.get('haka_id', None), False)
 
     return haka_id[0] if haka_id else not_found('haka_id')
-    return None
 
 
 def get_user_id():
@@ -181,7 +179,6 @@ def get_user_email():
     csc_email = session.get('samlUserdata', {}).get(SAML_ATTRIBUTES.get('email', None), False)
 
     return csc_email[0] if csc_email else not_found('csc_email')
-    return None
 
 
 def get_user_lastname():
@@ -197,7 +194,6 @@ def get_user_lastname():
     lastname = session.get('samlUserdata', {}).get(SAML_ATTRIBUTES.get('last_name', None), False)
 
     return lastname[0] if lastname else not_found('lastname')
-    return None
 
 
 def get_user_firstname():
@@ -213,7 +209,6 @@ def get_user_firstname():
     first_name = session.get('samlUserdata', {}).get(SAML_ATTRIBUTES.get('first_name', None), False)
 
     return first_name[0] if first_name else not_found('first_name')
-    return None
 
 
 def get_user_ida_groups():
@@ -229,7 +224,6 @@ def get_user_ida_groups():
     groups = session.get('samlUserdata', {}).get(SAML_ATTRIBUTES.get('idm_groups', None), False)
 
     return [group for group in groups if group.startswith('IDA')] if groups else not_found('groups')
-    return None
 
 
 def get_user_home_organization_id():
@@ -245,7 +239,6 @@ def get_user_home_organization_id():
     home_organization = session.get('samlUserdata', {}).get(SAML_ATTRIBUTES.get('haka_org_id', None), False)
 
     return home_organization[0] if home_organization else not_found('home_organization')
-    return None
 
 
 def get_user_home_organization_name():
@@ -261,4 +254,3 @@ def get_user_home_organization_name():
     home_organization_id = session.get('samlUserdata', {}).get(SAML_ATTRIBUTES.get('haka_org_name', None), False)
 
     return home_organization_id[0] if home_organization_id else not_found('home_organization_id')
-    return None

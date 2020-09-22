@@ -9,12 +9,12 @@
 
 import requests
 
-from etsin_finder.finder import app
-from etsin_finder.app_config import get_metax_api_config
-from etsin_finder.utils import json_or_empty, FlaskService
-from etsin_finder.constants import ACCESS_TYPES
+from etsin_finder.app import app
+from etsin_finder.log import log
 
-log = app.logger
+from etsin_finder.app_config import get_metax_api_config
+from etsin_finder.utils import json_or_empty, FlaskService, format_url
+from etsin_finder.constants import ACCESS_TYPES
 
 
 class MetaxAPIService(FlaskService):
@@ -54,15 +54,17 @@ class MetaxAPIService(FlaskService):
             dict: Return the responce from Metax as dict, else None.
 
         """
-        req_url = self.METAX_GET_DIRECTORY_FOR_CR_URL.format(dir_identifier, cr_identifier)
+        req_url = format_url(self.METAX_GET_DIRECTORY_FOR_CR_URL, dir_identifier, cr_identifier)
+        params = {}
         if file_fields:
-            req_url = req_url + '&file_fields={0}'.format(file_fields)
+            params['file_fields'] = file_fields
         if directory_fields:
-            req_url = req_url + '&directory_fields={0}'.format(directory_fields)
+            params['directory_fields'] = directory_fields
 
         try:
             metax_api_response = requests.get(req_url,
                                               headers={'Accept': 'application/json'},
+                                              params=params,
                                               auth=(self.user, self.pw),
                                               verify=self.verify_ssl,
                                               timeout=10)
@@ -97,7 +99,8 @@ class MetaxAPIService(FlaskService):
 
         """
         try:
-            metax_api_response = requests.get(self.METAX_GET_CATALOG_RECORD_WITH_FILE_DETAILS_URL.format(identifier),
+            url = format_url(self.METAX_GET_CATALOG_RECORD_WITH_FILE_DETAILS_URL, identifier)
+            metax_api_response = requests.get(url,
                                               headers={'Accept': 'application/json'},
                                               auth=(self.user, self.pw),
                                               verify=self.verify_ssl,
@@ -132,7 +135,8 @@ class MetaxAPIService(FlaskService):
 
         """
         try:
-            metax_api_response = requests.get(self.METAX_GET_REMOVED_CATALOG_RECORD_URL.format(identifier),
+            url = format_url(self.METAX_GET_REMOVED_CATALOG_RECORD_URL, identifier)
+            metax_api_response = requests.get(url,
                                               headers={'Accept': 'application/json'},
                                               auth=(self.user, self.pw),
                                               verify=self.verify_ssl,
@@ -277,15 +281,34 @@ def is_rems_catalog_record(catalog_record):
         return True
     return False
 
-
 def is_draft(catalog_record):
     """
     Is the catalog record a draft or not.
 
-    :param catalog_record:
-    :return:
+    Args:
+        catalog_record (dict): A catalog record
+
+    Returns:
+        bool: True if record is a draft
+
     """
     if catalog_record.get('state') == 'draft':
+        return True
+    return False
+
+
+def is_published(catalog_record):
+    """
+    Is the catalog record published or not.
+
+    Args:
+        catalog_record (dict): A catalog record
+
+    Returns:
+        bool: True if record is published
+
+    """
+    if catalog_record.get('state') == 'published':
         return True
     return False
 

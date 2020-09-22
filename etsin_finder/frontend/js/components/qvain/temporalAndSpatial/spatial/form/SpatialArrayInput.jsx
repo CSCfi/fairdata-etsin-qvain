@@ -1,60 +1,49 @@
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
-import { inject, observer } from 'mobx-react'
-import { v4 as uuidv4 } from 'uuid';
+import { observer } from 'mobx-react'
+import { v4 as uuidv4 } from 'uuid'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
-import { Input, Label } from '../../../general/form'
-import ValidationError from '../../../general/validationError'
+import { Input, Label } from '../../../general/modal/form'
+import ValidationError from '../../../general/errors/validationError'
 import Button from '../../../../general/button'
 
-class SpatialArrayInput extends Component {
-  static propTypes = {
-    Stores: PropTypes.object.isRequired,
-    datum: PropTypes.string.isRequired,
-    type: PropTypes.string.isRequired,
-    handleBlur: PropTypes.func,
-    error: PropTypes.string.isRequired,
-    isRequired: PropTypes.bool,
+const ModalArrayInput = ({
+  datum,
+  handleBlur,
+  type,
+  Field,
+  error,
+  translationsRoot,
+  isRequired,
+}) => {
+  const { changeAttribute, readonly } = Field
+
+  const translations = {
+    label: `${translationsRoot}.modal.${datum}Input.label`,
+    placeholder: `${translationsRoot}.modal.${datum}Input.placeholder`,
   }
 
-  static defaultProps = {
-    isRequired: false,
-    handleBlur: () => {},
+  const onChange = (event, id) => {
+    const arr = [...Field.inEdit[datum]]
+    arr[id].value = event.target.value
+    changeAttribute(datum, arr)
   }
 
-  translations = datum => ({
-    label: `qvain.temporalAndSpatial.spatial.modal.${datum}Input.label`,
-    placeholder: `qvain.temporalAndSpatial.spatial.modal.${datum}Input.placeholder`,
-  })
+  const onRemoveClick = id => {
+    const arr = [...Field.inEdit[datum]]
+    arr.splice(id, 1)
+    changeAttribute(datum, arr)
+  }
 
-  renderInputs = () => {
-    const { datum, handleBlur, type } = this.props
-    const { changeSpatialAttribute, spatialInEdit } = this.props.Stores.Qvain.Spatials
-    const { readonly } = this.props.Stores
-
-    const translations = this.translations(datum)
-
-    const onChange = (event, id) => {
-      const arr = [...spatialInEdit[datum]]
-      arr[id].value = event.target.value
-      changeSpatialAttribute(datum, arr)
-    }
-
-    const onRemoveClick = id => {
-      const arr = [...spatialInEdit[datum]]
-      arr.splice(id, 1)
-      changeSpatialAttribute(datum, arr)
-    }
-
-    return spatialInEdit[datum].map((item, id) => (
-      <div key={`${item.key}-${datum}-item`} style={{ display: 'flex', alignItems: 'center' }}>
+  const renderInputs = () =>
+    Field.inEdit[datum].map((item, id) => (
+      <SpatialItemWrapper key={`${item.key}-${datum}-item`}>
         <Translate
-          component={SpatialInputElem}
+          component={ArrayInputElem}
           type={type}
-          id={`${datum}Field`}
           autoFocus
           attributes={{ placeholder: translations.placeholder }}
           disabled={readonly}
@@ -66,39 +55,57 @@ class SpatialArrayInput extends Component {
           component={RemoveButton}
           onClick={() => onRemoveClick(id)}
           attributes={{ 'aria-label': 'qvain.general.buttons.remove' }}
+          disabled={Field.readonly}
         >
           <FontAwesomeIcon icon={faTimes} />
         </Translate>
-      </div>
+      </SpatialItemWrapper>
     ))
-  }
 
-  render() {
-    const { datum, error, isRequired } = this.props
-
-    const translations = this.translations(datum)
-    const { changeSpatialAttribute, spatialInEdit } = this.props.Stores.Qvain.Spatials
-
-    const addGeometry = () => {
-      const arr = [...spatialInEdit[datum]]
-      arr.push({ key: uuidv4(), value: '' })
-      changeSpatialAttribute(datum, arr)
-    }
-
-    return (
-      <>
-        <Label htmlFor={`${datum}Field`}>
-          <Translate content={translations.label} /> {isRequired ? '*' : ''}
-        </Label>
-        {this.renderInputs()}
-        <Button onClick={addGeometry}>
-          <Translate content="qvain.temporalAndSpatial.spatial.modal.buttons.addGeometry" />
-        </Button>
-        {error && <SpatialError>{error}</SpatialError>}
-      </>
-    )
-  }
+  return (
+    <ModalArrayInputWrapper>
+      <Label>
+        <Translate content={translations.label} /> {isRequired ? '*' : ''}
+      </Label>
+      {renderInputs()}
+      <AddButton
+        onClick={() => {
+          const arr = [...Field.inEdit[datum]]
+          arr.push({ key: uuidv4(), value: '' })
+          changeAttribute(datum, arr)
+        }}
+        disabled={Field.readonly}
+      >
+        <Translate content={`${translationsRoot}.modal.buttons.addGeometry`} />
+      </AddButton>
+      {error && <ArrayInputError>{error}</ArrayInputError>}
+    </ModalArrayInputWrapper>
+  )
 }
+
+ModalArrayInput.propTypes = {
+  Field: PropTypes.object.isRequired,
+  datum: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
+  handleBlur: PropTypes.func,
+  error: PropTypes.string,
+  isRequired: PropTypes.bool,
+  translationsRoot: PropTypes.string.isRequired,
+}
+
+ModalArrayInput.defaultProps = {
+  isRequired: false,
+  handleBlur: () => {},
+  error: '',
+}
+
+const ModalArrayInputWrapper = styled.div`
+  margin-bottom: 8px;
+`
+
+const AddButton = styled(Button)`
+  margin-left: 0;
+`
 
 const RemoveButton = styled(Button)`
   display: flex;
@@ -107,15 +114,20 @@ const RemoveButton = styled(Button)`
   margin-bottom: 1em;
 `
 
-const SpatialError = styled(ValidationError)`
+const ArrayInputError = styled(ValidationError)`
   margin-bottom: 0.5rem;
 `
 
-const SpatialInputElem = styled(Input)`
+const ArrayInputElem = styled(Input)`
   margin-bottom: 0.75rem;
-  + ${SpatialError} {
+  + ${ArrayInputError} {
     margin-top: -0.5rem;
   }
 `
 
-export default inject('Stores')(observer(SpatialArrayInput))
+const SpatialItemWrapper = styled.div`
+  display: flex;
+  align-items: center;
+`
+
+export default observer(ModalArrayInput)

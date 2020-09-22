@@ -1,4 +1,6 @@
-const fieldsOfScienceToMetaxMethod = (fieldsOfScience) =>
+import { toJS } from 'mobx'
+
+const fieldsOfScienceToMetax = (fieldsOfScience) =>
   fieldsOfScience.map((fieldOfScience) => fieldOfScience.url)
 
 const datasetLanguageToMetax = datasetLanguage =>
@@ -51,21 +53,59 @@ const filesToMetax = (selectedFiles, existingFiles) => {
   return parsedFileData
 }
 
+const organizationToArray = fullOrganization => {
+  for (const [key, value] of Object.entries(fullOrganization)) {
+    if (value && !value.email) delete fullOrganization[key].email
+  }
+  const { organization, department, subDepartment } = fullOrganization
+  const output = [{ ...organization }]
+  if (department) output.push({ ...department })
+  if (subDepartment) output.push({ ...subDepartment })
+  return output
+}
+
+const projectsToMetax = projects => projects.map(project => {
+  const projectObject = toJS(project)
+  const { details } = projectObject
+  if (details.funderType && details.funderType.url) {
+    details.funderType = { identifier: details.funderType.url }
+  } else delete details.funderType
+
+  const organizations = projectObject.organizations
+    .map(fullOrganization => organizationToArray(fullOrganization))
+
+  const fundingAgencies = projectObject.fundingAgencies.map(agency => {
+    const { organization } = agency
+    const contributorTypes = agency.contributorTypes.map(contributorType => {
+      const { identifier, label, definition, inScheme } = contributorType
+      return { identifier, label, definition, inScheme }
+    })
+    return { organization: organizationToArray(organization), contributorTypes }
+  })
+  return { details, organizations, fundingAgencies }
+})
+
 const handleSubmitToBackend = (Env, values) => {
   const actors = values.Actors.toBackend()
 
   const spatial = values.Spatials.toBackend()
+
+  const temporal = values.Temporals.toBackend()
+
+  const relation = values.RelatedResources.toBackend()
+
+  const provenance = values.Provenances.toBackend()
 
   const obj = {
     title: values.title,
     description: values.description,
     issuedDate: values.issuedDate,
     identifiers: values.otherIdentifiersArray,
-    fieldOfScience: fieldsOfScienceToMetaxMethod(values.fieldOfScienceArray),
+    fieldOfScience: fieldsOfScienceToMetax(values.fieldOfScienceArray),
     datasetLanguage: datasetLanguageToMetax(values.datasetLanguageArray),
     keywords: values.keywordsArray,
     actors,
-    infrastructure: values.infrastructures,
+    infrastructure: values.infrastructureArray,
     accessType: values.accessType ? values.accessType : undefined,
     restrictionGrounds: values.restrictionGrounds
       ? values.restrictionGrounds.identifier
@@ -77,7 +117,11 @@ const handleSubmitToBackend = (Env, values) => {
     dataCatalog: values.dataCatalog,
     cumulativeState: values.cumulativeState,
     useDoi: values.useDoi,
-    spatial
+    projects: projectsToMetax(values.projects),
+    spatial,
+    temporal,
+    relation,
+    provenance
   }
 
   if (values.original) {

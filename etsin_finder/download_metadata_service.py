@@ -11,10 +11,10 @@ from flask import Response, stream_with_context
 import requests
 
 from etsin_finder.app_config import get_metax_api_config
-from etsin_finder.finder import app
-from etsin_finder.utils import json_or_empty, FlaskService
+from etsin_finder.app import app
+from etsin_finder.log import log
 
-log = app.logger
+from etsin_finder.utils import FlaskService, format_url
 
 
 class DatasetMetadataService(FlaskService):
@@ -32,6 +32,9 @@ class DatasetMetadataService(FlaskService):
 
         if metax_api_config:
             self.HOST = 'https://{0}'.format(metax_api_config.get('HOST'))
+            self.user = metax_api_config.get('USER')
+            self.password = metax_api_config.get('PASSWORD')
+            self.verify_ssl = metax_api_config.get('VERIFY_SSL', True)
         elif not self.is_testing:
             log.error('Unable to initialize DatasetMetadataService due to missing config')
 
@@ -66,14 +69,18 @@ class DatasetMetadataService(FlaskService):
             return self._get_error_response(200)
 
         if metadata_format == 'metax':
-            url = self.HOST + '/rest/datasets/' + cr_id + '.json'
+            url = format_url(self.HOST + '/rest/datasets/{}.json', cr_id)
         else:
-            url = self.HOST + '/rest/datasets/' + cr_id + '?dataset_format=' + metadata_format
+            url = format_url(self.HOST + '/rest/datasets/{}?dataset_format={}', cr_id, metadata_format)
 
         log.info('Request dataset metadata from: {0}'.format(url))
 
         try:
-            metax_response = requests.get(url, stream=True, timeout=15)
+            metax_response = requests.get(url,
+                                          stream=True,
+                                          timeout=15,
+                                          verify=self.verify_ssl,
+                                          auth=(self.user, self.password))
             metax_response.raise_for_status()
         except requests.Timeout as t:
             log.error('Attempt to download dataset metadata timed out\n{0}'.format(t))

@@ -1,43 +1,31 @@
 import React from 'react'
-import styled from 'styled-components'
-import SpatialInput from './SpatialInput'
+import PropTypes from 'prop-types'
+import ModalInput from '../../../general/modal/modalInput'
 import SpatialArrayInput from './SpatialArrayInput'
-import LocationInput from './LocationInput'
+import ModalReferenceInput from '../../../general/modal/modalReferenceInput'
+import { Location } from '../../../../../stores/view/qvain.spatials'
+import { FormContainer } from '../../../general/modal/form'
 
-const Form = () => (
+const Form = props => (
   <FormContainer>
-    <SpatialInput
-      datum="name"
-      type="text"
-      error=""
-      isRequired
+    <ModalInput {...props} datum="name" isRequired />
+    <ModalInput {...props} datum="altitude" />
+    <ModalInput {...props} datum="address" />
+    <SpatialArrayInput {...props} datum="geometry" type="text" />
+    <ModalReferenceInput
+      {...props}
+      datum="location"
+      model={Location}
+      metaxIdentifier="location"
+      search
     />
-    <SpatialInput
-      datum="altitude"
-      type="text"
-      error=""
-    />
-    <SpatialInput
-      datum="address"
-      type="text"
-      error=""
-    />
-    <SpatialArrayInput
-      datum="geometry"
-      type="text"
-      error=""
-    />
-    <LocationInput />
   </FormContainer>
-    )
+)
 
-const FormContainer = styled.div`
-  flex-grow: 1;
-  padding: 0.5rem;
-  margin-bottom: 0.5rem;
-  border-radius: 4px;
-  overflow-y: auto;
-  max-height: 85%;
-`
+Form.propTypes = {
+  Store: PropTypes.object.isRequired,
+  Field: PropTypes.object.isRequired,
+  translationsRoot: PropTypes.string.isRequired,
+}
 
 export default Form

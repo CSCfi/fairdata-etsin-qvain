@@ -18,6 +18,12 @@ import styled from 'styled-components'
 
 class Tabs extends Component {
   render() {
+    let query = ''
+    const params = new URLSearchParams(this.props.location.search)
+    if (params.get('preview') === '1') {
+      query = '?preview=1'
+    }
+
     return (
       <Fragment>
         <EtsinTabs className="nav nav-tabs" role="tablist">
@@ -25,12 +31,14 @@ class Tabs extends Component {
             <NavLink
               exact
               replace
-              to={`/dataset/${this.props.identifier}`}
+              to={`/dataset/${this.props.identifier}${query}`}
               id="tab-for-description"
               aria-controls="tab-description"
               role="tab"
               className="nav-link"
-              aria-selected={this.props.location.pathname === `/dataset/${this.props.identifier}`}
+              aria-selected={
+                this.props.location.pathname === `/dataset/${this.props.identifier}${query}`
+              }
             >
               <Translate content="nav.dataset" fallback="Dataset" />
             </NavLink>
@@ -40,14 +48,14 @@ class Tabs extends Component {
               <NavLink
                 exact
                 replace
-                to={`/dataset/${this.props.identifier}/data`}
+                to={`/dataset/${this.props.identifier}/data${query}`}
                 id="tab-for-data"
                 aria-controls="tab-data"
                 role="tab"
                 className="nav-link"
                 aria-selected={
-                      this.props.location.pathname === `/dataset/${this.props.identifier}/data`
-                    }
+                  this.props.location.pathname === `/dataset/${this.props.identifier}/data${query}`
+                }
               >
                 <Translate content="nav.data" fallback="Data" />
               </NavLink>
@@ -58,13 +66,14 @@ class Tabs extends Component {
               <NavLink
                 exact
                 replace
-                to={`/dataset/${this.props.identifier}/events`}
+                to={`/dataset/${this.props.identifier}/events${query}`}
                 id="tab-for-events"
                 aria-controls="tab-events"
                 role="tab"
                 className="nav-link"
                 aria-selected={
-                  this.props.location.pathname === `/dataset/${this.props.identifier}/events`
+                  this.props.location.pathname ===
+                  `/dataset/${this.props.identifier}/events${query}`
                 }
               >
                 <Translate content="nav.events" fallback="Identifiers and events" />
@@ -76,13 +85,13 @@ class Tabs extends Component {
               <NavLink
                 exact
                 replace
-                to={`/dataset/${this.props.identifier}/maps`}
+                to={`/dataset/${this.props.identifier}/maps${query}`}
                 id="tab-for-maps"
                 aria-controls="tab-maps"
                 role="tab"
                 className="nav-link"
                 aria-selected={
-                  this.props.location.pathname === `/dataset/${this.props.identifier}/maps`
+                  this.props.location.pathname === `/dataset/${this.props.identifier}/maps${query}`
                 }
               >
                 <Translate content="nav.maps" fallback="Maps" />
@@ -102,6 +111,7 @@ Tabs.propTypes = {
   identifier: PropTypes.string.isRequired,
   location: PropTypes.shape({
     pathname: PropTypes.string,
+    search: PropTypes.string,
   }).isRequired,
 }
 
@@ -138,7 +148,7 @@ const EtsinTabs = styled.ul`
     }
     &:not(.active) {
       background-color: transparent;
-      color: ${props => props.theme.color.medgray};
+      color: ${props => props.theme.color.darkgray};
       &:hover {
         background-color: ${props => props.theme.color.primary};
         color: white;

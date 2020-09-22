@@ -8,12 +8,12 @@
 """Email sending related utils"""
 import datetime
 import re
-from enum import Enum
 
-from etsin_finder.finder import app
+from etsin_finder.app import app
+from etsin_finder.log import log
+
 from etsin_finder.constants import AGENT_TYPE
 
-log = app.logger
 
 def create_email_message_body(pref_id, user_email, user_subject, user_body):
     """Create body for an email message to be sent.

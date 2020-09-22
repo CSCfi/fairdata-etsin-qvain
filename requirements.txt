@@ -12,3 +12,4 @@ pytz==2018.9
 pyyaml==5.1
 requests==2.21.0
 tox==3.7.0
+Werkzeug==1.0.1
