@@ -65,7 +65,8 @@ def _get_test_app_config():
         'MAIL_PORT': 25,
         'MAIL_USERNAME': '',
         'MAIL_PASSWORD': '',
-        'MAIL_DEFAULT_SENDER': 'test@fairdata.fi'
+        'MAIL_DEFAULT_SENDER': 'test@fairdata.fi',
+        'SSO_PREFIX': ''
     }
 
 
