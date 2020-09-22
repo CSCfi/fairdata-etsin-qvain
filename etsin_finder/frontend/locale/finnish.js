@@ -229,6 +229,7 @@ const finnish = {
     dataInPasDatasetsCanNotBeDownloaded: 'PAS-aineistojen dataa ei voida ladata',
   },
   error: {
+    cscLoginRequired: 'Tämä sivu vaatii kirjautumisen CSC-tunnuksella.',
     notFound:
       'Olemme pahoillamme, nyt sattui häiriötilanne. Ole hyvä ja yritä hetken päästä uudelleen.',
     notLoaded: 'Hups! Sivua ei löytynyt.',
@@ -253,6 +254,7 @@ const finnish = {
       datasets: 'Aineistot',
       home: 'Koti',
       error: 'Virhe',
+      loginRequired: 'Kirjautuminen vaaditaan',
     },
     language: {
       toggleLabel: 'Vaihda kieltä',
