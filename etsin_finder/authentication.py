@@ -11,13 +11,13 @@ from urllib.parse import urlparse
 from flask import session, request
 from onelogin.saml2.auth import OneLogin_Saml2_Auth
 
-from etsin_finder.finder import app
+from etsin_finder.app import app
+from etsin_finder.log import log
 from etsin_finder.utils import executing_travis
 from etsin_finder.constants import SAML_ATTRIBUTES
 from etsin_finder.authentication_fairdata_sso import get_fairdata_sso_session_details, is_authenticated_through_fairdata_sso
 from etsin_finder.authentication_direct_proxy import get_saml_auth, init_saml_auth, is_authenticated_through_direct_proxy
 
-log = app.logger
 
 def not_found(field):
     """Log if field not found in session samlUserdata or SSO data

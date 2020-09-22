@@ -9,12 +9,14 @@
 
 from flask_restful import reqparse, Resource
 
-from etsin_finder.qvain_light_service import change_cumulative_state, refresh_directory_content, fix_deprecated_dataset
-from etsin_finder.finder import app
+from etsin_finder.qvain_light_service import (
+    change_cumulative_state,
+    refresh_directory_content,
+    fix_deprecated_dataset
+)
 from etsin_finder.qvain_light_utils import check_dataset_creator
 from etsin_finder.log_utils import log_request
 
-log = app.logger
 
 class QvainDatasetChangeCumulativeState(Resource):
     """Metax RPC for changing cumulative_state of a dataset."""

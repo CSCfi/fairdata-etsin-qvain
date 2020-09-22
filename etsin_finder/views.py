@@ -22,9 +22,8 @@ from etsin_finder.authentication_direct_proxy import \
 from etsin_finder.authentication_fairdata_sso import \
     is_authenticated_through_fairdata_sso, \
     log_sso_values
-from etsin_finder.finder import app
-
-log = app.logger
+from etsin_finder.app import app
+from etsin_finder.log import log
 
 # REACT APP RELATED
 
