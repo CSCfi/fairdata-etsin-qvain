@@ -200,7 +200,14 @@ def get_user_ida_projects():
     # Authenticated through direct proxy
     if is_authenticated_through_direct_proxy():
         groups = session.get('samlUserdata', {}).get(SAML_ATTRIBUTES.get('idm_groups', None), False)
-        return [group for group in groups if group.startswith('IDA')] if groups else not_found('ida_projects')
+        idaProjects = [group for group in groups if group.startswith('IDA')] if groups else not_found('ida_projects')
+
+        # Parse the projects (conversion from IdM group syntax)
+        try:
+            return [idaProjects.split(":")[1] for project in idaProjects]
+        except IndexError as e:
+            log.error('Index error while parsing user IDA projects:\n{0}'.format(e))
+            return None
 
     # Authenticated through Fairdata SSO
     if is_authenticated_through_fairdata_sso():
