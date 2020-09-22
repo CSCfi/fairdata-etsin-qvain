@@ -9,12 +9,12 @@
 
 import requests
 
-from etsin_finder.finder import app
-from etsin_finder.app_config import get_metax_qvain_api_config
-from etsin_finder.utils import json_or_text, FlaskService, format_url
-from etsin_finder.request_utils import make_request
+from etsin_finder.app import app
+from etsin_finder.log import log
 
-log = app.logger
+from etsin_finder.app_config import get_metax_qvain_api_config
+from etsin_finder.utils import FlaskService, format_url
+from etsin_finder.request_utils import make_request
 
 
 class MetaxCommonAPIService(FlaskService):
