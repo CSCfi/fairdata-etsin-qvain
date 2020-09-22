@@ -11,7 +11,7 @@ from etsin_finder.cr_service import (
 )
 from etsin_finder.log import log
 from etsin_finder.authentication import (
-    get_user_ida_groups,
+    get_user_ida_projects,
     get_user_csc_name,
     get_user_email,
     get_user_firstname,
