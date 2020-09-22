@@ -68,6 +68,7 @@ class ActorValidationSchema(Schema):
         else:
             raise ValidationError('Invalid actor type.')
 
+
 class LicenseValidationSchema(Schema):
     """Validation schema for licenses."""
 

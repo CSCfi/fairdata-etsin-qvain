@@ -21,8 +21,14 @@ export const QVAIN_URL = 'https://qvain.fairdata.fi'
 export const METAX_FAIRDATA_ROOT_URL = 'https://metax.fairdata.fi'
 
 export const FAIRDATA_WEBSITE_URL = {
-  FI: 'https://www.fairdata.fi/etsin/',
-  EN: 'https://www.fairdata.fi/en/etsin/'
+  ETSIN: {
+    FI: 'https://www.fairdata.fi/etsin/',
+    EN: 'https://www.fairdata.fi/en/etsin/'
+  },
+  QVAIN: {
+    FI: 'https://www.fairdata.fi/qvain/',
+    EN: 'https://www.fairdata.fi/en/qvain/'
+  }
 }
 
 export const LICENSE_URL = {

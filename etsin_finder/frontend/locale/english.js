@@ -344,6 +344,11 @@ const english = {
     },
   },
   qvain: {
+    nav: {
+      home: 'Home',
+      createDataset: 'Create Dataset',
+      editDataset: 'Edit Dataset',
+    },
     general: {
       brief: 'Research Dataset Metadata Tool',
       looseActors: {

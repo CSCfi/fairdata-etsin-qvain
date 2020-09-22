@@ -17,43 +17,40 @@ import translate from 'counterpart'
 import styled from 'styled-components'
 import { inject, observer } from 'mobx-react'
 import PropTypes from 'prop-types'
-import { Home, Search } from '../../../routes'
 
 class Navi extends React.Component {
   render() {
     const Accessibility = this.props.Stores.Accessibility
-    return (
-      <React.Fragment>
-        <NavItem
-          exact
-          to="/"
-          onPointerOver={() => {
-            Home.preload()
-          }}
-          onClick={() => {
-            Accessibility.announce(translate('changepage', { page: translate('nav.datasets') }))
-          }}
-        >
-          <Translate content="nav.home" />
-        </NavItem>
-        <NavItem
-          to="/datasets"
-          onPointerOver={() => {
-            Search.preload()
-          }}
-          onClick={() => {
-            Accessibility.announce(translate('changepage', { page: translate('nav.datasets') }))
-          }}
-        >
-          <Translate content="nav.datasets" />
-        </NavItem>
-      </React.Fragment>
-    )
+    return this.props.routes.map(route => (
+      <NavItem
+        key={route.path}
+        exact={route.exact}
+        to={route.path}
+        onPointerOver={() => {
+          if (route.loadableComponent) {
+            route.loadableComponent.preload()
+          }
+        }}
+        onClick={() => {
+          Accessibility.announce(translate('changepage', { page: translate(route.label) }))
+        }}
+      >
+        <Translate content={route.label} />
+      </NavItem>
+    ))
   }
 }
 
 Navi.propTypes = {
   Stores: PropTypes.object.isRequired,
+  routes: PropTypes.arrayOf(
+    PropTypes.shape({
+      loadableComponent: PropTypes.elementType,
+      label: PropTypes.string.isRequired,
+      path: PropTypes.string.isRequired,
+      exact: PropTypes.bool,
+    })
+  ).isRequired,
 }
 
 export default inject('Stores')(observer(Navi))
