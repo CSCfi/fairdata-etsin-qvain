@@ -2,17 +2,20 @@ import { observable, computed, action, toJS } from 'mobx'
 import cloneDeep from 'lodash.clonedeep'
 
 class Field {
-  constructor(Parent, Template, fieldName, references = []) {
-    this.Parent = Parent
+  constructor(Parent, Template, Model, fieldName, references = []) {
     this.Template = Template
+    this.Model = Model
     this.fieldName = fieldName
     this.references = references
+    this.Parent = Parent
   }
 
   @computed
   get readonly() {
     return this.Parent.readonly
   }
+
+  @observable storage = []
 
   @observable hasChanged
 
@@ -48,9 +51,7 @@ class Field {
       }
     })
 
-    const edited = this.isParentRoot()
-      ? this.Parent[this.fieldName].find(s => s.uiid === this.inEdit.uiid)
-      : this.Parent.inEdit[this.fieldName].find(s => s.uiid === this.inEdit.uiid)
+    const edited = this.storage.find(s => s.uiid === this.inEdit.uiid)
 
     if (!this.saveEdited(edited)) {
       this.saveNew()
@@ -62,32 +63,22 @@ class Field {
 
     if (edited) {
       const refs = this.detachRefs(this.inEdit)
-      if (this.isParentRoot()) {
-        const indexOfItem = this.Parent[this.fieldName].indexOf(edited)
-        this.Parent.editItemInField(this.fieldName, indexOfItem, cloneDeep(toJS(this.inEdit)), refs)
-      } else {
-        const indexOfItem = this.Parent.inEdit[this.fieldName].indexOf(edited)
-        this.Parent.inEdit[this.fieldName][indexOfItem] = cloneDeep(toJS(this.inEdit))
-        this.attachRefs(refs, this.Parent.inEdit[this.fieldName][indexOfItem])
-      }
+      const indexOfItem = this.storage.indexOf(edited)
+      this.storage[indexOfItem] = cloneDeep(toJS(this.inEdit))
+      this.attachRefs(refs, this.storage[indexOfItem])
+
       return true
     }
+
     return false
   }
 
   saveNew = () => {
     this.validationError = ''
     const refs = this.detachRefs(this.inEdit)
-    if (this.isParentRoot()) {
-      this.Parent.addToField(this.fieldName, cloneDeep(toJS(this.inEdit)), refs)
-    } else {
-      const index = this.Parent.inEdit[this.fieldName].length
-      this.Parent.inEdit[this.fieldName] = [
-        ...this.Parent.inEdit[this.fieldName],
-        cloneDeep(toJS(this.inEdit)),
-      ]
-      this.attachRefs(refs, this.Parent.inEdit[this.fieldName][index])
-    }
+    const index = this.storage.length
+    this.storage = [...this.storage, cloneDeep(toJS(this.inEdit))]
+    this.attachRefs(refs, this.storage[index])
   }
 
   @action clearInEdit = () => {
@@ -98,22 +89,14 @@ class Field {
   }
 
   @action remove = uiid => {
-    if (this.isParentRoot()) {
-      this.Parent.removeItemInField(this.fieldName, uiid)
-    } else {
-      this.Parent.inEdit[this.fieldName] = this.Parent.inEdit[this.fieldName].filter(
-        item => item.uiid !== uiid
-      )
-    }
+    this.storage = this.storage.filter(item => item.uiid !== uiid)
   }
 
   @action edit = uiid => {
     this.validationError = ''
     this.setChanged(false)
     this.editMode = true
-    const item = this.isParentRoot()
-      ? this.Parent[this.fieldName].find(s => s.uiid === uiid)
-      : this.Parent.inEdit[this.fieldName].find(s => s.uiid === uiid)
+    const item = this.storage.find(s => s.uiid === uiid)
 
     const clonedRefs = this.cloneRefs(item)
     const refs = this.detachRefs(item)
@@ -128,7 +111,16 @@ class Field {
     this.validationError = error
   }
 
-  isParentRoot = () => !this.Parent.inEdit // only root doesn't have inEdit object
+  @action
+  fromBackend = (data, Qvain) => {
+    this.storage = []
+    if (data !== undefined) {
+      data.forEach(element => {
+        const item = this.Model(element, Qvain)
+        this.storage.push(item)
+      })
+    }
+  }
 
   detachRefs = item => {
     const refs = {}

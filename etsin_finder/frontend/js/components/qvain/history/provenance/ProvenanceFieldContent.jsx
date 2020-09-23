@@ -11,12 +11,7 @@ const ProvenanceFieldContent = ({ Store, lang }) => {
   const translationsRoot = 'qvain.history.provenance'
   return (
     <>
-      <FieldList
-        Field={Field}
-        lang={lang}
-        translationsRoot={translationsRoot}
-        elements={Store.provenances}
-      />
+      <FieldList Field={Field} lang={lang} translationsRoot={translationsRoot} />
       <FieldListAdd
         Store={Store}
         Field={Field}
