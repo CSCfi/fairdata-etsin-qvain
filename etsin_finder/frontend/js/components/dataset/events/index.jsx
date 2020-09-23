@@ -107,7 +107,7 @@ class Events extends Component {
       label: set.length - i,
       identifier: single.identifier,
       removed: single.removed,
-      url: this.setUrl(single.identifier)
+      url: `/dataset/${single.identifier}`
     }))
 
   checkProvenance = prov => {
@@ -161,10 +161,6 @@ class Events extends Component {
       return false
     }
     return false
-  }
-
-  setUrl = (identifier) => {
-    return `/dataset/${identifier}`
   }
 
   relationIdentifierIsUrl(identifier) {
