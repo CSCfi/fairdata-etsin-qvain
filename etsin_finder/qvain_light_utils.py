@@ -484,31 +484,25 @@ def check_if_data_in_user_IDA_project(data):
     if user_ida_projects is None:
         return True
 
-    # Check IDA project permissions, if user_ida_projects exist
-    try:
-        user_ida_projects_ids = [project for project in user_ida_projects]
-    except IndexError as e:
-        log.error('Index error while parsing user IDA projects:\n{0}'.format(e))
-        return False
     if not user_ida_projects:
-        log.warning('Could not get user IDA groups.')
+        log.warning('Could not get user IDA projects.')
         return False
-    log.debug('User IDA groups: {0}'.format(user_ida_projects_ids))
+    log.debug('User IDA projects: {0}'.format(user_ida_projects))
     if "files" or "directories" in data:
         files = data.get("files") if "files" in data else []
         directories = data.get("directories") if "directories" in data else []
         if files:
             for file in files:
                 identifier = file.get("projectIdentifier")
-                if identifier not in user_ida_projects_ids:
-                    log.warning('File projectIdentifier not in user projects.\nidentifier: {0}, user_ida_projects_ids: {1}'
-                                .format(identifier, user_ida_projects_ids))
+                if identifier not in user_ida_projects:
+                    log.warning('File projectIdentifier not in user projects.\nidentifier: {0}, user_ida_projects: {1}'
+                                .format(identifier, user_ida_projects))
                     return False
         if directories:
             for directory in directories:
                 identifier = directory.get("projectIdentifier")
-                if identifier not in user_ida_projects_ids:
-                    log.warning('Directory projectIdentifier not in user projects.\nidentifier: {0}, user_ida_projects_ids: {1}'
-                                .format(identifier, user_ida_projects_ids))
+                if identifier not in user_ida_projects:
+                    log.warning('Directory projectIdentifier not in user projects.\nidentifier: {0}, user_ida_projects: {1}'
+                                .format(identifier, user_ida_projects))
                     return False
     return True
