@@ -5,14 +5,14 @@ import Translate from 'react-translate-component'
 import { observer } from 'mobx-react'
 import { ButtonGroup, ButtonLabel, EditButton, DeleteButton, ButtonContainer } from '../buttons'
 
-const FieldList = ({ Field, lang, translationsRoot, elements, disableNoItemsText }) => {
-  const { remove, edit, readonly } = Field
+const FieldList = ({ Field, lang, translationsRoot, disableNoItemsText }) => {
+  const { remove, edit, storage, readonly } = Field
 
-  if (!elements.length) {
+  if (!storage.length) {
     if (disableNoItemsText) return null
     return <Translate component="div" content={`${translationsRoot}.noItems`} />
   }
-  const Elements = elements.map(item => (
+  const Elements = storage.map(item => (
     <FieldListContainer key={item.uiid}>
       <Label>{item.name[lang] || item.name.und || item.name}</Label>
       <ButtonContainer>
@@ -40,13 +40,10 @@ FieldList.propTypes = {
   Field: PropTypes.object.isRequired,
   lang: PropTypes.string.isRequired,
   translationsRoot: PropTypes.string.isRequired,
-  elements: PropTypes.array,
   disableNoItemsText: PropTypes.bool,
 }
 
 FieldList.defaultProps = {
-  inEdit: false,
-  elements: [],
   disableNoItemsText: false,
 }
 
