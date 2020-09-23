@@ -164,16 +164,7 @@ class Events extends Component {
   }
 
   setUrl = (identifier) => {
-    let url = ''
-
-    if (process.env.NODE_ENV === 'test') { /* test and stable */
-      url = `https://etsin.fd-test.csc.fi/dataset/${identifier}`
-    } else if (process.env.NODE_ENV === 'development') { /* local */
-      url = `https://etsin-finder.local/dataset/${identifier}`
-    } else if (process.env.NODE_ENV === 'production') { /* production */
-      url = `https://etsin.fairdata.fi/dataset/${identifier}`
-    }
-    return url
+    return `/dataset/${identifier}`
   }
 
   relationIdentifierIsUrl(identifier) {
