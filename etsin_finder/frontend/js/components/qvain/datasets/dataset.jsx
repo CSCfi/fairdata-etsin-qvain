@@ -11,7 +11,7 @@ import Label from '../general/card/label'
 import { TableButton, RemoveButton } from '../general/buttons'
 import TablePasState from './tablePasState'
 import formatAge from './formatAge'
-import { Dropdown, DropdownItem } from '../general/input/dropdown'
+import { Dropdown, DropdownItem } from '../../general/dropdown'
 
 const datasetStateTranslation = dataset => {
   if (dataset.state === 'published') {
@@ -36,7 +36,7 @@ const getGoToEtsinButton = (dataset, getEtsinUrl) => {
   return (
     <Translate
       component={TableButton}
-      onClick={() => window.open(getEtsinUrl(`/dataset/${identifier}`), '_blank')}
+      onClick={() => window.open(getEtsinUrl(`/dataset/${identifier}?preview=1`), '_blank')}
       content={`qvain.datasets.${goToEtsinKey}`}
     />
   )

@@ -516,24 +516,23 @@ class Actors {
     actor.organizations = organizations
   }
 
-  toBackend = () =>
-    this.actors.map(actor => ({
-      type: actor.type,
-      roles: actor.roles,
-      person:
-        actor.type === ENTITY_TYPE.PERSON
-          ? {
-            name: actor.person.name,
-            email: actor.person.email || undefined,
-            identifier: actor.person.identifier || undefined,
-          }
-          : undefined,
-      organizations: actor.organizations.map(org => ({
-        name: org.name,
-        email: org.email || undefined,
-        identifier: org.identifier || undefined,
-      })),
-    }))
+  toBackend = () => this.actors.map(actor => ({
+    type: actor.type,
+    roles: actor.roles,
+    person:
+      actor.type === ENTITY_TYPE.PERSON
+        ? {
+          name: actor.person.name,
+          email: actor.person.email || undefined,
+          identifier: actor.person.identifier || undefined,
+        }
+        : undefined,
+    organizations: actor.organizations.map(org => ({
+      name: org.name,
+      email: org.email || undefined,
+      identifier: org.identifier || undefined,
+    })),
+  }))
 
   @computed get actorOptions() {
     return this.actors.map(ref => ({

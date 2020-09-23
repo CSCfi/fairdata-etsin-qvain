@@ -12,7 +12,6 @@
 
 import PropTypes from 'prop-types'
 import React from 'react'
-import { inject, observer } from 'mobx-react'
 import { NavLink } from 'react-router-dom'
 import Translate from 'react-translate-component'
 import translate from 'counterpart'
@@ -25,90 +24,72 @@ import DropdownMenu from './dropdownMenu'
 import LangToggle from './langToggle'
 import Login from './loginButton'
 import { Link } from '../button'
-import { QVAIN_URL } from '../../../utils/constants'
-import MaybeNavLink from './maybeNavLink'
 
-class MobileNavi extends React.Component {
-  render() {
-    const { Env } = this.props.Stores
-    return (
-      <MobileItems>
-        <DropdownMenu transparent buttonContent={<FontAwesomeIcon title="Menu" icon={faBars} size="lg" />} transparentButton>
-          <NavItem
-            exact
-            to="/"
-            onClick={() => {
-              Accessibility.announce(translate('changepage', { page: translate('nav.datasets') }))
-            }}
-          >
-            <Translate content="nav.home" />
-          </NavItem>
-          <NavItem
-            to="/datasets"
-            onClick={() => {
-              Accessibility.announce(translate('changepage', { page: translate('nav.datasets') }))
-            }}
-          >
-            <Translate content="nav.datasets" />
-          </NavItem>
-        </DropdownMenu>
-        <DropdownMenu transparent buttonContent={<FontAwesomeIcon title="Settings" icon={faCog} size="lg" />} transparentButton>
-          <CustomContainer>
-            <DatasetCont>
-              <TextContainer> <Translate content="nav.addDataset" /> </TextContainer>
-              <Row>
-                <Link
-                  width="100%"
-                  margin="0em 0em 0.6em 0em"
-                  href={QVAIN_URL}
-                  rel="noopener noreferrer"
-                  target="_blank"
-                >
-                  Qvain
-                </Link>
-                <MaybeNavLink
-                  width="50%"
-                  margin="0em 0em 0.6em 0em"
-                  to={Env.getQvainUrl('')}
-                >
-                  Qvain Light
-                </MaybeNavLink>
-              </Row>
-            </DatasetCont>
-            <Row>
-              <Link
-                margin="1.1em 0em 0em"
-                width="100%"
-                href={this.props.helpUrl}
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                <Translate content="nav.help" />
-              </Link>
-            </Row>
-            <Row>
-              <LangToggle margin="0.4em 0.4em 0.4em 0em" />
-              <Login width="100%" margin="0.4em 0em 0.4em 0em" />
-            </Row>
-          </CustomContainer>
-        </DropdownMenu>
-      </MobileItems>
-    )
-  }
-}
-
-MobileNavi.propTypes = {
-  Stores: PropTypes.object.isRequired,
-}
-
-export default inject('Stores')(observer(MobileNavi))
-
-MobileNavi.defaultProps = {
-  helpUrl: undefined,
-}
+const MobileNavi = props => (
+  <MobileItems>
+    <DropdownMenu
+      transparent
+      buttonContent={<FontAwesomeIcon title="Menu" icon={faBars} size="lg" />}
+      transparentButton
+    >
+      {props.naviRoutes.map(route => (
+        <NavItem
+          key={route.path}
+          exact={route.exact}
+          to={route.path}
+          onPointerOver={() => {
+            if (route.loadableComponent) {
+              route.loadableComponent.preload()
+            }
+          }}
+          onClick={() => {
+            Accessibility.announce(translate('changepage', { page: translate(route.label) }))
+          }}
+        >
+          <Translate content={route.label} />
+        </NavItem>
+      ))}
+    </DropdownMenu>
+    <DropdownMenu
+      transparent
+      buttonContent={<FontAwesomeIcon title="Settings" icon={faCog} size="lg" />}
+      transparentButton
+    >
+      <CustomContainer>
+        {props.children}
+        <Row>
+          <Link width="100%" href={props.helpUrl} rel="noopener noreferrer" target="_blank">
+            <Translate content="nav.help" />
+          </Link>
+        </Row>
+        <Row>
+          <LangToggle margin="0.4em 0.4em 0.4em 0em" />
+          <Login width="100%" margin="0.4em 0em 0.4em 0em" />
+        </Row>
+      </CustomContainer>
+    </DropdownMenu>
+  </MobileItems>
+)
 
 MobileNavi.propTypes = {
   helpUrl: PropTypes.string,
+  naviRoutes: PropTypes.arrayOf(
+    PropTypes.shape({
+      loadableComponent: PropTypes.elementType,
+      label: PropTypes.string.isRequired,
+      path: PropTypes.string.isRequired,
+      exact: PropTypes.bool,
+    })
+  ),
+  children: PropTypes.node,
+}
+
+export default MobileNavi
+
+MobileNavi.defaultProps = {
+  helpUrl: undefined,
+  naviRoutes: [],
+  children: null,
 }
 
 const MobileItems = styled.div`
@@ -116,23 +97,13 @@ const MobileItems = styled.div`
   height: 100%;
   @media screen and (min-width: ${p => p.theme.breakpoints.lg}) {
     display: none;
-    title
-    title  }
-`
-const TextContainer = styled.h1`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1em;
+  }
 `
 
 const Row = styled.div`
   display: inline-flex;
   width: 100%;
-`
-
-const DatasetCont = styled.div`
-  border-bottom: 3px solid ${p => p.theme.color.primary};
+  align-items: center;
 `
 
 const NavItem = styled(NavLink)`

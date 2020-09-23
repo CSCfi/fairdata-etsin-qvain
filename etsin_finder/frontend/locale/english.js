@@ -231,6 +231,7 @@ const english = {
     dataInPasDatasetsCanNotBeDownloaded: 'PAS dataset data cannot be downloaded',
   },
   error: {
+    cscLoginRequired: 'This page requires you to be logged in with a CSC account.',
     notFound:
       'Sorry, we are having some technical difficulties at the moment. Please, try again later.',
     notLoaded: "Sorry! The page couldn't be found.",
@@ -255,6 +256,7 @@ const english = {
       datasets: 'Datasets',
       home: 'Home',
       error: 'Error',
+      loginRequired: 'Login Required',
     },
     language: {
       toggleLabel: 'Toggle language',
@@ -344,6 +346,11 @@ const english = {
     },
   },
   qvain: {
+    nav: {
+      home: 'Home',
+      createDataset: 'Create Dataset',
+      editDataset: 'Edit Dataset',
+    },
     general: {
       brief: 'Research Dataset Metadata Tool',
       looseActors: {
