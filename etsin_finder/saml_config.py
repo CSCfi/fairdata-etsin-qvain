@@ -52,5 +52,5 @@ def get_sso_key():
         saml_config
 
     """
-    data = get_saml_config_from_file()
+    data = get_saml_config()
     return data.get('sp').get('privateKey')
