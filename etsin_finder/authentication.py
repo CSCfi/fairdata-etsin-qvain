@@ -63,8 +63,8 @@ def is_authenticated_CSC_user():
 
     # Authenticated through Fairdata SSO
     if is_authenticated_through_fairdata_sso():
-        environment_id_and_username = get_sso_environment_prefix() + '_fd_sso_username'
-        if request.cookies.getlist(environment_id_and_username):
+        session_data = get_fairdata_sso_session_details()
+        if session_data.get('authenticated_user').get('id'):
             return True
     return False
 
@@ -86,9 +86,8 @@ def get_user_csc_name():
 
     # Authentication through Fairdata SSO proxy
     if is_authenticated_through_fairdata_sso():
-        environment_id_and_username = get_sso_environment_prefix() + '_fd_sso_username'
-        log.info(environment_id_and_username)
-        return request.cookies.getlist(environment_id_and_username)[0]
+        session_data = get_fairdata_sso_session_details()
+        return session_data.get('authenticated_user').get('id')
 
     return not_found('csc_name')
 

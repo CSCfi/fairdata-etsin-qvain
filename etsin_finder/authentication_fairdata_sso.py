@@ -9,10 +9,12 @@
 
 import base64
 import json
+import jwt
 from flask import session, request
 from etsin_finder.app import app
 from etsin_finder.log import log
 from etsin_finder.app_config import get_app_config
+from etsin_finder.saml_config import get_sso_key
 
 def get_sso_environment_prefix():
     """Checks what environment the user is currently in, based on app_config
@@ -25,16 +27,18 @@ def get_sso_environment_prefix():
     return environment_string
 
 def get_fairdata_sso_session_details():
-    """Get sso details for the session
+    """Get SSO details for the session
 
     Returns
         session_data(list): Converted list of details found in Fairdata SSO session data
 
     """
-    sso_environment_and_session = get_sso_environment_prefix() + '_fd_sso_session'
-    session_data_string = request.cookies.getlist(sso_environment_and_session)
-    session_data = json.loads(base64.b64decode(session_data_string[0]))
-    return session_data
+    key = get_sso_key()
+    sso_environment = get_sso_environment_prefix() + '_fd_sso_session'
+    fd_sso_session = request.cookies.getlist(sso_environment)
+    decoded_fd_sso_session = jwt.decode(fd_sso_session[0], key, algorithms=['HS256'])
+    log.info(decoded_fd_sso_session)
+    return decoded_fd_sso_session
 
 def is_authenticated_through_fairdata_sso():
     """Is user authenticated through the new Fairdata single-sign on login
@@ -43,8 +47,11 @@ def is_authenticated_through_fairdata_sso():
         bool: Is auth.
 
     """
-    sso_environment_and_username = get_sso_environment_prefix() + '_fd_sso_username'
-    if request.cookies.getlist(sso_environment_and_username):
+    key = get_sso_key()
+    sso_environment = get_sso_environment_prefix() + '_fd_sso_session'
+    fd_sso_session = request.cookies.getlist(sso_environment)
+    decoded_fd_sso_session = jwt.decode(fd_sso_session[0], key, algorithms=['HS256'])
+    if decoded_fd_sso_session.get('authenticated_user').get('id'):
         return True
     return False
 
