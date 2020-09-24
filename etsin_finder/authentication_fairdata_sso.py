@@ -27,6 +27,19 @@ def get_sso_environment_prefix():
     environment_string = get_app_config(app.testing).get('SSO_PREFIX')
     return environment_string
 
+def get_encrypted_sso_session():
+    """Retrieve encrypted_sso_session
+
+    Returns:
+        Cookies
+
+    """
+    key = get_sso_key()
+    sso_environment_and_session = get_sso_environment_prefix() + '_fd_sso_session'
+    if request.cookies.getlist(sso_environment_and_session):
+        return request.cookies.getlist(sso_environment_and_session)
+    return None
+
 def get_fairdata_sso_session_details():
     """Get SSO details for the session
 
@@ -34,12 +47,13 @@ def get_fairdata_sso_session_details():
         session_data(list): Converted list of details found in Fairdata SSO session data
 
     """
-    key = get_sso_key()
-    sso_environment_and_session = get_sso_environment_prefix() + '_fd_sso_session'
-    fd_sso_session = request.cookies.getlist(sso_environment_and_session)
-    decoded_fd_sso_session = jwt.decode(fd_sso_session[0], key, algorithms=['HS256'])
-    log.info(decoded_fd_sso_session)
-    return decoded_fd_sso_session
+    fd_sso_session = get_encrypted_sso_session()
+
+    if fd_sso_session:
+        decoded_fd_sso_session = jwt.decode(fd_sso_session[0], key, algorithms=['HS256'])
+        log.info(decoded_fd_sso_session)
+        return decoded_fd_sso_session
+    return None
 
 def is_authenticated_through_fairdata_sso():
     """Is user authenticated through the new Fairdata single-sign on login
@@ -51,12 +65,13 @@ def is_authenticated_through_fairdata_sso():
     if executing_travis():
         return False
 
-    sso_environment_and_session = get_sso_environment_prefix() + '_fd_sso_session'
-    fd_sso_session = request.cookies.getlist(sso_environment_and_session)
-    key = get_sso_key()
-    decoded_fd_sso_session = jwt.decode(fd_sso_session[0], key, algorithms=['HS256'])
-    if decoded_fd_sso_session.get('authenticated_user').get('id'):
-        return True
+    fd_sso_session = get_encrypted_sso_session()
+
+    if fd_sso_session:
+        decoded_fd_sso_session = jwt.decode(fd_sso_session[0], key, algorithms=['HS256'])
+        if decoded_fd_sso_session.get('authenticated_user').get('id'):
+            return True
+        return False
     return False
 
 def log_sso_values():
