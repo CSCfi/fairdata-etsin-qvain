@@ -197,7 +197,7 @@ def get_user_fullname():
         user_full_name = session_data.get('authenticated_user').get('name')
         return user_full_name
 
-    return not_found('home_organization_id')
+    return not_found('fullname')
 
 def get_user_ida_projects():
     """Get user IDA projects in two different ways
