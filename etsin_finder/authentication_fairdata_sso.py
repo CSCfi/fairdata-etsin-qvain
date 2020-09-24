@@ -15,6 +15,7 @@ from etsin_finder.app import app
 from etsin_finder.log import log
 from etsin_finder.app_config import get_app_config
 from etsin_finder.saml_config import get_sso_key
+from etsin_finder.utils import executing_travis
 
 def get_sso_environment_prefix():
     """Checks what environment the user is currently in, based on app_config
@@ -34,8 +35,8 @@ def get_fairdata_sso_session_details():
 
     """
     key = get_sso_key()
-    sso_environment = get_sso_environment_prefix() + '_fd_sso_session'
-    fd_sso_session = request.cookies.getlist(sso_environment)
+    sso_environment_and_session = get_sso_environment_prefix() + '_fd_sso_session'
+    fd_sso_session = request.cookies.getlist(sso_environment_and_session)
     decoded_fd_sso_session = jwt.decode(fd_sso_session[0], key, algorithms=['HS256'])
     log.info(decoded_fd_sso_session)
     return decoded_fd_sso_session
@@ -47,9 +48,16 @@ def is_authenticated_through_fairdata_sso():
         bool: Is auth.
 
     """
+    sso_environment_and_session = get_sso_environment_prefix() + '_fd_sso_session'
+    fd_sso_session = request.cookies.getlist(sso_environment_and_session)
+
+    # Test travis without JWT
+    if executing_travis():
+        idp_check = get_sso_environment_prefix() + '_fd_sso_idp'
+        if request.cookies.getlist(idp_check):
+            return True
+
     key = get_sso_key()
-    sso_environment = get_sso_environment_prefix() + '_fd_sso_session'
-    fd_sso_session = request.cookies.getlist(sso_environment)
     decoded_fd_sso_session = jwt.decode(fd_sso_session[0], key, algorithms=['HS256'])
     if decoded_fd_sso_session.get('authenticated_user').get('id'):
         return True
