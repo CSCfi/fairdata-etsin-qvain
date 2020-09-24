@@ -34,7 +34,6 @@ def get_encrypted_sso_session():
         Cookies
 
     """
-    key = get_sso_key()
     sso_environment_and_session = get_sso_environment_prefix() + '_fd_sso_session'
     if request.cookies.getlist(sso_environment_and_session):
         return request.cookies.getlist(sso_environment_and_session)
@@ -48,6 +47,7 @@ def get_fairdata_sso_session_details():
 
     """
     fd_sso_session = get_encrypted_sso_session()
+    key = get_sso_key()
 
     if fd_sso_session:
         decoded_fd_sso_session = jwt.decode(fd_sso_session[0], key, algorithms=['HS256'])
@@ -66,6 +66,7 @@ def is_authenticated_through_fairdata_sso():
         return False
 
     fd_sso_session = get_encrypted_sso_session()
+    key = get_sso_key()
 
     if fd_sso_session:
         decoded_fd_sso_session = jwt.decode(fd_sso_session[0], key, algorithms=['HS256'])
