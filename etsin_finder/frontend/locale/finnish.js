@@ -1583,6 +1583,36 @@ const finnish = {
     content:
       'Tunnusta ei ole liitetty mihinkään kotiorganisaatioon. Olethan yhteydessä CSC:n asiakaspalveluun.',
   },
+  footer: {
+    fairdata: {
+      title: 'Fairdata',
+      text: 'Fairdata-palvelut järjestää <strong>opetus- ja kulttuuriministeriö</strong> ja toimittaa <strong>CSC – Tieteen tietotekniikan keskus Oy</strong>',
+    },
+    information: {
+      title: 'Tietoa',
+      terms: 'Käyttöpolitiikat ja ehdot',
+      termsUrl: 'https://www.fairdata.fi/kayttopolitiikat-ja-ehdot/',
+      contracts: 'Sopimukset ja tietosuoja',
+      contractsUrl: 'https://www.fairdata.fi/sopimukset/',
+    },
+    accessibility: {
+      title: 'Saavutettavuus',
+      statement: 'Saavutettavuus',
+      statementUrls: {
+        fairdata: 'https://www.fairdata.fi/saavutettavuus',
+        etsin: 'https://www.fairdata.fi/etsin-saavutettavuus',
+        qvain: 'https://www.fairdata.fi/qvain-saavutettavuus',
+      }
+    },
+    contact: {
+      title: 'Ota yhteyttä',
+    },
+    follow: {
+      title: 'Seuraa',
+      news: 'Uutiset',
+      newsUrl: 'https://www.fairdata.fi/ajankohtaista',
+    }
+  },
 }
 
 export default finnish
