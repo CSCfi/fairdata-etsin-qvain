@@ -14,6 +14,7 @@ from etsin_finder.app import app
 from etsin_finder.log import log
 from etsin_finder.utils import executing_travis
 from etsin_finder.constants import SAML_ATTRIBUTES
+from etsin_finder.app_config import get_app_config
 
 def get_saml_auth(flask_request):
     """Get saml auth
@@ -63,12 +64,11 @@ def prepare_flask_request_for_saml(request):
     """
     # If server is behind proxys or balancers use the HTTP_X_FORWARDED fields
     url_data = urlparse(request.url)
-    # If in local development environment this will redirect the saml login right.
-    if request.host == 'localhost':
-        request.host = '30.30.30.30'
+    log.info(get_app_config(app.testing).get('SERVER_DOMAIN_NAME'))
+
     return {
         'https': 'on' if request.scheme == 'https' else 'off',
-        'http_host': request.host,
+        'http_host': get_app_config(app.testing).get('SERVER_DOMAIN_NAME'),
         'server_port': url_data.port,
         'script_name': request.path,
         'get_data': request.args.copy(),
