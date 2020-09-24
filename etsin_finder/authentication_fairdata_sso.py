@@ -48,15 +48,11 @@ def is_authenticated_through_fairdata_sso():
         bool: Is auth.
 
     """
+    if executing_travis():
+        return False
+
     sso_environment_and_session = get_sso_environment_prefix() + '_fd_sso_session'
     fd_sso_session = request.cookies.getlist(sso_environment_and_session)
-
-    # Test travis without JWT
-    if executing_travis():
-        idp_check = get_sso_environment_prefix() + '_fd_sso_idp'
-        if request.cookies.getlist(idp_check):
-            return True
-
     key = get_sso_key()
     decoded_fd_sso_session = jwt.decode(fd_sso_session[0], key, algorithms=['HS256'])
     if decoded_fd_sso_session.get('authenticated_user').get('id'):
