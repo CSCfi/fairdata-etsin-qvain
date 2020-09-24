@@ -20,6 +20,7 @@ import { parseOrganization } from '../../components/qvain/project/utils'
 import Provenances from './qvain.provenances'
 import RelatedResources from './qvain.relatedResources'
 import Temporals from './qvain.temporals'
+import Infrastructures from './qvain.infrastructure'
 
 class Qvain {
   constructor(Env) {
@@ -31,6 +32,7 @@ class Qvain {
     this.Temporals.create()
     this.Provenances = new Provenances(this)
     this.RelatedResources = new RelatedResources(this)
+    this.Infrastructures = new Infrastructures(this)
   }
 
   @observable original = undefined // used if editing, otherwise undefined
@@ -64,8 +66,6 @@ class Qvain {
   @observable keywordString = ''
 
   @observable keywordsArray = []
-
-  @observable infrastructureArray = []
 
   @observable projects = []
 
@@ -101,7 +101,6 @@ class Qvain {
     this.projects = []
     this.license = License(undefined, LICENSE_URL.CCBY4)
     this.otherLicenseUrl = ''
-    this.infrastructureArray = []
     this.licenseArray = [License(undefined, LICENSE_URL.CCBY4)]
     this.accessType = AccessType(undefined, ACCESS_TYPE_URL.OPEN)
     this.embargoExpDate = undefined
@@ -127,6 +126,7 @@ class Qvain {
     this.fixDeprecatedModalOpen = false
 
     this.Files.reset()
+    this.Infrastructures.reset()
     this.Temporals.create()
 
     this.useDoi = false
@@ -239,20 +239,6 @@ class Qvain {
   @action
   setKeywordsArray = keywords => {
     this.keywordsArray = keywords
-    this.changed = true
-  }
-
-  @action
-  setInfrastructureArray = array => {
-    this.infrastructureArray = array
-    this.changed = true
-  }
-
-  @action
-  removeInfrastructure = infrastructureToRemove => {
-    this.infrastructures = this.infrastructures.filter(
-      infra => infra.url !== infrastructureToRemove.url
-    )
     this.changed = true
   }
 
@@ -743,12 +729,15 @@ class Qvain {
     }
 
     // infrastructures
+    this.infrastructures.fromBackend(researchDataset)
+    /*
     this.infrastructureArray = []
     if (researchDataset.infrastructure !== undefined) {
       this.infrastructureArray = researchDataset.infrastructure.map(element =>
         Infrastructure(element.pref_label, element.identifier)
       )
     }
+    */
 
     // spatials
     this.Spatials.fromBackend(researchDataset.spatial)
@@ -1183,11 +1172,6 @@ export const License = (name, identifier) => ({
 export const RestrictionGrounds = (name, identifier) => ({
   name,
   identifier,
-})
-
-export const Infrastructure = (name, url) => ({
-  name,
-  url,
 })
 
 export const Project = (
