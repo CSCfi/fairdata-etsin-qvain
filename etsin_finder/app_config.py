@@ -66,7 +66,6 @@ def _get_test_app_config():
         'MAIL_USERNAME': '',
         'MAIL_PASSWORD': '',
         'MAIL_DEFAULT_SENDER': 'test@fairdata.fi',
-        'SSO_PREFIX': ''
     }
 
 
@@ -83,7 +82,7 @@ def _get_app_config_for_travis():
         'APP_LOG_PATH': '/var/log/etsin_finder/etsin_finder.log',
         'DEBUG': True,
         'SECRET_KEY': 'cb3c5d29f16eda4e46fb77c14d6a75f9ab23e6df95c84e32',
-        'SSO_PREFIX': ''
+        'SSO_PREFIX': 'fd_test_csc_fi',
     }
 
 
