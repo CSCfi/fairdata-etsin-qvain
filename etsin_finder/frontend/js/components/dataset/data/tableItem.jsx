@@ -104,9 +104,9 @@ class TableItem extends Component {
                   title={this.props.item.type}
                   default={this.props.item.remote ? 'cloud' : 'file'}
                 />
-              )}
+                )}
             </React.Fragment>
-          )}
+            )}
         </FileType>
         {this.props.fields.name && this.props.item.directory ? (
           <FileName>
@@ -130,7 +130,7 @@ class TableItem extends Component {
           <FileName>
             <p>{this.props.item.name}</p>
           </FileName>
-        )}
+          )}
         {this.props.fields.size && <FileSize>{sizeParse(this.props.item.byte_size, 1)}</FileSize>}
         {this.props.fields.category
           && (checkNested(this.props.item.use_category, 'pref_label')
@@ -150,7 +150,6 @@ class TableItem extends Component {
               <InvertedButton
                 thin
                 color={this.props.theme.color.darkgray}
-                disabled={!this.props.allowInfo}
                 onClick={this.openModal}
               >
                 <Translate content="dataset.dl.info" />
@@ -325,7 +324,7 @@ const FileButtons = styled.td`
 `
 
 TableItem.defaultProps = {
-  changeFolder: () => {}
+  changeFolder: () => { }
 }
 
 TableItem.propTypes = {
@@ -358,7 +357,6 @@ TableItem.propTypes = {
   }).isRequired,
   changeFolder: PropTypes.func,
   allowDownload: PropTypes.bool.isRequired,
-  allowInfo: PropTypes.bool.isRequired,
   isRemote: PropTypes.bool.isRequired,
   cr_id: PropTypes.string.isRequired,
 }
