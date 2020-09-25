@@ -35,7 +35,11 @@ const formatAge = (currentTime, eventTime) => {
     // More than a month ago, compare by months
     const monthsSinceCreation = timestampCurrentTime.diff(timestampEvent, 'months')
 
-    if (monthsSinceCreation >= 1) {
+    if (secondsSinceCreation >= 2160000 && monthsSinceCreation === 0) { // 1 month
+      formattedDate = `${timestampCurrentTime.diff(timestampEvent, 'days')} ${translate(
+      'qvain.datasets.tableRows.dateFormat.days'
+    )}`
+    } else if (monthsSinceCreation >= 1) {
       formattedDate = translate('qvain.datasets.tableRows.dateFormat.oneMonth')
     } else if (monthsSinceCreation >= 10) {
       formattedDate = `${monthsSinceCreation} ${translate(
