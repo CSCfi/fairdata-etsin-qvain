@@ -10,6 +10,7 @@
 import base64
 import json
 import jwt
+from datetime import datetime
 from flask import session, request
 from etsin_finder.app import app
 from etsin_finder.log import log
@@ -27,33 +28,44 @@ def get_sso_environment_prefix():
     environment_string = get_app_config(app.testing).get('SSO_PREFIX')
     return environment_string
 
-def get_encrypted_sso_session():
-    """Retrieve encrypted_sso_session
+def get_decrypted_sso_session_details():
+    """Retrieve encrypted_sso_session_details
 
     Returns:
-        Cookies
+        decrypted_fd_sso_session(list): List of decrypted cookies
 
     """
+    key = get_sso_key()
     sso_environment_and_session = get_sso_environment_prefix() + '_fd_sso_session'
     if request.cookies.getlist(sso_environment_and_session):
-        return request.cookies.getlist(sso_environment_and_session)
+        fd_sso_session = request.cookies.getlist(sso_environment_and_session)
+        if fd_sso_session:
+            decrypted_fd_sso_session = jwt.decode(fd_sso_session[0], key, algorithms=['HS256'])
+            return decrypted_fd_sso_session
+        return None
     return None
 
-def get_fairdata_sso_session_details():
-    """Get SSO details for the session
+def is_cookie_still_valid():
+    """Checks if the cookie is still valid and not expired
 
-    Returns
-        session_data(list): Converted list of details found in Fairdata SSO session data
+    Returns:
+        True/false
 
     """
-    fd_sso_session = get_encrypted_sso_session()
-    key = get_sso_key()
+    fd_sso_session = get_decrypted_sso_session_details()
 
     if fd_sso_session:
-        decoded_fd_sso_session = jwt.decode(fd_sso_session[0], key, algorithms=['HS256'])
-        log.info(decoded_fd_sso_session)
-        return decoded_fd_sso_session
-    return None
+        if fd_sso_session.get('exp'):
+            sso_session_expiry_date = fd_sso_session.get('exp')
+            now = datetime.utcnow()
+            current_date = int(now.timestamp())
+            if sso_session_expiry_date > current_date:
+                log.info('Session is valid and has not yet expired')
+                return True
+            log.info('Session has expired')
+            return False
+        return False
+    return False
 
 def is_authenticated_through_fairdata_sso():
     """Is user authenticated through the new Fairdata single-sign on login
@@ -65,17 +77,17 @@ def is_authenticated_through_fairdata_sso():
     if executing_travis():
         return False
 
-    fd_sso_session = get_encrypted_sso_session()
-    key = get_sso_key()
+    fd_sso_session = get_decrypted_sso_session_details()
 
     if fd_sso_session:
-        decoded_fd_sso_session = jwt.decode(fd_sso_session[0], key, algorithms=['HS256'])
-        if decoded_fd_sso_session.get('authenticated_user').get('id'):
-            return True
+        if is_cookie_still_valid():
+            if fd_sso_session.get('authenticated_user').get('id'):
+                return True
+            return False
         return False
     return False
 
 def log_sso_values():
     """Log SSO values for the Fairdata session"""
     log.info(request.cookies)
-    log.info(get_fairdata_sso_session_details())
+    log.info(get_decrypted_sso_session_details())

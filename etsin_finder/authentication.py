@@ -14,8 +14,8 @@ from etsin_finder.log import log
 from etsin_finder.utils import executing_travis
 from etsin_finder.constants import SAML_ATTRIBUTES
 from etsin_finder.authentication_fairdata_sso import (
-    get_fairdata_sso_session_details,
     is_authenticated_through_fairdata_sso,
+    get_decrypted_sso_session_details,
     get_sso_environment_prefix
 )
 from etsin_finder.authentication_direct_proxy import is_authenticated_through_direct_proxy
@@ -63,7 +63,7 @@ def is_authenticated_CSC_user():
 
     # Authenticated through Fairdata SSO
     if is_authenticated_through_fairdata_sso():
-        session_data = get_fairdata_sso_session_details()
+        session_data = get_decrypted_sso_session_details()
         if session_data.get('authenticated_user').get('id'):
             return True
     return False
@@ -86,7 +86,7 @@ def get_user_csc_name():
 
     # Authentication through Fairdata SSO proxy
     if is_authenticated_through_fairdata_sso():
-        session_data = get_fairdata_sso_session_details()
+        session_data = get_decrypted_sso_session_details()
         return session_data.get('authenticated_user').get('id')
 
     return not_found('csc_name')
@@ -126,7 +126,7 @@ def get_user_email():
 
     # Authenticated through Fairdata SSO
     if is_authenticated_through_fairdata_sso():
-        session_data = get_fairdata_sso_session_details()
+        session_data = get_decrypted_sso_session_details()
         user_email = session_data.get('authenticated_user').get('email')
         return user_email
 
@@ -192,7 +192,7 @@ def get_user_fullname():
 
     # Authenticated through Fairdata SSO
     if is_authenticated_through_fairdata_sso():
-        session_data = get_fairdata_sso_session_details()
+        session_data = get_decrypted_sso_session_details()
         user_full_name = session_data.get('authenticated_user').get('name')
         return user_full_name
 
@@ -227,7 +227,7 @@ def get_user_ida_projects():
 
     # Authenticated through Fairdata SSO
     if is_authenticated_through_fairdata_sso():
-        session_data = get_fairdata_sso_session_details()
+        session_data = get_decrypted_sso_session_details()
         user_ida_projects = session_data.get('services').get('IDA').get('projects')
         return user_ida_projects
 
@@ -252,7 +252,7 @@ def get_user_home_organization_id():
 
     # Authenticated through Fairdata SSO
     if is_authenticated_through_fairdata_sso():
-        session_data = get_fairdata_sso_session_details()
+        session_data = get_decrypted_sso_session_details()
         user_home_organization_id = session_data.get('authenticated_user').get('organization').get('id')
         return user_home_organization_id
 
@@ -277,7 +277,7 @@ def get_user_home_organization_name():
 
     # Authenticated through Fairdata SSO
     if is_authenticated_through_fairdata_sso():
-        session_data = get_fairdata_sso_session_details()
+        session_data = get_decrypted_sso_session_details()
         user_home_organization_name = session_data.get('authenticated_user').get('organization').get('name')
         return user_home_organization_name
 
