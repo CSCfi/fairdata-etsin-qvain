@@ -49,27 +49,6 @@ def get_decrypted_sso_session_details():
         return None
     return None
 
-def is_session_still_valid():
-    """Checks if the cookie is still valid and not expired
-
-    Returns:
-        bool: Is session still valid
-
-    """
-    fd_sso_session = get_decrypted_sso_session_details()
-
-    if fd_sso_session:
-        if fd_sso_session.get('exp'):
-            sso_session_expiry_date = fd_sso_session.get('exp')
-            now = datetime.utcnow()
-            current_date = int(now.timestamp())
-            if sso_session_expiry_date > current_date:
-                return True
-            log.info('Session has expired')
-            return False
-        return False
-    return False
-
 def is_authenticated_through_fairdata_sso():
     """Is user authenticated through the new Fairdata single-sign on login
 
@@ -83,10 +62,8 @@ def is_authenticated_through_fairdata_sso():
     fd_sso_session = get_decrypted_sso_session_details()
 
     if fd_sso_session:
-        if is_session_still_valid():
-            if fd_sso_session.get('authenticated_user').get('id'):
-                return True
-            return False
+        if fd_sso_session.get('authenticated_user').get('id'):
+            return True
         return False
     return False
 
