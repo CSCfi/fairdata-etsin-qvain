@@ -29,7 +29,7 @@ def get_sso_environment_prefix():
     return environment_string
 
 def get_decrypted_sso_session_details():
-    """Retrieve encrypted_sso_session_details
+    """Retrieve decrypted_sso_session_details
 
     Returns:
         decrypted_fd_sso_session(list): List of decrypted cookies
@@ -40,16 +40,20 @@ def get_decrypted_sso_session_details():
     if request.cookies.getlist(sso_environment_and_session):
         fd_sso_session = request.cookies.getlist(sso_environment_and_session)
         if fd_sso_session:
-            decrypted_fd_sso_session = jwt.decode(fd_sso_session[0], key, algorithms=['HS256'])
-            return decrypted_fd_sso_session
+            try:
+                decrypted_fd_sso_session = jwt.decode(fd_sso_session[0], key, algorithms=['HS256'])
+                return decrypted_fd_sso_session
+            except Exception as error_message:
+                log.info(error_message)
+                return None
         return None
     return None
 
-def is_cookie_still_valid():
+def is_session_still_valid():
     """Checks if the cookie is still valid and not expired
 
     Returns:
-        True/false
+        bool: Is session still valid
 
     """
     fd_sso_session = get_decrypted_sso_session_details()
@@ -60,7 +64,6 @@ def is_cookie_still_valid():
             now = datetime.utcnow()
             current_date = int(now.timestamp())
             if sso_session_expiry_date > current_date:
-                log.info('Session is valid and has not yet expired')
                 return True
             log.info('Session has expired')
             return False
@@ -80,7 +83,7 @@ def is_authenticated_through_fairdata_sso():
     fd_sso_session = get_decrypted_sso_session_details()
 
     if fd_sso_session:
-        if is_cookie_still_valid():
+        if is_session_still_valid():
             if fd_sso_session.get('authenticated_user').get('id'):
                 return True
             return False
