@@ -150,7 +150,9 @@ def get_user_firstname():
 
     # Authenticated through Fairdata SSO
     if is_authenticated_through_fairdata_sso():
-        return None
+        session_data = get_decrypted_sso_session_details()
+        first_name = session_data.get('authenticated_user').get('firstname')
+        return first_name
 
     return not_found('firstname')
 
@@ -172,31 +174,11 @@ def get_user_lastname():
 
     # Authenticated through Fairdata SSO
     if is_authenticated_through_fairdata_sso():
-        return None
+        session_data = get_decrypted_sso_session_details()
+        last_name = session_data.get('authenticated_user').get('lastname')
+        return last_name
 
     return not_found('lastname')
-
-def get_user_fullname():
-    """Get user full name from Fairdata SSO
-
-    Returns:
-        string: The users full name.
-
-    """
-    if not is_authenticated():
-        return None
-
-    # Authenticated through direct proxy
-    if is_authenticated_through_direct_proxy():
-        return None
-
-    # Authenticated through Fairdata SSO
-    if is_authenticated_through_fairdata_sso():
-        session_data = get_decrypted_sso_session_details()
-        user_full_name = session_data.get('authenticated_user').get('name')
-        return user_full_name
-
-    return not_found('fullname')
 
 def get_user_ida_projects():
     """Get user IDA projects in two different ways

@@ -305,7 +305,6 @@ class User(Resource):
         csc_user = authentication.get_user_csc_name()
         first_name = authentication.get_user_firstname()
         last_name = authentication.get_user_lastname()
-        full_name = authentication.get_user_fullname()
         groups = authentication.get_user_ida_projects()
         user_info['user_ida_projects'] = groups
 
@@ -318,12 +317,10 @@ class User(Resource):
 
         if csc_user is not None:
             user_info['user_csc_name'] = csc_user
-        if first_name and last_name:
+        if first_name:
             user_info['first_name'] = first_name
+        if last_name:
             user_info['last_name'] = last_name
-        if full_name:
-            user_info['full_name'] = full_name
-
         return user_info, 200
 
 
