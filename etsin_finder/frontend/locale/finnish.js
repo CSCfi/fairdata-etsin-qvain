@@ -419,7 +419,6 @@ const finnish = {
       'Olet pyytänyt aineistollesi pysyväksi tunnisteeksi DOIn URN-tunnisteen sijaan. DOI vaatii, että julkaisupäivämäärä ja julkaisija on määritelty. DOI-tunniste rekisteröidään DataCite-palvelun tietokantaan, eikä toimintoa voi peruuttaa. Oletko varma?',
     useDoiAffirmative: 'Kyllä',
     useDoiNegative: 'Ei',
-    unsuccessfullLogin: 'Kirjautuminen epäonnistui.',
     notCSCUser1:
       'Varmistakaa että teillä on voimassaoleva CSC tunnus. Jos yritit kirjautua sisään ulkoisella tunnuksella (kuten Haka) niin saatat saada tämän ' +
       'virheilmoituksen, jos tilit eivät ole linkitetty. Linkityksen voi tehdä',

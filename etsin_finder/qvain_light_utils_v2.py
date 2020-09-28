@@ -52,6 +52,3 @@ def edited_data_to_metax(data, original):
     if "cumulativeState" in data:
         dataset_data["cumulative_state"] = data.get("cumulativeState")
     return dataset_data
-
-
-get_user_ida_projects = qvain_light_utils.get_user_ida_projects

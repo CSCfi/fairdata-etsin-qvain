@@ -20,10 +20,8 @@ from etsin_finder.utils import \
 from etsin_finder.qvain_light_dataset_schema_v2 import (
     UserMetadataValidationSchema
 )
-from etsin_finder.qvain_light_utils_v2 import (
-    check_dataset_creator,
-    get_user_ida_projects
-)
+from etsin_finder.qvain_light_utils_v2 import check_dataset_creator
+from etsin_finder.authentication import get_user_ida_projects
 
 from etsin_finder.common_service_v2 import (
     get_directory_for_project,

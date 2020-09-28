@@ -7,7 +7,6 @@
 
 """Functionalities related to authorization and what users are allowed to see."""
 
-from etsin_finder.authentication import get_user_id, is_authenticated
 from etsin_finder import cr_service
 from etsin_finder.cr_service import (
     get_catalog_record_access_type,
@@ -19,11 +18,10 @@ from etsin_finder.cr_service import (
 
 from etsin_finder.app import app
 from etsin_finder.log import log
-
 from etsin_finder import rems_service
 from etsin_finder.utils import tz_now_is_later_than_timestamp_str, remove_keys_recursively, leave_keys_in_dict
 from etsin_finder.constants import ACCESS_TYPES, DATA_CATALOG_IDENTIFIERS
-
+from etsin_finder.authentication import get_user_id, is_authenticated
 
 def user_can_view_dataset(cr_id):
     """

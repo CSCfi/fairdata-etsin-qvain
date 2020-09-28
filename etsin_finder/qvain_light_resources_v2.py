@@ -30,8 +30,9 @@ from etsin_finder.qvain_light_utils_v2 import (
     remove_deleted_datasets_from_results,
     edited_data_to_metax,
     get_encoded_access_granter,
-    get_user_ida_projects
 )
+
+from etsin_finder.authentication import get_user_ida_projects
 
 from etsin_finder.qvain_light_service_v2 import (
     create_dataset,
