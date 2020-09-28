@@ -1577,6 +1577,36 @@ const english = {
     content:
       'You have a verified CSC account, but your account does not seem to have a home organization. Please contact the CSC Helpdesk to set a home organization for your CSC account.',
   },
+  footer: {
+    fairdata: {
+      title: 'Fairdata',
+      text: 'The Fairdata services are offered by the <strong>Ministry of Education and Culture</strong> and produced by <strong>CSC – IT Center for Science Ltd.</strong>',
+    },
+    information: {
+      title: 'Information',
+      terms: 'Terms and Policies',
+      termsUrl: 'https://www.fairdata.fi/en/terms-and-policies/',
+      contracts: 'Contracts and Privacy',
+      contractsUrl: 'https://www.fairdata.fi/en/contracts-and-privacy/',
+    },
+    accessibility: {
+      title: 'Accessibility',
+      statement: 'Accessibility statement',
+      statementUrls: {
+        fairdata: 'https://www.fairdata.fi/en/accessibility',
+        etsin: 'https://www.fairdata.fi/en/etsin-accessibility',
+        qvain: 'https://www.fairdata.fi/en/qvain-accessibility'
+      }
+    },
+    contact: {
+      title: 'Contact',
+    },
+    follow: {
+      title: 'Follow',
+      news: "What's new",
+      newsUrl: 'https://www.fairdata.fi/en/news/',
+    }
+  },
 }
 
 export default english

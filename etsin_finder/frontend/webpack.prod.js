@@ -4,6 +4,7 @@ const DotenvPlugin = require('dotenv-webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
+const { insertBeforeStyled } = require('./helpers')
 
 const config = {
   entry: [path.join(__dirname, '/js/index.jsx')],
@@ -31,7 +32,10 @@ const config = {
       },
       {
         test: /\.css$/i,
-        use: ['style-loader', 'css-loader'],
+        use: [
+          { loader: 'style-loader', options: { insert: insertBeforeStyled }, },
+          'css-loader'
+        ],
       },
     ],
   },
