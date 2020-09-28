@@ -14,9 +14,7 @@ const LoggedInUser = ({ Stores }) => {
       <UserIcon icon={faUser} />
       {' '}
       <Name>
-        {firstName}
-        {' '}
-        {lastName}
+        {firstName || lastName}
       </Name>
     </UserWrapper>
   )
