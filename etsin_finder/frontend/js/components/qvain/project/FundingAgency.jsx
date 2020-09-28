@@ -24,7 +24,7 @@ import {
 } from './utils'
 import { LabelLarge, Input } from '../general/modal/form'
 import { fundingAgencySchema, organizationObjectSchema } from '../utils/formValidation'
-import { FundingAgency, ContributorType, Organization } from '../../../stores/view/qvain'
+import { FundingAgency, ContributorType, Organization } from '../../../stores/view/qvain.project'
 
 const FundingAgencyForm = props => {
   const onOrganizationChange = value => {
@@ -148,7 +148,7 @@ const FundingAgencyForm = props => {
 
   const { onRemove, value } = props
   const { formData, addedFundingAgencies } = value
-  const { readonly } = props.Stores.Qvain
+  const { readonly } = props.Stores.Qvain.Projects
   const { lang } = props.Stores.Locale
 
   return (
@@ -171,12 +171,13 @@ const FundingAgencyForm = props => {
       />
       <ErrorMessages errors={formData.errors.organization} />
       <Expand
-        title={(
+        title={
+          // eslint-disable-next-line react/jsx-wrap-multilines
           <Translate
             component="h3"
             content="qvain.project.inputs.fundingAgency.contributorType.title"
           />
-        )}
+        }
       >
         <ContributorTypeForm
           formData={formData.contributorTypeForm}

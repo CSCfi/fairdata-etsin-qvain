@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { inject, observer } from 'mobx-react'
 import Translate from 'react-translate-component'
@@ -6,7 +6,6 @@ import translate from 'counterpart'
 import Card from '../general/card'
 import ValidationError from '../general/errors/validationError'
 import { LabelLarge } from '../general/modal/form'
-import { issuedDateSchema } from '../utils/formValidation'
 import {
   DatePicker,
   handleDatePickerChange,
@@ -19,37 +18,11 @@ class IssuedDateField extends React.Component {
     Stores: PropTypes.object.isRequired,
   }
 
-  constructor(props) {
-    super(props)
-    this.state = {
-      focused: false,
-      error: false,
-      errorMessage: '',
-    }
-  }
-
-  validate = () => {
-    const { issuedDate } = this.props.Stores.Qvain
-    issuedDateSchema
-      .validate(issuedDate)
-      .then(() => {
-        this.setState({ error: false, errorMessage: '' })
-      })
-      .catch(err => {
-        this.setState({ error: true, errorMessage: err.errors })
-      })
-  }
-
-  componentDidUpdate = (prevProps, prevState) => {
-    if (!this.state.focused && prevState.focused) {
-      this.validate()
-    }
-  }
+  validate = () => this.props.Stores.Qvain.IssuedDate.validate()
 
   render() {
-    const { setIssuedDate, issuedDate, readonly } = this.props.Stores.Qvain
+    const { set, value, readonly, validationError } = this.props.Stores.Qvain.IssuedDate
     const { lang } = this.props.Stores.Locale
-    const { error, errorMessage } = this.state
 
     return (
       <Card bottomContent>
@@ -67,15 +40,16 @@ class IssuedDateField extends React.Component {
           <Translate component="p" content="qvain.description.issuedDate.infoText" />
           <DatePicker
             strictParsing
-            selected={issuedDate ? new Date(issuedDate) : new Date()}
-            onChangeRaw={e => e && handleDatePickerChange(e.target.value, setIssuedDate)}
-            onChange={date => date && handleDatePickerChange(date.toISOString(), setIssuedDate)}
+            selected={value ? new Date(value) : new Date()}
+            onChangeRaw={e => e && handleDatePickerChange(e.target.value, set)}
+            onChange={date => date && handleDatePickerChange(date.toISOString(), set)}
             locale={lang}
+            onBlur={this.validate}
             placeholderText={translate('qvain.description.issuedDate.placeholder')}
             dateFormat={getDateFormatLocale(lang)}
             disabled={readonly}
           />
-          <Fragment>{error && <ValidationError>{errorMessage}</ValidationError>}</Fragment>
+          <ValidationError>{validationError}</ValidationError>
         </>
       </Card>
     )

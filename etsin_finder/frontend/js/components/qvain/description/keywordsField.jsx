@@ -20,49 +20,46 @@ class KeywordsField extends Component {
     Stores: PropTypes.object.isRequired,
   }
 
-  state = {
-    keywordsValidationError: null,
-  }
-
   handleChange = e => {
-    const { setKeywordString } = this.props.Stores.Qvain
-    setKeywordString(e.target.value)
-    this.setState({ keywordsValidationError: null })
+    const { setItemStr, setValidationError } = this.props.Stores.Qvain.Keywords
+    if (e.target.value === ',') {
+      return
+    }
+    setItemStr(e.target.value)
+    setValidationError(null)
   }
 
   handleBlur = () => {
-    const { keywordsArray } = this.props.Stores.Qvain
+    const { storage, setValidationError } = this.props.Stores.Qvain.Keywords
     keywordsSchema
-      .validate(keywordsArray)
+      .validate(storage)
       .then(() => {
-        this.setState({ keywordsValidationError: null })
+        setValidationError(null)
       })
       .catch(err => {
-        this.setState({ keywordsValidationError: err.errors })
+        setValidationError(err.errors)
       })
-  }
-
-  handleKeywordAdd = e => {
-    e.preventDefault()
-    const { addKeywordToKeywordArray } = this.props.Stores.Qvain
-    addKeywordToKeywordArray()
-  }
-
-  handleKeywordRemove = word => {
-    const { removeKeyword } = this.props.Stores.Qvain
-    removeKeyword(word)
   }
 
   handleKeyDown = e => {
-    if (e.keyCode === 188 || e.keyCode === 13) {
-      this.handleKeywordAdd(e)
+    const { addKeyword, removeItemStr } = this.props.Stores.Qvain.Keywords
+    if (e.keyCode === 188) {
+      addKeyword()
+      removeItemStr()
     }
   }
 
   render() {
-    const { readonly, keywordsArray, keywordString } = this.props.Stores.Qvain
+    const {
+      readonly,
+      storage,
+      itemStr,
+      validationError,
+      remove,
+      addKeyword,
+    } = this.props.Stores.Qvain.Keywords
     const { lang } = this.props.Stores.Locale
-    const RenderedKeywords = keywordsArray.map(word => (
+    const RenderedKeywords = storage.map(word => (
       <Label color="#007fad" margin="0 0.5em 0.5em 0" key={word}>
         <PaddedWord>{word}</PaddedWord>
         {!readonly && (
@@ -71,7 +68,7 @@ class KeywordsField extends Component {
             size="xs"
             icon={faTimes}
             aria-label="remove"
-            onClick={() => this.handleKeywordRemove(word)}
+            onClick={() => remove(word)}
           />
         )}
       </Label>
@@ -94,15 +91,15 @@ class KeywordsField extends Component {
           component={Input}
           id="keywordsInput"
           disabled={readonly}
-          value={keywordString}
+          value={itemStr}
           onChange={this.handleChange}
           onKeyDown={this.handleKeyDown}
           type="text"
           attributes={{ placeholder: 'qvain.description.keywords.placeholder' }}
         />
-        <ValidationError>{this.state.keywordsValidationError}</ValidationError>
+        <ValidationError>{validationError}</ValidationError>
         <ButtonContainer>
-          <AddNewButton type="button" onClick={this.handleKeywordAdd} disabled={readonly}>
+          <AddNewButton type="button" onClick={addKeyword} disabled={readonly}>
             <Translate content="qvain.description.keywords.addButton" />
           </AddNewButton>
         </ButtonContainer>

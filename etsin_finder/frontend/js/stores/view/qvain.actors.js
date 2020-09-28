@@ -73,10 +73,10 @@ const actorToBackend = actor => ({
   person:
     actor.type === ENTITY_TYPE.PERSON
       ? {
-        name: actor.person.name,
-        email: actor.person.email || undefined,
-        identifier: actor.person.identifier || undefined,
-      }
+          name: actor.person.name,
+          email: actor.person.email || undefined,
+          identifier: actor.person.identifier || undefined,
+        }
       : undefined,
   organizations: actor.organizations.map(org => ({
     name: org.name,
@@ -170,6 +170,8 @@ class Actors {
   @observable loadingReferenceOrganizations = {}
 
   @observable onSuccessfulCreationCallbacks = []
+
+  @observable orphanActors = []
 
   @action clearReferenceOrganizations = () => {
     this.referenceOrganizations = {}
@@ -309,6 +311,7 @@ class Actors {
   @action
   reset = () => {
     this.actors.clear()
+    this.orphanActors = []
     this.actorInEdit = null
     this.onSuccessfulCreationCallbacks = []
   }
@@ -339,6 +342,11 @@ class Actors {
     this.mergeTheSameActors()
     this.mergeTheSameActorOrganizations()
     this.mergeActorsOrganizationsWithReferences()
+  }
+
+  fromBackend = dataset => {
+    this.orphanActors = []
+    this.editDataset(dataset)
   }
 
   @observable actors = []
@@ -479,7 +487,7 @@ class Actors {
 
   @action
   removeActor = async actor => {
-    const confirm = await this.Qvain.checkActorFromRefs(actor)
+    const confirm = await this.checkActorFromRefs(actor)
     if (!confirm) return null
     const actors = this.actors.filter(p => p.uiid !== actor.uiid)
     this.setActors(actors)
@@ -516,23 +524,45 @@ class Actors {
     actor.organizations = organizations
   }
 
-  toBackend = () => this.actors.map(actor => ({
-    type: actor.type,
-    roles: actor.roles,
-    person:
-      actor.type === ENTITY_TYPE.PERSON
-        ? {
-          name: actor.person.name,
-          email: actor.person.email || undefined,
-          identifier: actor.person.identifier || undefined,
-        }
-        : undefined,
-    organizations: actor.organizations.map(org => ({
-      name: org.name,
-      email: org.email || undefined,
-      identifier: org.identifier || undefined,
-    })),
-  }))
+  @action checkProvenanceActors = () => {
+    const provenanceActors = [
+      ...new Set(
+        this.Qvain.Provenances.storage
+          .map(prov => Object.values(prov.associations.actorsRef))
+          .flat()
+      ),
+    ].flat()
+    const actorsWithOnlyProvenanceTag = this.actors.filter(
+      actor => actor.roles.includes(ROLE.PROVENANCE) && actor.roles.length === 1
+    )
+
+    const orphanActors = actorsWithOnlyProvenanceTag.filter(
+      actor => !provenanceActors.includes(actor)
+    )
+    if (!orphanActors.length) return Promise.resolve(true)
+    this.orphanActors = orphanActors
+
+    return this.Qvain.createLooseActorPromise()
+  }
+
+  toBackend = () =>
+    this.actors.map(actor => ({
+      type: actor.type,
+      roles: actor.roles,
+      person:
+        actor.type === ENTITY_TYPE.PERSON
+          ? {
+              name: actor.person.name,
+              email: actor.person.email || undefined,
+              identifier: actor.person.identifier || undefined,
+            }
+          : undefined,
+      organizations: actor.organizations.map(org => ({
+        name: org.name,
+        email: org.email || undefined,
+        identifier: org.identifier || undefined,
+      })),
+    }))
 
   @computed get actorOptions() {
     return this.actors.map(ref => ({

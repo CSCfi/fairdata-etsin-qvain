@@ -5,7 +5,6 @@ import Translate from 'react-translate-component'
 
 import Select from '../general/input/select'
 import Card from '../general/card'
-import { FieldOfScience } from '../../../stores/view/qvain'
 import { LabelLarge } from '../general/modal/form'
 
 class FieldOfScienceField extends React.Component {
@@ -14,7 +13,7 @@ class FieldOfScienceField extends React.Component {
   }
 
   render() {
-    const { fieldOfScienceArray, setFieldOfScienceArray } = this.props.Stores.Qvain
+    const { storage, set, Model } = this.props.Stores.Qvain.FieldOfSciences
 
     return (
       <Card>
@@ -29,9 +28,9 @@ class FieldOfScienceField extends React.Component {
           attributes={{ placeholder: 'qvain.description.fieldOfScience.placeholder' }}
           isMulti
           isClearable={false}
-          model={FieldOfScience}
-          getter={fieldOfScienceArray}
-          setter={setFieldOfScienceArray}
+          model={Model}
+          getter={storage}
+          setter={set}
         />
       </Card>
     )
