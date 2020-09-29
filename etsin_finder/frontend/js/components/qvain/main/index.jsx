@@ -40,7 +40,7 @@ class Qvain extends Component {
 
   constructor(props) {
     super(props)
-    this.setFocusOnSubmitOrUpdateButton = this.setFocusOnSubmitButton.bind(this)
+    this.setFocusOnSubmitButton = this.setFocusOnSubmitButton.bind(this)
     this.submitButtonsRef = React.createRef()
   }
 
