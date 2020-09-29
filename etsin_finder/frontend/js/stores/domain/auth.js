@@ -52,6 +52,11 @@ class Auth {
   }
 
   @action
+  setUser(user) {
+    this.user = user
+  }
+
+  @action
   checkLogin() {
     return new Promise((resolve, reject) => {
       runInAction(() => {
@@ -64,8 +69,7 @@ class Auth {
         })
         .then(
           action(res => {
-            console.log(res.data)
-            this.user = {
+            this.setUser({
               name: res.data.user_csc_name,
               firstName: res.data.first_name,
               lastName: res.data.last_name,
@@ -73,7 +77,7 @@ class Auth {
               homeOrganizationName: res.data.home_organization_name,
               idaProjects: res.data.user_ida_projects,
               isUsingRems: res.data.is_using_rems,
-            }
+            })
 
             // User verified through HAKA or other external verification, but no valid CSC account -> no permission
             if (
