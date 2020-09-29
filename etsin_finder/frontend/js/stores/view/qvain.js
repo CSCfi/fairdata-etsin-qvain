@@ -196,8 +196,6 @@ class Qvain extends Resources {
   // Dataset - METAX dataset JSON
   // perform schema transformation METAX JSON -> etsin backend / internal schema
   @action editDataset = async dataset => {
-    this.orphanActors = []
-    this.provenancesWithNonExistingActors = []
     this.original = { ...dataset }
     this.deprecated = dataset.deprecated
     const researchDataset = dataset.research_dataset
@@ -254,7 +252,7 @@ class Qvain extends Resources {
       await this.Files.openDataset(dataset)
     }
 
-    this.changed = false
+    this.setChanged(false)
   }
 
   @action setOriginal = newOriginal => {

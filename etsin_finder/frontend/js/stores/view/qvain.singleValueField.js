@@ -8,7 +8,7 @@ class SingleValueField {
     this.reset()
   }
 
-  @observable value = undefined
+  @observable value = this.defaultValue
 
   @observable validationError = null
 

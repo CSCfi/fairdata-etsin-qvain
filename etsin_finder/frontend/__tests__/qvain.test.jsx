@@ -46,13 +46,11 @@ jest.mock('uuid', original => {
   }
 })
 
-const QvainStore = new QvainStoreClass(Env)
-
 const getStores = () => {
   Env.setMetaxApiV2(true)
   return {
     Env,
-    Qvain: QvainStore,
+    Qvain: new QvainStoreClass(Env),
     Locale: LocaleStore,
   }
 }
@@ -286,6 +284,7 @@ describe('Qvain.RightsAndLicenses', () => {
     expect(component).toMatchSnapshot()
   })
   it('should render default license', () => {
+    stores = getStores()
     const component = shallow(<License Stores={stores} theme={etsinTheme} />)
     expect(getRenderedLicenseUrls(component)).toEqual([LICENSE_URL.CCBY4])
   })

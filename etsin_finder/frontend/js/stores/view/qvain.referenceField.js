@@ -16,7 +16,7 @@ class ReferenceField {
   @observable validationError = null
 
   @action reset = () => {
-    this.storage = []
+    this.storage = this.defaultStorageFactory()
     this.item = this.defaultItem
     this.itemStr = ''
     this.validationError = null

@@ -524,6 +524,15 @@ class Actors {
     actor.organizations = organizations
   }
 
+  @action checkActorFromRefs = actor => {
+    const provenancesWithActorRefsToBeRemoved = this.Qvain.Provenances.storage.filter(
+      p => p.associations.actorsRef[actor.uiid]
+    )
+    if (!provenancesWithActorRefsToBeRemoved.length) return Promise.resolve(true)
+    this.provenancesWithNonExistingActors = provenancesWithActorRefsToBeRemoved
+    return this.createLooseProvenancePromise()
+  }
+
   @action checkProvenanceActors = () => {
     const provenanceActors = [
       ...new Set(
