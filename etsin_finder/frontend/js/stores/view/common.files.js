@@ -60,12 +60,14 @@ class Files {
 
   @action loadProjectInfo = async () => {
     const identifier = this.datasetIdentifier
-    const alreadyLoading = this.loadingProjectInfo && this.loadingProjectInfo.identifier === this.identifier
+    const alreadyLoading =
+      this.loadingProjectInfo && this.loadingProjectInfo.identifier === this.identifier
     if (alreadyLoading) {
       return
     }
 
-    const loadingAnotherProject = this.loadingProjectInfo && this.loadingProjectInfo.promise && !this.loadingProjectInfo.error
+    const loadingAnotherProject =
+      this.loadingProjectInfo && this.loadingProjectInfo.promise && !this.loadingProjectInfo.error
     if (loadingAnotherProject) {
       this.loadingProjectInfo.promise.cancel()
     }
@@ -107,7 +109,8 @@ class Files {
   @action loadMetadata = async () => {
     const identifier = this.datasetIdentifier
 
-    const alreadyLoading = this.loadingMetadata && this.loadingMetadata.identifier === this.identifier
+    const alreadyLoading =
+      this.loadingMetadata && this.loadingMetadata.identifier === this.identifier
     if (alreadyLoading) {
       return
     }
@@ -124,7 +127,9 @@ class Files {
         const dsDirectories = data.directories || []
         if (dsFiles.length > 0 || dsDirectories.length > 0) {
           const items = [...dsFiles, ...dsDirectories]
-          items.forEach((v, i) => { v.details = { id: i } })
+          items.forEach((v, i) => {
+            v.details = { id: i }
+          })
 
           dsFiles.forEach(file => {
             file.id = file.details.id
@@ -141,7 +146,7 @@ class Files {
             this.originalMetadata[key] = {
               ...this.cache[key],
               useCategoryLabel: file.use_category && file.use_category.pref_label,
-              fileTypeLabel: file.file_type && file.file_type.pref_label
+              fileTypeLabel: file.file_type && file.file_type.pref_label,
             }
           })
 
@@ -158,7 +163,7 @@ class Files {
             }
             this.originalMetadata[key] = {
               ...this.cache[key],
-              useCategoryLabel: dir.use_category && dir.use_category.pref_label
+              useCategoryLabel: dir.use_category && dir.use_category.pref_label,
             }
           })
         }
@@ -186,7 +191,7 @@ class Files {
     }
   }
 
-  @action openDataset = async (dataset) => {
+  @action openDataset = async dataset => {
     this.reset()
     this.datasetIdentifier = dataset.identifier
     await Promise.all([this.loadProjectInfo(), this.loadMetadata()])
@@ -194,16 +199,17 @@ class Files {
   }
 
   @action loadAllDirectories = async () => {
-    const loadChildren = async (dir) => (
-      Promise.all(dir.directories.map(async d => {
-        await this.loadDirectory(d)
-        return loadChildren(d)
-      }))
-    )
+    const loadChildren = async dir =>
+      Promise.all(
+        dir.directories.map(async d => {
+          await this.loadDirectory(d)
+          return loadChildren(d)
+        })
+      )
     await loadChildren(this.root)
   }
 
-  @action loadDirectory = async (dir) => itemLoaderPublic.loadDirectory(this, dir, 100)
+  @action loadDirectory = async dir => itemLoaderPublic.loadDirectory(this, dir, 100)
 
   @action changeProject = projectId => {
     Files.prototype.reset.call(this)
@@ -212,19 +218,20 @@ class Files {
     return this.loadProjectRoot()
   }
 
-  fetchRootIdentifier = async (projectIdentifier) => {
+  fetchRootIdentifier = async projectIdentifier => {
     // Public access to projects is only through published datasets.
     // To access user projects, overload this and remove cr_identifier from the request.
     const { data } = await axios.get(urls.v2.projectFiles(projectIdentifier), {
       params: {
-        cr_identifier: this.datasetIdentifier
-      }
+        cr_identifier: this.datasetIdentifier,
+      },
     })
     return data.identifier
   }
 
   @action loadProjectRoot = async () => {
-    const alreadyLoading = this.loadingProjectRoot && this.loadingProjectRoot.identifier === this.selectedProject
+    const alreadyLoading =
+      this.loadingProjectRoot && this.loadingProjectRoot.identifier === this.selectedProject
     if (alreadyLoading || (this.root && this.root.projectIdentifier === this.selectedProject)) {
       return
     }
@@ -236,8 +243,7 @@ class Files {
       this.loadingProjectRoot.promise.cancel()
     }
 
-
-    const loadRoot = async (projectIdentifier) => {
+    const loadRoot = async projectIdentifier => {
       const rootIdentifier = await this.fetchRootIdentifier(projectIdentifier)
       const root = observable(Project(projectIdentifier, rootIdentifier))
       await this.loadDirectory(root)

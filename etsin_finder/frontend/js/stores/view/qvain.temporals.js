@@ -29,11 +29,19 @@ class Temporals extends Field {
     this.storage = this.storage.filter(temp => temp.uiid !== uiid)
   }
 
-  toBackend = () =>
-    this.storage.map(temporal => ({
+  toBackend = () => {
+    // save on submit if Temporal is filled are filled but not added
+    if ((this.inEdit || {}).startDate && (this.inEdit || {}).endDate) {
+      this.save()
+    }
+
+    return this.storage.map(temporal => ({
       start_date: new Date(temporal.startDate).toISOString(),
       end_date: new Date(temporal.endDate).toISOString(),
     }))
+  }
+
+  fromBackend = (dataset, Qvain) => this.fromBackendBase(dataset.temporal, Qvain)
 }
 
 export const TemporalModel = data => ({

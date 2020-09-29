@@ -6,11 +6,11 @@ import Select from '../../general/input/searchSelect'
 import { InfrastructureModel } from '../../../../stores/view/qvain.infrastructure'
 
 const InfrastructureSelection = ({ Stores }) => {
-  const { infrastructures, set } = Stores.Qvain.Infrastructures
+  const { storage, set } = Stores.Qvain.Infrastructures
   return (
     <Select
       name="infrastructure"
-      getter={infrastructures}
+      getter={storage}
       setter={set}
       isMulti
       isClearable={false}

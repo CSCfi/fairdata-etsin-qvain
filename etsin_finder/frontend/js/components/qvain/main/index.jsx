@@ -29,6 +29,10 @@ class Qvain extends Component {
 
   disposeConfirmReload = null
 
+  setFocusOnSubmitOrUpdateButton = this.setFocusOnSubmitButton.bind(this)
+
+  submitButtonsRef = React.createRef()
+
   static propTypes = {
     Stores: PropTypes.object.isRequired,
     location: PropTypes.shape({
@@ -36,12 +40,6 @@ class Qvain extends Component {
     }).isRequired,
     match: PropTypes.object.isRequired,
     history: PropTypes.object.isRequired,
-  }
-
-  constructor(props) {
-    super(props)
-    this.setFocusOnSubmitOrUpdateButton = this.setFocusOnSubmitButton.bind(this)
-    this.submitButtonsRef = React.createRef()
   }
 
   state = {

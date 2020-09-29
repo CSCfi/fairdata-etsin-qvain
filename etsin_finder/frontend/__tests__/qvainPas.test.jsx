@@ -66,7 +66,7 @@ afterEach(() => {
 
 describe('Qvain.PasState', () => {
   const render = stores => {
-    stores.Qvain.setKeywordsArray(['key', 'word'])
+    stores.Qvain.Keywords.set(['key', 'word'])
     return mount(
       <Provider Stores={stores}>
         <ThemeProvider theme={etsinTheme}>
@@ -94,7 +94,7 @@ describe('Qvain.PasState', () => {
 
 describe('Qvain.Description', () => {
   const render = stores => {
-    stores.Qvain.setKeywordsArray(['key', 'word'])
+    stores.Qvain.Keywords.set(['key', 'word'])
     return mount(
       <Provider Stores={stores}>
         <ThemeProvider theme={etsinTheme}>
@@ -139,10 +139,12 @@ describe('Qvain.Description', () => {
 
 describe('Qvain.RightsAndLicenses', () => {
   const render = stores => {
-    stores.Qvain.setLicenseArray([
-      LicenseConstructor({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'other'),
+    stores.Qvain.Licenses.set([
+      stores.Qvain.Licenses.Model({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'other'),
     ])
-    stores.Qvain.setAccessType(AccessTypeConstructor({ en: 'Embargo' }, ACCESS_TYPE_URL.EMBARGO))
+    stores.Qvain.AccessType.set(
+      stores.Qvain.AccessType.Model({ en: 'Embargo' }, ACCESS_TYPE_URL.EMBARGO)
+    )
     return mount(
       <Provider Stores={stores}>
         <ThemeProvider theme={etsinTheme}>

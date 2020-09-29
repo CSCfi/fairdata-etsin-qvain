@@ -29,7 +29,7 @@ class Field {
     this.hasChanged = val
   }
 
-  @action create = () => {
+  @action reset = () => {
     this.setChanged(false)
     this.editMode = false
     this.inEdit = this.Template()
@@ -112,7 +112,7 @@ class Field {
   }
 
   @action
-  fromBackend = (data, Qvain) => {
+  fromBackendBase = (data, Qvain) => {
     this.storage = []
     if (data !== undefined) {
       data.forEach(element => {

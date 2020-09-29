@@ -29,11 +29,7 @@ import {
 } from '../js/components/qvain/general/errors/validationError'
 import { SlidingContent } from '../js/components/qvain/general/card'
 import Env from '../js/stores/domain/env'
-import QvainStoreClass, {
-  ExternalResource,
-  AccessType as AccessTypeConstructor,
-  License as LicenseConstructor,
-} from '../js/stores/view/qvain'
+import QvainStoreClass, { ExternalResource } from '../js/stores/view/qvain'
 import LocaleStore from '../js/stores/view/language'
 import TablePasState from '../js/components/qvain/datasets/tablePasState'
 import {
@@ -260,6 +256,9 @@ describe('Qvain dataset list filtering', () => {
 })
 
 describe('Qvain.RightsAndLicenses', () => {
+  let stores
+  let Licenses
+  let AccessTypeStore
   const getRenderedLicenseUrls = shallowLicenseComponent => {
     const selectedOptions = shallowLicenseComponent
       .findWhere(c => c.prop('component') == CreatableSelect)
@@ -271,34 +270,33 @@ describe('Qvain.RightsAndLicenses', () => {
     return selectedOptions.map(opt => opt.prop('data').identifier)
   }
 
+  beforeEach(() => {
+    stores = getStores()
+    stores.Qvain.resetQvainStore()
+    Licenses = stores.Qvain.Licenses
+    AccessTypeStore = stores.Qvain.AccessType
+  })
+
   it('should render <RightsAndLicenses />', () => {
     const component = shallow(<RightsAndLicenses />)
     expect(component).toMatchSnapshot()
   })
   it('should render <Licenses />', () => {
-    const stores = getStores()
     const component = shallow(<License Stores={stores} theme={etsinTheme} />)
     expect(component).toMatchSnapshot()
   })
   it('should render default license', () => {
-    const stores = getStores()
-    stores.Qvain.resetQvainStore()
     const component = shallow(<License Stores={stores} theme={etsinTheme} />)
     expect(getRenderedLicenseUrls(component)).toEqual([LICENSE_URL.CCBY4])
   })
   it('should render one added license, Other (URL)', () => {
-    const stores = getStores()
-    stores.Qvain.setLicenseArray([
-      LicenseConstructor({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'https://test.url'),
-    ])
+    Licenses.set([Licenses.Model({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'https://test.url')])
     const component = shallow(<License Stores={stores} theme={etsinTheme} />)
     expect(getRenderedLicenseUrls(component)).toEqual(['https://test.url'])
   })
   it('should render one added license, CCBY4', () => {
-    const stores = getStores()
-    stores.Qvain.licenseArray = []
-    stores.Qvain.setLicenseArray([
-      LicenseConstructor(
+    Licenses.set([
+      Licenses.Model(
         { en: 'Creative Commons Attribution 4.0 International (CC BY 4.0)' },
         LICENSE_URL.CCBY4
       ),
@@ -307,11 +305,10 @@ describe('Qvain.RightsAndLicenses', () => {
     expect(getRenderedLicenseUrls(component)).toEqual([LICENSE_URL.CCBY4])
   })
   it('should render three added licenses, Other (URL) x 2 + CCBY4', () => {
-    const stores = getStores()
-    stores.Qvain.setLicenseArray([
-      LicenseConstructor({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'https://test.url'),
-      LicenseConstructor({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'https://test2.url'),
-      LicenseConstructor(
+    Licenses.set([
+      Licenses.Model({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'https://test.url'),
+      Licenses.Model({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'https://test2.url'),
+      Licenses.Model(
         { en: 'Creative Commons Attribution 4.0 International (CC BY 4.0)' },
         LICENSE_URL.CCBY4
       ),
@@ -324,15 +321,15 @@ describe('Qvain.RightsAndLicenses', () => {
     ])
   })
   it('should render four licenses where two have errors', () => {
-    const stores = getStores()
-    stores.Qvain.setLicenseArray([
-      LicenseConstructor(
+    //    const stores = getStores()
+    Licenses.set([
+      Licenses.Model(
         { en: 'Creative Commons Attribution 4.0 International (CC BY 4.0)' },
         LICENSE_URL.CCBY4
       ),
-      LicenseConstructor({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'httpöötest.url'),
-      LicenseConstructor({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'http://ok.url'),
-      LicenseConstructor({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'httppp:/fail.url'),
+      Licenses.Model({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'httpöötest.url'),
+      Licenses.Model({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'http://ok.url'),
+      Licenses.Model({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'httppp:/fail.url'),
     ])
     const component = shallow(<License Stores={stores} theme={etsinTheme} />)
     component.instance().validateLicenses()
@@ -356,26 +353,22 @@ describe('Qvain.RightsAndLicenses', () => {
     expect(component).toMatchSnapshot()
   })
   it('should render <RestrictionGrounds />', () => {
-    const stores = getStores()
-    stores.Qvain.setAccessType(AccessTypeConstructor(undefined, ACCESS_TYPE_URL.EMBARGO))
+    AccessTypeStore.set(AccessTypeStore.Model(undefined, ACCESS_TYPE_URL.EMBARGO))
     const component = shallow(<AccessType Stores={stores} />)
     expect(component.find(RestrictionGrounds).length).toBe(1)
   })
   it('should NOT render <RestrictionGrounds />', () => {
-    const stores = getStores()
-    stores.Qvain.setAccessType(AccessTypeConstructor(undefined, ACCESS_TYPE_URL.OPEN))
+    AccessTypeStore.set(AccessTypeStore.Model(undefined, ACCESS_TYPE_URL.OPEN))
     const component = shallow(<AccessType Stores={stores} />)
     expect(component.find(RestrictionGrounds).length).toBe(0)
   })
   it('should render <EmbargoExpires />', () => {
-    const stores = getStores()
-    stores.Qvain.setAccessType(AccessTypeConstructor(undefined, ACCESS_TYPE_URL.EMBARGO))
+    AccessTypeStore.set(AccessTypeStore.Model(undefined, ACCESS_TYPE_URL.EMBARGO))
     const component = shallow(<AccessType Stores={stores} />)
     expect(component.find(EmbargoExpires).length).toBe(1)
   })
   it('should NOT render <EmbargoExpires />', () => {
-    const stores = getStores()
-    stores.Qvain.setAccessType(AccessTypeConstructor(undefined, ACCESS_TYPE_URL.OPEN))
+    AccessTypeStore.set(AccessTypeStore.Model(undefined, ACCESS_TYPE_URL.OPEN))
     const component = shallow(<AccessType Stores={stores} />)
     expect(component.find(EmbargoExpires).length).toBe(0)
   })

@@ -4,39 +4,18 @@ import PropTypes from 'prop-types'
 import { inject, observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 
-import { RestrictionGrounds as RestrictionGroundsConstructor } from '../../../stores/view/qvain'
 import Select from '../general/input/select'
-import { restrictionGroundsSchema } from '../utils/formValidation'
 import ValidationError from '../general/errors/validationError'
 
 class RestrictionGrounds extends Component {
+  handleBlur = this.props.Stores.Qvain.RestrictionGrounds.validate
+
   static propTypes = {
     Stores: PropTypes.object.isRequired,
   }
 
-  state = {
-    errorMessage: null,
-  }
-
-  handleBlur = () => {
-    const { identifier } = this.props.Stores.Qvain.restrictionGrounds || ''
-    restrictionGroundsSchema
-      .validate(identifier)
-      .then(() => {
-        this.setState({
-          errorMessage: null,
-        })
-      })
-      .catch(err => {
-        this.setState({
-          errorMessage: err.errors,
-        })
-      })
-  }
-
   render() {
-    const { errorMessage } = this.state
-    const { restrictionGrounds, setRestrictionGrounds } = this.props.Stores.Qvain
+    const { value, set, validationError, Model } = this.props.Stores.Qvain.RestrictionGrounds
     return (
       <RestrictionGroundsContainer>
         <Translate component="h3" content="qvain.rightsAndLicenses.restrictionGrounds.title" />
@@ -45,12 +24,12 @@ class RestrictionGrounds extends Component {
           metaxIdentifier="restriction_grounds"
           component={Select}
           attributes={{ placeholder: 'qvain.rightsAndLicenses.restrictionGrounds.placeholder' }}
-          model={RestrictionGroundsConstructor}
-          getter={restrictionGrounds}
-          setter={setRestrictionGrounds}
+          model={Model}
+          getter={value}
+          setter={set}
           onBlur={this.handleBlur}
         />
-        {errorMessage && <ValidationError>{errorMessage}</ValidationError>}
+        <ValidationError>{validationError}</ValidationError>
         <Text>
           <Translate content="qvain.rightsAndLicenses.restrictionGrounds.text" />
         </Text>

@@ -11,48 +11,35 @@ import ValidationError from '../general/errors/validationError'
 class DescriptionFieldInput extends Component {
   static propTypes = {
     Stores: PropTypes.object.isRequired,
+    fieldName: PropTypes.string.isRequired,
     propName: PropTypes.string.isRequired,
-    schema: PropTypes.object.isRequired,
     activeLang: PropTypes.string.isRequired,
   }
 
-  state = {
-    [`${this.props.propName}Error`]: null,
-  }
-
   handleChange = e => {
-    const { propName, activeLang } = this.props
-    const { setLangValue } = this.props.Stores.Qvain
-    setLangValue(propName, e.target.value, activeLang)
-    this.setState({ [`${propName}Error`]: null })
+    const { fieldName, activeLang } = this.props
+    const { set } = this.props.Stores.Qvain[fieldName]
+    set(e.target.value, activeLang)
   }
 
   handleBlur = () => {
-    const { propName, schema, Stores } = this.props
-    schema
-      .validate(Stores.Qvain[propName])
-      .then(() => {
-        this.setState({ [`${propName}Error`]: null })
-      })
-      .catch(err => {
-        this.setState({ [`${propName}Error`]: err.errors })
-      })
+    const { fieldName, Stores } = this.props
+    const { validate } = Stores.Qvain[fieldName]
+    validate()
   }
 
   getPlaceholder = () => {
-    const { propName } = this.props
-    const { lang } = this.props.Stores.Locale
+    const { propName, activeLang } = this.props
     const stub = `qvain.description.description.${propName}.`
-    return lang === 'fi' ? `${stub}placeholderFi` : `${stub}placeholderEn`
+    return activeLang === 'fi' ? `${stub}placeholderFi` : `${stub}placeholderEn`
   }
 
   render() {
-    const { propName, activeLang } = this.props
-    const { readonly } = this.props.Stores.Qvain
-    const value = this.props.Stores.Qvain[propName] || {}
+    const { fieldName, propName, activeLang } = this.props
+    const { value, readonly, validationError } = this.props.Stores.Qvain[fieldName]
     const { lang } = this.props.Stores.Locale
-    const { [`${propName}Error`]: error } = this.state
     const id = `${propName}Input`
+
     return (
       <>
         <LabelLarge htmlFor={id}>
@@ -75,7 +62,7 @@ class DescriptionFieldInput extends Component {
           onBlur={this.handleBlur}
           attributes={{ placeholder: this.getPlaceholder() }}
         />
-        {error && (
+        {validationError && (
           <Translate component={ValidationError} content={`qvain.description.error.${propName}`} />
         )}
       </>

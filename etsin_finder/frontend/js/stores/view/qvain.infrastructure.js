@@ -1,36 +1,13 @@
-import { observable, action } from 'mobx'
+import { action } from 'mobx'
+import ReferenceField from './qvain.referenceField'
 
-class Infrastructures {
-  constructor(Parent) {
-    this.Parent = Parent
-  }
-
-  @observable infrastructures = []
-
-  @action reset = () => {
-    this.infrastructures = []
-  }
-
-  @action
-  set = array => {
-    this.infrastructures = array
-    this.Parent.setChanged = true
-  }
-
-  @action
-  remove = infrastructureToRemove => {
-    this.infrastructures = this.infrastructures.filter(
-      infra => infra.url !== infrastructureToRemove.url
-    )
-    this.changed = true
-  }
-
+class Infrastructures extends ReferenceField {
   @action
   fromBackend = dataset => {
     // infrastructures
     this.reset()
     if (dataset.infrastructure !== undefined) {
-      this.infrastructures = dataset.infrastructure.map(element =>
+      this.storage = dataset.infrastructure.map(element =>
         InfrastructureModel(element.pref_label, element.identifier)
       )
     }
