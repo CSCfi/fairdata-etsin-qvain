@@ -22,6 +22,7 @@ class Qvain extends Resources {
   resetQvainStore = () => {
     this.original = undefined
     // Reset Files/Directories related data
+    this.resetFilesV1()
     this.dataCatalog = undefined
     this.preservationState = 0
     this.cumulativeState = CUMULATIVE_STATE.NO
