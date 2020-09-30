@@ -123,7 +123,7 @@ class DownloadAPIService(FlaskService):
             if file_ids:
                 params['file'] = file_ids
             if dir_ids:
-                params['dir'] = dir
+                params['dir'] = dir_ids
             params_str = parse.urlencode(params, doseq=True, quote_via=parse.quote, safe='')
             url += '?' + params_str
 
