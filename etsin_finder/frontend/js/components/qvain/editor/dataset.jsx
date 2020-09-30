@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 
-import { STSD, Form, SubmitContainer } from './editor.styled'
+import { SkipToSubmitDataset, Form, SubmitContainer, DisableImplicitSubmit } from './editor.styled'
 import { ErrorContainer, ErrorLabel, ErrorContent, ErrorButtons } from '../general/errors'
 import { Button } from '../../general/button'
 
@@ -40,6 +40,7 @@ const Dataset = ({
   }
   return (
     <Form className="container">
+      <DisableImplicitSubmit />
       <Description />
       <Actors />
       <RightsAndLicenses />
@@ -50,9 +51,9 @@ const Dataset = ({
       <SubmitContainer>
         <Translate component="p" content="qvain.consent" unsafe />
       </SubmitContainer>
-      <STSD onClick={setFocusOnSubmitButton}>
+      <SkipToSubmitDataset onClick={setFocusOnSubmitButton}>
         <Translate content="stsd" />
-      </STSD>
+      </SkipToSubmitDataset>
     </Form>
   )
 }

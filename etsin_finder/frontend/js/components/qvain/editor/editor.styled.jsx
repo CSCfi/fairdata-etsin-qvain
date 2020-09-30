@@ -5,7 +5,9 @@ import { Link } from 'react-router-dom'
 import { InvertedButton } from '../../general/button'
 import { Container, StickySubHeader } from '../general/card'
 
-export const STSD = styled.button`
+export const SkipToSubmitDataset = styled.button.attrs({
+  type: 'button',
+})`
   background: ${p => p.theme.color.primary};
   color: #fafafa;
   max-height: 0;
@@ -86,3 +88,14 @@ export const customStyles = {
     padding: '2vw',
   },
 }
+
+// According to the HTML spec, pressing enter in a text input causes implicit
+// form submission, i.e. the first submit button in the form is clicked.
+// Prevent this by adding a disabled submit button to the beginning of the form.
+export const DisableImplicitSubmit = styled.button.attrs({
+  disabled: true,
+  ariaHidden: true,
+  type: 'submit',
+})`
+  display: none;
+`
