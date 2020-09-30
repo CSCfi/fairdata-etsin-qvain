@@ -1,5 +1,5 @@
 import { observable, action, computed } from 'mobx'
-import { CUMULATIVE_STATE, DATA_CATALOG_IDENTIFIER } from '../../utils/constants'
+import { CUMULATIVE_STATE, DATA_CATALOG_IDENTIFIER } from '../../../utils/constants'
 import Resources from './qvain.resources'
 import Files from './qvain.files'
 

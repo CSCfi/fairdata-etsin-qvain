@@ -24,7 +24,11 @@ import {
 } from './utils'
 import { LabelLarge, Input } from '../general/modal/form'
 import { fundingAgencySchema, organizationObjectSchema } from '../utils/formValidation'
-import { FundingAgency, ContributorType, Organization } from '../../../stores/view/qvain.project'
+import {
+  FundingAgency,
+  ContributorType,
+  Organization,
+} from '../../../stores/view/qvain/qvain.project'
 
 const FundingAgencyForm = props => {
   const onOrganizationChange = value => {

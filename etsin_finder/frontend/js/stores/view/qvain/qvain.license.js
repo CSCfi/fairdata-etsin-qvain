@@ -1,5 +1,5 @@
 import ReferenceField from './qvain.referenceField'
-import { LICENSE_URL } from '../../utils/constants'
+import { LICENSE_URL } from '../../../utils/constants'
 
 export const Model = (name, identifier) => ({
   name,

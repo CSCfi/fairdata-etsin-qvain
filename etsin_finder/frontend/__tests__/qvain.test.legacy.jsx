@@ -22,7 +22,7 @@ import { SelectedFilesBase, FileLabel } from '../js/components/qvain/files/legac
 import { DeleteButton } from '../js/components/qvain/general/buttons'
 import Env from '../js/stores/domain/env'
 import QvainStoreClass from '../js/stores/view/qvain'
-import { Directory } from '../js/stores/view/common.filesv1.js'
+import { Directory } from '../js/stores/view/qvain/qvain.filesv1.js'
 import LocaleStore from '../js/stores/view/language'
 
 jest.mock('uuid', () => {

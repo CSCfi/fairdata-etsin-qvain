@@ -5,7 +5,7 @@ import TabInput from '../../../general/input/translationTabInputModal'
 import { FormContainer } from '../../../general/modal/form'
 import ModalInput from '../../../general/modal/modalInput'
 import ModalReferenceInput from '../../../general/modal/modalReferenceInput'
-import { RelationType } from '../../../../../stores/view/qvain.relatedResources'
+import { RelationType } from '../../../../../stores/view/qvain/qvain.relatedResources'
 import ModalSeparator from '../../../general/modal/modalSeparator'
 
 const Form = props => {

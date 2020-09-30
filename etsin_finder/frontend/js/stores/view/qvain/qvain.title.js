@@ -1,5 +1,5 @@
 import MultiLanguageField from './qvain.multiLanguageField'
-import { titleSchema } from '../../components/qvain/utils/formValidation'
+import { titleSchema } from '../../../components/qvain/utils/formValidation'
 
 class Title extends MultiLanguageField {
   constructor(Parent) {

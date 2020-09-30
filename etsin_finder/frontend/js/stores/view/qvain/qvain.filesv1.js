@@ -1,9 +1,9 @@
 import { observable, action, computed, runInAction } from 'mobx'
 import axios from 'axios'
-import { getDirectories, getFiles, deepCopy } from '../../components/qvain/utils/fileHierarchy'
-import urls from '../../components/qvain/utils/urls'
-import { USE_CATEGORY_URL } from '../../utils/constants'
-import { getPath } from '../../components/qvain/utils/object'
+import { getDirectories, getFiles, deepCopy } from '../../../components/qvain/utils/fileHierarchy'
+import urls from '../../../components/qvain/utils/urls'
+import { USE_CATEGORY_URL } from '../../../utils/constants'
+import { getPath } from '../../../components/qvain/utils/object'
 
 class FilesV1 {
   @observable idaPickerOpen = false

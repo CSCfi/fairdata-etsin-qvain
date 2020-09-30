@@ -1,6 +1,6 @@
 import { observable, action, toJS } from 'mobx'
 import { v4 as uuidv4 } from 'uuid'
-import { parseOrganization } from '../../components/qvain/project/utils'
+import { parseOrganization } from '../../../components/qvain/project/utils'
 
 class Projects {
   constructor(Parent) {

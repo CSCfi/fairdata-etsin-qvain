@@ -1,6 +1,6 @@
 import { action } from 'mobx'
 import SingleValueField from './qvain.singleValueField'
-import { restrictionGroundsSchema } from '../../components/qvain/utils/formValidation'
+import { restrictionGroundsSchema } from '../../../components/qvain/utils/formValidation'
 
 class RestrictionGrounds extends SingleValueField {
   constructor(Parent) {

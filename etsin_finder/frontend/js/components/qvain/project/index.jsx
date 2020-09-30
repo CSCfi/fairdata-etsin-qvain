@@ -5,7 +5,7 @@ import { inject, observer } from 'mobx-react'
 import { toJS } from 'mobx'
 import styled from 'styled-components'
 
-import { Project as ProjectObject } from '../../../stores/view/qvain.project'
+import { Project as ProjectObject } from '../../../stores/view/qvain/qvain.project'
 import { projectSchema } from '../utils/formValidation'
 
 import { Section } from '../general/section'

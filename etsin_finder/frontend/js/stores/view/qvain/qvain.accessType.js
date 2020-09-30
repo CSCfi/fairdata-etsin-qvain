@@ -1,6 +1,6 @@
 import SingleValueField from './qvain.singleValueField'
-import { ACCESS_TYPE_URL } from '../../utils/constants'
-import { accessTypeSchema } from '../../components/qvain/utils/formValidation'
+import { ACCESS_TYPE_URL } from '../../../utils/constants'
+import { accessTypeSchema } from '../../../components/qvain/utils/formValidation'
 
 const Model = (name, url) => ({
   name,

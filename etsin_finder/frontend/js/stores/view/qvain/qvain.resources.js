@@ -16,7 +16,7 @@ import EmbargoExpDate from './qvain.embargoExpDate'
 import RestrictionGrounds from './qvain.restrictionGrounds'
 import Title from './qvain.title'
 import Description from './qvain.description'
-import FilesV1 from './common.filesv1'
+import FilesV1 from './qvain.filesv1'
 
 class Resources extends FilesV1 {
   constructor() {

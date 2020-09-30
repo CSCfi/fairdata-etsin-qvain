@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { observable, action, runInAction, computed } from 'mobx'
 
-import { METAX_FAIRDATA_ROOT_URL, ENTITY_TYPE, ROLE } from '../../utils/constants'
+import { METAX_FAIRDATA_ROOT_URL, ENTITY_TYPE, ROLE } from '../../../utils/constants'
 
 // helper methods
 

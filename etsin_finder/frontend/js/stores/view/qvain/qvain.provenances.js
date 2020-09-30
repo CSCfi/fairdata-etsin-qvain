@@ -4,7 +4,7 @@ import Spatials from './qvain.spatials'
 import UsedEntities from './qvain.usedEntities'
 import Field from './qvain.field'
 import { ActorsRef } from './qvain.actors'
-import { ROLE } from '../../utils/constants'
+import { ROLE } from '../../../utils/constants'
 
 const Provenance = ({
   uiid = uuidv4(),

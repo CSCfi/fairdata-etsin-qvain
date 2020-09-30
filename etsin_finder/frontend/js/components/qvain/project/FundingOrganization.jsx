@@ -19,7 +19,7 @@ import {
 import Button from '../../general/button'
 import Label from '../general/card/label'
 
-import { Organization } from '../../../stores/view/qvain.project'
+import { Organization } from '../../../stores/view/qvain/qvain.project'
 import { organizationObjectSchema } from '../utils/formValidation'
 
 const FundingOrganization = props => {

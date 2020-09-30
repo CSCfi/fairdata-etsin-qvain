@@ -1,4 +1,4 @@
-import { descriptionSchema } from '../../components/qvain/utils/formValidation'
+import { descriptionSchema } from '../../../components/qvain/utils/formValidation'
 import MultiLanguageField from './qvain.multiLanguageField'
 
 class Description extends MultiLanguageField {

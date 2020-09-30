@@ -1,5 +1,5 @@
 import SingleValueField from './qvain.singleValueField'
-import { embargoExpDateSchema } from '../../components/qvain/utils/formValidation'
+import { embargoExpDateSchema } from '../../../components/qvain/utils/formValidation'
 
 class EmbargoExpDate extends SingleValueField {
   constructor(Parent) {

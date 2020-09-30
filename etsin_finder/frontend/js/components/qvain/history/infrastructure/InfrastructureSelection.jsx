@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { inject, observer } from 'mobx-react'
 import Select from '../../general/input/searchSelect'
 
-import { InfrastructureModel } from '../../../../stores/view/qvain.infrastructure'
+import { InfrastructureModel } from '../../../../stores/view/qvain/qvain.infrastructure'
 
 const InfrastructureSelection = ({ Stores }) => {
   const { storage, set } = Stores.Qvain.Infrastructures
