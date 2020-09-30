@@ -33,7 +33,7 @@ export class AccessType extends Component {
   }
 
   componentDidMount = () => {
-    const { Model } = this.props.Stores.Qvain.AccessType
+    const { Model, value: accessType } = this.props.Stores.Qvain.AccessType
     this.promises.push(
       getReferenceData('access_type')
         .then(res => {
@@ -41,7 +41,6 @@ export class AccessType extends Component {
           let options = list.map(ref => Model(ref._source.label, ref._source.uri))
 
           const user = this.props.Stores.Auth.user
-          const { accessType } = this.props.Stores.Qvain
 
           if (!user.isUsingRems && !(accessType && accessType.url === ACCESS_TYPE_URL.PERMIT)) {
             options = options.filter(ref => ref.url !== ACCESS_TYPE_URL.PERMIT)
