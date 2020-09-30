@@ -33,6 +33,10 @@ class Qvain extends Component {
 
   submitButtonsRef = React.createRef()
 
+  setFocusOnSubmitButton = this.setFocusOnSubmitButton.bind(this)
+
+  submitButtonsRef = React.createRef()
+
   static propTypes = {
     Stores: PropTypes.object.isRequired,
     location: PropTypes.shape({
