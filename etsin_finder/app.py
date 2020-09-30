@@ -27,7 +27,8 @@ def create_app():
     if not app.testing and not executing_travis():
         _setup_app_logging(app)
     if not executing_travis():
-        app.config.update({'SAML_PATH': '/home/etsin-user'})
+        app.config.update({'SAML_PATH_ETSIN': '/home/etsin-user/etsin'})
+        app.config.update({'SAML_PATH_QVAIN': '/home/etsin-user/qvain'})
     app.mail = Mail(app)
     app.cr_cache = CatalogRecordCache(app)
     app.rems_cache = RemsCache(app)

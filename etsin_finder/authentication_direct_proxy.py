@@ -26,8 +26,7 @@ def get_saml_auth(flask_request):
         object: SP SAML instance.
 
     """
-    return OneLogin_Saml2_Auth(prepare_flask_request_for_saml(flask_request), custom_base_path=app.config.get('SAML_PATH', None))
-
+    return OneLogin_Saml2_Auth(prepare_flask_request_for_saml(flask_request), custom_base_path=app.config.get('SAML_PATH_ETSIN', None))
 
 def init_saml_auth(saml_prepared_flask_request):
     """Init saml auth
@@ -39,7 +38,7 @@ def init_saml_auth(saml_prepared_flask_request):
         object: Initializes the SP SAML instance.
 
     """
-    return OneLogin_Saml2_Auth(saml_prepared_flask_request, custom_base_path=app.config.get('SAML_PATH', None))
+    return OneLogin_Saml2_Auth(saml_prepared_flask_request, custom_base_path=app.config.get('SAML_PATH_ETSIN', None))
 
 def is_authenticated_through_direct_proxy():
     """Is user authenticated through the old proxy solution
