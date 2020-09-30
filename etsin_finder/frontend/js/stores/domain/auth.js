@@ -26,7 +26,7 @@ class Auth {
     lastName: undefined,
     loggedIn: false,
     homeOrganizationName: undefined,
-    idaGroups: [],
+    idaProjects: [],
     isUsingRems: undefined,
   }
 
@@ -38,7 +38,7 @@ class Auth {
       lastName: undefined,
       loggedIn: false,
       homeOrganizationName: undefined,
-      idaGroups: [],
+      idaProjects: [],
       isUsingRems: undefined,
     }
   }
@@ -49,6 +49,11 @@ class Auth {
     this.userLogged = false
     this.cscUserLogged = false
     this.loading = false
+  }
+
+  @action
+  setUser(user) {
+    this.user = user
   }
 
   @action
@@ -64,38 +69,48 @@ class Auth {
         })
         .then(
           action(res => {
-            this.user = {
+            this.setUser({
               name: res.data.user_csc_name,
               firstName: res.data.first_name,
               lastName: res.data.last_name,
               loggedIn: res.data.is_authenticated,
               homeOrganizationName: res.data.home_organization_name,
-              idaGroups: res.data.user_ida_groups,
+              idaProjects: res.data.user_ida_projects,
               isUsingRems: res.data.is_using_rems,
-            }
-            if (res.data.is_authenticated && !res.data.is_authenticated_CSC_user) {
-              // The user was able to verify themself using HAKA or some other external verification,
-              // but do not have a valid CSC account and should not be granted permission.
+            })
+
+            // User verified through HAKA or other external verification, but no valid CSC account -> no permission
+            if (
+              res.data.is_authenticated &&
+              !res.data.is_authenticated_CSC_user
+            ) {
               this.userLogged = false
               this.cscUserLogged = false
-            } else if (!res.data.home_organization_name) {
-              // The user was able to verify themself using their CSC account,
-              // but do not have a home organization set (sui.csc.fi) and should not be granted permission.
+
+            // User verified through CSC account, but no set home organization -> no permission
+            } else if (
+              res.data.is_authenticated &&
+              res.data.is_authenticated_CSC_user &&
+              !res.data.home_organization_name
+            ) {
               this.userLogged = false
               this.cscUserLogged = false
+
+            // User verified through CSC account and has set home organization -> login successful
             } else if (
               res.data.is_authenticated &&
               res.data.is_authenticated_CSC_user &&
               res.data.home_organization_name
             ) {
-              // The user has a valid CSC account with a defined home organization. Login successful.
               this.userLogged = res.data.is_authenticated
               this.cscUserLogged = res.data.is_authenticated_CSC_user
+
+            // Error handling, if above conditions are not met, user should not be logged in
             } else {
-              // If any of the checks failed, the user should not be logged in. The variables keep their 'false' value.
               this.userLogged = false
               this.cscUserLogged = false
             }
+
             this.loading = false
             this.initializing = false
             resolve(res)

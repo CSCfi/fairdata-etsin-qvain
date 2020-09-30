@@ -13,6 +13,7 @@ from flask_restful import abort, reqparse, Resource
 
 from etsin_finder.app_config import get_app_config
 from etsin_finder import authentication
+from etsin_finder import authentication_direct_proxy
 from etsin_finder import authorization
 from etsin_finder import cr_service
 from etsin_finder import cr_service_v2
@@ -304,8 +305,8 @@ class User(Resource):
         csc_user = authentication.get_user_csc_name()
         first_name = authentication.get_user_firstname()
         last_name = authentication.get_user_lastname()
-        groups = authentication.get_user_ida_groups()
-        user_info['user_ida_groups'] = groups
+        groups = authentication.get_user_ida_projects()
+        user_info['user_ida_projects'] = groups
 
         is_using_rems_response = get_fairdata_rems_api_config(app.testing)
         is_using_rems = False
@@ -316,10 +317,10 @@ class User(Resource):
 
         if csc_user is not None:
             user_info['user_csc_name'] = csc_user
-        if first_name and last_name:
+        if first_name:
             user_info['first_name'] = first_name
+        if last_name:
             user_info['last_name'] = last_name
-
         return user_info, 200
 
 
@@ -435,7 +436,7 @@ class Session(Resource):
             tuple: bool and status code
 
         """
-        authentication.reset_flask_session_on_logout()
+        authentication_direct_proxy.reset_flask_session_on_logout()
         return not authentication.is_authenticated(), 200
 
 

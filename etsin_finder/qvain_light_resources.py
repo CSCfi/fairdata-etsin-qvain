@@ -28,10 +28,10 @@ from etsin_finder.qvain_light_utils import (
     edited_data_to_metax,
     check_if_data_in_user_IDA_project,
     get_encoded_access_granter,
-    get_user_ida_projects,
     check_dataset_creator,
     check_authentication,
 )
+from etsin_finder.authentication import get_user_ida_projects
 from etsin_finder.log_utils import log_request
 from etsin_finder.qvain_light_service import (
     create_dataset,

@@ -7,16 +7,14 @@ import styled from 'styled-components'
 
 export const ProjectSelectorBase = ({ Stores, disabled }) => {
   const { changeProject, selectedProject } = Stores.Qvain.Files
-  const { idaGroups } = Stores.Auth.user
+  const { idaProjects } = Stores.Auth.user
   const { error } = Stores.Qvain.Files.loadingProject || {}
   const notFound = error && error.response && error.response.status === 404
 
   const getOptions = () => {
-    // IDA groups found, so populate the IDA project dropdown
-    if (idaGroups) {
-      return idaGroups
-        .filter(group => group.includes('IDA'))
-        .map(group => group.substring(group.indexOf(':') + 1, group.length))
+    // IDA projects found, so populate the IDA project dropdown
+    if (idaProjects) {
+      return idaProjects
         .map(projectId => ({ value: projectId, label: projectId }))
     } // ... Otherwise the dropdown will be left empty, but visible, if the user has no IDA projects.
     return undefined

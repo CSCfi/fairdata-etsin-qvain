@@ -12,14 +12,18 @@ from flask import make_response, render_template, redirect, request, session
 from onelogin.saml2.utils import OneLogin_Saml2_Utils
 
 from etsin_finder.authentication import \
+    is_authenticated
+from etsin_finder.authentication_direct_proxy import \
     get_saml_auth, \
-    is_authenticated, \
+    is_authenticated_through_direct_proxy, \
     init_saml_auth, \
     prepare_flask_request_for_saml, \
     reset_flask_session_on_login
+from etsin_finder.authentication_fairdata_sso import \
+    is_authenticated_through_fairdata_sso, \
+    log_sso_values
 from etsin_finder.app import app
 from etsin_finder.log import log
-
 
 # REACT APP RELATED
 
@@ -75,11 +79,22 @@ def frontend_app(path):
 
 
 def _render_index_template(saml_errors=[], slo_success=False):
+    """Load saml attributes if logged in through old proxy, and log values
+
+    Args:
+        saml_errors (list): List of SAML errors
+        slo_success (bool): SLO status
+
+    Returns:
+        index.html rendered template
+
+    """
     is_auth = is_authenticated()
     if is_auth:
-        saml_attributes = session.get('samlUserdata').items()
-        log.debug("SAML attributes: {0}".format(saml_attributes))
-
+        if is_authenticated_through_direct_proxy():
+            log.info(session.get('samlUserdata').items())
+        if is_authenticated_through_fairdata_sso():
+            log_sso_values()
     return render_template('index.html')
 
 

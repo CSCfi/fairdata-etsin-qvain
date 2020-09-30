@@ -7,14 +7,14 @@ import { faUser } from '@fortawesome/free-solid-svg-icons'
 
 const LoggedInUser = ({ Stores }) => {
   const { user, userLogged } = Stores.Auth
-  const { firstName } = user
+  const { firstName, lastName } = user
 
   const User = (
     <UserWrapper>
       <UserIcon icon={faUser} />
       {' '}
       <Name>
-        {firstName}
+        {firstName || lastName}
       </Name>
     </UserWrapper>
   )

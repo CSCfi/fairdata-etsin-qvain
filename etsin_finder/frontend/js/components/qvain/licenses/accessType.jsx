@@ -41,8 +41,10 @@ export class AccessType extends Component {
           let options = list.map(ref => Model(ref._source.label, ref._source.uri))
 
           const user = this.props.Stores.Auth.user
-          if (!user.isUsingRems) {
-            options = options.filter(ref => ref.value !== ACCESS_TYPE_URL.RESTRICTED)
+          const { accessType } = this.props.Stores.Qvain
+
+          if (!user.isUsingRems && !(accessType && accessType.url === ACCESS_TYPE_URL.PERMIT)) {
+            options = options.filter(ref => ref.url !== ACCESS_TYPE_URL.PERMIT)
           }
 
           const { lang } = this.props.Stores.Locale

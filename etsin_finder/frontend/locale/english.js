@@ -419,7 +419,6 @@ const english = {
       'You have selected DOI as primary identifier for your dataset instead of URN. DOI requires a defined issued date and a dataset publisher. A DOI (Digital Object Identifier) will be created and stored in the DataCite Service and it cannot be removed. Are you sure you want to select DOI?',
     useDoiAffirmative: 'Yes',
     useDoiNegative: 'No',
-    unsuccessfullLogin: 'Login unsuccessful.',
     notCSCUser1:
       'Please make sure that you have a valid CSC account. If you tried to log in with an external account (for example Haka) you might get this error if your account is not associated with CSC account. Please do the registration in',
     notCSCUserLink: ' CSC Customer Portal',
@@ -1576,6 +1575,36 @@ const english = {
     header: 'Login unsuccessful.',
     content:
       'You have a verified CSC account, but your account does not seem to have a home organization. Please contact the CSC Helpdesk to set a home organization for your CSC account.',
+  },
+  footer: {
+    fairdata: {
+      title: 'Fairdata',
+      text: 'The Fairdata services are offered by the <strong>Ministry of Education and Culture</strong> and produced by <strong>CSC – IT Center for Science Ltd.</strong>',
+    },
+    information: {
+      title: 'Information',
+      terms: 'Terms and Policies',
+      termsUrl: 'https://www.fairdata.fi/en/terms-and-policies/',
+      contracts: 'Contracts and Privacy',
+      contractsUrl: 'https://www.fairdata.fi/en/contracts-and-privacy/',
+    },
+    accessibility: {
+      title: 'Accessibility',
+      statement: 'Accessibility statement',
+      statementUrls: {
+        fairdata: 'https://www.fairdata.fi/en/accessibility',
+        etsin: 'https://www.fairdata.fi/en/etsin-accessibility',
+        qvain: 'https://www.fairdata.fi/en/qvain-accessibility'
+      }
+    },
+    contact: {
+      title: 'Contact',
+    },
+    follow: {
+      title: 'Follow',
+      news: "What's new",
+      newsUrl: 'https://www.fairdata.fi/en/news/',
+    }
   },
 }
 

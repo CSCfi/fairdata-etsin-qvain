@@ -11,7 +11,7 @@ from etsin_finder.cr_service import (
 )
 from etsin_finder.log import log
 from etsin_finder.authentication import (
-    get_user_ida_groups,
+    get_user_ida_projects,
     get_user_csc_name,
     get_user_email,
     get_user_firstname,
@@ -468,25 +468,6 @@ def edited_data_to_metax(data, original):
     }
     return clean_empty_keyvalues_from_dict(edited_data)
 
-def get_user_ida_projects():
-    """List IDA projects for current user without the prefix.
-
-    Returns:
-        list(str): List of projects.
-
-    """
-    user_ida_groups = get_user_ida_groups()
-    if user_ida_groups is None:
-        log.error('Could not get user IDA projects.\n')
-        return None
-
-    try:
-        return [project.split(":")[1] for project in user_ida_groups]
-    except IndexError as e:
-        log.error('Index error while parsing user IDA projects:\n{0}'.format(e))
-        return None
-
-
 def check_if_data_in_user_IDA_project(data):
     """Check if the user creating a dataset belongs to the project that the files/folders belongs to.
 
@@ -497,37 +478,31 @@ def check_if_data_in_user_IDA_project(data):
         bool: True if data belongs to user, and False is not.
 
     """
-    user_ida_projects = get_user_ida_groups()
+    user_ida_projects = get_user_ida_projects()
 
     # If user_ida_projects do not exist, there cannot be any data permission violations, so return True in this case
     if user_ida_projects is None:
         return True
 
-    # Check IDA project permissions, if user_ida_projects exist
-    try:
-        user_ida_projects_ids = [project.split(":")[1] for project in user_ida_projects]
-    except IndexError as e:
-        log.error('Index error while parsing user IDA projects:\n{0}'.format(e))
-        return False
     if not user_ida_projects:
-        log.warning('Could not get user IDA groups.')
+        log.warning('Could not get user IDA projects.')
         return False
-    log.debug('User IDA groups: {0}'.format(user_ida_projects_ids))
+    log.debug('User IDA projects: {0}'.format(user_ida_projects))
     if "files" or "directories" in data:
         files = data.get("files") if "files" in data else []
         directories = data.get("directories") if "directories" in data else []
         if files:
             for file in files:
                 identifier = file.get("projectIdentifier")
-                if identifier not in user_ida_projects_ids:
-                    log.warning('File projectIdentifier not in user projects.\nidentifier: {0}, user_ida_projects_ids: {1}'
-                                .format(identifier, user_ida_projects_ids))
+                if identifier not in user_ida_projects:
+                    log.warning('File projectIdentifier not in user projects.\nidentifier: {0}, user_ida_projects: {1}'
+                                .format(identifier, user_ida_projects))
                     return False
         if directories:
             for directory in directories:
                 identifier = directory.get("projectIdentifier")
-                if identifier not in user_ida_projects_ids:
-                    log.warning('Directory projectIdentifier not in user projects.\nidentifier: {0}, user_ida_projects_ids: {1}'
-                                .format(identifier, user_ida_projects_ids))
+                if identifier not in user_ida_projects:
+                    log.warning('Directory projectIdentifier not in user projects.\nidentifier: {0}, user_ida_projects: {1}'
+                                .format(identifier, user_ida_projects))
                     return False
     return True

@@ -21,6 +21,7 @@ import SkipToContent from '../components/general/skipToContent'
 import Header from '../components/header'
 import Footer from './footer'
 import Content from './content'
+import CookiesNotification from './cookiesNotification'
 import QvainHeader from '../components/qvain/header'
 
 class Layout extends Component {
@@ -44,6 +45,7 @@ class Layout extends Component {
         <SkipToContent callback={this.focusContent} />
         {isQvain ? <QvainHeader /> : <Header />}
         <Content contentRef={this.content} />
+        <CookiesNotification />
         <Footer />
       </ErrorBoundary>
     )
