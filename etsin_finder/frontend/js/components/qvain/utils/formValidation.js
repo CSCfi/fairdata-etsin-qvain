@@ -372,7 +372,7 @@ const actorsSchema = yup
   // A Creator must be found in the actor list in order to allow the dataset to be posted to the database
   .test(
     'contains-creator',
-    translate('qvain.validationMessages.actors.requiredActors.mandatoryActors'),
+    translate('qvain.validationMessages.actors.requiredActors.mandatoryActors.creator'),
     value => {
       let foundCreator = false
       for (let i = 0; i < value.length; i += 1) {
@@ -388,32 +388,24 @@ const actorsSchema = yup
       return false
     }
   )
-  // DOI: publisher must be found in the actor list in order to allow the dataset to be posted to the database
-  .when('useDoi', {
-    is: true,
-    then: yup
-      .array()
-      .of(actorSchema)
-      .test(
-        'is-doi-and-contains-publisher',
-        translate('qvain.validationMessages.actors.requiredActors.publisherIfDOI'),
-        value => {
-          let foundPublisher = false
-          for (let i = 0; i < value.length; i += 1) {
-            for (let j = 0; j < value[i].roles.length; j += 1) {
-              if (value[i].roles[j] === ROLE.PUBLISHER) {
-                foundPublisher = true
-              }
-            }
+  .test(
+    'contains-publisher',
+    translate('qvain.validationMessages.actors.requiredActors.mandatoryActors.publisher'),
+    value => {
+      let foundPublisher = false
+      for (let i = 0; i < value.length; i += 1) {
+        for (let j = 0; j < value[i].roles.length; j += 1) {
+          if (value[i].roles[j] === ROLE.PUBLISHER) {
+            foundPublisher = true
           }
-          if (foundPublisher) {
-            return true
-          }
-          return false
         }
-      ),
-  })
-  .required(translate('qvain.validationMessages.actors.requiredActors.atLeastOneActor'))
+      }
+      if (foundPublisher) {
+        return true
+      }
+      return false
+    }
+  )
 
 // SPATIAL VALIDATION
 const spatialNameSchema = yup

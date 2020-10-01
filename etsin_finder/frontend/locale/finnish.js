@@ -876,8 +876,12 @@ const finnish = {
         },
         requiredActors: {
           atLeastOneActor: 'Aineistoon on lisättävä vähintään yksi toimija.',
-          mandatoryActors:
-            'Toimijat: Aineistolla on oltava ainakin yksi tekijä. Huomioi: yksittäisellä toimijalla voi olla useampi rooli.',
+          mandatoryActors: {
+            creator:
+              'Toimijat: Aineistolla on oltava ainakin yksi tekijä. Huomioi: yksittäisellä toimijalla voi olla useampi rooli.',
+            publisher:
+              'Toimijat: Aineistolla on oltava ainakin yksi julkaisija. Huomioi: yksittäisellä toimijalla voi olla useampi rooli.',
+          },
           publisherIfDOI: 'Toimijat: DOI-ainestoon on lisättävä julkaisija.',
         },
       },
@@ -1585,7 +1589,8 @@ const finnish = {
   footer: {
     fairdata: {
       title: 'Fairdata',
-      text: 'Fairdata-palvelut järjestää <strong>opetus- ja kulttuuriministeriö</strong> ja toimittaa <strong>CSC – Tieteen tietotekniikan keskus Oy</strong>',
+      text:
+        'Fairdata-palvelut järjestää <strong>opetus- ja kulttuuriministeriö</strong> ja toimittaa <strong>CSC – Tieteen tietotekniikan keskus Oy</strong>',
     },
     information: {
       title: 'Tietoa',
@@ -1601,7 +1606,7 @@ const finnish = {
         fairdata: 'https://www.fairdata.fi/saavutettavuus',
         etsin: 'https://www.fairdata.fi/etsin-saavutettavuus',
         qvain: 'https://www.fairdata.fi/qvain-saavutettavuus',
-      }
+      },
     },
     contact: {
       title: 'Ota yhteyttä',
@@ -1610,7 +1615,7 @@ const finnish = {
       title: 'Seuraa',
       news: 'Uutiset',
       newsUrl: 'https://www.fairdata.fi/ajankohtaista',
-    }
+    },
   },
 }
 

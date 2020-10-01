@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import { FormField, Checkbox, Label, HelpField } from '../../general/modal/form'
 
-const RoleCheckbox = ({ Stores, role, help, disabled }) => {
+const RoleCheckbox = ({ Stores, role, help, disabled, required }) => {
   const { readonly } = Stores.Qvain
   const { actorInEdit: actor, updateActor } = Stores.Qvain.Actors
 
@@ -32,6 +32,7 @@ const RoleCheckbox = ({ Stores, role, help, disabled }) => {
         />
         <Label htmlFor={id}>
           <Translate content={label} />
+          {required && '*'}
           {helpField}
         </Label>
       </FormField>
@@ -44,11 +45,13 @@ RoleCheckbox.propTypes = {
   role: PropTypes.string.isRequired,
   help: PropTypes.string,
   disabled: PropTypes.bool,
+  required: PropTypes.bool,
 }
 
 RoleCheckbox.defaultProps = {
   help: null,
   disabled: null,
+  required: false,
 }
 
 const RoleHelpField = styled(HelpField)`
