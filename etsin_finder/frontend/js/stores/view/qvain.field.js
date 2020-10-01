@@ -25,7 +25,8 @@ class Field {
 
   @observable validationError
 
-  @action reset = () => {
+  @action reset() {
+    console.log('super')
     this.storage = []
     this.hasChanged = false
     this.inEdit = undefined
@@ -37,7 +38,7 @@ class Field {
     this.hasChanged = val
   }
 
-  @action create = () => {
+  @action create() {
     this.setChanged(false)
     this.editMode = false
     this.inEdit = this.Template()
@@ -121,7 +122,7 @@ class Field {
 
   @action
   fromBackend = (data, Qvain) => {
-    this.storage = []
+    this.reset()
     if (data !== undefined) {
       data.forEach(element => {
         const item = this.Model(element, Qvain)
