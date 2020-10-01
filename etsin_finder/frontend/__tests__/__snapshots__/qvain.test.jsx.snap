@@ -410,6 +410,7 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
           "Template": [Function],
           "attachRefs": [Function],
           "cloneRefs": [Function],
+          "create": [Function],
           "detachRefs": [Function],
           "fieldName": "provenances",
           "references": Array [
@@ -417,6 +418,7 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
             "usedEntities",
             "spatials",
           ],
+          "reset": [Function],
           "saveEdited": [Function],
           "saveNew": [Function],
           "toBackend": [Function],
@@ -651,6 +653,7 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
           "Template": [Function],
           "attachRefs": [Function],
           "cloneRefs": [Function],
+          "create": [Function],
           "detachRefs": [Function],
           "fieldName": "provenances",
           "references": Array [
@@ -658,6 +661,7 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
             "usedEntities",
             "spatials",
           ],
+          "reset": [Function],
           "saveEdited": [Function],
           "saveNew": [Function],
           "toBackend": [Function],
@@ -892,6 +896,7 @@ exports[`Qvain.Description should render <LanguageField /> 1`] = `
           "Template": [Function],
           "attachRefs": [Function],
           "cloneRefs": [Function],
+          "create": [Function],
           "detachRefs": [Function],
           "fieldName": "provenances",
           "references": Array [
@@ -899,6 +904,7 @@ exports[`Qvain.Description should render <LanguageField /> 1`] = `
             "usedEntities",
             "spatials",
           ],
+          "reset": [Function],
           "saveEdited": [Function],
           "saveNew": [Function],
           "toBackend": [Function],
@@ -1133,6 +1139,7 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
           "Template": [Function],
           "attachRefs": [Function],
           "cloneRefs": [Function],
+          "create": [Function],
           "detachRefs": [Function],
           "fieldName": "provenances",
           "references": Array [
@@ -1140,6 +1147,7 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
             "usedEntities",
             "spatials",
           ],
+          "reset": [Function],
           "saveEdited": [Function],
           "saveNew": [Function],
           "toBackend": [Function],
