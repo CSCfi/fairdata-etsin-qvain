@@ -48,6 +48,11 @@ class Provenances extends Field {
     this.selectedActor = undefined
   }
 
+  @action reset() {
+    super.reset()
+    this.selectedActor = undefined
+  }
+
   @action create = () => {
     this.setChanged(false)
     this.editMode = false

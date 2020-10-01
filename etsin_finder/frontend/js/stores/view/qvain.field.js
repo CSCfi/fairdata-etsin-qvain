@@ -25,6 +25,14 @@ class Field {
 
   @observable validationError
 
+  @action reset = () => {
+    this.storage = []
+    this.hasChanged = false
+    this.inEdit = undefined
+    this.editMode = false
+    this.validationError = undefined
+  }
+
   @action setChanged = val => {
     this.hasChanged = val
   }
