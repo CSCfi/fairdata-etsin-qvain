@@ -18,9 +18,8 @@ const Spatial = (
 })
 
 class Spatials extends Field {
-  constructor(Parent, spatials = []) {
+  constructor(Parent) {
     super(Parent, Spatial, SpatialModel, 'spatials')
-    this.fromBackendBase(spatials, Parent)
   }
 
   clone = () => this

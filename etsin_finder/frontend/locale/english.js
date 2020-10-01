@@ -787,8 +787,11 @@ const english = {
         },
         requiredActors: {
           atLeastOneActor: 'You must add at least one actor to your dataset.',
-          mandatoryActors:
-            'Actors: Creator role is mandatory. Note: one actor can have multiple roles.',
+          mandatoryActors: {
+            creator: 'Actors: Creator role is mandatory. Note: one actor can have multiple roles.',
+            publisher:
+              'Actors: Publisher role is mandatory. Note: one actor can have multiple roles.',
+          },
           publisherIfDOI: 'Actors: For DOI datasets publisher must be defined.',
         },
       },
@@ -1579,7 +1582,8 @@ const english = {
   footer: {
     fairdata: {
       title: 'Fairdata',
-      text: 'The Fairdata services are offered by the <strong>Ministry of Education and Culture</strong> and produced by <strong>CSC – IT Center for Science Ltd.</strong>',
+      text:
+        'The Fairdata services are offered by the <strong>Ministry of Education and Culture</strong> and produced by <strong>CSC – IT Center for Science Ltd.</strong>',
     },
     information: {
       title: 'Information',
@@ -1594,8 +1598,8 @@ const english = {
       statementUrls: {
         fairdata: 'https://www.fairdata.fi/en/accessibility',
         etsin: 'https://www.fairdata.fi/en/etsin-accessibility',
-        qvain: 'https://www.fairdata.fi/en/qvain-accessibility'
-      }
+        qvain: 'https://www.fairdata.fi/en/qvain-accessibility',
+      },
     },
     contact: {
       title: 'Contact',
@@ -1604,7 +1608,7 @@ const english = {
       title: 'Follow',
       news: "What's new",
       newsUrl: 'https://www.fairdata.fi/en/news/',
-    }
+    },
   },
 }
 

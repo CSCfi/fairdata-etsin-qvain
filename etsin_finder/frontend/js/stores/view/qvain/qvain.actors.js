@@ -490,6 +490,7 @@ class Actors {
     const confirm = await this.checkActorFromRefs(actor)
     if (!confirm) return null
     const actors = this.actors.filter(p => p.uiid !== actor.uiid)
+    this.Qvain.removeActorFromRefs(actor)
     this.setActors(actors)
     this.Qvain.setChanged(true)
     return null
