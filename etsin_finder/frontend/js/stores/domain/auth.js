@@ -110,19 +110,18 @@ class Auth {
               this.userLogged = false
               this.cscUserLogged = false
             }
-
-            this.loading = false
-            this.initializing = false
             resolve(res)
           })
         )
         .catch(
           action(err => {
-            this.loading = false
             console.log(err)
             reject(err)
           })
-        )
+        ).finally(() => {
+          this.loading = false
+          this.initializing = false
+        })
     })
   }
 
