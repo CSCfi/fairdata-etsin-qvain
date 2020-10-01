@@ -32,7 +32,7 @@ class Login extends Component {
     isLoggedInKey: PropTypes.string,
     fontSize: PropTypes.string,
     borderColor: PropTypes.string,
-    loggedInAsService: PropTypes.string,
+    loginThroughService: PropTypes.string,
   }
 
   static defaultProps = {
@@ -41,7 +41,7 @@ class Login extends Component {
     fontSize: 'inherit',
     isLoggedInKey: 'userLogged',
     borderColor: '',
-    loggedInAsService: '',
+    loginThroughService: '',
   }
 
   state = {
@@ -52,8 +52,20 @@ class Login extends Component {
 
   componentDidMount() {
     this.setState({
-      loggedInThrough: this.props.loggedInAsService
+      loggedInThroughService: this.props.loginThroughService
     })
+  }
+
+  redirectToLogin = (location, loginThroughService) => {
+    const query = location.search
+    this.setState(
+      {
+        loading: true,
+      },
+      () => {
+        window.location = `/sso/${loginThroughService}?relay=${location.pathname}${encodeURIComponent(query)}`
+      }
+    )
   }
 
   logout = () => {
@@ -62,19 +74,7 @@ class Login extends Component {
         showNotice: true,
       },
       () => {
-        window.location = `/slo/${this.state.loggedInThrough}`
-      }
-    )
-  }
-
-  redirect = (location, loggedInAsService) => {
-    const query = location.search
-    this.setState(
-      {
-        loading: true,
-      },
-      () => {
-        window.location = `/sso/${loggedInAsService}?relay=${location.pathname}${encodeURIComponent(query)}`
+        window.location = `/slo/${this.state.loggedInThroughService}`
       }
     )
   }
@@ -90,7 +90,7 @@ class Login extends Component {
             <LoginButton
               width={this.props.width}
               margin="0"
-              onClick={() => this.redirect(this.props.location, this.props.loggedInAsService)}
+              onClick={() => this.redirectToLogin(this.props.location, this.props.loginThroughService)}
               borderColor={this.props.borderColor}
             >
               <LoginText visible={!this.state.loading} fontSize={this.props.fontSize}>

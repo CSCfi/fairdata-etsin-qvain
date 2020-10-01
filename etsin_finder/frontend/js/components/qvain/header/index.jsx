@@ -51,7 +51,7 @@ const QvainHeader = props => {
       <Right>
         <Settings
           helpUrl={helpUrl}
-          loggedInAsService='qvain'
+          loginThroughService="qvain"
         />
       </Right>
       <MobileNavi helpUrl={helpUrl} naviRoutes={routes} />

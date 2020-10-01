@@ -96,7 +96,7 @@ const EtsinHeader = props => {
       <Right>
         <Settings
           helpUrl={helpUrl}
-          loggedInAsService='etsin'
+          loginThroughService="etsin"
         >
           {dropDownMenu()}
         </Settings>

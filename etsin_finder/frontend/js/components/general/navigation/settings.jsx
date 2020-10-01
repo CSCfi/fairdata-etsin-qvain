@@ -27,7 +27,7 @@ const Settings = props => (
       </Link>
       {props.children}
       <LangToggle />
-      <Login loggedInAsService={props.loggedInAsService}/>
+      <Login loginThroughService={props.loginThroughService} />
     </Positioner>
   </React.Fragment>
 )
@@ -37,13 +37,13 @@ export default Settings
 Settings.defaultProps = {
   helpUrl: undefined,
   children: null,
-  loggedInAsService: '',
+  loginThroughService: '',
 }
 
 Settings.propTypes = {
   helpUrl: PropTypes.string,
   children: PropTypes.node,
-  loggedInAsService: PropTypes.string,
+  loginThroughService: PropTypes.string,
 }
 
 const Positioner = styled.div`
