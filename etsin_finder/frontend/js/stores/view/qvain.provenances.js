@@ -40,6 +40,8 @@ class Provenances extends Field {
       'spatials',
     ])
     this.Qvain = Qvain
+    this.create = this.create.bind(this)
+    this.reset = this.reset.bind(this)
   }
 
   @observable selectedActor = undefined

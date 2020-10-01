@@ -28,7 +28,6 @@ class Temporals extends Field {
 
   @action fromBackend(dataset, Qvain) {
     super.fromBackend(dataset, Qvain)
-    console.log('here')
     super.create()
   }
 

@@ -26,7 +26,6 @@ class Field {
   @observable validationError
 
   @action reset() {
-    console.log('super')
     this.storage = []
     this.hasChanged = false
     this.inEdit = undefined
