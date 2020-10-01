@@ -6,7 +6,7 @@ import { faCopy, faFolder } from '@fortawesome/free-solid-svg-icons'
 import Translate from 'react-translate-component'
 import styled, { css } from 'styled-components'
 
-import Label from '../../general/label'
+import Label from '../../general/card/label'
 import {
   ButtonLabel,
   EditButton,
@@ -15,7 +15,7 @@ import {
   ButtonContainer,
   TableButton,
 } from '../../general/buttons'
-import { SelectedFilesTitle } from '../../general/form'
+import { SelectedFilesTitle } from '../../general/modal/form'
 import FileForm from './fileForm'
 import DirectoryForm from './directoryForm'
 import { randomStr } from '../../utils/fileHierarchy'
@@ -198,30 +198,24 @@ const isInEdit = (inEdit, identifier, existing) =>
   inEdit !== undefined && inEdit.identifier === identifier && existing === inEdit.existing
 
 const SelectedFilesItem = styled(FileItem)`
-   {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    padding-left: 8px;
-  }
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  padding-left: 8px;
 `
 
 const FileButtonsContainer = styled(ButtonContainer)`
-   {
-    display: flex;
-    align-items: center;
-    margin-left: auto;
-  }
+  display: flex;
+  align-items: center;
+  margin-left: auto;
 `
 
 export const FileLabel = styled(ButtonLabel)`
-   {
-    margin-top: 0;
-    margin-bottom: 0;
-    margin-left: 0;
-    flex-shrink: 0;
-  }
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-left: 0;
+  flex-shrink: 0;
 `
 
 const RefreshDirectoryButton = styled.button`

@@ -4,8 +4,8 @@ import translate from 'counterpart'
 import AccessType from './accessType'
 import Licenses from './licenses'
 import { SectionTitle } from '../general/section'
-import Tooltip from '../general/tooltip'
-import { HelpIcon } from '../general/form'
+import Tooltip from '../general/section/tooltip'
+import { HelpIcon } from '../general/modal/form'
 import LicensesInfo from './licensesInfo'
 
 const RightsAndLicenses = () => {

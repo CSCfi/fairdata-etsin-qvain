@@ -2,9 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import { Observer } from 'mobx-react'
-import DurationPicker from '../../general/durationpicker'
-import ValidationError from '../../general/validationError'
-import { ButtonContainer, AddNewButton } from '../../general/addButton'
+import DurationPicker from '../../general/input/durationpicker'
+import ValidationError from '../../general/errors/validationError'
+import { ButtonContainer, AddNewButton } from '../../general/buttons'
 import TemporalList from './TemporalList'
 import handleSave from './handleSave'
 
@@ -23,8 +23,9 @@ const TemporalFieldContent = ({ Store, lang }) => {
         {() => (
           <TemporalList
             lang={lang}
-            temporals={Store.temporals}
-            remove={uiid => Store.removeItemInField('temporals', uiid)}
+            temporals={Field.storage}
+            remove={uiid => Field.removeTemporal(uiid)}
+            readonly={Field.readonly}
           />
         )}
       </Observer>
@@ -35,15 +36,20 @@ const TemporalFieldContent = ({ Store, lang }) => {
         datum="duration"
       />
       <Observer>
-        {() => <Translate component={ValidationError} content={Field.validationError} />}
+        {() => (
+          <>
+            <Translate component={ValidationError} content={Field.validationError} />
+            <ButtonContainer>
+              <Translate
+                component={AddNewButton}
+                content={`${translationsRoot}.addButton`}
+                onClick={handleClick}
+                disabled={Field.readonly}
+              />
+            </ButtonContainer>
+          </>
+        )}
       </Observer>
-      <ButtonContainer>
-        <Translate
-          component={AddNewButton}
-          content={`${translationsRoot}.addButton`}
-          onClick={handleClick}
-        />
-      </ButtonContainer>
     </>
   )
 }

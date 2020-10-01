@@ -5,7 +5,7 @@ import { faPen, faTimes, faFolder, faFolderOpen, faFile } from '@fortawesome/fre
 import Translate from 'react-translate-component'
 
 import { hasMetadata, hasPASMetadata } from '../../../../stores/view/common.files.items'
-import { Dropdown, DropdownItem } from '../../general/dropdown'
+import { Dropdown, DropdownItem } from '../../../general/dropdown'
 
 import {
   isDirectory,
@@ -52,7 +52,6 @@ const SelectedItemsTreeItemBase = ({ treeProps, item, level, parentArgs }) => {
   const isRemoved =
     (item.removed || (parentRemoved && !item.added)) && !hasAddedChildren && item.existing
 
-  let content = null
   const canRemove = (canRemoveFiles && (!isRemoved || hasAddedChildren)) || item.added
   const canUndoRemove = canRemoveFiles && item.existing && item.removed
   let canEdit = item.added || item.existing || hasAddedChildren || parentAdded
@@ -68,9 +67,9 @@ const SelectedItemsTreeItemBase = ({ treeProps, item, level, parentArgs }) => {
   )
   const name = item.name
 
-  if (isDirectory(item)) {
+  const getDirectoryContent = () => {
     const isOpen = directoryView.isOpen(item)
-    content = (
+    return (
       <>
         <ToggleOpenButton item={item} directoryView={directoryView} />
         <Icon icon={isOpen ? faFolderOpen : faFolder} />
@@ -82,17 +81,19 @@ const SelectedItemsTreeItemBase = ({ treeProps, item, level, parentArgs }) => {
         {removedTag}
       </>
     )
-  } else {
-    content = (
-      <>
-        <NoIcon />
-        <Icon icon={faFile} />
-        <ItemTitle>{name}</ItemTitle>
-        {newTag}
-        {removedTag}
-      </>
-    )
   }
+
+  const getFileContent = () => (
+    <>
+      <NoIcon />
+      <Icon icon={faFile} />
+      <ItemTitle>{name}</ItemTitle>
+      {newTag}
+      {removedTag}
+    </>
+  )
+
+  const content = isDirectory(item) ? getDirectoryContent() : getFileContent()
 
   const itemHasMetadata = hasMetadata(item)
   const itemHasPASMetadata = hasPASMetadata(item)
@@ -125,13 +126,14 @@ const SelectedItemsTreeItemBase = ({ treeProps, item, level, parentArgs }) => {
         component={DropdownItem}
         content={`qvain.files.selected.${itemHasMetadata ? 'editUserMetadata' : 'addUserMetadata'}`}
         onClick={() => toggleInEdit(item)}
+        disabled={readonly && !itemHasMetadata}
       />
       <Translate
         component={DropdownItem}
         content="qvain.files.selected.deleteUserMetadata"
         onClick={() => clearMetadata(item)}
         danger
-        disabled={!itemHasMetadata}
+        disabled={readonly || !itemHasMetadata}
       />
       {isFile(item) && (
         <>
@@ -145,7 +147,7 @@ const SelectedItemsTreeItemBase = ({ treeProps, item, level, parentArgs }) => {
             content="qvain.files.metadataModal.buttons.delete"
             onClick={showClearPasModal}
             danger
-            disabled={!itemHasPASMetadata}
+            disabled={readonly || !itemHasPASMetadata}
           />
         </>
       )}

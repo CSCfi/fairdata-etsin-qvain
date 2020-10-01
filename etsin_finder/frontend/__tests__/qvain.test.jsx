@@ -1,9 +1,12 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import translate from 'counterpart'
+import { components } from 'react-select'
+import CreatableSelect from 'react-select/creatable'
 
+import etsinTheme from '../js/styles/theme'
 import '../locale/translations'
-import Qvain from '../js/components/qvain'
+import Qvain from '../js/components/qvain/main'
 import Description from '../js/components/qvain/description'
 import DescriptionField from '../js/components/qvain/description/descriptionField'
 import OtherIdentifierField from '../js/components/qvain/description/otherIdentifierField'
@@ -13,13 +16,17 @@ import KeywordsField from '../js/components/qvain/description/keywordsField'
 import RightsAndLicenses from '../js/components/qvain/licenses'
 import { License } from '../js/components/qvain/licenses/licenses'
 import { AccessType } from '../js/components/qvain/licenses/accessType'
-import RestrictionGrounds from '../js/components/qvain/licenses/resctrictionGrounds'
+import RestrictionGrounds from '../js/components/qvain/licenses/restrictionGrounds'
 import EmbargoExpires from '../js/components/qvain/licenses/embargoExpires'
 import { ACCESS_TYPE_URL, LICENSE_URL, DATA_CATALOG_IDENTIFIER } from '../js/utils/constants'
 import { qvainFormSchema } from '../js/components/qvain/utils/formValidation'
 import { ExternalFilesBase } from '../js/components/qvain/files/external/externalFiles'
 import DoiSelection, { DoiCheckbox } from '../js/components/qvain/files/doiSelection'
 import { ButtonGroup } from '../js/components/qvain/general/buttons'
+import {
+  ValidationErrors,
+  ValidationErrorItem,
+} from '../js/components/qvain/general/errors/validationError'
 import { SlidingContent } from '../js/components/qvain/general/card'
 import Env from '../js/stores/domain/env'
 import QvainStoreClass, {
@@ -80,7 +87,9 @@ describe('Qvain', () => {
     }
 
     // Create empty dataset, getDataset should not be called
-    shallow(<FakeQvain Stores={stores} match={emptyMatch} history={{}} />)
+    shallow(
+      <FakeQvain Stores={stores} match={emptyMatch} history={{}} location={{ pathname: '/' }} />
+    )
     expect(callCount).toBe(0)
     expect(lastCall).toBe(undefined)
 
@@ -93,7 +102,14 @@ describe('Qvain', () => {
         original: { identifier: identifierMatch.params.identifier },
       },
     }
-    shallow(<FakeQvain Stores={datasetOpenedStore} match={identifierMatch} history={{}} />)
+    shallow(
+      <FakeQvain
+        Stores={datasetOpenedStore}
+        match={identifierMatch}
+        history={{}}
+        location={{ pathname: '/' }}
+      />
+    )
     expect(callCount).toBe(0)
     expect(lastCall).toBe(undefined)
 
@@ -106,13 +122,27 @@ describe('Qvain', () => {
         original: { identifier: anotherMatch.params.identifier },
       },
     }
-    shallow(<FakeQvain Stores={anotherDatasetOpenedStore} match={identifierMatch} history={{}} />)
+    shallow(
+      <FakeQvain
+        Stores={anotherDatasetOpenedStore}
+        match={identifierMatch}
+        history={{}}
+        location={{ pathname: '/' }}
+      />
+    )
     expect(callCount).toBe(1)
     expect(lastCall).toBe(identifierMatch.params.identifier)
 
     // Edit existing dataset, getDataset should be called
     lastCall = undefined
-    const wrapper = shallow(<FakeQvain Stores={stores} match={identifierMatch} history={{}} />)
+    const wrapper = shallow(
+      <FakeQvain
+        Stores={stores}
+        match={identifierMatch}
+        history={{}}
+        location={{ pathname: '/' }}
+      />
+    )
     expect(callCount).toBe(2)
     expect(lastCall).toBe(identifierMatch.params.identifier)
 
@@ -230,95 +260,96 @@ describe('Qvain dataset list filtering', () => {
 })
 
 describe('Qvain.RightsAndLicenses', () => {
+  const getRenderedLicenseUrls = shallowLicenseComponent => {
+    const selectedOptions = shallowLicenseComponent
+      .findWhere(c => c.prop('component') == CreatableSelect)
+      .dive()
+      .dive()
+      .dive()
+      .dive()
+      .find(components.MultiValue)
+    return selectedOptions.map(opt => opt.prop('data').identifier)
+  }
+
   it('should render <RightsAndLicenses />', () => {
     const component = shallow(<RightsAndLicenses />)
     expect(component).toMatchSnapshot()
   })
   it('should render <Licenses />', () => {
-    const component = shallow(<License Stores={getStores()} />)
+    const stores = getStores()
+    const component = shallow(<License Stores={stores} theme={etsinTheme} />)
     expect(component).toMatchSnapshot()
   })
-  it('should render other license URL field', () => {
+  it('should render default license', () => {
     const stores = getStores()
-    stores.Qvain.setLicense(LicenseConstructor({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'other'))
-    const component = shallow(<License Stores={stores} />)
-    expect(component.find('#otherLicenseURL').length).toBe(1)
-  })
-  it('should NOT render other license URL field', () => {
-    const stores = getStores()
-    stores.Qvain.setLicense(LicenseConstructor(undefined, LICENSE_URL.CCBY4))
-    const component = shallow(<License Stores={stores} />)
-    expect(component.find('#otherLicenseURL').length).toBe(0)
+    stores.Qvain.resetQvainStore()
+    const component = shallow(<License Stores={stores} theme={etsinTheme} />)
+    expect(getRenderedLicenseUrls(component)).toEqual([LICENSE_URL.CCBY4])
   })
   it('should render one added license, Other (URL)', () => {
     const stores = getStores()
-    stores.Qvain.licenseArray = []
-    stores.Qvain.setLicense(LicenseConstructor({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'other'))
-    stores.Qvain.otherLicenseUrl = 'https://test.url'
-    stores.Qvain.addLicense(stores.Qvain.license)
-    const component = shallow(<License Stores={stores} />)
-    expect(component.find('licenses__LabelTemp').length).toBe(1)
+    stores.Qvain.setLicenseArray([
+      LicenseConstructor({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'https://test.url'),
+    ])
+    const component = shallow(<License Stores={stores} theme={etsinTheme} />)
+    expect(getRenderedLicenseUrls(component)).toEqual(['https://test.url'])
   })
   it('should render one added license, CCBY4', () => {
     const stores = getStores()
     stores.Qvain.licenseArray = []
-    stores.Qvain.setLicense(
+    stores.Qvain.setLicenseArray([
       LicenseConstructor(
         { en: 'Creative Commons Attribution 4.0 International (CC BY 4.0)' },
         LICENSE_URL.CCBY4
-      )
-    )
-    stores.Qvain.addLicense(stores.Qvain.license)
-    const component = shallow(<License Stores={stores} />)
-    expect(component.find('licenses__LabelTemp').length).toBe(1)
+      ),
+    ])
+    const component = shallow(<License Stores={stores} theme={etsinTheme} />)
+    expect(getRenderedLicenseUrls(component)).toEqual([LICENSE_URL.CCBY4])
   })
   it('should render three added licenses, Other (URL) x 2 + CCBY4', () => {
     const stores = getStores()
-    stores.Qvain.licenseArray = []
-    // Add first other license
-    stores.Qvain.setLicense(LicenseConstructor({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'other'))
-    stores.Qvain.otherLicenseUrl = 'https://test.url'
-    stores.Qvain.addLicense(stores.Qvain.license)
-    // Add second other license
-    stores.Qvain.setLicense(LicenseConstructor({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'other'))
-    stores.Qvain.otherLicenseUrl = 'https://test2.url'
-    stores.Qvain.addLicense(stores.Qvain.license)
-    // Add CCBY4 license
-    stores.Qvain.setLicense(
+    stores.Qvain.setLicenseArray([
+      LicenseConstructor({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'https://test.url'),
+      LicenseConstructor({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'https://test2.url'),
       LicenseConstructor(
         { en: 'Creative Commons Attribution 4.0 International (CC BY 4.0)' },
         LICENSE_URL.CCBY4
-      )
-    )
-    stores.Qvain.addLicense(stores.Qvain.license)
-    const component = shallow(<License Stores={stores} />)
-    expect(component.find('licenses__LabelTemp').length).toBe(3)
+      ),
+    ])
+    const component = shallow(<License Stores={stores} theme={etsinTheme} />)
+    expect(getRenderedLicenseUrls(component)).toEqual([
+      'https://test.url',
+      'https://test2.url',
+      LICENSE_URL.CCBY4,
+    ])
   })
-  it('should render three added licenses when the user tries to add 4 (one duplicate)', () => {
+  it('should render four licenses where two have errors', () => {
     const stores = getStores()
-    stores.Qvain.licenseArray = []
-    // Add first other license
-    stores.Qvain.setLicense(LicenseConstructor({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'other'))
-    stores.Qvain.otherLicenseUrl = 'https://test.url'
-    stores.Qvain.addLicense(stores.Qvain.license)
-    // Add second other license
-    stores.Qvain.setLicense(LicenseConstructor({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'other'))
-    stores.Qvain.otherLicenseUrl = 'https://test2.url'
-    stores.Qvain.addLicense(stores.Qvain.license)
-    // Add CCBY4 license
-    stores.Qvain.setLicense(
+    stores.Qvain.setLicenseArray([
       LicenseConstructor(
         { en: 'Creative Commons Attribution 4.0 International (CC BY 4.0)' },
         LICENSE_URL.CCBY4
-      )
-    )
-    stores.Qvain.addLicense(stores.Qvain.license)
-    const component = shallow(<License Stores={stores} />)
-    // Add second other license again, SHOULD NOT ADDED
-    stores.Qvain.setLicense(LicenseConstructor({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'other'))
-    stores.Qvain.otherLicenseUrl = 'https://test2.url'
-    stores.Qvain.addLicense(stores.Qvain.license)
-    expect(component.find('licenses__LabelTemp').length).toBe(3)
+      ),
+      LicenseConstructor({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'httpöötest.url'),
+      LicenseConstructor({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'http://ok.url'),
+      LicenseConstructor({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'httppp:/fail.url'),
+    ])
+    const component = shallow(<License Stores={stores} theme={etsinTheme} />)
+    component.instance().validateLicenses()
+    expect(getRenderedLicenseUrls(component)).toEqual([
+      LICENSE_URL.CCBY4,
+      'httpöötest.url',
+      'http://ok.url',
+      'httppp:/fail.url',
+    ])
+    const errors = component
+      .find(ValidationErrors)
+      .dive()
+      .find(ValidationErrorItem)
+      .map(item => item.text())
+    expect(errors.length).toBe(2)
+    expect(errors[0].startsWith('httpöötest.url'))
+    expect(errors[1].startsWith('httppp:/fail.url'))
   })
   it('should render <AccessType />', () => {
     const component = shallow(<AccessType Stores={getStores()} />)
@@ -496,6 +527,7 @@ describe('Qvain validation', () => {
   })
 
   it('should validate dataset', async () => {
+    actors[0].roles.push('publisher')
     try {
       expect(await qvainFormSchema.validate(dataset, { abortEarly: false }))
     } catch (e) {
@@ -518,7 +550,7 @@ describe('Qvain validation', () => {
       expect(e.errors).toEqual(
         expect.arrayContaining([
           translate('qvain.validationMessages.issuedDate.requiredIfUseDoi'),
-          translate('qvain.validationMessages.actors.requiredActors.publisherIfDOI'),
+          translate('qvain.validationMessages.actors.requiredActors.mandatoryActors.publisher'),
         ])
       )
     }

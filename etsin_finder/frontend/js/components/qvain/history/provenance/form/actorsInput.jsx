@@ -7,14 +7,17 @@ import { inject, observer } from 'mobx-react'
 import translate from 'counterpart'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPen } from '@fortawesome/free-solid-svg-icons'
-import { Label } from '../../../general/form'
-import Button from '../../../../general/button'
+import { Label } from '../../../general/modal/form'
 import ActorsList from './actorsList'
 import { Actor } from '../../../../../stores/view/qvain.actors'
 import { ROLE } from '../../../../../utils/constants'
+import parseActorLabel from '../../../utils/actor'
 
-const ActorsInput = ({ Stores, language }) => {
-  const { Actors, Provenances } = Stores.Qvain
+const ActorsInput = ({ Stores }) => {
+  const { Actors, Provenances, readonly } = Stores.Qvain
+  const selectedOptions = (Provenances.inEdit.associations || {}).actorOptions || []
+  const selectedOptionIds = selectedOptions.map(option => option.value)
+  const { lang: language } = Stores.Locale
 
   const CreateOption = { Option: CustomOption }
 
@@ -23,16 +26,20 @@ const ActorsInput = ({ Stores, language }) => {
       value: 'create-actor',
       label: translate('qvain.history.provenance.modal.actorsInput.createButton'),
     },
-    ...Actors.actorOptions.map(option => {
-      const actorName = option.label[language] || option.label
-      const rolesStr = option.roles.map(role => `${translate(`qvain.actors.add.checkbox.${role}`)}`)
-      const name = `${actorName} / ${rolesStr.join(' / ')}`
+    ...Actors.actorOptions
+      .filter(option => !selectedOptionIds.includes(option.value))
+      .map(option => {
+        const rolesStr = option.roles.map(
+          role => `${translate(`qvain.actors.add.checkbox.${role}`)}`
+        )
+        const actorName = parseActorLabel(option, language)
+        const name = `${actorName} / ${rolesStr.join(' / ')}`
 
-      return {
-        value: option.value,
-        label: name,
-      }
-    }),
+        return {
+          value: option.value,
+          label: name,
+        }
+      }),
   ]
 
   const createActor = () => {
@@ -48,11 +55,23 @@ const ActorsInput = ({ Stores, language }) => {
       setSelectedActor(null)
       return
     }
-    setSelectedActor(selection)
+
+    const id = selection.value
+    Provenances.inEdit.associations.addActorWithId(id)
+    Stores.Qvain.Provenances.inEdit.associations.addRole(id, ROLE.PROVENANCE)
+    setSelectedActor('selectedActor', undefined)
   }
 
   const setSelectedActor = value => {
     Stores.Qvain.Provenances.changeAttribute('selectedActor', value)
+  }
+
+  const styles = {
+    option: style => ({
+      ...style,
+      display: 'flex',
+      alignItems: 'center',
+    }),
   }
 
   return (
@@ -66,40 +85,29 @@ const ActorsInput = ({ Stores, language }) => {
         language={language}
         Stores={Stores}
         actors={Provenances.inEdit.associations}
-        items={(Provenances.inEdit.associations || {}).actorOptions}
+        items={selectedOptions}
       />
       <Translate
         component={ReactSelect}
         inputId="actors-select"
-        attributes={{ placeholder: 'qvain.select.placeholder' }}
+        attributes={{ placeholder: 'qvain.history.provenance.modal.actorsInput.placeholder' }}
         options={options}
+        styles={styles}
         components={CreateOption}
         value={Provenances.inEdit.selectedActor}
         menuPlacement="auto"
         menuPosition="fixed"
         menuShouldScrollIntoView={false}
         isClearable
+        isDisabled={readonly}
         onChange={handleSelect}
       />
-      <ButtonContainer>
-        <Translate
-          component={AddButton}
-          content="qvain.history.provenance.modal.actorsInput.addButton"
-          onClick={() => {
-            if (!Provenances.inEdit.selectedActor) return
-            const id = Provenances.inEdit.selectedActor.value
-            Provenances.inEdit.associations.addActorWithId(id)
-            Stores.Qvain.Provenances.inEdit.associations.addRole(id, ROLE.PROVENANCE)
-            setSelectedActor('selectedActor', undefined)
-          }}
-        />
-      </ButtonContainer>
     </>
   )
 }
 
 const CustomOption = ({ children, ...props }) => (
-  <selectComponents.Option {...props} style={{ display: 'flex', justifyContent: 'space-between' }}>
+  <selectComponents.Option {...props}>
     {children} {props.value === 'create-actor' && <EditIcon color="primary" />}
   </selectComponents.Option>
 )
@@ -108,10 +116,6 @@ CustomOption.propTypes = {
   children: PropTypes.node.isRequired,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
 }
-
-const AddButton = styled(Button)`
-  margin-left: 0px;
-`
 
 const EditIcon = styled(FontAwesomeIcon).attrs({
   icon: faPen,
@@ -123,11 +127,6 @@ const EditIcon = styled(FontAwesomeIcon).attrs({
 
 ActorsInput.propTypes = {
   Stores: PropTypes.object.isRequired,
-  language: PropTypes.string.isRequired,
 }
-
-const ButtonContainer = styled.div`
-  text-align: left;
-`
 
 export default inject('Stores')(observer(ActorsInput))

@@ -3,7 +3,7 @@ import Translate from 'react-translate-component'
 import PropTypes from 'prop-types'
 import SectionTitle from './title'
 import { ExpandCollapse } from './expand'
-import QvainTooltip from '../qvainTooltip'
+import QvainTooltip from './qvainTooltip'
 
 class Section extends PureComponent {
   static propTypes = {
@@ -14,10 +14,7 @@ class Section extends PureComponent {
     components: PropTypes.exact({
       tooltipContent: PropTypes.elementType.isRequired,
     }).isRequired,
-    children: PropTypes.oneOfType([
-      PropTypes.array,
-      PropTypes.element
-    ]).isRequired,
+    children: PropTypes.oneOfType([PropTypes.array, PropTypes.element]).isRequired,
     isRequired: PropTypes.bool,
   }
 
@@ -40,7 +37,9 @@ class Section extends PureComponent {
     return (
       <div className="container">
         <SectionTitle>
-          {isRequired ? null : <ExpandCollapse type="button" isExpanded={isExpanded} onClick={handleClick} />}
+          {isRequired ? null : (
+            <ExpandCollapse type="button" isExpanded={isExpanded} onClick={handleClick} />
+          )}
           <Translate content={title} onClick={handleClick} />
           <QvainTooltip tooltipAriaLabel={tooltip} tooltipContent={tooltipContent} />
         </SectionTitle>

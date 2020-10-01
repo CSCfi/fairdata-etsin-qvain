@@ -11,7 +11,7 @@ import etsinTheme from '../../../../styles/theme'
 import SelectedItems from './selectedItems'
 import AddItemsModal from './addItems'
 import FixDeprecatedModal from '../fixDeprecatedModal'
-import { Checkbox, Label } from '../../general/form'
+import { Checkbox, Label } from '../../general/modal/form'
 import Loader from '../../../general/loader'
 import { ErrorLabel, ErrorContainer, ErrorContent, ErrorButtons } from '../../general/errors'
 import { Button } from '../../../general/button'
@@ -50,8 +50,8 @@ export class IDAFilePickerBase extends Component {
     } = this.props.Stores.Qvain.Files
     const haveItems =
       root &&
-      (root.files.some((f) => f.existing) ||
-        root.directories.some((d) => d.existing) ||
+      (root.files.some(f => f.existing) ||
+        root.directories.some(d => d.existing) ||
         root.addedChildCount > 0)
     const { toggleHideRemoved, hideRemoved } = SelectedItemsView
 

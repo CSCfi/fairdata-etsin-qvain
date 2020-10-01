@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Observer } from 'mobx-react'
-import FieldList from '../../general/fieldList'
-import FieldListAdd from '../../general/fieldListAdd'
+import { observer } from 'mobx-react'
+import FieldList from '../../general/section/fieldList'
+import FieldListAdd from '../../general/section/fieldListAdd'
 import handleSave from './handleSave'
 import Form from './form'
 
@@ -11,15 +11,7 @@ const ProvenanceFieldContent = ({ Store, lang }) => {
   const translationsRoot = 'qvain.history.provenance'
   return (
     <>
-      <Observer>{() => (
-        <FieldList
-          Field={Field}
-          lang={lang}
-          translationsRoot={translationsRoot}
-          elements={Store.provenances}
-        />
-      )}
-      </Observer>
+      <FieldList Field={Field} lang={lang} translationsRoot={translationsRoot} />
       <FieldListAdd
         Store={Store}
         Field={Field}
@@ -32,7 +24,7 @@ const ProvenanceFieldContent = ({ Store, lang }) => {
 }
 ProvenanceFieldContent.propTypes = {
   Store: PropTypes.object.isRequired,
-  lang: PropTypes.string.isRequired
+  lang: PropTypes.string.isRequired,
 }
 
-export default ProvenanceFieldContent
+export default observer(ProvenanceFieldContent)

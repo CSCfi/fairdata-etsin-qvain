@@ -12,8 +12,9 @@ const RelatedResource = (
 ) => ({ uiid, name, description, identifier, relationType, entityType })
 
 class RelatedResources extends Field {
-  constructor(Parent) {
-    super(Parent, RelatedResource, 'relatedResources')
+  constructor(Qvain) {
+    super(Qvain, RelatedResource, RelatedResourceModel, 'relatedResources')
+    this.Qvain = Qvain
   }
 
   relatedResourceToBackend = rr => ({
@@ -26,8 +27,22 @@ class RelatedResources extends Field {
     relation_type: { identifier: (rr.relationType || {}).url },
   })
 
-  toBackend = () => this.Parent.relatedResources.map(this.relatedResourceToBackend)
+  toBackend = () => this.storage.map(this.relatedResourceToBackend)
 }
+
+export const RelatedResourceModel = rr => ({
+  uiid: uuidv4(),
+  name: fillUndefinedMultiLangProp(rr.entity.title),
+  description: fillUndefinedMultiLangProp(rr.entity.description),
+  identifier: rr.entity.identifier,
+  relationType: rr.relation_type
+    ? RelationType(rr.relation_type.pref_label, rr.relation_type.identifier)
+    : undefined,
+  entityType:
+    rr.entity && rr.entity.type
+      ? RelationType(rr.entity.type.pref_label, rr.entity.type.identifier)
+      : undefined,
+})
 
 export const RelationType = (label, url) => ({
   label,
@@ -41,20 +56,4 @@ export const fillUndefinedMultiLangProp = (prop = {}) => {
   return prop
 }
 
-export const RelatedResourceModel = rr => {
-  console.log(rr)
-  return {
-    uiid: uuidv4(),
-    name: fillUndefinedMultiLangProp(rr.entity.title),
-    description: fillUndefinedMultiLangProp(rr.entity.description),
-    identifier: rr.entity.identifier,
-    relationType: rr.relation_type
-      ? RelationType(rr.relation_type.pref_label, rr.relation_type.identifier)
-      : undefined,
-    entityType:
-      rr.entity && rr.entity.type
-        ? RelationType(rr.entity.type.pref_label, rr.entity.type.identifier)
-        : undefined,
-  }
-}
 export default RelatedResources

@@ -5,27 +5,28 @@ import Translate from 'react-translate-component'
 import styled from 'styled-components'
 
 import { DATA_CATALOG_IDENTIFIER } from '../../../utils/constants'
-import { Checkbox, HelpField } from '../general/form'
+import { Checkbox, HelpField } from '../general/modal/form'
 
 function DoiSelection(props) {
+  const { dataCatalog, original, useDoi, setUseDoi, readonly } = props.Stores.Qvain
+  const isNewDraft = original && original.state === 'draft' && !original.draft_of
+  const canSelectDoi = (!original || isNewDraft) && dataCatalog === DATA_CATALOG_IDENTIFIER.IDA
+
   const handleDoiCheckboxChange = event => {
-    const { setUseDoi } = props.Stores.Qvain
     setUseDoi(event.target.checked)
   }
 
-  const { dataCatalog, original, useDoi } = props.Stores.Qvain
-  const isNewDraft = original && original.state === 'draft' && !original.draft_of
-  const canSelectDoi = (!original || isNewDraft) && dataCatalog === DATA_CATALOG_IDENTIFIER.IDA
   if (!canSelectDoi) {
     return null
   }
+
   return (
     <DoiSelectionContainer>
       <CheckBoxRow>
         <DoiCheckbox
           id="doiSelector"
           onChange={handleDoiCheckboxChange}
-          disabled={original !== undefined && !isNewDraft}
+          disabled={readonly || (original !== undefined && !isNewDraft)}
           checked={useDoi}
         />
         <DoiLabel htmlFor="doiSelector">
