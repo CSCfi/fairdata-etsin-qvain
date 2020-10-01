@@ -8,6 +8,8 @@ class Field {
     this.fieldName = fieldName
     this.references = references
     this.Parent = Parent
+    this.reset = this.reset.bind(this)
+    this.create = this.create.bind(this)
   }
 
   @computed
