@@ -47,7 +47,7 @@ class Login extends Component {
   state = {
     loading: false,
     showNotice: false,
-    loggedInThrough: '',
+    loggedInThroughService: '',
   }
 
   componentDidMount() {
