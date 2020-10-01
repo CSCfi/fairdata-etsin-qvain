@@ -128,6 +128,7 @@ class Qvain {
 
     this.Files.reset()
     this.Temporals.create()
+    this.Provenances.create()
 
     this.useDoi = false
 
