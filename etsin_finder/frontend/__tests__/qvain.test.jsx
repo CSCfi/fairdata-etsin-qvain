@@ -527,6 +527,7 @@ describe('Qvain validation', () => {
   })
 
   it('should validate dataset', async () => {
+    actors[0].roles.push('publisher')
     try {
       expect(await qvainFormSchema.validate(dataset, { abortEarly: false }))
     } catch (e) {
@@ -549,7 +550,7 @@ describe('Qvain validation', () => {
       expect(e.errors).toEqual(
         expect.arrayContaining([
           translate('qvain.validationMessages.issuedDate.requiredIfUseDoi'),
-          translate('qvain.validationMessages.actors.requiredActors.publisherIfDOI'),
+          translate('qvain.validationMessages.actors.requiredActors.mandatoryActors.publisher'),
         ])
       )
     }
