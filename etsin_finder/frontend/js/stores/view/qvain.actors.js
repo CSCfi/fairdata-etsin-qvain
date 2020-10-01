@@ -1,6 +1,5 @@
 import axios from 'axios'
 import { observable, action, runInAction, computed } from 'mobx'
-import textToAnnounce from '../../components/general/announceAndReset/textToAnnounce'
 
 import { METAX_FAIRDATA_ROOT_URL, ENTITY_TYPE, ROLE } from '../../utils/constants'
 
