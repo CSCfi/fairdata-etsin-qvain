@@ -26,8 +26,7 @@ def get_saml_auth(flask_request, service):
         object: SP SAML instance.
 
     """
-    path_to_saml_config = 'SAML_PATH_' + service
-    return OneLogin_Saml2_Auth(prepare_flask_request_for_saml(flask_request, service), custom_base_path=app.config.get(path_to_saml_config, None))
+    return OneLogin_Saml2_Auth(prepare_flask_request_for_saml(flask_request, service), custom_base_path=app.config.get(('SAML_PATH_' + service), None))
 
 def init_saml_auth(saml_prepared_flask_request, service):
     """Init saml auth
