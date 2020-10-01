@@ -51,7 +51,6 @@ def login_qvain():
     redirect_url = quote(request.args.get('relay', '/'))
     return redirect(auth.login(redirect_url))
 
-
 @app.route('/slo/etsin')
 def logout_etsin():
     """Endpoint which frontend should call when wanting to perform a logout from Etsin
@@ -111,7 +110,6 @@ def frontend_app(path):
     """
     return _render_index_template()
 
-
 def _render_index_template(saml_errors=[], slo_success=False):
     """Load saml attributes if logged in through old proxy, and log values
 
@@ -148,7 +146,6 @@ def saml_metadata_etsin():
     else:
         resp = make_response(', '.join(errors), 500)
     return resp
-    
 
 @app.route('/saml_metadata/qvain')
 def saml_metadata_qvain():
@@ -164,7 +161,6 @@ def saml_metadata_qvain():
     else:
         resp = make_response(', '.join(errors), 500)
     return resp
-
 
 @app.route('/acs/etsin', methods=['GET', 'POST'])
 def saml_attribute_consumer_service_etsin():
