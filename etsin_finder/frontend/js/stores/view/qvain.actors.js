@@ -73,10 +73,10 @@ const actorToBackend = actor => ({
   person:
     actor.type === ENTITY_TYPE.PERSON
       ? {
-        name: actor.person.name,
-        email: actor.person.email || undefined,
-        identifier: actor.person.identifier || undefined,
-      }
+          name: actor.person.name,
+          email: actor.person.email || undefined,
+          identifier: actor.person.identifier || undefined,
+        }
       : undefined,
   organizations: actor.organizations.map(org => ({
     name: org.name,
@@ -482,6 +482,7 @@ class Actors {
     const confirm = await this.Qvain.checkActorFromRefs(actor)
     if (!confirm) return null
     const actors = this.actors.filter(p => p.uiid !== actor.uiid)
+    this.Qvain.removeActorFromRefs(actor)
     this.setActors(actors)
     this.Qvain.setChanged(true)
     return null
@@ -516,23 +517,24 @@ class Actors {
     actor.organizations = organizations
   }
 
-  toBackend = () => this.actors.map(actor => ({
-    type: actor.type,
-    roles: actor.roles,
-    person:
-      actor.type === ENTITY_TYPE.PERSON
-        ? {
-          name: actor.person.name,
-          email: actor.person.email || undefined,
-          identifier: actor.person.identifier || undefined,
-        }
-        : undefined,
-    organizations: actor.organizations.map(org => ({
-      name: org.name,
-      email: org.email || undefined,
-      identifier: org.identifier || undefined,
-    })),
-  }))
+  toBackend = () =>
+    this.actors.map(actor => ({
+      type: actor.type,
+      roles: actor.roles,
+      person:
+        actor.type === ENTITY_TYPE.PERSON
+          ? {
+              name: actor.person.name,
+              email: actor.person.email || undefined,
+              identifier: actor.person.identifier || undefined,
+            }
+          : undefined,
+      organizations: actor.organizations.map(org => ({
+        name: org.name,
+        email: org.email || undefined,
+        identifier: org.identifier || undefined,
+      })),
+    }))
 
   @computed get actorOptions() {
     return this.actors.map(ref => ({

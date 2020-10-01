@@ -18,10 +18,9 @@ const Spatial = (
 })
 
 class Spatials extends Field {
-  constructor(Qvain, spatials = []) {
+  constructor(Qvain) {
     super(Qvain, Spatial, SpatialModel, 'spatials')
     this.Qvain = Qvain
-    this.fromBackend(spatials, Qvain)
   }
 
   clone = () => this
