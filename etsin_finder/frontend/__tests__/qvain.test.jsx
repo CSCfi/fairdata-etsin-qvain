@@ -6,22 +6,22 @@ import CreatableSelect from 'react-select/creatable'
 
 import etsinTheme from '../js/styles/theme'
 import '../locale/translations'
-import Qvain from '../js/components/qvain/main'
-import Description from '../js/components/qvain/description'
-import DescriptionField from '../js/components/qvain/description/descriptionField'
-import OtherIdentifierField from '../js/components/qvain/description/otherIdentifierField'
-import FieldOfScienceField from '../js/components/qvain/description/fieldOfScienceField'
-import LanguageField from '../js/components/qvain/description/languageField'
-import KeywordsField from '../js/components/qvain/description/keywordsField'
-import RightsAndLicenses from '../js/components/qvain/licenses'
-import { License } from '../js/components/qvain/licenses/licenses'
-import { AccessType } from '../js/components/qvain/licenses/accessType'
-import RestrictionGrounds from '../js/components/qvain/licenses/restrictionGrounds'
-import EmbargoExpires from '../js/components/qvain/licenses/embargoExpires'
+import Qvain from '../js/components/qvain/views/main'
+import Description from '../js/components/qvain/fields/description'
+import DescriptionField from '../js/components/qvain/fields/description/titleAndDescription'
+import OtherIdentifierField from '../js/components/qvain/fields/description/otherIdentifier'
+import FieldOfScienceField from '../js/components/qvain/fields/description/fieldOfScience'
+import LanguageField from '../js/components/qvain/fields/description/language'
+import KeywordsField from '../js/components/qvain/fields/description/keywords'
+import RightsAndLicenses from '../js/components/qvain/fields/licenses'
+import { License } from '../js/components/qvain/fields/licenses/licenses'
+import { AccessType } from '../js/components/qvain/fields/licenses/accessType'
+import RestrictionGrounds from '../js/components/qvain/fields/licenses/restrictionGrounds'
+import EmbargoExpires from '../js/components/qvain/fields/licenses/embargoExpires'
 import { ACCESS_TYPE_URL, LICENSE_URL, DATA_CATALOG_IDENTIFIER } from '../js/utils/constants'
 import { qvainFormSchema } from '../js/components/qvain/utils/formValidation'
-import { ExternalFilesBase } from '../js/components/qvain/files/external/externalFiles'
-import DoiSelection, { DoiCheckbox } from '../js/components/qvain/files/doiSelection'
+import { ExternalFilesBase } from '../js/components/qvain/fields/files/external/externalFiles'
+import DoiSelection, { DoiCheckbox } from '../js/components/qvain/fields/files/doiSelection'
 import { ButtonGroup } from '../js/components/qvain/general/buttons'
 import {
   ValidationErrors,
@@ -35,12 +35,12 @@ import QvainStoreClass, {
   License as LicenseConstructor,
 } from '../js/stores/view/qvain'
 import LocaleStore from '../js/stores/view/language'
-import TablePasState from '../js/components/qvain/datasets/tablePasState'
+import TablePasState from '../js/components/qvain/views/datasets/tablePasState'
 import {
   filterByTitle,
   filterGroupsByTitle,
   groupDatasetsByVersionSet,
-} from '../js/components/qvain/datasets/filter'
+} from '../js/components/qvain/views/datasets/filter'
 
 jest.mock('uuid', original => {
   let id = 0

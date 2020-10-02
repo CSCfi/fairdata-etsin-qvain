@@ -10,7 +10,7 @@ import translate from 'counterpart'
 
 import '../locale/translations.js'
 import etsinTheme from '../js/styles/theme'
-import MetadataModal from '../js/components/qvain/files/metadataModal'
+import MetadataModal from '../js/components/qvain/fields/files/metadataModal'
 import Env from '../js/stores/domain/env'
 import QvainStoreClass from '../js/stores/view/qvain'
 import { Project, File, Directory } from '../js/stores/view/common.files.items'
@@ -25,7 +25,7 @@ const getStores = () => {
   return {
     Env,
     Qvain: QvainStore,
-    Locale: LocaleStore
+    Locale: LocaleStore,
   }
 }
 const testFile = {
@@ -43,9 +43,8 @@ const testFile = {
     csv_has_header: true,
     csv_record_separator: 'LF',
     csv_quoting_char: '"',
-  }
+  },
 }
-
 
 const testFile2 = {
   description: 'File2',
@@ -62,7 +61,7 @@ const testFile2 = {
     csv_has_header: true,
     csv_record_separator: 'LF',
     csv_quoting_char: '"',
-  }
+  },
 }
 
 const testFile3 = {
@@ -80,7 +79,7 @@ const testFile3 = {
     csv_has_header: false,
     csv_record_separator: 'LF',
     csv_quoting_char: '"',
-  }
+  },
 }
 
 const testFile4 = {
@@ -98,7 +97,7 @@ const testFile4 = {
     csv_has_header: true,
     csv_record_separator: 'LF',
     csv_quoting_char: '"',
-  }
+  },
 }
 
 const fileFormats = {
@@ -110,19 +109,19 @@ const fileFormats = {
             input_file_format: 'text/csv',
             output_format_version: '',
             label: {
-              und: 'file_format_version_text_csv'
+              und: 'file_format_version_text_csv',
             },
-          }
+          },
         },
         {
           _source: {
             input_file_format: 'application/pdf',
             output_format_version: '1.6',
-          }
+          },
         },
       ],
-    }
-  }
+    },
+  },
 }
 
 describe('Qvain.MetadataModal', () => {
@@ -149,18 +148,19 @@ describe('Qvain.MetadataModal', () => {
     // Set directory hierarchy
     stores.Qvain.Files.selectedProject = 'project_y'
     stores.Qvain.Files.root = Project('project_y', 'project_root')
-    const dir = Directory({
-      id: 'test1',
-      identifier: 'test-ident-1',
-      project_identifier: 'project_y',
-      directory_name: 'test',
-      directory_path: '/test',
-    }, {
-      loaded: true, // don't try to fetch from Metax
-      files: [
-        testFile, testFile2, testFile3, testFile4
-      ].map(File)
-    })
+    const dir = Directory(
+      {
+        id: 'test1',
+        identifier: 'test-ident-1',
+        project_identifier: 'project_y',
+        directory_name: 'test',
+        directory_path: '/test',
+      },
+      {
+        loaded: true, // don't try to fetch from Metax
+        files: [testFile, testFile2, testFile3, testFile4].map(File),
+      }
+    )
     stores.Qvain.Files.root.directories.push(dir)
     wrapper.update()
   })
@@ -186,7 +186,9 @@ describe('Qvain.MetadataModal', () => {
     // Versions forbidden for text/csv
     stores.Qvain.setMetadataModalFile(await Files.getItemByPath('/test/test2.csv'))
     expect(instance.state.fileIdentifier).toBe('test_file2')
-    expect(instance.validateMetadata).toThrow(translate('qvain.files.metadataModal.errors.formatVersionNotAllowed'))
+    expect(instance.validateMetadata).toThrow(
+      translate('qvain.files.metadataModal.errors.formatVersionNotAllowed')
+    )
 
     // Accepted version for application/pdf
     stores.Qvain.setMetadataModalFile(await Files.getItemByPath('/test/test3.pdf'))
@@ -220,9 +222,9 @@ describe('Qvain.MetadataModal', () => {
         ...testFile,
         file_characteristics: {
           ...testFile.file_characteristics,
-          ...data
-        }
-      }
+          ...data,
+        },
+      },
     }))
     await instance.saveChanges()
     expect(file.pasMeta.csvHasHeader).toBe(false)
@@ -250,9 +252,9 @@ describe('Qvain.MetadataModal', () => {
         ...testFile4,
         file_characteristics: {
           ...testFile4.file_characteristics,
-          ...data
-        }
-      }
+          ...data,
+        },
+      },
     }))
     await instance.saveChanges()
 
@@ -278,7 +280,11 @@ describe('Qvain.MetadataModal', () => {
     await when(() => instance.formatFetchStatus !== 'loading')
 
     // All inputs and buttons should be enabled
-    const enabled = wrapper.find(MetadataModal).find('input').not('[type="hidden"]').not('[disabled=true]')
+    const enabled = wrapper
+      .find(MetadataModal)
+      .find('input')
+      .not('[type="hidden"]')
+      .not('[disabled=true]')
     expect(enabled.length).toBe(7)
     expect(wrapper.find(MetadataModal).find('button').not('[disabled=true]').length).toBe(3)
     expect(wrapper.find(MetadataModal).find('button').find('[disabled=true]').length).toBe(0)
@@ -288,7 +294,11 @@ describe('Qvain.MetadataModal', () => {
     wrapper.update()
 
     // Save button and all inputs should be disabled, close buttons should be enabled
-    const disabled = wrapper.find(MetadataModal).find('input').not('[type="hidden"]').find('[disabled=true]')
+    const disabled = wrapper
+      .find(MetadataModal)
+      .find('input')
+      .not('[type="hidden"]')
+      .find('[disabled=true]')
     expect(disabled.length).toBe(7)
     expect(wrapper.find(MetadataModal).find('button').not('[disabled=true]').length).toBe(2)
     expect(wrapper.find(MetadataModal).find('button').find('[disabled=true]').length).toBe(1)
@@ -304,14 +314,22 @@ describe('Qvain.MetadataModal', () => {
     await when(() => instance.formatFetchStatus !== 'loading')
 
     // All inputs and buttons should be enabled
-    let enabled = wrapper.find(MetadataModal).find('input').not('[type="hidden"]').not('[disabled=true]')
+    let enabled = wrapper
+      .find(MetadataModal)
+      .find('input')
+      .not('[type="hidden"]')
+      .not('[disabled=true]')
     expect(enabled.length).toBe(7)
 
     stores.Qvain.setMetadataModalFile(await Files.getItemByPath('/test/test4.pdf'))
     wrapper.update()
 
     // All inputs and buttons should be enabled
-    enabled = wrapper.find(MetadataModal).find('input').not('[type="hidden"]').not('[disabled=true]')
+    enabled = wrapper
+      .find(MetadataModal)
+      .find('input')
+      .not('[type="hidden"]')
+      .not('[disabled=true]')
     expect(enabled.length).toBe(3)
   })
 })

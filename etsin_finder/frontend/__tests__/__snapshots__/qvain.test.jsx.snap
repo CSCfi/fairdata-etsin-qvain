@@ -13,7 +13,7 @@ exports[`Qvain dataset list PreservationStates should render <TablePasState /> 1
         "$$typeof": Symbol(react.forward_ref),
         "attrs": Array [],
         "componentStyle": ComponentStyle {
-          "componentId": "tablePasState__PasText-sc-1w7mbwe-1",
+          "componentId": "tablePasState__PasText-kh2b5p-1",
           "isStatic": true,
           "rules": Array [
             "
@@ -31,7 +31,7 @@ exports[`Qvain dataset list PreservationStates should render <TablePasState /> 1
         "displayName": "tablePasState__PasText",
         "foldedComponentIds": Array [],
         "render": [Function],
-        "styledComponentId": "tablePasState__PasText-sc-1w7mbwe-1",
+        "styledComponentId": "tablePasState__PasText-kh2b5p-1",
         "target": "span",
         "toString": [Function],
         "warnTooManyClasses": [Function],

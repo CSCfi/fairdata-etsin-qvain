@@ -3,29 +3,35 @@ import { shallow, mount } from 'enzyme'
 
 import '../locale/translations'
 import etsinTheme from '../js/styles/theme'
-import Qvain from '../js/components/qvain/main'
-import Description from '../js/components/qvain/description'
-import DescriptionField from '../js/components/qvain/description/descriptionField'
-import OtherIdentifierField from '../js/components/qvain/description/otherIdentifierField'
-import FieldOfScienceField from '../js/components/qvain/description/fieldOfScienceField'
-import KeywordsField from '../js/components/qvain/description/keywordsField'
-import RightsAndLicenses from '../js/components/qvain/licenses'
-import { License } from '../js/components/qvain/licenses/licenses'
-import { AccessType } from '../js/components/qvain/licenses/accessType'
-import RestrictionGrounds from '../js/components/qvain/licenses/restrictionGrounds'
-import EmbargoExpires from '../js/components/qvain/licenses/embargoExpires'
-import { ACCESS_TYPE_URL, LICENSE_URL, DATA_CATALOG_IDENTIFIER } from '../js/utils/constants'
-import Files from '../js/components/qvain/files'
-import IDAFilePicker, { IDAFilePickerBase } from '../js/components/qvain/files/legacy/idaFilePicker'
-import FileSelector, { FileSelectorBase } from '../js/components/qvain/files/legacy/fileSelector'
-import { SelectedFilesBase, FileLabel } from '../js/components/qvain/files/legacy/selectedFiles'
-import { DeleteButton } from '../js/components/qvain/general/buttons'
-import Env from '../js/stores/domain/env'
+import Qvain from '../js/components/qvain/views/main'
+import Description from '../js/components/qvain/fields/description'
+import DescriptionField from '../js/components/qvain/fields/description/titleAndDescription'
+import OtherIdentifierField from '../js/components/qvain/fields/description/otherIdentifier'
+import FieldOfScienceField from '../js/components/qvain/fields/description/fieldOfScience'
+import KeywordsField from '../js/components/qvain/fields/description/keywords'
+import RightsAndLicenses from '../js/components/qvain/fields/licenses'
+import { License } from '../js/components/qvain/fields/licenses/licenses'
+import { AccessType } from '../js/components/qvain/fields/licenses/accessType'
+import RestrictionGrounds from '../js/components/qvain/fields/licenses/restrictionGrounds'
+import EmbargoExpires from '../js/components/qvain/fields/licenses/embargoExpires'
+import { ACCESS_TYPE_URL, DATA_CATALOG_IDENTIFIER } from '../js/utils/constants'
+import Files from '../js/components/qvain/fields/files'
+import IDAFilePicker, {
+  IDAFilePickerBase,
+} from '../js/components/qvain/fields/files/legacy/idaFilePicker'
+import FileSelector, {
+  FileSelectorBase,
+} from '../js/components/qvain/fields/files/legacy/fileSelector'
+import {
+  SelectedFilesBase,
+  FileLabel,
+} from '../js/components/qvain/fields/files/legacy/selectedFiles'
 import QvainStoreClass, {
   Directory,
   AccessType as AccessTypeConstructor,
-  License as LicenseConstructor,
 } from '../js/stores/view/qvain'
+import { DeleteButton } from '../js/components/qvain/general/buttons'
+import Env from '../js/stores/domain/env'
 import LocaleStore from '../js/stores/view/language'
 
 jest.mock('uuid', () => {

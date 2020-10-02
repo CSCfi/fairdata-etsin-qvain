@@ -3,7 +3,7 @@ import { shallow } from 'enzyme'
 import axios from 'axios'
 
 import '../locale/translations.js'
-import RemoveModal from '../js/components/qvain/datasets/removeModal'
+import RemoveModal from '../js/components/qvain/views/datasets/removeModal'
 import QvainStoreClass from '../js/stores/view/qvain'
 import LocaleStore from '../js/stores/view/language'
 import EnvStore from '../js/stores/domain/env'
@@ -101,6 +101,9 @@ describe('Qvain.RemoveModal', () => {
     wrapper.update()
     wrapper.find('#confirm-remove-dataset').simulate('click')
     await Promise.resolve()
-    expect(axios.delete.mock.calls).toEqual([['/api/v2/qvain/datasets/2'], ['/api/v2/qvain/datasets/1']])
+    expect(axios.delete.mock.calls).toEqual([
+      ['/api/v2/qvain/datasets/2'],
+      ['/api/v2/qvain/datasets/1'],
+    ])
   })
 })

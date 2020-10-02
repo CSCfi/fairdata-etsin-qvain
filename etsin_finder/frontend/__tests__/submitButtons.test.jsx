@@ -7,7 +7,7 @@ import { CUMULATIVE_STATE } from '../js/utils/constants'
 import Env from '../js/stores/domain/env'
 import QvainStoreClass from '../js/stores/view/qvain'
 import Locale from '../js/stores/view/language'
-import SubmitButtons from '../js/components/qvain/editor/submitButtons'
+import SubmitButtons from '../js/components/qvain/views/editor/submitButtons'
 import {
   metaxDataset,
   dataset,

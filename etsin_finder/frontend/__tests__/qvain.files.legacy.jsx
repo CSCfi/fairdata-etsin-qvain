@@ -1,10 +1,17 @@
 import React from 'react'
 import { shallow, mount } from 'enzyme'
 
-import Files from '../js/components/qvain/files'
-import IDAFilePicker, { IDAFilePickerBase } from '../js/components/qvain/files/legacy/idaFilePicker'
-import FileSelector, { FileSelectorBase } from '../js/components/qvain/files/legacy/fileSelector'
-import { SelectedFilesBase, FileLabel } from '../js/components/qvain/files/legacy/selectedFiles'
+import Files from '../js/components/qvain/fields/files'
+import IDAFilePicker, {
+  IDAFilePickerBase,
+} from '../js/components/qvain/fields/files/legacy/idaFilePicker'
+import FileSelector, {
+  FileSelectorBase,
+} from '../js/components/qvain/fields/files/legacy/fileSelector'
+import {
+  SelectedFilesBase,
+  FileLabel,
+} from '../js/components/qvain/fields/files/legacy/selectedFiles'
 import { DeleteButton } from '../js/components/qvain/general/buttons'
 import Env from '../js/stores/domain/env'
 import QvainStoreClass, { Directory } from '../js/stores/view/qvain'
