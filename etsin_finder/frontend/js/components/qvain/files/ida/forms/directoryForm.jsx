@@ -4,9 +4,9 @@ import { inject, observer } from 'mobx-react'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import { SaveButton, CancelButton } from '../../../general/buttons'
-import { Label, CustomSelect, Input, Textarea } from '../../../general/modal/form'
+import { Label, CustomSelect, Input, Textarea } from '../../../general/form'
 import { Container } from '../../../general/card'
-import ValidationError from '../../../general/errors/validationError'
+import ValidationError from '../../../general/validationError'
 import { getLocalizedOptions } from '../../../utils/getReferenceData'
 import {
   directorySchema,
@@ -201,12 +201,7 @@ export class DirectoryFormBase extends Component {
             onClick={this.handleCancel}
             content="qvain.common.cancel"
           />
-          <Translate
-            component={SaveButton}
-            disabled={readonly}
-            onClick={this.handleSave}
-            content="qvain.common.save"
-          />
+          <Translate component={SaveButton} onClick={this.handleSave} content="qvain.common.save" />
         </Buttons>
       </DirectoryContainer>
     )

@@ -18,15 +18,11 @@ class Auth {
 
   @observable loading = false
 
-  @observable initializing = true
-
   @observable user = {
     name: undefined,
-    firsName: undefined,
-    lastName: undefined,
     loggedIn: false,
     homeOrganizationName: undefined,
-    idaProjects: [],
+    idaGroups: [],
     isUsingRems: undefined,
   }
 
@@ -34,11 +30,9 @@ class Auth {
   resetUser = () => {
     this.user = {
       name: undefined,
-      firsName: undefined,
-      lastName: undefined,
       loggedIn: false,
       homeOrganizationName: undefined,
-      idaProjects: [],
+      idaGroups: [],
       isUsingRems: undefined,
     }
   }
@@ -52,11 +46,6 @@ class Auth {
   }
 
   @action
-  setUser(user) {
-    this.user = user
-  }
-
-  @action
   checkLogin() {
     return new Promise((resolve, reject) => {
       runInAction(() => {
@@ -65,59 +54,45 @@ class Auth {
       axios
         .get('/api/user', {
           headers: { 'content-type': 'application/json', charset: 'utf-8' },
-          withCredentials: true
         })
         .then(
-          action(res => {
-            this.setUser({
+          action((res) => {
+            this.user = {
               name: res.data.user_csc_name,
-              firstName: res.data.first_name,
-              lastName: res.data.last_name,
               loggedIn: res.data.is_authenticated,
               homeOrganizationName: res.data.home_organization_name,
-              idaProjects: res.data.user_ida_projects,
+              idaGroups: res.data.user_ida_groups,
               isUsingRems: res.data.is_using_rems,
-            })
-
-            // User verified through HAKA or other external verification, but no valid CSC account -> no permission
-            if (
-              res.data.is_authenticated &&
-              !res.data.is_authenticated_CSC_user
-            ) {
+            }
+            if (res.data.is_authenticated && !res.data.is_authenticated_CSC_user) {
+              // The user was able to verify themself using HAKA or some other external verification,
+              // but do not have a valid CSC account and should not be granted permission.
               this.userLogged = false
               this.cscUserLogged = false
-
-            // User verified through CSC account, but no set home organization -> no permission
-            } else if (
-              res.data.is_authenticated &&
-              res.data.is_authenticated_CSC_user &&
-              !res.data.home_organization_name
-            ) {
+            } else if (!res.data.home_organization_name) {
+              // The user was able to verify themself using their CSC account,
+              // but do not have a home organization set (sui.csc.fi) and should not be granted permission.
               this.userLogged = false
               this.cscUserLogged = false
-
-            // User verified through CSC account and has set home organization -> login successful
             } else if (
               res.data.is_authenticated &&
               res.data.is_authenticated_CSC_user &&
               res.data.home_organization_name
             ) {
+              // The user has a valid CSC account with a defined home organization. Login successful.
               this.userLogged = res.data.is_authenticated
               this.cscUserLogged = res.data.is_authenticated_CSC_user
-
-            // Error handling, if above conditions are not met, user should not be logged in
             } else {
+              // If any of the checks failed, the user should not be logged in. The variables keep their 'false' value.
               this.userLogged = false
               this.cscUserLogged = false
             }
-
             this.loading = false
-            this.initializing = false
             resolve(res)
           })
         )
         .catch(
-          action(err => {
+          action((err) => {
             this.loading = false
             console.log(err)
             reject(err)
@@ -131,15 +106,20 @@ class Auth {
     return new Promise((resolve, reject) => {
       axios
         .delete('/api/session')
-        .then(res => {
+        .then((res) => {
           this.userLogged = false
           this.cscUserLogged = false
 
           // Since the user will be logged out, all user.* variables should be reset to default values.
-          this.resetUser()
+          this.user = {
+            name: undefined,
+            loggedIn: false,
+            homeOrganizationName: undefined,
+            idaGroups: [],
+          }
           resolve(res)
         })
-        .catch(err => {
+        .catch((err) => {
           console.error(err)
           reject(err)
         })
@@ -153,7 +133,7 @@ class Auth {
       axios
         .get('/api/session')
         .then(() => resolve())
-        .catch(err => {
+        .catch((err) => {
           if (err.response.status === 401) {
             this.reset()
           }

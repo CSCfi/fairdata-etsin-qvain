@@ -363,11 +363,11 @@ class ElasticQuery {
             ],
             must_not: [
               {
-                term: {
-                  'data_catalog.en': this.includePasDatasets ? '' : 'Fairdata PAS datasets'
-                }
+                  term: {
+                      'data_catalog.en': this.includePasDatasets ? '' : 'Fairdata PAS datasets'
+                  }
               }
-            ]
+          ]
           },
         }
       } else {
@@ -380,11 +380,11 @@ class ElasticQuery {
             ],
             must_not: [
               {
-                term: {
-                  'data_catalog.en': this.includePasDatasets ? '' : 'Fairdata PAS datasets'
-                }
+                  term: {
+                      'data_catalog.en': this.includePasDatasets ? '' : 'Fairdata PAS datasets'
+                  }
               }
-            ]
+          ]
           },
         }
       }

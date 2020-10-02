@@ -28,11 +28,7 @@ export const Button = styled.button.attrs(props => ({
   margin: ${props => (props.noMargin ? 0 : props.margin)};
   border: ${props => (props.thin ? '1px' : '2px')} solid ${props => (props.color ? checkColor(props.color) : props.theme.color.primary)};
   background-color: ${props => (props.color ? checkColor(props.color) : props.theme.color.primary)};
-  color: ${props => {
-    if (props.color === 'white') return props.theme.color.primary
-    if (props.color === 'yellow') return 'black'
-    return 'white'
-  }};
+  color: ${props => (props.color !== 'white' ? 'white' : props.theme.color.primary)};
   border-radius: ${p => (p.br ? p.br : '0.25em')};
   line-height: 1.25;
   transition: 0.3s ease;

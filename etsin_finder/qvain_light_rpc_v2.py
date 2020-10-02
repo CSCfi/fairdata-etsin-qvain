@@ -16,9 +16,11 @@ from etsin_finder.qvain_light_service_v2 import (
     merge_draft,
     create_draft
 )
+from etsin_finder.finder import app
 from etsin_finder.log_utils import log_request
 from etsin_finder.qvain_light_utils_v2 import check_dataset_creator
 
+log = app.logger
 
 class QvainDatasetChangeCumulativeState(Resource):
     """Metax RPC for changing cumulative_state of a dataset."""

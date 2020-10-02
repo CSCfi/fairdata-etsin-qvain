@@ -43,7 +43,7 @@ const FilterOpen = styled(InvertedButton)`
   }
 `
 const Amount = styled.span`
-  background-color: ${props => props.theme.color.errorDark};
+  background-color: ${props => props.theme.color.error};
   color: white;
   height: 100%;
   display: inline-block;
@@ -51,7 +51,7 @@ const Amount = styled.span`
   left: 0;
   padding: 0.5em 1em;
   border-radius: 2px 0px 0px 2px;
-  box-shadow: 0 0 0 2px ${props => props.theme.color.errorDark};
+  box-shadow: 0 0 0 2px ${props => props.theme.color.error};
 `
 const Children = styled.span`
   display: inline-block;

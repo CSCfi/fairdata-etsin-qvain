@@ -31,12 +31,13 @@ const Table = props => {
         item={single}
         index={i}
         changeFolder={props.changeFolder}
+        allowInfo={props.allowInfo}
         allowDownload={props.allowDownload}
         fields={props.fields}
         isRemote={props.isRemote}
         cr_id={props.cr_id}
       />
-    ))
+  ))
 
   const sliced = props.data.length > itemMaxAmt
   const data = sliced ? props.data.slice(0, itemMaxAmt) : props.data
@@ -85,17 +86,18 @@ const Table = props => {
       </StyledTable>
     </TableContainer>
   )
-}
+  }
 
 
 Table.defaultProps = {
-  changeFolder: () => { },
+  changeFolder: () => {},
 }
 
 Table.propTypes = {
   data: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
   changeFolder: PropTypes.func,
   allowDownload: PropTypes.bool.isRequired,
+  allowInfo: PropTypes.bool.isRequired,
   isRemote: PropTypes.bool.isRequired,
   cr_id: PropTypes.string.isRequired,
   fields: PropTypes.shape({

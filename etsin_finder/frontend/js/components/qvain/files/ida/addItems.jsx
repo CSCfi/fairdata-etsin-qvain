@@ -8,7 +8,7 @@ import ProjectSelector from './projectSelector'
 import Modal from '../../../general/modal'
 import AddItemsTree from './addItemsTree'
 import { SaveButton, CancelButton } from '../../general/buttons'
-import { HelpField } from '../../general/modal/form'
+import { HelpField } from '../../general/form'
 
 export function AddFilesModal(props) {
   const { isOpen, onRequestClose } = props
@@ -18,7 +18,7 @@ export function AddFilesModal(props) {
   const saveAddedItems = () => {
     const { getTopmostChecked, clearChecked } = Files.AddItemsView
     const selected = getTopmostChecked()
-    selected.forEach(item => {
+    selected.forEach((item) => {
       Files.addItem(item)
     })
     clearChecked()
@@ -31,7 +31,7 @@ export function AddFilesModal(props) {
     const projectChosen =
       Files.projectLocked ||
       (Files.root && (Files.root.addedChildCount > 0 || Files.root.removedChildCount > 0))
-    const haveNewFiles = Object.values(Files.AddItemsView.checkedState).some(item => item)
+    const haveNewFiles = Object.values(Files.AddItemsView.checkedState).some((item) => item)
 
     return (
       <Modal

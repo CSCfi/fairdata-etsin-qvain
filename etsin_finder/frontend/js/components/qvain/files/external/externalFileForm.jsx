@@ -4,9 +4,9 @@ import { inject, observer } from 'mobx-react'
 import { toJS } from 'mobx'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
-import { Input, Label, CustomSelect } from '../../general/modal/form'
+import { Input, Label, CustomSelect } from '../../general/form'
 import { SaveButton, CancelButton, FileItem } from '../../general/buttons'
-import ValidationError from '../../general/errors/validationError'
+import ValidationError from '../../general/validationError'
 import { externalResourceSchema } from '../../utils/formValidation'
 import { getLocalizedOptions } from '../../utils/getReferenceData'
 import { EmptyExternalResource } from '../../../../stores/view/qvain'
@@ -27,11 +27,11 @@ export class ExternalFileFormBase extends Component {
   componentDidMount = () => {
     getLocalizedOptions('use_category').then(translations => {
       this.setState({
-        useCategories: {
-          en: translations.en,
-          fi: translations.fi,
-        },
-      })
+          useCategories: {
+            en: translations.en,
+            fi: translations.fi
+          }
+        })
     })
   }
 
@@ -51,29 +51,26 @@ export class ExternalFileFormBase extends Component {
     })
   }
 
-  handleSaveExternalResource = event => {
+  handleSaveExternalResource = (event) => {
     event.preventDefault()
     const { Qvain } = this.props.Stores
     const externalResource = toJS(Qvain.externalResourceInEdit)
-    externalResourceSchema
-      .validate(externalResource)
-      .then(() => {
-        Qvain.saveExternalResource(Qvain.externalResourceInEdit)
-        Qvain.editExternalResource(EmptyExternalResource)
-        this.resetErrorMessages()
+    externalResourceSchema.validate(externalResource).then(() => {
+      Qvain.saveExternalResource(Qvain.externalResourceInEdit)
+      Qvain.editExternalResource(EmptyExternalResource)
+      this.resetErrorMessages()
 
-        // Close IDA picker if it is open since after adding an externalResources,
-        // user shouldn't be able to add IDA files or directories
-        if (this.props.Stores.Qvain.idaPickerOpen) {
-          this.props.Stores.Qvain.idaPickerOpen = false
-        }
-      })
-      .catch(err => {
-        this.setState({ externalResourceError: err.errors })
-      })
+      // Close IDA picker if it is open since after adding an externalResources,
+      // user shouldn't be able to add IDA files or directories
+      if (this.props.Stores.Qvain.idaPickerOpen) {
+        this.props.Stores.Qvain.idaPickerOpen = false
+      }
+    }).catch(err => {
+      this.setState({ externalResourceError: err.errors })
+    })
   }
 
-  handleCancel = event => {
+  handleCancel = (event) => {
     event.preventDefault()
     this.props.Stores.Qvain.editExternalResource(EmptyExternalResource)
     this.resetErrorMessages()
@@ -82,7 +79,10 @@ export class ExternalFileFormBase extends Component {
   render() {
     const externalResource = this.props.Stores.Qvain.externalResourceInEdit
     const { lang } = this.props.Stores.Locale
-    const { useCategories, externalResourceError } = this.state
+    const {
+      useCategories,
+      externalResourceError
+    } = this.state
     return (
       <Fragment>
         <Label htmlFor="externalResourceTitleInput">
@@ -93,9 +93,7 @@ export class ExternalFileFormBase extends Component {
           type="text"
           id="externalResourceTitleInput"
           value={externalResource.title}
-          onChange={event => {
-            externalResource.title = event.target.value
-          }}
+          onChange={(event) => { externalResource.title = event.target.value }}
           attributes={{ placeholder: 'qvain.files.external.form.title.placeholder' }}
         />
         <Label htmlFor="useCategoryInput">
@@ -106,9 +104,7 @@ export class ExternalFileFormBase extends Component {
           inputId="useCategoryInput"
           value={externalResource.useCategory}
           options={useCategories[lang]}
-          onChange={selection => {
-            externalResource.useCategory = selection
-          }}
+          onChange={(selection) => { externalResource.useCategory = selection }}
           attributes={{ placeholder: 'qvain.files.external.form.useCategory.placeholder' }}
         />
         <Label htmlFor="accessUrlInput">
@@ -120,9 +116,7 @@ export class ExternalFileFormBase extends Component {
           type="text"
           id="accessUrlInput"
           value={externalResource.accessUrl}
-          onChange={event => {
-            externalResource.accessUrl = event.target.value
-          }}
+          onChange={(event) => { externalResource.accessUrl = event.target.value }}
           onBlur={this.handleOnUrlBlur}
           attributes={{ placeholder: 'qvain.files.external.form.accessUrl.placeholder' }}
         />
@@ -135,9 +129,7 @@ export class ExternalFileFormBase extends Component {
           type="text"
           id="downloadUrlInput"
           value={externalResource.downloadUrl}
-          onChange={event => {
-            externalResource.downloadUrl = event.target.value
-          }}
+          onChange={(event) => { externalResource.downloadUrl = event.target.value }}
           onBlur={this.handleOnUrlBlur}
           attributes={{ placeholder: 'qvain.files.external.form.downloadUrl.placeholder' }}
         />

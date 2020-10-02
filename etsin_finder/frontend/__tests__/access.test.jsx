@@ -98,6 +98,9 @@ describe('Access Store', () => {
     it('Should allow Ida file download', () => {
       expect(Access.restrictions.allowDataIdaDownloadButton).toEqual(true)
     })
+    it('Should show Ida file info', () => {
+      expect(Access.restrictions.allowDataIdaInfoButton).toEqual(true)
+    })
     it('Should not show ask for access', () => {
       expect(Access.restrictions.showREMSbutton).toEqual(false)
     })
@@ -122,6 +125,9 @@ describe('Access Store', () => {
       it('Should allow Ida file download', () => {
         expect(Access.restrictions.allowDataIdaDownloadButton).toEqual(true)
       })
+      it('Should show Ida file info', () => {
+        expect(Access.restrictions.allowDataIdaInfoButton).toEqual(true)
+      })
       it('Should not show ask for access', () => {
         expect(Access.restrictions.showREMSbutton).toEqual(false)
       })
@@ -145,6 +151,9 @@ describe('Access Store', () => {
       it('Should not allow Ida file download', () => {
         expect(Access.restrictions.allowDataIdaDownloadButton).toEqual(false)
       })
+      it('Should not show Ida file info', () => {
+        expect(Access.restrictions.allowDataIdaInfoButton).toEqual(false)
+      })
       it('Should not show ask for access', () => {
         expect(Access.restrictions.showREMSbutton).toEqual(false)
       })
@@ -166,6 +175,9 @@ describe('Access Store', () => {
     it('Should not allow Ida file download', () => {
       expect(Access.restrictions.allowDataIdaDownloadButton).toEqual(false)
     })
+    it('Should not show Ida file info', () => {
+      expect(Access.restrictions.allowDataIdaInfoButton).toEqual(false)
+    })
     it('Should not show ask for access', () => {
       expect(Access.restrictions.showREMSbutton).toEqual(false)
     })
@@ -185,6 +197,9 @@ describe('Access Store', () => {
     })
     it('Should not allow Ida file download', () => {
       expect(Access.restrictions.allowDataIdaDownloadButton).toEqual(false)
+    })
+    it('Should not show Ida file info', () => {
+      expect(Access.restrictions.allowDataIdaInfoButton).toEqual(false)
     })
     it('Should show ask for access', () => {
       expect(Access.restrictions.showREMSbutton).toEqual(true)
@@ -208,6 +223,9 @@ describe('Access Store', () => {
       it('Should not allow Ida file download', () => {
         expect(Access.restrictions.allowDataIdaDownloadButton).toEqual(false)
       })
+      it('Should not show Ida file info', () => {
+        expect(Access.restrictions.allowDataIdaInfoButton).toEqual(false)
+      })
       it('Should not show ask for access', () => {
         expect(Access.restrictions.showREMSbutton).toEqual(false)
       })
@@ -228,6 +246,9 @@ describe('Access Store', () => {
       })
       it('Should not allow Ida file download', () => {
         expect(Access.restrictions.allowDataIdaDownloadButton).toEqual(true)
+      })
+      it('Should not show Ida file info', () => {
+        expect(Access.restrictions.allowDataIdaInfoButton).toEqual(true)
       })
       it('Should not show ask for access', () => {
         expect(Access.restrictions.showREMSbutton).toEqual(false)

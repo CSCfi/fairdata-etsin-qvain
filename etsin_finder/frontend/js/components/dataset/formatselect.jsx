@@ -10,14 +10,16 @@
    */
 }
 
+
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import { darken } from 'polished'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
-import { HelpIcon } from '../qvain/general/modal/form'
-import Tooltip from '../qvain/general/section/tooltip'
+import { HelpIcon } from '../qvain/general/form'
+import Tooltip from '../qvain/general/tooltip'
 import Button from '../general/button'
+
 
 const SelectContainer = styled.div`
   width: ${props => props.width};
@@ -69,18 +71,16 @@ const Controller = styled(ListButton)`
   }
 `
 
-const InfoPosition = styled.div`
-   {
-    position: absolute;
-    top: 8px;
-    right: -25px;
-  }
+const InfoPosition = styled.div`{
+  position: absolute;
+  top: 8px; 
+  right: -25px;
+}
 `
 
-const Text = styled.span`
-   {
-    padding-right: 10px;
-  }
+const Text = styled.span`{
+  padding-right: 10px;
+}
 `
 
 export default class FormatSelect extends Component {
@@ -169,8 +169,7 @@ export default class FormatSelect extends Component {
         >
           <Translate component={Text} content="dataset.datasetAsFile.open" />
         </Controller>
-        {this.state.isOpen &&
-          this.state.isFocused &&
+        {this.state.isOpen && this.state.isFocused && (
           this.props.options.map((single, i) => (
             <ListItem
               noMargin
@@ -186,11 +185,12 @@ export default class FormatSelect extends Component {
               {this.props.options[0] === single ? (
                 <span className="sr-only">Current version: </span>
               ) : (
-                ''
-              )}
+                  ''
+                )}
               {single.label}
             </ListItem>
-          ))}
+          ))
+        )}
         {this.props.options.length > 1 && (
           <InfoPosition>
             <Tooltip

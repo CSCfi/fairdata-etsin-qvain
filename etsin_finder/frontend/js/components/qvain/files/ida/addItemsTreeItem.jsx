@@ -25,11 +25,13 @@ const AddItemsTreeItemBase = ({ treeProps, item, level, parentArgs }) => {
   const checkMark = isChecked || parentChecked
 
   const toggle = disabled ? null : () => directoryView.toggleChecked(item)
-  const toggleDirectoryOpen = dir => directoryView.toggleOpen(dir)
+  const toggleDirectoryOpen = (dir) => directoryView.toggleOpen(dir)
 
-  const getDirectoryContent = () => {
+  let content = null
+
+  if (isDirectory(item)) {
     const checkAction = directoryView.isChecked ? 'select' : 'deselect'
-    return (
+    content = (
       <>
         <ToggleOpenButton item={item} directoryView={directoryView} />
         <Translate
@@ -47,18 +49,16 @@ const AddItemsTreeItemBase = ({ treeProps, item, level, parentArgs }) => {
         </ItemTitle>
       </>
     )
+  } else {
+    content = (
+      <>
+        <NoIcon />
+        <Checkbox aria-label="select" checked={checkMark} disabled={disabled} onChange={toggle} />
+        <Icon icon={faFile} />
+        <ItemTitle>{item.name}</ItemTitle>
+      </>
+    )
   }
-
-  const getFileContent = () => (
-    <>
-      <NoIcon />
-      <Checkbox aria-label="select" checked={checkMark} disabled={disabled} onChange={toggle} />
-      <Icon icon={faFile} />
-      <ItemTitle>{item.name}</ItemTitle>
-    </>
-  )
-
-  const content = isDirectory(item) ? getDirectoryContent() : getFileContent()
 
   return (
     <ItemRow>

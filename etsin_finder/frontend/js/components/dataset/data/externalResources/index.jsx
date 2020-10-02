@@ -78,6 +78,7 @@ class ExternalResources extends Component {
           cr_id={this.state.results.identifier}
           data={this.state.currentFolder}
           allowDownload
+          allowInfo
           isRemote
           fields={{ size: false, category: true, name: true, downloadBtn: true, infoBtn: true }}
         />

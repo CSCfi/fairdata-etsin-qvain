@@ -5,14 +5,15 @@ import PropTypes from 'prop-types'
 import { inject, observer } from 'mobx-react'
 import styled from 'styled-components'
 import axios from 'axios'
+
 import { observable, action } from 'mobx'
 
 import Modal from '../../../general/modal'
-import { ConfirmClose } from '../../general/modal/confirmClose'
+import { ConfirmClose } from '../../general/confirmClose'
 import getReferenceData from '../../utils/getReferenceData'
 import { fileMetadataSchema } from '../../utils/formValidation'
 import { getResponseError } from '../../utils/responseError'
-import { Label, HelpField, Input } from '../../general/modal/form'
+import { Label, HelpField, Input } from '../../general/form'
 import { DangerButton, TableButton } from '../../general/buttons'
 import Response from '../response'
 import { getPASMeta } from '../../../../stores/view/common.files.items'
@@ -525,7 +526,6 @@ const ResponseOverlay = styled.div`
 
 export const AutoWidthTableButton = styled(TableButton)`
   width: auto;
-  max-width: none;
 `
 
 export default inject('Stores')(observer(MetadataModal))

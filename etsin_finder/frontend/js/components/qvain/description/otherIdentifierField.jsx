@@ -6,45 +6,40 @@ import Translate from 'react-translate-component'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import translate from 'counterpart'
+import Button from '../../general/button'
 import Card from '../general/card'
-import Label from '../general/card/label'
+import Label from '../general/label'
 import { otherIdentifiersArraySchema, otherIdentifierSchema } from '../utils/formValidation'
-import ValidationError from '../general/errors/validationError'
-import { Input, LabelLarge } from '../general/modal/form'
-import { ButtonContainer, AddNewButton } from '../general/buttons'
+import ValidationError from '../general/validationError'
+import { Input, LabelLarge } from '../general/form'
 
-const OtherIdentifierField = ({ Stores }) => {
-  const {
-    readonly,
-    removeOtherIdentifier,
-    setOtherIdentifier,
-    otherIdentifier,
-    otherIdentifiersArray,
-    addOtherIdentifier,
-    otherIdentifiersValidationError,
-    setOtherIdentifierValidationError,
-  } = Stores.Qvain
+class OtherIdentifierField extends React.Component {
+  static propTypes = {
+    Stores: PropTypes.object.isRequired,
+  }
 
-  const handleInputChange = event => {
+  handleInputChange = event => {
     const { value } = event.target
+    const { setOtherIdentifier } = this.props.Stores.Qvain
     setOtherIdentifier(value)
   }
 
-  const clearInput = () => {
+  clearInput = () => {
+    const { setOtherIdentifier } = this.props.Stores.Qvain
     setOtherIdentifier('')
   }
 
-  const handleAddClick = () => {
+  handleAddClick = event => {
+    event.preventDefault()
+    const { otherIdentifier, otherIdentifiersArray, addOtherIdentifier, setOtherIdentifierValidationError } = this.props.Stores.Qvain
     otherIdentifierSchema
       .validate(otherIdentifier)
       .then(() => {
         if (!otherIdentifiersArray.includes(otherIdentifier)) {
           addOtherIdentifier(otherIdentifier)
-          clearInput()
+          this.clearInput()
         } else {
-          setOtherIdentifierValidationError(
-            translate('qvain.description.otherIdentifiers.alreadyAdded')
-          )
+          setOtherIdentifierValidationError(translate('qvain.description.otherIdentifiers.alreadyAdded'))
         }
       })
       .catch(err => {
@@ -52,16 +47,19 @@ const OtherIdentifierField = ({ Stores }) => {
       })
   }
 
-  const handleRemove = identifier => {
+  handleRemove = identifier => {
+    const { removeOtherIdentifier } = this.props.Stores.Qvain
     removeOtherIdentifier(identifier)
   }
 
-  const handleBlur = () => {
+  handleBlur = () => {
+    const { setOtherIdentifierValidationError } = this.props.Stores.Qvain
     setOtherIdentifierValidationError(null)
-    validateOtherIdentifiers()
+    this.validateOtherIdentifiers()
   }
 
-  const validateOtherIdentifiers = () => {
+  validateOtherIdentifiers = () => {
+    const { otherIdentifiersArray, setOtherIdentifierValidationError } = this.props.Stores.Qvain
     otherIdentifiersArraySchema
       .validate(otherIdentifiersArray)
       .then(() => {
@@ -72,45 +70,48 @@ const OtherIdentifierField = ({ Stores }) => {
       })
   }
 
-  const otherIdentifiersLabels = otherIdentifiersArray.map(identifier => (
-    <Label color="primary" margin="0 0.5em 0.5em 0" key={identifier}>
-      <PaddedWord>{identifier}</PaddedWord>
-      <FontAwesomeIcon onClick={() => handleRemove(identifier)} icon={faTimes} size="xs" />
-    </Label>
-  ))
-
-  return (
-    <Card bottomContent>
-      <LabelLarge htmlFor="otherIdentifiersInput">
-        <Translate content="qvain.description.otherIdentifiers.title" />
-      </LabelLarge>
-      <Translate component="p" content="qvain.description.otherIdentifiers.instructions" />
-      {otherIdentifiersLabels}
-      <Input
-        type="text"
-        id="otherIdentifiersInput"
-        disabled={readonly}
-        value={otherIdentifier}
-        onChange={handleInputChange}
-        placeholder="http://doi.org/"
-        onBlur={handleBlur}
-      />
-      {otherIdentifiersValidationError && (
-        <ValidationError>{otherIdentifiersValidationError}</ValidationError>
-      )}
-      <ButtonContainer>
-        <AddNewButton type="button" onClick={handleAddClick} disabled={readonly}>
-          <Translate content="qvain.description.otherIdentifiers.addButton" />
-        </AddNewButton>
-      </ButtonContainer>
-    </Card>
-  )
+  render() {
+    const { readonly, otherIdentifier, otherIdentifiersArray, otherIdentifiersValidationError } = this.props.Stores.Qvain
+    const otherIdentifiersLabels = otherIdentifiersArray.map(identifier => (
+      <Label color="primary" margin="0 0.5em 0.5em 0" key={identifier}>
+        <PaddedWord>{identifier}</PaddedWord>
+        <FontAwesomeIcon onClick={() => this.handleRemove(identifier)} icon={faTimes} size="xs" />
+      </Label>
+    ))
+    return (
+      <Card bottomContent>
+        <LabelLarge htmlFor="otherIdentifiersInput">
+          <Translate content="qvain.description.otherIdentifiers.title" />
+        </LabelLarge>
+        <Translate component="p" content="qvain.description.otherIdentifiers.instructions" />
+        {otherIdentifiersLabels}
+        <Input
+          type="text"
+          id="otherIdentifiersInput"
+          disabled={readonly}
+          value={otherIdentifier}
+          onChange={this.handleInputChange}
+          placeholder="http://doi.org/"
+          onBlur={this.handleBlur}
+        />
+        {otherIdentifiersValidationError && <ValidationError>{otherIdentifiersValidationError}</ValidationError>}
+        <ButtonContainer>
+          <AddNewButton type="button" onClick={this.handleAddClick} disabled={readonly}>
+            <Translate content="qvain.description.otherIdentifiers.addButton" />
+          </AddNewButton>
+        </ButtonContainer>
+      </Card>
+    )
+  }
 }
 
-OtherIdentifierField.propTypes = {
-  Stores: PropTypes.object.isRequired,
-}
-
+const ButtonContainer = styled.div`
+  text-align: right;
+`
+const AddNewButton = styled(Button)`
+  margin: 0;
+  margin-top: 11px;
+`
 const PaddedWord = styled.span`
   padding-right: 10px;
 `

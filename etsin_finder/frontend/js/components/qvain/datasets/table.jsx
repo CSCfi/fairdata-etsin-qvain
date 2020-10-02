@@ -7,15 +7,14 @@ import axios from 'axios'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
 
-import { Table, TableHeader, Row, HeaderCell, TableBody, TableNote } from '../general/card/table'
+import { Table, TableHeader, Row, HeaderCell, TableBody, TableNote } from '../general/table'
 import urls from '../utils/urls'
 import RemoveModal from './removeModal'
 import DatasetPagination from './pagination'
 import { TableButton } from '../general/buttons'
-import { FormField, Input, Label as inputLabel } from '../general/modal/form'
+import { FormField, Input, Label as inputLabel } from '../general/form'
 import DatasetGroup from './datasetGroup'
 import { filterGroupsByTitle, groupDatasetsByVersionSet } from './filter'
-import etsinTheme from '../../../styles/theme'
 
 class DatasetTable extends Component {
   minOfDataSetsForSearchTool = 5
@@ -145,7 +144,7 @@ class DatasetTable extends Component {
   }
 
   handleCreateNewVersion = async identifier => {
-    const { metaxApiV2, getQvainUrl } = this.props.Stores.Env
+    const { metaxApiV2 } = this.props.Stores.Env
     if (!metaxApiV2) {
       console.error('Metax API V2 is required for creating a new version')
       return
@@ -156,7 +155,7 @@ class DatasetTable extends Component {
     this.promises.push(promise)
     const res = await promise
     const newIdentifier = res.data.identifier
-    this.props.history.push(getQvainUrl(`/dataset/${newIdentifier}`))
+    this.props.history.replace(`/qvain/dataset/${newIdentifier}`)
   }
 
   postRemoveUpdate = (dataset, onlyChanges) => {
@@ -202,13 +201,12 @@ class DatasetTable extends Component {
   }
 
   handleEnterEdit = dataset => () => {
-    const { getQvainUrl } = this.props.Stores.Env
     if (dataset.next_draft) {
-      this.props.history.push(getQvainUrl(`/dataset/${dataset.next_draft.identifier}`))
+      this.props.history.push(`/qvain/dataset/${dataset.next_draft.identifier}`)
       return
     }
     this.props.Stores.Qvain.editDataset(dataset)
-    this.props.history.push(getQvainUrl(`/dataset/${dataset.identifier}`))
+    this.props.history.push(`/qvain/dataset/${dataset.identifier}`)
   }
 
   handleChangePage = pageNum => () => {
@@ -293,7 +291,7 @@ class DatasetTable extends Component {
             {loading && <Translate component={TableNote} content="qvain.datasets.loading" />}
             {error && (
               <Fragment>
-                <TableNote style={{ color: etsinTheme.color.redText }}>
+                <TableNote style={{ color: 'red' }}>
                   <Translate content="qvain.datasets.errorOccurred" />:
                   <ErrorMessage>{errorMessage}</ErrorMessage>
                 </TableNote>
@@ -343,7 +341,6 @@ class DatasetTable extends Component {
 }
 
 const ErrorMessage = styled.span`
-  color: ${props => props.theme.color.redText};
   margin-left: 10px;
 `
 

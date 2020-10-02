@@ -21,8 +21,6 @@ import Stores from '../../../stores'
 import Button from '../button'
 import Loader from '../loader'
 import NoticeBar from '../noticeBar'
-import LoggedInUser from '../loggedInUser'
-import { Dropdown, DropdownItem } from '../dropdown'
 
 class Login extends Component {
   static propTypes = {
@@ -30,16 +28,12 @@ class Login extends Component {
     margin: PropTypes.string,
     width: PropTypes.string,
     isLoggedInKey: PropTypes.string,
-    fontSize: PropTypes.string,
-    borderColor: PropTypes.string,
   }
 
   static defaultProps = {
     margin: '0 0 0 0.4em',
     width: undefined,
-    fontSize: 'inherit',
     isLoggedInKey: 'userLogged',
-    borderColor: '',
   }
 
   state = {
@@ -59,15 +53,10 @@ class Login extends Component {
   }
 
   redirect = location => {
-    const query = location.search
-    this.setState(
-      {
-        loading: true,
-      },
-      () => {
-        window.location = `/sso?relay=${location.pathname}${encodeURIComponent(query)}`
-      }
-    )
+    this.setState({
+      loading: true,
+    })
+    window.location = `/sso?relay=${location.pathname}`
   }
 
   render() {
@@ -78,16 +67,17 @@ class Login extends Component {
             <LoaderCont active={this.state.loading}>
               <Loader active color="white" size="1.1em" spinnerSize="3px" />
             </LoaderCont>
-            <LogoutButton
+            <LoginButton
               width={this.props.width}
               margin="0"
-              onClick={() => this.redirect(this.props.location)}
-              borderColor={this.props.borderColor}
+              onClick={() => {
+                this.redirect(this.props.location)
+              }}
             >
-              <LoginText visible={!this.state.loading} fontSize={this.props.fontSize}>
+              <LoginText visible={!this.state.loading}>
                 <Translate content="nav.login" />
               </LoginText>
-            </LogoutButton>
+            </LoginButton>
           </Cont>
           {this.state.showNotice && (
             <NoticeBar
@@ -106,11 +96,14 @@ class Login extends Component {
       )
     }
     return (
-      <Dropdown buttonComponent={LogoutButton} buttonContent={<LoggedInUser />}>
-        <DropdownItem onClick={this.logout}>
-          <Translate content="nav.logout" />
-        </DropdownItem>
-      </Dropdown>
+      <LoginButton
+        color="primary"
+        onClick={this.logout}
+        margin={this.props.margin}
+        width={this.props.width}
+      >
+        <Translate content="nav.logout" />
+      </LoginButton>
     )
   }
 }
@@ -120,16 +113,8 @@ const Cont = styled.div`
   position: relative;
 `
 
-const LogoutButton = styled(Button)`
-  width: fit-content;
-  ${props =>
-    props.borderColor &&
-    `
-  border-color: ${props.theme.color[props.borderColor]};
-  :hover {
-    border-color: ${props.theme.color[props.borderColor]};
-  }
-  `}
+const LoginButton = styled(Button)`
+  white-space: nowrap;
 `
 
 const LoaderCont = styled.div`
@@ -141,7 +126,6 @@ const LoaderCont = styled.div`
 `
 const LoginText = styled.span`
   visibility: ${p => (p.visible ? 'initial' : 'hidden')};
-  font-size: ${p => p.fontSize};
 `
 
 export default withRouter(inject('Stores')(observer(Login)))

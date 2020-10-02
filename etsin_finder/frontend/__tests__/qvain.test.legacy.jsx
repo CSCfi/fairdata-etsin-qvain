@@ -2,8 +2,8 @@ import React from 'react'
 import { shallow, mount } from 'enzyme'
 
 import '../locale/translations'
-import etsinTheme from '../js/styles/theme'
-import Qvain from '../js/components/qvain/main'
+
+import Qvain from '../js/components/qvain'
 import Description from '../js/components/qvain/description'
 import DescriptionField from '../js/components/qvain/description/descriptionField'
 import OtherIdentifierField from '../js/components/qvain/description/otherIdentifierField'
@@ -12,7 +12,7 @@ import KeywordsField from '../js/components/qvain/description/keywordsField'
 import RightsAndLicenses from '../js/components/qvain/licenses'
 import { License } from '../js/components/qvain/licenses/licenses'
 import { AccessType } from '../js/components/qvain/licenses/accessType'
-import RestrictionGrounds from '../js/components/qvain/licenses/restrictionGrounds'
+import RestrictionGrounds from '../js/components/qvain/licenses/resctrictionGrounds'
 import EmbargoExpires from '../js/components/qvain/licenses/embargoExpires'
 import { ACCESS_TYPE_URL, LICENSE_URL, DATA_CATALOG_IDENTIFIER } from '../js/utils/constants'
 import Files from '../js/components/qvain/files'
@@ -71,9 +71,7 @@ describe('Qvain', () => {
     }
 
     // Create empty dataset, getDataset should not be called
-    shallow(
-      <FakeQvain Stores={stores} match={emptyMatch} history={{}} location={{ pathname: '/' }} />
-    )
+    shallow(<FakeQvain Stores={stores} match={emptyMatch} history={{}} />)
     expect(callCount).toBe(0)
     expect(lastCall).toBe(undefined)
 
@@ -86,14 +84,7 @@ describe('Qvain', () => {
         original: { identifier: identifierMatch.params.identifier },
       },
     }
-    shallow(
-      <FakeQvain
-        Stores={datasetOpenedStore}
-        match={identifierMatch}
-        history={{}}
-        location={{ pathname: '/' }}
-      />
-    )
+    shallow(<FakeQvain Stores={datasetOpenedStore} match={identifierMatch} history={{}} />)
     expect(callCount).toBe(0)
     expect(lastCall).toBe(undefined)
 
@@ -106,27 +97,13 @@ describe('Qvain', () => {
         original: { identifier: anotherMatch.params.identifier },
       },
     }
-    shallow(
-      <FakeQvain
-        Stores={anotherDatasetOpenedStore}
-        match={identifierMatch}
-        history={{}}
-        location={{ pathname: '/' }}
-      />
-    )
+    shallow(<FakeQvain Stores={anotherDatasetOpenedStore} match={identifierMatch} history={{}} />)
     expect(callCount).toBe(1)
     expect(lastCall).toBe(identifierMatch.params.identifier)
 
     // Edit existing dataset, getDataset should be called
     lastCall = undefined
-    const wrapper = shallow(
-      <FakeQvain
-        Stores={stores}
-        match={identifierMatch}
-        history={{}}
-        location={{ pathname: '/' }}
-      />
-    )
+    const wrapper = shallow(<FakeQvain Stores={stores} match={identifierMatch} history={{}} />)
     expect(callCount).toBe(2)
     expect(lastCall).toBe(identifierMatch.params.identifier)
 
@@ -167,13 +144,23 @@ describe('Qvain.RightsAndLicenses', () => {
     expect(component).toMatchSnapshot()
   })
   it('should render <Licenses />', () => {
-    const stores = getStores()
-    const component = shallow(<License Stores={stores} theme={etsinTheme} />)
+    const component = shallow(<License Stores={getStores()} />)
     expect(component).toMatchSnapshot()
   })
-  it('should render <AccessType />', () => {
+  it('should render other license URL field', () => {
     const stores = getStores()
-    const component = shallow(<AccessType Stores={stores} />)
+    stores.Qvain.setLicense(LicenseConstructor({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'other'))
+    const component = shallow(<License Stores={stores} />)
+    expect(component.find('#otherLicenseURL').length).toBe(1)
+  })
+  it('should NOT render other license URL field', () => {
+    const stores = getStores()
+    stores.Qvain.setLicense(LicenseConstructor(undefined, LICENSE_URL.CCBY4))
+    const component = shallow(<License Stores={stores} />)
+    expect(component.find('#otherLicenseURL').length).toBe(0)
+  })
+  it('should render <AccessType />', () => {
+    const component = shallow(<AccessType Stores={getStores()} />)
     expect(component).toMatchSnapshot()
   })
   it('should render <RestrictionGrounds />', () => {

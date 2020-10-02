@@ -65,7 +65,6 @@ const Notification = styled.div`
   width: 100%;
   background-color: #F3F2F1;
   padding: 2rem 3rem;
-  z-index: 1;
 
   p {
     margin: 0;

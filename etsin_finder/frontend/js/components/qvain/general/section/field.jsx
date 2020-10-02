@@ -2,8 +2,9 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
-import Card from '../card'
+import Card from '../card';
 import { ExpandCollapse } from './expand'
+
 
 const Field = ({ brief, children }) => {
   const [expanded, setExpanded] = useState(false)
@@ -17,14 +18,14 @@ const Field = ({ brief, children }) => {
       <Translate component="p" content={brief.description} />
       {children}
     </FieldContainerExpanded>
-  ) : (
-    <FieldContainerCollapsed>
-      <FieldHeaderCollapsed onClick={() => setExpanded(true)}>
-        <ExpandCollapse isExpanded={expanded} />
-        <Translate tabIndex="0" content={brief.title} />
-      </FieldHeaderCollapsed>
-    </FieldContainerCollapsed>
-  )
+    ) : (
+      <FieldContainerCollapsed>
+        <FieldHeaderCollapsed onClick={() => setExpanded(true)}>
+          <ExpandCollapse isExpanded={expanded} />
+          <Translate tabIndex="0" content={brief.title} />
+        </FieldHeaderCollapsed>
+      </FieldContainerCollapsed>
+    )
 }
 
 const FieldContainerCollapsed = styled.div`
@@ -34,26 +35,29 @@ const FieldContainerCollapsed = styled.div`
 `
 
 const FieldHeaderCollapsed = styled.div`
-  font-size: 1.2em;
-  margin: 0;
-  font-weight: bold;
-  line-height: calc(1.5 * 1.2em);
+font-size: 1.2em;
+margin: 0;
+font-weight: bold;
+line-height: calc(1.5 * 1.2em);
 `
 
-const FieldHeaderExpanded = styled.h3``
+const FieldHeaderExpanded = styled.h3`
 
-const FieldContainerExpanded = styled(Card)``
+`
+
+const FieldContainerExpanded = styled(Card)`
+`
 
 Field.propTypes = {
-  children: PropTypes.object.isRequired,
-  brief: PropTypes.object,
+    children: PropTypes.object.isRequired,
+    brief: PropTypes.object
 }
 
 Field.defaultProps = {
-  brief: {
-    title: '',
-    description: '',
-  },
+    brief: {
+        title: '',
+        description: ''
+    }
 }
 
 export default Field

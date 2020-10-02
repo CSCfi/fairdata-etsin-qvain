@@ -8,34 +8,30 @@ import FieldOfScienceField from './fieldOfScienceField'
 import LanguageField from './languageField'
 import KeywordsField from './keywordsField'
 import { SectionTitle } from '../general/section'
-import Tooltip from '../general/section/tooltip'
-import { HelpIcon } from '../general/modal/form'
+import Tooltip from '../general/tooltip'
+import { HelpIcon } from '../general/form'
 import DescriptionInfo from './descriptionInfo'
 
 const Description = () => {
   const [tooltipOpen, setTooltipOpen] = useState(false)
 
-  const title = (
-    <SectionTitle>
-      <Translate content="qvain.description.title" />
-      <Tooltip
-        isOpen={tooltipOpen}
-        close={() => setTooltipOpen(!tooltipOpen)}
-        align="Right"
-        text={<DescriptionInfo />}
-      >
-        <HelpIcon
-          aria-label={translate('qvain.description.infoTitle')}
-          onClick={() => setTooltipOpen(!tooltipOpen)}
-        />
-      </Tooltip>
-    </SectionTitle>
-  )
-
   return (
     <div className="container">
+      <SectionTitle>
+        <Translate content="qvain.description.title" />
+        <Tooltip
+          isOpen={tooltipOpen}
+          close={() => setTooltipOpen(!tooltipOpen)}
+          align="Right"
+          text={<DescriptionInfo />}
+        >
+          <HelpIcon
+            aria-label={translate('qvain.description.infoTitle')}
+            onClick={() => setTooltipOpen(!tooltipOpen)}
+          />
+        </Tooltip>
+      </SectionTitle>
       <React.Fragment>
-        {title}
         <DescriptionField />
         <IssuedDateField />
         <OtherIdentifierField />
@@ -47,4 +43,4 @@ const Description = () => {
   )
 }
 
-export default Description
+export default Description;

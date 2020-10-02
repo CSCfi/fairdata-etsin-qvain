@@ -16,7 +16,6 @@ const createActor = (actorJson, roles) => {
       orgs.unshift(
         Organization({
           name: currentOrg.name,
-          email: currentOrg.email,
           identifier: currentOrg.identifier,
           isReference: null, // null here means we aren't sure yet
         })
@@ -56,7 +55,7 @@ export const maybeReference = identifier =>
 
 const codeRegExp = RegExp('http://uri.suomi.fi/codelist/fairdata/organization/code/(.*)')
 
-export const getOrganizationSearchUrl = parentId => {
+const getOrganizationSearchUrl = parentId => {
   let shortId = ''
   if (parentId) {
     const match = codeRegExp.exec(parentId)
@@ -482,7 +481,6 @@ class Actors {
     const confirm = await this.Qvain.checkActorFromRefs(actor)
     if (!confirm) return null
     const actors = this.actors.filter(p => p.uiid !== actor.uiid)
-    this.Qvain.removeActorFromRefs(actor)
     this.setActors(actors)
     this.Qvain.setChanged(true)
     return null
@@ -539,7 +537,7 @@ class Actors {
   @computed get actorOptions() {
     return this.actors.map(ref => ({
       value: ref.uiid,
-      label: ref.person.name || ref.organizations.map(org => org.name),
+      label: ref.person.name || ref.organizations[0].name,
       roles: ref.roles,
     }))
   }
@@ -590,7 +588,7 @@ export class ActorsRef {
     // makes a list of actors based on the refs
     return Object.values(this.actorsRef).map(ref => ({
       value: ref.uiid,
-      label: ref.person.name || ref.organizations.map(org => org.name),
+      label: ref.person.name || ref.organizations[0].name,
       roles: ref.roles,
     }))
   }

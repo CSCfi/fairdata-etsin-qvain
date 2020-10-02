@@ -107,7 +107,7 @@ class Events extends Component {
       label: set.length - i,
       identifier: single.identifier,
       removed: single.removed,
-      url: `/dataset/${single.identifier}`
+      url: this.setUrl(single.identifier)
     }))
 
   checkProvenance = prov => {
@@ -161,6 +161,19 @@ class Events extends Component {
       return false
     }
     return false
+  }
+
+  setUrl = (identifier) => {
+    let url = ''
+
+    if (process.env.NODE_ENV === 'test') { /* test and stable */
+      url = `https://etsin-test.fairdata.fi/dataset/${identifier}`
+    } else if (process.env.NODE_ENV === 'development') { /* local */
+      url = `https://etsin-finder.local/dataset/${identifier}`
+    } else if (process.env.NODE_ENV === 'production') { /* production */
+      url = `https://etsin.fairdata.fi/dataset/${identifier}`
+    }
+    return url
   }
 
   relationIdentifierIsUrl(identifier) {

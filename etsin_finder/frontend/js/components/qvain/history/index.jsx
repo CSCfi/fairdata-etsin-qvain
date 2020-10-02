@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { Section } from '../general/section/index'
 import TooltipContent from './TooltipContent'
 import RelatedResource from './relatedResource'
@@ -19,12 +19,16 @@ const fieldProps = {
   components,
 }
 
-const History = () => (
-  <Section {...fieldProps}>
-    <RelatedResource />
-    <Infrastructure />
-    <Provenance />
-  </Section>
-)
+class History extends Component {
+  render() {
+    return (
+      <Section {...fieldProps}>
+        <RelatedResource />
+        <Infrastructure />
+        <Provenance />
+      </Section>
+    )
+  }
+}
 
 export default History

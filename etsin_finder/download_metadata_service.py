@@ -11,10 +11,10 @@ from flask import Response, stream_with_context
 import requests
 
 from etsin_finder.app_config import get_metax_api_config
-from etsin_finder.app import app
-from etsin_finder.log import log
-
+from etsin_finder.finder import app
 from etsin_finder.utils import FlaskService, format_url
+
+log = app.logger
 
 
 class DatasetMetadataService(FlaskService):

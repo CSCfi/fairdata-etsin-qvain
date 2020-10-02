@@ -5,21 +5,20 @@ import PropTypes from 'prop-types'
 import { inject, observer } from 'mobx-react'
 import { SectionTitle } from '../general/section'
 import { ContainerLight, ContainerSubsectionBottom } from '../general/card'
-import { HelpIcon } from '../general/modal/form'
+import { HelpIcon } from '../general/form'
 import IDAFilePicker from './ida'
 import ExternalFiles from './external/externalFiles'
 import DataCatalog from './dataCatalog'
 import CumulativeState from './cumulativeState'
 import CumulativeStateV2 from './cumulativeStateV2'
 import { DATA_CATALOG_IDENTIFIER } from '../../../utils/constants'
-import Tooltip from '../general/section/tooltip'
+import Tooltip from '../general/tooltip'
 import FilesInfo from './filesInfo'
 import MetadataModal from './metadataModal'
 import ClearMetadataModal from './metadataModal/clearMetadataModal'
 import SelectedItems from './ida/selectedItems'
 import LegacyFilePicker from './legacy/idaFilePicker'
 import LegacySelectedFiles from './legacy/selectedFiles'
-import FormModal from './ida/forms/formModal'
 
 class Files extends Component {
   static propTypes = {
@@ -30,44 +29,38 @@ class Files extends Component {
     tooltipOpen: false,
   }
 
-  getData = () => {
+  render() {
     const { dataCatalog, isPas } = this.props.Stores.Qvain
     const { metaxApiV2 } = this.props.Stores.Env
+    let data = null
 
     const SelectedItemsComponent = metaxApiV2 ? SelectedItems : LegacySelectedFiles
     const FilePickerComponent = metaxApiV2 ? IDAFilePicker : LegacyFilePicker
 
     if (isPas) {
-      return (
+      data = (
         <>
-          {metaxApiV2 && <FormModal />}
           <ContainerSubsectionBottom>
             <SelectedItemsComponent />
           </ContainerSubsectionBottom>
         </>
       )
-    }
-    if (dataCatalog === DATA_CATALOG_IDENTIFIER.IDA) {
-      return (
+    } else if (dataCatalog === DATA_CATALOG_IDENTIFIER.IDA) {
+      data = (
         <>
-          {metaxApiV2 ? <CumulativeStateV2 /> : <CumulativeState />}
+          { metaxApiV2 ? <CumulativeStateV2 /> : <CumulativeState /> }
           <ContainerSubsectionBottom>
             <FilePickerComponent />
           </ContainerSubsectionBottom>
         </>
       )
-    }
-    if (dataCatalog === DATA_CATALOG_IDENTIFIER.ATT) {
-      return (
+    } else if (dataCatalog === DATA_CATALOG_IDENTIFIER.ATT) {
+      data = (
         <ContainerSubsectionBottom>
           <ExternalFiles />
         </ContainerSubsectionBottom>
       )
     }
-    return null
-  }
-
-  render() {
     return (
       <ContainerLight className="container">
         <SectionTitle>
@@ -93,7 +86,7 @@ class Files extends Component {
           </Tooltip>
         </SectionTitle>
         <DataCatalog />
-        {this.getData()}
+        {data}
         <MetadataModal />
         <ClearMetadataModal />
       </ContainerLight>

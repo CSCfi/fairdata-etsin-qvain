@@ -15,9 +15,14 @@ export class ProjectSelectorBase extends Component {
   }
 
   getOptions() {
-    // IDA projects found, so populate the IDA project dropdown
-    if (this.props.Stores.Auth.user.idaProjects) {
-      return this.props.Stores.Auth.user.idaProjects
+    // IDA groups found, so populate the IDA project dropdown
+    if (this.props.Stores.Auth.user.idaGroups) {
+      return this.props.Stores.Auth.user.idaGroups
+        .filter(group => group.includes('IDA'))
+        .map(group => group.substring(
+          group.indexOf(':') + 1,
+          group.length
+        ))
         .map(projectId => ({ value: projectId, label: projectId }))
     } // ... Otherwise the dropdown will be left empty, but visible, if the user has no IDA projects.
       return undefined
@@ -74,7 +79,7 @@ export class ProjectSelectorBase extends Component {
 }
 
 const ErrorMessage = styled.p`
-  color: ${(props) => props.theme.color.redText};
+  color: red;
 `;
 
 export const ProjectSelect = styled(Select)`

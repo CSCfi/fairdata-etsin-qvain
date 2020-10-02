@@ -97,10 +97,10 @@ class Dataset extends React.Component {
 
       if (latestDate.getTime() > currentDate.getTime()) {
         urlText = 'tombstone.urlToNew'
-        linkToOtherVersion = 'tombstone.linkTextToNew'
+        linkToOtherVersion = 'tombstone.link'
       } else if (latestDate.getTime() < currentDate.getTime()) {
         urlText = 'tombstone.urlToOld'
-        linkToOtherVersion = 'tombstone.linkTextToOld'
+        linkToOtherVersion = 'tombstone.link'
       }
 
       for (const k of datasetVersionSet.keys()) {
@@ -168,20 +168,11 @@ class Dataset extends React.Component {
   }
 
   render() {
-    const { Accessibility, DatasetQuery, Env, Auth } = this.props.Stores
+    const { Accessibility, DatasetQuery, Env } = this.props.Stores
     const { metaxApiV2 } = Env
-    const { cscUserLogged } = Auth
-    const { location } = this.props
 
     // CASE 1: Houston, we have a problem
     if (this.state.error !== false) {
-      // If preview query parameter is enabled, user should try logging in
-      if (location && location.search) {
-        const params = new URLSearchParams(location.search)
-        if (params.get('preview') === '1' && !cscUserLogged) {
-          return <ErrorPage error={{ type: 'cscloginrequired' }} />
-        }
-      }
       return <ErrorPage error={{ type: 'notfound' }} />
     }
 
@@ -306,7 +297,6 @@ Dataset.propTypes = {
   Stores: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
-  location: PropTypes.object.isRequired,
 }
 
 export default inject('Stores')(observer(Dataset))

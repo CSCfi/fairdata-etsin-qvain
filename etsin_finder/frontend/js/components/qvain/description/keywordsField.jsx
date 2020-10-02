@@ -9,11 +9,11 @@ import counterpart from 'counterpart'
 
 import Tooltip from '../../general/tooltipHover'
 import Card from '../general/card'
-import Label from '../general/card/label'
-import ValidationError from '../general/errors/validationError'
-import { LabelLarge, Input } from '../general/modal/form'
+import Label from '../general/label'
+import Button from '../../general/button'
 import { keywordsSchema } from '../utils/formValidation'
-import { ButtonContainer, AddNewButton } from '../general/buttons'
+import ValidationError from '../general/validationError'
+import { LabelLarge } from '../general/form'
 
 class KeywordsField extends Component {
   static propTypes = {
@@ -24,7 +24,7 @@ class KeywordsField extends Component {
     keywordsValidationError: null,
   }
 
-  handleChange = e => {
+  handleChange = (e) => {
     const { setKeywordString } = this.props.Stores.Qvain
     setKeywordString(e.target.value)
     this.setState({ keywordsValidationError: null })
@@ -37,23 +37,23 @@ class KeywordsField extends Component {
       .then(() => {
         this.setState({ keywordsValidationError: null })
       })
-      .catch(err => {
+      .catch((err) => {
         this.setState({ keywordsValidationError: err.errors })
       })
   }
 
-  handleKeywordAdd = e => {
+  handleKeywordAdd = (e) => {
     e.preventDefault()
     const { addKeywordToKeywordArray } = this.props.Stores.Qvain
     addKeywordToKeywordArray()
   }
 
-  handleKeywordRemove = word => {
+  handleKeywordRemove = (word) => {
     const { removeKeyword } = this.props.Stores.Qvain
     removeKeyword(word)
   }
 
-  handleKeyDown = e => {
+  handleKeyDown = (e) => {
     if (e.keyCode === 188 || e.keyCode === 13) {
       this.handleKeywordAdd(e)
     }
@@ -62,7 +62,7 @@ class KeywordsField extends Component {
   render() {
     const { readonly, keywordsArray, keywordString } = this.props.Stores.Qvain
     const { lang } = this.props.Stores.Locale
-    const RenderedKeywords = keywordsArray.map(word => (
+    const RenderedKeywords = keywordsArray.map((word) => (
       <Label color="#007fad" margin="0 0.5em 0.5em 0" key={word}>
         <PaddedWord>{word}</PaddedWord>
         {!readonly && (
@@ -80,9 +80,7 @@ class KeywordsField extends Component {
       <Card>
         <LabelLarge htmlFor="keywordsInput">
           <Tooltip
-            title={counterpart('qvain.description.fieldHelpTexts.requiredToPublish', {
-              locale: lang,
-            })}
+            title={counterpart('qvain.description.fieldHelpTexts.requiredToPublish', { locale: lang })}
             position="right"
           >
             <Translate content="qvain.description.keywords.title" /> *
@@ -96,7 +94,6 @@ class KeywordsField extends Component {
           disabled={readonly}
           value={keywordString}
           onChange={this.handleChange}
-          onKeyDown={this.handleKeyDown}
           type="text"
           attributes={{ placeholder: 'qvain.description.keywords.placeholder' }}
         />
@@ -111,8 +108,24 @@ class KeywordsField extends Component {
   }
 }
 
+const Input = styled.input`
+  width: 100%;
+  border-radius: 3px;
+  border: 1px solid #cccccc;
+  padding: 8px;
+  color: #808080;
+  margin-bottom: 20px;
+`
 const PaddedWord = styled.span`
   padding-right: 10px;
+`
+
+const ButtonContainer = styled.div`
+  text-align: right;
+`
+const AddNewButton = styled(Button)`
+  margin: 0;
+  margin-top: 11px;
 `
 
 export default inject('Stores')(observer(KeywordsField))

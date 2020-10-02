@@ -14,6 +14,9 @@ logger = logging.getLogger()
 
 from .basetest import BaseTest
 
+# Due to circular imports of finder.app, finder needs to be imported before
+# importing qvain_light_utils or the import fails
+import etsin_finder.finder
 from etsin_finder.qvain_light_utils import alter_role_data
 
 from etsin_finder.qvain_light_dataset_schema import (

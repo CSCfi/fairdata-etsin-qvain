@@ -4,14 +4,10 @@ import { inject, observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 import translate from 'counterpart'
 import Card from '../general/card'
-import ValidationError from '../general/errors/validationError'
-import { LabelLarge } from '../general/modal/form'
+import ValidationError from '../general/validationError'
+import { LabelLarge } from '../general/form'
 import { issuedDateSchema } from '../utils/formValidation'
-import {
-  DatePicker,
-  handleDatePickerChange,
-  getDateFormatLocale,
-} from '../general/input/datepicker'
+import { DatePicker, handleDatePickerChange, getDateFormatLocale } from '../general/datepicker'
 import Tooltip from '../../general/tooltipHover'
 
 class IssuedDateField extends React.Component {

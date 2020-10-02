@@ -7,20 +7,13 @@ import styled from 'styled-components'
 
 import getReferenceData from '../utils/getReferenceData'
 import Card from '../general/card'
-import RestrictionGrounds from './restrictionGrounds'
+import RestrictionGrounds from './resctrictionGrounds'
 import { accessTypeSchema } from '../utils/formValidation'
-import ValidationError from '../general/errors/validationError'
+import ValidationError from '../general/validationError'
 import EmbargoExpires from './embargoExpires'
-import {
-  onChange,
-  getCurrentOption,
-  getOptionLabel,
-  getOptionValue,
-  sortOptions,
-  autoSortOptions,
-} from '../utils/select'
+import { onChange, getCurrentValue } from '../utils/select'
 import { AccessType as AccessTypeConstructor } from '../../../stores/view/qvain'
-import { LabelLarge, HelpField } from '../general/modal/form'
+import { LabelLarge, HelpField } from '../general/form'
 import { ACCESS_TYPE_URL } from '../../../utils/constants'
 
 export class AccessType extends Component {
@@ -31,33 +24,42 @@ export class AccessType extends Component {
   }
 
   state = {
-    options: [],
+    options: {
+      en: [],
+      fi: [],
+    },
     accessTypeValidationError: null,
   }
 
   componentDidMount = () => {
     this.promises.push(
       getReferenceData('access_type')
-        .then(res => {
+        .then((res) => {
           const list = res.data.hits.hits
-          let options = list.map(ref => AccessTypeConstructor(ref._source.label, ref._source.uri))
+          let refsEn = list.map((ref) => ({
+            value: ref._source.uri,
+            label: ref._source.label.en,
+          }))
+          let refsFi = list.map((ref) => ({
+            value: ref._source.uri,
+            label: ref._source.label.fi,
+          }))
 
           const user = this.props.Stores.Auth.user
-          const { accessType } = this.props.Stores.Qvain
 
-          if (!user.isUsingRems && !(accessType && accessType.url === ACCESS_TYPE_URL.PERMIT)) {
-            options = options.filter(ref => ref.url !== ACCESS_TYPE_URL.PERMIT)
+          if (!user.isUsingRems) {
+            refsFi = refsFi.filter((ref) => ref.value !== ACCESS_TYPE_URL.RESTRICTED)
+            refsEn = refsEn.filter((ref) => ref.value !== ACCESS_TYPE_URL.RESTRICTED)
           }
 
-          const { lang } = this.props.Stores.Locale
-          sortOptions(AccessTypeConstructor, lang, options)
           this.setState({
-            options,
+            options: {
+              en: refsEn,
+              fi: refsFi,
+            },
           })
-
-          autoSortOptions(this, this.props.Stores.Locale, AccessTypeConstructor)
         })
-        .catch(error => {
+        .catch((error) => {
           if (error.response) {
             // Error response from Metax
             console.log(error.response.data)
@@ -75,12 +77,14 @@ export class AccessType extends Component {
   }
 
   componentWillUnmount() {
-    this.promises.forEach(promise => promise && promise.cancel && promise.cancel())
+    this.promises.forEach((promise) => promise && promise.cancel && promise.cancel())
   }
 
-  handleChange = selection => {
+  handleChange = (selection) => {
+    const { lang } = this.props.Stores.Locale
+    const { options } = this.state
     const { setAccessType } = this.props.Stores.Qvain
-    onChange(setAccessType)(selection)
+    onChange(options, lang, setAccessType, AccessTypeConstructor)(selection)
     this.setState({ accessTypeValidationError: null })
   }
 
@@ -90,15 +94,15 @@ export class AccessType extends Component {
       .then(() => {
         this.setState({ accessTypeValidationError: null })
       })
-      .catch(err => {
+      .catch((err) => {
         this.setState({ accessTypeValidationError: err.errors })
       })
   }
 
   render() {
     const { lang } = this.props.Stores.Locale
-    const { accessType, readonly } = this.props.Stores.Qvain
     const { options } = this.state
+    const { accessType, readonly } = this.props.Stores.Qvain
 
     let permitInfo = null
     if (accessType && accessType.url === ACCESS_TYPE_URL.PERMIT) {
@@ -121,13 +125,13 @@ export class AccessType extends Component {
           component={Select}
           inputId="accessTypeSelect"
           name="accessType"
-          options={options}
+          options={this.state.options[lang]}
           clearable
           isDisabled={readonly}
-          value={getCurrentOption(AccessTypeConstructor, options, accessType)} // access is OPEN by default - 28.5.2019
+          value={
+            getCurrentValue(accessType, options, lang) // access is OPEN by default - 28.5.2019
+          }
           onChange={this.handleChange}
-          getOptionLabel={getOptionLabel(AccessTypeConstructor, lang)}
-          getOptionValue={getOptionValue(AccessTypeConstructor)}
           onBlur={this.handleBlur}
           attributes={{
             placeholder: 'qvain.rightsAndLicenses.accessType.placeholder',

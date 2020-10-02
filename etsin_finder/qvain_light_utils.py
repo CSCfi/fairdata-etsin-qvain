@@ -9,16 +9,13 @@ from etsin_finder.constants import DATA_CATALOG_IDENTIFIERS, ACCESS_TYPES
 from etsin_finder.cr_service import (
     get_catalog_record,
 )
-from etsin_finder.log import log
+from etsin_finder.finder import app
 from etsin_finder.authentication import (
-    get_user_ida_projects,
-    get_user_csc_name,
-    get_user_email,
-    get_user_firstname,
-    get_user_lastname,
+    get_user_ida_groups, get_user_csc_name, get_user_email, get_user_firstname, get_user_lastname,
     is_authenticated
 )
 
+log = app.logger
 
 def clean_empty_keyvalues_from_dict(d):
     """Cleans all key value pairs from the object that have empty values, like [], {} and ''.
@@ -86,61 +83,6 @@ def alter_role_data(actor_list=[], role="all"):
     return actors
 
 
-def _organization_array_to_object(organizations):
-    converted = organizations[0]
-    converted["@type"] = "Organization"
-    for sub_organization in organizations[1:]:
-        sub_organization["is_part_of"] = converted
-        sub_organization["@type"] = "Organization"
-        converted = sub_organization
-    return converted
-
-
-def _funding_agency_to_object(funding_agency):
-    converted = _organization_array_to_object(funding_agency["organization"])
-    if funding_agency.get("contributorTypes", []):
-        converted["contributor_type"] = [_contributor_type_to_metax_concept(contributor_type)
-                                         for contributor_type in funding_agency.get("contributorTypes")]
-    log.debug(converted)
-    return converted
-
-
-def _contributor_type_to_metax_concept(contributor_type):
-    return {
-        "identifier": contributor_type.get("identifier"),
-        "pref_label": contributor_type.get("label"),
-        "definition": contributor_type.get("definition"),
-        "in_scheme": contributor_type.get("inScheme")
-    }
-
-
-def alter_projects_to_metax(projects):
-    """Convert project objects from frontend to comply with the Metax schema.
-
-    Arguments:
-        project (list<dict>): List of project objects, containing details and organizations
-
-    Returns:
-        list<dict>: List of project objects in Metax schema
-
-    """
-    output = []
-    for project in projects:
-        details = project.get("details", {})
-        metax_project = {
-            "name": details.get("title"),
-            "identifier": details.get("identifier"),
-            "has_funder_identifier": details.get("fundingIdentifier"),
-            "funder_type": details.get("funderType"),
-            "source_organization": [_organization_array_to_object(organization)
-                                    for organization in project.get("organizations", [])],
-            "has_funding_agency": [_funding_agency_to_object(funding_agency)
-                                   for funding_agency in project.get("fundingAgencies", [])]
-        }
-        output.append(metax_project)
-    return output
-
-
 def other_identifiers_to_metax(identifiers_list):
     """Convert other identifiers to comply with Metax schema.
 
@@ -174,7 +116,7 @@ def access_rights_to_metax(data):
     license = data.get('license', [])
     for l in license:
         license_id = l.get('identifier')
-        license_name_en = l.get('name', {}).get('en') or ''
+        license_name_en = l.get('name', {}).get('en')
         if license_id and not license_name_en.startswith('Other (URL)'):
             license_object = {}
             license_object["identifier"] = license_id
@@ -306,7 +248,6 @@ def data_to_metax(data, metadata_provider_org, metadata_provider_user):
             "remote_resources": remote_resources_data_to_metax(data.get("remote_resources")) if data.get("dataCatalog") == DATA_CATALOG_IDENTIFIERS.get('att') else "",
             "files": files_data_to_metax(data.get("files")) if data.get("dataCatalog") == DATA_CATALOG_IDENTIFIERS.get('ida') else "",
             "directories": directories_data_to_metax(data.get("directories")) if data.get("dataCatalog") == DATA_CATALOG_IDENTIFIERS.get('ida') else "",
-            "is_output_of": alter_projects_to_metax(data.get("projects")),
             "relation": data.get("relation"),
             "provenance": provenances,
             "infrastructure": _to_metax_infrastructure(data.get("infrastructure")),
@@ -456,7 +397,6 @@ def edited_data_to_metax(data, original):
         "directories": directories_data_to_metax(data.get("directories")) if data.get("dataCatalog") == DATA_CATALOG_IDENTIFIERS.get('ida') else "",
         "infrastructure": _to_metax_infrastructure(data.get("infrastructure")),
         "spatial": data.get("spatial"),
-        "is_output_of": alter_projects_to_metax(data.get("projects")),
         "relation": data.get("relation"),
         "provenance": provenances,
         "temporal": data.get("temporal")
@@ -468,6 +408,25 @@ def edited_data_to_metax(data, original):
     }
     return clean_empty_keyvalues_from_dict(edited_data)
 
+def get_user_ida_projects():
+    """List IDA projects for current user without the prefix.
+
+    Returns:
+        list(str): List of projects.
+
+    """
+    user_ida_groups = get_user_ida_groups()
+    if user_ida_groups is None:
+        log.error('Could not get user IDA projects.\n')
+        return None
+
+    try:
+        return [project.split(":")[1] for project in user_ida_groups]
+    except IndexError as e:
+        log.error('Index error while parsing user IDA projects:\n{0}'.format(e))
+        return None
+
+
 def check_if_data_in_user_IDA_project(data):
     """Check if the user creating a dataset belongs to the project that the files/folders belongs to.
 
@@ -478,31 +437,37 @@ def check_if_data_in_user_IDA_project(data):
         bool: True if data belongs to user, and False is not.
 
     """
-    user_ida_projects = get_user_ida_projects()
+    user_ida_projects = get_user_ida_groups()
 
     # If user_ida_projects do not exist, there cannot be any data permission violations, so return True in this case
     if user_ida_projects is None:
         return True
 
-    if not user_ida_projects:
-        log.warning('Could not get user IDA projects.')
+    # Check IDA project permissions, if user_ida_projects exist
+    try:
+        user_ida_projects_ids = [project.split(":")[1] for project in user_ida_projects]
+    except IndexError as e:
+        log.error('Index error while parsing user IDA projects:\n{0}'.format(e))
         return False
-    log.debug('User IDA projects: {0}'.format(user_ida_projects))
+    if not user_ida_projects:
+        log.warning('Could not get user IDA groups.')
+        return False
+    log.debug('User IDA groups: {0}'.format(user_ida_projects_ids))
     if "files" or "directories" in data:
         files = data.get("files") if "files" in data else []
         directories = data.get("directories") if "directories" in data else []
         if files:
             for file in files:
                 identifier = file.get("projectIdentifier")
-                if identifier not in user_ida_projects:
-                    log.warning('File projectIdentifier not in user projects.\nidentifier: {0}, user_ida_projects: {1}'
-                                .format(identifier, user_ida_projects))
+                if identifier not in user_ida_projects_ids:
+                    log.warning('File projectIdentifier not in user projects.\nidentifier: {0}, user_ida_projects_ids: {1}'
+                                .format(identifier, user_ida_projects_ids))
                     return False
         if directories:
             for directory in directories:
                 identifier = directory.get("projectIdentifier")
-                if identifier not in user_ida_projects:
-                    log.warning('Directory projectIdentifier not in user projects.\nidentifier: {0}, user_ida_projects: {1}'
-                                .format(identifier, user_ida_projects))
+                if identifier not in user_ida_projects_ids:
+                    log.warning('Directory projectIdentifier not in user projects.\nidentifier: {0}, user_ida_projects_ids: {1}'
+                                .format(identifier, user_ida_projects_ids))
                     return False
     return True

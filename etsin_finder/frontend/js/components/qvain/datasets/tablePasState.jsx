@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import Translate from 'react-translate-component'
 
 import { PRESERVATION_STATE } from '../../../utils/constants'
-import Label from '../general/card/label'
+import Label from '../general/label'
 
 const TablePasState = ({ preservationState }) => {
   let text

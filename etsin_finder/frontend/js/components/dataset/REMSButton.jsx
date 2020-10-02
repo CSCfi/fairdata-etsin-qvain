@@ -28,7 +28,7 @@ const REMSButton = props => {
         <Button
           id="rems-button-draft"
           onClick={props.onClick}
-          color="yellow"
+          color={etsinTheme.color.yellow}
           noMargin
         >
           {props.loading ? (
@@ -47,7 +47,7 @@ const REMSButton = props => {
         <Button
           id="rems-button-submitted"
           onClick={props.onClick}
-          color="yellow"
+          color={etsinTheme.color.yellow}
           noMargin
         >
           {props.loading ? (

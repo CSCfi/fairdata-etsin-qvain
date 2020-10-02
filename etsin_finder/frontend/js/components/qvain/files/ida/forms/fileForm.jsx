@@ -5,9 +5,9 @@ import Translate from 'react-translate-component'
 import styled from 'styled-components'
 
 import { SaveButton, CancelButton } from '../../../general/buttons'
-import { Label, Input, Textarea, CustomSelect } from '../../../general/modal/form'
+import { Label, Input, Textarea, CustomSelect } from '../../../general/form'
 import { Container } from '../../../general/card'
-import ValidationError from '../../../general/errors/validationError'
+import ValidationError from '../../../general/validationError'
 import { getLocalizedOptions } from '../../../utils/getReferenceData'
 import {
   fileSchema,
@@ -253,12 +253,7 @@ class FileForm extends Component {
             onClick={this.handleCancel}
             content="qvain.common.cancel"
           />
-          <Translate
-            component={SaveButton}
-            disabled={readonly}
-            onClick={this.handleSave}
-            content="qvain.common.save"
-          />
+          <Translate component={SaveButton} onClick={this.handleSave} content="qvain.common.save" />
         </Buttons>
       </FileContainer>
     )

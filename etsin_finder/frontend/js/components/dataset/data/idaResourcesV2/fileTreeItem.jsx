@@ -29,7 +29,7 @@ import {
 const download = (datasetIdentifier, item) => {
   const handle = window.open(
     `/api/dl?cr_id=${datasetIdentifier}${
-    item.type === 'directory' ? `&dir_id=${item.identifier}` : `&file_id=${item.identifier}`
+      item.type === 'directory' ? `&dir_id=${item.identifier}` : `&file_id=${item.identifier}`
     }`
   )
   if (handle == null) {
@@ -39,7 +39,7 @@ const download = (datasetIdentifier, item) => {
 
 const FileTreeItemBase = ({ treeProps, item, level }) => {
   const { Files, directoryView, extraProps } = treeProps
-  const { allowDownload } = extraProps
+  const { allowInfo, allowDownload } = extraProps
   const { setInInfo, datasetIdentifier } = Files
   let content = null
   const name = item.name
@@ -80,6 +80,7 @@ const FileTreeItemBase = ({ treeProps, item, level }) => {
       component={ClickableIcon}
       icon={faInfoCircle}
       color={infoColor}
+      disabled={!allowInfo}
       disabledColor="gray"
       disabledOpacity={0.4}
       onClick={() => setInInfo(item)}

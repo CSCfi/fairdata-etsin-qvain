@@ -1,7 +1,11 @@
 import { v4 as uuidv4 } from 'uuid'
-import { observable, action } from 'mobx'
-import Spatials from './qvain.spatials'
-import UsedEntities from './qvain.usedEntities'
+import cloneDeep from 'lodash.clonedeep'
+import { toJS, observable, action } from 'mobx'
+import Spatials, { SpatialModel } from './qvain.spatials'
+import RelatedResources, {
+  fillUndefinedMultiLangProp,
+  RelationType,
+} from './qvain.relatedResources'
 import Field from './qvain.field'
 import { ActorsRef } from './qvain.actors'
 import { ROLE } from '../../utils/constants'
@@ -13,9 +17,9 @@ const Provenance = ({
   outcomeDescription = { fi: '', en: '', und: '' },
   startDate = undefined,
   endDate = undefined,
-  spatials, // aka location
+  spatials = [], // aka location
   outcome = undefined,
-  usedEntities,
+  relatedResources = [], // aka usedEntity
   associations = undefined,
   lifecycle = undefined,
 }) => ({
@@ -27,46 +31,39 @@ const Provenance = ({
   endDate,
   spatials,
   outcome,
-  usedEntities,
+  relatedResources,
   associations,
   lifecycle,
 })
 
 class Provenances extends Field {
   constructor(Qvain) {
-    super(Qvain, Provenance, ProvenanceModel, 'provenances', [
-      'associations',
-      'usedEntities',
-      'spatials',
-    ])
-    this.Qvain = Qvain
+    super(Qvain, Provenance, 'provenances', ['associations'])
+    this.Spatials = new Spatials(this)
+    this.RelatedResources = new RelatedResources(this)
   }
+
+  @observable spatials = []
+
+  @observable relatedResources = []
 
   @observable selectedActor = undefined
 
   @action saveAndClearSpatials = () => {
+    this.inEdit.spatials = cloneDeep(toJS(this.spatials))
+    this.spatials = []
+    this.relatedResources = []
     this.selectedActor = undefined
   }
 
-  @action reset() {
-    super.reset()
-    this.selectedActor = undefined
-  }
-
-  @action create() {
+  @action create = () => {
     this.setChanged(false)
     this.editMode = false
-    this.inEdit = new Provenance({
-      associations: new ActorsRef({
-        actors: this.Qvain.Actors,
-      }),
-      usedEntities: new UsedEntities(this.Qvain),
-      spatials: new Spatials(this.Qvain),
-    })
+    this.inEdit = new Provenance({ associations: new ActorsRef({ actors: this.Parent.Actors }) })
   }
 
   toBackend = () =>
-    this.storage.map(p => ({
+    this.Parent.provenances.map(p => ({
       title: p.name,
       description: p.description,
       outcome_description: p.outcomeDescription,
@@ -77,9 +74,11 @@ class Provenances extends Field {
               end_date: new Date(p.endDate).toISOString(),
             }
           : undefined, // TODO: move this conversion to Temporal when it's implemented
-      spatial: p.spatials.toBackend()[0],
+      spatial: p.spatials.map(this.Spatials.spatialToBackend)[0],
       event_outcome: { identifier: (p.outcome || {}).url },
-      used_entity: p.usedEntities.toBackend(),
+      used_entity: p.relatedResources.map(
+        rr => this.RelatedResources.relatedResourceToBackend(rr).entity
+      ),
       was_associated_with: p.associations.toBackend,
       lifecycle_event: { identifier: (p.lifecycle || {}).url },
     }))
@@ -95,20 +94,20 @@ export const Lifecycle = (name, url) => ({
   url,
 })
 
-export const ProvenanceModel = (provenanceData, Qvain) => ({
+export const ProvenanceModel = (Parent, provenanceData) => ({
   uiid: uuidv4(),
   name: parseTranslationField(provenanceData.title),
   description: parseTranslationField(provenanceData.description),
   outcomeDescription: parseTranslationField(provenanceData.outcome_description),
   startDate: (provenanceData.temporal || {}).start_date,
   endDate: (provenanceData.temporal || {}).end_date,
-  spatials: new Spatials(Qvain, provenanceData.spatial ? [provenanceData.spatial] : []),
+  spatials: provenanceData.spatial ? [SpatialModel(provenanceData.spatial)] : [],
   outcome: provenanceData.event_outcome
     ? Outcome(provenanceData.event_outcome.pref_label, provenanceData.event_outcome.identifier)
     : undefined,
-  usedEntities: new UsedEntities(Qvain, provenanceData.used_entity),
+  relatedResources: (provenanceData.used_entity || []).map(ue => UsedEntityModel(ue)),
   associations: new ActorsRef({
-    actors: Qvain.Actors,
+    actors: Parent.Actors,
     actorsFromBackend: provenanceData.was_associated_with,
     roles: [ROLE.PROVENANCE],
   }),
@@ -118,6 +117,14 @@ export const ProvenanceModel = (provenanceData, Qvain) => ({
         provenanceData.lifecycle_event.identifier
       )
     : undefined,
+})
+
+export const UsedEntityModel = ue => ({
+  uiid: uuidv4(),
+  name: fillUndefinedMultiLangProp(ue.title),
+  description: fillUndefinedMultiLangProp(ue.description),
+  identifier: ue.identifier,
+  entityType: ue.type ? RelationType(ue.type.pref_label, ue.type.identifier) : undefined,
 })
 
 const parseTranslationField = value => {

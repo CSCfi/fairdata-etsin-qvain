@@ -27,6 +27,7 @@ class IdaResources extends Component {
       this.state = {
         results,
         described: parsed,
+        allowInfo: access.restrictions.allowDataIdaInfoButton,
         allowDownload: access.restrictions.allowDataIdaDownloadButton,
         fileDirTree,
         currentFolder: fileDirTree,
@@ -263,6 +264,7 @@ class IdaResources extends Component {
           cr_id={this.state.results.identifier}
           data={this.state.currentFolder}
           allowDownload={this.state.allowDownload}
+          allowInfo={this.state.allowInfo}
           changeFolder={this.changeFolder}
           isRemote={false}
           fields={{ size: true, category: true, name: true, downloadBtn: true, infoBtn: true }}

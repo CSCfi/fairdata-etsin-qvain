@@ -1,13 +1,13 @@
 {
-  /**
-   * This file is part of the Etsin service
-   *
-   * Copyright 2017-2018 Ministry of Education and Culture, Finland
-   *
-   *
-   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
-   * @license   MIT
-   */
+/**
+ * This file is part of the Etsin service
+ *
+ * Copyright 2017-2018 Ministry of Education and Culture, Finland
+ *
+ *
+ * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
+ * @license   MIT
+ */
 }
 
 import React, { Component } from 'react'
@@ -31,8 +31,8 @@ export default class DropdownMenu extends Component {
     const currentTarget = e.currentTarget
     setTimeout(() => {
       if (
-        !currentTarget.contains(document.activeElement) &&
-        this.button.current !== document.activeElement
+        !currentTarget.contains(document.activeElement)
+        && this.button.current !== document.activeElement
       ) {
         this.close()
       }
@@ -60,7 +60,8 @@ export default class DropdownMenu extends Component {
     return (
       <MenuContainer>
         <ButtonContainer>
-          {this.props.transparent ? (
+          {this.props.transparent ?
+          (
             <CustomTransparentButton
               role="button"
               color="primary"
@@ -71,7 +72,8 @@ export default class DropdownMenu extends Component {
             >
               {this.props.buttonContent}
             </CustomTransparentButton>
-          ) : (
+          ) :
+          (
             <CustomButton
               role="button"
               color="primary"
@@ -113,9 +115,8 @@ const ButtonContainer = styled.div`
 `
 
 const CustomTransparentButton = styled(TransparentButton)`
-  ${p =>
-    p.open &&
-    `
+  ${p => p.open
+    && `
     &:after {
       content: '';
       position: absolute;

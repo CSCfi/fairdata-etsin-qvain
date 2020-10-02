@@ -20,6 +20,7 @@ const downloadAll = identifier => {
 
 function IdaResources(props) {
   const { restrictions } = props.Stores.Access
+  const allowInfo = restrictions.allowDataIdaInfoButton
   const allowDownload =
     props.dataset.data_catalog.catalog_json.identifier !== 'urn:nbn:fi:att:data-catalog-pas' &&
     restrictions.allowDataIdaDownloadButton
@@ -73,7 +74,7 @@ function IdaResources(props) {
         </HeaderButton>
       </Header>
 
-      <Tree allowDownload={allowDownload} />
+      <Tree allowDownload={allowDownload} allowInfo={allowInfo} />
       {inInfo && <Info {...infoProps} />}
     </>
   )

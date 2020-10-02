@@ -80,11 +80,7 @@ class RemoveModal extends Component {
         <TableButton id="cancel-remove-dataset" disabled={this.state.loading} onClick={onClose}>
           <Translate content="qvain.datasets.remove.confirm.cancel" />
         </TableButton>
-        <DangerButton
-          id="confirm-remove-dataset"
-          disabled={this.state.loading}
-          onClick={() => this.handleRemove()}
-        >
+        <DangerButton id="confirm-remove-dataset" disabled={this.state.loading} onClick={() => this.handleRemove()}>
           <Translate content={`qvain.datasets.remove.confirm.${removeKey}.ok`} />
         </DangerButton>
       </Modal>

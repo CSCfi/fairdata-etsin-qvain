@@ -1,50 +1,76 @@
 import React, { Component } from 'react'
 import { inject, observer } from 'mobx-react'
-import { withTheme } from 'styled-components'
+import Select from 'react-select'
+import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
-import CreatableSelect from 'react-select/creatable'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTimes } from '@fortawesome/free-solid-svg-icons'
 
 import getReferenceData from '../utils/getReferenceData'
 import Card from '../general/card'
-import { LabelLarge } from '../general/modal/form'
+import Button from '../../general/button'
+import { Label, Input, LabelLarge } from '../general/form'
 import { License as LicenseConstructor } from '../../../stores/view/qvain'
+import { onChange, getCurrentValue } from '../utils/select'
 import { licenseSchema } from '../utils/formValidation'
-import {
-  onChangeMulti,
-  getCurrentOption,
-  getOptionLabel,
-  getOptionValue,
-  sortOptions,
-  autoSortOptions,
-} from '../utils/select'
-import { ValidationErrors } from '../general/errors/validationError'
+import ValidationError from '../general/validationError'
+
+const otherOptValue = 'other'
+
+const otherOptLabel = locale => {
+  const labels = {
+    en: 'Other (URL)',
+    fi: 'Muu (URL)',
+  }
+  return labels[locale]
+}
+
+const otherOpt = locale => ({
+  value: otherOptValue,
+  label: otherOptLabel(locale),
+})
 
 export class License extends Component {
   promises = []
 
   static propTypes = {
     Stores: PropTypes.object.isRequired,
-    theme: PropTypes.object.isRequired,
   }
 
   state = {
-    options: [],
-    licenseErrors: {},
+    options: {},
+    errorMessage: undefined,
   }
 
   componentDidMount = () => {
+    const { license, setLicenseName } = this.props.Stores.Qvain
     this.promises.push(
       getReferenceData('license')
         .then(res => {
           const list = res.data.hits.hits
-          const options = list.map(ref => LicenseConstructor(ref._source.label, ref._source.uri))
-          const { lang } = this.props.Stores.Locale
-          sortOptions(LicenseConstructor, lang, options)
+          const refsEn = list.map(ref => ({
+            value: ref._source.uri,
+            label: ref._source.label.en,
+          }))
+          const refsFi = list.map(ref => ({
+            value: ref._source.uri,
+            label: ref._source.label.fi || ref._source.label.en, // use english label when finnish is not available
+          }))
+          refsEn.push(otherOpt('en'))
+          refsFi.push(otherOpt('fi'))
           this.setState({
-            options,
+            options: {
+              en: refsEn,
+              fi: refsFi,
+            },
           })
-          autoSortOptions(this, this.props.Stores.Locale, LicenseConstructor)
+          if (license && license.identifier) {
+            setLicenseName({
+              en: refsEn.find(opt => opt.value === license.identifier).label,
+              fi: refsFi.find(opt => opt.value === license.identifier).label,
+            })
+          }
         })
         .catch(error => {
           if (error.response) {
@@ -71,53 +97,43 @@ export class License extends Component {
     this.props.Stores.Qvain.removeLicense(license)
   }
 
-  validateLicenses = () => {
-    const { licenseArray } = this.props.Stores.Qvain
-    const licenseErrors = {}
-    licenseArray.forEach(license => {
-      const { identifier, name } = license
-      const validationObject = { identifier, name, otherLicenseUrl: identifier }
-      try {
-        licenseSchema.validateSync(validationObject)
-      } catch (err) {
-        licenseErrors[identifier] = err.message
-      }
-    })
-    this.setState({ licenseErrors })
+  handleOnBlur = () => {
+    const { otherLicenseUrl, idaPickerOpen } = this.props.Stores.Qvain
+    const { identifier, name } = this.props.Stores.Qvain.license
+    const validationObject = { idaPickerOpen, identifier, name, otherLicenseUrl }
+    licenseSchema
+      .validate(validationObject)
+      .then(() => {
+        this.setState({
+          errorMessage: undefined,
+        })
+      })
+      .catch(err => {
+        this.setState({
+          errorMessage: err.errors,
+        })
+      })
   }
-
-  onChange = values => {
-    const { setLicenseArray } = this.props.Stores.Qvain
-    onChangeMulti(setLicenseArray)(values)
-    this.validateLicenses()
-  }
-
-  createLicense = url =>
-    LicenseConstructor({ fi: `Muu (URL): ${url}`, en: `Other (URL): ${url}` }, url)
 
   render() {
-    const { options, licenseErrors } = this.state
+    const { options, errorMessage } = this.state
     const { lang } = this.props.Stores.Locale
-    const { licenseArray, readonly } = this.props.Stores.Qvain
+    const {
+      license,
+      setLicense,
+      otherLicenseUrl,
+      licenseArray,
+      addLicense,
+      removeLicense,
+      readonly,
+    } = this.props.Stores.Qvain
 
-    // allow wrap for long license labels
-    const styles = {
-      multiValue: (style, state) => {
-        if (this.state.licenseErrors[state.data.identifier]) {
-          return {
-            ...style,
-            background: this.props.theme.color.error,
-            color: 'white',
-          }
-        }
-        return style
-      },
-      multiValueLabel: style => ({
-        ...style,
-        whiteSpace: 'normal',
-        color: 'inherit',
-      }),
-    }
+    const licenses = licenseArray.map(l => (
+      <LabelTemp color="#007fad" margin="0 0.5em 0.5em 0" key={l.identifier}>
+        <PaddedWord>{l.name[lang]}</PaddedWord>
+        <FontAwesomeIcon onClick={() => removeLicense(l)} icon={faTimes} size="xs" />
+      </LabelTemp>
+    ))
 
     return (
       <Card>
@@ -125,31 +141,67 @@ export class License extends Component {
           <Translate content="qvain.rightsAndLicenses.license.title" />
         </LabelLarge>
         <Translate component="p" content="qvain.rightsAndLicenses.license.infoText" />
+        {licenses}
         <Translate
-          component={CreatableSelect}
+          component={Select}
           inputId="licenseSelect"
           name="license"
           isDisabled={readonly}
-          getOptionLabel={getOptionLabel(LicenseConstructor, lang)}
-          getOptionValue={getOptionValue(LicenseConstructor)}
-          value={getCurrentOption(LicenseConstructor, options, licenseArray)}
-          options={options}
-          isMulti
-          isClearable={false}
-          onChange={this.onChange}
-          createOptionPosition="first"
-          getNewOptionData={this.createLicense}
+          value={getCurrentValue(license, options, lang)}
+          options={options[lang]}
+          isClearable
+          onChange={onChange(options, lang, setLicense, LicenseConstructor)}
+          onBlur={() => {}}
           attributes={{ placeholder: 'qvain.rightsAndLicenses.license.placeholder' }}
-          styles={styles}
         />
-        {licenseErrors && (
-          <ValidationErrors
-            errors={Object.entries(licenseErrors).map(([url, err]) => `${url}: ${err}`)}
-          />
+        {license && license.identifier === otherOptValue && (
+          <>
+            <Translate
+              htmlFor="otherLicenseURL"
+              component={Label}
+              content="qvain.rightsAndLicenses.license.other.label"
+              style={{ marginTop: '20px' }}
+            />
+            <Input
+              id="otherLicenseURL"
+              disabled={readonly}
+              value={otherLicenseUrl}
+              onChange={event => {
+                this.props.Stores.Qvain.otherLicenseUrl = event.target.value
+              }}
+              placeholder="https://"
+              onBlur={this.handleOnBlur}
+            />
+            {errorMessage && <ValidationError>{errorMessage}</ValidationError>}
+            <Translate component="p" content="qvain.rightsAndLicenses.license.other.help" />
+          </>
         )}
+        <ButtonContainer>
+          <AddNewButton type="button" onClick={() => addLicense(license)} disabled={readonly}>
+            <Translate content="qvain.rightsAndLicenses.license.addButton" />
+          </AddNewButton>
+        </ButtonContainer>
       </Card>
     )
   }
 }
 
-export default withTheme(inject('Stores')(observer(License)))
+const LabelTemp = styled.div`
+  padding: 0.3em 0.6em 0.4em;
+  border-radius: 0.2em;
+  background: #007fad;
+  color: white;
+  display: inline-block;
+  margin: 0 0.5em 0.5em 0;
+`
+const PaddedWord = styled.span`
+  padding-right: 10px;
+`
+const ButtonContainer = styled.div`
+  text-align: right;
+`
+const AddNewButton = styled(Button)`
+  margin: 0;
+  margin-top: 11px;
+`
+export default inject('Stores')(observer(License))

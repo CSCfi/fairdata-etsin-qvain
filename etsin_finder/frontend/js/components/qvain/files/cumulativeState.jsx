@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { inject, observer } from 'mobx-react'
-import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import axios from 'axios'
@@ -9,10 +8,15 @@ import { ContainerSubsectionBottom } from '../general/card'
 import { CUMULATIVE_STATE } from '../../../utils/constants'
 import { getResponseError } from '../utils/responseError'
 import urls from '../utils/urls'
-import { LabelLarge, FormField, RadioInput, Label, HelpField } from '../general/modal/form'
+import { LabelLarge, FormField, RadioInput, Label, HelpField } from '../general/form'
 
 import Modal from '../../general/modal'
-import { TableButton, DangerButton } from '../general/buttons'
+import {
+  TableButton,
+  DangerButton,
+  // CumulativeStateButton,
+  CumulativeStateButtonText,
+} from '../general/buttons'
 
 import { Button as CumulativeStateButton } from '../../general/button'
 
@@ -219,12 +223,5 @@ class CumulativeState extends Component {
     )
   }
 }
-
-export const CumulativeStateButtonText = styled.span`
-  text-align: center;
-  color: inherit;
-  font-weight: 400;
-  text-transform: none;
-`
 
 export default inject('Stores')(observer(CumulativeState))

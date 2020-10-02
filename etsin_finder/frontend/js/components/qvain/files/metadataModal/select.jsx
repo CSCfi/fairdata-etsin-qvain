@@ -3,13 +3,15 @@ import translate from 'counterpart'
 import PropTypes from 'prop-types'
 
 import Select from 'react-select'
-import { Label } from '../../general/modal/form'
+import { Label } from '../../general/form'
 
-export const MetadataSelect = props => {
+export const MetadataSelect = (props) => {
   const noOptions = !props.options || props.options.length === 0
   return (
-    <Label htmlFor={props.inputId} style={labelStyle}>
-      {props.children || translate(`qvain.files.metadataModal.fields.${props.field}`)}
+    <Label
+      htmlFor={props.inputId}
+      style={labelStyle}
+    >{props.children || translate(`qvain.files.metadataModal.fields.${props.field}`)}
       <Select
         styles={!props.selectStyles && selectStyles}
         menuPlacement="auto"
@@ -17,10 +19,9 @@ export const MetadataSelect = props => {
         menuShouldScrollIntoView={false}
         name={props.inputId}
         isDisabled={noOptions}
-        placeholder={
-          noOptions
-            ? translate('qvain.files.metadataModal.placeholders.noOptions')
-            : props.placeholder || translate('qvain.files.metadataModal.placeholders.selectOption')
+        placeholder={noOptions ?
+          translate('qvain.files.metadataModal.placeholders.noOptions') :
+          props.placeholder || translate('qvain.files.metadataModal.placeholders.selectOption')
         }
         {...props}
       />
@@ -31,8 +32,9 @@ export const MetadataSelect = props => {
 MetadataSelect.propTypes = {
   ...Select.propTypes,
   selectStyles: PropTypes.object,
-  field: PropTypes.string,
+  field: PropTypes.string
 }
+
 
 MetadataSelect.defaultProps = {
   selectStyles: null,
@@ -40,37 +42,37 @@ MetadataSelect.defaultProps = {
 }
 
 const selectStyles = {
-  control: provided => ({
-    ...provided,
+  control: (provided) => ({
+      ...provided,
   }),
-  option: provided => ({
+  option: (provided) => ({
     ...provided,
     padding: '2px 8px',
-    borderBottom: '1px solid #eee',
-  }),
+    borderBottom: '1px solid #eee'
+}),
 }
 
 export const selectStylesNarrow = {
   container: () => ({
     minWidth: '10em',
   }),
-  control: provided => ({
-    ...provided,
-    minWidth: '10em',
-    flexGrow: 1,
-    marginBottom: 0,
+  control: (provided) => ({
+      ...provided,
+      minWidth: '10em',
+      flexGrow: 1,
+      marginBottom: 0,
   }),
-  option: provided => ({
+  option: (provided) => ({
     ...provided,
     padding: '2px 8px',
-    borderBottom: '1px solid #eee',
-  }),
+    borderBottom: '1px solid #eee'
+}),
 }
 
 export const labelStyle = {
   flexGrow: 1,
   flexBasis: '10em',
-  marginTop: '0.2rem',
+  marginTop: '0.2rem'
 }
 
 export default MetadataSelect
