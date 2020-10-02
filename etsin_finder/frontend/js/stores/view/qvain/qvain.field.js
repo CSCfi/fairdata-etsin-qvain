@@ -122,7 +122,7 @@ class Field {
   }
 
   @action
-  fromBackend = (data, Qvain) => {
+  fromBackendBase = (data, Qvain) => {
     this.reset()
     if (data !== undefined) {
       data.forEach(element => {

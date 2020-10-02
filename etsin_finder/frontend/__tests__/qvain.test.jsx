@@ -46,6 +46,12 @@ jest.mock('uuid', original => {
   }
 })
 
+jest.mock('moment', original => {
+  return () => ({
+    format: format => `moment formatted date: ${format}`,
+  })
+})
+
 const getStores = () => {
   Env.setMetaxApiV2(true)
   return {

@@ -106,7 +106,7 @@ class Provenances extends Field {
   }
 
   @action removeActorFromRefs = actor => {
-    this.Provenances.storage.forEach(p => p.associations.removeActorRef(actor.uiid))
+    this.storage.forEach(p => p.associations.removeActorRef(actor.uiid))
   }
 }
 
