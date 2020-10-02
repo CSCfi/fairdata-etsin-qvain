@@ -1,26 +1,40 @@
 import React from 'react'
 import styled from 'styled-components'
-import Title from './title'
-import LoginButton from './loginButton'
+import Description from './description'
+import Graphics from './graphics'
 
 const landingPage = () => (
-  <Container>
-    <Title />
-    <Divider />
-    <LoginButton />
-  </Container>
+  <div className="container">
+    <Flex>
+      <Part>
+        <Description />
+      </Part>
+      <Part>
+        <Graphics />
+      </Part>
+    </Flex>
+  </div>
 )
 
-const Container = styled.div`
-  margin: 1em;
-  padding: 4em;
-  background-color: #e7e9ed;
-`
+const Part = styled.div``
 
-const Divider = styled.hr`
-  border-color: #ababab;
-  border-top: 1px;
-  margin: 0.5em 0 2em 0;
+const Flex = styled.div`
+  margin: 5.25rem -0.75rem 1.25rem 0.25rem;
+  display: flex;
+
+  > * {
+    width: calc(50% - 0.75rem);
+    flex-grow: 1;
+    margin: 0.75rem;
+  }
+
+  @media screen and (max-width: ${p => p.theme.breakpoints.lg}) {
+    margin-top: 1.25rem;
+    flex-wrap: wrap;
+    > * {
+      width: 100%;
+    }
+  }
 `
 
 export default landingPage
