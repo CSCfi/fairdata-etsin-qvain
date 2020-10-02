@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import Image from './image'
 import { opacify } from 'polished'
+import Image from './image'
 
 export const Box = ({ children, title, arrow, blue, image, image2x, className, style }) => {
   const Div = blue ? BoxDivBlue : BoxDiv
