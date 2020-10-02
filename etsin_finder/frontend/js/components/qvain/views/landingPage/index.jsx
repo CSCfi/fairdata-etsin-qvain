@@ -21,13 +21,11 @@ const Part = styled.div``
 const Flex = styled.div`
   margin: 5.25rem -0.75rem 1.25rem 0.25rem;
   display: flex;
-
   > * {
     width: calc(50% - 0.75rem);
     flex-grow: 1;
     margin: 0.75rem;
   }
-
   @media screen and (max-width: ${p => p.theme.breakpoints.lg}) {
     margin-top: 1.25rem;
     flex-wrap: wrap;

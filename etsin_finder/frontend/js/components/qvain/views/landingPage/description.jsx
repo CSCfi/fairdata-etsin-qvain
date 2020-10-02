@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import { inject, observer } from 'mobx-react'
 import PropTypes from 'prop-types'
-import { FAIRDATA_WEBSITE_URL } from '../../../utils/constants'
+import { FAIRDATA_WEBSITE_URL } from '../../../../utils/constants'
 import LoginButton from './loginButton'
 
 const Description = props => {
@@ -35,7 +35,7 @@ const LoginButtonContainer = styled.div`
 const Header = styled.h1`
   font-weight: bold;
   line-height: 1.2;
-  font.size: 36px;
+  font-size: 36px;
 `
 
 const Brief = styled.h5`
