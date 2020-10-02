@@ -172,6 +172,7 @@ const FundingAgencyForm = props => {
       <ErrorMessages errors={formData.errors.organization} />
       <Expand
         title={
+          // eslint-disable-next-line react/jsx-wrap-multilines
           <Translate
             component="h3"
             content="qvain.project.inputs.fundingAgency.contributorType.title"
