@@ -32,6 +32,7 @@ export const ActorRolesBase = ({ Stores }) => {
           disabled={checkIfActorRoleExists(ROLE.PUBLISHER)}
           role={ROLE.PUBLISHER}
           help="(max 1)"
+          required
         />
         <RoleCheckbox role={ROLE.CURATOR} />
         <RoleCheckbox role={ROLE.RIGHTS_HOLDER} />
