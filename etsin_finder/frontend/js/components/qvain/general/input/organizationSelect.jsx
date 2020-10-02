@@ -13,7 +13,7 @@ import { organizationSelectSchema } from '../../utils/formValidation'
 import { Input, Label } from '../modal/form'
 import ValidationError from '../errors/validationError'
 import { DeleteButton } from '../buttons'
-import { validate } from '../../project/utils'
+import { validate } from '../../fields/project/utils'
 
 /**
  * A reusable organization select component.

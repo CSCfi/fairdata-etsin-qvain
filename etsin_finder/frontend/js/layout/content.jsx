@@ -16,8 +16,8 @@ import { observer, inject } from 'mobx-react'
 import PropTypes from 'prop-types'
 import { Home, Search, Dataset, Qvain, QvainDatasets } from '../routes'
 import ErrorPage from '../components/errorpage'
-import QvainLogin from '../components/qvain/main/qvainLogin'
-import QvainLandingPage from '../components/qvain/landingPage'
+import QvainLogin from '../components/qvain/views/main/qvainLogin'
+import QvainLandingPage from '../components/qvain/views/landingPage'
 
 class Content extends Component {
   static propTypes = {

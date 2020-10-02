@@ -22,7 +22,7 @@ import Header from '../components/header'
 import Footer from './footer'
 import Content from './content'
 import CookiesNotification from './cookiesNotification'
-import QvainHeader from '../components/qvain/header'
+import QvainHeader from '../components/qvain/general/header'
 
 class Layout extends Component {
   constructor(props) {
