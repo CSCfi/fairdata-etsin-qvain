@@ -264,7 +264,7 @@ const english = {
     cookies: {
       accept: 'Accept all cookies',
       infoText:
-        'By using Fairdata’s services you agree to our Cookies Use. We use cookies to improve your experience and make our services work better.',
+        'By using Fairdata services you agree to our Cookies Use. We use cookies to improve your experience and make our services work better.',
       link: 'View the Fairdata Privacy Policy.',
     },
   },
@@ -351,8 +351,16 @@ const english = {
       createDataset: 'Create Dataset',
       editDataset: 'Edit Dataset',
     },
-    general: {
+    home: {
       brief: 'Research Dataset Metadata Tool',
+      description: 'Fairdata Qvain tool makes metadata creation effortless for your research data. Qvain offers you a simple form to fill and save the metadata. Once you are happy with it you simply publish the metadata and make it visible to others. Qvain provides your dataset with a persistent identifier, landing page and distributes it to relevant metadata services.',
+      howTo: 'How to start using Qvain and user guides',
+      dataInIda: 'Data stored in IDA',
+      dataInExternal: 'Data stored outside of Fairdata',
+      qvainDataset: 'Describe your dataset, publish it and get a persistent identifier.',
+      etsinSearch: 'Your dataset can be discovered and downloaded in Etsin.',
+    },
+    general: {
       looseActors: {
         warning:
           "Some of the actors' role is marked as provenance but they are not attached in any of existing provenances. Saving the dataset will remove these orphaned actors. Following actors will be removed:",

@@ -93,9 +93,9 @@ export const customStyles = {
 // form submission, i.e. the first submit button in the form is clicked.
 // Prevent this by adding a disabled submit button to the beginning of the form.
 export const DisableImplicitSubmit = styled.button.attrs({
-  disabled: true,
-  ariaHidden: true,
   type: 'submit',
+  disabled: true,
+  'aria-hidden': true,
 })`
   display: none;
 `

@@ -3,6 +3,11 @@ import axios from 'axios'
 
 import Auth from '../js/stores/domain/auth'
 
+global.Promise = require('bluebird')
+Promise.config({
+  cancellation: true,
+})
+
 // This sets the mock adapter on the default instance
 const mock = new MockAdapter(axios)
 
