@@ -8,6 +8,8 @@ class Field {
     this.fieldName = fieldName
     this.references = references
     this.Parent = Parent
+    this.reset = this.reset.bind(this)
+    this.create = this.create.bind(this)
   }
 
   @computed
@@ -25,11 +27,19 @@ class Field {
 
   @observable validationError
 
+  @action reset() {
+    this.storage = []
+    this.hasChanged = false
+    this.inEdit = undefined
+    this.editMode = false
+    this.validationError = undefined
+  }
+
   @action setChanged = val => {
     this.hasChanged = val
   }
 
-  @action create = () => {
+  @action create() {
     this.setChanged(false)
     this.editMode = false
     this.inEdit = this.Template()
@@ -113,7 +123,7 @@ class Field {
 
   @action
   fromBackend = (data, Qvain) => {
-    this.storage = []
+    this.reset()
     if (data !== undefined) {
       data.forEach(element => {
         const item = this.Model(element, Qvain)

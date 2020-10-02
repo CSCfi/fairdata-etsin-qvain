@@ -120,14 +120,16 @@ class Qvain {
     this.existingDirectories = []
     this.hierarchy = {}
     this.inEdit = undefined
-    this.temporals = []
 
     this.metadataModalFile = undefined
     this.clearMetadataModalFile = undefined
     this.fixDeprecatedModalOpen = false
 
     this.Files.reset()
-    this.Temporals.create()
+    this.Temporals.reset()
+    this.Provenances.reset()
+    this.Spatials.reset()
+    this.RelatedResources.reset()
 
     this.useDoi = false
 
