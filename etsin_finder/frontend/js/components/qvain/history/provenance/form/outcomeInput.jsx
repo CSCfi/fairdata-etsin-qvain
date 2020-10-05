@@ -2,15 +2,15 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import { observer, inject } from 'mobx-react'
-import Select from '../../../general/select'
+import Select from '../../../general/input/select'
 import { Outcome } from '../../../../../stores/view/qvain.provenances'
-import { Label } from '../../../general/form'
+import { Label } from '../../../general/modal/form'
 
 const OutcomeInput = ({ Stores }) => {
   const setOutcome = value => Stores.Qvain.Provenances.changeAttribute('outcome', value)
   const translations = {
     label: 'qvain.history.provenance.modal.outcomeInput.label',
-    placeholder: 'qvain.history.provenance.modal.outcomeInput.placeholder'
+    placeholder: 'qvain.history.provenance.modal.outcomeInput.placeholder',
   }
   return (
     <>

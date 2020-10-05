@@ -3,6 +3,11 @@ import axios from 'axios'
 
 import Auth from '../js/stores/domain/auth'
 
+global.Promise = require('bluebird')
+Promise.config({
+  cancellation: true,
+})
+
 // This sets the mock adapter on the default instance
 const mock = new MockAdapter(axios)
 
@@ -11,7 +16,7 @@ const mockUser = {
   is_authenticated_CSC_user: true,
   home_organization_id: 'example.com/org',
   home_organization_name: 'organisaatio',
-  user_ida_groups: ['IDA:project_x', 'IDA:project_y'],
+  user_ida_projects: ['IDA:project_x', 'IDA:project_y'],
   is_using_rems: true,
   user_csc_name: 'Testi Käyttäjä',
 }
@@ -42,7 +47,7 @@ describe('Auth Store', () => {
         name: 'Testi Käyttäjä',
         loggedIn: true,
         homeOrganizationName: 'organisaatio',
-        idaGroups: ['IDA:project_x', 'IDA:project_y'],
+        idaProjects: ['IDA:project_x', 'IDA:project_y'],
         isUsingRems: true,
       })
     )
@@ -90,7 +95,7 @@ describe('Auth Store', () => {
       name: undefined,
       loggedIn: false,
       homeOrganizationName: undefined,
-      idaGroups: [],
+      idaProjects: [],
       isUsingRems: undefined,
     })
   })

@@ -70,20 +70,14 @@ const licenseSchema = yup.object().shape({
   name: yup.object().nullable(),
   identifier: yup.string().required(),
   otherLicenseUrl: yup
-    .mixed()
-    .when('identifier', {
-      is: 'other',
-      then: yup
-        .string(translate('qvain.validationMessages.license.otherUrl.string'))
-        .url(translate('qvain.validationMessages.license.otherUrl.url'))
-        .required(translate('qvain.validationMessages.license.otherUrl.required')),
-      otherwise: yup.string().url().nullable(),
-    })
+    .string(translate('qvain.validationMessages.license.otherUrl.string'))
+    .url(translate('qvain.validationMessages.license.otherUrl.url'))
+    .required(translate('qvain.validationMessages.license.otherUrl.required'))
     .nullable(),
 })
 
 const licenseArrayObject = yup.object().shape({
-  name: yup.object().required(),
+  name: yup.object().nullable(),
   identifier: yup
     .string(translate('qvain.validationMessages.license.otherUrl.string'))
     .url(translate('qvain.validationMessages.license.otherUrl.url'))
@@ -268,6 +262,55 @@ export const fileMetadataSchema = yup.object().shape({
   csvQuotingChar: yup.string().required(),
 })
 
+// PROJECT VALIDATION
+const organizationSelectSchema = yup.object().shape({
+  identifier: yup.string(),
+  name: yup.object().shape({
+    und: yup.string().required(translate('qvain.organizationSelect.validation.name')),
+  }),
+  email: yup.string().email(translate('qvain.organizationSelect.validation.email')),
+})
+
+const organizationObjectSchema = yup.object().shape({
+  organization: organizationSelectSchema
+    .nullable()
+    .required(translate('qvain.organizationSelect.validation.name')),
+  department: organizationSelectSchema.nullable(),
+  subDepartment: organizationSelectSchema.nullable(),
+})
+
+const fundingAgencySchema = yup.object().shape({
+  identifier: yup
+    .string()
+    .nullable()
+    .required(
+      translate('qvain.project.inputs.fundingAgency.contributorType.identifier.validation')
+    ),
+  labelFi: yup.string(),
+  labelEn: yup.string(),
+  definitionFi: yup.string(),
+  definitionEn: yup.string(),
+  inScheme: yup.string(),
+})
+
+const projectSchema = yup.object().shape({
+  details: yup.object().shape({
+    titleFi: yup.mixed().when('titleEn', {
+      is: val => Boolean(val),
+      then: yup.string(translate('qvain.project.inputs.title.validation.string')),
+      otherwise: yup
+        .string(translate('qvain.project.inputs.title.validation.string'))
+        .required(translate('qvain.project.inputs.title.validation.required')),
+    }),
+    titleEn: yup.string(translate('qvain.project.inputs.title.validation.string')),
+    identifier: yup.string(),
+    fundingIdentifier: yup.string(),
+    funderType: yup.object().nullable(),
+  }),
+  organizations: yup.array().min(1, translate('qvain.project.inputs.organization.validation')),
+  fundingAgencies: yup.array().min(0),
+})
+
 // EXTERNAL RESOURCES VALIDATION
 
 const externalResourceTitleSchema = yup
@@ -329,7 +372,7 @@ const actorsSchema = yup
   // A Creator must be found in the actor list in order to allow the dataset to be posted to the database
   .test(
     'contains-creator',
-    translate('qvain.validationMessages.actors.requiredActors.mandatoryActors'),
+    translate('qvain.validationMessages.actors.requiredActors.mandatoryActors.creator'),
     value => {
       let foundCreator = false
       for (let i = 0; i < value.length; i += 1) {
@@ -345,32 +388,24 @@ const actorsSchema = yup
       return false
     }
   )
-  // DOI: publisher must be found in the actor list in order to allow the dataset to be posted to the database
-  .when('useDoi', {
-    is: true,
-    then: yup
-      .array()
-      .of(actorSchema)
-      .test(
-        'is-doi-and-contains-publisher',
-        translate('qvain.validationMessages.actors.requiredActors.publisherIfDOI'),
-        value => {
-          let foundPublisher = false
-          for (let i = 0; i < value.length; i += 1) {
-            for (let j = 0; j < value[i].roles.length; j += 1) {
-              if (value[i].roles[j] === ROLE.PUBLISHER) {
-                foundPublisher = true
-              }
-            }
+  .test(
+    'contains-publisher',
+    translate('qvain.validationMessages.actors.requiredActors.mandatoryActors.publisher'),
+    value => {
+      let foundPublisher = false
+      for (let i = 0; i < value.length; i += 1) {
+        for (let j = 0; j < value[i].roles.length; j += 1) {
+          if (value[i].roles[j] === ROLE.PUBLISHER) {
+            foundPublisher = true
           }
-          if (foundPublisher) {
-            return true
-          }
-          return false
         }
-      ),
-  })
-  .required(translate('qvain.validationMessages.actors.requiredActors.atLeastOneActor'))
+      }
+      if (foundPublisher) {
+        return true
+      }
+      return false
+    }
+  )
 
 // SPATIAL VALIDATION
 const spatialNameSchema = yup
@@ -398,6 +433,10 @@ const relatedResourceNameSchema = yup.object().shape({
   }),
   en: yup.string('qvain.history.relatedResource.error.nameRequired'),
 })
+
+const relatedResourceTypeSchema = yup
+  .object()
+  .required('qvain.history.relatedResource.error.typeRequired')
 
 // PROVENANCE
 const provenanceNameSchema = yup.object().shape({
@@ -490,9 +529,14 @@ export {
   externalResourceDownloadUrlSchema,
   spatialNameSchema,
   spatialAltitudeSchema,
+  projectSchema,
+  organizationSelectSchema,
+  fundingAgencySchema,
   relatedResourceNameSchema,
+  relatedResourceTypeSchema,
   provenanceNameSchema,
   provenanceStartDateSchema,
   provenanceEndDateSchema,
   temporalDateSchema,
+  organizationObjectSchema,
 }

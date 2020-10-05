@@ -229,6 +229,7 @@ const finnish = {
     dataInPasDatasetsCanNotBeDownloaded: 'PAS-aineistojen dataa ei voida ladata',
   },
   error: {
+    cscLoginRequired: 'Tämä sivu vaatii kirjautumisen CSC-tunnuksella.',
     notFound:
       'Olemme pahoillamme, nyt sattui häiriötilanne. Ole hyvä ja yritä hetken päästä uudelleen.',
     notLoaded: 'Hups! Sivua ei löytynyt.',
@@ -253,6 +254,7 @@ const finnish = {
       datasets: 'Aineistot',
       home: 'Koti',
       error: 'Virhe',
+      loginRequired: 'Kirjautuminen vaaditaan',
     },
     language: {
       toggleLabel: 'Vaihda kieltä',
@@ -260,7 +262,7 @@ const finnish = {
     cookies: {
       accept: 'Hyväksy evästeet',
       infoText:
-        'Käyttämällä Fairdata-palveluja hyväksyt evästiden käytön. Käytämme evästeitä palvelun kehittömiseen ja käyttökokemuksen parantamiseen.',
+        'Käyttämällä Fairdata-palveluja hyväksyt evästeiden käytön. Käytämme evästeitä palvelun kehittämiseen ja käyttökokemuksen parantamiseen.',
       link: 'Fairdata-palvelujen tietosuoja.',
     },
   },
@@ -343,6 +345,20 @@ const finnish = {
     },
   },
   qvain: {
+    nav: {
+      home: 'Koti',
+      createDataset: 'Luo aineisto',
+      editDataset: 'Muokkaa aineistoa',
+    },
+    home: {
+      brief: 'Tutkimusaineiston metatietotyökalu',
+      howTo: 'Käytön aloitus ja käyttöoppaat',
+      description: 'Fairdata Qvain -työkalu tekee datasi kuvailun ja julkaisemisen helpoksi. Qvain tarjoaa selkeän lomakkeen, johon tiedot datasta täytetään. Tietojen syöttämisen jälkeen voit julkaista datasi tutkimusaineistona ja saattaa sen avoimesti saataville. Qvain tarjoaa tutkimusaineistollesi pysyvän tunnisteen, laskeutumissivun ja jakaa tietoa eteenpäin muille relevanteille palveluille.',
+      dataInIda: 'Data tallennettuna IDA-palvelussa',
+      dataInExternal: 'Data tallennettuna Fairdata-palveluiden ulkopuolella',
+      qvainDataset: 'Kuvaile datasi, julkaise se tutkimusaineistona ja luo sille pysyvä tunniste.',
+      etsinSearch: 'Tutkimusaineistosi on löydettävissä ja ladattavissa Etsin-palvelun kautta.',
+    },
     general: {
       looseActors: {
         warning:
@@ -371,7 +387,8 @@ const finnish = {
     saveDraft: 'Tallenna Luonnos',
     submit: 'Julkaise Aineisto',
     edit: 'Päivitä Aineisto',
-    unsavedChanges: 'Sinulla on tallentamattomia muutoksia. Oletko varma että haluat poistua sivulta?',
+    unsavedChanges:
+      'Sinulla on tallentamattomia muutoksia. Oletko varma että haluat poistua sivulta?',
     consent:
       'Käyttämällä Qvain Light -työkalua käyttäjä vakuuttaa, että hän on saanut suostumuksen muiden henkilöiden henkilötietojen lisäämiseen kuvailutietoihin ja ilmoittanut heille miten he voivat saada henkilötietonsa poistettua palvelusta. Käyttämällä Qvain Light-työkalua käyttäjä hyväksyy <a href="https://www.fairdata.fi/hyodyntaminen/kayttopolitiikat-ja-ehdot/">käyttöehdot</a>.',
     submitStatus: {
@@ -410,7 +427,6 @@ const finnish = {
       'Olet pyytänyt aineistollesi pysyväksi tunnisteeksi DOIn URN-tunnisteen sijaan. DOI vaatii, että julkaisupäivämäärä ja julkaisija on määritelty. DOI-tunniste rekisteröidään DataCite-palvelun tietokantaan, eikä toimintoa voi peruuttaa. Oletko varma?',
     useDoiAffirmative: 'Kyllä',
     useDoiNegative: 'Ei',
-    unsuccessfullLogin: 'Kirjautuminen epäonnistui.',
     notCSCUser1:
       'Varmistakaa että teillä on voimassaoleva CSC tunnus. Jos yritit kirjautua sisään ulkoisella tunnuksella (kuten Haka) niin saatat saada tämän ' +
       'virheilmoituksen, jos tilit eivät ole linkitetty. Linkityksen voi tehdä',
@@ -438,6 +454,24 @@ const finnish = {
     },
     select: {
       placeholder: 'Valitse vaihtoehto',
+      searchPlaceholder: 'Hae vaihtoehtoja kirjoittamalla',
+    },
+    organizationSelect: {
+      label: {
+        addNew: 'Lisää organisaatio käsin',
+        name: 'Organisaation nimi',
+        email: 'Organisaation sähköposti',
+        identifier: 'Organisaation yksilöivä tunniste',
+      },
+      placeholder: {
+        name: 'Nimi',
+        email: 'Sähköposti',
+        identifier: 'esim. http://orcid.org',
+      },
+      validation: {
+        name: 'Nimi täytyy täyttää',
+        email: 'Sähköpostiosoite ei kelpaa',
+      },
     },
     datasets: {
       title: 'Aineistot',
@@ -610,13 +644,101 @@ const finnish = {
       license: {
         title: 'Lisenssi',
         infoText:
-          'Lisenssi on tärkeä osa aineiston kuvailua. Lisenssillä määrittelet, miten aineistoa voi käyttää. Oletuksena on valittuna suositeltu CC BY 4.0. Jos haluat alasvetovalikosta valinnan sijaan määrittää lisenssin URL -osoitteen itse, valitse alasvetovalikosta "Muu (URL)", minkä jälkeen pääset kirjoittamaan URL-osoitteen.',
+          'Lisenssi on tärkeä osa aineiston kuvailua. Lisenssillä määrittelet, miten aineistoa voi käyttää. Oletuksena on valittuna suositeltu CC BY 4.0. Jos haluat alasvetovalikosta valinnan sijaan määrittää lisenssin URL -osoitteen itse, kirjoita lisenssin URL ja valitse alasvetovalikon alusta "Muu (URL)".',
         placeholder: 'Valitse vaihtoehto',
         other: {
           label: 'URL',
           help: 'Anna osoite lisenssille.',
         },
         addButton: 'Lisää lisenssi',
+      },
+    },
+    project: {
+      title: 'Projekti',
+      description: 'Projekti jonka tuotoksena aineisto on luotu',
+      addButton: 'Lisää',
+      editButton: 'Muokkaa',
+      tooltipContent: {
+        title: 'Projekti',
+        paragraph: 'Projekti jonka tuotoksena aineisto on luotu',
+      },
+      project: {
+        title: 'Lisää projekti',
+        addButton: 'Lisää',
+        description: 'Projekti jonka tuotoksena aineisto on luotu',
+      },
+      organization: {
+        title: 'Organisaatio *',
+        description: 'Organisaatio(t), jotka ovat olleet osallisena projektissa',
+      },
+      fundingAgency: {
+        title: 'Rahoittajaorganisaatio',
+      },
+      inputs: {
+        title: {
+          label: 'Lisää projektin otsikko',
+          description: 'Projektin nimi, lisää vähintään yksi kieli.',
+          validation: {
+            required: 'Lisää vähintään yksi kieli',
+            string: 'Nimen täytyy olla merkkijono.',
+          },
+        },
+        titleEn: {
+          placeholder: 'Nimi (Engalnti)',
+        },
+        titleFi: {
+          placeholder: 'Nimi (Suomi)',
+        },
+        identifier: {
+          label: 'Yksilöivä tunniste',
+          description:
+            'Yksiselitteinen viittaus resurssiin tietyssä kontekstissa. On suositeltavaa käyttää virallisen tunnistamisjärjestelmän mukaisesta tunnistetta.',
+          placeholder: 'Tunniste',
+        },
+        fundingIdentifier: {
+          label: 'Rahoitustunniste',
+          description: 'Projektin uniikki rahoitustunniste',
+          placeholder: 'Tunniste',
+        },
+        funderType: {
+          label: 'Rahoitustyyppi',
+          placeholder: 'Valitse rahoitustyyppi',
+          addButton: 'Lisää rahoitustyyppi',
+          noOptions: 'Rahoitustyyppiä ei löytynyt',
+        },
+        organization: {
+          placeholder: {
+            organization: 'Valitse organisaatio',
+            department: 'Valitse osasto',
+          },
+          addButton: 'Lisää organisaatio',
+          editButton: 'Muokkaa organisaatiota',
+          validation: 'Vähintään yksi organisaatio tarvitaan',
+        },
+        fundingAgency: {
+          contributorType: {
+            title: 'Organisaation rooli',
+            description: 'Valitse organisaation rooli projektin avustajana.',
+            organization: {
+              label: 'Valitse organisaatio',
+              validation: 'Organisaatio tarvitaan',
+            },
+            identifier: {
+              label: 'Rooli',
+              validation: 'Valitse rooli',
+            },
+            definition: {
+              label: 'Selite',
+              description: 'Lisäselite organisaation roolille',
+              placeholderEn: 'Selite (Englanti)',
+              placeholderFi: 'Selite (Suomi)',
+            },
+            addButton: 'Lisää rooli',
+            editButton: 'Muokkaa roolia',
+          },
+          addButton: 'Lisää avustaja',
+          editButton: 'Muokkaa avustajaa',
+        },
       },
     },
     actors: {
@@ -762,8 +884,12 @@ const finnish = {
         },
         requiredActors: {
           atLeastOneActor: 'Aineistoon on lisättävä vähintään yksi toimija.',
-          mandatoryActors:
-            'Toimijat: Aineistolla on oltava ainakin yksi tekijä. Huomioi: yksittäisellä toimijalla voi olla useampi rooli.',
+          mandatoryActors: {
+            creator:
+              'Toimijat: Aineistolla on oltava ainakin yksi tekijä. Huomioi: yksittäisellä toimijalla voi olla useampi rooli.',
+            publisher:
+              'Toimijat: Aineistolla on oltava ainakin yksi julkaisija. Huomioi: yksittäisellä toimijalla voi olla useampi rooli.',
+          },
           publisherIfDOI: 'Toimijat: DOI-ainestoon on lisättävä julkaisija.',
         },
       },
@@ -906,8 +1032,7 @@ const finnish = {
           state: 'Aineisto on julkaistu tavallisena, ei-kasvavana aineistona.',
           explanation:
             'Aineistoon ei voi lisätä tiedostoja tai hakemistoja luomatta siitä uutta versiota.',
-          note:
-            'Jos haluat muuttaa aineiston kasvavaksi, siitä on ensin luotava uusi versio.',
+          note: 'Jos haluat muuttaa aineiston kasvavaksi, siitä on ensin luotava uusi versio.',
         },
         stateChanged: {
           note: 'Uusi tila tulee voimaan kun aineisto tallennetaan.',
@@ -987,7 +1112,8 @@ const finnish = {
         },
         clear: {
           header: 'Poista PAS-metadata',
-          help: 'Haluatko poistaa PAS-metadatan tiedostosta %(file)s? Muutos tulee voimaan välittömästi.',
+          help:
+            'Haluatko poistaa PAS-metadatan tiedostosta %(file)s? Muutos tulee voimaan välittömästi.',
           cancel: 'Peruuta',
           confirm: 'Poista',
         },
@@ -1165,6 +1291,7 @@ const finnish = {
         noItems: 'Viittauksia toisiin resursseihin ei ole lisätty.',
         error: {
           nameRequired: 'Nimi kenttä on pakollinen ainakin yhdellä kielellä.',
+          typeRequired: 'Viitteen tyyppi on pakollinen kenttä.',
         },
         modal: {
           addButton: 'Lisää viittaus toiseen resurssiin',
@@ -1361,7 +1488,7 @@ const finnish = {
           },
           actorsInput: {
             label: 'Liittyi toimijaan',
-            addButton: 'Liitä toimija',
+            placeholder: 'Liitä toimija',
             createButton: 'Luo uusi toimija',
           },
           lifecycleInput: {
@@ -1429,21 +1556,22 @@ const finnish = {
       },
       temporal: {
         title: 'Ajallinen kattavuus',
-        description: 'Ajanjakso, minkä aineisto kattaa, esimerkiksi aika jolloin on tehty havaintoja.',
+        description:
+          'Ajanjakso, minkä aineisto kattaa, esimerkiksi aika jolloin on tehty havaintoja.',
         addButton: 'Lisää ajallinen kattavuus',
         error: {
           startDateMissing: 'Alkamisajankohta puuttuu.',
-          endDateMissing: 'Loppuajankohta puuttuu.'
+          endDateMissing: 'Loppuajankohta puuttuu.',
         },
         modal: {
           durationInput: {
             label: 'Ajanjakso',
             startPlaceholder: 'Alkamisajankohta',
-            endPlaceholder: 'Loppuajankohta'
+            endPlaceholder: 'Loppuajankohta',
           },
         },
       },
-  },
+    },
   },
   slogan: 'Tutkimustenhaku palvelu',
   stc: 'Siirry sivun pääsisältöön',
@@ -1451,19 +1579,51 @@ const finnish = {
   tombstone: {
     removedInfo: 'Aineisto on poistettu',
     deprecatedInfo: 'Aineisto on vanhentunut',
-    urlToNew: 'Aineistosta on olemassa uudempi, julkaistu versio. Saat sen avattua ',
-    urlToOld: 'Aineistosta on olemassa vanhempi, julkaistu versio. Saat sen avattua ',
-    link: 'tästä',
+    urlToNew: 'Aineistosta on olemassa uudempi, julkaistu versio.',
+    urlToOld: 'Aineistosta on olemassa vanhempi, julkaistu versio.',
+    linkTextToNew: 'Saat avattua uuden version tästä.',
+    linkTextToOld: 'Saat avattua version tästä.',
   },
   userAuthenticationError: {
     header: 'Kirjautuminen epäonnistui.',
     content:
-    'Tarkistathan, että sinulla on voimassaoleva CSC-tunnus (Qvaimen ja Qvain Lightin käyttö vaatii sen). Jos yritit kirjaututua jollain toisella tunnuksella (esim. Haka), sitä ei todennäköisesti ole liitetty CSC-tunnukseen. Lisäohjeita CSC-tunnuksen rekisteröimiseksi: https://docs.csc.fi/#accounts/how-to-create-new-user-account/',
+      'Tarkistathan, että sinulla on voimassaoleva CSC-tunnus (Qvaimen ja Qvain Lightin käyttö vaatii sen). Jos yritit kirjaututua jollain toisella tunnuksella (esim. Haka), sitä ei todennäköisesti ole liitetty CSC-tunnukseen. Lisäohjeita CSC-tunnuksen rekisteröimiseksi: https://docs.csc.fi/#accounts/how-to-create-new-user-account/',
   },
   userHomeOrganizationErrror: {
     header: 'Kirjautuminen epäonnistui.',
     content:
       'Tunnusta ei ole liitetty mihinkään kotiorganisaatioon. Olethan yhteydessä CSC:n asiakaspalveluun.',
+  },
+  footer: {
+    fairdata: {
+      title: 'Fairdata',
+      text:
+        'Fairdata-palvelut järjestää <strong>opetus- ja kulttuuriministeriö</strong> ja toimittaa <strong>CSC – Tieteen tietotekniikan keskus Oy</strong>',
+    },
+    information: {
+      title: 'Tietoa',
+      terms: 'Käyttöpolitiikat ja ehdot',
+      termsUrl: 'https://www.fairdata.fi/kayttopolitiikat-ja-ehdot/',
+      contracts: 'Sopimukset ja tietosuoja',
+      contractsUrl: 'https://www.fairdata.fi/sopimukset/',
+    },
+    accessibility: {
+      title: 'Saavutettavuus',
+      statement: 'Saavutettavuus',
+      statementUrls: {
+        fairdata: 'https://www.fairdata.fi/saavutettavuus',
+        etsin: 'https://www.fairdata.fi/etsin-saavutettavuus',
+        qvain: 'https://www.fairdata.fi/qvain-saavutettavuus',
+      },
+    },
+    contact: {
+      title: 'Ota yhteyttä',
+    },
+    follow: {
+      title: 'Seuraa',
+      news: 'Uutiset',
+      newsUrl: 'https://www.fairdata.fi/ajankohtaista',
+    },
   },
 }
 

@@ -9,7 +9,7 @@ import { useRenderTree } from '../../../general/files/tree'
 export function FileTree(props) {
   const { Files } = props.Stores.DatasetQuery
   const { View } = Files
-  const { allowDownload, allowInfo } = props
+  const { allowDownload } = props
 
   // Open top level directory
   useEffect(
@@ -32,7 +32,6 @@ export function FileTree(props) {
     },
     {
       allowDownload,
-      allowInfo,
     }
   )
 
@@ -41,8 +40,7 @@ export function FileTree(props) {
 
 FileTree.propTypes = {
   Stores: PropTypes.object.isRequired,
-  allowDownload: PropTypes.bool.isRequired,
-  allowInfo: PropTypes.bool.isRequired,
+  allowDownload: PropTypes.bool.isRequired
 }
 
 export default inject('Stores')(FileTree)

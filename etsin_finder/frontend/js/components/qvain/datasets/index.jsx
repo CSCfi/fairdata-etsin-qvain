@@ -14,7 +14,7 @@ import {
   SubHeaderText,
 } from '../general/card'
 import { SaveButton } from '../general/buttons'
-import Title from '../general/title'
+import Title from '../general/card/title'
 import Tracking from '../../../utils/tracking'
 import NoticeBar from '../../general/noticeBar'
 
@@ -33,6 +33,7 @@ class Datasets extends Component {
 
   render() {
     const { publishedDataset, setPublishedDataset } = this.props.Stores.QvainDatasets
+    const { getQvainUrl } = this.props.Stores.Env
 
     return (
       <QvainContainer>
@@ -54,7 +55,7 @@ class Datasets extends Component {
                 component={SaveButton}
                 onClick={() => {
                   this.props.Stores.Qvain.resetQvainStore()
-                  this.props.history.push('/qvain/dataset')
+                  this.props.history.push(getQvainUrl('/dataset'))
                 }}
                 content="qvain.datasets.createButton"
               />

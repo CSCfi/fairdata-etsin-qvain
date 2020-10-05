@@ -4,6 +4,7 @@ from etsin_finder.qvain_light_dataset_schema import (
     DatasetValidationSchema as DatasetValidationSchemaV1
 )
 
+
 class DatasetValidationSchema(DatasetValidationSchemaV1):
     """Validation schema for the whole dataset."""
 

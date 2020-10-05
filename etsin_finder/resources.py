@@ -13,6 +13,7 @@ from flask_restful import abort, reqparse, Resource
 
 from etsin_finder.app_config import get_app_config
 from etsin_finder import authentication
+from etsin_finder import authentication_direct_proxy
 from etsin_finder import authorization
 from etsin_finder import cr_service
 from etsin_finder import cr_service_v2
@@ -25,7 +26,9 @@ from etsin_finder.email_utils import \
     get_email_recipient_addresses, \
     get_harvest_info, \
     validate_send_message_request
-from etsin_finder.finder import app
+from etsin_finder.app import app
+from etsin_finder.log import log
+
 from etsin_finder.utils import \
     sort_array_of_obj_by_key, \
     slice_array_on_limit
@@ -35,7 +38,7 @@ from etsin_finder.rems_service import RemsAPIService
 from etsin_finder.app_config import get_fairdata_rems_api_config
 
 TOTAL_ITEM_LIMIT = 1000
-log = app.logger
+
 
 class Dataset(Resource):
     """Dataset related REST endpoints for frontend"""
@@ -300,8 +303,10 @@ class User(Resource):
             'home_organization_id': authentication.get_user_home_organization_id(),
             'home_organization_name': authentication.get_user_home_organization_name()}
         csc_user = authentication.get_user_csc_name()
-        groups = authentication.get_user_ida_groups()
-        user_info['user_ida_groups'] = groups
+        first_name = authentication.get_user_firstname()
+        last_name = authentication.get_user_lastname()
+        groups = authentication.get_user_ida_projects()
+        user_info['user_ida_projects'] = groups
 
         is_using_rems_response = get_fairdata_rems_api_config(app.testing)
         is_using_rems = False
@@ -312,6 +317,10 @@ class User(Resource):
 
         if csc_user is not None:
             user_info['user_csc_name'] = csc_user
+        if first_name:
+            user_info['first_name'] = first_name
+        if last_name:
+            user_info['last_name'] = last_name
         return user_info, 200
 
 
@@ -427,7 +436,7 @@ class Session(Resource):
             tuple: bool and status code
 
         """
-        authentication.reset_flask_session_on_logout()
+        authentication_direct_proxy.reset_flask_session_on_logout()
         return not authentication.is_authenticated(), 200
 
 

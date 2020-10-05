@@ -1,13 +1,13 @@
 {
-/**
- * This file is part of the Etsin service
- *
- * Copyright 2017-2018 Ministry of Education and Culture, Finland
- *
- *
- * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
- * @license   MIT
- */
+  /**
+   * This file is part of the Etsin service
+   *
+   * Copyright 2017-2018 Ministry of Education and Culture, Finland
+   *
+   *
+   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
+   * @license   MIT
+   */
 }
 
 import React, { Component } from 'react'
@@ -18,14 +18,16 @@ import PropTypes from 'prop-types'
 export default class SkipToContent extends Component {
   render() {
     return (
-      <STC onClick={this.props.callback}>
+      <SkipToContentButton onClick={this.props.callback}>
         <Translate content="stc" />
-      </STC>
+      </SkipToContentButton>
     )
   }
 }
 
-const STC = styled.button`
+const SkipToContentButton = styled.button.attrs({
+  type: 'button',
+})`
   background: ${p => p.theme.color.primary};
   color: white;
   max-height: 0;

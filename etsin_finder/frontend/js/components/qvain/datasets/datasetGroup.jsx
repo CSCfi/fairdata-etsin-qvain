@@ -1,76 +1,75 @@
-import React, { Component } from 'react'
-import { observer } from 'mobx-react'
+import React, { useState } from 'react'
+import { Observer } from 'mobx-react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronRight, faChevronUp } from '@fortawesome/free-solid-svg-icons'
 
-import { Row, BodyCell } from '../general/table'
+import { Row, BodyCell } from '../general/card/table'
 import Dataset from './dataset'
 
-class DatasetGroup extends Component {
-  state = {
-    showAll: false,
-  }
+const DatasetGroup = ({
+  datasets,
+  currentTimestamp,
+  handleEnterEdit,
+  handleCreateNewVersion,
+  openRemoveModal,
+  highlight,
+}) => {
+  const [showAll, setShowAll] = useState(false)
 
-  setShowAll = value => {
-    this.setState({ showAll: value })
-  }
-
-  render() {
-    const { datasets } = this.props
-
-    if (datasets.length <= 1) {
-      return (
-        <Dataset
-          dataset={datasets[0]}
-          currentTimestamp={this.props.currentTimestamp}
-          handleEnterEdit={this.props.handleEnterEdit}
-          handleCreateNewVersion={this.props.handleCreateNewVersion}
-          openRemoveModal={this.props.openRemoveModal}
-          highlight={datasets[0].identifier === this.props.highlight}
-        />
-      )
-    }
-
-    let visibleDatasets = [datasets[0]]
-
-    const { showAll } = this.state
-
-    const moreText = showAll ? 'qvain.datasets.hideVersions' : 'qvain.datasets.moreVersions'
-    const more = (
-      <Row>
-        <MoreButtonCell colSpan="5">
-          <MoreButton onClick={() => this.setShowAll(!showAll)}>
-            <MoreIcon icon={showAll ? faChevronUp : faChevronRight} />
-            <Translate content={moreText} with={{ count: datasets.length - 1 }} />
-          </MoreButton>
-        </MoreButtonCell>
-      </Row>
-    )
-    if (showAll) {
-      visibleDatasets = datasets
-    }
-
+  if (datasets.length <= 1) {
     return (
-      <>
-        {visibleDatasets.map((dataset, index) => (
-          <Dataset
-            key={dataset.identifier}
-            dataset={dataset}
-            currentTimestamp={this.props.currentTimestamp}
-            handleEnterEdit={this.props.handleEnterEdit}
-            handleCreateNewVersion={this.props.handleCreateNewVersion}
-            openRemoveModal={this.props.openRemoveModal}
-            indent={index !== 0}
-            highlight={dataset.identifier === this.props.highlight}
-          />
-        ))}
-        {more}
-      </>
+      <Dataset
+        dataset={datasets[0]}
+        currentTimestamp={currentTimestamp}
+        handleEnterEdit={handleEnterEdit}
+        handleCreateNewVersion={handleCreateNewVersion}
+        openRemoveModal={openRemoveModal}
+        highlight={datasets[0].identifier === highlight}
+      />
     )
   }
+
+  let visibleDatasets = [datasets[0]]
+
+  const moreText = showAll ? 'qvain.datasets.hideVersions' : 'qvain.datasets.moreVersions'
+  const more = (
+    <Row>
+      <MoreButtonCell colSpan="5">
+        <MoreButton onClick={() => setShowAll(!showAll)}>
+          <MoreIcon icon={showAll ? faChevronUp : faChevronRight} />
+          <Translate content={moreText} with={{ count: datasets.length - 1 }} />
+        </MoreButton>
+      </MoreButtonCell>
+    </Row>
+  )
+  if (showAll) {
+    visibleDatasets = datasets
+  }
+
+  return (
+    <Observer>
+      {() => (
+        <>
+          {visibleDatasets.map((dataset, index) => (
+            <Dataset
+              key={dataset.identifier}
+              dataset={dataset}
+              currentTimestamp={currentTimestamp}
+              handleEnterEdit={handleEnterEdit}
+              handleCreateNewVersion={handleCreateNewVersion}
+              openRemoveModal={openRemoveModal}
+              indent={index !== 0}
+              highlight={dataset.identifier === highlight}
+            />
+          ))}
+          {more}
+        </>
+      )}
+    </Observer>
+  )
 }
 
 DatasetGroup.propTypes = {
@@ -104,4 +103,4 @@ const MoreIcon = styled(FontAwesomeIcon)`
   margin: 0 0.5rem 0 0.5rem;
 `
 
-export default observer(DatasetGroup)
+export default DatasetGroup

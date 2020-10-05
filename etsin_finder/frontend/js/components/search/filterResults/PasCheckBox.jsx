@@ -3,16 +3,14 @@ import Translate from 'react-translate-component'
 import { inject, observer } from 'mobx-react'
 import PropTypes from 'prop-types'
 
-import { Checkbox, Label } from '../../qvain/general/form'
+import { Checkbox, Label } from '../../qvain/general/modal/form'
 
-export const PasCheckBox = (props) => {
+export const PasCheckBox = props => {
   const { includePasDatasets, toggleIncludePasDatasets } = props.Stores.ElasticQuery
   if (props.aggr === 'data_catalog') {
     return (
       <>
-        <Label
-          htmlFor="pasCheckbox"
-        >
+        <Label htmlFor="pasCheckbox">
           <Checkbox
             id="pasCheckbox"
             checked={includePasDatasets}

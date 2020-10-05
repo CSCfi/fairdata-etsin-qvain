@@ -231,6 +231,7 @@ const english = {
     dataInPasDatasetsCanNotBeDownloaded: 'PAS dataset data cannot be downloaded',
   },
   error: {
+    cscLoginRequired: 'This page requires you to be logged in with a CSC account.',
     notFound:
       'Sorry, we are having some technical difficulties at the moment. Please, try again later.',
     notLoaded: "Sorry! The page couldn't be found.",
@@ -255,6 +256,7 @@ const english = {
       datasets: 'Datasets',
       home: 'Home',
       error: 'Error',
+      loginRequired: 'Login Required',
     },
     language: {
       toggleLabel: 'Toggle language',
@@ -262,7 +264,7 @@ const english = {
     cookies: {
       accept: 'Accept all cookies',
       infoText:
-        'By using Fairdata’s services you agree to our Cookies Use. We use cookies to improve your experience and make our services work better.',
+        'By using Fairdata services you agree to our Cookies Use. We use cookies to improve your experience and make our services work better.',
       link: 'View the Fairdata Privacy Policy.',
     },
   },
@@ -344,6 +346,20 @@ const english = {
     },
   },
   qvain: {
+    nav: {
+      home: 'Home',
+      createDataset: 'Create Dataset',
+      editDataset: 'Edit Dataset',
+    },
+    home: {
+      brief: 'Research Dataset Metadata Tool',
+      description: 'Fairdata Qvain tool makes metadata creation effortless for your research data. Qvain offers you a simple form to fill and save the metadata. Once you are happy with it you simply publish the metadata and make it visible to others. Qvain provides your dataset with a persistent identifier, landing page and distributes it to relevant metadata services.',
+      howTo: 'How to start using Qvain and user guides',
+      dataInIda: 'Data stored in IDA',
+      dataInExternal: 'Data stored outside of Fairdata',
+      qvainDataset: 'Describe your dataset, publish it and get a persistent identifier.',
+      etsinSearch: 'Your dataset can be discovered and downloaded in Etsin.',
+    },
     general: {
       looseActors: {
         warning:
@@ -371,7 +387,8 @@ const english = {
     saveDraft: 'Save Draft',
     submit: 'Save and Publish',
     edit: 'Update Dataset',
-    unsavedChanges: 'Leaving the editor will discard your unsaved changes. Are you sure you want to leave the editor?',
+    unsavedChanges:
+      'Leaving the editor will discard your unsaved changes. Are you sure you want to leave the editor?',
     consent:
       'By using Qvain Light the user agrees that he or she has asked consent from all persons whose personal information the user will add to the descriptive data and informed them of how they can get their personal data removed. By using Qvain Light the user agrees to the <a href="https://www.fairdata.fi/hyodyntaminen/kayttopolitiikat-ja-ehdot/">Terms of Usage</a>.',
     submitStatus: {
@@ -410,7 +427,6 @@ const english = {
       'You have selected DOI as primary identifier for your dataset instead of URN. DOI requires a defined issued date and a dataset publisher. A DOI (Digital Object Identifier) will be created and stored in the DataCite Service and it cannot be removed. Are you sure you want to select DOI?',
     useDoiAffirmative: 'Yes',
     useDoiNegative: 'No',
-    unsuccessfullLogin: 'Login unsuccessful.',
     notCSCUser1:
       'Please make sure that you have a valid CSC account. If you tried to log in with an external account (for example Haka) you might get this error if your account is not associated with CSC account. Please do the registration in',
     notCSCUserLink: ' CSC Customer Portal',
@@ -438,6 +454,24 @@ const english = {
     },
     select: {
       placeholder: 'Select option',
+      searchPlaceholder: 'Type to search for options',
+    },
+    organizationSelect: {
+      label: {
+        addNew: 'Add organization manually',
+        name: 'Organization name',
+        email: 'Organization email',
+        identifier: 'Organization identifier',
+      },
+      placeholder: {
+        name: 'Name',
+        email: 'Email',
+        identifier: 'e.g http://orcid.org',
+      },
+      validation: {
+        name: 'A name is required',
+        email: 'A valid email address is required',
+      },
     },
     datasets: {
       title: 'Your Datasets',
@@ -563,7 +597,7 @@ const english = {
           'Select a value from the dropdown menu. The drop down uses the classification of the Ministry of Education and Culture.',
         placeholder: 'Select option',
         addButton: 'Add field of science',
-        help: 'You can add multiple field of science.',
+        help: 'You can add multiple fields of science.',
       },
       datasetLanguage: {
         title: 'Dataset language',
@@ -610,7 +644,7 @@ const english = {
       license: {
         title: 'License',
         infoText:
-          'License is an essential part of the dataset description. The license describes how the dataset can be used. As a default, the recommended CC BY 4.0 license is selected, but you can change it if needed. If you want to add a URL to an existing license page, please select "Other (URL)" and then insert the URL.',
+          'License is an essential part of the dataset description. The license describes how the dataset can be used. As a default, the recommended CC BY 4.0 license is selected, but you can change it if needed. If you want to add a URL to an existing license page, please type the URL and select the "Other (URL)" option.',
         placeholder: 'Select option',
         other: {
           label: 'URL address',
@@ -761,8 +795,11 @@ const english = {
         },
         requiredActors: {
           atLeastOneActor: 'You must add at least one actor to your dataset.',
-          mandatoryActors:
-            'Actors: Creator role is mandatory. Note: one actor can have multiple roles.',
+          mandatoryActors: {
+            creator: 'Actors: Creator role is mandatory. Note: one actor can have multiple roles.',
+            publisher:
+              'Actors: Publisher role is mandatory. Note: one actor can have multiple roles.',
+          },
           publisherIfDOI: 'Actors: For DOI datasets publisher must be defined.',
         },
       },
@@ -903,8 +940,7 @@ const english = {
           state: 'This dataset has been marked non-cumulative.',
           explanation:
             'Adding files or folders to a published dataset requires you to create a new version of the dataset.',
-          note:
-            'Changing the dataset cumulative requires creating a new version of the dataset.',
+          note: 'Changing the dataset cumulative requires creating a new version of the dataset.',
         },
         stateChanged: {
           note: 'The new state will be applied once you save the dataset.',
@@ -984,7 +1020,8 @@ const english = {
         },
         clear: {
           header: 'Remove Digital Preservation metadata',
-          help: 'Are you sure you want to remove Digital Preservation metadata for file %(file)s? The change will take place immediately.',
+          help:
+            'Are you sure you want to remove Digital Preservation metadata for file %(file)s? The change will take place immediately.',
           cancel: 'Cancel',
           confirm: 'Remove',
         },
@@ -1154,6 +1191,7 @@ const english = {
         noItems: 'No references to a related resources have been added.',
         error: {
           nameRequired: 'Name is required in at least one language.',
+          typeRequired: 'Relation type is required.',
         },
         modal: {
           addButton: 'Add reference to a related resource',
@@ -1356,13 +1394,102 @@ const english = {
           },
           actorsInput: {
             label: 'Was associated with',
-            addButton: 'Add existing actor',
+            placeholder: 'Add associated actor',
             createButton: 'Create new actor',
           },
           lifecycleInput: {
             label: 'Lifecycle event',
             placeholder: 'Lifecycle event',
           },
+        },
+      },
+    },
+    project: {
+      title: 'Producer Project',
+      description: 'A project in which the dataset was created',
+      addButton: 'Add project',
+      editButton: 'Edit project',
+      tooltipContent: {
+        title: 'Producer Project',
+        paragraph: 'A project in which the dataset was created',
+      },
+      project: {
+        title: 'Add project',
+        addButton: 'Add project',
+        description: 'A project in which the dataset was created',
+      },
+      organization: {
+        title: 'Organization *',
+        description: 'The Organization(s) who is/are participating to the project',
+      },
+      fundingAgency: {
+        title: 'Funding agency',
+      },
+      inputs: {
+        title: {
+          label: 'Add title for project',
+          description: 'Name of the project, at least one language is required.',
+          validation: {
+            required: 'At least one language is required.',
+            string: 'The title must be a string value.',
+          },
+        },
+        titleEn: {
+          placeholder: 'Title (English)',
+        },
+        titleFi: {
+          placeholder: 'Title (Finnish)',
+        },
+        identifier: {
+          label: 'Identifier',
+          description:
+            'Recommended best practice is to identify the resource by means of a string conforming to a formal identification system. An unambiguous reference to the resource within a given context.',
+          placeholder: 'Add identifier',
+        },
+        fundingIdentifier: {
+          label: 'Project funding identifier',
+          description: 'Unique identifier for the project that is being used by the project funder',
+          placeholder: 'Add project funding identifier',
+        },
+        funderType: {
+          label: 'Funder type',
+          placeholder: 'Select funder type',
+          addButton: 'Add funder type',
+          noOptions: 'Funder type not found',
+        },
+        organization: {
+          placeholder: {
+            organization: 'Select an organization',
+            department: 'Select a department',
+          },
+          addButton: 'Add organization',
+          editButton: 'Edit organization',
+          validation: 'At least one producer organization is required',
+        },
+        fundingAgency: {
+          contributorType: {
+            title: 'Contributor type',
+            description:
+              'Contributor type of the Organization. Based on the subset of the DataCite reference data',
+            organization: {
+              label: 'Select organization',
+              validation: 'A valid organization is required',
+            },
+            identifier: {
+              label: 'Contributor role',
+              validation: 'Contributor role is required',
+            },
+            definition: {
+              label: 'Definition',
+              description: 'A statement or formal explanation of the meaning of a concept.',
+              placeholderEn: 'Definition (English)',
+              placeholderFi: 'Definition (Finnish)',
+            },
+            addButton: 'Add contributor type',
+            editButton: 'Edit contributor type',
+          },
+          addButton: 'Add agency',
+          editButton: 'Edit agency',
         },
       },
     },
@@ -1427,17 +1554,17 @@ const english = {
         addButton: 'Add temporal coverage',
         error: {
           startDateMissing: 'Start date is missing.',
-          endDateMissing: 'End date is missing'
+          endDateMissing: 'End date is missing',
         },
         modal: {
           durationInput: {
             label: 'Period of time',
             startPlaceholder: 'Start date',
-            endPlaceholder: 'End date'
-          }
-        }
+            endPlaceholder: 'End date',
+          },
+        },
       },
-  },
+    },
   },
   slogan: 'Research data finder',
   stc: 'Skip to content',
@@ -1445,10 +1572,10 @@ const english = {
   tombstone: {
     removedInfo: 'The dataset has been removed',
     deprecatedInfo: 'The dataset has been deprecated',
-    urlToNew: 'A new version of this dataset is available. You can open it via this ',
-    urlToOld:
-      'An older (published) version of this dataset is available. You can open it via this ',
-    link: 'link',
+    urlToNew: 'A new version of this dataset is available.',
+    urlToOld: 'An older (published) version of this dataset is available.',
+    linkTextToNew: 'You can open the new version via this link.',
+    linkTextToOld: 'You can open the version via this link.',
   },
   userAuthenticationError: {
     header: 'Login unsuccessful.',
@@ -1459,6 +1586,37 @@ const english = {
     header: 'Login unsuccessful.',
     content:
       'You have a verified CSC account, but your account does not seem to have a home organization. Please contact the CSC Helpdesk to set a home organization for your CSC account.',
+  },
+  footer: {
+    fairdata: {
+      title: 'Fairdata',
+      text:
+        'The Fairdata services are offered by the <strong>Ministry of Education and Culture</strong> and produced by <strong>CSC – IT Center for Science Ltd.</strong>',
+    },
+    information: {
+      title: 'Information',
+      terms: 'Terms and Policies',
+      termsUrl: 'https://www.fairdata.fi/en/terms-and-policies/',
+      contracts: 'Contracts and Privacy',
+      contractsUrl: 'https://www.fairdata.fi/en/contracts-and-privacy/',
+    },
+    accessibility: {
+      title: 'Accessibility',
+      statement: 'Accessibility statement',
+      statementUrls: {
+        fairdata: 'https://www.fairdata.fi/en/accessibility',
+        etsin: 'https://www.fairdata.fi/en/etsin-accessibility',
+        qvain: 'https://www.fairdata.fi/en/qvain-accessibility',
+      },
+    },
+    contact: {
+      title: 'Contact',
+    },
+    follow: {
+      title: 'Follow',
+      news: "What's new",
+      newsUrl: 'https://www.fairdata.fi/en/news/',
+    },
   },
 }
 

@@ -104,9 +104,9 @@ class TableItem extends Component {
                   title={this.props.item.type}
                   default={this.props.item.remote ? 'cloud' : 'file'}
                 />
-              )}
+                )}
             </React.Fragment>
-          )}
+            )}
         </FileType>
         {this.props.fields.name && this.props.item.directory ? (
           <FileName>
@@ -130,7 +130,7 @@ class TableItem extends Component {
           <FileName>
             <p>{this.props.item.name}</p>
           </FileName>
-        )}
+          )}
         {this.props.fields.size && <FileSize>{sizeParse(this.props.item.byte_size, 1)}</FileSize>}
         {this.props.fields.category
           && (checkNested(this.props.item.use_category, 'pref_label')
@@ -149,8 +149,7 @@ class TableItem extends Component {
             <React.Fragment>
               <InvertedButton
                 thin
-                color={this.props.theme.color.gray}
-                disabled={!this.props.allowInfo}
+                color={this.props.theme.color.darkgray}
                 onClick={this.openModal}
               >
                 <Translate content="dataset.dl.info" />
@@ -208,6 +207,7 @@ class TableItem extends Component {
                     ? this.props.item.remote.download_url.description
                     : this.props.item.remote.access_url.description
                 )}
+                color={this.props.theme.color.primaryDark}
               >
                 <Translate
                   content={
@@ -324,7 +324,7 @@ const FileButtons = styled.td`
 `
 
 TableItem.defaultProps = {
-  changeFolder: () => {}
+  changeFolder: () => { }
 }
 
 TableItem.propTypes = {
@@ -344,7 +344,8 @@ TableItem.propTypes = {
   theme: PropTypes.shape({
     color: PropTypes.shape({
       primary: PropTypes.string.isRequired,
-      gray: PropTypes.string.isRequired,
+      primaryDark: PropTypes.string.isRequired,
+      darkgray: PropTypes.string.isRequired,
     }),
   }).isRequired,
   fields: PropTypes.shape({
@@ -356,7 +357,6 @@ TableItem.propTypes = {
   }).isRequired,
   changeFolder: PropTypes.func,
   allowDownload: PropTypes.bool.isRequired,
-  allowInfo: PropTypes.bool.isRequired,
   isRemote: PropTypes.bool.isRequired,
   cr_id: PropTypes.string.isRequired,
 }

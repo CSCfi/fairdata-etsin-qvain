@@ -18,10 +18,15 @@ import { withRouter } from 'react-router-dom'
 import HeroBanner from '../general/hero'
 import Tracking from '../../utils/tracking'
 import Accessibility from '../../stores/view/accessibility'
+import LoginButton from '../general/navigation/loginButton'
 
 class ErrorPage extends React.Component {
   componentDidMount() {
-    Accessibility.handleNavigation('error')
+    if (this.props.error.type === 'cscloginrequired') {
+      Accessibility.handleNavigation('loginRequired')
+    } else {
+      Accessibility.handleNavigation('error')
+    }
     Tracking.newPageView(`Error: ${this.props.error.type}`, this.props.location.pathname)
   }
 
@@ -33,6 +38,12 @@ class ErrorPage extends React.Component {
     return (
       <HeroBanner className="hero-primary hero-full">
         <section className="container text-center" aria-live="polite">
+          {this.props.error.type === 'cscloginrequired' && (
+            <>
+              <Translate content="error.cscLoginRequired" component="h1" />
+              <LoginButton inverted fontSize="1.25rem" margin="0" borderColor="white" />
+            </>
+          )}
           {this.props.error.type === 'notfound' && (
             <Translate content="error.notLoaded" component="h1" />
           )}

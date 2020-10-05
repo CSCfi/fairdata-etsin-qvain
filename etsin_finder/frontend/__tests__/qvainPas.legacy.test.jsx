@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 import { shallow, mount } from 'enzyme'
 import { Provider } from 'mobx-react'
 import { ThemeProvider } from 'styled-components'
@@ -7,7 +7,7 @@ import axios from 'axios'
 import '../locale/translations'
 
 import etsinTheme from '../js/styles/theme'
-import PasState from '../js/components/qvain/pasState'
+import PasState from '../js/components/qvain/editor/pasState'
 import DescriptionField from '../js/components/qvain/description/descriptionField'
 import OtherIdentifierField from '../js/components/qvain/description/otherIdentifierField'
 import FieldOfScienceField from '../js/components/qvain/description/fieldOfScienceField'
@@ -21,7 +21,7 @@ import QvainStoreClass, {
   Directory,
   File,
   AccessType as AccessTypeConstructor,
-  License as LicenseConstructor
+  License as LicenseConstructor,
 } from '../js/stores/view/qvain'
 import LocaleStore from '../js/stores/view/language'
 import EnvStore from '../js/stores/domain/env'
@@ -30,7 +30,7 @@ import { ACCESS_TYPE_URL, DATA_CATALOG_IDENTIFIER } from '../js/utils/constants'
 global.Promise = require('bluebird')
 
 Promise.config({
-  cancellation: true
+  cancellation: true,
 })
 
 const QvainStore = new QvainStoreClass(EnvStore)
@@ -41,10 +41,9 @@ const getStores = () => {
   return {
     Qvain: QvainStore,
     Locale: LocaleStore,
-    Env: EnvStore
+    Env: EnvStore,
   }
 }
-
 
 // Mock Metax responses
 const metaxResponses = {
@@ -68,19 +67,18 @@ const metaxResponses = {
               sv: 'Naturvetenskaper',
               en: 'Natural sciences',
               fi: 'LUONNONTIETEET',
-              und: 'LUONNONTIETEET'
+              und: 'LUONNONTIETEET',
             },
             parent_ids: [],
-            child_ids: [
-            ],
+            child_ids: [],
             has_children: false,
             same_as: [],
             internal_code: '',
-            scheme: 'http://www.yso.fi/onto/okm-tieteenala/conceptscheme'
-          }
-        }
-      ]
-    }
+            scheme: 'http://www.yso.fi/onto/okm-tieteenala/conceptscheme',
+          },
+        },
+      ],
+    },
   },
   '/es/reference_data/license/_search': {
     hits: {
@@ -101,20 +99,18 @@ const metaxResponses = {
             label: {
               fi: 'Creative Commons Yleismaailmallinen (CC0 1.0) Public Domain -lausuma',
               en: 'Creative Commons CC0 1.0 Universal (CC0 1.0) Public Domain Dedication',
-              und: 'Creative Commons Yleismaailmallinen (CC0 1.0) Public Domain -lausuma'
+              und: 'Creative Commons Yleismaailmallinen (CC0 1.0) Public Domain -lausuma',
             },
             parent_ids: [],
             child_ids: [],
             has_children: false,
-            same_as: [
-              'https://creativecommons.org/publicdomain/zero/1.0/'
-            ],
+            same_as: ['https://creativecommons.org/publicdomain/zero/1.0/'],
             internal_code: '',
-            scheme: 'http://uri.suomi.fi/codelist/fairdata/license'
-          }
-        }
-      ]
-    }
+            scheme: 'http://uri.suomi.fi/codelist/fairdata/license',
+          },
+        },
+      ],
+    },
   },
   '/es/reference_data/access_type/_search': {
     hits: {
@@ -137,20 +133,18 @@ const metaxResponses = {
             label: {
               fi: 'Embargo',
               en: 'Embargo',
-              und: 'Embargo'
+              und: 'Embargo',
             },
             parent_ids: [],
             child_ids: [],
             has_children: false,
-            same_as: [
-              'http://publications.europa.eu/resource/authority/access-right/NON_PUBLIC'
-            ],
+            same_as: ['http://publications.europa.eu/resource/authority/access-right/NON_PUBLIC'],
             internal_code: '',
-            scheme: 'http://uri.suomi.fi/codelist/fairdata/access_type'
-          }
-        }
-      ]
-    }
+            scheme: 'http://uri.suomi.fi/codelist/fairdata/access_type',
+          },
+        },
+      ],
+    },
   },
   '/es/reference_data/restriction_grounds/_search': {
     took: 0,
@@ -159,7 +153,7 @@ const metaxResponses = {
       total: 2,
       successful: 2,
       skipped: 0,
-      failed: 0
+      failed: 0,
     },
     hits: {
       total: 11,
@@ -179,21 +173,24 @@ const metaxResponses = {
             input_file_format: '',
             output_format_version: '',
             label: {
-              fi: 'Saatavuutta rajoitettu tietoja antaneen henkilön etuun tai suojaan perustuen tai esim. luovutussopimuksen perusteella',
-              en: 'Restricted access based on the interest or protection of the person who provided the information or, for example, on the basis of extradite',
+              fi:
+                'Saatavuutta rajoitettu tietoja antaneen henkilön etuun tai suojaan perustuen tai esim. luovutussopimuksen perusteella',
+              en:
+                'Restricted access based on the interest or protection of the person who provided the information or, for example, on the basis of extradite',
               sv: 'Begränsad åtkomst på grund av skydd av person',
-              und: 'Saatavuutta rajoitettu tietoja antaneen henkilön etuun tai suojaan perustuen tai esim. luovutussopimuksen perusteella'
+              und:
+                'Saatavuutta rajoitettu tietoja antaneen henkilön etuun tai suojaan perustuen tai esim. luovutussopimuksen perusteella',
             },
             parent_ids: [],
             child_ids: [],
             has_children: false,
             same_as: [],
             internal_code: '',
-            scheme: 'http://uri.suomi.fi/codelist/fairdata/restriction_grounds'
-          }
-        }
-      ]
-    }
+            scheme: 'http://uri.suomi.fi/codelist/fairdata/restriction_grounds',
+          },
+        },
+      ],
+    },
   },
   '/es/organization_data/organization/_search': {
     took: 0,
@@ -202,7 +199,7 @@ const metaxResponses = {
       total: 2,
       successful: 2,
       skipped: 0,
-      failed: 0
+      failed: 0,
     },
     hits: {
       total: 2439,
@@ -224,16 +221,14 @@ const metaxResponses = {
               fi: 'Aalto yliopisto',
               und: 'Aalto yliopisto',
               en: 'Aalto University',
-              sv: 'Aalto universitetet'
+              sv: 'Aalto universitetet',
             },
-            same_as: [
-              'http://isni.org/isni/0000000108389418'
-            ],
-            scheme: 'http://uri.suomi.fi/codelist/fairdata/organization'
-          }
-        }
-      ]
-    }
+            same_as: ['http://isni.org/isni/0000000108389418'],
+            scheme: 'http://uri.suomi.fi/codelist/fairdata/organization',
+          },
+        },
+      ],
+    },
   },
   '/es/reference_data/file_type/_search': {
     took: 0,
@@ -242,7 +237,7 @@ const metaxResponses = {
       total: 2,
       successful: 2,
       skipped: 0,
-      failed: 0
+      failed: 0,
     },
     hits: {
       total: 9,
@@ -264,17 +259,17 @@ const metaxResponses = {
             label: {
               fi: 'Video',
               en: 'Video',
-              und: 'Video'
+              und: 'Video',
             },
             parent_ids: [],
             child_ids: [],
             has_children: false,
             same_as: [],
             internal_code: '',
-            scheme: 'http://uri.suomi.fi/codelist/fairdata/file_type'
-          }
-        }
-      ]
+            scheme: 'http://uri.suomi.fi/codelist/fairdata/file_type',
+          },
+        },
+      ],
     },
   },
   '/es/reference_data/use_category/_search': {
@@ -284,7 +279,7 @@ const metaxResponses = {
       total: 2,
       successful: 2,
       skipped: 0,
-      failed: 0
+      failed: 0,
     },
     hits: {
       total: 7,
@@ -306,29 +301,29 @@ const metaxResponses = {
             label: {
               fi: 'Lähdeaineisto',
               en: 'Source material',
-              und: 'Lähdeaineisto'
+              und: 'Lähdeaineisto',
             },
             parent_ids: [],
             child_ids: [],
             has_children: false,
             same_as: [],
             internal_code: '',
-            scheme: 'http://uri.suomi.fi/codelist/fairdata/use_category'
-          }
-        }
-      ]
-    }
-  }
+            scheme: 'http://uri.suomi.fi/codelist/fairdata/use_category',
+          },
+        },
+      ],
+    },
+  },
 }
 
 jest.mock('axios')
-axios.get.mockImplementation((url) => {
+axios.get.mockImplementation(url => {
   const path = new URL(url).pathname
   if (!metaxResponses[path]) {
     console.error(`Error: no mock response for ${path}`)
   }
   return Promise.resolve({
-    data: metaxResponses[path]
+    data: metaxResponses[path],
   })
 })
 
@@ -361,7 +356,6 @@ describe('Qvain.PasState', () => {
     expect(wrapper.find(PasState).text().includes('80:')).toBe(true)
     wrapper.unmount()
 
-
     stores.Qvain.dataCatalog = DATA_CATALOG_IDENTIFIER.PAS
     stores.Qvain.setPreservationState(0)
     wrapper = render(stores)
@@ -369,7 +363,6 @@ describe('Qvain.PasState', () => {
     expect(wrapper.find(PasState).text().includes('0:')).toBe(true)
   })
 })
-
 
 describe('Qvain.Description', () => {
   const render = stores => {
@@ -418,8 +411,10 @@ describe('Qvain.Description', () => {
 
 describe('Qvain.RightsAndLicenses', () => {
   const render = stores => {
-    stores.Qvain.setLicense(LicenseConstructor({ en: 'Other (URL)', fi: 'Muu (URL)', }, 'other'))
-    stores.Qvain.setAccessType(AccessTypeConstructor(undefined, ACCESS_TYPE_URL.EMBARGO))
+    stores.Qvain.setLicenseArray([
+      LicenseConstructor({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'other'),
+    ])
+    stores.Qvain.setAccessType(AccessTypeConstructor({ en: 'Embargo' }, ACCESS_TYPE_URL.EMBARGO))
     return mount(
       <Provider Stores={stores}>
         <ThemeProvider theme={etsinTheme}>
@@ -439,8 +434,8 @@ describe('Qvain.RightsAndLicenses', () => {
     wrapper = render(stores)
     const inputs = wrapper.find('input').not('[type="hidden"]')
 
-    // Expect inputs: license, license url, access type, restriction grounds, embargo expires
-    expect(inputs.length).toBe(5)
+    // Expect inputs: license, access type, restriction grounds, embargo expires
+    expect(inputs.length).toBe(4)
     inputs.forEach(c => expect(c.props().disabled).toBe(true))
   })
 
@@ -451,8 +446,8 @@ describe('Qvain.RightsAndLicenses', () => {
     wrapper = render(stores)
     const inputs = wrapper.find('input').not('[type="hidden"]')
 
-    // Expect inputs: license, license url, access type, restriction grounds, embargo expires
-    expect(inputs.length).toBe(5)
+    // Expect inputs: license, access type, restriction grounds, embargo expires
+    expect(inputs.length).toBe(4)
     inputs.forEach(c => expect(c.props().disabled).toBe(false))
   })
 })
@@ -474,7 +469,7 @@ describe('Qvain.Files', () => {
         csv_has_header: true,
         csv_record_separator: 'LF',
         csv_quoting_char: '"',
-      }
+      },
     })
     stores.Qvain.selectedProject = 'project_y'
     stores.Qvain.hierarchy = Directory(
@@ -491,16 +486,14 @@ describe('Qvain.Files', () => {
               project_identifier: 'project_y',
               directory_name: 'directory2',
               directories: [],
-              files: []
+              files: [],
             },
             undefined,
             false,
             false
-          )
+          ),
         ],
-        files: [
-          testfile
-        ]
+        files: [testfile],
       },
       undefined,
       false,
