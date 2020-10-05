@@ -352,8 +352,8 @@ const english = {
       editDataset: 'Edit Dataset',
     },
     home: {
-      brief: 'Research Dataset Metadata Tool',
-      description: 'Fairdata Qvain tool makes metadata creation effortless for your research data. Qvain offers you a simple form to fill and save the metadata. Once you are happy with it you simply publish the metadata and make it visible to others. Qvain provides your dataset with a persistent identifier, landing page and distributes it to relevant metadata services.',
+      brief: 'Research Dataset Description Tool',
+      description: 'Fairdata Qvain tool makes describing and publishing your research data effortless for you. It offers you a straightforward form in which to fill information about your data. Once you are happy with it, you can simply publish the dataset and make it visible to others. Qvain provides your dataset with a persistent identifier, landing page and distributes it to other relevant services.',
       howTo: 'How to start using Qvain and user guides',
       dataInIda: 'Data stored in IDA',
       dataInExternal: 'Data stored outside of Fairdata',
