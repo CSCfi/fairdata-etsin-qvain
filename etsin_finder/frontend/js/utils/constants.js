@@ -59,7 +59,7 @@ export const ROLE = {
   PROVENANCE: 'provenance'
 }
 
-const PRESERVATION_STATE_COLOR = {
+export const PRESERVATION_STATE_COLOR = {
   DEFAULT: 'primary',
   // WAIT: 'primary',
   // FAIL: 'error',
