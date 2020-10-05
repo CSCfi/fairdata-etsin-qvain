@@ -95,7 +95,18 @@ def _render_index_template(saml_errors=[], slo_success=False):
             log.info(session.get('samlUserdata').items())
         if is_authenticated_through_fairdata_sso():
             log_sso_values()
-    return render_template('index.html')
+
+    if request.headers.get('X-Etsin-App', None) == 'qvain':
+        app_title = 'Qvain | Tutkimusaineiston metatietotyökalu'
+        app_description = 'Fairdata Qvain -työkalu tekee datasi ' \
+            'kuvailun ja julkaisemisen helpoksi.'
+    else:
+        app_title = 'Etsin | Tutkimusaineistojen hakupalvelu'
+        app_description = 'Kuvailutietojen perusteella käyttäjät ' \
+            'voivat etsiä aineistoja ja arvioida löytämiensä ' \
+            'aineistojen käyttökelpoisuutta tarpeisiinsa.'
+
+    return render_template('index.html', app_title=app_title, app_description=app_description)
 
 
 # SAML AUTHENTICATION RELATED
