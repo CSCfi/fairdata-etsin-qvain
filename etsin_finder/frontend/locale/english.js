@@ -876,9 +876,9 @@ const english = {
         explanation:
           'Choose "IDA" if the data is stored in Fairdata IDA Service. Choose "Remote resources" if the data is in remote location.',
         doiSelection:
-          'I want the dataset to have a DOI (digital object identifier) instead of a URN.',
+          'I want the published dataset to have a DOI (digital object identifier) instead of a URN.',
         doiSelectedHelp:
-          'When the dataset is published, a DOI will be created and stored in the DataCite Service. This operation cannot be undone.',
+          'When the dataset is published, a DOI will be created and stored in the DataCite Service. This operation cannot be undone. The issued date of a dataset that has been published with a DOI cannot be changed afterwards.',
         placeholder: 'Select option',
         ida: 'IDA',
         att: 'Remote resources',
