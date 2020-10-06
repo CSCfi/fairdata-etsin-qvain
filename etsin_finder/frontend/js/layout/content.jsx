@@ -32,7 +32,7 @@ class Content extends Component {
     const { isQvain, separateQvain, getQvainUrl } = Env
     const qvainPath = path => {
       if (isQvain) {
-        return path
+        return path || '/'
       }
       return `/qvain${path}`
     }
