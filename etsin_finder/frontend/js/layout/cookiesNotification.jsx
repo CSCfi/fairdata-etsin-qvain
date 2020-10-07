@@ -13,7 +13,7 @@ class CookiesNotification extends Component {
 
   componentDidMount() {
     counterpart.onLocaleChange(this.onLanguageChange)
-    if (Boolean(this.fdSSOGetCookie('fd_sso_notification_shown'))) {
+    if (this.fdSSOGetCookie('fd_sso_notification_shown')) {
       this.setState({
           displayCookieNotification: false
         }
@@ -24,42 +24,6 @@ class CookiesNotification extends Component {
   componentWillUnmount() {
     counterpart.offLocaleChange(this.onLanguageChange)
   }
-
-  fdSSOGetDomainName() {
-    let hostname = window.location.hostname;
-    let domain = hostname.substring(hostname.indexOf(".") + 1); // Check indexOf ".f" in local_dev
-    return domain
-}
-
- fdSSOGetPrefixedCookieName(name) {
-    let domain = this.fdSSOGetDomainName();
-    domain = domain.replace(/[^a-zA-Z0-9]/g, "_")
-    return domain + "_" + name
-}
-
- fdSSOGetCookie(name) {
-    name = this.fdSSOGetPrefixedCookieName(name)
-    let nameEQ = name + "=";
-    let ca = document.cookie.split(';');
-    for(let i = 0; i < ca.length; i++) {
-        let c = ca[i];
-        while (c.charAt(0)==' ') c = c.substring(1,c.length);
-        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
-    }
-    return null;
-}
-
- fdSSOSetCookie(name, value) {
-    name = this.fdSSOGetPrefixedCookieName(name);
-    let expiryDate = new Date();
-    expiryDate.setTime(expiryDate.getTime() + (7*24*60*60*1000));
-    let expires = "; expires=" + expiryDate.toUTCString();
-    document.cookie = name + "=" + (value || "")  + expires + "; path=/" + "; domain=." + this.fdSSOGetDomainName();
-}
-
- fdSSODismissNotification() {
-   this.fdSSOSetCookie("fd_sso_notification_shown", true)
-}
 
   onLanguageChange = () => {
     this.setState({
@@ -73,6 +37,46 @@ class CookiesNotification extends Component {
       : 'https://www.fairdata.fi/sopimukset/'
   }
 
+  fdSSODismissNotification = () => {
+    this.fdSSOSetCookie('fd_sso_notification_shown', true)
+  }
+
+  fdSSOGetDomainName() {
+    const hostname = window.location.hostname;
+    const domain = hostname.substring(hostname.indexOf('.') + 1); // Check indexOf ".f" in local_dev
+    return domain
+  }
+
+ fdSSOGetPrefixedCookieName(name) {
+    let domain = this.fdSSOGetDomainName();
+    domain = domain.replace(/[^a-zA-Z0-9]/g, '_')
+    return `${domain} ${name}`
+  }
+
+ fdSSOGetCookie(name) {
+    const cookieName = this.fdSSOGetPrefixedCookieName(name)
+    const nameEQ = `${cookieName}=`;
+    const ca = document.cookie.split(';');
+    for (let i = 0; i < ca.length; i += 1) {
+        let c = ca[i];
+        while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+    }
+    return null;
+  }
+
+ fdSSOSetCookie(name, value) {
+    const cookieName = this.fdSSOGetPrefixedCookieName(name);
+    const expiryDate = new Date();
+    expiryDate.setTime(expiryDate.getTime() + (7 * 24 * 60 * 60 * 1000));
+    const expires = `; expires=${expiryDate.toUTCString()}`
+    // eslint-disable-next-line
+    document.cookie = cookieName + '=' + (value || '') + expires + '; path=/' + '; domain=.' + this.fdSSOGetDomainName();
+    this.setState({
+      displayCookieNotification: false
+    })
+  }
+
   render() {
     return (
       <Notification visible={this.state.displayCookieNotification}>
@@ -82,7 +86,7 @@ class CookiesNotification extends Component {
             <a href={this.getPrivacyUrl()} target="_blank" rel="noopener noreferrer"><Translate content="general.cookies.link" /></a>
           </div>
           <Actions className="col-12 col-md-3">
-            <Button onClick={this.fdSSODismissNotification()}>
+            <Button onClick={this.fdSSODismissNotification}>
               <Translate content="general.cookies.accept" />
             </Button>
           </Actions>
