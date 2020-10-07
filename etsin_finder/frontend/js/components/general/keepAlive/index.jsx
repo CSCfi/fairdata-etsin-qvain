@@ -12,7 +12,7 @@
 
 import React, { Component } from 'react'
 import Translation from 'react-translate-component'
-
+import PropTypes from 'prop-types'
 import Idle from './idle'
 import NoticeBar from '../noticeBar'
 import Auth from '../../../stores/domain/auth'
@@ -27,6 +27,10 @@ import Auth from '../../../stores/domain/auth'
 export default class KeepAlive extends Component {
   static propTypes = {
     loginThroughService: PropTypes.string,
+  }
+
+  static defaultProps = {
+    loginThroughService: '',
   }
 
   state = {
