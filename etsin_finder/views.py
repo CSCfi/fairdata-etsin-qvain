@@ -27,6 +27,18 @@ from etsin_finder.log import log
 
 # REACT APP RELATED
 
+@app.route('/sso')
+def login_legacy():
+    """Endpoint which frontend should call when wanting to perform a legacy logout (non-SSO)
+
+    Returns:
+        Redirect the login.
+
+    """
+    auth = get_saml_auth(request, '')
+    redirect_url = quote(request.args.get('relay', '/'))
+    return redirect(auth.login(redirect_url))
+
 @app.route('/sso/etsin')
 def login_etsin():
     """Endpoint which frontend should call when wanting to perform a login as Etsin
@@ -35,7 +47,7 @@ def login_etsin():
         Redirect the login.
 
     """
-    auth = get_saml_auth(request, 'ETSIN')
+    auth = get_saml_auth(request, '_ETSIN')
     redirect_url = quote(request.args.get('relay', '/'))
     return redirect(auth.login(redirect_url))
 
@@ -47,7 +59,19 @@ def login_qvain():
         Redirect the login.
 
     """
-    auth = get_saml_auth(request, 'QVAIN')
+    auth = get_saml_auth(request, '_QVAIN')
+    redirect_url = quote(request.args.get('relay', '/'))
+    return redirect(auth.login(redirect_url))
+
+@app.route('/slo')
+def logout_legacy():
+    """Endpoint which frontend should call when wanting to perform a login as Etsin
+
+    Returns:
+        Redirect the login.
+
+    """
+    auth = get_saml_auth(request, '')
     redirect_url = quote(request.args.get('relay', '/'))
     return redirect(auth.login(redirect_url))
 
@@ -61,7 +85,7 @@ def logout_etsin():
         Redirect the logout.
 
     """
-    auth = get_saml_auth(request, 'ETSIN')
+    auth = get_saml_auth(request, '_ETSIN')
     name_id = None
     session_index = None
     if 'samlNameId' in session:
@@ -83,7 +107,7 @@ def logout_qvain():
         Redirect the logout.
 
     """
-    auth = get_saml_auth(request, 'QVAIN')
+    auth = get_saml_auth(request, '_QVAIN')
     name_id = None
     session_index = None
     if 'samlNameId' in session:
@@ -143,10 +167,25 @@ def _render_index_template(saml_errors=[], slo_success=False):
 
 # SAML AUTHENTICATION RELATED
 
+@app.route('/saml_metadata/')
+def saml_metadata_legacy():
+    """Optional. Prints out the public saml metadata for Etsin."""
+    auth = get_saml_auth(request, '')
+    settings = auth.get_settings()
+    metadata = settings.get_sp_metadata()
+    errors = settings.validate_metadata(metadata)
+
+    if len(errors) == 0:
+        resp = make_response(metadata, 200)
+        resp.headers['Content-Type'] = 'text/xml'
+    else:
+        resp = make_response(', '.join(errors), 500)
+    return resp
+
 @app.route('/saml_metadata/etsin')
 def saml_metadata_etsin():
     """Optional. Prints out the public saml metadata for Etsin."""
-    auth = get_saml_auth(request, 'ETSIN')
+    auth = get_saml_auth(request, '_ETSIN')
     settings = auth.get_settings()
     metadata = settings.get_sp_metadata()
     errors = settings.validate_metadata(metadata)
@@ -161,7 +200,7 @@ def saml_metadata_etsin():
 @app.route('/saml_metadata/qvain')
 def saml_metadata_qvain():
     """Optional. Prints out the public saml metadata for Qvain."""
-    auth = get_saml_auth(request, 'QVAIN')
+    auth = get_saml_auth(request, '_QVAIN')
     settings = auth.get_settings()
     metadata = settings.get_sp_metadata()
     errors = settings.validate_metadata(metadata)
@@ -173,12 +212,31 @@ def saml_metadata_qvain():
         resp = make_response(', '.join(errors), 500)
     return resp
 
+@app.route('/acs/', methods=['GET', 'POST'])
+def saml_attribute_consumer_service_legacy():
+    """The endpoint which is used by the saml library on auth.login call for Etsin"""
+    reset_flask_session_on_login()
+    req = prepare_flask_request_for_saml(request, '')
+    auth = init_saml_auth(req, '')
+    auth.process_response()
+    errors = auth.get_errors()
+    if len(errors) == 0 and auth.is_authenticated():
+        session['samlUserdata'] = auth.get_attributes()
+        session['samlNameId'] = auth.get_nameid()
+        session['samlSessionIndex'] = auth.get_session_index()
+        self_url = OneLogin_Saml2_Utils.get_self_url(req)
+        log.debug("SESSION: {0}".format(session))
+        if 'RelayState' in request.form and self_url != request.form.get('RelayState'):
+            return redirect(auth.redirect_to(unquote(request.form.get('RelayState'))))
+
+    return _render_index_template(saml_errors=errors)
+
 @app.route('/acs/etsin', methods=['GET', 'POST'])
 def saml_attribute_consumer_service_etsin():
     """The endpoint which is used by the saml library on auth.login call for Etsin"""
     reset_flask_session_on_login()
-    req = prepare_flask_request_for_saml(request, 'ETSIN')
-    auth = init_saml_auth(req, 'ETSIN')
+    req = prepare_flask_request_for_saml(request, '_ETSIN')
+    auth = init_saml_auth(req, '_ETSIN')
     auth.process_response()
     errors = auth.get_errors()
     if len(errors) == 0 and auth.is_authenticated():
@@ -196,8 +254,8 @@ def saml_attribute_consumer_service_etsin():
 def saml_attribute_consumer_service_qvain():
     """The endpoint which is used by the saml library on auth.login call for Qvain"""
     reset_flask_session_on_login()
-    req = prepare_flask_request_for_saml(request, 'QVAIN')
-    auth = init_saml_auth(req, 'QVAIN')
+    req = prepare_flask_request_for_saml(request, '_QVAIN')
+    auth = init_saml_auth(req, '_QVAIN')
     auth.process_response()
     errors = auth.get_errors()
     if len(errors) == 0 and auth.is_authenticated():
@@ -211,10 +269,25 @@ def saml_attribute_consumer_service_qvain():
 
     return _render_index_template(saml_errors=errors)
 
+@app.route('/sls/', methods=['GET', 'POST'])
+def saml_single_logout_service_legacy():
+    """The endpoint which is used by the saml library on auth.logout call"""
+    auth = get_saml_auth(request, '')
+    slo_success = False
+    url = auth.process_slo(delete_session_cb=lambda: session.clear())
+    errors = auth.get_errors()
+    if len(errors) == 0:
+        if url is not None:
+            return redirect(url)
+        else:
+            slo_success = True
+
+    return _render_index_template(saml_errors=errors, slo_success=slo_success)
+
 @app.route('/sls/etsin', methods=['GET', 'POST'])
 def saml_single_logout_service_etsin():
     """The endpoint which is used by the saml library on auth.logout call"""
-    auth = get_saml_auth(request, 'ETSIN')
+    auth = get_saml_auth(request, '_ETSIN')
     slo_success = False
     url = auth.process_slo(delete_session_cb=lambda: session.clear())
     errors = auth.get_errors()
@@ -229,7 +302,7 @@ def saml_single_logout_service_etsin():
 @app.route('/sls/qvain', methods=['GET', 'POST'])
 def saml_single_logout_service_qvain():
     """The endpoint which is used by the saml library on auth.logout call"""
-    auth = get_saml_auth(request, 'QVAIN')
+    auth = get_saml_auth(request, '_QVAIN')
     slo_success = False
     url = auth.process_slo(delete_session_cb=lambda: session.clear())
     errors = auth.get_errors()

@@ -26,7 +26,7 @@ def get_saml_auth(flask_request, service):
         object: SP SAML instance.
 
     """
-    return OneLogin_Saml2_Auth(prepare_flask_request_for_saml(flask_request, service), custom_base_path=app.config.get(('SAML_PATH_' + service), None))
+    return OneLogin_Saml2_Auth(prepare_flask_request_for_saml(flask_request, service), custom_base_path=app.config.get(('SAML_PATH' + service), None))
 
 def init_saml_auth(saml_prepared_flask_request, service):
     """Init saml auth
@@ -38,7 +38,7 @@ def init_saml_auth(saml_prepared_flask_request, service):
         object: Initializes the SP SAML instance.
 
     """
-    return OneLogin_Saml2_Auth(saml_prepared_flask_request, custom_base_path=app.config.get(('SAML_PATH_' + service), None))
+    return OneLogin_Saml2_Auth(saml_prepared_flask_request, custom_base_path=app.config.get(('SAML_PATH' + service), None))
 
 def is_authenticated_through_direct_proxy():
     """Is user authenticated through the old proxy solution
@@ -64,17 +64,17 @@ def prepare_flask_request_for_saml(request, service):
     # If server is behind proxys or balancers use the HTTP_X_FORWARDED fields
     url_data = urlparse(request.url)
 
-    if service == 'ETSIN':
-        http_host_variable_to_retrieve = 'SERVER_ETSIN_DOMAIN_NAME'
+    # If in local development environment this will redirect the saml login right.
+    if request.host == 'localhost':
+        http_host = '30.30.30.30'
+    elif service == 'ETSIN':
+        http_host = get_app_config(app.testing).get('SERVER_ETSIN_DOMAIN_NAME')
     elif service == 'QVAIN':
-        http_host_variable_to_retrieve = 'SERVER_QVAIN_DOMAIN_NAME'
-    else:
-        log.error('Could not retrieve domain name')
-    log.info(http_host_variable_to_retrieve)
+        http_host = get_app_config(app.testing).get('SERVER_QVAIN_DOMAIN_NAME')
 
     return {
         'https': 'on' if request.scheme == 'https' else 'off',
-        'http_host': get_app_config(app.testing).get(http_host_variable_to_retrieve),
+        'http_host': http_host,
         'server_port': url_data.port,
         'script_name': request.path,
         'get_data': request.args.copy(),
