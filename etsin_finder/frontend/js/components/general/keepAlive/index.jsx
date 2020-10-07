@@ -19,25 +19,35 @@ import Auth from '../../../stores/domain/auth'
 
 /*
   Logs user out if they idle for too long
-  and
   Renews session if user is active
 */
 
 // TODO: change renewal time to real time, change idle time to match real time
 
 export default class KeepAlive extends Component {
+  static propTypes = {
+    loginThroughService: PropTypes.string,
+  }
+
   state = {
     showNotice: false,
+    loggedInThroughService: '',
   }
 
   timeout = null
 
+  componentDidMount() {
+    this.setState({
+      loggedInThroughService: this.props.loginThroughService
+    })
+  }
+
   handleIdle = idle => {
-    // user was idle for custom time and is logged in
+    // User was idle for custom time and is logged in
     if (idle && Auth.userLogged) {
       this.timeout = setTimeout(() => {
         // Auth.logout()
-        window.location = '/slo'
+        window.location = `/slo/${this.state.loggedInThroughService}`
         this.setState({
           showNotice: true,
         })
