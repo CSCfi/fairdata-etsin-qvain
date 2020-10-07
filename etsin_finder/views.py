@@ -27,18 +27,6 @@ from etsin_finder.log import log
 
 # REACT APP RELATED
 
-@app.route('/sso')
-def login_legacy():
-    """Endpoint which frontend should call when wanting to perform a legacy logout (non-SSO)
-
-    Returns:
-        Redirect the login.
-
-    """
-    auth = get_saml_auth(request, '')
-    redirect_url = quote(request.args.get('relay', '/'))
-    return redirect(auth.login(redirect_url))
-
 @app.route('/sso/etsin')
 def login_etsin():
     """Endpoint which frontend should call when wanting to perform a login as Etsin
@@ -171,36 +159,6 @@ def _render_index_template(saml_errors=[], slo_success=False):
 def saml_metadata_legacy():
     """Optional. Prints out the public saml metadata for Etsin."""
     auth = get_saml_auth(request, '')
-    settings = auth.get_settings()
-    metadata = settings.get_sp_metadata()
-    errors = settings.validate_metadata(metadata)
-
-    if len(errors) == 0:
-        resp = make_response(metadata, 200)
-        resp.headers['Content-Type'] = 'text/xml'
-    else:
-        resp = make_response(', '.join(errors), 500)
-    return resp
-
-@app.route('/saml_metadata/etsin')
-def saml_metadata_etsin():
-    """Optional. Prints out the public saml metadata for Etsin."""
-    auth = get_saml_auth(request, '_ETSIN')
-    settings = auth.get_settings()
-    metadata = settings.get_sp_metadata()
-    errors = settings.validate_metadata(metadata)
-
-    if len(errors) == 0:
-        resp = make_response(metadata, 200)
-        resp.headers['Content-Type'] = 'text/xml'
-    else:
-        resp = make_response(', '.join(errors), 500)
-    return resp
-
-@app.route('/saml_metadata/qvain')
-def saml_metadata_qvain():
-    """Optional. Prints out the public saml metadata for Qvain."""
-    auth = get_saml_auth(request, '_QVAIN')
     settings = auth.get_settings()
     metadata = settings.get_sp_metadata()
     errors = settings.validate_metadata(metadata)

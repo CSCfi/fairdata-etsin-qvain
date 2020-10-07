@@ -25,6 +25,8 @@ import Auth from '../../../stores/domain/auth'
 // TODO: change renewal time to real time, change idle time to match real time
 
 export default class KeepAlive extends Component {
+  timeout = null
+
   static propTypes = {
     loginThroughService: PropTypes.string,
   }
@@ -37,8 +39,6 @@ export default class KeepAlive extends Component {
     showNotice: false,
     loggedInThroughService: '',
   }
-
-  timeout = null
 
   componentDidMount() {
     this.setState({

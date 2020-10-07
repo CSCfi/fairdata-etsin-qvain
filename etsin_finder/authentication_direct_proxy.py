@@ -64,11 +64,13 @@ def prepare_flask_request_for_saml(request, service):
     # If server is behind proxys or balancers use the HTTP_X_FORWARDED fields
     url_data = urlparse(request.url)
 
-    # If in local development environment this will redirect the saml login right.
+    # If in local development environment this will redirect the legacy SAML login right.
     if request.host == 'localhost':
         http_host = '30.30.30.30'
+    # Non-local login through Etsin SSO
     elif service == 'ETSIN':
         http_host = get_app_config(app.testing).get('SERVER_ETSIN_DOMAIN_NAME')
+    # Non-local login through Qvain SSO
     elif service == 'QVAIN':
         http_host = get_app_config(app.testing).get('SERVER_QVAIN_DOMAIN_NAME')
 
