@@ -263,9 +263,8 @@ const english = {
     },
     cookies: {
       accept: 'Accept all cookies',
-      infoText:
-        'By using Fairdata services you agree to our Cookies Use. We use cookies to improve your experience and make our services work better.',
-      link: 'View the Fairdata Privacy Policy.',
+      infoText: 'The Fairdata services use cookies and tracking to ensure security and quality.',
+      link: 'View the Fairdata Privacy Policy',
     },
   },
   home: {
