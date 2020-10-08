@@ -12,32 +12,46 @@
 
 import React, { Component } from 'react'
 import Translation from 'react-translate-component'
-
+import PropTypes from 'prop-types'
 import Idle from './idle'
 import NoticeBar from '../noticeBar'
 import Auth from '../../../stores/domain/auth'
 
 /*
   Logs user out if they idle for too long
-  and
   Renews session if user is active
 */
 
 // TODO: change renewal time to real time, change idle time to match real time
 
 export default class KeepAlive extends Component {
-  state = {
-    showNotice: false,
-  }
-
   timeout = null
 
+  static propTypes = {
+    loginThroughService: PropTypes.string,
+  }
+
+  static defaultProps = {
+    loginThroughService: '',
+  }
+
+  state = {
+    showNotice: false,
+    loggedInThroughService: '',
+  }
+
+  componentDidMount() {
+    this.setState({
+      loggedInThroughService: this.props.loginThroughService
+    })
+  }
+
   handleIdle = idle => {
-    // user was idle for custom time and is logged in
+    // User was idle for custom time and is logged in
     if (idle && Auth.userLogged) {
       this.timeout = setTimeout(() => {
         // Auth.logout()
-        window.location = '/slo'
+        window.location = `/slo/${this.state.loggedInThroughService}`
         this.setState({
           showNotice: true,
         })

@@ -64,7 +64,11 @@ const MobileNavi = props => (
         </Row>
         <Row>
           <LangToggle margin="0.4em 0.4em 0.4em 0em" />
-          <Login width="100%" margin="0.4em 0em 0.4em 0em" />
+          <Login
+            width="100%"
+            margin="0.4em 0em 0.4em 0em"
+            loginThroughService={props.loginThroughService}
+          />
         </Row>
       </CustomContainer>
     </DropdownMenu>
@@ -82,6 +86,7 @@ MobileNavi.propTypes = {
     })
   ),
   children: PropTypes.node,
+  loginThroughService: PropTypes.string,
 }
 
 export default MobileNavi
@@ -90,6 +95,7 @@ MobileNavi.defaultProps = {
   helpUrl: undefined,
   naviRoutes: [],
   children: null,
+  loginThroughService: '',
 }
 
 const MobileItems = styled.div`
