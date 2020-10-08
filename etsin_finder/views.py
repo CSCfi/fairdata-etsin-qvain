@@ -51,18 +51,6 @@ def login_qvain():
     redirect_url = quote(request.args.get('relay', '/'))
     return redirect(auth.login(redirect_url))
 
-@app.route('/slo')
-def logout_legacy():
-    """Endpoint which frontend should call when wanting to perform a login as Etsin
-
-    Returns:
-        Redirect the login.
-
-    """
-    auth = get_saml_auth(request, '')
-    redirect_url = quote(request.args.get('relay', '/'))
-    return redirect(auth.login(redirect_url))
-
 @app.route('/slo/etsin')
 def logout_etsin():
     """Endpoint which frontend should call when wanting to perform a logout from Etsin
