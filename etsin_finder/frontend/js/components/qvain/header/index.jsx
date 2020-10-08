@@ -49,9 +49,16 @@ const QvainHeader = props => {
         <Navi routes={routes} />
       </NaviContainer>
       <Right>
-        <Settings helpUrl={helpUrl} />
+        <Settings
+          helpUrl={helpUrl}
+          loginThroughService="qvain"
+        />
       </Right>
-      <MobileNavi helpUrl={helpUrl} naviRoutes={routes} />
+      <MobileNavi
+        helpUrl={helpUrl}
+        naviRoutes={routes}
+        loginThroughService="qvain"
+      />
     </Header>
   )
 }
