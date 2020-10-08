@@ -101,7 +101,11 @@ const EtsinHeader = props => {
           {dropDownMenu()}
         </Settings>
       </Right>
-      <MobileNavi helpUrl={helpUrl} naviRoutes={routes}>
+      <MobileNavi
+        helpUrl={helpUrl}
+        naviRoutes={routes}
+        loginThroughService="etsin"
+      >
         {mobileSettingsExtra}
       </MobileNavi>
     </Header>
