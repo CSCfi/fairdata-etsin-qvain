@@ -220,6 +220,7 @@ const english = {
       homepage: 'Homepage',
     },
     language: 'Language',
+    fairdataPas: 'Fairdata DPS',
     storedInPas:
       "This dataset is stored in Fairdata's Digital Preservation Service (data not accessible via Etsin).",
     pasDatasetVersionExists:
@@ -227,8 +228,8 @@ const english = {
     originalDatasetVersionExists: 'There is an existing use copy of the dataset. ',
     linkToPasDataset: "Click here to open the Digial preservation Service's version",
     linkToOriginalDataset: 'You can open the use copy by clicking here',
-    enteringPas: 'Entering PAS',
-    dataInPasDatasetsCanNotBeDownloaded: 'PAS dataset data cannot be downloaded',
+    enteringPas: 'Entering DPS',
+    dataInPasDatasetsCanNotBeDownloaded: 'DPS dataset data cannot be downloaded',
   },
   error: {
     cscLoginRequired: 'This page requires you to be logged in with a CSC account.',
@@ -287,7 +288,7 @@ const english = {
       fos: 'View fields of science in Search -page',
       research: 'View projects in Search -page',
     },
-    includePas: 'Include Fairdata PAS datasets',
+    includePas: 'Include Fairdata DPS datasets',
   },
   nav: {
     login: 'Login',
@@ -398,7 +399,7 @@ const english = {
       editMetadataSuccess: 'Dataset successfully updated!',
     },
     pasInfo: {
-      stateInfo: 'This is a PAS dataset. The state of the dataset is "%(state)s: %(description)s".',
+      stateInfo: 'This is a DPS dataset. The state of the dataset is "%(state)s: %(description)s".',
       editable: 'You can edit metadata but cannot add or remove any files.',
       readonly: 'You can view metadata but cannot make any changes.',
     },
@@ -881,7 +882,7 @@ const english = {
         placeholder: 'Select option',
         ida: 'IDA',
         att: 'Remote resources',
-        pas: 'PAS',
+        pas: 'DPS',
       },
       cumulativeState: {
         label: 'Cumulative dataset',

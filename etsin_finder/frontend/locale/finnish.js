@@ -220,6 +220,7 @@ const finnish = {
       homepage: 'Kotisivu',
     },
     language: 'Kieli',
+    fairdataPas: 'Fairdata PAS',
     storedInPas: 'Tämä aineisto on pitkäaikaissäilytyksessä.',
     pasDatasetVersionExists: 'Aineisto on myös pitkäaikaissäilytyksessä: ',
     originalDatasetVersionExists: 'Aineistosta on olemassa käyttökopio: ',
