@@ -262,9 +262,8 @@ const finnish = {
     },
     cookies: {
       accept: 'Hyväksy evästeet',
-      infoText:
-        'Käyttämällä Fairdata-palveluja hyväksyt evästeiden käytön. Käytämme evästeitä palvelun kehittämiseen ja käyttökokemuksen parantamiseen.',
-      link: 'Fairdata-palvelujen tietosuoja.',
+      infoText: 'Fairdata-palvelut käyttävät evästeitä ja seurantaa turvallisuuden ja laadun varmistamiseksi.',
+      link: 'Katso Fairdatan tietosuojakäytäntö',
     },
   },
   home: {
@@ -967,9 +966,9 @@ const finnish = {
         explanation:
           'Valitse "IDA", jos tiedostot on tallennettu Fairdata IDA -palveluun. Valitse "Ulkoinen lähde" jos tiedostot sijaitsevat muualla.',
         doiSelection:
-          'Haluan aineistolleni DOI-tunnisteen (digital object identifier) URN-tunnisteen sijaan.',
+          'Haluan julkaistulle aineistolleni DOI-tunnisteen (digital object identifier) URN-tunnisteen sijaan.',
         doiSelectedHelp:
-          'Aineistolle luodaan julkaisun yhteydessä DOI-tunniste, joka rekisteröidään DataCite-palvelun tietokantaan, eikä toimintoa voi peruuttaa.',
+          'Aineistolle luodaan julkaisun yhteydessä DOI-tunniste, joka rekisteröidään DataCite-palvelun tietokantaan, eikä toimintoa voi peruuttaa. DOI-tunnisteellisen aineiston julkaisupäivämäärää ei voi muuttaa enää julkaisun jälkeen.',
         placeholder: 'Valitse vaihtoehto',
         ida: 'IDA',
         att: 'Ulkoinen lähde',

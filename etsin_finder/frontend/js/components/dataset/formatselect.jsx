@@ -91,6 +91,7 @@ export default class FormatSelect extends Component {
 
     this.state = {
       isOpen: false,
+      isFocused: false,
       frontColor: props.frontColor ? props.frontColor : props.background,
       color: props.color,
       background: props.background,
@@ -147,6 +148,7 @@ export default class FormatSelect extends Component {
     this.setState(
       state => ({
         isOpen: !state.isOpen,
+        isFocused: !state.isOpen,
       }),
       () => {
         if (this.state.isOpen) {

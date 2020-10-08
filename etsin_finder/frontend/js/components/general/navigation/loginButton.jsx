@@ -32,6 +32,7 @@ class Login extends Component {
     isLoggedInKey: PropTypes.string,
     fontSize: PropTypes.string,
     borderColor: PropTypes.string,
+    loginThroughService: PropTypes.string,
   }
 
   static defaultProps = {
@@ -40,11 +41,31 @@ class Login extends Component {
     fontSize: 'inherit',
     isLoggedInKey: 'userLogged',
     borderColor: '',
+    loginThroughService: '',
   }
 
   state = {
     loading: false,
     showNotice: false,
+    loggedInThroughService: '',
+  }
+
+  componentDidMount() {
+    this.setState({
+      loggedInThroughService: this.props.loginThroughService
+    })
+  }
+
+  redirectToLogin = (location, loginThroughService) => {
+    const query = location.search
+    this.setState(
+      {
+        loading: true,
+      },
+      () => {
+        window.location = `/sso/${loginThroughService}?relay=${location.pathname}${encodeURIComponent(query)}`
+      }
+    )
   }
 
   logout = () => {
@@ -53,19 +74,7 @@ class Login extends Component {
         showNotice: true,
       },
       () => {
-        window.location = '/slo'
-      }
-    )
-  }
-
-  redirect = location => {
-    const query = location.search
-    this.setState(
-      {
-        loading: true,
-      },
-      () => {
-        window.location = `/sso?relay=${location.pathname}${encodeURIComponent(query)}`
+        window.location = `/slo/${this.state.loggedInThroughService}`
       }
     )
   }
@@ -78,16 +87,16 @@ class Login extends Component {
             <LoaderCont active={this.state.loading}>
               <Loader active color="white" size="1.1em" spinnerSize="3px" />
             </LoaderCont>
-            <LogoutButton
+            <LoginButton
               width={this.props.width}
               margin="0"
-              onClick={() => this.redirect(this.props.location)}
+              onClick={() => this.redirectToLogin(this.props.location, this.props.loginThroughService)}
               borderColor={this.props.borderColor}
             >
               <LoginText visible={!this.state.loading} fontSize={this.props.fontSize}>
                 <Translate content="nav.login" />
               </LoginText>
-            </LogoutButton>
+            </LoginButton>
           </Cont>
           {this.state.showNotice && (
             <NoticeBar
@@ -106,7 +115,7 @@ class Login extends Component {
       )
     }
     return (
-      <Dropdown buttonComponent={LogoutButton} buttonContent={<LoggedInUser />}>
+      <Dropdown buttonComponent={LoginButton} buttonContent={<LoggedInUser />}>
         <DropdownItem onClick={this.logout}>
           <Translate content="nav.logout" />
         </DropdownItem>
@@ -120,7 +129,7 @@ const Cont = styled.div`
   position: relative;
 `
 
-const LogoutButton = styled(Button)`
+const LoginButton = styled(Button)`
   width: fit-content;
   ${props =>
     props.borderColor &&
