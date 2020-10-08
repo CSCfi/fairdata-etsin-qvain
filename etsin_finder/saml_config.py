@@ -10,14 +10,14 @@
 import json
 from etsin_finder.log import log
 
-def get_saml_config_from_file():
-    """Get saml config.
+def get_etsin_saml_config_from_file():
+    """Get Etsin saml config.
 
     Returns:
         saml_config
 
     """
-    with open('/home/etsin-user/settings.json') as saml_json_file:
+    with open('/home/etsin-user/etsin/settings.json') as saml_json_file:
         return json.load(saml_json_file)
 
 def get_sso_key():
@@ -27,5 +27,5 @@ def get_sso_key():
         saml_config
 
     """
-    data = get_saml_config_from_file()
+    data = get_etsin_saml_config_from_file()
     return data.get('sp').get('privateKey')

@@ -16,7 +16,7 @@ from etsin_finder.utils import executing_travis
 from etsin_finder.constants import SAML_ATTRIBUTES
 from etsin_finder.app_config import get_app_config
 
-def get_saml_auth(flask_request):
+def get_saml_auth(flask_request, service):
     """Get saml auth
 
     Args:
@@ -26,10 +26,9 @@ def get_saml_auth(flask_request):
         object: SP SAML instance.
 
     """
-    return OneLogin_Saml2_Auth(prepare_flask_request_for_saml(flask_request), custom_base_path=app.config.get('SAML_PATH', None))
+    return OneLogin_Saml2_Auth(prepare_flask_request_for_saml(flask_request, service), custom_base_path=app.config.get(('SAML_PATH' + service), None))
 
-
-def init_saml_auth(saml_prepared_flask_request):
+def init_saml_auth(saml_prepared_flask_request, service):
     """Init saml auth
 
     Args:
@@ -39,7 +38,7 @@ def init_saml_auth(saml_prepared_flask_request):
         object: Initializes the SP SAML instance.
 
     """
-    return OneLogin_Saml2_Auth(saml_prepared_flask_request, custom_base_path=app.config.get('SAML_PATH', None))
+    return OneLogin_Saml2_Auth(saml_prepared_flask_request, custom_base_path=app.config.get(('SAML_PATH' + service), None))
 
 def is_authenticated_through_direct_proxy():
     """Is user authenticated through the old proxy solution
@@ -52,7 +51,7 @@ def is_authenticated_through_direct_proxy():
         return True
     return False
 
-def prepare_flask_request_for_saml(request):
+def prepare_flask_request_for_saml(request, service):
     """Prepare Flask request for saml
 
     Args:
@@ -64,11 +63,20 @@ def prepare_flask_request_for_saml(request):
     """
     # If server is behind proxys or balancers use the HTTP_X_FORWARDED fields
     url_data = urlparse(request.url)
-    log.info(get_app_config(app.testing).get('SERVER_DOMAIN_NAME'))
+
+    # If in local development environment this will redirect the legacy SAML login right.
+    if request.host == 'localhost':
+        http_host = '30.30.30.30'
+    # Non-local login through Etsin SSO
+    elif service == 'ETSIN':
+        http_host = get_app_config(app.testing).get('SERVER_ETSIN_DOMAIN_NAME')
+    # Non-local login through Qvain SSO
+    elif service == 'QVAIN':
+        http_host = get_app_config(app.testing).get('SERVER_QVAIN_DOMAIN_NAME')
 
     return {
         'https': 'on' if request.scheme == 'https' else 'off',
-        'http_host': get_app_config(app.testing).get('SERVER_DOMAIN_NAME'),
+        'http_host': http_host,
         'server_port': url_data.port,
         'script_name': request.path,
         'get_data': request.args.copy(),

@@ -25,7 +25,10 @@ class QvainLogin extends Component {
         {!loading && !cscUserLogged && (
           <Fragment>
             <Translate component="p" content="qvain.notLoggedIn" />
-            <LoginButton isLoggedInKey="cscUserLogged" />
+            <LoginButton
+              loginThroughService="qvain"
+              isLoggedInKey="cscUserLogged"
+            />
           </Fragment>
         )}
         {cscUserLogged && <Redirect to={redirectPath} />}
