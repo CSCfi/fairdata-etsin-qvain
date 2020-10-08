@@ -397,6 +397,7 @@ class Qvain {
   @action
   setUseDoi = selectedUseDoiStatus => {
     this.useDoi = selectedUseDoiStatus
+    this.changed = true
   }
 
   @action

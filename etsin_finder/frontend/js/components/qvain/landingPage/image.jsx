@@ -25,11 +25,15 @@ Image.defaultProps = {
 
 const ImageWrapper = styled.div`
   width: 64px;
+  height: 65px;
   margin: 0 0.5rem;
   padding: 0;
   display: flex;
   justify-content: flex-end;
   flex-shrink: 0;
+  > img {
+    object-fit: contain;
+  }
 `
 
 export default Image

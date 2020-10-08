@@ -263,9 +263,8 @@ const english = {
     },
     cookies: {
       accept: 'Accept all cookies',
-      infoText:
-        'By using Fairdata services you agree to our Cookies Use. We use cookies to improve your experience and make our services work better.',
-      link: 'View the Fairdata Privacy Policy.',
+      infoText: 'The Fairdata services use cookies and tracking to ensure security and quality.',
+      link: 'View the Fairdata Privacy Policy',
     },
   },
   home: {
@@ -876,9 +875,9 @@ const english = {
         explanation:
           'Choose "IDA" if the data is stored in Fairdata IDA Service. Choose "Remote resources" if the data is in remote location.',
         doiSelection:
-          'I want the dataset to have a DOI (digital object identifier) instead of a URN.',
+          'I want the published dataset to have a DOI (digital object identifier) instead of a URN.',
         doiSelectedHelp:
-          'When the dataset is published, a DOI will be created and stored in the DataCite Service. This operation cannot be undone.',
+          'When the dataset is published, a DOI will be created and stored in the DataCite Service. This operation cannot be undone. The issued date of a dataset that has been published with a DOI cannot be changed afterwards.',
         placeholder: 'Select option',
         ida: 'IDA',
         att: 'Remote resources',
