@@ -21,9 +21,16 @@ class IssuedDateField extends React.Component {
   validate = () => this.props.Stores.Qvain.IssuedDate.validate()
 
   render() {
-    const { set, value, readonly, validationError } = this.props.Stores.Qvain.IssuedDate
+    const {
+      original,
+      value,
+      set,
+      useDoi,
+      validationError,
+      readonly,
+    } = this.props.Stores.Qvain.IssuedDate
     const { lang } = this.props.Stores.Locale
-
+    const publishedWithDoi = !!(useDoi && original)
     return (
       <Card bottomContent>
         <>
@@ -47,7 +54,7 @@ class IssuedDateField extends React.Component {
             onBlur={this.validate}
             placeholderText={translate('qvain.description.issuedDate.placeholder')}
             dateFormat={getDateFormatLocale(lang)}
-            disabled={readonly}
+            disabled={readonly || publishedWithDoi}
           />
           <ValidationError>{validationError}</ValidationError>
         </>

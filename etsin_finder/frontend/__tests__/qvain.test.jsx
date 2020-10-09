@@ -11,6 +11,7 @@ import Description from '../js/components/qvain/description'
 import DescriptionField from '../js/components/qvain/description/descriptionField'
 import OtherIdentifierField from '../js/components/qvain/description/otherIdentifierField'
 import FieldOfScienceField from '../js/components/qvain/description/fieldOfScienceField'
+import IssuedDateField from '../js/components/qvain/description/issuedDateField'
 import LanguageField from '../js/components/qvain/description/languageField'
 import KeywordsField from '../js/components/qvain/description/keywordsField'
 import RightsAndLicenses from '../js/components/qvain/licenses'
@@ -37,6 +38,7 @@ import {
   filterGroupsByTitle,
   groupDatasetsByVersionSet,
 } from '../js/components/qvain/datasets/filter'
+import DatePicker from '../js/components/qvain/general/input/datepicker'
 
 jest.mock('uuid', original => {
   let id = 0
@@ -400,6 +402,35 @@ describe('Qvain.ExternalFiles', () => {
     )
     externalFiles.update()
     expect(externalFiles.find(ButtonGroup).length).toBe(1)
+  })
+})
+
+describe('Qvain issued date', () => {
+  let Qvain
+  let Stores
+  const IssuedDateFieldBase = IssuedDateField.wrappedComponent
+  beforeEach(() => {
+    Stores = getStores()
+    Qvain = Stores.Qvain
+    Qvain.resetQvainStore()
+  })
+
+  it('is enabled', () => {
+    const component = shallow(<IssuedDateFieldBase Stores={Stores} />)
+    expect(component.find(DatePicker).prop('disabled')).toEqual(false)
+  })
+
+  it('is enabled for unpublished DOI dataset', () => {
+    Qvain.setUseDoi(true)
+    const component = shallow(<IssuedDateFieldBase Stores={Stores} />)
+    expect(component.find(DatePicker).prop('disabled')).toEqual(false)
+  })
+
+  it('is disabled for published DOI dataset', () => {
+    Qvain.setUseDoi(true)
+    Qvain.setOriginal({ identifier: 'test' })
+    const component = shallow(<IssuedDateFieldBase Stores={Stores} />)
+    expect(component.find(DatePicker).prop('disabled')).toEqual(true)
   })
 })
 
