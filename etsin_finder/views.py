@@ -10,6 +10,7 @@ from urllib.parse import quote, unquote
 
 from flask import make_response, render_template, redirect, request, session
 from onelogin.saml2.utils import OneLogin_Saml2_Utils
+import requests
 
 from etsin_finder.authentication import \
     is_authenticated
@@ -24,6 +25,7 @@ from etsin_finder.authentication_fairdata_sso import \
     log_sso_values
 from etsin_finder.app import app
 from etsin_finder.log import log
+from etsin_finder.localization import get_language, translate
 
 # REACT APP RELATED
 
@@ -128,17 +130,15 @@ def _render_index_template(saml_errors=[], slo_success=False):
         if is_authenticated_through_fairdata_sso():
             log_sso_values()
 
+    lang = get_language()
     if request.headers.get('X-Etsin-App', None) == 'qvain':
-        app_title = 'Qvain | Tutkimusaineiston metatietotyökalu'
-        app_description = 'Fairdata Qvain -työkalu tekee datasi ' \
-            'kuvailun ja julkaisemisen helpoksi.'
+        app_title = translate(lang, 'qvain.title')
+        app_description = translate(lang, 'qvain.description')
     else:
-        app_title = 'Etsin | Tutkimusaineistojen hakupalvelu'
-        app_description = 'Kuvailutietojen perusteella käyttäjät ' \
-            'voivat etsiä aineistoja ja arvioida löytämiensä ' \
-            'aineistojen käyttökelpoisuutta tarpeisiinsa.'
+        app_title = translate(lang, 'etsin.title')
+        app_description = translate(lang, 'etsin.description')
 
-    return render_template('index.html', app_title=app_title, app_description=app_description)
+    return render_template('index.html', lang=lang, app_title=app_title, app_description=app_description)
 
 
 # SAML AUTHENTICATION RELATED

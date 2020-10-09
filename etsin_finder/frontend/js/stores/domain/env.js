@@ -10,18 +10,9 @@
 
 import { action, computed, observable } from 'mobx'
 import { RouterStore } from 'mobx-react-router'
+import { getCookieValue } from '../../utils/cookies'
 
 const routingStore = new RouterStore()
-
-const getCookieValue = (key) => {
-  const entry = document.cookie
-    .split('; ')
-    .find(row => row.startsWith(key))
-  if (entry) {
-    return entry.split('=')[1]
-  }
-  return undefined
-}
 
 const qvainHost = process.env.REACT_APP_QVAIN_HOST
 const etsinHost = process.env.REACT_APP_ETSIN_HOST
