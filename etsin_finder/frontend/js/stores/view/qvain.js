@@ -1,4 +1,4 @@
-import { observable, action, computed, runInAction } from 'mobx'
+import { observable, action, computed, runInAction, makeObservable } from 'mobx'
 import axios from 'axios'
 import moment from 'moment'
 import { v4 as uuid } from 'uuid'
@@ -23,6 +23,7 @@ import Temporals from './qvain.temporals'
 
 class Qvain {
   constructor(Env) {
+    makeObservable(this)
     this.Env = Env
     this.Files = new Files(this)
     this.Actors = new Actors(this)

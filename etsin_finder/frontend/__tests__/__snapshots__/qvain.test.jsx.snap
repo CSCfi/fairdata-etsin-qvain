@@ -71,11 +71,11 @@ exports[`Qvain.Description should render <Description /> 1`] = `
     </Tooltip>
   </title__SectionTitle>
   <DescriptionField />
-  <inject-IssuedDateField-with-Stores />
-  <inject-OtherIdentifierField-with-Stores />
-  <inject-FieldOfScienceField-with-Stores />
-  <inject-LanguageField-with-Stores />
-  <inject-KeywordsField-with-Stores />
+  <inject-with-Stores(IssuedDateField) />
+  <inject-with-Stores(OtherIdentifierField) />
+  <inject-with-Stores(FieldOfScienceField) />
+  <inject-with-Stores(LanguageField) />
+  <inject-with-Stores(KeywordsField) />
 </div>
 `;
 
@@ -84,7 +84,7 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
   language="fi"
   setLanguage={[Function]}
 >
-  <inject-DescriptionFieldInput-with-Stores
+  <inject-with-Stores(DescriptionFieldInput)
     activeLang="fi"
     propName="title"
     schema={
@@ -192,7 +192,7 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
       }
     }
   />
-  <inject-DescriptionFieldTextField-with-Stores
+  <inject-with-Stores(DescriptionFieldTextField)
     activeLang="fi"
     propName="description"
     schema={
@@ -321,13 +321,20 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
           "goBack": [Function],
           "goForward": [Function],
           "history": null,
+          "location": null,
           "push": [Function],
           "replace": [Function],
         },
         "metaxApiV2": true,
         "separateQvain": false,
       },
-      "Locale": Locale {},
+      "Locale": Locale {
+        "currentLang": "en",
+        "languages": Array [
+          "en",
+          "fi",
+        ],
+      },
       "Qvain": Qvain {
         "Actors": Actors {
           "Qvain": [Circular],
@@ -354,6 +361,7 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
             "goBack": [Function],
             "goForward": [Function],
             "history": null,
+            "location": null,
             "push": [Function],
             "replace": [Function],
           },
@@ -410,18 +418,22 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
           "Template": [Function],
           "attachRefs": [Function],
           "cloneRefs": [Function],
-          "create": [Function],
           "detachRefs": [Function],
+          "editMode": undefined,
           "fieldName": "provenances",
+          "hasChanged": undefined,
+          "inEdit": undefined,
           "references": Array [
             "associations",
             "usedEntities",
             "spatials",
           ],
-          "reset": [Function],
           "saveEdited": [Function],
           "saveNew": [Function],
+          "selectedActor": undefined,
+          "storage": Array [],
           "toBackend": [Function],
+          "validationError": undefined,
         },
         "RelatedResources": RelatedResources {
           "Model": [Function],
@@ -432,13 +444,18 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
           "cloneRefs": [Function],
           "create": [Function],
           "detachRefs": [Function],
+          "editMode": undefined,
           "fieldName": "relatedResources",
+          "hasChanged": undefined,
+          "inEdit": undefined,
           "references": Array [],
           "relatedResourceToBackend": [Function],
           "reset": [Function],
           "saveEdited": [Function],
           "saveNew": [Function],
+          "storage": Array [],
           "toBackend": [Function],
+          "validationError": undefined,
         },
         "Spatials": Spatials {
           "Model": [Function],
@@ -450,13 +467,18 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
           "cloneRefs": [Function],
           "create": [Function],
           "detachRefs": [Function],
+          "editMode": undefined,
           "fieldName": "spatials",
+          "hasChanged": undefined,
+          "inEdit": undefined,
           "references": Array [],
           "reset": [Function],
           "saveEdited": [Function],
           "saveNew": [Function],
           "spatialToBackend": [Function],
+          "storage": Array [],
           "toBackend": [Function],
+          "validationError": undefined,
         },
         "Temporals": Temporals {
           "Model": [Function],
@@ -464,7 +486,6 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
           "Template": [Function],
           "attachRefs": [Function],
           "cloneRefs": [Function],
-          "create": [Function],
           "detachRefs": [Function],
           "editMode": false,
           "fieldName": "temporals",
@@ -475,7 +496,6 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
             "uiid": 0,
           },
           "references": Array [],
-          "reset": [Function],
           "saveEdited": [Function],
           "saveNew": [Function],
           "storage": Array [],
@@ -570,13 +590,20 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
           "goBack": [Function],
           "goForward": [Function],
           "history": null,
+          "location": null,
           "push": [Function],
           "replace": [Function],
         },
         "metaxApiV2": true,
         "separateQvain": false,
       },
-      "Locale": Locale {},
+      "Locale": Locale {
+        "currentLang": "en",
+        "languages": Array [
+          "en",
+          "fi",
+        ],
+      },
       "Qvain": Qvain {
         "Actors": Actors {
           "Qvain": [Circular],
@@ -603,6 +630,7 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
             "goBack": [Function],
             "goForward": [Function],
             "history": null,
+            "location": null,
             "push": [Function],
             "replace": [Function],
           },
@@ -659,18 +687,22 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
           "Template": [Function],
           "attachRefs": [Function],
           "cloneRefs": [Function],
-          "create": [Function],
           "detachRefs": [Function],
+          "editMode": undefined,
           "fieldName": "provenances",
+          "hasChanged": undefined,
+          "inEdit": undefined,
           "references": Array [
             "associations",
             "usedEntities",
             "spatials",
           ],
-          "reset": [Function],
           "saveEdited": [Function],
           "saveNew": [Function],
+          "selectedActor": undefined,
+          "storage": Array [],
           "toBackend": [Function],
+          "validationError": undefined,
         },
         "RelatedResources": RelatedResources {
           "Model": [Function],
@@ -681,13 +713,18 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
           "cloneRefs": [Function],
           "create": [Function],
           "detachRefs": [Function],
+          "editMode": undefined,
           "fieldName": "relatedResources",
+          "hasChanged": undefined,
+          "inEdit": undefined,
           "references": Array [],
           "relatedResourceToBackend": [Function],
           "reset": [Function],
           "saveEdited": [Function],
           "saveNew": [Function],
+          "storage": Array [],
           "toBackend": [Function],
+          "validationError": undefined,
         },
         "Spatials": Spatials {
           "Model": [Function],
@@ -699,13 +736,18 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
           "cloneRefs": [Function],
           "create": [Function],
           "detachRefs": [Function],
+          "editMode": undefined,
           "fieldName": "spatials",
+          "hasChanged": undefined,
+          "inEdit": undefined,
           "references": Array [],
           "reset": [Function],
           "saveEdited": [Function],
           "saveNew": [Function],
           "spatialToBackend": [Function],
+          "storage": Array [],
           "toBackend": [Function],
+          "validationError": undefined,
         },
         "Temporals": Temporals {
           "Model": [Function],
@@ -713,7 +755,6 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
           "Template": [Function],
           "attachRefs": [Function],
           "cloneRefs": [Function],
-          "create": [Function],
           "detachRefs": [Function],
           "editMode": false,
           "fieldName": "temporals",
@@ -724,7 +765,6 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
             "uiid": 0,
           },
           "references": Array [],
-          "reset": [Function],
           "saveEdited": [Function],
           "saveNew": [Function],
           "storage": Array [],
@@ -819,13 +859,20 @@ exports[`Qvain.Description should render <LanguageField /> 1`] = `
           "goBack": [Function],
           "goForward": [Function],
           "history": null,
+          "location": null,
           "push": [Function],
           "replace": [Function],
         },
         "metaxApiV2": true,
         "separateQvain": false,
       },
-      "Locale": Locale {},
+      "Locale": Locale {
+        "currentLang": "en",
+        "languages": Array [
+          "en",
+          "fi",
+        ],
+      },
       "Qvain": Qvain {
         "Actors": Actors {
           "Qvain": [Circular],
@@ -852,6 +899,7 @@ exports[`Qvain.Description should render <LanguageField /> 1`] = `
             "goBack": [Function],
             "goForward": [Function],
             "history": null,
+            "location": null,
             "push": [Function],
             "replace": [Function],
           },
@@ -908,18 +956,22 @@ exports[`Qvain.Description should render <LanguageField /> 1`] = `
           "Template": [Function],
           "attachRefs": [Function],
           "cloneRefs": [Function],
-          "create": [Function],
           "detachRefs": [Function],
+          "editMode": undefined,
           "fieldName": "provenances",
+          "hasChanged": undefined,
+          "inEdit": undefined,
           "references": Array [
             "associations",
             "usedEntities",
             "spatials",
           ],
-          "reset": [Function],
           "saveEdited": [Function],
           "saveNew": [Function],
+          "selectedActor": undefined,
+          "storage": Array [],
           "toBackend": [Function],
+          "validationError": undefined,
         },
         "RelatedResources": RelatedResources {
           "Model": [Function],
@@ -930,13 +982,18 @@ exports[`Qvain.Description should render <LanguageField /> 1`] = `
           "cloneRefs": [Function],
           "create": [Function],
           "detachRefs": [Function],
+          "editMode": undefined,
           "fieldName": "relatedResources",
+          "hasChanged": undefined,
+          "inEdit": undefined,
           "references": Array [],
           "relatedResourceToBackend": [Function],
           "reset": [Function],
           "saveEdited": [Function],
           "saveNew": [Function],
+          "storage": Array [],
           "toBackend": [Function],
+          "validationError": undefined,
         },
         "Spatials": Spatials {
           "Model": [Function],
@@ -948,13 +1005,18 @@ exports[`Qvain.Description should render <LanguageField /> 1`] = `
           "cloneRefs": [Function],
           "create": [Function],
           "detachRefs": [Function],
+          "editMode": undefined,
           "fieldName": "spatials",
+          "hasChanged": undefined,
+          "inEdit": undefined,
           "references": Array [],
           "reset": [Function],
           "saveEdited": [Function],
           "saveNew": [Function],
           "spatialToBackend": [Function],
+          "storage": Array [],
           "toBackend": [Function],
+          "validationError": undefined,
         },
         "Temporals": Temporals {
           "Model": [Function],
@@ -962,7 +1024,6 @@ exports[`Qvain.Description should render <LanguageField /> 1`] = `
           "Template": [Function],
           "attachRefs": [Function],
           "cloneRefs": [Function],
-          "create": [Function],
           "detachRefs": [Function],
           "editMode": false,
           "fieldName": "temporals",
@@ -973,7 +1034,6 @@ exports[`Qvain.Description should render <LanguageField /> 1`] = `
             "uiid": 0,
           },
           "references": Array [],
-          "reset": [Function],
           "saveEdited": [Function],
           "saveNew": [Function],
           "storage": Array [],
@@ -1068,13 +1128,20 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
           "goBack": [Function],
           "goForward": [Function],
           "history": null,
+          "location": null,
           "push": [Function],
           "replace": [Function],
         },
         "metaxApiV2": true,
         "separateQvain": false,
       },
-      "Locale": Locale {},
+      "Locale": Locale {
+        "currentLang": "en",
+        "languages": Array [
+          "en",
+          "fi",
+        ],
+      },
       "Qvain": Qvain {
         "Actors": Actors {
           "Qvain": [Circular],
@@ -1101,6 +1168,7 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
             "goBack": [Function],
             "goForward": [Function],
             "history": null,
+            "location": null,
             "push": [Function],
             "replace": [Function],
           },
@@ -1157,18 +1225,22 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
           "Template": [Function],
           "attachRefs": [Function],
           "cloneRefs": [Function],
-          "create": [Function],
           "detachRefs": [Function],
+          "editMode": undefined,
           "fieldName": "provenances",
+          "hasChanged": undefined,
+          "inEdit": undefined,
           "references": Array [
             "associations",
             "usedEntities",
             "spatials",
           ],
-          "reset": [Function],
           "saveEdited": [Function],
           "saveNew": [Function],
+          "selectedActor": undefined,
+          "storage": Array [],
           "toBackend": [Function],
+          "validationError": undefined,
         },
         "RelatedResources": RelatedResources {
           "Model": [Function],
@@ -1179,13 +1251,18 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
           "cloneRefs": [Function],
           "create": [Function],
           "detachRefs": [Function],
+          "editMode": undefined,
           "fieldName": "relatedResources",
+          "hasChanged": undefined,
+          "inEdit": undefined,
           "references": Array [],
           "relatedResourceToBackend": [Function],
           "reset": [Function],
           "saveEdited": [Function],
           "saveNew": [Function],
+          "storage": Array [],
           "toBackend": [Function],
+          "validationError": undefined,
         },
         "Spatials": Spatials {
           "Model": [Function],
@@ -1197,13 +1274,18 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
           "cloneRefs": [Function],
           "create": [Function],
           "detachRefs": [Function],
+          "editMode": undefined,
           "fieldName": "spatials",
+          "hasChanged": undefined,
+          "inEdit": undefined,
           "references": Array [],
           "reset": [Function],
           "saveEdited": [Function],
           "saveNew": [Function],
           "spatialToBackend": [Function],
+          "storage": Array [],
           "toBackend": [Function],
+          "validationError": undefined,
         },
         "Temporals": Temporals {
           "Model": [Function],
@@ -1211,7 +1293,6 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
           "Template": [Function],
           "attachRefs": [Function],
           "cloneRefs": [Function],
-          "create": [Function],
           "detachRefs": [Function],
           "editMode": false,
           "fieldName": "temporals",
@@ -1222,7 +1303,6 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
             "uiid": 0,
           },
           "references": Array [],
-          "reset": [Function],
           "saveEdited": [Function],
           "saveNew": [Function],
           "storage": Array [],
@@ -1418,7 +1498,7 @@ exports[`Qvain.RightsAndLicenses should render <RightsAndLicenses /> 1`] = `
       />
     </Tooltip>
   </title__SectionTitle>
-  <WithTheme(inject-License-with-Stores) />
-  <inject-AccessType-with-Stores />
+  <WithTheme(inject-with-Stores(License)) />
+  <inject-with-Stores(AccessType) />
 </div>
 `;

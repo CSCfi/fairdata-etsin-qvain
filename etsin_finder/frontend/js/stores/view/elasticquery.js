@@ -8,7 +8,7 @@
  * @license   MIT
  */
 
-import { observable, action } from 'mobx'
+import { observable, action, makeObservable } from 'mobx'
 import axios from 'axios'
 import counterpart from 'counterpart'
 
@@ -38,12 +38,16 @@ const fields = [
   'preferred_identifier',
   'other_identifier.notation',
   'other_identifier.type.pref_label.*',
-  'dataset_version_set'
+  'dataset_version_set',
 ]
 
 let lastQueryTime = 0
 
 class ElasticQuery {
+  constructor() {
+    makeObservable(this)
+  }
+
   @observable filter = []
 
   @observable sorting = 'best'
@@ -364,10 +368,10 @@ class ElasticQuery {
             must_not: [
               {
                 term: {
-                  'data_catalog.en': this.includePasDatasets ? '' : 'Fairdata PAS datasets'
-                }
-              }
-            ]
+                  'data_catalog.en': this.includePasDatasets ? '' : 'Fairdata PAS datasets',
+                },
+              },
+            ],
           },
         }
       } else {
@@ -381,10 +385,10 @@ class ElasticQuery {
             must_not: [
               {
                 term: {
-                  'data_catalog.en': this.includePasDatasets ? '' : 'Fairdata PAS datasets'
-                }
-              }
-            ]
+                  'data_catalog.en': this.includePasDatasets ? '' : 'Fairdata PAS datasets',
+                },
+              },
+            ],
           },
         }
       }
@@ -434,7 +438,7 @@ class ElasticQuery {
             'preservation_identifier',
             'preservation_dataset_version',
             'preservation_dataset_origin_version',
-            'data_catalog_identifier'
+            'data_catalog_identifier',
           ],
           highlight: {
             // pre_tags: ['<b>'], # default is <em>
@@ -460,8 +464,10 @@ class ElasticQuery {
             // track queries, categories, and hits
             // category tracking turned off because filter contains a lot of different fields
             const aggr = `data_catalog_${currentLang}`
-            const bucketLengths = res.data.aggregations[aggr].buckets.map(bucket => bucket.doc_count)
-            const totalHits = bucketLengths.reduce((partialSum, a) => (partialSum + a), 0)
+            const bucketLengths = res.data.aggregations[aggr].buckets.map(
+              bucket => bucket.doc_count
+            )
+            const totalHits = bucketLengths.reduce((partialSum, a) => partialSum + a, 0)
             if (!initial) Tracking.newSearch(currentSearch, false, res.data.hits.hits.length)
             this.results = {
               hits: res.data.hits.hits,

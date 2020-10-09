@@ -8,7 +8,7 @@
  * @license   MIT
  */
 
-import { observable, action } from 'mobx'
+import { observable, action, makeObservable } from 'mobx'
 import axios from 'axios'
 
 import access from './access'
@@ -34,6 +34,7 @@ class DatasetQuery {
   constructor(Env) {
     this.Files = new Files()
     this.Env = Env
+    makeObservable(this)
   }
 
   @observable results = null

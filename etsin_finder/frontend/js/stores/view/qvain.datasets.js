@@ -1,10 +1,14 @@
-import { observable, action } from 'mobx'
+import { observable, action, makeObservable } from 'mobx'
 
 class QvainDatasets {
+  constructor() {
+    makeObservable(this)
+  }
+
   @observable publishedDataset = null
 
   @action
-  setPublishedDataset = (identifier) => {
+  setPublishedDataset = identifier => {
     this.publishedDataset = identifier
   }
 }
