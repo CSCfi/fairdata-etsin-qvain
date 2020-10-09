@@ -310,7 +310,7 @@ class Actors {
 
   @action
   reset = () => {
-    this.actors.clear()
+    this.actors = []
     this.orphanActors = []
     this.actorInEdit = null
     this.onSuccessfulCreationCallbacks = []
@@ -537,7 +537,7 @@ class Actors {
   @action checkProvenanceActors = () => {
     const provenanceActors = [
       ...new Set(
-        this.Qvain.Provenances.storage
+        this.Parent.Provenances.storage
           .map(prov => Object.values(prov.associations.actorsRef))
           .flat()
       ),
@@ -552,7 +552,7 @@ class Actors {
     if (!orphanActors.length) return Promise.resolve(true)
     this.orphanActors = orphanActors
 
-    return this.Qvain.createLooseActorPromise()
+    return this.createLooseActorPromise()
   }
 
   toBackend = () =>

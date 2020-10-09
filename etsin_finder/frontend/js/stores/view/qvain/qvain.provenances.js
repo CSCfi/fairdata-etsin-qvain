@@ -72,6 +72,7 @@ class Provenances extends Field {
     })
   }
 
+  @action
   toBackend = () =>
     this.storage.map(p => ({
       title: p.name,
@@ -91,6 +92,7 @@ class Provenances extends Field {
       lifecycle_event: { identifier: (p.lifecycle || {}).url },
     }))
 
+  @action
   fromBackend = (dataset, Qvain) => {
     this.provenancesWithNonExistingActors = []
     this.fromBackendBase(dataset.provenances, Qvain)

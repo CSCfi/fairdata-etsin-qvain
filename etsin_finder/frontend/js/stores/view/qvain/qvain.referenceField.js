@@ -7,7 +7,7 @@ class ReferenceField {
     this.defaultItem = defaultItem
   }
 
-  @observable storage = this.defaultStorageFactory()
+  @observable storage
 
   @observable item = this.defaultItem
 
