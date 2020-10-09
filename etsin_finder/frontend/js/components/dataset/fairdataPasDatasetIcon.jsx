@@ -34,9 +34,7 @@ const FairdataPasDatasetIcon = (props) => {
     }
       return (
         <FairdataPasIconContainerInPas>
-          <FairdataPasIconLabel>
-            Fairdata PAS
-          </FairdataPasIconLabel>
+          <Translate component={FairdataPasIconLabel} content="dataset.fairdataPas" />
         </FairdataPasIconContainerInPas>
       )
 }

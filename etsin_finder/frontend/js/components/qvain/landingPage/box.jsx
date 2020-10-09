@@ -9,9 +9,11 @@ export const Box = ({ children, title, arrow, blue, image, image2x, className, s
   return (
     <BoxContainer className={className} style={style}>
       <Div>
-        {title && <BoxTitle>{title}</BoxTitle>}
         <BoxContent>
-          <Image src={image} src2x={image2x} />
+          <TitleArea>
+            {title && <BoxTitle>{title}</BoxTitle>}
+            <Image src={image} src2x={image2x} />
+          </TitleArea>
           <BoxText>{children}</BoxText>
         </BoxContent>
       </Div>
@@ -19,6 +21,12 @@ export const Box = ({ children, title, arrow, blue, image, image2x, className, s
     </BoxContainer>
   )
 }
+
+const TitleArea = styled.div`
+  display: flex;
+  align-items: center;
+  margin: 0;
+`
 
 Box.propTypes = {
   children: PropTypes.node.isRequired,
@@ -44,19 +52,34 @@ const BoxDiv = styled.div`
   border: 1px solid #00000011;
   box-shadow: 0 3px 6px #00000027;
   border-radius: 10px;
-  padding: 1rem;
+  padding: 1rem 1rem;
   min-height: 6rem;
   display: flex;
-  align-items: center;
+  align-items: stretch;
   font-size: 14px;
   width: 100%;
   flex-grow: 1;
+  background: #fff;
+
+  @media screen and (max-width: ${p => p.theme.breakpoints.sm}) {
+    justify-content: center;
+  }
+
+  @media screen and (max-width: ${p => p.theme.breakpoints.lg}) {
+    padding: 1rem 2.5rem;
+  }
+
+  @media screen and (max-width: ${p => p.theme.breakpoints.md}) {
+    padding: 1rem 1.5rem;
+  }
 `
 
 const BoxDivBlue = styled(BoxDiv)`
   box-shadow: 0 3px 6px ${p => opacify(-0.8, p.theme.color.primary)};
   border: 1px solid ${p => opacify(-0.8, p.theme.color.primary)};
   color: ${p => p.theme.color.primaryDark};
+  background: #fcfeff;
+  position: relative;
 `
 
 const BoxTitle = styled.div`
@@ -69,6 +92,8 @@ const BoxTitle = styled.div`
 const BoxText = styled.div`
   font-weight: normal;
   flex-grow: 1;
+  display: flex;
+  align-items: center;
 
   flex-basis: 8em;
   @media screen and (max-width: ${p => p.theme.breakpoints.sm}) {
@@ -93,6 +118,11 @@ const BoxContent = styled.div`
   > * {
     margin: 0.25rem 0.5rem;
   }
+
+  @media screen and (max-width: ${p => p.theme.breakpoints.sm}) {
+    flex-direction: column;
+    text-align: center;
+  }
 `
 
 export const SideBySide = styled.div`
@@ -103,9 +133,14 @@ export const SideBySide = styled.div`
     flex-grow: 1;
     flex-basis: 12em;
   }
+
   @media screen and (max-width: ${p => p.theme.breakpoints.sm}) {
-    ${BoxContent} {
-      flex-direction: column;
+    ${BoxTitle} {
+      margin-right: 0;
+    }
+
+    ${BoxDiv} {
+      padding: 1rem 0.5rem;
     }
   }
 `

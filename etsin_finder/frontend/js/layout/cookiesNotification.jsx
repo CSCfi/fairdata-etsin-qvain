@@ -8,11 +8,17 @@ import Button from '../components/general/button'
 
 class CookiesNotification extends Component {
   state = {
-    visible: !localStorage.getItem('cookiesAccepted'),
+    displayCookieNotification: true
   }
 
   componentDidMount() {
     counterpart.onLocaleChange(this.onLanguageChange)
+    if (this.fdSSOGetCookie('fd_sso_notification_shown')) {
+      this.setState({
+          displayCookieNotification: false
+        }
+      )
+    }
   }
 
   componentWillUnmount() {
@@ -31,21 +37,56 @@ class CookiesNotification extends Component {
       : 'https://www.fairdata.fi/sopimukset/'
   }
 
-  handleAcceptCookies = () => {
-    localStorage.setItem('cookiesAccepted', true)
-    this.setState({ visible: false })
+  fdSSODismissNotification = () => {
+    this.fdSSOSetCookie('fd_sso_notification_shown', true)
+  }
+
+  fdSSOGetDomainName() {
+    const hostname = window.location.hostname;
+    const domain = hostname.substring(hostname.indexOf('.') + 1); // Check indexOf ".f" in local_dev
+    return domain
+  }
+
+ fdSSOGetPrefixedCookieName(name) {
+    let domain = this.fdSSOGetDomainName();
+    domain = domain.replace(/[^a-zA-Z0-9]/g, '_')
+    return `${domain} ${name}`
+  }
+
+ fdSSOGetCookie(name) {
+    const cookieName = this.fdSSOGetPrefixedCookieName(name)
+    const nameEQ = `${cookieName}=`;
+    const ca = document.cookie.split(';');
+    for (let i = 0; i < ca.length; i += 1) {
+        let c = ca[i];
+        while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+    }
+    return null;
+  }
+
+ fdSSOSetCookie(name, value) {
+    const cookieName = this.fdSSOGetPrefixedCookieName(name);
+    const expiryDate = new Date();
+    expiryDate.setTime(expiryDate.getTime() + (7 * 24 * 60 * 60 * 1000));
+    const expires = `; expires=${expiryDate.toUTCString()}`
+    // eslint-disable-next-line
+    document.cookie = cookieName + '=' + (value || '') + expires + '; path=/' + '; domain=.' + this.fdSSOGetDomainName();
+    this.setState({
+      displayCookieNotification: false
+    })
   }
 
   render() {
     return (
-      <Notification visible={this.state.visible}>
+      <Notification visible={this.state.displayCookieNotification}>
         <div className="container row no-gutters">
           <div className="col-12 col-md-9">
             <Translate component="p" content="general.cookies.infoText" />
             <a href={this.getPrivacyUrl()} target="_blank" rel="noopener noreferrer"><Translate content="general.cookies.link" /></a>
           </div>
           <Actions className="col-12 col-md-3">
-            <Button onClick={this.handleAcceptCookies}>
+            <Button onClick={this.fdSSODismissNotification}>
               <Translate content="general.cookies.accept" />
             </Button>
           </Actions>

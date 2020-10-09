@@ -2,11 +2,48 @@
 
 exports[`Qvain dataset list PreservationStates should render <TablePasState /> 1`] = `
 <Fragment>
-  <tablePasState__PasLabel
+  <Translate
     color="primary"
-  >
-    PAS
-  </tablePasState__PasLabel>
+    component={
+      Object {
+        "$$typeof": Symbol(react.forward_ref),
+        "attrs": Array [],
+        "componentStyle": ComponentStyle {
+          "componentId": "tablePasState__PasLabel-sc-1w7mbwe-0",
+          "isStatic": false,
+          "rules": Array [
+            "
+  padding: 0.3em 0.6em 0.4em;
+  border-radius: 0.2em;
+  background: ",
+            [Function],
+            ";
+  color: white;
+  display: inline-block;
+  margin: ",
+            [Function],
+            ";
+",
+            "
+  margin-left: 10px;
+  text-transform: uppercase;
+",
+          ],
+        },
+        "displayName": "tablePasState__PasLabel",
+        "foldedComponentIds": Array [
+          "label__Label-x0jqqw-0",
+        ],
+        "render": [Function],
+        "styledComponentId": "tablePasState__PasLabel-sc-1w7mbwe-0",
+        "target": "div",
+        "toString": [Function],
+        "warnTooManyClasses": [Function],
+        "withComponent": [Function],
+      }
+    }
+    content="qvain.files.dataCatalog.pas"
+  />
   <Translate
     component={
       Object {

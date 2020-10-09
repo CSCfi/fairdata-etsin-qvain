@@ -158,23 +158,6 @@ class Qvain {
   }
 
   @action
-  setTitle = (title, lang) => {
-    this.title[lang] = title
-    this.changed = true
-
-    // If this is a new dataset/draft and date is not yet defined, set date to today's date
-    if (this.issuedDate === undefined && this.original === undefined) {
-      this.issuedDate = moment().format('YYYY-MM-DD')
-    }
-  }
-
-  @action
-  setDescription = (description, lang) => {
-    this.description[lang] = description
-    this.changed = true
-  }
-
-  @action
   setIssuedDate = exp => {
     this.issuedDate = exp
     this.changed = true
@@ -401,6 +384,11 @@ class Qvain {
     this.dataCatalog = selectedDataCatalog
     this.changed = true
 
+    // If this is a new dataset and date is not yet defined, set date to today's date
+    if (this.issuedDate === undefined && this.original === undefined) {
+      this.issuedDate = moment().format('YYYY-MM-DD')
+    }
+
     // Remove useDoi if dataCatalog is ATT
     if (selectedDataCatalog === DATA_CATALOG_IDENTIFIER.ATT) {
       this.useDoi = false
@@ -410,6 +398,7 @@ class Qvain {
   @action
   setUseDoi = selectedUseDoiStatus => {
     this.useDoi = selectedUseDoiStatus
+    this.changed = true
   }
 
   @action
