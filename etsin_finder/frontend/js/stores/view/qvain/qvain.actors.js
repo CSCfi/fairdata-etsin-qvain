@@ -537,7 +537,7 @@ class Actors {
   @action checkProvenanceActors = () => {
     const provenanceActors = [
       ...new Set(
-        this.Parent.Provenances.storage
+        this.Qvain.Provenances.storage
           .map(prov => Object.values(prov.associations.actorsRef))
           .flat()
       ),

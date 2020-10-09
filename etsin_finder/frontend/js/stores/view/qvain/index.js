@@ -8,6 +8,7 @@ class Qvain extends Resources {
     super()
     this.Env = Env
     this.Files = new Files(this)
+    this.resetQvainStore()
   }
 
   @observable original = undefined // used if editing, otherwise undefined
@@ -27,7 +28,6 @@ class Qvain extends Resources {
     this.preservationState = 0
     this.cumulativeState = CUMULATIVE_STATE.NO
     this.newCumulativeState = this.cumulativeState
-    this.resetFilesV1()
     this.inEdit = undefined
 
     this.metadataModalFile = undefined
