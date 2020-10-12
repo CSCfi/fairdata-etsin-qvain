@@ -8,7 +8,7 @@
  * @license   MIT
  */
 
-import { observable, action, makeObservable } from 'mobx'
+import { observable, action, runInAction, makeObservable } from 'mobx'
 import axios from 'axios'
 import counterpart from 'counterpart'
 
@@ -469,12 +469,14 @@ class ElasticQuery {
             )
             const totalHits = bucketLengths.reduce((partialSum, a) => partialSum + a, 0)
             if (!initial) Tracking.newSearch(currentSearch, false, res.data.hits.hits.length)
-            this.results = {
-              hits: res.data.hits.hits,
-              total: totalHits,
-              aggregations: res.data.aggregations,
-            }
-            this.loading = false
+            runInAction(() => {
+              this.results = {
+                hits: res.data.hits.hits,
+                total: totalHits,
+                aggregations: res.data.aggregations,
+              }
+              this.loading = false
+            })
             resolve(res)
           }
         })
