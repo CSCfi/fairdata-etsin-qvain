@@ -52,7 +52,7 @@ class DatasetQuery {
     return new Promise((resolve, reject) => {
       axios
         .get(url)
-        .then(async res => {
+        .then(action(async res => {
           this.results = res.data.catalog_record
           this.emailInfo = res.data.email_info
           access.updateAccess(
@@ -62,14 +62,14 @@ class DatasetQuery {
           )
 
           resolve(res.data)
-        })
-        .catch(error => {
+        }))
+        .catch(action(error => {
           this.error = error
           this.results = []
           this.emailInfo = []
           this.directories = []
           reject(error)
-        })
+        }))
     })
   }
 

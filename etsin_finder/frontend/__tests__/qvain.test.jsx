@@ -298,7 +298,6 @@ describe('Qvain.RightsAndLicenses', () => {
   })
   it('should render one added license, CCBY4', () => {
     const stores = getStores()
-    stores.Qvain.licenseArray = []
     stores.Qvain.setLicenseArray([
       LicenseConstructor(
         { en: 'Creative Commons Attribution 4.0 International (CC BY 4.0)' },
