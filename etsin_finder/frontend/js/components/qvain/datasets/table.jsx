@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import { reaction } from 'mobx'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
@@ -16,6 +16,7 @@ import { FormField, Input, Label as inputLabel } from '../general/modal/form'
 import DatasetGroup from './datasetGroup'
 import { filterGroupsByTitle, groupDatasetsByVersionSet } from './filter'
 import etsinTheme from '../../../styles/theme'
+import { withStores } from '../utils/stores'
 
 class DatasetTable extends Component {
   minOfDataSetsForSearchTool = 5
@@ -369,4 +370,4 @@ const SearchInput = styled(Input)`
   margin-bottom: inherit;
 `
 
-export default withRouter(inject('Stores')(observer(DatasetTable)))
+export default withRouter(withStores(observer(DatasetTable)))
