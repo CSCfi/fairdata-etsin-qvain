@@ -1,5 +1,6 @@
 import React from 'react'
 import { shallow } from 'enzyme'
+import { runInAction } from 'mobx'
 
 import { AskForAccess } from '../js/components/dataset/askForAccess'
 import Access from '../js/stores/view/access'
@@ -37,7 +38,7 @@ describe('AskForAccess', () => {
     // User is logged in so it renders the REMSButton
     const stores = getStores()
     stores.Access.updateAccess(access, false, 'apply')
-    stores.Auth.userLogged = true
+    runInAction(() => (stores.Auth.userLogged = true))
     const wrapper = shallow(<AskForAccess Stores={stores} cr_id="test" />)
     expect(wrapper.find(REMSButton).length).toBe(1)
   })

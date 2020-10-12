@@ -1,7 +1,11 @@
-import { observable, action, runInAction } from 'mobx'
-import { itemLoaderNew, itemLoaderExisting, itemLoaderAny, itemLoaderPublic } from './common.files.loaders'
+import { observable, action, runInAction, makeObservable } from 'mobx'
+import {
+  itemLoaderNew,
+  itemLoaderExisting,
+  itemLoaderAny,
+  itemLoaderPublic,
+} from './common.files.loaders'
 import { getAction } from './common.files.utils'
-
 
 export class DirectoryView {
   // Responsible for providing lists of items (files or directories) for display.
@@ -11,11 +15,12 @@ export class DirectoryView {
   constructor(Files) {
     this.Files = Files
     if (typeof this.getItems !== 'function') {
-      throw new TypeError('Must override getItems');
+      throw new TypeError('Must override getItems')
     }
     if (typeof this.getItemLoader !== 'function') {
-      throw new TypeError('Must override getItemLoader');
+      throw new TypeError('Must override getItemLoader')
     }
+    makeObservable(this)
   }
 
   @action reset() {
@@ -25,20 +30,24 @@ export class DirectoryView {
     this.clearShowLimits()
   }
 
-
   // Opening/closing directories
 
   @observable openState = {}
 
-  isOpen = (dir) => (
-    !!(this.openState[dir.key] || dir.type === 'project')
-  )
+  isOpen = dir => !!(this.openState[dir.key] || dir.type === 'project')
 
-  @action open = async (dir) => {
+  @action open = async dir => {
     if (!this.openState[dir.key] && !dir.loaded) {
       const getCurrentCount = () => this.getItems(dir).length
       if (!dir.loaded || getCurrentCount() < this.defaultShowLimit) {
-        if (!await this.getItemLoader(dir).loadDirectory(this.Files, dir, this.defaultShowLimit, getCurrentCount)) {
+        if (
+          !(await this.getItemLoader(dir).loadDirectory(
+            this.Files,
+            dir,
+            this.defaultShowLimit,
+            getCurrentCount
+          ))
+        ) {
           return false
         }
       }
@@ -49,11 +58,11 @@ export class DirectoryView {
     return true
   }
 
-  @action close = (dir) => {
+  @action close = dir => {
     this.openState[dir.key] = false
   }
 
-  @action toggleOpen = async (dir) => {
+  @action toggleOpen = async dir => {
     if (!this.openState[dir.key]) {
       await this.open(dir)
     } else {
@@ -61,21 +70,22 @@ export class DirectoryView {
     }
   }
 
-  @action setAllOpen = async (newState) => {
-    const setChildrenOpen = async (dir) => (
-      Promise.all(dir.directories.map(async d => {
-        if (d.type === 'directory') {
-          if (newState) {
-            if (!await this.open(d)) {
-              return false
+  @action setAllOpen = async newState => {
+    const setChildrenOpen = async dir =>
+      Promise.all(
+        dir.directories.map(async d => {
+          if (d.type === 'directory') {
+            if (newState) {
+              if (!(await this.open(d))) {
+                return false
+              }
+            } else {
+              this.close(d)
             }
-          } else {
-            this.close(d)
           }
-        }
-        return setChildrenOpen(d)
-      }))
-    )
+          return setChildrenOpen(d)
+        })
+      )
     await setChildrenOpen(this.Files.root)
   }
 
@@ -93,13 +103,21 @@ export class DirectoryView {
     return this.showLimitState[dir.key] || this.defaultShowLimit
   }
 
-  @action showMore = async (dir) => {
+  @action showMore = async dir => {
     const newLimit = this.getShowLimit(dir) + this.showLimitIncrement
     const getCurrentCount = () => this.getItems(dir).length
-    const success = await this.getItemLoader(dir).loadDirectory(this.Files, dir, newLimit, getCurrentCount)
+    const success = await this.getItemLoader(dir).loadDirectory(
+      this.Files,
+      dir,
+      newLimit,
+      getCurrentCount
+    )
 
     runInAction(() => {
-      this.showLimitState[dir.key] = Math.max(this.showLimitState[dir.key] || this.defaultShowLimit, newLimit)
+      this.showLimitState[dir.key] = Math.max(
+        this.showLimitState[dir.key] || this.defaultShowLimit,
+        newLimit
+      )
     })
     return success
   }
@@ -127,7 +145,6 @@ export class DirectoryView {
     this.showLimitIncrement = increment
   }
 
-
   // Selecting items
 
   @observable checkedState = {}
@@ -141,7 +158,7 @@ export class DirectoryView {
     // Recursion stops when a checked item is encountered.
     // All children (including checked ones) of a checked directory are ignored.
     const checked = []
-    const recurse = (parent) => {
+    const recurse = parent => {
       if (parent.files) {
         parent.files.forEach(file => {
           if (this.isChecked(file)) {
@@ -164,7 +181,7 @@ export class DirectoryView {
     return checked
   }
 
-  @action toggleChecked = (item) => {
+  @action toggleChecked = item => {
     this.checkedState[item.key] = !this.checkedState[item.key]
   }
 
@@ -232,13 +249,18 @@ export class AddItemsView extends DirectoryView {
 }
 
 export class SelectedItemsView extends DirectoryView {
+  constructor(props) {
+    super(props)
+    makeObservable(this)
+  }
+
   @observable hideRemoved
 
   @action toggleHideRemoved = () => {
     this.hideRemoved = !this.hideRemoved
   }
 
-  @action setHideRemoved = (val) => {
+  @action setHideRemoved = val => {
     this.hideRemoved = val
   }
 
@@ -296,7 +318,11 @@ export class SelectedItemsView extends DirectoryView {
       }
 
       if (item.existing) {
-        if (item.type === 'directory' && item.addedChildCount === 0 && item.existingFileCount === 0) {
+        if (
+          item.type === 'directory' &&
+          item.addedChildCount === 0 &&
+          item.existingFileCount === 0
+        ) {
           return false
         }
 
@@ -312,7 +338,6 @@ export class SelectedItemsView extends DirectoryView {
     return filtered
   }
 }
-
 
 export class PublicItemsView extends DirectoryView {
   getItemLoader() {

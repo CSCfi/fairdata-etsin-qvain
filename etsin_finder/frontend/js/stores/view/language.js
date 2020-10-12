@@ -8,13 +8,17 @@
  * @license   MIT
  */
 
-import { observable, action, computed } from 'mobx'
+import { observable, action, computed, makeObservable } from 'mobx'
 import counterpart from 'counterpart'
 import moment from 'moment'
 import elasticquery from './elasticquery'
 import env from '../domain/env'
 
 class Locale {
+  constructor() {
+    makeObservable(this)
+  }
+
   @observable currentLang = counterpart.getLocale()
 
   @computed get lang() {
