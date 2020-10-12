@@ -6,6 +6,7 @@ import { Provider } from 'mobx-react'
 import { BrowserRouter } from 'react-router-dom'
 import axios from 'axios'
 import { when } from 'mobx'
+import { runInAction } from 'mobx'
 
 import '../locale/translations.js'
 import etsinTheme from '../js/styles/theme'
@@ -164,31 +165,33 @@ describe('Qvain.MetadataModal', () => {
     )
     instance = ref.current
     // Set directory hierarchy
-    stores.Qvain.selectedDirectories = []
-    stores.Qvain.existingFiles = [DatasetFile(testDatasetFile)]
-    stores.Qvain.selectedProject = 'project_y'
-    stores.Qvain.hierarchy = Directory(
-      {
-        id: 'test1',
-        identifier: 'test-ident-1',
-        project_identifier: 'project_y',
-        directory_name: 'root',
-        directories: [
-          {
-            id: 'test2',
-            identifier: 'test-ident-2',
-            project_identifier: 'project_y',
-            directory_name: 'directory2',
-            directories: [],
-            files: [],
-          },
-        ],
-        files: [testFile, testFile2, testFile3, testFile4],
-      },
-      undefined,
-      false,
-      true
-    )
+    runInAction(() => {
+      stores.Qvain.selectedDirectories = []
+      stores.Qvain.existingFiles = [DatasetFile(testDatasetFile)]
+      stores.Qvain.selectedProject = 'project_y'
+      stores.Qvain.hierarchy = Directory(
+        {
+          id: 'test1',
+          identifier: 'test-ident-1',
+          project_identifier: 'project_y',
+          directory_name: 'root',
+          directories: [
+            {
+              id: 'test2',
+              identifier: 'test-ident-2',
+              project_identifier: 'project_y',
+              directory_name: 'directory2',
+              directories: [],
+              files: [],
+            },
+          ],
+          files: [testFile, testFile2, testFile3, testFile4],
+        },
+        undefined,
+        false,
+        true
+      )
+    })
     wrapper.update()
   })
 
