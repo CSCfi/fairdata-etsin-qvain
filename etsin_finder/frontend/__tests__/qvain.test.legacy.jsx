@@ -32,6 +32,12 @@ jest.mock('uuid', () => {
   }
 })
 
+jest.mock('moment', original => {
+  return () => ({
+    format: format => `moment formatted date: ${format}`,
+  })
+})
+
 const QvainStore = new QvainStoreClass(Env)
 const getStores = () => {
   Env.setMetaxApiV2(false)
