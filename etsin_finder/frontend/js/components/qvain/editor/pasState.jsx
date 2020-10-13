@@ -1,15 +1,16 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
+import { useStores } from '../utils/stores'
 
 // If we have a PAS dataset, show information on current state.
-const PasState = (props) => {
-  const { isPas, readonly, preservationState } = props.Stores.Qvain
+const PasState = () => {
+  const { isPas, readonly, preservationState } = useStores().Qvain
   if (!isPas) {
     return null
   }
+
   const key = readonly ? 'readonly' : 'editable'
   return (
     <PasInfoText>
@@ -17,16 +18,12 @@ const PasState = (props) => {
         content="qvain.pasInfo.stateInfo"
         with={{
           state: preservationState,
-          description: <Translate content={`qvain.pasState.${preservationState}`} />
+          description: <Translate content={`qvain.pasState.${preservationState}`} />,
         }}
       />{' '}
       <Translate content={`qvain.pasInfo.${key}`} />
     </PasInfoText>
   )
-}
-
-PasState.propTypes = {
-  Stores: PropTypes.object.isRequired,
 }
 
 const PasInfoText = styled.div`
@@ -35,10 +32,10 @@ const PasInfoText = styled.div`
   width: 100%;
   color: green;
   z-index: 2;
-  border-bottom: 1px solid rgba(0,0,0,0.3);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
   position: relative;
   min-width: 300px;
   padding: 0.25em;
 `
 
-export default inject('Stores')(observer(PasState))
+export default observer(PasState)

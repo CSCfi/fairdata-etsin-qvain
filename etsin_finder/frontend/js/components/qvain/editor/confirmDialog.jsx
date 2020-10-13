@@ -5,6 +5,7 @@ import Modal from '../../general/modal'
 
 const ConfirmModal = props => {
   if (!props.show) return null
+
   return (
     <Modal isOpen contentLabel={'Warning'} customStyles={modalStyle}>
       <ConfirmDialog {...props} />
