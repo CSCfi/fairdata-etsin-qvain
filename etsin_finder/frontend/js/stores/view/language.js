@@ -37,6 +37,9 @@ class Locale {
 
   @action
   setLang = (lang, save = true) => {
+    if (!languages.includes(lang)) {
+      return
+    }
     counterpart.setLocale(lang)
     this.currentLang = counterpart.getLocale()
     moment.locale(lang)
