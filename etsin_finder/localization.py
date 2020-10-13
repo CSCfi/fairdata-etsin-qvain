@@ -38,7 +38,6 @@ def get_language():
     language from the accept-languages header.
     """
     cookie_lang = get_language_cookie()
-    env_prefix = get_sso_environment_prefix()
     if cookie_lang in languages:
         return cookie_lang
 
