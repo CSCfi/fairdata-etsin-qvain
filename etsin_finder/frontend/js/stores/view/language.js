@@ -19,6 +19,8 @@ const languages = ['en', 'fi']
 
 const getInitialLanguage = () => languages.find(lang => lang === document.documentElement.lang) || languages[0]
 
+const cookieName = process.env.REACT_APP_COOKIE_PREFIX ? `${process.env.REACT_APP_COOKIE_PREFIX}_fd_language` : 'fd_language'
+
 class Locale {
   @observable currentLang = counterpart.getLocale()
 
@@ -36,7 +38,7 @@ class Locale {
     moment.locale(lang)
     document.documentElement.lang = this.currentLang
     if (save) {
-      setCookieValue('lang', this.currentLang)
+      setCookieValue(cookieName, this.currentLang)
     }
   }
 
@@ -65,7 +67,7 @@ class Locale {
   @action
   loadLang = () => {
     /* get language setting from cookie */
-    const storedLang = getCookieValue('lang')
+    const storedLang = getCookieValue(cookieName)
     if (storedLang) {
       this.setLang(storedLang, false)
     } else {

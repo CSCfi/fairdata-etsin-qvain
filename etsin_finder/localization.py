@@ -8,6 +8,7 @@
 """Language and translation utilities"""
 
 from flask import request, session
+from etsin_finder.authentication_fairdata_sso import get_sso_environment_prefix
 
 languages = ['en', 'fi']
 default_language = 'en'
@@ -21,6 +22,14 @@ locale_mapping = {
     'fi': 'fi',
 }
 
+def get_language_cookie():
+    """Get value of language cookie."""
+    env_prefix = get_sso_environment_prefix()
+    if env_prefix:
+        return request.cookies.get(f'{env_prefix}_fd_language')
+    else:
+        return request.cookies.get('fd_language')
+
 def get_language():
     """
     Get language for request.
@@ -28,7 +37,8 @@ def get_language():
     Use value lang cookie if it is set. Otherwise determine
     language from the accept-languages header.
     """
-    cookie_lang = request.cookies.get('lang')
+    cookie_lang = get_language_cookie()
+    env_prefix = get_sso_environment_prefix()
     if cookie_lang in languages:
         return cookie_lang
 
