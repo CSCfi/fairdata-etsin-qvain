@@ -1,3 +1,4 @@
+import { makeObservable } from 'mobx'
 // import { observables } from 'mobx'
 import { v4 as uuidv4 } from 'uuid'
 import Field from './qvain.field'
@@ -14,6 +15,7 @@ const RelatedResource = (
 class RelatedResources extends Field {
   constructor(Qvain) {
     super(Qvain, RelatedResource, RelatedResourceModel, 'relatedResources')
+    makeObservable(this)
     this.Qvain = Qvain
   }
 

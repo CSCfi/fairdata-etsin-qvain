@@ -8,7 +8,7 @@
  * @license   MIT
  */
 
-import { observable, action, computed } from 'mobx'
+import { observable, action, computed, makeObservable } from 'mobx'
 import counterpart from 'counterpart'
 import moment from 'moment'
 import elasticquery from './elasticquery'
@@ -22,6 +22,10 @@ const getInitialLanguage = () => languages.find(lang => lang === document.docume
 const cookieName = process.env.REACT_APP_COOKIE_PREFIX ? `${process.env.REACT_APP_COOKIE_PREFIX}_fd_language` : 'fd_language'
 
 class Locale {
+  constructor() {
+    makeObservable(this)
+  }
+
   @observable currentLang = counterpart.getLocale()
 
   // get current computed (state changes are tracked) language. Convenience function.

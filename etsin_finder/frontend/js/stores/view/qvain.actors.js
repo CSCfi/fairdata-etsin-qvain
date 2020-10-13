@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { observable, action, runInAction, computed } from 'mobx'
+import { observable, action, runInAction, computed, makeObservable } from 'mobx'
 
 import { METAX_FAIRDATA_ROOT_URL, ENTITY_TYPE, ROLE } from '../../utils/constants'
 
@@ -155,6 +155,7 @@ export const Organization = ({
 class Actors {
   constructor(Qvain) {
     this.Qvain = Qvain
+    makeObservable(this)
     this.reset()
   }
 
@@ -551,6 +552,7 @@ export class ActorsRef {
   constructor({ actors, actorsFromBackend = [], roles = [] }) {
     this.actors = actors // instance of the actors class in Stores.Qvain for example
     this.roles = roles
+    makeObservable(this)
     const afbs = actorsFromBackend.map(afb => createActor(afb, roles))
     this.addRefsOnlyToActors(afbs)
     this.setActorsRef(afbs, roles)

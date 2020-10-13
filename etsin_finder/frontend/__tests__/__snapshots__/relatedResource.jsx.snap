@@ -9,6 +9,6 @@ exports[`RelatedResource it renders 1`] = `
     }
   }
 >
-  <inject-RelatedResourceContent-with-Stores />
+  <inject-with-Stores(RelatedResourceContent) />
 </Field>
 `;
