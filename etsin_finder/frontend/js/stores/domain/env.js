@@ -30,7 +30,6 @@ const getCookieValue = key => {
   }
 
 class Env {
-  
   constructor() {
     makeObservable(this)
   }
@@ -53,8 +52,7 @@ class Env {
   @action setQvainHost(host) {
     console.log(host)
     this.qvainHost = host
-
-  @observable environment = process.env.NODE_ENV
+  }
 
   @observable metaxApiV2 =
     process.env.NODE_ENV !== 'production' && localStorage.getItem('metax_api_v2') === '1'
