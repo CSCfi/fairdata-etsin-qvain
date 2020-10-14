@@ -1,13 +1,14 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { autorun } from 'mobx'
 import PropTypes from 'prop-types'
-import { inject, Observer } from 'mobx-react'
+import { inject, observer } from 'mobx-react'
 
 import FileTreeItem from './fileTreeItem'
 import { useRenderTree } from '../../../general/files/tree'
 
 export function FileTree(props) {
-  const { Files } = props.Stores.DatasetQuery
+  const { Files, packageRequests } = props.Stores.DatasetQuery
+  const { downloadApiV2 } = props.Stores.Env
   const { View } = Files
   const { allowDownload } = props
 
@@ -32,10 +33,12 @@ export function FileTree(props) {
     },
     {
       allowDownload,
+      packageRequests,
+      downloadApiV2
     }
   )
 
-  return <Observer>{renderTree}</Observer>
+  return renderTree()
 }
 
 FileTree.propTypes = {
@@ -43,4 +46,4 @@ FileTree.propTypes = {
   allowDownload: PropTypes.bool.isRequired
 }
 
-export default inject('Stores')(FileTree)
+export default inject('Stores')(observer(FileTree))

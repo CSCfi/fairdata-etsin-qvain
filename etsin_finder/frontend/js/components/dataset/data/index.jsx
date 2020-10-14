@@ -27,6 +27,12 @@ class Data extends Component {
       this.props.location.pathname
     )
     Accessibility.handleNavigation('data', false)
+
+    const { DatasetQuery } = this.props.Stores
+    const { downloadApiV2 } = this.props.Stores.Env
+    if (downloadApiV2) {
+      DatasetQuery.fetchPackageRequests()
+    }
   }
 
   render() {

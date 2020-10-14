@@ -35,7 +35,10 @@ from etsin_finder.utils import \
 from etsin_finder.log_utils import log_request
 from etsin_finder import rems_service
 from etsin_finder.rems_service import RemsAPIService
-from etsin_finder.app_config import get_fairdata_rems_api_config
+from etsin_finder.app_config import (
+    get_fairdata_rems_api_config,
+    get_download_api_v2_config
+)
 
 TOTAL_ITEM_LIMIT = 1000
 
@@ -492,5 +495,6 @@ class AppConfig(Resource):
         app_config = get_app_config(False)
         return {
             'SERVER_ETSIN_DOMAIN_NAME': app_config.get('SERVER_ETSIN_DOMAIN_NAME', ''),
-            'SERVER_QVAIN_DOMAIN_NAME': app_config.get('SERVER_QVAIN_DOMAIN_NAME', '')
+            'SERVER_QVAIN_DOMAIN_NAME': app_config.get('SERVER_QVAIN_DOMAIN_NAME', ''),
+            'DOWNLOAD_API_V2_ENABLED': app_config.get('DOWNLOAD_API_V2', {}).get('ENABLED', False)
         }

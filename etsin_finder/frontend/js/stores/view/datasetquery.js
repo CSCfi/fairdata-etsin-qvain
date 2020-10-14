@@ -8,7 +8,7 @@
  * @license   MIT
  */
 
-import { observable, action, makeObservable } from 'mobx'
+import { observable, action, makeObservable, runInAction } from 'mobx'
 import axios from 'axios'
 
 import access from './access'
@@ -44,6 +44,42 @@ class DatasetQuery {
   @observable directories = []
 
   @observable error = false
+
+  @observable packageRequests = {}
+
+  async fetchPackageRequests() {
+    // Fetch list of available downloadable packages
+    const { downloadApiV2 } = this.Env
+    if (!downloadApiV2 || !this.results) {
+      return
+    }
+
+    let response
+    try {
+      const url = `/api/v2/dl/requests?cr_id=${this.results.identifier}`
+      response = await axios.get(url)
+    } catch (err) {
+      runInAction(() => {
+        this.packageRequests = {}
+      })
+      if (err.response && err.response.status === 404) {
+        return
+      }
+      throw err
+    }
+
+    const { partial, ...full } = response.data
+    const requests = { '/': full };
+    (partial || []).forEach(req => {
+      if (req.scope.length === 1) {
+        requests[req.scope] = req
+      }
+    })
+
+    runInAction(() => {
+      this.packageRequests = requests
+    })
+  }
 
   @action
   getData(id) {

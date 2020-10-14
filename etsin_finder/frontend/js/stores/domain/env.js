@@ -35,6 +35,7 @@ class Env {
     const values = await importValuesAsync()
     this.setEtsinHost(values.SERVER_ETSIN_DOMAIN_NAME)
     this.setQvainHost(values.SERVER_QVAIN_DOMAIN_NAME)
+    this.setDownloadApiV2(!!values.DOWNLOAD_API_V2_ENABLED)
   }
 
   @action setEtsinHost(host) {
@@ -45,8 +46,14 @@ class Env {
     this.qvainHost = host
   }
 
+  @action setDownloadApiV2(enabled) {
+    this.downloadApiV2 = enabled
+  }
+
   @observable metaxApiV2 =
     process.env.NODE_ENV !== 'production' && localStorage.getItem('metax_api_v2') === '1'
+
+  @observable downloadApiV2 = false
 
   @observable app = getCookieValue('etsin_app')
 
