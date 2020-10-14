@@ -484,7 +484,7 @@ class AppConfig(Resource):
     @log_request
     def get(self):
         """Endpoint for importing app_config values to the frontend
-        
+
         Returns:
             app_config for frontend
 
