@@ -25,7 +25,6 @@ const getCookieValue = key => {
 
   async function importValuesAsync () {
     const response = await axios.get('api/app_config')
-    console.log(response)
     return response.data
   }
 
