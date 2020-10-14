@@ -1,4 +1,4 @@
-import { observable, action } from 'mobx'
+import { observable, action, makeObservable } from 'mobx'
 
 import { dirIdentifierKey, fileIdentifierKey } from './common.files.items'
 import { PromiseManager } from './common.files.utils'
@@ -11,6 +11,7 @@ class Files extends FilesBase {
 
   constructor() {
     super()
+    makeObservable(this)
     this.View = new PublicItemsView(this)
     this.promiseManager = new PromiseManager()
     this.reset()
@@ -18,7 +19,7 @@ class Files extends FilesBase {
 
   @observable inInfo = null
 
-  cancelOnReset = (promise) => (this.promiseManager.add(promise))
+  cancelOnReset = promise => this.promiseManager.add(promise)
 
   @action reset() {
     super.reset.call(this)
@@ -27,11 +28,11 @@ class Files extends FilesBase {
     this.inInfo = null
   }
 
-  @action setInInfo = (item) => {
+  @action setInInfo = item => {
     this.inInfo = item
   }
 
-  getUseCategoryLabel = (item) => {
+  getUseCategoryLabel = item => {
     const key = item.type === 'file' ? fileIdentifierKey(item) : dirIdentifierKey(item)
     if (this.originalMetadata[key]) {
       return this.originalMetadata[key].useCategoryLabel
@@ -39,7 +40,7 @@ class Files extends FilesBase {
     return null
   }
 
-  getFileTypeLabel = (item) => {
+  getFileTypeLabel = item => {
     const key = item.type === 'file' ? fileIdentifierKey(item) : dirIdentifierKey(item)
     if (this.originalMetadata[key]) {
       return this.originalMetadata[key].fileTypeLabel

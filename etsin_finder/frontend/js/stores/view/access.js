@@ -8,7 +8,7 @@
  * @license   MIT
  */
 
-import { observable, action } from 'mobx'
+import { observable, action, makeObservable } from 'mobx'
 
 import auth from '../domain/auth'
 import { ACCESS_TYPE_URL } from '../../utils/constants'
@@ -22,6 +22,10 @@ export const accessTypes = {
 }
 
 class Access {
+  constructor() {
+    makeObservable(this)
+  }
+
   @observable
   restrictions = {
     // ?

@@ -8,17 +8,15 @@
  * @license   MIT
  */
 
-import { action, computed, observable } from 'mobx'
+import { action, computed, makeObservable, observable } from 'mobx'
 import { RouterStore } from 'mobx-react-router'
 
 import axios from 'axios'
 
 const routingStore = new RouterStore()
 
-const getCookieValue = (key) => {
-  const entry = document.cookie
-    .split('; ')
-    .find(row => row.startsWith(key))
+const getCookieValue = key => {
+  const entry = document.cookie.split('; ').find(row => row.startsWith(key))
   if (entry) {
     return entry.split('=')[1]
   }
@@ -32,6 +30,10 @@ const getCookieValue = (key) => {
   }
 
 class Env {
+  
+  constructor() {
+    makeObservable(this)
+  }
 
   @observable etsinHost = ''
 
@@ -51,11 +53,11 @@ class Env {
   @action setQvainHost(host) {
     console.log(host)
     this.qvainHost = host
-  }
 
   @observable environment = process.env.NODE_ENV
 
-  @observable metaxApiV2 = process.env.NODE_ENV !== 'production' && localStorage.getItem('metax_api_v2') === '1'
+  @observable metaxApiV2 =
+    process.env.NODE_ENV !== 'production' && localStorage.getItem('metax_api_v2') === '1'
 
   @observable app = getCookieValue('etsin_app')
 
@@ -71,11 +73,11 @@ class Env {
 
   @observable separateQvain = this.qvainHost !== this.etsinHost
 
-  @action setMetaxApiV2 = (value) => {
+  @action setMetaxApiV2 = value => {
     this.metaxApiV2 = value
   }
 
-  getQvainUrl = (path) => {
+  getQvainUrl = path => {
     if (this.isQvain) {
       return path
     }
@@ -85,7 +87,7 @@ class Env {
     return `/qvain${path}`
   }
 
-  getEtsinUrl = (path) => {
+  getEtsinUrl = path => {
     if (this.isEtsin) {
       return path
     }

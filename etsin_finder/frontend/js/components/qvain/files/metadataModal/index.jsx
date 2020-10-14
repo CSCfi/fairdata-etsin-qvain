@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import { inject, observer } from 'mobx-react'
 import styled from 'styled-components'
 import axios from 'axios'
-import { observable, action } from 'mobx'
+import { observable, action, autorun } from 'mobx'
 
 import Modal from '../../../general/modal'
 import { ConfirmClose } from '../../general/modal/confirmClose'
@@ -21,7 +21,7 @@ import { getOptions, getDefaultOptions, makeOption, findOption } from './options
 import { MetadataSelect, selectStylesNarrow, labelStyle } from './select'
 import urls from '../../utils/urls'
 
-class MetadataModal extends Component {
+export class MetadataModal extends Component {
   @observable
   formatFetchStatus = 'loading'
 
@@ -53,10 +53,22 @@ class MetadataModal extends Component {
   async componentDidMount() {
     this.initialize()
     await this.fetchformatVersions()
+    this.autorunDisposer = autorun(async () => {
+      const file = this.props.Stores.Qvain.metadataModalFile || {}
+      if (file.identifier !== this.state.fileIdentifier) {
+        this.initialize()
+        if (this.formatFetchStatus === 'error') {
+          await this.fetchformatVersions()
+        }
+      }
+    })
   }
 
   async componentWillUnmount() {
     this.promises.forEach(promise => promise && promise.cancel && promise.cancel())
+    if (this.autorunDisposer) {
+      this.autorunDisposer()
+    }
   }
 
   @action
@@ -250,16 +262,6 @@ class MetadataModal extends Component {
     }
   }
 
-  componentWillReact = async () => {
-    const file = this.props.Stores.Qvain.metadataModalFile || {}
-    if (file.identifier !== this.state.fileIdentifier) {
-      this.initialize()
-      if (this.formatFetchStatus === 'error') {
-        await this.fetchformatVersions()
-      }
-    }
-  }
-
   isCsv() {
     return this.state.fileFormat === 'text/csv'
   }
@@ -269,6 +271,7 @@ class MetadataModal extends Component {
     try {
       // Create a list of available versions for each supported file format.
       const resp = await getReferenceData('file_format_version')
+
       const fileFormatVersions = resp.data.hits.hits.map(v => v._source)
 
       // get array of available versions for each file format
@@ -448,7 +451,11 @@ class MetadataModal extends Component {
           <TableButton disabled={this.state.loading} onClick={this.requestClose}>
             <Translate content={'qvain.files.metadataModal.buttons.close'} />
           </TableButton>
-          <DangerButton disabled={this.state.loading || readonly} onClick={this.saveChanges}>
+          <DangerButton
+            id="save-button"
+            disabled={this.state.loading || readonly}
+            onClick={this.saveChanges}
+          >
             <Translate content={'qvain.files.metadataModal.buttons.save'} />
           </DangerButton>
         </Buttons>

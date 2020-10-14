@@ -15,8 +15,8 @@ exports[`Qvain.Actors should render correctly 1`] = `
     }
   }
 >
-  <inject-ActorModalBase-with-Stores />
-  <inject-ActorsField-with-Stores />
+  <inject-with-Stores(ActorModalBase) />
+  <inject-with-Stores(ActorsField) />
 </Section>
 `;
 

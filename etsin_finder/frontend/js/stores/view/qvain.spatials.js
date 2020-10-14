@@ -1,3 +1,4 @@
+import { makeObservable } from 'mobx'
 import { v4 as uuidv4 } from 'uuid'
 import Field from './qvain.field'
 
@@ -20,6 +21,7 @@ const Spatial = (
 class Spatials extends Field {
   constructor(Qvain) {
     super(Qvain, Spatial, SpatialModel, 'spatials')
+    makeObservable(this)
     this.Qvain = Qvain
   }
 

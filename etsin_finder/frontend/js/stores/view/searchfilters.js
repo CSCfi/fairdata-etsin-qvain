@@ -8,33 +8,36 @@
  * @license   MIT
  */
 
-import { observable, action } from 'mobx'
+import { observable, action, makeObservable } from 'mobx'
 
 class SearchFilters {
-    @observable fieldOfScienceIsOpen = false
+  constructor() {
+    makeObservable(this)
+  }
 
-    @observable keywordIsOpen = false
+  @observable fieldOfScienceIsOpen = false
 
-    @observable projectIsOpen = false
+  @observable keywordIsOpen = false
 
-    @action toggleFieldOfScience = () => {
-        this.fieldOfScienceIsOpen = !this.fieldOfScienceIsOpen
-    }
+  @observable projectIsOpen = false
 
-    @action toggleKeyword = () => {
-        this.keywordIsOpen = !this.keywordIsOpen
-    }
+  @action toggleFieldOfScience = () => {
+    this.fieldOfScienceIsOpen = !this.fieldOfScienceIsOpen
+  }
 
-    @action toggleProject = () => {
-        this.projectIsOpen = !this.projectIsOpen
-    }
+  @action toggleKeyword = () => {
+    this.keywordIsOpen = !this.keywordIsOpen
+  }
 
-    @action closeFilters = () => {
-        this.fieldOfScienceIsOpen = false
-        this.keywordIsOpen = false
-        this.projectIsOpen = false
-    }
+  @action toggleProject = () => {
+    this.projectIsOpen = !this.projectIsOpen
+  }
+
+  @action closeFilters = () => {
+    this.fieldOfScienceIsOpen = false
+    this.keywordIsOpen = false
+    this.projectIsOpen = false
+  }
 }
-
 
 export default new SearchFilters()
