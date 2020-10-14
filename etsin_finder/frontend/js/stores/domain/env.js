@@ -23,7 +23,7 @@ const getCookieValue = key => {
   return undefined
 }
 
-async function importValuesAsync () {
+async function importValuesAsync() {
   const response = await axios.get('api/app_config')
   return response.data
 }
