@@ -270,7 +270,7 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
     Object {
       "Env": Env {
         "app": undefined,
-        "environment": "test",
+        "etsinHost": "",
         "getEtsinUrl": [Function],
         "getQvainUrl": [Function],
         "history": RouterStore {
@@ -283,7 +283,7 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
           "replace": [Function],
         },
         "metaxApiV2": false,
-        "separateQvain": false,
+        "qvainHost": "",
       },
       "Locale": Locale {
         "currentLang": "en",
@@ -310,7 +310,7 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
         },
         "Env": Env {
           "app": undefined,
-          "environment": "test",
+          "etsinHost": "",
           "getEtsinUrl": [Function],
           "getQvainUrl": [Function],
           "history": RouterStore {
@@ -323,7 +323,7 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
             "replace": [Function],
           },
           "metaxApiV2": false,
-          "separateQvain": false,
+          "qvainHost": "",
         },
         "Files": Files {
           "AddItemsView": AddItemsView {
@@ -538,7 +538,7 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
     Object {
       "Env": Env {
         "app": undefined,
-        "environment": "test",
+        "etsinHost": "",
         "getEtsinUrl": [Function],
         "getQvainUrl": [Function],
         "history": RouterStore {
@@ -551,7 +551,7 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
           "replace": [Function],
         },
         "metaxApiV2": false,
-        "separateQvain": false,
+        "qvainHost": "",
       },
       "Locale": Locale {
         "currentLang": "en",
@@ -578,7 +578,7 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
         },
         "Env": Env {
           "app": undefined,
-          "environment": "test",
+          "etsinHost": "",
           "getEtsinUrl": [Function],
           "getQvainUrl": [Function],
           "history": RouterStore {
@@ -591,7 +591,7 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
             "replace": [Function],
           },
           "metaxApiV2": false,
-          "separateQvain": false,
+          "qvainHost": "",
         },
         "Files": Files {
           "AddItemsView": AddItemsView {
@@ -806,7 +806,7 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
     Object {
       "Env": Env {
         "app": undefined,
-        "environment": "test",
+        "etsinHost": "",
         "getEtsinUrl": [Function],
         "getQvainUrl": [Function],
         "history": RouterStore {
@@ -819,7 +819,7 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
           "replace": [Function],
         },
         "metaxApiV2": false,
-        "separateQvain": false,
+        "qvainHost": "",
       },
       "Locale": Locale {
         "currentLang": "en",
@@ -846,7 +846,7 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
         },
         "Env": Env {
           "app": undefined,
-          "environment": "test",
+          "etsinHost": "",
           "getEtsinUrl": [Function],
           "getQvainUrl": [Function],
           "history": RouterStore {
@@ -859,7 +859,7 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
             "replace": [Function],
           },
           "metaxApiV2": false,
-          "separateQvain": false,
+          "qvainHost": "",
         },
         "Files": Files {
           "AddItemsView": AddItemsView {

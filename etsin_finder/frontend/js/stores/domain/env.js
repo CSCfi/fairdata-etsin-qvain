@@ -95,16 +95,6 @@ class Env {
     return `/qvain${path}`
   }
 
-  getEtsinUrl = path => {
-    if (this.isEtsin) {
-      return path
-    }
-    if (this.etsinHost && this.separateQvain) {
-      return `https://${this.etsinHost}${path}`
-    }
-    return path
-  }
-
   history = routingStore
 }
 

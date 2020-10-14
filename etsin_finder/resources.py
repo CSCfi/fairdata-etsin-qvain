@@ -490,5 +490,7 @@ class AppConfig(Resource):
 
         """
         app_config = get_app_config(False)
-        log.info(app_config)
-        return app_config
+        return {
+            'SERVER_ETSIN_DOMAIN_NAME': app_config.get('SERVER_ETSIN_DOMAIN_NAME', ''),
+            'SERVER_QVAIN_DOMAIN_NAME': app_config.get('SERVER_QVAIN_DOMAIN_NAME', '')
+        }
