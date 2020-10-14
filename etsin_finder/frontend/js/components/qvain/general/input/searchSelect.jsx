@@ -19,7 +19,7 @@ const Select = props => {
 
   const {
     Qvain: { readonly },
-    Loacale: { lang },
+    Locale: { lang },
   } = useStores()
 
   const _props = {

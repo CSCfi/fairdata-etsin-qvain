@@ -11,9 +11,10 @@ import { LabelLarge } from '../general/modal/form'
 import { useStores } from '../utils/stores'
 
 const LanguageField = () => {
+  const Stores = useStores()
   const {
     Qvain: { datasetLanguageArray, setDatasetLanguageArray },
-  } = useStores()
+  } = Stores
 
   return (
     <Card>
@@ -24,6 +25,7 @@ const LanguageField = () => {
       <Select
         name="dataset-language"
         id="datasetLanguage"
+        Stores={Stores}
         getter={datasetLanguageArray}
         setter={setDatasetLanguageArray}
         isMulti
