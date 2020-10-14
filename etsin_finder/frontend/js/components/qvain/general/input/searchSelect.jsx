@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import ReactSelect from 'react-select/async'
 import Translate from 'react-translate-component'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import {
   onChange,
   onChangeMulti,
@@ -12,21 +12,15 @@ import {
   sortOptions,
 } from '../../utils/select'
 import etsinTheme from '../../../../styles/theme'
+import { useStores } from '../../utils/stores'
 
 const Select = props => {
+  const { metaxIdentifier, getter, setter, model, name, inModal, placeholder, isMulti } = props
+
   const {
-    Stores,
-    metaxIdentifier,
-    getter,
-    setter,
-    model,
-    name,
-    inModal,
-    placeholder,
-    isMulti,
-  } = props
-  const { readonly } = Stores.Qvain
-  const { lang } = Stores.Locale
+    Qvain: { readonly },
+    Loacale: { lang },
+  } = useStores()
 
   const _props = {
     ...props,
@@ -81,4 +75,4 @@ Select.defaultProps = {
   isMulti: false,
 }
 
-export default inject('Stores')(observer(Select))
+export default observer(Select)

@@ -6,7 +6,7 @@ import Translate from 'react-translate-component'
 import axios from 'axios'
 import styled from 'styled-components'
 
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 
 import { getOrganizationSearchUrl } from '../../../../stores/view/qvain.actors'
 import { organizationSelectSchema } from '../../utils/formValidation'
@@ -14,6 +14,7 @@ import { Input, Label } from '../modal/form'
 import ValidationError from '../errors/validationError'
 import { DeleteButton } from '../buttons'
 import { validate } from '../../project/utils'
+import { withStores } from '../../utils/stores'
 
 /**
  * A reusable organization select component.
@@ -435,7 +436,7 @@ CreatableSelectComponent.defaultProps = {
   allowReset: false,
 }
 
-const Select = inject('Stores')(observer(CreatableSelectComponent))
+const Select = withStores(observer(CreatableSelectComponent))
 
 const ErrorMessage = ({ errors }) => {
   if (!errors || !errors.length) return null
@@ -509,4 +510,4 @@ const AddOptionContainer = styled.div`
   }
 `
 
-export default inject('Stores')(observer(OrganizationSelect))
+export default withStores(observer(OrganizationSelect))
