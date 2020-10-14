@@ -25,11 +25,12 @@ import {
   ClickableIcon,
   NoIcon,
 } from '../../../general/files/items'
+import { DOWNLOAD_API_REQUEST_STATUS } from '../../../../utils/constants'
 
 const download = (datasetIdentifier, item) => {
   const handle = window.open(
     `/api/dl?cr_id=${datasetIdentifier}${
-    item.type === 'directory' ? `&dir_id=${item.identifier}` : `&file_id=${item.identifier}`
+      item.type === 'directory' ? `&dir_id=${item.identifier}` : `&file_id=${item.identifier}`
     }`
   )
   if (handle == null) {
@@ -39,7 +40,7 @@ const download = (datasetIdentifier, item) => {
 
 const FileTreeItemBase = ({ treeProps, item, level }) => {
   const { Files, directoryView, extraProps } = treeProps
-  const { allowDownload } = extraProps
+  const { allowDownload, packageRequests, downloadApiV2 } = extraProps
   const { setInInfo, datasetIdentifier } = Files
   let content = null
   const name = item.name
@@ -104,11 +105,21 @@ const FileTreeItemBase = ({ treeProps, item, level }) => {
     />
   )
 
+  let downloadAvailable = false
+  if (downloadApiV2) {
+    const request = packageRequests[Files.getItemPath(item)]
+    if (request && request.status === DOWNLOAD_API_REQUEST_STATUS.success) {
+      downloadAvailable = true
+    }
+  } else {
+    downloadAvailable = true
+  }
+
   return (
     <ItemRow style={{ flexWrap: 'wrap' }}>
       <Group>
         {infoButton}
-        {downloadButton}
+        {downloadAvailable ? downloadButton : <NoIcon />}
         <ItemSpacer level={level + 0.5} />
         {content}
       </Group>

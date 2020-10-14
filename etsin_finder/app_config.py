@@ -136,6 +136,26 @@ def get_download_api_config(is_testing):
     return dl_api_conf
 
 
+def get_download_api_v2_config(is_testing):
+    """Get download API config.
+
+    Args:
+        is_testing (bool): Testing.
+
+    Returns:
+        dict: Download api config or None
+
+    """
+    if executing_travis() or is_testing:
+        return None
+
+    dl_api_conf = get_app_config(is_testing).get('DOWNLOAD_API_V2', False)
+    if not dl_api_conf or not isinstance(dl_api_conf, dict):
+        return None
+
+    return dl_api_conf
+
+
 def get_fairdata_rems_api_config(is_testing):
     """Get Fairdata Rems API config.
 
