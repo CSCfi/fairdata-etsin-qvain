@@ -23,10 +23,10 @@ const getCookieValue = key => {
   return undefined
 }
 
-  async function importValuesAsync () {
-    const response = await axios.get('api/app_config')
-    return response.data
-  }
+async function importValuesAsync () {
+  const response = await axios.get('api/app_config')
+  return response.data
+}
 
 class Env {
   constructor() {
@@ -44,12 +44,10 @@ class Env {
   }
 
   @action setEtsinHost(host) {
-    console.log(host)
     this.etsinHost = host
   }
 
   @action setQvainHost(host) {
-    console.log(host)
     this.qvainHost = host
   }
 
@@ -75,6 +73,16 @@ class Env {
 
   @action setMetaxApiV2 = value => {
     this.metaxApiV2 = value
+  }
+
+  getEtsinUrl = path => {
+    if (this.isEtsin) {
+      return path
+    }
+    if (this.etsinHost && this.separateQvain) {
+      return `https://${this.etsinHost}${path}`
+    }
+    return path
   }
 
   getQvainUrl = path => {
