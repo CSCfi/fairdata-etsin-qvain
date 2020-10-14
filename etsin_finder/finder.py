@@ -20,16 +20,27 @@ def add_restful_resources(app):
     """
     api = Api(app)
     from etsin_finder.resources import (
-        REMSApplyForPermission, Contact, Dataset, V2Dataset,
-        DatasetMetadata, User,
-        Session, Files, Download
+        REMSApplyForPermission,
+        Contact,
+        Dataset,
+        V2Dataset,
+        DatasetMetadata,
+        User,
+        Session,
+        Files,
+        Download,
+        AppConfig
     )
     from etsin_finder.qvain_light_resources import (
-        ProjectFiles, DirectoryFiles, FileCharacteristics,
-        QvainDatasets, QvainDataset
+        ProjectFiles,
+        DirectoryFiles,
+        FileCharacteristics,
+        QvainDatasets,
+        QvainDataset
     )
     from etsin_finder.qvain_light_rpc import (
-        QvainDatasetChangeCumulativeState, QvainDatasetRefreshDirectoryContent,
+        QvainDatasetChangeCumulativeState,
+        QvainDatasetRefreshDirectoryContent,
         QvainDatasetFixDeprecated
     )
 
@@ -85,6 +96,7 @@ def add_restful_resources(app):
     api.add_resource(User, '/api/user')
     api.add_resource(Session, '/api/session')
     api.add_resource(Download, '/api/dl')
+    api.add_resource(AppConfig, '/api/app_config')
 
     # Qvain light API endpoints
     api.add_resource(ProjectFiles, '/api/qvain/projects/<string:pid>/files')
@@ -92,10 +104,12 @@ def add_restful_resources(app):
     api.add_resource(FileCharacteristics, '/api/qvain/files/<string:file_id>/file_characteristics')
     api.add_resource(QvainDatasets, '/api/qvain/datasets')
     api.add_resource(QvainDataset, '/api/qvain/datasets/<id:cr_id>')
+
     # Qvain light API RPC endpoints
     api.add_resource(QvainDatasetChangeCumulativeState, '/api/rpc/datasets/change_cumulative_state')
     api.add_resource(QvainDatasetRefreshDirectoryContent, '/api/rpc/datasets/refresh_directory_content')
     api.add_resource(QvainDatasetFixDeprecated, '/api/rpc/datasets/fix_deprecated')
+
     # REMS API endpoints
     api.add_resource(REMSApplyForPermission, '/api/rems/<id:cr_id>')
 

@@ -476,3 +476,21 @@ class Download(Resource):
             return download_data(cr_id, file_ids, dir_ids)
         else:
             abort(403, message="Not authorized")
+
+
+class AppConfig(Resource):
+    """Dataset related REST endpoints for frontend"""
+
+    @log_request
+    def get(self):
+        """Endpoint for importing app_config values to the frontend
+
+        Returns:
+            app_config for frontend
+
+        """
+        app_config = get_app_config(False)
+        return {
+            'SERVER_ETSIN_DOMAIN_NAME': app_config.get('SERVER_ETSIN_DOMAIN_NAME', ''),
+            'SERVER_QVAIN_DOMAIN_NAME': app_config.get('SERVER_QVAIN_DOMAIN_NAME', '')
+        }
