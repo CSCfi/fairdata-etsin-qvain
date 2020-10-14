@@ -68,7 +68,10 @@ class Env {
     return this.app !== 'qvain'
   }
 
-  @observable separateQvain = this.qvainHost !== this.etsinHost
+  @computed
+  get separateQvain() {
+    return this.qvainHost !== this.etsinHost
+  }
 
   @action setMetaxApiV2 = value => {
     this.metaxApiV2 = value
