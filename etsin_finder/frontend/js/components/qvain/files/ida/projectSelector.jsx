@@ -1,21 +1,31 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 import Select from 'react-select'
 import styled from 'styled-components'
+import { useStores } from '../../utils/stores'
 
-export const ProjectSelectorBase = ({ Stores, disabled }) => {
-  const { changeProject, selectedProject } = Stores.Qvain.Files
-  const { idaProjects } = Stores.Auth.user
-  const { error } = Stores.Qvain.Files.loadingProject || {}
+export const ProjectSelectorBase = ({ disabled }) => {
+  const {
+    Qvain: {
+      Files: {
+        changeProject,
+        selectedProject,
+        loadingProject: { error },
+      },
+    },
+    Auth: {
+      user: { idaProjects },
+    },
+  } = useStores()
+
   const notFound = error && error.response && error.response.status === 404
 
   const getOptions = () => {
     // IDA projects found, so populate the IDA project dropdown
     if (idaProjects) {
-      return idaProjects
-        .map(projectId => ({ value: projectId, label: projectId }))
+      return idaProjects.map(projectId => ({ value: projectId, label: projectId }))
     } // ... Otherwise the dropdown will be left empty, but visible, if the user has no IDA projects.
     return undefined
   }
@@ -57,7 +67,6 @@ export const ProjectSelectorBase = ({ Stores, disabled }) => {
 }
 
 ProjectSelectorBase.propTypes = {
-  Stores: PropTypes.object.isRequired,
   disabled: PropTypes.bool,
 }
 
@@ -77,4 +86,4 @@ export const ProjectSelect = styled(Select)`
   color: #808080;
 `
 
-export default inject('Stores')(observer(ProjectSelectorBase))
+export default observer(ProjectSelectorBase)

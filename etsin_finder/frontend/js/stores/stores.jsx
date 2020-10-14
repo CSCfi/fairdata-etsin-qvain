@@ -14,4 +14,4 @@ StoresProvider.propTypes = {
 
 export const useStores = () => React.useContext(StoresContext)
 
-export const withStores = Component => props => <Component {...props} store={useStores()} />
+export const withStores = Component => props => <Component {...props} Stores={useStores()} />

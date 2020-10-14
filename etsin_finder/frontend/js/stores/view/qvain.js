@@ -147,6 +147,11 @@ class Qvain {
   }
 
   @action
+  setIdaPickerOpen = value => {
+    this.idaPickerOpen(value)
+  }
+
+  @action
   setChanged = changed => {
     this.changed = changed
   }
@@ -942,6 +947,14 @@ class Qvain {
     if (this.Env.metaxApiV2) {
       await this.Files.openDataset(dataset)
     }
+  }
+
+  @action setExtResOpen = value => {
+    this.setExtResOpen(value)
+  }
+
+  @action setExtResFormOpen = value => {
+    this.setExtResFormOpen = value
   }
 
   @action setOriginal = newOriginal => {
