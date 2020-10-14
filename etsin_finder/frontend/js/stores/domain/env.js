@@ -11,6 +11,8 @@
 import { action, computed, observable } from 'mobx'
 import { RouterStore } from 'mobx-react-router'
 
+import axios from 'axios'
+
 const routingStore = new RouterStore()
 
 const getCookieValue = (key) => {
@@ -23,10 +25,34 @@ const getCookieValue = (key) => {
   return undefined
 }
 
-const qvainHost = process.env.REACT_APP_QVAIN_HOST
-const etsinHost = process.env.REACT_APP_ETSIN_HOST
+  async function importValuesAsync () {
+    const response = await axios.get('api/app_config')
+    console.log(response)
+    return response.data
+  }
 
 class Env {
+
+  @observable etsinHost = ''
+
+  @observable qvainHost = ''
+
+  async fetchAppConfig() {
+    const values = await importValuesAsync()
+    this.setEtsinHost(values.SERVER_ETSIN_DOMAIN_NAME)
+    this.setQvainHost(values.SERVER_QVAIN_DOMAIN_NAME)
+  }
+
+  @action setEtsinHost(host) {
+    console.log(host)
+    this.etsinHost = host
+  }
+
+  @action setQvainHost(host) {
+    console.log(host)
+    this.qvainHost = host
+  }
+
   @observable environment = process.env.NODE_ENV
 
   @observable metaxApiV2 = process.env.NODE_ENV !== 'production' && localStorage.getItem('metax_api_v2') === '1'
@@ -43,7 +69,7 @@ class Env {
     return this.app !== 'qvain'
   }
 
-  @observable separateQvain = qvainHost !== etsinHost
+  @observable separateQvain = this.qvainHost !== this.etsinHost
 
   @action setMetaxApiV2 = (value) => {
     this.metaxApiV2 = value
@@ -53,8 +79,8 @@ class Env {
     if (this.isQvain) {
       return path
     }
-    if (qvainHost && this.separateQvain) {
-      return `https://${qvainHost}${path}`
+    if (this.qvainHost && this.separateQvain) {
+      return `https://${this.qvainHost}${path}`
     }
     return `/qvain${path}`
   }
@@ -63,8 +89,8 @@ class Env {
     if (this.isEtsin) {
       return path
     }
-    if (etsinHost && this.separateQvain) {
-      return `https://${etsinHost}${path}`
+    if (this.etsinHost && this.separateQvain) {
+      return `https://${this.etsinHost}${path}`
     }
     return path
   }
