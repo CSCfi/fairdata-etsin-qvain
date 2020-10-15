@@ -18,7 +18,7 @@ import { getCookieValue } from '../../utils/cookies'
 const routingStore = new RouterStore()
 
 async function importValuesAsync() {
-  const response = await axios.get('api/app_config')
+  const response = await axios.get('/api/app_config')
   return response.data
 }
 
