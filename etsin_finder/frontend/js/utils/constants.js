@@ -16,7 +16,7 @@ export const DATA_CATALOG_IDENTIFIER = {
 
 export const REMS_URL = 'https://vm1446.kaj.pouta.csc.fi'
 
-export const QVAIN_URL = 'https://qvain.fairdata.fi'
+export const LEGACY_QVAIN_URL = 'https://qvain.fairdata.fi'
 
 export const METAX_FAIRDATA_ROOT_URL = 'https://metax.fairdata.fi'
 

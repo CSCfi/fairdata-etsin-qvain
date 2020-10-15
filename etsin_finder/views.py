@@ -22,7 +22,8 @@ from etsin_finder.authentication_direct_proxy import \
     reset_flask_session_on_login
 from etsin_finder.authentication_fairdata_sso import \
     is_authenticated_through_fairdata_sso, \
-    log_sso_values
+    log_sso_values, \
+    join_redirect_url_path
 from etsin_finder.app import app
 from etsin_finder.log import log
 from etsin_finder.localization import get_language, translate
@@ -39,7 +40,9 @@ def login_etsin():
     """
     auth = get_saml_auth(request, '_ETSIN')
     redirect_url = quote(request.args.get('relay', '/'))
-    return redirect(auth.login(redirect_url))
+    login_url = auth.login(redirect_url)
+    login_url = join_redirect_url_path(login_url, redirect_url)
+    return redirect(login_url)
 
 @app.route('/sso/qvain')
 def login_qvain():
@@ -51,7 +54,9 @@ def login_qvain():
     """
     auth = get_saml_auth(request, '_QVAIN')
     redirect_url = quote(request.args.get('relay', '/'))
-    return redirect(auth.login(redirect_url))
+    login_url = auth.login(redirect_url)
+    login_url = join_redirect_url_path(login_url, redirect_url)
+    return redirect(login_url)
 
 @app.route('/slo/etsin')
 def logout_etsin():

@@ -12,17 +12,37 @@ import { action, computed, makeObservable, observable } from 'mobx'
 import { RouterStore } from 'mobx-react-router'
 import { getCookieValue } from '../../utils/cookies'
 
+import axios from 'axios'
+
 const routingStore = new RouterStore()
 
-const qvainHost = process.env.REACT_APP_QVAIN_HOST
-const etsinHost = process.env.REACT_APP_ETSIN_HOST
+async function importValuesAsync() {
+  const response = await axios.get('api/app_config')
+  return response.data
+}
 
 class Env {
   constructor() {
     makeObservable(this)
   }
 
-  @observable environment = process.env.NODE_ENV
+  @observable etsinHost = ''
+
+  @observable qvainHost = ''
+
+  async fetchAppConfig() {
+    const values = await importValuesAsync()
+    this.setEtsinHost(values.SERVER_ETSIN_DOMAIN_NAME)
+    this.setQvainHost(values.SERVER_QVAIN_DOMAIN_NAME)
+  }
+
+  @action setEtsinHost(host) {
+    this.etsinHost = host
+  }
+
+  @action setQvainHost(host) {
+    this.qvainHost = host
+  }
 
   @observable metaxApiV2 =
     process.env.NODE_ENV !== 'production' && localStorage.getItem('metax_api_v2') === '1'
@@ -39,30 +59,33 @@ class Env {
     return this.app !== 'qvain'
   }
 
-  @observable separateQvain = qvainHost !== etsinHost
+  @computed
+  get separateQvain() {
+    return this.qvainHost !== this.etsinHost
+  }
 
   @action setMetaxApiV2 = value => {
     this.metaxApiV2 = value
-  }
-
-  getQvainUrl = path => {
-    if (this.isQvain) {
-      return path
-    }
-    if (qvainHost && this.separateQvain) {
-      return `https://${qvainHost}${path}`
-    }
-    return `/qvain${path}`
   }
 
   getEtsinUrl = path => {
     if (this.isEtsin) {
       return path
     }
-    if (etsinHost && this.separateQvain) {
-      return `https://${etsinHost}${path}`
+    if (this.etsinHost && this.separateQvain) {
+      return `https://${this.etsinHost}${path}`
     }
     return path
+  }
+
+  getQvainUrl = path => {
+    if (this.isQvain) {
+      return path
+    }
+    if (this.qvainHost && this.separateQvain) {
+      return `https://${this.qvainHost}${path}`
+    }
+    return `/qvain${path}`
   }
 
   history = routingStore
