@@ -8,11 +8,12 @@
  * @license   MIT
  */
 
+import axios from 'axios'
 import { action, computed, makeObservable, observable } from 'mobx'
 import { RouterStore } from 'mobx-react-router'
+
 import { getCookieValue } from '../../utils/cookies'
 
-import axios from 'axios'
 
 const routingStore = new RouterStore()
 
