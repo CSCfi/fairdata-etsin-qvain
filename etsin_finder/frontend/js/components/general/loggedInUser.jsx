@@ -1,9 +1,10 @@
 import React from 'react'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUser } from '@fortawesome/free-solid-svg-icons'
+import { withStores } from '../../stores/stores'
 
 const LoggedInUser = ({ Stores }) => {
   const { user, userLogged } = Stores.Auth
@@ -11,11 +12,7 @@ const LoggedInUser = ({ Stores }) => {
 
   const User = (
     <UserWrapper>
-      <UserIcon icon={faUser} />
-      {' '}
-      <Name>
-        {firstName || lastName}
-      </Name>
+      <UserIcon icon={faUser} /> <Name>{firstName || lastName}</Name>
     </UserWrapper>
   )
   return userLogged ? User : null
@@ -35,4 +32,4 @@ LoggedInUser.propTypes = {
   Stores: PropTypes.object.isRequired,
 }
 
-export default inject('Stores')(observer(LoggedInUser))
+export default withStores(observer(LoggedInUser))

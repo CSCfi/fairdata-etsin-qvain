@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { observer, inject } from 'mobx-react'
+import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 import { withRouter } from 'react-router-dom'
 import styled from 'styled-components'
@@ -79,4 +79,4 @@ const DatasetHelp = styled.p`
   margin-bottom: 30px;
 `
 
-export default inject('Stores')(observer(withRouter(Datasets)))
+export default observer(withRouter(Datasets))

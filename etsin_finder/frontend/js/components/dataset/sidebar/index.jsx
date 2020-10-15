@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 
 import checkDataLang, { getDataLang } from '../../../utils/checkDataLang'
@@ -16,6 +16,7 @@ import ErrorBoundary from '../../general/errorBoundary'
 import Agent from '../agent'
 import Project from './special/project'
 import DatasetIsCumulativeNotificationBar from '../../general/datasetIsCumulativeNotificationBar'
+import { withStores } from '../../../stores/stores'
 
 class Sidebar extends Component {
   dateSeparator(start, end) {
@@ -113,9 +114,7 @@ class Sidebar extends Component {
       : ''
     const logo = dataCatalog.catalog_json.logo
     const field = researchDataset.field_of_science
-    const geographicName = checkNested(researchDataset, 'spatial')
-      ? researchDataset.spatial
-      : false
+    const geographicName = checkNested(researchDataset, 'spatial') ? researchDataset.spatial : false
     const temporal = checkNested(researchDataset, 'temporal') ? researchDataset.temporal : false
     const license = checkNested(researchDataset, 'access_rights', 'license')
       ? researchDataset.access_rights.license
@@ -258,15 +257,15 @@ class Sidebar extends Component {
               <SidebarItem trans="dataset.access_rights" hideEmpty="true">
                 {accessRights.restriction_grounds && accessRights.restriction_grounds.length > 0
                   ? accessRights.restriction_grounds.map(rg => (
-                    <ListItem key={`rg-${rg.identifier}`} lang={getDataLang(rg.pref_label)}>
-                      {checkDataLang(rg.pref_label)}
-                    </ListItem>
-                  ))
+                      <ListItem key={`rg-${rg.identifier}`} lang={getDataLang(rg.pref_label)}>
+                        {checkDataLang(rg.pref_label)}
+                      </ListItem>
+                    ))
                   : checkNested(accessRights, 'access_type', 'pref_label') && (
-                    <ListItem lang={getDataLang(accessRights.access_type.pref_label)}>
-                      {checkDataLang(accessRights.access_type.pref_label)}
-                    </ListItem>
-                  )}
+                      <ListItem lang={getDataLang(accessRights.access_type.pref_label)}>
+                        {checkDataLang(accessRights.access_type.pref_label)}
+                      </ListItem>
+                    )}
               </SidebarItem>
             )}
 
@@ -403,4 +402,4 @@ const SubjectHeaderLink = styled.a`
 
 const ListItem = styled.dd``
 
-export default inject('Stores')(observer(Sidebar))
+export default withStores(observer(Sidebar))

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Fragment } from 'react'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import { toJS } from 'mobx'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
@@ -146,4 +146,4 @@ export const ResourceItem = styled(FileItem)`
   margin-bottom: ${props => (props.active ? '0' : '10px')};
 `
 
-export default inject('Stores')(observer(ExternalFileFormBase))
+export default observer(ExternalFileFormBase)
