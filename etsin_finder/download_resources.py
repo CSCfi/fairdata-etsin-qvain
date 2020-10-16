@@ -7,7 +7,7 @@
 
 """Download API v2 endpoints"""
 
-from flask import session
+from flask import session, redirect
 from flask_mail import Message
 from flask_restful import abort, reqparse, Resource
 
@@ -33,7 +33,7 @@ def check_download_permission(cr_id):
         abort(403, message="Not authorized")
     return True
 
-class DownloadRequests(Resource):
+class Requests(Resource):
     """Class for generating and retrieving download package requests."""
 
     def __init__(self):
@@ -41,9 +41,8 @@ class DownloadRequests(Resource):
         self.parser = reqparse.RequestParser()
         self.parser.add_argument('cr_id', type=str, required=True)
 
-    @log_request
     def get(self):
-        """Get download package requets.
+        """Get download package requests.
 
         Returns:
             Response from download service.
@@ -53,3 +52,45 @@ class DownloadRequests(Resource):
         cr_id = args.get('cr_id')
         check_download_permission(cr_id)
         return download_service.get_requests(cr_id)
+
+
+class Authorize(Resource):
+    """Class for requesting download authorizations."""
+
+    def __init__(self):
+        """Setup endpoint"""
+        self.parser = reqparse.RequestParser()
+        self.parser.add_argument('cr_id', type=str, required=True)
+        self.parser.add_argument('file', type=str, required=False) # file path
+        self.parser.add_argument('package', type=str, required=False) # package name
+
+    @log_request
+    def post(self):
+        """
+        Authorize file or package for download
+
+        Returns:
+            Object with the dowload URL, or error from download service.
+
+        """
+        args = self.parser.parse_args()
+        file = args.get('file')
+        package = args.get('package')
+
+        if not (file or package):
+            return "Either 'file' or 'package' query parameter required", 400
+        if file and package:
+            return "Specify either 'file' or 'package', not both", 400
+
+        cr_id = args.get('cr_id')
+        check_download_permission(cr_id)
+
+        resp, status = download_service.authorize(cr_id, file=file, package=package)
+        if status != 200:
+            return resp, status
+
+        token = resp.get('token')
+        if not token:
+            return "Token missing from response", 500
+
+        return { 'url': download_service.get_download_url(token) }

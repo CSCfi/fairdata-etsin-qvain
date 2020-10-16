@@ -14,9 +14,11 @@ from etsin_finder.app_config import get_download_api_v2_config
 def add_download_v2_resources(api):
     """Set download API v2 endpoints"""
     from etsin_finder.download_resources import (
-        DownloadRequests
+        Requests,
+        Authorize,
     )
-    api.add_resource(DownloadRequests, '/api/v2/dl/requests')
+    api.add_resource(Requests, '/api/v2/dl/requests', endpoint="dl_requests")
+    api.add_resource(Authorize, '/api/v2/dl/authorize', endpoint="dl_download")
 
 
 def add_restful_resources(app):

@@ -11,6 +11,8 @@ import { Button } from '../../../general/button'
 import Info from './info'
 import sizeParse from '../../../../utils/sizeParse'
 import { withStores } from '../../../../stores/stores'
+import downloadV2 from './download'
+import { DOWNLOAD_API_REQUEST_STATUS } from '../../../../utils/constants'
 
 const downloadAll = identifier => {
   const handle = window.open(`/api/dl?cr_id=${identifier}`)
@@ -25,13 +27,13 @@ function IdaResources(props) {
     props.dataset.data_catalog.catalog_json.identifier !== 'urn:nbn:fi:att:data-catalog-pas' &&
     restrictions.allowDataIdaDownloadButton
 
-  const {
-    inInfo,
-    setInInfo,
-    getUseCategoryLabel,
-    getFileTypeLabel,
-    root,
-  } = props.Stores.DatasetQuery.Files
+  const { Files } = props.Stores.DatasetQuery
+
+  const { inInfo, setInInfo, getUseCategoryLabel, getFileTypeLabel, root } = Files
+
+  const { downloadApiV2 } = props.Stores.Env
+
+  const { packageRequests } = props.Stores.DatasetQuery
 
   const fileCount = (root && root.existingFileCount) || 0
   const totalSize = (root && root.existingByteSize) || 0
@@ -55,6 +57,20 @@ function IdaResources(props) {
     closeModal: () => setInInfo(null),
   }
 
+  let fullAvailable = allowDownload
+  let downloadFunc = () => downloadAll(props.dataset.identifier)
+
+  // Download full dataset package
+  if (downloadApiV2) {
+    const fullRequest = packageRequests['/']
+    if (fullRequest) {
+      fullAvailable = fullAvailable && fullRequest.status === DOWNLOAD_API_REQUEST_STATUS.success
+      downloadFunc = () => downloadV2(props.dataset.identifier, null, Files, fullRequest)
+    } else {
+      fullAvailable = false
+    }
+  }
+
   return (
     <>
       <Header>
@@ -64,10 +80,7 @@ function IdaResources(props) {
           {totalSize ? ` (${sizeParse(totalSize)})` : null}
         </HeaderStats>
 
-        <HeaderButton
-          disabled={!allowDownload}
-          onClick={() => downloadAll(props.dataset.identifier)}
-        >
+        <HeaderButton disabled={!fullAvailable} onClick={downloadFunc}>
           <Translate content={'dataset.dl.downloadAll'} />
           <Translate className="sr-only" content="dataset.dl.file_types.both" />
           <DownloadIcon />

@@ -60,7 +60,27 @@ class DownloadAPIService(FlaskService):
                                              self.REQUESTS_URL,
                                              params=params,
                                              )
+        if status == 404:
+            return {}, 404
+        if not success:
+            log.warning(f"Failed to get requests for dataset {dataset}")
 
+        return resp, status
+
+    def authorize(self, dataset, file=None, package=None):
+        """Get package generation requests for dataset"""
+        params = {
+            'dataset': dataset
+        }
+        if file:
+            params['file'] = file
+        if package:
+            params['package'] = package
+
+        resp, status, success = make_request(requests.post,
+                                             self.AUTHORIZE_URL,
+                                             json=params,
+                                             )
         if status == 404:
             return {}, 404
 
@@ -68,5 +88,8 @@ class DownloadAPIService(FlaskService):
             log.warning(f"Failed to get requests for dataset {dataset}")
 
         return resp, status
+
+    def get_download_url(self, token):
+        return f'{self.DOWNLOAD_URL}?token={token}'
 
 download_service = DownloadAPIService(app)

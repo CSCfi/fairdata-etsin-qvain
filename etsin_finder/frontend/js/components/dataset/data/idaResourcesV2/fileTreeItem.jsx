@@ -26,6 +26,7 @@ import {
   NoIcon,
 } from '../../../general/files/items'
 import { DOWNLOAD_API_REQUEST_STATUS } from '../../../../utils/constants'
+import downloadV2 from './download'
 
 const download = (datasetIdentifier, item) => {
   const handle = window.open(
@@ -75,6 +76,22 @@ const FileTreeItemBase = ({ treeProps, item, level }) => {
   const haveMetadata = hasMetadata(item)
   const infoColor = haveMetadata ? 'primary' : 'gray'
   const { type } = item
+  const downloadFunc = downloadApiV2 ? downloadV2 : download
+
+  let downloadAvailable = false
+  let packageRequest = null
+  if (downloadApiV2) {
+    const request = packageRequests[Files.getItemPath(item)]
+    packageRequest = request
+    if (
+      item.type === 'file' ||
+      (request && request.status === DOWNLOAD_API_REQUEST_STATUS.success)
+    ) {
+      downloadAvailable = true
+    }
+  } else {
+    downloadAvailable = true
+  }
 
   const infoButton = (
     <Translate
@@ -99,21 +116,11 @@ const FileTreeItemBase = ({ treeProps, item, level }) => {
       disabled={!allowDownload}
       disabledColor="gray"
       disabledOpacity={0.4}
-      onClick={() => download(datasetIdentifier, item)}
+      onClick={() => downloadFunc(datasetIdentifier, item, Files, packageRequest)}
       attributes={{ 'aria-label': 'dataset.dl.downloadItem' }}
       with={{ name }}
     />
   )
-
-  let downloadAvailable = false
-  if (downloadApiV2) {
-    const request = packageRequests[Files.getItemPath(item)]
-    if (request && request.status === DOWNLOAD_API_REQUEST_STATUS.success) {
-      downloadAvailable = true
-    }
-  } else {
-    downloadAvailable = true
-  }
 
   return (
     <ItemRow style={{ flexWrap: 'wrap' }}>
