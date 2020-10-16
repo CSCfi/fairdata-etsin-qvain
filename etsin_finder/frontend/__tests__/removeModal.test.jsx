@@ -3,26 +3,32 @@ import { shallow } from 'enzyme'
 import axios from 'axios'
 
 import '../locale/translations.js'
-import RemoveModal from '../js/components/qvain/datasets/removeModal'
+import { RemoveModal as RemoveModalBase } from '../js/components/qvain/datasets/removeModal'
 import QvainStoreClass from '../js/stores/view/qvain'
 import LocaleStore from '../js/stores/view/language'
 import EnvStore from '../js/stores/domain/env'
 
 jest.mock('axios')
 
-const QvainStore = new QvainStoreClass(EnvStore)
+const mockEnv = EnvStore
+const mockStores = new QvainStoreClass(mockEnv)
+const mockLocale = LocaleStore
 
-const getStores = () => {
-  QvainStore.resetQvainStore()
-  EnvStore.setMetaxApiV2(true)
-  return {
-    Qvain: QvainStore,
-    Env: EnvStore,
-    Locale: LocaleStore,
+jest.mock('../js/components/qvain/utils/stores', () => {
+  const getStores = () => {
+    mockStores.resetQvainStore()
+    mockEnv.setMetaxApiV2(true)
+    return {
+      Qvain: mockStores,
+      Env: mockEnv,
+      Locale: mockLocale,
+    }
   }
-}
 
-const RemoveModalBase = RemoveModal.WrappedComponent.wrappedComponent
+  return {
+    useStores: getStores,
+  }
+})
 
 describe('Qvain.RemoveModal', () => {
   let wrapper, stores
@@ -31,14 +37,8 @@ describe('Qvain.RemoveModal', () => {
 
   beforeEach(() => {
     axios.delete.mockReset()
-    stores = getStores()
     wrapper = shallow(
-      <RemoveModalBase
-        postRemoveUpdate={postRemoveUpdate}
-        onClose={onClose}
-        Stores={stores}
-        location={{}}
-      />
+      <RemoveModalBase postRemoveUpdate={postRemoveUpdate} onClose={onClose} location={{}} />
     )
   })
 
@@ -101,6 +101,9 @@ describe('Qvain.RemoveModal', () => {
     wrapper.update()
     wrapper.find('#confirm-remove-dataset').simulate('click')
     await Promise.resolve()
-    expect(axios.delete.mock.calls).toEqual([['/api/v2/qvain/datasets/2'], ['/api/v2/qvain/datasets/1']])
+    expect(axios.delete.mock.calls).toEqual([
+      ['/api/v2/qvain/datasets/2'],
+      ['/api/v2/qvain/datasets/1'],
+    ])
   })
 })

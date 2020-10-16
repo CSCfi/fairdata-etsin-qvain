@@ -12,7 +12,7 @@ import { getResponseError } from '../utils/responseError'
 import Tracking from '../../../utils/tracking'
 import { useStores } from '../utils/stores'
 
-const RemoveModal = ({ dataset, onlyChanges, postRemoveUpdate, location, onClose }) => {
+export const RemoveModal = ({ dataset, onlyChanges, postRemoveUpdate, location, onClose }) => {
   const {
     Env: { metaxApiV2 },
   } = useStores()

@@ -13,7 +13,6 @@
 import React, { Component } from 'react'
 import { ThemeProvider } from 'styled-components'
 import { Router } from 'react-router-dom'
-import { Provider } from 'mobx-react'
 import createBrowserHistory from 'history/createBrowserHistory'
 import { syncHistoryWithStore } from 'mobx-react-router'
 
@@ -59,16 +58,14 @@ export default class App extends Component {
     return (
       <div className="app">
         <StoresProvider store={Stores}>
-          <Provider Stores={Stores}>
-            <Router history={history}>
-              <ThemeProvider theme={etsinTheme}>
-                <React.Fragment>
-                  <GlobalStyle />
-                  <Layout />
-                </React.Fragment>
-              </ThemeProvider>
-            </Router>
-          </Provider>
+          <Router history={history}>
+            <ThemeProvider theme={etsinTheme}>
+              <React.Fragment>
+                <GlobalStyle />
+                <Layout />
+              </React.Fragment>
+            </ThemeProvider>
+          </Router>
         </StoresProvider>
       </div>
     )

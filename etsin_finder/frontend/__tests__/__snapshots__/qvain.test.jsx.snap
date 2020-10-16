@@ -108,11 +108,11 @@ exports[`Qvain.Description should render <Description /> 1`] = `
     </Tooltip>
   </title__SectionTitle>
   <DescriptionField />
-  <inject-with-Stores(IssuedDateField) />
-  <inject-with-Stores(OtherIdentifierField) />
-  <inject-with-Stores(FieldOfScienceField) />
-  <inject-with-Stores(LanguageField) />
-  <inject-with-Stores(KeywordsField) />
+  <IssuedDateField />
+  <OtherIdentifierField />
+  <FieldOfScienceField />
+  <LanguageField />
+  <KeywordsField />
 </div>
 `;
 
@@ -121,7 +121,7 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
   language="fi"
   setLanguage={[Function]}
 >
-  <inject-with-Stores(DescriptionFieldInput)
+  <DescriptionFieldInput
     activeLang="fi"
     propName="title"
     schema={
@@ -229,7 +229,7 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
       }
     }
   />
-  <inject-with-Stores(DescriptionFieldTextField)
+  <DescriptionFieldTextField
     activeLang="fi"
     propName="description"
     schema={
@@ -1535,7 +1535,7 @@ exports[`Qvain.RightsAndLicenses should render <RightsAndLicenses /> 1`] = `
       />
     </Tooltip>
   </title__SectionTitle>
-  <WithTheme(inject-with-Stores(License)) />
-  <inject-with-Stores(AccessType) />
+  <WithTheme(Component) />
+  <ForwardRef />
 </div>
 `;

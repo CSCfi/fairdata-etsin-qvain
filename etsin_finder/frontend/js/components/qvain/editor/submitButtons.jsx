@@ -14,7 +14,7 @@ import { InvertedButton } from '../../general/button'
 import DoiModal from './doiModal'
 import { withStores } from '../../../stores/stores'
 
-class SubmitButtons extends Component {
+export class SubmitButtons extends Component {
   promises = []
 
   static propTypes = {
