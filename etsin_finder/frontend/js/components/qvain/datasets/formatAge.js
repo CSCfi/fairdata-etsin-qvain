@@ -6,53 +6,55 @@ const formatAge = (currentTime, eventTime) => {
   const timestampEvent = moment(eventTime)
 
   const secondsSinceCreation = timestampCurrentTime.diff(timestampEvent, 'seconds')
+  const monthsSinceCreation = timestampCurrentTime.diff(timestampEvent, 'months')
 
   let formattedDate
+  const duration = moment.duration(secondsSinceCreation, 'seconds')
+  const t = duration._data
 
-  // Time intervals retrieved from Moment.js documentation
-  // For instance, 45 seconds is not exactly a minute, but roughly a minute, and can be displayed as one.
-  if (secondsSinceCreation < 45) {
-    formattedDate = translate('qvain.datasets.tableRows.dateFormat.moments')
-  } else if (secondsSinceCreation < 90) {
-    formattedDate = translate('qvain.datasets.tableRows.dateFormat.oneMinute')
-  } else if (secondsSinceCreation < 3700) {
-    formattedDate = `${timestampCurrentTime.diff(timestampEvent, 'minutes')} ${translate(
-      'qvain.datasets.tableRows.dateFormat.minutes'
-    )}`
-  } else if (secondsSinceCreation < 5400) {
-    formattedDate = translate('qvain.datasets.tableRows.dateFormat.oneHour')
-  } else if (secondsSinceCreation < 79200) {
-    formattedDate = `${timestampCurrentTime.diff(timestampEvent, 'hours')} ${translate(
-      'qvain.datasets.tableRows.dateFormat.hours'
-    )}`
-  } else if (secondsSinceCreation < 129600) {
-    formattedDate = translate('qvain.datasets.tableRows.dateFormat.oneDay')
-  } else if (secondsSinceCreation < 2160000) {
-    formattedDate = `${timestampCurrentTime.diff(timestampEvent, 'days')} ${translate(
-      'qvain.datasets.tableRows.dateFormat.days'
-    )}`
-  } else {
-    // More than a month ago, compare by months
-    const monthsSinceCreation = timestampCurrentTime.diff(timestampEvent, 'months')
-
-    if (secondsSinceCreation >= 2160000 && monthsSinceCreation === 0) { // 1 month
-      formattedDate = `${timestampCurrentTime.diff(timestampEvent, 'days')} ${translate(
-      'qvain.datasets.tableRows.dateFormat.days'
-    )}`
-    } else if (monthsSinceCreation >= 1) {
-      formattedDate = translate('qvain.datasets.tableRows.dateFormat.oneMonth')
-    } else if (monthsSinceCreation >= 10) {
-      formattedDate = `${monthsSinceCreation} ${translate(
-        'qvain.datasets.tableRows.dateFormat.months'
-      )}`
-    } else if (monthsSinceCreation >= 18) {
+  // Years (in plural), compare by years
+  if (t.years !== 0) {
+    if (t.years === 1) {
       formattedDate = translate('qvain.datasets.tableRows.dateFormat.oneYear')
     } else {
-      // Years (in plural), compare by years
       formattedDate = `${timestampCurrentTime.diff(timestampEvent, 'years')} ${translate(
         'qvain.datasets.tableRows.dateFormat.years'
       )}`
     }
+  } else if (t.months !== 0) {
+    if (t.months === 1) {
+      formattedDate = translate('qvain.datasets.tableRows.dateFormat.oneMonth')
+    } else {
+      formattedDate = `${monthsSinceCreation} ${translate(
+        'qvain.datasets.tableRows.dateFormat.months'
+      )}`
+    }
+  } else if (t.days !== 0) {
+    if (t.days === 1) {
+      formattedDate = translate('qvain.datasets.tableRows.dateFormat.oneDay')
+    } else {
+      formattedDate = `${timestampCurrentTime.diff(timestampEvent, 'days')} ${translate(
+        'qvain.datasets.tableRows.dateFormat.days'
+      )}`
+    }
+  } else if (t.hours !== 0) {
+    if (t.hours === 1) {
+      formattedDate = translate('qvain.datasets.tableRows.dateFormat.oneHour')
+    } else {
+      formattedDate = `${timestampCurrentTime.diff(timestampEvent, 'hours')} ${translate(
+        'qvain.datasets.tableRows.dateFormat.hours'
+      )}`
+    }
+  } else if (t.minutes !== 0) {
+    if (t.minutes === 1) {
+      formattedDate = translate('qvain.datasets.tableRows.dateFormat.oneMinute')
+    } else {
+      formattedDate = `${timestampCurrentTime.diff(timestampEvent, 'minutes')} ${translate(
+        'qvain.datasets.tableRows.dateFormat.minutes'
+      )}`
+    }
+  } else {
+    formattedDate = translate('qvain.datasets.tableRows.dateFormat.moments')
   }
 
   return formattedDate
