@@ -25,8 +25,7 @@ import {
   ClickableIcon,
   NoIcon,
 } from '../../../general/files/items'
-import { DOWNLOAD_API_REQUEST_STATUS } from '../../../../utils/constants'
-import downloadV2 from './download'
+import getDownloadAction from './download'
 
 const download = (datasetIdentifier, item) => {
   const handle = window.open(
@@ -41,7 +40,7 @@ const download = (datasetIdentifier, item) => {
 
 const FileTreeItemBase = ({ treeProps, item, level }) => {
   const { Files, directoryView, extraProps } = treeProps
-  const { allowDownload, packageRequests, downloadApiV2 } = extraProps
+  const { allowDownload, Packages, downloadApiV2 } = extraProps
   const { setInInfo, datasetIdentifier } = Files
   let content = null
   const name = item.name
@@ -76,19 +75,17 @@ const FileTreeItemBase = ({ treeProps, item, level }) => {
   const haveMetadata = hasMetadata(item)
   const infoColor = haveMetadata ? 'primary' : 'gray'
   const { type } = item
-  const downloadFunc = downloadApiV2 ? downloadV2 : download
+  let downloadFunc = () => download(datasetIdentifier, item)
+  let downloadIcon = faDownload
+  let downloadIconSpin = false
 
   let downloadAvailable = false
-  let packageRequest = null
   if (downloadApiV2) {
-    const request = packageRequests[Files.getItemPath(item)]
-    packageRequest = request
-    if (
-      item.type === 'file' ||
-      (request && request.status === DOWNLOAD_API_REQUEST_STATUS.success)
-    ) {
-      downloadAvailable = true
-    }
+    const action = getDownloadAction(datasetIdentifier, item, Packages, Files)
+    downloadFunc = action.func
+    downloadIcon = action.icon
+    downloadIconSpin = action.spin
+    downloadAvailable = action.available
   } else {
     downloadAvailable = true
   }
@@ -111,12 +108,13 @@ const FileTreeItemBase = ({ treeProps, item, level }) => {
   const downloadButton = (
     <Translate
       component={ClickableIcon}
-      icon={faDownload}
+      icon={downloadIcon}
+      spin={downloadIconSpin}
       color="primary"
       disabled={!allowDownload}
       disabledColor="gray"
       disabledOpacity={0.4}
-      onClick={() => downloadFunc(datasetIdentifier, item, Files, packageRequest)}
+      onClick={downloadFunc}
       attributes={{ 'aria-label': 'dataset.dl.downloadItem' }}
       with={{ name }}
     />

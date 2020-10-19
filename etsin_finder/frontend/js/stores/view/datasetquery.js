@@ -8,12 +8,13 @@
  * @license   MIT
  */
 
-import { observable, action, makeObservable, runInAction } from 'mobx'
+import { observable, action, makeObservable } from 'mobx'
 import axios from 'axios'
 
 import access from './access'
 
 import Files from './files'
+import Packages from './packages'
 
 const QueryFields = {
   file: [
@@ -34,6 +35,7 @@ class DatasetQuery {
   constructor(Env) {
     this.Files = new Files()
     this.Env = Env
+    this.Packages = new Packages(Env)
     makeObservable(this)
   }
 
@@ -45,44 +47,18 @@ class DatasetQuery {
 
   @observable error = false
 
-  @observable packageRequests = {}
-
-  async fetchPackageRequests() {
-    // Fetch list of available downloadable packages
+  async fetchPackages() {
     const { downloadApiV2 } = this.Env
     if (!downloadApiV2 || !this.results) {
       return
     }
 
-    let response
-    try {
-      const url = `/api/v2/dl/requests?cr_id=${this.results.identifier}`
-      response = await axios.get(url)
-    } catch (err) {
-      runInAction(() => {
-        this.packageRequests = {}
-      })
-      if (err.response && err.response.status === 404) {
-        return
-      }
-      throw err
-    }
-
-    const { partial, ...full } = response.data
-    const requests = { '/': full };
-    (partial || []).forEach(req => {
-      if (req.scope.length === 1) {
-        requests[req.scope] = req
-      }
-    })
-
-    runInAction(() => {
-      this.packageRequests = requests
-    })
+    await this.Packages.fetch(this.results.identifier)
   }
 
   @action
   getData(id) {
+    this.Packages.clear()
     const { metaxApiV2 } = this.Env
     const url = metaxApiV2 ? `/api/v2/dataset/${id}` : `/api/dataset/${id}`
     return new Promise((resolve, reject) => {

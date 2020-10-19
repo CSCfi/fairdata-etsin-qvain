@@ -32,7 +32,7 @@ class Data extends Component {
     const { DatasetQuery } = this.props.Stores
     const { downloadApiV2 } = this.props.Stores.Env
     if (downloadApiV2) {
-      DatasetQuery.fetchPackageRequests()
+      DatasetQuery.fetchPackages()
     }
   }
 

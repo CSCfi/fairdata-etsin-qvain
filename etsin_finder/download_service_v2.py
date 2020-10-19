@@ -64,7 +64,23 @@ class DownloadAPIService(FlaskService):
             return {}, 404
         if not success:
             log.warning(f"Failed to get requests for dataset {dataset}")
+        return resp, status
 
+    def post_request(self, dataset, scope):
+        """Post package generation request for dataset"""
+        params = {
+            'dataset': dataset,
+        }
+        if scope:
+            params['scope'] = scope
+        resp, status, success = make_request(requests.post,
+                                             self.REQUESTS_URL,
+                                             json=params,
+                                             )
+        if status == 404:
+            return {}, 404
+        if not success:
+            log.warning(f"Failed to create requests for dataset {dataset} with scope {scope}")
         return resp, status
 
     def authorize(self, dataset, file=None, package=None):

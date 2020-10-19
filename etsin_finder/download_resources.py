@@ -44,6 +44,9 @@ class Requests(Resource):
     def get(self):
         """Get download package requests.
 
+        Args:
+            cr_id (str): Dataset identifier.
+
         Returns:
             Response from download service.
 
@@ -52,6 +55,26 @@ class Requests(Resource):
         cr_id = args.get('cr_id')
         check_download_permission(cr_id)
         return download_service.get_requests(cr_id)
+
+    def post(self):
+        """Create download package request.
+
+        Args:
+            cr_id (str): Dataset identifier.
+            scope (list of str): Paths to be included (if not defined, include all files).
+
+        Returns:
+            Response from download service.
+
+        """
+
+        self.parser.add_argument('scope', type=str, action='append', required=False)
+        args = self.parser.parse_args()
+        cr_id = args.get('cr_id')
+        check_download_permission(cr_id)
+
+        scope = args.get('scope')
+        return download_service.post_request(cr_id, scope)
 
 
 class Authorize(Resource):
@@ -67,7 +90,12 @@ class Authorize(Resource):
     @log_request
     def post(self):
         """
-        Authorize file or package for download
+        Authorize file or package for download.
+
+        Args:
+            cr_id (str): Dataset identifier
+            file (str): File path
+            package (str): Package name
 
         Returns:
             Object with the dowload URL, or error from download service.

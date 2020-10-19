@@ -11,8 +11,7 @@ import { Button } from '../../../general/button'
 import Info from './info'
 import sizeParse from '../../../../utils/sizeParse'
 import { withStores } from '../../../../stores/stores'
-import downloadV2 from './download'
-import { DOWNLOAD_API_REQUEST_STATUS } from '../../../../utils/constants'
+import getDownloadAction from './download'
 
 const downloadAll = identifier => {
   const handle = window.open(`/api/dl?cr_id=${identifier}`)
@@ -33,7 +32,7 @@ function IdaResources(props) {
 
   const { downloadApiV2 } = props.Stores.Env
 
-  const { packageRequests } = props.Stores.DatasetQuery
+  const { Packages } = props.Stores.DatasetQuery
 
   const fileCount = (root && root.existingFileCount) || 0
   const totalSize = (root && root.existingByteSize) || 0
@@ -59,16 +58,15 @@ function IdaResources(props) {
 
   let fullAvailable = allowDownload
   let downloadFunc = () => downloadAll(props.dataset.identifier)
+  const iconProps = {}
 
   // Download full dataset package
   if (downloadApiV2) {
-    const fullRequest = packageRequests['/']
-    if (fullRequest) {
-      fullAvailable = fullAvailable && fullRequest.status === DOWNLOAD_API_REQUEST_STATUS.success
-      downloadFunc = () => downloadV2(props.dataset.identifier, null, Files, fullRequest)
-    } else {
-      fullAvailable = false
-    }
+    const action = getDownloadAction(props.dataset.identifier, null, Packages, Files)
+    fullAvailable = fullAvailable && action.available
+    downloadFunc = action.func
+    iconProps.icon = action.icon
+    iconProps.spin = action.spin
   }
 
   return (
@@ -83,7 +81,7 @@ function IdaResources(props) {
         <HeaderButton disabled={!fullAvailable} onClick={downloadFunc}>
           <Translate content={'dataset.dl.downloadAll'} />
           <Translate className="sr-only" content="dataset.dl.file_types.both" />
-          <DownloadIcon />
+          <DownloadIcon {...iconProps} />
         </HeaderButton>
       </Header>
 

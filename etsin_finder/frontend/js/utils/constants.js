@@ -1,8 +1,8 @@
 // Constants used in Etsin and Qvain Light
 
 export const DOWNLOAD_API_REQUEST_STATUS = {
-  pending: 'PENDING',
-  success: 'SUCCESS',
+  PENDING: 'PENDING',
+  SUCCESS: 'SUCCESS',
 }
 
 export const ACCESS_TYPE_URL = {
