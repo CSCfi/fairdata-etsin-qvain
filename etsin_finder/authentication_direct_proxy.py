@@ -67,12 +67,8 @@ def prepare_flask_request_for_saml(request, service):
     # If in local development environment this will redirect the legacy SAML login right.
     if request.host == 'localhost':
         http_host = '30.30.30.30'
-    # Non-local login through Etsin SSO
-    elif service == 'ETSIN':
+    else:
         http_host = get_app_config(app.testing).get('SERVER_ETSIN_DOMAIN_NAME')
-    # Non-local login through Qvain SSO
-    elif service == 'QVAIN':
-        http_host = get_app_config(app.testing).get('SERVER_QVAIN_DOMAIN_NAME')
 
     return {
         'https': 'on' if request.scheme == 'https' else 'off',
