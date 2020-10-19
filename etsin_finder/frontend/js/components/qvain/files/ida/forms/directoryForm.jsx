@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
 import styled from 'styled-components'
@@ -14,52 +14,69 @@ import {
   directoryDescriptionSchema,
   directoryUseCategorySchema,
 } from '../../../utils/formValidation'
-import { useStores } from '../../../utils/stores'
+import { withStores } from '../../../utils/stores'
 
-export const DirectoryFormBase = ({ className, setChanged, requestClose }) => {
-  const {
-    Locale: { lang },
-    Qvain: {
-      Files: { inEdit, applyInEdit },
-      readonly,
-    },
-  } = useStores()
+export class DirectoryFormBase extends Component {
+  inEdit = this.props.Stores.Qvain.Files.inEdit
 
-  const [title, setTitle] = useState(inEdit.title || inEdit.name)
-  const [description, setDescription] = useState(inEdit.description)
-  const [useCategoriesEn, setUseCategoriesEn] = useState([])
-  const [useCategoriesFi, setUseCategoriesFi] = useState([])
-  const [useCategory, setUseCategory] = useState()
-  const [directoryError, setDirectoryError] = useState()
-  const [titleError, setTitleError] = useState()
-  const [descriptionError, setDescriptionError] = useState()
-  const [useCategoryError, setUseCategoryError] = useState()
+  static propTypes = {
+    Stores: PropTypes.object.isRequired,
+    className: PropTypes.string,
+    setChanged: PropTypes.func.isRequired,
+    requestClose: PropTypes.func.isRequired,
+  }
 
-  useEffect(() => {
+  static defaultProps = {
+    className: '',
+  }
+
+  state = {
+    title: this.inEdit.title || this.inEdit.name,
+    description: this.inEdit.description,
+    useCategoriesEn: [],
+    useCategoriesFi: [],
+    useCategory: undefined,
+    directoryError: undefined,
+    titleError: undefined,
+    descriptionError: undefined,
+    useCategoryError: undefined,
+  }
+
+  componentDidMount = () => {
+    const { inEdit } = this.props.Stores.Qvain.Files
     getLocalizedOptions('use_category').then(translations => {
-      setUseCategoriesEn(translations.en)
-      setUseCategoriesFi(translations.fi)
-      setUseCategory(
-        lang === 'en'
-          ? getUseCategory(inEdit, translations.en)
-          : getUseCategory(inEdit, translations.fi)
-      )
+      this.setState((state, props) => ({
+        useCategoriesEn: translations.en,
+        useCategoriesFi: translations.fi,
+        useCategory:
+          props.Stores.Locale.lang === 'en'
+            ? getUseCategory(inEdit, translations.en)
+            : getUseCategory(inEdit, translations.fi),
+      }))
     })
-  })
-
-  const handleCancel = event => {
-    event.preventDefault()
-    requestClose()
   }
 
-  const handleChangeUse = selectedOption => {
-    setUseCategory(selectedOption)
-    setUseCategoryError(undefined)
-    setChanged(true)
+  handleCancel = event => {
+    event.preventDefault()
+    this.props.requestClose()
   }
 
-  const handleSave = event => {
+  updateValues = values => {
+    this.setState(values)
+    this.props.setChanged(true)
+  }
+
+  handleChangeUse = selectedOption => {
+    this.setState({
+      useCategory: selectedOption,
+      useCategoryError: undefined,
+    })
+    this.props.setChanged(true)
+  }
+
+  handleSave = event => {
     event.preventDefault()
+    const { title, description, useCategory } = this.state
     const validationObj = {
       title,
       description,
@@ -68,110 +85,133 @@ export const DirectoryFormBase = ({ className, setChanged, requestClose }) => {
     directorySchema
       .validate(validationObj)
       .then(() => {
-        setDirectoryError(null)
-        setUseCategoryError(null)
-        applyInEdit({
+        this.setState({
+          directoryError: undefined,
+          useCategoryError: undefined,
+        })
+        this.props.Stores.Qvain.Files.applyInEdit({
           title,
           description,
           useCategory: useCategory.value,
         })
       })
       .catch(err => {
-        setDirectoryError(err.errors)
+        this.setState({
+          directoryError: err.errors,
+        })
       })
   }
 
-  const handleOnBlur = (validator, value, errorSet) => {
+  handleOnBlur = (validator, value, errorSet) => {
     validator
       .validate(value)
       .then(() => errorSet(undefined))
       .catch(err => errorSet(err.errors))
   }
 
-  const handleTitleBlur = () => {
-    handleOnBlur(directoryTitleSchema, title, setTitleError)
+  handleTitleBlur = () => {
+    this.handleOnBlur(directoryTitleSchema, this.state.title, value =>
+      this.setState({ titleError: value })
+    )
   }
 
-  const handleDescriptionBlur = () => {
-    handleOnBlur(directoryDescriptionSchema, description, setDescriptionError)
+  handleDescriptionBlur = () => {
+    this.handleOnBlur(directoryDescriptionSchema, this.state.description, value =>
+      this.setState({ descriptionError: value })
+    )
   }
 
-  const handleOnUseCategoryBlur = () => {
+  handleOnUseCategoryBlur = () => {
+    const { useCategory } = this.state
     directoryUseCategorySchema
       .validate(useCategory)
       .then(() => {
-        setUseCategoryError(undefined)
-        setDirectoryError(undefined)
+        this.setState({
+          useCategoryError: undefined,
+          directoryError: undefined,
+        })
       })
       .catch(err => {
-        setUseCategoryError(err.errors)
+        this.setState({
+          useCategoryError: err.errors,
+        })
       })
   }
 
-  return (
-    <DirectoryContainer className={className}>
-      <Label>
-        <Translate content="qvain.files.selected.form.title.label" /> *
-      </Label>
-      <Translate
-        component={Input}
-        value={title}
-        disabled={readonly}
-        onChange={event => setTitle(event.target.value)}
-        onBlur={handleTitleBlur}
-        attributes={{ placeholder: 'qvain.files.selected.form.title.placeholder' }}
-      />
-      {titleError !== undefined && <ValidationError>{titleError}</ValidationError>}
-      <Label>
-        <Translate content="qvain.files.selected.form.description.label" />
-      </Label>
-      <Translate
-        component={Textarea}
-        value={description}
-        disabled={readonly}
-        onChange={event => setDescription(event.target.value)}
-        onBlur={handleDescriptionBlur}
-        attributes={{ placeholder: 'qvain.files.selected.form.description.placeholder' }}
-      />
-      {descriptionError !== undefined && <ValidationError>{descriptionError}</ValidationError>}
-      <Label>
-        <Translate content="qvain.files.selected.form.use.label" /> *
-      </Label>
-      <Translate
-        component={CustomSelect}
-        value={useCategory}
-        isDisabled={readonly}
-        options={lang === 'en' ? useCategoriesEn : useCategoriesFi}
-        onChange={handleChangeUse}
-        onBlur={handleOnUseCategoryBlur}
-        menuPlacement="auto"
-        menuPosition="fixed"
-        menuShouldScrollIntoView={false}
-        attributes={{ placeholder: 'qvain.files.selected.form.use.placeholder' }}
-      />
-      {useCategoryError !== undefined && <ValidationError>{useCategoryError}</ValidationError>}
-      {directoryError !== undefined && <ValidationError>{directoryError}</ValidationError>}
-      <Buttons>
-        <Translate component={CancelButton} onClick={handleCancel} content="qvain.common.cancel" />
+  render() {
+    const { readonly } = this.props.Stores.Qvain
+    const { titleError, descriptionError, directoryError, useCategoryError } = this.state
+    return (
+      <DirectoryContainer className={this.props.className}>
+        <Label>
+          <Translate content="qvain.files.selected.form.title.label" /> *
+        </Label>
         <Translate
-          component={SaveButton}
+          component={Input}
+          value={this.state.title}
           disabled={readonly}
-          onClick={handleSave}
-          content="qvain.common.save"
+          onChange={event =>
+            this.updateValues({
+              title: event.target.value,
+            })
+          }
+          onBlur={this.handleTitleBlur}
+          attributes={{ placeholder: 'qvain.files.selected.form.title.placeholder' }}
         />
-      </Buttons>
-    </DirectoryContainer>
-  )
-}
-
-DirectoryFormBase.propTypes = {
-  className: PropTypes.string,
-  setChanged: PropTypes.func.isRequired,
-  requestClose: PropTypes.func.isRequired,
-}
-
-DirectoryFormBase.defaultProps = {
-  className: '',
+        {titleError !== undefined && <ValidationError>{titleError}</ValidationError>}
+        <Label>
+          <Translate content="qvain.files.selected.form.description.label" />
+        </Label>
+        <Translate
+          component={Textarea}
+          value={this.state.description}
+          disabled={readonly}
+          onChange={event =>
+            this.updateValues({
+              description: event.target.value,
+            })
+          }
+          onBlur={this.handleDescriptionBlur}
+          attributes={{ placeholder: 'qvain.files.selected.form.description.placeholder' }}
+        />
+        {descriptionError !== undefined && <ValidationError>{descriptionError}</ValidationError>}
+        <Label>
+          <Translate content="qvain.files.selected.form.use.label" /> *
+        </Label>
+        <Translate
+          component={CustomSelect}
+          value={this.state.useCategory}
+          isDisabled={readonly}
+          options={
+            this.props.Stores.Locale.lang === 'en'
+              ? this.state.useCategoriesEn
+              : this.state.useCategoriesFi
+          }
+          onChange={this.handleChangeUse}
+          onBlur={this.handleOnUseCategoryBlur}
+          menuPlacement="auto"
+          menuPosition="fixed"
+          menuShouldScrollIntoView={false}
+          attributes={{ placeholder: 'qvain.files.selected.form.use.placeholder' }}
+        />
+        {useCategoryError !== undefined && <ValidationError>{useCategoryError}</ValidationError>}
+        {directoryError !== undefined && <ValidationError>{directoryError}</ValidationError>}
+        <Buttons>
+          <Translate
+            component={CancelButton}
+            onClick={this.handleCancel}
+            content="qvain.common.cancel"
+          />
+          <Translate
+            component={SaveButton}
+            disabled={readonly}
+            onClick={this.handleSave}
+            content="qvain.common.save"
+          />
+        </Buttons>
+      </DirectoryContainer>
+    )
+  }
 }
 
 const DirectoryContainer = styled(Container)`
@@ -194,4 +234,4 @@ const Buttons = styled.div`
 const getUseCategory = (directory, translations) =>
   translations.find(opt => opt.value === directory.useCategory)
 
-export default observer(DirectoryFormBase)
+export default withStores(observer(DirectoryFormBase))

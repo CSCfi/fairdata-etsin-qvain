@@ -25,7 +25,7 @@ const confirmReload = e => {
   e.returnValue = ''
 }
 
-class Qvain extends Component {
+export class Qvain extends Component {
   promises = []
 
   disposeConfirmReload = null

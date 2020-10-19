@@ -8,9 +8,13 @@ import { ActorInput, ActorError } from '../../common'
 import { useStores } from '../../../utils/stores'
 
 const PersonInput = ({ propName, schema, includeType, required }) => {
-  const Stores = useStores()
+  const {
+    Qvain: {
+      Actors: { actorInEdit: actor, updateActor },
+      readonly,
+    },
+  } = useStores()
   const [error, setError] = useState()
-  const { actorInEdit: actor, updateActor, readonly } = Stores.Qvain.Actors
 
   const handleOnBlur = () => {
     const validator = schema

@@ -38,8 +38,7 @@ const AddItemsTree = () => {
     directoryView: AddItemsView,
     moreItemsLevel: 1,
   })
-
-  return renderTree
+  return <>{renderTree()}</>
 }
 
 export default observer(AddItemsTree)

@@ -9,7 +9,7 @@ import { useStores } from '../../utils/stores'
 export function SelectedItemsTree() {
   const {
     Files: { SelectedItemsView, root },
-  } = useStores()
+  } = useStores().Qvain
   const { Files } = useStores().Qvain
 
   // Open top level directory

@@ -15,9 +15,8 @@ const getStores = () => ({
 
 const mockElasticQuery = ElasticQuery
 
-jest.mock('../js/utils/stores', original => {
+jest.mock('../js/utils/stores', () => {
   return {
-    ...original,
     useStores: () => ({ ElasticQuery: mockElasticQuery }),
   }
 })

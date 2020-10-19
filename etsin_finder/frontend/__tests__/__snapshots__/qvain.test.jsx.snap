@@ -81,9 +81,44 @@ exports[`Qvain dataset list PreservationStates should render <TablePasState /> 1
 `;
 
 exports[`Qvain should render correctly 1`] = `
-<ContextConsumer>
-  <Component />
-</ContextConsumer>
+<card__QvainContainer>
+  <Header
+    datasetError={false}
+    datasetLoading={false}
+  />
+  <StickyHeader
+    datasetError={false}
+    datasetLoading={false}
+    handleSubmitError={[Function]}
+    handleSubmitResponse={[Function]}
+    response={null}
+    submitButtonsRef={
+      Object {
+        "current": null,
+      }
+    }
+    submitted={false}
+  />
+  <Dataset
+    datasetError={false}
+    datasetErrorDetails={null}
+    datasetErrorTitle={null}
+    handleRetry={[Function]}
+    haveDataset={true}
+    setFocusOnSubmitButton={[Function]}
+  />
+  <LooseActorsDialog />
+  <LooseProvenanceDialog />
+  <Translate
+    attributes={
+      Object {
+        "message": "qvain.unsavedChanges",
+      }
+    }
+    component={[Function]}
+    when={false}
+  />
+</card__QvainContainer>
 `;
 
 exports[`Qvain.Description should render <Description /> 1`] = `
@@ -345,8 +380,8 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
 `;
 
 exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
-<FieldOfScienceField
-  Stores={
+<ContextProvider
+  value={
     Object {
       "Env": Env {
         "app": undefined,
@@ -610,12 +645,14 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
       },
     }
   }
-/>
+>
+  <FieldOfScienceField />
+</ContextProvider>
 `;
 
 exports[`Qvain.Description should render <KeywordsField /> 1`] = `
-<KeywordsField
-  Stores={
+<ContextProvider
+  value={
     Object {
       "Env": Env {
         "app": undefined,
@@ -879,12 +916,14 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
       },
     }
   }
-/>
+>
+  <KeywordsField />
+</ContextProvider>
 `;
 
 exports[`Qvain.Description should render <LanguageField /> 1`] = `
-<LanguageField
-  Stores={
+<ContextProvider
+  value={
     Object {
       "Env": Env {
         "app": undefined,
@@ -1148,12 +1187,14 @@ exports[`Qvain.Description should render <LanguageField /> 1`] = `
       },
     }
   }
-/>
+>
+  <LanguageField />
+</ContextProvider>
 `;
 
 exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
-<OtherIdentifierField
-  Stores={
+<ContextProvider
+  value={
     Object {
       "Env": Env {
         "app": undefined,
@@ -1417,7 +1458,9 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
       },
     }
   }
-/>
+>
+  <OtherIdentifierField />
+</ContextProvider>
 `;
 
 exports[`Qvain.RightsAndLicenses should render <AccessType /> 1`] = `

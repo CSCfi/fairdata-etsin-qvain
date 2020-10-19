@@ -1,10 +1,9 @@
 import React from 'react'
 import { shallow, mount } from 'enzyme'
-import { configure } from 'mobx'
+import { configure, runInAction } from 'mobx'
 import axios from 'axios'
 import ReactModal from 'react-modal'
 import { ThemeProvider } from 'styled-components'
-import { Provider } from 'mobx-react'
 import { components as selectComponents } from 'react-select'
 import CreatableSelect from 'react-select/creatable'
 
@@ -29,6 +28,7 @@ import organizationMockGet, {
   AaltoDepartmentOfMediaIdentifier,
   NotReallyReferenceIdentifier,
 } from './__testdata__/qvain.actors.data'
+import { StoresProvider } from '../js/stores/stores'
 
 global.Promise = require('bluebird')
 
@@ -38,6 +38,19 @@ configure({
 })
 
 jest.mock('axios')
+
+jest.mock('../js/components/qvain/utils/stores', () => {
+  const withStores = require('../js/stores/stores').withStores
+  const DATA_CATALOG_IDENTIFIER = require('../js/utils/constants').DATA_CATALOG_IDENTIFIER
+
+  const useStores = jest.fn()
+
+  return {
+    withStores,
+    useStores,
+  }
+})
+const { useStores } = require('../js/components/qvain/utils/stores')
 
 const QvainStore = new QvainStoreClass(Env)
 Env.setMetaxApiV2(true)
@@ -50,21 +63,22 @@ beforeEach(() => {
   axios.get.mockReset()
   stores.Qvain.resetQvainStore()
   stores.Qvain.Actors.clearReferenceOrganizations()
+  useStores.mockReturnValue(stores)
 })
 
 describe('Qvain.Actors', () => {
   it('should render correctly', () => {
-    const component = shallow(<ActorsBase Stores={stores} />)
+    const component = shallow(<ActorsBase />)
     expect(component).toMatchSnapshot()
   })
 
   it('should list all added actors', () => {
     const addedActors = mount(
-      <Provider Stores={stores}>
+      <StoresProvider store={stores}>
         <ThemeProvider theme={etsinTheme}>
           <AddedActors />
         </ThemeProvider>
-      </Provider>
+      </StoresProvider>
     )
     expect(addedActors.find(ButtonGroup).length).toBe(0)
     stores.Qvain.Actors.saveActor(
@@ -149,14 +163,16 @@ describe('Qvain.Actors modal', () => {
     await stores.Qvain.editDataset(dataset)
     stores.Qvain.Actors.editActor(Actor())
 
+    useStores.mockReturnValue(stores)
+
     helper = document.createElement('div')
     ReactModal.setAppElement(helper)
     wrapper = mount(
-      <Provider Stores={stores}>
+      <StoresProvider store={stores}>
         <ThemeProvider theme={etsinTheme}>
           <ActorModal />
         </ThemeProvider>
-      </Provider>,
+      </StoresProvider>,
       { attachTo: helper }
     )
   })
@@ -473,10 +489,11 @@ describe('Qvain.Actors modal', () => {
     expect(actorInEdit.organizations[0].name.en).toBe('New Name')
   })
 
-  it('prevents editing person', () => {
+  it('prevents editing person', async () => {
     const { editActor, actors } = stores.Qvain.Actors
     editActor(actors.find(actor => actor.type === ENTITY_TYPE.PERSON))
     stores.Qvain.setPreservationState(80)
+
     wrapper.update()
     const inputs = wrapper.find('input').not('[type="hidden"]')
 

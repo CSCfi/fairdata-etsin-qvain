@@ -15,15 +15,17 @@ import { useStores } from '../utils/stores'
 
 const OtherIdentifierField = () => {
   const {
-    readonly,
-    removeOtherIdentifier,
-    setOtherIdentifier,
-    otherIdentifier,
-    otherIdentifiersArray,
-    addOtherIdentifier,
-    otherIdentifiersValidationError,
-    setOtherIdentifierValidationError,
-  } = useStores().Qvain
+    Qvain: {
+      readonly,
+      removeOtherIdentifier,
+      setOtherIdentifier,
+      otherIdentifier,
+      otherIdentifiersArray,
+      addOtherIdentifier,
+      otherIdentifiersValidationError,
+      setOtherIdentifierValidationError,
+    },
+  } = useStores()
 
   const handleInputChange = event => {
     const { value } = event.target

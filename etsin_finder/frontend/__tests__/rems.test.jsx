@@ -6,6 +6,7 @@ import Access from '../js/stores/view/access'
 import Auth from '../js/stores/domain/auth'
 import REMSButton from '../js/components/dataset/REMSButton'
 import Loader from '../js/components/general/loader'
+import { runInAction } from 'mobx'
 
 const getStores = () => ({
   Access: Access,
@@ -37,7 +38,9 @@ describe('AskForAccess', () => {
     // User is logged in so it renders the REMSButton
     const stores = getStores()
     stores.Access.updateAccess(access, false, 'apply')
-    stores.Auth.userLogged = true
+    runInAction(() => {
+      stores.Auth.userLogged = true
+    })
     const wrapper = shallow(<AskForAccess Stores={stores} cr_id="test" />)
     expect(wrapper.find(REMSButton).length).toBe(1)
   })

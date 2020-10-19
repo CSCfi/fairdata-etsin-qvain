@@ -183,7 +183,7 @@ describe('Qvain.RightsAndLicenses', () => {
 })
 
 describe('Qvain.Files', () => {
-  const render = async (stores, editDirectory) => {
+  const render = (stores, editDirectory) => {
     const testfile = File({
       description: 'File',
       title: 'testfile',
@@ -235,37 +235,34 @@ describe('Qvain.Files', () => {
       stores.Qvain.Files.setInEdit(testfile)
       Form = FileForm
     }
-    const wrapper = act(() =>
-      mount(
-        <StoresProvider store={stores}>
-          <ThemeProvider theme={etsinTheme}>
-            <Form requestClose={() => {}} setChanged={() => {}} />
-          </ThemeProvider>
-        </StoresProvider>
-      )
+    return mount(
+      <StoresProvider store={stores}>
+        <ThemeProvider theme={etsinTheme}>
+          <Form requestClose={() => {}} setChanged={() => {}} />
+        </ThemeProvider>
+      </StoresProvider>
     )
-    return wrapper
   }
 
   it('prevents editing of file fields', async () => {
     const stores = getStores()
     stores.Qvain.setPreservationState(80)
-    wrapper = await render(stores)
+    wrapper = render(stores)
 
     const inputs = wrapper.find('input').not('[type="hidden"]')
     const textareas = wrapper.find('textarea').not('[type="hidden"]')
 
-    await waitFor(() => expect(inputs.length).toBe(3))
+    expect(inputs.length).toBe(3)
     inputs.forEach(c => expect(c.props().disabled).toBe(true))
 
     expect(textareas.length).toBe(1)
     textareas.forEach(c => expect(c.props().disabled).toBe(true))
   })
 
-  it.skip('allows editing of file fields', async () => {
+  it('allows editing of file fields', async () => {
     const stores = getStores()
     stores.Qvain.setPreservationState(0)
-    wrapper = await render(stores)
+    wrapper = render(stores)
     const inputs = wrapper.find('input').not('[type="hidden"]')
     expect(inputs.length).toBe(3)
     inputs.forEach(c => expect(c.props().disabled).toBe(false))
@@ -275,10 +272,10 @@ describe('Qvain.Files', () => {
     textareas.forEach(c => expect(c.props().disabled).toBe(false))
   })
 
-  it.skip('prevents editing of directory fields', async () => {
+  it('prevents editing of directory fields', async () => {
     const stores = getStores()
     stores.Qvain.setPreservationState(80)
-    wrapper = await render(stores, true)
+    wrapper = render(stores, true)
 
     const inputs = wrapper.find('input').not('[type="hidden"]')
     expect(inputs.length).toBe(2)
@@ -289,10 +286,10 @@ describe('Qvain.Files', () => {
     textareas.forEach(c => expect(c.props().disabled).toBe(true))
   })
 
-  it.skip('allows editing of directory fields', async () => {
+  it('allows editing of directory fields', async () => {
     const stores = getStores()
     stores.Qvain.setPreservationState(100)
-    wrapper = await render(stores, true)
+    wrapper = render(stores, true)
 
     const inputs = wrapper.find('input').not('[type="hidden"]')
     expect(inputs.length).toBe(2)

@@ -9,7 +9,11 @@ export const StoresProvider = ({ store, children }) => (
 
 StoresProvider.propTypes = {
   store: PropTypes.object.isRequired,
-  children: PropTypes.node.isRequired,
+  children: PropTypes.node,
+}
+
+StoresProvider.defaultProps = {
+  children: null,
 }
 
 export const useStores = () => React.useContext(StoresContext)

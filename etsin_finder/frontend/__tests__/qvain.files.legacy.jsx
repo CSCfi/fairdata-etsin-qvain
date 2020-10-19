@@ -10,6 +10,8 @@ import Env from '../js/stores/domain/env'
 import QvainStoreClass, { Directory } from '../js/stores/view/qvain'
 import LocaleStore from '../js/stores/view/language'
 import { DATA_CATALOG_IDENTIFIER } from '../js/utils/constants'
+import { triangle } from 'polished'
+import { runInAction } from 'mobx'
 
 global.Promise = require('bluebird')
 const QvainStore = new QvainStoreClass(Env)
@@ -23,12 +25,28 @@ const getStores = () => {
   }
 }
 
+jest.mock('../js/components/qvain/utils/stores', () => {
+  const withStores = require('../js/stores/stores').withStores
+  const DATA_CATALOG_IDENTIFIER = require('../js/utils/constants').DATA_CATALOG_IDENTIFIER
+  const useStores = jest.fn()
+  useStores.mockReturnValue({
+    Qvain: {
+      idaPickerOpen: true,
+      dataCatalog: DATA_CATALOG_IDENTIFIER.IDA,
+    },
+    Env: {
+      metaxAPIv2: false,
+    },
+  })
+  return { withStores, useStores }
+})
+
 describe('Qvain.Files', () => {
   it('should render file picker', () => {
     const store = getStores()
     store.Qvain.dataCatalog = DATA_CATALOG_IDENTIFIER.IDA
     store.Qvain.idaPickerOpen = true
-    const component = shallow(<Files Stores={store} />)
+    const component = shallow(<Files />)
     expect(component.dive().find(IDAFilePicker).length).toBe(1)
   })
 
@@ -46,34 +64,37 @@ describe('Qvain.Files', () => {
   it('allows selecting directories in the file selector', () => {
     const stores = getStores()
     const component = mount(<FileSelectorBase Stores={stores} />)
-    stores.Qvain.selectedProject = 'project_y'
-    stores.Qvain.hierarchy = Directory(
-      {
-        id: 'test1',
-        identifier: 'test-ident-1',
-        project_identifier: 'project_y',
-        directory_name: 'root',
-        directories: [
-          Directory(
-            {
-              id: 'test2',
-              identifier: 'test-ident-2',
-              project_identifier: 'project_y',
-              directory_name: 'directory2',
-              directories: [],
-              files: [],
-            },
-            undefined,
-            false,
-            false
-          ),
-        ],
-        files: [],
-      },
-      undefined,
-      false,
-      true
-    )
+    runInAction(() => {
+      stores.Qvain.selectedProject = 'project_y'
+      stores.Qvain.hierarchy = Directory(
+        {
+          id: 'test1',
+          identifier: 'test-ident-1',
+          project_identifier: 'project_y',
+          directory_name: 'root',
+          directories: [
+            Directory(
+              {
+                id: 'test2',
+                identifier: 'test-ident-2',
+                project_identifier: 'project_y',
+                directory_name: 'directory2',
+                directories: [],
+                files: [],
+              },
+              undefined,
+              false,
+              false
+            ),
+          ],
+          files: [],
+        },
+        undefined,
+        false,
+        true
+      )
+    })
+
     component.update()
     expect(component.find('li').length).toBe(1)
     component.find('li').find('input').simulate('change')
@@ -87,29 +108,31 @@ describe('Qvain.Files', () => {
     stores.Qvain.selectedDirectories = []
     const fileSelector = mount(<FileSelectorBase Stores={stores} />)
 
-    stores.Qvain.selectedProject = 'project_y'
-    stores.Qvain.hierarchy = Directory(
-      {
-        id: 'test1',
-        identifier: 'test-ident-1',
-        project_identifier: 'project_y',
-        directory_name: 'root',
-        directories: [
-          {
-            id: 'test2',
-            identifier: 'test-ident-2',
-            project_identifier: 'project_y',
-            directory_name: 'directory2',
-            directories: [],
-            files: [],
-          },
-        ],
-        files: [],
-      },
-      undefined,
-      false,
-      true
-    )
+    runInAction(() => {
+      stores.Qvain.selectedProject = 'project_y'
+      stores.Qvain.hierarchy = Directory(
+        {
+          id: 'test1',
+          identifier: 'test-ident-1',
+          project_identifier: 'project_y',
+          directory_name: 'root',
+          directories: [
+            {
+              id: 'test2',
+              identifier: 'test-ident-2',
+              project_identifier: 'project_y',
+              directory_name: 'directory2',
+              directories: [],
+              files: [],
+            },
+          ],
+          files: [],
+        },
+        undefined,
+        false,
+        true
+      )
+    })
     fileSelector.update()
     fileSelector.find('#test2Checkbox input').simulate('change')
     fileSelector.unmount()

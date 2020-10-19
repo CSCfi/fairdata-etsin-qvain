@@ -6,7 +6,10 @@ import { useStores } from '../utils/stores'
 
 // If we have a PAS dataset, show information on current state.
 const PasState = () => {
-  const { isPas, readonly, preservationState } = useStores().Qvain
+  const {
+    Qvain: { isPas, readonly, preservationState },
+  } = useStores()
+
   if (!isPas) {
     return null
   }
