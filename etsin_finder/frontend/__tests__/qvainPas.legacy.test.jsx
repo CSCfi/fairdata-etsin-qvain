@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { shallow, mount } from 'enzyme'
 import { ThemeProvider } from 'styled-components'
 import axios from 'axios'
+import { runInAction } from 'mobx'
 
 import '../locale/translations'
 
@@ -492,34 +493,36 @@ describe('Qvain.Files', () => {
         csv_quoting_char: '"',
       },
     })
-    stores.Qvain.selectedProject = 'project_y'
-    stores.Qvain.hierarchy = Directory(
-      {
-        id: 'test1',
-        identifier: 'test-ident-1',
-        project_identifier: 'project_y',
-        directory_name: 'root',
-        directories: [
-          Directory(
-            {
-              id: 'test2',
-              identifier: 'test-ident-2',
-              project_identifier: 'project_y',
-              directory_name: 'directory2',
-              directories: [],
-              files: [],
-            },
-            undefined,
-            false,
-            false
-          ),
-        ],
-        files: [testfile],
-      },
-      undefined,
-      false,
-      true
-    )
+    runInAction(() => {
+      stores.Qvain.selectedProject = 'project_y'
+      stores.Qvain.hierarchy = Directory(
+        {
+          id: 'test1',
+          identifier: 'test-ident-1',
+          project_identifier: 'project_y',
+          directory_name: 'root',
+          directories: [
+            Directory(
+              {
+                id: 'test2',
+                identifier: 'test-ident-2',
+                project_identifier: 'project_y',
+                directory_name: 'directory2',
+                directories: [],
+                files: [],
+              },
+              undefined,
+              false,
+              false
+            ),
+          ],
+          files: [testfile],
+        },
+        undefined,
+        false,
+        true
+      )
+    })
     stores.Qvain.setInEdit(testfile)
     return mount(
       <StoresProvider store={stores}>

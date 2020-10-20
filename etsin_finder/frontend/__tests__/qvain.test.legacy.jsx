@@ -1,5 +1,6 @@
 import React from 'react'
 import { shallow, mount } from 'enzyme'
+import { runInAction } from 'mobx'
 
 import { StoresProvider } from '../js/stores/stores'
 import '../locale/translations'

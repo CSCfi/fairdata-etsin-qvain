@@ -1,5 +1,6 @@
 import React from 'react'
 import { shallow, mount } from 'enzyme'
+import { runInAction } from 'mobx'
 
 import Files from '../js/components/qvain/files'
 import IDAFilePicker, { IDAFilePickerBase } from '../js/components/qvain/files/legacy/idaFilePicker'
@@ -94,7 +95,6 @@ describe('Qvain.Files', () => {
         true
       )
     })
-
     component.update()
     expect(component.find('li').length).toBe(1)
     component.find('li').find('input').simulate('change')

@@ -120,10 +120,12 @@ class Auth {
             reject(err)
           })
         )
-        .finally(() => {
-          this.loading = false
-          this.initializing = false
-        })
+        .finally(
+          action(() => {
+            this.loading = false
+            this.initializing = false
+          })
+        )
     })
   }
 

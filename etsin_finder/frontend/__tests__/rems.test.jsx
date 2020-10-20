@@ -1,5 +1,6 @@
 import React from 'react'
 import { shallow } from 'enzyme'
+import { runInAction } from 'mobx'
 
 import { AskForAccess } from '../js/components/dataset/askForAccess'
 import Access from '../js/stores/view/access'

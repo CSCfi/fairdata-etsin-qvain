@@ -12,6 +12,8 @@ import json
 import jwt
 from datetime import datetime
 from flask import session, request
+from urllib.parse import urlparse, urlunparse, parse_qs, urlencode, urljoin
+
 from etsin_finder.app import app
 from etsin_finder.log import log
 from etsin_finder.app_config import get_app_config
@@ -71,3 +73,31 @@ def log_sso_values():
     """Log SSO values for the Fairdata session"""
     log.info(request.cookies)
     log.info(get_decrypted_sso_session_details())
+
+def join_redirect_url_path(url, path):
+    """
+    Append path to redirect_url parameter in URL
+
+    Used to append a path to the redirect_url query parameter in a URL.
+    If the query parameter does not exist, the URL is returned unchanged.
+
+    Args:
+        url (str): Original URL including the query string
+        path (str): Path to append to redirect_url, may contain query params
+
+    Returns:
+        updated_url (str): Updated URL
+
+    """
+    if path == '' or path == '/':
+        return url
+
+    parsed_url = urlparse(url)
+    query = parse_qs(parsed_url.query)
+    query_redirect_url = query.get('redirect_url')
+    if not query_redirect_url:
+        return url
+
+    query['redirect_url'] = [urljoin(query_redirect_url[0], path)]
+    updated_url = parsed_url._replace(query=urlencode(query, doseq=True))
+    return urlunparse(updated_url)

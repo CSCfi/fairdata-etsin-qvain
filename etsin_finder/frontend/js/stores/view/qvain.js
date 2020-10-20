@@ -188,6 +188,7 @@ class Qvain {
     )
   }
 
+  @action
   setOtherIdentifierValidationError = value => {
     this.otherIdentifiersValidationError = value
   }
