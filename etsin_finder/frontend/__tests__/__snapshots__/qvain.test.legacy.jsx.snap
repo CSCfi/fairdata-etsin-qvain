@@ -28,11 +28,11 @@ exports[`Qvain.Description should render <Description /> 1`] = `
     </Tooltip>
   </title__SectionTitle>
   <DescriptionField />
-  <inject-IssuedDateField-with-Stores />
-  <inject-OtherIdentifierField-with-Stores />
-  <inject-FieldOfScienceField-with-Stores />
-  <inject-LanguageField-with-Stores />
-  <inject-KeywordsField-with-Stores />
+  <inject-with-Stores(IssuedDateField) />
+  <inject-with-Stores(OtherIdentifierField) />
+  <inject-with-Stores(FieldOfScienceField) />
+  <inject-with-Stores(LanguageField) />
+  <inject-with-Stores(KeywordsField) />
 </div>
 `;
 
@@ -41,7 +41,7 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
   language="fi"
   setLanguage={[Function]}
 >
-  <inject-DescriptionFieldInput-with-Stores
+  <inject-with-Stores(DescriptionFieldInput)
     activeLang="fi"
     fieldName="Title"
     propName="title"
@@ -184,38 +184,45 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
             "url": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
           },
         },
-        "Actors": Actors {
-          "Qvain": [Circular],
-          "actorInEdit": null,
-          "actors": Array [],
-          "editDataset": [Function],
-          "fromBackend": [Function],
-          "getDatasetOrganizations": [Function],
-          "getReferenceOrganizations": [Function],
-          "getReferenceOrganizationsForActor": [Function],
-          "loadingReferenceOrganizations": Object {},
-          "onSuccessfulCreationCallbacks": Array [],
-          "orphanActors": Array [],
-          "referenceOrganizationErrors": Object {},
-          "referenceOrganizations": Object {},
-          "setSelectedActor": undefined,
-          "toBackend": [Function],
+        "tests": Array [],
+        "transforms": Array [
+          [Function],
+        ],
+        "type": "object",
+      }
+    }
+  />
+  <inject-with-Stores(DescriptionFieldTextField)
+    activeLang="fi"
+    propName="description"
+    schema={
+      ObjectSchema {
+        "_blacklist": RefSet {
+          "list": Set {},
+          "refs": Map {},
         },
-        "DatasetLanguages": DatasetLanguages {
-          "Model": [Function],
-          "Parent": [Circular],
-          "defaultItem": undefined,
-          "defaultStorageFactory": [Function],
-          "fromBackend": [Function],
-          "item": undefined,
-          "itemStr": "",
-          "storage": Array [],
-          "toBackend": [Function],
-          "validationError": null,
+        "_conditions": Array [],
+        "_defaultDefault": [Function],
+        "_deps": Array [],
+        "_excludedEdges": Array [],
+        "_exclusive": Object {},
+        "_mutate": undefined,
+        "_nodes": Array [
+          "en",
+          "fi",
+        ],
+        "_options": Object {
+          "abortEarly": true,
+          "recursive": true,
         },
-        "Description": Description {
-          "Parent": [Circular],
-          "Schema": ObjectSchema {
+        "_type": "object",
+        "_typeError": [Function],
+        "_whitelist": RefSet {
+          "list": Set {},
+          "refs": Map {},
+        },
+        "fields": Object {
+          "en": StringSchema {
             "_blacklist": RefSet {
               "list": Set {},
               "refs": Map {},
@@ -357,15 +364,71 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
             ],
             "type": "date",
           },
-          "defaultValue": undefined,
-          "fromBackend": [Function],
+        },
+        "tests": Array [],
+        "transforms": Array [
+          [Function],
+        ],
+        "type": "object",
+      }
+    }
+  />
+  <Translate
+    component="div"
+    content="qvain.description.description.instructions"
+  />
+</TranslationTab>
+`;
+
+exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
+<FieldOfScienceField
+  Stores={
+    Object {
+      "Env": Env {
+        "app": undefined,
+        "etsinHost": "",
+        "getEtsinUrl": [Function],
+        "getQvainUrl": [Function],
+        "history": RouterStore {
+          "go": [Function],
+          "goBack": [Function],
+          "goForward": [Function],
+          "history": null,
+          "location": null,
+          "push": [Function],
+          "replace": [Function],
+        },
+        "metaxApiV2": false,
+        "qvainHost": "",
+      },
+      "Locale": Locale {
+        "currentLang": "en",
+        "languages": Array [
+          "en",
+          "fi",
+        ],
+      },
+      "Qvain": Qvain {
+        "Actors": Actors {
+          "Qvain": [Circular],
+          "actorInEdit": null,
+          "actors": Array [],
+          "editDataset": [Function],
+          "getDatasetOrganizations": [Function],
+          "getReferenceOrganizations": [Function],
+          "getReferenceOrganizationsForActor": [Function],
+          "loadingReferenceOrganizations": Object {},
+          "onSuccessfulCreationCallbacks": Array [],
+          "referenceOrganizationErrors": Object {},
+          "referenceOrganizations": Object {},
+          "setSelectedActor": undefined,
           "toBackend": [Function],
           "validationError": null,
           "value": undefined,
         },
         "Env": Env {
           "app": undefined,
-          "environment": "test",
+          "etsinHost": "",
           "getEtsinUrl": [Function],
           "getQvainUrl": [Function],
           "history": RouterStore {
@@ -373,11 +436,12 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
             "goBack": [Function],
             "goForward": [Function],
             "history": null,
+            "location": null,
             "push": [Function],
             "replace": [Function],
           },
           "metaxApiV2": false,
-          "separateQvain": false,
+          "qvainHost": "",
         },
         "FieldOfSciences": FieldOfSciences {
           "Model": [Function],
@@ -527,13 +591,11 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
           "Template": [Function],
           "attachRefs": [Function],
           "cloneRefs": [Function],
-          "create": [Function],
           "detachRefs": [Function],
           "editMode": undefined,
           "fieldName": "provenances",
           "hasChanged": undefined,
           "inEdit": undefined,
-          "provenancesWithNonExistingActors": Array [],
           "references": Array [
             "associations",
             "usedEntities",
@@ -543,6 +605,7 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
           "saveNew": [Function],
           "selectedActor": undefined,
           "storage": Array [],
+          "toBackend": [Function],
           "validationError": undefined,
         },
         "RelatedResources": RelatedResources {
@@ -553,10 +616,9 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
           "cloneRefs": [Function],
           "create": [Function],
           "detachRefs": [Function],
-          "editMode": false,
+          "editMode": undefined,
           "fieldName": "relatedResources",
-          "fromBackend": [Function],
-          "hasChanged": false,
+          "hasChanged": undefined,
           "inEdit": undefined,
           "references": Array [],
           "relatedResourceToBackend": [Function],
@@ -616,10 +678,9 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
           "cloneRefs": [Function],
           "create": [Function],
           "detachRefs": [Function],
-          "editMode": false,
+          "editMode": undefined,
           "fieldName": "spatials",
-          "fromBackend": [Function],
-          "hasChanged": false,
+          "hasChanged": undefined,
           "inEdit": undefined,
           "references": Array [],
           "reset": [Function],
@@ -636,7 +697,6 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
           "Template": [Function],
           "attachRefs": [Function],
           "cloneRefs": [Function],
-          "create": [Function],
           "detachRefs": [Function],
           "editMode": false,
           "fieldName": "temporals",
@@ -648,7 +708,6 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
             "uiid": 0,
           },
           "references": Array [],
-          "reset": [Function],
           "saveEdited": [Function],
           "saveNew": [Function],
           "storage": Array [],
@@ -1442,6 +1501,10 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
         "selectedDirectories": Array [],
         "selectedFiles": Array [],
         "selectedProject": undefined,
+        "title": Object {
+          "en": "",
+          "fi": "",
+        },
         "useDoi": false,
       },
     }
@@ -1455,7 +1518,7 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
     Object {
       "Env": Env {
         "app": undefined,
-        "environment": "test",
+        "etsinHost": "",
         "getEtsinUrl": [Function],
         "getQvainUrl": [Function],
         "history": RouterStore {
@@ -1463,13 +1526,20 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
           "goBack": [Function],
           "goForward": [Function],
           "history": null,
+          "location": null,
           "push": [Function],
           "replace": [Function],
         },
         "metaxApiV2": false,
-        "separateQvain": false,
+        "qvainHost": "",
       },
-      "Locale": Locale {},
+      "Locale": Locale {
+        "currentLang": "en",
+        "languages": Array [
+          "en",
+          "fi",
+        ],
+      },
       "Qvain": Qvain {
         "AccessType": AccessType {
           "Model": [Function],
@@ -1756,7 +1826,7 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
         },
         "Env": Env {
           "app": undefined,
-          "environment": "test",
+          "etsinHost": "",
           "getEtsinUrl": [Function],
           "getQvainUrl": [Function],
           "history": RouterStore {
@@ -1764,11 +1834,12 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
             "goBack": [Function],
             "goForward": [Function],
             "history": null,
+            "location": null,
             "push": [Function],
             "replace": [Function],
           },
           "metaxApiV2": false,
-          "separateQvain": false,
+          "qvainHost": "",
         },
         "FieldOfSciences": FieldOfSciences {
           "Model": [Function],
@@ -1918,13 +1989,11 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
           "Template": [Function],
           "attachRefs": [Function],
           "cloneRefs": [Function],
-          "create": [Function],
           "detachRefs": [Function],
           "editMode": undefined,
           "fieldName": "provenances",
           "hasChanged": undefined,
           "inEdit": undefined,
-          "provenancesWithNonExistingActors": Array [],
           "references": Array [
             "associations",
             "usedEntities",
@@ -1934,6 +2003,7 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
           "saveNew": [Function],
           "selectedActor": undefined,
           "storage": Array [],
+          "toBackend": [Function],
           "validationError": undefined,
         },
         "RelatedResources": RelatedResources {
@@ -1944,10 +2014,9 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
           "cloneRefs": [Function],
           "create": [Function],
           "detachRefs": [Function],
-          "editMode": false,
+          "editMode": undefined,
           "fieldName": "relatedResources",
-          "fromBackend": [Function],
-          "hasChanged": false,
+          "hasChanged": undefined,
           "inEdit": undefined,
           "references": Array [],
           "relatedResourceToBackend": [Function],
@@ -1958,46 +2027,6 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
           "toBackend": [Function],
           "validationError": undefined,
         },
-        "RestrictionGrounds": RestrictionGrounds {
-          "Model": [Function],
-          "Parent": [Circular],
-          "Schema": StringSchema {
-            "_blacklist": RefSet {
-              "list": Set {},
-              "refs": Map {},
-            },
-            "_conditions": Array [],
-            "_deps": Array [],
-            "_exclusive": Object {
-              "required": true,
-              "url": false,
-            },
-            "_mutate": undefined,
-            "_options": Object {
-              "abortEarly": true,
-              "recursive": true,
-            },
-            "_type": "string",
-            "_typeError": [Function],
-            "_whitelist": RefSet {
-              "list": Set {},
-              "refs": Map {},
-            },
-            "tests": Array [
-              [Function],
-              [Function],
-            ],
-            "transforms": Array [
-              [Function],
-            ],
-            "type": "string",
-          },
-          "defaultValue": undefined,
-          "fromBackend": [Function],
-          "toBackend": [Function],
-          "validationError": null,
-          "value": undefined,
-        },
         "Spatials": Spatials {
           "Model": [Function],
           "Parent": [Circular],
@@ -2007,10 +2036,9 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
           "cloneRefs": [Function],
           "create": [Function],
           "detachRefs": [Function],
-          "editMode": false,
+          "editMode": undefined,
           "fieldName": "spatials",
-          "fromBackend": [Function],
-          "hasChanged": false,
+          "hasChanged": undefined,
           "inEdit": undefined,
           "references": Array [],
           "reset": [Function],
@@ -2027,7 +2055,6 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
           "Template": [Function],
           "attachRefs": [Function],
           "cloneRefs": [Function],
-          "create": [Function],
           "detachRefs": [Function],
           "editMode": false,
           "fieldName": "temporals",
@@ -2039,7 +2066,6 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
             "uiid": 0,
           },
           "references": Array [],
-          "reset": [Function],
           "saveEdited": [Function],
           "saveNew": [Function],
           "storage": Array [],
@@ -2833,6 +2859,10 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
         "selectedDirectories": Array [],
         "selectedFiles": Array [],
         "selectedProject": undefined,
+        "title": Object {
+          "en": "",
+          "fi": "",
+        },
         "useDoi": false,
       },
     }
@@ -2846,7 +2876,7 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
     Object {
       "Env": Env {
         "app": undefined,
-        "environment": "test",
+        "etsinHost": "",
         "getEtsinUrl": [Function],
         "getQvainUrl": [Function],
         "history": RouterStore {
@@ -2854,13 +2884,20 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
           "goBack": [Function],
           "goForward": [Function],
           "history": null,
+          "location": null,
           "push": [Function],
           "replace": [Function],
         },
         "metaxApiV2": false,
-        "separateQvain": false,
+        "qvainHost": "",
       },
-      "Locale": Locale {},
+      "Locale": Locale {
+        "currentLang": "en",
+        "languages": Array [
+          "en",
+          "fi",
+        ],
+      },
       "Qvain": Qvain {
         "AccessType": AccessType {
           "Model": [Function],
@@ -3147,7 +3184,7 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
         },
         "Env": Env {
           "app": undefined,
-          "environment": "test",
+          "etsinHost": "",
           "getEtsinUrl": [Function],
           "getQvainUrl": [Function],
           "history": RouterStore {
@@ -3155,11 +3192,12 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
             "goBack": [Function],
             "goForward": [Function],
             "history": null,
+            "location": null,
             "push": [Function],
             "replace": [Function],
           },
           "metaxApiV2": false,
-          "separateQvain": false,
+          "qvainHost": "",
         },
         "FieldOfSciences": FieldOfSciences {
           "Model": [Function],
@@ -3309,13 +3347,11 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
           "Template": [Function],
           "attachRefs": [Function],
           "cloneRefs": [Function],
-          "create": [Function],
           "detachRefs": [Function],
           "editMode": undefined,
           "fieldName": "provenances",
           "hasChanged": undefined,
           "inEdit": undefined,
-          "provenancesWithNonExistingActors": Array [],
           "references": Array [
             "associations",
             "usedEntities",
@@ -3325,6 +3361,7 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
           "saveNew": [Function],
           "selectedActor": undefined,
           "storage": Array [],
+          "toBackend": [Function],
           "validationError": undefined,
         },
         "RelatedResources": RelatedResources {
@@ -3335,10 +3372,9 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
           "cloneRefs": [Function],
           "create": [Function],
           "detachRefs": [Function],
-          "editMode": false,
+          "editMode": undefined,
           "fieldName": "relatedResources",
-          "fromBackend": [Function],
-          "hasChanged": false,
+          "hasChanged": undefined,
           "inEdit": undefined,
           "references": Array [],
           "relatedResourceToBackend": [Function],
@@ -3349,46 +3385,6 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
           "toBackend": [Function],
           "validationError": undefined,
         },
-        "RestrictionGrounds": RestrictionGrounds {
-          "Model": [Function],
-          "Parent": [Circular],
-          "Schema": StringSchema {
-            "_blacklist": RefSet {
-              "list": Set {},
-              "refs": Map {},
-            },
-            "_conditions": Array [],
-            "_deps": Array [],
-            "_exclusive": Object {
-              "required": true,
-              "url": false,
-            },
-            "_mutate": undefined,
-            "_options": Object {
-              "abortEarly": true,
-              "recursive": true,
-            },
-            "_type": "string",
-            "_typeError": [Function],
-            "_whitelist": RefSet {
-              "list": Set {},
-              "refs": Map {},
-            },
-            "tests": Array [
-              [Function],
-              [Function],
-            ],
-            "transforms": Array [
-              [Function],
-            ],
-            "type": "string",
-          },
-          "defaultValue": undefined,
-          "fromBackend": [Function],
-          "toBackend": [Function],
-          "validationError": null,
-          "value": undefined,
-        },
         "Spatials": Spatials {
           "Model": [Function],
           "Parent": [Circular],
@@ -3398,10 +3394,9 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
           "cloneRefs": [Function],
           "create": [Function],
           "detachRefs": [Function],
-          "editMode": false,
+          "editMode": undefined,
           "fieldName": "spatials",
-          "fromBackend": [Function],
-          "hasChanged": false,
+          "hasChanged": undefined,
           "inEdit": undefined,
           "references": Array [],
           "reset": [Function],
@@ -3418,7 +3413,6 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
           "Template": [Function],
           "attachRefs": [Function],
           "cloneRefs": [Function],
-          "create": [Function],
           "detachRefs": [Function],
           "editMode": false,
           "fieldName": "temporals",
@@ -3430,7 +3424,6 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
             "uiid": 0,
           },
           "references": Array [],
-          "reset": [Function],
           "saveEdited": [Function],
           "saveNew": [Function],
           "storage": Array [],
@@ -4224,6 +4217,10 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
         "selectedDirectories": Array [],
         "selectedFiles": Array [],
         "selectedProject": undefined,
+        "title": Object {
+          "en": "",
+          "fi": "",
+        },
         "useDoi": false,
       },
     }
@@ -4346,7 +4343,7 @@ exports[`Qvain.RightsAndLicenses should render <RightsAndLicenses /> 1`] = `
       />
     </Tooltip>
   </title__SectionTitle>
-  <WithTheme(inject-License-with-Stores) />
-  <inject-AccessType-with-Stores />
+  <WithTheme(inject-with-Stores(License)) />
+  <inject-with-Stores(AccessType) />
 </div>
 `;

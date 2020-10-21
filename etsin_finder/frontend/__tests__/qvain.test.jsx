@@ -302,8 +302,9 @@ describe('Qvain.RightsAndLicenses', () => {
     expect(getRenderedLicenseUrls(component)).toEqual(['https://test.url'])
   })
   it('should render one added license, CCBY4', () => {
-    Licenses.set([
-      Licenses.Model(
+    const stores = getStores()
+    stores.Qvain.setLicenseArray([
+      LicenseConstructor(
         { en: 'Creative Commons Attribution 4.0 International (CC BY 4.0)' },
         LICENSE_URL.CCBY4
       ),

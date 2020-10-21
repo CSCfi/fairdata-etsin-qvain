@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid'
-import { observable, action } from 'mobx'
+import { observable, action, makeObservable } from 'mobx'
 import Spatials from './qvain.spatials'
 import UsedEntities from './qvain.usedEntities'
 import Field from './qvain.field'
@@ -39,6 +39,7 @@ class Provenances extends Field {
       'usedEntities',
       'spatials',
     ])
+    makeObservable(this)
     this.Qvain = Qvain
   }
 

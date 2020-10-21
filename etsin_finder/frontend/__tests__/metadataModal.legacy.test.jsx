@@ -6,6 +6,7 @@ import { Provider } from 'mobx-react'
 import { BrowserRouter } from 'react-router-dom'
 import axios from 'axios'
 import { when } from 'mobx'
+import { runInAction } from 'mobx'
 
 import '../locale/translations.js'
 import etsinTheme from '../js/styles/theme'
@@ -140,7 +141,7 @@ const fileFormats = {
 }
 
 describe('Qvain.MetadataModal', () => {
-  let helper, wrapper, stores
+  let helper, wrapper, stores, instance
 
   beforeEach(() => {
     // Mock file format list request
@@ -149,46 +150,49 @@ describe('Qvain.MetadataModal', () => {
     helper = document.createElement('div')
     ReactModal.setAppElement(helper)
     stores = getStores()
+    const ref = React.createRef()
     wrapper = mount(
       <Provider Stores={stores}>
         <BrowserRouter>
           <ThemeProvider theme={etsinTheme}>
             <>
               <FileSelector />
-              <MetadataModal />
+              <MetadataModal ref={ref} />
             </>
           </ThemeProvider>
         </BrowserRouter>
       </Provider>,
       { attachTo: helper }
     )
-
+    instance = ref.current
     // Set directory hierarchy
-    stores.Qvain.selectedDirectories = []
-    stores.Qvain.existingFiles = [DatasetFile(testDatasetFile)]
-    stores.Qvain.selectedProject = 'project_y'
-    stores.Qvain.hierarchy = Directory(
-      {
-        id: 'test1',
-        identifier: 'test-ident-1',
-        project_identifier: 'project_y',
-        directory_name: 'root',
-        directories: [
-          {
-            id: 'test2',
-            identifier: 'test-ident-2',
-            project_identifier: 'project_y',
-            directory_name: 'directory2',
-            directories: [],
-            files: [],
-          },
-        ],
-        files: [testFile, testFile2, testFile3, testFile4],
-      },
-      undefined,
-      false,
-      true
-    )
+    runInAction(() => {
+      stores.Qvain.selectedDirectories = []
+      stores.Qvain.existingFiles = [DatasetFile(testDatasetFile)]
+      stores.Qvain.selectedProject = 'project_y'
+      stores.Qvain.hierarchy = Directory(
+        {
+          id: 'test1',
+          identifier: 'test-ident-1',
+          project_identifier: 'project_y',
+          directory_name: 'root',
+          directories: [
+            {
+              id: 'test2',
+              identifier: 'test-ident-2',
+              project_identifier: 'project_y',
+              directory_name: 'directory2',
+              directories: [],
+              files: [],
+            },
+          ],
+          files: [testFile, testFile2, testFile3, testFile4],
+        },
+        undefined,
+        false,
+        true
+      )
+    })
     wrapper.update()
   })
 
@@ -200,7 +204,6 @@ describe('Qvain.MetadataModal', () => {
   it('opens file on click and validates the metadata', async () => {
     // Open modal, wait until versions have been fetched
     wrapper.find('button#test_file-open-metadata-modal').simulate('click')
-    const instance = wrapper.find(MetadataModal).instance().wrappedInstance
     await when(() => instance.formatFetchStatus !== 'loading')
 
     // Expect no version for text/csv
@@ -228,7 +231,6 @@ describe('Qvain.MetadataModal', () => {
   it('updates existing files on metadata save', async () => {
     // Open modal, wait until versions have been fetched
     wrapper.find('button#test_file-open-metadata-modal').simulate('click')
-    const instance = wrapper.find(MetadataModal).instance().wrappedInstance
     await when(() => instance.formatFetchStatus !== 'loading')
 
     expect(stores.Qvain.existingFiles[0].csvHasHeader).toBe(true)
@@ -253,7 +255,6 @@ describe('Qvain.MetadataModal', () => {
   it('allows modifying the pas metadata of files in hierarchy', async () => {
     // Open modal, wait until versions have been fetched
     wrapper.find('button#test_file4-open-metadata-modal').simulate('click')
-    const instance = wrapper.find(MetadataModal).instance().wrappedInstance
     await when(() => instance.formatFetchStatus !== 'loading')
     expect(instance.state.fileIdentifier).toBe('test_file4')
     expect(instance.state.formatVersion).not.toBe('1.6')
@@ -289,7 +290,6 @@ describe('Qvain.MetadataModal', () => {
   it('disables metadata editing in readonly state', async () => {
     // Open modal, wait until versions have been fetched
     wrapper.find('button#test_file2-open-metadata-modal').simulate('click')
-    const instance = wrapper.find(MetadataModal).instance().wrappedInstance
     await when(() => instance.formatFetchStatus !== 'loading')
 
     // All inputs and buttons should be enabled

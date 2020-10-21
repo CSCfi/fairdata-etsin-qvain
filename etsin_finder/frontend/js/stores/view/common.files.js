@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { observable, action, runInAction, computed } from 'mobx'
+import { observable, action, runInAction, computed, makeObservable } from 'mobx'
 
 import urls from '../../components/qvain/utils/urls'
 import { Project, dirIdentifierKey, fileIdentifierKey } from './common.files.items'
@@ -12,6 +12,7 @@ class Files {
   constructor() {
     this.promiseManager = new PromiseManager()
     Files.prototype.reset.call(this)
+    makeObservable(this)
   }
 
   @observable datasetIdentifier = null

@@ -3,6 +3,7 @@ import { shallow, mount } from 'enzyme'
 import { Provider } from 'mobx-react'
 import { ThemeProvider } from 'styled-components'
 import axios from 'axios'
+import { runInAction } from 'mobx'
 
 import '../locale/translations'
 
@@ -346,13 +347,13 @@ describe('Qvain.PasState', () => {
 
   it('shows pas state', () => {
     const stores = getStores()
-    stores.Qvain.dataCatalog = DATA_CATALOG_IDENTIFIER.IDA
+    stores.Qvain.setDataCatalog(DATA_CATALOG_IDENTIFIER.IDA)
     stores.Qvain.setPreservationState(80)
     wrapper = render(stores)
     expect(wrapper.find(PasState).text().includes('80:')).toBe(true)
     wrapper.unmount()
 
-    stores.Qvain.dataCatalog = DATA_CATALOG_IDENTIFIER.PAS
+    stores.Qvain.setDataCatalog(DATA_CATALOG_IDENTIFIER.PAS)
     stores.Qvain.setPreservationState(0)
     wrapper = render(stores)
     expect(wrapper.find(PasState).text().includes('80:')).toBe(false)
@@ -469,34 +470,36 @@ describe('Qvain.Files', () => {
         csv_quoting_char: '"',
       },
     })
-    stores.Qvain.selectedProject = 'project_y'
-    stores.Qvain.hierarchy = Directory(
-      {
-        id: 'test1',
-        identifier: 'test-ident-1',
-        project_identifier: 'project_y',
-        directory_name: 'root',
-        directories: [
-          Directory(
-            {
-              id: 'test2',
-              identifier: 'test-ident-2',
-              project_identifier: 'project_y',
-              directory_name: 'directory2',
-              directories: [],
-              files: [],
-            },
-            undefined,
-            false,
-            false
-          ),
-        ],
-        files: [testfile],
-      },
-      undefined,
-      false,
-      true
-    )
+    runInAction(() => {
+      stores.Qvain.selectedProject = 'project_y'
+      stores.Qvain.hierarchy = Directory(
+        {
+          id: 'test1',
+          identifier: 'test-ident-1',
+          project_identifier: 'project_y',
+          directory_name: 'root',
+          directories: [
+            Directory(
+              {
+                id: 'test2',
+                identifier: 'test-ident-2',
+                project_identifier: 'project_y',
+                directory_name: 'directory2',
+                directories: [],
+                files: [],
+              },
+              undefined,
+              false,
+              false
+            ),
+          ],
+          files: [testfile],
+        },
+        undefined,
+        false,
+        true
+      )
+    })
     stores.Qvain.setInEdit(testfile)
     return mount(
       <Provider Stores={stores}>
@@ -527,20 +530,20 @@ describe('Qvain.Files', () => {
 
   it('should not render file picker for PAS datasets', () => {
     const store = getStores()
-    store.Qvain.dataCatalog = DATA_CATALOG_IDENTIFIER.IDA
+    store.Qvain.setDataCatalog(DATA_CATALOG_IDENTIFIER.IDA)
     store.Qvain.setPreservationState(0)
     store.Qvain.idaPickerOpen = true
     wrapper = shallow(<Files Stores={store} />)
     expect(wrapper.dive().find(IDAFilePicker).length).toBe(1)
     wrapper.unmount()
 
-    store.Qvain.dataCatalog = DATA_CATALOG_IDENTIFIER.IDA
+    store.Qvain.setDataCatalog(DATA_CATALOG_IDENTIFIER.IDA)
     store.Qvain.setPreservationState(80)
     wrapper = shallow(<Files Stores={store} />)
     expect(wrapper.dive().find(IDAFilePicker).length).toBe(0)
     wrapper.unmount()
 
-    store.Qvain.dataCatalog = DATA_CATALOG_IDENTIFIER.PAS
+    store.Qvain.setDataCatalog(DATA_CATALOG_IDENTIFIER.PAS)
     store.Qvain.setPreservationState(0)
     wrapper = shallow(<Files Stores={store} />)
     expect(wrapper.dive().find(IDAFilePicker).length).toBe(0)

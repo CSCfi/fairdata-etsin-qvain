@@ -1,4 +1,4 @@
-import { observable, computed, action, toJS } from 'mobx'
+import { observable, computed, action, toJS, makeObservable } from 'mobx'
 import cloneDeep from 'lodash.clonedeep'
 
 class Field {
@@ -8,6 +8,7 @@ class Field {
     this.fieldName = fieldName
     this.references = references
     this.Parent = Parent
+    makeObservable(this)
     this.reset = this.reset.bind(this)
     this.create = this.create.bind(this)
   }

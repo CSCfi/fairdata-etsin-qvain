@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid'
-import { computed, action } from 'mobx'
+import { computed, action, makeObservable } from 'mobx'
 import Field from './qvain.field'
 
 const Temporal = (uiid = uuidv4(), startDate = undefined, endDate = undefined) => ({
@@ -11,6 +11,7 @@ const Temporal = (uiid = uuidv4(), startDate = undefined, endDate = undefined) =
 class Temporals extends Field {
   constructor(Parent) {
     super(Parent, Temporal, TemporalModel, 'temporals')
+    makeObservable(this)
   }
 
   @computed get renderable() {

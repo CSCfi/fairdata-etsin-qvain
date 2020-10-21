@@ -1,4 +1,4 @@
-import { observable, action } from 'mobx'
+import { observable, action, makeObservable } from 'mobx'
 
 // Sorting helper for natural sorting of file/directory names.
 const sortOpts = { numeric: true, sensitivity: 'base' }
@@ -13,7 +13,7 @@ export class PromiseManager {
   // prevent unhandled rejection warnings.
   promises = []
 
-  add = (promise) => {
+  add = promise => {
     this.promises.push(promise)
     promise.then(() => {
       this.promises = this.promises.filter(p => p !== promise)
@@ -30,6 +30,10 @@ export class PromiseManager {
 }
 
 export class ChildItemCounter {
+  constructor() {
+    makeObservable(this)
+  }
+
   // Helper class for counting child items based on paths without
   // having to load the entire directory hierarchy.
   @observable root = { directories: {}, count: 0 }
@@ -86,12 +90,12 @@ export const emptyDirectoryResponse = {
     count: 0,
     results: {
       directories: [],
-      files: []
-    }
-  }
+      files: [],
+    },
+  },
 }
 
-export const getAction = (parent) => {
+export const getAction = parent => {
   let added = false
   let removed = false
   let dir = parent
@@ -108,7 +112,7 @@ export const getAction = (parent) => {
   }
   return {
     added,
-    removed
+    removed,
   }
 }
 

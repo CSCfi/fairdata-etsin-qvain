@@ -1,4 +1,4 @@
-import { observable, action } from 'mobx'
+import { observable, action, makeObservable } from 'mobx'
 import axios from 'axios'
 
 import { hasMetadata, dirIdentifierKey, fileIdentifierKey } from '../common.files.items'
@@ -15,6 +15,7 @@ class Files extends FilesBase {
 
   constructor(Qvain) {
     super()
+    makeObservable(this)
     this.Qvain = Qvain
     this.SelectedItemsView = new SelectedItemsView(this)
     this.AddItemsView = new AddItemsView(this)
