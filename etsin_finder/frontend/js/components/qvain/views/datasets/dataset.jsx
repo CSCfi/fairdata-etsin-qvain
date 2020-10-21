@@ -26,17 +26,20 @@ const datasetStateTranslation = dataset => {
 const getGoToEtsinButton = (dataset, getEtsinUrl) => {
   let identifier = dataset.identifier
   let goToEtsinKey = 'goToEtsin'
+  let query = ''
   if (dataset.next_draft) {
     identifier = dataset.next_draft.identifier
     goToEtsinKey = 'goToEtsinDraft'
+    query = '?preview=1'
   } else if (dataset.state === 'draft') {
     goToEtsinKey = 'goToEtsinDraft'
+    query = '?preview=1'
   }
 
   return (
     <Translate
       component={TableButton}
-      onClick={() => window.open(getEtsinUrl(`/dataset/${identifier}?preview=1`), '_blank')}
+      onClick={() => window.open(getEtsinUrl(`/dataset/${identifier}${query}`), '_blank')}
       content={`qvain.datasets.${goToEtsinKey}`}
     />
   )

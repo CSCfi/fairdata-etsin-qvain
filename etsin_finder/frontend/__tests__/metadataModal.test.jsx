@@ -10,17 +10,17 @@ import translate from 'counterpart'
 
 import '../locale/translations.js'
 import etsinTheme from '../js/styles/theme'
-import MetadataModal from '../js/components/qvain/fields/files/metadataModal'
+import MetadataModal, {
+  MetadataModal as MetaComponent,
+} from '../js/components/qvain/files/metadataModal'
 import Env from '../js/stores/domain/env'
 import QvainStoreClass from '../js/stores/view/qvain'
 import { Project, File, Directory } from '../js/stores/view/common.files.items'
 import LocaleStore from '../js/stores/view/language'
 
-jest.mock('axios')
-
-const QvainStore = new QvainStoreClass(Env)
 const getStores = () => {
   Env.setMetaxApiV2(true)
+  const QvainStore = new QvainStoreClass(Env)
   QvainStore.resetQvainStore()
   return {
     Env,
@@ -28,6 +28,9 @@ const getStores = () => {
     Locale: LocaleStore,
   }
 }
+
+jest.mock('axios')
+
 const testFile = {
   description: 'File',
   title: 'testfile',
@@ -125,25 +128,41 @@ const fileFormats = {
 }
 
 describe('Qvain.MetadataModal', () => {
-  let helper, wrapper, stores
+  let helper, wrapper, stores, ref, instance
 
-  beforeEach(() => {
-    // Mock file format list request
-    axios.get.mockReturnValue(fileFormats)
-
+  const mountWrapper = () => {
+    ref = React.createRef()
     helper = document.createElement('div')
     ReactModal.setAppElement(helper)
-    stores = getStores()
     wrapper = mount(
       <Provider Stores={stores}>
         <BrowserRouter>
           <ThemeProvider theme={etsinTheme}>
-            <MetadataModal />
+            <MetadataModal ref={ref} />
           </ThemeProvider>
         </BrowserRouter>
       </Provider>,
       { attachTo: helper }
     )
+    instance = ref.current
+  }
+
+  const setFile = path => {
+    const { Files } = stores.Qvain
+    return new Promise(async res => {
+      const file = await Files.getItemByPath(path)
+      stores.Qvain.setMetadataModalFile(file)
+      mountWrapper()
+      await when(() => ref.formatFetchStatus !== 'loading')
+      res(file)
+    })
+  }
+
+  beforeEach(() => {
+    // Mock file format list request
+    axios.get.mockReturnValue(fileFormats)
+
+    stores = getStores()
 
     // Set directory hierarchy
     stores.Qvain.Files.selectedProject = 'project_y'
@@ -162,54 +181,39 @@ describe('Qvain.MetadataModal', () => {
       }
     )
     stores.Qvain.Files.root.directories.push(dir)
-    wrapper.update()
-  })
-
-  afterEach(() => {
-    wrapper.unmount()
-    wrapper.detach()
   })
 
   it('opens file on click and validates the metadata', async () => {
-    const { Files } = stores.Qvain
-
-    // Open modal, wait until versions have been fetched
-    stores.Qvain.setMetadataModalFile(await Files.getItemByPath('/test/test.csv'))
-    const instance = wrapper.find(MetadataModal).instance().wrappedInstance
-    await when(() => instance.formatFetchStatus !== 'loading')
-
-    // Expect no version for text/csv
+    await setFile('/test/test.csv')
     expect(instance.state.fileIdentifier).toBe('test_file')
     expect(instance.state.csvHasHeader).toBe(true)
     expect(instance.validateMetadata).not.toThrow()
+  })
 
+  it('opens file on click and gives an error on invalid metadata', async () => {
     // Versions forbidden for text/csv
-    stores.Qvain.setMetadataModalFile(await Files.getItemByPath('/test/test2.csv'))
+    await setFile('/test/test2.csv')
     expect(instance.state.fileIdentifier).toBe('test_file2')
     expect(instance.validateMetadata).toThrow(
       translate('qvain.files.metadataModal.errors.formatVersionNotAllowed')
     )
+  })
 
-    // Accepted version for application/pdf
-    stores.Qvain.setMetadataModalFile(await Files.getItemByPath('/test/test3.pdf'))
+  it('opens file on click that has valid application/pdf metadata', async () => {
+    await setFile('/test/test3.pdf')
     expect(instance.state.fileIdentifier).toBe('test_file3')
     expect(instance.state.csvHasHeader).toBe(false)
     expect(instance.validateMetadata).not.toThrow()
+  })
 
-    // Invalid version for application/pdf
-    stores.Qvain.setMetadataModalFile(await Files.getItemByPath('/test/test4.pdf'))
+  it('opens file on click but gaves an error when application/pdf metadata is invalid', async () => {
+    await setFile('/test/test4.pdf')
     expect(instance.state.fileIdentifier).toBe('test_file4')
     expect(instance.validateMetadata).toThrow()
   })
 
   it('updates existing files on metadata save', async () => {
-    const { Files } = stores.Qvain
-    const file = await Files.getItemByPath('/test/test.csv')
-
-    // Open modal, wait until versions have been fetched
-    stores.Qvain.setMetadataModalFile(file)
-    const instance = wrapper.find(MetadataModal).instance().wrappedInstance
-    await when(() => instance.formatFetchStatus !== 'loading')
+    const file = await setFile('/test/test.csv')
 
     expect(file.pasMeta.csvHasHeader).toBe(true)
     expect(instance.state.csvHasHeader).toBe(true)
@@ -231,14 +235,8 @@ describe('Qvain.MetadataModal', () => {
   })
 
   it('allows modifying the pas metadata of files in hierarchy', async () => {
-    const { Files } = stores.Qvain
-
+    const file = await setFile('/test/test4.pdf')
     // Open modal, wait until versions have been fetched
-    const file = await Files.getItemByPath('/test/test4.pdf')
-    stores.Qvain.setMetadataModalFile(file)
-    wrapper.update()
-    const instance = wrapper.find(MetadataModal).instance().wrappedInstance
-    await when(() => instance.formatFetchStatus !== 'loading')
     expect(instance.state.fileIdentifier).toBe('test_file4')
     expect(instance.state.formatVersion).not.toBe('1.6')
 
@@ -258,27 +256,21 @@ describe('Qvain.MetadataModal', () => {
     }))
     await instance.saveChanges()
 
-    // Clear modal file
+    // clear
     stores.Qvain.setMetadataModalFile(null)
+    mountWrapper()
     expect(instance.state.fileIdentifier).not.toBe('test_file4')
     expect(instance.state.formatVersion).not.toBe('1.6')
 
     // Reopen file from hierarchy, should now validate correctly
-    stores.Qvain.setMetadataModalFile(file)
+    await setFile('/test/test4.pdf')
     expect(instance.state.fileIdentifier).toBe('test_file4')
     expect(instance.state.formatVersion).toBe('1.6')
     expect(instance.validateMetadata).not.toThrow()
   })
 
   it('disables metadata editing in readonly state', async () => {
-    const { Files } = stores.Qvain
-
-    // Open modal, wait until versions have been fetched
-    stores.Qvain.setMetadataModalFile(await Files.getItemByPath('/test/test2.csv'))
-    wrapper.update()
-    const instance = wrapper.find(MetadataModal).instance().wrappedInstance
-    await when(() => instance.formatFetchStatus !== 'loading')
-
+    await setFile('/test/test2.csv')
     // All inputs and buttons should be enabled
     const enabled = wrapper
       .find(MetadataModal)
@@ -305,15 +297,8 @@ describe('Qvain.MetadataModal', () => {
   })
 
   it('hides csv options for non-csv files', async () => {
-    const { Files } = stores.Qvain
-
-    // Open modal, wait until versions have been fetched
-    stores.Qvain.setMetadataModalFile(await Files.getItemByPath('/test/test2.csv'))
-    wrapper.update()
-    const instance = wrapper.find(MetadataModal).instance().wrappedInstance
-    await when(() => instance.formatFetchStatus !== 'loading')
-
     // All inputs and buttons should be enabled
+    await setFile('/test/test2.csv')
     let enabled = wrapper
       .find(MetadataModal)
       .find('input')
@@ -321,10 +306,8 @@ describe('Qvain.MetadataModal', () => {
       .not('[disabled=true]')
     expect(enabled.length).toBe(7)
 
-    stores.Qvain.setMetadataModalFile(await Files.getItemByPath('/test/test4.pdf'))
-    wrapper.update()
-
     // All inputs and buttons should be enabled
+    await setFile('/test/test4.pdf')
     enabled = wrapper
       .find(MetadataModal)
       .find('input')

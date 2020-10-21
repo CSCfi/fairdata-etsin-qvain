@@ -1,8 +1,13 @@
 import React from 'react'
-import { shallow } from 'enzyme'
+import { shallow, mount } from 'enzyme'
 import axios from 'axios'
 
 import '../locale/translations'
+import { ThemeProvider } from 'styled-components'
+import { Provider } from 'mobx-react'
+import { BrowserRouter } from 'react-router-dom'
+import etsinTheme from '../js/styles/theme'
+
 import { CUMULATIVE_STATE } from '../js/utils/constants'
 import Env from '../js/stores/domain/env'
 import QvainStoreClass from '../js/stores/view/qvain'
@@ -116,7 +121,15 @@ describe('Qvain CumulativeState', () => {
       cumulative_state: CUMULATIVE_STATE.YES,
       draft_of: { identifier: 1 },
     })
-    const component = shallow(<CumulativeStateBase Stores={stores} />)
+    let component = mount(
+      <Provider Stores={stores}>
+        <BrowserRouter>
+          <ThemeProvider theme={etsinTheme}>
+            <CumulativeStateBase Stores={stores} />
+          </ThemeProvider>
+        </BrowserRouter>
+      </Provider>
+    )
     expect(component.find(CumulativeStateButton).length).toBe(1)
 
     // set cumulation to be closed

@@ -8,7 +8,7 @@
  * @license   MIT
  */
 
-import { observable, action } from 'mobx'
+import { observable, action, makeObservable } from 'mobx'
 import axios from 'axios'
 
 import access from './access'
@@ -34,6 +34,7 @@ class DatasetQuery {
   constructor(Env) {
     this.Files = new Files()
     this.Env = Env
+    makeObservable(this)
   }
 
   @observable results = null
@@ -51,7 +52,7 @@ class DatasetQuery {
     return new Promise((resolve, reject) => {
       axios
         .get(url)
-        .then(async res => {
+        .then(action(async res => {
           this.results = res.data.catalog_record
           this.emailInfo = res.data.email_info
           access.updateAccess(
@@ -61,14 +62,14 @@ class DatasetQuery {
           )
 
           resolve(res.data)
-        })
-        .catch(error => {
+        }))
+        .catch(action(error => {
           this.error = error
           this.results = []
           this.emailInfo = []
           this.directories = []
           reject(error)
-        })
+        }))
     })
   }
 

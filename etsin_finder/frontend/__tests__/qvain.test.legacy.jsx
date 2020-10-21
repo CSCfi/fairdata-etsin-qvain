@@ -1,5 +1,6 @@
 import React from 'react'
 import { shallow, mount } from 'enzyme'
+import { runInAction } from 'mobx'
 
 import '../locale/translations'
 import etsinTheme from '../js/styles/theme'
@@ -231,34 +232,36 @@ describe('Qvain.Files', () => {
   it('allows selecting directories in the file selector', () => {
     const stores = getStores()
     const component = mount(<FileSelectorBase Stores={stores} />)
-    stores.Qvain.selectedProject = 'project_y'
-    stores.Qvain.hierarchy = Directory(
-      {
-        id: 'test1',
-        identifier: 'test-ident-1',
-        project_identifier: 'project_y',
-        directory_name: 'root',
-        directories: [
-          Directory(
-            {
-              id: 'test2',
-              identifier: 'test-ident-2',
-              project_identifier: 'project_y',
-              directory_name: 'directory2',
-              directories: [],
-              files: [],
-            },
-            undefined,
-            false,
-            false
-          ),
-        ],
-        files: [],
-      },
-      undefined,
-      false,
-      true
-    )
+    runInAction(() => {
+      stores.Qvain.selectedProject = 'project_y'
+      stores.Qvain.hierarchy = Directory(
+        {
+          id: 'test1',
+          identifier: 'test-ident-1',
+          project_identifier: 'project_y',
+          directory_name: 'root',
+          directories: [
+            Directory(
+              {
+                id: 'test2',
+                identifier: 'test-ident-2',
+                project_identifier: 'project_y',
+                directory_name: 'directory2',
+                directories: [],
+                files: [],
+              },
+              undefined,
+              false,
+              false
+            ),
+          ],
+          files: [],
+        },
+        undefined,
+        false,
+        true
+      )
+    })
     component.update()
     expect(component.find('li').length).toBe(1)
     component.find('li').find('input').simulate('change')
@@ -272,29 +275,31 @@ describe('Qvain.Files', () => {
     stores.Qvain.selectedDirectories = []
     const fileSelector = mount(<FileSelectorBase Stores={stores} />)
 
-    stores.Qvain.selectedProject = 'project_y'
-    stores.Qvain.hierarchy = Directory(
-      {
-        id: 'test1',
-        identifier: 'test-ident-1',
-        project_identifier: 'project_y',
-        directory_name: 'root',
-        directories: [
-          {
-            id: 'test2',
-            identifier: 'test-ident-2',
-            project_identifier: 'project_y',
-            directory_name: 'directory2',
-            directories: [],
-            files: [],
-          },
-        ],
-        files: [],
-      },
-      undefined,
-      false,
-      true
-    )
+    runInAction(() => {
+      stores.Qvain.selectedProject = 'project_y'
+      stores.Qvain.hierarchy = Directory(
+        {
+          id: 'test1',
+          identifier: 'test-ident-1',
+          project_identifier: 'project_y',
+          directory_name: 'root',
+          directories: [
+            {
+              id: 'test2',
+              identifier: 'test-ident-2',
+              project_identifier: 'project_y',
+              directory_name: 'directory2',
+              directories: [],
+              files: [],
+            },
+          ],
+          files: [],
+        },
+        undefined,
+        false,
+        true
+      )
+    })
     fileSelector.update()
     fileSelector.find('#test2Checkbox input').simulate('change')
     fileSelector.unmount()

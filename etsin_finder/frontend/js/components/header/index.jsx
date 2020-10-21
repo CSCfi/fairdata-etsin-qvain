@@ -18,7 +18,7 @@ import PropTypes from 'prop-types'
 
 import { Link } from '../general/button'
 import DropdownMenu from '../general/navigation/dropdownMenu'
-import { QVAIN_URL, FAIRDATA_WEBSITE_URL } from '../../utils/constants'
+import { LEGACY_QVAIN_URL, FAIRDATA_WEBSITE_URL } from '../../utils/constants'
 import MaybeNavLink from '../general/navigation/maybeNavLink'
 
 import EtsinLogo from './etsinLogo'
@@ -55,7 +55,7 @@ const EtsinHeader = props => {
           <Link
             width="100%"
             margin="0.4em 0em 0.4em 0.4em"
-            href={QVAIN_URL}
+            href={LEGACY_QVAIN_URL}
             rel="noopener noreferrer"
             target="_blank"
           >
@@ -77,7 +77,7 @@ const EtsinHeader = props => {
         <Translate content="nav.addDataset" />
       </TextContainer>
       <Row>
-        <Link width="100%" href={QVAIN_URL} rel="noopener noreferrer" target="_blank">
+        <Link width="100%" href={LEGACY_QVAIN_URL} rel="noopener noreferrer" target="_blank">
           Qvain
         </Link>
         <MaybeNavLink width="50%" to={Env.getQvainUrl('')}>
@@ -94,9 +94,18 @@ const EtsinHeader = props => {
         <Navi routes={routes} />
       </NaviContainer>
       <Right>
-        <Settings helpUrl={helpUrl}>{dropDownMenu()}</Settings>
+        <Settings
+          helpUrl={helpUrl}
+          loginThroughService="etsin"
+        >
+          {dropDownMenu()}
+        </Settings>
       </Right>
-      <MobileNavi helpUrl={helpUrl} naviRoutes={routes}>
+      <MobileNavi
+        helpUrl={helpUrl}
+        naviRoutes={routes}
+        loginThroughService="etsin"
+      >
         {mobileSettingsExtra}
       </MobileNavi>
     </Header>

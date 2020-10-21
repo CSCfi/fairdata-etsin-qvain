@@ -77,7 +77,6 @@ class Qvain extends Component {
 
   componentWillUnmount() {
     this.props.Stores.Qvain.resetQvainStore()
-    this.props.Stores.Qvain.original = undefined
     this.promises.forEach(promise => promise.cancel())
     if (this.disposeConfirmReload) {
       this.disposeConfirmReload()

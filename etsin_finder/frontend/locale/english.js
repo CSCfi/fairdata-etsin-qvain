@@ -220,6 +220,7 @@ const english = {
       homepage: 'Homepage',
     },
     language: 'Language',
+    fairdataPas: 'Fairdata DPS',
     storedInPas:
       "This dataset is stored in Fairdata's Digital Preservation Service (data not accessible via Etsin).",
     pasDatasetVersionExists:
@@ -227,8 +228,8 @@ const english = {
     originalDatasetVersionExists: 'There is an existing use copy of the dataset. ',
     linkToPasDataset: "Click here to open the Digial preservation Service's version",
     linkToOriginalDataset: 'You can open the use copy by clicking here',
-    enteringPas: 'Entering PAS',
-    dataInPasDatasetsCanNotBeDownloaded: 'PAS dataset data cannot be downloaded',
+    enteringPas: 'Entering DPS',
+    dataInPasDatasetsCanNotBeDownloaded: 'DPS dataset data cannot be downloaded',
   },
   error: {
     cscLoginRequired: 'This page requires you to be logged in with a CSC account.',
@@ -263,9 +264,8 @@ const english = {
     },
     cookies: {
       accept: 'Accept all cookies',
-      infoText:
-        'By using Fairdata services you agree to our Cookies Use. We use cookies to improve your experience and make our services work better.',
-      link: 'View the Fairdata Privacy Policy.',
+      infoText: 'The Fairdata services use cookies and tracking to ensure security and quality.',
+      link: 'View the Fairdata Privacy Policy',
     },
   },
   home: {
@@ -288,7 +288,7 @@ const english = {
       fos: 'View fields of science in Search -page',
       research: 'View projects in Search -page',
     },
-    includePas: 'Include Fairdata PAS datasets',
+    includePas: 'Include Fairdata DPS datasets',
   },
   nav: {
     login: 'Login',
@@ -352,8 +352,8 @@ const english = {
       editDataset: 'Edit Dataset',
     },
     home: {
-      brief: 'Research Dataset Metadata Tool',
-      description: 'Fairdata Qvain tool makes metadata creation effortless for your research data. Qvain offers you a simple form to fill and save the metadata. Once you are happy with it you simply publish the metadata and make it visible to others. Qvain provides your dataset with a persistent identifier, landing page and distributes it to relevant metadata services.',
+      brief: 'Research Dataset Description Tool',
+      description: 'Fairdata Qvain tool makes describing and publishing your research data effortless for you. It offers you a straightforward form in which to fill information about your data. Once you are happy with it, you can simply publish the dataset and make it visible to others. Qvain provides your dataset with a persistent identifier, landing page and distributes it to other relevant services.',
       howTo: 'How to start using Qvain and user guides',
       dataInIda: 'Data stored in IDA',
       dataInExternal: 'Data stored outside of Fairdata',
@@ -399,7 +399,7 @@ const english = {
       editMetadataSuccess: 'Dataset successfully updated!',
     },
     pasInfo: {
-      stateInfo: 'This is a PAS dataset. The state of the dataset is "%(state)s: %(description)s".',
+      stateInfo: 'This is a DPS dataset. The state of the dataset is "%(state)s: %(description)s".',
       editable: 'You can edit metadata but cannot add or remove any files.',
       readonly: 'You can view metadata but cannot make any changes.',
     },
@@ -876,13 +876,13 @@ const english = {
         explanation:
           'Choose "IDA" if the data is stored in Fairdata IDA Service. Choose "Remote resources" if the data is in remote location.',
         doiSelection:
-          'I want the dataset to have a DOI (digital object identifier) instead of a URN.',
+          'I want the published dataset to have a DOI (digital object identifier) instead of a URN.',
         doiSelectedHelp:
-          'When the dataset is published, a DOI will be created and stored in the DataCite Service. This operation cannot be undone.',
+          'When the dataset is published, a DOI will be created and stored in the DataCite Service. This operation cannot be undone. The issued date of a dataset that has been published with a DOI cannot be changed afterwards.',
         placeholder: 'Select option',
         ida: 'IDA',
         att: 'Remote resources',
-        pas: 'PAS',
+        pas: 'DPS',
       },
       cumulativeState: {
         label: 'Cumulative dataset',

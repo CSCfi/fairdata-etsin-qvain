@@ -1,3 +1,4 @@
+import { makeObservable } from 'mobx'
 import { v4 as uuidv4 } from 'uuid'
 import Field from './qvain.field'
 
@@ -12,6 +13,7 @@ const UsedEntity = (
 class UsedEntities extends Field {
   constructor(Qvain, usedEntities = []) {
     super(Qvain, UsedEntity, UsedEntityModel, 'usedEntities')
+    makeObservable(this)
     this.Qvain = Qvain
     this.fromBackend(usedEntities, Qvain)
   }

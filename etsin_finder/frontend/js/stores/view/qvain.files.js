@@ -1,4 +1,4 @@
-import { observable, action } from 'mobx'
+import { observable, action, makeObservable } from 'mobx'
 import axios from 'axios'
 
 import { hasMetadata, dirIdentifierKey, fileIdentifierKey } from './common.files.items'
@@ -15,6 +15,7 @@ class Files extends FilesBase {
 
   constructor(Qvain) {
     super()
+    makeObservable(this)
     this.Qvain = Qvain
     this.SelectedItemsView = new SelectedItemsView(this)
     this.AddItemsView = new AddItemsView(this)
@@ -26,11 +27,11 @@ class Files extends FilesBase {
 
   @observable inEdit = undefined
 
-  cancelOnReset = (promise) => (this.promiseManager.add(promise))
+  cancelOnReset = promise => this.promiseManager.add(promise)
 
-  @action loadDirectory = async (dir) => itemLoaderAny.loadDirectory(this, dir, 100)
+  @action loadDirectory = async dir => itemLoaderAny.loadDirectory(this, dir, 100)
 
-  fetchRootIdentifier = async (projectIdentifier) => {
+  fetchRootIdentifier = async projectIdentifier => {
     const { data } = await axios.get(urls.v2.projectFiles(projectIdentifier))
     return data.identifier
   }
@@ -44,7 +45,7 @@ class Files extends FilesBase {
     this.inEdit = undefined
   }
 
-  @action setRefreshModalDirectory = (identifier) => {
+  @action setRefreshModalDirectory = identifier => {
     this.refreshModalDirectory = identifier
   }
 
@@ -88,9 +89,12 @@ class Files extends FilesBase {
       const offset = item.parent.pagination.offsets[fetchType]
       if (count !== null && offset >= count) {
         item.added = true
-        const fileCond = (i) => i.added || (i.existing && !i.removed && !parentAction.removed)
-        const dirCond = (i) => i.added || (i.existing && !i.removed && !parentAction.removed && i.existingFileCount >= i.fileCount)
-        const siblingsAdded = item.parent.files.every(fileCond) && item.parent.directories.every(dirCond)
+        const fileCond = i => i.added || (i.existing && !i.removed && !parentAction.removed)
+        const dirCond = i =>
+          i.added ||
+          (i.existing && !i.removed && !parentAction.removed && i.existingFileCount >= i.fileCount)
+        const siblingsAdded =
+          item.parent.files.every(fileCond) && item.parent.directories.every(dirCond)
         item.added = false
         if (siblingsAdded) {
           this.addItem(item.parent)
@@ -130,7 +134,7 @@ class Files extends FilesBase {
       const offset = item.parent.pagination.offsets[fetchType]
       if (count !== null && offset >= count) {
         item.removed = true
-        const cond = (i) => i.removed || (!i.existing && !i.added && !parentAction.added)
+        const cond = i => i.removed || (!i.existing && !i.added && !parentAction.added)
         const siblingsRemoved = item.parent.files.every(cond) && item.parent.directories.every(cond)
         item.removed = false
         if (siblingsRemoved) {
@@ -153,7 +157,7 @@ class Files extends FilesBase {
       return
     }
 
-    const clear = action((child) => {
+    const clear = action(child => {
       if (child.added) {
         this.updateAddedChildCount(child, -1)
         child.added = false
@@ -170,7 +174,7 @@ class Files extends FilesBase {
   }
 
   @action undoAction(item) {
-    const clear = action((child) => {
+    const clear = action(child => {
       if (child.added) {
         this.updateAddedChildCount(child, -1)
         child.added = false
@@ -207,7 +211,7 @@ class Files extends FilesBase {
     }
   }
 
-  @action clearMetadata = (item) => {
+  @action clearMetadata = item => {
     item.title = item.name
     item.description = undefined
     item.useCategory = undefined
@@ -222,7 +226,7 @@ class Files extends FilesBase {
     this.Qvain.setMetadataModalFile(null)
   }
 
-  @action applyClearPASMeta = (values) => {
+  @action applyClearPASMeta = values => {
     this.Qvain.clearMetadataModalFile.pasMeta = values
     this.Qvain.setClearMetadataModalFile(null)
   }
@@ -230,37 +234,47 @@ class Files extends FilesBase {
   metadataToMetax = () => {
     // Returns changed Metadata
 
-    const directoryToMetax = (dir) => ({
+    const directoryToMetax = dir => ({
       identifier: dir.identifier,
       title: dir.title || undefined,
       description: dir.description || undefined,
-      use_category: (dir.useCategory && {
-        identifier: dir.useCategory
-      }) || undefined,
+      use_category:
+        (dir.useCategory && {
+          identifier: dir.useCategory,
+        }) ||
+        undefined,
     })
 
-    const fileToMetax = (file) => ({
+    const fileToMetax = file => ({
       identifier: file.identifier,
       title: file.title || undefined,
       description: file.description || undefined,
-      file_type: (file.fileType && {
-        identifier: file.fileType,
-      }) || undefined,
-      use_category: (file.useCategory && {
-        identifier: file.useCategory
-      }) || undefined,
+      file_type:
+        (file.fileType && {
+          identifier: file.fileType,
+        }) ||
+        undefined,
+      use_category:
+        (file.useCategory && {
+          identifier: file.useCategory,
+        }) ||
+        undefined,
     })
 
-    const metadataHasChanged = (item) => {
-      const key = (item.type === 'file' && fileIdentifierKey(item)) || (item.type === 'directory' && dirIdentifierKey(item))
+    const metadataHasChanged = item => {
+      const key =
+        (item.type === 'file' && fileIdentifierKey(item)) ||
+        (item.type === 'directory' && dirIdentifierKey(item))
       const original = this.originalMetadata[key]
       if (!original) {
         return true
       }
 
-      if (item.description !== original.description ||
+      if (
+        item.description !== original.description ||
         item.useCategory !== original.useCategory ||
-        item.title !== original.title) {
+        item.title !== original.title
+      ) {
         return true
       }
 
@@ -274,7 +288,7 @@ class Files extends FilesBase {
     const directories = []
 
     // add updated selection data
-    const recurse = (parent) => {
+    const recurse = parent => {
       parent.files.forEach(file => {
         if (file.removed) {
           return
@@ -312,7 +326,7 @@ class Files extends FilesBase {
 
     return {
       files,
-      directories
+      directories,
     }
   }
 
@@ -320,7 +334,7 @@ class Files extends FilesBase {
     // Returns addition/removal actions
 
     const actions = { directories: [], files: [] }
-    const recurse = (item) => {
+    const recurse = item => {
       const actionGroup = item.type === 'file' ? actions.files : actions.directories
       if (item.added) {
         actionGroup.push({ identifier: item.identifier })

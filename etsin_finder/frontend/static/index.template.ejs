@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="{{ lang }}" dir="ltr">
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="x-ua-compatible" content="ie=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="Kuvailutietojen perusteella käyttäjät voivat etsiä aineistoja ja arvioida löytämiensä aineistojen käyttökelpoisuutta tarpeisiinsa."
+      content="{{ app_description }}"
     />
     <meta name="theme-color" content="#007FAD" />
     <link rel="manifest" href="/static/manifest.json" />
-    <title>Etsin | Tutkimusaineistojen hakupalvelu</title>
+    <title>{{ app_title }}</title>
     <style>
       .loader:empty {
         position: absolute;

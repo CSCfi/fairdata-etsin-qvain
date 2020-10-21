@@ -9,10 +9,14 @@
  */
 
 import React from 'react'
-import { observable, action } from 'mobx'
+import { observable, action, makeObservable } from 'mobx'
 import translate from 'counterpart'
 
 class Accessibility {
+  constructor() {
+    makeObservable(this)
+  }
+
   @observable assertiveAnnouncement = ''
 
   @observable politeAnnouncement = ''

@@ -4,7 +4,6 @@ import Translate from 'react-translate-component'
 import { inject, observer } from 'mobx-react'
 import PropTypes from 'prop-types'
 import { FAIRDATA_WEBSITE_URL } from '../../../../utils/constants'
-import LoginButton from './loginButton'
 
 const Description = props => {
   const { lang } = props.Stores.Locale
@@ -14,9 +13,6 @@ const Description = props => {
       <Header>Qvain</Header>
       <Translate component={Brief} content="qvain.home.brief" />
       <Translate component="p" content="qvain.home.description" />
-      <LoginButtonContainer>
-        <LoginButton />
-      </LoginButtonContainer>
       <p>
         <Translate component="a" href={helpUrl} content="qvain.home.howTo" />
       </p>
@@ -27,10 +23,6 @@ const Description = props => {
 Description.propTypes = {
   Stores: PropTypes.object.isRequired,
 }
-
-const LoginButtonContainer = styled.div`
-  margin-bottom: 1rem;
-`
 
 const Header = styled.h1`
   font-weight: bold;

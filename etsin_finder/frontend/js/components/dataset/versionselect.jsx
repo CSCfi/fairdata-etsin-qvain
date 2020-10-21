@@ -74,9 +74,9 @@ export default class VersionSelect extends Component {
     super(props)
 
     this.timeoutID = undefined
-
     this.state = {
       isOpen: false,
+      isFocused: false,
       selected: props.value,
       newestColor: props.newestColor ? props.newestColor : props.background,
       background: props.background,
@@ -132,6 +132,7 @@ export default class VersionSelect extends Component {
     this.setState(
       state => ({
         isOpen: !state.isOpen,
+        isFocused: !state.isOpen,
       }),
       () => {
         if (this.state.isOpen) {
@@ -141,8 +142,8 @@ export default class VersionSelect extends Component {
     )
   }
 
-  selectColor = (selected) => {
-    let color;
+  selectColor = selected => {
+    let color
     if (selected.old && !selected.removed) {
       color = this.state.background
     } else if (selected.removed) {
@@ -170,28 +171,25 @@ export default class VersionSelect extends Component {
         </Controller>
         {this.state.isOpen && this.state.isFocused && (
           <List width={this.props.width} background={this.props.background}>
-            {this.props.options
-              .map((single, i) => (
-                <ListItem
-                  noMargin
-                  color={single.old ? etsinTheme.color.dark : this.props.color}
-                  padding={this.props.padding}
-                  key={single.value}
-                  onClick={() => this.changeSelected(single)}
-                  value={single.value}
-                  ref={e => this.setFirstOptionRef(e, i)}
-                  background={
-                    this.selectColor(single)
-                  }
-                >
-                  {this.props.options[0] === single ? (
-                    <span className="sr-only">Current version: </span>
-                  ) : (
-                      ''
-                    )}
-                  {single.label}
-                </ListItem>
-              ))}
+            {this.props.options.map((single, i) => (
+              <ListItem
+                noMargin
+                color={single.old ? etsinTheme.color.dark : this.props.color}
+                padding={this.props.padding}
+                key={single.value}
+                onClick={() => this.changeSelected(single)}
+                value={single.value}
+                ref={e => this.setFirstOptionRef(e, i)}
+                background={this.selectColor(single)}
+              >
+                {this.props.options[0] === single ? (
+                  <span className="sr-only">Current version: </span>
+                ) : (
+                  ''
+                )}
+                {single.label}
+              </ListItem>
+            ))}
           </List>
         )}
       </SelectContainer>

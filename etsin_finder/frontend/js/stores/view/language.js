@@ -8,29 +8,45 @@
  * @license   MIT
  */
 
-import { observable, action, computed } from 'mobx'
+import { observable, action, computed, makeObservable } from 'mobx'
 import counterpart from 'counterpart'
 import moment from 'moment'
 import elasticquery from './elasticquery'
 import env from '../domain/env'
+import { setCookieValue, getCookieValue } from '../../utils/cookies'
+
+const languages = ['en', 'fi']
+
+const getInitialLanguage = () => languages.find(lang => lang === document.documentElement.lang) || languages[0]
+
+const cookieName = process.env.REACT_APP_COOKIE_PREFIX ? `${process.env.REACT_APP_COOKIE_PREFIX}_fd_language` : 'fd_language'
 
 class Locale {
+  constructor() {
+    makeObservable(this)
+  }
+
   @observable currentLang = counterpart.getLocale()
 
+  // get current computed (state changes are tracked) language. Convenience function.
   @computed get lang() {
     return this.currentLang
   }
 
-  // get current computed (state changes are tracked) language. Convenience function.
-  @observable languages = ['en', 'fi']
+  @observable languages = languages
 
   @action
-  setLang = lang => {
+  setLang = (lang, save = true) => {
+    if (!languages.includes(lang)) {
+      return
+    }
     counterpart.setLocale(lang)
     this.currentLang = counterpart.getLocale()
-    localStorage.setItem('lang', this.currentLang)
     moment.locale(lang)
     document.documentElement.lang = this.currentLang
+    if (save) {
+      setCookieValue(cookieName, this.currentLang)
+    }
   }
 
   @action
@@ -56,12 +72,13 @@ class Locale {
   }
 
   @action
-  getLang = () => {
-    /* get language from localstorage */
-    const storedLang = localStorage.getItem('lang')
+  loadLang = () => {
+    /* get language setting from cookie */
+    const storedLang = getCookieValue(cookieName)
     if (storedLang) {
-      this.setLang(storedLang)
-      moment.locale(storedLang)
+      this.setLang(storedLang, false)
+    } else {
+      this.setLang(getInitialLanguage(), false)
     }
   }
 }
