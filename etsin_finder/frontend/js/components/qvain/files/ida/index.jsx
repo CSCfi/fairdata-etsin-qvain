@@ -159,6 +159,7 @@ const PlusButton = styled(PlusButtonWrapper)`
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  flex-shrink: 0;
   :hover {
     border: 1px solid ${darken(0.15, etsinTheme.color.lightgray)};
     color: ${darken(0.1, etsinTheme.color.darkgray)};

@@ -17,16 +17,21 @@ class Packages {
 
   pollTimeout = null
 
+  @observable loadingDataset = false
+
+  @observable error = null
+
   @observable datasetIdentifier = null
 
   @observable packages = {}
 
   @action clearPackages() {
     this.packages = {}
-    this.datasetIdentifier = null
+    this.error = null
   }
 
   @action reset() {
+    this.datasetIdentifier = null
     this.clearPackages()
     this.setPollInterval(1.5e3)
     this.clearPollTimeout()
@@ -85,13 +90,18 @@ class Packages {
   }
 
   createPackage = async (params) => {
-    const resp = await axios.post('/api/v2/dl/requests', params)
-    const { partial, ...full } = resp.data
-    if (partial) {
-      this.updatePartials(partial)
-    }
-    if (full && full.status) {
-      this.updatePackage('/', full)
+    try {
+      const resp = await axios.post('/api/v2/dl/requests', params)
+      const { partial, ...full } = resp.data
+      if (partial) {
+        this.updatePartials(partial)
+      }
+      if (full && full.status) {
+        this.updatePackage('/', full)
+      }
+    } catch (err) {
+      console.error(err)
+      this.setError((err.response && err.response.data) || err.message)
     }
     this.schedulePoll()
   }
@@ -109,41 +119,54 @@ class Packages {
     })
   }
 
+  @action setLoadingDataset(val) {
+    this.loadingDataset = val
+  }
+
+  @action setError(msg) {
+    this.error = msg
+  }
+
   async fetch(datasetIdentifier) {
-    // Fetch list of available downloadable packages
-    const { downloadApiV2 } = this.Env
-    if (!downloadApiV2) {
-      return
-    }
-
-    runInAction(() => {
-      if (this.datasetIdentifier !== datasetIdentifier) {
-        this.clearPackages()
-      }
-      this.datasetIdentifier = datasetIdentifier
-    })
-
-    let response
     try {
-      const url = `/api/v2/dl/requests?cr_id=${datasetIdentifier}`
-      response = await axios.get(url)
-    } catch (err) {
-      this.clearPackages()
-      if (err.response && err.response.status === 404) {
+      // Fetch list of available downloadable packages
+      const { downloadApiV2 } = this.Env
+      if (!downloadApiV2) {
         return
       }
-      throw err
-    }
 
-    const { partial, ...full } = response.data
-    runInAction(() => {
-      if (Object.keys(full).length > 0) {
-        this.packages['/'] = full
+      runInAction(() => {
+        if (this.datasetIdentifier !== datasetIdentifier) {
+          this.clearPackages()
+          this.setLoadingDataset(true)
+        }
+        this.datasetIdentifier = datasetIdentifier
+      })
+
+      let response
+      try {
+        const url = `/api/v2/dl/requests?cr_id=${datasetIdentifier}`
+        response = await axios.get(url)
+      } catch (err) {
+        this.clearPackages()
+        if (!(err.response && err.response.status === 404)) {
+          console.error(err)
+          this.setError((err.response && err.response.data) || err.message)
+        }
+        return
       }
-      this.updatePartials(partial)
-    })
 
-    this.schedulePoll()
+      const { partial, ...full } = response.data
+      runInAction(() => {
+        if (Object.keys(full).length > 0) {
+          this.packages['/'] = full
+        }
+        this.updatePartials(partial)
+      })
+    } finally {
+      this.schedulePoll()
+      this.setLoadingDataset(false)
+    }
   }
 }
 

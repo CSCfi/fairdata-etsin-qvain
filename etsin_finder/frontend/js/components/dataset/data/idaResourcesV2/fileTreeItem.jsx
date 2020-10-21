@@ -79,15 +79,11 @@ const FileTreeItemBase = ({ treeProps, item, level }) => {
   let downloadIcon = faDownload
   let downloadIconSpin = false
 
-  let downloadAvailable = false
   if (downloadApiV2) {
     const action = getDownloadAction(datasetIdentifier, item, Packages, Files)
     downloadFunc = action.func
     downloadIcon = action.icon
     downloadIconSpin = action.spin
-    downloadAvailable = action.available
-  } else {
-    downloadAvailable = true
   }
 
   const infoButton = (
@@ -124,7 +120,7 @@ const FileTreeItemBase = ({ treeProps, item, level }) => {
     <ItemRow style={{ flexWrap: 'wrap' }}>
       <Group>
         {infoButton}
-        {downloadAvailable ? downloadButton : <NoIcon />}
+        {downloadButton}
         <ItemSpacer level={level + 0.5} />
         {content}
       </Group>

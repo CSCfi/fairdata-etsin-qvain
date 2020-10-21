@@ -1,6 +1,12 @@
 import { DOWNLOAD_API_REQUEST_STATUS } from '../../js/utils/constants'
 const { PENDING, SUCCESS } = DOWNLOAD_API_REQUEST_STATUS
 
+// Generate errors for matching dataset identifiers
+const errors = {
+  503: [503, { code: 503, message: 'service unvailable' }],
+  500: [500, { code: 500, message: 'internal server error' }],
+}
+
 class FakeDownload {
   // Mock implementation of the download service internals.
   // Currently supports only one directory/file in package scope.
@@ -106,7 +112,7 @@ const formatPackageResponse = packages => {
   //   ]
   // }
   if (!packages) {
-    return [404, 'not found']
+    return [404, {}]
   }
   const obj = {}
   Object.entries(packages).forEach(([path, pack]) => {
@@ -128,12 +134,19 @@ export const applyMockAdapter = (mockAdapter) => {
 
   mockAdapter.onGet(RegExp('^/api/v2/dl/requests')).reply(({ url, data }) => {
     const params = getParams(url, data)
+    if (errors[params.cr_id]) {
+      return errors[params.cr_id]
+    }
+
     const packages = fakeDownload.getDatasetPackages(params.cr_id)
     return formatPackageResponse(packages)
   })
 
   mockAdapter.onPost(RegExp('^/api/v2/dl/requests')).reply(({ url, data }) => {
     const params = getParams(url, data)
+    if (errors[params.cr_id]) {
+      return errors[params.cr_id]
+    }
     let path = '/'
     if (params.scope) {
       path = params.scope[0]

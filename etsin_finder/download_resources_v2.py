@@ -39,7 +39,7 @@ class Requests(Resource):
     def __init__(self):
         """Setup endpoint"""
         self.parser = reqparse.RequestParser()
-        self.parser.add_argument('cr_id', type=str, required=True)
+        self.parser.add_argument('cr_id', type=str, required=True, nullable=False)
 
     def get(self):
         """Get download package requests.
@@ -51,7 +51,7 @@ class Requests(Resource):
             Response from download service.
 
         """
-        args = self.parser.parse_args()
+        args = self.parser.parse_args(strict=True)
         cr_id = args.get('cr_id')
         check_download_permission(cr_id)
         return download_service.get_requests(cr_id)
@@ -67,9 +67,8 @@ class Requests(Resource):
             Response from download service.
 
         """
-
         self.parser.add_argument('scope', type=str, action='append', required=False)
-        args = self.parser.parse_args()
+        args = self.parser.parse_args(strict=True)
         cr_id = args.get('cr_id')
         check_download_permission(cr_id)
 
@@ -83,7 +82,7 @@ class Authorize(Resource):
     def __init__(self):
         """Setup endpoint"""
         self.parser = reqparse.RequestParser()
-        self.parser.add_argument('cr_id', type=str, required=True)
+        self.parser.add_argument('cr_id', type=str, required=True, nullable=False)
         self.parser.add_argument('file', type=str, required=False) # file path
         self.parser.add_argument('package', type=str, required=False) # package name
 
@@ -101,7 +100,7 @@ class Authorize(Resource):
             Object with the dowload URL, or error from download service.
 
         """
-        args = self.parser.parse_args()
+        args = self.parser.parse_args(strict=True)
         file = args.get('file')
         package = args.get('package')
 

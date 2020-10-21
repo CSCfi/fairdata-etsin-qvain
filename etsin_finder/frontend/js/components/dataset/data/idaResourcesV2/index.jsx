@@ -22,7 +22,7 @@ const downloadAll = identifier => {
 
 function IdaResources(props) {
   const { restrictions } = props.Stores.Access
-  const allowDownload =
+  let allowDownload =
     props.dataset.data_catalog.catalog_json.identifier !== 'urn:nbn:fi:att:data-catalog-pas' &&
     restrictions.allowDataIdaDownloadButton
 
@@ -32,7 +32,8 @@ function IdaResources(props) {
 
   const { downloadApiV2 } = props.Stores.Env
 
-  const { Packages } = props.Stores.DatasetQuery
+  const { DatasetQuery } = props.Stores
+  const { Packages } = DatasetQuery
 
   const fileCount = (root && root.existingFileCount) || 0
   const totalSize = (root && root.existingByteSize) || 0
@@ -56,17 +57,24 @@ function IdaResources(props) {
     closeModal: () => setInInfo(null),
   }
 
-  let fullAvailable = allowDownload
   let downloadFunc = () => downloadAll(props.dataset.identifier)
   const iconProps = {}
+  let downloadAllText = 'dataset.dl.downloadAll'
 
   // Download full dataset package
   if (downloadApiV2) {
     const action = getDownloadAction(props.dataset.identifier, null, Packages, Files)
-    fullAvailable = fullAvailable && action.available
     downloadFunc = action.func
     iconProps.icon = action.icon
     iconProps.spin = action.spin
+    if (DatasetQuery.isDraft) {
+      allowDownload = false
+      downloadAllText = 'dataset.dl.downloadDisabledForDraft'
+    } else if (action.pending) {
+      downloadAllText = 'dataset.dl.creatingDownloadAll'
+    } else if (!action.available) {
+      downloadAllText = 'dataset.dl.createDownloadAll'
+    }
   }
 
   return (
@@ -78,8 +86,8 @@ function IdaResources(props) {
           {totalSize ? ` (${sizeParse(totalSize)})` : null}
         </HeaderStats>
 
-        <HeaderButton disabled={!fullAvailable} onClick={downloadFunc}>
-          <Translate content={'dataset.dl.downloadAll'} />
+        <HeaderButton disabled={!allowDownload} onClick={downloadFunc}>
+          <Translate content={downloadAllText} />
           <Translate className="sr-only" content="dataset.dl.file_types.both" />
           <DownloadIcon {...iconProps} />
         </HeaderButton>

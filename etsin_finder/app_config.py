@@ -70,6 +70,12 @@ def _get_test_app_config():
         'MAIL_USERNAME': '',
         'MAIL_PASSWORD': '',
         'MAIL_DEFAULT_SENDER': 'test@fairdata.fi',
+        'SSO_PREFIX': 'fd_test_csc_fi',
+        'DOWNLOAD_API_V2': {
+            'ENABLED': True,
+            'HOST': 'mock-download',
+            'PORT': 1,
+        }
     }
 
 
@@ -87,6 +93,11 @@ def _get_app_config_for_travis():
         'DEBUG': True,
         'SECRET_KEY': 'cb3c5d29f16eda4e46fb77c14d6a75f9ab23e6df95c84e32',
         'SSO_PREFIX': 'fd_test_csc_fi',
+        'DOWNLOAD_API_V2': {
+            'ENABLED': True,
+            'HOST': 'mock-download',
+            'PORT': 1,
+        }
     }
 
 
@@ -146,9 +157,6 @@ def get_download_api_v2_config(is_testing):
         dict: Download api config or None
 
     """
-    if executing_travis() or is_testing:
-        return None
-
     dl_api_conf = get_app_config(is_testing).get('DOWNLOAD_API_V2', False)
     if not dl_api_conf or not isinstance(dl_api_conf, dict):
         return None

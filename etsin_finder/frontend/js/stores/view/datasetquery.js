@@ -8,7 +8,7 @@
  * @license   MIT
  */
 
-import { observable, action, makeObservable } from 'mobx'
+import { observable, computed, action, makeObservable } from 'mobx'
 import axios from 'axios'
 
 import access from './access'
@@ -56,9 +56,18 @@ class DatasetQuery {
     await this.Packages.fetch(this.results.identifier)
   }
 
+  @computed get isDraft() {
+    if (this.results) {
+      if (this.results.draft_of || this.results.state === 'draft') {
+        return true
+      }
+    }
+    return false
+  }
+
   @action
   getData(id) {
-    this.Packages.clear()
+    this.Packages.clearPackages()
     const { metaxApiV2 } = this.Env
     const url = metaxApiV2 ? `/api/v2/dataset/${id}` : `/api/dataset/${id}`
     return new Promise((resolve, reject) => {

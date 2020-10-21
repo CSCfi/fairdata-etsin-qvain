@@ -13,7 +13,7 @@ from etsin_finder.app_config import get_download_api_v2_config
 
 def add_download_v2_resources(api):
     """Set download API v2 endpoints"""
-    from etsin_finder.download_resources import (
+    from etsin_finder.download_resources_v2 import (
         Requests,
         Authorize,
     )
@@ -77,7 +77,8 @@ def add_restful_resources(app):
     )
 
     # Download API v2 endpoints
-    if get_download_api_v2_config(app.testing):
+    dl_api_config = get_download_api_v2_config(app.testing) or {}
+    if dl_api_config.get('ENABLED'):
         add_download_v2_resources(api)
 
     # Common Qvain Light and Etsin endpoints for Metax v2

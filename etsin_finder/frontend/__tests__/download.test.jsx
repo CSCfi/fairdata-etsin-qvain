@@ -5,6 +5,7 @@ import { DOWNLOAD_API_REQUEST_STATUS } from '../js/utils/constants'
 import Env from '../js/stores/domain/env'
 import Packages from '../js/stores/view/packages'
 import { fakeDownload, applyMockAdapter } from './__testdata__/download.data'
+import { runInAction } from 'mobx'
 
 global.Promise = require('bluebird')
 Promise.config({
@@ -37,6 +38,12 @@ describe('Packages', () => {
     applyMockAdapter(mockAdapter)
     fakeDownload.reset()
     mockAdapter.resetHistory()
+  })
+
+  afterEach(() => {
+    if (console.error.mockReset) {
+      console.error.mockReset()
+    }
   })
 
   it('fetches package list', async () => {
@@ -119,5 +126,20 @@ describe('Packages', () => {
     expect(mockAdapter.history.get.length).toBe(3)
     expect(packages.get('/files/jee').status).toBe(SUCCESS)
     expect(packages.pollTimeout).toBe(null)
+  })
+
+  it('on failed fetch, logs error', async () => {
+    jest.spyOn(console, 'error').mockImplementationOnce(() => {});
+    await packages.fetch(503)
+    expect(packages.error.code).toBe(503)
+    expect(console.error.mock.calls.length).toBe(1)
+  })
+
+  it('on failed package creation, logs error', async () => {
+    jest.spyOn(console, 'error').mockImplementationOnce(() => {});
+    runInAction(() => { packages.datasetIdentifier = 500 })
+    await packages.createPackageFromFolder('/')
+    expect(packages.error.code).toBe(500)
+    expect(console.error.mock.calls.length).toBe(1)
   })
 })

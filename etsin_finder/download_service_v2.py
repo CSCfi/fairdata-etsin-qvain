@@ -32,15 +32,17 @@ class DownloadAPIService(FlaskService):
         super().__init__(app)
 
         dl_api_config = get_download_api_v2_config(app.testing)
+        if dl_api_config:
+            host = dl_api_config.get('HOST')
+            port = dl_api_config.get('PORT')
 
-        host = dl_api_config.get('HOST')
-        port = dl_api_config.get('PORT')
-
-        self.API_BASE_URL = f'https://{host}:{port}'
-        self.REQUESTS_URL = f'{self.API_BASE_URL}/requests'
-        self.AUTHORIZE_URL = f'{self.API_BASE_URL}/authorize'
-        self.DOWNLOAD_URL = f'{self.API_BASE_URL}/download'
-        self.verify_ssl = True
+            self.API_BASE_URL = f'https://{host}:{port}'
+            self.REQUESTS_URL = f'{self.API_BASE_URL}/requests'
+            self.AUTHORIZE_URL = f'{self.API_BASE_URL}/authorize'
+            self.DOWNLOAD_URL = f'{self.API_BASE_URL}/download'
+            self.verify_ssl = True
+        else:
+            log.error('Unable to initialize DownloadAPIService (v2) due to missing config')
 
     def _get_args(self, **kwargs):
         """Get default args for request, allow overriding with kwargs."""
@@ -106,6 +108,7 @@ class DownloadAPIService(FlaskService):
         return resp, status
 
     def get_download_url(self, token):
+        """Create download URL from token"""
         return f'{self.DOWNLOAD_URL}?token={token}'
 
 download_service = DownloadAPIService(app)
