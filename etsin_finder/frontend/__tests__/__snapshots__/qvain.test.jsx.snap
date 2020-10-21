@@ -9,7 +9,7 @@ exports[`Qvain dataset list PreservationStates should render <TablePasState /> 1
         "$$typeof": Symbol(react.forward_ref),
         "attrs": Array [],
         "componentStyle": ComponentStyle {
-          "componentId": "tablePasState__PasLabel-sc-1w7mbwe-0",
+          "componentId": "tablePasState__PasLabel-kh2b5p-0",
           "isStatic": false,
           "rules": Array [
             "
@@ -35,7 +35,7 @@ exports[`Qvain dataset list PreservationStates should render <TablePasState /> 1
           "label__Label-x0jqqw-0",
         ],
         "render": [Function],
-        "styledComponentId": "tablePasState__PasLabel-sc-1w7mbwe-0",
+        "styledComponentId": "tablePasState__PasLabel-kh2b5p-0",
         "target": "div",
         "toString": [Function],
         "warnTooManyClasses": [Function],

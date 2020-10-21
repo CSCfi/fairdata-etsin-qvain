@@ -11,7 +11,7 @@ import Description from '../js/components/qvain/fields/description'
 import DescriptionField from '../js/components/qvain/fields/description/titleAndDescription'
 import OtherIdentifierField from '../js/components/qvain/fields/description/otherIdentifier'
 import FieldOfScienceField from '../js/components/qvain/fields/description/fieldOfScience'
-import IssuedDateField from '../js/components/qvain/fileds/description/issuedDate'
+import IssuedDateField from '../js/components/qvain/fields/description/issuedDate'
 import LanguageField from '../js/components/qvain/fields/description/language'
 import KeywordsField from '../js/components/qvain/fields/description/keywords'
 import RightsAndLicenses from '../js/components/qvain/fields/licenses'
@@ -42,7 +42,7 @@ import {
   filterGroupsByTitle,
   groupDatasetsByVersionSet,
 } from '../js/components/qvain/views/datasets/filter'
-import DatePicker from '../js/components/qvain/general/input/datepicker
+import DatePicker from '../js/components/qvain/general/input/datepicker'
 
 jest.mock('uuid', original => {
   let id = 0
