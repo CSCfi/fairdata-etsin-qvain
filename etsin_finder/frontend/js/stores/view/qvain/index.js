@@ -1,4 +1,4 @@
-import { observable, action, computed } from 'mobx'
+import { observable, action, computed, makeObservable } from 'mobx'
 import { CUMULATIVE_STATE, DATA_CATALOG_IDENTIFIER } from '../../../utils/constants'
 import Resources from './qvain.resources'
 import Files from './qvain.files'
@@ -9,6 +9,7 @@ class Qvain extends Resources {
     this.Env = Env
     this.Files = new Files(this)
     this.resetQvainStore()
+    makeObservable(this)
   }
 
   @observable original = undefined // used if editing, otherwise undefined
