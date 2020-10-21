@@ -7,7 +7,6 @@ import Access from '../js/stores/view/access'
 import Auth from '../js/stores/domain/auth'
 import REMSButton from '../js/components/dataset/REMSButton'
 import Loader from '../js/components/general/loader'
-import { runInAction } from 'mobx'
 
 const getStores = () => ({
   Access: Access,

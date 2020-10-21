@@ -11,8 +11,6 @@ import Env from '../js/stores/domain/env'
 import QvainStoreClass, { Directory } from '../js/stores/view/qvain'
 import LocaleStore from '../js/stores/view/language'
 import { DATA_CATALOG_IDENTIFIER } from '../js/utils/constants'
-import { triangle } from 'polished'
-import { runInAction } from 'mobx'
 
 global.Promise = require('bluebird')
 const QvainStore = new QvainStoreClass(Env)

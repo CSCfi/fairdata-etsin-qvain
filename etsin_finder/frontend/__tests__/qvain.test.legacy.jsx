@@ -16,7 +16,7 @@ import { License } from '../js/components/qvain/licenses/licenses'
 import { AccessType } from '../js/components/qvain/licenses/accessType'
 import RestrictionGrounds from '../js/components/qvain/licenses/restrictionGrounds'
 import EmbargoExpires from '../js/components/qvain/licenses/embargoExpires'
-import { ACCESS_TYPE_URL, LICENSE_URL, DATA_CATALOG_IDENTIFIER } from '../js/utils/constants'
+import { ACCESS_TYPE_URL, DATA_CATALOG_IDENTIFIER } from '../js/utils/constants'
 import Files from '../js/components/qvain/files'
 import IDAFilePicker, { IDAFilePickerBase } from '../js/components/qvain/files/legacy/idaFilePicker'
 import FileSelector, { FileSelectorBase } from '../js/components/qvain/files/legacy/fileSelector'
@@ -26,10 +26,8 @@ import Env from '../js/stores/domain/env'
 import QvainStoreClass, {
   Directory,
   AccessType as AccessTypeConstructor,
-  License as LicenseConstructor,
 } from '../js/stores/view/qvain'
 import LocaleStore from '../js/stores/view/language'
-import { runInAction } from 'mobx'
 
 jest.mock('uuid', () => {
   let id = 0

@@ -407,13 +407,6 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
           "fi",
         ],
       },
-      "Locale": Locale {
-        "currentLang": "en",
-        "languages": Array [
-          "en",
-          "fi",
-        ],
-      },
       "Qvain": Qvain {
         "Actors": Actors {
           "Qvain": [Circular],
@@ -676,13 +669,6 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
         },
         "metaxApiV2": true,
         "qvainHost": "",
-      },
-      "Locale": Locale {
-        "currentLang": "en",
-        "languages": Array [
-          "en",
-          "fi",
-        ],
       },
       "Locale": Locale {
         "currentLang": "en",
@@ -961,13 +947,6 @@ exports[`Qvain.Description should render <LanguageField /> 1`] = `
           "fi",
         ],
       },
-      "Locale": Locale {
-        "currentLang": "en",
-        "languages": Array [
-          "en",
-          "fi",
-        ],
-      },
       "Qvain": Qvain {
         "Actors": Actors {
           "Qvain": [Circular],
@@ -1230,13 +1209,6 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
         },
         "metaxApiV2": true,
         "qvainHost": "",
-      },
-      "Locale": Locale {
-        "currentLang": "en",
-        "languages": Array [
-          "en",
-          "fi",
-        ],
       },
       "Locale": Locale {
         "currentLang": "en",

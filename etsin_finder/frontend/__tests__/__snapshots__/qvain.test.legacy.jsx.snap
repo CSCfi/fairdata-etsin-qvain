@@ -6,7 +6,7 @@ exports[`Qvain should render correctly 1`] = `
     Object {
       "Env": Env {
         "app": undefined,
-        "environment": "test",
+        "etsinHost": "",
         "getEtsinUrl": [Function],
         "getQvainUrl": [Function],
         "history": RouterStore {
@@ -19,7 +19,7 @@ exports[`Qvain should render correctly 1`] = `
           "replace": [Function],
         },
         "metaxApiV2": false,
-        "separateQvain": false,
+        "qvainHost": "",
       },
       "Locale": Locale {
         "currentLang": "en",
@@ -46,7 +46,7 @@ exports[`Qvain should render correctly 1`] = `
         },
         "Env": Env {
           "app": undefined,
-          "environment": "test",
+          "etsinHost": "",
           "getEtsinUrl": [Function],
           "getQvainUrl": [Function],
           "history": RouterStore {
@@ -59,7 +59,7 @@ exports[`Qvain should render correctly 1`] = `
             "replace": [Function],
           },
           "metaxApiV2": false,
-          "separateQvain": false,
+          "qvainHost": "",
         },
         "Files": Files {
           "AddItemsView": AddItemsView {
@@ -257,7 +257,6 @@ exports[`Qvain should render correctly 1`] = `
         "selectedDirectories": Array [],
         "selectedFiles": Array [],
         "selectedProject": undefined,
-        "setOtherIdentifierValidationError": [Function],
         "title": Object {
           "en": "",
           "fi": "",
@@ -277,7 +276,7 @@ exports[`Qvain.Description should render <Description /> 1`] = `
     Object {
       "Env": Env {
         "app": undefined,
-        "environment": "test",
+        "etsinHost": "",
         "getEtsinUrl": [Function],
         "getQvainUrl": [Function],
         "history": RouterStore {
@@ -290,7 +289,7 @@ exports[`Qvain.Description should render <Description /> 1`] = `
           "replace": [Function],
         },
         "metaxApiV2": false,
-        "separateQvain": false,
+        "qvainHost": "",
       },
       "Locale": Locale {
         "currentLang": "en",
@@ -317,7 +316,7 @@ exports[`Qvain.Description should render <Description /> 1`] = `
         },
         "Env": Env {
           "app": undefined,
-          "environment": "test",
+          "etsinHost": "",
           "getEtsinUrl": [Function],
           "getQvainUrl": [Function],
           "history": RouterStore {
@@ -330,7 +329,7 @@ exports[`Qvain.Description should render <Description /> 1`] = `
             "replace": [Function],
           },
           "metaxApiV2": false,
-          "separateQvain": false,
+          "qvainHost": "",
         },
         "Files": Files {
           "AddItemsView": AddItemsView {
@@ -528,7 +527,6 @@ exports[`Qvain.Description should render <Description /> 1`] = `
         "selectedDirectories": Array [],
         "selectedFiles": Array [],
         "selectedProject": undefined,
-        "setOtherIdentifierValidationError": [Function],
         "title": Object {
           "en": "",
           "fi": "",
@@ -548,7 +546,7 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
     Object {
       "Env": Env {
         "app": undefined,
-        "environment": "test",
+        "etsinHost": "",
         "getEtsinUrl": [Function],
         "getQvainUrl": [Function],
         "history": RouterStore {
@@ -561,7 +559,7 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
           "replace": [Function],
         },
         "metaxApiV2": false,
-        "separateQvain": false,
+        "qvainHost": "",
       },
       "Locale": Locale {
         "currentLang": "en",
@@ -588,7 +586,7 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
         },
         "Env": Env {
           "app": undefined,
-          "environment": "test",
+          "etsinHost": "",
           "getEtsinUrl": [Function],
           "getQvainUrl": [Function],
           "history": RouterStore {
@@ -601,7 +599,7 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
             "replace": [Function],
           },
           "metaxApiV2": false,
-          "separateQvain": false,
+          "qvainHost": "",
         },
         "Files": Files {
           "AddItemsView": AddItemsView {
@@ -799,7 +797,6 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
         "selectedDirectories": Array [],
         "selectedFiles": Array [],
         "selectedProject": undefined,
-        "setOtherIdentifierValidationError": [Function],
         "title": Object {
           "en": "",
           "fi": "",
@@ -833,13 +830,6 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
         },
         "metaxApiV2": false,
         "qvainHost": "",
-      },
-      "Locale": Locale {
-        "currentLang": "en",
-        "languages": Array [
-          "en",
-          "fi",
-        ],
       },
       "Locale": Locale {
         "currentLang": "en",
@@ -1118,13 +1108,6 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
           "fi",
         ],
       },
-      "Locale": Locale {
-        "currentLang": "en",
-        "languages": Array [
-          "en",
-          "fi",
-        ],
-      },
       "Qvain": Qvain {
         "Actors": Actors {
           "Qvain": [Circular],
@@ -1387,13 +1370,6 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
         },
         "metaxApiV2": false,
         "qvainHost": "",
-      },
-      "Locale": Locale {
-        "currentLang": "en",
-        "languages": Array [
-          "en",
-          "fi",
-        ],
       },
       "Locale": Locale {
         "currentLang": "en",
