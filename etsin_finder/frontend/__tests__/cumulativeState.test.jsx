@@ -25,17 +25,15 @@ Promise.config({
 jest.mock('axios')
 axios.get.mockImplementation((...args) => {})
 
-jest.mock('../js/components/qvain/utils/stores', () => {
-  const withStores = require('../js/stores/stores').withStores
-
+jest.mock('../js/stores/stores', () => {
   const useStores = jest.fn()
 
   return {
-    withStores,
+    ...jest.requireActual('../js/stores/stores'),
     useStores,
   }
 })
-const { useStores } = require('../js/components/qvain/utils/stores')
+const { useStores } = require('../js/stores/stores')
 
 const Qvain = new QvainStoreClass(Env)
 

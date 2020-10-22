@@ -403,8 +403,7 @@ describe('Qvain.RightsAndLicenses', () => {
   })
 })
 
-jest.mock('../js/components/qvain/utils/stores', () => {
-  const withStores = require('../js/stores/stores').withStores
+jest.mock('../js/stores/stores', () => {
   const DATA_CATALOG_IDENTIFIER = require('../js/utils/constants').DATA_CATALOG_IDENTIFIER
   const useStores = jest.fn()
   const mockExternalFilesEmpty = {
@@ -501,7 +500,7 @@ jest.mock('../js/components/qvain/utils/stores', () => {
   useStores.mockReturnValueOnce(mockDoiSelectionIdaUseDoi)
 
   return {
-    withStores,
+    ...jest.requireActual('../js/stores/stores'),
     useStores,
   }
 })

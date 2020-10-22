@@ -39,18 +39,15 @@ configure({
 
 jest.mock('axios')
 
-jest.mock('../js/components/qvain/utils/stores', () => {
-  const withStores = require('../js/stores/stores').withStores
-  const DATA_CATALOG_IDENTIFIER = require('../js/utils/constants').DATA_CATALOG_IDENTIFIER
-
+jest.mock('../js/stores/stores', () => {
   const useStores = jest.fn()
 
   return {
-    withStores,
+    ...jest.requireActual('../js/stores/stores'),
     useStores,
   }
 })
-const { useStores } = require('../js/components/qvain/utils/stores')
+const { useStores } = require('../js/stores/stores')
 
 const QvainStore = new QvainStoreClass(Env)
 Env.setMetaxApiV2(true)

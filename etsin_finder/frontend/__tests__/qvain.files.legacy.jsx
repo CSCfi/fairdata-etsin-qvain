@@ -24,8 +24,7 @@ const getStores = () => {
   }
 }
 
-jest.mock('../js/components/qvain/utils/stores', () => {
-  const withStores = require('../js/stores/stores').withStores
+jest.mock('../js/stores/stores', () => {
   const DATA_CATALOG_IDENTIFIER = require('../js/utils/constants').DATA_CATALOG_IDENTIFIER
   const useStores = jest.fn()
   useStores.mockReturnValue({
@@ -37,7 +36,7 @@ jest.mock('../js/components/qvain/utils/stores', () => {
       metaxAPIv2: false,
     },
   })
-  return { withStores, useStores }
+  return { ...jest.requireActual('../js/stores/stores'), useStores }
 })
 
 describe('Qvain.Files', () => {

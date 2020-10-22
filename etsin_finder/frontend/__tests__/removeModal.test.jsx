@@ -14,7 +14,7 @@ const mockEnv = EnvStore
 const mockStores = new QvainStoreClass(mockEnv)
 const mockLocale = LocaleStore
 
-jest.mock('../js/components/qvain/utils/stores', () => {
+jest.mock('../js/stores/stores', () => {
   const getStores = () => {
     mockStores.resetQvainStore()
     mockEnv.setMetaxApiV2(true)
@@ -26,6 +26,7 @@ jest.mock('../js/components/qvain/utils/stores', () => {
   }
 
   return {
+    ...jest.requireActual('../js/stores/stores'),
     useStores: getStores,
   }
 })
