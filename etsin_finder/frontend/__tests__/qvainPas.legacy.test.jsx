@@ -26,7 +26,7 @@ import QvainStoreClass, {
 import LocaleStore from '../js/stores/view/language'
 import EnvStore from '../js/stores/domain/env'
 import { ACCESS_TYPE_URL, DATA_CATALOG_IDENTIFIER } from '../js/utils/constants'
-import { StoresProvider } from '../js/stores/stores'
+import { StoresProvider, useStores } from '../js/stores/stores'
 
 global.Promise = require('bluebird')
 
@@ -336,7 +336,6 @@ jest.mock('../js/stores/stores', () => {
     useStores,
   }
 })
-const { useStores } = require('../js/stores/stores')
 
 // Unmount mounted components after each test to avoid tests affecting each other.
 let wrapper

@@ -28,7 +28,7 @@ import organizationMockGet, {
   AaltoDepartmentOfMediaIdentifier,
   NotReallyReferenceIdentifier,
 } from './__testdata__/qvain.actors.data'
-import { StoresProvider } from '../js/stores/stores'
+import { useStores, StoresProvider } from '../js/stores/stores'
 
 global.Promise = require('bluebird')
 
@@ -47,7 +47,6 @@ jest.mock('../js/stores/stores', () => {
     useStores,
   }
 })
-const { useStores } = require('../js/stores/stores')
 
 const QvainStore = new QvainStoreClass(Env)
 Env.setMetaxApiV2(true)

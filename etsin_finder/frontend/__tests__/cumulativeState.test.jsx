@@ -14,7 +14,7 @@ import Locale from '../js/stores/view/language'
 import CumulativeState, {
   CumulativeStateButton,
 } from '../js/components/qvain/files/cumulativeStateV2'
-import { StoresProvider } from '../js/stores/stores'
+import { useStores, StoresProvider } from '../js/stores/stores'
 
 global.Promise = require('bluebird')
 
@@ -33,7 +33,6 @@ jest.mock('../js/stores/stores', () => {
     useStores,
   }
 })
-const { useStores } = require('../js/stores/stores')
 
 const Qvain = new QvainStoreClass(Env)
 

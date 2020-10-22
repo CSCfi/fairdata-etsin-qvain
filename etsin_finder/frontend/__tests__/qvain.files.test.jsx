@@ -22,7 +22,7 @@ import AddItemsTreeItem from '../js/components/qvain/files/ida/addItemsTreeItem'
 import handleSubmitToBackend from '../js/components/qvain/utils/handleSubmit'
 
 import { get } from './__testdata__/qvain.files.data'
-import { StoresProvider } from '../js/stores/stores'
+import { StoresProvider, useStores } from '../js/stores/stores'
 
 global.Promise = require('bluebird')
 
@@ -40,7 +40,6 @@ jest.mock('../js/stores/stores', () => {
     useStores,
   }
 })
-const { useStores } = require('../js/stores/stores')
 
 const flatten = dir => {
   const flatItems = []
