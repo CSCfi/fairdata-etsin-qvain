@@ -471,11 +471,16 @@ class SubmitButtons extends Component {
 
   handlePublishDataset = async (saveChanges = true, overrideIdentifier = null) => {
     const { Stores, history } = this.props
-    const { original, editDataset } = Stores.Qvain
+    const { original, editDataset, deprecated } = Stores.Qvain
     const { metaxApiV2, getQvainUrl } = Stores.Env
 
     if (!metaxApiV2) {
       console.error('Metax API V2 is required for publishing drafts')
+      return null
+    }
+
+    if (deprecated) {
+      this.failure(new Error(translate('qvain.error.deprecated')))
       return null
     }
 
