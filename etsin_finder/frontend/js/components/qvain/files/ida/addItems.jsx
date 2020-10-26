@@ -15,7 +15,7 @@ export const AddFilesModal = ({ isOpen, onRequestClose }) => {
   const {
     Qvain: {
       Files: {
-        AddItemView: { getTopmostChecked, clearChecked, checkedState },
+        AddItemsView: { getTopmostChecked, clearChecked, checkedState },
         addItem,
         projectLocked,
         root,
