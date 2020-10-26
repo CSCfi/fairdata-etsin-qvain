@@ -8,23 +8,17 @@
  * @license   MIT
  */
 
+import axios from 'axios'
 import { action, computed, makeObservable, observable } from 'mobx'
 import { RouterStore } from 'mobx-react-router'
 
-import axios from 'axios'
+import { getCookieValue } from '../../utils/cookies'
+
 
 const routingStore = new RouterStore()
 
-const getCookieValue = key => {
-  const entry = document.cookie.split('; ').find(row => row.startsWith(key))
-  if (entry) {
-    return entry.split('=')[1]
-  }
-  return undefined
-}
-
 async function importValuesAsync() {
-  const response = await axios.get('api/app_config')
+  const response = await axios.get('/api/app_config')
   return response.data
 }
 

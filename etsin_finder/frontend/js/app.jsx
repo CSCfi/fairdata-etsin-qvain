@@ -44,7 +44,7 @@ if (process.env.NODE_ENV === 'test') {
 }
 
 /* get language from localstorage */
-Stores.Locale.getLang()
+Stores.Locale.loadLang()
 
 // Load app config
 Stores.Env.fetchAppConfig()
