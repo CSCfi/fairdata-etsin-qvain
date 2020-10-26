@@ -120,4 +120,4 @@ class Authorize(Resource):
         if not token:
             return "Token missing from response", 500
 
-        return { 'url': download_service.get_download_url(token) }
+        return { 'url': download_service.get_download_url(token, dataset=cr_id, file=file, package=package) }

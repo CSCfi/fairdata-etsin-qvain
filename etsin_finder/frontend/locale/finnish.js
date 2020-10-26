@@ -95,8 +95,6 @@ const finnish = {
       download: 'Lataa',
       downloadFailed: 'Lataus epäonnistui',
       downloadAll: 'Lataa kaikki',
-      createDownloadAll: 'Luo paketti',
-      creatingDownloadAll: 'Luodaan pakettia',
       downloadDisabledForDraft: 'Lataus ei käytössä luonnoksille',
       downloadItem: 'Lataa %(name)s',
       downloading: 'Ladataan...',
@@ -106,6 +104,12 @@ const finnish = {
       info_header: 'Tiedoston muut tiedot',
       loading: 'Ladataan kansiota',
       loaded: 'Kansio latautunut',
+      packages: {
+        createForAll: 'Luo latauspaketti',
+        createForItem: 'Luo latauspaketti kohteelle %(name)s',
+        pending: 'Luodaan latauspakettia',
+        loading: 'Ladataan',
+      },
       fileCount: {
         one: '1 tiedosto',
         other: '%(count)s tiedostoa',

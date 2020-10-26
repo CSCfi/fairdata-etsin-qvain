@@ -6,6 +6,7 @@ import Env from '../js/stores/domain/env'
 import Packages from '../js/stores/view/packages'
 import { fakeDownload, applyMockAdapter } from './__testdata__/download.data'
 import { runInAction } from 'mobx'
+import getDownloadAction from '../js/components/dataset/data/idaResourcesV2/downloadActions'
 
 global.Promise = require('bluebird')
 Promise.config({
@@ -129,17 +130,85 @@ describe('Packages', () => {
   })
 
   it('on failed fetch, logs error', async () => {
-    jest.spyOn(console, 'error').mockImplementationOnce(() => {});
+    jest.spyOn(console, 'error').mockImplementationOnce(() => {})
     await packages.fetch(503)
     expect(packages.error.code).toBe(503)
     expect(console.error.mock.calls.length).toBe(1)
   })
 
   it('on failed package creation, logs error', async () => {
-    jest.spyOn(console, 'error').mockImplementationOnce(() => {});
-    runInAction(() => { packages.datasetIdentifier = 500 })
+    jest.spyOn(console, 'error').mockImplementationOnce(() => {})
+    runInAction(() => {
+      packages.datasetIdentifier = 500
+    })
     await packages.createPackageFromFolder('/')
     expect(packages.error.code).toBe(500)
     expect(console.error.mock.calls.length).toBe(1)
+  })
+})
+
+describe('Download button actions', () => {
+  // Mock Files class used for getting paths
+  const files = {
+    getItemPath: item => item.path,
+  }
+
+  const packages = new Packages(Env)
+  runInAction(() => {
+    packages.datasetIdentifier = 1
+    packages.packages = {
+      '/success': {
+        status: SUCCESS,
+      },
+      '/pending': {
+        status: PENDING,
+      },
+    }
+  })
+
+  beforeEach(() => {
+    runInAction(() => {
+      packages.loadingDataset = false
+    })
+  })
+
+  it('allows file download without package', async () => {
+    const fileItem = { type: 'file', path: '/file' }
+    const action = getDownloadAction(1, fileItem, packages, files)
+    expect(action.type).toBe('download')
+    expect(action.func).not.toBe(null)
+  })
+
+  it('allows package download', async () => {
+    const successDirectoryItem = { type: 'directory', path: '/success' }
+    const action = getDownloadAction(1, successDirectoryItem, packages, files)
+    expect(action.type).toBe('download')
+    expect(action.func).not.toBe(null)
+  })
+
+  it('shows spinner for pending package', async () => {
+    const pendingDirectoryItem = { type: 'directory', path: '/pending' }
+    const action = getDownloadAction(1, pendingDirectoryItem, packages, files)
+    expect(action.type).toBe('pending')
+    expect(action.func).toBe(null)
+    expect(action.spin).toBe(true)
+  })
+
+  it('shows spinner when loading package information', async () => {
+    runInAction(() => {
+      packages.loadingDataset = true
+    })
+    const noPackageDirectoryItem = { type: 'directory', path: '/no_package' }
+    const action = getDownloadAction(1, noPackageDirectoryItem, packages, files)
+    expect(action.type).toBe('loading')
+    expect(action.func).toBe(null)
+    expect(action.spin).toBe(true)
+  })
+
+  it('allows creating package', async () => {
+    const noPackageDirectoryItem = { type: 'directory', path: '/no_package' }
+    const action = getDownloadAction(1, noPackageDirectoryItem, packages, files)
+    expect(action.type).toBe('create')
+    expect(action.func).not.toBe(null)
   })
 })

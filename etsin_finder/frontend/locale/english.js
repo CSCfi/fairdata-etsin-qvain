@@ -95,8 +95,6 @@ const english = {
       download: 'Download',
       downloadFailed: 'Download failed',
       downloadAll: 'Download all',
-      createDownloadAll: 'Generate package',
-      creatingDownloadAll: 'Generating package',
       downloadDisabledForDraft: 'Download disabled for draft',
       downloading: 'Downloading...',
       downloadItem: 'Download %(name)s',
@@ -106,6 +104,12 @@ const english = {
       info_header: 'Other info related to file',
       loading: 'Loading folder',
       loaded: 'Folder loaded',
+      packages: {
+        createForAll: 'Generate download package',
+        createForItem: 'Create download package for %(name)s',
+        pending: 'Generating download package',
+        loading: 'Loading',
+      },
       fileCount: {
         one: '1 file',
         other: '%(count)s files',

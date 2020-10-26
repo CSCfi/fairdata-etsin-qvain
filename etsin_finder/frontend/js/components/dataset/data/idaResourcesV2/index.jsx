@@ -11,7 +11,7 @@ import { Button } from '../../../general/button'
 import Info from './info'
 import sizeParse from '../../../../utils/sizeParse'
 import { withStores } from '../../../../stores/stores'
-import getDownloadAction from './download'
+import getDownloadAction from './downloadActions'
 
 const downloadAll = identifier => {
   const handle = window.open(`/api/dl?cr_id=${identifier}`)
@@ -71,9 +71,9 @@ function IdaResources(props) {
       allowDownload = false
       downloadAllText = 'dataset.dl.downloadDisabledForDraft'
     } else if (action.pending) {
-      downloadAllText = 'dataset.dl.creatingDownloadAll'
+      downloadAllText = 'dataset.dl.packages.pending'
     } else if (!action.available) {
-      downloadAllText = 'dataset.dl.createDownloadAll'
+      downloadAllText = 'dataset.dl.packages.createForAll'
     }
   }
 

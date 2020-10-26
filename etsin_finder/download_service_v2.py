@@ -107,8 +107,18 @@ class DownloadAPIService(FlaskService):
 
         return resp, status
 
-    def get_download_url(self, token):
+    def get_download_url(self, token, dataset, file=None, package=None):
         """Create download URL from token"""
-        return f'{self.DOWNLOAD_URL}?token={token}'
+        params = {
+            'token': token,
+            'dataset': dataset
+        }
+        if file:
+            params['file'] = file
+        if package:
+            params['package'] = package
+
+        keyValues = '&'.join('='.join(item) for item in params.items())
+        return f'{self.DOWNLOAD_URL}?{keyValues}'
 
 download_service = DownloadAPIService(app)

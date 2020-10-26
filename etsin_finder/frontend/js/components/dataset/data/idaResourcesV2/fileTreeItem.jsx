@@ -25,7 +25,7 @@ import {
   ClickableIcon,
   NoIcon,
 } from '../../../general/files/items'
-import getDownloadAction from './download'
+import getDownloadAction from './downloadActions'
 
 const download = (datasetIdentifier, item) => {
   const handle = window.open(
@@ -78,12 +78,14 @@ const FileTreeItemBase = ({ treeProps, item, level }) => {
   let downloadFunc = () => download(datasetIdentifier, item)
   let downloadIcon = faDownload
   let downloadIconSpin = false
+  let downloadAriaLabel = 'dataset.dl.downloadItem'
 
   if (downloadApiV2) {
     const action = getDownloadAction(datasetIdentifier, item, Packages, Files)
     downloadFunc = action.func
     downloadIcon = action.icon
     downloadIconSpin = action.spin
+    downloadAriaLabel = action.ariaLabel
   }
 
   const infoButton = (
@@ -111,7 +113,7 @@ const FileTreeItemBase = ({ treeProps, item, level }) => {
       disabledColor="gray"
       disabledOpacity={0.4}
       onClick={downloadFunc}
-      attributes={{ 'aria-label': 'dataset.dl.downloadItem' }}
+      attributes={{ 'aria-label': downloadAriaLabel }}
       with={{ name }}
     />
   )

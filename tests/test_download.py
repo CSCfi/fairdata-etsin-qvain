@@ -27,9 +27,14 @@ fakeToken = {
     'token': 'abcdf00f',
 }
 
-fakeDownloadUrl = {
-    'url': f"https://mock-download:1/download?token={fakeToken['token']}",
+fakePackageDownloadUrl = {
+    'url': f"https://mock-download:1/download?token={fakeToken['token']}&dataset=1&package=x.zip",
 }
+
+fakeFileDownloadUrl = {
+    'url': f"https://mock-download:1/download?token={fakeToken['token']}&dataset=1&file=/folder/filename.gif",
+}
+
 
 def match_dataset(dataset):
     """Matcher that requires supplied dataset parameter to match."""
@@ -141,13 +146,13 @@ class TestDownloadResourcesAuthorize(BaseTest):
         """Authorize file"""
         r = unauthd_client.post('/api/v2/dl/authorize', json={ 'cr_id': 1, 'file': '/folder/filename.gif'})
         assert r.status_code == 200
-        assert r.json == fakeDownloadUrl
+        assert r.json == fakeFileDownloadUrl
 
     def test_authorize_package_ok(self, unauthd_client, open_catalog_record, authorize_mock):
         """Authorize package"""
         r = unauthd_client.post('/api/v2/dl/authorize', json={ 'cr_id': 1, 'package': 'x.zip'})
         assert r.status_code == 200
-        assert r.json == fakeDownloadUrl
+        assert r.json == fakePackageDownloadUrl
 
     def test_authorize_package_invalid_param(self, unauthd_client, open_catalog_record):
         """Fail due to unknown parameter"""
