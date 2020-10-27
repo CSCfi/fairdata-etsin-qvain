@@ -38,7 +38,6 @@ const KeywordsField = () => {
     keywordsSchema
       .validate(keywordsArray)
       .then(() => {
-        addKeywordToKeywordArray()
         setError(null)
       })
       .catch(err => {
@@ -48,6 +47,7 @@ const KeywordsField = () => {
 
   const handleKeywordAdd = e => {
     e.preventDefault()
+    addKeywordToKeywordArray()
     validate()
   }
 
