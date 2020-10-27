@@ -9,16 +9,14 @@ import { useStores } from '../../utils/stores'
 export const ProjectSelectorBase = ({ disabled }) => {
   const {
     Qvain: {
-      Files: {
-        changeProject,
-        selectedProject,
-        loadingProject: { error },
-      },
+      Files: { changeProject, selectedProject, loadingProject },
     },
     Auth: {
       user: { idaProjects },
     },
   } = useStores()
+
+  const error = (loadingProject && loadingProject.error) || undefined
 
   const notFound = error && error.response && error.response.status === 404
 
