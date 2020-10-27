@@ -197,7 +197,7 @@ def get_user_ida_projects():
     # Authenticated through direct proxy
     if is_authenticated_through_direct_proxy():
         groups = session.get('samlUserdata', {}).get(SAML_ATTRIBUTES.get('idm_groups', None), False)
-        idaProjects = [group for group in groups if group.startswith('IDA01')] if groups else not_found('ida_projects')
+        idaProjects = [group for group in groups if group.startswith('IDA01:')] if groups else not_found('ida_projects')
 
         # Parse the projects (conversion from IdM group syntax)
         try:
