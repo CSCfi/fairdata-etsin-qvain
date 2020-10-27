@@ -18,7 +18,6 @@ import { withRouter } from 'react-router-dom'
 import HeroBanner from '../general/hero'
 import Tracking from '../../utils/tracking'
 import Accessibility from '../../stores/view/accessibility'
-import LoginButton from '../general/navigation/loginButton'
 
 class ErrorPage extends React.Component {
   componentDidMount() {
