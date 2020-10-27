@@ -57,7 +57,6 @@ const Select = props => {
 }
 
 Select.propTypes = {
-  Stores: PropTypes.object.isRequired,
   metaxIdentifier: PropTypes.string.isRequired,
   getter: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   setter: PropTypes.func.isRequired,

@@ -597,6 +597,7 @@ exports[`Qvain.Description should render <LanguageField /> 1`] = `
               "showLimitIncrement": 20,
               "showLimitState": Object {},
             },
+            "addItem": [Function],
             "cache": Object {},
             "cancelOnReset": [Function],
             "datasetIdentifier": null,

@@ -10,7 +10,10 @@ const brief = {
 }
 
 const Provenance = () => {
-  const { Qvain: Store, Locale: lang } = useStores()
+  const {
+    Qvain: Store,
+    Locale: { lang },
+  } = useStores()
   return (
     <Field brief={brief}>
       <ProvenanceFieldContent Store={Store} lang={lang} />
