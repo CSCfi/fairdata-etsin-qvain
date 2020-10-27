@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { autorun } from 'mobx'
 import PropTypes from 'prop-types'
-import { Observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 
 import FileTreeItem from './fileTreeItem'
 import { useRenderTree } from '../../../general/files/tree'
@@ -36,7 +36,7 @@ export function FileTree(props) {
     }
   )
 
-  return <Observer>{renderTree}</Observer>
+  return renderTree()
 }
 
 FileTree.propTypes = {
@@ -44,4 +44,4 @@ FileTree.propTypes = {
   allowDownload: PropTypes.bool.isRequired,
 }
 
-export default withStores(FileTree)
+export default withStores(observer(FileTree))

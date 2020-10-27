@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { autorun } from 'mobx'
-import { Observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 
 import SelectedItemsTreeItem from './selectedItemsTreeItem'
 import { useRenderTree } from '../../../general/files/tree'
@@ -31,7 +31,7 @@ export function SelectedItemsTree() {
     moreItemsLevel: 4.5,
   })
 
-  return <Observer>{renderTree}</Observer>
+  return renderTree()
 }
 
-export default SelectedItemsTree
+export default observer(SelectedItemsTree)

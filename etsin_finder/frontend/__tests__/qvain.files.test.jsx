@@ -508,7 +508,7 @@ describe('Qvain.Files tree', () => {
     // wrapper = shallow(<SelectedItemsTreeBase Stores={stores} />).dive()
 
     useStores.mockReturnValue(stores)
-    let wrapper = shallow(<SelectedItemsTree />, <StoresProvider store={stores} />).dive()
+    let wrapper = shallow(<SelectedItemsTree />)
 
     expect(data.added).toBe(true)
     let items = wrapper.find(SelectedItemsTreeItem)
@@ -529,14 +529,14 @@ describe('Qvain.Files tree', () => {
     await Files.SelectedItemsView.setAllOpen(true)
 
     useStores.mockReturnValue(stores)
-    let wrapper = shallow(<SelectedItemsTree />, <StoresProvider store={stores} />).dive()
+    let wrapper = shallow(<SelectedItemsTree Stores={stores} />)
 
     const data = await Files.getItemByPath('/data')
     const subset = await Files.getItemByPath('/data/set1/subset')
     const subsetFile1 = await Files.getItemByPath('/data/set1/subset/file1.csv')
 
     Files.SelectedItemsView.toggleChecked(data) // check data
-    wrapper = shallow(<SelectedItemsTree />, <StoresProvider store={stores} />).dive()
+    wrapper = shallow(<SelectedItemsTree Stores={stores} />)
 
     expect(Files.SelectedItemsView.isChecked(data)).toBe(true)
     let items = wrapper.find(SelectedItemsTreeItem)
@@ -553,7 +553,7 @@ describe('Qvain.Files tree', () => {
     })
 
     Files.SelectedItemsView.toggleChecked(data) // uncheck data
-    wrapper = shallow(<SelectedItemsTree />, <StoresProvider store={stores} />).dive()
+    wrapper = shallow(<SelectedItemsTree Stores={stores} />)
 
     expect(Files.SelectedItemsView.isChecked(data)).toBe(false)
     items = wrapper.find(SelectedItemsTreeItem)
@@ -574,7 +574,7 @@ describe('Qvain.Files tree', () => {
     await Files.loadAllDirectories()
 
     useStores.mockReturnValue(stores)
-    let wrapper = shallow(<SelectedItemsTree />, <StoresProvider store={stores} />).dive()
+    let wrapper = shallow(<SelectedItemsTree Stores={stores} />)
     const view = Files.SelectedItemsView
 
     let items = wrapper.find(SelectedItemsTreeItem)
@@ -584,7 +584,7 @@ describe('Qvain.Files tree', () => {
     expect(items.filter('[level=0]').length).toBe(2)
 
     await view.open(data)
-    wrapper = shallow(<SelectedItemsTree />, <StoresProvider store={stores} />).dive()
+    wrapper = shallow(<SelectedItemsTree Stores={stores} />)
     expect(view.isOpen(data)).toBe(true)
     items = wrapper.find(SelectedItemsTreeItem)
 
@@ -592,14 +592,14 @@ describe('Qvain.Files tree', () => {
     expect(items.filter('[level=1]').length).toBe(2)
 
     await view.open(set1)
-    wrapper = shallow(<SelectedItemsTree />, <StoresProvider store={stores} />).dive()
+    wrapper = shallow(<SelectedItemsTree Stores={stores} />)
     items = wrapper.find(SelectedItemsTreeItem)
     expect(items.filter('[level=0]').length).toBe(2)
     expect(items.filter('[level=1]').length).toBe(2)
     expect(items.filter('[level=2]').length).toBe(3)
 
     view.close(data)
-    wrapper = shallow(<SelectedItemsTree />, <StoresProvider store={stores} />).dive()
+    wrapper = shallow(<SelectedItemsTree Stores={stores} />)
     items = wrapper.find(SelectedItemsTreeItem)
     expect(items.filter('[level=0]').length).toBe(2)
     expect(items.filter(':not([level=0])').length).toBe(0)
@@ -611,7 +611,7 @@ describe('Qvain.Files tree', () => {
     view.setDefaultShowLimit(3, 1)
 
     useStores.mockReturnValue(stores)
-    let wrapper = shallow(<SelectedItemsTree />, <StoresProvider store={stores} />).dive()
+    let wrapper = shallow(<SelectedItemsTree Stores={stores} />)
 
     const subset = await Files.getItemByPath('/data/set1/subset')
     let items = wrapper.find(SelectedItemsTreeItem)
@@ -619,7 +619,7 @@ describe('Qvain.Files tree', () => {
     expect(wrapper.find(ShowMore).length).toBe(1)
 
     await view.showMore(subset)
-    wrapper = shallow(<SelectedItemsTree />, <StoresProvider store={stores} />).dive()
+    wrapper = shallow(<SelectedItemsTree Stores={stores} />)
     items = wrapper.find(SelectedItemsTreeItem)
     expect(items.filter('[level=3]').length).toBe(4)
   })
@@ -630,13 +630,13 @@ describe('Qvain.Files tree', () => {
     await view.setAllOpen(true)
 
     useStores.mockReturnValue(stores)
-    let wrapper = shallow(<SelectedItemsTree />, <StoresProvider store={stores} />).dive()
+    let wrapper = shallow(<SelectedItemsTree Stores={stores} />)
 
     let items = wrapper.find(SelectedItemsTreeItem)
     expect(items.filter('[level=3]').length).toBe(4)
 
     view.setDefaultShowLimit(2, 1)
-    wrapper = shallow(<SelectedItemsTree />, <StoresProvider store={stores} />).dive()
+    wrapper = shallow(<SelectedItemsTree Stores={stores} />)
     items = wrapper.find(SelectedItemsTreeItem)
     expect(items.filter('[level=3]').length).toBe(2)
   })
@@ -648,18 +648,18 @@ describe('Qvain.Files tree', () => {
     const subset = await Files.getItemByPath('/data/set1/subset', true)
 
     useStores.mockReturnValue(stores)
-    let wrapper = shallow(<SelectedItemsTree />, <StoresProvider store={stores} />).dive()
+    let wrapper = shallow(<SelectedItemsTree Stores={stores} />)
 
     let items = wrapper.find(SelectedItemsTreeItem)
     expect(items.filter('[level=3]').length).toBe(2)
 
     await view.showMore(subset)
-    wrapper = shallow(<SelectedItemsTree />, <StoresProvider store={stores} />).dive()
+    wrapper = shallow(<SelectedItemsTree Stores={stores} />)
     items = wrapper.find(SelectedItemsTreeItem)
     expect(items.filter('[level=3]').length).toBe(3)
 
     await view.showMore(subset)
-    wrapper = shallow(<SelectedItemsTree />, <StoresProvider store={stores} />).dive()
+    wrapper = shallow(<SelectedItemsTree Stores={stores} />)
     items = wrapper.find(SelectedItemsTreeItem)
     expect(items.filter('[level=3]').length).toBe(4)
   })
@@ -675,11 +675,11 @@ describe('Qvain.Files tree', () => {
     await Files.AddItemsView.setAllOpen(true)
     await Files.SelectedItemsView.setAllOpen(true)
 
-    const addWrapper = shallow(<AddItemsTree />, <StoresProvider store={stores} />)
+    const addWrapper = shallow(<AddItemsTree Stores={stores} />)
     const addItems = addWrapper.find(AddItemsTreeItem)
     expect(addItems.length).toBe(21)
 
-    const selectedWrapper = shallow(<SelectedItemsTree />, <StoresProvider store={stores} />).dive()
+    const selectedWrapper = shallow(<SelectedItemsTree Stores={stores} />)
     const selectedItems = selectedWrapper.find(SelectedItemsTreeItem)
     expect(selectedItems.length).toBe(0)
   })
@@ -695,13 +695,13 @@ describe('Qvain.Files tree', () => {
     await Files.AddItemsView.setAllOpen(true)
     await Files.SelectedItemsView.setAllOpen(true)
 
-    const addWrapper = shallow(<AddItemsTree />, <StoresProvider store={stores} />)
+    const addWrapper = shallow(<AddItemsTree Stores={stores} />)
     const addItems = addWrapper.find(AddItemsTreeItem)
     expect(addItems.length).toBe(21)
 
     Files.SelectedItemsView.setHideRemoved(false)
 
-    let selectedWrapper = shallow(<SelectedItemsTree />, <StoresProvider store={stores} />).dive()
+    let selectedWrapper = shallow(<SelectedItemsTree Stores={stores} />)
     let selectedItems = selectedWrapper.find(SelectedItemsTreeItem)
     expect(selectedItems.length).toBe(14)
   })
@@ -716,7 +716,7 @@ describe('Qvain.Files tree', () => {
     await Files.AddItemsView.setAllOpen(true)
     await Files.SelectedItemsView.setAllOpen(true)
 
-    const selectedWrapper = shallow(<SelectedItemsTree />, <StoresProvider store={stores} />).dive()
+    const selectedWrapper = shallow(<SelectedItemsTree Stores={stores} />)
     const selectedItems = selectedWrapper.find(SelectedItemsTreeItem)
     expect(selectedWrapper.find(ShowMore).length).toBe(0)
     expect(selectedItems.length).toBe(21)
@@ -727,7 +727,7 @@ describe('Qvain.Files AddItemsTree ', () => {
   it('shows items that have new children ', async () => {
     await Files.AddItemsView.setAllOpen(true)
 
-    const wrapper = shallow(<AddItemsTree />, <StoresProvider store={stores} />)
+    const wrapper = shallow(<AddItemsTree Stores={stores} />)
     const items = wrapper.find(AddItemsTreeItem)
 
     expect(itemPaths(items.filter('[level=0]'))).toEqual(['/data'])
@@ -758,7 +758,7 @@ describe('Qvain.Files AddItemsTree ', () => {
 
     await Files.AddItemsView.setAllOpen(true)
 
-    const addWrapper = shallow(<AddItemsTree />, <StoresProvider store={stores} />)
+    const addWrapper = shallow(<AddItemsTree Stores={stores} />)
     const addItems = addWrapper.find(AddItemsTreeItem).filterWhere(i => i.prop('item') === dir)
     expect(addItems.length).toBe(1)
   })
@@ -771,7 +771,7 @@ describe('Qvain.Files AddItemsTree ', () => {
     Files.removeItem(file2)
     await Files.AddItemsView.setAllOpen(true)
 
-    const wrapper = shallow(<AddItemsTree />, <StoresProvider store={stores} />)
+    const wrapper = shallow(<AddItemsTree Stores={stores} />)
     const items = wrapper.find(AddItemsTreeItem)
 
     expect(itemPaths(items.filter('[level=0]'))).toEqual(['/data', '/moredata'])
@@ -790,7 +790,7 @@ describe('Qvain.Files SelectedItemsTree ', () => {
   it('shows selected and existing items', async () => {
     await Files.SelectedItemsView.setAllOpen(true)
 
-    const wrapper = shallow(<SelectedItemsTree />, <StoresProvider store={stores} />).dive()
+    const wrapper = shallow(<SelectedItemsTree Stores={stores} />)
     const items = wrapper.find(SelectedItemsTreeItem)
 
     expect(itemPaths(items.filter('[level=0]'))).toEqual(['/data', '/moredata'])
@@ -827,7 +827,7 @@ describe('Qvain.Files SelectedItemsTree ', () => {
     Files.addItem(file)
     await Files.SelectedItemsView.setAllOpen(true)
 
-    const wrapper = shallow(<SelectedItemsTree />, <StoresProvider store={stores} />).dive()
+    const wrapper = shallow(<SelectedItemsTree Stores={stores} />)
     const items = wrapper.find(SelectedItemsTreeItem)
 
     expect(itemPaths(items.filter('[level=2]'))).toEqual([
@@ -865,7 +865,7 @@ describe('Qvain.Files SelectedItemsTree ', () => {
     Files.addItem(file)
     Files.addItem(file2)
 
-    let wrapper = shallow(<SelectedItemsTree />, <StoresProvider store={stores} />).dive()
+    let wrapper = shallow(<SelectedItemsTree Stores={stores} />)
     let items = wrapper.find(SelectedItemsTreeItem)
 
     expect(itemPaths(items)).toEqual([
@@ -883,7 +883,7 @@ describe('Qvain.Files SelectedItemsTree ', () => {
     expect(Files.SelectedItemsView.showLimitState).toEqual({ 'dir:37': 2 })
 
     // testing components with updated showMore
-    wrapper = shallow(<SelectedItemsTree />, <StoresProvider store={stores} />).dive()
+    wrapper = shallow(<SelectedItemsTree Stores={stores} />)
     items = wrapper.find(SelectedItemsTreeItem)
     expect(itemPaths(items)).toEqual([
       '/data',
@@ -907,7 +907,7 @@ describe('Qvain.Files SelectedItemsTree ', () => {
     const dir = await Files.getItemByPath('/data/set1/subset2')
     Files.addItem(dir)
 
-    const wrapper = shallow(<SelectedItemsTree />, <StoresProvider store={stores} />).dive()
+    const wrapper = shallow(<SelectedItemsTree Stores={stores} />)
     let items = wrapper.find(SelectedItemsTreeItem)
 
     expect(itemPaths(items)).toEqual([
