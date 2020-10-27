@@ -15,6 +15,7 @@ import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import { inject, observer } from 'mobx-react'
 import PropTypes from 'prop-types'
+import translate from 'counterpart'
 
 import { Link } from '../general/button'
 import DropdownMenu from '../general/navigation/dropdownMenu'
@@ -44,7 +45,7 @@ const routes = [
 ]
 
 const EtsinHeader = props => {
-  const { lang } = props.Stores.Locale
+  const { lang, currentLang } = props.Stores.Locale
   const { Env } = props.Stores
   const helpUrl = lang === 'fi' ? FAIRDATA_WEBSITE_URL.ETSIN.FI : FAIRDATA_WEBSITE_URL.ETSIN.EN
 
@@ -94,20 +95,22 @@ const EtsinHeader = props => {
         <Navi routes={routes} />
       </NaviContainer>
       <Right>
-        <Settings
-          helpUrl={helpUrl}
-          loginThroughService="etsin"
-        >
+        <Settings helpUrl={helpUrl} loginThroughService="etsin">
           {dropDownMenu()}
         </Settings>
       </Right>
-      <MobileNavi
-        helpUrl={helpUrl}
-        naviRoutes={routes}
-        loginThroughService="etsin"
-      >
+      <MobileNavi helpUrl={helpUrl} naviRoutes={routes} loginThroughService="etsin">
         {mobileSettingsExtra}
       </MobileNavi>
+      <span className="sr-only" aria-live="assertive">
+        {/* For screen readers only. If the language is changed in the Store, Announce the new language. */}
+        {translate('general.state.changedLang', {
+          lang:
+            currentLang === 'fi'
+              ? translate('qvain.general.langFi')
+              : translate('qvain.general.langEn'),
+        })}
+      </span>
     </Header>
   )
 }

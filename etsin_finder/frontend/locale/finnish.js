@@ -258,7 +258,7 @@ const finnish = {
       loginRequired: 'Kirjautuminen vaaditaan',
     },
     language: {
-      toggleLabel: 'Vaihda kieltä',
+      toggleLabel: 'Vaihda kieltä: %(otherLang)s',
     },
     cookies: {
       accept: 'Hyväksy evästeet',
