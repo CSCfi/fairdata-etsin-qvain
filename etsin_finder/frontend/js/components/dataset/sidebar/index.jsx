@@ -142,7 +142,7 @@ class Sidebar extends Component {
               <SidebarItem>
                 <Logo
                   lang={getDataLang(catalogTitle)}
-                  alt={checkDataLang(catalogTitle)}
+                  alt={catalogPublisherHomepage}
                   file={logo}
                   url={catalogPublisherHomepage}
                 />
