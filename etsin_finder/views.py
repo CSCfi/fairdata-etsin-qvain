@@ -24,6 +24,7 @@ from etsin_finder.authentication_fairdata_sso import \
     is_authenticated_through_fairdata_sso, \
     log_sso_values, \
     join_redirect_url_path
+from etsin_finder.app_config import get_app_config
 from etsin_finder.app import app
 from etsin_finder.log import log
 from etsin_finder.localization import get_language, translate
@@ -44,7 +45,7 @@ def login_etsin():
     login_url = join_redirect_url_path(login_url, redirect_url)
 
     resp = make_response(redirect(login_url))
-    resp.set_cookie('logged_in_through', value='etsin', domain='.local.fd-test.csc.fi')
+    resp.set_cookie('logged_in_through', value='etsin', domain=get_app_config(app.testing).get('SESSION_COOKIE_DOMAIN'))
     return resp
 
 @app.route('/sso/qvain')
@@ -61,7 +62,7 @@ def login_qvain():
     login_url = join_redirect_url_path(login_url, redirect_url)
 
     resp = make_response(redirect(login_url))
-    resp.set_cookie('logged_in_through', value='qvain', domain='.local.fd-test.csc.fi')
+    resp.set_cookie('logged_in_through', value='qvain', domain=get_app_config(app.testing).get('SESSION_COOKIE_DOMAIN'))
     return resp
 
 @app.route('/slo/etsin')
@@ -175,7 +176,7 @@ def saml_attribute_consumer_service_legacy():
     # Workaround for local_development + old proxy
     host = request.headers.get('X-Forwarded-Host')
     if host == '30.30.30.30':
-        return redirect('https://etsin-finder.local.fd-test.csc.fi/acs/', 307)
+        return redirect('https://' + get_app_config(app.testing).get('SERVER_ETSIN_DOMAIN_NAME') + '/acs/', 307)
 
     reset_flask_session_on_login()
     req = prepare_flask_request_for_saml(request, '')
@@ -195,14 +196,14 @@ def saml_attribute_consumer_service_legacy():
         if ('samlUserdata' in session and len(session.get('samlUserdata', None)) > 0):
             # Redirect for Qvain
             if (logged_in_through == 'qvain'):
-                resp = make_response(redirect('http://qvain.local.fd-test.csc.fi'))
+                resp = make_response(redirect('https://' + get_app_config(app.testing).get('SERVER_QVAIN_DOMAIN_NAME')))
                 # Delete cookie
                 resp.set_cookie('logged_in_through', '', expires=0)
                 return resp
 
             # Redirect for Etsin
             if (logged_in_through == 'etsin'):
-                resp = make_response(redirect('http://etsin-finder.local.fd-test.csc.fi'))
+                resp = make_response(redirect('https://' + get_app_config(app.testing).get('SERVER_ETSIN_DOMAIN_NAME')))
                 # Delete cookie
                 resp.set_cookie('logged_in_through', '', expires=0)
                 return resp
