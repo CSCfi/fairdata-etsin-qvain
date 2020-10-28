@@ -16,7 +16,7 @@ import {
   SmallLoader,
 } from '../../../general/files/items'
 
-const AddItemsTreeItemBase = ({ treeProps, item, level, parentArgs }) => {
+export const AddItemsTreeItemBase = ({ treeProps, item, level, parentArgs }) => {
   const { directoryView } = treeProps
   const { parentChecked } = parentArgs
   const isOpen = directoryView.isOpen(item)

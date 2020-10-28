@@ -59,7 +59,7 @@ exports[`FilterSection should render <FilterSection /> 1`] = `
         term="data_catalog.en"
       />
     </ul>
-    <inject-with-Stores(PasCheckBox)
+    <PasCheckBox
       aggr="data_catalog"
     />
   </filterSection__FilterItems>
