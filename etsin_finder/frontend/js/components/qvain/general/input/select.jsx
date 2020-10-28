@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import ReactSelect from 'react-select'
 import Translate from 'react-translate-component'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 
 import {
   onChange,
@@ -15,6 +15,7 @@ import {
 } from '../../utils/select'
 import getReferenceData from '../../utils/getReferenceData'
 import etsinTheme from '../../../../styles/theme'
+import { withStores } from '../../utils/stores'
 
 class Select extends Component {
   promises = []
@@ -118,4 +119,4 @@ class Select extends Component {
   }
 }
 
-export default inject('Stores')(observer(Select))
+export default withStores(observer(Select))

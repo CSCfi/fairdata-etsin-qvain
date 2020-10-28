@@ -1,6 +1,5 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -12,18 +11,21 @@ import { otherIdentifiersArraySchema, otherIdentifierSchema } from '../utils/for
 import ValidationError from '../general/errors/validationError'
 import { Input, LabelLarge } from '../general/modal/form'
 import { ButtonContainer, AddNewButton } from '../general/buttons'
+import { useStores } from '../utils/stores'
 
-const OtherIdentifierField = ({ Stores }) => {
+const OtherIdentifierField = () => {
   const {
-    readonly,
-    removeOtherIdentifier,
-    setOtherIdentifier,
-    otherIdentifier,
-    otherIdentifiersArray,
-    addOtherIdentifier,
-    otherIdentifiersValidationError,
-    setOtherIdentifierValidationError,
-  } = Stores.Qvain
+    Qvain: {
+      readonly,
+      removeOtherIdentifier,
+      setOtherIdentifier,
+      otherIdentifier,
+      otherIdentifiersArray,
+      addOtherIdentifier,
+      otherIdentifiersValidationError,
+      setOtherIdentifierValidationError,
+    },
+  } = useStores()
 
   const handleInputChange = event => {
     const { value } = event.target
@@ -107,12 +109,8 @@ const OtherIdentifierField = ({ Stores }) => {
   )
 }
 
-OtherIdentifierField.propTypes = {
-  Stores: PropTypes.object.isRequired,
-}
-
 const PaddedWord = styled.span`
   padding-right: 10px;
 `
 
-export default inject('Stores')(observer(OtherIdentifierField))
+export default observer(OtherIdentifierField)

@@ -1,13 +1,13 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 import { TableButton } from '../general/buttons'
+import { useStores } from '../utils/stores'
 
 // If we have a deprecated dataset, show information and button for fixing it.
-const DeprecatedState = props => {
-  const { deprecated, showFixDeprecatedModal } = props.Stores.Qvain
+const DeprecatedState = () => {
+  const { deprecated, showFixDeprecatedModal } = useStores().Qvain
   if (!deprecated) {
     return null
   }
@@ -21,10 +21,6 @@ const DeprecatedState = props => {
       </ButtonContainer>
     </DeprecationInfoText>
   )
-}
-
-DeprecatedState.propTypes = {
-  Stores: PropTypes.object.isRequired,
 }
 
 const DeprecationInfoText = styled.div`
@@ -55,4 +51,4 @@ const FixDeprecatedButton = styled(TableButton)`
   max-width: none;
 `
 
-export default inject('Stores')(observer(DeprecatedState))
+export default observer(DeprecatedState)

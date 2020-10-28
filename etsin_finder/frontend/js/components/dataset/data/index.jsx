@@ -12,13 +12,14 @@
 
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 
 import Tracking from '../../../utils/tracking'
 import Accessibility from '../../../stores/view/accessibility'
 import ExternalResources from './externalResources'
 import IdaResources from './idaResources'
 import IdaResourcesV2 from './idaResourcesV2'
+import { withStores } from '../../../stores/stores'
 
 class Data extends Component {
   componentDidMount() {
@@ -57,4 +58,4 @@ Data.propTypes = {
   hasRemote: PropTypes.bool.isRequired,
 }
 
-export default inject('Stores')(observer(Data))
+export default withStores(observer(Data))

@@ -1,12 +1,14 @@
 import React from 'react'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
-import { inject, observer } from 'mobx-react'
-import PropTypes from 'prop-types'
+import { observer } from 'mobx-react'
 import { FAIRDATA_WEBSITE_URL } from '../../../utils/constants'
+import { useStores } from '../utils/stores'
 
-const Description = props => {
-  const { lang } = props.Stores.Locale
+const Description = () => {
+  const {
+    Locale: { lang },
+  } = useStores()
   const helpUrl = lang === 'fi' ? FAIRDATA_WEBSITE_URL.QVAIN.FI : FAIRDATA_WEBSITE_URL.QVAIN.EN
   return (
     <>
@@ -20,14 +22,10 @@ const Description = props => {
   )
 }
 
-Description.propTypes = {
-  Stores: PropTypes.object.isRequired,
-}
-
 const Header = styled.h1`
   font-weight: bold;
   line-height: 1.2;
-  font.size: 36px;
+  font-size: 36px;
 `
 
 const Brief = styled.h5`
@@ -36,4 +34,4 @@ const Brief = styled.h5`
   margin-bottom: 1rem;
 `
 
-export default inject('Stores')(observer(Description))
+export default observer(Description)

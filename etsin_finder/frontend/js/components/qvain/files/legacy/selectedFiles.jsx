@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCopy, faFolder } from '@fortawesome/free-solid-svg-icons'
 import Translate from 'react-translate-component'
@@ -23,6 +23,7 @@ import Modal from '../../../general/modal'
 import { CUMULATIVE_STATE } from '../../../../utils/constants'
 import RefreshDirectoryModal from '../refreshDirectoryModal'
 import FixDeprecatedModal from '../fixDeprecatedModal'
+import { withStores } from '../../utils/stores'
 
 export class SelectedFilesBase extends Component {
   static propTypes = {
@@ -259,4 +260,4 @@ const DeletedLabel = styled(Label)`
   text-transform: uppercase;
 `
 
-export default inject('Stores')(observer(SelectedFilesBase))
+export default withStores(observer(SelectedFilesBase))

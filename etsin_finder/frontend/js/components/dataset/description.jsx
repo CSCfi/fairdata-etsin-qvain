@@ -11,7 +11,7 @@
 }
 
 import React, { Component } from 'react'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
@@ -33,6 +33,7 @@ import checkNested from '../../utils/checkNested'
 import dateFormat from '../../utils/dateFormat'
 import Tracking from '../../utils/tracking'
 import { ACCESS_TYPE_URL, DATA_CATALOG_IDENTIFIER } from '../../utils/constants'
+import { withStores } from '../../utils/stores'
 
 const ReactMarkdown = require('react-markdown')
 
@@ -87,17 +88,17 @@ class Description extends Component {
   render() {
     const versions = this.props.dataset.dataset_version_set
     const datasetIdentifier = this.props.dataset.identifier
-    const isVersion = versions && versions.length > 0 && versions.some(version => version.identifier === datasetIdentifier)
+    const isVersion =
+      versions &&
+      versions.length > 0 &&
+      versions.some(version => version.identifier === datasetIdentifier)
 
     return (
       <div className="dsContent">
         <Labels>
           <Flex>
             {this.props.dataset.data_catalog.catalog_json.dataset_versioning && isVersion && (
-              <VersionChanger
-                versionSet={versions}
-                idn={datasetIdentifier}
-              />
+              <VersionChanger versionSet={versions} idn={datasetIdentifier} />
             )}
             {(this.props.dataset.data_catalog.catalog_json.identifier ===
               DATA_CATALOG_IDENTIFIER.PAS ||
@@ -117,9 +118,7 @@ class Description extends Component {
             />
           </Flex>
           <FormatChangerPosition>
-            <FormatChanger
-              idn={this.props.match.params.identifier}
-            />
+            <FormatChanger idn={this.props.match.params.identifier} />
           </FormatChangerPosition>
           <Flex>
             <ErrorBoundary>
@@ -129,7 +128,8 @@ class Description extends Component {
                   emails={this.props.emails}
                   // TEMPORARY: rems check won't be needed in contact later.
                   isRems={
-                    this.props.dataset.research_dataset.access_rights.access_type.identifier === ACCESS_TYPE_URL.PERMIT
+                    this.props.dataset.research_dataset.access_rights.access_type.identifier ===
+                    ACCESS_TYPE_URL.PERMIT
                   }
                 />
               )}
@@ -139,40 +139,30 @@ class Description extends Component {
         </Labels>
         <section>
           <div>
-            {
-              (this.props.dataset.data_catalog.catalog_json.identifier === DATA_CATALOG_IDENTIFIER.PAS) &&
-              (
-                <PasInfo>
-                  <Translate content="dataset.storedInPas" />
-                </PasInfo>
-              )
-            }
-            {
-              (this.props.dataset.preservation_dataset_origin_version) &&
-              (
-                <PasInfo>
-                  <Translate content="dataset.originalDatasetVersionExists" />
-                  <Link
-                    to={`/dataset/${this.props.dataset.preservation_dataset_origin_version.identifier}`}
-                  >
-                    <Translate content="dataset.linkToOriginalDataset" />
-                  </Link>
-                </PasInfo>
-              )
-            }
-            {
-              (this.props.dataset.preservation_dataset_version) &&
-              (
-                <PasInfo>
-                  <Translate content="dataset.pasDatasetVersionExists" />
-                  <Link
-                    to={`/dataset/${this.props.dataset.preservation_dataset_version.identifier}`}
-                  >
-                    <Translate content="dataset.linkToPasDataset" />
-                  </Link>
-                </PasInfo>
-              )
-            }
+            {this.props.dataset.data_catalog.catalog_json.identifier ===
+              DATA_CATALOG_IDENTIFIER.PAS && (
+              <PasInfo>
+                <Translate content="dataset.storedInPas" />
+              </PasInfo>
+            )}
+            {this.props.dataset.preservation_dataset_origin_version && (
+              <PasInfo>
+                <Translate content="dataset.originalDatasetVersionExists" />
+                <Link
+                  to={`/dataset/${this.props.dataset.preservation_dataset_origin_version.identifier}`}
+                >
+                  <Translate content="dataset.linkToOriginalDataset" />
+                </Link>
+              </PasInfo>
+            )}
+            {this.props.dataset.preservation_dataset_version && (
+              <PasInfo>
+                <Translate content="dataset.pasDatasetVersionExists" />
+                <Link to={`/dataset/${this.props.dataset.preservation_dataset_version.identifier}`}>
+                  <Translate content="dataset.linkToPasDataset" />
+                </Link>
+              </PasInfo>
+            )}
           </div>
           <div className="d-md-flex align-items-center dataset-title justify-content-between">
             <Title lang={getDataLang(this.state.title)}>{checkDataLang(this.state.title)}</Title>
@@ -231,7 +221,7 @@ class Description extends Component {
   }
 }
 
-export default inject('Stores')(observer(Description))
+export default withStores(observer(Description))
 
 Description.propTypes = {
   dataset: PropTypes.object.isRequired,
@@ -353,7 +343,7 @@ const CustomMarkdown = styled(ReactMarkdown)`
   h5:first-child,
   h6:first-child {
     margin-top: 0;
-    padding-top:0;
+    padding-top: 0;
   }
 
   h1:hover a.anchor,
