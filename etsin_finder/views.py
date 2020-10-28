@@ -169,6 +169,12 @@ def saml_metadata_legacy():
         resp = make_response(', '.join(errors), 500)
     return resp
 
+@app.route('/', subdomain='<service>')
+def redirect_to_qvain(service):
+    asd = session.get('samlUserdata')
+    log.info(asd)
+    return redirect('http://' + service + '.local.fd-test.csc.fi')
+
 @app.route('/acs/', methods=['GET', 'POST'])
 def saml_attribute_consumer_service_legacy():
     """The endpoint which is used by the saml library on auth.login call for both Etsin & Qvain"""
@@ -188,9 +194,11 @@ def saml_attribute_consumer_service_legacy():
         log.debug("SESSION: {0}".format(session))
         # if (logged_in_through == 'qvain'):
         app.config['SESSION_COOKIE_NAME'] = 'etsin_session'
-        app.config['SESSION_COOKIE_DOMAIN'] = '.local.fd-test.csc.fi'
-        app.config['REMEMBER_COOKIE_SECURE'] = '.local.fd-test.csc.fi'
-        return redirect('http://qvain.local.fd-test.csc.fi')
+        app.config['SESSION_COOKIE_DOMAIN'] = 'local.fd-test.csc.fi'
+        app.config['REMEMBER_COOKIE_SECURE'] = 'local.fd-test.csc.fi'
+        # return redirect('http://qvain.local.fd-test.csc.fi')
+        return redirect_to_qvain('qvain')
+        # return redirect('http://qvain.local.fd-test.csc.fi')
         # if 'RelayState' in request.form and self_url != request.form.get('RelayState'):
         #     return redirect(auth.redirect_to(unquote(request.form.get('RelayState'))))
 
