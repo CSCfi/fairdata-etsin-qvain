@@ -135,6 +135,7 @@ const Cont = styled.div`
 `
 
 const LoginButton = styled(Button)`
+  white-space: nowrap;
   width: fit-content;
   ${props =>
     props.borderColor &&

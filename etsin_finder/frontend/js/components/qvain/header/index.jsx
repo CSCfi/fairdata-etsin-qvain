@@ -17,8 +17,10 @@ import QvainLogo from './qvainLogo'
 import Settings from '../../general/navigation/settings'
 import Navi from '../../general/navigation'
 import MobileNavi from '../../general/navigation/mobileNavi'
+import LoginButton from '../../general/navigation/loginButton'
 import { FAIRDATA_WEBSITE_URL } from '../../../utils/constants'
 import Header, { NaviContainer, Right } from '../../general/header'
+import { MobileOnly, DesktopOnly } from '../../general/header/mediaHelpers'
 import { Qvain, QvainDatasets } from '../../../routes'
 import { useStores } from '../utils/stores'
 
@@ -52,8 +54,13 @@ const QvainHeader = () => {
       </NaviContainer>
       <Right>
         <Settings helpUrl={helpUrl} loginThroughService="qvain" />
+        <DesktopOnly>
+          <LoginButton loginThroughService="etsin" />
+        </DesktopOnly>
       </Right>
-      <MobileNavi helpUrl={helpUrl} naviRoutes={routes} loginThroughService="qvain" />
+      <MobileOnly>
+        <MobileNavi helpUrl={helpUrl} naviRoutes={routes} loginThroughService="qvain" />
+      </MobileOnly>
     </Header>
   )
 }
