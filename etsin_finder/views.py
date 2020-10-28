@@ -169,24 +169,21 @@ def saml_metadata_legacy():
         resp = make_response(', '.join(errors), 500)
     return resp
 
-# @app.route('/', subdomain='<service>')
-# def redirect_to_service(service):
-    # saml_user_data = session.get('samlUserdata').get('urn:oid:2.5.4.42')
-    # log.info(saml_user_data)
-    # resp = make_response(redirect('http://' + service + '.local.fd-test.csc.fi'))
-    # resp.set_cookie('saml', value=saml_user_data[0], domain='.local.fd-test.csc.fi')
-    # return resp
-
 @app.route('/acs/', methods=['GET', 'POST'])
 def saml_attribute_consumer_service_legacy():
     """The endpoint which is used by the saml library on auth.login call for both Etsin & Qvain"""
+
+    # Workaround for local_development + old proxy
+    host = request.headers.get('X-Forwarded-Host')
+    if host == '30.30.30.30':
+        return redirect('https://etsin-finder.local.fd-test.csc.fi/acs/', 307)
+
     reset_flask_session_on_login()
     req = prepare_flask_request_for_saml(request, '')
     auth = init_saml_auth(req, '')
     auth.process_response()
     errors = auth.get_errors()
     logged_in_through = request.cookies.get('logged_in_through')
-    logged_in_through = 'qvain'
 
     if len(errors) == 0 and auth.is_authenticated():
         session['samlUserdata'] = auth.get_attributes()
@@ -194,13 +191,20 @@ def saml_attribute_consumer_service_legacy():
         session['samlSessionIndex'] = auth.get_session_index()
         self_url = OneLogin_Saml2_Utils.get_self_url(req)
         log.debug("SESSION: {0}".format(session))
-        # if (logged_in_through == 'qvain'):
-        return redirect('http://qvain.local.fd-test.csc.fi')
-        # return redirect('http://qvain.local.fd-test.csc.fi')
-        # if 'RelayState' in request.form and self_url != request.form.get('RelayState'):
-        #     return redirect(auth.redirect_to(unquote(request.form.get('RelayState'))))
 
-    # return _render_index_template(saml_errors=errors)
+        log.info(logged_in_through)
+
+        # Redirect for Qvain
+        if (logged_in_through == 'qvain'):
+            return redirect('http://qvain.local.fd-test.csc.fi')
+
+        if (logged_in_through == 'etsin'):
+            return redirect('http://etsin-finder.local.fd-test.csc.fi')
+
+        if 'RelayState' in request.form and self_url != request.form.get('RelayState'):
+            return redirect(auth.redirect_to(unquote(request.form.get('RelayState'))))
+
+    return _render_index_template(saml_errors=errors)
 
 @app.route('/sls/', methods=['GET', 'POST'])
 def saml_single_logout_service_legacy():
