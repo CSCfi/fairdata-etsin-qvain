@@ -171,9 +171,11 @@ def saml_metadata_legacy():
 
 @app.route('/', subdomain='<service>')
 def redirect_to_qvain(service):
-    asd = session.get('samlUserdata')
-    log.info(asd)
-    return redirect('http://' + service + '.local.fd-test.csc.fi')
+    saml_user_data = session.get('samlUserdata').get('urn:oid:2.5.4.42')
+    log.info(saml_user_data)
+    resp = make_response(redirect('http://' + service + '.local.fd-test.csc.fi'))
+    resp.set_cookie('saml', value=saml_user_data[0])
+    return resp
 
 @app.route('/acs/', methods=['GET', 'POST'])
 def saml_attribute_consumer_service_legacy():
