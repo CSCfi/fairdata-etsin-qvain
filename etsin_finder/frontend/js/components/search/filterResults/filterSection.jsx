@@ -268,7 +268,6 @@ export const FilterCategory = styled.button`
   }
   &:focus,
   &:hover {
-    outline: none;
     background-color: ${p => mix(0.9, p.theme.color.lightgray, 'black')};
     border-color: ${p => mix(0.9, p.theme.color.lightgray, 'black')};
   }
@@ -279,7 +278,6 @@ export const FilterCategory = styled.button`
 `
 
 export const FilterItems = styled.div`
-  border: 2px solid ${p => p.theme.color.lightgray};
   padding: 0em 1em;
   max-height: 0px;
   overflow: hidden;
