@@ -30,6 +30,9 @@ def create_app():
         app.config.update({'SAML_PATH': '/home/etsin-user'})
         app.config.update({'SAML_PATH_ETSIN': '/home/etsin-user/etsin'})
         app.config.update({'SAML_PATH_QVAIN': '/home/etsin-user/qvain'})
+        app.config['SESSION_COOKIE_NAME'] = 'etsin_session'
+        app.config['SESSION_COOKIE_DOMAIN'] = 'local.fd-test.csc.fi'
+        app.config['REMEMBER_COOKIE_SECURE'] = 'local.fd-test.csc.fi'
     app.mail = Mail(app)
     app.cr_cache = CatalogRecordCache(app)
     app.rems_cache = RemsCache(app)

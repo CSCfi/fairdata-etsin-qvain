@@ -169,13 +169,13 @@ def saml_metadata_legacy():
         resp = make_response(', '.join(errors), 500)
     return resp
 
-@app.route('/', subdomain='<service>')
-def redirect_to_qvain(service):
-    saml_user_data = session.get('samlUserdata').get('urn:oid:2.5.4.42')
-    log.info(saml_user_data)
-    resp = make_response(redirect('http://' + service + '.local.fd-test.csc.fi'))
-    resp.set_cookie('saml', value=saml_user_data[0])
-    return resp
+# @app.route('/', subdomain='<service>')
+# def redirect_to_service(service):
+    # saml_user_data = session.get('samlUserdata').get('urn:oid:2.5.4.42')
+    # log.info(saml_user_data)
+    # resp = make_response(redirect('http://' + service + '.local.fd-test.csc.fi'))
+    # resp.set_cookie('saml', value=saml_user_data[0], domain='.local.fd-test.csc.fi')
+    # return resp
 
 @app.route('/acs/', methods=['GET', 'POST'])
 def saml_attribute_consumer_service_legacy():
@@ -195,11 +195,7 @@ def saml_attribute_consumer_service_legacy():
         self_url = OneLogin_Saml2_Utils.get_self_url(req)
         log.debug("SESSION: {0}".format(session))
         # if (logged_in_through == 'qvain'):
-        app.config['SESSION_COOKIE_NAME'] = 'etsin_session'
-        app.config['SESSION_COOKIE_DOMAIN'] = 'local.fd-test.csc.fi'
-        app.config['REMEMBER_COOKIE_SECURE'] = 'local.fd-test.csc.fi'
-        # return redirect('http://qvain.local.fd-test.csc.fi')
-        return redirect_to_qvain('qvain')
+        return redirect('http://qvain.local.fd-test.csc.fi')
         # return redirect('http://qvain.local.fd-test.csc.fi')
         # if 'RelayState' in request.form and self_url != request.form.get('RelayState'):
         #     return redirect(auth.redirect_to(unquote(request.form.get('RelayState'))))
