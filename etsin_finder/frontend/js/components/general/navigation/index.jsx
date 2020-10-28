@@ -15,34 +15,35 @@ import { NavLink } from 'react-router-dom'
 import Translate from 'react-translate-component'
 import translate from 'counterpart'
 import styled from 'styled-components'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'
+import { useStores } from '../../../utils/stores'
 
-class Navi extends React.Component {
-  render() {
-    const Accessibility = this.props.Stores.Accessibility
-    return this.props.routes.map(route => (
-      <NavItem
-        key={route.path}
-        exact={route.exact}
-        to={route.path}
-        onPointerOver={() => {
-          if (route.loadableComponent) {
-            route.loadableComponent.preload()
-          }
-        }}
-        onClick={() => {
-          Accessibility.announce(translate('changepage', { page: translate(route.label) }))
-        }}
-      >
-        <Translate content={route.label} />
-      </NavItem>
-    ))
-  }
+const Navi = ({ routes }) => {
+  const {
+    Accessibility: { announce },
+  } = useStores()
+
+  return routes.map(route => (
+    <NavItem
+      key={route.path}
+      exact={route.exact}
+      to={route.path}
+      onPointerOver={() => {
+        if (route.loadableComponent) {
+          route.loadableComponent.preload()
+        }
+      }}
+      onClick={() => {
+        announce(translate('changepage', { page: translate(route.label) }))
+      }}
+    >
+      <Translate content={route.label} />
+    </NavItem>
+  ))
 }
 
 Navi.propTypes = {
-  Stores: PropTypes.object.isRequired,
   routes: PropTypes.arrayOf(
     PropTypes.shape({
       loadableComponent: PropTypes.elementType,
@@ -53,7 +54,7 @@ Navi.propTypes = {
   ).isRequired,
 }
 
-export default inject('Stores')(observer(Navi))
+export default observer(Navi)
 
 const NavItem = styled(NavLink)`
   margin: 0 1.5em;

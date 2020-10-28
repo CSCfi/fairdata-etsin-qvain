@@ -13,7 +13,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'
 
 import { Link } from '../general/button'
@@ -27,6 +27,7 @@ import Navi from '../general/navigation/index'
 import MobileNavi from '../general/navigation/mobileNavi'
 import Header, { NaviContainer, Right } from '../general/header'
 import { Home, Search } from '../../routes'
+import { withStores } from '../../stores/stores'
 
 const routes = [
   {
@@ -94,18 +95,11 @@ const EtsinHeader = props => {
         <Navi routes={routes} />
       </NaviContainer>
       <Right>
-        <Settings
-          helpUrl={helpUrl}
-          loginThroughService="etsin"
-        >
+        <Settings helpUrl={helpUrl} loginThroughService="etsin">
           {dropDownMenu()}
         </Settings>
       </Right>
-      <MobileNavi
-        helpUrl={helpUrl}
-        naviRoutes={routes}
-        loginThroughService="etsin"
-      >
+      <MobileNavi helpUrl={helpUrl} naviRoutes={routes} loginThroughService="etsin">
         {mobileSettingsExtra}
       </MobileNavi>
     </Header>
@@ -139,4 +133,4 @@ const TextContainer = styled.h1`
   font-size: 1em;
 `
 
-export default inject('Stores')(observer(EtsinHeader))
+export default withStores(observer(EtsinHeader))

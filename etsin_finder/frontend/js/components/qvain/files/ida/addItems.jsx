@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { inject, Observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 import styled from 'styled-components'
 
@@ -9,62 +9,64 @@ import Modal from '../../../general/modal'
 import AddItemsTree from './addItemsTree'
 import { SaveButton, CancelButton } from '../../general/buttons'
 import { HelpField } from '../../general/modal/form'
+import { useStores } from '../../utils/stores'
 
-export function AddFilesModal(props) {
-  const { isOpen, onRequestClose } = props
-
-  const Files = props.Stores.Qvain.Files
+export const AddFilesModal = ({ isOpen, onRequestClose }) => {
+  const {
+    Qvain: {
+      Files: {
+        AddItemsView: { getTopmostChecked, clearChecked, checkedState },
+        addItem,
+        projectLocked,
+        root,
+      },
+      isCumulative,
+      original,
+    },
+  } = useStores()
 
   const saveAddedItems = () => {
-    const { getTopmostChecked, clearChecked } = Files.AddItemsView
     const selected = getTopmostChecked()
     selected.forEach(item => {
-      Files.addItem(item)
+      addItem(item)
     })
     clearChecked()
     onRequestClose()
   }
 
-  const render = () => {
-    const { isCumulative, original } = props.Stores.Qvain
-    const isPublished = !!original
-    const projectChosen =
-      Files.projectLocked ||
-      (Files.root && (Files.root.addedChildCount > 0 || Files.root.removedChildCount > 0))
-    const haveNewFiles = Object.values(Files.AddItemsView.checkedState).some(item => item)
+  const isPublished = !!original
+  const projectChosen =
+    projectLocked || (root && (root.addedChildCount > 0 || root.removedChildCount > 0))
+  const haveNewFiles = Object.values(checkedState).some(item => item)
 
-    return (
-      <Modal
-        contentLabel="addItemsModal"
-        isOpen={isOpen}
-        customStyles={modalStyle}
-        onRequestClose={onRequestClose}
-      >
-        <Header>
-          <Translate component={Title} content="qvain.files.addItemsModal.title" />
-          <ProjectSelector disabled={projectChosen} />
-        </Header>
-        <AddItemsTree onRequestClose={onRequestClose} />
-        {isPublished && !isCumulative && (
-          <Translate component={HelpField} content="qvain.files.addItemsModal.versionInfo" />
-        )}
-        <Buttons>
-          <SaveButton onClick={saveAddedItems} disabled={!haveNewFiles}>
-            <Translate content={'qvain.files.addItemsModal.buttons.save'} />
-          </SaveButton>
-          <CancelButton onClick={onRequestClose}>
-            <Translate content={'qvain.files.addItemsModal.buttons.close'} />
-          </CancelButton>
-        </Buttons>
-      </Modal>
-    )
-  }
-
-  return <Observer>{() => render()}</Observer>
+  return (
+    <Modal
+      contentLabel="addItemsModal"
+      isOpen={isOpen}
+      customStyles={modalStyle}
+      onRequestClose={onRequestClose}
+    >
+      <Header>
+        <Translate component={Title} content="qvain.files.addItemsModal.title" />
+        <ProjectSelector disabled={projectChosen} />
+      </Header>
+      <AddItemsTree onRequestClose={onRequestClose} />
+      {isPublished && !isCumulative && (
+        <Translate component={HelpField} content="qvain.files.addItemsModal.versionInfo" />
+      )}
+      <Buttons>
+        <SaveButton onClick={saveAddedItems} disabled={!haveNewFiles}>
+          <Translate content={'qvain.files.addItemsModal.buttons.save'} />
+        </SaveButton>
+        <CancelButton onClick={onRequestClose}>
+          <Translate content={'qvain.files.addItemsModal.buttons.close'} />
+        </CancelButton>
+      </Buttons>
+    </Modal>
+  )
 }
 
 AddFilesModal.propTypes = {
-  Stores: PropTypes.object.isRequired,
   isOpen: PropTypes.bool.isRequired,
   onRequestClose: PropTypes.func.isRequired,
 }
@@ -116,4 +118,4 @@ const Title = styled.h3`
   margin-bottom: 0;
 `
 
-export default inject('Stores')(AddFilesModal)
+export default observer(AddFilesModal)

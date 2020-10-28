@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import ReactSelect, { components as selectComponents } from 'react-select'
 import Translate from 'react-translate-component'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import translate from 'counterpart'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPen } from '@fortawesome/free-solid-svg-icons'
@@ -12,12 +12,15 @@ import ActorsList from './actorsList'
 import { Actor } from '../../../../../stores/view/qvain.actors'
 import { ROLE } from '../../../../../utils/constants'
 import parseActorLabel from '../../../utils/actor'
+import { useStores } from '../../../utils/stores'
 
-const ActorsInput = ({ Stores }) => {
-  const { Actors, Provenances, readonly } = Stores.Qvain
+const ActorsInput = () => {
+  const {
+    Qvain: { Actors, Provenances, readonly },
+    Locale: { lang: language },
+  } = useStores()
   const selectedOptions = (Provenances.inEdit.associations || {}).actorOptions || []
   const selectedOptionIds = selectedOptions.map(option => option.value)
-  const { lang: language } = Stores.Locale
 
   const CreateOption = { Option: CustomOption }
 
@@ -58,12 +61,12 @@ const ActorsInput = ({ Stores }) => {
 
     const id = selection.value
     Provenances.inEdit.associations.addActorWithId(id)
-    Stores.Qvain.Provenances.inEdit.associations.addRole(id, ROLE.PROVENANCE)
+    Provenances.inEdit.associations.addRole(id, ROLE.PROVENANCE)
     setSelectedActor('selectedActor', undefined)
   }
 
   const setSelectedActor = value => {
-    Stores.Qvain.Provenances.changeAttribute('selectedActor', value)
+    Provenances.changeAttribute('selectedActor', value)
   }
 
   const styles = {
@@ -83,7 +86,6 @@ const ActorsInput = ({ Stores }) => {
       />
       <ActorsList
         language={language}
-        Stores={Stores}
         actors={Provenances.inEdit.associations}
         items={selectedOptions}
       />
@@ -125,8 +127,4 @@ const EditIcon = styled(FontAwesomeIcon).attrs({
   margin-left: auto;
 `
 
-ActorsInput.propTypes = {
-  Stores: PropTypes.object.isRequired,
-}
-
-export default inject('Stores')(observer(ActorsInput))
+export default observer(ActorsInput)

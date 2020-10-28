@@ -10,13 +10,13 @@
    */
 }
 
-import React, { Component } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
 
-import { inject, observer } from 'mobx-react'
-import PropTypes from 'prop-types'
+import { observer } from 'mobx-react'
 import FilterSection from './filterSection'
+import { useStores } from '../../../utils/stores'
 
 const FilterContainer = styled.ul`
   padding: 1em;
@@ -28,30 +28,27 @@ const FilterContainer = styled.ul`
   }
 `
 
-class FilterResults extends Component {
-  render() {
-    const SearchFilters = this.props.Stores.SearchFilters
-    return (
-      <FilterContainer aria-labelledby="filterlabel">
-        <span id="filterlabel" className="sr-only" aria-hidden>
-          <Translate content="search.filter.filters" />
-        </span>
-        <FilterSection aggregation="access_type" />
-        <FilterSection aggregation="organization" />
-        <FilterSection aggregation="creator" />
-        <FilterSection aggregation="field_of_science" filterOpen={SearchFilters.fieldOfScienceIsOpen} />
-        <FilterSection aggregation="keyword" filterOpen={SearchFilters.keywordIsOpen} />
-        <FilterSection aggregation="infrastructure" />
-        <FilterSection aggregation="project" filterOpen={SearchFilters.projectIsOpen} />
-        <FilterSection aggregation="file_type" />
-        <FilterSection aggregation="data_catalog" />
-      </FilterContainer>
-    )
-  }
+const FilterResults = () => {
+  const {
+    SearchFilters: { fieldOfScienceIsOpen, keywordIsOpen, projectIsOpen },
+  } = useStores()
+
+  return (
+    <FilterContainer aria-labelledby="filterlabel">
+      <span id="filterlabel" className="sr-only" aria-hidden>
+        <Translate content="search.filter.filters" />
+      </span>
+      <FilterSection aggregation="access_type" />
+      <FilterSection aggregation="organization" />
+      <FilterSection aggregation="creator" />
+      <FilterSection aggregation="field_of_science" filterOpen={fieldOfScienceIsOpen} />
+      <FilterSection aggregation="keyword" filterOpen={keywordIsOpen} />
+      <FilterSection aggregation="infrastructure" />
+      <FilterSection aggregation="project" filterOpen={projectIsOpen} />
+      <FilterSection aggregation="file_type" />
+      <FilterSection aggregation="data_catalog" />
+    </FilterContainer>
+  )
 }
 
-export default inject('Stores')(observer(FilterResults))
-
-FilterResults.propTypes = {
-  Stores: PropTypes.object.isRequired,
-}
+export default observer(FilterResults)

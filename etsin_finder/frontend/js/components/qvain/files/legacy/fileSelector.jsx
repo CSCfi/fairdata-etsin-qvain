@@ -2,12 +2,13 @@
 import React, { Component } from 'react'
 import translate from 'counterpart'
 import PropTypes from 'prop-types'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import styled, { css } from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFolder, faChevronRight, faChevronDown } from '@fortawesome/free-solid-svg-icons'
 import { Checkbox } from '../../general/modal/form'
 import { FileIcon } from '../../general/buttons'
+import { withStores } from '../../utils/stores'
 
 export class FileSelectorBase extends Component {
   static propTypes = {
@@ -139,4 +140,4 @@ export const FilePickerFileButton = styled.button`
     `}
 `
 
-export default inject('Stores')(observer(FileSelectorBase))
+export default withStores(observer(FileSelectorBase))

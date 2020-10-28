@@ -11,12 +11,13 @@
 }
 
 import React, { Component } from 'react'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import translate from 'counterpart'
 
 import { TransparentButton, InvertedButton } from '../button'
+import { withStores } from '../../../utils/stores'
 
 class LangToggle extends Component {
   static propTypes = {
@@ -50,7 +51,8 @@ class LangToggle extends Component {
     }, 500)
   }
 
-  otherLang = () => this.props.Stores.Locale.languages.map(lang => {
+  otherLang = () =>
+    this.props.Stores.Locale.languages.map(lang => {
       if (lang !== this.props.Stores.Locale.currentLang) {
         return <Lang key={lang}>{lang}</Lang>
       }
@@ -65,9 +67,7 @@ class LangToggle extends Component {
         </div>
         <div>
           <span className="sr-only">
-            {translate('general.language.toggleLabel')}
-            :
-            {this.otherLang()}
+            {translate('general.language.toggleLabel')}:{this.otherLang()}
           </span>
           {this.props.inverted ? (
             <InvertedButton
@@ -97,4 +97,4 @@ const Lang = styled.span`
   }
 `
 
-export default inject('Stores')(observer(LangToggle))
+export default withStores(observer(LangToggle))
