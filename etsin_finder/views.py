@@ -172,7 +172,6 @@ def saml_metadata_legacy():
 @app.route('/acs/', methods=['GET', 'POST'])
 def saml_attribute_consumer_service_legacy():
     """The endpoint which is used by the saml library on auth.login call for both Etsin & Qvain"""
-
     # Workaround for local_development + old proxy
     host = request.headers.get('X-Forwarded-Host')
     if host == '30.30.30.30':
@@ -192,14 +191,21 @@ def saml_attribute_consumer_service_legacy():
         self_url = OneLogin_Saml2_Utils.get_self_url(req)
         log.debug("SESSION: {0}".format(session))
 
-        log.info(logged_in_through)
+        # Check if old proxy is used
+        if ('samlUserdata' in session and len(session.get('samlUserdata', None)) > 0):
+            # Redirect for Qvain
+            if (logged_in_through == 'qvain'):
+                resp = make_response(redirect('http://qvain.local.fd-test.csc.fi'))
+                # Delete cookie
+                resp.set_cookie('logged_in_through', '', expires=0)
+                return resp
 
-        # Redirect for Qvain
-        if (logged_in_through == 'qvain'):
-            return redirect('http://qvain.local.fd-test.csc.fi')
-
-        if (logged_in_through == 'etsin'):
-            return redirect('http://etsin-finder.local.fd-test.csc.fi')
+            # Redirect for Etsin
+            if (logged_in_through == 'etsin'):
+                resp = make_response(redirect('http://etsin-finder.local.fd-test.csc.fi'))
+                # Delete cookie
+                resp.set_cookie('logged_in_through', '', expires=0)
+                return resp
 
         if 'RelayState' in request.form and self_url != request.form.get('RelayState'):
             return redirect(auth.redirect_to(unquote(request.form.get('RelayState'))))
