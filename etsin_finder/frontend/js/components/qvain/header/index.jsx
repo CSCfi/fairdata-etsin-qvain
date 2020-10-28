@@ -55,7 +55,7 @@ const QvainHeader = () => {
       <Right>
         <Settings helpUrl={helpUrl} loginThroughService="qvain" />
         <DesktopOnly>
-          <LoginButton loginThroughService="etsin" />
+          <LoginButton loginThroughService="qvain" />
         </DesktopOnly>
       </Right>
       <MobileOnly>
