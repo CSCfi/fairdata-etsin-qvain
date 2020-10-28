@@ -9,6 +9,7 @@
 from urllib.parse import quote, unquote
 
 from flask import make_response, render_template, redirect, request, session
+from urllib.parse import urljoin
 from onelogin.saml2.utils import OneLogin_Saml2_Utils
 import requests
 
@@ -45,7 +46,7 @@ def login_etsin():
     login_url = join_redirect_url_path(login_url, redirect_url)
 
     resp = make_response(redirect(login_url))
-    resp.set_cookie('logged_in_through', value='etsin', domain=get_app_config(app.testing).get('SESSION_COOKIE_DOMAIN'))
+    resp.set_cookie('logged_in_through', value='etsin', domain=app.config.get('SESSION_COOKIE_DOMAIN'))
     return resp
 
 @app.route('/sso/qvain')
@@ -62,7 +63,7 @@ def login_qvain():
     login_url = join_redirect_url_path(login_url, redirect_url)
 
     resp = make_response(redirect(login_url))
-    resp.set_cookie('logged_in_through', value='qvain', domain=get_app_config(app.testing).get('SESSION_COOKIE_DOMAIN'))
+    resp.set_cookie('logged_in_through', value='qvain', domain=app.config.get('SESSION_COOKIE_DOMAIN'))
     return resp
 
 @app.route('/slo/etsin')
@@ -194,16 +195,20 @@ def saml_attribute_consumer_service_legacy():
 
         # Check if old proxy is used
         if ('samlUserdata' in session and len(session.get('samlUserdata', None)) > 0):
+            redirect_url = ''
+
             # Redirect for Qvain
             if (logged_in_through == 'qvain'):
-                resp = make_response(redirect('https://' + get_app_config(app.testing).get('SERVER_QVAIN_DOMAIN_NAME')))
-                # Delete cookie
-                resp.set_cookie('logged_in_through', '', expires=0)
-                return resp
+                redirect_url = 'https://' + app.config.get('SERVER_QVAIN_DOMAIN_NAME')
 
             # Redirect for Etsin
             if (logged_in_through == 'etsin'):
-                resp = make_response(redirect('https://' + get_app_config(app.testing).get('SERVER_ETSIN_DOMAIN_NAME')))
+                redirect_url = 'https://' + app.config.get('SERVER_ETSIN_DOMAIN_NAME')
+
+            if redirect_url:
+                if 'RelayState' in request.form:
+                    redirect_url = urljoin(redirect_url, unquote(request.form.get('RelayState')))
+                resp = make_response(redirect(redirect_url))
                 # Delete cookie
                 resp.set_cookie('logged_in_through', '', expires=0)
                 return resp
