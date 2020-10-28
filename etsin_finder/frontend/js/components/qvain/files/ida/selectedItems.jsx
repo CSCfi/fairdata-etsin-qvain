@@ -1,13 +1,16 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 
 import RefreshDirectoryModal from '../refreshDirectoryModal'
 import SelectedItemsTree from './selectedItemsTree'
+import { useStores } from '../../utils/stores'
 
-export function SelectedItems(props) {
-  const Files = props.Stores.Qvain.Files
-  const { refreshModalDirectory, setRefreshModalDirectory } = Files
+export function SelectedItems() {
+  const {
+    Qvain: {
+      Files: { refreshModalDirectory, setRefreshModalDirectory },
+    },
+  } = useStores()
 
   return (
     <>
@@ -20,9 +23,4 @@ export function SelectedItems(props) {
   )
 }
 
-SelectedItems.propTypes = {
-  Stores: PropTypes.object.isRequired,
-}
-
-
-export default inject('Stores')(observer(SelectedItems))
+export default observer(SelectedItems)

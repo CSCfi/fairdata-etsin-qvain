@@ -13,10 +13,11 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 
 import TableHeader from '../tableHeader'
 import Table from '../table'
+import { withStores } from '../../../../utils/stores'
 
 class ExternalResources extends Component {
   constructor(props) {
@@ -99,4 +100,4 @@ ExternalResources.propTypes = {
   Stores: PropTypes.object.isRequired,
 }
 
-export default inject('Stores')(observer(ExternalResources))
+export default withStores(observer(ExternalResources))

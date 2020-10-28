@@ -1,89 +1,76 @@
-import React, { Component } from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 import translate from 'counterpart'
 
 import { Textarea, LabelLarge } from '../general/modal/form'
 import Tooltip from '../../general/tooltipHover'
 import ValidationError from '../general/errors/validationError'
+import { useStores } from '../utils/stores'
 
-class DescriptionFieldTextField extends Component {
-  static propTypes = {
-    Stores: PropTypes.object.isRequired,
-    propName: PropTypes.string.isRequired,
-    schema: PropTypes.object.isRequired,
-    activeLang: PropTypes.string.isRequired,
-  }
+const DescriptionFieldTextField = ({ propName, activeLang, schema }) => {
+  const [error, setError] = useState(null)
+  const {
+    Qvain: { setLangValue, [propName]: value = {}, readonly },
+    Locale: { lang },
+  } = useStores()
 
-  state = {
-    [`${this.props.propName}Error`]: null,
-  }
-
-  handleChange = e => {
-    const { propName, activeLang } = this.props
-    const { setLangValue } = this.props.Stores.Qvain
+  const handleChange = e => {
     setLangValue(propName, e.target.value, activeLang)
-    this.setState({ [`${propName}Error`]: null })
+    setError(null)
   }
 
-  handleBlur = () => {
-    const { propName, schema, Stores } = this.props
+  const handleBlur = () => {
     schema
-      .validate(Stores.Qvain[propName])
+      .validate(value)
       .then(() => {
-        this.setState({ [`${propName}Error`]: null })
+        setError(null)
       })
       .catch(err => {
-        this.setState({ [`${propName}Error`]: err.errors })
+        setError(err.errors)
       })
   }
 
-  getPlaceholder = () => {
-    const { propName } = this.props
-    const { lang } = this.props.Stores.Locale
+  const getPlaceholder = () => {
     const stub = `qvain.description.description.${propName}.`
     return lang === 'fi' ? `${stub}placeholderFi` : `${stub}placeholderEn`
   }
 
-  render() {
-    const { propName, activeLang } = this.props
-    const { readonly } = this.props.Stores.Qvain
-    const value = this.props.Stores.Qvain[propName] || {}
-    const { lang } = this.props.Stores.Locale
-    const { [`${propName}Error`]: error } = this.state
-    const id = `${propName}Input`
-    return (
-      <>
-        <LabelLarge htmlFor={id}>
-          <Tooltip
-            title={translate('qvain.description.fieldHelpTexts.requiredForAll', {
-              locale: lang,
-            })}
-            position="right"
-          >
-            <Translate content={`qvain.description.description.${propName}.label`} /> *
-          </Tooltip>
-        </LabelLarge>
-        <Translate
-          component={Textarea}
-          id={id}
-          disabled={readonly}
-          value={value[activeLang]}
-          onChange={this.handleChange}
-          onBlur={this.handleBlur}
-          attributes={{ placeholder: this.getPlaceholder() }}
-        />
-        {error && (
-          <Translate component={ValidationError} content={`qvain.description.error.${propName}`} />
-        )}
-      </>
-    )
-  }
+  const id = `${propName}Input`
+
+  return (
+    <>
+      <LabelLarge htmlFor={id}>
+        <Tooltip
+          title={translate('qvain.description.fieldHelpTexts.requiredForAll', {
+            locale: lang,
+          })}
+          position="right"
+        >
+          <Translate content={`qvain.description.description.${propName}.label`} /> *
+        </Tooltip>
+      </LabelLarge>
+      <Translate
+        component={Textarea}
+        id={id}
+        disabled={readonly}
+        value={value[activeLang]}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        attributes={{ placeholder: getPlaceholder() }}
+      />
+      {error && (
+        <Translate component={ValidationError} content={`qvain.description.error.${propName}`} />
+      )}
+    </>
+  )
 }
 
 DescriptionFieldTextField.propTypes = {
-  Stores: PropTypes.object.isRequired,
+  propName: PropTypes.string.isRequired,
+  schema: PropTypes.object.isRequired,
+  activeLang: PropTypes.string.isRequired,
 }
 
-export default inject('Stores')(observer(DescriptionFieldTextField))
+export default observer(DescriptionFieldTextField)

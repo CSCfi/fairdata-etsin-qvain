@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
@@ -22,6 +22,7 @@ import {
   Expand,
   resolveOptions,
 } from './utils'
+import { withStores } from '../utils/stores'
 import { LabelLarge, Input } from '../general/modal/form'
 import { fundingAgencySchema, organizationObjectSchema } from '../utils/formValidation'
 import { FundingAgency, ContributorType, Organization } from '../../../stores/view/qvain'
@@ -151,6 +152,10 @@ const FundingAgencyForm = props => {
   const { readonly } = props.Stores.Qvain
   const { lang } = props.Stores.Locale
 
+  const expandTitle = (
+    <Translate component="h3" content="qvain.project.inputs.fundingAgency.contributorType.title" />
+  )
+
   return (
     <Card>
       <AddedAgencies
@@ -170,14 +175,7 @@ const FundingAgencyForm = props => {
         inputId="organization"
       />
       <ErrorMessages errors={formData.errors.organization} />
-      <Expand
-        title={(
-          <Translate
-            component="h3"
-            content="qvain.project.inputs.fundingAgency.contributorType.title"
-          />
-        )}
-      >
+      <Expand title={expandTitle}>
         <ContributorTypeForm
           formData={formData.contributorTypeForm}
           contributorTypes={formData.contributorTypes}
@@ -411,7 +409,7 @@ class ContributorTypeFormComponent extends Component {
   }
 }
 
-const ContributorTypeForm = inject('Stores')(observer(ContributorTypeFormComponent))
+const ContributorTypeForm = withStores(observer(ContributorTypeFormComponent))
 
 const AddedContributorTypes = ({ contributorTypes = [], onRemove, onEdit, lang }) => (
   <div>
@@ -453,4 +451,4 @@ const StyledSelect = styled(ReactSelect)`
   margin-bottom: 1rem;
 `
 
-export default inject('Stores')(observer(FundingAgencyForm))
+export default withStores(observer(FundingAgencyForm))

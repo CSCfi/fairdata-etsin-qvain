@@ -11,7 +11,7 @@
 }
 
 import React, { Component } from 'react'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAngleDoubleUp, faAngleDoubleDown, faAngleDown } from '@fortawesome/free-solid-svg-icons'
@@ -23,6 +23,7 @@ import checkDataLang from '../../../utils/checkDataLang'
 import FilterItem from './filterItem'
 import { TransparentLink } from '../../general/button'
 import PasCheckBox from './PasCheckBox'
+import { withStores } from '../../../stores/stores'
 
 export class FilterSection extends Component {
   constructor(props) {
@@ -161,7 +162,9 @@ export class FilterSection extends Component {
       this.termName = checkDataLang(term)
     }
 
-    this.state.aggregateItems = this.props.Stores.ElasticQuery.results.aggregations[this.aggregationName].buckets
+    this.state.aggregateItems = this.props.Stores.ElasticQuery.results.aggregations[
+      this.aggregationName
+    ].buckets
     this.state.displayShowButton = this.state.aggregateItems.length > this.cutoff
     if (!this.state.show) {
       this.state.aggregateItems = this.state.aggregateItems.slice(0, this.cutoff)
@@ -210,17 +213,16 @@ export class FilterSection extends Component {
                 </ShowHideBtn>
               </ShowHide>
             </div>
-          ) :
-            (
-              ''
-            )}
+          ) : (
+            ''
+          )}
         </FilterItems>
       </Section>
     )
   }
 }
 
-export default inject('Stores')(observer(FilterSection))
+export default withStores(observer(FilterSection))
 
 FilterSection.propTypes = {
   aggregation: PropTypes.string.isRequired,

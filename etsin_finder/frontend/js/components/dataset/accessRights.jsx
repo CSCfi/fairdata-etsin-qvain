@@ -11,7 +11,7 @@
 }
 
 import React, { Component } from 'react'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import translate from 'counterpart'
 import {
@@ -29,6 +29,7 @@ import checkDataLang, { getDataLang } from '../../utils/checkDataLang'
 import Button from '../general/button'
 import Modal from '../general/modal'
 import { ACCESS_TYPE_URL } from '../../utils/constants'
+import { withStores } from '../../utils/stores'
 
 export const accessRightsBool = accessRights => {
   if (accessRights !== undefined && accessRights !== null) {
@@ -56,7 +57,9 @@ class AccessRights extends Component {
       }
       identifier = props.access_rights.access_type.identifier
       id = Object.keys(ACCESS_TYPE_URL).find(key => ACCESS_TYPE_URL[key] === identifier)
-      description = translate(`dataset.access_rights_description.${id !== undefined ? id.toLowerCase() : ''}`)
+      description = translate(
+        `dataset.access_rights_description.${id !== undefined ? id.toLowerCase() : ''}`
+      )
       url = props.access_rights.access_url
     }
     this.state = {
@@ -154,7 +157,11 @@ class AccessRights extends Component {
               {this.state.restriction_grounds &&
                 this.state.restriction_grounds.map(rg => (
                   <div key={`div-rg-${rg.identifier}`}>
-                    <FontAwesomeIcon key={`fai-rg-${rg.identifier}`} icon={faExclamationTriangle} title="Restricted" />
+                    <FontAwesomeIcon
+                      key={`fai-rg-${rg.identifier}`}
+                      icon={faExclamationTriangle}
+                      title="Restricted"
+                    />
                     <AccessLabel key={`al-rg-${rg.identifier}`} lang={getDataLang(rg.pref_label)}>
                       {checkDataLang(rg.pref_label)}
                     </AccessLabel>
@@ -179,7 +186,7 @@ class AccessRights extends Component {
   }
 }
 
-export default inject('Stores')(observer(AccessRights))
+export default withStores(observer(AccessRights))
 export const undecorated = AccessRights
 
 const Access = styled.div`

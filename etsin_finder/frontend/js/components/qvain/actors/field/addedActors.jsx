@@ -1,36 +1,31 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { inject, observer } from 'mobx-react'
+import React from 'react'
+import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 
 import ActorItem from './actorItem'
+import { useStores } from '../../utils/stores'
 
-export class AddedActorsBase extends Component {
-  static propTypes = {
-    Stores: PropTypes.object.isRequired,
-  }
+export const AddedActorsBase = () => {
+  const Stores = useStores()
+  const { actors } = Stores.Qvain.Actors
 
-  render() {
-    const { actors } = this.props.Stores.Qvain.Actors
+  const description = (
+    <>
+      <Translate component="p" content="qvain.actors.add.help" />
+      {actors.length === 0 && (
+        <Translate tabIndex="0" component="p" content="qvain.actors.added.noneAddedNotice" />
+      )}
+    </>
+  )
 
-    const description = (
-      <>
-        <Translate component="p" content="qvain.actors.add.help" />
-        {actors.length === 0 && (
-          <Translate tabIndex="0" component="p" content="qvain.actors.added.noneAddedNotice" />
-        )}
-      </>
-    )
+  const ActorList = actors.map(actor => <ActorItem key={actor.uiid} actor={actor} />)
 
-    const ActorList = actors.map(actor => <ActorItem key={actor.uiid} actor={actor} />)
-
-    return (
-      <>
-        {description}
-        {ActorList}
-      </>
-    )
-  }
+  return (
+    <>
+      {description}
+      {ActorList}
+    </>
+  )
 }
 
-export default inject('Stores')(observer(AddedActorsBase))
+export default observer(AddedActorsBase)
