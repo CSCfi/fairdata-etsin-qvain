@@ -18,6 +18,7 @@ import styled from 'styled-components'
 import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'
 import { useStores } from '../../../utils/stores'
+import Accessibility from '../../../stores/view/accessibility'
 
 const Navi = ({ routes }) => {
   const {
@@ -35,7 +36,7 @@ const Navi = ({ routes }) => {
         }
       }}
       onClick={() => {
-        announce(translate('changepage', { page: translate(route.label) }))
+        Accessibility.announce(translate('changepage', { page: translate(route.label) }))
       }}
     >
       <Translate content={route.label} />
