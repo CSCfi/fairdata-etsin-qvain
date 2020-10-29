@@ -15,6 +15,7 @@ import translate from 'counterpart'
 class Accessibility {
   constructor() {
     makeObservable(this)
+    this.announce = this.announce.bind(this)
   }
 
   @observable assertiveAnnouncement = ''
