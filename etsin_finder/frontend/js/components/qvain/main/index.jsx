@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import translate from 'counterpart'
 import { autorun } from 'mobx'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import axios from 'axios'
 import { withRouter } from 'react-router-dom'
 import { Prompt } from 'react-router'
@@ -17,6 +17,7 @@ import StickyHeader from '../editor/stickyHeader'
 import Dataset from '../editor/dataset'
 import LooseActorDialog from '../editor/looseActorDialog'
 import LooseProvenanceDialog from '../editor/looseProvenanceDialog'
+import { withStores } from '../utils/stores'
 
 // Event handler to prevent page reload
 const confirmReload = e => {
@@ -24,7 +25,7 @@ const confirmReload = e => {
   e.returnValue = ''
 }
 
-class Qvain extends Component {
+export class Qvain extends Component {
   promises = []
 
   disposeConfirmReload = null
@@ -252,4 +253,4 @@ class Qvain extends Component {
   }
 }
 
-export default withRouter(inject('Stores')(observer(Qvain)))
+export default withRouter(withStores(observer(Qvain)))

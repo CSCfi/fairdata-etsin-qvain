@@ -1,14 +1,16 @@
 import React from 'react'
-import { inject, observer } from 'mobx-react'
-import PropTypes from 'prop-types'
+import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 import styled from 'styled-components'
 
 import { DATA_CATALOG_IDENTIFIER } from '../../../utils/constants'
 import { Checkbox, HelpField } from '../general/modal/form'
+import { useStores } from '../utils/stores'
 
-function DoiSelection(props) {
-  const { dataCatalog, original, useDoi, setUseDoi, readonly } = props.Stores.Qvain
+function DoiSelection() {
+  const {
+    Qvain: { dataCatalog, original, useDoi, setUseDoi, readonly },
+  } = useStores()
   const isNewDraft = original && original.state === 'draft' && !original.draft_of
   const canSelectDoi = (!original || isNewDraft) && dataCatalog === DATA_CATALOG_IDENTIFIER.IDA
 
@@ -40,10 +42,6 @@ function DoiSelection(props) {
   )
 }
 
-DoiSelection.propTypes = {
-  Stores: PropTypes.object.isRequired,
-}
-
 export const DoiCheckbox = styled(Checkbox)`
   flex-shrink: 0;
 `
@@ -68,4 +66,4 @@ const DoiLabel = styled.label`
   display: inline-block;
 `
 
-export default inject('Stores')(observer(DoiSelection))
+export default observer(DoiSelection)

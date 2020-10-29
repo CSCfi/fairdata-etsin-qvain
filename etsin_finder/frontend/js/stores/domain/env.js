@@ -14,7 +14,6 @@ import { RouterStore } from 'mobx-react-router'
 
 import { getCookieValue } from '../../utils/cookies'
 
-
 const routingStore = new RouterStore()
 
 async function importValuesAsync() {

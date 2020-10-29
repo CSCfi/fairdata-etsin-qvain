@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFile, faFolder, faDownload } from '@fortawesome/free-solid-svg-icons'
@@ -10,6 +10,7 @@ import Tree from './fileTree'
 import { Button } from '../../../general/button'
 import Info from './info'
 import sizeParse from '../../../../utils/sizeParse'
+import { withStores } from '../../../../stores/stores'
 
 const downloadAll = identifier => {
   const handle = window.open(`/api/dl?cr_id=${identifier}`)
@@ -115,4 +116,4 @@ const DownloadIcon = styled(FontAwesomeIcon).attrs(() => ({
   margin-left: 0.5em;
 `
 
-export default inject('Stores')(observer(IdaResources))
+export default withStores(observer(IdaResources))

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes, { instanceOf } from 'prop-types'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import axios from 'axios'
 import { withRouter } from 'react-router-dom'
 import styled from 'styled-components'
@@ -12,8 +12,9 @@ import handleSubmitToBackend from '../utils/handleSubmit'
 import urls from '../utils/urls'
 import { InvertedButton } from '../../general/button'
 import DoiModal from './doiModal'
+import { withStores } from '../../../stores/stores'
 
-class SubmitButtons extends Component {
+export class SubmitButtons extends Component {
   promises = []
 
   static propTypes = {
@@ -679,4 +680,4 @@ const SubmitButton = styled(InvertedButton)`
   border: 1px solid;
 `
 
-export default withRouter(inject('Stores')(observer(SubmitButtons)))
+export default withRouter(withStores(observer(SubmitButtons)))
