@@ -22,7 +22,7 @@ import { faBars, faCog } from '@fortawesome/free-solid-svg-icons'
 import Accessibility from '../../../stores/view/accessibility'
 import DropdownMenu from './dropdownMenu'
 import LangToggle from './langToggle'
-import Login from './loginButton'
+import LoginButton from './loginButton'
 import { Link } from '../button'
 
 const MobileNavi = props => (
@@ -56,24 +56,25 @@ const MobileNavi = props => (
       transparentButton
     >
       <CustomContainer>
-        {props.children}
         <Row>
+          {props.children}
+          <LangToggle margin="0.4em 0.4em 0.4em 0em" />
           <Link width="100%" href={props.helpUrl} rel="noopener noreferrer" target="_blank">
             <Translate content="nav.help" />
           </Link>
         </Row>
-        <Row>
-          <LangToggle margin="0.4em 0.4em 0.4em 0em" />
-          <Login
-            width="100%"
-            margin="0.4em 0em 0.4em 0em"
-            loginThroughService={props.loginThroughService}
-          />
-        </Row>
       </CustomContainer>
     </DropdownMenu>
+    <LoginContainer>
+      <LoginButton loginThroughService={props.loginThroughService} />
+    </LoginContainer>
   </MobileItems>
 )
+
+const LoginContainer = styled.div`
+  display: flex;
+  align-items: center;
+`
 
 MobileNavi.propTypes = {
   helpUrl: PropTypes.string,
@@ -101,9 +102,6 @@ MobileNavi.defaultProps = {
 const MobileItems = styled.div`
   display: inline-flex;
   height: 100%;
-  @media screen and (min-width: ${p => p.theme.breakpoints.lg}) {
-    display: none;
-  }
 `
 
 const Row = styled.div`

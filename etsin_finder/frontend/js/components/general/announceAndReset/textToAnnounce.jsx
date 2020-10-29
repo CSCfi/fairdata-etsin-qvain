@@ -1,18 +1,14 @@
 import React from 'react'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'
+import { useStores } from '../../../utils/stores'
 
-const TextToAnnounce = props => (
-  <React.Fragment>{props.Stores.Accessibility[props.location]}</React.Fragment>
-)
-
+const TextToAnnounce = ({ location }) => {
+  const { Accessibility } = useStores()
+  return <>{Accessibility[location]}</>
+}
 TextToAnnounce.propTypes = {
   location: PropTypes.string.isRequired,
-  Stores: PropTypes.shape({
-    Accessibility: PropTypes.shape({
-      navText: PropTypes.string,
-    }),
-  }).isRequired,
 }
 
-export default inject('Stores')(observer(TextToAnnounce))
+export default observer(TextToAnnounce)

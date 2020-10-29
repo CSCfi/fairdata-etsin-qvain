@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import { SaveButton, CancelButton } from '../../../general/buttons'
@@ -14,6 +14,7 @@ import {
   directoryDescriptionSchema,
   directoryUseCategorySchema,
 } from '../../../utils/formValidation'
+import { withStores } from '../../../utils/stores'
 
 export class DirectoryFormBase extends Component {
   inEdit = this.props.Stores.Qvain.Files.inEdit
@@ -233,4 +234,4 @@ const Buttons = styled.div`
 const getUseCategory = (directory, translations) =>
   translations.find(opt => opt.value === directory.useCategory)
 
-export default inject('Stores')(observer(DirectoryFormBase))
+export default withStores(observer(DirectoryFormBase))

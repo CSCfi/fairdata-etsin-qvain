@@ -2,12 +2,13 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import translate from 'counterpart'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import axios from 'axios'
 
 import Button from '../general/button'
 import REMSButton from './REMSButton'
 import { REMS_URL } from '../../utils/constants'
+import { withStores } from '../../utils/stores'
 
 export class AskForAccess extends Component {
   state = {
@@ -58,4 +59,4 @@ AskForAccess.propTypes = {
   Stores: PropTypes.object.isRequired,
 }
 
-export default inject('Stores')(observer(AskForAccess))
+export default withStores(observer(AskForAccess))

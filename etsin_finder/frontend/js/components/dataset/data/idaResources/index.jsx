@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import translate from 'counterpart'
 import PropTypes from 'prop-types'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 
 import createTree from '../../../../utils/createTree'
 import TableHeader from '../tableHeader'
@@ -11,6 +11,7 @@ import Breadcrumbs from '../breadcrumbs'
 import access from '../../../../stores/view/access'
 import Accessibility from '../../../../stores/view/accessibility'
 import { DATA_CATALOG_IDENTIFIER } from '../../../../utils/constants'
+import { withStores } from '../../../../utils/stores'
 
 class IdaResources extends Component {
   constructor(props) {
@@ -281,4 +282,4 @@ IdaResources.propTypes = {
   Stores: PropTypes.object.isRequired,
 }
 
-export default inject('Stores')(observer(IdaResources))
+export default withStores(observer(IdaResources))

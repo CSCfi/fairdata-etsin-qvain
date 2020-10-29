@@ -11,7 +11,7 @@
 }
 
 import React, { Component } from 'react'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'
 
 import ErrorBoundary from '../components/general/errorBoundary'
@@ -23,6 +23,7 @@ import Footer from './footer'
 import Content from './content'
 import CookiesNotification from './cookiesNotification'
 import QvainHeader from '../components/qvain/header'
+import { withStores } from '../stores/stores'
 
 class Layout extends Component {
   constructor(props) {
@@ -56,4 +57,4 @@ Layout.propTypes = {
   Stores: PropTypes.object.isRequired,
 }
 
-export default inject('Stores')(observer(Layout))
+export default withStores(observer(Layout))

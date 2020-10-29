@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import { observer } from 'mobx-react'
+import { runInAction } from 'mobx'
 import { v4 as uuidv4 } from 'uuid'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
@@ -27,9 +28,11 @@ const ModalArrayInput = ({
   }
 
   const onChange = (event, id) => {
-    const arr = [...Field.inEdit[datum]]
-    arr[id].value = event.target.value
-    changeAttribute(datum, arr)
+    runInAction(() => {
+      const arr = [...Field.inEdit[datum]]
+      arr[id].value = event.target.value
+      changeAttribute(datum, arr)
+    })
   }
 
   const onRemoveClick = id => {

@@ -38,7 +38,9 @@ describe('AskForAccess', () => {
     // User is logged in so it renders the REMSButton
     const stores = getStores()
     stores.Access.updateAccess(access, false, 'apply')
-    runInAction(() => (stores.Auth.userLogged = true))
+    runInAction(() => {
+      stores.Auth.userLogged = true
+    })
     const wrapper = shallow(<AskForAccess Stores={stores} cr_id="test" />)
     expect(wrapper.find(REMSButton).length).toBe(1)
   })

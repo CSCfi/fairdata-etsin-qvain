@@ -11,20 +11,24 @@
 }
 
 import React from 'react'
-import { inject, observer } from 'mobx-react'
-import PropTypes from 'prop-types'
+import { observer } from 'mobx-react'
 
 import QvainLogo from './qvainLogo'
 import Settings from '../../general/navigation/settings'
 import Navi from '../../general/navigation'
 import MobileNavi from '../../general/navigation/mobileNavi'
+import LoginButton from '../../general/navigation/loginButton'
 import { FAIRDATA_WEBSITE_URL } from '../../../utils/constants'
 import Header, { NaviContainer, Right } from '../../general/header'
+import { MobileOnly, DesktopOnly } from '../../general/header/mediaHelpers'
 import { Qvain, QvainDatasets } from '../../../routes'
+import { useStores } from '../utils/stores'
 
-const QvainHeader = props => {
-  const { original } = props.Stores.Qvain
-  const { lang } = props.Stores.Locale
+const QvainHeader = () => {
+  const {
+    Qvain: { original },
+    Locale: { lang },
+  } = useStores()
 
   const routes = [
     {
@@ -49,22 +53,16 @@ const QvainHeader = props => {
         <Navi routes={routes} />
       </NaviContainer>
       <Right>
-        <Settings
-          helpUrl={helpUrl}
-          loginThroughService="qvain"
-        />
+        <Settings helpUrl={helpUrl} loginThroughService="qvain" />
+        <DesktopOnly>
+          <LoginButton loginThroughService="qvain" />
+        </DesktopOnly>
       </Right>
-      <MobileNavi
-        helpUrl={helpUrl}
-        naviRoutes={routes}
-        loginThroughService="qvain"
-      />
+      <MobileOnly>
+        <MobileNavi helpUrl={helpUrl} naviRoutes={routes} loginThroughService="qvain" />
+      </MobileOnly>
     </Header>
   )
 }
 
-QvainHeader.propTypes = {
-  Stores: PropTypes.object.isRequired,
-}
-
-export default inject('Stores')(observer(QvainHeader))
+export default observer(QvainHeader)

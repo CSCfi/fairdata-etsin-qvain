@@ -304,8 +304,9 @@ const TableRow = styled.tr`
 
 const FileType = styled.td``
 
-const FileName = styled.td``
-
+const FileName = styled.td`
+    word-break: break-all;
+`
 const FileSize = styled.td``
 
 const FileCategory = styled.td`
