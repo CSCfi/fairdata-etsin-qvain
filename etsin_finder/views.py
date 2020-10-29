@@ -206,10 +206,7 @@ def saml_attribute_consumer_service_legacy():
             if redirect_url:
                 if 'RelayState' in request.form:
                     redirect_url = urljoin(redirect_url, unquote(request.form.get('RelayState')))
-                resp = make_response(redirect(redirect_url))
-                # Delete cookie
-                resp.set_cookie('logged_in_through', '', expires=0)
-                return resp
+                return redirect(redirect_url)
 
         if 'RelayState' in request.form and self_url != request.form.get('RelayState'):
             return redirect(auth.redirect_to(unquote(request.form.get('RelayState'))))
