@@ -45,9 +45,8 @@ def login_etsin():
     login_url = auth.login(redirect_url)
     login_url = join_redirect_url_path(login_url, redirect_url)
 
-    resp = make_response(redirect(login_url))
-    resp.set_cookie('logged_in_through', value='etsin', domain=app.config.get('SESSION_COOKIE_DOMAIN'))
-    return resp
+    session['logged_in_through'] = 'etsin'
+    return redirect(login_url)
 
 @app.route('/sso/qvain')
 def login_qvain():
@@ -62,9 +61,8 @@ def login_qvain():
     login_url = auth.login(redirect_url)
     login_url = join_redirect_url_path(login_url, redirect_url)
 
-    resp = make_response(redirect(login_url))
-    resp.set_cookie('logged_in_through', value='qvain', domain=app.config.get('SESSION_COOKIE_DOMAIN'))
-    return resp
+    session['logged_in_through'] = 'qvain'
+    return redirect(login_url)
 
 @app.route('/slo/etsin')
 def logout_etsin():
@@ -179,12 +177,12 @@ def saml_attribute_consumer_service_legacy():
     if host == '30.30.30.30':
         return redirect('https://' + get_app_config(app.testing).get('SERVER_ETSIN_DOMAIN_NAME') + '/acs/', 307)
 
+    logged_in_through = session.get('logged_in_through')
     reset_flask_session_on_login()
     req = prepare_flask_request_for_saml(request, '')
     auth = init_saml_auth(req, '')
     auth.process_response()
     errors = auth.get_errors()
-    logged_in_through = request.cookies.get('logged_in_through')
 
     if len(errors) == 0 and auth.is_authenticated():
         session['samlUserdata'] = auth.get_attributes()
