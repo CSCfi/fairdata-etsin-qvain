@@ -11,15 +11,16 @@
 }
 
 import React from 'react'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import translate from 'counterpart'
 
 import { TransparentButton, InvertedButton } from '../button'
+import { useStores } from '../../../utils/stores'
 
-const LangToggle = ({ inverted, margin, Stores }) => {
-  const { Locale } = Stores
+const LangToggle = ({ inverted, margin }) => {
+  const { Locale } = useStores()
   const changeLang = () => {
     Locale.toggleLang()
   }
@@ -76,7 +77,6 @@ const Lang = styled.span`
 LangToggle.propTypes = {
   inverted: PropTypes.bool,
   margin: PropTypes.string,
-  Stores: PropTypes.object.isRequired,
 }
 
 LangToggle.defaultProps = {
@@ -84,4 +84,4 @@ LangToggle.defaultProps = {
   margin: '0.3em 0.3em',
 }
 
-export default inject('Stores')(observer(LangToggle))
+export default observer(LangToggle)

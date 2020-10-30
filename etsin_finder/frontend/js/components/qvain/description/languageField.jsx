@@ -1,7 +1,6 @@
 import React from 'react'
 
-import PropTypes from 'prop-types'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 import translate from 'counterpart'
 
@@ -9,9 +8,13 @@ import Select from '../general/input/searchSelect'
 import { DatasetLanguage } from '../../../stores/view/qvain'
 import Card from '../general/card'
 import { LabelLarge } from '../general/modal/form'
+import { useStores } from '../utils/stores'
 
-const LanguageField = ({ Stores }) => {
-  const { datasetLanguageArray, setDatasetLanguageArray } = Stores.Qvain
+const LanguageField = () => {
+  const Stores = useStores()
+  const {
+    Qvain: { datasetLanguageArray, setDatasetLanguageArray },
+  } = Stores
 
   return (
     <Card>
@@ -22,6 +25,7 @@ const LanguageField = ({ Stores }) => {
       <Select
         name="dataset-language"
         id="datasetLanguage"
+        Stores={Stores}
         getter={datasetLanguageArray}
         setter={setDatasetLanguageArray}
         isMulti
@@ -41,8 +45,4 @@ const LanguageField = ({ Stores }) => {
   )
 }
 
-LanguageField.propTypes = {
-  Stores: PropTypes.object.isRequired,
-}
-
-export default inject('Stores')(observer(LanguageField))
+export default observer(LanguageField)

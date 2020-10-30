@@ -17,9 +17,10 @@ import counterpart from 'counterpart'
 import axios from 'axios'
 
 import { Link } from 'react-router-dom'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'
 import ContentBox from '../general/contentBox'
+import { withStores } from '../../stores/stores'
 
 class KeyValues extends Component {
   constructor(props) {
@@ -40,7 +41,6 @@ class KeyValues extends Component {
     this.getValues()
     counterpart.onLocaleChange(this.localeChanged)
   }
-
 
   componentWillUnmount() {
     counterpart.offLocaleChange(this.localeChanged)
@@ -85,7 +85,7 @@ class KeyValues extends Component {
 
   localeChanged = () => {
     this.setState({
-      lang: this.props.Stores.Locale.currentLang === 'fi' ? 'en' : 'fi'
+      lang: this.props.Stores.Locale.currentLang === 'fi' ? 'en' : 'fi',
     })
   }
 
@@ -107,13 +107,12 @@ class KeyValues extends Component {
                 </h1>
                 <Translate content="home.key.dataset" fallback="aineistoa" component="p" />
               </div>
-            ) :
-              (
-                <div>
-                  <H1Skeleton />
-                  <PSkeleton />
-                </div>
-              )}
+            ) : (
+              <div>
+                <H1Skeleton />
+                <PSkeleton />
+              </div>
+            )}
           </Value>
           <Value>
             {this.state.loaded ? (
@@ -129,13 +128,12 @@ class KeyValues extends Component {
                 </h1>
                 <Translate content="home.key.keywords" fallback="asiasanaa" component="p" />
               </div>
-            ) :
-              (
-                <div>
-                  <H1Skeleton />
-                  <PSkeleton />
-                </div>
-              )}
+            ) : (
+              <div>
+                <H1Skeleton />
+                <PSkeleton />
+              </div>
+            )}
           </Value>
           <Value>
             {this.state.loaded ? (
@@ -151,13 +149,12 @@ class KeyValues extends Component {
                 </h1>
                 <Translate content="home.key.fos" fallback="tieteenalaa" component="p" />
               </div>
-            ) :
-              (
-                <div>
-                  <H1Skeleton />
-                  <PSkeleton />
-                </div>
-              )}
+            ) : (
+              <div>
+                <H1Skeleton />
+                <PSkeleton />
+              </div>
+            )}
           </Value>
           <Value>
             {this.state.loaded ? (
@@ -173,13 +170,12 @@ class KeyValues extends Component {
                 </h1>
                 <Translate content="home.key.research" fallback="tutkimusprojektia" component="p" />
               </div>
-            ) :
-              (
-                <div>
-                  <H1Skeleton />
-                  <PSkeleton />
-                </div>
-              )}
+            ) : (
+              <div>
+                <H1Skeleton />
+                <PSkeleton />
+              </div>
+            )}
           </Value>
         </CustomBox>
       </aside>
@@ -191,7 +187,7 @@ KeyValues.propTypes = {
   Stores: PropTypes.object.isRequired,
 }
 
-export default inject('Stores')(observer(KeyValues))
+export default withStores(observer(KeyValues))
 
 const CustomBox = styled(ContentBox)`
   margin-bottom: 2em;
@@ -253,6 +249,6 @@ const FiltersLink = styled(Link)`
   font-size: 0.975em;
   &:active {
     transition: 0.1s ease;
-    box-shadow: 0px 2px 5px -2px rgba(0,0,0,0.7) inset;
+    box-shadow: 0px 2px 5px -2px rgba(0, 0, 0, 0.7) inset;
   }
 `

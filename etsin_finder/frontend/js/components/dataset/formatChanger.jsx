@@ -14,9 +14,10 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import { withTheme } from 'styled-components'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 
 import FormatSelect from './formatselect'
+import { withStores } from '../../stores/stores'
 
 class FormatChanger extends Component {
   constructor(props) {
@@ -111,4 +112,4 @@ FormatChanger.propTypes = {
   Stores: PropTypes.object.isRequired,
 }
 
-export default withRouter(withTheme(inject('Stores')(observer(FormatChanger))))
+export default withRouter(withTheme(withStores(observer(FormatChanger))))

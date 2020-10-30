@@ -5,9 +5,10 @@ import Translate from 'react-translate-component'
 import translate from 'counterpart'
 import { ButtonGroup, ButtonLabel, DeleteButton, ButtonContainer } from '../../../general/buttons'
 import parseActorLabel from '../../../utils/actor'
+import { useStores } from '../../../utils/stores'
 
-const ActorsList = ({ Stores, actors, items, language }) => {
-  const { readonly } = Stores.Qvain
+const ActorsList = ({ actors, items, language }) => {
+  const { readonly } = useStores().Qvain
 
   const handleRemoveActor = actor => {
     actors.removeActorRef(actor.value)
@@ -45,7 +46,6 @@ const ActorLabel = styled(ButtonLabel)`
 `
 
 ActorsList.propTypes = {
-  Stores: PropTypes.object.isRequired,
   actors: PropTypes.object,
   items: PropTypes.array,
   language: PropTypes.string.isRequired,

@@ -1,17 +1,18 @@
-import React, { Component, Fragment } from 'react';
-import PropTypes from 'prop-types';
-import { inject, observer } from 'mobx-react'
+import React, { Component, Fragment } from 'react'
+import PropTypes from 'prop-types'
+import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 import ProjectSelector from './projectSelector'
 import SelectedFiles from './selectedFiles'
 import FileSelector from './fileSelector'
+import { withStores } from '../../utils/stores'
 
 export class IDAFilePickerBase extends Component {
   static propTypes = {
-    Stores: PropTypes.object.isRequired
+    Stores: PropTypes.object.isRequired,
   }
 
-  handleToggleForm = (event) => {
+  handleToggleForm = event => {
     event.preventDefault()
     const { idaPickerOpen } = this.props.Stores.Qvain
     if (idaPickerOpen) {
@@ -36,4 +37,4 @@ export class IDAFilePickerBase extends Component {
   }
 }
 
-export default inject('Stores')(observer(IDAFilePickerBase))
+export default withStores(observer(IDAFilePickerBase))

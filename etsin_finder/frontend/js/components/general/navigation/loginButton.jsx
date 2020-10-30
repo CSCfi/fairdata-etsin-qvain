@@ -13,7 +13,7 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import { withRouter } from 'react-router-dom'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 
@@ -23,6 +23,7 @@ import Loader from '../loader'
 import NoticeBar from '../noticeBar'
 import LoggedInUser from '../loggedInUser'
 import { Dropdown, DropdownItem } from '../dropdown'
+import { withStores } from '../../../stores/stores'
 
 class Login extends Component {
   static propTypes = {
@@ -52,7 +53,7 @@ class Login extends Component {
 
   componentDidMount() {
     this.setState({
-      loggedInThroughService: this.props.loginThroughService
+      loggedInThroughService: this.props.loginThroughService,
     })
   }
 
@@ -63,7 +64,9 @@ class Login extends Component {
         loading: true,
       },
       () => {
-        window.location = `/sso/${loginThroughService}?relay=${location.pathname}${encodeURIComponent(query)}`
+        window.location = `/sso/${loginThroughService}?relay=${
+          location.pathname
+        }${encodeURIComponent(query)}`
       }
     )
   }
@@ -90,7 +93,9 @@ class Login extends Component {
             <LoginButton
               width={this.props.width}
               margin="0"
-              onClick={() => this.redirectToLogin(this.props.location, this.props.loginThroughService)}
+              onClick={() =>
+                this.redirectToLogin(this.props.location, this.props.loginThroughService)
+              }
               borderColor={this.props.borderColor}
             >
               <LoginText visible={!this.state.loading} fontSize={this.props.fontSize}>
@@ -130,6 +135,7 @@ const Cont = styled.div`
 `
 
 const LoginButton = styled(Button)`
+  white-space: nowrap;
   width: fit-content;
   ${props =>
     props.borderColor &&
@@ -153,4 +159,4 @@ const LoginText = styled.span`
   font-size: ${p => p.fontSize};
 `
 
-export default withRouter(inject('Stores')(observer(Login)))
+export default withRouter(withStores(observer(Login)))

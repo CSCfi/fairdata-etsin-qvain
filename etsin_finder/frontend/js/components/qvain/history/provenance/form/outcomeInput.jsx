@@ -1,13 +1,18 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
-import { observer, inject } from 'mobx-react'
+import { observer } from 'mobx-react'
 import Select from '../../../general/input/select'
 import { Outcome } from '../../../../../stores/view/qvain.provenances'
 import { Label } from '../../../general/modal/form'
+import { useStores } from '../../../utils/stores'
 
-const OutcomeInput = ({ Stores }) => {
-  const setOutcome = value => Stores.Qvain.Provenances.changeAttribute('outcome', value)
+const OutcomeInput = () => {
+  const {
+    Qvain: {
+      Provenances: { changeAttribute, outcome },
+    },
+  } = useStores()
+  const setOutcome = value => changeAttribute('outcome', value)
   const translations = {
     label: 'qvain.history.provenance.modal.outcomeInput.label',
     placeholder: 'qvain.history.provenance.modal.outcomeInput.placeholder',
@@ -19,7 +24,7 @@ const OutcomeInput = ({ Stores }) => {
       </Label>
       <Select
         name="infrastructure"
-        getter={Stores.Qvain.Provenances.outcome}
+        getter={outcome}
         setter={setOutcome}
         model={Outcome}
         metaxIdentifier="event_outcome"
@@ -29,8 +34,4 @@ const OutcomeInput = ({ Stores }) => {
   )
 }
 
-OutcomeInput.propTypes = {
-  Stores: PropTypes.object.isRequired,
-}
-
-export default inject('Stores')(observer(OutcomeInput))
+export default observer(OutcomeInput)
