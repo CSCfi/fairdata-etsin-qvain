@@ -14,13 +14,11 @@ import { useStores } from '../../utils/stores'
 export const ExternalFileFormBase = () => {
   const {
     Qvain: {
-      inEdit: {
-        externalResourceInEdit: externalResource,
-        idaPickerOpen,
-        setIdaPickerOpen,
-        saveExternalResource,
-        editExternalResource,
-      },
+      externalResourceInEdit: externalResource,
+      idaPickerOpen,
+      setIdaPickerOpen,
+      saveExternalResource,
+      editExternalResource,
     },
     Locale: { lang },
   } = useStores()
