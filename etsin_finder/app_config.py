@@ -8,9 +8,9 @@
 """Get configurations for the app and external services."""
 
 import yaml
+from flask import has_app_context, current_app
 
 from etsin_finder.utils import executing_travis
-
 
 def _get_app_config_from_file():
     """Get app config from file
@@ -33,6 +33,10 @@ def get_app_config(is_testing):
         function: function to get app config.
 
     """
+    # use the existing config from app context when possible
+    if has_app_context():
+        return current_app.config
+
     if executing_travis():
         return _get_app_config_for_travis()
     if is_testing:
