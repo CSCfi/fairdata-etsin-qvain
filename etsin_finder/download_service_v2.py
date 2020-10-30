@@ -35,21 +35,30 @@ class DownloadAPIService(FlaskService):
         if dl_api_config:
             host = dl_api_config.get('HOST')
             port = dl_api_config.get('PORT')
+            user = dl_api_config.get('USER')
+            password = dl_api_config.get('PASSWORD')
 
             self.API_BASE_URL = f'https://{host}:{port}'
             self.REQUESTS_URL = f'{self.API_BASE_URL}/requests'
             self.AUTHORIZE_URL = f'{self.API_BASE_URL}/authorize'
             self.DOWNLOAD_URL = f'{self.API_BASE_URL}/download'
             self.verify_ssl = True
+            self.auth = None
+            if user or password:
+                self.auth = (user, password)
+            self.proxies = None
+            if dl_api_config.get('HTTPS_PROXY'):
+                self.proxies = dict(https=dl_api_config.get('HTTPS_PROXY'))
         else:
             log.error('Unable to initialize DownloadAPIService (v2) due to missing config')
 
     def _get_args(self, **kwargs):
         """Get default args for request, allow overriding with kwargs."""
         args = dict(headers={'Accept': 'application/json', 'Content-Type': 'application/json'},
-                    # auth=(self.user, self.pw),
+                    auth=self.auth,
                     verify=self.verify_ssl,
-                    timeout=10)
+                    timeout=10,
+                    proxies=self.proxies)
         args.update(kwargs)
         return args
 
@@ -82,7 +91,7 @@ class DownloadAPIService(FlaskService):
         if status == 404:
             return {}, 404
         if not success:
-            log.warning(f"Failed to create requests for dataset {dataset} with scope {scope}")
+            log.warning(f"Failed to create package for dataset {dataset} with scope {scope}")
         return resp, status
 
     def authorize(self, dataset, file=None, package=None):
