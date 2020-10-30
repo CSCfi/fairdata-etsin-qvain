@@ -1,14 +1,15 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 import AddedActors from './addedActors'
 import ActorTitle from './actorTitle'
 import { Container } from '../../general/card'
 import { Actor } from '../../../../stores/view/qvain.actors'
 import { ButtonContainer, AddNewButton } from '../../general/buttons'
+import { useStores } from '../../utils/stores'
 
-const ActorsField = ({ Stores }) => {
+const ActorsField = () => {
+  const Stores = useStores()
   const { editActor } = Stores.Qvain.Actors
   const { readonly } = Stores.Qvain
 
@@ -29,8 +30,4 @@ const ActorsField = ({ Stores }) => {
   )
 }
 
-ActorsField.propTypes = {
-  Stores: PropTypes.object.isRequired,
-}
-
-export default inject('Stores')(observer(ActorsField))
+export default observer(ActorsField)

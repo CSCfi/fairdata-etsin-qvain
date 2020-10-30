@@ -13,7 +13,6 @@
 import React, { Component } from 'react'
 import { ThemeProvider } from 'styled-components'
 import { Router } from 'react-router-dom'
-import { Provider } from 'mobx-react'
 import createBrowserHistory from 'history/createBrowserHistory'
 import { syncHistoryWithStore } from 'mobx-react-router'
 
@@ -29,11 +28,10 @@ import 'react-datepicker/dist/react-datepicker.css'
 import etsinTheme from './styles/theme'
 import GlobalStyle from './styles/globalStyles'
 import Stores from './stores'
-
+import { StoresProvider } from './stores/stores'
 
 registerLocale('fi', fi)
 registerLocale('en', en)
-
 
 if (process.env.NODE_ENV === 'test') {
   console.log('We are in test')
@@ -62,7 +60,7 @@ export default class App extends Component {
   render() {
     return (
       <div className="app">
-        <Provider Stores={Stores}>
+        <StoresProvider store={Stores}>
           <Router history={history}>
             <ThemeProvider theme={etsinTheme}>
               <React.Fragment>
@@ -71,7 +69,7 @@ export default class App extends Component {
               </React.Fragment>
             </ThemeProvider>
           </Router>
-        </Provider>
+        </StoresProvider>
       </div>
     )
   }

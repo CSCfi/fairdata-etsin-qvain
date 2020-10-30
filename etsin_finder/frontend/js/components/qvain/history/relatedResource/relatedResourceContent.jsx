@@ -1,15 +1,17 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import FieldList from '../../general/section/fieldList'
 import FieldListAdd from '../../general/section/fieldListAdd'
 import Form from './form'
 import handleSave from './handleSave'
+import { useStores } from '../../utils/stores'
 
-const RelatedResourceContent = ({ Stores }) => {
+const RelatedResourceContent = () => {
+  const {
+    Qvain: Store,
+    Locale: { lang },
+  } = useStores()
   const translationsRoot = 'qvain.history.relatedResource'
-  const Store = Stores.Qvain
-  const { lang } = Stores.Locale
   const Field = Store.RelatedResources
   return (
     <>
@@ -25,8 +27,4 @@ const RelatedResourceContent = ({ Stores }) => {
   )
 }
 
-RelatedResourceContent.propTypes = {
-  Stores: PropTypes.object.isRequired,
-}
-
-export default inject('Stores')(observer(RelatedResourceContent))
+export default observer(RelatedResourceContent)

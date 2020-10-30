@@ -11,7 +11,7 @@
 }
 
 import React, { Component } from 'react'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFilter } from '@fortawesome/free-solid-svg-icons'
@@ -67,8 +67,7 @@ class Results extends Component {
                           onClick={this.toggleFilter}
                           active={this.state.filterOpen}
                         >
-                          <FontAwesomeIcon icon={faFilter} />
-                          {' '}
+                          <FontAwesomeIcon icon={faFilter} />{' '}
                           <Translate content="search.filter.filter" />
                         </FilterToggle>
                         <SortResults />
@@ -167,4 +166,4 @@ Results.defaultProps = {
   query: '',
 }
 
-export default inject('Stores')(observer(Results))
+export default observer(Results)

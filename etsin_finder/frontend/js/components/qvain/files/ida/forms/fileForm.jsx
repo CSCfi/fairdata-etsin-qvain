@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 import styled from 'styled-components'
 
@@ -15,6 +15,7 @@ import {
   fileDescriptionSchema,
   fileUseCategorySchema,
 } from '../../../utils/formValidation'
+import { withStores } from '../../../utils/stores'
 
 class FileForm extends Component {
   inEdit = this.props.Stores.Qvain.Files.inEdit
@@ -298,4 +299,4 @@ const Row = styled.div`
   column-gap: 0.5rem;
 `
 
-export default inject('Stores')(observer(FileForm))
+export default withStores(observer(FileForm))
