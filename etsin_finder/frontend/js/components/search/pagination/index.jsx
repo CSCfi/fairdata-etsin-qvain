@@ -12,13 +12,14 @@
 
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import translate from 'counterpart'
 
 import ElasticQuery from '../../../stores/view/elasticquery'
 import Accessibility from '../../../stores/view/accessibility'
+import { withStores } from '../../../stores/stores'
 
 class Pagination extends Component {
   constructor(props) {
@@ -95,8 +96,8 @@ class Pagination extends Component {
   checkAfter() {
     return new Promise(resolve => {
       while (
-        this.state.currentPage + this.afterCounter < this.state.pageAmount
-        && this.afterCounter < 7
+        this.state.currentPage + this.afterCounter < this.state.pageAmount &&
+        this.afterCounter < 7
       ) {
         this.afterCounter += 1
       }
@@ -132,15 +133,11 @@ class Pagination extends Component {
               this.changePage(e, value)
             }}
           >
-            <Translate content="search.pagination.SRpage" className="sr-only" />
-            {' '}
-            {value}
+            <Translate content="search.pagination.SRpage" className="sr-only" /> {value}
           </PaginationButton>
         ) : (
           <PaginationButton className="current" disabled aria-disabled="true">
-            <Translate content="search.pagination.SRcurrentpage" className="sr-only" />
-            {' '}
-            {value}
+            <Translate content="search.pagination.SRcurrentpage" className="sr-only" /> {value}
           </PaginationButton>
         )}
       </li>
@@ -182,20 +179,22 @@ class Pagination extends Component {
   restDots(where) {
     if (where === 'before') {
       if (
-        (this.state.currentPage === 5 && this.state.pageAmount > 8)
-        || (this.state.pageAmount === 9 && this.state.currentPage > 5)
+        (this.state.currentPage === 5 && this.state.pageAmount > 8) ||
+        (this.state.pageAmount === 9 && this.state.currentPage > 5)
       ) {
         return this.singlePage(2, true)
-      } if (this.state.currentPage > 5 && this.state.pageAmount > 8) {
+      }
+      if (this.state.currentPage > 5 && this.state.pageAmount > 8) {
         return this.singlePage('...', false)
       }
     } else if (where === 'after') {
       if (
-        (this.state.pageAmount - this.state.currentPage === 4 && this.state.pageAmount > 8)
-        || (this.state.pageAmount === 9 && this.state.currentPage < 5)
+        (this.state.pageAmount - this.state.currentPage === 4 && this.state.pageAmount > 8) ||
+        (this.state.pageAmount === 9 && this.state.currentPage < 5)
       ) {
         return this.singlePage(this.state.pageAmount - 1, true)
-      } if (this.state.pageAmount - this.state.currentPage > 4 && this.state.pageAmount > 8) {
+      }
+      if (this.state.pageAmount - this.state.currentPage > 4 && this.state.pageAmount > 8) {
         return this.singlePage('...', false)
       }
     }
@@ -212,26 +211,31 @@ class Pagination extends Component {
                 this.changePage(e, this.state.currentPage - 1)
               }}
             >
-              <span aria-hidden>{'<'}</span>
-              {' '}
+              <span aria-hidden>{'<'}</span>{' '}
               <Translate content="search.pagination.prev" className="sr-only" />
             </PaginationButton>
           </li>
         )}
-        {// first page
-        this.state.currentPage !== 1 && this.singlePage(1, true)}
+        {
+          // first page
+          this.state.currentPage !== 1 && this.singlePage(1, true)
+        }
         {this.restDots('before')}
-        {// pages before
-        this.state.before.map(single => single)}
-        {this.singlePage(this.state.currentPage, false)}
-        {' '}
-        {/* currentpage */}
-        {// pages after
-        this.state.after.map(single => single)}
+        {
+          // pages before
+          this.state.before.map(single => single)
+        }
+        {this.singlePage(this.state.currentPage, false)} {/* currentpage */}
+        {
+          // pages after
+          this.state.after.map(single => single)
+        }
         {this.restDots('after')}
-        {// last page
-        this.state.currentPage !== this.state.pageAmount
-          && this.singlePage(this.state.pageAmount, true)}
+        {
+          // last page
+          this.state.currentPage !== this.state.pageAmount &&
+            this.singlePage(this.state.pageAmount, true)
+        }
         {this.state.currentPage < this.state.pageAmount && (
           <li>
             <PaginationButton
@@ -239,8 +243,7 @@ class Pagination extends Component {
                 this.changePage(e, this.state.currentPage + 1)
               }}
             >
-              <Translate content="search.pagination.next" className="sr-only" />
-              {' '}
+              <Translate content="search.pagination.next" className="sr-only" />{' '}
               <span aria-hidden>{'>'}</span>
             </PaginationButton>
           </li>
@@ -319,4 +322,4 @@ Pagination.propTypes = {
   currentPage: PropTypes.number.isRequired,
 }
 
-export default inject('Stores')(observer(Pagination))
+export default withStores(observer(Pagination))

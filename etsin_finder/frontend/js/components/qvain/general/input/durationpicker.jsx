@@ -1,12 +1,13 @@
 import React from 'react'
 import styled from 'styled-components'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import { Label } from '../modal/form'
 import { DatePicker, handleDatePickerChange, getDateFormatLocale } from './datepicker'
+import { useStores } from '../../utils/stores'
 
-const DurationPicker = ({ Stores, Field, translationsRoot, datum }) => {
+const DurationPicker = ({ Field, translationsRoot, datum }) => {
   const translations = {
     label: `${translationsRoot}.modal.${datum}Input.label`,
     startPlaceholder: `${translationsRoot}.modal.${datum}Input.startPlaceholder`,
@@ -14,8 +15,10 @@ const DurationPicker = ({ Stores, Field, translationsRoot, datum }) => {
   }
   const { startDate, endDate } = Field.inEdit
   const { changeAttribute } = Field
-  const { readonly } = Stores.Qvain
-  const { lang } = Stores.Locale
+  const {
+    Qvain: { readonly },
+    Locale: { lang },
+  } = useStores()
 
   const handleDateChangeRaw = (e, propName) =>
     e && handleDatePickerChange(e.target.value, date => changeAttribute(propName, date))
@@ -73,7 +76,6 @@ const DurationPicker = ({ Stores, Field, translationsRoot, datum }) => {
 }
 
 DurationPicker.propTypes = {
-  Stores: PropTypes.object.isRequired,
   Field: PropTypes.object.isRequired,
   translationsRoot: PropTypes.string.isRequired,
   datum: PropTypes.string.isRequired,
@@ -94,4 +96,4 @@ const DatePickerContainer = styled.div`
   }
 `
 
-export default inject('Stores')(observer(DurationPicker))
+export default observer(DurationPicker)

@@ -2,10 +2,11 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import PropTypes from 'prop-types'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 
 import checkDataLang from '../../../../utils/checkDataLang'
 import checkNested from '../../../../utils/checkNested'
+import { withStores } from '../../../../stores/stores'
 
 class Citation extends Component {
   getAgents() {
@@ -84,4 +85,4 @@ const TextMuted = styled.div`
   margin-top: 0.3rem;
 `
 
-export default inject('Stores')(observer(Citation))
+export default withStores(observer(Citation))
