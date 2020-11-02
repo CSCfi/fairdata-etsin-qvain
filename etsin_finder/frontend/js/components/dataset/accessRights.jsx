@@ -79,6 +79,7 @@ class AccessRights extends Component {
 
   restricted() {
     return (
+      // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
       <div tabIndex="0">
         <FontAwesomeIcon icon={faLock} title="Closed lock" />
         <AccessLabel lang={getDataLang(this.state.title)}>
@@ -90,6 +91,7 @@ class AccessRights extends Component {
 
   openAccess() {
     return (
+      // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
       <div tabIndex="0">
         <FontAwesomeIcon icon={faLockOpen} title="Lock open" />
         <AccessLabel lang={getDataLang(this.state.title)}>
@@ -135,6 +137,7 @@ class AccessRights extends Component {
             <ModalInner>
               {accessRightsBool(this.props.access_rights) ? this.openAccess() : this.restricted()}
               {this.state.description && (
+                // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
                 <div tabIndex="0">
                   <FontAwesomeIcon icon={faInfoCircle} title="Additional information" />
                   <AccessLabel lang={getDataLang(this.state.description)}>
@@ -143,6 +146,7 @@ class AccessRights extends Component {
                 </div>
               )}
               {this.state.url && (
+                // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
                 <div tabIndex="0">
                   <FontAwesomeIcon icon={faGlobe} title="Access to data" />
                   <AccessUrl
@@ -156,6 +160,7 @@ class AccessRights extends Component {
               )}
               {this.state.restriction_grounds &&
                 this.state.restriction_grounds.map(rg => (
+                  // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
                   <div key={`div-rg-${rg.identifier}`} tabIndex="0">
                     <FontAwesomeIcon
                       key={`fai-rg-${rg.identifier}`}
