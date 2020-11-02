@@ -45,7 +45,7 @@ const CumulativeState = () => {
       return
     }
     setResponse(null)
-    loading(true)
+    setLoading(true)
 
     const newState =
       currentState === CUMULATIVE_STATE.YES ? CUMULATIVE_STATE.CLOSED : CUMULATIVE_STATE.YES
