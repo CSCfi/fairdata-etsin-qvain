@@ -11,6 +11,7 @@ const download = async (params) => {
     if (!iframe) {
       iframe = document.createElement('iframe')
       document.body.appendChild(iframe)
+      iframe.id = 'download-iframe'
       iframe.style.display = 'none'
     }
     iframe.setAttribute('src', url)

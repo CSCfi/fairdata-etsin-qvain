@@ -3,6 +3,8 @@ import axios from 'axios'
 
 import { DOWNLOAD_API_REQUEST_STATUS } from '../../utils/constants'
 
+const getErrorText = err => (err.response && err.response.data) || err.message
+
 class Packages {
   // Download API package handling
 
@@ -101,7 +103,7 @@ class Packages {
       }
     } catch (err) {
       console.error(err)
-      this.setError((err.response && err.response.data) || err.message)
+      this.setError(getErrorText(err))
     }
     this.schedulePoll()
   }
@@ -151,7 +153,7 @@ class Packages {
         this.clearPackages()
         if (!(err.response && err.response.status === 404)) {
           console.error(err)
-          this.setError((err.response && err.response.data) || err.message)
+          this.setError(getErrorText(err))
         }
         return
       }

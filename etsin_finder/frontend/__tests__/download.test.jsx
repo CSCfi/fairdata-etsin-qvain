@@ -7,6 +7,19 @@ import Packages from '../js/stores/view/packages'
 import { fakeDownload, applyMockAdapter } from './__testdata__/download.data'
 import { runInAction } from 'mobx'
 import getDownloadAction from '../js/components/dataset/data/idaResourcesV2/downloadActions'
+import {
+  downloadFile,
+  downloadPackage,
+} from '../js/components/dataset/data/idaResourcesV2/download'
+
+jest.mock('../js/components/dataset/data/idaResourcesV2/download', () => {
+  const actual = jest.requireActual('../js/components/dataset/data/idaResourcesV2/download')
+  return {
+    ...actual,
+    downloadFile: jest.fn().mockImplementation(actual.downloadFile),
+    downloadPackage: jest.fn().mockImplementation(actual.downloadPackage),
+  }
+})
 
 global.Promise = require('bluebird')
 Promise.config({
@@ -17,7 +30,7 @@ const { PENDING, SUCCESS } = DOWNLOAD_API_REQUEST_STATUS
 
 // Enable fake timers. Use 'legacy' explicitly because
 // jest 27 will change the default to 'modern' which will
-// probably require some changes.
+// require some changes.
 jest.useFakeTimers('legacy')
 
 Env.setDownloadApiV2(true)
@@ -35,6 +48,7 @@ describe('Packages', () => {
 
   beforeEach(() => {
     packages = new Packages(Env)
+    packages.reset()
     jest.clearAllTimers()
     applyMockAdapter(mockAdapter)
     fakeDownload.reset()
@@ -145,6 +159,18 @@ describe('Packages', () => {
     expect(packages.error.code).toBe(500)
     expect(console.error.mock.calls.length).toBe(1)
   })
+
+  it('updates package', async () => {
+    const pack = { scope: ['/moro'] }
+    packages.updatePackage('/moro', pack)
+    expect(packages.packages['/moro']).toEqual(pack)
+  })
+
+  it('ignores package with multiple items in scope', async () => {
+    const pack = { scope: ['/moro', '/another_folder'] }
+    packages.updatePackage('/moro', pack)
+    expect(packages.packages['/moro']).toEqual(undefined)
+  })
 })
 
 describe('Download button actions', () => {
@@ -159,9 +185,11 @@ describe('Download button actions', () => {
     packages.packages = {
       '/success': {
         status: SUCCESS,
+        package: 'success.zip',
       },
       '/pending': {
         status: PENDING,
+        package: 'pending.zip',
       },
     }
   })
@@ -172,18 +200,29 @@ describe('Download button actions', () => {
     })
   })
 
+  afterEach(() => {
+    downloadFile.mockClear()
+    downloadPackage.mockClear()
+  })
+
   it('allows file download without package', async () => {
     const fileItem = { type: 'file', path: '/file' }
     const action = getDownloadAction(1, fileItem, packages, files)
     expect(action.type).toBe('download')
-    expect(action.func).not.toBe(null)
+    expect(action.available).toBe(true)
+    downloadFile.mockImplementationOnce(() => {})
+    action.func()
+    expect(downloadFile.mock.calls).toEqual([[1, '/file']])
   })
 
   it('allows package download', async () => {
     const successDirectoryItem = { type: 'directory', path: '/success' }
     const action = getDownloadAction(1, successDirectoryItem, packages, files)
     expect(action.type).toBe('download')
-    expect(action.func).not.toBe(null)
+    expect(action.available).toBe(true)
+    downloadPackage.mockImplementationOnce(() => {})
+    action.func()
+    expect(downloadPackage.mock.calls).toEqual([[1, 'success.zip']])
   })
 
   it('shows spinner for pending package', async () => {
@@ -209,6 +248,46 @@ describe('Download button actions', () => {
     const noPackageDirectoryItem = { type: 'directory', path: '/no_package' }
     const action = getDownloadAction(1, noPackageDirectoryItem, packages, files)
     expect(action.type).toBe('create')
-    expect(action.func).not.toBe(null)
+    jest.spyOn(packages, 'createPackageFromFolder')
+    action.func()
+    expect(packages.createPackageFromFolder.mock.calls).toEqual([['/no_package']])
+  })
+})
+
+describe('Download functions', () => {
+  afterEach(() => {
+    document.body.innerHTML = ''
+  })
+
+  it('downloads file', async () => {
+    await downloadFile(123, '/some/file/path.txt')
+    const iframes = document.getElementsByTagName('iframe')
+    expect(iframes.length).toBe(1)
+    expect(iframes[0].getAttribute('src')).toBe('file_dl_url?cr_id=123&file=/some/file/path.txt')
+  })
+
+  it('downloads package', async () => {
+    await downloadPackage(123, 'package-id')
+    const iframes = document.getElementsByTagName('iframe')
+    expect(iframes.length).toBe(1)
+    expect(iframes[0].getAttribute('src')).toBe('package_dl_url?cr_id=123&package=package-id')
+  })
+
+  it('reuses iframe', async () => {
+    await downloadPackage(123, 'package-id')
+    let iframes = document.getElementsByTagName('iframe')
+    expect(iframes.length).toBe(1)
+    expect(iframes[0].getAttribute('src')).toBe('package_dl_url?cr_id=123&package=package-id')
+
+    await downloadPackage(123, 'package-id-2')
+    iframes = document.getElementsByTagName('iframe')
+    expect(iframes.length).toBe(1)
+    expect(iframes[0].getAttribute('src')).toBe('package_dl_url?cr_id=123&package=package-id-2')
+  })
+
+  it('logs error', async () => {
+    jest.spyOn(console, 'error').mockImplementationOnce(() => {})
+    await downloadPackage(500, 'package-id')
+    expect(console.error.mock.calls.length).toBe(1)
   })
 })

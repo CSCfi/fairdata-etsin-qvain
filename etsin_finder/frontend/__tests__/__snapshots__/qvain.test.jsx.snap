@@ -519,6 +519,7 @@ exports[`Qvain.Description should render <LanguageField /> 1`] = `
       Object {
         "Env": Env {
           "app": undefined,
+          "downloadApiV2": false,
           "etsinHost": "",
           "getEtsinUrl": [Function],
           "getQvainUrl": [Function],
@@ -559,6 +560,7 @@ exports[`Qvain.Description should render <LanguageField /> 1`] = `
           },
           "Env": Env {
             "app": undefined,
+            "downloadApiV2": false,
             "etsinHost": "",
             "getEtsinUrl": [Function],
             "getQvainUrl": [Function],
@@ -603,6 +605,7 @@ exports[`Qvain.Description should render <LanguageField /> 1`] = `
             "datasetIdentifier": null,
             "fetchRootIdentifier": [Function],
             "getItemByPath": [Function],
+            "getItemPath": [Function],
             "inEdit": undefined,
             "loadingMetadata": null,
             "loadingProjectInfo": null,

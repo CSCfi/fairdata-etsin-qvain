@@ -156,4 +156,16 @@ export const applyMockAdapter = (mockAdapter) => {
     }
     return formatPackageResponse(createdPackages)
   })
+
+  mockAdapter.onPost(RegExp('^/api/v2/dl/authorize')).reply(({ url, data }) => {
+    const params = getParams(url, data)
+    const { cr_id, file, package: pack } = params
+    if (errors[cr_id]) {
+      return errors[cr_id]
+    }
+    if (file) {
+      return [200, { url: `file_dl_url?cr_id=${cr_id}&file=${file}` }]
+    }
+    return [200, { url: `package_dl_url?cr_id=${cr_id}&package=${pack}` }]
+  })
 }

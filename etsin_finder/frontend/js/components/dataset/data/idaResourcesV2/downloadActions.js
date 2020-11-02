@@ -8,20 +8,12 @@ import { DOWNLOAD_API_REQUEST_STATUS } from '../../../../utils/constants'
 import { downloadFile, downloadPackage } from './download'
 
 // Download button information for file/package
-//   ariaLabel: Icon button aria-label
-//   available: is item available for download
-//   func: action when dl button is clicked
-//   icon: download button icon
-//   pending: is package being generated
-//   spin: enable spin (for loading icon)
-//   type: type of action (used for tests)
-
 const actionDefaults = {
   ariaLabel: 'dataset.dl.downloadItem',
-  available: false,
-  func: null,
+  available: false, // is file/package ready for download
+  func: null, // action when button is clicked
   icon: faDownload,
-  pending: false,
+  pending: false, // is package being generated
   spin: false,
   type: 'default',
 }
@@ -38,6 +30,7 @@ const actionDownload = (datasetIdentifier, item, path, pack) => {
     ariaLabel: 'dataset.dl.downloadItem',
     func,
     type: 'download',
+    available: true,
   }
 }
 
