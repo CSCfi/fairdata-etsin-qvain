@@ -79,7 +79,7 @@ class AccessRights extends Component {
 
   restricted() {
     return (
-      <div>
+      <div tabIndex="0">
         <FontAwesomeIcon icon={faLock} title="Closed lock" />
         <AccessLabel lang={getDataLang(this.state.title)}>
           {checkDataLang(this.state.title)}
@@ -90,7 +90,7 @@ class AccessRights extends Component {
 
   openAccess() {
     return (
-      <div>
+      <div tabIndex="0">
         <FontAwesomeIcon icon={faLockOpen} title="Lock open" />
         <AccessLabel lang={getDataLang(this.state.title)}>
           {checkDataLang(this.state.title)}
@@ -135,7 +135,7 @@ class AccessRights extends Component {
             <ModalInner>
               {accessRightsBool(this.props.access_rights) ? this.openAccess() : this.restricted()}
               {this.state.description && (
-                <div>
+                <div tabIndex="0">
                   <FontAwesomeIcon icon={faInfoCircle} title="Additional information" />
                   <AccessLabel lang={getDataLang(this.state.description)}>
                     {checkDataLang(this.state.description)}
@@ -143,7 +143,7 @@ class AccessRights extends Component {
                 </div>
               )}
               {this.state.url && (
-                <div>
+                <div tabIndex="0">
                   <FontAwesomeIcon icon={faGlobe} title="Access to data" />
                   <AccessUrl
                     href={this.state.url.identifier}
@@ -156,13 +156,13 @@ class AccessRights extends Component {
               )}
               {this.state.restriction_grounds &&
                 this.state.restriction_grounds.map(rg => (
-                  <div key={`div-rg-${rg.identifier}`}>
+                  <div key={`div-rg-${rg.identifier}`} tabIndex="0">
                     <FontAwesomeIcon
                       key={`fai-rg-${rg.identifier}`}
                       icon={faExclamationTriangle}
                       title="Restricted"
                     />
-                    <AccessLabel key={`al-rg-${rg.identifier}`} lang={getDataLang(rg.pref_label)}>
+                    <AccessLabel key={`al-rg-${rg.identifier}`} lang={getDataLang(rg.pref_label)} tabIndex="0">
                       {checkDataLang(rg.pref_label)}
                     </AccessLabel>
                   </div>
@@ -228,7 +228,6 @@ const ModalInner = styled.div`
     margin-bottom: 0.2em;
   }
 `
-
 AccessRights.defaultProps = {
   access_rights: undefined,
   button: false,
