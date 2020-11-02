@@ -18,15 +18,13 @@ const LoaderWrapper = props => (
 )
 
 export const SmallLoader = styled(LoaderWrapper)`
-   {
-    width: 1.3rem;
-    height: 1.3rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-left: 0.5em;
-    opacity: 0.8;
-  }
+  width: 1.3rem;
+  height: 1.3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 0.5em;
+  opacity: 0.8;
 `
 
 const IconWrapper = ({ icon, color, disabledColor, disabledOpacity, ...props }) => (
@@ -76,20 +74,18 @@ ClickableIconButton.defaultProps = {
 }
 
 export const Icon = styled(IconWrapper)`
-   {
-    width: 1.3rem;
-    height: 1.3rem;
-    font-size: 1.1rem;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    flex-shrink: 0;
+  width: 1.3rem;
+  height: 1.3rem;
+  font-size: 1.1rem;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  flex-shrink: 0;
 
-    ${props => (props.disabled ? `color: ${props.theme.color[props.disabledColor]};` : '')}
+  ${props => (props.disabled ? `color: ${props.theme.color[props.disabledColor]};` : '')}
 
-    ${props => props.disabled && props.disabledOpacity && `opacity: ${props.disabledOpacity}`}
-  }
+  ${props => props.disabled && props.disabledOpacity && `opacity: ${props.disabledOpacity}`}
 `
 
 export const ClickableIcon = styled(ClickableIconButton)`
@@ -105,14 +101,14 @@ export const ClickableIcon = styled(ClickableIconButton)`
   align-items: center;
 
   ${props =>
-    props.disabled
+    (props.disabled
       ? `
     color: ${props.theme.color[props.disabledColor]};
     opacity: ${props.disabledOpacity};
     `
       : `
     cursor: pointer;
-    `}
+    `)}
 }
 `
 
@@ -149,126 +145,100 @@ CheckboxWrapper.propTypes = {
 export const ItemCheckbox = styled.input.attrs({
   type: 'checkbox',
 })`
-   {
-    flex-shrink: 0;
-    width: 1.1rem;
-    height: 1.1rem;
-    margin: 0;
-  }
+  flex-shrink: 0;
+  width: 1.1rem;
+  height: 1.1rem;
+  margin: 0;
 `
 
 // Placeholder that has the same size as an icon
 export const Checkbox = styled(CheckboxWrapper)`
-   {
-    flex-shrink: 0;
-    width: 1.3rem;
-    height: 1.3rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+  flex-shrink: 0;
+  width: 1.3rem;
+  height: 1.3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `
 
 // Placeholder that has the same size as an icon
 export const NoIcon = styled.div`
-   {
-    flex-shrink: 0;
-    width: 1.3rem;
-    height: 1.3rem;
-  }
+  flex-shrink: 0;
+  width: 1.3rem;
+  height: 1.3rem;
 `
 
 export const ItemTitle = styled.div`
-   {
-    margin-left: 4px;
-    display: flex;
-    align-items: center;
-    flex-grow: 1;
-  }
+  margin-left: 4px;
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
 `
 
 export const FileCount = styled.span`
-   {
-    margin-left: 0.5em;
-    margin-right: 0.5em;
-    font-size: 90%;
-    color: #606060;
-    white-space: nowrap;
-  }
+  margin-left: 0.5em;
+  margin-right: 0.5em;
+  font-size: 90%;
+  color: #606060;
+  white-space: nowrap;
 `
 
 export const ItemRow = styled.li`
-   {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
 
-    ${props => (props.disabled ? 'color: #888' : '')}
-  }
+  ${props => (props.disabled ? 'color: #888' : '')}
 `
 
 export const ItemSpacer = styled.div`
-   {
-    width: ${props => props.level * 1.3}em;
-    margin: 0;
-    padding: 0;
-    flex-shrink: 0;
-  }
+  width: ${props => props.level * 1.3}em;
+  margin: 0;
+  padding: 0;
+  flex-shrink: 0;
 `
 
 export const GrowSpacer = styled.div`
-   {
-    flex-grow: 1;
-  }
+  flex-grow: 1;
 `
 
 export const Items = styled.div`
-   {
-    display: flex;
-    align-items: flex-start;
-    justify-content: flex-start;
-    flex-grow: 1;
-    width: 100%;
-    overflow: auto;
-  }
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-grow: 1;
+  width: 100%;
+  overflow: auto;
 `
 
 export const ChildrenItem = styled.li`
-   {
-    width: 100%;
-  }
+  width: 100%;
 `
 
 export const Children = styled.ul`
-   {
-    width: 100%;
-  }
+  width: 100%;
 `
 
 export const Tag = styled.div`
-   {
-    font-size: 75%;
-    font-weight: bold;
-    background: ${p => (p.color && tint(0.8, p.theme.color[p.color])) || '#cdf'};
-    min-width: 20px;
-    border: 1px solid ${p => (p.color && tint(0.5, p.color && p.theme.color[p.color])) || '#bce'};
-    border-radius: 4px;
-    text-align: center;
-    margin-left: 2px;
-    padding: 1px 4px;
-    text-transform: uppercase;
-    white-space: nowrap;
-  }
+  font-size: 75%;
+  font-weight: bold;
+  background: ${p => (p.color && tint(0.8, p.theme.color[p.color])) || '#cdf'};
+  min-width: 20px;
+  border: 1px solid ${p => (p.color && tint(0.5, p.color && p.theme.color[p.color])) || '#bce'};
+  border-radius: 4px;
+  text-align: center;
+  margin-left: 2px;
+  padding: 1px 4px;
+  text-transform: uppercase;
+  white-space: nowrap;
 `
 
 export const PlainTag = styled.div`
-   {
-    font-size: 90%;
-    border-radius: 4px;
-    text-align: center;
-    margin-left: 2px;
-    padding: 1px 4px;
-    white-space: nowrap;
-  }
+  font-size: 90%;
+  border-radius: 4px;
+  text-align: center;
+  margin-left: 2px;
+  padding: 1px 4px;
+  white-space: nowrap;
 `
