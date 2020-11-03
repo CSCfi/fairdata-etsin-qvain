@@ -38,7 +38,6 @@ const SubmitResponse = ({ history, response }) => {
 
   // If the user wants to clear the submitResponse
   if (clearSubmitResponse) {
-    setClearSubmitResponse(false)
     return null
   }
 

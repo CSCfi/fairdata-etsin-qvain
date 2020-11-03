@@ -1,54 +1,53 @@
 import { toJS } from 'mobx'
 
-const fieldsOfScienceToMetax = (fieldsOfScience) =>
-  fieldsOfScience.map((fieldOfScience) => fieldOfScience.url)
+const fieldsOfScienceToMetax = fieldsOfScience =>
+  fieldsOfScience.map(fieldOfScience => fieldOfScience.url)
 
-const datasetLanguageToMetax = datasetLanguage =>
-  datasetLanguage.map(language => language.url)
+const datasetLanguageToMetax = datasetLanguage => datasetLanguage.map(language => language.url)
 
 const directoriesToMetax = (selectedDirectories, existingDirectories) => {
   const selectedDirectoryIdentifiers = selectedDirectories
-    ? selectedDirectories.map((sd) => sd.identifier)
+    ? selectedDirectories.map(sd => sd.identifier)
     : []
   const notOverwrittenExistingDirectories = existingDirectories
-    ? existingDirectories.filter((ed) => !selectedDirectoryIdentifiers.includes(ed.identifier))
+    ? existingDirectories.filter(ed => !selectedDirectoryIdentifiers.includes(ed.identifier))
     : []
   const directories = [...selectedDirectories, ...notOverwrittenExistingDirectories]
   const parsedDirectoryData = directories
-    ? directories.map((dir) => ({
-      identifier: dir.identifier,
-      title: dir.title,
-      description: dir.description ? dir.description : undefined,
-      useCategory: {
-        identifier: dir.useCategory,
-      },
-      projectIdentifier: dir.projectIdentifier ? dir.projectIdentifier : undefined,
-    }))
+    ? directories.map(dir => ({
+        identifier: dir.identifier,
+        title: dir.title,
+        description: dir.description ? dir.description : undefined,
+        useCategory: {
+          identifier: dir.useCategory,
+        },
+        projectIdentifier: dir.projectIdentifier ? dir.projectIdentifier : undefined,
+      }))
     : []
   return parsedDirectoryData
 }
 
 const filesToMetax = (selectedFiles, existingFiles) => {
-  const selectedFileIdentifiers = selectedFiles ? selectedFiles.map((sf) => sf.identifier) : []
+  const selectedFileIdentifiers = selectedFiles ? selectedFiles.map(sf => sf.identifier) : []
   const notOverwrittenExistingFiles = existingFiles
-    ? existingFiles.filter((ef) => !selectedFileIdentifiers.includes(ef.identifier))
+    ? existingFiles.filter(ef => !selectedFileIdentifiers.includes(ef.identifier))
     : []
   const files = [...selectedFiles, ...notOverwrittenExistingFiles]
   const parsedFileData = files
-    ? files.map((file) => ({
-      identifier: file.identifier,
-      title: file.title,
-      description: file.description ? file.description : undefined,
-      fileType: file.fileType
-        ? {
-          identifier: file.fileType,
-        }
-        : undefined,
-      useCategory: {
-        identifier: file.useCategory,
-      },
-      projectIdentifier: file.projectIdentifier ? file.projectIdentifier : undefined,
-    }))
+    ? files.map(file => ({
+        identifier: file.identifier,
+        title: file.title,
+        description: file.description ? file.description : undefined,
+        fileType: file.fileType
+          ? {
+              identifier: file.fileType,
+            }
+          : undefined,
+        useCategory: {
+          identifier: file.useCategory,
+        },
+        projectIdentifier: file.projectIdentifier ? file.projectIdentifier : undefined,
+      }))
     : []
   return parsedFileData
 }
@@ -64,30 +63,32 @@ const organizationToArray = fullOrganization => {
   return output
 }
 
-const projectsToMetax = projects => projects.map(project => {
-  const projectObject = toJS(project)
-  const { details } = projectObject
-  if (details.funderType && details.funderType.url) {
-    details.funderType = { identifier: details.funderType.url }
-  } else delete details.funderType
+const projectsToMetax = projects =>
+  projects.map(project => {
+    const projectObject = toJS(project)
+    const { details } = projectObject
+    if (details.funderType && details.funderType.url) {
+      details.funderType = { identifier: details.funderType.url }
+    } else delete details.funderType
 
-  const organizations = projectObject.organizations
-    .map(fullOrganization => organizationToArray(fullOrganization))
+    const organizations = projectObject.organizations.map(fullOrganization =>
+      organizationToArray(fullOrganization)
+    )
 
-  const fundingAgencies = projectObject.fundingAgencies.map(agency => {
-    const { organization } = agency
-    const contributorTypes = agency.contributorTypes.map(contributorType => {
-      const { identifier, label, definition, inScheme } = contributorType
-      return { identifier, label, definition, inScheme }
+    const fundingAgencies = projectObject.fundingAgencies.map(agency => {
+      const { organization } = agency
+      const contributorTypes = agency.contributorTypes.map(contributorType => {
+        const { identifier, label, definition, inScheme } = contributorType
+        return { identifier, label, definition, inScheme }
+      })
+      return { organization: organizationToArray(organization), contributorTypes }
     })
-    return { organization: organizationToArray(organization), contributorTypes }
+    return { details, organizations, fundingAgencies }
   })
-  return { details, organizations, fundingAgencies }
-})
 
 const handleSubmitToBackend = (Env, values) => {
   const actors = values.Actors.toBackend()
-
+  console.log(JSON.stringify(values.dataCatalog))
   const spatial = values.Spatials.toBackend()
 
   const temporal = values.Temporals.toBackend()
@@ -121,7 +122,7 @@ const handleSubmitToBackend = (Env, values) => {
     spatial,
     temporal,
     relation,
-    provenance
+    provenance,
   }
 
   if (values.original) {

@@ -1,6 +1,7 @@
 import { observable, action, computed, runInAction, makeObservable } from 'mobx'
 import axios from 'axios'
 import moment from 'moment'
+import translate from 'counterpart'
 import { v4 as uuid } from 'uuid'
 import { getDirectories, getFiles, deepCopy } from '../../components/qvain/utils/fileHierarchy'
 import urls from '../../components/qvain/utils/urls'
@@ -20,6 +21,8 @@ import { parseOrganization } from '../../components/qvain/project/utils'
 import Provenances from './qvain.provenances'
 import RelatedResources from './qvain.relatedResources'
 import Temporals from './qvain.temporals'
+import Submit from './qvain.submit'
+import { otherIdentifierSchema } from '../../components/qvain/utils/formValidation'
 
 class Qvain {
   constructor(Env) {
@@ -32,6 +35,7 @@ class Qvain {
     this.Temporals.create()
     this.Provenances = new Provenances(this)
     this.RelatedResources = new RelatedResources(this)
+    this.Submit = new Submit(this)
   }
 
   @observable original = undefined // used if editing, otherwise undefined
@@ -1037,6 +1041,36 @@ class Qvain {
       this.preservationState !== 100 &&
       this.preservationState !== 130
     )
+  }
+
+  // move this to qvain.otherIdentifier class when refactor ticket is merged
+  @action cleanupOtherIdentifiers = () => {
+    const {
+      otherIdentifier,
+      setOtherIdentifierValidationError,
+      otherIdentifiersArray,
+      addOtherIdentifier,
+      setOtherIdentifier,
+    } = this
+    if (otherIdentifier !== '') {
+      try {
+        otherIdentifierSchema.validateSync(otherIdentifier)
+      } catch (err) {
+        this.Submit.setError(err)
+        setOtherIdentifierValidationError(err.errors)
+        return false
+      }
+      if (!otherIdentifiersArray.includes(otherIdentifier)) {
+        addOtherIdentifier(otherIdentifier)
+        setOtherIdentifier('')
+        this.Submit.clearResponse()
+        return true
+      }
+      const message = translate('qvain.description.otherIdentifiers.alreadyAdded')
+      setOtherIdentifierValidationError(message)
+      return false
+    }
+    return true
   }
 
   @action checkProvenanceActors = () => {
