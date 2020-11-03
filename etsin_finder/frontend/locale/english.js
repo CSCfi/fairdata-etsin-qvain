@@ -251,13 +251,14 @@ const english = {
     },
     pageTitles: {
       data: 'Data',
-      idnAndEvents: 'Identifiers and Events',
+      events: 'Identifiers and Events',
       maps: 'Maps',
       dataset: 'Dataset',
       datasets: 'Datasets',
       home: 'Home',
       error: 'Error',
       loginRequired: 'Login Required',
+      qvain: 'Qvain'
     },
     language: {
       toggleLabel: 'Switch language to: %(otherLang)s',

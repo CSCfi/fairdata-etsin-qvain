@@ -11,6 +11,7 @@
 import React from 'react'
 import { observable, action, makeObservable } from 'mobx'
 import translate from 'counterpart'
+import env from '../domain/env'
 
 class Accessibility {
   constructor() {
@@ -80,12 +81,38 @@ class Accessibility {
 
   @action
   handleNavigation(location, resetFocus = true) {
-    const pageName = translate(`general.pageTitles.${location}`)
+    let loc = location;
+    if (location === undefined) {
+      loc = this.getLocation()
+    }
+    const pageName = translate(`general.pageTitles.${loc}`)
     this.announce(pageName)
     this.setPageTitle(pageName)
     if (resetFocus) {
       this.resetFocus()
     }
+  }
+
+  getLocation() {
+    const pageTitles = [
+        'data',
+        'events',
+        'maps',
+        'datasets',
+        'home',
+        'error',
+        'loginRequired',
+        'qvain'
+    ]
+    const index = env.history.location.pathname.lastIndexOf('/');
+    let location = env.history.location.pathname.substring(index + 1);
+
+    if (location === '') {
+      location = 'home'
+    } else if (!pageTitles.includes(location)) { // Case with dataset/{identifier}
+      location = 'dataset'
+    }
+    return location
   }
 
   setPageTitle(name) {

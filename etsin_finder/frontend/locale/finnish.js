@@ -249,13 +249,14 @@ const finnish = {
     },
     pageTitles: {
       data: 'Data',
-      idnAndEvents: 'Tunnisteet ja tapahtumat',
+      events: 'Tunnisteet ja tapahtumat',
       maps: 'Kartat',
       dataset: 'Aineisto',
       datasets: 'Aineistot',
       home: 'Koti',
       error: 'Virhe',
       loginRequired: 'Kirjautuminen vaaditaan',
+      qvain: 'Qvain'
     },
     language: {
       toggleLabel: 'Vaihda kieltä: %(otherLang)s',
