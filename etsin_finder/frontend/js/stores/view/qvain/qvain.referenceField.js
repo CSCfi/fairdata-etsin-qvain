@@ -1,10 +1,11 @@
-import { action, observable, computed } from 'mobx'
+import { action, observable, computed, makeObservable } from 'mobx'
 
 class ReferenceField {
   constructor(Parent, defaultStorageFactory = () => [], defaultItem = undefined) {
     this.Parent = Parent
     this.defaultStorageFactory = defaultStorageFactory
     this.defaultItem = defaultItem
+    makeObservable(this)
   }
 
   @observable storage

@@ -1,6 +1,5 @@
-import React, { Component, Fragment } from 'react'
-import { inject, observer } from 'mobx-react'
-import PropTypes from 'prop-types'
+import React, { useState, useEffect, Fragment } from 'react'
+import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 import translate from 'counterpart'
 import {
@@ -10,37 +9,54 @@ import {
 } from '../general/input/datepicker'
 import { Label } from '../general/modal/form'
 import ValidationError from '../general/errors/validationError'
+import { useStores } from '../utils/stores'
 
-class EmbargoExpires extends Component {
-  validate = this.props.Stores.Qvain.EmbargoExpDate.validate
+const EmbargoExpires = () => {
+  const {
+    Qvain: {
+      EmbargoExpDate: { embargoExpDate, setEmbargoExpDate, readonly, Schema },
+    },
+    Locale: { lang },
+  } = useStores()
 
-  static propTypes = {
-    Stores: PropTypes.object.isRequired,
-  }
+  const [focused, setFocused] = useState(false)
+  const [error, setError] = useState(null)
 
-  render() {
-    const { set, value, readonly, validationError } = this.props.Stores.Qvain.EmbargoExpDate
-    const { lang } = this.props.Stores.Locale
+  useEffect(() => {
+    const validate = () => {
+      Schema.validate(embargoExpDate)
+        .then(() => {
+          setError(null)
+        })
+        .catch(err => {
+          setError(err.errors)
+        })
+    }
 
-    return (
-      <Fragment>
-        <Translate component={Label} content="qvain.rightsAndLicenses.embargoDate.label" />
-        <DatePicker
-          strictParsing
-          selected={value ? new Date(value) : null}
-          onChangeRaw={e => e && handleDatePickerChange(e.target.value, set)}
-          onChange={date => date && handleDatePickerChange(date.toISOString(), set)}
-          onBlur={this.validate}
-          locale={lang}
-          placeholderText={translate('qvain.rightsAndLicenses.embargoDate.placeholder')}
-          dateFormat={getDateFormatLocale(lang)}
-          disabled={readonly}
-        />
-        {<ValidationError>{validationError}</ValidationError>}
-        <Translate component="p" content="qvain.rightsAndLicenses.embargoDate.help" />
-      </Fragment>
-    )
-  }
+    if (!focused) {
+      validate()
+    }
+  }, [focused, embargoExpDate, Schema])
+
+  return (
+    <Fragment>
+      <Translate component={Label} content="qvain.rightsAndLicenses.embargoDate.label" />
+      <DatePicker
+        strictParsing
+        selected={embargoExpDate ? new Date(embargoExpDate) : null}
+        onChangeRaw={e => e && handleDatePickerChange(e.target.value, setEmbargoExpDate)}
+        onChange={date => date && handleDatePickerChange(date.toISOString(), setEmbargoExpDate)}
+        locale={lang}
+        placeholderText={translate('qvain.rightsAndLicenses.embargoDate.placeholder')}
+        dateFormat={getDateFormatLocale(lang)}
+        disabled={readonly}
+        onFocus={() => setFocused(true)}
+        onBlur={() => setFocused(false)}
+      />
+      {error && <ValidationError>{error}</ValidationError>}
+      <Translate component="p" content="qvain.rightsAndLicenses.embargoDate.help" />
+    </Fragment>
+  )
 }
 
-export default inject('Stores')(observer(EmbargoExpires))
+export default observer(EmbargoExpires)

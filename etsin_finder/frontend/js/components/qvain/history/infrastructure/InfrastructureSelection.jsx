@@ -1,12 +1,15 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import Select from '../../general/input/searchSelect'
 
-import { InfrastructureModel } from '../../../../stores/view/qvain/qvain.infrastructure'
+import { useStores } from '../../utils/stores'
 
-const InfrastructureSelection = ({ Stores }) => {
-  const { storage, set } = Stores.Qvain.Infrastructures
+const InfrastructureSelection = () => {
+  const {
+    Qvain: {
+      Infrastructures: { storage, Model, set },
+    },
+  } = useStores()
   return (
     <Select
       name="infrastructure"
@@ -14,14 +17,10 @@ const InfrastructureSelection = ({ Stores }) => {
       setter={set}
       isMulti
       isClearable={false}
-      model={InfrastructureModel}
+      model={Model}
       metaxIdentifier="research_infra"
     />
   )
 }
 
-InfrastructureSelection.propTypes = {
-  Stores: PropTypes.object.isRequired,
-}
-
-export default inject('Stores')(observer(InfrastructureSelection))
+export default observer(InfrastructureSelection)

@@ -1,10 +1,11 @@
-import { action } from 'mobx'
+import { action, makeObservable } from 'mobx'
 import SingleValueField from './qvain.singleValueField'
 
 class MultiLanguageField extends SingleValueField {
   constructor(Parent, Schema) {
     super(Parent, Schema, { fi: '', en: '' })
     this.Parent = Parent
+    makeObservable(this)
   }
 
   @action set = (value, lang) => {

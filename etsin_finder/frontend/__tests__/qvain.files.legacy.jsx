@@ -12,6 +12,7 @@ import QvainStoreClass from '../js/stores/view/qvain'
 import { Directory } from '../js/stores/view/qvain/qvain.filesv1'
 import LocaleStore from '../js/stores/view/language'
 import { DATA_CATALOG_IDENTIFIER } from '../js/utils/constants'
+import { useStores } from '../js/stores/stores'
 
 global.Promise = require('bluebird')
 const QvainStore = new QvainStoreClass(Env)
@@ -25,17 +26,39 @@ const getStores = () => {
   }
 }
 
+jest.mock('../js/stores/stores', () => {
+  const DATA_CATALOG_IDENTIFIER = require('../js/utils/constants').DATA_CATALOG_IDENTIFIER
+  const useStores = jest.fn()
+  useStores.mockReturnValue({
+    Qvain: {
+      idaPickerOpen: true,
+      dataCatalog: DATA_CATALOG_IDENTIFIER.IDA,
+    },
+    Env: {
+      metaxAPIv2: false,
+    },
+  })
+  return { ...jest.requireActual('../js/stores/stores'), useStores }
+})
+
 describe('Qvain.Files', () => {
+  let stores
+
+  beforeEach(() => {
+    stores = getStores()
+    stores.Qvain.resetQvainStore()
+    useStores.mockReturnValue(stores)
+  })
+
   it('should render file picker', () => {
-    const store = getStores()
-    store.Qvain.dataCatalog = DATA_CATALOG_IDENTIFIER.IDA
-    store.Qvain.idaPickerOpen = true
-    const component = shallow(<Files Stores={store} />)
+    stores.Qvain.dataCatalog = DATA_CATALOG_IDENTIFIER.IDA
+    stores.Qvain.idaPickerOpen = true
+    const component = shallow(<Files />)
     expect(component.dive().find(IDAFilePicker).length).toBe(1)
   })
 
   it('should open file selector upon selecting file picker', () => {
-    const component = shallow(<IDAFilePickerBase Stores={getStores()} />)
+    const component = shallow(<IDAFilePickerBase Stores={stores} />)
     component
       .children()
       .last()
@@ -46,7 +69,6 @@ describe('Qvain.Files', () => {
   })
 
   it('allows selecting directories in the file selector', () => {
-    const stores = getStores()
     const component = mount(<FileSelectorBase Stores={stores} />)
     runInAction(() => {
       stores.Qvain.selectedProject = 'project_y'
@@ -85,8 +107,6 @@ describe('Qvain.Files', () => {
   })
 
   it('allows modifying the metadata of selected directories', () => {
-    // repeat previous one
-    const stores = getStores()
     // reset selected directories
     stores.Qvain.selectedDirectories = []
     const fileSelector = mount(<FileSelectorBase Stores={stores} />)

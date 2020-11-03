@@ -1,7 +1,6 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import React, { useState } from 'react'
 import Translate from 'react-translate-component'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
@@ -14,102 +13,103 @@ import ValidationError from '../general/errors/validationError'
 import { LabelLarge, Input } from '../general/modal/form'
 import { keywordsSchema } from '../utils/formValidation'
 import { ButtonContainer, AddNewButton } from '../general/buttons'
+import { useStores } from '../utils/stores'
 
-class KeywordsField extends Component {
-  static propTypes = {
-    Stores: PropTypes.object.isRequired,
+const KeywordsField = () => {
+  const {
+    Qvain: {
+      readonly,
+      Keywords: {
+        itemStr: keywordString,
+        setItemStr: setKeywordString,
+        addKeyword,
+        remove: removeKeyword,
+        storage: keywordsArray,
+      },
+    },
+    Locale: { lang },
+  } = useStores()
+  const [error, setError] = useState(null)
+
+  const handleChange = e => {
+    setKeywordString(e.target.value)
+    setError(null)
   }
 
-  handleChange = e => {
-    const { setItemStr, setValidationError } = this.props.Stores.Qvain.Keywords
-    if (e.target.value === ',') {
-      return
-    }
-    setItemStr(e.target.value)
-    setValidationError(null)
-  }
-
-  handleBlur = () => {
-    const { storage, setValidationError } = this.props.Stores.Qvain.Keywords
+  const validate = () => {
     keywordsSchema
-      .validate(storage)
+      .validate(keywordsArray)
       .then(() => {
-        setValidationError(null)
+        setError(null)
       })
       .catch(err => {
-        setValidationError(err.errors)
+        setError(err.errors)
       })
   }
 
-  handleKeyDown = e => {
-    const { addKeyword, removeItemStr } = this.props.Stores.Qvain.Keywords
-    if (e.keyCode === 188) {
-      addKeyword()
-      removeItemStr()
+  const handleKeywordAdd = e => {
+    e.preventDefault()
+    addKeyword()
+    validate()
+  }
+
+  const handleKeyDown = e => {
+    if (e.keyCode === 188 || e.keyCode === 13) {
+      handleKeywordAdd(e)
     }
   }
 
-  render() {
-    const {
-      readonly,
-      storage,
-      itemStr,
-      validationError,
-      remove,
-      addKeyword,
-    } = this.props.Stores.Qvain.Keywords
-    const { lang } = this.props.Stores.Locale
-    const RenderedKeywords = storage.map(word => (
-      <Label color="#007fad" margin="0 0.5em 0.5em 0" key={word}>
-        <PaddedWord>{word}</PaddedWord>
-        {!readonly && (
-          <FontAwesomeIcon
-            className="delete-keyword"
-            size="xs"
-            icon={faTimes}
-            aria-label="remove"
-            onClick={() => remove(word)}
-          />
-        )}
-      </Label>
-    ))
-    return (
-      <Card>
-        <LabelLarge htmlFor="keywordsInput">
-          <Tooltip
-            title={counterpart('qvain.description.fieldHelpTexts.requiredToPublish', {
-              locale: lang,
-            })}
-            position="right"
-          >
-            <Translate content="qvain.description.keywords.title" /> *
-          </Tooltip>
-        </LabelLarge>
-        <Translate component="p" content="qvain.description.keywords.help" />
-        {RenderedKeywords}
-        <Translate
-          component={Input}
-          id="keywordsInput"
-          disabled={readonly}
-          value={itemStr}
-          onChange={this.handleChange}
-          onKeyDown={this.handleKeyDown}
-          type="text"
-          attributes={{ placeholder: 'qvain.description.keywords.placeholder' }}
+  const RenderedKeywords = keywordsArray.map(word => (
+    <Label color="#007fad" margin="0 0.5em 0.5em 0" key={word}>
+      <PaddedWord>{word}</PaddedWord>
+      {!readonly && (
+        <FontAwesomeIcon
+          className="delete-keyword"
+          size="xs"
+          icon={faTimes}
+          aria-label="remove"
+          onClick={() => removeKeyword(word)}
         />
-        <ValidationError>{validationError}</ValidationError>
-        <ButtonContainer>
-          <AddNewButton type="button" onClick={addKeyword} disabled={readonly}>
-            <Translate content="qvain.description.keywords.addButton" />
-          </AddNewButton>
-        </ButtonContainer>
-      </Card>
-    )
-  }
+      )}
+    </Label>
+  ))
+
+  return (
+    <Card>
+      <LabelLarge htmlFor="keywordsInput">
+        <Tooltip
+          title={counterpart('qvain.description.fieldHelpTexts.requiredToPublish', {
+            locale: lang,
+          })}
+          position="right"
+        >
+          <Translate content="qvain.description.keywords.title" /> *
+        </Tooltip>
+      </LabelLarge>
+      <Translate component="p" content="qvain.description.keywords.help" />
+      {RenderedKeywords}
+      <Translate
+        component={Input}
+        id="keywordsInput"
+        disabled={readonly}
+        value={keywordString}
+        onChange={handleChange}
+        onKeyDown={handleKeyDown}
+        type="text"
+        attributes={{ placeholder: 'qvain.description.keywords.placeholder' }}
+      />
+      <ValidationError>{error}</ValidationError>
+      <ButtonContainer>
+        <AddNewButton type="button" onClick={handleKeywordAdd} disabled={readonly}>
+          <Translate content="qvain.description.keywords.addButton" />
+        </AddNewButton>
+      </ButtonContainer>
+    </Card>
+  )
 }
 
 const PaddedWord = styled.span`
   padding-right: 10px;
 `
 
-export default inject('Stores')(observer(KeywordsField))
+export default observer(KeywordsField)

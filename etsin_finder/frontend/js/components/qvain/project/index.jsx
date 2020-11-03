@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import { toJS } from 'mobx'
 import styled from 'styled-components'
 
@@ -25,6 +25,7 @@ import ProjectForm from './ProjectForm'
 import FundingOrganization from './FundingOrganization'
 import FundingAgency from './FundingAgency'
 import { Expand } from './utils'
+import { withStores } from '../utils/stores'
 
 const FIELD_PROPS = {
   translations: {
@@ -308,7 +309,7 @@ AddedProjectsComponent.propTypes = {
   removeProject: PropTypes.func.isRequired,
 }
 
-const AddedProjects = inject('Stores')(observer(AddedProjectsComponent))
+const AddedProjects = withStores(observer(AddedProjectsComponent))
 
 const Actions = styled.div`
   margin-top: 1.5rem;
@@ -319,4 +320,4 @@ const Actions = styled.div`
 
 const ProjectActions = styled(ButtonContainer)``
 
-export default inject('Stores')(observer(Project))
+export default withStores(observer(Project))

@@ -1,4 +1,4 @@
-import { action, observable, computed } from 'mobx'
+import { action, observable, computed, makeObservable } from 'mobx'
 
 class SingleValueField {
   constructor(Parent, Schema = undefined, defaultValue = undefined) {
@@ -6,6 +6,7 @@ class SingleValueField {
     this.defaultValue = defaultValue
     this.Schema = Schema
     this.reset()
+    makeObservable(this)
   }
 
   @observable value = this.defaultValue

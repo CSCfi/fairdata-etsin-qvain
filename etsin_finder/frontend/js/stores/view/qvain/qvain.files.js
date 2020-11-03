@@ -20,6 +20,7 @@ class Files extends FilesBase {
     this.SelectedItemsView = new SelectedItemsView(this)
     this.AddItemsView = new AddItemsView(this)
     this.promiseManager = new PromiseManager()
+    this.addItem = this.addItem.bind(this)
     this.reset()
   }
 

@@ -1,41 +1,50 @@
-import React, { Component } from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
-import PropTypes from 'prop-types'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 
 import Select from '../general/input/select'
 import ValidationError from '../general/errors/validationError'
+import { useStores } from '../utils/stores'
 
-class RestrictionGrounds extends Component {
-  handleBlur = this.props.Stores.Qvain.RestrictionGrounds.validate
+const RestrictionGrounds = () => {
+  const {
+    Qvain: {
+      RestrictionGrounds: { value: restrictionGrounds, set: setRestrictionGrounds, Schema, Model },
+    },
+  } = useStores()
+  const [error, setError] = useState()
 
-  static propTypes = {
-    Stores: PropTypes.object.isRequired,
+  const handleBlur = () => {
+    const { identifier = '' } = restrictionGrounds
+    Schema.validate(identifier)
+      .then(() => {
+        setError(null)
+      })
+      .catch(err => {
+        setError(err.errors)
+      })
   }
 
-  render() {
-    const { value, set, validationError, Model } = this.props.Stores.Qvain.RestrictionGrounds
-    return (
-      <RestrictionGroundsContainer>
-        <Translate component="h3" content="qvain.rightsAndLicenses.restrictionGrounds.title" />
-        <Translate
-          name="restrictionGrounds"
-          metaxIdentifier="restriction_grounds"
-          component={Select}
-          attributes={{ placeholder: 'qvain.rightsAndLicenses.restrictionGrounds.placeholder' }}
-          model={Model}
-          getter={value}
-          setter={set}
-          onBlur={this.handleBlur}
-        />
-        <ValidationError>{validationError}</ValidationError>
-        <Text>
-          <Translate content="qvain.rightsAndLicenses.restrictionGrounds.text" />
-        </Text>
-      </RestrictionGroundsContainer>
-    )
-  }
+  return (
+    <RestrictionGroundsContainer>
+      <Translate component="h3" content="qvain.rightsAndLicenses.restrictionGrounds.title" />
+      <Translate
+        name="restrictionGrounds"
+        metaxIdentifier="restriction_grounds"
+        component={Select}
+        attributes={{ placeholder: 'qvain.rightsAndLicenses.restrictionGrounds.placeholder' }}
+        model={Model}
+        getter={restrictionGrounds}
+        setter={setRestrictionGrounds}
+        onBlur={handleBlur}
+      />
+      {error && <ValidationError>{error}</ValidationError>}
+      <Text>
+        <Translate content="qvain.rightsAndLicenses.restrictionGrounds.text" />
+      </Text>
+    </RestrictionGroundsContainer>
+  )
 }
 
 const RestrictionGroundsContainer = styled.div`
@@ -45,4 +54,4 @@ const Text = styled.p`
   margin-top: 10px;
 `
 
-export default inject('Stores')(observer(RestrictionGrounds))
+export default observer(RestrictionGrounds)

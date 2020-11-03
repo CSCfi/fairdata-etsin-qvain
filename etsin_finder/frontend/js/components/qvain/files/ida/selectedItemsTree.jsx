@@ -1,21 +1,23 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { autorun } from 'mobx'
-import PropTypes from 'prop-types'
-import { inject, Observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 
 import SelectedItemsTreeItem from './selectedItemsTreeItem'
 import { useRenderTree } from '../../../general/files/tree'
+import { useStores } from '../../utils/stores'
 
-export function SelectedItemsTree(props) {
-  const { Files } = props.Stores.Qvain
-  const { SelectedItemsView } = Files
+export function SelectedItemsTree() {
+  const {
+    Files: { SelectedItemsView, root },
+  } = useStores().Qvain
+  const { Files } = useStores().Qvain
 
   // Open top level directory
   useEffect(
     () =>
       autorun(() => {
-        if (Files.root) {
-          Files.root.directories.forEach((dir) => SelectedItemsView.open(dir))
+        if (root) {
+          root.directories.forEach(dir => SelectedItemsView.open(dir))
         }
       }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -29,11 +31,7 @@ export function SelectedItemsTree(props) {
     moreItemsLevel: 4.5,
   })
 
-  return <Observer>{renderTree}</Observer>
+  return renderTree()
 }
 
-SelectedItemsTree.propTypes = {
-  Stores: PropTypes.object.isRequired,
-}
-
-export default inject('Stores')(SelectedItemsTree)
+export default observer(SelectedItemsTree)

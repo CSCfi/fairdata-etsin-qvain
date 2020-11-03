@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import { withTheme } from 'styled-components'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
@@ -18,6 +18,7 @@ import {
   autoSortOptions,
 } from '../utils/select'
 import { ValidationErrors } from '../general/errors/validationError'
+import { withStores } from '../utils/stores'
 
 export class License extends Component {
   promises = []
@@ -155,4 +156,4 @@ export class License extends Component {
   }
 }
 
-export default withTheme(inject('Stores')(observer(License)))
+export default withTheme(withStores(observer(License)))

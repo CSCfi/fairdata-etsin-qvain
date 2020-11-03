@@ -2,9 +2,10 @@ import React from 'react'
 import { shallow, mount } from 'enzyme'
 import { runInAction } from 'mobx'
 
+import { StoresProvider } from '../js/stores/stores'
 import '../locale/translations'
 import etsinTheme from '../js/styles/theme'
-import Qvain from '../js/components/qvain/main'
+import Qvain, { Qvain as QvainBase } from '../js/components/qvain/main'
 import Description from '../js/components/qvain/description'
 import DescriptionField from '../js/components/qvain/description/descriptionField'
 import OtherIdentifierField from '../js/components/qvain/description/otherIdentifierField'
@@ -23,7 +24,7 @@ import { SelectedFilesBase, FileLabel } from '../js/components/qvain/files/legac
 import { DeleteButton } from '../js/components/qvain/general/buttons'
 import Env from '../js/stores/domain/env'
 import QvainStoreClass from '../js/stores/view/qvain'
-import { Directory } from '../js/stores/view/qvain/qvain.filesv1.js'
+import { Directory } from '../js/stores/view/qvain/qvain.filesv1'
 import LocaleStore from '../js/stores/view/language'
 
 jest.mock('uuid', () => {
@@ -39,6 +40,25 @@ jest.mock('moment', original => {
   })
 })
 
+jest.mock('../js/stores/stores', () => {
+  const DATA_CATALOG_IDENTIFIER = require('../js/utils/constants').DATA_CATALOG_IDENTIFIER
+  const useStores = jest.fn()
+
+  useStores.mockReturnValue({
+    Qvain: {
+      dataCatalog: DATA_CATALOG_IDENTIFIER.IDA,
+    },
+    Env: {
+      metaxApiV2: false,
+    },
+  })
+
+  return {
+    ...jest.requireActual('../js/stores/stores'),
+    useStores,
+  }
+})
+
 const QvainStore = new QvainStoreClass(Env)
 const getStores = () => {
   Env.setMetaxApiV2(false)
@@ -51,7 +71,11 @@ const getStores = () => {
 
 describe('Qvain', () => {
   it('should render correctly', () => {
-    const component = shallow(<Qvain Stores={getStores()} />)
+    const component = shallow(
+      <StoresProvider store={getStores()}>
+        <Qvain />
+      </StoresProvider>
+    )
 
     expect(component).toMatchSnapshot()
   })
@@ -67,7 +91,7 @@ describe('Qvain', () => {
     // Replace Qvain.getDataset so we can test it was called correctly
     let callCount = 0
     let lastCall
-    class FakeQvain extends Qvain.WrappedComponent.wrappedComponent {
+    class FakeQvain extends QvainBase {
       getDataset(identifier) {
         callCount += 1
         lastCall = identifier
@@ -144,23 +168,43 @@ describe('Qvain', () => {
 
 describe('Qvain.Description', () => {
   it('should render <Description />', () => {
-    const component = shallow(<Description Stores={getStores()} />)
+    const component = shallow(
+      <StoresProvider store={getStores()}>
+        <Description />
+      </StoresProvider>
+    )
     expect(component).toMatchSnapshot()
   })
   it('should render <DescriptionField />', () => {
-    const component = shallow(<DescriptionField Stores={getStores()} />)
+    const component = shallow(
+      <StoresProvider store={getStores()}>
+        <DescriptionField />
+      </StoresProvider>
+    )
     expect(component).toMatchSnapshot()
   })
   it('should render <OtherIdentifierField />', () => {
-    const component = shallow(<OtherIdentifierField Stores={getStores()} />)
+    const component = shallow(
+      <StoresProvider store={getStores()}>
+        <OtherIdentifierField />
+      </StoresProvider>
+    )
     expect(component).toMatchSnapshot()
   })
   it('should render <FieldOfScienceField />', () => {
-    const component = shallow(<FieldOfScienceField Stores={getStores()} />)
+    const component = shallow(
+      <StoresProvider store={getStores()}>
+        <FieldOfScienceField />
+      </StoresProvider>
+    )
     expect(component).toMatchSnapshot()
   })
   it('should render <KeywordsField />', () => {
-    const component = shallow(<KeywordsField Stores={getStores()} />)
+    const component = shallow(
+      <StoresProvider store={getStores()}>
+        <KeywordsField />
+      </StoresProvider>
+    )
     expect(component).toMatchSnapshot()
   })
 })
@@ -216,8 +260,8 @@ describe('Qvain.Files', () => {
     const store = getStores()
     store.Qvain.dataCatalog = DATA_CATALOG_IDENTIFIER.IDA
     store.Qvain.idaPickerOpen = true
-    const component = shallow(<Files Stores={store} />)
-    expect(component.dive().find(IDAFilePicker).length).toBe(1)
+    const component = shallow(<Files />)
+    expect(component.find(IDAFilePicker).length).toBe(1)
   })
 
   it('should open file selector upon selecting file picker', () => {

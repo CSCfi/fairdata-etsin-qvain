@@ -2,11 +2,9 @@ import React from 'react'
 import { mount } from 'enzyme'
 import ReactModal from 'react-modal'
 import { ThemeProvider } from 'styled-components'
-import { Provider } from 'mobx-react'
 import { BrowserRouter } from 'react-router-dom'
 import axios from 'axios'
-import { when } from 'mobx'
-import { runInAction } from 'mobx'
+import { runInAction, when } from 'mobx'
 
 import '../locale/translations.js'
 import etsinTheme from '../js/styles/theme'
@@ -16,6 +14,7 @@ import Env from '../js/stores/domain/env'
 import QvainStoreClass from '../js/stores/view/qvain'
 import { DatasetFile, Directory } from '../js/stores/view/qvain/qvain.filesv1.js'
 import LocaleStore from '../js/stores/view/language'
+import { StoresProvider } from '../js/stores/stores.jsx'
 
 jest.mock('axios')
 
@@ -152,7 +151,7 @@ describe('Qvain.MetadataModal', () => {
     stores = getStores()
     const ref = React.createRef()
     wrapper = mount(
-      <Provider Stores={stores}>
+      <StoresProvider store={stores}>
         <BrowserRouter>
           <ThemeProvider theme={etsinTheme}>
             <>
@@ -161,7 +160,7 @@ describe('Qvain.MetadataModal', () => {
             </>
           </ThemeProvider>
         </BrowserRouter>
-      </Provider>,
+      </StoresProvider>,
       { attachTo: helper }
     )
     instance = ref.current

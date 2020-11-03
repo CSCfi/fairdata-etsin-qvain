@@ -1,7 +1,12 @@
-import { action } from 'mobx'
+import { action, makeObservable } from 'mobx'
 import ReferenceField from './qvain.referenceField'
 
 class Keywords extends ReferenceField {
+  constructor(Parent, defaultStorageFactory = () => [], defaultItem = undefined) {
+    super(Parent, defaultStorageFactory, defaultItem)
+    makeObservable(this)
+  }
+
   @action
   addKeyword = () => {
     if (this.itemStr.length > 0) {

@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
@@ -18,6 +18,7 @@ import {
 } from './utils'
 import Button from '../../general/button'
 import Label from '../general/card/label'
+import { withStores } from '../utils/stores'
 
 import { Organization } from '../../../stores/view/qvain/qvain.project'
 import { organizationObjectSchema } from '../utils/formValidation'
@@ -160,4 +161,4 @@ const OrganizationLabel = styled(Label)`
   cursor: pointer;
 `
 
-export default inject('Stores')(observer(FundingOrganization))
+export default withStores(observer(FundingOrganization))

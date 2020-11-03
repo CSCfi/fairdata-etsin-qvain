@@ -17,7 +17,7 @@ import PropTypes from 'prop-types'
 import translate from 'counterpart'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import { NavLink } from 'react-router-dom'
 
 import { opacify } from 'polished'
@@ -28,6 +28,7 @@ import ErrorPage from '../errorpage'
 import ErrorBoundary from '../general/errorBoundary'
 import NoticeBar from '../general/noticeBar'
 import Loader from '../general/loader'
+import { withStores } from '../../stores/stores'
 
 const BackButton = styled(NavLink)`
   color: ${props => props.theme.color.primary};
@@ -309,4 +310,4 @@ Dataset.propTypes = {
   location: PropTypes.object.isRequired,
 }
 
-export default inject('Stores')(observer(Dataset))
+export default withStores(observer(Dataset))

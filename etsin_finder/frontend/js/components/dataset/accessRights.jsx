@@ -11,7 +11,7 @@
 }
 
 import React, { Component } from 'react'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import translate from 'counterpart'
 import {
@@ -29,6 +29,7 @@ import checkDataLang, { getDataLang } from '../../utils/checkDataLang'
 import Button from '../general/button'
 import Modal from '../general/modal'
 import { ACCESS_TYPE_URL } from '../../utils/constants'
+import { withStores } from '../../utils/stores'
 
 export const accessRightsBool = accessRights => {
   if (accessRights !== undefined && accessRights !== null) {
@@ -56,7 +57,9 @@ class AccessRights extends Component {
       }
       identifier = props.access_rights.access_type.identifier
       id = Object.keys(ACCESS_TYPE_URL).find(key => ACCESS_TYPE_URL[key] === identifier)
-      description = translate(`dataset.access_rights_description.${id !== undefined ? id.toLowerCase() : ''}`)
+      description = translate(
+        `dataset.access_rights_description.${id !== undefined ? id.toLowerCase() : ''}`
+      )
       url = props.access_rights.access_url
     }
     this.state = {
@@ -76,7 +79,8 @@ class AccessRights extends Component {
 
   restricted() {
     return (
-      <div>
+      // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
+      <div tabIndex="0">
         <FontAwesomeIcon icon={faLock} title="Closed lock" />
         <AccessLabel lang={getDataLang(this.state.title)}>
           {checkDataLang(this.state.title)}
@@ -87,7 +91,8 @@ class AccessRights extends Component {
 
   openAccess() {
     return (
-      <div>
+      // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
+      <div tabIndex="0">
         <FontAwesomeIcon icon={faLockOpen} title="Lock open" />
         <AccessLabel lang={getDataLang(this.state.title)}>
           {checkDataLang(this.state.title)}
@@ -132,7 +137,8 @@ class AccessRights extends Component {
             <ModalInner>
               {accessRightsBool(this.props.access_rights) ? this.openAccess() : this.restricted()}
               {this.state.description && (
-                <div>
+                // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
+                <div tabIndex="0">
                   <FontAwesomeIcon icon={faInfoCircle} title="Additional information" />
                   <AccessLabel lang={getDataLang(this.state.description)}>
                     {checkDataLang(this.state.description)}
@@ -140,7 +146,8 @@ class AccessRights extends Component {
                 </div>
               )}
               {this.state.url && (
-                <div>
+                // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
+                <div tabIndex="0">
                   <FontAwesomeIcon icon={faGlobe} title="Access to data" />
                   <AccessUrl
                     href={this.state.url.identifier}
@@ -153,9 +160,14 @@ class AccessRights extends Component {
               )}
               {this.state.restriction_grounds &&
                 this.state.restriction_grounds.map(rg => (
-                  <div key={`div-rg-${rg.identifier}`}>
-                    <FontAwesomeIcon key={`fai-rg-${rg.identifier}`} icon={faExclamationTriangle} title="Restricted" />
-                    <AccessLabel key={`al-rg-${rg.identifier}`} lang={getDataLang(rg.pref_label)}>
+                  // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
+                  <div key={`div-rg-${rg.identifier}`} tabIndex="0">
+                    <FontAwesomeIcon
+                      key={`fai-rg-${rg.identifier}`}
+                      icon={faExclamationTriangle}
+                      title="Restricted"
+                    />
+                    <AccessLabel key={`al-rg-${rg.identifier}`} lang={getDataLang(rg.pref_label)} tabIndex="0">
                       {checkDataLang(rg.pref_label)}
                     </AccessLabel>
                   </div>
@@ -179,7 +191,7 @@ class AccessRights extends Component {
   }
 }
 
-export default inject('Stores')(observer(AccessRights))
+export default withStores(observer(AccessRights))
 export const undecorated = AccessRights
 
 const Access = styled.div`
@@ -221,7 +233,6 @@ const ModalInner = styled.div`
     margin-bottom: 0.2em;
   }
 `
-
 AccessRights.defaultProps = {
   access_rights: undefined,
   button: false,

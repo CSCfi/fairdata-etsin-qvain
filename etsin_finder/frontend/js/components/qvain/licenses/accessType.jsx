@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import Select from 'react-select'
 import Translate from 'react-translate-component'
 import styled from 'styled-components'
@@ -20,6 +20,7 @@ import {
 } from '../utils/select'
 import { LabelLarge, HelpField } from '../general/modal/form'
 import { ACCESS_TYPE_URL } from '../../../utils/constants'
+import { withStores } from '../utils/stores'
 
 export class AccessType extends Component {
   promises = []
@@ -134,4 +135,4 @@ const PermitHelp = styled.div`
   margin-top: 0.5rem;
 `
 
-export default inject('Stores')(observer(AccessType))
+export default withStores(observer(AccessType))
