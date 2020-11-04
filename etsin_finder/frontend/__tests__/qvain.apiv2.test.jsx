@@ -82,11 +82,12 @@ const generateDefaultDatasetForPublish = settings => ({
   ...settings,
 })
 
-const createMockQvain = () => {
+const createMockQvain = settings => {
   return {
     checkProvenanceActors: jest.fn(() => true),
     addUnsavedMultiValueFields: jest.fn(),
     cleanupOtherIdentifiers: jest.fn(() => true),
+    ...settings,
   }
 }
 
@@ -399,6 +400,105 @@ describe('publish new dataset', () => {
     const dataset = generateDefaultDatasetForPublish({
       dataCatalog: DATA_CATALOG_IDENTIFIER.ATT,
       cumulativeState: CUMULATIVE_STATE.CLOSED,
+      useDoi: true,
+    })
+
+    expectError(dataset, errors.wrongFileOrigin)
+  })
+})
+
+describe('edit existing draft dataset', () => {
+  let Submit, mockQvain
+  beforeEach(() => {
+    mockQvain = createMockQvain({ original: { state: 'draft' } })
+    Submit = new SubmitClass(mockQvain)
+  })
+
+  const expectNoError = async dataset => {
+    handleSubmitToBackend.mockReturnValue(dataset)
+    qvainFormSchema.validate.mockReturnValue(realQvainFormSchema.validate(dataset))
+
+    try {
+      await Submit.submitDraft()
+    } finally {
+      expect(Submit.error).toBe(undefined)
+    }
+  }
+
+  const expectError = async (dataset, error) => {
+    handleSubmitToBackend.mockReturnValue(dataset)
+    qvainFormSchema.validate.mockReturnValue(realQvainFormSchema.validate(dataset))
+
+    await expect(Submit.submitDraft()).rejects.toThrow()
+  }
+
+  afterEach(async () => {
+    jest.resetAllMocks()
+  })
+
+  test('cases 37-39: no file origin, urn, cumulative state any', async () => {
+    const dataset = generateDefaultDatasetForPublish({ dataCatalog: undefined })
+
+    await expectError(dataset, errors.missingFileOrigin)
+  })
+
+  test('cases 40-42: no file origin, doi, cumulative state any', async () => {
+    const dataset = generateDefaultDatasetForPublish({ dataCatalog: undefined, useDoi: true })
+
+    await expectError(dataset, errors.missingFileOrigin)
+  })
+
+  test('case 43: ida, urn, cumulative state no', async () => {
+    const dataset = generateDefaultDatasetForPublish()
+
+    await expectNoError(dataset)
+  })
+
+  test('case 44: ida, urn, cumulative state yes', async () => {
+    const dataset = generateDefaultDatasetForPublish({ cumulativeState: CUMULATIVE_STATE.YES })
+
+    await expectNoError(dataset)
+  })
+
+  test('case 45: ida, urn, cumulative state yes', async () => {
+    const dataset = generateDefaultDatasetForPublish({ cumulativeState: CUMULATIVE_STATE.CLOSED })
+
+    await expectNoError(dataset)
+  })
+
+  test('case 46: ida, doi, cumulative state no', async () => {
+    const dataset = generateDefaultDatasetForPublish({ useDoi: true })
+
+    await expectNoError(dataset)
+  })
+
+  test('case 47: ida, doi, cumulative state yes', async () => {
+    const dataset = generateDefaultDatasetForPublish({
+      useDoi: true,
+      cumultaiveState: CUMULATIVE_STATE.YES,
+    })
+
+    await expectNoError(dataset)
+  })
+
+  test('case 48: ida, doi, cumulative state closed', async () => {
+    const dataset = generateDefaultDatasetForPublish({
+      useDoi: true,
+      cumultaiveState: CUMULATIVE_STATE.CLOSED,
+    })
+
+    await expectNoError(dataset)
+  })
+
+  test('case 49-51: ext resources, urn, cumulative state any', () => {
+    const dataset = generateDefaultDatasetForPublish({ dataCatalog: DATA_CATALOG_IDENTIFIER.ATT })
+
+    expectNoError(dataset)
+  })
+
+  test('case 52-54: ext resources, doi, cumulative state any', () => {
+    const dataset = generateDefaultDatasetForPublish({
+      dataCatalog: DATA_CATALOG_IDENTIFIER.ATT,
       useDoi: true,
     })
 

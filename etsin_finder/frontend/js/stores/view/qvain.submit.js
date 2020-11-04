@@ -3,8 +3,9 @@ import handleSubmitToBackend from '../../components/qvain/utils/handleSubmit'
 import { qvainFormSchema } from '../../components/qvain/utils/formValidation'
 import { DATA_CATALOG_IDENTIFIER } from '../../utils/constants'
 
-const SUBMIT_TYPES = {
-  NEW_DATASET: 'NEW_DATASET',
+const DATASET_STATE = {
+  NEW: 'NEW',
+  DRAFT: 'DRAFT',
   UNKNOWN: 'UNKNOWN',
 }
 
@@ -68,8 +69,11 @@ class Submit {
 
   @action submitDraft = async () => {
     switch (this.submitType) {
-      case SUBMIT_TYPES.NEW_DATASET:
+      case DATASET_STATE.NEW:
         await this.exec(this.createNewDraft)
+        return
+      case DATASET_STATE.DRAFT:
+        await this.exec(this.updateDraft)
         return
       default:
         console.error('Unknown submit status')
@@ -78,7 +82,7 @@ class Submit {
 
   @action submitPublish = async () => {
     switch (this.submitType) {
-      case SUBMIT_TYPES.NEW_DATASET:
+      case DATASET_STATE.NEW:
         await this.exec(this.publishNewDataset)
         return
       default:
@@ -96,13 +100,20 @@ class Submit {
 
   createNewDraft = () => {}
 
+  updateDraft = () => {}
+
   publishNewDataset = () => {}
 
   @computed get submitType() {
-    if (!this.Qvain.original) {
-      return SUBMIT_TYPES.NEW_DATASET
+    const { original } = this.Qvain
+    if (!original) {
+      return DATASET_STATE.NEW
     }
-    return SUBMIT_TYPES.UNKNOWN
+    if (original && original.state === 'draft') {
+      return DATASET_STATE.DRAFT
+    }
+
+    return DATASET_STATE.UNKNOWN
   }
 }
 

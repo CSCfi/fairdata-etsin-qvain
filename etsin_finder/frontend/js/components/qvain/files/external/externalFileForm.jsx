@@ -32,7 +32,7 @@ export const ExternalFileFormBase = () => {
         fi: translations.fi,
       })
     })
-  })
+  }, [])
 
   const handleSaveExternalResource = event => {
     event.preventDefault()
