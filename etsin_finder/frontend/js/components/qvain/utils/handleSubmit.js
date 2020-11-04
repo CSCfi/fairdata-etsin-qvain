@@ -88,7 +88,7 @@ const projectsToMetax = projects =>
 
 const handleSubmitToBackend = (Env, values) => {
   const actors = values.Actors.toBackend()
-  console.log(JSON.stringify(values.dataCatalog))
+
   const spatial = values.Spatials.toBackend()
 
   const temporal = values.Temporals.toBackend()

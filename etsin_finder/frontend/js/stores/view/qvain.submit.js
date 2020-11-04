@@ -1,6 +1,7 @@
 import { makeObservable, observable, action, computed } from 'mobx'
 import handleSubmitToBackend from '../../components/qvain/utils/handleSubmit'
 import { qvainFormSchema } from '../../components/qvain/utils/formValidation'
+import { DATA_CATALOG_IDENTIFIER } from '../../utils/constants'
 
 const SUBMIT_TYPES = {
   NEW_DATASET: 'NEW_DATASET',
@@ -53,6 +54,7 @@ class Submit {
     const payload = handleSubmitToBackend(this.Qvain.Env, this.Qvain)
 
     try {
+      await this.checkDoiCompability(payload)
       await qvainFormSchema.validate(payload)
       this.setLoading(true)
       await submitFunction(payload)
@@ -74,7 +76,27 @@ class Submit {
     }
   }
 
+  @action submitPublish = async () => {
+    switch (this.submitType) {
+      case SUBMIT_TYPES.NEW_DATASET:
+        await this.exec(this.publishNewDataset)
+        return
+      default:
+        console.error('Unknown submit status')
+    }
+  }
+
+  checkDoiCompability = payload => {
+    return new Promise((res, rej) => {
+      if (!payload.useDoi) res()
+      if (payload.useDoi && payload.dataCatalog === DATA_CATALOG_IDENTIFIER.IDA) res()
+      rej(new Error('Doi can be used only with Ida datasets.'))
+    })
+  }
+
   createNewDraft = () => {}
+
+  publishNewDataset = () => {}
 
   @computed get submitType() {
     if (!this.Qvain.original) {
