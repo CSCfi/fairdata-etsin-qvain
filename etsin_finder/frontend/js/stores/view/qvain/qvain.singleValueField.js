@@ -7,13 +7,14 @@ class SingleValueField {
     this.Schema = Schema
     this.reset()
     makeObservable(this)
+    this.set = this.set.bind(this)
   }
 
   @observable value = this.defaultValue
 
   @observable validationError = null
 
-  @action set = newValue => {
+  @action set(newValue) {
     this.value = newValue
     this.Parent.setChanged(true)
   }

@@ -1,4 +1,4 @@
-import { observable, action, computed, runInAction } from 'mobx'
+import { observable, action, computed, runInAction, makeObservable } from 'mobx'
 import axios from 'axios'
 import { getDirectories, getFiles, deepCopy } from '../../../components/qvain/utils/fileHierarchy'
 import urls from '../../../components/qvain/utils/urls'
@@ -6,6 +6,10 @@ import { USE_CATEGORY_URL } from '../../../utils/constants'
 import { getPath } from '../../../components/qvain/utils/object'
 
 class FilesV1 {
+  constructor() {
+    makeObservable(this)
+  }
+
   @observable idaPickerOpen = false
 
   @observable selectedProject = undefined
@@ -51,29 +55,29 @@ class FilesV1 {
       }
       this.existingDirectories = dsDirectories
         ? dsDirectories.map(d => {
-            // Removed directories don't have details
-            if (!d.details) {
-              d.details = {
-                directory_name: d.title,
-                file_path: '',
-                removed: true,
-              }
+          // Removed directories don't have details
+          if (!d.details) {
+            d.details = {
+              directory_name: d.title,
+              file_path: '',
+              removed: true,
             }
-            return DatasetDirectory(d)
-          })
+          }
+          return DatasetDirectory(d)
+        })
         : []
       this.existingFiles = dsFiles
         ? dsFiles.map(f => {
-            // Removed files don't have details
-            if (!f.details) {
-              f.details = {
-                file_name: f.title,
-                file_path: '',
-                removed: true,
-              }
+          // Removed files don't have details
+          if (!f.details) {
+            f.details = {
+              file_name: f.title,
+              file_path: '',
+              removed: true,
             }
-            return DatasetFile(f, undefined, true)
-          })
+          }
+          return DatasetFile(f, undefined, true)
+        })
         : []
     }
   }

@@ -1,10 +1,11 @@
-import { action } from 'mobx'
+import { action, makeObservable } from 'mobx'
 import SingleValueField from './qvain.singleValueField'
 import { restrictionGroundsSchema } from '../../../components/qvain/utils/formValidation'
 
 class RestrictionGrounds extends SingleValueField {
   constructor(Parent) {
     super(Parent, restrictionGroundsSchema)
+    makeObservable(this)
   }
 
   fromBackend = dataset => {

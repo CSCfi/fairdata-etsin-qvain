@@ -8,13 +8,13 @@ class MultiLanguageField extends SingleValueField {
     makeObservable(this)
   }
 
-  @action set = (value, lang) => {
+  @action set(value, lang) {
     this.value[lang] = value
     this.setValidationError(null)
     this.Parent.setChanged(true)
   }
 
-  toBackend = () => this.value
+  @action toBackend = () => this.value
 }
 
 export default MultiLanguageField

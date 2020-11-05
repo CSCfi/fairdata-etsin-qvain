@@ -1,7 +1,12 @@
-import { action } from 'mobx'
+import { action, makeObservable } from 'mobx'
 import ReferenceField from './qvain.referenceField'
 
 class FieldOfSciences extends ReferenceField {
+  constructor(...args) {
+    super(...args)
+    makeObservable(this)
+  }
+
   @action fromBackend = dataset => {
     this.reset()
     if (dataset.field_of_science !== undefined) {

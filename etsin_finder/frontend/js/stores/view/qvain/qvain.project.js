@@ -1,10 +1,11 @@
-import { observable, action, toJS } from 'mobx'
+import { observable, action, toJS, makeObservable } from 'mobx'
 import { v4 as uuidv4 } from 'uuid'
 import { parseOrganization } from '../../../components/qvain/project/utils'
 
 class Projects {
   constructor(Parent) {
     this.readonly = Parent.readonly
+    makeObservable(this)
   }
 
   @observable projects = []
