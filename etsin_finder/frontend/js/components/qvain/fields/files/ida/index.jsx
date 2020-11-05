@@ -16,7 +16,7 @@ import Loader from '../../../../general/loader'
 import { ErrorLabel, ErrorContainer, ErrorContent, ErrorButtons } from '../../../general/errors'
 import { Button } from '../../../../general/button'
 import FormModal from './forms/formModal'
-import { useStores } from '../../utils/stores'
+import { useStores } from '../../../utils/stores'
 
 export const IDAFilePickerBase = () => {
   const {

@@ -3,7 +3,7 @@ import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 import translate from 'counterpart'
 import ConfirmDialog from './confirmDialog'
-import { useStores } from '../utils/stores'
+import { useStores } from '../../utils/stores'
 
 const LooseActorsDialog = () => {
   const {

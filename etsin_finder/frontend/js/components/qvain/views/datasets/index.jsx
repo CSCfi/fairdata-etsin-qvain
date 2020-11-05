@@ -4,7 +4,7 @@ import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 import { withRouter } from 'react-router-dom'
 import styled from 'styled-components'
-import { useStores } from '../utils/stores'
+import { useStores } from '../../utils/stores'
 
 import DatasetTable from './table'
 import {

@@ -17,7 +17,7 @@ import StickyHeader from '../editor/stickyHeader'
 import Dataset from '../editor/dataset'
 import LooseActorDialog from '../editor/looseActorDialog'
 import LooseProvenanceDialog from '../editor/looseProvenanceDialog'
-import { withStores } from '../utils/stores'
+import { withStores } from '../../utils/stores'
 
 // Event handler to prevent page reload
 const confirmReload = e => {

@@ -10,7 +10,7 @@ import {
   organizationEmailSchema,
   organizationIdentifierSchema,
 } from '../../../../utils/formValidation'
-import { useStores } from '../../../utils/stores'
+import { useStores } from '../../../../utils/stores'
 
 const schemas = {
   name: organizationNameSchema,

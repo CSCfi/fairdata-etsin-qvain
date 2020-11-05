@@ -2,7 +2,7 @@ import React from 'react'
 import { observer } from 'mobx-react'
 import { Field } from '../../../general/section'
 import ProvenanceFieldContent from './ProvenanceFieldContent'
-import { useStores } from '../../utils/stores'
+import { useStores } from '../../../utils/stores'
 
 const brief = {
   title: 'qvain.history.provenance.title',

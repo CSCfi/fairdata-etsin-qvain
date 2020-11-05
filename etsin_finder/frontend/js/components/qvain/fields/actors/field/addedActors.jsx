@@ -3,7 +3,7 @@ import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 
 import ActorItem from './actorItem'
-import { useStores } from '../../utils/stores'
+import { useStores } from '../../../utils/stores'
 
 export const AddedActorsBase = () => {
   const Stores = useStores()

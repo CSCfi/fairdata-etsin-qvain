@@ -18,7 +18,7 @@ import { Home, Search, Dataset, Qvain, QvainDatasets } from '../routes'
 import ErrorPage from '../components/errorpage'
 import QvainLogin from '../components/qvain/views/main/qvainLogin'
 import QvainLandingPage from '../components/qvain/views/landingPage'
-import { useStores } from '../../utils/stores'
+import { useStores } from '../utils/stores'
 
 const Content = ({ contentRef }) => {
   const {

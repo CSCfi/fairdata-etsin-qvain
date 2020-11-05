@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import Title from '../../general/card/title'
 import { SubHeader, SubHeaderText } from '../../general/card'
 import { SubHeaderTextContainer } from './editor.styled'
-import { useStores } from '../utils/stores'
+import { useStores } from '../../utils/stores'
 
 const Header = ({ datasetLoading, datasetError }) => {
   const { original } = useStores().Qvain

@@ -17,7 +17,7 @@ import {
   getOptionValue,
   sortOptions,
   autoSortOptions,
-} from '../utils/select'
+} from '../../utils/select'
 import { LabelLarge, HelpField } from '../../general/modal/form'
 import { ACCESS_TYPE_URL } from '../../../../utils/constants'
 import { withStores } from '../../utils/stores'

@@ -9,7 +9,7 @@ import CreatableSelect from 'react-select/creatable'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPen } from '@fortawesome/free-solid-svg-icons'
 
-import { useStores } from '../../../utils/stores'
+import { useStores } from '../../../../utils/stores'
 import { DeleteButton } from '../../../../general/buttons'
 import ValidationError from '../../../../general/errors/validationError'
 import { getOrganizationName } from '../../common'

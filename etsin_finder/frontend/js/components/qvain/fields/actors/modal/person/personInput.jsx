@@ -5,7 +5,7 @@ import Translate from 'react-translate-component'
 
 import { Label } from '../../../../general/modal/form'
 import { ActorInput, ActorError } from '../../common'
-import { useStores } from '../../../utils/stores'
+import { useStores } from '../../../../utils/stores'
 
 const PersonInput = ({ propName, schema, includeType, required }) => {
   const {

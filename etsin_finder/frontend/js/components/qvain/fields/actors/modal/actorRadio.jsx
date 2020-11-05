@@ -4,7 +4,7 @@ import Translate from 'react-translate-component'
 import styled from 'styled-components'
 import { observer } from 'mobx-react'
 import { RadioInput, NestedLabel } from '../../../general/modal/form'
-import { useStores } from '../../utils/stores'
+import { useStores } from '../../../utils/stores'
 
 const propTypes = {
   role: PropTypes.string.isRequired,

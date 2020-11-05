@@ -13,7 +13,7 @@ import ValidationError from '../../../general/errors/validationError'
 import { LabelLarge, Input } from '../../../general/modal/form'
 import { keywordsSchema } from '../../../utils/formValidation'
 import { ButtonContainer, AddNewButton } from '../../../general/buttons'
-import { useStores } from '../utils/stores'
+import { useStores } from '../../../utils/stores'
 
 const KeywordsField = () => {
   const {

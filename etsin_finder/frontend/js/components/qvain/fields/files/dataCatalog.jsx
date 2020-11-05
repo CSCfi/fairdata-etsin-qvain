@@ -12,7 +12,7 @@ import { LabelLarge } from '../../general/modal/form'
 import etsinTheme from '../../../../styles/theme'
 import DoiSelection from './doiSelection'
 import Tooltip from '../../../general/tooltipHover'
-import { useStores } from '../utils/stores'
+import { useStores } from '../../utils/stores'
 
 const DataCatalog = () => {
   const {

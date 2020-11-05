@@ -14,7 +14,7 @@ import {
   directoryDescriptionSchema,
   directoryUseCategorySchema,
 } from '../../../utils/formValidation'
-import { withStores } from '../../utils/stores'
+import { withStores } from '../../../utils/stores'
 
 export class DirectoryFormBase extends Component {
   inEdit = this.props.Stores.Qvain.inEdit

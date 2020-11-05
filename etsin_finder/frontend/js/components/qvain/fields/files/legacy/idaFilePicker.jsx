@@ -5,7 +5,7 @@ import Translate from 'react-translate-component'
 import ProjectSelector from './projectSelector'
 import SelectedFiles from './selectedFiles'
 import FileSelector from './fileSelector'
-import { withStores } from '../../utils/stores'
+import { withStores } from '../../../utils/stores'
 
 export class IDAFilePickerBase extends Component {
   static propTypes = {

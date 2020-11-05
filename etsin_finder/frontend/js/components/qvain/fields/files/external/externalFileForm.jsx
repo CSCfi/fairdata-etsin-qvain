@@ -9,7 +9,7 @@ import ValidationError from '../../../general/errors/validationError'
 import { externalResourceSchema } from '../../../utils/formValidation'
 import { getLocalizedOptions } from '../../../utils/getReferenceData'
 import { EmptyExternalResource } from '../../../../../stores/view/qvain'
-import { useStores } from '../../utils/stores'
+import { useStores } from '../../../utils/stores'
 
 export const ExternalFileFormBase = () => {
   const {

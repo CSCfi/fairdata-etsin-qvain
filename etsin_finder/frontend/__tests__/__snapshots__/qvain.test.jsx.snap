@@ -152,25 +152,33 @@ exports[`Qvain.Description should render <Description /> 1`] = `
 `;
 
 exports[`Qvain.Description should render <DescriptionField /> 1`] = `
-<TranslationTab
-  language="fi"
-  setLanguage={[Function]}
+<div
+  className="container"
 >
-  <DescriptionFieldInput
-    activeLang="fi"
-    fieldName="Title"
-    propName="title"
-  />
-  <DescriptionFieldTextField
-    activeLang="fi"
-    fieldName="Description"
-    propName="description"
-  />
-  <Translate
-    component="div"
-    content="qvain.description.description.instructions"
-  />
-</TranslationTab>
+  <title__SectionTitle>
+    <Translate
+      component="span"
+      content="qvain.description.title"
+    />
+    <Tooltip
+      align="Right"
+      close={[Function]}
+      isOpen={false}
+      text={<DescriptionInfo />}
+    >
+      <HelpIcon
+        aria-label="Description info"
+        onClick={[Function]}
+      />
+    </Tooltip>
+  </title__SectionTitle>
+  <DescriptionField />
+  <IssuedDateField />
+  <OtherIdentifierField />
+  <FieldOfScienceField />
+  <LanguageField />
+  <KeywordsField />
+</div>
 `;
 
 exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `

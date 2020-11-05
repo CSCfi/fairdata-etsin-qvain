@@ -12,7 +12,7 @@ import handleSubmitToBackend from '../../utils/handleSubmit'
 import urls from '../../utils/urls'
 import { InvertedButton } from '../../../general/button'
 import DoiModal from './doiModal'
-import { withStores } from '../../../stores/stores'
+import { withStores } from '../../../../stores/stores'
 
 export class SubmitButtons extends Component {
   promises = []

@@ -7,7 +7,7 @@ import translate from 'counterpart'
 import Select from '../../../general/input/searchSelect'
 import Card from '../../../general/card'
 import { LabelLarge } from '../../../general/modal/form'
-import { useStores } from '../../utils/stores'
+import { useStores } from '../../../utils/stores'
 
 const LanguageField = () => {
   const Stores = useStores()

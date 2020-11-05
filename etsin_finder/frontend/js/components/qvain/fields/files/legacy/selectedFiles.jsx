@@ -23,7 +23,7 @@ import Modal from '../../../../general/modal'
 import { CUMULATIVE_STATE } from '../../../../../utils/constants'
 import RefreshDirectoryModal from '../refreshDirectoryModal'
 import FixDeprecatedModal from '../fixDeprecatedModal'
-import { withStores } from '../../utils/stores'
+import { withStores } from '../../../utils/stores'
 
 export class SelectedFilesBase extends Component {
   static propTypes = {

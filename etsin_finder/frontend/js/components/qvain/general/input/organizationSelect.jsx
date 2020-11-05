@@ -14,7 +14,7 @@ import { Input, Label } from '../modal/form'
 import ValidationError from '../errors/validationError'
 import { DeleteButton } from '../buttons'
 import { validate } from '../../fields/project/utils'
-import { withStores } from '../../../utils/stores'
+import { withStores } from '../../../../utils/stores'
 
 /**
  * A reusable organization select component.

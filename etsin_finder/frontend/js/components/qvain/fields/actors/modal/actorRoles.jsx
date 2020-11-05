@@ -5,7 +5,7 @@ import Translate from 'react-translate-component'
 import { ROLE } from '../../../../../utils/constants'
 import { GroupLabel } from '../common'
 import RoleCheckbox from './roleCheckbox'
-import { useStores } from '../../utils/stores'
+import { useStores } from '../../../utils/stores'
 
 export const ActorRolesBase = () => {
   const {

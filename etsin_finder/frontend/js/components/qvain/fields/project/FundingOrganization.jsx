@@ -18,7 +18,7 @@ import {
 } from './utils'
 import Button from '../../../general/button'
 import Label from '../../general/card/label'
-import { withStores } from '../utils/stores'
+import { withStores } from '../../utils/stores'
 
 import { Organization } from '../../../../stores/view/qvain/qvain.project'
 import { organizationObjectSchema } from '../../utils/formValidation'

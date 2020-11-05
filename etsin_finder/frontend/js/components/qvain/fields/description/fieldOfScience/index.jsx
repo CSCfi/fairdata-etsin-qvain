@@ -2,10 +2,10 @@ import React from 'react'
 import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 
-import Select from '../general/input/select'
-import Card from '../general/card'
-import { LabelLarge } from '../general/modal/form'
-import { useStores } from '../utils/stores'
+import Select from '../../../general/input/select'
+import Card from '../../../general/card'
+import { LabelLarge } from '../../../general/modal/form'
+import { useStores } from '../../../utils/stores'
 
 const FieldOfScienceField = () => {
   const {

@@ -5,7 +5,7 @@ import translate from 'counterpart'
 import Translate from 'react-translate-component'
 import styled from 'styled-components'
 
-import { useStores } from '../../utils/stores'
+import { useStores } from '../../../utils/stores'
 import { getActorName, ActorIcon } from '../common'
 import {
   ButtonGroup,

@@ -3,7 +3,7 @@ import { observer } from 'mobx-react'
 
 import RefreshDirectoryModal from '../refreshDirectoryModal'
 import SelectedItemsTree from './selectedItemsTree'
-import { useStores } from '../../utils/stores'
+import { useStores } from '../../../utils/stores'
 
 export function SelectedItems() {
   const {

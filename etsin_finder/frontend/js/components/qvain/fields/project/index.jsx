@@ -25,7 +25,7 @@ import ProjectForm from './ProjectForm'
 import FundingOrganization from './FundingOrganization'
 import FundingAgency from './FundingAgency'
 import { Expand } from './utils'
-import { withStores } from '../utils/stores'
+import { withStores } from '../../utils/stores'
 
 const FIELD_PROPS = {
   translations: {

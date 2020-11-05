@@ -10,7 +10,7 @@ import Modal from '../../../general/modal'
 import { TableButton, DangerButton } from '../../general/buttons'
 import { getResponseError } from '../../utils/responseError'
 import Tracking from '../../../../utils/tracking'
-import { useStores } from '../../utils/stores'
+import { useStores } from '../../../../utils/stores'
 
 export const RemoveModal = ({ dataset, onlyChanges, postRemoveUpdate, location, onClose }) => {
   const {

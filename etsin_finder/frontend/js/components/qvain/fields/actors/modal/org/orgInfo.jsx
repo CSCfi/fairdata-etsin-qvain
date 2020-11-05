@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react'
 import { observer } from 'mobx-react'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
-import { Label } from '../../../general/modal/form'
-import { Organization } from '../../../../../stores/view/qvain/qvain.actors'
+import { Label } from '../../../../general/modal/form'
+import { Organization } from '../../../../../../stores/view/qvain/qvain.actors'
 import OrgSelector from './orgSelector'
 import OrgForm from './orgForm'
 import { getOrganizationName } from '../../common'
-import { useStores } from '../../../utils/stores'
+import { useStores } from '../../../../utils/stores'
 
 const sortOpts = { numeric: true, sensitivity: 'base' }
 const sortFunc = (a, b) => a.localeCompare(b, undefined, sortOpts)

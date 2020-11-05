@@ -9,7 +9,7 @@ import { ConfirmClose } from '../../../../general/modal/confirmClose'
 import { TableButton } from '../../../../general/buttons'
 import FileForm from './fileForm'
 import DirectoryForm from './directoryForm'
-import { useStores } from '../../../utils/stores'
+import { useStores } from '../../../../utils/stores'
 
 const FormModal = () => {
   const {

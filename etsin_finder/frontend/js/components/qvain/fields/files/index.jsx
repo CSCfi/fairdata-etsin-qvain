@@ -19,7 +19,7 @@ import SelectedItems from './ida/selectedItems'
 import LegacyFilePicker from './legacy/idaFilePicker'
 import LegacySelectedFiles from './legacy/selectedFiles'
 import FormModal from './ida/forms/formModal'
-import { useStores } from '../utils/stores'
+import { useStores } from '../../utils/stores'
 
 const Files = () => {
   const {

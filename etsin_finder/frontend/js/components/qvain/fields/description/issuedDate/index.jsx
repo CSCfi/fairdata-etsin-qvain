@@ -11,7 +11,7 @@ import {
   getDateFormatLocale,
 } from '../../../general/input/datepicker'
 import Tooltip from '../../../../general/tooltipHover'
-import { useStores } from '../utils/stores'
+import { useStores } from '../../../utils/stores'
 
 const IssuedDateField = () => {
   const {

@@ -7,7 +7,7 @@ import { Paragraph, ContainerSubsectionBottom } from '../../general/card'
 import { CUMULATIVE_STATE } from '../../../../utils/constants'
 import { LabelLarge, FormField, RadioInput, Label, HelpField } from '../../general/modal/form'
 import { Button } from '../../../general/button'
-import { useStores } from '../utils/stores'
+import { useStores } from '../../utils/stores'
 
 const CumulativeState = () => {
   const {

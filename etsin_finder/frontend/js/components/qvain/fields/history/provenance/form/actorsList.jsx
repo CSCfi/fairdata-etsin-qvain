@@ -10,7 +10,7 @@ import {
   ButtonContainer,
 } from '../../../../general/buttons'
 import parseActorLabel from '../../../../utils/actor'
-import { useStores } from '../../../utils/stores'
+import { useStores } from '../../../../utils/stores'
 
 const ActorsList = ({ actors, items, language }) => {
   const { readonly } = useStores().Qvain

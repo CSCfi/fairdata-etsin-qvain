@@ -7,7 +7,7 @@ import translate from 'counterpart'
 import { Input, LabelLarge } from '../../../general/modal/form'
 import Tooltip from '../../../../general/tooltipHover'
 import ValidationError from '../../../general/errors/validationError'
-import { useStores } from '../utils/stores'
+import { useStores } from '../../../utils/stores'
 
 const DescriptionFieldInput = ({ propName, fieldName, activeLang }) => {
   const {

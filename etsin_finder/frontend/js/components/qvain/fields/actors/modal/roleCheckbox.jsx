@@ -4,7 +4,7 @@ import { observer } from 'mobx-react'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import { FormField, Checkbox, Label, HelpField } from '../../../general/modal/form'
-import { useStores } from '../../utils/stores'
+import { useStores } from '../../../utils/stores'
 
 const RoleCheckbox = ({ role, help, disabled, required }) => {
   const {

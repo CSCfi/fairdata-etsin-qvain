@@ -4,7 +4,7 @@ import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 import Select from 'react-select'
 import styled from 'styled-components'
-import { withStores } from '../../utils/stores'
+import { withStores } from '../../../utils/stores'
 
 export class ProjectSelectorBase extends Component {
   static propTypes = {

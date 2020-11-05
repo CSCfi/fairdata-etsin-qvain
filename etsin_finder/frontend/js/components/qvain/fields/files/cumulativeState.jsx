@@ -16,7 +16,7 @@ import { TableButton, DangerButton } from '../../general/buttons'
 import { Button as CumulativeStateButton } from '../../../general/button'
 
 import Response from './response'
-import { useStores } from '../utils/stores'
+import { useStores } from '../../utils/stores'
 
 const CumulativeState = () => {
   const {

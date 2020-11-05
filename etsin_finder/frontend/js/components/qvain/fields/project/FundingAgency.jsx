@@ -23,8 +23,8 @@ import {
   resolveOptions,
 } from './utils'
 import { withStores } from '../../utils/stores'
-import { LabelLarge, Input } from '../general/modal/form'
-import { fundingAgencySchema, organizationObjectSchema } from '../utils/formValidation'
+import { LabelLarge, Input } from '../../general/modal/form'
+import { fundingAgencySchema, organizationObjectSchema } from '../../utils/formValidation'
 import {
   FundingAgency,
   ContributorType,

@@ -13,7 +13,7 @@ import { ConfirmClose } from '../../../general/modal/confirmClose'
 import ActorErrors from './actorErrors'
 import Buttons from './buttons'
 import { TableButton } from '../../../general/buttons'
-import { useStores } from '../../utils/stores'
+import { useStores } from '../../../utils/stores'
 
 export const ActorModalBase = () => {
   const {

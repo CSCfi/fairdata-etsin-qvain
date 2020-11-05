@@ -2,7 +2,7 @@ import React from 'react'
 import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 import ConfirmDialog from './confirmDialog'
-import { useStores } from '../utils/stores'
+import { useStores } from '../../utils/stores'
 
 const LooseProvenanceDialog = () => {
   const {

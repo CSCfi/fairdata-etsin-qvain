@@ -7,7 +7,7 @@ import translate from 'counterpart'
 import { Textarea, LabelLarge } from '../../../general/modal/form'
 import Tooltip from '../../../../general/tooltipHover'
 import ValidationError from '../../../general/errors/validationError'
-import { useStores } from '../utils/stores'
+import { useStores } from '../../../utils/stores'
 
 const DescriptionFieldTextField = ({ propName, fieldName, activeLang }) => {
   const [error, setError] = useState(null)

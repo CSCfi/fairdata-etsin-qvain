@@ -6,7 +6,7 @@ import { ENTITY_TYPE } from '../../../../../utils/constants'
 import PersonInfo from './person/personForm'
 import OrgInfo from './org/orgInfo'
 import { GroupLabel } from '../common'
-import { useStores } from '../../utils/stores'
+import { useStores } from '../../../utils/stores'
 
 export const ActorInfoBase = () => {
   const {

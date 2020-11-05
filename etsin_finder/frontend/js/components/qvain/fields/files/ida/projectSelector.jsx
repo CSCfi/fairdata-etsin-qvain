@@ -4,7 +4,7 @@ import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 import Select from 'react-select'
 import styled from 'styled-components'
-import { useStores } from '../../utils/stores'
+import { useStores } from '../../../utils/stores'
 
 export const ProjectSelectorBase = ({ disabled }) => {
   const {

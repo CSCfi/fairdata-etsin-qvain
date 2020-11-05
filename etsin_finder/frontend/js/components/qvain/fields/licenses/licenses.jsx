@@ -18,7 +18,7 @@ import {
   autoSortOptions,
 } from '../../utils/select'
 import { ValidationErrors } from '../../general/errors/validationError'
-import { withStores } from '../utils/stores'
+import { withStores } from '../../utils/stores'
 
 export class License extends Component {
   promises = []

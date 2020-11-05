@@ -11,7 +11,7 @@ import { otherIdentifiersArraySchema, otherIdentifierSchema } from '../../../uti
 import ValidationError from '../../../general/errors/validationError'
 import { Input, LabelLarge } from '../../../general/modal/form'
 import { ButtonContainer, AddNewButton } from '../../../general/buttons'
-import { useStores } from '../utils/stores'
+import { useStores } from '../../../utils/stores'
 
 const OtherIdentifierField = () => {
   const {
