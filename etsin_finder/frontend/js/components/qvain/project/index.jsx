@@ -220,8 +220,8 @@ class Project extends Component {
   }
 
   removeProject = (id, event) => {
-    if (this.props.Stores.Qvain.Prjects.readonly) return
     if (event) event.preventDefault()
+    if (this.props.Stores.Qvain.Projects.readonly) return
     if (id === this.state.id) this.resetForm()
     this.props.Stores.Qvain.Projects.removeProject(id)
   }
