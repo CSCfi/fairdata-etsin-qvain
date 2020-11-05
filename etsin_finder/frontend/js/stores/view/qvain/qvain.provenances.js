@@ -4,7 +4,7 @@ import Spatials from './qvain.spatials'
 import UsedEntities from './qvain.usedEntities'
 import Field from './qvain.field'
 import { ActorsRef } from './qvain.actors'
-import { ROLE } from '../../utils/constants'
+import { ROLE } from '../../../utils/constants'
 
 const Provenance = ({
   uiid = uuidv4(),
@@ -45,6 +45,13 @@ class Provenances extends Field {
 
   @observable selectedActor = undefined
 
+  @observable provenancesWithNonExistingActors = []
+
+  @action reset = () => {
+    this.selectedActor = undefined
+    this.provenancesWithNonExistingActors = []
+  }
+
   @action saveAndClearSpatials = () => {
     this.selectedActor = undefined
   }
@@ -66,6 +73,7 @@ class Provenances extends Field {
     })
   }
 
+  @action
   toBackend = () =>
     this.storage.map(p => ({
       title: p.name,
@@ -84,6 +92,25 @@ class Provenances extends Field {
       was_associated_with: p.associations.toBackend,
       lifecycle_event: { identifier: (p.lifecycle || {}).url },
     }))
+
+  @action
+  fromBackend = (dataset, Qvain) => {
+    this.provenancesWithNonExistingActors = []
+    this.fromBackendBase(dataset.provenances, Qvain)
+  }
+
+  @action checkActorFromRefs = actor => {
+    const provenancesWithActorRefsToBeRemoved = this.storage.filter(
+      p => p.associations.actorsRef[actor.uiid]
+    )
+    if (!provenancesWithActorRefsToBeRemoved.length) return Promise.resolve(true)
+    this.provenancesWithNonExistingActors = provenancesWithActorRefsToBeRemoved
+    return this.Parent.createLooseProvenancePromise()
+  }
+
+  @action removeActorFromRefs = actor => {
+    this.storage.forEach(p => p.associations.removeActorRef(actor.uiid))
+  }
 }
 
 export const Outcome = (name, url) => ({

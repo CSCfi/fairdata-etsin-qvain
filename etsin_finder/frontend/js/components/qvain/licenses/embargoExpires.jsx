@@ -8,13 +8,14 @@ import {
   getDateFormatLocale,
 } from '../general/input/datepicker'
 import { Label } from '../general/modal/form'
-import { embargoExpDateSchema } from '../utils/formValidation'
 import ValidationError from '../general/errors/validationError'
 import { useStores } from '../utils/stores'
 
 const EmbargoExpires = () => {
   const {
-    Qvain: { embargoExpDate, setEmbargoExpDate, readonly },
+    Qvain: {
+      EmbargoExpDate: { embargoExpDate, setEmbargoExpDate, readonly, Schema },
+    },
     Locale: { lang },
   } = useStores()
 
@@ -23,8 +24,7 @@ const EmbargoExpires = () => {
 
   useEffect(() => {
     const validate = () => {
-      embargoExpDateSchema
-        .validate(embargoExpDate)
+      Schema.validate(embargoExpDate)
         .then(() => {
           setError(null)
         })
@@ -36,7 +36,7 @@ const EmbargoExpires = () => {
     if (!focused) {
       validate()
     }
-  }, [focused, embargoExpDate])
+  }, [focused, embargoExpDate, Schema])
 
   return (
     <Fragment>

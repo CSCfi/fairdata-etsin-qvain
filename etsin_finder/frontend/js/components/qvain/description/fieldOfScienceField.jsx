@@ -4,13 +4,14 @@ import Translate from 'react-translate-component'
 
 import Select from '../general/input/select'
 import Card from '../general/card'
-import { FieldOfScience } from '../../../stores/view/qvain'
 import { LabelLarge } from '../general/modal/form'
 import { useStores } from '../utils/stores'
 
 const FieldOfScienceField = () => {
   const {
-    Qvain: { fieldOfScienceArray, setFieldOfScienceArray },
+    Qvain: {
+      FieldOfSciences: { storage, set, Model },
+    },
   } = useStores()
 
   return (
@@ -26,9 +27,9 @@ const FieldOfScienceField = () => {
         attributes={{ placeholder: 'qvain.description.fieldOfScience.placeholder' }}
         isMulti
         isClearable={false}
-        model={FieldOfScience}
-        getter={fieldOfScienceArray}
-        setter={setFieldOfScienceArray}
+        model={Model}
+        getter={storage}
+        setter={set}
       />
     </Card>
   )

@@ -50,30 +50,24 @@ export class SubmitButtons extends Component {
   }
 
   checkOtherIdentifiersV1 = () => {
-    const {
-      otherIdentifier,
-      otherIdentifiersArray,
-      addOtherIdentifier,
-      setOtherIdentifier,
-      setOtherIdentifierValidationError,
-    } = this.props.Stores.Qvain
-    if (otherIdentifier !== '') {
+    const { OtherIdentifiers } = this.props.Stores.Qvain
+    if (OtherIdentifiers.itemStr !== '') {
       try {
-        otherIdentifierSchema.validateSync(otherIdentifier)
+        otherIdentifierSchema.validateSync(OtherIdentifiers.itemStr)
       } catch (err) {
         this.props.handleSubmitError(err)
-        setOtherIdentifierValidationError(err.errors)
+        OtherIdentifiers.setValidationError(err.errors)
         return false
       }
-      if (!otherIdentifiersArray.includes(otherIdentifier)) {
-        addOtherIdentifier(otherIdentifier)
-        setOtherIdentifier('')
+      if (!OtherIdentifiers.storage.includes(OtherIdentifiers.itemStr)) {
+        OtherIdentifiers.add(OtherIdentifiers.itemStr)
+        OtherIdentifiers.setItemStr('')
         this.success(null)
         return true
       }
       const message = translate('qvain.description.otherIdentifiers.alreadyAdded')
       this.failure({ errors: message })
-      setOtherIdentifierValidationError(message)
+      OtherIdentifiers.setValidationError(message)
       return false
     }
     return true
@@ -85,7 +79,7 @@ export class SubmitButtons extends Component {
     }
 
     const { Stores, handleSubmitError } = this.props
-    const { addUnsavedMultiValueFields, setChanged } = Stores.Qvain
+    const { setChanged } = Stores.Qvain
     const { metaxApiV2 } = Stores.Env
 
     if (metaxApiV2) {
@@ -95,7 +89,6 @@ export class SubmitButtons extends Component {
 
     this.setLoading(true)
 
-    addUnsavedMultiValueFields()
     if (!this.checkOtherIdentifiersV1()) {
       return false
     }
@@ -125,13 +118,7 @@ export class SubmitButtons extends Component {
   }
 
   handleUpdateV1 = async () => {
-    const {
-      original,
-      addUnsavedMultiValueFields,
-      moveSelectedToExisting,
-      setChanged,
-      editDataset,
-    } = this.props.Stores.Qvain
+    const { original, moveSelectedToExisting, setChanged, editDataset } = this.props.Stores.Qvain
     const { metaxApiV2 } = this.props.Stores.Env
     const datasetUrl = urls.v1.dataset(original.identifier)
 
@@ -140,7 +127,6 @@ export class SubmitButtons extends Component {
       return false
     }
 
-    addUnsavedMultiValueFields()
     if (!this.checkOtherIdentifiersV1()) {
       return false
     }
@@ -180,14 +166,12 @@ export class SubmitButtons extends Component {
       original,
       canSelectFiles,
       canRemoveFiles,
-      addUnsavedMultiValueFields,
       cumulativeState,
       newCumulativeState,
       Files,
     } = this.props.Stores.Qvain
     const { metaxApiV2 } = this.props.Stores.Env
 
-    addUnsavedMultiValueFields()
     if (!this.checkOtherIdentifiersV1()) {
       return false
     }
@@ -239,7 +223,7 @@ export class SubmitButtons extends Component {
 
   submit = async submitFunction => {
     const { Stores } = this.props
-    const isProvenanceActorsOk = await Stores.Qvain.checkProvenanceActors()
+    const isProvenanceActorsOk = await Stores.Qvain.Actors.checkProvenanceActors()
     if (!isProvenanceActorsOk) return
     submitFunction()
   }

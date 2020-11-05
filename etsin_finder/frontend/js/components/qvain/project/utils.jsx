@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons'
 import styled from 'styled-components'
 
-import { getOrganizationSearchUrl } from '../../../stores/view/qvain.actors'
+import { getOrganizationSearchUrl } from '../../../stores/view/qvain/qvain.actors'
 import ValidationError from '../general/errors/validationError'
 import { METAX_FAIRDATA_ROOT_URL } from '../../../utils/constants'
 

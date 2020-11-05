@@ -4,7 +4,7 @@ import Translate from 'react-translate-component'
 import AddedActors from './addedActors'
 import ActorTitle from './actorTitle'
 import { Container } from '../../general/card'
-import { Actor } from '../../../../stores/view/qvain.actors'
+import { Actor } from '../../../../stores/view/qvain/qvain.actors'
 import { ButtonContainer, AddNewButton } from '../../general/buttons'
 import { useStores } from '../../utils/stores'
 

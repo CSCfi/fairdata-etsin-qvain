@@ -16,65 +16,60 @@ import { useStores } from '../utils/stores'
 const OtherIdentifierField = () => {
   const {
     Qvain: {
-      readonly,
-      removeOtherIdentifier,
-      setOtherIdentifier,
-      otherIdentifier,
-      otherIdentifiersArray,
-      addOtherIdentifier,
-      otherIdentifiersValidationError,
-      setOtherIdentifierValidationError,
+      OtherIdentifiers: {
+        remove,
+        setValidationError,
+        validationError,
+        storage,
+        itemStr,
+        addItemStr,
+        setItemStr,
+        readonly,
+      },
     },
   } = useStores()
 
   const handleInputChange = event => {
     const { value } = event.target
-    setOtherIdentifier(value)
-  }
-
-  const clearInput = () => {
-    setOtherIdentifier('')
+    setItemStr(value)
   }
 
   const handleAddClick = () => {
     otherIdentifierSchema
-      .validate(otherIdentifier)
+      .validate(itemStr)
       .then(() => {
-        if (!otherIdentifiersArray.includes(otherIdentifier)) {
-          addOtherIdentifier(otherIdentifier)
-          clearInput()
+        if (!storage.includes(itemStr)) {
+          addItemStr()
         } else {
-          setOtherIdentifierValidationError(
-            translate('qvain.description.otherIdentifiers.alreadyAdded')
-          )
+          setValidationError(translate('qvain.description.otherIdentifiers.alreadyAdded'))
         }
       })
       .catch(err => {
-        setOtherIdentifierValidationError(err.errors)
+        setValidationError(err.errors)
       })
   }
 
   const handleRemove = identifier => {
-    removeOtherIdentifier(identifier)
+    remove(identifier)
   }
 
   const handleBlur = () => {
-    setOtherIdentifierValidationError(null)
+    setValidationError(null)
     validateOtherIdentifiers()
   }
 
   const validateOtherIdentifiers = () => {
     otherIdentifiersArraySchema
-      .validate(otherIdentifiersArray)
+      .validate(storage)
       .then(() => {
-        setOtherIdentifierValidationError(null)
+        setValidationError(null)
       })
       .catch(err => {
-        setOtherIdentifierValidationError(err.errors)
+        setValidationError(err.errors)
       })
   }
 
-  const otherIdentifiersLabels = otherIdentifiersArray.map(identifier => (
+  const otherIdentifiersLabels = storage.map(identifier => (
     <Label color="primary" margin="0 0.5em 0.5em 0" key={identifier}>
       <PaddedWord>{identifier}</PaddedWord>
       <FontAwesomeIcon onClick={() => handleRemove(identifier)} icon={faTimes} size="xs" />
@@ -92,14 +87,12 @@ const OtherIdentifierField = () => {
         type="text"
         id="otherIdentifiersInput"
         disabled={readonly}
-        value={otherIdentifier}
+        value={itemStr}
         onChange={handleInputChange}
         placeholder="http://doi.org/"
         onBlur={handleBlur}
       />
-      {otherIdentifiersValidationError && (
-        <ValidationError>{otherIdentifiersValidationError}</ValidationError>
-      )}
+      {validationError && <ValidationError>{validationError}</ValidationError>}
       <ButtonContainer>
         <AddNewButton type="button" onClick={handleAddClick} disabled={readonly}>
           <Translate content="qvain.description.otherIdentifiers.addButton" />

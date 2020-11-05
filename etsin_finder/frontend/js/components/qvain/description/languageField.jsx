@@ -5,16 +5,13 @@ import Translate from 'react-translate-component'
 import translate from 'counterpart'
 
 import Select from '../general/input/searchSelect'
-import { DatasetLanguage } from '../../../stores/view/qvain'
 import Card from '../general/card'
 import { LabelLarge } from '../general/modal/form'
 import { useStores } from '../utils/stores'
 
 const LanguageField = () => {
   const Stores = useStores()
-  const {
-    Qvain: { datasetLanguageArray, setDatasetLanguageArray },
-  } = Stores
+  const { storage, set, Model } = Stores.Qvain.DatasetLanguages
 
   return (
     <Card>
@@ -25,12 +22,11 @@ const LanguageField = () => {
       <Select
         name="dataset-language"
         id="datasetLanguage"
-        Stores={Stores}
-        getter={datasetLanguageArray}
-        setter={setDatasetLanguageArray}
+        getter={storage}
+        setter={set}
         isMulti
         isClearable={false}
-        model={DatasetLanguage}
+        model={Model}
         noOptionsMessage={({ inputValue }) => {
           if (inputValue) {
             return translate('qvain.description.datasetLanguage.noResults')

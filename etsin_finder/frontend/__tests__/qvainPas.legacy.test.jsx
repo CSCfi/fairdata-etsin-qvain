@@ -17,12 +17,8 @@ import AccessType from '../js/components/qvain/licenses/accessType'
 import Files from '../js/components/qvain/files'
 import FileForm from '../js/components/qvain/files/legacy/fileForm'
 import IDAFilePicker from '../js/components/qvain/files/legacy/idaFilePicker'
-import QvainStoreClass, {
-  Directory,
-  File,
-  AccessType as AccessTypeConstructor,
-  License as LicenseConstructor,
-} from '../js/stores/view/qvain'
+import QvainStoreClass from '../js/stores/view/qvain'
+import { Directory, File } from '../js/stores/view/qvain/qvain.filesv1'
 import LocaleStore from '../js/stores/view/language'
 import EnvStore from '../js/stores/domain/env'
 import { ACCESS_TYPE_URL, DATA_CATALOG_IDENTIFIER } from '../js/utils/constants'
@@ -380,7 +376,7 @@ describe('Qvain.PasState', () => {
 describe('Qvain.Description', () => {
   const render = preservationState => {
     const stores = getStores()
-    stores.Qvain.setKeywordsArray(['key', 'word'])
+    stores.Qvain.Keywords.set(['key', 'word'])
     stores.Qvain.setPreservationState(preservationState)
 
     const mockState = {
@@ -429,10 +425,12 @@ describe('Qvain.Description', () => {
 
 describe('Qvain.RightsAndLicenses', () => {
   const render = stores => {
-    stores.Qvain.setLicenseArray([
-      LicenseConstructor({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'other'),
+    stores.Qvain.Licenses.set([
+      stores.Qvain.Licenses.Model({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'other'),
     ])
-    stores.Qvain.setAccessType(AccessTypeConstructor({ en: 'Embargo' }, ACCESS_TYPE_URL.EMBARGO))
+    stores.Qvain.AccessType.set(
+      stores.Qvain.AccessType.Model({ en: 'Embargo' }, ACCESS_TYPE_URL.EMBARGO)
+    )
     return mount(
       <StoresProvider store={stores}>
         <ThemeProvider theme={etsinTheme}>
@@ -471,6 +469,10 @@ describe('Qvain.RightsAndLicenses', () => {
 })
 
 describe('Qvain.Files', () => {
+  beforeEach(() => {
+    useStores.mockReturnValue(getStores())
+  })
+
   const render = stores => {
     const testfile = File({
       description: 'File',

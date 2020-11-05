@@ -2,21 +2,22 @@ import React from 'react'
 import { observer } from 'mobx-react'
 import Select from '../../general/input/searchSelect'
 
-import { Infrastructure } from '../../../../stores/view/qvain'
 import { useStores } from '../../utils/stores'
 
 const InfrastructureSelection = () => {
   const {
-    Qvain: { infrastructureArray, setInfrastructureArray },
+    Qvain: {
+      Infrastructures: { storage, Model, set },
+    },
   } = useStores()
   return (
     <Select
       name="infrastructure"
-      getter={infrastructureArray}
-      setter={setInfrastructureArray}
+      getter={storage}
+      setter={set}
       isMulti
       isClearable={false}
-      model={Infrastructure}
+      model={Model}
       metaxIdentifier="research_infra"
     />
   )
