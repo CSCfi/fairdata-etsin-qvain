@@ -14,6 +14,7 @@ import {
   fileActions,
   metadataActions,
 } from './__testdata__/submitButtons.data'
+import { runInAction } from 'mobx'
 
 global.Promise = require('bluebird')
 
@@ -31,7 +32,7 @@ const getMockProps = () => ({
   },
   submitButtonsRef: React.createRef(),
   handleSubmitResponse: () => {},
-  handleSubmitError: () => {},
+  handleSubmitError: jest.fn(),
 })
 
 Env.setMetaxApiV2(true)
@@ -51,7 +52,7 @@ const logCalls = (name, func) => {
 }
 
 describe('Qvain SubmitButtons.patchDataset', () => {
-  let patchDataset
+  let patchDataset, handlePublishDataset, props
 
   beforeEach(() => {
     calls.length = 0
@@ -65,8 +66,10 @@ describe('Qvain SubmitButtons.patchDataset', () => {
     axios.post.mockImplementation(logCalls('post', v => ({ data: v })))
     Qvain.resetQvainStore()
 
-    const wrapper = shallow(<SubmitButtonsBase Stores={stores} {...getMockProps()} />)
+    props = getMockProps()
+    const wrapper = shallow(<SubmitButtonsBase Stores={stores} {...props} />)
     patchDataset = wrapper.instance().patchDataset
+    handlePublishDataset = wrapper.instance().handlePublishDataset
   })
 
   it('sends requests in correct order when patching dataset', async () => {
@@ -135,5 +138,17 @@ describe('Qvain SubmitButtons.patchDataset', () => {
       ['put', '/api/v2/common/datasets/12345/user_metadata', metadataActions],
       ['get', '/api/v2/qvain/datasets/12345'],
     ])
+  })
+
+  it('when deprecated, should call handleSubmitError', async () => {
+    runInAction(() => {
+      stores.Qvain.deprecated = true
+    })
+    await handlePublishDataset()
+    expect(props.handleSubmitError).toHaveBeenCalledWith(
+      new Error(
+        'Cannot publish dataset because it is deprecated. Please resolve deprecation first.'
+      )
+    )
   })
 })
