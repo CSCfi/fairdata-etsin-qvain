@@ -1,5 +1,5 @@
 import React from 'react'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
@@ -12,6 +12,7 @@ import { TableButton, RemoveButton } from '../../general/buttons'
 import TablePasState from './tablePasState'
 import formatAge from './formatAge'
 import { Dropdown, DropdownItem } from '../../../general/dropdown'
+import { useStores } from '../../utils/stores'
 
 const datasetStateTranslation = dataset => {
   if (dataset.state === 'published') {
@@ -77,7 +78,6 @@ const getActionItem = action => {
 }
 
 function Dataset({
-  Stores,
   dataset,
   currentTimestamp,
   handleCreateNewVersion,
@@ -86,7 +86,9 @@ function Dataset({
   indent,
   highlight,
 }) {
-  const { metaxApiV2, getEtsinUrl } = Stores.Env
+  const {
+    Env: { metaxApiV2, getEtsinUrl },
+  } = useStores()
   const actions = []
   if (
     metaxApiV2 &&
@@ -161,7 +163,6 @@ function Dataset({
 }
 
 Dataset.propTypes = {
-  Stores: PropTypes.object.isRequired,
   dataset: PropTypes.object.isRequired,
   currentTimestamp: PropTypes.object.isRequired,
   handleEnterEdit: PropTypes.func.isRequired,
@@ -228,4 +229,4 @@ const DropdownButton = styled(TableButton)`
   padding: 0.25rem;
 `
 
-export default inject('Stores')(observer(Dataset))
+export default observer(Dataset)

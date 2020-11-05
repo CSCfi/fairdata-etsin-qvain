@@ -1,13 +1,13 @@
 import { observable, action, makeObservable } from 'mobx'
 import axios from 'axios'
 
-import { hasMetadata, dirIdentifierKey, fileIdentifierKey } from './common.files.items'
-import { PromiseManager, getAction } from './common.files.utils'
-import { itemLoaderAny, FetchType } from './common.files.loaders'
-import { AddItemsView, SelectedItemsView } from './common.files.views'
-import urls from '../../components/qvain/utils/urls'
+import { hasMetadata, dirIdentifierKey, fileIdentifierKey } from '../common.files.items'
+import { PromiseManager, getAction } from '../common.files.utils'
+import { itemLoaderAny, FetchType } from '../common.files.loaders'
+import { AddItemsView, SelectedItemsView } from '../common.files.views'
+import urls from '../../../components/qvain/utils/urls'
 
-import FilesBase from './common.files'
+import FilesBase from '../common.files'
 
 class Files extends FilesBase {
   // File hierarchy for files in user projects.
@@ -20,6 +20,7 @@ class Files extends FilesBase {
     this.SelectedItemsView = new SelectedItemsView(this)
     this.AddItemsView = new AddItemsView(this)
     this.promiseManager = new PromiseManager()
+    this.addItem = this.addItem.bind(this)
     this.reset()
   }
 

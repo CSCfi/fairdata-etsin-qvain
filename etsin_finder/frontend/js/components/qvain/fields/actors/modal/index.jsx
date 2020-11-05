@@ -1,6 +1,5 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { inject, observer } from 'mobx-react'
+import React, { useState } from 'react'
+import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 import styled from 'styled-components'
 
@@ -14,52 +13,65 @@ import { ConfirmClose } from '../../../general/modal/confirmClose'
 import ActorErrors from './actorErrors'
 import Buttons from './buttons'
 import { TableButton } from '../../../general/buttons'
+import { useStores } from '../../utils/stores'
 
-export class ActorModalBase extends Component {
-  static propTypes = {
-    Stores: PropTypes.object.isRequired,
+export const ActorModalBase = () => {
+  const {
+    Qvain: {
+      Actors: {
+        actorInEdit,
+        editActor,
+        saveActor,
+        cancelActor,
+        actors,
+        referenceOrganizationErrors,
+      },
+      readonly,
+    },
+  } = useStores()
+  const [actorError, setActorError] = useState(null)
+  const [confirmClose, setConfirmClose] = useState(false)
+
+  if (!actorInEdit) {
+    return null
   }
 
-  state = {
-    confirmClose: false,
-    actorError: null,
-  }
+  const loadingFailed = Object.values(referenceOrganizationErrors).length > 0
+  const originalActor = actors.find(actor => actor.uiid === actorInEdit.uiid)
+  const isNew = !originalActor
+  const action = isNew ? 'create' : 'edit'
 
-  handleSaveActor = () => {
-    const { Qvain } = this.props.Stores
-    const { actorInEdit, editActor, saveActor } = Qvain.Actors
-
+  const handleSaveActor = () => {
     actorSchema
       .validate(actorInEdit)
       .then(() => {
         saveActor(actorInEdit)
         editActor(null)
-        this.setState({ actorError: null })
+        setActorError(null)
       })
       .catch(err => {
-        this.setState({ actorError: err.errors })
+        setActorError(err.errors)
       })
   }
 
-  close = () => {
-    this.setState({ confirmClose: false })
-    this.props.Stores.Qvain.Actors.cancelActor()
+  const close = () => {
+    setConfirmClose(false)
+    cancelActor()
   }
 
-  handleRequestClose = hasChanged => {
+  const handleRequestClose = hasChanged => {
     if (hasChanged) {
-      this.setState({ confirmClose: true })
+      setConfirmClose(true)
     } else {
-      this.close()
+      close()
     }
   }
 
-  hideConfirmClose = () => {
-    this.setState({ confirmClose: false })
+  const hideConfirmClose = () => {
+    setConfirmClose(false)
   }
 
-  hasChanged = originalActor => {
-    const { actorInEdit } = this.props.Stores.Qvain.Actors
+  const hasChanged = () => {
     if (originalActor) {
       return JSON.stringify(originalActor) !== JSON.stringify(actorInEdit)
     }
@@ -72,50 +84,34 @@ export class ActorModalBase extends Component {
     )
   }
 
-  render() {
-    const { readonly } = this.props.Stores.Qvain
-    const { actorInEdit, actors, referenceOrganizationErrors } = this.props.Stores.Qvain.Actors
-    if (!actorInEdit) {
-      return null
-    }
-    const loadingFailed = Object.values(referenceOrganizationErrors).length > 0
-    const originalActor = actors.find(actor => actor.uiid === actorInEdit.uiid)
-    const hasChanged = this.hasChanged(originalActor)
-    const isNew = !originalActor
-    const action = isNew ? 'create' : 'edit'
-    const requestClose = () => this.handleRequestClose(hasChanged)
+  const requestClose = () => handleRequestClose(hasChanged())
 
-    return (
-      <Modal
-        isOpen
-        onRequestClose={requestClose}
-        contentLabel="fixDeprecatedModal"
-        customStyles={modalStyle}
-      >
-        <Header>
-          <ActorIcon actor={actorInEdit} style={{ marginRight: '1rem' }} />
-          <Translate content={`qvain.actors.add.action.${action}`} />
-        </Header>
-        <Content>
-          <ActorTypeSelect />
-          <ActorRoles />
-          <ActorInfo />
-        </Content>
-        <ActorErrors actorError={this.state.actorError} loadingFailed={loadingFailed} />
-        <Buttons
-          handleRequestClose={requestClose}
-          handleSaveActor={this.handleSaveActor}
-          readonly={readonly}
-        />
+  return (
+    <Modal
+      isOpen
+      onRequestClose={requestClose}
+      contentLabel="fixDeprecatedModal"
+      customStyles={modalStyle}
+    >
+      <Header>
+        <ActorIcon actor={actorInEdit} style={{ marginRight: '1rem' }} />
+        <Translate content={`qvain.actors.add.action.${action}`} />
+      </Header>
+      <Content>
+        <ActorTypeSelect />
+        <ActorRoles />
+        <ActorInfo />
+      </Content>
+      <ActorErrors actorError={actorError} loadingFailed={loadingFailed} />
+      <Buttons
+        handleRequestClose={requestClose}
+        handleSaveActor={handleSaveActor}
+        readonly={readonly}
+      />
 
-        <ConfirmClose
-          show={this.state.confirmClose}
-          onCancel={this.hideConfirmClose}
-          onConfirm={this.close}
-        />
-      </Modal>
-    )
-  }
+      <ConfirmClose show={confirmClose} onCancel={hideConfirmClose} onConfirm={close} />
+    </Modal>
+  )
 }
 
 export const AutoWidthTableButton = styled(TableButton)`
@@ -161,4 +157,4 @@ const modalStyle = {
   },
 }
 
-export default inject('Stores')(observer(ActorModalBase))
+export default observer(ActorModalBase)

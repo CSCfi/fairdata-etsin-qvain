@@ -1,17 +1,19 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import { Field } from '../../../general/section'
 import ProvenanceFieldContent from './ProvenanceFieldContent'
+import { useStores } from '../../utils/stores'
 
 const brief = {
   title: 'qvain.history.provenance.title',
   description: 'qvain.history.provenance.description',
 }
 
-const Provenance = ({ Stores }) => {
-  const Store = Stores.Qvain
-  const { lang } = Stores.Locale
+const Provenance = () => {
+  const {
+    Qvain: Store,
+    Locale: { lang },
+  } = useStores()
   return (
     <Field brief={brief}>
       <ProvenanceFieldContent Store={Store} lang={lang} />
@@ -19,8 +21,4 @@ const Provenance = ({ Stores }) => {
   )
 }
 
-Provenance.propTypes = {
-  Stores: PropTypes.object.isRequired,
-}
-
-export default inject('Stores')(observer(Provenance))
+export default observer(Provenance)

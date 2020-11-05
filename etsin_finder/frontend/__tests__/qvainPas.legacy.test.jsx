@@ -1,6 +1,5 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { shallow, mount } from 'enzyme'
-import { Provider } from 'mobx-react'
 import { ThemeProvider } from 'styled-components'
 import axios from 'axios'
 import { runInAction } from 'mobx'
@@ -18,15 +17,12 @@ import AccessType from '../js/components/qvain/fields/licenses/accessType'
 import Files from '../js/components/qvain/fields/files'
 import FileForm from '../js/components/qvain/fields/files/legacy/fileForm'
 import IDAFilePicker from '../js/components/qvain/fields/files/legacy/idaFilePicker'
-import QvainStoreClass, {
-  Directory,
-  File,
-  AccessType as AccessTypeConstructor,
-  License as LicenseConstructor,
-} from '../js/stores/view/qvain'
+import QvainStoreClass from '../js/stores/view/qvain'
+import { Directory, File } from '../js/stores/view/qvain/qvain.filesv1'
 import LocaleStore from '../js/stores/view/language'
 import EnvStore from '../js/stores/domain/env'
 import { ACCESS_TYPE_URL, DATA_CATALOG_IDENTIFIER } from '../js/utils/constants'
+import { StoresProvider, useStores } from '../js/stores/stores'
 
 global.Promise = require('bluebird')
 
@@ -328,6 +324,15 @@ axios.get.mockImplementation(url => {
   })
 })
 
+jest.mock('../js/stores/stores', () => {
+  const useStores = jest.fn()
+
+  return {
+    ...jest.requireActual('../js/stores/stores'),
+    useStores,
+  }
+})
+
 // Unmount mounted components after each test to avoid tests affecting each other.
 let wrapper
 afterEach(() => {
@@ -338,38 +343,52 @@ afterEach(() => {
 })
 
 describe('Qvain.PasState', () => {
-  const render = stores => {
-    stores.Qvain.setKeywordsArray(['key', 'word'])
+  const render = (dataCatalog, preservationState) => {
+    const mockPasState = {
+      Qvain: {
+        dataCatalog,
+        preservationState,
+        isPas: true,
+      },
+    }
+
+    useStores.mockReturnValue(mockPasState)
+
     return mount(
-      <Provider Stores={stores}>
-        <ThemeProvider theme={etsinTheme}>
-          <PasState />
-        </ThemeProvider>
-      </Provider>
+      <ThemeProvider theme={etsinTheme}>
+        <PasState />
+      </ThemeProvider>
     )
   }
 
   it('shows pas state', () => {
-    const stores = getStores()
-    stores.Qvain.setDataCatalog(DATA_CATALOG_IDENTIFIER.IDA)
-    stores.Qvain.setPreservationState(80)
-    wrapper = render(stores)
+    wrapper = render(DATA_CATALOG_IDENTIFIER.IDA, 80)
+
     expect(wrapper.find(PasState).text().includes('80:')).toBe(true)
     wrapper.unmount()
 
-    stores.Qvain.setDataCatalog(DATA_CATALOG_IDENTIFIER.PAS)
-    stores.Qvain.setPreservationState(0)
-    wrapper = render(stores)
+    wrapper = render(DATA_CATALOG_IDENTIFIER.PAS, 0)
     expect(wrapper.find(PasState).text().includes('80:')).toBe(false)
     expect(wrapper.find(PasState).text().includes('0:')).toBe(true)
   })
 })
 
 describe('Qvain.Description', () => {
-  const render = stores => {
-    stores.Qvain.setKeywordsArray(['key', 'word'])
+  const render = preservationState => {
+    const stores = getStores()
+    stores.Qvain.Keywords.set(['key', 'word'])
+    stores.Qvain.setPreservationState(preservationState)
+
+    const mockState = {
+      Qvain: stores.Qvain,
+      Locale: stores.Locale,
+      Env: stores.Env,
+    }
+
+    useStores.mockReturnValue(mockState)
+
     return mount(
-      <Provider Stores={stores}>
+      <StoresProvider store={stores}>
         <ThemeProvider theme={etsinTheme}>
           <>
             <DescriptionField />
@@ -378,15 +397,12 @@ describe('Qvain.Description', () => {
             <KeywordsField />
           </>
         </ThemeProvider>
-      </Provider>
+      </StoresProvider>
     )
   }
 
   it('prevents editing of description fields', () => {
-    const stores = getStores()
-    stores.Qvain.setPreservationState(80)
-
-    wrapper = render(stores)
+    wrapper = render(80)
     const inputs = wrapper.find('input').not('[type="hidden"]')
     expect(inputs.length).toBe(4)
     inputs.forEach(c => expect(c.props().disabled).toBe(true))
@@ -397,10 +413,7 @@ describe('Qvain.Description', () => {
   })
 
   it('allows editing of description fields', () => {
-    const stores = getStores()
-    stores.Qvain.setPreservationState(0)
-
-    wrapper = render(stores)
+    wrapper = render(0)
     const inputs = wrapper.find('input').not('[type="hidden"]')
     expect(inputs.length).toBe(4)
     inputs.forEach(c => expect(c.props().disabled).toBe(false))
@@ -412,19 +425,21 @@ describe('Qvain.Description', () => {
 
 describe('Qvain.RightsAndLicenses', () => {
   const render = stores => {
-    stores.Qvain.setLicenseArray([
-      LicenseConstructor({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'other'),
+    stores.Qvain.Licenses.set([
+      stores.Qvain.Licenses.Model({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'other'),
     ])
-    stores.Qvain.setAccessType(AccessTypeConstructor({ en: 'Embargo' }, ACCESS_TYPE_URL.EMBARGO))
+    stores.Qvain.AccessType.set(
+      stores.Qvain.AccessType.Model({ en: 'Embargo' }, ACCESS_TYPE_URL.EMBARGO)
+    )
     return mount(
-      <Provider Stores={stores}>
+      <StoresProvider store={stores}>
         <ThemeProvider theme={etsinTheme}>
           <>
             <License />
             <AccessType />
           </>
         </ThemeProvider>
-      </Provider>
+      </StoresProvider>
     )
   }
 
@@ -454,6 +469,10 @@ describe('Qvain.RightsAndLicenses', () => {
 })
 
 describe('Qvain.Files', () => {
+  beforeEach(() => {
+    useStores.mockReturnValue(getStores())
+  })
+
   const render = stores => {
     const testfile = File({
       description: 'File',
@@ -504,11 +523,11 @@ describe('Qvain.Files', () => {
     })
     stores.Qvain.setInEdit(testfile)
     return mount(
-      <Provider Stores={stores}>
+      <StoresProvider store={stores}>
         <ThemeProvider theme={etsinTheme}>
           <FileForm />
         </ThemeProvider>
-      </Provider>
+      </StoresProvider>
     )
   }
 

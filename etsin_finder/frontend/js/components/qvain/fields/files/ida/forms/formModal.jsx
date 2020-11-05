@@ -1,6 +1,5 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { inject, observer } from 'mobx-react'
+import React, { useState } from 'react'
+import { observer } from 'mobx-react'
 import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFile } from '@fortawesome/free-solid-svg-icons'
@@ -10,93 +9,58 @@ import { ConfirmClose } from '../../../../general/modal/confirmClose'
 import { TableButton } from '../../../../general/buttons'
 import FileForm from './fileForm'
 import DirectoryForm from './directoryForm'
+import { useStores } from '../../../utils/stores'
 
-class FormModal extends Component {
-  promises = []
+const FormModal = () => {
+  const {
+    Qvain: {
+      Files: { inEdit, setInEdit },
+    },
+  } = useStores()
+  const [changed, setChanged] = useState(false)
+  const [confirmClose, setConfirmClose] = useState(false)
 
-  static propTypes = {
-    Stores: PropTypes.object.isRequired,
-  }
-
-  state = {
-    changed: false,
-    confirmClose: false,
-  }
-
-  requestClose = () => {
-    if (this.state.loading) {
-      return
-    }
-
-    if (!this.state.changed) {
-      this.close()
+  const requestClose = () => {
+    if (!changed) {
+      close()
     } else {
-      this.showConfirmClose()
+      showConfirmClose()
     }
   }
 
-  showConfirmClose = () => {
-    this.setState({
-      confirmClose: true,
-    })
+  const showConfirmClose = () => {
+    setConfirmClose(true)
   }
 
-  hideConfirmClose = () => {
-    this.setState({
-      confirmClose: false,
-    })
+  const hideConfirmClose = () => {
+    setConfirmClose(false)
   }
 
-  clearError = () => {
-    this.setState({})
-  }
-
-  close = () => {
-    const { setInEdit } = this.props.Stores.Qvain.Files
+  const close = () => {
     setInEdit(null)
-    this.setChanged(false)
-    this.hideConfirmClose()
+    setChanged(false)
+    hideConfirmClose()
   }
 
-  setChanged = value => {
-    this.setState({
-      changed: value,
-    })
+  if (!inEdit) {
+    return null
   }
 
-  render() {
-    const { inEdit } = this.props.Stores.Qvain.Files
-    if (!inEdit) {
-      return null
-    }
-    return (
-      <Modal
-        contentLabel="formModal"
-        isOpen
-        onRequestClose={this.requestClose}
-        customStyles={modalStyles}
-      >
-        <h3>
-          <FontAwesomeIcon icon={faFile} style={{ marginRight: '1rem' }} />
-          <ItemPath item={inEdit} />
-        </h3>
-        {this.state.changed && '*'}
+  return (
+    <Modal contentLabel="formModal" isOpen onRequestClose={requestClose} customStyles={modalStyles}>
+      <h3>
+        <FontAwesomeIcon icon={faFile} style={{ marginRight: '1rem' }} />
+        <ItemPath item={inEdit} />
+      </h3>
+      {changed && '*'}
 
-        {inEdit.type === 'directory' && (
-          <DirectoryForm setChanged={this.setChanged} requestClose={this.requestClose} />
-        )}
-        {inEdit.type === 'file' && (
-          <FileForm setChanged={this.setChanged} requestClose={this.requestClose} />
-        )}
-        <ConfirmClose
-          show={this.state.confirmClose}
-          onCancel={this.hideConfirmClose}
-          onConfirm={this.close}
-          disabled={this.state.loading}
-        />
-      </Modal>
-    )
-  }
+      {inEdit.type === 'directory' && (
+        <DirectoryForm setChanged={setChanged} requestClose={requestClose} />
+      )}
+      {inEdit.type === 'file' && <FileForm setChanged={setChanged} requestClose={requestClose} />}
+      <ConfirmClose show={confirmClose} onCancel={hideConfirmClose} onConfirm={close} />
+    </Modal>
+  )
 }
 
 const ItemPath = ({ item }) => item.path.substring(1).split('/').join(' / ')
@@ -126,4 +90,4 @@ export const AutoWidthTableButton = styled(TableButton)`
   width: auto;
 `
 
-export default inject('Stores')(observer(FormModal))
+export default observer(FormModal)

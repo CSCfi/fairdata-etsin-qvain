@@ -1,6 +1,5 @@
 import React from 'react'
-import { inject, observer } from 'mobx-react'
-import PropTypes from 'prop-types'
+import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 import styled from 'styled-components'
 
@@ -8,17 +7,20 @@ import { Paragraph, ContainerSubsectionBottom } from '../../general/card'
 import { CUMULATIVE_STATE } from '../../../../utils/constants'
 import { LabelLarge, FormField, RadioInput, Label, HelpField } from '../../general/modal/form'
 import { Button } from '../../../general/button'
+import { useStores } from '../utils/stores'
 
-const CumulativeState = ({ Stores }) => {
+const CumulativeState = () => {
   const {
-    cumulativeState,
-    isCumulative,
-    newCumulativeState,
-    setCumulativeState,
-    setNewCumulativeState,
-    hasBeenPublished,
-    original,
-  } = Stores.Qvain
+    Qvain: {
+      cumulativeState,
+      isCumulative,
+      newCumulativeState,
+      setCumulativeState,
+      setNewCumulativeState,
+      hasBeenPublished,
+      original,
+    },
+  } = useStores()
 
   const offState = isCumulative ? CUMULATIVE_STATE.CLOSED : CUMULATIVE_STATE.NO
   const canChangeCumulativeState = !hasBeenPublished || cumulativeState === CUMULATIVE_STATE.YES
@@ -112,13 +114,9 @@ const CumulativeState = ({ Stores }) => {
   )
 }
 
-CumulativeState.propTypes = {
-  Stores: PropTypes.object.isRequired,
-}
-
 export const CumulativeStateButton = styled(Button)`
   display: block;
   margin-left: 0;
 `
 
-export default inject('Stores')(observer(CumulativeState))
+export default observer(CumulativeState)

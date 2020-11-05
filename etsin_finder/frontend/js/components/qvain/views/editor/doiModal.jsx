@@ -5,19 +5,19 @@ import Translate from 'react-translate-component'
 import Modal from '../../../general/modal'
 import { Button } from '../../../general/button'
 
-const DoiModal = props => (
+const DoiModal = ({ onAcceptUseDoi, onRequestClose, isOpen }) => (
   <Modal
-    isOpen={props.isOpen}
-    onRequestClose={props.onRequestClose}
+    isOpen={isOpen}
+    onRequestClose={onRequestClose}
     customStyles={doiModalStyles}
     contentLabel="UseDoiModalInformation"
   >
     <Translate content="qvain.useDoiHeader" component="h2" />
     <Translate content="qvain.useDoiContent" component="p" />
-    <Button onClick={props.onAcceptUseDoi}>
+    <Button onClick={onAcceptUseDoi}>
       <Translate content="qvain.useDoiAffirmative" component="span" />
     </Button>
-    <Button onClick={props.onRequestClose}>
+    <Button onClick={onRequestClose}>
       <Translate content="qvain.useDoiNegative" component="span" />
     </Button>
   </Modal>

@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import translate from 'counterpart'
@@ -9,6 +9,7 @@ import CreatableSelect from 'react-select/creatable'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPen } from '@fortawesome/free-solid-svg-icons'
 
+import { useStores } from '../../../utils/stores'
 import { DeleteButton } from '../../../../general/buttons'
 import ValidationError from '../../../../general/errors/validationError'
 import { getOrganizationName } from '../../common'
@@ -59,7 +60,6 @@ const getOptionsWithLang = (datasetOptions, referenceOptions, lang) => [
 ]
 
 const propTypes = {
-  Stores: PropTypes.object.isRequired,
   organization: PropTypes.object,
   organizations: PropTypes.array.isRequired,
   datasetOrganizations: PropTypes.array,
@@ -79,7 +79,6 @@ const defaultProps = {
 }
 
 export const OrgSelectorBase = ({
-  Stores,
   organization,
   organizations,
   datasetOrganizations,
@@ -91,6 +90,7 @@ export const OrgSelectorBase = ({
   toggleEdit,
   level,
 }) => {
+  const Stores = useStores()
   const { readonly } = Stores.Qvain
   const { lang } = Stores.Locale
 
@@ -302,4 +302,4 @@ const SelectOrg = styled(CreatableSelect)`
 OrgSelectorBase.propTypes = propTypes
 OrgSelectorBase.defaultProps = defaultProps
 
-export default inject('Stores')(observer(OrgSelectorBase))
+export default observer(OrgSelectorBase)

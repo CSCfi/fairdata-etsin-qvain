@@ -3,15 +3,17 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import { withRouter } from 'react-router-dom'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 
 import Loader from '../../../general/loader'
 import { TableButton } from '../../general/buttons'
+import { useStores } from '../../utils/stores'
 
 // Shows success/fail based on a RPC request response. If the response prop is null, shows a loader.
-const Response = props => {
-  const { response, history, requestClose } = props
-  const { getQvainUrl } = props.Stores.Env
+const Response = ({ response, history, requestClose }) => {
+  const {
+    Env: { getQvainUrl },
+  } = useStores()
 
   const handleOpenNewVersion = identifier => {
     history.push(getQvainUrl(`/dataset/${identifier}`))
@@ -68,7 +70,6 @@ const Response = props => {
 }
 
 Response.propTypes = {
-  Stores: PropTypes.object.isRequired,
   response: PropTypes.object,
   history: PropTypes.object.isRequired,
   requestClose: PropTypes.func,
@@ -135,4 +136,4 @@ const NewVersionButton = styled(TableButton)`
   margin-bottom: 1em;
 `
 
-export default withRouter(inject('Stores')(observer(Response)))
+export default withRouter(observer(Response))

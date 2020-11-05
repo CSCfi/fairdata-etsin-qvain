@@ -1,18 +1,21 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import { ROLE } from '../../../../../utils/constants'
 import { GroupLabel } from '../common'
 import RoleCheckbox from './roleCheckbox'
+import { useStores } from '../../utils/stores'
 
-export const ActorRolesBase = ({ Stores }) => {
-  const { actors, actorInEdit } = Stores.Qvain.Actors
-  const actor = actorInEdit
+export const ActorRolesBase = () => {
+  const {
+    Qvain: {
+      Actors: { actors, actorInEdit: actor },
+    },
+  } = useStores()
 
   const checkIfActorRoleExists = role => {
-    if (actors.map(p => p.uiid).includes(actorInEdit.uiid)) {
+    if (actors.map(p => p.uiid).includes(actor.uiid)) {
       // we are editing a previously added actor, allow changing roles
       return false
     }
@@ -43,10 +46,6 @@ export const ActorRolesBase = ({ Stores }) => {
   )
 }
 
-ActorRolesBase.propTypes = {
-  Stores: PropTypes.object.isRequired,
-}
-
 export const List = styled.ul`
   padding: 0px;
   margin: 0;
@@ -60,4 +59,4 @@ const Fieldset = styled.fieldset`
   border: none;
 `
 
-export default inject('Stores')(observer(ActorRolesBase))
+export default observer(ActorRolesBase)

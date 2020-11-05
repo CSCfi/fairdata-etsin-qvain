@@ -1,10 +1,11 @@
 import React from 'react'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'
 import translate from 'counterpart'
 import Translate from 'react-translate-component'
 import styled from 'styled-components'
 
+import { useStores } from '../../utils/stores'
 import { getActorName, ActorIcon } from '../common'
 import {
   ButtonGroup,
@@ -14,7 +15,8 @@ import {
   ButtonContainer,
 } from '../../../general/buttons'
 
-const ActorItem = ({ Stores, actor }) => {
+const ActorItem = ({ actor }) => {
+  const Stores = useStores()
   const { editActor, removeActor } = Stores.Qvain.Actors
   const { lang } = Stores.Locale
   const { readonly } = Stores.Qvain
@@ -55,7 +57,6 @@ const ActorItem = ({ Stores, actor }) => {
 }
 
 ActorItem.propTypes = {
-  Stores: PropTypes.object.isRequired,
   actor: PropTypes.object.isRequired,
 }
 
@@ -66,4 +67,4 @@ const ActorLabel = styled(ButtonLabel)`
   word-break: break-word;
 `
 
-export default inject('Stores')(observer(ActorItem))
+export default observer(ActorItem)

@@ -2,7 +2,7 @@ import React from 'react'
 import { mount } from 'enzyme'
 import ReactModal from 'react-modal'
 import { ThemeProvider } from 'styled-components'
-import { Provider } from 'mobx-react'
+import { StoresProvider } from '../js/stores/stores'
 import { BrowserRouter } from 'react-router-dom'
 import axios from 'axios'
 import { when } from 'mobx'
@@ -133,13 +133,13 @@ describe('Qvain.MetadataModal', () => {
     helper = document.createElement('div')
     ReactModal.setAppElement(helper)
     wrapper = mount(
-      <Provider Stores={stores}>
+      <StoresProvider store={stores}>
         <BrowserRouter>
           <ThemeProvider theme={etsinTheme}>
             <MetadataModal ref={ref} />
           </ThemeProvider>
         </BrowserRouter>
-      </Provider>,
+      </StoresProvider>,
       { attachTo: helper }
     )
     instance = ref.current

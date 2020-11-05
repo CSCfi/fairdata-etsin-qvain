@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { observable, action, runInAction, computed, makeObservable } from 'mobx'
 
-import { METAX_FAIRDATA_ROOT_URL, ENTITY_TYPE, ROLE } from '../../utils/constants'
+import { METAX_FAIRDATA_ROOT_URL, ENTITY_TYPE, ROLE } from '../../../utils/constants'
 
 // helper methods
 
@@ -172,6 +172,8 @@ class Actors {
 
   @observable onSuccessfulCreationCallbacks = []
 
+  @observable orphanActors = []
+
   @action clearReferenceOrganizations = () => {
     this.referenceOrganizations = {}
     this.loadingReferenceOrganizations = {}
@@ -309,7 +311,8 @@ class Actors {
 
   @action
   reset = () => {
-    this.actors.clear()
+    this.actors = []
+    this.orphanActors = []
     this.actorInEdit = null
     this.onSuccessfulCreationCallbacks = []
   }
@@ -340,6 +343,11 @@ class Actors {
     this.mergeTheSameActors()
     this.mergeTheSameActorOrganizations()
     this.mergeActorsOrganizationsWithReferences()
+  }
+
+  fromBackend = dataset => {
+    this.orphanActors = []
+    this.editDataset(dataset)
   }
 
   @observable actors = []
@@ -480,10 +488,10 @@ class Actors {
 
   @action
   removeActor = async actor => {
-    const confirm = await this.Qvain.checkActorFromRefs(actor)
+    const confirm = await this.checkActorFromRefs(actor)
     if (!confirm) return null
     const actors = this.actors.filter(p => p.uiid !== actor.uiid)
-    this.Qvain.removeActorFromRefs(actor)
+    this.Qvain.Provenances.removeActorFromRefs(actor)
     this.setActors(actors)
     this.Qvain.setChanged(true)
     return null
@@ -516,6 +524,36 @@ class Actors {
   @action
   setActorOrganizations = (actor, organizations) => {
     actor.organizations = organizations
+  }
+
+  @action checkActorFromRefs = actor => {
+    const provenancesWithActorRefsToBeRemoved = this.Qvain.Provenances.storage.filter(
+      p => p.associations.actorsRef[actor.uiid]
+    )
+    if (!provenancesWithActorRefsToBeRemoved.length) return Promise.resolve(true)
+    this.provenancesWithNonExistingActors = provenancesWithActorRefsToBeRemoved
+    return this.createLooseProvenancePromise()
+  }
+
+  @action checkProvenanceActors = () => {
+    const provenanceActors = [
+      ...new Set(
+        this.Qvain.Provenances.storage
+          .map(prov => Object.values(prov.associations.actorsRef))
+          .flat()
+      ),
+    ].flat()
+    const actorsWithOnlyProvenanceTag = this.actors.filter(
+      actor => actor.roles.includes(ROLE.PROVENANCE) && actor.roles.length === 1
+    )
+
+    const orphanActors = actorsWithOnlyProvenanceTag.filter(
+      actor => !provenanceActors.includes(actor)
+    )
+    if (!orphanActors.length) return Promise.resolve(true)
+    this.orphanActors = orphanActors
+
+    return this.createLooseActorPromise()
   }
 
   toBackend = () =>

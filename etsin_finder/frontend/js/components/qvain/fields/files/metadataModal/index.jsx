@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import Translate from 'react-translate-component'
 import translate from 'counterpart'
 import PropTypes from 'prop-types'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import styled from 'styled-components'
 import axios from 'axios'
 import { observable, action, autorun } from 'mobx'
@@ -20,6 +20,7 @@ import { getPASMeta } from '../../../../../stores/view/common.files.items'
 import { getOptions, getDefaultOptions, makeOption, findOption } from './options'
 import { MetadataSelect, selectStylesNarrow, labelStyle } from './select'
 import urls from '../../../utils/urls'
+import { withStores } from '../../../utils/stores'
 
 export class MetadataModal extends Component {
   @observable
@@ -535,4 +536,4 @@ export const AutoWidthTableButton = styled(TableButton)`
   max-width: none;
 `
 
-export default inject('Stores')(observer(MetadataModal))
+export default withStores(observer(MetadataModal))

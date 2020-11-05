@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react'
-import PropTypes from 'prop-types'
-import { inject, Observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import { autorun } from 'mobx'
 import Translate from 'react-translate-component'
 
 import { useRenderTree } from '../../../../general/files/tree'
 import AddItemsTreeItem from './addItemsTreeItem'
+import { useStores } from '../../../utils/stores'
 
 const EmptyHelp = () => (
   <div>
@@ -13,16 +13,18 @@ const EmptyHelp = () => (
   </div>
 )
 
-function AddItemsTree(props) {
-  const { Files } = props.Stores.Qvain
-  const { AddItemsView } = Files
+const AddItemsTree = () => {
+  const {
+    Qvain: { Files },
+  } = useStores()
+  const { AddItemsView, root } = Files
 
   // Open top level directory
   useEffect(
     () =>
       autorun(() => {
         if (Files.root) {
-          Files.root.directories.forEach(dir => AddItemsView.open(dir))
+          Files.root.directories.forEach((dir) => AddItemsView.open(dir))
         }
       }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -36,12 +38,7 @@ function AddItemsTree(props) {
     directoryView: AddItemsView,
     moreItemsLevel: 1,
   })
-
-  return <Observer>{renderTree}</Observer>
+  return renderTree()
 }
 
-AddItemsTree.propTypes = {
-  Stores: PropTypes.object.isRequired,
-}
-
-export default inject('Stores')(AddItemsTree)
+export default observer(AddItemsTree)

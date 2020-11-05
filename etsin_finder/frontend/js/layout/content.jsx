@@ -10,61 +10,62 @@
    */
 }
 
-import React, { Component } from 'react'
+import React from 'react'
 import { Route, Switch, Redirect } from 'react-router-dom'
-import { observer, inject } from 'mobx-react'
+import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'
 import { Home, Search, Dataset, Qvain, QvainDatasets } from '../routes'
 import ErrorPage from '../components/errorpage'
 import QvainLogin from '../components/qvain/views/main/qvainLogin'
 import QvainLandingPage from '../components/qvain/views/landingPage'
+import { useStores } from '../../utils/stores'
 
-class Content extends Component {
-  static propTypes = {
-    Stores: PropTypes.object.isRequired,
-    contentRef: PropTypes.object.isRequired,
-  }
+const Content = ({ contentRef }) => {
+  const {
+    Auth,
+    Env: { isQvain, separateQvain, getQvainUrl },
+  } = useStores()
 
-  render() {
-    const { Auth, Env } = this.props.Stores
-    if (Auth.initializing) return null
+  if (Auth.initializing) return null
 
-    const { isQvain, separateQvain, getQvainUrl } = Env
-    const qvainPath = path => {
-      if (isQvain) {
-        return path || '/'
-      }
-      return `/qvain${path}`
+  const qvainPath = path => {
+    if (isQvain) {
+      return path || '/'
     }
-
-    return (
-      <main className="content">
-        <span ref={this.props.contentRef} tabIndex="-1" />
-        <Switch>
-          {separateQvain && <Route path="/qvain" render={redirectToQvain(isQvain, getQvainUrl)} />}
-          {!isQvain && [
-            <Route exact path="/" key="home" component={Home} />,
-            <Route exact path="/datasets/:query?" key="search" component={Search} />,
-            <Route path="/dataset/:identifier" key="dataset" component={Dataset} />,
-          ]}
-          <Route
-            path={qvainPath('/dataset/:identifier')}
-            render={renderIfLoggedIn(renderQvain, Auth)}
-          />
-          <Route exact path={qvainPath('/dataset')} render={renderIfLoggedIn(renderQvain, Auth)} />
-          <Route
-            exact
-            path={qvainPath('')}
-            render={renderIfLoggedIn(renderQvainDatasets, Auth, renderQvainLandingPage)}
-          />
-          <Route render={() => <ErrorPage error={{ type: 'error' }} />} />
-        </Switch>
-      </main>
-    )
+    return `/qvain${path}`
   }
+
+  return (
+    <main className="content">
+      <span ref={contentRef} tabIndex="-1" />
+      <Switch>
+        {separateQvain && <Route path="/qvain" render={redirectToQvain(isQvain, getQvainUrl)} />}
+        {!isQvain && [
+          <Route exact path="/" key="home" component={Home} />,
+          <Route exact path="/datasets/:query?" key="search" component={Search} />,
+          <Route path="/dataset/:identifier" key="dataset" component={Dataset} />,
+        ]}
+        <Route
+          path={qvainPath('/dataset/:identifier')}
+          render={renderIfLoggedIn(renderQvain, Auth)}
+        />
+        <Route exact path={qvainPath('/dataset')} render={renderIfLoggedIn(renderQvain, Auth)} />
+        <Route
+          exact
+          path={qvainPath('')}
+          render={renderIfLoggedIn(renderQvainDatasets, Auth, renderQvainLandingPage)}
+        />
+        <Route render={() => <ErrorPage error={{ type: 'error' }} />} />
+      </Switch>
+    </main>
+  )
 }
 
-export default inject('Stores')(observer(Content))
+Content.propTypes = {
+  contentRef: PropTypes.object.isRequired,
+}
+
+export default observer(Content)
 
 const redirectToQvain = (isQvain, getQvainUrl) => props => {
   // redirect /qvain to the new qvain app url

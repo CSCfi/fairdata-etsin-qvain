@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import t from 'counterpart'
 
-import { ProjectFunderType } from '../../../../stores/view/qvain'
+import { ProjectFunderType } from '../../../../stores/view/qvain/qvain.project'
 import { LabelLarge, Input } from '../../general/modal/form'
 import Select from '../../general/input/select'
 import { ErrorMessages } from './utils'

@@ -13,10 +13,9 @@ const RelatedResource = (
 ) => ({ uiid, name, description, identifier, relationType, entityType })
 
 class RelatedResources extends Field {
-  constructor(Qvain) {
-    super(Qvain, RelatedResource, RelatedResourceModel, 'relatedResources')
+  constructor(Parent) {
+    super(Parent, RelatedResource, RelatedResourceModel, 'relatedResources')
     makeObservable(this)
-    this.Qvain = Qvain
   }
 
   relatedResourceToBackend = rr => ({
@@ -30,6 +29,8 @@ class RelatedResources extends Field {
   })
 
   toBackend = () => this.storage.map(this.relatedResourceToBackend)
+
+  fromBackend = (dataset, Qvain) => this.fromBackendBase(dataset.relation, Qvain)
 }
 
 export const RelatedResourceModel = rr => ({

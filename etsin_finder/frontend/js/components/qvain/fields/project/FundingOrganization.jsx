@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
@@ -18,8 +18,9 @@ import {
 } from './utils'
 import Button from '../../../general/button'
 import Label from '../../general/card/label'
+import { withStores } from '../utils/stores'
 
-import { Organization } from '../../../../stores/view/qvain'
+import { Organization } from '../../../../stores/view/qvain/qvain.project'
 import { organizationObjectSchema } from '../../utils/formValidation'
 
 const FundingOrganization = props => {
@@ -93,7 +94,7 @@ const FundingOrganization = props => {
 
   const { addedOrganizations, formData } = props.organizations
   const { lang } = props.Stores.Locale
-  const { readonly } = props.Stores.Qvain
+  const { readonly } = props.Stores.Qvain.Projects
   return (
     <Card>
       <Translate component="h3" content="qvain.project.organization.title" />
@@ -160,4 +161,4 @@ const OrganizationLabel = styled(Label)`
   cursor: pointer;
 `
 
-export default inject('Stores')(observer(FundingOrganization))
+export default withStores(observer(FundingOrganization))

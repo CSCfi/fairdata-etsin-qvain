@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 import styled from 'styled-components'
 
@@ -15,6 +15,7 @@ import {
   fileDescriptionSchema,
   fileUseCategorySchema,
 } from '../../../utils/formValidation'
+import { withStores } from '../../../utils/stores'
 
 class FileForm extends Component {
   inEdit = this.props.Stores.Qvain.inEdit
@@ -131,13 +132,6 @@ class FileForm extends Component {
   handleEditMetadata = event => {
     event.preventDefault()
     this.props.Stores.Qvain.setMetadataModalFile(this.props.Stores.Qvain.inEdit)
-  }
-
-  getFormatVersions = fileFormat => {
-    if (fileFormat !== undefined) {
-      return this.state.formatVersions.get(fileFormat.value)
-    }
-    return []
   }
 
   handleOnBlur = (validator, value, errorSet) => {
@@ -313,4 +307,4 @@ const EditMetadataButton = styled(SaveButton)`
   padding: 10px 25px;
 `
 
-export default inject('Stores')(observer(FileForm))
+export default withStores(observer(FileForm))

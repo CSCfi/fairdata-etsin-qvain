@@ -1,37 +1,37 @@
-import React, { Component } from 'react'
+import React, { useState } from 'react'
 import Translate from 'react-translate-component'
-import PropTypes from 'prop-types'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import styled from 'styled-components'
 import axios from 'axios'
 
 import Modal from '../../../../general/modal'
 import { DangerButton, TableButton } from '../../../general/buttons'
 import { getPASMeta } from '../../../../../stores/view/common.files.items'
+import { useStores } from '../../../utils/stores'
 
 import urls from '../../../utils/urls'
 
-class ClearMetadataModal extends Component {
-  static propTypes = {
-    Stores: PropTypes.object.isRequired,
-  }
+const ClearMetadataModal = () => {
+  const {
+    Qvain: {
+      readonly,
+      clearMetadataModalFile,
+      setClearMetadataModalFile,
+      Files: { applyClearPASMeta },
+    },
+    Env: { metaxApiV2 },
+  } = useStores()
+  const [loading, setLoading] = useState(false)
 
-  state = {
-    loading: false,
-  }
-
-  clearFileCharacteristics = async () => {
-    const { clearMetadataModalFile, Files } = this.props.Stores.Qvain
+  const clearFileCharacteristics = async () => {
     const { identifier } = clearMetadataModalFile
-    const { applyClearPASMeta } = Files
     const url = urls.v2.fileCharacteristics(identifier)
 
     // revert to default file characteristics
     const data = {
       encoding: 'UTF-8',
     }
-
-    this.setState({ loading: true })
+    setLoading(true)
     try {
       const response = await axios.put(url, data, {
         headers: {
@@ -39,60 +39,51 @@ class ClearMetadataModal extends Component {
         },
       })
       applyClearPASMeta(getPASMeta(response.data))
-      this.close()
+      close()
     } finally {
-      this.setState({ loading: false })
+      setLoading(false)
     }
   }
 
-  close = () => {
-    if (this.state.loading) {
+  const close = () => {
+    if (loading) {
       return
     }
-    const { setClearMetadataModalFile } = this.props.Stores.Qvain
     setClearMetadataModalFile(undefined)
   }
 
-  render() {
-    const { clearMetadataModalFile, readonly } = this.props.Stores.Qvain
-    const { metaxApiV2 } = this.props.Stores.Env
-
-    // Only supported with metaxApiV2
-    if (!clearMetadataModalFile || !metaxApiV2) {
-      return null
-    }
-
-    return (
-      <Modal
-        contentLabel="clearMetadataModal"
-        isOpen
-        onRequestClose={this.close}
-        customStyles={modalStyles}
-      >
-        <Translate
-          content="qvain.files.metadataModal.clear.header"
-          component="h3"
-          style={{ marginBottom: 0 }}
-        />
-        <Translate
-          content="qvain.files.metadataModal.clear.help"
-          component="p"
-          with={{ file: clearMetadataModalFile.name }}
-        />
-        <Buttons>
-          <TableButton disabled={this.state.loading} onClick={this.close}>
-            <Translate content={'qvain.files.metadataModal.clear.cancel'} />
-          </TableButton>
-          <DangerButton
-            disabled={this.state.loading || readonly}
-            onClick={this.clearFileCharacteristics}
-          >
-            <Translate content={'qvain.files.metadataModal.clear.confirm'} />
-          </DangerButton>
-        </Buttons>
-      </Modal>
-    )
+  // Only supported with metaxApiV2
+  if (!clearMetadataModalFile || !metaxApiV2) {
+    return null
   }
+
+  return (
+    <Modal
+      contentLabel="clearMetadataModal"
+      isOpen
+      onRequestClose={close}
+      customStyles={modalStyles}
+    >
+      <Translate
+        content="qvain.files.metadataModal.clear.header"
+        component="h3"
+        style={{ marginBottom: 0 }}
+      />
+      <Translate
+        content="qvain.files.metadataModal.clear.help"
+        component="p"
+        with={{ file: clearMetadataModalFile.name }}
+      />
+      <Buttons>
+        <TableButton disabled={loading} onClick={close}>
+          <Translate content={'qvain.files.metadataModal.clear.cancel'} />
+        </TableButton>
+        <DangerButton disabled={loading || readonly} onClick={clearFileCharacteristics}>
+          <Translate content={'qvain.files.metadataModal.clear.confirm'} />
+        </DangerButton>
+      </Buttons>
+    </Modal>
+  )
 }
 
 const Buttons = styled.div`
@@ -124,4 +115,4 @@ export const AutoWidthTableButton = styled(TableButton)`
   width: auto;
 `
 
-export default inject('Stores')(observer(ClearMetadataModal))
+export default observer(ClearMetadataModal)

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes, { instanceOf } from 'prop-types'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import axios from 'axios'
 import { withRouter } from 'react-router-dom'
 import styled from 'styled-components'
@@ -12,8 +12,9 @@ import handleSubmitToBackend from '../../utils/handleSubmit'
 import urls from '../../utils/urls'
 import { InvertedButton } from '../../../general/button'
 import DoiModal from './doiModal'
+import { withStores } from '../../../stores/stores'
 
-class SubmitButtons extends Component {
+export class SubmitButtons extends Component {
   promises = []
 
   static propTypes = {
@@ -49,30 +50,24 @@ class SubmitButtons extends Component {
   }
 
   checkOtherIdentifiersV1 = () => {
-    const {
-      otherIdentifier,
-      otherIdentifiersArray,
-      addOtherIdentifier,
-      setOtherIdentifier,
-      setOtherIdentifierValidationError,
-    } = this.props.Stores.Qvain
-    if (otherIdentifier !== '') {
+    const { OtherIdentifiers } = this.props.Stores.Qvain
+    if (OtherIdentifiers.itemStr !== '') {
       try {
-        otherIdentifierSchema.validateSync(otherIdentifier)
+        otherIdentifierSchema.validateSync(OtherIdentifiers.itemStr)
       } catch (err) {
         this.props.handleSubmitError(err)
-        setOtherIdentifierValidationError(err.errors)
+        OtherIdentifiers.setValidationError(err.errors)
         return false
       }
-      if (!otherIdentifiersArray.includes(otherIdentifier)) {
-        addOtherIdentifier(otherIdentifier)
-        setOtherIdentifier('')
+      if (!OtherIdentifiers.storage.includes(OtherIdentifiers.itemStr)) {
+        OtherIdentifiers.add(OtherIdentifiers.itemStr)
+        OtherIdentifiers.setItemStr('')
         this.success(null)
         return true
       }
       const message = translate('qvain.description.otherIdentifiers.alreadyAdded')
       this.failure({ errors: message })
-      setOtherIdentifierValidationError(message)
+      OtherIdentifiers.setValidationError(message)
       return false
     }
     return true
@@ -84,7 +79,7 @@ class SubmitButtons extends Component {
     }
 
     const { Stores, handleSubmitError } = this.props
-    const { addUnsavedMultiValueFields, setChanged } = Stores.Qvain
+    const { setChanged } = Stores.Qvain
     const { metaxApiV2 } = Stores.Env
 
     if (metaxApiV2) {
@@ -94,7 +89,6 @@ class SubmitButtons extends Component {
 
     this.setLoading(true)
 
-    addUnsavedMultiValueFields()
     if (!this.checkOtherIdentifiersV1()) {
       return false
     }
@@ -124,13 +118,7 @@ class SubmitButtons extends Component {
   }
 
   handleUpdateV1 = async () => {
-    const {
-      original,
-      addUnsavedMultiValueFields,
-      moveSelectedToExisting,
-      setChanged,
-      editDataset,
-    } = this.props.Stores.Qvain
+    const { original, moveSelectedToExisting, setChanged, editDataset } = this.props.Stores.Qvain
     const { metaxApiV2 } = this.props.Stores.Env
     const datasetUrl = urls.v1.dataset(original.identifier)
 
@@ -139,7 +127,6 @@ class SubmitButtons extends Component {
       return false
     }
 
-    addUnsavedMultiValueFields()
     if (!this.checkOtherIdentifiersV1()) {
       return false
     }
@@ -179,14 +166,12 @@ class SubmitButtons extends Component {
       original,
       canSelectFiles,
       canRemoveFiles,
-      addUnsavedMultiValueFields,
       cumulativeState,
       newCumulativeState,
       Files,
     } = this.props.Stores.Qvain
     const { metaxApiV2 } = this.props.Stores.Env
 
-    addUnsavedMultiValueFields()
     if (!this.checkOtherIdentifiersV1()) {
       return false
     }
@@ -238,7 +223,7 @@ class SubmitButtons extends Component {
 
   submit = async submitFunction => {
     const { Stores } = this.props
-    const isProvenanceActorsOk = await Stores.Qvain.checkProvenanceActors()
+    const isProvenanceActorsOk = await Stores.Qvain.Actors.checkProvenanceActors()
     if (!isProvenanceActorsOk) return
     submitFunction()
   }
@@ -471,11 +456,16 @@ class SubmitButtons extends Component {
 
   handlePublishDataset = async (saveChanges = true, overrideIdentifier = null) => {
     const { Stores, history } = this.props
-    const { original, editDataset } = Stores.Qvain
+    const { original, editDataset, deprecated } = Stores.Qvain
     const { metaxApiV2, getQvainUrl } = Stores.Env
 
     if (!metaxApiV2) {
       console.error('Metax API V2 is required for publishing drafts')
+      return null
+    }
+
+    if (deprecated) {
+      this.failure(new Error(translate('qvain.error.deprecated')))
       return null
     }
 
@@ -674,4 +664,4 @@ const SubmitButton = styled(InvertedButton)`
   border: 1px solid;
 `
 
-export default withRouter(inject('Stores')(observer(SubmitButtons)))
+export default withRouter(withStores(observer(SubmitButtons)))

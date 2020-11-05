@@ -1,6 +1,6 @@
-import React, { Component } from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 import styled from 'styled-components'
 import { darken } from 'polished'
@@ -16,117 +16,102 @@ import Loader from '../../../../general/loader'
 import { ErrorLabel, ErrorContainer, ErrorContent, ErrorButtons } from '../../../general/errors'
 import { Button } from '../../../../general/button'
 import FormModal from './forms/formModal'
+import { useStores } from '../../utils/stores'
 
-export class IDAFilePickerBase extends Component {
-  state = {
-    addFilesModalOpen: false,
+export const IDAFilePickerBase = () => {
+  const {
+    Qvain: {
+      Files: {
+        selectedProject,
+        root,
+        retry,
+        SelectedItemsView: { toggleHideRemoved, hideRemoved },
+        isLoadingProject,
+        loadingProjectError,
+      },
+      canSelectFiles,
+      original,
+    },
+  } = useStores()
+  const [modalOpen, setModalOpen] = useState(false)
+
+  const haveItems =
+    root &&
+    (root.files.some(f => f.existing) ||
+      root.directories.some(d => d.existing) ||
+      root.addedChildCount > 0)
+
+  if (loadingProjectError) {
+    console.error(loadingProjectError)
   }
 
-  static propTypes = {
-    Stores: PropTypes.object.isRequired,
+  if (original && loadingProjectError) {
+    return (
+      <div className="container">
+        <ErrorContainer>
+          <ErrorLabel>
+            <Translate content="qvain.files.error.title" />
+          </ErrorLabel>
+          <ErrorContent>{String(loadingProjectError)}</ErrorContent>
+          <ErrorButtons>
+            <Button onClick={retry}>
+              <Translate content="qvain.files.error.retry" />
+            </Button>
+          </ErrorButtons>
+        </ErrorContainer>
+      </div>
+    )
   }
 
-  open = () => {
-    this.setState({
-      addFilesModalOpen: true,
-    })
-  }
-
-  close = () => {
-    this.setState({
-      addFilesModalOpen: false,
-    })
-  }
-
-  render() {
-    const { canSelectFiles, original } = this.props.Stores.Qvain
-    const {
-      selectedProject,
-      root,
-      retry,
-      SelectedItemsView,
-      isLoadingProject,
-      loadingProjectError,
-    } = this.props.Stores.Qvain.Files
-    const haveItems =
-      root &&
-      (root.files.some(f => f.existing) ||
-        root.directories.some(d => d.existing) ||
-        root.addedChildCount > 0)
-    const { toggleHideRemoved, hideRemoved } = SelectedItemsView
-
-    if (loadingProjectError) {
-      console.error(loadingProjectError)
-    }
-
-    if (original && loadingProjectError) {
-      return (
-        <div className="container">
-          <ErrorContainer>
-            <ErrorLabel>
-              <Translate content="qvain.files.error.title" />
-            </ErrorLabel>
-            <ErrorContent>{String(loadingProjectError)}</ErrorContent>
-            <ErrorButtons>
-              <Button onClick={retry}>
-                <Translate content="qvain.files.error.retry" />
-              </Button>
-            </ErrorButtons>
-          </ErrorContainer>
-        </div>
-      )
-    }
-
-    if (!selectedProject && isLoadingProject) {
-      return (
-        <>
-          <Translate component={Title} content="qvain.files.selected.title" />
-          <Loader active />
-        </>
-      )
-    }
-
-    if (!canSelectFiles && !haveItems) {
-      return <Translate component={Title} content="qvain.files.selected.none" />
-    }
-
+  if (!selectedProject && isLoadingProject) {
     return (
       <>
-        {canSelectFiles ? (
-          <Translate component={Title} content="qvain.files.selected.title" />
-        ) : (
-          <Translate
-            component={Title}
-            content="qvain.files.selected.readonlyTitle"
-            with={{ project: selectedProject }}
-          />
-        )}
-        {canSelectFiles && (
-          <Controls>
-            <AddItems>
-              <Translate
-                component={PlusButton}
-                onClick={this.open}
-                attributes={{ 'aria-label': 'qvain.files.addItemsModal.title' }}
-              />
-              <ProjectInfo>
-                {haveItems ? selectedProject : <Translate content="qvain.files.selected.none" />}
-              </ProjectInfo>
-            </AddItems>
-            <HideRemovedLabel>
-              <Checkbox onChange={toggleHideRemoved} checked={hideRemoved} type="checkbox" />
-              <Translate content={'qvain.files.selected.hideRemoved'} />
-            </HideRemovedLabel>
-          </Controls>
-        )}
-
-        <AddItemsModal isOpen={this.state.addFilesModalOpen} onRequestClose={this.close} />
-        <SelectedItems />
-        <FixDeprecatedModal />
-        <FormModal />
+        <Translate component={Title} content="qvain.files.selected.title" />
+        <Loader active />
       </>
     )
   }
+
+  if (!canSelectFiles && !haveItems) {
+    return <Translate component={Title} content="qvain.files.selected.none" />
+  }
+
+  return (
+    <>
+      {canSelectFiles ? (
+        <Translate component={Title} content="qvain.files.selected.title" />
+      ) : (
+        <Translate
+          component={Title}
+          content="qvain.files.selected.readonlyTitle"
+          with={{ project: selectedProject }}
+        />
+      )}
+      {canSelectFiles && (
+        <Controls>
+          <AddItems>
+            <Translate
+              component={PlusButton}
+              onClick={() => setModalOpen(true)}
+              attributes={{ 'aria-label': 'qvain.files.addItemsModal.title' }}
+            />
+            <ProjectInfo>
+              {haveItems ? selectedProject : <Translate content="qvain.files.selected.none" />}
+            </ProjectInfo>
+          </AddItems>
+          <HideRemovedLabel>
+            <Checkbox onChange={toggleHideRemoved} checked={hideRemoved} type="checkbox" />
+            <Translate content={'qvain.files.selected.hideRemoved'} />
+          </HideRemovedLabel>
+        </Controls>
+      )}
+
+      <AddItemsModal isOpen={modalOpen} onRequestClose={() => setModalOpen(false)} />
+      <SelectedItems />
+      <FixDeprecatedModal />
+      <FormModal />
+    </>
+  )
 }
 
 const HideRemovedLabel = styled(Label)`
@@ -185,4 +170,4 @@ PlusButtonWrapper.propTypes = {
   onClick: PropTypes.func.isRequired,
 }
 
-export default inject('Stores')(observer(IDAFilePickerBase))
+export default observer(IDAFilePickerBase)

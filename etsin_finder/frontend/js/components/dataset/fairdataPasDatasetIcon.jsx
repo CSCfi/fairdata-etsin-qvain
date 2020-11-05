@@ -11,35 +11,35 @@
 }
 
 import React from 'react'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 
 import { DATA_CATALOG_IDENTIFIER } from '../../utils/constants'
+import { withStores } from '../../utils/stores'
 
-const FairdataPasDatasetIcon = (props) => {
-    if (
-      (`${props.preservation_state}` > 0)
-      &&
-      (`${props.data_catalog_identifier}` !== DATA_CATALOG_IDENTIFIER.PAS)
-    ) {
-      return (
-        <FairdataPasIconContainerEnteringPas>
-          <FairdataPasIconLabel>
-            <Translate content="dataset.enteringPas" />
-          </FairdataPasIconLabel>
-        </FairdataPasIconContainerEnteringPas>
-      )
-    }
-      return (
-        <FairdataPasIconContainerInPas>
-          <Translate component={FairdataPasIconLabel} content="dataset.fairdataPas" />
-        </FairdataPasIconContainerInPas>
-      )
+const FairdataPasDatasetIcon = props => {
+  if (
+    `${props.preservation_state}` > 0 &&
+    `${props.data_catalog_identifier}` !== DATA_CATALOG_IDENTIFIER.PAS
+  ) {
+    return (
+      <FairdataPasIconContainerEnteringPas>
+        <FairdataPasIconLabel>
+          <Translate content="dataset.enteringPas" />
+        </FairdataPasIconLabel>
+      </FairdataPasIconContainerEnteringPas>
+    )
+  }
+  return (
+    <FairdataPasIconContainerInPas>
+      <Translate component={FairdataPasIconLabel} content="dataset.fairdataPas" />
+    </FairdataPasIconContainerInPas>
+  )
 }
 
-export default inject('Stores')(observer(FairdataPasDatasetIcon))
+export default withStores(observer(FairdataPasDatasetIcon))
 export const undecorated = FairdataPasDatasetIcon
 
 const FairdataPasIconContainerInPas = styled.div`
@@ -51,7 +51,7 @@ const FairdataPasIconContainerInPas = styled.div`
 
 const FairdataPasIconContainerEnteringPas = styled.div`
   padding: 0.2em 0.9em;
-  background-color: #EFE4B0;
+  background-color: #efe4b0;
   border-radius: 1em;
   margin-right: 5px;
 `

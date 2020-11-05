@@ -1,6 +1,5 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { inject, observer } from 'mobx-react'
+import React, { useState } from 'react'
+import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 import axios from 'axios'
 
@@ -8,102 +7,84 @@ import Modal from '../../../general/modal'
 import Response from './response'
 import { DangerButton, TableButton } from '../../general/buttons'
 import { getResponseError } from '../../utils/responseError'
+import { useStores } from '../../utils/stores'
 
-class FixDeprecatedModal extends Component {
-  static propTypes = {
-    Stores: PropTypes.object.isRequired,
-  }
+const FixDeprecatedModal = () => {
+  const {
+    Qvain: { original, deprecated, closeFixDeprecatedModal, fixDeprecatedModalOpen, changed },
+  } = useStores()
+  const [response, setResponse] = useState(null)
+  const [loading, setLoading] = useState(false)
 
-  state = {
-    response: null,
-    loading: false,
-  }
-
-  fixDeprecated = () => {
-    const { deprecated, original } = this.props.Stores.Qvain
+  const fixDeprecated = () => {
     if (!original || !deprecated) {
       return
     }
-    this.setState({
-      response: null,
-      loading: true,
-    })
+    setLoading(true)
+    setResponse(null)
 
     const obj = {
       identifier: original.identifier,
     }
+
     axios
       .post('/api/rpc/datasets/fix_deprecated', obj)
-      .then(response => {
-        const data = response.data || {}
-        this.setState({
-          response: {
-            new_version_created: data.new_version_created,
-          },
+      .then(res => {
+        const data = res.data || {}
+        setResponse({
+          new_version_created: data.new_version_created,
         })
       })
       .catch(err => {
-        this.setState({
-          response: {
-            error: getResponseError(err),
-          },
+        setResponse({
+          error: getResponseError(err),
         })
       })
       .finally(() => {
-        this.setState({
-          loading: false,
-        })
+        setLoading(false)
       })
   }
 
-  handleRequestClose = () => {
-    if (!this.state.loading) {
-      this.props.Stores.Qvain.closeFixDeprecatedModal()
-      this.setState({
-        response: null,
-      })
+  const handleRequestClose = () => {
+    if (!loading) {
+      closeFixDeprecatedModal()
+      setResponse(null)
     }
   }
 
-  render() {
-    const { changed, fixDeprecatedModalOpen } = this.props.Stores.Qvain
-    return (
-      <Modal
-        isOpen={fixDeprecatedModalOpen}
-        onRequestClose={this.handleRequestClose}
-        contentLabel="fixDeprecatedModal"
-      >
-        <Translate component="h3" content="qvain.files.fixDeprecatedModal.header" />
-        {this.state.loading || this.state.response ? (
-          <Response response={this.state.response} requestClose={this.handleRequestClose} />
-        ) : (
-          <>
-            <Translate component="p" content={'qvain.files.fixDeprecatedModal.help'} />
-            {changed && (
-              <Translate component="p" content={'qvain.files.fixDeprecatedModal.changes'} />
-            )}
-          </>
-        )}
-        {this.state.response ? (
-          <TableButton onClick={this.handleRequestClose}>
-            <Translate content={'qvain.files.fixDeprecatedModal.buttons.close'} />
+  return (
+    <Modal
+      isOpen={fixDeprecatedModalOpen}
+      onRequestClose={handleRequestClose}
+      contentLabel="fixDeprecatedModal"
+    >
+      <Translate component="h3" content="qvain.files.fixDeprecatedModal.header" />
+      {loading || response ? (
+        <Response response={response} requestClose={handleRequestClose} />
+      ) : (
+        <>
+          <Translate component="p" content={'qvain.files.fixDeprecatedModal.help'} />
+          {changed && (
+            <Translate component="p" content={'qvain.files.fixDeprecatedModal.changes'} />
+          )}
+        </>
+      )}
+      {response ? (
+        <TableButton onClick={handleRequestClose}>
+          <Translate content={'qvain.files.fixDeprecatedModal.buttons.close'} />
+        </TableButton>
+      ) : (
+        <>
+          <TableButton disabled={loading} onClick={handleRequestClose}>
+            <Translate content={'qvain.files.fixDeprecatedModal.buttons.cancel'} />
           </TableButton>
-        ) : (
-          <>
-            <TableButton disabled={this.state.loading} onClick={this.handleRequestClose}>
-              <Translate content={'qvain.files.fixDeprecatedModal.buttons.cancel'} />
-            </TableButton>
-            <DangerButton
-              disabled={changed || this.state.loading}
-              onClick={() => this.fixDeprecated()}
-            >
-              <Translate content={'qvain.files.fixDeprecatedModal.buttons.ok'} />
-            </DangerButton>
-          </>
-        )}
-      </Modal>
-    )
-  }
+          <DangerButton disabled={changed || loading} onClick={fixDeprecated}>
+            <Translate content={'qvain.files.fixDeprecatedModal.buttons.ok'} />
+          </DangerButton>
+        </>
+      )}
+    </Modal>
+  )
 }
 
-export default inject('Stores')(observer(FixDeprecatedModal))
+export default observer(FixDeprecatedModal)

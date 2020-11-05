@@ -3,12 +3,15 @@ import PropTypes from 'prop-types'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 import Label from '../card/label'
+import { useStores } from '../../utils/stores'
 
-const SelectedItems = ({ Stores, getter, handleClick, noItems }) => {
-  const { lang } = Stores.Locale
+const SelectedItems = ({ getter, handleClick, noItems }) => {
+  const {
+    Locale: { lang },
+  } = useStores()
   const generateComponents = () => {
     if (!getter.length) {
       return <Translate component="div" content={noItems} />
@@ -26,7 +29,6 @@ const SelectedItems = ({ Stores, getter, handleClick, noItems }) => {
 }
 
 SelectedItems.propTypes = {
-  Stores: PropTypes.object.isRequired,
   getter: PropTypes.array.isRequired,
   handleClick: PropTypes.func.isRequired,
   noItems: PropTypes.string.isRequired,
@@ -35,4 +37,4 @@ SelectedItems.propTypes = {
 const PaddedWord = styled.span`
   padding-right: 10px;
 `
-export default inject('Stores')(observer(SelectedItems))
+export default observer(SelectedItems)

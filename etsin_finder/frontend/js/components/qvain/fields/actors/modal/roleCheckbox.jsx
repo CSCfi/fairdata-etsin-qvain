@@ -1,13 +1,18 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import { FormField, Checkbox, Label, HelpField } from '../../../general/modal/form'
+import { useStores } from '../../utils/stores'
 
-const RoleCheckbox = ({ Stores, role, help, disabled, required }) => {
-  const { readonly } = Stores.Qvain
-  const { actorInEdit: actor, updateActor } = Stores.Qvain.Actors
+const RoleCheckbox = ({ role, help, disabled, required }) => {
+  const {
+    Qvain: {
+      Actors: { actorInEdit: actor, updateActor },
+      readonly,
+    },
+  } = useStores()
 
   const handleChangeRole = event => {
     const roles = event.target.checked
@@ -19,6 +24,7 @@ const RoleCheckbox = ({ Stores, role, help, disabled, required }) => {
   const id = `role-${role}`
   const helpField = help && <RoleHelpField>{help}</RoleHelpField>
   const label = `qvain.actors.add.checkbox.${role}`
+
   return (
     <ListItem disabled={readonly || disabled}>
       <FormField>
@@ -41,7 +47,6 @@ const RoleCheckbox = ({ Stores, role, help, disabled, required }) => {
 }
 
 RoleCheckbox.propTypes = {
-  Stores: PropTypes.object.isRequired,
   role: PropTypes.string.isRequired,
   help: PropTypes.string,
   disabled: PropTypes.bool,
@@ -67,4 +72,4 @@ export const ListItem = styled.li`
   color: ${props => (props.disabled ? 'grey' : 'inherit')};
 `
 
-export default inject('Stores')(observer(RoleCheckbox))
+export default observer(RoleCheckbox)
