@@ -20,7 +20,7 @@ import Button from '../../general/button'
 import Label from '../general/card/label'
 import { withStores } from '../utils/stores'
 
-import { Organization } from '../../../stores/view/qvain'
+import { Organization } from '../../../stores/view/qvain/qvain.project'
 import { organizationObjectSchema } from '../utils/formValidation'
 
 const FundingOrganization = props => {
@@ -94,7 +94,7 @@ const FundingOrganization = props => {
 
   const { addedOrganizations, formData } = props.organizations
   const { lang } = props.Stores.Locale
-  const { readonly } = props.Stores.Qvain
+  const { readonly } = props.Stores.Qvain.Projects
   return (
     <Card>
       <Translate component="h3" content="qvain.project.organization.title" />

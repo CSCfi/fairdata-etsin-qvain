@@ -8,7 +8,6 @@ import CreatableSelect from 'react-select/creatable'
 import getReferenceData from '../utils/getReferenceData'
 import Card from '../general/card'
 import { LabelLarge } from '../general/modal/form'
-import { License as LicenseConstructor } from '../../../stores/view/qvain'
 import { licenseSchema } from '../utils/formValidation'
 import {
   onChangeMulti,
@@ -35,17 +34,18 @@ export class License extends Component {
   }
 
   componentDidMount = () => {
+    const { Model } = this.props.Stores.Qvain.Licenses
+    const { lang } = this.props.Stores.Locale
     this.promises.push(
       getReferenceData('license')
         .then(res => {
           const list = res.data.hits.hits
-          const options = list.map(ref => LicenseConstructor(ref._source.label, ref._source.uri))
-          const { lang } = this.props.Stores.Locale
-          sortOptions(LicenseConstructor, lang, options)
+          const options = list.map(ref => Model(ref._source.label, ref._source.uri))
+          sortOptions(Model, lang, options)
           this.setState({
             options,
           })
-          autoSortOptions(this, this.props.Stores.Locale, LicenseConstructor)
+          autoSortOptions(this, this.props.Stores.Locale, Model)
         })
         .catch(error => {
           if (error.response) {
@@ -69,13 +69,13 @@ export class License extends Component {
   }
 
   removeLicense = license => {
-    this.props.Stores.Qvain.removeLicense(license)
+    this.props.Stores.Qvain.Licenses.remove(license)
   }
 
   validateLicenses = () => {
-    const { licenseArray } = this.props.Stores.Qvain
+    const { storage } = this.props.Stores.Qvain.Licenses
     const licenseErrors = {}
-    licenseArray.forEach(license => {
+    storage.forEach(license => {
       const { identifier, name } = license
       const validationObject = { identifier, name, otherLicenseUrl: identifier }
       try {
@@ -88,18 +88,21 @@ export class License extends Component {
   }
 
   onChange = values => {
-    const { setLicenseArray } = this.props.Stores.Qvain
-    onChangeMulti(setLicenseArray)(values)
+    const { set } = this.props.Stores.Qvain.Licenses
+    onChangeMulti(set)(values)
     this.validateLicenses()
   }
 
   createLicense = url =>
-    LicenseConstructor({ fi: `Muu (URL): ${url}`, en: `Other (URL): ${url}` }, url)
+    this.props.Stores.Qvain.Licenses.Model(
+      { fi: `Muu (URL): ${url}`, en: `Other (URL): ${url}` },
+      url
+    )
 
   render() {
     const { options, licenseErrors } = this.state
     const { lang } = this.props.Stores.Locale
-    const { licenseArray, readonly } = this.props.Stores.Qvain
+    const { storage, readonly, Model } = this.props.Stores.Qvain.Licenses
 
     // allow wrap for long license labels
     const styles = {
@@ -131,9 +134,9 @@ export class License extends Component {
           inputId="licenseSelect"
           name="license"
           isDisabled={readonly}
-          getOptionLabel={getOptionLabel(LicenseConstructor, lang)}
-          getOptionValue={getOptionValue(LicenseConstructor)}
-          value={getCurrentOption(LicenseConstructor, options, licenseArray)}
+          getOptionLabel={getOptionLabel(Model, lang)}
+          getOptionValue={getOptionValue(Model)}
+          value={getCurrentOption(Model, options, storage)}
           options={options}
           isMulti
           isClearable={false}

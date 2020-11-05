@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Fragment } from 'react'
 import { observer } from 'mobx-react'
-import { toJS } from 'mobx'
+import { toJS, action } from 'mobx'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import { Input, Label, CustomSelect } from '../../general/modal/form'
@@ -14,13 +14,11 @@ import { useStores } from '../../utils/stores'
 export const ExternalFileFormBase = () => {
   const {
     Qvain: {
-      inEdit: {
-        externalResourceInEdit: externalResource,
-        idaPickerOpen,
-        setIdaPickerOpen,
-        saveExternalResource,
-        editExternalResource,
-      },
+      externalResourceInEdit: externalResource,
+      idaPickerOpen,
+      setIdaPickerOpen,
+      saveExternalResource,
+      editExternalResource,
     },
     Locale: { lang },
   } = useStores()
@@ -34,7 +32,7 @@ export const ExternalFileFormBase = () => {
         fi: translations.fi,
       })
     })
-  })
+  }, [])
 
   const handleSaveExternalResource = event => {
     event.preventDefault()
@@ -73,9 +71,9 @@ export const ExternalFileFormBase = () => {
         type="text"
         id="externalResourceTitleInput"
         value={externalResource.title}
-        onChange={event => {
+        onChange={action(event => {
           externalResource.title = event.target.value
-        }}
+        })}
         attributes={{ placeholder: 'qvain.files.external.form.title.placeholder' }}
       />
       <Label htmlFor="useCategoryInput">
@@ -86,9 +84,9 @@ export const ExternalFileFormBase = () => {
         inputId="useCategoryInput"
         value={externalResource.useCategory}
         options={useCategories[lang]}
-        onChange={selection => {
+        onChange={action(selection => {
           externalResource.useCategory = selection
-        }}
+        })}
         attributes={{ placeholder: 'qvain.files.external.form.useCategory.placeholder' }}
       />
       <Label htmlFor="accessUrlInput">
@@ -100,9 +98,9 @@ export const ExternalFileFormBase = () => {
         type="text"
         id="accessUrlInput"
         value={externalResource.accessUrl}
-        onChange={event => {
+        onChange={action(event => {
           externalResource.accessUrl = event.target.value
-        }}
+        })}
         attributes={{ placeholder: 'qvain.files.external.form.accessUrl.placeholder' }}
       />
       <Label htmlFor="downloadUrlInput">
@@ -114,9 +112,9 @@ export const ExternalFileFormBase = () => {
         type="text"
         id="downloadUrlInput"
         value={externalResource.downloadUrl}
-        onChange={event => {
+        onChange={action(event => {
           externalResource.downloadUrl = event.target.value
-        }}
+        })}
         attributes={{ placeholder: 'qvain.files.external.form.downloadUrl.placeholder' }}
       />
       {error && <ValidationError>{error}</ValidationError>}

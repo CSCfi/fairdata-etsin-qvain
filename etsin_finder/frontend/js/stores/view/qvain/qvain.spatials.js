@@ -19,10 +19,9 @@ const Spatial = (
 })
 
 class Spatials extends Field {
-  constructor(Qvain) {
-    super(Qvain, Spatial, SpatialModel, 'spatials')
+  constructor(Parent) {
+    super(Parent, Spatial, SpatialModel, 'spatials')
     makeObservable(this)
-    this.Qvain = Qvain
   }
 
   clone = () => this
@@ -36,6 +35,8 @@ class Spatials extends Field {
   })
 
   toBackend = () => this.storage.map(this.spatialToBackend)
+
+  fromBackend = (dataset, Qvain) => this.fromBackendBase(dataset.spatial, Qvain)
 }
 
 export const Location = (name, url) => ({

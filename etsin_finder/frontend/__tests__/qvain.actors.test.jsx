@@ -20,7 +20,7 @@ import OrgForm from '../js/components/qvain/actors/modal/org/orgForm'
 import { ButtonGroup, DeleteButton } from '../js/components/qvain/general/buttons'
 import Env from '../js/stores/domain/env'
 import QvainStoreClass from '../js/stores/view/qvain'
-import { Actor, Organization, Person, maybeReference } from '../js/stores/view/qvain.actors'
+import { Actor, Organization, Person, maybeReference } from '../js/stores/view/qvain/qvain.actors'
 import LocaleStore from '../js/stores/view/language'
 import organizationMockGet, {
   dataset,

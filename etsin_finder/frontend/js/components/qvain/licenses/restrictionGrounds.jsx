@@ -3,22 +3,21 @@ import styled from 'styled-components'
 import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 
-import { RestrictionGrounds as RestrictionGroundsConstructor } from '../../../stores/view/qvain'
 import Select from '../general/input/select'
-import { restrictionGroundsSchema } from '../utils/formValidation'
 import ValidationError from '../general/errors/validationError'
 import { useStores } from '../utils/stores'
 
 const RestrictionGrounds = () => {
   const {
-    Qvain: { restrictionGrounds, setRestrictionGrounds },
+    Qvain: {
+      RestrictionGrounds: { value: restrictionGrounds, set: setRestrictionGrounds, Schema, Model },
+    },
   } = useStores()
   const [error, setError] = useState()
 
   const handleBlur = () => {
     const { identifier = '' } = restrictionGrounds
-    restrictionGroundsSchema
-      .validate(identifier)
+    Schema.validate(identifier)
       .then(() => {
         setError(null)
       })
@@ -35,7 +34,7 @@ const RestrictionGrounds = () => {
         metaxIdentifier="restriction_grounds"
         component={Select}
         attributes={{ placeholder: 'qvain.rightsAndLicenses.restrictionGrounds.placeholder' }}
-        model={RestrictionGroundsConstructor}
+        model={Model}
         getter={restrictionGrounds}
         setter={setRestrictionGrounds}
         onBlur={handleBlur}

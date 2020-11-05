@@ -50,7 +50,7 @@ describe('Qvain Access Type', () => {
 
   it('always allows the current access type', async () => {
     Auth.setUser({ ...Auth.user, isUsingRems: false })
-    QvainStore.setAccessType({ url: ACCESS_TYPE_URL.PERMIT })
+    QvainStore.AccessType.set({ url: ACCESS_TYPE_URL.PERMIT })
     const component = shallow(<AccessType Stores={getStores()} />)
     await Promise.resolve()
     const options = component.instance().state.options

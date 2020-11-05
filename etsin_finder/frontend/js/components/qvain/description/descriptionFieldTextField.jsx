@@ -9,21 +9,23 @@ import Tooltip from '../../general/tooltipHover'
 import ValidationError from '../general/errors/validationError'
 import { useStores } from '../utils/stores'
 
-const DescriptionFieldTextField = ({ propName, activeLang, schema }) => {
+const DescriptionFieldTextField = ({ propName, fieldName, activeLang }) => {
   const [error, setError] = useState(null)
   const {
-    Qvain: { setLangValue, [propName]: value = {}, readonly },
+    Qvain: {
+      [fieldName]: { value, set, Schema },
+      readonly,
+    },
     Locale: { lang },
   } = useStores()
 
   const handleChange = e => {
-    setLangValue(propName, e.target.value, activeLang)
+    set(e.target.value, activeLang)
     setError(null)
   }
 
   const handleBlur = () => {
-    schema
-      .validate(value)
+    Schema.validate(value)
       .then(() => {
         setError(null)
       })
@@ -34,7 +36,7 @@ const DescriptionFieldTextField = ({ propName, activeLang, schema }) => {
 
   const getPlaceholder = () => {
     const stub = `qvain.description.description.${propName}.`
-    return lang === 'fi' ? `${stub}placeholderFi` : `${stub}placeholderEn`
+    return activeLang === 'fi' ? `${stub}placeholderFi` : `${stub}placeholderEn`
   }
 
   const id = `${propName}Input`
@@ -69,7 +71,7 @@ const DescriptionFieldTextField = ({ propName, activeLang, schema }) => {
 
 DescriptionFieldTextField.propTypes = {
   propName: PropTypes.string.isRequired,
-  schema: PropTypes.object.isRequired,
+  fieldName: PropTypes.string.isRequired,
   activeLang: PropTypes.string.isRequired,
 }
 

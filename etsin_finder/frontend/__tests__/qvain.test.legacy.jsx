@@ -23,10 +23,8 @@ import FileSelector, { FileSelectorBase } from '../js/components/qvain/files/leg
 import { SelectedFilesBase, FileLabel } from '../js/components/qvain/files/legacy/selectedFiles'
 import { DeleteButton } from '../js/components/qvain/general/buttons'
 import Env from '../js/stores/domain/env'
-import QvainStoreClass, {
-  Directory,
-  AccessType as AccessTypeConstructor,
-} from '../js/stores/view/qvain'
+import QvainStoreClass from '../js/stores/view/qvain'
+import { Directory } from '../js/stores/view/qvain/qvain.filesv1'
 import LocaleStore from '../js/stores/view/language'
 
 jest.mock('uuid', () => {
@@ -34,6 +32,12 @@ jest.mock('uuid', () => {
   return {
     v4: () => id++,
   }
+})
+
+jest.mock('moment', original => {
+  return () => ({
+    format: format => `moment formatted date: ${format}`,
+  })
 })
 
 jest.mock('../js/stores/stores', () => {
@@ -45,7 +49,7 @@ jest.mock('../js/stores/stores', () => {
       dataCatalog: DATA_CATALOG_IDENTIFIER.IDA,
     },
     Env: {
-      metaxAPIv2: false,
+      metaxApiV2: false,
     },
   })
 
@@ -206,41 +210,46 @@ describe('Qvain.Description', () => {
 })
 
 describe('Qvain.RightsAndLicenses', () => {
+  let stores
+  let Licenses
+  let AccessTypeStore
+
+  beforeEach(() => {
+    stores = getStores()
+    stores.Qvain.resetQvainStore()
+    Licenses = stores.Qvain.Licenses
+    AccessTypeStore = stores.Qvain.AccessType
+  })
+
   it('should render <RightsAndLicenses />', () => {
     const component = shallow(<RightsAndLicenses />)
     expect(component).toMatchSnapshot()
   })
   it('should render <Licenses />', () => {
-    const stores = getStores()
     const component = shallow(<License Stores={stores} theme={etsinTheme} />)
     expect(component).toMatchSnapshot()
   })
   it('should render <AccessType />', () => {
-    const stores = getStores()
     const component = shallow(<AccessType Stores={stores} />)
     expect(component).toMatchSnapshot()
   })
   it('should render <RestrictionGrounds />', () => {
-    const stores = getStores()
-    stores.Qvain.setAccessType(AccessTypeConstructor(undefined, ACCESS_TYPE_URL.EMBARGO))
+    AccessTypeStore.set(AccessTypeStore.Model(undefined, ACCESS_TYPE_URL.EMBARGO))
     const component = shallow(<AccessType Stores={stores} />)
     expect(component.find(RestrictionGrounds).length).toBe(1)
   })
   it('should NOT render <RestrictionGrounds />', () => {
-    const stores = getStores()
-    stores.Qvain.setAccessType(AccessTypeConstructor(undefined, ACCESS_TYPE_URL.OPEN))
+    AccessTypeStore.set(AccessTypeStore.Model(undefined, ACCESS_TYPE_URL.OPEN))
     const component = shallow(<AccessType Stores={stores} />)
     expect(component.find(RestrictionGrounds).length).toBe(0)
   })
   it('should render <EmbargoExpires />', () => {
-    const stores = getStores()
-    stores.Qvain.setAccessType(AccessTypeConstructor(undefined, ACCESS_TYPE_URL.EMBARGO))
+    AccessTypeStore.set(AccessTypeStore.Model(undefined, ACCESS_TYPE_URL.EMBARGO))
     const component = shallow(<AccessType Stores={stores} />)
     expect(component.find(EmbargoExpires).length).toBe(1)
   })
   it('should NOT render <EmbargoExpires />', () => {
-    const stores = getStores()
-    stores.Qvain.setAccessType(AccessTypeConstructor(undefined, ACCESS_TYPE_URL.OPEN))
+    AccessTypeStore.set(AccessTypeStore.Model(undefined, ACCESS_TYPE_URL.OPEN))
     const component = shallow(<AccessType Stores={stores} />)
     expect(component.find(EmbargoExpires).length).toBe(0)
   })

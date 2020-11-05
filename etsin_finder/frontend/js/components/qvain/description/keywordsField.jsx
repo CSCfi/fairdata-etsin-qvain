@@ -18,12 +18,14 @@ import { useStores } from '../utils/stores'
 const KeywordsField = () => {
   const {
     Qvain: {
-      keywordsArray,
-      keywordString,
-      setKeywordString,
-      addKeywordToKeywordArray,
-      removeKeyword,
       readonly,
+      Keywords: {
+        itemStr: keywordString,
+        setItemStr: setKeywordString,
+        addKeyword,
+        remove: removeKeyword,
+        storage: keywordsArray,
+      },
     },
     Locale: { lang },
   } = useStores()
@@ -47,7 +49,7 @@ const KeywordsField = () => {
 
   const handleKeywordAdd = e => {
     e.preventDefault()
-    addKeywordToKeywordArray()
+    addKeyword()
     validate()
   }
 

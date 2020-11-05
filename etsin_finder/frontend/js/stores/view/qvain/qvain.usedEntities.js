@@ -11,11 +11,10 @@ const UsedEntity = (
 ) => ({ uiid, name, description, identifier, entityType })
 
 class UsedEntities extends Field {
-  constructor(Qvain, usedEntities = []) {
+  constructor(Qvain) {
     super(Qvain, UsedEntity, UsedEntityModel, 'usedEntities')
     makeObservable(this)
     this.Qvain = Qvain
-    this.fromBackend(usedEntities, Qvain)
   }
 
   clone = () => this
@@ -28,6 +27,8 @@ class UsedEntities extends Field {
   })
 
   toBackend = () => this.storage.map(this.usedEntityToBackend)
+
+  fromBackend = this.fromBackendBase
 }
 
 export const UsedEntityModel = ue => ({

@@ -5,7 +5,6 @@ import translate from 'counterpart'
 import Card from '../general/card'
 import ValidationError from '../general/errors/validationError'
 import { LabelLarge } from '../general/modal/form'
-import { issuedDateSchema } from '../utils/formValidation'
 import {
   DatePicker,
   handleDatePickerChange,
@@ -16,21 +15,25 @@ import { useStores } from '../utils/stores'
 
 const IssuedDateField = () => {
   const {
-    Qvain: { original, issuedDate, setIssuedDate, useDoi, readonly },
+    Qvain: {
+      original,
+      useDoi,
+      readonly,
+      IssuedDate: { issuedDate, setIssuedDate, Schema },
+    },
     Locale: { lang },
   } = useStores()
   const [error, setError] = useState('')
 
   useEffect(() => {
-    issuedDateSchema
-      .validate(issuedDate)
+    Schema.validate(issuedDate)
       .then(() => {
         setError('')
       })
       .catch(err => {
         setError(err.errors)
       })
-  }, [issuedDate])
+  }, [issuedDate, Schema])
 
   const publishedWithDoi = !!(useDoi && original)
 

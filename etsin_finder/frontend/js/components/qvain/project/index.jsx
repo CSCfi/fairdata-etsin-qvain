@@ -5,7 +5,7 @@ import { observer } from 'mobx-react'
 import { toJS } from 'mobx'
 import styled from 'styled-components'
 
-import { Project as ProjectObject } from '../../../stores/view/qvain'
+import { Project as ProjectObject } from '../../../stores/view/qvain/qvain.project'
 import { projectSchema } from '../utils/formValidation'
 
 import { Section } from '../general/section'
@@ -173,11 +173,12 @@ class Project extends Component {
           organizations.addedOrganizations,
           fundingAgencies.addedFundingAgencies
         )
-        this.props.Stores.Qvain.setProject(project)
+        this.props.Stores.Qvain.Projects.setProject(project)
         this.resetForm()
       })
       .catch(validationErrors => {
         const parsedErrors = { details: {}, organizations: {}, fundingAgencies: {} }
+        console.log(validationErrors)
         validationErrors.inner.forEach(error => {
           const { errors, path } = error
           const paths = path.split('.')
@@ -197,7 +198,7 @@ class Project extends Component {
 
   editProject = (id, event) => {
     if (event) event.preventDefault()
-    const project = toJS(this.props.Stores.Qvain.projects.find(proj => proj.id === id))
+    const project = toJS(this.props.Stores.Qvain.Projects.projects.find(proj => proj.id === id))
     if (!project) return
 
     const { details, organizations, fundingAgencies } = project
@@ -219,10 +220,10 @@ class Project extends Component {
   }
 
   removeProject = (id, event) => {
-    if (this.props.Stores.Qvain.readonly) return
     if (event) event.preventDefault()
+    if (this.props.Stores.Qvain.Projects.readonly) return
     if (id === this.state.id) this.resetForm()
-    this.props.Stores.Qvain.removeProject(id)
+    this.props.Stores.Qvain.Projects.removeProject(id)
   }
 
   resetForm = event => {
@@ -238,7 +239,7 @@ class Project extends Component {
 
   render() {
     const { details, organizations, projectInEdit, fundingAgencies } = this.state
-    const { readonly } = this.props.Stores.Qvain
+    const { readonly } = this.props.Stores.Qvain.Projects
     return (
       <Section {...FIELD_PROPS}>
         <Card>
@@ -281,7 +282,7 @@ class Project extends Component {
 
 const AddedProjectsComponent = ({ Stores, editProject, removeProject }) => {
   const { lang } = Stores.Locale
-  const { projects, readonly } = Stores.Qvain
+  const { projects, readonly } = Stores.Qvain.Projects
 
   const renderProjectTitle = details => {
     const { fi, en } = details.title

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import ModalInput from '../../../general/modal/modalInput'
 import SpatialArrayInput from './SpatialArrayInput'
 import ModalReferenceInput from '../../../general/modal/modalReferenceInput'
-import { Location } from '../../../../../stores/view/qvain.spatials'
+import { Location } from '../../../../../stores/view/qvain/qvain.spatials'
 import { FormContainer } from '../../../general/modal/form'
 
 const Form = props => (
