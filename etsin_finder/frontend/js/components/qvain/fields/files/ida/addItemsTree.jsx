@@ -17,7 +17,7 @@ const AddItemsTree = () => {
   const {
     Qvain: { Files },
   } = useStores()
-  const { AddItemsView, root } = Files
+  const { AddItemsView } = Files
 
   // Open top level directory
   useEffect(

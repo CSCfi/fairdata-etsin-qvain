@@ -156,10 +156,6 @@ const FundingAgencyForm = props => {
   const { readonly } = props.Stores.Qvain.Projects
   const { lang } = props.Stores.Locale
 
-  const expandTitle = (
-    <Translate component="h3" content="qvain.project.inputs.fundingAgency.contributorType.title" />
-  )
-
   return (
     <Card>
       <AddedAgencies

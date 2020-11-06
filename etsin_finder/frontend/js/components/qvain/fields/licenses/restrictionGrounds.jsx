@@ -3,9 +3,7 @@ import styled from 'styled-components'
 import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 
-import { RestrictionGrounds as RestrictionGroundsConstructor } from '../../../../stores/view/qvain'
 import Select from '../../general/input/select'
-import { restrictionGroundsSchema } from '../../utils/formValidation'
 import ValidationError from '../../general/errors/validationError'
 import { useStores } from '../../utils/stores'
 
