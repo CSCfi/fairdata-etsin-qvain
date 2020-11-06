@@ -5,19 +5,17 @@ import counterpart from 'counterpart'
 
 import Button from '../components/general/button'
 
-
 class CookiesNotification extends Component {
   state = {
-    displayCookieNotification: true
+    displayCookieNotification: true,
   }
 
   componentDidMount() {
     counterpart.onLocaleChange(this.onLanguageChange)
     if (this.fdSSOGetCookie('fd_sso_notification_shown')) {
       this.setState({
-          displayCookieNotification: false
-        }
-      )
+        displayCookieNotification: false,
+      })
     }
   }
 
@@ -42,38 +40,39 @@ class CookiesNotification extends Component {
   }
 
   fdSSOGetDomainName() {
-    const hostname = window.location.hostname;
-    const domain = hostname.substring(hostname.indexOf('.') + 1); // Check indexOf ".f" in local_dev
+    const hostname = window.location.hostname
+    const domain = hostname.substring(hostname.indexOf('.') + 1) // Check indexOf ".f" in local_dev
     return domain
   }
 
- fdSSOGetPrefixedCookieName(name) {
-    let domain = this.fdSSOGetDomainName();
+  fdSSOGetPrefixedCookieName(name) {
+    let domain = this.fdSSOGetDomainName()
     domain = domain.replace(/[^a-zA-Z0-9]/g, '_')
     return `${domain} ${name}`
   }
 
- fdSSOGetCookie(name) {
+  fdSSOGetCookie(name) {
     const cookieName = this.fdSSOGetPrefixedCookieName(name)
-    const nameEQ = `${cookieName}=`;
-    const ca = document.cookie.split(';');
+    const nameEQ = `${cookieName}=`
+    const ca = document.cookie.split(';')
     for (let i = 0; i < ca.length; i += 1) {
-        let c = ca[i];
-        while (c.charAt(0) === ' ') c = c.substring(1, c.length);
-        if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+      let c = ca[i]
+      while (c.charAt(0) === ' ') c = c.substring(1, c.length)
+      if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length)
     }
-    return null;
+    return null
   }
 
- fdSSOSetCookie(name, value) {
-    const cookieName = this.fdSSOGetPrefixedCookieName(name);
-    const expiryDate = new Date();
-    expiryDate.setTime(expiryDate.getTime() + (7 * 24 * 60 * 60 * 1000));
+  fdSSOSetCookie(name, value) {
+    const cookieName = this.fdSSOGetPrefixedCookieName(name)
+    const expiryDate = new Date()
+    expiryDate.setTime(expiryDate.getTime() + 7 * 24 * 60 * 60 * 1000)
     const expires = `; expires=${expiryDate.toUTCString()}`
-    // eslint-disable-next-line
-    document.cookie = cookieName + '=' + (value || '') + expires + '; path=/' + '; domain=.' + this.fdSSOGetDomainName();
+    document.cookie = `${cookieName}=${
+      value || ''
+    }${expires}; path=/; domain=.${this.fdSSOGetDomainName()}`
     this.setState({
-      displayCookieNotification: false
+      displayCookieNotification: false,
     })
   }
 
@@ -83,7 +82,13 @@ class CookiesNotification extends Component {
         <div className="container row no-gutters">
           <div className="col-12 col-md-9">
             <Translate component="p" content="general.cookies.infoText" />
-            <a href={this.getPrivacyUrl()} target="_blank" rel="noopener noreferrer"><Translate content="general.cookies.link" /></a>
+            <Translate
+              component={StyledLink}
+              href={this.getPrivacyUrl()}
+              target="_blank"
+              rel="noopener noreferrer"
+              content="general.cookies.link"
+            />
           </div>
           <Actions className="col-12 col-md-3">
             <Button onClick={this.fdSSODismissNotification}>
@@ -104,7 +109,7 @@ const Notification = styled.div`
   bottom: 0;
   left: 0;
   width: 100%;
-  background-color: #F3F2F1;
+  background-color: #f3f2f1;
   padding: 2rem 3rem;
   z-index: 1;
 
@@ -124,10 +129,15 @@ const Actions = styled.div`
   }
 
   @media only screen and (max-width: 576px) {
-    padding: .5rem;
+    padding: 0.5rem;
     flex-direction: column;
     align-items: initial;
   }
+`
+
+const StyledLink = styled.a`
+  // Set color with contrast ratio 4.61
+  color: #0075a3;
 `
 
 export default CookiesNotification
