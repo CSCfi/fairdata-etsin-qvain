@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { observer } from 'mobx-react'
+
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import { Label } from '../../../../general/modal/form'
@@ -54,7 +55,12 @@ export const OrgInfoBase = () => {
       fetchAllDatasetReferenceOrganizations()
       actorInEdit.organizations.forEach(org => fetchReferenceOrganizations(org))
     }
-  }, [actorInEdit, fetchAllDatasetReferenceOrganizations, fetchReferenceOrganizations])
+  }, [
+    actorInEdit,
+    actorInEdit.organizations,
+    fetchAllDatasetReferenceOrganizations,
+    fetchReferenceOrganizations,
+  ])
 
   const setOrganization = (index, org) => {
     if (
