@@ -258,11 +258,12 @@ const finnish = {
       loginRequired: 'Kirjautuminen vaaditaan',
     },
     language: {
-      toggleLabel: 'Vaihda kieltä',
+      toggleLabel: 'Vaihda kieltä: %(otherLang)s',
     },
     cookies: {
       accept: 'Hyväksy evästeet',
-      infoText: 'Fairdata-palvelut käyttävät evästeitä ja seurantaa turvallisuuden ja laadun varmistamiseksi.',
+      infoText:
+        'Fairdata-palvelut käyttävät evästeitä ja seurantaa turvallisuuden ja laadun varmistamiseksi.',
       link: 'Katso Fairdatan tietosuojakäytäntö',
     },
   },
@@ -353,7 +354,8 @@ const finnish = {
     home: {
       brief: 'Tutkimusaineiston metatietotyökalu',
       howTo: 'Käytön aloitus ja käyttöoppaat',
-      description: 'Fairdata Qvain -työkalu tekee datasi kuvailun ja julkaisemisen helpoksi. Qvain tarjoaa selkeän lomakkeen, johon tiedot datasta täytetään. Tietojen syöttämisen jälkeen voit julkaista datasi tutkimusaineistona ja saattaa sen avoimesti saataville. Qvain tarjoaa tutkimusaineistollesi pysyvän tunnisteen, laskeutumissivun ja jakaa tietoa eteenpäin muille relevanteille palveluille.',
+      description:
+        'Fairdata Qvain -työkalu tekee datasi kuvailun ja julkaisemisen helpoksi. Qvain tarjoaa selkeän lomakkeen, johon tiedot datasta täytetään. Tietojen syöttämisen jälkeen voit julkaista datasi tutkimusaineistona ja saattaa sen avoimesti saataville. Qvain tarjoaa tutkimusaineistollesi pysyvän tunnisteen, laskeutumissivun ja jakaa tietoa eteenpäin muille relevanteille palveluille.',
       dataInIda: 'Data tallennettuna IDA-palvelussa',
       dataInExternal: 'Data tallennettuna Fairdata-palveluiden ulkopuolella',
       qvainDataset: 'Kuvaile datasi, julkaise se tutkimusaineistona ja luo sille pysyvä tunniste.',
@@ -438,6 +440,8 @@ const finnish = {
     titleLoading: 'Ladataan aineistoa',
     titleLoadingFailed: 'Aineiston Lataus Epäonnistui',
     error: {
+      deprecated:
+        'Aineistoa ei voida julkaista, koska aineisto on vanhentunut. Korjaa vanhentunut aineisto ensin.',
       permission: 'Oikeusvirhe aineiston latauksessa',
       missing: 'Aineistoa ei löydy',
       default: 'Virhe ladattaessa aineistoa',

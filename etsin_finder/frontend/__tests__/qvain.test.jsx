@@ -6,23 +6,23 @@ import CreatableSelect from 'react-select/creatable'
 
 import etsinTheme from '../js/styles/theme'
 import '../locale/translations'
-import { Qvain as QvainBase } from '../js/components/qvain/main'
-import Description from '../js/components/qvain/description'
-import DescriptionField from '../js/components/qvain/description/descriptionField'
-import OtherIdentifierField from '../js/components/qvain/description/otherIdentifierField'
-import FieldOfScienceField from '../js/components/qvain/description/fieldOfScienceField'
-import IssuedDateField from '../js/components/qvain/description/issuedDateField'
-import LanguageField from '../js/components/qvain/description/languageField'
-import KeywordsField from '../js/components/qvain/description/keywordsField'
-import RightsAndLicenses from '../js/components/qvain/licenses'
-import { License } from '../js/components/qvain/licenses/licenses'
-import { AccessType } from '../js/components/qvain/licenses/accessType'
-import RestrictionGrounds from '../js/components/qvain/licenses/restrictionGrounds'
-import EmbargoExpires from '../js/components/qvain/licenses/embargoExpires'
+import { Qvain as QvainBase } from '../js/components/qvain/views/main'
+import Description from '../js/components/qvain/fields/description'
+import DescriptionField from '../js/components/qvain/fields/description'
+import OtherIdentifierField from '../js/components/qvain/fields/description/otherIdentifier'
+import FieldOfScienceField from '../js/components/qvain/fields/description/fieldOfScience'
+import IssuedDateField from '../js/components/qvain/fields/description/issuedDate'
+import LanguageField from '../js/components/qvain/fields/description/language'
+import KeywordsField from '../js/components/qvain/fields/description/keywords'
+import RightsAndLicenses from '../js/components/qvain/fields/licenses'
+import { License } from '../js/components/qvain/fields/licenses/licenses'
+import { AccessType } from '../js/components/qvain/fields/licenses/accessType'
+import RestrictionGrounds from '../js/components/qvain/fields/licenses/restrictionGrounds'
+import EmbargoExpires from '../js/components/qvain/fields/licenses/embargoExpires'
 import { ACCESS_TYPE_URL, LICENSE_URL, DATA_CATALOG_IDENTIFIER } from '../js/utils/constants'
 import { qvainFormSchema } from '../js/components/qvain/utils/formValidation'
-import { ExternalFilesBase } from '../js/components/qvain/files/external/externalFiles'
-import DoiSelection, { DoiCheckbox } from '../js/components/qvain/files/doiSelection'
+import { ExternalFilesBase } from '../js/components/qvain/fields/files/external/externalFiles'
+import DoiSelection, { DoiCheckbox } from '../js/components/qvain/fields/files/doiSelection'
 import { ButtonGroup } from '../js/components/qvain/general/buttons'
 import {
   ValidationErrors,
@@ -30,18 +30,14 @@ import {
 } from '../js/components/qvain/general/errors/validationError'
 import { SlidingContent } from '../js/components/qvain/general/card'
 import Env from '../js/stores/domain/env'
-import QvainStoreClass, {
-  ExternalResource,
-  AccessType as AccessTypeConstructor,
-  License as LicenseConstructor,
-} from '../js/stores/view/qvain'
+import QvainStoreClass, { ExternalResource } from '../js/stores/view/qvain'
 import LocaleStore from '../js/stores/view/language'
-import TablePasState from '../js/components/qvain/datasets/tablePasState'
+import TablePasState from '../js/components/qvain/views/datasets/tablePasState'
 import {
   filterByTitle,
   filterGroupsByTitle,
   groupDatasetsByVersionSet,
-} from '../js/components/qvain/datasets/filter'
+} from '../js/components/qvain/views/datasets/filter'
 import DatePicker from '../js/components/qvain/general/input/datepicker'
 import { StoresProvider, useStores } from '../js/stores/stores'
 
@@ -53,6 +49,11 @@ jest.mock('uuid', original => {
   }
 })
 
+jest.mock('moment', original => {
+  return () => ({
+    format: format => `moment formatted date: ${format}`,
+  })
+})
 jest.mock('../js/stores/stores', () => {
   const useStores = jest.fn()
   return {
@@ -67,7 +68,7 @@ const getStores = () => {
   Env.setMetaxApiV2(true)
   return {
     Env,
-    Qvain: QvainStore,
+    Qvain: new QvainStoreClass(Env),
     Locale: LocaleStore,
   }
 }
@@ -298,6 +299,8 @@ describe('Qvain dataset list filtering', () => {
 })
 
 describe('Qvain.RightsAndLicenses', () => {
+  let stores
+  let Licenses
   const getRenderedLicenseUrls = shallowLicenseComponent => {
     const selectedOptions = shallowLicenseComponent
       .findWhere(c => c.prop('component') == CreatableSelect)
@@ -308,8 +311,6 @@ describe('Qvain.RightsAndLicenses', () => {
       .find(components.MultiValue)
     return selectedOptions.map(opt => opt.prop('data').identifier)
   }
-
-  let stores
 
   beforeEach(() => {
     stores = getStores()
@@ -330,15 +331,17 @@ describe('Qvain.RightsAndLicenses', () => {
     expect(getRenderedLicenseUrls(component)).toEqual([LICENSE_URL.CCBY4])
   })
   it('should render one added license, Other (URL)', () => {
-    stores.Qvain.setLicenseArray([
+    const { set: setLicenseArray, Model: LicenseConstructor } = stores.Qvain.Licenses
+    setLicenseArray([
       LicenseConstructor({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'https://test.url'),
     ])
     const component = shallow(<License Stores={stores} theme={etsinTheme} />)
     expect(getRenderedLicenseUrls(component)).toEqual(['https://test.url'])
   })
   it('should render one added license, CCBY4', () => {
-    stores.Qvain.setLicenseArray([])
-    stores.Qvain.setLicenseArray([
+    const { set: setLicenseArray, Model: LicenseConstructor } = stores.Qvain.Licenses
+    setLicenseArray([])
+    setLicenseArray([
       LicenseConstructor(
         { en: 'Creative Commons Attribution 4.0 International (CC BY 4.0)' },
         LICENSE_URL.CCBY4
@@ -348,7 +351,8 @@ describe('Qvain.RightsAndLicenses', () => {
     expect(getRenderedLicenseUrls(component)).toEqual([LICENSE_URL.CCBY4])
   })
   it('should render three added licenses, Other (URL) x 2 + CCBY4', () => {
-    stores.Qvain.setLicenseArray([
+    const { set: setLicenseArray, Model: LicenseConstructor } = stores.Qvain.Licenses
+    setLicenseArray([
       LicenseConstructor({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'https://test.url'),
       LicenseConstructor({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'https://test2.url'),
       LicenseConstructor(
@@ -364,14 +368,15 @@ describe('Qvain.RightsAndLicenses', () => {
     ])
   })
   it('should render four licenses where two have errors', () => {
-    stores.Qvain.setLicenseArray([
-      LicenseConstructor(
+    const { Licenses } = stores.Qvain
+    Licenses.set([
+      Licenses.Model(
         { en: 'Creative Commons Attribution 4.0 International (CC BY 4.0)' },
         LICENSE_URL.CCBY4
       ),
-      LicenseConstructor({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'httpöötest.url'),
-      LicenseConstructor({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'http://ok.url'),
-      LicenseConstructor({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'httppp:/fail.url'),
+      Licenses.Model({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'httpöötest.url'),
+      Licenses.Model({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'http://ok.url'),
+      Licenses.Model({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'httppp:/fail.url'),
     ])
     const component = shallow(<License Stores={stores} theme={etsinTheme} />)
     component.instance().validateLicenses()
@@ -395,22 +400,26 @@ describe('Qvain.RightsAndLicenses', () => {
     expect(component).toMatchSnapshot()
   })
   it('should render <RestrictionGrounds />', () => {
-    stores.Qvain.setAccessType(AccessTypeConstructor(undefined, ACCESS_TYPE_URL.EMBARGO))
+    const { set: setAccessType, Model: AccessTypeConstructor } = stores.Qvain.AccessType
+    setAccessType(AccessTypeConstructor(undefined, ACCESS_TYPE_URL.EMBARGO))
     const component = shallow(<AccessType Stores={stores} />)
     expect(component.find(RestrictionGrounds).length).toBe(1)
   })
   it('should NOT render <RestrictionGrounds />', () => {
-    stores.Qvain.setAccessType(AccessTypeConstructor(undefined, ACCESS_TYPE_URL.OPEN))
+    const { set: setAccessType, Model: AccessTypeConstructor } = stores.Qvain.AccessType
+    setAccessType(AccessTypeConstructor(undefined, ACCESS_TYPE_URL.OPEN))
     const component = shallow(<AccessType Stores={stores} />)
     expect(component.find(RestrictionGrounds).length).toBe(0)
   })
   it('should render <EmbargoExpires />', () => {
-    stores.Qvain.setAccessType(AccessTypeConstructor(undefined, ACCESS_TYPE_URL.EMBARGO))
+    const { set: setAccessType, Model: AccessTypeConstructor } = stores.Qvain.AccessType
+    setAccessType(AccessTypeConstructor(undefined, ACCESS_TYPE_URL.EMBARGO))
     const component = shallow(<AccessType Stores={stores} />)
     expect(component.find(EmbargoExpires).length).toBe(1)
   })
   it('should NOT render <EmbargoExpires />', () => {
-    stores.Qvain.setAccessType(AccessTypeConstructor(undefined, ACCESS_TYPE_URL.OPEN))
+    const { set: setAccessType, Model: AccessTypeConstructor } = stores.Qvain.AccessType
+    setAccessType(AccessTypeConstructor(undefined, ACCESS_TYPE_URL.OPEN))
     const component = shallow(<AccessType Stores={stores} />)
     expect(component.find(EmbargoExpires).length).toBe(0)
   })
