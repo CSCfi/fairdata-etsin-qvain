@@ -16,7 +16,7 @@ import DatasetQuery from './view/datasetquery'
 import Accessibility from './view/accessibility'
 import Map from './view/map'
 import Qvain from './view/qvain'
-import QvainDatasets from './view/qvain.datasets'
+import QvainDatasets from './view/qvain/qvain.datasets'
 import Access from './view/access'
 import SearchFilters from './view/searchfilters'
 

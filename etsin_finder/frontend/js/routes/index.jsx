@@ -17,8 +17,10 @@ export const Dataset = loadable(() => import('../components/dataset' /* webpackP
 
 export const Search = loadable(() => import('../components/search' /* webpackPrefetch: true */))
 
-export const Qvain = loadable(() => import('../components/qvain/main' /* webpackPrefetch: true */))
+export const Qvain = loadable(() =>
+  import('../components/qvain/views/main' /* webpackPrefetch: true */)
+)
 
 export const QvainDatasets = loadable(() =>
-  import('../components/qvain/datasets' /* webpackPrefetch: true */)
+  import('../components/qvain/views/datasets' /* webpackPrefetch: true */)
 )

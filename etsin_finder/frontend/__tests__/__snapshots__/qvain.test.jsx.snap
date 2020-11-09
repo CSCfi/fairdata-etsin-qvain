@@ -9,7 +9,7 @@ exports[`Qvain dataset list PreservationStates should render <TablePasState /> 1
         "$$typeof": Symbol(react.forward_ref),
         "attrs": Array [],
         "componentStyle": ComponentStyle {
-          "componentId": "tablePasState__PasLabel-sc-1w7mbwe-0",
+          "componentId": "tablePasState__PasLabel-kh2b5p-0",
           "isStatic": false,
           "rules": Array [
             "
@@ -35,7 +35,7 @@ exports[`Qvain dataset list PreservationStates should render <TablePasState /> 1
           "label__Label-x0jqqw-0",
         ],
         "render": [Function],
-        "styledComponentId": "tablePasState__PasLabel-sc-1w7mbwe-0",
+        "styledComponentId": "tablePasState__PasLabel-kh2b5p-0",
         "target": "div",
         "toString": [Function],
         "warnTooManyClasses": [Function],
@@ -50,7 +50,7 @@ exports[`Qvain dataset list PreservationStates should render <TablePasState /> 1
         "$$typeof": Symbol(react.forward_ref),
         "attrs": Array [],
         "componentStyle": ComponentStyle {
-          "componentId": "tablePasState__PasText-sc-1w7mbwe-1",
+          "componentId": "tablePasState__PasText-kh2b5p-1",
           "isStatic": true,
           "rules": Array [
             "
@@ -68,7 +68,7 @@ exports[`Qvain dataset list PreservationStates should render <TablePasState /> 1
         "displayName": "tablePasState__PasText",
         "foldedComponentIds": Array [],
         "render": [Function],
-        "styledComponentId": "tablePasState__PasText-sc-1w7mbwe-1",
+        "styledComponentId": "tablePasState__PasText-kh2b5p-1",
         "target": "span",
         "toString": [Function],
         "warnTooManyClasses": [Function],
@@ -152,231 +152,33 @@ exports[`Qvain.Description should render <Description /> 1`] = `
 `;
 
 exports[`Qvain.Description should render <DescriptionField /> 1`] = `
-<TranslationTab
-  language="fi"
-  setLanguage={[Function]}
+<div
+  className="container"
 >
-  <DescriptionFieldInput
-    activeLang="fi"
-    propName="title"
-    schema={
-      ObjectSchema {
-        "_blacklist": RefSet {
-          "list": Set {},
-          "refs": Map {},
-        },
-        "_conditions": Array [],
-        "_defaultDefault": [Function],
-        "_deps": Array [],
-        "_excludedEdges": Array [],
-        "_exclusive": Object {},
-        "_mutate": undefined,
-        "_nodes": Array [
-          "en",
-          "fi",
-        ],
-        "_options": Object {
-          "abortEarly": true,
-          "recursive": true,
-        },
-        "_type": "object",
-        "_typeError": [Function],
-        "_whitelist": RefSet {
-          "list": Set {},
-          "refs": Map {},
-        },
-        "fields": Object {
-          "en": StringSchema {
-            "_blacklist": RefSet {
-              "list": Set {},
-              "refs": Map {},
-            },
-            "_conditions": Array [],
-            "_deps": Array [],
-            "_exclusive": Object {
-              "max": true,
-            },
-            "_mutate": undefined,
-            "_options": Object {
-              "abortEarly": true,
-              "recursive": true,
-            },
-            "_type": "string",
-            "_typeError": [Function],
-            "_whitelist": RefSet {
-              "list": Set {},
-              "refs": Map {},
-            },
-            "tests": Array [
-              [Function],
-            ],
-            "transforms": Array [
-              [Function],
-            ],
-            "type": "string",
-          },
-          "fi": SchemaType {
-            "_blacklist": RefSet {
-              "list": Set {},
-              "refs": Map {},
-            },
-            "_conditions": Array [
-              Condition {
-                "fn": [Function],
-                "refs": Array [
-                  Reference {
-                    "getter": [Function],
-                    "isContext": false,
-                    "isSibling": true,
-                    "isValue": false,
-                    "key": "en",
-                    "map": undefined,
-                    "path": "en",
-                  },
-                ],
-              },
-            ],
-            "_deps": Array [
-              "en",
-            ],
-            "_exclusive": Object {},
-            "_mutate": undefined,
-            "_options": Object {
-              "abortEarly": true,
-              "recursive": true,
-            },
-            "_type": "mixed",
-            "_typeError": [Function],
-            "_whitelist": RefSet {
-              "list": Set {},
-              "refs": Map {},
-            },
-            "tests": Array [],
-            "transforms": Array [],
-            "type": "mixed",
-          },
-        },
-        "tests": Array [],
-        "transforms": Array [
-          [Function],
-        ],
-        "type": "object",
-      }
-    }
-  />
-  <DescriptionFieldTextField
-    activeLang="fi"
-    propName="description"
-    schema={
-      ObjectSchema {
-        "_blacklist": RefSet {
-          "list": Set {},
-          "refs": Map {},
-        },
-        "_conditions": Array [],
-        "_defaultDefault": [Function],
-        "_deps": Array [],
-        "_excludedEdges": Array [],
-        "_exclusive": Object {},
-        "_mutate": undefined,
-        "_nodes": Array [
-          "en",
-          "fi",
-        ],
-        "_options": Object {
-          "abortEarly": true,
-          "recursive": true,
-        },
-        "_type": "object",
-        "_typeError": [Function],
-        "_whitelist": RefSet {
-          "list": Set {},
-          "refs": Map {},
-        },
-        "fields": Object {
-          "en": StringSchema {
-            "_blacklist": RefSet {
-              "list": Set {},
-              "refs": Map {},
-            },
-            "_conditions": Array [],
-            "_deps": Array [],
-            "_exclusive": Object {
-              "max": true,
-            },
-            "_mutate": undefined,
-            "_options": Object {
-              "abortEarly": true,
-              "recursive": true,
-            },
-            "_type": "string",
-            "_typeError": [Function],
-            "_whitelist": RefSet {
-              "list": Set {},
-              "refs": Map {},
-            },
-            "tests": Array [
-              [Function],
-            ],
-            "transforms": Array [
-              [Function],
-            ],
-            "type": "string",
-          },
-          "fi": SchemaType {
-            "_blacklist": RefSet {
-              "list": Set {},
-              "refs": Map {},
-            },
-            "_conditions": Array [
-              Condition {
-                "fn": [Function],
-                "refs": Array [
-                  Reference {
-                    "getter": [Function],
-                    "isContext": false,
-                    "isSibling": true,
-                    "isValue": false,
-                    "key": "en",
-                    "map": undefined,
-                    "path": "en",
-                  },
-                ],
-              },
-            ],
-            "_deps": Array [
-              "en",
-            ],
-            "_exclusive": Object {},
-            "_mutate": undefined,
-            "_options": Object {
-              "abortEarly": true,
-              "recursive": true,
-            },
-            "_type": "mixed",
-            "_typeError": [Function],
-            "_whitelist": RefSet {
-              "list": Set {},
-              "refs": Map {},
-            },
-            "tests": Array [],
-            "transforms": Array [],
-            "type": "mixed",
-          },
-        },
-        "tests": Array [],
-        "transforms": Array [
-          [Function],
-        ],
-        "type": "object",
-      }
-    }
-  />
-  <Translate
-    component="div"
-    content="qvain.description.description.instructions"
-  />
-</TranslationTab>
+  <title__SectionTitle>
+    <Translate
+      component="span"
+      content="qvain.description.title"
+    />
+    <Tooltip
+      align="Right"
+      close={[Function]}
+      isOpen={false}
+      text={<DescriptionInfo />}
+    >
+      <HelpIcon
+        aria-label="Description info"
+        onClick={[Function]}
+      />
+    </Tooltip>
+  </title__SectionTitle>
+  <DescriptionField />
+  <IssuedDateField />
+  <OtherIdentifierField />
+  <FieldOfScienceField />
+  <LanguageField />
+  <KeywordsField />
+</div>
 `;
 
 exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
@@ -515,276 +317,6 @@ exports[`Qvain.Description should render <LanguageField /> 1`] = `
     content="qvain.description.datasetLanguage.help"
   />
   <Select
-    Stores={
-      Object {
-        "Env": Env {
-          "app": undefined,
-          "etsinHost": "",
-          "getEtsinUrl": [Function],
-          "getQvainUrl": [Function],
-          "history": RouterStore {
-            "go": [Function],
-            "goBack": [Function],
-            "goForward": [Function],
-            "history": null,
-            "location": null,
-            "push": [Function],
-            "replace": [Function],
-          },
-          "metaxApiV2": true,
-          "qvainHost": "",
-        },
-        "Locale": Locale {
-          "currentLang": "en",
-          "languages": Array [
-            "en",
-            "fi",
-          ],
-        },
-        "Qvain": Qvain {
-          "Actors": Actors {
-            "Qvain": [Circular],
-            "actorInEdit": null,
-            "actors": Array [],
-            "editDataset": [Function],
-            "getDatasetOrganizations": [Function],
-            "getReferenceOrganizations": [Function],
-            "getReferenceOrganizationsForActor": [Function],
-            "loadingReferenceOrganizations": Object {},
-            "onSuccessfulCreationCallbacks": Array [],
-            "referenceOrganizationErrors": Object {},
-            "referenceOrganizations": Object {},
-            "setSelectedActor": undefined,
-            "toBackend": [Function],
-          },
-          "Env": Env {
-            "app": undefined,
-            "etsinHost": "",
-            "getEtsinUrl": [Function],
-            "getQvainUrl": [Function],
-            "history": RouterStore {
-              "go": [Function],
-              "goBack": [Function],
-              "goForward": [Function],
-              "history": null,
-              "location": null,
-              "push": [Function],
-              "replace": [Function],
-            },
-            "metaxApiV2": true,
-            "qvainHost": "",
-          },
-          "Files": Files {
-            "AddItemsView": AddItemsView {
-              "Files": [Circular],
-              "checkedState": Object {},
-              "defaultShowLimit": 20,
-              "getTopmostChecked": [Function],
-              "isOpen": [Function],
-              "openState": Object {},
-              "showLimitIncrement": 20,
-              "showLimitState": Object {},
-            },
-            "Qvain": [Circular],
-            "SelectedItemsView": SelectedItemsView {
-              "Files": [Circular],
-              "checkedState": Object {},
-              "defaultShowLimit": 20,
-              "getTopmostChecked": [Function],
-              "hideRemoved": false,
-              "isOpen": [Function],
-              "openState": Object {},
-              "showLimitIncrement": 20,
-              "showLimitState": Object {},
-            },
-            "addItem": [Function],
-            "cache": Object {},
-            "cancelOnReset": [Function],
-            "datasetIdentifier": null,
-            "fetchRootIdentifier": [Function],
-            "getItemByPath": [Function],
-            "inEdit": undefined,
-            "loadingMetadata": null,
-            "loadingProjectInfo": null,
-            "loadingProjectRoot": null,
-            "metadataToMetax": [Function],
-            "originalMetadata": Object {},
-            "projectLocked": false,
-            "promiseManager": PromiseManager {
-              "add": [Function],
-              "promises": Array [],
-            },
-            "refreshModalDirectory": null,
-            "root": null,
-            "selectedProject": undefined,
-          },
-          "Provenances": Provenances {
-            "Model": [Function],
-            "Parent": [Circular],
-            "Qvain": [Circular],
-            "Template": [Function],
-            "attachRefs": [Function],
-            "cloneRefs": [Function],
-            "detachRefs": [Function],
-            "editMode": false,
-            "fieldName": "provenances",
-            "hasChanged": false,
-            "inEdit": undefined,
-            "references": Array [
-              "associations",
-              "usedEntities",
-              "spatials",
-            ],
-            "saveEdited": [Function],
-            "saveNew": [Function],
-            "selectedActor": undefined,
-            "storage": Array [],
-            "toBackend": [Function],
-            "validationError": undefined,
-          },
-          "RelatedResources": RelatedResources {
-            "Model": [Function],
-            "Parent": [Circular],
-            "Qvain": [Circular],
-            "Template": [Function],
-            "attachRefs": [Function],
-            "cloneRefs": [Function],
-            "create": [Function],
-            "detachRefs": [Function],
-            "editMode": false,
-            "fieldName": "relatedResources",
-            "hasChanged": false,
-            "inEdit": undefined,
-            "references": Array [],
-            "relatedResourceToBackend": [Function],
-            "reset": [Function],
-            "saveEdited": [Function],
-            "saveNew": [Function],
-            "storage": Array [],
-            "toBackend": [Function],
-            "validationError": undefined,
-          },
-          "Spatials": Spatials {
-            "Model": [Function],
-            "Parent": [Circular],
-            "Qvain": [Circular],
-            "Template": [Function],
-            "attachRefs": [Function],
-            "clone": [Function],
-            "cloneRefs": [Function],
-            "create": [Function],
-            "detachRefs": [Function],
-            "editMode": false,
-            "fieldName": "spatials",
-            "hasChanged": false,
-            "inEdit": undefined,
-            "references": Array [],
-            "reset": [Function],
-            "saveEdited": [Function],
-            "saveNew": [Function],
-            "spatialToBackend": [Function],
-            "storage": Array [],
-            "toBackend": [Function],
-            "validationError": undefined,
-          },
-          "Temporals": Temporals {
-            "Model": [Function],
-            "Parent": [Circular],
-            "Template": [Function],
-            "attachRefs": [Function],
-            "cloneRefs": [Function],
-            "detachRefs": [Function],
-            "editMode": false,
-            "fieldName": "temporals",
-            "hasChanged": false,
-            "inEdit": Object {
-              "endDate": undefined,
-              "startDate": undefined,
-              "uiid": 8,
-            },
-            "references": Array [],
-            "saveEdited": [Function],
-            "saveNew": [Function],
-            "storage": Array [],
-            "toBackend": [Function],
-            "validationError": undefined,
-          },
-          "accessType": Object {
-            "name": undefined,
-            "url": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
-          },
-          "changed": false,
-          "clearMetadataModalFile": undefined,
-          "createExternalResourceUIId": [Function],
-          "createLooseActorPromise": [Function],
-          "createLooseProvenancePromise": [Function],
-          "cumulativeState": 0,
-          "dataCatalog": undefined,
-          "datasetLanguageArray": Array [],
-          "deprecated": false,
-          "description": Object {
-            "en": "",
-            "fi": "",
-          },
-          "deselectChildren": [Function],
-          "deselectParents": [Function],
-          "embargoExpDate": undefined,
-          "existingDirectories": Array [],
-          "existingFiles": Array [],
-          "extResFormOpen": false,
-          "externalResourceInEdit": Object {
-            "accessUrl": "",
-            "downloadUrl": "",
-            "id": undefined,
-            "title": "",
-            "useCategory": "",
-          },
-          "externalResources": Array [],
-          "fieldOfScienceArray": Array [],
-          "fixDeprecatedModalOpen": false,
-          "hierarchy": Object {},
-          "idaPickerOpen": false,
-          "inEdit": undefined,
-          "infrastructureArray": Array [],
-          "issuedDate": undefined,
-          "keywordString": "",
-          "keywordsArray": Array [],
-          "license": Object {
-            "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
-            "name": undefined,
-          },
-          "licenseArray": Array [
-            Object {
-              "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
-              "name": undefined,
-            },
-          ],
-          "mergeArraysByIdentifier": [Function],
-          "metadataModalFile": undefined,
-          "newCumulativeState": 0,
-          "original": undefined,
-          "otherIdentifier": "",
-          "otherIdentifiersArray": Array [],
-          "otherIdentifiersValidationError": null,
-          "otherLicenseUrl": "",
-          "preservationState": 0,
-          "projects": Array [],
-          "promptLooseActors": undefined,
-          "promptLooseProvenances": undefined,
-          "provenancesWithNonExistingActors": Array [],
-          "resourceInEdit": undefined,
-          "restrictionGrounds": undefined,
-          "selectedDirectories": Array [],
-          "selectedFiles": Array [],
-          "selectedProject": undefined,
-          "title": Object {
-            "en": "",
-            "fi": "",
-          },
-          "useDoi": false,
-        },
-      }
-    }
     getter={Array []}
     id="datasetLanguage"
     inModal={false}

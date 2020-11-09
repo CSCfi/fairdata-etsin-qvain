@@ -1,6 +1,6 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import { RelatedResource } from '../js/components/qvain/history/relatedResource'
+import { RelatedResource } from '../js/components/qvain/fields/history/relatedResource'
 
 describe('RelatedResource', () => {
   let wrapper
