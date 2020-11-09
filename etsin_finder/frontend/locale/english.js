@@ -260,7 +260,7 @@ const english = {
       loginRequired: 'Login Required',
     },
     language: {
-      toggleLabel: 'Toggle language',
+      toggleLabel: 'Switch language to: %(otherLang)s',
     },
     cookies: {
       accept: 'Accept all cookies',

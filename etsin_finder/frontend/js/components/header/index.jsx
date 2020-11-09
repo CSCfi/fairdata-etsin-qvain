@@ -15,6 +15,7 @@ import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'
+import translate from 'counterpart'
 
 import { FAIRDATA_WEBSITE_URL } from '../../utils/constants'
 import MaybeExternalLink from '../general/navigation/maybeExternalLink'
@@ -49,7 +50,7 @@ const QvainLink = styled(MaybeExternalLink)`
 `
 
 const EtsinHeader = props => {
-  const { lang } = props.Stores.Locale
+  const { lang, currentLang } = props.Stores.Locale
   const { Env } = props.Stores
   const helpUrl = lang === 'fi' ? FAIRDATA_WEBSITE_URL.ETSIN.FI : FAIRDATA_WEBSITE_URL.ETSIN.EN
 
@@ -80,6 +81,15 @@ const EtsinHeader = props => {
           {mobileSettingsExtra}
         </MobileNavi>
       </MobileOnly>
+      <span className="sr-only" aria-live="assertive">
+        {/* For screen readers only. If the language is changed in the Store, Announce the new language. */}
+        {translate('general.state.changedLang', {
+          lang:
+            currentLang === 'fi'
+              ? translate('qvain.general.langFi')
+              : translate('qvain.general.langEn'),
+        })}
+      </span>
     </Header>
   )
 }
