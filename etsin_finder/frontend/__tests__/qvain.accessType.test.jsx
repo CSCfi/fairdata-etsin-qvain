@@ -3,7 +3,7 @@ import { shallow } from 'enzyme'
 import axios from 'axios'
 
 import '../locale/translations'
-import { AccessType } from '../js/components/qvain/licenses/accessType'
+import { AccessType } from '../js/components/qvain/fields/licenses/accessType'
 import { ACCESS_TYPE_URL } from '../js/utils/constants'
 import Auth from '../js/stores/domain/auth'
 import Env from '../js/stores/domain/env'
