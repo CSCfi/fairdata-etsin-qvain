@@ -1,10 +1,10 @@
 import { makeObservable, observable, action, computed } from 'mobx'
 import axios from 'axios'
 import { ValidationError } from 'yup'
-import handleSubmitToBackend from '../../components/qvain/utils/handleSubmit'
-import { qvainFormSchema } from '../../components/qvain/utils/formValidation'
-import { DATA_CATALOG_IDENTIFIER, DATASET_STATE } from '../../utils/constants'
-import urls from '../../components/qvain/utils/urls'
+import handleSubmitToBackend from '../../../components/qvain/utils/handleSubmit'
+import { qvainFormSchema } from '../../../components/qvain/utils/formValidation'
+import { DATA_CATALOG_IDENTIFIER, DATASET_STATE } from '../../../utils/constants'
+import urls from '../../../components/qvain/utils/urls'
 
 // helper functions
 const isActionsEmpty = actions => actions.files.length === 0 && actions.directories.length === 0

@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { InvertedButton } from '../../general/button'
+import { InvertedButton } from '../../../general/button'
 
 export const SubmitButton = styled(InvertedButton)`
   background: #fff;

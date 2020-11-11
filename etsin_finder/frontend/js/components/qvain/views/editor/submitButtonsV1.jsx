@@ -3,12 +3,12 @@ import PropTypes, { instanceOf } from 'prop-types'
 import Translate from 'react-translate-component'
 import { observer } from 'mobx-react'
 import axios from 'axios'
-import { useStores } from '../utils/stores'
+import { useStores } from '../../utils/stores'
 import { SubmitButton } from './submitButton.styled'
 
-import handleSubmitToBackend from '../utils/handleSubmit'
-import urls from '../utils/urls'
-import { qvainFormSchema } from '../utils/formValidation'
+import handleSubmitToBackend from '../../utils/handleSubmit'
+import urls from '../../utils/urls'
+import { qvainFormSchema } from '../../utils/formValidation'
 
 const SubmitButtonsV1 = ({
   submit,

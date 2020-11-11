@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import PropTypes, { instanceOf } from 'prop-types'
 import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
-import { useStores } from '../utils/stores'
+import { useStores } from '../../utils/stores'
 import SubmitButton from './submitButton.styled'
 
 export const SubmitButtonsV2 = ({ submitButtonsRef, disabled, doiModal, history }) => {

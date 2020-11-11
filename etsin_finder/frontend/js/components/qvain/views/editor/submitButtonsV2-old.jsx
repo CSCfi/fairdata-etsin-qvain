@@ -4,9 +4,9 @@ import { observer } from 'mobx-react'
 import PropTypes, { instanceOf } from 'prop-types'
 import Translate from 'react-translate-component'
 import { useStores } from '../utils/stores'
-import handleSubmitToBackend from '../utils/handleSubmit'
-import { qvainFormSchema } from '../utils/formValidation'
-import urls from '../utils/urls'
+import handleSubmitToBackend from '../../utils/handleSubmit'
+import { qvainFormSchema } from '../../utils/formValidation'
+import urls from '../../utils/urls'
 import { SubmitButton } from './submitButton.styled'
 
 export const SubmitButtonsV2 = ({
