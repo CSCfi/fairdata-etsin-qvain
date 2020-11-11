@@ -593,7 +593,7 @@ const finnish = {
           'Metadatan tunniste luodaan automaattisesti mutta jos on jo OLEMASSA OLEVA tunniste, syötä se tähän.',
         alreadyAdded: 'Tunniste on jo lisätty',
         addButton: 'Lisää tunniste',
-        placeholder: 'E.g. https://doi.org/...',
+        placeholder: 'Esim. https://doi.org/...',
       },
       fieldOfScience: {
         title: 'Tieteenala',

@@ -86,6 +86,7 @@ const StringArray = ({
   }
 
   const handleInputChange = (str, meta) => {
+    // prevent blur from clearing the input
     if (meta.action !== 'input-blur' && meta.action !== 'menu-close') {
       setItemStr(str)
       setChanged(true)
