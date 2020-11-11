@@ -7,7 +7,7 @@ import { CUMULATIVE_STATE } from '../js/utils/constants'
 import Env from '../js/stores/domain/env'
 import QvainStoreClass from '../js/stores/view/qvain'
 import Locale from '../js/stores/view/language'
-import { SubmitButtonsV2 as SubmitButtonsBase } from '../js/components/qvain/editor/submitButtonsV2'
+import { SubmitButtonsV2 as SubmitButtonsBase } from '../js/components/qvain/views/editor/submitButtonsV2'
 import {
   metaxDataset,
   dataset,
@@ -15,6 +15,7 @@ import {
   metadataActions,
 } from './__testdata__/submitButtons.data'
 import { useStores } from '../js/stores/stores'
+import { runInAction } from 'mobx'
 
 global.Promise = require('bluebird')
 
@@ -45,6 +46,9 @@ const getMockProps = () => ({
     replace: jest.fn(),
     push: jest.fn(),
   },
+  submitButtonsRef: React.createRef(),
+  handleSubmitResponse: () => {},
+  handleSubmitError: jest.fn(),
 })
 
 Env.setMetaxApiV2(true)
@@ -72,7 +76,7 @@ test('should silence jest error', () => {
 // However these test cases will be in api v2 tests.
 
 describe('Qvain SubmitButtons.patchDataset', () => {
-  let patchDataset, ref, wrapper
+  let patchDataset, handlePublishDataset, props
 
   beforeEach(() => {
     calls.length = 0
@@ -85,8 +89,11 @@ describe('Qvain SubmitButtons.patchDataset', () => {
     axios.put.mockImplementation(logCalls('put', v => ({ data: v })))
     axios.post.mockImplementation(logCalls('post', v => ({ data: v })))
     Qvain.resetQvainStore()
-    useStores.mockReturnValue(stores)
-    wrapper = shallow(<SubmitButtonsBase {...getMockProps()} />)
+
+    props = getMockProps()
+    const wrapper = shallow(<SubmitButtonsBase Stores={stores} {...props} />)
+    patchDataset = wrapper.instance().patchDataset
+    handlePublishDataset = wrapper.instance().handlePublishDataset
   })
 
   it('sends requests in correct order when patching dataset', async () => {
@@ -155,6 +162,18 @@ describe('Qvain SubmitButtons.patchDataset', () => {
       ['put', '/api/v2/common/datasets/12345/user_metadata', metadataActions],
       ['get', '/api/v2/qvain/datasets/12345'],
     ])
+  })
+
+  it('when deprecated, should call handleSubmitError', async () => {
+    runInAction(() => {
+      stores.Qvain.deprecated = true
+    })
+    await handlePublishDataset()
+    expect(props.handleSubmitError).toHaveBeenCalledWith(
+      new Error(
+        'Cannot publish dataset because it is deprecated. Please resolve deprecation first.'
+      )
+    )
   })
 })
 */

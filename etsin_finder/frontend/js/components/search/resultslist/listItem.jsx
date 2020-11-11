@@ -14,15 +14,31 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import translate from 'counterpart'
 
 import checkDataLang, { getDataLang } from '../../../utils/checkDataLang'
 import ErrorBoundary from '../../general/errorBoundary'
 import AccessRights from '../../dataset/accessRights'
 import FairdataPasDatasetIcon from '../../dataset/fairdataPasDatasetIcon'
 import ContentBox from '../../general/contentBox'
-import { DATA_CATALOG_IDENTIFIER } from '../../../utils/constants'
+import { DATA_CATALOG_IDENTIFIER, ACCESS_TYPE_URL } from '../../../utils/constants'
+
 
 export default class ListItem extends Component {
+  datasetAvailability = (accessRights) => {
+    let identifier = null
+    let id = null
+    let description = null
+    if (accessRights !== undefined && accessRights !== null) {
+      identifier = this.props.item.access_rights.access_type.identifier
+      id = Object.keys(ACCESS_TYPE_URL).find(key => ACCESS_TYPE_URL[key] === identifier)
+      description = translate(
+        `dataset.access_rights_description.${id !== undefined ? id.toLowerCase() : ''}`
+      )
+    }
+    return description
+  }
+
   shortDescription(string) {
     // shortens description to 500
     if (string.length > 500) {
@@ -40,8 +56,10 @@ export default class ListItem extends Component {
         <ErrorBoundary>
           <Link
             to={`/dataset/${this.props.catId}`}
-            aria-label={`${checkDataLang(this.props.item.title)}: ${this.shortDescription(
-              checkDataLang(this.props.item.description)
+            aria-label={`
+              ${checkDataLang(this.props.item.title)}: 
+              ${this.datasetAvailability(this.props.item.access_rights)}: 
+              ${this.shortDescription(checkDataLang(this.props.item.description)
             )}`}
             lang={getDataLang(this.props.item.title)}
           >

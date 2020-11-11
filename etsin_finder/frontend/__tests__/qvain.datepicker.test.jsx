@@ -7,7 +7,6 @@ import '../locale/translations'
 import etsinTheme from '../js/styles/theme'
 import DatePicker, { StyledCustomDatePicker } from '../js/components/qvain/general/input/datepicker'
 import LocaleStore from '../js/stores/view/language'
-import EnvStore from '../js/stores/domain/env'
 
 global.Promise = require('bluebird')
 

@@ -3,7 +3,7 @@ import { shallow } from 'enzyme'
 import axios from 'axios'
 
 import '../locale/translations.js'
-import { RemoveModal as RemoveModalBase } from '../js/components/qvain/datasets/removeModal'
+import { RemoveModal as RemoveModalBase } from '../js/components/qvain/views/datasets/removeModal'
 import QvainStoreClass from '../js/stores/view/qvain'
 import LocaleStore from '../js/stores/view/language'
 import EnvStore from '../js/stores/domain/env'

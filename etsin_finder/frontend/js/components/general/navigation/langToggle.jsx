@@ -10,83 +10,60 @@
    */
 }
 
-import React, { Component } from 'react'
+import React from 'react'
 import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import translate from 'counterpart'
 
 import { TransparentButton, InvertedButton } from '../button'
-import { withStores } from '../../../utils/stores'
+import { useStores } from '../../../utils/stores'
 
-class LangToggle extends Component {
-  static propTypes = {
-    inverted: PropTypes.bool,
-    margin: PropTypes.string,
-    Stores: PropTypes.object.isRequired,
+const LangToggle = ({ inverted, margin }) => {
+  const { Locale } = useStores()
+  const changeLang = () => {
+    Locale.toggleLang()
   }
 
-  static defaultProps = {
-    inverted: false,
-    margin: '0.3em 0.3em',
-  }
-
-  state = {
-    announce: '',
-  }
-
-  changeLang = () => {
-    this.props.Stores.Locale.toggleLang()
-    setTimeout(() => {
-      this.setState({
-        announce: translate('general.state.changedLang', {
-          lang: this.props.Stores.Locale.currentLang,
-        }),
-      })
-    }, 50)
-    setTimeout(() => {
-      this.setState({
-        announce: '',
-      })
-    }, 500)
-  }
-
-  otherLang = () =>
-    this.props.Stores.Locale.languages.map(lang => {
-      if (lang !== this.props.Stores.Locale.currentLang) {
+  const otherLang = () =>
+    Locale.languages.map(lang => {
+      if (lang !== Locale.currentLang) {
         return <Lang key={lang}>{lang}</Lang>
       }
       return null
     })
 
-  render() {
-    return (
-      <div>
-        <div className="sr-only" aria-live="assertive">
-          {this.state.announce}
-        </div>
-        <div>
-          <span className="sr-only">
-            {translate('general.language.toggleLabel')}:{this.otherLang()}
-          </span>
-          {this.props.inverted ? (
-            <InvertedButton
-              color="dark"
-              margin={this.props.margin}
-              padding="0.3em 1em 0.4em"
-              onClick={this.changeLang}
-            >
-              {this.otherLang()}
-            </InvertedButton>
-          ) : (
-            <TransparentButton onClick={this.changeLang} margin={this.props.margin}>
-              {this.otherLang()}
-            </TransparentButton>
-          )}
-        </div>
-      </div>
-    )
-  }
+  return (
+    <>
+      <span className="sr-only" id="sr-text-for-language-toggle">
+        {translate('general.language.toggleLabel', {
+          otherLang:
+            Locale.currentLang === 'fi'
+              ? translate('qvain.general.langEn')
+              : translate('qvain.general.langFi'),
+        })}
+      </span>
+      {inverted ? (
+        <InvertedButton
+          color="dark"
+          margin={margin}
+          padding="0.3em 1em 0.4em"
+          onClick={changeLang}
+          aria-labelledby="sr-text-for-language-toggle"
+        >
+          {otherLang()}
+        </InvertedButton>
+      ) : (
+        <TransparentButton
+          onClick={changeLang}
+          margin={margin}
+          aria-labelledby="sr-text-for-language-toggle"
+        >
+          {otherLang()}
+        </TransparentButton>
+      )}
+    </>
+  )
 }
 
 const Lang = styled.span`
@@ -97,4 +74,14 @@ const Lang = styled.span`
   }
 `
 
-export default withStores(observer(LangToggle))
+LangToggle.propTypes = {
+  inverted: PropTypes.bool,
+  margin: PropTypes.string,
+}
+
+LangToggle.defaultProps = {
+  inverted: false,
+  margin: '0.3em 0.3em',
+}
+
+export default observer(LangToggle)

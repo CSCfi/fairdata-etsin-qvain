@@ -13,7 +13,7 @@ import QvainStoreClass from '../js/stores/view/qvain'
 import Locale from '../js/stores/view/language'
 import CumulativeState, {
   CumulativeStateButton,
-} from '../js/components/qvain/files/cumulativeStateV2'
+} from '../js/components/qvain/fields/files/cumulativeStateV2'
 import { useStores, StoresProvider } from '../js/stores/stores'
 
 global.Promise = require('bluebird')
