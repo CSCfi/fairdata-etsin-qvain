@@ -689,7 +689,18 @@ exports[`Qvain.Description should render <LanguageField /> 1`] = `
           },
           "Submit": Submit {
             "Qvain": [Circular],
+            "checkDoiCompability": [Function],
+            "createNewDraft": [Function],
+            "error": undefined,
             "isLoading": false,
+            "mergeDraft": [Function],
+            "publishDraft": [Function],
+            "publishNewDataset": [Function],
+            "response": null,
+            "savePublishedAsDraft": [Function],
+            "updateDraft": [Function],
+            "updatePublish": [Function],
+            "useDoiModalIsOpen": false,
           },
           "Temporals": Temporals {
             "Model": [Function],

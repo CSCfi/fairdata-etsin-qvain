@@ -1,12 +1,15 @@
 /*
  **  Files v2 submit cases frontend tests
  **
- **  Files v2 has 144 theoretical test conditions. About half of these cases are inactive or not possible at all.
- **  The ultimate goal is to test out all the test cases that can be tested. Tests lean heavily on the documentation found in the link below.
- **  The cases are named after the theoretical number column. There's also bunch of typical tests that were made during the development of qvaim.submit
+ **  Files v2 has 144 theoretical test conditions. Almost half of these cases are inactive or not possible at all.
+ **  The ultimate goal is to test out all the test cases that can be tested.
+ **  Tests lean heavily on the documentation found in the link below.
+ **  The cases are named after the theoretical number column.
+ **  There's also bunch of typical tests that were made during the development of qvain.submit
  **  class. You can find them from the start of the tests.
  **
- **  Tests ends up in possible error or or axios action. Tests don't test out the actual response, it trusts that backend is tested properly.
+ **  Tests ends up in possible error or successful function run. Tests don't test out the actual response, it trusts that backend is tested properly.
+ **  They only test that payload is sent to a correct address.
  **
  **  for more info: https://wiki.eduuni.fi/pages/viewpage.action?pageId=162084194
  */
@@ -17,10 +20,10 @@ import handleSubmitToBackend from '../js/components/qvain/utils/handleSubmit'
 import moment from 'moment'
 import { CUMULATIVE_STATE, DATA_CATALOG_IDENTIFIER, ACCESS_TYPE_URL } from '../js/utils/constants'
 import '../locale/translations'
+import urls from '../js/components/qvain/utils/urls'
 
 // first half of the tests mocks qvainFormSchema but the rest of the tests uses actual module
 import { qvainFormSchema } from '../js/components/qvain/utils/formValidation'
-import { ValidationError } from 'yup'
 const realQvainFormSchema = jest.requireActual('../js/components/qvain/utils/formValidation')
   .qvainFormSchema
 
@@ -84,11 +87,32 @@ const generateDefaultDatasetForPublish = settings => ({
 
 const createMockQvain = settings => {
   return {
+    Files: {
+      actionsToMetax: jest.fn(() => ({ files: [], directories: [] })),
+      metadataToMetax: jest.fn(() => ({ files: [], directories: [] })),
+    },
     checkProvenanceActors: jest.fn(() => true),
     addUnsavedMultiValueFields: jest.fn(),
     cleanupOtherIdentifiers: jest.fn(() => true),
+    updateFiles: jest.fn(),
+    editDataset: jest.fn(),
+    setChanged: jest.fn(),
+    canRemoveFiles: true,
+    canSelectFiles: true,
     ...settings,
   }
+}
+
+const generalPostResponse = {
+  data: {
+    identifier: 'some identifier',
+  },
+}
+
+const generalGetResponse = {
+  data: {
+    identifier: 'some other identifier',
+  },
 }
 
 describe('Submit.exec()', () => {
@@ -101,7 +125,7 @@ describe('Submit.exec()', () => {
 
   beforeEach(() => {
     handleSubmitToBackend.mockReturnValue(generateDefaultDatasetForPublish())
-    submitFunction = jest.fn()
+    submitFunction = jest.fn(() => generalPostResponse)
     mockQvain = createMockQvain()
     Submit = new SubmitClass(mockQvain)
   })
@@ -147,12 +171,40 @@ describe('Submit.exec()', () => {
     await exec()
     expect(qvainFormSchema.validate).toHaveBeenCalledTimes(1)
   })
+
+  test('should call setChanged', async () => {
+    await exec()
+    expect(mockQvain.setChanged).toHaveBeenCalledWith(false)
+  })
+
+  test(`when no actions to update, calls editDataset with data`, async () => {
+    await exec()
+    expect(mockQvain.editDataset).toHaveBeenCalledWith(generalPostResponse.data)
+  })
+
+  test(`when fileActions to update, calls editDataset with data from backend`, async () => {
+    mockQvain.Files.actionsToMetax.mockReturnValue({
+      files: [{ identifier: 'some file' }],
+      directories: [],
+    })
+    axios.get.mockReturnValue(generalGetResponse)
+    await exec()
+    expect(mockQvain.editDataset).toHaveBeenCalledWith(generalGetResponse.data)
+  })
+
+  test(`when newCumulativeState, calls editDataset with data from backend`, async () => {
+    mockQvain.newCumulativeState = 'new state'
+    axios.get.mockReturnValue(generalGetResponse)
+    await exec()
+    expect(mockQvain.editDataset).toHaveBeenCalledWith(generalGetResponse.data)
+  })
 })
 
 describe('submitDraft', () => {
   let Submit, mockQvain
   beforeEach(() => {
     mockQvain = createMockQvain()
+    axios.post.mockReturnValue(generalPostResponse)
     Submit = new SubmitClass(mockQvain)
   })
 
@@ -172,12 +224,21 @@ describe('submitDraft', () => {
   const expectError = async (dataset, error) => {
     handleSubmitToBackend.mockReturnValue(dataset)
     qvainFormSchema.validate.mockReturnValue(realQvainFormSchema.validate(dataset))
-
-    await expect(Submit.submitDraft()).rejects.toThrow(error)
+    await Submit.submitDraft()
+    expect(Submit.error?.message).toEqual(error)
   }
 
   afterEach(async () => {
     jest.resetAllMocks()
+  })
+
+  test('should call axios.post with dataset and draft param', async () => {
+    handleSubmitToBackend.mockReturnValue('dataset')
+    qvainFormSchema.validate.mockReturnValue(Promise.resolve(undefined))
+    await Submit.submitDraft()
+    expect(axios.post).toHaveBeenCalledWith(urls.v2.datasets(), 'dataset', {
+      params: { draft: true },
+    })
   })
 
   test('cases 1-3: no file origin, urn, cumulative state any', async () => {
@@ -188,7 +249,7 @@ describe('submitDraft', () => {
   test('cases 4-6: no file origin, doi, cumulative state any', async () => {
     const dataset = generateDefaultDatasetForPublish({ dataCatalog: undefined, useDoi: true })
 
-    await expectError(dataset, errors.wrongFileOrigin)
+    await expectError(dataset, errors.missingFileOrigin)
   })
 
   test('case 7: Ida, urn, cumulative state no', async () => {
@@ -274,6 +335,11 @@ describe('publish new dataset', () => {
   let Submit, mockQvain
   beforeEach(() => {
     mockQvain = createMockQvain()
+    axios.post.mockReturnValue({
+      data: {
+        identifier: 'some identifier',
+      },
+    })
     Submit = new SubmitClass(mockQvain)
   })
 
@@ -291,12 +357,30 @@ describe('publish new dataset', () => {
   const expectError = async (dataset, error) => {
     handleSubmitToBackend.mockReturnValue(dataset)
     qvainFormSchema.validate.mockReturnValue(realQvainFormSchema.validate(dataset))
-
-    await expect(Submit.submitPublish()).rejects.toThrow()
+    await Submit.submitPublish()
+    expect(Submit.error?.message).toEqual(error)
   }
 
   afterEach(async () => {
     jest.resetAllMocks()
+  })
+
+  test('should call axios.post twice', async () => {
+    handleSubmitToBackend.mockReturnValue('dataset')
+    qvainFormSchema.validate.mockReturnValue(Promise.resolve(undefined))
+    await Submit.submitPublish()
+    expect(axios.post.mock.calls[0]).toEqual([
+      urls.v2.datasets(),
+      'dataset',
+      {
+        params: { draft: true },
+      },
+    ])
+    expect(axios.post.mock.calls[1]).toEqual([
+      urls.v2.rpc.publishDataset(),
+      null,
+      { params: { identifier: 'some identifier' } },
+    ])
   })
 
   test('case 19-21: no file origin, urn, cumulative state any', async () => {
@@ -341,7 +425,7 @@ describe('publish new dataset', () => {
       useDoi: true,
     })
 
-    expectNoError(dataset)
+    await expectNoError(dataset)
   })
 
   test('case 30: ida, doi, cumulative state closed', async () => {
@@ -350,7 +434,7 @@ describe('publish new dataset', () => {
       useDoi: true,
     })
 
-    expectNoError(dataset)
+    await expectNoError(dataset)
   })
 
   test('case 31: external resources, urn, cumulative state no', async () => {
@@ -365,7 +449,7 @@ describe('publish new dataset', () => {
       cumulativeState: CUMULATIVE_STATE.YES,
     })
 
-    expectNoError(dataset)
+    await expectNoError(dataset)
   })
 
   test('case 33: external resources, urn, cumulative state closed', async () => {
@@ -374,10 +458,10 @@ describe('publish new dataset', () => {
       cumulativeState: CUMULATIVE_STATE.CLOSED,
     })
 
-    expectNoError(dataset)
+    await expectNoError(dataset)
   })
 
-  test('case 34: external resources, doi, cumulative state no', async () => {
+  test('cases 34-36: external resources, doi, cumulative state no', async () => {
     const dataset = generateDefaultDatasetForPublish({
       dataCatalog: DATA_CATALOG_IDENTIFIER.ATT,
       useDoi: true,
@@ -385,37 +469,23 @@ describe('publish new dataset', () => {
 
     await expectError(dataset, errors.wrongFileOrigin)
   })
-
-  test('case 35: external resources, doi, cumulative state yes', async () => {
-    const dataset = generateDefaultDatasetForPublish({
-      dataCatalog: DATA_CATALOG_IDENTIFIER.ATT,
-      cumulativeState: CUMULATIVE_STATE.YES,
-      useDoi: true,
-    })
-
-    expectError(dataset, errors.wrongFileOrigin)
-  })
-
-  test('case 36: external resources, doi, cumulative state closed', async () => {
-    const dataset = generateDefaultDatasetForPublish({
-      dataCatalog: DATA_CATALOG_IDENTIFIER.ATT,
-      cumulativeState: CUMULATIVE_STATE.CLOSED,
-      useDoi: true,
-    })
-
-    expectError(dataset, errors.wrongFileOrigin)
-  })
 })
 
 describe('edit existing draft dataset', () => {
   let Submit, mockQvain
+  const preparedDataset = { original: { identifier: 'some identifier' } }
   beforeEach(() => {
     mockQvain = createMockQvain({ original: { state: 'draft' } })
+    axios.patch.mockReturnValue({
+      data: {
+        identifier: 'some identifier',
+      },
+    })
     Submit = new SubmitClass(mockQvain)
   })
 
   const expectNoError = async dataset => {
-    handleSubmitToBackend.mockReturnValue(dataset)
+    handleSubmitToBackend.mockReturnValue({ ...preparedDataset, ...dataset })
     qvainFormSchema.validate.mockReturnValue(realQvainFormSchema.validate(dataset))
 
     try {
@@ -426,14 +496,21 @@ describe('edit existing draft dataset', () => {
   }
 
   const expectError = async (dataset, error) => {
-    handleSubmitToBackend.mockReturnValue(dataset)
+    handleSubmitToBackend.mockReturnValue({ ...preparedDataset, ...dataset })
     qvainFormSchema.validate.mockReturnValue(realQvainFormSchema.validate(dataset))
-
-    await expect(Submit.submitDraft()).rejects.toThrow()
+    await Submit.submitDraft()
+    expect(Submit.error?.message).toEqual(error)
   }
 
   afterEach(async () => {
     jest.resetAllMocks()
+  })
+
+  test('should call axios.patch with dataset and existing identifier', async () => {
+    handleSubmitToBackend.mockReturnValue(preparedDataset)
+    qvainFormSchema.validate.mockReturnValue(Promise.resolve(undefined))
+    await Submit.submitDraft()
+    expect(axios.patch).toHaveBeenCalledWith(urls.v2.dataset('some identifier'), preparedDataset)
   })
 
   test('cases 37-39: no file origin, urn, cumulative state any', async () => {
@@ -490,18 +567,545 @@ describe('edit existing draft dataset', () => {
     await expectNoError(dataset)
   })
 
-  test('case 49-51: ext resources, urn, cumulative state any', () => {
+  test('case 49-51: ext resources, urn, cumulative state any', async () => {
     const dataset = generateDefaultDatasetForPublish({ dataCatalog: DATA_CATALOG_IDENTIFIER.ATT })
 
-    expectNoError(dataset)
+    await expectNoError(dataset)
   })
 
-  test('case 52-54: ext resources, doi, cumulative state any', () => {
+  test('case 52-54: ext resources, doi, cumulative state any', async () => {
     const dataset = generateDefaultDatasetForPublish({
       dataCatalog: DATA_CATALOG_IDENTIFIER.ATT,
       useDoi: true,
     })
 
-    expectError(dataset, errors.wrongFileOrigin)
+    await expectError(dataset, errors.wrongFileOrigin)
+  })
+})
+
+describe('publish existing draft dataset', () => {
+  let Submit, mockQvain
+  const preparedDataset = { original: { identifier: 'some identifier' } }
+  beforeEach(() => {
+    mockQvain = createMockQvain({ original: { state: 'draft' } })
+    axios.post.mockReturnValue({
+      data: {
+        identifier: 'some identifier',
+      },
+    })
+    axios.patch.mockReturnValue({
+      data: {
+        identifier: 'some identifier',
+      },
+    })
+    Submit = new SubmitClass(mockQvain)
+  })
+
+  const expectNoError = async dataset => {
+    handleSubmitToBackend.mockReturnValue({ ...preparedDataset, ...dataset })
+    qvainFormSchema.validate.mockReturnValue(realQvainFormSchema.validate(dataset))
+
+    try {
+      await Submit.submitPublish()
+    } finally {
+      expect(Submit.error).toBe(undefined)
+    }
+  }
+
+  const expectError = async (dataset, error) => {
+    handleSubmitToBackend.mockReturnValue({ ...preparedDataset, ...dataset })
+    qvainFormSchema.validate.mockReturnValue(realQvainFormSchema.validate(dataset))
+    await Submit.submitPublish()
+    expect(Submit.error?.message).toEqual(error)
+  }
+
+  afterEach(async () => {
+    jest.resetAllMocks()
+  })
+
+  test('should call axios.patch and post', async () => {
+    handleSubmitToBackend.mockReturnValue(preparedDataset)
+    qvainFormSchema.validate.mockReturnValue(Promise.resolve(undefined))
+    await Submit.submitPublish()
+
+    expect(axios.patch).toHaveBeenCalledWith(
+      urls.v2.dataset(preparedDataset.original.identifier),
+      preparedDataset
+    )
+    expect(axios.post).toHaveBeenCalledWith(urls.v2.rpc.publishDataset(), null, {
+      params: { identifier: preparedDataset.original.identifier },
+    })
+  })
+
+  test('cases 55-57: no file origin, urn, cumulative state any', async () => {
+    const dataset = generateDefaultDatasetForPublish({ dataCatalog: undefined })
+
+    await expectError(dataset, errors.missingFileOrigin)
+  })
+
+  test('cases 58-60: no file origin, doi, cumulative state any', async () => {
+    const dataset = generateDefaultDatasetForPublish({ dataCatalog: undefined, useDoi: true })
+
+    await expectError(dataset, errors.missingFileOrigin)
+  })
+
+  test('case 61: ida, urn, cumulative state no', async () => {
+    const dataset = generateDefaultDatasetForPublish()
+
+    await expectNoError(dataset)
+  })
+
+  test('case 62: ida, urn, cumulative state yes', async () => {
+    const dataset = generateDefaultDatasetForPublish({ cumulativeState: CUMULATIVE_STATE.YES })
+
+    await expectNoError(dataset)
+  })
+
+  test('case 63: ida, urn, cumulative state yes', async () => {
+    const dataset = generateDefaultDatasetForPublish({ cumulativeState: CUMULATIVE_STATE.CLOSED })
+
+    await expectNoError(dataset)
+  })
+
+  test('case 64: ida, doi, cumulative state no', async () => {
+    const dataset = generateDefaultDatasetForPublish({ useDoi: true })
+
+    await expectNoError(dataset)
+  })
+
+  test('case 65: ida, doi, cumulative state yes', async () => {
+    const dataset = generateDefaultDatasetForPublish({
+      useDoi: true,
+      cumultaiveState: CUMULATIVE_STATE.YES,
+    })
+
+    await expectNoError(dataset)
+  })
+
+  test('case 66: ida, doi, cumulative state closed', async () => {
+    const dataset = generateDefaultDatasetForPublish({
+      useDoi: true,
+      cumultaiveState: CUMULATIVE_STATE.CLOSED,
+    })
+
+    await expectNoError(dataset)
+  })
+
+  test('case 67-69: ext resources, urn, cumulative state any', async () => {
+    const dataset = generateDefaultDatasetForPublish({ dataCatalog: DATA_CATALOG_IDENTIFIER.ATT })
+
+    await expectNoError(dataset)
+  })
+
+  test('case 70-72: ext resources, doi, cumulative state any', async () => {
+    const dataset = generateDefaultDatasetForPublish({
+      dataCatalog: DATA_CATALOG_IDENTIFIER.ATT,
+      useDoi: true,
+    })
+
+    await expectError(dataset, errors.wrongFileOrigin)
+  })
+})
+
+describe('save published dataset as draft', () => {
+  let Submit, mockQvain
+  const preparedDataset = { original: { identifier: 'some identifier' } }
+
+  beforeEach(() => {
+    mockQvain = createMockQvain({ original: { state: 'published' } })
+    axios.post.mockReturnValue({
+      data: {
+        identifier: 'some identifier',
+      },
+    })
+    axios.get.mockReturnValue({ data: { identifier: 'fresh id' } })
+    axios.patch.mockReturnValue({
+      data: {
+        identifier: 'some other identifier',
+      },
+    })
+    Submit = new SubmitClass(mockQvain)
+  })
+
+  const expectNoError = async dataset => {
+    handleSubmitToBackend.mockReturnValue({
+      ...dataset,
+      original: { ...dataset.original, ...preparedDataset.original },
+    })
+    qvainFormSchema.validate.mockReturnValue(realQvainFormSchema.validate(dataset))
+
+    try {
+      await Submit.submitDraft()
+    } finally {
+      expect(Submit.error).toBe(undefined)
+    }
+  }
+
+  const expectError = async (dataset, error) => {
+    handleSubmitToBackend.mockReturnValue({
+      ...dataset,
+      original: { ...dataset.original, ...preparedDataset.original },
+    })
+    qvainFormSchema.validate.mockReturnValue(realQvainFormSchema.validate(dataset))
+    await Submit.submitDraft()
+    expect(Submit.error?.message).toEqual(error)
+  }
+
+  afterEach(async () => {
+    jest.resetAllMocks()
+  })
+
+  test('should call axios.post to make new draft, patch to save changes', async () => {
+    handleSubmitToBackend.mockReturnValue(preparedDataset)
+    qvainFormSchema.validate.mockReturnValue(Promise.resolve(undefined))
+    await Submit.submitDraft()
+    expect(axios.post).toHaveBeenCalledWith(urls.v2.rpc.createDraft(), null, {
+      params: { identifier: 'some identifier' },
+    })
+    expect(axios.get).toHaveBeenCalledWith(urls.v2.dataset('some identifier'))
+    expect(axios.patch).toHaveBeenCalledWith(urls.v2.dataset('fresh id'), preparedDataset)
+  })
+
+  test('cases 73-75: no file origin, urn, cumulative state any', async () => {
+    const dataset = generateDefaultDatasetForPublish({ dataCatalog: undefined })
+
+    await expectError(dataset, errors.missingFileOrigin)
+  })
+
+  test('cases 76-78: no file origin, doi, cumulative state any', async () => {
+    const dataset = generateDefaultDatasetForPublish({ dataCatalog: undefined, useDoi: true })
+
+    await expectError(dataset, errors.missingFileOrigin)
+  })
+
+  test('case 79: ida, urn, cumulative state no', async () => {
+    const dataset = generateDefaultDatasetForPublish()
+
+    await expectNoError(dataset)
+  })
+
+  test('case 80: ida, urn, cumulative state yes', async () => {
+    const dataset = generateDefaultDatasetForPublish({ cumulativeState: CUMULATIVE_STATE.YES })
+
+    await expectNoError(dataset)
+  })
+
+  test('case 81: ida, urn, cumulative state yes', async () => {
+    const dataset = generateDefaultDatasetForPublish({ cumulativeState: CUMULATIVE_STATE.CLOSED })
+
+    await expectNoError(dataset)
+  })
+
+  test('case 82: ida, doi, cumulative state no', async () => {
+    const dataset = generateDefaultDatasetForPublish({ useDoi: true })
+
+    await expectNoError(dataset)
+  })
+
+  test('case 83: ida, doi, cumulative state yes', async () => {
+    const dataset = generateDefaultDatasetForPublish({
+      useDoi: true,
+      cumulativeState: CUMULATIVE_STATE.YES,
+    })
+
+    await expectNoError(dataset)
+  })
+
+  test('case 84: ida, doi, cumulative state closed', async () => {
+    const dataset = generateDefaultDatasetForPublish({
+      useDoi: true,
+      cumulativeState: CUMULATIVE_STATE.CLOSED,
+    })
+
+    await expectNoError(dataset)
+  })
+
+  test('case 85-87: ext resources, urn, cumulative state any', async () => {
+    const dataset = generateDefaultDatasetForPublish({ dataCatalog: DATA_CATALOG_IDENTIFIER.ATT })
+
+    await expectNoError(dataset)
+  })
+
+  test('case 88-90: ext resources, doi, cumulative state any', async () => {
+    const dataset = generateDefaultDatasetForPublish({
+      dataCatalog: DATA_CATALOG_IDENTIFIER.ATT,
+      useDoi: true,
+    })
+
+    await expectError(dataset, errors.wrongFileOrigin)
+  })
+})
+
+describe('republish dataset', () => {
+  let Submit, mockQvain
+  const preparedDataset = { original: { identifier: 'some identifier' } }
+  beforeEach(() => {
+    mockQvain = createMockQvain({ original: { state: 'published', identifier: 'some identifier' } })
+    axios.patch.mockReturnValue({
+      data: {
+        identifier: 'some identifier',
+      },
+    })
+    axios.post.mockReturnValue({
+      data: {
+        identifier: 'some identifier',
+      },
+    })
+    axios.get.mockReturnValue({
+      data: {
+        identifier: 'some identifier',
+      },
+    })
+    Submit = new SubmitClass(mockQvain)
+  })
+
+  const expectNoError = async dataset => {
+    handleSubmitToBackend.mockReturnValue({
+      ...dataset,
+      original: { ...dataset.original, ...preparedDataset.original },
+    })
+    qvainFormSchema.validate.mockReturnValue(realQvainFormSchema.validate(dataset))
+
+    try {
+      await Submit.submitPublish()
+    } finally {
+      expect(Submit.error).toBe(undefined)
+    }
+  }
+
+  const expectError = async (dataset, error) => {
+    handleSubmitToBackend.mockReturnValue({
+      ...dataset,
+      original: { ...dataset.original, ...preparedDataset.original },
+    })
+    qvainFormSchema.validate.mockReturnValue(realQvainFormSchema.validate(dataset))
+    await Submit.submitPublish()
+    expect(Submit.error?.message).toEqual(error)
+  }
+
+  afterEach(async () => {
+    jest.resetAllMocks()
+  })
+
+  test('should call axios.patch with dataset and existing identifier', async () => {
+    handleSubmitToBackend.mockReturnValue(preparedDataset)
+    qvainFormSchema.validate.mockReturnValue(Promise.resolve(undefined))
+    await Submit.submitDraft()
+    expect(axios.patch).toHaveBeenCalledWith(urls.v2.dataset('some identifier'), preparedDataset)
+  })
+
+  test('cases 91-93: no file origin, urn, cumulative state any', async () => {
+    const dataset = generateDefaultDatasetForPublish({ dataCatalog: undefined })
+
+    await expectError(dataset, errors.missingFileOrigin)
+  })
+
+  test('cases 94-96: no file origin, doi, cumulative state any', async () => {
+    const dataset = generateDefaultDatasetForPublish({ dataCatalog: undefined, useDoi: true })
+
+    await expectError(dataset, errors.missingFileOrigin)
+  })
+
+  test('case 97: ida, urn, cumulative state no', async () => {
+    const dataset = generateDefaultDatasetForPublish()
+
+    await expectNoError(dataset)
+  })
+
+  test('case 98: ida, urn, cumulative state yes', async () => {
+    const dataset = generateDefaultDatasetForPublish({ cumulativeState: CUMULATIVE_STATE.YES })
+
+    await expectNoError(dataset)
+  })
+
+  test('case 99: ida, urn, cumulative state yes', async () => {
+    const dataset = generateDefaultDatasetForPublish({ cumulativeState: CUMULATIVE_STATE.CLOSED })
+
+    await expectNoError(dataset)
+  })
+
+  test('case 100: ida, doi, cumulative state no', async () => {
+    const dataset = generateDefaultDatasetForPublish({ useDoi: true })
+
+    await expectNoError(dataset)
+  })
+
+  test('case 101: ida, doi, cumulative state yes', async () => {
+    const dataset = generateDefaultDatasetForPublish({
+      useDoi: true,
+      cumultaiveState: CUMULATIVE_STATE.YES,
+    })
+
+    await expectNoError(dataset)
+  })
+
+  test('case 102: ida, doi, cumulative state closed', async () => {
+    const dataset = generateDefaultDatasetForPublish({
+      useDoi: true,
+      cumultaiveState: CUMULATIVE_STATE.CLOSED,
+    })
+
+    await expectNoError(dataset)
+  })
+
+  test('case 103-105: ext resources, urn, cumulative state any', async () => {
+    const dataset = generateDefaultDatasetForPublish({ dataCatalog: DATA_CATALOG_IDENTIFIER.ATT })
+
+    await expectNoError(dataset)
+  })
+
+  test('case 106-108: ext resources, doi, cumulative state any', async () => {
+    const dataset = generateDefaultDatasetForPublish({
+      dataCatalog: DATA_CATALOG_IDENTIFIER.ATT,
+      useDoi: true,
+    })
+
+    await expectError(dataset, errors.wrongFileOrigin)
+  })
+})
+
+// cases 109 - 126
+// saving an unpublished dataset as a draft is code-wise the same thing than updating a draft
+// no need to test.
+
+// create an draft from published dataset and publish it
+describe('publish unpublished dataset', () => {
+  let Submit, mockQvain
+  const preparedDataset = {
+    original: {
+      identifier: 'some identifier',
+    },
+  }
+  beforeEach(() => {
+    mockQvain = createMockQvain({
+      original: {
+        state: 'draft',
+        draft_of: { identifier: 'some other identifier' },
+      },
+    })
+    axios.post.mockReturnValue({
+      data: {
+        identifier: 'some identifier',
+      },
+    })
+    axios.patch.mockReturnValue({
+      data: {
+        identifier: 'some identifier',
+      },
+    })
+    axios.get.mockReturnValue({
+      data: {
+        identifier: 'some identifier',
+      },
+    })
+
+    Submit = new SubmitClass(mockQvain)
+  })
+
+  const expectNoError = async dataset => {
+    handleSubmitToBackend.mockReturnValue({
+      ...dataset,
+      original: { ...dataset.original, ...preparedDataset.original },
+    })
+    qvainFormSchema.validate.mockReturnValue(realQvainFormSchema.validate(dataset))
+
+    try {
+      await Submit.submitPublish()
+    } finally {
+      expect(Submit.error).toBe(undefined)
+    }
+  }
+
+  const expectError = async (dataset, error) => {
+    handleSubmitToBackend.mockReturnValue({
+      ...dataset,
+      original: { ...dataset.original, ...preparedDataset.original },
+    })
+    qvainFormSchema.validate.mockReturnValue(realQvainFormSchema.validate(dataset))
+    await Submit.submitPublish()
+    expect(Submit.error?.message).toEqual(error)
+  }
+
+  afterEach(async () => {
+    jest.resetAllMocks()
+  })
+
+  test('should call axios.patch with dataset and existing identifier', async () => {
+    handleSubmitToBackend.mockReturnValue(preparedDataset)
+    qvainFormSchema.validate.mockReturnValue(Promise.resolve(undefined))
+    await Submit.submitPublish()
+    expect(axios.post).toHaveBeenCalledWith(urls.v2.rpc.mergeDraft(), null, {
+      params: { identifier: 'some identifier' },
+    })
+    expect(axios.patch).toHaveBeenCalledWith(urls.v2.dataset('some identifier'), preparedDataset)
+  })
+
+  test('cases 127-129: no file origin, urn, cumulative state any', async () => {
+    const dataset = generateDefaultDatasetForPublish({ dataCatalog: undefined })
+
+    await expectError(dataset, errors.missingFileOrigin)
+  })
+
+  test('cases 130-132: no file origin, doi, cumulative state any', async () => {
+    const dataset = generateDefaultDatasetForPublish({ dataCatalog: undefined, useDoi: true })
+
+    await expectError(dataset, errors.missingFileOrigin)
+  })
+
+  test('case 133: ida, urn, cumulative state no', async () => {
+    const dataset = generateDefaultDatasetForPublish()
+
+    await expectNoError(dataset)
+  })
+
+  test('case 134: ida, urn, cumulative state yes', async () => {
+    const dataset = generateDefaultDatasetForPublish({ cumulativeState: CUMULATIVE_STATE.YES })
+
+    await expectNoError(dataset)
+  })
+
+  test('case 135: ida, urn, cumulative state yes', async () => {
+    const dataset = generateDefaultDatasetForPublish({ cumulativeState: CUMULATIVE_STATE.CLOSED })
+
+    await expectNoError(dataset)
+  })
+
+  test('case 136: ida, doi, cumulative state no', async () => {
+    const dataset = generateDefaultDatasetForPublish({ useDoi: true })
+
+    await expectNoError(dataset)
+  })
+
+  test('case 137: ida, doi, cumulative state yes', async () => {
+    const dataset = generateDefaultDatasetForPublish({
+      useDoi: true,
+      cumultaiveState: CUMULATIVE_STATE.YES,
+    })
+
+    await expectNoError(dataset)
+  })
+
+  test('case 138: ida, doi, cumulative state closed', async () => {
+    const dataset = generateDefaultDatasetForPublish({
+      useDoi: true,
+      cumultaiveState: CUMULATIVE_STATE.CLOSED,
+    })
+
+    await expectNoError(dataset)
+  })
+
+  test('case 139-141: ext resources, urn, cumulative state any', async () => {
+    const dataset = generateDefaultDatasetForPublish({ dataCatalog: DATA_CATALOG_IDENTIFIER.ATT })
+
+    await expectNoError(dataset)
+  })
+
+  test('case 142-144: ext resources, doi, cumulative state any', async () => {
+    const dataset = generateDefaultDatasetForPublish({
+      dataCatalog: DATA_CATALOG_IDENTIFIER.ATT,
+      useDoi: true,
+    })
+
+    await expectError(dataset, errors.wrongFileOrigin)
   })
 })
