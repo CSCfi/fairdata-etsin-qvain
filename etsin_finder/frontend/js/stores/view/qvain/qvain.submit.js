@@ -100,8 +100,7 @@ class Submit {
 
   @action exec = async (submitFunction, schema = qvainFormSchema) => {
     const {
-      cleanupOtherIdentifiers,
-      addUnsavedMultiValueFields,
+      OtherIdentifiers: { cleanupOtherIdentifiers },
       editDataset,
       setChanged,
     } = this.Qvain
@@ -109,7 +108,6 @@ class Submit {
     if (!(await this.promptProvenancesAndCleanOtherIdentifiers())) return
 
     this.closeUseDoiModal()
-    addUnsavedMultiValueFields()
     const dataset = this.prepareDataset()
     const { fileActions, metadataActions, newCumulativeState } = this.prepareActions()
 
@@ -210,7 +208,7 @@ class Submit {
   }
 
   @action promptProvenancesAndCleanOtherIdentifiers = async () => {
-    const isProvenanceActorsOk = await this.Qvain.checkProvenanceActors()
+    const isProvenanceActorsOk = await this.Qvain.Actors.checkProvenanceActors()
     if (!isProvenanceActorsOk) {
       return false
     }
