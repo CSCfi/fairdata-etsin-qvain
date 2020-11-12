@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { opacify, desaturate } from 'polished'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import Translate from 'react-translate-component'
 import {
   faPen,
   faTimes,
@@ -59,9 +60,13 @@ const EditButtonStyles = styled.button`
 `
 
 export const EditButton = props => (
-  <EditButtonStyles {...props}>
+  <Translate
+    component={EditButtonStyles}
+    attributes={{ 'aria-label': 'qvain.general.buttons.edit' }}
+    {...props}
+  >
     <FontAwesomeIcon size="lg" icon={faPen} />
-  </EditButtonStyles>
+  </Translate>
 )
 
 const DeleteButtonStyles = styled.button`
@@ -82,7 +87,11 @@ const DeleteButtonStyles = styled.button`
 `
 
 export const DeleteButton = props => (
-  <DeleteButtonStyles {...props}>
+  <Translate
+    component={DeleteButtonStyles}
+    attributes={{ 'aria-label': 'qvain.general.buttons.edit' }}
+    {...props}
+  >
     <FontAwesomeIcon size="lg" icon={faTimes} />
-  </DeleteButtonStyles>
+  </Translate>
 )

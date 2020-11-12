@@ -186,7 +186,7 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
   bottomContent={false}
 >
   <form__LabelLarge
-    htmlFor="fieldOfScienceSelect"
+    htmlFor="fieldOfScience-select"
   >
     <Translate
       component="span"
@@ -214,7 +214,7 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
     isMulti={true}
     metaxIdentifier="field_of_science"
     model={[Function]}
-    name="fieldOfScienceSelect"
+    name="fieldOfScience"
     setter={[Function]}
   />
 </Card>
@@ -305,7 +305,7 @@ exports[`Qvain.Description should render <LanguageField /> 1`] = `
   bottomContent={false}
 >
   <form__LabelLarge
-    htmlFor="datasetLanguage"
+    htmlFor="dataset-language-select"
   >
     <Translate
       component="span"

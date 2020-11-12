@@ -202,7 +202,8 @@ class OrganizationSelect extends Component {
 
     return (
       <SelectContainer>
-        <Select
+        <Translate
+          component={Select}
           onChange={this.onOrganizationChange}
           onBlur={() => this.onBlur('organization')}
           name={name}
@@ -212,33 +213,38 @@ class OrganizationSelect extends Component {
           placeholder={placeholder.organization}
           creatable={creatable}
           allowReset={value.organization && !value.department}
+          attributes={{ ariaLabel: 'qvain.project.inputs.organization.levels.organization' }}
         />
         <Department>
           {value.organization && (
-            <Select
+            <Translate
+              component={Select}
               onChange={this.onDepartmentChange}
               onBlur={() => this.onBlur('department')}
               name={name}
-              inputId={inputId}
+              inputId={`${inputId}-department`}
               value={value.department === undefined ? null : value.department}
               options={options.department ? options.department[lang] : []}
               placeholder={placeholder.department}
               creatable={creatable}
               allowReset={value.department && !value.subDepartment}
+              attributes={{ ariaLabel: 'qvain.project.inputs.organization.levels.department' }}
             />
           )}
           <Department>
             {value.department && (
-              <Select
+              <Translate
+                component={Select}
                 onChange={this.onSubdepartmentChange}
                 onBlur={() => this.onBlur('subDepartment')}
                 name={name}
-                inputId={inputId}
+                inputId={`${inputId}-subdepartment`}
                 value={value.subDepartment === undefined ? null : value.subDepartment}
                 options={options.subDepartment ? options.subDepartment[lang] : []}
                 placeholder={placeholder.department}
                 creatable={creatable}
                 allowReset={Boolean(value.subDepartment)}
+                attributes={{ ariaLabel: 'qvain.project.inputs.organization.levels.subdepartment' }}
               />
             )}
           </Department>
@@ -263,6 +269,7 @@ const CreatableSelectComponent = ({
   inputId,
   creatable,
   allowReset,
+  ariaLabel,
 }) => {
   /**
    * Open form if add manually is selected.
@@ -339,7 +346,7 @@ const CreatableSelectComponent = ({
     const errors = value.errors || {}
     return (
       <AddOptionContainer>
-        <Label htmlForm="name">
+        <Label htmlFor={`${inputId}-name`}>
           <Translate content="qvain.organizationSelect.label.name" />
         </Label>
         <Translate
@@ -349,10 +356,10 @@ const CreatableSelectComponent = ({
           onBlur={onBlur}
           attributes={{ placeholder: 'qvain.organizationSelect.placeholder.name' }}
           name="name"
-          id="name"
+          id={`${inputId}-name`}
         />
         <ErrorMessage errors={errors.name || []} />
-        <Label htmlForm="name">
+        <Label htmlFor={`${inputId}-email`}>
           <Translate content="qvain.organizationSelect.label.email" />
         </Label>
         <Translate
@@ -362,9 +369,10 @@ const CreatableSelectComponent = ({
           onBlur={onBlur}
           attributes={{ placeholder: 'qvain.organizationSelect.placeholder.email' }}
           name="email"
+          id={`${inputId}-email`}
         />
         <ErrorMessage errors={errors.email || []} />
-        <Label htmlForm="name">
+        <Label htmlFor={`${inputId}-identifier`}>
           <Translate content="qvain.organizationSelect.label.identifier" />
         </Label>
         <Translate
@@ -374,6 +382,7 @@ const CreatableSelectComponent = ({
           onBlur={onBlur}
           attributes={{ placeholder: 'qvain.organizationSelect.placeholder.identifier' }}
           name="identifier"
+          id={`${inputId}-identifier`}
         />
         <ErrorMessage errors={errors.identifier || []} />
       </AddOptionContainer>
@@ -395,6 +404,7 @@ const CreatableSelectComponent = ({
           classNamePrefix="select"
           options={getOptions()}
           attributes={{ placeholder }}
+          aria-label={ariaLabel}
         />
         {renderForm()}
       </div>
@@ -426,6 +436,7 @@ CreatableSelectComponent.propTypes = {
   inputId: PropTypes.string.isRequired,
   creatable: PropTypes.bool,
   allowReset: PropTypes.bool,
+  ariaLabel: PropTypes.string,
 }
 
 CreatableSelectComponent.defaultProps = {
@@ -434,6 +445,7 @@ CreatableSelectComponent.defaultProps = {
   creatable: true,
   value: undefined,
   allowReset: false,
+  ariaLabel: undefined,
 }
 
 const Select = withStores(observer(CreatableSelectComponent))

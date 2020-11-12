@@ -58,7 +58,7 @@ const MobileNavi = props => (
       <CustomContainer>
         <Row>
           {props.children}
-          <LangToggle margin="0.4em 0.4em 0.4em 0em" />
+          <LangToggle mobile margin="0.4em 0.4em 0.4em 0em" />
           <Link width="100%" href={props.helpUrl} rel="noopener noreferrer" target="_blank">
             <Translate content="nav.help" />
           </Link>

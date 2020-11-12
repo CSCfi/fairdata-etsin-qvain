@@ -92,10 +92,9 @@ export class SelectedFilesBase extends Component {
                 />
               </RefreshDirectoryButton>
             )}
-            {!s.removed && <EditButton aria-label="Edit" onClick={this.handleEdit(s)} />}
+            {!s.removed && <EditButton onClick={this.handleEdit(s)} />}
             {removable && (
               <DeleteButton
-                aria-label="Remove"
                 onClick={event => {
                   event.preventDefault()
                   if (s.directoryName !== undefined) {

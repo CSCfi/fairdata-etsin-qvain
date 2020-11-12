@@ -52,6 +52,7 @@ const IssuedDateField = () => {
         </LabelLarge>
         <Translate component="p" content="qvain.description.issuedDate.infoText" />
         <DatePicker
+          id="issuedDateInput"
           strictParsing
           selected={issuedDate ? new Date(issuedDate) : new Date()}
           onChangeRaw={e => e && handleDatePickerChange(e.target.value, setIssuedDate)}

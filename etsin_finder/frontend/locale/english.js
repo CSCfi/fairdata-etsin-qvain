@@ -1465,6 +1465,11 @@ const english = {
             organization: 'Select an organization',
             department: 'Select a department',
           },
+          levels: {
+            organization: 'Organization',
+            department: 'Department',
+            subdepartment: 'Subdepartment'
+          },
           addButton: 'Add organization',
           editButton: 'Edit organization',
           validation: 'At least one producer organization is required',
