@@ -242,61 +242,108 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
     component="p"
     content="qvain.description.keywords.help"
   />
-  <Translate
-    attributes={
-      Object {
-        "placeholder": "qvain.description.keywords.placeholder",
-      }
-    }
-    component={
-      Object {
-        "$$typeof": Symbol(react.forward_ref),
-        "attrs": Array [],
-        "componentStyle": ComponentStyle {
-          "componentId": "form__Input-sc-6aqd3o-1",
-          "isStatic": true,
-          "rules": Array [
-            "
-  width: 100%;
-  border-radius: 3px;
-  border: solid 1px #cccccc;
-  padding: 8px;
-  color: #000;
-  margin-bottom: 1.25rem;
-  display: block;
-",
-          ],
+  <StringArray
+    addItemStr={[Function]}
+    addWithComma={true}
+    itemSchema={null}
+    itemStr=""
+    readonly={false}
+    schema={
+      ArraySchema {
+        "_blacklist": RefSet {
+          "list": Set {},
+          "refs": Map {},
         },
-        "displayName": "form__Input",
-        "foldedComponentIds": Array [],
-        "render": [Function],
-        "styledComponentId": "form__Input-sc-6aqd3o-1",
-        "target": "input",
-        "toString": [Function],
-        "warnTooManyClasses": [Function],
-        "withComponent": [Function],
+        "_conditions": Array [],
+        "_deps": Array [],
+        "_exclusive": Object {
+          "required": true,
+        },
+        "_mutate": undefined,
+        "_options": Object {
+          "abortEarly": true,
+          "recursive": true,
+        },
+        "_subType": StringSchema {
+          "_blacklist": RefSet {
+            "list": Set {},
+            "refs": Map {},
+          },
+          "_conditions": Array [],
+          "_deps": Array [],
+          "_exclusive": Object {
+            "max": true,
+          },
+          "_mutate": undefined,
+          "_options": Object {
+            "abortEarly": true,
+            "recursive": true,
+          },
+          "_type": "string",
+          "_typeError": [Function],
+          "_whitelist": RefSet {
+            "list": Set {},
+            "refs": Map {},
+          },
+          "tests": Array [
+            [Function],
+          ],
+          "transforms": Array [
+            [Function],
+          ],
+          "type": "string",
+        },
+        "_type": "array",
+        "_typeError": [Function],
+        "_whitelist": RefSet {
+          "list": Set {},
+          "refs": Map {},
+        },
+        "innerType": StringSchema {
+          "_blacklist": RefSet {
+            "list": Set {},
+            "refs": Map {},
+          },
+          "_conditions": Array [],
+          "_deps": Array [],
+          "_exclusive": Object {
+            "max": true,
+          },
+          "_mutate": undefined,
+          "_options": Object {
+            "abortEarly": true,
+            "recursive": true,
+          },
+          "_type": "string",
+          "_typeError": [Function],
+          "_whitelist": RefSet {
+            "list": Set {},
+            "refs": Map {},
+          },
+          "tests": Array [
+            [Function],
+          ],
+          "transforms": Array [
+            [Function],
+          ],
+          "type": "string",
+        },
+        "tests": Array [
+          [Function],
+        ],
+        "transforms": Array [
+          [Function],
+        ],
+        "type": "array",
       }
     }
-    disabled={false}
-    id="keywordsInput"
-    onChange={[Function]}
-    onKeyDown={[Function]}
-    type="text"
-    value=""
+    set={[Function]}
+    setItemStr={[Function]}
+    setValidationError={[Function]}
+    translationsRoot="qvain.description.keywords"
+    validationError=""
+    value={Array []}
   />
-  <validationError__ValidationError />
-  <buttonContainers__ButtonContainer>
-    <commonButtons__AddNewButton
-      disabled={false}
-      onClick={[Function]}
-      type="button"
-    >
-      <Translate
-        component="span"
-        content="qvain.description.keywords.addButton"
-      />
-    </commonButtons__AddNewButton>
-  </buttonContainers__ButtonContainer>
 </Card>
 `;
 
@@ -349,27 +396,147 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
     component="p"
     content="qvain.description.otherIdentifiers.instructions"
   />
-  <form__Input
-    disabled={false}
-    id="otherIdentifiersInput"
-    onBlur={[Function]}
-    onChange={[Function]}
-    placeholder="http://doi.org/"
-    type="text"
-    value=""
+  <StringArray
+    addItemStr={[Function]}
+    addWithComma={true}
+    itemSchema={
+      StringSchema {
+        "_blacklist": RefSet {
+          "list": Set {},
+          "refs": Map {},
+        },
+        "_conditions": Array [],
+        "_deps": Array [],
+        "_exclusive": Object {
+          "max": true,
+          "min": true,
+          "url": false,
+        },
+        "_mutate": undefined,
+        "_options": Object {
+          "abortEarly": true,
+          "recursive": true,
+        },
+        "_type": "string",
+        "_typeError": [Function],
+        "_whitelist": RefSet {
+          "list": Set {},
+          "refs": Map {},
+        },
+        "tests": Array [
+          [Function],
+          [Function],
+          [Function],
+        ],
+        "transforms": Array [
+          [Function],
+        ],
+        "type": "string",
+      }
+    }
+    itemStr=""
+    readonly={false}
+    schema={
+      ArraySchema {
+        "_blacklist": RefSet {
+          "list": Set {},
+          "refs": Map {},
+        },
+        "_conditions": Array [],
+        "_deps": Array [],
+        "_exclusive": Object {},
+        "_mutate": undefined,
+        "_nullable": true,
+        "_options": Object {
+          "abortEarly": true,
+          "recursive": true,
+        },
+        "_subType": StringSchema {
+          "_blacklist": RefSet {
+            "list": Set {},
+            "refs": Map {},
+          },
+          "_conditions": Array [],
+          "_deps": Array [],
+          "_exclusive": Object {
+            "max": true,
+            "min": true,
+            "url": false,
+          },
+          "_mutate": undefined,
+          "_options": Object {
+            "abortEarly": true,
+            "recursive": true,
+          },
+          "_type": "string",
+          "_typeError": [Function],
+          "_whitelist": RefSet {
+            "list": Set {},
+            "refs": Map {},
+          },
+          "tests": Array [
+            [Function],
+            [Function],
+            [Function],
+          ],
+          "transforms": Array [
+            [Function],
+          ],
+          "type": "string",
+        },
+        "_type": "array",
+        "_typeError": [Function],
+        "_whitelist": RefSet {
+          "list": Set {},
+          "refs": Map {},
+        },
+        "innerType": StringSchema {
+          "_blacklist": RefSet {
+            "list": Set {},
+            "refs": Map {},
+          },
+          "_conditions": Array [],
+          "_deps": Array [],
+          "_exclusive": Object {
+            "max": true,
+            "min": true,
+            "url": false,
+          },
+          "_mutate": undefined,
+          "_options": Object {
+            "abortEarly": true,
+            "recursive": true,
+          },
+          "_type": "string",
+          "_typeError": [Function],
+          "_whitelist": RefSet {
+            "list": Set {},
+            "refs": Map {},
+          },
+          "tests": Array [
+            [Function],
+            [Function],
+            [Function],
+          ],
+          "transforms": Array [
+            [Function],
+          ],
+          "type": "string",
+        },
+        "tests": Array [],
+        "transforms": Array [
+          [Function],
+        ],
+        "type": "array",
+      }
+    }
+    set={[Function]}
+    setItemStr={[Function]}
+    setValidationError={[Function]}
+    translationsRoot="qvain.description.otherIdentifiers"
+    validationError=""
+    value={Array []}
   />
-  <buttonContainers__ButtonContainer>
-    <commonButtons__AddNewButton
-      disabled={false}
-      onClick={[Function]}
-      type="button"
-    >
-      <Translate
-        component="span"
-        content="qvain.description.otherIdentifiers.addButton"
-      />
-    </commonButtons__AddNewButton>
-  </buttonContainers__ButtonContainer>
 </Card>
 `;
 

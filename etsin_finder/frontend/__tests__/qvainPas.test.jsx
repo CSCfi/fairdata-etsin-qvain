@@ -116,9 +116,6 @@ describe('Qvain.Description', () => {
     expect(inputs.length).toBe(4)
     inputs.forEach(c => expect(c.props().disabled).toBe(true))
     wrapper.unmount()
-
-    // Keyword delete buttons should not be rendered
-    expect(wrapper.find('FontAwesomeIcon.delete-keyword').length).toBe(0)
   })
 
   it('allows editing of description fields', () => {
@@ -129,9 +126,6 @@ describe('Qvain.Description', () => {
     const inputs = wrapper.find('input').not('[type="hidden"]')
     expect(inputs.length).toBe(4)
     inputs.forEach(c => expect(c.props().disabled).toBe(false))
-
-    // Keyword delete buttons should be rendered
-    expect(wrapper.find('FontAwesomeIcon.delete-keyword').length).toBe(2)
   })
 })
 
