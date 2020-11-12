@@ -37,6 +37,7 @@ const OtherIdentifierField = () => {
         value={storage}
         set={set}
         schema={otherIdentifiersArraySchema}
+        addWithComma
         readonly={readonly}
         translationsRoot="qvain.description.otherIdentifiers"
         validationError={validationError || ''}

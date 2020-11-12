@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useRef, forwardRef } from 'react'
 import Translate from 'react-translate-component'
 import { observer } from 'mobx-react'
 import CreatableSelect from 'react-select/creatable'
-import PropTypes from 'prop-types'
+import PropTypes, { instanceOf } from 'prop-types'
 import styled from 'styled-components'
 import translate from 'counterpart'
 import { AddNewButton } from '../buttons'
@@ -33,6 +33,7 @@ const StringArray = ({
   setValidationError,
 }) => {
   const [changed, setChanged] = useState()
+  const selectRef = useRef()
 
   const validateArray = () => {
     if (!changed) {
@@ -85,6 +86,18 @@ const StringArray = ({
     }
   }
 
+  const focusInput = () => {
+    const select = selectRef?.current
+    if (select) {
+      select.select.focus()
+    }
+  }
+
+  const handleAddNew = () => {
+    validateAndAdd()
+    focusInput()
+  }
+
   const handleInputChange = (str, meta) => {
     // prevent blur from clearing the input
     if (meta.action !== 'input-blur' && meta.action !== 'menu-close') {
@@ -111,7 +124,8 @@ const StringArray = ({
   return (
     <>
       <Translate
-        component={CreatableSelect}
+        component={RefCreatableSelect}
+        selectRef={selectRef}
         components={components}
         inputValue={itemStr}
         isMulti
@@ -128,7 +142,7 @@ const StringArray = ({
       />
       <ErrorAndButtonContainer>
         <ArrayValidationError>{validationError}</ArrayValidationError>
-        <AddNewButton type="button" onClick={validateAndAdd} disabled={readonly}>
+        <AddNewButton type="button" onClick={handleAddNew} disabled={readonly}>
           <Translate content={`${translationsRoot}.addButton`} />
         </AddNewButton>
       </ErrorAndButtonContainer>
@@ -156,6 +170,14 @@ StringArray.defaultProps = {
   schema: null,
   addWithComma: false,
   readonly: false,
+}
+
+const RefCreatableSelect = ({ selectRef, ...props }) => (
+  <CreatableSelect ref={selectRef} {...props} />
+)
+
+RefCreatableSelect.propTypes = {
+  selectRef: PropTypes.object.isRequired,
 }
 
 const ArrayValidationError = styled(ValidationError)`
