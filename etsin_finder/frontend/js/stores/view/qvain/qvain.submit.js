@@ -2,7 +2,10 @@ import { makeObservable, observable, action, computed } from 'mobx'
 import axios from 'axios'
 import { ValidationError } from 'yup'
 import handleSubmitToBackend from '../../../components/qvain/utils/handleSubmit'
-import { qvainFormSchema } from '../../../components/qvain/utils/formValidation'
+import {
+  qvainFormSchema,
+  qvainFormSchemaDraft,
+} from '../../../components/qvain/utils/formValidation'
 import { DATA_CATALOG_IDENTIFIER, DATASET_STATE } from '../../../utils/constants'
 import urls from '../../../components/qvain/utils/urls'
 
@@ -60,14 +63,14 @@ class Submit {
   @action submitDraft = async () => {
     switch (this.submitType) {
       case DATASET_STATE.NEW:
-        await this.exec(this.createNewDraft)
+        await this.exec(this.createNewDraft, qvainFormSchemaDraft)
         return
       case DATASET_STATE.DRAFT:
       case DATASET_STATE.UNPUBLISHED_DRAFT:
-        await this.exec(this.updateDataset)
+        await this.exec(this.updateDataset, qvainFormSchemaDraft)
         return
       case DATASET_STATE.PUBLISHED:
-        await this.exec(this.savePublishedAsDraft)
+        await this.exec(this.savePublishedAsDraft, qvainFormSchemaDraft)
         return
       default:
         console.error('Unknown submit status')
@@ -135,6 +138,7 @@ class Submit {
       this.response = undefined
       if (!(error instanceof ValidationError)) {
         console.error(error)
+        throw error
       }
     } finally {
       this.setLoading(false)

@@ -23,9 +23,11 @@ import '../locale/translations'
 import urls from '../js/components/qvain/utils/urls'
 
 // first half of the tests mocks qvainFormSchema but the rest of the tests uses actual module
-import { qvainFormSchema } from '../js/components/qvain/utils/formValidation'
+import { qvainFormSchema, qvainFormSchemaDraft } from '../js/components/qvain/utils/formValidation'
 const realQvainFormSchema = jest.requireActual('../js/components/qvain/utils/formValidation')
   .qvainFormSchema
+const realQvainFormSchemaDraft = jest.requireActual('../js/components/qvain/utils/formValidation')
+  .qvainFormSchemaDraft
 
 jest.mock('axios')
 
@@ -36,6 +38,9 @@ jest.mock('../js/components/qvain/utils/handleSubmit', () => {
 jest.mock('../js/components/qvain/utils/formValidation', () => {
   return {
     qvainFormSchema: {
+      validate: jest.fn(),
+    },
+    qvainFormSchemaDraft: {
       validate: jest.fn(),
     },
   }
@@ -85,6 +90,16 @@ const generateDefaultDatasetForPublish = settings => ({
   ...settings,
 })
 
+const generateDefaultDatasetForDraft = settings => ({
+  title: { fi: 'otsikko', en: 'title' },
+  description: { fi: '', en: '' },
+  cumulativeState: CUMULATIVE_STATE.NO,
+  accessType: { url: ACCESS_TYPE_URL.OPEN },
+  useDoi: false,
+  dataCatalog: DATA_CATALOG_IDENTIFIER.IDA,
+  ...settings,
+})
+
 const createMockQvain = settings => {
   return {
     Files: {
@@ -118,9 +133,9 @@ const generalGetResponse = {
 describe('Submit.exec()', () => {
   let Submit, mockQvain, submitFunction
 
-  const exec = async (init = () => {}) => {
+  const exec = async (init = () => {}, schema) => {
     init()
-    await Submit.exec(submitFunction)
+    await Submit.exec(submitFunction, schema)
   }
 
   beforeEach(() => {
@@ -172,6 +187,11 @@ describe('Submit.exec()', () => {
     expect(qvainFormSchema.validate).toHaveBeenCalledTimes(1)
   })
 
+  test('should call qvainFormSchemaDraft.validate when given specific schema', async () => {
+    await exec(undefined, qvainFormSchemaDraft)
+    expect(qvainFormSchemaDraft.validate).toHaveBeenCalledTimes(1)
+  })
+
   test('should call setChanged', async () => {
     await exec()
     expect(mockQvain.setChanged).toHaveBeenCalledWith(false)
@@ -206,11 +226,27 @@ describe('submitDraft', () => {
     mockQvain = createMockQvain()
     axios.post.mockReturnValue(generalPostResponse)
     Submit = new SubmitClass(mockQvain)
+    handleSubmitToBackend.mockReturnValue(generateDefaultDatasetForDraft())
+  })
+
+  test('should use qvainFormSchemaDraft on exec call', async () => {
+    qvainFormSchemaDraft.validate.mockReturnValue(undefined)
+    await Submit.submitDraft()
+    expect(qvainFormSchemaDraft.validate).toHaveBeenCalledTimes(1)
+  })
+})
+
+describe('create new draft', () => {
+  let Submit, mockQvain
+  beforeEach(() => {
+    mockQvain = createMockQvain()
+    axios.post.mockReturnValue(generalPostResponse)
+    Submit = new SubmitClass(mockQvain)
   })
 
   const expectNoError = async dataset => {
     handleSubmitToBackend.mockReturnValue(dataset)
-    qvainFormSchema.validate.mockReturnValue(realQvainFormSchema.validate(dataset))
+    qvainFormSchemaDraft.validate.mockReturnValue(realQvainFormSchemaDraft.validate(dataset))
 
     try {
       await Submit.submitDraft()
@@ -223,7 +259,7 @@ describe('submitDraft', () => {
 
   const expectError = async (dataset, error) => {
     handleSubmitToBackend.mockReturnValue(dataset)
-    qvainFormSchema.validate.mockReturnValue(realQvainFormSchema.validate(dataset))
+    qvainFormSchemaDraft.validate.mockReturnValue(realQvainFormSchemaDraft.validate(dataset))
     await Submit.submitDraft()
     expect(Submit.error?.message).toEqual(error)
   }
@@ -234,7 +270,7 @@ describe('submitDraft', () => {
 
   test('should call axios.post with dataset and draft param', async () => {
     handleSubmitToBackend.mockReturnValue('dataset')
-    qvainFormSchema.validate.mockReturnValue(Promise.resolve(undefined))
+    qvainFormSchemaDraft.validate.mockReturnValue(Promise.resolve(undefined))
     await Submit.submitDraft()
     expect(axios.post).toHaveBeenCalledWith(urls.v2.datasets(), 'dataset', {
       params: { draft: true },
@@ -242,42 +278,42 @@ describe('submitDraft', () => {
   })
 
   test('cases 1-3: no file origin, urn, cumulative state any', async () => {
-    const dataset = generateDefaultDatasetForPublish({ dataCatalog: undefined })
-    await expectError(dataset, errors.missingFileOrigin)
+    const dataset = generateDefaultDatasetForDraft({ dataCatalog: undefined })
+    await expectNoError(dataset)
   })
 
   test('cases 4-6: no file origin, doi, cumulative state any', async () => {
-    const dataset = generateDefaultDatasetForPublish({ dataCatalog: undefined, useDoi: true })
+    const dataset = generateDefaultDatasetForDraft({ dataCatalog: undefined, useDoi: true })
 
-    await expectError(dataset, errors.missingFileOrigin)
+    await expectNoError(dataset)
   })
 
   test('case 7: Ida, urn, cumulative state no', async () => {
-    const dataset = generateDefaultDatasetForPublish()
+    const dataset = generateDefaultDatasetForDraft()
 
     await expectNoError(dataset)
   })
 
   test('case 8: Ida, urn, cumulative state yes', async () => {
-    const dataset = generateDefaultDatasetForPublish({ cumulativeState: CUMULATIVE_STATE.YES })
+    const dataset = generateDefaultDatasetForDraft({ cumulativeState: CUMULATIVE_STATE.YES })
 
     await expectNoError(dataset)
   })
 
   test('case 9: Ida, urn, cumulative state closed', async () => {
-    const dataset = generateDefaultDatasetForPublish({ cumulativeState: CUMULATIVE_STATE.CLOSED })
+    const dataset = generateDefaultDatasetForDraft({ cumulativeState: CUMULATIVE_STATE.CLOSED })
 
     await expectNoError(dataset)
   })
 
   test('case 10: Ida, doi, cumulative state no', async () => {
-    const dataset = generateDefaultDatasetForPublish({ useDoi: true })
+    const dataset = generateDefaultDatasetForDraft({ useDoi: true })
 
     await expectNoError(dataset)
   })
 
   test('case 11: Ida, doi, cumulative state yes', async () => {
-    const dataset = generateDefaultDatasetForPublish({
+    const dataset = generateDefaultDatasetForDraft({
       useDoi: true,
       cumulativeState: CUMULATIVE_STATE.YES,
     })
@@ -286,7 +322,7 @@ describe('submitDraft', () => {
   })
 
   test('case 12: Ida, doi, cumulative state closed', async () => {
-    const dataset = generateDefaultDatasetForPublish({
+    const dataset = generateDefaultDatasetForDraft({
       useDoi: true,
       cumulativeState: CUMULATIVE_STATE.CLOSED,
     })
@@ -295,7 +331,7 @@ describe('submitDraft', () => {
   })
 
   test('case 13: remote resources, urn, cumulative state no', async () => {
-    const dataset = generateDefaultDatasetForPublish({
+    const dataset = generateDefaultDatasetForDraft({
       dataCatalog: DATA_CATALOG_IDENTIFIER.ATT,
     })
 
@@ -303,7 +339,7 @@ describe('submitDraft', () => {
   })
 
   test('case 14: remote resources, urn, cumulative state yes', async () => {
-    const dataset = generateDefaultDatasetForPublish({
+    const dataset = generateDefaultDatasetForDraft({
       dataCatalog: DATA_CATALOG_IDENTIFIER.ATT,
       cumulativeState: CUMULATIVE_STATE.YES,
     })
@@ -312,7 +348,7 @@ describe('submitDraft', () => {
   })
 
   test('case 15: remote resources, urn, cumulative state closed', async () => {
-    const dataset = generateDefaultDatasetForPublish({
+    const dataset = generateDefaultDatasetForDraft({
       dataCatalog: DATA_CATALOG_IDENTIFIER.ATT,
       cumulativeState: CUMULATIVE_STATE.CLOSED,
     })
@@ -322,7 +358,7 @@ describe('submitDraft', () => {
 
   // Ui doesn't allow these, doi can be activated only for ida
   test('case 16-18: remote resources, doi, cumulative state', async () => {
-    const dataset = generateDefaultDatasetForPublish({
+    const dataset = generateDefaultDatasetForDraft({
       dataCatalog: DATA_CATALOG_IDENTIFIER.ATT,
       useDoi: true,
     })
@@ -486,7 +522,7 @@ describe('edit existing draft dataset', () => {
 
   const expectNoError = async dataset => {
     handleSubmitToBackend.mockReturnValue({ ...preparedDataset, ...dataset })
-    qvainFormSchema.validate.mockReturnValue(realQvainFormSchema.validate(dataset))
+    qvainFormSchemaDraft.validate.mockReturnValue(realQvainFormSchemaDraft.validate(dataset))
 
     try {
       await Submit.submitDraft()
@@ -497,7 +533,7 @@ describe('edit existing draft dataset', () => {
 
   const expectError = async (dataset, error) => {
     handleSubmitToBackend.mockReturnValue({ ...preparedDataset, ...dataset })
-    qvainFormSchema.validate.mockReturnValue(realQvainFormSchema.validate(dataset))
+    qvainFormSchemaDraft.validate.mockReturnValue(realQvainFormSchemaDraft.validate(dataset))
     await Submit.submitDraft()
     expect(Submit.error?.message).toEqual(error)
   }
@@ -508,49 +544,49 @@ describe('edit existing draft dataset', () => {
 
   test('should call axios.patch with dataset and existing identifier', async () => {
     handleSubmitToBackend.mockReturnValue(preparedDataset)
-    qvainFormSchema.validate.mockReturnValue(Promise.resolve(undefined))
+    qvainFormSchemaDraft.validate.mockReturnValue(Promise.resolve(undefined))
     await Submit.submitDraft()
     expect(axios.patch).toHaveBeenCalledWith(urls.v2.dataset('some identifier'), preparedDataset)
   })
 
   test('cases 37-39: no file origin, urn, cumulative state any', async () => {
-    const dataset = generateDefaultDatasetForPublish({ dataCatalog: undefined })
+    const dataset = generateDefaultDatasetForDraft({ dataCatalog: undefined })
 
-    await expectError(dataset, errors.missingFileOrigin)
+    await expectNoError(dataset)
   })
 
   test('cases 40-42: no file origin, doi, cumulative state any', async () => {
-    const dataset = generateDefaultDatasetForPublish({ dataCatalog: undefined, useDoi: true })
+    const dataset = generateDefaultDatasetForDraft({ dataCatalog: undefined, useDoi: true })
 
-    await expectError(dataset, errors.missingFileOrigin)
+    await expectError(dataset)
   })
 
   test('case 43: ida, urn, cumulative state no', async () => {
-    const dataset = generateDefaultDatasetForPublish()
+    const dataset = generateDefaultDatasetForDraft()
 
     await expectNoError(dataset)
   })
 
   test('case 44: ida, urn, cumulative state yes', async () => {
-    const dataset = generateDefaultDatasetForPublish({ cumulativeState: CUMULATIVE_STATE.YES })
+    const dataset = generateDefaultDatasetForDraft({ cumulativeState: CUMULATIVE_STATE.YES })
 
     await expectNoError(dataset)
   })
 
   test('case 45: ida, urn, cumulative state yes', async () => {
-    const dataset = generateDefaultDatasetForPublish({ cumulativeState: CUMULATIVE_STATE.CLOSED })
+    const dataset = generateDefaultDatasetForDraft({ cumulativeState: CUMULATIVE_STATE.CLOSED })
 
     await expectNoError(dataset)
   })
 
   test('case 46: ida, doi, cumulative state no', async () => {
-    const dataset = generateDefaultDatasetForPublish({ useDoi: true })
+    const dataset = generateDefaultDatasetForDraft({ useDoi: true })
 
     await expectNoError(dataset)
   })
 
   test('case 47: ida, doi, cumulative state yes', async () => {
-    const dataset = generateDefaultDatasetForPublish({
+    const dataset = generateDefaultDatasetForDraft({
       useDoi: true,
       cumultaiveState: CUMULATIVE_STATE.YES,
     })
@@ -559,7 +595,7 @@ describe('edit existing draft dataset', () => {
   })
 
   test('case 48: ida, doi, cumulative state closed', async () => {
-    const dataset = generateDefaultDatasetForPublish({
+    const dataset = generateDefaultDatasetForDraft({
       useDoi: true,
       cumultaiveState: CUMULATIVE_STATE.CLOSED,
     })
@@ -568,13 +604,13 @@ describe('edit existing draft dataset', () => {
   })
 
   test('case 49-51: ext resources, urn, cumulative state any', async () => {
-    const dataset = generateDefaultDatasetForPublish({ dataCatalog: DATA_CATALOG_IDENTIFIER.ATT })
+    const dataset = generateDefaultDatasetForDraft({ dataCatalog: DATA_CATALOG_IDENTIFIER.ATT })
 
     await expectNoError(dataset)
   })
 
   test('case 52-54: ext resources, doi, cumulative state any', async () => {
-    const dataset = generateDefaultDatasetForPublish({
+    const dataset = generateDefaultDatasetForDraft({
       dataCatalog: DATA_CATALOG_IDENTIFIER.ATT,
       useDoi: true,
     })
@@ -732,7 +768,7 @@ describe('save published dataset as draft', () => {
       ...dataset,
       original: { ...dataset.original, ...preparedDataset.original },
     })
-    qvainFormSchema.validate.mockReturnValue(realQvainFormSchema.validate(dataset))
+    qvainFormSchemaDraft.validate.mockReturnValue(realQvainFormSchemaDraft.validate(dataset))
 
     try {
       await Submit.submitDraft()
@@ -746,7 +782,7 @@ describe('save published dataset as draft', () => {
       ...dataset,
       original: { ...dataset.original, ...preparedDataset.original },
     })
-    qvainFormSchema.validate.mockReturnValue(realQvainFormSchema.validate(dataset))
+    qvainFormSchemaDraft.validate.mockReturnValue(realQvainFormSchemaDraft.validate(dataset))
     await Submit.submitDraft()
     expect(Submit.error?.message).toEqual(error)
   }
@@ -757,7 +793,7 @@ describe('save published dataset as draft', () => {
 
   test('should call axios.post to make new draft, patch to save changes', async () => {
     handleSubmitToBackend.mockReturnValue(preparedDataset)
-    qvainFormSchema.validate.mockReturnValue(Promise.resolve(undefined))
+    qvainFormSchemaDraft.validate.mockReturnValue(Promise.resolve(undefined))
     await Submit.submitDraft()
     expect(axios.post).toHaveBeenCalledWith(urls.v2.rpc.createDraft(), null, {
       params: { identifier: 'some identifier' },
@@ -767,43 +803,43 @@ describe('save published dataset as draft', () => {
   })
 
   test('cases 73-75: no file origin, urn, cumulative state any', async () => {
-    const dataset = generateDefaultDatasetForPublish({ dataCatalog: undefined })
+    const dataset = generateDefaultDatasetForDraft({ dataCatalog: undefined })
 
-    await expectError(dataset, errors.missingFileOrigin)
+    await expectNoError(dataset)
   })
 
   test('cases 76-78: no file origin, doi, cumulative state any', async () => {
-    const dataset = generateDefaultDatasetForPublish({ dataCatalog: undefined, useDoi: true })
+    const dataset = generateDefaultDatasetForDraft({ dataCatalog: undefined, useDoi: true })
 
-    await expectError(dataset, errors.missingFileOrigin)
+    await expectNoError(dataset)
   })
 
   test('case 79: ida, urn, cumulative state no', async () => {
-    const dataset = generateDefaultDatasetForPublish()
+    const dataset = generateDefaultDatasetForDraft()
 
     await expectNoError(dataset)
   })
 
   test('case 80: ida, urn, cumulative state yes', async () => {
-    const dataset = generateDefaultDatasetForPublish({ cumulativeState: CUMULATIVE_STATE.YES })
+    const dataset = generateDefaultDatasetForDraft({ cumulativeState: CUMULATIVE_STATE.YES })
 
     await expectNoError(dataset)
   })
 
   test('case 81: ida, urn, cumulative state yes', async () => {
-    const dataset = generateDefaultDatasetForPublish({ cumulativeState: CUMULATIVE_STATE.CLOSED })
+    const dataset = generateDefaultDatasetForDraft({ cumulativeState: CUMULATIVE_STATE.CLOSED })
 
     await expectNoError(dataset)
   })
 
   test('case 82: ida, doi, cumulative state no', async () => {
-    const dataset = generateDefaultDatasetForPublish({ useDoi: true })
+    const dataset = generateDefaultDatasetForDraft({ useDoi: true })
 
     await expectNoError(dataset)
   })
 
   test('case 83: ida, doi, cumulative state yes', async () => {
-    const dataset = generateDefaultDatasetForPublish({
+    const dataset = generateDefaultDatasetForDraft({
       useDoi: true,
       cumulativeState: CUMULATIVE_STATE.YES,
     })
@@ -812,7 +848,7 @@ describe('save published dataset as draft', () => {
   })
 
   test('case 84: ida, doi, cumulative state closed', async () => {
-    const dataset = generateDefaultDatasetForPublish({
+    const dataset = generateDefaultDatasetForDraft({
       useDoi: true,
       cumulativeState: CUMULATIVE_STATE.CLOSED,
     })
@@ -821,13 +857,13 @@ describe('save published dataset as draft', () => {
   })
 
   test('case 85-87: ext resources, urn, cumulative state any', async () => {
-    const dataset = generateDefaultDatasetForPublish({ dataCatalog: DATA_CATALOG_IDENTIFIER.ATT })
+    const dataset = generateDefaultDatasetForDraft({ dataCatalog: DATA_CATALOG_IDENTIFIER.ATT })
 
     await expectNoError(dataset)
   })
 
   test('case 88-90: ext resources, doi, cumulative state any', async () => {
-    const dataset = generateDefaultDatasetForPublish({
+    const dataset = generateDefaultDatasetForDraft({
       dataCatalog: DATA_CATALOG_IDENTIFIER.ATT,
       useDoi: true,
     })
