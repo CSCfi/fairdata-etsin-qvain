@@ -74,7 +74,7 @@ const StringArray = ({
   }
 
   const validateAndAdd = () => {
-    if (changed && validateItemStr()) {
+    if (changed && itemStr && validateItemStr()) {
       addItemStr()
       validateArray()
     }
