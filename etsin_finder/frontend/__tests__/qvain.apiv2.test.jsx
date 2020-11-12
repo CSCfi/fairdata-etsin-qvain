@@ -14,7 +14,7 @@
  **  for more info: https://wiki.eduuni.fi/pages/viewpage.action?pageId=162084194
  */
 
-import SubmitClass from '../js/stores/view/qvain.submit'
+import SubmitClass from '../js/stores/view/qvain/qvain.submit'
 import axios from 'axios'
 import handleSubmitToBackend from '../js/components/qvain/utils/handleSubmit'
 import moment from 'moment'

@@ -1,10 +1,12 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import { SubmitButtonsV2 } from '../js/components/qvain/editor/submitButtonsV2'
+import { SubmitButtonsV2 } from '../js/components/qvain/views/editor/submitButtonsV2'
 import { useStores } from '../js/stores/stores'
+import { fn } from 'moment'
 
 const mockSubmitDraft = jest.fn()
 const mockSubmitPublish = jest.fn()
+const mockGetQvainUrl = jest.fn()
 
 jest.mock('../js/stores/stores', () => {
   return {
@@ -19,7 +21,10 @@ useStores.mockReturnValue({
       submitPublish: mockSubmitPublish,
     },
   },
+  Env: { getQvainUrl: mockGetQvainUrl },
 })
+
+const mockHistory = { replace: jest.fn() }
 
 let wrapper
 let disabled = false
@@ -27,6 +32,7 @@ let disabled = false
 const basicRender = () => {
   wrapper = shallow(
     <SubmitButtonsV2
+      history={mockHistory}
       submitButtonsRef={React.createRef()}
       doiModal={<div id="doi-modal" />}
       disabled={disabled}
