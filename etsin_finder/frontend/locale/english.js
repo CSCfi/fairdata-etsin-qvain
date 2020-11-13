@@ -249,16 +249,16 @@ const english = {
       changedLang: 'Changed language to: %(lang)s',
       inactiveLogout: 'You have been logged out due to inactivity',
     },
-    pageTitles: {
+    qvainPageTitle: 'Qvain | Research Dataset Description Tool',
+    etsinPageTitles: {
       data: 'Data',
       events: 'Identifiers and Events',
       maps: 'Maps',
       dataset: 'Dataset',
       datasets: 'Datasets',
       home: 'Home',
-      error: 'Error',
-      loginRequired: 'Login Required',
-      qvain: 'Qvain'
+      qvain: 'Qvain',
+      error: 'Error - The page could not be found'
     },
     language: {
       toggleLabel: 'Switch language to: %(otherLang)s',

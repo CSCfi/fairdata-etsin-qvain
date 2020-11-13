@@ -81,42 +81,50 @@ class Accessibility {
 
   @action
   handleNavigation(location, resetFocus = true) {
-    let loc = location;
-    if (location === undefined) {
-      loc = this.getLocation()
+    if (env.isQvain) {
+      this.setQvainPageTitle(translate('general.qvainPageTitle'))
+      return
     }
-    const pageName = translate(`general.pageTitles.${loc}`)
+
+    let loc = location;
+    loc = this.getLocation()
+
+    const pageName = translate(`general.etsinPageTitles.${loc}`)
     this.announce(pageName)
-    this.setPageTitle(pageName)
+    this.setEtsinPageTitle(pageName)
     if (resetFocus) {
       this.resetFocus()
     }
   }
 
   getLocation() {
-    const pageTitles = [
-        'data',
-        'events',
-        'maps',
-        'datasets',
-        'home',
-        'error',
-        'loginRequired',
-        'qvain'
+    const etsinLocationMatchers = [
+      ['datasets', new RegExp('^/datasets/?$')],
+      ['dataset', new RegExp('^/dataset/[^/]+?$')],
+      ['data', new RegExp('^/dataset/[^/]+/data/?$')],
+      ['events', new RegExp('^/dataset/[^/]+/events/?$')],
+      ['maps', new RegExp('^/dataset/[^/]+/maps/?$')],
+      ['qvain', new RegExp('^/qvain/?')],
+      ['home', new RegExp('^/$')],
     ]
-    const index = env.history.location.pathname.lastIndexOf('/');
-    let location = env.history.location.pathname.substring(index + 1);
 
-    if (location === '') {
-      location = 'home'
-    } else if (!pageTitles.includes(location)) { // Case with dataset/{identifier}
-      location = 'dataset'
+    let location
+    const pathname = env.history.location.pathname
+    for (const [matchLocation, matcher] of etsinLocationMatchers) {
+      if (matcher.test(pathname)) {
+        location = matchLocation
+        break
+      }
     }
-    return location
+    return location || 'error'
   }
 
-  setPageTitle(name) {
+  setEtsinPageTitle(name) {
     document.title = `${name} - etsin.fairdata.fi`
+  }
+
+  setQvainPageTitle(name) {
+    document.title = name
   }
 
   resetFocus() {
