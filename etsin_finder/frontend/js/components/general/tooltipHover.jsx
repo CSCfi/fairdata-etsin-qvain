@@ -37,9 +37,16 @@ export default TooltipHover
 function getContainerPosition(position) {
   switch (position) {
     case 'top':
-      return 'transform: translate(-50%, -6px);' + 'bottom: 100%;' + 'left: 50%;'
+      return `
+        transform: translate(-50%, -6px);
+        bottom: 100%;
+        left: 50%;`
     case 'right':
-      return 'transform: translate(10px, 0);' + 'bottom: 0%;' + 'left: 100%;'
+      return `
+        transform: translate(10px, 0);
+        bottom: 0%;
+        left: 100%;
+        `
     default:
       return null
   }
@@ -48,9 +55,15 @@ function getContainerPosition(position) {
 function getTipPosition(position) {
   switch (position) {
     case 'right':
-      return 'bottom: 50%;' + 'right: 0%;' + 'transform: translate(10px, 5px);'
+      return `
+        bottom: 50%;
+        right: 0%;
+        transform: translate(10px, 5px);`
     case 'top':
-      return 'bottom: 100%;' + 'left: 50%;' + 'transform: translate(-50%, 6px);'
+      return `
+        bottom: 100%;
+        left: 50%;
+        transform: translate(-50%, 6px);`
     default:
       return null
   }
