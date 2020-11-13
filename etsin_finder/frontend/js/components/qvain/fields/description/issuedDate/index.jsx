@@ -19,7 +19,7 @@ const IssuedDateField = () => {
       original,
       useDoi,
       readonly,
-      IssuedDate: { issuedDate, setIssuedDate, Schema },
+      IssuedDate: { value: issuedDate, set: setIssuedDate, Schema },
     },
     Locale: { lang },
   } = useStores()

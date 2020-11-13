@@ -591,15 +591,15 @@ const english = {
           "If your dataset already has an identifier (usually a DOI) insert it here. The dataset still gets the permanent identifier which resolves to Etsin's Landing page.",
         instructions:
           'Identifier for the metadata will be created automatically but if there already is an EXISTING identifier please insert it here.',
-        addButton: 'Add identifiers',
         alreadyAdded: 'Identifier already added',
+        addButton: 'Add identifier',
+        placeholder: 'E.g. https://doi.org/...',
       },
       fieldOfScience: {
         title: 'Field of Science',
         infoText:
           'Select a value from the dropdown menu. The drop down uses the classification of the Ministry of Education and Culture.',
         placeholder: 'Select option',
-        addButton: 'Add field of science',
         help: 'You can add multiple fields of science.',
       },
       datasetLanguage: {
@@ -607,14 +607,14 @@ const english = {
         infoText: 'Select languages used in the dataset.',
         placeholder: 'Type to search language',
         noResults: 'No languages found',
-        addButton: 'Add language',
         help: 'You can add multiple languages.',
       },
       keywords: {
         title: 'Keywords',
         infoText: 'Set keywords that characterize the dataset.',
         placeholder: 'E.g. economy',
-        addButton: 'Add keywords',
+        alreadyAdded: 'Keyword already added',
+        addButton: 'Add keyword',
         help:
           'You can add multiple keywords by separating them with a comma (,). Dataset has to have at least one keyword.',
       },
