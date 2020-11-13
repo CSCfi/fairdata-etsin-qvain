@@ -25,11 +25,12 @@ const OtherIdentifierField = () => {
 
   return (
     <Card bottomContent>
-      <LabelLarge htmlFor="otherIdentifiersInput">
+      <LabelLarge htmlFor="other-identifiers-input">
         <Translate content="qvain.description.otherIdentifiers.title" />
       </LabelLarge>
       <Translate component="p" content="qvain.description.otherIdentifiers.instructions" />
       <StringArray
+        id="other-identifiers-input"
         itemStr={itemStr}
         setItemStr={setItemStr}
         addItemStr={addItemStr}
